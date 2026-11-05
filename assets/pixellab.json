@@ -4609,5 +4609,43 @@
         }
       }
     }
+  },
+  "torre-becario": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el cuarto minijefe: el becario (becario.gd; sus copias, copia_becario.gd, usan la misma hoja), con la receta del presentador (torre-presentador): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Carrito, lanzar y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/becario-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); lanzar también con final = partida. Las vistas quietas (rotations) no vienen en bajar_zip.py: se sacaron del mismo zip (<estado>/rotations/<dirección>.png). Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py becario-72 rotations walk carrito lanzar muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py becario-72 jefe-becario (casilla 109x107; offset del Sprite (-56, -85)). Sin muebles nuevos: el carrito del correo, los vasos de café, el reflejo y el destello de la fotocopiadora se dibujan con código.",
+    "coste": "34 generaciones (6 el modelo, 28 las animaciones, ninguna repetida)",
+    "becario-72": {
+      "character_id": "db0fc771-c130-421f-9986-6a8075254f68",
+      "size": "72x72",
+      "description": "a skinny, nervous young zombie man boss, a clumsy office intern, standing slightly hunched with his shoulders raised, about 64 pixels tall. He wears a white dress shirt several sizes too big for him, with long baggy sleeves and the shirt tail hanging out, a crooked thin red tie, loose khaki trousers and worn brown shoes, the shirt torn and stained with brown coffee and dark dried blood in places. A plain white ID badge card hangs from a blue lanyard around his neck. Under one arm he clutches a thick messy stack of white photocopy papers. Messy short brown hair, a young face. Grey-green rotting zombie skin, dead pale eyes, an anxious open mouth. No logos, no letters, no badges with text, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: camisa blanca enorme con manchas de café, corbata roja torcida, pantalón caqui, pelo castaño revuelto y la pila de folios bajo el brazo.",
+      "animaciones": {
+        "subject_description": "a skinny young zombie office intern in a baggy oversized white shirt with a crooked red tie, clutching a stack of papers under one arm (de lado: ', seen from the side'; de espaldas: 'a skinny young zombie office intern in a baggy oversized white shirt, seen from behind')",
+        "initial_pose": "standing slightly hunched with his shoulders raised + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the right...) + ', the stack of papers under one arm' (de frente y de lado)",
+        "frases_de_direccion": "las del presentador ('Strict front view the whole time, facing the camera, he never turns to the side.', 'He keeps the same three-quarter front/back view the whole time, facing ... he never turns.', 'Strict side view the whole time, facing right: he never turns toward the camera.', 'Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways.')",
+        "andar": {
+          "group": "a50f957d-ca40-4ddb-b2fd-ae5df0b6cb5e",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 96-100). 7 direcciones.",
+          "action_description": "He hurries forward in place in a quick, nervous, seamless looping walk cycle: short hurried steps, his legs stepping alternately, his shoulders hunched, his free arm swinging and the stack of papers pressed under the other arm, his oversized shirt flapping a little. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines. (De espaldas, 'his arms swinging a little', sin los papeles.)"
+        },
+        "carrito": {
+          "group": "c3161187-1cef-4910-85ac-cc60eb4fb548",
+          "fotogramas": "8 + partida, solo partida. 7 direcciones. Suelta los papeles en el 1-2 y corre inclinado del 3 al 8 (el juego hace el bucle 3-8; de espaldas, los brazos estirados se ven como brazos en alto).",
+          "action_description": "He drops his papers and breaks into a frantic charging run (toward the camera / toward the lower right of the image / to the right / away from the camera...): he leans far forward, both arms stretched straight out in front of him at waist height with both hands closed around an invisible horizontal bar, as if pushing something heavy ahead of him, his legs pumping fast in long running strides, his tie and oversized shirt flapping. He keeps running in the last frames. Draw nothing in his hands. No effects, no dust, no motion lines, no objects.",
+          "pegas": "Los papeles que suelta quedan sueltos en el suelo en el 1-3: se quitan al montar (motas 300 en jefe_hoja.py). No dibujó ningún carrito: lo pone el juego."
+        },
+        "lanzar": {
+          "group": "6e4466f2-013d-4717-8da6-e01e7a0fd940",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. El brazo arriba en el 3-4.",
+          "action_description": "With his free arm he winds back and then throws something underhand high into the air (toward the camera / toward the lower right of the image / to the right / away from the camera...) in a clumsy, hurried throw, his arm swinging forward and up, his hand opening at the top of the swing, the papers still pressed under his other arm, and then he settles cleanly back into the starting stance. His hand is empty. No effects, no objects, no cups, no motion lines.",
+          "pegas": "En vez de nada, tira un folio (fotogramas 2-3 en varias direcciones): se quita al montar (motas 300). Los vasos de café los dibuja el juego."
+        },
+        "muerte": {
+          "group": "6f7d8c23-93b8-47ca-b935-3e3872a77d36",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Se le caen los papeles, cae de rodillas y de bruces entre los folios.",
+          "action_description": "He dies: the stack of papers slips from under his arm and scatters onto the floor around his feet, he staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor among the scattered white papers, in the last frames. No effects, no blood. (De espaldas, 'a stack of white papers falls and scatters...')"
+        }
+      }
+    }
   }
 }

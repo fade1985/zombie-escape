@@ -230,3 +230,11 @@ animaciones con PixMiniMax, una dirección por llamada). Todo en `assets/pixella
   `py tools/jefe_hoja.py presentador-72 jefe-presentador` (quita la estela blanca del brazo al chasquear). El cono del grito, los
   haces de los focos, la pantalla blanca y el confeti los dibuja el juego (`presentador.gd`, `confeti.gd`). Su público son
   oficinistas normales, sentados detrás del respaldo de las butacas.
+- **El becario** (minijefe, 72 px; fuente `becario-72`, hoja `jefe-becario`): camisa blanca que le queda grande, corbata roja
+  torcida, acreditación colgada de un cordón azul y una pila de fotocopias bajo el brazo. La misma receta: andar, carrito (suelta
+  los papeles y corre inclinado con los brazos por delante, como empujando), lanzar (el café) y muerte (se le esparcen los papeles
+  y cae de bruces); hacia el oeste, el este en espejo. 34 generaciones (6 el modelo, 28 las animaciones, ninguna repetida). Todo
+  en `assets/pixellab.json` → `torre-becario`. Hoja con `py tools/jefe_hoja.py becario-72 jefe-becario` (quita los papeles que
+  se le escapan al tirar y al coger el carrito). Sus copias usan la misma hoja, más claras y sin sombra. El carrito del correo,
+  los vasos de café, el reflejo en las fotocopiadoras y el destello de la máquina los dibuja el juego (`becario.gd`,
+  `proyectil.gd`).

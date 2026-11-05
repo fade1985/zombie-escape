@@ -445,6 +445,22 @@ msgstr "Dégage-les de la porte !"
 msgid "¡Así no puedo, Johnny!"
 msgstr "Impossible comme ça, Johnny !"
 
+#: scripts/becario.gd
+msgid "¡A COPIAR!"
+msgstr "PHOTOCOPIE !"
+
+#: scripts/becario.gd
+msgid "¡CORREO URGENTE!"
+msgstr "COURRIER URGENT !"
+
+#: scripts/becario.gd
+msgid "¡CAFÉ PARA TODOS!"
+msgstr "DU CAFÉ POUR TOUT LE MONDE !"
+
+#: scripts/becario.gd
+msgid "¡ME VAN A CONTRATAR!"
+msgstr "ILS VONT M'EMBAUCHER !"
+
 #: scripts/bestiario.gd
 msgid "El vecino"
 msgstr "Le voisin"
@@ -564,6 +580,14 @@ msgstr "Le présentateur"
 #: scripts/bestiario.gd
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "Hurle dans son micro, aveugle avec les projecteurs et couvre le sol de confettis. En colère, il fait lever son public."
+
+#: scripts/bestiario.gd
+msgid "El becario"
+msgstr "Le stagiaire"
+
+#: scripts/bestiario.gd
+msgid "Se fotocopia a sí mismo: busca al único que tiene sombra. Embiste con el carrito del correo y lo pone todo perdido de café."
+msgstr "Il se photocopie lui-même : cherche le seul qui a une ombre. Il fonce avec le chariot du courrier et met du café partout."
 
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"

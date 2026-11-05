@@ -383,6 +383,25 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
        la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe presentador --plato`.
+   - **El becario** 🟡 **Hecho el 5 nov, a falta del visto bueno del dueño.** 34 generaciones (6 el modelo, 28 las animaciones,
+     ninguna repetida). Lo que ha quedado (`becario.gd` y `copia_becario.gd`; números provisionales, en sus `const`):
+     - Vida 380 (+35 % por planta), velocidad 120, 8 si te pegas a él. Su sala, la **Sala de fotocopias** (`jefe-becario` en
+       `Catalogo.SALAS`): en la pared de arriba, tres fotocopiadoras, dos impresoras, dos archivadores y dos lámparas; a los lados,
+       fuentes de agua y plantas; en medio, dos filas de escritorios con pasillos entre ellos.
+     - **Fotocopias** («¡A COPIAR!»): corre a la fotocopiadora más cercana (3 s como mucho), la máquina echa un destello y salen
+       **3 copias** de él a los lados. Con el destello, él se cambia de sitio con una de ellas. Las copias son iguales pero **sin
+       sombra** y un pelín más claras; mueren de un golpe (se deshacen en papeles), no hacen daño y lo que les pegas no le quita vida
+       a él. Solo el de verdad lleva sombra (doble, para que se note) y **se refleja en el frontal de las fotocopiadoras** que
+       tiene cerca (y se les enciende la pantallita). Cada 12 s como pronto; más de 8 copias a la vez, no.
+     - **Carrito del correo** («¡CORREO URGENTE!»): saca el carrito (dibujado con código, delante de él), marca una **franja
+       roja** 0,8 s y embiste: 14 de daño y te tira. Si se come una pared o un mueble, se queda atontado 1,4 s. Cada 6 s como pronto.
+     - **Café para todos** («¡CAFÉ PARA TODOS!»): 4 vasos de café en curva, uno donde está Johnny, otro a donde va y los demás
+       alrededor, cada uno con su marca roja: 6 de daño si te pilla y un **charco de café que resbala** 6 s. Cada 7 s como pronto.
+     - **Enfadado** («¡ME VAN A CONTRATAR!»): saca **5 copias**, enseguida y cada 9 s, y **las copias pegan** (5 al tocarte; se
+       ponen rojas como él). El carrito avisa menos (0,6 s) y sale cada 4,5 s; tira 6 vasos. Si muere, las copias se deshacen con él.
+     - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
+       la torre (parte 9).
+     - Prueba: `--captura --edificio torre --jefe becario --fotocopias`.
 6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres.
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las
    viviendas y un superviviente por trozo.

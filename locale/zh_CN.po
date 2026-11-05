@@ -444,6 +444,22 @@ msgstr "帮我把门口那些赶走！"
 msgid "¡Así no puedo, Johnny!"
 msgstr "Johnny，这样我没法干活！"
 
+#: scripts/becario.gd
+msgid "¡A COPIAR!"
+msgstr "复印开始！"
+
+#: scripts/becario.gd
+msgid "¡CORREO URGENTE!"
+msgstr "加急邮件！"
+
+#: scripts/becario.gd
+msgid "¡CAFÉ PARA TODOS!"
+msgstr "人人都有咖啡！"
+
+#: scripts/becario.gd
+msgid "¡ME VAN A CONTRATAR!"
+msgstr "我要转正了！"
+
 #: scripts/bestiario.gd
 msgid "El vecino"
 msgstr "邻居"
@@ -563,6 +579,14 @@ msgstr "主持人"
 #: scripts/bestiario.gd
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "对着麦克风大吼，用聚光灯晃瞎你，把地上撒满彩纸。发怒后，他让观众全都站起来。"
+
+#: scripts/bestiario.gd
+msgid "El becario"
+msgstr "实习生"
+
+#: scripts/bestiario.gd
+msgid "Se fotocopia a sí mismo: busca al único que tiene sombra. Embiste con el carrito del correo y lo pone todo perdido de café."
+msgstr "他会复印自己：找出唯一有影子的那个。他推着邮件车撞人，还把咖啡洒得到处都是。"
 
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"

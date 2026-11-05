@@ -10,6 +10,7 @@
 #                                    py tools/jefe_hoja.py bombero-72 jefe-bombero    (minijefe de los Apartamentos)
 #                                    py tools/jefe_hoja.py informatico-72 jefe-informatico   (minijefe de Torre Velaria)
 #                                    py tools/jefe_hoja.py presentador-72 jefe-presentador   (minijefe de Torre Velaria)
+#                                    py tools/jefe_hoja.py becario-72 jefe-becario   (minijefe de Torre Velaria)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -235,6 +236,22 @@ JEFES = {
         "de_frente": ["chasquear"],
         "motas": {"muerte": 60},   # (el micrófono que sale volando)
         "sin": {"chasquear_s": [1]},   # la estela blanca del brazo
+        "sangre": 150,
+    },
+    # el becario (minijefe de Torre Velaria): sus copias usan esta misma hoja (copia_becario.gd); el carrito del correo, los
+    # vasos de café y el reflejo en las fotocopiadoras salen con código (becario.gd). Hacia el oeste, el este dado la
+    # vuelta (tools/espejo_oeste.py), también la vista quieta
+    "becario-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 8, True, True),
+            "carrito": ("carrito", 9, False, False),
+            "lanzar": ("lanzar", 9, False, False),
+            "muerte": ("muerte", 13, False, False),
+        },
+        "motas": {"lanzar": 300, "carrito": 300},   # (los papeles que se le escapan al tirar y al coger el carrito; los
+        # de la muerte se quedan: caen al suelo con él)
         "sangre": 150,
     },
     # el científico jefe (el jefe final de los Apartamentos, lienzo de 128 como el gerente): las probetas que

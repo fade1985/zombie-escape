@@ -445,6 +445,22 @@ msgstr "Schaff sie mir von der Tür weg!"
 msgid "¡Así no puedo, Johnny!"
 msgstr "So geht das nicht, Johnny!"
 
+#: scripts/becario.gd
+msgid "¡A COPIAR!"
+msgstr "AB IN DEN KOPIERER!"
+
+#: scripts/becario.gd
+msgid "¡CORREO URGENTE!"
+msgstr "EILPOST!"
+
+#: scripts/becario.gd
+msgid "¡CAFÉ PARA TODOS!"
+msgstr "KAFFEE FÜR ALLE!"
+
+#: scripts/becario.gd
+msgid "¡ME VAN A CONTRATAR!"
+msgstr "ICH WERDE ÜBERNOMMEN!"
+
 #: scripts/bestiario.gd
 msgid "El vecino"
 msgstr "Der Nachbar"
@@ -564,6 +580,14 @@ msgstr "Der Moderator"
 #: scripts/bestiario.gd
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "Brüllt ins Mikro, blendet mit den Scheinwerfern und füllt den Boden mit Konfetti. Wütend holt er sein Publikum auf die Beine."
+
+#: scripts/bestiario.gd
+msgid "El becario"
+msgstr "Der Praktikant"
+
+#: scripts/bestiario.gd
+msgid "Se fotocopia a sí mismo: busca al único que tiene sombra. Embiste con el carrito del correo y lo pone todo perdido de café."
+msgstr "Er kopiert sich selbst: Such den Einzigen mit Schatten. Er rammt dich mit dem Postwagen und kippt überall Kaffee hin."
 
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"

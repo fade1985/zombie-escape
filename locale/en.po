@@ -445,6 +445,22 @@ msgstr "Get them off the door!"
 msgid "¡Así no puedo, Johnny!"
 msgstr "I can't work like this, Johnny!"
 
+#: scripts/becario.gd
+msgid "¡A COPIAR!"
+msgstr "COPY THAT!"
+
+#: scripts/becario.gd
+msgid "¡CORREO URGENTE!"
+msgstr "URGENT MAIL!"
+
+#: scripts/becario.gd
+msgid "¡CAFÉ PARA TODOS!"
+msgstr "COFFEE FOR EVERYONE!"
+
+#: scripts/becario.gd
+msgid "¡ME VAN A CONTRATAR!"
+msgstr "THEY'RE GONNA HIRE ME!"
+
 #: scripts/bestiario.gd
 msgid "El vecino"
 msgstr "The Neighbor"
@@ -564,6 +580,14 @@ msgstr "The Presenter"
 #: scripts/bestiario.gd
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "Shouts into his mic, blinds you with spotlights and fills the floor with confetti. Angry, he gets his audience on their feet."
+
+#: scripts/bestiario.gd
+msgid "El becario"
+msgstr "The Intern"
+
+#: scripts/bestiario.gd
+msgid "Se fotocopia a sí mismo: busca al único que tiene sombra. Embiste con el carrito del correo y lo pone todo perdido de café."
+msgstr "He photocopies himself: look for the only one with a shadow. He rams you with the mail cart and spills coffee everywhere."
 
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"

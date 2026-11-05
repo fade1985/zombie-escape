@@ -444,6 +444,123 @@ func probar_plato() -> void:
 	Captura.foto("captura-presentador-muerto.png")
 
 
+# Con "--captura --edificio torre --jefe becario --fotocopias": el becario (parte 5 de la torre, becario.gd) en su Sala de
+# fotocopias, quieto (cada ataque se le manda a mano) y con Johnny delante. Fotos: la sala (captura-fotocopias.png), las
+# copias recién salidas, con el de verdad reflejado en la máquina (captura-becario-copias.png y, de cerca, -reflejo), el
+# aviso del carrito (-carrito-aviso) y la embestida (-carrito), los vasos de café en el aire (-cafe-aviso) y sus charcos
+# (-cafe), enfadado con más copias (-enfadado) y caído, con las copias deshechas (-muerto). Lo que comprueba, en la terminal
+func probar_fotocopias() -> void:
+	if not await ir_a_la_sala_del_jefe("becario"):
+		return
+	var espera := func(s: float) -> void:
+		await get_tree().create_timer(s, false).timeout
+	jefa.quieto = true
+	jefa.espera_copias = 999.0
+	jefa.espera_carrito = 999.0
+	jefa.espera_cafe = 999.0
+	johnny.vida = 999
+	# (sin los demás zombis de la sala, como el escolta de la alarma: que no se metan en las fotos)
+	var limpiar := func() -> void:
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z != jefa and not "jefe" in z:
+				z.queue_free()
+	limpiar.call()
+	for al in get_tree().get_nodes_in_group("aliados"):   # (ni el superviviente que acompaña a Johnny: dispara a las copias)
+		al.process_mode = Node.PROCESS_MODE_DISABLED
+		al.visible = false
+	for cam in get_tree().get_nodes_in_group("camaras"):   # (sin alarmas que traigan escoltas)
+		cam.queue_free()
+	johnny.set_physics_process(false)   # (quieto y sin pegar: que no rompa las copias antes de la foto)
+	print("Fotocopias: sala «%s», %d fotocopiadoras (esperado: Sala de fotocopias, 3)" % [planta.sitios[aqui].nombre,
+		jefa.copiadoras().size()])
+	var sala_: Rect2 = jefa.sala()
+	johnny.global_position = Vector2(sala_.get_center().x, sala_.position.y + 260)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.5)
+	Captura.foto("captura-fotocopias.png")
+	# las copias: va a la fotocopiadora más cercana y salen tres; el de verdad, con sombra y en el frontal de la máquina
+	jefa.quieto = false
+	var c: Node2D = jefa.copiadora_cercana()
+	jefa.cambiar("a_copiar", {"copiadora": c})
+	var t0 := 0.0
+	while jefa.estado == "a_copiar" and t0 < 4.0:
+		await espera.call(0.1)
+		t0 += 0.1
+	jefa.quieto = true
+	await espera.call(jefa.COPIANDO * 0.5 + 0.15)
+	print("Copias: %d (esperado: 3), con sombra: %d (esperado: 0), el de verdad junto a la máquina: %s" % [
+		jefa.copias_vivas().size(), jefa.copias_vivas().filter(func(x): return x.has_node("Sombra")).size(),
+		jefa.global_position.distance_to(jefa.boca_de(c)) < 200.0])
+	johnny.global_position = jefa.global_position + Vector2(0, 70)
+	johnny.get_node("Camara").reset_smoothing()
+	for x in jefa.copias_vivas():
+		x.quieto = true
+	limpiar.call()
+	await espera.call(0.35)
+	Captura.foto("captura-becario-copias.png")
+	print("Reflejo: la fotocopiadora en pantalla, en %s" % (c.get_global_transform_with_canvas().origin))
+	# una copia se deshace de un golpe, sin quitarle vida al becario
+	var vida_antes: int = jefa.vida
+	var golpeada: Node2D = jefa.copias_vivas()[0]
+	golpeada.recibir_golpe(10, Vector2.UP)
+	await espera.call(0.2)
+	print("Copia golpeada: deshecha %s (esperado: true), al becario le quitó %d (esperado: 0)" % [
+		not is_instance_valid(golpeada), vida_antes - jefa.vida])
+	for x in jefa.copias_vivas():
+		x.deshacer()
+	johnny.set_physics_process(true)
+	# el carrito: la franja y la embestida, con Johnny delante
+	jefa.global_position = sala_.get_center() + Vector2(-200, 40)
+	johnny.global_position = jefa.global_position + Vector2(260, 0)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.3)
+	jefa.quieto = false
+	jefa.mirada = Vector2.RIGHT
+	limpiar.call()
+	jefa.cambiar("aviso_carrito", {"aviso": 0.8})
+	await espera.call(0.6)
+	Captura.foto("captura-becario-carrito-aviso.png")
+	var antes: int = johnny.vida
+	await espera.call(0.35)
+	Captura.foto("captura-becario-carrito.png")
+	await espera.call(0.8)
+	print("Carrito: le quita %d (esperado: 14), estado del becario «%s»" % [antes - johnny.vida, jefa.estado])
+	jefa.quieto = true
+	jefa.andar(999.0)
+	# el café: cuatro vasos donde está Johnny y alrededor, y sus charcos de café
+	johnny.global_position = jefa.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(1.0)
+	limpiar.call()
+	jefa.cambiar("cafe")
+	await espera.call(0.75)
+	Captura.foto("captura-becario-cafe-aviso.png")
+	await espera.call(0.8)
+	print("Café: charcos %d (esperado: 4)" % jefa.get_parent().get_children().filter(func(ch): return ch.get("tipo") == "cafe").size())
+	Captura.foto("captura-becario-cafe.png")
+	# enfadado: saca cinco copias, que pegan
+	jefa.vida = int(jefa.vida_max * 0.45)
+	await espera.call(1.8)
+	limpiar.call()
+	jefa.fotocopiar(null)
+	print("Enfadado: al copiar salen %d (esperado: 5)" % jefa.copias_vivas().size())
+	await espera.call(0.3)
+	print("Enfadado: fase %d (esperado: 2), copias %d (esperado: 5), pegan %d (esperado: 5)" % [jefa.fase,
+		jefa.copias_vivas().size(), jefa.copias_vivas()[0].CONTACTO if jefa.enfadado() else 0])
+	for x in jefa.copias_vivas():
+		x.quieto = true
+	johnny.global_position = jefa.global_position + Vector2(0, 230)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.3)
+	Captura.foto("captura-becario-enfadado.png")
+	jefa.recibir_golpe(99999, Vector2.UP)
+	await espera.call(0.6)
+	print("Muerto: quedan %d copias (esperado: 0)" % get_tree().get_nodes_in_group("zombis").filter(
+		func(z): return "jefe" in z).size())
+	await espera.call(0.8)   # (a los 2 s sale la mutación, que para el juego)
+	Captura.foto("captura-becario-muerto.png")
+
+
 # Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 9 fogones y
 # freidoras (tres en cada pared), que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
 # Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los

@@ -137,7 +137,14 @@ en una línea.
     en las butacas, `sentado` en `zombi.gd`: no se despiertan solos, el apuntado automático no los elige y, enfadado, los levanta a
     todos; si muere, se desploman con él. Su Plató de presentaciones, `jefe-presentador` en el catálogo: escenario con pantalla,
     atril y focos en la pared de arriba y filas de butacas, `islas` con `arriba`; prueba
-    `--captura --edificio torre --jefe presentador --plato`). El becario, sin hacer.
+    `--captura --edificio torre --jefe presentador --plato`). `becario.gd` (el becario: corre a la fotocopiadora más cercana y,
+    con un destello, salen sus copias, `copia_becario.gd`, iguales pero sin sombra y más claras, que mueren de un golpe y no
+    pegan hasta que se enfada; él se cambia de sitio con una y es el único que se refleja en el frontal de las fotocopiadoras
+    cercanas. El carrito del correo, dibujado con código, embiste por una franja roja, `embestir` de `minijefe.gd`. Los vasos de
+    café, `"cafe"` en `proyectil.gd`, dejan el charco `"cafe"` de `charco.gd`, que resbala. Si muere, las copias se deshacen en
+    papeles. Su Sala de fotocopias, `jefe-becario` en el catálogo: tres fotocopiadoras, impresoras, archivadores y lámparas arriba,
+    fuentes y plantas a los lados y dos filas de escritorios, `islas` con `arriba`; prueba
+    `--captura --edificio torre --jefe becario --fotocopias`).
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
     `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
     espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`

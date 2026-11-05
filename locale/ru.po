@@ -446,6 +446,22 @@ msgstr "Убери их от двери!"
 msgid "¡Así no puedo, Johnny!"
 msgstr "Так я не могу, Джонни!"
 
+#: scripts/becario.gd
+msgid "¡A COPIAR!"
+msgstr "КОПИРУЮ!"
+
+#: scripts/becario.gd
+msgid "¡CORREO URGENTE!"
+msgstr "СРОЧНАЯ ПОЧТА!"
+
+#: scripts/becario.gd
+msgid "¡CAFÉ PARA TODOS!"
+msgstr "КОФЕ ДЛЯ ВСЕХ!"
+
+#: scripts/becario.gd
+msgid "¡ME VAN A CONTRATAR!"
+msgstr "МЕНЯ ВОЗЬМУТ В ШТАТ!"
+
 #: scripts/bestiario.gd
 msgid "El vecino"
 msgstr "Сосед"
@@ -565,6 +581,14 @@ msgstr "Ведущий"
 #: scripts/bestiario.gd
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "Орёт в микрофон, слепит прожекторами и засыпает пол конфетти. В ярости поднимает на ноги свою публику."
+
+#: scripts/bestiario.gd
+msgid "El becario"
+msgstr "Стажёр"
+
+#: scripts/bestiario.gd
+msgid "Se fotocopia a sí mismo: busca al único que tiene sombra. Embiste con el carrito del correo y lo pone todo perdido de café."
+msgstr "Он ксерокопирует сам себя: ищи единственного с тенью. Таранит почтовой тележкой и всё заливает кофе."
 
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"

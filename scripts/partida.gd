@@ -59,11 +59,12 @@ const ZOMBIS := {
 	"directora": preload("res://escenas/personajes/directora.tscn"),   # minijefes de Torre Velaria (docs/PLAN_TERCER_EDIFICIO.md)
 	"informatico": preload("res://escenas/personajes/informatico.tscn"),
 	"presentador": preload("res://escenas/personajes/presentador.tscn"),
+	"becario": preload("res://escenas/personajes/becario.tscn"),
 }
 # Los jefes de planta: barra de vida grande, un 35 % más duros en cada planta (JEFE_POR_PLANTA) y, al caer, billetes,
 # munición, objetos y la mutación (el jefe final de un edificio, el gerente, sin lo de la planta ni la mutación: final_de())
 const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "gerente", "gloton", "gymbro", "bombero",
-	"cientifico_jefe", "directora", "informatico", "presentador"]
+	"cientifico_jefe", "directora", "informatico", "presentador", "becario"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const BILLETE := preload("res://scripts/billete.gd")
@@ -91,7 +92,7 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "modista": Color("#93b07a"),
 	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80"), "gloton": Color("#b9a06e"), "gymbro": Color("#c2b48a"),
 	"bombero": Color("#6b6158"), "cientifico_jefe": Color("#d9d6c8"), "directora": Color("#9aa88a"),
-	"informatico": Color("#a3a98c"), "presentador": Color("#a9a56e")}
+	"informatico": Color("#a3a98c"), "presentador": Color("#a9a56e"), "becario": Color("#9fae86")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)

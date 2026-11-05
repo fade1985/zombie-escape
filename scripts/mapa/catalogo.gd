@@ -938,6 +938,19 @@ const SALAS := {
 		},
 		"islas": {"muebles": ["theaterseats"], "fila": 2, "entre": 0, "cada": 150, "arriba": 170.0},
 	},
+	# la Sala de fotocopias del becario (minijefe de Torre Velaria): en el fondo, tres fotocopiadoras (las de su ataque:
+	# corre a la más cercana y saca sus copias, becario.gd) con impresoras, archivadores y dos lámparas; a los lados, fuentes
+	# de agua y plantas, y en medio dos filas de escritorios con pasillos, detrás de los que esconderse del carrito
+	"jefe-becario": {
+		"muebles": [],
+		"cuantos": [0, 0],
+		"fijos": {
+			"arriba": ["copier", "printer", "lamp", "filecabinet", "copier", "filecabinet", "lamp", "printer", "copier"],
+			"izquierda": ["plant", "watercooler", "plant"],
+			"derecha": ["plant", "watercooler", "plant"],
+		},
+		"islas": {"muebles": ["officedesk"], "fila": 2, "entre": 120, "cada": 230, "arriba": 150.0},
+	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {
 		"muebles": ["tallmannequin", "clothesrack", "tallmannequin", "checkout"],

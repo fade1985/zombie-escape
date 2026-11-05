@@ -149,6 +149,11 @@ const EFECTOS := {
 	"microfono": {"hueco": 300, "notas": [[2400, 0.35, "seno", 0.02, 900, 0.0], [150, 0.4, "sierra", 0.06, -60, 0.05],
 		[110, 0.35, "cuadrada", 0.035, -40, 0.1]]},
 	"foco": {"hueco": 200, "notas": [[140, 0.06, "cuadrada", 0.06, -60], [900, 0.25, "seno", 0.012, 300, 0.05]]},
+	# el becario: la fotocopiadora al copiar (el zumbido de la luz que pasa), las copias al deshacerse en papeles y el
+	# traqueteo del carrito del correo
+	"fotocopia": {"hueco": 300, "notas": [[180, 0.5, "sierra", 0.03, 120, 0.0], [1400, 0.4, "seno", 0.012, 600, 0.05]]},
+	"papeles": {"hueco": 60, "notas": [[2500, 0.18, "ruido", 0.03, -1200, 0.0], [1200, 0.12, "ruido", 0.015, -400, 0.06]]},
+	"carrito": {"hueco": 300, "notas": [[90, 0.5, "cuadrada", 0.03, 30, 0.0], [600, 0.45, "ruido", 0.012, -200, 0.0]]},
 	"confeti": {"hueco": 120, "notas": [[260, 0.08, "cuadrada", 0.06, -180], [3000, 0.25, "ruido", 0.02, -1500, 0.02]]},
 	# los eventos sorpresa (eventos.gd): la sirena de la alarma de incendios
 	"alarma": {"fijo": true, "hueco": 400, "notas": [[720, 0.4, "triangulo", 0.03, 380, 0.0], [1100, 0.4, "triangulo", 0.03, -380, 0.4],

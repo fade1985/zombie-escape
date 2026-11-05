@@ -40,6 +40,8 @@ const TIPOS := {
 	"aceite": {"dibujo": LEJIA, "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}, "tinte": Color(1.0, 0.8, 0.25)},
 	"hirviendo": {"radio": 60.0, "vida": 6.0, "estados": {"fuego": {"dps": 12.0}}, "prende": true},   # el del cocinero
 	# el agua de los aspersores (la alarma de incendios, eventos.gd): solo resbala, y no se seca mientras dure
+	# el café de los vasos del becario (becario.gd): solo resbala
+	"cafe": {"dibujo": LEJIA, "radio": 50.0, "vida": 6.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.6, 0.38, 0.22)},
 	"agua": {"dibujo": LEJIA, "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.55, 0.8, 1.0)},
 }
 # Los colores de los charcos que burbujean: del borde al centro, los brillos, la burbuja (y su brillo), el vapor y

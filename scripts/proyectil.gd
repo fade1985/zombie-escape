@@ -29,6 +29,8 @@ const TIPOS := {
 	"probeta_acido": {"vuelo": 0.85, "altura": 170.0, "golpe": 6, "charco": "acido", "marca": 50.0, "liquido": Color("#d8ff4a")},
 	"probeta_veneno": {"vuelo": 0.85, "altura": 170.0, "golpe": 6, "charco": "veneno", "marca": 50.0, "liquido": Color("#b05ad8")},
 	"probeta_aceite": {"vuelo": 0.85, "altura": 170.0, "golpe": 0, "charco": "aceite", "marca": 50.0, "liquido": Color("#4fc3ff")},
+	# los vasos de café del becario (becario.gd): en curva, con su marca, y dejan un charco de café que resbala
+	"cafe": {"vuelo": 0.8, "altura": 150.0, "golpe": 6, "charco": "cafe", "marca": 46.0, "liquido": Color("#6b3f22")},
 }
 
 var tipo := "veneno"
@@ -102,7 +104,7 @@ func caer(datos: Dictionary) -> void:
 			var a := randf() * TAU
 			var color: Color = datos.get("liquido", Color("#e8c547") if tipo == "sarten" else Color("#c7e04a"))
 			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160), color, randf_range(3, 5), 0.4)
-		if datos.has("liquido"):   # la probeta: también sus cristales
+		if tipo.begins_with("probeta"):   # la probeta: también sus cristales
 			for i in 4:
 				var a := randf() * TAU
 				Particulas.soltar(self, hasta, Vector2(cos(a) * 110.0, sin(a) * 65.0), Color("#d8f0ff"), 2, 0.3)
@@ -171,6 +173,8 @@ func _draw() -> void:
 			sarten(self, donde, t * 9.0)
 		"probeta_acido", "probeta_veneno", "probeta_aceite":
 			probeta(self, donde, t * 11.0, datos.liquido)
+		"cafe":
+			vaso(self, donde, t * 9.0)
 		_:
 			# La garrafa de lejía, dando vueltas
 			draw_set_transform(donde, t * 10.0, Vector2(2, 2))
@@ -199,6 +203,19 @@ static func probeta(lienzo: CanvasItem, donde: Vector2, giro: float, liquido: Co
 	lienzo.draw_rect(Rect2(-3, -10, 2, 8), Color(1, 1, 1, 0.6))     # el brillo del cristal
 	lienzo.draw_rect(Rect2(-5, -18, 10, 5), contorno)              # el tapón
 	lienzo.draw_rect(Rect2(-4, -17, 8, 3), Color("#b58a5a"))
+
+
+# Un vaso de café de cartón, con su tapa y la funda marrón, dando vueltas (los del becario)
+static func vaso(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
+	lienzo.draw_set_transform(donde, giro)
+	var contorno := Color("#1d1b2c")
+	lienzo.draw_colored_polygon(PackedVector2Array([Vector2(-9, -12), Vector2(9, -12), Vector2(7, 13), Vector2(-7, 13)]), contorno)
+	lienzo.draw_colored_polygon(PackedVector2Array([Vector2(-7, -10), Vector2(7, -10), Vector2(5, 11), Vector2(-5, 11)]),
+		Color("#f2efe6"))
+	lienzo.draw_rect(Rect2(-6, -3, 12, 7), Color("#a8743f"))        # la funda
+	lienzo.draw_rect(Rect2(-10, -16, 20, 5), contorno)               # la tapa
+	lienzo.draw_rect(Rect2(-9, -15, 18, 3), Color("#ffffff"))
+	lienzo.draw_rect(Rect2(-5, -8, 2, 4), Color(1, 1, 1, 0.7))       # el brillo
 
 
 # Dónde caerá la sartén: un anillo rojo que se va llenando
