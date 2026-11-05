@@ -269,7 +269,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
 
 1. **El esqueleto** (Opus): la ficha `"torre"`, el candado, el generador de departamentos y sus habitaciones (con
    muebles prestados de los otros edificios), los nombres de las plantas (10, 20, 30, 40) y el cerrojo del código con
-   sus tres ordenadores. **Hecho el 5 nov, a falta del visto bueno del dueño.** Lo que ha quedado:
+   sus tres ordenadores. ✅ **Hecho el 5 nov, con el visto bueno del dueño.** Lo que ha quedado:
    - La ficha `"torre"` en `edificios.gd` (se abre al completar el centro) y sus cuatro minijefes en `MINIJEFES` (sin
      hacer: en su planta sale la portera, con su cuarto de la limpieza). El icono de su tarjeta, `tools/icono_torre.py`.
    - Los seis departamentos son tipos de `Tienda.TIPOS` con `"edificio": "torre"`; cada uno toma de momento el plano, los
