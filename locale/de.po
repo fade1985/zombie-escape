@@ -525,7 +525,7 @@ msgstr "Der Kartenwächter"
 msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
 msgstr "Er hat die Karte für den Stock und weiß es. Er pfeift, haut ab und kommt aus der Puste: Das ist deine Chance."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Der Einsatzpolizist"
 
@@ -2858,6 +2858,14 @@ msgstr "Verbände und Medikits heilen 50 % mehr."
 #: scripts/skins.gd
 msgid "Mata al cocinero por primera vez."
 msgstr "Erledige den Koch zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "Tras un golpe, tardas más en poder recibir otro (de 0,7 a 1,2 s) y nada te tira al suelo."
+msgstr "Nach einem Treffer dauert es länger, bis du wieder getroffen werden kannst (von 0,7 auf 1,2 s), und nichts wirft dich um."
+
+#: scripts/skins.gd
+msgid "Mata al antidisturbios por primera vez."
+msgstr "Erledige den Einsatzpolizisten zum ersten Mal."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

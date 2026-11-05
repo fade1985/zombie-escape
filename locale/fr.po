@@ -525,7 +525,7 @@ msgstr "Le garde au badge"
 msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
 msgstr "Il a le badge de l'étage et il le sait. Il siffle, il fuit et il s'essouffle : c'est ton moment."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Le CRS"
 
@@ -2858,6 +2858,14 @@ msgstr "Les bandages et les médikits soignent 50 % de plus."
 #: scripts/skins.gd
 msgid "Mata al cocinero por primera vez."
 msgstr "Tue le cuisinier pour la première fois."
+
+#: scripts/skins.gd
+msgid "Tras un golpe, tardas más en poder recibir otro (de 0,7 a 1,2 s) y nada te tira al suelo."
+msgstr "Après un coup, il faut plus de temps avant de pouvoir en recevoir un autre (de 0,7 à 1,2 s) et rien ne te fait tomber."
+
+#: scripts/skins.gd
+msgid "Mata al antidisturbios por primera vez."
+msgstr "Tue le CRS pour la première fois."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

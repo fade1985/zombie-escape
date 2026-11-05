@@ -1211,7 +1211,7 @@ func paso() -> Array:
 # sin andar, atacar ni rodar, y luego se levanta. No quita vida (lo malo es lo que pase mientras). Rodando no se
 # tropieza, ni recién levantado. Devuelve si se ha caído
 func caer(segundos: float) -> bool:
-	if not vivo or esquiva_t > 0.0 or caido_t > 0.0 or levantado_t > 0.0:
+	if not vivo or esquiva_t > 0.0 or caido_t > 0.0 or levantado_t > 0.0 or Skins.firme(skin):   # (el antidisturbios, no)
 		return false
 	var iba := velocity
 	quedarse_quieto()
@@ -1360,7 +1360,7 @@ func recibir_dano(cantidad: int, quien = null, peligro := "") -> void:
 		Zombi.texto_flotante(get_parent(), global_position + Vector2(-40, -70), Idioma.t("¡Esquivado!"), AZUL, 18)
 		Sonido.tocar("esquiva")
 		return
-	invulnerable = INVULNERABLE
+	invulnerable = maxf(INVULNERABLE, Skins.aguante(skin))   # (el antidisturbios, skins.gd: más rato)
 	# Durito quita un poco a cada golpe (sin bajar de GOLPE_MINIMO de lo que era); lo que queda se lo lleva el escudo,
 	# si le queda (quitar_vida())
 	var minimo := maxi(1, roundi(cantidad * GOLPE_MINIMO))
@@ -1408,13 +1408,17 @@ func devolver(quien) -> void:
 
 
 # Lo llaman los charcos en cada paso mientras los pisa (charco.gd): apunta sus estados. La esquiva cruza
-# cualquier charco sin que le pase nada. Con la skin del bombero, el fuego tampoco (lo demás del charco, sí)
+# cualquier charco sin que le pase nada. Con la skin del bombero, el fuego tampoco (lo demás del charco, sí); con la del
+# antidisturbios, "tirado" (lo que ponen las cargas y los golpes que tumban) tampoco
 func pisar(estados_charco: Dictionary) -> void:
 	if vivo and esquiva_t <= 0.0:
 		var pisados := estados_charco
 		if ignifugo() and pisados.has("fuego"):
 			pisados = estados_charco.duplicate()
 			pisados.erase("fuego")
+		if Skins.firme(skin) and pisados.has("tirado"):   # (el antidisturbios: las cargas no le tiran)
+			pisados = pisados.duplicate()
+			pisados.erase("tirado")
 		Estados.pisar(pisando, pisados)
 
 

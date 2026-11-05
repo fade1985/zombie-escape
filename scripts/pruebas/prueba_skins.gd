@@ -10,6 +10,9 @@ extends "res://scripts/pruebas/prueba_armas.gd"
 #   - el doctor Salas: suelta un objeto de más la mitad de las veces (Skins.doble) y lo consigue el científico jefe
 #   - el cocinero (M90): las vendas y el botiquín curan un 50 % más (Skins.cura, partida.cura_de), contado y usando unas
 #     vendas de verdad; lo consigue el cocinero del centro comercial
+#   - el antidisturbios (M90): tras un golpe, 1,2 s sin recibir otro (y no 0,7), de verdad: un segundo golpe a los 0,9 s
+#     no le quita nada con la skin y sin ella sí; y nada le tira (ni "tirado" al pisar ni caer()); lo consigue el
+#     antidisturbios del centro comercial; su carta en la taquilla (captura-skins-taquilla-antidisturbios.png)
 #   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
 #     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón, el gymbro y el bombero
 #     (captura-skins-taquilla-<id>.png); «Siguiente skin» del panel de pruebas da la vuelta sin guardar
@@ -176,6 +179,17 @@ func probar_skins() -> void:
 		print("Elegido el cocinero: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true)" % [johnny.skin,
 			johnny.sprite.sprite_frames.resource_path.get_file(),
 			(taquilla.cartas["cocinero"] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y])
+		# el antidisturbios (M90), igual: el último de la lista (captura-skins-taquilla-antidisturbios.png)
+		Skins.desbloquear("antidisturbios")
+		taquilla.abrir(self)
+		await get_tree().process_frame
+		(taquilla.cartas["antidisturbios"] as Button).grab_focus()
+		taquilla.elegir("antidisturbios")
+		await get_tree().create_timer(0.5).timeout
+		Captura.foto("captura-skins-taquilla-antidisturbios.png")
+		print("Elegido el antidisturbios: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true)" % [
+			johnny.skin, johnny.sprite.sprite_frames.resource_path.get_file(),
+			(taquilla.cartas["antidisturbios"] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y])
 		taquilla.cerrar()
 	print("Taquilla cerrada: juego en pausa %s (esperado: false)" % get_tree().paused)
 	var vuelta := []
@@ -183,7 +197,7 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > Conserje)" % " > ".join(vuelta))
+	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > El antidisturbios > Conserje)" % " > ".join(vuelta))
 	# el doctor Salas (M36): la mitad de las veces, un objeto más; las demás skins, nunca
 	print("Objeto de más: salas %s · bombero %s · conserje %s · lo consigue «%s» (esperado: 0.5, 0, 0, «salas»)" % [
 		Skins.doble("salas"), Skins.doble("bombero"), Skins.doble(""), Skins.de_jefe("cientifico_jefe")])
@@ -201,6 +215,34 @@ func probar_skins() -> void:
 		" · ".join(curas), johnny.vida - antes, Skins.de_jefe("cocinero")])
 	johnny.skin = ""
 	johnny.vida = johnny.vida_tope()
+	# el antidisturbios (M90): tras un golpe, más rato sin recibir otro; de verdad, con dos golpes a 0,9 s
+	var aguante := []
+	for skin in ["", "antidisturbios", "cocinero"]:
+		johnny.skin = skin
+		johnny.invulnerable = 0.0
+		var vida_antes: int = johnny.vida
+		johnny.recibir_dano(5)
+		var tras_uno: float = johnny.invulnerable
+		var primero: int = vida_antes - johnny.vida
+		await get_tree().create_timer(0.9).timeout
+		vida_antes = johnny.vida
+		johnny.recibir_dano(5)
+		aguante.append("%s: %.1f s, 1º -%d, 2º -%d" % [Skins.nombre(skin), tras_uno, primero, vida_antes - johnny.vida])
+		johnny.vida = johnny.vida_tope()
+	johnny.invulnerable = 0.0
+	# y nada le tira: ni lo que ponen las cargas ("tirado") ni los tropiezos (caer())
+	johnny.skin = "antidisturbios"
+	johnny.pisando.clear()
+	johnny.pisar({"tirado": {}})
+	var tirado_con: bool = johnny.pisando.has("tirado")
+	var cae_con: bool = johnny.caer(1.0)
+	johnny.skin = ""
+	johnny.pisando.clear()
+	johnny.pisar({"tirado": {}})
+	var tirado_sin: bool = johnny.pisando.has("tirado")
+	johnny.pisando.clear()
+	print("Aguante: %s · con la skin, tirado %s y se cae %s · sin ella, tirado %s · lo consigue «%s» (esperado: 0,7 s y el 2º quita lo mismo que el 1º; 1,2 s y el 2º, nada; 0,7 s y lo mismo; false, false; true; «antidisturbios»)" % [
+		" · ".join(aguante), tirado_con, cae_con, tirado_sin, Skins.de_jefe("antidisturbios")])
 
 	# ── La cara: las 8 direcciones con la fregona, y las otras armas mirando al sur (una foto por skin) ──
 	johnny.position = Vector2(690, 330)
@@ -208,7 +250,7 @@ func probar_skins() -> void:
 	johnny.hide()
 	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
-	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero"]:
+	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios"]:
 		var copias := []
 		var hojas_bien := 0
 		for i in dirs.size() + armas.size() + 1:

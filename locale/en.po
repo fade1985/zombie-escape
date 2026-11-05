@@ -525,7 +525,7 @@ msgstr "The Keycard Guard"
 msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
 msgstr "He's got the floor's keycard and he knows it. He whistles, runs off and gets winded: that's your moment."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "The Riot Cop"
 
@@ -2858,6 +2858,14 @@ msgstr "Bandages and medkits heal 50 % more."
 #: scripts/skins.gd
 msgid "Mata al cocinero por primera vez."
 msgstr "Kill the cook for the first time."
+
+#: scripts/skins.gd
+msgid "Tras un golpe, tardas más en poder recibir otro (de 0,7 a 1,2 s) y nada te tira al suelo."
+msgstr "After a hit, it takes longer before you can be hit again (from 0.7 to 1.2 s) and nothing knocks you down."
+
+#: scripts/skins.gd
+msgid "Mata al antidisturbios por primera vez."
+msgstr "Kill the riot cop for the first time."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

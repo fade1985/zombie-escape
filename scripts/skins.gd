@@ -37,6 +37,15 @@
 # La sexta, el cocinero (la suelta el cocinero del centro comercial al caer por primera vez, partida.gd; M90): un gorro
 # de cocinero blanco en lugar del pañuelo, con su barba de siempre. Con ella puesta, las vendas y los botiquines curan un
 # 50 % más ("cura"; partida.gd, cura_de(): las vendas, de 25 a 38; el botiquín, de 40 a 60)
+#
+# La séptima, el antidisturbios (la suelta el antidisturbios del centro comercial al caer por primera vez, partida.gd;
+# M90): un casco antidisturbios negro con la visera bajada; tapa el pelo y el pañuelo. Con ella puesta:
+#   - tras un golpe, Johnny tarda más en poder recibir otro ("aguante"; johnny.gd, recibir_dano(): de 0,7 s a 1,2 s,
+#     parpadeando). Solo se nota cuando le pegan muchos seguidos (una horda, el aceite del cocinero...): un golpe suelto
+#     quita lo mismo
+#   - nada le tira al suelo ("firme"; johnny.gd, pisar() y caer()): ni la carga del antidisturbios ni la embestida de
+#     la mascota, ni los golpes que tumban del Glotón, el Gymbro o el doctor Salas, ni las mancuernas del gimnasio.
+#     El daño de esos golpes, sí se lo llevan
 class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
@@ -55,6 +64,9 @@ const LISTA := {
 		"como": "Mata al doctor Salas por primera vez.", "jefe": "cientifico_jefe", "doble": 0.5},
 	"cocinero": {"nombre": "El cocinero", "efecto": "Las vendas y los botiquines curan un 50 % más.",
 		"como": "Mata al cocinero por primera vez.", "jefe": "cocinero", "cura": 1.5},
+	"antidisturbios": {"nombre": "El antidisturbios",
+		"efecto": "Tras un golpe, tardas más en poder recibir otro (de 0,7 a 1,2 s) y nada te tira al suelo.",
+		"como": "Mata al antidisturbios por primera vez.", "jefe": "antidisturbios", "aguante": 1.2, "firme": true},
 }
 # [/traducir]
 
@@ -155,3 +167,14 @@ static func doble(id: String) -> float:
 # Por cuánto se multiplica lo que curan las vendas y los botiquines con esa skin (el cocinero, 1,5)
 static func cura(id: String) -> float:
 	return LISTA[id].get("cura", 1.0) if id in LISTA else 1.0
+
+
+# Cuánto rato pasa Johnny sin recibir daño tras un golpe con esa skin (0 = el de siempre, johnny.INVULNERABLE: el
+# antidisturbios, 1,2 s)
+static func aguante(id: String) -> float:
+	return LISTA[id].get("aguante", 0.0) if id in LISTA else 0.0
+
+
+# Si con esa skin nada tira a Johnny al suelo (el antidisturbios): ni las cargas y embestidas ni los tropiezos
+static func firme(id: String) -> bool:
+	return LISTA[id].get("firme", false) if id in LISTA else false
