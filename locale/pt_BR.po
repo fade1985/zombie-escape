@@ -557,6 +557,14 @@ msgstr "O cara da TI"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "Eletrifica o chão em faixas e apaga a luz da sala. Irritado, reinicia ao lado de outro rack."
 
+#: scripts/bestiario.gd
+msgid "El presentador"
+msgstr "O apresentador"
+
+#: scripts/bestiario.gd
+msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
+msgstr "Grita no microfone, cega com os holofotes e enche o chão de confete. Irritado, põe a plateia de pé."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "O policial de choque"
@@ -2970,6 +2978,26 @@ msgstr "FAXINA!"
 #: scripts/portera.gd
 msgid "¡QUE ACABO DE FREGAR!"
 msgstr "ACABEI DE PASSAR PANO!"
+
+#: scripts/presentador.gd
+msgid "¡UN APLAUSO!"
+msgstr "UMA SALVA DE PALMAS!"
+
+#: scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRESA!"
+
+#: scripts/presentador.gd
+msgid "¡¿ME OÍS AL FONDO?!"
+msgstr "VOCÊS AÍ DO FUNDO ME OUVEM?!"
+
+#: scripts/presentador.gd
+msgid "¡Cegado!"
+msgstr "Cego!"
+
+#: scripts/presentador.gd
+msgid "¡EN PIE, PÚBLICO!"
+msgstr "DE PÉ, PLATEIA!"
 
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"

@@ -354,6 +354,96 @@ func probar_datos() -> void:
 	Captura.foto("captura-informatico-muerto.png")
 
 
+# Con "--captura --edificio torre --jefe presentador --plato": el presentador (parte 5 de la torre, presentador.gd) en su
+# Plató de presentaciones, quieto (cada ataque se le manda a mano) y con Johnny delante. Fotos: la sala con las butacas y
+# el público sentado (captura-plato.png), el cono del grito (captura-presentador-grito-aviso.png) y la onda (-grito), el
+# foco siguiendo a Johnny (-foco) y la pantalla blanca al mirarlo (-cegado), los cañones de confeti (-confeti-aviso y
+# -confeti), enfadado con el público en pie (-enfadado) y caído (-muerto). Lo que comprueba, en la terminal
+func probar_plato() -> void:
+	if not await ir_a_la_sala_del_jefe("presentador"):
+		return
+	var espera := func(s: float) -> void:
+		await get_tree().create_timer(s, false).timeout
+	jefa.quieto = true
+	jefa.espera_grito = 999.0
+	jefa.espera_focos = 999.0
+	jefa.espera_confeti = 999.0
+	johnny.vida = 999
+	var butacas := get_tree().get_nodes_in_group("muebles").filter(func(m): return m.get("datos") is Dictionary 		and m.datos.get("tipo", "") == jefa.BUTACAS)
+	var sentados: Array = jefa.publico.filter(func(z): return z.sentado)
+	print("Plató: sala «%s», %d filas de butacas, %d focos, %d sentados (esperado: Plató de presentaciones, 10 sentados)" % [
+		planta.sitios[aqui].nombre, butacas.size(), jefa.focos().size(), sentados.size()])
+	# la sala entera, con el público sentado: Johnny en medio (con un tiro al aire: no se despiertan)
+	johnny.global_position = jefa.global_position + Vector2(0, 260)
+	johnny.get_node("Camara").reset_smoothing()
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.has_method("oir_disparo"):
+			z.oir_disparo(johnny.global_position)
+	await espera.call(0.8)
+	print("Plató: tras el tiro, siguen sentados %d (esperado: 10)" % jefa.publico.filter(func(z): return z.sentado).size())
+	Captura.foto("captura-plato.png")
+	# el escenario: la pantalla, el atril y los focos
+	var sala_: Rect2 = jefa.sala()
+	johnny.global_position = Vector2(sala_.get_center().x, sala_.position.y + 230)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.4)
+	Captura.foto("captura-plato-escenario.png")
+	print("Plató: el suelo %s, el presentador en %s" % [sala_, jefa.global_position])
+	# el grito al micrófono: el cono y la onda, con Johnny dentro (le empuja hacia atrás)
+	johnny.global_position = jefa.global_position + Vector2(0, 170)
+	await espera.call(0.3)
+	jefa.cambiar("microfono", {"angulo": PI / 2, "gritos": 0})
+	await espera.call(0.5)
+	Captura.foto("captura-presentador-grito-aviso.png")
+	var antes: int = johnny.vida
+	var desde: Vector2 = johnny.global_position
+	await espera.call(0.42)
+	Captura.foto("captura-presentador-grito.png")
+	await espera.call(0.3)
+	print("Grito: le quita %d (esperado: 12) y le aparta %.0f (esperado: más de 60)" % [antes - johnny.vida,
+		johnny.global_position.distance_to(desde) if johnny.global_position.y > desde.y else -1.0])
+	await espera.call(0.8)
+	# los focos: el haz sigue a Johnny; mirando al foco, ciega
+	johnny.global_position = jefa.global_position + Vector2(0, 220)
+	jefa.cambiar("focos")
+	await espera.call(1.2)
+	print("Focos: encendidos %d (esperado: 1)" % jefa.haces.size())
+	Captura.foto("captura-presentador-foco.png")
+	if not jefa.haces.is_empty():
+		var h: Dictionary = jefa.haces[0]
+		johnny.global_position = h.punto
+		johnny.direccion = Minijefe.DIRS[posmod(roundi((h.foco.global_position + jefa.CABEZA_FOCO - h.punto).angle() / (PI / 4.0)), 8)]
+		johnny.set_physics_process(false)   # (quieto, mirando al foco)
+		await espera.call(0.25)
+		print("Focos: mirándolo, cegado %.2f (esperado: más de 0)" % jefa.cegado_t)
+		Captura.foto("captura-presentador-cegado.png")
+		johnny.set_physics_process(true)
+	await espera.call(jefa.HAZ)
+	# el confeti: cuatro cañones donde va estando Johnny (que anda hacia la derecha)
+	johnny.global_position = jefa.global_position + Vector2(-140, 200)
+	jefa.cambiar("confeti", {"puestos": 0})
+	for i in 12:
+		johnny.global_position.x += 24.0
+		await espera.call(0.13)
+	print("Confeti: cañones %d (esperado: 4)" % get_tree().get_nodes_in_group("balas_zombi").filter(func(b): return b is Confeti).size())
+	Captura.foto("captura-presentador-confeti-aviso.png")
+	await espera.call(0.6)
+	Captura.foto("captura-presentador-confeti.png")
+	await espera.call(1.2)
+	# enfadado: el público se levanta
+	jefa.vida = int(jefa.vida_max * 0.45)
+	await espera.call(2.2)
+	print("Enfadado: fase %d (esperado: 2), sentados %d (esperado: 0)" % [jefa.fase,
+		jefa.publico.filter(func(z): return is_instance_valid(z) and z.sentado).size()])
+	johnny.global_position = jefa.global_position + Vector2(0, 240)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.3)
+	Captura.foto("captura-presentador-enfadado.png")
+	jefa.recibir_golpe(99999, Vector2.UP)
+	await espera.call(1.4)   # (a los 2 s sale la mutación, que para el juego)
+	Captura.foto("captura-presentador-muerto.png")
+
+
 # Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 9 fogones y
 # freidoras (tres en cada pared), que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
 # Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los

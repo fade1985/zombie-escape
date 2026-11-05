@@ -144,6 +144,12 @@ const EFECTOS := {
 	"viento": {"hueco": 700, "notas": [[500, 1.2, "ruido", 0.012, 300, 0.0], [300, 0.9, "ruido", 0.008, -150, 0.25]]},
 	"camara": {"hueco": 250, "notas": [[1900, 0.05, "cuadrada", 0.008, 0]]},
 	"siseo": {"hueco": 300, "notas": [[5000, 0.5, "ruido", 0.012, -2000]]},
+	# el presentador (minijefe de Torre Velaria): el acople del micrófono con su grito, el clac del foco al encenderse y
+	# el estallido del cañón de confeti
+	"microfono": {"hueco": 300, "notas": [[2400, 0.35, "seno", 0.02, 900, 0.0], [150, 0.4, "sierra", 0.06, -60, 0.05],
+		[110, 0.35, "cuadrada", 0.035, -40, 0.1]]},
+	"foco": {"hueco": 200, "notas": [[140, 0.06, "cuadrada", 0.06, -60], [900, 0.25, "seno", 0.012, 300, 0.05]]},
+	"confeti": {"hueco": 120, "notas": [[260, 0.08, "cuadrada", 0.06, -180], [3000, 0.25, "ruido", 0.02, -1500, 0.02]]},
 	# los eventos sorpresa (eventos.gd): la sirena de la alarma de incendios
 	"alarma": {"fijo": true, "hueco": 400, "notas": [[720, 0.4, "triangulo", 0.03, 380, 0.0], [1100, 0.4, "triangulo", 0.03, -380, 0.4],
 		[720, 0.4, "triangulo", 0.03, 380, 0.8], [1100, 0.4, "triangulo", 0.03, -380, 1.2]]},

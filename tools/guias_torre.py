@@ -32,6 +32,12 @@ T = {
     'mesa-entrevistas': (88, 48, 20, 0,  (150, 120, 90),  'mesa',     True),
     'office-cocina':   (88,  44, 26, 0,  (170, 170, 165), 'horno',    False),
     'maqueta-torre':   (64,  64, 22, 0,  (150, 150, 155), 'mesa',     False),
+    # el Plató de presentaciones (el presentador, minijefe): la fila de butacas (vista de espaldas: miran al escenario,
+    # arriba), el atril, el foco de pie y la pantalla gigante de la pared
+    'butacas':         (128, 36, 30, 0,  (140, 40, 50),   'butacas',  False),
+    'atril':           (40,  28, 40, 0,  (60, 45, 35),    'liso',     False),
+    'foco':            (40,  36, 56, 0,  (45, 45, 50),    'foco',     False),
+    'pantalla-plato':  (160, 24, 64, 0,  (35, 38, 45),    'pantalla', False),
 }
 
 _encima = g.encima
@@ -105,11 +111,55 @@ def encima(t, nombre, color, rnd):
             for j in range(3):
                 t.caja(0.12 + i * 0.28, 0.12 + j * 0.28, 0.3 + i * 0.28, 0.3 + j * 0.28,
                        (170, 185, 200) if (i + j) % 2 else (130, 150, 175))   # los edificios en miniatura
+    elif nombre == 'butacas':
+        for k in range(4):   # los cuatro asientos, vistos desde arriba, con los reposabrazos entre ellos
+            t.caja(0.03 + k * 0.245, 0.0, 0.24 + k * 0.245, 0.75, g.tono(color, 1.15))
+            t.caja(k * 0.245, 0.0, 0.03 + k * 0.245, 1.0, (40, 40, 45), False)
+    elif nombre == 'atril':
+        t.caja(0.1, 0.1, 0.9, 0.8, g.tono(color, 1.2))     # el tablero inclinado
+        t.caja(0.25, 0.2, 0.75, 0.6, (225, 225, 215))      # los papeles del discurso
+        t.caja(0.45, 0.0, 0.55, 0.25, (30, 30, 30), False)   # el micrófono de cuello de cisne
+    elif nombre == 'foco':
+        t.caja(0.15, 0.1, 0.85, 0.9, (30, 30, 35))         # el foco, de lado, sobre su trípode
+        t.caja(0.25, 0.65, 0.75, 0.95, (240, 235, 190), False)   # su cristal, mirando al público
+    elif nombre == 'pantalla-plato':
+        t.caja(0, 0, 1, 0.5, g.tono(color, 0.6))
     else:
         _encima(t, nombre, color, rnd)
 
 
 g.encima = encima
+
+_frente = g.frente
+
+
+def frente(dr, x, y, w, h, color, estilo, rnd):
+    """Los frentes nuevos del plató; los demás, los de guias_centro.py"""
+    if estilo == 'butacas':
+        # los respaldos de las cuatro butacas, vistos por detrás, y sus patas
+        bw = w // 4
+        for k in range(4):
+            dr.rectangle((x + k * bw + g.S, y, x + (k + 1) * bw - g.S - 1, y + h - 5 * g.S), fill=g.tono(color, 0.8), outline=g.RAYA)
+        dr.rectangle((x, y + h - 5 * g.S, x + w - 1, y + h - 3 * g.S), fill=(40, 40, 45, 255), outline=g.RAYA)
+        for px in (x + g.S, x + w - 4 * g.S):
+            dr.rectangle((px, y + h - 3 * g.S, px + 3 * g.S - 1, y + h - 1), fill=(40, 40, 45, 255), outline=g.RAYA)
+        return
+    if estilo == 'foco':
+        # el trípode: una barra y tres patas abiertas
+        cx = x + w // 2
+        dr.rectangle((cx - g.S, y, cx + g.S, y + h - 6 * g.S), fill=(60, 60, 65, 255), outline=g.RAYA)
+        for px in (x + g.S, cx, x + w - 2 * g.S):
+            dr.line((cx, y + h - 6 * g.S, px, y + h - 1), fill=g.RAYA, width=g.S)
+        return
+    if estilo == 'pantalla':
+        # la pantalla gigante, apagada, con su marco
+        dr.rectangle((x, y, x + w - 1, y + h - 1), fill=g.tono(color, 0.7), outline=g.RAYA)
+        dr.rectangle((x + 3 * g.S, y + 3 * g.S, x + w - 3 * g.S, y + h - 3 * g.S), fill=(70, 95, 130, 255), outline=g.RAYA)
+        return
+    _frente(dr, x, y, w, h, color, estilo, rnd)
+
+
+g.frente = frente
 
 if __name__ == '__main__':
     if sys.argv[1:2] == ['quita']:

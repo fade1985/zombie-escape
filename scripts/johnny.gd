@@ -590,7 +590,7 @@ func ayuda_apunte(angulo: float) -> float:
 	var margen := AYUDA_ANGULO
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
-		if hacia.length() - zombi.radio > alcance or not se_ve(zombi):
+		if hacia.length() - zombi.radio > alcance or not se_ve(zombi) or zombi.get("sentado"):
 			continue
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
 		if desvio < margen:
@@ -689,6 +689,9 @@ func buscar_objetivo(w: Dictionary) -> Node2D:
 			continue
 		# ni a la modista quieta entre los maniquíes: hay que encontrarla (o pegarle a mano)
 		if zombi.has_method("escondida") and zombi.escondida():
+			continue
+		# ni al público sentado del plató (presentador.gd): se le dispara solo a propósito
+		if zombi.get("sentado"):
 			continue
 		if distancia >= alcance or not se_ve(zombi):
 			continue

@@ -131,7 +131,13 @@ en una línea.
     `teclado.gd`; el cortocircuito, `cortocircuito.gd`: franjas del suelo que dan corriente por turnos, con chispitas antes; el
     apagón de su sala unos segundos, `Luz.evento`; enfadado se «reinicia» junto a otro armario. Pinta las lucecitas de los armarios
     de servidores, que lucen a oscuras. Su Centro de datos, `jefe-informatico` en el catálogo: pared de armarios y filas sueltas,
-    `islas`; prueba `--captura --edificio torre --jefe informatico --datos`). Los otros dos (presentador y becario), sin hacer.
+    `islas`; prueba `--captura --edificio torre --jefe informatico --datos`). `presentador.gd` (el presentador: el grito al
+    micrófono, un cono en el suelo y una onda que empuja; los focos de su sala, cuyo haz sigue a Johnny y, si los mira, ponen la
+    pantalla blanca; los cañones de confeti, `confeti.gd`, que revientan donde estaba Johnny. Sienta a su público de oficinistas
+    en las butacas, `sentado` en `zombi.gd`: no se despiertan solos, el apuntado automático no los elige y, enfadado, los levanta a
+    todos; si muere, se desploman con él. Su Plató de presentaciones, `jefe-presentador` en el catálogo: escenario con pantalla,
+    atril y focos en la pared de arriba y filas de butacas, `islas` con `arriba`; prueba
+    `--captura --edificio torre --jefe presentador --plato`). El becario, sin hacer.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
     `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
     espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`

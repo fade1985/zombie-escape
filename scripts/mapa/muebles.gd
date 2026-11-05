@@ -144,8 +144,9 @@ static func colocados(lista: Array, sala: Dictionary) -> Array:
 # Las salas de venta de las tiendas son grandes: además de los muebles de las paredes, filas de muebles en medio
 # (góndolas, estanterías, mesas...) con pasillos entre ellas. "isla" (de Catalogo.SALAS): muebles (de qué tipos,
 # al azar), fila (cuántos seguidos como mucho), entre (el hueco entre dos de la misma fila) y cada (cada cuánto va
-# una fila, de pie a pie; lo bastante para que el dibujo de una no tape la de detrás y quede pasillo). Todo lejos
-# de las paredes (MARGEN_ISLA), sin tapar puertas ni cortar el paso.
+# una fila, de pie a pie; lo bastante para que el dibujo de una no tape la de detrás y quede pasillo); y, si se pone,
+# arriba (lo que se deja de más libre junto a la pared de arriba). Todo lejos de las paredes (MARGEN_ISLA), sin tapar
+# puertas ni cortar el paso.
 const MARGEN_ISLA := 104.0
 const PASILLO_ISLA := 96.0   # el pasillo entre dos tramos de la misma fila
 
@@ -168,6 +169,7 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 	var x0 := c0 * CASILLA + MARGEN_ISLA
 	var x1 := (c1 + 1) * CASILLA - MARGEN_ISLA
 	var y0 := f0 * CASILLA + MARGEN_ISLA + 40.0   # arriba, más: los muebles de la pared de arriba son altos
+	y0 += isla.get("arriba", 0.0)   # (el plató del presentador: el escenario, libre)
 	var y1 := (f1 + 1) * CASILLA - MARGEN_ISLA
 	var puestas := []
 	var y := y0 + rng.randf() * 32.0

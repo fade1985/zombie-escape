@@ -4565,5 +4565,49 @@
         }
       }
     }
+  },
+  "torre-presentador": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el tercer minijefe: el presentador (presentador.gd), con la receta del informático (torre-informatico): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Grito, chasquear y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/presentador-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); grito y chasquear también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py presentador-72 rotations walk grito muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py presentador-72 jefe-presentador (casilla 99x105; offset del Sprite (-49, -89)). Los muebles de su plató, con create_image_pixflux y la receta de torre-parte2 (guía de py tools/guias_torre.py a fuerza 45; originales en assets/sources/torre/crudos/, sin fondo en assets/sources/salas/torre/; al foco se le quitó a mano el azul que quedaba alrededor de la cabeza).",
+    "coste": "32 generaciones (6 el modelo, 22 las animaciones y 4 los muebles, ninguna repetida; saldo 1039,55 → 1007,55)",
+    "muebles": {
+      "butacas": "a1d60b8c (fila de cuatro butacas rojas vistas de espaldas: 'a row of four red velvet theater seats in an auditorium, seen in 3/4 top-down view from behind...')",
+      "atril": "a3eed325",
+      "foco": "6db39964 (foco de pie con trípode)",
+      "pantalla-plato": "c3ab91da (pantalla gigante de la pared del fondo)"
+    },
+    "presentador-72": {
+      "character_id": "db72fb47-473b-4e1c-b683-5b30ca189d4f",
+      "size": "72x72",
+      "alto_px": 69,
+      "description": "a lanky, theatrical zombie man boss, a corporate keynote presenter on stage, standing upright with his chest puffed out and one arm raised in a showy presenter gesture, about 66 pixels tall. He wears a shiny, glossy electric blue suit jacket with wide lapels that gleams with highlights, a black turtleneck underneath, slim black trousers and pointed shiny black shoes, the suit torn and stained with dark dried blood in places. Big slicked-back glossy black pompadour hair, a thin black headset microphone curving from his ear to the corner of his mouth. A wide, too-perfect toothy advertising smile with bright white teeth in a rotting face. Grey-green rotting zombie skin, dead pale eyes. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: americana azul eléctrico brillante, tupé engominado, micrófono de diadema, una mano en la cadera y la otra levantada. La piel salió más amarillenta que la de los demás.",
+      "animaciones": {
+        "subject_description": "a lanky zombie man in a shiny electric blue suit jacket with a slicked-back black pompadour and a thin headset microphone at his mouth (de lado: ', seen from the side'; de espaldas: '... pompadour, seen from behind', sin el micrófono)",
+        "initial_pose": "standing upright with his chest puffed out, one hand on his hip and the other arm raised in a showy presenter gesture + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / ...); de lado, 'standing upright with his chest puffed out, facing right, seen from the side'; de espaldas, '..., one arm raised in a showy gesture, seen from behind, his back to the camera'",
+        "frases_de_direccion": "las del informático ('Strict front view the whole time, facing the camera, he never turns to the side.', etc.)",
+        "andar": {
+          "group": "96cc6f7d-d42f-4e2a-90a2-c89c1eb8ad43",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 96-100). 7 direcciones.",
+          "action_description": "He struts forward in place in a confident, showy, seamless looping walk cycle: his legs step alternately with long bouncy steps, his chest stays puffed out, one hand stays on his hip and his raised hand waves a little to the audience with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines. (De lado, 'his chest stays puffed out and his arms swing a little with each step'.)"
+        },
+        "grito": {
+          "group": "7eeb9dad-20fc-47a4-a4c2-86b04bb82875",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Coge aire en 1-2 y grita del 3 al 7 (de frente se acerca a la cámara: se ve más grande).",
+          "action_description": "He shouts into his headset microphone with all his strength: he leans back and fills his chest, then thrusts his head and upper body forward (toward the camera / toward the lower right of the image / to the right / away from the camera...), his mouth opening extremely wide in a huge shout, both arms flung out wide to the sides, holding the shout for a moment, then he settles cleanly back into the starting stance. No effects, no sound waves, no motion lines, no text."
+        },
+        "chasquear": {
+          "group": "52ad8632-69f6-4683-bc69-02bcd4e87812",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (los focos y el confeti).",
+          "action_description": "He starts the big show: he sweeps his raised arm across in a grand theatrical gesture, then snaps his fingers high above his head with a wide toothy showman grin, then points forward at the audience, and then settles cleanly back into the starting stance. No effects, no sparks, no confetti, no motion lines.",
+          "pegas": "En el fotograma 1 pinta una estela blanca del brazo: se quita al montar (los fotogramas 'sin' de jefe_hoja.py)."
+        },
+        "muerte": {
+          "group": "9ea83fdf-ed77-494b-af2f-4df4c89f7113",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Se le cae el micrófono, cae de rodillas y de bruces.",
+          "action_description": "He dies: his headset microphone falls off, he staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor, in the last frames. No effects, no blood."
+        }
+      }
+    }
   }
 }

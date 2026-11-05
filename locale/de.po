@@ -557,6 +557,14 @@ msgstr "Der IT-Typ"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "Er setzt den Boden streifenweise unter Strom und schaltet in seinem Raum das Licht aus. Wütend startet er neben einem anderen Schrank neu."
 
+#: scripts/bestiario.gd
+msgid "El presentador"
+msgstr "Der Moderator"
+
+#: scripts/bestiario.gd
+msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
+msgstr "Brüllt ins Mikro, blendet mit den Scheinwerfern und füllt den Boden mit Konfetti. Wütend holt er sein Publikum auf die Beine."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Der Einsatzpolizist"
@@ -2970,6 +2978,26 @@ msgstr "KEHRWOCHE!"
 #: scripts/portera.gd
 msgid "¡QUE ACABO DE FREGAR!"
 msgstr "FRISCH GEWISCHT!"
+
+#: scripts/presentador.gd
+msgid "¡UN APLAUSO!"
+msgstr "APPLAUS, BITTE!"
+
+#: scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "ÜBERRASCHUNG!"
+
+#: scripts/presentador.gd
+msgid "¡¿ME OÍS AL FONDO?!"
+msgstr "HÖRT IHR MICH DA HINTEN?!"
+
+#: scripts/presentador.gd
+msgid "¡Cegado!"
+msgstr "Geblendet!"
+
+#: scripts/presentador.gd
+msgid "¡EN PIE, PÚBLICO!"
+msgstr "ALLE AUFSTEHEN!"
 
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"

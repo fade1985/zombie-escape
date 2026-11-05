@@ -557,6 +557,14 @@ msgstr "L'informaticien"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "Il électrifie le sol par bandes et coupe la lumière de sa salle. En colère, il redémarre près d'une autre baie."
 
+#: scripts/bestiario.gd
+msgid "El presentador"
+msgstr "Le présentateur"
+
+#: scripts/bestiario.gd
+msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
+msgstr "Hurle dans son micro, aveugle avec les projecteurs et couvre le sol de confettis. En colère, il fait lever son public."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Le CRS"
@@ -2970,6 +2978,26 @@ msgstr "DU BALAI !"
 #: scripts/portera.gd
 msgid "¡QUE ACABO DE FREGAR!"
 msgstr "JE VIENS DE LAVER !"
+
+#: scripts/presentador.gd
+msgid "¡UN APLAUSO!"
+msgstr "ON L'APPLAUDIT !"
+
+#: scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRISE !"
+
+#: scripts/presentador.gd
+msgid "¡¿ME OÍS AL FONDO?!"
+msgstr "VOUS M'ENTENDEZ AU FOND ?!"
+
+#: scripts/presentador.gd
+msgid "¡Cegado!"
+msgstr "Ébloui !"
+
+#: scripts/presentador.gd
+msgid "¡EN PIE, PÚBLICO!"
+msgstr "DEBOUT, LE PUBLIC !"
 
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"

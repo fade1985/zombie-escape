@@ -351,6 +351,14 @@
     "huella": "d218596cc0768bba",
     "sprite": "mueble-armory"
   },
+  "torre/atril.png": {
+    "huella": "21cfff7954f1523f",
+    "sprite": "mueble-lectern"
+  },
+  "torre/butacas.png": {
+    "huella": "db4a0c3269b6f93c",
+    "sprite": "mueble-theaterseats"
+  },
   "torre/cubiculo-lado.png": {
     "huella": "029f22aa4e2c392d",
     "sprite": "mueble-cubicle-lado"
@@ -366,6 +374,10 @@
   "torre/escritorio.png": {
     "huella": "02dab5d7b3386af4",
     "sprite": "mueble-officedesk"
+  },
+  "torre/foco.png": {
+    "huella": "c06b0372a6518e43",
+    "sprite": "mueble-spotlight"
   },
   "torre/fotocopiadora.png": {
     "huella": "347d0258bd91d565",
@@ -414,6 +426,10 @@
   "torre/office-cocina.png": {
     "huella": "29f74f5076714ead",
     "sprite": "mueble-officekitchen"
+  },
+  "torre/pantalla-plato.png": {
+    "huella": "dae83982e33cce57",
+    "sprite": "mueble-stagescreen"
   },
   "torre/pared-monitores.png": {
     "huella": "7b96d83faab3f26f",

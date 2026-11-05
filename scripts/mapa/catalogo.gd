@@ -146,6 +146,12 @@ const MUEBLES := {
 	"interviewtable":  {"len": 88,  "dep": 48, "paredes": "lados", "archivo": "torre/mesa-entrevistas"},
 	"officekitchen":   {"len": 88,  "dep": 44, "paredes": "",      "archivo": "torre/office-cocina"},
 	"towermodel":      {"len": 64,  "dep": 64, "paredes": "",      "archivo": "torre/maqueta-torre"},
+	# el Plató de presentaciones del presentador (minijefe): las filas de butacas (vistas de espaldas: miran al escenario),
+	# el atril, los focos de pie y la pantalla gigante de la pared del fondo
+	"theaterseats":    {"len": 128, "dep": 36, "paredes": "",      "archivo": "torre/butacas"},
+	"lectern":         {"len": 40,  "dep": 28, "paredes": "",      "archivo": "torre/atril"},
+	"spotlight":       {"len": 40,  "dep": 36, "paredes": "",      "archivo": "torre/foco"},
+	"stagescreen":     {"len": 160, "dep": 24, "paredes": "",      "archivo": "torre/pantalla-plato"},
 }
 
 # Cada sala, por su uso (el de apartamento.gd, más el pasillo; la sala de mantenimiento no tiene muebles sueltos):
@@ -920,6 +926,17 @@ const SALAS := {
 				"lamp", "serverrack", "serverrack"],
 		},
 		"islas": {"muebles": ["serverrack"], "fila": 3, "entre": 0, "cada": 230},
+	},
+	# el Plató de presentaciones del presentador (minijefe de Torre Velaria): en el fondo, el escenario, con la pantalla
+	# gigante, el atril y dos focos de pie (los de su ataque: presentador.gd) y, en el resto, filas de butacas vistas de
+	# espaldas, con pasillos entre ellas, con el público de zombis sentado (lo sienta él al llegar)
+	"jefe-presentador": {
+		"muebles": [],
+		"cuantos": [0, 0],
+		"fijos": {
+			"arriba": ["spotlight", "lamp", "lectern", "stagescreen", "lamp", "spotlight"],
+		},
+		"islas": {"muebles": ["theaterseats"], "fila": 2, "entre": 0, "cada": 150, "arriba": 170.0},
 	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {

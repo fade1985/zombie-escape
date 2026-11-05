@@ -365,6 +365,24 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
        la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe informatico --datos`.
+   - **El presentador** ⏳ **Hecho el 5 nov, a falta del visto bueno del dueño.** 32 generaciones (6 el modelo, 22 las animaciones, 4 los
+     muebles del plató). Lo que ha quedado (`presentador.gd`; números provisionales, en sus `const`):
+     - Vida 430 (+35 % por planta), velocidad 85, 8 si te pegas a él. Su sala, el **Plató de presentaciones** (`jefe-presentador` en
+       `Catalogo.SALAS`): en la pared de arriba, el escenario con la pantalla gigante, el atril, dos lámparas y dos focos de pie; en el
+       resto, filas de butacas rojas vistas de espaldas, con pasillos entre ellas. Al llegar sienta a **10 oficinistas** en butacas al
+       azar: no se despiertan ni viéndote ni oyendo tiros (y el apuntado automático no los elige); solo si les das.
+     - **Grito al micrófono** («¡¿ME OÍS AL FONDO?!»): marca en el suelo un cono azul hacia Johnny (unos 60°, 8 casillas de largo)
+       durante 0,8 s y suelta la onda: 12 de daño y un **empujón** fuerte hacia atrás (si no hay pared en medio). Cada 4 s como pronto.
+     - **Focos** («¡UN APLAUSO!»): se enciende uno de los focos del escenario y su círculo de luz va siguiendo a Johnny despacio, 4,5 s.
+       Si Johnny está dentro y **mira hacia el foco**, la pantalla se pone blanca 1,3 s («¡Cegado!»; luego 2 s sin volver a cegar). Cada
+       12 s como pronto.
+     - **Confeti** («¡SORPRESA!»): 4 cañones, uno cada 0,35 s donde va estando Johnny; cada uno marca un círculo rosa y revienta a los
+       0,9 s (10 de daño) con papelitos de colores. Cada 8 s como pronto.
+     - **Enfadado** («¡EN PIE, PÚBLICO!»): el público se levanta todo a la vez. Grita dos veces seguidas y más ancho (90°), enciende los
+       dos focos a la vez y pone 6 cañones. Si muere, los que sigan sentados se desploman con él.
+     - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
+       la torre (parte 9).
+     - Prueba: `--captura --edificio torre --jefe presentador --plato`.
 6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres.
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las
    viviendas y un superviviente por trozo.

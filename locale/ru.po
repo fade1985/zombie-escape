@@ -558,6 +558,14 @@ msgstr "Айтишник"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "Пускает ток по полу полосами и выключает свет в своём зале. В ярости перезагружается у другой стойки."
 
+#: scripts/bestiario.gd
+msgid "El presentador"
+msgstr "Ведущий"
+
+#: scripts/bestiario.gd
+msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
+msgstr "Орёт в микрофон, слепит прожекторами и засыпает пол конфетти. В ярости поднимает на ноги свою публику."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Омоновец"
@@ -2975,6 +2983,26 @@ msgstr "ПОД МЕТЕЛКУ!"
 #: scripts/portera.gd
 msgid "¡QUE ACABO DE FREGAR!"
 msgstr "КУДА ПО ПОМЫТОМУ?!"
+
+#: scripts/presentador.gd
+msgid "¡UN APLAUSO!"
+msgstr "АПЛОДИСМЕНТЫ!"
+
+#: scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "СЮРПРИЗ!"
+
+#: scripts/presentador.gd
+msgid "¡¿ME OÍS AL FONDO?!"
+msgstr "НА ЗАДНИХ РЯДАХ СЛЫШНО?!"
+
+#: scripts/presentador.gd
+msgid "¡Cegado!"
+msgstr "Ослеплён!"
+
+#: scripts/presentador.gd
+msgid "¡EN PIE, PÚBLICO!"
+msgstr "ВСЕМ ВСТАТЬ!"
 
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"

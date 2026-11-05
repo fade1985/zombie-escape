@@ -9,6 +9,7 @@
 #                                    py tools/jefe_hoja.py gymbro-72 jefe-gymbro      (minijefe de los Apartamentos)
 #                                    py tools/jefe_hoja.py bombero-72 jefe-bombero    (minijefe de los Apartamentos)
 #                                    py tools/jefe_hoja.py informatico-72 jefe-informatico   (minijefe de Torre Velaria)
+#                                    py tools/jefe_hoja.py presentador-72 jefe-presentador   (minijefe de Torre Velaria)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -217,6 +218,23 @@ JEFES = {
         "de_frente": ["teclear"],
         "motas": {"lanzar": 100},
         "sin": {"lanzar_s": [5], "lanzar_e": [5], "lanzar_o": [5], "lanzar_ne": [4]},   # la estela blanca del brazo
+        "sangre": 150,
+    },
+    # el presentador (minijefe de Torre Velaria): el cono del grito, los focos y el confeti salen con código
+    # (presentador.gd, confeti.gd). "chasquear" (los focos y el confeti), solo de frente; en su fotograma 1 pinta una
+    # estela blanca del brazo. Hacia el oeste, el este dado la vuelta (tools/espejo_oeste.py), también la vista quieta
+    "presentador-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 8, True, True),
+            "grito": ("grito", 10, False, False),
+            "chasquear": ("chasquear", 9, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["chasquear"],
+        "motas": {"muerte": 60},   # (el micrófono que sale volando)
+        "sin": {"chasquear_s": [1]},   # la estela blanca del brazo
         "sangre": 150,
     },
     # el científico jefe (el jefe final de los Apartamentos, lienzo de 128 como el gerente): las probetas que

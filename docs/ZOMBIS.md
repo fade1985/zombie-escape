@@ -222,3 +222,11 @@ animaciones con PixMiniMax, una dirección por llamada). Todo en `assets/pixella
   modelo, 22 las animaciones, ninguna repetida). Todo en `assets/pixellab.json` → `torre-informatico`. Hoja con
   `py tools/jefe_hoja.py informatico-72 jefe-informatico` (quita la estela blanca del brazo en el lanzamiento). Los teclados, las
   franjas eléctricas y el reinicio los dibuja el juego (`teclado.gd`, `cortocircuito.gd`, `informatico.gd`).
+- **El presentador** (minijefe, 72 px; fuente `presentador-72`, hoja `jefe-presentador`): americana azul eléctrico brillante, tupé
+  negro engominado, micrófono de diadema y sonrisa de anuncio, con un brazo levantado como quien presenta. La misma receta: andar,
+  grito (con los brazos abiertos y la boca enorme), chasquear (solo de frente: los focos y el confeti) y muerte; hacia el oeste, el
+  este en espejo. 28 generaciones (6 el modelo, 22 las animaciones, ninguna repetida), más 4 de los muebles de su plató (butacas,
+  atril, foco y pantalla, con `tools/guias_torre.py`). Todo en `assets/pixellab.json` → `torre-presentador`. Hoja con
+  `py tools/jefe_hoja.py presentador-72 jefe-presentador` (quita la estela blanca del brazo al chasquear). El cono del grito, los
+  haces de los focos, la pantalla blanca y el confeti los dibuja el juego (`presentador.gd`, `confeti.gd`). Su público son
+  oficinistas normales, sentados detrás del respaldo de las butacas.

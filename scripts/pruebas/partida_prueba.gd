@@ -185,6 +185,9 @@
 #   --datos             (con --edificio torre --jefe informatico) el informático en su Centro de datos: los teclados,
 #                       el cortocircuito (franjas), el apagón (con las lucecitas de los armarios), enfadado (se
 #                       reinicia junto a otro armario) y su muerte, con fotos                [prueba_jefes.gd]
+#   --plato             (con --edificio torre --jefe presentador) el presentador en su Plató: el público sentado, el
+#                       grito al micrófono (empuja), los focos (ciegan si los miras), el confeti, enfadado (el público
+#                       se levanta) y su muerte, con fotos                                  [prueba_jefes.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -344,6 +347,10 @@ func empezar_prueba() -> void:
 	elif "--datos" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_datos()
+		get_tree().quit()
+	elif "--plato" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_plato()
 		get_tree().quit()
 	elif "--cocina" in args:
 		set_process(false)   # sin la prueba larga

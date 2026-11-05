@@ -557,6 +557,14 @@ msgstr "The IT guy"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "He electrifies the floor in strips and kills the lights in his room. Angry, he reboots next to another rack."
 
+#: scripts/bestiario.gd
+msgid "El presentador"
+msgstr "The Presenter"
+
+#: scripts/bestiario.gd
+msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
+msgstr "Shouts into his mic, blinds you with spotlights and fills the floor with confetti. Angry, he gets his audience on their feet."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "The Riot Cop"
@@ -2970,6 +2978,26 @@ msgstr "CLEAN SWEEP!"
 #: scripts/portera.gd
 msgid "¡QUE ACABO DE FREGAR!"
 msgstr "I JUST MOPPED!"
+
+#: scripts/presentador.gd
+msgid "¡UN APLAUSO!"
+msgstr "A ROUND OF APPLAUSE!"
+
+#: scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRISE!"
+
+#: scripts/presentador.gd
+msgid "¡¿ME OÍS AL FONDO?!"
+msgstr "CAN YOU HEAR ME IN THE BACK?!"
+
+#: scripts/presentador.gd
+msgid "¡Cegado!"
+msgstr "Blinded!"
+
+#: scripts/presentador.gd
+msgid "¡EN PIE, PÚBLICO!"
+msgstr "EVERYBODY ON YOUR FEET!"
 
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"

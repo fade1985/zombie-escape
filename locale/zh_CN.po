@@ -556,6 +556,14 @@ msgstr "网管"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "他让地面一条条通电，还会关掉房间的灯。发怒后会重启，出现在另一台机柜旁。"
 
+#: scripts/bestiario.gd
+msgid "El presentador"
+msgstr "主持人"
+
+#: scripts/bestiario.gd
+msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
+msgstr "对着麦克风大吼，用聚光灯晃瞎你，把地上撒满彩纸。发怒后，他让观众全都站起来。"
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "防暴警察"
@@ -2965,6 +2973,26 @@ msgstr "统统扫走！"
 #: scripts/portera.gd
 msgid "¡QUE ACABO DE FREGAR!"
 msgstr "我刚拖的地！"
+
+#: scripts/presentador.gd
+msgid "¡UN APLAUSO!"
+msgstr "掌声欢迎！"
+
+#: scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "惊喜！"
+
+#: scripts/presentador.gd
+msgid "¡¿ME OÍS AL FONDO?!"
+msgstr "后排听得见吗？！"
+
+#: scripts/presentador.gd
+msgid "¡Cegado!"
+msgstr "被晃瞎了！"
+
+#: scripts/presentador.gd
+msgid "¡EN PIE, PÚBLICO!"
+msgstr "观众们，起立！"
 
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"

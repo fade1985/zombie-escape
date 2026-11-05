@@ -49,6 +49,9 @@ var zarpazo_dado := false  # si ya ha dado el golpe en este zarpazo (solo uno po
 var momento_zarpazo := 0.429   # en qué punto de la animación de ataque llega la mano (lo pone su hoja)
 # Los zombis de los apartamentos esperan dormidos en su habitación ("zona") hasta que notan a Johnny
 var dormido := false
+# El público del plató del presentador (presentador.gd): dormido en su butaca, sin despertarse por ver a Johnny ni por
+# oír disparos (ni por el corrillo de los de al lado): solo si le pegan o cuando el presentador le levanta
+var sentado := false
 var zona := -1
 var espabilando := 0.0     # tiempo que le queda quieto después de despertar
 var exclamacion := true     # suelta el "!" al despertar (la dependienta no: lo suyo es su grito)
@@ -306,7 +309,7 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 # Dormido: se despierta si Johnny entra en su habitación o le ve cerca sin un muro en medio. Con la skin de la modista
 # (Skins.camuflaje), entrar en la habitación no le despierta, y le ve solo a la mitad de distancia
 func vigilar(johnny: Node2D) -> void:
-	if johnny == null or not johnny.vivo:
+	if johnny == null or not johnny.vivo or sentado:
 		return
 	var mapa := get_tree().get_first_node_in_group("mapa")
 	var camuflaje := Skins.camuflaje(johnny.get("skin") if johnny.get("skin") != null else "")
@@ -319,11 +322,16 @@ func despertar() -> void:
 	if not dormido:
 		return
 	dormido = false
+	if sentado:
+		sentado = false
+		# (sentado, ni se aparta de los de al lado ni choca con ellos: presentador.gd, sentar_publico)
+		agente.avoidance_enabled = true
+		set_collision_mask_value(CAPA_ZOMBIS, true)
 	espabilando = ESPABILAR
 	if exclamacion and not con_barrera():   # (M80: con la barrera puesta, sin el "!": ya se ve la burbuja)
 		exclamacion_suelta = Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("ffd23f"), 26)
 	for otro in get_tree().get_nodes_in_group("zombis"):
-		if otro != self and otro.get("dormido") and distancia_a(otro) < CORRILLO:
+		if otro != self and otro.get("dormido") and not otro.get("sentado") and distancia_a(otro) < CORRILLO:
 			otro.despertar()
 
 
@@ -404,7 +412,7 @@ func onda_en(_p: Vector2) -> void:
 # y el militar (aliado.gd, M43)
 func oir_disparo(donde: Vector2) -> void:
 	# (con la Alerta 5, más lejos; con el reto del día "Oído fino", el triple)
-	if dormido and global_position.distance_to(donde) < OIDO * Alerta.oido() * Reto.oido():
+	if dormido and not sentado and global_position.distance_to(donde) < OIDO * Alerta.oido() * Reto.oido():
 		despertar()
 
 
