@@ -316,7 +316,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      rápidos, 6 s). La válvula, en la pared del archivo (o de otra habitación de dentro), lo corta y lo vuelve a abrir.
    - El viento tiene su cartel de derrota («El viento», `Menus.PELIGROS`) y sus tres sonidos nuevos (`viento`, `camara`, `siseo`).
    - Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
-4. **Los zombis nuevos** (Sonnet): oficinista y escolta. ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** 76 generaciones
+4. **Los zombis nuevos** (Sonnet): oficinista y escolta. ✅ **Hecho el 5 nov, con el visto bueno del dueño.** 76 generaciones
    (12 de los dos modelos, 0,25 de importar el oficinista con la piel verde y 64 de las animaciones). Lo que ha quedado:
    - **Oficinista** (`zombi_oficinista.gd`, `zombi-oficinista`; vida 25, velocidad 75): guarda las distancias (se aparta a menos de
      170, se acerca a más de 300) y cada 2,5 s tira una taza o una grapadora que va recta y despacio (260; 8 de daño; dibujadas con
