@@ -299,12 +299,14 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	poner_animacion("andar")
 
 
-# Dormido: se despierta si Johnny entra en su habitación o le ve cerca sin un muro en medio
+# Dormido: se despierta si Johnny entra en su habitación o le ve cerca sin un muro en medio. Con la skin de la modista
+# (Skins.camuflaje), entrar en la habitación no le despierta, y le ve solo a la mitad de distancia
 func vigilar(johnny: Node2D) -> void:
 	if johnny == null or not johnny.vivo:
 		return
 	var mapa := get_tree().get_first_node_in_group("mapa")
-	if (mapa and zona >= 0 and mapa.zona_en(johnny.global_position) == zona) 			or (distancia_a(johnny) < VISTA and se_ve(johnny)):
+	var camuflaje := Skins.camuflaje(johnny.get("skin") if johnny.get("skin") != null else "")
+	if (camuflaje >= 1.0 and mapa and zona >= 0 and mapa.zona_en(johnny.global_position) == zona) 			or (distancia_a(johnny) < VISTA * camuflaje and se_ve(johnny)):
 		despertar()
 
 

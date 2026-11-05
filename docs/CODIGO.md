@@ -252,8 +252,10 @@ en una línea.
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`): el portero, el
   glotón, el gymbro, el bombero, el doctor Salas (M36: `doble()`, un objeto de más la mitad de las veces que un zombi
   suelta uno, en `partida.gd`; se consigue matando al doctor Salas), el cocinero (M90: `cura()`, las vendas y los
-  botiquines curan un 50 % más, en `partida.cura_de`) y el antidisturbios (M90: `aguante()`, tras un golpe 1,2 s sin
-  recibir otro en vez de 0,7, y `firme()`, nada le tira al suelo; en `johnny.gd`: `recibir_dano`, `pisar` y `caer`). En la taquilla (`ui/taquilla.gd`) ya no caben todas: la lista
+  botiquines curan un 50 % más, en `partida.cura_de`), el antidisturbios (M90: `aguante()`, tras un golpe 1,2 s sin
+  recibir otro en vez de 0,7, y `firme()`, nada le tira al suelo; en `johnny.gd`: `recibir_dano`, `pisar` y `caer`) y
+  la modista (M90: `camuflaje()`, los zombis dormidos no se despiertan porque Johnny entre en su habitación y le ven a
+  la mitad de distancia; en `zombi.vigilar` y en `zombi_guardia.gd`). En la taquilla (`ui/taquilla.gd`) ya no caben todas: la lista
   se desliza (`ALTO_LISTA`).
 - `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
   botiquín, 40 (M72: antes 50), que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de

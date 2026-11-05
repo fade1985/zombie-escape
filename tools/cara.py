@@ -45,7 +45,7 @@ DE_JOHNNY = 34    # un color es "de Johnny" si se parece así a alguno de sus co
 # para una calva con el pañuelo de siempre (el gymbro: se quita el pelo, y el pañuelo y sus puntas se quedan);
 # "casco", para un casco que tapa el pelo y el pañuelo (el bombero: se quita como "quitar", y lo que el casco se sale
 # de la cabeza de siempre va por detrás de los brazos, pegar())
-SOBRA = {"portero": "tenir", "gloton": "quitar", "gymbro": "calvo", "bombero": "casco", "salas": "tenir", "cocinero": "casco", "antidisturbios": "casco"}
+SOBRA = {"portero": "tenir", "gloton": "quitar", "gymbro": "calvo", "bombero": "casco", "salas": "tenir", "cocinero": "casco", "antidisturbios": "casco", "modista": "casco"}
 QUITAN = ("quitar", "calvo", "casco")   # los modos que quitan lo que sobra (y tapan los rojos vivos del pañuelo)
 # Las bombonas del lanzallamas se pintaron de rojo sobre el gris que dibujó PixelLab. Para pegar la cabeza se miran
 # como si siguieran grises: el rojo se parece a la piel y al pañuelo, y la cabeza nueva quedaba detrás de las

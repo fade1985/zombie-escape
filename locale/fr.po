@@ -541,7 +541,7 @@ msgstr "Le cuisinier"
 msgid "Sigue en su cocina, y la carta es cuchillos y aceite hirviendo. No te quedes bajo las marcas."
 msgstr "Toujours dans sa cuisine, et au menu : couteaux et huile bouillante. Ne reste pas sous les marques."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La modista"
 msgstr "La couturière"
 
@@ -2866,6 +2866,14 @@ msgstr "Après un coup, il faut plus de temps avant de pouvoir en recevoir un au
 #: scripts/skins.gd
 msgid "Mata al antidisturbios por primera vez."
 msgstr "Tue le CRS pour la première fois."
+
+#: scripts/skins.gd
+msgid "Los zombis dormidos no se despiertan al entrar en su habitación y te ven a la mitad de distancia."
+msgstr "Les zombies endormis ne se réveillent pas quand tu entres dans leur pièce et ne te voient qu'à moitié moins loin."
+
+#: scripts/skins.gd
+msgid "Mata a la modista por primera vez."
+msgstr "Tue la couturière pour la première fois."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

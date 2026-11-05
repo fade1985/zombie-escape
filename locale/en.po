@@ -541,7 +541,7 @@ msgstr "The Cook"
 msgid "Sigue en su cocina, y la carta es cuchillos y aceite hirviendo. No te quedes bajo las marcas."
 msgstr "Still in his kitchen, and on the menu: knives and boiling oil. Don't stand under the marks."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La modista"
 msgstr "The Seamstress"
 
@@ -2866,6 +2866,14 @@ msgstr "After a hit, it takes longer before you can be hit again (from 0.7 to 1.
 #: scripts/skins.gd
 msgid "Mata al antidisturbios por primera vez."
 msgstr "Kill the riot cop for the first time."
+
+#: scripts/skins.gd
+msgid "Los zombis dormidos no se despiertan al entrar en su habitación y te ven a la mitad de distancia."
+msgstr "Sleeping zombies don't wake up when you enter their room and only see you from half as far."
+
+#: scripts/skins.gd
+msgid "Mata a la modista por primera vez."
+msgstr "Kill the seamstress for the first time."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

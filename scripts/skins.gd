@@ -46,6 +46,12 @@
 #   - nada le tira al suelo ("firme"; johnny.gd, pisar() y caer()): ni la carga del antidisturbios ni la embestida de
 #     la mascota, ni los golpes que tumban del Glotón, el Gymbro o el doctor Salas, ni las mancuernas del gimnasio.
 #     El daño de esos golpes, sí se lo llevan
+#
+# La octava, la modista (la suelta la modista del centro comercial al caer por primera vez, partida.gd; M90): el pelo
+# negro recogido en un moño con dos alfileres y unas gafitas redondas de costurera, con su barba de siempre. Con ella
+# puesta, Johnny pasa desapercibido como ella entre los maniquíes ("camuflaje"; zombi.gd, vigilar(), y el guardia,
+# zombi_guardia.gd): los zombis dormidos ya no se despiertan porque entre en su habitación, y le ven solo a la mitad de
+# distancia (de 330 a 165). Lo demás los despierta igual: oír un disparo, que les pegue, que se despierte uno de al lado
 class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
@@ -67,6 +73,9 @@ const LISTA := {
 	"antidisturbios": {"nombre": "El antidisturbios",
 		"efecto": "Tras un golpe, tardas más en poder recibir otro (de 0,7 a 1,2 s) y nada te tira al suelo.",
 		"como": "Mata al antidisturbios por primera vez.", "jefe": "antidisturbios", "aguante": 1.2, "firme": true},
+	"modista": {"nombre": "La modista",
+		"efecto": "Los zombis dormidos no se despiertan al entrar en su habitación y te ven a la mitad de distancia.",
+		"como": "Mata a la modista por primera vez.", "jefe": "modista", "camuflaje": 0.5},
 }
 # [/traducir]
 
@@ -178,3 +187,9 @@ static func aguante(id: String) -> float:
 # Si con esa skin nada tira a Johnny al suelo (el antidisturbios): ni las cargas y embestidas ni los tropiezos
 static func firme(id: String) -> bool:
 	return LISTA[id].get("firme", false) if id in LISTA else false
+
+
+# A qué parte de la distancia de siempre ven los zombis dormidos a Johnny con esa skin (1 = la de siempre; menos de 1,
+# además, entrar en su habitación no los despierta: la modista, 0,5)
+static func camuflaje(id: String) -> float:
+	return LISTA[id].get("camuflaje", 1.0) if id in LISTA else 1.0

@@ -540,7 +540,7 @@ msgstr "厨师"
 msgid "Sigue en su cocina, y la carta es cuchillos y aceite hirviendo. No te quedes bajo las marcas."
 msgstr "他还守在厨房里，今日菜单：飞刀和滚油。别站在标记下面。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La modista"
 msgstr "裁缝"
 
@@ -2861,6 +2861,14 @@ msgstr "受到一次攻击后，需要更久才能再次受到伤害（从0.7秒
 #: scripts/skins.gd
 msgid "Mata al antidisturbios por primera vez."
 msgstr "首次杀死防暴警察。"
+
+#: scripts/skins.gd
+msgid "Los zombis dormidos no se despiertan al entrar en su habitación y te ven a la mitad de distancia."
+msgstr "你走进沉睡僵尸的房间时它们不会醒来，而且它们只能在一半的距离内发现你。"
+
+#: scripts/skins.gd
+msgid "Mata a la modista por primera vez."
+msgstr "首次杀死裁缝。"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

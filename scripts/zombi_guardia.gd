@@ -38,7 +38,7 @@ func _ready() -> void:
 
 func andar(delta: float, johnny: Node2D) -> void:
 	if not alerta:
-		if distancia_a(johnny) < VISTA and se_ve(johnny):
+		if distancia_a(johnny) < VISTA * Skins.camuflaje(johnny.get("skin") if johnny.get("skin") != null else "") 				and se_ve(johnny):   # (con la skin de la modista, le ve a la mitad de distancia)
 			alerta = true
 			tocar_silbato()
 		else:
