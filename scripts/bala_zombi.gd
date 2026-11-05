@@ -10,6 +10,7 @@ var radio := 9.0
 var vida := 6.0
 var forma := "gota"   # "gota": agua sucia de fregar (la portera); "polvo": una nubecita (su giro); "alfiler": una
                       # aguja con la cabeza roja (la modista)
+                      # "taza" y "grapadora": lo que tira el oficinista de Torre Velaria (dan vueltas al volar)
 var agua: Dictionary = AGUA   # los colores de la gota (AGUA_ROJA, con la portera enfadada)
 var dueno: Node2D = null   # quien la lanza (para la skin del glotón: johnny.gd, devolver())
 var t := randf() * TAU     # para que cada gota tiemble a su ritmo
@@ -25,6 +26,14 @@ const AGUA_ROJA := {"borde": Color("#2e1416", 0.95), "oscuro": Color("#6e2a2a", 
 # El polvo del giro: gris claro, algo transparente y con el borde suave, sin brillo
 const POLVO := {"borde": Color("#4a4646", 0.6), "oscuro": Color("#857f78", 0.75), "medio": Color("#b0aaa2", 0.72),
 	"claro": Color("#dcd7ce", 0.8), "brillo": Color("#dcd7ce", 0.8)}
+# Lo que tira el oficinista, dibujado a píxeles: o borde, w y s el blanco y la sombra de la taza, c el café, r el rojo
+# y m el metal de la grapadora
+const OBJETOS := {
+	"taza": {"dibujo": ["oooooo..", "occcco..", "owwwsooo", "owwwso.o", "owwwsooo", "owwwso..", ".oooo..."],
+		"colores": {"o": Color("#1d1b2c"), "w": Color("#eeeae0"), "s": Color("#b9b3a6"), "c": Color("#5a3a22")}},
+	"grapadora": {"dibujo": ["ooooooooo", "orrrrrrro", "ooooooooo", ".ommmmmmo", ".oooooooo"],
+		"colores": {"o": Color("#1d1b2c"), "r": Color("#b8333a"), "m": Color("#8d93a0"), "w": Color("#d8dde6")}},
+}
 const PIXEL := 2.0   # un píxel del dibujo
 const ALTO := 22.0   # a qué altura del suelo vuela
 # Los dibujos de la gota ya hechos, por color, tamaño, dirección (16) y estiramiento (3), y los de la nubecita de
@@ -66,6 +75,11 @@ func salpicar(donde: Vector2, hacia: Vector2) -> void:
 		Salpicadura.lanzar(get_parent(), donde, hacia, agua)
 	elif forma == "polvo":
 		Salpicadura.lanzar(get_parent(), donde, hacia, POLVO, true)   # se deshace, sin mancha
+	elif OBJETOS.has(forma):
+		# se rompe en trocitos de sus colores
+		for i in 6:
+			var v := (-hacia.normalized()).rotated(randf_range(-1.3, 1.3)) * randf_range(60.0, 150.0)
+			Particulas.soltar(get_parent(), donde + Vector2(0, -ALTO), v, OBJETOS[forma].colores.values()[i % 3 + 1], 3, 0.3)
 
 
 # La gota de agua sucia (o la nubecita de polvo, o el alfiler), a la altura del cuerpo y con su sombra en el suelo
@@ -83,6 +97,23 @@ func _draw() -> void:
 		for x in range(-r, r + 1):
 			if Vector2(x, y * 2.0).length() <= r:
 				draw_rect(Rect2(Vector2(x, y) * PIXEL, Vector2(PIXEL, PIXEL)), Color(0, 0, 0, 0.22))
+	if OBJETOS.has(forma):
+		# la taza o la grapadora, dando vueltas: el dibujo girado de cuarto en cuarto (para que los píxeles sigan rectos)
+		var ob: Dictionary = OBJETOS[forma]
+		var filas: Array = ob.dibujo
+		var alto: int = filas.size()
+		var ancho: int = filas[0].length()
+		var cuarto := posmod(int(t * 12.0), 4)
+		for y in alto:
+			for x in ancho:
+				var c: String = filas[y][x]
+				if c == ".":
+					continue
+				var p := Vector2(x - ancho / 2.0, y - alto / 2.0)
+				for _k in cuarto:
+					p = Vector2(-p.y, p.x)
+				draw_rect(Rect2((p * PIXEL).round() + Vector2(0, -ALTO), Vector2(PIXEL, PIXEL)), ob.colores[c])
+		return
 	if forma == "polvo":
 		# la nubecita: da vueltas (4 dibujos) y se hincha un poco al volar
 		var vuelta := posmod(int(t * 10.0), 4)

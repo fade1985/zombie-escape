@@ -2,7 +2,7 @@
 # la pared de arriba de la sala grande, barren el suelo con su cono de luz, de un lado a otro. Las paredes y los muebles
 # les tapan la vista. Si una ve a Johnny un rato ("ve"), se le llena la barrita naranja de encima y salta la alarma: luz roja y sirena, se
 # despiertan todos los zombis del departamento y, la primera vez que llama esa cámara, llegan refuerzos por la puerta
-# (de momento, zombis normales; con la parte 4 del plan, los escoltas de Velaria). Se rompen de un disparo (bala.gd,
+# (los escoltas de Velaria, zombi_escolta.gd). Se rompen de un disparo (bala.gd,
 # camara_en): rotas, sueltan chispas y ya no ven. Si no está la alarma, después de sonar descansan un poco.
 #
 # Se dibuja todo con código: el cono (en el suelo, que luce por sí mismo) en este nodo, y cada cámara (la caja, el
@@ -135,7 +135,7 @@ func saltar(i: int) -> void:
 	datos.camaras[i].llamo = true
 	var puerta: Node2D = mapa.puertas[0]
 	for k in Peligros.CAMARAS.refuerzos:
-		var zombi: Node2D = partida.meter_zombi("normal", puerta.llegada() + Vector2(randf_range(-24, 24), randf_range(-24, 24)))
+		var zombi: Node2D = partida.meter_zombi("escolta", puerta.llegada() + Vector2(randf_range(-24, 24), randf_range(-24, 24)))
 		if zombi and zombi.get("dormido"):
 			zombi.despertar()
 

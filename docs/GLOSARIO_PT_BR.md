@@ -40,6 +40,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Velaria, Velaria Corp., VD-7, Marta Ruiz | igual | |
 | Canal 8 | Canal 8 | |
 | Torre Velaria · Turno infinito · Dirección · Velaria Noche | Torre Velaria · Turno Infinito · Diretoria · Velaria Noite | |
+| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! | o funcionário · o guarda-costas da Velaria · TOC! | |
 | durmiente · noctámbulo | adormecido · noctâmbulo | |
 | Sujeto 0 · sujetos | Sujeito 0 · sujeitos (y *cobaias* en los gritos de Salas) | |
 | piso (vivienda) · edificio | apartamento (*apto.*) · prédio | |

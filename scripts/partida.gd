@@ -45,6 +45,8 @@ const ZOMBIS := {
 	"guardia": preload("res://escenas/personajes/zombi_guardia.tscn"),   # el de la tarjeta (centro comercial)
 	"vigilante": preload("res://escenas/personajes/zombi_vigilante.tscn"),       # los del centro comercial
 	"dependienta": preload("res://escenas/personajes/zombi_dependienta.tscn"),
+	"oficinista": preload("res://escenas/personajes/zombi_oficinista.tscn"),   # los de Torre Velaria
+	"escolta": preload("res://escenas/personajes/zombi_escolta.tscn"),
 	"antidisturbios": preload("res://escenas/personajes/antidisturbios.tscn"),   # minijefes del centro comercial
 	"mascota": preload("res://escenas/personajes/mascota.tscn"),
 	"cocinero": preload("res://escenas/personajes/cocinero.tscn"),
@@ -82,6 +84,7 @@ const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un bill
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
+	"oficinista": Color("#9cb87a"), "escolta": Color("#93ad84"),
 	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "modista": Color("#93b07a"),
 	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80"), "gloton": Color("#b9a06e"), "gymbro": Color("#c2b48a"),
 	"bombero": Color("#6b6158"), "cientifico_jefe": Color("#d9d6c8")}

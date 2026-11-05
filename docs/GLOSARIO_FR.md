@@ -36,6 +36,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | Poste de sécurité · Cuisine centrale · Atelier de couture · Magasin de jouets | |
 | los Apartamentos · el Centro comercial | les Appartements · le Centre commercial | |
 | Velaria, Velaria Corp., Torre Velaria, Velaria Noche | Velaria, Velaria Corp., Tour Velaria, Velaria Nuit | |
+| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! | l'employé de bureau · le garde du corps de Velaria · TOC ! | |
 | Canal 8 · CANAL8.TV | Canal 8 · CANAL8.TV | |
 | Turno infinito (programa) | Jour sans fin | guiño a *Un jour sans fin* (*Groundhog Day*) |
 | Dirección (de Velaria) · Gerencia (del centro) | Direction · Gérance | SOLO DIRECCIÓN = *RÉSERVÉ À LA DIRECTION* |

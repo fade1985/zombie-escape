@@ -215,7 +215,7 @@ func _physics_process(delta: float) -> void:
 			if not zarpazo_dado and avance_animacion() >= momento_zarpazo:
 				zarpazo_dado = true
 				if johnny and global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + alcance + 10.0:
-					johnny.recibir_dano(dano, self)
+					dar_zarpazo(johnny)
 
 		"golpe":
 			# Sale despedido hacia atrás y va frenando; aquí no se usa el agente, se mueve él solo
@@ -464,6 +464,11 @@ func empezar_zarpazo(johnny: Node2D) -> void:
 	zarpazo_dado = false
 	mirar_hacia(johnny.global_position - global_position)
 	poner_animacion("ataque")
+
+
+# El zarpazo le llega a Johnny (cada tipo puede añadirle lo suyo: el táser del escolta de Velaria lo deja tieso)
+func dar_zarpazo(johnny: Node2D) -> void:
+	johnny.recibir_dano(dano, self)
 
 
 # Lo llaman las armas de Johnny (golpes y balas) y las explosiones. "fuerza" es hacia dónde y con qué
@@ -823,6 +828,7 @@ func numero_flotante(cantidad: int) -> void:
 # El número de un golpe o una bala (en los zombis y los jefes): blanco o, si es crítico, amarillo, grande y con «!», para
 # que se note (M15). "critico" lo pone quien pega (johnny.golpear y bala.gd) justo antes de recibir_golpe y lo quita después
 static var critico := false
+static var de_bala := false   # lo pone bala.gd mientras da a un zombi (el chaleco del escolta de Velaria solo para balas)
 const MUERTE_FUERTE := 360.0   # el empuje de un golpe que revienta al zombi si lo mata (la explosión empuja 374)
 const CRITICO := Color("#ffd23f")
 

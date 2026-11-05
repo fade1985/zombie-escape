@@ -138,7 +138,7 @@ const CAMARAS := {
 	"ve": 0.5,           # segundos viendo a Johnny hasta que salta la alarma (sin verle, se vacía a la mitad de ese paso)
 	"alarma": 6.0,       # lo que suena la alarma
 	"descanso": 4.0,     # después, lo que tarda en volver a vigilar
-	"refuerzos": 2,      # los zombis que llegan por la puerta (una vez por cámara; luego serán los escoltas de Velaria)
+	"refuerzos": 2,      # los escoltas de Velaria que llegan por la puerta (una vez por cámara)
 	"lejos_puerta": 3,   # la cámara del medio (Seguridad), a estas casillas como poco de una puerta
 }
 # El gas de las rejillas de Recursos Humanos (gas.gd): el VD-7 del aire acondicionado. A ratos, cada rejilla echa una

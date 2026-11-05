@@ -193,3 +193,19 @@ andar de 12 fotogramas, ataque y golpe de 8 (partida y final iguales), muerte de
 - **Coste:** 73 generaciones los dos (cada dirección, 1; dos andares de la dependienta, 2). Se repitieron dos muertes
   del vigilante (de espaldas y hacia la izquierda) porque PixelLab pintó un charco grande alrededor: el texto «He
   dies quietly... The floor around him stays completely clean» lo quitó a la primera.
+
+## Torre Velaria (Godot, 5 de noviembre de 2026)
+
+Con la misma receta que el centro comercial (modelo con `create_character_pro_flash` a 48, estilo: el sur del zombi normal;
+animaciones con PixMiniMax, una dirección por llamada). Todo en `assets/pixellab.json` → `torre-parte4`. 76 generaciones.
+
+- **Oficinista** (`zombi-oficinista`, fuente `oficinista-48`): camisa blanca, corbata roja torcida y acreditación azul (los
+  cascos no se ven). Salió con la piel gris parda: `py tools/piel.py oficinista-48 48 72 0.42` (con un tono más ancho, las
+  manchas de la camisa también se volvían verdes) y se importó como personaje nuevo (`95213d8c`, 0,25). Anda con los brazos bajos
+  en las 8 direcciones. El ataque es lanzar algo por encima del hombro; lo que vuela (taza o grapadora) lo dibuja el juego. Pega:
+  en los dos primeros fotogramas del lanzamiento le sale algo azul en la mano.
+- **Escolta de Velaria** (`zombi-escolta`, fuente `escolta-48`): traje negro, chaleco gris y corbata fina. Anda con los brazos
+  bajos. El ataque es estirar el táser hacia delante (`zombi.json`: `"ataque": {"impacto": 2}`; en el juego llega en 0,286,
+  `zombi_escolta.gd`). En algunas direcciones suelta una chispita amarilla.
+- Las hojas se montan con `py tools/zombi.py oficinista-48 zombi-oficinista` (y `escolta-48 zombi-escolta`) y sus `.tres` con
+  `py tools/hacer_frames.py assets/sprites/zombi-<nombre>`.

@@ -316,7 +316,21 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      rápidos, 6 s). La válvula, en la pared del archivo (o de otra habitación de dentro), lo corta y lo vuelve a abrir.
    - El viento tiene su cartel de derrota («El viento», `Menus.PELIGROS`) y sus tres sonidos nuevos (`viento`, `camara`, `siseo`).
    - Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
-4. **Los zombis nuevos** (Sonnet): oficinista y escolta.
+4. **Los zombis nuevos** (Sonnet): oficinista y escolta. ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** 76 generaciones
+   (12 de los dos modelos, 0,25 de importar el oficinista con la piel verde y 64 de las animaciones). Lo que ha quedado:
+   - **Oficinista** (`zombi_oficinista.gd`, `zombi-oficinista`; vida 25, velocidad 75): guarda las distancias (se aparta a menos de
+     170, se acerca a más de 300) y cada 2,5 s tira una taza o una grapadora que va recta y despacio (260; 8 de daño; dibujadas con
+     código en `bala_zombi.gd`). Si lo acorralas, manotazo de 5. Sale en todos los departamentos desde el vestíbulo: como mucho 2
+     por departamento y, si a suertes no sale ninguno, uno de los de siempre se cambia por él.
+   - **Escolta de Velaria** (`zombi_escolta.gd`, `zombi-escolta`; vida 50, velocidad 90): el chaleco le para media bala de frente
+     (chispas y «¡TOC!»; los golpes, el fuego y las explosiones, enteros). Su táser quita 6 y deja a Johnny tieso medio segundo
+     (el `"calambre"` del agua con corriente). Llegan dos con la alarma de cada cámara, hacen guardia en Seguridad corporativa (1 o 2)
+     y, de la planta 20 arriba, a veces sale uno suelto en los demás departamentos.
+   - Su ficha en el bestiario (solo de la torre) y en el panel de pruebas (F9). Los dibujos, en `docs/ZOMBIS.md` (Torre Velaria) y en
+     `assets/pixellab.json` → `torre-parte4`.
+   - Pegas: en el lanzamiento del oficinista PixelLab le pintó algo azul en la mano (los dos primeros fotogramas); el táser del
+     escolta suelta una chispita amarilla en algunas direcciones.
+   - Pruebas: `--captura --edificio torre --oficinista`, `--escolta` y `--camaras`.
 5. **Minijefes**, uno por sesión (Opus): directora, informático, presentador y becario.
 6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres.
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las

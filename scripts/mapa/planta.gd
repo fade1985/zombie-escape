@@ -76,7 +76,7 @@ static var joyeria_planta := 0
 
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
 const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0,
-	"vigilante": 1.5, "dependienta": 1.5}
+	"vigilante": 1.5, "dependienta": 1.5, "oficinista": 1.5, "escolta": 2.0}
 # Presupuesto de un apartamento: "base" más "por_nivel" por cada nivel (el nivel sube con la planta y con el
 # orden del apartamento dentro de ella). Son los números del juego JS, equilibrados con partidas simuladas.
 const BASE := 5.0
@@ -84,6 +84,8 @@ const POR_NIVEL := 1.1
 # Zombis de más en cada habitación de un apartamento, aparte del presupuesto: los más baratos, para que se sienta
 # una horda. Solo los que caben
 const EXTRA_POR_SALA := 2
+const OFICINISTAS := 2          # Torre Velaria: los oficinistas que salen como mucho en cada departamento
+const ESCOLTAS_SEGURIDAD := 2   # y los escoltas de Velaria que hacen guardia en Seguridad corporativa
 # Y en las tiendas del centro comercial (M84: con el presupuesto solo salían unos 9 por tienda; así, unos 27, como un
 # piso): en la sala de venta, en los baños y en las demás salas (almacén, cocina, rebotica...)
 const EXTRA_TIENDA := {"tienda": 14, "bano": 1, "otra": 3}
@@ -684,6 +686,19 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 			tipos.append("vigilante")
 		if sitio.tienda == "joyeria":   # la joyería tiene más seguridad: más vigilantes
 			tipos += ["vigilante", "vigilante"]
+	# en los departamentos de Torre Velaria (parte 4 del plan), los suyos: el oficinista en todos desde el vestíbulo (como
+	# mucho OFICINISTAS por departamento) y el escolta de Velaria en Seguridad corporativa (ESCOLTAS_SEGURIDAD, seguros) y, de
+	# la planta 20 arriba, alguno suelto en los demás (como mucho uno)
+	var cupo := {}   # cuántos quedan por salir de cada tipo con tope
+	if sitio.get("tienda", "") != "" and Tienda.TIPOS[sitio.tienda].get("edificio", "") == "torre":
+		tipos.append("oficinista")
+		cupo.oficinista = OFICINISTAS
+		if sitio.tienda == "seguridad":
+			tipos.append("escolta")
+			cupo.escolta = ESCOLTAS_SEGURIDAD
+		elif num >= 3:
+			tipos.append("escolta")
+			cupo.escolta = 1
 	var area := 0
 	for s in apt.salas:
 		area += s.casillas
@@ -718,6 +733,10 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 			queda -= COSTE[tipo]
 			if tipo == "dependienta":
 				tipos.erase("dependienta")
+			if cupo.has(tipo):
+				cupo[tipo] -= 1
+				if cupo[tipo] <= 0:
+					tipos.erase(tipo)
 		# y los de más de cada habitación (de los que cuestan hasta 1: lentos, normales y rápidos), lejos de la puerta,
 		# de los muebles y de los otros: los que no caben, se quedan sin salir. En las tiendas, más (EXTRA_TIENDA)
 		var extra := EXTRA_POR_SALA
@@ -729,6 +748,15 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 			if pos == Vector2.INF:
 				break
 			zombis.append({"tipo": baratos[rng.randi() % baratos.size()], "pos": pos})
+	# en la torre, que no falten: si a suertes no ha salido ningún oficinista (o ningún escolta en Seguridad), uno de los de
+	# siempre se cambia por él
+	for t in cupo:
+		var tope: int = OFICINISTAS if t == "oficinista" else ESCOLTAS_SEGURIDAD if sitio.tienda == "seguridad" else 0
+		if tope > 0 and cupo[t] == tope:
+			for z in zombis:
+				if z.tipo in ["normal", "lento", "rapido"]:
+					z.tipo = t
+					break
 	return zombis
 
 

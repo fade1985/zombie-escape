@@ -524,6 +524,22 @@ msgstr "持卡保安"
 msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
 msgstr "他拿着这层楼的门禁卡，而且心里有数。吹哨、逃跑、跑到喘不上气：这就是你的机会。"
 
+#: scripts/bestiario.gd
+msgid "El oficinista"
+msgstr "上班族"
+
+#: scripts/bestiario.gd
+msgid "Sigue atendiendo llamadas que nunca llegan. No se te acerca: te tira la grapadora y, si vas a por él, se aparta."
+msgstr "还在接永远不会打来的电话。他不靠近你：会朝你扔订书机，你冲过去他就后退。"
+
+#: scripts/bestiario.gd
+msgid "El escolta de Velaria"
+msgstr "Velaria保镖"
+
+#: scripts/bestiario.gd
+msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
+msgstr "被摄像头发现时他就会赶来。防弹背心能从正面挡掉一半子弹，电击枪会让你动弹不得：绕到他身后。"
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "防暴警察"
@@ -6415,6 +6431,10 @@ msgstr "知道了"
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"
 msgstr "啊啊啊！！！"
+
+#: scripts/zombi_escolta.gd
+msgid "¡TOC!"
+msgstr "咚！"
 
 #: scripts/zombi_guardia.gd
 msgid "uf"

@@ -4434,5 +4434,54 @@
     "texto": "The plastic mannequin is destroyed: cracks spread across her pale body, her head snaps off and drops, her arms break off at the shoulders and fall, then the whole figure crumbles and collapses straight down into a pile of broken plastic pieces and the crumpled dark red dress on the floor. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, same character, same colors and size."
    }
   }
+ },
+ "torre-parte4": {
+  "fecha": "2026-11-05",
+  "nota": "Parte 4 de la Torre Velaria: dos zombis nuevos de 48 px, el oficinista y el escolta, animados con PixMiniMax (una dirección por llamada; andar 12 fotogramas sin final con los brazos bajos en las 8 direcciones; ataque y golpe 8 con partida y final iguales, el dibujo quieto pegado en (24, 32) de un lienzo de 96x96, subido con get_upload_url; muerte 12 sin final y sin charco). Todo a 1 generación por dirección (64 en total, ninguna repetida). En las vistas de espaldas el texto empieza con 'He keeps the same three-quarter back view the whole time...' o 'Strict back view the whole time...'; en las de frente de tres cuartos, 'He keeps the same three-quarter front view...'; en las muertes de espaldas la cabeza queda hacia la cámara. Se montan con py tools/zombi.py oficinista-48 zombi-oficinista y py tools/zombi.py escolta-48 zombi-escolta, y los .tres con py tools/hacer_frames.py assets/sprites/zombi-<nombre>.",
+  "coste": "64 generaciones según el saldo (1166,55 -> 1102,55): 32 por zombi, ninguna repetida. Un envío de ataque se canceló al principio (keep_first_frame=false) y se relanzó con el valor normal.",
+  "oficinista-48": {
+   "character_id": "95213d8c-4358-4f36-aa2e-bbf3154f35eb",
+   "de": "bb26ac79-c705-4416-ac08-793b3b69bfef (el modelo, con la piel beige; no se anima) -> py tools/piel.py oficinista-48 48 72 0.42 -> create_character con las 8 vistas (0,25) = 95213d8c",
+   "modelo": {
+    "description": "adult male zombie office worker from a corporate skyscraper, call-center headset, white long-sleeved office shirt, crooked loosened dark red tie, blue lanyard with a white ID badge, grey office trousers (descripción abreviada)",
+    "herramienta": "create_character_pro_flash, 48x48, view low top-down, 6 generaciones",
+    "estilo": "rotations/south.png de zombi-normal-48 (7a4cc1fd), color_palette false"
+   },
+   "subject_description": "a male zombie office worker with grey-green skin, messy dark hair, a white shirt with blood stains, a crooked red tie, a blue lanyard with an ID badge and grey trousers",
+   "grupos": {
+    "andar": "044c8ccb-49ff-4611-b6de-344f81f2c6a7",
+    "ataque": "c8dd407a-b1f5-4063-82d5-aacd98e7a8ad",
+    "golpe": "75db8c92-a70f-454f-ad5c-3df002a53b4a",
+    "muerte": "64b69af7-fa40-4668-a99e-0e19d6b7e107"
+   },
+   "andar": "He shambles forward in place in a slow, heavy, seamless looping zombie walk cycle: his legs drag and stride alternately, one foot scraping after the other, his hunched torso lurching and swaying from side to side with each step and his head lolling. His arms hang low and limp at his sides, swinging loosely with the steps; they never rise. He keeps facing exactly the same direction the whole time and never turns. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation. (los de frente, de espaldas y tres cuartos llevan delante 'Strict front view...', 'Strict back view...' o 'He keeps the same three-quarter ... view...')",
+   "ataque": "He throws an object overhand. He draws his front arm back behind his head, then steps forward and hurls his empty hand forward and down at shoulder height as if throwing a stapler, his head thrusting forward. Nothing leaves his hand: no object, no effects. He keeps facing exactly the same direction the whole time. Then he pulls back, his arm drops limp again and he settles cleanly into the starting hunched stance. (+ cola de siempre)",
+   "golpe": "He takes a hard hit to the chest from the front. His head and shoulders snap backward, his torso bends back and his arms fling loosely forward, and he staggers one short step backward, off balance. His hair jolts with the impact. He keeps facing exactly the same direction the whole time and stays on his feet. Then he sways forward again, his arms drop limp and he settles cleanly into the starting hunched stance. No blood, no effects. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "muerte": "He dies quietly: his head snaps back from a final blow, his knees buckle and his whole body goes limp. He topples backward and falls flat onto the floor on his back, arms flopping out to the sides, legs sprawled, and he bounces very slightly as he lands. Then he lies completely still and motionless on the ground for the last frames, dead, flat on his back. He never gets up. The floor around him stays completely clean and empty: nothing spills, nothing spreads, no puddle, no liquid, no effects. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "sprite": "assets/sprites/zombi-oficinista (.png, .json y .tres); hit del ataque 0,429 (fotograma 4 de 7)",
+   "pegas": "Aun diciendo 'nothing leaves his hand', en los primeros fotogramas del ataque lleva en la mano un objeto azul (parece un avión de papel o una carpeta) y en algunas direcciones sale volando algo blanco o rojo; no se limpió. El andar no cierra perfecto en casi ninguna dirección (zombi.py elige el mejor tramo)."
+  },
+  "escolta-48": {
+   "character_id": "2d3b84e1-af3c-4433-84c7-2384ed8bd351",
+   "modelo": {
+    "description": "adult male zombie corporate bodyguard, black suit jacket open over a dark grey tactical body armor vest, earpiece, taser at his belt (descripción abreviada)",
+    "herramienta": "create_character_pro_flash, 48x48, view low top-down, 6 generaciones",
+    "estilo": "rotations/south.png de zombi-normal-48 (7a4cc1fd), color_palette false"
+   },
+   "subject_description": "a male zombie bodyguard with grey-green skin, slicked-back black hair, a black suit jacket over a dark grey armored vest, a thin black tie and black trousers",
+   "grupos": {
+    "andar": "3e56f359-c5c3-4a56-a51e-fac8fbbbd99d",
+    "ataque": "71b40e32-b7b1-4453-b298-e6423c7b141d",
+    "golpe": "63993d8f-6400-4da6-83d8-c72274aee544",
+    "muerte": "967bf67b-d835-4736-9bb5-8629d57c2aec"
+   },
+   "andar": "He shambles forward in place in a slow, heavy, seamless looping zombie walk cycle: his legs drag and stride alternately, one foot scraping after the other, his hunched torso lurching and swaying from side to side with each step and his head lolling. His arms hang low and limp at his sides, swinging loosely with the steps; they never rise. He keeps facing exactly the same direction the whole time and never turns. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation. (con los mismos prefijos por dirección)",
+   "ataque": "He jabs with a stun gun. He pulls a small black taser from his belt with his front hand, lunges one step forward and thrusts it straight out in front of him at chest height, holding it there for a moment, his jaw snapping open. No sparks, no effects. He keeps facing exactly the same direction the whole time. Then he pulls back, the taser goes back to his belt, his arms hang limp again and he settles cleanly into the starting hunched stance. (+ cola de siempre)",
+   "golpe": "He takes a hard hit to the chest from the front. His head and shoulders snap backward, his torso bends back and his arms fling loosely forward, and he staggers one short step backward, off balance. His hair jolts with the impact. He keeps facing exactly the same direction the whole time and stays on his feet. Then he sways forward again, his arms drop limp and he settles cleanly into the starting hunched stance. No blood, no effects. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "muerte": "He dies quietly: his head snaps back from a final blow, his knees buckle and his whole body goes limp. He topples backward and falls flat onto the floor on his back, arms flopping out to the sides, legs sprawled, and he bounces very slightly as he lands. Then he lies completely still and motionless on the ground for the last frames, dead, flat on his back. He never gets up. The floor around him stays completely clean and empty: nothing spills, nothing spreads, no puddle, no liquid, no effects. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "sprite": "assets/sprites/zombi-escolta (.png, .json y .tres; zombi.json con ataque.impacto 2); hit del ataque 0,286 (fotograma 3 de 7)",
+   "pegas": "El 'taser' sale como un arma corta de brazo estirado (parece una pistola) con un cable, y en 3-4 direcciones lleva chispas amarillas al principio aunque se dijo 'no sparks' (no se limpiaron: en el ataque solo se quitan destellos blancos). Hay pequeñas salpicaduras de sangre oscura en golpe y muerte."
+  },
+  "lo_repetido": "Nada repetido. Solo se canceló un envío del ataque del oficinista (south) por usar keep_first_frame=false."
  }
 }

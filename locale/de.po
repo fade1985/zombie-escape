@@ -525,6 +525,22 @@ msgstr "Der Kartenwächter"
 msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
 msgstr "Er hat die Karte für den Stock und weiß es. Er pfeift, haut ab und kommt aus der Puste: Das ist deine Chance."
 
+#: scripts/bestiario.gd
+msgid "El oficinista"
+msgstr "Der Büroangestellte"
+
+#: scripts/bestiario.gd
+msgid "Sigue atendiendo llamadas que nunca llegan. No se te acerca: te tira la grapadora y, si vas a por él, se aparta."
+msgstr "Nimmt immer noch Anrufe entgegen, die nie kommen. Er kommt nicht nah: Er wirft den Tacker, und wenn du auf ihn losgehst, weicht er zurück."
+
+#: scripts/bestiario.gd
+msgid "El escolta de Velaria"
+msgstr "Der Velaria-Leibwächter"
+
+#: scripts/bestiario.gd
+msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
+msgstr "Kommt, wenn dich eine Kamera sieht. Seine Weste hält von vorn die halbe Kugel ab, und sein Taser lässt dich erstarren: geh um ihn herum."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Der Einsatzpolizist"
@@ -6435,6 +6451,10 @@ msgstr "Verstanden"
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"
 msgstr "AAAHHH!!!"
+
+#: scripts/zombi_escolta.gd
+msgid "¡TOC!"
+msgstr "TOCK!"
 
 #: scripts/zombi_guardia.gd
 msgid "uf"

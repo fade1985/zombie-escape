@@ -1588,6 +1588,8 @@ func probar_camaras() -> void:
 	print("Cámaras: le ve %s; alarma %s, zombi despierto %s, refuerzos %d (esperado: true, true, true, 2)" % [ve,
 		c.alarma > 0.0, not dormido.dormido, get_tree().get_nodes_in_group("zombis").size() - zombis_antes])
 	Captura.foto("captura-torre-camaras-2.png")
+	var escoltas := get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get_meta("tipo", "") == "escolta").size()
+	print("Cámaras: escoltas de Velaria entre los refuerzos %d (esperado: 2)" % escoltas)
 	# otra alarma de la misma cámara: ya no llama a nadie más
 	var ahora: int = get_tree().get_nodes_in_group("zombis").size()
 	c.alarma = 0.0
@@ -1652,4 +1654,132 @@ func probar_gas() -> void:
 	await get_tree().create_timer(0.4).timeout
 	print("Gas: con Johnny en la válvula, abierto %s; echa la primera %s (esperado: false y false)" % [g.datos.abierto, g.echando(0)])
 	Captura.foto("captura-torre-gas-3.png")
+	get_tree().quit()
+
+
+# Cuántos oficinistas y escoltas de Velaria salen en cada tipo de departamento de la torre (tercer edificio, parte 4):
+# genera 30 plantas de cada número y cuenta lo que pone Planta.horda en cada departamento. Lo usan --oficinista y --escolta
+func contar_torre(tipo_zombi: String) -> void:
+	var cuenta := {}
+	for i in 30:
+		for num in [1, 2, 3, 4]:
+			Planta.semilla = 7100 + i * 10 + num
+			var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+			for s in p.sitios:
+				if s.get("tienda", "") == "" or s.tipo == "jefe" or Tienda.TIPOS[s.tienda].get("edificio", "") != "torre":
+					continue
+				var clave := "%s (planta %d)" % [s.tienda, num]
+				var n := Planta.horda(s, 1, num).filter(func(z): return z.tipo == tipo_zombi).size()
+				if not cuenta.has(clave):
+					cuenta[clave] = [0, 0, 99]
+				cuenta[clave][0] += 1
+				cuenta[clave][1] += n
+				cuenta[clave][2] = mini(cuenta[clave][2], n)
+	Planta.semilla = 0
+	var claves := cuenta.keys()
+	claves.sort()
+	for clave in claves:
+		print("%s: %s en %s, de media %.1f, como mínimo %d" % [tipo_zombi.capitalize(), clave, "%d departamentos" % cuenta[clave][0],
+			float(cuenta[clave][1]) / cuenta[clave][0], cuenta[clave][2]])
+
+
+# El centro de la habitación más grande de un sitio (la sala grande del departamento), en una casilla sin mueble
+func centro_sala_grande(sitio: Dictionary) -> Vector2:
+	var sala: Dictionary = sitio.apt.salas[0]
+	for s in sitio.apt.salas:
+		if s.casillas > sala.casillas:
+			sala = s
+	return Vector2((sala.c0 + sala.ancho / 2.0) * 32.0, (sala.f0 + sala.fondo / 2.0) * 32.0)
+
+
+# Con "--captura --edificio torre --oficinista": el oficinista. Cuenta cuántos salen en cada departamento; luego, en Atención
+# al cliente, uno despierto a media distancia de Johnny (quieto): dice si le tira algo y cuánto le quita, y, con Johnny
+# pegado a él, si se aparta. Fotos: captura-torre-oficinista-1.png (la taza o la grapadora volando) y -2.png (apartándose).
+# Luego se cierra
+func probar_oficinista() -> void:
+	contar_torre("oficinista")
+	var sitio: Dictionary = await ir_a_departamento("atencion")
+	if sitio.is_empty():
+		get_tree().quit(1)
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no dispare ni tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	var centro := centro_sala_grande(sitio)
+	johnny.position = centro + Vector2(-110, 0)
+	var zombi := meter_zombi("oficinista", centro + Vector2(110, 0))
+	var vida: int = johnny.vida
+	var tirado := ""
+	for k in 40:
+		await get_tree().create_timer(0.1).timeout
+		for b in get_tree().get_nodes_in_group("balas_zombi"):
+			if tirado == "":
+				tirado = b.forma
+				Captura.foto("captura-torre-oficinista-1.png")
+		johnny.position = centro + Vector2(-110, 0)   # quieto, que no le empujen
+	print("Oficinista: ha tirado %s, vida de Johnny %d -> %d (esperado: taza o grapadora, y 8 menos)" % [tirado if tirado != "" else "NADA",
+		vida, johnny.vida])
+	# Johnny, pegado: se aparta (o le da un manotazo)
+	johnny.position = zombi.position + Vector2(-60, 0)
+	var antes: float = zombi.position.distance_to(johnny.position)
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-torre-oficinista-2.png")
+	print("Oficinista: con Johnny a %.0f, se aparta hasta %.0f (esperado: más lejos)" % [antes, zombi.position.distance_to(johnny.position)])
+	get_tree().quit()
+
+
+# Con "--captura --edificio torre --escolta": el escolta de Velaria. Cuenta cuántos salen en cada departamento; luego, en
+# Seguridad corporativa, uno quieto (de diana) mirando a Johnny: dice cuánto le hace una bala de frente y una por la espalda
+# (la de frente, la mitad: el chaleco); luego, despierto y pegado a Johnny, si el táser le quita vida y lo deja tieso.
+# Fotos: captura-torre-escolta-1.png (la bala en el chaleco) y -2.png (Johnny tieso). Luego se cierra
+func probar_escolta() -> void:
+	contar_torre("escolta")
+	var sitio: Dictionary = await ir_a_departamento("seguridad")
+	if sitio.is_empty():
+		get_tree().quit(1)
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no dispare ni tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	var c: Node = peligro_de("camaras")
+	if c:
+		c.queue_free()   # (que no salte la alarma y lleguen más)
+	var centro := centro_sala_grande(sitio)
+	johnny.position = centro + Vector2(0, 130)
+	johnny.set_physics_process(false)   # quieto y sin pegar (si no, le dispara solo y lo gira)
+	var zombi := meter_zombi("escolta", centro)
+	zombi.diana = true
+	zombi.casa = zombi.position   # (la diana se queda en su sitio, mirando a Johnny)
+	var danos := []
+	zombi.herido.connect(func(cantidad, golpe): if golpe: danos.append(cantidad))
+	await get_tree().create_timer(0.5).timeout
+	# de frente (desde Johnny, abajo) y por la espalda (desde arriba)
+	for desde in [Vector2(0, 90), Vector2(0, -90)]:
+		var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()
+		bala.position = centro + desde
+		bala.velocidad = -desde.normalized() * 900.0
+		bala.dano = 20
+		mapa.add_child(bala)
+		await get_tree().create_timer(0.12).timeout
+		if desde.y > 0:
+			Captura.foto("captura-torre-escolta-1.png")
+		await get_tree().create_timer(1.2).timeout   # (que vuelva a su sitio: la bala lo empuja)
+		zombi.position = zombi.casa
+	print("Escolta: bala de 20 de frente %s, por la espalda %s (esperado: 10 y 20)" % [danos[0] if danos.size() > 0 else "NADA",
+		danos[1] if danos.size() > 1 else "NADA"])
+	# el táser
+	zombi.diana = false
+	johnny.position = zombi.position + Vector2(0, 40)
+	var vida: int = johnny.vida
+	var tieso := false
+	for k in 40:
+		await get_tree().create_timer(0.05).timeout
+		if johnny.vida < vida:
+			johnny.set_physics_process(true)   # (para que se le ponga el calambre)
+			await get_tree().create_timer(0.05).timeout
+			johnny.set_physics_process(false)
+			tieso = johnny.estados.has("calambre")
+			Captura.foto("captura-torre-escolta-2.png")
+			break
+	print("Escolta: táser, vida de Johnny %d -> %d, tieso %s (esperado: 6 menos, o 7 con lo que sube por planta, y true)" % [vida, johnny.vida, tieso])
 	get_tree().quit()

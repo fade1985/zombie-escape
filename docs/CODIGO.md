@@ -86,6 +86,11 @@ en una línea.
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
+  Los de Torre Velaria: `zombi_oficinista.gd` (guarda las distancias y tira tazas y grapadoras, `bala_zombi.gd`) y
+  `zombi_escolta.gd` (el chaleco para media bala de frente, con `Zombi.de_bala`, que pone `bala.gd`; el táser deja a Johnny
+  tieso con el `"calambre"` de `estados.gd`, desde `dar_zarpazo`, que cualquier tipo puede cambiar). Salen en los
+  departamentos (`planta.gd`, `horda`: `OFICINISTAS` y `ESCOLTAS_SEGURIDAD`) y los escoltas, con la alarma de las cámaras.
+  Pruebas: `--captura --edificio torre --oficinista` y `--escolta`.
   El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
   no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
@@ -125,8 +130,8 @@ en una línea.
     (el doctor Salas; las lenguas de la criatura, `lengua.gd`; lo seguido que ataca la criatura se mide con `--criatura`). `helicoptero.gd`: el que llega al final (su cuerpo,
     `helicoptero.png` de PixelLab; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
     el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
-- `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; y los
-  alfileres de la modista), `salpicadura.gd`
+- `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; los
+  alfileres de la modista y las tazas y grapadoras del oficinista, que dan vueltas), `salpicadura.gd`
   (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
   `explosion.gd` (lo que se ve es la explosión de pixelfx: `tools/pixelfx/explosion.js`, una copia de "small-explosion" más
   grande y sin las piedras ni la tierra, que caían en raya vista desde arriba; la exporta `exportar_explosion.mjs` en
@@ -211,7 +216,7 @@ en una línea.
   `luz_jefe.gd` (la luz fija de esas habitaciones).
   De los departamentos de Torre Velaria: `viento.gd` (el ventanal roto de Marketing y Dirección: arrastra a Johnny y tira a
   los zombis por la ventana, que cuentan sin cuerpo ni botín: `partida.gd`, meta `"ventana"`), `camaras.gd` (Informática y
-  Seguridad: la alarma y los refuerzos; se rompen de un tiro desde `bala.gd`, `romper_en`), `gas.gd` y `valvula.gd`
+  Seguridad: la alarma y los refuerzos, dos escoltas de Velaria; se rompen de un tiro desde `bala.gd`, `romper_en`), `gas.gd` y `valvula.gd`
   (Recursos Humanos: duerme a los zombis y los despierta frenéticos, `zombi.gd` `gasear`; a Johnny no le hace nada).
   Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
 - `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la

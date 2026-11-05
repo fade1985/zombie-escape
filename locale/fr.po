@@ -525,6 +525,22 @@ msgstr "Le garde au badge"
 msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
 msgstr "Il a le badge de l'étage et il le sait. Il siffle, il fuit et il s'essouffle : c'est ton moment."
 
+#: scripts/bestiario.gd
+msgid "El oficinista"
+msgstr "L'employé de bureau"
+
+#: scripts/bestiario.gd
+msgid "Sigue atendiendo llamadas que nunca llegan. No se te acerca: te tira la grapadora y, si vas a por él, se aparta."
+msgstr "Il répond toujours à des appels qui n'arrivent jamais. Il ne s'approche pas : il te lance son agrafeuse et, si tu fonces sur lui, il recule."
+
+#: scripts/bestiario.gd
+msgid "El escolta de Velaria"
+msgstr "Le garde du corps de Velaria"
+
+#: scripts/bestiario.gd
+msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
+msgstr "Il arrive quand une caméra te repère. Son gilet arrête la moitié d'une balle de face et son taser te paralyse : contourne-le."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Le CRS"
@@ -6435,6 +6451,10 @@ msgstr "Compris"
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"
 msgstr "AAAHHH !!!"
+
+#: scripts/zombi_escolta.gd
+msgid "¡TOC!"
+msgstr "TOC !"
 
 #: scripts/zombi_guardia.gd
 msgid "uf"

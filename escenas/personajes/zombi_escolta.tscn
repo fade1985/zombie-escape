@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://escenas/personajes/zombi_normal.tscn" id="base"]
+[ext_resource type="Script" path="res://scripts/zombi_escolta.gd" id="script"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-escolta.tres" id="ropa"]
+
+[node name="Zombi" instance=ExtResource("base")]
+script = ExtResource("script")
+vida_max = 50
+velocidad = 90.0
+dano = 6
+alcance = 22.0
+ropas = Array[SpriteFrames]([ExtResource("ropa")])
+
+[node name="Sprite" parent="." index="2"]
+sprite_frames = ExtResource("ropa")

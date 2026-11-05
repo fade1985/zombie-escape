@@ -26,6 +26,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 |---|---|---|
 | Johnny | Johnny | letras latinas (la marca) |
 | Velaria · Velaria Corp. · Torre Velaria | Velaria · Velaria公司 · Velaria大厦 | latinas |
+| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! | 上班族 · Velaria保镖 · 咚！ | |
 | VD-7 | VD-7 | |
 | Marta Ruiz · Elena Ruiz | Marta Ruiz · Elena Ruiz | **latinas**: `Historia.REPORTERA` es `# no-tr` y el juego escribe «Marta Ruiz» tal cual; para que la reportera y su hermana se reconozcan, las dos se quedan así |
 | el doctor Salas · Héctor Salas | 萨拉斯博士 · 埃克托·萨拉斯 | «Dr./Dra.» = …博士 (detrás del nombre) |

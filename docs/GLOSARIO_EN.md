@@ -118,6 +118,7 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | durmiente · noctámbulo | sleeper · nightwalker |
 | Sujeto 0 · «Asunto:» | Subject 0 · «Subject:» |
 | Torre Velaria · Turno infinito · Dirección · SOLO DIRECCIÓN · Velaria Noche | Velaria Tower · Endless Shift · Head Office · DIRECTOR ONLY · Velaria Night |
+| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! (bala en el chaleco) | the Office Worker · the Velaria Bodyguard · TOK! |
 | Canal 8 | Channel 8 |
 | almacén · cámara (frigorífica) · rebotica · probadores · taquillas | storeroom · freezer · back room · fitting rooms · lockers |
 | Tutoriales: lanzables · truco · piezas de mejora · peligros de las tiendas · vida en tercios | throwables · perk · upgrade parts · store hazards · health in thirds |

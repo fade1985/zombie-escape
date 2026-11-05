@@ -41,6 +41,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | Пост охраны · Главная кухня · Ателье · Магазин игрушек | |
 | los Apartamentos · el Centro comercial | Жилой дом · Торговый центр (жилой дом, торговый центр en frase) | |
 | Velaria, Velaria Corp., Torre Velaria, Velaria Noche | Velaria (en latino, marca; no se declina) · Башня Velaria · «Velaria Ночь» | |
+| Zombis de la torre: oficinista · escolta de Velaria · ¡TOC! | Офисный работник · Телохранитель Velaria · ТУК! | |
 | VD-7 · Marta Ruiz · Elena · Canal 8 | VD-7 · Марта Руис · Елена · Канал 8 | |
 | Dirección (de Velaria) · gerencia (del centro) | Дирекция · руководство | |
 | Zombis: vecino, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Сосед, Ползун, Пацан, Подрывник, Спрут, Толстяк | |

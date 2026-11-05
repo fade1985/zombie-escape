@@ -35,6 +35,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | durmiente · noctámbulo · Sujeto 0 | Schläfer · Nachtschwärmer · Proband 0 | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Polizist · Soldat · Ärztin · Handwerker · Apothekerin · Techniker | |
 | Velaria Corp. · Torre Velaria · Velaria Noche · Turno infinito | Velaria Corp. · Velaria-Turm · Velaria Nacht · Endlosschicht | |
+| Zombis de la torre: oficinista · escolta de Velaria · ¡TOC! | Büroangestellter · Velaria-Leibwächter · TOCK! | |
 | Canal 8 · CANAL8.TV | Kanal 8 · KANAL8.TV | |
 | ConserjeOS · CONSERJE OS 95 · C:\MANTENIMIENTO | HausmeisterOS · HAUSMEISTER OS 95 · C:\WARTUNG | |
 | Dirección (de Velaria) · gerencia (del centro) | Geschäftsleitung · Leitung | |

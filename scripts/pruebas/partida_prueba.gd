@@ -175,6 +175,10 @@
 #                       de un tiro, con fotos                                                  [prueba_sitios.gd]
 #   --gas               (con --edificio torre) el gas de Recursos Humanos: duerme al zombi, no a Johnny, lo despierta
 #                       frenético y la válvula del archivo lo corta, con fotos                 [prueba_sitios.gd]
+#   --oficinista        (con --edificio torre) el oficinista (tercer edificio, parte 4): cuántos salen en cada departamento,
+#                       si tira tazas y grapadoras y si se aparta de Johnny, con fotos      [prueba_sitios.gd]
+#   --escolta           (con --edificio torre) el escolta de Velaria: cuántos salen, el chaleco (media bala de frente)
+#                       y el táser que deja tieso, con fotos                                 [prueba_sitios.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -635,6 +639,12 @@ func empezar_prueba() -> void:
 	elif "--gas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gas()
+	elif "--oficinista" in args:
+		set_process(false)   # sin la prueba larga
+		probar_oficinista()
+	elif "--escolta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_escolta()
 	elif "--zombis-tienda" in args:
 		set_process(false)   # sin la prueba larga
 		probar_zombis_tienda()

@@ -525,6 +525,22 @@ msgstr "The Keycard Guard"
 msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
 msgstr "He's got the floor's keycard and he knows it. He whistles, runs off and gets winded: that's your moment."
 
+#: scripts/bestiario.gd
+msgid "El oficinista"
+msgstr "The Office Worker"
+
+#: scripts/bestiario.gd
+msgid "Sigue atendiendo llamadas que nunca llegan. No se te acerca: te tira la grapadora y, si vas a por él, se aparta."
+msgstr "Still answering calls that never come. He keeps his distance: he throws his stapler and, if you go for him, he backs off."
+
+#: scripts/bestiario.gd
+msgid "El escolta de Velaria"
+msgstr "The Velaria Bodyguard"
+
+#: scripts/bestiario.gd
+msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
+msgstr "He shows up when a camera spots you. His vest stops half a bullet from the front and his taser freezes you stiff: get around him."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "The Riot Cop"
@@ -6435,6 +6451,10 @@ msgstr "Got it"
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"
 msgstr "AAAHHH!!!"
+
+#: scripts/zombi_escolta.gd
+msgid "¡TOC!"
+msgstr "TOK!"
 
 #: scripts/zombi_guardia.gd
 msgid "uf"

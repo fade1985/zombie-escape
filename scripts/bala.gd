@@ -70,11 +70,13 @@ func _physics_process(delta: float) -> void:
 		if escudo or global_position.distance_to(zombi.global_position) < zombi.radio + radio + 3.0:
 			var fuerza := velocidad.normalized() * EMPUJE * empuje
 			Zombi.critico = critico   # (su número sale en amarillo)
+			Zombi.de_bala = true
 			if de_aliado and zombi is Minijefe:
 				zombi.recibir_golpe(dano, fuerza, false, true)
 			else:
 				zombi.recibir_golpe(dano, fuerza)
 			Zombi.critico = false
+			Zombi.de_bala = false
 			if escudo:
 				rebotar(zombi)
 				return
