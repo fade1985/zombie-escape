@@ -246,6 +246,14 @@ en una línea.
   (a los zombis los pone frenéticos al momento) y la puerta del helipuerto, que se abre al caer el jefe (`partida.gd`,
   `fin_del_edificio`: no baja el helicóptero). La partida le pasa el jefe (`mapa.laboratorio.jefe`); a media vida, o con
   `romper_cabina()`, la cabina se rompe y queda en automático. Prueba: `--captura --edificio torre --laboratorio`.
+  El jefe de la planta 40 es `sujeto_1.gd` (el Sujeto 1, extends `Minijefe`; números en sus `const`): anda hacia Johnny,
+  rueda de lado cuando le van a dar (la bala le pregunta, `esquivar_bala()` en `bala.gd`: 1 de cada 3, como mucho cada 2,5 s),
+  fregonazo en abanico (`Aviso.golpe`) y cubos de agua en curva (`proyectil.gd` "cubo", con su anillo; dejan el charco
+  "agua_cubo" de `charco.gd`, que resbala 6 s). A media vida se parte (`partir()`): llama a `romper_cabina()`, saca dos mitades
+  (la misma escena con `mitad = true`, más pequeñas y rápidas) y él se queda de **mando** invisible, fuera del grupo
+  "zombis": su vida es la suma de las dos (la barra) y cae cuando caen las dos, así `partida.gd` y `laboratorio.gd` lo tratan
+  como a cualquier jefe. Al caer una, la otra se enfada (`enfadar()`). Prueba: `--captura --edificio torre --jefe sujeto_1
+  --sujeto`.
 - `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
   primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
 - `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la

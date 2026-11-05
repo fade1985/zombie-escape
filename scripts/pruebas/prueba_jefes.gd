@@ -1553,3 +1553,130 @@ func probar_laboratorio() -> void:
 	johnny.position = Vector2(lab.datos.puerta, Planta.MURO + 24)
 	await get_tree().create_timer(0.4, true).timeout   # (el relato del final pone el juego en pausa)
 	print("  al llegar a ella: se acaba el edificio %s (esperado: true)" % lab.salido)
+
+
+# --sujeto (con --edificio torre --jefe sujeto_1): el Sujeto 1, el jefe final de Torre Velaria, en el laboratorio de la
+# planta 40 (parte 6). Quieto (captura-sujeto.png), el aviso del fregonazo y el golpe (captura-sujeto-fregonazo-aviso.png y
+# captura-sujeto-fregonazo.png: 22 y un empujón), el cubo levantado, los cubos volando con sus anillos y los charcos de
+# agua (captura-sujeto-cubo-aviso.png, captura-sujeto-cubos.png y captura-sujeto-charcos.png), rodando para librarse de
+# una bala (captura-sujeto-rodar.png), partiéndose (captura-sujeto-partirse.png), las dos mitades
+# (captura-sujeto-partido.png), una enfadada al caer la otra (captura-sujeto-enfadado.png) y, al caer las dos, la puerta
+# del helipuerto. Lo que comprueba lo escribe en la terminal
+func probar_sujeto() -> void:
+	await get_tree().create_timer(0.3).timeout
+	var espera := func(s: float) -> void:
+		await get_tree().create_timer(s, false).timeout
+	nueva_planta(Planta.PLANTAS)
+	await montar(0, puerta_de_llegada(), false)
+	for al in get_tree().get_nodes_in_group("aliados"):
+		al.process_mode = Node.PROCESS_MODE_DISABLED
+		al.visible = false
+	var s: Dictionary = planta.sitios[0]
+	var lab: Node2D = mapa.laboratorio
+	johnny.vida = 999
+	johnny.position = Vector2(s.ancho / 2.0 + 160, 520)
+	johnny.set_physics_process(false)
+	await espera.call(1.2)
+	lab.espera = 999.0   # (sin trucos de la presidenta: que no se metan en las fotos)
+	var suj: Node2D = jefa
+	print("Sujeto 1: jefe %s, script sujeto_1.gd %s, vida %d, la presidenta lo sigue %s" % [planta.jefe,
+		suj.get_script().resource_path.ends_with("sujeto_1.gd"), suj.vida, lab.jefe == suj])
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != suj:
+			z.queue_free()
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(1.0, 1.0)
+	var centro := Vector2(s.ancho / 2.0, 500)
+	var mirar := func(donde: Vector2) -> void:
+		Temblor.desplazamiento = donde - johnny.position
+		camara.reset_smoothing()
+	suj.position = centro
+	suj.process_mode = Node.PROCESS_MODE_DISABLED
+	johnny.position = centro + Vector2(130, 30)
+	mirar.call(centro + Vector2(60, -40))
+	await espera.call(0.4)
+	Captura.foto("captura-sujeto.png")
+	# el fregonazo
+	suj.process_mode = Node.PROCESS_MODE_INHERIT
+	suj.foto(johnny, "fregonazo")
+	suj.t = 0.25
+	var vida: int = johnny.vida
+	await espera.call(0.15)
+	Captura.foto("captura-sujeto-fregonazo-aviso.png")
+	await espera.call(0.3)
+	Captura.foto("captura-sujeto-fregonazo.png")
+	print("Fregonazo: a Johnny le quita %d (esperado: 22), le empuja %s" % [vida - johnny.vida, johnny.velocity.length() > 100.0])
+	await espera.call(1.6)
+	# los cubos
+	johnny.position = centro + Vector2(300, 60)
+	mirar.call(centro + Vector2(160, -20))
+	suj.position = centro
+	suj.espera.cubo = 0.0
+	suj.foto(johnny, "cubo")
+	suj.t = 0.2
+	johnny.invulnerable = 0.0   # (con su física parada, lo invulnerable del fregonazo no se le pasa solo)
+	vida = johnny.vida
+	await espera.call(0.15)
+	Captura.foto("captura-sujeto-cubo-aviso.png")
+	await espera.call(0.55)
+	Captura.foto("captura-sujeto-cubos.png")
+	await espera.call(0.8)
+	var charcos := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "agua_cubo")
+	suj.process_mode = Node.PROCESS_MODE_DISABLED
+	Captura.foto("captura-sujeto-charcos.png")
+	print("Cubos: charcos de agua %d (esperado: 3), a Johnny le quita %d (esperado: 8)" % [charcos.size(), vida - johnny.vida])
+	for c in charcos:
+		c.queue_free()
+	# rodar: las balas que le darían (bala.gd le pregunta)
+	suj.process_mode = Node.PROCESS_MODE_INHERIT
+	suj.andar(5.0)
+	suj.rodo = -10.0
+	suj.balas = 0
+	var esquiva := []
+	for i in 3:
+		esquiva.append(suj.esquivar_bala(Vector2(-600, 0)))
+	await espera.call(0.25)
+	mirar.call(suj.position + Vector2(0, -40))
+	Captura.foto("captura-sujeto-rodar.png")
+	print("Rodar: tres balas seguidas %s (esperado: alguna true), estado %s (esperado: rodar)" % [esquiva, suj.estado])
+	await espera.call(0.6)
+	print("  después de rodar, otra bala enseguida: %s (esperado: false, cada 2,5 s como mucho)" % suj.esquivar_bala(Vector2(-600, 0)))
+	# partirse
+	suj.position = centro
+	johnny.position = centro + Vector2(260, 60)
+	mirar.call(centro + Vector2(60, -40))
+	suj.vida = suj.vida_max / 2
+	await espera.call(1.0)
+	Captura.foto("captura-sujeto-partirse.png")
+	print("Partirse: estado %s (esperado: partirse), cabina rota %s" % [suj.estado, lab.rota])
+	await espera.call(0.9)
+	var mitades: Array = suj.mitades
+	for m in mitades:
+		m.process_mode = Node.PROCESS_MODE_DISABLED
+	await espera.call(0.1)
+	Captura.foto("captura-sujeto-partido.png")
+	print("Partido: mitades %d (esperado: 2), vida de cada una %s (esperado: la mitad de %d), barra %d/%d, cabina rota %s, el grande en zombis %s (esperado: false), la pelea sigue %s" % [
+		mitades.size(), mitades.map(func(m): return m.vida), suj.vida_max, suj.vida, suj.vida_max, lab.rota,
+		suj.is_in_group("zombis"), lab.activo()])
+	# cae una: la otra se enfada
+	mitades[1].process_mode = Node.PROCESS_MODE_INHERIT
+	mitades[0].process_mode = Node.PROCESS_MODE_INHERIT
+	mitades[0].quitar_vida(99999, Vector2.ZERO)
+	await espera.call(0.5)
+	mitades[1].process_mode = Node.PROCESS_MODE_DISABLED
+	mirar.call(mitades[1].position + Vector2(0, -40))
+	Captura.foto("captura-sujeto-enfadado.png")
+	print("Cae una: la otra enfadada %s (esperado: true), velocidad %.0f (esperado: %.0f), barra %d" % [mitades[1].fase == 2,
+		mitades[1].velocidad(), suj.VELOCIDAD[1] * suj.ENFADADO, suj.vida])
+	# cae la otra: cae el jefe y se abre la puerta del helipuerto
+	mitades[1].process_mode = Node.PROCESS_MODE_INHERIT
+	mitades[1].quitar_vida(99999, Vector2.ZERO)
+	var t0 := 0.0
+	while not lab.salida_abierta and t0 < 8.0:
+		if get_tree().paused:   # (la página del dosier: se cierra)
+			get_tree().paused = false
+			menus.cerrar()
+		await get_tree().create_timer(0.2, true).timeout
+		t0 += 0.2
+	print("Caen las dos: el jefe muerto %s, vida %d, puerta del helipuerto abierta %s (esperado: true, 0, true)" % [
+		planta.jefa_muerta, suj.vida, lab.salida_abierta])

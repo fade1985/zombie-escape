@@ -31,6 +31,8 @@ const TIPOS := {
 	"probeta_aceite": {"vuelo": 0.85, "altura": 170.0, "golpe": 0, "charco": "aceite", "marca": 50.0, "liquido": Color("#4fc3ff")},
 	# los vasos de café del becario (becario.gd): en curva, con su marca, y dejan un charco de café que resbala
 	"cafe": {"vuelo": 0.8, "altura": 150.0, "golpe": 6, "charco": "cafe", "marca": 46.0, "liquido": Color("#6b3f22")},
+	# los cubos de agua del Sujeto 1 (sujeto_1.gd): en curva alta, con su marca; dejan un charco de agua que resbala
+	"cubo": {"vuelo": 0.9, "altura": 180.0, "golpe": 8, "charco": "agua_cubo", "marca": 56.0, "liquido": Color("#8fd3ff")},
 }
 
 var tipo := "veneno"
@@ -175,6 +177,8 @@ func _draw() -> void:
 			probeta(self, donde, t * 11.0, datos.liquido)
 		"cafe":
 			vaso(self, donde, t * 9.0)
+		"cubo":
+			cubo(self, donde, t * 8.0)
 		_:
 			# La garrafa de lejía, dando vueltas
 			draw_set_transform(donde, t * 10.0, Vector2(2, 2))
@@ -216,6 +220,18 @@ static func vaso(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
 	lienzo.draw_rect(Rect2(-10, -16, 20, 5), contorno)               # la tapa
 	lienzo.draw_rect(Rect2(-9, -15, 18, 3), Color("#ffffff"))
 	lienzo.draw_rect(Rect2(-5, -8, 2, 4), Color(1, 1, 1, 0.7))       # el brillo
+
+
+# El cubo de fregar del Sujeto 1: de plástico gris azulado, con su asa y el agua dentro, dando vueltas
+static func cubo(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
+	lienzo.draw_set_transform(donde, giro)
+	var contorno := Color("#1d1b2c")
+	lienzo.draw_arc(Vector2(0, -12), 11.0, PI, TAU, 10, contorno, 3.0)   # el asa
+	lienzo.draw_colored_polygon(PackedVector2Array([Vector2(-14, -12), Vector2(14, -12), Vector2(10, 14), Vector2(-10, 14)]), contorno)
+	lienzo.draw_colored_polygon(PackedVector2Array([Vector2(-12, -10), Vector2(12, -10), Vector2(8, 12), Vector2(-8, 12)]),
+		Color("#5f7f9a"))
+	lienzo.draw_rect(Rect2(-12, -10, 24, 5), Color("#8fd3ff"))       # el agua
+	lienzo.draw_rect(Rect2(-8, -2, 3, 10), Color(1, 1, 1, 0.35))     # el brillo
 
 
 # Dónde caerá la sartén: un anillo rojo que se va llenando

@@ -68,6 +68,10 @@ func _physics_process(delta: float) -> void:
 		# (la burbuja del jefe de bomberos para la bala en su borde, tal como se ve: bombero.gd, escudo_toca)
 		var escudo: bool = zombi.has_method("escudo_toca") and zombi.escudo_toca(global_position + Vector2(0, -altura))
 		if escudo or global_position.distance_to(zombi.global_position) < zombi.radio + radio + 3.0:
+			# (el Sujeto 1, a veces, rueda de lado y la bala le pasa de largo: sujeto_1.gd, esquivar_bala)
+			if zombi.has_method("esquivar_bala") and zombi.esquivar_bala(velocidad):
+				tocados.append(zombi)
+				continue
 			var fuerza := velocidad.normalized() * EMPUJE * empuje
 			Zombi.critico = critico   # (su número sale en amarillo)
 			Zombi.de_bala = true

@@ -686,6 +686,14 @@ msgstr "Тварь"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "Что осталось от доктора после собственной дозы: пасть Обжоры, руки Качка и огонь брандмейстера. Уходи с ее полос и от ударной волны."
 
+#: scripts/bestiario.gd
+msgid "El Sujeto 1"
+msgstr "Субъект 1"
+
+#: scripts/bestiario.gd
+msgid "Una copia de Johnny hecha con su sangre: rueda para librarse de las balas, barre con la fregona y tira cubos de agua. A media vida se parte en dos."
+msgstr "Копия Джонни, сделанная из его крови: перекатывается, уходя от пуль, бьёт шваброй и швыряет вёдра с водой. На половине здоровья делится надвое."
+
 #: scripts/bombero.gd
 msgid "¡A ARDER!"
 msgstr "ГОРИ ЯСНО!"
@@ -726,7 +734,7 @@ msgstr "МОЙ КУПОЛ!"
 msgid "¡AÚN NO HE TERMINADO!"
 msgstr "Я ЕЩЕ НЕ ЗАКОНЧИЛ!"
 
-#: scripts/cientifico_jefe.gd scripts/gerente.gd
+#: scripts/cientifico_jefe.gd scripts/gerente.gd scripts/sujeto_1.gd
 msgid "¡GRAAAAH!"
 msgstr "ГРААААХ!"
 
@@ -2527,7 +2535,7 @@ msgstr "ПРЫГ!"
 msgid "¡HORA DE JUGAR!"
 msgstr "ДАВАЙ ИГРАТЬ!"
 
-#: scripts/minijefe.gd
+#: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
 msgstr "ГРРР!"
 
@@ -3247,6 +3255,10 @@ msgstr "Половина купюр, которые ты подбираешь, �
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "Убей управляющего в первый раз."
+
+#: scripts/sujeto_1.gd
+msgid "¡NO AGUANTA!"
+msgstr "НЕ ВЫДЕРЖИВАЕТ!"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

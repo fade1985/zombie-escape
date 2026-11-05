@@ -238,3 +238,11 @@ animaciones con PixMiniMax, una dirección por llamada). Todo en `assets/pixella
   se le escapan al tirar y al coger el carrito). Sus copias usan la misma hoja, más claras y sin sombra. El carrito del correo,
   los vasos de café, el reflejo en las fotocopiadoras y el destello de la máquina los dibuja el juego (`becario.gd`,
   `proyectil.gd`).
+- **El Sujeto 1** (jefe final de Torre Velaria, lienzo de 128 como el gerente; fuente `sujeto-1-128`, hoja `jefe-sujeto-1`): una
+  copia de Johnny enorme y pálida, con el peto vaquero roto, la cinta roja, cicatrices, tubos en los hombros y una fregona
+  gigante. Andar, rodar, fregonazo, cubo y muerte en sur, sureste, este, noreste y norte (el oeste, en espejo: `py
+  tools/espejo_oeste.py --lado`), y partirse solo de frente. Del cubo se quitan al montar los fotogramas con la bola oscura
+  que PixelLab le puso en la mano (`sin` en `jefe_hoja.py`): queda la postura de partida y el brazo ya lanzando; el cubo
+  levantado, el que vuela y el charco los dibuja el juego (`sujeto_1.gd`, `proyectil.gd` "cubo", `charco.gd` "agua_cubo").
+  Escala 1,4; sus dos mitades de la fase partida, el mismo dibujo a escala 1. Todo en `assets/pixellab.json` →
+  `torre-sujeto-1`. Hoja con `py tools/jefe_hoja.py sujeto-1-128 jefe-sujeto-1`.

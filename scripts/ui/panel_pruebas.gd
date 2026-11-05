@@ -15,7 +15,8 @@ extends CanvasLayer
 const PESTANAS := ["Jefes", "Zombis", "Ayudas", "Johnny", "Ir a", "Varios"]
 const JEFES := {"portera": "Portera", "antidisturbios": "Antidisturbios", "cocinero": "Cocinero", "modista": "Modista",
 	"mascota": "Mascota", "gerente": "Gerente", "gloton": "Glotón", "gymbro": "Gymbro", "bombero": "Jefe de bomberos",
-	"cientifico_jefe": "Científico jefe", "directora": "Directora de RR. HH.", "informatico": "Informático", "presentador": "Presentador", "becario": "Becario"}
+	"cientifico_jefe": "Científico jefe", "directora": "Directora de RR. HH.", "informatico": "Informático", "presentador": "Presentador", "becario": "Becario",
+	"sujeto_1": "Sujeto 1"}
 const ZOMBIS := {"normal": "Normal", "lento": "Lento", "rapido": "Rápido", "explosivo": "Explosivo",
 	"tentaculos": "Tentáculos", "venenoso": "Venenoso", "vigilante": "Vigilante", "dependienta": "Dependienta",
 	"oficinista": "Oficinista", "escolta": "Escolta de Velaria"}

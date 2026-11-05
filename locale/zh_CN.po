@@ -684,6 +684,14 @@ msgstr "怪物"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "博士给自己打了一针之后剩下的东西：大胃王的嘴、健身哥的胳膊、消防队长的火。避开它的冲锋路线和冲击波。"
 
+#: scripts/bestiario.gd
+msgid "El Sujeto 1"
+msgstr "1号实验体"
+
+#: scripts/bestiario.gd
+msgid "Una copia de Johnny hecha con su sangre: rueda para librarse de las balas, barre con la fregona y tira cubos de agua. A media vida se parte en dos."
+msgstr "用强尼的血造出来的复制品：会翻滚躲开子弹，抡起拖把横扫，还会扔水桶。血量减半时会一分为二。"
+
 #: scripts/bombero.gd
 msgid "¡A ARDER!"
 msgstr "消防演习！"
@@ -724,7 +732,7 @@ msgstr "我的玻璃罩！"
 msgid "¡AÚN NO HE TERMINADO!"
 msgstr "我还没完呢！"
 
-#: scripts/cientifico_jefe.gd scripts/gerente.gd
+#: scripts/cientifico_jefe.gd scripts/gerente.gd scripts/sujeto_1.gd
 msgid "¡GRAAAAH!"
 msgstr "吼啊啊啊！"
 
@@ -2523,7 +2531,7 @@ msgstr "蹦！"
 msgid "¡HORA DE JUGAR!"
 msgstr "游戏时间！"
 
-#: scripts/minijefe.gd
+#: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
 msgstr "吼——！"
 
@@ -3237,6 +3245,10 @@ msgstr "你捡到的钞票有一半价值翻倍。"
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "首次杀死经理。"
+
+#: scripts/sujeto_1.gd
+msgid "¡NO AGUANTA!"
+msgstr "撑不住了！"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

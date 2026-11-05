@@ -11,6 +11,7 @@
 #                                    py tools/jefe_hoja.py informatico-72 jefe-informatico   (minijefe de Torre Velaria)
 #                                    py tools/jefe_hoja.py presentador-72 jefe-presentador   (minijefe de Torre Velaria)
 #                                    py tools/jefe_hoja.py becario-72 jefe-becario   (minijefe de Torre Velaria)
+#                                    py tools/jefe_hoja.py sujeto-1-128 jefe-sujeto-1   (el jefe final de Torre Velaria)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -257,6 +258,28 @@ JEFES = {
     # el científico jefe (el jefe final de los Apartamentos, lienzo de 128 como el gerente): las probetas que
     # lanza, el chorro de suero y la cúpula salen con código (cientifico_jefe.gd). Sin muerte (el que muere es la
     # criatura, en otra hoja); "suero" y "jeringa", solo de frente. Hacia el oeste, el este dado la vuelta
+    # el Sujeto 1 (el jefe final de Torre Velaria, lienzo de 128): el cubo y el agua salen con código (sujeto_1.gd).
+    # En el cubo, PixelLab le puso una bola oscura en la mano al echar el brazo atrás (y en el suelo, y una raya):
+    # esos fotogramas se quitan ("sin") y queda la postura de partida y el brazo ya lanzando. "partirse", solo de
+    # frente. Hacia el oeste, el este dado la vuelta (py tools/espejo_oeste.py --lado)
+    "sujeto-1-128": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 8, True, True),
+            "rodar": ("rodar", 14, False, False),
+            "fregonazo": ("fregonazo", 12, False, False),
+            "cubo": ("cubo", 10, False, False),
+            "muerte": ("muerte", 10, False, False),
+            "partirse": ("partirse", 9, False, False),
+        },
+        "de_frente": ["partirse"],
+        "motas": {"cubo": 300, "fregonazo": 120},
+        "sin": {"cubo_s": [1, 2, 3, 4], "cubo_se": [1, 2, 3, 4, 5], "cubo_so": [1, 2, 3, 4, 5],
+                "cubo_e": [1, 2, 3], "cubo_o": [1, 2, 3], "cubo_ne": [1, 2, 3, 4], "cubo_no": [1, 2, 3, 4],
+                "cubo_n": [3]},
+        "pies": (64, 125),
+    },
     "cientifico-jefe-128": {
         "anims": {
             "quieto": ("rotations", 1, True, False),

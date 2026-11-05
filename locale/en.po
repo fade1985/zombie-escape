@@ -685,6 +685,14 @@ msgstr "The Creature"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "What's left of the doctor after his own dose: the Glutton's mouth, the Gymbro's arms and the fire chief's flames. Stay out of its charge lanes and its shockwave."
 
+#: scripts/bestiario.gd
+msgid "El Sujeto 1"
+msgstr "Subject 1"
+
+#: scripts/bestiario.gd
+msgid "Una copia de Johnny hecha con su sangre: rueda para librarse de las balas, barre con la fregona y tira cubos de agua. A media vida se parte en dos."
+msgstr "A copy of Johnny made from his blood: rolls to dodge bullets, sweeps with his mop and throws buckets of water. At half health he splits in two."
+
 #: scripts/bombero.gd
 msgid "¡A ARDER!"
 msgstr "FIRE DRILL!"
@@ -725,7 +733,7 @@ msgstr "MY DOME!"
 msgid "¡AÚN NO HE TERMINADO!"
 msgstr "I'M NOT DONE YET!"
 
-#: scripts/cientifico_jefe.gd scripts/gerente.gd
+#: scripts/cientifico_jefe.gd scripts/gerente.gd scripts/sujeto_1.gd
 msgid "¡GRAAAAH!"
 msgstr "GRAAAAH!"
 
@@ -2525,7 +2533,7 @@ msgstr "BOING!"
 msgid "¡HORA DE JUGAR!"
 msgstr "PLAYTIME!"
 
-#: scripts/minijefe.gd
+#: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
 msgstr "GRRR!"
 
@@ -3242,6 +3250,10 @@ msgstr "Half of the bills you pick up are worth double."
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "Kill the manager for the first time."
+
+#: scripts/sujeto_1.gd
+msgid "¡NO AGUANTA!"
+msgstr "IT'S TEARING APART!"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

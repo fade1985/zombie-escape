@@ -42,6 +42,8 @@ const TIPOS := {
 	# el agua de los aspersores (la alarma de incendios, eventos.gd): solo resbala, y no se seca mientras dure
 	# el café de los vasos del becario (becario.gd): solo resbala
 	"cafe": {"dibujo": LEJIA, "radio": 50.0, "vida": 6.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.6, 0.38, 0.22)},
+	# el agua de los cubos del Sujeto 1 (sujeto_1.gd): solo resbala, 6 s
+	"agua_cubo": {"dibujo": LEJIA, "radio": 56.0, "vida": 6.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.55, 0.8, 1.0)},
 	"agua": {"dibujo": LEJIA, "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.55, 0.8, 1.0)},
 }
 # Los colores de los charcos que burbujean: del borde al centro, los brillos, la burbuja (y su brillo), el vapor y

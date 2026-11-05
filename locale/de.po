@@ -685,6 +685,14 @@ msgstr "Die Kreatur"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "Was vom Doktor nach seiner eigenen Dosis übrig ist: das Maul des Vielfraßes, die Arme des Gymbros und das Feuer des Feuerwehrchefs. Raus aus ihren Bahnen und ihrer Druckwelle."
 
+#: scripts/bestiario.gd
+msgid "El Sujeto 1"
+msgstr "Proband 1"
+
+#: scripts/bestiario.gd
+msgid "Una copia de Johnny hecha con su sangre: rueda para librarse de las balas, barre con la fregona y tira cubos de agua. A media vida se parte en dos."
+msgstr "Eine Kopie von Johnny, gemacht aus seinem Blut: rollt sich vor Kugeln weg, fegt mit dem Mopp und wirft Wassereimer. Bei halber Gesundheit teilt er sich in zwei."
+
 #: scripts/bombero.gd
 msgid "¡A ARDER!"
 msgstr "FEUER FREI!"
@@ -725,7 +733,7 @@ msgstr "MEINE KUPPEL!"
 msgid "¡AÚN NO HE TERMINADO!"
 msgstr "DAS WAR NOCH NICHTS!"
 
-#: scripts/cientifico_jefe.gd scripts/gerente.gd
+#: scripts/cientifico_jefe.gd scripts/gerente.gd scripts/sujeto_1.gd
 msgid "¡GRAAAAH!"
 msgstr "GRAAAAH!"
 
@@ -2525,7 +2533,7 @@ msgstr "BOING!"
 msgid "¡HORA DE JUGAR!"
 msgstr "SPIELZEIT!"
 
-#: scripts/minijefe.gd
+#: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
 msgstr "GRRR!"
 
@@ -3242,6 +3250,10 @@ msgstr "Die Hälfte der Scheine, die du aufhebst, ist doppelt so viel wert."
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "Erledige den Manager zum ersten Mal."
+
+#: scripts/sujeto_1.gd
+msgid "¡NO AGUANTA!"
+msgstr "ES ZERREISST IHN!"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

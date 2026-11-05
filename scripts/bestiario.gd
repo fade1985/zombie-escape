@@ -76,7 +76,7 @@ const LISTA := {
 	"directora": {"nombre": "La directora de Recursos Humanos",
 		"frase": "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble.",
 		"edificios": ["torre"], "hoja": "res://assets/sprites/jefe-directora.tres",
-		"recorte": Rect2i(23, 56, 41, 72), "retrato": "quieto_s", "escala": 2, "jefe": true},
+		"recorte": Rect2i(23, 56, 41, 71), "retrato": "quieto_s", "escala": 2, "jefe": true},
 	"informatico": {"nombre": "El informático",
 		"frase": "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario.",
 		"edificios": ["torre"], "hoja": "res://assets/sprites/jefe-informatico.tres",
@@ -84,7 +84,7 @@ const LISTA := {
 	"presentador": {"nombre": "El presentador",
 		"frase": "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público.",
 		"edificios": ["torre"], "hoja": "res://assets/sprites/jefe-presentador.tres",
-		"recorte": Rect2i(25, 19, 52, 71), "retrato": "quieto_s", "escala": 2, "jefe": true},
+		"recorte": Rect2i(25, 20, 51, 69), "retrato": "quieto_s", "escala": 2, "jefe": true},
 	"becario": {"nombre": "El becario",
 		"frase": "Se fotocopia a sí mismo: busca al único que tiene sombra. Embiste con el carrito del correo y lo pone todo perdido de café.",
 		"edificios": ["torre"], "hoja": "res://assets/sprites/jefe-becario.tres",
@@ -140,6 +140,11 @@ const LISTA := {
 		"frase": "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-criatura.tres",
 		"recorte": Rect2i(22, 47, 116, 115), "retrato": "quieto_s", "escala": 2, "jefe": true},
+	# el jefe final de Torre Velaria (el laboratorio de la planta 40)
+	"sujeto_1": {"nombre": "El Sujeto 1",
+		"frase": "Una copia de Johnny hecha con su sangre: rueda para librarse de las balas, barre con la fregona y tira cubos de agua. A media vida se parte en dos.",
+		"edificios": ["torre"], "hoja": "res://assets/sprites/jefe-sujeto-1.tres",
+		"recorte": Rect2i(26, 40, 98, 126), "retrato": "quieto_s", "escala": 2, "jefe": true},
 }
 # [/traducir]
 
