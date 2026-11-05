@@ -383,7 +383,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
        la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe presentador --plato`.
-   - **El becario** 🟡 **Hecho el 5 nov, a falta del visto bueno del dueño.** 34 generaciones (6 el modelo, 28 las animaciones,
+   - **El becario** ✅ **Hecho el 5 nov, con el visto bueno del dueño.** 34 generaciones (6 el modelo, 28 las animaciones,
      ninguna repetida). Lo que ha quedado (`becario.gd` y `copia_becario.gd`; números provisionales, en sus `const`):
      - Vida 380 (+35 % por planta), velocidad 120, 8 si te pegas a él. Su sala, la **Sala de fotocopias** (`jefe-becario` en
        `Catalogo.SALAS`): en la pared de arriba, tres fotocopiadoras, dos impresoras, dos archivadores y dos lámparas; a los lados,
