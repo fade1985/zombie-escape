@@ -55,6 +55,10 @@ msgstr "Аптечки, бинты и Аксолотль лечат вдвое �
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "Охранник (или зомби с ключом) вдвое живучее, а зомби слышат тебя издалека"
 
+#: scripts/aliado.gd scripts/tornos.gd
+msgid "¡Detrás!"
+msgstr "Сзади!"
+
 #: scripts/aliado.gd
 msgid "Quédate a su lado para levantarlo"
 msgstr "Постой рядом, чтобы помочь подняться"
@@ -298,7 +302,7 @@ msgstr "Готово! Можешь включать свет"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "%s починил провод! Вода больше не бьет током"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Помоги, не могу встать!"
 
@@ -350,7 +354,7 @@ msgstr "Зачищаю, скручиваю… готово"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Осталось только заизолировать…"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "Еще чуть-чуть!"
 
@@ -366,15 +370,15 @@ msgstr "Так я не могу! Вырубай ток!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Меня же шибанет! Рубильник!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Джонни, вернись!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Не бросай меня тут!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "Меня же съедят!"
 
@@ -426,7 +430,7 @@ msgstr "Держи, просуну под дверью!"
 msgid "¡Otra fuera!"
 msgstr "Еще одна!"
 
-#: scripts/barricada.gd
+#: scripts/barricada.gd scripts/tornos.gd
 msgid "Ya casi está…"
 msgstr "Почти готово…"
 
@@ -3326,6 +3330,22 @@ msgid "¡Gracias! ¡Sácame de aquí!"
 msgstr "Спасибо! Вытащи меня отсюда!"
 
 #: scripts/supervivientes.gd
+msgid "La recepcionista: la llave está en el suelo de %s"
+msgstr "Администратор: ключ лежит на полу, %s"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la llave la lleva un zombi de %s"
+msgstr "Администратор: ключ у зомби, %s"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "Администратор: ключ-карта у охранника с картой, он ходит по коридору"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: las cifras del código están en %s"
+msgstr "Администратор: цифры кода здесь: %s"
+
+#: scripts/supervivientes.gd
 msgid "¡%s se une al equipo! %s"
 msgstr "%s в команде! %s"
 
@@ -3517,6 +3537,34 @@ msgstr "Моет пол там, где проходит: убирает лужи
 #: scripts/supervivientes.gd
 msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "Чинит тебе швабру: удар шваброй бьёт шире"
+
+#: scripts/supervivientes.gd
+msgid "Recepcionista"
+msgstr "Администратор"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en recepción!"
+msgstr "Я на ресепшене!"
+
+#: scripts/supervivientes.gd
+msgid "¡Detrás del mostrador!"
+msgstr "За стойкой!"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo subir la persiana!"
+msgstr "Не могу поднять ролету!"
+
+#: scripts/supervivientes.gd
+msgid "¡Por fin alguien vivo! Abro los tornos y nos vamos"
+msgstr "Наконец-то живой человек! Я открою турникеты, и уходим"
+
+#: scripts/supervivientes.gd
+msgid "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda"
+msgstr "Кричит «Сзади!», когда зомби вот-вот ударит тебя в спину"
+
+#: scripts/supervivientes.gd
+msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
+msgstr "На каждом этаже подсказывает, где то, что открывает комнату босса"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -3995,6 +4043,54 @@ msgstr "Гремучая смесь"
 #: scripts/talentos.gd
 msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
 msgstr "Зомби, умершие сразу с двумя эффектами (огонь, кислота, молния или холод), взрываются (тебе это не вредит)"
+
+#: scripts/tornos.gd
+msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
+msgstr "Двери захлопнулись! Защищай: %s открывает турникеты"
+
+#: scripts/tornos.gd
+msgid "¡Gracias! Sigo con los tornos"
+msgstr "Спасибо! Возвращаюсь к турникетам"
+
+#: scripts/tornos.gd
+msgid "¡Abiertos! Ya podemos subir"
+msgstr "Открыто! Теперь можно наверх"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha abierto los tornos!"
+msgstr "%s открыла турникеты!"
+
+#: scripts/tornos.gd
+msgid "Aguanta: la %s está abriendo los tornos"
+msgstr "Держись: %s открывает турникеты"
+
+#: scripts/tornos.gd
+msgid "La %s abre los tornos · %d:%02d"
+msgstr "%s открывает турникеты · %d:%02d"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha caído!"
+msgstr "%s ранена!"
+
+#: scripts/tornos.gd
+msgid "Los tornos se han bloqueado. ¡Cúbreme mientras los abro!"
+msgstr "Турникеты заблокированы. Прикрой меня, пока я их открываю!"
+
+#: scripts/tornos.gd
+msgid "Tarjeta… rechazada. Otra vez"
+msgstr "Карта… отклонена. Ещё раз"
+
+#: scripts/tornos.gd
+msgid "¡Mira, se atascan con los tornos!"
+msgstr "Смотри, они застревают в турникетах!"
+
+#: scripts/tornos.gd
+msgid "¡Toma, esto estaba en objetos perdidos!"
+msgstr "Держи, это было в бюро находок!"
+
+#: scripts/tornos.gd
+msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
+msgstr "«Доступ ограничен: этаж 40»… что там наверху?"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

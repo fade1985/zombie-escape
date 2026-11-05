@@ -203,6 +203,10 @@
 #                       de la limpieza lleno de gas, los zombis dormidos, las tres válvulas (despiertan frenéticos),
 #                       la puerta que se abre, unirse, fregar charcos, la fregona ancha y su habitación, con fotos
 #                                                                                         [prueba_sitios.gd]
+#   --recepcionista     (con --edificio torre) la recepcionista, superviviente de la torre (parte 7): la persiana
+#                       bajada del mostrador del vestíbulo, subirla, abrir los tornos 60 s (la barra, los tornos que
+#                       frenan, tumbarla y levantarla), el aviso de la planta, el «¡Detrás!» y su habitación, con fotos
+#                                                                                         [prueba_sitios.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -648,6 +652,9 @@ func empezar_prueba() -> void:
 	elif "--limpiadora" in args:
 		set_process(false)   # sin la prueba larga
 		probar_limpiadora()
+	elif "--recepcionista" in args:
+		set_process(false)   # sin la prueba larga
+		probar_recepcionista()
 	elif "--viviendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_viviendas()

@@ -118,6 +118,19 @@ const DATOS := {
 		"desc": "Friega por donde pasa: quita los charcos de veneno, de ácido y los que resbalan",   # [traducir]
 		"habilidad": {"tipo": "fregar", "cada": 1.2, "alcance": 110.0},
 		"mejora": "Te arregla la fregona: el fregonazo barre más ancho"},   # [traducir]
+	# la recepcionista: escondida detrás del mostrador del vestíbulo (planta 1) con la persiana bajada; al unirse, abre
+	# los tornos con su tarjeta mientras llegan zombis, que los tornos frenan (tornos.gd). Ya rescatada, al llegar a cada
+	# planta dice dónde está lo que abre la sala del jefe (pista); si te acompaña, grita «¡Detrás!» (aliado.gd, avisar)
+	"recepcionista": {"id": "recepcionista", "edificio": "torre", "color": Color("#ff8ac8"), "arma": "",
+		"mostrador": true,
+		"look": {"skin": Color("#f1c9a5"), "hair": Color("#1a1a1a"), "shirt": Color("#24305e"), "pants": Color("#24305e"),
+			"shoes": Color("#1d1b2c"), "tarjeta": true},
+		"nombre": "Recepcionista",   # [traducir]
+		"gritos": ["¡Socorro!", "¡Estoy en recepción!", "¡Detrás del mostrador!", "¡No puedo subir la persiana!", "¡Que alguien me oiga!"],   # [traducir]
+		"rescate": "tornos", "al_abrir": "¡Por fin alguien vivo! Abro los tornos y nos vamos",   # [traducir]
+		"desc": "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda",   # [traducir]
+		"habilidad": {"tipo": "avisar", "cada": 4.0, "antes": 0.5},
+		"mejora": "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"},   # [traducir]
 }
 const DESCUENTO := 0.85   # el precio de empleado del informático joven
 const FREGONA_ANCHA := 200.0 / 140.0   # la fregona arreglada por la limpiadora de noche: barre 200° en vez de 140° (johnny.gd)
@@ -197,6 +210,7 @@ var escolta := Escolta.new()   # el rescate de la farmacéutica
 var averia := Averia.new()     # el del técnico
 var copia := Copia.new()       # el del informático joven
 var valvulas := Valvulas.new()   # el de la limpiadora de noche
+var tornos := Tornos.new()       # el de la recepcionista
 
 
 func preparar(p: Node) -> void:
@@ -220,6 +234,8 @@ func preparar(p: Node) -> void:
 	add_child(copia)
 	valvulas.sup = self
 	add_child(valvulas)
+	tornos.sup = self
+	add_child(tornos)
 
 
 # Al empezar la partida: quién sale y en qué planta (elegirSuperviviente), de los de este edificio. Los que ya
@@ -230,8 +246,11 @@ func elegir() -> void:
 	var s := Guardado.cargar()
 	var quedan := de_edificio(partida.edificio).filter(func(id): return not id in s.rescatados)
 	Planta.tienda_fija = {}
+	Planta.mostrador_fijo = 0
 	if not quedan.is_empty():
-		poner_rescate(DATOS[quedan[randi() % quedan.size()]], randi_range(1, Planta.PLANTAS - 1))
+		var def: Dictionary = DATOS[quedan[randi() % quedan.size()]]
+		# (la recepcionista, siempre en el vestíbulo: la planta 1)
+		poner_rescate(def, 1 if def.has("mostrador") else randi_range(1, Planta.PLANTAS - 1))
 	if s.acompanante in s.rescatados and DATOS.has(s.acompanante):
 		var a := crear(DATOS[s.acompanante], "equipo")
 		a.es_vecino = true
@@ -249,6 +268,7 @@ func poner_rescate(def: Dictionary, num: int) -> void:
 	rescate = {"def": def, "planta": num, "rescatado": false, "amigo": null, "sitio": -1, "horda_hecha": false}
 	Planta.tienda_fija = {"planta": num, "tienda": def.tienda, "sala": def.sala, "cuarto": def.get("cuarto", "")} \
 		if def.has("tienda") else {}
+	Planta.mostrador_fijo = num if def.has("mostrador") else 0
 
 
 # Al generar cada planta: si le toca a esta, se cierra la puerta de su baño (el baño ya lo ha guardado planta.gd)
@@ -301,6 +321,7 @@ func recoger() -> void:
 		if a.get_parent():
 			a.get_parent().remove_child(a)
 	valvulas.soltar()
+	tornos.soltar()
 	if is_instance_valid(npc):
 		npc.queue_free()
 	if is_instance_valid(puerta) and puerta.abierta == 0.0 and not puerta.abriendo:
@@ -324,7 +345,10 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
 	if hay_sos() and idx == partida.planta.superviviente.sitio:
 		var sup: Dictionary = partida.planta.superviviente
-		if sup.puerta.cerrada:
+		if sup.has("mostrador"):
+			if sup.puerta.cerrada:
+				puerta = tornos.montar_persiana()   # la recepcionista, detrás de la persiana del mostrador (tornos.gd)
+		elif sup.puerta.cerrada:
 			puerta = PUERTA_BANO.new()
 			puerta.montar(sup.puerta)
 			if rescate.def.get("rescate", "") == "barricada":
@@ -354,6 +378,8 @@ func _physics_process(delta: float) -> void:
 	actualizar_socorro(delta)
 	if npc and npc.modo == "encerrado":
 		npc.visible = not partida.mapa.oculto(npc.position)
+		if partida.planta.superviviente.has("mostrador"):
+			tornos.mirar(npc)   # (escondida mientras la persiana siga bajada; al llegar Johnny, la sube)
 		if not encerrado() and johnny.vivo and johnny.position.distance_to(npc.position) < 60.0:
 			unir(npc)
 	for v in vecinos:
@@ -435,7 +461,7 @@ func piso_limpio(idx: int) -> void:
 		a.al_limpiar()
 	if not encerrado() or idx != partida.planta.superviviente.sitio:
 		return
-	if not rescate.def.get("rescate", "") in ["barricada", "valvulas"]:
+	if not rescate.def.get("rescate", "") in ["barricada", "valvulas", "tornos"]:
 		abrir_escondite(idx)   # (la limpiadora, con las válvulas: valvulas.gd)
 
 
@@ -456,6 +482,47 @@ func abrir_escondite(idx: int) -> void:
 	if npc and partida.aqui == idx:
 		var dice: String = rescate.def.get("al_abrir", "")
 		npc.decir(Idioma.t(dice) if dice != "" else Idioma.t("¡Gracias! ¡Sácame de aquí!"))
+
+
+# La recepcionista ya rescatada: al llegar a una planta, al rato ("espera" segundos), dice dónde está lo que abre la sala
+# del jefe (pista)
+func avisar_pista(espera: float) -> void:
+	if not "recepcionista" in Guardado.cargar().rescatados:
+		return
+	var num: int = partida.planta.num
+	await get_tree().create_timer(espera, false).timeout
+	if partida.planta.num != num or partida.terminada:
+		return
+	var texto := pista()
+	if texto != "":
+		partida.decir(texto, 4.0)
+
+
+# Lo que abre la sala del jefe de esta planta y dónde está, ya traducido ("" si no hay nada que buscar): la llave (el
+# zombi que la lleva), el guardia de la tarjeta o los ordenadores con las cifras del código
+func pista() -> String:
+	var planta: Dictionary = partida.planta
+	if planta.get("azotea", false) or planta.tiene_llave or planta.get("llave_usada", false):
+		return ""
+	match partida.ed.cerrojo:
+		"llave":
+			if planta.llave.sitio >= 0:
+				return Idioma.t("La recepcionista: la llave está en el suelo de %s") % Planta.nombre_de_sitio(planta.sitios[planta.llave.sitio])
+			for sitio in planta.sitios:
+				if sitio.get("zombis", []).any(func(z): return z.get("llave", false)):
+					return Idioma.t("La recepcionista: la llave la lleva un zombi de %s") % Planta.nombre_de_sitio(sitio)
+		"tarjeta":
+			if planta.get("guardia", {}).get("vivo", false):
+				return Idioma.t("La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo")
+		"codigo":
+			var donde := []
+			for t in planta.get("codigo", {}).get("terminales", []):
+				var nombre := Planta.nombre_de_sitio(planta.sitios[t.sitio])
+				if not t.leido and not nombre in donde:
+					donde.append(nombre)
+			if not donde.is_empty():
+				return Idioma.t("La recepcionista: las cifras del código están en %s") % ", ".join(donde)
+	return ""
 
 
 # Johnny se le arrima con la puerta abierta: se une al equipo
@@ -479,6 +546,8 @@ func unir(a: Aliado) -> void:
 		averia.empezar(a)   # si su tienda no tuviera el agua con corriente, la horda de siempre
 	elif a.def.get("rescate", "") == "copia":
 		copia.empezar(a)
+	elif a.def.get("rescate", "") == "tornos":
+		tornos.empezar(a)
 
 
 # ═════════════ La horda ═════════════
@@ -487,7 +556,7 @@ func actualizar_horda(delta: float) -> void:
 	var r := rescate
 	if r.is_empty() or not r.rescatado or not r.amigo in equipo or partida.aqui != r.sitio:
 		return
-	if r.def.get("rescate", "") in ["escolta", "copia", "valvulas"] or averia.activa():
+	if r.def.get("rescate", "") in ["escolta", "copia", "valvulas", "tornos"] or averia.activa():
 		return   # la farmacéutica no tiene horda (su escolta va en escolta.gd), ni el técnico (averia.gd), ni el informático (copia.gd)
 	var a: Aliado = r.amigo
 	if horda.is_empty():
@@ -582,6 +651,9 @@ func al_herir(cae: bool, a: Aliado) -> void:
 		return
 	if copia.el == a:
 		copia.al_herir(cae)
+		return
+	if tornos.ella == a:
+		tornos.al_herir(cae)
 		return
 	if horda.is_empty():
 		return
@@ -745,6 +817,7 @@ func dibujar_capa() -> void:
 	averia.dibujar(capa)
 	copia.dibujar(capa)
 	valvulas.dibujar(capa)
+	tornos.dibujar(capa)
 	if horda.is_empty():
 		return
 	var a: Aliado = rescate.amigo
@@ -799,6 +872,8 @@ func probar_aqui(fundir := true, quien := "") -> void:
 		var i: int = (propios.find(rescate.def.id) + 1) % propios.size() if not rescate.is_empty() else 0
 		if quien != "":
 			i = propios.find(quien)
+		elif DATOS[propios[i]].has("mostrador") and num != 1:
+			i = (i + 1) % propios.size()   # (la recepcionista solo sale en el vestíbulo, la planta 1)
 		poner_rescate(DATOS[propios[i]], num)
 		partida.nueva_planta(num)   # la misma planta otra vez, ya con su tienda
 		sup = partida.planta.superviviente
@@ -813,7 +888,8 @@ func probar_aqui(fundir := true, quien := "") -> void:
 	sup.puerta.cerrada = true
 	var sitio: Dictionary = partida.planta.sitios[sup.sitio]
 	sitio.zombis = []
-	sitio.limpio = false
+	if sup.sitio != 0:
+		sitio.limpio = false   # (la recepcionista está en el pasillo, que no se limpia)
 	partida.olvidar_mapa(sup.sitio)
 	await partida.montar(sup.sitio, 0, fundir)
 

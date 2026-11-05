@@ -55,6 +55,10 @@ msgstr "急救包、绷带和美西螈的治疗量减半"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "保安（或拿钥匙的僵尸）血量翻倍，僵尸也能从更远处听见你"
 
+#: scripts/aliado.gd scripts/tornos.gd
+msgid "¡Detrás!"
+msgstr "身后！"
+
 #: scripts/aliado.gd
 msgid "Quédate a su lado para levantarlo"
 msgstr "待在旁边把人扶起来"
@@ -296,7 +300,7 @@ msgstr "修好了！可以合闸送电了"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "%s修好了电线！水里不会再电人了"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "帮帮我，我起不来了！"
 
@@ -348,7 +352,7 @@ msgstr "剥线，接上……行了"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "就差缠绝缘胶带了……"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "再坚持一下！"
 
@@ -364,15 +368,15 @@ msgstr "这样我没法干！快断电！"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "我要触电了！电闸！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny，回来！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "别把我丢在这儿！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "我要被吃掉了！"
 
@@ -424,7 +428,7 @@ msgstr "拿着，我从门缝底下递给你！"
 msgid "¡Otra fuera!"
 msgstr "又拆一块！"
 
-#: scripts/barricada.gd
+#: scripts/barricada.gd scripts/tornos.gd
 msgid "Ya casi está…"
 msgstr "快好了……"
 
@@ -3316,6 +3320,22 @@ msgid "¡Gracias! ¡Sácame de aquí!"
 msgstr "谢谢！快带我离开这儿！"
 
 #: scripts/supervivientes.gd
+msgid "La recepcionista: la llave está en el suelo de %s"
+msgstr "前台接待：钥匙掉在%s的地上"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la llave la lleva un zombi de %s"
+msgstr "前台接待：钥匙在%s的一只僵尸身上"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "前台接待：门禁卡在持卡保安身上，他在走廊里巡逻"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: las cifras del código están en %s"
+msgstr "前台接待：密码的数字在%s"
+
+#: scripts/supervivientes.gd
 msgid "¡%s se une al equipo! %s"
 msgstr "%s加入了队伍！%s"
 
@@ -3507,6 +3527,34 @@ msgstr "走到哪儿拖到哪儿：清除毒液、酸液和湿滑的水洼"
 #: scripts/supervivientes.gd
 msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "帮你修好拖把：拖把横扫范围更大"
+
+#: scripts/supervivientes.gd
+msgid "Recepcionista"
+msgstr "前台接待"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en recepción!"
+msgstr "我在前台！"
+
+#: scripts/supervivientes.gd
+msgid "¡Detrás del mostrador!"
+msgstr "在柜台后面！"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo subir la persiana!"
+msgstr "卷帘门拉不起来！"
+
+#: scripts/supervivientes.gd
+msgid "¡Por fin alguien vivo! Abro los tornos y nos vamos"
+msgstr "终于见到活人了！我去开闸机，咱们走"
+
+#: scripts/supervivientes.gd
+msgid "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda"
+msgstr "僵尸要从背后偷袭你时，她会喊「身后！」"
+
+#: scripts/supervivientes.gd
+msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
+msgstr "每到一层，告诉你打开头目房间的东西在哪里"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -3981,6 +4029,54 @@ msgstr "爆炸配方"
 #: scripts/talentos.gd
 msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
 msgstr "同时带有两种效果（火焰、酸液、闪电或冰冻）死去的僵尸会爆炸（对你无害）"
+
+#: scripts/tornos.gd
+msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
+msgstr "门都关上了！%s开闸机的时候，保护好她"
+
+#: scripts/tornos.gd
+msgid "¡Gracias! Sigo con los tornos"
+msgstr "谢谢！我接着开闸机"
+
+#: scripts/tornos.gd
+msgid "¡Abiertos! Ya podemos subir"
+msgstr "开了！现在可以上楼了"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha abierto los tornos!"
+msgstr "%s打开了闸机！"
+
+#: scripts/tornos.gd
+msgid "Aguanta: la %s está abriendo los tornos"
+msgstr "撑住：%s正在开闸机"
+
+#: scripts/tornos.gd
+msgid "La %s abre los tornos · %d:%02d"
+msgstr "%s正在开闸机 · %d:%02d"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha caído!"
+msgstr "%s倒下了！"
+
+#: scripts/tornos.gd
+msgid "Los tornos se han bloqueado. ¡Cúbreme mientras los abro!"
+msgstr "闸机锁住了。我开的时候掩护我！"
+
+#: scripts/tornos.gd
+msgid "Tarjeta… rechazada. Otra vez"
+msgstr "门卡……被拒。再来"
+
+#: scripts/tornos.gd
+msgid "¡Mira, se atascan con los tornos!"
+msgstr "看，它们卡在闸机里了！"
+
+#: scripts/tornos.gd
+msgid "¡Toma, esto estaba en objetos perdidos!"
+msgstr "给，这是失物招领处的！"
+
+#: scripts/tornos.gd
+msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
+msgstr "「限制进入：40 层」……上面有什么？"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

@@ -73,8 +73,11 @@ func casillas() -> Array:
 	var x0 := MARGEN + PUNTA + 4
 	var largo := ANCHO - x0 * 2
 	var medio := PASILLO_Y + 5.0
-	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": CLARO, "aqui": aqui == 0, "icono": "", "sos": false,
-		"puerta": Rect2(), "sitio": -1 if abajo() else 0})
+	# (la recepcionista de la torre se esconde en el pasillo, detrás del mostrador: su "!", encima de él)
+	var en_mostrador: bool = partida.supervivientes.encerrado() and planta.superviviente.has("mostrador")
+	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": CLARO, "aqui": aqui == 0, "icono": "", "sos": en_mostrador,
+		"puerta": Rect2(), "sitio": -1 if abajo() else 0,
+		"sos_x": x0 + planta.superviviente.mostrador.x / pasillo.ancho * largo if en_mostrador else 0.0})
 	if abajo():
 		# bajando en el ascensor: el pasillo de la planta baja y, en su puerta A, la sala de mantenimiento
 		var x := par(x0 + float(Planta.PUERTA_A) / pasillo.ancho * largo)
@@ -172,6 +175,8 @@ func _draw() -> void:
 	for c in lista:
 		if c.sos:
 			var esquina: Vector2 = c.r.position + Vector2(c.r.size.x - 6, -4)
+			if c.has("sos_x") and c.sos_x > 0.0:
+				esquina = Vector2(c.sos_x - 5, c.r.position.y - 4)
 			draw_rect(Rect2(esquina, Vector2(10, 12)).grow(2), BORDE)
 			draw_rect(Rect2(esquina, Vector2(10, 12)), Color("#ff5d73"))
 			draw_string(letra, esquina + Vector2(-5, 12), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, Color.WHITE)

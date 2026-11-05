@@ -55,6 +55,10 @@ msgstr "Medkits, bandages and Axolotl heal half as much"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "The guard (or the key zombie) takes twice the damage and zombies hear you from farther away"
 
+#: scripts/aliado.gd scripts/tornos.gd
+msgid "¡Detrás!"
+msgstr "Behind you!"
+
 #: scripts/aliado.gd
 msgid "Quédate a su lado para levantarlo"
 msgstr "Stay close to help them up"
@@ -297,7 +301,7 @@ msgstr "Fixed! You can switch the power back on now"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "The %s fixed the wire! The water doesn't shock anymore"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Help me, I can't get up!"
 
@@ -349,7 +353,7 @@ msgstr "Strip the wire, join it… okay"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Just the electrical tape left…"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "Just a bit more!"
 
@@ -365,15 +369,15 @@ msgstr "I can't work like this! Cut the power!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "I'm gonna get electrocuted! The lever!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, come back!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Don't leave me here!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "They're eating me!"
 
@@ -425,7 +429,7 @@ msgstr "Here, sliding this under the door!"
 msgid "¡Otra fuera!"
 msgstr "Another one gone!"
 
-#: scripts/barricada.gd
+#: scripts/barricada.gd scripts/tornos.gd
 msgid "Ya casi está…"
 msgstr "Almost there…"
 
@@ -3321,6 +3325,22 @@ msgid "¡Gracias! ¡Sácame de aquí!"
 msgstr "Thank you! Get me out of here!"
 
 #: scripts/supervivientes.gd
+msgid "La recepcionista: la llave está en el suelo de %s"
+msgstr "The receptionist: the key is on the floor of %s"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la llave la lleva un zombi de %s"
+msgstr "The receptionist: a zombie in %s has the key"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "The receptionist: the Keycard Guard has the access card, he's patrolling the hallway"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: las cifras del código están en %s"
+msgstr "The receptionist: the code digits are in %s"
+
+#: scripts/supervivientes.gd
 msgid "¡%s se une al equipo! %s"
 msgstr "The %s joins the team! %s"
 
@@ -3512,6 +3532,34 @@ msgstr "Mops wherever she goes: clears poison, acid and slippery puddles"
 #: scripts/supervivientes.gd
 msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "Fixes your mop: mop swings sweep wider"
+
+#: scripts/supervivientes.gd
+msgid "Recepcionista"
+msgstr "Receptionist"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en recepción!"
+msgstr "I'm at reception!"
+
+#: scripts/supervivientes.gd
+msgid "¡Detrás del mostrador!"
+msgstr "Behind the desk!"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo subir la persiana!"
+msgstr "I can't raise the shutter!"
+
+#: scripts/supervivientes.gd
+msgid "¡Por fin alguien vivo! Abro los tornos y nos vamos"
+msgstr "Finally, someone alive! I'll open the turnstiles and we're out"
+
+#: scripts/supervivientes.gd
+msgid "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda"
+msgstr "Shouts \"Behind you!\" when a zombie is about to hit you from behind"
+
+#: scripts/supervivientes.gd
+msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
+msgstr "On each floor, tells you where to find what opens the boss room"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -3988,6 +4036,54 @@ msgstr "Explosive Mix"
 #: scripts/talentos.gd
 msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
 msgstr "Zombies that die with two effects at once (fire, acid, lightning or cold) explode (it doesn't hurt you)"
+
+#: scripts/tornos.gd
+msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
+msgstr "The doors have shut! Protect the %s while she opens the turnstiles"
+
+#: scripts/tornos.gd
+msgid "¡Gracias! Sigo con los tornos"
+msgstr "Thanks! Back to the turnstiles"
+
+#: scripts/tornos.gd
+msgid "¡Abiertos! Ya podemos subir"
+msgstr "Open! Now we can go up"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha abierto los tornos!"
+msgstr "The %s has opened the turnstiles!"
+
+#: scripts/tornos.gd
+msgid "Aguanta: la %s está abriendo los tornos"
+msgstr "Hold on: the %s is opening the turnstiles"
+
+#: scripts/tornos.gd
+msgid "La %s abre los tornos · %d:%02d"
+msgstr "The %s opens the turnstiles · %d:%02d"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha caído!"
+msgstr "The %s is down!"
+
+#: scripts/tornos.gd
+msgid "Los tornos se han bloqueado. ¡Cúbreme mientras los abro!"
+msgstr "The turnstiles are locked. Cover me while I open them!"
+
+#: scripts/tornos.gd
+msgid "Tarjeta… rechazada. Otra vez"
+msgstr "Card… declined. Again"
+
+#: scripts/tornos.gd
+msgid "¡Mira, se atascan con los tornos!"
+msgstr "Look, they get stuck in the turnstiles!"
+
+#: scripts/tornos.gd
+msgid "¡Toma, esto estaba en objetos perdidos!"
+msgstr "Here, this was in lost and found!"
+
+#: scripts/tornos.gd
+msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
+msgstr "\"Restricted access: floor 40\"… what's up there?"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

@@ -55,6 +55,10 @@ msgstr "Médikits, bandages et Axolotl soignent moitié moins"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "Le garde (ou le zombie à la clé) encaisse deux fois plus et les zombies t'entendent de plus loin"
 
+#: scripts/aliado.gd scripts/tornos.gd
+msgid "¡Detrás!"
+msgstr "Derrière toi !"
+
 #: scripts/aliado.gd
 msgid "Quédate a su lado para levantarlo"
 msgstr "Reste près de lui pour le relever"
@@ -297,7 +301,7 @@ msgstr "Réparé ! Tu peux remettre le courant"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "Le %s a réparé le câble ! L'eau ne donne plus de décharges"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Aide-moi, je ne peux pas me relever !"
 
@@ -349,7 +353,7 @@ msgstr "Je dénude le câble, je raccorde… voilà"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Plus que le chatterton…"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "Encore un peu !"
 
@@ -365,15 +369,15 @@ msgstr "Je ne peux pas bosser comme ça ! Coupe le courant !"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Je vais m'électrocuter ! Le levier !"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, reviens !"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Ne me laisse pas là !"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "Ils me bouffent !"
 
@@ -425,7 +429,7 @@ msgstr "Tiens, je te le passe par-dessous !"
 msgid "¡Otra fuera!"
 msgstr "Encore une !"
 
-#: scripts/barricada.gd
+#: scripts/barricada.gd scripts/tornos.gd
 msgid "Ya casi está…"
 msgstr "Presque fini…"
 
@@ -3321,6 +3325,22 @@ msgid "¡Gracias! ¡Sácame de aquí!"
 msgstr "Merci ! Sors-moi d'ici !"
 
 #: scripts/supervivientes.gd
+msgid "La recepcionista: la llave está en el suelo de %s"
+msgstr "La réceptionniste : la clé est par terre dans %s"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la llave la lleva un zombi de %s"
+msgstr "La réceptionniste : un zombie de %s a la clé"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "La réceptionniste : c'est le garde au badge qui a le badge d'accès, il fait sa ronde dans le couloir"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: las cifras del código están en %s"
+msgstr "La réceptionniste : les chiffres du code sont dans %s"
+
+#: scripts/supervivientes.gd
 msgid "¡%s se une al equipo! %s"
 msgstr "Nouvelle recrue : %s ! %s"
 
@@ -3512,6 +3532,34 @@ msgstr "Lave le sol sur son passage : fait disparaître les flaques de poison, d
 #: scripts/supervivientes.gd
 msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "Répare ta serpillière : ses coups balaient plus large"
+
+#: scripts/supervivientes.gd
+msgid "Recepcionista"
+msgstr "Réceptionniste"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en recepción!"
+msgstr "Je suis à l'accueil !"
+
+#: scripts/supervivientes.gd
+msgid "¡Detrás del mostrador!"
+msgstr "Derrière le comptoir !"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo subir la persiana!"
+msgstr "Je n'arrive pas à lever le rideau de fer !"
+
+#: scripts/supervivientes.gd
+msgid "¡Por fin alguien vivo! Abro los tornos y nos vamos"
+msgstr "Enfin quelqu'un de vivant ! J'ouvre les tourniquets et on s'en va"
+
+#: scripts/supervivientes.gd
+msgid "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda"
+msgstr "Crie « Derrière toi ! » quand un zombie va te frapper dans le dos"
+
+#: scripts/supervivientes.gd
+msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
+msgstr "À chaque étage, te dit où se trouve ce qui ouvre la salle du boss"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -3988,6 +4036,54 @@ msgstr "Mélange explosif"
 #: scripts/talentos.gd
 msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
 msgstr "Les zombies qui meurent avec deux effets à la fois (feu, acide, foudre ou froid) explosent (sans effet sur toi)"
+
+#: scripts/tornos.gd
+msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
+msgstr "Les portes se sont refermées ! Protège la %s pendant qu'elle ouvre les tourniquets"
+
+#: scripts/tornos.gd
+msgid "¡Gracias! Sigo con los tornos"
+msgstr "Merci ! Je reprends les tourniquets"
+
+#: scripts/tornos.gd
+msgid "¡Abiertos! Ya podemos subir"
+msgstr "Ouverts ! On peut monter"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha abierto los tornos!"
+msgstr "La %s a ouvert les tourniquets !"
+
+#: scripts/tornos.gd
+msgid "Aguanta: la %s está abriendo los tornos"
+msgstr "Tiens bon : la %s ouvre les tourniquets"
+
+#: scripts/tornos.gd
+msgid "La %s abre los tornos · %d:%02d"
+msgstr "La %s ouvre les tourniquets · %d:%02d"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha caído!"
+msgstr "La %s est à terre !"
+
+#: scripts/tornos.gd
+msgid "Los tornos se han bloqueado. ¡Cúbreme mientras los abro!"
+msgstr "Les tourniquets sont bloqués. Couvre-moi pendant que je les ouvre !"
+
+#: scripts/tornos.gd
+msgid "Tarjeta… rechazada. Otra vez"
+msgstr "Carte… refusée. Encore"
+
+#: scripts/tornos.gd
+msgid "¡Mira, se atascan con los tornos!"
+msgstr "Regarde, ils se coincent dans les tourniquets !"
+
+#: scripts/tornos.gd
+msgid "¡Toma, esto estaba en objetos perdidos!"
+msgstr "Tiens, c'était aux objets trouvés !"
+
+#: scripts/tornos.gd
+msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
+msgstr "« Accès restreint : étage 40 »… qu'est-ce qu'il y a là-haut ?"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

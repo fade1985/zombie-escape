@@ -463,7 +463,21 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento A (bata azul y moño, con la fregona en la
        mano), andar, «fregar» y caída.
      - Prueba: `--captura --edificio torre --limpiadora`.
-   - **Falta:** la recepcionista, en su trozo.
+   - **Tercer trozo (5 nov, falta el visto bueno del dueño):** la recepcionista (id `recepcionista`; `tornos.gd`).
+     - Sale **siempre en el vestíbulo** (la planta 1), detrás del mostrador de recepción, con una **persiana metálica
+       bajada** (dibujada con código: `Tornos.Persiana`). No se la ve, pero grita; flecha y «!» en el minimapa, encima del
+       mostrador. Al llegar Johnny al mostrador (110), sube la persiana y sale.
+     - Al unirse, va a los **tornos** y los abre con su **tarjeta** (su gesto cada 1,5 s, con un pitido): **60 s** con
+       las puertas cerradas y zombis entrando por las del vestíbulo (3 a 8 por grupo, 50 a la vez como mucho; a mitad,
+       molotov, granada y munición). Mientras, los tornos **frenan** al zombi que pasa a menos de 80: va a 0,45 de su
+       velocidad (`Tornos.freno`, zona amarilla en el suelo). Si la tumban, como en la horda.
+     - Ya rescatada: **al llegar a cada planta** (y al empezar), un aviso dice dónde está lo que abre la sala del jefe:
+       el zombi que lleva la llave, el guardia de la tarjeta o los departamentos con las cifras del código
+       (`Supervivientes.pista`). Si te acompaña: grita **«¡Detrás!»** cuando un zombi va a pegar a Johnny por la
+       espalda en medio segundo o menos (y le sale un «!» encima), cada 4 s como mucho (`Aliado.avisar`).
+     - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento A (americana azul marino, pañuelo rosa,
+       auriculares), andar, «pasar la tarjeta» y caída.
+     - Prueba: `--captura --edificio torre --recepcionista`.
 8. **La historia** (Sonnet): dosier, noticias y relato final.
 9. **Las skins** (Sonnet): las cinco cabezas y sus ventajas.
 10. **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las

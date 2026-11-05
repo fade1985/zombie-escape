@@ -987,6 +987,13 @@ func probar_limpiadora() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --edificio torre --recepcionista": la recepcionista (tornos.gd)
+func probar_recepcionista() -> void:
+	await get_tree().create_timer(0.3).timeout
+	await supervivientes.tornos.probar()
+	get_tree().quit()
+
+
 func probar_viviendas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await supervivientes.probar_viviendas()

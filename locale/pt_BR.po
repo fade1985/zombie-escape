@@ -55,6 +55,10 @@ msgstr "Kits médicos, bandagens e Axolote curam a metade"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "O guarda (ou o zumbi da chave) aguenta o dobro e os zumbis te ouvem de mais longe"
 
+#: scripts/aliado.gd scripts/tornos.gd
+msgid "¡Detrás!"
+msgstr "Atrás de você!"
+
 #: scripts/aliado.gd
 msgid "Quédate a su lado para levantarlo"
 msgstr "Fique por perto para ajudar a levantar"
@@ -297,7 +301,7 @@ msgstr "Pronto! Já pode religar a luz"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "O %s consertou o fio! A água não dá mais choque"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Me ajuda, não consigo levantar!"
 
@@ -349,7 +353,7 @@ msgstr "Descasca o fio, junta… beleza"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Só falta a fita isolante…"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "Só mais um pouco!"
 
@@ -365,15 +369,15 @@ msgstr "Assim não dá! Corta a energia!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Vou tomar choque! A alavanca!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, volta aqui!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Não me deixa aqui!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "Tão me comendo!"
 
@@ -425,7 +429,7 @@ msgstr "Toma, vou passar por baixo da porta!"
 msgid "¡Otra fuera!"
 msgstr "Mais uma fora!"
 
-#: scripts/barricada.gd
+#: scripts/barricada.gd scripts/tornos.gd
 msgid "Ya casi está…"
 msgstr "Tá quase…"
 
@@ -3321,6 +3325,22 @@ msgid "¡Gracias! ¡Sácame de aquí!"
 msgstr "Valeu! Me tira daqui!"
 
 #: scripts/supervivientes.gd
+msgid "La recepcionista: la llave está en el suelo de %s"
+msgstr "A recepcionista: a chave está no chão de %s"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la llave la lleva un zombi de %s"
+msgstr "A recepcionista: um zumbi de %s está com a chave"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "A recepcionista: o guarda do cartão está com o cartão de acesso, ele ronda o corredor"
+
+#: scripts/supervivientes.gd
+msgid "La recepcionista: las cifras del código están en %s"
+msgstr "A recepcionista: os dígitos do código estão em %s"
+
+#: scripts/supervivientes.gd
 msgid "¡%s se une al equipo! %s"
 msgstr "Reforço na equipe: %s! %s"
 
@@ -3512,6 +3532,34 @@ msgstr "Passa pano por onde anda: tira as poças de veneno, de ácido e as que e
 #: scripts/supervivientes.gd
 msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "Conserta o seu esfregão: a esfregada varre mais largo"
+
+#: scripts/supervivientes.gd
+msgid "Recepcionista"
+msgstr "Recepcionista"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en recepción!"
+msgstr "Estou na recepção!"
+
+#: scripts/supervivientes.gd
+msgid "¡Detrás del mostrador!"
+msgstr "Atrás do balcão!"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo subir la persiana!"
+msgstr "Não consigo levantar a porta de aço!"
+
+#: scripts/supervivientes.gd
+msgid "¡Por fin alguien vivo! Abro los tornos y nos vamos"
+msgstr "Finalmente alguém vivo! Eu abro as catracas e a gente vai embora"
+
+#: scripts/supervivientes.gd
+msgid "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda"
+msgstr "Grita \"Atrás de você!\" quando um zumbi vai te atacar pelas costas"
+
+#: scripts/supervivientes.gd
+msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
+msgstr "Ao chegar em cada andar, diz onde está o que abre a sala do chefe"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -3988,6 +4036,54 @@ msgstr "Mistura explosiva"
 #: scripts/talentos.gd
 msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
 msgstr "Os zumbis que morrem com dois efeitos ao mesmo tempo (fogo, ácido, raio ou frio) explodem (em você não faz nada)"
+
+#: scripts/tornos.gd
+msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
+msgstr "As portas se fecharam! Proteja a %s enquanto ela abre as catracas"
+
+#: scripts/tornos.gd
+msgid "¡Gracias! Sigo con los tornos"
+msgstr "Obrigada! Voltando às catracas"
+
+#: scripts/tornos.gd
+msgid "¡Abiertos! Ya podemos subir"
+msgstr "Abertas! Agora podemos subir"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha abierto los tornos!"
+msgstr "A %s abriu as catracas!"
+
+#: scripts/tornos.gd
+msgid "Aguanta: la %s está abriendo los tornos"
+msgstr "Aguente: a %s está abrindo as catracas"
+
+#: scripts/tornos.gd
+msgid "La %s abre los tornos · %d:%02d"
+msgstr "A %s abre as catracas · %d:%02d"
+
+#: scripts/tornos.gd
+msgid "¡La %s ha caído!"
+msgstr "A %s caiu!"
+
+#: scripts/tornos.gd
+msgid "Los tornos se han bloqueado. ¡Cúbreme mientras los abro!"
+msgstr "As catracas travaram. Me cubra enquanto eu abro!"
+
+#: scripts/tornos.gd
+msgid "Tarjeta… rechazada. Otra vez"
+msgstr "Cartão… recusado. De novo"
+
+#: scripts/tornos.gd
+msgid "¡Mira, se atascan con los tornos!"
+msgstr "Olha, eles ficam presos nas catracas!"
+
+#: scripts/tornos.gd
+msgid "¡Toma, esto estaba en objetos perdidos!"
+msgstr "Toma, isto estava nos achados e perdidos!"
+
+#: scripts/tornos.gd
+msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
+msgstr "\"Acesso restrito: andar 40\"… o que tem lá em cima?"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

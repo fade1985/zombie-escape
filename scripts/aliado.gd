@@ -62,6 +62,7 @@ const HOJAS := {
 	"tecnico": {"hoja": preload("res://assets/sprites/superviviente-tecnico.tres"), "fogonazo": 0.2},
 	"programador": {"hoja": preload("res://assets/sprites/superviviente-programador.tres"), "fogonazo": 0.2},
 	"limpiadora": {"hoja": preload("res://assets/sprites/superviviente-limpiadora.tres"), "fogonazo": 0.3},
+	"recepcionista": {"hoja": preload("res://assets/sprites/superviviente-recepcionista.tres"), "fogonazo": 0.4},
 }
 # El fogonazo de pixelfx (fogonazo.gd) de cada arma de los que disparan: el policía, el de la pistola, y el militar,
 # que dispara en ráfagas, el de la MP5 (sus llamas se van turnando)
@@ -88,6 +89,7 @@ var rayo_a := Vector2.ZERO
 var forzando := false
 var sitio_forzar := Vector2.ZERO
 var mira_forzar := Vector2.UP
+var con_tarjeta := false   # la recepcionista abriendo los tornos (tornos.gd): pasa la tarjeta en vez de trastear
 var ganzua_t := 0.0        # cuánto falta para las próximas chispitas de la cerradura (trastear)
 var chispitas: Array = []  # las que vuelan: {p (junto a él), v, t}; se pintan en "encima", que luce sin luz
 var herida := false        # la farmacéutica, mientras Johnny la lleva a las escaleras (escolta.gd)
@@ -311,7 +313,21 @@ func forzar() -> void:
 	ir_a(sitio_forzar, 220.0)
 	animar("andar" if velocity.length() > 20.0 else "reposo", mira_forzar)
 	if en_su_sitio() and velocity.length() <= 20.0:
-		trastear()
+		if con_tarjeta:
+			pasar_tarjeta()
+		else:
+			trastear()
+
+
+# La recepcionista abriendo los tornos (tornos.gd): cada poco, su gesto de pasar la tarjeta, y el lector pita
+func pasar_tarjeta() -> void:
+	ganzua_t -= get_physics_process_delta_time()
+	if ganzua_t > 0.0:
+		return
+	ganzua_t = Tornos.PASA
+	if sprite and accion_t < 0.0:
+		empezar_accion()
+	get_tree().create_timer(HOJAS.get(def.id, {}).get("fogonazo", 0.3), false).timeout.connect(Sonido.tocar.bind("pitido"))
 
 
 # Forzando la cerradura (M63): echado hacia la puerta, trastea a golpecitos (un empujón corto y vuelve, con un temblor
@@ -368,6 +384,9 @@ func habilidad(delta: float) -> void:
 		return   # lo suyo no se usa: se nota en los charcos (johnny.gd)
 	if h.tipo == "fregar":
 		fregar(h)
+		return
+	if h.tipo == "avisar":
+		avisar(h)
 		return
 	var blanco := zombi_cercano()
 	if h.tipo == "golpear" or h.tipo == "aturdir":
@@ -575,6 +594,38 @@ func fregar(h: Dictionary) -> void:
 	for c in cerca:
 		c.fregar()
 	Sonido.tocar("barrido")
+
+
+# La recepcionista: si un zombi va a pegar a Johnny por la espalda (le falta "antes" segundos o menos para el zarpazo, o
+# ya lo está echando) grita «¡Detrás!» y le sale una marca encima; luego descansa "cada" segundos
+func avisar(h: Dictionary) -> void:
+	if hab_t > 0.0:
+		return
+	var z := por_detras(h.antes)
+	if z == null:
+		return
+	hab_t = h.cada
+	decir(Idioma.t("¡Detrás!"))
+	Sonido.tocar("pitido")
+	partida.supervivientes.texto_flotante(z.global_position + Vector2(0, -70), "!", Tema.ROJO, 32, 0.8)
+
+
+# El zombi que va a pegar a Johnny por la espalda dentro de "antes" segundos (o null). La espalda: más de 110° entre
+# hacia donde mira Johnny y donde está el zombi
+func por_detras(antes: float) -> Node2D:
+	var mira: Vector2 = Vector2.from_angle(RUMBOS.find(johnny.direccion) * TAU / 8.0) if johnny.direccion in RUMBOS 		else Vector2.DOWN
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.get("estado") == "muerto" or z.get("dormido") or z.get("dano") == 0:
+			continue
+		var hacia: Vector2 = z.global_position - johnny.global_position
+		if absf(mira.angle_to(hacia)) < deg_to_rad(110.0):
+			continue
+		var falta: float = hacia.length() - z.radio - johnny.RADIO - z.alcance
+		if z.estado == "zarpazo" and not z.zarpazo_dado:
+			return z
+		if z.estado == "andar" and falta / maxf(z.velocidad, 1.0) <= antes:
+			return z
+	return null
 
 
 # ¿Va con Johnny alguien que deja a medias los charcos (la farmacéutica)? Lo pregunta johnny.gd al pisar uno

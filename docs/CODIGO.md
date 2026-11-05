@@ -402,7 +402,13 @@ en una línea.
   limpieza, `Planta.cuarto_limpieza`, con el gas dentro; hay que cerrar las tres válvulas del departamento, una por rejilla
   y para siempre (`Peligros.gas` con `tres`), con los zombis dormidos por el gas que despiertan frenéticos al cerrar una cerca
   o con un golpe, `Zombi.espabilar_gas`; ya rescatada, la fregona barre 200° en vez de 140°, `Supervivientes.FREGONA_ANCHA`;
-  acompañando, friega los charcos de `Charco.FREGABLES` con su gesto, `Aliado.fregar`; `--edificio torre --limpiadora`).
+  acompañando, friega los charcos de `Charco.FREGABLES` con su gesto, `Aliado.fregar`; `--edificio torre --limpiadora`) y
+  `tornos.gd` (la recepcionista, id `recepcionista`: siempre en el vestíbulo, la planta 1, detrás del mostrador con la
+  persiana bajada, `Planta.mostrador`, `Planta.mostrador_fijo` y `Tornos.Persiana`; sube al llegar Johnny; al unirse, abre
+  los tornos con su tarjeta 60 s mientras entran zombis por las puertas del vestíbulo, y los tornos los frenan a 0,45,
+  `Tornos.freno` desde `Zombi.ir_hacia`, con la zona amarilla en el suelo; ya rescatada, al llegar a cada planta dice dónde
+  está lo que abre la sala del jefe, `Supervivientes.pista` y `avisar_pista`; acompañando, grita «¡Detrás!» si un zombi va
+  a pegar a Johnny por la espalda en medio segundo, `Aliado.avisar`; `--edificio torre --recepcionista`).
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide

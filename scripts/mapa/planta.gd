@@ -70,6 +70,9 @@ const APARATOS := {
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
 static var tienda_fija := {}
+# La recepcionista de Torre Velaria: en qué planta se esconde detrás del mostrador del vestíbulo (la 1; 0 = no le
+# toca a ella). La pone supervivientes.gd al empezar, como tienda_fija
+static var mostrador_fijo := 0
 # La joyería del centro comercial (parte 9): una por partida, en esta planta (la pone partida.gd al empezar; 0 =
 # ninguna). Va en la segunda puerta normal de su planta, nunca en la del jefe ni en la del superviviente
 static var joyeria_planta := 0
@@ -214,7 +217,10 @@ static func aviso_de(salida: Dictionary) -> String:
 #   cientifico       {sitio, pos, cogida} dónde está el científico muerto con la página del dosier (historia.gd)
 #   superviviente    {sitio, sala, puerta, pos} el baño (y su puerta, de apt.puertas) donde se esconde el
 #                    superviviente si en esta partida le toca esta planta (lo decide supervivientes.gd). Ese baño
-#                    no lleva zombis: si no, nadie podría limpiar el piso
+#                    no lleva zombis: si no, nadie podría limpiar el piso. La recepcionista de la torre, en cambio, se
+#                    esconde en el pasillo, detrás del mostrador del vestíbulo: {sitio: 0, sala: -1, puerta (solo
+#                    {cerrada}: es su persiana), pos (delante del mostrador), mostrador (el pie del mostrador), tornos
+#                    (el pie de cada torno)} (mostrador)
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
 # aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso (y, en las escaleras, aviso_jefe)}; las puertas de tienda de la pared de arriba
@@ -435,6 +441,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			puertas = bano.puertas   # (el aseo de Recursos Humanos, el cuarto de la limpiadora, da a otra habitación)
 		planta.superviviente = {"sitio": de_superv, "sala": bano.id, "puerta": puertas[0],
 			"pos": bano.centro if en == Vector2.INF else en}
+	if mostrador_fijo == num and estilo_pasillo == "vestibulo":
+		planta.superviviente = mostrador(pasillo)   # la recepcionista, detrás del mostrador del vestíbulo
 	for orden in normales.size():
 		var sitio: Dictionary = planta.sitios[normales[orden]]
 		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
@@ -817,6 +825,21 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 # azar, y vendas en los demás (antes, contando por toda la planta, un botiquín y luego dos de vendas, así que el
 # botiquín caía siempre en los mismos baños). Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
 # lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido, dentro}
+# Torre Velaria: la recepcionista se esconde detrás del mostrador del vestíbulo (el pasillo de la planta baja), con la
+# persiana bajada (tornos.gd). Su sitio: el pie del mostrador y, delante, donde espera al subirla; y el de los tornos,
+# donde los abre con su tarjeta
+static func mostrador(pasillo: Dictionary) -> Dictionary:
+	var pie := Vector2.ZERO
+	var tornos := []
+	for m in pasillo.muebles:
+		if m.tipo == "reception":
+			pie = Vector2(m.x, m.y + m.h / 2.0)
+		elif m.tipo == "turnstile":
+			tornos.append(Vector2(m.x, m.y + m.h / 2.0))
+	return {"sitio": 0, "sala": -1, "puerta": {"cerrada": true}, "pos": pie + Vector2(0, 30), "mostrador": pie,
+		"tornos": tornos}
+
+
 # Torre Velaria: la limpiadora de noche se ha encerrado en el aseo de Recursos Humanos, que en su planta es el cuarto de
 # la limpieza (supervivientes.gd: "cuarto"): sin váter ni lavabo, con el carro de limpieza y un cubo de basura
 # (Catalogo.SALAS, "limpieza-rrhh") y fregonas y cubos colgados de la pared (mapa.gd, colgados). Y el gas del

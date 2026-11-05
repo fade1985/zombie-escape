@@ -324,8 +324,10 @@ func _ready() -> void:
 		decir("%s: %s%s" % [Planta.nombre_de(planta), Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla()]
 			if Alerta.nivel > 0 else ""] + ("\n" + Reto.aviso() if Reto.activo else "")
 			+ ("\n" + Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila") if botiquin else ""), 4.0)
-		if not Historia.noticias_nuevas(s).is_empty():
+		var noticias := not Historia.noticias_nuevas(s).is_empty()
+		if noticias:
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
+		supervivientes.avisar_pista(9.0 if noticias else 4.8)   # (la recepcionista rescatada: dónde está la llave o el código)
 		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
 
 
@@ -704,6 +706,8 @@ func cruzar(i: int) -> void:
 	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable
 	if arreglo == "":
 		arreglo = supervivientes.copia.no_cruzar()   # el informático joven, copiando los archivos
+	if arreglo == "":
+		arreglo = supervivientes.tornos.no_cruzar()   # la recepcionista, abriendo los tornos
 	if arreglo != "":
 		decir(arreglo)
 		Sonido.tocar("no")
@@ -807,6 +811,7 @@ func subir() -> void:
 	if planta.get("azotea", false):   # (en la torre, la planta 40, el laboratorio)
 		texto = Idioma.t("%s · ¡El último combate del edificio!") % Planta.nombre_de(planta) if planta.edificio == "torre" 			else Idioma.t("Azotea · ¡El último combate del edificio!")
 	decir(texto if premio == "" else "%s · %s" % [texto, premio], 2.5 if premio == "" else 3.5)
+	supervivientes.avisar_pista(3.0 if premio == "" else 4.0)   # (la recepcionista rescatada: dónde está la llave o el código)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
 	if superado != "":

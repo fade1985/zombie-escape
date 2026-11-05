@@ -4714,8 +4714,8 @@
  "supervivientes-torre-48": {
   "kind": "characters",
   "fecha": "2026-11-05",
-  "nota": "Los supervivientes de Torre Velaria (parte 7 de docs/PLAN_TERCER_EDIFICIO.md), con la receta de supervivientes-centro-48. Primero, el informático joven (id programador en scripts/supervivientes.gd). FASE 1 (modelos): dos intentos con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo; hoja assets/pruebas/supervivientes-torre-48-modelos.png. ELEGIDO por el dueño (5 nov): el B (sudadera morada); sus 8 vistas en assets/sources/superviviente-programador-48/rotations/. FASE 2: andar con la plantilla walking-8-frames en las 8 direcciones. FASE 3: el gesto «hackear» (saca el móvil del bolsillo de la sudadera, lo toca dos veces y la pantalla destella morada; lo guarda) en las 8 direcciones y caído (solo south), con PixMiniMax desde animate_character (sin lienzo propio: PixelLab lo pone de 68x68 y el fotograma 0 es el quieto). LA LIMPIADORA DE NOCHE (id limpiadora, 5 nov): dos intentos con la fregona en la mano (hoja assets/pruebas/supervivientes-torre-48-limpiadora-modelos.png); ELEGIDO por el dueño el A (bata azul, moño); andar, el gesto «fregar» (friega el suelo de delante a un lado y a otro) y caído, igual que el informático.",
-  "coste": "25 generaciones: 12 de los dos modelos (6 cada uno), 8 del andar (1 por dirección), 8 de hackear y 1 de caído. La limpiadora: 12 + 8 + 8 + 1 = 29",
+  "nota": "Los supervivientes de Torre Velaria (parte 7 de docs/PLAN_TERCER_EDIFICIO.md), con la receta de supervivientes-centro-48. Primero, el informático joven (id programador en scripts/supervivientes.gd). FASE 1 (modelos): dos intentos con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo; hoja assets/pruebas/supervivientes-torre-48-modelos.png. ELEGIDO por el dueño (5 nov): el B (sudadera morada); sus 8 vistas en assets/sources/superviviente-programador-48/rotations/. FASE 2: andar con la plantilla walking-8-frames en las 8 direcciones. FASE 3: el gesto «hackear» (saca el móvil del bolsillo de la sudadera, lo toca dos veces y la pantalla destella morada; lo guarda) en las 8 direcciones y caído (solo south), con PixMiniMax desde animate_character (sin lienzo propio: PixelLab lo pone de 68x68 y el fotograma 0 es el quieto). LA LIMPIADORA DE NOCHE (id limpiadora, 5 nov): dos intentos con la fregona en la mano (hoja assets/pruebas/supervivientes-torre-48-limpiadora-modelos.png); ELEGIDO por el dueño el A (bata azul, moño); andar, el gesto «fregar» (friega el suelo de delante a un lado y a otro) y caído, igual que el informático. LA RECEPCIONISTA (id recepcionista, 5 nov): dos intentos (hoja assets/pruebas/supervivientes-torre-48-recepcionista-modelos.png); ELEGIDO por el dueño el A (americana azul marino, pañuelo rosa, auriculares, coleta); andar, el gesto «tarjeta» (tiende la tarjeta del cordón como contra un lector y la retira) y caído, con PixMiniMax.",
+  "coste": "25 generaciones: 12 de los dos modelos (6 cada uno), 8 del andar (1 por dirección), 8 de hackear y 1 de caído. La limpiadora: 12 + 8 + 8 + 1 = 29. La recepcionista: 12 + 8 + 8 + 1 = 29",
   "request": {
    "herramienta": "create_character_pro_flash",
    "width": 48,
@@ -4764,18 +4764,36 @@
     "name": "Superviviente limpiadora B",
     "seed": 4822,
     "description": "adult female night shift cleaner in a corporate office tower, a brave survivor of a zombie outbreak, realistic adult body proportions, slim, small head, light skin, curly red hair held back with a green headband, dark green cleaning uniform polo shirt and matching work trousers, a short grey apron with pockets, bright yellow rubber gloves, white sneakers, holding a mop with a red handle and a white string head upright in her right hand, clothes dirty and wrinkled, a small plaster on her cheek, tough expression, no zombie wounds, no blood, detailed shading"
+   },
+   "recepcionista-A": {
+    "carpeta": "assets/sources/superviviente-recepcionista-48/intentos/A/",
+    "character_id": "22ab987a-2fb4-4c09-a0e0-f830982ec87c",
+    "job_id": "b22a76df-b932-46ab-b999-5f20ab20b243",
+    "name": "Superviviente recepcionista A",
+    "seed": 4825,
+    "description": "adult female hotel-style receptionist of a corporate office skyscraper, a frightened survivor of a zombie outbreak, realistic adult body proportions, slim, small head, light skin, straight black hair in a neat high ponytail, navy blue blazer over a white blouse, a small pink silk scarf tied at the neck, a thin black headset with a microphone on her head, white ID card on a red lanyard, navy pencil skirt, dark tights, black low-heeled shoes, clothes wrinkled and dusty, a scratch on one cheek, scared expression, no zombie wounds, no blood, empty hands, arms relaxed at her sides, detailed shading"
+   },
+   "recepcionista-B": {
+    "carpeta": "assets/sources/superviviente-recepcionista-48/intentos/B/",
+    "character_id": "b594dabb-a363-4b24-ad6c-bdde89d74267",
+    "job_id": "da8eaf87-c264-4449-af10-6a87d7a863d8",
+    "name": "Superviviente recepcionista B",
+    "seed": 4826,
+    "description": "young adult female front desk receptionist of a corporate office tower, a nervous survivor of a zombie outbreak, realistic adult body proportions, slim, small head, medium brown skin, curly dark brown hair tied in a low bun, light pink blouse with rolled-up sleeves under a dark grey vest, a big white access card on a pink lanyard around her neck, dark grey trousers, white sneakers, clothes stained and crumpled, a plaster on her forehead, worried expression, no zombie wounds, no blood, empty hands, arms relaxed at her sides, detailed shading"
    }
   },
   "elegidos": {
    "programador": "programador-B",
-   "limpiadora": "limpiadora-A"
+   "limpiadora": "limpiadora-A",
+   "recepcionista": "recepcionista-A"
   },
   "andar": {
    "template": "walking-8-frames",
    "frames": 8,
    "grupos": {
     "programador": "baafb85f-f42d-4ade-8151-aa25a1a88f15",
-    "limpiadora": "b2ae2916-bd9d-45e5-b04e-631588a08865"
+    "limpiadora": "b2ae2916-bd9d-45e5-b04e-631588a08865",
+    "recepcionista": "7d635914-8ed2-4e7d-86d4-357802d6240a"
    }
   },
   "accion": {
@@ -4794,16 +4812,26 @@
     "subject_description": "a middle-aged female night cleaner with dark hair in a low bun, a light blue cleaning smock, yellow rubber gloves and a wooden mop with a grey string head",
     "action_description": "She mops the floor. She grips the mop handle with both hands and swings the mop head across the floor in front of her feet, left then right then left again in quick wide strokes, scrubbing the floor. Then she lifts the mop back beside her, holds it upright in her right hand with the mop head resting on the floor and settles cleanly back into the starting standing pose. Her feet stay planted and she keeps facing exactly the same direction, she never turns. No water, no effects. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
     "nota": "En dos tandas (south y north; luego las otras seis). En north gira un poco la cabeza a mitad y en north-east se vuelve un instante hacia delante: se dejaron."
+   },
+   "recepcionista": {
+    "animation_name": "tarjeta",
+    "grupo": "6b68703b-77e7-417d-820a-3c4af59480da",
+    "subject_description": "a young female receptionist with a black high ponytail, a navy blue blazer and pencil skirt, a pink neck scarf, a thin black headset and a white ID card on a red lanyard",
+    "initial_pose": "standing upright, empty hands, arms relaxed at her sides",
+    "action_description": "She swipes her access card. Her right hand takes the white ID card hanging from the lanyard on her chest, stretches her arm forward and holds the card out in front of her at waist height as if pressing it against a reader, holds it there for a moment, then pulls the card back, lets it hang from the lanyard again, her arms relax and she settles cleanly back into the starting standing pose with empty hands. Her feet stay planted and she keeps facing exactly the same direction, she never turns. No effects. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "nota": "En dos tandas (south y north; luego las otras seis). En south y north se gira un poco de lado al tender la tarjeta (como si la pasara por el lector de al lado): se dejaron."
    }
   },
   "caido": {
    "grupos": {
     "programador": "a8ce7753-6f54-47f3-a764-025281bc556e",
-    "limpiadora": "c2871975-750f-4f28-bc9f-688fb1cd4762"
+    "limpiadora": "c2871975-750f-4f28-bc9f-688fb1cd4762",
+    "recepcionista": "93c38688-75ba-4345-a2a7-f877bcbd17f1"
    },
    "action_description": "El de supervivientes-48 → caido, con «his glasses still on».",
-   "limpiadora": "Con PixMiniMax (no el de supervivientes-48): se desploma de lado, la fregona cae a su lado y se queda tumbada; «her hair bun still tied»"
+   "limpiadora": "Con PixMiniMax (no el de supervivientes-48): se desploma de lado, la fregona cae a su lado y se queda tumbada; «her hair bun still tied»",
+   "recepcionista": "Con PixMiniMax: se le doblan las rodillas, cae de lado y se queda tumbada; «her headset still on her head»"
   },
-  "descartados": "el intento A (42271691-d837-4b2f-92b3-c79fd36aeedb) sigue en PixelLab: borrarlo solo con permiso del dueño; sus vistas, en intentos/A/; la limpiadora B (7531e70f-6ae0-4f5d-be93-dfc358e6178d) sigue en PixelLab: borrarla solo con permiso del dueño; sus vistas, en superviviente-limpiadora-48/intentos/B/"
+  "descartados": "el intento A (42271691-d837-4b2f-92b3-c79fd36aeedb) sigue en PixelLab: borrarlo solo con permiso del dueño; sus vistas, en intentos/A/; la limpiadora B (7531e70f-6ae0-4f5d-be93-dfc358e6178d) sigue en PixelLab: borrarla solo con permiso del dueño; sus vistas, en superviviente-limpiadora-48/intentos/B/; la recepcionista B (b594dabb-a363-4b24-ad6c-bdde89d74267) sigue en PixelLab: borrarla solo con permiso del dueño; sus vistas, en superviviente-recepcionista-48/intentos/B/"
  }
 }

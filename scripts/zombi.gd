@@ -299,6 +299,8 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	if frenesi > 0.0:
 		rapidez *= Peligros.GAS.rapido   # (despierta frenético del gas)
 	rapidez *= Estados.frenado(estados)   # el frío de la cámara
+	if not Tornos.frenan.is_empty():
+		rapidez *= Tornos.freno(global_position)   # los tornos a medio abrir de la recepcionista (tornos.gd)
 	if con_acido():
 		rapidez *= 1.0 - Mejoras.de_johnny(get_tree(), "pegajoso")   # (Pegajoso: el ácido los frena)
 	pedir_velocidad(paso.normalized() * rapidez)
