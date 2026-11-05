@@ -451,7 +451,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento B (sudadera morada), andar, «hackear»
        con el móvil y caído.
      - Prueba: `--captura --edificio torre --programador`; las viviendas, `--captura --viviendas`.
-   - **Segundo trozo (5 nov, falta el visto bueno del dueño):** la limpiadora de noche (id `limpiadora`; `valvulas.gd`).
+   - **Segundo trozo ✅ (5 nov, con el visto bueno del dueño):** la limpiadora de noche (id `limpiadora`; `valvulas.gd`).
      - Sale en **Recursos Humanos** de una planta al azar: su aseo pasa a ser el **cuarto de la limpieza** (carro y cubo
        de basura, fregonas colgadas; `Planta.cuarto_limpieza`), con gas dentro. Limpiar el departamento no la saca: hay
        que cerrar **tres válvulas** (archivo, entrevistas y la pared de arriba de la sala grande, o dos en la sala grande si
