@@ -505,8 +505,19 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      seguridad» va después del desfibrilador y se guarda con la partida. Las cajas de munición, × 1,3 hacia arriba (la
      de la pistola, de 12 a 16).
    - Prueba: `--captura --skins-torre` (y la de las cámaras con la skin, dentro de `--camaras`).
-10. **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las
-    traducciones de todo a los 7 idiomas; la prueba de cada cosa (`--captura --edificio torre ...`).
+10. ✅ **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las
+    traducciones de todo a los 7 idiomas; la prueba de cada cosa (`--captura --edificio torre ...`). **Hecho el 5 nov.**
+    El reto del día, el apagón y el incendio ya funcionaban en la torre. Lo arreglado o añadido, con el sí del dueño:
+    - **Bestiario:** los seis zombis de siempre también salen en la torre; su ficha dice «Sale en: Todos los edificios».
+    - **Alerta 5:** en la torre no hay guardia ni zombi de la llave, así que allí **cada ordenador del código llama a dos
+      escoltas** (por la puerta del departamento, como las cámaras). La tarjeta y el aviso de la torre dicen su regla.
+    - **Horda:** en la torre trae **oficinistas desde la 2ª planta y escoltas desde la 3ª** (como los vigilantes del centro).
+    - **Logros (42):** «Reestructuración» (completar la torre) y «Horas extra» (rescatar a sus 3 supervivientes).
+    - **Tutoriales:** «Torre Velaria» (el código, al llegar) y «Peligros de la torre» (viento, cámaras y gas, en el
+      primer departamento con peligro), con sus fotos.
+    - **Traducciones:** 1718 textos, todos en los 7 idiomas; los nombres de la torre, apuntados en los seis glosarios.
+    - Pruebas: `--alerta 5`, `--evento horda`, `--reto si` y `--banco`, con `--edificio torre`; y la nueva
+      `--tutoriales-torre`.
 
 ## Preguntas para el dueño
 

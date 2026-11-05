@@ -32,6 +32,8 @@ const LISTA := [
 		"desc": "Gana una partida: limpia el edificio de arriba abajo."},
 	{"id": "liquidacion", "tema": "edificios", "nombre": "Liquidación total", "icono": "centro", "premio": 20, "cuenta": "",
 		"mira": "completado", "edificio": "centro", "desc": "Completa el Centro comercial: derrota al gerente."},
+	{"id": "reestructuracion", "tema": "edificios", "nombre": "Reestructuración", "icono": "torre", "premio": 25, "cuenta": "",
+		"mira": "completado", "edificio": "torre", "desc": "Completa Torre Velaria: derrota al Sujeto 1."},
 	{"id": "alerta_naranja", "tema": "edificios", "nombre": "Alerta naranja", "icono": "alerta", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Completa un edificio con la Alerta 3 o más."},
 	{"id": "alerta_maxima", "tema": "edificios", "nombre": "Alerta máxima", "icono": "alerta", "premio": 35, "meta": 1, "cuenta": "",
@@ -84,6 +86,8 @@ const LISTA := [
 		"mira": "rescatados", "edificio": "apartamentos", "desc": "Rescata a los 3 supervivientes de los Apartamentos."},
 	{"id": "plantilla", "tema": "supervivientes", "nombre": "Plantilla completa", "icono": "centro", "premio": 10, "cuenta": "",
 		"mira": "rescatados", "edificio": "centro", "desc": "Rescata a los 3 supervivientes del Centro comercial."},
+	{"id": "horas_extra", "tema": "supervivientes", "nombre": "Horas extra", "icono": "torre", "premio": 10, "cuenta": "",
+		"mira": "rescatados", "edificio": "torre", "desc": "Rescata a los 3 supervivientes de Torre Velaria."},
 	{"id": "buena_compania", "tema": "supervivientes", "nombre": "Buena compañía", "icono": "corazon", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida con un vecino de las viviendas acompañándote."},
 	# ── Sorpresas y retos

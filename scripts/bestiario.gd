@@ -8,7 +8,7 @@
 # nacen por ahí y llevan la suya):
 #   nombre     el que se lee en la ficha
 #   frase      lo que cuenta de él (una pista de cómo se le gana)
-#   edificios  en cuáles sale ("apartamentos", "centro"): cada edificio enseña los suyos
+#   edificios  en cuáles sale ("apartamentos", "centro", "torre"): cada edificio enseña los suyos
 #   hoja       su SpriteFrames (el maniquí, un PNG entero)
 #   recorte    el trozo dibujado dentro de la celda del fotograma de frente (sin los márgenes vacíos). Lo escribe
 #              `py tools/recortes_bestiario.py` (repetir si cambia una hoja): así el juego no tiene que leer la imagen
@@ -25,27 +25,27 @@ class_name Bestiario
 const LISTA := {
 	"normal": {"nombre": "El vecino",
 		"frase": "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde.",
-		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-normal.tres",
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-normal.tres",
 		"recorte": Rect2i(35, 33, 23, 46), "retrato": "reposo_s", "escala": 2, "jefe": false},
 	"lento": {"nombre": "El arrastrado",
 		"frase": "Le falta la mitad de abajo y no se ha enterado. Se arrastra con las manos y lo deja todo perdido.",
-		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-lento.tres",
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-lento.tres",
 		"recorte": Rect2i(27, 50, 34, 27), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"rapido": {"nombre": "El crío",
 		"frase": "Un crío con gorra y chándal que corre como un demonio. Frena fatal: apártate y se pasa de largo.",
-		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-rapido.tres",
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-rapido.tres",
 		"recorte": Rect2i(37, 38, 19, 41), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"explosivo": {"nombre": "El dinamitero",
 		"frase": "Un hombretón con gabardina. Cuando la abre no es para enseñarte nada bueno: corre.",
-		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-explosivo.tres",
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-explosivo.tres",
 		"recorte": Rect2i(29, 31, 33, 51), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"tentaculos": {"nombre": "El de los tentáculos",
 		"frase": "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella.",
-		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-tentaculos-gpt.tres",
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-tentaculos-gpt.tres",
 		"recorte": Rect2i(59, 31, 57, 97), "retrato": "quieto_s", "escala": 1, "jefe": false},
 	"venenoso": {"nombre": "El gordo",
 		"frase": "Guarda las distancias y escupe un moco que deja el suelo envenenado.",
-		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-venenoso.tres",
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-venenoso.tres",
 		"recorte": Rect2i(38, 51, 65, 67), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"portera": {"nombre": "La portera",
 		"frase": "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar.",

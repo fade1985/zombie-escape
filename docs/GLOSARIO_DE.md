@@ -121,3 +121,16 @@ Endurecimiento = Verhornung.
 
 Leertaste · Umschalt · Esc · Tab · Eingabe · Strg · Alt · Rücktaste · Pfeil links/rechts/hoch/runter · Linksklick · Rechtsklick ·
 Mittelklick · Mausrad; Controller · L-Stick / R-Stick · D-Pad hoch/runter/links/rechts · Tastatur und Maus.
+
+## Torre Velaria (repaso del 5 nov: los nombres como ya están en el juego)
+
+| Español | Traducción |
+|---|---|
+| Minijefes: La directora de Recursos Humanos · El informático · El presentador · El becario | Die Personalchefin · Der IT-Typ · Der Moderator · Der Praktikant |
+| Jefe final: El Sujeto 1 | Proband 1 |
+| Supervivientes: Informático joven · Limpiadora de noche · Recepcionista | IT-Azubi · Nachtputzfrau · Empfangsdame |
+| Departamentos: Informática · Recursos Humanos · Marketing · Seguridad corporativa | IT · Personalabteilung · Marketing · Konzernsicherheit |
+| Salas: Sala de servidores · Archivo · Centro de datos · Sala de fotocopias · Laboratorio | Serverraum · Archiv · Rechenzentrum · Kopierraum · Labor |
+| Logros: Reestructuración · Horas extra | Umstrukturierung · Überstunden |
+| Tutoriales: Peligros de la torre | Gefahren im Turm |
+| control de productividad · escolta(s) | Leistungskontrolle · Leibwächter |

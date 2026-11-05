@@ -311,7 +311,8 @@ func avanzar_horda(delta: float) -> void:
 		premio()
 
 
-# Qué zombis salen: cada planta, peores (en el centro comercial, también vigilantes)
+# Qué zombis salen: cada planta, peores (en el centro comercial, también vigilantes; en la torre, oficinistas desde
+# la 2ª planta y escoltas desde la 3ª)
 func tipos_horda(num: int) -> Array:
 	var nivel: int = HORDA.nivel + num
 	var tipos := ["lento", "normal", "normal"]
@@ -323,6 +324,11 @@ func tipos_horda(num: int) -> Array:
 		tipos.append("tentaculos")
 	if partida.ed.generador == "tienda" and num >= 2:
 		tipos.append("vigilante")
+	if partida.ed.generador == "departamento":   # Torre Velaria: sus oficinistas y, más arriba, sus escoltas
+		if num >= 2:
+			tipos.append("oficinista")
+		if num >= 3:
+			tipos.append("escolta")
 	return tipos
 
 
@@ -535,6 +541,12 @@ func probar_incendio(foto: Callable, esperar: Callable) -> void:
 func probar_horda(foto: Callable, esperar: Callable) -> void:
 	var johnny: Node2D = partida.johnny
 	johnny.set_physics_process(false)   # quieto, que no le muevan los empujones
+	for num in range(1, Planta.PLANTAS):   # lo que puede salir en cada planta (los de su edificio, sin repetir)
+		var tipos := []
+		for t in tipos_horda(num):
+			if not t in tipos:
+				tipos.append(t)
+		print("Horda · en la planta %d pueden salir: %s" % [num, ", ".join(tipos)])
 	var ancho: float = partida.planta.sitios[0].ancho
 	var alto: float = partida.planta.sitios[0].alto
 	# lejos del medio (como al llegar) no pasa nada, ni pasado de sobra el tiempo del cartel: espera a que llegue al medio

@@ -141,3 +141,16 @@ El mundo. Las plantas se nombran así para que valgan detrás de «the» y en mi
 | Salas: Almacén · Cámara frigorífica · Taquillas · Probadores · Rebotica · Aseo · Trastienda · Cámara acorazada | Storeroom · Freezer · Lockers · Fitting rooms · Back room · Restroom · Stockroom · Vault |
 | TRASTEROS (cartel) | STORAGE |
 | Cerrada con llave · Cerrada: hace falta una tarjeta de acceso | Locked: you need the key · Locked: you need an access card |
+
+## Torre Velaria (repaso del 5 nov: los nombres como ya están en el juego)
+
+| Español | Traducción |
+|---|---|
+| Minijefes: La directora de Recursos Humanos · El informático · El presentador · El becario | The HR Director · The IT guy · The Presenter · The Intern |
+| Jefe final: El Sujeto 1 | Subject 1 |
+| Supervivientes: Informático joven · Limpiadora de noche · Recepcionista | IT Kid · Night Cleaner · Receptionist |
+| Departamentos: Informática · Recursos Humanos · Marketing · Seguridad corporativa | IT · Human Resources · Marketing · Corporate Security |
+| Salas: Sala de servidores · Archivo · Centro de datos · Sala de fotocopias · Laboratorio | Server Room · Archive · Data Center · Copy Room · Laboratory |
+| Logros: Reestructuración · Horas extra | Restructuring · Overtime |
+| Tutoriales: Peligros de la torre | Tower hazards |
+| control de productividad · escolta(s) | productivity check · bodyguard(s) |

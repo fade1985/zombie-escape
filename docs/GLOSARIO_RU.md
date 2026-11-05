@@ -167,3 +167,16 @@ Desatascador = Вантуз, Criogenia = Криогеника, Reacción en cade
 Лев. стик / Прав. стик · Нажатие лев./прав. стика · Крестовина вверх/вниз/влево/вправо · Select, Guide, Start, LB, RB, LT, RT tal cual.
 En los tutoriales, las `{teclas}` van detrás de dos puntos («Движение: {moverse}.», «Уклонение: {esquivar} — …»), así que los nombres
 que las sustituyen («мышь», «левый стик», «кнопка уклонения»…) van en nominativo.
+
+## Torre Velaria (repaso del 5 nov: los nombres como ya están en el juego)
+
+| Español | Traducción |
+|---|---|
+| Minijefes: La directora de Recursos Humanos · El informático · El presentador · El becario | Директор по персоналу · Айтишник · Ведущий · Стажёр |
+| Jefe final: El Sujeto 1 | Субъект 1 |
+| Supervivientes: Informático joven · Limpiadora de noche · Recepcionista | Юный айтишник · Ночная уборщица · Администратор |
+| Departamentos: Informática · Recursos Humanos · Marketing · Seguridad corporativa | ИТ-отдел · Отдел кадров · Маркетинг · Служба безопасности |
+| Salas: Sala de servidores · Archivo · Centro de datos · Sala de fotocopias · Laboratorio | Серверная · Архив · Дата-центр · Копировальная · Лаборатория |
+| Logros: Reestructuración · Horas extra | Реструктуризация · Сверхурочные |
+| Tutoriales: Peligros de la torre | Опасности башни |
+| control de productividad · escolta(s) | проверка продуктивности · телохранитель(и) |

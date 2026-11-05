@@ -21,6 +21,8 @@ const REGLAS := [
 	"Botiquines, vendas y Ajolote curan la mitad",
 	"El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos",
 ]
+# En Torre Velaria no hay guardia ni llave (la sala del jefe se abre con el código): su Alerta 5 cambia esa mitad
+const REGLA_5_TORRE := "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
 # [/traducir]
 const MAS_ZOMBIS := 1.25     # A1: el presupuesto de zombis de cada sitio (planta.gd, horda)
 const MAS_RAPIDOS := 1.1     # A2: la velocidad de los zombis (no la de los jefes)
@@ -29,6 +31,7 @@ const JEFE_ENFADO := 0.7     # ...y a qué parte de su vida se enfadan (sin aler
 const BOTIQUIN := 0.5        # A4: lo que curan los botiquines (y Ajolote: tarda el doble; johnny.gd)
 const GUARDIA_VIDA := 2.0    # A5: la vida del guardia de la tarjeta (o del zombi que lleva la llave)...
 const OIDO := 1.5            # ...y la distancia a la que se oyen los disparos
+const ESCOLTAS_CODIGO := 2   # A5 en la torre: los escoltas que llegan al leer cada ordenador del código (partida.gd)
 const DOLARES := 0.2         # recompensa: dólares de más por cada nivel (al completar el edificio)
 const PIEZAS := 0.2          # recompensa: piezas de más por cada nivel (las que sueltan los zombis y los jefes)
 
@@ -64,6 +67,10 @@ static func oido() -> float:
 	return OIDO if nivel >= 5 else 1.0
 
 
+static func escoltas_codigo() -> int:
+	return ESCOLTAS_CODIGO if nivel >= 5 else 0
+
+
 # Los dólares de más al completar el edificio
 static func dolares_extra(dolares: int) -> int:
 	return roundi(dolares * DOLARES * nivel)
@@ -80,13 +87,15 @@ static func nombre(n := nivel) -> String:
 	return Idioma.t("Alerta %d") % n if n > 0 else Idioma.t("Sin alerta")
 
 
-# Lo que añade un nivel (REGLAS), en el idioma del jugador
-static func regla(n := nivel) -> String:
+# Lo que añade un nivel (REGLAS), en el idioma del jugador; en la torre, la Alerta 5 es la suya (REGLA_5_TORRE)
+static func regla(n := nivel, edificio := "") -> String:
+	if n == 5 and edificio == "torre":
+		return Idioma.t(REGLA_5_TORRE)
 	return Idioma.t(REGLAS[n])
 
 
-static func resumen(n := nivel) -> String:
+static func resumen(n := nivel, edificio := "") -> String:
 	if n <= 0:
 		return Idioma.t("Como siempre")
-	return Idioma.t("%s%s\n+%d %% de dólares y de piezas") % [regla(n), Idioma.t(" (y lo de antes)") if n > 1 else "",
+	return Idioma.t("%s%s\n+%d %% de dólares y de piezas") % [regla(n, edificio), Idioma.t(" (y lo de antes)") if n > 1 else "",
 		roundi(DOLARES * n * 100)]

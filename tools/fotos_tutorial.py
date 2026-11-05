@@ -44,6 +44,8 @@ FOTOS = {
 	"peligros": ("captura-peligro-agua.png", 380, 130),            # --fotos-tiendas --edificio centro
 	"dependienta": ("captura-nuevos.png", 420, 215),               # --grito --edificio centro (la tienda sale al azar: mover el recorte)
 	"alerta": ("captura-reto-tarjeta.png", 330, 330),              # --reto si
+	"torre": ("captura-torre-terminal-cerca.png", 290, 120),       # --torre --edificio torre (el ordenador del código)
+	"peligros_torre": ("captura-torre-camaras-1.png", 180, 110),   # --camaras --edificio torre (el cono de la cámara)
 }
 
 # En los otros idiomas, las que salen de otra captura (la prueba larga, que no hace falta repetir para una sola foto)
@@ -54,7 +56,7 @@ FOTOS_EN = {
 	"supervivientes": ("captura-escolta.png", 180, 290),           # --rescate --edificio centro
 }
 # Las fotos sin ningún texto dibujado (la oscuridad, la horda, un molotov...) valen en todos los idiomas: no se rehacen.
-SIN_TEXTO = ["apagon", "botiquin", "curas", "horda", "incendio", "jugar", "lanzables", "municion", "peligros", "dependienta"]
+SIN_TEXTO = ["apagon", "botiquin", "curas", "horda", "incendio", "jugar", "lanzables", "municion", "peligros", "dependienta", "torre", "peligros_torre"]
 
 if __name__ == "__main__":
 	args = sys.argv[1:]

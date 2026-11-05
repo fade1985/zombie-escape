@@ -174,3 +174,16 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Cocinero · Modista · Mascota | 趁热吃！ / 下锅！ · 嘶——！ / 给你量尺寸！ · 免费抱抱！ / 蹦！ / 游戏时间！ |
 | Antidisturbios: ¡PRIIIII! · ¡ATRÁS! · ¡QUEDAS DETENIDO! · ¡CLONC! | 嘘——！ · 退后！ · 你被捕了！ · 当！ |
 | Dependienta: ¡¡¡AAAHHH!!! (bestiario: ¡OFERTAS! = 大促销！) · Guardia: ¡PRIIII! / uf | 啊啊啊！！！ · 嘘——！ / 呼 |
+
+## Torre Velaria (repaso del 5 nov: los nombres como ya están en el juego)
+
+| Español | Traducción |
+|---|---|
+| Minijefes: La directora de Recursos Humanos · El informático · El presentador · El becario | 人事总监 · 网管 · 主持人 · 实习生 |
+| Jefe final: El Sujeto 1 | 1号实验体 |
+| Supervivientes: Informático joven · Limpiadora de noche · Recepcionista | 年轻网管 · 夜班保洁员 · 前台接待 |
+| Departamentos: Informática · Recursos Humanos · Marketing · Seguridad corporativa | 信息部 · 人力资源部 · 市场部 · 企业安保部 |
+| Salas: Sala de servidores · Archivo · Centro de datos · Sala de fotocopias · Laboratorio | 机房 · 档案室 · 数据中心 · 复印室 · 实验室 |
+| Logros: Reestructuración · Horas extra | 企业重组 · 加班 |
+| Tutoriales: Peligros de la torre | 大厦里的危险 |
+| control de productividad · escolta(s) | 效率检查 · 保镖 |

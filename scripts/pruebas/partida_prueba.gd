@@ -171,7 +171,8 @@
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera [prueba_sitios.gd]
 #   --torre             (con --edificio torre) Torre Velaria, el esqueleto (tercer edificio, parte 1): sus plantas, sus
-#                       departamentos, el código y sus ordenadores, con fotos                [prueba_sitios.gd]
+#                       departamentos, el código y sus ordenadores, con fotos (la del tutorial «Torre Velaria»:
+#                       captura-torre-terminal-cerca.png)                                     [prueba_sitios.gd]
 #   --departamentos     (con --edificio torre; --tipo X, solo ese) los pasillos de la torre y sus departamentos, con la puerta abajo
 #                       y arriba, sin zombis: sus muebles y una foto de cada                 [prueba_sitios.gd]
 #   --viento            (con --edificio torre) el ventanal roto de Marketing: cuánto arrastra a Johnny, el borde y los
@@ -233,7 +234,8 @@
 #                       minijefe                                                           [prueba_sitios.gd]
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
-#   --alerta N          las reglas de esa alerta (1 a 5)                                     [prueba_varias.gd]
+#   --alerta N          las reglas de esa alerta (1 a 5); con --edificio torre, la Alerta 5 de la torre: los escoltas
+#                       que llegan al leer un ordenador del código (captura-alerta-codigo.png)  [prueba_varias.gd]
 #   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella      [prueba_varias.gd]
 #   --curas             las vendas y el botiquín: casillas del HUD, teclas 1 y 2, el tercio que devuelve el botiquín, la
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
@@ -241,6 +243,8 @@
 #                                                                                          [prueba_varias.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, el del primer botiquín, la lista desde la pausa, el del
 #                       baúl antes del baúl y la casilla de Ayudas                         [prueba_varias.gd]
+#   --tutoriales-torre  (con --edificio torre) los dos tutoriales de la torre: «Torre Velaria» (el código) y
+#                       «Peligros de la torre», que sale solo al entrar en el primer departamento con peligro [prueba_varias.gd]
 #   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se
 #                       saltan, el cartel del final y que quedan apuntados (mirarlos también con --lang ru y
 #                       --lang zh_CN, por si se sale alguna línea)                           [prueba_varias.gd]
@@ -292,12 +296,12 @@
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
-#   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
+#   --reto si           el reto del día (--reto <regla> fuerza esa regla); vale con --edificio X  [prueba_varias.gd]
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Ajolote, los
 #                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
 #                       números de jefes, mutaciones y aliados                             [prueba_varias.gd]
 #   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador; y los
-#                       40 logros (M17): el repaso del guardado, los de jefes, racha, arsenal, ganar, reto y horda, y
+#                       42 logros (M17; los dos de la torre, del 5 nov): el repaso del guardado, los de jefes, racha, arsenal, ganar, reto y horda, y
 #                       el ordenador por apartados                                          [prueba_varias.gd]
 #   --quimico           la rama Químico de los talentos: cada talento con sus números, las fotos del nivel 3 y el
 #                       árbol con las tres ramas en el ordenador                            [prueba_varias.gd]
@@ -315,8 +319,10 @@
 #                       captura-horda-trastea-*.png y -chispas.png), los vecinos de las viviendas, la barricada,
 #                       la escolta y la avería: lo mismo que en la prueba larga          [supervivientes.gd, probar()]
 #   --evento X          ese evento sorpresa: apagon (con un superviviente pidiendo ayuda a oscuras: fotos
-#                       apagon-socorro-*), incendio u horda                                  [eventos.gd, probar()]
-#   --banco             lo quitado desaparece del guardado; luego el banco, las armas de efecto y Colecciones
+#                       apagon-socorro-*), incendio u horda (dice qué zombis salen en cada planta: con --edificio
+#                       torre, oficinistas y escoltas); vale con --edificio X                [eventos.gd, probar()]
+#   --banco             lo quitado desaparece del guardado; luego el banco, las armas de efecto y Colecciones (con
+#                       --edificio torre, también la ficha del oficinista: captura-bestiario-torre.png)
 #                                                                                            [prueba_larga.gd]
 #   --trailer           el trailer: Johnny juega solo unas escenas con textos y el título (docs/TRAILER.md) [trailer.gd]
 extends "res://scripts/pruebas/trailer.gd"
@@ -787,6 +793,9 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--tutoriales-torre" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tutoriales_torre()
 	elif "--relato" in args:
 		set_process(false)   # sin la prueba larga (la suya ya va: empieza en prueba_comun.gd, antes que esta)
 	elif "--mando" in args:

@@ -1151,6 +1151,8 @@ func cuantos(ids: Array, tenidos: Array) -> int:
 # Dónde sale un enemigo: corto para las fichas ("Apartamentos y centro") o con artículo para las frases
 func sale_en(d: Dictionary, con_articulo := false) -> String:
 	var eds: Array = d.edificios
+	if eds.size() >= Edificios.LISTA.size():   # los zombis de siempre: en todos
+		return Idioma.t("todos los edificios") if con_articulo else Idioma.t("Todos los edificios")
 	if con_articulo:
 		# «los Apartamentos y el Centro comercial»: de uno en uno, cada idioma pone su «y»
 		var texto: String = Idioma.t(Edificios.datos(eds[0]).el_nombre)

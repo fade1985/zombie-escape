@@ -370,7 +370,7 @@ en una línea.
   ajustes de Opciones, de los tres, en `guardado-ajustes.json` con el hueco en uso. `base` es el nombre sin `.json`
   (la prueba usa `usar("user://guardado-prueba")`), `elegir_hueco`, `hueco_usado`, `borrar_hueco`), `huecos.gd`
   (`Huecos`, la pantalla «Elige partida» del menú: una tarjeta por hueco con su resumen o «Vacía», y «Borrar partida»
-  con confirmación; elegir uno monta el menú otra vez; se prueba con `--huecos`), `logros.gd` (40 desde el M17, 28 oct; uno =
+  con confirmación; elegir uno monta el menú otra vez; se prueba con `--huecos`), `logros.gd` (40 desde el M17, 28 oct, y 42 con los dos de la torre, 5 nov; uno =
   una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
   —skins, bestiario, páginas, objetos, rescatados, talentos, edificio completado— y los da por conseguidos el repaso,
   `revisar()`: al empezar, cada vez que se escribe el guardado (`Guardado.escrituras`), al acabar y al abrir el

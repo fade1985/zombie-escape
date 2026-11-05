@@ -12,13 +12,14 @@ extends "res://scripts/pruebas/prueba_sitios.gd"
 # captura-alerta-llave-cogida.png, y su hueco encendido en el inventario, en captura-alerta-llave-inventario.png; la
 # llave en el suelo, con su resplandor, en captura-alerta-llave-suelo.png y, con la penumbra, en
 # captura-alerta-llave-suelo-oscuro.png);
-# en el centro comercial, el guardia) y
+# en el centro comercial, el guardia; en la torre, los escoltas que llegan al leer un ordenador del código:
+# captura-alerta-codigo.png) y
 # captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
 func probar_alerta() -> void:
 	var n := Alerta.nivel
-	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.REGLAS[n]])
+	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.regla(n, edificio)])
 	decir("%s: %s
-%s: %s" % [planta.nombre, ed.objetivo, Alerta.nombre(), Alerta.REGLAS[n]], 4.0)
+%s: %s" % [planta.nombre, ed.objetivo, Alerta.nombre(), Alerta.regla(n, edificio)], 4.0)
 	await get_tree().create_timer(0.5, false).timeout
 	Captura.foto("captura-alerta.png")
 	# A1: los zombis de cinco plantas, sin alerta y con ella (las mismas: con las mismas semillas)
@@ -53,6 +54,23 @@ func probar_alerta() -> void:
 		await montar(0, 0, false)
 		print("A5 · el guardia: vida %d" % guardia.vida_max)
 		johnny.position = guardia.position + Vector2(-160, 40)   # (que no se quede en la puerta, que la cruzaría)
+	elif ed.cerrojo == "codigo":
+		# Torre Velaria: al leer un ordenador del código llegan escoltas por la puerta del departamento (solo con la A5)
+		var d: Dictionary = planta.codigo.terminales[0]
+		await montar(d.sitio, 0, false)
+		var escoltas := func() -> int:
+			return get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get_meta("tipo", "") == "escolta").size()
+		var antes: int = escoltas.call()
+		johnny.position = d.pos + Vector2(0, 50)
+		johnny.get_node("Camara").reset_smoothing()
+		for t in mapa.cosas.get_children():
+			if t.name == "Terminal" and t.datos == d:
+				d.leido = true
+				t.leido.emit()
+		await get_tree().create_timer(1.5, false).timeout
+		print("A5 · torre: escoltas en %s antes de leer el ordenador %d, después %d (esperado: %d más; sin la A5, 0)" % [
+			planta.sitios[d.sitio].nombre, antes, escoltas.call(), Alerta.escoltas_codigo()])
+		Captura.foto("captura-alerta-codigo.png")
 	else:
 		var vecino := -1
 		var con_llave := 0
@@ -892,6 +910,52 @@ func probar_relato() -> void:
 # pausa (con su botón: captura-tutorial-pausa.png), con los vistos y los «???» (captura-tutorial-lista.png). El del
 # baúl sale antes de abrirlo y, al cerrarlo, se abre el baúl; con la casilla de Ayudas apagada no sale ninguno. Y el
 # texto de una ficha con teclado y en el móvil
+# Con "--captura --edificio torre --tutoriales-torre": la ficha «Torre Velaria» (captura-tutorial-torre.png) y, al
+# entrar en el primer departamento con peligro (viento, cámaras o gas), la de «Peligros de la torre», que sale sola
+# (captura-tutorial-peligros_torre.png). Luego se cierra
+func probar_tutoriales_torre() -> void:
+	Tutoriales.olvidar()
+	tutoriales_prueba = true
+	var ventana := func() -> Tutorial:
+		for h in get_children():
+			if h is Tutorial and not h.is_queued_for_deletion():
+				return h
+		return null
+	await get_tree().create_timer(0.3).timeout
+	tutorial("torre")
+	await get_tree().create_timer(0.8).timeout
+	var t: Tutorial = ventana.call()
+	print("Tutorial torre · abierta: %s (esperado: torre)" % (t.id if t else "ninguna"))
+	Captura.foto("captura-tutorial-torre.png")
+	if t:
+		t.cerrar()
+	await get_tree().create_timer(0.5).timeout
+	# el primer departamento con peligro de la torre (en esta planta o, si no hay, en la siguiente)
+	var con_peligro := func() -> int:
+		for i in planta.sitios.size():
+			if planta.sitios[i].get("peligros", []).any(func(p): return p.tipo in ["viento", "camaras", "gas"]):
+				return i
+		return -1
+	var idx: int = con_peligro.call()
+	if idx < 0:
+		planta = Planta.generar(3, edificio, jefe_de(3))
+		idx = con_peligro.call()
+	if idx < 0:
+		print("Tutorial torre · ERROR: ningún departamento con peligro")
+		get_tree().quit()
+		return
+	await montar(idx, 0, false)
+	await get_tree().create_timer(1.0).timeout
+	t = ventana.call()
+	print("Tutorial torre · al entrar en %s (peligros %s): %s (esperado: peligros_torre)" % [planta.sitios[idx].nombre,
+		planta.sitios[idx].peligros.map(func(p): return p.tipo), t.id if t else "ninguna"])
+	Captura.foto("captura-tutorial-peligros_torre.png")
+	if t:
+		t.cerrar()
+	await get_tree().create_timer(0.5).timeout
+	get_tree().quit()
+
+
 func probar_tutorial() -> void:
 	Tutoriales.olvidar()
 	tutoriales_prueba = true
@@ -1091,7 +1155,7 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 	for l in Logros.LISTA:
 		if l.has("mira"):
 			metas[l.id] = Logros.meta(l)
-	print("Logros nuevos · %d en total · metas %s (esperado: 40; comunidad 3, plantilla 3, vestuario 4, naturalista 22, investigador 10, chatarrero 8, especialista 36, conserje_total 108, arsenal 9, todas_reglas 7, cazajefes 25, empleado_mes 10, liquidacion 1, cambio_look 1)" % [
+	print("Logros nuevos · %d en total · metas %s (esperado: 42; comunidad 3, plantilla 3, horas_extra 3, reestructuracion 1, vestuario 4, naturalista 22, investigador 10, chatarrero 8, especialista 36, conserje_total 108, arsenal 9, todas_reglas 7, cazajefes 25, empleado_mes 10, liquidacion 1, cambio_look 1)" % [
 		Logros.LISTA.size(), metas])
 	# 2) el repaso: con todo eso en el guardado, conseguidos de golpe y en un solo aviso
 	Guardado.cambiar(func(g):
@@ -1110,10 +1174,10 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 		Guardado.edificio(g, "centro").completado = true
 		g.logros_cuentas = {})
 	logros.revisar()
-	print("Logros nuevos · repaso: %s (esperado: liquidacion, especialista, comunidad, cambio_look, vestuario, naturalista, investigador, chatarrero)" % [
+	print("Logros nuevos · repaso: %s (esperado: liquidacion, reestructuracion, especialista, comunidad, cambio_look, vestuario, naturalista, investigador, chatarrero)" % [
 		conseguidos.call()])
 	await get_tree().create_timer(0.3).timeout
-	print("Logros nuevos · el aviso: «%s» (esperado: ¡8 logros conseguidos! Míralos y cobra los premios en el ordenador)" % aviso.text)
+	print("Logros nuevos · el aviso: «%s» (esperado: ¡9 logros conseguidos! Míralos y cobra los premios en el ordenador)" % aviso.text)
 	Captura.foto("captura-logros-varios.png")
 	# 3) los jefes
 	Guardado.cambiar(func(g): g.logros = {})

@@ -55,6 +55,10 @@ msgstr "Аптечки, бинты и Аксолотль лечат вдвое �
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "Охранник (или зомби с ключом) вдвое живучее, а зомби слышат тебя издалека"
 
+#: scripts/alerta.gd
+msgid "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
+msgstr "Каждый компьютер с кодом вызывает двух телохранителей, а зомби слышат тебя издалека"
+
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
 msgstr "Сзади!"
@@ -862,7 +866,7 @@ msgstr "управляющий"
 msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
 msgstr "зачисти магазины и выследи охранника: у него ключ-карта"
 
-#: scripts/edificios.gd
+#: scripts/edificios.gd scripts/tutoriales.gd
 msgid "Torre Velaria"
 msgstr "Башня Velaria"
 
@@ -2200,6 +2204,14 @@ msgid "Completa el Centro comercial: derrota al gerente."
 msgstr "Пройди торговый центр: победи управляющего."
 
 #: scripts/logros.gd
+msgid "Reestructuración"
+msgstr "Реструктуризация"
+
+#: scripts/logros.gd
+msgid "Completa Torre Velaria: derrota al Sujeto 1."
+msgstr "Пройди Башню Velaria: победи Субъекта 1."
+
+#: scripts/logros.gd
 msgid "Alerta naranja"
 msgstr "Оранжевая тревога"
 
@@ -2390,6 +2402,14 @@ msgstr "Полный штат"
 #: scripts/logros.gd
 msgid "Rescata a los 3 supervivientes del Centro comercial."
 msgstr "Спаси всех 3 выживших в торговом центре."
+
+#: scripts/logros.gd
+msgid "Horas extra"
+msgstr "Сверхурочные"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de Torre Velaria."
+msgstr "Спаси всех 3 выживших в Башне Velaria."
 
 #: scripts/logros.gd
 msgid "Buena compañía"
@@ -4921,6 +4941,38 @@ msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (
 msgstr "Пузырь не исчезнет, пока она не упадёт: сначала займись продавщицей (если их несколько — всеми). Она слабая, но убегает: загони её в угол или брось в неё что-нибудь."
 
 #: scripts/tutoriales.gd
+msgid "Al llegar a Torre Velaria"
+msgstr "Когда попадаешь в Башню Velaria"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido de algún departamento: su pantalla brilla en verde."
+msgstr "Комната босса открывается кодом из трёх цифр. Каждая цифра — на включённом компьютере в каком-то отделе: его экран светится зелёным."
+
+#: scripts/tutoriales.gd
+msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los zombis."
+msgstr "Встань перед ним, чтобы прочитать, но сработает «проверка продуктивности», и проснутся все зомби."
+
+#: scripts/tutoriales.gd
+msgid "Peligros de la torre"
+msgstr "Опасности башни"
+
+#: scripts/tutoriales.gd
+msgid "En el primer departamento con peligro"
+msgstr "В первом опасном отделе"
+
+#: scripts/tutoriales.gd
+msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los zombis que llegan al borde salen volando."
+msgstr "Разбитое окно в Маркетинге вытягивает наружу: проходи вплотную к столам. Зомби, дошедшие до края, вылетают."
+
+#: scripts/tutoriales.gd
+msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
+msgstr "Если тебя заметит камера Службы безопасности, сработает тревога и придут телохранители: разбей её выстрелом заранее."
+
+#: scripts/tutoriales.gd
+msgid "El gas de Recursos Humanos duerme a los zombis, pero despiertan frenéticos. La válvula del archivo lo corta."
+msgstr "Газ в Отделе кадров усыпляет зомби, но просыпаются они в бешенстве. Вентиль в архиве перекрывает газ."
+
+#: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
 msgstr "Тревога и Испытание дня"
 
@@ -6927,6 +6979,14 @@ msgstr "Враг, которого ты еще не встречал. Те, ко
 #: scripts/ui/ordenador.gd
 msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
 msgstr "Все, что находишь и встречаешь, остается здесь навсегда. Наведи на карточки, чтобы посмотреть."
+
+#: scripts/ui/ordenador.gd
+msgid "todos los edificios"
+msgstr "все здания"
+
+#: scripts/ui/ordenador.gd
+msgid "Todos los edificios"
+msgstr "Все здания"
 
 #: scripts/ui/ordenador.gd
 msgid "Apartamentos y centro"

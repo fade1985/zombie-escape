@@ -55,6 +55,10 @@ msgstr "Médikits, bandages et Axolotl soignent moitié moins"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "Le garde (ou le zombie à la clé) encaisse deux fois plus et les zombies t'entendent de plus loin"
 
+#: scripts/alerta.gd
+msgid "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
+msgstr "Chaque ordinateur du code appelle deux gardes du corps et les zombies t'entendent de plus loin"
+
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
 msgstr "Derrière toi !"
@@ -861,7 +865,7 @@ msgstr "le gérant"
 msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
 msgstr "nettoie les boutiques et traque le garde de la sécurité : il porte le badge d'accès"
 
-#: scripts/edificios.gd
+#: scripts/edificios.gd scripts/tutoriales.gd
 msgid "Torre Velaria"
 msgstr "Tour Velaria"
 
@@ -2198,6 +2202,14 @@ msgid "Completa el Centro comercial: derrota al gerente."
 msgstr "Termine le Centre commercial : bats le gérant."
 
 #: scripts/logros.gd
+msgid "Reestructuración"
+msgstr "Restructuration"
+
+#: scripts/logros.gd
+msgid "Completa Torre Velaria: derrota al Sujeto 1."
+msgstr "Termine la Tour Velaria : bats le Sujet 1."
+
+#: scripts/logros.gd
 msgid "Alerta naranja"
 msgstr "Alerte orange"
 
@@ -2388,6 +2400,14 @@ msgstr "Effectif complet"
 #: scripts/logros.gd
 msgid "Rescata a los 3 supervivientes del Centro comercial."
 msgstr "Sauve les 3 survivants du Centre commercial."
+
+#: scripts/logros.gd
+msgid "Horas extra"
+msgstr "Heures sup"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de Torre Velaria."
+msgstr "Sauve les 3 survivants de la Tour Velaria."
 
 #: scripts/logros.gd
 msgid "Buena compañía"
@@ -4914,6 +4934,38 @@ msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (
 msgstr "La bulle ne disparaît que quand elle tombe : occupe-toi d'abord de la vendeuse (s'il y en a plusieurs, de toutes). Elle est fragile, mais elle s'enfuit : coince-la ou lance-lui quelque chose."
 
 #: scripts/tutoriales.gd
+msgid "Al llegar a Torre Velaria"
+msgstr "En arrivant à la Tour Velaria"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido de algún departamento: su pantalla brilla en verde."
+msgstr "La salle du boss s'ouvre avec un code à trois chiffres. Chaque chiffre est sur un ordinateur allumé d'un service : son écran brille en vert."
+
+#: scripts/tutoriales.gd
+msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los zombis."
+msgstr "Plante-toi devant pour le lire, mais le « contrôle de productivité » se déclenche et tous les zombies se réveillent."
+
+#: scripts/tutoriales.gd
+msgid "Peligros de la torre"
+msgstr "Dangers de la tour"
+
+#: scripts/tutoriales.gd
+msgid "En el primer departamento con peligro"
+msgstr "Dans le premier service avec un danger"
+
+#: scripts/tutoriales.gd
+msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los zombis que llegan al borde salen volando."
+msgstr "La baie vitrée cassée du Marketing t'aspire dehors : traverse en longeant les bureaux. Les zombies qui arrivent au bord s'envolent."
+
+#: scripts/tutoriales.gd
+msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
+msgstr "Si une caméra de la Sécurité te voit, l'alarme sonne et des gardes du corps arrivent : casse-la d'un tir avant."
+
+#: scripts/tutoriales.gd
+msgid "El gas de Recursos Humanos duerme a los zombis, pero despiertan frenéticos. La válvula del archivo lo corta."
+msgstr "Le gaz des Ressources humaines endort les zombies, mais ils se réveillent frénétiques. La vanne des archives le coupe."
+
+#: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
 msgstr "Alerte et Défi du jour"
 
@@ -6907,6 +6959,14 @@ msgstr "Un ennemi que tu n'as pas encore croisé. Ceux que tu vois en partie son
 #: scripts/ui/ordenador.gd
 msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
 msgstr "Ce que tu trouves ou croises reste ici pour toujours. Survole les fiches pour le voir."
+
+#: scripts/ui/ordenador.gd
+msgid "todos los edificios"
+msgstr "tous les bâtiments"
+
+#: scripts/ui/ordenador.gd
+msgid "Todos los edificios"
+msgstr "Tous les bâtiments"
 
 #: scripts/ui/ordenador.gd
 msgid "Apartamentos y centro"

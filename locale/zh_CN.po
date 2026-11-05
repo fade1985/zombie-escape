@@ -55,6 +55,10 @@ msgstr "急救包、绷带和美西螈的治疗量减半"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "保安（或拿钥匙的僵尸）血量翻倍，僵尸也能从更远处听见你"
 
+#: scripts/alerta.gd
+msgid "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
+msgstr "每台存有密码的电脑都会叫来两名保镖，僵尸也能从更远处听见你"
+
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
 msgstr "身后！"
@@ -860,7 +864,7 @@ msgstr "经理"
 msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
 msgstr "清理各家商店，干掉保安：门禁卡在他身上"
 
-#: scripts/edificios.gd
+#: scripts/edificios.gd scripts/tutoriales.gd
 msgid "Torre Velaria"
 msgstr "Velaria大厦"
 
@@ -2196,6 +2200,14 @@ msgid "Completa el Centro comercial: derrota al gerente."
 msgstr "通关购物中心：打败经理。"
 
 #: scripts/logros.gd
+msgid "Reestructuración"
+msgstr "企业重组"
+
+#: scripts/logros.gd
+msgid "Completa Torre Velaria: derrota al Sujeto 1."
+msgstr "通关Velaria大厦：打败1号实验体。"
+
+#: scripts/logros.gd
 msgid "Alerta naranja"
 msgstr "橙色警戒"
 
@@ -2386,6 +2398,14 @@ msgstr "全员到齐"
 #: scripts/logros.gd
 msgid "Rescata a los 3 supervivientes del Centro comercial."
 msgstr "救出购物中心的全部3名幸存者。"
+
+#: scripts/logros.gd
+msgid "Horas extra"
+msgstr "加班"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de Torre Velaria."
+msgstr "救出Velaria大厦的全部3名幸存者。"
 
 #: scripts/logros.gd
 msgid "Buena compañía"
@@ -4907,6 +4927,38 @@ msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (
 msgstr "泡泡要等她倒下才会消失：先去对付店员（如果有好几个，就全部解决）。她很脆弱，但会逃跑：把她逼到角落，或者朝她扔点东西。"
 
 #: scripts/tutoriales.gd
+msgid "Al llegar a Torre Velaria"
+msgstr "来到Velaria大厦时"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido de algún departamento: su pantalla brilla en verde."
+msgstr "头目的房间要用三位数密码打开。每位数字都在某个部门一台开着的电脑上：屏幕会发出绿光。"
+
+#: scripts/tutoriales.gd
+msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los zombis."
+msgstr "站到电脑前就能读出数字，但会触发“效率检查”，所有僵尸都会醒来。"
+
+#: scripts/tutoriales.gd
+msgid "Peligros de la torre"
+msgstr "大厦里的危险"
+
+#: scripts/tutoriales.gd
+msgid "En el primer departamento con peligro"
+msgstr "第一次进入有危险的部门时"
+
+#: scripts/tutoriales.gd
+msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los zombis que llegan al borde salen volando."
+msgstr "市场部破碎的落地窗会把你往外吸：贴着办公桌走过去。被吹到窗边的僵尸会飞出去。"
+
+#: scripts/tutoriales.gd
+msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
+msgstr "被安保部的摄像头看见就会拉响警报，保镖随即赶到：先一枪把它打坏。"
+
+#: scripts/tutoriales.gd
+msgid "El gas de Recursos Humanos duerme a los zombis, pero despiertan frenéticos. La válvula del archivo lo corta."
+msgstr "人力资源部的毒气会让僵尸睡着，但它们醒来时会发狂。档案室的阀门可以关掉毒气。"
+
+#: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
 msgstr "警戒与每日挑战"
 
@@ -6887,6 +6939,14 @@ msgstr "一个你还没遇到过的敌人。在游戏中见到的敌人都会记
 #: scripts/ui/ordenador.gd
 msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
 msgstr "你找到的或遇到的都会永久记录在这里。移到卡片上即可查看。"
+
+#: scripts/ui/ordenador.gd
+msgid "todos los edificios"
+msgstr "所有大楼"
+
+#: scripts/ui/ordenador.gd
+msgid "Todos los edificios"
+msgstr "所有大楼"
 
 #: scripts/ui/ordenador.gd
 msgid "Apartamentos y centro"

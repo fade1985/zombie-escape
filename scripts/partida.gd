@@ -322,7 +322,7 @@ func _ready() -> void:
 		empezar_prueba()
 	else:
 		await mutacion_al_empezar()
-		decir("%s: %s%s" % [Planta.nombre_de(planta), Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla()]
+		decir("%s: %s%s" % [Planta.nombre_de(planta), Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla(Alerta.nivel, edificio)]
 			if Alerta.nivel > 0 else ""] + ("\n" + Reto.aviso() if Reto.activo else "")
 			+ ("\n" + Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila") if botiquin else ""), 4.0)
 		var noticias := not Historia.noticias_nuevas(s).is_empty()
@@ -543,6 +543,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	guia.al_montar()
 	if sitio.get("peligros", []).any(func(p): return p.tipo in ["frio", "fuego", "agua"]):
 		tutorial("peligros")   # (la cámara frigorífica, la cocina o el agua de las tiendas del centro comercial)
+	elif sitio.get("peligros", []).any(func(p): return p.tipo in ["viento", "camaras", "gas"]):
+		tutorial("peligros_torre")   # (el ventanal de Marketing, las cámaras de Seguridad o el gas de Recursos Humanos)
 	if fundir:
 		await create_tween().set_ignore_time_scale().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
 	cambiando = false
@@ -767,8 +769,7 @@ func cruzar(i: int) -> void:
 	await montar(salida.a, salida.vuelta)
 	if planta.sitios[aqui].tipo != "pasillo":
 		return
-	if ed.cerrojo != "codigo":   # (la torre aún no tiene el suyo)
-		tutorial("centro" if ed.cerrojo == "tarjeta" else "apartamentos")
+	tutorial({"tarjeta": "centro", "codigo": "torre"}.get(ed.cerrojo, "apartamentos"))
 	if salida.tipo == "ascensor":
 		decir(Planta.nombre_de(planta), 2.5)   # de vuelta de la sala de mantenimiento: en qué planta se está
 	elif planta.get("ascensor_nuevo", false):
@@ -947,6 +948,13 @@ func _al_leer_terminal() -> void:
 	for z in get_tree().get_nodes_in_group("zombis"):
 		if z.get("dormido"):
 			z.despertar()
+	# con la Alerta 5, además llegan escoltas por la puerta del departamento (como las cámaras de Seguridad)
+	if Alerta.escoltas_codigo() > 0 and not mapa.puertas.is_empty():
+		var puerta: Node2D = mapa.puertas[0]
+		for k in Alerta.escoltas_codigo():
+			var zombi: Node2D = meter_zombi("escolta", puerta.llegada() + Vector2(randf_range(-24, 24), randf_range(-24, 24)))
+			if zombi and zombi.get("dormido"):
+				zombi.despertar()
 	if leidos.size() < planta.codigo.terminales.size():
 		decir(Idioma.t("Cifra %d de %d. ¡Control de productividad: despiertan todos!") % [leidos.size(),
 			planta.codigo.terminales.size()], 3.0)

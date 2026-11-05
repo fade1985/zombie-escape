@@ -172,3 +172,16 @@ Sufijos sueltos: « gauche», « droite», « haut», « bas».
 | Dr Salas: ¡MÁS SUJETOS! · ¡DOSIS DOBLE! · ¡SUERO! · ¡NO ME TOCARÁS! · ¡MI CÚPULA! · ¡AÚN NO HE TERMINADO! | MES COBAYES ! · DOUBLE DOSE ! · SÉRUM ! · PAS TOUCHE ! · MA COUPOLE ! · CE N'EST PAS FINI ! |
 | Minijefes: ¡GRRR! · ¡PUMBA! | GRRR ! · PAF ! |
 | Johnny: ¡Adrenalina! · ¡Esquivado! · ¡Segundo aliento! · recargando… | Adrénaline ! · Esquivé ! · Second souffle ! · recharge… |
+
+## Torre Velaria (repaso del 5 nov: los nombres como ya están en el juego)
+
+| Español | Traducción |
+|---|---|
+| Minijefes: La directora de Recursos Humanos · El informático · El presentador · El becario | La DRH · L'informaticien · Le présentateur · Le stagiaire |
+| Jefe final: El Sujeto 1 | Le Sujet 1 |
+| Supervivientes: Informático joven · Limpiadora de noche · Recepcionista | Jeune informaticien · Femme de ménage de nuit · Réceptionniste |
+| Departamentos: Informática · Recursos Humanos · Marketing · Seguridad corporativa | Informatique · Ressources humaines · Marketing · Sécurité |
+| Salas: Sala de servidores · Archivo · Centro de datos · Sala de fotocopias · Laboratorio | Salle des serveurs · Archives · Centre de données · Salle de photocopie · Laboratoire |
+| Logros: Reestructuración · Horas extra | Restructuration · Heures sup |
+| Tutoriales: Peligros de la torre | Dangers de la tour |
+| control de productividad · escolta(s) | contrôle de productivité · garde(s) du corps |

@@ -55,6 +55,10 @@ msgstr "Kits médicos, bandagens e Axolote curam a metade"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "O guarda (ou o zumbi da chave) aguenta o dobro e os zumbis te ouvem de mais longe"
 
+#: scripts/alerta.gd
+msgid "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
+msgstr "Cada computador do código chama dois guarda-costas e os zumbis te ouvem de mais longe"
+
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
 msgstr "Atrás de você!"
@@ -861,7 +865,7 @@ msgstr "o gerente"
 msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
 msgstr "limpe as lojas e cace o guarda de segurança: ele leva o cartão de acesso"
 
-#: scripts/edificios.gd
+#: scripts/edificios.gd scripts/tutoriales.gd
 msgid "Torre Velaria"
 msgstr "Torre Velaria"
 
@@ -2198,6 +2202,14 @@ msgid "Completa el Centro comercial: derrota al gerente."
 msgstr "Complete o Shopping: derrote o gerente."
 
 #: scripts/logros.gd
+msgid "Reestructuración"
+msgstr "Reestruturação"
+
+#: scripts/logros.gd
+msgid "Completa Torre Velaria: derrota al Sujeto 1."
+msgstr "Complete a Torre Velaria: derrote o Sujeito 1."
+
+#: scripts/logros.gd
 msgid "Alerta naranja"
 msgstr "Alerta laranja"
 
@@ -2388,6 +2400,14 @@ msgstr "Equipe completa"
 #: scripts/logros.gd
 msgid "Rescata a los 3 supervivientes del Centro comercial."
 msgstr "Resgate os 3 sobreviventes do Shopping."
+
+#: scripts/logros.gd
+msgid "Horas extra"
+msgstr "Hora extra"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de Torre Velaria."
+msgstr "Resgate os 3 sobreviventes da Torre Velaria."
 
 #: scripts/logros.gd
 msgid "Buena compañía"
@@ -4914,6 +4934,38 @@ msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (
 msgstr "A bolha só some quando ela cai: vá primeiro atrás da vendedora (se houver várias, de todas). Ela é fraquinha, mas foge: encurrale ela ou jogue alguma coisa nela."
 
 #: scripts/tutoriales.gd
+msgid "Al llegar a Torre Velaria"
+msgstr "Ao chegar à Torre Velaria"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido de algún departamento: su pantalla brilla en verde."
+msgstr "A sala do chefe abre com um código de três dígitos. Cada dígito está num computador ligado de algum departamento: a tela brilha em verde."
+
+#: scripts/tutoriales.gd
+msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los zombis."
+msgstr "Pare na frente dele para ler, mas dispara o “controle de produtividade” e todos os zumbis acordam."
+
+#: scripts/tutoriales.gd
+msgid "Peligros de la torre"
+msgstr "Perigos da torre"
+
+#: scripts/tutoriales.gd
+msgid "En el primer departamento con peligro"
+msgstr "No primeiro departamento com perigo"
+
+#: scripts/tutoriales.gd
+msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los zombis que llegan al borde salen volando."
+msgstr "A janela quebrada do Marketing te puxa para fora: atravesse colado nas mesas. Os zumbis que chegam à beira saem voando."
+
+#: scripts/tutoriales.gd
+msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
+msgstr "Se uma câmera da Segurança te vir, o alarme dispara e chegam guarda-costas: quebre-a com um tiro antes."
+
+#: scripts/tutoriales.gd
+msgid "El gas de Recursos Humanos duerme a los zombis, pero despiertan frenéticos. La válvula del archivo lo corta."
+msgstr "O gás do RH faz os zumbis dormirem, mas eles acordam frenéticos. A válvula do arquivo corta o gás."
+
+#: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
 msgstr "Alerta e Desafio do dia"
 
@@ -6907,6 +6959,14 @@ msgstr "Um inimigo que você ainda não encontrou. Os que você vir numa partida
 #: scripts/ui/ordenador.gd
 msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
 msgstr "O que você encontra fica aqui para sempre. Passe pelas fichas para ver."
+
+#: scripts/ui/ordenador.gd
+msgid "todos los edificios"
+msgstr "todos os prédios"
+
+#: scripts/ui/ordenador.gd
+msgid "Todos los edificios"
+msgstr "Todos os prédios"
 
 #: scripts/ui/ordenador.gd
 msgid "Apartamentos y centro"

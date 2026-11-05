@@ -373,7 +373,8 @@ func probar_historia() -> void:
 # Colecciones (bestiario.gd y el programa del ordenador): deja en el guardado parte de lo que hay (6 objetos,
 # cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
 # (captura-escritorio-nuevo.png), los objetos de este edificio (captura-colecciones.png), la ficha del vecino
-# (captura-bestiario.png) y la del gerente, sin ver (captura-bestiario-falta.png). Luego cuenta en la terminal lo
+# (captura-bestiario.png), la del gerente, sin ver (captura-bestiario-falta.png) y, en la torre, la del oficinista
+# (captura-bestiario-torre.png). Luego cuenta en la terminal lo
 # encontrado y visto de cada edificio, y comprueba los totales
 func probar_colecciones() -> void:
 	# lo que la prueba ha ido apuntando sola (meter_zombi avisa al bestiario con cada enemigo que nace)
@@ -382,6 +383,8 @@ func probar_colecciones() -> void:
 	var vistos: Array = ["normal", "lento", "rapido", "portera"]
 	if edificio == "centro":
 		vistos += ["dependienta", "guardia", "antidisturbios"]
+	if edificio == "torre":
+		vistos += ["oficinista", "escolta", "directora", "sujeto_1"]
 	Guardado.cambiar(func(g):
 		g.encontrados = encontrados
 		g.bestiario = vistos
@@ -398,6 +401,10 @@ func probar_colecciones() -> void:
 	ordenador.abrir("colecciones", "z_gerente")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-bestiario-falta.png")
+	if edificio == "torre":   # uno de la torre: «Sale en: Torre Velaria» (el vecino, en todos los edificios)
+		ordenador.abrir("colecciones", "z_oficinista")
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-bestiario-torre.png")
 	# los recuentos que enseña el programa, edificio por edificio
 	var g := Guardado.cargar()
 	for e in Edificios.LISTA:
@@ -408,8 +415,8 @@ func probar_colecciones() -> void:
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
 	if Objetos.de_edificio("apartamentos").size() != 7 or Objetos.de_edificio("centro").size() != 8:
 		push_error("Colecciones: los objetos por edificio no son 7 y 8")
-	if Bestiario.LISTA.size() != 22:
-		push_error("Colecciones: el bestiario no tiene 22 fichas")
+	if Bestiario.LISTA.size() != 29:
+		push_error("Colecciones: el bestiario no tiene 29 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
 		push_error("Colecciones: el retrato del gerente mutado es null")
 	if g.colecciones_nuevo:

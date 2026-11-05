@@ -344,7 +344,7 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 		var n: int = alertas[id]
 		texto.text = Idioma.t("%s (de %d)") % [Alerta.nombre(n), maximo]
 		nombre.get_child(0).modulate = Color.WHITE if n > 0 else Color(1, 1, 1, 0.35)
-		explica.text = Alerta.resumen(n)
+		explica.text = Alerta.resumen(n, id)
 		menos.disabled = n <= 0
 		mas.disabled = n >= maximo
 	poner.call()

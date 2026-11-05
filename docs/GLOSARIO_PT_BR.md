@@ -183,3 +183,16 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | diario de turno · parte de incidencias · albarán de entrega · orden de recogida | diário de plantão · relatório de ocorrências · nota de entrega · ordem de coleta |
 | almacén · rebotica | estoque · fundos (da farmácia) |
 | azotea · helipuerto | terraço · heliponto |
+
+## Torre Velaria (repaso del 5 nov: los nombres como ya están en el juego)
+
+| Español | Traducción |
+|---|---|
+| Minijefes: La directora de Recursos Humanos · El informático · El presentador · El becario | A diretora de RH · O cara da TI · O apresentador · O estagiário |
+| Jefe final: El Sujeto 1 | O Sujeito 1 |
+| Supervivientes: Informático joven · Limpiadora de noche · Recepcionista | Garoto da TI · Faxineira da noite · Recepcionista |
+| Departamentos: Informática · Recursos Humanos · Marketing · Seguridad corporativa | TI · Recursos Humanos · Marketing · Segurança corporativa |
+| Salas: Sala de servidores · Archivo · Centro de datos · Sala de fotocopias · Laboratorio | Sala dos servidores · Arquivo · Data center · Sala de cópias · Laboratório |
+| Logros: Reestructuración · Horas extra | Reestruturação · Hora extra |
+| Tutoriales: Peligros de la torre | Perigos da torre |
+| control de productividad · escolta(s) | controle de produtividade · guarda-costas |

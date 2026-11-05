@@ -1420,6 +1420,11 @@ func probar_torre() -> void:
 		return get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get("dormido")).size()
 	print("Torre: en %s, %d zombis dormidos antes de leer" % [Planta.nombre_de_sitio(planta.sitios[d.sitio]), dormidos.call()])
 	await foto_entera(planta.sitios[d.sitio], "captura-torre-departamento.png")
+	# antes de leerlo, Johnny a un paso y el ordenador brillando (la foto del tutorial «Torre Velaria»)
+	johnny.position = d.pos + Vector2(100, 40)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-torre-terminal-cerca.png")
 	johnny.position = d.pos + Vector2(0, 40)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
