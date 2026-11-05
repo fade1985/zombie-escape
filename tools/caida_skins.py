@@ -24,7 +24,7 @@ import cara  # noqa: E402
 RAIZ = cara.RAIZ
 SPRITES = cara.SPRITES
 NOMBRE = "conserje-48-caida"
-SKINS = ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios", "modista", "mascota"]
+SKINS = ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios", "modista", "mascota", "gerente"]
 GIRO = 15          # de cuántos en cuántos grados se prueba
 CERCA = 9          # hasta cuántos píxeles del pañuelo se busca el centro de la cabeza
 PARECIDO = 70      # dos colores se parecen si la suma de sus diferencias es menor que esto

@@ -566,7 +566,7 @@ msgstr "Талисман"
 msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
 msgstr "Гигантский плюшевый медведь, а внутри кто-то есть. Таранит, прыгает, а если врежется — видит звездочки."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El gerente"
 msgstr "Управляющий"
 
@@ -2887,6 +2887,14 @@ msgstr "Ты ходишь на 15 % быстрее."
 #: scripts/skins.gd
 msgid "Mata a la mascota por primera vez."
 msgstr "Убей талисмана в первый раз."
+
+#: scripts/skins.gd
+msgid "La mitad de los billetes que coges valen el doble."
+msgstr "Половина купюр, которые ты подбираешь, стоит вдвое больше."
+
+#: scripts/skins.gd
+msgid "Mata al gerente por primera vez."
+msgstr "Убей управляющего в первый раз."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

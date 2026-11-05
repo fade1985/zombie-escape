@@ -56,6 +56,11 @@
 # La novena, la mascota (la suelta la mascota del centro comercial al caer por primera vez, partida.gd; M90): la capucha
 # de oso de peluche amarillo y sucio de la mascota, con la cara de Johnny asomando por delante. Con ella puesta, Johnny
 # anda un 15 % más rápido ("rapidez"; johnny.gd, al andar; con la Adrenalina, las dos). La esquiva, igual que siempre
+#
+# La décima, el gerente (la suelta el gerente, el jefe final del centro comercial, al caer por primera vez, partida.gd;
+# M90): el pelo engominado hacia atrás, gris con canas, con la raya al lado, como un ejecutivo; con su barba de siempre.
+# Con ella puesta, la mitad de los billetes que coge valen $2 en vez de $1 ("comision"; partida.gd, valor_billete()):
+# de media, un 50 % más de dólares. Los fajos de la joyería y los premios, igual. La esquiva, igual que siempre
 class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
@@ -82,6 +87,8 @@ const LISTA := {
 		"como": "Mata a la modista por primera vez.", "jefe": "modista", "camuflaje": 0.5},
 	"mascota": {"nombre": "La mascota", "efecto": "Andas un 15 % más rápido.",
 		"como": "Mata a la mascota por primera vez.", "jefe": "mascota", "rapidez": 1.15},
+	"gerente": {"nombre": "El gerente", "efecto": "La mitad de los billetes que coges valen el doble.",
+		"como": "Mata al gerente por primera vez.", "jefe": "gerente", "comision": 0.5},
 }
 # [/traducir]
 
@@ -204,3 +211,8 @@ static func camuflaje(id: String) -> float:
 # Por cuánto se multiplica lo deprisa que anda Johnny con esa skin (la mascota, 1,15)
 static func rapidez(id: String) -> float:
 	return LISTA[id].get("rapidez", 1.0) if id in LISTA else 1.0
+
+
+# La probabilidad de que un billete valga $2 en vez de $1 con esa skin (0 = nunca: el gerente, 0,5)
+static func comision(id: String) -> float:
+	return LISTA[id].get("comision", 0.0) if id in LISTA else 0.0

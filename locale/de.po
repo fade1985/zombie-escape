@@ -565,7 +565,7 @@ msgstr "Das Maskottchen"
 msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
 msgstr "Ein riesiger Teddybär mit jemandem drin. Stürmt los, springt, und wenn er irgendwo reinkracht, sieht er Sternchen."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El gerente"
 msgstr "Der Manager"
 
@@ -2882,6 +2882,14 @@ msgstr "Du läufst 15 % schneller."
 #: scripts/skins.gd
 msgid "Mata a la mascota por primera vez."
 msgstr "Erledige das Maskottchen zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "La mitad de los billetes que coges valen el doble."
+msgstr "Die Hälfte der Scheine, die du aufhebst, ist doppelt so viel wert."
+
+#: scripts/skins.gd
+msgid "Mata al gerente por primera vez."
+msgstr "Erledige den Manager zum ersten Mal."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

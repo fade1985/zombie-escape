@@ -18,6 +18,8 @@ extends "res://scripts/pruebas/prueba_armas.gd"
 #     carta en la taquilla (captura-skins-taquilla-modista.png)
 #   - la mascota (M90): anda un 15 % más rápido, de verdad (andando 0,4 s); lo consigue la mascota; su carta en la
 #     taquilla (captura-skins-taquilla-mascota.png)
+#   - el gerente (M90): la mitad de los billetes valen $2 (valor_billete, contado 2000 veces, y uno cogido de verdad);
+#     lo consigue el gerente; su carta en la taquilla (captura-skins-taquilla-gerente.png)
 #   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
 #     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón, el gymbro y el bombero
 #     (captura-skins-taquilla-<id>.png); «Siguiente skin» del panel de pruebas da la vuelta sin guardar
@@ -217,6 +219,17 @@ func probar_skins() -> void:
 		print("Elegida la mascota: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true)" % [
 			johnny.skin, johnny.sprite.sprite_frames.resource_path.get_file(),
 			(taquilla.cartas["mascota"] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y])
+		# el gerente (M90), igual: el último (captura-skins-taquilla-gerente.png)
+		Skins.desbloquear("gerente")
+		taquilla.abrir(self)
+		await get_tree().process_frame
+		(taquilla.cartas["gerente"] as Button).grab_focus()
+		taquilla.elegir("gerente")
+		await get_tree().create_timer(0.5).timeout
+		Captura.foto("captura-skins-taquilla-gerente.png")
+		print("Elegido el gerente: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true)" % [
+			johnny.skin, johnny.sprite.sprite_frames.resource_path.get_file(),
+			(taquilla.cartas["gerente"] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y])
 		taquilla.cerrar()
 	print("Taquilla cerrada: juego en pausa %s (esperado: false)" % get_tree().paused)
 	var vuelta := []
@@ -224,7 +237,7 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > El antidisturbios > La modista > La mascota > Conserje)" % " > ".join(vuelta))
+	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > El antidisturbios > La modista > La mascota > El gerente > Conserje)" % " > ".join(vuelta))
 	# el doctor Salas (M36): la mitad de las veces, un objeto más; las demás skins, nunca
 	print("Objeto de más: salas %s · bombero %s · conserje %s · lo consigue «%s» (esperado: 0.5, 0, 0, «salas»)" % [
 		Skins.doble("salas"), Skins.doble("bombero"), Skins.doble(""), Skins.de_jefe("cientifico_jefe")])
@@ -309,6 +322,24 @@ func probar_skins() -> void:
 		await get_tree().create_timer(0.3).timeout
 	print("Rapidez andando: conserje %.0f · mascota %.0f (× %.2f) · modista %.0f · lo consigue «%s» (esperado: × 1.15, la modista como el conserje; «mascota»)" % [
 		rapideces[0], rapideces[1], rapideces[1] / rapideces[0], rapideces[2], Skins.de_jefe("mascota")])
+	# el gerente (M90): la mitad de los billetes valen $2; contado 2000 veces y, de verdad, cogiendo uno
+	var billetes := []
+	for skin in ["", "gerente", "mascota"]:
+		johnny.skin = skin
+		var suma := 0
+		for i in 2000:
+			suma += valor_billete()
+		billetes.append("%s: $%.2f" % [Skins.nombre(skin), suma / 2000.0])
+	johnny.skin = "gerente"
+	var cogidos := 0
+	var antes_dolares := dolares
+	for i in 20:   # (20 billetes encima de Johnny: se cogen solos)
+		soltar_billetes(1, johnny.position)
+	await get_tree().create_timer(2.5).timeout
+	cogidos = dolares - antes_dolares
+	print("Billetes: de media %s · 20 cogidos con el gerente: $%d · lo consigue «%s» (esperado: $1.00, unos $1.50, $1.00; entre 20 y 40, unos 30; «gerente»)" % [
+		" · ".join(billetes), cogidos, Skins.de_jefe("gerente")])
+	dolares = antes_dolares
 	johnny.skin = ""
 	johnny.position = sitio
 	print("Camuflaje (en %s, habitación %d): %s · lo consigue «%s» (esperado: Conserje despierto y despierto; La modista dormido a 200 y despierto a 120, y se ven siempre; «modista»)" % [
@@ -320,7 +351,7 @@ func probar_skins() -> void:
 	johnny.hide()
 	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
-	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios", "modista", "mascota"]:
+	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios", "modista", "mascota", "gerente"]:
 		var copias := []
 		var hojas_bien := 0
 		for i in dirs.size() + armas.size() + 1:

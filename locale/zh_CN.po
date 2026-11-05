@@ -564,7 +564,7 @@ msgstr "吉祥物"
 msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
 msgstr "一只巨型泰迪熊玩偶，里面还装着个人。会冲撞、会跳，要是一头撞上东西，就会眼冒金星。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El gerente"
 msgstr "经理"
 
@@ -2877,6 +2877,14 @@ msgstr "移动速度提高15%。"
 #: scripts/skins.gd
 msgid "Mata a la mascota por primera vez."
 msgstr "首次杀死吉祥物。"
+
+#: scripts/skins.gd
+msgid "La mitad de los billetes que coges valen el doble."
+msgstr "你捡到的钞票有一半价值翻倍。"
+
+#: scripts/skins.gd
+msgid "Mata al gerente por primera vez."
+msgstr "首次杀死经理。"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

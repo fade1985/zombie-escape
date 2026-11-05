@@ -1092,10 +1092,16 @@ func soltar_billetes(cuantos: int, donde: Vector2) -> void:
 		billete.johnny = johnny
 		billete.position = donde
 		billete.cogido.connect(func():
-			dolares += 1
+			var vale := valor_billete()
+			dolares += vale
 			Sonido.tocar("moneda")
-			numero(billete.position, "+$1", Tema.VERDE))
+			numero(billete.position, "+$%d" % vale, Tema.VERDE))
 		mapa.cosas.add_child.call_deferred(billete)
+
+
+# Lo que vale un billete al cogerlo: $1 (con la skin del gerente, la mitad de las veces $2: Skins.comision)
+func valor_billete() -> int:
+	return 2 if randf() < Skins.comision(johnny.skin) else 1
 
 
 # Un molotov o una granada en el suelo: se coge pasando por encima, si cabe en la mochila (en el reto "Solo

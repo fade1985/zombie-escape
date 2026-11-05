@@ -565,7 +565,7 @@ msgstr "O mascote"
 msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
 msgstr "Um urso de pelúcia gigante com alguém dentro. Avança, pula e, se der de cara na parede, vê estrelinhas."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El gerente"
 msgstr "O gerente"
 
@@ -2882,6 +2882,14 @@ msgstr "Você anda 15 % mais rápido."
 #: scripts/skins.gd
 msgid "Mata a la mascota por primera vez."
 msgstr "Mate o mascote pela primeira vez."
+
+#: scripts/skins.gd
+msgid "La mitad de los billetes que coges valen el doble."
+msgstr "Metade das notas que você pega valem o dobro."
+
+#: scripts/skins.gd
+msgid "Mata al gerente por primera vez."
+msgstr "Mate o gerente pela primeira vez."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

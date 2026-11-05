@@ -565,7 +565,7 @@ msgstr "La mascotte"
 msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
 msgstr "Un ours en peluche géant avec quelqu'un dedans. Il charge, il saute et, s'il se plante, il voit trente-six chandelles."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El gerente"
 msgstr "Le gérant"
 
@@ -2882,6 +2882,14 @@ msgstr "Tu marches 15 % plus vite."
 #: scripts/skins.gd
 msgid "Mata a la mascota por primera vez."
 msgstr "Tue la mascotte pour la première fois."
+
+#: scripts/skins.gd
+msgid "La mitad de los billetes que coges valen el doble."
+msgstr "La moitié des billets que tu ramasses valent le double."
+
+#: scripts/skins.gd
+msgid "Mata al gerente por primera vez."
+msgstr "Tue le gérant pour la première fois."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"
