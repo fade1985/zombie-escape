@@ -301,7 +301,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      (`ventanal.gd`) y el cartel del número de planta junto al ascensor (0, 10, 20, 30 y 40, `puerta.gd`).
    - Sin hacer (opcional): cambiar el ordenador del código (`terminal.gd`) por uno de PixelLab.
    - Prueba: `--captura --edificio torre --departamentos` (`--tipo X`) y `--torre`.
-3. **Los peligros** (Opus): viento, cámaras y gas. ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** Lo que ha quedado
+3. **Los peligros** (Opus): viento, cámaras y gas. ✅ **Hecho el 5 nov, con el visto bueno del dueño.** Lo que ha quedado
    (los números, en `Peligros.VIENTO`, `CAMARAS` y `GAS`; todo dibujado con código y solo con los zombis despiertos):
    - **Viento** (`viento.gd`; Marketing y Dirección): el ventanal roto, en la pared de un lado de la sala grande, con la ciudad
      detrás, cortinas, rayas de aire y papeles volando. Empuja de 90 (pegado) a 30 (en la otra punta), a rachas (4 s a la mitad y
