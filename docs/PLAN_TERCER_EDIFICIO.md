@@ -402,7 +402,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
        la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe becario --fotocopias`.
-6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres. 🔶 **Hecha (5 nov), en dos sesiones; falta el visto bueno de la segunda.**
+6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres. ✅ **Hecha (5 nov), en dos sesiones, con el visto bueno del dueño.**
    - **Primera sesión, hecha (5 nov, con el visto bueno del dueño):** el laboratorio y la presidenta. Lo que ha quedado:
      - La planta 40 ya no es la azotea: es el **Laboratorio** (`planta.gd`, `laboratorio`; 44 × 30 casillas), con suelo de
        baldosa blanca y paredes de laboratorio. Se llega por la derecha y la escalera se cierra detrás. En la pared de arriba,
@@ -423,7 +423,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
        partirse (de frente y parte de las demás direcciones, sin montar aún) y la presidenta (tableta y huir, ya montada en
        `presidenta.png`); las cápsulas (cerrada y abierta), la mesa y la pared del laboratorio.
      - Prueba: `--captura --edificio torre --laboratorio`.
-   - **Segunda sesión, hecha (5 nov, falta el visto bueno del dueño):** el Sujeto 1 (`sujeto_1.gd`, `jefe-sujeto-1`; números
+   - **Segunda sesión, hecha (5 nov, con el visto bueno del dueño):** el Sujeto 1 (`sujeto_1.gd`, `jefe-sujeto-1`; números
      en sus `const`). Vida 1500, velocidad 95, 10 si te pegas. **Rueda** cuando le disparan (1 de cada 3 balas, como mucho cada
      2,5 s: la bala le pasa de largo), **fregonazo** en abanico de 140° y 5 casillas (0,6 s de aviso; 22 y empujón) y **cubos de
      agua** (3 en curva con sus anillos; 8 y un charco que resbala 6 s; cada 6 s). **A media vida se parte en dos** (animación
