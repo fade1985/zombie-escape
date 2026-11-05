@@ -332,7 +332,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      escolta suelta una chispita amarilla en algunas direcciones.
    - Pruebas: `--captura --edificio torre --oficinista`, `--escolta` y `--camaras`.
 5. **Minijefes**, uno por sesión (Opus): directora, informático, presentador y becario.
-   - **La directora de Recursos Humanos** ✅ **Hecha el 5 nov, a falta del visto bueno del dueño.** 35 generaciones (6 el modelo, 29
+   - **La directora de Recursos Humanos** ✅ **Hecha el 5 nov, con el visto bueno del dueño.** 35 generaciones (6 el modelo, 29
      las animaciones). Lo que ha quedado (`directora.gd`; números provisionales, en sus `const`):
      - Vida 450 (+35 % por planta), velocidad 75, 8 si te pegas a ella. Su sala, el **Despacho de Recursos Humanos** (`jefe-directora`
        en `Catalogo.SALAS`): archivadores, librerías, su mesa de dirección y dos lámparas al fondo; a cada lado, la sala de espera
