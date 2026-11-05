@@ -463,7 +463,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento A (bata azul y moño, con la fregona en la
        mano), andar, «fregar» y caída.
      - Prueba: `--captura --edificio torre --limpiadora`.
-   - **Tercer trozo (5 nov, falta el visto bueno del dueño):** la recepcionista (id `recepcionista`; `tornos.gd`).
+   - **Tercer trozo ✅ (5 nov, con el visto bueno del dueño):** la recepcionista (id `recepcionista`; `tornos.gd`).
      - Sale **siempre en el vestíbulo** (la planta 1), detrás del mostrador de recepción, con una **persiana metálica
        bajada** (dibujada con código: `Tornos.Persiana`). No se la ve, pero grita; flecha y «!» en el minimapa, encima del
        mostrador. Al llegar Johnny al mostrador (110), sube la persiana y sale.
