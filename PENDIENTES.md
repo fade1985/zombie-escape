@@ -13,10 +13,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M90** Centro comercial: las cinco skins de sus jefes (el antidisturbios, el cocinero, la modista, la mascota y el
-  gerente), como las de los Apartamentos (`skins.gd`): cada una la suelta su jefe al caer por primera vez, con su
-  cara y su ventaja. Para más adelante.
-
-
 ## Por limar
 
