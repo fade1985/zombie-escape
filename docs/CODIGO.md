@@ -375,7 +375,9 @@ en una línea.
   encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta nada; los zombis de esas partidas van
   aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
   `historia.gd` (dosier, noticias y relatos, con la historia resumida arriba; se edita sin tocar los `id` y todos los
-  textos se ven con `--historia`, y los relatos con `--relato`) y `bestiario.gd` (sus fichas;
+  textos se ven con `--historia`, y los relatos con `--relato`; los de Torre Velaria, solos, con `--historia-torre`. En la
+  torre las páginas dicen su planta como «vestíbulo» o «planta 10» (`donde(p, edificio)`) y la última la suelta el Sujeto 1
+  en el «laboratorio») y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).
 - `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
@@ -449,8 +451,8 @@ en una línea.
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
-  (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás y la reportera son dibujos de PixelLab de
-  `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 32 (M75) y por
+  (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
+  `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 32 (M75) y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se

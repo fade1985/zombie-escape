@@ -6,7 +6,7 @@ con dos puntos de ojos) y la ciudad de detrás (siete bloques azules). Ahora sal
     antes, de frente, sobre azul, que PixelLab "viste" (create_image_pixflux con init_image). El boceto va a 1 píxel
     por unidad del juego, que es el doble de los píxeles del juego, como siempre; luego se reduce a la mitad. La
     pantalla se deja hueca (con las esquinas redondeadas de una tele vieja): la emisión se pinta debajo;
-  - los dos fondos de la calle (delante del número 14 y delante del centro comercial), a los píxeles del juego;
+  - los tres fondos de la calle (delante del número 14, del centro comercial y de Torre Velaria), a los píxeles del juego;
   - la reportera de medio cuerpo, sin fondo, y las posiciones de su boca para que hable (create_vocal_animation).
 
   py tools/tele.py guia     → assets/sources/tele/guia.png (el boceto del mueble)
@@ -32,7 +32,7 @@ ESQUINA = 10                        # el redondeo de las esquinas de la pantalla
 FONDO_PX = (144, 82)                # los fondos de la calle, en píxeles del juego (la pantalla entera)
 
 # Los intentos elegidos (assets/sources/tele/intentos/)
-ELEGIDOS = {'mueble': 2, 'reportera': 1, '14': 1, 'centro': 4}
+ELEGIDOS = {'mueble': 2, 'reportera': 1, '14': 1, 'centro': 4, 'torre': 4}
 
 # La boca y los ojos de la reportera elegida, a mano: los píxeles que cambian (en el dibujo de PixelLab, sin recortar)
 REPORTERA_X, REPORTERA_Y = 13, 13   # la esquina de lo que no es transparente (el recorte)
@@ -159,7 +159,7 @@ def todo():
     Image.open(original).save(sin_fondo)
     quita(sin_fondo)
     mueble(sin_fondo, f'{OUT}/mueble.png')
-    for sitio in ['14', 'centro']:
+    for sitio in ['14', 'centro', 'torre']:
         Image.open(f'{CARPETA}/intentos/calle-{sitio}-{ELEGIDOS[sitio]}.png').convert('RGB').save(f'{OUT}/calle-{sitio}.png')
     reportera(f'{CARPETA}/intentos/reportera-{ELEGIDOS["reportera"]}.png', f'{OUT}/reportera.png')
 

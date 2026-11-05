@@ -139,6 +139,9 @@
 #                       un fondo liso: todos con bata (M86)                                [prueba_varias.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia en la
 #                       tele, trozo a trozo, para ver si caben                         [prueba_larga.gd]
+#   --historia-torre    la historia de Torre Velaria: las cinco hojas, el Dosier con páginas arrancadas (dónde
+#                       buscarlas), las cinco noticias delante de la torre (y si caben en ruso y chino) y el
+#                       relato del final                                                 [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
 #                       completar el edificio                                          [prueba_inventario.gd]
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)
@@ -503,6 +506,10 @@ func empezar_prueba() -> void:
 	elif "--historia" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_historia_entera()
+		get_tree().quit()
+	elif "--historia-torre" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_historia_torre()
 		get_tree().quit()
 	elif "--municion" in args:
 		set_process(false)   # sin la prueba larga

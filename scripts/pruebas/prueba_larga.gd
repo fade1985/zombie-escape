@@ -753,6 +753,112 @@ func probar_noticias() -> void:
 	ordenador.apagar()
 
 
+# Con "--captura --historia-torre": la historia de Torre Velaria (parte 8 del plan). Las cinco hojas del dosier
+# (captura-torre-hoja-N.png); el Dosier del ordenador con la 1 y la 4 encontradas y las demás arrancadas, que dicen
+# dónde buscarlas (vestíbulo, planta 10...; captura-torre-dosier-*.png); cada noticia de la torre en la tele, delante de
+# la torre, trozo a trozo (captura-torre-tele-<id>-N.png), y si caben en ruso y chino; y el relato del final, línea a
+# línea (captura-torre-relato.png). El guardado de prueba vuelve a quedar como estaba
+func probar_historia_torre() -> void:
+	var antes := Guardado.cargar().duplicate(true)
+	var paginas: Array = Historia.dosier("torre").paginas
+	# en cada planta de la torre con página (vestíbulo y plantas 10 a 30) hay un sitio para el muerto que la lleva
+	for num in range(1, 5):
+		var c: Dictionary = Planta.generar(num, "torre").cientifico
+		print("Historia torre · el muerto de %s: %s" % [Planta.nombre_torre(num), "sitio %d" % c.sitio if not c.is_empty() else "NINGUNO"])
+	for i in paginas.size():
+		menus.pagina(paginas[i], i + 1, paginas.size(), func(): pass)
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-torre-hoja-%d.png" % (i + 1))
+		menus.leida()
+	# el Dosier con la 1 y la 4 encontradas y el centro completado (la torre aún no)
+	Guardado.cambiar(func(g):
+		for p in paginas:
+			g.paginas.erase(p.id)
+		g.paginas.append_array(["tv_visitas", "tv_sujeto_1"])
+		Guardado.edificio(g, "centro").completado = true
+		Guardado.edificio(g, "torre").completado = false)
+	var de_torre := func() -> Array:
+		return Historia.noticias_emitidas(Guardado.cargar()).filter(func(n): return n.get("sitio", "") == "torre").map(
+			func(n): return n.id)
+	print("Historia torre · falta la 2: «%s»" % Historia.falta("torre", paginas[1]).replace("\n", " "))
+	print("Historia torre · falta la 5: «%s»" % Historia.falta("torre", paginas[4]).replace("\n", " "))
+	print("Historia torre · dónde, de la 1 a la 5: %s (esperado: vestíbulo, planta 10, planta 20, planta 30, laboratorio)" % [
+		paginas.map(func(p): return Historia.donde(p, "torre"))])
+	print("Historia torre · noticias con la 1 y la 4: %s (esperado: n_presentacion, n_simulacro, n_audio_presidenta)" % [de_torre.call()])
+	abrir_ordenador()
+	await get_tree().create_timer(0.3).timeout
+	for id in ["tv_visitas", "tv_bienestar", "tv_sujeto_cero"]:
+		ordenador.abrir("dosier", "b_" + id)
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-torre-dosier-%s.png" % id)
+	# todas encontradas y la torre completada: las cinco noticias
+	Guardado.cambiar(func(g):
+		for p in paginas:
+			if not p.id in g.paginas:
+				g.paginas.append(p.id)
+		Guardado.edificio(g, "torre").completado = true)
+	print("Historia torre · noticias con todo: %s (esperado: las 5)" % [de_torre.call()])
+	var noticias: Array = Historia.NOTICIAS.filter(func(n): return n.get("sitio", "") == "torre")
+	for n in noticias:
+		ordenador.abrir("noticias", "b_" + n.id)
+		await get_tree().create_timer(0.3).timeout
+		var tele: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
+		tele.saltar()
+		await get_tree().create_timer(2.5).timeout   # que se vaya el rótulo del nombre de la reportera
+		for i in tele.trozos.size():
+			print("Tele %s, trozo %d de %d: %d líneas (caben %d)" % [n.id, i + 1, tele.trozos.size(),
+				tele.texto.get_line_count(), tele.lineas_que_caben()])
+			Captura.foto("captura-torre-tele-%s-%d.png" % [n.id, i + 1])
+			tele.saltar()
+			tele.saltar()
+			await get_tree().create_timer(0.1).timeout
+	var tele_idiomas: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
+	for codigo in ["en", "de", "ru", "zh_CN"]:
+		Idioma.poner(codigo, false)
+		var peor := 0
+		for n in noticias:
+			tele_idiomas.poner(n)
+			tele_idiomas.texto.visible_characters = -1
+			for t in tele_idiomas.trozos:
+				tele_idiomas.texto.text = t
+				peor = maxi(peor, tele_idiomas.texto.get_line_count())
+		print("Tele de la torre en %s: el trozo más largo con %d líneas (caben %d)" % [codigo, peor, tele_idiomas.lineas_que_caben()])
+	Idioma.poner(Idioma.ORIGEN, false)
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().create_timer(0.3).timeout
+	# el relato del final, pasando las líneas con Intro
+	Guardado.cambiar(func(g): g.relatos.erase("torre"))
+	relatos_prueba = true   # (en las pruebas no salen relatos si no se pide: puede_relato)
+	ver_relato("torre")
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
+	var r: Relato = null
+	for h in get_children():
+		if h is Relato and h.is_processing_input():
+			r = h
+	if r == null:
+		print("ERROR: el relato de la torre no se ha abierto")
+	else:
+		var intro := InputEventKey.new()
+		intro.keycode = KEY_ENTER
+		intro.pressed = true
+		while r.vistas < r.lineas.size():
+			Input.parse_input_event(intro)
+			await get_tree().create_timer(0.25).timeout
+		await get_tree().create_timer(Relato.FUNDIDO).timeout
+		print("Relato · torre: %d líneas, alto del texto %d" % [r.lineas.size(), r.columna.size.y])
+		Captura.foto("captura-torre-relato.png")
+		Input.parse_input_event(intro)
+		await get_tree().create_timer(Relato.FUNDIDO + 0.5).timeout
+		print("Relato · torre apuntado: %s (esperado: true)" % ("torre" in Guardado.cargar().relatos))
+	Guardado.cambiar(func(g):
+		g.paginas = antes.paginas
+		g.noticias_vistas = antes.noticias_vistas
+		g.relatos = antes.relatos
+		for e in Historia.DOSIERES:
+			Guardado.edificio(g, e).completado = antes.edificios.get(e, {}).get("completado", false))
+
+
 # Con "--captura --historia": todos los textos de historia.gd, para ver si caben. Cada página del dosier de cada
 # edificio en su hoja, como al cogerla (captura-hoja-<id>.png), y cada noticia en la tele con todo lo que dice la
 # reportera, trozo a trozo (captura-tele-<id>-<trozo>.png). Al acabar, el guardado de prueba vuelve a tener sus páginas y sus noticias

@@ -1175,6 +1175,10 @@ msgid "azotea"
 msgstr "крыша"
 
 #: scripts/historia.gd
+msgid "laboratorio"
+msgstr "лаборатории"
+
+#: scripts/historia.gd
 msgid "Página arrancada"
 msgstr "Вырванная страница"
 
@@ -1585,6 +1589,202 @@ msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
 msgstr "Мне обещали хорошую дозу. Прислали шприц и эту бумажку."
 
 #: scripts/historia.gd
+msgid "Dosier VD-7 · Torre Velaria"
+msgstr "Досье VD-7 · Башня Velaria"
+
+#: scripts/historia.gd
+msgid "En cada planta hay un cuerpo con una página, y la última la lleva el Sujeto 1. Lo que encuentres queda aquí para siempre."
+msgstr "На каждом этаже лежит тело со страницей, а последнюю носит Объект 1. Все, что найдешь, останется здесь навсегда."
+
+#: scripts/historia.gd
+msgid "Dra. Nuria Castell, médica de guardia de Velaria"
+msgstr "Д-р Нурия Кастель, дежурный врач Velaria"
+
+#: scripts/historia.gd
+msgid "LIBRO DE VISITAS · HACE 11 AÑOS"
+msgstr "КНИГА ПОСЕТИТЕЛЕЙ · 11 ЛЕТ НАЗАД"
+
+#: scripts/historia.gd
+msgid "Visitas del turno de noche"
+msgstr "Посетители ночной смены"
+
+#: scripts/historia.gd
+msgid ""
+"14 de marzo. 23:40. Dr. H. Salas. Planta 40.\n"
+"\n"
+"14 de marzo. 23:52. J. Rush, voluntario. Planta 40. Le acompaña seguridad. Firma con buena letra.\n"
+"\n"
+"15 de marzo. J. Rush no firma la salida.\n"
+"\n"
+"(Las tres semanas siguientes, arrancadas.)\n"
+"\n"
+"4 de abril. 06:10. J. Rush sale. Firma con una X. Le acompaña seguridad. Destino: «número 14, conserje»."
+msgstr ""
+"14 марта. 23:40. Д-р Х. Салас. Этаж 40.\n"
+"\n"
+"14 марта. 23:52. Дж. Раш, доброволец. Этаж 40. Сопровождает охрана. Подпись разборчивая.\n"
+"\n"
+"15 марта. Дж. Раш выход не отметил.\n"
+"\n"
+"(Следующие три недели вырваны.)\n"
+"\n"
+"4 апреля. 06:10. Дж. Раш выходит. Подпись: крестик. Сопровождает охрана. Куда: «дом 14, дворник»."
+
+#: scripts/historia.gd
+msgid "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."
+msgstr "Это имя мне знакомо. Это дворник, которого ищут в новостях. Он уже был здесь."
+
+#: scripts/historia.gd
+msgid "Dra. Marina Ortega, médica de empresa"
+msgstr "Д-р Марина Ортега, корпоративный врач"
+
+#: scripts/historia.gd
+msgid "CIRCULAR DE RECURSOS HUMANOS"
+msgstr "ЦИРКУЛЯР ОТДЕЛА КАДРОВ"
+
+#: scripts/historia.gd
+msgid "Programa Bienestar"
+msgstr "Программа «Благополучие»"
+
+#: scripts/historia.gd
+msgid ""
+"Para toda la plantilla de Torre Velaria: desde el lunes, la torre estrena aire acondicionado. Más fresco, más descanso, mejor ambiente. Gracias por vuestro esfuerzo.\n"
+"\n"
+"ANEXO, SOLO PARA DIRECCIÓN: el aire lleva VD-7 en dosis muy baja, en las cuarenta plantas. Empleados más tranquilos, más horas, ninguna queja.\n"
+"\n"
+"Si alguien se duerme en su mesa, no se le despierta. Recursos Humanos lo recoge por la noche y lo sube a la planta 40."
+msgstr ""
+"Всем сотрудникам Башни Velaria: с понедельника в башне новый кондиционер. Прохладнее, больше отдыха, лучше атмосфера. Спасибо за ваш труд.\n"
+"\n"
+"ПРИЛОЖЕНИЕ, ТОЛЬКО ДЛЯ ДИРЕКЦИИ: в воздухе VD-7 в очень малой дозе, на всех сорока этажах. Сотрудники спокойнее, работают дольше, жалоб нет.\n"
+"\n"
+"Если кто-то уснул за столом, его не будят. Отдел кадров забирает его ночью и поднимает на этаж 40."
+
+#: scripts/historia.gd
+msgid "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."
+msgstr "В этом месяце я уже подписала сорок больничных «по усталости». Надеваю маску."
+
+#: scripts/historia.gd
+msgid "Dr. Pablo Ferrer, asesor científico de la presentación"
+msgstr "Д-р Пабло Ферре, научный консультант презентации"
+
+#: scripts/historia.gd
+msgid "GUION · NO DIFUNDIR"
+msgstr "СЦЕНАРИЙ · НЕ РАСПРОСТРАНЯТЬ"
+
+#: scripts/historia.gd
+msgid "El futuro del trabajo"
+msgstr "Будущее работы"
+
+#: scripts/historia.gd
+msgid ""
+"LUZ. MÚSICA. Sale el presentador.\n"
+"\n"
+"PRESENTADOR: ¿Cansados? ¿Otra vez lunes? Eso se acabó.\n"
+"\n"
+"PRESENTADOR: Velaria presenta el Turno Infinito: el VD-7 en el aire de cada oficina, cada fábrica y cada hospital del país.\n"
+"\n"
+"Se abre el telón. Sale el Sujeto 1.\n"
+"\n"
+"PRESENTADOR: Les presento al empleado perfecto. No duerme. No se cansa. No pide vacaciones.\n"
+"\n"
+"APLAUSOS (grabados: el público ya no aplaude)."
+msgstr ""
+"СВЕТ. МУЗЫКА. Выходит ведущий.\n"
+"\n"
+"ВЕДУЩИЙ: Устали? Опять понедельник? С этим покончено.\n"
+"\n"
+"ВЕДУЩИЙ: Velaria представляет Бесконечную смену: VD-7 в воздухе каждого офиса, каждого завода и каждой больницы страны.\n"
+"\n"
+"Занавес открывается. Выходит Объект 1.\n"
+"\n"
+"ВЕДУЩИЙ: Знакомьтесь: идеальный сотрудник. Не спит. Не устает. Не просит отпуск.\n"
+"\n"
+"АПЛОДИСМЕНТЫ (запись: зал больше не аплодирует)."
+
+#: scripts/historia.gd
+msgid "Me piden que escriba que es seguro. Lo he visto en el laboratorio."
+msgstr "Меня просят написать, что это безопасно. Я видел это в лаборатории."
+
+#: scripts/historia.gd
+msgid "Dr. Andrés Lin, investigador del laboratorio"
+msgstr "Д-р Андрес Лин, исследователь лаборатории"
+
+#: scripts/historia.gd
+msgid "INFORME · LABORATORIO 40"
+msgstr "ОТЧЕТ · ЛАБОРАТОРИЯ 40"
+
+#: scripts/historia.gd
+msgid "Sujeto 1"
+msgstr "Объект 1"
+
+#: scripts/historia.gd
+msgid ""
+"Origen: la sangre del Sujeto 0, sacada una vez al mes durante once años, en sus «revisiones médicas de empresa».\n"
+"\n"
+"Resultado: dos metros y medio. No duerme. No se cansa. No se convierte.\n"
+"\n"
+"Imita lo que ve. Le pusimos vídeos del Sujeto 0 trabajando y ahora friega el suelo del laboratorio.\n"
+"\n"
+"Problema: no obedece. Ha roto dos cápsulas y a tres técnicos.\n"
+"\n"
+"La presidenta dice que da igual: se presenta el viernes."
+msgstr ""
+"Происхождение: кровь Объекта 0, бравшаяся раз в месяц на протяжении одиннадцати лет во время его «корпоративных медосмотров».\n"
+"\n"
+"Результат: два с половиной метра. Не спит. Не устает. Не превращается.\n"
+"\n"
+"Повторяет увиденное. Мы показали ему видео, где Объект 0 работает, и теперь он драит пол в лаборатории.\n"
+"\n"
+"Проблема: не подчиняется. Разбил две капсулы и троих техников.\n"
+"\n"
+"Президент говорит, что неважно: презентация в пятницу."
+
+#: scripts/historia.gd
+msgid "Ayer me miró y dijo «turno de noche». Como el conserje."
+msgstr "Вчера он посмотрел на меня и сказал «ночная смена». Как дворник."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"Этой страницы нет. Ее носит Объект 1, на самом верху, в лаборатории на этаже 40.\n"
+"\n"
+"Придется ее отобрать."
+
+#: scripts/historia.gd
+msgid "Sujeto 1, el empleado perfecto de Velaria"
+msgstr "Объект 1, идеальный сотрудник Velaria"
+
+#: scripts/historia.gd
+msgid "FICHA DE SUJETO · SOLO PRESIDENCIA"
+msgstr "КАРТОЧКА ОБЪЕКТА · ТОЛЬКО ДЛЯ ПРЕЗИДЕНТА"
+
+#: scripts/historia.gd
+msgid ""
+"Nombre: Johnny Rush. Repartidor de noche, sin familia y con deudas. Se presentó voluntario al primer ensayo del VD-7 por $500.\n"
+"\n"
+"Dosis: cuarenta veces la normal. No se durmió. No se convirtió. Su sangre deshace el VD-7.\n"
+"\n"
+"Después: tres semanas de borrado de memoria. Nuevo trabajo: conserje del número 14, un edificio nuestro, para tenerlo cerca. Revisión médica cada mes.\n"
+"\n"
+"Si recuerda, avisar a Presidencia. Si escapa, recuperarlo vivo. Es lo único que tenemos que funciona."
+msgstr ""
+"Имя: Джонни Раш. Ночной курьер, без семьи и с долгами. Вызвался добровольцем на первое испытание VD-7 за $500.\n"
+"\n"
+"Доза: в сорок раз больше нормы. Не уснул. Не превратился. Его кровь разрушает VD-7.\n"
+"\n"
+"Потом: три недели стирания памяти. Новая работа: дворник в доме 14, нашем здании, чтобы держать его поблизости. Медосмотр каждый месяц.\n"
+"\n"
+"Если вспомнит, сообщить Президенту. Если сбежит, вернуть живым. Это единственное, что у нас работает."
+
+#: scripts/historia.gd
+msgid "Encima de la foto, con letra torpe: «PAPÁ»."
+msgstr "Над фотографией неловким почерком: «ПАПА»."
+
+#: scripts/historia.gd
 msgid "Canal 8"
 msgstr "Канал 8"
 
@@ -1669,6 +1869,46 @@ msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea 
 msgstr "Срочно: вертолет Velaria вернулся, на этот раз на крышу торгового центра. Он взлетел с кем-то на борту и взял курс на Башню Velaria. Velaria больше не ищет своего дворника: «Он с нами, в безопасности». Завтра в своей башне компания представит «будущее труда». О моей сестре — ничего."
 
 #: scripts/historia.gd
+msgid "Esta noche, el futuro del trabajo"
+msgstr "Сегодня вечером: будущее работы"
+
+#: scripts/historia.gd
+msgid "Buenas noches. Les hablo desde la puerta de Torre Velaria. Esta noche, Velaria presenta aquí «el futuro del trabajo», en directo para todo el país. Hay focos, alfombra roja y colas de invitados. La presidenta, Clara Velar, promete «una sorpresa que cambiará los lunes para siempre». Del conserje, ni una palabra."
+msgstr "Добрый вечер. Говорю с вами от входа в Башню Velaria. Сегодня вечером Velaria представляет здесь «будущее работы», в прямом эфире для всей страны. Прожекторы, красная дорожка, очереди гостей. Президент, Клара Велар, обещает «сюрприз, который навсегда изменит понедельники». О дворнике ни слова."
+
+#: scripts/historia.gd
+msgid "La torre cierra «por un simulacro»"
+msgstr "Башня закрыта «из-за учений»"
+
+#: scripts/historia.gd
+msgid "La presentación se ha cancelado a última hora. Torre Velaria ha cerrado sus puertas «por un simulacro de incendio», y desde entonces no ha salido nadie. Nuestra fuente nos manda la foto de un libro de visitas de hace once años. Hay un nombre: «J. Rush, voluntario. Planta 40»."
+msgstr "Презентацию отменили в последний момент. Башня Velaria закрыла двери «из-за учебной пожарной тревоги», и с тех пор оттуда никто не вышел. Наш источник присылает фото книги посетителей одиннадцатилетней давности. В ней есть имя: «Дж. Раш, доброволец. Этаж 40»."
+
+#: scripts/historia.gd
+msgid "Dormidos en la puerta giratoria"
+msgstr "Спят в вертящейся двери"
+
+#: scripts/historia.gd
+msgid "Esta madrugada, varios empleados de la torre han salido por la puerta giratoria... con los ojos cerrados. Dan vueltas y vueltas y vuelven a entrar. Velaria dice que es su nuevo programa de bienestar: «Descansar sin dejar de trabajar». Nuestra fuente dice que el VD-7 va en el aire acondicionado."
+msgstr "Под утро несколько сотрудников башни вышли через вертящуюся дверь... с закрытыми глазами. Они крутятся и крутятся и заходят обратно. Velaria говорит, что это ее новая программа благополучия: «Отдыхать, не переставая работать». Наш источник утверждает, что VD-7 пускают через кондиционер."
+
+#: scripts/historia.gd
+msgid "Se filtra un audio de la presidenta"
+msgstr "Утекла аудиозапись президента"
+
+#: scripts/historia.gd
+msgid "Nos llega un audio de la presidenta de Velaria: «¿Que el Sujeto 1 no obedece? Los empleados tampoco, y los tenemos. Presentadlo igual. Y traedme al conserje: lo necesito entero». Velaria dice que el audio es falso, hecho con un ordenador. No dice quién es el Sujeto 1."
+msgstr "К нам попала аудиозапись президента Velaria: «Объект 1 не подчиняется? Сотрудники тоже, а мы их держим. Все равно представляйте. И приведите мне дворника: он нужен мне целым». Velaria заявляет, что запись фальшивая, сделана на компьютере. Кто такой Объект 1, не уточняет."
+
+#: scripts/historia.gd
+msgid "La torre, a oscuras"
+msgstr "Башня погрузилась во тьму"
+
+#: scripts/historia.gd
+msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de abajo arriba. Hace unos minutos ha despegado un helicóptero desde el helipuerto, rumbo al norte. Velaria no contesta al teléfono. Y a mí me acaba de llegar un mensaje sin firma: «Soy el conserje. Tengo algo para ti»."
+msgstr "Срочно: Башня Velaria погрузилась во тьму этаж за этажом, снизу вверх. Несколько минут назад с вертолетной площадки взлетел вертолет и взял курс на север. Velaria не отвечает на звонки. А мне только что пришло сообщение без подписи: «Это дворник. У меня для тебя кое-что есть»."
+
+#: scripts/historia.gd
 msgid "Número 14. Turno de noche."
 msgstr "Дом 14. Ночная смена."
 
@@ -1739,6 +1979,30 @@ msgstr "Джонни не помнит, чтобы бывал там."
 #: scripts/historia.gd
 msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
 msgstr "Сорок этажей ковролина. Кому-то придется их убирать."
+
+#: scripts/historia.gd
+msgid "El helipuerto está vacío. El helicóptero de Velaria ya es una luz pequeña, rumbo al norte."
+msgstr "Вертолетная площадка пуста. Вертолет Velaria уже маленький огонек на пути к северу."
+
+#: scripts/historia.gd
+msgid "En la mano, su ficha. Johnny Rush. Voluntario."
+msgstr "В руке его карточка. Джонни Раш. Доброволец."
+
+#: scripts/historia.gd
+msgid "Ahora se acuerda: la luz blanca, el olor del laboratorio, la firma con una X."
+msgstr "Теперь он вспомнил: белый свет, запах лаборатории, подпись крестиком."
+
+#: scripts/historia.gd
+msgid "Abajo, la ciudad duerme. En cada farmacia, una caja de «Velaria Noche»."
+msgstr "Внизу город спит. В каждой аптеке коробка «Velaria Ночь»."
+
+#: scripts/historia.gd
+msgid "Johnny le manda una foto de la hoja a Marta Ruiz."
+msgstr "Джонни отправляет фото листа Марте Руис."
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo todo."
+msgstr "Кому-то придется все это убирать."
 
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."

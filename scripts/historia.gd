@@ -121,6 +121,45 @@ const DOSIERES := {
 				"nota": "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."},   # [traducir]
 		],
 	},
+	# Torre Velaria: por qué Johnny «ya conoce» la planta 40. Hace once años fue el voluntario del primer ensayo del
+	# VD-7; no se convirtió, le borraron la memoria y lo pusieron de conserje en el 14 para tenerlo cerca. Con su
+	# sangre han hecho el Sujeto 1. La presidenta (Clara Velar) quiere presentarlo como «el empleado perfecto» y
+	# llevar el VD-7 del aire de la torre a todo el país. Las plantas son el vestíbulo y la 10, 20, 30 y 40 (donde())
+	"torre": {
+		"titulo": "Dosier VD-7 · Torre Velaria",   # [traducir]
+		"nota": "En cada planta hay un cuerpo con una página, y la última la lleva el Sujeto 1. Lo que encuentres queda aquí para siempre.",   # [traducir]
+		"falta": "Esta página falta. Está junto a un cuerpo, en la %s.\n\nBúscalo en una partida.",   # [traducir]
+		"paginas": [
+			{"id": "tv_visitas", "planta": 1, "cuerpo": "Dra. Nuria Castell, médica de guardia de Velaria",   # [traducir]
+				"look": {"skin": Color("#e0ac69"), "hair": Color("#1d1b2c")},
+				"tipo": "LIBRO DE VISITAS · HACE 11 AÑOS", "titulo": "Visitas del turno de noche",   # [traducir]
+				"texto": "14 de marzo. 23:40. Dr. H. Salas. Planta 40.\n\n14 de marzo. 23:52. J. Rush, voluntario. Planta 40. Le acompaña seguridad. Firma con buena letra.\n\n15 de marzo. J. Rush no firma la salida.\n\n(Las tres semanas siguientes, arrancadas.)\n\n4 de abril. 06:10. J. Rush sale. Firma con una X. Le acompaña seguridad. Destino: «número 14, conserje».",   # [traducir]
+				"nota": "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."},   # [traducir]
+			{"id": "tv_bienestar", "planta": 2, "cuerpo": "Dra. Marina Ortega, médica de empresa",   # [traducir]
+				"look": {"skin": Color("#ffd2a8"), "hair": Color("#8a5a2b")},
+				"tipo": "CIRCULAR DE RECURSOS HUMANOS", "titulo": "Programa Bienestar",   # [traducir]
+				"texto": "Para toda la plantilla de Torre Velaria: desde el lunes, la torre estrena aire acondicionado. Más fresco, más descanso, mejor ambiente. Gracias por vuestro esfuerzo.\n\nANEXO, SOLO PARA DIRECCIÓN: el aire lleva VD-7 en dosis muy baja, en las cuarenta plantas. Empleados más tranquilos, más horas, ninguna queja.\n\nSi alguien se duerme en su mesa, no se le despierta. Recursos Humanos lo recoge por la noche y lo sube a la planta 40.",   # [traducir]
+				"nota": "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."},   # [traducir]
+			{"id": "tv_guion", "planta": 3, "cuerpo": "Dr. Pablo Ferrer, asesor científico de la presentación",   # [traducir]
+				"look": {"skin": Color("#c68642"), "hair": Color("#2b2b2b")},
+				"tipo": "GUION · NO DIFUNDIR", "titulo": "El futuro del trabajo",   # [traducir]
+				"texto": "LUZ. MÚSICA. Sale el presentador.\n\nPRESENTADOR: ¿Cansados? ¿Otra vez lunes? Eso se acabó.\n\nPRESENTADOR: Velaria presenta el Turno Infinito: el VD-7 en el aire de cada oficina, cada fábrica y cada hospital del país.\n\nSe abre el telón. Sale el Sujeto 1.\n\nPRESENTADOR: Les presento al empleado perfecto. No duerme. No se cansa. No pide vacaciones.\n\nAPLAUSOS (grabados: el público ya no aplaude).",   # [traducir]
+				"nota": "Me piden que escriba que es seguro. Lo he visto en el laboratorio."},   # [traducir]
+			{"id": "tv_sujeto_1", "planta": 4, "cuerpo": "Dr. Andrés Lin, investigador del laboratorio",   # [traducir]
+				"look": {"skin": Color("#f1c27d"), "hair": Color("#9b93a0")},
+				"tipo": "INFORME · LABORATORIO 40", "titulo": "Sujeto 1",   # [traducir]
+				"texto": "Origen: la sangre del Sujeto 0, sacada una vez al mes durante once años, en sus «revisiones médicas de empresa».\n\nResultado: dos metros y medio. No duerme. No se cansa. No se convierte.\n\nImita lo que ve. Le pusimos vídeos del Sujeto 0 trabajando y ahora friega el suelo del laboratorio.\n\nProblema: no obedece. Ha roto dos cápsulas y a tres técnicos.\n\nLa presidenta dice que da igual: se presenta el viernes.",   # [traducir]
+				"nota": "Ayer me miró y dijo «turno de noche». Como el conserje."},   # [traducir]
+			# La última no la lleva un muerto: la suelta el Sujeto 1 al caer en el laboratorio (del_jefe)
+			{"id": "tv_sujeto_cero", "planta": 5, "jefe": true, "donde": "laboratorio",
+				"falta": "Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n\nTendrás que quitársela.",   # [traducir]
+				"cuerpo": "Sujeto 1, el empleado perfecto de Velaria",   # [traducir]
+				"look": {"skin": Color("#c9b8d6"), "hair": Color("#3b2a4a")},
+				"tipo": "FICHA DE SUJETO · SOLO PRESIDENCIA", "titulo": "Sujeto 0",   # [traducir]
+				"texto": "Nombre: Johnny Rush. Repartidor de noche, sin familia y con deudas. Se presentó voluntario al primer ensayo del VD-7 por $500.\n\nDosis: cuarenta veces la normal. No se durmió. No se convirtió. Su sangre deshace el VD-7.\n\nDespués: tres semanas de borrado de memoria. Nuevo trabajo: conserje del número 14, un edificio nuestro, para tenerlo cerca. Revisión médica cada mes.\n\nSi recuerda, avisar a Presidencia. Si escapa, recuperarlo vivo. Es lo único que tenemos que funciona.",   # [traducir]
+				"nota": "Encima de la foto, con letra torpe: «PAPÁ»."},   # [traducir]
+		],
+	},
 }
 
 
@@ -171,6 +210,22 @@ const NOTICIAS := [
 	{"id": "n_helicoptero", "sitio": "centro", "pagina": "", "victoria": "centro",
 		"titular": "Un helicóptero en la azotea",
 		"texto": "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."},
+	# Torre Velaria: la presentación que no llega a hacerse
+	{"id": "n_presentacion", "sitio": "torre", "pagina": "", "victoria": "centro",
+		"titular": "Esta noche, el futuro del trabajo",
+		"texto": "Buenas noches. Les hablo desde la puerta de Torre Velaria. Esta noche, Velaria presenta aquí «el futuro del trabajo», en directo para todo el país. Hay focos, alfombra roja y colas de invitados. La presidenta, Clara Velar, promete «una sorpresa que cambiará los lunes para siempre». Del conserje, ni una palabra."},
+	{"id": "n_simulacro", "sitio": "torre", "pagina": "tv_visitas", "victoria": "",
+		"titular": "La torre cierra «por un simulacro»",
+		"texto": "La presentación se ha cancelado a última hora. Torre Velaria ha cerrado sus puertas «por un simulacro de incendio», y desde entonces no ha salido nadie. Nuestra fuente nos manda la foto de un libro de visitas de hace once años. Hay un nombre: «J. Rush, voluntario. Planta 40»."},
+	{"id": "n_dormidos", "sitio": "torre", "pagina": "tv_bienestar", "victoria": "",
+		"titular": "Dormidos en la puerta giratoria",
+		"texto": "Esta madrugada, varios empleados de la torre han salido por la puerta giratoria... con los ojos cerrados. Dan vueltas y vueltas y vuelven a entrar. Velaria dice que es su nuevo programa de bienestar: «Descansar sin dejar de trabajar». Nuestra fuente dice que el VD-7 va en el aire acondicionado."},
+	{"id": "n_audio_presidenta", "sitio": "torre", "pagina": "tv_sujeto_1", "victoria": "",
+		"titular": "Se filtra un audio de la presidenta",
+		"texto": "Nos llega un audio de la presidenta de Velaria: «¿Que el Sujeto 1 no obedece? Los empleados tampoco, y los tenemos. Presentadlo igual. Y traedme al conserje: lo necesito entero». Velaria dice que el audio es falso, hecho con un ordenador. No dice quién es el Sujeto 1."},
+	{"id": "n_torre_a_oscuras", "sitio": "torre", "pagina": "", "victoria": "torre",
+		"titular": "La torre, a oscuras",
+		"texto": "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de abajo arriba. Hace unos minutos ha despegado un helicóptero desde el helipuerto, rumbo al norte. Velaria no contesta al teléfono. Y a mí me acaba de llegar un mensaje sin firma: «Soy el conserje. Tengo algo para ti»."},
 ]
 # [/traducir]
 
@@ -204,6 +259,15 @@ const RELATOS := {
 		"Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»",
 		"Johnny no recuerda haber estado allí.",
 		"Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas.",
+	],
+	# Con gancho (lo eligió el dueño el 5 nov): la presidenta escapa; Johnny ya sabe quién es y se lo cuenta a Marta
+	"torre": [
+		"El helipuerto está vacío. El helicóptero de Velaria ya es una luz pequeña, rumbo al norte.",
+		"En la mano, su ficha. Johnny Rush. Voluntario.",
+		"Ahora se acuerda: la luz blanca, el olor del laboratorio, la firma con una X.",
+		"Abajo, la ciudad duerme. En cada farmacia, una caja de «Velaria Noche».",
+		"Johnny le manda una foto de la hoja a Marta Ruiz.",
+		"Alguien tendrá que limpiarlo todo.",
 	],
 }
 # [/traducir]
@@ -296,11 +360,16 @@ static func cuerpo_de(p: Dictionary) -> String:
 	return Idioma.t(p.cuerpo)
 
 
-# Dónde está una página, en el idioma del jugador: su planta o, si la suelta el jefe, su sitio (hoy solo "azotea"; un
-# sitio nuevo necesita aquí su propio Idioma.t, porque la herramienta no recoge de la tabla las palabras en minúscula)
-static func donde(p: Dictionary) -> String:
+# Dónde está una página, en el idioma del jugador: su planta o, si la suelta el jefe, su sitio ("azotea" o, en la
+# torre, "laboratorio"; un sitio nuevo necesita aquí su propio Idioma.t, porque la herramienta no recoge de la tabla
+# las palabras en minúscula). En Torre Velaria las plantas se llaman vestíbulo y planta 10, 20... (Planta.nombre_torre)
+static func donde(p: Dictionary, edificio := "") -> String:
 	if p.get("donde", "") == "azotea":
 		return Idioma.t("azotea")
+	if p.get("donde", "") == "laboratorio":
+		return Idioma.t("laboratorio")
+	if edificio == "torre":
+		return Idioma.minusculas(Planta.nombre_torre(p.planta))
 	return p.get("donde", Idioma.minusculas(Planta.nombre_planta(p.planta)))
 
 
@@ -308,7 +377,7 @@ static func donde(p: Dictionary) -> String:
 static func falta(edificio: String, p: Dictionary) -> String:
 	if p.has("falta"):
 		return Idioma.t(p.falta)
-	return Idioma.t(dosier(edificio).falta) % donde(p)
+	return Idioma.t(dosier(edificio).falta) % donde(p, edificio)
 
 
 # Apunta una página como encontrada

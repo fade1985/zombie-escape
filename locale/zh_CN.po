@@ -1173,6 +1173,10 @@ msgid "azotea"
 msgstr "天台"
 
 #: scripts/historia.gd
+msgid "laboratorio"
+msgstr "实验室"
+
+#: scripts/historia.gd
 msgid "Página arrancada"
 msgstr "撕下的一页"
 
@@ -1583,6 +1587,202 @@ msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
 msgstr "他们答应给我好的剂量。结果寄来一支针剂和这张纸。"
 
 #: scripts/historia.gd
+msgid "Dosier VD-7 · Torre Velaria"
+msgstr "VD-7档案 · Velaria大厦"
+
+#: scripts/historia.gd
+msgid "En cada planta hay un cuerpo con una página, y la última la lleva el Sujeto 1. Lo que encuentres queda aquí para siempre."
+msgstr "每一层都有一具尸体带着一页纸，最后一页在1号受试者身上。你找到的东西会永远留在这里。"
+
+#: scripts/historia.gd
+msgid "Dra. Nuria Castell, médica de guardia de Velaria"
+msgstr "Nuria Castell博士，Velaria值班医生"
+
+#: scripts/historia.gd
+msgid "LIBRO DE VISITAS · HACE 11 AÑOS"
+msgstr "访客登记簿 · 11年前"
+
+#: scripts/historia.gd
+msgid "Visitas del turno de noche"
+msgstr "夜班访客"
+
+#: scripts/historia.gd
+msgid ""
+"14 de marzo. 23:40. Dr. H. Salas. Planta 40.\n"
+"\n"
+"14 de marzo. 23:52. J. Rush, voluntario. Planta 40. Le acompaña seguridad. Firma con buena letra.\n"
+"\n"
+"15 de marzo. J. Rush no firma la salida.\n"
+"\n"
+"(Las tres semanas siguientes, arrancadas.)\n"
+"\n"
+"4 de abril. 06:10. J. Rush sale. Firma con una X. Le acompaña seguridad. Destino: «número 14, conserje»."
+msgstr ""
+"3月14日。23:40。H. Salas博士。40楼。\n"
+"\n"
+"3月14日。23:52。J. Rush，志愿者。40楼。保安陪同。签名字迹工整。\n"
+"\n"
+"3月15日。J. Rush未签离。\n"
+"\n"
+"（接下来三周的记录，被撕掉了。）\n"
+"\n"
+"4月4日。06:10。J. Rush离开。签了一个X。保安陪同。去向：“14号楼，清洁工”。"
+
+#: scripts/historia.gd
+msgid "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."
+msgstr "这个名字我听过。就是新闻里在找的那个清洁工。他以前来过这里。"
+
+#: scripts/historia.gd
+msgid "Dra. Marina Ortega, médica de empresa"
+msgstr "Marina Ortega博士，公司医生"
+
+#: scripts/historia.gd
+msgid "CIRCULAR DE RECURSOS HUMANOS"
+msgstr "人力资源部通告"
+
+#: scripts/historia.gd
+msgid "Programa Bienestar"
+msgstr "“健康关怀”计划"
+
+#: scripts/historia.gd
+msgid ""
+"Para toda la plantilla de Torre Velaria: desde el lunes, la torre estrena aire acondicionado. Más fresco, más descanso, mejor ambiente. Gracias por vuestro esfuerzo.\n"
+"\n"
+"ANEXO, SOLO PARA DIRECCIÓN: el aire lleva VD-7 en dosis muy baja, en las cuarenta plantas. Empleados más tranquilos, más horas, ninguna queja.\n"
+"\n"
+"Si alguien se duerme en su mesa, no se le despierta. Recursos Humanos lo recoge por la noche y lo sube a la planta 40."
+msgstr ""
+"致Velaria大厦全体员工：从周一起，大厦启用新空调。更凉爽，更好休息，氛围更好。感谢大家的努力。\n"
+"\n"
+"附件，仅限高层：空调里含有极低剂量的VD-7，四十层全覆盖。员工更平静，工时更长，没有任何怨言。\n"
+"\n"
+"如果有人在工位上睡着了，不要叫醒他。人力资源部会在夜里把他接走，送到40楼。"
+
+#: scripts/historia.gd
+msgid "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."
+msgstr "这个月我已经批了四十张“因疲劳”的病假。我要戴上口罩了。"
+
+#: scripts/historia.gd
+msgid "Dr. Pablo Ferrer, asesor científico de la presentación"
+msgstr "Pablo Ferrer博士，发布会科学顾问"
+
+#: scripts/historia.gd
+msgid "GUION · NO DIFUNDIR"
+msgstr "脚本 · 严禁外传"
+
+#: scripts/historia.gd
+msgid "El futuro del trabajo"
+msgstr "工作的未来"
+
+#: scripts/historia.gd
+msgid ""
+"LUZ. MÚSICA. Sale el presentador.\n"
+"\n"
+"PRESENTADOR: ¿Cansados? ¿Otra vez lunes? Eso se acabó.\n"
+"\n"
+"PRESENTADOR: Velaria presenta el Turno Infinito: el VD-7 en el aire de cada oficina, cada fábrica y cada hospital del país.\n"
+"\n"
+"Se abre el telón. Sale el Sujeto 1.\n"
+"\n"
+"PRESENTADOR: Les presento al empleado perfecto. No duerme. No se cansa. No pide vacaciones.\n"
+"\n"
+"APLAUSOS (grabados: el público ya no aplaude)."
+msgstr ""
+"灯光。音乐。主持人上场。\n"
+"\n"
+"主持人：累了吗？又是周一？这一切都结束了。\n"
+"\n"
+"主持人：Velaria隆重推出“无限加班”：VD-7将进入全国每一间办公室、每一座工厂、每一家医院的空气里。\n"
+"\n"
+"幕布拉开。1号受试者上场。\n"
+"\n"
+"主持人：请看完美员工。他不睡觉。他不疲倦。他不休假。\n"
+"\n"
+"掌声（录音：观众已经不会鼓掌了）。"
+
+#: scripts/historia.gd
+msgid "Me piden que escriba que es seguro. Lo he visto en el laboratorio."
+msgstr "他们要我写下“安全”二字。我在实验室里亲眼见过。"
+
+#: scripts/historia.gd
+msgid "Dr. Andrés Lin, investigador del laboratorio"
+msgstr "Andrés Lin博士，实验室研究员"
+
+#: scripts/historia.gd
+msgid "INFORME · LABORATORIO 40"
+msgstr "报告 · 40号实验室"
+
+#: scripts/historia.gd
+msgid "Sujeto 1"
+msgstr "1号受试者"
+
+#: scripts/historia.gd
+msgid ""
+"Origen: la sangre del Sujeto 0, sacada una vez al mes durante once años, en sus «revisiones médicas de empresa».\n"
+"\n"
+"Resultado: dos metros y medio. No duerme. No se cansa. No se convierte.\n"
+"\n"
+"Imita lo que ve. Le pusimos vídeos del Sujeto 0 trabajando y ahora friega el suelo del laboratorio.\n"
+"\n"
+"Problema: no obedece. Ha roto dos cápsulas y a tres técnicos.\n"
+"\n"
+"La presidenta dice que da igual: se presenta el viernes."
+msgstr ""
+"来源：0号受试者的血液，十一年来每月抽取一次，借口是“公司体检”。\n"
+"\n"
+"结果：两米半高。不睡觉。不疲倦。不变异。\n"
+"\n"
+"他会模仿所看到的一切。我们给他放了0号受试者工作的视频，现在他在拖实验室的地板。\n"
+"\n"
+"问题：不听话。他打碎了两个舱，打伤了三名技术员。\n"
+"\n"
+"董事长说无所谓：周五照常发布。"
+
+#: scripts/historia.gd
+msgid "Ayer me miró y dijo «turno de noche». Como el conserje."
+msgstr "昨天他看着我，说了一句“夜班”。就像那个清洁工。"
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"这一页缺失。它在1号受试者身上，在最顶层，40楼的实验室里。\n"
+"\n"
+"你得从他手里夺过来。"
+
+#: scripts/historia.gd
+msgid "Sujeto 1, el empleado perfecto de Velaria"
+msgstr "1号受试者，Velaria的完美员工"
+
+#: scripts/historia.gd
+msgid "FICHA DE SUJETO · SOLO PRESIDENCIA"
+msgstr "受试者档案 · 仅限董事长办公室"
+
+#: scripts/historia.gd
+msgid ""
+"Nombre: Johnny Rush. Repartidor de noche, sin familia y con deudas. Se presentó voluntario al primer ensayo del VD-7 por $500.\n"
+"\n"
+"Dosis: cuarenta veces la normal. No se durmió. No se convirtió. Su sangre deshace el VD-7.\n"
+"\n"
+"Después: tres semanas de borrado de memoria. Nuevo trabajo: conserje del número 14, un edificio nuestro, para tenerlo cerca. Revisión médica cada mes.\n"
+"\n"
+"Si recuerda, avisar a Presidencia. Si escapa, recuperarlo vivo. Es lo único que tenemos que funciona."
+msgstr ""
+"姓名：Johnny Rush。夜班送货员，无家人，负债。为了$500自愿参加了VD-7的首次试验。\n"
+"\n"
+"剂量：正常剂量的四十倍。没有睡着。没有变异。他的血液能分解VD-7。\n"
+"\n"
+"之后：三周的记忆清除。新工作：14号楼的清洁工，那是我们的楼，方便就近看管。每月一次体检。\n"
+"\n"
+"如果他想起来了，立即通知董事长办公室。如果他逃跑，务必活捉。这是我们唯一有效的东西。"
+
+#: scripts/historia.gd
+msgid "Encima de la foto, con letra torpe: «PAPÁ»."
+msgstr "照片上方，歪歪扭扭的字迹：“爸爸”。"
+
+#: scripts/historia.gd
 msgid "Canal 8"
 msgstr "8频道"
 
@@ -1667,6 +1867,46 @@ msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea 
 msgstr "最新消息：Velaria的直升机又来了，这次落在购物中心的天台上。它载着一个人起飞，飞往Velaria大厦。Velaria不再寻找他们的清洁工：“他和我们在一起，很安全。”明天，Velaria将在大厦发布“工作的未来”。至于我妹妹，还是没有消息。"
 
 #: scripts/historia.gd
+msgid "Esta noche, el futuro del trabajo"
+msgstr "今晚，工作的未来"
+
+#: scripts/historia.gd
+msgid "Buenas noches. Les hablo desde la puerta de Torre Velaria. Esta noche, Velaria presenta aquí «el futuro del trabajo», en directo para todo el país. Hay focos, alfombra roja y colas de invitados. La presidenta, Clara Velar, promete «una sorpresa que cambiará los lunes para siempre». Del conserje, ni una palabra."
+msgstr "晚上好。我在Velaria大厦门口为您报道。今晚，Velaria将在这里发布“工作的未来”，向全国直播。现场有聚光灯、红地毯，还有排队入场的嘉宾。董事长Clara Velar承诺将带来“一个永远改变周一的惊喜”。关于那位清洁工，只字未提。"
+
+#: scripts/historia.gd
+msgid "La torre cierra «por un simulacro»"
+msgstr "大厦以“演习”为由关闭"
+
+#: scripts/historia.gd
+msgid "La presentación se ha cancelado a última hora. Torre Velaria ha cerrado sus puertas «por un simulacro de incendio», y desde entonces no ha salido nadie. Nuestra fuente nos manda la foto de un libro de visitas de hace once años. Hay un nombre: «J. Rush, voluntario. Planta 40»."
+msgstr "发布会在最后一刻取消。Velaria大厦以“消防演习”为由关闭了大门，此后再没有人出来。我们的线人发来一张十一年前访客登记簿的照片。上面有一个名字：“J. Rush，志愿者。40楼”。"
+
+#: scripts/historia.gd
+msgid "Dormidos en la puerta giratoria"
+msgstr "旋转门里的沉睡者"
+
+#: scripts/historia.gd
+msgid "Esta madrugada, varios empleados de la torre han salido por la puerta giratoria... con los ojos cerrados. Dan vueltas y vueltas y vuelven a entrar. Velaria dice que es su nuevo programa de bienestar: «Descansar sin dejar de trabajar». Nuestra fuente dice que el VD-7 va en el aire acondicionado."
+msgstr "今天凌晨，大厦里有几名员工从旋转门走了出来……闭着眼睛。他们一圈又一圈地转，然后又走回去。Velaria说这是公司新的健康计划：“边工作边休息”。我们的线人说，VD-7就在空调里。"
+
+#: scripts/historia.gd
+msgid "Se filtra un audio de la presidenta"
+msgstr "董事长的录音被泄露"
+
+#: scripts/historia.gd
+msgid "Nos llega un audio de la presidenta de Velaria: «¿Que el Sujeto 1 no obedece? Los empleados tampoco, y los tenemos. Presentadlo igual. Y traedme al conserje: lo necesito entero». Velaria dice que el audio es falso, hecho con un ordenador. No dice quién es el Sujeto 1."
+msgstr "我们收到一段Velaria董事长的录音：“1号受试者不听话？员工也不听话，不照样留着吗。照常发布。再把那个清洁工带来见我：我要完整的。”Velaria称录音是假的，是电脑合成的。但没有说1号受试者是谁。"
+
+#: scripts/historia.gd
+msgid "La torre, a oscuras"
+msgstr "大厦陷入黑暗"
+
+#: scripts/historia.gd
+msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de abajo arriba. Hace unos minutos ha despegado un helicóptero desde el helipuerto, rumbo al norte. Velaria no contesta al teléfono. Y a mí me acaba de llegar un mensaje sin firma: «Soy el conserje. Tengo algo para ti»."
+msgstr "最新消息：Velaria大厦一层一层地陷入黑暗，由下而上。几分钟前，一架直升机从停机坪起飞，朝北飞去。Velaria不接电话。而我刚刚收到一条没有署名的消息：“我是那个清洁工。我有东西给你。”"
+
+#: scripts/historia.gd
 msgid "Número 14. Turno de noche."
 msgstr "14号楼。夜班。"
 
@@ -1737,6 +1977,30 @@ msgstr "Johnny不记得自己去过那里。"
 #: scripts/historia.gd
 msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
 msgstr "四十层的地毯。总得有人来打扫。"
+
+#: scripts/historia.gd
+msgid "El helipuerto está vacío. El helicóptero de Velaria ya es una luz pequeña, rumbo al norte."
+msgstr "停机坪空了。Velaria的直升机已经变成一点小小的灯光，朝北飞去。"
+
+#: scripts/historia.gd
+msgid "En la mano, su ficha. Johnny Rush. Voluntario."
+msgstr "手里拿着他的档案。Johnny Rush。志愿者。"
+
+#: scripts/historia.gd
+msgid "Ahora se acuerda: la luz blanca, el olor del laboratorio, la firma con una X."
+msgstr "现在他想起来了：白色的灯光，实验室的气味，签下的那个X。"
+
+#: scripts/historia.gd
+msgid "Abajo, la ciudad duerme. En cada farmacia, una caja de «Velaria Noche»."
+msgstr "楼下，城市沉睡。每家药店里，都摆着一盒“Velaria安睡”。"
+
+#: scripts/historia.gd
+msgid "Johnny le manda una foto de la hoja a Marta Ruiz."
+msgstr "Johnny把那页纸拍了照，发给Marta Ruiz。"
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo todo."
+msgstr "总得有人来打扫。"
 
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."

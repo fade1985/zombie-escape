@@ -1174,6 +1174,10 @@ msgid "azotea"
 msgstr "Dach"
 
 #: scripts/historia.gd
+msgid "laboratorio"
+msgstr "Labor"
+
+#: scripts/historia.gd
 msgid "Página arrancada"
 msgstr "Ausgerissene Seite"
 
@@ -1584,6 +1588,202 @@ msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
 msgstr "Sie haben mir die gute Dosis versprochen. Geschickt haben sie eine Spritze und diesen Zettel."
 
 #: scripts/historia.gd
+msgid "Dosier VD-7 · Torre Velaria"
+msgstr "Akte VD-7 · Velaria-Turm"
+
+#: scripts/historia.gd
+msgid "En cada planta hay un cuerpo con una página, y la última la lleva el Sujeto 1. Lo que encuentres queda aquí para siempre."
+msgstr "In jedem Stock liegt eine Leiche mit einer Seite, und die letzte trägt Proband 1. Was du findest, bleibt für immer hier."
+
+#: scripts/historia.gd
+msgid "Dra. Nuria Castell, médica de guardia de Velaria"
+msgstr "Dr. Nuria Castell, diensthabende Ärztin bei Velaria"
+
+#: scripts/historia.gd
+msgid "LIBRO DE VISITAS · HACE 11 AÑOS"
+msgstr "BESUCHERBUCH · VOR 11 JAHREN"
+
+#: scripts/historia.gd
+msgid "Visitas del turno de noche"
+msgstr "Besuche der Nachtschicht"
+
+#: scripts/historia.gd
+msgid ""
+"14 de marzo. 23:40. Dr. H. Salas. Planta 40.\n"
+"\n"
+"14 de marzo. 23:52. J. Rush, voluntario. Planta 40. Le acompaña seguridad. Firma con buena letra.\n"
+"\n"
+"15 de marzo. J. Rush no firma la salida.\n"
+"\n"
+"(Las tres semanas siguientes, arrancadas.)\n"
+"\n"
+"4 de abril. 06:10. J. Rush sale. Firma con una X. Le acompaña seguridad. Destino: «número 14, conserje»."
+msgstr ""
+"14. März. 23:40. Dr. H. Salas. 40. Stock.\n"
+"\n"
+"14. März. 23:52. J. Rush, Freiwilliger. 40. Stock. Begleitet vom Sicherheitsdienst. Unterschreibt mit schöner Handschrift.\n"
+"\n"
+"15. März. J. Rush trägt sich nicht aus.\n"
+"\n"
+"(Die folgenden drei Wochen: herausgerissen.)\n"
+"\n"
+"4. April. 06:10. J. Rush geht. Unterschreibt mit einem X. Begleitet vom Sicherheitsdienst. Ziel: \"Nummer 14, Hausmeister\"."
+
+#: scripts/historia.gd
+msgid "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."
+msgstr "Der Name kommt mir bekannt vor. Das ist der Hausmeister, den sie in den Nachrichten suchen. Er war schon mal hier."
+
+#: scripts/historia.gd
+msgid "Dra. Marina Ortega, médica de empresa"
+msgstr "Dr. Marina Ortega, Betriebsärztin"
+
+#: scripts/historia.gd
+msgid "CIRCULAR DE RECURSOS HUMANOS"
+msgstr "RUNDSCHREIBEN DER PERSONALABTEILUNG"
+
+#: scripts/historia.gd
+msgid "Programa Bienestar"
+msgstr "Wohlfühlprogramm"
+
+#: scripts/historia.gd
+msgid ""
+"Para toda la plantilla de Torre Velaria: desde el lunes, la torre estrena aire acondicionado. Más fresco, más descanso, mejor ambiente. Gracias por vuestro esfuerzo.\n"
+"\n"
+"ANEXO, SOLO PARA DIRECCIÓN: el aire lleva VD-7 en dosis muy baja, en las cuarenta plantas. Empleados más tranquilos, más horas, ninguna queja.\n"
+"\n"
+"Si alguien se duerme en su mesa, no se le despierta. Recursos Humanos lo recoge por la noche y lo sube a la planta 40."
+msgstr ""
+"An die gesamte Belegschaft des Velaria-Turms: Ab Montag hat der Turm eine Klimaanlage. Kühler, erholsamer, bessere Stimmung. Danke für euren Einsatz.\n"
+"\n"
+"ANHANG, NUR FÜR DIE GESCHÄFTSLEITUNG: Die Luft enthält VD-7 in sehr niedriger Dosis, in allen vierzig Stockwerken. Ruhigere Mitarbeiter, mehr Stunden, keine Beschwerden.\n"
+"\n"
+"Wer an seinem Schreibtisch einschläft, wird nicht geweckt. Die Personalabteilung holt ihn nachts ab und bringt ihn in den 40. Stock."
+
+#: scripts/historia.gd
+msgid "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."
+msgstr "Diesen Monat habe ich schon vierzig Krankschreibungen \"wegen Erschöpfung\" unterschrieben. Ich setze eine Maske auf."
+
+#: scripts/historia.gd
+msgid "Dr. Pablo Ferrer, asesor científico de la presentación"
+msgstr "Dr. Pablo Ferrer, wissenschaftlicher Berater der Präsentation"
+
+#: scripts/historia.gd
+msgid "GUION · NO DIFUNDIR"
+msgstr "DREHBUCH · NICHT WEITERGEBEN"
+
+#: scripts/historia.gd
+msgid "El futuro del trabajo"
+msgstr "Die Zukunft der Arbeit"
+
+#: scripts/historia.gd
+msgid ""
+"LUZ. MÚSICA. Sale el presentador.\n"
+"\n"
+"PRESENTADOR: ¿Cansados? ¿Otra vez lunes? Eso se acabó.\n"
+"\n"
+"PRESENTADOR: Velaria presenta el Turno Infinito: el VD-7 en el aire de cada oficina, cada fábrica y cada hospital del país.\n"
+"\n"
+"Se abre el telón. Sale el Sujeto 1.\n"
+"\n"
+"PRESENTADOR: Les presento al empleado perfecto. No duerme. No se cansa. No pide vacaciones.\n"
+"\n"
+"APLAUSOS (grabados: el público ya no aplaude)."
+msgstr ""
+"LICHT. MUSIK. Der Moderator tritt auf.\n"
+"\n"
+"MODERATOR: Müde? Schon wieder Montag? Das ist vorbei.\n"
+"\n"
+"MODERATOR: Velaria präsentiert die Endlosschicht: VD-7 in der Luft jedes Büros, jeder Fabrik und jedes Krankenhauses im Land.\n"
+"\n"
+"Der Vorhang öffnet sich. Proband 1 tritt auf.\n"
+"\n"
+"MODERATOR: Ich präsentiere Ihnen den perfekten Mitarbeiter. Er schläft nicht. Er wird nicht müde. Er nimmt keinen Urlaub.\n"
+"\n"
+"APPLAUS (vom Band: Das Publikum klatscht nicht mehr)."
+
+#: scripts/historia.gd
+msgid "Me piden que escriba que es seguro. Lo he visto en el laboratorio."
+msgstr "Ich soll schreiben, dass es sicher ist. Ich habe es im Labor gesehen."
+
+#: scripts/historia.gd
+msgid "Dr. Andrés Lin, investigador del laboratorio"
+msgstr "Dr. Andrés Lin, Forscher im Labor"
+
+#: scripts/historia.gd
+msgid "INFORME · LABORATORIO 40"
+msgstr "BERICHT · LABOR 40"
+
+#: scripts/historia.gd
+msgid "Sujeto 1"
+msgstr "Proband 1"
+
+#: scripts/historia.gd
+msgid ""
+"Origen: la sangre del Sujeto 0, sacada una vez al mes durante once años, en sus «revisiones médicas de empresa».\n"
+"\n"
+"Resultado: dos metros y medio. No duerme. No se cansa. No se convierte.\n"
+"\n"
+"Imita lo que ve. Le pusimos vídeos del Sujeto 0 trabajando y ahora friega el suelo del laboratorio.\n"
+"\n"
+"Problema: no obedece. Ha roto dos cápsulas y a tres técnicos.\n"
+"\n"
+"La presidenta dice que da igual: se presenta el viernes."
+msgstr ""
+"Herkunft: das Blut von Proband 0, einmal im Monat über elf Jahre entnommen, bei seinen \"betriebsärztlichen Untersuchungen\".\n"
+"\n"
+"Ergebnis: zweieinhalb Meter. Schläft nicht. Wird nicht müde. Verwandelt sich nicht.\n"
+"\n"
+"Er ahmt nach, was er sieht. Wir haben ihm Videos von Proband 0 bei der Arbeit gezeigt, und jetzt wischt er den Boden im Labor.\n"
+"\n"
+"Problem: Er gehorcht nicht. Er hat zwei Kapseln zerbrochen und drei Techniker.\n"
+"\n"
+"Die Präsidentin sagt, das sei egal: Die Präsentation ist am Freitag."
+
+#: scripts/historia.gd
+msgid "Ayer me miró y dijo «turno de noche». Como el conserje."
+msgstr "Gestern sah er mich an und sagte \"Nachtschicht\". Wie der Hausmeister."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"Diese Seite fehlt. Proband 1 trägt sie, ganz oben, im Labor im 40. Stock.\n"
+"\n"
+"Du wirst sie ihm abnehmen müssen."
+
+#: scripts/historia.gd
+msgid "Sujeto 1, el empleado perfecto de Velaria"
+msgstr "Proband 1, der perfekte Mitarbeiter von Velaria"
+
+#: scripts/historia.gd
+msgid "FICHA DE SUJETO · SOLO PRESIDENCIA"
+msgstr "PROBANDENAKTE · NUR PRÄSIDIUM"
+
+#: scripts/historia.gd
+msgid ""
+"Nombre: Johnny Rush. Repartidor de noche, sin familia y con deudas. Se presentó voluntario al primer ensayo del VD-7 por $500.\n"
+"\n"
+"Dosis: cuarenta veces la normal. No se durmió. No se convirtió. Su sangre deshace el VD-7.\n"
+"\n"
+"Después: tres semanas de borrado de memoria. Nuevo trabajo: conserje del número 14, un edificio nuestro, para tenerlo cerca. Revisión médica cada mes.\n"
+"\n"
+"Si recuerda, avisar a Presidencia. Si escapa, recuperarlo vivo. Es lo único que tenemos que funciona."
+msgstr ""
+"Name: Johnny Rush. Nachtkurier, ohne Familie und mit Schulden. Meldete sich für $500 freiwillig zum ersten VD-7-Versuch.\n"
+"\n"
+"Dosis: das Vierzigfache der normalen. Er ist nicht eingeschlafen. Er hat sich nicht verwandelt. Sein Blut löst das VD-7 auf.\n"
+"\n"
+"Danach: drei Wochen Gedächtnislöschung. Neuer Job: Hausmeister von Nummer 14, einem Gebäude von uns, damit wir ihn in der Nähe haben. Monatliche ärztliche Untersuchung.\n"
+"\n"
+"Wenn er sich erinnert, das Präsidium informieren. Wenn er flieht, lebend zurückholen. Er ist das Einzige, was bei uns funktioniert."
+
+#: scripts/historia.gd
+msgid "Encima de la foto, con letra torpe: «PAPÁ»."
+msgstr "Über dem Foto, in ungelenker Schrift: \"PAPA\"."
+
+#: scripts/historia.gd
 msgid "Canal 8"
 msgstr "Kanal 8"
 
@@ -1668,6 +1868,46 @@ msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea 
 msgstr "Eilmeldung: Der Hubschrauber von Velaria ist zurück, diesmal auf dem Dach des Einkaufszentrums. Er ist mit jemandem an Bord gestartet, Kurs Velaria-Turm. Velaria sucht seinen Hausmeister nicht mehr: \"Er ist bei uns, in Sicherheit.\" Morgen stellt das Unternehmen in seinem Turm \"die Zukunft der Arbeit\" vor. Von meiner Schwester: nichts."
 
 #: scripts/historia.gd
+msgid "Esta noche, el futuro del trabajo"
+msgstr "Heute Nacht: die Zukunft der Arbeit"
+
+#: scripts/historia.gd
+msgid "Buenas noches. Les hablo desde la puerta de Torre Velaria. Esta noche, Velaria presenta aquí «el futuro del trabajo», en directo para todo el país. Hay focos, alfombra roja y colas de invitados. La presidenta, Clara Velar, promete «una sorpresa que cambiará los lunes para siempre». Del conserje, ni una palabra."
+msgstr "Guten Abend. Ich melde mich vom Eingang des Velaria-Turms. Heute Nacht präsentiert Velaria hier \"die Zukunft der Arbeit\", live für das ganze Land. Es gibt Scheinwerfer, roten Teppich und Schlangen von Gästen. Die Präsidentin, Clara Velar, verspricht \"eine Überraschung, die die Montage für immer verändern wird\". Vom Hausmeister: kein Wort."
+
+#: scripts/historia.gd
+msgid "La torre cierra «por un simulacro»"
+msgstr "Der Turm schließt \"wegen einer Übung\""
+
+#: scripts/historia.gd
+msgid "La presentación se ha cancelado a última hora. Torre Velaria ha cerrado sus puertas «por un simulacro de incendio», y desde entonces no ha salido nadie. Nuestra fuente nos manda la foto de un libro de visitas de hace once años. Hay un nombre: «J. Rush, voluntario. Planta 40»."
+msgstr "Die Präsentation wurde in letzter Minute abgesagt. Der Velaria-Turm hat \"wegen einer Brandschutzübung\" seine Türen geschlossen, und seitdem ist niemand herausgekommen. Unsere Quelle schickt uns das Foto eines Besucherbuchs von vor elf Jahren. Darin steht ein Name: \"J. Rush, Freiwilliger. 40. Stock\"."
+
+#: scripts/historia.gd
+msgid "Dormidos en la puerta giratoria"
+msgstr "Schlafend in der Drehtür"
+
+#: scripts/historia.gd
+msgid "Esta madrugada, varios empleados de la torre han salido por la puerta giratoria... con los ojos cerrados. Dan vueltas y vueltas y vuelven a entrar. Velaria dice que es su nuevo programa de bienestar: «Descansar sin dejar de trabajar». Nuestra fuente dice que el VD-7 va en el aire acondicionado."
+msgstr "Heute früh sind mehrere Angestellte des Turms durch die Drehtür gekommen... mit geschlossenen Augen. Sie drehen sich und drehen sich und gehen wieder hinein. Velaria sagt, das sei das neue Wohlfühlprogramm: \"Ausruhen, ohne aufzuhören zu arbeiten\". Unsere Quelle sagt, das VD-7 stecke in der Klimaanlage."
+
+#: scripts/historia.gd
+msgid "Se filtra un audio de la presidenta"
+msgstr "Audio der Präsidentin gelangt an die Öffentlichkeit"
+
+#: scripts/historia.gd
+msgid "Nos llega un audio de la presidenta de Velaria: «¿Que el Sujeto 1 no obedece? Los empleados tampoco, y los tenemos. Presentadlo igual. Y traedme al conserje: lo necesito entero». Velaria dice que el audio es falso, hecho con un ordenador. No dice quién es el Sujeto 1."
+msgstr "Uns erreicht ein Audio der Präsidentin von Velaria: \"Proband 1 gehorcht nicht? Die Mitarbeiter auch nicht, und die haben wir trotzdem. Präsentiert ihn trotzdem. Und bringt mir den Hausmeister: Ich brauche ihn ganz.\" Velaria sagt, das Audio sei gefälscht, am Computer gemacht. Wer Proband 1 ist, sagt es nicht."
+
+#: scripts/historia.gd
+msgid "La torre, a oscuras"
+msgstr "Der Turm im Dunkeln"
+
+#: scripts/historia.gd
+msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de abajo arriba. Hace unos minutos ha despegado un helicóptero desde el helipuerto, rumbo al norte. Velaria no contesta al teléfono. Y a mí me acaba de llegar un mensaje sin firma: «Soy el conserje. Tengo algo para ti»."
+msgstr "Eilmeldung: Der Velaria-Turm ist im Dunkeln versunken, Stock für Stock, von unten nach oben. Vor wenigen Minuten ist vom Hubschrauberlandeplatz ein Hubschrauber abgehoben, Kurs Norden. Velaria geht nicht ans Telefon. Und mir ist gerade eine anonyme Nachricht zugegangen: \"Ich bin der Hausmeister. Ich habe etwas für dich.\""
+
+#: scripts/historia.gd
 msgid "Número 14. Turno de noche."
 msgstr "Nummer 14. Nachtschicht."
 
@@ -1738,6 +1978,30 @@ msgstr "Johnny kann sich nicht erinnern, je dort gewesen zu sein."
 #: scripts/historia.gd
 msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
 msgstr "Vierzig Stockwerke Teppich. Irgendwer muss sie sauber machen."
+
+#: scripts/historia.gd
+msgid "El helipuerto está vacío. El helicóptero de Velaria ya es una luz pequeña, rumbo al norte."
+msgstr "Der Hubschrauberlandeplatz ist leer. Der Hubschrauber von Velaria ist nur noch ein kleines Licht, Kurs Norden."
+
+#: scripts/historia.gd
+msgid "En la mano, su ficha. Johnny Rush. Voluntario."
+msgstr "In der Hand seine Akte. Johnny Rush. Freiwilliger."
+
+#: scripts/historia.gd
+msgid "Ahora se acuerda: la luz blanca, el olor del laboratorio, la firma con una X."
+msgstr "Jetzt erinnert er sich: das weiße Licht, der Geruch des Labors, die Unterschrift mit einem X."
+
+#: scripts/historia.gd
+msgid "Abajo, la ciudad duerme. En cada farmacia, una caja de «Velaria Noche»."
+msgstr "Unten schläft die Stadt. In jeder Apotheke eine Packung \"Velaria Nacht\"."
+
+#: scripts/historia.gd
+msgid "Johnny le manda una foto de la hoja a Marta Ruiz."
+msgstr "Johnny schickt Marta Ruiz ein Foto des Blatts."
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo todo."
+msgstr "Irgendwer muss das alles sauber machen."
 
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."

@@ -4255,7 +4255,28 @@
    "elegido": "4 (de 4)",
    "coste": "10 generaciones"
   },
-  "coste": "34 generaciones"
+  "calle-torre": {
+   "texto": "night, seen from a TV news camera in front of a tall modern glass corporate skyscraper. On the right half: the base of a very tall dark glass office tower with a few cold white lit windows going up out of frame, a revolving glass entrance door, a red carpet and stage spotlights pointing at the sky, a police car with flashing red and blue lights, yellow and black cordon tape and metal barriers. Wet plaza, dark blue night sky. The left part of the image is plain dark plaza and sky. Pixel art scene, dark outlines, muted colors, no text, no letters, no people",
+   "parametros": {
+    "tool": "create_image_pro",
+    "width": 144,
+    "height": 82,
+    "no_background": false,
+    "style_image": "assets/sprites/helicoptero.png",
+    "style_copy": [
+     "outline",
+     "shading",
+     "detail"
+    ],
+    "seed": 1
+   },
+   "fecha": "2026-11-05",
+   "nota": "La calle delante de Torre Velaria, para las noticias de la torre (sitio torre de Historia.NOTICIAS; parte 8 del plan del tercer edificio). Elegido el 4: los focos cruzados de la presentacion, la puerta giratoria y la policia.",
+   "job_id": "a1b0fc2d-58ba-44bc-8e7d-79a2eb108343",
+   "elegido": "4 (de 4)",
+   "coste": "10 generaciones"
+  },
+  "coste": "44 generaciones"
  },
  "puerta-salida": {
   "kind": "a mano",

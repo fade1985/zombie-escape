@@ -13,7 +13,7 @@ const LETRAS_POR_SEGUNDO := 30.0
 const MUEBLE := preload("res://assets/ui/tele/mueble.png")
 # La reportera: 4 dibujos en fila (la boca cerrada, entreabierta y abierta, y los ojos cerrados)
 const REPORTERA := preload("res://assets/ui/tele/reportera.png")
-const CALLES := {"14": preload("res://assets/ui/tele/calle-14.png"),
+const CALLES := {"14": preload("res://assets/ui/tele/calle-14.png"), "torre": preload("res://assets/ui/tele/calle-torre.png"),
 	"centro": preload("res://assets/ui/tele/calle-centro.png")}
 const CONTORNO := Color("#1d1b2c")
 const ROJO := Color("#c0392b")

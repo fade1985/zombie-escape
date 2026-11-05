@@ -1002,7 +1002,7 @@ func programa_dosier(c: VBoxContainer) -> void:
 					h.queue_free()
 				lado.add_child(Historia.hoja(p, 410.0) if tiene else Historia.hoja_arrancada(edificio, p, 410.0))
 			enlazar(b, (Idioma.t("%s, página %d: %s. La llevaba %s.") % [nombre, i + 1, Historia.titulo_de(p), Historia.cuerpo_de(p)]) if tiene
-				else Idioma.t("%s, página %d: aún no la has encontrado (%s).") % [nombre, i + 1, Historia.donde(p)], ver)
+				else Idioma.t("%s, página %d: aún no la has encontrado (%s).") % [nombre, i + 1, Historia.donde(p, edificio)], ver)
 			b.focus_entered.connect(ver)
 			b.mouse_entered.connect(ver)
 	info.text = Idioma.t("Pasa por las páginas para leerlas.")

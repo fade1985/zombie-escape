@@ -478,7 +478,19 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento A (americana azul marino, pañuelo rosa,
        auriculares), andar, «pasar la tarjeta» y caída.
      - Prueba: `--captura --edificio torre --recepcionista`.
-8. **La historia** (Sonnet): dosier, noticias y relato final.
+8. **La historia** (Sonnet): dosier, noticias y relato final. ✅ **Hecha el 5 nov** (falta el visto bueno del dueño). Lo que ha
+   quedado (`historia.gd`, `"torre"`; ids `tv_*` y `n_*`):
+   - El final, **con gancho** (lo eligió el dueño): la presidenta (ya tiene nombre: **Clara Velar**) escapa en el
+     helicóptero rumbo al norte; Johnny recuerda quién es y le manda su ficha a Marta.
+   - Los muertos llevan bata, como siempre desde la M86 (en vez de la recepcionista y el guionista del plan, médicos y
+     científicos de Velaria): vestíbulo, la Dra. Nuria Castell (el libro de visitas de hace once años); planta 10, la
+     Dra. Marina Ortega (la circular «Programa Bienestar»); planta 20, el Dr. Pablo Ferrer (el guion de «El futuro del
+     trabajo»); planta 30, el Dr. Andrés Lin (el informe del Sujeto 1). La quinta, la ficha del Sujeto 0, la suelta el
+     Sujeto 1 al caer.
+   - Cinco noticias delante de la torre (calle nueva de PixelLab, `calle-torre.png`): la presentación (al completar el
+     centro), el simulacro (página 1), los dormidos de la puerta giratoria (página 2), el audio de la presidenta
+     (página 4) y la torre a oscuras (al completar la torre).
+   - Prueba: `--captura --historia-torre`.
 9. **Las skins** (Sonnet): las cinco cabezas y sus ventajas.
 10. **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las
     traducciones de todo a los 7 idiomas; la prueba de cada cosa (`--captura --edificio torre ...`).
