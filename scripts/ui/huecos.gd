@@ -95,7 +95,7 @@ func tarjeta(n: int) -> Button:
 		if not foto.is_empty():
 			var azotea: bool = Edificios.datos(foto.edificio).get("azotea", false) and foto.planta == Planta.PLANTAS
 			lineas.append([Idioma.t("A medias: %s") % ("%s · %s" % [Idioma.t(Edificios.datos(foto.edificio).nombre),
-				Planta.nombre_de({"num": foto.planta, "azotea": azotea})]), ""])
+				Planta.nombre_de({"num": foto.planta, "azotea": azotea, "edificio": foto.edificio})]), ""])
 	else:
 		lineas.append([Idioma.t("Vacía"), ""])
 		lineas.append([Idioma.t("Empieza de cero"), "Sub"])

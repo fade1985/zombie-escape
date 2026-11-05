@@ -715,6 +715,22 @@ msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de ac
 msgstr "зачисти магазины и выследи охранника: у него ключ-карта"
 
 #: scripts/edificios.gd
+msgid "Torre Velaria"
+msgstr "Башня Velaria"
+
+#: scripts/edificios.gd
+msgid "Oficinas de moqueta, empleados que no duermen y un laboratorio en la planta 40"
+msgstr "Офисы с ковролином, сотрудники, которые не спят, и лаборатория на 40-м этаже"
+
+#: scripts/edificios.gd
+msgid "el Sujeto 1"
+msgstr "Субъект 1"
+
+#: scripts/edificios.gd
+msgid "limpia los departamentos y busca las tres cifras del código en sus ordenadores"
+msgstr "зачисти отделы и найди три цифры кода на их компьютерах"
+
+#: scripts/edificios.gd
 msgid "el Glotón"
 msgstr "Обжора"
 
@@ -773,6 +789,54 @@ msgstr "Магазин игрушек"
 #: scripts/edificios.gd
 msgid "la Juguetería"
 msgstr "магазин игрушек"
+
+#: scripts/edificios.gd
+msgid "la directora de Recursos Humanos"
+msgstr "директор по персоналу"
+
+#: scripts/edificios.gd
+msgid "Despacho de Recursos Humanos"
+msgstr "Кабинет отдела кадров"
+
+#: scripts/edificios.gd
+msgid "el Despacho de Recursos Humanos"
+msgstr "кабинет отдела кадров"
+
+#: scripts/edificios.gd
+msgid "el informático"
+msgstr "айтишник"
+
+#: scripts/edificios.gd
+msgid "Centro de datos"
+msgstr "Дата-центр"
+
+#: scripts/edificios.gd
+msgid "el Centro de datos"
+msgstr "дата-центр"
+
+#: scripts/edificios.gd
+msgid "el presentador"
+msgstr "ведущий"
+
+#: scripts/edificios.gd
+msgid "Plató de presentaciones"
+msgstr "Сцена для презентаций"
+
+#: scripts/edificios.gd
+msgid "el Plató de presentaciones"
+msgstr "сцена для презентаций"
+
+#: scripts/edificios.gd
+msgid "el becario"
+msgstr "стажёр"
+
+#: scripts/edificios.gd
+msgid "Sala de fotocopias"
+msgstr "Копировальная"
+
+#: scripts/edificios.gd
+msgid "la Sala de fotocopias"
+msgstr "копировальная"
 
 #: scripts/escolta.gd
 msgid "Vámonos. Despacio, por favor"
@@ -2064,6 +2128,14 @@ msgid "%dª planta"
 msgstr "Этаж %d"
 
 #: scripts/mapa/planta.gd
+msgid "Vestíbulo"
+msgstr "Вестибюль"
+
+#: scripts/mapa/planta.gd
+msgid "Planta %d"
+msgstr "Этаж %d"
+
+#: scripts/mapa/planta.gd
 msgid "Azotea"
 msgstr "Крыша"
 
@@ -2079,7 +2151,7 @@ msgstr "%d%s"
 msgid "Vestuario"
 msgstr "Раздевалка"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
 msgid "Despacho"
 msgstr "Кабинет"
 
@@ -2104,6 +2176,10 @@ msgid "4ª planta"
 msgstr "Этаж 5"
 
 #: scripts/mapa/planta.gd
+msgid "Oficina destrozada"
+msgstr "Разгромленный офис"
+
+#: scripts/mapa/planta.gd
 msgid "Gimnasio"
 msgstr "Спортзал"
 
@@ -2118,6 +2194,10 @@ msgstr "Квартира в огне"
 #: scripts/mapa/planta.gd
 msgid "Cerrada: hace falta una tarjeta de acceso"
 msgstr "Заперто: нужна ключ-карта"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta el código de tres cifras"
+msgstr "Заперто: нужен трёхзначный код"
 
 #: scripts/mapa/planta.gd
 msgid "Cerrada con llave"
@@ -2200,6 +2280,54 @@ msgid "JOYAS"
 msgstr "ЗОЛОТО"
 
 #: scripts/mapa/tienda.gd
+msgid "Atención al cliente"
+msgstr "Служба поддержки"
+
+#: scripts/mapa/tienda.gd
+msgid "CLIENTES"
+msgstr "ПОДДЕРЖКА"
+
+#: scripts/mapa/tienda.gd
+msgid "Informática"
+msgstr "ИТ-отдел"
+
+#: scripts/mapa/tienda.gd
+msgid "INFORMATICA"
+msgstr "ИТ"
+
+#: scripts/mapa/tienda.gd
+msgid "Recursos Humanos"
+msgstr "Отдел кадров"
+
+#: scripts/mapa/tienda.gd
+msgid "RR.HH."
+msgstr "КАДРЫ"
+
+#: scripts/mapa/tienda.gd
+msgid "Marketing"
+msgstr "Маркетинг"
+
+#: scripts/mapa/tienda.gd
+msgid "MARKETING"
+msgstr "МАРКЕТИНГ"
+
+#: scripts/mapa/tienda.gd
+msgid "Seguridad corporativa"
+msgstr "Служба безопасности"
+
+#: scripts/mapa/tienda.gd
+msgid "SEGURIDAD"
+msgstr "ОХРАНА"
+
+#: scripts/mapa/tienda.gd
+msgid "Dirección"
+msgstr "Дирекция"
+
+#: scripts/mapa/tienda.gd
+msgid "DIRECCION"
+msgstr "ДИРЕКЦИЯ"
+
+#: scripts/mapa/tienda.gd
 msgid "Almacén"
 msgstr "Склад"
 
@@ -2230,6 +2358,42 @@ msgstr "Кладовая"
 #: scripts/mapa/tienda.gd
 msgid "Cámara acorazada"
 msgstr "Хранилище"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de impresoras"
+msgstr "Принтерная"
+
+#: scripts/mapa/tienda.gd
+msgid "Office"
+msgstr "Кухня"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de servidores"
+msgstr "Серверная"
+
+#: scripts/mapa/tienda.gd
+msgid "Archivo"
+msgstr "Архив"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de entrevistas"
+msgstr "Переговорная"
+
+#: scripts/mapa/tienda.gd
+msgid "Estudio de grabación"
+msgstr "Студия звукозаписи"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de cámaras"
+msgstr "Комната видеонаблюдения"
+
+#: scripts/mapa/tienda.gd
+msgid "Armero"
+msgstr "Оружейная"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de juntas"
+msgstr "Зал совещаний"
 
 #: scripts/mapa/tienda.gd
 msgid "Tienda destrozada"
@@ -2428,6 +2592,10 @@ msgid "Abres con la tarjeta de acceso"
 msgstr "Открываешь ключ-картой"
 
 #: scripts/partida.gd
+msgid "Tecleas el código: la puerta se abre"
+msgstr "Ты набираешь код: дверь открывается"
+
+#: scripts/partida.gd
 msgid "Abres con la llave"
 msgstr "Открываешь ключом"
 
@@ -2458,6 +2626,18 @@ msgstr "Чисто! Дверь открылась"
 #: scripts/partida.gd
 msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
 msgstr "Ограда закрылась! Вниз не уйти, пока не одолеешь: %s"
+
+#: scripts/partida.gd
+msgid "Cifra %d de %d. ¡Control de productividad: despiertan todos!"
+msgstr "Цифра %d из %d. Проверка продуктивности: все просыпаются!"
+
+#: scripts/partida.gd
+msgid "la sala de %s"
+msgstr "комната (%s)"
+
+#: scripts/partida.gd
+msgid "Ya tienes el código: abre %s"
+msgstr "Код у тебя: он открывает %s"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -4882,6 +5062,10 @@ msgstr "Пройди его, чтобы открыть Тревогу 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (из %d)"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y el laboratorio"
+msgstr "Этажей: %d и лаборатория"
 
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"

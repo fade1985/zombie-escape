@@ -714,6 +714,22 @@ msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de ac
 msgstr "nettoie les boutiques et traque le garde de la sécurité : il porte le badge d'accès"
 
 #: scripts/edificios.gd
+msgid "Torre Velaria"
+msgstr "Tour Velaria"
+
+#: scripts/edificios.gd
+msgid "Oficinas de moqueta, empleados que no duermen y un laboratorio en la planta 40"
+msgstr "Bureaux en moquette, employés qui ne dorment jamais et un labo au 40e étage"
+
+#: scripts/edificios.gd
+msgid "el Sujeto 1"
+msgstr "le Sujet 1"
+
+#: scripts/edificios.gd
+msgid "limpia los departamentos y busca las tres cifras del código en sus ordenadores"
+msgstr "nettoie les services et trouve les trois chiffres du code sur leurs ordinateurs"
+
+#: scripts/edificios.gd
 msgid "el Glotón"
 msgstr "le Glouton"
 
@@ -772,6 +788,54 @@ msgstr "Magasin de jouets"
 #: scripts/edificios.gd
 msgid "la Juguetería"
 msgstr "le Magasin de jouets"
+
+#: scripts/edificios.gd
+msgid "la directora de Recursos Humanos"
+msgstr "la DRH"
+
+#: scripts/edificios.gd
+msgid "Despacho de Recursos Humanos"
+msgstr "Bureau de la DRH"
+
+#: scripts/edificios.gd
+msgid "el Despacho de Recursos Humanos"
+msgstr "le Bureau de la DRH"
+
+#: scripts/edificios.gd
+msgid "el informático"
+msgstr "l'informaticien"
+
+#: scripts/edificios.gd
+msgid "Centro de datos"
+msgstr "Centre de données"
+
+#: scripts/edificios.gd
+msgid "el Centro de datos"
+msgstr "le Centre de données"
+
+#: scripts/edificios.gd
+msgid "el presentador"
+msgstr "le présentateur"
+
+#: scripts/edificios.gd
+msgid "Plató de presentaciones"
+msgstr "Scène des présentations"
+
+#: scripts/edificios.gd
+msgid "el Plató de presentaciones"
+msgstr "la Scène des présentations"
+
+#: scripts/edificios.gd
+msgid "el becario"
+msgstr "le stagiaire"
+
+#: scripts/edificios.gd
+msgid "Sala de fotocopias"
+msgstr "Salle de photocopie"
+
+#: scripts/edificios.gd
+msgid "la Sala de fotocopias"
+msgstr "la Salle de photocopie"
 
 #: scripts/escolta.gd
 msgid "Vámonos. Despacio, por favor"
@@ -2062,6 +2126,14 @@ msgid "%dª planta"
 msgstr "Étage %d"
 
 #: scripts/mapa/planta.gd
+msgid "Vestíbulo"
+msgstr "Hall"
+
+#: scripts/mapa/planta.gd
+msgid "Planta %d"
+msgstr "Étage %d"
+
+#: scripts/mapa/planta.gd
 msgid "Azotea"
 msgstr "Toit"
 
@@ -2077,7 +2149,7 @@ msgstr "%d%s"
 msgid "Vestuario"
 msgstr "Vestiaire"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
 msgid "Despacho"
 msgstr "Bureau"
 
@@ -2102,6 +2174,10 @@ msgid "4ª planta"
 msgstr "4e étage"
 
 #: scripts/mapa/planta.gd
+msgid "Oficina destrozada"
+msgstr "Bureau saccagé"
+
+#: scripts/mapa/planta.gd
 msgid "Gimnasio"
 msgstr "Salle de sport"
 
@@ -2116,6 +2192,10 @@ msgstr "Appartement en feu"
 #: scripts/mapa/planta.gd
 msgid "Cerrada: hace falta una tarjeta de acceso"
 msgstr "Fermée : il faut un badge d'accès"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta el código de tres cifras"
+msgstr "Fermée : il faut le code à trois chiffres"
 
 #: scripts/mapa/planta.gd
 msgid "Cerrada con llave"
@@ -2198,6 +2278,54 @@ msgid "JOYAS"
 msgstr "BIJOUX"
 
 #: scripts/mapa/tienda.gd
+msgid "Atención al cliente"
+msgstr "Service client"
+
+#: scripts/mapa/tienda.gd
+msgid "CLIENTES"
+msgstr "CLIENTS"
+
+#: scripts/mapa/tienda.gd
+msgid "Informática"
+msgstr "Informatique"
+
+#: scripts/mapa/tienda.gd
+msgid "INFORMATICA"
+msgstr "INFORMATIQUE"
+
+#: scripts/mapa/tienda.gd
+msgid "Recursos Humanos"
+msgstr "Ressources humaines"
+
+#: scripts/mapa/tienda.gd
+msgid "RR.HH."
+msgstr "RH"
+
+#: scripts/mapa/tienda.gd
+msgid "Marketing"
+msgstr "Marketing"
+
+#: scripts/mapa/tienda.gd
+msgid "MARKETING"
+msgstr "MARKETING"
+
+#: scripts/mapa/tienda.gd
+msgid "Seguridad corporativa"
+msgstr "Sécurité"
+
+#: scripts/mapa/tienda.gd
+msgid "SEGURIDAD"
+msgstr "SÉCURITÉ"
+
+#: scripts/mapa/tienda.gd
+msgid "Dirección"
+msgstr "Direction"
+
+#: scripts/mapa/tienda.gd
+msgid "DIRECCION"
+msgstr "DIRECTION"
+
+#: scripts/mapa/tienda.gd
 msgid "Almacén"
 msgstr "Réserve"
 
@@ -2228,6 +2356,42 @@ msgstr "Arrière-boutique"
 #: scripts/mapa/tienda.gd
 msgid "Cámara acorazada"
 msgstr "Salle forte"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de impresoras"
+msgstr "Salle des imprimantes"
+
+#: scripts/mapa/tienda.gd
+msgid "Office"
+msgstr "Coin café"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de servidores"
+msgstr "Salle des serveurs"
+
+#: scripts/mapa/tienda.gd
+msgid "Archivo"
+msgstr "Archives"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de entrevistas"
+msgstr "Salle d'entretien"
+
+#: scripts/mapa/tienda.gd
+msgid "Estudio de grabación"
+msgstr "Studio d'enregistrement"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de cámaras"
+msgstr "Salle des caméras"
+
+#: scripts/mapa/tienda.gd
+msgid "Armero"
+msgstr "Armurerie"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de juntas"
+msgstr "Salle du conseil"
 
 #: scripts/mapa/tienda.gd
 msgid "Tienda destrozada"
@@ -2426,6 +2590,10 @@ msgid "Abres con la tarjeta de acceso"
 msgstr "Tu ouvres avec le badge d'accès"
 
 #: scripts/partida.gd
+msgid "Tecleas el código: la puerta se abre"
+msgstr "Tu tapes le code : la porte s'ouvre"
+
+#: scripts/partida.gd
 msgid "Abres con la llave"
 msgstr "Tu ouvres avec la clé"
 
@@ -2456,6 +2624,18 @@ msgstr "Zone nettoyée ! La porte s'est ouverte"
 #: scripts/partida.gd
 msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
 msgstr "La grille s'est fermée ! Pas moyen de redescendre avant d'en finir avec %s"
+
+#: scripts/partida.gd
+msgid "Cifra %d de %d. ¡Control de productividad: despiertan todos!"
+msgstr "Chiffre %d sur %d. Contrôle de productivité : tout le monde se réveille !"
+
+#: scripts/partida.gd
+msgid "la sala de %s"
+msgstr "la salle de %s"
+
+#: scripts/partida.gd
+msgid "Ya tienes el código: abre %s"
+msgstr "Tu as le code : il ouvre %s"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -4865,6 +5045,10 @@ msgstr "Termine-le pour débloquer l'Alerte 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (sur %d)"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y el laboratorio"
+msgstr "%d étages et le labo"
 
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"

@@ -35,11 +35,38 @@ const TIPOS := {
 	# Al fondo, la cámara acorazada: la sala opcional con riesgo (su puerta y su premio, en los trozos 2 y 3)
 	"joyeria": {"nombre": "Joyería", "neon": "JOYAS", "salas": ["trastienda", "acorazada"],   # [traducir]
 		"color": Color("#ffd23f")},
+	# Los departamentos de Torre Velaria (el tercer edificio: docs/PLAN_TERCER_EDIFICIO.md). Son tiendas para el código
+	# (un local con su sala grande delante y sus habitaciones al fondo), pero de la torre ("edificio"); el "neon" es su
+	# rótulo iluminado. "desde": la planta desde la que sale (Dirección, solo de la planta 20 arriba). De momento (parte 1,
+	# el esqueleto) cada uno toma el plano y los muebles de una tienda del centro ("presta": esa tienda, y qué habitación
+	# de ella hace de cada una suya); en la parte 2 llevan los suyos
+	"atencion": {"nombre": "Atención al cliente", "neon": "CLIENTES", "salas": ["impresoras", "office", "bano"],   # [traducir]
+		"color": Color("#dff1ff"), "edificio": "torre",
+		"presta": {"tipo": "supermercado", "usos": {"impresoras": "camara", "office": "almacen"}}},
+	"informatica": {"nombre": "Informática", "neon": "INFORMATICA", "salas": ["servidores", "almacen", "bano"],   # [traducir]
+		"color": Color("#9fd8ff"), "edificio": "torre",
+		"presta": {"tipo": "electronica", "usos": {"servidores": "taquillas"}}},
+	"rrhh": {"nombre": "Recursos Humanos", "neon": "RR.HH.", "salas": ["archivo", "entrevistas", "bano"],   # [traducir]
+		"color": Color("#ffe9c9"), "edificio": "torre",
+		"presta": {"tipo": "ropa", "usos": {"archivo": "almacen", "entrevistas": "probadores"}}},
+	"marketing": {"nombre": "Marketing", "neon": "MARKETING", "salas": ["almacen", "estudio", "bano"],   # [traducir]
+		"color": Color("#ffc6ef"), "edificio": "torre",
+		"presta": {"tipo": "ferreteria", "usos": {"estudio": "taller"}}},
+	"seguridad": {"nombre": "Seguridad corporativa", "neon": "SEGURIDAD", "salas": ["camaras", "armero", "bano"],   # [traducir]
+		"color": Color("#c9ffd8"), "edificio": "torre",
+		"presta": {"tipo": "restaurante", "usos": {"camaras": "cocina", "armero": "camara"}}},
+	"direccion": {"nombre": "Dirección", "neon": "DIRECCION", "salas": ["despacho", "juntas", "bano"],   # [traducir]
+		"color": Color("#fff3b0"), "edificio": "torre", "desde": 3,
+		"presta": {"tipo": "ropa", "usos": {"despacho": "almacen", "juntas": "probadores"}}},
 }
 # [traducir]
 const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "taller": "Taller", "taquillas": "Taquillas",
 	"cocina": "Cocina", "probadores": "Probadores", "rebotica": "Rebotica", "bano": "Aseo de empleados",
-	"trastienda": "Trastienda", "acorazada": "Cámara acorazada"}
+	"trastienda": "Trastienda", "acorazada": "Cámara acorazada",
+	# las de los departamentos de Torre Velaria
+	"impresoras": "Sala de impresoras", "office": "Office", "servidores": "Sala de servidores", "archivo": "Archivo",
+	"entrevistas": "Sala de entrevistas", "estudio": "Estudio de grabación", "camaras": "Sala de cámaras",
+	"armero": "Armero", "despacho": "Despacho", "juntas": "Sala de juntas"}
 # [/traducir]
 
 # M77: las tiendas fijas, como el piso de los apartamentos (Apartamento.PLANO_PASILLO). Cada tipo de tienda que tiene
@@ -56,7 +83,11 @@ const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "tall
 # quedado mal
 const LETRAS := {"V": {"uso": "tienda"}, "K": {"uso": "camara"}, "A": {"uso": "almacen"}, "B": {"uso": "bano"},
 	"T": {"uso": "taller"}, "Q": {"uso": "taquillas"}, "O": {"uso": "cocina"}, "P": {"uso": "probadores"},
-	"R": {"uso": "rebotica"}, "Z": {"uso": "trastienda"}, "X": {"uso": "acorazada"}}
+	"R": {"uso": "rebotica"}, "Z": {"uso": "trastienda"}, "X": {"uso": "acorazada"},
+	# las de los departamentos de Torre Velaria
+	"I": {"uso": "impresoras"}, "F": {"uso": "office"}, "S": {"uso": "servidores"}, "H": {"uso": "archivo"},
+	"N": {"uso": "entrevistas"}, "U": {"uso": "estudio"}, "C": {"uso": "camaras"}, "Y": {"uso": "armero"},
+	"D": {"uso": "despacho"}, "J": {"uso": "juntas"}}
 const PLANOS := {
 	# el supermercado: la cámara a la izquierda y el almacén a la derecha, con el aseo en su rincón; entre los dos, un
 	# trozo de sala de venta que llega hasta el fondo
@@ -300,6 +331,36 @@ const PLANOS := {
 	],
 }
 
+# Los tipos de local de ese edificio ("centro": las tiendas; "torre": los departamentos), sin la joyería (no se sortea)
+static func de_edificio(edificio: String) -> Array:
+	return TIPOS.keys().filter(func(t): return t != "joyeria" and TIPOS[t].get("edificio", "centro") == edificio)
+
+
+# El plano de un local: el suyo o, en un departamento de la torre que aún no lo tiene, el de la tienda que le presta el
+# suyo, con las letras de sus habitaciones cambiadas por las de las suyas
+static func plano_de(tipo: String) -> Array:
+	if PLANOS.has(tipo):
+		return PLANOS[tipo]
+	var presta: Dictionary = TIPOS[tipo].presta
+	var cambio := {}   # letra de la tienda -> letra del departamento
+	for uso in presta.usos:
+		cambio[letra_de(presta.usos[uso])] = letra_de(uso)
+	var plano := []
+	for fila in PLANOS[presta.tipo]:
+		var nueva := ""
+		for c in fila:
+			nueva += cambio.get(c, "V" if c == "~" else c)   # (sin el charco con corriente de la electrónica)
+		plano.append(nueva)
+	return plano
+
+
+static func letra_de(uso: String) -> String:
+	for l in LETRAS:
+		if LETRAS[l].uso == uso:
+			return l
+	return ""
+
+
 # El nombre de una tienda ("supermercado"...), ya traducido: para enseñarlo
 static func nombre(tipo: String) -> String:
 	return Idioma.t(TIPOS[tipo].nombre)
@@ -327,7 +388,7 @@ static func generar(_semilla: int, tipo: String, jefe := false, lado := "abajo")
 # (Muebles.de_tienda), no los del sorteo
 static func del_plano(tipo: String, lado: String) -> Dictionary:
 	# el charco (~) es sala de venta: se apuntan sus casillas y se lee como una V
-	var plano: Array = PLANOS[tipo].duplicate()
+	var plano: Array = plano_de(tipo).duplicate()
 	var agua := []
 	for f in plano.size():
 		for c in plano[f].length():

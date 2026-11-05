@@ -64,7 +64,7 @@ func _ready() -> void:
 		donde.theme_type_variation = "Sub"
 		donde.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		donde.text = "%s · %s" % [Idioma.t(Edificios.datos(foto.edificio).nombre),
-			Planta.nombre_de({"num": foto.planta, "azotea": azotea})] + (" · " + Idioma.t("Reto del día") if foto.reto.activo else "")
+			Planta.nombre_de({"num": foto.planta, "azotea": azotea, "edificio": foto.edificio})] + (" · " + Idioma.t("Reto del día") if foto.reto.activo else "")
 		columna.add_child(donde)
 	var jugar := boton(columna, Idioma.t("JUGAR"), elegir_edificio, "BotonGrande")
 	if seguir:
@@ -487,7 +487,9 @@ func textos_tarjeta(id: String, s: Dictionary) -> Array:
 	var textos := [[Idioma.t(datos.nombre), ""], [Idioma.t(datos.desc), "Sub"]]
 	if Edificios.abierto(s, id):
 		var veces: int = p.partidas
-		textos.append([Idioma.t("%d plantas y azotea") % (Planta.PLANTAS - 1) + " · "
+		# (la torre no acaba en la azotea: acaba en el laboratorio de la planta 40)
+		var plantas := Idioma.t("%d plantas y el laboratorio") if id == "torre" else Idioma.t("%d plantas y azotea")
+		textos.append([plantas % (Planta.PLANTAS - 1) + " · "
 			+ Idioma.n("%d intento", "%d intentos", veces) % veces, "Sub"])
 		var progreso := Idioma.t("¡Sin explorar!")
 		if p.completado:

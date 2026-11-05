@@ -714,6 +714,22 @@ msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de ac
 msgstr "clear the stores and hunt down the security guard: he carries the access card"
 
 #: scripts/edificios.gd
+msgid "Torre Velaria"
+msgstr "Velaria Tower"
+
+#: scripts/edificios.gd
+msgid "Oficinas de moqueta, empleados que no duermen y un laboratorio en la planta 40"
+msgstr "Carpeted offices, staff who never sleep and a lab on the 40th floor"
+
+#: scripts/edificios.gd
+msgid "el Sujeto 1"
+msgstr "Subject 1"
+
+#: scripts/edificios.gd
+msgid "limpia los departamentos y busca las tres cifras del código en sus ordenadores"
+msgstr "clear the departments and find the three digits of the code on their computers"
+
+#: scripts/edificios.gd
 msgid "el Glotón"
 msgstr "the Glutton"
 
@@ -772,6 +788,54 @@ msgstr "Toy Store"
 #: scripts/edificios.gd
 msgid "la Juguetería"
 msgstr "the Toy Store"
+
+#: scripts/edificios.gd
+msgid "la directora de Recursos Humanos"
+msgstr "the HR director"
+
+#: scripts/edificios.gd
+msgid "Despacho de Recursos Humanos"
+msgstr "HR Director's Office"
+
+#: scripts/edificios.gd
+msgid "el Despacho de Recursos Humanos"
+msgstr "the HR Director's Office"
+
+#: scripts/edificios.gd
+msgid "el informático"
+msgstr "the IT guy"
+
+#: scripts/edificios.gd
+msgid "Centro de datos"
+msgstr "Data Center"
+
+#: scripts/edificios.gd
+msgid "el Centro de datos"
+msgstr "the Data Center"
+
+#: scripts/edificios.gd
+msgid "el presentador"
+msgstr "the presenter"
+
+#: scripts/edificios.gd
+msgid "Plató de presentaciones"
+msgstr "Presentation Stage"
+
+#: scripts/edificios.gd
+msgid "el Plató de presentaciones"
+msgstr "the Presentation Stage"
+
+#: scripts/edificios.gd
+msgid "el becario"
+msgstr "the intern"
+
+#: scripts/edificios.gd
+msgid "Sala de fotocopias"
+msgstr "Copy Room"
+
+#: scripts/edificios.gd
+msgid "la Sala de fotocopias"
+msgstr "the Copy Room"
 
 #: scripts/escolta.gd
 msgid "Vámonos. Despacio, por favor"
@@ -2062,6 +2126,14 @@ msgid "%dª planta"
 msgstr "Floor %d"
 
 #: scripts/mapa/planta.gd
+msgid "Vestíbulo"
+msgstr "Lobby"
+
+#: scripts/mapa/planta.gd
+msgid "Planta %d"
+msgstr "Floor %d"
+
+#: scripts/mapa/planta.gd
 msgid "Azotea"
 msgstr "Rooftop"
 
@@ -2077,7 +2149,7 @@ msgstr "%d%s"
 msgid "Vestuario"
 msgstr "Locker room"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
 msgid "Despacho"
 msgstr "Office"
 
@@ -2102,6 +2174,10 @@ msgid "4ª planta"
 msgstr "5th floor"
 
 #: scripts/mapa/planta.gd
+msgid "Oficina destrozada"
+msgstr "Wrecked Office"
+
+#: scripts/mapa/planta.gd
 msgid "Gimnasio"
 msgstr "Gym"
 
@@ -2116,6 +2192,10 @@ msgstr "Burning apartment"
 #: scripts/mapa/planta.gd
 msgid "Cerrada: hace falta una tarjeta de acceso"
 msgstr "Locked: you need an access card"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta el código de tres cifras"
+msgstr "Locked: you need the three-digit code"
 
 #: scripts/mapa/planta.gd
 msgid "Cerrada con llave"
@@ -2198,6 +2278,54 @@ msgid "JOYAS"
 msgstr "JEWELS"
 
 #: scripts/mapa/tienda.gd
+msgid "Atención al cliente"
+msgstr "Customer Service"
+
+#: scripts/mapa/tienda.gd
+msgid "CLIENTES"
+msgstr "SUPPORT"
+
+#: scripts/mapa/tienda.gd
+msgid "Informática"
+msgstr "IT"
+
+#: scripts/mapa/tienda.gd
+msgid "INFORMATICA"
+msgstr "IT DEPT"
+
+#: scripts/mapa/tienda.gd
+msgid "Recursos Humanos"
+msgstr "Human Resources"
+
+#: scripts/mapa/tienda.gd
+msgid "RR.HH."
+msgstr "HR"
+
+#: scripts/mapa/tienda.gd
+msgid "Marketing"
+msgstr "Marketing"
+
+#: scripts/mapa/tienda.gd
+msgid "MARKETING"
+msgstr "MARKETING"
+
+#: scripts/mapa/tienda.gd
+msgid "Seguridad corporativa"
+msgstr "Corporate Security"
+
+#: scripts/mapa/tienda.gd
+msgid "SEGURIDAD"
+msgstr "SECURITY"
+
+#: scripts/mapa/tienda.gd
+msgid "Dirección"
+msgstr "Head Office"
+
+#: scripts/mapa/tienda.gd
+msgid "DIRECCION"
+msgstr "HEAD OFFICE"
+
+#: scripts/mapa/tienda.gd
 msgid "Almacén"
 msgstr "Storeroom"
 
@@ -2228,6 +2356,42 @@ msgstr "Stockroom"
 #: scripts/mapa/tienda.gd
 msgid "Cámara acorazada"
 msgstr "Vault"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de impresoras"
+msgstr "Printer Room"
+
+#: scripts/mapa/tienda.gd
+msgid "Office"
+msgstr "Break Room"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de servidores"
+msgstr "Server Room"
+
+#: scripts/mapa/tienda.gd
+msgid "Archivo"
+msgstr "Archive"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de entrevistas"
+msgstr "Interview Room"
+
+#: scripts/mapa/tienda.gd
+msgid "Estudio de grabación"
+msgstr "Recording Studio"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de cámaras"
+msgstr "Camera Room"
+
+#: scripts/mapa/tienda.gd
+msgid "Armero"
+msgstr "Armory"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de juntas"
+msgstr "Boardroom"
 
 #: scripts/mapa/tienda.gd
 msgid "Tienda destrozada"
@@ -2426,6 +2590,10 @@ msgid "Abres con la tarjeta de acceso"
 msgstr "You open it with the access card"
 
 #: scripts/partida.gd
+msgid "Tecleas el código: la puerta se abre"
+msgstr "You key in the code: the door opens"
+
+#: scripts/partida.gd
 msgid "Abres con la llave"
 msgstr "You open it with the key"
 
@@ -2456,6 +2624,18 @@ msgstr "All clear! The door is open"
 #: scripts/partida.gd
 msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
 msgstr "The fence is shut! No way down until you finish off %s"
+
+#: scripts/partida.gd
+msgid "Cifra %d de %d. ¡Control de productividad: despiertan todos!"
+msgstr "Digit %d of %d. Productivity check: everyone wakes up!"
+
+#: scripts/partida.gd
+msgid "la sala de %s"
+msgstr "the room of %s"
+
+#: scripts/partida.gd
+msgid "Ya tienes el código: abre %s"
+msgstr "You have the code: it opens %s"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -4865,6 +5045,10 @@ msgstr "Complete it to unlock Alert 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (of %d)"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y el laboratorio"
+msgstr "%d floors and the lab"
 
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"

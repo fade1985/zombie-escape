@@ -269,7 +269,20 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
 
 1. **El esqueleto** (Opus): la ficha `"torre"`, el candado, el generador de departamentos y sus habitaciones (con
    muebles prestados de los otros edificios), los nombres de las plantas (10, 20, 30, 40) y el cerrojo del código con
-   sus tres ordenadores.
+   sus tres ordenadores. **Hecho el 5 nov, a falta del visto bueno del dueño.** Lo que ha quedado:
+   - La ficha `"torre"` en `edificios.gd` (se abre al completar el centro) y sus cuatro minijefes en `MINIJEFES` (sin
+     hacer: en su planta sale la portera, con su cuarto de la limpieza). El icono de su tarjeta, `tools/icono_torre.py`.
+   - Los seis departamentos son tipos de `Tienda.TIPOS` con `"edificio": "torre"`; cada uno toma de momento el plano, los
+     muebles y los suelos de una tienda del centro (`"presta"`), con sus habitaciones con su nombre (sala de servidores,
+     archivo, sala de juntas...). Dirección, solo de la planta 20 arriba. Sin escaparates: solo su rótulo, que de momento
+     es el letrero de neón del centro. Sin dependientas ni vigilantes (sus zombis llegan en la parte 4).
+   - Las plantas se llaman vestíbulo y planta 10, 20, 30 y 40 (`Planta.nombre_torre`); la 40, de momento, es la azotea
+     del centro. El cartel pintado junto al ascensor no sale en la torre (los que hay van del 0 al 3).
+   - El código: tres cifras al azar en tres ordenadores encendidos (`terminal.gd`, dibujado con código), en habitaciones
+     distintas de los departamentos normales (en el vestíbulo, que solo tiene dos, uno lleva dos). Al leer uno, la cifra
+     sale en grande y se despiertan los zombis de allí; con las tres, la sala del jefe se abre como con la llave.
+   - El pasillo, de momento, la galería del centro.
+   - Prueba: `--captura --edificio torre --torre`.
 2. **Cómo se ve** (Sonnet): suelos, paredes y muebles con PixelLab; rótulos de departamento y ventanales con la ciudad.
 3. **Los peligros** (Opus): viento, cámaras y gas.
 4. **Los zombis nuevos** (Sonnet): oficinista y escolta.

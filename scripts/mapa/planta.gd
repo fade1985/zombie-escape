@@ -115,6 +115,8 @@ static func numero_visible(num: int) -> int:
 	return num if Idioma.actual in CALLE_ES_LA_PRIMERA else num - 1
 # Las puertas de los pisos tal como las nombra nombre_puerta («Bajo C», «1ºD»), para traducirlas al enseñarlas
 static var _puerta := RegEx.create_from_string("^(?:Bajo ([A-Z])|(\\d+)º([A-Z]))$")   # no-tr
+# Las plantas de la torre tal como las guarda nombre_torre_es («Planta 10»)
+static var _planta_torre := RegEx.create_from_string("^Planta (\\d+)$")   # no-tr
 
 
 # Cómo se llama la planta "num" (1 = la baja), ya traducido: para enseñarlo. Las frases lo ponen en minúscula detrás de
@@ -133,8 +135,22 @@ static func nombre_planta_es(num: int) -> String:
 	return "Planta baja" if num == 1 else "%dª planta" % (num - 1)   # no-tr (el dato: se traduce al enseñarlo)
 
 
-# El nombre de la planta de la partida (la que devuelve generar o azotea), ya traducido: la azotea o su número
+# Torre Velaria (el tercer edificio) cuenta sus plantas de otra manera: el ascensor solo para cada diez, así que son el
+# vestíbulo y las plantas 10, 20, 30 y 40 (la última, la del laboratorio, en lugar de la azotea). Ya traducido
+static func nombre_torre(num: int) -> String:
+	return Idioma.t("Vestíbulo") if num == 1 else Idioma.t("Planta %d") % ((num - 1) * 10)
+
+
+# Lo mismo en español, tal como se guarda ("Vestíbulo", "Planta 10"...; nombre_de_sitio lo traduce)
+static func nombre_torre_es(num: int) -> String:
+	return "Vestíbulo" if num == 1 else "Planta %d" % ((num - 1) * 10)   # no-tr (el dato: se traduce al enseñarlo)
+
+
+# El nombre de la planta de la partida (la que devuelve generar o azotea), ya traducido: la azotea o su número (en la
+# torre, a su manera: nombre_torre)
 static func nombre_de(planta: Dictionary) -> String:
+	if planta.get("edificio", "") == "torre":
+		return nombre_torre(planta.num)
 	return Idioma.t("Azotea") if planta.get("azotea", false) else nombre_planta(planta.num)
 
 
@@ -154,6 +170,9 @@ static func nombre_de_sitio(cosa: Dictionary) -> String:
 		return Supervivientes.nombre_de(Supervivientes.DATOS[cosa.vecino])
 	if cosa.get("tipo", "") in ["expo", "armas"]:
 		return nombre
+	var torre := _planta_torre.search(nombre)
+	if torre != null:
+		return Idioma.t("Planta %d") % torre.get_string(1).to_int()
 	var m := _puerta.search(nombre)
 	if m == null:
 		return Idioma.t(nombre)
@@ -210,9 +229,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var ed: Dictionary = Edificios.datos(edificio)
 	if ed.get("azotea", false) and num == PLANTAS:
 		return azotea(num, edificio, su_jefe)
-	var tiendas: bool = ed.generador == "tienda"
+	# (los departamentos de la torre son tiendas para el código: tienda.gd)
+	var tiendas: bool = ed.generador in ["tienda", "departamento"]
 	var mini: Dictionary = Edificios.MINIJEFES.get(su_jefe, {})
-	var planta := {"num": num, "nombre": nombre_planta_es(num), "sitios": [], "llave": {}, "tiene_llave": false,
+	var planta := {"num": num, "nombre": nombre_torre_es(num) if edificio == "torre" else nombre_planta_es(num), "sitios": [], "llave": {}, "tiene_llave": false,
 		"jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "armas": -1, "edificio": edificio,
 		"jefe": su_jefe if su_jefe != "" else ed.jefe, "el_jefe": mini.get("el", ed.el_jefe)}
 	var ancho := PASILLO_COLS * CASILLA
@@ -240,7 +260,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			de_jefa = h
 	# en el centro comercial, cada puerta una tienda distinta; la primera tienda normal, la del superviviente si le
 	# toca esta planta (tienda_fija) o, si no, cualquiera (desde la M81 todas tienen su aseo de empleados)
-	var tipos: Array = Tienda.TIPOS.keys().filter(func(t): return t != "joyeria")   # (la joyería no se sortea)
+	# (la joyería no se sortea; en la torre, sus departamentos: Dirección, solo de la planta 20 arriba)
+	var tipos: Array = Tienda.de_edificio("torre" if ed.generador == "departamento" else "centro").filter(func(t):
+		return Tienda.TIPOS[t].get("desde", 1) <= num)
 	tipos.shuffle()
 	var tipo_de := {}
 	var fija: Dictionary = tienda_fija if tiendas and tienda_fija.get("planta", -1) == num else {}
@@ -268,6 +290,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# la puerta del apartamento está en el lado que da al pasillo
 		var lado := "abajo" if h.dir == "arriba" else "arriba"
 		var apt := Tienda.generar(rng.randi(), tipo_tienda, jefe, lado) if tiendas else Apartamento.generar(jefe, lado)
+		if jefe and not mini.has("tienda") and ed.generador == "departamento":
+			# (en la torre, mientras no esté su minijefe)
+			apt.salas[0].nombre = "Oficina destrozada"   # [traducir]
 		if jefe and mini.has("tienda"):
 			# la tienda de un minijefe se llama según quién esté (la Oficina de seguridad del antidisturbios...)
 			nombre = mini.tienda
@@ -328,15 +353,18 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# en la pared de arriba se ve la fachada de la tienda: su letrero de neón y un escaparate a cada lado de la
 			# puerta (mapa.gd)
 			puerta.neon = tipo_tienda
-			for lado_x in [-1, 1]:
+			# (los departamentos de la torre, sin escaparates: solo su rótulo)
+			for lado_x in ([-1, 1] if Tienda.TIPOS[tipo_tienda].get("edificio", "centro") == "centro" else []):
 				pasillo.escaparates.append({"x": h.en + lado_x * ESCAPARATE_A, "tienda": tipo_tienda})
 		if jefe:
 			puerta.cerrojo = "llave"   # la llave o la tarjeta: se abren igual (ver partida.gd)
-			puerta.aviso = "Cerrada: hace falta una tarjeta de acceso" if ed.cerrojo == "tarjeta" else "Cerrada con llave"   # [traducir]
+			puerta.aviso = {"tarjeta": "Cerrada: hace falta una tarjeta de acceso", "codigo": "Cerrada: hace falta el código de tres cifras"}.get(   # [traducir]
+				ed.cerrojo, "Cerrada con llave")   # [traducir]
 		pasillo.salidas.append(puerta)
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
-		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": num - 1})   # [traducir]
+		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": -1 if edificio == "torre" else num - 1})   # [traducir]
+	# (en la torre, sin el cartel pintado de la planta: los que hay van del 0 al 3, y allí son la 10, la 20... Parte 2)
 	# por donde se ha llegado: solo en la planta baja, el portal del edificio, a la izquierda. En las demás plantas no hay otra
 	# puerta: se llega por las escaleras de la derecha, las mismas por las que se salió de la planta de abajo (como en un
 	# edificio de verdad, que no hay que rodear); y por ellas se sigue subiendo
@@ -439,6 +467,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var cuarto: Dictionary = cuartos[rng.randi() % cuartos.size()]
 	var en := sitio_libre(planta.sitios[de_cientifico], cuarto, Vector2.INF, [], 40.0)
 	planta.cientifico = {"sitio": de_cientifico, "pos": cuarto.centro if en == Vector2.INF else en, "cogida": false}
+	# Con el código (la torre), sus tres cifras en tres ordenadores encendidos de los departamentos normales
+	if ed.cerrojo == "codigo":
+		planta.llave = {"sitio": -1, "pos": Vector2.ZERO}   # (no hay llave en el suelo)
+		planta.codigo = codigo(planta, normales)
 	# Las viviendas de los rescatados, detrás de la puerta de la derecha de la sala de mantenimiento (la segunda de sus
 	# salidas)
 	if baja:
@@ -446,6 +478,38 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		planta.sitios.append(Viviendas.generar(rng.randi(), planta.mantenimiento, 1))
 		planta.sitios[planta.mantenimiento].salidas[1].a = planta.viviendas
 	return planta
+
+
+# El código de la sala del jefe en Torre Velaria (cerrojo "codigo"): tres cifras al azar, cada una en un ordenador
+# encendido (terminal.gd) de un departamento normal, en una habitación que no sea un aseo ni la del superviviente. Si
+# la planta tiene menos de tres departamentos normales (la baja, con la sala de mantenimiento, tiene dos), alguno lleva
+# dos, en habitaciones distintas. Devuelve {cifras, terminales: [{sitio, sala, pos, leido}]}
+static func codigo(planta: Dictionary, normales: Array) -> Dictionary:
+	var cifras := ""
+	for i in 3:
+		cifras += str(rng.randi() % 10)
+	var terminales := []
+	var usadas := {}   # sitio -> salas ya con ordenador
+	for i in 3:
+		var idx: int = normales[i % normales.size()]
+		var sitio: Dictionary = planta.sitios[idx]
+		var ya: Array = usadas.get(idx, [])
+		var sup: Dictionary = planta.superviviente
+		var salas: Array = sitio.apt.salas.filter(func(s):
+			return s.uso != "bano" and not s.id in ya and (sup.is_empty() or sup.sitio != idx or sup.sala != s.id))
+		if salas.is_empty():
+			continue
+		var sala: Dictionary = salas[rng.randi() % salas.size()]
+		usadas[idx] = usadas.get(idx, []) + [sala.id]
+		# lejos de la pared de arriba (su dibujo sube 76 unidades y ahí están los muebles altos, que lo taparían)
+		var en := Vector2.INF
+		for _intento in 20:
+			en = sitio_libre(sitio, sala, Vector2.INF, sitio.zombis, 60.0)
+			if en != Vector2.INF and en.y > (sala.f0 + 5) * CASILLA:
+				break
+		terminales.append({"sitio": idx, "sala": sala.id, "pos": sala.centro if en == Vector2.INF else en, "leido": false,
+			"cifra": cifras[i]})
+	return {"cifras": cifras, "terminales": terminales}
 
 
 # La azotea (la última planta del centro comercial y de los Apartamentos, como en el juego JS): un solo sitio grande
@@ -611,7 +675,7 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 		tipos.append("tentaculos")
 	# en las tiendas del centro comercial, además, los suyos: la dependienta desde la planta baja (una por tienda
 	# como mucho) y el vigilante desde la 1ª planta
-	if sitio.get("tienda", "") != "":
+	if sitio.get("tienda", "") != "" and Tienda.TIPOS[sitio.tienda].get("edificio", "centro") == "centro":
 		tipos.append("dependienta")
 		if num >= 2:
 			tipos.append("vigilante")

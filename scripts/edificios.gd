@@ -3,10 +3,12 @@
 #
 #   nombre, desc      lo que sale en su tarjeta de la pantalla "Elige edificio" (menu_principal.gd)
 #   el_nombre         con su artículo, para las frases ("los Apartamentos", "el Centro comercial")
-#   generador         qué hay detrás de las puertas de cada planta: "apartamento" (apartamento.gd) o "tienda" (tienda.gd)
+#   generador         qué hay detrás de las puertas de cada planta: "apartamento" (apartamento.gd), "tienda" (tienda.gd) o
+#                     "departamento" (los de la torre: también en tienda.gd, los de su "edificio")
 #   sitios            cómo se llaman esos sitios en los avisos ("apartamentos", "tiendas")
-#   cerrojo           cómo se abre el sitio del jefe: "llave" (la lleva un zombi al azar de los otros sitios) o "tarjeta" (la lleva
-#                     el guardia de seguridad, que ronda el pasillo: zombi_guardia.gd)
+#   cerrojo           cómo se abre el sitio del jefe: "llave" (la lleva un zombi al azar de los otros sitios), "tarjeta" (la lleva
+#                     el guardia de seguridad, que ronda el pasillo: zombi_guardia.gd) o "codigo" (sus tres cifras, en tres
+#                     ordenadores encendidos de los departamentos: terminal.gd)
 #   jefe, el_jefe     el zombi jefe de cada planta (una escena de partida.gd, ZOMBIS) y cómo se le nombra
 #   minijefes         los minijefes de las plantas (las de tiendas en el centro comercial), uno por planta desde la baja:
 #                     la partida los sortea (sin repetir) y en las plantas de más, o si aún no existe el que toca,
@@ -59,6 +61,25 @@ const LISTA := {
 		"abre": "apartamentos",
 		"pasillo": "galeria",
 	},
+	# El tercer edificio (docs/PLAN_TERCER_EDIFICIO.md): la sede de Velaria, de oficinas. Parte 1, el esqueleto: sus
+	# departamentos y el código; el pasillo, de momento, la galería del centro, y la planta 40, de momento, la azotea
+	"torre": {
+		"nombre": "Torre Velaria",
+		"el_nombre": "Torre Velaria",
+		"desc": "Oficinas de moqueta, empleados que no duermen y un laboratorio en la planta 40",
+		"generador": "departamento",
+		"sitios": "departamentos",
+		"cerrojo": "codigo",
+		"jefe": "portera",          # donde le toque a un minijefe sin hacer (y en la planta 40, mientras no esté el Sujeto 1)
+		"el_jefe": "la portera",
+		"minijefes": ["directora", "informatico", "presentador", "becario"],
+		"azotea": true,
+		"final": "sujeto_1",
+		"el_final": "el Sujeto 1",
+		"objetivo": "limpia los departamentos y busca las tres cifras del código en sus ordenadores",
+		"abre": "centro",
+		"pasillo": "galeria",
+	},
 }
 
 # Los minijefes: cómo se les nombra y, en el centro comercial (parte 4 del plan), cómo se llama su tienda (sola y
@@ -73,6 +94,12 @@ const MINIJEFES := {
 	"cocinero": {"el": "el cocinero", "tienda": "Cocina central", "la_tienda": "la Cocina central"},
 	"modista": {"el": "la modista", "tienda": "Taller de costura", "la_tienda": "el Taller de costura"},
 	"mascota": {"el": "la mascota", "tienda": "Juguetería", "la_tienda": "la Juguetería"},
+	# los de Torre Velaria (aún sin hacer: en su planta sale la portera)
+	"directora": {"el": "la directora de Recursos Humanos", "tienda": "Despacho de Recursos Humanos",
+		"la_tienda": "el Despacho de Recursos Humanos"},
+	"informatico": {"el": "el informático", "tienda": "Centro de datos", "la_tienda": "el Centro de datos"},
+	"presentador": {"el": "el presentador", "tienda": "Plató de presentaciones", "la_tienda": "el Plató de presentaciones"},
+	"becario": {"el": "el becario", "tienda": "Sala de fotocopias", "la_tienda": "la Sala de fotocopias"},
 }
 # [/traducir]
 

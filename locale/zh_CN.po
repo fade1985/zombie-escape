@@ -713,6 +713,22 @@ msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de ac
 msgstr "清理各家商店，干掉保安：门禁卡在他身上"
 
 #: scripts/edificios.gd
+msgid "Torre Velaria"
+msgstr "Velaria大厦"
+
+#: scripts/edificios.gd
+msgid "Oficinas de moqueta, empleados que no duermen y un laboratorio en la planta 40"
+msgstr "铺着地毯的办公室、不睡觉的员工，还有40楼的实验室"
+
+#: scripts/edificios.gd
+msgid "el Sujeto 1"
+msgstr "1号实验体"
+
+#: scripts/edificios.gd
+msgid "limpia los departamentos y busca las tres cifras del código en sus ordenadores"
+msgstr "清理各个部门，在它们的电脑上找到密码的三个数字"
+
+#: scripts/edificios.gd
 msgid "el Glotón"
 msgstr "大胃王"
 
@@ -771,6 +787,54 @@ msgstr "玩具店"
 #: scripts/edificios.gd
 msgid "la Juguetería"
 msgstr "玩具店"
+
+#: scripts/edificios.gd
+msgid "la directora de Recursos Humanos"
+msgstr "人事总监"
+
+#: scripts/edificios.gd
+msgid "Despacho de Recursos Humanos"
+msgstr "人事总监办公室"
+
+#: scripts/edificios.gd
+msgid "el Despacho de Recursos Humanos"
+msgstr "人事总监办公室"
+
+#: scripts/edificios.gd
+msgid "el informático"
+msgstr "网管"
+
+#: scripts/edificios.gd
+msgid "Centro de datos"
+msgstr "数据中心"
+
+#: scripts/edificios.gd
+msgid "el Centro de datos"
+msgstr "数据中心"
+
+#: scripts/edificios.gd
+msgid "el presentador"
+msgstr "主持人"
+
+#: scripts/edificios.gd
+msgid "Plató de presentaciones"
+msgstr "发布会舞台"
+
+#: scripts/edificios.gd
+msgid "el Plató de presentaciones"
+msgstr "发布会舞台"
+
+#: scripts/edificios.gd
+msgid "el becario"
+msgstr "实习生"
+
+#: scripts/edificios.gd
+msgid "Sala de fotocopias"
+msgstr "复印室"
+
+#: scripts/edificios.gd
+msgid "la Sala de fotocopias"
+msgstr "复印室"
 
 #: scripts/escolta.gd
 msgid "Vámonos. Despacio, por favor"
@@ -2060,6 +2124,14 @@ msgid "%dª planta"
 msgstr "%d楼"
 
 #: scripts/mapa/planta.gd
+msgid "Vestíbulo"
+msgstr "大堂"
+
+#: scripts/mapa/planta.gd
+msgid "Planta %d"
+msgstr "%d楼"
+
+#: scripts/mapa/planta.gd
 msgid "Azotea"
 msgstr "天台"
 
@@ -2075,7 +2147,7 @@ msgstr "%d%s"
 msgid "Vestuario"
 msgstr "更衣室"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
 msgid "Despacho"
 msgstr "办公室"
 
@@ -2100,6 +2172,10 @@ msgid "4ª planta"
 msgstr "5楼"
 
 #: scripts/mapa/planta.gd
+msgid "Oficina destrozada"
+msgstr "被毁的办公室"
+
+#: scripts/mapa/planta.gd
 msgid "Gimnasio"
 msgstr "健身房"
 
@@ -2114,6 +2190,10 @@ msgstr "着火的公寓"
 #: scripts/mapa/planta.gd
 msgid "Cerrada: hace falta una tarjeta de acceso"
 msgstr "锁着：需要门禁卡"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta el código de tres cifras"
+msgstr "锁着：需要三位数密码"
 
 #: scripts/mapa/planta.gd
 msgid "Cerrada con llave"
@@ -2196,6 +2276,54 @@ msgid "JOYAS"
 msgstr "珠宝"
 
 #: scripts/mapa/tienda.gd
+msgid "Atención al cliente"
+msgstr "客服部"
+
+#: scripts/mapa/tienda.gd
+msgid "CLIENTES"
+msgstr "客服"
+
+#: scripts/mapa/tienda.gd
+msgid "Informática"
+msgstr "信息部"
+
+#: scripts/mapa/tienda.gd
+msgid "INFORMATICA"
+msgstr "信息部"
+
+#: scripts/mapa/tienda.gd
+msgid "Recursos Humanos"
+msgstr "人力资源部"
+
+#: scripts/mapa/tienda.gd
+msgid "RR.HH."
+msgstr "人事"
+
+#: scripts/mapa/tienda.gd
+msgid "Marketing"
+msgstr "市场部"
+
+#: scripts/mapa/tienda.gd
+msgid "MARKETING"
+msgstr "市场部"
+
+#: scripts/mapa/tienda.gd
+msgid "Seguridad corporativa"
+msgstr "企业安保部"
+
+#: scripts/mapa/tienda.gd
+msgid "SEGURIDAD"
+msgstr "安保"
+
+#: scripts/mapa/tienda.gd
+msgid "Dirección"
+msgstr "总部"
+
+#: scripts/mapa/tienda.gd
+msgid "DIRECCION"
+msgstr "总部"
+
+#: scripts/mapa/tienda.gd
 msgid "Almacén"
 msgstr "仓库"
 
@@ -2226,6 +2354,42 @@ msgstr "库房"
 #: scripts/mapa/tienda.gd
 msgid "Cámara acorazada"
 msgstr "金库"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de impresoras"
+msgstr "打印室"
+
+#: scripts/mapa/tienda.gd
+msgid "Office"
+msgstr "茶水间"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de servidores"
+msgstr "机房"
+
+#: scripts/mapa/tienda.gd
+msgid "Archivo"
+msgstr "档案室"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de entrevistas"
+msgstr "面试室"
+
+#: scripts/mapa/tienda.gd
+msgid "Estudio de grabación"
+msgstr "录音棚"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de cámaras"
+msgstr "监控室"
+
+#: scripts/mapa/tienda.gd
+msgid "Armero"
+msgstr "武器库"
+
+#: scripts/mapa/tienda.gd
+msgid "Sala de juntas"
+msgstr "会议室"
 
 #: scripts/mapa/tienda.gd
 msgid "Tienda destrozada"
@@ -2424,6 +2588,10 @@ msgid "Abres con la tarjeta de acceso"
 msgstr "你用门禁卡打开了门"
 
 #: scripts/partida.gd
+msgid "Tecleas el código: la puerta se abre"
+msgstr "你输入密码：门开了"
+
+#: scripts/partida.gd
 msgid "Abres con la llave"
 msgstr "你用钥匙打开了门"
 
@@ -2454,6 +2622,18 @@ msgstr "清理完毕！门打开了"
 #: scripts/partida.gd
 msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
 msgstr "围栏关上了！不解决掉%s，谁也别想下去"
+
+#: scripts/partida.gd
+msgid "Cifra %d de %d. ¡Control de productividad: despiertan todos!"
+msgstr "第%d个数字（共%d个）。效率检查：所有人都醒了！"
+
+#: scripts/partida.gd
+msgid "la sala de %s"
+msgstr "%s的房间"
+
+#: scripts/partida.gd
+msgid "Ya tienes el código: abre %s"
+msgstr "密码到手：能打开%s"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -4848,6 +5028,10 @@ msgstr "通关后解锁警戒1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s（共 %d）"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y el laboratorio"
+msgstr "%d层楼和实验室"
 
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"

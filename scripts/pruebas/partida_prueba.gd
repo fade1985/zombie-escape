@@ -165,6 +165,8 @@
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos, y que no se amontonen [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera [prueba_sitios.gd]
+#   --torre             (con --edificio torre) Torre Velaria, el esqueleto (tercer edificio, parte 1): sus plantas, sus
+#                       departamentos, el código y sus ordenadores, con fotos                [prueba_sitios.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -610,6 +612,9 @@ func empezar_prueba() -> void:
 	elif "--tiendas-fijas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tiendas_fijas()
+	elif "--torre" in args:
+		set_process(false)   # sin la prueba larga
+		probar_torre()
 	elif "--zombis-tienda" in args:
 		set_process(false)   # sin la prueba larga
 		probar_zombis_tienda()

@@ -74,7 +74,15 @@ const ESTILO_TIENDA := {
 	"probadores": [["moqueta"], "venta"],
 	# la joyería (parte 9): su sala de venta con mármol ("<uso>-<tipo de tienda>" manda sobre "<uso>"), la trastienda
 	# como un almacén y la cámara acorazada con suelo de chapa de acero
-	"tienda-joyeria": [["marmol"], "venta"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"]}
+	"tienda-joyeria": [["marmol"], "venta"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
+	# los departamentos de Torre Velaria (parte 1 del tercer edificio: de momento, con los suelos y paredes del centro; los
+	# suyos, en la parte 2): la sala grande con moqueta, y cada habitación del fondo con uno de los que ya hay
+	"tienda-atencion": [["moqueta"], "venta"], "tienda-informatica": [["linoleo"], "venta"], "tienda-rrhh": [["moqueta"], "venta"],
+	"tienda-marketing": [["moqueta"], "venta"], "tienda-seguridad": [["linoleo"], "venta"], "tienda-direccion": [["marmol"], "venta"],
+	"impresoras": [["linoleo"], "almacen"], "office": [["cocinaind"], "cocinaind"], "servidores": [["linoleo"], "almacen"],
+	"archivo": [["almacen"], "almacen"], "entrevistas": [["moqueta"], "venta"], "estudio": [["moqueta"], "venta"],
+	"camaras": [["linoleo"], "almacen"], "armero": [["almacen"], "almacen"], "despacho": [["moqueta"], "venta"],
+	"juntas": [["moqueta"], "venta"]}
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra
 const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": {"tapa": "centro", "alfombra": false}}
 const NEON := preload("res://scripts/mapa/neon.gd")

@@ -245,7 +245,7 @@ en una línea.
   suelta al caer. Y la entrada a la sala de pruebas (`pruebas`,
   `sitio_pruebas`, `en_pruebas`: allí los zombis no cuentan ni sueltan nada). Avisa a la prueba en
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
-- `edificios.gd`: la ficha de cada edificio, `MINIJEFES` y el sorteo de qué jefe va en cada planta
+- `edificios.gd`: la ficha de cada edificio (apartamentos, centro y torre), `MINIJEFES` y el sorteo de qué jefe va en cada planta
   (`orden_jefes`, `jefe_de()`).
 - `alerta.gd` (niveles de alerta), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `reto.gd` (el reto del
   día; su tarjeta en «Elige edificio» dice la regla, tu marca y el premio de hoy, `texto_tarjeta`; se juega una vez al día: el intento se gasta al empezar y el botón sale apagado hasta mañana, `jugado`) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
@@ -457,7 +457,10 @@ en una línea.
   puerta abajo), y la habitación de cada jefe; `tienda.gd` da cada tienda: desde la M77, todas fijas, dibujadas con letras en `Tienda.PLANOS` (la electrónica, con su
   charco: `~`; todas con su aseo de empleados y su botiquín, M81), leídas con `Apartamento.del_plano` y con sus muebles puestos a mano
   (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); la galería, igual
-  (`colocados` de `"galeria"`, se mira con `--galeria`);
+  (`colocados` de `"galeria"`, se mira con `--galeria`). Los departamentos de Torre Velaria (el tercer edificio,
+  `docs/PLAN_TERCER_EDIFICIO.md`) también son tipos de `Tienda.TIPOS`, con `"edificio": "torre"`: de momento toman el plano y
+  los muebles de una tienda del centro (`"presta"`, `Tienda.plano_de`, `Muebles.de_tienda`); se miran con
+  `--edificio torre --torre`;
   `viviendas.gd`, el pasillo de los rescatados. Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
   habitación y el pasillo, cerrados por sus tabiques de una casilla de grueso, lisos y de un gris muy oscuro (`tabique.gd` y
   `mapa.poner_tabiques`); solo la pared de arriba de cada uno tiene altura (su cara y, encima, su tabique, con los de los
@@ -510,7 +513,8 @@ en una línea.
 - `cara_pared.gd`, `neon.gd`; `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`,
   `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo; se
   pone con una `condicion` y se mira cada segundo)
-  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página),
+  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `terminal.gd` (los ordenadores con
+  las tres cifras del código de la sala del jefe en Torre Velaria: `Planta.codigo` y `partida.poner_terminales`),
   `valla.gd` (la del helipuerto de la azotea).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.

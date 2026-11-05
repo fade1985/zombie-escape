@@ -1363,3 +1363,57 @@ func probar_guardia() -> void:
 	print("Guardia en ~14 s: silbatos %d (esperado 3: al verte y cada 6 s) · refuerzos vivos %d (Johnny va matando) · velocidad de un refuerzo %.0f (esperado 165)" % [
 		silbatos[0], refuerzos.size(), vel])
 	get_tree().quit()
+
+
+# Con "--captura --edificio torre --torre" (tercer edificio, parte 1: el esqueleto): de cada planta de Torre Velaria, su
+# nombre, sus departamentos y las tres cifras del código con dónde está cada ordenador; luego, en la planta 10, el pasillo
+# (captura-torre-pasillo.png), un departamento con su ordenador sin leer (captura-torre-departamento.png), Johnny
+# leyéndolo (los zombis de allí se despiertan; captura-torre-terminal.png) y, leídos los tres, la sala del jefe ya se
+# puede abrir. Y el nombre de la última planta (la 40). Luego se cierra
+func probar_torre() -> void:
+	for num in range(1, Planta.PLANTAS + 1):
+		Planta.semilla = 4100 + num
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		var lista := []
+		for s in p.sitios:
+			if s.tipo in ["apartamento", "jefe"] and not s.get("azotea", false):
+				lista.append("%s%s (%s)" % ["[jefe] " if s.tipo == "jefe" else "", s.nombre, ", ".join(s.apt.salas.map(func(x): return x.nombre))])
+		print("Torre, %s (%s): %s" % [Planta.nombre_de(p), p.nombre, " · ".join(lista) if not lista.is_empty() else "sin departamentos"])
+		if p.has("codigo"):
+			print("    código %s: %s" % [p.codigo.cifras, " · ".join(p.codigo.terminales.map(func(d):
+				return "%s en %s, %s" % [d.cifra, p.sitios[d.sitio].nombre, p.sitios[d.sitio].apt.salas[d.sala].nombre]))])
+	Planta.semilla = 4102
+	nueva_planta(2)
+	Planta.semilla = 0
+	await montar(0, 0, false)
+	await get_tree().create_timer(0.6).timeout
+	print("Torre: lugar «%s», %d ordenadores (esperado: 3)" % [lugar.text, planta.codigo.terminales.size()])
+	johnny.position = Vector2(planta.sitios[0].ancho * 0.3, planta.sitios[0].alto / 2.0)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-torre-pasillo.png")
+	var d: Dictionary = planta.codigo.terminales[0]
+	await montar(d.sitio, 0, false)
+	await get_tree().create_timer(0.6).timeout
+	var dormidos := func() -> int:
+		return get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get("dormido")).size()
+	print("Torre: en %s, %d zombis dormidos antes de leer" % [Planta.nombre_de_sitio(planta.sitios[d.sitio]), dormidos.call()])
+	await foto_entera(planta.sitios[d.sitio], "captura-torre-departamento.png")
+	johnny.position = d.pos + Vector2(0, 40)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-torre-terminal.png")
+	for n in mapa.cosas.get_children():
+		if n.name.begins_with("Terminal"):
+			print("Torre: ordenador en %s (Johnny en %s), visible %s, modulate %s, z %d" % [n.global_position, johnny.global_position, n.is_visible_in_tree(), n.modulate, n.z_index])
+	print("Torre: leído %s (esperado: true), dormidos después %d (esperado: 0), tiene_llave %s (esperado: false)" % [
+		d.leido, dormidos.call(), planta.tiene_llave])
+	for otro in planta.codigo.terminales:
+		if not otro.leido:
+			otro.leido = true
+			_al_leer_terminal()
+	var jefe_idx: int = planta.sitios.find(planta.sitios.filter(func(s): return s.tipo == "jefe")[0])
+	print("Torre: con las tres, tiene_llave %s (esperado: true); la sala del jefe: %s" % [planta.tiene_llave,
+		Planta.nombre_de_sitio(planta.sitios[jefe_idx])])
+	print("Torre: la última planta se llama «%s» (esperado: Planta 40)" % Planta.nombre_de(Planta.generar(Planta.PLANTAS, edificio, "")))
+	get_tree().quit()

@@ -69,6 +69,7 @@ const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
 const TAQUILLA := preload("res://scripts/ui/taquilla.gd")
 const PRESENTACION := preload("res://scripts/ui/presentacion.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
+const TERMINAL := preload("res://scripts/mapa/terminal.gd")   # los ordenadores del código de Torre Velaria
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
 const REFUERZOS := 4               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas). M83: antes 2
@@ -590,6 +591,7 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 		if Reto.sin_curas():   # el reto del día "Sin curas": todos vacíos
 			armarito.vaciar()
 	poner_cientifico(idx)
+	poner_terminales(idx)
 	for puerta in mapa.puertas:
 		puerta.empujada.connect(cruzar)
 
@@ -714,7 +716,8 @@ func cruzar(i: int) -> void:
 			planta.tiene_llave = false
 			planta.llave_usada = true
 			salida.cerrojo = ""
-			decir(Idioma.t("Abres con la tarjeta de acceso") if ed.cerrojo == "tarjeta" else Idioma.t("Abres con la llave"))
+			decir({"tarjeta": Idioma.t("Abres con la tarjeta de acceso"), "codigo": Idioma.t("Tecleas el código: la puerta se abre")}.get(
+				ed.cerrojo, Idioma.t("Abres con la llave")))
 			Sonido.tocar("compra")
 		"jefa":
 			if not planta.jefa_muerta:
@@ -728,7 +731,8 @@ func cruzar(i: int) -> void:
 	await montar(salida.a, salida.vuelta)
 	if planta.sitios[aqui].tipo != "pasillo":
 		return
-	tutorial("centro" if ed.cerrojo == "tarjeta" else "apartamentos")
+	if ed.cerrojo != "codigo":   # (la torre aún no tiene el suyo)
+		tutorial("centro" if ed.cerrojo == "tarjeta" else "apartamentos")
 	if salida.tipo == "ascensor":
 		decir(Planta.nombre_de(planta), 2.5)   # de vuelta de la sala de mantenimiento: en qué planta se está
 	elif planta.get("ascensor_nuevo", false):
@@ -878,6 +882,41 @@ func poner_cientifico(idx: int) -> void:
 		cuerpo.vaciar()
 	else:
 		cuerpo.cogida.connect(_al_coger_pagina.bind(pagina))
+
+
+# ── El código de Torre Velaria: sus tres cifras, en tres ordenadores de los departamentos (Planta.codigo) ──
+
+# Los ordenadores de este sitio, la primera vez que se entra (luego se quedan en su mapa, leídos o no)
+func poner_terminales(idx: int) -> void:
+	for d in planta.get("codigo", {}).get("terminales", []):
+		if d.sitio != idx:
+			continue
+		var terminal := TERMINAL.new()
+		terminal.montar(d, mapa, johnny)
+		mapa.cosas.add_child(terminal)
+		terminal.leido.connect(_al_leer_terminal)
+
+
+# Johnny ha leído una cifra: salta el «control de productividad» (se despiertan los zombis de aquí) y, con las tres,
+# la sala del jefe se puede abrir (como con la llave: tiene_llave)
+func _al_leer_terminal() -> void:
+	var leidos: Array = planta.codigo.terminales.filter(func(d): return d.leido)
+	var cifras := ""
+	for d in planta.codigo.terminales:
+		cifras += str(d.cifra) if d.leido else "_"
+	gran_aviso(cifras.replace("", " ").strip_edges(), Tema.AMARILLO)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.get("dormido"):
+			z.despertar()
+	if leidos.size() < planta.codigo.terminales.size():
+		decir(Idioma.t("Cifra %d de %d. ¡Control de productividad: despiertan todos!") % [leidos.size(),
+			planta.codigo.terminales.size()], 3.0)
+		return
+	planta.tiene_llave = true
+	Sonido.tocar("compra")
+	var sala: String = Edificios.MINIJEFES.get(planta.jefe, {}).get("la_tienda", "")
+	sala = Idioma.t(sala) if sala != "" else Idioma.t("la sala de %s") % Idioma.t(planta.el_jefe)
+	decir(Idioma.t("Ya tienes el código: abre %s") % sala, 3.5)
 
 
 func _al_coger_pagina(p: Dictionary) -> void:
