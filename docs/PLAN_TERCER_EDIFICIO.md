@@ -284,7 +284,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
    - El pasillo, de momento, la galería del centro.
    - Prueba: `--captura --edificio torre --torre`.
 2. **Cómo se ve** (Sonnet): suelos, paredes y muebles con PixelLab; rótulos de departamento y ventanales con la ciudad.
-   ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** 45 generaciones (no las 115 del cálculo: los departamentos
+   ✅ **Hecho el 5 nov, con el visto bueno del dueño.** 45 generaciones (no las 115 del cálculo: los departamentos
    siguen en los planos de las tiendas y usan unos 20 muebles). Lo que ha quedado:
    - Suelos, paredes y tapa propios (`docs/FONDOS.md`, apartado de la torre): el pasillo, de moqueta gris y cristal esmerilado;
      el vestíbulo, de mármol en damero con paredes de piedra; los departamentos, con tabique claro, y el centro de datos
