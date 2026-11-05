@@ -506,7 +506,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      de la pistola, de 12 a 16).
    - Prueba: `--captura --skins-torre` (y la de las cámaras con la skin, dentro de `--camaras`).
 10. ✅ **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las
-    traducciones de todo a los 7 idiomas; la prueba de cada cosa (`--captura --edificio torre ...`). **Hecho el 5 nov.**
+    traducciones de todo a los 7 idiomas; la prueba de cada cosa (`--captura --edificio torre ...`). **Hecho el 5 nov, con el visto bueno del dueño.**
     El reto del día, el apagón y el incendio ya funcionaban en la torre. Lo arreglado o añadido, con el sí del dueño:
     - **Bestiario:** los seis zombis de siempre también salen en la torre; su ficha dice «Sale en: Todos los edificios».
     - **Alerta 5:** en la torre no hay guardia ni zombi de la llave, así que allí **cada ordenador del código llama a dos
