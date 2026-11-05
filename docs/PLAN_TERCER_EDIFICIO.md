@@ -348,7 +348,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9, sin atajo de teclado: ya hay 10 jefes) y en la sala de
        exposición. Su skin, con las demás de la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe directora --despacho`.
-   - **El informático** ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** 28 generaciones (6 el modelo, 22 las animaciones).
+   - **El informático** ✅ **Hecho el 5 nov, con el visto bueno del dueño.** 28 generaciones (6 el modelo, 22 las animaciones).
      Lo que ha quedado (`informatico.gd`; números provisionales, en sus `const`):
      - Vida 420 (+35 % por planta), velocidad 80, 8 si te pegas a él. Su sala, el **Centro de datos** (`jefe-informatico` en
        `Catalogo.SALAS`): una pared de armarios de servidores al fondo (con dos lámparas) y filas de armarios sueltos en medio, con
