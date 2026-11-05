@@ -4527,5 +4527,43 @@
         }
       }
     }
+  },
+  "torre-informatico": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el segundo minijefe: el informático (informatico.gd), con la receta de la directora (torre-directora): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Lanzar y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/informatico-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); lanzar y teclear también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py informatico-72 rotations walk lanzar muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py informatico-72 jefe-informatico (casilla 100x111; offset del Sprite (-46, -88)).",
+    "coste": "28 generaciones (6 el modelo, 22 las animaciones, ninguna repetida; saldo 1067,55 → 1039,55)",
+    "informatico-72": {
+      "character_id": "d194929a-e8b0-41bc-8bfb-e32554a89053",
+      "size": "72x72",
+      "alto_px": 71,
+      "description": "a thin, hunched zombie man boss, a computer technician from a server room, standing slouched forward with rounded shoulders, about 64 pixels tall. He wears a baggy dark navy blue hoodie with the hood down, worn grey jeans and dirty white sneakers, the hoodie torn and stained with dark dried blood in places. Messy greasy black hair, big round thick glasses with a cracked lens. Several tangled computer cables in bright colors (yellow, blue and red) hang around his neck like a scarf, their plugs dangling at his chest. In his right hand he holds a white coffee mug stuck to his hand, with a small green spot on it. Grey-green rotting zombie skin, dead pale eyes behind the glasses, dark circles under the eyes, a crooked open mouth. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: sudadera azul marino, gafas redondas, cables amarillos, azules y rojos al cuello y la taza blanca con su punto verde.",
+      "animaciones": {
+        "subject_description": "a thin hunched zombie man in a baggy navy blue hoodie with big round glasses and colorful computer cables hanging around his neck, holding a white coffee mug in one hand (de lado: ', seen from the side'; de espaldas: 'with messy black hair ... seen from behind', sin las gafas ni los cables)",
+        "initial_pose": "standing slouched forward + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the right...) + ', holding the white coffee mug down at his side'",
+        "frases_de_direccion": "las de la directora y el bombero ('Strict front view the whole time, facing the camera, he never turns to the side.', etc.)",
+        "andar": {
+          "group": "cbe89705-5037-4c14-908c-8efa03683534",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 100-104). 7 direcciones.",
+          "action_description": "He shuffles forward in place in a slow, sluggish, seamless looping walk cycle: his legs step alternately with short dragging steps, his shoulders stay slouched and rounded, the cables around his neck swing slightly and the coffee mug in his hand sways a little with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines."
+        },
+        "lanzar": {
+          "group": "3a4dbc6c-b520-4618-8edc-5479989436f4",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Echa el brazo hacia el fotograma 5.",
+          "action_description": "He hurls something with his free hand: keeping the coffee mug in one hand, he swings his other arm back and up over his shoulder with the hand clenched, then whips that arm forward hard in a big sweeping sidearm throw (toward the camera / to the right / toward the lower right of the image / away from the camera...), his body leaning forward with the effort, and then settles cleanly back into the starting stance. His throwing hand is empty: no object, no keyboard, no effects, no motion lines.",
+          "pegas": "Pinta una estela del brazo (blanca de frente; oscura de lado y de espaldas) en el fotograma del lanzamiento y, de lado, una bolita marrón suelta: se quitan al montar (motas 100 y los fotogramas 'sin' de jefe_hoja.py)."
+        },
+        "teclear": {
+          "group": "2cdb247d-3cb8-4a97-9a2a-972853d8d10d",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (el cortocircuito y el apagón).",
+          "action_description": "He hacks the system: he grabs one of the cables around his neck with his free hand and yanks it, then jabs the fingers of that hand frantically in the air in front of his chest as if typing very fast on an invisible keyboard, his head bobbing and his mouth open in a manic grin, then he lowers his hand and settles cleanly back into the starting stance. No effects, no sparks, no keyboard, no motion lines."
+        },
+        "muerte": {
+          "group": "b9493a92-0c83-471a-8c52-936ba703cc2c",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Suelta la taza, cae de rodillas y de bruces.",
+          "action_description": "He dies: he drops the coffee mug, staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor, in the last frames. The mug lies on the floor beside him. No effects, no blood."
+        }
+      }
+    }
   }
 }

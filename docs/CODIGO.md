@@ -127,7 +127,11 @@ en una línea.
   - Torre Velaria: `directora.gd` (la directora de Recursos Humanos, + `cae_encima.gd`: su sello gigante y las cajas de cartón,
     que caen del techo con su marca en el suelo; el sello «despide» a Johnny, `johnny.despedir()`: unos segundos sin el arma de
     fuego. Su Despacho de Recursos Humanos, `jefe-directora` en el catálogo, con muebles fijos de la torre; prueba
-    `--captura --edificio torre --jefe directora --despacho`). Los otros tres (informático, presentador y becario), sin hacer.
+    `--captura --edificio torre --jefe directora --despacho`). `informatico.gd` (el informático: tira teclados en abanico,
+    `teclado.gd`; el cortocircuito, `cortocircuito.gd`: franjas del suelo que dan corriente por turnos, con chispitas antes; el
+    apagón de su sala unos segundos, `Luz.evento`; enfadado se «reinicia» junto a otro armario. Pinta las lucecitas de los armarios
+    de servidores, que lucen a oscuras. Su Centro de datos, `jefe-informatico` en el catálogo: pared de armarios y filas sueltas,
+    `islas`; prueba `--captura --edificio torre --jefe informatico --datos`). Los otros dos (presentador y becario), sin hacer.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
     `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
     espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`

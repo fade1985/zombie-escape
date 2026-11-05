@@ -549,6 +549,14 @@ msgstr "Die Personalchefin"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "Ihr Stempel fällt von der Decke: Trifft er dich, bist du gefeuert und eine Weile ohne Schusswaffe. Mit ihren Leuten vor sich hält sie doppelt so viel aus."
 
+#: scripts/bestiario.gd
+msgid "El informático"
+msgstr "Der IT-Typ"
+
+#: scripts/bestiario.gd
+msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
+msgstr "Er setzt den Boden streifenweise unter Strom und schaltet in seinem Raum das Licht aus. Wütend startet er neben einem anderen Schrank neu."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Der Einsatzpolizist"
@@ -1642,6 +1650,22 @@ msgstr "Vierzig Stockwerke Teppich. Irgendwer muss sie sauber machen."
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "Diese Seite fehlt (%s)."
+
+#: scripts/informatico.gd
+msgid "¡REINICIANDO…!"
+msgstr "NEUSTART…!"
+
+#: scripts/informatico.gd
+msgid "¡SOBRECARGA!"
+msgstr "ÜBERLASTUNG!"
+
+#: scripts/informatico.gd
+msgid "¡CTRL+ALT+SUPR!"
+msgstr "STRG+ALT+ENTF!"
+
+#: scripts/informatico.gd
+msgid "¡ERROR FATAL!"
+msgstr "SCHWERER FEHLER!"
 
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"

@@ -269,6 +269,91 @@ func probar_despacho() -> void:
 	Captura.foto("captura-directora-muerta.png")
 
 
+# Con "--captura --edificio torre --jefe informatico --datos": el informático (parte 5 de la torre, informatico.gd) en su
+# Centro de datos, quieto (cada ataque se le manda a mano) y con Johnny delante. Fotos: la sala con sus armarios
+# (captura-datos.png), los teclados en abanico (captura-informatico-teclados.png), el aviso del cortocircuito con sus
+# chispitas (-corto-aviso) y dando corriente (-corto), el apagón con las lucecitas (-apagon), enfadado reiniciándose
+# (-reinicio, y -vuelto junto a otro armario) y caído (-muerto). Lo que comprueba, en la terminal
+func probar_datos() -> void:
+	if not await ir_a_la_sala_del_jefe("informatico"):
+		return
+	var espera := func(s: float) -> void:
+		await get_tree().create_timer(s, false).timeout
+	jefa.quieto = true
+	jefa.espera_teclados = 999.0
+	jefa.espera_corto = 999.0
+	jefa.espera_apagon = 999.0
+	jefa.espera_reinicio = 999.0
+	johnny.vida = 999
+	var armarios: Array = jefa.armarios()
+	var muebles := get_tree().get_nodes_in_group("muebles").filter(func(m): return m.get("datos") is Dictionary)
+	print("Datos: sala «%s», %d muebles, %d armarios de servidores, %d con lucecitas (esperado: Centro de datos)" % [
+		planta.sitios[aqui].nombre, muebles.size(), armarios.size(), jefa.lucecitas.size()])
+	print("Datos: el suelo de la sala %s, %d franjas" % [jefa.sala(), ceili(jefa.sala().size.y / Cortocircuito.FRANJA)])
+	# la sala entera: Johnny en medio, un poco arriba
+	johnny.global_position = jefa.sala().get_center() + Vector2(0, -60)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.8)
+	Captura.foto("captura-datos.png")
+	johnny.global_position = jefa.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.3)
+	# los teclados
+	jefa.cambiar("teclados", {"angulo": PI / 2, "lanzado": false})
+	await espera.call(0.6)
+	print("Teclados: volando %d (esperado: 8)" % get_tree().get_nodes_in_group("balas_zombi").filter(func(b): return b is Teclado).size())
+	Captura.foto("captura-informatico-teclados.png")
+	await espera.call(1.5)
+	# el cortocircuito: el aviso y luego dando corriente (Johnny, en una franja de las que dan)
+	jefa.cambiar("corto")
+	await espera.call(0.4 + 0.7)
+	var corto: Array = get_tree().get_nodes_in_group("balas_zombi").filter(func(b): return b is Cortocircuito)
+	print("Cortocircuito: %d (esperado: 1), turnos %s" % [corto.size(), corto[0].turnos if corto else "-"])
+	Captura.foto("captura-informatico-corto-aviso.png")
+	if corto:
+		var sala: Rect2 = jefa.sala()
+		johnny.global_position.y = sala.position.y + Cortocircuito.FRANJA * 2.5 - 12.0   # en la franja 2 (par: da en el primer turno)
+	var antes: int = johnny.vida
+	await espera.call(0.6)
+	print("Cortocircuito: a Johnny en una franja que da le quita %d (esperado: 12)" % (antes - johnny.vida))
+	Captura.foto("captura-informatico-corto.png")
+	await espera.call(2.5)
+	johnny.global_position = jefa.global_position + Vector2(0, 200)
+	# el apagón
+	var luz_antes := Luz.evento
+	jefa.cambiar("apagon")
+	await espera.call(1.6)
+	print("Apagón: oscuridad de más %.2f (antes %.2f, esperado 0,45)" % [Luz.evento, luz_antes])
+	Captura.foto("captura-informatico-apagon.png")
+	await espera.call(jefa.APAGON)
+	print("Apagón: pasados %d s, oscuridad de más %.2f (esperado %.2f)" % [jefa.APAGON, Luz.evento, luz_antes])
+	# enfadado: se reinicia junto a otro armario
+	jefa.vida = int(jefa.vida_max * 0.45)
+	await espera.call(1.8)
+	print("Enfadado: fase %d (esperado: 2)" % jefa.fase)
+	var desde: Vector2 = jefa.global_position
+	jefa.espera_reinicio = 0.0
+	jefa.elegir(johnny)
+	print("Reinicio: estado «%s» (esperado: reinicio)" % jefa.estado)
+	await espera.call(0.3)
+	Captura.foto("captura-informatico-reinicio.png")
+	await espera.call(jefa.SE_VA + jefa.FUERA)
+	print("Reinicio: se ha movido %.0f (esperado: más de 120), a %.0f de Johnny (esperado: más de %.0f)" % [
+		desde.distance_to(jefa.global_position), jefa.global_position.distance_to(johnny.global_position), jefa.LEJOS_REINICIO])
+	johnny.global_position = jefa.global_position + Vector2(0, 160)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.4)
+	Captura.foto("captura-informatico-vuelto.png")
+	# muere en pleno apagón: la luz vuelve
+	jefa.estado = "andar"
+	jefa.apagar()
+	await espera.call(0.3)
+	jefa.recibir_golpe(99999, Vector2.UP)
+	print("Muerto: oscuridad de más %.2f (esperado %.2f)" % [Luz.evento, luz_antes])
+	await espera.call(1.4)   # (a los 2 s sale la mutación, que para el juego)
+	Captura.foto("captura-informatico-muerto.png")
+
+
 # Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 9 fogones y
 # freidoras (tres en cada pared), que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
 # Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los

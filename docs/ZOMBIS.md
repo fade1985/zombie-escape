@@ -216,3 +216,9 @@ animaciones con PixMiniMax, una dirección por llamada). Todo en `assets/pixella
   modelo, 29 las animaciones, ninguna repetida). Todo en `assets/pixellab.json` → `torre-directora`. Hoja con
   `py tools/jefe_hoja.py directora-72 jefe-directora` (quita la sangre y la estela blanca que PixelLab pinta en el golpe). El sello que
   cae y las cajas los dibuja el juego (`cae_encima.gd`).
+- **El informático** (minijefe, 72 px; fuente `informatico-72`, hoja `jefe-informatico`): sudadera azul marino, gafas redondas,
+  cables de colores colgando del cuello y una taza de café en la mano. La misma receta que la directora: andar, lanzar (los
+  teclados), teclear (solo de frente: el cortocircuito y el apagón) y muerte; hacia el oeste, el este en espejo. 28 generaciones (6 el
+  modelo, 22 las animaciones, ninguna repetida). Todo en `assets/pixellab.json` → `torre-informatico`. Hoja con
+  `py tools/jefe_hoja.py informatico-72 jefe-informatico` (quita la estela blanca del brazo en el lanzamiento). Los teclados, las
+  franjas eléctricas y el reinicio los dibuja el juego (`teclado.gd`, `cortocircuito.gd`, `informatico.gd`).

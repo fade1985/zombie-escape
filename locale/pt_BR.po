@@ -549,6 +549,14 @@ msgstr "A diretora de RH"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "O carimbo dela cai do teto: se te pegar, você é demitido e fica sem a arma de fogo. Com a equipe dela na frente, ela aguenta o dobro."
 
+#: scripts/bestiario.gd
+msgid "El informático"
+msgstr "O cara da TI"
+
+#: scripts/bestiario.gd
+msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
+msgstr "Eletrifica o chão em faixas e apaga a luz da sala. Irritado, reinicia ao lado de outro rack."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "O policial de choque"
@@ -1642,6 +1650,22 @@ msgstr "Quarenta andares de carpete. Alguém vai ter que limpar isso."
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "Falta esta página (%s)."
+
+#: scripts/informatico.gd
+msgid "¡REINICIANDO…!"
+msgstr "REINICIANDO…!"
+
+#: scripts/informatico.gd
+msgid "¡SOBRECARGA!"
+msgstr "SOBRECARGA!"
+
+#: scripts/informatico.gd
+msgid "¡CTRL+ALT+SUPR!"
+msgstr "CTRL+ALT+DEL!"
+
+#: scripts/informatico.gd
+msgid "¡ERROR FATAL!"
+msgstr "ERRO FATAL!"
 
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"

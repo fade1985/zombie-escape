@@ -348,6 +348,23 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9, sin atajo de teclado: ya hay 10 jefes) y en la sala de
        exposición. Su skin, con las demás de la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe directora --despacho`.
+   - **El informático** ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** 28 generaciones (6 el modelo, 22 las animaciones).
+     Lo que ha quedado (`informatico.gd`; números provisionales, en sus `const`):
+     - Vida 420 (+35 % por planta), velocidad 80, 8 si te pegas a él. Su sala, el **Centro de datos** (`jefe-informatico` en
+       `Catalogo.SALAS`): una pared de armarios de servidores al fondo (con dos lámparas) y filas de armarios sueltos en medio, con
+       pasillos entre ellas. Cada armario lleva sus lucecitas verdes y ámbar, que parpadean y lucen también a oscuras.
+     - **Teclados**: 8 en abanico, dando vueltas (10 de daño cada uno; `teclado.gd`). Cada 3,2 s como pronto.
+     - **Cortocircuito** («¡SOBRECARGA!»): el suelo de la sala, en franjas de 3 casillas; primero dan corriente las pares y luego las
+       impares. Cada turno, 1,1 s de aviso (la franja se tiñe de azul y echa chispitas) y 0,8 s de corriente: 12 de daño si Johnny tiene
+       los pies dentro (`cortocircuito.gd`). Cada 7,5 s como pronto.
+     - **Apagón** («¡CTRL+ALT+SUPR!»): 5 s casi a oscuras (las lámparas se apagan): solo se ve con la linterna y con las lucecitas de
+       los armarios. Cada 17 s como pronto. Si cae en pleno apagón, vuelve la luz.
+     - **Enfadado** («¡ERROR FATAL!»): cada 8 s se **reinicia** («¡REINICIANDO…!»): parpadea como una pantalla rota (sin que le
+       hagan daño), desaparece 1 s y vuelve junto a otro armario lejos de Johnny (el de destino avisa con sus lucecitas en rojo). Y el
+       cortocircuito tiene un turno más (pares, impares, pares) con menos aviso, y tira 10 teclados.
+     - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
+       la torre (parte 9).
+     - Prueba: `--captura --edificio torre --jefe informatico --datos`.
 6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres.
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las
    viviendas y un superviviente por trozo.

@@ -94,7 +94,8 @@ const MINIJEFES := {
 	"cocinero": {"el": "el cocinero", "tienda": "Cocina central", "la_tienda": "la Cocina central"},
 	"modista": {"el": "la modista", "tienda": "Taller de costura", "la_tienda": "el Taller de costura"},
 	"mascota": {"el": "la mascota", "tienda": "Juguetería", "la_tienda": "la Juguetería"},
-	# los de Torre Velaria (los que aún no están hechos: en su planta sale la portera). La directora, directora.gd
+	# los de Torre Velaria (los que aún no están hechos: en su planta sale la portera). La directora, directora.gd; el
+	# informático, informatico.gd
 	"directora": {"el": "la directora de Recursos Humanos", "tienda": "Despacho de Recursos Humanos",
 		"la_tienda": "el Despacho de Recursos Humanos"},
 	"informatico": {"el": "el informático", "tienda": "Centro de datos", "la_tienda": "el Centro de datos"},

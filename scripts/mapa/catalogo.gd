@@ -908,6 +908,19 @@ const SALAS := {
 			"derecha": ["plant", "lobbysofa", "watercooler", "lobbysofa", "plant"],
 		},
 	},
+	# el Centro de datos del informático (minijefe de Torre Velaria; planta.gd pone apt.tipo = "informatico"): en el fondo, una
+	# pared de armarios de servidores (con dos lámparas, para que haya algo de luz) y, en medio, filas de armarios sueltos con
+	# pasillos entre ellas (muebles.gd, islas), detrás de los que esconderse de los teclados. Sus lucecitas parpadean y lucen
+	# también a oscuras (informatico.gd, pintar_lucecitas): con el apagón, lo único que se ve además de la linterna
+	"jefe-informatico": {
+		"muebles": [],
+		"cuantos": [0, 0],
+		"fijos": {
+			"arriba": ["serverrack", "serverrack", "lamp", "serverrack", "serverrack", "watercooler", "serverrack", "serverrack",
+				"lamp", "serverrack", "serverrack"],
+		},
+		"islas": {"muebles": ["serverrack"], "fila": 3, "entre": 0, "cada": 230},
+	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {
 		"muebles": ["tallmannequin", "clothesrack", "tallmannequin", "checkout"],

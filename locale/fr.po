@@ -549,6 +549,14 @@ msgstr "La DRH"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "Son tampon tombe du plafond : s'il t'écrase, tu es viré et privé de ton arme à feu un moment. Avec ses employés devant elle, elle encaisse deux fois plus."
 
+#: scripts/bestiario.gd
+msgid "El informático"
+msgstr "L'informaticien"
+
+#: scripts/bestiario.gd
+msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
+msgstr "Il électrifie le sol par bandes et coupe la lumière de sa salle. En colère, il redémarre près d'une autre baie."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Le CRS"
@@ -1642,6 +1650,22 @@ msgstr "Quarante étages de moquette. Il faudra bien que quelqu'un les nettoie."
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "Cette page manque (%s)."
+
+#: scripts/informatico.gd
+msgid "¡REINICIANDO…!"
+msgstr "REDÉMARRAGE… !"
+
+#: scripts/informatico.gd
+msgid "¡SOBRECARGA!"
+msgstr "SURCHARGE !"
+
+#: scripts/informatico.gd
+msgid "¡CTRL+ALT+SUPR!"
+msgstr "CTRL+ALT+SUPPR !"
+
+#: scripts/informatico.gd
+msgid "¡ERROR FATAL!"
+msgstr "ERREUR FATALE !"
 
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"

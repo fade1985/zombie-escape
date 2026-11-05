@@ -182,6 +182,9 @@
 #   --despacho          (con --edificio torre --jefe directora) la directora de Recursos Humanos en su despacho: el sello
 #                       (despedido: sin arma de fuego), la lluvia de cajas, la evaluación (mitad de daño), enfadada (tres
 #                       sellos) y su muerte, con fotos                                      [prueba_jefes.gd]
+#   --datos             (con --edificio torre --jefe informatico) el informático en su Centro de datos: los teclados,
+#                       el cortocircuito (franjas), el apagón (con las lucecitas de los armarios), enfadado (se
+#                       reinicia junto a otro armario) y su muerte, con fotos                [prueba_jefes.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -337,6 +340,10 @@ func empezar_prueba() -> void:
 	elif "--despacho" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_despacho()
+		get_tree().quit()
+	elif "--datos" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_datos()
 		get_tree().quit()
 	elif "--cocina" in args:
 		set_process(false)   # sin la prueba larga

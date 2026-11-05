@@ -549,6 +549,14 @@ msgstr "The HR Director"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "Her stamp drops from the ceiling: if it lands on you, you're fired and lose your firearm for a while. With her staff in front of her, she's twice as tough."
 
+#: scripts/bestiario.gd
+msgid "El informático"
+msgstr "The IT guy"
+
+#: scripts/bestiario.gd
+msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
+msgstr "He electrifies the floor in strips and kills the lights in his room. Angry, he reboots next to another rack."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "The Riot Cop"
@@ -1642,6 +1650,22 @@ msgstr "Forty floors of carpet. Someone will have to clean them up."
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "This page is missing (%s)."
+
+#: scripts/informatico.gd
+msgid "¡REINICIANDO…!"
+msgstr "REBOOTING…!"
+
+#: scripts/informatico.gd
+msgid "¡SOBRECARGA!"
+msgstr "OVERLOAD!"
+
+#: scripts/informatico.gd
+msgid "¡CTRL+ALT+SUPR!"
+msgstr "CTRL+ALT+DEL!"
+
+#: scripts/informatico.gd
+msgid "¡ERROR FATAL!"
+msgstr "FATAL ERROR!"
 
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"

@@ -548,6 +548,14 @@ msgstr "人事总监"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "她的印章会从天而降：被砸中就会被开除，一时用不了枪械。手下挡在前面时，她能多扛一倍。"
 
+#: scripts/bestiario.gd
+msgid "El informático"
+msgstr "网管"
+
+#: scripts/bestiario.gd
+msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
+msgstr "他让地面一条条通电，还会关掉房间的灯。发怒后会重启，出现在另一台机柜旁。"
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "防暴警察"
@@ -1641,6 +1649,22 @@ msgstr "四十层的地毯。总得有人来打扫。"
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "这一页缺失（%s）。"
+
+#: scripts/informatico.gd
+msgid "¡REINICIANDO…!"
+msgstr "重启中……！"
+
+#: scripts/informatico.gd
+msgid "¡SOBRECARGA!"
+msgstr "过载！"
+
+#: scripts/informatico.gd
+msgid "¡CTRL+ALT+SUPR!"
+msgstr "CTRL+ALT+DEL！"
+
+#: scripts/informatico.gd
+msgid "¡ERROR FATAL!"
+msgstr "致命错误！"
 
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"

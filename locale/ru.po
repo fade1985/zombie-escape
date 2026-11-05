@@ -550,6 +550,14 @@ msgstr "Директор по персоналу"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "Её печать падает с потолка: попадёт — тебя уволят, и ты на время останешься без огнестрела. Пока её подчинённые рядом, она вдвое крепче."
 
+#: scripts/bestiario.gd
+msgid "El informático"
+msgstr "Айтишник"
+
+#: scripts/bestiario.gd
+msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
+msgstr "Пускает ток по полу полосами и выключает свет в своём зале. В ярости перезагружается у другой стойки."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Омоновец"
@@ -1643,6 +1651,22 @@ msgstr "Сорок этажей ковролина. Кому-то придетс
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "Этой страницы нет (%s)."
+
+#: scripts/informatico.gd
+msgid "¡REINICIANDO…!"
+msgstr "ПЕРЕЗАГРУЗКА…!"
+
+#: scripts/informatico.gd
+msgid "¡SOBRECARGA!"
+msgstr "ПЕРЕГРУЗКА!"
+
+#: scripts/informatico.gd
+msgid "¡CTRL+ALT+SUPR!"
+msgstr "CTRL+ALT+DEL!"
+
+#: scripts/informatico.gd
+msgid "¡ERROR FATAL!"
+msgstr "ФАТАЛЬНАЯ ОШИБКА!"
 
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"

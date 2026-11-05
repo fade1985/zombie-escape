@@ -34,7 +34,7 @@ const SALA_ESTANCIAS := [{"uso": "vestuario", "nombre": "Vestuario"}, {"uso": "d
 	{"uso": "taller", "nombre": "Taller"}]
 # [/traducir]
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 158           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero, el científico jefe y la directora, y para los muebles de la sala de mantenimiento)
+const EXPO_FILAS := 163           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero, el científico jefe, la directora y el informático, y para los muebles de la sala de mantenimiento)
 const ARMAS_CASILLAS := 34       # la sala de pruebas (cuadrada): del centro a la pared caben 15 casillas
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30

@@ -8,6 +8,7 @@
 #                                    py tools/jefe_hoja.py gloton-72 jefe-gloton      (minijefe de los Apartamentos)
 #                                    py tools/jefe_hoja.py gymbro-72 jefe-gymbro      (minijefe de los Apartamentos)
 #                                    py tools/jefe_hoja.py bombero-72 jefe-bombero    (minijefe de los Apartamentos)
+#                                    py tools/jefe_hoja.py informatico-72 jefe-informatico   (minijefe de Torre Velaria)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -198,6 +199,24 @@ JEFES = {
         "de_frente": ["llamar"],
         "motas": {"golpe": 120, "sello": 100},   # los salpicones del golpe y el sello que sale volando (lo dibuja el juego)
         "sin": {"golpe_s": [1], "golpe_se": [2], "golpe_e": [1, 2], "golpe_o": [1, 2]},   # la estela blanca y el chorro de sangre
+        "sangre": 150,
+    },
+    # el informático (minijefe de Torre Velaria): los teclados, el cortocircuito y el reinicio salen con código
+    # (informatico.gd, teclado.gd, cortocircuito.gd). "teclear" (el cortocircuito y el apagón), solo de frente. Hacia el
+    # oeste, el este dado la vuelta (tools/espejo_oeste.py), también la vista quieta. En "lanzar" pinta una estela
+    # blanca del brazo: se borra con las motas
+    "informatico-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 8, True, True),
+            "lanzar": ("lanzar", 12, False, False),
+            "teclear": ("teclear", 9, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["teclear"],
+        "motas": {"lanzar": 100},
+        "sin": {"lanzar_s": [5], "lanzar_e": [5], "lanzar_o": [5], "lanzar_ne": [4]},   # la estela blanca del brazo
         "sangre": 150,
     },
     # el científico jefe (el jefe final de los Apartamentos, lienzo de 128 como el gerente): las probetas que
