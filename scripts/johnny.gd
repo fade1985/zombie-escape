@@ -456,6 +456,7 @@ func _physics_process(delta: float) -> void:
 		rapidez *= Estados.frenado(estados)   # el frío de la cámara, el calambrazo del agua
 		if adrenalina():
 			rapidez *= 1.0 + Talentos.ADRENALINA.velocidad
+		rapidez *= Skins.rapidez(skin)   # (la mascota, skins.gd: un 15 % más)
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
 	move_and_slide()

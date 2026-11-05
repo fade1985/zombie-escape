@@ -557,7 +557,7 @@ msgstr "Le mannequin"
 msgid "Quieto mientras lo miras. No le des la espalda."
 msgstr "Immobile tant que tu le regardes. Ne lui tourne pas le dos."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La mascota"
 msgstr "La mascotte"
 
@@ -2874,6 +2874,14 @@ msgstr "Les zombies endormis ne se réveillent pas quand tu entres dans leur pi�
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
 msgstr "Tue la couturière pour la première fois."
+
+#: scripts/skins.gd
+msgid "Andas un 15 % más rápido."
+msgstr "Tu marches 15 % plus vite."
+
+#: scripts/skins.gd
+msgid "Mata a la mascota por primera vez."
+msgstr "Tue la mascotte pour la première fois."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

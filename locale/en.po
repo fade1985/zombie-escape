@@ -557,7 +557,7 @@ msgstr "The Mannequin"
 msgid "Quieto mientras lo miras. No le des la espalda."
 msgstr "Frozen while you're looking at it. Don't turn your back on it."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La mascota"
 msgstr "The Mascot"
 
@@ -2874,6 +2874,14 @@ msgstr "Sleeping zombies don't wake up when you enter their room and only see yo
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
 msgstr "Kill the seamstress for the first time."
+
+#: scripts/skins.gd
+msgid "Andas un 15 % más rápido."
+msgstr "You walk 15 % faster."
+
+#: scripts/skins.gd
+msgid "Mata a la mascota por primera vez."
+msgstr "Kill the mascot for the first time."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

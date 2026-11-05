@@ -557,7 +557,7 @@ msgstr "O manequim"
 msgid "Quieto mientras lo miras. No le des la espalda."
 msgstr "Fica parado enquanto você olha. Não dê as costas pra ele."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La mascota"
 msgstr "O mascote"
 
@@ -2874,6 +2874,14 @@ msgstr "Os zumbis adormecidos não acordam quando você entra no quarto deles e 
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
 msgstr "Mate a costureira pela primeira vez."
+
+#: scripts/skins.gd
+msgid "Andas un 15 % más rápido."
+msgstr "Você anda 15 % mais rápido."
+
+#: scripts/skins.gd
+msgid "Mata a la mascota por primera vez."
+msgstr "Mate o mascote pela primeira vez."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

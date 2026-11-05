@@ -3565,6 +3565,20 @@
   "cost": "10 generaciones",
   "updated": "2026-11-05"
  },
+ "skin-mascota": {
+  "kind": "edit_image",
+  "job_id": "d2f6e55c-9299-4d6b-85fa-2069233ee6d2",
+  "asset_id": "7bea9d1b-1640-5bac-b7de-d02736fc1d2d",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin de la mascota (scripts/skins.gd, M90), hecha el 2026-11-05 con la misma receta que las otras: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera: una capucha de oso de peluche amarillo y sucio con dos orejas, con la cara y la barba de Johnny asomando por delante. Los 8 dibujos, tal cual, en assets/sources/skin-mascota/quietos/<dirección>.png. tools/cara.py mascota pega la cabeza en las hojas de armas (SOBRA = \"casco\": la capucha tapa el pelo y el pañuelo) y tools/caida_skins.py mascota, en la de caerse.",
+  "request": {
+   "description": "Put a teddy bear mascot costume head on him, changing only his head: a dirty, faded yellow plush teddy bear hood that fits close around his skull like a hooded costume, with two small round bear ears on top (the ears stay small, inside the image), slightly grubby brown stains on the fur, and a round opening at the front through which his own face is clearly seen. The hood is about as big as his head, not bigger. The bear hood covers all his brown hair and completely replaces the red bandana: no hair, no bandana and no bandana tails are visible. Keep his black beard and moustache, the same face, eyes, eyebrows and expression inside the opening, exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the bear hood and ears the same in every view; from the side the hood and one ear are seen in profile; from behind only the yellow back of the hood and the two ears are seen.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-05"
+ },
  "municion-iconos": {
   "nota": "Los dibujos de la munición, la gasolina y el bidón de ácido (25 oct, lo pidió el dueño: hacerlos bien con el arte del juego, de frente y un poco desde arriba, en tres cuartos). create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png (el baúl de la sala de mantenimiento, 32x29, en tres cuartos) como imagen de estilo sin copiar sus colores (style_options color_palette false). Dos intentos de cada uno (semillas X001 y X002), todos en assets/sources/municion/intentos/; hoja para elegir: assets/sources/municion/elegir.png. ELEGIDOS por el dueño: pistola A (assets/ui/iconos/municion-pistola.png), escopeta A (municion-escopeta.png, quitado un píxel blanco suelto de la esquina), gasolina B (obj-gasolina.png) y ácido A (obj-bidon_acido.png). Los cuatro cargadores de la MP5 (A y B de pie, C tumbado en diagonal y D dos cargadores pegados con cinta) no le gustaron: la de la MP5 (municion-mp5.png) es la caja de la pistola pintada de verde oscuro militar con assets/sources/municion/verde_militar.py. En el juego: la caja que suelta un zombi enseña la munición del arma que la recibiría (partida.icono_caja; la MP5, la caja verde) y se ve un poco a oscuras (billete.gd, a_oscuras); en el inventario, los iconos de Armas.MUNICION. Prueba: -- --captura --municion-suelo.",
   "herramienta": "create_object_pro_flash",

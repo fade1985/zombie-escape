@@ -52,6 +52,10 @@
 # puesta, Johnny pasa desapercibido como ella entre los maniquíes ("camuflaje"; zombi.gd, vigilar(), y el guardia,
 # zombi_guardia.gd): los zombis dormidos ya no se despiertan porque entre en su habitación, y le ven solo a la mitad de
 # distancia (de 330 a 165). Lo demás los despierta igual: oír un disparo, que les pegue, que se despierte uno de al lado
+#
+# La novena, la mascota (la suelta la mascota del centro comercial al caer por primera vez, partida.gd; M90): la capucha
+# de oso de peluche amarillo y sucio de la mascota, con la cara de Johnny asomando por delante. Con ella puesta, Johnny
+# anda un 15 % más rápido ("rapidez"; johnny.gd, al andar; con la Adrenalina, las dos). La esquiva, igual que siempre
 class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
@@ -76,6 +80,8 @@ const LISTA := {
 	"modista": {"nombre": "La modista",
 		"efecto": "Los zombis dormidos no se despiertan al entrar en su habitación y te ven a la mitad de distancia.",
 		"como": "Mata a la modista por primera vez.", "jefe": "modista", "camuflaje": 0.5},
+	"mascota": {"nombre": "La mascota", "efecto": "Andas un 15 % más rápido.",
+		"como": "Mata a la mascota por primera vez.", "jefe": "mascota", "rapidez": 1.15},
 }
 # [/traducir]
 
@@ -193,3 +199,8 @@ static func firme(id: String) -> bool:
 # además, entrar en su habitación no los despierta: la modista, 0,5)
 static func camuflaje(id: String) -> float:
 	return LISTA[id].get("camuflaje", 1.0) if id in LISTA else 1.0
+
+
+# Por cuánto se multiplica lo deprisa que anda Johnny con esa skin (la mascota, 1,15)
+static func rapidez(id: String) -> float:
+	return LISTA[id].get("rapidez", 1.0) if id in LISTA else 1.0

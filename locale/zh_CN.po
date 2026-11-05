@@ -556,7 +556,7 @@ msgstr "假人模特"
 msgid "Quieto mientras lo miras. No le des la espalda."
 msgstr "你盯着它，它就不动。千万别背对它。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La mascota"
 msgstr "吉祥物"
 
@@ -2869,6 +2869,14 @@ msgstr "你走进沉睡僵尸的房间时它们不会醒来，而且它们只能
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
 msgstr "首次杀死裁缝。"
+
+#: scripts/skins.gd
+msgid "Andas un 15 % más rápido."
+msgstr "移动速度提高15%。"
+
+#: scripts/skins.gd
+msgid "Mata a la mascota por primera vez."
+msgstr "首次杀死吉祥物。"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

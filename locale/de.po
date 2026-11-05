@@ -557,7 +557,7 @@ msgstr "Die Schaufensterpuppe"
 msgid "Quieto mientras lo miras. No le des la espalda."
 msgstr "Erstarrt, solange du hinsiehst. Dreh ihr nicht den Rücken zu."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La mascota"
 msgstr "Das Maskottchen"
 
@@ -2874,6 +2874,14 @@ msgstr "Schlafende Zombies wachen nicht auf, wenn du ihr Zimmer betrittst, und s
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
 msgstr "Erledige die Schneiderin zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "Andas un 15 % más rápido."
+msgstr "Du läufst 15 % schneller."
+
+#: scripts/skins.gd
+msgid "Mata a la mascota por primera vez."
+msgstr "Erledige das Maskottchen zum ersten Mal."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

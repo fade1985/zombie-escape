@@ -558,7 +558,7 @@ msgstr "Манекен"
 msgid "Quieto mientras lo miras. No le des la espalda."
 msgstr "Замирает, пока ты на него смотришь. Не поворачивайся к нему спиной."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "La mascota"
 msgstr "Талисман"
 
@@ -2879,6 +2879,14 @@ msgstr "Спящие зомби не просыпаются, когда ты в�
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
 msgstr "Убей швею в первый раз."
+
+#: scripts/skins.gd
+msgid "Andas un 15 % más rápido."
+msgstr "Ты ходишь на 15 % быстрее."
+
+#: scripts/skins.gd
+msgid "Mata a la mascota por primera vez."
+msgstr "Убей талисмана в первый раз."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

@@ -16,6 +16,8 @@ extends "res://scripts/pruebas/prueba_armas.gd"
 #   - la modista (M90): un zombi dormido no se despierta porque Johnny entre en su habitación, y le ve a la mitad de
 #     distancia (de verdad, con un zombi dormido a 200 y luego a 120, con y sin la skin); lo consigue la modista; su
 #     carta en la taquilla (captura-skins-taquilla-modista.png)
+#   - la mascota (M90): anda un 15 % más rápido, de verdad (andando 0,4 s); lo consigue la mascota; su carta en la
+#     taquilla (captura-skins-taquilla-mascota.png)
 #   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
 #     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón, el gymbro y el bombero
 #     (captura-skins-taquilla-<id>.png); «Siguiente skin» del panel de pruebas da la vuelta sin guardar
@@ -204,6 +206,17 @@ func probar_skins() -> void:
 		print("Elegida la modista: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true)" % [
 			johnny.skin, johnny.sprite.sprite_frames.resource_path.get_file(),
 			(taquilla.cartas["modista"] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y])
+		# la mascota (M90), igual (captura-skins-taquilla-mascota.png)
+		Skins.desbloquear("mascota")
+		taquilla.abrir(self)
+		await get_tree().process_frame
+		(taquilla.cartas["mascota"] as Button).grab_focus()
+		taquilla.elegir("mascota")
+		await get_tree().create_timer(0.5).timeout
+		Captura.foto("captura-skins-taquilla-mascota.png")
+		print("Elegida la mascota: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true)" % [
+			johnny.skin, johnny.sprite.sprite_frames.resource_path.get_file(),
+			(taquilla.cartas["mascota"] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y])
 		taquilla.cerrar()
 	print("Taquilla cerrada: juego en pausa %s (esperado: false)" % get_tree().paused)
 	var vuelta := []
@@ -211,7 +224,7 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > El antidisturbios > La modista > Conserje)" % " > ".join(vuelta))
+	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > El antidisturbios > La modista > La mascota > Conserje)" % " > ".join(vuelta))
 	# el doctor Salas (M36): la mitad de las veces, un objeto más; las demás skins, nunca
 	print("Objeto de más: salas %s · bombero %s · conserje %s · lo consigue «%s» (esperado: 0.5, 0, 0, «salas»)" % [
 		Skins.doble("salas"), Skins.doble("bombero"), Skins.doble(""), Skins.de_jefe("cientifico_jefe")])
@@ -283,6 +296,19 @@ func probar_skins() -> void:
 			await get_tree().physics_frame
 			camuflaje.append("%s a %d: %s (se ven %s)" % [Skins.nombre(skin), lejos, "despierto" if not dormilon.dormido else "dormido", dormilon.se_ve(johnny)])
 			dormilon.queue_free()
+	# la mascota (M90): anda un 15 % más rápido; de verdad, andando hacia la derecha 0,4 s desde ese mismo sitio
+	var rapideces := []
+	for skin in ["", "mascota", "modista"]:
+		johnny.skin = skin
+		johnny.position = libre
+		johnny.velocity = Vector2.ZERO
+		Input.action_press("derecha")
+		await get_tree().create_timer(0.4).timeout
+		rapideces.append(johnny.velocity.length())
+		Input.action_release("derecha")
+		await get_tree().create_timer(0.3).timeout
+	print("Rapidez andando: conserje %.0f · mascota %.0f (× %.2f) · modista %.0f · lo consigue «%s» (esperado: × 1.15, la modista como el conserje; «mascota»)" % [
+		rapideces[0], rapideces[1], rapideces[1] / rapideces[0], rapideces[2], Skins.de_jefe("mascota")])
 	johnny.skin = ""
 	johnny.position = sitio
 	print("Camuflaje (en %s, habitación %d): %s · lo consigue «%s» (esperado: Conserje despierto y despierto; La modista dormido a 200 y despierto a 120, y se ven siempre; «modista»)" % [
@@ -294,7 +320,7 @@ func probar_skins() -> void:
 	johnny.hide()
 	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
-	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios", "modista"]:
+	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios", "modista", "mascota"]:
 		var copias := []
 		var hojas_bien := 0
 		for i in dirs.size() + armas.size() + 1:

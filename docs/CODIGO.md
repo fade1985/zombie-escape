@@ -255,7 +255,8 @@ en una línea.
   botiquines curan un 50 % más, en `partida.cura_de`), el antidisturbios (M90: `aguante()`, tras un golpe 1,2 s sin
   recibir otro en vez de 0,7, y `firme()`, nada le tira al suelo; en `johnny.gd`: `recibir_dano`, `pisar` y `caer`) y
   la modista (M90: `camuflaje()`, los zombis dormidos no se despiertan porque Johnny entre en su habitación y le ven a
-  la mitad de distancia; en `zombi.vigilar` y en `zombi_guardia.gd`). En la taquilla (`ui/taquilla.gd`) ya no caben todas: la lista
+  la mitad de distancia; en `zombi.vigilar` y en `zombi_guardia.gd`) y la mascota (M90: `rapidez()`, anda un 15 % más
+  rápido; en `johnny.gd`, al andar). En la taquilla (`ui/taquilla.gd`) ya no caben todas: la lista
   se desliza (`ALTO_LISTA`).
 - `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
   botiquín, 40 (M72: antes 50), que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
