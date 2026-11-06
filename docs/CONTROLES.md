@@ -145,6 +145,12 @@ cada prueba se explica lo que comprueba y las fotos que saca.
 
 La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba pone en cuál estás):
 
+**Abrir los muebles** (el ordenador, la taquilla, el banco de trabajo y el baúl): ya no se abren solos al arrimarse.
+Con Johnny delante (sin letrero) se abren con la acción de **atacar**: clic izquierdo o
+J (las que tenga puestas en Opciones), **RT** en el mando y, en el móvil, el botón **Abrir** que sale entonces encima
+del arco de botones. Mientras está delante de uno, el clic abre y no dispara; al apartarse, vuelve a disparar
+(`mapa/zona_usar.gd`; se prueba con `-- --captura --sala`).
+
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
@@ -177,7 +183,7 @@ vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado
 `scripts/ui/tactil.gd`, solo mientras se juega. Joystick izquierdo (mitad izquierda de la pantalla); abajo a la
 derecha, según el modo: joystick derecho (libre, el de siempre) o esquivar grande (con *Disparo asistido*).
 En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de a distancia en la mano recarga) y lanzar (arrastrar y
-soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). En los menús el dedo hace
+soltar), con el botoncito de cambiar lanzable; delante de un mueble de la sala de mantenimiento, encima, **Abrir**. Bajo el minimapa: inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). En los menús el dedo hace
 de ratón. En táctil la pantalla se agranda sin redondear.
 Con un ratón (un móvil Android con ratón y teclado, o un ordenador con pantalla táctil), al moverlo o hacer clic se
 esconden los botones y se apunta con él como en el ordenador; al tocar la pantalla vuelven (`Tactil.con_dedo`).

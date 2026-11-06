@@ -7108,6 +7108,10 @@ msgstr "Appuie sur une touche pour continuer · Échap pour passer"
 msgid "Gira el móvil para jugar mejor"
 msgstr "Tourne ton téléphone pour mieux jouer"
 
+#: scripts/ui/tactil.gd
+msgid "Abrir"
+msgstr "Ouvrir"
+
 #: scripts/ui/taquilla.gd
 msgid "Taquilla de Johnny"
 msgstr "Casier de Johnny"

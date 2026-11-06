@@ -7128,6 +7128,10 @@ msgstr "Нажми любую клавишу, чтобы продолжить ·
 msgid "Gira el móvil para jugar mejor"
 msgstr "Поверни телефон — так удобнее"
 
+#: scripts/ui/tactil.gd
+msgid "Abrir"
+msgstr "Открыть"
+
 #: scripts/ui/taquilla.gd
 msgid "Taquilla de Johnny"
 msgstr "Шкафчик Джонни"

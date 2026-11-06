@@ -49,6 +49,8 @@ func probar_skins() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
+	mapa.taquilla.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	if taquilla.abierta():
 		var puesto: bool = taquilla.elegir("portero")
 		# (la foto con todas en «???»: que su pista quepa en la carta, también la larga del jefe de bomberos)
@@ -145,7 +147,9 @@ func probar_skins() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
-	print("Taquilla: abierta al arrimarse %s · juego en pausa %s (esperado: true, true)" % [taquilla.abierta(), get_tree().paused])
+	mapa.taquilla.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
+	print("Taquilla: abierta al arrimarse y pulsar %s · juego en pausa %s (esperado: true, true)" % [taquilla.abierta(), get_tree().paused])
 	if taquilla.abierta():
 		taquilla.marcar("portero")
 		await get_tree().create_timer(0.4).timeout

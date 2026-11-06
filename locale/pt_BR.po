@@ -7108,6 +7108,10 @@ msgstr "Aperte qualquer tecla para continuar · Esc para pular"
 msgid "Gira el móvil para jugar mejor"
 msgstr "Gire o celular para jogar melhor"
 
+#: scripts/ui/tactil.gd
+msgid "Abrir"
+msgstr "Abrir"
+
 #: scripts/ui/taquilla.gd
 msgid "Taquilla de Johnny"
 msgstr "Armário do Johnny"

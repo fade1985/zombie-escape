@@ -1,13 +1,14 @@
-# Un mueble de la sala de mantenimiento que se usa al arrimarse (Baul y BancoTrabajo en src/props.js del JS):
+# Un mueble de la sala de mantenimiento que se usa arrimándose a él (Baul y BancoTrabajo en src/props.js del JS):
 # pegado a la pared de arriba, sin su nombre escrito (se reconoce por el dibujo). Delante tiene una zona
-# invisible: cuando Johnny se arrima, avisa con "usar" y la partida abre su pantalla (ui/inventario.gd). Al
-# cerrarla hay que apartarse un poco antes de que se vuelva a abrir. Como la mesa del ordenador (ordenador.gd),
-# pero sin luz.
+# invisible (zona_usar.gd): con Johnny en ella y el clic (atacar), avisa con "usar" y la
+# partida abre su pantalla (ui/inventario.gd). Como la mesa del ordenador (ordenador.gd), pero sin luz.
 extends StaticBody2D
 
 signal usar
 
-var lista := true     # se pone a false al abrirse, y vuelve a true cuando Johnny se aparta
+const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
+
+var zona: Area2D      # la de delante (zona_usar.gd)
 
 
 # "x": su centro; "arriba": donde acaba el muro de arriba; "ancho" y "hondo": lo que ocupa en el suelo
@@ -30,19 +31,8 @@ func montar(nombre: String, dibujo: String, x: float, arriba: float, ancho: floa
 	forma.position = Vector2(0, -hondo / 2.0)
 	add_child(forma)
 
-	# la zona de delante, donde se para Johnny para usarlo
-	var zona := Area2D.new()
-	zona.collision_layer = 0
-	zona.collision_mask = 2   # solo Johnny
-	var hueco := CollisionShape2D.new()
-	var r := RectangleShape2D.new()
-	r.size = Vector2(ancho + 20, 40)
-	hueco.shape = r
-	hueco.position = Vector2(0, 18)
-	zona.add_child(hueco)
+	# la zona de delante, donde se para Johnny para usarlo: se abre con el clic (zona_usar.gd)
+	zona = ZONA_USAR.new()
+	zona.montar(ancho)
 	add_child(zona)
-	zona.body_entered.connect(func(_cuerpo):
-		if lista:
-			lista = false
-			usar.emit())
-	zona.body_exited.connect(func(_cuerpo): lista = true)
+	zona.usar.connect(usar.emit)

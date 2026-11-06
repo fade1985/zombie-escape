@@ -166,6 +166,7 @@ var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siemp
 var modo := "libre"        # cómo se ataca (ver arriba)
 var asistido_puesto := false   # cómo estaba la ayuda "Disparo asistido" la última vez que se miró (mirar_asistido)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
+var ante_mueble: Area2D = null   # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): el clic lo abre, no dispara
 
 const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
 # Los estados de charco que le corroen: con ellos se le ven encima las manchas de ácido, como a los zombis (M65): el
@@ -584,7 +585,7 @@ func apuntar_libre() -> void:
 	if apunte.length() < 1.0:
 		return
 	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado
-	if ataca:
+	if ataca and ante_mueble == null:   # (delante de un mueble de la sala, el clic es para abrirlo)
 		intentar_atacar(ayuda_apunte(apunte.angle()))
 
 

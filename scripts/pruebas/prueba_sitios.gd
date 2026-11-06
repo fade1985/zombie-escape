@@ -1007,7 +1007,8 @@ func probar_viviendas() -> void:
 # los zombis): a la puerta del pasillo, a la de las viviendas y delante de cada mueble que se usa. Fotos: la sala entera
 # (captura-sala.png) y, recortada de la pantalla, cada estancia con Johnny dentro y lo que pone arriba
 # (captura-sala-vestuario.png, captura-sala-despacho.png y captura-sala-taller.png). Luego se pone delante del banco, de
-# la estantería y del baúl y cuenta cuál se usaría; cruza la puerta de las viviendas, vuelve y sale al pasillo, y cuenta
+# la estantería y del baúl y cuenta cuál se usaría; comprueba que los muebles se abren con el clic y no al arrimarse
+# (probar_abrir_muebles); cruza la puerta de las viviendas, vuelve y sale al pasillo, y cuenta
 # adónde ha llegado cada vez. Luego se cierra
 func probar_sala() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
@@ -1058,15 +1059,13 @@ func probar_sala() -> void:
 		var trozo := Rect2i(Vector2i(a), Vector2i(b - a)).intersection(Rect2i(Vector2i.ZERO, pantalla.get_size()))
 		pantalla.get_region(trozo).save_png("res://captura-sala-%s.png" % s.uso)
 	$Pantalla.show()
-	# el banco y el baúl, con la estantería en medio: delante de cada sitio, qué se usaría (sin abrir sus pantallas)
-	mapa.banco.lista = false
-	mapa.baul.lista = false
-	var en_zona := func(m: Node) -> bool:
-		return not m.get_children().filter(func(h): return h is Area2D)[0].get_overlapping_bodies().is_empty()
+	# el banco y el baúl, con la estantería en medio: delante de cada sitio, qué se usaría
+	var en_zona := func(m: Node) -> bool: return johnny.ante_mueble == m.zona
 	for n in [["banco", mapa.banco.position.x], ["estantería", 918.0], ["baúl", mapa.baul.position.x]]:
 		johnny.position = Vector2(n[1], mapa.MURO + 36.0 + 22.0)
 		await get_tree().create_timer(0.1).timeout
 		print("Delante de: %s · se usaría: banco %s, baúl %s" % [n[0], en_zona.call(mapa.banco), en_zona.call(mapa.baul)])
+	await probar_abrir_muebles(usables)
 	# las dos puertas de fuera: a las viviendas (y vuelta, por la misma) y al pasillo
 	await cruzar(1)
 	print("Por la puerta de la derecha: en «%s» (esperado: viviendas)" % planta.sitios[aqui].tipo)
@@ -1076,6 +1075,85 @@ func probar_sala() -> void:
 	await cruzar(0)
 	print("Por la puerta de abajo: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
 	get_tree().quit()
+
+
+# De probar_sala: los muebles ya no se abren solos al arrimarse (zona_usar.gd). Delante de cada uno, sin pulsar nada,
+# no se abre; con un clic izquierdo se abre, y Johnny (en el modo libre) no dispara. Lejos de los
+# muebles, el clic vuelve a disparar. En el móvil, delante de un mueble sale el botón «Abrir» y tocarlo lo abre. Las
+# pantallas no llegan a abrirse: mientras dura, "usar" solo se cuenta. Fotos: captura-sala-ordenador.png (Johnny delante
+# del ordenador, sin que se abra) y captura-sala-movil.png (delante de la taquilla, con los botones del móvil)
+func probar_abrir_muebles(usables: Dictionary) -> void:
+	var antes_modo: String = johnny.modo
+	johnny.modo = "libre"
+	johnny.con_raton = true
+	var veces := {}
+	var guardadas := {}
+	for n in usables:
+		var m: Node = usables[n][0]
+		guardadas[n] = m.usar.get_connections().map(func(c): return c.callable)
+		for c in guardadas[n]:
+			m.usar.disconnect(c)
+		veces[n] = 0
+		m.usar.connect(func(): veces[n] += 1)
+	var clic := func(abajo: bool) -> void:
+		var e := InputEventMouseButton.new()
+		e.button_index = MOUSE_BUTTON_LEFT
+		e.pressed = abajo
+		e.position = get_viewport().get_mouse_position()
+		Input.parse_input_event(e)
+	for n in usables:
+		var m: Node = usables[n][0]
+		johnny.position = m.position + Vector2(0, 22)
+		johnny.espera = 0.0
+		await get_tree().create_timer(0.4).timeout
+		var sin_clic: int = veces[n]
+		if n == "Ordenador":
+			Captura.foto("captura-sala-ordenador.png")
+		clic.call(true)
+		await get_tree().create_timer(0.15).timeout
+		clic.call(false)
+		await get_tree().physics_frame
+		print("%s: al arrimarse se abre %d veces (esperado: 0) · con el clic se abre %d (esperado: 1) · dispara %s (esperado: false)"
+			% [n, sin_clic, veces[n], johnny.espera > 0.0])
+	# en el móvil: delante de la taquilla sale el botón «Abrir», y tocarlo la abre (foto: captura-sala-movil.png)
+	var tactil: Tactil = null
+	for hijo in get_children():
+		if hijo is Tactil:
+			tactil = hijo
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	await get_tree().create_timer(0.2).timeout
+	var antes: int = veces["Taquilla"]
+	var boton: Array = tactil.botones().get("abrir", [])
+	Captura.foto("captura-sala-movil.png")
+	if not boton.is_empty():
+		for pulsado in [true, false]:
+			var t := InputEventScreenTouch.new()
+			t.position = get_viewport().get_final_transform() * Vector2(boton[0])   # (de la pantalla del juego a la ventana)
+			t.pressed = pulsado
+			Input.parse_input_event(t)
+			await get_tree().physics_frame
+	print("Móvil, delante de la taquilla: botón «Abrir» %s (esperado: true) · al tocarlo se abre %d (esperado: 1)"
+		% [not boton.is_empty(), veces["Taquilla"] - antes])
+	Tactil.activo = false
+	tactil.visible = false
+	johnny.con_raton = true
+	# lejos de los muebles, el clic dispara como siempre
+	johnny.position = mapa.ordenador.position + Vector2(0, 140)
+	johnny.espera = 0.0
+	await get_tree().create_timer(0.3).timeout
+	clic.call(true)
+	await get_tree().create_timer(0.15).timeout
+	clic.call(false)
+	print("Lejos de los muebles: delante de alguno %s (esperado: false) · el clic dispara %s (esperado: true)"
+		% [johnny.ante_mueble != null, johnny.espera > 0.0 or johnny.ataque_t >= 0.0])
+	johnny.modo = antes_modo
+	for n in usables:
+		var m: Node = usables[n][0]
+		for c in m.usar.get_connections():
+			m.usar.disconnect(c.callable)
+		for c in guardadas[n]:
+			m.usar.connect(c)
 
 
 # Con "--captura --ascensor": el ascensor (partida.gd, arreglar_ascensor). En la planta baja no se arregla (la sala
@@ -1142,7 +1220,9 @@ func probar_ascensor() -> void:
 	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.3).timeout
+	mapa.baul.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	var abierto: bool = inventario.abierto == "baul"
 	if abierto:
 		inventario.guardar_todo()

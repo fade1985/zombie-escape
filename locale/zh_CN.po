@@ -7088,6 +7088,10 @@ msgstr "按任意键继续 · 按 Esc 跳过"
 msgid "Gira el móvil para jugar mejor"
 msgstr "把手机横过来玩更顺手"
 
+#: scripts/ui/tactil.gd
+msgid "Abrir"
+msgstr "打开"
+
 #: scripts/ui/taquilla.gd
 msgid "Taquilla de Johnny"
 msgstr "Johnny的储物柜"

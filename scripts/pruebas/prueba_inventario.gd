@@ -30,6 +30,8 @@ func probar_baul_pistola() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
+	mapa.baul.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	if inventario.abierto != "baul":
 		print("ERROR: el baúl no se ha abierto")
 		get_tree().quit()
@@ -88,6 +90,8 @@ func probar_baul_fregona() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
+	mapa.baul.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	if inventario.abierto != "baul":
 		print("ERROR: el baúl no se ha abierto")
 		get_tree().quit()
@@ -155,6 +159,8 @@ func probar_baul() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
+	mapa.baul.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	var abierto: bool = inventario.abierto == "baul"
 	print("Baúl: abierto al arrimarse %s · juego en pausa %s (esperado: true, true)" % [abierto, get_tree().paused])
 	if not abierto:
@@ -497,6 +503,8 @@ func probar_calidades() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
+	mapa.baul.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	if inventario.abierto != "baul":
 		print("Baúl: no se ha abierto (esperado: abierto)")
 		Guardado.escribir(antes)
@@ -603,6 +611,8 @@ func probar_banco_mejorar() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
+	mapa.banco.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	if inventario.abierto != "banco":
 		print("Banco: no se ha abierto (esperado: abierto)")
 		Guardado.escribir(antes)
@@ -1170,6 +1180,8 @@ func probar_montones() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
+	mapa.baul.zona.abrir()   # (ya no se abre solo al arrimarse: con el clic, zona_usar.gd)
+	await get_tree().create_timer(0.3).timeout
 	if inventario.abierto != "baul":
 		print("Baúl: no se ha abierto (esperado: abierto)")
 		Guardado.escribir(antes)
