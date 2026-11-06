@@ -667,7 +667,7 @@ func probar_tienda_armas() -> void:
 	var boton := func(id: String) -> Button: return ordenador.ventana.find_child("b_" + id, true, false)
 	var dolares := func() -> int: return Guardado.cargar().dolares
 	var foco := get_viewport().gui_get_focus_owner()
-	print("Al abrir: ficha de «%s» · marcado %s · «Comprar» a la vista %s (esperado: nada, b_info, false)" % [
+	print("Al abrir: ficha de «%s» · marcado %s · «Comprar» a la vista %s (esperado: nada, b_cuchillo, false)" % [
 		tienda.call().ficha_id, foco.name if foco else "nada", boton.call("comprar").visible])
 	Captura.foto("captura-tienda-nota.png")
 	# el ratón
@@ -696,10 +696,8 @@ func probar_tienda_armas() -> void:
 	print("Mando, A: cuerpo a cuerpo %s · sigue marcado %s · ficha de «%s» (esperado: bate, b_bate, bate)" % [
 		johnny.huecos.cuerpo, foco.name if foco else "nada", tienda.call().ficha_id])
 	await pulsar_mando(JOY_BUTTON_DPAD_UP)
-	await pulsar_mando(JOY_BUTTON_DPAD_UP)
 	foco = get_viewport().gui_get_focus_owner()
-	print("Mando, arriba dos veces: marcado %s · ficha de «%s» (esperado: b_info, nada: cómo va la tienda)" % [
-		foco.name if foco else "nada", tienda.call().ficha_id])
+	print("Mando, arriba desde el bate: marcado %s (esperado: b_bate, no se sale)" % [foco.name if foco else "nada"])
 	Controles.con_mando = false
 	# el dedo
 	Tactil.activo = true
@@ -712,7 +710,7 @@ func probar_tienda_armas() -> void:
 	await get_tree().create_timer(0.4).timeout
 	await tocar(boton.call("granada").get_global_rect().get_center())
 	await get_tree().create_timer(0.3).timeout
-	print("Dedo, segundo toque: llevas %d (esperado: %d)" % [lanzables.total("granada"), granadas + 1])
+	print("Dedo, segundo toque: llevas %d (esperado: %d) · info «%s» · listo %s" % [lanzables.total("granada"), granadas + 1, ordenador.info.text, tienda.call().listo])
 	Tactil.activo = false
 	# en los idiomas más largos (y en chino, sin espacios): la ficha de la motosierra cabe (captura-tienda-<idioma>.png)
 	var idioma := Idioma.actual

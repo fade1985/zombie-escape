@@ -748,7 +748,6 @@ func programa_armas(c: VBoxContainer, foco := "") -> void:
 	tienda.name = "tienda"
 	tienda.montar(self, Guardado.cargar(), foco.trim_prefix("b_"))
 	c.add_child(tienda)
-	enlazar(tienda.boton_info, Idioma.t("Elige un arma: se paga con los dólares ahorrados."), tienda.ver_nota)
 	for id in Armas.PRECIOS:
 		enlazar(tienda.botones[id], resumen(Armas.DATOS[id]), tienda.al_pulsar.bind(id))
 	for k in Lanzables.PRECIOS:
