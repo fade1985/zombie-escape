@@ -217,11 +217,11 @@ msgstr "Lance-acide"
 msgid "Lanza rayos"
 msgstr "Lance-éclairs"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Cuerpo a cuerpo"
 msgstr "Corps à corps"
 
-#: scripts/armas.gd scripts/ui/inventario.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "A distancia"
 msgstr "À distance"
 
@@ -5097,11 +5097,11 @@ msgstr "Coûte $%d : il te manque $%d"
 msgid "Toca otra vez: comprar · $%d"
 msgstr "Touche encore : acheter · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "A: comprar · $%d"
 msgstr "A : acheter · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "Intro: comprar · $%d"
 msgstr "Entrée : acheter · $%d"
 
@@ -5179,7 +5179,7 @@ msgstr "En main"
 msgid "De repuesto"
 msgstr "De rechange"
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
 msgstr "Lançables"
 
@@ -5268,7 +5268,7 @@ msgstr "Jeter"
 msgid "Si la tiras, la de repuesto pasa a la mano."
 msgstr "Si tu la jettes, celle de rechange passe en main."
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Daño"
 msgstr "Dégâts"
 
@@ -5276,7 +5276,7 @@ msgstr "Dégâts"
 msgid "Ritmo"
 msgstr "Cadence"
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Alcance"
 msgstr "Portée"
 
@@ -5300,7 +5300,7 @@ msgstr "Pièce · Améliore les armes"
 msgid "Objeto · Común"
 msgstr "Objet · Commun"
 
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Llevas %d"
 msgstr "Tu en as %d"
 
@@ -5834,7 +5834,7 @@ msgstr "Sonne, attire les zombies 3 s et explose."
 msgid "Explota y deja a los zombis congelados 3 s."
 msgstr "Explose et laisse les zombies gelés 3 s."
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "Spéciales"
 
@@ -6644,7 +6644,7 @@ msgstr "C:\\MAINTENANCE\\%s"
 msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
 msgstr "Retire tous les points de l'arbre. Ce que tu as dépensé n'est pas remboursé."
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
 msgstr "Les $%d de cette partie sont gardés à la fin : tous si tu termines le bâtiment, la moitié si tu tombes."
 
@@ -6663,10 +6663,6 @@ msgstr "%s. Coûte $%d : il te manque $%d."
 #: scripts/ui/ordenador.gd
 msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s. Appuie pour le monter ($%d)."
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Dollars économisés"
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
@@ -6697,32 +6693,12 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s passe à %d/%d !"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Vendues en qualité Normale. Si tu tombes, tu perds tout ce que tu portes, alors range-le d'abord au coffre de l'atelier. Si tu termines le bâtiment, tout va au coffre sans que tu aies rien à faire. Tu portes deux armes de chaque type : celle que tu avais en main passe en rechange et celle de rechange va au coffre ; si elle n'y tient pas ou ne peut pas y aller, celle de ta main reste par terre."
-
-#: scripts/ui/ordenador.gd
-msgid "LA LLEVAS"
-msgstr "EN MAIN"
-
-#: scripts/ui/ordenador.gd
-msgid "GRATIS"
-msgstr "GRATUIT"
-
-#: scripts/ui/ordenador.gd
-msgid "Arrojables · de uno en uno, hasta los que caben"
-msgstr "Lançables · un par un, autant qu'il en rentre"
-
-#: scripts/ui/ordenador.gd
-msgid "AL MÁXIMO"
-msgstr "AU MAX"
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Choisis une arme : elle se paie avec les dollars économisés."
 
 #: scripts/ui/ordenador.gd
 msgid "%s: %s Cada uno, $%d."
 msgstr "%s : %s L'unité, $%d."
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un arma: se paga con los dólares ahorrados."
-msgstr "Choisis une arme : elle se paie avec les dollars économisés."
 
 #: scripts/ui/ordenador.gd
 msgid "Daño %d/s · Depósito %d s"
@@ -6823,6 +6799,10 @@ msgstr "Succès débloqués"
 #: scripts/ui/ordenador.gd
 msgid "Premios por cobrar"
 msgstr "Récompenses à encaisser"
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Dollars économisés"
 
 #: scripts/ui/ordenador.gd
 msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
@@ -7085,14 +7065,6 @@ msgid "Colecciones y bestiario"
 msgstr "Collections et bestiaire"
 
 #: scripts/ui/ordenador.gd
-msgid "A distancia · llenas, y con munición de reserva"
-msgstr "À distance · chargées, avec des munitions en réserve"
-
-#: scripts/ui/ordenador.gd
-msgid "Especiales · llenas; van en el hueco de las de A distancia"
-msgstr "Spéciales · chargées ; elles prennent l'emplacement des armes À distance"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Noticias\n"
 "¡NUEVAS!"
@@ -7179,6 +7151,66 @@ msgstr "CANAL 8"
 #: scripts/ui/tele.gd
 msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
 msgstr "DERNIÈRE MINUTE  ·  %s : « LA SITUATION EST SOUS CONTRÔLE »  ·  NE VOUS APPROCHEZ PAS DE L'IMMEUBLE  ·  "
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLEVAS"
+msgstr "EN MAIN"
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLENO"
+msgstr "PLEIN"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cómo va la tienda"
+msgstr "Comment marche la boutique"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Ya la llevas"
+msgstr "Déjà à toi"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No te caben más"
+msgstr "Plus de place"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No en este reto"
+msgstr "Pas dans ce défi"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Te faltan $%d"
+msgstr "Il te manque $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Comprar · $%d"
+msgstr "Acheter · $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Vendues en qualité Normale. Si tu tombes, tu perds tout ce que tu portes, alors range-le d'abord au coffre de l'atelier. Si tu termines le bâtiment, tout va au coffre sans que tu aies rien à faire. Tu portes deux armes de chaque type : celle que tu avais en main passe en rechange et celle de rechange va au coffre ; si elle n'y tient pas ou ne peut pas y aller, celle de ta main reste par terre."
+
+#: scripts/ui/tienda_armas.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines, et elles vont à l'emplacement à distance. Les lançables s'achètent un par un, tant qu'il reste de la place."
+
+#: scripts/ui/tienda_armas.gd
+msgid "Área"
+msgstr "Zone"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Rapidez"
+msgstr "Vitesse"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Abanico"
+msgstr "Arc"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Depósito"
+msgstr "Réservoir"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cargador"
+msgstr "Chargeur"
 
 #: scripts/ui/tutorial.gd
 msgid "¡Nuevo!"

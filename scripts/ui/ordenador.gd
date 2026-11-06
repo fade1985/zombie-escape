@@ -8,7 +8,8 @@
 #     tienes una de repuesto, esa va al baúl en el momento (partida.repuesto_al_baul; si no cabe o no se puede
 #     guardar, la de la mano se queda en el suelo: partida.llevar_arma, dos de cada tipo como mucho). Desde el
 #     25 oct también vende el lanzallamas, el lanza ácido y el lanza rayos, que antes se creaban en el banco.
-#     Cuatro secciones, las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
+#     Todo a la vez en una chapa oscura, con la ficha de lo elegido a la derecha (tienda_armas.gd). Cuatro grupos,
+#     las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
 #     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, mientras quepan (van a sus montones de
 #     5); los que sobren al completar el edificio van al baúl.
 #   - "Logros": los retos del juego (logros.gd), por apartados (Logros.TEMAS), para elegir cuál intentar en esta
@@ -44,17 +45,9 @@ const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOG
 const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
 	"noticias": "Noticias de Canal 8", "colecciones": "Colecciones y bestiario"}
 # [/traducir]
-# Las secciones de armas de la tienda: [familia (Armas.familia), título]. Las especiales, aparte (como sus piezas),
-# aunque van en el hueco de las de A distancia. Debajo, los arrojables
-# [traducir]
-const SECCIONES := [
-	["cuerpo", "Cuerpo a cuerpo"],
-	["distancia", "A distancia · llenas, y con munición de reserva"],
-	["especial", "Especiales · llenas; van en el hueco de las de A distancia"],
-]
-# [/traducir]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
 const ARBOL := preload("res://scripts/ui/arbol_talentos.gd")   # el árbol de talentos (TALENTOS.EXE)
+const TIENDA := preload("res://scripts/ui/tienda_armas.gd")   # la tienda de armas (ARMAS.EXE)
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
 # El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
 # [traducir]
@@ -331,7 +324,7 @@ func abrir(programa: String, foco := "") -> void:
 	elif programa == "colecciones":
 		programa_colecciones(contenido)
 	else:
-		programa_armas(contenido)
+		programa_armas(contenido, foco)
 	var marcado: Control = contenido.find_child(foco, true, false) if foco != "" else null
 	if marcado == null:
 		marcado = primer_boton(contenido)
@@ -549,14 +542,6 @@ func explica_talento(s: Dictionary, t: Dictionary) -> String:
 	return texto
 
 
-# Lo ahorrado: una caja azul hundida, como .pc-saldo del JS
-func saldo(c: VBoxContainer, s: Dictionary) -> void:
-	var fila := HBoxContainer.new()
-	fila.add_theme_constant_override("separation", 8)
-	c.add_child(fila)
-	cajita(fila, Idioma.t("Dólares ahorrados"), "billete", "$%d" % s.dolares)
-
-
 func cajita(fila: HBoxContainer, rotulo: String, icono: String, valor: String) -> void:
 	var marco := PanelContainer.new()
 	marco.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -573,11 +558,6 @@ func cajita(fila: HBoxContainer, rotulo: String, icono: String, valor: String) -
 	var abajo := Tema.icono_y_texto(icono, valor, 24)
 	abajo.get_child(1).add_theme_color_override("font_color", Color.WHITE)
 	columna.add_child(abajo)
-
-
-func nota_partida(c: VBoxContainer) -> void:
-	if partida.dolares > 0:
-		nota(c, Idioma.t("Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes.") % partida.dolares)
 
 
 func nota(c: VBoxContainer, texto: String) -> void:
@@ -760,38 +740,21 @@ func subir(id: String) -> void:
 
 # ── Tienda de armas ──
 
-func programa_armas(c: VBoxContainer) -> void:
-	var s := Guardado.cargar()
-	saldo(c, s)
-	nota(c, Idioma.t("Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."))
-	nota_partida(c)
-	var ids := Armas.PRECIOS.keys()
-	ids.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
-	for seccion in SECCIONES:
-		var lista := rejilla(grupo(c, seccion[1]))
-		for id in ids:
-			if Armas.familia(id) != seccion[0]:
-				continue
-			var w: Dictionary = Armas.DATOS[id]
-			var precio: int = Supervivientes.precio(Armas.PRECIOS[id])
-			var lleva: bool = partida.johnny.huecos[w.tipo] == id
-			var etiqueta := Idioma.t("LA LLEVAS") if lleva else (Idioma.t("GRATIS") if precio == 0 else "$%d" % precio)
-			var estado := "puesta" if lleva else ("" if s.dolares >= precio else "bloqueada")
-			var b := tarjeta(lista, "b_" + id, id, Armas.nombre(id), resumen_corto(w), etiqueta, estado)
-			enlazar(b, resumen(w), comprar_arma.bind(id))
-	# los arrojables, de uno en uno: «AL MÁXIMO» (en verde) si ya no le cabe ninguno más (sus montones llenos y sin hueco
-	# para otro: lanzables.cabe)
-	var lz: Lanzables = partida.lanzables
-	var lista := rejilla(grupo(c, Idioma.t("Arrojables · de uno en uno, hasta los que caben")))
+# La chapa oscura con todo a la vez: las casillas por grupos a la izquierda y la ficha de lo elegido a la derecha
+# (tienda_armas.gd). Aquí se le pone a cada casilla lo que explica en la línea de abajo y lo que hace al pulsarla.
+# "foco": la casilla que se marca (después de comprar, lo comprado: la ficha lo sigue enseñando)
+func programa_armas(c: VBoxContainer, foco := "") -> void:
+	var tienda: Control = TIENDA.new()
+	tienda.name = "tienda"
+	tienda.montar(self, Guardado.cargar(), foco.trim_prefix("b_"))
+	c.add_child(tienda)
+	enlazar(tienda.boton_info, Idioma.t("Elige un arma: se paga con los dólares ahorrados."), tienda.ver_nota)
+	for id in Armas.PRECIOS:
+		enlazar(tienda.botones[id], resumen(Armas.DATOS[id]), tienda.al_pulsar.bind(id))
 	for k in Lanzables.PRECIOS:
-		var precio: int = Supervivientes.precio(Lanzables.PRECIOS[k])
-		var lleno := not lz.cabe(k)
-		var estado := "lleno" if lleno else ("" if s.dolares >= precio and not Reto.sin_municion() else "bloqueada")
-		var b := tarjeta(lista, "b_" + k, k, Lanzables.uno(k), Idioma.t("Llevas %d") % lz.total(k),
-			Idioma.t("AL MÁXIMO") if lleno else "$%d" % precio, estado)
 		var que: String = Idioma.t(INVENTARIO.QUE_HACE[k])
-		enlazar(b, Idioma.t("%s: %s Cada uno, $%d.") % [Lanzables.uno(k), que[0].to_lower() + que.substr(1), precio],
-			comprar_lanzable.bind(k))
+		enlazar(tienda.botones[k], Idioma.t("%s: %s Cada uno, $%d.") % [Lanzables.uno(k), que[0].to_lower() + que.substr(1),
+			Supervivientes.precio(Lanzables.PRECIOS[k])], tienda.al_pulsar.bind(k))
 	info.text = Idioma.t("Elige un arma: se paga con los dólares ahorrados.")
 
 

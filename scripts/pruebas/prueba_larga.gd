@@ -648,6 +648,88 @@ func probar_arbol_talentos() -> void:
 	ahorrados = antes.dolares
 
 
+# Con "--captura --tienda-armas": la tienda de armas del ordenador (tienda_armas.gd), con 100 $. Al abrir, la ficha
+# explica la tienda (captura-tienda-nota.png). Con el ratón: al pasar por la escopeta la ficha la enseña
+# (captura-tienda-raton.png), se queda al ir hacia «Comprar» y «Comprar» la compra. Con el mando: la cruceta pasa del
+# cuchillo al bate, la ficha lo sigue y dice «A: comprar» (captura-tienda-mando.png), y A lo compra. Con el dedo: el
+# primer toque en la granada solo enseña la ficha (captura-tienda-dedo.png) y el segundo compra una. Y la ficha en alemán,
+# ruso y chino (captura-tienda-de.png...). Cada línea dice lo esperado. Deja el guardado como estaba
+func probar_tienda_armas() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g): g.dolares = 100)
+	ahorrados = 100
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas")
+	await get_tree().create_timer(0.5).timeout
+	var tienda := func() -> Control: return ordenador.ventana.find_child("tienda", true, false)
+	var boton := func(id: String) -> Button: return ordenador.ventana.find_child("b_" + id, true, false)
+	var dolares := func() -> int: return Guardado.cargar().dolares
+	var foco := get_viewport().gui_get_focus_owner()
+	print("Al abrir: ficha de «%s» · marcado %s · «Comprar» a la vista %s (esperado: nada, b_info, false)" % [
+		tienda.call().ficha_id, foco.name if foco else "nada", boton.call("comprar").visible])
+	Captura.foto("captura-tienda-nota.png")
+	# el ratón
+	await mover_raton(boton.call("escopeta").get_global_rect().get_center())
+	print("Ratón encima de la escopeta: ficha de «%s» · botón «%s» (esperado: escopeta, Comprar · $%d)" % [
+		tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), tienda.call().precio("escopeta")])
+	Captura.foto("captura-tienda-raton.png")
+	await mover_raton(boton.call("comprar").get_global_rect().get_center())
+	print("Ratón encima de «Comprar»: ficha de «%s» (esperado: escopeta, se queda)" % tienda.call().ficha_id)
+	var precio_escopeta: int = tienda.call().precio("escopeta")
+	await clic_en(boton.call("comprar"))
+	await get_tree().create_timer(0.3).timeout
+	print("Clic en «Comprar»: en la mano %s · $%d · ficha de «%s» · botón «%s» (esperado: escopeta, $%d, escopeta, Ya la llevas)" % [
+		johnny.huecos.fuego, dolares.call(), tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), 100 - precio_escopeta])
+	# el mando
+	Controles.con_mando = true
+	boton.call("cuchillo").grab_focus()
+	await pulsar_mando(JOY_BUTTON_DPAD_RIGHT)
+	foco = get_viewport().gui_get_focus_owner()
+	print("Mando, derecha desde el cuchillo: marcado %s · ficha de «%s» · botón «%s» (esperado: b_bate, bate, A: comprar · $%d)" % [
+		foco.name if foco else "nada", tienda.call().ficha_id, tienda.call().texto_comprar("bate"), tienda.call().precio("bate")])
+	Captura.foto("captura-tienda-mando.png")
+	await pulsar_mando(JOY_BUTTON_A)
+	await get_tree().create_timer(0.3).timeout
+	foco = get_viewport().gui_get_focus_owner()
+	print("Mando, A: cuerpo a cuerpo %s · sigue marcado %s · ficha de «%s» (esperado: bate, b_bate, bate)" % [
+		johnny.huecos.cuerpo, foco.name if foco else "nada", tienda.call().ficha_id])
+	await pulsar_mando(JOY_BUTTON_DPAD_UP)
+	await pulsar_mando(JOY_BUTTON_DPAD_UP)
+	foco = get_viewport().gui_get_focus_owner()
+	print("Mando, arriba dos veces: marcado %s · ficha de «%s» (esperado: b_info, nada: cómo va la tienda)" % [
+		foco.name if foco else "nada", tienda.call().ficha_id])
+	Controles.con_mando = false
+	# el dedo
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	var granadas: int = lanzables.total("granada")
+	await tocar(boton.call("granada").get_global_rect().get_center())
+	print("Dedo, primer toque en la granada: llevas %d (antes %d) · ficha de «%s» (esperado: las mismas, granada)" % [
+		lanzables.total("granada"), granadas, tienda.call().ficha_id])
+	Captura.foto("captura-tienda-dedo.png")
+	await get_tree().create_timer(0.4).timeout
+	await tocar(boton.call("granada").get_global_rect().get_center())
+	await get_tree().create_timer(0.3).timeout
+	print("Dedo, segundo toque: llevas %d (esperado: %d)" % [lanzables.total("granada"), granadas + 1])
+	Tactil.activo = false
+	# en los idiomas más largos (y en chino, sin espacios): la ficha de la motosierra cabe (captura-tienda-<idioma>.png)
+	var idioma := Idioma.actual
+	for codigo in ["de", "ru", "zh_CN"]:
+		Idioma.poner(codigo, false)
+		ordenador.abrir("armas", "b_motosierra")
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-tienda-%s.png" % codigo)
+	Idioma.poner(idioma, false)
+	ordenador.abrir("")
+	ordenador.apagar()
+	Guardado.cambiar(func(g):
+		g.dolares = antes.dolares
+		g.armas = antes.armas)
+	ahorrados = antes.dolares
+
+
 # Mueve el ratón de verdad hasta ese punto (en coordenadas del lienzo)
 func mover_raton(punto: Vector2) -> void:
 	var sitio: Vector2 = get_viewport().get_screen_transform() * punto

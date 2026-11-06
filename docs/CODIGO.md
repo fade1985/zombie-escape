@@ -484,12 +484,28 @@ en una línea.
   llenarlo. Encima de cada hexágono, un botón transparente `b_<id>`. La ficha (qué hace, ahora y con otro, qué abre y
   el pie con el precio) sale al lado del que está bajo el ratón o, con el teclado, el mando o el dedo, del marcado
   (`quien`, `modo`); con el dedo, el primer toque solo la enseña y el segundo compra (`al_pulsar`, `listo`). Las flechas
-  van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Prueba: `--arbol-talentos`.
+  van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Prueba: `--arbol-talentos`. La chapa, sus
+  colores y el marcador de lo ahorrado los comparte con la tienda de armas: están en `chapa.gd`.
+- `chapa.gd`: lo que comparten el árbol de talentos y la tienda de armas: los colores de la chapa oscura (`BORDE`,
+  `CHAPA`, `REMACHE`, `TEXTO`, `AMARILLO`...), `dibujar` (el marco con sus remaches) y `dibujar_ahorrado` (el billete y
+  la pantallita de caja registradora, con cada cifra sobre un «8» apagado; `caja_ahorrado` dice dónde acaba).
+- `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
+  izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
+  de `Lanzables.PRECIOS`) con sus casillas (el icono y el precio; «LLEVAS» o «LLENO» en verde, apagada si no llega:
+  `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
+  `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`), qué hace (`INVENTARIO.QUE_HACE`), sus
+  números (`ordenador.resumen_corto`) y el botón «Comprar» (`b_comprar`, sin foco: compra lo de la ficha). Sin nada
+  elegido (al abrir, o con la «i», `b_info`), la ficha explica la tienda (`nota`: la calidad Normal, el baúl y lo de
+  esta partida). Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
+  el teclado, el mando o el dedo, la marcada (`quien`); tras comprar se rehace con lo comprado elegido. Con el dedo, el
+  primer toque enseña y el segundo compra (`al_pulsar`, `listo`). Los textos largos se parten a mano (`partir`; en
+  chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se
-  vea: `encadenar` le dice a cada botón de una lista con desplazamiento cuál tiene encima y debajo (`--ordenador-teclado`). La tienda, en cuatro
-  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`, mientras quepan). Con dos armas de ese tipo, `comprar_arma` manda la de repuesto al baúl (`partida.repuesto_al_baul`) antes de `llevar_arma`, solo en la tienda. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
+  vea: `encadenar` le dice a cada botón de una lista con desplazamiento cuál tiene encima y debajo (`--ordenador-teclado`). La tienda es
+  `tienda_armas.gd` (`programa_armas` la monta y le pone a cada casilla su línea de abajo); los arrojables se compran de
+  uno en uno con `comprar_lanzable`, mientras quepan. Con dos armas de ese tipo, `comprar_arma` manda la de repuesto al baúl (`partida.repuesto_al_baul`) antes de `llevar_arma`, solo en la tienda. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
   llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`); se ponen y se quitan con `poner_aviso`, y
   `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones, ver una noticia o cobrar un logro, sin tener
   que apagar (y al apagar también se pone al día el «!» de la mesa). Y los avisos de sucesos, además de la

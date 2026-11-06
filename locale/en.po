@@ -217,11 +217,11 @@ msgstr "Acid launcher"
 msgid "Lanza rayos"
 msgstr "Lightning gun"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Cuerpo a cuerpo"
 msgstr "Melee"
 
-#: scripts/armas.gd scripts/ui/inventario.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "A distancia"
 msgstr "Ranged"
 
@@ -5097,11 +5097,11 @@ msgstr "Costs $%d: you need $%d more"
 msgid "Toca otra vez: comprar · $%d"
 msgstr "Tap again: buy · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "A: comprar · $%d"
 msgstr "A: buy · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "Intro: comprar · $%d"
 msgstr "Enter: buy · $%d"
 
@@ -5179,7 +5179,7 @@ msgstr "In hand"
 msgid "De repuesto"
 msgstr "Spare"
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
 msgstr "Throwables"
 
@@ -5268,7 +5268,7 @@ msgstr "Drop"
 msgid "Si la tiras, la de repuesto pasa a la mano."
 msgstr "If you drop it, your spare moves to hand."
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Daño"
 msgstr "Damage"
 
@@ -5276,7 +5276,7 @@ msgstr "Damage"
 msgid "Ritmo"
 msgstr "Speed"
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Alcance"
 msgstr "Range"
 
@@ -5300,7 +5300,7 @@ msgstr "Part · Upgrades weapons"
 msgid "Objeto · Común"
 msgstr "Item · Common"
 
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Llevas %d"
 msgstr "Carrying %d"
 
@@ -5834,7 +5834,7 @@ msgstr "Makes noise, lures zombies for 3 s, then explodes."
 msgid "Explota y deja a los zombis congelados 3 s."
 msgstr "Explodes and freezes zombies for 3 s."
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "Special"
 
@@ -6644,7 +6644,7 @@ msgstr "C:\\MAINTENANCE\\%s"
 msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
 msgstr "Removes every point from the tree. What you spent on them is not refunded."
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
 msgstr "The $%d from this run get saved when it ends: all of it if you clear the building, half if you die."
 
@@ -6663,10 +6663,6 @@ msgstr "%s. Costs $%d: you're $%d short."
 #: scripts/ui/ordenador.gd
 msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s. Press to level it up ($%d)."
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Saved dollars"
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
@@ -6697,32 +6693,12 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s goes up to %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Sold in Normal quality. If you die, you lose everything you're carrying, so put it in the workshop stash first. If you clear the building, it all goes to the stash without you doing anything. You carry two of each type: the one in your hand moves to spare and your spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand stays on the floor."
-
-#: scripts/ui/ordenador.gd
-msgid "LA LLEVAS"
-msgstr "IN HAND"
-
-#: scripts/ui/ordenador.gd
-msgid "GRATIS"
-msgstr "FREE"
-
-#: scripts/ui/ordenador.gd
-msgid "Arrojables · de uno en uno, hasta los que caben"
-msgstr "Throwables · one at a time, as many as fit"
-
-#: scripts/ui/ordenador.gd
-msgid "AL MÁXIMO"
-msgstr "FULL"
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Pick a weapon: you pay with your saved dollars."
 
 #: scripts/ui/ordenador.gd
 msgid "%s: %s Cada uno, $%d."
 msgstr "%s: %s Each, $%d."
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un arma: se paga con los dólares ahorrados."
-msgstr "Pick a weapon: you pay with your saved dollars."
 
 #: scripts/ui/ordenador.gd
 msgid "Daño %d/s · Depósito %d s"
@@ -6823,6 +6799,10 @@ msgstr "Achievements unlocked"
 #: scripts/ui/ordenador.gd
 msgid "Premios por cobrar"
 msgstr "Rewards to claim"
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Saved dollars"
 
 #: scripts/ui/ordenador.gd
 msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
@@ -7085,14 +7065,6 @@ msgid "Colecciones y bestiario"
 msgstr "Collections and Bestiary"
 
 #: scripts/ui/ordenador.gd
-msgid "A distancia · llenas, y con munición de reserva"
-msgstr "Ranged · fully loaded, with spare ammo"
-
-#: scripts/ui/ordenador.gd
-msgid "Especiales · llenas; van en el hueco de las de A distancia"
-msgstr "Special · fully loaded; they take the Ranged slot"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Noticias\n"
 "¡NUEVAS!"
@@ -7179,6 +7151,66 @@ msgstr "CHANNEL 8"
 #: scripts/ui/tele.gd
 msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
 msgstr "BREAKING NEWS  ·  %s: \"THE SITUATION IS UNDER CONTROL\"  ·  STAY AWAY FROM THE BUILDING  ·  "
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLEVAS"
+msgstr "IN HAND"
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLENO"
+msgstr "FULL"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cómo va la tienda"
+msgstr "How the shop works"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Ya la llevas"
+msgstr "Already yours"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No te caben más"
+msgstr "No room for more"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No en este reto"
+msgstr "Not in this challenge"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Te faltan $%d"
+msgstr "You need $%d more"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Comprar · $%d"
+msgstr "Buy · $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Sold in Normal quality. If you die, you lose everything you're carrying, so put it in the workshop stash first. If you clear the building, it all goes to the stash without you doing anything. You carry two of each type: the one in your hand moves to spare and your spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand stays on the floor."
+
+#: scripts/ui/tienda_armas.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "Ranged weapons come loaded and with spare ammo; special ones come full and go in the ranged slot. Throwables are bought one at a time, while you have room."
+
+#: scripts/ui/tienda_armas.gd
+msgid "Área"
+msgstr "Area"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Rapidez"
+msgstr "Speed"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Abanico"
+msgstr "Swing arc"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Depósito"
+msgstr "Tank"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cargador"
+msgstr "Magazine"
 
 #: scripts/ui/tutorial.gd
 msgid "¡Nuevo!"

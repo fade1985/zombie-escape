@@ -216,11 +216,11 @@ msgstr "酸液枪"
 msgid "Lanza rayos"
 msgstr "闪电枪"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Cuerpo a cuerpo"
 msgstr "近战"
 
-#: scripts/armas.gd scripts/ui/inventario.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "A distancia"
 msgstr "远程"
 
@@ -5090,11 +5090,11 @@ msgstr "花费 $%d：还差 $%d"
 msgid "Toca otra vez: comprar · $%d"
 msgstr "再点一次：购买 · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "A: comprar · $%d"
 msgstr "A：购买 · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "Intro: comprar · $%d"
 msgstr "回车：购买 · $%d"
 
@@ -5171,7 +5171,7 @@ msgstr "手上"
 msgid "De repuesto"
 msgstr "备用"
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
 msgstr "投掷物"
 
@@ -5260,7 +5260,7 @@ msgstr "丢在地上"
 msgid "Si la tiras, la de repuesto pasa a la mano."
 msgstr "丢掉后，备用武器会换到手上。"
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Daño"
 msgstr "伤害"
 
@@ -5268,7 +5268,7 @@ msgstr "伤害"
 msgid "Ritmo"
 msgstr "攻速"
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Alcance"
 msgstr "距离"
 
@@ -5292,7 +5292,7 @@ msgstr "零件 · 升级武器"
 msgid "Objeto · Común"
 msgstr "物品 · 普通"
 
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Llevas %d"
 msgstr "携带 %d"
 
@@ -5815,7 +5815,7 @@ msgstr "发出响声，吸引僵尸3秒后爆炸。"
 msgid "Explota y deja a los zombis congelados 3 s."
 msgstr "爆炸后将僵尸冰冻3秒。"
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "特殊"
 
@@ -6624,7 +6624,7 @@ msgstr "C:\\维修间\\%s"
 msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
 msgstr "清空天赋树上的所有点数。花掉的钱不会退还。"
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
 msgstr "本局的 $%d 会在结束时存下：通关大楼全部保留，倒下则保留一半。"
 
@@ -6643,10 +6643,6 @@ msgstr "%s。花费 $%d：还差 $%d。"
 #: scripts/ui/ordenador.gd
 msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s。点击升级（$%d）。"
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "存下的美元"
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
@@ -6677,32 +6673,12 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s升到 %d/%d！"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "出售的都是普通品质。倒下就会丢失身上带的所有东西，所以要先存进工作间的储物箱。通关大楼后，所有东西都会自动存入储物箱，不用你动手。每种最多带两件：你手上那件会换到备用，备用的那件放进储物箱；如果放不下或不能存放，手上那件会留在地上。"
-
-#: scripts/ui/ordenador.gd
-msgid "LA LLEVAS"
-msgstr "已持有"
-
-#: scripts/ui/ordenador.gd
-msgid "GRATIS"
-msgstr "免费"
-
-#: scripts/ui/ordenador.gd
-msgid "Arrojables · de uno en uno, hasta los que caben"
-msgstr "投掷物 · 一个一个买，能装多少买多少"
-
-#: scripts/ui/ordenador.gd
-msgid "AL MÁXIMO"
-msgstr "已满"
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "选一件武器：用存下的美元支付。"
 
 #: scripts/ui/ordenador.gd
 msgid "%s: %s Cada uno, $%d."
 msgstr "%s：%s每个 $%d。"
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un arma: se paga con los dólares ahorrados."
-msgstr "选一件武器：用存下的美元支付。"
 
 #: scripts/ui/ordenador.gd
 msgid "Daño %d/s · Depósito %d s"
@@ -6803,6 +6779,10 @@ msgstr "已达成成就"
 #: scripts/ui/ordenador.gd
 msgid "Premios por cobrar"
 msgstr "待领取奖励"
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "存下的美元"
 
 #: scripts/ui/ordenador.gd
 msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
@@ -7065,14 +7045,6 @@ msgid "Colecciones y bestiario"
 msgstr "收藏品和图鉴"
 
 #: scripts/ui/ordenador.gd
-msgid "A distancia · llenas, y con munición de reserva"
-msgstr "远程 · 满弹，并附带备用弹药"
-
-#: scripts/ui/ordenador.gd
-msgid "Especiales · llenas; van en el hueco de las de A distancia"
-msgstr "特殊 · 满装；占用远程武器的格子"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Noticias\n"
 "¡NUEVAS!"
@@ -7159,6 +7131,66 @@ msgstr "8频道"
 #: scripts/ui/tele.gd
 msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
 msgstr "最新消息  ·  %s：“情况已经得到控制”  ·  请勿靠近大楼  ·  "
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLEVAS"
+msgstr "已持有"
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLENO"
+msgstr "已满"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cómo va la tienda"
+msgstr "商店说明"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Ya la llevas"
+msgstr "已经持有"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No te caben más"
+msgstr "放不下了"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No en este reto"
+msgstr "本挑战不可用"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Te faltan $%d"
+msgstr "还差 $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Comprar · $%d"
+msgstr "购买 · $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "出售的都是普通品质。倒下就会丢失身上带的所有东西，所以要先存进工作间的储物箱。通关大楼后，所有东西都会自动存入储物箱，不用你动手。每种最多带两件：你手上那件会换到备用，备用的那件放进储物箱；如果放不下或不能存放，手上那件会留在地上。"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出售，占用远程武器的位置。投掷物一个一个买，直到放不下为止。"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Área"
+msgstr "范围"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Rapidez"
+msgstr "速度"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Abanico"
+msgstr "挥砍范围"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Depósito"
+msgstr "储罐"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cargador"
+msgstr "弹匣"
 
 #: scripts/ui/tutorial.gd
 msgid "¡Nuevo!"

@@ -218,11 +218,11 @@ msgstr "Кислотомет"
 msgid "Lanza rayos"
 msgstr "Молниемет"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Cuerpo a cuerpo"
 msgstr "Ближний бой"
 
-#: scripts/armas.gd scripts/ui/inventario.gd
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "A distancia"
 msgstr "Дальний бой"
 
@@ -5104,11 +5104,11 @@ msgstr "Цена $%d: не хватает $%d"
 msgid "Toca otra vez: comprar · $%d"
 msgstr "Коснись ещё раз: купить · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "A: comprar · $%d"
 msgstr "A: купить · $%d"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
 msgid "Intro: comprar · $%d"
 msgstr "Enter: купить · $%d"
 
@@ -5187,7 +5187,7 @@ msgstr "В руках"
 msgid "De repuesto"
 msgstr "Запас"
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
 msgstr "Метательное"
 
@@ -5276,7 +5276,7 @@ msgstr "Выбросить"
 msgid "Si la tiras, la de repuesto pasa a la mano."
 msgstr "Если выбросишь, в руку перейдет запасное."
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Daño"
 msgstr "Урон"
 
@@ -5284,7 +5284,7 @@ msgstr "Урон"
 msgid "Ritmo"
 msgstr "Темп"
 
-#: scripts/ui/inventario.gd scripts/ui/menus.gd
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Alcance"
 msgstr "Дальность"
 
@@ -5308,7 +5308,7 @@ msgstr "Деталь · Улучшает оружие"
 msgid "Objeto · Común"
 msgstr "Предмет · Обычный"
 
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Llevas %d"
 msgstr "С собой: %d"
 
@@ -5853,7 +5853,7 @@ msgstr "Шумит, 3 с приманивает зомби и взрываетс
 msgid "Explota y deja a los zombis congelados 3 s."
 msgstr "Взрывается и замораживает зомби на 3 с."
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "Особое"
 
@@ -6664,7 +6664,7 @@ msgstr "C:\\ДВОРНИЦКАЯ\\%s"
 msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
 msgstr "Снимает все очки с дерева. Потраченное на них не возвращается."
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
 msgstr "$%d этого забега сохранятся в конце: все, если пройдешь здание, половина — если падешь."
 
@@ -6683,10 +6683,6 @@ msgstr "%s. Цена $%d: не хватает $%d."
 #: scripts/ui/ordenador.gd
 msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s. Нажми, чтобы прокачать ($%d)."
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Накопленные доллары"
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
@@ -6717,32 +6713,12 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s: теперь %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Продается в Обычном качестве. Если падешь, потеряешь все, что при тебе, поэтому сначала убери это в сундук в мастерской. Если пройдешь здание, все само попадет в сундук. Носишь по два каждого типа: то, что было в руке, станет запасным, а запасное уйдет в сундук; если оно не влезет или его нельзя убрать, то, что было в руке, останется на полу."
-
-#: scripts/ui/ordenador.gd
-msgid "LA LLEVAS"
-msgstr "ПРИ ТЕБЕ"
-
-#: scripts/ui/ordenador.gd
-msgid "GRATIS"
-msgstr "ДАРОМ"
-
-#: scripts/ui/ordenador.gd
-msgid "Arrojables · de uno en uno, hasta los que caben"
-msgstr "Метательное · по одному, сколько влезет"
-
-#: scripts/ui/ordenador.gd
-msgid "AL MÁXIMO"
-msgstr "ПОЛНО"
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Выбери оружие: платишь накопленными долларами."
 
 #: scripts/ui/ordenador.gd
 msgid "%s: %s Cada uno, $%d."
 msgstr "%s: %s Цена за штуку: $%d."
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un arma: se paga con los dólares ahorrados."
-msgstr "Выбери оружие: платишь накопленными долларами."
 
 #: scripts/ui/ordenador.gd
 msgid "Daño %d/s · Depósito %d s"
@@ -6843,6 +6819,10 @@ msgstr "Полученные достижения"
 #: scripts/ui/ordenador.gd
 msgid "Premios por cobrar"
 msgstr "Награды к получению"
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Накопленные доллары"
 
 #: scripts/ui/ordenador.gd
 msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
@@ -7105,14 +7085,6 @@ msgid "Colecciones y bestiario"
 msgstr "Коллекции и бестиарий"
 
 #: scripts/ui/ordenador.gd
-msgid "A distancia · llenas, y con munición de reserva"
-msgstr "Дальний бой · заряжено, с запасом патронов"
-
-#: scripts/ui/ordenador.gd
-msgid "Especiales · llenas; van en el hueco de las de A distancia"
-msgstr "Особое · заряжено; занимает ячейку дальнего боя"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Noticias\n"
 "¡NUEVAS!"
@@ -7199,6 +7171,66 @@ msgstr "КАНАЛ 8"
 #: scripts/ui/tele.gd
 msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
 msgstr "СРОЧНО  ·  %s: «СИТУАЦИЯ ПОД КОНТРОЛЕМ»  ·  НЕ ПОДХОДИТЕ К ЗДАНИЮ  ·  "
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLEVAS"
+msgstr "ПРИ ТЕБЕ"
+
+#: scripts/ui/tienda_armas.gd
+msgid "LLENO"
+msgstr "ПОЛНО"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cómo va la tienda"
+msgstr "Как устроен магазин"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Ya la llevas"
+msgstr "Уже при тебе"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No te caben más"
+msgstr "Больше не влезает"
+
+#: scripts/ui/tienda_armas.gd
+msgid "No en este reto"
+msgstr "Не в этом испытании"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Te faltan $%d"
+msgstr "Не хватает $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Comprar · $%d"
+msgstr "Купить · $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Продается в Обычном качестве. Если падешь, потеряешь все, что при тебе, поэтому сначала убери это в сундук в мастерской. Если пройдешь здание, все само попадет в сундук. Носишь по два каждого типа: то, что было в руке, станет запасным, а запасное уйдет в сундук; если оно не влезет или его нельзя убрать, то, что было в руке, останется на полу."
+
+#: scripts/ui/tienda_armas.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным, и оно занимает место дальнобойного. Метательное покупается по одному, пока есть место."
+
+#: scripts/ui/tienda_armas.gd
+msgid "Área"
+msgstr "Площадь"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Rapidez"
+msgstr "Скорость"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Abanico"
+msgstr "Размах"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Depósito"
+msgstr "Бак"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Cargador"
+msgstr "Магазин"
 
 #: scripts/ui/tutorial.gd
 msgid "¡Nuevo!"

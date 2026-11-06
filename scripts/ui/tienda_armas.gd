@@ -1,0 +1,510 @@
+# La tienda de armas del ordenador (ARMAS.EXE, en ordenador.gd): la misma chapa oscura que el árbol de talentos
+# (chapa.gd), con lo ahorrado arriba a la izquierda y todo a la vez, sin desplazarse.
+#
+# A la izquierda, una fila por grupo (Cuerpo a cuerpo, A distancia, Especiales y Arrojables) y en cada una sus casillas:
+# el icono y, debajo, el precio en amarillo. Lo que llevas dice «LLEVAS» (en verde apagado), los arrojables que ya no te
+# caben, «LLENO», y lo que no puedes pagar sale apagado, con el precio en gris.
+#
+# A la derecha, una ficha fija con lo elegido: su nombre y su grupo, el dibujo en grande, unos medidores de 10
+# cuadraditos (cada uno comparado con el arma que más tiene de eso), qué hace y el botón «Comprar». Sin nada elegido (al
+# abrir, o con el botón «i» de al lado de lo ahorrado), la ficha explica cómo va la tienda.
+#
+# Lo elegido es, con el ratón, la última casilla por la que ha pasado (y se queda al ir hacia «Comprar»); con el teclado,
+# el mando o el dedo, la marcada. Con el ratón, el teclado o el mando se compra al pulsar la casilla; con el dedo, el
+# primer toque solo la enseña y el segundo compra (o «Comprar», que compra a la primera). Todo se dibuja con código
+# (_draw); encima de cada casilla hay un botón transparente, "b_<id>", que es el que se marca y se pulsa
+extends Control
+
+const PLACA := preload("res://scripts/ui/chapa.gd")
+const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada cosa (QUE_HACE)
+const VERDE := Color("#7fa86a")      # lo que llevas y lo lleno
+const VERDE_BORDE := Color("#5f8a4f")
+const ANCHO_FICHA := 250
+const CASILLA := 62                  # lo más grande que es una casilla (si no cabe, menos)
+const HUECO := 6                     # entre casilla y casilla
+const TITULO := 24                   # lo alto del título de cada grupo, con su raya
+const MEDIDOR := 18                  # lo alto de cada medidor de la ficha
+const ALTO_BOTON := 40
+# Los grupos, en orden: [familia (Armas.familia; "arrojable" para los de Lanzables), título]
+# [traducir]
+const GRUPOS := [
+	["cuerpo", "Cuerpo a cuerpo"],
+	["distancia", "A distancia"],
+	["especial", "Especiales"],
+	["arrojable", "Arrojables"],
+]
+# [/traducir]
+
+# Cómo se está moviendo el jugador por la pantalla: "raton" o "foco" (el teclado o el mando). Se queda al volver a montar
+# la ventana después de comprar
+static var modo := "raton"
+
+var ordenador: Node
+var s: Dictionary                    # el guardado
+var filas := []                      # una por grupo: [familia, título, [ids]]
+var botones := {}                    # id → su botón (la casilla)
+var casillas := {}                   # id → su recuadro
+var titulos := []                    # [y, título] de cada grupo
+var boton_info: Button               # la «i» de al lado de lo ahorrado: la ficha explica la tienda
+var comprar: Button                  # el botón «Comprar» de la ficha
+var ficha := Rect2()
+var ficha_id := ""                   # lo que enseña la ficha ("" = cómo va la tienda)
+var ficha_desde := 0.0               # desde cuándo (en s): un toque del dedo justo al elegirlo no compra
+var listo := {}                      # id → si al pulsarlo ya enseñaba su ficha (con el dedo, el segundo toque)
+var maximos := {}                    # "tipo/medida" → lo más que tiene de eso un arma de la tienda (los medidores)
+
+
+# "elegido": lo que enseña la ficha al abrir ("" = cómo va la tienda; después de comprar, lo comprado)
+func montar(o: Node, guardado: Dictionary, elegido := "") -> void:
+	ordenador = o
+	s = guardado
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
+	custom_minimum_size = Vector2(0, 400)
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	boton_info = boton_transparente("b_info", Vector2(28, 28))   # (el primero: es el que se marca al abrir)
+	var armas := Armas.PRECIOS.keys()
+	armas.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
+	for g in GRUPOS:
+		var ids: Array = Lanzables.PRECIOS.keys() if g[0] == "arrojable" else armas.filter(func(id): return Armas.familia(id) == g[0])
+		filas.append([g[0], Idioma.t(g[1]), ids])
+		for id in ids:
+			var b := boton_transparente("b_" + id, Vector2(CASILLA, CASILLA))
+			b.button_down.connect(func(): listo[id] = ficha_id == id and ahora() - ficha_desde > 0.25)
+			botones[id] = b
+	comprar = boton_transparente("b_comprar", Vector2(ANCHO_FICHA - 16, ALTO_BOTON))
+	comprar.focus_mode = Control.FOCUS_NONE   # (la marca se queda en la casilla: es lo que se compra)
+	comprar.pressed.connect(func():
+		if ficha_id != "":
+			comprar_esto(ficha_id))
+	for b in [boton_info, comprar]:
+		b.mouse_entered.connect(queue_redraw)
+		b.mouse_exited.connect(queue_redraw)
+		b.button_down.connect(queue_redraw)
+		b.button_up.connect(queue_redraw)
+	calcular_maximos()
+	ficha_id = elegido if botones.has(elegido) else ""
+	ficha_desde = ahora()
+	resized.connect(colocar)
+
+
+func boton_transparente(nombre: String, tam: Vector2) -> Button:
+	var b := Button.new()
+	b.name = nombre
+	b.flat = true
+	b.focus_mode = Control.FOCUS_ALL
+	b.size = tam
+	for e in ["normal", "hover", "pressed", "focus", "disabled", "hover_pressed"]:
+		b.add_theme_stylebox_override(e, StyleBoxEmpty.new())
+	b.focus_entered.connect(actualizar_ficha)
+	b.focus_exited.connect(actualizar_ficha)
+	add_child(b)
+	return b
+
+
+func ahora() -> float:
+	return Time.get_ticks_msec() / 1000.0
+
+
+# ── Los medidores ──
+
+# Lo que mide cada uno, según lo que sea: [nombre, medida]. Las armas cuerpo a cuerpo, su daño, su rapidez, lo lejos que
+# llegan y lo ancho del golpe; las de fuego, su daño, su rapidez, su cargador (o su depósito) y lo lejos que llegan; los
+# arrojables, su daño y lo grande que es lo que dejan
+# (los nombres se traducen al dibujarlos)
+# [traducir]
+func medidas(id: String) -> Array:
+	if Lanzables.PRECIOS.has(id):
+		return [["Daño", "dano"], ["Área", "radio"]]
+	var w: Dictionary = Armas.DATOS[id]
+	if w.tipo == "cuerpo":
+		return [["Daño", "dano"], ["Rapidez", "ritmo"], ["Alcance", "alcance"], ["Abanico", "arco"]]
+	return [["Daño", "dano"], ["Rapidez", "ritmo"], ["Depósito", "deposito"] if w.has("deposito") else ["Cargador", "cargador"],
+		["Alcance", "alcance"]]
+# [/traducir]
+
+
+# Cuánto tiene de esa medida. El daño de un arma es el de cada disparo o golpe (la escopeta, con todos sus perdigones;
+# las de depósito, el de cada trago de su chorro); el del molotov, su golpe y todo lo que quema su fuego
+func valor(id: String, medida: String) -> float:
+	if Lanzables.PRECIOS.has(id):
+		var l: Dictionary = Lanzables.DATOS[id]
+		if medida == "dano" and l.has("quema"):
+			return l.golpe + l.quema * l.vida
+		return float(l.get(medida, 0))
+	var w: Dictionary = Armas.DATOS[id]
+	if medida == "dano":
+		return w.dano / w.ritmo if w.has("deposito") else float(w.dano * w.get("perdigones", 1))
+	return float(w.get(medida, 0))
+
+
+func tipo_de(id: String) -> String:
+	return "arrojable" if Lanzables.PRECIOS.has(id) else Armas.DATOS[id].tipo
+
+
+func calcular_maximos() -> void:
+	for id in botones:
+		for m in medidas(id):
+			var clave: String = tipo_de(id) + "/" + m[1]
+			maximos[clave] = maxf(maximos.get(clave, 0.0), valor(id, m[1]))
+
+
+# De 1 a 10 cuadraditos (el que más tiene, los 10)
+func cuadraditos(id: String, medida: String) -> int:
+	var tope: float = maximos.get(tipo_de(id) + "/" + medida, 0.0)
+	return 0 if tope <= 0.0 else clampi(ceili(valor(id, medida) / tope * 10.0 - 0.001), 1, 10)
+
+
+# ── Cómo está cada cosa ──
+
+func precio(id: String) -> int:
+	return Supervivientes.precio(Lanzables.PRECIOS[id] if Lanzables.PRECIOS.has(id) else Armas.PRECIOS[id])
+
+
+# "lleva" (un arma en la mano o de repuesto), "lleno" (un arrojable que ya no cabe), "reto" (el reto sin munición no deja
+# llevar arrojables), "caro" (no te llega) o "" (se puede comprar)
+func estado(id: String) -> String:
+	var partida: Node = ordenador.partida
+	if Lanzables.PRECIOS.has(id):
+		if not partida.lanzables.cabe(id):
+			return "lleno"
+		if Reto.sin_municion():
+			return "reto"
+	else:
+		var tipo: String = Armas.DATOS[id].tipo
+		if partida.johnny.huecos[tipo] == id or partida.repuesto(tipo) == id:
+			return "lleva"
+	return "caro" if s.dolares < precio(id) else ""
+
+
+func nombre(id: String) -> String:
+	return Lanzables.uno(id) if Lanzables.PRECIOS.has(id) else Armas.nombre(id)
+
+
+func grupo(id: String) -> String:
+	for f in filas:
+		if id in f[2]:
+			return f[1]
+	return ""
+
+
+# ── Dónde va cada cosa (al cambiar de tamaño) ──
+
+func colocar() -> void:
+	if size.x < ANCHO_FICHA * 2 or size.y < 200:
+		return   # (aún sin su tamaño de verdad)
+	var margen := 10.0
+	var arriba := PLACA.ARRIBA + 4.0
+	ficha = Rect2(size.x - margen - ANCHO_FICHA, arriba, ANCHO_FICHA, size.y - arriba - margen)
+	var ancho_izquierda := ficha.position.x - margen * 2 - 6
+	var mas_ancha := 0
+	for f in filas:
+		mas_ancha = maxi(mas_ancha, f[2].size())
+	var lado := floorf(minf(CASILLA, minf((ancho_izquierda + HUECO) / mas_ancha - HUECO,
+		(size.y - arriba - margen) / filas.size() - TITULO - HUECO)))
+	var y := arriba
+	titulos.clear()
+	for f in filas:
+		titulos.append([y, f[1]])
+		for i in f[2].size():
+			var r := Rect2(margen + 4 + i * (lado + HUECO), y + TITULO, lado, lado)
+			casillas[f[2][i]] = r
+			botones[f[2][i]].position = r.position
+			botones[f[2][i]].size = r.size
+		y += TITULO + lado + HUECO
+	comprar.size = Vector2(ANCHO_FICHA - 16, ALTO_BOTON)
+	comprar.position = Vector2(ficha.position.x + 8, ficha.end.y - 8 - ALTO_BOTON)
+	boton_info.position = Vector2(PLACA.caja_ahorrado(get_theme_default_font(), s.dolares).end.x + 10, 8)
+	comprar.visible = ficha_id != ""
+	poner_vecinos()
+	actualizar_ficha()
+	queue_redraw()
+
+
+# Con el teclado o el mando, a qué casilla se pasa con cada flecha: la más cercana en esa dirección. Arriba del todo, a la
+# «i»; abajo del todo y a la derecha del todo, no se mueve (si no, Godot buscaría solo y se iría a los iconos del
+# escritorio). A la izquierda de la primera columna sí se sale a ellos, como en los demás programas
+func poner_vecinos() -> void:
+	var sitios := {}   # botón → su centro
+	for id in botones:
+		sitios[botones[id]] = casillas[id].get_center()
+	for b: Button in sitios:
+		for lado in [[Vector2.UP, "focus_neighbor_top"], [Vector2.DOWN, "focus_neighbor_bottom"],
+				[Vector2.LEFT, "focus_neighbor_left"], [Vector2.RIGHT, "focus_neighbor_right"]]:
+			var mejor: Button = null
+			var menor := INF
+			for o: Button in sitios:
+				var d: Vector2 = sitios[o] - sitios[b]
+				var hacia := d.dot(lado[0])
+				var de_lado := absf(d.dot(Vector2(lado[0].y, lado[0].x)))
+				if hacia > 4.0 and de_lado < hacia * (3.0 if lado[0].y != 0 else 0.5) and hacia + de_lado * 2.0 < menor:
+					menor = hacia + de_lado * 2.0
+					mejor = o
+			if mejor:
+				b.set(lado[1], b.get_path_to(mejor))
+			elif lado[0] == Vector2.UP:
+				b.set(lado[1], b.get_path_to(boton_info))
+			elif lado[0] != Vector2.LEFT:
+				b.set(lado[1], b.get_path_to(b))
+	boton_info.focus_neighbor_bottom = boton_info.get_path_to(botones[filas[0][2][0]])
+	boton_info.focus_neighbor_top = boton_info.get_path_to(boton_info)
+	boton_info.focus_neighbor_right = boton_info.get_path_to(boton_info)
+
+
+# ── El dibujo ──
+
+func _draw() -> void:
+	var fuente := get_theme_default_font()
+	PLACA.dibujar(self, size)
+	PLACA.dibujar_ahorrado(self, fuente, s.dolares)
+	if casillas.is_empty():
+		return
+	dibujar_info(fuente)
+	var ancho_titulos := ficha.position.x - 24
+	for t in titulos:
+		draw_string(fuente, Vector2(14, t[0] + 16), t[1].to_upper(), HORIZONTAL_ALIGNMENT_LEFT, ancho_titulos, 16, PLACA.TEXTO)
+		draw_rect(Rect2(14, t[0] + 20, ancho_titulos - 4, 2), PLACA.APAGADO)
+	for id in casillas:
+		dibujar_casilla(id, fuente)
+	dibujar_ficha(fuente)
+
+
+# La «i»: un botoncito cuadrado de la chapa; claro si está marcado o con el ratón encima
+func dibujar_info(fuente: Font) -> void:
+	var r := Rect2(boton_info.position, boton_info.size)
+	var marcado := boton_info.is_hovered() or (boton_info.has_focus() and modo == "foco") or ficha_id == ""
+	draw_rect(r, PLACA.TEXTO if marcado else PLACA.REMACHE)
+	draw_rect(r.grow(-2), Color("#2f333a"))
+	draw_string(fuente, Vector2(r.position.x, r.position.y + 21), "i", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 16,   # no-tr
+		PLACA.TEXTO if marcado else PLACA.TEXTO_SUAVE)
+
+
+# Una casilla: oscura con borde gris, el icono y el precio (o «LLEVAS», «LLENO»). La elegida, con el borde claro
+func dibujar_casilla(id: String, fuente: Font) -> void:
+	var r: Rect2 = casillas[id]
+	var e := estado(id)
+	var borde := PLACA.REMACHE
+	var relleno := Color("#1c1f24")
+	var texto := "$%d" % precio(id)
+	var color_texto := PLACA.AMARILLO
+	var apagada := e in ["caro", "reto"]
+	if e in ["lleva", "lleno"]:
+		borde = VERDE_BORDE
+		texto = Idioma.t("LLEVAS") if e == "lleva" else Idioma.t("LLENO")
+		color_texto = VERDE
+	elif apagada:
+		borde = PLACA.APAGADO
+		relleno = PLACA.NEGRO
+		color_texto = PLACA.TEXTO_SUAVE
+	if id == ficha_id:
+		borde = PLACA.TEXTO
+	draw_rect(r, borde)
+	draw_rect(r.grow(-2), relleno)
+	var lado := minf(32.0, r.size.y - 26)
+	draw_texture_rect(icono(id), Rect2(r.get_center().x - lado / 2.0, r.position.y + 6, lado, lado), false,
+		Color(0.55, 0.55, 0.55, 0.75) if apagada else Color.WHITE)
+	var tam := 16
+	while tam > 10 and fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > r.size.x - 6:
+		tam -= 2   # (que «LLEVAS» quepa en todos los idiomas)
+	draw_string(fuente, Vector2(r.position.x, r.end.y - 7), texto, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, tam, color_texto)
+
+
+# La ficha de la derecha: lo elegido o, sin nada elegido, cómo va la tienda
+func dibujar_ficha(fuente: Font) -> void:
+	var f := ficha
+	draw_rect(f, PLACA.REMACHE)
+	draw_rect(f.grow(-2), Color("#101215"))
+	draw_rect(Rect2(f.position + Vector2(2, 2), Vector2(f.size.x - 4, 26)), Color("#2a2e35"))
+	var ancho := f.size.x - 20
+	var x := f.position.x + 10
+	if ficha_id == "":
+		draw_string(fuente, Vector2(x, f.position.y + 21), Idioma.t("Cómo va la tienda").to_upper(), HORIZONTAL_ALIGNMENT_LEFT, ancho, 16, PLACA.TEXTO)
+		var y := f.position.y + 50
+		for parrafo in nota():
+			y = escribir(fuente, parrafo[0], Vector2(x, y), ancho, 14, parrafo[1], f.end.y - 8) + 8
+		return
+	var id := ficha_id
+	draw_string(fuente, Vector2(x, f.position.y + 21), nombre(id).to_upper(), HORIZONTAL_ALIGNMENT_LEFT, ancho, 16, PLACA.TEXTO)
+	var g := grupo(id)
+	var ancho_grupo := fuente.get_string_size(g, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x
+	if fuente.get_string_size(nombre(id).to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + ancho_grupo + 12 < ancho:
+		draw_string(fuente, Vector2(x, f.position.y + 20), g, HORIZONTAL_ALIGNMENT_RIGHT, ancho, 14, PLACA.TEXTO_SUAVE)
+	# el dibujo, a ×3, en su recuadro
+	var cuadro := Rect2(x - 2, f.position.y + 34, ancho + 4, 100)
+	draw_rect(cuadro, PLACA.APAGADO)
+	draw_rect(cuadro.grow(-2), Color("#0d1012"))
+	draw_texture_rect(icono(id), Rect2(cuadro.get_center() - Vector2(48, 48), Vector2(96, 96)), false)
+	# los medidores
+	var y := cuadro.end.y + 6
+	for m in medidas(id):
+		draw_string(fuente, Vector2(x, y + 13), Idioma.t(m[0]), HORIZONTAL_ALIGNMENT_LEFT, 112, 14, PLACA.TEXTO)
+		var llenos := cuadraditos(id, m[1])
+		for i in 10:
+			draw_rect(Rect2(x + ancho - 10 * 11 + 3 + i * 11, y + 3, 8, 8), PLACA.TEXTO if i < llenos else PLACA.APAGADO)
+		y += MEDIDOR
+	# qué hace y sus números (o cuántos llevas)
+	var tope := comprar.position.y - 6
+	y = escribir(fuente, Idioma.t(INVENTARIO.QUE_HACE.get(id, "")), Vector2(x, y + 4), ancho, 14, PLACA.TEXTO, tope) + 2
+	var datos: String = Idioma.t("Llevas %d") % ordenador.partida.lanzables.total(id) if Lanzables.PRECIOS.has(id) \
+		else ordenador.resumen_corto(Armas.DATOS[id])
+	escribir(fuente, datos, Vector2(x, y), ancho, 14, PLACA.TEXTO_SUAVE, tope)
+	dibujar_comprar(fuente)
+
+
+# Un texto partido en líneas (por palabras) que no pasan de "ancho", sin bajar de "tope"; devuelve dónde acaba (y)
+func escribir(fuente: Font, texto: String, sitio: Vector2, ancho: float, tam: int, color: Color, tope: float) -> float:
+	var alto_linea := fuente.get_height(tam)
+	var y := sitio.y
+	for linea in partir(fuente, texto, ancho, tam):
+		if y + alto_linea > tope:
+			break
+		draw_string(fuente, Vector2(sitio.x, y + fuente.get_ascent(tam)), linea, HORIZONTAL_ALIGNMENT_LEFT, -1, tam, color)
+		y += alto_linea
+	return y
+
+
+func partir(fuente: Font, texto: String, ancho: float, tam: int) -> PackedStringArray:
+	var lineas := PackedStringArray()
+	var linea := ""
+	# las palabras; una más ancha que la línea (el chino va sin espacios), letra a letra
+	var trozos := []
+	for palabra in texto.split(" ", false):
+		if fuente.get_string_size(palabra, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x <= ancho:
+			trozos.append([palabra, " "])
+		else:
+			for i in palabra.length():
+				trozos.append([palabra[i], " " if i == 0 else ""])
+	for trozo in trozos:
+		var palabra: String = trozo[0]
+		var con: String = palabra if linea == "" else linea + trozo[1] + palabra
+		if linea != "" and fuente.get_string_size(con, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > ancho:
+			lineas.append(linea)
+			linea = palabra
+		else:
+			linea = con
+	if linea != "":
+		lineas.append(linea)
+	return lineas
+
+
+# El botón «Comprar · $X», con el texto en amarillo; si no se puede, en gris y diciendo por qué
+func dibujar_comprar(fuente: Font) -> void:
+	var r := Rect2(comprar.position, comprar.size)
+	var texto := texto_comprar(ficha_id)
+	var se_puede := estado(ficha_id) == ""
+	var encima := se_puede and comprar.is_hovered()
+	var pulsado := se_puede and comprar.button_pressed
+	draw_rect(r, PLACA.TEXTO if se_puede else PLACA.APAGADO)
+	draw_rect(r.grow(-2), Color("#3a3f47") if encima and not pulsado else (Color("#2f333a") if se_puede else PLACA.NEGRO))
+	var tam := 24 if se_puede else 16
+	while tam > 12 and fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > r.size.x - 12:
+		tam -= 2
+	var base := r.position.y + r.size.y / 2.0 + fuente.get_ascent(tam) / 2.0 - 2 + (2 if pulsado else 0)
+	draw_string(fuente, Vector2(r.position.x, base), texto, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, tam,
+		PLACA.AMARILLO if se_puede else PLACA.TEXTO_SUAVE)
+
+
+# Lo que dice el botón «Comprar»: cómo se compra y cuánto cuesta (o por qué no se puede). Lo usan también las pruebas
+func texto_comprar(id: String) -> String:
+	var p := precio(id)
+	match estado(id):
+		"lleva": return Idioma.t("Ya la llevas")
+		"lleno": return Idioma.t("No te caben más")
+		"reto": return Idioma.t("No en este reto")
+		"caro": return Idioma.t("Te faltan $%d") % (p - s.dolares)
+	if not (Tactil.activo and Tactil.con_dedo):
+		if Controles.con_mando:
+			return Idioma.t("A: comprar · $%d") % p
+		if modo == "foco":
+			return Idioma.t("Intro: comprar · $%d") % p
+	return Idioma.t("Comprar · $%d") % p
+
+
+# Lo que dice la ficha sin nada elegido, párrafo a párrafo: [texto, color]
+func nota() -> Array:
+	var parrafos := [
+		[Idioma.t("Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."), PLACA.TEXTO],
+		[Idioma.t("Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."), PLACA.TEXTO_SUAVE],
+	]
+	if ordenador.partida.dolares > 0:
+		parrafos.append([Idioma.t("Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes.") % ordenador.partida.dolares, PLACA.AMARILLO])
+	return parrafos
+
+
+# Los iconos se cargan una vez (assets/ui/iconos)
+var iconos := {}
+func icono(id: String) -> Texture2D:
+	if not iconos.has(id):
+		iconos[id] = load("res://assets/ui/iconos/%s.png" % id)
+	return iconos[id]
+
+
+# ── Lo elegido ──
+
+func _input(evento: InputEvent) -> void:
+	if not is_visible_in_tree():
+		return
+	var antes := modo
+	if evento is InputEventKey or evento is InputEventJoypadButton or (evento is InputEventJoypadMotion and absf(evento.axis_value) > 0.5):
+		modo = "foco"
+	elif evento is InputEventMouseMotion or evento is InputEventMouseButton or evento is InputEventScreenTouch:
+		modo = "raton"
+	if evento is InputEventMouseMotion or modo != antes:
+		actualizar_ficha()
+		if modo != antes:
+			queue_redraw()   # (el botón «Comprar» dice cómo se compra)
+
+
+# Lo que tiene que enseñar la ficha: con el ratón, la casilla de debajo (o la «i»: cómo va la tienda); si no hay
+# ninguna, lo que ya enseñaba. Con el teclado, el mando o el dedo, la marcada (el toque marca el botón, pero no mueve el
+# ratón de Godot: se quedaría en el sitio de antes)
+func quien() -> String:
+	var con_dedo := Tactil.activo and Tactil.con_dedo
+	if modo == "raton" and not con_dedo:
+		if ordenador.colocando:
+			return ficha_id
+		var raton := get_local_mouse_position()
+		for id in casillas:
+			if casillas[id].has_point(raton):
+				return id
+		if Rect2(boton_info.position, boton_info.size).has_point(raton):
+			return ""
+		return ficha_id
+	var foco := get_viewport().gui_get_focus_owner()
+	if foco == boton_info:
+		return ""
+	for id in botones:
+		if botones[id] == foco:
+			return id
+	return ficha_id
+
+
+func actualizar_ficha() -> void:
+	var id := quien()
+	if id == ficha_id:
+		return
+	ficha_id = id
+	ficha_desde = ahora()
+	comprar.visible = id != ""
+	queue_redraw()
+
+
+# Al pulsar una casilla: con el dedo, si su ficha no estaba ya a la vista, el toque solo la enseña
+func al_pulsar(id: String) -> void:
+	if Tactil.activo and Tactil.con_dedo and not listo.get(id, false):
+		return
+	comprar_esto(id)
+
+
+func comprar_esto(id: String) -> void:
+	if Lanzables.PRECIOS.has(id):
+		ordenador.comprar_lanzable(id)
+	else:
+		ordenador.comprar_arma(id)
+
+
+# La «i»: la ficha vuelve a explicar cómo va la tienda
+func ver_nota() -> void:
+	ficha_id = ""
+	comprar.visible = false
+	queue_redraw()
