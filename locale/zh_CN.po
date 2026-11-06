@@ -5050,6 +5050,82 @@ msgstr "小地图下方的背包按钮"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "小地图下方的暂停按钮"
 
+#: scripts/ui/arbol_talentos.gd
+msgid "Resetear talentos"
+msgstr "重置天赋"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Te devuelve $%d"
+msgstr "退还 $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Cuesta $%d"
+msgstr "花费 $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "No hay puntos puestos"
+msgstr "没有已分配的点数"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "¿Seguro?"
+msgstr "确定？"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Resetear"
+msgstr "重置"
+
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "存下的美元"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Necesitas %s al máximo"
+msgstr "需要先点满%s"
+
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
+msgid "¡Al máximo! %s"
+msgstr "已满级！%s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "¡Al máximo!"
+msgstr "已满级！"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Ahora: %s · Con otro: %s"
+msgstr "当前：%s · 再加一点：%s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Al llenarlo abre: %s"
+msgstr "点满后解锁：%s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "MÁX"
+msgstr "满级"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Bloqueado"
+msgstr "未解锁"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Cuesta $%d: te faltan $%d"
+msgstr "花费 $%d：还差 $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Toca otra vez: comprar · $%d"
+msgstr "再点一次：购买 · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "A: comprar · $%d"
+msgstr "A：购买 · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Intro: comprar · $%d"
+msgstr "回车：购买 · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Clic: comprar · $%d"
+msgstr "点击：购买 · $%d"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "护盾 %d"
@@ -6569,76 +6645,16 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\维修间\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Resetear talentos"
-msgstr "重置天赋"
-
-#: scripts/ui/ordenador.gd
-msgid "Te devuelve $%d"
-msgstr "退还 $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cuesta $%d"
-msgstr "花费 $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "No hay puntos puestos"
-msgstr "没有已分配的点数"
-
-#: scripts/ui/ordenador.gd
-msgid "¿Seguro?"
-msgstr "确定？"
-
-#: scripts/ui/ordenador.gd
-msgid "Resetear"
-msgstr "重置"
-
-#: scripts/ui/ordenador.gd
 msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
 msgstr "收回天赋树上的所有点数，退还你花在上面的钱，扣除 $%d。"
-
-#: scripts/ui/ordenador.gd
-msgid "Árbol de talentos · cada punto se compra y sube un nivel"
-msgstr "天赋树 · 每点需购买，提升一级"
-
-#: scripts/ui/ordenador.gd
-msgid "%d de %d"
-msgstr "%d / %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
-msgstr "%s分支：已投入 %d / %d 点。点击查看天赋树。"
-
-#: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "每一点都用存下的钱购买，提升一级。想进入下一层级，先把它要求的天赋点满。"
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "存下的美元"
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
 msgstr "本局的 $%d 会在结束时存下：通关大楼全部保留，倒下则保留一半。"
 
 #: scripts/ui/ordenador.gd
-msgid "Necesitas %s al máximo"
-msgstr "需要先点满%s"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Al máximo! %s"
-msgstr "已满级！%s"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Al máximo!"
-msgstr "已满级！"
-
-#: scripts/ui/ordenador.gd
-msgid "Ahora: %s · Con otro: %s"
-msgstr "当前：%s · 再加一点：%s"
-
-#: scripts/ui/ordenador.gd
-msgid "MÁX"
-msgstr "满级"
+msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "每一点都用存下的钱购买，提升一级。想进入下一层级，先把它要求的天赋点满。"
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"

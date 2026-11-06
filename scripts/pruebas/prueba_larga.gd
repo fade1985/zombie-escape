@@ -584,6 +584,104 @@ func probar_ordenador_teclado() -> void:
 	Guardado.cambiar(func(g): g.merge(antes, true))
 
 
+# Con "--captura --arbol-talentos": la ficha del árbol de talentos del ordenador (arbol_talentos.gd), con 100 $, Ataque
+# lleno y Puntería a 2. Con el ratón: sale al pasar por encima de Tirador (captura-arbol-raton.png), se va al apartarlo y
+# un clic compra. Con el mando: la cruceta pasa de Ataque a Camorrista, la ficha la sigue y dice «A: comprar»
+# (captura-arbol-mando.png), y A compra. Con el dedo: el primer toque en Corpulento solo enseña la ficha, «Toca otra vez»
+# (captura-arbol-dedo.png), y el segundo compra. Cada línea dice lo esperado. Deja el guardado como estaba
+func probar_arbol_talentos() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g):
+		g.dolares = 100
+		g.talentos = {"ataque": 5, "punteria": 2})
+	ahorrados = 100
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("puntos")
+	await get_tree().create_timer(0.5).timeout
+	var arbol := func() -> Control: return ordenador.ventana.find_child("arbol", true, false)
+	var boton := func(id: String) -> Button: return ordenador.ventana.find_child("b_" + id, true, false)
+	var nivel := func(id: String) -> int: return Talentos.nivel_de(Guardado.cargar(), id)
+	# el ratón
+	await mover_raton(boton.call("tirador").get_global_rect().get_center())
+	print("Ratón encima de Tirador: ficha de «%s», a la vista %s, pie «%s» (esperado: tirador, true, Clic: comprar · $10)" % [
+		arbol.call().ficha_id, arbol.call().ficha.visible, arbol.call().pie_ficha("tirador")])
+	Captura.foto("captura-arbol-raton.png")
+	await mover_raton(arbol.call().get_global_rect().position + Vector2(30, 30))
+	print("Ratón apartado: ficha de «%s», a la vista %s (esperado: nada, false)" % [arbol.call().ficha_id, arbol.call().ficha.visible])
+	await clic_en(boton.call("tirador"))
+	await get_tree().create_timer(0.3).timeout
+	print("Clic en Tirador: nivel %d (esperado: 1, a la primera)" % nivel.call("tirador"))
+	# el mando
+	Controles.con_mando = true
+	boton.call("ataque").grab_focus()
+	await pulsar_mando(JOY_BUTTON_DPAD_DOWN)
+	var foco := get_viewport().gui_get_focus_owner()
+	print("Mando, abajo desde Ataque: marcado %s · ficha de «%s» · pie «%s» (esperado: b_camorrista, camorrista, A: comprar · $10)" % [
+		foco.name if foco else "nada", arbol.call().ficha_id, arbol.call().pie_ficha("camorrista")])
+	Captura.foto("captura-arbol-mando.png")
+	await pulsar_mando(JOY_BUTTON_A)
+	await get_tree().create_timer(0.3).timeout
+	foco = get_viewport().gui_get_focus_owner()
+	print("Mando, A: Camorrista %d · sigue marcado %s · ficha de «%s» (esperado: 1, b_camorrista, camorrista)" % [
+		nivel.call("camorrista"), foco.name if foco else "nada", arbol.call().ficha_id])
+	Controles.con_mando = false
+	# el dedo
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	await tocar(boton.call("corpulento").get_global_rect().get_center())
+	print("Dedo, primer toque en Corpulento: nivel %d · ficha de «%s» · pie «%s» (esperado: 0, corpulento, Toca otra vez: comprar · $5)" % [
+		nivel.call("corpulento"), arbol.call().ficha_id, arbol.call().pie_ficha("corpulento")])
+	Captura.foto("captura-arbol-dedo.png")
+	await get_tree().create_timer(0.4).timeout
+	await tocar(boton.call("corpulento").get_global_rect().get_center())
+	await get_tree().create_timer(0.3).timeout
+	print("Dedo, segundo toque: nivel %d (esperado: 1)" % nivel.call("corpulento"))
+	Tactil.activo = false
+	ordenador.abrir("")
+	ordenador.apagar()
+	Guardado.cambiar(func(g):
+		g.dolares = antes.dolares
+		g.dolares_talentos = antes.dolares_talentos
+		g.talentos = antes.talentos)
+	ahorrados = antes.dolares
+
+
+# Mueve el ratón de verdad hasta ese punto (en coordenadas del lienzo)
+func mover_raton(punto: Vector2) -> void:
+	var sitio: Vector2 = get_viewport().get_screen_transform() * punto
+	Input.warp_mouse(sitio)
+	var e := InputEventMouseMotion.new()
+	e.position = sitio
+	e.global_position = sitio
+	e.relative = Vector2(1, 1)
+	Input.parse_input_event(e)
+	await get_tree().create_timer(0.2).timeout
+
+
+# Un botón del mando, pulsado y soltado
+func pulsar_mando(cual: JoyButton) -> void:
+	for pulsado in [true, false]:
+		var e := InputEventJoypadButton.new()
+		e.button_index = cual
+		e.pressed = pulsado
+		Input.parse_input_event(e)
+		await get_tree().create_timer(0.1).timeout
+
+
+# Un toque del dedo en ese punto (Godot lo convierte en un clic del ratón, como en el móvil)
+func tocar(punto: Vector2) -> void:
+	var sitio: Vector2 = get_viewport().get_screen_transform() * punto
+	for pulsado in [true, false]:
+		var e := InputEventScreenTouch.new()
+		e.index = 0
+		e.pressed = pulsado
+		e.position = sitio
+		Input.parse_input_event(e)
+		await get_tree().create_timer(0.1).timeout
+
+
 # Para probar_ordenador_teclado: pulsa esa acción hasta que la marca deje de moverse; devuelve las veces que se ha movido
 func andar_con_teclado(accion: String) -> int:
 	var pasos := 0

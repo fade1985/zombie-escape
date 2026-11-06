@@ -344,7 +344,7 @@ en una línea.
   (`ArmasCreadas.con_acido`); Criogenia da congeladoras (`Lanzables.extra_talentos`) y las hace durar (`granada.gd`);
   Reacción en cadena y Residuo tóxico, al morir el zombi (`zombi.quimica_al_morir`: el estallido de las Épicas y un
   charco `residuo`, `charco.gd`), y Pararrayos, al recibir un golpe (`johnny.pararrayos`, con `Talentos.PARARRAYOS`).
-  En el ordenador, una pestaña por rama (`ordenador.gd`, `rama_abierta`). Se prueba con `--quimico`. Desde el 6 nov
+  En el ordenador, las tres ramas a la vez (`arbol_talentos.gd`, ver más abajo). Se prueba con `--quimico`. Desde el 6 nov
   cada punto se compra en su talento con los dólares ahorrados (`Talentos.PRECIOS`, por fila del árbol: 5, 10, 15, 20
   y 25 $; `Talentos.precio` y `subir`), y lo gastado se apunta en `dolares_talentos` del guardado; ya no hay puntos de
   talento que comprar (los que tenían los guardados viejos sin gastar, `guardado.gd` los cambia por dólares a 10 $).
@@ -478,6 +478,13 @@ en una línea.
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
   `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 32 (M75) y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
+- `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
+  ramas a la vez, cada una de su color (`COLORES`: Militar rojo, Superviviente verde, Químico amarillo), dibujada con
+  código (`_draw`): cada talento es un hexágono con su icono y sus cuadraditos, y las rayas al que pide se encienden al
+  llenarlo. Encima de cada hexágono, un botón transparente `b_<id>`. La ficha (qué hace, ahora y con otro, qué abre y
+  el pie con el precio) sale al lado del que está bajo el ratón o, con el teclado, el mando o el dedo, del marcado
+  (`quien`, `modo`); con el dedo, el primer toque solo la enseña y el segundo compra (`al_pulsar`, `listo`). Las flechas
+  van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Prueba: `--arbol-talentos`.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se

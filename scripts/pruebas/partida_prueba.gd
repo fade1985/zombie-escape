@@ -146,6 +146,8 @@
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
 #   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
+#   --arbol-talentos    la ficha del árbol de talentos del ordenador con el ratón (sale al pasar por encima), el
+#                       mando (sigue a la marca) y el dedo (el primer toque la enseña, el segundo compra) [prueba_larga.gd]
 #   --muertos-dosier    (con --edificio X) los muertos que llevan las páginas del dosier de ese edificio, en fila sobre
 #                       un fondo liso: todos con bata (M86)                                [prueba_varias.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia en la
@@ -514,6 +516,10 @@ func empezar_prueba() -> void:
 		get_tree().quit()
 	elif "--avisos-ordenador" in args:
 		await probar_avisos_ordenador()
+		get_tree().quit()
+	elif "--arbol-talentos" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_arbol_talentos()
 		get_tree().quit()
 	elif "--ordenador-arriba" in args:
 		set_process(false)   # sin la prueba larga

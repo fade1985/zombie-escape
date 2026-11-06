@@ -5057,6 +5057,82 @@ msgstr "o botão da mochila, embaixo do minimapa"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "o botão de pausa, embaixo do minimapa"
 
+#: scripts/ui/arbol_talentos.gd
+msgid "Resetear talentos"
+msgstr "Resetar talentos"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Te devuelve $%d"
+msgstr "Devolve $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Cuesta $%d"
+msgstr "Custa $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "No hay puntos puestos"
+msgstr "Nenhum ponto gasto"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "¿Seguro?"
+msgstr "Certeza?"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Resetear"
+msgstr "Resetar"
+
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Dólares guardados"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Necesitas %s al máximo"
+msgstr "Requer %s no máximo"
+
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
+msgid "¡Al máximo! %s"
+msgstr "No máximo! %s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "¡Al máximo!"
+msgstr "No máximo!"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Ahora: %s · Con otro: %s"
+msgstr "Agora: %s · Com mais um: %s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Al llenarlo abre: %s"
+msgstr "Ao completar, libera: %s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "MÁX"
+msgstr "MÁX"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Bloqueado"
+msgstr "Bloqueado"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Cuesta $%d: te faltan $%d"
+msgstr "Custa $%d: faltam $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Toca otra vez: comprar · $%d"
+msgstr "Toque de novo: comprar · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "A: comprar · $%d"
+msgstr "A: comprar · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Intro: comprar · $%d"
+msgstr "Enter: comprar · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Clic: comprar · $%d"
+msgstr "Clique: comprar · $%d"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "escudo %d"
@@ -6589,76 +6665,16 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\MANUTENCAO\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Resetear talentos"
-msgstr "Resetar talentos"
-
-#: scripts/ui/ordenador.gd
-msgid "Te devuelve $%d"
-msgstr "Devolve $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cuesta $%d"
-msgstr "Custa $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "No hay puntos puestos"
-msgstr "Nenhum ponto gasto"
-
-#: scripts/ui/ordenador.gd
-msgid "¿Seguro?"
-msgstr "Certeza?"
-
-#: scripts/ui/ordenador.gd
-msgid "Resetear"
-msgstr "Resetar"
-
-#: scripts/ui/ordenador.gd
 msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
 msgstr "Tira todos os pontos da árvore e devolve o que você gastou neles, menos $%d."
-
-#: scripts/ui/ordenador.gd
-msgid "Árbol de talentos · cada punto se compra y sube un nivel"
-msgstr "Árvore de talentos · cada ponto é comprado e sobe um nível"
-
-#: scripts/ui/ordenador.gd
-msgid "%d de %d"
-msgstr "%d de %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
-msgstr "Ramo %s: %d de seus %d pontos colocados. Aperte para ver a árvore."
-
-#: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "Cada ponto é pago com o dinheiro guardado e sobe um nível. Para passar ao nível seguinte, complete antes o talento que ele pede."
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Dólares guardados"
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
 msgstr "Os $%d desta partida são guardados quando ela acaba: todos se você completar o prédio, a metade se cair."
 
 #: scripts/ui/ordenador.gd
-msgid "Necesitas %s al máximo"
-msgstr "Requer %s no máximo"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Al máximo! %s"
-msgstr "No máximo! %s"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Al máximo!"
-msgstr "No máximo!"
-
-#: scripts/ui/ordenador.gd
-msgid "Ahora: %s · Con otro: %s"
-msgstr "Agora: %s · Com mais um: %s"
-
-#: scripts/ui/ordenador.gd
-msgid "MÁX"
-msgstr "MÁX"
+msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Cada ponto é pago com o dinheiro guardado e sobe um nível. Para passar ao nível seguinte, complete antes o talento que ele pede."
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"

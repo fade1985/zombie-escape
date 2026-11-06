@@ -1362,9 +1362,8 @@ func probar_flatulento() -> void:
 # (el lanzallamas y la congeladora), Guantes de goma (lo que quita un segundo de fuego), Incendiario, Desatascador,
 # Criogenia (las congeladoras del principio, las que caben y lo que dejan quietos) y los tres del nivel 3 con su foto:
 # Reacción en cadena (captura-quimico-reaccion.png), Residuo tóxico (captura-quimico-residuo.png) y Pararrayos
-# (captura-quimico-pararrayos.png). Al final, el árbol en el ordenador, con una pestaña por rama: la de Militar
-# (captura-quimico-arbol-militar.png) y la de Químico, arriba y abajo (captura-quimico-arbol.png y
-# captura-quimico-arbol-abajo.png). Se cierra
+# (captura-quimico-pararrayos.png). Al final, el árbol en el ordenador, con las tres ramas a la vez y la ficha de
+# Incendiario (captura-quimico-arbol.png). Se cierra
 func probar_quimico() -> void:
 	var centro: Vector2 = await sala_de_talentos()
 	var todos := {"catalizador": 5, "guantes_goma": 5, "incendiario": 5, "desatascador": 5, "criogenia": 3, "reaccion": 1,
@@ -1499,23 +1498,31 @@ func probar_quimico() -> void:
 			"incendiario": 3})
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
-	ordenador.rama_abierta = "militar"
-	ordenador.abrir("puntos")
-	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-quimico-arbol-militar.png")
-	ordenador.ver_rama("quimico")
-	await get_tree().create_timer(0.3).timeout
+	ordenador.abrir("puntos", "b_incendiario")
+	await ensenar_ficha("incendiario")
 	Captura.foto("captura-quimico-arbol.png")
-	for desliza: ScrollContainer in ordenador.find_children("*", "ScrollContainer", true, false):
-		desliza.scroll_vertical = 99999
-	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-quimico-arbol-abajo.png")
-	print("Árbol: pestañas %s (esperado: las tres) · se ve la rama %s (esperado: quimico)" % [
-		ordenador.find_children("b_rama_*", "", true, false).map(func(b): return b.name), ordenador.rama_abierta])
+	print("Árbol: %d hexágonos (esperado: 36, las tres ramas a la vez) · ficha de Incendiario «%s» (esperado: ... Ahora: ... · Con otro: ...)" % [
+		ordenador.ventana.find_child("arbol", true, false).botones.size(), ficha_de("incendiario")])
 	Guardado.cambiar(func(gu):
 		gu.dolares = guardado_antes.dolares
 		gu.talentos = guardado_antes.talentos)
 	get_tree().quit()
+
+
+# Para las pruebas del árbol de talentos del ordenador (arbol_talentos.gd): marca ese talento como con el teclado o el
+# mando, para que salga su ficha, y espera a que se vea
+func ensenar_ficha(id: String) -> void:
+	await get_tree().create_timer(0.3).timeout
+	ordenador.ARBOL.modo = "foco"
+	ordenador.ventana.find_child("b_" + id, true, false).grab_focus()
+	ordenador.ventana.find_child("arbol", true, false).actualizar_ficha()   # (si ya estaba marcado, no se entera)
+	await get_tree().create_timer(0.2).timeout
+
+
+# Lo que pone la ficha de ese talento, con su pie
+func ficha_de(id: String) -> String:
+	var arbol: Control = ordenador.ventana.find_child("arbol", true, false)
+	return " | ".join(arbol.lineas_ficha(id).map(func(l): return l[0]) + [arbol.pie_ficha(id)])
 
 
 # Para las pruebas de talentos: Johnny en la sala más grande del apartamento más grande, sin zombis, quieto (que no pegue
@@ -1546,7 +1553,7 @@ func sala_de_talentos() -> Vector2:
 # Con "--captura --equilibrio-talentos": los cambios de las ramas Militar y Superviviente (M15), con sus números en la
 # terminal y lo esperado al lado: Durito llega a 3 (y a quien tenía más se le devuelven los puntos), Ajolote cura solo
 # hasta la mitad, Puntería lanza más lejos y Mirilla da un crítico de cada 3 disparos, con su número en amarillo
-# (captura-talentos-critico.png). Al final, las tarjetas del ordenador con lo que dan ahora y con otro punto
+# (captura-talentos-critico.png). Al final, las fichas del ordenador con lo que dan ahora y con otro punto
 # (captura-talentos-militar.png y captura-talentos-superviviente.png). Ninja cada 5 s: en --equilibrio. Se cierra
 func probar_equilibrio_talentos() -> void:
 	var centro: Vector2 = await sala_de_talentos()
@@ -1619,17 +1626,15 @@ func probar_equilibrio_talentos() -> void:
 		g.talentos = {"ataque": 5, "punteria": 3, "camorrista": 2, "corpulento": 5, "lobezno": 2, "durito": 1})
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
-	ordenador.rama_abierta = "militar"
 	ordenador.abrir("puntos", "b_punteria")
-	await get_tree().create_timer(0.3).timeout
+	await ensenar_ficha("punteria")
 	Captura.foto("captura-talentos-militar.png")
-	ordenador.ver_rama("superviviente")
-	ordenador.abrir("puntos", "b_lobezno")
-	await get_tree().create_timer(0.3).timeout
+	print("Ficha: Puntería 3 «%s» (esperado: ... Ahora: %s · Con otro: %s ...)" % [ficha_de("punteria"),
+		Talentos.efecto("punteria", 3), Talentos.efecto("punteria", 4)])
+	await ensenar_ficha("durito")
 	Captura.foto("captura-talentos-superviviente.png")
-	print("Tarjetas: Puntería 3 «%s» · Durito 1 «%s» (esperado: Ahora: ... · Con otro: ...)" % [
-		"Ahora: %s · Con otro: %s" % [Talentos.efecto("punteria", 3), Talentos.efecto("punteria", 4)],
-		"Ahora: %s · Con otro: %s" % [Talentos.efecto("durito", 1), Talentos.efecto("durito", 2)]])
+	print("Ficha: Durito 1 «%s» (esperado: ... Ahora: %s · Con otro: %s ...)" % [ficha_de("durito"),
+		Talentos.efecto("durito", 1), Talentos.efecto("durito", 2)])
 	Guardado.cambiar(func(g):
 		g.dolares = guardado_antes.dolares
 		g.talentos = guardado_antes.talentos)
@@ -1653,13 +1658,15 @@ func probar_comprar_talentos() -> void:
 	aplicar_talentos({})
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
-	ordenador.rama_abierta = "militar"
 	ordenador.abrir("puntos", "b_ataque")
 	await get_tree().create_timer(0.4).timeout
-	var tarjeta := func(nombre: String) -> String:   # lo que pone en la tarjeta de ese botón
+	var tarjeta := func(nombre: String) -> String:   # lo que pone en el botón de Resetear, o en la ficha de un talento
+		if nombre != "b_resetear":
+			return ficha_de(nombre.trim_prefix("b_"))
 		var b: Button = ordenador.ventana.find_child(nombre, true, false)
 		return " | ".join(b.get_parent().find_children("*", "Label", true, false).map(func(l): return l.text)) if b else "no está"
-	print("Precios: Ataque «%s» · Camorrista «%s» (esperado: ... $5 · bloqueado, sin precio)" % [tarjeta.call("b_ataque"), tarjeta.call("b_camorrista")])
+	await ensenar_ficha("ataque")
+	print("Precios: Ataque «%s» · Camorrista «%s» (esperado: ... $5 · Necesitas Ataque al máximo ... Bloqueado)" % [tarjeta.call("b_ataque"), tarjeta.call("b_camorrista")])
 	Captura.foto("captura-talentos-precios.png")
 	for i in 5:
 		ordenador.subir("ataque")
@@ -1673,7 +1680,6 @@ func probar_comprar_talentos() -> void:
 	Guardado.cambiar(func(g): g.dolares = 2)
 	ahorrados = 2
 	ordenador.subir("punteria")
-	ordenador.rama_abierta = "militar"   # (al subir Corpulento se ha abierto la suya)
 	ordenador.abrir("puntos", "b_punteria")
 	await get_tree().create_timer(0.4).timeout
 	ordenador.ventana.find_child("b_punteria", true, false).grab_focus()   # (por si el ratón de la ventana está encima de otra tarjeta)
@@ -1718,7 +1724,7 @@ func probar_comprar_talentos() -> void:
 # aliento (una vez por planta: captura-altos-aliento.png) y Adrenalina (daño y velocidad: captura-altos-adrenalina.png).
 # Químico: Napalm, Pegajoso, Alto voltaje (el rayo de Pararrayos salta a 4 más: captura-altos-voltaje.png) y Mezcla
 # explosiva (captura-altos-mezcla.png). Al final, en el ordenador, la corona de Militar bloqueada y la de Superviviente
-# comprada (captura-altos-arbol-militar.png y captura-altos-arbol-superviviente.png). Se cierra
+# comprada, con sus fichas (captura-altos-arbol-militar.png y captura-altos-arbol-superviviente.png). Se cierra
 func probar_talentos_altos() -> void:
 	var centro: Vector2 = await sala_de_talentos()
 	var guardado_antes := Guardado.cargar()
@@ -1908,20 +1914,13 @@ func probar_talentos_altos() -> void:
 			"ninja": 1, "desfibrilador": 1, "blindaje": 3, "sombra": 3, "aliento": 3, "adrenalina": 1}))
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
-	ordenador.rama_abierta = "militar"
 	ordenador.abrir("puntos", "b_veterano")
-	await get_tree().create_timer(0.3).timeout
-	for desliza: ScrollContainer in ordenador.find_children("*", "ScrollContainer", true, false):
-		desliza.scroll_vertical = 99999
-	await get_tree().create_timer(0.3).timeout
+	await ensenar_ficha("veterano")
 	Captura.foto("captura-altos-arbol-militar.png")
-	ordenador.ver_rama("superviviente")
-	ordenador.abrir("puntos", "b_adrenalina")
-	await get_tree().create_timer(0.3).timeout
-	for desliza: ScrollContainer in ordenador.find_children("*", "ScrollContainer", true, false):
-		desliza.scroll_vertical = 99999
-	await get_tree().create_timer(0.3).timeout
+	print("Ficha: Veterano «%s» (esperado: Necesitas Racimo al máximo · Bloqueado)" % ficha_de("veterano"))
+	await ensenar_ficha("adrenalina")
 	Captura.foto("captura-altos-arbol-superviviente.png")
+	print("Ficha: Adrenalina «%s» (esperado: ¡Al máximo! · MÁX)" % ficha_de("adrenalina"))
 	Guardado.cambiar(func(g):
 		g.dolares = guardado_antes.dolares
 		g.talentos = guardado_antes.talentos)

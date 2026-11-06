@@ -1,8 +1,8 @@
 # El ordenador de la sala de mantenimiento, "ConserjeOS" (src/ordenador.js del JS). Al arrimarse a la mesa
 # (mapa/ordenador.gd) el juego se pausa y sale la pantalla: un monitor viejo con su escritorio, sus iconos, la
 # barra de tareas con el reloj y una ventana para cada programa:
-#   - "Compra de puntos e intercambio": cambia los dólares ahorrados por puntos de talento (talentos.gd) y los
-#     gasta en el árbol de talentos. Lo comprado se nota al momento.
+#   - "Talentos": el árbol de talentos (arbol_talentos.gd), con las tres ramas a la vez; cada punto se compra en su
+#     talento con los dólares ahorrados (talentos.gd). Lo comprado se nota al momento.
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS), en calidad Normal (parte 4 de la
 #     tienda y las piezas: Armas.CALIDADES), y queda desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
 #     tienes una de repuesto, esa va al baúl en el momento (partida.repuesto_al_baul; si no cabe o no se puede
@@ -54,6 +54,7 @@ const SECCIONES := [
 ]
 # [/traducir]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
+const ARBOL := preload("res://scripts/ui/arbol_talentos.gd")   # el árbol de talentos (TALENTOS.EXE)
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
 # El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
 # [traducir]
@@ -85,7 +86,6 @@ var info: Label             # la línea de abajo de la ventana: explica lo que e
 var tarea: Label
 var reloj: Label
 var abierta := ""           # el programa abierto ("" = solo el escritorio)
-var rama_abierta := "militar"   # en Puntos, la pestaña de la rama del árbol que se ve
 var seguro_resetear := false     # en Puntos, ya se ha pulsado una vez «Resetear talentos»: la segunda lo hace (M32)
 
 
@@ -523,46 +523,32 @@ func montar_ventana(programa: String) -> VBoxContainer:
 
 # ── Talentos: cada punto se compra en su talento, con lo ahorrado ──
 
+# Las tres ramas a la vez en una chapa oscura, cada talento un hexágono con su ficha al pasar por encima (arbol_talentos.gd).
+# Aquí se le pone a cada botón lo que explica en la línea de abajo y lo que hace al pulsarlo
 func programa_puntos(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
-	saldo(c, s)
-	nota_partida(c)
+	var arbol: Control = ARBOL.new()
+	arbol.name = "arbol"
+	arbol.montar(self, s)
+	c.add_child(arbol)
 	# Resetear (M32): quita los puntos del árbol y devuelve lo gastado menos PRECIO_RESETEAR. Se pulsa dos veces, por si acaso
-	var botones := rejilla(c)
-	var en_el_arbol := Talentos.puestos(s)
-	var devuelve := Talentos.devolucion(s)
-	var resetear := tarjeta(botones, "b_resetear", "herramientas", Idioma.t("Resetear talentos"),
-		(Idioma.t("Te devuelve $%d") % devuelve if devuelve >= 0 else Idioma.t("Cuesta $%d") % -devuelve) if en_el_arbol > 0
-			else Idioma.t("No hay puntos puestos"),
-		Idioma.t("¿Seguro?") if seguro_resetear else Idioma.t("Resetear"),
-		"" if Talentos.se_puede_resetear(s) else "bloqueada")
-	enlazar(resetear, Idioma.t("Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d.") %
+	enlazar(arbol.resetear, Idioma.t("Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d.") %
 		Talentos.PRECIO_RESETEAR, resetear_talentos)
-	var arbol := grupo(c, Idioma.t("Árbol de talentos · cada punto se compra y sube un nivel"))
-	# Una pestaña por rama (con tres, una al lado de otra no cabían): la abierta, hundida y en verde, y debajo su árbol
-	var pestanas := HBoxContainer.new()
-	pestanas.add_theme_constant_override("separation", 6)
-	arbol.add_child(pestanas)
-	for rama in Talentos.RAMAS:
-		var puestos := 0
-		var total := 0
-		for t in Talentos.LISTA:
-			if t.rama == rama.id:
-				puestos += Talentos.nivel_de(s, t.id)
-				total += t.max
-		var b := tarjeta(pestanas, "b_rama_" + rama.id, rama.icono, Talentos.nombre_rama(rama.id), Idioma.t("%d de %d") % [puestos, total], "",
-			"puesta" if rama.id == rama_abierta else "")
-		enlazar(b, Idioma.t("Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol.") % [Talentos.nombre_rama(rama.id), puestos, total],
-			ver_rama.bind(rama.id))
-	for rama in Talentos.RAMAS:
-		if rama.id == rama_abierta:
-			arbol.add_child(montar_rama(s, rama))
-	info.text = Idioma.t("Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide.")
+	for t in Talentos.LISTA:
+		enlazar(arbol.botones[t.id], explica_talento(s, t), arbol.al_pulsar.bind(t.id))
+	info.text = Idioma.t("Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes.") % 		partida.dolares if partida.dolares > 0 else 		Idioma.t("Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide.")
 
 
-func ver_rama(id: String) -> void:
-	rama_abierta = id
-	abrir("puntos", "b_rama_" + id)
+# Lo que dice la línea de abajo de un talento marcado
+func explica_talento(s: Dictionary, t: Dictionary) -> String:
+	var texto: String = Talentos.desc_de(t.id)
+	var precio := Talentos.precio(t.id)
+	match Talentos.motivo(s, t.id):
+		"bloqueado": texto = Idioma.t("Necesitas %s al máximo. %s") % [Talentos.nombres(Talentos.faltan(s, t.id)), texto]
+		"max": texto = Idioma.t("¡Al máximo! %s") % texto
+		"sin_dinero": texto = Idioma.t("%s. Cuesta $%d: te faltan $%d.") % [texto, precio, precio - s.dolares]
+		"": texto = Idioma.t("%s. Pulsa para subirlo ($%d).") % [texto, precio]
+	return texto
 
 
 # Lo ahorrado: una caja azul hundida, como .pc-saldo del JS
@@ -632,65 +618,6 @@ func rejilla(c: Container) -> GridContainer:
 	return g
 
 
-# Una rama del árbol (.pc-rama): su título en azul y, debajo, sus niveles (1 arriba, 5 abajo), cada uno con su
-# número a la izquierda y sus talentos en dos columnas
-func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
-	var columna := VBoxContainer.new()
-	columna.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	columna.add_theme_constant_override("separation", 5)
-	var titulo := PanelContainer.new()
-	titulo.add_theme_stylebox_override("panel", caja(AZUL, AZUL, 0, 0, 4))
-	columna.add_child(titulo)
-	titulo.add_child(Tema.icono_y_texto(rama.icono, Talentos.nombre_rama(rama.id), 24))
-	for nivel in range(1, 6):
-		var fila := HBoxContainer.new()
-		fila.add_theme_constant_override("separation", 6)
-		columna.add_child(fila)
-		var numero := Label.new()
-		numero.text = str(nivel)
-		numero.custom_minimum_size = Vector2(20, 22)
-		numero.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-		numero.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		numero.add_theme_color_override("font_color", TARJETA_LUZ)
-		numero.add_theme_constant_override("outline_size", 0)
-		numero.add_theme_stylebox_override("normal", caja(TINTA_SUAVE, TINTA_SUAVE, 0, 0, 0))
-		fila.add_child(numero)
-		var lista := rejilla(fila)
-		lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		for t in Talentos.LISTA:
-			if t.rama == rama.id and t.nivel == nivel:
-				nodo_talento(lista, s, t)
-	return columna
-
-
-func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
-	var n := Talentos.nivel_de(s, t.id)
-	var motivo := Talentos.motivo(s, t.id)
-	var estado: String = {"max": "lleno", "bloqueado": "bloqueada", "sin_dinero": "apagada"}.get(motivo, "")
-	# debajo del nombre: con algún punto puesto, lo que da ahora y lo que daría el siguiente (Talentos.efecto); sin
-	# ninguno, lo que hace cada punto
-	var ahora := Talentos.efecto(t.id, n)
-	var debajo: String = Talentos.desc_de(t.id)
-	var faltan := Talentos.nombres(Talentos.faltan(s, t.id))   # (los del nivel 5 piden tres: solo salen los que faltan)
-	if motivo == "bloqueado":
-		debajo = Idioma.t("Necesitas %s al máximo") % faltan
-	elif motivo == "max":
-		debajo = Idioma.t("¡Al máximo! %s") % ahora if ahora != "" else Idioma.t("¡Al máximo!")
-	elif n > 0 and ahora != "":
-		debajo = Idioma.t("Ahora: %s · Con otro: %s") % [ahora, Talentos.efecto(t.id, n + 1)]
-	var precio := Talentos.precio(t.id)
-	var etiqueta := Idioma.t("MÁX") if motivo == "max" else ("" if motivo == "bloqueado" else "$%d" % precio)
-	var b := tarjeta(lista, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, Talentos.nombre_de(t.id), debajo, etiqueta,
-		estado, [n, t.max])
-	var texto: String = Talentos.desc_de(t.id)
-	match motivo:
-		"bloqueado": texto = Idioma.t("Necesitas %s al máximo. %s") % [faltan, texto]
-		"max": texto = Idioma.t("¡Al máximo! %s") % texto
-		"sin_dinero": texto = Idioma.t("%s. Cuesta $%d: te faltan $%d.") % [texto, precio, precio - s.dolares]
-		"": texto = Idioma.t("%s. Pulsa para subirlo ($%d).") % [texto, precio]
-	enlazar(b, texto, subir.bind(t.id))
-
-
 # «Resetear talentos»: la primera vez solo pregunta; la segunda quita los puntos del árbol y devuelve lo gastado
 func resetear_talentos() -> void:
 	var s := Guardado.cargar()
@@ -724,7 +651,6 @@ func subir(id: String) -> void:
 	var s := Talentos.subir(id)
 	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	partida.aplicar_talentos(s.talentos)
-	rama_abierta = Talentos.talento(id).rama   # (si se sube desde fuera, como en las pruebas, que se vea)
 	abrir("puntos", "b_" + id)
 	info.set_deferred("text", Idioma.t("¡%s sube a %d/%d!") % [Talentos.nombre_de(id), Talentos.nivel_de(s, id), Talentos.talento(id).max])   # después de marcar el botón (que pone su explicación)
 

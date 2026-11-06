@@ -5064,6 +5064,82 @@ msgstr "кнопка рюкзака под миникартой"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "кнопка паузы под миникартой"
 
+#: scripts/ui/arbol_talentos.gd
+msgid "Resetear talentos"
+msgstr "Сбросить таланты"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Te devuelve $%d"
+msgstr "Вернёт $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Cuesta $%d"
+msgstr "Цена $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "No hay puntos puestos"
+msgstr "Очки не вложены"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "¿Seguro?"
+msgstr "Уверен?"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Resetear"
+msgstr "Сбросить"
+
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Накопленные доллары"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Necesitas %s al máximo"
+msgstr "Нужно прокачать до максимума: %s"
+
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
+msgid "¡Al máximo! %s"
+msgstr "Максимум! %s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "¡Al máximo!"
+msgstr "Максимум!"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Ahora: %s · Con otro: %s"
+msgstr "Сейчас: %s · С еще одним: %s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Al llenarlo abre: %s"
+msgstr "Если прокачать до конца, откроет: %s"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "MÁX"
+msgstr "МАКС"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Bloqueado"
+msgstr "Закрыто"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Cuesta $%d: te faltan $%d"
+msgstr "Цена $%d: не хватает $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Toca otra vez: comprar · $%d"
+msgstr "Коснись ещё раз: купить · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "A: comprar · $%d"
+msgstr "A: купить · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Intro: comprar · $%d"
+msgstr "Enter: купить · $%d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Clic: comprar · $%d"
+msgstr "Клик: купить · $%d"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "щит %d"
@@ -6609,76 +6685,16 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\ДВОРНИЦКАЯ\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Resetear talentos"
-msgstr "Сбросить таланты"
-
-#: scripts/ui/ordenador.gd
-msgid "Te devuelve $%d"
-msgstr "Вернёт $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cuesta $%d"
-msgstr "Цена $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "No hay puntos puestos"
-msgstr "Очки не вложены"
-
-#: scripts/ui/ordenador.gd
-msgid "¿Seguro?"
-msgstr "Уверен?"
-
-#: scripts/ui/ordenador.gd
-msgid "Resetear"
-msgstr "Сбросить"
-
-#: scripts/ui/ordenador.gd
 msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
 msgstr "Снимает все очки с дерева и возвращает потраченное на них, за вычетом $%d."
-
-#: scripts/ui/ordenador.gd
-msgid "Árbol de talentos · cada punto se compra y sube un nivel"
-msgstr "Дерево талантов · каждое очко покупается и даёт новый уровень"
-
-#: scripts/ui/ordenador.gd
-msgid "%d de %d"
-msgstr "%d из %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
-msgstr "Ветка «%s»: очков вложено %d из %d. Нажми, чтобы увидеть ее дерево."
-
-#: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "Каждое очко оплачивается накопленными долларами и даёт новый уровень. Чтобы перейти на следующий ярус, сначала прокачай до максимума нужный талант."
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Накопленные доллары"
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
 msgstr "$%d этого забега сохранятся в конце: все, если пройдешь здание, половина — если падешь."
 
 #: scripts/ui/ordenador.gd
-msgid "Necesitas %s al máximo"
-msgstr "Нужно прокачать до максимума: %s"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Al máximo! %s"
-msgstr "Максимум! %s"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Al máximo!"
-msgstr "Максимум!"
-
-#: scripts/ui/ordenador.gd
-msgid "Ahora: %s · Con otro: %s"
-msgstr "Сейчас: %s · С еще одним: %s"
-
-#: scripts/ui/ordenador.gd
-msgid "MÁX"
-msgstr "МАКС"
+msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Каждое очко оплачивается накопленными долларами и даёт новый уровень. Чтобы перейти на следующий ярус, сначала прокачай до максимума нужный талант."
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"
