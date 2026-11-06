@@ -75,16 +75,20 @@ def guia(nombre):
         caja(dr, 14, 16, 1, 12, (205, 210, 215))
         caja(dr, 21, 16, 1, 12, (205, 210, 215))
     elif nombre == 'servicio':
-        # dos hojas de acero con su ventanuco de cristal armado, la barra antipánico y la rejilla de abajo
-        caja(dr, 0, 0, w, h, (60, 66, 66), True)
-        for x in (2, 19):
-            caja(dr, x, 2, 15, h - 2, (110, 118, 116))
-            caja(dr, x + 4, 6, 7, 9, (40, 50, 56))
-            caja(dr, x + 2, 34, 11, 1, (70, 76, 76))
-            caja(dr, x + 2, 36, 11, 1, (70, 76, 76))
-            caja(dr, x + 2, 38, 11, 1, (70, 76, 76))
-        caja(dr, 17, 2, 2, h - 2, (60, 66, 66))
-        caja(dr, 3, 23, w - 6, 2, (170, 175, 172))
+        # (6 nov, como la foto del dueño) una sola hoja de chapa gris claro en un marco gris oscuro, con la manilla
+        # plateada en vertical a media altura, dos bisagras y la rejilla de ventilación de lamas abajo
+        caja(dr, 0, 0, w, h, (66, 70, 74), True)
+        caja(dr, 3, 3, w - 6, h - 3, (164, 168, 170))
+        caja(dr, 3, 3, w - 6, 1, (188, 192, 194))            # el canto de arriba, con luz
+        caja(dr, w - 4, 4, 1, h - 4, (138, 142, 146))         # el canto de la derecha, en sombra
+        for y in (8, 32):                                      # las bisagras, a la izquierda
+            caja(dr, 3, y, 1, 3, (96, 100, 104))
+        caja(dr, 26, 18, 3, 10, (120, 124, 128))               # la placa de la manilla
+        caja(dr, 27, 19, 1, 8, (222, 226, 228))                # la manilla, en vertical
+        caja(dr, 7, 31, w - 14, 9, (110, 114, 118))            # la rejilla: el marco
+        for y in range(32, 39, 2):                             # y sus lamas
+            caja(dr, 8, y, w - 16, 1, (58, 62, 66))
+            caja(dr, 8, y + 1, w - 16, 1, (150, 154, 158))
     else:
         # bano: una hoja de madera de interior, sin marco (el hueco es del tabique)
         caja(dr, 0, 0, w, h, (74, 49, 35), True)
