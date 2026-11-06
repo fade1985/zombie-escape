@@ -201,6 +201,10 @@ msgid "Gatling"
 msgstr "加特林"
 
 #: scripts/armas.gd
+msgid "Lanzagranadas"
+msgstr "榴弹发射器"
+
+#: scripts/armas.gd
 msgid "Lanzallamas"
 msgstr "火焰喷射器"
 
@@ -267,6 +271,18 @@ msgstr "弹链打光了！"
 #: scripts/armas.gd
 msgid "la gatling"
 msgstr "加特林"
+
+#: scripts/armas.gd
+msgid "Granadas de 40 mm"
+msgstr "40毫米榴弹"
+
+#: scripts/armas.gd
+msgid "¡Sin granadas!"
+msgstr "榴弹打光了！"
+
+#: scripts/armas.gd
+msgid "el lanzagranadas"
+msgstr "榴弹发射器"
 
 #: scripts/armas.gd scripts/objetos.gd
 msgid "Gasolina"
@@ -3004,8 +3020,8 @@ msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierr
 msgstr "近战武器（拖把、小刀、球棒、电锯和武士刀）"
 
 #: scripts/objetos.gd
-msgid "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)"
-msgstr "远程武器（手枪、MP5、散弹枪和加特林）"
+msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el lanzagranadas)"
+msgstr "远程武器（手枪、MP5、散弹枪、加特林和榴弹发射器）"
 
 #: scripts/objetos.gd
 msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
@@ -5628,6 +5644,11 @@ msgid_plural "%d balas de cinta"
 msgstr[0] "%d 发弹链子弹"
 
 #: scripts/ui/inventario.gd
+msgid "%d granada de 40 mm"
+msgid_plural "%d granadas de 40 mm"
+msgstr[0] "%d 枚40毫米榴弹"
+
+#: scripts/ui/inventario.gd
 msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d 桶汽油"
@@ -5709,6 +5730,10 @@ msgstr "射速极快的连射。和手枪用同一种子弹。"
 #: scripts/ui/inventario.gd
 msgid "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas."
 msgstr "转起来要一会儿，之后就停不下来。很沉：走得更慢。消耗弹链。"
+
+#: scripts/ui/inventario.gd
+msgid "Granadas que revientan al tocar algo y hacen daño alrededor (¡también a ti!). Se recarga de una en una."
+msgstr "碰到东西就爆炸，炸伤周围的一切（你也会被炸到！）。一发一发地装填。"
 
 #: scripts/ui/inventario.gd
 msgid "Llamarada continua que quema a todos. Se llena con gasolina."

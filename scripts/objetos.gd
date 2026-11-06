@@ -40,7 +40,7 @@ const PIEZAS := {
 # [traducir]
 const PIEZA_PARA := {
 	"cuerpo": "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierra y la katana)",
-	"distancia": "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)",
+	"distancia": "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el lanzagranadas)",
 	"especial": "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)",
 	"arrojable": "los arrojables (el molotov, la granada, la atraedora y la congeladora)",
 }

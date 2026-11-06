@@ -1,0 +1,28 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con el lanzagranadas (lo lee tools/arma.py del juego JS). Las posturas quietas de south y north NO son las del estado de PixelLab (allí apuntaba de lado): son el último fotograma de una animación corta en la que Johnny gira el arma (posturas/; en south, la segunda toma: la primera, en descartes/postura-south-1/). Las originales están en descartes/rotations-viejas/.",
+  "andar": {
+    "nota": "El ciclo de andar lo elige el script, salvo en north (no encuentra tramo: los 12 desde el quieto) y east (el tramo que elige solo cierra con 221 píxeles cambiados; el de 11 desde el 1, con 31). north-west es la segunda toma (andar-lanzagranadas-noroeste); la primera giraba el arma: descartes/walk-north-west-1/.",
+    "ciclo": {
+      "north": [0, 12],
+      "east": [1, 11]
+    }
+  },
+  "ataque": {
+    "nota": "Disparo. El lanzagranadas dispara una vez por segundo; se usan el fogonazo y la vuelta a la calma (el humo grande de PixelLab se sale de la casilla: el juego pone el de la escopeta). 'boca': 'fogonazo' hace que el script busque dónde está la boca del arma en cada dirección para que las granadas nazcan ahí. En west y south-west el humo de PixelLab tapa el pecho de Johnny en el fotograma del fogonazo: 'sin_tinte' hace que arma.py deje ahí el dibujo quieto y solo conserve lo de fuera.",
+    "duracion": 0.3,
+    "impacto": 0,
+    "boca": "fogonazo",
+    "efectos": true,
+    "sin_tinte": {"west": [1], "south-west": [1]},
+    "fotogramas": {
+      "south": [2, 7, 8],
+      "south-east": [1, 7, 8],
+      "east": [1, 7, 8],
+      "north-east": [2, 7, 8],
+      "north": [1, 7, 8],
+      "north-west": [1, 7, 8],
+      "west": [1, 7, 8],
+      "south-west": [1, 7, 8]
+    }
+  }
+}

@@ -66,6 +66,11 @@ en una línea.
   los cañones giran medio segundo antes de la primera bala (`arranque`; `johnny.gd`: `giro_t`, `girando()`), Johnny
   anda más despacio mientras dispara (`lenta`) y sin el empujón del dibujo (`sin_patada`); usa el fogonazo de la MP5
   (`fogonazo`). Receta en `assets/pixellab.json` → `conserje-48-gatling`; prueba `--gatling`.
+  El **lanzagranadas** (6 nov): arma a distancia con su propia munición, las granadas de 40 mm (`"granadas_40"` en
+  `Armas.MUNICION`); con `"granada": true` no dispara balas sino `granada_40.gd`, que vuela despacio y revienta al
+  tocar a un zombi, una pared o al llegar a su alcance con la explosión de la granada de mano (también a Johnny, como
+  mucho `Lanzables.DANO_JOHNNY`). Tambor de 6 que se recarga de una en una (`cartucho`); usa el fogonazo de la escopeta
+  y su sonido `"lanzagranadas"`. Receta en `assets/pixellab.json` → `conserje-48-lanzagranadas`; prueba `--lanzagranadas`.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
   de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
   de cada clave, F cambia; sus cuentas en `cantidades`) y 4 de repuesto (`REPUESTO`, 8 hasta la M67; `repuesto` y sus cuentas en `en_repuesto`,

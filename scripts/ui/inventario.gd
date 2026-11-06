@@ -163,6 +163,7 @@ const QUE_HACE := {
 	"escopeta": "Cinco perdigones en abanico. Se recarga de cartucho en cartucho.",
 	"mp5": "Ráfagas muy rápidas. Gasta las mismas balas que la pistola.",
 	"gatling": "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas.",
+	"lanzagranadas": "Granadas que revientan al tocar algo y hacen daño alrededor (¡también a ti!). Se recarga de una en una.",
 	"lanzallamas": "Llamarada continua que quema a todos. Se llena con gasolina.",
 	"desintegrador": "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido.",
 	"pistola_electrica": "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías.",
@@ -1993,6 +1994,7 @@ func cuenta_municion(tipo: String, n: int) -> String:
 		"balas": return Idioma.n("%d bala", "%d balas", n) % n
 		"cartuchos": return Idioma.n("%d cartucho", "%d cartuchos", n) % n
 		"cinta": return Idioma.n("%d bala de cinta", "%d balas de cinta", n) % n
+		"granadas_40": return Idioma.n("%d granada de 40 mm", "%d granadas de 40 mm", n) % n
 		"gasolina": return Idioma.n("%d gasolina", "%d gasolinas", n) % n
 		"bidon_acido": return Idioma.n("%d bidón de ácido", "%d bidones de ácido", n) % n
 	return Idioma.n("%d batería", "%d baterías", n) % n

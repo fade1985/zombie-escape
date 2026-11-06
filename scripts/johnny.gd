@@ -862,6 +862,25 @@ func disparar(angulo: float) -> void:
 			empezar_recarga()
 		avisar_arma()
 		return
+	if w.get("granada", false):
+		# el lanzagranadas: una granada de 40 mm que revienta al tocar algo (granada_40.gd), con la onda de la de mano
+		var g := Granada40.new()
+		g.velocidad = Vector2.from_angle(angulo + (randf() - 0.5) * w.temblor) * w.velocidad
+		g.dano_zombis = con_critico(w.dano, seguro)
+		g.radio = Lanzables.GRANADA.radio
+		g.vida = w.alcance / w.velocidad
+		get_parent().add_child(g)
+		g.global_position = salida
+		Sonido.tocar("lanzagranadas")
+		Fogonazo.soltar(get_parent(), w.get("fogonazo", huecos[mano]), salida - Vector2(0, 50), angulo,
+			salida.y if sin(angulo) < -0.3 else maxf(salida.y, global_position.y + 2.0))
+		Temblor.temblar(5.0)
+		Luz.destello(self, salida - Vector2(0, 50), 170.0, 0.12)
+		oir_disparo()
+		if balas <= 0:
+			empezar_recarga()
+		avisar_arma()
+		return
 	for i in w.perdigones:
 		var desvio := 0.0
 		if w.perdigones > 1:

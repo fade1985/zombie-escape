@@ -3317,3 +3317,161 @@ func probar_gatling() -> void:
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
+
+
+# El lanzagranadas (6 nov): comprarlo, su munición nueva (las granadas de 40 mm), la granada volando y reventando en la
+# diana con la onda de la granada de mano, que también daña a Johnny (como mucho Lanzables.DANO_JOHNNY) si está
+# pegado, la recarga de una en una (y disparar a mitad), las 8 direcciones y dos skins
+func probar_lanzagranadas() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.dolares = maxi(g2.dolares, 200)
+		g2.skins = ["portero", "gymbro"]
+		g2.skin = "")
+	johnny.vestir("")
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas", "b_lanzagranadas")
+	await get_tree().create_timer(0.3).timeout
+	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("lanzagranadas"), Armas.PRECIOS.lanzagranadas,
+		ordenador.info.text])
+	Captura.foto("captura-lanzagranadas-tienda.png")
+	ordenador.comprar_arma("lanzagranadas")
+	await get_tree().process_frame
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().process_frame
+	var w := Armas.datos("lanzagranadas")
+	print("Comprado: a distancia «%s» · familia %s · hoja «%s» · munición %s («%s», %s) · daño %d · %.1f disparos/s · tambor de %d (esperado: lanzagranadas, distancia, conserje-48-lanzagranadas.tres, granadas_40, Granadas de 40 mm, el lanzagranadas, 80, 1, 6)" % [
+		johnny.huecos.fuego, Armas.familia("lanzagranadas"), w.hoja.resource_path.get_file(), Armas.municion("lanzagranadas"),
+		Armas.municion_nombre("granadas_40"), Armas.municion_para("granadas_40"), w.dano, w.ritmo, w.cargador])
+
+	# a la sala de pruebas, con el lanzagranadas en la mano
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger("lanzagranadas")
+	if johnny.mano != "fuego":
+		johnny.cambiar_mano()
+	johnny.meter_municion("granadas_40", 12)
+	johnny.modo = "quieto"   # que no ataque por su cuenta
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	var sitio: Vector2 = sala.diana.global_position + Vector2(-260, 0)
+	johnny.global_position = sitio
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-lanzagranadas-quieto.png")
+	print("Granadas: %d en el tambor y %d de reserva, en %d hueco(s) de munición" % [johnny.balas,
+		johnny.cuanta("granadas_40"), johnny.huecos_municion().size()])
+
+	# un disparo a la diana: la granada vuela despacio y revienta al tocarla (y otra vez fuera los que le acompañan,
+	# que alguno llega tarde y la mueve a tiros)
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	print("Acompañantes: %d" % get_tree().get_nodes_in_group("aliados").size())
+	var vida: int = johnny.vida
+	var golpes: Array[int] = []   # lo que le quita cada golpe a la diana
+	sala.diana.herido.connect(func(cuanto: int, _golpe: bool): golpes.append(cuanto))
+	johnny.intentar_atacar(0.0)
+	await get_tree().physics_frame
+	var granada: Granada40 = null
+	for n in johnny.get_parent().get_children():
+		if n is Granada40:
+			granada = n
+	var rapidez: float = granada.velocidad.length() if granada else 0.0
+	print("Sale una granada: %s · velocidad %.0f · alcance %.0f (esperado: sí, 420, 360)" % [
+		"sí" if granada else "no", rapidez, w.alcance])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-lanzagranadas-vuela.png")
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-lanzagranadas-revienta.png")
+	await get_tree().create_timer(0.3).timeout
+	print("Lejos: a la diana, el golpe más fuerte %d, a Johnny %d (esperado: 80, 0) · quedan %d en el tambor (esperado: 5)" % [
+		golpes.max(), vida - johnny.vida, johnny.balas])
+
+	# pegado a la diana: la onda también le pilla a él, como mucho DANO_JOHNNY
+	await get_tree().create_timer(1.0).timeout
+	johnny.global_position = sala.diana.global_position + Vector2(-50, 0)
+	await get_tree().create_timer(0.3).timeout
+	vida = johnny.vida
+	golpes.clear()
+	johnny.intentar_atacar(0.0)
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-lanzagranadas-pegado.png")
+	await get_tree().create_timer(0.4).timeout
+	print("Pegado: a la diana %d, a Johnny %d (esperado: 80, %d)" % [golpes.max(), vida - johnny.vida,
+		Lanzables.DANO_JOHNNY])
+
+	# al llegar a su alcance sin tocar nada, también revienta (hacia arriba, donde no hay nadie)
+	johnny.global_position = sitio
+	await get_tree().create_timer(1.2).timeout
+	johnny.intentar_atacar(-PI / 2.0)
+	await get_tree().create_timer(w.alcance / w.velocidad - 0.05).timeout
+	var vuela := false
+	for n in johnny.get_parent().get_children():
+		if n is Granada40:
+			vuela = true
+	await get_tree().create_timer(0.15).timeout
+	var explota := false
+	for n in johnny.get_parent().get_children():
+		if n.get_script() == preload("res://scripts/explosion.gd"):
+			explota = true
+	print("Al alcance: volaba justo antes %s, explosión después %s (esperado: sí, sí)" % [
+		"sí" if vuela else "no", "sí" if explota else "no"])
+
+	# la recarga, de una en una: con el tambor vacío, recarga un rato y dispara a mitad (disparando de uno en uno no
+	# se vacía nunca: entre disparo y disparo ya mete una, como la escopeta)
+	await get_tree().create_timer(1.0).timeout
+	johnny.balas = 0
+	johnny.intentar_atacar(PI)   # sin granadas: empieza a recargar
+	var en_tambor := []
+	for i in 4:
+		await get_tree().create_timer(0.6).timeout
+		en_tambor.append(johnny.balas)
+	Captura.foto("captura-lanzagranadas-recarga.png")
+	var a_mitad: int = johnny.balas
+	johnny.intentar_atacar(PI)
+	await get_tree().physics_frame
+	print("Recarga: cada 0,6 s en el tambor %s (esperado: sube de una en una) · dispara a mitad: %d → %d (esperado: una menos)" % [
+		str(en_tambor), a_mitad, johnny.balas])
+	await get_tree().create_timer(1.2).timeout
+
+	# las 8 direcciones: quieto y disparando
+	johnny.meter_municion("granadas_40", 12)
+	johnny.global_position = sitio + Vector2(100, 200)
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-lanzagranadas-%s.png" % d)
+		johnny.intentar_atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.06).timeout
+		Captura.foto("captura-lanzagranadas-disparo-%s.png" % d)
+		await get_tree().create_timer(2.6).timeout   # (que se apague la explosión, que dura 2,5 s)
+
+	# la caja de munición del suelo: con el lanzagranadas en la mano, la de las granadas
+	print("Caja del suelo con el lanzagranadas: «%s» (esperado: municion-lanzagranadas)" %
+		icono_caja().resource_path.get_file().get_basename())
+
+	# con dos skins: su hoja del lanzagranadas
+	for skin in ["portero", "gymbro"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "se"
+		await get_tree().create_timer(0.2).timeout
+		Captura.foto("captura-lanzagranadas-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-lanzagranadas-%s.tres)" % [skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+
+	Guardado.cambiar(func(g2):
+		g2.dolares = antes.dolares
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+

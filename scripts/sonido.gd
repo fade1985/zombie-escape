@@ -60,6 +60,9 @@ const EFECTOS := {
 	"pistola_duro": {"hueco": 50, "notas": [[3000, 0.06, "ruido", 0.045, -2400], [140, 0.1, "seno", 0.07, -90],
 		[2500, 0.04, "ruido", 0.022, -1800, 0.035], [1000, 0.12, "ruido", 0.01, -600, 0.05]]},
 	"escopeta": {"notas": [[120, 0.2, "sierra", 0.07, -60], [700, 0.1, "cuadrada", 0.035, -600]]},
+	# el lanzagranadas (6 nov): un «bloop» hueco y grave, con un soplo de ruido, y la granada sale silbando
+	"lanzagranadas": {"notas": [[180, 0.16, "seno", 0.09, -110], [2500, 0.08, "ruido", 0.03, -1800],
+		[70, 0.2, "triangulo", 0.07, -25, 0.01], [900, 0.25, "seno", 0.012, -500, 0.06]]},
 	"pitido": {"fijo": true, "notas": [[1200, 0.06, "cuadrada", 0.03]]},                             # beep (mecha)
 	"explosion": {"notas": [[90, 0.45, "sierra", 0.09, -60], [50, 0.5, "triangulo", 0.1, -20, 0.02],
 		[400, 0.15, "cuadrada", 0.04, -350]]},

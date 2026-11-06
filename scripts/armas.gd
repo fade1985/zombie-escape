@@ -26,7 +26,7 @@ class_name Armas
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
 # no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
-const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 0, "escopeta": 30, "mp5": 40, "gatling": 70, "pistola_electrica": 45,
+const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 0, "escopeta": 30, "mp5": 40, "gatling": 70, "lanzagranadas": 65, "pistola_electrica": 45,
 	"lanzallamas": 60, "desintegrador": 60}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
@@ -277,6 +277,21 @@ const DATOS := {
 		"boca": {"s": Vector2(-1, 10), "se": Vector2(32, -17), "e": Vector2(42, -14), "ne": Vector2(32, -25),
 			"n": Vector2(-14, -55), "no": Vector2(-40, -29), "o": Vector2(-38, -16), "so": Vector2(-41, -16)},
 	},
+	# el lanzagranadas (6 nov): un lanzagranadas negro de tambor de seis que Johnny apunta al pecho, con la culata al
+	# hombro y una mano en cada empuñadura (conserje-48-lanzagranadas, de PixelLab). Gasta su propia munición, las
+	# granadas de 40 mm ("granadas_40"). "granada": no dispara balas, sino una granada que vuela despacio y revienta al
+	# tocar a un zombi, una pared o al llegar a su alcance (granada_40.gd), con la onda de la granada de mano: "dano" es
+	# el de la explosión, en área (Lanzables.GRANADA), y a Johnny le hace como mucho Lanzables.DANO_JOHNNY si le pilla.
+	# Se recarga de una en una, como la escopeta ("cartucho"). "fogonazo": usa el de la escopeta (fogonazo.gd)
+	"lanzagranadas": {
+		"nombre": "Lanzagranadas", "tipo": "fuego", "dano": 80, "ritmo": 1.0, "alcance": 360.0, "velocidad": 420.0,   # [traducir]
+		"perdigones": 1, "abertura": 0.0, "temblor": 0.03, "empuje": 1.0, "cargador": 6, "recarga": 0.6,
+		"cartucho": true, "municion": "granadas_40", "granada": true, "fogonazo": "escopeta",
+		"pies": Vector2(48, 72),
+		"hoja": preload("res://assets/sprites/conserje-48-lanzagranadas.tres"),
+		"boca": {"s": Vector2(13, 8), "se": Vector2(34, -18), "e": Vector2(35, -31), "ne": Vector2(29, -48),
+			"n": Vector2(3, -57), "no": Vector2(-41, -44), "o": Vector2(-44, -34), "so": Vector2(-32, -19)},
+	},
 	# el lanzallamas: no dispara, echa una llamarada continua mientras se ataca (llamarada.gd) que llega a 10 casillas
 	# ("alcance" y "velocidad" mandan en lo lejos que llega). No tiene cargador (el de 12 no lo usa): tiene un depósito
 	# de "deposito" segundos de fuego que se llena entero con una gasolina de la mochila (en "recarga" segundos; las
@@ -403,6 +418,8 @@ const MUNICION := {
 	"balas": {"nombre": "Balas de pistola", "icono": "municion-pistola", "hueco": 24, "sin": "¡Sin balas!", "para": "la pistola y la MP5"},
 	"cartuchos": {"nombre": "Cartuchos", "icono": "municion-escopeta", "hueco": 12, "sin": "¡Sin cartuchos!", "para": "la escopeta"},
 	"cinta": {"nombre": "Cinta de balas", "icono": "municion-gatling", "hueco": 200, "sin": "¡Sin cinta de balas!", "para": "la gatling"},
+	"granadas_40": {"nombre": "Granadas de 40 mm", "icono": "municion-lanzagranadas", "hueco": 12, "sin": "¡Sin granadas!",
+		"para": "el lanzagranadas"},
 	"gasolina": {"nombre": "Gasolina", "icono": "obj-gasolina", "hueco": 3, "sin": "¡Sin gasolina!", "para": "el lanzallamas"},
 	"bidon_acido": {"nombre": "Bidón de ácido", "icono": "obj-bidon_acido", "hueco": 3, "sin": "¡Sin ácido!",
 		"para": "el lanza ácido"},

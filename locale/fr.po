@@ -202,6 +202,10 @@ msgid "Gatling"
 msgstr "Gatling"
 
 #: scripts/armas.gd
+msgid "Lanzagranadas"
+msgstr "Lance-grenades"
+
+#: scripts/armas.gd
 msgid "Lanzallamas"
 msgstr "Lance-flammes"
 
@@ -268,6 +272,18 @@ msgstr "Plus de bande de balles !"
 #: scripts/armas.gd
 msgid "la gatling"
 msgstr "la Gatling"
+
+#: scripts/armas.gd
+msgid "Granadas de 40 mm"
+msgstr "Grenades de 40 mm"
+
+#: scripts/armas.gd
+msgid "¡Sin granadas!"
+msgstr "Plus de grenades !"
+
+#: scripts/armas.gd
+msgid "el lanzagranadas"
+msgstr "le lance-grenades"
 
 #: scripts/armas.gd scripts/objetos.gd
 msgid "Gasolina"
@@ -3006,8 +3022,8 @@ msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierr
 msgstr "les armes de corps à corps (la serpillière, le couteau, la batte, la tronçonneuse et le katana)"
 
 #: scripts/objetos.gd
-msgid "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)"
-msgstr "les armes à distance (le pistolet, le MP5, le fusil à pompe et la Gatling)"
+msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el lanzagranadas)"
+msgstr "les armes à distance (le pistolet, le MP5, le fusil à pompe, la Gatling et le lance-grenades)"
 
 #: scripts/objetos.gd
 msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
@@ -5643,6 +5659,12 @@ msgstr[0] "%d balle de bande"
 msgstr[1] "%d balles de bande"
 
 #: scripts/ui/inventario.gd
+msgid "%d granada de 40 mm"
+msgid_plural "%d granadas de 40 mm"
+msgstr[0] "%d grenade de 40 mm"
+msgstr[1] "%d grenades de 40 mm"
+
+#: scripts/ui/inventario.gd
 msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d jerrican"
@@ -5727,6 +5749,10 @@ msgstr "Rafales très rapides. Utilise les mêmes balles que le pistolet."
 #: scripts/ui/inventario.gd
 msgid "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas."
 msgstr "Met un instant à démarrer, puis ne s'arrête plus. Elle est lourde : tu marches plus lentement. Utilise des bandes de balles."
+
+#: scripts/ui/inventario.gd
+msgid "Granadas que revientan al tocar algo y hacen daño alrededor (¡también a ti!). Se recarga de una en una."
+msgstr "Des grenades qui éclatent au contact et blessent tout autour (toi aussi !). Se recharge une par une."
 
 #: scripts/ui/inventario.gd
 msgid "Llamarada continua que quema a todos. Se llena con gasolina."

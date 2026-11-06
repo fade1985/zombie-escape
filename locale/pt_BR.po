@@ -202,6 +202,10 @@ msgid "Gatling"
 msgstr "Gatling"
 
 #: scripts/armas.gd
+msgid "Lanzagranadas"
+msgstr "Lança-granadas"
+
+#: scripts/armas.gd
 msgid "Lanzallamas"
 msgstr "Lança-chamas"
 
@@ -268,6 +272,18 @@ msgstr "Sem cinta de balas!"
 #: scripts/armas.gd
 msgid "la gatling"
 msgstr "a gatling"
+
+#: scripts/armas.gd
+msgid "Granadas de 40 mm"
+msgstr "Granadas de 40 mm"
+
+#: scripts/armas.gd
+msgid "¡Sin granadas!"
+msgstr "Sem granadas!"
+
+#: scripts/armas.gd
+msgid "el lanzagranadas"
+msgstr "o lança-granadas"
 
 #: scripts/armas.gd scripts/objetos.gd
 msgid "Gasolina"
@@ -3006,8 +3022,8 @@ msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierr
 msgstr "as armas corpo a corpo (o esfregão, a faca, o taco, a motosserra e a katana)"
 
 #: scripts/objetos.gd
-msgid "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)"
-msgstr "as armas à distância (a pistola, a MP5, a escopeta e a gatling)"
+msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el lanzagranadas)"
+msgstr "as armas à distância (a pistola, a MP5, a escopeta, a gatling e o lança-granadas)"
 
 #: scripts/objetos.gd
 msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
@@ -5643,6 +5659,12 @@ msgstr[0] "%d bala de cinta"
 msgstr[1] "%d balas de cinta"
 
 #: scripts/ui/inventario.gd
+msgid "%d granada de 40 mm"
+msgid_plural "%d granadas de 40 mm"
+msgstr[0] "%d granada de 40 mm"
+msgstr[1] "%d granadas de 40 mm"
+
+#: scripts/ui/inventario.gd
 msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d galão de gasolina"
@@ -5727,6 +5749,10 @@ msgstr "Rajadas muito rápidas. Gasta as mesmas balas que a pistola."
 #: scripts/ui/inventario.gd
 msgid "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas."
 msgstr "Demora um pouco para girar e depois não para. É pesada: você anda mais devagar. Gasta cinta de balas."
+
+#: scripts/ui/inventario.gd
+msgid "Granadas que revientan al tocar algo y hacen daño alrededor (¡también a ti!). Se recarga de una en una."
+msgstr "Granadas que explodem ao tocar em algo e ferem tudo ao redor (você também!). Recarrega uma por uma."
 
 #: scripts/ui/inventario.gd
 msgid "Llamarada continua que quema a todos. Se llena con gasolina."

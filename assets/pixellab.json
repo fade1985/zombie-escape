@@ -5029,5 +5029,46 @@
    "cost": "20 generaciones"
   },
   "cost_total": "48 generaciones: 10 del estado, 2 de las posturas, 8 del disparo, 8 del andar y 20 de los cuatro iconos"
+ },
+ "conserje-48-lanzagranadas": {
+  "kind": "character_state",
+  "character_id": "bbb4c80b-82aa-4b01-9aff-727cc2d054c3",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Lanzagranadas en guardia",
+  "nota": "Estado de Johnny con el lanzagranadas (2026-11-06), pedido por el dueño con tres fotos de referencia solo para el diseño y la pose (un lanzagranadas negro de tambor de seis con culata plegable y empuñadura delantera, su granada de 40 mm de punta dorada y casquillo negro, y alguien que lo apunta al pecho con la culata al hombro). Lienzo de 64x64 sin la paleta de Johnny (max_colors 48). De lado y en diagonal, bien a la primera; de frente y de espaldas apuntaba de lado, como con la gatling: ver 'posturas'. EN EL JUEGO (sprite conserje-48-lanzagranadas, casilla de 96x96 con los pies en 48,72): reposo, andar y disparo en las 8 direcciones. Se monta con: py ../game/tools/arma.py conserje-48-lanzagranadas, luego py tools/hacer_frames.py assets/sprites/conserje-48-lanzagranadas y py tools/cara.py <skin> lanzagranadas para cada skin.",
+  "request": {
+   "edit_description": "holding a chunky black six-shot revolver grenade launcher at chest height, aiming it straight forward and ready to fire: the folding stock pressed into his shoulder, one hand on the pistol trigger grip and the other hand on the vertical front grip under the barrel; the launcher is matte black and dark grey metal with a big round revolving drum cylinder in the middle, a short wide tube barrel with a large round muzzle pointing straight forward away from him, and small rails on top; the grenade launcher stays aimed forward at chest height with both hands in every view: front, side and back; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "max_colors": 48
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-06",
+  "posturas": {
+   "nota": "south y north: PixMiniMax de 8 fotogramas desde la rotación del estado, sin end_frame; el último fotograma, recortado a 64x64 en (2, 2), es la rotación nueva en assets/sources/conserje-48-lanzagranadas/rotations/ (las de PixelLab, en descartes/rotations-viejas/; las animaciones, en posturas/). En south, la primera toma (postura-lanzagranadas-abajo) dejaba el arma en vertical delante del pecho: se usa la segunda (postura-lanzagranadas-abajo-2, que pide el cañón hacia abajo delante de la barriga); la primera, en descartes/postura-south-1/. En PixelLab el estado sigue con sus rotaciones originales.",
+   "groups": {
+    "south": "09e752b9-6c0e-442a-9f7f-2591edb86d19",
+    "south_descartada": "55cdf880-b2ac-4ba4-ba06-1efa9fe3f028",
+    "north": "a8083b9b-6086-4e12-a7eb-1e5fe1bb9835"
+   },
+   "cost": "3 generaciones"
+  },
+  "ataque": {
+   "nota": "Un disparo con fogonazo gordo y bocanada de humo; el retroceso solo arriba. PixMiniMax, 8 fotogramas más el de partida, de una en una con el quieto (el nuevo en south y north) pegado en un lienzo de 96x96 en (16, 26) como partida y llegada. Todas bien a la primera. Se usan 3 fotogramas: el del fogonazo (el 1; el 2 en south y north-east) y los dos últimos, ya en calma (el humo grande de PixelLab se sale de la casilla: el juego pone el de la escopeta). En west y south-west el humo tapa el pecho: 'sin_tinte' en arma.json. Textos: el común (east, west, south-east y south-west cambiando initial_pose), el de las diagonales de espaldas (empieza por 'He keeps the same three-quarter back view...'), el de frente y el de espaldas.",
+   "group": "fac47a5a-61d8-497b-b49f-dfd0bb002925",
+   "animation_name": "disparo-lanzagranadas",
+   "cost": "8 generaciones",
+   "action_description_comun": "He fires one grenade from the grenade launcher with a heavy thump. A short fat burst of yellow and orange flame and a big puff of light grey smoke bursts out of the wide round muzzle for an instant. The strong recoil kicks only his upper body: his shoulders and arms jolt back and the barrel tips up a little, while his legs and boots stay completely still and planted, then he brings the launcher back down and keeps aiming in exactly the same direction as the revolving drum turns one notch. The flash fades quickly and the smoke puff drifts away and vanishes, and he settles cleanly into the starting braced stance. Only one shot, no second flash, no projectile drawn. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+  },
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida. Las 6 de lado y en diagonal en una llamada (grupo c8639779-e588-47d1-afc6-bb68e220efe0); south en ese grupo con su postura nueva como custom_start_frame_url; north en su propio grupo (0c3cb702-8efe-487b-a3fb-1cd90d12a422) igual. north-west giraba el arma a mitad: se repitió pidiendo los brazos y el arma quietos (andar-lanzagranadas-noroeste, grupo ebe4de5b-caea-4c02-9b33-7dcd5f5d1d05); la primera, en descartes/walk-north-west-1/. El tramo del ciclo de north y east se le dice a arma.py en arma.json.",
+   "animation_name": "andar-lanzagranadas",
+   "cost": "9 generaciones"
+  },
+  "iconos": {
+   "nota": "Baúl como estilo sin sus colores, 32x32. Munición (tres granadas de 40 mm de punta dorada, de pie), create_object_pro_flash: assets/sources/municion/intentos/lanzagranadas-A.png (semilla 35001, 0bb93db3-eb92-468b-92bd-1b00f817a1f7) y lanzagranadas-B.png (35002, 88f41660-841a-4d31-a532-dbe71f76ce01). Arma: con create_object_pro_flash sale siempre de frente (icono-frente-A/B.png, semillas 36001 y 36002, descartados); de perfil, con create_image_pro_flash: assets/sources/lanzagranadas/intentos/icono-A.png (36003, 72d7f8f5-4b74-57d8-9769-00465d88a51f) e icono-B.png (36004, 282ffa4d-e87e-5791-bd5e-8ee37848bf52). En el juego, de momento los A: assets/ui/iconos/municion-lanzagranadas.png y lanzagranadas.png.",
+   "cost": "30 generaciones"
+  },
+  "cost_total": "60 generaciones: 10 del estado, 3 de las posturas, 8 del disparo, 9 del andar y 30 de los seis iconos"
  }
 }
