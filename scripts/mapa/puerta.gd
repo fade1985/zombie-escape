@@ -17,8 +17,8 @@ const DIBUJO := {"tienda": preload("res://assets/sprites/puerta-tienda.png"),
 const PISO := preload("res://assets/sprites/puerta-piso-sucia.png")
 const PISO_DIBUJO := Vector2(36, 43)
 # Las de la pared de abajo, que se ve por detrás: el hueco en el muro, con su marco, y la hoja desde arriba, un tablón con su pomo
-# (tools/puerta_abajo.py). 36 × 32 píxeles, 72 × 64 unidades. Tres, una al lado de otra: madera sucia, madera limpia (ver "limpia")
-# y cristal y aluminio (el centro comercial)
+# (tools/puerta_abajo.py). 36 × 32 píxeles, 72 × 64 unidades. Cuatro, una al lado de otra: madera sucia, madera limpia (ver "limpia"),
+# cristal y aluminio (el centro comercial) y chapa gris (la de la sala de mantenimiento, ver "metal")
 const ABAJO := preload("res://assets/sprites/puerta-abajo.png")
 const ABAJO_DIBUJO := Vector2(36, 32)
 # El número de la planta pintado en la pared junto al ascensor (de suelo a moldura): 28 × 42 píxeles, 56 × 84 unidades.
@@ -82,6 +82,7 @@ var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
 var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
 var limpia := false      # si es de una zona segura (lo pone mapa.gd: ZONAS_SEGURAS): sin sangre
+var metal := false       # si es la de la sala de mantenimiento (lo pone mapa.gd): la de abajo, de chapa gris como la de fuera
 var cartel: Node2D = null   # las escaleras: su cartel EXIT de la pared de arriba (cartel_salida.gd, lo pone mapa.gd)
 var abierta := true:     # si se puede pasar
 	set(valor):
@@ -137,7 +138,7 @@ func _draw() -> void:
 				placa_de_piso(Vector2(42, -78), PLACA_PARED, Vector2(38, -80))   # en la pared, a la derecha del marco y a la altura de los ojos
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
-			var modelo := 2 if centro else (1 if limpia else 0)
+			var modelo := 3 if metal else (2 if centro else (1 if limpia else 0))
 			draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(modelo * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
 			if salida.has("placa"):
 				# la de acero, encima del muro, a la derecha del hueco; las de latón, tiradas en el suelo, a un lado de la puerta

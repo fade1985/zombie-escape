@@ -3,8 +3,10 @@ de frente como las de arriba: se ve el hueco en el muro, con su marco, y la hoja
 igual que las puertas de lado de dentro de los pisos (tools/puerta_lado_cerrada.py).
 
 Saca assets/sprites/puerta-abajo.png, tres modelos de 36 × 32 píxeles (72 × 64 unidades, lo que mide de grueso el muro), uno al lado
-de otro y en este orden: la de madera sucia (L23), la de madera limpia (las zonas seguras) y la de cristal y aluminio del centro
-comercial. Hecha a mano: a 6 píxeles de grueso PixelLab no dibuja.
+de otro y en este orden: la de madera sucia (L23), la de madera limpia (las zonas seguras), la de cristal y aluminio del centro
+comercial y la de chapa gris de la sala de mantenimiento. Esta última, pasada por PixelLab: lo que sale de aquí, al doble y con
+un margen azul, es la guía (assets/sources/puertas/guias/abajo-metal.png); lo que devolvió create_image_pixflux (fuerza 300) está en
+assets/sources/puertas/abajo-metal.png y es lo que se pone, a su tamaño. Hecha a mano: a 6 píxeles de grueso PixelLab no dibuja.
 
   py tools/puerta_abajo.py     (y luego, para que Godot la importe: Godot --headless --path . --import)
 """
@@ -29,6 +31,11 @@ MODELOS = [
     MADERA,
     {"marco": ((136, 138, 155), (115, 119, 138), (43, 44, 65)), "tablon": ((178, 197, 211), (87, 98, 118), (44, 56, 72)),
         "veta": (115, 119, 138), "suelo": ((70, 72, 88), (46, 48, 62), (26, 26, 36)), "pomo": ((178, 197, 211), (115, 119, 138))},
+    # la de la sala de mantenimiento (6 nov): la misma chapa gris claro y el marco gris oscuro que la de fuera
+    # (puerta-servicio.png), con el pomo de metal más oscuro
+    {"marco": ((104, 108, 114), (66, 70, 74), (40, 43, 48)), "tablon": ((200, 204, 206), (164, 168, 170), (128, 132, 136)),
+        "veta": (142, 146, 150), "suelo": MADERA["suelo"], "pomo": ((170, 176, 182), (76, 80, 88)),
+        "pixellab": "assets/sources/puertas/abajo-metal.png"},
 ]
 
 
@@ -75,6 +82,12 @@ def puerta(modelo, semilla):
     return im
 
 
+def de_pixellab(ruta):
+    """Lo que devolvió PixelLab: sin el margen azul de 4 píxeles y a la mitad (cada píxel del juego, 2 × 2)"""
+    im = Image.open(ruta).convert("RGBA").crop((4, 4, 4 + ANCHO * 2, 4 + ALTO * 2))
+    return im.resize((ANCHO, ALTO), Image.NEAREST)
+
+
 def sucia(im):
     ensuciar(im, [], "puerta-abajo")
     dado = random.Random("sangre")
@@ -90,7 +103,7 @@ def sucia(im):
 if __name__ == "__main__":
     hoja = Image.new("RGBA", (ANCHO * len(MODELOS), ALTO), (0, 0, 0, 0))
     for k, modelo in enumerate(MODELOS):
-        im = puerta(modelo, k)
+        im = de_pixellab(modelo["pixellab"]) if "pixellab" in modelo else puerta(modelo, k)
         if k == 0:
             sucia(im)
         hoja.paste(im, (k * ANCHO, 0))

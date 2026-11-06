@@ -817,6 +817,7 @@ func poner_puertas() -> void:
 		puerta.indice = i
 		puerta.centro = centro
 		puerta.limpia = sitio.tipo in ZONAS_SEGURAS
+		puerta.metal = sitio.tipo == "mantenimiento"
 		puerta.name = "Puerta%d" % i
 		match salida.dir:
 			"arriba": puerta.position = Vector2(salida.en, MURO)
