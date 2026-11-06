@@ -223,7 +223,7 @@ func _draw() -> void:
 
 
 # Lo ahorrado, como el marcador de una caja registradora: el billete y, en una pantallita hundida, los dólares en
-# amarillo encima de unos «8» apagados (los segmentos sin encender); al lado, en pequeño, qué es
+# amarillo encima de unos «8» apagados (los segmentos sin encender)
 func dibujar_ahorrado(fuente: Font) -> void:
 	var numero := str(s.dolares)
 	var casillas := maxi(4, numero.length())   # una por cifra, todas del mismo ancho (el de un 8), como en un marcador
@@ -247,7 +247,6 @@ func dibujar_ahorrado(fuente: Font) -> void:
 		if j >= 0:
 			draw_string(fuente, Vector2(x, base.y + 2), numero[j], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, Color("#5c4208"))
 			draw_string(fuente, Vector2(x, base.y), numero[j], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, AMARILLO)
-	draw_string(fuente, Vector2(caja.end.x + 10, 28), Idioma.t("Dólares ahorrados"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, TEXTO_SUAVE)
 
 
 func dibujar_rama(rama: Dictionary, x: float, ancho: float, fuente: Font) -> void:
