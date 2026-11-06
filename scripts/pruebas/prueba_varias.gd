@@ -1642,9 +1642,9 @@ func probar_equilibrio_talentos() -> void:
 
 
 # Con "--captura --comprar-talentos": los talentos se compran con dólares, punto a punto, en el ordenador (6 nov), y el
-# botón «Resetear talentos» (M32) devuelve lo gastado menos 20 $. Con 100 $: Ataque 5 (5 $ cada punto, fila 1),
+# botón «Resetear talentos» (M32) ya no devuelve lo gastado (6 nov). Con 100 $: Ataque 5 (5 $ cada punto, fila 1),
 # Camorrista 2 (10 $, fila 2) y Corpulento 1; luego, con 2 $, Puntería no se puede (te faltan 3 $). El reseteo
-# pregunta la primera vez y la segunda devuelve 50 - 20 = 30 $, y Johnny vuelve a su vida de siempre. Al final, un
+# pregunta la primera vez y la segunda quita los puntos sin devolver nada (se queda en 2 $), y Johnny vuelve a su vida de siempre. Al final, un
 # guardado de antes (7 puntos sin gastar y Ataque 3) se convierte: 70 $ más y 30 $ gastados en el árbol. Cada línea
 # dice lo esperado. Fotos: captura-talentos-precios.png, captura-talentos-sin-dinero.png, captura-resetear-seguro.png
 # y captura-resetear-hecho.png. Deja el guardado como estaba
@@ -1689,7 +1689,7 @@ func probar_comprar_talentos() -> void:
 		Talentos.nivel_de(s, "punteria"), s.dolares, Talentos.motivo(s, "punteria"), ordenador.info.text])
 	Captura.foto("captura-talentos-sin-dinero.png")
 	var vida_con: int = johnny.stats.vida_max
-	print("Resetear: tarjeta «%s» (esperado: Resetear talentos | Te devuelve $30 | Resetear)" % tarjeta.call("b_resetear"))
+	print("Resetear: tarjeta «%s» (esperado: Resetear talentos | No devuelve el dinero | Resetear)" % tarjeta.call("b_resetear"))
 	ordenador.resetear_talentos()
 	await get_tree().create_timer(0.4).timeout
 	s = Guardado.cargar()
@@ -1699,7 +1699,7 @@ func probar_comprar_talentos() -> void:
 	ordenador.resetear_talentos()
 	await get_tree().create_timer(0.4).timeout
 	s = Guardado.cargar()
-	print("Segundo toque: talentos %s · dólares %d · gastados %d · info «%s» (esperado: {} · 32 · 0 · ¡Hecho! Te devuelve $30...)" % [
+	print("Segundo toque: talentos %s · dólares %d · gastados %d · info «%s» (esperado: {} · 2 · 0 · ¡Hecho! El árbol está vacío...)" % [
 		s.talentos, s.dolares, s.dolares_talentos, ordenador.info.text])
 	print("Johnny: vida máxima %d (con Corpulento 1, %d; esperado: la de siempre, %d) · vida %d (esperado: no más que la máxima)" % [
 		johnny.stats.vida_max, vida_con, Mejoras.base().vida_max, johnny.vida])

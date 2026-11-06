@@ -29,7 +29,7 @@ const NUEVO := {
 	"dolares": 0,         # dólares ahorrados (en el JS se llamaban "keys")
 	"dolares_total": 0,   # dólares conseguidos en total
 	"puntos": 0,          # solo de los guardados viejos: los puntos de talento sin gastar, que al cargar se cambian por dólares
-	"dolares_talentos": 0, # dólares gastados en el árbol de talentos (lo que devuelve resetearlo, menos lo que cuesta)
+	"dolares_talentos": 0, # dólares gastados en el árbol de talentos (lo que se pierde al resetearlo)
 	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
 	"armas": [],          # armas desbloqueadas (encontradas o compradas). La fregona siempre está
 	"partidas": 0,

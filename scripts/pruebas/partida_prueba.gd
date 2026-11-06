@@ -325,7 +325,7 @@
 #                       Segundo aliento, la Adrenalina, el rayo de Alto voltaje y la Mezcla explosiva, y las coronas
 #                       en el ordenador                                                      [prueba_varias.gd]
 #   --comprar-talentos  los talentos se compran con dólares, punto a punto (sus precios, sin dinero), el botón
-#                       «Resetear talentos» (M32: pregunta, devuelve lo gastado menos $20 y Johnny pierde lo que le
+#                       «Resetear talentos» (M32: pregunta, no devuelve el dinero y Johnny pierde lo que le
 #                       daban) y un guardado viejo con puntos sin gastar, cambiados por dólares  [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]

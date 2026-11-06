@@ -5062,12 +5062,8 @@ msgid "Resetear talentos"
 msgstr "Resetar talentos"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Te devuelve $%d"
-msgstr "Devolve $%d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "Custa $%d"
+msgid "No devuelve el dinero"
+msgstr "Não devolve o dinheiro"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "No hay puntos puestos"
@@ -6665,8 +6661,8 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\MANUTENCAO\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
-msgstr "Tira todos os pontos da árvore e devolve o que você gastou neles, menos $%d."
+msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
+msgstr "Tira todos os pontos da árvore. O que você gastou neles não é devolvido."
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
@@ -6693,20 +6689,12 @@ msgid "No tienes ningún punto puesto."
 msgstr "Você não gastou nenhum ponto."
 
 #: scripts/ui/ordenador.gd
-msgid "No te llega: resetear cuesta $%d de lo ahorrado."
-msgstr "Não dá: resetar custa $%d do que você guardou."
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
+msgstr "Certeza? Aperte de novo para tirar todos os pontos da árvore. Os $%d que você gastou não voltam."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
-msgstr "Certeza? Aperte de novo para tirar todos os pontos da árvore."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados."
-msgstr "Pronto! Devolve $%d: agora você tem $%d guardados."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados."
-msgstr "Pronto! Custou $%d: agora você tem $%d guardados."
+msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
+msgstr "Pronto! A árvore está vazia para distribuir de novo. Você tem $%d guardados."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"

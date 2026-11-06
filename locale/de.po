@@ -5062,12 +5062,8 @@ msgid "Resetear talentos"
 msgstr "Talente zurücksetzen"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Te devuelve $%d"
-msgstr "Erstattet $%d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "Kostet $%d"
+msgid "No devuelve el dinero"
+msgstr "Kein Geld zurück"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "No hay puntos puestos"
@@ -6665,8 +6661,8 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\WARTUNG\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
-msgstr "Nimmt alle Punkte aus dem Baum und erstattet, was du dafür ausgegeben hast, abzüglich $%d."
+msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
+msgstr "Entfernt alle Punkte aus dem Baum. Was du dafür ausgegeben hast, bekommst du nicht zurück."
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
@@ -6693,20 +6689,12 @@ msgid "No tienes ningún punto puesto."
 msgstr "Du hast noch keinen Punkt verteilt."
 
 #: scripts/ui/ordenador.gd
-msgid "No te llega: resetear cuesta $%d de lo ahorrado."
-msgstr "Reicht nicht: Zurücksetzen kostet $%d vom Ersparten."
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
+msgstr "Sicher? Drück nochmal, um alle Punkte aus dem Baum zu entfernen. Die ausgegebenen $%d bekommst du nicht zurück."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
-msgstr "Sicher? Drück noch mal, um alle Punkte aus dem Baum zu nehmen."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados."
-msgstr "Erledigt! Du bekommst $%d zurück: jetzt hast du $%d gespart."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados."
-msgstr "Erledigt! Das hat dich $%d gekostet: jetzt hast du $%d gespart."
+msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
+msgstr "Erledigt! Der Baum ist leer und kann neu verteilt werden. Du hast $%d gespart."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"

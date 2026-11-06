@@ -5055,12 +5055,8 @@ msgid "Resetear talentos"
 msgstr "重置天赋"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Te devuelve $%d"
-msgstr "退还 $%d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "花费 $%d"
+msgid "No devuelve el dinero"
+msgstr "不退钱"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "No hay puntos puestos"
@@ -6645,8 +6641,8 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\维修间\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
-msgstr "收回天赋树上的所有点数，退还你花在上面的钱，扣除 $%d。"
+msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
+msgstr "清空天赋树上的所有点数。花掉的钱不会退还。"
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
@@ -6673,20 +6669,12 @@ msgid "No tienes ningún punto puesto."
 msgstr "你还没有分配任何点数。"
 
 #: scripts/ui/ordenador.gd
-msgid "No te llega: resetear cuesta $%d de lo ahorrado."
-msgstr "钱不够：重置要花掉存款 $%d。"
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
+msgstr "确定吗？再按一次清空天赋树上的所有点数。已花掉的 $%d 不会退还。"
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
-msgstr "确定？再按一次即可收回天赋树上的所有点数。"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados."
-msgstr "完成！退还 $%d：你现在存有 $%d。"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados."
-msgstr "完成！花了 $%d：你现在存有 $%d。"
+msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
+msgstr "完成！天赋树已清空，可以重新分配。你存了 $%d。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"

@@ -5062,12 +5062,8 @@ msgid "Resetear talentos"
 msgstr "Réinitialiser les talents"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Te devuelve $%d"
-msgstr "Rembourse $%d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "Coût : $%d"
+msgid "No devuelve el dinero"
+msgstr "Pas de remboursement"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "No hay puntos puestos"
@@ -6665,8 +6661,8 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\MAINTENANCE\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
-msgstr "Retire tous les points de l'arbre et te rembourse ce que tu y as dépensé, moins $%d."
+msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
+msgstr "Retire tous les points de l'arbre. Ce que tu as dépensé n'est pas remboursé."
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
@@ -6693,20 +6689,12 @@ msgid "No tienes ningún punto puesto."
 msgstr "Tu n'as placé aucun point."
 
 #: scripts/ui/ordenador.gd
-msgid "No te llega: resetear cuesta $%d de lo ahorrado."
-msgstr "Pas assez : réinitialiser coûte $%d de tes économies."
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
+msgstr "Sûr ? Appuie encore pour retirer tous les points de l'arbre. Les $%d dépensés ne sont pas remboursés."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
-msgstr "Sûr ? Appuie encore pour retirer tous les points de l'arbre."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados."
-msgstr "C'est fait ! Tu récupères $%d : tu as maintenant $%d d'économies."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados."
-msgstr "C'est fait ! Ça t'a coûté $%d : tu as maintenant $%d d'économies."
+msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
+msgstr "C'est fait ! L'arbre est vide, prêt à être redistribué. Tu as $%d d'économies."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"

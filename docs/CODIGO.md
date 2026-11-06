@@ -348,8 +348,8 @@ en una línea.
   cada punto se compra en su talento con los dólares ahorrados (`Talentos.PRECIOS`, por fila del árbol: 5, 10, 15, 20
   y 25 $; `Talentos.precio` y `subir`), y lo gastado se apunta en `dolares_talentos` del guardado; ya no hay puntos de
   talento que comprar (los que tenían los guardados viejos sin gastar, `guardado.gd` los cambia por dólares a 10 $).
-  «Resetear talentos» (M32): quita todos los puntos y devuelve lo gastado menos `PRECIO_RESETEAR` (20 $), pulsando dos
-  veces (`Talentos.resetear` y `devolucion`, `ordenador.resetear_talentos`, `seguro_resetear`); se prueba con
+  «Resetear talentos» (M32): quita todos los puntos, gratis pero sin devolver lo gastado (desde el 6 nov; antes devolvía
+  todo menos 20 $), pulsando dos veces (`Talentos.resetear`, `ordenador.resetear_talentos`, `seguro_resetear`); se prueba con
   `--comprar-talentos`. Revisión de
   Militar y Superviviente (M15): Durito llega a 3 (`guardado.gd` devuelve en dólares los puntos que sobren si un talento
   admite menos), Ajolote cura solo hasta la mitad (`johnny.REGENERA_TOPE`), Ninja cada 5 s (`NINJA_ESPERA`), Puntería

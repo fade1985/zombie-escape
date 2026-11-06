@@ -6,7 +6,7 @@
 # Cada punto de un talento se compra directamente en él, con los dólares ahorrados, en el ordenador de la sala de
 # mantenimiento (ui/ordenador.gd, TALENTOS.EXE): cada punto sube un nivel y cuesta según la fila del árbol en la que
 # está (PRECIOS). Lo comprado es para siempre (se guarda en "talentos" del guardado, y lo gastado en
-# "dolares_talentos", para que el reseteo lo devuelva). Los dólares de la partida en curso no cuentan hasta que
+# "dolares_talentos": lo que se pierde al resetear, que no devuelve nada). Los dólares de la partida en curso no cuentan hasta que
 # acaba (todos si completas el edificio; la mitad si caes). Hasta el 6 nov se compraban antes «puntos de talento» a
 # $10 y luego se gastaban; los que tenían los guardados viejos sin gastar se cambiaron por dólares (guardado.gd).
 #
@@ -19,7 +19,6 @@ class_name Talentos
 # Llenar el árbol entero sale por unos $1.290
 const PRECIOS := {1: 5, 2: 10, 3: 15, 4: 20, 5: 25}
 const PRECIO_PUNTO_VIEJO := 10   # lo que costaba un punto de talento antes del 6 nov (guardado.gd convierte los que sobraban)
-const PRECIO_RESETEAR := 20   # dólares que se quedan al resetear: se devuelve todo lo gastado en el árbol menos esto (M32)
 
 # Los textos de RAMAS y de LISTA (nombre y desc) se traducen al enseñarlos, con nombre_rama(), nombre_de() y desc_de().
 # Ojo: las desc no acaban en punto, porque ordenador.gd les pega detrás «. Te hace falta 1 punto.» y similares
@@ -293,23 +292,17 @@ static func puestos(s: Dictionary) -> int:
 	return n
 
 
-# Lo que devuelve resetear: todo lo gastado en el árbol menos PRECIO_RESETEAR (puede salir negativo: entonces se paga)
-static func devolucion(s: Dictionary) -> int:
-	return int(s.dolares_talentos) - PRECIO_RESETEAR
-
-
-# ¿Se puede resetear? Hace falta algún punto puesto y que, si lo gastado no llega a PRECIO_RESETEAR, llegue lo ahorrado
+# ¿Se puede resetear? Hace falta algún punto puesto (es gratis)
 static func se_puede_resetear(s: Dictionary) -> bool:
-	return puestos(s) > 0 and s.dolares + devolucion(s) >= 0
+	return puestos(s) > 0
 
 
-# Quita todos los puntos puestos y devuelve lo gastado en ellos menos PRECIO_RESETEAR (M32).
-# Devuelve el guardado nuevo, o {} si no se puede
+# Quita todos los puntos puestos (M32). Lo gastado en ellos NO se devuelve (lo pidió el dueño el 6 nov: antes se
+# devolvía todo menos $20). Devuelve el guardado nuevo, o {} si no se puede
 static func resetear() -> Dictionary:
 	var s := Guardado.cargar()
 	if not se_puede_resetear(s):
 		return {}
-	s.dolares += devolucion(s)
 	s.dolares_talentos = 0
 	s.talentos = {}
 	Guardado.escribir(s)

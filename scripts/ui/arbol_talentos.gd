@@ -94,11 +94,9 @@ func montar_resetear() -> void:
 	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fila.add_child(textos)
 	var en_el_arbol := Talentos.puestos(s)
-	var devuelve := Talentos.devolucion(s)
 	var se_puede := Talentos.se_puede_resetear(s)
 	textos.add_child(etiqueta(Idioma.t("Resetear talentos"), TEXTO if se_puede else TEXTO_SUAVE))
-	textos.add_child(etiqueta((Idioma.t("Te devuelve $%d") % devuelve if devuelve >= 0 else Idioma.t("Cuesta $%d") % -devuelve)
-		if en_el_arbol > 0 else Idioma.t("No hay puntos puestos"), TEXTO_SUAVE))
+	textos.add_child(etiqueta(Idioma.t("No devuelve el dinero") if en_el_arbol > 0 else Idioma.t("No hay puntos puestos"), TEXTO_SUAVE))
 	var marca := etiqueta(Idioma.t("¿Seguro?") if ordenador.seguro_resetear else Idioma.t("Resetear"), Color.WHITE)
 	marca.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	var fondo_marca := StyleBoxFlat.new()
@@ -217,21 +215,50 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2(3, 3), size - Vector2(6, 6)), CHAPA)
 	for p in [Vector2(8, 8), Vector2(size.x - 12, 8), Vector2(8, size.y - 12), Vector2(size.x - 12, size.y - 12)]:
 		draw_rect(Rect2(p, Vector2(4, 4)), REMACHE)
-	# lo ahorrado
-	draw_string(fuente, Vector2(22, 28), Idioma.t("Dólares ahorrados").to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, TEXTO_SUAVE)
-	var x := 22.0 + fuente.get_string_size(Idioma.t("Dólares ahorrados").to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 10.0
-	draw_texture_rect(icono("billete"), Rect2(x, 8, 32, 32), false)
-	draw_string(fuente, Vector2(x + 38, 32), "$%d" % s.dolares, HORIZONTAL_ALIGNMENT_LEFT, -1, 32, AMARILLO)
+	dibujar_ahorrado(fuente)
 	if columnas.is_empty():
 		return
 	for k in Talentos.RAMAS.size():
 		dibujar_rama(Talentos.RAMAS[k], columnas[k][0], columnas[k][1], fuente)
 
 
+# Lo ahorrado, como el marcador de una caja registradora: el billete y, en una pantallita hundida, los dólares en
+# amarillo encima de unos «8» apagados (los segmentos sin encender); al lado, en pequeño, qué es
+func dibujar_ahorrado(fuente: Font) -> void:
+	var numero := str(s.dolares)
+	var casillas := maxi(4, numero.length())   # una por cifra, todas del mismo ancho (el de un 8), como en un marcador
+	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr
+	var ancho_cifras := casilla * casillas
+	var ancho_dolar := fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
+	draw_texture_rect(icono("billete"), Rect2(14, 6, 32, 32), false)
+	var caja := Rect2(52, 5, ancho_dolar + ancho_cifras + 20, 34)
+	draw_rect(caja, REMACHE)                                                    # el marco
+	draw_rect(caja.grow(-2), Color("#050607"))                                  # la sombra de arriba e izquierda...
+	draw_rect(Rect2(caja.position + Vector2(3, 3), caja.size - Vector2(5, 5)), Color("#3a3f47"))   # ...la luz de abajo y derecha
+	draw_rect(Rect2(caja.position + Vector2(3, 3), caja.size - Vector2(6, 6)), Color("#0d1012"))   # y el cristal
+	draw_rect(Rect2(caja.position + Vector2(4, 4), Vector2(caja.size.x - 8, 2)), Color("#1a1e22"))  # el brillo de arriba
+	var base := Vector2(caja.position.x + 9, caja.end.y - 8)
+	draw_string(fuente, base, "$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32, AMARILLO)   # no-tr
+	# cada casilla, su 8 apagado y, en las de la derecha, la cifra encendida (centrada en su casilla) con su sombra
+	for i in casillas:
+		var x := base.x + ancho_dolar + i * casilla
+		draw_string(fuente, Vector2(x, base.y), "8", HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, Color("#26231a"))   # no-tr
+		var j := i - (casillas - numero.length())
+		if j >= 0:
+			draw_string(fuente, Vector2(x, base.y + 2), numero[j], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, Color("#5c4208"))
+			draw_string(fuente, Vector2(x, base.y), numero[j], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, AMARILLO)
+	draw_string(fuente, Vector2(caja.end.x + 10, 28), Idioma.t("Dólares ahorrados"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, TEXTO_SUAVE)
+
+
 func dibujar_rama(rama: Dictionary, x: float, ancho: float, fuente: Font) -> void:
 	var color: Array = COLORES[rama.id]
-	draw_rect(Rect2(x, ARRIBA, ancho, size.y - ARRIBA - 8), color[3])
+	var alto := size.y - ARRIBA - 8
+	draw_rect(Rect2(x, ARRIBA, ancho, alto), color[3])
+	# el recuadro de su color, alrededor de toda la rama
 	draw_rect(Rect2(x, ARRIBA, ancho, 2), color[1])
+	draw_rect(Rect2(x, ARRIBA + alto - 2, ancho, 2), color[1])
+	draw_rect(Rect2(x, ARRIBA, 2, alto), color[1])
+	draw_rect(Rect2(x + ancho - 2, ARRIBA, 2, alto), color[1])
 	# el emblema redondo, el nombre y los puntos puestos
 	var e := Vector2(x + 22, ARRIBA + CABECERA / 2.0 + 2)
 	draw_circle(e, 16, color[1], true, -1.0, false)

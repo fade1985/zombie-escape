@@ -531,9 +531,8 @@ func programa_puntos(c: VBoxContainer) -> void:
 	arbol.name = "arbol"
 	arbol.montar(self, s)
 	c.add_child(arbol)
-	# Resetear (M32): quita los puntos del árbol y devuelve lo gastado menos PRECIO_RESETEAR. Se pulsa dos veces, por si acaso
-	enlazar(arbol.resetear, Idioma.t("Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d.") %
-		Talentos.PRECIO_RESETEAR, resetear_talentos)
+	# Resetear (M32): quita los puntos del árbol, sin devolver lo gastado. Se pulsa dos veces, por si acaso
+	enlazar(arbol.resetear, Idioma.t("Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."), resetear_talentos)
 	for t in Talentos.LISTA:
 		enlazar(arbol.botones[t.id], explica_talento(s, t), arbol.al_pulsar.bind(t.id))
 	info.text = Idioma.t("Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes.") % 		partida.dolares if partida.dolares > 0 else 		Idioma.t("Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide.")
@@ -618,28 +617,26 @@ func rejilla(c: Container) -> GridContainer:
 	return g
 
 
-# «Resetear talentos»: la primera vez solo pregunta; la segunda quita los puntos del árbol y devuelve lo gastado
+# «Resetear talentos»: la primera vez solo pregunta; la segunda quita los puntos del árbol (lo gastado no se devuelve)
 func resetear_talentos() -> void:
 	var s := Guardado.cargar()
 	if not Talentos.se_puede_resetear(s):
 		Sonido.tocar("no")
-		info.text = Idioma.t("No tienes ningún punto puesto.") if Talentos.puestos(s) == 0 else \
-			Idioma.t("No te llega: resetear cuesta $%d de lo ahorrado.") % -Talentos.devolucion(s)
+		info.text = Idioma.t("No tienes ningún punto puesto.")
 		return
 	if not seguro_resetear:
 		seguro_resetear = true
 		abrir("puntos", "b_resetear")
-		info.set_deferred("text", Idioma.t("¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."))
+		info.set_deferred("text", Idioma.t("¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven.") %
+			s.dolares_talentos)
 		return
 	seguro_resetear = false
-	var devueltos := Talentos.devolucion(s)
 	s = Talentos.resetear()
 	Sonido.tocar("compra")
 	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	partida.aplicar_talentos(s.talentos)
 	abrir("puntos", "b_resetear")
-	info.set_deferred("text", (Idioma.t("¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados.") % [devueltos, s.dolares]) if devueltos >= 0
-		else Idioma.t("¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados.") % [-devueltos, s.dolares])
+	info.set_deferred("text", Idioma.t("¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados.") % s.dolares)
 
 
 func subir(id: String) -> void:

@@ -5069,12 +5069,8 @@ msgid "Resetear talentos"
 msgstr "Сбросить таланты"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Te devuelve $%d"
-msgstr "Вернёт $%d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "Цена $%d"
+msgid "No devuelve el dinero"
+msgstr "Деньги не вернутся"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "No hay puntos puestos"
@@ -6685,8 +6681,8 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\ДВОРНИЦКАЯ\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
-msgstr "Снимает все очки с дерева и возвращает потраченное на них, за вычетом $%d."
+msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
+msgstr "Снимает все очки с дерева. Потраченное на них не возвращается."
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
@@ -6713,20 +6709,12 @@ msgid "No tienes ningún punto puesto."
 msgstr "Ты ещё не вложил ни одного очка."
 
 #: scripts/ui/ordenador.gd
-msgid "No te llega: resetear cuesta $%d de lo ahorrado."
-msgstr "Не хватает: сброс стоит $%d из накоплений."
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
+msgstr "Точно? Нажми ещё раз, чтобы снять все очки с дерева. Потраченные $%d не вернутся."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
-msgstr "Уверен? Нажми ещё раз, чтобы снять все очки с дерева."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados."
-msgstr "Готово! Возвращено $%d: теперь у тебя накоплено $%d."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados."
-msgstr "Готово! Это стоило $%d: теперь у тебя накоплено $%d."
+msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
+msgstr "Готово! Дерево пустое, можно распределить заново. У тебя накоплено $%d."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"
