@@ -3,18 +3,23 @@
 # (M16, 28 oct: el 4, con un talento debajo de cada uno del 3, y el 5, la «corona» de la rama, que pide los tres del 4
 # al máximo).
 #
-# Los puntos de talento se compran con los dólares ahorrados en el ordenador de la sala de mantenimiento
-# (ui/ordenador.gd) y se gastan aquí, de uno en uno: cada punto sube un nivel del talento. Lo comprado es para
-# siempre (se guarda en "talentos" del guardado). Los dólares de la partida en curso no cuentan hasta que
-# acaba (todos si completas el edificio; la mitad si caes).
+# Cada punto de un talento se compra directamente en él, con los dólares ahorrados, en el ordenador de la sala de
+# mantenimiento (ui/ordenador.gd, TALENTOS.EXE): cada punto sube un nivel y cuesta según la fila del árbol en la que
+# está (PRECIOS). Lo comprado es para siempre (se guarda en "talentos" del guardado, y lo gastado en
+# "dolares_talentos", para que el reseteo lo devuelva). Los dólares de la partida en curso no cuentan hasta que
+# acaba (todos si completas el edificio; la mitad si caes). Hasta el 6 nov se compraban antes «puntos de talento» a
+# $10 y luego se gastaban; los que tenían los guardados viejos sin gastar se cambiaron por dólares (guardado.gd).
 #
 # Para tocar un talento basta con cambiar su línea en LISTA: "max" es cuántos puntos admite, "pide" el talento
 # que hay que tener al máximo antes (o una lista, si son varios); lo que hace con n puntos está en aplicar_uno(). Lo que no es un número
 # (esquivar solo, el escudo, el golpe de Ninja, resucitar...) lo lee Johnny de sus atributos (johnny.gd).
 class_name Talentos
 
-const PRECIO_PUNTO := 10   # dólares que cuesta cada punto de talento (provisional, como en el JS)
-const PRECIO_RESETEAR := 20   # dólares que cuesta quitar todos los puntos puestos y que vuelvan para repartirlos otra vez (M32)
+# Lo que cuesta cada punto, según la fila del árbol (el "nivel" del talento): los de abajo, más fuertes, más caros.
+# Llenar el árbol entero sale por unos $1.290
+const PRECIOS := {1: 5, 2: 10, 3: 15, 4: 20, 5: 25}
+const PRECIO_PUNTO_VIEJO := 10   # lo que costaba un punto de talento antes del 6 nov (guardado.gd convierte los que sobraban)
+const PRECIO_RESETEAR := 20   # dólares que se quedan al resetear: se devuelve todo lo gastado en el árbol menos esto (M32)
 
 # Los textos de RAMAS y de LISTA (nombre y desc) se traducen al enseñarlos, con nombre_rama(), nombre_de() y desc_de().
 # Ojo: las desc no acaban en punto, porque ordenador.gd les pega detrás «. Te hace falta 1 punto.» y similares
@@ -155,15 +160,20 @@ static func nivel_de(s: Dictionary, id: String) -> int:
 	return mini(int(s.talentos.get(id, 0)), talento(id).max)
 
 
-# ¿Se le puede poner un punto más? Devuelve "" si se puede, o el motivo: "max", "bloqueado" o "sin_puntos"
+# Lo que cuesta un punto de este talento
+static func precio(id: String) -> int:
+	return PRECIOS[int(talento(id).nivel)]
+
+
+# ¿Se le puede poner un punto más? Devuelve "" si se puede, o el motivo: "max", "bloqueado" o "sin_dinero"
 static func motivo(s: Dictionary, id: String) -> String:
 	var t := talento(id)
 	if nivel_de(s, id) >= t.max:
 		return "max"
 	if not faltan(s, id).is_empty():
 		return "bloqueado"
-	if s.puntos < 1:
-		return "sin_puntos"
+	if s.dolares < precio(id):
+		return "sin_dinero"
 	return ""
 
 
@@ -275,17 +285,6 @@ static func aplicar(st: Dictionary, talentos: Dictionary) -> Dictionary:
 	return st
 
 
-# Compra n puntos con los dólares ahorrados. Devuelve el guardado nuevo, o {} si no llega el dinero
-static func comprar_puntos(n: int) -> Dictionary:
-	var s := Guardado.cargar()
-	if n < 1 or s.dolares < n * PRECIO_PUNTO:
-		return {}
-	s.dolares -= n * PRECIO_PUNTO
-	s.puntos += n
-	Guardado.escribir(s)
-	return s
-
-
 # Los puntos puestos en todo el árbol
 static func puestos(s: Dictionary) -> int:
 	var n := 0
@@ -294,25 +293,36 @@ static func puestos(s: Dictionary) -> int:
 	return n
 
 
-# Quita todos los puntos puestos y los devuelve para repartirlos otra vez (M32), por PRECIO_RESETEAR de lo ahorrado.
-# Devuelve el guardado nuevo, o {} si no hay nada puesto o no llega el dinero
+# Lo que devuelve resetear: todo lo gastado en el árbol menos PRECIO_RESETEAR (puede salir negativo: entonces se paga)
+static func devolucion(s: Dictionary) -> int:
+	return int(s.dolares_talentos) - PRECIO_RESETEAR
+
+
+# ¿Se puede resetear? Hace falta algún punto puesto y que, si lo gastado no llega a PRECIO_RESETEAR, llegue lo ahorrado
+static func se_puede_resetear(s: Dictionary) -> bool:
+	return puestos(s) > 0 and s.dolares + devolucion(s) >= 0
+
+
+# Quita todos los puntos puestos y devuelve lo gastado en ellos menos PRECIO_RESETEAR (M32).
+# Devuelve el guardado nuevo, o {} si no se puede
 static func resetear() -> Dictionary:
 	var s := Guardado.cargar()
-	if puestos(s) == 0 or s.dolares < PRECIO_RESETEAR:
+	if not se_puede_resetear(s):
 		return {}
-	s.dolares -= PRECIO_RESETEAR
-	s.puntos += puestos(s)
+	s.dolares += devolucion(s)
+	s.dolares_talentos = 0
 	s.talentos = {}
 	Guardado.escribir(s)
 	return s
 
 
-# Pone un punto en un talento. Devuelve el guardado nuevo, o {} si no se puede
+# Compra un punto de un talento con lo ahorrado. Devuelve el guardado nuevo, o {} si no se puede
 static func subir(id: String) -> Dictionary:
 	var s := Guardado.cargar()
 	if motivo(s, id) != "":
 		return {}
-	s.puntos -= 1
+	s.dolares -= precio(id)
+	s.dolares_talentos += precio(id)
 	s.talentos[id] = nivel_de(s, id) + 1
 	Guardado.escribir(s)
 	return s

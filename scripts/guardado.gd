@@ -28,7 +28,8 @@ const NUEVO := {
 	"mejor_planta": 0,    # la planta más alta a la que se ha llegado en cualquier edificio
 	"dolares": 0,         # dólares ahorrados (en el JS se llamaban "keys")
 	"dolares_total": 0,   # dólares conseguidos en total
-	"puntos": 0,          # puntos de talento sin gastar (se compran con dólares en el ordenador)
+	"puntos": 0,          # solo de los guardados viejos: los puntos de talento sin gastar, que al cargar se cambian por dólares
+	"dolares_talentos": 0, # dólares gastados en el árbol de talentos (lo que devuelve resetearlo, menos lo que cuesta)
 	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
 	"armas": [],          # armas desbloqueadas (encontradas o compradas). La fregona siempre está
 	"partidas": 0,
@@ -107,7 +108,7 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 		s.ajustes = comunes.ajustes
 	s.ajustes = NUEVO.ajustes.duplicate(true).merged(s.ajustes, true)   # copia: las constantes no se pueden cambiar
 	# JSON guarda todos los números con decimales: los que son de contar, otra vez enteros
-	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
+	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "dolares_talentos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
 		s[clave] = int(s[clave])
 	for t in s.talentos:
 		s.talentos[t] = int(s.talentos[t])
@@ -116,6 +117,12 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 		if s.talentos[t] > tope:
 			s.puntos += s.talentos[t] - tope
 			s.talentos[t] = tope
+	# Los talentos se compran con dólares desde el 6 nov: un guardado de antes no sabe lo gastado en el árbol (se cuenta
+	# a lo que costaba entonces cada punto) y los puntos que tenía sin gastar se le cambian por dólares, a ese precio
+	if not leido.has("dolares_talentos"):
+		s.dolares_talentos = Talentos.puestos(s) * Talentos.PRECIO_PUNTO_VIEJO
+	s.dolares += s.puntos * Talentos.PRECIO_PUNTO_VIEJO
+	s.puntos = 0
 	# los objetos que ya no existen desaparecen del baúl y de los encontrados (Colecciones): el mechero, la llave
 	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco, el
 	# cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona de gas, la

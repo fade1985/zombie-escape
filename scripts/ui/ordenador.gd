@@ -31,7 +31,7 @@ const CARCASA := Color("#a49a83")      # el plástico del monitor, amarillento d
 # Los textos de estas tablas se traducen al enseñarlos (Idioma.t); las marcas son para tools/traducciones.py
 # [traducir]
 const ICONOS := [   # [programa, icono, nombre]
-	["puntos", "billete", "Puntos e\nintercambio"],
+	["puntos", "fuerza", "Talentos"],   # (por dentro se sigue llamando "puntos": antes se compraban puntos de talento)
 	["armas", "pistola", "Tienda\nde armas"],
 	["logros", "trofeo", "Logros"],
 	["dosier", "dosier", "Dosier\nVD-7"],
@@ -39,9 +39,9 @@ const ICONOS := [   # [programa, icono, nombre]
 	["colecciones", "colecciones", "Colecciones"],
 	["apagar", "puerta", "Apagar"],
 ]
-const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV",
+const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV",
 	"colecciones": "COLECCION.EXE"}
-const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
+const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
 	"noticias": "Noticias de Canal 8", "colecciones": "Colecciones y bestiario"}
 # [/traducir]
 # Las secciones de armas de la tienda: [familia (Armas.familia), título]. Las especiales, aparte (como sus piezas),
@@ -521,33 +521,24 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	return contenido
 
 
-# ── Compra de puntos e intercambio ──
+# ── Talentos: cada punto se compra en su talento, con lo ahorrado ──
 
 func programa_puntos(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
-	var alcanzables: int = s.dolares / Talentos.PRECIO_PUNTO
 	saldo(c, s)
 	nota_partida(c)
-	var cambio := grupo(c, Idioma.t("Intercambio · $%d = 1 punto") % Talentos.PRECIO_PUNTO)
-	var botones := rejilla(cambio)
-	var uno := tarjeta(botones, "b_comprar_1", "billete", Idioma.t("Comprar 1 punto"), Idioma.t("Cuesta $%d") % Talentos.PRECIO_PUNTO,
-		Idioma.t("Cambiar"), "" if alcanzables >= 1 else "bloqueada")
-	enlazar(uno, Idioma.t("Cambia $%d por 1 punto de talento") % Talentos.PRECIO_PUNTO, comprar.bind(1))
-	var todo := tarjeta(botones, "b_comprar_todo", "billete",
-		Idioma.t("Comprar %d puntos (todo)") % alcanzables if alcanzables > 1 else Idioma.t("Comprar todo lo posible"),
-		Idioma.t("Cuesta $%d") % (alcanzables * Talentos.PRECIO_PUNTO) if alcanzables >= 1 else Idioma.t("Necesitas $%d") % Talentos.PRECIO_PUNTO,
-		Idioma.t("Cambiar"), "" if alcanzables >= 1 else "bloqueada")
-	enlazar(todo, Idioma.t("Cambia todos los dólares que puedas por puntos ($%d = 1 punto)") % Talentos.PRECIO_PUNTO,
-		func(): comprar(maxi(1, Guardado.cargar().dolares / Talentos.PRECIO_PUNTO)))
-	# Resetear (M32): devuelve todos los puntos puestos, por PRECIO_RESETEAR. Se pulsa dos veces, por si acaso
+	# Resetear (M32): quita los puntos del árbol y devuelve lo gastado menos PRECIO_RESETEAR. Se pulsa dos veces, por si acaso
+	var botones := rejilla(c)
 	var en_el_arbol := Talentos.puestos(s)
+	var devuelve := Talentos.devolucion(s)
 	var resetear := tarjeta(botones, "b_resetear", "herramientas", Idioma.t("Resetear talentos"),
-		Idioma.t("Cuesta $%d") % Talentos.PRECIO_RESETEAR if en_el_arbol > 0 else Idioma.t("No hay puntos puestos"),
+		(Idioma.t("Te devuelve $%d") % devuelve if devuelve >= 0 else Idioma.t("Cuesta $%d") % -devuelve) if en_el_arbol > 0
+			else Idioma.t("No hay puntos puestos"),
 		Idioma.t("¿Seguro?") if seguro_resetear else Idioma.t("Resetear"),
-		"" if en_el_arbol > 0 and s.dolares >= Talentos.PRECIO_RESETEAR else "bloqueada")
-	enlazar(resetear, Idioma.t("Quita todos los puntos puestos en el árbol y te los devuelve para repartirlos otra vez. Cuesta $%d.") %
+		"" if Talentos.se_puede_resetear(s) else "bloqueada")
+	enlazar(resetear, Idioma.t("Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d.") %
 		Talentos.PRECIO_RESETEAR, resetear_talentos)
-	var arbol := grupo(c, Idioma.t("Árbol de talentos · cada punto sube un nivel"))
+	var arbol := grupo(c, Idioma.t("Árbol de talentos · cada punto se compra y sube un nivel"))
 	# Una pestaña por rama (con tres, una al lado de otra no cabían): la abierta, hundida y en verde, y debajo su árbol
 	var pestanas := HBoxContainer.new()
 	pestanas.add_theme_constant_override("separation", 6)
@@ -566,7 +557,7 @@ func programa_puntos(c: VBoxContainer) -> void:
 	for rama in Talentos.RAMAS:
 		if rama.id == rama_abierta:
 			arbol.add_child(montar_rama(s, rama))
-	info.text = Idioma.t("Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide.")
+	info.text = Idioma.t("Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide.")
 
 
 func ver_rama(id: String) -> void:
@@ -574,14 +565,12 @@ func ver_rama(id: String) -> void:
 	abrir("puntos", "b_rama_" + id)
 
 
-# Lo ahorrado (y, en la de puntos, los puntos): cajas azules hundidas, como .pc-saldo del JS
+# Lo ahorrado: una caja azul hundida, como .pc-saldo del JS
 func saldo(c: VBoxContainer, s: Dictionary) -> void:
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 8)
 	c.add_child(fila)
 	cajita(fila, Idioma.t("Dólares ahorrados"), "billete", "$%d" % s.dolares)
-	if abierta == "puntos":
-		cajita(fila, Idioma.t("Puntos de talento"), "trofeo", "%d" % s.puntos)
 
 
 func cajita(fila: HBoxContainer, rotulo: String, icono: String, valor: String) -> void:
@@ -677,7 +666,7 @@ func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
 func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 	var n := Talentos.nivel_de(s, t.id)
 	var motivo := Talentos.motivo(s, t.id)
-	var estado: String = {"max": "lleno", "bloqueado": "bloqueada", "sin_puntos": "apagada"}.get(motivo, "")
+	var estado: String = {"max": "lleno", "bloqueado": "bloqueada", "sin_dinero": "apagada"}.get(motivo, "")
 	# debajo del nombre: con algún punto puesto, lo que da ahora y lo que daría el siguiente (Talentos.efecto); sin
 	# ninguno, lo que hace cada punto
 	var ahora := Talentos.efecto(t.id, n)
@@ -689,37 +678,26 @@ func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 		debajo = Idioma.t("¡Al máximo! %s") % ahora if ahora != "" else Idioma.t("¡Al máximo!")
 	elif n > 0 and ahora != "":
 		debajo = Idioma.t("Ahora: %s · Con otro: %s") % [ahora, Talentos.efecto(t.id, n + 1)]
-	var etiqueta := Idioma.t("MÁX") if motivo == "max" else ("" if motivo == "bloqueado" else "+1")
+	var precio := Talentos.precio(t.id)
+	var etiqueta := Idioma.t("MÁX") if motivo == "max" else ("" if motivo == "bloqueado" else "$%d" % precio)
 	var b := tarjeta(lista, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, Talentos.nombre_de(t.id), debajo, etiqueta,
 		estado, [n, t.max])
 	var texto: String = Talentos.desc_de(t.id)
 	match motivo:
 		"bloqueado": texto = Idioma.t("Necesitas %s al máximo. %s") % [faltan, texto]
 		"max": texto = Idioma.t("¡Al máximo! %s") % texto
-		"sin_puntos": texto = Idioma.t("%s. Te hace falta 1 punto.") % texto
-		"": texto = Idioma.t("%s. Pulsa para subirlo (1 punto).") % texto
+		"sin_dinero": texto = Idioma.t("%s. Cuesta $%d: te faltan $%d.") % [texto, precio, precio - s.dolares]
+		"": texto = Idioma.t("%s. Pulsa para subirlo ($%d).") % [texto, precio]
 	enlazar(b, texto, subir.bind(t.id))
 
 
-func comprar(n: int) -> void:
-	var s := Talentos.comprar_puntos(n)
-	if s.is_empty():
-		info.text = Idioma.t("No te llega: cada punto cuesta $%d de lo ahorrado.") % Talentos.PRECIO_PUNTO
-		Sonido.tocar("no")
-		return
-	Sonido.tocar("compra")
-	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
-	abrir("puntos", "b_comprar_1" if s.dolares >= Talentos.PRECIO_PUNTO else "")
-	# (el español pone «puntos» también con 1, como siempre; el inglés sí distingue)
-	info.set_deferred("text", Idioma.n("¡Hecho! Ahora tienes %d punto para gastar.", "¡Hecho! Ahora tienes %d puntos para gastar.", s.puntos) % s.puntos)   # después de marcar el botón (que pone su explicación)
-
-
-# «Resetear talentos»: la primera vez solo pregunta; la segunda quita los puntos del árbol y los devuelve
+# «Resetear talentos»: la primera vez solo pregunta; la segunda quita los puntos del árbol y devuelve lo gastado
 func resetear_talentos() -> void:
 	var s := Guardado.cargar()
-	if Talentos.puestos(s) == 0 or s.dolares < Talentos.PRECIO_RESETEAR:
+	if not Talentos.se_puede_resetear(s):
 		Sonido.tocar("no")
-		info.text = Idioma.t("No tienes ningún punto puesto.") if Talentos.puestos(s) == 0 else 			Idioma.t("No te llega: resetear cuesta $%d de lo ahorrado.") % Talentos.PRECIO_RESETEAR
+		info.text = Idioma.t("No tienes ningún punto puesto.") if Talentos.puestos(s) == 0 else \
+			Idioma.t("No te llega: resetear cuesta $%d de lo ahorrado.") % -Talentos.devolucion(s)
 		return
 	if not seguro_resetear:
 		seguro_resetear = true
@@ -727,14 +705,14 @@ func resetear_talentos() -> void:
 		info.set_deferred("text", Idioma.t("¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."))
 		return
 	seguro_resetear = false
-	var devueltos := Talentos.puestos(s)
+	var devueltos := Talentos.devolucion(s)
 	s = Talentos.resetear()
 	Sonido.tocar("compra")
 	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	partida.aplicar_talentos(s.talentos)
 	abrir("puntos", "b_resetear")
-	info.set_deferred("text", Idioma.n("¡Hecho! Te devuelve %d punto: ahora tienes %d para gastar.",
-		"¡Hecho! Te devuelve %d puntos: ahora tienes %d para gastar.", devueltos) % [devueltos, s.puntos])
+	info.set_deferred("text", (Idioma.t("¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados.") % [devueltos, s.dolares]) if devueltos >= 0
+		else Idioma.t("¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados.") % [-devueltos, s.dolares])
 
 
 func subir(id: String) -> void:
@@ -744,6 +722,7 @@ func subir(id: String) -> void:
 		return   # la línea de info ya dice por qué no se puede
 	Sonido.tocar("compra")
 	var s := Talentos.subir(id)
+	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	partida.aplicar_talentos(s.talentos)
 	rama_abierta = Talentos.talento(id).rama   # (si se sube desde fuera, como en las pruebas, que se vea)
 	abrir("puntos", "b_" + id)
@@ -1290,7 +1269,7 @@ func ficha_bestiario(id: String, visto: bool) -> Control:
 
 # Una tarjeta (.pc-arma del JS): con relieve, su icono grande, el nombre (y, en los talentos, sus cuadraditos de
 # nivel), una línea de explicación debajo y la etiqueta azul de la derecha ("$15", "+1 punto", "MÁX"...).
-# "estado": "" (se puede usar), "bloqueada" (apagada), "apagada" (sin puntos: la etiqueta en gris), "puesta" o
+# "estado": "" (se puede usar), "bloqueada" (apagada), "apagada" (sin dinero: la etiqueta en gris), "puesta" o
 # "lleno" (en verde). Por encima lleva un botón transparente del mismo tamaño, que es el que se marca y se pulsa
 # (con el ratón, el teclado o el mando) y el que se devuelve
 func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, debajo: String, etiqueta: String,

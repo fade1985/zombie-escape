@@ -6569,44 +6569,16 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\维修间\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Intercambio · $%d = 1 punto"
-msgstr "兑换 · $%d = 1点"
+msgid "Resetear talentos"
+msgstr "重置天赋"
 
 #: scripts/ui/ordenador.gd
-msgid "Comprar 1 punto"
-msgstr "购买1点"
+msgid "Te devuelve $%d"
+msgstr "退还 $%d"
 
 #: scripts/ui/ordenador.gd
 msgid "Cuesta $%d"
 msgstr "花费 $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cambiar"
-msgstr "兑换"
-
-#: scripts/ui/ordenador.gd
-msgid "Cambia $%d por 1 punto de talento"
-msgstr "用 $%d 兑换1个天赋点"
-
-#: scripts/ui/ordenador.gd
-msgid "Comprar %d puntos (todo)"
-msgstr "购买 %d 点（全部）"
-
-#: scripts/ui/ordenador.gd
-msgid "Comprar todo lo posible"
-msgstr "能买多少买多少"
-
-#: scripts/ui/ordenador.gd
-msgid "Necesitas $%d"
-msgstr "需要 $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
-msgstr "把能换的美元都换成天赋点（$%d = 1点）"
-
-#: scripts/ui/ordenador.gd
-msgid "Resetear talentos"
-msgstr "重置天赋"
 
 #: scripts/ui/ordenador.gd
 msgid "No hay puntos puestos"
@@ -6621,12 +6593,12 @@ msgid "Resetear"
 msgstr "重置"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos puestos en el árbol y te los devuelve para repartirlos otra vez. Cuesta $%d."
-msgstr "收回天赋树上已分配的所有点数，让你重新分配。花费 $%d。"
+msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
+msgstr "收回天赋树上的所有点数，退还你花在上面的钱，扣除 $%d。"
 
 #: scripts/ui/ordenador.gd
-msgid "Árbol de talentos · cada punto sube un nivel"
-msgstr "天赋树 · 每点提升一级"
+msgid "Árbol de talentos · cada punto se compra y sube un nivel"
+msgstr "天赋树 · 每点需购买，提升一级"
 
 #: scripts/ui/ordenador.gd
 msgid "%d de %d"
@@ -6637,16 +6609,12 @@ msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
 msgstr "%s分支：已投入 %d / %d 点。点击查看天赋树。"
 
 #: scripts/ui/ordenador.gd
-msgid "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "每投入一点提升一级。想进入下一层级，先把它要求的天赋点满。"
+msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "每一点都用存下的钱购买，提升一级。想进入下一层级，先把它要求的天赋点满。"
 
 #: scripts/ui/ordenador.gd
 msgid "Dólares ahorrados"
 msgstr "存下的美元"
-
-#: scripts/ui/ordenador.gd
-msgid "Puntos de talento"
-msgstr "天赋点"
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
@@ -6677,21 +6645,12 @@ msgid "Necesitas %s al máximo. %s"
 msgstr "需要先点满%s。%s"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Te hace falta 1 punto."
-msgstr "%s。需要1点天赋点。"
+msgid "%s. Cuesta $%d: te faltan $%d."
+msgstr "%s。花费 $%d：还差 $%d。"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Pulsa para subirlo (1 punto)."
-msgstr "%s。点击升级（1点）。"
-
-#: scripts/ui/ordenador.gd
-msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
-msgstr "钱不够：每点天赋点要花掉存款 $%d。"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Ahora tienes %d punto para gastar."
-msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
-msgstr[0] "完成！现在你有 %d 点可以分配。"
+msgid "%s. Pulsa para subirlo ($%d)."
+msgstr "%s。点击升级（$%d）。"
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
@@ -6706,9 +6665,12 @@ msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
 msgstr "确定？再按一次即可收回天赋树上的所有点数。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te devuelve %d punto: ahora tienes %d para gastar."
-msgid_plural "¡Hecho! Te devuelve %d puntos: ahora tienes %d para gastar."
-msgstr[0] "完成！返还了 %d 点：现在你有 %d 点可以分配。"
+msgid "¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados."
+msgstr "完成！退还 $%d：你现在存有 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados."
+msgstr "完成！花了 $%d：你现在存有 $%d。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"
@@ -7031,12 +6993,8 @@ msgid "Aún no te lo has cruzado."
 msgstr "你还没遇到过它。"
 
 #: scripts/ui/ordenador.gd
-msgid ""
-"Puntos e\n"
-"intercambio"
-msgstr ""
-"天赋点\n"
-"兑换"
+msgid "Talentos"
+msgstr "天赋"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7067,8 +7025,8 @@ msgid "Apagar"
 msgstr "关机"
 
 #: scripts/ui/ordenador.gd
-msgid "PUNTOS.EXE"
-msgstr "天赋点.EXE"
+msgid "TALENTOS.EXE"
+msgstr "天赋.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "ARMAS.EXE"
@@ -7091,8 +7049,8 @@ msgid "COLECCION.EXE"
 msgstr "收藏.EXE"
 
 #: scripts/ui/ordenador.gd
-msgid "Compra de puntos e intercambio"
-msgstr "天赋点购买与兑换"
+msgid "Árbol de talentos"
+msgstr "天赋树"
 
 #: scripts/ui/ordenador.gd
 msgid "Tienda de armas"

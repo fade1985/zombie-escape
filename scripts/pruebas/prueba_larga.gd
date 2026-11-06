@@ -239,11 +239,11 @@ func _process(delta: float) -> void:
 		probar_menus()
 
 
-# El ordenador: con $60 en el guardado de prueba compra puntos, sube Ataque, compra la escopeta y hace fotos
+# El ordenador: con $60 en el guardado de prueba sube Ataque y Puntería ($5 cada punto), compra la escopeta y hace fotos
 func probar_ordenador() -> void:
 	Guardado.cambiar(func(g):
 		g.dolares = 60
-		g.puntos = 0
+		g.dolares_talentos = 0
 		g.talentos = {}
 		g.armas = [])
 	ahorrados = 60
@@ -251,7 +251,6 @@ func probar_ordenador() -> void:
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
 	ordenador.abrir("puntos")
-	ordenador.comprar(3)
 	ordenador.subir("ataque")
 	ordenador.subir("punteria")
 	ordenador.subir("tirador")   # bloqueado: no tiene Ataque al máximo
@@ -270,7 +269,7 @@ func probar_ordenador() -> void:
 	ordenador.cobrar_logro("desahucio")
 	print("Logros: %s | $%d ahorrados tras cobrar" % [Guardado.cargar().logros, Guardado.cargar().dolares])
 	var g := Guardado.cargar()
-	print("Ordenador: $%d ahorrados, %d puntos, talentos %s, armas %s | daño x%.2f | lleva %s" % [g.dolares, g.puntos,
+	print("Ordenador: $%d ahorrados, $%d gastados en talentos, talentos %s, armas %s | daño x%.2f | lleva %s" % [g.dolares, g.dolares_talentos,
 		g.talentos, g.armas, johnny.stats.dano, johnny.huecos])
 	ordenador.abrir("")
 	ordenador.apagar()
@@ -445,7 +444,7 @@ func probar_ordenador_arriba() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
 		g.dolares = 60
-		g.puntos = 3)
+		g.talentos = {})   # (que Ataque se pueda subir)
 	ahorrados = 60
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
@@ -462,12 +461,9 @@ func probar_ordenador_arriba() -> void:
 		await get_tree().create_timer(0.6).timeout
 		cuenta.call(programa)
 		Captura.foto("captura-arriba-%s.png" % programa)
-	# comprar un punto y subir un talento desde abajo: no salta arriba
+	# subir un talento desde abajo: no salta arriba
 	ordenador.abrir("puntos")
 	await get_tree().create_timer(0.4).timeout
-	ordenador.comprar(1)
-	await get_tree().create_timer(0.6).timeout
-	cuenta.call("puntos tras comprar 1 punto (esperado: arriba, info «¡Hecho!...»)")
 	var desliza: ScrollContainer = ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0]
 	desliza.scroll_vertical = 120
 	await get_tree().create_timer(0.3).timeout
@@ -501,7 +497,9 @@ func probar_ordenador_arriba() -> void:
 			await clic_en(ordenador.iconos.get_node("icono_" + programa))
 			await get_tree().create_timer(0.4).timeout
 			cuenta.call("%d pasos, %s abierto con un clic (esperado: arriba; Noticias, la de fuera arriba)" % [pasos, programa])
-		Guardado.cambiar(func(g): g.puntos = 5)
+		Guardado.cambiar(func(g):
+			g.dolares = 60
+			g.talentos = {})
 		ordenador.abrir("")
 		await get_tree().create_timer(0.2).timeout
 		ordenador.abrir("puntos")
@@ -527,7 +525,7 @@ func probar_ordenador_arriba() -> void:
 	ordenador.apagar()
 	Guardado.cambiar(func(g):
 		g.dolares = antes.dolares
-		g.puntos = antes.puntos
+		g.dolares_talentos = antes.dolares_talentos
 		g.talentos = antes.talentos)
 	ahorrados = antes.dolares
 

@@ -6589,44 +6589,16 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\MAINTENANCE\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Intercambio · $%d = 1 punto"
-msgstr "Échange · $%d = 1 point"
+msgid "Resetear talentos"
+msgstr "Réinitialiser les talents"
 
 #: scripts/ui/ordenador.gd
-msgid "Comprar 1 punto"
-msgstr "Acheter 1 point"
+msgid "Te devuelve $%d"
+msgstr "Rembourse $%d"
 
 #: scripts/ui/ordenador.gd
 msgid "Cuesta $%d"
 msgstr "Coût : $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cambiar"
-msgstr "Échanger"
-
-#: scripts/ui/ordenador.gd
-msgid "Cambia $%d por 1 punto de talento"
-msgstr "Échange $%d contre 1 point de talent"
-
-#: scripts/ui/ordenador.gd
-msgid "Comprar %d puntos (todo)"
-msgstr "Acheter %d points (tout)"
-
-#: scripts/ui/ordenador.gd
-msgid "Comprar todo lo posible"
-msgstr "Acheter le maximum"
-
-#: scripts/ui/ordenador.gd
-msgid "Necesitas $%d"
-msgstr "Il te faut $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
-msgstr "Échange tous les dollars possibles contre des points ($%d = 1 point)"
-
-#: scripts/ui/ordenador.gd
-msgid "Resetear talentos"
-msgstr "Réinitialiser les talents"
 
 #: scripts/ui/ordenador.gd
 msgid "No hay puntos puestos"
@@ -6641,12 +6613,12 @@ msgid "Resetear"
 msgstr "Réinitialiser"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos puestos en el árbol y te los devuelve para repartirlos otra vez. Cuesta $%d."
-msgstr "Retire tous les points placés dans l'arbre et te les rend pour les répartir à nouveau. Coûte $%d."
+msgid "Quita todos los puntos del árbol y te devuelve lo que gastaste en ellos, menos $%d."
+msgstr "Retire tous les points de l'arbre et te rembourse ce que tu y as dépensé, moins $%d."
 
 #: scripts/ui/ordenador.gd
-msgid "Árbol de talentos · cada punto sube un nivel"
-msgstr "Arbre de talents · chaque point monte d'un niveau"
+msgid "Árbol de talentos · cada punto se compra y sube un nivel"
+msgstr "Arbre de talents · chaque point s'achète et monte d'un niveau"
 
 #: scripts/ui/ordenador.gd
 msgid "%d de %d"
@@ -6657,16 +6629,12 @@ msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
 msgstr "Branche %s : %d de ses %d points placés. Appuie pour voir son arbre."
 
 #: scripts/ui/ordenador.gd
-msgid "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "Chaque point monte d'un niveau. Pour passer au niveau suivant, remplis d'abord le talent demandé."
+msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Chaque point se paie avec tes économies et monte d'un niveau. Pour passer au niveau suivant, remplis d'abord le talent demandé."
 
 #: scripts/ui/ordenador.gd
 msgid "Dólares ahorrados"
 msgstr "Dollars économisés"
-
-#: scripts/ui/ordenador.gd
-msgid "Puntos de talento"
-msgstr "Points de talent"
 
 #: scripts/ui/ordenador.gd
 msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
@@ -6697,22 +6665,12 @@ msgid "Necesitas %s al máximo. %s"
 msgstr "Il faut %s au maximum. %s"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Te hace falta 1 punto."
-msgstr "%s. Il te faut 1 point."
+msgid "%s. Cuesta $%d: te faltan $%d."
+msgstr "%s. Coûte $%d : il te manque $%d."
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Pulsa para subirlo (1 punto)."
-msgstr "%s. Appuie pour le monter (1 point)."
-
-#: scripts/ui/ordenador.gd
-msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
-msgstr "Pas assez : chaque point coûte $%d de tes économies."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Hecho! Ahora tienes %d punto para gastar."
-msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
-msgstr[0] "C'est fait ! Tu as maintenant %d point à dépenser."
-msgstr[1] "C'est fait ! Tu as maintenant %d points à dépenser."
+msgid "%s. Pulsa para subirlo ($%d)."
+msgstr "%s. Appuie pour le monter ($%d)."
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
@@ -6727,10 +6685,12 @@ msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
 msgstr "Sûr ? Appuie encore pour retirer tous les points de l'arbre."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! Te devuelve %d punto: ahora tienes %d para gastar."
-msgid_plural "¡Hecho! Te devuelve %d puntos: ahora tienes %d para gastar."
-msgstr[0] "C'est fait ! Tu récupères %d point : tu as maintenant %d à dépenser."
-msgstr[1] "C'est fait ! Tu récupères %d points : tu as maintenant %d à dépenser."
+msgid "¡Hecho! Te devuelve $%d: ahora tienes $%d ahorrados."
+msgstr "C'est fait ! Tu récupères $%d : tu as maintenant $%d d'économies."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Te ha costado $%d: ahora tienes $%d ahorrados."
+msgstr "C'est fait ! Ça t'a coûté $%d : tu as maintenant $%d d'économies."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"
@@ -7053,12 +7013,8 @@ msgid "Aún no te lo has cruzado."
 msgstr "Tu ne l'as pas encore croisé."
 
 #: scripts/ui/ordenador.gd
-msgid ""
-"Puntos e\n"
-"intercambio"
-msgstr ""
-"Points et\n"
-"échange"
+msgid "Talentos"
+msgstr "Talents"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7089,8 +7045,8 @@ msgid "Apagar"
 msgstr "Éteindre"
 
 #: scripts/ui/ordenador.gd
-msgid "PUNTOS.EXE"
-msgstr "POINTS.EXE"
+msgid "TALENTOS.EXE"
+msgstr "TALENTS.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "ARMAS.EXE"
@@ -7113,8 +7069,8 @@ msgid "COLECCION.EXE"
 msgstr "COLLECTION.EXE"
 
 #: scripts/ui/ordenador.gd
-msgid "Compra de puntos e intercambio"
-msgstr "Achat de points et échange"
+msgid "Árbol de talentos"
+msgstr "Arbre de talents"
 
 #: scripts/ui/ordenador.gd
 msgid "Tienda de armas"

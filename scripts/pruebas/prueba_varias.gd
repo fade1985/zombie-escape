@@ -1494,7 +1494,7 @@ func probar_quimico() -> void:
 	# ── El árbol con las tres ramas en el ordenador ──
 	var guardado_antes := Guardado.cargar()
 	Guardado.cambiar(func(gu):
-		gu.puntos = 4
+		gu.dolares = 100
 		gu.talentos = {"ataque": 5, "punteria": 2, "corpulento": 5, "durito": 3, "catalizador": 5, "guantes_goma": 2,
 			"incendiario": 3})
 	abrir_ordenador()
@@ -1513,7 +1513,7 @@ func probar_quimico() -> void:
 	print("Árbol: pestañas %s (esperado: las tres) · se ve la rama %s (esperado: quimico)" % [
 		ordenador.find_children("b_rama_*", "", true, false).map(func(b): return b.name), ordenador.rama_abierta])
 	Guardado.cambiar(func(gu):
-		gu.puntos = guardado_antes.puntos
+		gu.dolares = guardado_antes.dolares
 		gu.talentos = guardado_antes.talentos)
 	get_tree().quit()
 
@@ -1552,13 +1552,13 @@ func probar_equilibrio_talentos() -> void:
 	var centro: Vector2 = await sala_de_talentos()
 	var guardado_antes := Guardado.cargar()
 
-	# ── Durito: como mucho 3, y los puntos de más vuelven ──
+	# ── Durito: como mucho 3, y los puntos de más vuelven (en dólares, a lo que costaban: $10) ──
 	Guardado.cambiar(func(g):
 		g.talentos.durito = 5
-		g.puntos = 1)
+		g.dolares = 0)
 	var leido := Guardado.cargar()
-	print("Durito: con 5 puestos en un guardado viejo, al cargar se queda en %d y los puntos pasan de 1 a %d (esperado: 3 y 3)" % [
-		leido.talentos.durito, leido.puntos])
+	print("Durito: con 5 puestos en un guardado viejo, al cargar se queda en %d y los dólares pasan de 0 a %d (esperado: 3 y 20)" % [
+		leido.talentos.durito, leido.dolares])
 	aplicar_talentos({"corpulento": 5, "durito": 3})
 	johnny.escudo = 0.0
 	johnny.invulnerable = 0.0
@@ -1615,7 +1615,7 @@ func probar_equilibrio_talentos() -> void:
 
 	# ── Las tarjetas del ordenador: lo que dan ahora y con otro punto ──
 	Guardado.cambiar(func(g):
-		g.puntos = 4
+		g.dolares = 100
 		g.talentos = {"ataque": 5, "punteria": 3, "camorrista": 2, "corpulento": 5, "lobezno": 2, "durito": 1})
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -1631,47 +1631,84 @@ func probar_equilibrio_talentos() -> void:
 		"Ahora: %s · Con otro: %s" % [Talentos.efecto("punteria", 3), Talentos.efecto("punteria", 4)],
 		"Ahora: %s · Con otro: %s" % [Talentos.efecto("durito", 1), Talentos.efecto("durito", 2)]])
 	Guardado.cambiar(func(g):
-		g.puntos = guardado_antes.puntos
+		g.dolares = guardado_antes.dolares
 		g.talentos = guardado_antes.talentos)
 	get_tree().quit()
 
 
-# Con "--captura --resetear-talentos": el botón «Resetear talentos» del ordenador (M32), con 50 $ ahorrados y 7 puntos
-# puestos (Ataque 3, Corpulento 4). El primer toque solo pregunta; el segundo devuelve los 7, cobra 20 $ y Johnny vuelve
-# a su vida de siempre. Cada línea dice lo esperado. Fotos: captura-resetear-seguro.png (la tarjeta preguntando) y
-# captura-resetear-hecho.png. Deja el guardado como estaba
-func probar_resetear_talentos() -> void:
+# Con "--captura --comprar-talentos": los talentos se compran con dólares, punto a punto, en el ordenador (6 nov), y el
+# botón «Resetear talentos» (M32) devuelve lo gastado menos 20 $. Con 100 $: Ataque 5 (5 $ cada punto, fila 1),
+# Camorrista 2 (10 $, fila 2) y Corpulento 1; luego, con 2 $, Puntería no se puede (te faltan 3 $). El reseteo
+# pregunta la primera vez y la segunda devuelve 50 - 20 = 30 $, y Johnny vuelve a su vida de siempre. Al final, un
+# guardado de antes (7 puntos sin gastar y Ataque 3) se convierte: 70 $ más y 30 $ gastados en el árbol. Cada línea
+# dice lo esperado. Fotos: captura-talentos-precios.png, captura-talentos-sin-dinero.png, captura-resetear-seguro.png
+# y captura-resetear-hecho.png. Deja el guardado como estaba
+func probar_comprar_talentos() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
-		g.dolares = 50
-		g.puntos = 0
-		g.talentos = {"ataque": 3, "corpulento": 4})
-	ahorrados = 50
-	aplicar_talentos(Guardado.cargar().talentos)
-	var vida_con: int = johnny.stats.vida_max
+		g.dolares = 100
+		g.dolares_talentos = 0
+		g.talentos = {})
+	ahorrados = 100
+	aplicar_talentos({})
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
-	ordenador.abrir("puntos")
+	ordenador.rama_abierta = "militar"
+	ordenador.abrir("puntos", "b_ataque")
 	await get_tree().create_timer(0.4).timeout
-	var tarjeta := func() -> String:   # lo que pone en el botón de la tarjeta
-		var b: Button = ordenador.ventana.find_child("b_resetear", true, false)
+	var tarjeta := func(nombre: String) -> String:   # lo que pone en la tarjeta de ese botón
+		var b: Button = ordenador.ventana.find_child(nombre, true, false)
 		return " | ".join(b.get_parent().find_children("*", "Label", true, false).map(func(l): return l.text)) if b else "no está"
-	print("Con 7 puntos puestos: tarjeta «%s» (esperado: Resetear talentos | Cuesta $20 | Resetear)" % tarjeta.call())
-	ordenador.resetear_talentos()
+	print("Precios: Ataque «%s» · Camorrista «%s» (esperado: ... $5 · bloqueado, sin precio)" % [tarjeta.call("b_ataque"), tarjeta.call("b_camorrista")])
+	Captura.foto("captura-talentos-precios.png")
+	for i in 5:
+		ordenador.subir("ataque")
+	ordenador.subir("camorrista")
+	ordenador.subir("camorrista")
+	ordenador.subir("corpulento")
 	await get_tree().create_timer(0.4).timeout
 	var s := Guardado.cargar()
-	print("Primer toque: tarjeta «%s» · info «%s» · puntos %d · dólares %d (esperado: ¿Seguro? · pregunta · 0 · 50)" % [
-		tarjeta.call(), ordenador.info.text, s.puntos, s.dolares])
+	print("Comprados: talentos %s · dólares %d · gastados %d · HUD %d (esperado: ataque 5, camorrista 2, corpulento 1 · 100 - 25 - 20 - 5 = 50 · 50 · 50)" % [
+		s.talentos, s.dolares, s.dolares_talentos, ahorrados])
+	Guardado.cambiar(func(g): g.dolares = 2)
+	ahorrados = 2
+	ordenador.subir("punteria")
+	ordenador.rama_abierta = "militar"   # (al subir Corpulento se ha abierto la suya)
+	ordenador.abrir("puntos", "b_punteria")
+	await get_tree().create_timer(0.4).timeout
+	ordenador.ventana.find_child("b_punteria", true, false).grab_focus()   # (por si el ratón de la ventana está encima de otra tarjeta)
+	await get_tree().create_timer(0.1).timeout
+	s = Guardado.cargar()
+	print("Con $2: Puntería %d · dólares %d · motivo «%s» · info «%s» (esperado: 0 · 2 · sin_dinero · ... Cuesta $5: te faltan $3.)" % [
+		Talentos.nivel_de(s, "punteria"), s.dolares, Talentos.motivo(s, "punteria"), ordenador.info.text])
+	Captura.foto("captura-talentos-sin-dinero.png")
+	var vida_con: int = johnny.stats.vida_max
+	print("Resetear: tarjeta «%s» (esperado: Resetear talentos | Te devuelve $30 | Resetear)" % tarjeta.call("b_resetear"))
+	ordenador.resetear_talentos()
+	await get_tree().create_timer(0.4).timeout
+	s = Guardado.cargar()
+	print("Primer toque: tarjeta «%s» · info «%s» · dólares %d (esperado: ¿Seguro? · pregunta · 2)" % [
+		tarjeta.call("b_resetear"), ordenador.info.text, s.dolares])
 	Captura.foto("captura-resetear-seguro.png")
 	ordenador.resetear_talentos()
 	await get_tree().create_timer(0.4).timeout
 	s = Guardado.cargar()
-	print("Segundo toque: puntos %d · talentos %s · dólares %d · info «%s» (esperado: 7 · {} · 30 · ¡Hecho! Te devuelve 7...)" % [
-		s.puntos, s.talentos, s.dolares, ordenador.info.text])
-	print("Johnny: vida máxima %d (con Corpulento 4, %d; esperado: la de siempre, %d) · vida %d (esperado: no más que la máxima)" % [
+	print("Segundo toque: talentos %s · dólares %d · gastados %d · info «%s» (esperado: {} · 32 · 0 · ¡Hecho! Te devuelve $30...)" % [
+		s.talentos, s.dolares, s.dolares_talentos, ordenador.info.text])
+	print("Johnny: vida máxima %d (con Corpulento 1, %d; esperado: la de siempre, %d) · vida %d (esperado: no más que la máxima)" % [
 		johnny.stats.vida_max, vida_con, Mejoras.base().vida_max, johnny.vida])
-	print("Ya sin puntos puestos: tarjeta «%s» (esperado: ... No hay puntos puestos ...)" % tarjeta.call())
+	print("Ya sin puntos puestos: tarjeta «%s» (esperado: ... No hay puntos puestos ...)" % tarjeta.call("b_resetear"))
 	Captura.foto("captura-resetear-hecho.png")
+	# un guardado de antes del 6 nov: con puntos sin gastar y sin "dolares_talentos"
+	var viejo := Guardado.cargar()
+	viejo.dolares = 5
+	viejo.puntos = 7
+	viejo.talentos = {"ataque": 3}
+	viejo.erase("dolares_talentos")
+	Guardado.escribir(viejo)
+	s = Guardado.cargar()
+	print("Guardado viejo: dólares %d · puntos %d · gastados %d · Ataque %d (esperado: 5 + 70 = 75 · 0 · 30 · 3)" % [
+		s.dolares, s.puntos, s.dolares_talentos, Talentos.nivel_de(s, "ataque")])
 	Guardado.escribir(antes)
 
 
@@ -1861,12 +1898,12 @@ func probar_talentos_altos() -> void:
 		por_rama[t.rama] = por_rama.get(t.rama, 0) + t.max
 	var casi := {"ataque": 5, "punteria": 5, "camorrista": 5, "tirador": 5, "artificiero": 3, "larguirucho": 1,
 		"mirilla": 1, "fabricante": 1, "frenesi": 3, "gatillo": 3, "racimo": 1}
-	var prueba := {"puntos": 4, "talentos": casi}
+	var prueba := {"dolares": 100, "talentos": casi}
 	print("Árbol: puntos por rama %s (esperado: 36 cada una) · Veterano con Racimo a 1: %s, falta %s (esperado: bloqueado y Racimo); con Racimo a 3: «%s» (esperado: «»)" % [
 		por_rama, Talentos.motivo(prueba, "veterano"), Talentos.nombres(Talentos.faltan(prueba, "veterano")),
-		Talentos.motivo({"puntos": 4, "talentos": casi.merged({"racimo": 3}, true)}, "veterano")])
+		Talentos.motivo({"dolares": 100, "talentos": casi.merged({"racimo": 3}, true)}, "veterano")])
 	Guardado.cambiar(func(g):
-		g.puntos = 4
+		g.dolares = 100
 		g.talentos = casi.merged({"corpulento": 5, "lobezno": 5, "durito": 3, "reflejos": 5, "sanitario": 5, "acero": 1,
 			"ninja": 1, "desfibrilador": 1, "blindaje": 3, "sombra": 3, "aliento": 3, "adrenalina": 1}))
 	abrir_ordenador()
@@ -1886,7 +1923,7 @@ func probar_talentos_altos() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-altos-arbol-superviviente.png")
 	Guardado.cambiar(func(g):
-		g.puntos = guardado_antes.puntos
+		g.dolares = guardado_antes.dolares
 		g.talentos = guardado_antes.talentos)
 	get_tree().quit()
 
