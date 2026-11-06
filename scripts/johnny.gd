@@ -713,8 +713,9 @@ func atacar(angulo: float) -> void:
 	var nombre := "ataque_" + direccion
 	var largo_anim := sprite.sprite_frames.get_frame_count(nombre) / sprite.sprite_frames.get_animation_speed(nombre)
 	if w.tipo == "cuerpo":
-		# La animación del golpe dura medio segundo como mucho, y nunca más que el hueco entre golpes
-		ataque_dur = minf(0.5, 0.95 / w.ritmo)
+		# La animación del golpe dura medio segundo como mucho (la motosierra, su "golpe_dura": se ve subir), y nunca
+		# más que el hueco entre golpes
+		ataque_dur = minf(w.get("golpe_dura", 0.5), 0.95 / w.ritmo)
 		Sonido.tocar("barrido")
 		golpe_pendiente = true
 		golpe_angulo = angulo
@@ -1209,6 +1210,13 @@ func animar() -> void:
 # ácido en el depósito: se le dice dónde está el labio de la boquilla en el dibujo de ahora (las "puntas" de su hoja,
 # que solo tiene las del reposo). Andando o echando el chorro no se le dice, y la gota se suelta
 func gotear() -> void:
+	# La motosierra: de la punta de la espada, manchada de sangre, cae una gota de vez en cuando mientras no golpea
+	# (quieto o andando; la punta es la del dibujo quieto: al andar se mueve un píxel arriba o abajo, no se nota)
+	var w := Armas.datos(huecos[mano])
+	if w.get("sangra", false):
+		if ataque_t < 0.0:
+			goteo.gotear(sprite.global_position + w.punta[direccion] * 2.0, direccion, true)
+		return
 	var puntas: Dictionary = sprite.sprite_frames.get_meta("puntas", {})
 	var dibujo := String(sprite.animation)
 	if deposito <= 0.0 or llamarada.pedida or not puntas.has(dibujo) or Armas.datos(huecos[mano]).get("efecto", "") != "acido":

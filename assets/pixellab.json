@@ -4924,5 +4924,38 @@
    "recepcionista": "Con PixMiniMax: se le doblan las rodillas, cae de lado y se queda tumbada; «her headset still on her head»"
   },
   "descartados": "el intento A (42271691-d837-4b2f-92b3-c79fd36aeedb) sigue en PixelLab: borrarlo solo con permiso del dueño; sus vistas, en intentos/A/; la limpiadora B (7531e70f-6ae0-4f5d-be93-dfc358e6178d) sigue en PixelLab: borrarla solo con permiso del dueño; sus vistas, en superviviente-limpiadora-48/intentos/B/; la recepcionista B (b594dabb-a363-4b24-ad6c-bdde89d74267) sigue en PixelLab: borrarla solo con permiso del dueño; sus vistas, en superviviente-recepcionista-48/intentos/B/"
+ },
+ "conserje-48-motosierra": {
+  "kind": "character_state",
+  "character_id": "bf45873c-4024-4578-bd48-71f5e75981a7",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Motosierra en guardia",
+  "nota": "Estado de Johnny con la motosierra (2026-11-06), pedido por el dueño con dos fotos de referencia (una motosierra roja sujeta con las dos manos y alguien que la levanta por encima de la cabeza), solo para la pose. Lienzo de 64x64 sin la paleta de Johnny (max_colors 48). Salió bien a la primera; de lado la punta de la espada toca el borde del lienzo. La sangre de la espada no es de PixelLab: la pinta tools/sangre_motosierra.py (los dibujos tal cual, en sin_sangre/). EN EL JUEGO (sprite conserje-48-motosierra, casilla de 112x112 con los pies en 56,88): reposo, andar y ataque en las 8 direcciones. Se monta con: py tools/sangre_motosierra.py y py ../game/tools/arma.py conserje-48-motosierra, luego py tools/hacer_frames.py assets/sprites/conserje-48-motosierra y py tools/cara.py <skin> motosierra para cada skin.",
+  "request": {
+   "edit_description": "holding a big chainsaw like a weapon with both hands at waist height: one hand gripping the top loop handle over the engine and the other hand on the rear trigger grip, knees slightly bent in a ready stance; the chainsaw body is a worn red engine housing with black parts, and the guide bar is extra long and extra wide, a thick dark grey steel blade with a silver chain of teeth along its edge, pointing straight forward away from him; the chainsaw stays held in front of him with both hands in every view: front, side and back; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "max_colors": 48
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-06",
+  "ataque": {
+   "nota": "Levantarla por encima de la cabeza y dejarla caer. PixMiniMax, 12 fotogramas más el de partida, de una en una con el quieto pegado en un lienzo de 96x96 en (16, 26) como partida y llegada. Todas bien a la primera. Fotogramas en assets/sources/conserje-48-motosierra/sin_sangre/ataque/ (el 0 de PixelLab salía con colores 1 punto distintos: se cambió por el dibujo quieto). Cuatro textos: el común (east, west, south-east y south-west cambiando initial_pose), el de frente, el de espaldas y el de las diagonales de espaldas.",
+   "group": "c4de8c01-71ab-418a-9f1d-9d2bed5a2083",
+   "animation_name": "ataque-motosierra",
+   "cost": "8 generaciones",
+   "action_description_comun": "He heaves the heavy chainsaw up with both hands, lifting it high above his head, the long guide bar pointing up and back over his head, arms fully raised, leaning back slightly. Then he brings it crashing down hard and fast in one vertical overhead chop in front of him, swinging it down until the guide bar points down at the floor in front of his feet, knees bending with the weight of the blow. The chain on the guide bar leaves a short bright pale grey streak along the downward arc. A small burst of dust appears where the tip hits the ground in front of him. Then he lifts the chainsaw back up to waist height and settles cleanly into the starting stance, the guide bar pointing forward again. He keeps facing the same direction the whole time and never lets go of the chainsaw. The tail of the red bandana flicks with the motion. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+  },
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida, las 8 direcciones en una sola llamada, bien a la primera. tools/arma.py elige el tramo que hace ciclo.",
+   "group": "a06a948e-3512-46de-8977-c6f2a6b1567d",
+   "animation_name": "andar-motosierra",
+   "cost": "8 generaciones"
+  },
+  "icono": {
+   "nota": "create_object_pro_flash 32x32, 1 dirección, baúl como estilo sin sus colores (la receta de los iconos de objetos). Dos intentos: assets/sources/motosierra/intentos/icono-A.png (semilla 31001, objeto ae433c06-bb08-4c09-b7b8-e70d4fc7ba0d) y icono-B.png (31002, 55c3f51d-6f0d-4fb2-af09-638747651c21); hoja para elegir: assets/sources/motosierra/elegir-icono.png. ELEGIDO EL A por el dueño (2026-11-06): es assets/ui/iconos/motosierra.png tal cual.",
+   "cost": "10 generaciones"
+  },
+  "cost_total": "36 generaciones: 10 del estado, 8 del ataque, 8 del andar y 10 de los dos iconos"
  }
 }

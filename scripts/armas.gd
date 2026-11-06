@@ -26,7 +26,7 @@ class_name Armas
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
 # no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
-const PRECIOS := {"cuchillo": 10, "bate": 15, "pistola": 0, "escopeta": 30, "mp5": 40, "pistola_electrica": 45,
+const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "pistola": 0, "escopeta": 30, "mp5": 40, "pistola_electrica": 45,
 	"lanzallamas": 60, "desintegrador": 60}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
@@ -210,6 +210,19 @@ const DATOS := {
 		"hoja": preload("res://assets/sprites/conserje-48-cuchillo.tres"),
 		"punta": {"s": Vector2(-10, -14), "se": Vector2(19, -27), "e": Vector2(16, -24), "ne": Vector2(18, -27),
 			"n": Vector2(15, -30), "no": Vector2(-18, -27), "o": Vector2(-16, -28), "so": Vector2(-19, -27)},
+	},
+	# la motosierra (6 nov): la lleva con las dos manos a la cintura y el golpe es levantarla por encima de la cabeza y
+	# dejarla caer de golpe (conserje-48-motosierra, de PixelLab; la sangre de la espada la pinta
+	# tools/sangre_motosierra.py). Lenta y muy fuerte: un zombi normal cae de un golpe; la que más llega, pero en un
+	# abanico estrecho, recto hacia delante. Su golpe dura más que el de las otras ("golpe_dura": 0,7 s en vez de 0,5),
+	# para que se vea subir. Como sube tanto, su casilla es más grande: de 112x112, con los pies en 56,88. "sangra":
+	# de la punta de la espada caen gotas de sangre de vez en cuando (goteo.gd)
+	"motosierra": {
+		"nombre": "Motosierra", "tipo": "cuerpo", "dano": 34, "ritmo": 0.9, "alcance": 76.0, "arco": 70.0,   # [traducir]
+		"empuje": 2.5, "parada": 0.12, "momento": 0.5, "golpe_dura": 0.7, "sangra": true, "pies": Vector2(56, 88),
+		"hoja": preload("res://assets/sprites/conserje-48-motosierra.tres"),
+		"punta": {"s": Vector2(22, 0), "se": Vector2(27, -1), "e": Vector2(30, -13), "ne": Vector2(27, -35),
+			"n": Vector2(-18, -40), "no": Vector2(-28, -35), "o": Vector2(-31, -14), "so": Vector2(-28, -1)},
 	},
 	"pistola": {
 		"nombre": "Pistola", "tipo": "fuego", "dano": 10, "ritmo": 2.5, "alcance": 420.0, "velocidad": 620.0,   # [traducir]

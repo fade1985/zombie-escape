@@ -178,6 +178,10 @@ msgid "Cuchillo"
 msgstr "Knife"
 
 #: scripts/armas.gd
+msgid "Motosierra"
+msgstr "Chainsaw"
+
+#: scripts/armas.gd
 msgid "Pistola"
 msgstr "Pistol"
 
@@ -2978,8 +2982,8 @@ msgid "%s y %s"
 msgstr "%s and %s"
 
 #: scripts/objetos.gd
-msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)"
-msgstr "melee weapons (the mop, the knife and the bat)"
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate y la motosierra)"
+msgstr "melee weapons (the mop, the knife, the bat and the chainsaw)"
 
 #: scripts/objetos.gd
 msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
@@ -5673,6 +5677,10 @@ msgstr "One heavy hit that shoves zombies back."
 #: scripts/ui/inventario.gd
 msgid "Muy rápido, pero hay que arrimarse."
 msgstr "Very fast, but you have to get close."
+
+#: scripts/ui/inventario.gd
+msgid "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante."
+msgstr "Slow, but a normal zombie goes down in a single hit. Long reach, straight ahead."
 
 #: scripts/ui/inventario.gd
 msgid "Dispara de una en una, recto y lejos."

@@ -1,0 +1,20 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con la motosierra (lo lee tools/arma.py del juego JS). La casilla es más grande que la de siempre: al levantarla por encima de la cabeza la motosierra sube mucho.",
+  "celda": [112, 112],
+  "pivote": [56, 88],
+  "ataque": {
+    "nota": "Qué fotogramas de PixelLab se usan en cada dirección y en qué orden: la levanta, la baja de golpe (con la estela) y vuelve. En todas, el golpe llega en el sexto (índice 5).",
+    "duracion": 0.7,
+    "impacto": 5,
+    "fotogramas": {
+      "south":      [1, 2, 3, 4, 5, 6, 7, 8, 10, 12],
+      "south-east": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12],
+      "east":       [1, 2, 3, 4, 5, 6, 7, 8, 10, 12],
+      "north-east": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12],
+      "north":      [0, 1, 2, 3, 4, 5, 6, 8, 10, 12],
+      "north-west": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12],
+      "west":       [1, 2, 3, 4, 5, 6, 7, 8, 10, 12],
+      "south-west": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12]
+    }
+  }
+}

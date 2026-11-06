@@ -56,7 +56,10 @@ en una línea.
 - `llamarada.gd`: la llama continua del lanzallamas, el chorro del lanza ácido y el rayo del lanza rayos (cono, daño
   cada 0,25 s, empuje, luz; `variante`: "llama", "acido" o "rayo". El rayo se dibuja a código —zigzag, ramitas y
   arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
-  `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
+  `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido, y la de sangre de la punta de la
+  motosierra (`sangra` en `armas.gd`). La **motosierra** (6 nov): golpe lento y fuerte por encima de la cabeza
+  (`golpe_dura`: su golpe dura 0,7 s y no 0,5), casilla de 112×112; su hoja sale de PixelLab y la sangre de la espada
+  la pinta `tools/sangre_motosierra.py` (receta en `assets/pixellab.json` → `conserje-48-motosierra`); prueba `--motosierra`.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
   de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
   de cada clave, F cambia; sus cuentas en `cantidades`) y 4 de repuesto (`REPUESTO`, 8 hasta la M67; `repuesto` y sus cuentas en `en_repuesto`,

@@ -2976,3 +2976,119 @@ func lanzar_y_esperar(clave: String, sitio: Vector2, donde: Vector2, foto := "",
 			foto = ""
 		await get_tree().physics_frame
 	return en
+
+
+# Con "--captura --motosierra": la motosierra (6 nov). Se compra en la tienda de armas (foto
+# captura-motosierra-tienda.png) y pasa a la mano de cuerpo a cuerpo; sus números. En la sala de pruebas:
+#   - la gota de sangre de la punta de la espada: se hincha, cuelga (captura-motosierra-gota.png) y cae
+#   - el golpe hacia la derecha con tres zombis normales quietos: el de delante cae de un golpe; el de abajo (fuera de
+#     su abanico estrecho) y el de lejos (más allá de su alcance) siguen enteros. Fotos con la motosierra arriba
+#     (captura-motosierra-arriba.png), al caer (captura-motosierra-golpe.png) y después (captura-motosierra-despues.png)
+#   - las 8 direcciones, quieta con la gota (captura-motosierra-<dirección>.png) y en el golpe
+#     (captura-motosierra-golpe-<dirección>.png); y con el portero y el gymbro, su hoja
+# Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_motosierra() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.dolares = maxi(g2.dolares, 200)
+		g2.skins = ["portero", "gymbro"]
+		g2.skin = "")
+	johnny.vestir("")
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas", "b_motosierra")
+	await get_tree().create_timer(0.3).timeout
+	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("motosierra"), Armas.PRECIOS.motosierra, ordenador.info.text])
+	Captura.foto("captura-motosierra-tienda.png")
+	ordenador.comprar_arma("motosierra")
+	await get_tree().process_frame
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().process_frame
+	var w := Armas.datos("motosierra")
+	print("Comprada: cuerpo a cuerpo «%s» · familia %s · hoja «%s» · daño %d · %.1f golpes/s · alcance %.0f · abanico %.0f · golpe %.1f s · icono «%s» (esperado: motosierra, cuerpo, conserje-48-motosierra.tres, 34, 0.9, 76, 70, 0.7, motosierra)" % [
+		johnny.huecos.cuerpo, Armas.familia("motosierra"), w.hoja.resource_path.get_file(), w.dano, w.ritmo, w.alcance,
+		w.arco, w.golpe_dura, Objetos.icono("motosierra")])
+
+	# a la sala de pruebas, con la motosierra en la mano
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger("motosierra")
+	if johnny.mano != "cuerpo":
+		johnny.cambiar_mano()
+	johnny.modo = "quieto"   # que no ataque por su cuenta
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+
+	# la gota de sangre de la punta de la espada
+	await get_tree().create_timer(0.3).timeout
+	var hinchandose: bool = johnny.goteo.t > 0.0
+	johnny.goteo.t = johnny.goteo.dura * 0.8
+	await get_tree().create_timer(0.1).timeout   # (que llegue a pintarse antes de la foto)
+	Captura.foto("captura-motosierra-gota.png")
+	johnny.goteo.t = johnny.goteo.dura + Goteo.CUELGA - 0.01
+	await get_tree().physics_frame
+	await get_tree().physics_frame   # (la señal llega antes del paso: con dos, seguro que ya se ha soltado)
+	var cae: bool = johnny.goteo.cayendo.size() > 0
+	await get_tree().create_timer(0.6).timeout
+	print("La gota de sangre: se hincha %s · es de sangre %s · se suelta y cae %s · ya en el suelo %s (esperado: true, true, true, true)" % [
+		hinchandose, johnny.goteo.sangre, cae, johnny.goteo.cayendo.is_empty()])
+
+	# el golpe: tres zombis normales quietos
+	var z := []
+	for d in [Vector2(60, 0), Vector2(10, 70), Vector2(150, 0)]:
+		z.append(meter_zombi("normal", johnny.position + d))
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.aturdido = 30.0
+	johnny.intentar_atacar(0.0)
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-motosierra-arriba.png")
+	await get_tree().create_timer(0.17).timeout
+	Captura.foto("captura-motosierra-golpe.png")
+	await get_tree().create_timer(0.45).timeout
+	Captura.foto("captura-motosierra-despues.png")
+	var vivo := func(n): return is_instance_valid(n) and n.vida > 0
+	print("Golpe a la derecha: el de delante (a 60) vivo %s · el de abajo (fuera del abanico) vivo %s · el de lejos (a 150) vivo %s (esperado: false, true, true)" % [
+		vivo.call(z[0]), vivo.call(z[1]), vivo.call(z[2])])
+	for zombi in z:
+		if is_instance_valid(zombi):
+			zombi.remove_from_group("zombis")
+			zombi.queue_free()
+	await get_tree().create_timer(0.5).timeout
+
+	# las 8 direcciones: quieta con la gota colgando, y el golpe
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		await get_tree().physics_frame
+		johnny.goteo.t = johnny.goteo.dura * 0.8
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-motosierra-%s.png" % d)
+		johnny.intentar_atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.37).timeout
+		Captura.foto("captura-motosierra-golpe-%s.png" % d)
+		await get_tree().create_timer(0.8).timeout
+
+	# con dos skins: su hoja de la motosierra
+	for skin in ["portero", "gymbro"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "se"
+		await get_tree().create_timer(0.2).timeout
+		Captura.foto("captura-motosierra-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-motosierra-%s.tres)" % [skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+
+	Guardado.cambiar(func(g2):
+		g2.dolares = antes.dolares
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()

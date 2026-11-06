@@ -69,6 +69,8 @@
 #                       apagar y encender ayudas y volver con F9                          [prueba_armas.gd]
 #   --lanzallamas, --desintegrador, --pistola-electrica   cada arma de efecto: comprarla, su daño, su depósito o su
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
+#   --motosierra        la motosierra: comprarla, la gota de sangre, el golpe por encima de la cabeza (a quién le
+#                       da), las 8 direcciones y dos skins                                 [prueba_armas.gd]
 #   --relieve           el relieve con la luz (mapas de normales): Johnny y dos zombis con y sin relieve, con una
 #                       lámpara a cada lado                                                [prueba_varias.gd]
 #   --impacto           el impacto de bala de Sprite Fusion (impacto.gd) junto al de siempre, contra la pared
@@ -553,6 +555,9 @@ func empezar_prueba() -> void:
 	elif "--pistola-electrica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pistola_electrica()
+	elif "--motosierra" in args:
+		set_process(false)   # sin la prueba larga
+		probar_motosierra()
 	elif "--relieve" in args:
 		set_process(false)   # sin la prueba larga
 		probar_relieve()

@@ -178,6 +178,10 @@ msgid "Cuchillo"
 msgstr "Faca"
 
 #: scripts/armas.gd
+msgid "Motosierra"
+msgstr "Motosserra"
+
+#: scripts/armas.gd
 msgid "Pistola"
 msgstr "Pistola"
 
@@ -2978,8 +2982,8 @@ msgid "%s y %s"
 msgstr "%s e %s"
 
 #: scripts/objetos.gd
-msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)"
-msgstr "as armas corpo a corpo (o esfregão, a faca e o taco)"
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate y la motosierra)"
+msgstr "as armas corpo a corpo (o esfregão, a faca, o taco e a motosserra)"
 
 #: scripts/objetos.gd
 msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
@@ -5673,6 +5677,10 @@ msgstr "Um golpe forte que empurra os zumbis."
 #: scripts/ui/inventario.gd
 msgid "Muy rápido, pero hay que arrimarse."
 msgstr "Muito rápida, mas tem que chegar perto."
+
+#: scripts/ui/inventario.gd
+msgid "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante."
+msgstr "Lenta, mas um zumbi normal cai com um só golpe. Alcança longe, em linha reta à frente."
 
 #: scripts/ui/inventario.gd
 msgid "Dispara de una en una, recto y lejos."
