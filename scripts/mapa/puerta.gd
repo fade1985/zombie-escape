@@ -82,7 +82,7 @@ var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
 var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
 var limpia := false      # si es de una zona segura (lo pone mapa.gd: ZONAS_SEGURAS): sin sangre
-var metal := false       # si es la de la sala de mantenimiento (lo pone mapa.gd): la de abajo, de chapa gris como la de fuera
+var metal := false       # si es de chapa gris como la de fuera (lo pone mapa.gd): las de la sala de mantenimiento y la de las viviendas a ella
 var cartel: Node2D = null   # las escaleras: su cartel EXIT de la pared de arriba (cartel_salida.gd, lo pone mapa.gd)
 var abierta := true:     # si se puede pasar
 	set(valor):
@@ -148,6 +148,13 @@ func _draw() -> void:
 			# por donde se ha llegado
 			if salida.tipo == "escaleras":
 				draw_texture_rect(SALIDA, Rect2(-8, -36, 72, 72), false)
+				return
+			if metal:
+				# la de chapa gris de la pared de abajo, girada un cuarto de vuelta para que la hoja quede del lado de dentro
+				# (en la de la derecha, el de arriba del dibujo va a la izquierda; en la de la izquierda, a la derecha)
+				draw_set_transform(Vector2.ZERO, -PI / 2 if salida.dir == "derecha" else PI / 2)
+				draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(3 * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
+				draw_set_transform(Vector2.ZERO)
 				return
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0
 			draw_rect(Rect2(x0, -36, 64, 72), MARCO)
