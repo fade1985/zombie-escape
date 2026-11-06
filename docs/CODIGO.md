@@ -499,7 +499,10 @@ en una línea.
   esta partida). Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
   el teclado, el mando o el dedo, la marcada (`quien`); tras comprar se rehace con lo comprado elegido. Con el dedo, el
   primer toque enseña y el segundo compra (`al_pulsar`, `listo`). Los textos largos se parten a mano (`partir`; en
-  chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino).
+  chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino). Las armas que tienen sus
+  dibujos de la tienda (`assets/ui/tienda/<id>.png`, 48 en diagonal, para la casilla, y `<id>-grande.png`, 96x48 en
+  horizontal, para la ficha a ×2; `dibujo_tienda`, de PixelLab: `assets/pixellab.json` → `tienda-dibujos`) los usan; las
+  demás, el icono de siempre.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se

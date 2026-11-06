@@ -279,10 +279,18 @@ func dibujar_casilla(id: String, fuente: Font) -> void:
 		borde = PLACA.TEXTO
 	draw_rect(r, borde)
 	draw_rect(r.grow(-2), relleno)
-	var lado := minf(32.0, r.size.y - 26) if texto != "" else minf(32.0, r.size.y - 12)
-	var arriba := r.position.y + 6 if texto != "" else r.get_center().y - lado / 2.0
-	draw_texture_rect(icono(id), Rect2(r.get_center().x - lado / 2.0, arriba, lado, lado), false,
-		Color(0.55, 0.55, 0.55, 0.75) if apagada else Color.WHITE)
+	var color := Color(0.55, 0.55, 0.55, 0.75) if apagada else Color.WHITE
+	var dibujo := dibujo_tienda(id)
+	if dibujo:
+		# el de la tienda (48), a su tamaño y en el centro; «LLEVAS» va encima, en una franja oscura
+		var lado48 := Vector2(dibujo.get_size())
+		draw_texture_rect(dibujo, Rect2((r.get_center() - lado48 / 2.0).floor(), lado48), false, color)
+		if texto != "":
+			draw_rect(Rect2(r.position.x + 2, r.end.y - 20, r.size.x - 4, 18), Color(relleno, 0.85))
+	else:
+		var lado := minf(32.0, r.size.y - 26) if texto != "" else minf(32.0, r.size.y - 12)
+		var arriba := r.position.y + 6 if texto != "" else r.get_center().y - lado / 2.0
+		draw_texture_rect(icono(id), Rect2(r.get_center().x - lado / 2.0, arriba, lado, lado), false, color)
 	if texto == "":
 		return
 	var tam := 16
@@ -315,7 +323,15 @@ func dibujar_ficha(fuente: Font) -> void:
 	var cuadro := Rect2(x - 2, f.position.y + 34, ancho + 4, 100)
 	draw_rect(cuadro, PLACA.APAGADO)
 	draw_rect(cuadro.grow(-2), Color("#0d1012"))
-	draw_texture_rect(icono(id), Rect2(cuadro.get_center() - Vector2(48, 48), Vector2(96, 96)), false)
+	# el dibujo grande de la tienda (en horizontal, como en un escaparate) a ×2; si no tiene, el de la casilla a ×2 o el
+	# icono de siempre a ×3
+	var grande := dibujo_tienda(id, "-grande")
+	var dibujo := grande if grande else dibujo_tienda(id)
+	var zoom := 2.0 if dibujo else 3.0
+	if dibujo == null:
+		dibujo = icono(id)
+	var tam_dibujo := Vector2(dibujo.get_size()) * zoom
+	draw_texture_rect(dibujo, Rect2((cuadro.get_center() - tam_dibujo / 2.0).floor(), tam_dibujo), false)
 	# los medidores
 	var y := cuadro.end.y + 6
 	for m in medidas(id):
@@ -411,6 +427,16 @@ func nota() -> Array:
 	if ordenador.partida.dolares > 0:
 		parrafos.append([Idioma.t("Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes.") % ordenador.partida.dolares, PLACA.AMARILLO])
 	return parrafos
+
+
+# Los dibujos de la tienda, más grandes y nítidos que los iconos (assets/ui/tienda: <id>.png, de 48, para la casilla, y
+# <id>-grande.png, en horizontal, para la ficha); null si esa cosa aún no tiene
+var dibujos := {}
+func dibujo_tienda(id: String, cual := "") -> Texture2D:
+	var ruta := "res://assets/ui/tienda/%s%s.png" % [id, cual]
+	if not dibujos.has(ruta):
+		dibujos[ruta] = load(ruta) if ResourceLoader.exists(ruta) else null
+	return dibujos[ruta]
 
 
 # Los iconos se cargan una vez (assets/ui/iconos)
