@@ -1644,7 +1644,7 @@ func probar_equilibrio_talentos() -> void:
 # Con "--captura --comprar-talentos": los talentos se compran con dólares, punto a punto, en el ordenador (6 nov), y el
 # botón «Resetear talentos» (M32) ya no devuelve lo gastado (6 nov). Con 100 $: Ataque 5 (5 $ cada punto, fila 1),
 # Camorrista 2 (10 $, fila 2) y Corpulento 1; luego, con 2 $, Puntería no se puede (te faltan 3 $). El reseteo
-# pregunta la primera vez y la segunda quita los puntos sin devolver nada (se queda en 2 $), y Johnny vuelve a su vida de siempre. Al final, un
+# saca una ventanita que pregunta («¿Seguro? Perderás todo el dinero…»); Esc la cierra y «Sí, resetear» quita los puntos sin devolver nada (se queda en 2 $), y Johnny vuelve a su vida de siempre. Al final, un
 # guardado de antes (7 puntos sin gastar y Ataque 3) se convierte: 70 $ más y 30 $ gastados en el árbol. Cada línea
 # dice lo esperado. Fotos: captura-talentos-precios.png, captura-talentos-sin-dinero.png, captura-resetear-seguro.png
 # y captura-resetear-hecho.png. Deja el guardado como estaba
@@ -1689,21 +1689,38 @@ func probar_comprar_talentos() -> void:
 		Talentos.nivel_de(s, "punteria"), s.dolares, Talentos.motivo(s, "punteria"), ordenador.info.text])
 	Captura.foto("captura-talentos-sin-dinero.png")
 	var vida_con: int = johnny.stats.vida_max
-	print("Resetear: tarjeta «%s» (esperado: Resetear talentos | No devuelve el dinero | Resetear)" % tarjeta.call("b_resetear"))
+	print("Resetear: botón «%s» (esperado: Resetear talentos)" % tarjeta.call("b_resetear"))
 	ordenador.resetear_talentos()
 	await get_tree().create_timer(0.4).timeout
 	s = Guardado.cargar()
-	print("Primer toque: tarjeta «%s» · info «%s» · dólares %d (esperado: ¿Seguro? · pregunta · 2)" % [
-		tarjeta.call("b_resetear"), ordenador.info.text, s.dolares])
+	var foco := get_viewport().gui_get_focus_owner()
+	var aviso_texto: String = ordenador.aviso.find_child("texto", true, false).text if ordenador.aviso else "no está"
+	print("Al pulsarlo: ventanita «%s» · marcado %s · dólares %d (esperado: ¿Seguro? Perderás todo el dinero... ($50)... · b_cancelar · 2)" % [
+		aviso_texto, foco.name if foco else "nada", s.dolares])
 	Captura.foto("captura-resetear-seguro.png")
+	# Esc (o B) la cierra sin tocar nada
+	for pulsado in [true, false]:
+		var esc := InputEventAction.new()
+		esc.action = "ui_cancel"
+		esc.pressed = pulsado
+		Input.parse_input_event(esc)
+		await get_tree().create_timer(0.1).timeout
+	foco = get_viewport().gui_get_focus_owner()
+	print("Esc: ventanita %s · programa abierto «%s» · marcado %s · Ataque %d (esperado: cerrada, puntos, b_resetear, 5)" % [
+		"abierta" if ordenador.aviso else "cerrada", ordenador.abierta, foco.name if foco else "nada", Talentos.nivel_de(Guardado.cargar(), "ataque")])
 	ordenador.resetear_talentos()
+	await get_tree().create_timer(0.3).timeout
+	ordenador.aviso.find_child("b_si", true, false).emit_signal("pressed")
 	await get_tree().create_timer(0.4).timeout
 	s = Guardado.cargar()
-	print("Segundo toque: talentos %s · dólares %d · gastados %d · info «%s» (esperado: {} · 2 · 0 · ¡Hecho! El árbol está vacío...)" % [
+	print("«Sí, resetear»: talentos %s · dólares %d · gastados %d · info «%s» (esperado: {} · 2 · 0 · ¡Hecho! El árbol está vacío...)" % [
 		s.talentos, s.dolares, s.dolares_talentos, ordenador.info.text])
 	print("Johnny: vida máxima %d (con Corpulento 1, %d; esperado: la de siempre, %d) · vida %d (esperado: no más que la máxima)" % [
 		johnny.stats.vida_max, vida_con, Mejoras.base().vida_max, johnny.vida])
-	print("Ya sin puntos puestos: tarjeta «%s» (esperado: ... No hay puntos puestos ...)" % tarjeta.call("b_resetear"))
+	ordenador.resetear_talentos()
+	await get_tree().create_timer(0.2).timeout
+	print("Ya sin puntos puestos: ventanita %s · info «%s» (esperado: no sale · No tienes ningún punto puesto.)" % [
+		"sale" if ordenador.aviso else "no sale", ordenador.info.text])
 	Captura.foto("captura-resetear-hecho.png")
 	# un guardado de antes del 6 nov: con puntos sin gastar y sin "dolares_talentos"
 	var viejo := Guardado.cargar()

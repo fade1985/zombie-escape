@@ -5064,29 +5064,9 @@ msgstr "кнопка рюкзака под миникартой"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "кнопка паузы под миникартой"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear talentos"
 msgstr "Сбросить таланты"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No devuelve el dinero"
-msgstr "Деньги не вернутся"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No hay puntos puestos"
-msgstr "Очки не вложены"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "¿Seguro?"
-msgstr "Уверен?"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Resetear"
-msgstr "Сбросить"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Накопленные доллары"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Necesitas %s al máximo"
@@ -6705,12 +6685,28 @@ msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s. Нажми, чтобы прокачать ($%d)."
 
 #: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Накопленные доллары"
+
+#: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
 msgstr "Ты ещё не вложил ни одного очка."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
-msgstr "Точно? Нажми ещё раз, чтобы снять все очки с дерева. Потраченные $%d не вернутся."
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
+msgstr "Точно? Ты потеряешь все деньги, вложенные в таланты ($%d). Дерево опустеет, и очки можно будет распределить заново."
+
+#: scripts/ui/ordenador.gd
+msgid "Sí, resetear"
+msgstr "Да, сбросить"
+
+#: scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Отмена"
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que gastaste en los talentos no se devuelve."
+msgstr "Потраченное на таланты не возвращается."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."

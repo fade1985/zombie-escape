@@ -86,7 +86,7 @@ var info: Label             # la línea de abajo de la ventana: explica lo que e
 var tarea: Label
 var reloj: Label
 var abierta := ""           # el programa abierto ("" = solo el escritorio)
-var seguro_resetear := false     # en Puntos, ya se ha pulsado una vez «Resetear talentos»: la segunda lo hace (M32)
+var aviso: Control               # en Talentos, la ventanita de «¿Seguro?» al resetear (M32); null = no está
 
 
 func _ready() -> void:
@@ -304,8 +304,7 @@ func _process(_delta: float) -> void:
 func abrir(programa: String, foco := "") -> void:
 	var antes := abierta
 	abierta = programa
-	if foco != "b_resetear":
-		seguro_resetear = false   # («¿Seguro?» solo vale justo después de pulsarlo)
+	cerrar_aviso(false)
 	if programa != antes:
 		Sonido.tocar("click")
 	# Al volver a abrir el mismo programa (tras comprar o subir algo), cada desplazamiento se queda donde estaba
@@ -617,21 +616,128 @@ func rejilla(c: Container) -> GridContainer:
 	return g
 
 
-# «Resetear talentos»: la primera vez solo pregunta; la segunda quita los puntos del árbol (lo gastado no se devuelve)
+# «Resetear talentos»: no lo hace todavía, saca la ventanita que pregunta si de verdad (preguntar_reseteo)
 func resetear_talentos() -> void:
 	var s := Guardado.cargar()
 	if not Talentos.se_puede_resetear(s):
 		Sonido.tocar("no")
 		info.text = Idioma.t("No tienes ningún punto puesto.")
 		return
-	if not seguro_resetear:
-		seguro_resetear = true
-		abrir("puntos", "b_resetear")
-		info.set_deferred("text", Idioma.t("¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven.") %
-			s.dolares_talentos)
+	preguntar_reseteo(s)
+
+
+# La ventanita de aviso, como un cuadro de diálogo de Windows 95, en medio del programa: «¿Seguro? Perderás todo el
+# dinero invertido…», con «Sí, resetear» y «Cancelar» (el marcado al salir, por si acaso). Detrás, una sombra que tapa la
+# ventana para que no se pueda pulsar nada más; Esc o B cierran el aviso (_unhandled_input), y las flechas no salen de él
+func preguntar_reseteo(s: Dictionary) -> void:
+	cerrar_aviso(false)
+	Sonido.tocar("click")
+	aviso = ColorRect.new()
+	aviso.name = "aviso"
+	aviso.color = Color(0, 0, 0, 0.45)
+	aviso.mouse_filter = Control.MOUSE_FILTER_STOP
+	aviso.position = ventana.position
+	aviso.size = ventana.size
+	pantalla.add_child(aviso)
+	pantalla.move_child(aviso, ventana.get_index() + 1)
+	var centro := CenterContainer.new()
+	centro.size = aviso.size
+	aviso.add_child(centro)
+	var cuadro := PanelContainer.new()
+	cuadro.add_theme_stylebox_override("panel", caja(BEIS, BEIS, 0, 0, 3))
+	cuadro.draw.connect(func(): relieve(cuadro, false, 3.0))
+	centro.add_child(cuadro)
+	var columna := VBoxContainer.new()
+	columna.add_theme_constant_override("separation", 0)
+	cuadro.add_child(columna)
+	var barra := PanelContainer.new()
+	barra.add_theme_stylebox_override("panel", caja(AZUL, AZUL, 0, 0, 3))
+	columna.add_child(barra)
+	var titulo := Label.new()
+	titulo.text = Idioma.t("Resetear talentos")
+	barra.add_child(titulo)
+	var margen := MarginContainer.new()
+	for lado in ["left", "right", "top", "bottom"]:
+		margen.add_theme_constant_override("margin_" + lado, 14)
+	columna.add_child(margen)
+	var dentro := VBoxContainer.new()
+	dentro.add_theme_constant_override("separation", 14)
+	margen.add_child(dentro)
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 12)
+	dentro.add_child(fila)
+	var alerta := TextureRect.new()
+	alerta.texture = load("res://assets/ui/iconos/alerta.png")
+	alerta.custom_minimum_size = Vector2(32, 32)
+	alerta.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	alerta.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	fila.add_child(alerta)
+	var texto := texto_tarjeta(Idioma.t("¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez.") %
+		s.dolares_talentos, TINTA)
+	texto.name = "texto"
+	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	texto.custom_minimum_size.x = 320
+	fila.add_child(texto)
+	var botones := HBoxContainer.new()
+	botones.alignment = BoxContainer.ALIGNMENT_CENTER
+	botones.add_theme_constant_override("separation", 12)
+	dentro.add_child(botones)
+	var si := boton_aviso(botones, "b_si", Idioma.t("Sí, resetear"), reseteo_confirmado)
+	var no := boton_aviso(botones, "b_cancelar", Idioma.t("Cancelar"), cerrar_aviso)
+	for b: Button in [si, no]:
+		var otro: Button = no if b == si else si
+		b.focus_neighbor_left = b.get_path_to(otro)
+		b.focus_neighbor_right = b.get_path_to(otro)
+		b.focus_neighbor_top = b.get_path_to(b)
+		b.focus_neighbor_bottom = b.get_path_to(b)
+	no.grab_focus.call_deferred()
+	info.text = Idioma.t("Lo que gastaste en los talentos no se devuelve.")
+
+
+# Un botón de la ventanita de aviso, como los de Windows 95: con relieve, más claro con el ratón encima y con el punteado
+# de «marcado» con el teclado o el mando
+func boton_aviso(padre: Container, nombre: String, texto: String, al_pulsar: Callable) -> Button:
+	var b := Button.new()
+	b.name = nombre
+	b.text = texto
+	b.custom_minimum_size = Vector2(130, 32)
+	b.focus_mode = Control.FOCUS_ALL
+	for estado in ["normal", "hover", "pressed", "focus", "hover_pressed"]:
+		b.add_theme_stylebox_override(estado, caja(TARJETA_LUZ if estado in ["hover", "hover_pressed"] else TARJETA, TARJETA, 0, 0, 4))
+	for c in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_hover_pressed_color"]:
+		b.add_theme_color_override(c, TINTA)
+	b.add_theme_constant_override("outline_size", 0)
+	b.draw.connect(func():
+		relieve(b, b.button_pressed, 2.0)
+		if b.has_focus():
+			var r := Rect2(Vector2(5, 5), b.size - Vector2(10, 10))
+			for lado in [[r.position, Vector2(r.end.x, r.position.y)], [Vector2(r.end.x, r.position.y), r.end],
+					[r.end, Vector2(r.position.x, r.end.y)], [Vector2(r.position.x, r.end.y), r.position]]:
+				b.draw_dashed_line(lado[0], lado[1], TINTA, 1.0, 2.0))
+	b.pressed.connect(al_pulsar)
+	padre.add_child(b)
+	return b
+
+
+# Quita la ventanita de aviso; "volver": deja marcado otra vez «Resetear talentos» (al cancelar)
+func cerrar_aviso(volver := true) -> void:
+	if aviso == null:
 		return
-	seguro_resetear = false
-	s = Talentos.resetear()
+	aviso.queue_free()
+	aviso = null
+	if volver and ventana:
+		var b := ventana.find_child("b_resetear", true, false)
+		if b:
+			b.grab_focus()
+		info.text = Idioma.t("Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve.")
+
+
+# «Sí, resetear» en la ventanita: quita todos los puntos (lo gastado no se devuelve) y Johnny pierde lo que le daban
+func reseteo_confirmado() -> void:
+	cerrar_aviso(false)
+	var s := Talentos.resetear()
+	if s.is_empty():
+		return
 	Sonido.tocar("compra")
 	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	partida.aplicar_talentos(s.talentos)
@@ -1340,7 +1446,9 @@ func caja(color: Color, borde: Color, grosor: int, redondeo: int, margen: int) -
 func _unhandled_input(evento: InputEvent) -> void:
 	if fondo and (evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa")):
 		get_viewport().set_input_as_handled()
-		if abierta != "":
+		if aviso:
+			cerrar_aviso()   # (la ventanita de «¿Seguro?», antes que el programa)
+		elif abierta != "":
 			abrir("")
 		else:
 			apagar()

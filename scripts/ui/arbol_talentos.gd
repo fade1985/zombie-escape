@@ -72,7 +72,8 @@ func montar(o: Node, guardado: Dictionary) -> void:
 	resized.connect(colocar)
 
 
-# «Resetear talentos»: un botón de la chapa con su nombre, lo que devuelve y, a la derecha, «Resetear» o «¿Seguro?»
+# «Resetear talentos»: un botón de la chapa con las herramientas y su nombre (al pulsarlo, el ordenador pregunta con una
+# ventanita: ordenador.preguntar_reseteo)
 func montar_resetear() -> void:
 	var marco := PanelContainer.new()
 	marco.name = "resetear"
@@ -93,17 +94,18 @@ func montar_resetear() -> void:
 	textos.add_theme_constant_override("separation", -2)
 	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fila.add_child(textos)
-	var en_el_arbol := Talentos.puestos(s)
 	var se_puede := Talentos.se_puede_resetear(s)
-	textos.add_child(etiqueta(Idioma.t("Resetear talentos"), TEXTO if se_puede else TEXTO_SUAVE))
-	textos.add_child(etiqueta(Idioma.t("No devuelve el dinero") if en_el_arbol > 0 else Idioma.t("No hay puntos puestos"), TEXTO_SUAVE))
-	var marca := etiqueta(Idioma.t("¿Seguro?") if ordenador.seguro_resetear else Idioma.t("Resetear"), Color.WHITE)
-	marca.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	var fondo_marca := StyleBoxFlat.new()
-	fondo_marca.bg_color = Color("#a33a26") if ordenador.seguro_resetear else (Color("#4a4f58") if se_puede else APAGADO)
-	fondo_marca.set_content_margin_all(4)
-	marca.add_theme_stylebox_override("normal", fondo_marca)
-	fila.add_child(marca)
+	var herramientas := TextureRect.new()
+	herramientas.texture = icono("herramientas")
+	herramientas.custom_minimum_size = Vector2(24, 24)
+	herramientas.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	herramientas.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	herramientas.modulate = Color.WHITE if se_puede else Color(0.6, 0.6, 0.6, 0.7)
+	fila.add_child(herramientas)
+	fila.move_child(herramientas, 0)
+	var nombre := etiqueta(Idioma.t("Resetear talentos"), TEXTO if se_puede else TEXTO_SUAVE)
+	nombre.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	textos.add_child(nombre)
 	resetear = Button.new()
 	resetear.name = "b_resetear"
 	resetear.flat = true

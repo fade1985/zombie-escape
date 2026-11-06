@@ -5057,29 +5057,9 @@ msgstr "o botão da mochila, embaixo do minimapa"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "o botão de pausa, embaixo do minimapa"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear talentos"
 msgstr "Resetar talentos"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No devuelve el dinero"
-msgstr "Não devolve o dinheiro"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No hay puntos puestos"
-msgstr "Nenhum ponto gasto"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "¿Seguro?"
-msgstr "Certeza?"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Resetear"
-msgstr "Resetar"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Dólares guardados"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Necesitas %s al máximo"
@@ -6685,12 +6665,28 @@ msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s. Aperte para subir ($%d)."
 
 #: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Dólares guardados"
+
+#: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
 msgstr "Você não gastou nenhum ponto."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
-msgstr "Certeza? Aperte de novo para tirar todos os pontos da árvore. Os $%d que você gastou não voltam."
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
+msgstr "Certeza? Você vai perder todo o dinheiro investido nos talentos ($%d). A árvore vai ficar vazia para distribuir de novo."
+
+#: scripts/ui/ordenador.gd
+msgid "Sí, resetear"
+msgstr "Sim, resetar"
+
+#: scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Cancelar"
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que gastaste en los talentos no se devuelve."
+msgstr "O que você gastou nos talentos não é devolvido."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."

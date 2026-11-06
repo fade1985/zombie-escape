@@ -5050,29 +5050,9 @@ msgstr "小地图下方的背包按钮"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "小地图下方的暂停按钮"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear talentos"
 msgstr "重置天赋"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No devuelve el dinero"
-msgstr "不退钱"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No hay puntos puestos"
-msgstr "没有已分配的点数"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "¿Seguro?"
-msgstr "确定？"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Resetear"
-msgstr "重置"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "存下的美元"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Necesitas %s al máximo"
@@ -6665,12 +6645,28 @@ msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s。点击升级（$%d）。"
 
 #: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "存下的美元"
+
+#: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
 msgstr "你还没有分配任何点数。"
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
-msgstr "确定吗？再按一次清空天赋树上的所有点数。已花掉的 $%d 不会退还。"
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
+msgstr "确定吗？你会失去投入天赋的所有钱（$%d）。天赋树会清空，可以重新分配。"
+
+#: scripts/ui/ordenador.gd
+msgid "Sí, resetear"
+msgstr "是，重置"
+
+#: scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "取消"
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que gastaste en los talentos no se devuelve."
+msgstr "花在天赋上的钱不会退还。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."

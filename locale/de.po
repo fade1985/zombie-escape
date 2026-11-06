@@ -5057,29 +5057,9 @@ msgstr "dem Rucksack-Knopf unter der Minikarte"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "dem Pause-Knopf unter der Minikarte"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear talentos"
 msgstr "Talente zurücksetzen"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No devuelve el dinero"
-msgstr "Kein Geld zurück"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No hay puntos puestos"
-msgstr "Keine Punkte verteilt"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "¿Seguro?"
-msgstr "Sicher?"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Resetear"
-msgstr "Zurücksetzen"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Gesparte Dollar"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Necesitas %s al máximo"
@@ -6685,12 +6665,28 @@ msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s. Drück zum Steigern ($%d)."
 
 #: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Gesparte Dollar"
+
+#: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
 msgstr "Du hast noch keinen Punkt verteilt."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
-msgstr "Sicher? Drück nochmal, um alle Punkte aus dem Baum zu entfernen. Die ausgegebenen $%d bekommst du nicht zurück."
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
+msgstr "Sicher? Du verlierst das ganze Geld, das du in Talente gesteckt hast ($%d). Der Baum wird leer und kann neu verteilt werden."
+
+#: scripts/ui/ordenador.gd
+msgid "Sí, resetear"
+msgstr "Ja, zurücksetzen"
+
+#: scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Abbrechen"
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que gastaste en los talentos no se devuelve."
+msgstr "Was du für Talente ausgegeben hast, bekommst du nicht zurück."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."

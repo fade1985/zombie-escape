@@ -5057,29 +5057,9 @@ msgstr "le bouton du sac à dos, sous la mini-carte"
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "le bouton de pause, sous la mini-carte"
 
-#: scripts/ui/arbol_talentos.gd
+#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear talentos"
 msgstr "Réinitialiser les talents"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No devuelve el dinero"
-msgstr "Pas de remboursement"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "No hay puntos puestos"
-msgstr "Aucun point placé"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "¿Seguro?"
-msgstr "Sûr ?"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Resetear"
-msgstr "Réinitialiser"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Dollars économisés"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Necesitas %s al máximo"
@@ -6685,12 +6665,28 @@ msgid "%s. Pulsa para subirlo ($%d)."
 msgstr "%s. Appuie pour le monter ($%d)."
 
 #: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Dollars économisés"
+
+#: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
 msgstr "Tu n'as placé aucun point."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol. Los $%d que gastaste no se devuelven."
-msgstr "Sûr ? Appuie encore pour retirer tous les points de l'arbre. Les $%d dépensés ne sont pas remboursés."
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
+msgstr "Sûr ? Tu vas perdre tout l'argent investi dans les talents ($%d). L'arbre sera vide pour être redistribué."
+
+#: scripts/ui/ordenador.gd
+msgid "Sí, resetear"
+msgstr "Oui, réinitialiser"
+
+#: scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Annuler"
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que gastaste en los talentos no se devuelve."
+msgstr "Ce que tu as dépensé en talents n'est pas remboursé."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
