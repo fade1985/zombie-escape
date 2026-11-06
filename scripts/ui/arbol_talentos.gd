@@ -93,12 +93,16 @@ func montar_resetear() -> void:
 	var textos := VBoxContainer.new()
 	textos.add_theme_constant_override("separation", -2)
 	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	textos.size_flags_vertical = Control.SIZE_SHRINK_CENTER   # el nombre, a la altura de la mitad del icono
 	fila.add_child(textos)
 	var se_puede := Talentos.se_puede_resetear(s)
 	var herramientas := TextureRect.new()
 	herramientas.texture = icono("herramientas")
-	herramientas.custom_minimum_size = Vector2(24, 24)
+	herramientas.custom_minimum_size = Vector2(32, 32)
 	herramientas.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	herramientas.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	herramientas.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	herramientas.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	herramientas.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	herramientas.modulate = Color.WHITE if se_puede else Color(0.6, 0.6, 0.6, 0.7)
 	fila.add_child(herramientas)
