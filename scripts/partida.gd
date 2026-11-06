@@ -185,7 +185,6 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): decir(Idioma.t("Modo de atacar: %s") % Idioma.t(nombre), 1.6))
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")

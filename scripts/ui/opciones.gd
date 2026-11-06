@@ -1,12 +1,13 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene cuatro pestañas:
-#   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), el modo de atacar (se guarda), la
+#   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), la
 #     música, el sonido, la pantalla completa y el temblor de pantalla (Normal, Suave o Sin temblor: lo que tiembla la
 #     cámara y lo que se frena el juego al golpear, temblor.gd; se guarda). En el móvil, además, el tamaño y la transparencia de los botones
 #     táctiles y la vibración (se guardan).
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
 #     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
 #     En el móvil, qué hace cada botón táctil.
-#   - Ayudas: para que más gente pueda terminar los edificios (vida entera, pistola sin fin, lanzar apuntando solo). Se guardan y se
+#   - Ayudas: para que más gente pueda terminar los edificios (vida entera, pistola sin fin, lanzar apuntando solo,
+#     disparo asistido). Se guardan y se
 #     notan al momento, también desde la pausa (johnny.gd y hud.gd las miran con Guardado.ajuste). Y los
 #     tutoriales (tutoriales.gd): si salen sus ventanas, y que vuelvan a salir todos.
 #   - Créditos: quién ha hecho el juego (AUTORES), con qué, y las letras que no son nuestras (LETRAS_DE_OTROS). Su botón
@@ -40,12 +41,6 @@ const LETRAS_DE_OTROS := [
 # Todos los textos de las tablas de aquí abajo se traducen al enseñarlos (Idioma.t); las marcas son para
 # tools/traducciones.py (docs/IDIOMAS.md)
 # [traducir]
-# Lo que se explica de cada modo de atacar
-const MODOS_AYUDA := {
-	"asistido": "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte.",
-	"libre": "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil.",
-}
-
 # Las filas de la pestaña Controles: el nombre y las acciones del mapa de controles (project.godot) que juntan
 # (apuntar no se cambia aquí: es el ratón o el stick derecho)
 const FILAS := [
@@ -53,7 +48,7 @@ const FILAS := [
 	["Moverse: izquierda", ["izquierda"]],
 	["Moverse: abajo", ["abajo"]],
 	["Moverse: derecha", ["derecha"]],
-	["Apuntar (modo libre)", []],
+	["Apuntar", []],
 	["Atacar", ["atacar"]],
 	["Esquivar", ["esquivar"]],
 	["Cambiar de arma", ["cambiar_arma"]],
@@ -64,19 +59,18 @@ const FILAS := [
 	["Usar botiquín", ["usar_botiquin"]],
 	["Inventario", ["inventario"]],
 	["Pausa", ["pausa"]],
-	["Modo de atacar", ["cambiar_modo"]],
 ]
 
 # En el móvil, los botones táctiles (scripts/ui/tactil.gd)
 const TACTIL := [
 	["Moverse", "Joystick: toca y arrastra en la mitad izquierda"],
-	["Apuntar", "Solo en \"apuntar libre\": el joystick de abajo a la derecha"],
+	["Apuntar", "El joystick de abajo a la derecha (sin él con «Disparo asistido»)"],
 	["Esquivar", "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"],
 	["Armas", "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"],
 	["Lanzar", "Arrastra desde el botón para apuntar y suelta para tirar"],
 	["Molotov o granada", "El botoncito de al lado de lanzar"],
 	["Vendas y botiquín", "Los botones de debajo del minimapa (solo salen si llevas)"],
-	["Modo, inventario y pausa", "Los botones de debajo del minimapa"],
+	["Inventario y pausa", "Los botones de debajo del minimapa"],
 ]
 
 # Los ajustes del móvil (tactil.gd): los valores por los que va pasando cada botón, con su nombre.
@@ -247,13 +241,6 @@ func general() -> void:
 		contenido.add_theme_constant_override("separation", 8)
 		contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		caja.add_child(contenido)
-	var modo: String = Guardado.cargar().ajustes.modo
-	var ayuda := Label.new()
-	ayuda.theme_type_variation = "Sub"
-	ayuda.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	ayuda.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	ayuda.custom_minimum_size.x = 560
-	ayuda.text = Idioma.t(MODOS_AYUDA[modo])
 	# El idioma: un botón por idioma, cada uno con su nombre en su idioma (y el rótulo, en dos), para encontrarlo aunque
 	# el juego esté en otro. El de ahora, con las letras amarillas como la pestaña en la que estás
 	var rotulo_idioma := Label.new()
@@ -287,14 +274,6 @@ func general() -> void:
 		avisar.text = Idioma.t("Avisar de un texto mal traducido")
 		avisar.pressed.connect(func(): OS.shell_open(enlace_avisos))
 		fila_idioma.add_child(avisar)
-	var boton_modo := opcion(Idioma.t("Modo de atacar: %s") % Idioma.t(modos()[modo]))
-	boton_modo.pressed.connect(func():
-		var orden: Array = modos().keys()
-		var nuevo: String = orden[(orden.find(Guardado.cargar().ajustes.modo) + 1) % orden.size()]
-		poner_modo(nuevo)
-		boton_modo.text = Idioma.t("Modo de atacar: %s") % Idioma.t(modos()[nuevo])
-		ayuda.text = Idioma.t(MODOS_AYUDA[nuevo]))
-	contenido.add_child(ayuda)
 	var musica := opcion(texto_musica())
 	musica.pressed.connect(func():
 		Guardado.cambiar(func(g): g.ajustes.musica = not g.ajustes.musica)
@@ -320,16 +299,29 @@ func general() -> void:
 	contenido = fuera
 
 
-# Las ayudas: cada una, un botón de Sí/No con lo que hace debajo
+# Las ayudas: cada una, un botón de Sí/No con lo que hace debajo. El aviso de los logros arriba y las ayudas en una
+# caja con barra, como Controles: ya no caben todas en los 640 de alto
 func ayudas() -> void:
-	var aviso := explicar(Idioma.t("Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."))
+	var aviso := explicar(Idioma.t("Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."))
 	aviso.add_theme_color_override("font_color", Tema.AMARILLO)
+	var fuera := contenido
+	var caja := ScrollContainer.new()
+	caja.custom_minimum_size = Vector2(620, 330)
+	caja.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	caja.follow_focus = true
+	fuera.add_child(caja)
+	contenido = VBoxContainer.new()
+	contenido.add_theme_constant_override("separation", 8)
+	contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	caja.add_child(contenido)
 	rotar(Idioma.t("Vida entera"), "vida_entera", SI_NO)
 	explicar(Idioma.t("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."))
 	rotar(Idioma.t("Pistola sin fin"), "pistola_sin_fin", SI_NO)
 	explicar(Idioma.t("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."))
 	rotar(Idioma.t("Lanzar apuntando solo"), "lanzar_solo", SI_NO)
 	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."))
+	rotar(Idioma.t("Disparo asistido"), "disparo_asistido", SI_NO)
+	explicar(Idioma.t("Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."))
 	rotar(Idioma.t("Tutoriales"), "tutoriales", SI_NO)
 	explicar(Idioma.t("La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."))
 	var otra_vez := opcion(Idioma.t("Que vuelvan a salir todos"))
@@ -338,6 +330,7 @@ func ayudas() -> void:
 		Sonido.tocar("click")
 		otra_vez.text = Idioma.t("Volverán a salir desde el principio")
 		otra_vez.disabled = true)
+	contenido = fuera
 
 
 func explicar(texto: String) -> Label:
@@ -427,17 +420,6 @@ func rotar(nombre: String, clave: String, valores: Array) -> void:
 		Guardado.cambiar(func(g): g.ajustes[clave] = nuevo[0])
 		Tactil.ajustar()
 		b.text = "%s: %s" % [nombre, Idioma.t(nuevo[1])])
-
-
-# Los nombres de los modos están en johnny.gd (MODOS)
-func modos() -> Dictionary:
-	return preload("res://scripts/johnny.gd").MODOS
-
-
-func poner_modo(nuevo: String) -> void:
-	Guardado.cambiar(func(g): g.ajustes.modo = nuevo)
-	if johnny:
-		johnny.poner_modo(nuevo)
 
 
 func opcion(texto: String) -> Button:

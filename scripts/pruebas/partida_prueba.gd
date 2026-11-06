@@ -281,8 +281,8 @@
 #                       --todo, todos y no solo los 25 peores                                  [prueba_letras.gd]
 #   --tildes            una foto ampliada por idioma (captura-tildes-<idioma>.png) con las tildes, ñ, ü, ¿ y ¡: que ninguna
 #                       salga al revés ni cambiada                                             [prueba_letras.gd]
-#   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el aviso del modo de
-#                       atacar (F1), en el móvil y las cifras de la vida                     [prueba_varias.gd]
+#   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el modo de
+#                       atacar con la ayuda Disparo asistido, en el móvil y la vida        [prueba_varias.gd]
 #   --hudmando          las teclas pegadas a las casillas del HUD (cambiar de arma y de lanzable, las curas): con el
 #                       teclado, las suyas; tocando el mando, los dibujos de sus botones (M44)  [prueba_varias.gd]
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una, ver lo que cambia y el efecto (M54) [prueba_larga.gd]

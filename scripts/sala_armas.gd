@@ -449,7 +449,7 @@ func escribir() -> void:
 	l.append("Daño por segundo %s%s" % [decimal(dps, 1), con_recargas])
 	if w.has("efecto"):
 		l.append("Efecto: " + EFECTOS.get(w.efecto, w.efecto))
-	var modo := "Modo %s (F1)" % johnny.MODOS.get(johnny.modo, johnny.modo)
+	var modo := "Modo %s" % johnny.MODOS.get(johnny.modo, johnny.modo)
 	if is_instance_valid(diana):
 		modo += " · diana a %s casillas" % decimal(johnny.global_position.distance_to(diana.global_position) / Planta.CASILLA, 1)
 	l.append(modo)

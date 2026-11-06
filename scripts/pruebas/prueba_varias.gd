@@ -261,7 +261,7 @@ func probar_escudo() -> void:
 # Con "--captura --hud": el HUD (hud.gd), con las armas y los lanzables en la esquina de abajo a la derecha. Con
 # tres lanzables a mano, saca el HUD quieto (captura-hud.png), la barra con todas las cifras de la vida
 # (captura-hud-vida-123.png, -456 y -789), a medio cambiar de arma con la Q (captura-hud-cambio.png), ya cambiada, sin el nombre encima (captura-hud-q.png), a medio cambiar de lanzable con la
-# F (captura-hud-f.png), el aviso del modo de atacar (captura-hud-modo.png) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
+# F (captura-hud-f.png), el modo de atacar al cambiar la ayuda «Disparo asistido» (en la terminal) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
 func probar_hud() -> void:
 	set_process(false)
 	for t in ["granada", "atraedora"]:
@@ -285,14 +285,16 @@ func probar_hud() -> void:
 	lanzables.cambiar()
 	await get_tree().create_timer(0.08).timeout
 	Captura.foto("captura-hud-f.png")
-	# el modo de atacar con su tecla (F1 o C): ya no hay línea de teclas abajo, sale un aviso
+	# el modo de atacar cambia con la ayuda "Disparo asistido" (ya no tiene tecla; la partida de prueba la lleva puesta)
 	var modo_antes: String = johnny.modo
-	johnny.cambiar_modo()
-	await get_tree().create_timer(0.3).timeout
-	print("HUD · modo de atacar: %s → %s, aviso: %s" % [modo_antes, johnny.modo, aviso.text])
-	Captura.foto("captura-hud-modo.png")
-	johnny.poner_modo(modo_antes)
-	Guardado.cambiar(func(g): g.ajustes.modo = modo_antes)
+	var ayuda_antes: bool = Guardado.ajuste("disparo_asistido")
+	Guardado.cambiar(func(g): g.ajustes.disparo_asistido = not ayuda_antes)
+	await get_tree().create_timer(0.1).timeout
+	var modo_con: String = johnny.modo
+	Guardado.cambiar(func(g): g.ajustes.disparo_asistido = ayuda_antes)
+	await get_tree().create_timer(0.1).timeout
+	print("HUD · modo de atacar: %s → al cambiar la ayuda %s → al dejarla como estaba %s · tecla cambiar_modo: %s (esperado: asistido → libre → asistido, false)" % [
+		modo_antes, modo_con, johnny.modo, InputMap.has_action("cambiar_modo")])
 	await get_tree().create_timer(0.5).timeout
 	Tactil.activo = true   # (solo el HUD: los botones del móvil no se montan a mitad de partida)
 	await get_tree().create_timer(0.1).timeout

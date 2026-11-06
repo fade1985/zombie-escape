@@ -38,10 +38,11 @@ func fotos_ayudas() -> void:
 	var o := Opciones.abrir(self, null, johnny)
 	o.ver("ayudas")
 	await get_tree().process_frame
-	for b in o.contenido.get_children():
-		if b is Button:
-			b.pressed.emit()
+	for b in o.contenido.find_children("*", "Button", true, false):   # (van en una caja con barra)
+		b.pressed.emit()
 	await get_tree().create_timer(0.3).timeout
+	print("Ayudas: Disparo asistido %s, Johnny en el modo %s (la partida de prueba la lleva puesta: esperado false, libre)" % [
+		Guardado.ajuste("disparo_asistido"), johnny.modo])
 	Captura.foto("captura-ayudas-opciones.png")
 	o.cerrar()
 	probar.call("sí")

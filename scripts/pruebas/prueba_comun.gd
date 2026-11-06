@@ -10,6 +10,9 @@ func _ready() -> void:
 
 func preparar_prueba() -> void:
 	Guardado.usar("user://guardado-prueba")   # la prueba no toca el guardado de verdad (ni sus ajustes)
+	# Johnny apunta y ataca solo (la ayuda "Disparo asistido"), como siempre en las pruebas: así limpia los
+	# apartamentos y pelea con los jefes sin que nadie juegue. La que quiera el modo libre se lo pone (johnny.modo)
+	Guardado.cambiar(func(g): g.ajustes.disparo_asistido = true)
 	SalaArmas.escondido = false   # la sala de pruebas, con sus líneas y su panel de daño a la vista (en el juego empieza sin ellos)
 	# sin el repaso de los logros que salen del guardado (logros.gd, revisar): sus avisos saldrían en las fotos de
 	# cualquier prueba; la de --logros lo hace a mano

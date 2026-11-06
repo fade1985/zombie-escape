@@ -128,7 +128,7 @@ const JEFE_APURADO := 0.1     # Por los pelos: la parte de su vida máxima que l
 const EXPRES := 15 * 60.0     # Jornada exprés: los segundos de partida, como mucho
 const PRIMER_REPASO := 1.5    # al empezar la partida, lo que tarda el primer repaso del guardado (revisar)
 # Los ajustes de las ayudas que quitan los logros (los Tutoriales no: no ayudan a jugar)
-const AYUDAS := ["vida_entera", "pistola_sin_fin", "lanzar_solo"]
+const AYUDAS := ["vida_entera", "pistola_sin_fin", "lanzar_solo", "disparo_asistido"]
 
 var partida: Node
 var con_ayudas := false   # si en esta partida ha estado encendida alguna ayuda (aunque ya se haya apagado)

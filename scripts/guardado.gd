@@ -62,15 +62,15 @@ const NUEVO := {
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"en_curso": "",       # la partida a medias, al empezar la planta en la que va (partida_guardada.gd; "" = ninguna)
 	"retos": {},          # el reto del día (reto.gd): la marca de hoy en cada edificio: {"apartamentos": {...}} (ver RETO)
-	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
+	# teclas: los controles cambiados en Opciones (controles.gd)
 	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)
-	# vida_entera, pistola_sin_fin y lanzar_solo: las ayudas de la pestaña Ayudas de Opciones (johnny.gd y
+	# vida_entera, pistola_sin_fin, lanzar_solo y disparo_asistido: las ayudas de la pestaña Ayudas de Opciones (johnny.gd y
 	# lanzables.gd las miran) · tutoriales: si salen las ventanas de los tutoriales (tutoriales.gd)
 	# idioma: "es" o "en", el elegido en Opciones (idioma.gd); "" = nunca se ha elegido: el del sistema
 	# temblor: cuánto tiembla la pantalla y cuánto se frena el juego al golpear (temblor.gd): 1 normal, 0,5 suave, 0 nada
-	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
+	"ajustes": {"musica": true, "teclas": {},
 		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true, "temblor": 1.0,
-		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true, "idioma": "", "pantalla_completa": false},
+		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "disparo_asistido": false, "tutoriales": true, "idioma": "", "pantalla_completa": false},
 }
 
 # alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"

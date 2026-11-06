@@ -248,7 +248,7 @@ func hecha(id: String) -> bool:
 		"esquivar":
 			return johnny.esquiva_t > 0.0
 		"atacar":
-			return johnny.ataque_t >= 0.0 or (Guardado.ajuste("modo") != "libre" and desde > 4.0)
+			return johnny.ataque_t >= 0.0 or (Guardado.ajuste("disparo_asistido") and desde > 4.0)
 		"pistola":
 			return johnny.mano == "fuego"
 		"recargar":

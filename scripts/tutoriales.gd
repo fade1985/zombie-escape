@@ -24,7 +24,7 @@ const GRUPOS := ["Lo básico", "Armas", "Plantas y jefes", "Eventos sorpresa", "
 const LISTA := {
 	"jugar": {"grupo": "Lo básico", "titulo": "Cómo se juega", "icono": "skin-conserje", "cuando": "Al empezar",
 		"lineas": ["Muévete con {moverse}.",
-			"{atacar_modo} El modo de atacar se cambia con {cambiar_modo}.",
+			"{atacar_modo}",
 			"Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño.",
 			"Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."]},
 	"apartamentos": {"grupo": "Lo básico", "titulo": "Limpia los apartamentos", "icono": "puerta",
@@ -158,7 +158,7 @@ const TACTIL := {
 	"recargar": "el botón del arma a distancia, con ella en la mano", "lanzar": "el botón de lanzar",
 	"cambiar_lanzable": "el botoncito de al lado de lanzar", "usar_vendas": "el botón de las vendas, bajo el minimapa",
 	"usar_botiquin": "el botón del botiquín, bajo el minimapa", "inventario": "el botón de la mochila, bajo el minimapa",
-	"pausa": "el botón de pausa, bajo el minimapa", "cambiar_modo": "el botón del modo, bajo el minimapa",
+	"pausa": "el botón de pausa, bajo el minimapa",
 }
 # [/traducir]
 
@@ -237,10 +237,11 @@ static func con_teclas(texto_traducido: String) -> String:
 	return t
 
 
-# Cómo se ataca, según el modo elegido (johnny.gd, MODOS)
+# Cómo se ataca: apuntando tú, o solo con la ayuda "Disparo asistido" (johnny.gd, MODOS)
 static func atacar_modo() -> String:
-	if Guardado.ajuste("modo") == "libre":
-		return Idioma.t("Apunta y ataca con {apuntar}.") if Tactil.activo else Idioma.t("Apunta con {apuntar} y ataca con {atacar}.")
+	if not Guardado.ajuste("disparo_asistido"):
+		var como := Idioma.t("Apunta y ataca con {apuntar}.") if Tactil.activo else Idioma.t("Apunta con {apuntar} y ataca con {atacar}.")
+		return como + " " + Idioma.t("Si prefieres que Johnny apunte solo, en Opciones → Ayudas está «Disparo asistido».")
 	return Idioma.t("Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte.")
 
 

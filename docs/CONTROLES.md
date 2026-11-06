@@ -15,8 +15,7 @@ cartel del final hablan igual de botones o de teclas. Se prueba con `-- --captur
 |---|---|---|
 | Moverse | WASD o flechas | stick izquierdo |
 | Esquivar | Espacio o Mayús | A o LB |
-| Atacar | según el modo: solo (asistido) o ratón + clic o J (libre) | RT / stick derecho |
-| Cambiar modo de atacar | F1 o C | cruceta abajo |
+| Atacar | ratón + clic o J; solo, con la ayuda *Disparo asistido* | RT / stick derecho |
 | Cambiar de arma (cuerpo a cuerpo / distancia) | Q o rueda | Y |
 | Recargar | R | X |
 | Lanzar (mantener para apuntar, soltar para lanzar) | E o clic derecho | LT |
@@ -44,9 +43,10 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   esquivaba. Al enchufar uno así, `Controles.ordenar_mando` le da el orden estándar del navegador (`ORDEN_WEB`); a los
   reconocidos no los toca. Se prueba solo en la web, con un mando de mentira que la prueba enchufa desde el navegador:
   exportar a `web/` (de desarrollo), arrancar su servidor y `py tools/medir_web.py 45 --captura --mandoweb`.
-- **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
+- **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
   tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
-  fin*, *Lanzar apuntando solo*; no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
+  fin*, *Lanzar apuntando solo*, *Disparo asistido* (Johnny apunta y ataca solo; sin ella, el modo libre, el de
+  siempre: ya no hay tecla para cambiarlo); no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
   apague luego; los ya conseguidos se conservan y se cobran; y *Tutoriales*, con el botón *Que vuelvan a salir
   todos*), la
   lista de controles (pulsar la casilla y luego la tecla; si ya la usaba otra acción, se intercambian) y la pestaña
@@ -175,9 +175,9 @@ vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado
 ## Móvil (táctil)
 
 `scripts/ui/tactil.gd`, solo mientras se juega. Joystick izquierdo (mitad izquierda de la pantalla); abajo a la
-derecha, según el modo: esquivar grande (asistido) o joystick derecho (libre).
+derecha, según el modo: joystick derecho (libre, el de siempre) o esquivar grande (con *Disparo asistido*).
 En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de a distancia en la mano recarga) y lanzar (arrastrar y
-soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). En los menús el dedo hace
+soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). En los menús el dedo hace
 de ratón. En táctil la pantalla se agranda sin redondear.
 Con un ratón (un móvil Android con ratón y teclado, o un ordenador con pantalla táctil), al moverlo o hacer clic se
 esconden los botones y se apunta con él como en el ordenador; al tocar la pantalla vuelven (`Tactil.con_dedo`).

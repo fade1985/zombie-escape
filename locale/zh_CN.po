@@ -3015,10 +3015,6 @@ msgstr "投掷零件"
 msgid "Botiquín"
 msgstr "急救包"
 
-#: scripts/partida.gd scripts/ui/opciones.gd
-msgid "Modo de atacar: %s"
-msgstr "攻击模式：%s"
-
 #: scripts/partida.gd
 msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
 msgstr "除颤器！你满血复活（每栋楼仅限一次）"
@@ -4419,6 +4415,10 @@ msgid "Apunta con {apuntar} y ataca con {atacar}."
 msgstr "用{apuntar}瞄准，用{atacar}攻击。"
 
 #: scripts/tutoriales.gd
+msgid "Si prefieres que Johnny apunte solo, en Opciones → Ayudas está «Disparo asistido»."
+msgstr "如果想让 Johnny 自己瞄准，可以在“选项 → 辅助”里开启“辅助射击”。"
+
+#: scripts/tutoriales.gd
 msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
 msgstr "Johnny会自动瞄准并攻击最近的僵尸：你只管走位。"
 
@@ -4483,8 +4483,8 @@ msgid "Muévete con {moverse}."
 msgstr "用{moverse}移动。"
 
 #: scripts/tutoriales.gd
-msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
-msgstr "{atacar_modo}攻击模式可以用{cambiar_modo}切换。"
+msgid "{atacar_modo}"
+msgstr "{atacar_modo}"
 
 #: scripts/tutoriales.gd
 msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
@@ -5009,10 +5009,6 @@ msgstr "小地图下方的背包按钮"
 #: scripts/tutoriales.gd
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "小地图下方的暂停按钮"
-
-#: scripts/tutoriales.gd
-msgid "el botón del modo, bajo el minimapa"
-msgstr "小地图下方的模式按钮"
 
 #: scripts/ui/hud.gd
 msgid "escudo %d"
@@ -6067,8 +6063,8 @@ msgid "Vibración"
 msgstr "振动"
 
 #: scripts/ui/opciones.gd
-msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
-msgstr "开启这三项辅助中的任意一项后，该局无法获得成就（即使之后关闭也一样）。已经获得的成就不受影响。"
+msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "开启其中任何一项辅助后，本局无法获得成就（即使之后关闭也一样）。已经获得的成就会保留。"
 
 #: scripts/ui/opciones.gd
 msgid "Vida entera"
@@ -6093,6 +6089,14 @@ msgstr "自动瞄准投掷"
 #: scripts/ui/opciones.gd
 msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
 msgstr "燃烧瓶、手雷和其他投掷物会自动飞向你看到的最近的僵尸。如果一个都看不到，就照常投掷。"
+
+#: scripts/ui/opciones.gd
+msgid "Disparo asistido"
+msgstr "辅助射击"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny会自动瞄准并攻击最近的僵尸。你只需要专心走位。"
 
 #: scripts/ui/opciones.gd
 msgid "Tutoriales"
@@ -6215,14 +6219,6 @@ msgid "Cambiado a %s"
 msgstr "已改为%s"
 
 #: scripts/ui/opciones.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
-msgstr "Johnny会自动瞄准并攻击最近的僵尸。你只需要专心走位。"
-
-#: scripts/ui/opciones.gd
-msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
-msgstr "由你瞄准：用鼠标、手柄右摇杆或手机右侧的摇杆。"
-
-#: scripts/ui/opciones.gd
 msgid "Moverse: arriba"
 msgstr "移动：上"
 
@@ -6239,8 +6235,8 @@ msgid "Moverse: derecha"
 msgstr "移动：右"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar (modo libre)"
-msgstr "瞄准（自由瞄准）"
+msgid "Apuntar"
+msgstr "瞄准"
 
 #: scripts/ui/opciones.gd
 msgid "Atacar"
@@ -6275,10 +6271,6 @@ msgid "Usar botiquín"
 msgstr "使用急救包"
 
 #: scripts/ui/opciones.gd
-msgid "Modo de atacar"
-msgstr "攻击模式"
-
-#: scripts/ui/opciones.gd
 msgid "Moverse"
 msgstr "移动"
 
@@ -6287,12 +6279,8 @@ msgid "Joystick: toca y arrastra en la mitad izquierda"
 msgstr "摇杆：在屏幕左半边按住拖动"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar"
-msgstr "瞄准"
-
-#: scripts/ui/opciones.gd
-msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
-msgstr "仅限“自由瞄准”：右下角的摇杆"
+msgid "El joystick de abajo a la derecha (sin él con «Disparo asistido»)"
+msgstr "右下角的摇杆（开启“辅助射击”时没有）"
 
 #: scripts/ui/opciones.gd
 msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
@@ -6323,8 +6311,8 @@ msgid "Los botones de debajo del minimapa (solo salen si llevas)"
 msgstr "小地图下方的按钮（身上有才会出现）"
 
 #: scripts/ui/opciones.gd
-msgid "Modo, inventario y pausa"
-msgstr "模式、物品栏和暂停"
+msgid "Inventario y pausa"
+msgstr "物品栏和暂停"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa"
@@ -7203,7 +7191,3 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
-
-#, sin-usar
-msgid "Aseo"
-msgstr "厕所"

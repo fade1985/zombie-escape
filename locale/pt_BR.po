@@ -3017,10 +3017,6 @@ msgstr "Peça arremessável"
 msgid "Botiquín"
 msgstr "Kit médico"
 
-#: scripts/partida.gd scripts/ui/opciones.gd
-msgid "Modo de atacar: %s"
-msgstr "Modo de ataque: %s"
-
 #: scripts/partida.gd
 msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
 msgstr "Desfibrilador! Você volta com a vida cheia (só uma vez por prédio)"
@@ -4426,6 +4422,10 @@ msgid "Apunta con {apuntar} y ataca con {atacar}."
 msgstr "Mire com {apuntar} e ataque com {atacar}."
 
 #: scripts/tutoriales.gd
+msgid "Si prefieres que Johnny apunte solo, en Opciones → Ayudas está «Disparo asistido»."
+msgstr "Se preferir que o Johnny mire sozinho, em Opções → Ajudas tem \"Tiro assistido\"."
+
+#: scripts/tutoriales.gd
 msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
 msgstr "Johnny mira e ataca sozinho o zumbi mais próximo: você só se preocupa em se mexer."
 
@@ -4490,8 +4490,8 @@ msgid "Muévete con {moverse}."
 msgstr "Mova-se com {moverse}."
 
 #: scripts/tutoriales.gd
-msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
-msgstr "{atacar_modo} Troque o modo de ataque com {cambiar_modo}."
+msgid "{atacar_modo}"
+msgstr "{atacar_modo}"
 
 #: scripts/tutoriales.gd
 msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
@@ -5016,10 +5016,6 @@ msgstr "o botão da mochila, embaixo do minimapa"
 #: scripts/tutoriales.gd
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "o botão de pausa, embaixo do minimapa"
-
-#: scripts/tutoriales.gd
-msgid "el botón del modo, bajo el minimapa"
-msgstr "o botão do modo, embaixo do minimapa"
 
 #: scripts/ui/hud.gd
 msgid "escudo %d"
@@ -6085,8 +6081,8 @@ msgid "Vibración"
 msgstr "Vibração"
 
 #: scripts/ui/opciones.gd
-msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
-msgstr "Com alguma destas três ajudas ligada, não dá para conseguir conquistas nessa partida (mesmo se você desligar depois). As que você já tem continuam."
+msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "Com qualquer uma destas ajudas ligada, você não ganha conquistas nessa partida (mesmo se desligar depois). As que você já tem continuam."
 
 #: scripts/ui/opciones.gd
 msgid "Vida entera"
@@ -6111,6 +6107,14 @@ msgstr "Arremesso automático"
 #: scripts/ui/opciones.gd
 msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
 msgstr "O molotov, a granada e os outros arremessáveis vão sozinhos até o zumbi mais próximo que você vê. Se não vir nenhum, são arremessados como sempre."
+
+#: scripts/ui/opciones.gd
+msgid "Disparo asistido"
+msgstr "Tiro assistido"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny mira e ataca sozinho o zumbi mais próximo. Você só se preocupa em se mexer."
 
 #: scripts/ui/opciones.gd
 msgid "Tutoriales"
@@ -6233,14 +6237,6 @@ msgid "Cambiado a %s"
 msgstr "Mudado para %s"
 
 #: scripts/ui/opciones.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
-msgstr "Johnny mira e ataca sozinho o zumbi mais próximo. Você só se preocupa em se mexer."
-
-#: scripts/ui/opciones.gd
-msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
-msgstr "Você mira: com o mouse, com o analógico direito do controle ou com o joystick direito do celular."
-
-#: scripts/ui/opciones.gd
 msgid "Moverse: arriba"
 msgstr "Mover: cima"
 
@@ -6257,8 +6253,8 @@ msgid "Moverse: derecha"
 msgstr "Mover: direita"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar (modo libre)"
-msgstr "Mirar (modo livre)"
+msgid "Apuntar"
+msgstr "Mirar"
 
 #: scripts/ui/opciones.gd
 msgid "Atacar"
@@ -6293,10 +6289,6 @@ msgid "Usar botiquín"
 msgstr "Usar kit médico"
 
 #: scripts/ui/opciones.gd
-msgid "Modo de atacar"
-msgstr "Modo de ataque"
-
-#: scripts/ui/opciones.gd
 msgid "Moverse"
 msgstr "Mover"
 
@@ -6305,12 +6297,8 @@ msgid "Joystick: toca y arrastra en la mitad izquierda"
 msgstr "Joystick: toque e arraste na metade esquerda"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar"
-msgstr "Mirar"
-
-#: scripts/ui/opciones.gd
-msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
-msgstr "Só em \"mira livre\": o joystick do canto inferior direito"
+msgid "El joystick de abajo a la derecha (sin él con «Disparo asistido»)"
+msgstr "O joystick de baixo à direita (não aparece com \"Tiro assistido\")"
 
 #: scripts/ui/opciones.gd
 msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
@@ -6341,8 +6329,8 @@ msgid "Los botones de debajo del minimapa (solo salen si llevas)"
 msgstr "Os botões embaixo do minimapa (só aparecem se você tiver)"
 
 #: scripts/ui/opciones.gd
-msgid "Modo, inventario y pausa"
-msgstr "Modo, inventário e pausa"
+msgid "Inventario y pausa"
+msgstr "Inventário e pausa"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa"
@@ -7223,7 +7211,3 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
-
-#, sin-usar
-msgid "Aseo"
-msgstr "Banheiro"

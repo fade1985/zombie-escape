@@ -1,12 +1,12 @@
 # Los controles táctiles del móvil, como el #touch-ui del JS (src/input.js, index.html):
 #   - Joystick izquierdo: se toca en cualquier sitio de la mitad izquierda y se arrastra (sale donde se toca).
-#   - Abajo a la derecha, según el modo de atacar: esquivar en el asistido (como ataca solo, el botón que más
+#   - Abajo a la derecha, según el modo de atacar: esquivar en el asistido (la ayuda "Disparo asistido": como ataca solo, el botón que más
 #     se usa va donde descansa el pulgar, y lo demás más cerca a su alrededor) y un joystick derecho en el
 #     libre (apunta y dispara).
 #   - Alrededor, en arco: esquivar, las dos armas (tocar la otra la saca; tocar la de fuego que ya está en la
 #     mano, recarga) y lanzar (se arrastra desde él para apuntar y se suelta para tirar), con el ⇄ al lado
 #     para cambiar lo que se lanza.
-#   - Bajo el minimapa: cambiar el modo de atacar, el inventario y la pausa; y, a su izquierda, las vendas y el
+#   - Bajo el minimapa: el inventario y la pausa; y, a su izquierda, las vendas y el
 #     botiquín si lleva (tocar uno lo usa: partida.usar_cura).
 # Los botones "pulsan" las mismas acciones que el teclado y el mando (eventos de acción), así que Johnny y
 # los lanzables no saben si es un dedo o una tecla.
@@ -165,7 +165,6 @@ func botones() -> Dictionary:
 		"cuerpo": [en_arco.call(218.0, 145.0), 34.0 * k],
 		"fuego": [en_arco.call(252.0, 145.0), 34.0 * k],
 		"lanzar": [en_arco.call(288.0, 145.0), 38.0 * k],
-		"modo": [bajo_mapa.call(150.0), 22.0 * k],
 		"inventario": [bajo_mapa.call(97.0), 22.0 * k],
 		"pausa": [bajo_mapa.call(44.0), 22.0 * k],
 	}
@@ -181,7 +180,7 @@ func botones() -> Dictionary:
 	var sitio := 0
 	for id in Objetos.USABLES:
 		if partida.mochila.has(id):
-			b[id] = [bajo_mapa.call(203.0 + sitio * 53.0), 22.0 * k]
+			b[id] = [bajo_mapa.call(150.0 + sitio * 53.0), 22.0 * k]
 			sitio += 1
 	return b
 
@@ -284,8 +283,6 @@ func pulsar(nombre: String, abajo: bool) -> void:
 		"cuerpo", "fuego":
 			# la otra arma: cambiar; la de fuego que ya está en la mano: recargar
 			accion("recargar" if johnny.mano == nombre else "cambiar_arma", abajo)
-		"modo":
-			accion("cambiar_modo", abajo)
 		"vendas", "botiquin":
 			if abajo:
 				partida.usar_cura(nombre)
@@ -328,7 +325,7 @@ func soltar_todo() -> void:
 	ejes("apuntar", apunte)
 	soltar_apunte = 0
 	# solo las que estén apretadas: soltar una que no lo está cuenta igual como "soltada" (y lanzaba un molotov)
-	for nombre in ["esquivar", "atacar", "lanzar", "cambiar_lanzable", "recargar", "cambiar_arma", "cambiar_modo"]:
+	for nombre in ["esquivar", "atacar", "lanzar", "cambiar_lanzable", "recargar", "cambiar_arma"]:
 		if Input.is_action_pressed(nombre):
 			Input.action_release(nombre)
 
@@ -404,8 +401,6 @@ func dibujar() -> void:
 					icono(donde, Lanzables.tipo_de(otro), 22 * esc)
 			"atacar":
 				icono(donde, Objetos.icono(johnny.huecos[johnny.mano]), 56 * esc)
-			"modo":
-				icono(donde, "diana", 26 * esc)
 			"vendas", "botiquin":
 				icono(donde, Objetos.icono(nombre), 28 * esc)
 				texto(lienzo, donde + Vector2(r * 0.55, r * 0.8), str(partida.mochila.count(nombre)), roundi(14 * esc), Tema.TINTA)

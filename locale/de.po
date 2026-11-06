@@ -3017,10 +3017,6 @@ msgstr "Wurfwaffenteil"
 msgid "Botiquín"
 msgstr "Medikit"
 
-#: scripts/partida.gd scripts/ui/opciones.gd
-msgid "Modo de atacar: %s"
-msgstr "Angriffsmodus: %s"
-
 #: scripts/partida.gd
 msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
 msgstr "Defibrillator! Du bist mit vollem Leben zurück (nur einmal pro Gebäude)"
@@ -4426,6 +4422,10 @@ msgid "Apunta con {apuntar} y ataca con {atacar}."
 msgstr "Ziele mit {apuntar} und greife mit {atacar} an."
 
 #: scripts/tutoriales.gd
+msgid "Si prefieres que Johnny apunte solo, en Opciones → Ayudas está «Disparo asistido»."
+msgstr "Soll Johnny lieber selbst zielen: Unter Optionen → Hilfen gibt es \"Assistiertes Schießen\"."
+
+#: scripts/tutoriales.gd
 msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
 msgstr "Johnny zielt und schlägt von selbst auf den nächsten Zombie: Du musst nur laufen."
 
@@ -4490,8 +4490,8 @@ msgid "Muévete con {moverse}."
 msgstr "Beweg dich mit {moverse}."
 
 #: scripts/tutoriales.gd
-msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
-msgstr "{atacar_modo} Den Angriffsmodus wechselst du mit {cambiar_modo}."
+msgid "{atacar_modo}"
+msgstr "{atacar_modo}"
 
 #: scripts/tutoriales.gd
 msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
@@ -5016,10 +5016,6 @@ msgstr "dem Rucksack-Knopf unter der Minikarte"
 #: scripts/tutoriales.gd
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "dem Pause-Knopf unter der Minikarte"
-
-#: scripts/tutoriales.gd
-msgid "el botón del modo, bajo el minimapa"
-msgstr "dem Modus-Knopf unter der Minikarte"
 
 #: scripts/ui/hud.gd
 msgid "escudo %d"
@@ -6085,8 +6081,8 @@ msgid "Vibración"
 msgstr "Vibration"
 
 #: scripts/ui/opciones.gd
-msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
-msgstr "Ist eine dieser drei Hilfen an, gibt es in der Runde keine Erfolge (auch wenn du sie später ausschaltest). Deine bisherigen bleiben."
+msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "Ist eine dieser Hilfen an, gibt es in dieser Runde keine Erfolge (auch wenn du sie später ausschaltest). Die, die du schon hast, bleiben."
 
 #: scripts/ui/opciones.gd
 msgid "Vida entera"
@@ -6111,6 +6107,14 @@ msgstr "Auto-Zielen beim Werfen"
 #: scripts/ui/opciones.gd
 msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
 msgstr "Molotow, Granate und die anderen Wurfwaffen fliegen von selbst zum nächsten Zombie in Sicht. Siehst du keinen, wird normal geworfen."
+
+#: scripts/ui/opciones.gd
+msgid "Disparo asistido"
+msgstr "Assistiertes Schießen"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny zielt und schlägt von selbst auf den nächsten Zombie. Du musst dich nur bewegen."
 
 #: scripts/ui/opciones.gd
 msgid "Tutoriales"
@@ -6233,14 +6237,6 @@ msgid "Cambiado a %s"
 msgstr "Geändert auf %s"
 
 #: scripts/ui/opciones.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
-msgstr "Johnny zielt und schlägt von selbst auf den nächsten Zombie. Du musst dich nur bewegen."
-
-#: scripts/ui/opciones.gd
-msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
-msgstr "Du zielst selbst: mit der Maus, dem rechten Stick am Controller oder dem rechten Joystick am Handy."
-
-#: scripts/ui/opciones.gd
 msgid "Moverse: arriba"
 msgstr "Bewegen: hoch"
 
@@ -6257,8 +6253,8 @@ msgid "Moverse: derecha"
 msgstr "Bewegen: rechts"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar (modo libre)"
-msgstr "Zielen (freier Modus)"
+msgid "Apuntar"
+msgstr "Zielen"
 
 #: scripts/ui/opciones.gd
 msgid "Atacar"
@@ -6293,10 +6289,6 @@ msgid "Usar botiquín"
 msgstr "Medikit benutzen"
 
 #: scripts/ui/opciones.gd
-msgid "Modo de atacar"
-msgstr "Angriffsmodus"
-
-#: scripts/ui/opciones.gd
 msgid "Moverse"
 msgstr "Bewegen"
 
@@ -6305,12 +6297,8 @@ msgid "Joystick: toca y arrastra en la mitad izquierda"
 msgstr "Joystick: in der linken Hälfte tippen und ziehen"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar"
-msgstr "Zielen"
-
-#: scripts/ui/opciones.gd
-msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
-msgstr "Nur bei \"Freies Zielen\": der Joystick unten rechts"
+msgid "El joystick de abajo a la derecha (sin él con «Disparo asistido»)"
+msgstr "Der Joystick unten rechts (nicht mit \"Assistiertes Schießen\")"
 
 #: scripts/ui/opciones.gd
 msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
@@ -6341,8 +6329,8 @@ msgid "Los botones de debajo del minimapa (solo salen si llevas)"
 msgstr "Die Knöpfe unter der Minikarte (nur sichtbar, wenn du welche hast)"
 
 #: scripts/ui/opciones.gd
-msgid "Modo, inventario y pausa"
-msgstr "Modus, Inventar und Pause"
+msgid "Inventario y pausa"
+msgstr "Inventar und Pause"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa"
@@ -7223,7 +7211,3 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
-
-#, sin-usar
-msgid "Aseo"
-msgstr "WC"

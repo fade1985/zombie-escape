@@ -3019,10 +3019,6 @@ msgstr "Метательная деталь"
 msgid "Botiquín"
 msgstr "Аптечка"
 
-#: scripts/partida.gd scripts/ui/opciones.gd
-msgid "Modo de atacar: %s"
-msgstr "Режим атаки: %s"
-
 #: scripts/partida.gd
 msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
 msgstr "Дефибриллятор! Ты снова с полным здоровьем (только раз за здание)"
@@ -4433,6 +4429,10 @@ msgid "Apunta con {apuntar} y ataca con {atacar}."
 msgstr "Прицел: {apuntar}, атака: {atacar}."
 
 #: scripts/tutoriales.gd
+msgid "Si prefieres que Johnny apunte solo, en Opciones → Ayudas está «Disparo asistido»."
+msgstr "Если хочешь, чтобы Джонни целился сам, в «Настройки → Упрощения» есть «Стрельба с автоприцелом»."
+
+#: scripts/tutoriales.gd
 msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
 msgstr "Джонни сам целится и бьет ближайшего зомби: твое дело — двигаться."
 
@@ -4497,8 +4497,8 @@ msgid "Muévete con {moverse}."
 msgstr "Движение: {moverse}."
 
 #: scripts/tutoriales.gd
-msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
-msgstr "{atacar_modo} Сменить режим атаки: {cambiar_modo}."
+msgid "{atacar_modo}"
+msgstr "{atacar_modo}"
 
 #: scripts/tutoriales.gd
 msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
@@ -5023,10 +5023,6 @@ msgstr "кнопка рюкзака под миникартой"
 #: scripts/tutoriales.gd
 msgid "el botón de pausa, bajo el minimapa"
 msgstr "кнопка паузы под миникартой"
-
-#: scripts/tutoriales.gd
-msgid "el botón del modo, bajo el minimapa"
-msgstr "кнопка режима под миникартой"
 
 #: scripts/ui/hud.gd
 msgid "escudo %d"
@@ -6103,8 +6099,8 @@ msgid "Vibración"
 msgstr "Вибрация"
 
 #: scripts/ui/opciones.gd
-msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
-msgstr "Если включено хоть одно из этих трех упрощений, достижения в этом забеге не выдаются (даже если потом выключить). Уже полученные остаются."
+msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "Если включено любое из этих упрощений, в этом забеге достижения не получить (даже если потом выключить). Полученные раньше остаются."
 
 #: scripts/ui/opciones.gd
 msgid "Vida entera"
@@ -6129,6 +6125,14 @@ msgstr "Броски с автонаводкой"
 #: scripts/ui/opciones.gd
 msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
 msgstr "Молотов, граната и прочее метательное само летит в ближайшего видимого зомби. Если никого не видно, бросок как обычно."
+
+#: scripts/ui/opciones.gd
+msgid "Disparo asistido"
+msgstr "Стрельба с автоприцелом"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Джонни сам целится и атакует ближайшего зомби. Тебе нужно только двигаться."
 
 #: scripts/ui/opciones.gd
 msgid "Tutoriales"
@@ -6251,14 +6255,6 @@ msgid "Cambiado a %s"
 msgstr "Изменено: %s"
 
 #: scripts/ui/opciones.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
-msgstr "Джонни сам целится и атакует ближайшего зомби. Тебе нужно только двигаться."
-
-#: scripts/ui/opciones.gd
-msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
-msgstr "Целишься ты: мышью, правым стиком геймпада или правым джойстиком на телефоне."
-
-#: scripts/ui/opciones.gd
 msgid "Moverse: arriba"
 msgstr "Движение: вверх"
 
@@ -6275,8 +6271,8 @@ msgid "Moverse: derecha"
 msgstr "Движение: вправо"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar (modo libre)"
-msgstr "Прицел (ручной режим)"
+msgid "Apuntar"
+msgstr "Прицел"
 
 #: scripts/ui/opciones.gd
 msgid "Atacar"
@@ -6311,10 +6307,6 @@ msgid "Usar botiquín"
 msgstr "Применить аптечку"
 
 #: scripts/ui/opciones.gd
-msgid "Modo de atacar"
-msgstr "Режим атаки"
-
-#: scripts/ui/opciones.gd
 msgid "Moverse"
 msgstr "Движение"
 
@@ -6323,12 +6315,8 @@ msgid "Joystick: toca y arrastra en la mitad izquierda"
 msgstr "Джойстик: коснись и тяни в левой половине"
 
 #: scripts/ui/opciones.gd
-msgid "Apuntar"
-msgstr "Прицел"
-
-#: scripts/ui/opciones.gd
-msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
-msgstr "Только в режиме «Ручной прицел»: джойстик справа внизу"
+msgid "El joystick de abajo a la derecha (sin él con «Disparo asistido»)"
+msgstr "Джойстик внизу справа (его нет со «Стрельбой с автоприцелом»)"
 
 #: scripts/ui/opciones.gd
 msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
@@ -6359,8 +6347,8 @@ msgid "Los botones de debajo del minimapa (solo salen si llevas)"
 msgstr "Кнопки под миникартой (появляются, только если есть что применить)"
 
 #: scripts/ui/opciones.gd
-msgid "Modo, inventario y pausa"
-msgstr "Режим, инвентарь и пауза"
+msgid "Inventario y pausa"
+msgstr "Инвентарь и пауза"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa"
@@ -7243,7 +7231,3 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
-
-#, sin-usar
-msgid "Aseo"
-msgstr "Туалет"

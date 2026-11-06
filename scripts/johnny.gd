@@ -8,8 +8,8 @@
 # y el lanza rayos no disparan: mientras se ataca echan un chorro continuo (llamarada.gd) y gastan su depósito, que se llena
 # con un objeto de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido; el lanza rayos,
 # con una batería: el "relleno" de armas.gd).
-# Dos modos de atacar (se elige en Opciones, o F1, C o la cruceta abajo del mando
-# cambian de uno a otro; se guarda):
+# Dos modos de atacar: el libre es el de siempre y el asistido es una ayuda (Opciones → Ayudas, "Disparo
+# asistido"; con ella encendida no se consiguen logros, logros.gd). Se nota al momento, también desde la pausa:
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
 #             está a tiro, le pega o le dispara. El jugador solo se preocupa de moverse
 #   libre     apunta con el ratón (y ataca con el clic o J) o con el stick derecho del mando (y ataca mientras
@@ -38,7 +38,6 @@ extends CharacterBody2D
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
 signal murio
 signal arma_cambiada(texto: String)            # el cartel del arma (y sus balas) de la pantalla escucha esta
-signal modo_cambiado(nombre: String)           # al cambiar el modo de atacar con su tecla: la partida lo avisa
 signal resucito                                # Desfibrilador: la partida saca el aviso
 
 const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igual que en el juego
@@ -164,7 +163,8 @@ var patada := Vector2.ZERO     # hacia dónde y cuánto empuja ese disparo
 
 var fregona_ancha := false   # la limpiadora de noche está rescatada: le ha arreglado la fregona (barre más ancho)
 var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siempre): sus hojas y su ventaja
-var modo := "asistido"     # cómo se ataca (ver arriba)
+var modo := "libre"        # cómo se ataca (ver arriba)
+var asistido_puesto := false   # cómo estaba la ayuda "Disparo asistido" la última vez que se miró (mirar_asistido)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
 
 const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
@@ -212,10 +212,10 @@ func _ready() -> void:
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
 	vida_cambiada.emit.call_deferred(vida, stats.vida_max)
-	# El modo de atacar elegido la última vez (en Opciones o con F1)
+	# El modo de atacar: asistido si está puesta la ayuda; si no, libre
 	var guardado := Guardado.cargar()
-	if guardado.ajustes.modo in MODOS:
-		modo = guardado.ajustes.modo
+	asistido_puesto = Guardado.ajuste("disparo_asistido")
+	modo = "asistido" if asistido_puesto else "libre"
 	fregona_ancha = "limpiadora" in guardado.rescatados
 
 
@@ -280,13 +280,15 @@ func avisar_adrenalina() -> void:
 	con_adrenalina = ahora
 
 
-# F1, C o cruceta abajo: pasa al siguiente modo de atacar (y se guarda para la próxima vez)
-func cambiar_modo() -> void:
-	var nombres := MODOS.keys()
-	var nuevo: String = nombres[(nombres.find(modo) + 1) % nombres.size()]
-	poner_modo(nuevo)
-	Guardado.cambiar(func(g): g.ajustes.modo = nuevo)
-	modo_cambiado.emit(MODOS[modo])
+# Si se ha encendido o apagado la ayuda "Disparo asistido" (Opciones → Ayudas, también desde la pausa), cambia el modo.
+# Solo cuando cambia la ayuda: así las pruebas pueden ponerle el modo que quieran (o "quieto") sin que se lo quite
+func mirar_asistido() -> void:
+	var ahora: bool = Guardado.ajuste("disparo_asistido")
+	if ahora == asistido_puesto:
+		return
+	asistido_puesto = ahora
+	if modo in MODOS:
+		poner_modo("asistido" if ahora else "libre")
 
 
 func poner_modo(nuevo: String) -> void:
@@ -419,8 +421,7 @@ func _physics_process(delta: float) -> void:
 		cambiar_mano()
 	if Input.is_action_just_pressed("recargar"):
 		empezar_recarga()
-	if Input.is_action_just_pressed("cambiar_modo"):
-		cambiar_modo()
+	mirar_asistido()
 	# Pistola sin fin: si se pone la ayuda con el cargador a medias, se llena (y deja de recargar)
 	if pistola_sin_fin() and balas < base("pistola").cargador:
 		balas = base("pistola").cargador
