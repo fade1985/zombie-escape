@@ -62,6 +62,10 @@ en una línea.
   la pinta `tools/sangre_motosierra.py` (receta en `assets/pixellab.json` → `conserje-48-motosierra`); prueba `--motosierra`. La **katana**
   (6 nov): envainada a la cadera; el golpe es desenvainar con un corte de abajo arriba que deja una media luna de luz
   (casilla de 96×96 con los pies en 48,84; receta en `assets/pixellab.json` → `conserje-48-katana`); prueba `--katana`.
+  La **gatling** (6 nov): arma a distancia con su propia munición, la cinta de balas (`"cinta"` en `Armas.MUNICION`);
+  los cañones giran medio segundo antes de la primera bala (`arranque`; `johnny.gd`: `giro_t`, `girando()`), Johnny
+  anda más despacio mientras dispara (`lenta`) y sin el empujón del dibujo (`sin_patada`); usa el fogonazo de la MP5
+  (`fogonazo`). Receta en `assets/pixellab.json` → `conserje-48-gatling`; prueba `--gatling`.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
   de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
   de cada clave, F cambia; sus cuentas en `cantidades`) y 4 de repuesto (`REPUESTO`, 8 hasta la M67; `repuesto` y sus cuentas en `en_repuesto`,

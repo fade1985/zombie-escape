@@ -198,6 +198,10 @@ msgid "MP5"
 msgstr "MP5"
 
 #: scripts/armas.gd
+msgid "Gatling"
+msgstr "Gatling"
+
+#: scripts/armas.gd
 msgid "Lanzallamas"
 msgstr "Lança-chamas"
 
@@ -252,6 +256,18 @@ msgstr "Sem cartuchos!"
 #: scripts/armas.gd
 msgid "la escopeta"
 msgstr "a escopeta"
+
+#: scripts/armas.gd
+msgid "Cinta de balas"
+msgstr "Cinta de balas"
+
+#: scripts/armas.gd
+msgid "¡Sin cinta de balas!"
+msgstr "Sem cinta de balas!"
+
+#: scripts/armas.gd
+msgid "la gatling"
+msgstr "a gatling"
 
 #: scripts/armas.gd scripts/objetos.gd
 msgid "Gasolina"
@@ -2990,8 +3006,8 @@ msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierr
 msgstr "as armas corpo a corpo (o esfregão, a faca, o taco, a motosserra e a katana)"
 
 #: scripts/objetos.gd
-msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
-msgstr "as armas à distância (a pistola, a MP5 e a escopeta)"
+msgid "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)"
+msgstr "as armas à distância (a pistola, a MP5, a escopeta e a gatling)"
 
 #: scripts/objetos.gd
 msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
@@ -5621,6 +5637,12 @@ msgstr[0] "%d cartucho"
 msgstr[1] "%d cartuchos"
 
 #: scripts/ui/inventario.gd
+msgid "%d bala de cinta"
+msgid_plural "%d balas de cinta"
+msgstr[0] "%d bala de cinta"
+msgstr[1] "%d balas de cinta"
+
+#: scripts/ui/inventario.gd
 msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d galão de gasolina"
@@ -5701,6 +5723,10 @@ msgstr "Cinco chumbinhos em leque. Recarrega de cartucho em cartucho."
 #: scripts/ui/inventario.gd
 msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
 msgstr "Rajadas muito rápidas. Gasta as mesmas balas que a pistola."
+
+#: scripts/ui/inventario.gd
+msgid "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas."
+msgstr "Demora um pouco para girar e depois não para. É pesada: você anda mais devagar. Gasta cinta de balas."
 
 #: scripts/ui/inventario.gd
 msgid "Llamarada continua que quema a todos. Se llena con gasolina."

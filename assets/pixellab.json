@@ -4989,5 +4989,45 @@
    "cost": "10 generaciones"
   },
   "cost_total": "36 generaciones: 10 del estado, 8 del ataque, 8 del andar y 10 de los dos iconos"
+ },
+ "conserje-48-gatling": {
+  "kind": "character_state",
+  "character_id": "c0605b41-0266-4238-9005-28cf9177c134",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Gatling en guardia",
+  "nota": "Estado de Johnny con la gatling (2026-11-06), pedido por el dueño con tres fotos de referencia solo para el diseño y la pose (una gatling negra de seis cañones con asa arriba, y alguien que la lleva a la cintura). Sin cinta cruzada en el pecho (lo eligió el dueño): solo la que cuelga del arma. Lienzo de 64x64 sin la paleta de Johnny (max_colors 48). De lado y en diagonal, bien a la primera; de frente y de espaldas apuntaba de lado, como pasó con la MP5: ver 'posturas'. EN EL JUEGO (sprite conserje-48-gatling, casilla de 96x96 con los pies en 48,72): reposo, andar y disparo en las 8 direcciones. Se monta con: py ../game/tools/arma.py conserje-48-gatling, luego py tools/hacer_frames.py assets/sprites/conserje-48-gatling y py tools/cara.py <skin> gatling para cada skin.",
+  "request": {
+   "edit_description": "holding a heavy black six-barrel rotary minigun at waist height with both hands, ready to fire: one hand gripping the carry handle on top of the gun and the other hand on the rear trigger grip, knees slightly bent in a braced stance; the gun is matte black and dark grey metal with a cluster of six long thin barrels pointing straight forward away from him, a boxy motor housing at the back, and a short belt of shiny brass bullets hanging down from the side of the gun; the minigun stays held at his waist with both hands, barrels forward, in every view: front, side and back; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "max_colors": 48
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-06",
+  "posturas": {
+   "nota": "south y north: PixMiniMax de 8 fotogramas desde la rotación del estado, sin end_frame (postura-gatling-abajo y postura-gatling-arriba); el último fotograma, recortado a 64x64 en (2, 2), es la rotación nueva en assets/sources/conserje-48-gatling/rotations/ (las de PixelLab, en descartes/rotations-viejas/; las animaciones enteras, en posturas/). En PixelLab el estado sigue con sus rotaciones originales.",
+   "groups": {
+    "south": "f023d256-1ee4-4185-a521-68d95760eee1",
+    "north": "587351ce-8e68-4580-86ef-fd3d4ee648b0"
+   },
+   "cost": "2 generaciones"
+  },
+  "ataque": {
+   "nota": "Un disparo con fogonazo, humo y casquillo; el retroceso solo en la parte de arriba del cuerpo. PixMiniMax, 8 fotogramas más el de partida, de una en una con el quieto (el nuevo en south y north) pegado en un lienzo de 96x96 en (16, 26) como partida y llegada. Todas bien a la primera; en east, south-east y south el fogonazo tiñe a Johnny de amarillo: arma.py lo quita ('sin_tinte' en arma.json). Se usan 3 fotogramas por dirección (12 balas por segundo). Textos: el común (east, west, south-east y south-west cambiando initial_pose), el de las diagonales de espaldas (se antepone 'He keeps the same three-quarter back view...'), el de frente y el de espaldas.",
+   "animation_name": "disparo-gatling",
+   "cost": "8 generaciones",
+   "action_description_comun": "He fires one quick shot from the heavy minigun. The cluster of six barrels spins and a bright yellow and orange muzzle flash bursts out of the end of the barrels for an instant. The recoil shakes only his upper body: his shoulders and arms jolt back a little and the barrels jump very slightly, while his legs and boots stay completely still and planted and he keeps aiming in exactly the same direction. A small wisp of light grey smoke drifts from the barrels and a tiny brass shell casing flips out of the side of the gun. The flash and the smoke fade away quickly and he settles cleanly into the starting braced stance. Only one shot, no second flash. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+  },
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida. south y north, cada una sola con su postura nueva como custom_start_frame_url (north en su propio grupo, 4619fade-6105-47a3-a5b5-b902f2067224); las otras 6 en una llamada, en el grupo de south. Bien a la primera. El tramo del ciclo de south y north-west se le dice a arma.py en arma.json.",
+   "group": "66b28761-3e69-441e-b36f-544e68e9b08c",
+   "animation_name": "andar-gatling",
+   "cost": "8 generaciones"
+  },
+  "iconos": {
+   "nota": "create_object_pro_flash 32x32, 1 dirección, baúl como estilo sin sus colores. Munición (la caja verde con la cinta de balas): assets/sources/municion/intentos/gatling-A.png (semilla 33001, 5e70f9b4-0242-4246-a145-bc80d3378ddf) y gatling-B.png (33002, 5735835f-74fe-4485-ad2a-e2a55b906cfc). Arma: assets/sources/gatling/intentos/icono-A.png (34001, c6f74254-1338-42fd-9a5e-1b6bc4a789e3) e icono-B.png (34002, dff53b72-dd28-4911-93f5-1953078b3a31). En el juego, de momento los A: assets/ui/iconos/municion-gatling.png y gatling.png.",
+   "cost": "20 generaciones"
+  },
+  "cost_total": "48 generaciones: 10 del estado, 2 de las posturas, 8 del disparo, 8 del andar y 20 de los cuatro iconos"
  }
 }

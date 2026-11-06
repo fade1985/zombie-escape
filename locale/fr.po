@@ -198,6 +198,10 @@ msgid "MP5"
 msgstr "MP5"
 
 #: scripts/armas.gd
+msgid "Gatling"
+msgstr "Gatling"
+
+#: scripts/armas.gd
 msgid "Lanzallamas"
 msgstr "Lance-flammes"
 
@@ -252,6 +256,18 @@ msgstr "Plus de cartouches !"
 #: scripts/armas.gd
 msgid "la escopeta"
 msgstr "le fusil à pompe"
+
+#: scripts/armas.gd
+msgid "Cinta de balas"
+msgstr "Bande de balles"
+
+#: scripts/armas.gd
+msgid "¡Sin cinta de balas!"
+msgstr "Plus de bande de balles !"
+
+#: scripts/armas.gd
+msgid "la gatling"
+msgstr "la Gatling"
 
 #: scripts/armas.gd scripts/objetos.gd
 msgid "Gasolina"
@@ -2990,8 +3006,8 @@ msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierr
 msgstr "les armes de corps à corps (la serpillière, le couteau, la batte, la tronçonneuse et le katana)"
 
 #: scripts/objetos.gd
-msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
-msgstr "les armes à distance (le pistolet, le MP5 et le fusil à pompe)"
+msgid "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)"
+msgstr "les armes à distance (le pistolet, le MP5, le fusil à pompe et la Gatling)"
 
 #: scripts/objetos.gd
 msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
@@ -5621,6 +5637,12 @@ msgstr[0] "%d cartouche"
 msgstr[1] "%d cartouches"
 
 #: scripts/ui/inventario.gd
+msgid "%d bala de cinta"
+msgid_plural "%d balas de cinta"
+msgstr[0] "%d balle de bande"
+msgstr[1] "%d balles de bande"
+
+#: scripts/ui/inventario.gd
 msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d jerrican"
@@ -5701,6 +5723,10 @@ msgstr "Cinq plombs en éventail. Se recharge cartouche par cartouche."
 #: scripts/ui/inventario.gd
 msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
 msgstr "Rafales très rapides. Utilise les mêmes balles que le pistolet."
+
+#: scripts/ui/inventario.gd
+msgid "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas."
+msgstr "Met un instant à démarrer, puis ne s'arrête plus. Elle est lourde : tu marches plus lentement. Utilise des bandes de balles."
 
 #: scripts/ui/inventario.gd
 msgid "Llamarada continua que quema a todos. Se llena con gasolina."

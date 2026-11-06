@@ -73,6 +73,8 @@
 #                       da), las 8 direcciones y dos skins                                 [prueba_armas.gd]
 #   --katana            la katana: comprarla, el corte de abajo arriba (a quién le da), las 8 direcciones y dos
 #                       skins                                                              [prueba_armas.gd]
+#   --gatling           la gatling: comprarla, su cinta de balas, el arranque de los cañones, la ráfaga, lo
+#                       despacio que anda disparando, las 8 direcciones y dos skins        [prueba_armas.gd]
 #   --relieve           el relieve con la luz (mapas de normales): Johnny y dos zombis con y sin relieve, con una
 #                       lámpara a cada lado                                                [prueba_varias.gd]
 #   --impacto           el impacto de bala de Sprite Fusion (impacto.gd) junto al de siempre, contra la pared
@@ -563,6 +565,9 @@ func empezar_prueba() -> void:
 	elif "--katana" in args:
 		set_process(false)   # sin la prueba larga
 		probar_katana()
+	elif "--gatling" in args:
+		set_process(false)   # sin la prueba larga
+		probar_gatling()
 	elif "--relieve" in args:
 		set_process(false)   # sin la prueba larga
 		probar_relieve()

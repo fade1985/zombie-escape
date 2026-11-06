@@ -26,7 +26,7 @@ class_name Armas
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
 # no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
-const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 0, "escopeta": 30, "mp5": 40, "pistola_electrica": 45,
+const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 0, "escopeta": 30, "mp5": 40, "gatling": 70, "pistola_electrica": 45,
 	"lanzallamas": 60, "desintegrador": 60}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
@@ -262,6 +262,21 @@ const DATOS := {
 		"boca": {"s": Vector2(-1, 4), "se": Vector2(32, -23), "e": Vector2(33, -31), "ne": Vector2(27, -42),
 			"n": Vector2(7, -61), "no": Vector2(-26, -40), "o": Vector2(-32, -30), "so": Vector2(-29, -21)},
 	},
+	# la gatling (6 nov): una ametralladora de seis cañones que gira, que Johnny lleva a la cintura con una mano en el asa
+	# de arriba y otra en la empuñadura, con una cinta de balas colgando (conserje-48-gatling, de PixelLab). Gasta su
+	# propia munición, la cinta de balas ("cinta"). "arranque": al empezar a disparar, los cañones giran ese rato antes
+	# de que salga la primera bala (si deja de disparar, vuelven a pararse). "lenta": mientras dispara, Johnny anda a
+	# esa parte de su velocidad. "sin_patada": disparando andando, el dibujo no se va hacia atrás (johnny.gd, patada).
+	# "fogonazo": usa el de la MP5 (fogonazo.gd)
+	"gatling": {
+		"nombre": "Gatling", "tipo": "fuego", "dano": 6, "ritmo": 12.0, "alcance": 380.0, "velocidad": 660.0,   # [traducir]
+		"perdigones": 1, "abertura": 0.0, "temblor": 0.18, "empuje": 0.3, "cargador": 100, "recarga": 3.0,
+		"cartucho": false, "municion": "cinta", "arranque": 0.5, "lenta": 0.55, "sin_patada": true, "fogonazo": "mp5",
+		"pies": Vector2(48, 72),
+		"hoja": preload("res://assets/sprites/conserje-48-gatling.tres"),
+		"boca": {"s": Vector2(-1, 10), "se": Vector2(32, -17), "e": Vector2(42, -14), "ne": Vector2(32, -25),
+			"n": Vector2(-14, -55), "no": Vector2(-40, -29), "o": Vector2(-38, -16), "so": Vector2(-41, -16)},
+	},
 	# el lanzallamas: no dispara, echa una llamarada continua mientras se ataca (llamarada.gd) que llega a 10 casillas
 	# ("alcance" y "velocidad" mandan en lo lejos que llega). No tiene cargador (el de 12 no lo usa): tiene un depósito
 	# de "deposito" segundos de fuego que se llena entero con una gasolina de la mochila (en "recarga" segundos; las
@@ -387,6 +402,7 @@ static func relleno_uno(relleno: String) -> String:
 const MUNICION := {
 	"balas": {"nombre": "Balas de pistola", "icono": "municion-pistola", "hueco": 24, "sin": "¡Sin balas!", "para": "la pistola y la MP5"},
 	"cartuchos": {"nombre": "Cartuchos", "icono": "municion-escopeta", "hueco": 12, "sin": "¡Sin cartuchos!", "para": "la escopeta"},
+	"cinta": {"nombre": "Cinta de balas", "icono": "municion-gatling", "hueco": 200, "sin": "¡Sin cinta de balas!", "para": "la gatling"},
 	"gasolina": {"nombre": "Gasolina", "icono": "obj-gasolina", "hueco": 3, "sin": "¡Sin gasolina!", "para": "el lanzallamas"},
 	"bidon_acido": {"nombre": "Bidón de ácido", "icono": "obj-bidon_acido", "hueco": 3, "sin": "¡Sin ácido!",
 		"para": "el lanza ácido"},

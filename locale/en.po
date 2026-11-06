@@ -198,6 +198,10 @@ msgid "MP5"
 msgstr "MP5"
 
 #: scripts/armas.gd
+msgid "Gatling"
+msgstr "Gatling"
+
+#: scripts/armas.gd
 msgid "Lanzallamas"
 msgstr "Flamethrower"
 
@@ -252,6 +256,18 @@ msgstr "Out of shells!"
 #: scripts/armas.gd
 msgid "la escopeta"
 msgstr "the shotgun"
+
+#: scripts/armas.gd
+msgid "Cinta de balas"
+msgstr "Ammo belt"
+
+#: scripts/armas.gd
+msgid "¡Sin cinta de balas!"
+msgstr "Out of belt ammo!"
+
+#: scripts/armas.gd
+msgid "la gatling"
+msgstr "the Gatling"
 
 #: scripts/armas.gd scripts/objetos.gd
 msgid "Gasolina"
@@ -2990,8 +3006,8 @@ msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierr
 msgstr "melee weapons (the mop, the knife, the bat, the chainsaw and the katana)"
 
 #: scripts/objetos.gd
-msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
-msgstr "ranged weapons (the pistol, the MP5 and the shotgun)"
+msgid "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)"
+msgstr "ranged weapons (the pistol, the MP5, the shotgun and the Gatling)"
 
 #: scripts/objetos.gd
 msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
@@ -5621,6 +5637,12 @@ msgstr[0] "%d shell"
 msgstr[1] "%d shells"
 
 #: scripts/ui/inventario.gd
+msgid "%d bala de cinta"
+msgid_plural "%d balas de cinta"
+msgstr[0] "%d belt round"
+msgstr[1] "%d belt rounds"
+
+#: scripts/ui/inventario.gd
 msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d gas can"
@@ -5701,6 +5723,10 @@ msgstr "Five pellets in a spread. Reloads one shell at a time."
 #: scripts/ui/inventario.gd
 msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
 msgstr "Very fast bursts. Uses the same bullets as the pistol."
+
+#: scripts/ui/inventario.gd
+msgid "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas."
+msgstr "Takes a moment to spin up, then never stops. It's heavy: you walk slower. Uses ammo belts."
 
 #: scripts/ui/inventario.gd
 msgid "Llamarada continua que quema a todos. Se llena con gasolina."

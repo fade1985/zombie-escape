@@ -160,6 +160,8 @@ var golpe_pendiente := false   # golpe cuerpo a cuerpo que aún no ha llegado (p
 var golpe_angulo := 0.0        # y hacia dónde va
 var patada_t := -1.0           # tiempo desde el último disparo andando (-1 = nada): el retroceso de todo el cuerpo
 var patada := Vector2.ZERO     # hacia dónde y cuánto empuja ese disparo
+var giro_t := 0.0              # la gatling: cuánto llevan girando sus cañones ("arranque" en armas.gd)...
+var giro_paso := -10           # ...y en qué paso de física se pidió disparar por última vez (si no es el de antes, se paran)
 
 var fregona_ancha := false   # la limpiadora de noche está rescatada: le ha arreglado la fregona (barre más ancho)
 var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siempre): sus hojas y su ventaja
@@ -375,6 +377,12 @@ func _physics_process(delta: float) -> void:
 		atras = patada * maxf(0.0, 1.0 - patada_t / PATADA_T)
 		if patada_t >= PATADA_T:
 			patada_t = -1.0
+	# Los cañones de la gatling cogiendo velocidad: Johnny tiembla un poquito, cada vez más
+	if girando():
+		var arranque: float = arma().arranque
+		if giro_t < arranque:
+			var fuerza := 0.5 + giro_t / arranque
+			atras += Vector2(randf_range(-fuerza, fuerza), randf_range(-fuerza, fuerza)).round()
 	sprite.position = Vector2(0, 16) + atras
 	efectos.position = sprite.position
 	if not vivo:
@@ -466,6 +474,8 @@ func _physics_process(delta: float) -> void:
 		if adrenalina():
 			rapidez *= 1.0 + Talentos.ADRENALINA.velocidad
 		rapidez *= Skins.rapidez(skin)   # (la mascota, skins.gd: un 15 % más)
+		if girando():
+			rapidez *= arma().get("lenta", 1.0)   # la gatling pesa: mientras dispara, anda más despacio
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
 	move_and_slide()
@@ -610,6 +620,15 @@ func ayuda_apunte(angulo: float) -> float:
 # en cada paso en que se ataca con él, echa fuego
 func intentar_atacar(angulo: float) -> void:
 	var w := arma()
+	if w.has("arranque"):
+		# la gatling: sus cañones tienen que girar "arranque" segundos seguidos antes de que salga la primera bala
+		var paso := Engine.get_physics_frames()
+		if paso != giro_paso:
+			giro_t = giro_t + get_physics_process_delta_time() if paso - giro_paso == 1 else 0.0
+			giro_paso = paso
+		if giro_t < w.arranque:
+			direccion = direccion_de(Vector2.from_angle(angulo))
+			return
 	if espera > 0.0 or not (w.tipo == "cuerpo" or lista_para_disparar()):
 		return
 	direccion = direccion_de(Vector2.from_angle(angulo))
@@ -733,9 +752,11 @@ func atacar(angulo: float) -> void:
 			efectos.play("efectos_" + direccion)
 			efectos.set_frame_and_progress(0, 0.0)
 			efectos.show()
-			# como andando no se ve el retroceso de los brazos, el disparo empuja a Johnny entero hacia atrás
-			patada = -Vector2.from_angle(angulo) * PATADA * (1.6 if w.get("perdigones", 1) > 1 else 1.0)
-			patada_t = 0.0
+			# como andando no se ve el retroceso de los brazos, el disparo empuja a Johnny entero hacia atrás (la
+			# gatling no: con tantas balas, iría dando tirones)
+			if not w.get("sin_patada", false):
+				patada = -Vector2.from_angle(angulo) * PATADA * (1.6 if w.get("perdigones", 1) > 1 else 1.0)
+				patada_t = 0.0
 	else:
 		if sprite.animation.begins_with("andar"):
 			# Si golpea andando, las piernas siguen el paso desde donde iba (animar() las enseña)
@@ -864,7 +885,7 @@ func disparar(angulo: float) -> void:
 	# El fogonazo de pixelfx (fogonazo.gd), donde se ve la boca: se ordena como las balas, pero hacia los lados y hacia
 	# abajo, siempre delante de Johnny
 	var orden := salida.y if sin(angulo) < -0.3 else maxf(salida.y, global_position.y + 2.0)
-	Fogonazo.soltar(get_parent(), huecos[mano], salida - Vector2(0, 50), angulo, orden)
+	Fogonazo.soltar(get_parent(), w.get("fogonazo", huecos[mano]), salida - Vector2(0, 50), angulo, orden)
 	if w.perdigones > 1:
 		Temblor.temblar(4.0)   # la escopeta da un buen golpe
 	# El fogonazo alumbra un instante alrededor (más con la escopeta)
@@ -897,6 +918,11 @@ func oir_disparo() -> void:
 
 # Antes de disparar: ¿hay bala en el cargador (o fuego en el depósito)? Si no, recarga. La escopeta puede disparar
 # a mitad de recarga (con lo que lleve metido); las demás, no
+# ¿Están girando los cañones de la gatling? (se ha pedido disparar con ella en este paso de física o en el de antes)
+func girando() -> bool:
+	return Engine.get_physics_frames() - giro_paso <= 1 and arma().has("arranque")
+
+
 func lista_para_disparar() -> bool:
 	if recargando > 0.0:
 		if not arma().cartucho or balas <= 0:
@@ -1121,7 +1147,7 @@ func cambiar_mano() -> void:
 # juego (fogonazo.gd y chispa.gd)
 func preparar_fogonazo() -> void:
 	if is_inside_tree():
-		Fogonazo.precalentar(get_parent(), huecos.get("fuego", ""))
+		Fogonazo.precalentar(get_parent(), Armas.datos(huecos.get("fuego", "")).get("fogonazo", huecos.get("fuego", "")))
 		Chispa.precalentar(get_parent())
 		if stats.resucitar and not resucitado:   # el desfibrilador (M55), para que no pare el juego al caer
 			EfectoSuelo.precalentar(get_parent(), "desfibrilador")

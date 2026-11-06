@@ -1,0 +1,25 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con la gatling (lo lee tools/arma.py del juego JS). Las posturas quietas de south y north NO son las del estado de PixelLab (allí la gatling apuntaba de lado): son el último fotograma de una animación corta en la que Johnny gira el arma (posturas/), como se hizo con la MP5. Las originales están en descartes/rotations-viejas/.",
+  "andar": {
+    "nota": "El ciclo de andar lo elige el script, salvo en south (el tramo de 11 fotogramas cierra con 26 píxeles cambiados, el que encuentra solo con 115) y north-west (los 12 desde el quieto cierran con 42). En north cierra con 191, pero de un fotograma al siguiente cambian unos 500: no se nota.",
+    "ciclo": {"south": [1, 11], "north-west": [0, 12]}
+  },
+  "ataque": {
+    "nota": "Disparo. La gatling dispara 12 veces por segundo, así que cada disparo dura 0,08 s y solo caben 3 fotogramas de los 8 de PixelLab, empezando por el del fogonazo; se repite con cada bala y se ve como un traqueteo. En south y south-east el fogonazo sale un fotograma más tarde. Donde PixelLab tiñó a Johnny de amarillo con el fogonazo, arma.py deja el dibujo quieto y solo conserva el fogonazo (en east el primero no lo veía solo: 'sin_tinte' se lo dice a mano). 'boca': 'fogonazo' hace que el script busque dónde está la boca del arma en cada dirección para que las balas nazcan ahí.",
+    "duracion": 0.08,
+    "impacto": 0,
+    "boca": "fogonazo",
+    "efectos": true,
+    "sin_tinte": {"east": [1, 2, 3], "south-east": [2, 3], "south": [3, 4]},
+    "fotogramas": {
+      "south":      [2, 3, 4],
+      "south-east": [2, 3, 4],
+      "east":       [1, 2, 3],
+      "north-east": [1, 2, 3],
+      "north":      [1, 2, 3],
+      "north-west": [1, 2, 3],
+      "west":       [1, 2, 3],
+      "south-west": [1, 2, 3]
+    }
+  }
+}

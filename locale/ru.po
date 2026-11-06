@@ -199,6 +199,10 @@ msgid "MP5"
 msgstr "MP5"
 
 #: scripts/armas.gd
+msgid "Gatling"
+msgstr "Гатлинг"
+
+#: scripts/armas.gd
 msgid "Lanzallamas"
 msgstr "Огнемет"
 
@@ -253,6 +257,18 @@ msgstr "Нет дроби!"
 #: scripts/armas.gd
 msgid "la escopeta"
 msgstr "дробовик"
+
+#: scripts/armas.gd
+msgid "Cinta de balas"
+msgstr "Пулемётная лента"
+
+#: scripts/armas.gd
+msgid "¡Sin cinta de balas!"
+msgstr "Лента кончилась!"
+
+#: scripts/armas.gd
+msgid "la gatling"
+msgstr "гатлинг"
 
 #: scripts/armas.gd scripts/objetos.gd
 msgid "Gasolina"
@@ -2992,8 +3008,8 @@ msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierr
 msgstr "оружие ближнего боя (швабра, нож, бита, бензопила и катана)"
 
 #: scripts/objetos.gd
-msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
-msgstr "оружие дальнего боя (пистолет, MP5 и дробовик)"
+msgid "las armas a distancia (la pistola, la MP5, la escopeta y la gatling)"
+msgstr "оружие дальнего боя (пистолет, MP5, дробовик и гатлинг)"
 
 #: scripts/objetos.gd
 msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
@@ -5635,6 +5651,13 @@ msgstr[1] "%d заряда дроби"
 msgstr[2] "%d зарядов дроби"
 
 #: scripts/ui/inventario.gd
+msgid "%d bala de cinta"
+msgid_plural "%d balas de cinta"
+msgstr[0] "%d патрон в ленте"
+msgstr[1] "%d патрона в ленте"
+msgstr[2] "%d патронов в ленте"
+
+#: scripts/ui/inventario.gd
 msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d канистра бензина"
@@ -5718,6 +5741,10 @@ msgstr "Пять дробин веером. Заряжается по одном
 #: scripts/ui/inventario.gd
 msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
 msgstr "Очень быстрые очереди. Тратит те же пули, что и пистолет."
+
+#: scripts/ui/inventario.gd
+msgid "Tarda un momento en arrancar y luego no para. Pesa: andas más despacio. Gasta cinta de balas."
+msgstr "Раскручивается не сразу, но потом не останавливается. Тяжёлый: идёшь медленнее. Тратит пулемётную ленту."
 
 #: scripts/ui/inventario.gd
 msgid "Llamarada continua que quema a todos. Se llena con gasolina."

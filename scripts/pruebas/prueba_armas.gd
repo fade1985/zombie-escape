@@ -3186,3 +3186,134 @@ func probar_katana() -> void:
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
+
+
+# La gatling (6 nov): comprarla, su munición nueva (la cinta de balas), el arranque de los cañones (medio segundo sin
+# balas), la ráfaga, lo despacio que anda disparando (sin el empujón hacia atrás), las 8 direcciones y dos skins
+func probar_gatling() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.dolares = maxi(g2.dolares, 200)
+		g2.skins = ["portero", "gymbro"]
+		g2.skin = "")
+	johnny.vestir("")
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas", "b_gatling")
+	await get_tree().create_timer(0.3).timeout
+	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("gatling"), Armas.PRECIOS.gatling, ordenador.info.text])
+	Captura.foto("captura-gatling-tienda.png")
+	ordenador.comprar_arma("gatling")
+	await get_tree().process_frame
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().process_frame
+	var w := Armas.datos("gatling")
+	print("Comprada: a distancia «%s» · familia %s · hoja «%s» · munición %s («%s», %s) · daño %d · %.0f balas/s · cinta de %d (esperado: gatling, distancia, conserje-48-gatling.tres, cinta, Cinta de balas, la gatling, 6, 12, 100)" % [
+		johnny.huecos.fuego, Armas.familia("gatling"), w.hoja.resource_path.get_file(), Armas.municion("gatling"),
+		Armas.municion_nombre("cinta"), Armas.municion_para("cinta"), w.dano, w.ritmo, w.cargador])
+
+	# a la sala de pruebas, con la gatling en la mano
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger("gatling")
+	if johnny.mano != "fuego":
+		johnny.cambiar_mano()
+	johnny.meter_municion("cinta", 100)
+	johnny.modo = "quieto"   # que no ataque por su cuenta
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(-160, 200)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-gatling-quieto.png")
+	print("Cinta: %d en el arma y %d de reserva, en %d hueco(s) de munición" % [johnny.balas, johnny.cuanta("cinta"),
+		johnny.huecos_municion().size()])
+
+	# el arranque y la ráfaga: dispara sin parar hacia la derecha, paso a paso
+	var al_empezar: int = johnny.disparos
+	var en_arranque := -1
+	var t := 0.0
+	var foto_giro := false
+	var foto_rafaga := false
+	while t < 1.5:
+		johnny.intentar_atacar(0.0)
+		await get_tree().physics_frame
+		t += get_physics_process_delta_time()
+		if t >= 0.25 and not foto_giro:
+			foto_giro = true
+			Captura.foto("captura-gatling-arranque.png")
+		if t >= 0.45 and en_arranque < 0:
+			en_arranque = johnny.disparos - al_empezar
+		if t >= 1.0 and not foto_rafaga:
+			foto_rafaga = true
+			Captura.foto("captura-gatling-rafaga.png")
+	var en_rafaga: int = johnny.disparos - al_empezar - en_arranque
+	print("Arranque: %d balas en los primeros 0,45 s · después, %d en 1,05 s (esperado: 0 · unas 10 o 12)" % [en_arranque, en_rafaga])
+	await get_tree().create_timer(0.3).timeout
+	print("Parado un rato: los cañones %s (esperado: parados)" % ("girando" if johnny.girando() else "parados"))
+	for i in 3:   # al volver a disparar, otra vez medio segundo de arranque
+		johnny.intentar_atacar(0.0)
+		await get_tree().physics_frame
+	print("Vuelve a disparar: %d balas en los 3 primeros pasos (esperado: 0)" % (johnny.disparos - al_empezar - en_arranque - en_rafaga))
+
+	# andando: sin disparar y disparando (más despacio y sin empujón hacia atrás)
+	await get_tree().create_timer(0.4).timeout
+	Input.action_press("abajo")
+	await get_tree().create_timer(0.6).timeout
+	var sin_disparar: float = johnny.velocity.length()
+	t = 0.0
+	var empujon := 0.0
+	while t < 1.2:
+		johnny.intentar_atacar(0.0)
+		await get_tree().physics_frame
+		t += get_physics_process_delta_time()
+		if t > 0.6:
+			empujon = maxf(empujon, absf(johnny.sprite.position.x))
+		if t >= 1.0 and t < 1.0 + get_physics_process_delta_time():
+			Captura.foto("captura-gatling-andando.png")
+	var disparando: float = johnny.velocity.length()
+	Input.action_release("abajo")
+	print("Andando: %.0f sin disparar, %.0f disparando (esperado: la segunda, un %d %% de la primera) · empujón del dibujo %.1f (esperado: 0)" % [
+		sin_disparar, disparando, roundi(w.lenta * 100), empujon])
+	await get_tree().create_timer(0.5).timeout
+
+	# las 8 direcciones: quieta y disparando (otra vez donde empezó, que andando ha bajado)
+	johnny.meter_municion("cinta", 100)
+	johnny.global_position = sala.diana.global_position + Vector2(-160, 200)
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-gatling-%s.png" % d)
+		t = 0.0
+		while t < 0.62:
+			johnny.intentar_atacar(johnny.DIRS.find(d) * PI / 4)
+			await get_tree().physics_frame
+			t += get_physics_process_delta_time()
+		Captura.foto("captura-gatling-disparo-%s.png" % d)
+		await get_tree().create_timer(0.4).timeout
+
+	# la caja de munición del suelo: con la gatling en la mano, la de la cinta
+	print("Caja del suelo con la gatling: «%s» (esperado: municion-gatling)" % icono_caja().resource_path.get_file().get_basename())
+
+	# con dos skins: su hoja de la gatling
+	for skin in ["portero", "gymbro"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "se"
+		await get_tree().create_timer(0.2).timeout
+		Captura.foto("captura-gatling-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-gatling-%s.tres)" % [skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+
+	Guardado.cambiar(func(g2):
+		g2.dolares = antes.dolares
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
