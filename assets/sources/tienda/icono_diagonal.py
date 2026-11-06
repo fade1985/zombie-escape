@@ -1,17 +1,20 @@
-# El icono de la casilla del cuchillo (assets/ui/tienda/cuchillo.png, 48x48) sacado del dibujo grande de la ficha
-# (cuchillo-grande.png, de PixelLab): el mismo cuchillo girado 45 grados y más pequeño. Como girar y encoger un dibujo de
+# El icono de la casilla de un arma de la tienda (assets/ui/tienda/<id>.png, 48x48) sacado de su dibujo grande de la
+# ficha (<id>-grande.png, de PixelLab): la misma arma girada 45 grados y más pequeña. Como girar y encoger un dibujo de
 # píxeles lo emborrona, se hace como el RotSprite: se agranda 8 veces sin suavizar, se gira, y se vuelve a encoger
 # quedándose en cada píxel con el color que más sale en su trozo (nada de mezclas). Después se le pone el contorno
-# oscuro alrededor, como el resto de dibujos. Uso: py cuchillo_diagonal.py [escala]
+# oscuro alrededor, como el resto de dibujos. Deja intentos/<id>-mano.png para revisarlo; el bueno se copia a mano.
+#   py icono_diagonal.py cuchillo 0.735     (la escala: lo más grande que quepa en 48; dice el tamaño que sale)
+#   py icono_diagonal.py bate 0.6
 import sys
 from collections import Counter
 from PIL import Image
 
-ESCALA = float(sys.argv[1]) if len(sys.argv) > 1 else 0.66
+ARMA = sys.argv[1]
+ESCALA = float(sys.argv[2]) if len(sys.argv) > 2 else 0.66
 GRANDE = 8
 LADO = 48
 
-origen = Image.open("../../ui/tienda/cuchillo-grande.png").convert("RGBA")
+origen = Image.open("../../ui/tienda/%s-grande.png" % ARMA).convert("RGBA")
 origen = origen.crop(origen.getbbox())
 grande = origen.resize((origen.width * GRANDE, origen.height * GRANDE), Image.NEAREST)
 girado = grande.rotate(45, resample=Image.NEAREST, expand=True)
@@ -37,7 +40,7 @@ for y in range(alto):
             final.putpixel((x, y), cuenta.most_common(1)[0][0])
 
 # el contorno: el color más oscuro del dibujo, en los píxeles del borde que tocan lo vacío (sin esquinas)
-colores = Counter(c for c in origen.getdata() if c[3] > 0)
+colores = Counter(c for c in origen.get_flattened_data() if c[3] > 0)
 oscuro = min(colores, key=lambda c: sum(c[:3]))
 borde = final.copy()
 fp = final.load()
@@ -53,5 +56,5 @@ for y in range(final.height):
 
 lienzo = Image.new("RGBA", (LADO, LADO), (0, 0, 0, 0))
 lienzo.paste(borde, ((LADO - borde.width) // 2, (LADO - borde.height) // 2), borde)
-lienzo.save("intentos/cuchillo-mano.png")
+lienzo.save("intentos/%s-mano.png" % ARMA)
 print("tamaño del dibujo:", borde.size)
