@@ -170,6 +170,8 @@
 #   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!», su barrera (M80) y su tutorial [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles (se abren con
 #                       el clic, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
+#   --clic-mueble       delante del baúl de la sala: un clic lejos no lo abre (y Johnny ataca), uno encima sí, y J
+#                       también                                                              [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
 #   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel, sin muebles, y el nombre de la planta y de sus
@@ -702,6 +704,9 @@ func empezar_prueba() -> void:
 	elif "--acustica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_acustica()
+	elif "--clic-mueble" in args:
+		set_process(false)   # sin la prueba larga
+		probar_clic_mueble()
 	elif "--sala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_sala()

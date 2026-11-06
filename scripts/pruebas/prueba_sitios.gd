@@ -1095,12 +1095,6 @@ func probar_abrir_muebles(usables: Dictionary) -> void:
 			m.usar.disconnect(c)
 		veces[n] = 0
 		m.usar.connect(func(): veces[n] += 1)
-	var clic := func(abajo: bool) -> void:
-		var e := InputEventMouseButton.new()
-		e.button_index = MOUSE_BUTTON_LEFT
-		e.pressed = abajo
-		e.position = get_viewport().get_mouse_position()
-		Input.parse_input_event(e)
 	for n in usables:
 		var m: Node = usables[n][0]
 		johnny.position = m.position + Vector2(0, 22)
@@ -1109,9 +1103,10 @@ func probar_abrir_muebles(usables: Dictionary) -> void:
 		var sin_clic: int = veces[n]
 		if n == "Ordenador":
 			Captura.foto("captura-sala-ordenador.png")
-		clic.call(true)
+		var sobre: Vector2 = m.position + Vector2(0, -30)   # encima del dibujo del mueble
+		clic_raton(sobre, true)
 		await get_tree().create_timer(0.15).timeout
-		clic.call(false)
+		clic_raton(sobre, false)
 		await get_tree().physics_frame
 		print("%s: al arrimarse se abre %d veces (esperado: 0) · con el clic se abre %d (esperado: 1) · dispara %s (esperado: false)"
 			% [n, sin_clic, veces[n], johnny.espera > 0.0])
@@ -1142,9 +1137,10 @@ func probar_abrir_muebles(usables: Dictionary) -> void:
 	johnny.position = mapa.ordenador.position + Vector2(0, 140)
 	johnny.espera = 0.0
 	await get_tree().create_timer(0.3).timeout
-	clic.call(true)
+	var lejos: Vector2 = johnny.position + Vector2(120, 0)
+	clic_raton(lejos, true)
 	await get_tree().create_timer(0.15).timeout
-	clic.call(false)
+	clic_raton(lejos, false)
 	print("Lejos de los muebles: delante de alguno %s (esperado: false) · el clic dispara %s (esperado: true)"
 		% [johnny.ante_mueble != null, johnny.espera > 0.0 or johnny.ataque_t >= 0.0])
 	johnny.modo = antes_modo
@@ -1154,6 +1150,67 @@ func probar_abrir_muebles(usables: Dictionary) -> void:
 			m.usar.disconnect(c.callable)
 		for c in guardadas[n]:
 			m.usar.connect(c)
+
+
+# Un clic del ratón en "donde" (un punto del mapa): primero lo mueve ahí y luego pulsa o suelta el botón izquierdo
+func clic_raton(donde: Vector2, abajo: bool) -> void:
+	var en_ventana := get_viewport().get_final_transform() * (get_viewport().get_canvas_transform() * donde)
+	var m := InputEventMouseMotion.new()
+	m.position = en_ventana
+	Input.parse_input_event(m)
+	var e := InputEventMouseButton.new()
+	e.button_index = MOUSE_BUTTON_LEFT
+	e.pressed = abajo
+	e.position = en_ventana
+	Input.parse_input_event(e)
+
+
+# Con "--captura --clic-mueble": con Johnny delante del baúl (zona_usar.gd), un clic lejos del baúl no lo abre y Johnny
+# ataca hacia allí; un clic encima del baúl lo abre y no ataca; y J (sin puntero) también lo abre. La pantalla del
+# baúl no llega a abrirse: "usar" solo se cuenta. Foto: captura-clic-mueble.png (Johnny delante del baúl). Luego se cierra
+func probar_clic_mueble() -> void:
+	var baul: Node = mapa.baul
+	var guardadas: Array = baul.usar.get_connections().map(func(c): return c.callable)
+	for c in guardadas:
+		baul.usar.disconnect(c)
+	var veces := [0]
+	baul.usar.connect(func(): veces[0] += 1)
+	johnny.position = baul.position + Vector2(0, 22)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	johnny.modo = "libre"   # (después de esperar: al empezar, la partida le pone el de Opciones)
+	johnny.con_raton = true
+	Captura.foto("captura-clic-mueble.png")
+	print("Clic mueble: Johnny delante del baúl %s (esperado: true)" % [johnny.ante_mueble == baul.zona])
+	# un clic lejos, a la derecha y abajo, en el suelo
+	johnny.espera = 0.0
+	var lejos: Vector2 = johnny.position + Vector2(160, 90)
+	clic_raton(lejos, true)
+	await get_tree().create_timer(0.15).timeout
+	var ataca: bool = johnny.espera > 0.0 or johnny.ataque_t >= 0.0
+	clic_raton(lejos, false)
+	await get_tree().create_timer(0.6).timeout
+	print("Clic mueble: clic lejos · se abre %d (esperado: 0) · ataca %s (esperado: true)" % [veces[0], ataca])
+	# un clic encima del baúl
+	johnny.espera = 0.0
+	johnny.ataque_t = -1.0
+	var sobre: Vector2 = baul.position + Vector2(0, -30)
+	clic_raton(sobre, true)
+	await get_tree().create_timer(0.15).timeout
+	ataca = johnny.espera > 0.0 or johnny.ataque_t >= 0.0
+	clic_raton(sobre, false)
+	await get_tree().physics_frame
+	print("Clic mueble: clic encima · se abre %d (esperado: 1) · ataca %s (esperado: false)" % [veces[0], ataca])
+	# J, sin puntero: lo abre aunque el ratón esté lejos
+	for abajo in [true, false]:
+		var k := InputEventKey.new()
+		k.physical_keycode = KEY_J
+		k.pressed = abajo
+		Input.parse_input_event(k)
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+	print("Clic mueble: con J · se abre %d (esperado: 2)" % veces[0])
+	get_tree().quit()
 
 
 # Con "--captura --ascensor": el ascensor (partida.gd, arreglar_ascensor). En la planta baja no se arregla (la sala
