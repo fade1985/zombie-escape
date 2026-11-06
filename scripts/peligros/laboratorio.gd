@@ -105,7 +105,11 @@ func montar(d: Dictionary, m: Node) -> void:
 	mapa.cosas.add_child(puerta)
 
 
-func _exit_tree() -> void:
+# Lo que se puso en las cosas del mapa se borra solo cuando se borra este nodo de verdad: al salir de la planta, el
+# mapa se guarda fuera de la escena (partida.gd, dejar_mapa) y, al volver, tiene que seguir ahí
+func _notification(que: int) -> void:
+	if que != NOTIFICATION_PREDELETE:
+		return
 	for n in [cabina, puerta]:
 		if is_instance_valid(n):
 			n.queue_free()

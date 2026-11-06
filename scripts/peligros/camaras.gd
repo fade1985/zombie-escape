@@ -56,7 +56,11 @@ func montar(d: Dictionary, m: Node) -> void:
 		luz_alarma.append(luz)
 
 
-func _exit_tree() -> void:
+# Lo que se puso en las cosas del mapa se borra solo cuando se borra este nodo de verdad: al salir de la planta, el
+# mapa se guarda fuera de la escena (partida.gd, dejar_mapa) y, al volver, tiene que seguir ahí
+func _notification(que: int) -> void:
+	if que != NOTIFICATION_PREDELETE:
+		return
 	for c in cuerpos:
 		if is_instance_valid(c):
 			c.queue_free()

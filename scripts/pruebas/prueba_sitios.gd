@@ -1643,6 +1643,14 @@ func probar_camaras() -> void:
 	johnny.position = Vector2(cam.x + 120.0, cam.y + 120.0)
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-torre-camaras-3.png")
+	# salir del departamento (el mapa se guarda fuera de la escena, partida.gd dejar_mapa) y volver: las cámaras
+	# siguen en la pared (antes se borraban al salir y, al volver, el juego se paraba con un error)
+	var guardado: Node = mapa
+	remove_child(guardado)
+	await get_tree().physics_frame
+	add_child(guardado)
+	await get_tree().create_timer(0.3).timeout
+	print("Cámaras: tras salir y volver, dibujos enteros %s (esperado: true)" % c.cuerpos.all(func(n): return is_instance_valid(n)))
 	get_tree().quit()
 
 
