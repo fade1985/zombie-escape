@@ -181,6 +181,10 @@ msgid "Motosierra"
 msgstr "电锯"
 
 #: scripts/armas.gd
+msgid "Katana"
+msgstr "武士刀"
+
+#: scripts/armas.gd
 msgid "Pistola"
 msgstr "手枪"
 
@@ -2980,8 +2984,8 @@ msgid "%s y %s"
 msgstr "%s和%s"
 
 #: scripts/objetos.gd
-msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate y la motosierra)"
-msgstr "近战武器（拖把、小刀、球棒和电锯）"
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierra y la katana)"
+msgstr "近战武器（拖把、小刀、球棒、电锯和武士刀）"
 
 #: scripts/objetos.gd
 msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
@@ -5664,6 +5668,10 @@ msgstr "出手很快，但得贴近才行。"
 #: scripts/ui/inventario.gd
 msgid "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante."
 msgstr "很慢，但普通僵尸一击就倒。攻击距离远，只打正前方。"
+
+#: scripts/ui/inventario.gd
+msgid "Desenvaina de golpe y corta de abajo arriba. Rápida, con un abanico medio."
+msgstr "瞬间拔刀，自下而上斩击。速度快，挥砍范围中等。"
 
 #: scripts/ui/inventario.gd
 msgid "Dispara de una en una, recto y lejos."

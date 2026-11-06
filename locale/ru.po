@@ -183,6 +183,10 @@ msgid "Motosierra"
 msgstr "Бензопила"
 
 #: scripts/armas.gd
+msgid "Katana"
+msgstr "Катана"
+
+#: scripts/armas.gd
 msgid "Pistola"
 msgstr "Пистолет"
 
@@ -2984,8 +2988,8 @@ msgid "%s y %s"
 msgstr "%s и %s"
 
 #: scripts/objetos.gd
-msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate y la motosierra)"
-msgstr "оружие ближнего боя (швабра, нож, бита и бензопила)"
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierra y la katana)"
+msgstr "оружие ближнего боя (швабра, нож, бита, бензопила и катана)"
 
 #: scripts/objetos.gd
 msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
@@ -5698,6 +5702,10 @@ msgstr "Очень быстрый, но надо подойти вплотную
 #: scripts/ui/inventario.gd
 msgid "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante."
 msgstr "Медленная, но обычный зомби падает с одного удара. Бьёт далеко, прямо вперёд."
+
+#: scripts/ui/inventario.gd
+msgid "Desenvaina de golpe y corta de abajo arriba. Rápida, con un abanico medio."
+msgstr "Выхватывается молниеносно и рубит снизу вверх. Быстрая, бьёт средним веером."
 
 #: scripts/ui/inventario.gd
 msgid "Dispara de una en una, recto y lejos."

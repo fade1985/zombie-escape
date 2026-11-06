@@ -1,0 +1,24 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con la katana (lo lee tools/arma.py del juego JS). La casilla es la de siempre (96x96), pero con los pies más abajo: el corte sube por encima de la cabeza y casi no baja de los pies.",
+  "celda": [96, 96],
+  "pivote": [48, 84],
+  "andar": {
+    "nota": "El ciclo de andar lo elige el script, salvo en north-west: el tramo de 11 fotogramas cierra mucho mejor (cambian 30 píxeles) que el que encuentra solo, que como mucho mira tramos de 10.",
+    "ciclo": {"north-west": [1, 11]}
+  },
+  "ataque": {
+    "nota": "Qué fotogramas de PixelLab se usan en cada dirección y en qué orden: desenvaina, el corte de abajo arriba con la media luna de luz, se queda un momento con la hoja arriba, la baja y la envaina. En todas, la media luna sale en el tercero (índice 2). Donde PixelLab la dibujó un fotograma más tarde (south-east, north y west) se empieza uno más tarde.",
+    "duracion": 0.5,
+    "impacto": 2,
+    "fotogramas": {
+      "south":      [1, 2, 3, 4, 5, 6, 7, 9, 11, 12],
+      "south-east": [2, 3, 4, 5, 6, 7, 8, 9, 11, 12],
+      "east":       [1, 2, 3, 4, 5, 6, 7, 9, 11, 12],
+      "north-east": [1, 2, 3, 4, 5, 6, 7, 9, 11, 12],
+      "north":      [2, 3, 4, 5, 6, 7, 8, 9, 11, 12],
+      "north-west": [1, 2, 3, 4, 5, 6, 7, 9, 11, 12],
+      "west":       [2, 3, 4, 5, 6, 7, 8, 9, 11, 12],
+      "south-west": [1, 2, 3, 4, 5, 6, 7, 9, 11, 12]
+    }
+  }
+}

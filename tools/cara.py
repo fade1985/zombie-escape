@@ -35,7 +35,7 @@ from PIL import Image
 
 RAIZ = Path(__file__).resolve().parent.parent
 SPRITES = RAIZ / "assets" / "sprites"
-ARMAS = ["guardia", "bate", "cuchillo", "motosierra", "pistola", "escopeta", "mp5", "lanzallamas", "desintegrador", "lanza-rayos"]
+ARMAS = ["guardia", "bate", "cuchillo", "motosierra", "katana", "pistola", "escopeta", "mp5", "lanzallamas", "desintegrador", "lanza-rayos"]
 DIRECCIONES = ["south", "south-east", "east", "north-east", "north", "north-west", "west", "south-west"]
 BARBILLA = 12     # hasta esta fila (del dibujo de 48) llega la cabeza de siempre
 PARECIDO = 60     # dos colores se parecen si la suma de sus diferencias es menor que esto

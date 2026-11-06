@@ -4957,5 +4957,37 @@
    "cost": "10 generaciones"
   },
   "cost_total": "36 generaciones: 10 del estado, 8 del ataque, 8 del andar y 10 de los dos iconos"
+ },
+ "conserje-48-katana": {
+  "kind": "character_state",
+  "character_id": "2a4876f5-89d0-40a7-b6ca-4bdb8044f109",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Katana envainada",
+  "nota": "Estado de Johnny con la katana (2026-11-06), pedido por el dueño con dos fotos de referencia solo para la pose (envainada a la cadera izquierda, la mano izquierda en la vaina y la derecha en el mango, listo para desenvainar); diseño nuestro. Lienzo de 64x64 sin la paleta de Johnny (max_colors 48), como la motosierra. Bien a la primera. EN EL JUEGO (sprite conserje-48-katana, casilla de 96x96 con los pies en 48,84): reposo, andar y ataque en las 8 direcciones. Se monta con: py ../game/tools/arma.py conserje-48-katana, luego py tools/hacer_frames.py assets/sprites/conserje-48-katana y py tools/cara.py <skin> katana para cada skin.",
+  "request": {
+   "edit_description": "ready to draw a sheathed katana: standing fairly upright with knees only slightly bent and the torso leaning forward just a little; the katana is in its scabbard at his left hip, the left hand holding the dark scabbard near its mouth and the right hand already gripping the handle across his body, ready to draw; the scabbard is dark navy black lacquer, the handle is wrapped in a dark red cord with a small round dark guard; the sword stays sheathed at the left hip in every view: front, side and back; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "max_colors": 48
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-06",
+  "ataque": {
+   "nota": "Desenvainar con un corte de abajo arriba que deja una media luna de luz, y volver a envainar. PixMiniMax (animate_character mode pixminimax), 12 fotogramas más el de partida, de una en una con el quieto pegado en un lienzo de 96x96 en (16, 26) como partida y llegada. Todas bien a la primera; la media luna sale en el fotograma 3 o 4. Cada dirección quedó en su propio grupo de animación (ataque-katana). Cuatro textos: el común (east, west, south-east y south-west cambiando initial_pose), el de frente (south: de la rodilla izquierda a por encima del hombro derecho), el de espaldas (north) y el de las diagonales de espaldas. El fotograma 0 se cambió por el dibujo quieto (pegado sin máscara, si no arma.py dice que no coincide).",
+   "animation_name": "ataque-katana",
+   "cost": "8 generaciones",
+   "action_description_comun": "From the ready stance with the katana sheathed at his left hip, he draws it in one lightning-fast motion: the steel blade flashes out of the dark scabbard and sweeps in a single rising diagonal cut in front of him, from low near the floor in front of his legs up to above his shoulder, leaving a pale crescent-shaped streak of light curving upward along the arc of the blade. He holds the finish for an instant with the blade raised high, then lowers it and slides it back into the scabbard at his left hip, settling cleanly into the starting stance with his right hand on the handle. He keeps facing the same direction the whole time. The tail of the red bandana flicks with the motion. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+  },
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida, las 8 direcciones en una sola llamada, bien a la primera. tools/arma.py elige el tramo que hace ciclo (en north-west se le dice en arma.json).",
+   "group": "32063b3e-3f8e-46bb-99f6-3741af26473e",
+   "animation_name": "andar-katana",
+   "cost": "8 generaciones"
+  },
+  "icono": {
+   "nota": "create_object_pro_flash 32x32, 1 dirección, baúl como estilo sin sus colores. Dos intentos: assets/sources/katana/intentos/icono-A.png (semilla 32001, objeto dd41fd96-7bd5-42f0-ac39-8423beee5d17) y icono-B.png (32002, 89e9ca40-6b8a-4959-b1ac-b6c0cbe3b3e7); hoja para elegir: assets/sources/katana/elegir-icono.png. ELEGIDO EL A por el dueño (2026-11-06): es assets/ui/iconos/katana.png tal cual.",
+   "cost": "10 generaciones"
+  },
+  "cost_total": "36 generaciones: 10 del estado, 8 del ataque, 8 del andar y 10 de los dos iconos"
  }
 }

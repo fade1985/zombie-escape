@@ -3092,3 +3092,97 @@ func probar_motosierra() -> void:
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
+
+
+# La katana (6 nov): comprarla, el corte de abajo arriba con la media luna (a quién le da), las 8 direcciones y dos
+# skins. Lanzar con: -- --captura --katana
+func probar_katana() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.dolares = maxi(g2.dolares, 200)
+		g2.skins = ["portero", "gymbro"]
+		g2.skin = "")
+	johnny.vestir("")
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas", "b_katana")
+	await get_tree().create_timer(0.3).timeout
+	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("katana"), Armas.PRECIOS.katana, ordenador.info.text])
+	Captura.foto("captura-katana-tienda.png")
+	ordenador.comprar_arma("katana")
+	await get_tree().process_frame
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().process_frame
+	var w := Armas.datos("katana")
+	print("Comprada: cuerpo a cuerpo «%s» · familia %s · hoja «%s» · daño %d · %.1f golpes/s · alcance %.0f · abanico %.0f · icono «%s» (esperado: katana, cuerpo, conserje-48-katana.tres, 20, 1.4, 70, 100, katana)" % [
+		johnny.huecos.cuerpo, Armas.familia("katana"), w.hoja.resource_path.get_file(), w.dano, w.ritmo, w.alcance,
+		w.arco, Objetos.icono("katana")])
+
+	# a la sala de pruebas, con la katana en la mano
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger("katana")
+	if johnny.mano != "cuerpo":
+		johnny.cambiar_mano()
+	johnny.modo = "quieto"   # que no ataque por su cuenta
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-katana-quieto.png")
+
+	# el corte: tres zombis normales quietos
+	var z := []
+	for d in [Vector2(55, 0), Vector2(10, 70), Vector2(130, 0)]:
+		z.append(meter_zombi("normal", johnny.position + d))
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.aturdido = 30.0
+	var vidas := z.map(func(n): return n.vida)
+	johnny.intentar_atacar(0.0)
+	await get_tree().create_timer(0.12).timeout
+	Captura.foto("captura-katana-corte.png")
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-katana-despues.png")
+	var herido := func(i): return not is_instance_valid(z[i]) or z[i].vida < vidas[i]
+	print("Corte a la derecha: el de delante (a 55) herido %s · el de abajo (fuera del abanico) herido %s · el de lejos (a 130) herido %s (esperado: true, false, false)" % [
+		herido.call(0), herido.call(1), herido.call(2)])
+	for zombi in z:
+		if is_instance_valid(zombi):
+			zombi.remove_from_group("zombis")
+			zombi.queue_free()
+	await get_tree().create_timer(0.5).timeout
+
+	# las 8 direcciones: quieta y el corte
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-katana-%s.png" % d)
+		johnny.intentar_atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.12).timeout
+		Captura.foto("captura-katana-corte-%s.png" % d)
+		await get_tree().create_timer(0.8).timeout
+
+	# con dos skins: su hoja de la katana
+	for skin in ["portero", "gymbro"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "se"
+		await get_tree().create_timer(0.2).timeout
+		Captura.foto("captura-katana-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-katana-%s.tres)" % [skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+
+	Guardado.cambiar(func(g2):
+		g2.dolares = antes.dolares
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()

@@ -182,6 +182,10 @@ msgid "Motosierra"
 msgstr "Kettensäge"
 
 #: scripts/armas.gd
+msgid "Katana"
+msgstr "Katana"
+
+#: scripts/armas.gd
 msgid "Pistola"
 msgstr "Pistole"
 
@@ -2982,8 +2986,8 @@ msgid "%s y %s"
 msgstr "%s und %s"
 
 #: scripts/objetos.gd
-msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate y la motosierra)"
-msgstr "die Nahkampfwaffen (Mopp, Messer, Schläger und Kettensäge)"
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierra y la katana)"
+msgstr "die Nahkampfwaffen (Mopp, Messer, Schläger, Kettensäge und Katana)"
 
 #: scripts/objetos.gd
 msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
@@ -5681,6 +5685,10 @@ msgstr "Sehr schnell, aber du musst nah ran."
 #: scripts/ui/inventario.gd
 msgid "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante."
 msgstr "Langsam, aber ein normaler Zombie fällt mit einem einzigen Schlag. Große Reichweite, gerade nach vorn."
+
+#: scripts/ui/inventario.gd
+msgid "Desenvaina de golpe y corta de abajo arriba. Rápida, con un abanico medio."
+msgstr "Blitzschnell gezogen, schneidet von unten nach oben. Schnell, mit mittlerem Fächer."
 
 #: scripts/ui/inventario.gd
 msgid "Dispara de una en una, recto y lejos."

@@ -158,6 +158,7 @@ const QUE_HACE := {
 	"bate": "Un golpe fuerte que empuja a los zombis.",
 	"cuchillo": "Muy rápido, pero hay que arrimarse.",
 	"motosierra": "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante.",
+	"katana": "Desenvaina de golpe y corta de abajo arriba. Rápida, con un abanico medio.",
 	"pistola": "Dispara de una en una, recto y lejos.",
 	"escopeta": "Cinco perdigones en abanico. Se recarga de cartucho en cartucho.",
 	"mp5": "Ráfagas muy rápidas. Gasta las mismas balas que la pistola.",

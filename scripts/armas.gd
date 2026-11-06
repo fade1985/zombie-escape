@@ -26,7 +26,7 @@ class_name Armas
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
 # no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
-const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "pistola": 0, "escopeta": 30, "mp5": 40, "pistola_electrica": 45,
+const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 0, "escopeta": 30, "mp5": 40, "pistola_electrica": 45,
 	"lanzallamas": 60, "desintegrador": 60}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
@@ -223,6 +223,18 @@ const DATOS := {
 		"hoja": preload("res://assets/sprites/conserje-48-motosierra.tres"),
 		"punta": {"s": Vector2(22, 0), "se": Vector2(27, -1), "e": Vector2(30, -13), "ne": Vector2(27, -35),
 			"n": Vector2(-18, -40), "no": Vector2(-28, -35), "o": Vector2(-31, -14), "so": Vector2(-28, -1)},
+	},
+	# la katana (6 nov): la lleva envainada a la cadera izquierda, con la mano derecha ya en el mango, y el golpe es
+	# desenvainar de golpe con un corte de abajo arriba que deja una media luna de luz; luego la vuelve a envainar
+	# (conserje-48-katana, de PixelLab). Rápida y de alcance medio, en un abanico medio. El corte llega enseguida
+	# ("momento" 0,2: en el tercero de sus 10 fotogramas). Su casilla es la de siempre, de 96x96, pero con los pies más
+	# abajo (48,84), porque el corte sube por encima de la cabeza. "punta": el final de la vaina (o del mango)
+	"katana": {
+		"nombre": "Katana", "tipo": "cuerpo", "dano": 20, "ritmo": 1.4, "alcance": 70.0, "arco": 100.0,   # [traducir]
+		"empuje": 1.2, "parada": 0.06, "momento": 0.2, "pies": Vector2(48, 84),
+		"hoja": preload("res://assets/sprites/conserje-48-katana.tres"),
+		"punta": {"s": Vector2(16, -9), "se": Vector2(-16, -13), "e": Vector2(-15, -13), "ne": Vector2(-19, -12),
+			"n": Vector2(-14, -9), "no": Vector2(-15, -24), "o": Vector2(17, -11), "so": Vector2(21, -12)},
 	},
 	"pistola": {
 		"nombre": "Pistola", "tipo": "fuego", "dano": 10, "ritmo": 2.5, "alcance": 420.0, "velocidad": 620.0,   # [traducir]
