@@ -64,6 +64,10 @@ COMO_GRIS = {"lanzallamas": {
     (96, 128, 40): (98, 86, 73),
     (48, 80, 44): (52, 63, 76),
 }}
+# Y el bate de metal (tools/bate_metal.py): sus grises y los negros de la cinta se miran como la madera que eran en
+# ese mismo píxel (la hoja de madera, guardada en assets/sources), para que la cabeza nueva quede igual que antes
+COMO_GRIS["bate"] = __import__("bate_metal").como_madera()
+DE_ANTES = {"bate": RAIZ / "assets" / "sources" / "conserje-48-bate" / "hoja-madera.png"}
 
 
 def dist(a, b):
@@ -499,13 +503,14 @@ def main():
         antes = hoja.copy()
         px = hoja.load()
         grises = COMO_GRIS.get(arma, {})
+        de_antes = cargar(DE_ANTES[arma]).load() if arma in DE_ANTES else None
         rojos = {}
         for y in range(hoja.height) if grises else ():
             for x in range(hoja.width):
                 c = px[x, y]
                 if c[3] and c[:3] in grises:
-                    rojos[(x, y)] = c
-                    px[x, y] = grises[c[:3]] + (c[3],)
+                    px[x, y] = de_antes[x, y] if de_antes else grises[c[:3]] + (c[3],)
+                    rojos[(x, y)] = (c, px[x, y])
         # dónde está la cabeza en el dibujo quieto de cada dirección (para cuando el pañuelo no se vea)
         cerca = {}
         for direc, v in datos["anims"]["still"]["dirs"].items():
@@ -522,8 +527,8 @@ def main():
                 dudosos.append(f"{anim} {direc} {col} ({parecido:.2f})")
             pegar(px, x0, y0, cw, ch, t, cabezas[direc], quietos[direc], johnny, claros[direc], sobra, pieles[direc])
             hechos.append((anim, direc, fila, col, t))
-        for (x, y), c in rojos.items():
-            if px[x, y] == grises[c[:3]] + (c[3],):
+        for (x, y), (c, como) in rojos.items():
+            if px[x, y] == como:
                 px[x, y] = c
         hoja.save(SPRITES / f"{nombre}-{skin}.png", optimize=True)
         tres = (SPRITES / f"{nombre}.tres").read_text(encoding="utf-8")

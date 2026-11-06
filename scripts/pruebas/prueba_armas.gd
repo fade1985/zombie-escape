@@ -3188,6 +3188,55 @@ func probar_katana() -> void:
 	get_tree().quit()
 
 
+# El bate de metal (7 nov, tools/bate_metal.py): en la sala de pruebas, quieto, el golpe, las 8 direcciones (quieto y
+# golpeando) y dos skins. Lanzar con: -- --captura --bate
+func probar_bate() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.skins = ["portero", "gymbro"]
+		g2.skin = "")
+	johnny.vestir("")
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger("bate")
+	if johnny.mano != "cuerpo":
+		johnny.cambiar_mano()
+	johnny.modo = "quieto"   # que no ataque por su cuenta
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Con el bate: hoja «%s» (esperado: conserje-48-bate.tres)" % johnny.sprite.sprite_frames.resource_path.get_file())
+	Captura.foto("captura-bate-quieto.png")
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-bate-%s.png" % d)
+		johnny.intentar_atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.15).timeout
+		Captura.foto("captura-bate-golpe-%s.png" % d)
+		await get_tree().create_timer(0.8).timeout
+	for skin in ["portero", "gymbro"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "se"
+		await get_tree().create_timer(0.2).timeout
+		Captura.foto("captura-bate-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-bate-%s.tres)" % [skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+	Guardado.cambiar(func(g2):
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
 # La gatling (6 nov): comprarla, su munición nueva (la cinta de balas), el arranque de los cañones (medio segundo sin
 # balas), la ráfaga, lo despacio que anda disparando (sin el empujón hacia atrás), las 8 direcciones y dos skins
 func probar_gatling() -> void:

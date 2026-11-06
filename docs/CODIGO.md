@@ -733,7 +733,10 @@ en una línea.
   naranja, sin `boca: fogonazo` y la boca a mano en `armas.gd`; `andar.ciclo` y `andar.espejo` para el andar. Retoques:
   `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
   ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y
-  quita el parpadeo de espaldas, que confundía el arma con unos ojos; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`) y
+  quita el parpadeo de espaldas, que confundía el arma con unos ojos; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`),
+  `bate_metal.py` (el bate de aluminio con el mango de cinta negra: busca el bate de madera en cada dibujo por su forma,
+  porque comparte los colores con la piel, y lo repinta; lee `assets/sources/conserje-48-bate/hoja-madera.png`, los
+  golpes que no acierta van a mano en `AJUSTES` y `py tools/bate_metal.py muestra` deja antes y después en `capturas/`) y
   `cara.py` (las skins: `py tools/cara.py <skin> [arma]`). Al final de todos, `respiracion.py`: rehace el reposo de
   todas las hojas de Johnny y sus skins (solo sube el pecho, la cabeza quieta; dos respiraciones en 6 s, con el
   parpadeo) y conserva las puntas del lanza ácido. Va después porque los otros esperan el reposo viejo de 20 dibujos:

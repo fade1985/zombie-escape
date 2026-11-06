@@ -71,6 +71,7 @@
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #   --motosierra        la motosierra: comprarla, la gota de sangre, el golpe por encima de la cabeza (a quién le
 #                       da), las 8 direcciones y dos skins                                 [prueba_armas.gd]
+#   --bate              el bate de metal: quieto, el golpe, las 8 direcciones y dos skins   [prueba_armas.gd]
 #   --katana            la katana: comprarla, el corte de abajo arriba (a quién le da), las 8 direcciones y dos
 #                       skins                                                              [prueba_armas.gd]
 #   --gatling           la gatling: comprarla, su cinta de balas, el arranque de los cañones, la ráfaga, lo
@@ -580,6 +581,9 @@ func empezar_prueba() -> void:
 	elif "--motosierra" in args:
 		set_process(false)   # sin la prueba larga
 		probar_motosierra()
+	elif "--bate" in args:
+		set_process(false)   # sin la prueba larga
+		probar_bate()
 	elif "--katana" in args:
 		set_process(false)   # sin la prueba larga
 		probar_katana()
