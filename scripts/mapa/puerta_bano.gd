@@ -20,7 +20,8 @@
 #   - las de las viviendas de quien aún no está rescatado (mapa.gd)
 # Las de las viviendas ("trastero": son los trasteros del edificio) son azules lisas, con el pomo de metal y el marco
 # de chapa crema: los mismos dibujos de frente repintados (puerta-trastero y puerta-trastero-abierta, de
-# tools/trastero.py). Todas van en tabiques horizontales: de lado no tienen dibujo propio.
+# tools/trastero.py); la del fondo del pasillo, en un tabique de lado, con los de lado repintados igual
+# (puerta-trastero-lado-cerrada y puerta-trastero-abierta-lado).
 #   - la blindada de la cámara acorazada de la joyería (joyeria.gd): de acero ("acero", también en su hueco)
 extends StaticBody2D
 
@@ -38,6 +39,8 @@ const SOMBRA_LADO := 3      # las filas de abajo de ese dibujo que son la sombra
 const GIRO_LADO := 2.6779   # lo que gira de lado al abrirse del todo, 153 grados: casi pegada a la pared (cada píxel hacia un lado, dos hacia arriba)
 const DIBUJO_TRASTERO := preload("res://assets/sprites/puerta-trastero.png")
 const ABIERTA_TRASTERO := preload("res://assets/sprites/puerta-trastero-abierta.png")
+const CERRADA_LADO_TRASTERO := preload("res://assets/sprites/puerta-trastero-lado-cerrada.png")
+const ABIERTA_LADO_TRASTERO := preload("res://assets/sprites/puerta-trastero-abierta-lado.png")
 const CERRADA_LADO := preload("res://assets/sprites/puerta-bano-lado-cerrada.png")   # la de lado, cerrada: un tablón de 16 × 32 (el hueco entero, con el tablón en medio)
 # Los dibujos de madera: limpios, los de arriba (solo en las zonas seguras: mapa.gd), o sucios, con sangre y arañazos (tools/puertas_sucias.py)
 const MADERA_LIMPIA := {"frente": DIBUJO, "abierta": ABIERTA, "lado": ABIERTA_LADO, "cerrada": CERRADA_LADO}
@@ -215,7 +218,7 @@ func _draw() -> void:
 		# en un tabique de lado: el umbral, el suelo del hueco, que lo llena de lado a lado del grueso del muro (al
 		# abrirse se va: abierta, la puerta se ordena por arriba y les taparía los pies a los que pasan)
 		if abierta < 1.0:
-			var umbral := Color("#2b3036") if acero else Color("#4a3428")
+			var umbral := Color("#2b3036") if acero else Color("#4b505c") if trastero else Color("#4a3428")
 			var borde := LINEA
 			umbral.a = 1.0 - abierta
 			borde.a = 1.0 - abierta
@@ -255,14 +258,15 @@ func hoja_de_lado(r: Rect2, temblor: float) -> void:
 	if abierta < FIN_CERRADA:
 		var tinte := Color.WHITE
 		tinte.a = 1.0 - abierta / FIN_CERRADA
-		draw_texture_rect(madera.cerrada, Rect2(r.position.x + temblor, r.position.y, r.size.x, r.size.y), false, tinte)
+		draw_texture_rect(CERRADA_LADO_TRASTERO if trastero else madera.cerrada, Rect2(r.position.x + temblor, r.position.y, r.size.x, r.size.y), false, tinte)
 	if abierta <= 0.0:
 		return
 	var bisagra := Vector2(lerpf(r.get_center().x, r.end.x - 2.0, abierta) + temblor, r.position.y + 4.0)
 	if abierta >= 1.0:
 		# (la esquina de arriba a la izquierda del dibujo, 4 unidades a la izquierda de la cara: el canto de la bisagra)
-		var tam: Vector2 = madera.lado.get_size() * 2.0
-		draw_texture_rect(madera.lado, Rect2(bisagra + Vector2(-4.0, -tam.y + SOMBRA_LADO * 2.0), tam), false)
+		var lado: Texture2D = ABIERTA_LADO_TRASTERO if trastero else madera.lado
+		var tam: Vector2 = lado.get_size() * 2.0
+		draw_texture_rect(lado, Rect2(bisagra + Vector2(-4.0, -tam.y + SOMBRA_LADO * 2.0), tam), false)
 		return
 	var giro := abierta * GIRO_LADO
 	draw_set_transform_matrix(Transform2D(Vector2(sin(giro), cos(giro)), Vector2(0, 1), bisagra))

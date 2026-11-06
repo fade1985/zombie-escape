@@ -1056,6 +1056,11 @@ func probar_viviendas() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
 	Captura.foto("captura-viviendas-torre.png")
+	# la del fondo, la única en un tabique de lado: se abre y se queda azul, con su pomo de metal (captura-viviendas-fondo-abierta.png)
+	for hoja in mapa.get_tree().get_nodes_in_group("obstaculos").filter(func(n): return n.get_script() == PUERTA_BANO and not n.de_frente):
+		hoja.abrir()
+	await get_tree().create_timer(1.5, false).timeout
+	Captura.foto("captura-viviendas-fondo-abierta.png")
 	# una puerta cerrada no deja pasar: Johnny anda hacia la de la médica un segundo y se queda en el pasillo
 	var de_ella: Dictionary = casas.apt.puertas.filter(func(d): return d.vecino == "medico")[0]
 	johnny.position = Vector2((de_ella.c + 1) * Planta.CASILLA, (Viviendas.PASILLO_F + 1) * Planta.CASILLA)

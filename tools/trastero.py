@@ -13,6 +13,10 @@ claro y las puertas azules lisas con el pomo de metal. Todo dibujado aquí, a la
                            assets/sprites/puerta-trastero.png   la hoja cerrada, de frente (28 × 43, como puerta-bano)
                            assets/sprites/puerta-trastero-abierta.png   abierta del todo, de frente (14 × 67, como
                                                                         puerta-bano-abierta: su forma, repintada)
+                           assets/sprites/puerta-trastero-lado-cerrada.png   la cerrada en un tabique de lado (16 × 32,
+                                                                             puerta-bano-lado-cerrada repintada)
+                           assets/sprites/puerta-trastero-abierta-lado.png   y abierta del todo (14 × 67,
+                                                                             puerta-bano-abierta-lado repintada)
 
 Luego, en Godot: --headless --path . --import
 """
@@ -283,6 +287,65 @@ def puerta_abierta():
     im.save(f'{SALIDA}/puerta-trastero-abierta.png')
 
 
+def es_laton(r, g, b):
+    """El pomo de latón de las de madera: amarillento, saturado y claro"""
+    h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
+    return 0.08 < h < 0.2 and s > 0.35 and l > 0.45
+
+
+def puerta_lado_cerrada():
+    """Cerrada, en un tabique de lado (la del fondo del pasillo): el tablón de puerta-bano-lado-cerrada (16 × 32) repintado.
+    El contorno y la sombra del suelo se quedan; la madera, con sus vetas y nudos, pasa a azul liso con su luz a la
+    izquierda y su sombra a la derecha; y el pomo, que sobresale por los dos lados del tablón, de metal (brillo arriba)"""
+    im = Image.open(f'{SALIDA}/puerta-bano-lado-cerrada.png').convert('RGBA')
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            if px[x, y][3] < 255 or px[x, y][:3] == LINEA:
+                continue
+            if x < 6 or x > 8:
+                c = METAL[0] if px[x, y - 1][:3] == LINEA else METAL[1]   # el pomo, a los lados del tablón
+            else:
+                c = AZUL_LUZ if x == 6 else AZUL_SOMBRA if x == 8 else AZUL
+            px[x, y] = c + (255,)
+    im.save(f'{SALIDA}/puerta-trastero-lado-cerrada.png')
+
+
+def puerta_lado_abierta():
+    """Abierta del todo, en un tabique de lado: puerta-bano-abierta-lado (14 × 67), la hoja casi de canto vista desde
+    el otro lado, repintada como puerta_abierta: todo lo de dentro, del mismo azul liso (sin las molduras de la madera);
+    el canto de la izquierda y los filos que dan al aire, con luz; y el pomo, de metal. Se quedan el contorno de fuera y
+    la sombra del suelo"""
+    im = Image.open(f'{SALIDA}/puerta-bano-abierta-lado.png').convert('RGBA')
+    orig = im.copy().load()
+    px = im.load()
+
+    def lleno(x, y):
+        return 0 <= x < im.width and 0 <= y < im.height and orig[x, y][3] == 255
+
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, a = px[x, y]
+            if a < 255:
+                continue   # la sombra del suelo, como está
+            borde = not all(lleno(x + dx, y + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            if (r, g, b) == LINEA:
+                if not borde:
+                    px[x, y] = AZUL + (255,)   # el contorno de las molduras, por dentro de la hoja
+                continue
+            l = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)[1]
+            if es_laton(r, g, b) or (l > 0.42 and 10 <= x <= 12 and 20 <= y <= 25):
+                c = METAL[0] if es_laton(r, g, b) and orig[x, y - 1][:3] != LINEA else METAL[1]   # el pomo
+            elif x == 1:
+                c = AZUL_CANTO   # el canto, que da a la luz
+            elif x == 0 or (borde and l > 0.3):
+                c = AZUL_LUZ     # su filo y los de arriba y de las bisagras, que dan al aire
+            else:
+                c = AZUL
+            px[x, y] = c + (255,)
+    im.save(f'{SALIDA}/puerta-trastero-abierta-lado.png')
+
+
 if __name__ == '__main__':
     suelo()
     pared()
@@ -290,5 +353,7 @@ if __name__ == '__main__':
     linea()
     puerta_cerrada()
     puerta_abierta()
-    print('  suelo-trastero, pared-trastero, techo-trastero, pared-trastero-pasillo, linea-trastero, puerta-trastero y '
-          'puerta-trastero-abierta')
+    puerta_lado_cerrada()
+    puerta_lado_abierta()
+    print('  suelo-trastero, pared-trastero, techo-trastero, pared-trastero-pasillo, linea-trastero, puerta-trastero, '
+          'puerta-trastero-abierta, puerta-trastero-lado-cerrada y puerta-trastero-abierta-lado')
