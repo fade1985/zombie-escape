@@ -732,8 +732,8 @@ en una línea.
   `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
   La puerta del despacho al taller, metálica (`PUERTA_BANO.METAL`, la elige `mapa.poner_hojas`): `puerta_metal.py` copia la forma
-  de los dibujos de lado de la de madera y la pinta a mano como la foto del dueño (`assets/sources/puerta-metal-foto.webp`): verde
-  oscuro, con la manilla plateada y el bombín.
+  de los dibujos de lado de la de madera y la rellena con el acero de la imagen de GPT (`assets/sources/puerta-metal-gpt.webp`; la
+  manilla, negra limpia, sin mezclarse con la chapa).
 - **Efectos de pixelfx** (el plugin de efectos pixel art, MIT, `git clone https://github.com/patch-gg/pixelfx`):
   `pixelfx/exportar.mjs` saca un efecto en tres hojas para Godot (detrás del personaje, delante y el brillo, que se suma)
   y `pixelfx/escudo-fuego.js` es la burbuja de fuego del jefe de bomberos (`escudo-fuego-*.png`, en `bombero.gd`):
