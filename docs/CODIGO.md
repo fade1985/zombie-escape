@@ -724,9 +724,12 @@ en una línea.
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de
   `assets/fuentes/zombie-scape-ui.ttf` (ver `docs/IDIOMAS.md`, «Las tildes de la letra del juego»); después, `--headless --path . --import`.
-- **La sala de mantenimiento, sin sangre:** `sala_sin_sangre.py` saca las copias limpias de suelos y paredes (`suelo-vestuario`,
-  `pared-vestuario`, `suelo-despacho`, `pared-despacho`: las de siempre las usan los pisos y siguen con su sangre) y
+- **La sala de mantenimiento, sin sangre:** `sala_sin_sangre.py` saca las copias limpias de suelos y paredes (`suelo-vestuario` y
+  `pared-vestuario`: las de siempre las usan los pisos y siguen con su sangre) y
   limpia los muebles que la llevan pintada (baúl, banco, ducha, váter, estante de botes). Si se regenera un mueble, hay que pasarlo otra vez.
+- **El despacho de la sala de mantenimiento:** `despacho_ladrillo.py` saca su pared de ladrillo rojo visto (`pared-despacho`, 468x48) y
+  su suelo de tarima envejecida (`suelo-despacho`, 128x128) de dos imágenes de GPT (`assets/sources/despacho-*-gpt.webp`). La pared no
+  se reduce sin más: mide cada ladrillo de la imagen y lo vuelve a dibujar limpio (3 píxeles de ladrillo y 1 de junta).
 - **El taller de la sala de mantenimiento:** `taller_vinilo.py` saca su suelo de vinilo gris con motitas (`suelo-taller`, 128x128) y
   su pared blanca con el zócalo del mismo vinilo (`pared-taller`) de dos imágenes de GPT (`assets/sources/taller-*-gpt.webp`).
   El baúl (`baul.png`, 42x23, también el de la sala de pruebas), un arcón de plástico negro: `baul_plastico.py` lo pasa a mano píxel a

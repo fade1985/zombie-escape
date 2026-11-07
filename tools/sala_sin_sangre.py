@@ -3,10 +3,8 @@
 # otra nueva, igual pero limpia. Lo que se ve de cada estancia lo dice ESTILO_MANTENIMIENTO de scripts/mapa/mapa.gd.
 #   suelo-bano-b        → suelo-vestuario   (cada baldosa manchada toma lo que le falta de la baldosa limpia que más se le parece)
 #   pared-bano-b        → pared-vestuario   (cada píxel manchado, de otro limpio de su misma fila, respetando la cuadrícula)
-#   suelo-salon-a       → suelo-despacho    (cada píxel manchado, de otro limpio de su misma columna: la veta de los tablones)
-#   pared-salon-c       → pared-despacho
 # El suelo y la pared del taller ya no salen de aquí: desde el 7 nov son de vinilo gris y pared blanca
-# (tools/taller_vinilo.py). También limpia los muebles que
+# (tools/taller_vinilo.py); ni los del despacho, de ladrillo y tarima envejecida (tools/despacho_ladrillo.py). También limpia los muebles que
 # la llevan pintada (mueble(), al final), en su mismo archivo: si alguno se vuelve a generar (tools/baul_mantenimiento.py,
 # tools/banco_mantenimiento.py...), hay que pasar esto después. Usa siempre la misma semilla, así que al lanzarla otra vez salen
 # los mismos dibujos. Uso: py tools/sala_sin_sangre.py  (y luego, para que Godot importe los
@@ -191,8 +189,7 @@ def mueble(nombre, cajas, es_sangre):
 
 baldosas("suelo-bano-b", "suelo-vestuario", -11, 4, 1)
 pared("pared-bano-b", "pared-vestuario", 8, 22, 48, 7.4, 1)
-tablones("suelo-salon-a", "suelo-despacho", 16, 26, 7, 1)
-pared("pared-salon-c", "pared-despacho", 8, 14, 33, 1, 1)
+# (el suelo y la pared del despacho ya no: desde el 7 nov, tools/despacho_ladrillo.py)
 # (el baúl ya no: desde el 7 nov es de plástico negro, tools/baul_plastico.py)
 # la tapa del banco (la caja de herramientas de abajo es roja de verdad y se queda) y la cabeza del martillo
 mueble("banco-trabajo", [[12, 20, 37, 26]], lambda c: c[1] < c[0] * 0.6 and c[0] > 120 or c[0] > c[1] * 2.2)
