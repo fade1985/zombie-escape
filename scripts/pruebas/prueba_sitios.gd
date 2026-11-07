@@ -901,6 +901,22 @@ func probar_cerrar_puerta(una: Node2D) -> void:
 	print("Puertas, cerrar: con un zombi en el hueco sigue abierta %s y tiembla %s (esperado: true las dos)" % [
 		una.abierta == 1.0, tiembla])
 	zombi.queue_free()
+	# más lejos, a 50 del hueco (fuera de donde se abre arrimándose): también se cierra a mano, y se vuelve a abrir
+	await get_tree().create_timer(0.2).timeout
+	var medio: float = (una.caja.size.y if una.de_frente else una.caja.size.x) / 2
+	johnny.position = una.caja.get_center() + (delante - una.caja.get_center()).normalized() * (medio + 50.0)
+	await get_tree().create_timer(0.3).timeout
+	zona = una.uso.get_node("Zona") if una.uso else null
+	var lejos_delante: bool = zona != null and johnny.ante_mueble == zona and zona.activa()
+	if zona:
+		zona.abrir()
+	await get_tree().create_timer(0.6).timeout
+	var lejos_cierra: bool = una.abierta == 0.0
+	una.usar_a_mano()
+	await get_tree().create_timer(0.6).timeout
+	print("Puertas, cerrar: a 50 del hueco se puede usar %s, se cierra %s y se vuelve a abrir %s (esperado: true las tres)" % [
+		lejos_delante, lejos_cierra, una.abierta == 1.0])
+	johnny.position = delante
 	for a in aliados:
 		a.set_physics_process(true)
 	await get_tree().create_timer(0.1).timeout

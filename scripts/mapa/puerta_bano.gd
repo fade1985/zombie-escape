@@ -60,6 +60,8 @@ const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerr
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
 const MIRAR := 0.1          # cada cuánto mira una libre si alguien la empuja
+const ALCANCE := 60.0       # a cuánto del hueco, por delante o por detrás, se cierra o se abre a mano (más que ARRIMADO: con la horda encima no hay que afinar)
+const ALCANCE_LADO := 16.0  # y lo que sobra por los lados del hueco
 const HOLGURA := 8.0        # lo que se mira alrededor del hueco para ver si hay alguien dentro al cerrar
 const VUELTA := 2.5         # lo rápido que gira al abrirse o cerrarse (en 0,4 s)
 const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
@@ -194,7 +196,7 @@ func usar_a_mano() -> void:
 		abrir_empujando()
 
 
-# La zona para usarla a mano, delante y detrás del hueco (donde se abre arrimándose), con un dibujo escondido igual que
+# La zona para usarla a mano, delante y detrás del hueco (más amplia que donde se abre arrimándose: ALCANCE), con un dibujo escondido igual que
 # el de la puerta ahora (abierta del todo o cerrada) del que zona_usar.gd saca el contorno amarillo
 func poner_uso() -> void:
 	if not libre or trastero or acero or uso:
@@ -229,7 +231,8 @@ func poner_uso() -> void:
 	uso.name = "Uso"   # no-tr
 	uso.add_child(dibujo)
 	var zona := ZONA_USAR.new()
-	zona.montar_rect(Rect2(arrimo.position - position, arrimo.size))
+	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
+	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
 	zona.cierra = abierta >= 1.0
 	zona.usar.connect(usar_a_mano)
