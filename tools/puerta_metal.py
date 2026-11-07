@@ -5,7 +5,8 @@
 #   puerta-metal-lado-cerrada  (16x32, como puerta-bano-lado-cerrada): la tira de canto de acero, con la manilla negra a
 #                              los dos lados (la de GPT eran dos ganchos hacia arriba: aquí, el bulto del pomo de madera)
 #   puerta-metal-abierta-lado  (14x67, como puerta-bano-abierta-lado): el mismo paralelogramo, con la cara de la puerta de
-#                              GPT (sus remaches, la chapa de abajo y la manilla), enderezada y vuelta a torcer a su forma
+#                              GPT (sus remaches y la chapa de abajo), enderezada y vuelta a torcer a su forma; la manilla
+#                              de GPT, reducida, era un borrón negro: se quita y se pinta a mano, pequeña
 #   puerta-metal               (28x43, como puerta-bano): la misma cara, de frente, para mientras gira
 #   py tools/puerta_metal.py   (y luego Godot --headless --path . --import)
 from PIL import Image
@@ -31,7 +32,9 @@ def muestra(u, v):
     """El color de la cara en (u, v), de 0 a 1 (la media de un cuadrito, sin lo transparente)"""
     x, y = int(u * (cara.width - 1)), int(v * (cara.height - 1))
     caja = cara.crop((max(0, x - 6), max(0, y - 6), x + 7, y + 7)).convert("RGB")
-    return caja.resize((1, 1), Image.Resampling.BOX).getpixel((0, 0))
+    color = caja.resize((1, 1), Image.Resampling.BOX).getpixel((0, 0))
+    # lo oscuro (la manilla de GPT, que reducida es un borrón negro) se vuelve chapa: la manilla se pinta luego, a mano
+    return color if sum(color) > 330 else MEDIO
 
 
 # 1 · De frente (28x43): la cara reducida, con su contorno
@@ -42,6 +45,10 @@ for y in range(43):
             frente.putpixel((x, y), LINEA + (255,))
         else:
             frente.putpixel((x, y), muestra((x - 1) / 25, (y - 1) / 40) + (255,))
+# la manilla, a mano: la base redonda y la palanca hacia la bisagra, con su luz arriba
+for x, y, color in [(20, 21, MANILLA), (21, 21, MANILLA), (20, 22, MANILLA), (21, 22, MANILLA), (17, 22, MANILLA),
+                    (18, 22, MANILLA), (19, 22, MANILLA), (17, 21, MANILLA_LUZ), (18, 21, MANILLA_LUZ), (19, 21, MANILLA_LUZ)]:
+    frente.putpixel((x, y), color + (255,))
 frente.save(CARPETA + "puerta-metal.png")
 
 # 2 · Abierta de lado (14x67): la forma de la de madera; las dos primeras columnas, el canto de la bisagra (claro), lo de
@@ -65,6 +72,12 @@ for x in range(w):
         else:
             v = (y - arriba) / max(1, abajo - 3 - arriba)
             abierta.putpixel((x, y), muestra((x - 2) / (w - 3), min(1.0, v)) + (255,))
+# la manilla, a mano, cerca del canto de la derecha y a media altura de su columna (como el pomo de la de madera): la
+# base, de dos píxeles, y encima su luz
+filas = [y for y in range(h) if abierta.getpixel((11, y))[3]]
+medio = (filas[0] + filas[-1]) // 2
+for x, y, color in [(11, medio, MANILLA), (11, medio + 1, MANILLA), (10, medio + 1, MANILLA), (11, medio - 1, MANILLA_LUZ)]:
+    abierta.putpixel((x, y), color + (255,))
 abierta.save(CARPETA + "puerta-metal-abierta-lado.png")
 
 # 3 · Cerrada de lado (16x32): la forma de la de madera; la tira, de acero (oscuro a un lado, claro al otro, con brillo
