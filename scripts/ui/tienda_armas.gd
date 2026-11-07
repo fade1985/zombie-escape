@@ -385,21 +385,23 @@ func partir(fuente: Font, texto: String, ancho: float, tam: int) -> PackedString
 	return lineas
 
 
-# El botón «Comprar · $X», con el texto en amarillo; si no se puede, en gris y diciendo por qué
+# El botón «Comprar · $X», con el texto en amarillo; si no se puede, en gris y diciendo por qué; lo que ya llevas,
+# «Comprada» en grande, en verde y con el borde verde (como su casilla)
 func dibujar_comprar(fuente: Font) -> void:
 	var r := Rect2(comprar.position, comprar.size)
 	var texto := texto_comprar(ficha_id)
 	var se_puede := estado(ficha_id) == ""
+	var comprada := estado(ficha_id) == "lleva"
 	var encima := se_puede and comprar.is_hovered()
 	var pulsado := se_puede and comprar.button_pressed
-	draw_rect(r, PLACA.TEXTO if se_puede else PLACA.APAGADO)
+	draw_rect(r, PLACA.TEXTO if se_puede else (VERDE_BORDE if comprada else PLACA.APAGADO))
 	draw_rect(r.grow(-2), Color("#3a3f47") if encima and not pulsado else (Color("#2f333a") if se_puede else PLACA.NEGRO))
-	var tam := 24 if se_puede else 16
+	var tam := 24 if se_puede or comprada else 16
 	while tam > 12 and fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > r.size.x - 12:
 		tam -= 2
 	var base := r.position.y + r.size.y / 2.0 + fuente.get_ascent(tam) / 2.0 - 2 + (2 if pulsado else 0)
 	draw_string(fuente, Vector2(r.position.x, base), texto, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, tam,
-		PLACA.AMARILLO if se_puede else PLACA.TEXTO_SUAVE)
+		PLACA.AMARILLO if se_puede else (VERDE if comprada else PLACA.TEXTO_SUAVE))
 
 
 # Lo que dice el botón «Comprar»: cómo se compra y cuánto cuesta (o por qué no se puede). Lo usan también las pruebas
