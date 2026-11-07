@@ -157,7 +157,11 @@ func _draw() -> void:
 			if metal:
 				# la de chapa gris de la pared de abajo, girada un cuarto de vuelta para que la hoja quede del lado de dentro
 				# (en la de la derecha, el de arriba del dibujo va a la izquierda; en la de la izquierda, a la derecha)
-				draw_set_transform(Vector2.ZERO, -PI / 2 if salida.dir == "derecha" else PI / 2)
+				# (y en la de la derecha, dada la vuelta: si no, el pomo quedaría arriba y no abajo, como en la de la izquierda)
+				if salida.dir == "derecha":
+					draw_set_transform(Vector2.ZERO, -PI / 2, Vector2(-1, 1))
+				else:
+					draw_set_transform(Vector2.ZERO, PI / 2)
 				draw_texture_rect(ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
 				draw_set_transform(Vector2.ZERO)
 				return
