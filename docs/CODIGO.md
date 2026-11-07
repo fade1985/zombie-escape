@@ -755,6 +755,9 @@ en una línea.
   Y el váter, de lado (el `stafftoilet` del catálogo, `mueble-stafftoilet-lado.png`, 26x37, la cisterna en la pared de la
   izquierda y la tapa levantada; de `assets/sources/vater-gpt.webp`): igual que el lavabo, en el vestuario y en los baños de
   los pisos. No pasa por `importar.py` (si se reimporta `vestuario/vater-vestuario-lado.png`, lo pisa).
+  Y el banco largo del vestuario, suelto en medio (el `lockerbench` del catálogo, `mueble-lockerbench.png`, 64x28, listones de
+  haya sobre tubo gris con su zapatero; de `assets/sources/banco-vestuario-gpt.webp`). No pasa por `importar.py` (si se
+  reimporta `vestuario/banco-vestuario.png`, lo pisa).
   Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
   `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
   (la de antes, dibujada a mano) ya no se usa: si se pasa, la pisa.
