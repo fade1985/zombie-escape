@@ -26,11 +26,12 @@ MUEBLES = {
     "corcho": ("assets/sources/corcho-gpt.webp", "assets/sprites/corcho.png", 44, 29, False),
     # la papelera del despacho, a la derecha de la mesa (el "wastebasket" del catálogo): de rejilla gris oscura con
     # papeles blancos dentro; a 14 de ancho (la vieja, 12), que a 12 la rejilla casi no se leía
-    "papelera": ("assets/sources/papelera-gpt.webp", "assets/sprites/mueble-wastebasket.png", 14, 21, True),
+    "papelera": ("assets/sources/papelera-gpt.webp", "assets/sprites/mueble-wastebasket.png", 14, 21, True,
+                 [(0, 7), (13, 7)]),   # (dos píxeles negros que sobresalían a los lados, debajo del aro)
 }
 
 
-def pasar(origen, sprite, ancho, alto, con_json):
+def pasar(origen, sprite, ancho, alto, con_json, quitar=()):
     im = Image.open(origen).convert("RGBA")
     W, H = im.size
     px = im.load()
@@ -51,6 +52,8 @@ def pasar(origen, sprite, ancho, alto, con_json):
     # mezclando colores (premultiplicado: el fondo transparente no tiñe los bordes), y el borde, sin medias tintas
     salida = im.convert("RGBa").resize((ancho, alto), Image.LANCZOS).convert("RGBA")
     salida.putalpha(salida.split()[3].point(lambda v: 255 if v > 110 else 0))
+    for xy in quitar:   # los píxeles sueltos que sobran, a mano
+        salida.putpixel(xy, (0, 0, 0, 0))
     salida.save(sprite)
     if con_json:
         with open(sprite.replace(".png", ".json"), "w", encoding="utf-8", newline="\n") as f:
