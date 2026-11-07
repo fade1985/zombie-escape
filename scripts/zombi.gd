@@ -56,6 +56,8 @@ var zona := -1
 var espabilando := 0.0     # tiempo que le queda quieto después de despertar
 var exclamacion := true     # suelta el "!" al despertar (la dependienta no: lo suyo es su grito)
 var apretado := false      # pasando por una puerta abierta: ni se aparta de los demás ni choca con ellos (pedir_velocidad)
+var trabado := 0.0         # lo que lleva queriendo andar sin avanzar (_al_calcular_velocidad)
+var sin_esquivar := 0.0    # lo que le queda andando derecho, sin esquivar a los demás, para destrabarse
 
 var estados := {}          # lo que le han puesto los charcos (estados.gd)
 var pisando := {}          # los estados de los charcos que pisa en este paso
@@ -453,9 +455,28 @@ func pedir_velocidad(v: Vector2) -> void:
 		mover(v)
 
 
+# El esquive tiene una trampa: con otro zombi al lado y una pared al otro, le puede torcer la velocidad contra la pared y
+# dejarle andando sin avanzar para siempre (los dos se esquivan el uno al otro). Si quiere andar y lleva TRABADO s sin
+# avanzar, deja de esquivar SIN_ESQUIVAR s y va derecho a donde quería
+const TRABADO := 0.6
+const SIN_ESQUIVAR := 0.5
+
 func _al_calcular_velocidad(segura: Vector2) -> void:
-	if not apretado:
-		mover(segura)
+	if apretado:
+		return
+	var delta := get_physics_process_delta_time()
+	if sin_esquivar > 0.0:
+		sin_esquivar -= delta
+		segura = agente.velocity
+	mover(segura)
+	var quiere := agente.velocity.length()
+	if quiere > 20.0 and get_real_velocity().length() < quiere * 0.15:
+		trabado += delta
+		if trabado >= TRABADO:
+			trabado = 0.0
+			sin_esquivar = SIN_ESQUIVAR
+	else:
+		trabado = 0.0
 
 
 func mover(segura: Vector2) -> void:
@@ -473,7 +494,9 @@ func empezar_zarpazo(johnny: Node2D) -> void:
 	estado = "zarpazo"
 	zarpazo_dado = false
 	mirar_hacia(johnny.global_position - global_position)
-	poner_animacion("ataque")
+	# desde el principio aunque ya estuviera puesta: si da dos zarpazos seguidos hacia el mismo lado, la del primero
+	# ya ha acabado (parada en su último dibujo) y, sin volver a empezarla, nunca acabaría y se quedaría congelado
+	poner_animacion("ataque", true)
 
 
 # El zarpazo le llega a Johnny (cada tipo puede añadirle lo suyo: el táser del escolta de Velaria lo deja tieso)

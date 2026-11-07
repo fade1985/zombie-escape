@@ -1992,3 +1992,116 @@ func probar_escolta() -> void:
 			break
 	print("Escolta: táser, vida de Johnny %d -> %d, tieso %s (esperado: 6 menos, o 7 con lo que sube por planta, y true)" % [vida, johnny.vida, tieso])
 	get_tree().quit()
+
+
+# Con "--captura --congelados": los zombis de verdad de los apartamentos de varias plantas (--plantas N, 4, desde la
+# --desde N, 1; con --semilla N, siempre las mismas), todos
+# despiertos, y Johnny (quieto e invencible) cambiando de habitación cada CONGELADOS_CAMBIO s para que tengan que ir a por
+# él por las puertas. Cada medio segundo (en pasos de física) mira quién lleva CONGELADOS_QUIETO s sin moverse estando
+# lejos de Johnny: un zombi «congelado». Dice qué le pasa a cada uno (su estado, su animación, su camino, quién tiene
+# pegado) y saca una foto de los cuatro primeros (captura-congelados-N.png; sin ninguno, del primer piso al acabar,
+# captura-congelados.png). Va a toda prisa (ATASCO_RITMO). Esperado: ninguno. Luego se cierra
+const CONGELADOS_CAMBIO := 8.0
+const CONGELADOS_QUIETO := 4.0
+const CONGELADOS_TIEMPO := 32.0
+
+func probar_congelados() -> void:
+	johnny.invencible = true
+	johnny.set_physics_process(false)   # (quieto: que no los mate él solo en el modo asistido)
+	Engine.time_scale = ATASCO_RITMO
+	var total := 0
+	var congelados := 0
+	var fotos := 0
+	Planta.semilla = int(Captura.dato("--semilla", "0"))   # (con --semilla N, las plantas salen siempre iguales)
+	var desde := int(Captura.dato("--desde", "1"))
+	for num in range(desde, desde + int(Captura.dato("--plantas", "4"))):
+		nueva_planta(num)
+		for idx in planta.sitios.size():
+			var sitio: Dictionary = planta.sitios[idx]
+			if sitio.tipo != "apartamento" or sitio.get("tienda", "") != "" or sitio.zombis.is_empty():
+				continue
+			await montar(idx, 0, false)
+			await get_tree().create_timer(1.0, true, true).timeout   # (a que esté listo el mapa de caminos)
+			johnny.invulnerable = 999.0
+			var red := get_world_2d().navigation_map
+			# (las habitaciones a las que se puede llegar: no el baño cerrado del superviviente ni la cámara acorazada)
+			var salas: Array = sitio.apt.salas.filter(func(s): return s.puertas.any(func(d): return not d.get("cerrada", false)))
+			var zombis: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z is Zombi)
+			total += zombis.size()
+			for z in zombis:
+				z.despertar()
+			var sitios_de := {}   # dónde estaba cada uno hace CONGELADOS_QUIETO s
+			var avisado := {}
+			var t := 0.0
+			var sala_n := 0
+			while t < CONGELADOS_TIEMPO:
+				if fmod(t, CONGELADOS_CAMBIO) < 0.01:
+					sala_n += 1
+					johnny.position = NavigationServer2D.map_get_closest_point(red, salas[sala_n % salas.size()].centro)
+					johnny.get_node("Camara").reset_smoothing()
+					sitios_de.clear()
+				await get_tree().create_timer(0.5, true, true).timeout
+				t += 0.5
+				for z in zombis:
+					if not is_instance_valid(z) or z.estado == "muerto" or avisado.has(z):
+						continue
+					var hist: Array = sitios_de.get(z, [])
+					hist.append(z.global_position)
+					if hist.size() > int(CONGELADOS_QUIETO / 0.5):
+						hist.pop_front()
+					sitios_de[z] = hist
+					if hist.size() < int(CONGELADOS_QUIETO / 0.5):
+						continue
+					var lejos: float = z.global_position.distance_to(johnny.global_position)
+					var movido := 0.0
+					for p in hist:
+						movido = maxf(movido, p.distance_to(z.global_position))
+					if movido > 6.0 or lejos < 140.0:
+						continue
+					avisado[z] = true
+					congelados += 1
+					var ag: NavigationAgent2D = z.agente
+					print("Congelado: planta %d, sitio %d, %s en %s (sala %d, Johnny en la %d, a %d): estado %s, animación %s %s, " % [
+						num, idx, z.get_meta("tipo"), z.global_position.round(), mapa.zona_en(z.global_position),
+						mapa.zona_en(johnny.global_position), lejos, z.estado, z.sprite.animation,
+						"en marcha" if z.sprite.is_playing() else "parada"] +
+						"dormido %s, espabilando %.1f, aturdido %.1f, liado %.1f, apretado %s, ve a Johnny %s, " % [
+						z.dormido, z.espabilando, z.aturdido, z.liado, z.apretado, z.se_ve(johnny)] +
+						"camino: acabado %s, llega %s, siguiente %s, velocidad %s, pedida %s, evitar %s, capa %s" % [
+						ag.is_navigation_finished(), ag.is_target_reachable(), (ag.get_next_path_position() - z.global_position).round(),
+						z.velocity.round(), ag.velocity.round(), ag.avoidance_enabled, z.get_collision_mask_value(Zombi.CAPA_ZOMBIS)])
+					var pegados := []
+					for o in zombis:
+						if is_instance_valid(o) and o != z and o.estado != "muerto" and o.global_position.distance_to(z.global_position) < 44.0:
+							pegados.append("%s %s %s" % [o.get_meta("tipo"), (o.global_position - z.global_position).round(), o.estado])
+					var choques := []
+					for k in z.get_slide_collision_count():
+						var c: KinematicCollision2D = z.get_slide_collision(k)
+						choques.append("%s %s" % [c.get_collider().name if c.get_collider() else "?", c.get_normal().round()])
+					var puertas := []
+					for h in mapa.hojas:
+						if h.caja.get_center().distance_to(z.global_position) < 120.0:
+							puertas.append("%s abierta %.1f libre %s" % [(h.caja.get_center() - z.global_position).round(), h.abierta, h.libre])
+					print("   pegados %s, choca con %s, puertas %s" % [pegados, choques, puertas])
+					if fotos < 4:
+						# la foto, con la cámara de Johnny sobre el zombi (sin mover a Johnny, que le atacarían)
+						fotos += 1
+						for s in sitio.apt.salas:
+							mapa.vistas[s.id] = true
+							mapa.niebla[s.id] = 0.0
+						mapa.actualizar_niebla(0.0)
+						var cam: Camera2D = johnny.get_node("Camara")
+						var antes := cam.offset
+						cam.offset = z.global_position - johnny.global_position
+						cam.reset_smoothing()
+						await get_tree().process_frame
+						await get_tree().process_frame
+						Captura.foto("captura-congelados-%d.png" % fotos)
+						cam.offset = antes
+						cam.reset_smoothing()
+			if fotos == 0 and num == desde:
+				Captura.foto("captura-congelados.png")   # (sin congelados: cómo van a por Johnny al acabar el primer piso)
+	print("Congelados: %d de %d zombis (esperado: 0)" % [congelados, total])
+	Planta.semilla = 0
+	Engine.time_scale = 1.0
+	get_tree().quit()

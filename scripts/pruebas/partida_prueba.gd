@@ -246,6 +246,8 @@
 #                       mantenimiento: cerradas, Johnny y un zombi las abren, y siguen abiertas [prueba_sitios.gd]
 #   --atasco-puertas    varios zombis de cada tipo (--zombis N, 18) salen a la vez por una misma puerta de un piso, sin
 #                       ver a Johnny y viéndole: que pasen todos y sin parones              [prueba_sitios.gd]
+#   --congelados        los zombis de los apartamentos de varias plantas (--plantas N, 4), despiertos, con Johnny
+#                       cambiando de habitación: que ninguno se quede quieto lejos de él     [prueba_sitios.gd]
 #   --guardia           (con --edificio centro) M83: el guardia de la tarjeta a la vista de Johnny: cuenta silbatos, refuerzos
 #                       y las velocidades de la huida y de los refuerzos          [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
@@ -788,6 +790,9 @@ func empezar_prueba() -> void:
 	elif "--atasco-puertas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_atasco()
+	elif "--congelados" in args:
+		set_process(false)   # sin la prueba larga
+		probar_congelados()
 	elif "--tiendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tiendas()

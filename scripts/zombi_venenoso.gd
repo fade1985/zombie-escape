@@ -41,7 +41,7 @@ func andar(delta: float, johnny: Node2D) -> void:
 		t_escupir = 0.0
 		escupido = false
 		mirar_hacia(hacia)
-		poner_animacion("ataque")
+		poner_animacion("ataque", true)   # (desde el principio: como el zarpazo, zombi.gd empezar_zarpazo)
 		return
 	var rumbo_deseado: Vector2
 	if not ve or distancia > LEJOS:
