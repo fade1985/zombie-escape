@@ -21,6 +21,8 @@ const PISO_DIBUJO := Vector2(36, 43)
 # cristal y aluminio (el centro comercial) y chapa gris (la de la sala de mantenimiento, ver "metal")
 const ABAJO := preload("res://assets/sprites/puerta-abajo.png")
 const ABAJO_DIBUJO := Vector2(36, 32)
+# la de chapa gris, con la hoja de la puerta metálica del despacho al taller (tools/puerta_abajo_metal.py): la que se usa de verdad
+const ABAJO_METAL := preload("res://assets/sprites/puerta-abajo-metal.png")
 # El número de la planta pintado en la pared junto al ascensor (de suelo a moldura): 28 × 42 píxeles, 56 × 84 unidades.
 # Planta baja (0) a 3ª (la azotea no tiene ascensor)
 const CARTELES := [preload("res://assets/sprites/cartel-planta-0.png"), preload("res://assets/sprites/cartel-planta-1.png"),
@@ -138,8 +140,11 @@ func _draw() -> void:
 				placa_de_piso(Vector2(42, -78), PLACA_PARED, Vector2(38, -80))   # en la pared, a la derecha del marco y a la altura de los ojos
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
-			var modelo := 3 if metal else (2 if centro else (1 if limpia else 0))
-			draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(modelo * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
+			if metal:
+				draw_texture_rect(ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
+			else:
+				var modelo := 2 if centro else (1 if limpia else 0)
+				draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(modelo * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
 			if salida.has("placa"):
 				# la de acero, encima del muro, a la derecha del hueco; las de latón, tiradas en el suelo, a un lado de la puerta
 				placa_de_piso(Vector2(42, 6), PLACA_SUELO, Vector2(34, -56) if salida.placa == "C" else Vector2(-88, -60))
@@ -153,7 +158,7 @@ func _draw() -> void:
 				# la de chapa gris de la pared de abajo, girada un cuarto de vuelta para que la hoja quede del lado de dentro
 				# (en la de la derecha, el de arriba del dibujo va a la izquierda; en la de la izquierda, a la derecha)
 				draw_set_transform(Vector2.ZERO, -PI / 2 if salida.dir == "derecha" else PI / 2)
-				draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(3 * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
+				draw_texture_rect(ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
 				draw_set_transform(Vector2.ZERO)
 				return
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0

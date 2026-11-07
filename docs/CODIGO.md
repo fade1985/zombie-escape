@@ -767,6 +767,9 @@ en una línea.
   La puerta del despacho al taller, metálica (`PUERTA_BANO.METAL`, la elige `mapa.poner_hojas`): `puerta_metal.py` saca las tres de las
   imágenes de GPT tal cual (`puerta-metal-gpt-2.webp`: la cerrada y la abierta; `puerta-metal-gpt-frente.webp`: la de frente, la que
   gira): les quita el fondo y las reduce; la abierta, metida en la forma de la de madera para que gire igual.
+  Las salidas de la sala (la de la pared de abajo y, girada, la de la derecha, que da a los trasteros; y la de los trasteros que
+  vuelve a ella) llevan esa misma hoja, cerrada: `puerta_abajo_metal.py` la pone tumbada en el hueco de chapa gris de
+  `puerta-abajo.png` (`puerta-abajo-metal.png`, que usa `puerta.gd`; el cuarto dibujo de `puerta-abajo.png` ya no se usa).
 - **Efectos de pixelfx** (el plugin de efectos pixel art, MIT, `git clone https://github.com/patch-gg/pixelfx`):
   `pixelfx/exportar.mjs` saca un efecto en tres hojas para Godot (detrás del personaje, delante y el brillo, que se suma)
   y `pixelfx/escudo-fuego.js` es la burbuja de fuego del jefe de bomberos (`escudo-fuego-*.png`, en `bombero.gd`):
