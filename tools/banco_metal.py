@@ -3,8 +3,8 @@
 # hacha), la mesa con herramientas sueltas, los dos cajones y, abajo, el maletín negro y el naranja. Sale tal cual de la
 # imagen de GPT que trajo (assets/sources/banco-trabajo-gpt.webp), pedida ya en pixel art de cuadrados grandes y
 # colores planos: se quita el fondo (solo el negro puro que se llega desde el borde: los contornos y el hueco de abajo,
-# casi negros, se quedan), se recorta y se reduce a 40 × 49 tomando en cada cuadrito el color que más hay (sin mezclar).
-# El mismo ancho que el de antes (PixelLab, tools/banco_mantenimiento.py), un poco más alto: crece hacia la pared.
+# casi negros, se quedan), se recorta y se reduce a 48 × 58 tomando en cada cuadrito el color que más hay (sin mezclar).
+# Algo más grande que el de antes (PixelLab, tools/banco_mantenimiento.py, 40 × 44): se ven mejor las herramientas (lo eligió el dueño).
 # A 2 unidades por píxel, como todos los muebles.
 #   py tools/banco_metal.py   → assets/sprites/banco-trabajo.png  (y luego Godot --headless --path . --import)
 from collections import Counter, deque
@@ -12,7 +12,7 @@ from PIL import Image
 
 ORIGEN = "assets/sources/banco-trabajo-gpt.webp"
 SPRITE = "assets/sprites/banco-trabajo.png"
-ANCHO, ALTO = 40, 49
+ANCHO, ALTO = 48, 58
 
 im = Image.open(ORIGEN).convert("RGB")
 W, H = im.size

@@ -731,7 +731,7 @@ en una línea.
   su pared blanca con el zócalo del mismo vinilo (`pared-taller`) de dos imágenes de GPT (`assets/sources/taller-*-gpt.webp`).
   El baúl (`baul.png`, 42x23, también el de la sala de pruebas), un arcón de plástico negro: `baul_plastico.py` lo pasa a mano píxel a
   píxel copiando el dibujo de GPT (`assets/sources/baul-plastico-gpt.webp`; reducido sin más se emborronaba). Ocupa 78x36 en el suelo.
-  El banco de trabajo (`banco-trabajo.png`, 40x49), de acero gris con el tablero perforado naranja y los maletines: `banco_metal.py`
+  El banco de trabajo (`banco-trabajo.png`, 48x58), de acero gris con el tablero perforado naranja y los maletines: `banco_metal.py`
   lo saca tal cual de la imagen de GPT (`assets/sources/banco-trabajo-gpt.webp`, pedida ya en cuadrados grandes y colores planos),
   quitando el negro puro del fondo y reduciéndola sin mezclar colores. Ocupa 76x36 en el suelo.
   En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
