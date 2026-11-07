@@ -670,14 +670,17 @@ func probar_tienda_armas() -> void:
 	print("Al abrir: ficha de «%s» · marcado %s · «Comprar» a la vista %s (esperado: nada, b_cuchillo, false)" % [
 		tienda.call().ficha_id, foco.name if foco else "nada", boton.call("comprar").visible])
 	Captura.foto("captura-tienda-nota.png")
-	# el ratón (primero por el cuchillo, el bate y la katana, que tienen sus dibujos de la tienda:
-	# captura-tienda-cuchillo.png, captura-tienda-bate.png y captura-tienda-katana.png)
+	# el ratón (primero por el cuchillo, el bate, la katana y la motosierra, que tienen sus dibujos de la tienda:
+	# captura-tienda-<id>.png)
 	await mover_raton(boton.call("cuchillo").get_global_rect().get_center())
 	Captura.foto("captura-tienda-cuchillo.png")
 	await mover_raton(boton.call("bate").get_global_rect().get_center())
 	Captura.foto("captura-tienda-bate.png")
 	await mover_raton(boton.call("katana").get_global_rect().get_center())
 	Captura.foto("captura-tienda-katana.png")
+	await mover_raton(boton.call("motosierra").get_global_rect().get_center())
+	print("Ratón encima de la motosierra: ficha de «%s» (esperado: motosierra)" % tienda.call().ficha_id)
+	Captura.foto("captura-tienda-motosierra.png")
 	await mover_raton(boton.call("escopeta").get_global_rect().get_center())
 	print("Ratón encima de la escopeta: ficha de «%s» · botón «%s» (esperado: escopeta, Comprar · $%d)" % [
 		tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), tienda.call().precio("escopeta")])

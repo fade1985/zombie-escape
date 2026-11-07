@@ -5092,6 +5092,12 @@
    "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py katana 0.7 (en assets/sources/tienda)",
    "cost": "20 generaciones"
   },
+  "motosierra": {
+   "foto": "sin foto: como la que lleva Johnny (cuerpo rojo, asa negra, espada gris), nueva y sin sangre",
+   "ficha": "B (semilla 48302, objeto 622573de-0800-46d8-a695-dbd58e50e40f), 96x48, con el icono del cuchillo de imagen de estilo sin copiar sus colores. Descartada A (48301: un dibujito negro raro encima del cuerpo, la espada más corta)",
+   "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py motosierra 0.7 (en assets/sources/tienda)",
+   "cost": "10 generaciones"
+  },
   "cost": "36 generaciones el cuchillo (6 intentos de 5 y la foto, 6): lo bueno, a la segunda. Con dos intentos de cada dibujo, unas 20 por arma",
   "updated": "2026-11-06"
  }
