@@ -722,8 +722,10 @@ en una línea.
 - **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de
   `assets/fuentes/zombie-scape-ui.ttf` (ver `docs/IDIOMAS.md`, «Las tildes de la letra del juego»); después, `--headless --path . --import`.
 - **La sala de mantenimiento, sin sangre:** `sala_sin_sangre.py` saca las copias limpias de suelos y paredes (`suelo-vestuario`,
-  `pared-vestuario`, `suelo-despacho`, `pared-despacho`, `pared-taller`: las de siempre las usan los pisos y siguen con su sangre) y
+  `pared-vestuario`, `suelo-despacho`, `pared-despacho`: las de siempre las usan los pisos y siguen con su sangre) y
   limpia los muebles que la llevan pintada (baúl, banco, ducha, váter, estante de botes). Si se regenera un mueble, hay que pasarlo otra vez.
+- **El taller de la sala de mantenimiento:** `taller_vinilo.py` saca su suelo de vinilo gris con motitas (`suelo-taller`, 128x128) y
+  su pared blanca con el zócalo del mismo vinilo (`pared-taller`) de dos imágenes de GPT (`assets/sources/taller-*-gpt.webp`).
 - **Efectos de pixelfx** (el plugin de efectos pixel art, MIT, `git clone https://github.com/patch-gg/pixelfx`):
   `pixelfx/exportar.mjs` saca un efecto en tres hojas para Godot (detrás del personaje, delante y el brillo, que se suma)
   y `pixelfx/escudo-fuego.js` es la burbuja de fuego del jefe de bomberos (`escudo-fuego-*.png`, en `bombero.gd`):

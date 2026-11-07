@@ -5,8 +5,8 @@
 #   pared-bano-b        → pared-vestuario   (cada píxel manchado, de otro limpio de su misma fila, respetando la cuadrícula)
 #   suelo-salon-a       → suelo-despacho    (cada píxel manchado, de otro limpio de su misma columna: la veta de los tablones)
 #   pared-salon-c       → pared-despacho
-#   pared-mantenimiento → pared-taller
-# El suelo del taller (suelo-mantenimiento) no lleva sangre, solo mugre, y se queda como está. También limpia los muebles que
+# El suelo y la pared del taller ya no salen de aquí: desde el 7 nov son de vinilo gris y pared blanca
+# (tools/taller_vinilo.py). También limpia los muebles que
 # la llevan pintada (mueble(), al final), en su mismo archivo: si alguno se vuelve a generar (tools/baul_mantenimiento.py,
 # tools/banco_mantenimiento.py...), hay que pasar esto después. Usa siempre la misma semilla, así que al lanzarla otra vez salen
 # los mismos dibujos. Uso: py tools/sala_sin_sangre.py  (y luego, para que Godot importe los
@@ -193,7 +193,6 @@ baldosas("suelo-bano-b", "suelo-vestuario", -11, 4, 1)
 pared("pared-bano-b", "pared-vestuario", 8, 22, 48, 7.4, 1)
 tablones("suelo-salon-a", "suelo-despacho", 16, 26, 7, 1)
 pared("pared-salon-c", "pared-despacho", 8, 14, 33, 1, 1)
-pared("pared-mantenimiento", "pared-taller", 8, 24, 48, 1, 2)
 mueble("baul", [[14, 17, 26, 28]], lambda c: c[0] > c[1] * 2.2 and c[0] > c[2] * 1.2)
 # la tapa del banco (la caja de herramientas de abajo es roja de verdad y se queda) y la cabeza del martillo
 mueble("banco-trabajo", [[12, 20, 37, 26]], lambda c: c[1] < c[0] * 0.6 and c[0] > 120 or c[0] > c[1] * 2.2)

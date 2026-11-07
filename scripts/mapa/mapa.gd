@@ -40,11 +40,11 @@ const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
 const BANCO_X := 820.0
 const BAUL_X := 1010.0
 const TAQUILLA_X := 260.0
-# Los suelos y paredes de las estancias de la sala de mantenimiento: el taller, con los de siempre (cemento y la pared
-# blanca y verde); el vestuario, de azulejo, como los baños de los pisos; y el despacho, con tarima y la pared beis con
+# Los suelos y paredes de las estancias de la sala de mantenimiento: el taller, de vinilo gris con motitas y pared blanca
+# con su zócalo del mismo vinilo (tools/taller_vinilo.py); el vestuario, de azulejo, como los baños de los pisos; y el despacho, con tarima y la pared beis con
 # friso de madera de los salones. Sin sangre: es el sitio seguro del juego, y por eso llevan sus propias copias limpias de
 # esas texturas (tools/sala_sin_sangre.py). [suelo, pared, techo]: sprites suelo-<x>, pared-<x> y techo-<x>
-const ESTILO_MANTENIMIENTO := {"taller": ["mantenimiento", "taller", "mantenimiento"],
+const ESTILO_MANTENIMIENTO := {"taller": ["taller", "taller", "mantenimiento"],
 	"vestuario": ["vestuario", "vestuario", "bano-b"], "despacho": ["despacho", "despacho", "salon-c"]}
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
 const ZONAS_SEGURAS := ["mantenimiento", "viviendas", "armas", "expo"]   # donde las puertas de madera no llevan sangre ni arañazos
