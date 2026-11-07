@@ -1288,8 +1288,8 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 		sc.scroll_vertical = 0
 	await get_tree().process_frame
 	Captura.foto("captura-logros-temas.png")
-	print("Logros nuevos · ordenador: apartados %s (esperado: Edificios, Jefes, Combate, Armas y talentos, Supervivientes, Sorpresas y retos, Colecciones)" % [
-		ordenador.ventana.find_children("*", "Label", true, false).map(func(l): return l.text).filter(func(t): return t in Logros.TEMAS.values())])
+	print("Logros nuevos · ordenador: apartados %s (esperado: resumen, edificios, jefes, combate, armas, supervivientes, sorpresas, colecciones)" % [
+		ordenador.ventana.find_child("archivador", true, false).temas.keys()])
 	for sc in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
 		sc.scroll_vertical = 100000
 	await get_tree().process_frame
@@ -3408,3 +3408,93 @@ func probar_muertos_dosier() -> void:
 		print("Muerto del dosier %d: %s · con bata: %s" % [i + 1, muertos[i].cuerpo, not muertos[i].look.has("ropa")])
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-muertos-dosier.png")
+
+
+# --archivador-logros: el programa Logros del ordenador como un archivador (archivador_logros.gd). El Resumen con tres por
+# cobrar (captura-archivador-resumen.png); la página Jefes (captura-archivador-jefes.png) y Edificios, la de más logros,
+# que caben todos (captura-archivador-edificios.png); cobrar uno con el teclado (sigue en su página, ya «Hecho»); el
+# Resumen sin nada por cobrar («Casi lo tienes», captura-archivador-casi.png); con muchos por cobrar, los que no caben
+# (captura-archivador-muchos.png), y con una ayuda puesta, su aviso (captura-archivador-ayudas.png). Deja el guardado
+# como estaba
+func probar_archivador_logros() -> void:
+	set_process(false)
+	await get_tree().create_timer(0.3).timeout
+	var copia := Guardado.cargar()
+	var claves := ["logros", "logros_cuentas", "dolares", "muertos", "ajustes"]
+	var poner := func(estados: Dictionary) -> void:
+		Guardado.cambiar(func(g):
+			for a in Logros.AYUDAS:
+				g.ajustes[a] = false
+			g.logros = estados
+			g.dolares = 60
+			g.muertos = 64
+			g.logros_cuentas["jefes"] = 9)
+	poner.call({"primer_turno": "cobrado", "sube_conserje": "cobrado", "desahucio": "cobrado", "manitas": "cobrado",
+		"buen_vecino": "cobrado", "fregona_oro": "cobrado", "por_los_pelos": "cobrado", "sin_rasguno": "conseguido",
+		"joya_corona": "conseguido", "caja_fuerte": "conseguido"})
+	logros.repasar = false
+	logros.con_ayudas = false
+	logros.mejor_racha = 18
+	logros.fregonazos = 0
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.4).timeout
+	var archivador: Control = ordenador.ventana.find_child("archivador", true, false)
+	print("Archivador · al abrir: página %s, filas %s, marcado %s (esperado: resumen, [sin_rasguno, joya_corona, caja_fuerte], b_tema_resumen)" % [
+		archivador.pagina, archivador.visibles, get_viewport().gui_get_focus_owner().name])
+	Captura.foto("captura-archivador-resumen.png")
+	archivador.temas["jefes"].pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
+	print("Archivador · Jefes: filas %s, marcado %s (esperado: los 5 de jefes, b_tema_jefes)" % [archivador.visibles, get_viewport().gui_get_focus_owner().name])
+	archivador.botones["sin_rasguno"].grab_focus()
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-archivador-jefes.png")
+	# cobrar con el teclado: Intro en la fila
+	var antes: int = Guardado.cargar().dolares
+	await pulsar_evento(accion("ui_accept"))
+	await get_tree().create_timer(0.3).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
+	print("Archivador · Intro en Sin un rasguño: %s, +$%d, página %s, marcado %s (esperado: cobrado, +15, jefes, b_sin_rasguno)" % [
+		Logros.estado(Guardado.cargar(), "sin_rasguno"), Guardado.cargar().dolares - antes, archivador.pagina,
+		get_viewport().gui_get_focus_owner().name])
+	archivador.temas["edificios"].pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
+	var dentro: bool = archivador.filas.values().all(func(r: Rect2): return r.end.y <= archivador.size.y - 8)
+	print("Archivador · Edificios: %d filas, todas dentro: %s (esperado: 9, true)" % [archivador.filas.size(), dentro])
+	Captura.foto("captura-archivador-edificios.png")
+	# el Resumen sin nada por cobrar
+	poner.call({"primer_turno": "cobrado", "desahucio": "cobrado"})
+	ordenador.abrir("")
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.4).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
+	print("Archivador · sin nada por cobrar: casi %s, filas %s (esperado: true, los que van más avanzados)" % [archivador.casi, archivador.visibles])
+	Captura.foto("captura-archivador-casi.png")
+	# muchos por cobrar
+	var muchos := {}
+	for l in Logros.LISTA.slice(0, 9):
+		muchos[l.id] = "conseguido"
+	poner.call(muchos)
+	ordenador.abrir("")
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.4).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
+	print("Archivador · 9 por cobrar: se ven %d, sobran %d" % [archivador.filas.size(), archivador.sobran])
+	Captura.foto("captura-archivador-muchos.png")
+	# con una ayuda
+	Guardado.cambiar(func(g): g.ajustes["vida_entera"] = true)
+	logros.con_ayudas = true
+	ordenador.abrir("")
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-archivador-ayudas.png")
+	ordenador.abrir("")
+	ordenador.apagar()
+	logros.con_ayudas = false
+	Guardado.cambiar(func(g):
+		for k in claves:
+			g[k] = copia[k])
+	get_tree().quit()

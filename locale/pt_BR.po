@@ -5109,6 +5109,54 @@ msgstr "Enter: comprar · $%d"
 msgid "Clic: comprar · $%d"
 msgstr "Clique: comprar · $%d"
 
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar $%d"
+msgstr "Para resgatar $%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros %d/%d"
+msgstr "Conquistas %d/%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Resumen"
+msgstr "Resumo"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Partida con ayudas: no da logros"
+msgstr "Partida com ajudas: sem conquistas"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Casi lo tienes"
+msgstr "Quase lá"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Elige un apartado a la izquierda para ver sus logros."
+msgstr "Escolha uma seção à esquerda para ver suas conquistas."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar"
+msgstr "Para resgatar"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Y %d más: búscalos por el «!» de la izquierda."
+msgstr "E mais %d: procure o «!» à esquerda."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cómo vas"
+msgstr "Seu progresso"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros conseguidos"
+msgstr "Conquistas desbloqueadas"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cobrar $%d"
+msgstr "Resgatar $%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Hecho"
+msgstr "Feito"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "escudo %d"
@@ -6793,36 +6841,20 @@ msgid "¡Compra hecha! Ya llevas %d %s."
 msgstr "Comprado! Agora você tem %d %s."
 
 #: scripts/ui/ordenador.gd
-msgid "Logros conseguidos"
-msgstr "Conquistas desbloqueadas"
+msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
+msgstr "O que você tem para resgatar e seu progresso em cada seção."
 
 #: scripts/ui/ordenador.gd
-msgid "Premios por cobrar"
-msgstr "Prêmios para resgatar"
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Dólares guardados"
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
-msgstr "Escolha um desafio para esta partida. Ao cumprir, aparece um aviso; volte aqui para resgatar o prêmio."
+msgid "%s: llevas %d de %d."
+msgstr "%s: %d de %d feitas."
 
 #: scripts/ui/ordenador.gd
 msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
 msgstr "Esta partida está com ajudas (Opções → Ajudas): não dá para conseguir conquistas. As que você já tem continuam e você pode resgatá-las."
 
 #: scripts/ui/ordenador.gd
-msgid "COBRAR $%d"
-msgstr "RESGATAR $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "HECHO"
-msgstr "FEITO"
-
-#: scripts/ui/ordenador.gd
-msgid "Pasa por encima de un logro para ver cómo vas."
-msgstr "Passe por cima de uma conquista para ver seu progresso."
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "Escolha um desafio para esta partida. Ao cumprir, aparece um aviso; volte aqui para resgatar o prêmio."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Conseguido! Pulsa para cobrar $%d."

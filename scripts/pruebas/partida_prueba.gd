@@ -324,6 +324,8 @@
 #   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador; y los
 #                       42 logros (M17; los dos de la torre, del 5 nov): el repaso del guardado, los de jefes, racha, arsenal, ganar, reto y horda, y
 #                       el ordenador por apartados                                          [prueba_varias.gd]
+#   --archivador-logros el programa Logros del ordenador (el archivador): el Resumen, las páginas, cobrar con el
+#                       teclado, «Casi lo tienes», muchos por cobrar y el aviso de las ayudas [prueba_varias.gd]
 #   --quimico           la rama Químico de los talentos: cada talento con sus números, las fotos del nivel 3 y el
 #                       árbol con las tres ramas en el ordenador                            [prueba_varias.gd]
 #   --equilibrio-talentos  Durito hasta 3 (y los puntos de más, devueltos), Ajolote hasta la mitad, el alcance de
@@ -888,6 +890,9 @@ func empezar_prueba() -> void:
 	elif "--logros" in args:
 		set_process(false)   # sin la prueba larga
 		probar_logros()
+	elif "--archivador-logros" in args:
+		set_process(false)   # sin la prueba larga
+		probar_archivador_logros()
 	elif "--quimico" in args:
 		set_process(false)   # sin la prueba larga
 		probar_quimico()

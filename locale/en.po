@@ -5109,6 +5109,54 @@ msgstr "Enter: buy · $%d"
 msgid "Clic: comprar · $%d"
 msgstr "Click: buy · $%d"
 
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar $%d"
+msgstr "To claim $%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros %d/%d"
+msgstr "Achievements %d/%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Resumen"
+msgstr "Summary"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Partida con ayudas: no da logros"
+msgstr "Game with assists: no achievements"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Casi lo tienes"
+msgstr "Almost there"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Elige un apartado a la izquierda para ver sus logros."
+msgstr "Pick a section on the left to see its achievements."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar"
+msgstr "To claim"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Y %d más: búscalos por el «!» de la izquierda."
+msgstr "And %d more: look for the «!» on the left."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cómo vas"
+msgstr "Progress"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros conseguidos"
+msgstr "Achievements unlocked"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cobrar $%d"
+msgstr "Claim $%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Hecho"
+msgstr "Done"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "shield %d"
@@ -6793,36 +6841,20 @@ msgid "¡Compra hecha! Ya llevas %d %s."
 msgstr "Bought! You now carry %d %s."
 
 #: scripts/ui/ordenador.gd
-msgid "Logros conseguidos"
-msgstr "Achievements unlocked"
+msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
+msgstr "What you have to claim and your progress in each section."
 
 #: scripts/ui/ordenador.gd
-msgid "Premios por cobrar"
-msgstr "Rewards to claim"
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Saved dollars"
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
-msgstr "Pick a challenge for this run. When you complete it, a notice pops up; come back here to claim the reward."
+msgid "%s: llevas %d de %d."
+msgstr "%s: %d of %d done."
 
 #: scripts/ui/ordenador.gd
 msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
 msgstr "This run has assists on (Options → Assists): no achievements can be earned. The ones you already have stay, and you can claim them."
 
 #: scripts/ui/ordenador.gd
-msgid "COBRAR $%d"
-msgstr "CLAIM $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "HECHO"
-msgstr "DONE"
-
-#: scripts/ui/ordenador.gd
-msgid "Pasa por encima de un logro para ver cómo vas."
-msgstr "Move onto an achievement to see your progress."
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "Pick a challenge for this run. When you complete it, a notice pops up; come back here to claim the reward."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Conseguido! Pulsa para cobrar $%d."

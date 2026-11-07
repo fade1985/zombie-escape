@@ -12,8 +12,9 @@
 #     las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
 #     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, mientras quepan (van a sus montones de
 #     5); los que sobren al completar el edificio van al baúl.
-#   - "Logros": los retos del juego (logros.gd), por apartados (Logros.TEMAS), para elegir cuál intentar en esta
-#     partida. Los conseguidos se cobran aquí (su premio va a los dólares ahorrados).
+#   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. En la chapa oscura, como un
+#     archivador (archivador_logros.gd): a la izquierda, el Resumen y un apartado por tema (Logros.TEMAS); a la
+#     derecha, la página elegida. Los conseguidos se cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
 #     los edificios, para releerlas. Las que faltan salen como páginas arrancadas.
 #   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
@@ -48,6 +49,7 @@ const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "lo
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
 const ARBOL := preload("res://scripts/ui/arbol_talentos.gd")   # el árbol de talentos (TALENTOS.EXE)
 const TIENDA := preload("res://scripts/ui/tienda_armas.gd")   # la tienda de armas (ARMAS.EXE)
+const ARCHIVADOR := preload("res://scripts/ui/archivador_logros.gd")   # los logros (LOGROS.EXE)
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
 # El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
 # [traducir]
@@ -316,7 +318,7 @@ func abrir(programa: String, foco := "") -> void:
 	if programa == "puntos":
 		programa_puntos(contenido)
 	elif programa == "logros":
-		programa_logros(contenido)
+		foco = programa_logros(contenido, foco)
 	elif programa == "dosier":
 		programa_dosier(contenido)
 	elif programa == "noticias":
@@ -872,39 +874,37 @@ func comprar_lanzable(k: String) -> void:
 
 # ── Logros ──
 
-func programa_logros(c: VBoxContainer) -> void:
+# La chapa oscura como un archivador (archivador_logros.gd): las páginas a la izquierda (Resumen y un apartado por tema)
+# y la elegida a la derecha. Aquí se le pone a cada fila lo que explica en la línea de abajo y lo que hace al pulsarla.
+# "foco": lo que se marca; sin nada (al abrirlo desde el escritorio) se empieza por el Resumen. Devuelve lo que hay que
+# marcar de verdad (una fila que ya no está en la página, como lo recién cobrado en el Resumen, marca su página)
+func programa_logros(c: VBoxContainer, foco := "") -> String:
 	partida.logros.revisar()   # (lo que ya llegue por el guardado, como un talento recién comprado, sale conseguido)
 	var s := Guardado.cargar()
-	var hechos := 0
-	var por_cobrar := 0
-	for l in Logros.LISTA:
-		var e := Logros.estado(s, l.id)
-		if e != "pendiente":
-			hechos += 1
-		if e == "conseguido":
-			por_cobrar += l.premio
-	var fila := HBoxContainer.new()
-	fila.add_theme_constant_override("separation", 8)
-	c.add_child(fila)
-	cajita(fila, Idioma.t("Logros conseguidos"), "trofeo", "%d / %d" % [hechos, Logros.LISTA.size()])
-	cajita(fila, Idioma.t("Premios por cobrar"), "billete", "$%d" % por_cobrar)
-	cajita(fila, Idioma.t("Dólares ahorrados"), "billete", "$%d" % s.dolares)
-	nota(c, Idioma.t("Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."))
-	if partida.logros.sin_logros():
-		nota(c, Idioma.t("Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."))
-	# por apartados (Logros.TEMAS), cada uno con sus tarjetas en dos columnas
-	for tema in Logros.TEMAS:
-		var lista := rejilla(grupo(c, Logros.nombre_tema(tema)))
-		for l in Logros.LISTA.filter(func(x): return x.tema == tema):
-			var e := Logros.estado(s, l.id)
-			var etiqueta: String = {"pendiente": "$%d" % l.premio, "conseguido": Idioma.t("COBRAR $%d") % l.premio, "cobrado": Idioma.t("HECHO")}[e]
-			var meta := Logros.meta(l)
-			var hecho: int = meta if e != "pendiente" else mini(partida.logros.progreso(l.id, s), meta)
-			var barra: Array = [hecho, meta] if meta > 1 else []
-			var b := tarjeta(lista, "b_" + l.id, l.icono, Logros.nombre_de(l.id), Logros.desc_de(l.id), etiqueta,
-				{"pendiente": "apagada", "conseguido": "", "cobrado": "lleno"}[e], [], barra)
-			enlazar(b, "%s: %s %s" % [Logros.nombre_de(l.id), Logros.desc_de(l.id), explica_logro(l, e, hecho, meta)], cobrar_logro.bind(l.id))
-	info.text = Idioma.t("Pasa por encima de un logro para ver cómo vas.")
+	if foco == "":
+		ARCHIVADOR.pagina = "resumen"
+	elif foco.begins_with("b_tema_"):
+		ARCHIVADOR.pagina = foco.trim_prefix("b_tema_")
+	elif ARCHIVADOR.pagina != "resumen" and Logros.datos(foco.trim_prefix("b_")).get("tema", "") != ARCHIVADOR.pagina:
+		ARCHIVADOR.pagina = Logros.datos(foco.trim_prefix("b_")).get("tema", "resumen")   # (un logro de otro apartado: su página)
+	var archivador: Control = ARCHIVADOR.new()
+	archivador.name = "archivador"
+	archivador.montar(self, s)
+	c.add_child(archivador)
+	for t in archivador.temas:
+		var lista: Array = Logros.LISTA if t == "resumen" else archivador.de_tema(t)
+		var texto: String = Idioma.t("Lo que tienes por cobrar y cómo vas en cada apartado.") if t == "resumen" else 			Idioma.t("%s: llevas %d de %d.") % [Logros.nombre_tema(t), archivador.conseguidos(lista), lista.size()]
+		enlazar(archivador.temas[t], texto, func(): pass)   # (cambiar de página ya lo hace el archivador)
+	for id in archivador.botones:
+		var l := Logros.datos(id)
+		var e := Logros.estado(s, id)
+		var meta := Logros.meta(l)
+		var hecho: int = meta if e != "pendiente" else mini(partida.logros.progreso(id, s), meta)
+		enlazar(archivador.botones[id], "%s: %s %s" % [Logros.nombre_de(id), Logros.desc_de(id), explica_logro(l, e, hecho, meta)], cobrar_logro.bind(id))
+	info.text = Idioma.t("Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos.") 		if partida.logros.sin_logros() else Idioma.t("Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio.")
+	if foco.begins_with("b_tema_") or archivador.botones.has(foco.trim_prefix("b_")):
+		return foco
+	return "b_tema_" + ARCHIVADOR.pagina if foco != "" else ""
 
 
 # Lo que dice la línea de abajo de un logro (e: su estado; hecho y meta: cuánto lleva), cada caso en una frase entera

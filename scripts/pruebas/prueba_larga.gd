@@ -570,15 +570,13 @@ func probar_ordenador_teclado() -> void:
 		var subidas: int = await andar_con_teclado("ui_up")
 		print("%s con el teclado: baja %d y acaba en %s (esperado: abajo del todo) · sube %d y acaba en %s (esperado: arriba del todo)" % [
 			programa, bajadas, abajo, subidas, donde.call()])
-	# con el ratón, en cambio, pulsar la primera tarjeta no mueve la ventana (tiene que quedarse donde estaba)
+	# con el ratón, un clic en un apartado de los logros (archivador_logros.gd) abre su página
 	ordenador.abrir("logros")
 	await get_tree().create_timer(0.5).timeout
-	var ventana_logros: ScrollContainer = ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0]
-	ventana_logros.scroll_vertical = 60
-	await get_tree().create_timer(0.2).timeout
-	await clic_en(ordenador.ventana.find_child("b_primer_turno", true, false))
+	await clic_en(ordenador.ventana.find_child("b_tema_jefes", true, false))
 	await get_tree().create_timer(0.3).timeout
-	print("Clic en la primera tarjeta con la ventana bajada 60: %s (esperado: sigue en 60)" % donde.call())
+	print("Clic en Jefes de los logros: página %s, marcado %s (esperado: jefes, b_tema_jefes)" % [
+		ordenador.ventana.find_child("archivador", true, false).pagina, donde.call()])
 	ordenador.abrir("")
 	ordenador.apagar()
 	Guardado.cambiar(func(g): g.merge(antes, true))

@@ -5116,6 +5116,54 @@ msgstr "Enter: купить · $%d"
 msgid "Clic: comprar · $%d"
 msgstr "Клик: купить · $%d"
 
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar $%d"
+msgstr "К получению $%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros %d/%d"
+msgstr "Достижения %d/%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Resumen"
+msgstr "Сводка"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Partida con ayudas: no da logros"
+msgstr "Игра с помощью: без достижений"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Casi lo tienes"
+msgstr "Почти готово"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Elige un apartado a la izquierda para ver sus logros."
+msgstr "Выбери раздел слева, чтобы увидеть его достижения."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar"
+msgstr "К получению"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Y %d más: búscalos por el «!» de la izquierda."
+msgstr "И ещё %d: ищи «!» слева."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cómo vas"
+msgstr "Прогресс"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros conseguidos"
+msgstr "Полученные достижения"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cobrar $%d"
+msgstr "Забрать $%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Hecho"
+msgstr "Готово"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "щит %d"
@@ -6813,36 +6861,20 @@ msgid "¡Compra hecha! Ya llevas %d %s."
 msgstr "Куплено! В запасе: %d (%s)."
 
 #: scripts/ui/ordenador.gd
-msgid "Logros conseguidos"
-msgstr "Полученные достижения"
+msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
+msgstr "Что можно забрать и прогресс по каждому разделу."
 
 #: scripts/ui/ordenador.gd
-msgid "Premios por cobrar"
-msgstr "Награды к получению"
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Накопленные доллары"
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
-msgstr "Выбери испытание на этот забег. Когда выполнишь — появится уведомление; возвращайся сюда за наградой."
+msgid "%s: llevas %d de %d."
+msgstr "%s: %d из %d."
 
 #: scripts/ui/ordenador.gd
 msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
 msgstr "В этом забеге включены упрощения («Настройки → Упрощения»): достижения не выдаются. Полученные остаются, их можно забрать."
 
 #: scripts/ui/ordenador.gd
-msgid "COBRAR $%d"
-msgstr "ЗАБРАТЬ $%d"
-
-#: scripts/ui/ordenador.gd
-msgid "HECHO"
-msgstr "ГОТОВО"
-
-#: scripts/ui/ordenador.gd
-msgid "Pasa por encima de un logro para ver cómo vas."
-msgstr "Наведи на достижение, чтобы увидеть прогресс."
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "Выбери испытание на этот забег. Когда выполнишь — появится уведомление; возвращайся сюда за наградой."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Conseguido! Pulsa para cobrar $%d."

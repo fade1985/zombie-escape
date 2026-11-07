@@ -503,6 +503,16 @@ en una línea.
   dibujos de la tienda (`assets/ui/tienda/<id>.png`, 48 en diagonal, para la casilla, y `<id>-grande.png`, 96x48 en
   horizontal, para la ficha a ×2; `dibujo_tienda`, de PixelLab: `assets/pixellab.json` → `tienda-dibujos`) los usan; las
   demás, el icono de siempre.
+- `archivador_logros.gd`: los logros de ConserjeOS (LOGROS.EXE), desde el 7 nov. La misma chapa oscura, como un
+  archivador: arriba, lo ahorrado y, a la derecha, «Logros 10/42» y «Por cobrar $X». A la izquierda, un botón por página
+  (`b_tema_<tema>`): «Resumen» y uno por apartado de `Logros.TEMAS`, con su barrita, su cuenta y un «!» si tiene algo por
+  cobrar (cada apartado con su color, `COLORES`). A la derecha, la página (`pagina`, que se queda al rehacer la ventana):
+  el Resumen enseña lo que hay por cobrar (los que no caben, «Y N más»; si no hay nada, «Casi lo tienes»: los que se
+  hacen varias veces y van más avanzados) y «Cómo vas», una barra con todos y una por apartado; un apartado, sus logros
+  en filas (`b_<id>`: icono, nombre, su barra si `meta` > 1, lo que pide cortado con «...» y la placa del premio: apagada,
+  amarilla «Cobrar $X» o verde «Hecho»). Pulsar una fila cobra (`ordenador.cobrar_logro`); lo que pide, entero, sale en la
+  línea de abajo. `programa_logros` lo monta, le pone a cada botón su línea de abajo y decide qué se marca. Prueba:
+  `--archivador-logros`.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se

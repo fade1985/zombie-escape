@@ -5109,6 +5109,54 @@ msgstr "Enter: kaufen · $%d"
 msgid "Clic: comprar · $%d"
 msgstr "Klick: kaufen · $%d"
 
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar $%d"
+msgstr "Offen: $%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros %d/%d"
+msgstr "Erfolge %d/%d"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Resumen"
+msgstr "Übersicht"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Partida con ayudas: no da logros"
+msgstr "Spiel mit Hilfen: keine Erfolge"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Casi lo tienes"
+msgstr "Fast geschafft"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Elige un apartado a la izquierda para ver sus logros."
+msgstr "Wähle links einen Bereich, um seine Erfolge zu sehen."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Por cobrar"
+msgstr "Abholen"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Y %d más: búscalos por el «!» de la izquierda."
+msgstr "Und %d weitere: such das «!» links."
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cómo vas"
+msgstr "Fortschritt"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Logros conseguidos"
+msgstr "Erzielte Erfolge"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Cobrar $%d"
+msgstr "$%d holen"
+
+#: scripts/ui/archivador_logros.gd
+msgid "Hecho"
+msgstr "Erledigt"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "Schild %d"
@@ -6793,36 +6841,20 @@ msgid "¡Compra hecha! Ya llevas %d %s."
 msgstr "Gekauft! Du hast jetzt %d %s."
 
 #: scripts/ui/ordenador.gd
-msgid "Logros conseguidos"
-msgstr "Erzielte Erfolge"
+msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
+msgstr "Was du abholen kannst und dein Fortschritt in jedem Bereich."
 
 #: scripts/ui/ordenador.gd
-msgid "Premios por cobrar"
-msgstr "Offene Belohnungen"
-
-#: scripts/ui/ordenador.gd
-msgid "Dólares ahorrados"
-msgstr "Gesparte Dollar"
-
-#: scripts/ui/ordenador.gd
-msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
-msgstr "Such dir ein Ziel für diese Runde aus. Schaffst du es, kommt eine Meldung; hol dir die Belohnung dann hier ab."
+msgid "%s: llevas %d de %d."
+msgstr "%s: %d von %d geschafft."
 
 #: scripts/ui/ordenador.gd
 msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
 msgstr "Diese Runde läuft mit Hilfen (Optionen → Hilfen): keine Erfolge. Deine bisherigen bleiben, und du kannst sie einlösen."
 
 #: scripts/ui/ordenador.gd
-msgid "COBRAR $%d"
-msgstr "$%d HOLEN"
-
-#: scripts/ui/ordenador.gd
-msgid "HECHO"
-msgstr "ERLEDIGT"
-
-#: scripts/ui/ordenador.gd
-msgid "Pasa por encima de un logro para ver cómo vas."
-msgstr "Geh auf einen Erfolg, um deinen Fortschritt zu sehen."
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "Such dir ein Ziel für diese Runde aus. Schaffst du es, kommt eine Meldung; hol dir die Belohnung dann hier ab."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Conseguido! Pulsa para cobrar $%d."
