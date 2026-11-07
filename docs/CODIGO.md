@@ -491,10 +491,10 @@ en una línea.
   la pantallita de caja registradora, con cada cifra sobre un «8» apagado; `caja_ahorrado` dice dónde acaba).
 - `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
   izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
-  de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; «LLEVAS» o «LLENO» en verde, apagada si no llega:
+  de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas con el borde verde y lo lleno, además, con «LLENO», apagada si no llega:
   `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
   `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`), qué hace (`INVENTARIO.QUE_HACE`), sus
-  números (`ordenador.resumen_corto`) y el botón «Comprar» (`b_comprar`, sin foco: compra lo de la ficha). Sin nada
+  números (`ordenador.resumen_corto`) y el botón «Comprar» (`b_comprar`, sin foco: compra lo de la ficha; si ya la llevas dice «Comprada»). Sin nada
   elegido (al abrir con el ratón), la ficha explica la tienda (`nota`: la calidad Normal, el baúl y lo de
   esta partida). Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
   el teclado, el mando o el dedo, la marcada (`quien`); tras comprar se rehace con lo comprado elegido. Con el dedo, el
