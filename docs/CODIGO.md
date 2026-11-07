@@ -731,12 +731,11 @@ en una línea.
   su pared blanca con el zócalo del mismo vinilo (`pared-taller`) de dos imágenes de GPT (`assets/sources/taller-*-gpt.webp`).
   El baúl (`baul.png`, 42x23, también el de la sala de pruebas), un arcón de plástico negro: `baul_plastico.py` lo pasa a mano píxel a
   píxel copiando el dibujo de GPT (`assets/sources/baul-plastico-gpt.webp`; reducido sin más se emborronaba). Ocupa 78x36 en el suelo.
-  El banco de trabajo (`banco-trabajo.png`, 48x58), de acero gris con el tablero perforado naranja y los maletines: `banco_metal.py`
-  lo redibuja a mano píxel a píxel copiando la imagen de GPT (`assets/sources/banco-trabajo-gpt.webp`; reducida sin más se
-  emborronaba), con un contorno oscuro de 1 píxel en cada herramienta. Ocupa 76x36 en el suelo.
-  La estantería de entre los dos (`mueble-canshelf.png`, 40x68), de acero galvanizado con cajas de cartón y cubos grises: igual,
-  `estanteria_metal.py` la redibuja a mano de la imagen de GPT (`assets/sources/estanteria-metal-gpt.webp`). No pasa por
-  `importar.py` (si se reimporta `mantenimiento/estanteria-botes.png`, la pisa).
+  El banco de trabajo (`banco-trabajo.png`, 48x58, acero gris con el tablero perforado naranja) y la estantería de entre los
+  dos (`mueble-canshelf.png`, 40x68, acero galvanizado con cajas): `muebles_gpt.py` los saca de sus imágenes de GPT
+  (`assets/sources/banco-trabajo-gpt.webp` y `estanteria-metal-gpt.webp`, en pixel art sobre negro puro) reduciéndolas
+  mezclando colores, como las tuberías, para que conserven las sombras y el volumen. La estantería no pasa por
+  `importar.py` (si se reimporta `mantenimiento/estanteria-botes.png`, la pisa). Para otro mueble de GPT, se añade a su lista.
   En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
   `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
