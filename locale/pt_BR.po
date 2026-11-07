@@ -1270,8 +1270,8 @@ msgstr ""
 "Equipe: uma médica, para vigiar os sujeitos; um policial fardado, para que eles confiem; e uma escolta militar, caso algo dê errado. A síndica trabalha para nós."
 
 #: scripts/historia.gd
-msgid "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."
-msgstr "Salas diz que ninguém vai sentir falta dessa gente. Foi por isso que ele escolheu essas pessoas."
+msgid "Salas dice que nadie los echará de menos."
+msgstr "Salas diz que ninguém vai sentir falta deles."
 
 #: scripts/historia.gd
 msgid "Tomás Vidal, enfermero de noche"
@@ -1340,8 +1340,8 @@ msgstr ""
 "Apaguem este e-mail."
 
 #: scripts/historia.gd
-msgid "No pienso borrarlo. Que lo lea alguien."
-msgstr "Não vou apagar. Alguém tem que ler isso."
+msgid "No lo borro. Que alguien lo lea."
+msgstr "Não vou apagar. Alguém tem que ler."
 
 #: scripts/historia.gd
 msgid "Dr. Ramón Gil, investigador de Velaria"
@@ -1376,8 +1376,8 @@ msgstr ""
 "Salas tira sangue deles toda noite e leva para o terraço."
 
 #: scripts/historia.gd
-msgid "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."
-msgstr "S-1 me chamou pelo nome. Tirem o pessoal dos andares de cima. JÁ."
+msgid "S-1 sabe mi nombre. ¡Evacuad arriba YA!"
+msgstr "S-1 sabe meu nome. Evacuem lá em cima JÁ!"
 
 #: scripts/historia.gd
 msgid ""
@@ -1420,8 +1420,8 @@ msgstr ""
 "Eu não vou esperar. Os noctâmbulos são o caminho: VD-7 puro, tudo de uma vez, e estarei acima do ser humano."
 
 #: scripts/historia.gd
-msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
-msgstr "Se você está lendo isto, zelador: não confie no pessoal de jaleco. Nem em quem vier te resgatar."
+msgid "Conserje: no te fíes de las batas. Ni de quien te rescate."
+msgstr "Zelador: não confie em jaleco. Nem em quem te resgatar."
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Centro comercial"
@@ -1472,8 +1472,8 @@ msgstr ""
 "Se um cliente perguntar pelo prédio 14, atender fora da loja e avisar a segurança da Velaria Corp."
 
 #: scripts/historia.gd
-msgid "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."
-msgstr "Sem receita? Isso eu não vendo. A moça lá dos fundos também não."
+msgid "¿Sin receta? Esto no lo vendo."
+msgstr "Sem receita? Isso eu não vendo."
 
 #: scripts/historia.gd
 msgid "Dra. Elena Ruiz, técnica de Velaria"
@@ -1506,8 +1506,8 @@ msgstr ""
 "Se der certo, a Velaria Corp. vai vender para fábricas, armazéns e hospitais: um turno infinito para o país inteiro."
 
 #: scripts/historia.gd
-msgid "Marta, si te llega esto: no vengas al centro. Por favor."
-msgstr "Marta, se isto chegar até você: não venha ao shopping. Por favor."
+msgid "Marta: no vengas al centro. Por favor."
+msgstr "Marta: não venha ao shopping. Por favor."
 
 #: scripts/historia.gd
 msgid "Dr. Tomás Vidal, químico de Velaria"
@@ -1544,8 +1544,8 @@ msgstr ""
 "05:30. Peço ajuda. A Velaria Corp. manda um policial de choque. Ele entra na sala de segurança. Não sai."
 
 #: scripts/historia.gd
-msgid "Se lo quité al de seguridad. Él no llegó a la mañana."
-msgstr "Tirei isto do segurança. Ele não chegou ao amanhecer."
+msgid "Era del vigilante. No llegó a la mañana."
+msgstr "Era do vigia. Ele não chegou de manhã."
 
 #: scripts/historia.gd
 msgid "Dra. Irene Soler, enlace de Velaria con la gerencia"
@@ -1580,8 +1580,8 @@ msgstr ""
 "Em troca, quero a dose boa. A de verdade."
 
 #: scripts/historia.gd
-msgid "Lo imprimí para la Torre. El gerente lleva cuatro días sin dormir: dice que ya no le hace falta."
-msgstr "Imprimi para a Torre. O gerente está há quatro dias sem dormir: diz que não precisa mais."
+msgid "El gerente ya no duerme. Dice que no le hace falta."
+msgstr "O gerente não dorme mais. Diz que não precisa."
 
 #: scripts/historia.gd
 msgid ""
@@ -1624,8 +1624,8 @@ msgstr ""
 "O gerente não viaja. O que ele pediu não vai ser entregue. Mandem uma seringa para ele aguentar até a gente chegar."
 
 #: scripts/historia.gd
-msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
-msgstr "Me prometeram a dose boa. Me mandaram uma seringa e esta folha."
+msgid "Me prometieron la dosis buena. Solo vino esto."
+msgstr "Prometeram a dose boa. Só veio isto."
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Torre Velaria"
@@ -1670,8 +1670,8 @@ msgstr ""
 "4 de abril. 06:10. J. Rush sai. Assina com um X. Acompanhado pela segurança. Destino: \"número 14, zelador\"."
 
 #: scripts/historia.gd
-msgid "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."
-msgstr "Esse nome não me é estranho. É o zelador que procuram nas notícias. Ele já esteve aqui."
+msgid "Es el conserje de las noticias. Ya estuvo aquí."
+msgstr "É o zelador do jornal. Ele já esteve aqui."
 
 #: scripts/historia.gd
 msgid "Dra. Marina Ortega, médica de empresa"
@@ -1700,8 +1700,8 @@ msgstr ""
 "Se alguém dormir na mesa, não se acorda. O RH recolhe à noite e leva para o andar 40."
 
 #: scripts/historia.gd
-msgid "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."
-msgstr "Este mês já assinei quarenta afastamentos \"por cansaço\". Vou usar máscara."
+msgid "40 bajas «por cansancio». Me pongo mascarilla."
+msgstr "40 atestados \"por cansaço\". Vou de máscara."
 
 #: scripts/historia.gd
 msgid "Dr. Pablo Ferrer, asesor científico de la presentación"
@@ -1742,8 +1742,8 @@ msgstr ""
 "APLAUSOS (gravados: o público já não aplaude)."
 
 #: scripts/historia.gd
-msgid "Me piden que escriba que es seguro. Lo he visto en el laboratorio."
-msgstr "Pedem que eu escreva que é seguro. Eu vi no laboratório."
+msgid "Quieren que escriba que es seguro. Yo lo he visto."
+msgstr "Querem que eu escreva que é seguro. Eu vi."
 
 #: scripts/historia.gd
 msgid "Dr. Andrés Lin, investigador del laboratorio"
@@ -1780,8 +1780,8 @@ msgstr ""
 "A presidente diz que tanto faz: a apresentação é na sexta."
 
 #: scripts/historia.gd
-msgid "Ayer me miró y dijo «turno de noche». Como el conserje."
-msgstr "Ontem ele me olhou e disse \"turno da noite\". Igual ao zelador."
+msgid "Ayer me dijo «turno de noche». Como el conserje."
+msgstr "Ontem ele disse \"turno da noite\". Como o zelador."
 
 #: scripts/historia.gd
 msgid ""
@@ -1820,8 +1820,8 @@ msgstr ""
 "Se ele lembrar, avisar a Presidência. Se fugir, recuperá-lo vivo. É a única coisa que temos que funciona."
 
 #: scripts/historia.gd
-msgid "Encima de la foto, con letra torpe: «PAPÁ»."
-msgstr "Em cima da foto, com letra torta: \"PAPAI\"."
+msgid "En la foto, con letra torpe: «PAPÁ»."
+msgstr "Na foto, com letra torta: \"PAPAI\"."
 
 #: scripts/historia.gd
 msgid "Canal 8"

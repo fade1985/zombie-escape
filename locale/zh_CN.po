@@ -1269,8 +1269,8 @@ msgstr ""
 "人员：一名医生，负责观察受试者；一名穿制服的警察，让他们放心；一支军队护卫，以防万一。楼管大妈是我们的人。"
 
 #: scripts/historia.gd
-msgid "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."
-msgstr "萨拉斯说，这些人就算消失了也没人会想念。所以他才选了他们。"
+msgid "Salas dice que nadie los echará de menos."
+msgstr "萨拉斯说，没人会想念他们。"
 
 #: scripts/historia.gd
 msgid "Tomás Vidal, enfermero de noche"
@@ -1339,8 +1339,8 @@ msgstr ""
 "阅后删除此邮件。"
 
 #: scripts/historia.gd
-msgid "No pienso borrarlo. Que lo lea alguien."
-msgstr "我才不删。总得有人看到。"
+msgid "No lo borro. Que alguien lo lea."
+msgstr "我不删。总得有人看到。"
 
 #: scripts/historia.gd
 msgid "Dr. Ramón Gil, investigador de Velaria"
@@ -1375,8 +1375,8 @@ msgstr ""
 "萨拉斯每晚抽他们的血，送上天台。"
 
 #: scripts/historia.gd
-msgid "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."
-msgstr "S-1叫出了我的名字。把楼上的人员都撤出来。马上。"
+msgid "S-1 sabe mi nombre. ¡Evacuad arriba YA!"
+msgstr "S-1 知道我的名字。立刻撤离楼上！"
 
 #: scripts/historia.gd
 msgid ""
@@ -1419,8 +1419,8 @@ msgstr ""
 "我不等了。夜行者就是捷径：纯VD-7，一次全部注射，我将超越人类。"
 
 #: scripts/historia.gd
-msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
-msgstr "清洁工，如果你看到这段话：别相信穿白大褂的人。也别相信那些来救你的人。"
+msgid "Conserje: no te fíes de las batas. Ni de quien te rescate."
+msgstr "门卫：别信穿白大褂的。也别信来救你的人。"
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Centro comercial"
@@ -1471,8 +1471,8 @@ msgstr ""
 "如有顾客打听14号楼，请带到店外接待，并通知Velaria公司安保部门。"
 
 #: scripts/historia.gd
-msgid "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."
-msgstr "不用处方？这东西我不卖。配药间那个姑娘也不卖。"
+msgid "¿Sin receta? Esto no lo vendo."
+msgstr "没有处方？这个我不卖。"
 
 #: scripts/historia.gd
 msgid "Dra. Elena Ruiz, técnica de Velaria"
@@ -1505,8 +1505,8 @@ msgstr ""
 "如果成功，Velaria公司将把它卖给工厂、仓库和医院：让全国都无限加班。"
 
 #: scripts/historia.gd
-msgid "Marta, si te llega esto: no vengas al centro. Por favor."
-msgstr "Marta，如果你收到这个：别来商场。求你了。"
+msgid "Marta: no vengas al centro. Por favor."
+msgstr "玛尔塔：别来商场。求你了。"
 
 #: scripts/historia.gd
 msgid "Dr. Tomás Vidal, químico de Velaria"
@@ -1543,8 +1543,8 @@ msgstr ""
 "05:30。我请求支援。Velaria公司派来一名防暴警察。他进了保安室。再没出来。"
 
 #: scripts/historia.gd
-msgid "Se lo quité al de seguridad. Él no llegó a la mañana."
-msgstr "我从保安头儿身上拿的。他没撑到早上。"
+msgid "Era del vigilante. No llegó a la mañana."
+msgstr "这是保安的。他没撑到天亮。"
 
 #: scripts/historia.gd
 msgid "Dra. Irene Soler, enlace de Velaria con la gerencia"
@@ -1579,8 +1579,8 @@ msgstr ""
 "作为交换，我要好的那种剂量。真货。"
 
 #: scripts/historia.gd
-msgid "Lo imprimí para la Torre. El gerente lleva cuatro días sin dormir: dice que ya no le hace falta."
-msgstr "为Velaria大厦打印的。经理已经四天没睡了：他说他已经不需要睡觉了。"
+msgid "El gerente ya no duerme. Dice que no le hace falta."
+msgstr "经理不睡觉了。他说已经不需要了。"
 
 #: scripts/historia.gd
 msgid ""
@@ -1623,8 +1623,8 @@ msgstr ""
 "经理不随行。他要的东西不给。给他送一支针剂，让他撑到我们赶到。"
 
 #: scripts/historia.gd
-msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
-msgstr "他们答应给我好的剂量。结果寄来一支针剂和这张纸。"
+msgid "Me prometieron la dosis buena. Solo vino esto."
+msgstr "说好给我好的那剂。只寄来了这个。"
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Torre Velaria"
@@ -1669,8 +1669,8 @@ msgstr ""
 "4月4日。06:10。J. Rush离开。签了一个X。保安陪同。去向：“14号楼，清洁工”。"
 
 #: scripts/historia.gd
-msgid "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."
-msgstr "这个名字我听过。就是新闻里在找的那个清洁工。他以前来过这里。"
+msgid "Es el conserje de las noticias. Ya estuvo aquí."
+msgstr "是新闻里那个门卫。他来过这里。"
 
 #: scripts/historia.gd
 msgid "Dra. Marina Ortega, médica de empresa"
@@ -1699,8 +1699,8 @@ msgstr ""
 "如果有人在工位上睡着了，不要叫醒他。人力资源部会在夜里把他接走，送到40楼。"
 
 #: scripts/historia.gd
-msgid "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."
-msgstr "这个月我已经批了四十张“因疲劳”的病假。我要戴上口罩了。"
+msgid "40 bajas «por cansancio». Me pongo mascarilla."
+msgstr "四十张“疲劳”病假单。我戴上口罩了。"
 
 #: scripts/historia.gd
 msgid "Dr. Pablo Ferrer, asesor científico de la presentación"
@@ -1741,8 +1741,8 @@ msgstr ""
 "掌声（录音：观众已经不会鼓掌了）。"
 
 #: scripts/historia.gd
-msgid "Me piden que escriba que es seguro. Lo he visto en el laboratorio."
-msgstr "他们要我写下“安全”二字。我在实验室里亲眼见过。"
+msgid "Quieren que escriba que es seguro. Yo lo he visto."
+msgstr "他们要我写它很安全。可我亲眼见过。"
 
 #: scripts/historia.gd
 msgid "Dr. Andrés Lin, investigador del laboratorio"
@@ -1779,8 +1779,8 @@ msgstr ""
 "董事长说无所谓：周五照常发布。"
 
 #: scripts/historia.gd
-msgid "Ayer me miró y dijo «turno de noche». Como el conserje."
-msgstr "昨天他看着我，说了一句“夜班”。就像那个清洁工。"
+msgid "Ayer me dijo «turno de noche». Como el conserje."
+msgstr "昨天他说“夜班”。和那个门卫一样。"
 
 #: scripts/historia.gd
 msgid ""
@@ -1819,8 +1819,8 @@ msgstr ""
 "如果他想起来了，立即通知董事长办公室。如果他逃跑，务必活捉。这是我们唯一有效的东西。"
 
 #: scripts/historia.gd
-msgid "Encima de la foto, con letra torpe: «PAPÁ»."
-msgstr "照片上方，歪歪扭扭的字迹：“爸爸”。"
+msgid "En la foto, con letra torpe: «PAPÁ»."
+msgstr "照片上，歪歪扭扭写着：“爸爸”。"
 
 #: scripts/historia.gd
 msgid "Canal 8"

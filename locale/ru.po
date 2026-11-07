@@ -1271,8 +1271,8 @@ msgstr ""
 "Персонал: врач — следить за объектами; полицейский в форме — чтобы доверяли; и военный конвой — на случай, если что-то пойдет не так. Вахтерша работает на нас."
 
 #: scripts/historia.gd
-msgid "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."
-msgstr "Салас говорит, что по этим людям никто не будет скучать. Потому он их и выбрал."
+msgid "Salas dice que nadie los echará de menos."
+msgstr "Салас говорит, что по ним никто не заскучает."
 
 #: scripts/historia.gd
 msgid "Tomás Vidal, enfermero de noche"
@@ -1341,8 +1341,8 @@ msgstr ""
 "Удалите это письмо."
 
 #: scripts/historia.gd
-msgid "No pienso borrarlo. Que lo lea alguien."
-msgstr "Не стану я его удалять. Пусть кто-нибудь прочтет."
+msgid "No lo borro. Que alguien lo lea."
+msgstr "Не сотру. Пусть кто-нибудь прочтёт."
 
 #: scripts/historia.gd
 msgid "Dr. Ramón Gil, investigador de Velaria"
@@ -1377,8 +1377,8 @@ msgstr ""
 "Салас каждую ночь берет у них кровь и уносит на крышу."
 
 #: scripts/historia.gd
-msgid "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."
-msgstr "S-1 назвала меня по имени. Уведите персонал с верхних этажей. СРОЧНО."
+msgid "S-1 sabe mi nombre. ¡Evacuad arriba YA!"
+msgstr "S-1 знает моё имя. Эвакуируйте верх. СЕЙЧАС!"
 
 #: scripts/historia.gd
 msgid ""
@@ -1421,8 +1421,8 @@ msgstr ""
 "Я ждать не стану. Полуночники — это путь: чистый VD-7, все сразу, и я стану выше человека."
 
 #: scripts/historia.gd
-msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
-msgstr "Если ты это читаешь, дворник: не верь людям в халатах. И тем, кто придет тебя спасать, — тоже."
+msgid "Conserje: no te fíes de las batas. Ni de quien te rescate."
+msgstr "Дворник: не верь халатам. И тем, кто тебя спасёт."
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Centro comercial"
@@ -1473,8 +1473,8 @@ msgstr ""
 "Если покупатель спросит про дом 14, вывести его из магазина и сообщить в службу безопасности Velaria Corp."
 
 #: scripts/historia.gd
-msgid "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."
-msgstr "Без рецепта? Я такое продавать не буду. Девушка из провизорской — тоже."
+msgid "¿Sin receta? Esto no lo vendo."
+msgstr "Без рецепта? Я такое не продаю."
 
 #: scripts/historia.gd
 msgid "Dra. Elena Ruiz, técnica de Velaria"
@@ -1507,8 +1507,8 @@ msgstr ""
 "Если все получится, Velaria Corp. будет продавать его заводам, складам и больницам: бесконечная смена для всей страны."
 
 #: scripts/historia.gd
-msgid "Marta, si te llega esto: no vengas al centro. Por favor."
-msgstr "Марта, если это до тебя дойдет: не приезжай в центр. Пожалуйста."
+msgid "Marta: no vengas al centro. Por favor."
+msgstr "Марта, не приходи в центр. Прошу."
 
 #: scripts/historia.gd
 msgid "Dr. Tomás Vidal, químico de Velaria"
@@ -1545,8 +1545,8 @@ msgstr ""
 "05:30. Прошу помощи. Velaria Corp. присылает омоновца. Он заходит в пост охраны. И не выходит."
 
 #: scripts/historia.gd
-msgid "Se lo quité al de seguridad. Él no llegó a la mañana."
-msgstr "Забрал это у охранника. Он не дожил до утра."
+msgid "Era del vigilante. No llegó a la mañana."
+msgstr "Это было у охранника. Он не дожил до утра."
 
 #: scripts/historia.gd
 msgid "Dra. Irene Soler, enlace de Velaria con la gerencia"
@@ -1581,8 +1581,8 @@ msgstr ""
 "Взамен я хочу хорошую дозу. Настоящую."
 
 #: scripts/historia.gd
-msgid "Lo imprimí para la Torre. El gerente lleva cuatro días sin dormir: dice que ya no le hace falta."
-msgstr "Распечатала для Башни. Управляющий не спит четвертый день: говорит, ему больше не нужно."
+msgid "El gerente ya no duerme. Dice que no le hace falta."
+msgstr "Управляющий больше не спит. Говорит, ему не нужно."
 
 #: scripts/historia.gd
 msgid ""
@@ -1625,8 +1625,8 @@ msgstr ""
 "Управляющий не летит. Что он просил, не выдавать. Пришлите ему шприц, чтобы продержался до нашего прибытия."
 
 #: scripts/historia.gd
-msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
-msgstr "Мне обещали хорошую дозу. Прислали шприц и эту бумажку."
+msgid "Me prometieron la dosis buena. Solo vino esto."
+msgstr "Мне обещали хорошую дозу. Пришло только это."
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Torre Velaria"
@@ -1671,8 +1671,8 @@ msgstr ""
 "4 апреля. 06:10. Дж. Раш выходит. Подпись: крестик. Сопровождает охрана. Куда: «дом 14, дворник»."
 
 #: scripts/historia.gd
-msgid "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."
-msgstr "Это имя мне знакомо. Это дворник, которого ищут в новостях. Он уже был здесь."
+msgid "Es el conserje de las noticias. Ya estuvo aquí."
+msgstr "Это дворник из новостей. Он уже был здесь."
 
 #: scripts/historia.gd
 msgid "Dra. Marina Ortega, médica de empresa"
@@ -1701,8 +1701,8 @@ msgstr ""
 "Если кто-то уснул за столом, его не будят. Отдел кадров забирает его ночью и поднимает на этаж 40."
 
 #: scripts/historia.gd
-msgid "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."
-msgstr "В этом месяце я уже подписала сорок больничных «по усталости». Надеваю маску."
+msgid "40 bajas «por cansancio». Me pongo mascarilla."
+msgstr "40 больничных «от усталости». Я в маске."
 
 #: scripts/historia.gd
 msgid "Dr. Pablo Ferrer, asesor científico de la presentación"
@@ -1743,8 +1743,8 @@ msgstr ""
 "АПЛОДИСМЕНТЫ (запись: зал больше не аплодирует)."
 
 #: scripts/historia.gd
-msgid "Me piden que escriba que es seguro. Lo he visto en el laboratorio."
-msgstr "Меня просят написать, что это безопасно. Я видел это в лаборатории."
+msgid "Quieren que escriba que es seguro. Yo lo he visto."
+msgstr "Велят писать, что это безопасно. А я видел."
 
 #: scripts/historia.gd
 msgid "Dr. Andrés Lin, investigador del laboratorio"
@@ -1781,8 +1781,8 @@ msgstr ""
 "Президент говорит, что неважно: презентация в пятницу."
 
 #: scripts/historia.gd
-msgid "Ayer me miró y dijo «turno de noche». Como el conserje."
-msgstr "Вчера он посмотрел на меня и сказал «ночная смена». Как дворник."
+msgid "Ayer me dijo «turno de noche». Como el conserje."
+msgstr "Вчера он сказал «ночная смена». Как дворник."
 
 #: scripts/historia.gd
 msgid ""
@@ -1821,8 +1821,8 @@ msgstr ""
 "Если вспомнит, сообщить Президенту. Если сбежит, вернуть живым. Это единственное, что у нас работает."
 
 #: scripts/historia.gd
-msgid "Encima de la foto, con letra torpe: «PAPÁ»."
-msgstr "Над фотографией неловким почерком: «ПАПА»."
+msgid "En la foto, con letra torpe: «PAPÁ»."
+msgstr "На фото, корявым почерком: «ПАПА»."
 
 #: scripts/historia.gd
 msgid "Canal 8"

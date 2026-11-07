@@ -56,7 +56,7 @@ const DOSIERES := {
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b")},
 				"tipo": "PLAN DE CAMPO · CONFIDENCIAL", "titulo": "Estudio de descanso",   # [traducir]
 				"texto": "Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n\nSujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y $300 al mes.\n\nDosis: una pastilla de VD-7 cada noche, a las 23:00.\n\nPersonal: una médica, para vigilar a los sujetos; un policía de uniforme, para que se fíen; y una escolta militar, por si algo sale mal. La portera trabaja para nosotros.",   # [traducir]
-				"nota": "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."},   # [traducir]
+				"nota": "Salas dice que nadie los echará de menos."},   # [traducir]
 			{"id": "vd7_diario", "planta": 2, "cuerpo": "Tomás Vidal, enfermero de noche",   # [traducir]
 				"look": {"skin": Color("#c68642"), "hair": Color("#1d1b2c")},
 				"tipo": "DIARIO DE TURNO", "titulo": "Noches 6 a 13",   # [traducir]
@@ -66,12 +66,12 @@ const DOSIERES := {
 				"look": {"skin": Color("#ffd2a8"), "hair": Color("#8a5a2b")},
 				"tipo": "CORREO INTERNO IMPRESO", "titulo": "Asunto: RE: ¿virus?",   # [traducir]
 				"texto": "De: Dirección de Velaria Corp.\nPara: Equipo de campo\n\nNo hay ningún virus, lo sabemos. Pero «virus» lo entiende todo el mundo y nadie pregunta por las pastillas.\n\nEsta noche nuestra seguridad precinta el edificio: nadie entra ni sale, tampoco vosotros ni la escolta. El edificio es nuestro y la policía de fuera no puede pasar.\n\nEl mordisco cambia el ADN del mordido: un durmiente más. No estaba previsto. Ahora forma parte del estudio.\n\nBorrad este correo.",   # [traducir]
-				"nota": "No pienso borrarlo. Que lo lea alguien."},   # [traducir]
+				"nota": "No lo borro. Que alguien lo lea."},   # [traducir]
 			{"id": "vd7_anexo", "planta": 4, "cuerpo": "Dr. Ramón Gil, investigador de Velaria",   # [traducir]
 				"look": {"skin": Color("#e0ac69"), "hair": Color("#9b93a0")},
 				"tipo": "INFORME · DOSIS ALTA", "titulo": "Los noctámbulos",   # [traducir]
 				"texto": "Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «noctámbulos».\n\nS-1. La portera. Dosis triple. Sigue fregando.\nS-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\nS-3. Deudas, 1ºD. Lo mezcló con sus batidos. Ya no le cabe la ropa.\nS-4. Bombero jubilado, 2ºA. El fuego no le quema.\n\nSalas les saca sangre cada noche y se la sube a la azotea.",   # [traducir]
-				"nota": "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."},   # [traducir]
+				"nota": "S-1 sabe mi nombre. ¡Evacuad arriba YA!"},   # [traducir]
 			# La última no la lleva un muerto: la suelta el científico jefe (el director del estudio) al caer en la
 			# azotea (del_jefe)
 			{"id": "vd7_sujeto_cero", "planta": 5, "jefe": true, "donde": "azotea",
@@ -80,7 +80,7 @@ const DOSIERES := {
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#d9d1bd")},
 				"tipo": "LISTA DE SUJETOS · SOLO DIRECCIÓN", "titulo": "Sujeto 0",   # [traducir]
 				"texto": "Durmientes: 131, contando al personal. Noctámbulos: 4.\n\nSujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un noctámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n\nEs la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n\nYo no espero. Los noctámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano.",   # [traducir]
-				"nota": "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."},   # [traducir]
+				"nota": "Conserje: no te fíes de las batas. Ni de quien te rescate."},   # [traducir]
 		],
 	},
 	# «Turno infinito»: el gerente del centro pone VD-7 en el café de sus empleados para que trabajen sin parar, y
@@ -94,22 +94,22 @@ const DOSIERES := {
 				"look": {"skin": Color("#e0ac69"), "hair": Color("#4a3426")},
 				"tipo": "ALBARÁN DE ENTREGA", "titulo": "Pedido para la farmacia",   # [traducir]
 				"texto": "Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n\nCada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: $3,99.\n\nColocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n\nSi un cliente pregunta por el edificio 14, se le atiende fuera de la tienda y se avisa a la seguridad de Velaria Corp.",   # [traducir]
-				"nota": "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."},   # [traducir]
+				"nota": "¿Sin receta? Esto no lo vendo."},   # [traducir]
 			{"id": "cc_turno", "planta": 2, "cuerpo": "Dra. Elena Ruiz, técnica de Velaria",   # [traducir]
 				"look": {"skin": Color("#ffd2a8"), "hair": Color("#b5651d")},
 				"tipo": "CONTRATO · CONFIDENCIAL", "titulo": "Programa «Turno infinito»",   # [traducir]
 				"texto": "Entre Velaria Corp. y la gerencia del centro comercial.\n\nVelaria entrega el VD-7 gratis. El centro lo echa en la cafetera de la sala de descanso de los empleados, a dosis completa. Ellos no lo saben.\n\nObjetivo: turnos de 20 horas, sin cansancio y sin quejas. Velaria se queda con los datos de 312 empleados.\n\nSi sale bien, Velaria Corp. lo venderá a fábricas, almacenes y hospitales: un turno infinito para todo el país.",   # [traducir]
-				"nota": "Marta, si te llega esto: no vengas al centro. Por favor."},   # [traducir]
+				"nota": "Marta: no vengas al centro. Por favor."},   # [traducir]
 			{"id": "cc_incidencias", "planta": 3, "cuerpo": "Dr. Tomás Vidal, químico de Velaria",   # [traducir]
 				"look": {"skin": Color("#c68642"), "hair": Color("#2b2b2b")},   # M86: un científico, con su bata
 				"tipo": "PARTE DE INCIDENCIAS", "titulo": "Turno de noche",   # [traducir]
 				"texto": "02:10. Cerrado desde las 22:00. Los cajeros siguen cobrando a nadie.\n\n03:40. El cocinero fríe sin aceite. La del taller de costura viste maniquíes. El del oso de la juguetería saluda al pasillo vacío.\n\n04:15. Tienen los ojos cerrados. Siguen trabajando. Si te acercas, muerden.\n\n05:00. El gerente dice que no es una incidencia: «Rinden más que nunca».\n\n05:30. Pido ayuda. Velaria Corp. manda un antidisturbios. Entra en la oficina de seguridad. No sale.",   # [traducir]
-				"nota": "Se lo quité al de seguridad. Él no llegó a la mañana."},   # [traducir]
+				"nota": "Era del vigilante. No llegó a la mañana."},   # [traducir]
 			{"id": "cc_correo", "planta": 4, "cuerpo": "Dra. Irene Soler, enlace de Velaria con la gerencia",   # [traducir]
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#1d1b2c")},   # M86: una científica, con su bata
 				"tipo": "CORREO IMPRESO · GERENCIA", "titulo": "Asunto: El conserje",   # [traducir]
 				"texto": "De: Gerencia del centro comercial\nPara: Velaria Corp., Dirección\n\nEl conserje del 14 está en el centro. Lo veo en las cámaras: sube planta por planta, como si buscara algo.\n\nNo voy a llamar a la policía. Lo retengo hasta que llegue vuestro helicóptero. He cerrado las salidas, y mis empleados no se cansan.\n\nA cambio, quiero la dosis buena. La de verdad.",   # [traducir]
-				"nota": "Lo imprimí para la Torre. El gerente lleva cuatro días sin dormir: dice que ya no le hace falta."},   # [traducir]
+				"nota": "El gerente ya no duerme. Dice que no le hace falta."},   # [traducir]
 			# La última no la lleva un muerto: la suelta el gerente al caer en la azotea (del_jefe). La azotea y el
 			# gerente llegan en el trozo 6 de la parte 4
 			{"id": "cc_recogida", "planta": 5, "jefe": true, "donde": "azotea",
@@ -118,7 +118,7 @@ const DOSIERES := {
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#6e6a64")},
 				"tipo": "ORDEN DE RECOGIDA · URGENTE", "titulo": "Recogida del Sujeto 0",   # [traducir]
 				"texto": "Lugar: helipuerto de la azotea del centro comercial. Hora: en cuanto avise el gerente.\n\nCarga: el Sujeto 0, el conserje del 14. Vivo. No gastéis VD-7 con él: no le hace nada.\n\nDestino: Torre Velaria, nuestra sede. Directo al laboratorio de la planta 40. Él ya lo conoce, aunque no se acuerde.\n\nEl gerente no viaja. Lo que pidió no se le entrega. Mandadle una jeringa para que aguante hasta que lleguemos.",   # [traducir]
-				"nota": "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."},   # [traducir]
+				"nota": "Me prometieron la dosis buena. Solo vino esto."},   # [traducir]
 		],
 	},
 	# Torre Velaria: por qué Johnny «ya conoce» la planta 40. Hace once años fue el voluntario del primer ensayo del
@@ -134,22 +134,22 @@ const DOSIERES := {
 				"look": {"skin": Color("#e0ac69"), "hair": Color("#1d1b2c")},
 				"tipo": "LIBRO DE VISITAS · HACE 11 AÑOS", "titulo": "Visitas del turno de noche",   # [traducir]
 				"texto": "14 de marzo. 23:40. Dr. H. Salas. Planta 40.\n\n14 de marzo. 23:52. J. Rush, voluntario. Planta 40. Le acompaña seguridad. Firma con buena letra.\n\n15 de marzo. J. Rush no firma la salida.\n\n(Las tres semanas siguientes, arrancadas.)\n\n4 de abril. 06:10. J. Rush sale. Firma con una X. Le acompaña seguridad. Destino: «número 14, conserje».",   # [traducir]
-				"nota": "Este nombre me suena. Es el conserje que buscan en las noticias. Ya estuvo aquí."},   # [traducir]
+				"nota": "Es el conserje de las noticias. Ya estuvo aquí."},   # [traducir]
 			{"id": "tv_bienestar", "planta": 2, "cuerpo": "Dra. Marina Ortega, médica de empresa",   # [traducir]
 				"look": {"skin": Color("#ffd2a8"), "hair": Color("#8a5a2b")},
 				"tipo": "CIRCULAR DE RECURSOS HUMANOS", "titulo": "Programa Bienestar",   # [traducir]
 				"texto": "Para toda la plantilla de Torre Velaria: desde el lunes, la torre estrena aire acondicionado. Más fresco, más descanso, mejor ambiente. Gracias por vuestro esfuerzo.\n\nANEXO, SOLO PARA DIRECCIÓN: el aire lleva VD-7 en dosis muy baja, en las cuarenta plantas. Empleados más tranquilos, más horas, ninguna queja.\n\nSi alguien se duerme en su mesa, no se le despierta. Recursos Humanos lo recoge por la noche y lo sube a la planta 40.",   # [traducir]
-				"nota": "Este mes ya he firmado cuarenta bajas «por cansancio». Me pongo mascarilla."},   # [traducir]
+				"nota": "40 bajas «por cansancio». Me pongo mascarilla."},   # [traducir]
 			{"id": "tv_guion", "planta": 3, "cuerpo": "Dr. Pablo Ferrer, asesor científico de la presentación",   # [traducir]
 				"look": {"skin": Color("#c68642"), "hair": Color("#2b2b2b")},
 				"tipo": "GUION · NO DIFUNDIR", "titulo": "El futuro del trabajo",   # [traducir]
 				"texto": "LUZ. MÚSICA. Sale el presentador.\n\nPRESENTADOR: ¿Cansados? ¿Otra vez lunes? Eso se acabó.\n\nPRESENTADOR: Velaria presenta el Turno Infinito: el VD-7 en el aire de cada oficina, cada fábrica y cada hospital del país.\n\nSe abre el telón. Sale el Sujeto 1.\n\nPRESENTADOR: Les presento al empleado perfecto. No duerme. No se cansa. No pide vacaciones.\n\nAPLAUSOS (grabados: el público ya no aplaude).",   # [traducir]
-				"nota": "Me piden que escriba que es seguro. Lo he visto en el laboratorio."},   # [traducir]
+				"nota": "Quieren que escriba que es seguro. Yo lo he visto."},   # [traducir]
 			{"id": "tv_sujeto_1", "planta": 4, "cuerpo": "Dr. Andrés Lin, investigador del laboratorio",   # [traducir]
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#9b93a0")},
 				"tipo": "INFORME · LABORATORIO 40", "titulo": "Sujeto 1",   # [traducir]
 				"texto": "Origen: la sangre del Sujeto 0, sacada una vez al mes durante once años, en sus «revisiones médicas de empresa».\n\nResultado: dos metros y medio. No duerme. No se cansa. No se convierte.\n\nImita lo que ve. Le pusimos vídeos del Sujeto 0 trabajando y ahora friega el suelo del laboratorio.\n\nProblema: no obedece. Ha roto dos cápsulas y a tres técnicos.\n\nLa presidenta dice que da igual: se presenta el viernes.",   # [traducir]
-				"nota": "Ayer me miró y dijo «turno de noche». Como el conserje."},   # [traducir]
+				"nota": "Ayer me dijo «turno de noche». Como el conserje."},   # [traducir]
 			# La última no la lleva un muerto: la suelta el Sujeto 1 al caer en el laboratorio (del_jefe)
 			{"id": "tv_sujeto_cero", "planta": 5, "jefe": true, "donde": "laboratorio",
 				"falta": "Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n\nTendrás que quitársela.",   # [traducir]
@@ -157,7 +157,7 @@ const DOSIERES := {
 				"look": {"skin": Color("#c9b8d6"), "hair": Color("#3b2a4a")},
 				"tipo": "FICHA DE SUJETO · SOLO PRESIDENCIA", "titulo": "Sujeto 0",   # [traducir]
 				"texto": "Nombre: Johnny Rush. Repartidor de noche, sin familia y con deudas. Se presentó voluntario al primer ensayo del VD-7 por $500.\n\nDosis: cuarenta veces la normal. No se durmió. No se convirtió. Su sangre deshace el VD-7.\n\nDespués: tres semanas de borrado de memoria. Nuevo trabajo: conserje del número 14, un edificio nuestro, para tenerlo cerca. Revisión médica cada mes.\n\nSi recuerda, avisar a Presidencia. Si escapa, recuperarlo vivo. Es lo único que tenemos que funciona.",   # [traducir]
-				"nota": "Encima de la foto, con letra torpe: «PAPÁ»."},   # [traducir]
+				"nota": "En la foto, con letra torpe: «PAPÁ»."},   # [traducir]
 		],
 	},
 }

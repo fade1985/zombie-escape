@@ -22,7 +22,6 @@ const TINTA := Color("#2a2520")
 const GRIS := Color("#6a5f50")
 const ROJO := Color("#a3312b")
 const BOLI := Color("#1f3c8a")
-const POSIT := Color("#f2e27a")
 # El logo de Velaria Corp. (inventado: una luna creciente dentro de un círculo, porque el VD-7 se vende para dormir;
 # lo eligió el dueño el 7 nov y es el de siempre: tools/logo_velaria.py). 24x24: a 2 unidades por píxel en la cabecera de
 # siempre y a su tamaño en la compacta
@@ -109,13 +108,34 @@ func colocar(ancho: float, t: int, t_titulo: int, compacto: bool) -> float:
 		return y + 34   # (y el trozo roto de abajo)
 	var fondo := y
 	if a_mano != "":
-		# el pósit, abajo a la derecha, debajo del texto
-		var ancho_posit := minf(330.0, (derecha - izquierda) * 0.6)
+		# el pósit, pequeño y casi cuadrado, como uno de verdad (por eso las notas son cortas: tres o cuatro líneas),
+		# pegado abajo a la derecha: las últimas líneas del texto se estrechan para dejarle sitio. Se prueba a subirlo
+		# línea a línea y se queda donde la hoja acabe más arriba
+		var ancho_posit := minf(196.0, (derecha - izquierda) * 0.4)
 		var trozos := partir(a_mano, ancho_posit - 20)
-		caja_posit = Rect2(derecha - ancho_posit, y + 6, ancho_posit, 14.0 + trozos.size() * alto_linea + 6)
+		var alto_posit := maxf(14.0 + trozos.size() * alto_linea + 16, ancho_posit * 0.78)   # (abajo, sitio para la esquina doblada)
+		var estrecho := derecha - izquierda - ancho_posit - 14
+		var mejor := INF
+		var arriba := y + 6   # (debajo de todo el texto)
+		while arriba >= cuerpo_y + 2:
+			var desde := arriba
+			lineas.clear()
+			var fin := escribir(escrito, cuerpo_y + 2, func(yy): return Vector2(izquierda,
+					estrecho if yy + alto_linea > desde - 4 else derecha - izquierda))
+			var abajo := maxf(fin, desde + alto_posit + 4)
+			if abajo < mejor - 0.5:
+				mejor = abajo
+				caja_posit = Rect2(derecha - ancho_posit, desde, ancho_posit, alto_posit)
+			arriba -= alto_linea
+		lineas.clear()
+		var sitio_posit := caja_posit.position.y
+		escribir(escrito, cuerpo_y + 2, func(yy): return Vector2(izquierda,
+				estrecho if yy + alto_linea > sitio_posit - 4 else derecha - izquierda))
 		for i in trozos.size():
-			lineas_posit.append([trozos[i], Vector2(10, 12 + fuente.get_ascent(tam) + i * alto_linea)])
-		fondo = caja_posit.end.y + 4
+			# (el texto, centrado de arriba abajo, sin contar la esquina doblada)
+			var margen_arriba := maxf(12.0, (alto_posit - 16.0 - trozos.size() * alto_linea) / 2.0 + 4.0)
+			lineas_posit.append([trozos[i], Vector2(10, margen_arriba + fuente.get_ascent(tam) + i * alto_linea)])
+		fondo = mejor
 	return fondo + MARGEN
 
 
@@ -341,13 +361,40 @@ func clip(punto: Vector2) -> void:
 	draw_rect(Rect2(punto + Vector2(3, 6), Vector2(4, 22)), Color("#c8ccd2"), false, 1.0)
 
 
-# La nota a mano, en un pósit amarillo algo torcido
+# La nota a mano, en un pósit amarillo algo torcido, como uno de verdad: un amarillo pálido en franjas (más claro a la
+# izquierda y más oscuro a la derecha), la tira de pegamento arriba, un poco más clara, y la esquina de abajo a la
+# izquierda levantada y doblada (se ve su revés, más anaranjado), con su sombra debajo
 func posit() -> void:
 	draw_set_transform(caja_posit.get_center(), deg_to_rad(1.5))
 	var caja := Rect2(-caja_posit.size / 2.0, caja_posit.size)
-	draw_rect(Rect2(caja.position + Vector2(3, 3), caja.size), Color(0, 0, 0, 0.3))
-	draw_rect(caja, POSIT)
-	draw_rect(Rect2(caja.position, Vector2(caja.size.x, 6)), Color("#e6d364"))
+	var x0 := caja.position.x
+	var y0 := caja.position.y
+	var x1 := caja.end.x
+	var y1 := caja.end.y
+	var doblez := 24.0   # lo que se levanta la esquina
+	var esquina := [Vector2(x0, y1 - doblez), Vector2(x0 + doblez, y1)]   # el pliegue
+	var punta := Vector2(x0 + doblez * 0.8, y1 - doblez * 0.8)        # la punta de la esquina, ya doblada
+	# la sombra, suave
+	draw_rect(Rect2(caja.position + Vector2(2, 3), caja.size - Vector2(2, 0)), Color(0, 0, 0, 0.14))
+	# el papel en franjas de amarillo: más claro a la izquierda y más oscuro a la derecha
+	var franjas := [Color("#fcf4ba"), Color("#fbf0aa"), Color("#f9eb9c"), Color("#f7e68f"), Color("#f4e084"), Color("#f1da7a")]
+	var ancho_franja := ceilf(caja.size.x / franjas.size())
+	for i in franjas.size():
+		var a := x0 + i * ancho_franja
+		draw_rect(Rect2(a, y0, minf(ancho_franja, x1 - a), caja.size.y), franjas[i])
+	# donde se ha levantado la esquina se ve la hoja de debajo, con la sombra de la esquina
+	var fuera := PackedVector2Array([esquina[0], esquina[1], Vector2(x0, y1)])
+	draw_colored_polygon(fuera, PAPEL)
+	draw_colored_polygon(PackedVector2Array([esquina[0], esquina[1], esquina[1] + Vector2(-5, 1), esquina[0] + Vector2(-1, 6)]),
+		Color(0, 0, 0, 0.22))
+	# la tira de pegamento de arriba, algo más clara
+	draw_rect(Rect2(x0, y0, caja.size.x, 8), Color(1, 1, 0.92, 0.4))
+	# la esquina doblada: el revés del papel, anaranjado, más oscuro hacia la punta, con el borde del pliegue claro
+	draw_colored_polygon(PackedVector2Array([esquina[0], esquina[1], punta + Vector2(2, 2)]), Color(0, 0, 0, 0.12))   # (su sombrita sobre el pósit)
+	draw_colored_polygon(PackedVector2Array([esquina[0], esquina[1], punta]), Color("#f0cf62"))
+	draw_colored_polygon(PackedVector2Array([esquina[0].lerp(punta, 0.35), esquina[1].lerp(punta, 0.35), punta]), Color("#e3b648"))
+	draw_colored_polygon(PackedVector2Array([esquina[0].lerp(punta, 0.7), esquina[1].lerp(punta, 0.7), punta]), Color("#d29d36"))
+	draw_line(esquina[0], esquina[1], Color("#fff7cc"), 1.0)
 	for l in lineas_posit:
 		draw_string(fuente, caja.position + l[1], l[0], HORIZONTAL_ALIGNMENT_LEFT, -1, tam, BOLI)
 	draw_set_transform(Vector2.ZERO)
