@@ -962,7 +962,7 @@ func probar_noticias() -> void:
 	await get_tree().create_timer(0.2).timeout
 	Captura.foto("captura-noticias-entera.png")
 	for t in ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele):
-		print("La tele: letras de %d, %d trozos, este con %d líneas (caben %d) · ¿flechita? %s (esperado: 20 · los que hagan falta · true si hay más de 1)" % [
+		print("La tele: letras de %d, %d trozos, este con %d líneas (caben %d) · ¿flechita? %s (esperado: 18 · los que hagan falta · true si hay más de 1)" % [
 			Tele.LETRA, t.trozos.size(), t.texto.get_line_count(), t.lineas_que_caben(), t.hay_mas()])
 		t.saltar()   # el trozo siguiente
 	await get_tree().create_timer(1.5).timeout
