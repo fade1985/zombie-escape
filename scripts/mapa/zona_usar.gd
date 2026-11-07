@@ -66,7 +66,8 @@ func montar_rect(r: Rect2) -> void:
 	body_entered.connect(func(cuerpo):
 		johnny = cuerpo
 		clic_fuera = false
-		cuerpo.set("ante_mueble", self))
+		if mas_cerca_que(cuerpo.get("ante_mueble")):
+			cuerpo.set("ante_mueble", self))
 	body_exited.connect(func(cuerpo):
 		if cuerpo.get("ante_mueble") == self:
 			cuerpo.set("ante_mueble", null)
@@ -113,7 +114,7 @@ func resaltado() -> bool:
 	var en_dibujo := dibujo.get_global_transform_with_canvas().affine_inverse() * raton
 	if not dedo and raton.x >= 0.0 and dibujo.get_rect().grow(4).has_point(en_dibujo):
 		return true
-	return johnny != null and (dedo or not johnny.get("con_raton"))
+	return johnny != null and johnny.get("ante_mueble") == self and (dedo or not johnny.get("con_raton"))
 
 
 # Cada vez que se pulsa "atacar", apunta si ha sido un clic fuera del mueble (llega antes que _physics_process)
@@ -126,8 +127,38 @@ func _input(evento: InputEvent) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if johnny and Input.is_action_just_pressed("atacar") and not clic_fuera and activa():
+	if johnny == null:
+		return
+	# si está en la zona de dos muebles a la vez (la puerta del taller y el banco), manda el más cercano: solo ese
+	# sale con el contorno y solo ese se usa
+	var otra: Variant = johnny.get("ante_mueble")
+	if otra != self and mas_cerca_que(otra):
+		johnny.set("ante_mueble", self)
+		clic_fuera = false
+	if johnny.get("ante_mueble") == self and Input.is_action_just_pressed("atacar") and not clic_fuera and activa():
 		abrir()
+
+
+# Si este mueble le toca a Johnny antes que "otra" zona (en la que también está): si la otra no se puede usar ahora
+# o este está más cerca (del medio de su dibujo)
+func mas_cerca_que(otra: Variant) -> bool:
+	if otra == null or not is_instance_valid(otra) or otra == self:
+		return true
+	if not activa():
+		return false
+	if not otra.activa():
+		return true
+	return distancia() < otra.distancia() - 1.0
+
+
+# De Johnny al medio del dibujo del mueble
+func distancia() -> float:
+	if johnny == null:
+		return INF
+	var medio := global_position
+	if dibujo:
+		medio = dibujo.get_global_transform() * dibujo.get_rect().get_center()
+	return johnny.global_position.distance_to(medio)
 
 
 # Si ahora se puede usar (ver "puede")

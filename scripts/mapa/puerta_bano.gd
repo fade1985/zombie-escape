@@ -231,7 +231,9 @@ func poner_uso() -> void:
 	uso.name = "Uso"   # no-tr
 	uso.add_child(dibujo)
 	var zona := ZONA_USAR.new()
-	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
+	# (la de lado, abierta, se queda de pie por encima del hueco, casi lo alto de la hoja: la zona sube con ella, para
+	# poder cerrarla también junto a la parte de arriba)
+	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, ALTO + ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
 	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
 	zona.cierra = abierta >= 1.0

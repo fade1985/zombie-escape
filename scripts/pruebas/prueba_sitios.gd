@@ -916,6 +916,20 @@ func probar_cerrar_puerta(una: Node2D) -> void:
 	await get_tree().create_timer(0.6).timeout
 	print("Puertas, cerrar: a 50 del hueco se puede usar %s, se cierra %s y se vuelve a abrir %s (esperado: true las tres)" % [
 		lejos_delante, lejos_cierra, una.abierta == 1.0])
+	# la de lado: junto a la parte de arriba de la hoja abierta (que se queda de pie por encima del hueco), también
+	if not una.de_frente:
+		johnny.position = Vector2(una.caja.end.x + 24.0, una.caja.position.y - 70.0)
+		await get_tree().create_timer(0.3).timeout
+		zona = una.uso.get_node("Zona") if una.uso else null
+		var arriba_delante: bool = zona != null and johnny.ante_mueble == zona and zona.activa()
+		if zona:
+			zona.abrir()
+		await get_tree().create_timer(0.6).timeout
+		var arriba_cierra: bool = una.abierta == 0.0
+		una.usar_a_mano()
+		await get_tree().create_timer(0.6).timeout
+		print("Puertas, cerrar: de lado, junto a lo alto de la hoja se puede usar %s, se cierra %s y se vuelve a abrir %s (esperado: true las tres)" % [
+			arriba_delante, arriba_cierra, una.abierta == 1.0])
 	johnny.position = delante
 	for a in aliados:
 		a.set_physics_process(true)

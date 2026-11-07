@@ -157,7 +157,9 @@ móvil, cuando Johnny está delante (`-- --captura --contorno-mueble`).
 muebles. Delante de una abierta sale su contorno amarillo y se cierra con atacar (clic encima, J, RT o el botón
 **Cerrar** del móvil). Si hay alguien en el hueco no se cierra (tiembla). Cerrada así, no se vuelve a abrir sola hasta
 que Johnny se aparta y vuelve a arrimarse; sin moverse, se abre otra vez con atacar. Los zombis la siguen abriendo
-empujando (`mapa/puerta_bano.gd`; `-- --captura --puertas`).
+empujando (`mapa/puerta_bano.gd`; `-- --captura --puertas`). La de lado, abierta, se queda de pie por encima del hueco
+y se cierra también junto a su parte de arriba. Si Johnny está delante de dos cosas a la vez (la puerta del taller y el
+banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
 
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
