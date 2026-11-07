@@ -506,6 +506,9 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	info = Label.new()
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.custom_minimum_size = Vector2(0, 34)
+	# siempre con sitio para dos renglones (y nunca más), para que un texto largo no encoja la ventana de encima
+	info.max_lines_visible = 2
+	info.ready.connect(func(): info.custom_minimum_size.y = maxf(34.0, info.get_line_height() * 2 + info.get_theme_constant("line_spacing")))
 	info.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	info.add_theme_color_override("font_color", TINTA)
 	info.add_theme_constant_override("outline_size", 0)

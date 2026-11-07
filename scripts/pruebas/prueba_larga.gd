@@ -673,6 +673,7 @@ func probar_tienda_armas() -> void:
 	# el ratón (primero por el cuchillo, el bate, la katana y la motosierra, que tienen sus dibujos de la tienda:
 	# captura-tienda-<id>.png)
 	await mover_raton(boton.call("cuchillo").get_global_rect().get_center())
+	var alto_cuchillo: Vector2 = tienda.call().size
 	Captura.foto("captura-tienda-cuchillo.png")
 	await mover_raton(boton.call("bate").get_global_rect().get_center())
 	Captura.foto("captura-tienda-bate.png")
@@ -691,6 +692,8 @@ func probar_tienda_armas() -> void:
 	Captura.foto("captura-tienda-gatling.png")
 	await mover_raton(boton.call("lanzallamas").get_global_rect().get_center())
 	Captura.foto("captura-tienda-lanzallamas.png")
+	print("Ratón encima del lanzallamas: la tienda mide %s y la línea de info %s (esperado: lo mismo que encima del cuchillo, %s)" % [
+		tienda.call().size, ordenador.info.size, alto_cuchillo])
 	await mover_raton(boton.call("desintegrador").get_global_rect().get_center())
 	Captura.foto("captura-tienda-desintegrador.png")
 	await mover_raton(boton.call("pistola_electrica").get_global_rect().get_center())
