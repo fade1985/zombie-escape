@@ -1,10 +1,7 @@
-# Los suelos y las paredes de la sala de mantenimiento, sin sangre (L20 de PENDIENTES): es el sitio seguro del juego. Las
-# texturas de siempre llevan la sangre pintada dentro y las usan también los pisos, así que no se tocan: de cada una sale
-# otra nueva, igual pero limpia. Lo que se ve de cada estancia lo dice ESTILO_MANTENIMIENTO de scripts/mapa/mapa.gd.
-#   suelo-bano-b        → suelo-vestuario   (cada baldosa manchada toma lo que le falta de la baldosa limpia que más se le parece)
-#   pared-bano-b        → pared-vestuario   (cada píxel manchado, de otro limpio de su misma fila, respetando la cuadrícula)
-# El suelo y la pared del taller ya no salen de aquí: desde el 7 nov son de vinilo gris y pared blanca
-# (tools/taller_vinilo.py); ni los del despacho, de ladrillo y tarima envejecida (tools/despacho_ladrillo.py). También limpia los muebles que
+# La sala de mantenimiento, sin sangre (L20 de PENDIENTES): es el sitio seguro del juego. Antes sacaba de aquí también sus
+# suelos y paredes (copias limpias de los de los pisos), pero ya no: el taller, de vinilo (tools/taller_vinilo.py, 7 nov); el
+# despacho, de ladrillo y tarima (tools/despacho_ladrillo.py, 7 nov); y el vestuario, de azulejo blanco y baldosa beis
+# (tools/vestuario_azulejo.py, 8 nov). Lo que queda: limpia los muebles que
 # la llevan pintada (mueble(), al final), en su mismo archivo: si alguno se vuelve a generar (tools/baul_mantenimiento.py,
 # tools/banco_mantenimiento.py...), hay que pasar esto después. Usa siempre la misma semilla, así que al lanzarla otra vez salen
 # los mismos dibujos. Uso: py tools/sala_sin_sangre.py  (y luego, para que Godot importe los
@@ -187,17 +184,10 @@ def mueble(nombre, cajas, es_sangre):
     print(nombre, "· píxeles limpiados:", len(marca))
 
 
-baldosas("suelo-bano-b", "suelo-vestuario", -11, 4, 1)
-pared("pared-bano-b", "pared-vestuario", 8, 22, 48, 7.4, 1)
+# (el suelo y la pared del vestuario ya no: desde el 8 nov, tools/vestuario_azulejo.py)
 # (el suelo y la pared del despacho ya no: desde el 7 nov, tools/despacho_ladrillo.py)
 # (el baúl ya no: desde el 7 nov es de plástico negro, tools/baul_plastico.py)
-# la tapa del banco (la caja de herramientas de abajo es roja de verdad y se queda) y la cabeza del martillo
-mueble("banco-trabajo", [[12, 20, 37, 26]], lambda c: c[1] < c[0] * 0.6 and c[0] > 120 or c[0] > c[1] * 2.2)
-mueble("banco-trabajo", [[11, 5, 16, 7]], lambda c: c[0] > c[1] * 1.15 and c[2] > c[1])
-mueble("mueble-showertray", [[5, 20, 35, 46]], lambda c: c[0] - c[1] > 4)
-mueble("mueble-stafftoilet-lado", [[11, 20, 21, 25]], lambda c: c[0] - c[1] > 6)
-# solo el armazón y el borde de las baldas: los botes rojos se quedan
-ESTANTE = [[0, 14, 3, 59], [36, 14, 40, 59], [0, 14, 40, 15], [0, 25, 40, 26], [0, 36, 40, 37], [0, 47, 40, 49], [14, 46, 32, 47]]
-mueble("mueble-canshelf", ESTANTE, lambda c: c[0] - c[1] > 6)
+# (ni el banco de trabajo, la ducha, el váter y la estantería: desde el 7 nov salen de imágenes de GPT sin sangre,
+# tools/muebles_gpt.py; limpiarlos aquí los estropearía)
 # la mancha del marco de las puertas de dentro (las de los pisos, con su sangre, salen de aquí con tools/puertas_sucias.py)
 mueble("puerta-bano", [[21, 6, 26, 19]], lambda c: c[1] < c[0] * 0.62)

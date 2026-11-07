@@ -724,9 +724,11 @@ en una línea.
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de
   `assets/fuentes/zombie-scape-ui.ttf` (ver `docs/IDIOMAS.md`, «Las tildes de la letra del juego»); después, `--headless --path . --import`.
-- **La sala de mantenimiento, sin sangre:** `sala_sin_sangre.py` saca las copias limpias de suelos y paredes (`suelo-vestuario` y
-  `pared-vestuario`: las de siempre las usan los pisos y siguen con su sangre) y
-  limpia los muebles que la llevan pintada (baúl, banco, ducha, váter, estante de botes). Si se regenera un mueble, hay que pasarlo otra vez.
+- **La sala de mantenimiento, sin sangre:** `sala_sin_sangre.py` ya solo limpia la mancha del marco de las puertas de dentro
+  (`puerta-bano`). Los suelos, las paredes y los muebles de la sala ya no salen de ahí: son nuevos y limpios (de GPT o dibujados).
+- **El vestuario de la sala de mantenimiento:** `vestuario_azulejo.py` dibuja su pared de azulejo blanco (`pared-vestuario`, 480x48,
+  azulejos de 8) y su suelo de baldosa beis (`suelo-vestuario`, 128x128, baldosas de 16), como la foto del dueño: una cuadrícula
+  limpia con algo de diferencia entre piezas y grano dentro de cada una.
 - **El despacho de la sala de mantenimiento:** `despacho_ladrillo.py` saca su pared de ladrillo rojo visto (`pared-despacho`, 468x48) y
   su suelo de tarima envejecida (`suelo-despacho`, 128x128) de dos imágenes de GPT (`assets/sources/despacho-*-gpt.webp`). La pared no
   se reduce sin más: mide cada ladrillo de la imagen y lo vuelve a dibujar limpio (3 píxeles de ladrillo y 1 de junta).
