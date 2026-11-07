@@ -6693,12 +6693,12 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s steigt auf %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Elige un arma: se paga con los dólares ahorrados."
-msgstr "Wähle eine Waffe: Bezahlt wird mit den gesparten Dollar."
-
-#: scripts/ui/ordenador.gd
 msgid "%s: %s Cada uno, $%d."
 msgstr "%s: %s Je $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Wähle eine Waffe: Bezahlt wird mit den gesparten Dollar."
 
 #: scripts/ui/ordenador.gd
 msgid "Daño %d/s · Depósito %d s"
@@ -7151,10 +7151,6 @@ msgstr "KANAL 8"
 #: scripts/ui/tele.gd
 msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
 msgstr "EILMELDUNG  ·  %s: \"DIE LAGE IST UNTER KONTROLLE\"  ·  HALTEN SIE SICH VOM GEBÄUDE FERN  ·  "
-
-#: scripts/ui/tienda_armas.gd
-msgid "LLEVAS"
-msgstr "DABEI"
 
 #: scripts/ui/tienda_armas.gd
 msgid "LLENO"

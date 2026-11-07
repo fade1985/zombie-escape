@@ -6673,12 +6673,12 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s升到 %d/%d！"
 
 #: scripts/ui/ordenador.gd
-msgid "Elige un arma: se paga con los dólares ahorrados."
-msgstr "选一件武器：用存下的美元支付。"
-
-#: scripts/ui/ordenador.gd
 msgid "%s: %s Cada uno, $%d."
 msgstr "%s：%s每个 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "选一件武器：用存下的美元支付。"
 
 #: scripts/ui/ordenador.gd
 msgid "Daño %d/s · Depósito %d s"
@@ -7131,10 +7131,6 @@ msgstr "8频道"
 #: scripts/ui/tele.gd
 msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
 msgstr "最新消息  ·  %s：“情况已经得到控制”  ·  请勿靠近大楼  ·  "
-
-#: scripts/ui/tienda_armas.gd
-msgid "LLEVAS"
-msgstr "已持有"
 
 #: scripts/ui/tienda_armas.gd
 msgid "LLENO"

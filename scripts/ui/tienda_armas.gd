@@ -2,7 +2,7 @@
 # (chapa.gd), con lo ahorrado arriba a la izquierda y todo a la vez, sin desplazarse.
 #
 # A la izquierda, una fila por grupo (Cuerpo a cuerpo, A distancia, Especiales y Arrojables) y en cada una sus casillas:
-# el icono (el precio sale en la ficha). Lo que llevas dice «LLEVAS» (en verde apagado), los arrojables que ya no te
+# el icono (el precio sale en la ficha). Lo que llevas, con el borde verde (sin letrero), los arrojables que ya no te
 # caben, «LLENO», y lo que no puedes pagar sale apagado.
 #
 # A la derecha, una ficha fija con lo elegido: su nombre y su grupo, el dibujo en grande, unos medidores de 10
@@ -260,8 +260,8 @@ func _draw() -> void:
 	dibujar_ficha(fuente)
 
 
-# Una casilla: oscura con borde gris y el icono (el precio sale en la ficha, al pasar por encima). Lo que llevas o ya
-# no cabe, con el borde verde y «LLEVAS» o «LLENO»; lo que no se puede comprar, apagado. La elegida, con el borde claro
+# Una casilla: oscura con borde gris y el icono (el precio sale en la ficha, al pasar por encima). Lo que llevas, con el
+# borde verde; lo que ya no cabe, también con «LLENO»; lo que no se puede comprar, apagado. La elegida, con el borde claro
 func dibujar_casilla(id: String, fuente: Font) -> void:
 	var r: Rect2 = casillas[id]
 	var e := estado(id)
@@ -271,7 +271,7 @@ func dibujar_casilla(id: String, fuente: Font) -> void:
 	var texto := ""
 	if e in ["lleva", "lleno"]:
 		borde = VERDE_BORDE
-		texto = Idioma.t("LLEVAS") if e == "lleva" else Idioma.t("LLENO")
+		texto = "" if e == "lleva" else Idioma.t("LLENO")
 	elif apagada:
 		borde = PLACA.APAGADO
 		relleno = PLACA.NEGRO
@@ -282,7 +282,7 @@ func dibujar_casilla(id: String, fuente: Font) -> void:
 	var color := Color(0.55, 0.55, 0.55, 0.75) if apagada else Color.WHITE
 	var dibujo := dibujo_tienda(id)
 	if dibujo:
-		# el de la tienda (48), a su tamaño y en el centro; «LLEVAS» va encima, en una franja oscura
+		# el de la tienda (48), a su tamaño y en el centro; «LLENO» va encima, en una franja oscura
 		var lado48 := Vector2(dibujo.get_size())
 		draw_texture_rect(dibujo, Rect2((r.get_center() - lado48 / 2.0).floor(), lado48), false, color)
 		if texto != "":
@@ -295,7 +295,7 @@ func dibujar_casilla(id: String, fuente: Font) -> void:
 		return
 	var tam := 16
 	while tam > 10 and fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > r.size.x - 6:
-		tam -= 2   # (que «LLEVAS» quepa en todos los idiomas)
+		tam -= 2   # (que «LLENO» quepa en todos los idiomas)
 	draw_string(fuente, Vector2(r.position.x, r.end.y - 7), texto, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, tam, VERDE)
 
 

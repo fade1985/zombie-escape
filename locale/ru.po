@@ -6713,12 +6713,12 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s: теперь %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Elige un arma: se paga con los dólares ahorrados."
-msgstr "Выбери оружие: платишь накопленными долларами."
-
-#: scripts/ui/ordenador.gd
 msgid "%s: %s Cada uno, $%d."
 msgstr "%s: %s Цена за штуку: $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Выбери оружие: платишь накопленными долларами."
 
 #: scripts/ui/ordenador.gd
 msgid "Daño %d/s · Depósito %d s"
@@ -7171,10 +7171,6 @@ msgstr "КАНАЛ 8"
 #: scripts/ui/tele.gd
 msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
 msgstr "СРОЧНО  ·  %s: «СИТУАЦИЯ ПОД КОНТРОЛЕМ»  ·  НЕ ПОДХОДИТЕ К ЗДАНИЮ  ·  "
-
-#: scripts/ui/tienda_armas.gd
-msgid "LLEVAS"
-msgstr "ПРИ ТЕБЕ"
 
 #: scripts/ui/tienda_armas.gd
 msgid "LLENO"
