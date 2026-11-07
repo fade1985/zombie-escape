@@ -5140,6 +5140,12 @@
    "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py desintegrador 0.6 (en assets/sources/tienda)",
    "cost": "nada en PixelLab"
   },
+  "pistola_electrica": {
+   "foto": "sin foto: el lanza rayos, un rifle largo blanco con la franja cian, como el que lleva Johnny",
+   "ficha": "hecho por el dueño con GPT a la tercera (gpt/pistola_electrica.webp; descartadas la pistola, gpt/pistola_electrica-pistola.webp, y el rifle con mirilla, gpt/pistola_electrica-mirilla.webp). Reducido a 92x22 quedándose en cada píxel con la mediana del centro de su trozo, en el centro de 96x48 (intentos/pistola_electrica-grande-gpt.png)",
+   "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py pistola_electrica 0.62 (en assets/sources/tienda)",
+   "cost": "nada en PixelLab"
+  },
   "cost": "36 generaciones el cuchillo (6 intentos de 5 y la foto, 6): lo bueno, a la segunda. Con dos intentos de cada dibujo, unas 20 por arma",
   "updated": "2026-11-06"
  }
