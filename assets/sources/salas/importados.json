@@ -271,6 +271,14 @@
     "huella": "e1ae8b020516c9cf",
     "sprite": "mueble-canshelf"
   },
+  "mantenimiento/tuberias-caldera-lado.png": {
+    "huella": "adddfcd0111f1a85",
+    "sprite": "mueble-boilerpipes-lado"
+  },
+  "mantenimiento/tuberias-incendios-lado.png": {
+    "huella": "59eaeeb7969bbff3",
+    "sprite": "mueble-firepipes-lado"
+  },
   "pasillo/aplique.png": {
     "huella": "88d5170172b2319e",
     "sprite": "aplique-pared"

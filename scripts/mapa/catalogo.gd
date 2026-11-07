@@ -127,6 +127,10 @@ const MUEBLES := {
 	"staffsink":       {"len": 52,  "dep": 40, "paredes": "lados", "archivo": "vestuario/lavabo-espejo"},
 	"canshelf":        {"len": 80,  "dep": 36, "paredes": "",      "archivo": "mantenimiento/estanteria-botes"},
 	"wastebasket":     {"len": 24,  "dep": 22, "paredes": "todas", "archivo": "despacho/papelera"},
+	# las tuberías de las paredes de los lados del taller, debajo de sus puertas (GPT, tools/taller_tuberias.py): las
+	# blancas de la caldera, a la izquierda, y las rojas de incendios, a la derecha (solo de lado: no tienen dibujo de frente)
+	"boilerpipes":     {"len": 100, "dep": 46, "paredes": "lados", "archivo": "mantenimiento/tuberias-caldera"},
+	"firepipes":       {"len": 100, "dep": 46, "paredes": "lados", "archivo": "mantenimiento/tuberias-incendios"},
 	# Los de Torre Velaria (parte 2 del tercer edificio; PixelLab, con las guías de tools/guias_torre.py): oficina,
 	# vestíbulo, centro de datos, despachos y la sala de seguridad. Los altos (rack, archivador, librería, armero, pared de
 	# monitores), solo en la pared del fondo
