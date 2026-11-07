@@ -5101,7 +5101,7 @@
   "pistola": {
    "foto": "sin foto: como la que lleva Johnny (negra y gris oscuro)",
    "ficha": "PixelLab no la sacó (A y D, de frente con el cañón mirando a la cámara; B y C, bloqueadas por su filtro, semillas 48401-48404). La hizo el dueño con GPT (gpt/pistola.webp): reducida a 68x46 quedándose en cada píxel con la mediana del centro de su trozo, en el centro de 96x48 (intentos/pistola-grande-gpt.png)",
-   "casilla": "hecha a mano desde la de la ficha, sin girar: py icono_diagonal.py pistola 0.65 0 (en assets/sources/tienda)",
+   "casilla": "hecha a mano desde la de la ficha, girada como las demás: py icono_diagonal.py pistola 0.6 (en assets/sources/tienda; la recta, intentos/pistola-mano-0.65.png, con 0.65 0)",
    "cost": "20 generaciones (para nada)"
   },
   "cost": "36 generaciones el cuchillo (6 intentos de 5 y la foto, 6): lo bueno, a la segunda. Con dos intentos de cada dibujo, unas 20 por arma",
