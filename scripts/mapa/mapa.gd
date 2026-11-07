@@ -863,14 +863,14 @@ func poner_muebles() -> void:
 	if sitio.tipo == "armas":
 		# el baúl de pruebas de la sala de pruebas (sala_armas.gd), arriba a la izquierda
 		baul = ARRIMABLE.new()
-		baul.montar("Baul", "res://assets/sprites/baul.png", MURO + 4 * Planta.CASILLA, MURO, 60.0, 36.0)
+		baul.montar("Baul", "res://assets/sprites/baul.png", MURO + 4 * Planta.CASILLA, MURO, 78.0, 36.0)
 		cosas.add_child(baul)
 	if sitio.tipo == "mantenimiento":
 		ordenador = ORDENADOR.new()
 		ordenador.montar(ORDENADOR_X, MURO)
 		cosas.add_child(ordenador)
 		baul = ARRIMABLE.new()
-		baul.montar("Baul", "res://assets/sprites/baul.png", BAUL_X, MURO, 60.0, 36.0)
+		baul.montar("Baul", "res://assets/sprites/baul.png", BAUL_X, MURO, 78.0, 36.0)
 		cosas.add_child(baul)
 		banco = ARRIMABLE.new()
 		banco.montar("Banco", "res://assets/sprites/banco-trabajo.png", BANCO_X, MURO, 76.0, 36.0)

@@ -726,6 +726,8 @@ en una línea.
   limpia los muebles que la llevan pintada (baúl, banco, ducha, váter, estante de botes). Si se regenera un mueble, hay que pasarlo otra vez.
 - **El taller de la sala de mantenimiento:** `taller_vinilo.py` saca su suelo de vinilo gris con motitas (`suelo-taller`, 128x128) y
   su pared blanca con el zócalo del mismo vinilo (`pared-taller`) de dos imágenes de GPT (`assets/sources/taller-*-gpt.webp`).
+  El baúl (`baul.png`, 42x23, también el de la sala de pruebas), un arcón de plástico negro: `baul_plastico.py` lo pasa a mano píxel a
+  píxel copiando el dibujo de GPT (`assets/sources/baul-plastico-gpt.webp`; reducido sin más se emborronaba). Ocupa 78x36 en el suelo.
 - **Efectos de pixelfx** (el plugin de efectos pixel art, MIT, `git clone https://github.com/patch-gg/pixelfx`):
   `pixelfx/exportar.mjs` saca un efecto en tres hojas para Godot (detrás del personaje, delante y el brillo, que se suma)
   y `pixelfx/escudo-fuego.js` es la burbuja de fuego del jefe de bomberos (`escudo-fuego-*.png`, en `bombero.gd`):

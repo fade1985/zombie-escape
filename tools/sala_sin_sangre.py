@@ -193,7 +193,7 @@ baldosas("suelo-bano-b", "suelo-vestuario", -11, 4, 1)
 pared("pared-bano-b", "pared-vestuario", 8, 22, 48, 7.4, 1)
 tablones("suelo-salon-a", "suelo-despacho", 16, 26, 7, 1)
 pared("pared-salon-c", "pared-despacho", 8, 14, 33, 1, 1)
-mueble("baul", [[14, 17, 26, 28]], lambda c: c[0] > c[1] * 2.2 and c[0] > c[2] * 1.2)
+# (el baúl ya no: desde el 7 nov es de plástico negro, tools/baul_plastico.py)
 # la tapa del banco (la caja de herramientas de abajo es roja de verdad y se queda) y la cabeza del martillo
 mueble("banco-trabajo", [[12, 20, 37, 26]], lambda c: c[1] < c[0] * 0.6 and c[0] > 120 or c[0] > c[1] * 2.2)
 mueble("banco-trabajo", [[11, 5, 16, 7]], lambda c: c[0] > c[1] * 1.15 and c[2] > c[1])

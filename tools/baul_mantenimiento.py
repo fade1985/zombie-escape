@@ -1,4 +1,6 @@
-"""El baúl de la sala de mantenimiento (donde se guardan las armas creadas y los objetos), al estilo de los muebles.
+"""YA NO SE USA: desde el 7 nov el baúl es de plástico negro (tools/baul_plastico.py); lanzar esto lo pisaría.
+
+El baúl de la sala de mantenimiento (donde se guardan las armas creadas y los objetos), al estilo de los muebles.
 
 Hasta el 23 oct era un dibujo hecho con rectángulos (copiado del juego JS, en tools/dibujos_7b.py) y desentonaba al
 lado del banco de trabajo nuevo. Ahora sale de PixelLab con la misma receta que el banco (tools/banco_mantenimiento.py):
