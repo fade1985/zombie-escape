@@ -3505,7 +3505,8 @@ func probar_archivador_logros() -> void:
 # la página 1 (captura-dosier-carpeta.png); al pasar por la 2, la hoja arrancada (captura-dosier-carpeta-falta.png);
 # la pestaña del centro (captura-dosier-carpeta-centro.png) y por dónde va el teclado. Luego, con todas encontradas y en
 # español, alemán, ruso y chino, si cada hoja cabe en la carpeta y en la ventanita de la partida (y con qué letra); la
-# más apretada en ruso y en chino, en foto (captura-dosier-carpeta-<idioma>.png). Deja el guardado como estaba
+# más apretada en ruso y en chino, en foto (captura-dosier-carpeta-<idioma>.png), y una con la cabecera compacta
+# (captura-dosier-carpeta-compacta.png). Deja el guardado como estaba
 func probar_dosier_carpeta() -> void:
 	set_process(false)
 	await get_tree().create_timer(0.3).timeout
@@ -3551,6 +3552,7 @@ func probar_dosier_carpeta() -> void:
 		var peor := ["", 0.0, 0.0, 0]   # la página, lo que le sobra a su hoja, lo alto que es, su letra
 		var letras := {}
 		var no_caben := []
+		var compacta := ""   # la primera con la cabecera compacta (en español, se le hace una foto)
 		for e in Historia.DOSIERES:
 			ordenador.abrir("dosier", "b_edificio_" + e)
 			await get_tree().create_timer(0.15).timeout
@@ -3559,7 +3561,10 @@ func probar_dosier_carpeta() -> void:
 				carpeta.ver(p.id)
 				var alto_max: float = carpeta.alto_hoja()
 				var h: Control = carpeta.hoja
-				letras[h.tam] = letras.get(h.tam, 0) + 1
+				var clave := "%d%s" % [h.tam, " compacta" if h.compacta else ""]
+				letras[clave] = letras.get(clave, 0) + 1
+				if h.compacta and compacta == "":
+					compacta = p.id
 				if h.size.y > alto_max + 0.5:
 					no_caben.append(p.id)
 				if h.size.y - alto_max > peor[1] or peor[0] == "":
@@ -3574,6 +3579,10 @@ func probar_dosier_carpeta() -> void:
 				h.free()
 		print("Hojas en %s · carpeta: letras %s, no caben %s, la más apretada %s (%d de alto, le sobran %d, letra %d) · ventanita: letras %s, la más alta %d (caben 420)" % [
 			codigo, letras, no_caben, peor[0], peor[2], peor[1], peor[3], en_ventana, mas_alta])
+		if codigo == "es" and compacta != "":
+			ordenador.abrir("dosier", "b_" + compacta)
+			await get_tree().create_timer(0.3).timeout
+			Captura.foto("captura-dosier-carpeta-compacta.png")
 		if codigo in ["ru", "zh_CN"]:
 			ordenador.abrir("dosier", "b_" + peor[0])
 			await get_tree().create_timer(0.3).timeout

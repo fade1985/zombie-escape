@@ -317,14 +317,12 @@ func cabecera(w: float) -> void:
 # El sello de «CONFIDENCIAL»: rojo, en un recuadro doble, girado y gastado (le faltan trocitos)
 func sello(w: float) -> void:
 	var texto := Idioma.t("CONFIDENCIAL")
-	var t := 32
-	if compacta or ancho_de(texto, 32) > w * 0.42:
-		t = 16
+	var t := 32   # (siempre grande, en todas las hojas: lo pidió el dueño)
 	var tam_sello := Vector2(ancho_de(texto, t) + 24, alto_de(t) + 12)
 	# a la derecha del título, entre la franja y el texto (lo pisa poco)
-	var centro := Vector2(w - MARGEN - 16 - tam_sello.x / 2.0, titulo_y + (12 if t == 32 else 4))
+	var centro := Vector2(w - MARGEN - 16 - tam_sello.x / 2.0, titulo_y + (8 if compacta else 12))
 	var tinta := Color(ROJO, 0.78)
-	draw_set_transform(centro, deg_to_rad(-8))
+	draw_set_transform(centro, deg_to_rad(-5 if compacta else -8))   # (en la compacta hay menos alto: menos girado)
 	var caja := Rect2(-tam_sello / 2.0, tam_sello)
 	draw_rect(caja, tinta, false, 3.0)
 	draw_rect(caja.grow(-5), tinta, false, 1.0)
