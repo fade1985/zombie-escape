@@ -5161,10 +5161,6 @@ msgid "Hecho"
 msgstr "Готово"
 
 #: scripts/ui/carpeta_dosier.gd
-msgid "%d / %d páginas"
-msgstr "Страниц: %d / %d"
-
-#: scripts/ui/carpeta_dosier.gd
 msgid "Página %d"
 msgstr "Страница %d"
 

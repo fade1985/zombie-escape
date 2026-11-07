@@ -5147,10 +5147,6 @@ msgid "Hecho"
 msgstr "已完成"
 
 #: scripts/ui/carpeta_dosier.gd
-msgid "%d / %d páginas"
-msgstr "%d / %d 页"
-
-#: scripts/ui/carpeta_dosier.gd
 msgid "Página %d"
 msgstr "第 %d 页"
 

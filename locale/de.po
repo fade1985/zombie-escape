@@ -5154,10 +5154,6 @@ msgid "Hecho"
 msgstr "Erledigt"
 
 #: scripts/ui/carpeta_dosier.gd
-msgid "%d / %d páginas"
-msgstr "%d / %d Seiten"
-
-#: scripts/ui/carpeta_dosier.gd
 msgid "Página %d"
 msgstr "Seite %d"
 

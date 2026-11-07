@@ -515,7 +515,7 @@ en una línea.
   `--archivador-logros`.
 - `carpeta_dosier.gd`: el Dosier de ConserjeOS (DOSIER.TXT), desde el 7 nov. La ventana va maximizada (tapa los iconos)
   y, encima de la chapa oscura, una carpeta de archivo marrón con una pestaña por edificio (`b_edificio_<id>`, «Apartamentos
-  2/5») y, a la derecha, las páginas de todos. A la izquierda, las páginas del edificio como fichas (`b_<id>`: en papel las
+  2/5»). A la izquierda, las páginas del edificio como fichas (`b_<id>`: en papel las
   encontradas, con «Página N» y su título; arrancadas las que faltan, solo con «Página N»); a la derecha, la hoja de la que se mira,
   con un clip (cambia al pasar por una ficha, `ver`). El edificio y la página se quedan al rehacer la ventana
   (`recordado`, `recordada`). Sin desplazarse. `programa_dosier` lo monta y le pone a cada botón su línea de abajo (quién

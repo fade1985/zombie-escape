@@ -1,7 +1,7 @@
 # El Dosier del ordenador (DOSIER.TXT, en ordenador.gd), como una carpeta de archivo marrón abierta encima de la misma
 # chapa oscura que el árbol de talentos, la tienda de armas y los logros (chapa.gd). Se ve entero, sin desplazarse.
 #
-# Arriba, una pestaña por edificio con las páginas que llevas de él («Apartamentos 2/5») y, a la derecha, las de todos.
+# Arriba, una pestaña por edificio con las páginas que llevas de él («Apartamentos 2/5»).
 # Dentro de la carpeta, a la izquierda, las páginas de ese edificio como fichas: las encontradas en papel, con
 # «Página N» y su título; las que faltan, como un trozo arrancado con solo «Página N» (que falta ya se ve). A la derecha, la hoja de la página
 # que se mira (hoja_dosier.gd), sujeta con un clip: se cambia al pasar por una ficha (con el ratón, el teclado o el
@@ -127,7 +127,7 @@ func colocar() -> void:
 	# las pestañas, una al lado de otra
 	var x := 20.0
 	for e in pestanas:
-		var ancho := minf(ancho_texto(fuente, texto_pestana(e), 16) + 24, (size.x - 150) / pestanas.size() - 6)
+		var ancho := minf(ancho_texto(fuente, texto_pestana(e), 16) + 24, (size.x - 40) / pestanas.size() - 6)
 		var r := Rect2(x, 5, ancho, ALTO_PESTANA)
 		cajas_pestanas[e] = r
 		pestanas[e].position = r.position
@@ -198,14 +198,6 @@ func _draw() -> void:
 	PLACA.dibujar(self, size)
 	if cajas_pestanas.is_empty():
 		return
-	# arriba a la derecha: las páginas de todos los edificios
-	var todas := 0
-	var tuyas := 0
-	for e in Historia.DOSIERES:
-		todas += del_edificio(e).size()
-		tuyas += halladas(e)
-	var cuenta := Idioma.t("%d / %d páginas") % [tuyas, todas]
-	draw_string(fuente, Vector2(size.x - 18 - ancho_texto(fuente, cuenta, 16), 24), cuenta, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, PLACA.TEXTO)
 	# las pestañas de detrás, la carpeta y la pestaña elegida (pegada a la carpeta)
 	for e in cajas_pestanas:
 		if e != edificio:
