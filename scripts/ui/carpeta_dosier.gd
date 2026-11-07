@@ -272,14 +272,15 @@ func ficha(id: String, fuente: Font) -> void:
 			draw_string(fuente, Vector2(r.position.x + 8, r.position.y + 24 + i * alto + fuente.get_ascent(16)), linea,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Historia.TINTA)
 	else:
-		# el trozo que queda de una hoja arrancada: roto por abajo
+		# el trozo que queda de una hoja arrancada: roto por abajo, un poco más abajo de «Página N»
 		var azar := RandomNumberGenerator.new()
 		azar.seed = hash(id)
-		var forma := PackedVector2Array([r.position, Vector2(r.end.x, r.position.y), Vector2(r.end.x, r.end.y - 10)])
+		var abajo := minf(r.end.y, r.position.y + 8 + Historia.HOJA.alto_de(16) + 16)
+		var forma := PackedVector2Array([r.position, Vector2(r.end.x, r.position.y), Vector2(r.end.x, abajo - 4)])
 		var x := r.end.x
 		while x > r.position.x:
 			x = maxf(r.position.x, x - azar.randf_range(8, 16))
-			forma.append(Vector2(x, r.end.y - azar.randf_range(0, 14)))
+			forma.append(Vector2(x, abajo - azar.randf_range(0, 9)))
 		var borde := forma.duplicate()
 		borde.append(forma[0])
 		draw_colored_polygon(forma, ARRANCADA)
