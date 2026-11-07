@@ -3568,11 +3568,11 @@ func probar_dosier_carpeta() -> void:
 		var mas_alta := 0.0
 		for e in Historia.DOSIERES:
 			for p in Historia.DOSIERES[e].paginas:
-				var h: Control = Historia.hoja(p, 720.0, 450.0)
+				var h: Control = Historia.hoja(p, 720.0, 420.0)   # (como en menus.pagina)
 				en_ventana[h.tam] = en_ventana.get(h.tam, 0) + 1
 				mas_alta = maxf(mas_alta, h.size.y)
 				h.free()
-		print("Hojas en %s · carpeta: letras %s, no caben %s, la más apretada %s (%d de alto, le sobran %d, letra %d) · ventanita: letras %s, la más alta %d (caben 450)" % [
+		print("Hojas en %s · carpeta: letras %s, no caben %s, la más apretada %s (%d de alto, le sobran %d, letra %d) · ventanita: letras %s, la más alta %d (caben 420)" % [
 			codigo, letras, no_caben, peor[0], peor[2], peor[1], peor[3], en_ventana, mas_alta])
 		if codigo in ["ru", "zh_CN"]:
 			ordenador.abrir("dosier", "b_" + peor[0])

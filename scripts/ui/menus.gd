@@ -384,14 +384,14 @@ func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
 	primera.grab_focus.call_deferred()
 
 
-# La página del dosier que lleva el científico: la hoja (con la foto del muerto y su nombre) y el botón de seguir
+# La página del dosier que lleva el científico: quién era, la hoja y el botón de seguir
 func pagina(p: Dictionary, n: int, total: int, al_cerrar: Callable) -> void:
 	var columna := abrir("pagina", 0.85)
 	al_leer = al_cerrar
-	titulo(columna, Idioma.t("Página %d de %d") % [n, total])
+	titulo(columna, Idioma.t("Página %d de %d") % [n, total], Idioma.t("Junto al cuerpo de %s") % Historia.cuerpo_de(p))
 	var centro := CenterContainer.new()
 	columna.add_child(centro)
-	centro.add_child(Historia.hoja(p, 720.0, 450.0))
+	centro.add_child(Historia.hoja(p, 720.0, 420.0))
 	var pie := Label.new()
 	pie.text = Idioma.t("Se guarda en el Dosier del ordenador de mantenimiento")
 	pie.theme_type_variation = "Sub"

@@ -7,12 +7,10 @@
 #     edificio y el número de página);
 #   - una franja con el edificio, dónde se encontró y el número de página;
 #   - el tipo de papel en rojo, el título grande, una raya y el sello rojo y gastado de «CONFIDENCIAL», girado;
-#   - la foto del sitio, como una polaroid con un clip: el científico muerto en el suelo, con su piel y su pelo
-#     (los de su página, como en cientifico.gd), y su nombre debajo, en boli azul;
-#   - el texto, al lado de la foto y, cuando la foto se acaba, a todo lo ancho;
-#   - la nota a mano, en un pósit amarillo algo torcido.
+#   - el texto, a todo lo ancho (sin foto: el dueño la quitó el 7 nov);
+#   - la nota a mano, en un pósit amarillo algo torcido, abajo a la derecha.
 # Las que aún no se tienen («Página arrancada») son solo el trozo de arriba, roto por abajo, con lo que dice
-# Historia.falta() en vez del texto, y sin foto.
+# Historia.falta() en vez del texto.
 #
 # Que quepa todo: la hoja mide de alto lo que necesita. Si con eso pasa de "alto_max", prueba con la letra más
 # pequeña (del texto, 16 → 14 → 12; y el título, de 32 a 16) hasta que quepa; si ni así, crece. Nunca se corta texto
@@ -25,11 +23,7 @@ const GRIS := Color("#6a5f50")
 const ROJO := Color("#a3312b")
 const BOLI := Color("#1f3c8a")
 const POSIT := Color("#f2e27a")
-const CUERPO := preload("res://assets/sprites/cientifico-muerto.png")
-const PIEL := preload("res://assets/sprites/cientifico-muerto-piel.png")
-const PELO := preload("res://assets/sprites/cientifico-muerto-pelo.png")
 const MARGEN := 14.0
-const FOTO := Vector2(132, 88)       # lo de dentro de la polaroid (el muerto va a 2 por píxel: 124×76)
 const CODIGOS := {"apartamentos": "AP", "centro": "CC", "torre": "TV"}   # no-tr
 # Los signos del chino que no pueden empezar una línea (se quedan pegados a lo de antes)
 const PEGADOS := "，。、；：！？）」』》〉…—·"   # no-tr
@@ -52,17 +46,14 @@ var franja_y := 64.0                 # donde va la franja del edificio
 var tipo_y := 96.0                   # el tipo de papel (en rojo) y, debajo, el título
 var titulo_y := 0.0
 var cuerpo_y := 0.0                  # donde empieza lo de debajo de la raya
-var pie_foto := 40.0                 # lo blanco de debajo de la foto, donde va el nombre
 var lineas := []                     # [texto, posición de su base]
-var caja_foto := Rect2()
 var caja_posit := Rect2()
 var lineas_posit := []               # [texto, posición dentro del pósit]
 var escrito := ""                    # el texto (o lo que dice falta())
 var a_mano := ""                     # la nota ("" = sin pósit)
 var semilla := 0
 
-# Lo que se va probando hasta que cabe: [letra del texto, letra del título, cabecera compacta]. Con cada una, el pósit
-# debajo del texto o debajo de la foto (lo que deje la hoja más baja)
+# Lo que se va probando hasta que cabe: [letra del texto, letra del título, cabecera compacta]
 const PRUEBAS := [[16, 32, false], [14, 32, false], [14, 16, false], [14, 16, true], [12, 16, true], [10, 16, true]]
 
 
@@ -81,12 +72,7 @@ func montar(pagina: Dictionary, ed: String, n: int, de: int, rota: bool, ancho: 
 	# de la letra más grande a la más pequeña, hasta que quepa
 	var alto := 0.0
 	for prueba in PRUEBAS:
-		alto = colocar(ancho, prueba[0], prueba[1], prueba[2], false)
-		if a_mano != "":
-			var al_pie := alto
-			alto = colocar(ancho, prueba[0], prueba[1], prueba[2], true)
-			if al_pie <= alto:
-				alto = colocar(ancho, prueba[0], prueba[1], prueba[2], false)
+		alto = colocar(ancho, prueba[0], prueba[1], prueba[2])
 		if alto <= alto_max:
 			break
 	custom_minimum_size = Vector2(ancho, alto)
@@ -94,9 +80,8 @@ func montar(pagina: Dictionary, ed: String, n: int, de: int, rota: bool, ancho: 
 	queue_redraw()
 
 
-# Coloca todo con esa letra y devuelve lo alto que queda la hoja. "posit_izquierda": el pósit debajo de la foto (si
-# no, a la derecha, debajo del texto)
-func colocar(ancho: float, t: int, t_titulo: int, compacto: bool, posit_izquierda: bool) -> float:
+# Coloca todo con esa letra y devuelve lo alto que queda la hoja
+func colocar(ancho: float, t: int, t_titulo: int, compacto: bool) -> float:
 	tam = t
 	tam_titulo = t_titulo
 	compacta = compacto
@@ -105,48 +90,33 @@ func colocar(ancho: float, t: int, t_titulo: int, compacto: bool, posit_izquierd
 	tipo_y = franja_y + (26.0 if compacta else 32.0)
 	titulo_y = tipo_y + fuente.get_height(16) + (1 if compacta else 2)
 	cuerpo_y = titulo_y + fuente.get_height(tam_titulo) + (8 if compacta else 12)
-	pie_foto = 28.0 if compacta else 40.0
 	# la franja: los tres textos en una línea (si no caben, con la letra más pequeña)
 	tam_franja = 16
 	while tam_franja > 10 and ancho_de(texto_edificio(), tam_franja) + ancho_de(texto_hallado(), tam_franja) \
 			+ ancho_de(texto_numero(), tam_franja) + 64 > ancho - 2 * MARGEN:
 		tam_franja -= 2
-	var y := cuerpo_y + 2
 	lineas.clear()
 	lineas_posit.clear()
 	caja_posit = Rect2()
 	var izquierda := MARGEN + 4
 	var derecha := ancho - MARGEN - 4
+	var y := escribir(escrito, cuerpo_y + 2, func(_y): return Vector2(izquierda, derecha - izquierda))
 	if arrancada:
-		caja_foto = Rect2()
-		y = escribir(escrito, y, func(_y): return Vector2(izquierda, derecha - izquierda))
 		return y + 34   # (y el trozo roto de abajo)
-	caja_foto = Rect2(MARGEN + 2, cuerpo_y + 6, FOTO.x + 16, FOTO.y + 8 + pie_foto)
-	var al_lado := caja_foto.end.x + 16
-	# el pósit debajo de la foto: se coloca antes que el texto, que va a su lado
-	var trozos := []
-	if a_mano != "" and posit_izquierda:
-		trozos = partir(a_mano, caja_foto.size.x - 16)
-		caja_posit = Rect2(caja_foto.position.x - 2, caja_foto.end.y + 10, caja_foto.size.x + 4, 14.0 + trozos.size() * alto_linea + 6)
-	var izquierda_fin := (caja_posit.end.y if posit_izquierda and a_mano != "" else caja_foto.end.y) + 6
-	y = escribir(escrito, y, func(arriba: float):
-		if arriba < izquierda_fin:
-			return Vector2(al_lado, derecha - al_lado)
-		return Vector2(izquierda, derecha - izquierda))
-	var fondo := maxf(y, izquierda_fin - 2)
-	if a_mano != "" and not posit_izquierda:
-		# el pósit, a la derecha, debajo del texto (cabe al lado de la foto)
-		var ancho_posit := minf(330.0, derecha - al_lado)
-		trozos = partir(a_mano, ancho_posit - 20)
+	var fondo := y
+	if a_mano != "":
+		# el pósit, abajo a la derecha, debajo del texto
+		var ancho_posit := minf(330.0, (derecha - izquierda) * 0.6)
+		var trozos := partir(a_mano, ancho_posit - 20)
 		caja_posit = Rect2(derecha - ancho_posit, y + 6, ancho_posit, 14.0 + trozos.size() * alto_linea + 6)
-		fondo = maxf(fondo, caja_posit.end.y + 4)
-	for i in trozos.size():
-		lineas_posit.append([trozos[i], Vector2(10, 12 + fuente.get_ascent(tam) + i * alto_linea)])
+		for i in trozos.size():
+			lineas_posit.append([trozos[i], Vector2(10, 12 + fuente.get_ascent(tam) + i * alto_linea)])
+		fondo = caja_posit.end.y + 4
 	return fondo + MARGEN
 
 
 # Parte el texto en líneas y las va poniendo desde "y". "sitio(y)" dice, para una línea que empieza en y, desde dónde
-# y con qué ancho se escribe (al lado de la foto, más estrecha). Devuelve dónde acaba
+# y con qué ancho se escribe. Devuelve dónde acaba
 func escribir(texto: String, y: float, sitio: Callable) -> float:
 	for parrafo in texto.split("\n"):
 		if parrafo.strip_edges() == "":
@@ -246,11 +216,6 @@ func referencia() -> String:
 	return "VD7-%s-%02d" % [CODIGOS.get(edificio, edificio.left(2).to_upper()), numero]   # no-tr
 
 
-# El nombre del muerto, sin su cargo («Dra. Inés Lozano, coordinadora del estudio» → «Dra. Inés Lozano»)
-func nombre_del_muerto() -> String:
-	return Historia.cuerpo_de(p).split("，")[0].split(",")[0].strip_edges()
-
-
 # ── El dibujo ──
 
 func _draw() -> void:
@@ -261,10 +226,8 @@ func _draw() -> void:
 	sello(w)
 	for l in lineas:
 		draw_string(fuente, l[1], l[0], HORIZONTAL_ALIGNMENT_LEFT, -1, tam, TINTA)
-	if not arrancada:
-		foto()
-		if a_mano != "":
-			posit()
+	if not arrancada and a_mano != "":
+		posit()
 	if con_clip:
 		clip(Vector2(w - MARGEN - 134 - 30, -14))   # (entre el nombre y el código de barras)
 
@@ -376,42 +339,6 @@ func sello(w: float) -> void:
 		var punto := Vector2(r.randf_range(caja.position.x, caja.end.x - 2), r.randf_range(caja.position.y, caja.end.y - 2))
 		draw_rect(Rect2(punto.floor(), Vector2(2, 1 + r.randi_range(0, 1))), Color(PAPEL, 0.85))
 	draw_set_transform(Vector2.ZERO)
-
-
-# La polaroid del sitio: las baldosas oscuras, la sangre, el muerto con su piel y su pelo, su nombre y el clip
-func foto() -> void:
-	var r := caja_foto
-	draw_set_transform(r.get_center(), deg_to_rad(-2))
-	var caja := Rect2(-r.size / 2.0, r.size)
-	draw_rect(Rect2(caja.position + Vector2(3, 3), caja.size), Color(0, 0, 0, 0.35))
-	draw_rect(caja, Color("#f4f1ea"))
-	draw_rect(caja, Color("#cfc8b8"), false, 1.0)
-	var dentro := Rect2(caja.position + Vector2(8, 8), FOTO)
-	draw_rect(dentro, Color("#3a3530"))
-	for x in range(16, int(FOTO.x), 16):
-		draw_rect(Rect2(dentro.position + Vector2(x, 0), Vector2(1, FOTO.y)), Color("#2e2a26"))
-	for y in range(16, int(FOTO.y), 16):
-		draw_rect(Rect2(dentro.position + Vector2(0, y), Vector2(FOTO.x, 1)), Color("#2e2a26"))
-	var azar := RandomNumberGenerator.new()
-	azar.seed = semilla + 7
-	var charco := dentro.get_center() + Vector2(18, 12)
-	for i in 16:
-		var t: int = [2, 2, 4, 4, 6][azar.randi_range(0, 4)]
-		draw_rect(Rect2(charco + Vector2(azar.randi_range(-18, 16), azar.randi_range(-12, 10)), Vector2(t, t)), Color(0.43, 0.08, 0.07, 0.9))
-	var lado := Vector2(CUERPO.get_size()) * 2.0
-	var sitio := Rect2((dentro.get_center() - lado / 2.0).floor(), lado)
-	var look: Dictionary = p.get("look", {})
-	draw_texture_rect(CUERPO, sitio, false)
-	draw_texture_rect(PIEL, sitio, false, Color(look.get("skin", Color("#e0ac69"))).lerp(Color("#969696"), 0.35))
-	draw_texture_rect(PELO, sitio, false, Color(look.get("hair", Color("#2b2b2b"))))
-	var nombre := nombre_del_muerto()
-	var t := 16
-	while t > 10 and ancho_de(nombre, t) > caja.size.x - 10:
-		t -= 2
-	draw_string(fuente, Vector2(caja.position.x, dentro.end.y + pie_foto / 2.0 - 6 + fuente.get_ascent(t) / 2.0), nombre,
-		HORIZONTAL_ALIGNMENT_CENTER, caja.size.x, t, BOLI)
-	draw_set_transform(Vector2.ZERO)
-	clip(Vector2(r.position.x + 34, r.position.y - 12))
 
 
 # Un clip de papel (de arriba abajo)

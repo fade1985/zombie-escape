@@ -524,10 +524,9 @@ en una línea.
   `hoja_arrancada()`; la usan la ventanita de página encontrada, `menus.pagina`, y la carpeta). Papel viejo con motitas y
   un cerco de café; el logo de Velaria (inventado: una luna creciente en un círculo), «Investigación del sueño», código de
   barras y referencia (`VD7-AP-01`: edificio y número); la franja con el edificio, «HALLADO EN» y n / total; el tipo, el
-  título, el sello de «CONFIDENCIAL»; la polaroid del muerto (`cientifico-muerto.png` con su piel y su pelo) con su nombre en
-  boli; el texto al lado de la foto y luego a todo lo ancho; la nota en un pósit. Mide de alto lo que necesita: si pasa
-  de `alto_max`, prueba con la letra más pequeña y la cabecera compacta (`PRUEBAS`) y el pósit debajo de la foto o del
-  texto; nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
+  título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
+  pósit, abajo a la derecha. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
+  cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se

@@ -6173,6 +6173,10 @@ msgid "Página %d de %d"
 msgstr "Page %d sur %d"
 
 #: scripts/ui/menus.gd
+msgid "Junto al cuerpo de %s"
+msgstr "Près d'un corps : %s"
+
+#: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "Rangée dans le Dossier de l'ordinateur de maintenance"
 

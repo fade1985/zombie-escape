@@ -6153,6 +6153,10 @@ msgid "Página %d de %d"
 msgstr "第 %d / %d 页"
 
 #: scripts/ui/menus.gd
+msgid "Junto al cuerpo de %s"
+msgstr "发现于尸体旁：%s"
+
+#: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "已保存到维修间电脑的“档案”里"
 

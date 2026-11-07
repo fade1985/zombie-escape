@@ -6193,6 +6193,10 @@ msgid "Página %d de %d"
 msgstr "Страница %d из %d"
 
 #: scripts/ui/menus.gd
+msgid "Junto al cuerpo de %s"
+msgstr "Рядом с телом: %s"
+
+#: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "Сохраняется в Досье на компьютере в дворницкой"
 
