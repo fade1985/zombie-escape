@@ -7141,8 +7141,8 @@ msgid "Cómo va la tienda"
 msgstr "商店说明"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Ya la llevas"
-msgstr "已经持有"
+msgid "Comprada"
+msgstr "已购买"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No te caben más"

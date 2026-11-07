@@ -690,8 +690,9 @@ func probar_tienda_armas() -> void:
 	var precio_escopeta: int = tienda.call().precio("escopeta")
 	await clic_en(boton.call("comprar"))
 	await get_tree().create_timer(0.3).timeout
-	print("Clic en «Comprar»: en la mano %s · $%d · ficha de «%s» · botón «%s» (esperado: escopeta, $%d, escopeta, Ya la llevas)" % [
+	print("Clic en «Comprar»: en la mano %s · $%d · ficha de «%s» · botón «%s» (esperado: escopeta, $%d, escopeta, Comprada)" % [
 		johnny.huecos.fuego, dolares.call(), tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), 100 - precio_escopeta])
+	Captura.foto("captura-tienda-comprada.png")
 	# el mando
 	Controles.con_mando = true
 	boton.call("cuchillo").grab_focus()

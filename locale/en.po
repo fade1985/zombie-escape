@@ -7161,8 +7161,8 @@ msgid "Cómo va la tienda"
 msgstr "How the shop works"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Ya la llevas"
-msgstr "Already yours"
+msgid "Comprada"
+msgstr "Purchased"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No te caben más"

@@ -406,7 +406,7 @@ func dibujar_comprar(fuente: Font) -> void:
 func texto_comprar(id: String) -> String:
 	var p := precio(id)
 	match estado(id):
-		"lleva": return Idioma.t("Ya la llevas")
+		"lleva": return Idioma.t("Comprada")   # (y se da por hecho que la llevas)
 		"lleno": return Idioma.t("No te caben más")
 		"reto": return Idioma.t("No en este reto")
 		"caro": return Idioma.t("Te faltan $%d") % (p - s.dolares)
