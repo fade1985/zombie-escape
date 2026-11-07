@@ -5104,6 +5104,12 @@
    "casilla": "hecha a mano desde la de la ficha, girada como las demás: py icono_diagonal.py pistola 0.6 (en assets/sources/tienda; la recta, intentos/pistola-mano-0.65.png, con 0.65 0)",
    "cost": "20 generaciones (para nada)"
   },
+  "escopeta": {
+   "foto": "sin foto: como la que lleva Johnny (de corredera, culata y guardamanos de madera marrón anaranjada, cañón de acero gris azulado)",
+   "ficha": "hecha por el dueño con GPT, dos tomas (gpt/escopeta-1.webp y -2.webp); eligió la 1. Reducida a 92x19 quedándose en cada píxel con la mediana del centro de su trozo, en el centro de 96x48 (intentos/escopeta-grande-1.png; la 2, en intentos/escopeta-grande-2.png)",
+   "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py escopeta 0.62 (en assets/sources/tienda)",
+   "cost": "nada en PixelLab"
+  },
   "cost": "36 generaciones el cuchillo (6 intentos de 5 y la foto, 6): lo bueno, a la segunda. Con dos intentos de cada dibujo, unas 20 por arma",
   "updated": "2026-11-06"
  }
