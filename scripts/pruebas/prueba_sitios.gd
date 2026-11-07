@@ -936,24 +936,19 @@ func probar_cerrar_puerta(una: Node2D) -> void:
 		lejos_delante, lejos_cierra, una.abierta == 1.0])
 	# la de lado: junto a la parte de arriba de la hoja abierta (que se queda de pie por encima del hueco), también
 	if not una.de_frente:
-		johnny.position = Vector2(una.caja.end.x + 24.0, una.caja.position.y - 70.0)
+		# (del lado de la hoja: la del taller se abre hacia la izquierda, "al_reves")
+		johnny.position = Vector2(una.caja.position.x - 24.0 if una.al_reves else una.caja.end.x + 24.0, una.caja.position.y - 70.0)
 		await get_tree().create_timer(0.3).timeout
 		zona = una.uso.get_node("Zona") if una.uso else null
 		var arriba_delante: bool = zona != null and johnny.ante_mueble == zona and zona.activa()
-		# (si ahí también se está delante de un mueble, como el banco junto a la puerta del taller, manda el mueble)
-		var mueble: bool = johnny.ante_mueble != null and not johnny.ante_mueble.puerta
 		if zona:
 			zona.abrir()
 		await get_tree().create_timer(0.6).timeout
 		var arriba_cierra: bool = una.abierta == 0.0
 		una.usar_a_mano()
 		await get_tree().create_timer(0.6).timeout
-		if mueble:
-			print("Puertas, cerrar: de lado, junto a lo alto de la hoja manda el mueble de al lado %s y la puerta no %s (esperado: true las dos)" % [
-				mueble, not arriba_delante])
-		else:
-			print("Puertas, cerrar: de lado, junto a lo alto de la hoja se puede usar %s, se cierra %s y se vuelve a abrir %s (esperado: true las tres)" % [
-				arriba_delante, arriba_cierra, una.abierta == 1.0])
+		print("Puertas, cerrar: de lado, junto a lo alto de la hoja se puede usar %s, se cierra %s y se vuelve a abrir %s (esperado: true las tres)" % [
+			arriba_delante, arriba_cierra, una.abierta == 1.0])
 	johnny.position = delante
 	for a in aliados:
 		a.set_physics_process(true)
@@ -1131,8 +1126,8 @@ func probar_viviendas() -> void:
 # los zombis): a la puerta del pasillo, a la de las viviendas y delante de cada mueble que se usa. Fotos: la sala entera
 # (captura-sala.png) y, recortada de la pantalla, cada estancia con Johnny dentro y lo que pone arriba
 # (captura-sala-vestuario.png, captura-sala-despacho.png y captura-sala-taller.png). Luego se pone delante del banco, de
-# la estantería y del baúl y cuenta cuál se usaría (y, con la puerta del taller abierta, que delante del banco manda el
-# banco); comprueba que los muebles se abren con el clic y no al arrimarse
+# la estantería y del baúl y cuenta cuál se usaría (y, con la puerta del taller abierta, que delante del banco se usa
+# el banco); comprueba que los muebles se abren con el clic y no al arrimarse
 # (probar_abrir_muebles); cruza la puerta de las viviendas, vuelve y sale al pasillo, y cuenta
 # adónde ha llegado cada vez. Luego se cierra
 func probar_sala() -> void:
@@ -1204,7 +1199,7 @@ func probar_sala() -> void:
 		var zona_puerta: Node = metal.uso.get_node("Zona") if metal.uso else null
 		print("Puerta del taller abierta, delante del banco · se usaría: banco %s, puerta %s (esperado: true, false)" % [
 			en_zona.call(mapa.banco), zona_puerta != null and johnny.ante_mueble == zona_puerta])
-		johnny.position = Vector2(metal.caja.end.x + 24.0, metal.caja.get_center().y)
+		johnny.position = Vector2(metal.caja.position.x - 24.0, metal.caja.get_center().y)   # (del lado del despacho, el de la hoja)
 		await get_tree().create_timer(0.1).timeout
 		zona_puerta = metal.uso.get_node("Zona") if metal.uso else null
 		print("Puerta del taller abierta, junto al hueco · se usaría: banco %s, puerta %s (esperado: false, true)" % [

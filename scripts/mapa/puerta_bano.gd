@@ -87,6 +87,8 @@ var tiempo := 0.0
 var cerrando := false
 var espera := false         # cerrada a mano: Johnny y los suyos no la abren arrimándose hasta que se vayan de delante
 var uso: Node2D = null      # para cerrarla o volver a abrirla a mano: su zona (zona_usar.gd) y el dibujo del contorno
+var al_reves := false       # la de lado, que se abre hacia la habitación de la izquierda en vez de la de la derecha: la
+                            # metálica del despacho al taller (mapa.gd), para que abierta no se quede de pie junto al banco
 
 
 func montar(datos: Dictionary) -> void:
@@ -215,6 +217,10 @@ func poner_uso() -> void:
 		else:
 			tex = madera.lado
 			dibujo.position = Vector2(r.end.x - 2.0 - 4.0, r.position.y + 4.0 - tex.get_height() * 2.0 + SOMBRA_LADO * 2.0)
+			if al_reves:
+				# (el mismo dibujo dado la vuelta, del otro lado del hueco: ver hoja_de_lado)
+				dibujo.flip_h = true
+				dibujo.position.x = r.position.x + r.end.x - dibujo.position.x - tex.get_width() * 2.0
 		dibujo.texture = tex
 		dibujo.scale = Vector2(2, 2)
 	elif de_frente:
@@ -238,7 +244,6 @@ func poner_uso() -> void:
 	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
 	zona.cierra = abierta >= 1.0
-	zona.puerta = true
 	zona.usar.connect(usar_a_mano)
 	uso.add_child(zona)
 	add_child(uso)
@@ -382,7 +387,11 @@ func _draw() -> void:
 				tabla(Vector2(hoja.position.x - 10, y - 3), Vector2(hoja.end.x + 10, y + 3))
 			draw_set_transform(Vector2.ZERO)
 		else:
+			if al_reves:
+				# dada la vuelta alrededor del medio del hueco: gira hacia la habitación de la izquierda
+				draw_set_transform_matrix(Transform2D(Vector2(-1, 0), Vector2(0, 1), Vector2(r.position.x + r.end.x, 0)))
 			hoja_de_lado(r, temblor)
+			draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
 # La hoja de madera de un tabique de lado, con la bisagra arriba del hueco: cerrada, su dibujo (puerta-bano-lado-cerrada:
@@ -406,7 +415,8 @@ func hoja_de_lado(r: Rect2, temblor: float) -> void:
 		draw_texture_rect(lado, Rect2(bisagra + Vector2(-4.0, -tam.y + SOMBRA_LADO * 2.0), tam), false)
 		return
 	var giro := abierta * GIRO_LADO
-	draw_set_transform_matrix(Transform2D(Vector2(sin(giro), cos(giro)), Vector2(0, 1), bisagra))
+	var vuelta := Transform2D(Vector2(-1, 0), Vector2(0, 1), Vector2(r.position.x + r.end.x, 0)) if al_reves else Transform2D.IDENTITY
+	draw_set_transform_matrix(vuelta * Transform2D(Vector2(sin(giro), cos(giro)), Vector2(0, 1), bisagra))
 	pintar_frente(Rect2(0, -ALTO, r.size.y - 8.0, ALTO), Color.WHITE.darkened(0.15 * abierta))
 	draw_set_transform_matrix(Transform2D.IDENTITY)
 

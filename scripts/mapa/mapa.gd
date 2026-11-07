@@ -914,6 +914,7 @@ func poner_hojas() -> void:
 			hoja.madera = PUERTA_BANO.MADERA_LIMPIA
 		if sitio.tipo == "mantenimiento" and d.get("a", -1) == 2:
 			hoja.madera = PUERTA_BANO.METAL   # (la del despacho al taller: la metálica)
+			hoja.al_reves = true   # (y se abre hacia el despacho: abierta hacia el taller, se quedaba de pie junto al banco)
 		hoja.montar(d)
 		cosas.add_child(hoja)
 		hojas.append(hoja)

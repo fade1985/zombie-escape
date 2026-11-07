@@ -766,7 +766,9 @@ en una línea.
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
   La puerta del despacho al taller, metálica (`PUERTA_BANO.METAL`, la elige `mapa.poner_hojas`): `puerta_metal.py` saca las tres de las
   imágenes de GPT tal cual (`puerta-metal-gpt-2.webp`: la cerrada y la abierta; `puerta-metal-gpt-frente.webp`: la de frente, la que
-  gira): les quita el fondo y las reduce; la abierta, metida en la forma de la de madera para que gire igual.
+  gira): les quita el fondo y las reduce; la abierta, metida en la forma de la de madera para que gire igual. Se abre hacia el
+  despacho (`al_reves` en `puerta_bano.gd`: todo dado la vuelta alrededor del medio del hueco), no hacia el taller: abierta
+  hacia allí se quedaba de pie junto al banco de trabajo y no dejaba usarlo.
   Las salidas de la sala (la de la pared de abajo y, girada, la de la derecha, que da a los trasteros; y la de los trasteros que
   vuelve a ella) llevan esa misma hoja, cerrada: `puerta_abajo_metal.py` la pone tumbada en el hueco de chapa gris de
   `puerta-abajo.png` (`puerta-abajo-metal.png`, que usa `puerta.gd`; el cuarto dibujo de `puerta-abajo.png` ya no se usa).
