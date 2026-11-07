@@ -21,6 +21,9 @@ MUEBLES = {
     "estanteria": ("assets/sources/estanteria-metal-gpt.webp", "assets/sprites/mueble-canshelf.png", 40, 68, True),
     # la mesa del ordenador del despacho (ordenador.gd): de nogal, con el monitor y la torre beige de los 90
     "mesa_ordenador": ("assets/sources/mesa-ordenador-gpt.webp", "assets/sprites/mesa-ordenador.png", 48, 49, False),
+    # el corcho colgado en la pared del despacho, a la izquierda de la mesa (mapa.gd): sin marco, con papeles crema
+    # y chinchetas doradas (antes, de tools/guias_mantenimiento.py, que ya no se usa para él)
+    "corcho": ("assets/sources/corcho-gpt.webp", "assets/sprites/corcho.png", 44, 29, False),
 }
 
 
