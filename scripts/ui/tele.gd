@@ -21,7 +21,7 @@ const AZUL := Color("#1d2a6b")
 const MUEBLE_EN := Vector2(24, 0)   # centrado encima del cuadro del texto
 const PANTALLA := Rect2(46, 54, 288, 164)   # el hueco del mueble (lo dice tools/tele.py), más MUEBLE_EN
 const CAJA_TEXTO := Rect2(0, 262, 448, 142)   # lo que dice la reportera, por trozos (partir)
-const LETRA := 16   # el tamaño de esas letras (M75 las subió a 32, pero eran enormes: el dueño las prefiere a 16)
+const LETRA := 20   # el tamaño de esas letras (M75 las subió a 32, pero eran enormes: el dueño las prefiere a 20)
 const NOMBRE_SEGUNDOS := 4.0   # lo que se ve el rótulo con el nombre de la reportera al empezar
 
 var noticia: Dictionary
@@ -72,7 +72,7 @@ func _init() -> void:
 	texto.add_theme_color_override("font_color", Color("#e8e8d0"))
 	texto.add_theme_constant_override("outline_size", 0)
 	texto.add_theme_font_size_override("font_size", LETRA)
-	texto.add_theme_constant_override("line_spacing", 4)   # con letras de 16, algo de aire entre líneas (a 32 era -8)
+	texto.add_theme_constant_override("line_spacing", 4)   # con letras de 20, algo de aire entre líneas (a 32 era -8)
 	add_child(texto)
 
 
