@@ -1,58 +1,58 @@
-# La puerta metálica de la sala de mantenimiento (la del despacho al taller, en un tabique de lado), del 7 nov: sale de
-# la imagen de GPT que trajo el dueño (assets/sources/puerta-metal-gpt.webp: la cerrada vista desde arriba a la
-# izquierda y la abierta, de pie y torcida, a la derecha). Para que gire igual que la de madera (puerta_bano.gd), copia la
-# forma exacta de sus dibujos y la rellena de acero:
-#   puerta-metal-lado-cerrada  (16x32, como puerta-bano-lado-cerrada): la tira de canto de acero, con la manilla negra a
-#                              los dos lados (la de GPT eran dos ganchos hacia arriba: aquí, el bulto del pomo de madera)
-#   puerta-metal-abierta-lado  (14x67, como puerta-bano-abierta-lado): el mismo paralelogramo, con la cara de la puerta de
-#                              GPT (sus remaches y la chapa de abajo), enderezada y vuelta a torcer a su forma; la manilla
-#                              de GPT, reducida, era un borrón negro: se quita y se pinta a mano, pequeña
-#   puerta-metal               (28x43, como puerta-bano): la misma cara, de frente, para mientras gira
+# La puerta metálica de la sala de mantenimiento (la del despacho al taller, en un tabique de lado), del 7 nov. Primero
+# salió de una imagen de GPT (assets/sources/puerta-metal-gpt.webp), de acero gris claro, pero su manilla negra sobre la
+# chapa clara no se veía bien; ahora es como la foto que trajo el dueño (assets/sources/puerta-metal-foto.webp): una
+# puerta de seguridad verde oscuro con la manilla plateada y el bombín debajo, dibujada a mano píxel a píxel.
+# Para que gire igual que la de madera (puerta_bano.gd), copia la forma exacta de sus dibujos:
+#   puerta-metal-lado-cerrada  (16x32, como puerta-bano-lado-cerrada): la tira de canto, verde, con la manilla plateada
+#                              asomando a los dos lados
+#   puerta-metal-abierta-lado  (14x67, como puerta-bano-abierta-lado): el mismo paralelogramo, con su cara verde, el canto
+#                              de la bisagra más claro, la manilla y el bombín, y su sombra en el suelo
+#   puerta-metal               (28x43, como puerta-bano): la misma de frente, para mientras gira
 #   py tools/puerta_metal.py   (y luego Godot --headless --path . --import)
 from PIL import Image
 
-ORIGEN = "assets/sources/puerta-metal-gpt.webp"
 CARPETA = "assets/sprites/"
 LINEA = (29, 27, 44)
-OSCURO, MEDIO, CLARO, BRILLO = (79, 84, 91), (128, 133, 140), (168, 172, 178), (196, 200, 205)
-MANILLA, MANILLA_LUZ = (34, 34, 38), (78, 80, 86)
-
-gpt = Image.open(ORIGEN).convert("RGBA")
-# la cara de la abierta, enderezada: de la x 920 a la 1145, cada columna desde su borde de arriba (que baja 0,6 por
-# columna) hasta el de abajo
-X0, X1, ALTO_CARA = 920, 1145, 778
-cara = Image.new("RGBA", (X1 - X0, ALTO_CARA))
-for u in range(X1 - X0):
-    arriba = 44 + u * 0.6
-    for v in range(ALTO_CARA):
-        cara.putpixel((u, v), gpt.getpixel((X0 + u, int(arriba + v))))
+OSCURO, VERDE, LUZ, CANTO, CANTO_LUZ = (27, 45, 40), (40, 66, 57), (55, 86, 75), (72, 106, 93), (98, 134, 119)
+PLATA, PLATA_LUZ, PLATA_SOMBRA = (190, 192, 186), (232, 234, 228), (118, 120, 116)
+HUECO = (14, 16, 18)   # el agujero de la llave
 
 
-def muestra(u, v):
-    """El color de la cara en (u, v), de 0 a 1 (la media de un cuadrito, sin lo transparente)"""
-    x, y = int(u * (cara.width - 1)), int(v * (cara.height - 1))
-    caja = cara.crop((max(0, x - 6), max(0, y - 6), x + 7, y + 7)).convert("RGB")
-    color = caja.resize((1, 1), Image.Resampling.BOX).getpixel((0, 0))
-    # lo oscuro (la manilla de GPT, que reducida es un borrón negro) se vuelve chapa: la manilla se pinta luego, a mano
-    return color if sum(color) > 330 else MEDIO
+def pon(im, puntos):
+    for x, y, c in puntos:
+        im.putpixel((x, y), c + (255,))
 
 
-# 1 · De frente (28x43): la cara reducida, con su contorno
+def es_linea(c):
+    return abs(c[0] - LINEA[0]) + abs(c[1] - LINEA[1]) + abs(c[2] - LINEA[2]) < 24
+
+
+# 1 · De frente (28x43): la hoja verde con su contorno, un poco más clara arriba a la izquierda, un panel marcado, la
+# manilla plateada (la base redonda y la palanca hacia la bisagra, a la izquierda) y el bombín debajo
 frente = Image.new("RGBA", (28, 43), (0, 0, 0, 0))
 for y in range(43):
     for x in range(28):
         if x in (0, 27) or y in (0, 42):
-            frente.putpixel((x, y), LINEA + (255,))
+            c = LINEA
+        elif x in (1, 26) or y in (1, 41):
+            c = OSCURO
+        elif x == 2 or y == 2:
+            c = LUZ
         else:
-            frente.putpixel((x, y), muestra((x - 1) / 25, (y - 1) / 40) + (255,))
-# la manilla, a mano: la base redonda y la palanca hacia la bisagra, con su luz arriba
-for x, y, color in [(20, 21, MANILLA), (21, 21, MANILLA), (20, 22, MANILLA), (21, 22, MANILLA), (17, 22, MANILLA),
-                    (18, 22, MANILLA), (19, 22, MANILLA), (17, 21, MANILLA_LUZ), (18, 21, MANILLA_LUZ), (19, 21, MANILLA_LUZ)]:
-    frente.putpixel((x, y), color + (255,))
+            c = VERDE
+        frente.putpixel((x, y), c + (255,))
+for y in range(6, 37):   # el panel: una raya oscura y otra clara
+    pon(frente, [(5, y, OSCURO), (22, y, LUZ)])
+for x in range(5, 23):
+    pon(frente, [(x, 6, OSCURO), (x, 36, LUZ)])
+pon(frente, [(20, 20, PLATA_LUZ), (21, 20, PLATA), (20, 21, PLATA), (21, 21, PLATA_SOMBRA),
+             (16, 20, PLATA_LUZ), (17, 20, PLATA_LUZ), (18, 20, PLATA_LUZ), (19, 20, PLATA_LUZ),
+             (16, 21, PLATA_SOMBRA), (17, 21, PLATA_SOMBRA), (18, 21, PLATA_SOMBRA), (19, 21, PLATA_SOMBRA),
+             (20, 24, PLATA), (21, 24, PLATA), (20, 25, HUECO), (21, 25, PLATA_SOMBRA), (20, 26, PLATA), (21, 26, PLATA)])
 frente.save(CARPETA + "puerta-metal.png")
 
-# 2 · Abierta de lado (14x67): la forma de la de madera; las dos primeras columnas, el canto de la bisagra (claro), lo de
-# abajo del todo, su sombra en el suelo (se queda), el contorno (se queda) y lo demás, la cara
+# 2 · Abierta de lado (14x67): la forma de la de madera. Las dos primeras columnas, el canto de la bisagra; lo de abajo
+# del todo, su sombra en el suelo (se queda); el contorno (se queda); lo demás, la cara verde, más oscura hacia abajo
 madera = Image.open(CARPETA + "puerta-bano-abierta-lado.png").convert("RGBA")
 abierta = Image.new("RGBA", madera.size, (0, 0, 0, 0))
 w, h = madera.size
@@ -65,29 +65,30 @@ for x in range(w):
         c = madera.getpixel((x, y))
         if c[3] < 255 or y > abajo - 3 and x > 1:
             abierta.putpixel((x, y), c)   # (la sombra del suelo)
-        elif abs(c[0] - LINEA[0]) + abs(c[1] - LINEA[1]) + abs(c[2] - LINEA[2]) < 24:
-            abierta.putpixel((x, y), LINEA + (255,))
+        elif es_linea(c) and (y in (arriba, abajo) or x == w - 1 or not madera.getpixel((x, y - 1))[3]
+                              or not madera.getpixel((x, y + 1))[3]):
+            abierta.putpixel((x, y), LINEA + (255,))   # (solo el contorno de fuera: las rayas de la madera, no)
         elif x < 2:
-            abierta.putpixel((x, y), (BRILLO if x == 0 else CLARO) + (255,))
+            abierta.putpixel((x, y), (CANTO_LUZ if x == 0 else CANTO) + (255,))
+        elif y == arriba or y == arriba + 1:
+            abierta.putpixel((x, y), LUZ + (255,))   # (el borde de arriba, con luz)
         else:
-            v = (y - arriba) / max(1, abajo - 3 - arriba)
-            abierta.putpixel((x, y), muestra((x - 2) / (w - 3), min(1.0, v)) + (255,))
-# la manilla, a mano, cerca del canto de la derecha y a media altura de su columna (como el pomo de la de madera): la
-# base, de dos píxeles, y encima su luz
+            v = (y - arriba) / max(1, abajo - arriba)
+            abierta.putpixel((x, y), (LUZ if x == 2 else VERDE if v < 0.75 else OSCURO) + (255,))
+# la manilla, a media altura de su columna y cerca del canto libre (a la derecha): la base redonda, la palanca de 3
+# hacia la bisagra, con su luz arriba y su sombra abajo; y el bombín, dos más abajo
 filas = [y for y in range(h) if abierta.getpixel((11, y))[3]]
-medio = (filas[0] + filas[-1]) // 2
-# (la base, de 2x2, y la palanca hacia la bisagra, de 3 de largo, con su luz encima: más grande que el pomo de madera,
-# porque una de 2 o 3 píxeles en la chapa clara no se veía)
-pomo = [(x, y, MANILLA) for x in (10, 11) for y in (medio, medio + 1)]
-pomo += [(x, medio + 1, MANILLA) for x in (7, 8, 9)]
-pomo += [(x, medio, MANILLA_LUZ) for x in (7, 8, 9)] + [(10, medio - 1, MANILLA_LUZ), (11, medio - 1, MANILLA_LUZ)]
-pomo += [(x, medio + 2, OSCURO) for x in (7, 8, 9, 10, 11)]   # (su sombra en la chapa)
-for x, y, color in pomo:
-    abierta.putpixel((x, y), color + (255,))
+m = (filas[0] + filas[-1]) // 2 - 2
+pon(abierta, [(10, m, PLATA_LUZ), (11, m, PLATA), (10, m + 1, PLATA), (11, m + 1, PLATA_SOMBRA),
+              (7, m, PLATA_LUZ), (8, m, PLATA_LUZ), (9, m, PLATA_LUZ),
+              (7, m + 1, PLATA_SOMBRA), (8, m + 1, PLATA_SOMBRA), (9, m + 1, PLATA_SOMBRA),
+              (7, m + 2, OSCURO), (8, m + 2, OSCURO), (9, m + 2, OSCURO),
+              (10, m + 4, PLATA), (11, m + 4, PLATA), (10, m + 5, HUECO), (11, m + 5, PLATA_SOMBRA), (10, m + 6, PLATA),
+              (11, m + 6, PLATA)])
 abierta.save(CARPETA + "puerta-metal-abierta-lado.png")
 
-# 3 · Cerrada de lado (16x32): la forma de la de madera; la tira, de acero (oscuro a un lado, claro al otro, con brillo
-# en medio) y el bulto del pomo, la manilla negra
+# 3 · Cerrada de lado (16x32): la forma de la de madera; la tira, verde (oscura a un lado y clara al otro) y lo que
+# sobresale a los lados, la manilla plateada
 madera = Image.open(CARPETA + "puerta-bano-lado-cerrada.png").convert("RGBA")
 cerrada = Image.new("RGBA", madera.size, (0, 0, 0, 0))
 for y in range(madera.height):
@@ -95,14 +96,14 @@ for y in range(madera.height):
         c = madera.getpixel((x, y))
         if not c[3]:
             continue
-        if abs(c[0] - LINEA[0]) + abs(c[1] - LINEA[1]) + abs(c[2] - LINEA[2]) < 24:
+        if es_linea(c):
             color = LINEA
         elif x < 5 or x > 10:
-            color = MANILLA_LUZ if y == 21 or y == 22 else MANILLA   # (la manilla, con su luz arriba)
+            color = PLATA_LUZ if y == 21 else PLATA_SOMBRA if y == 24 else PLATA
         elif y in (0, 1, 30, 31):
             color = OSCURO   # (los cantos de arriba y abajo)
         else:
-            color = [OSCURO, MEDIO, BRILLO, CLARO, MEDIO, OSCURO][x - 5]
+            color = [OSCURO, VERDE, CANTO_LUZ, CANTO, VERDE, OSCURO][x - 5]
         cerrada.putpixel((x, y), color + (c[3],))
 cerrada.save(CARPETA + "puerta-metal-lado-cerrada.png")
 print("puerta-metal, puerta-metal-abierta-lado y puerta-metal-lado-cerrada")
