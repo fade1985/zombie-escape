@@ -3,7 +3,7 @@
 #
 # Arriba, una pestaña por edificio con las páginas que llevas de él («Apartamentos 2/5») y, a la derecha, las de todos.
 # Dentro de la carpeta, a la izquierda, las páginas de ese edificio como fichas: las encontradas en papel, con
-# «Página N» y su título; las que faltan, como un trozo arrancado que dice «falta». A la derecha, la hoja de la página
+# «Página N» y su título; las que faltan, como un trozo arrancado con solo «Página N» (que falta ya se ve). A la derecha, la hoja de la página
 # que se mira (hoja_dosier.gd), sujeta con un clip: se cambia al pasar por una ficha (con el ratón, el teclado o el
 # mando). Quién la llevaba o dónde buscarla sale en la línea de abajo del ordenador.
 #
@@ -245,7 +245,7 @@ func pestana(e: String, fuente: Font) -> void:
 		LETRA_CARPETA if elegida else Color("#3e3020"))
 
 
-# Una ficha de la izquierda: en papel si la tienes («Página N» y su título) o arrancada si falta. La que se mira sale
+# Una ficha de la izquierda: en papel si la tienes («Página N» y su título) o arrancada, con solo «Página N», si falta. La que se mira sale
 # un poco hacia la hoja
 func ficha(id: String, fuente: Font) -> void:
 	var r: Rect2 = fichas[id]
@@ -287,9 +287,6 @@ func ficha(id: String, fuente: Font) -> void:
 		var color := Color("#6a5838")
 		var base := r.position.y + 4 + fuente.get_ascent(16)
 		draw_string(fuente, Vector2(r.position.x + 8, base), titulo, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 16, ajustar(fuente, titulo, r.size.x - 16, 16), color)
-		var falta := Idioma.t("falta")
-		draw_string(fuente, Vector2(r.position.x + 8, base + fuente.get_height(16) + 2), falta, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 16,
-			ajustar(fuente, falta, r.size.x - 16, 16), Historia.ROJO.darkened(0.1))
 
 
 func ancho_texto(fuente: Font, texto: String, tam: int) -> float:

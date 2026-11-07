@@ -5154,10 +5154,6 @@ msgstr "%d / %d 页"
 msgid "Página %d"
 msgstr "第 %d 页"
 
-#: scripts/ui/carpeta_dosier.gd
-msgid "falta"
-msgstr "缺失"
-
 #: scripts/ui/hoja_dosier.gd
 msgid "EDIFICIO: %s"
 msgstr "大楼：%s"

@@ -5168,10 +5168,6 @@ msgstr "Страниц: %d / %d"
 msgid "Página %d"
 msgstr "Страница %d"
 
-#: scripts/ui/carpeta_dosier.gd
-msgid "falta"
-msgstr "нет"
-
 #: scripts/ui/hoja_dosier.gd
 msgid "EDIFICIO: %s"
 msgstr "ЗДАНИЕ: %s"

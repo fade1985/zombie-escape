@@ -5161,10 +5161,6 @@ msgstr "%d / %d Seiten"
 msgid "Página %d"
 msgstr "Seite %d"
 
-#: scripts/ui/carpeta_dosier.gd
-msgid "falta"
-msgstr "fehlt"
-
 #: scripts/ui/hoja_dosier.gd
 msgid "EDIFICIO: %s"
 msgstr "GEBÄUDE: %s"
