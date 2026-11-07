@@ -76,7 +76,13 @@ for x in range(w):
 # base, de dos píxeles, y encima su luz
 filas = [y for y in range(h) if abierta.getpixel((11, y))[3]]
 medio = (filas[0] + filas[-1]) // 2
-for x, y, color in [(11, medio, MANILLA), (11, medio + 1, MANILLA), (10, medio + 1, MANILLA), (11, medio - 1, MANILLA_LUZ)]:
+# (la base, de 2x2, y la palanca hacia la bisagra, de 3 de largo, con su luz encima: más grande que el pomo de madera,
+# porque una de 2 o 3 píxeles en la chapa clara no se veía)
+pomo = [(x, y, MANILLA) for x in (10, 11) for y in (medio, medio + 1)]
+pomo += [(x, medio + 1, MANILLA) for x in (7, 8, 9)]
+pomo += [(x, medio, MANILLA_LUZ) for x in (7, 8, 9)] + [(10, medio - 1, MANILLA_LUZ), (11, medio - 1, MANILLA_LUZ)]
+pomo += [(x, medio + 2, OSCURO) for x in (7, 8, 9, 10, 11)]   # (su sombra en la chapa)
+for x, y, color in pomo:
     abierta.putpixel((x, y), color + (255,))
 abierta.save(CARPETA + "puerta-metal-abierta-lado.png")
 
