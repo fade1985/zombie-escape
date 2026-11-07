@@ -5,19 +5,21 @@
 # oscuro alrededor, como el resto de dibujos. Deja intentos/<id>-mano.png para revisarlo; el bueno se copia a mano.
 #   py icono_diagonal.py cuchillo 0.735     (la escala: lo más grande que quepa en 48; dice el tamaño que sale)
 #   py icono_diagonal.py bate 0.6
+#   py icono_diagonal.py pistola 0.62 0   (el tercero, los grados que se gira: 0 para las de fuego, que van rectas)
 import sys
 from collections import Counter
 from PIL import Image
 
 ARMA = sys.argv[1]
 ESCALA = float(sys.argv[2]) if len(sys.argv) > 2 else 0.66
+GRADOS = float(sys.argv[3]) if len(sys.argv) > 3 else 45
 GRANDE = 8
 LADO = 48
 
 origen = Image.open("../../ui/tienda/%s-grande.png" % ARMA).convert("RGBA")
 origen = origen.crop(origen.getbbox())
 grande = origen.resize((origen.width * GRANDE, origen.height * GRANDE), Image.NEAREST)
-girado = grande.rotate(45, resample=Image.NEAREST, expand=True)
+girado = grande.rotate(GRADOS, resample=Image.NEAREST, expand=True)
 girado = girado.crop(girado.getbbox())
 
 # cada píxel del dibujo final es un trozo de "paso" x "paso" del girado: el color que más sale (si hay más lleno que vacío)
