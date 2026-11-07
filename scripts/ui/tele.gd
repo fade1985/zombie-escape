@@ -21,7 +21,7 @@ const AZUL := Color("#1d2a6b")
 const MUEBLE_EN := Vector2(24, 0)   # centrado encima del cuadro del texto
 const PANTALLA := Rect2(46, 54, 288, 164)   # el hueco del mueble (lo dice tools/tele.py), más MUEBLE_EN
 const CAJA_TEXTO := Rect2(0, 262, 448, 142)   # lo que dice la reportera, por trozos (partir)
-const LETRA := 32   # el tamaño de esas letras (M75: antes 16, y cabía la noticia entera)
+const LETRA := 24   # el tamaño de esas letras (M75 las subió de 16 a 32; luego, grandes de más: 24)
 const NOMBRE_SEGUNDOS := 4.0   # lo que se ve el rótulo con el nombre de la reportera al empezar
 
 var noticia: Dictionary
