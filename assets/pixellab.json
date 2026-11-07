@@ -5086,6 +5086,12 @@
    "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py bate 0.66 (en assets/sources/tienda)",
    "cost": "10 generaciones"
   },
+  "katana": {
+   "foto": "katana envainada de vaina azul con cordón (sageo); el dueño la quiso con los colores de la que lleva Johnny: vaina negra y empuñadura granate",
+   "ficha": "C (semilla 48211, objeto 1de899f4-a2d2-43b7-ad7f-6755d805e499), 96x48, con el icono del cuchillo de imagen de estilo sin copiar sus colores y pidiendo la proporción de verdad (mango 1/4, vaina 3/4). Retocada a mano: los rojos, a granate (más oscuros y menos vivos) y la vaina, de casi negro a la laca azul muy oscura de la katana de Johnny (si no, en el fondo oscuro de la tienda no se veía). Descartadas A y B (48201/48202: la vaina corta; la B, borrosa y rosa) y D (48212: rosa fucsia). Intentos en intentos/katana-grande-*.png",
+   "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py katana 0.7 (en assets/sources/tienda)",
+   "cost": "20 generaciones"
+  },
   "cost": "36 generaciones el cuchillo (6 intentos de 5 y la foto, 6): lo bueno, a la segunda. Con dos intentos de cada dibujo, unas 20 por arma",
   "updated": "2026-11-06"
  }
