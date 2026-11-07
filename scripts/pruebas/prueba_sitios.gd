@@ -738,6 +738,24 @@ func probar_puertas() -> void:
 	print("Puertas (%s): %d en %d huecos sin llave, cerradas %d (esperado: las mismas las tres)" % [sitio.nombre,
 		mapa.hojas.size(), libres.size(), mapa.hojas.filter(func(h): return h.abierta == 0.0).size()])
 	await foto_entera(sitio, "captura-puertas-cerradas.png")
+	print("Puertas: cerradas al empezar, con su zona para abrirlas a mano %d de %d (esperado: todas)" % [
+		mapa.hojas.filter(func(h): return h.uso != null).size(), mapa.hojas.size()])
+	# una cerrada desde el principio, abierta a mano desde lejos (a 50, donde aún no se abre sola al arrimarse)
+	var primera: Node2D = mapa.hojas[0]
+	var hacia_fuera := Vector2(0, 1) if primera.de_frente else Vector2(1, 0)
+	var medio0: float = (primera.caja.size.y if primera.de_frente else primera.caja.size.x) / 2
+	johnny.position = primera.caja.get_center() + hacia_fuera * (medio0 + 50.0)
+	await get_tree().create_timer(0.3).timeout
+	var zona0: Area2D = primera.uso.get_node("Zona") if primera.uso else null
+	var delante0: bool = zona0 != null and johnny.ante_mueble == zona0 and zona0.activa() and not zona0.cierra
+	if zona0:
+		zona0.abrir()
+	await get_tree().create_timer(0.6).timeout
+	print("Puertas: una cerrada desde el principio, a 50 se puede usar %s y se abre a mano %s (esperado: true las dos)" % [
+		delante0, primera.abierta == 1.0])
+	# (y se vuelve a cerrar, para que el resto de la prueba empiece como antes)
+	primera.usar_a_mano()
+	await get_tree().create_timer(0.6).timeout
 
 	# Johnny se arrima a una de frente (o a la primera, si no hay) desde abajo
 	var de_frente: Array = mapa.hojas.filter(func(h): return h.de_frente)

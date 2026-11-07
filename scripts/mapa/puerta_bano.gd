@@ -110,6 +110,7 @@ func montar(datos: Dictionary) -> void:
 	else:
 		add_to_group("obstaculos")   # la navegación no cuenta con pasar por aquí mientras esté cerrada
 	poner_choque()
+	poner_uso()   # (desde el principio: una libre cerrada también se abre a mano, sin esperar a arrimarse del todo)
 
 
 # Cerrada: choca y tapa la luz

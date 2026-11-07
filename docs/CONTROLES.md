@@ -154,7 +154,8 @@ amarillo**: con el ratón, al pasarlo por encima del mueble (esté Johnny donde 
 móvil, cuando Johnny está delante (`-- --captura --contorno-mueble`).
 
 **Cerrar las puertas** de dentro (pisos, tiendas y la sala de mantenimiento; no las de los trasteros): igual que los
-muebles. Delante de una abierta sale su contorno amarillo y se cierra con atacar (clic encima, J, RT o el botón
+muebles. Desde el principio: las que empiezan cerradas, además de abrirse solas al arrimarse, se abren igual a mano y
+desde algo más lejos. Delante de una abierta sale su contorno amarillo y se cierra con atacar (clic encima, J, RT o el botón
 **Cerrar** del móvil). Si hay alguien en el hueco no se cierra (tiembla). Cerrada así, no se vuelve a abrir sola hasta
 que Johnny se aparta y vuelve a arrimarse; sin moverse, se abre otra vez con atacar. Los zombis la siguen abriendo
 empujando (`mapa/puerta_bano.gd`; `-- --captura --puertas`). La de lado, abierta, se queda de pie por encima del hueco
