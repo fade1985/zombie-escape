@@ -2,8 +2,8 @@
 # Historia.hoja_arrancada()). Sale en la ventanita de «página encontrada» (menus.gd) y en el Dosier del ordenador
 # (carpeta_dosier.gd). Todo se dibuja con código (_draw):
 #   - el papel viejo, con motitas y un cerco de café (cada página, siempre las mismas: salen de su id);
-#   - arriba, el logo de Velaria (inventado: una luna creciente dentro de un círculo, porque el VD-7 se vende para
-#     dormir), «VELARIA CORP.», «Investigación del sueño», un código de barras y la referencia (VD7-AP-01: el
+#   - arriba, el logo de Velaria (LOGO: una luna creciente morada dentro de un círculo azul marino), «VELARIA
+#     CORP.», «Investigación del sueño», un código de barras y la referencia (VD7-AP-01: el
 #     edificio y el número de página);
 #   - una franja con el edificio, dónde se encontró y el número de página;
 #   - el tipo de papel en rojo, el título grande, una raya y el sello rojo y gastado de «CONFIDENCIAL», girado;
@@ -23,6 +23,9 @@ const GRIS := Color("#6a5f50")
 const ROJO := Color("#a3312b")
 const BOLI := Color("#1f3c8a")
 const POSIT := Color("#f2e27a")
+# El logo de Velaria Corp. (inventado: una luna creciente dentro de un círculo, porque el VD-7 se vende para dormir;
+# lo eligió el dueño el 7 nov y es el de siempre: tools/logo_velaria.py). 16x16, a 2 unidades por píxel
+const LOGO := preload("res://assets/ui/velaria-logo.png")
 const MARGEN := 14.0
 const CODIGOS := {"apartamentos": "AP", "centro": "CC", "torre": "TV"}   # no-tr
 # Los signos del chino que no pueden empezar una línea (se quedan pegados a lo de antes)
@@ -267,20 +270,20 @@ func papel(w: float, h: float) -> void:
 
 
 # Arriba: el logo, el nombre, el código de barras con la referencia, la franja, el tipo, el título y la raya. La
-# compacta, más baja: el logo más pequeño y el nombre con la letra de siempre
+# compacta, más baja: el nombre con la letra de siempre y todo en una línea
 func cabecera(w: float) -> void:
 	var x := w - MARGEN - 134
 	if compacta:
 		# todo en una línea: el logo, el nombre y, si cabe, «Investigación del sueño»
-		logo(Vector2(MARGEN + 2, 6), 24.0)
+		draw_texture_rect(LOGO, Rect2(MARGEN + 2, 3, 32, 32), false)
 		var nombre := Historia.EMPRESA.to_upper()
-		draw_string(fuente, Vector2(MARGEN + 34, 10 + fuente.get_ascent(16)), nombre, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, TINTA)
-		var detras := MARGEN + 34 + ancho_de(nombre, 16) + 12
+		draw_string(fuente, Vector2(MARGEN + 42, 10 + fuente.get_ascent(16)), nombre, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, TINTA)
+		var detras := MARGEN + 42 + ancho_de(nombre, 16) + 12
 		var lema := Idioma.t("Investigación del sueño")
 		if detras + ancho_de(lema, 16) < x - 12:
 			draw_string(fuente, Vector2(detras, 10 + fuente.get_ascent(16)), lema, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, GRIS)
 	else:
-		logo(Vector2(MARGEN + 2, 12), 36.0)
+		draw_texture_rect(LOGO, Rect2(MARGEN + 2, 14, 32, 32), false)
 		draw_string(fuente, Vector2(MARGEN + 46, 12 + fuente.get_ascent(32) - 2), Historia.EMPRESA.to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 32, TINTA)
 		draw_string(fuente, Vector2(MARGEN + 48, 56), Idioma.t("Investigación del sueño"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, GRIS)
 	var alto_barras := 10.0 if compacta else 24.0
@@ -308,14 +311,6 @@ func cabecera(w: float) -> void:
 		t = 16
 	draw_string(fuente, Vector2(MARGEN + 2, titulo_y + fuente.get_ascent(t)), titulo, HORIZONTAL_ALIGNMENT_LEFT, -1, t, TINTA)
 	draw_rect(Rect2(MARGEN + 2, cuerpo_y - 6, w - 2 * MARGEN - 4, 2), Color(TINTA, 0.8))
-
-
-# El logo de Velaria (inventado): una luna creciente dentro de un círculo
-func logo(esquina: Vector2, lado: float) -> void:
-	var centro := esquina + Vector2(lado, lado) / 2.0
-	draw_arc(centro, lado / 2.0 - 1.5, 0, TAU, 40, TINTA, 3.0)
-	draw_circle(centro, lado / 2.0 - 8, TINTA)
-	draw_circle(centro + Vector2(5, -3), lado / 2.0 - 9, PAPEL)
 
 
 # El sello de «CONFIDENCIAL»: rojo, en un recuadro doble, girado y gastado (le faltan trocitos)
