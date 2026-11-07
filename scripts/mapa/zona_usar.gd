@@ -88,6 +88,8 @@ func _ready() -> void:
 	contorno.scale = dibujo.scale
 	contorno.centered = dibujo.centered
 	contorno.offset = dibujo.offset
+	contorno.flip_h = dibujo.flip_h   # (la puerta del taller, abierta hacia el despacho, lleva su dibujo dado la vuelta)
+	contorno.flip_v = dibujo.flip_v
 	contorno.position = dibujo.position
 	var sombreador := Shader.new()
 	sombreador.code = SHADER_CONTORNO

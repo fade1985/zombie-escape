@@ -1204,6 +1204,14 @@ func probar_sala() -> void:
 		zona_puerta = metal.uso.get_node("Zona") if metal.uso else null
 		print("Puerta del taller abierta, junto al hueco · se usaría: banco %s, puerta %s (esperado: false, true)" % [
 			en_zona.call(mapa.banco), zona_puerta != null and johnny.ante_mueble == zona_puerta])
+		# (y su contorno amarillo, encima de la hoja abierta: captura-sala-puerta-taller.png)
+		await get_tree().create_timer(0.2).timeout
+		Captura.foto("captura-sala-puerta-taller.png")
+		# a 80 del hueco, del lado del taller (con la zona más amplia, también se usa)
+		johnny.position = Vector2(metal.caja.end.x + 80.0, metal.caja.get_center().y)
+		await get_tree().create_timer(0.1).timeout
+		print("Puerta del taller abierta, a 80 del hueco por el taller · se usaría la puerta %s (esperado: true)" % [
+			zona_puerta != null and johnny.ante_mueble == zona_puerta])
 		metal.usar_a_mano()
 		await get_tree().create_timer(0.8).timeout
 	await probar_abrir_muebles(usables)
