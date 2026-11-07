@@ -732,8 +732,8 @@ en una línea.
   El baúl (`baul.png`, 42x23, también el de la sala de pruebas), un arcón de plástico negro: `baul_plastico.py` lo pasa a mano píxel a
   píxel copiando el dibujo de GPT (`assets/sources/baul-plastico-gpt.webp`; reducido sin más se emborronaba). Ocupa 78x36 en el suelo.
   El banco de trabajo (`banco-trabajo.png`, 48x58), de acero gris con el tablero perforado naranja y los maletines: `banco_metal.py`
-  lo saca tal cual de la imagen de GPT (`assets/sources/banco-trabajo-gpt.webp`, pedida ya en cuadrados grandes y colores planos),
-  quitando el negro puro del fondo y reduciéndola sin mezclar colores. Ocupa 76x36 en el suelo.
+  lo redibuja a mano píxel a píxel copiando la imagen de GPT (`assets/sources/banco-trabajo-gpt.webp`; reducida sin más se
+  emborronaba), con un contorno oscuro de 1 píxel en cada herramienta. Ocupa 76x36 en el suelo.
   En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
   `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
