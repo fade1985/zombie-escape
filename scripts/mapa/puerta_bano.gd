@@ -48,6 +48,10 @@ const MADERA_SUCIA := {"frente": preload("res://assets/sprites/puerta-bano-sucia
 	"abierta": preload("res://assets/sprites/puerta-bano-abierta-sucia.png"),
 	"lado": preload("res://assets/sprites/puerta-bano-abierta-lado-sucia.png"),
 	"cerrada": preload("res://assets/sprites/puerta-bano-lado-cerrada-sucia.png")}
+# la metálica de la sala de mantenimiento, la del despacho al taller (mapa.gd, poner_hojas; de GPT, tools/puerta_metal.py)
+const METAL := {"frente": preload("res://assets/sprites/puerta-metal.png"), "abierta": ABIERTA,
+	"lado": preload("res://assets/sprites/puerta-metal-abierta-lado.png"),
+	"cerrada": preload("res://assets/sprites/puerta-metal-lado-cerrada.png")}
 const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
@@ -218,7 +222,7 @@ func _draw() -> void:
 		# en un tabique de lado: el umbral, el suelo del hueco, que lo llena de lado a lado del grueso del muro (al
 		# abrirse se va: abierta, la puerta se ordena por arriba y les taparía los pies a los que pasan)
 		if abierta < 1.0:
-			var umbral := Color("#2b3036") if acero else Color("#4b505c") if trastero else Color("#4a3428")
+			var umbral := Color("#2b3036") if acero else Color("#4b505c") if trastero or madera == METAL else Color("#4a3428")
 			var borde := LINEA
 			umbral.a = 1.0 - abierta
 			borde.a = 1.0 - abierta
