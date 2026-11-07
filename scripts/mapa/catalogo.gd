@@ -120,7 +120,7 @@ const MUEBLES := {
 	# los de la sala de mantenimiento (sus tres estancias, planta.gd; PixelLab, con las guías de
 	# tools/guias_mantenimiento.py), que no salen en los pisos: en el vestuario, el plato de ducha, el banco largo sin
 	# respaldo (suelto, se ve igual desde cualquier lado), el váter y el lavabo con su espejo (estos dos, solo de lado: no
-	# tienen dibujo de frente); en el taller, la estantería metálica con botes; y en el despacho, la papelera
+	# tienen dibujo de frente); en el taller, la estantería metálica con cajas (tools/estanteria_metal.py); y en el despacho, la papelera
 	"showertray":      {"len": 72,  "dep": 64, "paredes": "",      "archivo": "vestuario/plato-ducha"},
 	"lockerbench":     {"len": 128, "dep": 28, "paredes": "todas", "archivo": "vestuario/banco-vestuario"},
 	"stafftoilet":     {"len": 40,  "dep": 52, "paredes": "lados", "archivo": "vestuario/vater-vestuario"},

@@ -734,6 +734,9 @@ en una línea.
   El banco de trabajo (`banco-trabajo.png`, 48x58), de acero gris con el tablero perforado naranja y los maletines: `banco_metal.py`
   lo redibuja a mano píxel a píxel copiando la imagen de GPT (`assets/sources/banco-trabajo-gpt.webp`; reducida sin más se
   emborronaba), con un contorno oscuro de 1 píxel en cada herramienta. Ocupa 76x36 en el suelo.
+  La estantería de entre los dos (`mueble-canshelf.png`, 40x68), de acero galvanizado con cajas de cartón y cubos grises: igual,
+  `estanteria_metal.py` la redibuja a mano de la imagen de GPT (`assets/sources/estanteria-metal-gpt.webp`). No pasa por
+  `importar.py` (si se reimporta `mantenimiento/estanteria-botes.png`, la pisa).
   En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
   `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
