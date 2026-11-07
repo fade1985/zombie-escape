@@ -5110,6 +5110,12 @@
    "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py escopeta 0.62 (en assets/sources/tienda)",
    "cost": "nada en PixelLab"
   },
+  "mp5": {
+   "foto": "sin foto: como el que lleva Johnny (todo de metal gris oscuro azulado, cargador recto)",
+   "ficha": "hecho por el dueño con GPT (gpt/mp5.webp), reducido a 92x46 quedándose en cada píxel con la mediana del centro de su trozo, en el centro de 96x48 (intentos/mp5-grande-gpt.png)",
+   "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py mp5 0.6 (en assets/sources/tienda)",
+   "cost": "nada en PixelLab"
+  },
   "cost": "36 generaciones el cuchillo (6 intentos de 5 y la foto, 6): lo bueno, a la segunda. Con dos intentos de cada dibujo, unas 20 por arma",
   "updated": "2026-11-06"
  }

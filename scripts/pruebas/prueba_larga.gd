@@ -683,6 +683,8 @@ func probar_tienda_armas() -> void:
 	Captura.foto("captura-tienda-motosierra.png")
 	await mover_raton(boton.call("pistola").get_global_rect().get_center())
 	Captura.foto("captura-tienda-pistola.png")
+	await mover_raton(boton.call("mp5").get_global_rect().get_center())
+	Captura.foto("captura-tienda-mp5.png")
 	await mover_raton(boton.call("escopeta").get_global_rect().get_center())
 	print("Ratón encima de la escopeta: ficha de «%s» · botón «%s» (esperado: escopeta, Comprar · $%d)" % [
 		tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), tienda.call().precio("escopeta")])
