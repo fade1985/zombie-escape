@@ -22,10 +22,6 @@ const ANCHO_TEMAS := 160             # la columna de los botones de la izquierda
 const ALTO_FILA := 36                # lo más alta que es una fila (si no caben, menos)
 const ANCHO_PREMIO := 92             # la placa del premio
 const ALTO_BARRA := 20               # las barras de «Cómo vas»
-# El color de cada apartado (sus barras y su título)
-const COLORES := {"edificios": Color("#5f8fc8"), "jefes": Color("#c8504a"), "combate": Color("#d8873a"),
-	"armas": Color("#9aa0ae"), "supervivientes": Color("#6aa85a"), "sorpresas": Color("#b070c0"),
-	"colecciones": Color("#d8b84a")}
 
 # La página que se ve ("resumen" o un tema). Se queda al volver a montar la ventana (al cobrar o cambiar de página)
 static var pagina := "resumen"
@@ -244,12 +240,16 @@ func dibujar_tema(t: String, fuente: Font) -> void:
 		return
 	var cuenta := "%d/%d" % [conseguidos(lista), lista.size()]
 	var ancho_cuenta := fuente.get_string_size(cuenta, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x
-	barra(Rect2(r.position.x + 8, r.end.y - 12, r.size.x - 24 - ancho_cuenta, 7), conseguidos(lista), lista.size(), COLORES[t])
+	barra(Rect2(r.position.x + 8, r.end.y - 12, r.size.x - 24 - ancho_cuenta, 7), conseguidos(lista), lista.size())
 	draw_string(fuente, Vector2(r.end.x - 8 - ancho_cuenta, r.end.y - 5), cuenta, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, PLACA.TEXTO_SUAVE)
 
 
-# Una barra hundida, rellena del color hasta donde va
-func barra(r: Rect2, n: int, total: int, color: Color) -> void:
+# Una barra hundida, rellena hasta donde va: en amarillo mientras falta y en verde al completarla. "oscura": las de
+# «Cómo vas», que llevan el texto encima, con el color algo más apagado para que se lea
+func barra(r: Rect2, n: int, total: int, oscura := false) -> void:
+	var color := VERDE if n >= total else PLACA.AMARILLO
+	if oscura:
+		color = color.darkened(0.3)
 	draw_rect(r, PLACA.REMACHE)
 	draw_rect(r.grow(-1), Color("#0d1012"))
 	if total > 0 and n > 0:
@@ -281,7 +281,7 @@ func dibujar_resumen(fuente: Font) -> void:
 	titulo(fuente, como_vas_y, Idioma.t("Cómo vas"), PLACA.TEXTO_SUAVE)
 	var y := como_vas_y + 26
 	var total := Rect2(x, y, ancho, ALTO_BARRA)
-	barra(total, conseguidos(Logros.LISTA), Logros.LISTA.size(), PLACA.AMARILLO.darkened(0.3))
+	barra(total, conseguidos(Logros.LISTA), Logros.LISTA.size(), true)
 	con_sombra(fuente, total, Idioma.t("Logros conseguidos"), "%d/%d" % [conseguidos(Logros.LISTA), Logros.LISTA.size()])
 	y += ALTO_BARRA + 8
 	var mitad := floorf((ancho - 6) / 2.0)
@@ -289,7 +289,7 @@ func dibujar_resumen(fuente: Font) -> void:
 	for t in Logros.TEMAS:
 		var r := Rect2(x + (i % 2) * (mitad + 6), y + (i / 2) * (ALTO_BARRA + 6), mitad, ALTO_BARRA)
 		var lista := de_tema(t)
-		barra(r, conseguidos(lista), lista.size(), COLORES[t].darkened(0.3))
+		barra(r, conseguidos(lista), lista.size(), true)
 		con_sombra(fuente, r, Logros.nombre_tema(t), "%d/%d" % [conseguidos(lista), lista.size()])
 		i += 1
 
@@ -336,7 +336,7 @@ func dibujar_fila(id: String, fuente: Font) -> void:
 		var bx := x + fuente.get_string_size(nombre, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 8
 		var ancho_barra := minf(70.0, x + ancho - ancho_cuenta - 6 - bx)
 		if ancho_barra >= 24:
-			barra(Rect2(bx, base - 10, ancho_barra, 9), hecho(l), m, COLORES[l.tema])
+			barra(Rect2(bx, base - 10, ancho_barra, 9), hecho(l), m)
 			draw_string(fuente, Vector2(bx + ancho_barra + 6, base), cuenta, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, PLACA.TEXTO_SUAVE)
 	if con_desc:
 		draw_string(fuente, Vector2(x, r.end.y - 5), cortar(fuente, Logros.desc_de(id), ancho, 14), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, PLACA.TEXTO_SUAVE)

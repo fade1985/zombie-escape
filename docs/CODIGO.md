@@ -506,7 +506,7 @@ en una línea.
 - `archivador_logros.gd`: los logros de ConserjeOS (LOGROS.EXE), desde el 7 nov. La misma chapa oscura, como un
   archivador: arriba, lo ahorrado y, a la derecha, «Logros 10/42» y «Por cobrar $X». A la izquierda, un botón por página
   (`b_tema_<tema>`): «Resumen» y uno por apartado de `Logros.TEMAS`, con su barrita, su cuenta y un «!» si tiene algo por
-  cobrar (cada apartado con su color, `COLORES`). A la derecha, la página (`pagina`, que se queda al rehacer la ventana):
+  cobrar; las barras, en amarillo mientras falta y en verde al completarlas. A la derecha, la página (`pagina`, que se queda al rehacer la ventana):
   el Resumen enseña lo que hay por cobrar (los que no caben, «Y N más»; si no hay nada, «Casi lo tienes»: los que se
   hacen varias veces y van más avanzados) y «Cómo vas», una barra con todos y una por apartado; un apartado, sus logros
   en filas (`b_<id>`: icono, nombre, su barra si `meta` > 1, lo que pide cortado con «...» y la placa del premio: apagada,
