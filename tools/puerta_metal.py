@@ -29,9 +29,9 @@ for u in range(X1 - X0):
 
 
 def muestra(u, v):
-    """El color de la cara en (u, v), de 0 a 1, del cuadrito que le toca de la imagen de GPT: si en él manda lo negro de
-    la manilla (más de un tercio, y solo donde está ella), negro de manilla limpio; si no, la media de lo que no es negro.
-    Así la manilla no se mezcla con la chapa en un borrón gris, y las rayas negras de los bordes de GPT no se cuelan"""
+    """El color de la cara en (u, v), de 0 a 1: la media de lo que no es negro del cuadrito que le toca de la imagen de
+    GPT (así no se cuelan las rayas negras de sus bordes). Donde GPT puso la manilla larga, la chapa de un poco más
+    arriba: el dueño la quiere redonda, como en la cerrada, y se pinta a mano (pomo)"""
     x, y = int(u * (cara.width - 1)), int(v * (cara.height - 1))
     caja = cara.crop((max(0, x - 8), max(0, y - 8), x + 9, y + 9)).convert("RGB")
     claros, negros = [], 0
@@ -40,9 +40,10 @@ def muestra(u, v):
             negros += 1
         else:
             claros.append(c)
-    manilla = 0.38 < u < 0.95 and 0.42 < v < 0.62   # (dónde está la manilla en la cara: fuera, lo negro son bordes)
-    if manilla and negros * 3 > caja.width * caja.height or not claros:
-        return MANILLA
+    if 0.38 < u < 0.95 and 0.42 < v < 0.62:
+        return muestra(u, 0.36)   # (donde estaba la manilla larga de GPT, la chapa de un poco más arriba: sin rastro)
+    if not claros:
+        return MEDIO   # (la manilla larga de GPT, fuera: el pomo es redondo, como en la cerrada, y se pinta luego)
     return tuple(sum(c[i] for c in claros) // len(claros) for i in range(3))
 
 
@@ -54,6 +55,15 @@ for y in range(43):
             frente.putpixel((x, y), LINEA + (255,))
         else:
             frente.putpixel((x, y), muestra((x - 1) / 25, (y - 1) / 40) + (255,))
+# el pomo redondo, a mano (como el de la cerrada): 3x3 sin las esquinas, con su luz arriba a la izquierda
+def pomo(im, x, y):
+    for dx, dy in ((1, 0), (0, 1), (1, 1), (2, 1), (1, 2)):
+        im.putpixel((x + dx, y + dy), MANILLA + (255,))
+    im.putpixel((x + 1, y + 1), MANILLA_LUZ + (255,))
+    im.putpixel((x + 2, y + 2), OSCURO + (255,))   # (su sombrita en la chapa)
+
+
+pomo(frente, 19, 20)
 frente.save(CARPETA + "puerta-metal.png")
 
 # 2 · Abierta de lado (14x67): la forma de la de madera; las dos primeras columnas, el canto de la bisagra (claro), lo de
@@ -77,6 +87,8 @@ for x in range(w):
         else:
             v = (y - arriba) / max(1, abajo - 3 - arriba)
             abierta.putpixel((x, y), muestra((x - 2) / (w - 3), min(1.0, v)) + (255,))
+filas = [y for y in range(h) if abierta.getpixel((10, y))[3]]
+pomo(abierta, 9, (filas[0] + filas[-1]) // 2 - 4)   # (a media altura, cerca del canto libre, como el de madera)
 abierta.save(CARPETA + "puerta-metal-abierta-lado.png")
 
 # 3 · Cerrada de lado (16x32): la forma de la de madera; la tira, de acero (oscuro a un lado, claro al otro, con brillo
