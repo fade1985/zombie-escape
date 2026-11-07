@@ -121,7 +121,7 @@ const MUEBLES := {
 	# tools/guias_mantenimiento.py), que no salen en los pisos: en el vestuario, el plato de ducha, el banco largo sin
 	# respaldo (suelto, se ve igual desde cualquier lado), el váter y el lavabo con su espejo (estos dos, solo de lado: no
 	# tienen dibujo de frente); en el taller, la estantería metálica con cajas (tools/muebles_gpt.py); y en el despacho, la papelera
-	"showertray":      {"len": 72,  "dep": 64, "paredes": "",      "archivo": "vestuario/plato-ducha"},
+	"showertray":      {"len": 72,  "dep": 44, "paredes": "",      "archivo": "vestuario/plato-ducha"},
 	"lockerbench":     {"len": 128, "dep": 28, "paredes": "todas", "archivo": "vestuario/banco-vestuario"},
 	"stafftoilet":     {"len": 40,  "dep": 52, "paredes": "lados", "archivo": "vestuario/vater-vestuario"},
 	"staffsink":       {"len": 52,  "dep": 40, "paredes": "lados", "archivo": "vestuario/lavabo-espejo"},
@@ -366,14 +366,14 @@ const SALAS := {
 	# pared y la ducha lleva su dibujo del revés). Igual en los pisos volteados
 	"bano-matrimonio": {
 		"colocados": {
-			"abajo": [["showertray", 1.0, "libre", 0.8125], ["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
-			"arriba": [["showertray", 1.0, "libre", 0.8125], ["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+			"abajo": [["showertray", 1.0, "libre", 0.5], ["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+			"arriba": [["showertray", 1.0, "libre", 0.5], ["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
 		},
 	},
 	"bano-individual": {
 		"colocados": {
-			"abajo": [["showertray", 6.0, "libre", 0.8125, "espejo"], ["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
-			"arriba": [["showertray", 6.0, "libre", 0.8125, "espejo"], ["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+			"abajo": [["showertray", 6.0, "libre", 0.5, "espejo"], ["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+			"arriba": [["showertray", 6.0, "libre", 0.5, "espejo"], ["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 		},
 	},
 	# el pasillo de cada planta de los Apartamentos: de momento, sin muebles (si vuelven, solo poco hondos: el pasillo es

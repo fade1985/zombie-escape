@@ -747,7 +747,7 @@ en una línea.
   `importar.py` (si se reimporta `despacho/papelera.png`, la pisa).
   Y la ducha del vestuario, que también sale en los dos baños de los pisos (el `showertray` del catálogo,
   `mueble-showertray.png`, 36x66, mampara de cristal azulado de frente con perfiles de aluminio sobre su plato blanco; de
-  `assets/sources/ducha-gpt.webp`): lo que ocupa en el suelo no cambia (72x64), lo de más sube por la pared. No pasa por
+  `assets/sources/ducha-gpt.webp`): ocupa 72x44 en el suelo (antes 72x64, para que el plato quede pegado a la pared), lo de más sube por la pared. No pasa por
   `importar.py` (si se reimporta `vestuario/plato-ducha.png`, la pisa).
   Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
   `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
