@@ -126,7 +126,7 @@ const MUEBLES := {
 	"stafftoilet":     {"len": 40,  "dep": 52, "paredes": "lados", "archivo": "vestuario/vater-vestuario"},
 	"staffsink":       {"len": 52,  "dep": 40, "paredes": "lados", "archivo": "vestuario/lavabo-espejo"},
 	"canshelf":        {"len": 80,  "dep": 36, "paredes": "",      "archivo": "mantenimiento/estanteria-botes"},
-	"wastebasket":     {"len": 24,  "dep": 22, "paredes": "todas", "archivo": "despacho/papelera"},
+	"wastebasket":     {"len": 28,  "dep": 22, "paredes": "todas", "archivo": "despacho/papelera"},
 	# las tuberías de las paredes de los lados del taller, debajo de sus puertas (GPT, tools/taller_tuberias.py): las
 	# blancas de la caldera, a la izquierda, y las rojas de incendios, a la derecha (solo de lado: no tienen dibujo de frente)
 	"boilerpipes":     {"len": 100, "dep": 46, "paredes": "lados", "archivo": "mantenimiento/tuberias-caldera"},

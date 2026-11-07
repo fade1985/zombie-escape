@@ -742,6 +742,9 @@ en una línea.
   Y el corcho colgado en la pared del despacho, a la izquierda de la mesa (`corcho.png`, 44x29, sin marco, con papeles crema y
   chinchetas doradas; de `assets/sources/corcho-gpt.webp`): `mapa.gd` lo cuelga por su borde de abajo. `guias_mantenimiento.py
   corcho` (el de antes) ya no se usa: si se pasa, lo pisa.
+  Y la papelera del despacho, a la derecha de la mesa (el `wastebasket` del catálogo, `mueble-wastebasket.png`, 14x21, de
+  rejilla gris oscura con papeles blancos; de `assets/sources/papelera-gpt.webp`): ocupa 28x22 en el suelo. No pasa por
+  `importar.py` (si se reimporta `despacho/papelera.png`, la pisa).
   En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
   `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
