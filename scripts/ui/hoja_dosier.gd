@@ -24,7 +24,8 @@ const ROJO := Color("#a3312b")
 const BOLI := Color("#1f3c8a")
 const POSIT := Color("#f2e27a")
 # El logo de Velaria Corp. (inventado: una luna creciente dentro de un círculo, porque el VD-7 se vende para dormir;
-# lo eligió el dueño el 7 nov y es el de siempre: tools/logo_velaria.py). 16x16, a 2 unidades por píxel
+# lo eligió el dueño el 7 nov y es el de siempre: tools/logo_velaria.py). 24x24: a 2 unidades por píxel en la cabecera de
+# siempre y a su tamaño en la compacta
 const LOGO := preload("res://assets/ui/velaria-logo.png")
 const MARGEN := 14.0
 const CODIGOS := {"apartamentos": "AP", "centro": "CC", "torre": "TV"}   # no-tr
@@ -275,17 +276,17 @@ func cabecera(w: float) -> void:
 	var x := w - MARGEN - 134
 	if compacta:
 		# todo en una línea: el logo, el nombre y, si cabe, «Investigación del sueño»
-		draw_texture_rect(LOGO, Rect2(MARGEN + 2, 3, 32, 32), false)
+		draw_texture_rect(LOGO, Rect2(MARGEN + 2, 6, 24, 24), false)   # (a su tamaño)
 		var nombre := Historia.EMPRESA.to_upper()
-		draw_string(fuente, Vector2(MARGEN + 42, 10 + fuente.get_ascent(16)), nombre, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, TINTA)
-		var detras := MARGEN + 42 + ancho_de(nombre, 16) + 12
+		draw_string(fuente, Vector2(MARGEN + 34, 10 + fuente.get_ascent(16)), nombre, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, TINTA)
+		var detras := MARGEN + 34 + ancho_de(nombre, 16) + 12
 		var lema := Idioma.t("Investigación del sueño")
 		if detras + ancho_de(lema, 16) < x - 12:
 			draw_string(fuente, Vector2(detras, 10 + fuente.get_ascent(16)), lema, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, GRIS)
 	else:
-		draw_texture_rect(LOGO, Rect2(MARGEN + 2, 14, 32, 32), false)
-		draw_string(fuente, Vector2(MARGEN + 46, 12 + fuente.get_ascent(32) - 2), Historia.EMPRESA.to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 32, TINTA)
-		draw_string(fuente, Vector2(MARGEN + 48, 56), Idioma.t("Investigación del sueño"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, GRIS)
+		draw_texture_rect(LOGO, Rect2(MARGEN, 10, 48, 48), false)   # (a 2 unidades por píxel)
+		draw_string(fuente, Vector2(MARGEN + 58, 12 + fuente.get_ascent(32) - 2), Historia.EMPRESA.to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 32, TINTA)
+		draw_string(fuente, Vector2(MARGEN + 60, 56), Idioma.t("Investigación del sueño"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, GRIS)
 	var alto_barras := 10.0 if compacta else 24.0
 	for i in 45:   # el código de barras del registro
 		if (i * 7) % 5 != 1:

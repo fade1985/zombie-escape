@@ -522,7 +522,7 @@ en una línea.
   la llevaba o dónde buscarla). Prueba: `--dosier-carpeta` (también si cabe cada hoja, en alemán, ruso y chino).
 - `hoja_dosier.gd`: una página del dosier dibujada como expediente de Velaria Corp. (`Historia.hoja()` y
   `hoja_arrancada()`; la usan la ventanita de página encontrada, `menus.pagina`, y la carpeta). Papel viejo con motitas y
-  un cerco de café; el logo de Velaria (`assets/ui/velaria-logo.png`, 16x16, de `tools/logo_velaria.py`: una luna creciente
+  un cerco de café; el logo de Velaria (`assets/ui/velaria-logo.png`, 24x24, de `tools/logo_velaria.py`, sacado de la imagen de GPT: una luna creciente
   morada en un círculo azul marino; lo eligió el dueño el 7 nov y es el logo de Velaria para todo), «Investigación del sueño», código de
   barras y referencia (`VD7-AP-01`: edificio y número); la franja con el edificio, «HALLADO EN» y n / total; el tipo, el
   título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
