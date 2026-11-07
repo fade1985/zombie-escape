@@ -745,6 +745,10 @@ en una línea.
   Y la papelera del despacho, a la derecha de la mesa (el `wastebasket` del catálogo, `mueble-wastebasket.png`, 14x21, de
   rejilla gris oscura con papeles blancos; de `assets/sources/papelera-gpt.webp`): ocupa 28x22 en el suelo. No pasa por
   `importar.py` (si se reimporta `despacho/papelera.png`, la pisa).
+  Y la ducha del vestuario, que también sale en los dos baños de los pisos (el `showertray` del catálogo,
+  `mueble-showertray.png`, 36x66, mampara de cristal azulado de frente con perfiles de aluminio sobre su plato blanco; de
+  `assets/sources/ducha-gpt.webp`): lo que ocupa en el suelo no cambia (72x64), lo de más sube por la pared. No pasa por
+  `importar.py` (si se reimporta `vestuario/plato-ducha.png`, la pisa).
   Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
   `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
   (la de antes, dibujada a mano) ya no se usa: si se pasa, la pisa.
