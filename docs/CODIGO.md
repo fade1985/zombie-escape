@@ -736,6 +736,9 @@ en una línea.
   (`assets/sources/banco-trabajo-gpt.webp` y `estanteria-metal-gpt.webp`, en pixel art sobre negro puro) reduciéndolas
   mezclando colores, como las tuberías, para que conserven las sombras y el volumen. La estantería no pasa por
   `importar.py` (si se reimporta `mantenimiento/estanteria-botes.png`, la pisa). Para otro mueble de GPT, se añade a su lista.
+  También sale así la mesa del ordenador del despacho (`mesa-ordenador.png`, 48x49, de nogal con el monitor y la torre beige de
+  los 90; de `assets/sources/mesa-ordenador-gpt.webp`): el resplandor azul de la pantalla lo sigue poniendo `ordenador.gd`.
+  `ordenador_mantenimiento.py` (la de PixelLab de antes) ya no se usa: si se pasa, la pisa.
   En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
   `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
