@@ -5128,6 +5128,18 @@
    "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py gatling 0.62 (en assets/sources/tienda)",
    "cost": "nada en PixelLab"
   },
+  "lanzallamas": {
+   "foto": "sin foto: bidón rojo con manguera y lanza, como el de antes de la tienda",
+   "ficha": "hecho por el dueño con GPT (gpt/lanzallamas.webp), reducido a 92x29 quedándose en cada píxel con la mediana del centro de su trozo, en el centro de 96x48 (intentos/lanzallamas-grande-gpt.png)",
+   "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py lanzallamas 0.62 (en assets/sources/tienda)",
+   "cost": "nada en PixelLab"
+  },
+  "desintegrador": {
+   "foto": "sin foto: el lanza ácido, bidón verde lima con manguera y lanza, como el de antes de la tienda",
+   "ficha": "hecho por el dueño con GPT (gpt/desintegrador.webp), reducido a 92x31 quedándose en cada píxel con la mediana del centro de su trozo, en el centro de 96x48 (intentos/desintegrador-grande-gpt.png)",
+   "casilla": "hecha a mano desde la de la ficha: py icono_diagonal.py desintegrador 0.6 (en assets/sources/tienda)",
+   "cost": "nada en PixelLab"
+  },
   "cost": "36 generaciones el cuchillo (6 intentos de 5 y la foto, 6): lo bueno, a la segunda. Con dos intentos de cada dibujo, unas 20 por arma",
   "updated": "2026-11-06"
  }
