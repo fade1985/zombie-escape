@@ -695,7 +695,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		Muebles.nuevo("staffsink", izquierda, 240, 1),   # (el espejo sube mucho: más arriba se montaría en la ducha)
 		Muebles.nuevo("stafftoilet", izquierda, 332, 1),
 		Muebles.nuevo("lockerbench", {"lado": "arriba", "base": 302}, 270, 1),
-		Muebles.nuevo("wastebasket", arriba, 650, 0),
+		Muebles.nuevo("wastebasket", {"lado": "arriba", "base": MURO + 16}, 650, 0),   # (un poco separada de la pared, como la mesa)
 		Muebles.nuevo("canshelf", arriba, 931, 2),   # (en medio del banco y el baúl: mapa.BANCO_X y BAUL_X)
 		# las tuberías, debajo de las puertas de los lados del taller (del suelo hasta la puerta: cada dibujo sube 128)
 		Muebles.nuevo("boilerpipes", {"lado": "izquierda", "base": (2 + SALA_ESTANCIA * 2 + 2) * CASILLA}, alto - MURO - 50, 2),
