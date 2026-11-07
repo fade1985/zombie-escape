@@ -982,10 +982,11 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 	var desliza := ScrollContainer.new()
 	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	desliza.follow_focus = true
-	desliza.custom_minimum_size.y = Tele.CAJA_TEXTO.end.y
+	desliza.custom_minimum_size.y = Tele.MUEBLE.get_size().y * Tele.ESCALA
 	partes.add_child(desliza)
+	# (estrecha, como los botones de canal de un mando: la tele va a ×3 y ocupa casi todo; el titular de cada una sale
+	# en la tele y en la línea de info)
 	var lista := VBoxContainer.new()
-	lista.custom_minimum_size.x = 220
 	lista.add_theme_constant_override("separation", 6)
 	desliza.add_child(lista)
 	var tele := Tele.new()
@@ -998,8 +999,7 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 		var n: Dictionary = Historia.NOTICIAS[i]
 		var sale := Historia.emitida(s, n)
 		var nueva := n in nuevas
-		var b := tarjeta(lista, "b_" + n.id, "noticias" if sale else "candado", Idioma.t("Emisión %d") % (i + 1),
-			Historia.titular_de(n) if sale else Idioma.t("Sin emitir"), Idioma.t("¡NUEVA!") if nueva else "", "" if sale else "bloqueada")
+		var b := boton_emision(lista, "b_" + n.id, "noticias" if sale else "candado", i + 1, nueva, not sale)
 		if not sale:
 			var pista := (Idioma.t("Completa %s.") % Idioma.t(Edificios.datos(n.victoria).el_nombre)) if n.victoria != "" else Idioma.t("Sigue buscando páginas del dosier VD-7.")
 			enlazar(b, Idioma.t("Emisión %d: aún no ha salido. %s") % [i + 1, pista], Sonido.tocar.bind("no"))
@@ -1340,6 +1340,56 @@ func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, de
 		relieve(marco, estado == "puesta", 2.0)
 		if encima:
 			# el punteado de "marcado" de Windows, por dentro
+			var r := Rect2(Vector2(5, 5), marco.size - Vector2(10, 10))
+			for lado in [[r.position, Vector2(r.end.x, r.position.y)], [Vector2(r.end.x, r.position.y), r.end],
+					[r.end, Vector2(r.position.x, r.end.y)], [Vector2(r.position.x, r.end.y), r.position]]:
+				marco.draw_dashed_line(lado[0], lado[1], TINTA, 1.0, 2.0))
+	for senal in [b.focus_entered, b.focus_exited, b.mouse_entered, b.mouse_exited]:
+		senal.connect(marco.queue_redraw)
+	return b
+
+
+# Un botón de emisión de las Noticias, estrecho como un botón de canal: el icono, el número debajo y, si es nueva, un
+# punto azul en la esquina (las que no han salido, con candado y apagadas). Con el mismo relieve y marcado que las
+# tarjetas
+func boton_emision(padre: Container, nombre: String, icono: String, numero: int, nueva: bool, bloqueada: bool) -> Button:
+	var marco := PanelContainer.new()
+	marco.custom_minimum_size = Vector2(56, 58)
+	marco.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	padre.add_child(marco)
+	var dentro := VBoxContainer.new()
+	dentro.alignment = BoxContainer.ALIGNMENT_CENTER
+	dentro.add_theme_constant_override("separation", 0)
+	dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if bloqueada:
+		dentro.modulate = Color(1, 1, 1, 0.55)
+	marco.add_child(dentro)
+	var imagen := TextureRect.new()
+	imagen.texture = load("res://assets/ui/iconos/%s.png" % icono)
+	imagen.custom_minimum_size = Vector2(32, 32)
+	imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	imagen.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	dentro.add_child(imagen)
+	var cifra := texto_tarjeta(str(numero), TINTA)
+	cifra.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cifra.add_theme_font_size_override("font_size", 16)
+	dentro.add_child(cifra)
+	var b := Button.new()
+	b.name = nombre
+	b.flat = true
+	b.focus_mode = Control.FOCUS_ALL
+	for e in ["normal", "hover", "pressed", "focus", "disabled", "hover_pressed"]:
+		b.add_theme_stylebox_override(e, StyleBoxEmpty.new())
+	marco.add_child(b)
+	marco.draw.connect(func():
+		var encima := b.has_focus() or b.is_hovered()
+		marco.draw_rect(Rect2(Vector2.ZERO, marco.size), TARJETA_LUZ if encima and not bloqueada else TARJETA)
+		relieve(marco, false, 2.0)
+		if nueva:
+			Formas.disco(marco, Vector2(marco.size.x - 10, 10), 5, AZUL)
+		if encima:
 			var r := Rect2(Vector2(5, 5), marco.size - Vector2(10, 10))
 			for lado in [[r.position, Vector2(r.end.x, r.position.y)], [Vector2(r.end.x, r.position.y), r.end],
 					[r.end, Vector2(r.position.x, r.end.y)], [Vector2(r.position.x, r.end.y), r.position]]:

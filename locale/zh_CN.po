@@ -6905,18 +6905,6 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "移到各页上即可阅读。"
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d"
-msgstr "第 %d 期"
-
-#: scripts/ui/ordenador.gd
-msgid "Sin emitir"
-msgstr "未播出"
-
-#: scripts/ui/ordenador.gd
-msgid "¡NUEVA!"
-msgstr "新！"
-
-#: scripts/ui/ordenador.gd
 msgid "Completa %s."
 msgstr "通关%s。"
 

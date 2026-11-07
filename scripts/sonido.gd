@@ -129,6 +129,9 @@ const EFECTOS := {
 	"ganzua": {"hueco": 300, "notas": [[2300, 0.02, "cuadrada", 0.008], [1800, 0.025, "cuadrada", 0.007, 0, 0.07]]},
 	"click": {"fijo": true, "hueco": 200, "notas": [[1600, 0.03, "cuadrada", 0.025]]},
 	"voz": {"varia": 0.12, "hueco": 70, "notas": [[480, 0.035, "triangulo", 0.012, -60]]},              # la reportera de las noticias
+	# la tele de las noticias: el siseo de cambiar de emisión y el «tuuung» de encenderse (con un poco de siseo)
+	"tele_ruido": {"hueco": 150, "notas": [[5000, 0.3, "ruido", 0.016, -1500]]},
+	"tele_encender": {"hueco": 300, "notas": [[90, 0.22, "seno", 0.04, 260], [6000, 0.25, "ruido", 0.01, -3000, 0.05]]},
 	"recargar": {"notas": [[520, 0.05, "cuadrada", 0.025, -200], [260, 0.06, "triangulo", 0.04, -80, 0.06]]},
 	"recargado": {"notas": [[300, 0.05, "cuadrada", 0.035, 200], [1400, 0.04, "cuadrada", 0.025, 0, 0.07]]},
 	"cartucho": {"notas": [[700, 0.04, "cuadrada", 0.025, -300], [1200, 0.03, "cuadrada", 0.02, 0, 0.05]]},

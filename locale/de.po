@@ -6925,18 +6925,6 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Geh auf die Seiten, um sie zu lesen."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d"
-msgstr "Sendung %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Sin emitir"
-msgstr "Nicht gesendet"
-
-#: scripts/ui/ordenador.gd
-msgid "¡NUEVA!"
-msgstr "NEU!"
-
-#: scripts/ui/ordenador.gd
 msgid "Completa %s."
 msgstr "Schaff %s."
 

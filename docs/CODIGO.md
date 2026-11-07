@@ -476,8 +476,11 @@ en una línea.
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
-  `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
-  trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
+  `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Desde el 8 nov va a ×3 y lo que dice la reportera sale dentro de la
+  pantalla, como subtítulos amarillos (letras de 18) sobre una franja oscura, por trozos de 2 líneas (`partir`, que mide con el mismo
+  texto; en chino, letra a letra) que pasan solos a los 2,5 s (`PAUSA`; al pulsar, se adelanta), con "1/4" en la esquina. Se enciende
+  como una tele vieja la primera vez y hace nieve al cambiar de emisión (sonidos `tele_encender` y `tele_ruido`). En el ordenador, la
+  lista de emisiones son botones estrechos de canal (`boton_emision`: icono, número y un punto azul si es nueva).
 - `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
   ramas a la vez, cada una de su color (`COLORES`: Militar rojo, Superviviente verde, Químico amarillo), dibujada con
   código (`_draw`): cada talento es un hexágono con su icono y sus cuadraditos, y las rayas al que pide se encienden al

@@ -6925,18 +6925,6 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Passe pelas páginas para ler."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d"
-msgstr "Transmissão %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Sin emitir"
-msgstr "Não exibida"
-
-#: scripts/ui/ordenador.gd
-msgid "¡NUEVA!"
-msgstr "NOVA!"
-
-#: scripts/ui/ordenador.gd
 msgid "Completa %s."
 msgstr "Complete %s."
 
