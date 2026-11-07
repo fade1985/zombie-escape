@@ -596,7 +596,7 @@ func apuntar_libre() -> void:
 		return
 	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado
 	# (delante de un mueble de la sala, el clic encima de él, J o RT son para abrirlo; un clic en otra parte, para atacar)
-	if ataca and (ante_mueble == null or ante_mueble.clic_fuera):
+	if ataca and (ante_mueble == null or ante_mueble.clic_fuera or not ante_mueble.activa()):
 		intentar_atacar(ayuda_apunte(apunte.angle()))
 
 

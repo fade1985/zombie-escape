@@ -750,6 +750,7 @@ func probar_puertas() -> void:
 	var choca := una.get_children().any(func(h): return h is CollisionShape2D and not h.disabled)
 	print("Puertas: Johnny se arrima y se abre %s, ya no choca %s, apuntada en su hueco %s (esperado: true las tres)" % [
 		una.abierta == 1.0, not choca, una.hueco.get("abierta", false)])
+	await probar_cerrar_puerta(una)
 
 	# un zombi despierto en una habitación de una sola puerta (cerrada); Johnny, en la de al lado
 	var otra: Node2D = null
@@ -829,11 +830,80 @@ func probar_puertas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	print("Puertas: la sala de mantenimiento, %d en %d huecos (esperado: los mismos)" % [mapa.hojas.size(),
 		planta.sitios[sala].apt.puertas.size()])
+	# la metálica del taller (de lado): Johnny se arrima, la abre y la cierra a mano como en el piso
+	var metal: Array = mapa.hojas.filter(func(h): return h.madera == h.METAL)
+	if not metal.is_empty():
+		var m: Node2D = metal[0]
+		johnny.position = m.caja.get_center() + (Vector2(0, m.caja.size.y / 2 + 20) if m.de_frente else Vector2(m.caja.size.x / 2 + 20, 0))
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.8).timeout
+		print("Puertas: la metálica del taller, de lado %s, se abre %s (esperado: true las dos)" % [not m.de_frente, m.abierta == 1.0])
+		await probar_cerrar_puerta(m)
+		Captura.foto("captura-puertas-metal-abierta.png")
 	for h in mapa.hojas:
 		h.abrir()
 	await get_tree().create_timer(0.6).timeout
 	await foto_entera(planta.sitios[sala], "captura-puertas-sala.png")
 	get_tree().quit()
+
+
+# De probar_puertas: Johnny, delante de la puerta que acaba de abrir, la cierra a mano como el baúl (zona_usar.gd:
+# contorno amarillo y la acción de atacar); cerrada, aunque siga delante no se vuelve a abrir sola; usándola otra vez,
+# se abre; cerrada otra vez, al irse y volver se abre sola; y con un zombi en el hueco no se cierra (tiembla).
+# Fotos: captura-puertas-contorno.png (abierta, con el contorno) y captura-puertas-cerrada-a-mano.png
+func probar_cerrar_puerta(una: Node2D) -> void:
+	# (los compañeros de Johnny, quietos y lejos: si se quedan en el hueco al seguirle, con razón no se cierra)
+	var aliados := get_tree().get_nodes_in_group("aliados")
+	for a in aliados:
+		a.set_physics_process(false)
+		a.position = johnny.position + (johnny.position - una.caja.get_center()).normalized() * 200.0
+	var zona: Area2D = una.uso.get_node("Zona") if una.uso else null
+	await get_tree().create_timer(0.2).timeout
+	print("Puertas, cerrar: tiene zona %s, Johnny delante %s, se puede usar %s, el botón dice «Cerrar» %s (esperado: true las cuatro)" % [
+		zona != null, zona != null and johnny.ante_mueble == zona, zona != null and zona.activa(), zona != null and zona.cierra])
+	if zona == null:
+		return
+	Captura.foto("captura-puertas-contorno.png")
+	zona.abrir()   # (lo mismo que el clic, J, RT o el botón del móvil)
+	await get_tree().create_timer(0.6).timeout
+	var choca := una.get_children().any(func(h): return h is CollisionShape2D and not h.disabled)
+	print("Puertas, cerrar: se cierra %s, choca %s, apuntada cerrada en su hueco %s (esperado: true las tres)" % [
+		una.abierta == 0.0, choca, not una.hueco.get("abierta", true)])
+	Captura.foto("captura-puertas-cerrada-a-mano.png" if una.de_frente else "captura-puertas-metal-cerrada.png")
+	await get_tree().create_timer(0.5).timeout
+	print("Puertas, cerrar: con Johnny aún delante sigue cerrada %s (esperado: true)" % (una.abierta == 0.0))
+	# usarla otra vez, sin moverse: se abre
+	zona = una.uso.get_node("Zona") if una.uso else null
+	await get_tree().create_timer(0.2).timeout
+	if zona:
+		zona.abrir()
+	await get_tree().create_timer(0.6).timeout
+	print("Puertas, cerrar: usándola otra vez se abre %s (esperado: true)" % (una.abierta == 1.0))
+	# cerrada otra vez, Johnny se va lejos y vuelve: se abre sola
+	await get_tree().create_timer(0.2).timeout
+	una.usar_a_mano()
+	await get_tree().create_timer(0.6).timeout
+	var delante: Vector2 = johnny.position
+	johnny.position = delante + (delante - una.caja.get_center()).normalized() * 120.0
+	await get_tree().create_timer(0.3).timeout
+	var cerrada_lejos: bool = una.abierta == 0.0
+	johnny.position = delante
+	await get_tree().create_timer(0.6).timeout
+	print("Puertas, cerrar: cerrada otra vez %s, al irse y volver se abre sola %s (esperado: true las dos)" % [
+		cerrada_lejos, una.abierta == 1.0])
+	# un zombi (dormido, quieto) en el hueco: no se cierra, tiembla
+	var zombi: Node2D = meter_zombi("lento", una.caja.get_center())
+	zombi.dormido = true
+	await get_tree().create_timer(0.2).timeout
+	una.usar_a_mano()
+	var tiembla: bool = una.golpes > 0.0
+	await get_tree().create_timer(0.6).timeout
+	print("Puertas, cerrar: con un zombi en el hueco sigue abierta %s y tiembla %s (esperado: true las dos)" % [
+		una.abierta == 1.0, tiembla])
+	zombi.queue_free()
+	for a in aliados:
+		a.set_physics_process(true)
+	await get_tree().create_timer(0.1).timeout
 
 
 # Con "--captura --atasco-puertas": varios zombis de cada tipo (--zombis N, 18 si no se dice) salen a la vez por una misma

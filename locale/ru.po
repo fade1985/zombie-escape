@@ -5504,7 +5504,7 @@ msgstr "Здесь ничего не пропадет, даже если пад�
 msgid "Guardar todo"
 msgstr "Убрать все"
 
-#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+#: scripts/ui/inventario.gd scripts/ui/tactil.gd scripts/ui/taquilla.gd
 msgid "Cerrar"
 msgstr "Закрыть"
 

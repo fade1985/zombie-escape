@@ -623,7 +623,10 @@ en una línea.
 - `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
 - `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
   mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
-  los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Cerradas paran la luz,
+  los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Johnny las cierra a mano
+  como se usa el baúl (`zona_usar.gd`, con «Cerrar» en el móvil; `cerrar`, `poner_uso`): no si hay alguien en el hueco
+  (tiembla), y cerrada a mano no se reabre sola hasta que Johnny y los suyos se van de delante (`espera`); usándola
+  otra vez se abre (`-- --captura --puertas`). Cerradas paran la luz,
   las balas, la vista de los zombis y la niebla. Y las cerradas con llave (su hueco lleva `cerrada`): el baño del
   superviviente, las viviendas sin rescatar y la cámara acorazada de la joyería (`acero`). Las viviendas de los ya
   rescatados llevan la suya abierta del todo (`libre` y `abierta` desde el principio: no choca ni tapa la luz; la

@@ -243,7 +243,8 @@
 #                       el superviviente, los eventos, la sala de pruebas y lo que ocupa una planta entera; con
 #                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]
 #   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
-#                       mantenimiento: cerradas, Johnny y un zombi las abren, y siguen abiertas [prueba_sitios.gd]
+#                       mantenimiento: cerradas, Johnny y un zombi las abren, Johnny las cierra a mano (como el
+#                       baúl) y las vuelve a abrir, y siguen abiertas                         [prueba_sitios.gd]
 #   --atasco-puertas    varios zombis de cada tipo (--zombis N, 18) salen a la vez por una misma puerta de un piso, sin
 #                       ver a Johnny y viéndole: que pasen todos y sin parones              [prueba_sitios.gd]
 #   --congelados        los zombis de los apartamentos de varias plantas (--plantas N, 4), despiertos, con Johnny

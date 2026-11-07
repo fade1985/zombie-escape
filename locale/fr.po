@@ -5496,7 +5496,7 @@ msgstr "Ici, rien ne se perd, même si tu tombes."
 msgid "Guardar todo"
 msgstr "Tout ranger"
 
-#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+#: scripts/ui/inventario.gd scripts/ui/tactil.gd scripts/ui/taquilla.gd
 msgid "Cerrar"
 msgstr "Fermer"
 

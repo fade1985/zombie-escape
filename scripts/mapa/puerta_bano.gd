@@ -12,6 +12,10 @@
 # Las "libres" las pone mapa.gd en cada hueco de los pisos, las tiendas y la sala de mantenimiento: empiezan cerradas
 # y las abren Johnny y los que le acompañan con solo arrimarse, y los zombis despiertos empujándolas un momento. La
 # navegación cuenta con pasar por ellas, para que los zombis vayan a abrirlas.
+# Las libres (menos las de los trasteros) se cierran a mano, como se usan el baúl y el banco (zona_usar.gd: delante de
+# la puerta, el clic encima, J, RT o el botón «Cerrar» del móvil, con el contorno amarillo). Si hay alguien en el hueco,
+# no se cierra: tiembla. Cerrada a mano, Johnny y los suyos no la vuelven a abrir con solo estar delante: hay que irse y
+# volver a arrimarse, o usarla otra vez sin moverse. Los zombis la siguen abriendo empujando.
 # Las demás van cerradas con llave (su hueco lleva "cerrada", y ahí mapa.gd no pone la libre) y la navegación no cuenta
 # con pasar por ellas hasta que se abren:
 #   - la del baño donde se esconde el superviviente (PuertaBano en src/props.js del JS), hasta que se limpia el piso.
@@ -56,6 +60,9 @@ const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerr
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
 const MIRAR := 0.1          # cada cuánto mira una libre si alguien la empuja
+const HOLGURA := 8.0        # lo que se mira alrededor del hueco para ver si hay alguien dentro al cerrar
+const VUELTA := 2.5         # lo rápido que gira al abrirse o cerrarse (en 0,4 s)
+const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 
 var hueco: Dictionary
 var de_frente := false      # hueco en un tabique horizontal: la hoja se ve de frente, como los muros
@@ -75,6 +82,9 @@ var libre := false         # se abre empujando (ver arriba)
 var empuje := 0.0           # lo que lleva un zombi empujándola
 var mirar_t := 0.0
 var tiempo := 0.0
+var cerrando := false
+var espera := false         # cerrada a mano: Johnny y los suyos no la abren arrimándose hasta que se vayan de delante
+var uso: Node2D = null      # para cerrarla o volver a abrirla a mano: su zona (zona_usar.gd) y el dibujo del contorno
 
 
 func montar(datos: Dictionary) -> void:
@@ -91,11 +101,17 @@ func montar(datos: Dictionary) -> void:
 		abierta = 1.0   # ya la abrió alguien: sigue abierta, sin chocar
 		abriendo = true
 		arriba_de_lado()
+		poner_uso()
 		return
 	if libre:
 		hueco.abierta = false
 	else:
 		add_to_group("obstaculos")   # la navegación no cuenta con pasar por aquí mientras esté cerrada
+	poner_choque()
+
+
+# Cerrada: choca y tapa la luz
+func poner_choque() -> void:
 	var forma := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
 	rect.size = caja.size
@@ -111,19 +127,120 @@ func montar(datos: Dictionary) -> void:
 	add_child(sombra)
 
 
+func quitar_choque() -> void:
+	for hijo in get_children():
+		if hijo is CollisionShape2D:
+			hijo.set_deferred("disabled", true)
+			hijo.queue_free()
+		elif hijo is LightOccluder2D:
+			hijo.queue_free()
+
+
 # Se abre: deja de chocar y, poco a poco, gira
 func abrir() -> void:
 	if abriendo:
 		return
 	abriendo = true
+	cerrando = false
+	espera = false
 	hueco.abierta = true
 	remove_from_group("obstaculos")
-	for hijo in get_children():
-		if hijo is CollisionShape2D:
-			hijo.set_deferred("disabled", true)
-		elif hijo is LightOccluder2D:
-			hijo.queue_free()
+	quitar_choque()
+	quitar_uso()
 	arriba_de_lado()
+
+
+# Se cierra a mano (abierta del todo): vuelve a chocar enseguida y, poco a poco, gira hasta cerrarse. Si hay alguien en
+# el hueco, no: tiembla
+func cerrar() -> void:
+	if not abriendo or abierta < 1.0:
+		return
+	if hueco_ocupado():
+		golpes = 0.3
+		return
+	abriendo = false
+	cerrando = true
+	espera = true
+	hueco.abierta = false
+	position.y = caja.end.y + 1   # (la de lado se ordena otra vez por el pie del hueco: ver arriba_de_lado)
+	quitar_uso()
+	poner_choque.call_deferred()   # (desde la física no se pueden poner formas que chocan)
+	Sonido.tocar("crujido")
+
+
+# Si hay alguien (Johnny, uno de los suyos o un zombi) en el hueco, o casi
+func hueco_ocupado() -> bool:
+	var dentro := caja.grow(HOLGURA)
+	for grupo in ["jugador", "aliados", "zombis"]:
+		for c in get_tree().get_nodes_in_group(grupo):
+			if c is Node2D and c.get("estado") != "muerto" and dentro.has_point(c.global_position):
+				return true
+	return false
+
+
+# Si se puede usar a mano ahora (zona_usar.gd): abierta del todo o cerrada del todo, y Johnny fuera del hueco (si
+# está dentro, J ataca)
+func se_puede_usar() -> bool:
+	if cerrando or (abriendo and abierta < 1.0):
+		return false
+	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
+	return johnny == null or not caja.grow(HOLGURA).has_point(johnny.global_position)
+
+
+func usar_a_mano() -> void:
+	if abriendo:
+		cerrar()
+	else:
+		abrir_empujando()
+
+
+# La zona para usarla a mano, delante y detrás del hueco (donde se abre arrimándose), con un dibujo escondido igual que
+# el de la puerta ahora (abierta del todo o cerrada) del que zona_usar.gd saca el contorno amarillo
+func poner_uso() -> void:
+	if not libre or trastero or acero or uso:
+		return
+	var dibujo := Sprite2D.new()
+	dibujo.centered = false
+	dibujo.visible = false
+	var r := caja
+	r.position -= position
+	if abierta >= 1.0:
+		var tex: Texture2D
+		if de_frente:
+			tex = madera.abierta
+			dibujo.position = Vector2(r.position.x + MARCO, r.end.y - ALTO)
+		else:
+			tex = madera.lado
+			dibujo.position = Vector2(r.end.x - 2.0 - 4.0, r.position.y + 4.0 - tex.get_height() * 2.0 + SOMBRA_LADO * 2.0)
+		dibujo.texture = tex
+		dibujo.scale = Vector2(2, 2)
+	elif de_frente:
+		var modelo := posmod(roundi((caja.position.x + caja.position.y) / CASILLA), roundi(madera.frente.get_width() / FRENTE.x))
+		# (su modelo, suelto: el contorno no puede salir de un trozo de la tira de modelos)
+		var trozo := Rect2i(Vector2i(modelo * int(FRENTE.x), 0), Vector2i(FRENTE))
+		dibujo.texture = ImageTexture.create_from_image(madera.frente.get_image().get_region(trozo))
+		dibujo.position = Vector2(r.position.x + MARCO, r.end.y - ALTO)
+		dibujo.scale = Vector2(r.size.x - MARCO * 2, ALTO) / FRENTE
+	else:
+		dibujo.texture = madera.cerrada
+		dibujo.position = r.position
+		dibujo.scale = r.size / madera.cerrada.get_size()
+	uso = Node2D.new()
+	uso.name = "Uso"   # no-tr
+	uso.add_child(dibujo)
+	var zona := ZONA_USAR.new()
+	zona.montar_rect(Rect2(arrimo.position - position, arrimo.size))
+	zona.puede = se_puede_usar
+	zona.cierra = abierta >= 1.0
+	zona.usar.connect(usar_a_mano)
+	uso.add_child(zona)
+	add_child(uso)
+
+
+func quitar_uso() -> void:
+	if uso:
+		uso.queue_free()
+		uso = null
 
 
 # La de lado, abierta, se queda de pie arriba del hueco (su bisagra, 4 unidades por debajo del borde): se ordena con lo
@@ -136,20 +253,22 @@ func arriba_de_lado() -> void:
 # Una libre, cerrada: si Johnny o uno de los suyos se arrima, se abre; si un zombi despierto la empuja, tiembla y,
 # al rato, también
 func _physics_process(delta: float) -> void:
-	if not libre or abriendo:
+	if not libre or abriendo or cerrando:
 		return
 	mirar_t -= delta
 	if mirar_t > 0.0:
 		return
 	mirar_t = MIRAR
 	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
-	if johnny and arrimo.has_point(johnny.global_position):
+	var amigo := johnny != null and arrimo.has_point(johnny.global_position)
+	for a in get_tree().get_nodes_in_group("aliados"):
+		if not amigo and a.modo == "equipo" and arrimo.has_point(a.global_position):
+			amigo = true
+	if amigo and not espera:
 		abrir_empujando()
 		return
-	for a in get_tree().get_nodes_in_group("aliados"):
-		if a.modo == "equipo" and arrimo.has_point(a.global_position):
-			abrir_empujando()
-			return
+	if not amigo:
+		espera = false   # (cerrada a mano: ya se han ido de delante, la próxima vez se abre al arrimarse)
 	for z in get_tree().get_nodes_in_group("zombis"):
 		if z is Zombi and not z.dormido and z.estado != "muerto" and arrimo.has_point(z.global_position):
 			empuje += MIRAR
@@ -167,10 +286,17 @@ func abrir_empujando() -> void:
 
 func _process(delta: float) -> void:
 	tiempo += delta
-	var cambia := golpes > 0.0 or (abriendo and abierta < 1.0)
+	var cambia := golpes > 0.0 or (abriendo and abierta < 1.0) or cerrando
 	golpes = maxf(0.0, golpes - delta)
-	if abriendo:
-		abierta = minf(1.0, abierta + delta * 2.5)
+	if abriendo and abierta < 1.0:
+		abierta = minf(1.0, abierta + delta * VUELTA)
+		if abierta >= 1.0:
+			poner_uso()
+	elif cerrando:
+		abierta = maxf(0.0, abierta - delta * VUELTA)
+		if abierta <= 0.0:
+			cerrando = false
+			poner_uso()
 	if cambia:
 		queue_redraw()
 

@@ -153,6 +153,12 @@ del arco de botones. Mientras está delante de uno, el clic abre y no dispara; a
 amarillo**: con el ratón, al pasarlo por encima del mueble (esté Johnny donde esté); con el mando, el teclado o en el
 móvil, cuando Johnny está delante (`-- --captura --contorno-mueble`).
 
+**Cerrar las puertas** de dentro (pisos, tiendas y la sala de mantenimiento; no las de los trasteros): igual que los
+muebles. Delante de una abierta sale su contorno amarillo y se cierra con atacar (clic encima, J, RT o el botón
+**Cerrar** del móvil). Si hay alguien en el hueco no se cierra (tiembla). Cerrada así, no se vuelve a abrir sola hasta
+que Johnny se aparta y vuelve a arrimarse; sin moverse, se abre otra vez con atacar. Los zombis la siguen abriendo
+empujando (`mapa/puerta_bano.gd`; `-- --captura --puertas`).
+
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,

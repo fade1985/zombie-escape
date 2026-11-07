@@ -5496,7 +5496,7 @@ msgstr "Nothing here is lost if you die."
 msgid "Guardar todo"
 msgstr "Stash all"
 
-#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+#: scripts/ui/inventario.gd scripts/ui/tactil.gd scripts/ui/taquilla.gd
 msgid "Cerrar"
 msgstr "Close"
 

@@ -4,6 +4,9 @@
 # Opciones), RT en el mando y, en el móvil, el botón «Abrir» que sale entonces (tactil.gd). Con el ratón, el clic tiene
 # que caer encima del mueble: si cae en otra parte, no se abre y Johnny ataca como siempre (clic_fuera). Con J o RT no hay
 # puntero, así que lo abren estén donde estén y no disparan (johnny.gd, "ante_mueble"). Sin letrero encima (lo pidió el dueño).
+# Las puertas de dentro (puerta_bano.gd) usan la misma zona para cerrarse y volver a abrirse: la ponen con montar_rect
+# (la zona de delante y detrás del hueco), dicen con "puede" cuándo se pueden usar y, con "cierra", que el botón del
+# móvil diga «Cerrar».
 extends Area2D
 
 signal usar
@@ -40,18 +43,25 @@ var clic_fuera := false     # si lo último con lo que se ha atacado es un clic 
 var dibujo: Sprite2D = null     # el dibujo del mueble
 var contorno: Sprite2D = null   # su contorno amarillo, escondido mientras no toca
 var raton := Vector2(-1, -1)    # dónde está el ratón en la pantalla (el último movimiento); negativo si aún no se ha movido
+var puede := Callable()         # si se da, cuándo se puede usar (si no, siempre): mientras no, ni contorno ni se usa, y J ataca
+var cierra := false             # el botón del móvil dice «Cerrar» en vez de «Abrir» (una puerta abierta)
 
 
 # "ancho": lo que ocupa el mueble en el suelo
 func montar(ancho: float) -> void:
+	montar_rect(Rect2(-(ancho + 20) / 2.0, -2, ancho + 20, 40))
+
+
+# La zona en un rectángulo cualquiera ("r", en las coordenadas del mueble)
+func montar_rect(r: Rect2) -> void:
 	name = "Zona"   # no-tr
 	collision_layer = 0
 	collision_mask = 2   # solo Johnny
 	var hueco := CollisionShape2D.new()
-	var r := RectangleShape2D.new()
-	r.size = Vector2(ancho + 20, 40)
-	hueco.shape = r
-	hueco.position = Vector2(0, 18)
+	var forma := RectangleShape2D.new()
+	forma.size = r.size
+	hueco.shape = forma
+	hueco.position = r.get_center()
 	add_child(hueco)
 	body_entered.connect(func(cuerpo):
 		johnny = cuerpo
@@ -96,6 +106,8 @@ func _process(_delta: float) -> void:
 # Si toca enseñar el contorno: con el ratón, si está encima del mueble (lo mismo que cuenta para el clic); sin él (mando,
 # teclado o el dedo en el móvil), si Johnny está delante y ya se puede abrir
 func resaltado() -> bool:
+	if not activa():
+		return false
 	var dedo := Tactil.activo and Tactil.con_dedo
 	# (el ratón, en la pantalla; pasado al dibujo cada vez, porque la cámara se mueve aunque el ratón esté quieto)
 	var en_dibujo := dibujo.get_global_transform_with_canvas().affine_inverse() * raton
@@ -114,8 +126,13 @@ func _input(evento: InputEvent) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if johnny and Input.is_action_just_pressed("atacar") and not clic_fuera:
+	if johnny and Input.is_action_just_pressed("atacar") and not clic_fuera and activa():
 		abrir()
+
+
+# Si ahora se puede usar (ver "puede")
+func activa() -> bool:
+	return not puede.is_valid() or puede.call()
 
 
 # Si un clic cae sobre el dibujo del mueble (con un poco de margen, para no tener que afinar)

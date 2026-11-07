@@ -5488,7 +5488,7 @@ msgstr "就算你倒下，这里的东西也不会丢。"
 msgid "Guardar todo"
 msgstr "全部存入"
 
-#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+#: scripts/ui/inventario.gd scripts/ui/tactil.gd scripts/ui/taquilla.gd
 msgid "Cerrar"
 msgstr "关闭"
 

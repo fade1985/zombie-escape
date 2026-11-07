@@ -177,7 +177,7 @@ func botones() -> Dictionary:
 		b.lanzar = [en_arco.call(280.0, 115.0), 38.0 * k]
 	b["cambiar_lanzable"] = [b.lanzar[0] + Vector2(56, -24) * k, 20.0 * k]
 	# delante de un mueble de la sala de mantenimiento, el botón «Abrir», encima del arco (zona_usar.gd)
-	if johnny.ante_mueble:
+	if johnny.ante_mueble and johnny.ante_mueble.activa():
 		b["abrir"] = [en_arco.call(250.0, 250.0), 38.0 * k]
 	# las curas que lleva, a la izquierda de los de debajo del minimapa (si no lleva ninguna, no salen)
 	var sitio := 0
@@ -296,7 +296,7 @@ func pulsar(nombre: String, abajo: bool) -> void:
 			if abajo:
 				partida.pausar()
 		"abrir":
-			if abajo and johnny.ante_mueble:
+			if abajo and johnny.ante_mueble and johnny.ante_mueble.activa():
 				johnny.ante_mueble.abrir()
 
 
@@ -415,7 +415,7 @@ func dibujar() -> void:
 			"pausa":
 				icono(donde, "pausa", 26 * esc)
 			"abrir":
-				texto(lienzo, donde, Idioma.t("Abrir"), roundi(16 * esc), Tema.AMARILLO)
+				texto(lienzo, donde, Idioma.t("Cerrar") if johnny.ante_mueble and johnny.ante_mueble.cierra else Idioma.t("Abrir"), roundi(16 * esc), Tema.AMARILLO)
 	# Mientras se apunta desde lanzar, hasta dónde se ha arrastrado
 	if "lanzar" in dedos.values():
 		var desde: Vector2 = b.lanzar[0]
