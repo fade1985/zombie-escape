@@ -752,6 +752,9 @@ en una línea.
   Y el lavabo de pie con su espejo, de lado (el `staffsink` del catálogo, `mueble-staffsink-lado.png`, 20x66, para la pared
   de la izquierda; en la de la derecha el juego le da la vuelta; de `assets/sources/lavabo-gpt.webp`): sale en el vestuario y
   en los baños de los pisos. No pasa por `importar.py` (si se reimporta `vestuario/lavabo-espejo-lado.png`, lo pisa).
+  Y el váter, de lado (el `stafftoilet` del catálogo, `mueble-stafftoilet-lado.png`, 26x37, la cisterna en la pared de la
+  izquierda y la tapa levantada; de `assets/sources/vater-gpt.webp`): igual que el lavabo, en el vestuario y en los baños de
+  los pisos. No pasa por `importar.py` (si se reimporta `vestuario/vater-vestuario-lado.png`, lo pisa).
   Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
   `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
   (la de antes, dibujada a mano) ya no se usa: si se pasa, la pisa.

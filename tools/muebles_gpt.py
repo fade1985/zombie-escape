@@ -34,6 +34,9 @@ MUEBLES = {
     # el lavabo de pie con su espejo, de lado (el "staffsink" del catálogo, que solo tiene dibujo de lado): para la pared
     # de la izquierda; en la de la derecha, el juego le da la vuelta
     "lavabo": ("assets/sources/lavabo-gpt.webp", "assets/sprites/mueble-staffsink-lado.png", 20, 66, True),
+    # el váter, de lado (el "stafftoilet" del catálogo, que solo tiene dibujo de lado): la cisterna en la pared de la
+    # izquierda y la taza con la tapa levantada; en la pared de la derecha, el juego le da la vuelta
+    "vater": ("assets/sources/vater-gpt.webp", "assets/sprites/mueble-stafftoilet-lado.png", 26, 37, True),
     # la taquilla de las skins, en el vestuario (mapa.gd, partida.abrir_taquilla): gris claro con tres puertas azules;
     # mismo ancho que la vieja (28), más alta que Johnny como una de verdad (antes, de tools/taquilla.py)
     "taquilla": ("assets/sources/taquilla-gpt.webp", "assets/sprites/taquilla.png", 28, 56, False),
