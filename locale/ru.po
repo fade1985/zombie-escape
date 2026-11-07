@@ -6945,6 +6945,18 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Наведи на страницы, чтобы прочитать."
 
 #: scripts/ui/ordenador.gd
+msgid "Emisión %d"
+msgstr "Выпуск %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin emitir"
+msgstr "Не вышел"
+
+#: scripts/ui/ordenador.gd
+msgid "¡NUEVA!"
+msgstr "НОВЫЙ!"
+
+#: scripts/ui/ordenador.gd
 msgid "Completa %s."
 msgstr "Пройди %s."
 
