@@ -38,7 +38,7 @@ const CORCHO := preload("res://assets/sprites/corcho.png")   # (tools/guias_mant
 const ARMARITO := preload("res://scripts/mapa/armarito.gd")
 const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
 const BANCO_X := 820.0
-const BAUL_X := 1010.0
+const BAUL_X := 1040.0   # (pegado a la derecha del taller)
 const TAQUILLA_X := 260.0
 # Los suelos y paredes de las estancias de la sala de mantenimiento: el taller, de vinilo gris con motitas y pared blanca
 # con su zócalo del mismo vinilo (tools/taller_vinilo.py); el vestuario, de azulejo, como los baños de los pisos; y el despacho, con tarima y la pared beis con
