@@ -1165,6 +1165,39 @@ func clic_raton(donde: Vector2, abajo: bool) -> void:
 	Input.parse_input_event(e)
 
 
+# Con "--captura --contorno-mueble": el contorno amarillo de los muebles de la sala (zona_usar.gd). Con Johnny lejos del
+# baúl, el ratón encima lo enciende (captura-contorno-raton.png) y fuera lo apaga; con Johnny delante, sin ratón (mando,
+# teclado o móvil), se enciende (captura-contorno-delante.png), y con el ratón lejos, no. Cada línea dice lo esperado
+func probar_contorno_mueble() -> void:
+	var baul: Node = mapa.baul
+	var raton := func(donde: Vector2) -> void:
+		var m := InputEventMouseMotion.new()
+		m.position = get_viewport().get_final_transform() * (get_viewport().get_canvas_transform() * donde)
+		Input.parse_input_event(m)
+	johnny.position = baul.position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	raton.call(baul.position + Vector2(0, -30))
+	await get_tree().create_timer(0.2).timeout
+	print("Contorno: ratón encima del baúl, Johnny lejos · se ve %s (esperado: true) · el del banco %s (esperado: false)" % [
+		baul.zona.contorno.visible, mapa.banco.zona.contorno.visible])
+	Captura.foto("captura-contorno-raton.png")
+	raton.call(johnny.position + Vector2(120, 40))
+	await get_tree().create_timer(0.2).timeout
+	print("Contorno: ratón fuera · se ve %s (esperado: false)" % baul.zona.contorno.visible)
+	johnny.position = baul.position + Vector2(0, 22)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
+	raton.call(johnny.position + Vector2(160, 90))   # el ratón lejos del baúl
+	await get_tree().create_timer(0.2).timeout
+	print("Contorno: Johnny delante con el ratón lejos · se ve %s (esperado: false)" % baul.zona.contorno.visible)
+	johnny.con_raton = false   # como si jugara con el mando
+	await get_tree().create_timer(0.2).timeout
+	print("Contorno: Johnny delante sin ratón · se ve %s (esperado: true)" % baul.zona.contorno.visible)
+	Captura.foto("captura-contorno-delante.png")
+	get_tree().quit()
+
+
 # Con "--captura --clic-mueble": con Johnny delante del baúl (zona_usar.gd), un clic lejos del baúl no lo abre y Johnny
 # ataca hacia allí; un clic encima del baúl lo abre y no ataca; y J (sin puntero) también lo abre. La pantalla del
 # baúl no llega a abrirse: "usar" solo se cuenta. Foto: captura-clic-mueble.png (Johnny delante del baúl). Luego se cierra

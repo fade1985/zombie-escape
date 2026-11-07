@@ -149,7 +149,9 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
 Con Johnny delante (sin letrero) se abren con la acción de **atacar**: clic izquierdo o
 J (las que tenga puestas en Opciones), **RT** en el mando y, en el móvil, el botón **Abrir** que sale entonces encima
 del arco de botones. Mientras está delante de uno, el clic abre y no dispara; al apartarse, vuelve a disparar
-(`mapa/zona_usar.gd`; se prueba con `-- --captura --sala`).
+(`mapa/zona_usar.gd`; se prueba con `-- --captura --sala`). Para que se sepa que se usan, les sale un **contorno
+amarillo**: con el ratón, al pasarlo por encima del mueble (esté Johnny donde esté); con el mando, el teclado o en el
+móvil, cuando Johnny está delante (`-- --captura --contorno-mueble`).
 
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a

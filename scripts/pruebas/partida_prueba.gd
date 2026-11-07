@@ -177,6 +177,8 @@
 #                       el clic, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
 #   --clic-mueble       delante del baúl de la sala: un clic lejos no lo abre (y Johnny ataca), uno encima sí, y J
 #                       también                                                              [prueba_sitios.gd]
+#   --contorno-mueble   el contorno amarillo de los muebles de la sala: con el ratón encima, o con Johnny delante sin
+#                       ratón (mando, teclado, móvil)                                        [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
 #   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel, sin muebles, y el nombre de la planta y de sus
@@ -720,6 +722,9 @@ func empezar_prueba() -> void:
 	elif "--acustica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_acustica()
+	elif "--contorno-mueble" in args:
+		set_process(false)   # sin la prueba larga
+		probar_contorno_mueble()
 	elif "--clic-mueble" in args:
 		set_process(false)   # sin la prueba larga
 		probar_clic_mueble()
