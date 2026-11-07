@@ -745,6 +745,9 @@ en una línea.
   Y la papelera del despacho, a la derecha de la mesa (el `wastebasket` del catálogo, `mueble-wastebasket.png`, 14x21, de
   rejilla gris oscura con papeles blancos; de `assets/sources/papelera-gpt.webp`): ocupa 28x22 en el suelo. No pasa por
   `importar.py` (si se reimporta `despacho/papelera.png`, la pisa).
+  Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
+  `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
+  (la de antes, dibujada a mano) ya no se usa: si se pasa, la pisa.
   En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
   `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
   imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
