@@ -45,6 +45,7 @@ var contorno: Sprite2D = null   # su contorno amarillo, escondido mientras no to
 var raton := Vector2(-1, -1)    # dónde está el ratón en la pantalla (el último movimiento); negativo si aún no se ha movido
 var puede := Callable()         # si se da, cuándo se puede usar (si no, siempre): mientras no, ni contorno ni se usa, y J ataca
 var cierra := false             # el botón del móvil dice «Cerrar» en vez de «Abrir» (una puerta abierta)
+var puerta := false             # si es la de una puerta de dentro (puerta_bano.gd): con un mueble a la vez, manda el mueble
 
 
 # "ancho": lo que ocupa el mueble en el suelo
@@ -139,8 +140,9 @@ func _physics_process(_delta: float) -> void:
 		abrir()
 
 
-# Si este mueble le toca a Johnny antes que "otra" zona (en la que también está): si la otra no se puede usar ahora
-# o este está más cerca (del medio de su dibujo)
+# Si este mueble le toca a Johnny antes que "otra" zona (en la que también está): si la otra no se puede usar ahora,
+# si este es un mueble y la otra una puerta (la del taller, abierta, se queda de pie junto al banco y tapaba su zona
+# entera: para cerrarla basta con apartarse un poco del banco), o si está más cerca (del medio de su dibujo)
 func mas_cerca_que(otra: Variant) -> bool:
 	if otra == null or not is_instance_valid(otra) or otra == self:
 		return true
@@ -148,6 +150,8 @@ func mas_cerca_que(otra: Variant) -> bool:
 		return false
 	if not otra.activa():
 		return true
+	if puerta != otra.puerta:
+		return not puerta
 	return distancia() < otra.distancia() - 1.0
 
 

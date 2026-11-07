@@ -238,6 +238,7 @@ func poner_uso() -> void:
 	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
 	zona.cierra = abierta >= 1.0
+	zona.puerta = true
 	zona.usar.connect(usar_a_mano)
 	uso.add_child(zona)
 	add_child(uso)
