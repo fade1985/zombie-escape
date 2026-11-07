@@ -7,6 +7,7 @@
 # imagen (dónde empieza, dónde acaba y su color) y se vuelve a dibujar limpio, 3 píxeles de ladrillo y 1 de junta.
 # (Antes salían de tools/sala_sin_sangre.py, de los de los pisos sin sangre: ya no.)
 # Uso: py tools/despacho_ladrillo.py  (y luego Godot --headless --path . --import)
+import random
 from PIL import Image
 
 FUENTES = "assets/sources/"
@@ -80,13 +81,25 @@ for f in range(FILAS):
         for i in range(a, b - 1 if b - a > 1 else b):
             for j in range(3):
                 trozo.putpixel((i % ANCHO, f * 4 + j), color)
-# un poco de volumen: la fila de arriba de cada ladrillo, algo más clara, y la de abajo, algo más oscura
+# Más real (los colores planos y vivos de GPT parecían de dibujo animado, 7 nov): cada ladrillo, más apagado y oscuro,
+# tirando a marrón como el de la foto; cada píxel con su grano (y alguna picadura más oscura); la fila de arriba de cada
+# ladrillo, algo más clara, y la de abajo, más oscura; el mortero, gris arena sucio con su grano y en sombra bajo el ladrillo
+azar = random.Random(7)
+def apagado(c):
+    gris = sum(c) / 3
+    c = [v * 0.62 + gris * 0.38 for v in c]           # menos color
+    c = [c[0] * 0.80, c[1] * 0.74, c[2] * 0.70]       # más oscuro y más marrón
+    return c
 for x in range(ANCHO):
     for f in range(FILAS):
-        for j, k in ((0, 1.08), (2, 0.86)):
+        for j in range(4):
             c = trozo.getpixel((x, f * 4 + j))
-            if c != mortero:
-                trozo.putpixel((x, f * 4 + j), tuple(min(255, int(v * k)) for v in c))
+            if c == mortero:
+                k = azar.uniform(0.86, 1.0) * (0.84 if j == 3 else 1.0)
+                trozo.putpixel((x, f * 4 + j), tuple(int(v * k) for v in (150, 138, 122)))
+                continue
+            k = azar.uniform(0.90, 1.06) * (0.78 if azar.random() < 0.08 else 1.0) * {0: 1.08, 1: 1.0, 2: 0.84}[j]
+            trozo.putpixel((x, f * 4 + j), tuple(max(0, min(255, int(v * k))) for v in apagado(c)))
 veces = max(1, round(480 / ANCHO))
 tira = Image.new("RGB", (ANCHO * veces, FILAS * 4))
 for i in range(veces):
