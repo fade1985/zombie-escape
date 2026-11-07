@@ -749,6 +749,9 @@ en una línea.
   `mueble-showertray.png`, 36x66, mampara de cristal azulado de frente con perfiles de aluminio sobre su plato blanco; de
   `assets/sources/ducha-gpt.webp`): ocupa 72x44 en el suelo (antes 72x64, para que el plato quede pegado a la pared), lo de más sube por la pared. No pasa por
   `importar.py` (si se reimporta `vestuario/plato-ducha.png`, la pisa).
+  Y el lavabo de pie con su espejo, de lado (el `staffsink` del catálogo, `mueble-staffsink-lado.png`, 20x66, para la pared
+  de la izquierda; en la de la derecha el juego le da la vuelta; de `assets/sources/lavabo-gpt.webp`): sale en el vestuario y
+  en los baños de los pisos. No pasa por `importar.py` (si se reimporta `vestuario/lavabo-espejo-lado.png`, lo pisa).
   Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
   `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
   (la de antes, dibujada a mano) ya no se usa: si se pasa, la pisa.
