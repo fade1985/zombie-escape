@@ -513,6 +513,21 @@ en una línea.
   amarilla «Cobrar $X» o verde «Hecho»). Pulsar una fila cobra (`ordenador.cobrar_logro`); lo que pide, entero, sale en la
   línea de abajo. `programa_logros` lo monta, le pone a cada botón su línea de abajo y decide qué se marca. Prueba:
   `--archivador-logros`.
+- `carpeta_dosier.gd`: el Dosier de ConserjeOS (DOSIER.TXT), desde el 7 nov. La ventana va maximizada (tapa los iconos)
+  y, encima de la chapa oscura, una carpeta de archivo marrón con una pestaña por edificio (`b_edificio_<id>`, «Apartamentos
+  2/5») y, a la derecha, las páginas de todos. A la izquierda, las páginas del edificio como fichas (`b_<id>`: en papel las
+  encontradas, con «Página N» y su título; arrancadas las que faltan, «falta»); a la derecha, la hoja de la que se mira,
+  con un clip (cambia al pasar por una ficha, `ver`). El edificio y la página se quedan al rehacer la ventana
+  (`recordado`, `recordada`). Sin desplazarse. `programa_dosier` lo monta y le pone a cada botón su línea de abajo (quién
+  la llevaba o dónde buscarla). Prueba: `--dosier-carpeta` (también si cabe cada hoja, en alemán, ruso y chino).
+- `hoja_dosier.gd`: una página del dosier dibujada como expediente de Velaria Corp. (`Historia.hoja()` y
+  `hoja_arrancada()`; la usan la ventanita de página encontrada, `menus.pagina`, y la carpeta). Papel viejo con motitas y
+  un cerco de café; el logo de Velaria (inventado: una luna creciente en un círculo), «Investigación del sueño», código de
+  barras y referencia (`VD7-AP-01`: edificio y número); la franja con el edificio, «HALLADO EN» y n / total; el tipo, el
+  título, el sello de «CONFIDENCIAL»; la polaroid del muerto (`cientifico-muerto.png` con su piel y su pelo) con su nombre en
+  boli; el texto al lado de la foto y luego a todo lo ancho; la nota en un pósit. Mide de alto lo que necesita: si pasa
+  de `alto_max`, prueba con la letra más pequeña y la cabecera compacta (`PRUEBAS`) y el pósit debajo de la foto o del
+  texto; nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se

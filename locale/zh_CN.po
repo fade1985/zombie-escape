@@ -1221,10 +1221,6 @@ msgid "laboratorio"
 msgstr "实验室"
 
 #: scripts/historia.gd
-msgid "Página arrancada"
-msgstr "撕下的一页"
-
-#: scripts/historia.gd
 msgid "Dosier VD-7 · Apartamentos"
 msgstr "VD-7档案 · 公寓楼"
 
@@ -5150,6 +5146,42 @@ msgstr "领取 $%d"
 msgid "Hecho"
 msgstr "已完成"
 
+#: scripts/ui/carpeta_dosier.gd
+msgid "%d / %d páginas"
+msgstr "%d / %d 页"
+
+#: scripts/ui/carpeta_dosier.gd
+msgid "Página %d"
+msgstr "第 %d 页"
+
+#: scripts/ui/carpeta_dosier.gd
+msgid "falta"
+msgstr "缺失"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "EDIFICIO: %s"
+msgstr "大楼：%s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "HALLADO EN: %s"
+msgstr "发现地点：%s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "Investigación del sueño"
+msgstr "睡眠研究"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "REF: %s"
+msgstr "编号：%s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "Página arrancada"
+msgstr "撕下的一页"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "CONFIDENCIAL"
+msgstr "机密"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "护盾 %d"
@@ -6121,10 +6153,6 @@ msgid "Página %d de %d"
 msgstr "第 %d / %d 页"
 
 #: scripts/ui/menus.gd
-msgid "Junto al cuerpo de %s"
-msgstr "发现于尸体旁：%s"
-
-#: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "已保存到维修间电脑的“档案”里"
 
@@ -6865,24 +6893,8 @@ msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
 msgstr "已领取 $%d！现在可以用来买天赋点或武器了。"
 
 #: scripts/ui/ordenador.gd
-msgid "Dosier VD-7"
-msgstr "VD-7档案"
-
-#: scripts/ui/ordenador.gd
-msgid "%d / %d páginas"
-msgstr "%d / %d 页"
-
-#: scripts/ui/ordenador.gd
-msgid "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."
-msgstr "你找到的每一页，不管在哪栋楼哪一层，都会永久保存在这里。"
-
-#: scripts/ui/ordenador.gd
-msgid "Página %d"
-msgstr "第 %d 页"
-
-#: scripts/ui/ordenador.gd
-msgid "Arrancada"
-msgstr "缺失"
+msgid "%s: %d de %d páginas del dosier."
+msgstr "%s：档案 %d / %d 页。"
 
 #: scripts/ui/ordenador.gd
 msgid "%s, página %d: %s. La llevaba %s."
@@ -6943,10 +6955,6 @@ msgstr "%s：已找到 %d / %d 件物品。"
 #: scripts/ui/ordenador.gd
 msgid "Dosier"
 msgstr "档案"
-
-#: scripts/ui/ordenador.gd
-msgid "%s: %d de %d páginas del dosier."
-msgstr "%s：档案 %d / %d 页。"
 
 #: scripts/ui/ordenador.gd
 msgid "Bestiario · %d / %d"
@@ -7067,6 +7075,10 @@ msgstr "天赋树"
 #: scripts/ui/ordenador.gd
 msgid "Tienda de armas"
 msgstr "武器商店"
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "VD-7档案"
 
 #: scripts/ui/ordenador.gd
 msgid "Noticias de Canal 8"

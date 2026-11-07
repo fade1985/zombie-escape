@@ -1223,10 +1223,6 @@ msgid "laboratorio"
 msgstr "лаборатории"
 
 #: scripts/historia.gd
-msgid "Página arrancada"
-msgstr "Вырванная страница"
-
-#: scripts/historia.gd
 msgid "Dosier VD-7 · Apartamentos"
 msgstr "Досье VD-7 · Жилой дом"
 
@@ -5164,6 +5160,42 @@ msgstr "Забрать $%d"
 msgid "Hecho"
 msgstr "Готово"
 
+#: scripts/ui/carpeta_dosier.gd
+msgid "%d / %d páginas"
+msgstr "Страниц: %d / %d"
+
+#: scripts/ui/carpeta_dosier.gd
+msgid "Página %d"
+msgstr "Страница %d"
+
+#: scripts/ui/carpeta_dosier.gd
+msgid "falta"
+msgstr "нет"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "EDIFICIO: %s"
+msgstr "ЗДАНИЕ: %s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "HALLADO EN: %s"
+msgstr "НАЙДЕНА: %s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "Investigación del sueño"
+msgstr "Исследования сна"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "REF: %s"
+msgstr "ШИФР: %s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "Página arrancada"
+msgstr "Вырванная страница"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "CONFIDENCIAL"
+msgstr "СЕКРЕТНО"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "щит %d"
@@ -6161,10 +6193,6 @@ msgid "Página %d de %d"
 msgstr "Страница %d из %d"
 
 #: scripts/ui/menus.gd
-msgid "Junto al cuerpo de %s"
-msgstr "Рядом с телом: %s"
-
-#: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "Сохраняется в Досье на компьютере в дворницкой"
 
@@ -6905,24 +6933,8 @@ msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
 msgstr "Получено $%d! Теперь их можно потратить на очки или оружие."
 
 #: scripts/ui/ordenador.gd
-msgid "Dosier VD-7"
-msgstr "Досье VD-7"
-
-#: scripts/ui/ordenador.gd
-msgid "%d / %d páginas"
-msgstr "Страниц: %d / %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."
-msgstr "Каждая найденная страница — в любом здании и на любом этаже — остается здесь навсегда."
-
-#: scripts/ui/ordenador.gd
-msgid "Página %d"
-msgstr "Страница %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Arrancada"
-msgstr "Вырвана"
+msgid "%s: %d de %d páginas del dosier."
+msgstr "%s: страниц досье — %d из %d."
 
 #: scripts/ui/ordenador.gd
 msgid "%s, página %d: %s. La llevaba %s."
@@ -6983,10 +6995,6 @@ msgstr "%s: найдено предметов — %d из %d."
 #: scripts/ui/ordenador.gd
 msgid "Dosier"
 msgstr "Досье"
-
-#: scripts/ui/ordenador.gd
-msgid "%s: %d de %d páginas del dosier."
-msgstr "%s: страниц досье — %d из %d."
 
 #: scripts/ui/ordenador.gd
 msgid "Bestiario · %d / %d"
@@ -7107,6 +7115,10 @@ msgstr "Дерево талантов"
 #: scripts/ui/ordenador.gd
 msgid "Tienda de armas"
 msgstr "Магазин оружия"
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Досье VD-7"
 
 #: scripts/ui/ordenador.gd
 msgid "Noticias de Canal 8"

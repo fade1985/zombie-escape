@@ -326,6 +326,8 @@
 #                       el ordenador por apartados                                          [prueba_varias.gd]
 #   --archivador-logros el programa Logros del ordenador (el archivador): el Resumen, las páginas, cobrar con el
 #                       teclado, «Casi lo tienes», muchos por cobrar y el aviso de las ayudas [prueba_varias.gd]
+#   --dosier-carpeta    el Dosier del ordenador (la carpeta): las pestañas, las fichas, la hoja arrancada, el teclado
+#                       y si cada hoja cabe (en la carpeta y en la ventanita), también en alemán, ruso y chino [prueba_varias.gd]
 #   --quimico           la rama Químico de los talentos: cada talento con sus números, las fotos del nivel 3 y el
 #                       árbol con las tres ramas en el ordenador                            [prueba_varias.gd]
 #   --equilibrio-talentos  Durito hasta 3 (y los puntos de más, devueltos), Ajolote hasta la mitad, el alcance de
@@ -893,6 +895,9 @@ func empezar_prueba() -> void:
 	elif "--archivador-logros" in args:
 		set_process(false)   # sin la prueba larga
 		probar_archivador_logros()
+	elif "--dosier-carpeta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_dosier_carpeta()
 	elif "--quimico" in args:
 		set_process(false)   # sin la prueba larga
 		probar_quimico()

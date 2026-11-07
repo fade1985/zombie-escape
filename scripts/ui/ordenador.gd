@@ -16,7 +16,8 @@
 #     archivador (archivador_logros.gd): a la izquierda, el Resumen y un apartado por tema (Logros.TEMAS); a la
 #     derecha, la página elegida. Los conseguidos se cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
-#     los edificios, para releerlas. Las que faltan salen como páginas arrancadas.
+#     los edificios, para releerlas. Una carpeta de archivo con una pestaña por edificio (carpeta_dosier.gd): las
+#     páginas como fichas a la izquierda y la hoja a la derecha. Las que faltan salen como páginas arrancadas.
 #   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
 #     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
 #   - "Colecciones": lo encontrado y visto alguna vez, por edificio y en porcentaje, y el bestiario
@@ -50,6 +51,7 @@ const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace ca
 const ARBOL := preload("res://scripts/ui/arbol_talentos.gd")   # el árbol de talentos (TALENTOS.EXE)
 const TIENDA := preload("res://scripts/ui/tienda_armas.gd")   # la tienda de armas (ARMAS.EXE)
 const ARCHIVADOR := preload("res://scripts/ui/archivador_logros.gd")   # los logros (LOGROS.EXE)
+const CARPETA_DOSIER := preload("res://scripts/ui/carpeta_dosier.gd")   # el dosier (DOSIER.TXT)
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
 # El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
 # [traducir]
@@ -320,7 +322,7 @@ func abrir(programa: String, foco := "") -> void:
 	elif programa == "logros":
 		foco = programa_logros(contenido, foco)
 	elif programa == "dosier":
-		programa_dosier(contenido)
+		foco = programa_dosier(contenido, foco)
 	elif programa == "noticias":
 		foco = programa_noticias(contenido, foco)
 	elif programa == "colecciones":
@@ -442,6 +444,10 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	ventana.draw.connect(func(): relieve(ventana, false, 3.0))
 	ventana.position = Vector2(152, 10)
 	ventana.size = Vector2(718, 508)
+	if programa == "dosier":
+		# el Dosier, maximizado (tapa los iconos): las hojas llevan mucho texto y así se leen con la letra más grande
+		ventana.position = Vector2(4, 4)
+		ventana.size = Vector2(872, 514)
 	pantalla.add_child(ventana)
 	pantalla.move_child(ventana, iconos.get_index() + 1)
 	var columna := VBoxContainer.new()
@@ -936,56 +942,31 @@ func cobrar_logro(id: String) -> void:
 # ── Dosier ──
 
 # Las páginas de todos los edificios (no solo del que se juega): se guardan para siempre (Guardado: "paginas"),
-# las encuentres donde las encuentres. A la izquierda, las páginas por edificio (con su propio desplazamiento);
-# a la derecha, la hoja que se esté mirando. Las que faltan salen como páginas arrancadas
-func programa_dosier(c: VBoxContainer) -> void:
+# las encuentres donde las encuentres. Una carpeta con una pestaña por edificio (carpeta_dosier.gd): a la izquierda,
+# las páginas de ese edificio como fichas, y a la derecha, la hoja que se esté mirando; las que faltan salen
+# arrancadas. Aquí se le pone a cada pestaña y a cada ficha lo que explica en la línea de abajo. "foco": lo que se
+# marca (una página o una pestaña, "b_edificio_<id>"). Devuelve lo que hay que marcar de verdad: sin nada, la página
+# que se mira
+func programa_dosier(c: VBoxContainer, foco := "") -> String:
 	var s := Guardado.cargar()
-	var halladas := 0
-	var total := 0
-	for id in Historia.DOSIERES:
-		var paginas: Array = Historia.DOSIERES[id].paginas
-		total += paginas.size()
-		halladas += paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
-	var fila := HBoxContainer.new()
-	fila.add_theme_constant_override("separation", 8)
-	c.add_child(fila)
-	cajita(fila, Idioma.t("Dosier VD-7"), "dosier", Idioma.t("%d / %d páginas") % [halladas, total])
-	nota(c, Idioma.t("Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."))
-	var partes := HBoxContainer.new()
-	partes.add_theme_constant_override("separation", 10)
-	c.add_child(partes)
-	var desliza := ScrollContainer.new()
-	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	desliza.follow_focus = true
-	desliza.custom_minimum_size = Vector2(240, Tele.CAJA_TEXTO.end.y - 40)
-	partes.add_child(desliza)
-	var lista := VBoxContainer.new()
-	lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lista.add_theme_constant_override("separation", 6)
-	desliza.add_child(lista)
-	var lado := CenterContainer.new()
-	lado.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lado.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	partes.add_child(lado)
-	for edificio in Historia.DOSIERES:
-		var d: Dictionary = Historia.DOSIERES[edificio]
-		var suyas: int = d.paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
-		var nombre: String = Idioma.t(Edificios.datos(edificio).nombre) if edificio in Edificios.LISTA else edificio
-		var del_edificio := grupo(lista, "%s · %d / %d" % [nombre, suyas, d.paginas.size()])
-		for i in d.paginas.size():
-			var p: Dictionary = d.paginas[i]
-			var tiene := Historia.encontrada(s, p.id)
-			var b := tarjeta(del_edificio, "b_" + p.id, "dosier" if tiene else "candado", Idioma.t("Página %d") % (i + 1),
-				Historia.titulo_de(p) if tiene else Idioma.t("Arrancada"), "", "" if tiene else "bloqueada")
-			var ver := func():
-				for h in lado.get_children():
-					h.queue_free()
-				lado.add_child(Historia.hoja(p, 410.0) if tiene else Historia.hoja_arrancada(edificio, p, 410.0))
-			enlazar(b, (Idioma.t("%s, página %d: %s. La llevaba %s.") % [nombre, i + 1, Historia.titulo_de(p), Historia.cuerpo_de(p)]) if tiene
-				else Idioma.t("%s, página %d: aún no la has encontrado (%s).") % [nombre, i + 1, Historia.donde(p, edificio)], ver)
-			b.focus_entered.connect(ver)
-			b.mouse_entered.connect(ver)
+	var carpeta: Control = CARPETA_DOSIER.new()
+	carpeta.name = "carpeta"
+	carpeta.montar(self, s, foco)
+	c.add_child(carpeta)
+	for e in carpeta.pestanas:
+		enlazar(carpeta.pestanas[e], Idioma.t("%s: %d de %d páginas del dosier.") % [carpeta.nombre_edificio(e), carpeta.halladas(e),
+			carpeta.del_edificio(e).size()], func(): pass)   # (cambiar de pestaña ya lo hace la carpeta)
+	var nombre: String = carpeta.nombre_edificio(carpeta.edificio)
+	var paginas: Array = carpeta.del_edificio()
+	for i in paginas.size():
+		var p: Dictionary = paginas[i]
+		enlazar(carpeta.botones[p.id], (Idioma.t("%s, página %d: %s. La llevaba %s.") % [nombre, i + 1, Historia.titulo_de(p), Historia.cuerpo_de(p)])
+			if Historia.encontrada(s, p.id) else Idioma.t("%s, página %d: aún no la has encontrado (%s).") % [nombre, i + 1,
+			Historia.donde(p, carpeta.edificio)], func(): pass)
 	info.text = Idioma.t("Pasa por las páginas para leerlas.")
+	if foco.begins_with("b_edificio_"):
+		return foco
+	return "b_" + carpeta.vista
 
 
 # ── Noticias ──

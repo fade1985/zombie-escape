@@ -388,68 +388,40 @@ static func apuntar(id: String) -> void:
 
 
 # ── La hoja ──
-# Una página del dosier dibujada como un papel: amarillento, con letra de máquina de escribir, el tipo de
-# documento arriba, un sello y la nota a mano al pie. La usan el aviso de la partida (menus.gd) y el ordenador.
+# Una página del dosier dibujada como un expediente de Velaria Corp. (ui/hoja_dosier.gd): el papel viejo, el logo, la
+# foto del sitio con el muerto, el texto, el sello y la nota en un pósit. La usan el aviso de la partida (menus.gd) y
+# el Dosier del ordenador (ui/carpeta_dosier.gd). Los colores del papel también los usa la hojita del suelo (cientifico.gd)
 
 const PAPEL := Color("#e9dfc4")
 const PAPEL_BORDE := Color("#b8a983")
 const TINTA := Color("#2a2520")
 const ROJO := Color("#a3312b")
 const BOLI := Color("#1f3c8a")
+const HOJA := preload("res://scripts/ui/hoja_dosier.gd")
 
 
-# La hoja de una página encontrada, en el idioma del jugador
-static func hoja(p: Dictionary, ancho := 560.0) -> PanelContainer:
-	return dibujar_hoja(Idioma.t(p.tipo), titulo_de(p), Idioma.t(p.texto), Idioma.t(p.nota), ancho)
+# De qué edificio es una página y qué número tiene: [edificio, número (desde 1), páginas del edificio]
+static func sitio_de(p: Dictionary) -> Array:
+	for e in DOSIERES:
+		var paginas: Array = DOSIERES[e].paginas
+		for i in paginas.size():
+			if paginas[i].id == p.get("id", ""):
+				return [e, i + 1, paginas.size()]
+	return ["", 1, 1]
+
+
+# La hoja de una página encontrada, en el idioma del jugador. Mide "ancho" y de alto lo que necesite; si pasa de
+# "alto_max", con la letra algo más pequeña (sin cortar nunca el texto)
+static func hoja(p: Dictionary, ancho := 720.0, alto_max := 440.0) -> Control:
+	var sitio := sitio_de(p)
+	var h: Control = HOJA.new()
+	h.montar(p, sitio[0], sitio[1], sitio[2], false, ancho, alto_max)
+	return h
 
 
 # La hoja de una página aún sin encontrar (el ordenador): arrancada, con lo que dice falta() en vez del texto
-static func hoja_arrancada(edificio: String, p: Dictionary, ancho := 560.0) -> PanelContainer:
-	return dibujar_hoja("???", Idioma.t("Página arrancada"), falta(edificio, p), "", ancho)
-
-
-# El papel, con los textos ya en el idioma del jugador (a_mano = "": sin nota a mano al pie)
-static func dibujar_hoja(tipo_doc: String, titulo: String, escrito: String, a_mano: String, ancho: float) -> PanelContainer:
-	var papel := PanelContainer.new()
-	var estilo := StyleBoxFlat.new()
-	estilo.bg_color = PAPEL
-	estilo.border_color = PAPEL_BORDE
-	estilo.set_border_width_all(2)
-	estilo.set_content_margin_all(18)
-	estilo.shadow_color = Color(0, 0, 0, 0.45)
-	estilo.shadow_size = 6
-	estilo.shadow_offset = Vector2(4, 4)
-	papel.add_theme_stylebox_override("panel", estilo)
-	papel.custom_minimum_size.x = ancho
-	var columna := VBoxContainer.new()
-	columna.add_theme_constant_override("separation", 8)
-	papel.add_child(columna)
-	var arriba := HBoxContainer.new()
-	columna.add_child(arriba)
-	var tipo := texto(tipo_doc, ROJO, 16)
-	tipo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	arriba.add_child(tipo)
-	arriba.add_child(texto(EMPRESA.to_upper(), Color(TINTA, 0.55), 16))
-	columna.add_child(texto(titulo, TINTA, 32))
-	var raya := ColorRect.new()
-	raya.color = Color(TINTA, 0.4)
-	raya.custom_minimum_size.y = 2
-	columna.add_child(raya)
-	var cuerpo := texto(escrito, TINTA, 16)
-	cuerpo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	columna.add_child(cuerpo)
-	if a_mano != "":
-		var nota := texto("— " + a_mano, BOLI, 16)
-		nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		nota.rotation_degrees = -1.0   # escrita a mano, un poco torcida
-		columna.add_child(nota)
-	return papel
-
-
-static func texto(t: String, color: Color, tamano: int) -> Label:
-	var l := Label.new()
-	l.text = t
-	l.add_theme_color_override("font_color", color)
-	l.add_theme_constant_override("outline_size", 0)
-	l.add_theme_font_size_override("font_size", tamano)
-	return l
+static func hoja_arrancada(edificio: String, p: Dictionary, ancho := 720.0, alto_max := 440.0) -> Control:
+	var sitio := sitio_de(p)
+	var h: Control = HOJA.new()
+	h.montar(p, edificio, sitio[1], sitio[2], true, ancho, alto_max)
+	return h

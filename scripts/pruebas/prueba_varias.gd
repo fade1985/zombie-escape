@@ -3498,3 +3498,88 @@ func probar_archivador_logros() -> void:
 		for k in claves:
 			g[k] = copia[k])
 	get_tree().quit()
+
+
+# --dosier-carpeta: el Dosier del ordenador como una carpeta (carpeta_dosier.gd) con la hoja de expediente
+# (hoja_dosier.gd). Con la 1 y la 3 de los Apartamentos y la 1 del centro: al abrir, la pestaña de los Apartamentos y
+# la página 1 (captura-dosier-carpeta.png); al pasar por la 2, la hoja arrancada (captura-dosier-carpeta-falta.png);
+# la pestaña del centro (captura-dosier-carpeta-centro.png) y por dónde va el teclado. Luego, con todas encontradas y en
+# español, alemán, ruso y chino, si cada hoja cabe en la carpeta y en la ventanita de la partida (y con qué letra); la
+# más apretada en ruso y en chino, en foto (captura-dosier-carpeta-<idioma>.png). Deja el guardado como estaba
+func probar_dosier_carpeta() -> void:
+	set_process(false)
+	await get_tree().create_timer(0.3).timeout
+	var copia: Array = Guardado.cargar().paginas.duplicate()
+	Guardado.cambiar(func(g): g.paginas = ["vd7_protocolo", "vd7_correo", Historia.dosier("centro").paginas[0].id])
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.CARPETA_DOSIER.recordado = "apartamentos"
+	ordenador.abrir("dosier")
+	await get_tree().create_timer(0.4).timeout
+	var carpeta: Control = ordenador.ventana.find_child("carpeta", true, false)
+	var marcado := func() -> String:
+		var f := get_viewport().gui_get_focus_owner()
+		return f.name if f else "nada"
+	print("Carpeta · al abrir: %s, mira %s, marcado %s (esperado: apartamentos, vd7_protocolo, b_vd7_protocolo)" % [
+		carpeta.edificio, carpeta.vista, marcado.call()])
+	Captura.foto("captura-dosier-carpeta.png")
+	carpeta.botones["vd7_diario"].grab_focus()
+	await get_tree().create_timer(0.3).timeout
+	print("Carpeta · en la 2: mira %s, arrancada %s, info «%s»" % [carpeta.vista, carpeta.hoja.arrancada, ordenador.info.text])
+	Captura.foto("captura-dosier-carpeta-falta.png")
+	# el teclado: arriba, a la pestaña; a la derecha, la siguiente; abajo, a la primera ficha
+	var pasos := []
+	for a in ["ui_up", "ui_up", "ui_up", "ui_right", "ui_down", "ui_down"]:
+		await pulsar_evento(accion(a))
+		await get_tree().create_timer(0.15).timeout
+		pasos.append(marcado.call())
+	print("Carpeta · teclado desde la 2 (arriba ×3, derecha, abajo ×2): %s (esperado: b_vd7_protocolo, b_edificio_apartamentos, b_edificio_apartamentos, b_edificio_centro, b_vd7_protocolo, b_vd7_diario)" % [pasos])
+	await call("clic_en", carpeta.pestanas["centro"])   # (clic_en está en prueba_larga.gd)
+	await get_tree().create_timer(0.4).timeout
+	carpeta = ordenador.ventana.find_child("carpeta", true, false)
+	print("Carpeta · clic en el centro: %s, mira %s, marcado %s (esperado: centro, su página 1, b_edificio_centro)" % [
+		carpeta.edificio, carpeta.vista, marcado.call()])
+	Captura.foto("captura-dosier-carpeta-centro.png")
+	# ¿cabe cada hoja? Todas encontradas, en cada idioma
+	Guardado.cambiar(func(g):
+		g.paginas = []
+		for e in Historia.DOSIERES:
+			for p in Historia.DOSIERES[e].paginas:
+				g.paginas.append(p.id))
+	for codigo in ["es", "de", "ru", "zh_CN"]:
+		Idioma.poner(codigo, false)
+		var peor := ["", 0.0, 0.0, 0]   # la página, lo que le sobra a su hoja, lo alto que es, su letra
+		var letras := {}
+		var no_caben := []
+		for e in Historia.DOSIERES:
+			ordenador.abrir("dosier", "b_edificio_" + e)
+			await get_tree().create_timer(0.15).timeout
+			carpeta = ordenador.ventana.find_child("carpeta", true, false)
+			for p in Historia.DOSIERES[e].paginas:
+				carpeta.ver(p.id)
+				var alto_max: float = carpeta.alto_hoja()
+				var h: Control = carpeta.hoja
+				letras[h.tam] = letras.get(h.tam, 0) + 1
+				if h.size.y > alto_max + 0.5:
+					no_caben.append(p.id)
+				if h.size.y - alto_max > peor[1] or peor[0] == "":
+					peor = [p.id, h.size.y - alto_max, h.size.y, h.tam]
+		var en_ventana := {}
+		var mas_alta := 0.0
+		for e in Historia.DOSIERES:
+			for p in Historia.DOSIERES[e].paginas:
+				var h: Control = Historia.hoja(p, 720.0, 450.0)
+				en_ventana[h.tam] = en_ventana.get(h.tam, 0) + 1
+				mas_alta = maxf(mas_alta, h.size.y)
+				h.free()
+		print("Hojas en %s · carpeta: letras %s, no caben %s, la más apretada %s (%d de alto, le sobran %d, letra %d) · ventanita: letras %s, la más alta %d (caben 450)" % [
+			codigo, letras, no_caben, peor[0], peor[2], peor[1], peor[3], en_ventana, mas_alta])
+		if codigo in ["ru", "zh_CN"]:
+			ordenador.abrir("dosier", "b_" + peor[0])
+			await get_tree().create_timer(0.3).timeout
+			Captura.foto("captura-dosier-carpeta-%s.png" % codigo)
+	Idioma.poner(Idioma.ORIGEN, false)
+	ordenador.abrir("")
+	ordenador.apagar()
+	Guardado.cambiar(func(g): g.paginas = copia)
+	get_tree().quit()

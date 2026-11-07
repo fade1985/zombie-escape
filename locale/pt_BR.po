@@ -1222,10 +1222,6 @@ msgid "laboratorio"
 msgstr "laboratório"
 
 #: scripts/historia.gd
-msgid "Página arrancada"
-msgstr "Página arrancada"
-
-#: scripts/historia.gd
 msgid "Dosier VD-7 · Apartamentos"
 msgstr "Dossiê VD-7 · Apartamentos"
 
@@ -5157,6 +5153,42 @@ msgstr "Resgatar $%d"
 msgid "Hecho"
 msgstr "Feito"
 
+#: scripts/ui/carpeta_dosier.gd
+msgid "%d / %d páginas"
+msgstr "%d / %d páginas"
+
+#: scripts/ui/carpeta_dosier.gd
+msgid "Página %d"
+msgstr "Página %d"
+
+#: scripts/ui/carpeta_dosier.gd
+msgid "falta"
+msgstr "falta"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "EDIFICIO: %s"
+msgstr "PRÉDIO: %s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "HALLADO EN: %s"
+msgstr "ACHADA EM: %s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "Investigación del sueño"
+msgstr "Pesquisa do sono"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "REF: %s"
+msgstr "REF: %s"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "Página arrancada"
+msgstr "Página arrancada"
+
+#: scripts/ui/hoja_dosier.gd
+msgid "CONFIDENCIAL"
+msgstr "CONFIDENCIAL"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "escudo %d"
@@ -6141,10 +6173,6 @@ msgid "Página %d de %d"
 msgstr "Página %d de %d"
 
 #: scripts/ui/menus.gd
-msgid "Junto al cuerpo de %s"
-msgstr "Junto ao corpo: %s"
-
-#: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "Fica guardada no Dossiê do computador da manutenção"
 
@@ -6885,24 +6913,8 @@ msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
 msgstr "Resgatados $%d! Já pode gastar em pontos ou armas."
 
 #: scripts/ui/ordenador.gd
-msgid "Dosier VD-7"
-msgstr "Dossiê VD-7"
-
-#: scripts/ui/ordenador.gd
-msgid "%d / %d páginas"
-msgstr "%d / %d páginas"
-
-#: scripts/ui/ordenador.gd
-msgid "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."
-msgstr "Cada página que você encontrar, em qualquer prédio e em qualquer andar, fica aqui para sempre."
-
-#: scripts/ui/ordenador.gd
-msgid "Página %d"
-msgstr "Página %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Arrancada"
-msgstr "Arrancada"
+msgid "%s: %d de %d páginas del dosier."
+msgstr "%s: %d de %d páginas do dossiê."
 
 #: scripts/ui/ordenador.gd
 msgid "%s, página %d: %s. La llevaba %s."
@@ -6963,10 +6975,6 @@ msgstr "%s: %d de %d objetos encontrados."
 #: scripts/ui/ordenador.gd
 msgid "Dosier"
 msgstr "Dossiê"
-
-#: scripts/ui/ordenador.gd
-msgid "%s: %d de %d páginas del dosier."
-msgstr "%s: %d de %d páginas do dossiê."
 
 #: scripts/ui/ordenador.gd
 msgid "Bestiario · %d / %d"
@@ -7087,6 +7095,10 @@ msgstr "Árvore de talentos"
 #: scripts/ui/ordenador.gd
 msgid "Tienda de armas"
 msgstr "Loja de armas"
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Dossiê VD-7"
 
 #: scripts/ui/ordenador.gd
 msgid "Noticias de Canal 8"
