@@ -526,7 +526,7 @@ en una línea.
   morada en un círculo azul marino; lo eligió el dueño el 7 nov y es el logo de Velaria para todo), «Investigación del sueño», código de
   barras y referencia (`VD7-AP-01`: edificio y número); la franja con el edificio, «HALLADO EN» y n / total; el tipo, el
   título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
-  pósit (amarillo, con la esquina doblada, pequeño y casi cuadrado: las notas son cortas), pegado abajo a la derecha; las últimas líneas del texto se estrechan para dejarle sitio. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
+  pósit (amarillo, con la esquina doblada, pequeño y casi cuadrado: las notas son cortas; la nota, letra a letra como escrita a mano con boli, `a_mano_en`, siempre a 16), pegado abajo a la derecha; las últimas líneas del texto se estrechan para dejarle sitio. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
   cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se

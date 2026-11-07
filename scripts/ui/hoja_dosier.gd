@@ -22,6 +22,7 @@ const TINTA := Color("#2a2520")
 const GRIS := Color("#6a5f50")
 const ROJO := Color("#a3312b")
 const BOLI := Color("#1f3c8a")
+const TAM_POSIT := 16   # la letra del pósit, siempre a 16 (a otro tamaño, escrita a mano, se emborrona)
 # El logo de Velaria Corp. (inventado: una luna creciente dentro de un círculo, porque el VD-7 se vende para dormir;
 # lo eligió el dueño el 7 nov y es el de siempre: tools/logo_velaria.py). 24x24: a 2 unidades por píxel en la cabecera de
 # siempre y a su tamaño en la compacta
@@ -112,8 +113,9 @@ func colocar(ancho: float, t: int, t_titulo: int, compacto: bool) -> float:
 		# pegado abajo a la derecha: las últimas líneas del texto se estrechan para dejarle sitio. Se prueba a subirlo
 		# línea a línea y se queda donde la hoja acabe más arriba
 		var ancho_posit := minf(196.0, (derecha - izquierda) * 0.4)
-		var trozos := partir(a_mano, ancho_posit - 20)
-		var alto_posit := maxf(14.0 + trozos.size() * alto_linea + 16, ancho_posit * 0.78)   # (abajo, sitio para la esquina doblada)
+		var trozos := partir(a_mano, ancho_posit - 20, TAM_POSIT)
+		var linea_posit := alto_de(TAM_POSIT) + 1.0
+		var alto_posit := maxf(14.0 + trozos.size() * linea_posit + 16, ancho_posit * 0.78)   # (abajo, sitio para la esquina doblada)
 		var estrecho := derecha - izquierda - ancho_posit - 14
 		var mejor := INF
 		var arriba := y + 6   # (debajo de todo el texto)
@@ -133,8 +135,8 @@ func colocar(ancho: float, t: int, t_titulo: int, compacto: bool) -> float:
 				estrecho if yy + alto_linea > sitio_posit - 4 else derecha - izquierda))
 		for i in trozos.size():
 			# (el texto, centrado de arriba abajo, sin contar la esquina doblada)
-			var margen_arriba := maxf(12.0, (alto_posit - 16.0 - trozos.size() * alto_linea) / 2.0 + 4.0)
-			lineas_posit.append([trozos[i], Vector2(10, margen_arriba + fuente.get_ascent(tam) + i * alto_linea)])
+			var margen_arriba := maxf(12.0, (alto_posit - 16.0 - trozos.size() * linea_posit) / 2.0 + 4.0)
+			lineas_posit.append([trozos[i], Vector2(10, margen_arriba + fuente.get_ascent(TAM_POSIT) + i * linea_posit)])
 		fondo = mejor
 	return fondo + MARGEN
 
@@ -163,13 +165,15 @@ func escribir(texto: String, y: float, sitio: Callable) -> float:
 
 
 # Las líneas de un texto con un ancho fijo (el pósit)
-func partir(texto: String, ancho: float) -> Array:
+func partir(texto: String, ancho: float, t := 0) -> Array:
+	if t == 0:
+		t = tam
 	var salen := []
 	for parrafo in texto.split("\n"):
 		var linea := ""
 		for trozo in trocear(parrafo):
 			var prueba: String = linea + (" " if trozo[1] and linea != "" else "") + trozo[0]
-			if linea != "" and ancho_de(prueba, tam) > ancho:
+			if linea != "" and ancho_de(prueba, t) > ancho:
 				salen.append(linea)
 				linea = trozo[0]
 			else:
@@ -395,6 +399,26 @@ func posit() -> void:
 	draw_colored_polygon(PackedVector2Array([esquina[0].lerp(punta, 0.35), esquina[1].lerp(punta, 0.35), punta]), Color("#e3b648"))
 	draw_colored_polygon(PackedVector2Array([esquina[0].lerp(punta, 0.7), esquina[1].lerp(punta, 0.7), punta]), Color("#d29d36"))
 	draw_line(esquina[0], esquina[1], Color("#fff7cc"), 1.0)
-	for l in lineas_posit:
-		draw_string(fuente, caja.position + l[1], l[0], HORIZONTAL_ALIGNMENT_LEFT, -1, tam, BOLI)
+	var giro := Transform2D(deg_to_rad(1.5), caja_posit.get_center())
+	for i in lineas_posit.size():
+		a_mano_en(giro, caja.position + lineas_posit[i][1], lineas_posit[i][0], i)
 	draw_set_transform(Vector2.ZERO)
+
+
+# Una línea escrita a mano con boli: letra a letra, inclinada hacia la derecha (como la cursiva de quien escribe deprisa),
+# cada una un poco más arriba o más abajo, algo girada y con más o menos tinta, y la línea entera subiendo o bajando
+# un poco. "giro" es cómo está puesto el pósit. Siempre sale igual para el mismo texto (no tiembla al redibujar)
+func a_mano_en(giro: Transform2D, punto: Vector2, texto: String, n: int) -> void:
+	var r := RandomNumberGenerator.new()
+	r.seed = hash(texto) + n
+	var deriva := r.randf_range(-0.025, 0.025)   # lo que sube o baja la línea al avanzar
+	var x := 0.0
+	for letra in texto:
+		var avance := fuente.get_string_size(letra, HORIZONTAL_ALIGNMENT_LEFT, -1, TAM_POSIT).x
+		if letra != " ":
+			var sitio := punto + Vector2(x, x * deriva + r.randi_range(-1, 1)).round()
+			var trazo := Transform2D(deg_to_rad(r.randf_range(-2.5, 2.5)), Vector2.ONE, deg_to_rad(-12.0), sitio)
+			draw_set_transform_matrix(giro * trazo)
+			var tinta := BOLI.lerp(Color("#2e55b0"), r.randf_range(0.0, 0.45))
+			draw_string(fuente, Vector2.ZERO, letra, HORIZONTAL_ALIGNMENT_LEFT, -1, TAM_POSIT, Color(tinta, r.randf_range(0.82, 1.0)))
+		x += avance + r.randi_range(-1, 1) * 0.5
