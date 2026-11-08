@@ -31,12 +31,14 @@ from PIL import Image, ImageEnhance, ImageOps
 # lienzo: el zarpazo del vecino, de perfil, alarga los brazos más allá de los 48 píxeles y se le cortaban las manos;
 # en 96 cabe (tools/zombi.py coloca cada fotograma buscando en él el dibujo quieto, sea cual sea su tamaño). Y si el
 # golpe va con los pies clavados: cada fotograma se coloca por sus propios pies, no por la rejilla de la fila (en el del
-# vecino, al echarse atrás, GPT le corría los pies 2 o 3 píxeles adelante y parecía que resbalaba)
+# vecino, al echarse atrás, GPT le corría los pies 2 o 3 píxeles adelante y parecía que resbalaba). Y el retoque de
+# color (contraste, brillo, color): el vecino salía mucho más apagado que el de PixelLab, al lado del otro; con algo más
+# de los tres se ve igual de vivo sin perder el volumen (lo pidió el dueño)
 ZOMBIS = {
-    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48, False),
-    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96, True),   # el vecino
+    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48, False, (1.08, 1.0, 1.0)),
+    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
-FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO = ZOMBIS["vecina"]
+FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -112,7 +114,11 @@ def nitido(dibujo):
     """Al mezclar, los colores se lavan un poco: algo más de contraste. Poco (el 8 nov, de 1,25 y más color a 1,08):
     así se quedan las sombras suaves y el volumen de la imagen, como los muebles de GPT (lo eligió el dueño)"""
     alfa = dibujo.split()[3]
-    rgb = ImageEnhance.Contrast(dibujo.convert("RGB")).enhance(1.08)
+    rgb = ImageEnhance.Contrast(dibujo.convert("RGB")).enhance(RETOQUE[0])   # (cada zombi, el suyo: ZOMBIS)
+    if RETOQUE[1] != 1.0:
+        rgb = ImageEnhance.Brightness(rgb).enhance(RETOQUE[1])
+    if RETOQUE[2] != 1.0:
+        rgb = ImageEnhance.Color(rgb).enhance(RETOQUE[2])
     rgb.putalpha(alfa)
     return rgb
 
@@ -255,7 +261,7 @@ if __name__ == "__main__":
     if sys.argv[1:2] == ["--zombi"]:
         if len(sys.argv) < 3 or sys.argv[2] not in ZOMBIS:
             sys.exit("Zombis que conoce: " + ", ".join(ZOMBIS))
-        FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO = ZOMBIS[sys.argv[2]]
+        FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS[sys.argv[2]]
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
