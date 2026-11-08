@@ -56,7 +56,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 
 | Español | Chino |
 |---|---|
-| el vecino · el arrastrado · el crío · el dinamitero | 邻居 · 爬行者 · 熊孩子 · 自爆客 |
+| el vecino · la vecina · el arrastrado · el crío · el dinamitero | 邻居 · 女邻居 · 爬行者 · 熊孩子 · 自爆客 |
 | el de los tentáculos · el gordo | 触手怪 · 胖子 |
 | la dependienta · el vigilante · el guardia (de la tarjeta) · el maniquí | 店员 · 巡逻保安 · 持卡保安 · 假人模特 |
 | durmiente · noctámbulo | 沉睡者 · 夜行者 |

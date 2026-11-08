@@ -285,6 +285,7 @@ func probar_zombis_sala() -> void:
 	var cerca_puerta := 0
 	var juntos := 0
 	var salas_n := 0
+	var tipos := {}   # cuántos de cada tipo (la vecina, desde el 8 nov, en los apartamentos)
 	for i in 12:
 		Planta.semilla = 1000 + i
 		var num := 1 + i % 5
@@ -298,6 +299,7 @@ func probar_zombis_sala() -> void:
 			var puerta := Vector2(s.salidas[0].en, Planta.MURO + 52 if s.salidas[0].dir == "arriba" else s.alto - Planta.MURO - 52)
 			var cuenta := {}
 			for z in s.zombis:
+				tipos[z.tipo] = tipos.get(z.tipo, 0) + 1
 				var c := int(z.pos.x / Planta.CASILLA)
 				var f := int(z.pos.y / Planta.CASILLA)
 				var id: int = s.apt.dueno[f * s.apt.cols + c]
@@ -320,6 +322,7 @@ func probar_zombis_sala() -> void:
 	print("Zombis por habitación: %d pisos, %d habitaciones, %d zombis (%.1f por piso, %.1f por habitación)" % [
 		pisos, salas_n, total, float(total) / maxi(pisos, 1), float(total) / maxi(salas_n, 1)])
 	print("Zombis por habitación: con menos de 2: %s (esperado: ninguna)" % [pocos])
+	print("Zombis por habitación: de cada tipo %s (esperado: entre ellos, vecinas)" % [tipos])
 	print("Zombis por habitación: a menos de %d de la puerta %d, dos a menos de 60: %d (esperado: 0 y 0)" % [
 		int(Planta.LEJOS_PUERTA), cerca_puerta, juntos])
 	# la foto: un piso de la 3ª planta, con todos sus zombis a la vista

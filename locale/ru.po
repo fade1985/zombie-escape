@@ -519,6 +519,14 @@ msgid "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis.
 msgstr "Приехал на рассвете в грузовике Velaria в обмен на бесплатную квартиру. Теперь он спящий: не здоровается на лестнице, а кусается."
 
 #: scripts/bestiario.gd
+msgid "La vecina"
+msgstr "Соседка"
+
+#: scripts/bestiario.gd
+msgid "Se pasaba el día pegada a la mirilla. Ahora baja en bata y rulos a ver qué es ese ruido, y el ruido eres tú."
+msgstr "Целыми днями не отходила от глазка. Теперь спускается в халате и бигуди посмотреть, что за шум, а шум — это ты."
+
+#: scripts/bestiario.gd
 msgid "El arrastrado"
 msgstr "Ползун"
 
@@ -7025,12 +7033,12 @@ msgid "Sale en: %s"
 msgstr "Где встречается: %s"
 
 #: scripts/ui/ordenador.gd
-msgid "Aún no te lo has cruzado."
-msgstr "Ты его еще не встречал."
-
-#: scripts/ui/ordenador.gd
 msgid "Matados: %d"
 msgstr "Убито: %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no te lo has cruzado."
+msgstr "Ты его еще не встречал."
 
 #: scripts/ui/ordenador.gd
 msgid "Talentos"

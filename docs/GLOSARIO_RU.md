@@ -44,7 +44,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | Zombis de la torre: oficinista · escolta de Velaria · ¡TOC! | Офисный работник · Телохранитель Velaria · ТУК! | |
 | VD-7 · Marta Ruiz · Elena · Canal 8 | VD-7 · Марта Руис · Елена · Канал 8 | |
 | Dirección (de Velaria) · gerencia (del centro) | Дирекция · руководство | |
-| Zombis: vecino, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Сосед, Ползун, Пацан, Подрывник, Спрут, Толстяк | |
+| Zombis: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Сосед, Соседка, Ползун, Пацан, Подрывник, Спрут, Толстяк | |
 | dependienta · vigilante · guardia de la tarjeta · maniquí | Продавщица · Охранник · Охранник с картой · Манекен | |
 | durmiente · noctámbulo · Sujeto 0 · sujetos | спящий · полуночник · Объект 0 · объекты / подопытные | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Полицейский · Военный · Врач · Мастер · Фармацевт · Техник | |

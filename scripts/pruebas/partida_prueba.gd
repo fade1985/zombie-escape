@@ -190,7 +190,7 @@
 #   --llegada           por dónde se llega a cada planta: el portal a la izquierda, las demás (y la azotea) por la derecha [prueba_sitios.gd]
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
-#   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos, y que no se amontonen [prueba_sitios.gd]
+#   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos (y de cada tipo), y que no se amontonen [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera [prueba_sitios.gd]
 #   --torre             (con --edificio torre) Torre Velaria, el esqueleto (tercer edificio, parte 1): sus plantas, sus

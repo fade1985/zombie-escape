@@ -819,6 +819,13 @@ en una línea.
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
   animaciones), `jefe_hoja.py` (jefes: `py tools/jefe_hoja.py gloton-72 jefe-gloton`; cada jefe en su ficha `JEFES`),
   `superviviente.py`, `zombi.py` + `png.py`, `piel.py`, `espejo_oeste.py`, `hoja.py` (hoja de revisión).
+- **Un zombi hecho con GPT (la vecina, 8 nov):** `zombi_gpt.py` pasa las imágenes de GPT (`assets/sources/zombi-vecina-gpt/`:
+  `personaje.webp` con las 5 vistas en fila y una por animación y vista, `andar-s.webp`, `ataque-e.webp`…, con los fotogramas
+  en una o dos filas sobre negro puro) a los dibujos que monta `zombi.py`: quita el fondo, reduce mezclando colores como los
+  muebles, con un contorno suave, y coloca cada fotograma midiendo la rejilla de GPT con un punto que no se mueve (la cabeza
+  al andar, los pies en lo demás). Las 3 vistas del oeste salen en espejo. `py tools/zombi_gpt.py personaje`, luego
+  `py tools/zombi_gpt.py <andar|ataque|golpe|muerte> <south|south-east|east|north-east|north>`, y después `zombi.py
+  zombi-vecina-48 zombi-vecina` y `hacer_frames.py`. Sale en los apartamentos (`planta.gd`, `horda`), con el coste del vecino.
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es

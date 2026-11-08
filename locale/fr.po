@@ -518,6 +518,14 @@ msgid "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis.
 msgstr "Arrivé à l'aube dans un camion de Velaria, en échange d'un appartement gratuit. C'est un dormeur, maintenant : il ne dit plus bonjour dans l'escalier, il mord."
 
 #: scripts/bestiario.gd
+msgid "La vecina"
+msgstr "La voisine"
+
+#: scripts/bestiario.gd
+msgid "Se pasaba el día pegada a la mirilla. Ahora baja en bata y rulos a ver qué es ese ruido, y el ruido eres tú."
+msgstr "Elle passait ses journées collée au judas. Maintenant, elle descend en peignoir et bigoudis voir d'où vient ce bruit, et le bruit, c'est toi."
+
+#: scripts/bestiario.gd
 msgid "El arrastrado"
 msgstr "Le rampant"
 
@@ -7005,12 +7013,12 @@ msgid "Sale en: %s"
 msgstr "Apparaît dans : %s"
 
 #: scripts/ui/ordenador.gd
-msgid "Aún no te lo has cruzado."
-msgstr "Tu ne l'as pas encore croisé."
-
-#: scripts/ui/ordenador.gd
 msgid "Matados: %d"
 msgstr "Tués : %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no te lo has cruzado."
+msgstr "Tu ne l'as pas encore croisé."
 
 #: scripts/ui/ordenador.gd
 msgid "Talentos"

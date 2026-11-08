@@ -517,6 +517,14 @@ msgid "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis.
 msgstr "凌晨坐着Velaria的卡车搬来的，换来一套免费公寓。现在他是个沉睡者：在楼梯上碰见不打招呼，直接咬。"
 
 #: scripts/bestiario.gd
+msgid "La vecina"
+msgstr "女邻居"
+
+#: scripts/bestiario.gd
+msgid "Se pasaba el día pegada a la mirilla. Ahora baja en bata y rulos a ver qué es ese ruido, y el ruido eres tú."
+msgstr "她整天趴在猫眼上。现在她穿着睡袍、戴着卷发筒下楼，看看是什么声音——而那个声音就是你。"
+
+#: scripts/bestiario.gd
 msgid "El arrastrado"
 msgstr "爬行者"
 
@@ -6985,12 +6993,12 @@ msgid "Sale en: %s"
 msgstr "出现在：%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Aún no te lo has cruzado."
-msgstr "你还没遇到过它。"
-
-#: scripts/ui/ordenador.gd
 msgid "Matados: %d"
 msgstr "击杀：%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no te lo has cruzado."
+msgstr "你还没遇到过它。"
 
 #: scripts/ui/ordenador.gd
 msgid "Talentos"

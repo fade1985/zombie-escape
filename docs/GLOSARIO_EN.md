@@ -105,7 +105,7 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | Español | Inglés |
 |---|---|
 | Supervivientes (sin artículo, con mayúscula): Policía · Militar · Médica · Farmacéutica · Ferretero · Técnico | Cop · Soldier · Doctor · Pharmacist · Hardware Guy · Technician |
-| Zombis: el vecino · el reptante · el niño · el dinamitero · el de los tentáculos · el gordo · la dependienta · el vigilante · el guardia · el maniquí | the Neighbor · the Crawler · the Kid · the Bomber · the Tentacle Guy · the Fat Man · the Sales Clerk · the Security Guard · the Keycard Guard · the Mannequin |
+| Zombis: el vecino · la vecina · el reptante · el niño · el dinamitero · el de los tentáculos · el gordo · la dependienta · el vigilante · el guardia · el maniquí | the Neighbor · the Neighbor Lady · the Crawler · the Kid · the Bomber · the Tentacle Guy · the Fat Man · the Sales Clerk · the Security Guard · the Keycard Guard · the Mannequin |
 | Jefes: la criatura · el gerente mutado | the Creature · the Mutated Manager |
 | Gritos de la portera: ¡QUE ACABO DE FREGAR! · ¡VECINOS! · ¡LEJÍA! · ¡ÁCIDO! · ¡A BARRER! | I JUST MOPPED! · TENANTS! · BLEACH! · ACID! · CLEAN SWEEP! |
 | Gerente: ¡A TRABAJAR! · ¡AQUÍ NO PARA NADIE! | BACK TO WORK! · NOBODY CLOCKS OUT! |

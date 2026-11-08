@@ -55,7 +55,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 
 | Español | Francés |
 |---|---|
-| el vecino · el arrastrado · el crío · el dinamitero | le voisin · le rampant · le gamin · le dynamiteur |
+| el vecino · la vecina · el arrastrado · el crío · el dinamitero | le voisin · la voisine · le rampant · le gamin · le dynamiteur |
 | el de los tentáculos · el gordo · la dependienta | le gars aux tentacules · le gros · la vendeuse |
 | el vigilante · el guardia (de la tarjeta) · el maniquí | le vigile · le garde (au badge) · le mannequin |
 | ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH !!! (en el bestiario sigue «¡OFERTAS!»: SOLDES !) |

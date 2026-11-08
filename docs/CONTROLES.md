@@ -129,7 +129,7 @@ arrojables).
 | Pestaña | Qué tiene |
 |---|---|
 | Jefes | un botón por jefe (atajo: **Mayús + 1…0**); **A media vida** (sale ya enfadado) y **Quieto** (ataca y avisa, pero no se mueve) |
-| Zombis | un botón por tipo (atajo: **1…8**: normal, lento, rápido, explosivo, tentáculos, venenoso, vigilante, dependienta; sin atajo, al final, la **Vecina (GPT)**, la de la prueba hecha con GPT), **Cuántos** (1, 3, 5 o 10) y **Borrar todos** |
+| Zombis | un botón por tipo (atajo: **1…8**: normal, lento, rápido, explosivo, tentáculos, venenoso, vigilante, dependienta; sin atajo, al final, la **Vecina**), **Cuántos** (1, 3, 5 o 10) y **Borrar todos** |
 | Ayudas | se encienden y se apagan: cada línea de ayuda, el panel de daño, los avisos de los jefes en el suelo, la penumbra y **Esconder todo** (como el guion) |
 | Johnny | **Invencible**, **Munición sin fin**, la **Diana** (ponerla o quitarla) y **Siguiente skin** (no se guarda) |
 | Ir a | la **Exposición** (todos los muebles y zombis; F9 vuelve), la **Azotea**, el **Superviviente** (su apartamento ya sin zombis; en el centro comercial, cada vez el siguiente) y la sala de cada minijefe del edificio, en la planta que le tocó |

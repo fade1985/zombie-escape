@@ -444,8 +444,8 @@ func probar_colecciones() -> void:
 		var suyos: Array = Bestiario.de_familia(fam)
 		suman += suyos.size()
 		print("Familia %s: %d/%d vistos" % [fam, suyos.filter(func(id): return id in g.bestiario).size(), suyos.size()])
-	if suman != Bestiario.LISTA.size() or Bestiario.LISTA.size() != 29:
-		push_error("Colecciones: las familias suman %d y el bestiario tiene %d (esperado: 29 y 29)" % [suman, Bestiario.LISTA.size()])
+	if suman != Bestiario.LISTA.size() or Bestiario.LISTA.size() != 30:   # (con la vecina, 8 nov)
+		push_error("Colecciones: las familias suman %d y el bestiario tiene %d (esperado: 30 y 30)" % [suman, Bestiario.LISTA.size()])
 	if g.colecciones_nuevo:
 		push_error("Colecciones: el aviso de nuevo sigue puesto después de abrir el programa")
 	# matar uno lo cuenta en la partida (al acabar pasa al guardado); en la sala de pruebas, no (ver meter_zombi)
