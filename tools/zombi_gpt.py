@@ -25,12 +25,14 @@ import sys
 from collections import deque
 from PIL import Image, ImageEnhance, ImageOps
 
-# Cada zombi: dónde están sus imágenes de GPT y dónde van los dibujos que lee tools/zombi.py
+# Cada zombi: dónde están sus imágenes de GPT, dónde van los dibujos que lee tools/zombi.py y hasta qué gris se toma
+# por fondo. Con 10, al vecino se le comía a trozos la pierna de detrás (los vaqueros en sombra, casi negros, se
+# confundían con el fondo y salían huecos que parpadeaban al andar); con 5 se queda entera y sin cerco oscuro
 ZOMBIS = {
-    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48"),
-    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48"),   # el vecino, rehecho
+    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10),
+    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5),   # el vecino, rehecho
 }
-FUENTE, DESTINO = ZOMBIS["vecina"]
+FUENTE, DESTINO, FONDO = ZOMBIS["vecina"]
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -46,7 +48,7 @@ def sin_fondo(im):
     cola = deque([(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)])
     while cola:
         x, y = cola.popleft()
-        if x < 0 or y < 0 or x >= W or y >= H or fondo[y * W + x] or max(px[x, y][:3]) >= 10:
+        if x < 0 or y < 0 or x >= W or y >= H or fondo[y * W + x] or max(px[x, y][:3]) >= FONDO:
             continue
         fondo[y * W + x] = 1
         cola.extend(((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)))
@@ -240,7 +242,7 @@ if __name__ == "__main__":
     if sys.argv[1:2] == ["--zombi"]:
         if len(sys.argv) < 3 or sys.argv[2] not in ZOMBIS:
             sys.exit("Zombis que conoce: " + ", ".join(ZOMBIS))
-        FUENTE, DESTINO = ZOMBIS[sys.argv[2]]
+        FUENTE, DESTINO, FONDO = ZOMBIS[sys.argv[2]]
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
