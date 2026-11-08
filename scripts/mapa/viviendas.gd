@@ -145,3 +145,19 @@ static func casa(id: String) -> Vector2:
 	var r := habitacion(id)
 	var fondo := r.size.y - (TAPADAS if r.position.y <= PASILLO_F else 0)   # (la del fondo, como el pasillo)
 	return Vector2(r.position.x + r.size.x / 2.0, r.position.y + fondo / 2.0) * CASILLA + SITIO.get(id, Vector2.ZERO)
+
+
+# Los apliques (mapa.gd: poner_apliques), fijos: uno en medio de la pared de arriba de cada habitación y, en la del
+# pasillo, uno en cada tabique entre las puertas de arriba y otro al final (sin tapar ninguna puerta ni el cartel). En
+# unidades; "zona", la habitación que alumbran
+static func apliques(apt: Dictionary) -> Array:
+	var lista := []
+	for s in apt.salas:
+		var xs := [(s.c0 + s.ancho / 2.0) * CASILLA]
+		if s.id == 0:
+			xs = [(BORDE + LARGO - 2.5) * CASILLA]
+			for k in range(1, 4):
+				xs.append((BORDE + ENTRADA + k * (ANCHO + 1) - 0.5) * CASILLA)
+		for x in xs:
+			lista.append({"x": x, "y": s.f0 * CASILLA + 1.0, "zona": s.id, "semilla": 0.0, "parpadea": false})
+	return lista

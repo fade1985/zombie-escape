@@ -13,7 +13,8 @@
 class_name Luz
 extends CanvasModulate
 
-const OSCURIDAD_SALA := {"pasillo": 0.8, "apartamento": 0.84, "jefe": 0.5}
+# (la sala de mantenimiento y los trasteros, como un apartamento: se alumbran con la linterna y sus apliques)
+const OSCURIDAD_SALA := {"pasillo": 0.8, "apartamento": 0.84, "jefe": 0.5, "mantenimiento": 0.84, "viviendas": 0.84}
 const PASILLO := 0.8                       # la oscuridad de referencia: a esta, las luces lucen a tope
 const SOMBRA := Color(0.03, 0.03, 0.1)     # a qué color tiende lo oscuro (azul noche, casi negro)
 # La linterna de Johnny: un cono que sale de sus pies hacia donde mira y hace sombras con los muebles
