@@ -52,6 +52,10 @@ CORRE = False
 # El lienzo del andar: 48, salvo los que se estiran (el crío corriendo, y el arrastrado, que de perfil echa un brazo
 # muy adelante y el muñón detrás: el de PixelLab ya andaba en 60)
 LIENZO_ANDAR = {"rapido": 64, "lento": 64}
+# Los que van por el suelo (el arrastrado): en el ataque, el golpe y la muerte, cada fotograma a la altura a la que lo
+# dibuja GPT, no con lo más bajo en el suelo. Al dar el zarpazo levanta las dos manos y, con lo más bajo abajo, todo
+# el cuerpo se hundía 5 píxeles justo al atacar
+ALTURA_GPT = False
 ANDAR = 48
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
@@ -225,6 +229,10 @@ def animacion(anim, vista):
         # lo alta que va la cabeza de cada uno respecto a las de su fila (para el que corre)
         cimas = [abajo - d.height for d, abajo, _ in suyos]
         cima = sum(cimas) / len(cimas)
+        if ALTURA_GPT and anim != "andar":
+            # (el arrastrado: lo que cada uno queda por encima del suelo de su fila, el más bajo de ella)
+            suelo = max(abajo for _, abajo, _ in suyos)
+            cimas, cima = [abajo - suelo for _, abajo, _ in suyos], 0
         if anim == "golpe" and GOLPE_CLAVADO:
             trozos += [(d, centro, f, c - cima) for (d, _, centro), f, c in zip(suyos, fijos, cimas)]   # cada uno, por sus pies
         else:
@@ -252,7 +260,10 @@ def animacion(anim, vista):
     for n, (dibujo, centro, columna, cima) in enumerate(trozos, 1):
         corrido = sitio - LIENZO / 2 + (centro - columna) / escala
         arriba = caja[1] + (lado - LIENZO) + cima / escala if CORRE and anim == "andar" else None
-        hecho = en_lienzo(reducir(dibujo, escala), corrido, lado, arriba)
+        reducido = reducir(dibujo, escala)
+        if ALTURA_GPT and anim != "andar":
+            arriba = lado - 1 - reducido.height + cima / escala
+        hecho = en_lienzo(reducido, corrido, lado, arriba)
         hecho.save(os.path.join(carpeta, "%s-%d.png" % (vista, n)))
         for otra in espejo:
             ImageOps.mirror(hecho).save(os.path.join(carpeta, "%s-%d.png" % (otra, n)))
@@ -286,6 +297,7 @@ if __name__ == "__main__":
         FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS[sys.argv[2]]
         CORRE = sys.argv[2] == "rapido"
         ANDAR = LIENZO_ANDAR.get(sys.argv[2], LIENZO)
+        ALTURA_GPT = sys.argv[2] == "lento"
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
