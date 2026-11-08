@@ -1,7 +1,7 @@
 """Los trasteros del edificio, donde viven los supervivientes rescatados (las habitaciones de las viviendas, viviendas.gd):
 como los de la foto del dueño, de chapa metálica acanalada color crema, con el suelo de hormigón pulido gris azulado
 claro y las puertas azules lisas con el pomo de metal. Todo dibujado aquí, a la densidad de los personajes (cada píxel,
-2 unidades del juego), sin costuras:
+2 unidades del juego), sin costuras, y vieja (grano, mugre, óxido, juntas y grietas: que no parezca de plástico):
 
   py tools/trastero.py   → assets/sprites/suelo-trastero.png    el suelo (128 × 128, se repite)
                            assets/sprites/pared-trastero.png    la cara de la pared de arriba (192 × 48, se repite a lo largo)
@@ -28,21 +28,30 @@ LINEA = (29, 27, 44)      # el contorno de siempre
 
 # ── El suelo: hormigón pulido gris azulado claro, con manchas suaves y alguna motita ──
 SUELO = 128
-SUELO_TONOS = [(139, 149, 168), (145, 155, 173), (151, 161, 179)]   # oscuro, medio, claro (muy juntos: manchas suaves)
-MOTA_CLARA = (171, 180, 196)
-MOTA_OSCURA = (118, 127, 146)
+SUELO_TONOS = [(126, 131, 140), (134, 139, 147), (141, 146, 153), (149, 153, 159)]   # gris de hormigón, de oscuro a claro
+MOTA_CLARA = (166, 170, 175)
+MOTA_OSCURA = (106, 110, 118)
+ACEITE = (78, 80, 88)             # la mancha de aceite
+ROZADURA = (92, 94, 102)          # las de las ruedas
+GRIETA = (84, 87, 96)
+JUNTA = (70, 72, 82)              # el corte de la junta de dilatación
+JUNTA_CANTO = (164, 168, 174)     # y su canto, con luz
 
 # ── La pared: chapa acanalada crema; cada canal, PERIODO píxeles (16: una casilla), con su nervio ──
 PARED_ANCHO, PARED_ALTO = 192, 48
 PERIODO = 16
 CREMA = (222, 216, 199)          # el liso de la chapa
-CREMA_MOTA = (210, 204, 187)     # alguna motita en el liso (que no quede de plástico)
+CREMA_MOTA = (210, 204, 187)     # el grano del liso (que no quede de plástico): lo oscuro...
+CREMA_CLARO = (229, 224, 209)    # ...y lo claro
+PLANCHA = 64                     # cada plancha de chapa, de ancho (cuatro canales; 192 = tres)
 NERVIO_LUZ = (240, 236, 222)     # el lado del nervio que da a la luz (la izquierda)
 NERVIO_SOMBRA = (172, 166, 150)  # el lado en sombra
 NERVIO_HONDO = (146, 140, 126)   # el pie del nervio, el más oscuro
 JUNTO_NERVIO = (196, 190, 173)   # el liso pegado a la sombra del nervio
 TORNILLO = (120, 116, 106)
-SUCIO = (150, 142, 124)          # los chorretones de mugre de abajo
+SUCIO = (150, 142, 124)          # la mugre que sube del suelo
+SUCIO_HONDO = (124, 116, 100)    # sus chorretones y los roces
+OXIDO = (150, 88, 48)            # el que chorrea de los tornillos
 # el perfil de abajo (de chapa galvanizada, como el de arriba): de arriba abajo
 RODAPIE = [(96, 100, 110), (184, 190, 199), (156, 162, 172), (118, 124, 134)]
 # ── La chapa lagrimada de abajo de la pared del pasillo (la de la foto): acero galvanizado con su relieve de rombos ──
@@ -89,34 +98,96 @@ def ruido_toro(tam, celda, rng):
     return valores
 
 
+def mezcla(a, b, t):
+    return tuple(round(x + (y - x) * t) for x, y in zip(a, b))
+
+
 def suelo():
+    """Hormigón de verdad: el gris de fondo a manchas grandes (cuatro tonos, con el paso de uno a otro tramado para que
+    no se vean escalones), el árido en motitas, la junta de dilatación cortada en los bordes (cada 128 píxeles, 4
+    casillas: el suelo hecho por losas) con el canto algo desconchado, una grieta fina que sale de la junta, una mancha
+    de aceite vieja y rozaduras oscuras de los carros. Todo casa por los cuatro lados"""
     rng = random.Random(14)
     grande = ruido_toro(SUELO, 32, rng)
-    chico = ruido_toro(SUELO, 8, rng)
+    medio = ruido_toro(SUELO, 16, rng)
+    chico = ruido_toro(SUELO, 4, rng)
     im = Image.new('RGB', (SUELO, SUELO))
     px = im.load()
     for y in range(SUELO):
         for x in range(SUELO):
-            v = grande[y][x] * 0.75 + chico[y][x] * 0.25
-            px[x, y] = SUELO_TONOS[0 if v < 0.3 else 1 if v < 0.7 else 2]
-    # motitas sueltas (el árido del hormigón), más claras que oscuras
-    for _ in range(140):
-        px[rng.randrange(SUELO), rng.randrange(SUELO)] = MOTA_CLARA
-    for _ in range(70):
-        px[rng.randrange(SUELO), rng.randrange(SUELO)] = MOTA_OSCURA
+            v = grande[y][x] * 0.6 + medio[y][x] * 0.25 + chico[y][x] * 0.15
+            v += (rng.random() - 0.5) * 0.08   # el tramado entre tonos
+            px[x, y] = SUELO_TONOS[0 if v < 0.36 else 1 if v < 0.52 else 2 if v < 0.68 else 3]
+    # el árido: motitas claras y oscuras, alguna de dos píxeles
+    for _ in range(260):
+        x, y = rng.randrange(SUELO), rng.randrange(SUELO)
+        c = MOTA_CLARA if rng.random() < 0.55 else MOTA_OSCURA
+        px[x, y] = c
+        if rng.random() < 0.2:
+            px[(x + 1) % SUELO, y] = c
+    # la mancha de aceite, vieja: un borrón oscuro de borde irregular, más oscuro por dentro
+    cx, cy = 84, 40
+    for y in range(-12, 13):
+        for x in range(-16, 17):
+            d = (x / 16) ** 2 + (y / 11) ** 2 + (chico[(cy + y) % SUELO][(cx + x) % SUELO] - 0.5) * 0.9
+            if d < 1:
+                p = ((cx + x) % SUELO, (cy + y) % SUELO)
+                px[p] = mezcla(px[p], ACEITE, 0.4 if d < 0.45 else 0.22)
+    # rozaduras de ruedas: trazos cortos y finos en horizontal, apenas más oscuros
+    for _ in range(7):
+        x, y = rng.randrange(SUELO), rng.randrange(SUELO)
+        for k in range(rng.randint(6, 16)):
+            p = ((x + k) % SUELO, (y + (k // 7)) % SUELO)
+            if rng.random() < 0.8:
+                px[p] = mezcla(px[p], ROZADURA, 0.5)
+    # la grieta: sale de la junta de arriba y baja serpenteando, cada vez más fina (con su labio claro al lado)
+    x, y = 30, 1
+    for paso in range(46):
+        px[x % SUELO, y] = GRIETA
+        if paso < 30 and rng.random() < 0.5:
+            px[(x + 1) % SUELO, y] = mezcla(px[(x + 1) % SUELO, y], MOTA_CLARA, 0.6)
+        y += 1
+        x += rng.choice((-1, 0, 0, 1))
+        if paso > 34 and rng.random() < 0.5:
+            y += 1
+    # la junta de dilatación, en el borde de arriba y en el de la izquierda: el corte oscuro y, al lado, el canto con luz
+    for i in range(SUELO):
+        px[i, 0] = JUNTA
+        px[0, i] = JUNTA
+        px[i, 1] = mezcla(px[i, 1], JUNTA_CANTO, 0.6)
+        px[1, i] = mezcla(px[1, i], JUNTA_CANTO, 0.6)
+        px[i, SUELO - 1] = mezcla(px[i, SUELO - 1], JUNTA, 0.35)   # la sombra del otro canto
+        px[SUELO - 1, i] = mezcla(px[SUELO - 1, i], JUNTA, 0.35)
+    # algún desconchón en el canto de la junta
+    for _ in range(6):
+        k = rng.randrange(4, SUELO - 4)
+        for d in range(rng.randint(1, 3)):
+            if rng.random() < 0.5:
+                px[k + d, 1] = JUNTA
+                px[k + d, 2] = mezcla(px[k + d, 2], JUNTA, 0.5)
+            else:
+                px[1, k + d] = JUNTA
+                px[2, k + d] = mezcla(px[2, k + d], JUNTA, 0.5)
     im.save(f'{SALIDA}/suelo-trastero.png')
 
 
 def pared(lagrimada=False):
-    """La cara de la pared de chapa acanalada. La del pasillo (lagrimada) lleva abajo, en vez del perfil, una franja de
+    """La cara de la pared de chapa acanalada, vieja: cada plancha (PLANCHA píxeles de ancho) con su tono, algo distinto
+    del de al lado, y la junta donde una monta sobre la otra, con su fila de tornillos; el liso con grano; arriba, la
+    sombra del perfil; abajo, la mugre que sube del suelo a manchas, con chorretones; el óxido que chorrea de algunos
+    tornillos; y algún roce y algún bollo. La del pasillo (lagrimada) lleva abajo, en vez del perfil, una franja de
     chapa lagrimada que sube LAGRIMADA píxeles, como las de los pasillos de trasteros de verdad: que no se raye la chapa
     con los carros y las cajas"""
     rng = random.Random(7)
     im = Image.new('RGB', (PARED_ANCHO, PARED_ALTO))
     px = im.load()
     chapa = PARED_ALTO - (LAGRIMADA if lagrimada else len(RODAPIE))
+    grano = ruido_toro(PARED_ANCHO, 4, rng)
+    manchas = ruido_toro(PARED_ANCHO, 16, rng)
+    tonos = [1.0, 0.965, 1.015]   # el de cada plancha
     for x in range(PARED_ANCHO):
         k = x % PERIODO
+        tono = tonos[(x // PLANCHA) % len(tonos)]
         for y in range(chapa):
             # el nervio, en las últimas columnas de cada canal: luz a la izquierda, sombra a la derecha
             if k == 11:
@@ -130,25 +201,56 @@ def pared(lagrimada=False):
             elif k == 0:
                 c = JUNTO_NERVIO
             else:
-                c = CREMA_MOTA if rng.random() < 0.015 else CREMA
+                g = grano[y % PARED_ANCHO][x]
+                c = CREMA_MOTA if g < 0.3 else CREMA_CLARO if g > 0.78 else CREMA
+            c = tuple(min(255, round(v * tono)) for v in c)
+            # la sombra del perfil de arriba, que se va en tres filas
+            if y < 3:
+                c = mezcla(c, NERVIO_HONDO, (0.5, 0.25, 0.1)[y])
+            # la mugre de abajo: sube más donde hay mancha, y se apaga hacia arriba
+            alto = 6 + manchas[(y * 3) % PARED_ANCHO][x] * 12
+            sube = chapa - 1 - y
+            if sube < alto:
+                c = mezcla(c, SUCIO, 0.55 * (1 - sube / alto) ** 1.4)
             px[x, y] = c
-        # la fila de arriba, en la sombra del perfil
-        px[x, 0] = tuple(round(v * 0.85) for v in px[x, 0])
         if not lagrimada:
             for i, c in enumerate(RODAPIE):
                 px[x, chapa + i] = c
-    # los tornillos, arriba y abajo, en medio del liso de cada canal
+    # la junta de cada plancha: el canto de la de encima, con luz, y su sombra en la de debajo
+    for x0 in range(0, PARED_ANCHO, PLANCHA):
+        for y in range(chapa):
+            px[x0, y] = mezcla(px[x0, y], NERVIO_LUZ, 0.6)
+            px[(x0 + 1) % PARED_ANCHO, y] = mezcla(px[(x0 + 1) % PARED_ANCHO, y], NERVIO_HONDO, 0.55)
+        for y in range(5, chapa - 3, 9):   # sus tornillos, a lo alto
+            px[(x0 + 3) % PARED_ANCHO, y] = TORNILLO
+    # los tornillos, arriba y abajo, en medio del liso de cada canal; de algunos chorrea óxido
     for x in range(5, PARED_ANCHO, PERIODO):
-        px[x, 3] = TORNILLO
-        px[x, chapa - 3] = TORNILLO
-    # unos chorretones de mugre que suben desde el suelo
-    for _ in range(9):
+        for y in (4, chapa - 4):
+            px[x, y] = TORNILLO
+            if rng.random() < 0.35:
+                largo = rng.randint(2, 7)
+                for d in range(1, largo + 1):
+                    if y + d < chapa:
+                        px[x, y + d] = mezcla(px[x, y + d], OXIDO, 0.55 * (1 - d / (largo + 1)) + 0.1)
+    # chorretones de mugre que suben desde el suelo
+    for _ in range(14):
         x = rng.randrange(PARED_ANCHO)
         if x % PERIODO in (11, 14, 15):
             continue
-        for y in range(chapa - 1, chapa - 1 - rng.randint(3, 9), -1):
-            if rng.random() < 0.7:
-                px[x, y] = SUCIO
+        for y in range(chapa - 1, chapa - 1 - rng.randint(4, 14), -1):
+            if rng.random() < 0.75:
+                px[x, y] = mezcla(px[x, y], SUCIO_HONDO, 0.6)
+    # roces: rayas horizontales cortas a media altura (cajas y carros), oscuras con un filo claro encima
+    for _ in range(5):
+        x, y = rng.randrange(PARED_ANCHO - 14), rng.randrange(chapa // 2, chapa - 6)
+        for d in range(rng.randint(5, 14)):
+            px[x + d, y] = mezcla(px[x + d, y], SUCIO_HONDO, 0.45)
+            px[x + d, y - 1] = mezcla(px[x + d, y - 1], NERVIO_LUZ, 0.4)
+    # un par de bollos: una sombra curva con su luz al otro lado
+    for bx, by in ((40, chapa - 12), (150, chapa - 16)):
+        for d in range(-3, 4):
+            px[bx + d, by - 2 + abs(d) // 2] = mezcla(px[bx + d, by - 2 + abs(d) // 2], NERVIO_HONDO, 0.45)
+            px[bx + d, by + 2 - abs(d) // 2] = mezcla(px[bx + d, by + 2 - abs(d) // 2], NERVIO_LUZ, 0.45)
     if lagrimada:
         lagrimas(px, chapa, rng)
         im.save(f'{SALIDA}/pared-trastero-pasillo.png')
