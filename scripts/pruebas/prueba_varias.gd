@@ -2030,7 +2030,7 @@ func probar_vecina() -> void:
 		z.recibir_golpe(999, Vector2(-60, 0) if z == izquierda else Vector2(60, 0) if z == derecha
 				else Vector2(-42, -42) if z == diagonal else Vector2(0, 60) if z == abajo
 				else Vector2(-42, 42) if z == abajo_diagonal else Vector2(0, -60))
-	# al reventar, las vecinas sueltan gotas de sangre y no trozos verdes (el vecino, sí): captura-vecina-reventon.png
+	# al reventar, las vecinas sueltan gotas de sangre y no trozos verdes, y sin anillo blanco (el vecino, con los dos): captura-vecina-reventon.png
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-vecina-reventon.png")
 	await get_tree().create_timer(1.45).timeout

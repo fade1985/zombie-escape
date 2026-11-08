@@ -88,7 +88,8 @@ const BILLETES_GUARDIA := 2
 const JEFE_POR_PLANTA := 1.35     # los jefes de planta, su vida por cada planta que se sube (M72: antes 1,25)
 const ZOMBI_POR_PLANTA := 0.1     # los demás zombis, vida y zarpazo de más por cada planta (M72: antes, nada)
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
-# Los que al reventar no sueltan trozos verdes de piel, sino gotas de sangre (la vecina: lo pidió el dueño)
+# Los que al reventar no sueltan trozos verdes de piel, sino gotas de sangre, y sin el anillo blanco (la vecina: lo
+# pidió el dueño)
 const TROZOS_DE_SANGRE := ["vecina"]
 # La sangre de cada tipo de zombi: el color de su piel (los trozos al reventar) y el de su mancha (del JS)
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
@@ -1724,7 +1725,8 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 	var trozos: Color = Color("#ff9f1c") if tipo == "explosivo" else PIELES.get(tipo, PIELES.normal)
 	if tipo in TROZOS_DE_SANGRE:
 		trozos = color
-	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo", color, zombi.get_parent())
+	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo" and tipo not in TROZOS_DE_SANGRE,
+		color, zombi.get_parent())
 	var jefa := tipo in JEFES
 	# de un golpe fuerte (un crítico, una explosión...), además revienta en sangre (M49; efecto_suelo.gd)
 	if zombi.get("muerte_fuerte") and not jefa and tipo != "explosivo":
