@@ -192,6 +192,9 @@ func _draw() -> void:
 # bloquea. Ya arreglado (al caer el jefe de la planta, ver arreglar_ascensor en partida.gd), sin la cinta y con la
 # lucecita encendida en verde
 func ascensor() -> void:
+	if not centro and not salida.has("planta_torre"):
+		ascensor_portal()
+		return
 	var w := 80.0
 	var alto := 80.0
 	var x0 := -w / 2.0
@@ -215,6 +218,26 @@ func ascensor() -> void:
 		# la cinta, a media altura de las hojas y sin llegar al cartel de la planta (que acaba 18 a la izquierda de ellas)
 		draw_rect(Rect2(x0 - 10, -34, w + 20, 2), CINTA_SOMBRA)
 		cinta(x0 - 10, -44, w + 20)
+	if salida.has("planta"):
+		cartel_planta()
+
+
+# El de los Apartamentos, de GPT (tools/ascensor_gpt.py): acero sucio y arañado, de 41 × 46 píxeles (82 × 92 unidades), con
+# el indicador negro de encima, donde se pinta la lucecita, y la cinta amarilla y negra (un trozo de 48 × 6 que se repite)
+# de lado a lado a media altura; ya arreglado, sin la cinta y con la lucecita en verde
+const ASCENSOR := preload("res://assets/sprites/ascensor.png")
+const CINTA_GPT := preload("res://assets/sprites/cinta.png")
+func ascensor_portal() -> void:
+	draw_texture_rect(ASCENSOR, Rect2(-41, -92, 82, 92), false)
+	# la lucecita, en medio del indicador (píxeles 17 a 23 y 1 a 3 del dibujo)
+	draw_rect(Rect2(-4, -88, 8, 2), Color("5fd35a") if abierta else Color("8a2020"))
+	if not abierta:
+		var x := -51.0
+		draw_rect(Rect2(x, -34, 102, 2), CINTA_SOMBRA)
+		while x < 51.0:
+			var largo := minf(96.0, 51.0 - x)
+			draw_texture_rect_region(CINTA_GPT, Rect2(x, -46, largo, 12), Rect2(0, 0, largo / 2.0, 6))
+			x += largo
 	if salida.has("planta"):
 		cartel_planta()
 
