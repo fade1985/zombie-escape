@@ -2,13 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/zombi.gd" id="script"]
 [ext_resource type="Script" path="res://scripts/sombra.gd" id="sombra"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento.tres" id="frames"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-rojo.tres" id="ropa1"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-bata.tres" id="ropa2"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-mostaza.tres" id="ropa3"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-negro.tres" id="ropa4"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-militar.tres" id="ropa5"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-turquesa.tres" id="ropa6"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-gpt.tres" id="frames"]
 
 [sub_resource type="CircleShape2D" id="cuerpo"]
 radius = 17.0
@@ -27,7 +21,7 @@ bamboleo = 0.3
 bamboleo_ritmo = 1.5
 a_tirones = true
 altura = 60.0
-ropas = Array[SpriteFrames]([ExtResource("frames"), ExtResource("ropa1"), ExtResource("ropa2"), ExtResource("ropa3"), ExtResource("ropa4"), ExtResource("ropa5"), ExtResource("ropa6")])
+ropas = Array[SpriteFrames]([ExtResource("frames")])
 
 [node name="Sombra" type="Node2D" parent="."]
 position = Vector2(0, 27)
