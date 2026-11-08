@@ -52,8 +52,14 @@ static func probar(menu: Control) -> void:
 	borrar.pressed.emit()
 	await arbol.create_timer(0.2).timeout
 	Captura.foto("captura-huecos-seguro.png")
-	bien("borrar pregunta antes", Guardado.hueco_usado(3))
+	var pregunta: Confirmar = h.find_children("*", "Confirmar", false, false).front()
+	bien("borrar pregunta antes («¿Estás seguro?»)", Guardado.hueco_usado(3) and pregunta != null)
+	pregunta.responder(false)
+	await arbol.process_frame
+	bien("con No no se borra", Guardado.hueco_usado(3))
 	borrar.pressed.emit()
+	await arbol.process_frame
+	(h.find_children("*", "Confirmar", false, false).front() as Confirmar).responder(true)
 	await arbol.create_timer(0.3).timeout
 	Captura.foto("captura-huecos-borrado.png")
 	bien("el hueco 3, borrado (y el 1, intacto)", not Guardado.hueco_usado(3) and Guardado.cargar().dolares == 120)

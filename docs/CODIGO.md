@@ -554,6 +554,9 @@ en una línea.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
   y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
   y la ficha del elegido). La ficha (`ficha()`) lleva su foto de `assets/ui/tutorial/`.
+- `confirmar.gd` (`Confirmar`): la ventanita «¿Estás seguro?» en el centro de la pantalla, con lo que se perdería y
+  Sí / No (el foco empieza en No; Esc o B dicen que no). La usan «Borrar partida» (`huecos.gd`) y «Destruir» del
+  inventario y del baúl. `Confirmar.preguntar(dueño, detalle).respondido` dice si se ha dicho que sí.
 - `relato.gd`: los textos de la historia sobre negro (`Historia.RELATOS`): la introducción y un final por edificio, cada
   uno una sola vez (`relatos` en el guardado; no salen en el reto, y una partida continuada no pasa por la introducción
   pero sí saca el final). Las líneas salen solas,

@@ -268,18 +268,18 @@ func general() -> void:
 	# El idioma: un botón que lleva a la lista de idiomas (idiomas(), desde el 8 nov). Su rótulo, en dos idiomas y con el
 	# nombre del de ahora, para encontrarlo aunque el juego esté en otro
 	var idioma_ahora: String = Idioma.IDIOMAS.filter(func(i): return i[0] == Idioma.actual)[0][1]
-	var al_idioma := opcion("Idioma / Language: " + idioma_ahora)   # no-tr
+	var al_idioma := opcion("Idioma / Language: " + idioma_ahora, "BotonGrande")   # no-tr
 	var letra_ahora := Tema.fuente_del_idioma(Idioma.actual)
 	if letra_ahora != null:
 		al_idioma.add_theme_font_override("font", letra_ahora)
 	al_idioma.pressed.connect(func(): ver("idioma"))
 	boton_idioma = al_idioma   # (al volver de la lista de idiomas, el foco va aquí)
 	# la música y el sonido, tras el botón Audio (audio(), desde el 8 nov)
-	opcion(Idioma.t("Audio")).pressed.connect(func(): ver("audio"))
+	opcion(Idioma.t("Audio"), "BotonGrande").pressed.connect(func(): ver("audio"))
 	# la pantalla completa y el temblor, tras el botón Pantalla (pantalla(), desde el 8 nov)
-	opcion(Idioma.t("Pantalla")).pressed.connect(func(): ver("pantalla"))
+	opcion(Idioma.t("Pantalla"), "BotonGrande").pressed.connect(func(): ver("pantalla"))
 	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
-		var tutorial := opcion(Idioma.t("Tutorial"))
+		var tutorial := opcion(Idioma.t("Tutorial"), "BotonGrande")
 		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
 	if Tactil.activo:
 		var titulo := Label.new()
@@ -361,21 +361,11 @@ func pantalla() -> void:
 	(contenido.get_child(0) as Control).grab_focus.call_deferred()
 
 
-# Las ayudas: cada una, un botón de Sí/No con lo que hace debajo. El aviso de los logros arriba y las ayudas en una
-# caja con barra, como Controles: ya no caben todas en los 640 de alto
+# Las ayudas: cada una, un botón de Sí/No con lo que hace debajo, y el aviso de los logros arriba. Todas a la vista,
+# sin barra (desde que los tutoriales se fueron a la lista de Tutorial, caben)
 func ayudas() -> void:
 	var aviso := explicar(Idioma.t("Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."))
 	aviso.add_theme_color_override("font_color", Tema.AMARILLO)
-	var fuera := contenido
-	var caja := ScrollContainer.new()
-	caja.custom_minimum_size = Vector2(620, 330)
-	caja.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	caja.follow_focus = true
-	fuera.add_child(caja)
-	contenido = VBoxContainer.new()
-	contenido.add_theme_constant_override("separation", 8)
-	contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	caja.add_child(contenido)
 	rotar(Idioma.t("Vida entera"), "vida_entera", SI_NO)
 	explicar(Idioma.t("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."))
 	rotar(Idioma.t("Pistola sin fin"), "pistola_sin_fin", SI_NO)
@@ -384,7 +374,6 @@ func ayudas() -> void:
 	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."))
 	rotar(Idioma.t("Disparo asistido"), "disparo_asistido", SI_NO)
 	explicar(Idioma.t("Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."))
-	contenido = fuera
 
 
 func explicar(texto: String) -> Label:
@@ -476,9 +465,11 @@ func rotar(nombre: String, clave: String, valores: Array) -> void:
 		b.text = "%s: %s" % [nombre, Idioma.t(nuevo[1])])
 
 
-func opcion(texto: String) -> Button:
+# Un botón de la lista, centrado. "variacion": "BotonGrande" para los de General, como los del menú de inicio
+func opcion(texto: String, variacion := "") -> Button:
 	var b := Button.new()
 	b.text = texto
+	b.theme_type_variation = variacion
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	b.custom_minimum_size.x = 360
 	contenido.add_child(b)

@@ -5154,6 +5154,18 @@ msgstr "已完成"
 msgid "Página %d"
 msgstr "第 %d 页"
 
+#: scripts/ui/confirmar.gd
+msgid "¿Estás seguro?"
+msgstr "确定吗？"
+
+#: scripts/ui/confirmar.gd scripts/ui/opciones.gd
+msgid "Sí"
+msgstr "开"
+
+#: scripts/ui/confirmar.gd scripts/ui/opciones.gd
+msgid "No"
+msgstr "关"
+
 #: scripts/ui/hoja_dosier.gd
 msgid "EDIFICIO: %s"
 msgstr "大楼：%s"
@@ -5193,10 +5205,6 @@ msgstr "返回"
 #: scripts/ui/huecos.gd
 msgid "Borrar partida"
 msgstr "删除存档"
-
-#: scripts/ui/huecos.gd scripts/ui/inventario.gd
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "确定吗？再按一次"
 
 #: scripts/ui/huecos.gd
 msgid "Partida %d"
@@ -6369,14 +6377,6 @@ msgid "Sonido: %s"
 msgstr "音效：%s"
 
 #: scripts/ui/opciones.gd
-msgid "No"
-msgstr "关"
-
-#: scripts/ui/opciones.gd
-msgid "Sí"
-msgstr "开"
-
-#: scripts/ui/opciones.gd
 msgid "Música: %s"
 msgstr "音乐：%s"
 
@@ -7263,6 +7263,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "确定吗？再按一次"
 
 #, sin-usar
 msgid "Pulsa una casilla para cambiar esa tecla o ese botón"

@@ -5161,6 +5161,18 @@ msgstr "Done"
 msgid "Página %d"
 msgstr "Page %d"
 
+#: scripts/ui/confirmar.gd
+msgid "¿Estás seguro?"
+msgstr "Are you sure?"
+
+#: scripts/ui/confirmar.gd scripts/ui/opciones.gd
+msgid "Sí"
+msgstr "Yes"
+
+#: scripts/ui/confirmar.gd scripts/ui/opciones.gd
+msgid "No"
+msgstr "No"
+
 #: scripts/ui/hoja_dosier.gd
 msgid "EDIFICIO: %s"
 msgstr "BUILDING: %s"
@@ -5200,10 +5212,6 @@ msgstr "Back"
 #: scripts/ui/huecos.gd
 msgid "Borrar partida"
 msgstr "Delete save"
-
-#: scripts/ui/huecos.gd scripts/ui/inventario.gd
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Sure? Press again"
 
 #: scripts/ui/huecos.gd
 msgid "Partida %d"
@@ -6389,14 +6397,6 @@ msgid "Sonido: %s"
 msgstr "Sound: %s"
 
 #: scripts/ui/opciones.gd
-msgid "No"
-msgstr "No"
-
-#: scripts/ui/opciones.gd
-msgid "Sí"
-msgstr "Yes"
-
-#: scripts/ui/opciones.gd
 msgid "Música: %s"
 msgstr "Music: %s"
 
@@ -7283,6 +7283,10 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Sure? Press again"
 
 #, sin-usar
 msgid "Pulsa una casilla para cambiar esa tecla o ese botón"

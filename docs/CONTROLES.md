@@ -91,8 +91,8 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   elegido con sus botones (**Ponérmela**, **Usar**, **A la mano**, **Al repuesto**, **Tirar al suelo**, **Destruir**).
   **Destruir** (botón rojo, también en el baúl) quita para siempre la casilla elegida entera: lo de la mochila y la
   munición, y en el baúl también sus objetos, armas y paquetes de arrojables (para hacer sitio); no las armas ni los
-  arrojables que lleva Johnny. Pide confirmación: la 1.ª pulsación pone «¿Seguro? Pulsa otra vez» y la 2.ª destruye;
-  elegir otra casilla o esperar 3 s lo cancela. No tiene atajo del mando ni se arrastra.
+  arrojables que lleva Johnny. Pide confirmación: sale en el centro «¿Estás seguro?» con lo que se
+  perdería, y Sí lo destruye (No, Esc o B lo dejan). No tiene atajo del mando ni se arrastra.
   - Flechas o mando: la ficha sigue a la marca; Intro o A salta al botón principal; Y lo hace directamente; X o Supr
     tira; B, Esc o Tab cierran.
   - Ratón o dedo: se toca, o se **arrastra** (se encienden los sitios donde vale soltar; encima de Johnny, se pone el

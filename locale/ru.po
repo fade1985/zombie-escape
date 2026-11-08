@@ -5168,6 +5168,18 @@ msgstr "Готово"
 msgid "Página %d"
 msgstr "Страница %d"
 
+#: scripts/ui/confirmar.gd
+msgid "¿Estás seguro?"
+msgstr "Ты уверен?"
+
+#: scripts/ui/confirmar.gd scripts/ui/opciones.gd
+msgid "Sí"
+msgstr "Да"
+
+#: scripts/ui/confirmar.gd scripts/ui/opciones.gd
+msgid "No"
+msgstr "Нет"
+
 #: scripts/ui/hoja_dosier.gd
 msgid "EDIFICIO: %s"
 msgstr "ЗДАНИЕ: %s"
@@ -5207,10 +5219,6 @@ msgstr "Назад"
 #: scripts/ui/huecos.gd
 msgid "Borrar partida"
 msgstr "Удалить сохранение"
-
-#: scripts/ui/huecos.gd scripts/ui/inventario.gd
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Точно? Нажми еще раз"
 
 #: scripts/ui/huecos.gd
 msgid "Partida %d"
@@ -6409,14 +6417,6 @@ msgid "Sonido: %s"
 msgstr "Звук: %s"
 
 #: scripts/ui/opciones.gd
-msgid "No"
-msgstr "Нет"
-
-#: scripts/ui/opciones.gd
-msgid "Sí"
-msgstr "Да"
-
-#: scripts/ui/opciones.gd
 msgid "Música: %s"
 msgstr "Музыка: %s"
 
@@ -7303,6 +7303,10 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Точно? Нажми еще раз"
 
 #, sin-usar
 msgid "Pulsa una casilla para cambiar esa tecla o ese botón"

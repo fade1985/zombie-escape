@@ -2,7 +2,7 @@
 # tarjeta con su resumen (mejor planta, dólares, edificios completados, partidas jugadas y la partida a medias) o
 # «Vacía». Se abre con JUGAR (desde el 8 nov). Al pulsar una tarjeta se pasa a ese hueco: si tiene una partida a medias,
 # se sigue; si no, el menú se monta otra vez con lo suyo y abre «Elige edificio». Debajo de cada tarjeta con
-# algo, «Borrar»: la primera pulsación pregunta y la segunda lo borra para siempre. Esc (o B en el mando) vuelve al menú.
+# algo, «Borrar partida»: pregunta «¿Estás seguro?» (confirmar.gd) y con Sí lo borra para siempre. Esc (o B en el mando) vuelve al menú.
 class_name Huecos
 extends CenterContainer
 
@@ -53,15 +53,16 @@ func poner_tarjetas() -> void:
 			borrar.text = Idioma.t("Borrar partida")
 			borrar.custom_minimum_size.x = 200
 			borrar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			# Antes de borrar, la ventanita de «¿Estás seguro?» (confirmar.gd); con No, el foco vuelve a «Borrar partida»
 			borrar.pressed.connect(func():
-				if borrar.text == Idioma.t("Borrar partida"):
-					borrar.text = Idioma.t("¿Seguro? Pulsa otra vez")
-				else:
+				Confirmar.preguntar(self).respondido.connect(func(si: bool):
+					if not si:
+						borrar.grab_focus()
+						return
 					Guardado.borrar_hueco(n)
 					cambiado = true
-					Sonido.tocar("click")
 					poner_tarjetas()
-					tarjeta_de(n).grab_focus())
+					tarjeta_de(n).grab_focus()))
 			caja.add_child(borrar)
 		tarjetas.add_child(caja)
 
