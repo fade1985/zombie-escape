@@ -320,7 +320,7 @@
 #   --continuar         la partida a medias: se guarda al subir a la 1ª planta, el menú enseña «Continuar partida» y,
 #                       al continuarla, la planta y lo que se llevaba son iguales             [prueba_varias.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
-#   --vecina            la vecina hecha con GPT junto al vecino: andar, atacar, golpe y muerte [prueba_varias.gd]
+#   --vecina            la vecina hecha con GPT (de frente y de lado) junto al vecino: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla); vale con --edificio X  [prueba_varias.gd]

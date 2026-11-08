@@ -14,6 +14,8 @@ por píxel del juego, en 2016 de ancho): GPT la devuelve a 2000 de ancho, así q
 Uso (desde la carpeta del proyecto):
   py tools/zombi_gpt.py personaje      las 5 vistas quietas → assets/sources/zombi-vecina-48/rotations/ (y las 3 en espejo)
   py tools/zombi_gpt.py andar south    andar de frente (andar-s.webp) → assets/sources/zombi-vecina-48/walk/south-<n>.png
+  py tools/zombi_gpt.py andar east     de perfil (andar-e.webp) → walk/east-<n>.png y, en espejo, walk/west-<n>.png
+  py tools/zombi_gpt.py rellenar       las animaciones que aún no hay, con el dibujo quieto de su dirección
 """
 import os
 import sys
@@ -164,10 +166,17 @@ def animacion(anim, vista):
     carpeta = os.path.join(DESTINO, nombres[anim])
     os.makedirs(carpeta, exist_ok=True)
     quieto.save(os.path.join(carpeta, "%s-0.png" % vista))
+    # la dirección del otro lado (de perfil a la derecha → a la izquierda), la misma en espejo
+    espejo = [otra for otra, de in ESPEJO.items() if de == vista]
+    for otra in espejo:
+        ImageOps.mirror(quieto).save(os.path.join(carpeta, "%s-0.png" % otra))
     for n, (dibujo, aparte) in enumerate(trozos, 1):
         corrido = (aparte - trozos[0][1]) / escala   # (el primero, en medio)
-        en_lienzo(reducir(dibujo, escala), corrido).save(os.path.join(carpeta, "%s-%d.png" % (vista, n)))
-        print("%s %s-%d" % (anim, vista, n))
+        hecho = en_lienzo(reducir(dibujo, escala), corrido)
+        hecho.save(os.path.join(carpeta, "%s-%d.png" % (vista, n)))
+        for otra in espejo:
+            ImageOps.mirror(hecho).save(os.path.join(carpeta, "%s-%d.png" % (otra, n)))
+        print("%s %s-%d%s" % (anim, vista, n, " (y en espejo: %s)" % otra if espejo else ""))
 
 
 # Mientras solo estén hechas algunas direcciones (la prueba empezó solo de frente): las demás animaciones, con el

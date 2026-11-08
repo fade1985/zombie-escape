@@ -1967,9 +1967,10 @@ func correr_un_rato(centro: Vector2) -> float:
 	return rapidez
 
 
-# Con "--captura --vecina": la vecina, el zombi de la prueba hecho entero con GPT (tools/zombi_gpt.py; de momento solo
-# de frente), al lado del vecino de siempre, para comparar. En la sala de pruebas, los dos bajan hacia Johnny
-# (andar_s: captura-vecina-andar.png), le atacan (captura-vecina-ataque.png), reciben un golpe
+# Con "--captura --vecina": la vecina, el zombi de la prueba hecho entero con GPT (tools/zombi_gpt.py; de momento de
+# frente y de perfil), al lado del vecino de siempre, para comparar. En la sala de pruebas, la vecina y el vecino bajan
+# hacia Johnny y otras dos vecinas le llegan de lado, una por cada lado (de perfil a la derecha y, en espejo, a la
+# izquierda) (captura-vecina-andar.png), le atacan (captura-vecina-ataque.png), reciben un golpe
 # (captura-vecina-golpe.png) y mueren (captura-vecina-muerte.png, ya tendidos). En la terminal, la animación y el
 # fotograma de cada uno en cada momento
 func probar_vecina() -> void:
@@ -1996,9 +1997,13 @@ func probar_vecina() -> void:
 	print("Johnny en pantalla: %s" % johnny.get_global_transform_with_canvas().origin)
 	var ella: Node2D = meter_zombi("vecina", johnny.position + Vector2(0, -230))   # justo encima: le ataca de frente
 	var el: Node2D = meter_zombi("normal", johnny.position + Vector2(200, -230))
+	var izquierda: Node2D = meter_zombi("vecina", johnny.position + Vector2(-230, 0))   # (le llega mirando a la derecha)
+	var derecha: Node2D = meter_zombi("vecina", johnny.position + Vector2(230, 0))
+	var de_lado := func() -> String:
+		return "de lado: %s y %s" % [que_hace.call(izquierda), que_hace.call(derecha)]
 	await get_tree().create_timer(0.7).timeout
 	Captura.foto("captura-vecina-andar.png")
-	print("Vecina andando: %s · vecino %s (esperado: andar andar_s los dos)" % [que_hace.call(ella), que_hace.call(el)])
+	print("Vecina andando: %s · vecino %s (esperado: andar andar_s los dos) · %s (esperado: andar_e y andar_o)" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
 	# que lleguen y ataquen
 	var esperado := 0.0
 	while (ella.estado != "zarpazo" or ella.sprite.frame < 6) and esperado < 6.0:
@@ -2006,19 +2011,19 @@ func probar_vecina() -> void:
 		esperado += 1.0 / 60
 	await RenderingServer.frame_post_draw
 	Captura.foto("captura-vecina-ataque.png")
-	print("Vecina atacando: %s · vecino %s (esperado: zarpazo ataque_s)" % [que_hace.call(ella), que_hace.call(el)])
+	print("Vecina atacando: %s · vecino %s (esperado: zarpazo ataque_s) · %s (esperado: ataque_e y ataque_o)" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
 	await get_tree().create_timer(1.0).timeout
-	for z in [ella, el]:
-		z.recibir_golpe(5, Vector2(0, -60))
+	for z in [ella, el, izquierda, derecha]:   # (empujados hacia fuera: cada una sigue mirando a Johnny)
+		z.recibir_golpe(5, Vector2(-60, 0) if z == izquierda else Vector2(60, 0) if z == derecha else Vector2(0, -60))
 	await get_tree().create_timer(0.12).timeout
 	Captura.foto("captura-vecina-golpe.png")
-	print("Vecina con el golpe: %s · vecino %s (esperado: golpe golpe_s)" % [que_hace.call(ella), que_hace.call(el)])
+	print("Vecina con el golpe: %s · vecino %s (esperado: golpe golpe_s) · %s" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
 	await get_tree().create_timer(0.6).timeout
-	for z in [ella, el]:
-		z.recibir_golpe(999, Vector2(0, -60))
+	for z in [ella, el, izquierda, derecha]:   # (empujados hacia fuera: cada una sigue mirando a Johnny)
+		z.recibir_golpe(999, Vector2(-60, 0) if z == izquierda else Vector2(60, 0) if z == derecha else Vector2(0, -60))
 	await get_tree().create_timer(1.6).timeout
 	Captura.foto("captura-vecina-muerte.png")
-	print("Vecina muerta: %s · vecino %s (esperado: muerto muerte_s en el último fotograma)" % [que_hace.call(ella), que_hace.call(el)])
+	print("Vecina muerta: %s · vecino %s (esperado: muerto muerte_s en el último fotograma) · %s (esperado: muerte_e y muerte_o)" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
 	get_tree().quit()
 
 
