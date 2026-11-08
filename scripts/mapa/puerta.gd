@@ -72,6 +72,7 @@ const PLACA_SUELO := {"hoja": preload("res://assets/sprites/placa-rota-suelo.png
 const CARTEL_MANT_LISO := preload("res://assets/sprites/cartel-mantenimiento-liso.png")
 const MANT_PUNTA := 9
 const MANT_ALTO := 30.0
+const PLACA_AZUL := 22.0   # lo alto de la placa azul pequeña con la letra de los pisos A y B
 const MANT_MARGEN := 14.0   # del borde a las letras, a cada lado (justo pasado el tornillo)
 static var mant_fuente: FontVariation
 const CARTEL_LETRA := Color("e9dfc6")   # el blanco roto de las letras de GPT
@@ -151,8 +152,12 @@ func _draw() -> void:
 				draw_texture_rect(DIBUJO[dibujo], Rect2(-36, -86, 72, 86), false)
 			if dibujo == "servicio":
 				cartel_mantenimiento(Vector2(46, -64))   # a la derecha del marco, a la altura del de TRASTEROS
+			elif salida.get("placa", "") == "llave":
+				placa_de_piso(Vector2(42, -78), PLACA_PARED, Vector2(38, -80))
 			elif salida.has("placa"):
-				placa_de_piso(Vector2(42, -78), PLACA_PARED, Vector2(38, -80))   # en la pared, a la derecha del marco y a la altura de los ojos
+				# la letra del piso en una placa azul pequeña como la de la planta (la del ascensor), a la derecha del marco y
+				# a la altura de los ojos (antes, una de latón rota y torcida: PLACA_PARED)
+				cartel_azul(salida.placa, Vector2(42, -64), PLACA_AZUL)
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
 			if metal:
@@ -160,8 +165,9 @@ func _draw() -> void:
 			else:
 				var modelo := 2 if centro else (1 if limpia else 0)
 				draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(modelo * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
-			if salida.has("placa"):
-				# la de acero, encima del muro, a la derecha del hueco; las de latón, tiradas en el suelo, a un lado de la puerta
+			if salida.get("placa", "") == "llave":
+				# la de acero, encima del muro, a la derecha del hueco (las de latón tiradas en el suelo de los pisos C y D, PLACA_SUELO,
+				# ya no salen: esos pisos se quedan sin placa)
 				placa_de_piso(Vector2(42, 6), PLACA_SUELO, Vector2(34, -56) if salida.placa == "C" else Vector2(-88, -60))
 		_:
 			# En los laterales del pasillo: las escaleras (la salida de incendios, en el muro de la derecha) o la puerta
@@ -253,24 +259,27 @@ func cartel_mantenimiento(en: Vector2) -> void:
 	cartel_azul(Idioma.t("Mantenimiento").to_upper(), en)
 
 
-# La placa azul esmaltada (la de MANTENIMIENTO) con "texto", del largo que pida: "en", el medio de su lado izquierdo
-func cartel_azul(texto: String, en: Vector2) -> void:
+# La placa azul esmaltada (la de MANTENIMIENTO) con "texto", del largo que pida: "en", el medio de su lado izquierdo.
+# "alto", lo alto de la placa (las puntas, con sus tornillos, y el margen, a su escala; la letra, siempre a 16)
+func cartel_azul(texto: String, en: Vector2, alto := MANT_ALTO) -> void:
+	var escala := alto / MANT_ALTO
+	var margen := roundf(MANT_MARGEN * escala / 2.0) * 2.0
 	var letra := 16
 	if not mant_fuente:   # la letra de siempre, con las letras algo más juntas (el cartel, más corto)
 		mant_fuente = FontVariation.new()
 		mant_fuente.base_font = Tema.FUENTE
 		mant_fuente.spacing_glyph = -1
 	var letras := ceilf(mant_fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra).x / 2.0) * 2.0
-	var r := Rect2(en.x, en.y - MANT_ALTO / 2.0, letras + MANT_MARGEN * 2.0, MANT_ALTO)
+	var r := Rect2(en.x, en.y - alto / 2.0, letras + margen * 2.0, alto)
 	draw_rect(Rect2(r.position + Vector2(2, 2), r.size), Color(0, 0, 0, 0.25))   # su sombra en la pared, como el de TRASTEROS
 	var tam := CARTEL_MANT_LISO.get_size()
-	var punta := MANT_PUNTA * 2.0
+	var punta := roundf(MANT_PUNTA * 2.0 * escala / 2.0) * 2.0
 	draw_texture_rect_region(CARTEL_MANT_LISO, Rect2(r.position, Vector2(punta, r.size.y)), Rect2(0, 0, MANT_PUNTA, tam.y))
 	draw_texture_rect_region(CARTEL_MANT_LISO, Rect2(r.position.x + punta, r.position.y, r.size.x - punta * 2.0, r.size.y),
 		Rect2(MANT_PUNTA, 0, tam.x - MANT_PUNTA * 2, tam.y))
 	draw_texture_rect_region(CARTEL_MANT_LISO, Rect2(r.end.x - punta, r.position.y, punta, r.size.y),
 		Rect2(tam.x - MANT_PUNTA, 0, MANT_PUNTA, tam.y))
-	var donde := Vector2(r.position.x + MANT_MARGEN, r.position.y + 21.0)
+	var donde := Vector2(r.position.x + margen, r.position.y + roundf(alto / 2.0 + 6.0))
 	draw_string(mant_fuente, donde + Vector2(2, 2), texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, Color(0, 0, 0, 0.35))
 	draw_string(mant_fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, CARTEL_LETRA)
 
