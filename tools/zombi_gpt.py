@@ -29,12 +29,14 @@ from PIL import Image, ImageEnhance, ImageOps
 # por fondo, y de qué tamaño es el lienzo del ataque, el golpe y la muerte. Con 10, al vecino se le comía a trozos la pierna de detrás (los vaqueros en sombra, casi negros, se
 # confundían con el fondo y salían huecos que parpadeaban al andar); con 5 se queda entera y sin cerco oscuro. El
 # lienzo: el zarpazo del vecino, de perfil, alarga los brazos más allá de los 48 píxeles y se le cortaban las manos;
-# en 96 cabe (tools/zombi.py coloca cada fotograma buscando en él el dibujo quieto, sea cual sea su tamaño)
+# en 96 cabe (tools/zombi.py coloca cada fotograma buscando en él el dibujo quieto, sea cual sea su tamaño). Y si el
+# golpe va con los pies clavados: cada fotograma se coloca por sus propios pies, no por la rejilla de la fila (en el del
+# vecino, al echarse atrás, GPT le corría los pies 2 o 3 píxeles adelante y parecía que resbalaba)
 ZOMBIS = {
-    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48),
-    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96),   # el vecino, rehecho
+    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48, False),
+    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96, True),   # el vecino
 }
-FUENTE, DESTINO, FONDO, LIENZO_ANIM = ZOMBIS["vecina"]
+FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO = ZOMBIS["vecina"]
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -197,7 +199,10 @@ def animacion(anim, vista):
         fijos = [fijo(d, centro, por_la_cabeza) for d, _, centro in suyos]
         if not (anim == "muerte" and numero_fila > 0 and rejilla):
             rejilla = recta(fijos)
-        trozos += [(d, centro, rejilla[0] + rejilla[1] * i) for i, (d, _, centro) in enumerate(suyos)]
+        if anim == "golpe" and GOLPE_CLAVADO:
+            trozos += [(d, centro, f) for (d, _, centro), f in zip(suyos, fijos)]   # cada uno, por sus pies
+        else:
+            trozos += [(d, centro, rejilla[0] + rejilla[1] * i) for i, (d, _, centro) in enumerate(suyos)]
     # la escala: que el primero (de pie, como empiezan todas) mida de alto lo que el dibujo quieto
     quieto = Image.open(os.path.join(DESTINO, "rotations", vista + ".png"))
     caja = quieto.getbbox()
@@ -250,7 +255,7 @@ if __name__ == "__main__":
     if sys.argv[1:2] == ["--zombi"]:
         if len(sys.argv) < 3 or sys.argv[2] not in ZOMBIS:
             sys.exit("Zombis que conoce: " + ", ".join(ZOMBIS))
-        FUENTE, DESTINO, FONDO, LIENZO_ANIM = ZOMBIS[sys.argv[2]]
+        FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO = ZOMBIS[sys.argv[2]]
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
