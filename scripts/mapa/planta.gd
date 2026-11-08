@@ -390,7 +390,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	pasillo.apliques = []
 	var x := MURO + 130
 	while x < ancho - MURO - 60:
-		if pasillo.salidas.all(func(s): return s.dir != "arriba" or absf(s.en - x) > 90) \
+		# (y, a la derecha de la puerta de la sala de mantenimiento, sin tapar su cartel: puerta.gd)
+		if pasillo.salidas.all(func(s): return s.dir != "arriba" or (absf(s.en - x) > 90
+				and not (s.get("placa", "") == "llave" and x > s.en and x < s.en + 260))) \
 				and pasillo.escaparates.all(func(e): return absf(e.x - x) > ESCAPARATE_MEDIO + 20):
 			pasillo.apliques.append({"x": x, "semilla": rng.randf(), "parpadea": rng.randf() < 0.3})
 		x += 230

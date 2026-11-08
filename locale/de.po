@@ -2713,13 +2713,9 @@ msgstr "Jetzt gibt es kein Zurück mehr"
 msgid "Laboratorio"
 msgstr "Labor"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Mantenimiento"
 msgstr "Wartung"
-
-#: scripts/mapa/puerta.gd
-msgid "SALA DE MANTENIMIENTO"
-msgstr "WARTUNGSRAUM"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

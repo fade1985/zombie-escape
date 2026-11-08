@@ -27,8 +27,8 @@ func probar_pasillo() -> void:
 
 
 # Con "--captura --cartel-sala": la puerta de acero de la sala de mantenimiento en el pasillo de la planta baja (la A, de
-# tools/puerta_servicio.py) y su cartel a la izquierda (tools/cartel_mantenimiento.py), con Johnny delante: en español, con
-# las letras del dibujo, y en inglés, francés, ruso y chino, con la traducción escrita en la placa lisa. Fotos:
+# tools/puerta_servicio.py) y su cartel a la derecha (tools/cartel_mantenimiento.py), con Johnny delante: «MANTENIMIENTO»
+# escrito en la placa lisa, en español, inglés, francés, ruso y chino. Fotos:
 # captura-cartel-sala-<idioma>.png. Luego se cierra
 func probar_cartel_sala() -> void:
 	var antes := Idioma.actual
@@ -40,7 +40,7 @@ func probar_cartel_sala() -> void:
 		Idioma.poner(codigo, false)
 		puerta.queue_redraw()
 		await get_tree().create_timer(0.5).timeout
-		print("Cartel de la sala en %s: «%s»" % [codigo, Idioma.t("SALA DE MANTENIMIENTO")])
+		print("Cartel de la sala en %s: «%s»" % [codigo, Idioma.t("Mantenimiento").to_upper()])
 		Captura.foto("captura-cartel-sala-%s.png" % codigo)
 	Idioma.poner(antes, false)
 	get_tree().quit()

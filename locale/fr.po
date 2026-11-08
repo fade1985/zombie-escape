@@ -2713,13 +2713,9 @@ msgstr "Pas de retour en arrière"
 msgid "Laboratorio"
 msgstr "Laboratoire"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Mantenimiento"
 msgstr "Maintenance"
-
-#: scripts/mapa/puerta.gd
-msgid "SALA DE MANTENIMIENTO"
-msgstr "SALLE DE MAINTENANCE"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

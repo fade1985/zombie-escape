@@ -2713,13 +2713,9 @@ msgstr "There's no going back"
 msgid "Laboratorio"
 msgstr "Laboratory"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Mantenimiento"
 msgstr "Maintenance"
-
-#: scripts/mapa/puerta.gd
-msgid "SALA DE MANTENIMIENTO"
-msgstr "MAINTENANCE ROOM"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

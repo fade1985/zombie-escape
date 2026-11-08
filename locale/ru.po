@@ -2715,13 +2715,9 @@ msgstr "Пути назад нет"
 msgid "Laboratorio"
 msgstr "Лаборатория"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Mantenimiento"
 msgstr "Дворницкая"
-
-#: scripts/mapa/puerta.gd
-msgid "SALA DE MANTENIMIENTO"
-msgstr "ДВОРНИЦКАЯ"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

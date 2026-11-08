@@ -2711,12 +2711,8 @@ msgstr "已经没有回头路了"
 msgid "Laboratorio"
 msgstr "实验室"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Mantenimiento"
-msgstr "维修间"
-
-#: scripts/mapa/puerta.gd
-msgid "SALA DE MANTENIMIENTO"
 msgstr "维修间"
 
 #: scripts/mapa/tienda.gd

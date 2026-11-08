@@ -724,9 +724,11 @@ en una línea.
   (`puerta-servicio.png`, 36 × 43; antes, la de PixelLab, gris claro y lisa): acero apagado con grano, mugre que sube del suelo, la chapa
   de las patadas arañada, la mancha de las manos en la manilla, polvo en la rejilla y algo de óxido. `cartel_mantenimiento.py` reduce la
   imagen de GPT del cartel «SALA DE MANTENIMIENTO» (`assets/sources/cartel-mantenimiento-gpt.webp`, chapa esmaltada azul como el de
-  TRASTEROS) mezclando colores (`pasar` de `muebles_gpt.py`) a 84 × 24, y saca también la placa sin letras (`cartel-mantenimiento-liso.png`):
-  `puerta.gd` (`cartel_mantenimiento`) la pone a la izquierda de la puerta, con las letras de GPT en español y, en los otros idiomas, la
-  placa lisa con la traducción escrita encima. Prueba: `--captura --cartel-sala`.
+  TRASTEROS) mezclando colores (`pasar` de `muebles_gpt.py`): la placa sin letras (`cartel-mantenimiento-liso.png`, 64 × 15) y, aparte, la
+  de GPT con sus letras (`cartel-mantenimiento.png`, ya sin usar). `puerta.gd` (`cartel_mantenimiento`) la pone a la derecha de la puerta
+  (donde iba la placa de la llave inglesa, que ya no está), del tamaño del de TRASTEROS: estirada por en medio con lo que mida
+  «MANTENIMIENTO» ya traducido, en una línea y con la letra a 16. Los apliques del pasillo no se ponen encima (`planta.gd`). Prueba:
+  `--captura --cartel-sala`.
 - **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de

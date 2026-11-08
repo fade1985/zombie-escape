@@ -63,12 +63,13 @@ const CINTA_SOMBRA := Color(0, 0, 0, 0.35)   # la sombrita que deja la cinta peg
 # ascensor, el número grande de la planta
 const PLACA_PARED := {"hoja": preload("res://assets/sprites/placa-rota-pared.png"), "dibujo": Vector2(16, 17)}
 const PLACA_SUELO := {"hoja": preload("res://assets/sprites/placa-rota-suelo.png"), "dibujo": Vector2(26, 26)}
-# El cartel de «SALA DE MANTENIMIENTO», a la izquierda de su puerta: chapa esmaltada azul y vieja, como el de TRASTEROS
-# (tools/cartel_mantenimiento.py, de una imagen de GPT). 84 × 24 píxeles, 168 × 48 unidades. En español, con las letras de
-# GPT; en los otros idiomas, la misma placa lisa y la traducción escrita encima (MANTENIMIENTO)
-const CARTEL_MANT := preload("res://assets/sprites/cartel-mantenimiento.png")
+# El cartel de «MANTENIMIENTO», a la derecha de su puerta: chapa esmaltada azul y vieja, del tamaño del de TRASTEROS
+# (cartel_trasteros.gd: 30 de alto y la letra a 16, en una línea). La placa, de una imagen de GPT sin sus letras
+# (tools/cartel_mantenimiento.py, 64 × 15 píxeles): se estira por en medio con lo que mida el texto, ya traducido
+# ("Mantenimiento", el nombre de la sala, en mayúsculas). MANT_PUNTA, lo que mide cada punta (con su tornillo), que no se estira
 const CARTEL_MANT_LISO := preload("res://assets/sprites/cartel-mantenimiento-liso.png")
-const MANTENIMIENTO := "SALA DE MANTENIMIENTO"   # [traducir]
+const MANT_PUNTA := 9
+const MANT_ALTO := 30.0
 const CARTEL_LETRA := Color("e9dfc6")   # el blanco roto de las letras de GPT
 const CHAPA := {"luz": Color("aab2ae"), "medio": Color("86908c"), "sombra": Color("565f5d"), "filo": Color("1e2324"),
 	"letra": Color("15191a")}
@@ -144,8 +145,8 @@ func _draw() -> void:
 			else:
 				draw_texture_rect(DIBUJO[dibujo], Rect2(-36, -86, 72, 86), false)
 			if dibujo == "servicio":
-				cartel_mantenimiento(Rect2(-36 - 12 - 168, -88, 168, 48))
-			if salida.has("placa"):
+				cartel_mantenimiento(Vector2(46, -64))   # a la derecha del marco, a la altura del de TRASTEROS
+			elif salida.has("placa"):
 				placa_de_piso(Vector2(42, -78), PLACA_PARED, Vector2(38, -80))   # en la pared, a la derecha del marco y a la altura de los ojos
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
@@ -213,31 +214,24 @@ func ascensor() -> void:
 		cartel_planta()
 
 
-# El cartel de la sala de mantenimiento en "r". En español, el dibujo con sus letras; en los demás, la placa lisa con la
-# traducción encima, en dos líneas (partida por el espacio más cerca de la mitad) o en una si no tiene espacios
-func cartel_mantenimiento(r: Rect2) -> void:
-	draw_rect(Rect2(r.position + Vector2(2, 2), r.size), Color(0, 0, 0, 0.25))   # su sombra en la pared, como el de TRASTEROS
-	if Idioma.actual == "es":
-		draw_texture_rect(CARTEL_MANT, r, false)
-		return
-	draw_texture_rect(CARTEL_MANT_LISO, r, false)
-	var texto := Idioma.t(MANTENIMIENTO)
-	var lineas: Array = [texto]
-	var mejor := -1
-	for i in texto.length():
-		if texto[i] == " " and (mejor < 0 or absi(i - texto.length() / 2) < absi(mejor - texto.length() / 2)):
-			mejor = i
-	if mejor > 0:
-		lineas = [texto.substr(0, mejor), texto.substr(mejor + 1)]
+# El cartel de la sala de mantenimiento: "en", el medio de su lado izquierdo. La placa, con las puntas a su tamaño y lo de
+# en medio estirado, y encima el texto, con su sombra
+func cartel_mantenimiento(en: Vector2) -> void:
+	var texto := Idioma.t("Mantenimiento").to_upper()
 	var letra := 16
-	var alto := 16.0 * lineas.size()
-	var y := r.position.y + roundf((r.size.y - alto) / 2.0) + 12.0
-	for linea: String in lineas:
-		var ancho := Tema.FUENTE.get_string_size(linea, HORIZONTAL_ALIGNMENT_LEFT, -1, letra).x
-		var x := r.position.x + roundf((r.size.x - ancho) / 4.0) * 2.0
-		draw_string(Tema.FUENTE, Vector2(x + 2, y + 2), linea, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, Color(0, 0, 0, 0.35))
-		draw_string(Tema.FUENTE, Vector2(x, y), linea, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, CARTEL_LETRA)
-		y += 16.0
+	var letras := ceilf(Tema.FUENTE.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra).x / 2.0) * 2.0
+	var r := Rect2(en.x, en.y - MANT_ALTO / 2.0, letras + 40.0, MANT_ALTO)
+	draw_rect(Rect2(r.position + Vector2(2, 2), r.size), Color(0, 0, 0, 0.25))   # su sombra en la pared, como el de TRASTEROS
+	var tam := CARTEL_MANT_LISO.get_size()
+	var punta := MANT_PUNTA * 2.0
+	draw_texture_rect_region(CARTEL_MANT_LISO, Rect2(r.position, Vector2(punta, r.size.y)), Rect2(0, 0, MANT_PUNTA, tam.y))
+	draw_texture_rect_region(CARTEL_MANT_LISO, Rect2(r.position.x + punta, r.position.y, r.size.x - punta * 2.0, r.size.y),
+		Rect2(MANT_PUNTA, 0, tam.x - MANT_PUNTA * 2, tam.y))
+	draw_texture_rect_region(CARTEL_MANT_LISO, Rect2(r.end.x - punta, r.position.y, punta, r.size.y),
+		Rect2(tam.x - MANT_PUNTA, 0, MANT_PUNTA, tam.y))
+	var donde := Vector2(r.position.x + 20.0, r.position.y + 21.0)
+	draw_string(Tema.FUENTE, donde + Vector2(2, 2), texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, Color(0, 0, 0, 0.35))
+	draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, CARTEL_LETRA)
 
 
 # La placa de una puerta. La de la sala de mantenimiento, con su esquina de arriba a la izquierda en "acero": una llave inglesa en

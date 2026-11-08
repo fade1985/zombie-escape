@@ -16,7 +16,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 from muebles_gpt import pasar  # noqa: E402
 
 ORIGEN = "assets/sources/cartel-mantenimiento-gpt.webp"
-ANCHO, ALTO = 84, 24          # 168 × 48 unidades (el de TRASTEROS, unas 126 × 30)
+ANCHO, ALTO = 84, 24          # el de GPT, con sus letras (ya no se usa en el juego: se queda para comparar)
+LISO_ANCHO, LISO_ALTO = 64, 15   # la placa lisa: 30 unidades de alto, como el de TRASTEROS (puerta.gd la estira por en medio)
 LETRAS = (250, 205, 1690, 570)   # dónde van las letras en la imagen de GPT (dentro del filete y entre los tornillos)
 
 pasar(ORIGEN, "assets/sprites/cartel-mantenimiento.png", ANCHO, ALTO, False)
@@ -40,5 +41,5 @@ relleno.putalpha(255)
 liso = Image.composite(relleno.convert("RGB"), im, mascara)
 tmp = os.path.join(tempfile.gettempdir(), "cartel-mantenimiento-liso.png")
 liso.save(tmp)
-pasar(tmp, "assets/sprites/cartel-mantenimiento-liso.png", ANCHO, ALTO, False)
+pasar(tmp, "assets/sprites/cartel-mantenimiento-liso.png", LISO_ANCHO, LISO_ALTO, False)
 os.remove(tmp)
