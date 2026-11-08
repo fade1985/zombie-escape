@@ -36,6 +36,9 @@ extends Node2D
 
 const ZOMBIS := {
 	"normal": preload("res://escenas/personajes/zombi_normal.tscn"),
+	# la prueba del 8 nov: un zombi dibujado entero con GPT (tools/zombi_gpt.py), igual que el vecino; aún no sale en
+	# las partidas (solo en la prueba --vecina)
+	"vecina": preload("res://escenas/personajes/zombi_vecina.tscn"),
 	"lento": preload("res://escenas/personajes/zombi_lento.tscn"),
 	"rapido": preload("res://escenas/personajes/zombi_rapido.tscn"),
 	"explosivo": preload("res://escenas/personajes/zombi_explosivo.tscn"),

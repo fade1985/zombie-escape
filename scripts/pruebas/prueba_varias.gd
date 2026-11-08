@@ -1967,6 +1967,61 @@ func correr_un_rato(centro: Vector2) -> float:
 	return rapidez
 
 
+# Con "--captura --vecina": la vecina, el zombi de la prueba hecho entero con GPT (tools/zombi_gpt.py; de momento solo
+# de frente), al lado del vecino de siempre, para comparar. En la sala de pruebas, los dos bajan hacia Johnny
+# (andar_s: captura-vecina-andar.png), le atacan (captura-vecina-ataque.png), reciben un golpe
+# (captura-vecina-golpe.png) y mueren (captura-vecina-muerte.png, ya tendidos). En la terminal, la animación y el
+# fotograma de cada uno en cada momento
+func probar_vecina() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(260, 200)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	var que_hace := func(z: Node2D) -> String:
+		return "%s %s/%d" % [z.estado, z.sprite.animation, z.sprite.frame]
+	await get_tree().create_timer(0.2).timeout
+	johnny.get_node("Sprite").visible = false   # (que no tape a la vecina cuando le ataca desde arriba)
+	print("Johnny en pantalla: %s" % johnny.get_global_transform_with_canvas().origin)
+	var ella: Node2D = meter_zombi("vecina", johnny.position + Vector2(0, -230))   # justo encima: le ataca de frente
+	var el: Node2D = meter_zombi("normal", johnny.position + Vector2(200, -230))
+	await get_tree().create_timer(0.7).timeout
+	Captura.foto("captura-vecina-andar.png")
+	print("Vecina andando: %s · vecino %s (esperado: andar andar_s los dos)" % [que_hace.call(ella), que_hace.call(el)])
+	# que lleguen y ataquen
+	var esperado := 0.0
+	while (ella.estado != "zarpazo" or ella.sprite.frame < 6) and esperado < 6.0:
+		await get_tree().physics_frame
+		esperado += 1.0 / 60
+	await RenderingServer.frame_post_draw
+	Captura.foto("captura-vecina-ataque.png")
+	print("Vecina atacando: %s · vecino %s (esperado: zarpazo ataque_s)" % [que_hace.call(ella), que_hace.call(el)])
+	await get_tree().create_timer(1.0).timeout
+	for z in [ella, el]:
+		z.recibir_golpe(5, Vector2(0, -60))
+	await get_tree().create_timer(0.12).timeout
+	Captura.foto("captura-vecina-golpe.png")
+	print("Vecina con el golpe: %s · vecino %s (esperado: golpe golpe_s)" % [que_hace.call(ella), que_hace.call(el)])
+	await get_tree().create_timer(0.6).timeout
+	for z in [ella, el]:
+		z.recibir_golpe(999, Vector2(0, -60))
+	await get_tree().create_timer(1.6).timeout
+	Captura.foto("captura-vecina-muerte.png")
+	print("Vecina muerta: %s · vecino %s (esperado: muerto muerte_s en el último fotograma)" % [que_hace.call(ella), que_hace.call(el)])
+	get_tree().quit()
+
+
 # Con "--captura --tentaculos": el zombi de tentáculos con su hoja de PixelLab (zombi_tentaculos.gd). En la sala de
 # pruebas, dos vienen andando hacia Johnny, uno por cada lado (captura-tentaculos-andar.png); luego uno, ya cerca,
 # avisa del latigazo echando los tentáculos atrás (captura-tentaculos-aviso.png) y los lanza al dar el golpe
