@@ -6985,8 +6985,8 @@ msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apu
 msgstr "Um inimigo que você ainda não encontrou. Os que você vir numa partida ficam registrados aqui."
 
 #: scripts/ui/ordenador.gd
-msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
-msgstr "Todo inimigo que você encontra fica aqui para sempre. Passe pelos quadros para ver a ficha dele."
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha."
+msgstr "Todo inimigo que você encontra fica aqui para sempre. Escolha um quadro para ver a ficha dele."
 
 #: scripts/ui/ordenador.gd
 msgid "Sonámbulos"
@@ -7295,6 +7295,10 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
+
+#, sin-usar
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
+msgstr "Todo inimigo que você encontra fica aqui para sempre. Passe pelos quadros para ver a ficha dele."
 
 #, sin-usar
 msgid "Bestiario"

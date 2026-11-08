@@ -425,6 +425,25 @@ func probar_colecciones() -> void:
 	print("Al pulsar la pestaña de los sonámbulos: pestaña %s, marcado %s, casillas %d (esperado: sonambulos, pes_sonambulos, 12)" % [
 		ordenador.familia_vista, marcado.name if marcado else "nada",
 		ordenador.ventana.find_children("z_*", "Button", true, false).size()])
+	# la ficha sale al elegir la casilla, no al pasar por ella: marcada (como con el ratón encima: aclarada y con borde
+	# gris fino), el vecino sigue en la ficha (captura-sujetos-encima.png); pulsada, sale el crío
+	ordenador.abrir("colecciones", "z_normal")
+	await get_tree().create_timer(0.3).timeout
+	var visor := func() -> String:
+		for h in ordenador.ventana.find_children("*", "CenterContainer", true, false):
+			if h.has_meta("ficha"):
+				return h.get_meta("ficha")
+		return ""
+	var crio: Button = ordenador.ventana.find_child("z_rapido", true, false)
+	crio.grab_focus()
+	crio.mouse_entered.emit()
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-sujetos-encima.png")
+	var al_pasar: String = visor.call()
+	crio.pressed.emit()
+	await get_tree().create_timer(0.2).timeout
+	print("Sujetos: al pasar por el crío, la ficha de %s; al elegirlo, la de %s (esperado: z_normal y z_rapido)" % [al_pasar,
+		visor.call()])
 	# ningún sujeto toca la lámpara del escenario: de cabeza a pies cabe entre el techo y el suelo
 	var tocan := []
 	for id in Bestiario.LISTA:

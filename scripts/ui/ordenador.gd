@@ -1143,8 +1143,8 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 		enlazar(b, (Idioma.t("%s: sale en %s. Matados: %d.") % [Bestiario.nombre(id), sale_en(Bestiario.LISTA[id], true),
 			Bestiario.matados(s, id)]) if visto
 			else Idioma.t("Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."), ver)
-		b.focus_entered.connect(ver)
-		b.mouse_entered.connect(ver)
+		# (su ficha sale al elegirla: con un clic, o con Intro o A en la marcada. Antes salía con solo pasar por encima,
+		# y el dueño prefiere elegirla, 8 nov)
 	# con el teclado o el mando, de los bordes no se sale: la ventana tapa los iconos del escritorio, y Godot, sin esto,
 	# pasaba a ellos al bajar de la última fila o ir a la izquierda
 	var casillas := cuadricula.get_children()
@@ -1166,7 +1166,7 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 	var primero: String = empieza.substr(2)
 	mostrar(lado, empieza, ficha_bestiario.bind(s, primero, Bestiario.visto(s, primero)))
 	senalar_casilla(cuadricula, empieza)
-	info.text = Idioma.t("Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha.")
+	info.text = Idioma.t("Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha.")
 	return foco if foco.begins_with("pes_") or foco.begins_with("pag_") else empieza
 
 
@@ -1231,15 +1231,13 @@ func mostrar(lado: CenterContainer, clave: String, hacer: Callable) -> void:
 
 
 # Una casilla de la cuadrícula: un botón con el dibujo de frente del enemigo, encajado; en silueta negra si aún no se ha
-# visto y con marco dorado si es un jefe. Se marca (el mando entra en la cuadrícula) pero no hace nada al pulsarlo
+# visto y con marco dorado si es un jefe. Al pulsarla, su ficha sale a la izquierda (sus bordes los pone senalar_casilla)
 func casilla_zombi(padre: Container, id: String, visto: bool) -> Button:
 	var b := Button.new()
 	b.name = "z_" + id
 	b.focus_mode = Control.FOCUS_ALL
 	b.custom_minimum_size = Vector2(CASILLA_ZOMBI, CASILLA_ZOMBI)
 	b.set_meta("jefe", Bestiario.LISTA[id].get("jefe", false))
-	for e in ["hover", "focus", "pressed", "hover_pressed"]:
-		b.add_theme_stylebox_override(e, caja(TARJETA_LUZ, TINTA, 3, 0, 0))
 	padre.add_child(b)
 	var centro := CenterContainer.new()
 	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -1263,13 +1261,18 @@ func casilla_zombi(padre: Container, id: String, visto: bool) -> Button:
 	return b
 
 
-# La casilla del que sale en la ficha, con el borde oscuro aunque el ratón o el foco se vayan; las demás, normales
-# (las de los jefes, con su marco dorado)
+# La casilla elegida (la que sale en la ficha): clara y con el borde negro grueso, pase lo que pase. Las demás, normales
+# (las de los jefes, con su marco dorado) y, con el ratón encima o marcadas con el teclado o el mando, se aclaran y
+# llevan un borde gris más fino: así se nota por dónde se va sin confundirla con la elegida
 func senalar_casilla(cuadricula: GridContainer, clave: String) -> void:
+	var elegida := caja(TARJETA_LUZ, TINTA, 3, 0, 0)
+	var encima := caja(TARJETA_LUZ, TINTA_SUAVE, 2, 0, 0)
 	for b: Button in cuadricula.get_children():
 		var jefe: bool = b.get_meta("jefe", false)
-		b.add_theme_stylebox_override("normal", caja(TARJETA_LUZ, TINTA, 3, 0, 0) if b.name == clave
-			else caja(TARJETA, PIP_LLENO if jefe else TARJETA, 3, 0, 0))
+		var es := b.name == clave
+		b.add_theme_stylebox_override("normal", elegida if es else caja(TARJETA, PIP_LLENO if jefe else TARJETA, 3, 0, 0))
+		for e in ["hover", "focus", "pressed", "hover_pressed"]:
+			b.add_theme_stylebox_override(e, elegida if es else encima)
 
 
 # La ficha de un enemigo, a la izquierda: él grande y moviéndose (en silueta, quieto, si no se ha visto) en un escenario con

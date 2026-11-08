@@ -6965,8 +6965,8 @@ msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apu
 msgstr "一个你还没遇到过的敌人。在游戏中见到的敌人都会记录在这里。"
 
 #: scripts/ui/ordenador.gd
-msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
-msgstr "你遇到过的每个敌人都会永远留在这里。把光标移到格子上查看它的档案。"
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha."
+msgstr "你遇到过的每个敌人都会永远留在这里。选择一个格子查看它的档案。"
 
 #: scripts/ui/ordenador.gd
 msgid "Sonámbulos"
@@ -7275,6 +7275,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
+msgstr "你遇到过的每个敌人都会永远留在这里。把光标移到格子上查看它的档案。"
 
 #, sin-usar
 msgid "Bestiario"
