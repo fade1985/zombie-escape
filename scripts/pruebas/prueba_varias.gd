@@ -2033,6 +2033,15 @@ func probar_vecina() -> void:
 	await get_tree().create_timer(1.6).timeout
 	Captura.foto("captura-vecina-muerte.png")
 	print("Vecina muerta: %s · vecino %s (esperado: muerto muerte_s en el último fotograma) · %s (esperado: muerte_e, muerte_o, muerte_se, muerte_n y muerte_ne)" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
+	# el panel de pruebas, en Zombis: la vecina, el último botón (captura-vecina-panel.png), y que sale con él
+	await pulsar_y_esperar(KEY_P)
+	panel_pruebas.elegir("Zombis")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-vecina-panel.png")
+	var antes := get_tree().get_nodes_in_group("zombis").size()
+	panel_pruebas.sacar_zombis("vecina")
+	await get_tree().create_timer(0.3).timeout
+	print("Vecina desde el panel: %d zombis más (esperado: 1)" % (get_tree().get_nodes_in_group("zombis").size() - antes))
 	get_tree().quit()
 
 

@@ -19,7 +19,8 @@ const JEFES := {"portera": "Portera", "antidisturbios": "Antidisturbios", "cocin
 	"sujeto_1": "Sujeto 1"}
 const ZOMBIS := {"normal": "Normal", "lento": "Lento", "rapido": "Rápido", "explosivo": "Explosivo",
 	"tentaculos": "Tentáculos", "venenoso": "Venenoso", "vigilante": "Vigilante", "dependienta": "Dependienta",
-	"oficinista": "Oficinista", "escolta": "Escolta de Velaria"}
+	"oficinista": "Oficinista", "escolta": "Escolta de Velaria",
+	"vecina": "Vecina (GPT)"}   # (la de la prueba hecha con GPT: de momento solo sale aquí; sin atajo, es la 11)
 const CUANTOS := [1, 3, 5, 10]
 # Los atajos de la sala de pruebas (también con el panel cerrado): 1 a 8, los zombis; Mayús + 1 a 0, los jefes (en
 # el orden de JEFES y ZOMBIS)
