@@ -96,15 +96,17 @@ def reducir(dibujo, escala):
 
 
 def nitido(dibujo):
-    """Al mezclar, los colores se lavan: un poco más de contraste y de color, para que no desentone con los de PixelLab"""
+    """Al mezclar, los colores se lavan un poco: algo más de contraste. Poco (el 8 nov, de 1,25 y más color a 1,08):
+    así se quedan las sombras suaves y el volumen de la imagen, como los muebles de GPT (lo eligió el dueño)"""
     alfa = dibujo.split()[3]
-    rgb = ImageEnhance.Color(ImageEnhance.Contrast(dibujo.convert("RGB")).enhance(1.25)).enhance(1.15)
+    rgb = ImageEnhance.Contrast(dibujo.convert("RGB")).enhance(1.08)
     rgb.putalpha(alfa)
     return rgb
 
 
 def contorno(dibujo):
-    """El contorno oscuro de los zombis de PixelLab: el píxel del borde (el que toca lo transparente), oscurecido"""
+    """Un contorno suave: el píxel del borde (el que toca lo transparente), algo más oscuro (al 60 %; no casi negro como
+    los de PixelLab, que la dejaba plana, de cómic), para que se recorte contra el suelo sin perder el volumen"""
     px = dibujo.load()
     W, H = dibujo.size
     borde = []
@@ -115,7 +117,7 @@ def contorno(dibujo):
                 borde.append((x, y))
     for x, y in borde:
         r, g, b, a = px[x, y]
-        px[x, y] = (round(r * 0.3), round(g * 0.3), round(b * 0.3), a)
+        px[x, y] = (round(r * 0.6), round(g * 0.6), round(b * 0.6), a)
     return dibujo
 
 
