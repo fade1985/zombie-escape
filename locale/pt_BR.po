@@ -2629,7 +2629,7 @@ msgstr "%dº andar"
 msgid "Vestíbulo"
 msgstr "Saguão"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Planta %d"
 msgstr "Andar %d"
 

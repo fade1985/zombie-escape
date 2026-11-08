@@ -2629,7 +2629,7 @@ msgstr "Étage %d"
 msgid "Vestíbulo"
 msgstr "Hall"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Planta %d"
 msgstr "Étage %d"
 

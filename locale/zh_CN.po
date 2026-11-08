@@ -2627,7 +2627,7 @@ msgstr "%d楼"
 msgid "Vestíbulo"
 msgstr "大堂"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Planta %d"
 msgstr "%d楼"
 

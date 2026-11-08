@@ -2631,7 +2631,7 @@ msgstr "Этаж %d"
 msgid "Vestíbulo"
 msgstr "Вестибюль"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Planta %d"
 msgstr "Этаж %d"
 

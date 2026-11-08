@@ -2629,7 +2629,7 @@ msgstr "Floor %d"
 msgid "Vestíbulo"
 msgstr "Lobby"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Planta %d"
 msgstr "Floor %d"
 

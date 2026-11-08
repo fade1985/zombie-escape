@@ -2629,7 +2629,7 @@ msgstr "%d. Stock"
 msgid "Vestíbulo"
 msgstr "Foyer"
 
-#: scripts/mapa/planta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
 msgid "Planta %d"
 msgstr "%d. Stock"
 
