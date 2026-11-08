@@ -2087,6 +2087,9 @@ func probar_vecina() -> void:
 # Con "--captura --lento-gpt" lo mismo con el arrastrado (zombi lento): el de PixelLab y a su lado el de GPT
 # (zombi-lento-gpt, 8 nov). Fotos captura-lento-gpt-*.png
 #
+# Con "--captura --gordo-real" lo mismo con el gordo (venenoso), solo él: el de PixelLab más real ("suave" en su zombi.json,
+# como el crío; lo eligió el dueño el 8 nov). Fotos captura-gordo-gpt-*.png
+#
 # Con "--captura --tres-zombis" lo mismo con la vecina, el vecino y el crío juntos (los tres más reales), por tríos en
 # cada dirección: fotos captura-tres-gpt-*.png
 func probar_vecino_gpt(tipo := "normal", nombre := "vecino", otras: Array = []) -> void:

@@ -325,6 +325,7 @@
 #                       andar, atacar, golpe y muerte (el de GPT es el vecino del juego desde el 8 nov) [prueba_varias.gd]
 #   --crio-gpt          lo mismo con el crío (el de PixelLab; y a su lado el de GPT cuando esté su hoja) [prueba_varias.gd]
 #   --lento-gpt         lo mismo con el arrastrado (el de PixelLab y a su lado el de GPT) [prueba_varias.gd]
+#   --gordo-real        el gordo (venenoso) más real (contorno suave, como el crío), quieto en sus 8 direcciones: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --tres-zombis       la vecina, el vecino y el crío (los tres de GPT) juntos, por tríos en sus 8 direcciones (mismas fotos) [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
@@ -872,6 +873,9 @@ func empezar_prueba() -> void:
 	elif "--lento-gpt" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecino_gpt("lento", "lento")
+	elif "--gordo-real" in args:
+		set_process(false)   # sin la prueba larga
+		probar_vecino_gpt("venenoso", "gordo", ["zombi-venenoso"])
 	elif "--tres-zombis" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecino_gpt("normal", "tres", ["zombi-vecina", "zombi-normal-gpt", "zombi-rapido-gpt"])
