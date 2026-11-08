@@ -70,6 +70,8 @@ const PLACA_SUELO := {"hoja": preload("res://assets/sprites/placa-rota-suelo.png
 const CARTEL_MANT_LISO := preload("res://assets/sprites/cartel-mantenimiento-liso.png")
 const MANT_PUNTA := 9
 const MANT_ALTO := 30.0
+const MANT_MARGEN := 14.0   # del borde a las letras, a cada lado (justo pasado el tornillo)
+static var mant_fuente: FontVariation
 const CARTEL_LETRA := Color("e9dfc6")   # el blanco roto de las letras de GPT
 const CHAPA := {"luz": Color("aab2ae"), "medio": Color("86908c"), "sombra": Color("565f5d"), "filo": Color("1e2324"),
 	"letra": Color("15191a")}
@@ -219,8 +221,12 @@ func ascensor() -> void:
 func cartel_mantenimiento(en: Vector2) -> void:
 	var texto := Idioma.t("Mantenimiento").to_upper()
 	var letra := 16
-	var letras := ceilf(Tema.FUENTE.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra).x / 2.0) * 2.0
-	var r := Rect2(en.x, en.y - MANT_ALTO / 2.0, letras + 40.0, MANT_ALTO)
+	if not mant_fuente:   # la letra de siempre, con las letras algo más juntas (el cartel, más corto)
+		mant_fuente = FontVariation.new()
+		mant_fuente.base_font = Tema.FUENTE
+		mant_fuente.spacing_glyph = -1
+	var letras := ceilf(mant_fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra).x / 2.0) * 2.0
+	var r := Rect2(en.x, en.y - MANT_ALTO / 2.0, letras + MANT_MARGEN * 2.0, MANT_ALTO)
 	draw_rect(Rect2(r.position + Vector2(2, 2), r.size), Color(0, 0, 0, 0.25))   # su sombra en la pared, como el de TRASTEROS
 	var tam := CARTEL_MANT_LISO.get_size()
 	var punta := MANT_PUNTA * 2.0
@@ -229,9 +235,9 @@ func cartel_mantenimiento(en: Vector2) -> void:
 		Rect2(MANT_PUNTA, 0, tam.x - MANT_PUNTA * 2, tam.y))
 	draw_texture_rect_region(CARTEL_MANT_LISO, Rect2(r.end.x - punta, r.position.y, punta, r.size.y),
 		Rect2(tam.x - MANT_PUNTA, 0, MANT_PUNTA, tam.y))
-	var donde := Vector2(r.position.x + 20.0, r.position.y + 21.0)
-	draw_string(Tema.FUENTE, donde + Vector2(2, 2), texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, Color(0, 0, 0, 0.35))
-	draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, CARTEL_LETRA)
+	var donde := Vector2(r.position.x + MANT_MARGEN, r.position.y + 21.0)
+	draw_string(mant_fuente, donde + Vector2(2, 2), texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, Color(0, 0, 0, 0.35))
+	draw_string(mant_fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, letra, CARTEL_LETRA)
 
 
 # La placa de una puerta. La de la sala de mantenimiento, con su esquina de arriba a la izquierda en "acero": una llave inglesa en
