@@ -413,6 +413,21 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		var borde := MURO / CASILLA
 		pasillo.muebles = Muebles.colocados(Catalogo.SALAS[estilo_pasillo].colocados.abajo, {"id": 0, "c0": borde, "f0": borde,
 			"ancho": PASILLO_COLS - 2 * borde, "fondo": PASILLO_FILAS - 2 * borde})
+	if estilo_pasillo == "pasillo":
+		# las plantas del pasillo de los Apartamentos (un ficus mustio de GPT), puestas a mano contra la pared de arriba: a la
+		# izquierda del ascensor, a la izquierda de las puertas de los pisos A y B y, en la planta baja, a la izquierda de la de la sala de
+		# mantenimiento
+		var medio_planta: float = Catalogo.MUEBLES.plantapasillo.len / 2.0
+		for s in pasillo.salidas:
+			if s.dir != "arriba":
+				continue
+			var junto := 0.0
+			if s.tipo == "ascensor":
+				junto = s.en - 49.0 - 8.0 - medio_planta   # (el ascensor mide 41 a cada lado, más su sombra)
+			elif s.get("placa", "") in ["llave", "A", "B"]:
+				junto = s.en - 36.0 - 8.0 - medio_planta
+			if junto - medio_planta >= MURO:   # (y sin meterse en el muro de la izquierda)
+				pasillo.muebles.append(Muebles.nuevo("plantapasillo", {"lado": "arriba", "base": MURO}, junto, 0))
 	if baja:
 		planta.armas = planta.sitios.size()
 		planta.sitios.append(sala_armas(planta.mantenimiento))

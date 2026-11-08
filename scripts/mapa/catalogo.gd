@@ -69,6 +69,8 @@ const MUEBLES := {
 	"sink":       {"len": 64,  "dep": 46,  "paredes": "",      "archivo": "bano/lavabo"},
 	"washer":     {"len": 46,  "dep": 50,  "paredes": "",      "archivo": "bano/lavadora"},
 	"plant":      {"len": 40,  "dep": 36,  "paredes": "todas", "archivo": "comun/planta"},
+	# la del pasillo de los Apartamentos, de GPT (tools/muebles_gpt.py): un ficus mustio en su maceta de barro
+	"plantapasillo": {"len": 48, "dep": 36, "paredes": "todas", "archivo": "planta-pasillo-gpt"},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -378,6 +380,7 @@ const SALAS := {
 	},
 	# el pasillo de cada planta de los Apartamentos: de momento, sin muebles (si vuelven, solo poco hondos: el pasillo es
 	# estrecho, "fondo_max": 46; los de antes: shoerack, coatstand, console, plant y bookshelf, de 5 a 8)
+	# el pasillo de los Apartamentos: sin muebles al azar (sus plantas van puestas a mano: planta.gd)
 	"pasillo": {"muebles": [], "cuantos": [0, 0]},
 	# el pasillo de dentro de un piso (apartamento.gd: PLANO_PASILLO), con su recibidor: pocos muebles
 	"pasillo-piso": {

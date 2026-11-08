@@ -16,7 +16,7 @@ func probar_pasillo() -> void:
 		johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0)
 		johnny.get_node("Camara").reset_smoothing()
 		await get_tree().create_timer(0.8).timeout
-		print("Pasillo de la planta %d: muebles %d (esperado: 0, de momento va vacío)" % [num - 1,
+		print("Pasillo de la planta %d: muebles %d (esperado: 3, las plantas junto al ascensor y junto a los pisos A y B; en la planta baja, la A es la sala de mantenimiento)" % [num - 1,
 			get_tree().get_nodes_in_group("muebles").size()])
 		print("  [%s] «%s» · puertas «%s» y «%s» (en español: «%s», «%s» y «%s»)" % [Idioma.actual, Planta.nombre_de(planta),
 			Planta.nombre_de_sitio({"nombre": Planta.nombre_puerta(num, "A")}),

@@ -43,6 +43,9 @@ MUEBLES = {
     # la taquilla de las skins, en el vestuario (mapa.gd, partida.abrir_taquilla): gris claro con tres puertas azules;
     # mismo ancho que la vieja (28), más alta que Johnny como una de verdad (antes, de tools/taquilla.py)
     "taquilla": ("assets/sources/taquilla-gpt.webp", "assets/sprites/taquilla.png", 28, 56, False),
+    # la planta del pasillo de los Apartamentos (la "plantapasillo" del catálogo): un ficus mustio en su maceta de barro
+    # agrietada; algo más baja que Johnny (48)
+    "planta_pasillo": ("assets/sources/planta-pasillo-gpt.webp", "assets/sprites/mueble-plantapasillo.png", 24, 42, True),
 }
 
 
