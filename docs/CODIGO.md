@@ -837,8 +837,12 @@ en una línea.
 - **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
   casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
   mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus
-  dibujos) ni la sangre de la cara (boca y mejilla: `sin_sangre_cara.py`, igual). Su versión con GPT, por hacer: `--zombi rapido` en `zombi_gpt.py`, textos en `assets/sources/zombi-rapido-gpt/`
-  (referencia `capturas/referencia-rapido.png`). `--captura --crio-gpt` lo enseña en sus 8 direcciones (y al de GPT al lado, cuando esté).
+  dibujos) ni la sangre de la cara (boca y mejilla: `sin_sangre_cara.py`, igual). El **crío con GPT** (8 nov), entero: `--zombi rapido` → `assets/sources/zombi-rapido-gpt-48`
+  → `zombi.py zombi-rapido-gpt-48 zombi-rapido-gpt` (corre a 10 fotogramas por segundo; el ataque, 0,6 s). Como corre,
+  `zombi_gpt.py` pone su cabeza a la altura que la dibuja GPT y deja que los pies se levanten, en un lienzo de 64 (de
+  perfil estira mucho la pierna). Textos, en `assets/sources/zombi-rapido-gpt/textos-gpt.md` (referencia
+  `capturas/referencia-rapido.png`). Aún no sale en las partidas. `--captura --crio-gpt` lo pone junto al de PixelLab y
+  `--captura --tres-zombis`, junto a la vecina y el vecino.
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es
