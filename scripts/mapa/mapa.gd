@@ -40,9 +40,6 @@ const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
 const BANCO_X := 820.0
 const BAUL_X := 1040.0   # (pegado a la derecha del taller)
 const TAQUILLA_X := 260.0
-# Los apliques de la sala de mantenimiento, uno en la pared de arriba de cada estancia, sin tapar lo que cuelga en ella:
-# [x, estancia] (el vestuario es la 1, el despacho la 0 y el taller la 2). Lucen fijos: es el sitio seguro
-const APLIQUES_SALA := [[350.0, 1], [700.0, 0], [880.0, 2]]
 # Los suelos y paredes de las estancias de la sala de mantenimiento: el taller, de vinilo gris con motitas y pared blanca
 # con su zócalo del mismo vinilo (tools/taller_vinilo.py); el vestuario, de azulejo blanco y baldosa beis
 # (tools/vestuario_azulejo.py); y el despacho, de ladrillo visto y tarima envejecida (tools/despacho_ladrillo.py). Sin sangre:
@@ -971,24 +968,13 @@ func poner_lampara(mueble: Node2D, m: Dictionary) -> void:
 
 
 # Los apliques de la pared de arriba del pasillo (planta.gd): su dibujo y su luz. El nodo va en el pie de la
-# cara del muro, para ordenarse con ella; el charco de luz cae 60 unidades más abajo, en el suelo. La sala de
-# mantenimiento (APLIQUES_SALA) y los trasteros (Viviendas.apliques) llevan los suyos, fijos, cada uno en la pared
-# de arriba de su estancia ("y") y alumbrando solo esa estancia ("zona", como las lámparas de un apartamento)
+# cara del muro, para ordenarse con ella; el charco de luz cae 60 unidades más abajo, en el suelo.
 func poner_apliques() -> void:
-	var lista: Array = sitio.get("apliques", [])
-	if sitio.tipo == "mantenimiento":
-		lista = APLIQUES_SALA.map(func(a): return {"x": a[0], "zona": a[1], "semilla": 0.0, "parpadea": false})
-	elif sitio.tipo == "viviendas":
-		lista = Viviendas.apliques(sitio.apt)
-	for a in lista:
+	for a in sitio.get("apliques", []):
 		var luz := LAMPARA.instantiate()
-		luz.position = Vector2(a.x, a.get("y", MURO + 1))
+		luz.position = Vector2(a.x, MURO + 1)
 		luz.semilla = a.semilla
 		luz.parpadea = a.parpadea
-		if a.has("zona"):   # (en una habitación aún cerrada, con niebla, apagado hasta que se abre: lampara.gd)
-			luz.mapa = self
-			luz.zona = a.zona
-			luz.get_node("LuzCosas").range_item_cull_mask = Luz.CAPA_COSAS | Luz.capa_sala(a.zona)
 		luz.alto = 38.0
 		luz.suelo = Vector2(0, 60)
 		# si el centro de la luz cae dentro de un mueble, su sombra lo dejaría todo a oscuras: más abajo
