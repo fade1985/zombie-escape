@@ -201,9 +201,34 @@ func construir(cual := "general") -> void:
 	var volver := Button.new()
 	volver.text = Idioma.t("Volver")
 	volver.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	volver.pressed.connect(cerrar)
+	volver.pressed.connect(atras)
 	columna.add_child(volver)
 	ver(cual)
+
+
+# Volver (o Esc, B, Start): al menú de antes. De Idioma, Audio y Pantalla, a General (con el foco en su botón); de las
+# Licencias, a Créditos; de una pestaña, se cierra Opciones (y se vuelve al menú o a la pausa de detrás)
+func atras() -> void:
+	if pestana in ["idioma", "audio", "pantalla"]:
+		var de := pestana
+		ver("general")
+		var b := contenido.find_child(de, true, false) as Button
+		if b:
+			b.grab_focus.call_deferred()
+	elif pestana == "licencias":
+		ver("creditos")
+	else:
+		cerrar()
+
+
+# Los botones grandes de la página (los de General, Audio y Pantalla), todos tan anchos como el más ancho
+func igualar() -> void:
+	var grandes := contenido.find_children("*", "Button", true, false).filter(func(b): return b.theme_type_variation == "BotonGrande")
+	var ancho := 0.0
+	for b: Button in grandes:
+		ancho = maxf(ancho, b.get_combined_minimum_size().x)
+	for b: Button in grandes:
+		b.custom_minimum_size.x = ancho
 
 
 func cerrar() -> void:
@@ -265,22 +290,27 @@ func general() -> void:
 		contenido.add_theme_constant_override("separation", 8)
 		contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		caja.add_child(contenido)
-	# El idioma: un botón que lleva a la lista de idiomas (idiomas(), desde el 8 nov). Su rótulo, en dos idiomas y con el
-	# nombre del de ahora, para encontrarlo aunque el juego esté en otro
+	# El idioma: un botón que lleva a la lista de idiomas (idiomas(), desde el 8 nov), con el nombre del de ahora
 	var idioma_ahora: String = Idioma.IDIOMAS.filter(func(i): return i[0] == Idioma.actual)[0][1]
-	var al_idioma := opcion("Idioma / Language: " + idioma_ahora, "BotonGrande")   # no-tr
+	var al_idioma := opcion("%s: %s" % [Idioma.t("Idioma"), idioma_ahora], "BotonGrande")
+	al_idioma.name = "idioma"   # no-tr
 	var letra_ahora := Tema.fuente_del_idioma(Idioma.actual)
 	if letra_ahora != null:
 		al_idioma.add_theme_font_override("font", letra_ahora)
 	al_idioma.pressed.connect(func(): ver("idioma"))
 	boton_idioma = al_idioma   # (al volver de la lista de idiomas, el foco va aquí)
 	# la música y el sonido, tras el botón Audio (audio(), desde el 8 nov)
-	opcion(Idioma.t("Audio"), "BotonGrande").pressed.connect(func(): ver("audio"))
+	var al_audio := opcion(Idioma.t("Audio"), "BotonGrande")
+	al_audio.name = "audio"   # no-tr
+	al_audio.pressed.connect(func(): ver("audio"))
 	# la pantalla completa y el temblor, tras el botón Pantalla (pantalla(), desde el 8 nov)
-	opcion(Idioma.t("Pantalla"), "BotonGrande").pressed.connect(func(): ver("pantalla"))
+	var a_pantalla := opcion(Idioma.t("Pantalla"), "BotonGrande")
+	a_pantalla.name = "pantalla"   # no-tr
+	a_pantalla.pressed.connect(func(): ver("pantalla"))
 	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
 		var tutorial := opcion(Idioma.t("Tutorial"), "BotonGrande")
 		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
+	igualar()
 	if Tactil.activo:
 		var titulo := Label.new()
 		titulo.theme_type_variation = "Sub"
@@ -299,7 +329,7 @@ func general() -> void:
 func idiomas() -> void:
 	var rotulo_idioma := Label.new()
 	rotulo_idioma.theme_type_variation = "Sub"
-	rotulo_idioma.text = "Idioma / Language"   # no-tr
+	rotulo_idioma.text = Idioma.t("Idioma")
 	rotulo_idioma.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	contenido.add_child(rotulo_idioma)
 	var fila_idioma := HFlowContainer.new()   # (los botones pasan a otra fila si no caben en el ancho)
@@ -340,24 +370,26 @@ func idiomas() -> void:
 
 # El audio (el botón Audio de General): la música y quitar todo el sonido. Se vuelve con la pestaña General
 func audio() -> void:
-	var musica := opcion(texto_musica())
+	var musica := opcion(texto_musica(), "BotonGrande")
 	musica.pressed.connect(func():
 		Guardado.cambiar(func(g): g.ajustes.musica = not g.ajustes.musica)
 		Sonido.musica_si(Guardado.cargar().ajustes.musica)
 		musica.text = texto_musica())
 	# Quitar todo el sonido (como el botón del altavoz del JS): no se guarda
-	var sonido := opcion(texto_sonido())
+	var sonido := opcion(texto_sonido(), "BotonGrande")
 	sonido.pressed.connect(func():
 		Sonido.silenciar(not Sonido.silenciado())
 		sonido.text = texto_sonido())
+	igualar()
 	musica.grab_focus.call_deferred()
 
 
 # La pantalla (el botón Pantalla de General): la pantalla completa y el temblor. Se vuelve con la pestaña General
 func pantalla() -> void:
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
-		opcion(Idioma.t("Pantalla completa")).pressed.connect(Tactil.pantalla_completa)
-	rotar(Idioma.t("Temblor de pantalla"), "temblor", TEMBLORES)
+		opcion(Idioma.t("Pantalla completa"), "BotonGrande").pressed.connect(Tactil.pantalla_completa)
+	rotar(Idioma.t("Temblor de pantalla"), "temblor", TEMBLORES, "BotonGrande")
+	igualar()
 	(contenido.get_child(0) as Control).grab_focus.call_deferred()
 
 
@@ -381,7 +413,7 @@ func explicar(texto: String) -> Label:
 	l.theme_type_variation = "Sub"
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	l.custom_minimum_size.x = 560
+	l.custom_minimum_size.x = 620   # (el ancho de la tabla de Controles: así se mide como se ve y no sobra hueco abajo)
 	l.text = texto
 	contenido.add_child(l)
 	return l
@@ -450,14 +482,14 @@ static func texto_de_licencias() -> String:
 
 # Un botón que, a cada pulsación, pasa al siguiente valor de la lista, lo guarda en los ajustes y se lo
 # dice a los botones táctiles (se nota al momento, también al volver de la pausa)
-func rotar(nombre: String, clave: String, valores: Array) -> void:
+func rotar(nombre: String, clave: String, valores: Array, variacion := "") -> void:
 	var cual := func() -> int:
 		var actual = Guardado.cargar().ajustes[clave]
 		for i in valores.size():
 			if str(valores[i][0]) == str(actual):   # con str: el guardado trae los números con decimales
 				return i
 		return 0
-	var b := opcion("%s: %s" % [nombre, Idioma.t(valores[cual.call()][1])])
+	var b := opcion("%s: %s" % [nombre, Idioma.t(valores[cual.call()][1])], variacion)
 	b.pressed.connect(func():
 		var nuevo: Array = valores[(cual.call() + 1) % valores.size()]
 		Guardado.cambiar(func(g): g.ajustes[clave] = nuevo[0])
@@ -605,7 +637,7 @@ func _input(evento: InputEvent) -> void:
 		return
 	if evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa"):
 		get_viewport().set_input_as_handled()
-		cerrar()
+		atras()
 
 
 func esperar_tecla(evento: InputEvent) -> void:

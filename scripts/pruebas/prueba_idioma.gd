@@ -28,7 +28,7 @@ static func probar(menu: Control) -> void:
 	var o := Opciones.abrir(menu, menu.centro)
 	await arbol.create_timer(0.4).timeout
 	Captura.foto("captura-idioma-opciones.png")
-	o.ver("idioma")   # (la lista de idiomas, desde el 8 nov tras el botón «Idioma / Language» de General)
+	o.ver("idioma")   # (la lista de idiomas, desde el 8 nov tras el botón «Idioma: …» de General)
 	await arbol.create_timer(0.3).timeout
 	# El botón de avisar de un texto mal traducido (Opciones.enlace_avisos): sin enlace no sale; con enlace, en todos los idiomas menos el español
 	var hay_aviso := func() -> bool: return o.contenido.find_child("avisar_traduccion", true, false) != null
@@ -45,6 +45,12 @@ static func probar(menu: Control) -> void:
 	o.ver("pantalla")   # (la pantalla completa y el temblor, tras el botón Pantalla de General)
 	await arbol.create_timer(0.3).timeout
 	Captura.foto("captura-idioma-pantalla.png")
+	# Volver (o Esc) desde Pantalla: a General, con el foco en su botón; no se cierra Opciones
+	o.atras()
+	await arbol.create_timer(0.1).timeout
+	var foco := arbol.root.get_viewport().gui_get_focus_owner()
+	print("Volver desde Pantalla: pestaña %s · foco «%s» · Opciones abierta %s (esperado: general, pantalla, true)" % [
+		o.pestana, foco.name if foco else "-", is_instance_valid(o) and not o.is_queued_for_deletion()])
 	o.ver("controles")
 	await arbol.create_timer(0.3).timeout
 	Captura.foto("captura-idioma-controles.png")
@@ -68,6 +74,8 @@ static func probar(menu: Control) -> void:
 		"Soft Type" in licencias, "Godot Engine contributors" in licencias])
 	await arbol.create_timer(0.3).timeout
 	Captura.foto("captura-idioma-licencias.png")
+	o.atras()
+	print("Volver desde las licencias: pestaña %s (esperado: creditos)" % o.pestana)
 	# El cambio de idioma en caliente: la pantalla se monta otra vez, en la misma pestaña, y no queda ninguna vieja
 	o.ver("general")
 	var antes := Idioma.actual

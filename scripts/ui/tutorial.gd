@@ -7,13 +7,13 @@
 #     temas por grupos (los que aún no han salido, con «???») y a la derecha la ficha del elegido. Mientras está
 #     abierto esconde "lo_que_tapa" (el menú de detrás), como Opciones.
 # Las dos avisan al cerrarse con la señal "cerrado". Se manejan con el ratón, las flechas o el mando.
-# La ficha (ficha()): el icono y el título, la foto (assets/ui/tutorial/<id>.png, a tamaño real) y las líneas.
+# La ficha (ficha()): el icono y el título y las líneas (sin fotos desde el 8 nov).
 class_name Tutorial
 extends CanvasLayer
 
 signal cerrado
 
-const ANCHO := 520.0       # el de la ficha y el de su foto (520 × 180, recortada por tools/fotos_tutorial.py)
+const ANCHO := 520.0       # el de la ficha
 const ALTO_LISTA := 430.0  # el de la lista de temas (con barra si no caben)
 const ESPERA := 0.6        # segundos que la ventana no hace caso al salir
 
@@ -194,7 +194,7 @@ func ver(cual: String) -> void:
 			b.add_theme_color_override(c, Tema.AMARILLO if k == cual else Tema.TINTA)
 
 
-# La ficha de un tutorial: el icono y el título, la foto con su marco y las líneas, con las teclas en amarillo
+# La ficha de un tutorial: el icono y el título, y las líneas, con las teclas en amarillo
 static func ficha(cual: String) -> VBoxContainer:
 	var d: Dictionary = Tutoriales.LISTA[cual]
 	var caja := VBoxContainer.new()
@@ -203,25 +203,6 @@ static func ficha(cual: String) -> VBoxContainer:
 	cabeza.alignment = BoxContainer.ALIGNMENT_CENTER
 	(cabeza.get_child(cabeza.get_child_count() - 1) as Label).theme_type_variation = "Titulo"
 	caja.add_child(cabeza)
-	var ruta := "res://assets/ui/tutorial/%s.png" % cual
-	# la foto lleva texto del juego dibujado: en otro idioma, la suya (assets/ui/tutorial/en/<id>.png; tools/fotos_tutorial.py)
-	var ruta_idioma := "res://assets/ui/tutorial/%s/%s.png" % [Idioma.actual, cual]
-	if Idioma.actual != Idioma.ORIGEN and ResourceLoader.exists(ruta_idioma):
-		ruta = ruta_idioma
-	if ResourceLoader.exists(ruta):
-		var marco := PanelContainer.new()
-		var borde := StyleBoxFlat.new()
-		borde.bg_color = Tema.LINEA
-		borde.set_border_width_all(2)
-		borde.border_color = Tema.OXIDO
-		borde.set_content_margin_all(2)
-		marco.add_theme_stylebox_override("panel", borde)
-		marco.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		var foto := TextureRect.new()
-		foto.texture = load(ruta)
-		foto.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		marco.add_child(foto)
-		caja.add_child(marco)
 	var texto := RichTextLabel.new()
 	texto.bbcode_enabled = true
 	texto.fit_content = true

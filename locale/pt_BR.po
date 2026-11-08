@@ -6249,6 +6249,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Jogue longe: a explosão também te machuca."
 
 #: scripts/ui/opciones.gd
+msgid "Idioma"
+msgstr "Idioma"
+
+#: scripts/ui/opciones.gd
 msgid "Audio"
 msgstr "Áudio"
 

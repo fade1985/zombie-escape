@@ -6269,6 +6269,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Бросай подальше: взрыв ранит и тебя."
 
 #: scripts/ui/opciones.gd
+msgid "Idioma"
+msgstr "Язык"
+
+#: scripts/ui/opciones.gd
 msgid "Audio"
 msgstr "Аудио"
 

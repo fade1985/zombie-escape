@@ -5,8 +5,7 @@
 # Opciones → Ayudas (ajuste "tutoriales"), que también tiene un botón para que vuelvan a salir todos.
 #
 # Cada ficha: grupo (su apartado en la lista), titulo, icono (assets/ui/iconos), cuando (cuándo sale, para la lista y
-# para no perderse) y lineas, lo que se explica. Su foto es assets/ui/tutorial/<id>.png, recortada de las capturas de
-# la prueba (tools/fotos_tutorial.py). En las líneas, las teclas van entre llaves ({esquivar}, con el nombre de la
+# para no perderse) y lineas, lo que se explica. Sin fotos (se quitaron el 8 nov). En las líneas, las teclas van entre llaves ({esquivar}, con el nombre de la
 # acción de project.godot): salen las del jugador (las cambiadas en Opciones también), los botones del mando si hay uno
 # enchufado o, en el móvil, los de la pantalla (tecla()). {moverse}, {apuntar} y {atacar_modo} son de aquí.
 #

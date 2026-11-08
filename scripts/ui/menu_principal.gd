@@ -393,10 +393,10 @@ func tutorial_alerta() -> void:
 	Tutorial.ventana(self, "alerta").cerrado.connect(func(): primera_tarjeta().grab_focus())
 
 
+# Volver (o Esc) en «Elige edificio»: a la pantalla de antes, «Elige partida» (huecos.gd), que al cerrarse vuelve al menú
 func volver_al_menu() -> void:
 	edificios.hide()
-	centro.show()
-	centro.find_children("*", "Button", true, false)[0].grab_focus()
+	abrir_huecos()
 
 
 # Esc (o B en el mando) en "Elige edificio" o en la despedida: vuelve al menú. N (tecla de prueba): abre todos los edificios

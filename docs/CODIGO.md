@@ -553,7 +553,7 @@ en una línea.
   mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
   y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
-  y la ficha del elegido). La ficha (`ficha()`) lleva su foto de `assets/ui/tutorial/`.
+  y la ficha del elegido). La ficha (`ficha()`): el icono, el título y las líneas (sin fotos desde el 8 nov).
 - `confirmar.gd` (`Confirmar`): la ventanita «¿Estás seguro?» en el centro de la pantalla, con lo que se perdería y
   Sí / No (el foco empieza en No; Esc o B dicen que no). La usan «Borrar partida» (`huecos.gd`) y «Destruir» del
   inventario y del baúl. `Confirmar.preguntar(dueño, detalle).respondido` dice si se ha dicho que sí.
@@ -716,8 +716,7 @@ en una línea.
 
 - **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
 - **Lo dibujado en otro idioma:** `cartel_planta_idiomas.py` hace los carteles de planta con la palabra de cada idioma («FLOOR»,
-  «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`) y `fotos_tutorial.py <idioma>` recorta las fotos de los tutoriales de las
-  capturas sacadas con `--lang <idioma>` (`assets/ui/tutorial/<idioma>/`).
+  «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`).
 - **El número de la planta, gastado:** los carteles limpios están en `assets/sources/cartel/limpios/` (ahí escriben `guias_cartel.py sprites`
   y `cartel_planta_idiomas.py`) y `cartel_roto.py` saca de ellos los del juego (`assets/sprites/cartel-planta-*.png`), con la pintura
   pelada, un desconchón y grietas. Si se toca un cartel, hay que pasarlo otra vez; la palabra se protege para que se lea.
@@ -891,8 +890,6 @@ en una línea.
   Python: cada letra es una cuadrícula de 5×7 con relieve, babas y un filo crema). Las letras están en `LETRAS` (J, H, N, Y, R y U son
   las añadidas al pasar al nombre nuevo), los colores en `REPARTOS` (`py tools/logo.py todas` los enseña todos juntos; el elegido es
   `VARIANTE`) y `py tools/logo.py viejo` rehace el logo de antes, idéntico, para comprobar que el programa no ha cambiado.
-- **Fotos de los tutoriales:** `fotos_tutorial.py` recorta de las capturas de la prueba (520 × 180, a tamaño real) la
-  foto de cada ficha; al lado de cada una, la prueba que saca su captura: `py tools/fotos_tutorial.py [id...]`.
 - **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en
   `tools/efectos/*.wav`, que no van a git).
 - **Música de 8 bits:** `motor-8bit.mjs` y las canciones (`el-ultimo-inquilino.mjs`, `turno-de-noche.mjs`,

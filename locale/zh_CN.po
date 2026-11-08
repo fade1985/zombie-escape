@@ -6229,6 +6229,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "扔远一点：爆炸也会伤到你自己。"
 
 #: scripts/ui/opciones.gd
+msgid "Idioma"
+msgstr "语言"
+
+#: scripts/ui/opciones.gd
 msgid "Audio"
 msgstr "音频"
 

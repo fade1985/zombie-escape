@@ -59,7 +59,7 @@ Todo lo que tenga letras entre las dos marcas es un texto (se saltan los ids en 
 diccionario). Una sola línea se marca con `# [traducir]` al final de la línea. Lo que se vaya a enseñar tiene que pasar
 por `Idioma.t(...)` en el sitio donde se muestra (o en una función que lo devuelva ya traducido, como `Alerta.regla()`).
 
-Un texto en español que de verdad no se traduce (el botón «Idioma / Language», los nombres de los idiomas) lleva
+Un texto en español que de verdad no se traduce (los nombres de los idiomas) lleva
 `# no-tr` al final de su línea.
 
 ## La herramienta: `py tools/traducciones.py`
@@ -187,7 +187,7 @@ variaciones y con el espaciado del propio `FontFile` y no se mueve.
    gramática (el género, `de` + artículo, mayúsculas de los nombres), mirar los sitios que arman frases con nombres traducidos:
    `Idioma.minusculas()` ya deja los nombres alemanes con su mayúscula.
 5. Lo dibujado en imágenes: la palabra del cartel de planta en `tools/cartel_planta_idiomas.py` (`PALABRAS`) y su juego de carteles en
-   `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`); las fotos de los tutoriales, con `--lang <código>` y `py tools/fotos_tutorial.py <código>`.
+   `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`).
 6. **Cómo cuenta las plantas:** en España (y en Alemania, Francia o Brasil) la de la calle es la «planta baja» y la de encima, la 1ª; en
    Estados Unidos, Rusia o China la de la calle ya es la 1ª. Si cuenta como estos, su código va en `Planta.CALLE_ES_LA_PRIMERA` (y en la
    lista igual de `tools/cartel_planta_idiomas.py`): sus plantas y sus puertas suben un número («1ª planta» es *2nd floor*, «1ºD» es
@@ -227,11 +227,6 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
 - `assets/sprites/cartel-planta-N.png` lleva «PLANTA»: `py tools/cartel_planta_idiomas.py` hace `cartel-planta-N-<idioma>.png` («FLOOR»,
   «ANDAR», «ETAGE»), que `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`) usa según el idioma. En inglés, ruso y chino, donde la planta de la
   calle ya es la 1ª, el cartel de la planta N lleva el número N + 1 (el 4, `cartel-planta-4.png`, solo lo usan ellos).
-- `assets/ui/tutorial/<id>.png` son recortes de capturas con el texto del juego dibujado: las de cada idioma van en
-  `assets/ui/tutorial/<idioma>/<id>.png` (`ui/tutorial.gd` las prefiere y, si no hay, usa la de español). Se rehacen con las
-  capturas sacadas con `--lang <idioma>` y `py tools/fotos_tutorial.py <idioma>`; las ocho que no llevan ningún texto (apagón, curas,
-  horda, incendio, jugar, lanzables, munición, peligros) valen para todos los idiomas y no se rehacen. Cuando cambie lo que se ve en el
-  juego, hay que repetir las fotos en cada idioma (la lista de pruebas que las sacan está en `tools/fotos_tutorial.py`).
 - Sin texto dibujado: `EXIT` de la salida de incendios (ya es inglés), la «H» del helipuerto y los escaparates (garabatos). El logo
   (`assets/ui/logo.png`, «Johnny Rush: Zombie Escape») es el mismo en todos los idiomas: el nombre del juego no se traduce.
 
