@@ -13,6 +13,8 @@ por píxel del juego, en 2016 de ancho): GPT la devuelve a 2000 de ancho, así q
 
 Cada zombi tiene su ficha en ZOMBIS (sus carpetas). Sin decir cuál, es la vecina; para otro, su nombre delante:
   py tools/zombi_gpt.py --zombi normal personaje      (el vecino con GPT: zombi-normal-gpt → zombi-normal-gpt-48)
+  py tools/zombi_gpt.py --zombi rapido personaje      (el crío con GPT: zombi-rapido-gpt → zombi-rapido-gpt-48;
+                                                       su referencia, capturas/referencia-rapido.png)
 
 Uso (desde la carpeta del proyecto):
   py tools/zombi_gpt.py personaje      las 5 vistas quietas → assets/sources/zombi-vecina-48/rotations/ (y las 3 en espejo)
@@ -37,6 +39,7 @@ from PIL import Image, ImageEnhance, ImageOps
 ZOMBIS = {
     "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48, False, (1.08, 1.0, 1.0)),
     "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
+    "rapido": ("assets/sources/zombi-rapido-gpt", "assets/sources/zombi-rapido-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
 FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
 LIENZO = 48

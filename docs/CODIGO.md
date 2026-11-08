@@ -834,6 +834,11 @@ en una línea.
   clavados al atacar y en el golpe, y en qué rodilla va el roto). Desde el 8 nov es **el vecino del juego**
   (`zombi_normal.tscn`, y su ficha de Sujetos), con una sola ropa, la camisa azul: las 6 de colores del de PixelLab
   (`zombi-normal-rojo`, `-bata`…) ya no se usan. `--captura --vecino-gpt` lo pone junto al de PixelLab para comparar.
+- **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
+  casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
+  mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus
+  dibujos). Su versión con GPT, por hacer: `--zombi rapido` en `zombi_gpt.py`, textos en `assets/sources/zombi-rapido-gpt/`
+  (referencia `capturas/referencia-rapido.png`). `--captura --crio-gpt` lo enseña en sus 8 direcciones (y al de GPT al lado, cuando esté).
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es

@@ -323,6 +323,7 @@
 #   --vecina            la vecina hecha con GPT (en todas las vistas) junto al vecino: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --vecino-gpt        el vecino rehecho con GPT junto al de PixelLab, quietos en dos filas en sus 8 direcciones:
 #                       andar, atacar, golpe y muerte (el de GPT es el vecino del juego desde el 8 nov) [prueba_varias.gd]
+#   --crio-gpt          lo mismo con el crío (el de PixelLab; y a su lado el de GPT cuando esté su hoja) [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla); vale con --edificio X  [prueba_varias.gd]
@@ -863,6 +864,9 @@ func empezar_prueba() -> void:
 	elif "--vecino-gpt" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecino_gpt()
+	elif "--crio-gpt" in args:
+		set_process(false)   # sin la prueba larga
+		probar_vecino_gpt("rapido", "crio")
 	elif "--vecina" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecina()

@@ -2080,7 +2080,10 @@ func probar_vecina() -> void:
 # que lo eligió el dueño) junto al de PixelLab. En la sala de pruebas, vecinos quietos en sus 8 direcciones, por parejas (a la izquierda el
 # de PixelLab y a su lado el de GPT; arriba, de frente a de espaldas en diagonal; abajo, el resto), a la vez: andar (captura-vecino-gpt-andar.png), atacar (-ataque),
 # recibir un golpe (-golpe) y morir (-muerte). Son vecinos de siempre con la hoja cambiada y sin moverse (ni pensar)
-func probar_vecino_gpt() -> void:
+#
+# Con "--captura --crio-gpt" lo mismo con el crío (zombi rápido): por ahora solo el de PixelLab, ya con el contorno suave
+# y sin el mechón de la nuca (8 nov), y a su lado el de GPT cuando esté su hoja (zombi-rapido-gpt). Fotos captura-crio-gpt-*.png
+func probar_vecino_gpt(tipo := "normal", nombre := "vecino") -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
@@ -2098,13 +2101,15 @@ func probar_vecino_gpt() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.2).timeout
 	johnny.get_node("Sprite").visible = false   # (la cámara va con él: los vecinos, alrededor)
-	var hojas: Array[SpriteFrames] = [load("res://assets/sprites/zombi-normal.tres"), load("res://assets/sprites/zombi-normal-gpt.tres")]
+	var hojas: Array[SpriteFrames] = [load("res://assets/sprites/zombi-%s.tres" % tipo)]
+	if ResourceLoader.exists("res://assets/sprites/zombi-%s-gpt.tres" % tipo):
+		hojas.append(load("res://assets/sprites/zombi-%s-gpt.tres" % tipo))
 	var direcciones := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var todos: Array = []
 	for d in direcciones.size():
-		for fila in 2:   # (cada dirección, el de PixelLab y a su lado el de GPT: con la misma luz)
+		for fila in hojas.size():   # (cada dirección, el de PixelLab y a su lado el de GPT: con la misma luz)
 			var i := (d % 4) * 2 + fila
-			var z: Node2D = meter_zombi("normal", johnny.position + Vector2(-150 + (i - 3.5) * 95, -60 + (d / 4) * 170))
+			var z: Node2D = meter_zombi(tipo, johnny.position + Vector2(-150 + (i - 3.5) * 95, -60 + (d / 4) * 170))
 			z.process_mode = Node.PROCESS_MODE_DISABLED   # (quieto: ni anda ni ataca)
 			for hijo in z.get_children():   # (parado así, su sombra y lo demás no se ponen en su sitio: solo el dibujo)
 				if hijo is CanvasItem and hijo != z.sprite:
@@ -2118,7 +2123,7 @@ func probar_vecino_gpt() -> void:
 			z.sprite.play(anim + "_" + z.sprite.get_meta("dir"))
 		await get_tree().create_timer(1.6 if anim == "muerte" else 0.3 if anim == "golpe" else 0.45).timeout
 		await RenderingServer.frame_post_draw
-		Captura.foto("captura-vecino-gpt-%s.png" % anim)
+		Captura.foto("captura-%s-gpt-%s.png" % [nombre, anim])
 		var t: Array = []
 		for z in todos:
 			t.append("%s/%d" % [z.sprite.animation, z.sprite.frame])

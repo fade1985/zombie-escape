@@ -5,7 +5,7 @@ Lo saca todo de assets/sources/<fuente>/:
   walk/<dirección>-<n>.png      andar (PixMiniMax; el lienzo cambia de tamaño según la dirección)
   ataque/, golpe/, muerte/      atacar, recibir un golpe y morir (lienzo de 96×96 con el dibujo quieto en 24, 32)
   reposo/ (opcional)            reposo de PixMiniMax, con partida y final en el dibujo quieto (el de tentáculos)
-  zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen" y "fps_andar"
+  zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen", "fps_andar" y "suave"
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
@@ -153,6 +153,35 @@ def gore(f):
 spark = lambda c: min(c) > 215 and nearest(c)[0] > 40 ** 2     # destello blanco
 
 
+def suavizar(im, brillo):
+    """Contorno suave y retoque de color (ver "suave" más abajo)"""
+    from PIL import ImageEnhance
+    px = im.load()
+    w, h = im.size
+    v4 = ((1, 0), (-1, 0), (0, 1), (0, -1))
+    v8 = v4 + ((1, 1), (-1, 1), (1, -1), (-1, -1))
+    borde = {(x, y) for y in range(h) for x in range(w) if px[x, y][3] and any(
+        not (0 <= x + i < w and 0 <= y + j < h) or not px[x + i, y + j][3] for i, j in v4)}
+    nuevo = {}
+    for x, y in borde:
+        r, g, b, a = px[x, y]
+        if r + g + b < 120:   # el contorno oscuro: el color de dentro
+            dentro = [px[x + i, y + j] for i, j in v8 if 0 <= x + i < w and 0 <= y + j < h
+                      and px[x + i, y + j][3] and (x + i, y + j) not in borde]
+            if dentro:
+                r, g, b = (sum(c[k] for c in dentro) / len(dentro) for k in range(3))
+        nuevo[(x, y)] = (round(r * brillo * 0.6), round(g * brillo * 0.6), round(b * brillo * 0.6), a)
+    alfa = im.split()[3]
+    rgb = ImageEnhance.Contrast(im.convert('RGB')).enhance(1.2)
+    rgb = ImageEnhance.Brightness(rgb).enhance(brillo)
+    rgb = ImageEnhance.Color(rgb).enhance(1.1).convert('RGBA')
+    rgb.putalpha(alfa)
+    q = rgb.load()
+    for p, c in nuevo.items():
+        q[p] = c
+    return rgb
+
+
 def same_colors(im):
     """Pinta el fotograma solo con los colores del zombi (el más parecido a cada uno)."""
     out = im.copy()
@@ -295,6 +324,11 @@ anims['attack']['hit'] = round(HIT / len(attack['south']), 3)
 # oscurece en toda la hoja, no solo en golpe y muerte, para que no cambie de color al andar
 if cfg.get('sangre_en_todo') and SANGRE == 'oscura':
     sheet = darken(sheet)
+# "suave" en zombi.json (el crío, 0.8): más real, como los zombis de GPT. El contorno casi negro de PixelLab, que lo
+# deja plano, de cómic, pasa a ser el color de dentro al 60 %, y algo más de contraste y color; el número es el brillo
+# (lo eligió el dueño el 8 nov: el crío, a 0,8, más oscuro que el vecino de GPT)
+if cfg.get('suave'):
+    sheet = suavizar(sheet, cfg['suave'])
 guardar_png(sheet, f'assets/sprites/{SPRITE}.png')
 json.dump({'cell': [CW, CH], 'pivot': [PX, PY], 'anims': anims,
            'source': f'Hecha con tools/zombi.py a partir de {SRC}/'},
