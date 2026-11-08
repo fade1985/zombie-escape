@@ -390,16 +390,20 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	pasillo.apliques = []
 	var x := MURO + 130
 	while x < ancho - MURO - 60:
-		# (y, a la derecha de la puerta de la sala de mantenimiento, sin tapar su cartel: puerta.gd)
+		# (y, a la derecha de la puerta de la sala de mantenimiento y del ascensor de los Apartamentos, sin tapar sus
+		# carteles: puerta.gd)
 		if pasillo.salidas.all(func(s): return s.dir != "arriba" or (absf(s.en - x) > 90
-				and not (s.get("placa", "") == "llave" and x > s.en and x < s.en + 260))) \
+				and not ((s.get("placa", "") == "llave" or (s.tipo == "ascensor" and estilo_pasillo == "pasillo"))
+					and x > s.en and x < s.en + 260))) \
 				and pasillo.escaparates.all(func(e): return absf(e.x - x) > ESCAPARATE_MEDIO + 20):
 			pasillo.apliques.append({"x": x, "semilla": rng.randf(), "parpadea": rng.randf() < 0.3})
 		x += 230
 	# los muebles del pasillo, sin tapar ninguna puerta ni escaparate y dejando ir de una punta a la otra
 	var delante_escaparates: Array = pasillo.escaparates.map(func(e): return Rect2(e.x - ESCAPARATE_MEDIO, MURO,
 		ESCAPARATE_MEDIO * 2, 60))
-	delante_escaparates.append(Rect2(ancho / 2.0 - 130, MURO, 130, 130))   # (y el cartel de la planta, a la izquierda del ascensor)
+	# (y el cartel de la planta: en los Apartamentos, a la derecha del ascensor; en los otros, a la izquierda)
+	delante_escaparates.append(Rect2(ancho / 2.0, MURO, 200, 130) if estilo_pasillo == "pasillo"
+		else Rect2(ancho / 2.0 - 130, MURO, 130, 130))
 	pasillo.muebles = Muebles.de_sala(estilo_pasillo, {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
 		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng,
 		delante_escaparates) if not Catalogo.SALAS[estilo_pasillo].has("colocados") else []

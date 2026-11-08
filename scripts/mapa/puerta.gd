@@ -238,14 +238,23 @@ func ascensor_portal() -> void:
 			var largo := minf(96.0, 51.0 - x)
 			draw_texture_rect_region(CINTA_GPT, Rect2(x, -46, largo, 12), Rect2(0, 0, largo / 2.0, 6))
 			x += largo
-	if salida.has("planta"):
-		cartel_planta()
+	if salida.get("planta", -1) >= 0:
+		# a su derecha, la placa azul de la planta, como la de MANTENIMIENTO: «PLANTA 0» (en inglés, ruso y chino la de la
+		# calle ya es la 1ª: Planta.CALLE_ES_LA_PRIMERA). Antes, el número grande pintado a la izquierda (cartel_planta)
+		var num: int = salida.planta + (1 if Idioma.actual in Planta.CALLE_ES_LA_PRIMERA else 0)
+		# (en español, la de la calle es «PLANTA BAJA», como en el nombre de la planta; en los demás idiomas, con su número)
+		var texto: String = "PLANTA BAJA" if Idioma.actual == "es" and num == 0 else (Idioma.t("Planta %d") % num).to_upper()   # no-tr (solo en español)
+		cartel_azul(texto, Vector2(51, -64))
 
 
 # El cartel de la sala de mantenimiento: "en", el medio de su lado izquierdo. La placa, con las puntas a su tamaño y lo de
 # en medio estirado, y encima el texto, con su sombra
 func cartel_mantenimiento(en: Vector2) -> void:
-	var texto := Idioma.t("Mantenimiento").to_upper()
+	cartel_azul(Idioma.t("Mantenimiento").to_upper(), en)
+
+
+# La placa azul esmaltada (la de MANTENIMIENTO) con "texto", del largo que pida: "en", el medio de su lado izquierdo
+func cartel_azul(texto: String, en: Vector2) -> void:
 	var letra := 16
 	if not mant_fuente:   # la letra de siempre, con las letras algo más juntas (el cartel, más corto)
 		mant_fuente = FontVariation.new()
