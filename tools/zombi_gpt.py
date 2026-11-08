@@ -220,10 +220,16 @@ def animacion(anim, vista):
     # columnas de la primera (las dos filas comparten rejilla). Lo que cada dibujo se aparta de su columna es lo que
     # se mueve de verdad (echarse adelante, caer), y así se mueve en el lienzo
     por_la_cabeza = anim == "andar"
+    # El arrastrado, de perfil y en diagonal de frente: al atacar, lo más bajo son las manos, que se van adelante, y el
+    # cuerpo entero se corría 16 píxeles hasta salirse del lienzo. Lo que se queda quieto es el final del cuerpo, que
+    # en esas vistas es su borde izquierdo
+    por_detras = ALTURA_GPT and anim != "andar" and vista in ("south-east", "east")
     trozos, rejilla = [], None
     for numero_fila, fila in enumerate(filas(im)):
         suyos = separar(fila)
         fijos = [fijo(d, centro, por_la_cabeza) for d, _, centro in suyos]
+        if por_detras:
+            fijos = [centro - d.width / 2 for d, _, centro in suyos]   # (su borde izquierdo: el final del cuerpo)
         if not (anim == "muerte" and numero_fila > 0 and rejilla):
             rejilla = recta(fijos)
         # lo alta que va la cabeza de cada uno respecto a las de su fila (para el que corre)
@@ -242,7 +248,7 @@ def animacion(anim, vista):
     caja = quieto.getbbox()
     escala = trozos[0][0].height / (caja[3] - caja[1])
     # el punto fijo del dibujo quieto: ahí cae la columna de cada fotograma (así no salta al pasar de quieta a andar)
-    sitio = fijo(quieto.crop(caja), (caja[0] + caja[2]) / 2, por_la_cabeza)
+    sitio = caja[0] if por_detras else fijo(quieto.crop(caja), (caja[0] + caja[2]) / 2, por_la_cabeza)
     carpeta = os.path.join(DESTINO, nombres[anim])
     os.makedirs(carpeta, exist_ok=True)
     # el lienzo: al andar, el de 48; en lo demás, el del zombi (el dibujo quieto, abajo y en medio)
