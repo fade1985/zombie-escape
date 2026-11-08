@@ -425,6 +425,14 @@ func probar_colecciones() -> void:
 	print("Al pulsar la pestaña de los sonámbulos: pestaña %s, marcado %s, casillas %d (esperado: sonambulos, pes_sonambulos, 12)" % [
 		ordenador.familia_vista, marcado.name if marcado else "nada",
 		ordenador.ventana.find_children("z_*", "Button", true, false).size()])
+	# ningún sujeto toca la lámpara del escenario: de cabeza a pies cabe entre el techo y el suelo
+	var tocan := []
+	for id in Bestiario.LISTA:
+		var alto: int = Bestiario.LISTA[id].recorte.size.y
+		var escala := clampi(int((ordenador.PIES_ESCENARIO - ordenador.TECHO_ESCENARIO) / alto), 1, 3)
+		if alto * escala > ordenador.PIES_ESCENARIO - ordenador.TECHO_ESCENARIO:
+			tocan.append(id)
+	print("Sujetos que tocan la lámpara: %s (esperado: [])" % [tocan])
 	# la ventana, maximizada, y nada se sale (sin barra de desplazamiento en el programa)
 	var desliza: ScrollContainer = ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0]
 	print("Colecciones · ventana %s (esperado: 872 de ancho) · se desplaza %s (esperado: false; mide %d de alto y caben %d)" % [

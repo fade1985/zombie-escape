@@ -1025,7 +1025,11 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 # ── Colecciones: el bestiario ──
 
 const FICHA_ANCHO := 404       # la ficha de la izquierda (el escenario, el nombre, la frase...)
-const ESCENARIO := Vector2(404, 180)   # donde sale el enemigo grande, con su luz
+const ESCENARIO := Vector2(404, 208)   # donde sale el enemigo grande, con su luz
+# En el escenario (medido en su fondo, foco-sujetos.png): los pies, en el charco de luz del suelo, y lo más alto a lo
+# que puede llegar la cabeza, unos píxeles por debajo de la lámpara, para no tocarla
+const PIES_ESCENARIO := 186.0
+const TECHO_ESCENARIO := 46.0
 const FONDO_ESCENARIO := preload("res://assets/ui/foco-sujetos.png")   # su fondo, 202 × 90 (tools/foco_sujetos.py)
 const CASILLA_ZOMBI := 100     # cada casilla de la cuadrícula de la derecha (4 por fila)
 const POR_PAGINA := 12         # las casillas de cada página de la cuadrícula (4 × 3)
@@ -1284,8 +1288,8 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	columna.add_child(escenario)
 	# el dibujo, con los pies en el centro del suelo: a escala entera, lo más grande que quepa (como mucho, a 3)
 	var usado: Rect2i = d.recorte
-	var escala := clampi(int((ESCENARIO.y - 30) / usado.size.y), 1, 3)
-	var pies := Vector2(ESCENARIO.x / 2, ESCENARIO.y - 18)
+	var escala := clampi(int((PIES_ESCENARIO - TECHO_ESCENARIO) / usado.size.y), 1, 3)
+	var pies := Vector2(ESCENARIO.x / 2, PIES_ESCENARIO)
 	var recurso: Resource = load(d.hoja)
 	var dibujo: Node2D
 	if recurso is SpriteFrames and (recurso as SpriteFrames).has_animation(d.retrato):
@@ -1314,18 +1318,19 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	nombre.add_theme_font_size_override("font_size", 24)
 	nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(nombre)
-	var donde := texto_tarjeta(Idioma.t("Sale en: %s") % (sale_en(d) if visto else "???"), TINTA_SUAVE)
-	donde.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	columna.add_child(donde)
+	# dónde sale y cuántos se han matado, en la misma línea (así cabe el escenario alto)
+	var linea := HBoxContainer.new()
+	linea.alignment = BoxContainer.ALIGNMENT_CENTER
+	linea.add_theme_constant_override("separation", 12)
+	columna.add_child(linea)
+	linea.add_child(texto_tarjeta(Idioma.t("Sale en: %s") % (sale_en(d) if visto else "???"), TINTA_SUAVE))
+	if visto:
+		linea.add_child(texto_tarjeta(Idioma.t("Matados: %d") % Bestiario.matados(s, id), VERDE_OSCURO))
 	var frase := texto_tarjeta(Bestiario.frase(id) if visto else Idioma.t("Aún no te lo has cruzado."), TINTA)
 	frase.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	frase.custom_minimum_size.x = FICHA_ANCHO
 	frase.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(frase)
-	if visto:
-		var cuenta := texto_tarjeta(Idioma.t("Matados: %d") % Bestiario.matados(s, id), VERDE_OSCURO)
-		cuenta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		columna.add_child(cuenta)
 	return columna
 
 
@@ -1345,9 +1350,9 @@ func polvo_y_parpadeo(e: Control) -> void:
 	polvo.amount = 22
 	polvo.lifetime = 5.0
 	polvo.preprocess = 5.0   # ya flotando al abrir la ficha
-	polvo.position = Vector2(ESCENARIO.x / 2, 100)
+	polvo.position = Vector2(ESCENARIO.x / 2, 110)
 	polvo.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	polvo.emission_rect_extents = Vector2(70, 50)   # el ancho del cono por en medio
+	polvo.emission_rect_extents = Vector2(70, 60)   # el ancho del cono por en medio
 	polvo.direction = Vector2(0, -1)
 	polvo.spread = 40.0
 	polvo.gravity = Vector2.ZERO
