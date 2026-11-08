@@ -115,9 +115,11 @@ func marca_nuevo() -> Label:
 	marca.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	marca.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	marca.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	marca.add_theme_color_override("font_color", TINTA)
-	marca.add_theme_constant_override("outline_size", 0)
-	marca.add_theme_stylebox_override("normal", caja(Tema.AMARILLO, TINTA, 2, 12, 0))
+	# solo el «!», como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4 (antes, en un círculo amarillo)
+	marca.add_theme_font_size_override("font_size", 16)
+	marca.add_theme_color_override("font_color", Tema.TINTA)
+	marca.add_theme_constant_override("outline_size", 4)
+	marca.add_theme_color_override("font_outline_color", Tema.LINEA)
 	var bote := marca.create_tween().set_loops()
 	bote.tween_property(marca, "position:y", -3.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	bote.tween_property(marca, "position:y", 3.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

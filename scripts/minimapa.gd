@@ -177,9 +177,9 @@ func _draw() -> void:
 			var esquina: Vector2 = c.r.position + Vector2(c.r.size.x - 6, -4)
 			if c.has("sos_x") and c.sos_x > 0.0:
 				esquina = Vector2(c.sos_x - 5, c.r.position.y - 4)
-			draw_rect(Rect2(esquina, Vector2(10, 12)).grow(2), BORDE)
-			draw_rect(Rect2(esquina, Vector2(10, 12)), Color("#ff5d73"))
-			draw_string(letra, esquina + Vector2(-5, 12), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, Color.WHITE)
+			# solo el «!», como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4 (antes, blanco en un cuadrito rosa)
+			draw_string_outline(letra, esquina + Vector2(-5, 12), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, 4, Tema.LINEA)
+			draw_string(letra, esquina + Vector2(-5, 12), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, Tema.TINTA)
 	# el marco que parpadea alrededor de donde estás
 	for c in lista:
 		if c.aqui:

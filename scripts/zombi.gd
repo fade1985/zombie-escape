@@ -333,7 +333,7 @@ func despertar() -> void:
 		set_collision_mask_value(CAPA_ZOMBIS, true)
 	espabilando = ESPABILAR
 	if exclamacion and not con_barrera():   # (M80: con la barrera puesta, sin el "!": ya se ve la burbuja)
-		exclamacion_suelta = Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("ffd23f"), 26)
+		exclamacion_suelta = Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Tema.TINTA, 18)   # (como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4; antes, amarillo y grande)
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro != self and otro.get("dormido") and not otro.get("sentado") and distancia_a(otro) < CORRILLO:
 			otro.despertar()
@@ -785,7 +785,7 @@ func gas_y_frenesi(delta: float) -> void:
 			# despierta frenético: un "!" morado y más rápido un rato
 			frenesi = Peligros.GAS.frenetico
 			agente.max_speed *= Peligros.GAS.rapido
-			Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("#d38cff"), 26)
+			Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Tema.TINTA, 18)   # (como todos los «!»; antes, morado)
 	elif frenesi > 0.0:
 		frenesi -= delta
 		if randf() < 6.0 * delta:

@@ -234,8 +234,9 @@ func dibujar_tema(t: String, fuente: Font) -> void:
 		PLACA.AMARILLO if elegido else PLACA.TEXTO)
 	if hay_cobrar:
 		var marca := Rect2(r.end.x - 16, r.position.y + 5, 9, 13)
-		draw_rect(marca, PLACA.AMARILLO)
-		draw_string(fuente, Vector2(marca.position.x, marca.end.y - 2), "!", HORIZONTAL_ALIGNMENT_CENTER, marca.size.x, 14, PLACA.NEGRO)   # no-tr
+		# solo el «!», como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4 (antes, negro en una etiqueta amarilla)
+		draw_string_outline(fuente, Vector2(marca.position.x, marca.end.y - 1), "!", HORIZONTAL_ALIGNMENT_CENTER, marca.size.x, 16, 4, Tema.LINEA)   # no-tr
+		draw_string(fuente, Vector2(marca.position.x, marca.end.y - 1), "!", HORIZONTAL_ALIGNMENT_CENTER, marca.size.x, 16, Tema.TINTA)   # no-tr
 	if en_medio:
 		return
 	var cuenta := "%d/%d" % [conseguidos(lista), lista.size()]

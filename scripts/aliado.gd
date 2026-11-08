@@ -607,7 +607,7 @@ func avisar(h: Dictionary) -> void:
 	hab_t = h.cada
 	decir(Idioma.t("¡Detrás!"))
 	Sonido.tocar("pitido")
-	partida.supervivientes.texto_flotante(z.global_position + Vector2(0, -70), "!", Tema.ROJO, 32, 0.8)
+	partida.supervivientes.texto_flotante(z.global_position + Vector2(0, -70), "!", Tema.TINTA, 18, 0.8)   # (como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4; antes, rojo y grande)
 
 
 # El zombi que va a pegar a Johnny por la espalda dentro de "antes" segundos (o null). La espalda: más de 110° entre

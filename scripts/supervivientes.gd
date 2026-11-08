@@ -419,7 +419,9 @@ func actualizar_socorro(delta: float) -> void:
 		return
 	grito_t = tiempo
 	var gritos: Array = rescate.def.get("gritos", GRITOS)
-	texto_flotante(donde + Vector2(randf_range(-14, 14), 0), Idioma.t(gritos[randi() % gritos.size()]), Color("#ff8a8a"), tamano)
+	# del color de los avisos de la línea de abajo (partida.decir: «Has cogido la llave...»), el hueso de Tema.TINTA, y a su
+	# tamaño (16, con el contorno de 4); antes, rosa
+	texto_flotante(donde + Vector2(randf_range(-14, 14), 0), Idioma.t(gritos[randi() % gritos.size()]), Tema.TINTA, tamano)
 
 
 # En el pasillo, la puerta del apartamento del superviviente
@@ -843,13 +845,11 @@ func flecha(hacia: Vector2, color: Color, grande: bool, sube := 0.0) -> void:
 	var punto := en.clamp(borde.position, borde.end)
 	if a_la_vista:
 		punto.y -= sube * clampf(minf(en.x - borde.position.x, borde.end.x - en.x) / 80.0, 0.0, 1.0)
-	var radio := 16.0 if grande else 13.0
-	var dir := Vector2.DOWN if a_la_vista else (en - punto).normalized()
-	Formas.poligono(capa, PackedVector2Array([punto + dir * (radio + 10), punto + dir.orthogonal() * 8 + dir * radio * 0.6,
-		punto - dir.orthogonal() * 8 + dir * radio * 0.6]), color)
-	Formas.disco(capa, punto, radio + 2, Tema.LINEA)
-	Formas.disco(capa, punto, radio, color)
-	capa.draw_string(Tema.FUENTE, punto + Vector2(-20, 6), "!", HORIZONTAL_ALIGNMENT_CENTER, 40, 16, Tema.LINEA)
+	# solo un «!», como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4
+	# (antes, un círculo del color del superviviente con su pico; "grande", al gritar: ahora sube un poco)
+	var donde := punto + Vector2(-20, 6 - (3 if grande else 0))
+	capa.draw_string_outline(Tema.FUENTE, donde, "!", HORIZONTAL_ALIGNMENT_CENTER, 40, 16, 4, Tema.LINEA)
+	capa.draw_string(Tema.FUENTE, donde, "!", HORIZONTAL_ALIGNMENT_CENTER, 40, 16, Tema.TINTA)
 
 
 # ═════════════ Para probar ═════════════
