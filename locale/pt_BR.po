@@ -2717,6 +2717,10 @@ msgstr "Laboratório"
 msgid "Mantenimiento"
 msgstr "Manutenção"
 
+#: scripts/mapa/puerta.gd
+msgid "SALA DE MANTENIMIENTO"
+msgstr "SALA DE MANUTENÇÃO"
+
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"
 msgstr "Supermercado"

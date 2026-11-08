@@ -2715,6 +2715,10 @@ msgstr "实验室"
 msgid "Mantenimiento"
 msgstr "维修间"
 
+#: scripts/mapa/puerta.gd
+msgid "SALA DE MANTENIMIENTO"
+msgstr "维修间"
+
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"
 msgstr "超市"

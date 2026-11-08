@@ -183,6 +183,8 @@
 #   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel, sin muebles, y el nombre de la planta y de sus
 #                       puertas en el idioma de la prueba (con --lang en, un número más que en español)   [prueba_sitios.gd]
+#   --cartel-sala       la puerta de acero de la sala de mantenimiento en el pasillo de la planta baja y su cartel, en
+#                       español, inglés, francés, ruso y chino                               [prueba_sitios.gd]
 #   --llegada           por dónde se llega a cada planta: el portal a la izquierda, las demás (y la azotea) por la derecha [prueba_sitios.gd]
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
@@ -741,6 +743,9 @@ func empezar_prueba() -> void:
 	elif "--pasillo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pasillo()
+	elif "--cartel-sala" in args:
+		set_process(false)   # sin la prueba larga
+		probar_cartel_sala()
 	elif "--llegada" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llegada()

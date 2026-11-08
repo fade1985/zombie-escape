@@ -26,6 +26,26 @@ func probar_pasillo() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --cartel-sala": la puerta de acero de la sala de mantenimiento en el pasillo de la planta baja (la A, de
+# tools/puerta_servicio.py) y su cartel a la izquierda (tools/cartel_mantenimiento.py), con Johnny delante: en español, con
+# las letras del dibujo, y en inglés, francés, ruso y chino, con la traducción escrita en la placa lisa. Fotos:
+# captura-cartel-sala-<idioma>.png. Luego se cierra
+func probar_cartel_sala() -> void:
+	var antes := Idioma.actual
+	await montar(0, 0, false)
+	var puerta: Node2D = mapa.puertas[0]
+	johnny.position = puerta.position + Vector2(-60, 90)
+	johnny.get_node("Camara").reset_smoothing()
+	for codigo in ["es", "en", "fr", "ru", "zh_CN"]:
+		Idioma.poner(codigo, false)
+		puerta.queue_redraw()
+		await get_tree().create_timer(0.5).timeout
+		print("Cartel de la sala en %s: «%s»" % [codigo, Idioma.t("SALA DE MANTENIMIENTO")])
+		Captura.foto("captura-cartel-sala-%s.png" % codigo)
+	Idioma.poner(antes, false)
+	get_tree().quit()
+
+
 # Con "--captura --salida": la salida de incendios del fondo del pasillo (la puerta roja de las escaleras, en el muro de la
 # derecha, y su cartel EXIT en la pared de arriba), con Johnny delante: primero con la planta sin pasar (cartel apagado) y
 # luego, al caer el jefe, con el cartel encendido y alumbrando. Dice si cada cosa está como toca y, al volver al pasillo de una

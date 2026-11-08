@@ -2719,6 +2719,10 @@ msgstr "Лаборатория"
 msgid "Mantenimiento"
 msgstr "Дворницкая"
 
+#: scripts/mapa/puerta.gd
+msgid "SALA DE MANTENIMIENTO"
+msgstr "ДВОРНИЦКАЯ"
+
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"
 msgstr "Супермаркет"
