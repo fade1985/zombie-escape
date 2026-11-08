@@ -837,7 +837,7 @@ en una línea.
 - **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
   casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
   mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus
-  dibujos). Su versión con GPT, por hacer: `--zombi rapido` en `zombi_gpt.py`, textos en `assets/sources/zombi-rapido-gpt/`
+  dibujos) ni la sangre de la cara (boca y mejilla: `sin_sangre_cara.py`, igual). Su versión con GPT, por hacer: `--zombi rapido` en `zombi_gpt.py`, textos en `assets/sources/zombi-rapido-gpt/`
   (referencia `capturas/referencia-rapido.png`). `--captura --crio-gpt` lo enseña en sus 8 direcciones (y al de GPT al lado, cuando esté).
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
