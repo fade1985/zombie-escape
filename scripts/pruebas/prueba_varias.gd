@@ -2026,11 +2026,11 @@ func probar_vecina() -> void:
 	Captura.foto("captura-vecina-golpe.png")
 	print("Vecina con el golpe: %s · vecino %s (esperado: golpe golpe_s) · %s" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
 	await get_tree().create_timer(0.6).timeout
-	for z in [ella, el, izquierda, derecha, diagonal, abajo, abajo_diagonal]:   # (empujados hacia fuera: cada una sigue mirando a Johnny)
-		z.recibir_golpe(999, Vector2(-60, 0) if z == izquierda else Vector2(60, 0) if z == derecha
+	for z in [ella, el, izquierda, derecha, diagonal, abajo, abajo_diagonal]:   # (justo la vida que le queda: muerte normal, sin el reventón del golpe fuerte)
+		z.recibir_golpe(z.vida, Vector2(-60, 0) if z == izquierda else Vector2(60, 0) if z == derecha
 				else Vector2(-42, -42) if z == diagonal else Vector2(0, 60) if z == abajo
 				else Vector2(-42, 42) if z == abajo_diagonal else Vector2(0, -60))
-	# al reventar, las vecinas sueltan gotas de sangre y no trozos verdes, y sin anillo blanco (el vecino, con los dos): captura-vecina-reventon.png
+	# al morir, las vecinas no revientan: solo la sangre del golpe, hacia donde va (el vecino, sí): captura-vecina-reventon.png
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-vecina-reventon.png")
 	await get_tree().create_timer(1.45).timeout
