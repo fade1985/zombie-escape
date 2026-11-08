@@ -841,7 +841,8 @@ en una línea.
   → `zombi.py zombi-rapido-gpt-48 zombi-rapido-gpt` (corre a 10 fotogramas por segundo; el ataque, 0,6 s). Como corre,
   `zombi_gpt.py` pone su cabeza a la altura que la dibuja GPT y deja que los pies se levanten, en un lienzo de 64 (de
   perfil estira mucho la pierna). Textos, en `assets/sources/zombi-rapido-gpt/textos-gpt.md` (referencia
-  `capturas/referencia-rapido.png`). Aún no sale en las partidas. `--captura --crio-gpt` lo pone junto al de PixelLab y
+  `capturas/referencia-rapido.png`). Desde el 8 nov es **el crío del juego** (`zombi_rapido.tscn` y su ficha de
+  Sujetos); el de PixelLab (`zombi-rapido`) ya no se usa. `--captura --crio-gpt` lo pone junto al de PixelLab y
   `--captura --tres-zombis`, junto a la vecina y el vecino.
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).

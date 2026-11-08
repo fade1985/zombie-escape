@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/zombi.gd" id="script"]
 [ext_resource type="Script" path="res://scripts/sombra.gd" id="sombra"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-rapido.tres" id="frames"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-rapido-gpt.tres" id="frames"]
 
 [sub_resource type="CircleShape2D" id="cuerpo"]
 radius = 14.0
