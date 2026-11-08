@@ -2030,7 +2030,10 @@ func probar_vecina() -> void:
 		z.recibir_golpe(999, Vector2(-60, 0) if z == izquierda else Vector2(60, 0) if z == derecha
 				else Vector2(-42, -42) if z == diagonal else Vector2(0, 60) if z == abajo
 				else Vector2(-42, 42) if z == abajo_diagonal else Vector2(0, -60))
-	await get_tree().create_timer(1.6).timeout
+	# al reventar, las vecinas sueltan gotas de sangre y no trozos verdes (el vecino, sí): captura-vecina-reventon.png
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-vecina-reventon.png")
+	await get_tree().create_timer(1.45).timeout
 	Captura.foto("captura-vecina-muerte.png")
 	print("Vecina muerta: %s · vecino %s (esperado: muerto muerte_s en el último fotograma) · %s (esperado: muerte_e, muerte_o, muerte_se, muerte_n y muerte_ne)" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
 	# el panel de pruebas, en Zombis: la vecina, el último botón (captura-vecina-panel.png), y que sale con él
