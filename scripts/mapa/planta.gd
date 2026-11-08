@@ -388,8 +388,22 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	# los apliques de la pared de arriba, cada 230 unidades y sin tapar puertas: son las luces del pasillo
 	# (algunos fallan de vez en cuando), como en src/rooms.js
 	pasillo.apliques = []
+	if estilo_pasillo == "pasillo":
+		# en los Apartamentos, cuatro: a la mitad de cada tramo de pared de arriba (de la pared de la izquierda a la puerta A,
+		# de la A al ascensor, del ascensor a la B y de la B a la pared de la derecha), como pidió el dueño el 8 nov
+		var bordes: Array = [MURO]
+		var de_arriba: Array = pasillo.salidas.filter(func(s): return s.dir == "arriba")
+		de_arriba.sort_custom(func(p, q): return p.en < q.en)
+		for s in de_arriba:
+			var medio: float = 49.0 if s.tipo == "ascensor" else 36.0   # (el ascensor, con su sombra; las puertas, con su marco)
+			bordes.append(s.en - medio)
+			bordes.append(s.en + medio)
+		bordes.append(ancho - MURO)
+		for i in range(0, bordes.size(), 2):
+			pasillo.apliques.append({"x": roundf((bordes[i] + bordes[i + 1]) / 2.0), "semilla": rng.randf(),
+				"parpadea": rng.randf() < 0.3})
 	var x := MURO + 130
-	while x < ancho - MURO - 60:
+	while x < ancho - MURO - 60 and estilo_pasillo != "pasillo":
 		# (y, a la derecha de la puerta de la sala de mantenimiento y del ascensor de los Apartamentos, sin tapar sus
 		# carteles: puerta.gd)
 		if pasillo.salidas.all(func(s): return s.dir != "arriba" or (absf(s.en - x) > 90
