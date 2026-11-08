@@ -2076,8 +2076,8 @@ func probar_vecina() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --vecino-gpt": el vecino rehecho con GPT (assets/sprites/zombi-normal-gpt, 8 nov) junto al de PixelLab,
-# para que el dueño elija. En la sala de pruebas, vecinos quietos en sus 8 direcciones, por parejas (a la izquierda el
+# Con "--captura --vecino-gpt": el vecino rehecho con GPT (assets/sprites/zombi-normal-gpt, 8 nov; el del juego desde
+# que lo eligió el dueño) junto al de PixelLab. En la sala de pruebas, vecinos quietos en sus 8 direcciones, por parejas (a la izquierda el
 # de PixelLab y a su lado el de GPT; arriba, de frente a de espaldas en diagonal; abajo, el resto), a la vez: andar (captura-vecino-gpt-andar.png), atacar (-ataque),
 # recibir un golpe (-golpe) y morir (-muerte). Son vecinos de siempre con la hoja cambiada y sin moverse (ni pensar)
 func probar_vecino_gpt() -> void:

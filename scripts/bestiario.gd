@@ -25,8 +25,8 @@ class_name Bestiario
 const LISTA := {
 	"normal": {"nombre": "El vecino",
 		"frase": "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde.",
-		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-normal.tres",
-		"recorte": Rect2i(35, 33, 23, 46), "retrato": "reposo_s", "escala": 2, "jefe": false},
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-normal-gpt.tres",
+		"recorte": Rect2i(37, 34, 22, 45), "retrato": "reposo_s", "escala": 2, "jefe": false},
 	"vecina": {"nombre": "La vecina",
 		"frase": "Se pasaba el día pegada a la mirilla. Ahora baja en bata y rulos a ver qué es ese ruido, y el ruido eres tú.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/zombi-vecina.tres",

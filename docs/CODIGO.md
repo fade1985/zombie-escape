@@ -831,8 +831,9 @@ en una línea.
   `--zombi normal` → `assets/sources/zombi-normal-gpt-48` → `zombi.py zombi-normal-gpt-48 zombi-normal-gpt` (anda a 7
   fotogramas por segundo: `"fps_andar"` en su `zombi.json`). Los textos que se le pidieron a GPT, enteros, en
   `assets/sources/zombi-normal-gpt/textos-gpt.md` (con lo aprendido: el paso descrito fotograma a fotograma, los pies
-  clavados al atacar y en el golpe, y en qué rodilla va el roto). Aún no sale en las partidas: `--captura --vecino-gpt` los
-  pone juntos para comparar.
+  clavados al atacar y en el golpe, y en qué rodilla va el roto). Desde el 8 nov es **el vecino del juego**
+  (`zombi_normal.tscn`, y su ficha de Sujetos), con una sola ropa, la camisa azul: las 6 de colores del de PixelLab
+  (`zombi-normal-rojo`, `-bata`…) ya no se usan. `--captura --vecino-gpt` lo pone junto al de PixelLab para comparar.
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es
