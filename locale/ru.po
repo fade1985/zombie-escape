@@ -5986,10 +5986,6 @@ msgstr ""
 "Управление и режим атаки — в настройках"
 
 #: scripts/ui/menu_principal.gd
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "Лучший этаж: %d   ·   Накоплено: $%d"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "Спасибо за игру!"
 
@@ -7315,6 +7311,10 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
+msgstr "Лучший этаж: %d   ·   Накоплено: $%d"
 
 #, sin-usar
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."

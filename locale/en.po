@@ -5967,10 +5967,6 @@ msgstr ""
 "Controls and attack mode are in Options"
 
 #: scripts/ui/menu_principal.gd
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "Best floor reached: %d   ·   Dollars saved: $%d"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "Thanks for playing!"
 
@@ -7295,6 +7291,10 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
+msgstr "Best floor reached: %d   ·   Dollars saved: $%d"
 
 #, sin-usar
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."

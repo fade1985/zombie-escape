@@ -5948,10 +5948,6 @@ msgstr ""
 "操作和攻击模式在“选项”里"
 
 #: scripts/ui/menu_principal.gd
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "最高到达：第%d层   ·   存下的美元：$%d"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "感谢游玩！"
 
@@ -7275,6 +7271,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
+msgstr "最高到达：第%d层   ·   存下的美元：$%d"
 
 #, sin-usar
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."

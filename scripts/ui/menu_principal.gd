@@ -123,11 +123,7 @@ func _ready() -> void:
 	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ayuda.add_child(texto)
 
-	var s := Guardado.cargar()
-	if s.mejor_planta > 0 or s.dolares > 0:
-		var record := Tema.icono_y_texto("trofeo", Idioma.t("Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d") % [s.mejor_planta, s.dolares])
-		record.alignment = BoxContainer.ALIGNMENT_CENTER
-		columna.add_child(record)
+	# (debajo de Salir iban la mejor planta y los dólares ahorrados: quitados el 8 nov, a petición del dueño)
 
 	(seguir if seguir else jugar).grab_focus.call_deferred()
 	if Captura.activa():
