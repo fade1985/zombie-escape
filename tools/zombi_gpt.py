@@ -26,13 +26,15 @@ from collections import deque
 from PIL import Image, ImageEnhance, ImageOps
 
 # Cada zombi: dónde están sus imágenes de GPT, dónde van los dibujos que lee tools/zombi.py y hasta qué gris se toma
-# por fondo. Con 10, al vecino se le comía a trozos la pierna de detrás (los vaqueros en sombra, casi negros, se
-# confundían con el fondo y salían huecos que parpadeaban al andar); con 5 se queda entera y sin cerco oscuro
+# por fondo, y de qué tamaño es el lienzo del ataque, el golpe y la muerte. Con 10, al vecino se le comía a trozos la pierna de detrás (los vaqueros en sombra, casi negros, se
+# confundían con el fondo y salían huecos que parpadeaban al andar); con 5 se queda entera y sin cerco oscuro. El
+# lienzo: el zarpazo del vecino, de perfil, alarga los brazos más allá de los 48 píxeles y se le cortaban las manos;
+# en 96 cabe (tools/zombi.py coloca cada fotograma buscando en él el dibujo quieto, sea cual sea su tamaño)
 ZOMBIS = {
-    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10),
-    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5),   # el vecino, rehecho
+    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48),
+    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96),   # el vecino, rehecho
 }
-FUENTE, DESTINO, FONDO = ZOMBIS["vecina"]
+FUENTE, DESTINO, FONDO, LIENZO_ANIM = ZOMBIS["vecina"]
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -130,11 +132,11 @@ def contorno(dibujo):
     return dibujo
 
 
-def en_lienzo(dibujo, corrido=0.0):
-    """En su lienzo de 48 × 48: en medio (o "corrido" píxeles a un lado, en las animaciones) y con los pies en la
-    última fila (como los de PixelLab, fila 46)"""
-    lienzo = Image.new("RGBA", (LIENZO, LIENZO), (0, 0, 0, 0))
-    lienzo.paste(dibujo, (round(LIENZO / 2 + corrido - dibujo.width / 2), LIENZO - 1 - dibujo.height), dibujo)
+def en_lienzo(dibujo, corrido=0.0, lado=LIENZO):
+    """En su lienzo de 48 × 48 (o de "lado"): en medio (o "corrido" píxeles a un lado, en las animaciones) y con los
+    pies en la última fila (como los de PixelLab, fila 46)"""
+    lienzo = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
+    lienzo.paste(dibujo, (round(lado / 2 + corrido - dibujo.width / 2), lado - 1 - dibujo.height), dibujo)
     return lienzo
 
 
@@ -204,6 +206,12 @@ def animacion(anim, vista):
     sitio = fijo(quieto.crop(caja), (caja[0] + caja[2]) / 2, por_la_cabeza)
     carpeta = os.path.join(DESTINO, nombres[anim])
     os.makedirs(carpeta, exist_ok=True)
+    # el lienzo: al andar, el de 48; en lo demás, el del zombi (el dibujo quieto, abajo y en medio)
+    lado = LIENZO if anim == "andar" else LIENZO_ANIM
+    if lado != LIENZO:
+        grande = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
+        grande.paste(quieto, ((lado - LIENZO) // 2, lado - LIENZO))
+        quieto = grande
     quieto.save(os.path.join(carpeta, "%s-0.png" % vista))
     # la dirección del otro lado (de perfil a la derecha → a la izquierda), la misma en espejo
     espejo = [otra for otra, de in ESPEJO.items() if de == vista]
@@ -211,7 +219,7 @@ def animacion(anim, vista):
         ImageOps.mirror(quieto).save(os.path.join(carpeta, "%s-0.png" % otra))
     for n, (dibujo, centro, columna) in enumerate(trozos, 1):
         corrido = sitio - LIENZO / 2 + (centro - columna) / escala
-        hecho = en_lienzo(reducir(dibujo, escala), corrido)
+        hecho = en_lienzo(reducir(dibujo, escala), corrido, lado)
         hecho.save(os.path.join(carpeta, "%s-%d.png" % (vista, n)))
         for otra in espejo:
             ImageOps.mirror(hecho).save(os.path.join(carpeta, "%s-%d.png" % (otra, n)))
@@ -242,7 +250,7 @@ if __name__ == "__main__":
     if sys.argv[1:2] == ["--zombi"]:
         if len(sys.argv) < 3 or sys.argv[2] not in ZOMBIS:
             sys.exit("Zombis que conoce: " + ", ".join(ZOMBIS))
-        FUENTE, DESTINO, FONDO = ZOMBIS[sys.argv[2]]
+        FUENTE, DESTINO, FONDO, LIENZO_ANIM = ZOMBIS[sys.argv[2]]
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
