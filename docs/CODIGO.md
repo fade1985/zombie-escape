@@ -530,7 +530,7 @@ en una línea.
   cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
   maximizado: arriba lo visto con su barra, dos pestañas (`Bestiario.familias()`: los durmientes, zombis de siempre, y los
-  sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose en negro bajo un foco, en silueta
+  sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose bajo la lámpara de `assets/ui/foco-sujetos.png` (de GPT, `tools/foco_sujetos.py`), con polvo y algún parpadeo, en silueta
   si falta; su frase y cuántos se han matado, `matados` del guardado, que suma `partida.contar_matado` al acabar) y a la
   derecha la cuadrícula (`casilla_zombi`; jefes con marco dorado). Se prueba con `--coleccion`. Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se

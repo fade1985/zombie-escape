@@ -1026,6 +1026,7 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 
 const FICHA_ANCHO := 404       # la ficha de la izquierda (el escenario, el nombre, la frase...)
 const ESCENARIO := Vector2(404, 180)   # donde sale el enemigo grande, con su luz
+const FONDO_ESCENARIO := preload("res://assets/ui/foco-sujetos.png")   # su fondo, 202 × 90 (tools/foco_sujetos.py)
 const CASILLA_ZOMBI := 100     # cada casilla de la cuadrícula de la derecha (4 por fila)
 const POR_PAGINA := 12         # las casillas de cada página de la cuadrícula (4 × 3)
 var familia_vista := "durmientes"   # la pestaña abierta de Colecciones (Bestiario.familias)
@@ -1278,6 +1279,7 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	escenario.name = "escenario"
 	escenario.custom_minimum_size = ESCENARIO
 	escenario.clip_contents = true
+	escenario.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	escenario.draw.connect(pintar_escenario.bind(escenario))
 	columna.add_child(escenario)
 	# el dibujo, con los pies en el centro del suelo: a escala entera, lo más grande que quepa (como mucho, a 3)
@@ -1306,6 +1308,7 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	if not visto:
 		dibujo.modulate = Color.BLACK   # la silueta
 	escenario.add_child(dibujo)
+	polvo_y_parpadeo(escenario)
 
 	var nombre := texto_tarjeta(Bestiario.nombre(id) if visto else "???", TINTA)
 	nombre.add_theme_font_size_override("font_size", 24)
@@ -1326,33 +1329,51 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	return columna
 
 
-# El fondo del escenario de la ficha: negro, con un foco colgado arriba en medio que alumbra hacia abajo: un cono de luz
-# (a franjas, más clara por dentro, como en pixel art) que acaba en un charco de luz en el suelo, donde está el enemigo.
-# La luz del cono deja ver la silueta negra de los que aún no se han visto
+# El fondo del escenario de la ficha: la sala a oscuras con la lámpara y su cono de luz (la imagen de GPT reducida,
+# assets/ui/foco-sujetos.png), a 2 unidades por píxel como todo el juego. La luz deja ver la silueta negra de los que
+# aún no se han visto
 func pintar_escenario(e: Control) -> void:
-	var t := e.size
-	var medio := t.x / 2
-	var pies := Vector2(medio, t.y - 18)
-	e.draw_rect(Rect2(Vector2.ZERO, t), Color("#07060a"))
-	# el cono: de 3 franjas, de fuera a dentro, cada una más estrecha y más clara
-	var luz := Color("#fff1c9")
-	for i in 3:
-		var arriba := 14.0 - i * 4.0     # medio ancho junto al foco
-		var abajo := 120.0 - i * 34.0    # medio ancho en el suelo
-		var cono := PackedVector2Array([Vector2(medio - arriba, 10), Vector2(medio + arriba, 10),
-			Vector2(medio + abajo, pies.y), Vector2(medio - abajo, pies.y)])
-		e.draw_colored_polygon(cono, Color(luz, 0.07 + i * 0.03))
-	# el charco del suelo, a anillos
-	for i in 3:
-		e.draw_set_transform(pies, 0.0, Vector2(1.0, 0.2))
-		e.draw_circle(Vector2.ZERO, 132.0 - i * 36.0, Color(luz, 0.12 + i * 0.08))
-	e.draw_set_transform(Vector2.ZERO)
-	# el foco: una pantalla de chapa colgada del techo, con la bombilla encendida
-	e.draw_rect(Rect2(medio - 1, 0, 2, 4), Color("#3a3a40"))
-	e.draw_colored_polygon(PackedVector2Array([Vector2(medio - 6, 4), Vector2(medio + 6, 4), Vector2(medio + 14, 11),
-		Vector2(medio - 14, 11)]), Color("#4a4a52"))
-	e.draw_rect(Rect2(medio - 8, 11, 16, 2), luz)
+	e.draw_texture_rect(FONDO_ESCENARIO, Rect2(Vector2.ZERO, e.size), false)
 	relieve(e, true, 2.0)
+
+
+# Lo que le da vida al escenario: motas de polvo que suben despacio dentro del cono de luz (delante del enemigo) y,
+# de vez en cuando, la lámpara que falla un instante (como las de los apartamentos): se oscurece todo y vuelve
+func polvo_y_parpadeo(e: Control) -> void:
+	var polvo := CPUParticles2D.new()
+	polvo.name = "polvo"
+	polvo.amount = 22
+	polvo.lifetime = 5.0
+	polvo.preprocess = 5.0   # ya flotando al abrir la ficha
+	polvo.position = Vector2(ESCENARIO.x / 2, 100)
+	polvo.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	polvo.emission_rect_extents = Vector2(70, 50)   # el ancho del cono por en medio
+	polvo.direction = Vector2(0, -1)
+	polvo.spread = 40.0
+	polvo.gravity = Vector2.ZERO
+	polvo.initial_velocity_min = 2.0
+	polvo.initial_velocity_max = 6.0
+	polvo.scale_amount_min = 2.0   # un píxel del dibujo (2 unidades)
+	polvo.scale_amount_max = 2.0
+	var tono := Gradient.new()   # aparece y se apaga poco a poco
+	tono.set_color(0, Color(1.0, 0.9, 0.6, 0.0))
+	tono.set_color(1, Color(1.0, 0.9, 0.6, 0.0))
+	tono.add_point(0.3, Color(1.0, 0.9, 0.6, 0.7))
+	tono.add_point(0.7, Color(1.0, 0.9, 0.6, 0.5))
+	polvo.color_ramp = tono
+	e.add_child(polvo)
+	var reloj := Timer.new()
+	reloj.wait_time = 0.5
+	reloj.autostart = true
+	reloj.timeout.connect(func():
+		if randf() < 0.08:
+			var fallo := e.create_tween()
+			fallo.tween_property(e, "modulate", Color(0.45, 0.45, 0.45), 0.05)
+			fallo.tween_property(e, "modulate", Color.WHITE, 0.05)
+			if randf() < 0.5:   # a veces, dos seguidos
+				fallo.tween_property(e, "modulate", Color(0.6, 0.6, 0.6), 0.04).set_delay(0.06)
+				fallo.tween_property(e, "modulate", Color.WHITE, 0.06))
+	e.add_child(reloj)
 
 
 # ── Piezas ──
