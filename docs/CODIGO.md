@@ -826,6 +826,13 @@ en una línea.
   al andar, los pies en lo demás). Las 3 vistas del oeste salen en espejo. `py tools/zombi_gpt.py personaje`, luego
   `py tools/zombi_gpt.py <andar|ataque|golpe|muerte> <south|south-east|east|north-east|north>`, y después `zombi.py
   zombi-vecina-48 zombi-vecina` y `hacer_frames.py`. Sale en los apartamentos (`planta.gd`, `horda`), con el coste del vecino.
+  Sirve para otros zombis con `--zombi <nombre>` delante (cada uno en su ficha `ZOMBIS`: carpetas, hasta qué gris es fondo,
+  lienzo del ataque, golpe y muerte, y si el golpe va con los pies clavados). El **vecino rehecho con GPT** (8 nov):
+  `--zombi normal` → `assets/sources/zombi-normal-gpt-48` → `zombi.py zombi-normal-gpt-48 zombi-normal-gpt` (anda a 7
+  fotogramas por segundo: `"fps_andar"` en su `zombi.json`). Los textos que se le pidieron a GPT, enteros, en
+  `assets/sources/zombi-normal-gpt/textos-gpt.md` (con lo aprendido: el paso descrito fotograma a fotograma, los pies
+  clavados al atacar y en el golpe, y en qué rodilla va el roto). Aún no sale en las partidas: `--captura --vecino-gpt` los
+  pone juntos para comparar.
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es

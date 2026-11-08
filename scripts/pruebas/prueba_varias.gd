@@ -2076,6 +2076,57 @@ func probar_vecina() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --vecino-gpt": el vecino rehecho con GPT (assets/sprites/zombi-normal-gpt, 8 nov) junto al de PixelLab,
+# para que el dueño elija. En la sala de pruebas, vecinos quietos en sus 8 direcciones, por parejas (a la izquierda el
+# de PixelLab y a su lado el de GPT; arriba, de frente a de espaldas en diagonal; abajo, el resto), a la vez: andar (captura-vecino-gpt-andar.png), atacar (-ataque),
+# recibir un golpe (-golpe) y morir (-muerte). Son vecinos de siempre con la hoja cambiada y sin moverse (ni pensar)
+func probar_vecino_gpt() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(260, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.2).timeout
+	johnny.get_node("Sprite").visible = false   # (la cámara va con él: los vecinos, alrededor)
+	var hojas: Array[SpriteFrames] = [load("res://assets/sprites/zombi-normal.tres"), load("res://assets/sprites/zombi-normal-gpt.tres")]
+	var direcciones := ["s", "se", "e", "ne", "n", "no", "o", "so"]
+	var todos: Array = []
+	for d in direcciones.size():
+		for fila in 2:   # (cada dirección, el de PixelLab y a su lado el de GPT: con la misma luz)
+			var i := (d % 4) * 2 + fila
+			var z: Node2D = meter_zombi("normal", johnny.position + Vector2(-150 + (i - 3.5) * 95, -60 + (d / 4) * 170))
+			z.process_mode = Node.PROCESS_MODE_DISABLED   # (quieto: ni anda ni ataca)
+			for hijo in z.get_children():   # (parado así, su sombra y lo demás no se ponen en su sitio: solo el dibujo)
+				if hijo is CanvasItem and hijo != z.sprite:
+					hijo.visible = false
+			z.sprite.sprite_frames = hojas[fila]
+			z.sprite.set_meta("dir", direcciones[d])
+			todos.append(z)
+	for anim in ["andar", "ataque", "golpe", "muerte"]:
+		for z in todos:
+			z.sprite.process_mode = Node.PROCESS_MODE_ALWAYS   # (el dibujo sí se mueve)
+			z.sprite.play(anim + "_" + z.sprite.get_meta("dir"))
+		await get_tree().create_timer(1.6 if anim == "muerte" else 0.3 if anim == "golpe" else 0.45).timeout
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-vecino-gpt-%s.png" % anim)
+		var t: Array = []
+		for z in todos:
+			t.append("%s/%d" % [z.sprite.animation, z.sprite.frame])
+		print("Vecinos (%s; por parejas, PixelLab y GPT): %s" % [anim, " · ".join(t)])
+		await get_tree().create_timer(0.3).timeout
+	get_tree().quit()
+
+
 # Con "--captura --tentaculos": el zombi de tentáculos con su hoja de PixelLab (zombi_tentaculos.gd). En la sala de
 # pruebas, dos vienen andando hacia Johnny, uno por cada lado (captura-tentaculos-andar.png); luego uno, ya cerca,
 # avisa del latigazo echando los tentáculos atrás (captura-tentaculos-aviso.png) y los lanza al dar el golpe
