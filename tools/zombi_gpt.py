@@ -42,6 +42,10 @@ ZOMBIS = {
     "rapido": ("assets/sources/zombi-rapido-gpt", "assets/sources/zombi-rapido-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
 FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
+# Los que corren (el crío): al andar, la cabeza va a la altura que la pone GPT (casi siempre la misma) y los pies se
+# levantan del suelo cuando van en el aire. Con los pies siempre abajo, como los que andan, la cabeza le subía y bajaba
+# hasta 5 píxeles de un fotograma a otro y daba saltos
+CORRE = False
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -143,11 +147,14 @@ def contorno(dibujo):
     return dibujo
 
 
-def en_lienzo(dibujo, corrido=0.0, lado=LIENZO):
+def en_lienzo(dibujo, corrido=0.0, lado=LIENZO, arriba=None):
     """En su lienzo de 48 × 48 (o de "lado"): en medio (o "corrido" píxeles a un lado, en las animaciones) y con los
     pies en la última fila (como los de PixelLab, fila 46)"""
     lienzo = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
-    lienzo.paste(dibujo, (round(lado / 2 + corrido - dibujo.width / 2), lado - 1 - dibujo.height), dibujo)
+    y = lado - 1 - dibujo.height
+    if arriba is not None:   # (el que corre: la cabeza a esa altura; los pies, nunca por debajo del suelo)
+        y = min(y, round(arriba))
+    lienzo.paste(dibujo, (round(lado / 2 + corrido - dibujo.width / 2), y), dibujo)
     return lienzo
 
 
@@ -208,10 +215,13 @@ def animacion(anim, vista):
         fijos = [fijo(d, centro, por_la_cabeza) for d, _, centro in suyos]
         if not (anim == "muerte" and numero_fila > 0 and rejilla):
             rejilla = recta(fijos)
+        # lo alta que va la cabeza de cada uno respecto a las de su fila (para el que corre)
+        cimas = [abajo - d.height for d, abajo, _ in suyos]
+        cima = sum(cimas) / len(cimas)
         if anim == "golpe" and GOLPE_CLAVADO:
-            trozos += [(d, centro, f) for (d, _, centro), f in zip(suyos, fijos)]   # cada uno, por sus pies
+            trozos += [(d, centro, f, c - cima) for (d, _, centro), f, c in zip(suyos, fijos, cimas)]   # cada uno, por sus pies
         else:
-            trozos += [(d, centro, rejilla[0] + rejilla[1] * i) for i, (d, _, centro) in enumerate(suyos)]
+            trozos += [(d, centro, rejilla[0] + rejilla[1] * i, c - cima) for i, ((d, _, centro), c) in enumerate(zip(suyos, cimas))]
     # la escala: que el primero (de pie, como empiezan todas) mida de alto lo que el dibujo quieto
     quieto = Image.open(os.path.join(DESTINO, "rotations", vista + ".png"))
     caja = quieto.getbbox()
@@ -231,9 +241,10 @@ def animacion(anim, vista):
     espejo = [otra for otra, de in ESPEJO.items() if de == vista]
     for otra in espejo:
         ImageOps.mirror(quieto).save(os.path.join(carpeta, "%s-0.png" % otra))
-    for n, (dibujo, centro, columna) in enumerate(trozos, 1):
+    for n, (dibujo, centro, columna, cima) in enumerate(trozos, 1):
         corrido = sitio - LIENZO / 2 + (centro - columna) / escala
-        hecho = en_lienzo(reducir(dibujo, escala), corrido, lado)
+        arriba = caja[1] + cima / escala if CORRE and anim == "andar" else None
+        hecho = en_lienzo(reducir(dibujo, escala), corrido, lado, arriba)
         hecho.save(os.path.join(carpeta, "%s-%d.png" % (vista, n)))
         for otra in espejo:
             ImageOps.mirror(hecho).save(os.path.join(carpeta, "%s-%d.png" % (otra, n)))
@@ -265,6 +276,7 @@ if __name__ == "__main__":
         if len(sys.argv) < 3 or sys.argv[2] not in ZOMBIS:
             sys.exit("Zombis que conoce: " + ", ".join(ZOMBIS))
         FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS[sys.argv[2]]
+        CORRE = sys.argv[2] == "rapido"
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
