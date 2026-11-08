@@ -158,6 +158,7 @@ var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a 
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
+var matados := {}          # los mismos, por tipo ({"normal": 12, ...}): al acabar, a los de siempre (Colecciones)
 var duracion := 0.0        # segundos jugados (sin contar la pausa)
 var raton := Raton.new()
 var terminada := false
@@ -1592,6 +1593,8 @@ func terminar(gano: bool, abandona := false) -> void:
 		if not nuevo.is_empty() and not nuevo.id in g.rescatados:
 			g.rescatados.append(nuevo.id)
 		g.muertos += muertos
+		for id in matados:   # los de cada tipo, para las fichas de Colecciones
+			g.matados[id] = int(g.matados.get(id, 0)) + matados[id]
 		if logros.sin_logros():
 			g.muertos_con_ayudas += muertos   # con ayudas no suman para el logro Exterminador
 		var e := Guardado.edificio(g, edificio)
@@ -1697,9 +1700,6 @@ func conseguido(s: Dictionary) -> Array:
 	if not vistos.is_empty():
 		filas.append(["zombi", Idioma.n("Nuevo en el bestiario", "Nuevos en el bestiario", vistos.size()),
 			", ".join(vistos.map(func(id): return Bestiario.nombre(id))) if vistos.size() <= 2 else "+%d" % vistos.size()])
-	var objetos: Array = nuevos.call(s.encontrados, al_empezar.encontrados)
-	if not objetos.is_empty():
-		filas.append(["colecciones", Idioma.t("Objetos nuevos en Colecciones"), "+%d" % objetos.size()])
 	# la planta más alta a la que se ha llegado en este edificio (el reto del día lleva su marca aparte)
 	if not Reto.activo and planta.num > maxi(al_empezar.mejor_planta, 1):
 		filas.append(["escalera", Idioma.t("¡Nueva mejor marca!"), Planta.nombre_de(planta)])
@@ -1759,6 +1759,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 				sangre(tipo, zombi)
 			return
 		muertos += 1
+		contar_matado(Bestiario.de(zombi))   # el de ahora: el gerente o el doctor, ya mutados, cuentan como lo que son
 		var ardia: bool = zombi.get("arder_t") != null and zombi.arder_t > 0.0
 		logros.zombi_muerto(johnny.huecos[johnny.mano], ardia)
 		# tirado por el ventanal roto de la torre (peligros/viento.gd): cuenta, pero ni sangre ni suelta nada
@@ -1948,6 +1949,12 @@ func sitio_pruebas() -> void:
 	planta.sitios.append(Planta.sala_armas(-1))
 	planta.expo = planta.sitios.size()
 	planta.sitios.append(Planta.exposicion(planta.armas))
+
+
+# Uno más de este tipo matado en esta partida (al acabar pasa al guardado, "matados": las fichas de Colecciones)
+func contar_matado(id: String) -> void:
+	if id in Bestiario.LISTA:
+		matados[id] = matados.get(id, 0) + 1
 
 
 # Si Johnny está en la sala de pruebas o en la exposición: lo que pasa ahí no cuenta

@@ -3288,10 +3288,6 @@ msgstr[0] "Novo no bestiário"
 msgstr[1] "Novos no bestiário"
 
 #: scripts/partida.gd
-msgid "Objetos nuevos en Colecciones"
-msgstr "Objetos novos nas Coleções"
-
-#: scripts/partida.gd
 msgid "¡Nueva mejor marca!"
 msgstr "Novo recorde!"
 
@@ -6957,40 +6953,32 @@ msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s, com %s. Passe pelas transmissões para ver."
 
 #: scripts/ui/ordenador.gd
-msgid "Objetos"
-msgstr "Objetos"
-
-#: scripts/ui/ordenador.gd
 msgid "Bestiario"
 msgstr "Bestiário"
 
 #: scripts/ui/ordenador.gd
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s: %d de %d objetos encontrados."
+msgid "Vistos"
+msgstr "Vistos"
 
 #: scripts/ui/ordenador.gd
-msgid "Dosier"
-msgstr "Dossiê"
+msgid "%s: %d de %d vistos."
+msgstr "%s: %d de %d vistos."
 
 #: scripts/ui/ordenador.gd
-msgid "Bestiario · %d / %d"
-msgstr "Bestiário · %d / %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Sin ver"
-msgstr "Não visto"
-
-#: scripts/ui/ordenador.gd
-msgid "%s: sale en %s."
-msgstr "%s · Onde aparece: %s."
+msgid "%s: sale en %s. Matados: %d."
+msgstr "%s: aparece em %s. Abatidos: %d."
 
 #: scripts/ui/ordenador.gd
 msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
 msgstr "Um inimigo que você ainda não encontrou. Os que você vir numa partida ficam registrados aqui."
 
 #: scripts/ui/ordenador.gd
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "O que você encontra fica aqui para sempre. Passe pelas fichas para ver."
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
+msgstr "Todo inimigo que você encontra fica aqui para sempre. Passe pelos quadros para ver a ficha dele."
+
+#: scripts/ui/ordenador.gd
+msgid "Comunes"
+msgstr "Comuns"
 
 #: scripts/ui/ordenador.gd
 msgid "todos los edificios"
@@ -7005,28 +6993,16 @@ msgid "Apartamentos y centro"
 msgstr "Apartamentos e shopping"
 
 #: scripts/ui/ordenador.gd
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d de %d páginas · %s. Leia em DOSSIE.TXT."
-
-#: scripts/ui/ordenador.gd
-msgid "Página %d · %s"
-msgstr "Página %d · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "Objetos · %s"
-msgstr "Objetos · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "%s (sin encontrar) · %s"
-msgstr "%s (não encontrado) · %s"
-
-#: scripts/ui/ordenador.gd
 msgid "Sale en: %s"
 msgstr "Aparece em: %s"
 
 #: scripts/ui/ordenador.gd
 msgid "Aún no te lo has cruzado."
 msgstr "Você ainda não cruzou com ele."
+
+#: scripts/ui/ordenador.gd
+msgid "Matados: %d"
+msgstr "Abatidos: %d"
 
 #: scripts/ui/ordenador.gd
 msgid "Talentos"
@@ -7099,10 +7075,6 @@ msgstr "Dossiê VD-7"
 #: scripts/ui/ordenador.gd
 msgid "Noticias de Canal 8"
 msgstr "Notícias do Canal 8"
-
-#: scripts/ui/ordenador.gd
-msgid "Colecciones y bestiario"
-msgstr "Coleções e bestiário"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7307,3 +7279,55 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
+
+#, sin-usar
+msgid "Objetos nuevos en Colecciones"
+msgstr "Objetos novos nas Coleções"
+
+#, sin-usar
+msgid "Objetos"
+msgstr "Objetos"
+
+#, sin-usar
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s: %d de %d objetos encontrados."
+
+#, sin-usar
+msgid "Dosier"
+msgstr "Dossiê"
+
+#, sin-usar
+msgid "Bestiario · %d / %d"
+msgstr "Bestiário · %d / %d"
+
+#, sin-usar
+msgid "Sin ver"
+msgstr "Não visto"
+
+#, sin-usar
+msgid "%s: sale en %s."
+msgstr "%s · Onde aparece: %s."
+
+#, sin-usar
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "O que você encontra fica aqui para sempre. Passe pelas fichas para ver."
+
+#, sin-usar
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "%d de %d páginas · %s. Leia em DOSSIE.TXT."
+
+#, sin-usar
+msgid "Página %d · %s"
+msgstr "Página %d · %s"
+
+#, sin-usar
+msgid "Objetos · %s"
+msgstr "Objetos · %s"
+
+#, sin-usar
+msgid "%s (sin encontrar) · %s"
+msgstr "%s (não encontrado) · %s"
+
+#, sin-usar
+msgid "Colecciones y bestiario"
+msgstr "Coleções e bestiário"

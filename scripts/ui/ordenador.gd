@@ -20,8 +20,8 @@
 #     páginas como fichas a la izquierda y la hoja a la derecha. Las que faltan salen como páginas arrancadas.
 #   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
 #     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
-#   - "Colecciones": lo encontrado y visto alguna vez, por edificio y en porcentaje, y el bestiario
-#     (bestiario.gd) con cada enemigo, su dibujo y una frase. Queda entre partidas; el icono avisa si hay algo nuevo.
+#   - "Colecciones": el bestiario (bestiario.gd): cada enemigo visto alguna vez, por familias, con su dibujo, su
+#     frase y cuántos se han matado. Queda entre partidas; el icono avisa si hay algo nuevo.
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta que acaba (todos si
 # completas el edificio; la mitad si caes).
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
@@ -45,7 +45,7 @@ const ICONOS := [   # [programa, icono, nombre]
 const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV",
 	"colecciones": "COLECCION.EXE"}
 const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
-	"noticias": "Noticias de Canal 8", "colecciones": "Colecciones y bestiario"}
+	"noticias": "Noticias de Canal 8", "colecciones": "Bestiario"}
 # [/traducir]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
 const ARBOL := preload("res://scripts/ui/arbol_talentos.gd")   # el árbol de talentos (TALENTOS.EXE)
@@ -326,7 +326,7 @@ func abrir(programa: String, foco := "") -> void:
 	elif programa == "noticias":
 		foco = programa_noticias(contenido, foco)
 	elif programa == "colecciones":
-		programa_colecciones(contenido)
+		foco = programa_colecciones(contenido, foco)
 	else:
 		programa_armas(contenido, foco)
 	var marcado: Control = contenido.find_child(foco, true, false) if foco != "" else null
@@ -444,8 +444,9 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	ventana.draw.connect(func(): relieve(ventana, false, 3.0))
 	ventana.position = Vector2(152, 10)
 	ventana.size = Vector2(718, 508)
-	if programa == "dosier":
-		# el Dosier, maximizado (tapa los iconos): las hojas llevan mucho texto y así se leen con la letra más grande
+	if programa == "dosier" or programa == "colecciones":
+		# el Dosier, maximizado (tapa los iconos): las hojas llevan mucho texto y así se leen con la letra más grande;
+		# y Colecciones, para que quepan a la vez la ficha grande y la cuadrícula
 		ventana.position = Vector2(4, 4)
 		ventana.size = Vector2(872, 514)
 	pantalla.add_child(ventana)
@@ -1021,87 +1022,138 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 	return primera_nueva if primera_nueva != "" else ultima
 
 
-# ── Colecciones ──
+# ── Colecciones: el bestiario ──
 
-# Lo que se ha encontrado y visto alguna vez, de todos los edificios (Guardado: "encontrados" y "bestiario").
-# Arriba, las cuentas totales; a la izquierda, por edificio, dos fichas (objetos y páginas del dosier) con su barra, y
-# el bestiario con una ficha por enemigo; a la derecha, lo que se esté mirando: la rejilla de objetos, las páginas,
-# o el dibujo del enemigo (en silueta si no se ha visto)
-func programa_colecciones(c: VBoxContainer) -> void:
+const FICHA_ANCHO := 404       # la ficha de la izquierda (el escenario, el nombre, la frase...)
+const ESCENARIO := Vector2(404, 180)   # donde sale el enemigo grande, con su luz
+const CASILLA_ZOMBI := 100     # cada casilla de la cuadrícula de la derecha (4 por fila)
+var familia_vista := "comunes"   # la pestaña abierta de Colecciones (Bestiario.familias)
+
+
+# Todos los enemigos del juego, como un álbum (desde el 8 nov, solo ellos: los objetos y las páginas del dosier ya no
+# salen aquí; las páginas se leen en DOSIER.TXT). Arriba, cuántos se han visto, con su barra; debajo, una pestaña por
+# familia (los comunes, que salen en todos los edificios, y los propios de cada edificio); a la izquierda, el que se esté
+# mirando, grande y moviéndose, con su nombre, dónde sale, su frase y cuántos se han matado; a la derecha, la cuadrícula de
+# la familia: los vistos a color, los que faltan en silueta negra y los jefes con marco dorado. "foco": "z_<id>" abre su
+# familia con él marcado; "pes_<familia>", esa pestaña. Devuelve lo que hay que marcar
+func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 	var s := Guardado.cargar()
 	if s.colecciones_nuevo:
 		# ya está visto: el aviso del icono se quita hasta que haya algo nuevo
 		s = Guardado.cambiar(func(g): g.colecciones_nuevo = false)
 		refrescar_avisos()
-	var fila := HBoxContainer.new()
-	fila.add_theme_constant_override("separation", 8)
-	c.add_child(fila)
-	cajita(fila, Idioma.t("Objetos"), "mochila", "%d / %d" % [cuantos(Objetos.NOMBRES.keys(), s.encontrados), Objetos.NOMBRES.size()])
+	if foco.begins_with("z_") and foco.substr(2) in Bestiario.LISTA:
+		familia_vista = Bestiario.familia(foco.substr(2))
+	elif foco.begins_with("pes_") and foco.substr(4) in Bestiario.familias():
+		familia_vista = foco.substr(4)
+
+	# arriba: el título y lo visto de todo el bestiario, con su barra
+	var arriba := HBoxContainer.new()
+	arriba.add_theme_constant_override("separation", 8)
+	c.add_child(arriba)
+	var titulo := texto_tarjeta(Idioma.t("Bestiario"), TINTA)
+	titulo.add_theme_font_size_override("font_size", 24)
+	titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	arriba.add_child(titulo)
 	var vistos := cuantos(Bestiario.LISTA.keys(), s.bestiario)
-	cajita(fila, Idioma.t("Bestiario"), "zombi", "%d / %d" % [vistos, Bestiario.LISTA.size()])
-	# la lista y el visor se quedan con el hueco que dejan las cajas (con un alto fijo, el contenido se pasaba unos
-	# píxeles y la ventana se desplazaba al marcar una ficha, tapando las cajas)
+	for h: Control in [texto_tarjeta(Idioma.t("Vistos"), TINTA_SUAVE), barra_progreso(vistos, Bestiario.LISTA.size()),
+			texto_tarjeta("%d / %d" % [vistos, Bestiario.LISTA.size()], TINTA)]:
+		h.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		arriba.add_child(h)
+
+	# las pestañas: una por familia, con cuántos se han visto de ella
+	var pestanas := HBoxContainer.new()
+	pestanas.add_theme_constant_override("separation", 6)
+	c.add_child(pestanas)
+	for fam: String in Bestiario.familias():
+		var suyos := Bestiario.de_familia(fam)
+		var hechos := cuantos(suyos, s.bestiario)
+		var b := Button.new()
+		b.name = "pes_" + fam
+		b.text = "%s · %d / %d" % [nombre_familia(fam), hechos, suyos.size()]
+		b.focus_mode = Control.FOCUS_ALL
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var esta := fam == familia_vista
+		b.add_theme_stylebox_override("normal", caja(TARJETA_LUZ if esta else TARJETA, TINTA if esta else TARJETA, 2, 0, 4))
+		for e in ["hover", "focus", "pressed", "hover_pressed"]:
+			b.add_theme_stylebox_override(e, caja(TARJETA_LUZ, TINTA, 2, 0, 4))
+		for color in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
+			b.add_theme_color_override(color, TINTA)
+		b.add_theme_constant_override("outline_size", 0)
+		pestanas.add_child(b)
+		enlazar(b, Idioma.t("%s: %d de %d vistos.") % [nombre_familia(fam), hechos, suyos.size()], func():
+			if familia_vista != fam:
+				familia_vista = fam
+				abrir("colecciones", "pes_" + fam))
+
+	# debajo: la ficha a la izquierda y la cuadrícula a la derecha
 	var partes := HBoxContainer.new()
-	partes.add_theme_constant_override("separation", 10)
+	partes.add_theme_constant_override("separation", 12)
 	partes.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	c.add_child(partes)
-	var desliza := ScrollContainer.new()
-	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	desliza.follow_focus = true
-	desliza.custom_minimum_size = Vector2(240, 200)
-	desliza.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	partes.add_child(desliza)
-	var lista := VBoxContainer.new()
-	lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lista.add_theme_constant_override("separation", 6)
-	desliza.add_child(lista)
 	var lado := CenterContainer.new()
-	lado.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lado.custom_minimum_size.x = FICHA_ANCHO
 	lado.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	partes.add_child(lado)
-
-	for ed in Edificios.LISTA:
-		var nombre: String = Idioma.t(Edificios.datos(ed).nombre)
-		var paginas: Array = Historia.dosier(ed).paginas
-		# [ficha, icono, título, cuántos, de cuántos, la frase de la línea de abajo (nombre, cuántos y de cuántos)]
-		var fichas := [
-			["objetos", "mochila", Idioma.t("Objetos"), cuantos(Objetos.de_edificio(ed), s.encontrados), Objetos.de_edificio(ed).size(),
-				Idioma.t("%s: %d de %d objetos encontrados.")],
-			["dosier", "dosier", Idioma.t("Dosier"), paginas.filter(func(p): return Historia.encontrada(s, p.id)).size(), paginas.size(),
-				Idioma.t("%s: %d de %d páginas del dosier.")],
-		]
-		fichas = fichas.filter(func(f): return f[4] > 0)
-		var hecho := 0
-		var meta := 0
-		for f in fichas:
-			hecho += f[3]
-			meta += f[4]
-		var del_edificio := grupo(lista, "%s · %d %%" % [nombre, roundi(100.0 * hecho / maxi(meta, 1))])
-		for f in fichas:
-			var cual: String = f[0]
-			var clave := "c_%s_%s" % [ed, cual]
-			var b := tarjeta(del_edificio, clave, f[1], f[2], "%d / %d" % [f[3], f[4]], "",
-				"lleno" if f[4] > 0 and f[3] >= f[4] else "", [], [f[3], f[4]] if f[4] > 0 else [])
-			var hacer := ficha_edificio.bind(s, ed, cual)
-			var ver := func(): mostrar(lado, clave, hacer)
-			enlazar(b, f[5] % [nombre, f[3], f[4]], ver)
-			b.focus_entered.connect(ver)
-			b.mouse_entered.connect(ver)
-
-	var del_bestiario := grupo(lista, Idioma.t("Bestiario · %d / %d") % [vistos, Bestiario.LISTA.size()])
-	for id: String in Bestiario.LISTA:
-		var d: Dictionary = Bestiario.LISTA[id]
+	var cuadricula := GridContainer.new()
+	cuadricula.columns = 4
+	cuadricula.add_theme_constant_override("h_separation", 6)
+	cuadricula.add_theme_constant_override("v_separation", 4)
+	cuadricula.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	partes.add_child(cuadricula)
+	var ids := Bestiario.de_familia(familia_vista)
+	for id: String in ids:
 		var visto := Bestiario.visto(s, id)
 		var clave := "z_" + id
-		var b := tarjeta(del_bestiario, clave, "jefe" if d.get("jefe", false) else "zombi", Bestiario.nombre(id) if visto else "???",
-			sale_en(d) if visto else Idioma.t("Sin ver"), "", "" if visto else "bloqueada")
-		var hacer := ficha_bestiario.bind(id, visto)
-		var ver := func(): mostrar(lado, clave, hacer)
-		enlazar(b, (Idioma.t("%s: sale en %s.") % [Bestiario.nombre(id), sale_en(d, true)]) if visto
+		var b := casilla_zombi(cuadricula, id, visto)
+		var hacer := ficha_bestiario.bind(s, id, visto)
+		var ver := func():
+			mostrar(lado, clave, hacer)
+			senalar_casilla(cuadricula, clave)
+		enlazar(b, (Idioma.t("%s: sale en %s. Matados: %d.") % [Bestiario.nombre(id), sale_en(Bestiario.LISTA[id], true),
+			Bestiario.matados(s, id)]) if visto
 			else Idioma.t("Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."), ver)
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
-	info.text = Idioma.t("Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo.")
+	# con el teclado o el mando, de los bordes no se sale: la ventana tapa los iconos del escritorio, y Godot, sin esto,
+	# pasaba a ellos al bajar de la última fila o ir a la izquierda
+	var casillas := cuadricula.get_children()
+	for i in casillas.size():
+		var b: Button = casillas[i]
+		if i + cuadricula.columns >= casillas.size():
+			b.focus_neighbor_bottom = b.get_path()
+		if i % cuadricula.columns == 0:
+			b.focus_neighbor_left = b.get_path()
+		if i % cuadricula.columns == cuadricula.columns - 1 or i == casillas.size() - 1:
+			b.focus_neighbor_right = b.get_path()
+	for b: Button in pestanas.get_children():
+		b.focus_neighbor_top = b.get_path()
+	pestanas.get_child(0).focus_neighbor_left = pestanas.get_child(0).get_path()
+	pestanas.get_child(-1).focus_neighbor_right = pestanas.get_child(-1).get_path()
+	# al abrir, en la ficha: el pedido o el primero de la familia
+	var empieza: String = foco if foco.begins_with("z_") and foco.substr(2) in ids else "z_" + ids[0]
+	var primero: String = empieza.substr(2)
+	mostrar(lado, empieza, ficha_bestiario.bind(s, primero, Bestiario.visto(s, primero)))
+	senalar_casilla(cuadricula, empieza)
+	info.text = Idioma.t("Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha.")
+	return foco if foco.begins_with("pes_") else empieza
+
+
+# El nombre de una familia en su pestaña: «Comunes» o el del edificio
+func nombre_familia(fam: String) -> String:
+	return Idioma.t("Comunes") if fam == "comunes" else Idioma.t(Edificios.datos(fam).nombre)
+
+
+# Una barra hundida, verde hasta donde se ha llegado (lo visto del bestiario)
+func barra_progreso(hecho: int, total: int) -> Control:
+	var barra := Control.new()
+	barra.custom_minimum_size = Vector2(160, 16)
+	barra.draw.connect(func():
+		var t := barra.size
+		barra.draw_rect(Rect2(Vector2.ZERO, t), TARJETA)
+		barra.draw_rect(Rect2(2, 2, (t.x - 4) * hecho / maxf(total, 1), t.y - 4), VERDE_OSCURO)
+		relieve(barra, true, 2.0))
+	return barra
 
 
 # Cuántos de estos ids están ya en una lista del guardado
@@ -1123,110 +1175,102 @@ func sale_en(d: Dictionary, con_articulo := false) -> String:
 	return Idioma.t("Apartamentos y centro") if eds.size() > 1 else Idioma.t(Edificios.datos(eds[0]).nombre)
 
 
-# Pone una ficha en el visor de la derecha. Si ya es la que está, nada (el foco y el ratón la piden a la vez).
-# "hacer" la construye, solo entonces: las rejillas de iconos no se montan hasta que se miran
+# Pone una ficha en el visor de la izquierda. Si ya es la que está, nada (el foco y el ratón la piden a la vez).
+# "hacer" la construye, solo entonces
 func mostrar(lado: CenterContainer, clave: String, hacer: Callable) -> void:
 	if lado.get_meta("ficha", "") == clave:
 		return
 	lado.set_meta("ficha", clave)
-	# si el foco (el mando) estaba dentro del visor y el ratón pide otra ficha, que no se pierda: pasa a la ficha
-	# nueva o, si esa no tiene botones, a su tarjeta de la lista
-	var foco := get_viewport().gui_get_focus_owner()
-	var dentro := foco != null and lado.is_ancestor_of(foco)
 	for h in lado.get_children():
 		lado.remove_child(h)
 		h.queue_free()
-	var ficha: Control = hacer.call()
-	lado.add_child(ficha)
-	if dentro:
-		var b: Control = primer_boton(ficha)
-		if b == null:
-			b = ventana.find_child(clave, true, false)
-		if b:
-			b.grab_focus()
+	lado.add_child(hacer.call())
 
 
-# La ficha de un edificio en el visor: sus objetos (una rejilla de casillas, apagadas las que faltan) o sus páginas
-# del dosier (solo los títulos: se leen en DOSIER.TXT)
-func ficha_edificio(s: Dictionary, ed: String, cual: String) -> Control:
-	var nombre: String = Idioma.t(Edificios.datos(ed).nombre)
-	var columna := VBoxContainer.new()
-	columna.add_theme_constant_override("separation", 6)
-	if cual == "dosier":
-		var paginas: Array = Historia.dosier(ed).paginas
-		var halladas := paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
-		var l := texto_tarjeta(Idioma.t("%d de %d páginas de %s. Léelas en DOSIER.TXT.") % [halladas, paginas.size(), nombre], TINTA)
-		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		l.custom_minimum_size.x = 400
-		columna.add_child(l)
-		for i in paginas.size():
-			if Historia.encontrada(s, paginas[i].id):
-				columna.add_child(texto_tarjeta(Idioma.t("Página %d · %s") % [i + 1, Historia.titulo_de(paginas[i])], TINTA_SUAVE))
-		return columna
-	columna.add_child(texto_tarjeta(Idioma.t("Objetos · %s") % nombre, TINTA))
-	var casillas := GridContainer.new()
-	casillas.columns = 6
-	casillas.add_theme_constant_override("h_separation", 4)
-	casillas.add_theme_constant_override("v_separation", 4)
-	columna.add_child(casillas)
-	for id in Objetos.de_edificio(ed):
-		var tiene: bool = id in s.encontrados
-		var b := casilla(casillas, "o_" + id, "obj-" + id, tiene)
-		enlazar(b, ("%s · %s" if tiene else Idioma.t("%s (sin encontrar) · %s")) % [Objetos.nombre(id), Objetos.donde(id, ed)], func(): pass)
-	return columna
-
-
-# Una casilla de la rejilla de objetos: un botón de 52 × 52 con el icono a 32 × 32; apagado si aún no se tiene. Se
-# marca (el mando entra en la rejilla) pero no hace nada al pulsarlo: solo explica en la línea de abajo
-func casilla(padre: Container, nombre: String, icono: String, tiene: bool) -> Button:
+# Una casilla de la cuadrícula: un botón con el dibujo de frente del enemigo, encajado; en silueta negra si aún no se ha
+# visto y con marco dorado si es un jefe. Se marca (el mando entra en la cuadrícula) pero no hace nada al pulsarlo
+func casilla_zombi(padre: Container, id: String, visto: bool) -> Button:
 	var b := Button.new()
-	b.name = nombre
+	b.name = "z_" + id
 	b.focus_mode = Control.FOCUS_ALL
-	b.custom_minimum_size = Vector2(52, 52)
-	b.add_theme_stylebox_override("normal", caja(TARJETA, TARJETA, 0, 0, 0))
+	b.custom_minimum_size = Vector2(CASILLA_ZOMBI, CASILLA_ZOMBI)
+	b.set_meta("jefe", Bestiario.LISTA[id].get("jefe", false))
 	for e in ["hover", "focus", "pressed", "hover_pressed"]:
-		b.add_theme_stylebox_override(e, caja(TARJETA_LUZ, TINTA, 2, 0, 0))
+		b.add_theme_stylebox_override(e, caja(TARJETA_LUZ, TINTA, 3, 0, 0))
 	padre.add_child(b)
 	var centro := CenterContainer.new()
 	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
 	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(centro)
 	var imagen := TextureRect.new()
-	imagen.texture = load("res://assets/ui/iconos/%s.png" % icono)
-	imagen.custom_minimum_size = Vector2(32, 32)
+	imagen.texture = Bestiario.retrato(id)
+	# a escala entera, lo más grande que quepa (como mucho, a 2)
+	var t := imagen.texture.get_size()
+	var escala := clampf(floorf((CASILLA_ZOMBI - 4) / maxf(t.x, t.y)), 1.0, 2.0)
+	if t.x * escala > CASILLA_ZOMBI - 8 or t.y * escala > CASILLA_ZOMBI - 8:
+		escala = minf((CASILLA_ZOMBI - 8) / t.x, (CASILLA_ZOMBI - 8) / t.y)   # los grandes, a menos de 1
+	imagen.custom_minimum_size = t * escala
 	imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	imagen.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if not tiene:
-		imagen.modulate = Color(1, 1, 1, 0.35)   # apagado, como las tarjetas "bloqueada"
+	if not visto:
+		imagen.modulate = Color.BLACK   # la silueta
 	centro.add_child(imagen)
 	return b
 
 
-# La ficha de un enemigo en el visor: su dibujo de frente al tamaño del juego (en silueta si no se ha visto), su
-# nombre, dónde sale y su frase
-func ficha_bestiario(id: String, visto: bool) -> Control:
+# La casilla del que sale en la ficha, con el borde oscuro aunque el ratón o el foco se vayan; las demás, normales
+# (las de los jefes, con su marco dorado)
+func senalar_casilla(cuadricula: GridContainer, clave: String) -> void:
+	for b: Button in cuadricula.get_children():
+		var jefe: bool = b.get_meta("jefe", false)
+		b.add_theme_stylebox_override("normal", caja(TARJETA_LUZ, TINTA, 3, 0, 0) if b.name == clave
+			else caja(TARJETA, PIP_LLENO if jefe else TARJETA, 3, 0, 0))
+
+
+# La ficha de un enemigo, a la izquierda: él grande y moviéndose (en silueta, quieto, si no se ha visto) en un escenario con
+# su luz, y debajo su nombre, dónde sale, su frase y cuántos se han matado
+func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	var d: Dictionary = Bestiario.LISTA[id]
 	var columna := VBoxContainer.new()
-	columna.add_theme_constant_override("separation", 4)
-	var retrato := TextureRect.new()
-	retrato.texture = Bestiario.retrato(id)
-	# cada píxel del dibujo, "escala" en pantalla (como en el juego); los más altos (el gerente y su mutación), a 1,
-	# para que quepan con el nombre y la frase
-	var escala: int = d.escala
-	if retrato.texture.get_size().y * escala > 220:
-		escala = 1
-	retrato.custom_minimum_size = retrato.texture.get_size() * escala
-	retrato.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	retrato.stretch_mode = TextureRect.STRETCH_SCALE
-	retrato.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	retrato.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	columna.custom_minimum_size.x = FICHA_ANCHO
+	columna.add_theme_constant_override("separation", 2)
+	var escenario := Control.new()
+	escenario.name = "escenario"
+	escenario.custom_minimum_size = ESCENARIO
+	escenario.clip_contents = true
+	escenario.draw.connect(pintar_escenario.bind(escenario))
+	columna.add_child(escenario)
+	# el dibujo, con los pies en el centro del suelo: a escala entera, lo más grande que quepa (como mucho, a 3)
+	var usado: Rect2i = d.recorte
+	var escala := clampi(int((ESCENARIO.y - 30) / usado.size.y), 1, 3)
+	var pies := Vector2(ESCENARIO.x / 2, ESCENARIO.y - 18)
+	var recurso: Resource = load(d.hoja)
+	var dibujo: Node2D
+	if recurso is SpriteFrames and (recurso as SpriteFrames).has_animation(d.retrato):
+		var animado := AnimatedSprite2D.new()
+		animado.sprite_frames = recurso
+		animado.animation = d.retrato
+		if visto:
+			animado.play()
+		dibujo = animado
+		animado.centered = false
+	else:   # el maniquí: un PNG entero
+		var quieto := Sprite2D.new()
+		quieto.texture = recurso as Texture2D
+		quieto.centered = false
+		dibujo = quieto
+	dibujo.name = "dibujo"
+	dibujo.scale = Vector2(escala, escala)
+	dibujo.position = (pies - Vector2(usado.position.x + usado.size.x / 2.0, usado.position.y + usado.size.y) * escala).round()
+	dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	if not visto:
-		retrato.modulate = Color(0, 0, 0, 0.85)   # la silueta
-	columna.add_child(retrato)
+		dibujo.modulate = Color.BLACK   # la silueta
+	escenario.add_child(dibujo)
+
 	var nombre := texto_tarjeta(Bestiario.nombre(id) if visto else "???", TINTA)
-	nombre.add_theme_font_size_override("font_size", 32)
+	nombre.add_theme_font_size_override("font_size", 24)
 	nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(nombre)
 	var donde := texto_tarjeta(Idioma.t("Sale en: %s") % (sale_en(d) if visto else "???"), TINTA_SUAVE)
@@ -1234,10 +1278,35 @@ func ficha_bestiario(id: String, visto: bool) -> Control:
 	columna.add_child(donde)
 	var frase := texto_tarjeta(Bestiario.frase(id) if visto else Idioma.t("Aún no te lo has cruzado."), TINTA)
 	frase.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	frase.custom_minimum_size.x = 420
+	frase.custom_minimum_size.x = FICHA_ANCHO
 	frase.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(frase)
+	if visto:
+		var cuenta := texto_tarjeta(Idioma.t("Matados: %d") % Bestiario.matados(s, id), VERDE_OSCURO)
+		cuenta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		columna.add_child(cuenta)
 	return columna
+
+
+# El fondo del escenario de la ficha: una sala oscura con un foco que cae desde arriba y deja un charco de luz en el suelo,
+# donde está el enemigo (a escalones, como en pixel art, y con luz de sobra para que se vea la silueta negra)
+func pintar_escenario(e: Control) -> void:
+	var t := e.size
+	e.draw_rect(Rect2(Vector2.ZERO, t), Color("#241b16"))
+	# la pared: más clara hacia el centro, a franjas
+	for i in 5:
+		var ancho := t.x * (0.9 - i * 0.16)
+		e.draw_rect(Rect2((t.x - ancho) / 2, 0, ancho, t.y), Color("#2e231c").lerp(Color("#6b5240"), i / 4.0))
+	# el suelo
+	e.draw_rect(Rect2(0, t.y - 34, t.x, 34), Color("#1c1511"))
+	# el charco de luz del suelo, a anillos
+	var pies := Vector2(t.x / 2, t.y - 18)
+	for i in 4:
+		var r := 150.0 - i * 34.0
+		e.draw_set_transform(pies, 0.0, Vector2(1.0, 0.22))
+		e.draw_circle(Vector2.ZERO, r, Color("#3a2c22").lerp(Color("#8d6c50"), i / 3.0))
+	e.draw_set_transform(Vector2.ZERO)
+	relieve(e, true, 2.0)
 
 
 # ── Piezas ──

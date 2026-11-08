@@ -3283,10 +3283,6 @@ msgid_plural "Nuevos en el bestiario"
 msgstr[0] "图鉴新增"
 
 #: scripts/partida.gd
-msgid "Objetos nuevos en Colecciones"
-msgstr "收藏品新增物品"
-
-#: scripts/partida.gd
 msgid "¡Nueva mejor marca!"
 msgstr "新纪录！"
 
@@ -6937,40 +6933,32 @@ msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s，主播%s。移到各期上即可观看。"
 
 #: scripts/ui/ordenador.gd
-msgid "Objetos"
-msgstr "物品"
-
-#: scripts/ui/ordenador.gd
 msgid "Bestiario"
 msgstr "图鉴"
 
 #: scripts/ui/ordenador.gd
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s：已找到 %d / %d 件物品。"
+msgid "Vistos"
+msgstr "已见"
 
 #: scripts/ui/ordenador.gd
-msgid "Dosier"
-msgstr "档案"
+msgid "%s: %d de %d vistos."
+msgstr "%s：已见 %d / %d。"
 
 #: scripts/ui/ordenador.gd
-msgid "Bestiario · %d / %d"
-msgstr "图鉴 · %d / %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Sin ver"
-msgstr "未遇见"
-
-#: scripts/ui/ordenador.gd
-msgid "%s: sale en %s."
-msgstr "%s：出现在%s。"
+msgid "%s: sale en %s. Matados: %d."
+msgstr "%s：出现在%s。击杀：%d。"
 
 #: scripts/ui/ordenador.gd
 msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
 msgstr "一个你还没遇到过的敌人。在游戏中见到的敌人都会记录在这里。"
 
 #: scripts/ui/ordenador.gd
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "你找到的或遇到的都会永久记录在这里。移到卡片上即可查看。"
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
+msgstr "你遇到过的每个敌人都会永远留在这里。把光标移到格子上查看它的档案。"
+
+#: scripts/ui/ordenador.gd
+msgid "Comunes"
+msgstr "常见"
 
 #: scripts/ui/ordenador.gd
 msgid "todos los edificios"
@@ -6985,28 +6973,16 @@ msgid "Apartamentos y centro"
 msgstr "公寓楼和购物中心"
 
 #: scripts/ui/ordenador.gd
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d / %d 页，来自%s。去“档案.TXT”里阅读。"
-
-#: scripts/ui/ordenador.gd
-msgid "Página %d · %s"
-msgstr "第 %d 页 · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "Objetos · %s"
-msgstr "物品 · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "%s (sin encontrar) · %s"
-msgstr "%s（未找到）· %s"
-
-#: scripts/ui/ordenador.gd
 msgid "Sale en: %s"
 msgstr "出现在：%s"
 
 #: scripts/ui/ordenador.gd
 msgid "Aún no te lo has cruzado."
 msgstr "你还没遇到过它。"
+
+#: scripts/ui/ordenador.gd
+msgid "Matados: %d"
+msgstr "击杀：%d"
 
 #: scripts/ui/ordenador.gd
 msgid "Talentos"
@@ -7079,10 +7055,6 @@ msgstr "VD-7档案"
 #: scripts/ui/ordenador.gd
 msgid "Noticias de Canal 8"
 msgstr "8频道新闻"
-
-#: scripts/ui/ordenador.gd
-msgid "Colecciones y bestiario"
-msgstr "收藏品和图鉴"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7287,3 +7259,55 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Objetos nuevos en Colecciones"
+msgstr "收藏品新增物品"
+
+#, sin-usar
+msgid "Objetos"
+msgstr "物品"
+
+#, sin-usar
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s：已找到 %d / %d 件物品。"
+
+#, sin-usar
+msgid "Dosier"
+msgstr "档案"
+
+#, sin-usar
+msgid "Bestiario · %d / %d"
+msgstr "图鉴 · %d / %d"
+
+#, sin-usar
+msgid "Sin ver"
+msgstr "未遇见"
+
+#, sin-usar
+msgid "%s: sale en %s."
+msgstr "%s：出现在%s。"
+
+#, sin-usar
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "你找到的或遇到的都会永久记录在这里。移到卡片上即可查看。"
+
+#, sin-usar
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "%d / %d 页，来自%s。去“档案.TXT”里阅读。"
+
+#, sin-usar
+msgid "Página %d · %s"
+msgstr "第 %d 页 · %s"
+
+#, sin-usar
+msgid "Objetos · %s"
+msgstr "物品 · %s"
+
+#, sin-usar
+msgid "%s (sin encontrar) · %s"
+msgstr "%s（未找到）· %s"
+
+#, sin-usar
+msgid "Colecciones y bestiario"
+msgstr "收藏品和图鉴"

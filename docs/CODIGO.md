@@ -528,7 +528,11 @@ en una línea.
   título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
   pósit (amarillo, con la esquina doblada, pequeño y casi cuadrado: las notas son cortas; la nota, letra a letra como escrita a mano con boli, `a_mano_en`, siempre a 16), pegado abajo a la derecha; las últimas líneas del texto se estrechan para dejarle sitio. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
   cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
-- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
+- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Colecciones es solo el bestiario desde el 8 nov (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
+  maximizado: arriba lo visto con su barra, una pestaña por familia (`Bestiario.familias()`: los comunes y los de cada
+  edificio), a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose en un escenario con luz, en silueta
+  si falta; su frase y cuántos se han matado, `matados` del guardado, que suma `partida.contar_matado` al acabar) y a la
+  derecha la cuadrícula (`casilla_zombi`; jefes con marco dorado). Se prueba con `--coleccion`. Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se
   vea: `encadenar` le dice a cada botón de una lista con desplazamiento cuál tiene encima y debajo (`--ordenador-teclado`). La tienda es

@@ -282,8 +282,8 @@ static func piezas_de_jefe() -> Array:
 	return lista
 
 
-# ── Colecciones (el programa del ordenador) ──
-# Lo encontrado alguna vez se apunta en el guardado ("encontrados"), y el ordenador lo cuenta por edificio.
+# ── Lo encontrado (para el logro de los objetos; Colecciones ya no lo enseña desde el 8 nov) ──
+# Lo encontrado alguna vez se apunta en el guardado ("encontrados"): lo cuenta el logro (logros.gd).
 
 # Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, todos menos las vendas; en el centro
 # comercial, todos. Otro valor: todos
@@ -322,6 +322,5 @@ static func apuntar_encontrado(id: String) -> void:
 	if not id in NOMBRES:
 		return
 	Guardado.cambiar(func(g):
-		if not id in g.encontrados:
-			g.encontrados.append(id)
-			g.colecciones_nuevo = true)
+		if not id in g.encontrados:   # (solo para el logro: Colecciones ya no enseña los objetos)
+			g.encontrados.append(id))

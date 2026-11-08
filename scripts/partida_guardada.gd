@@ -70,7 +70,7 @@ static func apuntar(p: Node, num: int) -> void:
 		"logros": {"con_ayudas": p.logros.con_ayudas, "fregonazos": p.logros.fregonazos, "curado": p.logros.curado,
 			"racha": p.logros.racha, "mejor_racha": p.logros.mejor_racha},
 		"mochila": p.mochila, "armas_guardadas": p.armas_guardadas,
-		"dolares": p.dolares, "muertos": p.muertos, "duracion": p.duracion, "al_empezar": p.al_empezar,
+		"dolares": p.dolares, "muertos": p.muertos, "matados": p.matados, "duracion": p.duracion, "al_empezar": p.al_empezar,
 		"johnny": {"vida": j.vida, "tercios": j.tercios, "resucitado": j.resucitado, "copia_usada": j.copia_usada, "huecos": j.huecos,
 			"calidades": j.calidades, "mano": j.mano, "balas": j.balas, "municion": j.municion,
 			"cargadores": j.cargadores, "deposito": j.deposito},
@@ -96,6 +96,7 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	p.armas_guardadas = foto.armas_guardadas.duplicate()
 	p.dolares = foto.dolares
 	p.muertos = foto.muertos
+	p.matados = foto.get("matados", {}).duplicate()   # (una foto de antes del 8 nov no los trae)
 	p.duracion = foto.duracion
 	p.al_empezar = foto.al_empezar.duplicate(true)
 	# Johnny: sus atributos (talentos y mutaciones), su vida y sus armas

@@ -315,9 +315,18 @@ func despertar_maniquies(johnny: Node2D) -> void:
 	for p in donde:
 		var vivo := VIVO.new()
 		vivo.set_meta("tipo", "maniqui")   # (quién es: Bestiario.de)
+		# romperlo cuenta como matarlo (para Colecciones); si se rompen porque ella ha caído, no
+		vivo.murio.connect(maniqui_roto)
 		get_parent().add_child(vivo)
 		vivo.global_position = p - Vector2(0, VIVO.PIE)
 		vivos.append(vivo)
+
+
+# Un maniquí vivo roto por Johnny: uno más matado (Colecciones)
+func maniqui_roto() -> void:
+	var p := get_tree().current_scene
+	if estado != "muerto" and p and p.has_method("contar_matado") and not p.en_pruebas():
+		p.contar_matado("maniqui")
 
 
 func morir() -> void:

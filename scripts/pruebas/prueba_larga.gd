@@ -369,67 +369,68 @@ func probar_historia() -> void:
 	await probar_noticias()
 
 
-# Colecciones (bestiario.gd y el programa del ordenador): deja en el guardado parte de lo que hay (6 objetos,
-# cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
-# (captura-escritorio-nuevo.png), los objetos de este edificio (captura-colecciones.png), la ficha del vecino
-# (captura-bestiario.png), la del gerente, sin ver (captura-bestiario-falta.png) y, en la torre, la del oficinista
-# (captura-bestiario-torre.png). Luego cuenta en la terminal lo
-# encontrado y visto de cada edificio, y comprueba los totales
+# Colecciones (bestiario.gd y el programa del ordenador; también solo, con --coleccion): deja en el guardado
+# parte de los enemigos vistos y unos cuantos matados, y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
+# (captura-escritorio-nuevo.png), la pestaña de los comunes con el vecino (captura-colecciones.png), la del centro
+# con el gerente en silueta (captura-bestiario-falta.png), la de la torre con el oficinista
+# (captura-bestiario-torre.png) y la de los Apartamentos con la criatura, el más grande (captura-bestiario-grande.png).
+# Luego cuenta en la terminal lo visto de cada familia, comprueba los totales y que matar uno lo apunta
 func probar_colecciones() -> void:
 	# lo que la prueba ha ido apuntando sola (meter_zombi avisa al bestiario con cada enemigo que nace)
 	print("Bestiario apuntado por la prueba hasta aquí: %s" % [Guardado.cargar().get("bestiario", [])])
-	var encontrados: Array = Objetos.de_edificio(edificio).slice(0, 6)
-	var vistos: Array = ["normal", "lento", "rapido", "portera"]
-	if edificio == "centro":
-		vistos += ["dependienta", "guardia", "antidisturbios"]
-	if edificio == "torre":
-		vistos += ["oficinista", "escolta", "directora", "sujeto_1"]
+	var vistos: Array = ["normal", "lento", "rapido", "explosivo", "venenoso", "portera", "criatura", "dependienta",
+		"guardia", "antidisturbios", "maniqui", "gerente_mutado", "oficinista", "escolta"]
 	Guardado.cambiar(func(g):
-		g.encontrados = encontrados
 		g.bestiario = vistos
+		g.matados = {"normal": 128, "lento": 41, "rapido": 37, "portera": 3, "dependienta": 12}
 		g.colecciones_nuevo = true)
 	abrir_ordenador()
 	await get_tree().create_timer(0.5).timeout   # el encendido del monitor dura 0,35 s
 	Captura.foto("captura-escritorio-nuevo.png")   # el icono avisa de que hay algo nuevo
-	ordenador.abrir("colecciones", "c_%s_objetos" % edificio)
-	await get_tree().create_timer(0.3).timeout
+	ordenador.abrir("colecciones")
+	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-colecciones.png")
-	ordenador.abrir("colecciones", "z_normal")
-	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-bestiario.png")
+	var marcado := get_viewport().gui_get_focus_owner()
+	print("Colecciones al abrir: pestaña %s, marcado %s (esperado: comunes, z_normal)" % [ordenador.familia_vista,
+		marcado.name if marcado else "nada"])
 	ordenador.abrir("colecciones", "z_gerente")
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-bestiario-falta.png")
-	if edificio == "torre":   # uno de la torre: «Sale en: Torre Velaria» (el vecino, en todos los edificios)
-		ordenador.abrir("colecciones", "z_oficinista")
-		await get_tree().create_timer(0.3).timeout
-		Captura.foto("captura-bestiario-torre.png")
-	# la ventana del programa no crece con los nombres largos ni con las frases (se saldría de la pantalla del monitor)
-	var tarjetas := []
-	var buscar := func(n: Node, f: Callable) -> void:
-		for h in n.get_children():
-			if h is ScrollContainer:
-				tarjetas.append(h)
-			f.call(h, f)
-	buscar.call(ordenador.ventana, buscar)
-	print("Colecciones · ventana %s (esperado: 718 de ancho) · listas %s" % [ordenador.ventana.size,
-		tarjetas.map(func(d): return d.size.x)])
-	# los recuentos que enseña el programa, edificio por edificio
+	print("Con z_gerente: pestaña %s (esperado: centro)" % ordenador.familia_vista)
+	ordenador.abrir("colecciones", "z_oficinista")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-bestiario-torre.png")
+	ordenador.abrir("colecciones", "z_criatura")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-bestiario-grande.png")
+	# una pestaña, pulsada de verdad: cambia de familia y se queda marcada
+	var pestana: Button = ordenador.ventana.find_child("pes_centro", true, false)
+	pestana.pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	marcado = get_viewport().gui_get_focus_owner()
+	print("Al pulsar la pestaña del centro: pestaña %s, marcado %s, casillas %d (esperado: centro, pes_centro, 10)" % [
+		ordenador.familia_vista, marcado.name if marcado else "nada",
+		ordenador.ventana.find_children("z_*", "Button", true, false).size()])
+	# la ventana, maximizada, y nada se sale (sin barra de desplazamiento en el programa)
+	var desliza: ScrollContainer = ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0]
+	print("Colecciones · ventana %s (esperado: 872 de ancho) · se desplaza %s (esperado: false; mide %d de alto y caben %d)" % [
+		ordenador.ventana.size, desliza.get_v_scroll_bar().visible, desliza.get_v_scroll_bar().max_value, desliza.size.y])
+	# lo que enseña, familia por familia
 	var g := Guardado.cargar()
-	for e in Edificios.LISTA:
-		var objetos: Array = Objetos.de_edificio(e)
-		var bichos: Array = Bestiario.de_edificio(e)
-		print("Colecciones de %s: objetos %d/%d | bestiario %d/%d" % [e,
-			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
-			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 7 or Objetos.de_edificio("centro").size() != 8:
-		push_error("Colecciones: los objetos por edificio no son 7 y 8")
-	if Bestiario.LISTA.size() != 29:
-		push_error("Colecciones: el bestiario no tiene 29 fichas")
-	if Bestiario.retrato("gerente_mutado") == null:
-		push_error("Colecciones: el retrato del gerente mutado es null")
+	var suman := 0
+	for fam in Bestiario.familias():
+		var suyos: Array = Bestiario.de_familia(fam)
+		suman += suyos.size()
+		print("Familia %s: %d/%d vistos" % [fam, suyos.filter(func(id): return id in g.bestiario).size(), suyos.size()])
+	if suman != Bestiario.LISTA.size() or Bestiario.LISTA.size() != 29:
+		push_error("Colecciones: las familias suman %d y el bestiario tiene %d (esperado: 29 y 29)" % [suman, Bestiario.LISTA.size()])
 	if g.colecciones_nuevo:
 		push_error("Colecciones: el aviso de nuevo sigue puesto después de abrir el programa")
+	# matar uno lo cuenta en la partida (al acabar pasa al guardado); en la sala de pruebas, no (ver meter_zombi)
+	var antes: int = matados.get("lento", 0)
+	contar_matado("lento")
+	contar_matado("no_existe")
+	print("Matados en la partida: lento %d → %d (esperado: uno más) · claves %s" % [antes, matados.lento, matados.keys()])
 	ordenador.abrir("")
 	ordenador.apagar()
 

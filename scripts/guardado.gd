@@ -37,6 +37,7 @@ const NUEVO := {
 	                        # de los Apartamentos aunque no sea la primera, y se apaga sola al empezarla
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total
+	"matados": {},        # zombis matados de cada tipo desde el 8 nov ({"normal": 120, ...}, claves de Bestiario.LISTA): Colecciones
 	"muertos_con_ayudas": 0, # los de "muertos" que se mataron en partidas con ayudas: no cuentan para el logro Exterminador (logros.gd)
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...}
 	"baul_equipo": [],    # las armas y los arrojables del baúl, cada uno en su casilla y con su calidad
@@ -110,6 +111,8 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 	# JSON guarda todos los números con decimales: los que son de contar, otra vez enteros
 	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "dolares_talentos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
 		s[clave] = int(s[clave])
+	for id in s.matados:
+		s.matados[id] = int(s.matados[id])
 	for t in s.talentos:
 		s.talentos[t] = int(s.talentos[t])
 		# un talento que ahora admite menos puntos (Durito, de 5 a 3 el 28 oct): los que sobran vuelven sin gastar

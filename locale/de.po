@@ -3288,10 +3288,6 @@ msgstr[0] "Neu im Bestiarium"
 msgstr[1] "Neu im Bestiarium"
 
 #: scripts/partida.gd
-msgid "Objetos nuevos en Colecciones"
-msgstr "Neue Gegenstände in den Sammlungen"
-
-#: scripts/partida.gd
 msgid "¡Nueva mejor marca!"
 msgstr "Neue Bestmarke!"
 
@@ -6957,40 +6953,32 @@ msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s, mit %s. Geh auf die Sendungen, um sie zu sehen."
 
 #: scripts/ui/ordenador.gd
-msgid "Objetos"
-msgstr "Gegenstände"
-
-#: scripts/ui/ordenador.gd
 msgid "Bestiario"
 msgstr "Bestiarium"
 
 #: scripts/ui/ordenador.gd
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s: %d von %d Gegenständen gefunden."
+msgid "Vistos"
+msgstr "Gesehen"
 
 #: scripts/ui/ordenador.gd
-msgid "Dosier"
-msgstr "Akte"
+msgid "%s: %d de %d vistos."
+msgstr "%s: %d von %d gesehen."
 
 #: scripts/ui/ordenador.gd
-msgid "Bestiario · %d / %d"
-msgstr "Bestiarium · %d / %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Sin ver"
-msgstr "Ungesehen"
-
-#: scripts/ui/ordenador.gd
-msgid "%s: sale en %s."
-msgstr "%s · Vorkommen: %s."
+msgid "%s: sale en %s. Matados: %d."
+msgstr "%s: kommt vor in %s. Erledigt: %d."
 
 #: scripts/ui/ordenador.gd
 msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
 msgstr "Ein Gegner, dem du noch nicht begegnet bist. Wen du in einer Runde siehst, wird hier eingetragen."
 
 #: scripts/ui/ordenador.gd
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "Was du findest oder triffst, bleibt für immer hier. Geh auf die Karten, um es zu sehen."
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
+msgstr "Jeder Gegner, dem du begegnest, bleibt hier für immer. Fahr über die Felder, um seine Akte zu sehen."
+
+#: scripts/ui/ordenador.gd
+msgid "Comunes"
+msgstr "Gewöhnliche"
 
 #: scripts/ui/ordenador.gd
 msgid "todos los edificios"
@@ -7005,28 +6993,16 @@ msgid "Apartamentos y centro"
 msgstr "Mietshaus und Zentrum"
 
 #: scripts/ui/ordenador.gd
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d von %d Seiten · %s. Lies sie in AKTE.TXT."
-
-#: scripts/ui/ordenador.gd
-msgid "Página %d · %s"
-msgstr "Seite %d · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "Objetos · %s"
-msgstr "Gegenstände · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "%s (sin encontrar) · %s"
-msgstr "%s (nicht gefunden) · %s"
-
-#: scripts/ui/ordenador.gd
 msgid "Sale en: %s"
 msgstr "Vorkommen: %s"
 
 #: scripts/ui/ordenador.gd
 msgid "Aún no te lo has cruzado."
 msgstr "Noch nicht begegnet."
+
+#: scripts/ui/ordenador.gd
+msgid "Matados: %d"
+msgstr "Erledigt: %d"
 
 #: scripts/ui/ordenador.gd
 msgid "Talentos"
@@ -7099,10 +7075,6 @@ msgstr "Akte VD-7"
 #: scripts/ui/ordenador.gd
 msgid "Noticias de Canal 8"
 msgstr "Nachrichten von Kanal 8"
-
-#: scripts/ui/ordenador.gd
-msgid "Colecciones y bestiario"
-msgstr "Sammlungen und Bestiarium"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7307,3 +7279,55 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "Objetos nuevos en Colecciones"
+msgstr "Neue Gegenstände in den Sammlungen"
+
+#, sin-usar
+msgid "Objetos"
+msgstr "Gegenstände"
+
+#, sin-usar
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s: %d von %d Gegenständen gefunden."
+
+#, sin-usar
+msgid "Dosier"
+msgstr "Akte"
+
+#, sin-usar
+msgid "Bestiario · %d / %d"
+msgstr "Bestiarium · %d / %d"
+
+#, sin-usar
+msgid "Sin ver"
+msgstr "Ungesehen"
+
+#, sin-usar
+msgid "%s: sale en %s."
+msgstr "%s · Vorkommen: %s."
+
+#, sin-usar
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "Was du findest oder triffst, bleibt für immer hier. Geh auf die Karten, um es zu sehen."
+
+#, sin-usar
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "%d von %d Seiten · %s. Lies sie in AKTE.TXT."
+
+#, sin-usar
+msgid "Página %d · %s"
+msgstr "Seite %d · %s"
+
+#, sin-usar
+msgid "Objetos · %s"
+msgstr "Gegenstände · %s"
+
+#, sin-usar
+msgid "%s (sin encontrar) · %s"
+msgstr "%s (nicht gefunden) · %s"
+
+#, sin-usar
+msgid "Colecciones y bestiario"
+msgstr "Sammlungen und Bestiarium"

@@ -3288,10 +3288,6 @@ msgstr[0] "New in the bestiary"
 msgstr[1] "New in the bestiary"
 
 #: scripts/partida.gd
-msgid "Objetos nuevos en Colecciones"
-msgstr "New items in Collections"
-
-#: scripts/partida.gd
 msgid "¡Nueva mejor marca!"
 msgstr "New personal best!"
 
@@ -6957,40 +6953,32 @@ msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s, with %s. Move over the broadcasts to watch them."
 
 #: scripts/ui/ordenador.gd
-msgid "Objetos"
-msgstr "Items"
-
-#: scripts/ui/ordenador.gd
 msgid "Bestiario"
 msgstr "Bestiary"
 
 #: scripts/ui/ordenador.gd
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s: %d of %d items found."
+msgid "Vistos"
+msgstr "Seen"
 
 #: scripts/ui/ordenador.gd
-msgid "Dosier"
-msgstr "Dossier"
+msgid "%s: %d de %d vistos."
+msgstr "%s: %d of %d seen."
 
 #: scripts/ui/ordenador.gd
-msgid "Bestiario · %d / %d"
-msgstr "Bestiary · %d / %d"
-
-#: scripts/ui/ordenador.gd
-msgid "Sin ver"
-msgstr "Unseen"
-
-#: scripts/ui/ordenador.gd
-msgid "%s: sale en %s."
-msgstr "%s: appears in %s."
+msgid "%s: sale en %s. Matados: %d."
+msgstr "%s: appears in %s. Killed: %d."
 
 #: scripts/ui/ordenador.gd
 msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
 msgstr "An enemy you haven't run into yet. The ones you see in a run get logged here."
 
 #: scripts/ui/ordenador.gd
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "What you find or run into stays here for good. Move over the cards to see it."
+msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
+msgstr "Every enemy you run into stays here forever. Hover over the squares to see their file."
+
+#: scripts/ui/ordenador.gd
+msgid "Comunes"
+msgstr "Common"
 
 #: scripts/ui/ordenador.gd
 msgid "todos los edificios"
@@ -7005,28 +6993,16 @@ msgid "Apartamentos y centro"
 msgstr "Apartments and mall"
 
 #: scripts/ui/ordenador.gd
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d of %d pages from %s. Read them in DOSSIER.TXT."
-
-#: scripts/ui/ordenador.gd
-msgid "Página %d · %s"
-msgstr "Page %d · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "Objetos · %s"
-msgstr "Items · %s"
-
-#: scripts/ui/ordenador.gd
-msgid "%s (sin encontrar) · %s"
-msgstr "%s (not found yet) · %s"
-
-#: scripts/ui/ordenador.gd
 msgid "Sale en: %s"
 msgstr "Appears in: %s"
 
 #: scripts/ui/ordenador.gd
 msgid "Aún no te lo has cruzado."
 msgstr "You haven't run into this one yet."
+
+#: scripts/ui/ordenador.gd
+msgid "Matados: %d"
+msgstr "Killed: %d"
 
 #: scripts/ui/ordenador.gd
 msgid "Talentos"
@@ -7099,10 +7075,6 @@ msgstr "Dossier VD-7"
 #: scripts/ui/ordenador.gd
 msgid "Noticias de Canal 8"
 msgstr "Channel 8 News"
-
-#: scripts/ui/ordenador.gd
-msgid "Colecciones y bestiario"
-msgstr "Collections and Bestiary"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7307,3 +7279,55 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "Objetos nuevos en Colecciones"
+msgstr "New items in Collections"
+
+#, sin-usar
+msgid "Objetos"
+msgstr "Items"
+
+#, sin-usar
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s: %d of %d items found."
+
+#, sin-usar
+msgid "Dosier"
+msgstr "Dossier"
+
+#, sin-usar
+msgid "Bestiario · %d / %d"
+msgstr "Bestiary · %d / %d"
+
+#, sin-usar
+msgid "Sin ver"
+msgstr "Unseen"
+
+#, sin-usar
+msgid "%s: sale en %s."
+msgstr "%s: appears in %s."
+
+#, sin-usar
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "What you find or run into stays here for good. Move over the cards to see it."
+
+#, sin-usar
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "%d of %d pages from %s. Read them in DOSSIER.TXT."
+
+#, sin-usar
+msgid "Página %d · %s"
+msgstr "Page %d · %s"
+
+#, sin-usar
+msgid "Objetos · %s"
+msgstr "Items · %s"
+
+#, sin-usar
+msgid "%s (sin encontrar) · %s"
+msgstr "%s (not found yet) · %s"
+
+#, sin-usar
+msgid "Colecciones y bestiario"
+msgstr "Collections and Bestiary"

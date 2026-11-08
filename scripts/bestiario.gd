@@ -167,6 +167,27 @@ static func de(nodo) -> String:
 	return nodo.get_meta("tipo", "")
 
 
+# Las familias de Colecciones (una pestaña cada una): "comunes" (los que salen en todos los edificios) y los
+# propios de cada edificio, en el orden de Edificios.LISTA
+static func familias() -> Array:
+	return ["comunes"] + Edificios.LISTA.keys()
+
+
+static func familia(id: String) -> String:
+	var eds: Array = LISTA[id].edificios
+	return "comunes" if eds.size() >= Edificios.LISTA.size() else eds[0]
+
+
+# Los de una familia, en el orden de LISTA
+static func de_familia(fam: String) -> Array:
+	return LISTA.keys().filter(func(id): return familia(id) == fam)
+
+
+# Cuántos de este se han matado (s es el guardado; se cuentan desde el 8 nov)
+static func matados(s: Dictionary, id: String) -> int:
+	return int(s.get("matados", {}).get(id, 0))
+
+
 # Los que salen en un edificio, en el orden de LISTA
 static func de_edificio(edificio: String) -> Array:
 	return LISTA.keys().filter(func(id): return edificio in LISTA[id].edificios)

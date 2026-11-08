@@ -141,6 +141,8 @@
 #                       quitados                                                       [prueba_inventario.gd]
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
 #   --noticias          el programa de Noticias del ordenador: la tele con la reportera hablando [prueba_larga.gd]
+#   --coleccion         el programa Colecciones del ordenador (el bestiario): las pestañas, la ficha grande, las
+#                       siluetas y los matados de cada zombi                               [prueba_larga.gd]
 #   --novedades         los avisos de lo nuevo: el «!» de la mesa del ordenador, de la taquilla y de los iconos, y el
 #                       grito grande de las noticias, los logros y las skins                [prueba_larga.gd]
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
@@ -524,6 +526,10 @@ func empezar_prueba() -> void:
 	elif "--noticias" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_noticias()
+		get_tree().quit()
+	elif "--coleccion" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_colecciones()
 		get_tree().quit()
 	elif "--novedades" in args:
 		await probar_novedades()
