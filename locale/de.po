@@ -5923,10 +5923,6 @@ msgid "Arrojable"
 msgstr "Wurfwaffe"
 
 #: scripts/ui/menu_principal.gd
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "Säubere das Haus von Zombies, Stock für Stock"
-
-#: scripts/ui/menu_principal.gd
 msgid "Continuar partida"
 msgstr "Runde fortsetzen"
 
@@ -5942,17 +5938,9 @@ msgstr "SPIELEN"
 msgid "Si empiezas otra, la guardada se pierde"
 msgstr "Startest du eine neue, ist die gespeicherte weg"
 
-#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
-msgid "Tutorial"
-msgstr "Tutorial"
-
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
 msgid "Opciones"
 msgstr "Optionen"
-
-#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
-msgid "Pantalla completa"
-msgstr "Vollbild"
 
 #: scripts/ui/menu_principal.gd
 msgid "Salir"
@@ -6063,6 +6051,14 @@ msgstr "Granaten: %d"
 #: scripts/ui/menus.gd
 msgid "Continuar"
 msgstr "Weiter"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Tutorial"
+msgstr "Tutorial"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pantalla completa"
+msgstr "Vollbild"
 
 #: scripts/ui/menus.gd
 msgid "Abandonar partida"
@@ -7291,6 +7287,10 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "Limpia el edificio de zombis, planta a planta"
+msgstr "Säubere das Haus von Zombies, Stock für Stock"
 
 #, sin-usar
 msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"

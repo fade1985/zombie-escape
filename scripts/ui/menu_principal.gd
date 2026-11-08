@@ -1,5 +1,5 @@
-# El menú principal (showMenu de src/ui.js): el logo, JUGAR, Tutorial (tutorial.gd), Opciones (opciones.gd), pantalla
-# completa y salir (en la web, una despedida: M46), y el récord. Al lado de Tutorial y Opciones, el hueco de guardado en uso («Partida 1»), que abre
+# El menú principal (showMenu de src/ui.js): el logo, JUGAR, Opciones (opciones.gd, con el Tutorial y la pantalla
+# completa dentro) y salir (en la web, una despedida: M46). Debajo de Opciones, el hueco de guardado en uso («Partida 1»), que abre
 # «Elige partida» (huecos.gd): cambiar de hueco, o borrar uno para empezar de cero. Con una partida a medias (partida_guardada.gd), encima de JUGAR sale «Continuar
 # partida» con su edificio y su planta, y JUGAR pide pulsarlo otra vez (la partida nueva pisa la guardada). Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings
 # de src/ui.js): una tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida
@@ -62,10 +62,7 @@ func _ready() -> void:
 	logo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	logo.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	columna.add_child(logo)
-	var lema := Label.new()
-	lema.text = Idioma.t("Limpia el edificio de zombis, planta a planta")
-	lema.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	columna.add_child(lema)
+	# (debajo del título iba el lema «Limpia el edificio de zombis, planta a planta»: quitado el 8 nov)
 
 	var foto := PartidaGuardada.guardada()
 	var seguir: Button = null
@@ -88,17 +85,8 @@ func _ready() -> void:
 				donde.text = Idioma.t("Si empiezas otra, la guardada se pierde")
 			else:
 				elegir_edificio())
-	# Tutorial, Opciones y el hueco de guardado, uno al lado del otro (uno debajo del otro, el menú ya no cabe en la pantalla)
-	var fila := HBoxContainer.new()
-	fila.alignment = BoxContainer.ALIGNMENT_CENTER
-	fila.add_theme_constant_override("separation", 6)
-	columna.add_child(fila)
-	var tutorial := boton(fila, Idioma.t("Tutorial"), func(): pass)
-	tutorial.custom_minimum_size.x = 127
-	tutorial.pressed.connect(func():
-		Tutorial.lista(self, centro).cerrado.connect(tutorial.grab_focus))
-	var opciones := boton(fila, Idioma.t("Opciones"), func(): pass)
-	opciones.custom_minimum_size.x = 127
+	# Opciones (con el Tutorial y la pantalla completa dentro, desde el 8 nov), el hueco de guardado y Salir, uno debajo del otro
+	var opciones := boton(columna, Idioma.t("Opciones"), func(): pass)
 	opciones.pressed.connect(func():
 		var idioma_antes := Idioma.actual
 		Opciones.abrir(self, centro).cerrado.connect(func():
@@ -106,10 +94,7 @@ func _ready() -> void:
 				get_tree().reload_current_scene()
 			else:
 				opciones.grab_focus()))
-	var partidas := boton(fila, Idioma.t("Partida %d") % Guardado.hueco, abrir_huecos)
-	partidas.custom_minimum_size.x = 127
-	if Tactil.puede_pantalla_completa():   # en iPhone no hay
-		boton(columna, Idioma.t("Pantalla completa"), Tactil.pantalla_completa)
+	boton(columna, Idioma.t("Partida %d") % Guardado.hueco, abrir_huecos)
 	boton(columna, Idioma.t("Salir"), salir)
 
 	var ayuda := PanelContainer.new()

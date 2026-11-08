@@ -5942,10 +5942,6 @@ msgid "Arrojable"
 msgstr "Метательное"
 
 #: scripts/ui/menu_principal.gd
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "Зачисти здание от зомби, этаж за этажом"
-
-#: scripts/ui/menu_principal.gd
 msgid "Continuar partida"
 msgstr "Продолжить забег"
 
@@ -5961,17 +5957,9 @@ msgstr "ИГРАТЬ"
 msgid "Si empiezas otra, la guardada se pierde"
 msgstr "Начнёшь новый — сохранённый пропадёт"
 
-#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
-msgid "Tutorial"
-msgstr "Обучение"
-
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
 msgid "Opciones"
 msgstr "Настройки"
-
-#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
-msgid "Pantalla completa"
-msgstr "Полный экран"
 
 #: scripts/ui/menu_principal.gd
 msgid "Salir"
@@ -6083,6 +6071,14 @@ msgstr "Гранаты: %d"
 #: scripts/ui/menus.gd
 msgid "Continuar"
 msgstr "Продолжить"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Tutorial"
+msgstr "Обучение"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pantalla completa"
+msgstr "Полный экран"
 
 #: scripts/ui/menus.gd
 msgid "Abandonar partida"
@@ -7311,6 +7307,10 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Limpia el edificio de zombis, planta a planta"
+msgstr "Зачисти здание от зомби, этаж за этажом"
 
 #, sin-usar
 msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"

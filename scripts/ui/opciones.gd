@@ -286,6 +286,9 @@ func general() -> void:
 		sonido.text = texto_sonido())
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		opcion(Idioma.t("Pantalla completa")).pressed.connect(Tactil.pantalla_completa)
+	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
+		var tutorial := opcion(Idioma.t("Tutorial"))
+		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
 	rotar(Idioma.t("Temblor de pantalla"), "temblor", TEMBLORES)
 	if Tactil.activo:
 		var titulo := Label.new()

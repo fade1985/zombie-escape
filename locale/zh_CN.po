@@ -5904,10 +5904,6 @@ msgid "Arrojable"
 msgstr "投掷物"
 
 #: scripts/ui/menu_principal.gd
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "一层一层，把大楼里的僵尸清理干净"
-
-#: scripts/ui/menu_principal.gd
 msgid "Continuar partida"
 msgstr "继续本局"
 
@@ -5923,17 +5919,9 @@ msgstr "开始"
 msgid "Si empiezas otra, la guardada se pierde"
 msgstr "开始新的一局会丢失已保存的进度"
 
-#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
-msgid "Tutorial"
-msgstr "教程"
-
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
 msgid "Opciones"
 msgstr "选项"
-
-#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
-msgid "Pantalla completa"
-msgstr "全屏"
 
 #: scripts/ui/menu_principal.gd
 msgid "Salir"
@@ -6043,6 +6031,14 @@ msgstr "手雷：%d"
 #: scripts/ui/menus.gd
 msgid "Continuar"
 msgstr "继续"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Tutorial"
+msgstr "教程"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pantalla completa"
+msgstr "全屏"
 
 #: scripts/ui/menus.gd
 msgid "Abandonar partida"
@@ -7271,6 +7267,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Limpia el edificio de zombis, planta a planta"
+msgstr "一层一层，把大楼里的僵尸清理干净"
 
 #, sin-usar
 msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"

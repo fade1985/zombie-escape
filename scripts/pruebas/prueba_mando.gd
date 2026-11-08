@@ -53,7 +53,7 @@ static func menu_principal(menu: Control) -> void:
 	await pulsar(arbol, JOY_BUTTON_B)
 	print("Mando · «Elige edificio», B: vuelve al menú %s · marcado «%s» (esperado: true, un botón del menú)" % [
 		menu.centro.visible and not menu.edificios.visible, marcado(menu)])
-	for par: Array in [[Idioma.t("Opciones"), Opciones], [Idioma.t("Tutorial"), Tutorial]]:
+	for par: Array in [[Idioma.t("Opciones"), Opciones]]:   # (el Tutorial, desde el 8 nov, va dentro de Opciones)
 		var b := buscar(menu.centro, par[0])
 		b.grab_focus()
 		await pulsar(arbol, JOY_BUTTON_A)
