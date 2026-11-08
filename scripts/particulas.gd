@@ -92,6 +92,15 @@ func _process(delta: float) -> void:
 		q.t -= delta
 		if q.has("antes"):   # (dónde estaba: la estela de las gotas finas)
 			q.antes = q.p - Vector2(0, q.z)
+		if q.has("z") and q.v != Vector2.ZERO:
+			# las que vuelan no atraviesan paredes ni muebles (capa de choque 1, como las balas): la que choca se para
+			# junto a ella y cae ahí mismo
+			var despues: Vector2 = q.p + q.v * delta
+			var choque := get_world_2d().direct_space_state.intersect_ray(PhysicsRayQueryParameters2D.create(q.p, despues, 1))
+			if choque:
+				q.p = choque.position + choque.normal * (4.0 + q.s)   # (separada lo que mide su mancha)
+				q.v = Vector2.ZERO
+				continue
 		q.p += q.v * delta
 		if q.has("z"):
 			volando(q, delta)

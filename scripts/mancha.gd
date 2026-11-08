@@ -107,7 +107,13 @@ static func salpicon(sala: Node, donde: Vector2, color: Color, hacia: Vector2, g
 	var t := ahora()
 	var dir := hacia.normalized() if hacia.length() > 1.0 else Vector2.RIGHT
 	var largo := clampf(hacia.length() * 0.035, 2.0, 14.0)   # en unidades: de 1 a 7 píxeles del dibujo
+	var espacio := m.get_world_2d().direct_space_state
+	var punto := PhysicsPointQueryParameters2D.new()
+	punto.collision_mask = 1   # paredes y muebles
 	var celda := func(centro: Vector2, lado: float) -> void:
+		punto.position = centro
+		if not espacio.intersect_point(punto, 1).is_empty():
+			return   # (el trozo que caería dentro de una pared o de un mueble, no)
 		var l := maxf(2.0, roundf(lado / 2.0) * 2.0)
 		m.celdas.append([((m.to_local(centro) - Vector2(l, l) / 2.0) / 2.0).round() * 2.0, color, Vector2(l, l), t])
 	if grueso > 3.0:
@@ -123,7 +129,7 @@ static func salpicon(sala: Node, donde: Vector2, color: Color, hacia: Vector2, g
 		var pasos := maxi(1, int(largo / 2.0))
 		for i in pasos:
 			celda.call(donde - dir * i * 2.0, 4.0 if i == 0 and largo > 6.0 else 2.0)
-	if randf() < 0.35:   # gotitas sueltas, un poco más allá
+	if hacia.length() > 1.0 and randf() < 0.35:   # gotitas sueltas, un poco más allá (no si se paró en una pared)
 		for i in randi_range(1, 2):
 			celda.call(donde + dir * randf_range(6.0, 14.0) + dir.orthogonal() * randf_range(-4.0, 4.0), 2.0)
 	m.secando_hasta = t + SECADO

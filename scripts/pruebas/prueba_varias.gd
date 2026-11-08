@@ -2039,6 +2039,31 @@ func probar_vecina() -> void:
 	# la sangre del suelo, ya seca: más oscura que recién caída (Mancha.SECADO) (captura-vecina-sangre-seca.png)
 	await get_tree().create_timer(Mancha.SECADO).timeout
 	Captura.foto("captura-vecina-sangre-seca.png")
+	# la sangre no atraviesa las paredes: una vecina pegada a la pared de arriba recibe golpes hacia la pared; ninguna
+	# mancha queda dentro del muro, pasado su borde de choque (captura-vecina-pared.png)
+	var junto: Vector2 = johnny.position
+	while mapa.zona_en(mapa.to_local(mapa.get_parent().to_global(junto + Vector2(0, -44)))) >= 0 and junto.y > 0:
+		junto.y -= 8
+	var pegada: Node2D = meter_zombi("vecina", junto)
+	johnny.position = junto + Vector2(0, 160)   # (la cámara, con él: que se vea la pared)
+	johnny.get_node("Camara").reset_smoothing()
+	var gotas: Mancha = pegada.get_parent().get_node_or_null("Gotas")
+	var ya := gotas.celdas.size() if gotas else 0
+	for i in 4:
+		pegada.recibir_golpe(1 if i < 3 else pegada.vida, Vector2(randf_range(-20, 20), -60))
+		await get_tree().create_timer(0.15).timeout
+	await get_tree().create_timer(1.5).timeout
+	Captura.foto("captura-vecina-pared.png")
+	gotas = pegada.get_parent().get_node_or_null("Gotas")
+	var dentro := 0
+	for c in (gotas.celdas.slice(ya) if gotas else []):
+		var punto := PhysicsPointQueryParameters2D.new()   # dentro de una pared o un mueble (capa de choque 1)
+		punto.position = gotas.to_global(c[0] + c[2] / 2.0)
+		punto.collision_mask = 1
+		if not get_world_2d().direct_space_state.intersect_point(punto).is_empty():
+			dentro += 1
+	print("Sangre en la pared: %d manchas dentro del muro de las %d suyas (esperado: 0) · la vecina en %s" % [dentro,
+		(gotas.celdas.size() - ya) if gotas else 0, junto])
 	# el panel de pruebas, en Zombis: la vecina, el último botón (captura-vecina-panel.png), y que sale con él
 	await pulsar_y_esperar(KEY_P)
 	panel_pruebas.elegir("Zombis")
