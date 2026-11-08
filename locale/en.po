@@ -6241,12 +6241,12 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Throw it far: its blast hurts you too."
 
 #: scripts/ui/opciones.gd
-msgid "Avisar de un texto mal traducido"
-msgstr "Report a bad translation"
+msgid "Audio"
+msgstr "Audio"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
-msgstr "Screen shake"
+msgid "Pantalla"
+msgstr "Display"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -6263,6 +6263,14 @@ msgstr "Transparency"
 #: scripts/ui/opciones.gd
 msgid "Vibración"
 msgstr "Vibration"
+
+#: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "Report a bad translation"
+
+#: scripts/ui/opciones.gd
+msgid "Temblor de pantalla"
+msgstr "Screen shake"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."

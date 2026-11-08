@@ -27,15 +27,24 @@ static func probar(menu: Control) -> void:
 	Opciones.enlace_avisos = ""
 	var o := Opciones.abrir(menu, menu.centro)
 	await arbol.create_timer(0.4).timeout
+	Captura.foto("captura-idioma-opciones.png")
+	o.ver("idioma")   # (la lista de idiomas, desde el 8 nov tras el botón «Idioma / Language» de General)
+	await arbol.create_timer(0.3).timeout
 	# El botón de avisar de un texto mal traducido (Opciones.enlace_avisos): sin enlace no sale; con enlace, en todos los idiomas menos el español
 	var hay_aviso := func() -> bool: return o.contenido.find_child("avisar_traduccion", true, false) != null
 	var sin_enlace: bool = hay_aviso.call()
 	Opciones.enlace_avisos = enlace
-	o.ver("general")
+	o.ver("idioma")
 	await arbol.create_timer(0.3).timeout
 	print("Botón «Avisar de un texto mal traducido»: sin enlace %s, con enlace %s (esperado: false, %s)" % [
 		sin_enlace, hay_aviso.call(), "false en español" if Idioma.actual == Idioma.ORIGEN else "true"])
-	Captura.foto("captura-idioma-opciones.png")
+	Captura.foto("captura-idioma-lista.png")
+	o.ver("audio")   # (la música y el sonido, tras el botón Audio de General)
+	await arbol.create_timer(0.3).timeout
+	Captura.foto("captura-idioma-audio.png")
+	o.ver("pantalla")   # (la pantalla completa y el temblor, tras el botón Pantalla de General)
+	await arbol.create_timer(0.3).timeout
+	Captura.foto("captura-idioma-pantalla.png")
 	o.ver("controles")
 	await arbol.create_timer(0.3).timeout
 	Captura.foto("captura-idioma-controles.png")

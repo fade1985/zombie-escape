@@ -6261,12 +6261,12 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Бросай подальше: взрыв ранит и тебя."
 
 #: scripts/ui/opciones.gd
-msgid "Avisar de un texto mal traducido"
-msgstr "Сообщить о плохом переводе"
+msgid "Audio"
+msgstr "Аудио"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
-msgstr "Дрожание экрана"
+msgid "Pantalla"
+msgstr "Экран"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -6283,6 +6283,14 @@ msgstr "Прозрачность"
 #: scripts/ui/opciones.gd
 msgid "Vibración"
 msgstr "Вибрация"
+
+#: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "Сообщить о плохом переводе"
+
+#: scripts/ui/opciones.gd
+msgid "Temblor de pantalla"
+msgstr "Дрожание экрана"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."

@@ -2596,16 +2596,18 @@ func probar_sensacion() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --temblor": el ajuste «Temblor de pantalla» de Opciones (pestaña General). Cuenta: que el botón pasa de
+# Con "--captura --temblor": el ajuste «Temblor de pantalla» de Opciones (pestaña General, botón Pantalla). Cuenta: que el botón pasa de
 # Normal a Suave, a Sin temblor y vuelve a Normal, y que cada paso se guarda (1, 0,5 y 0); y, con cada valor, cuánto
 # tiembla la cámara con un temblor de 10 y cuánto dura el parón de un golpe de 0,1 s (Temblor.temblar y Temblor.parar:
 # 10 y 100 ms, 5 y 50 ms, 0 y ninguno). Foto: captura-temblor-opciones.png (con «Sin temblor»). Se cierra
 func probar_temblor() -> void:
 	var o := Opciones.abrir(self, null, johnny)
 	await get_tree().process_frame
+	o.ver("pantalla")   # (desde el 8 nov, tras el botón Pantalla de General)
+	await get_tree().process_frame
 	var boton: Button = null
 	for b in o.contenido.get_children():
-		if b is Button and b.text.begins_with(Idioma.t("Temblor de pantalla")):
+		if b is Button and not b.is_queued_for_deletion() and b.text.begins_with(Idioma.t("Temblor de pantalla")):
 			boton = b
 	if boton == null:
 		print("ERROR: en Opciones no está el botón del temblor de pantalla")

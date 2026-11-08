@@ -6241,12 +6241,12 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Lance-la loin : son explosion te blesse aussi."
 
 #: scripts/ui/opciones.gd
-msgid "Avisar de un texto mal traducido"
-msgstr "Signaler une mauvaise traduction"
+msgid "Audio"
+msgstr "Audio"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
-msgstr "Secousse de l'écran"
+msgid "Pantalla"
+msgstr "Écran"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -6263,6 +6263,14 @@ msgstr "Transparence"
 #: scripts/ui/opciones.gd
 msgid "Vibración"
 msgstr "Vibration"
+
+#: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "Signaler une mauvaise traduction"
+
+#: scripts/ui/opciones.gd
+msgid "Temblor de pantalla"
+msgstr "Secousse de l'écran"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."

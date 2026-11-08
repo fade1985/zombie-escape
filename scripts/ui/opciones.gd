@@ -202,8 +202,8 @@ func cerrar() -> void:
 func ver(cual: String) -> void:
 	pestana = cual
 	for b: Button in pestanas.get_children():
-		# La pestaña en la que estás, con las letras amarillas (las licencias son parte de Créditos)
-		if b.name == cual or (cual == "licencias" and b.name == "creditos"):
+		# La pestaña en la que estás, con las letras amarillas (las licencias son parte de Créditos, y los idiomas, de General)
+		if b.name == cual or (cual == "licencias" and b.name == "creditos") or (cual in ["idioma", "audio", "pantalla"] and b.name == "general"):
 			b.add_theme_color_override("font_color", Tema.AMARILLO)
 			b.add_theme_color_override("font_focus_color", Tema.AMARILLO)
 			b.add_theme_color_override("font_hover_color", Tema.AMARILLO)
@@ -224,6 +224,15 @@ func ver(cual: String) -> void:
 	elif cual == "licencias":
 		licencias()
 		return   # (el foco va a su botón de volver a los créditos)
+	elif cual == "idioma":
+		idiomas()
+		return   # (el foco va al idioma de ahora)
+	elif cual == "audio":
+		audio()
+		return   # (el foco va a la música)
+	elif cual == "pantalla":
+		pantalla()
+		return   # (el foco va a su primer botón)
 	else:
 		controles()
 	(pestanas.get_node(cual) as Button).grab_focus.call_deferred()
@@ -241,8 +250,38 @@ func general() -> void:
 		contenido.add_theme_constant_override("separation", 8)
 		contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		caja.add_child(contenido)
-	# El idioma: un botón por idioma, cada uno con su nombre en su idioma (y el rótulo, en dos), para encontrarlo aunque
-	# el juego esté en otro. El de ahora, con las letras amarillas como la pestaña en la que estás
+	# El idioma: un botón que lleva a la lista de idiomas (idiomas(), desde el 8 nov). Su rótulo, en dos idiomas y con el
+	# nombre del de ahora, para encontrarlo aunque el juego esté en otro
+	var idioma_ahora: String = Idioma.IDIOMAS.filter(func(i): return i[0] == Idioma.actual)[0][1]
+	var al_idioma := opcion("Idioma / Language: " + idioma_ahora)   # no-tr
+	var letra_ahora := Tema.fuente_del_idioma(Idioma.actual)
+	if letra_ahora != null:
+		al_idioma.add_theme_font_override("font", letra_ahora)
+	al_idioma.pressed.connect(func(): ver("idioma"))
+	boton_idioma = al_idioma   # (al volver de la lista de idiomas, el foco va aquí)
+	# la música y el sonido, tras el botón Audio (audio(), desde el 8 nov)
+	opcion(Idioma.t("Audio")).pressed.connect(func(): ver("audio"))
+	# la pantalla completa y el temblor, tras el botón Pantalla (pantalla(), desde el 8 nov)
+	opcion(Idioma.t("Pantalla")).pressed.connect(func(): ver("pantalla"))
+	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
+		var tutorial := opcion(Idioma.t("Tutorial"))
+		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
+	if Tactil.activo:
+		var titulo := Label.new()
+		titulo.theme_type_variation = "Sub"
+		titulo.text = Idioma.t("Móvil")
+		titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		contenido.add_child(titulo)
+		rotar(Idioma.t("Tamaño de los botones"), "tactil_tamano", TAMANOS)
+		rotar(Idioma.t("Transparencia"), "tactil_opacidad", OPACIDADES)
+		rotar(Idioma.t("Vibración"), "vibracion", SI_NO)
+	contenido = fuera
+
+
+# La lista de idiomas (el botón «Idioma / Language» de General): un botón por idioma, cada uno con su nombre en su idioma
+# (y el rótulo, en dos), para encontrarlo aunque el juego esté en otro. El de ahora, con las letras amarillas como la
+# pestaña en la que estás. Al elegir uno se vuelve a General (y sin elegir, con la pestaña General)
+func idiomas() -> void:
 	var rotulo_idioma := Label.new()
 	rotulo_idioma.theme_type_variation = "Sub"
 	rotulo_idioma.text = "Idioma / Language"   # no-tr
@@ -260,7 +299,13 @@ func general() -> void:
 		var letra := Tema.fuente_del_idioma(i[0])   # (el ruso y el chino se escriben con su letra, en cualquier idioma)
 		if letra != null:
 			b.add_theme_font_override("font", letra)
-		b.pressed.connect(func(): Idioma.poner(i[0]))
+		b.pressed.connect(func():   # al elegirlo, de vuelta a General (con el foco en el botón del idioma)
+			pestana = "general"
+			if i[0] == Idioma.actual:
+				ver("general")
+				boton_idioma.grab_focus.call_deferred()
+			else:
+				Idioma.poner(i[0]))
 		if i[0] == Idioma.actual:
 			boton_idioma = b
 			for c in ["font_color", "font_focus_color", "font_hover_color"]:
@@ -274,6 +319,12 @@ func general() -> void:
 		avisar.text = Idioma.t("Avisar de un texto mal traducido")
 		avisar.pressed.connect(func(): OS.shell_open(enlace_avisos))
 		fila_idioma.add_child(avisar)
+	if boton_idioma:
+		boton_idioma.grab_focus.call_deferred()
+
+
+# El audio (el botón Audio de General): la música y quitar todo el sonido. Se vuelve con la pestaña General
+func audio() -> void:
 	var musica := opcion(texto_musica())
 	musica.pressed.connect(func():
 		Guardado.cambiar(func(g): g.ajustes.musica = not g.ajustes.musica)
@@ -284,22 +335,15 @@ func general() -> void:
 	sonido.pressed.connect(func():
 		Sonido.silenciar(not Sonido.silenciado())
 		sonido.text = texto_sonido())
+	musica.grab_focus.call_deferred()
+
+
+# La pantalla (el botón Pantalla de General): la pantalla completa y el temblor. Se vuelve con la pestaña General
+func pantalla() -> void:
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		opcion(Idioma.t("Pantalla completa")).pressed.connect(Tactil.pantalla_completa)
-	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
-		var tutorial := opcion(Idioma.t("Tutorial"))
-		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
 	rotar(Idioma.t("Temblor de pantalla"), "temblor", TEMBLORES)
-	if Tactil.activo:
-		var titulo := Label.new()
-		titulo.theme_type_variation = "Sub"
-		titulo.text = Idioma.t("Móvil")
-		titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		contenido.add_child(titulo)
-		rotar(Idioma.t("Tamaño de los botones"), "tactil_tamano", TAMANOS)
-		rotar(Idioma.t("Transparencia"), "tactil_opacidad", OPACIDADES)
-		rotar(Idioma.t("Vibración"), "vibracion", SI_NO)
-	contenido = fuera
+	(contenido.get_child(0) as Control).grab_focus.call_deferred()
 
 
 # Las ayudas: cada una, un botón de Sí/No con lo que hace debajo. El aviso de los logros arriba y las ayudas en una
