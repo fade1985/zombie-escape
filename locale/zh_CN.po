@@ -5194,11 +5194,11 @@ msgstr "返回"
 msgid "Borrar partida"
 msgstr "删除存档"
 
-#: scripts/ui/huecos.gd scripts/ui/inventario.gd scripts/ui/menu_principal.gd
+#: scripts/ui/huecos.gd scripts/ui/inventario.gd
 msgid "¿Seguro? Pulsa otra vez"
 msgstr "确定吗？再按一次"
 
-#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd
+#: scripts/ui/huecos.gd
 msgid "Partida %d"
 msgstr "存档 %d"
 
@@ -5914,10 +5914,6 @@ msgstr "每日挑战"
 #: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "开始"
-
-#: scripts/ui/menu_principal.gd
-msgid "Si empiezas otra, la guardada se pierde"
-msgstr "开始新的一局会丢失已保存的进度"
 
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
 msgid "Opciones"
@@ -7267,6 +7263,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Si empiezas otra, la guardada se pierde"
+msgstr "开始新的一局会丢失已保存的进度"
 
 #, sin-usar
 msgid "Limpia el edificio de zombis, planta a planta"

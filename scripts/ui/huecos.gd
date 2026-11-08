@@ -1,6 +1,7 @@
 # La pantalla «Elige partida» del menú principal (M45): los tres huecos de guardado (guardado.gd), cada uno en su
 # tarjeta con su resumen (mejor planta, dólares, edificios completados, partidas jugadas y la partida a medias) o
-# «Vacía». Al pulsar una tarjeta se pasa a ese hueco y el menú se monta otra vez con lo suyo. Debajo de cada tarjeta con
+# «Vacía». Se abre con JUGAR (desde el 8 nov). Al pulsar una tarjeta se pasa a ese hueco: si tiene una partida a medias,
+# se sigue; si no, el menú se monta otra vez con lo suyo y abre «Elige edificio». Debajo de cada tarjeta con
 # algo, «Borrar»: la primera pulsación pregunta y la segunda lo borra para siempre. Esc (o B en el mando) vuelve al menú.
 class_name Huecos
 extends CenterContainer
@@ -11,6 +12,7 @@ const ANCHO := 260   # el ancho de una tarjeta
 
 var tarjetas: HBoxContainer
 var cambiado := false   # se ha borrado algo: el menú de detrás ya no vale
+static var a_edificios := false   # al montarse otra vez, el menú abre «Elige edificio» (menu_principal.gd)
 
 
 func _ready() -> void:
@@ -113,10 +115,15 @@ func tarjeta(n: int) -> Button:
 	return b
 
 
-# Pasa a ese hueco y el menú se monta otra vez, con su «Continuar partida» y su récord
+# Pasa a ese hueco: con una partida a medias, a seguirla; si no, el menú se monta otra vez con lo suyo y abre «Elige edificio»
 func elegir(n: int) -> void:
 	Sonido.tocar("click")
 	Guardado.elegir_hueco(n)
+	var foto := PartidaGuardada.guardada()
+	if not foto.is_empty():
+		PartidaGuardada.seguir(foto)
+		return
+	a_edificios = true
 	get_tree().reload_current_scene()
 
 

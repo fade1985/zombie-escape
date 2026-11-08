@@ -39,7 +39,7 @@ static func buscar(dentro: Node, texto: String) -> Button:
 	return null
 
 
-# El menú principal: JUGAR con A abre «Elige edificio» y B vuelve; Opciones y Tutorial, igual
+# El menú principal: JUGAR con A abre «Elige partida» (huecos.gd) y B vuelve; Opciones, igual
 static func menu_principal(menu: Control) -> void:
 	var arbol := menu.get_tree()
 	var abierta := func(clase: Variant) -> bool:   # ¿hay una pantalla de esa clase delante?
@@ -48,11 +48,11 @@ static func menu_principal(menu: Control) -> void:
 	var jugar := buscar(menu.centro, Idioma.t("JUGAR"))
 	jugar.grab_focus()
 	await pulsar(arbol, JOY_BUTTON_A)
-	print("Mando · menú, A en JUGAR: «Elige edificio» a la vista %s · menú a la vista %s · marcado «%s» (esperado: true, false, una tarjeta)" % [
-		menu.edificios != null and menu.edificios.visible, menu.centro.visible, marcado(menu)])
+	print("Mando · menú, A en JUGAR: «Elige partida» a la vista %s · menú a la vista %s · marcado «%s» (esperado: true, false, una tarjeta)" % [
+		abierta.call(Huecos), menu.centro.visible, marcado(menu)])
 	await pulsar(arbol, JOY_BUTTON_B)
-	print("Mando · «Elige edificio», B: vuelve al menú %s · marcado «%s» (esperado: true, un botón del menú)" % [
-		menu.centro.visible and not menu.edificios.visible, marcado(menu)])
+	print("Mando · «Elige partida», B: vuelve al menú %s · marcado «%s» (esperado: true, un botón del menú)" % [
+		menu.centro.visible and not abierta.call(Huecos), marcado(menu)])
 	for par: Array in [[Idioma.t("Opciones"), Opciones]]:   # (el Tutorial, desde el 8 nov, va dentro de Opciones)
 		var b := buscar(menu.centro, par[0])
 		b.grab_focus()

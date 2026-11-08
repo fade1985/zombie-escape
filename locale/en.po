@@ -5201,11 +5201,11 @@ msgstr "Back"
 msgid "Borrar partida"
 msgstr "Delete save"
 
-#: scripts/ui/huecos.gd scripts/ui/inventario.gd scripts/ui/menu_principal.gd
+#: scripts/ui/huecos.gd scripts/ui/inventario.gd
 msgid "¿Seguro? Pulsa otra vez"
 msgstr "Sure? Press again"
 
-#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd
+#: scripts/ui/huecos.gd
 msgid "Partida %d"
 msgstr "Save %d"
 
@@ -5933,10 +5933,6 @@ msgstr "Daily Challenge"
 #: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "PLAY"
-
-#: scripts/ui/menu_principal.gd
-msgid "Si empiezas otra, la guardada se pierde"
-msgstr "Start another and the saved one is lost"
 
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
 msgid "Opciones"
@@ -7287,6 +7283,10 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "Si empiezas otra, la guardada se pierde"
+msgstr "Start another and the saved one is lost"
 
 #, sin-usar
 msgid "Limpia el edificio de zombis, planta a planta"

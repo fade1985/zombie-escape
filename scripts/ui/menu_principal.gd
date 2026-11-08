@@ -1,7 +1,7 @@
 # El menú principal (showMenu de src/ui.js): el logo, JUGAR, Opciones (opciones.gd, con el Tutorial y la pantalla
-# completa dentro) y salir (en la web, una despedida: M46). Debajo de Opciones, el hueco de guardado en uso («Partida 1»), que abre
+# completa dentro) y salir (en la web, una despedida: M46). JUGAR abre
 # «Elige partida» (huecos.gd): cambiar de hueco, o borrar uno para empezar de cero. Con una partida a medias (partida_guardada.gd), encima de JUGAR sale «Continuar
-# partida» con su edificio y su planta, y JUGAR pide pulsarlo otra vez (la partida nueva pisa la guardada). Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings
+# partida» con su edificio y su planta. Es la escena con la que arranca el juego. Elegida una partida sin nada a medias, se abre "Elige edificio" (showBuildings
 # de src/ui.js): una tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida
 # (escenas/partida.tscn).
 # Debajo de cada tarjeta, el nivel de alerta con el que se juega (alerta.gd): se cambia con las flechas, entre los
@@ -75,18 +75,10 @@ func _ready() -> void:
 		donde.text = "%s · %s" % [Idioma.t(Edificios.datos(foto.edificio).nombre),
 			Planta.nombre_de({"num": foto.planta, "azotea": azotea, "edificio": foto.edificio})] + (" · " + Idioma.t("Reto del día") if foto.reto.activo else "")
 		columna.add_child(donde)
-	var jugar := boton(columna, Idioma.t("JUGAR"), elegir_edificio, "BotonGrande")
-	if seguir:
-		# con una partida guardada, la primera pulsación avisa de que se pierde y la segunda abre «Elige edificio»
-		jugar.pressed.disconnect(elegir_edificio)
-		jugar.pressed.connect(func():
-			if jugar.text == Idioma.t("JUGAR"):
-				jugar.text = Idioma.t("¿Seguro? Pulsa otra vez")
-				donde.text = Idioma.t("Si empiezas otra, la guardada se pierde")
-			else:
-				elegir_edificio())
-	# Opciones (con el Tutorial y la pantalla completa dentro, desde el 8 nov), el hueco de guardado y Salir, uno debajo del otro
-	var opciones := boton(columna, Idioma.t("Opciones"), func(): pass)
+	# JUGAR abre «Elige partida» (huecos.gd, desde el 8 nov): la que esté a medias se sigue y las demás pasan a «Elige edificio»
+	var jugar := boton(columna, Idioma.t("JUGAR"), abrir_huecos, "BotonGrande")
+	# Opciones (con el Tutorial y la pantalla completa dentro) y Salir, grandes como JUGAR
+	var opciones := boton(columna, Idioma.t("Opciones"), func(): pass, "BotonGrande")
 	opciones.pressed.connect(func():
 		var idioma_antes := Idioma.actual
 		Opciones.abrir(self, centro).cerrado.connect(func():
@@ -94,8 +86,7 @@ func _ready() -> void:
 				get_tree().reload_current_scene()
 			else:
 				opciones.grab_focus()))
-	boton(columna, Idioma.t("Partida %d") % Guardado.hueco, abrir_huecos)
-	boton(columna, Idioma.t("Salir"), salir)
+	boton(columna, Idioma.t("Salir"), salir, "BotonGrande")
 
 	var ayuda := PanelContainer.new()
 	ayuda.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -111,6 +102,9 @@ func _ready() -> void:
 	# (debajo de Salir iban la mejor planta y los dólares ahorrados: quitados el 8 nov, a petición del dueño)
 
 	(seguir if seguir else jugar).grab_focus.call_deferred()
+	if Huecos.a_edificios:   # se acaba de elegir en «Elige partida» una partida sin nada a medias
+		Huecos.a_edificios = false
+		elegir_edificio.call_deferred()
 	if Captura.activa():
 		Captura.vigilar()
 		await get_tree().create_timer(0.4).timeout
