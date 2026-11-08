@@ -247,6 +247,10 @@ def animacion(anim, vista):
     quieto = Image.open(os.path.join(DESTINO, "rotations", vista + ".png"))
     caja = quieto.getbbox()
     escala = trozos[0][0].height / (caja[3] - caja[1])
+    if ALTURA_GPT and anim == "muerte":
+        # (el arrastrado: al empezar a caer GPT le alza la cabeza y, midiendo por el alto, encogía 6 píxeles de golpe;
+        # por el ancho, que no cambia, se queda de su tamaño)
+        escala = trozos[0][0].width / (caja[2] - caja[0])
     # el punto fijo del dibujo quieto: ahí cae la columna de cada fotograma (así no salta al pasar de quieta a andar)
     sitio = caja[0] if por_detras else fijo(quieto.crop(caja), (caja[0] + caja[2]) / 2, por_la_cabeza)
     carpeta = os.path.join(DESTINO, nombres[anim])
