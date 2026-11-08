@@ -1144,9 +1144,10 @@ func probar_los_seis() -> void:
 	johnny.position = Vector2(Viviendas.COLS * Planta.CASILLA / 2.0, (Viviendas.PASILLO_F + 3) * Planta.CASILLA)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
-	print("Los seis en las viviendas: %s | puertas cerradas %d (esperado: 2, las de la torre que aún no están)" % [vecinos.map(func(v): return "%s en «%s»" % [
+	# (cerradas, solo las de los de la torre que aún no están en DATOS: ya están todos, así que ninguna)
+	print("Los seis en las viviendas: %s | puertas cerradas %d (esperado: %d, las de la torre que aún no están)" % [vecinos.map(func(v): return "%s en «%s»" % [
 		v.def.nombre, partida.mapa.nombre_zona(partida.mapa.zona_en(v.position))]),
-		partida.mapa.sitio.apt.puertas.filter(func(d): return d.cerrada).size()])
+		partida.mapa.sitio.apt.puertas.filter(func(d): return d.cerrada).size(), Viviendas.ids().size() - DATOS.size()])
 	Captura.foto("captura-viviendas-seis.png")
 	Guardado.cambiar(func(x):
 		x.rescatados = antes[0]
