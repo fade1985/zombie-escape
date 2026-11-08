@@ -2036,6 +2036,9 @@ func probar_vecina() -> void:
 	await get_tree().create_timer(1.45).timeout
 	Captura.foto("captura-vecina-muerte.png")
 	print("Vecina muerta: %s · vecino %s (esperado: muerto muerte_s en el último fotograma) · %s (esperado: muerte_e, muerte_o, muerte_se, muerte_n y muerte_ne)" % [que_hace.call(ella), que_hace.call(el), de_lado.call()])
+	# la sangre del suelo, ya seca: más oscura que recién caída (Mancha.SECADO) (captura-vecina-sangre-seca.png)
+	await get_tree().create_timer(Mancha.SECADO).timeout
+	Captura.foto("captura-vecina-sangre-seca.png")
 	# el panel de pruebas, en Zombis: la vecina, el último botón (captura-vecina-panel.png), y que sale con él
 	await pulsar_y_esperar(KEY_P)
 	panel_pruebas.elegir("Zombis")

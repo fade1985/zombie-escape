@@ -39,14 +39,26 @@ static func volar(desde: Node, pie: Vector2, altura: float, velocidad: Vector2, 
 		"borde": borde, "rebotes": rebotes, "mancha": mancha})
 
 
-# Sangre que salta de un golpe: unas gotas hacia donde va el golpe ("hacia"), que caen y manchan el suelo
+# Sangre que salta de un golpe hacia donde va el golpe ("hacia"), como un chorro de verdad (8 nov, más realista):
+#  - casi todas, gotas finas: salen deprisa, en un cono estrecho y casi a ras, y llegan lejos (con su estela al volar)
+#  - una de cada cuatro, gotas gordas: más lentas, más abiertas y más altas, caen cerca
+# Cada una de un tono algo distinto (unas más vivas, otras más oscuras). Al caer dejan una mancha alargada hacia
+# donde iban, más larga cuanto más deprisa, a veces con gotitas sueltas delante, y se va oscureciendo al secarse
+# (Mancha.salpicon)
 static func salpicar(desde: Node, suelo: Node, pie: Vector2, altura: float, hacia: Vector2, color: Color, n := 6) -> void:
 	var base := hacia.angle() if hacia.length() > 0.1 else randf() * TAU
+	var lista_de := capa(desde).lista
 	for i in n:
-		var v := Vector2.from_angle(base + randf_range(-0.7, 0.7)) * randf_range(60.0, 230.0)
-		var tam := randf_range(2.0, 5.0)
-		volar(desde, pie, altura + randf_range(-8, 8), Vector2(v.x, v.y * 0.6), randf_range(20.0, 140.0), color,
-			tam, suelo, Color(color, randf_range(0.45, 0.7)), Vector2.ONE * (4.0 if tam < 4.0 else 8.0))
+		var gorda := randf() < 0.25
+		var v := Vector2.from_angle(base + randf_range(-0.6, 0.6) * (1.0 if gorda else 0.55)) \
+			* (randf_range(50.0, 150.0) if gorda else randf_range(150.0, 380.0))
+		var tono := color.lightened(randf_range(0.0, 0.3)) if randf() < 0.5 else color.darkened(randf_range(0.0, 0.3))
+		var z := altura + randf_range(-8, 8)
+		lista_de.append({"p": pie, "v": Vector2(v.x, v.y * 0.6), "c": tono, "s": randf_range(4.0, 6.0) if gorda else 2.0,
+			"t": 3.0, "max": 3.0, "r": 0.0, "z": z,
+			"vz": randf_range(70.0, 170.0) if gorda else randf_range(10.0, 80.0), "suelo": suelo,
+			"marca": Color(tono, randf_range(0.75, 0.9)), "marca_tam": Vector2.ZERO, "redonda": gorda, "borde": false,
+			"rebotes": 0, "mancha": "Gotas", "salpicon": true, "estela": not gorda, "antes": pie - Vector2(0, z)})
 
 
 # El reventón de un zombi al morir (burst en src/game-efectos.js): "n" trozos de su color, redondos y con su
@@ -78,6 +90,8 @@ static func anillo(desde: Node, donde: Vector2, radio: float, color: Color, vida
 func _process(delta: float) -> void:
 	for q in lista:
 		q.t -= delta
+		if q.has("antes"):   # (dónde estaba: la estela de las gotas finas)
+			q.antes = q.p - Vector2(0, q.z)
 		q.p += q.v * delta
 		if q.has("z"):
 			volando(q, delta)
@@ -100,7 +114,11 @@ func volando(q: Dictionary, delta: float) -> void:
 		q.v *= 0.45
 		return
 	q.t = 0.0
-	if is_instance_valid(q.suelo) and q.suelo.is_inside_tree() and q.marca.a > 0.0:   # (si no, Johnny ya ha salido de ese sitio)
+	if not (is_instance_valid(q.suelo) and q.suelo.is_inside_tree() and q.marca.a > 0.0):   # (si no, Johnny ya ha salido de ese sitio)
+		return
+	if q.get("salpicon", false):
+		Mancha.salpicon(q.suelo, q.p, q.marca, q.v, q.s)
+	else:
 		Mancha.gota(q.suelo, q.p, q.marca, q.marca_tam, q.mancha, 150 if q.mancha == "Casquillos" else 700)
 
 
@@ -127,6 +145,10 @@ func _draw() -> void:
 			continue
 		if q.get("borde", false):
 			draw_rect(Rect2(p - Vector2(s, s) / 2.0 - Vector2(2, 2), Vector2(s + 4, s + 4)), Color(0.11, 0.1, 0.17, alfa))
+		if q.get("estela", false):   # la gota fina que va deprisa: un píxel más donde estaba, algo más claro
+			var atras: Vector2 = (q.antes / 2.0).round() * 2.0
+			if atras != p:
+				draw_rect(Rect2(atras - Vector2(s, s) / 2.0, Vector2(s, s)), Color(c, alfa * 0.6))
 		draw_rect(Rect2(p - Vector2(s, s) / 2.0, Vector2(s, s)), Color(c, alfa))
 
 

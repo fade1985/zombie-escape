@@ -14,6 +14,11 @@ var maximo_celdas := 0   # si tiene, las celdas más viejas se van borrando al p
 var aparece: Array = []
 var crecido := 1.0
 var crece := 0.0         # lo que tarda en crecer del todo, en segundos
+# La sangre de los golpes (salpicon) se seca: cada celda lleva cuándo cayó y se oscurece en SECADO segundos
+const SECADO := 8.0
+const MAXIMO_SANGRE := 3000   # las celdas de "Gotas" que se quedan, si hay sangre de golpes (cada gota deja varias)
+var secando_hasta := 0.0
+var repintar := 0.0
 
 
 func _ready() -> void:
@@ -28,19 +33,38 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	# crece deprisa al principio y cada vez más despacio, como la sangre que se va extendiendo
-	crecido = minf(1.0, crecido + delta / crece * (1.6 - crecido))
-	queue_redraw()
-	if crecido >= 1.0:
+	if crecido < 1.0:
+		# crece deprisa al principio y cada vez más despacio, como la sangre que se va extendiendo
+		crecido = minf(1.0, crecido + delta / crece * (1.6 - crecido))
+		queue_redraw()
+	if secando_hasta > 0.0:
+		# la sangre que se seca: se repinta unas 6 veces por segundo (con miles de gotas, cada fotograma sería mucho)
+		repintar -= delta
+		if repintar <= 0.0:
+			repintar = 0.16
+			queue_redraw()
+		if ahora() > secando_hasta:
+			secando_hasta = 0.0
+			queue_redraw()
+	if crecido >= 1.0 and secando_hasta == 0.0:
 		set_process(false)
 
 
 func _draw() -> void:
+	var t := ahora()
 	for i in celdas.size():
 		if i < aparece.size() and aparece[i] > crecido:
 			continue
 		var c: Array = celdas[i]
-		draw_rect(Rect2(c[0], c[2] if c.size() > 2 else Vector2(CELDA, CELDA)), c[1])
+		var color: Color = c[1]
+		if c.size() > 3:   # sangre que se seca: de su color a uno más oscuro y algo más apagado
+			var k := clampf((t - c[3]) / SECADO, 0.0, 1.0)
+			color = color.lerp(Color(color.darkened(0.5), color.a * 0.8), k)
+		draw_rect(Rect2(c[0], c[2] if c.size() > 2 else Vector2(CELDA, CELDA)), color)
+
+
+static func ahora() -> float:
+	return Time.get_ticks_msec() / 1000.0
 
 
 # Una marca pequeña en el suelo (una gota que cae, un casquillo, el rastro del que se arrastra) en el punto
@@ -48,6 +72,14 @@ func _draw() -> void:
 # "maximo" últimas: así no hace falta un nodo por gota. "tam", en unidades (de 2 en 2)
 static func gota(sala: Node, donde: Vector2, color: Color, tam := Vector2(CELDA, CELDA), nombre := "Gotas",
 		maximo := 700) -> void:
+	var m := de_gotas(sala, nombre, maximo)
+	var p: Vector2 = (((m.to_local(donde) - tam / 2.0) / 2.0).round() * 2.0)
+	m.celdas.append([p, color, tam])
+	m.recortar()
+
+
+# La mancha de pequeñas marcas "nombre" de ese sitio (se crea la primera vez)
+static func de_gotas(sala: Node, nombre: String, maximo: int) -> Mancha:
 	var m: Mancha = sala.get_node_or_null(nombre)
 	if m == null:
 		m = Mancha.new()
@@ -57,11 +89,46 @@ static func gota(sala: Node, donde: Vector2, color: Color, tam := Vector2(CELDA,
 		sala.add_child(m)
 		if nombre == "Casquillos":
 			m.z_index = -1   # encima de la sangre (y del rastro), como los cuerpos
-	var p: Vector2 = (((m.to_local(donde) - tam / 2.0) / 2.0).round() * 2.0)
-	m.celdas.append([p, color, tam])
-	if m.celdas.size() > m.maximo_celdas:
-		m.celdas = m.celdas.slice(m.celdas.size() - m.maximo_celdas)
-	m.queue_redraw()
+	return m
+
+
+func recortar() -> void:
+	if celdas.size() > maximo_celdas:
+		celdas = celdas.slice(celdas.size() - maximo_celdas)
+	queue_redraw()
+
+
+# La marca de una gota de sangre de un golpe (Particulas.salpicar) al caer: alargada hacia donde iba ("hacia", su
+# velocidad por el suelo), más larga cuanto más deprisa y más fina hacia la punta; la gota gorda ("grueso" de 4 a 6),
+# con su cuerpo redondo y una cola corta. A veces, una o dos gotitas sueltas un poco más allá. Se va secando (SECADO)
+static func salpicon(sala: Node, donde: Vector2, color: Color, hacia: Vector2, grueso: float) -> void:
+	var m := de_gotas(sala, "Gotas", MAXIMO_SANGRE)
+	m.maximo_celdas = maxi(m.maximo_celdas, MAXIMO_SANGRE)
+	var t := ahora()
+	var dir := hacia.normalized() if hacia.length() > 1.0 else Vector2.RIGHT
+	var largo := clampf(hacia.length() * 0.035, 2.0, 14.0)   # en unidades: de 1 a 7 píxeles del dibujo
+	var celda := func(centro: Vector2, lado: float) -> void:
+		var l := maxf(2.0, roundf(lado / 2.0) * 2.0)
+		m.celdas.append([((m.to_local(centro) - Vector2(l, l) / 2.0) / 2.0).round() * 2.0, color, Vector2(l, l), t])
+	if grueso > 3.0:
+		# la gorda: un cuerpo redondeado (una cruz de celdas) y una cola corta y fina hacia donde iba
+		var g := roundf(grueso / 2.0) * 2.0
+		celda.call(donde, g)
+		celda.call(donde + Vector2(g / 2.0, 0), g - 2.0)
+		celda.call(donde - Vector2(g / 2.0, 0), g - 2.0)
+		for i in int(largo / 4.0):
+			celda.call(donde + dir * (g / 2.0 + 2.0 + i * 2.0), 2.0)
+	else:
+		# la fina: un trazo de su largo, de 4 a 2 de grueso (más gruesa donde golpea primero, al final del vuelo)
+		var pasos := maxi(1, int(largo / 2.0))
+		for i in pasos:
+			celda.call(donde - dir * i * 2.0, 4.0 if i == 0 and largo > 6.0 else 2.0)
+	if randf() < 0.35:   # gotitas sueltas, un poco más allá
+		for i in randi_range(1, 2):
+			celda.call(donde + dir * randf_range(6.0, 14.0) + dir.orthogonal() * randf_range(-4.0, 4.0), 2.0)
+	m.secando_hasta = t + SECADO
+	m.set_process(true)
+	m.recortar()
 
 
 # El charco de un zombi muerto a golpes o a tiros: sale debajo del cuerpo y se va extendiendo. Oscuro y
