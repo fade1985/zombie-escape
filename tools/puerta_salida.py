@@ -1,4 +1,7 @@
-"""La salida de incendios del fondo del pasillo (scripts/mapa/puerta.gd y cartel_salida.gd): la puerta roja de las
+"""(YA NO SE USA desde el 8 nov: la puerta y el cartel salen de imágenes de GPT con tools/salida_gpt.py. Si se pasa
+este, los pisa con los de antes.)
+
+La salida de incendios del fondo del pasillo (scripts/mapa/puerta.gd y cartel_salida.gd): la puerta roja de las
 escaleras y su cartel verde EXIT, dibujados a mano, sin PixelLab.
 
 La puerta está en el muro de la derecha, que se ve desde arriba y plano, así que (como la puerta de dentro cerrada de los
