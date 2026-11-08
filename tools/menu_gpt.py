@@ -2,7 +2,7 @@
 # premultiplicado, tools/muebles_gpt.py):
 #   assets/sources/menu-fondo-gpt.webp  → assets/ui/menu-fondo.png (480 × 320): el portal de noche con Johnny de espaldas;
 #                                         en el menú se ve ×2 (2 unidades por píxel), cubriendo toda la pantalla
-#   assets/sources/titulo-gpt.webp      → assets/ui/titulo.png (300 × 100): JOHNNY RUSH / ZOMBIE ESCAPE con la fregona;
+#   assets/sources/titulo-gpt.webp      → assets/ui/titulo.png (300 × 100): JOHNNY RUSH / ZOMBIE ESCAPE (sin fregona, 8 nov);
 #                                         se le quita el negro puro que se llega desde el borde y se ve ×2
 #   py tools/menu_gpt.py   (y luego Godot --headless --path . --import)
 from collections import deque
