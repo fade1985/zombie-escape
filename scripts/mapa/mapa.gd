@@ -819,7 +819,10 @@ func poner_puertas() -> void:
 		puerta.centro = centro
 		puerta.limpia = sitio.tipo in ZONAS_SEGURAS
 		# las de chapa gris: las de la sala de mantenimiento y la de las viviendas que vuelve a ella (la de la izquierda)
-		puerta.metal = sitio.tipo == "mantenimiento" or (sitio.tipo == "viviendas" and salida.dir == "izquierda")
+		# y la de la calle del portal de los Apartamentos (la de llegada de la planta baja), igual pero gris marengo
+		var portal: bool = sitio.tipo == "pasillo" and sitio.get("estilo", "pasillo") == "pasillo" and salida.get("tipo", "") == "llegada"
+		puerta.metal = sitio.tipo == "mantenimiento" or (sitio.tipo == "viviendas" and salida.dir == "izquierda") or portal
+		puerta.marengo = portal
 		puerta.name = "Puerta%d" % i
 		match salida.dir:
 			"arriba": puerta.position = Vector2(salida.en, MURO)

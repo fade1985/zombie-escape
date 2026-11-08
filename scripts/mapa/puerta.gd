@@ -23,6 +23,8 @@ const ABAJO := preload("res://assets/sprites/puerta-abajo.png")
 const ABAJO_DIBUJO := Vector2(36, 32)
 # la de chapa gris, con la hoja de la puerta metálica del despacho al taller (tools/puerta_abajo_metal.py): la que se usa de verdad
 const ABAJO_METAL := preload("res://assets/sprites/puerta-abajo-metal.png")
+# la misma con la hoja en gris marengo metalizado (tools/puerta_abajo_metal.py): la puerta de la calle del portal de los Apartamentos
+const ABAJO_MARENGO := preload("res://assets/sprites/puerta-abajo-marengo.png")
 # El número de la planta pintado en la pared junto al ascensor (de suelo a moldura): 28 × 42 píxeles, 56 × 84 unidades.
 # Planta baja (0) a 3ª (la azotea no tiene ascensor)
 const CARTELES := [preload("res://assets/sprites/cartel-planta-0.png"), preload("res://assets/sprites/cartel-planta-1.png"),
@@ -95,6 +97,7 @@ var indice := 0          # su número en la lista de salidas del sitio
 var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
 var limpia := false      # si es de una zona segura (lo pone mapa.gd: ZONAS_SEGURAS): sin sangre
 var metal := false       # si es de chapa gris como la de fuera (lo pone mapa.gd): las de la sala de mantenimiento y la de las viviendas a ella
+var marengo := false     # con la hoja gris marengo (lo pone mapa.gd): la de la calle del portal de los Apartamentos
 var cartel: Node2D = null   # las escaleras: su cartel EXIT de la pared de arriba (cartel_salida.gd, lo pone mapa.gd)
 var abierta := true:     # si se puede pasar
 	set(valor):
@@ -174,7 +177,7 @@ func _draw() -> void:
 					draw_set_transform(Vector2.ZERO, -PI / 2, Vector2(-1, 1))
 				else:
 					draw_set_transform(Vector2.ZERO, PI / 2)
-				draw_texture_rect(ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
+				draw_texture_rect(ABAJO_MARENGO if marengo else ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
 				draw_set_transform(Vector2.ZERO)
 				return
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0

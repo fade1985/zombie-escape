@@ -80,7 +80,7 @@ func probar_salida() -> void:
 # llegada a la izquierda; las demás plantas, ninguna: se llega por las escaleras de la derecha, las mismas por las que se
 # sale, y la azotea, por la escalera de su derecha (como la salida de incendios). De cada una dice cuántas puertas tiene a la izquierda, por
 # cuál se llega y a cuánto de ella aparece Johnny; y subiendo de verdad (subir, de la 1ª a la 2ª y de la 3ª a la azotea) dónde
-# aparece. Fotos: captura-llegada-<planta>.png (la 1ª y la 2ª, con Johnny recién llegado) y captura-llegada-izquierda.png (el otro extremo del
+# aparece. Fotos: captura-llegada-<planta>.png (la planta baja, con la puerta de la calle, y la 1ª y la 2ª, con Johnny recién llegado) y captura-llegada-izquierda.png (el otro extremo del
 # pasillo de la 1ª, sin puerta). Luego se cierra
 func probar_llegada() -> void:
 	for num in [1, 2, 3, 5]:
@@ -88,7 +88,7 @@ func probar_llegada() -> void:
 		await montar(0, puerta_de_llegada(), false)
 		await get_tree().create_timer(0.6).timeout
 		avisar_llegada("Montada")
-		if num in [2, 3]:
+		if num in [1, 2, 3]:
 			Captura.foto("captura-llegada-%d.png" % num)
 		if num == 2:
 			# y el otro extremo del pasillo, donde estaba la puerta de llegada: ahora, pared lisa
