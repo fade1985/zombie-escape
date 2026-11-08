@@ -12,7 +12,9 @@
 # "--edificios", solo esa pantalla (como está en el guardado de prueba y con el centro comercial cerrado) y se cierra.
 extends Control
 
-const LOGO := preload("res://assets/ui/logo.png")
+# el título y el fondo, de GPT (tools/menu_gpt.py); el logo viejo, assets/ui/logo.png, sigue en el trailer
+const LOGO := preload("res://assets/ui/titulo.png")
+const FONDO := preload("res://assets/ui/menu-fondo.png")
 const ANCHO_TARJETA := 312   # el ancho de una tarjeta de "Elige edificio": que quepa el selector de alerta de debajo (306), si no ensancha la suya
 const ANCHO_TEXTO := ANCHO_TARJETA - 32   # lo que queda para sus textos, con 16 de margen a cada lado
 
@@ -34,19 +36,29 @@ func _ready() -> void:
 	fondo.color = Color(0.05, 0.04, 0.06)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(fondo)
+	# el portal de noche con Johnny de espaldas (480 × 320, ×2 sin suavizar): llena la pantalla, recortando lo que sobre
+	var portal := TextureRect.new()
+	portal.texture = FONDO
+	portal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	portal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	portal.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	portal.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(portal)
 	centro = CenterContainer.new()
 	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(centro)
+	# fuera del menú (Elige edificio, partidas guardadas, despedida) el fondo se oscurece, para que se lean los textos sueltos
+	centro.visibility_changed.connect(func(): portal.modulate = Color.WHITE if centro.visible else Color(0.35, 0.35, 0.4))
 	var columna := VBoxContainer.new()
 	columna.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_theme_constant_override("separation", 12)
 	centro.add_child(columna)
 
-	# El logo es pixel art pequeño (201×62, de tools/logo.py): se amplía ×3 sin suavizar
+	# El título (300 × 100): se amplía ×2 sin suavizar
 	var logo := TextureRect.new()
 	logo.texture = LOGO
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	logo.custom_minimum_size = LOGO.get_size() * 3
+	logo.custom_minimum_size = LOGO.get_size() * 2
 	logo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	logo.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	columna.add_child(logo)
