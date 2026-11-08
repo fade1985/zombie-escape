@@ -145,24 +145,52 @@ def personaje():
         print("%s: %s" % (vista, dibujo.getbbox()))
 
 
+def fijo(dibujo, centro, por_la_cabeza):
+    """El punto de un dibujo que no debería moverse de lado (en las mismas medidas que "centro", el centro de su caja):
+    el centro de la cabeza (su décima parte de arriba) o el de los pies (la de abajo)"""
+    alto = max(1, dibujo.height // 10)
+    trozo = dibujo.crop((0, 0, dibujo.width, alto)) if por_la_cabeza else dibujo.crop((0, dibujo.height - alto, dibujo.width, dibujo.height))
+    caja = trozo.getbbox() or (0, 0, dibujo.width, alto)
+    return centro - dibujo.width / 2 + (caja[0] + caja[2]) / 2
+
+
+def recta(puntos):
+    """La rejilla de una fila: la recta (principio, paso) que mejor pasa por esos puntos, uno por columna"""
+    n = len(puntos)
+    if n < 2:
+        return (puntos[0], 0.0)
+    medio_i, medio = (n - 1) / 2, sum(puntos) / n
+    paso = sum((i - medio_i) * (p - medio) for i, p in enumerate(puntos)) / sum((i - medio_i) ** 2 for i in range(n))
+    return (medio - paso * medio_i, paso)
+
+
 # Una animación de una dirección (andar-s.webp: andar de frente): cada fotograma de la fila, a la misma escala que el
 # personaje y en su lienzo, en <animación>/<dirección>-<n>.png; el 0 es el dibujo quieto (así lo quiere tools/zombi.py)
 def animacion(anim, vista):
     nombres = {"andar": "walk", "ataque": "ataque", "golpe": "golpe", "muerte": "muerte"}
     corta = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne", "north": "n"}[vista]
     im = sin_fondo(Image.open(os.path.join(FUENTE, "%s-%s.webp" % (anim, corta))))
-    # los fotogramas, fila a fila (GPT puede ponerlos en varias filas, que se leen como un libro)
-    # y cuánto se aparta cada uno del centro de su hueco (GPT los reparte en huecos iguales): al caer o al echarse
-    # atrás, el dibujo se mueve dentro de su hueco, y así se mueve igual en el lienzo
-    trozos = []
-    for fila in filas(im):
+    # Dónde va cada fotograma en el lienzo. GPT los pone en una rejilla de columnas iguales, pero no de 1/6 del ancho
+    # justo (suele ser algo menos, y con márgenes): suponerlo hacía que la vecina se fuera corriendo de lado hasta 17
+    # píxeles en cada fila y diera un salto al empezar la siguiente. Así que la rejilla se mide en cada fila, con un
+    # punto que no debería moverse: al andar, la cabeza; en lo demás, los pies (se quedan plantados al atacar, al
+    # recibir el golpe y al empezar a caer). La muerte acaba tendida y los pies ya no valen: su segunda fila usa las
+    # columnas de la primera (las dos filas comparten rejilla). Lo que cada dibujo se aparta de su columna es lo que
+    # se mueve de verdad (echarse adelante, caer), y así se mueve en el lienzo
+    por_la_cabeza = anim == "andar"
+    trozos, rejilla = [], None
+    for numero_fila, fila in enumerate(filas(im)):
         suyos = separar(fila)
-        hueco = im.width / len(suyos)
-        trozos += [(d, (centro - (i + 0.5) * hueco)) for i, (d, _, centro) in enumerate(suyos)]
+        fijos = [fijo(d, centro, por_la_cabeza) for d, _, centro in suyos]
+        if not (anim == "muerte" and numero_fila > 0 and rejilla):
+            rejilla = recta(fijos)
+        trozos += [(d, centro, rejilla[0] + rejilla[1] * i) for i, (d, _, centro) in enumerate(suyos)]
     # la escala: que el primero (de pie, como empiezan todas) mida de alto lo que el dibujo quieto
     quieto = Image.open(os.path.join(DESTINO, "rotations", vista + ".png"))
     caja = quieto.getbbox()
     escala = trozos[0][0].height / (caja[3] - caja[1])
+    # el punto fijo del dibujo quieto: ahí cae la columna de cada fotograma (así no salta al pasar de quieta a andar)
+    sitio = fijo(quieto.crop(caja), (caja[0] + caja[2]) / 2, por_la_cabeza)
     carpeta = os.path.join(DESTINO, nombres[anim])
     os.makedirs(carpeta, exist_ok=True)
     quieto.save(os.path.join(carpeta, "%s-0.png" % vista))
@@ -170,8 +198,8 @@ def animacion(anim, vista):
     espejo = [otra for otra, de in ESPEJO.items() if de == vista]
     for otra in espejo:
         ImageOps.mirror(quieto).save(os.path.join(carpeta, "%s-0.png" % otra))
-    for n, (dibujo, aparte) in enumerate(trozos, 1):
-        corrido = (aparte - trozos[0][1]) / escala   # (el primero, en medio)
+    for n, (dibujo, centro, columna) in enumerate(trozos, 1):
+        corrido = sitio - LIENZO / 2 + (centro - columna) / escala
         hecho = en_lienzo(reducir(dibujo, escala), corrido)
         hecho.save(os.path.join(carpeta, "%s-%d.png" % (vista, n)))
         for otra in espejo:
