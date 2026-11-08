@@ -5,7 +5,7 @@ Lo saca todo de assets/sources/<fuente>/:
   walk/<dirección>-<n>.png      andar (PixMiniMax; el lienzo cambia de tamaño según la dirección)
   ataque/, golpe/, muerte/      atacar, recibir un golpe y morir (lienzo de 96×96 con el dibujo quieto en 24, 32)
   reposo/ (opcional)            reposo de PixMiniMax, con partida y final en el dibujo quieto (el de tentáculos)
-  zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla" y "origen"
+  zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen" y "fps_andar"
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
@@ -285,7 +285,8 @@ for name, b in blocks:
     for r, d in enumerate(DIRS):
         for i, f in enumerate(b[d]):
             sheet.alpha_composite(f, (i * CW, (row + r) * CH))
-    fps = {'idle': cfg.get('reposo', {}).get('fps', 1.5), 'walk': 10}.get(name) or round(len(b['south']) / DUR[name], 1)
+    # andar, a 10 fotogramas por segundo; otro ritmo con "fps_andar" (el vecino de GPT, a 7: lo eligió el dueño)
+    fps = {'idle': cfg.get('reposo', {}).get('fps', 1.5), 'walk': cfg.get('fps_andar', 10)}.get(name) or round(len(b['south']) / DUR[name], 1)
     anims[name] = {'fps': fps, 'loop': name in ('idle', 'walk'),
                    'dirs': {d: {'row': row + r, 'frames': len(b[d])} for r, d in enumerate(DIRS)}}
     row += len(DIRS)
