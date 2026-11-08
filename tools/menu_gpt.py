@@ -2,7 +2,7 @@
 # premultiplicado, tools/muebles_gpt.py):
 #   assets/sources/menu-fondo-gpt.webp  → assets/ui/menu-fondo.png (480 × 320): el portal de noche con Johnny de espaldas;
 #                                         en el menú se ve ×2 (2 unidades por píxel), cubriendo toda la pantalla
-#   assets/sources/titulo-gpt.webp      → assets/ui/titulo.png (300 × 100): JOHNNY RUSH / ZOMBIE ESCAPE (sin fregona, 8 nov);
+#   assets/sources/titulo-gpt.webp      → assets/ui/titulo.png (300 × 100): JOHNNY RUSH / ZOMBIE ESCAPE (el de la fregona, con ella borrada a mano);
 #                                         se le quita el negro puro que se llega desde el borde y se ve ×2
 #   py tools/menu_gpt.py   (y luego Godot --headless --path . --import)
 from collections import deque
@@ -32,7 +32,12 @@ def sin_fondo(ruta):
 Image.open('assets/sources/menu-fondo-gpt.webp').convert('RGB').resize((480, 320), Image.LANCZOS).save('assets/ui/menu-fondo.png')
 # el título: sin el negro de alrededor, recortado y reducido mezclando colores, con el borde sin medias tintas
 t = sin_fondo('assets/sources/titulo-gpt.webp')
-t = t.crop(t.getbbox()).convert('RGBa').resize((300, 100), Image.LANCZOS).convert('RGBA')
+# sin estirarlo: 300 de ancho con su proporción, abajo en un lienzo de 300 × 100 (así el menú no se mueve)
+t = t.crop(t.getbbox())
+alto = min(100, round(300 * t.height / t.width))
+t = t.convert('RGBa').resize((300, alto), Image.LANCZOS).convert('RGBA')
 t.putalpha(t.split()[3].point(lambda v: 255 if v > 110 else 0))
-t.save('assets/ui/titulo.png')
+lienzo = Image.new('RGBA', (300, 100), (0, 0, 0, 0))
+lienzo.paste(t, (0, 100 - alto))
+lienzo.save('assets/ui/titulo.png')
 print('menu-fondo.png y titulo.png')
