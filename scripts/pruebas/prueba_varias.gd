@@ -2083,7 +2083,10 @@ func probar_vecina() -> void:
 #
 # Con "--captura --crio-gpt" lo mismo con el crío (zombi rápido): por ahora solo el de PixelLab, ya con el contorno suave
 # y sin el mechón de la nuca (8 nov), y a su lado el de GPT cuando esté su hoja (zombi-rapido-gpt). Fotos captura-crio-gpt-*.png
-func probar_vecino_gpt(tipo := "normal", nombre := "vecino") -> void:
+#
+# Con "--captura --tres-zombis" lo mismo con la vecina, el vecino y el crío juntos (los tres más reales), por tríos en
+# cada dirección: fotos captura-tres-gpt-*.png
+func probar_vecino_gpt(tipo := "normal", nombre := "vecino", otras: Array = []) -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
@@ -2104,12 +2107,17 @@ func probar_vecino_gpt(tipo := "normal", nombre := "vecino") -> void:
 	var hojas: Array[SpriteFrames] = [load("res://assets/sprites/zombi-%s.tres" % tipo)]
 	if ResourceLoader.exists("res://assets/sprites/zombi-%s-gpt.tres" % tipo):
 		hojas.append(load("res://assets/sprites/zombi-%s-gpt.tres" % tipo))
+	if not otras.is_empty():
+		hojas.clear()
+		for o in otras:
+			hojas.append(load("res://assets/sprites/%s.tres" % o))
 	var direcciones := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var todos: Array = []
 	for d in direcciones.size():
 		for fila in hojas.size():   # (cada dirección, el de PixelLab y a su lado el de GPT: con la misma luz)
-			var i := (d % 4) * 2 + fila
-			var z: Node2D = meter_zombi(tipo, johnny.position + Vector2(-150 + (i - 3.5) * 95, -60 + (d / 4) * 170))
+			var i := (d % 4) * hojas.size() + fila
+			var paso := 95.0 if hojas.size() <= 2 else 62.0   # (de tres en tres, más juntos para que quepan)
+			var z: Node2D = meter_zombi(tipo, johnny.position + Vector2(-150 + (i - (4 * hojas.size() - 1) / 2.0) * paso, -60 + (d / 4) * 170))
 			z.process_mode = Node.PROCESS_MODE_DISABLED   # (quieto: ni anda ni ataca)
 			for hijo in z.get_children():   # (parado así, su sombra y lo demás no se ponen en su sitio: solo el dibujo)
 				if hijo is CanvasItem and hijo != z.sprite:
