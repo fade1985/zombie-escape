@@ -60,7 +60,13 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
   escala). `makePlainLayout('maintenance')` (`src/rooms.js`) pone 6–10 al azar con el dado de la propia sala, al final,
   así que no cambia la huella del test; llevan giro de 90° y volteo al azar y `drawRoom` las pinta una vez en `roomImage`.
   No salen en la franja de la pared de arriba (muebles de armas). Sirve igual para otras salas: añadir `manchas` a su layout.
-- Pasillo (17 oct, con visto bueno): **moqueta** burdeos y mostaza con octógonos y una **alfombra** roja de borde
+- **Pasillo de los Apartamentos, desde el 8 nov (con visto bueno):** un portal abandonado hecho con GPT: baldosa de gres gris
+  (8 × 8, `suelo-pasillo`, 128 × 128, oscurecida un 20 % para que se distinga de la pared) y azulejo crema con rodapié gris
+  (`pared-pasillo`, 154 × 48: 11 azulejos de 14 × 9 y 3 de rodapié; `techo-pasillo`, canto de yeso gris), con grietas, huecos,
+  arañazos y manchas granate pequeñas. Sin alfombra (`PASILLOS` en `mapa.gd`). Originales en `assets/sources/suelos/pasillo-suelo-gpt.webp`
+  y `pasillo-pared-gpt.webp`; se pasan con `py tools/portal_gpt.py`. Prompts: vista cenital pura o pared de frente, cuadrícula exacta
+  de baldosas, sin costuras, y «manchas granate como óxido seco» (GPT rechaza la palabra sangre). Se mira con `--captura --pasillo`.
+- Pasillo (17 oct, con visto bueno; **ya no se usa**, sustituido el 8 nov): **moqueta** burdeos y mostaza con octógonos y una **alfombra** roja de borde
   mostaza en medio. El dueño las genera realistas y las pixela con tezumie.github.io (tamaño de píxel 4, con su
   paleta). Originales en `assets/sources/suelos/pasillo-moqueta.png` y `pasillo-alfombra.png`.
   - La moqueta de ahora es un recorte de prueba de 128 × 128 (4 × 4 casillas; su dibujo se repite cada 32 píxeles

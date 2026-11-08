@@ -84,8 +84,9 @@ const ESTILO_TIENDA := {
 	"archivo": [["torre"], "oficina"], "entrevistas": [["torre"], "oficina"], "estudio": [["datos"], "oficina"],
 	"camaras": [["datos"], "datos"], "armero": [["almacen"], "almacen"], "despacho": [["direccion"], "direccion"],
 	"juntas": [["direccion"], "direccion"]}
-# El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra
-const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": {"tapa": "centro", "alfombra": false},
+# El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
+# los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)
+const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": false}, "galeria": {"tapa": "centro", "alfombra": false},
 	# los de Torre Velaria: el distribuidor de oficina (moqueta gris y cristal esmerilado) y el vestíbulo (mármol y piedra)
 	"torre": {"tapa": "torre", "alfombra": false}, "vestibulo": {"tapa": "torre", "alfombra": false}}
 const NEON := preload("res://scripts/mapa/neon.gd")
