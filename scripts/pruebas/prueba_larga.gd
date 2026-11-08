@@ -371,10 +371,11 @@ func probar_historia() -> void:
 
 # Colecciones (bestiario.gd y el programa del ordenador; también solo, con --coleccion): deja en el guardado
 # parte de los enemigos vistos y unos cuantos matados, y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
-# (captura-escritorio-nuevo.png), la pestaña de los comunes con el vecino (captura-colecciones.png), la del centro
-# con el gerente en silueta (captura-bestiario-falta.png), la de la torre con el oficinista
-# (captura-bestiario-torre.png) y la de los Apartamentos con la criatura, el más grande (captura-bestiario-grande.png).
-# Luego cuenta en la terminal lo visto de cada familia, comprueba los totales y que matar uno lo apunta
+# (captura-escritorio-nuevo.png), la pestaña de los durmientes con el vecino (captura-colecciones.png), la de los
+# sonámbulos con el gerente en silueta (captura-bestiario-falta.png), los durmientes con el oficinista
+# (captura-bestiario-torre.png), los sonámbulos con la criatura, el más grande (captura-bestiario-grande.png), y su
+# segunda página con el Sujeto 1 (captura-bestiario-pagina.png). Luego cuenta en la terminal lo visto de cada familia,
+# comprueba los totales, las flechas de las páginas y que matar uno lo apunta
 func probar_colecciones() -> void:
 	# lo que la prueba ha ido apuntando sola (meter_zombi avisa al bestiario con cada enemigo que nace)
 	print("Bestiario apuntado por la prueba hasta aquí: %s" % [Guardado.cargar().get("bestiario", [])])
@@ -391,24 +392,37 @@ func probar_colecciones() -> void:
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-colecciones.png")
 	var marcado := get_viewport().gui_get_focus_owner()
-	print("Colecciones al abrir: pestaña %s, marcado %s (esperado: comunes, z_normal)" % [ordenador.familia_vista,
+	print("Colecciones al abrir: pestaña %s, marcado %s (esperado: durmientes, z_normal)" % [ordenador.familia_vista,
 		marcado.name if marcado else "nada"])
 	ordenador.abrir("colecciones", "z_gerente")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-bestiario-falta.png")
-	print("Con z_gerente: pestaña %s (esperado: centro)" % ordenador.familia_vista)
+	print("Con z_gerente: pestaña %s, página %d (esperado: sonambulos, 0)" % [ordenador.familia_vista, ordenador.pagina_vista])
 	ordenador.abrir("colecciones", "z_oficinista")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-bestiario-torre.png")
 	ordenador.abrir("colecciones", "z_criatura")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-bestiario-grande.png")
-	# una pestaña, pulsada de verdad: cambia de familia y se queda marcada
-	var pestana: Button = ordenador.ventana.find_child("pes_centro", true, false)
+	ordenador.abrir("colecciones", "z_sujeto_1")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-bestiario-pagina.png")
+	print("Con z_sujeto_1: pestaña %s, página %d, casillas %d (esperado: sonambulos, 1, 5)" % [ordenador.familia_vista,
+		ordenador.pagina_vista, ordenador.ventana.find_children("z_*", "Button", true, false).size()])
+	# la flecha de la derecha da la vuelta a la primera página y se queda marcada
+	var flecha: Button = ordenador.ventana.find_child("pag_sig", true, false)
+	flecha.pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	var tras_flecha := get_viewport().gui_get_focus_owner()
+	print("Tras la flecha: página %d, marcado %s (esperado: 0, pag_sig)" % [ordenador.pagina_vista,
+		tras_flecha.name if tras_flecha else "nada"])
+	# una pestaña, pulsada de verdad: cambia de familia, vuelve a la primera página y se queda marcada
+	ordenador.abrir("colecciones", "z_normal")
+	var pestana: Button = ordenador.ventana.find_child("pes_sonambulos", true, false)
 	pestana.pressed.emit()
 	await get_tree().create_timer(0.3).timeout
 	marcado = get_viewport().gui_get_focus_owner()
-	print("Al pulsar la pestaña del centro: pestaña %s, marcado %s, casillas %d (esperado: centro, pes_centro, 10)" % [
+	print("Al pulsar la pestaña de los sonámbulos: pestaña %s, marcado %s, casillas %d (esperado: sonambulos, pes_sonambulos, 12)" % [
 		ordenador.familia_vista, marcado.name if marcado else "nada",
 		ordenador.ventana.find_children("z_*", "Button", true, false).size()])
 	# la ventana, maximizada, y nada se sale (sin barra de desplazamiento en el programa)

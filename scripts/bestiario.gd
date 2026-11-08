@@ -167,20 +167,24 @@ static func de(nodo) -> String:
 	return nodo.get_meta("tipo", "")
 
 
-# Las familias de Colecciones (una pestaña cada una): "comunes" (los que salen en todos los edificios) y los
-# propios de cada edificio, en el orden de Edificios.LISTA
+# Las familias de Colecciones (una pestaña cada una): los "durmientes" (los zombis de siempre) y los "sonambulos"
+# (los jefes: los de planta y los finales)
 static func familias() -> Array:
-	return ["comunes"] + Edificios.LISTA.keys()
+	return ["durmientes", "sonambulos"]
 
 
 static func familia(id: String) -> String:
-	var eds: Array = LISTA[id].edificios
-	return "comunes" if eds.size() >= Edificios.LISTA.size() else eds[0]
+	return "sonambulos" if LISTA[id].get("jefe", false) else "durmientes"
 
 
-# Los de una familia, en el orden de LISTA
+# Los de una familia, ordenados por dónde salen: primero los de todos los edificios y luego los de cada edificio, en
+# el orden de Edificios.LISTA (y entre ellos, en el de LISTA)
 static func de_familia(fam: String) -> Array:
-	return LISTA.keys().filter(func(id): return familia(id) == fam)
+	var suyos := LISTA.keys().filter(func(id): return familia(id) == fam)
+	var lista := suyos.filter(func(id): return LISTA[id].edificios.size() >= Edificios.LISTA.size())
+	for ed in Edificios.LISTA:
+		lista += suyos.filter(func(id): return not id in lista and LISTA[id].edificios[0] == ed)
+	return lista
 
 
 # Cuántos de este se han matado (s es el guardado; se cuentan desde el 8 nov)

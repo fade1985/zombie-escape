@@ -6933,8 +6933,8 @@ msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s，主播%s。移到各期上即可观看。"
 
 #: scripts/ui/ordenador.gd
-msgid "Bestiario"
-msgstr "图鉴"
+msgid "Sujetos"
+msgstr "实验对象"
 
 #: scripts/ui/ordenador.gd
 msgid "Vistos"
@@ -6943,6 +6943,10 @@ msgstr "已见"
 #: scripts/ui/ordenador.gd
 msgid "%s: %d de %d vistos."
 msgstr "%s：已见 %d / %d。"
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d de %d."
+msgstr "第 %d / %d 页。"
 
 #: scripts/ui/ordenador.gd
 msgid "%s: sale en %s. Matados: %d."
@@ -6957,8 +6961,12 @@ msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casilla
 msgstr "你遇到过的每个敌人都会永远留在这里。把光标移到格子上查看它的档案。"
 
 #: scripts/ui/ordenador.gd
-msgid "Comunes"
-msgstr "常见"
+msgid "Sonámbulos"
+msgstr "梦游者"
+
+#: scripts/ui/ordenador.gd
+msgid "Durmientes"
+msgstr "沉睡者"
 
 #: scripts/ui/ordenador.gd
 msgid "todos los edificios"
@@ -7259,6 +7267,14 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Bestiario"
+msgstr "图鉴"
+
+#, sin-usar
+msgid "Comunes"
+msgstr "常见"
 
 #, sin-usar
 msgid "Objetos nuevos en Colecciones"

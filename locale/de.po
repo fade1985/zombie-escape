@@ -6953,8 +6953,8 @@ msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s, mit %s. Geh auf die Sendungen, um sie zu sehen."
 
 #: scripts/ui/ordenador.gd
-msgid "Bestiario"
-msgstr "Bestiarium"
+msgid "Sujetos"
+msgstr "Probanden"
 
 #: scripts/ui/ordenador.gd
 msgid "Vistos"
@@ -6963,6 +6963,10 @@ msgstr "Gesehen"
 #: scripts/ui/ordenador.gd
 msgid "%s: %d de %d vistos."
 msgstr "%s: %d von %d gesehen."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d de %d."
+msgstr "Seite %d von %d."
 
 #: scripts/ui/ordenador.gd
 msgid "%s: sale en %s. Matados: %d."
@@ -6977,8 +6981,12 @@ msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casilla
 msgstr "Jeder Gegner, dem du begegnest, bleibt hier für immer. Fahr über die Felder, um seine Akte zu sehen."
 
 #: scripts/ui/ordenador.gd
-msgid "Comunes"
-msgstr "Gewöhnliche"
+msgid "Sonámbulos"
+msgstr "Schlafwandler"
+
+#: scripts/ui/ordenador.gd
+msgid "Durmientes"
+msgstr "Schläfer"
 
 #: scripts/ui/ordenador.gd
 msgid "todos los edificios"
@@ -7279,6 +7287,14 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "Bestiario"
+msgstr "Bestiarium"
+
+#, sin-usar
+msgid "Comunes"
+msgstr "Gewöhnliche"
 
 #, sin-usar
 msgid "Objetos nuevos en Colecciones"

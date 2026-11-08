@@ -45,7 +45,7 @@ const ICONOS := [   # [programa, icono, nombre]
 const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV",
 	"colecciones": "COLECCION.EXE"}
 const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
-	"noticias": "Noticias de Canal 8", "colecciones": "Bestiario"}
+	"noticias": "Noticias de Canal 8", "colecciones": "Sujetos"}
 # [/traducir]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
 const ARBOL := preload("res://scripts/ui/arbol_talentos.gd")   # el árbol de talentos (TALENTOS.EXE)
@@ -1027,15 +1027,19 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 const FICHA_ANCHO := 404       # la ficha de la izquierda (el escenario, el nombre, la frase...)
 const ESCENARIO := Vector2(404, 180)   # donde sale el enemigo grande, con su luz
 const CASILLA_ZOMBI := 100     # cada casilla de la cuadrícula de la derecha (4 por fila)
-var familia_vista := "comunes"   # la pestaña abierta de Colecciones (Bestiario.familias)
+const POR_PAGINA := 12         # las casillas de cada página de la cuadrícula (4 × 3)
+var familia_vista := "durmientes"   # la pestaña abierta de Colecciones (Bestiario.familias)
+var pagina_vista := 0               # y su página
 
 
 # Todos los enemigos del juego, como un álbum (desde el 8 nov, solo ellos: los objetos y las páginas del dosier ya no
-# salen aquí; las páginas se leen en DOSIER.TXT). Arriba, cuántos se han visto, con su barra; debajo, una pestaña por
-# familia (los comunes, que salen en todos los edificios, y los propios de cada edificio); a la izquierda, el que se esté
-# mirando, grande y moviéndose, con su nombre, dónde sale, su frase y cuántos se han matado; a la derecha, la cuadrícula de
-# la familia: los vistos a color, los que faltan en silueta negra y los jefes con marco dorado. "foco": "z_<id>" abre su
-# familia con él marcado; "pes_<familia>", esa pestaña. Devuelve lo que hay que marcar
+# salen aquí; las páginas se leen en DOSIER.TXT). Se llama «Sujetos» (los de Velaria). Arriba, cuántos se han visto,
+# con su barra; debajo, una pestaña por familia (los durmientes, los zombis de siempre, y los sonámbulos, los jefes) y, a
+# la derecha, las flechas de las páginas de la cuadrícula (si tiene más de una); a la izquierda, el que se esté mirando,
+# grande y moviéndose bajo un foco, con su nombre, dónde sale, su frase y cuántos se han matado; a la derecha, la
+# cuadrícula de la familia: los vistos a color, los que faltan en silueta negra y los jefes con marco dorado. "foco":
+# "z_<id>" abre su familia y su página con él marcado; "pes_<familia>", esa pestaña; "pag_ant" o "pag_sig", la flecha.
+# Devuelve lo que hay que marcar
 func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 	var s := Guardado.cargar()
 	if s.colecciones_nuevo:
@@ -1044,14 +1048,20 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 		refrescar_avisos()
 	if foco.begins_with("z_") and foco.substr(2) in Bestiario.LISTA:
 		familia_vista = Bestiario.familia(foco.substr(2))
+		pagina_vista = Bestiario.de_familia(familia_vista).find(foco.substr(2)) / POR_PAGINA
 	elif foco.begins_with("pes_") and foco.substr(4) in Bestiario.familias():
 		familia_vista = foco.substr(4)
+	if not familia_vista in Bestiario.familias():
+		familia_vista = Bestiario.familias()[0]
+	var todos := Bestiario.de_familia(familia_vista)
+	var paginas := ceili(todos.size() / float(POR_PAGINA))
+	pagina_vista = posmod(pagina_vista, paginas)
 
 	# arriba: el título y lo visto de todo el bestiario, con su barra
 	var arriba := HBoxContainer.new()
 	arriba.add_theme_constant_override("separation", 8)
 	c.add_child(arriba)
-	var titulo := texto_tarjeta(Idioma.t("Bestiario"), TINTA)
+	var titulo := texto_tarjeta(Idioma.t("Sujetos"), TINTA)
 	titulo.add_theme_font_size_override("font_size", 24)
 	titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	arriba.add_child(titulo)
@@ -1071,20 +1081,35 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 		var b := Button.new()
 		b.name = "pes_" + fam
 		b.text = "%s · %d / %d" % [nombre_familia(fam), hechos, suyos.size()]
-		b.focus_mode = Control.FOCUS_ALL
-		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var esta := fam == familia_vista
-		b.add_theme_stylebox_override("normal", caja(TARJETA_LUZ if esta else TARJETA, TINTA if esta else TARJETA, 2, 0, 4))
-		for e in ["hover", "focus", "pressed", "hover_pressed"]:
-			b.add_theme_stylebox_override(e, caja(TARJETA_LUZ, TINTA, 2, 0, 4))
-		for color in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
-			b.add_theme_color_override(color, TINTA)
-		b.add_theme_constant_override("outline_size", 0)
+		b.custom_minimum_size.x = 200
+		estilo_pestana(b, fam == familia_vista)
 		pestanas.add_child(b)
 		enlazar(b, Idioma.t("%s: %d de %d vistos.") % [nombre_familia(fam), hechos, suyos.size()], func():
 			if familia_vista != fam:
 				familia_vista = fam
+				pagina_vista = 0
 				abrir("colecciones", "pes_" + fam))
+	# las páginas de la cuadrícula, a la derecha de las pestañas: < 1 / 2 > (dan la vuelta)
+	if paginas > 1:
+		var hueco := Control.new()
+		hueco.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pestanas.add_child(hueco)
+		for flecha in [["pag_ant", "<", -1], ["pag_sig", ">", 1]]:
+			var b := Button.new()
+			b.name = flecha[0]
+			b.text = flecha[1]
+			b.custom_minimum_size.x = 36
+			estilo_pestana(b, false)
+			if flecha[2] > 0:
+				var cual := texto_tarjeta("%d / %d" % [pagina_vista + 1, paginas], TINTA)
+				cual.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+				pestanas.add_child(cual)
+			pestanas.add_child(b)
+			var paso: int = flecha[2]
+			var nombre_boton: String = flecha[0]
+			enlazar(b, Idioma.t("Página %d de %d.") % [pagina_vista + 1, paginas], func():
+				pagina_vista = posmod(pagina_vista + paso, paginas)
+				abrir("colecciones", nombre_boton))
 
 	# debajo: la ficha a la izquierda y la cuadrícula a la derecha
 	var partes := HBoxContainer.new()
@@ -1101,7 +1126,7 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 	cuadricula.add_theme_constant_override("v_separation", 4)
 	cuadricula.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	partes.add_child(cuadricula)
-	var ids := Bestiario.de_familia(familia_vista)
+	var ids := todos.slice(pagina_vista * POR_PAGINA, (pagina_vista + 1) * POR_PAGINA)
 	for id: String in ids:
 		var visto := Bestiario.visto(s, id)
 		var clave := "z_" + id
@@ -1126,22 +1151,35 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 			b.focus_neighbor_left = b.get_path()
 		if i % cuadricula.columns == cuadricula.columns - 1 or i == casillas.size() - 1:
 			b.focus_neighbor_right = b.get_path()
-	for b: Button in pestanas.get_children():
+	var de_arriba := pestanas.get_children().filter(func(h): return h is Button)
+	for b: Button in de_arriba:
 		b.focus_neighbor_top = b.get_path()
-	pestanas.get_child(0).focus_neighbor_left = pestanas.get_child(0).get_path()
-	pestanas.get_child(-1).focus_neighbor_right = pestanas.get_child(-1).get_path()
+	de_arriba[0].focus_neighbor_left = de_arriba[0].get_path()
+	de_arriba[-1].focus_neighbor_right = de_arriba[-1].get_path()
 	# al abrir, en la ficha: el pedido o el primero de la familia
 	var empieza: String = foco if foco.begins_with("z_") and foco.substr(2) in ids else "z_" + ids[0]
 	var primero: String = empieza.substr(2)
 	mostrar(lado, empieza, ficha_bestiario.bind(s, primero, Bestiario.visto(s, primero)))
 	senalar_casilla(cuadricula, empieza)
 	info.text = Idioma.t("Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha.")
-	return foco if foco.begins_with("pes_") else empieza
+	return foco if foco.begins_with("pes_") or foco.begins_with("pag_") else empieza
 
 
-# El nombre de una familia en su pestaña: «Comunes» o el del edificio
+# Las pestañas y las flechas de Colecciones: como una tarjeta, con borde oscuro la abierta, la marcada y la de debajo
+# del ratón
+func estilo_pestana(b: Button, abierta_ya: bool) -> void:
+	b.focus_mode = Control.FOCUS_ALL
+	b.add_theme_stylebox_override("normal", caja(TARJETA_LUZ if abierta_ya else TARJETA, TINTA if abierta_ya else TARJETA, 2, 0, 4))
+	for e in ["hover", "focus", "pressed", "hover_pressed"]:
+		b.add_theme_stylebox_override(e, caja(TARJETA_LUZ, TINTA, 2, 0, 4))
+	for color in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
+		b.add_theme_color_override(color, TINTA)
+	b.add_theme_constant_override("outline_size", 0)
+
+
+# El nombre de una familia en su pestaña
 func nombre_familia(fam: String) -> String:
-	return Idioma.t("Comunes") if fam == "comunes" else Idioma.t(Edificios.datos(fam).nombre)
+	return Idioma.t("Sonámbulos") if fam == "sonambulos" else Idioma.t("Durmientes")
 
 
 # Una barra hundida, verde hasta donde se ha llegado (lo visto del bestiario)
@@ -1288,24 +1326,32 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	return columna
 
 
-# El fondo del escenario de la ficha: una sala oscura con un foco que cae desde arriba y deja un charco de luz en el suelo,
-# donde está el enemigo (a escalones, como en pixel art, y con luz de sobra para que se vea la silueta negra)
+# El fondo del escenario de la ficha: negro, con un foco colgado arriba en medio que alumbra hacia abajo: un cono de luz
+# (a franjas, más clara por dentro, como en pixel art) que acaba en un charco de luz en el suelo, donde está el enemigo.
+# La luz del cono deja ver la silueta negra de los que aún no se han visto
 func pintar_escenario(e: Control) -> void:
 	var t := e.size
-	e.draw_rect(Rect2(Vector2.ZERO, t), Color("#241b16"))
-	# la pared: más clara hacia el centro, a franjas
-	for i in 5:
-		var ancho := t.x * (0.9 - i * 0.16)
-		e.draw_rect(Rect2((t.x - ancho) / 2, 0, ancho, t.y), Color("#2e231c").lerp(Color("#6b5240"), i / 4.0))
-	# el suelo
-	e.draw_rect(Rect2(0, t.y - 34, t.x, 34), Color("#1c1511"))
-	# el charco de luz del suelo, a anillos
-	var pies := Vector2(t.x / 2, t.y - 18)
-	for i in 4:
-		var r := 150.0 - i * 34.0
-		e.draw_set_transform(pies, 0.0, Vector2(1.0, 0.22))
-		e.draw_circle(Vector2.ZERO, r, Color("#3a2c22").lerp(Color("#8d6c50"), i / 3.0))
+	var medio := t.x / 2
+	var pies := Vector2(medio, t.y - 18)
+	e.draw_rect(Rect2(Vector2.ZERO, t), Color("#07060a"))
+	# el cono: de 3 franjas, de fuera a dentro, cada una más estrecha y más clara
+	var luz := Color("#fff1c9")
+	for i in 3:
+		var arriba := 14.0 - i * 4.0     # medio ancho junto al foco
+		var abajo := 120.0 - i * 34.0    # medio ancho en el suelo
+		var cono := PackedVector2Array([Vector2(medio - arriba, 10), Vector2(medio + arriba, 10),
+			Vector2(medio + abajo, pies.y), Vector2(medio - abajo, pies.y)])
+		e.draw_colored_polygon(cono, Color(luz, 0.07 + i * 0.03))
+	# el charco del suelo, a anillos
+	for i in 3:
+		e.draw_set_transform(pies, 0.0, Vector2(1.0, 0.2))
+		e.draw_circle(Vector2.ZERO, 132.0 - i * 36.0, Color(luz, 0.12 + i * 0.08))
 	e.draw_set_transform(Vector2.ZERO)
+	# el foco: una pantalla de chapa colgada del techo, con la bombilla encendida
+	e.draw_rect(Rect2(medio - 1, 0, 2, 4), Color("#3a3a40"))
+	e.draw_colored_polygon(PackedVector2Array([Vector2(medio - 6, 4), Vector2(medio + 6, 4), Vector2(medio + 14, 11),
+		Vector2(medio - 14, 11)]), Color("#4a4a52"))
+	e.draw_rect(Rect2(medio - 8, 11, 16, 2), luz)
 	relieve(e, true, 2.0)
 
 

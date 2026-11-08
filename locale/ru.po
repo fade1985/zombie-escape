@@ -6973,8 +6973,8 @@ msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s, ведущая — %s. Наведи на выпуски, чтобы посмотреть."
 
 #: scripts/ui/ordenador.gd
-msgid "Bestiario"
-msgstr "Бестиарий"
+msgid "Sujetos"
+msgstr "Объекты"
 
 #: scripts/ui/ordenador.gd
 msgid "Vistos"
@@ -6983,6 +6983,10 @@ msgstr "Встречено"
 #: scripts/ui/ordenador.gd
 msgid "%s: %d de %d vistos."
 msgstr "%s: встречено %d из %d."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d de %d."
+msgstr "Страница %d из %d."
 
 #: scripts/ui/ordenador.gd
 msgid "%s: sale en %s. Matados: %d."
@@ -6997,8 +7001,12 @@ msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casilla
 msgstr "Каждый враг, которого ты встретил, остаётся здесь навсегда. Наведи на клетки, чтобы увидеть его карточку."
 
 #: scripts/ui/ordenador.gd
-msgid "Comunes"
-msgstr "Обычные"
+msgid "Sonámbulos"
+msgstr "Лунатики"
+
+#: scripts/ui/ordenador.gd
+msgid "Durmientes"
+msgstr "Спящие"
 
 #: scripts/ui/ordenador.gd
 msgid "todos los edificios"
@@ -7299,6 +7307,14 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Bestiario"
+msgstr "Бестиарий"
+
+#, sin-usar
+msgid "Comunes"
+msgstr "Обычные"
 
 #, sin-usar
 msgid "Objetos nuevos en Colecciones"
