@@ -268,7 +268,7 @@
 #   --guiado --tercios  en la primera partida, al perder el primer tercio sale la ventana de los tercios (M35)
 #                                                                                          [prueba_varias.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, el del primer botiquín, la lista desde la pausa, el del
-#                       baúl antes del baúl y la casilla de Ayudas                         [prueba_varias.gd]
+#                       baúl antes del baúl y el botón «Tutoriales: No»                         [prueba_varias.gd]
 #   --tutoriales-torre  (con --edificio torre) los dos tutoriales de la torre: «Torre Velaria» (el código) y
 #                       «Peligros de la torre», que sale solo al entrar en el primer departamento con peligro [prueba_varias.gd]
 #   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se

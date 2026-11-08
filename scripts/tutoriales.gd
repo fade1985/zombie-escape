@@ -185,7 +185,7 @@ static func apuntar(id: String) -> void:
 	Guardado.cambiar(func(s): if not id in s.tutoriales: s.tutoriales.append(id))
 
 
-# Que vuelvan a salir todos (el botón de Opciones → Ayudas), también la guía de la primera partida (guia.gd)
+# Que vuelvan a salir todos (el botón de abajo de la lista de Tutorial), también la guía de la primera partida (guia.gd)
 static func olvidar() -> void:
 	vistos = []
 	vistos_de = Guardado.archivo

@@ -6289,22 +6289,6 @@ msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas d
 msgstr "Johnny会自动瞄准并攻击最近的僵尸。你只需要专心走位。"
 
 #: scripts/ui/opciones.gd
-msgid "Tutoriales"
-msgstr "教程提示"
-
-#: scripts/ui/opciones.gd
-msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
-msgstr "第一次遇到新东西时，会弹出窗口说明发生了什么、该怎么做。看过的都在“教程”里。"
-
-#: scripts/ui/opciones.gd
-msgid "Que vuelvan a salir todos"
-msgstr "重新显示全部"
-
-#: scripts/ui/opciones.gd
-msgid "Volverán a salir desde el principio"
-msgstr "会从头重新显示"
-
-#: scripts/ui/opciones.gd
 msgid "Hecho con Godot Engine"
 msgstr "使用 Godot Engine 制作"
 
@@ -7224,6 +7208,18 @@ msgstr "可以在主菜单和暂停菜单的“教程”里重新查看"
 msgid "Entendido"
 msgstr "知道了"
 
+#: scripts/ui/tutorial.gd
+msgid "Tutoriales"
+msgstr "教程提示"
+
+#: scripts/ui/tutorial.gd
+msgid "Que vuelvan a salir todos"
+msgstr "重新显示全部"
+
+#: scripts/ui/tutorial.gd
+msgid "Volverán a salir desde el principio"
+msgstr "会从头重新显示"
+
 #: scripts/valvulas.gd
 msgid "Válvula cerrada: %d de %d"
 msgstr "阀门已关：%d / %d"
@@ -7271,6 +7267,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
+msgstr "第一次遇到新东西时，会弹出窗口说明发生了什么、该怎么做。看过的都在“教程”里。"
 
 #, sin-usar
 msgid "Si empiezas otra, la guardada se pierde"

@@ -6309,22 +6309,6 @@ msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas d
 msgstr "Johnny vise et attaque tout seul le zombie le plus proche. Toi, tu n'as qu'à te déplacer."
 
 #: scripts/ui/opciones.gd
-msgid "Tutoriales"
-msgstr "Tutoriels"
-
-#: scripts/ui/opciones.gd
-msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
-msgstr "La première fois que tu tombes sur quelque chose de nouveau, une fenêtre explique ce qui se passe et comment faire. Ceux déjà vus sont dans Tutoriel."
-
-#: scripts/ui/opciones.gd
-msgid "Que vuelvan a salir todos"
-msgstr "Tous les revoir"
-
-#: scripts/ui/opciones.gd
-msgid "Volverán a salir desde el principio"
-msgstr "Ils réapparaîtront depuis le début"
-
-#: scripts/ui/opciones.gd
 msgid "Hecho con Godot Engine"
 msgstr "Créé avec Godot Engine"
 
@@ -7244,6 +7228,18 @@ msgstr "Tu peux le revoir dans Tutoriel, depuis le menu principal et la pause"
 msgid "Entendido"
 msgstr "Compris"
 
+#: scripts/ui/tutorial.gd
+msgid "Tutoriales"
+msgstr "Tutoriels"
+
+#: scripts/ui/tutorial.gd
+msgid "Que vuelvan a salir todos"
+msgstr "Tous les revoir"
+
+#: scripts/ui/tutorial.gd
+msgid "Volverán a salir desde el principio"
+msgstr "Ils réapparaîtront depuis le début"
+
 #: scripts/valvulas.gd
 msgid "Válvula cerrada: %d de %d"
 msgstr "Vanne fermée : %d sur %d"
@@ -7291,6 +7287,10 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#, sin-usar
+msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
+msgstr "La première fois que tu tombes sur quelque chose de nouveau, une fenêtre explique ce qui se passe et comment faire. Ceux déjà vus sont dans Tutoriel."
 
 #, sin-usar
 msgid "Si empiezas otra, la guardada se pierde"

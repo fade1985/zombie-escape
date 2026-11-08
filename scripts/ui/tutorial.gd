@@ -147,12 +147,33 @@ func montar_lista(columna: VBoxContainer) -> void:
 	derecha = VBoxContainer.new()
 	derecha.custom_minimum_size = Vector2(ANCHO, ALTO_LISTA)
 	lado.add_child(derecha)
+	# Abajo, en una fila: si salen las ventanas de los tutoriales (antes en Opciones → Ayudas), que vuelvan a salir
+	# todos y Volver
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_theme_constant_override("separation", 12)
+	columna.add_child(fila)
+	var si_no := func() -> String:
+		return "%s: %s" % [Idioma.t("Tutoriales"), Idioma.t("Sí" if Guardado.cargar().ajustes.tutoriales else "No")]
+	var encender := Button.new()
+	encender.text = si_no.call()
+	encender.pressed.connect(func():
+		Guardado.cambiar(func(g): g.ajustes.tutoriales = not g.ajustes.tutoriales)
+		encender.text = si_no.call())
+	fila.add_child(encender)
+	var otra_vez := Button.new()
+	otra_vez.text = Idioma.t("Que vuelvan a salir todos")
+	otra_vez.pressed.connect(func():
+		Tutoriales.olvidar()
+		Sonido.tocar("click")
+		otra_vez.text = Idioma.t("Volverán a salir desde el principio")
+		otra_vez.disabled = true)
+	fila.add_child(otra_vez)
 	var volver := Button.new()
 	volver.text = Idioma.t("Volver")
 	volver.custom_minimum_size.x = 180
-	volver.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	volver.pressed.connect(cerrar)
-	columna.add_child(volver)
+	fila.add_child(volver)
 	ver("jugar")   # («Cómo se juega» siempre se ve)
 	(botones.jugar as Button).grab_focus.call_deferred()
 

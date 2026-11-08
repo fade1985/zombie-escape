@@ -369,14 +369,6 @@ func ayudas() -> void:
 	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."))
 	rotar(Idioma.t("Disparo asistido"), "disparo_asistido", SI_NO)
 	explicar(Idioma.t("Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."))
-	rotar(Idioma.t("Tutoriales"), "tutoriales", SI_NO)
-	explicar(Idioma.t("La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."))
-	var otra_vez := opcion(Idioma.t("Que vuelvan a salir todos"))
-	otra_vez.pressed.connect(func():
-		Tutoriales.olvidar()
-		Sonido.tocar("click")
-		otra_vez.text = Idioma.t("Volverán a salir desde el principio")
-		otra_vez.disabled = true)
 	contenido = fuera
 
 

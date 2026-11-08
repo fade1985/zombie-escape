@@ -47,8 +47,8 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*, *Disparo asistido* (Johnny apunta y ataca solo; sin ella, el modo libre, el de
   siempre: ya no hay tecla para cambiarlo); no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
-  apague luego; los ya conseguidos se conservan y se cobran; y *Tutoriales*, con el botón *Que vuelvan a salir
-  todos*), la
+  apague luego; los ya conseguidos se conservan y se cobran; *Tutoriales: Sí/No* y *Que vuelvan a salir todos* están
+  abajo en la lista de **Tutorial**), la
   lista de controles (pulsar la casilla y luego la tecla; si ya la usaba otra acción, se intercambian) y la pestaña
   **Créditos** (con qué se ha hecho el juego y las letras de otros; su botón *Licencias* enseña los textos legales enteros,
   que se bajan con la rueda, las flechas o la cruceta).
@@ -61,7 +61,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   En la **primera partida**, la planta baja no saca las ventanas de lo básico: lo enseña jugando (`guia.gd`), con
   pistas encima de Johnny que se van al hacerlo, la casilla del HUD que toca latiendo y una flecha en el suelo (la de
   la vida en tercios sí sale, al perder el primero: es cuando más falta hace). El botón
-  *Que vuelvan a salir todos* de Opciones → Ayudas también la reactiva: sale en la próxima partida de los Apartamentos
+  *Que vuelvan a salir todos* (abajo en Tutorial) también la reactiva: sale en la próxima partida de los Apartamentos
   aunque no sea la primera (`guia_otra_vez` en el guardado; se apaga sola al empezarla).
 - **Textos de la historia:** la introducción (la primera partida) y el final de cada edificio (la primera vez que se
   completa) salen sobre negro, línea a línea. Cualquier tecla, clic, toque o botón del mando saca la siguiente y, con

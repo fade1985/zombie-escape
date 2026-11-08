@@ -405,7 +405,7 @@ en una línea.
   `recorte` lo calcula `tools/recortes_bestiario.py`).
 - `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
-  (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste de Ayudas. Cada uno sale una sola vez: los
+  (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste «Tutoriales: Sí/No» (abajo en la lista de Tutorial, con «Que vuelvan a salir todos»). Cada uno sale una sola vez: los
   pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
   mutación sacan el suyo antes de abrirse; las vendas sacan «curas» y el botiquín, «botiquin», el suyo aparte
   y fuera de la guía, que solo enseña las vendas: M62), `eventos.gd`, `supervivientes.gd` y el menú (el de la alerta). Se prueba

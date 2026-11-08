@@ -33,7 +33,7 @@ const NUEVO := {
 	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
 	"armas": [],          # armas desbloqueadas (encontradas o compradas). La fregona siempre está
 	"partidas": 0,
-	"guia_otra_vez": false, # «Que vuelvan a salir todos» (Opciones → Ayudas): la guía de la primera partida (guia.gd) sale en la próxima
+	"guia_otra_vez": false, # «Que vuelvan a salir todos» (abajo en Tutorial): la guía de la primera partida (guia.gd) sale en la próxima
 	                        # de los Apartamentos aunque no sea la primera, y se apaga sola al empezarla
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total

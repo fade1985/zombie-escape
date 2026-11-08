@@ -961,6 +961,8 @@ func probar_tutoriales_torre() -> void:
 func probar_tutorial() -> void:
 	Tutoriales.olvidar()
 	tutoriales_prueba = true
+	guia.activa = false   # (la guía de la primera partida tapa «Cómo se juega» y otros: tiene su prueba, --guiado)
+	Guardado.cambiar(func(g): g.ajustes.tutoriales = true)   # (por si el guardado de prueba los tiene apagados)
 	var ventana := func() -> Tutorial:
 		for h in get_children():
 			if h is Tutorial and not h.is_queued_for_deletion():
