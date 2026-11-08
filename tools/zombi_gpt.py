@@ -1,4 +1,4 @@
-"""Un zombi hecho con GPT (la prueba del 8 nov: la vecina, «vecino 2»), pasado a los dibujos que monta tools/zombi.py.
+"""Un zombi hecho con GPT (la prueba del 8 nov fue la vecina, «vecino 2»), pasado a los dibujos que monta tools/zombi.py.
 
 GPT dibuja cada cosa en una sola imagen, sobre fondo negro puro, con las vistas o los fotogramas en fila: así se parece
 más de uno a otro. Esta herramienta:
@@ -11,6 +11,9 @@ más de uno a otro. Esta herramienta:
 La escala sale de la referencia que se le da a GPT (capturas/referencia-vecino.png: el vecino a 8 píxeles de la imagen
 por píxel del juego, en 2016 de ancho): GPT la devuelve a 2000 de ancho, así que 8 × 2000 / 2016.
 
+Cada zombi tiene su ficha en ZOMBIS (sus carpetas). Sin decir cuál, es la vecina; para otro, su nombre delante:
+  py tools/zombi_gpt.py --zombi normal personaje      (el vecino con GPT: zombi-normal-gpt → zombi-normal-gpt-48)
+
 Uso (desde la carpeta del proyecto):
   py tools/zombi_gpt.py personaje      las 5 vistas quietas → assets/sources/zombi-vecina-48/rotations/ (y las 3 en espejo)
   py tools/zombi_gpt.py andar south    andar de frente (andar-s.webp) → assets/sources/zombi-vecina-48/walk/south-<n>.png
@@ -22,8 +25,12 @@ import sys
 from collections import deque
 from PIL import Image, ImageEnhance, ImageOps
 
-FUENTE = "assets/sources/zombi-vecina-gpt"   # las imágenes de GPT
-DESTINO = "assets/sources/zombi-vecina-48"   # lo que lee tools/zombi.py
+# Cada zombi: dónde están sus imágenes de GPT y dónde van los dibujos que lee tools/zombi.py
+ZOMBIS = {
+    "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48"),
+    "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48"),   # el vecino, rehecho
+}
+FUENTE, DESTINO = ZOMBIS["vecina"]
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -230,6 +237,11 @@ def rellenar():
 
 
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--zombi"]:
+        if len(sys.argv) < 3 or sys.argv[2] not in ZOMBIS:
+            sys.exit("Zombis que conoce: " + ", ".join(ZOMBIS))
+        FUENTE, DESTINO = ZOMBIS[sys.argv[2]]
+        del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
         sys.exit()
