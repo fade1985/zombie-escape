@@ -537,9 +537,10 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	Sonido.tocar("golpe")
 	a_golpes = true
 	destellar()
-	# la sangre salta hacia donde va el golpe (más si es el último; el 8 nov, el doble que antes: lo pidió el dueño)
+	# la sangre salta hacia donde va el golpe (más si es el último). El 8 nov, el dueño pidió más, que se note que se les
+	# da bien: antes 5 y 10
 	Particulas.salpicar(self, suelo(), global_position + Vector2(0, 6), altura * 0.5, fuerza, color_sangre,
-		20 if vida <= 0 else 10)
+		32 if vida <= 0 else 16)
 	# Se gira hacia quien le ha pegado (al revés del empuje)
 	mirar_hacia(-fuerza)
 	if vida <= 0:
