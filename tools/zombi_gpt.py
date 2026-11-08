@@ -15,6 +15,8 @@ Cada zombi tiene su ficha en ZOMBIS (sus carpetas). Sin decir cuál, es la vecin
   py tools/zombi_gpt.py --zombi normal personaje      (el vecino con GPT: zombi-normal-gpt → zombi-normal-gpt-48)
   py tools/zombi_gpt.py --zombi rapido personaje      (el crío con GPT: zombi-rapido-gpt → zombi-rapido-gpt-48;
                                                        su referencia, capturas/referencia-rapido.png)
+  py tools/zombi_gpt.py --zombi lento personaje       (el arrastrado con GPT: zombi-lento-gpt → zombi-lento-gpt-48;
+                                                       su referencia, capturas/referencia-lento.png)
 
 Uso (desde la carpeta del proyecto):
   py tools/zombi_gpt.py personaje      las 5 vistas quietas → assets/sources/zombi-vecina-48/rotations/ (y las 3 en espejo)
@@ -40,12 +42,17 @@ ZOMBIS = {
     "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48, False, (1.08, 1.0, 1.0)),
     "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
     "rapido": ("assets/sources/zombi-rapido-gpt", "assets/sources/zombi-rapido-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
+    "lento": ("assets/sources/zombi-lento-gpt", "assets/sources/zombi-lento-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
 FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
 # Los que corren (el crío): al andar, la cabeza va a la altura que la pone GPT (casi siempre la misma) y los pies se
 # levantan del suelo cuando van en el aire. Con los pies siempre abajo, como los que andan, la cabeza le subía y bajaba
 # hasta 5 píxeles de un fotograma a otro y daba saltos
 CORRE = False
+# El lienzo del andar: 48, salvo los que se estiran (el crío corriendo, y el arrastrado, que de perfil echa un brazo
+# muy adelante y el muñón detrás: el de PixelLab ya andaba en 60)
+LIENZO_ANDAR = {"rapido": 64, "lento": 64}
+ANDAR = 48
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -232,7 +239,7 @@ def animacion(anim, vista):
     os.makedirs(carpeta, exist_ok=True)
     # el lienzo: al andar, el de 48; en lo demás, el del zombi (el dibujo quieto, abajo y en medio)
     # (el que corre estira mucho la pierna de atrás: de perfil se le cortaba el pie en 48; en 64 cabe)
-    lado = (64 if CORRE else LIENZO) if anim == "andar" else LIENZO_ANIM
+    lado = ANDAR if anim == "andar" else LIENZO_ANIM
     if lado != LIENZO:
         grande = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
         grande.paste(quieto, ((lado - LIENZO) // 2, lado - LIENZO))
@@ -278,6 +285,7 @@ if __name__ == "__main__":
             sys.exit("Zombis que conoce: " + ", ".join(ZOMBIS))
         FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS[sys.argv[2]]
         CORRE = sys.argv[2] == "rapido"
+        ANDAR = LIENZO_ANDAR.get(sys.argv[2], LIENZO)
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
