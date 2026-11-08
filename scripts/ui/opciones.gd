@@ -180,8 +180,23 @@ func construir(cual := "general") -> void:
 		b.name = p[0]
 		b.pressed.connect(func(): ver(p[0]))
 		pestanas.add_child(b)
+	# Las cuatro pestañas, del tamaño de la más grande: así la ventana no cambia al pasar de una a otra. Se monta cada
+	# una de prueba (en una caja que se tira enseguida), se mide y el contenido se queda con lo más ancho y lo más alto
+	var medida := Vector2.ZERO
+	for p in ["general", "controles", "ayudas", "creditos"]:
+		contenido = VBoxContainer.new()
+		contenido.add_theme_constant_override("separation", 8)
+		columna.add_child(contenido)
+		call(p)
+		medida = medida.max(contenido.get_combined_minimum_size())
+		columna.remove_child(contenido)
+		contenido.free()
+	casillas.clear()
+	aviso = null
+	boton_idioma = null
 	contenido = VBoxContainer.new()
 	contenido.add_theme_constant_override("separation", 8)
+	contenido.custom_minimum_size = medida
 	columna.add_child(contenido)
 	var volver := Button.new()
 	volver.text = Idioma.t("Volver")
@@ -501,10 +516,10 @@ func controles() -> void:
 			continue
 		casilla(tabla, f[1][0], false)
 		casilla(tabla, f[1][0], true)
+	# Debajo de la tabla, lo que ha pasado (esperando una tecla, cambiado, restablecido...): vacío hasta que pasa algo
 	aviso = Label.new()
 	aviso.theme_type_variation = "Sub"
 	aviso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	aviso.text = Idioma.t("Pulsa una casilla para cambiar esa tecla o ese botón")
 	contenido.add_child(aviso)
 	opcion(Idioma.t("Restablecer controles")).pressed.connect(func():
 		Controles.restablecer()

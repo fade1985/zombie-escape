@@ -6357,10 +6357,6 @@ msgid "Stick dcho."
 msgstr "Right stick"
 
 #: scripts/ui/opciones.gd
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Press a box to change that key or button"
-
-#: scripts/ui/opciones.gd
 msgid "Restablecer controles"
 msgstr "Reset controls"
 
@@ -7287,6 +7283,10 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "Press a box to change that key or button"
 
 #, sin-usar
 msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."

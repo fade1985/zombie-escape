@@ -6357,10 +6357,6 @@ msgid "Stick dcho."
 msgstr "Analóg. dir."
 
 #: scripts/ui/opciones.gd
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Clique num quadro para trocar essa tecla ou esse botão"
-
-#: scripts/ui/opciones.gd
 msgid "Restablecer controles"
 msgstr "Restaurar controles"
 
@@ -7287,6 +7283,10 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
+
+#, sin-usar
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "Clique num quadro para trocar essa tecla ou esse botão"
 
 #, sin-usar
 msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."

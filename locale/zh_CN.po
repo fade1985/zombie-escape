@@ -6337,10 +6337,6 @@ msgid "Stick dcho."
 msgstr "右摇杆"
 
 #: scripts/ui/opciones.gd
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "点击一个格子来更改对应的按键或按钮"
-
-#: scripts/ui/opciones.gd
 msgid "Restablecer controles"
 msgstr "恢复默认操作"
 
@@ -7267,6 +7263,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "点击一个格子来更改对应的按键或按钮"
 
 #, sin-usar
 msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."

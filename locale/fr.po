@@ -6357,10 +6357,6 @@ msgid "Stick dcho."
 msgstr "Stick droit"
 
 #: scripts/ui/opciones.gd
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Appuie sur une case pour changer cette touche ou ce bouton"
-
-#: scripts/ui/opciones.gd
 msgid "Restablecer controles"
 msgstr "Commandes par défaut"
 
@@ -7287,6 +7283,10 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#, sin-usar
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "Appuie sur une case pour changer cette touche ou ce bouton"
 
 #, sin-usar
 msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."

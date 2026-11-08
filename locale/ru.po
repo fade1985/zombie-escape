@@ -6377,10 +6377,6 @@ msgid "Stick dcho."
 msgstr "Прав. стик"
 
 #: scripts/ui/opciones.gd
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Нажми на ячейку, чтобы сменить эту клавишу или кнопку"
-
-#: scripts/ui/opciones.gd
 msgid "Restablecer controles"
 msgstr "Сбросить управление"
 
@@ -7307,6 +7303,10 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "Нажми на ячейку, чтобы сменить эту клавишу или кнопку"
 
 #, sin-usar
 msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
