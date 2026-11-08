@@ -3,7 +3,7 @@ violencia, aun con los textos más suaves y con el final del cuerpo en marrón).
 arrastrarse, que ya son de GPT: estira un brazo y luego el otro mientras el cuerpo se lanza unos píxeles hacia delante
 (hacia donde mira: arriba, o arriba a la derecha) y vuelve. De espaldas no se le ve la cara, así que se entiende igual.
 La muerte, el dibujo quieto aplastándose contra el suelo (se le doblan los brazos y se queda tendido).
-El golpe (también de perfil), igual: el dibujo quieto echándose unos píxeles hacia atrás y volviendo (a GPT ni se le pidió).
+El golpe (también de perfil y en diagonal de frente), igual: el dibujo quieto echándose unos píxeles hacia atrás y volviendo (a GPT ni se le pidió).
 
 Se pasa después de montar arrastrarse en esas vistas (y de rojo_espalda.py):
   py assets/sources/zombi-lento-gpt/espaldas.py
@@ -19,14 +19,14 @@ ATAQUE = [(0, 0), (1, 1), (3, 2), (4, 3), (5, 4), (6, 5), (11, 6), (12, 6), (12,
 # el golpe: el dibujo quieto, empujado hacia atrás (en negativo) y de vuelta
 GOLPE = [(0, 0), (0, -2), (0, -3), (0, -3), (0, -2), (0, -1), (0, 0)]
 # hacia dónde es «delante» en cada vista (en píxeles por cada píxel de lanzarse)
-DELANTE = {"north": (0, -1), "north-east": (0.7, -0.7), "east": (1, 0)}
-# (el golpe de perfil tampoco lo quiso dibujar GPT: también sale de aquí, solo el golpe)
-ESPEJO = {"north-east": "north-west", "east": "west"}
+DELANTE = {"north": (0, -1), "north-east": (0.7, -0.7), "east": (1, 0), "south-east": (0.7, 0.7)}
+# (el golpe de perfil tampoco lo quiso dibujar GPT, y el de diagonal de frente no llegó: también salen de aquí, solo el golpe)
+ESPEJO = {"north-east": "north-west", "east": "west", "south-east": "south-west"}
 LADO = 96   # el lienzo del ataque (el de arrastrarse es de 64: el dibujo quieto, abajo y en medio en los dos)
 
 for anim, PASOS in [("ataque", ATAQUE), ("golpe", GOLPE)]:
     for vista, (dx, dy) in DELANTE.items():
-        if anim == "ataque" and vista == "east":
+        if anim == "ataque" and vista in ("east", "south-east"):
             continue
         for n, (fotograma, cuanto) in enumerate(PASOS):
             andar = Image.open(os.path.join(CARPETA, "walk", "%s-%d.png" % (vista, fotograma))).convert("RGBA")

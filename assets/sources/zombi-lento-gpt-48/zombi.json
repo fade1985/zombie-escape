@@ -1,0 +1,12 @@
+{
+  "cintura": 40,
+  "pies": 72,
+  "sangre": "viva",
+  "ataque": { "fotogramas": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "impacto": 7, "duracion": 0.7 },
+  "golpe": { "fotogramas": [1, 2, 3, 4, 5, 6] },
+  "muerte": { "fotogramas": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "duracion": 1.1 },
+  "andar": {
+    "south": [1, 12], "south-east": [1, 12], "east": [1, 12], "north-east": [1, 12],
+    "north": [1, 12], "north-west": [1, 12], "west": [1, 12], "south-west": [1, 12]
+  }
+}

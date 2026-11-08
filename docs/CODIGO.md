@@ -844,6 +844,15 @@ en una línea.
   `capturas/referencia-rapido.png`). Desde el 8 nov es **el crío del juego** (`zombi_rapido.tscn` y su ficha de
   Sujetos); el de PixelLab (`zombi-rapido`) ya no se usa. `--captura --crio-gpt` lo pone junto al de PixelLab y
   `--captura --tres-zombis`, junto a la vecina y el vecino.
+- **El arrastrado con GPT (8 nov):** `--zombi lento` → `assets/sources/zombi-lento-gpt-48` → `zombi.py zombi-lento-gpt-48
+  zombi-lento-gpt` (textos en `assets/sources/zombi-lento-gpt/textos-gpt.md`, referencia `capturas/referencia-lento.png`).
+  Va por el suelo: arrastrarse en lienzo de 64, y en el ataque, el golpe y la muerte cada fotograma a la altura que lo
+  dibuja GPT (`ALTURA_GPT`), de perfil y en diagonal de frente colocado por el final del cuerpo (no por las manos) y la
+  muerte medida por el ancho. GPT rechazaba por violencia casi todo lo de espaldas (el muñón rojo): de espaldas se le
+  pidió arrastrarse con una copia con el final del cuerpo en marrón (`capturas/lento-para-gpt-sin-rojo.png`) y
+  `rojo_espalda.py` se lo vuelve a pintar; el ataque, el golpe y la muerte de espaldas, el golpe de perfil y el de
+  diagonal de frente los monta `espaldas.py` con sus otros dibujos (pasarlo después de `zombi_gpt.py`).
+  `--captura --lento-gpt` lo pone junto al de PixelLab.
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es
