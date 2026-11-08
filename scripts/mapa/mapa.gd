@@ -989,7 +989,7 @@ func poner_apliques() -> void:
 		luz.position = Vector2(a.x, MURO + 1)
 		luz.semilla = a.semilla
 		luz.parpadea = a.parpadea
-		luz.alto = 38.0
+		luz.alto = 78.0   # (subidos el 8 nov, como pidió el dueño: antes, a 38)
 		luz.suelo = Vector2(0, 60)
 		# si el centro de la luz cae dentro de un mueble, su sombra lo dejaría todo a oscuras: más abajo
 		for m in muebles:
@@ -999,7 +999,7 @@ func poner_apliques() -> void:
 		var dibujo := Sprite2D.new()
 		dibujo.texture = APLIQUE
 		dibujo.scale = Vector2(2, 2)
-		dibujo.position = Vector2(0, -36)
+		dibujo.position = Vector2(0, -76)
 		luz.add_child(dibujo)
 		luz.move_child(dibujo, 0)
 		cosas.add_child(luz)

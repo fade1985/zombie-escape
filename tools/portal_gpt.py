@@ -3,7 +3,7 @@
 #   assets/sources/suelos/pasillo-suelo-gpt.webp  → assets/sprites/suelo-pasillo.png  (8 × 8 baldosas, 128 × 128)
 #   assets/sources/suelos/pasillo-pared-gpt.webp  → assets/sprites/pared-pasillo.png  (11 azulejos × 5 filas, 154 × 48)
 #                                                  y techo-pasillo.png (el remate de arriba, 6 de alto)
-# Se reduce MEZCLANDO colores (cada píxel, la media de su trozo), como los muebles de GPT, y cada baldosa o azulejo
+# Se reduce MEZCLANDO colores con LANCZOS, como los muebles de GPT, y cada baldosa o azulejo
 # cae justo en su cuadro de píxeles con la junta en el último: así las juntas salen de un píxel, rectas, y la textura
 # empalma consigo misma al repetirse. El suelo se oscurece un poco (OSCURO) para que se distinga de la pared.
 #   py tools/portal_gpt.py   (y luego Godot --headless --path . --import)
@@ -11,7 +11,7 @@ import json
 import numpy as np
 from PIL import Image
 
-OSCURO = 0.80   # cuánto se oscurece el suelo (1 = como lo dibujó GPT)
+OSCURO = 0.58   # cuánto se oscurece el suelo (1 = como lo dibujó GPT): tan oscuro como el rodapié de la pared, como pidió el dueño
 
 
 def guardar(im, nombre):
@@ -23,9 +23,17 @@ def guardar(im, nombre):
     print(f'{nombre}: {im.width}x{im.height}')
 
 
-def reducir(im, caja, ancho, alto):
-    # la media de color de cada trozo (BOX) de la caja (x0, y0, x1, y1, en píxeles de la imagen, con decimales)
-    return im.resize((ancho, alto), Image.BOX, box=caja)
+def reducir(im, caja, ancho, alto, repite_y=False):
+    # como los muebles (tools/muebles_gpt.py): mezclando colores con LANCZOS, de la caja (x0, y0, x1, y1, en píxeles de
+    # la imagen, con decimales). LANCZOS mira también un poco fuera de cada trozo, así que la imagen se pone repetida
+    # alrededor (a lo ancho y, en el suelo, también a lo alto): en los bordes mira lo que viene al repetirse y empalma
+    # sin costura. (Hasta el 8 nov iba con BOX, la media de cada trozo, algo más borroso)
+    a = np.asarray(im)
+    W, H = im.size
+    a = np.tile(a, (3 if repite_y else 1, 3, 1))
+    dy = H if repite_y else 0
+    x0, y0, x1, y1 = caja
+    return Image.fromarray(a).resize((ancho, alto), Image.LANCZOS, box=(x0 + W, y0 + dy, x1 + W, y1 + dy))
 
 
 # --- Suelo: 1254 × 1254, 8 × 8 baldosas de 156,75 con media junta en cada borde. Se corre 4,4 píxeles para que la
@@ -33,7 +41,7 @@ def reducir(im, caja, ancho, alto):
 img = Image.open('assets/sources/suelos/pasillo-suelo-gpt.webp').convert('RGB')
 a = np.asarray(img)
 a = np.roll(a, (-4, -4), axis=(0, 1))
-suelo = reducir(Image.fromarray(a), (0, 0, 1254, 1254), 128, 128)
+suelo = reducir(Image.fromarray(a), (0, 0, 1254, 1254), 128, 128, True)
 suelo = Image.fromarray(np.clip(np.asarray(suelo).astype(float) * OSCURO, 0, 255).astype(np.uint8))
 guardar(suelo, 'suelo-pasillo')
 
@@ -43,7 +51,7 @@ img = Image.open('assets/sources/suelos/pasillo-pared-gpt.webp').convert('RGB')
 a = np.roll(np.asarray(img), -5, axis=1)
 img = Image.fromarray(a)
 azulejos = reducir(img, (0, 285.5, 1536, 718.5), 154, 45)
-rodapie = reducir(img, (0, 718.5, 1536, 745), 154, 3)
+rodapie = reducir(img, (0, 718.5, 1536, 743), 154, 3)
 pared = Image.new('RGB', (154, 48))
 pared.paste(azulejos, (0, 0))
 pared.paste(rodapie, (0, 45))
