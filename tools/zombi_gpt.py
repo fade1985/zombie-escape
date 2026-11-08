@@ -231,7 +231,8 @@ def animacion(anim, vista):
     carpeta = os.path.join(DESTINO, nombres[anim])
     os.makedirs(carpeta, exist_ok=True)
     # el lienzo: al andar, el de 48; en lo demás, el del zombi (el dibujo quieto, abajo y en medio)
-    lado = LIENZO if anim == "andar" else LIENZO_ANIM
+    # (el que corre estira mucho la pierna de atrás: de perfil se le cortaba el pie en 48; en 64 cabe)
+    lado = (64 if CORRE else LIENZO) if anim == "andar" else LIENZO_ANIM
     if lado != LIENZO:
         grande = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
         grande.paste(quieto, ((lado - LIENZO) // 2, lado - LIENZO))
@@ -243,7 +244,7 @@ def animacion(anim, vista):
         ImageOps.mirror(quieto).save(os.path.join(carpeta, "%s-0.png" % otra))
     for n, (dibujo, centro, columna, cima) in enumerate(trozos, 1):
         corrido = sitio - LIENZO / 2 + (centro - columna) / escala
-        arriba = caja[1] + cima / escala if CORRE and anim == "andar" else None
+        arriba = caja[1] + (lado - LIENZO) + cima / escala if CORRE and anim == "andar" else None
         hecho = en_lienzo(reducir(dibujo, escala), corrido, lado, arriba)
         hecho.save(os.path.join(carpeta, "%s-%d.png" % (vista, n)))
         for otra in espejo:
