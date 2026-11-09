@@ -37,7 +37,7 @@ const ICONOS := [   # [programa, icono, nombre]
 	["puntos", "escritorio-talentos", "Talentos"],   # (por dentro se sigue llamando "puntos": antes se compraban puntos de talento)
 	["armas", "escritorio-armas", "Tienda\nde armas"],
 	["logros", "escritorio-logros", "Logros"],
-	["dosier", "dosier", "Dosier\nVD-7"],
+	["dosier", "escritorio-dosier", "Dosier\nVD-7"],
 	["noticias", "noticias", "Noticias"],
 	["colecciones", "colecciones", "Colecciones"],
 	["apagar", "puerta", "Apagar"],

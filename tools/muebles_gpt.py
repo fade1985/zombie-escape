@@ -52,6 +52,8 @@ MUEBLES = {
     # Logros, una copa amarilla lisa; los huecos de las asas se vacían también (las semillas)
     "escritorio_logros": ("assets/sources/escritorio-logros-gpt.webp", "assets/ui/iconos/escritorio-logros.png", 27, 25, False, (),
                           [(230, 400), (1020, 400)]),
+    # Dosier VD-7, una carpeta amarilla lisa
+    "escritorio_dosier": ("assets/sources/escritorio-dosier-gpt.webp", "assets/ui/iconos/escritorio-dosier.png", 28, 22, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
