@@ -66,7 +66,7 @@ const LISTA := [
 		"desc": "Mata 30 zombis seguidos sin perder vida."},
 	{"id": "intocable", "tema": "combate", "nombre": "Intocable", "icono": "reflejos", "premio": 25, "meta": 1, "cuenta": "",
 		"desc": "Pasa una planta entera, de la llegada a las escaleras, sin perder vida."},
-	{"id": "sin_tiritas", "tema": "combate", "nombre": "Sin tiritas", "icono": "botiquin", "premio": 15, "meta": 1, "cuenta": "",
+	{"id": "sin_tiritas", "tema": "combate", "nombre": "Sin tiritas", "icono": "logro-sin_tiritas", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida sin curarte con vendas ni botiquín."},
 	# ── Armas y talentos
 	{"id": "manitas", "tema": "armas", "nombre": "Manitas", "icono": "herramientas", "premio": 10, "meta": 1, "cuenta": "",
