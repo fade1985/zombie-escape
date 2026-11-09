@@ -77,7 +77,7 @@ const LISTA := [
 		"desc": "Cada golpe que recibes quita 1 menos por punto"},
 	{"id": "reflejos", "rama": "superviviente", "nivel": 2, "nombre": "Reflejos", "max": 5, "icono": "talento-reflejos", "pide": "corpulento",
 		"desc": "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"},
-	{"id": "sanitario", "rama": "superviviente", "nivel": 2, "nombre": "Sanitario", "max": 5, "icono": "botiquin", "pide": "lobezno",
+	{"id": "sanitario", "rama": "superviviente", "nivel": 2, "nombre": "Sanitario", "max": 5, "icono": "talento-sanitario", "pide": "lobezno",
 		"desc": "Los botiquines y las vendas curan 10 más por punto"},
 	{"id": "acero", "rama": "superviviente", "nivel": 3, "nombre": "Acero", "max": 1, "icono": "cartucho", "pide": "durito",
 		"desc": "Cada planta, un escudo de 50 que se gasta antes que la vida"},
