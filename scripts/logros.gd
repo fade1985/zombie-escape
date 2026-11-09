@@ -95,7 +95,7 @@ const LISTA := [
 		"desc": "Abre la cámara acorazada de la Joyería del centro comercial."},
 	{"id": "se_fue_la_luz", "tema": "sorpresas", "nombre": "Se fue la luz", "icono": "logro-se_fue_la_luz", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Supera un apagón: llega a la planta siguiente."},
-	{"id": "simulacro", "tema": "sorpresas", "nombre": "Simulacro", "icono": "lanzallamas", "premio": 5, "meta": 1, "cuenta": "",
+	{"id": "simulacro", "tema": "sorpresas", "nombre": "Simulacro", "icono": "logro-simulacro", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Supera un incendio: llega a la planta siguiente."},
 	{"id": "contra_marea", "tema": "sorpresas", "nombre": "Contra la marea", "icono": "bate", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Vence a una horda del pasillo."},
