@@ -14,10 +14,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 ## Mejoras
 
 - **M2** Talentos: cambiar los iconos uno a uno por dibujos de GPT.
-- **M3** Exclamación nueva hecha con GPT (la de los avisos: Noticias nuevas, logros por cobrar…).
 - **M4** Logros: cambiar los iconos uno a uno por dibujos de GPT.
-- **M6** Ordenador: cambiar los iconos del escritorio (Talentos, Tienda, Logros, Dosier, Noticias, Colecciones, Apagar) por dibujos de GPT.
-- **M7** La flecha amarilla del principio de la partida, por un dibujo de GPT.
 - **M8** Trasteros: puertas, camas y estanterías más realistas con lo de los muebles.
 - **M9** Pasillo del trastero: sus objetos, más realistas con lo de los muebles.
 - **M10** Portal: poner un felpudo grande (el dueño adjuntará una foto de referencia).
