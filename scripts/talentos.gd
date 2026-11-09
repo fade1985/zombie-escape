@@ -58,7 +58,7 @@ const LISTA := [
 		"desc": "Uno de cada 3 disparos es un crítico seguro (doble daño)"},
 	{"id": "fabricante", "rama": "militar", "nivel": 3, "nombre": "Fabricante", "max": 1, "icono": "granada", "pide": "artificiero",
 		"desc": "Fuego y explosiones más grandes, y el fuego dura más"},
-	{"id": "frenesi", "rama": "militar", "nivel": 4, "nombre": "Frenesí", "max": 3, "icono": "cuchillo", "pide": "larguirucho",
+	{"id": "frenesi", "rama": "militar", "nivel": 4, "nombre": "Frenesí", "max": 3, "icono": "talento-frenesi", "pide": "larguirucho",
 		"desc": "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"},
 	{"id": "gatillo", "rama": "militar", "nivel": 4, "nombre": "Gatillo fácil", "max": 3, "icono": "mp5", "pide": "mirilla",
 		"desc": "Disparas un 10 % más rápido y recargas un 10 % antes por punto"},
