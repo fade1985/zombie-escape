@@ -18,6 +18,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M10** Portal: poner un felpudo grande (el dueño adjuntará una foto de referencia).
 - **M13** Apartamentos: todos los muebles de cocina, salón y dormitorios, más realistas con lo de los muebles.
 - **M14** Científicos muertos que llevan los dosieres y el dosier flotante, rehechos con GPT.
+- **M15** Johnny: la animación de caerse y las estrellas que le dan vueltas en la cabeza, nuevas con GPT.
 
 ## Por limar
 
