@@ -130,8 +130,9 @@
 #                       daño a Johnny; sin sumarse, el respiro y la pausa) y el tono de los sonidos [prueba_armas.gd]
 #   --temblor           el ajuste «Temblor» de Opciones: el botón (Normal, Suave, No), que
 #                       se guarda y que multiplica el temblor y el parón de los golpes          [prueba_armas.gd]
-#   --musica            la música por capas: qué capas se oyen explorando, con zombis, en la horda y con el jefe, y
-#                       que van a la par (va sin sonido: lo dice en la terminal)              [prueba_armas.gd]
+#   --musica            la música por capas: qué capas se oyen explorando, con zombis, en la horda y con el jefe,
+#                       que van a la par y las de explorar el centro y la torre (va sin sonido: lo dice en la
+#                       terminal)                                                             [prueba_armas.gd]
 #   --skins             las skins: desbloqueo, taquilla, caras y lo que hace cada una        [prueba_skins.gd]
 #   --skins-torre       las cinco skins de Torre Velaria: desbloqueo, taquilla, caras, Despido, linterna,
 #                       munición, Copia de seguridad y la mutación al empezar                [prueba_skins.gd]

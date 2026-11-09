@@ -145,6 +145,8 @@
   (`audio/driver/mix_rate.web` en `project.godot`; sin él, el navegador pone 48 000), sin perder nada: los `.ogg` ya van
   a 32 000 y los efectos se hacen a 22 050. Cada capa ocupa 23 MB en vez de 35: unos 140 MB de música con las dos
   canciones cargadas y unos 185 MB mientras una entra y la otra se va (antes de las capas, unos 105 y 140).
+  Desde que el Centro comercial y Torre Velaria tienen su canción de explorar (9 nov), `liberar` suelta las que ya no
+  tocan: en una partida se guardan solo la de las hordas y la de explorar ese edificio, como antes.
   Medido el 29 oct: las dos capas empiezan en el mismo instante y desde el principio, y `--musica` sale bien también
   en la web.
 - Para ver qué suena en una exportación de prueba sin oírla: un script en el `<head>` de su `index.html` que envuelva

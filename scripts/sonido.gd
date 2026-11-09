@@ -9,12 +9,14 @@
 # la vez no saturen), Efectos y Musica.
 # Con --captura (la prueba sin jugar) arranca sin sonido, como el modo ?pruebas del JS.
 #
-# La música de fondo: dos canciones de 8 bits hechas aquí, partidas en capas (la base y la batería o la melodía) que
+# La música de fondo: canciones hechas aquí, partidas en capas (la base y la batería, la melodía o el ritmo) que
 # suenan a la vez y siempre juntas, cada una en su .ogg (cada canción tiene su partitura en tools/<canción>.mjs, que saca
 # assets/musica/<canción>-<capa>.ogg ya con su volumen). Suena en bucle sin cortes (el final empalma con el principio)
 # y lo que cambia es qué capas se oyen: según el momento y cuántos zombis hay despiertos (MOMENTOS). Al cambiar a un
 # momento con otra canción, la nueva entra mientras la vieja se apaga:
 #     Sonido.musica("menu")       # "menu" (los menús y explorar las plantas), "horda", "jefe" o "" (se apaga despacio)
+# Explorando el Centro comercial o Torre Velaria, "menu" pone la canción de ese edificio (EXPLORAR): la partida dice en
+# qué edificio se juega con Sonido.edificio (y el menú principal lo deja en "").
 #     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
 #
 # Cuando el juego no se ve o no se está usando (otra app u otra pestaña, la pantalla del móvil bloqueada, la ventana
@@ -174,6 +176,8 @@ var siguiente := 0
 const CANCIONES := {
 	"el-ultimo-inquilino": {"compases": 32, "capas": ["base", "bateria"]},   # los menús y explorar
 	"turno-de-noche": {"compases": 52, "capas": ["base", "melodia"]},        # las hordas y los jefes
+	"ultimas-rebajas": {"compases": 36, "capas": ["base", "ritmo"]},         # explorar el Centro comercial
+	"junta-de-accionistas": {"compases": 36, "capas": ["base", "ritmo"]},    # explorar Torre Velaria
 }
 # Cada momento: su canción y qué capas se oyen según cuántos zombis hay despiertos (filas [desde cuántos, capas], de
 # menos a más). Explorando, la batería entra en cuanto se despierta uno; en la horda, la melodía, cuando son MUCHOS; en
@@ -183,7 +187,13 @@ const MOMENTOS := {
 	"menu": {"cancion": "el-ultimo-inquilino", "capas": [[0, ["base"]], [1, ["base", "bateria"]]]},
 	"horda": {"cancion": "turno-de-noche", "capas": [[0, ["base"]], [MUCHOS, ["base", "melodia"]]]},
 	"jefe": {"cancion": "turno-de-noche", "capas": [[0, ["base"]], [1, ["base", "melodia"]]]},
+	"explorar_centro": {"cancion": "ultimas-rebajas", "capas": [[0, ["base"]], [1, ["base", "ritmo"]]]},
+	"explorar_torre": {"cancion": "junta-de-accionistas", "capas": [[0, ["base"]], [1, ["base", "ritmo"]]]},
 }
+# Los edificios con canción propia para explorar: su momento (el ritmo entra en cuanto se despierta un zombi). En los
+# demás (los Apartamentos), al explorar suena la de los menús
+const EXPLORAR := {"centro": "explorar_centro", "torre": "explorar_torre"}
+var edificio := ""       # el edificio de la partida que se juega ("" en el menú principal)
 const FUNDIDO := 3.0     # segundos que tarda en pasar de una canción a otra
 const SUBE := 1.0        # segundos que tarda una capa en entrar...
 const BAJA := 3.0        # ...y en irse,
@@ -282,6 +292,8 @@ func reproductor_musica() -> AudioStreamPlayer:
 # Cambia de momento. Si es otra canción, la nueva entra mientras la vieja se apaga; si es la misma (de la horda al
 # jefe, o volver enseguida a la que se estaba apagando), sigue por donde iba y solo cambian sus capas
 func musica(nuevo: String) -> void:
+	if nuevo == "menu":
+		nuevo = EXPLORAR.get(edificio, "menu")
 	if nuevo == momento:
 		return
 	momento = nuevo
@@ -384,7 +396,22 @@ func fundir(r: AudioStreamPlayer, hasta: float, segundos: float, parar := false)
 	r.set_meta("fundido", t)
 	t.tween_method(func(v: float): r.volume_db = maxf(linear_to_db(v), -80.0), db_to_linear(r.volume_db), hasta, segundos)
 	if parar:
-		t.tween_callback(r.stop)
+		t.tween_callback(func():
+			r.stop()
+			liberar())
+
+
+# Suelta las canciones que ya no suenan y que no van a volver pronto: las de explorar de otro sitio (las de otro
+# edificio, o la de los menús dentro del centro comercial). Así, en la web, no se guardan más de dos canciones a la vez
+# (cada una ocupa allí mucha memoria, ver docs/WEB.md); la de las hordas se queda siempre
+func liberar() -> void:
+	var quedan := ["turno-de-noche", MOMENTOS[EXPLORAR.get(edificio, "menu")].cancion, cancion]
+	for c in capas.keys():
+		if c in quedan or capas[c].values().any(func(r: AudioStreamPlayer): return r.playing):
+			continue
+		for r in capas[c].values():
+			r.queue_free()
+		capas.erase(c)
 
 
 # La melodía corta del final (como music.jingle del JS): sube si se gana, baja si se pierde. La música se apaga

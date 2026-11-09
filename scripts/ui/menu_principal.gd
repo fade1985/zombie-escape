@@ -29,6 +29,7 @@ func _ready() -> void:
 	Tactil.preparar()   # en el móvil, la pantalla sin redondear
 	Controles.aplicar()   # las teclas cambiadas en Opciones
 	theme = Tema.crear()
+	Sonido.edificio = ""   # (fuera de la partida, la de los menús)
 	Sonido.musica("menu")
 	Calentador.empezar(self)   # los shaders grandes, antes de jugar
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))

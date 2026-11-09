@@ -183,6 +183,7 @@ var de_prueba := 0         # «Científico muerto» del panel de pruebas: la pá
 
 func _ready() -> void:
 	Controles.aplicar()   # las teclas cambiadas en Opciones (por si se abre la partida directamente)
+	Sonido.edificio = edificio   # al explorar, la música de este edificio (Sonido.EXPLORAR)
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso]:

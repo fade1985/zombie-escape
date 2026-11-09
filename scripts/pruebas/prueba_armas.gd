@@ -2722,8 +2722,9 @@ func sin_paron(respiro := true) -> void:
 # que no le hacen nada a Johnny. Como va sin sonido, cada línea dice qué canción suena y qué capas se oyen, con lo
 # esperado: explorando sin zombis despiertos, con uno (entra la batería), recién quitado (la batería aguanta) y al rato
 # (se va); la horda con pocos y con MUCHOS (entra la melodía), y que la canción de antes se ha parado; de la horda al jefe
-# (la misma canción sigue por donde iba), antes y después de salir el jefe; que las capas van a la par, y que al
-# apagarla se para todo. Tarda medio minuto. Se cierra
+# (la misma canción sigue por donde iba), antes y después de salir el jefe; que las capas van a la par; las de explorar
+# el Centro comercial y Torre Velaria (con su capa de ritmo, y que se sueltan las que ya no tocan), y que al apagarla se
+# para todo. Tarda un minuto. Se cierra
 func probar_musica() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	for n in mapa.get_children():
@@ -2786,6 +2787,28 @@ func probar_musica() -> void:
 	dice.call("ha salido el jefe", "turno-de-noche [base, melodia]")
 	var pos: Array = donde_va.call("turno-de-noche")
 	print("Música, las capas van a la par: se llevan %d ms (esperado: 0)" % roundi((pos.max() - pos.min()) * 1000.0))
+
+	# Las de explorar de cada edificio (Sonido.EXPLORAR): "menu" pone la del edificio de la partida
+	poner.call(0)
+	Sonido.edificio = "centro"
+	Sonido.musica("menu")
+	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
+	dice.call("explorando el centro comercial", "ultimas-rebajas [base]")
+	poner.call(1)
+	await get_tree().create_timer(sube).timeout
+	dice.call("en el centro comercial con un zombi despierto", "ultimas-rebajas [base, ritmo]")
+	poner.call(0)
+	print("Música, la de los menús soltada en el centro comercial: %s (esperado: true)" % (
+		not Sonido.capas.has("el-ultimo-inquilino")))
+	Sonido.edificio = "torre"
+	Sonido.musica("horda")
+	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
+	Sonido.musica("menu")
+	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
+	dice.call("explorando Torre Velaria, después de una horda", "junta-de-accionistas [base]")
+	print("Música, canciones guardadas en Torre Velaria: %s (esperado: [turno-de-noche, junta-de-accionistas])" % [
+		Sonido.capas.keys()])
+	Sonido.edificio = "apartamentos"
 
 	Sonido.musica("")
 	await get_tree().create_timer(2.0).timeout

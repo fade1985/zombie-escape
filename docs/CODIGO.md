@@ -479,8 +479,10 @@ en una línea.
   prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
   sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y
   los zombis despiertos, que cuenta cada medio segundo: explorando, la batería entra con uno; en la horda, la melodía,
-  con `MUCHOS` (6); con el jefe, la melodía, cuando sale. Suben en 1 s y bajan tras 5 s sin hacer falta; se prueba con
-  `--musica`), `controles.gd` (las teclas cambiadas en Opciones; y `con_mando`, si se juega con el mando: lo último que se ha tocado,
+  con `MUCHOS` (6); con el jefe, la melodía, cuando sale. Suben en 1 s y bajan tras 5 s sin hacer falta. Explorando el
+  Centro comercial o Torre Velaria, `"menu"` pone la canción de ese edificio (`EXPLORAR`, por `Sonido.edificio`, que pone
+  la partida y el menú principal deja en `""`), con su capa de ritmo en cuanto se despierta un zombi; `liberar` suelta las
+  canciones que ya no tocan, para que en la web no haya más de dos guardadas. Se prueba con `--musica`), `controles.gd` (las teclas cambiadas en Opciones; y `con_mando`, si se juega con el mando: lo último que se ha tocado,
   que mira `pantalla.gd` con `fijarse`, M44; y `ordenar_mando`, que en la web da el orden estándar a los mandos que el
   navegador no reconoce, para que su L2 no sea Start, M73, ver `docs/CONTROLES.md`).
 
@@ -732,8 +734,9 @@ en una línea.
 - `sprites/`: las hojas (`.png` + `.json`) y sus animaciones (`.tres`). Hoja nueva →
   `py tools/hacer_frames.py assets/sprites/<nombre>`.
 - `musica/`: «El último inquilino» (menús y explorar: `el-ultimo-inquilino-base.ogg` y `-bateria.ogg`) y «Turno de
-  noche» (hordas y jefes: `turno-de-noche-base.ogg` y `-melodia.ogg`), las capas que suenan a la vez (`CANCIONES` y
-  `MOMENTOS` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
+  noche» (hordas y jefes: `turno-de-noche-base.ogg` y `-melodia.ogg`), y las de explorar cada edificio: «Últimas
+  rebajas» (Centro comercial) y «Junta de accionistas» (Torre Velaria), épicas, con `-base.ogg` y `-ritmo.ogg`; las capas
+  que suenan a la vez (`CANCIONES`, `MOMENTOS` y `EXPLORAR` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
   (ver `docs/WEB.md`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
   25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
@@ -929,6 +932,13 @@ en una línea.
   `tools/efectos/*.wav`, que no van a git).
 - **Música de 8 bits:** `motor-8bit.mjs` y las canciones (`el-ultimo-inquilino.mjs`, `turno-de-noche.mjs`,
   `villancico-8bit.mjs`, de prueba). `node tools/<canción>.mjs` saca el `.wav` y el `.ogg`; con `--veces 4`, en bucle.
+  El motor tiene también instrumentos «de 16 bits» (sierra con varias voces y filtro, seno, FM, coro, reverberación de
+  sala, la cinta que tiembla) y percusión de tráiler (`taiko`, `caja16`, `charles`, `platillo16`, `golpe`, `ascenso`):
+  las canciones de explorar los edificios, hechas el 9 nov en tres estilos por edificio para elegir. Las elegidas,
+  `ultimas-rebajas.mjs` y `junta-de-accionistas.mjs`; las otras se quedan por si acaso (`hilo-musical.mjs`,
+  `caja-registradora.mjs`, `musica-en-espera.mjs`, `horas-extra.mjs`). Cada una deja en `tools/efectos/elegir/` la
+  canción entera y la base sola (con `index.html` para escucharlas todas) y, con `--juego`, sus capas en
+  `assets/musica/` ya a su volumen (`sacarCancion`, que lo mide con ffmpeg).
   Por capas: cada instrumento dice su `capa` (y la percusión y demás, la suya en `capas` de `crearMotor`), `guardar()`
   saca un `.wav` por capa, a la misma ganancia, que sumados suenan como la canción entera, y la partitura pasa cada uno
   a su `.ogg`. El trailer suma las capas al montar.
