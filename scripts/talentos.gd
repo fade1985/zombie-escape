@@ -24,7 +24,7 @@ const PRECIO_PUNTO_VIEJO := 10   # lo que costaba un punto de talento antes del 
 # Ojo: las desc no acaban en punto, porque ordenador.gd les pega detrás «. Te hace falta 1 punto.» y similares
 # [traducir]
 const RAMAS := [
-	{"id": "militar", "nombre": "Militar", "icono": "militar"},
+	{"id": "militar", "nombre": "Militar", "icono": "rama-militar"},
 	{"id": "superviviente", "nombre": "Superviviente", "icono": "medico"},
 	{"id": "quimico", "nombre": "Químico", "icono": "obj-bidon_acido"},
 ]

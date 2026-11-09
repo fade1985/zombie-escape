@@ -237,7 +237,7 @@ func dibujar_rama(rama: Dictionary, x: float, ancho: float, fuente: Font) -> voi
 	var e := Vector2(x + 22, ARRIBA + CABECERA / 2.0 + 2)
 	draw_circle(e, 16, color[1], true, -1.0, false)
 	draw_circle(e, 13, color[2], true, -1.0, false)
-	draw_texture_rect(icono(rama.icono), Rect2(e - Vector2(12, 12), Vector2(24, 24)), false)
+	draw_texture_rect(icono(rama.icono), en_caja(icono(rama.icono), e, 24.0), false)
 	draw_string(fuente, Vector2(x + 44, e.y + 6), Talentos.nombre_rama(rama.id).to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color[0])
 	var puestos := 0
 	var total := 0
