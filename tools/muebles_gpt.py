@@ -114,6 +114,7 @@ MUEBLES = {
     "logro_primer_turno": ("assets/sources/logro-primer_turno-gpt.webp", "assets/ui/iconos/logro-primer_turno.png", 28, 32, False),
     "logro_sube_conserje": ("assets/sources/logro-sube_conserje-gpt.webp", "assets/ui/iconos/logro-sube_conserje.png", 29, 32, False),
     "logro_liquidacion": ("assets/sources/logro-liquidacion-gpt.webp", "assets/ui/iconos/logro-liquidacion.png", 32, 28, False),
+    "logro_reestructuracion": ("assets/sources/logro-reestructuracion-gpt.webp", "assets/ui/iconos/logro-reestructuracion.png", 20, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

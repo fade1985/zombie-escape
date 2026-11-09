@@ -32,7 +32,7 @@ const LISTA := [
 		"desc": "Gana una partida: limpia el edificio de arriba abajo."},
 	{"id": "liquidacion", "tema": "edificios", "nombre": "Liquidación total", "icono": "logro-liquidacion", "premio": 20, "cuenta": "",
 		"mira": "completado", "edificio": "centro", "desc": "Completa el Centro comercial: derrota al gerente."},
-	{"id": "reestructuracion", "tema": "edificios", "nombre": "Reestructuración", "icono": "torre", "premio": 25, "cuenta": "",
+	{"id": "reestructuracion", "tema": "edificios", "nombre": "Reestructuración", "icono": "logro-reestructuracion", "premio": 25, "cuenta": "",
 		"mira": "completado", "edificio": "torre", "desc": "Completa Torre Velaria: derrota al Sujeto 1."},
 	{"id": "alerta_naranja", "tema": "edificios", "nombre": "Alerta naranja", "icono": "alerta", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Completa un edificio con la Alerta 3 o más."},
