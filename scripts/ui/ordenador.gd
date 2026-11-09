@@ -216,8 +216,8 @@ func montar_monitor() -> void:
 		# una línea de más y los rótulos de dos líneas pedirían 84 de alto (y los 7 ya no cabrían)
 		var dentro := VBoxContainer.new()
 		dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
-		dentro.offset_top = 8       # dentro del borde del marco de madera del foco
-		dentro.offset_bottom = -9
+		dentro.offset_top = 12      # dentro del borde del marco de madera del foco, con aire por arriba
+		dentro.offset_bottom = -8
 		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dentro.add_theme_constant_override("separation", 0)
 		b.add_child(dentro)
