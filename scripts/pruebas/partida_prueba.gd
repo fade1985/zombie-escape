@@ -157,6 +157,8 @@
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
 #   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
+#   --ordenador-iconos  los iconos del escritorio del ordenador con el ratón encima: el dibujo y el rótulo, dentro del
+#                       marco de madera (fotos captura-ordenador-icono-*.png, ampliadas)       [prueba_larga.gd]
 #   --arbol-talentos    la ficha del árbol de talentos del ordenador con el ratón (sale al pasar por encima), el
 #                       mando (sigue a la marca) y el dedo (el primer toque la enseña, el segundo compra) [prueba_larga.gd]
 #   --tienda-armas      la tienda de armas del ordenador: la ficha explica la tienda al abrir y sigue al ratón, al
@@ -602,6 +604,10 @@ func empezar_prueba() -> void:
 	elif "--ordenador-arriba" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_ordenador_arriba()
+		get_tree().quit()
+	elif "--ordenador-iconos" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_ordenador_iconos()
 		get_tree().quit()
 	elif "--ordenador-teclado" in args:
 		set_process(false)   # sin la prueba larga

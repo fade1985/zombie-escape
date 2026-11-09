@@ -593,6 +593,25 @@ func clic_en(b: Control) -> void:
 
 # Con "--captura --ordenador-teclado": con el teclado o el mando se llega a todo en cada programa del ordenador: sube hasta
 # arriba, baja hasta abajo y vuelve, y dice por cuántas tarjetas ha pasado y dónde acaba. Deja el guardado como estaba
+# Con "--captura --ordenador-iconos": cada icono del escritorio del ordenador con el ratón encima (el marco de madera del
+# foco): una foto ampliada ×3 de cada uno, captura-ordenador-icono-<programa>.png, para ver que el dibujo y el rótulo
+# quedan dentro del marco
+func probar_ordenador_iconos() -> void:
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	await get_tree().create_timer(0.6).timeout
+	for b: Button in ordenador.iconos.get_children():
+		Input.warp_mouse(b.get_global_rect().get_center() * get_viewport().get_screen_transform().get_scale())
+		b.grab_focus()
+		await get_tree().create_timer(0.25).timeout
+		var r := b.get_global_rect().grow(8)
+		var img := get_viewport().get_texture().get_image().get_region(Rect2i(r))
+		img.resize(img.get_width() * 3, img.get_height() * 3, Image.INTERPOLATE_NEAREST)
+		img.save_png(Captura.CARPETA + "captura-ordenador-icono-%s.png" % b.name.trim_prefix("icono_"))
+	Captura.foto("captura-ordenador-iconos.png")
+	ordenador.apagar()
+
+
 func probar_ordenador_teclado() -> void:
 	var antes := Guardado.cargar()
 	await get_tree().create_timer(0.3).timeout

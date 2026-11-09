@@ -199,12 +199,15 @@ func montar_monitor() -> void:
 		var b := Button.new()
 		b.name = "icono_" + i[0]
 		b.flat = true
-		b.custom_minimum_size = Vector2(132, 72)
+		# 82 de alto (antes 72): con el ratón encima sale el marco de madera del foco, y su borde (unos 8 por cada lado)
+		# pisaba el dibujo por arriba y los rótulos de dos líneas por abajo. Noticias, sola en su esquina, algo más (su
+		# tele es más alta). Los 6 de la columna caben igual: 12 + 5 × 84 + 82 = 514, y la barra de tareas empieza en 522
+		b.custom_minimum_size = Vector2(132, 88 if i[0] == "noticias" else 82)
 		b.size = b.custom_minimum_size
 		if i[0] == "noticias":
 			b.position = Vector2(pantalla.custom_minimum_size.x - 10 - 132, 12)
 		else:
-			b.position = Vector2(10, 12 + en_columna * 73)
+			b.position = Vector2(10, 12 + en_columna * 84)
 			en_columna += 1
 		b.add_theme_stylebox_override("normal", caja(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 4, 2))   # sin el margen grande del tema: caben los 7
 		b.add_theme_stylebox_override("hover", caja(Color(1, 1, 1, 0.12), Color(0, 0, 0, 0), 0, 4, 2))
@@ -213,8 +216,8 @@ func montar_monitor() -> void:
 		# una línea de más y los rótulos de dos líneas pedirían 84 de alto (y los 7 ya no cabrían)
 		var dentro := VBoxContainer.new()
 		dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
-		dentro.offset_top = 2
-		dentro.offset_bottom = -6   # más hueco abajo: el marco de madera del foco es más grueso que el texto
+		dentro.offset_top = 8       # dentro del borde del marco de madera del foco
+		dentro.offset_bottom = -9
 		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dentro.add_theme_constant_override("separation", 0)
 		b.add_child(dentro)
