@@ -26,7 +26,7 @@ const PRECIO_PUNTO_VIEJO := 10   # lo que costaba un punto de talento antes del 
 const RAMAS := [
 	{"id": "militar", "nombre": "Militar", "icono": "rama-militar"},
 	{"id": "superviviente", "nombre": "Superviviente", "icono": "rama-superviviente"},
-	{"id": "quimico", "nombre": "Químico", "icono": "obj-bidon_acido"},
+	{"id": "quimico", "nombre": "Químico", "icono": "rama-quimico"},
 ]
 # [/traducir]
 # El rayo de Pararrayos (johnny.gd, pararrayos): su daño (con el Catalizador, más), lo que aturde, cada cuánto como
