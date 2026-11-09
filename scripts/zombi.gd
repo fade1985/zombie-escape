@@ -36,6 +36,7 @@ const CAPA_ZOMBIS := 3     # su capa de choque, la 3 de project.godot
 @export var bamboleo_ritmo := 2.3
 @export var a_tirones := false   # el lento: avanza a tirones, como si se arrastrara con las manos
 @export var altura := 86.0       # dónde le salen los números de daño (por encima de la cabeza)
+@export var aguanta_acido := false   # el gordo (venenoso): los charcos de ácido no le queman (9 nov, lo pidió el dueño)
 # Las ropas: cada uno sale con una al azar (si no hay ninguna, se queda con la que trae su escena)
 @export var ropas: Array[SpriteFrames] = []
 
@@ -635,6 +636,9 @@ func quimica_al_morir() -> void:
 
 # Lo llaman los charcos en cada paso mientras los pisa
 func pisar(estados_charco: Dictionary) -> void:
+	if aguanta_acido and estados_charco.has("acido"):
+		estados_charco = estados_charco.duplicate()
+		estados_charco.erase("acido")
 	Estados.pisar(pisando, estados_charco, true)
 
 

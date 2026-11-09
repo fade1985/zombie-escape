@@ -2230,6 +2230,52 @@ func probar_vecino_gpt(tipo := "normal", nombre := "vecino", otras: Array = []) 
 	get_tree().quit()
 
 
+# Con "--captura --acido-zombis": cada zombi, quieto encima de un charco de ácido (el de la portera) en la sala de
+# pruebas, y cuánta vida pierde en 2 s: todos se queman menos el gordo (venenoso: aguanta_acido) y el Glotón (los
+# minijefes no pisan charcos). Foto
+# captura-acido-zombis.png
+func probar_acido_zombis() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(260, 260)
+	johnny.get_node("Camara").reset_smoothing()
+	var tipos := ["normal", "vecina", "lento", "rapido", "explosivo", "tentaculos", "venenoso", "gloton"]
+	var zombis := {}
+	for i in tipos.size():
+		var donde: Vector2 = johnny.position + Vector2(-420 + i * 120, -170)
+		var z: Node2D = meter_zombi(tipos[i], donde)
+		if "velocidad" in z and not (z.get("velocidad") is Array or z.get("velocidad") is Dictionary):
+			z.set("velocidad", 0.0)
+		var charco: Node2D = preload("res://escenas/armas/charco.tscn").instantiate()
+		charco.tipo = "acido"
+		charco.duracion = 3.0
+		charco.position = donde
+		z.get_parent().add_child(charco)
+		zombis[tipos[i]] = [z, 0]
+	await get_tree().create_timer(0.5).timeout
+	for t in zombis:
+		zombis[t][0].global_position = johnny.position + Vector2(-420 + tipos.find(t) * 120, -170)
+		zombis[t][1] = zombis[t][0].vida
+	await get_tree().create_timer(2.0).timeout
+	var lineas := PackedStringArray()
+	for t in zombis:
+		var z: Node2D = zombis[t][0]
+		z.global_position = johnny.position + Vector2(-420 + tipos.find(t) * 120, -170)
+		lineas.append("%s -%d" % [t, zombis[t][1] - z.vida])
+	print("Ácido en los zombis (2 s encima del charco): %s (esperado: todos pierden vida menos venenoso y gloton, -0)" % " · ".join(lineas))
+	Captura.foto("captura-acido-zombis.png")
+	get_tree().quit()
+
+
 # Con "--captura --tentaculos": el zombi de tentáculos con su hoja de PixelLab (zombi_tentaculos.gd). En la sala de
 # pruebas, dos vienen andando hacia Johnny, uno por cada lado (captura-tentaculos-andar.png); luego uno, ya cerca,
 # avisa del latigazo echando los tentáculos atrás (captura-tentaculos-aviso.png) y los lanza al dar el golpe

@@ -13,6 +13,7 @@ collision_mask = 5
 motion_mode = 1
 script = ExtResource("script")
 vida_max = 35
+aguanta_acido = true
 velocidad = 60.0
 dano = 0
 radio = 30.0
