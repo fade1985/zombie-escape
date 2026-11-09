@@ -64,7 +64,7 @@ const LISTA := [
 		"desc": "Prende fuego a 5 zombis con un mismo molotov."},
 	{"id": "racha", "tema": "combate", "nombre": "Racha imparable", "icono": "logro-racha", "premio": 10, "meta": 30, "cuenta": "partida",
 		"desc": "Mata 30 zombis seguidos sin perder vida."},
-	{"id": "intocable", "tema": "combate", "nombre": "Intocable", "icono": "reflejos", "premio": 25, "meta": 1, "cuenta": "",
+	{"id": "intocable", "tema": "combate", "nombre": "Intocable", "icono": "logro-intocable", "premio": 25, "meta": 1, "cuenta": "",
 		"desc": "Pasa una planta entera, de la llegada a las escaleras, sin perder vida."},
 	{"id": "sin_tiritas", "tema": "combate", "nombre": "Sin tiritas", "icono": "logro-sin_tiritas", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida sin curarte con vendas ni botiquín."},
