@@ -87,7 +87,7 @@ const LISTA := [
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
 	{"id": "blindaje", "rama": "superviviente", "nivel": 4, "nombre": "Blindaje", "max": 3, "icono": "talento-blindaje", "pide": "acero",
 		"desc": "El escudo de Acero tiene 25 más por punto"},
-	{"id": "sombra", "rama": "superviviente", "nivel": 4, "nombre": "Sombra", "max": 3, "icono": "reflejos", "pide": "ninja",
+	{"id": "sombra", "rama": "superviviente", "nivel": 4, "nombre": "Sombra", "max": 3, "icono": "talento-sombra", "pide": "ninja",
 		"desc": "La esquiva se recarga un 15 % antes por punto"},
 	{"id": "aliento", "rama": "superviviente", "nivel": 4, "nombre": "Segundo aliento", "max": 3, "icono": "cafe", "pide": "desfibrilador",
 		"desc": "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"},
