@@ -45,7 +45,7 @@ const LISTA := [
 	# ── Jefes
 	{"id": "desahucio", "tema": "jefes", "nombre": "Desahucio", "icono": "logro-desahucio", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Derrota a la portera."},
-	{"id": "sin_rasguno", "tema": "jefes", "nombre": "Sin un rasguño", "icono": "casco", "premio": 15, "meta": 1, "cuenta": "",
+	{"id": "sin_rasguno", "tema": "jefes", "nombre": "Sin un rasguño", "icono": "logro-sin_rasguno", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe sin perder vida en toda la pelea."},
 	{"id": "por_los_pelos", "tema": "jefes", "nombre": "Por los pelos", "icono": "vida", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe con menos del 10 % de tu vida."},
