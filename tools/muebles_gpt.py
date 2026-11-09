@@ -49,6 +49,9 @@ MUEBLES = {
     # desde el borde, se vacían también (las semillas)
     "escritorio_armas": ("assets/sources/escritorio-armas-gpt.webp", "assets/ui/iconos/escritorio-armas.png", 26, 26, False, (),
                          [(627, 627), (387, 387), (867, 387), (387, 867), (867, 867)]),
+    # Logros, una copa amarilla lisa; los huecos de las asas se vacían también (las semillas)
+    "escritorio_logros": ("assets/sources/escritorio-logros-gpt.webp", "assets/ui/iconos/escritorio-logros.png", 27, 25, False, (),
+                          [(230, 400), (1020, 400)]),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
