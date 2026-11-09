@@ -15,7 +15,7 @@ cartel del final hablan igual de botones o de teclas. Se prueba con `-- --captur
 |---|---|---|
 | Moverse | WASD o flechas | stick izquierdo |
 | Esquivar | Espacio o Mayús | A o LB |
-| Atacar | ratón + clic o J; solo, con la ayuda *Disparo asistido* | RT / stick derecho |
+| Atacar | ratón + clic o J; solo, con la ayuda *Disparo asistido* | RT (el stick derecho solo apunta: RT ataca hacia donde se apuntó; en el móvil, su joystick derecho sí ataca) |
 | Cambiar de arma (cuerpo a cuerpo / distancia) | Q o rueda | Y |
 | Recargar | R | X |
 | Lanzar (mantener para apuntar, soltar para lanzar) | E o clic derecho | LT |

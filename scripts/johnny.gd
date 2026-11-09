@@ -12,8 +12,8 @@
 # asistido"; con ella encendida no se consiguen logros, logros.gd). Se nota al momento, también desde la pausa:
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
 #             está a tiro, le pega o le dispara. El jugador solo se preocupa de moverse
-#   libre     apunta con el ratón (y ataca con el clic o J) o con el stick derecho del mando (y ataca mientras
-#             lo empuja). Con una ayuda suave: si apuntas casi encima de un zombi, se tuerce un poco hacia él
+#   libre     apunta con el ratón (y ataca con el clic o J) o con el stick derecho del mando (que solo apunta: se
+#             ataca con RT, hacia donde se apuntó). Con una ayuda suave: si apuntas casi encima de un zombi, se tuerce un poco hacia él
 #
 # Tiene vida: los zarpazos se la quitan y, cuando cambia, lo avisa con la señal "vida_cambiada". La vida va
 # en tres tercios: el tercio que pierde ya no se cura (solo el botiquín lo devuelve), y por cada uno anda un 15 %
@@ -168,6 +168,7 @@ var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siemp
 var modo := "libre"        # cómo se ataca (ver arriba)
 var asistido_puesto := false   # cómo estaba la ayuda "Disparo asistido" la última vez que se miró (mirar_asistido)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
+var ultimo_apunte := Vector2.DOWN   # modo libre, con el mando: hacia donde se empujó el stick derecho por última vez (RT ataca hacia ahí)
 var ante_mueble: Area2D = null   # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): el clic encima lo abre, no dispara
 
 const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
@@ -580,7 +581,8 @@ func apuntar_y_atacar() -> void:
 		intentar_atacar(hacia.angle())
 
 
-# Modo libre: apunta con el stick derecho (y ataca mientras lo empuja) o con el ratón (y ataca con el clic o J)
+# Modo libre: apunta con el stick derecho (solo apunta; ataca RT) o con el ratón (y ataca con el clic o J). En el móvil, su
+# joystick derecho apunta y ataca
 func apuntar_libre() -> void:
 	var stick := Input.get_vector("apuntar_izquierda", "apuntar_derecha", "apuntar_arriba", "apuntar_abajo")
 	var apunte := Vector2.ZERO
@@ -589,9 +591,15 @@ func apuntar_libre() -> void:
 	var lanzando := Input.is_action_pressed("lanzar") or Input.is_action_just_released("lanzar")
 	if stick.length() > 0.5 and not lanzando:
 		apunte = stick
-		ataca = true
+		ultimo_apunte = stick
+		# el stick del mando solo apunta (se ataca con RT); el joystick del móvil, que es el único botón, también ataca
+		if Tactil.activo and Tactil.con_dedo:
+			ataca = true
 	elif con_raton:
 		apunte = get_global_mouse_position() - global_position
+	elif ataca and Controles.con_mando:
+		# RT con el stick suelto: hacia donde se apuntó por última vez
+		apunte = ultimo_apunte
 	if apunte.length() < 1.0:
 		return
 	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado

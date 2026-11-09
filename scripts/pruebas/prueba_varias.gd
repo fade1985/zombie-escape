@@ -3341,6 +3341,49 @@ func probar_formas() -> void:
 # sin que cierre nada), un tutorial (que con prisa no se cierra), el inventario, la taquilla, el ordenador, una página del
 # dosier, el panel de pruebas y, al final, el cartel del final. Que A siga esquivando y que B sin ningún menú no haga nada.
 # El menú principal lo prueba menu_principal.gd antes de llegar aquí. Lo que comprueba lo escribe en la terminal
+# El stick derecho del mando solo apunta; RT ataca. Con eventos de verdad (acciones), sin mando físico
+func probar_apuntar_mando() -> void:
+	var jug = johnny
+	var mando_antes := Controles.con_mando
+	var ayuda_antes: bool = Guardado.ajuste("disparo_asistido")
+	Controles.con_mando = true
+	Guardado.cambiar(func(g): g.ajustes.disparo_asistido = false)   # (la partida de prueba lleva el disparo asistido puesto)
+	await get_tree().create_timer(0.2).timeout
+	jug.con_raton = false
+	var esperar := func() -> void:
+		for i in 8:
+			await get_tree().physics_frame
+	jug.espera = 0.0
+	Input.action_press("apuntar_derecha", 1.0)
+	await esperar.call()
+	jug.apuntar_libre()
+	print("Mando · solo el stick derecho: mira %s, ha atacado %s (esperado: e, false)" % [jug.direccion, jug.espera > 0.0])
+	Input.action_press("atacar")
+	await esperar.call()
+	print("Mando · stick + RT: ha atacado %s (esperado: true)" % [jug.espera > 0.0])
+	Input.action_release("apuntar_derecha")
+	Input.action_release("atacar")
+	await get_tree().create_timer(1.5).timeout
+	jug.espera = 0.0
+	Input.action_press("atacar")
+	await esperar.call()
+	print("Mando · RT con el stick suelto: ha atacado %s, mira %s (esperado: true, e)" % [jug.espera > 0.0, jug.direccion])
+	Input.action_release("atacar")
+	await get_tree().create_timer(1.5).timeout
+	# el móvil: su joystick derecho es el único botón de atacar, así que sí ataca
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	jug.espera = 0.0
+	Input.action_press("apuntar_abajo", 1.0)
+	await esperar.call()
+	print("Móvil · joystick derecho: ha atacado %s (esperado: true)" % [jug.espera > 0.0])
+	Input.action_release("apuntar_abajo")
+	Tactil.activo = false
+	Controles.con_mando = mando_antes
+	Guardado.cambiar(func(g): g.ajustes.disparo_asistido = ayuda_antes)
+	get_tree().quit()
+
+
 func probar_mando() -> void:
 	var pulsar_a := func() -> void: await PruebaMando.pulsar(get_tree(), JOY_BUTTON_A)
 	var pulsar_b := func() -> void: await PruebaMando.pulsar(get_tree(), JOY_BUTTON_B)
