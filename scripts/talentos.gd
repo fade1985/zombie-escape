@@ -91,7 +91,7 @@ const LISTA := [
 		"desc": "La esquiva se recarga un 15 % antes por punto"},
 	{"id": "aliento", "rama": "superviviente", "nivel": 4, "nombre": "Segundo aliento", "max": 3, "icono": "talento-aliento", "pide": "desfibrilador",
 		"desc": "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"},
-	{"id": "adrenalina", "rama": "superviviente", "nivel": 5, "nombre": "Adrenalina", "max": 1, "icono": "alerta",
+	{"id": "adrenalina", "rama": "superviviente", "nivel": 5, "nombre": "Adrenalina", "max": 1, "icono": "talento-adrenalina",
 		"pide": ["blindaje", "sombra", "aliento"],
 		"desc": "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"},
 	# ── Químico
