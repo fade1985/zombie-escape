@@ -463,7 +463,9 @@ en una línea.
   memoria para la web, que no tiene archivo. En Opciones → General, «Abrir el registro de errores» (abre la carpeta) o,
   en la web y el móvil, «Copiar el registro de errores». Al cerrar el juego escribe el resumen, «Registro al cerrar: N
   errores y M avisos» con cada uno distinto y cuántas veces salió: así se ve de un vistazo si una prueba `--captura` (o
-  la partida de un jugador) ha ido limpia. Se prueba con `--registro`.
+  la partida de un jugador) ha ido limpia. Detrás, Godot suelta al apagarse unas líneas de «leaked at exit» y «resources
+  still in use»: son los dibujos y letras que guardan las `static var` de los scripts, no afectan y se dejan (9 nov).
+  Se prueba con `--registro`.
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide
