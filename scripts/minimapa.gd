@@ -1,8 +1,8 @@
 # El minimapa, arriba a la derecha. En el pasillo de la planta (y en la exposición y la sala de pruebas), el plano de la
 # planta, como el de una mazmorra; dentro de un sitio (un piso, la habitación de un jefe, una tienda, la sala de
 # mantenimiento, las viviendas...), el plano de ese sitio (ver "El plano del sitio", abajo).
-# El plano de la planta: el pasillo en medio y, unida a él por un trocito de pasillo, una sala por cada puerta (arriba y
-# abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar (con un «?»), rojo = con zombis dentro, claro = limpio; Johnny, un círculo
+# El plano de la planta: el pasillo en medio y, pegada a él (con el muro compartido y el hueco de la puerta), una sala
+# por cada puerta (arriba y abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar (con un «?»), rojo = con zombis dentro, claro = limpio; Johnny, un círculo
 # rojo (en el pasillo, donde está). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
 # (supervivientes.gd).
@@ -29,7 +29,7 @@ const PASILLO_Y := 58.0     # dónde empieza (por arriba) el pasillo
 const CASILLA := 32.0
 const PUNTO := Color("#ff3b3b")     # los zombis, con las cámaras
 const BRILLO := Color("#ffb3a0")
-const SALA := Vector2(34, 18)       # cada apartamento en el plano de la planta: todos iguales, sea como sea de grande
+const SALA := Vector2(34, 22)       # cada apartamento en el plano de la planta: todos iguales, sea como sea de grande
 const OSCURA := Color("#2e2a36")    # en el plano de un sitio, las habitaciones aún sin pisar (con la niebla del mapa)
 const DONDE := Color("#e6d68a")     # la habitación en la que está Johnny
 const JOHNNY := Color("#e2382c")    # Johnny: un círculo rojo con el borde claro (los zombis son cuadraditos)
@@ -76,7 +76,7 @@ func _process(delta: float) -> void:
 
 
 # Las salas del plano de la planta: cada una un diccionario con su rectángulo, su color, si estás ahí, su icono, si está
-# ahí el superviviente y el trocito de pasillo ("puerta") que la une al pasillo, como en el plano de una mazmorra.
+# ahí el superviviente y el hueco de su puerta ("puerta"): todas pegadas al pasillo, compartiendo el muro.
 # Todas del mismo tamaño (SALA). Todo cae en números pares: 2 unidades = un píxel del dibujo.
 func casillas() -> Array:
 	var planta: Dictionary = partida.planta
@@ -95,13 +95,13 @@ func casillas() -> Array:
 	for s in pasillo.salidas:
 		match s.tipo:
 			"llegada":
-				lista.append({"r": Rect2(MARGEN, medio - 9, PUNTA, 18), "color": GRIS, "aqui": false, "icono": "puerta",
-					"sos": false, "puerta": Rect2(MARGEN + PUNTA - 2, medio - 3, 8, 6)})
+				lista.append({"r": Rect2(x0 - 2 - PUNTA, medio - 11, PUNTA, 22), "color": GRIS, "aqui": false, "icono": "puerta",
+					"sos": false, "puerta": Rect2(x0 - 4, medio - 3, 4, 6)})
 			"escaleras":
 				var abiertas: bool = planta.jefa_muerta
-				lista.append({"r": Rect2(x0 + largo + 4, medio - 9, PUNTA, 18), "color": VERDE if abiertas else GRIS,
+				lista.append({"r": Rect2(x0 + largo + 2, medio - 11, PUNTA, 22), "color": VERDE if abiertas else GRIS,
 					"aqui": false, "icono": "escalera" if abiertas else "candado", "sos": false,
-					"puerta": Rect2(x0 + largo - 2, medio - 3, 8, 6)})
+					"puerta": Rect2(x0 + largo, medio - 3, 4, 6)})
 			"puerta":
 				if s.a < 0:
 					continue
@@ -120,9 +120,9 @@ func casillas() -> Array:
 				var alto := SALA.y
 				var x := par(x0 + float(s.en) / pasillo.ancho * largo)
 				var arriba: bool = s.dir == "arriba"
-				var y := PASILLO_Y - 6 - alto if arriba else PASILLO_Y + 16
-				# (el trocito de pasillo entra 2 en la sala y 2 en el pasillo, para abrir los dos muros)
-				var puerta := Rect2(x - 3, y + alto - 2, 6, PASILLO_Y + 2 - (y + alto - 2)) if arriba 					else Rect2(x - 3, PASILLO_Y + 8, 6, y + 2 - (PASILLO_Y + 8))
+				# pegada al pasillo: su muro y el del pasillo son uno, con el hueco de la puerta
+				var y := PASILLO_Y - 2 - alto if arriba else PASILLO_Y + 12
+				var puerta := Rect2(x - 3, PASILLO_Y - 4 if arriba else PASILLO_Y + 10, 6, 4)
 				lista.append({"r": Rect2(x - ancho / 2.0, y, ancho, alto), "color": color,
 					# (desde la exposición y las viviendas, que no salen en el plano, se marca la sala de mantenimiento)
 					"aqui": aqui == s.a or (planta.sitios[aqui].tipo in ["expo", "armas", "viviendas"] and sitio.tipo == "mantenimiento"),
@@ -193,14 +193,10 @@ func dibujar_planta() -> void:
 		elif color == GRIS and c.icono == "" and c.has("sitio"):
 			# sin visitar: un «?» pequeño
 			draw_string(letra, Vector2(r.position.x, r.get_center().y + 7), "?", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 16, GRIS.lightened(0.35))   # no-tr (un signo)
-	# los trozos de pasillo, encima, con su muro a los lados: abren el muro de la sala y el del pasillo, y en la sala
-	# dejan el umbral de la puerta, del color del pasillo
+	# el hueco de cada puerta, encima, abre el muro que comparten la sala y el pasillo
 	for c in lista:
 		if c.puerta.has_area():
-			var d: Rect2 = c.puerta
-			var hor := d.size.x > d.size.y   # (los de la llegada y las escaleras van de lado)
-			draw_rect(d.grow_individual(0, 2, 0, 2) if hor else d.grow_individual(2, 0, 2, 0), BORDE)
-			draw_rect(d, PASILLO)
+			draw_rect(c.puerta, PASILLO)
 	if camaras:
 		dibujar_zombis(lista)
 	for c in lista:
