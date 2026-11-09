@@ -26,7 +26,7 @@ const LISTA := [
 	# ── Edificios
 	{"id": "primer_turno", "tema": "edificios", "nombre": "Primer turno", "icono": "logro-primer_turno", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Limpia tu primer apartamento."},
-	{"id": "sube_conserje", "tema": "edificios", "nombre": "Sube, conserje", "icono": "escalera", "premio": 15, "meta": 1, "cuenta": "",
+	{"id": "sube_conserje", "tema": "edificios", "nombre": "Sube, conserje", "icono": "logro-sube_conserje", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Llega a la planta 3."},
 	{"id": "fin_jornada", "tema": "edificios", "nombre": "Fin de la jornada", "icono": "trofeo", "premio": 50, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida: limpia el edificio de arriba abajo."},
