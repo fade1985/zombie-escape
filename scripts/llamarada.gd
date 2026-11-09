@@ -14,7 +14,8 @@
 # sale una bocanada de humo y el humo de la punta sigue subiendo un rato (apagar(), HUMO; el shader, "apagado").
 #
 # El lanza ácido (Armas.DATOS.desintegrador, efecto "acido") echa por aquí su chorro, igual de largo y con el mismo
-# cono: lo que cambia es el dibujo (escenas/armas/chorro_acido.gdshader: un chorro de ácido a presión que se abre en abanico, verde),
+# cono: lo que cambia es el dibujo (escenas/armas/chorro_acido.gdshader: una vara de ácido a presión, blanca en el centro y
+# con borde verde oscuro, que engorda, se rompe en pegotes al final y es más estrecha que el cono que moja),
 # el sonido (un siseo de agua a presión), que no alumbra, que en vez de chispas suelta gotitas que caen (y salpican
 # contra la pared) y que, en vez de prenderlos, deja a los zombis la herida de ácido (ArmasCreadas.herir). Como no es
 # fuego, al jefe de bomberos también le quita vida.
@@ -41,14 +42,15 @@ const ALTURA_CUERPO := 26.0 # y a cuál llega al final
 const CRECE := 0.12         # lo que tarda en estirarse hasta su alcance al encenderla
 const APAGA := 0.22         # y lo que tarda en irse al apagarla (se despega de la boca y se aleja)
 const APAGA_LLAMA := 0.4    # la del lanzallamas, más despacio (se enfría y sube mientras se va)
+const APAGA_ACIDO := 0.32   # el ácido, algo más despacio que el rayo: se ve cómo se va deshaciendo (chorro_acido.gdshader)
 const HUMO := 0.9           # lo que dura el humo del apagado del lanzallamas (el de la boquilla y el de la punta)
-const BAJA_DIBUJO := 3.0    # el dibujo de la llama, un poco más abajo que la boca de la bala: así sale justo del agujero
 const EMPUJE := 170.0       # empuje base, como el de las balas
 const SOMBREADO := preload("res://escenas/armas/llamarada.gdshader")
 const SOMBREADO_ACIDO := preload("res://escenas/armas/chorro_acido.gdshader")
 const CHISPAS := 22.0       # chispas que saltan por segundo
 const GOTAS_FUEGO := 9.0    # el lanzallamas: gotas de gasolina ardiendo que se caen del chorro por segundo
 const GOTITAS := 26.0       # el ácido: gotitas que se escapan del final del chorro por segundo (contra la pared, el doble)
+const SALPICAN := 40.0      # y gotas que saltan de sus lados por segundo (salpicar)
 const VERDES := [Color("#ecf896"), Color("#c7e04a"), Color("#96b430")]   # las del chorro (chorro_acido.gdshader)
 const LUZ := Color(1.0, 0.6, 0.28)
 # El rayo del lanza rayos
@@ -161,6 +163,7 @@ func _physics_process(delta: float) -> void:
 			quemar()
 		if variante == "acido":
 			gotitas(delta)
+			salpicar(delta)
 		else:
 			chispas(delta)
 		if variante == "llama":
@@ -168,12 +171,14 @@ func _physics_process(delta: float) -> void:
 	else:
 		if antes and variante == "llama" and largo > 20.0:
 			apagar()
+		if antes and variante == "acido" and largo > 20.0:
+			soltar_acido()
 		if apagado >= 0.0:
 			apagado += delta
 			if apagado > HUMO:
 				apagado = -1.0
 		if largo > 0.0:
-			cola += alcance / (APAGA_LLAMA if variante == "llama" else APAGA) * delta
+			cola += alcance / {"llama": APAGA_LLAMA, "acido": APAGA_ACIDO}.get(variante, APAGA) * delta
 			if cola >= largo:
 				largo = 0.0
 				cola = 0.0
@@ -315,11 +320,47 @@ func gotitas(delta: float) -> void:
 		return
 	var u := Vector2.from_angle(angulo)
 	var d := randf_range(0.75, 1.0) * largo
-	var pie := global_position + u * d + u.orthogonal() * randf_range(-0.5, 0.5) * (BOCA + d * abre())
+	var pie := global_position + u * d + u.orthogonal() * randf_range(-1.0, 1.0) * ancho_acido(d)
 	var hacia := u * (randf_range(-110.0, -30.0) if cortada else randf_range(30.0, 110.0))
 	hacia += u.orthogonal() * randf_range(-60.0, 60.0) * (1.6 if cortada else 1.0)
 	Particulas.volar(self, pie, lerpf(ALTURA, ALTURA_CUERPO, d / alcance), hacia, randf_range(10.0, 70.0),
 		VERDES[randi() % VERDES.size()], 2.0)
+
+
+# Lo que mide de lado el chorro de ácido que se dibuja a "d" de la boca (chorro_acido.gdshader: 2,6 + 9 píxeles del
+# dibujo al final, sin los borbotones ni los grumos), en unidades
+func ancho_acido(d: float) -> float:
+	return 2.0 * (2.6 + 9.0 * pow(clampf(d / alcance, 0.0, 1.0), 0.9))
+
+
+# El ácido: gotas que saltan de los lados del chorro, a lo largo de todo él, hacia fuera y hacia delante, y caen al
+# suelo (así no se ve quieto); una de cada cuatro, gorda
+func salpicar(delta: float) -> void:
+	if largo < 30.0 or randf() > SALPICAN * delta:
+		return
+	var u := Vector2.from_angle(angulo)
+	var d := randf_range(0.12, 0.95) * largo
+	var lado := 1.0 if randf() < 0.5 else -1.0
+	var pie := global_position + u * d + u.orthogonal() * lado * ancho_acido(d)
+	var hacia := u * randf_range(40.0, 150.0) + u.orthogonal() * lado * randf_range(50.0, 150.0)
+	Particulas.volar(self, pie, lerpf(ALTURA, ALTURA_CUERPO, d / alcance), hacia, randf_range(20.0, 90.0),
+		VERDES[randi() % VERDES.size()], 3.0 if randf() < 0.25 else 2.0)
+
+
+# Al soltar el lanza ácido: la boquilla escupe un último chorrito que cae justo delante (sin la presión, se
+# desparrama), y el chorro, al romperse, suelta gotas a lo largo de él que siguen volando hacia delante
+func soltar_acido() -> void:
+	var u := Vector2.from_angle(angulo)
+	for i in 7:
+		var hacia := u * randf_range(15.0, 75.0) + u.orthogonal() * randf_range(-25.0, 25.0)
+		Particulas.volar(self, global_position + u * randf_range(0.0, 12.0), ALTURA, hacia, randf_range(0.0, 30.0),
+			VERDES[randi() % VERDES.size()], 3.0 if i < 2 else 2.0)
+	for i in 10:
+		var d := randf_range(0.1, 1.0) * largo
+		var hacia := u * randf_range(60.0, 160.0) + u.orthogonal() * randf_range(-70.0, 70.0)
+		var pie := global_position + u * d + u.orthogonal() * randf_range(-1.0, 1.0) * ancho_acido(d)
+		Particulas.volar(self, pie, lerpf(ALTURA, ALTURA_CUERPO, d / alcance), hacia, randf_range(10.0, 60.0),
+			VERDES[randi() % VERDES.size()], 2.0)
 
 
 # Le pasa al shader dónde está la llama y cómo va (en la pantalla: el eje baja un poco, porque la llama baja de la
@@ -337,7 +378,7 @@ func pintar() -> void:
 	if variante != "rayo":
 		var m: ShaderMaterial = material
 		m.set_shader_parameter("tiempo", tiempo)
-		m.set_shader_parameter("boca", global_position + Vector2(0, BAJA_DIBUJO - ALTURA) - eje * ATRAS)
+		m.set_shader_parameter("boca", global_position + Vector2(0, -ALTURA) - eje * ATRAS)
 		m.set_shader_parameter("eje", eje)
 		m.set_shader_parameter("largo", largo * f + ATRAS + (8.0 if cortada else 0.0))   # (que toque la cara de la pared)
 		m.set_shader_parameter("cola", cola * f + ATRAS if cola > 0.0 else 0.0)

@@ -184,7 +184,7 @@ func probar_lanzallamas() -> void:
 	var w := Armas.datos(id)
 	johnny.modo = "quieto"   # que no eche fuego por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
-	print("Lanzallamas en la mano: %s · hoja «%s» · daño %d/s · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: lanzallamas, conserje-48-lanzallamas.tres, 30, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (28, -22), false, lanzallamas, pistola: la de repuesto)" % [
+	print("Lanzallamas en la mano: %s · hoja «%s» · daño %d/s · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: lanzallamas, conserje-48-lanzallamas.tres, 30, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (25, -20), false, lanzallamas, pistola: la de repuesto)" % [
 		johnny.huecos.fuego, johnny.sprite.sprite_frames.resource_path.get_file(), w.dano, w.alcance, w.alcance / Planta.CASILLA,
 		w.deposito, johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.arma_de_caja()])
 
@@ -450,7 +450,8 @@ func chorro_torcido(arma: String) -> void:
 #     se quedan con la herida de ácido y el primero se va hacia atrás) y a 430 (más allá de las 10 casillas: ni se
 #     entera). Johnny no pierde vida, no queda ningún charco y no alumbra; al soltar, se apaga
 #     (captura-desintegrador-chorro.png, a medio chorro), y la gota que colgaba se ha soltado
-#   - al soltar, se despega de la boquilla y se va (captura-desintegrador-soltando.png); y contra la pared se corta
+#   - al soltar, se despega de la boquilla y se va deshaciendo (captura-desintegrador-soltando.png y, un poco
+#     después, captura-desintegrador-soltando2.png); y contra la pared se corta
 #     en ella y salpica (captura-desintegrador-pared.png)
 #   - hacia zombis entre dos direcciones del dibujo (chorro_torcido): al un poco apartado de la línea, sale recto por
 #     donde apunta el tubo y su cono de 45° le da; al del hueco entre la diagonal y abajo, se gira lo justo para que
@@ -555,6 +556,10 @@ func probar_desintegrador() -> void:
 		await get_tree().physics_frame
 	Captura.foto("captura-desintegrador-soltando.png")
 	print("Al soltar: despegado de la boquilla %.0f de %.0f (esperado: más de 0)" % [johnny.llamarada.cola, johnny.llamarada.largo])
+	# y un poco después: el resto del chorro, deshaciéndose en pegotes, y el chorrito de la boquilla cayendo
+	for i in 6:
+		await get_tree().physics_frame
+	Captura.foto("captura-desintegrador-soltando2.png")
 	await get_tree().create_timer(0.5).timeout
 	var puesto: Vector2 = johnny.global_position
 	johnny.global_position = sala.diana.global_position + Vector2(380, 200)

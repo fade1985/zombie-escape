@@ -298,15 +298,17 @@ const DATOS := {
 	# balas no le valen). Su daño es por segundo (era 60 y se bajó a la mitad, 25 oct), y empuja cada medio segundo.
 	# Johnny lleva dos bombonas rojas a la espalda y una manguera hasta el tubo (conserje-48-lanzallamas; la llama la
 	# pinta el juego) y echa el fuego en la postura quieta de su hoja (la de apuntar, con el piloto encendido); la
-	# casilla es la de siempre, de 96x96 con los pies en 48,72. La boca es la punta del tubo de esa postura (donde está
-	# el piloto: el píxel del dibujo que más sale hacia donde apunta), medida en la hoja
+	# casilla es la de siempre, de 96x96 con los pies en 48,72. La boca es el centro del agujero del tubo en esa postura
+	# (justo debajo de la llamita del piloto que trae pintada), medida en la hoja
 	"lanzallamas": {
 		"nombre": "Lanzallamas", "tipo": "fuego", "dano": 30, "ritmo": 2.5, "alcance": 320.0, "velocidad": 620.0,   # [traducir]
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.5, "cargador": 12, "recarga": 1.5,
 		"cartucho": false, "deposito": 8.0, "relleno": "gasolina", "efecto": "llama", "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
-		"boca": {"s": Vector2(2, 1), "se": Vector2(26, -13), "e": Vector2(28, -22), "ne": Vector2(24, -39),
-			"n": Vector2(8, -52), "no": Vector2(-25, -40), "o": Vector2(-28, -21), "so": Vector2(-24, -10)},
+		# (9 nov: el centro del agujero del tubo, debajo de la llamita del piloto que trae pintada; antes se medía en la
+		# punta de esa llamita y el fuego salía por encima del tubo, sobre todo en las diagonales de arriba)
+		"boca": {"s": Vector2(1, -1), "se": Vector2(23, -11), "e": Vector2(25, -20), "ne": Vector2(23, -33),
+			"n": Vector2(8.5, -45), "no": Vector2(-23.5, -33), "o": Vector2(-25, -19.5), "so": Vector2(-24, -11)},
 		"cano": CANO_LANZALLAMAS,
 	},
 	# el desintegrador (en el juego, «Lanza ácido»; por dentro, el id, sus dibujos y el guardado siguen siéndolo): un
