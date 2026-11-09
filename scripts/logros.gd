@@ -82,13 +82,13 @@ const LISTA := [
 	# ── Supervivientes
 	{"id": "buen_vecino", "tema": "supervivientes", "nombre": "Buen vecino", "icono": "logro-buen_vecino", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."},
-	{"id": "comunidad", "tema": "supervivientes", "nombre": "Comunidad de vecinos", "icono": "apartamentos", "premio": 10, "cuenta": "",
+	{"id": "comunidad", "tema": "supervivientes", "nombre": "Comunidad de vecinos", "icono": "logro-comunidad", "premio": 10, "cuenta": "",
 		"mira": "rescatados", "edificio": "apartamentos", "desc": "Rescata a los 3 supervivientes de los Apartamentos."},
-	{"id": "plantilla", "tema": "supervivientes", "nombre": "Plantilla completa", "icono": "centro", "premio": 10, "cuenta": "",
+	{"id": "plantilla", "tema": "supervivientes", "nombre": "Plantilla completa", "icono": "logro-plantilla", "premio": 10, "cuenta": "",
 		"mira": "rescatados", "edificio": "centro", "desc": "Rescata a los 3 supervivientes del Centro comercial."},
-	{"id": "horas_extra", "tema": "supervivientes", "nombre": "Horas extra", "icono": "torre", "premio": 10, "cuenta": "",
+	{"id": "horas_extra", "tema": "supervivientes", "nombre": "Horas extra", "icono": "logro-horas_extra", "premio": 10, "cuenta": "",
 		"mira": "rescatados", "edificio": "torre", "desc": "Rescata a los 3 supervivientes de Torre Velaria."},
-	{"id": "buena_compania", "tema": "supervivientes", "nombre": "Buena compañía", "icono": "corazon", "premio": 5, "meta": 1, "cuenta": "",
+	{"id": "buena_compania", "tema": "supervivientes", "nombre": "Buena compañía", "icono": "logro-buena_compania", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida con un vecino de las viviendas acompañándote."},
 	# ── Sorpresas y retos
 	{"id": "caja_fuerte", "tema": "sorpresas", "nombre": "Caja fuerte", "icono": "llave", "premio": 20, "meta": 1, "cuenta": "",
