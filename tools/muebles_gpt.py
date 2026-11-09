@@ -28,6 +28,13 @@ MUEBLES = {
     # papeles blancos dentro; a 14 de ancho (la vieja, 12), que a 12 la rejilla casi no se leía
     "papelera": ("assets/sources/papelera-gpt.webp", "assets/sprites/mueble-wastebasket.png", 14, 21, True,
                  [(0, 7), (13, 7)]),   # (dos píxeles negros que sobresalían a los lados, debajo del aro)
+    # los dibujos de las tarjetas de «Elige edificio» (menu_principal.gd; los iconos del minimapa y los logros siguen como
+    # estaban), a 32 de alto como los demás: el
+    # edificio de los Apartamentos, de ladrillo con escaleras de incendios, de noche (9 nov)
+    "icono_apartamentos": ("assets/sources/apartamentos-gpt.webp", "assets/ui/tarjeta-apartamentos.png", 25, 32, False),
+    # y el candado de los edificios cerrados, de acero gastado con óxido; el hueco del arco, que el fondo no alcanza
+    # desde el borde, se vacía también (la semilla, en el medio del arco de la imagen de GPT)
+    "icono_candado": ("assets/sources/candado-gpt.webp", "assets/ui/tarjeta-candado.png", 22, 32, False, (), [(640, 350)]),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
@@ -49,13 +56,13 @@ MUEBLES = {
 }
 
 
-def pasar(origen, sprite, ancho, alto, con_json, quitar=()):
+def pasar(origen, sprite, ancho, alto, con_json, quitar=(), semillas=()):
     im = Image.open(origen).convert("RGBA")
     W, H = im.size
     px = im.load()
     # el fondo: el negro puro que se llega desde el borde
     fondo = bytearray(W * H)
-    cola = deque([(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)])
+    cola = deque([(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)] + list(semillas))
     while cola:
         x, y = cola.popleft()
         if x < 0 or y < 0 or x >= W or y >= H or fondo[y * W + x] or max(px[x, y][:3]) >= 6:

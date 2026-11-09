@@ -426,7 +426,10 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(caja)
 	var dibujo := TextureRect.new()
-	dibujo.texture = load("res://assets/ui/iconos/%s.png" % ("candado" if not abierto else id))
+	# (los Apartamentos y el candado, con su dibujo de GPT para la tarjeta: tools/muebles_gpt.py, 9 nov)
+	var nombre_dibujo: String = "candado" if not abierto else id
+	var de_tarjeta := "res://assets/ui/tarjeta-%s.png" % nombre_dibujo
+	dibujo.texture = load(de_tarjeta if ResourceLoader.exists(de_tarjeta) else "res://assets/ui/iconos/%s.png" % nombre_dibujo)
 	dibujo.custom_minimum_size = Vector2(64, 64)
 	dibujo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	dibujo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
