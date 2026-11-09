@@ -64,7 +64,7 @@ const LISTA := [
 		"desc": "Disparas un 10 % más rápido y recargas un 10 % antes por punto"},
 	{"id": "racimo", "rama": "militar", "nivel": 4, "nombre": "Racimo", "max": 3, "icono": "talento-racimo", "pide": "fabricante",
 		"desc": "El molotov y la granada sueltan 1 más pequeño alrededor por punto"},
-	{"id": "veterano", "rama": "militar", "nivel": 5, "nombre": "Veterano", "max": 1, "icono": "trofeo",
+	{"id": "veterano", "rama": "militar", "nivel": 5, "nombre": "Veterano", "max": 1, "icono": "talento-veterano",
 		"pide": ["frenesi", "gatillo", "racimo"],
 		"desc": "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"},
 	# ── Superviviente

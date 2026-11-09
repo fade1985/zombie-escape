@@ -1940,6 +1940,11 @@ func probar_talentos_altos() -> void:
 	await ensenar_ficha("adrenalina")
 	Captura.foto("captura-altos-arbol-superviviente.png")
 	print("Ficha: Adrenalina «%s» (esperado: ¡Al máximo! · MÁX)" % ficha_de("adrenalina"))
+	# Militar entera, con su corona (Veterano) comprada, para ver todos sus iconos sin candados
+	Guardado.cambiar(func(g): g.talentos = g.talentos.merged({"racimo": 3, "veterano": 1}, true))
+	ordenador.abrir("puntos", "b_ataque")
+	await ensenar_ficha("ataque")
+	Captura.foto("captura-altos-arbol-corona.png")
 	Guardado.cambiar(func(g):
 		g.dolares = guardado_antes.dolares
 		g.talentos = guardado_antes.talentos)
