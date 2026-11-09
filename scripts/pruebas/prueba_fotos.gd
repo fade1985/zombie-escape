@@ -194,6 +194,34 @@ func fotos_luz() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --linterna": la linterna de pecho de Johnny (luz.gd) en un apartamento a oscuras (con el apagón)
+# y sin zombis, con Johnny en medio de una habitación mirando hacia abajo, en diagonal, a un lado, en la otra
+# diagonal y hacia arriba (captura-linterna-<s, se, e, ne, n>.png): el foco brilla en el pecho (de espaldas no) y
+# el haz del suelo empieza algo por delante de los pies. Luego se cierra
+func fotos_linterna() -> void:
+	set_process(false)
+	$Pantalla/HUD.hide()
+	var i := 1   # el primer apartamento
+	while i < planta.sitios.size() - 1 and not planta.sitios[i].has("apt"):
+		i += 1
+	montar(i, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	Luz.evento = 0.9
+	var sala: Dictionary = planta.sitios[i].apt.salas[0]
+	var mitad := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0 + 1.0) * 32.0
+	johnny.modo = "quieto"
+	johnny.position = mitad
+	johnny.get_node("Camara").reset_smoothing()
+	for dir in ["s", "se", "e", "ne", "n"]:
+		johnny.direccion = dir
+		await get_tree().create_timer(0.8).timeout
+		Captura.foto("captura-linterna-%s.png" % dir)
+		var foco: Node2D = johnny.get_node_or_null("Foco")
+		print("Linterna %s: foco en %s, se ve %.2f" % [dir, foco.position, foco.modulate.a * float(foco.visible)])
+	get_tree().quit()
+
+
 # Con "-- --captura --edificio centro --fotos-tiendas": sin penumbra y con todo descubierto, una foto de la sala de
 # venta de cada tienda de las dos primeras plantas (captura-tienda-<tipo>.png) y otra de la galería, y se cierra.
 # Además, la primera vez que sale cada peligro, sus fotos (fotos_peligros)

@@ -174,6 +174,7 @@
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
 #                       en el HUD y en el inventario                                       [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar  [prueba_fotos.gd]
+#   --linterna          la linterna de pecho de Johnny a oscuras, mirando en 5 direcciones   [prueba_fotos.gd]
 #   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!», su barrera (M80) y su tutorial [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles (se abren con
 #                       el clic, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
@@ -380,6 +381,8 @@ func empezar_prueba() -> void:
 		probar_grito()
 	elif "--fotos-luz" in args:
 		fotos_luz()
+	elif "--linterna" in args:
+		fotos_linterna()
 	elif "--fotos-ayudas" in args:
 		fotos_ayudas()
 	elif "--fotos-supervivientes" in args:

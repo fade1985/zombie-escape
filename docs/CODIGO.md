@@ -669,7 +669,7 @@ en una línea.
   las tres cifras del código de la sala del jefe en Torre Velaria: `Planta.codigo` y `partida.poner_terminales`),
   `valla.gd` (la del helipuerto de la azotea).
 
-**luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
+**luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny y su linterna de pecho: el cono del suelo, el foco en el pecho y el rayo tenue entre los dos; fogonazos; prueba `--captura --linterna`), `lampara.gd`, `fuego.gd`.
 
 **pruebas/**: lo que solo se usa con `--captura`.
 - `captura.gd` (clase `Captura`): `activa()`, `dato("--jefe", "antidisturbios")` y `foto("captura-x.png")` (la guarda en `capturas/`, que lleva un `.gdignore` para que Godot no la importe).

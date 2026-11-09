@@ -17,11 +17,17 @@ extends CanvasModulate
 const OSCURIDAD_SALA := {"pasillo": 0.8, "apartamento": 0.84, "jefe": 0.5, "mantenimiento": 0.84, "viviendas": 0.84}
 const PASILLO := 0.8                       # la oscuridad de referencia: a esta, las luces lucen a tope
 const SOMBRA := Color(0.03, 0.03, 0.1)     # a qué color tiende lo oscuro (azul noche, casi negro)
-# La linterna de Johnny: un cono que sale de sus pies hacia donde mira y hace sombras con los muebles
+# La linterna de Johnny: la típica de pecho. En el suelo, un cono que sale de debajo de ella (de sus pies) hacia
+# donde mira y hace sombras con los muebles; en el pecho, el foco encendido (un brillito que se ve de frente y
+# de lado, y de espaldas no), y del foco al suelo, un rayo muy tenue por el aire, que une los dos
 const LINTERNA_ALCANCE := 330.0            # hasta dónde llega, en unidades
 const LINTERNA_ANCHO := 0.62               # medio ángulo del cono, en radianes (unos 35°)
 const LINTERNA_GIRO := 10.0                # lo rápido que se vuelve hacia donde mira
 const LINTERNA_COLOR := Color(1.0, 0.95, 0.82)
+const PECHO := Vector2(0, -38)             # dónde va la linterna, desde los pies de Johnny (unos 27 píxeles del dibujo más arriba)
+const PECHO_DELANTE := Vector2(9, 4)       # cuánto se adelanta del centro hacia donde mira (de lado y hacia abajo)
+const RAYO_LARGO := 95.0                   # dónde llega al suelo el rayo del aire (donde el haz del suelo ya luce)
+const RAYO_ANCHO := 26.0                   # medio ancho del rayo al llegar al suelo
 const FOGONAZO := Color(1.0, 0.82, 0.51)
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
 const CAPA_SUELO := 2
@@ -67,6 +73,8 @@ var johnny: Node2D
 var linterna: Node2D        # gira con Johnny; dentro, el cono del suelo (con sombras) y el de lo demás
 var linterna_suelo: PointLight2D
 var linterna_cosas: PointLight2D
+var foco: Sprite2D          # el brillo de la linterna en el pecho de Johnny
+var rayo: Polygon2D         # y el rayo tenue que va por el aire del foco al suelo
 static var textura_cono: ImageTexture
 
 
@@ -119,6 +127,19 @@ func seguir_a(quien: Node2D) -> void:
 	linterna_suelo.shadow_filter_smooth = 3.0
 	linterna_suelo.shadow_item_cull_mask = SOMBRAS
 	linterna_cosas = cono(CAPA_COSAS)
+	foco = Sprite2D.new()
+	foco.name = "Foco"
+	foco.texture = hacer_foco()
+	foco.scale = Vector2(2, 2)
+	var propio := CanvasItemMaterial.new()
+	propio.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED   # luce por sí mismo, aunque esté oscuro
+	propio.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD        # y suma luz a lo que tiene debajo
+	foco.material = propio
+	rayo = Polygon2D.new()
+	rayo.name = "Rayo"
+	rayo.material = propio
+	johnny.add_child(rayo)
+	johnny.add_child(foco)   # (los últimos: se dibujan encima de Johnny)
 	pintar()
 
 
@@ -132,10 +153,12 @@ func cono(capa: int) -> PointLight2D:
 	return luz
 
 
-# El dibujo del cono (se hace una vez): mirando hacia la derecha desde el centro, se apaga hacia la punta y
-# hacia los lados. Sale de los pies (lo que hay debajo de la mano, en el suelo: si saliera de más arriba,
-# pegado a un muro quedaría dentro de él y se romperían las sombras), pero ahí apenas alumbra: el haz se
-# ve empezar un poco por delante de Johnny, no en sus pies
+# El dibujo del cono (se hace una vez): mirando hacia la derecha desde el centro. Sale de los pies (lo que hay
+# debajo de la linterna del pecho, en el suelo: si saliera de más arriba, pegado a un muro quedaría dentro de él
+# y se romperían las sombras), pero ahí no alumbra: la linterna apunta hacia delante y un poco hacia abajo, así
+# que la luz llega al suelo algo por delante de Johnny. Como una linterna de verdad, tiene dos partes: el
+# centro del haz, más fuerte y estrecho, que cae a media distancia, y alrededor un halo más flojo y ancho que
+# se va apagando hacia la punta
 static func hacer_cono() -> ImageTexture:
 	if textura_cono:
 		return textura_cono
@@ -146,12 +169,30 @@ static func hacer_cono() -> ImageTexture:
 		for x in lado:
 			var v := Vector2(x + 0.5, y + 0.5) - centro
 			var d := v.length() / (lado / 2.0)
+			var a := absf(v.angle())
 			var hacia_punta := pow(clampf(1.0 - d, 0.0, 1.0), 0.8)
-			var hacia_lado := 1.0 - smoothstep(LINTERNA_ANCHO * 0.55, LINTERNA_ANCHO, absf(v.angle()))
-			var k := hacia_punta * hacia_lado * smoothstep(0.02, 0.22, d)
+			var halo := (1.0 - smoothstep(LINTERNA_ANCHO * 0.6, LINTERNA_ANCHO, a)) * hacia_punta * 0.75
+			var nucleo := (1.0 - smoothstep(LINTERNA_ANCHO * 0.15, LINTERNA_ANCHO * 0.5, a)) \
+					* smoothstep(0.06, 0.26, d) * (1.0 - smoothstep(0.38, 0.85, d)) * 0.55
+			var k := clampf((halo + nucleo) * smoothstep(0.03, 0.17, d), 0.0, 1.0)
 			img.set_pixel(x, y, Color(k, k, k, 1.0))
 	textura_cono = ImageTexture.create_from_image(img)
 	return textura_cono
+
+
+# El brillo del foco de la linterna del pecho (se dibuja con píxeles del tamaño del dibujo): el cristal, casi
+# blanco, y alrededor un resplandor cálido que se apaga en dos o tres píxeles
+static func hacer_foco() -> ImageTexture:
+	var lado := 11
+	var img := Image.create(lado, lado, false, Image.FORMAT_RGBA8)
+	var centro := Vector2(lado, lado) / 2.0
+	for y in lado:
+		for x in lado:
+			var d := (Vector2(x + 0.5, y + 0.5) - centro).length()
+			var k := 1.0 if d < 1.0 else pow(clampf(1.0 - (d - 1.0) / 4.5, 0.0, 1.0), 2.0) * 0.55
+			var c := Color(1.0, 0.98, 0.9).lerp(Color(1.0, 0.85, 0.5), clampf(d / 3.0, 0.0, 1.0)) * k
+			img.set_pixel(x, y, Color(c.r, c.g, c.b, 1.0))
+	return ImageTexture.create_from_image(img)
 
 
 # El ángulo de cada una de las 8 direcciones de Johnny ("e" es 0 y van girando de 45 en 45)
@@ -167,6 +208,18 @@ func _process(delta: float) -> void:
 	if linterna and is_instance_valid(johnny):
 		var hacia := angulo_de(johnny.direccion)
 		linterna.rotation = lerp_angle(linterna.rotation, hacia, minf(delta * LINTERNA_GIRO, 1.0))
+		# el foco, en el pecho y un poco hacia donde mira; de espaldas (mirando hacia arriba) lo tapa su cuerpo
+		var mira := Vector2.from_angle(linterna.rotation)
+		foco.position = (PECHO + mira * PECHO_DELANTE).round()
+		foco.modulate.a = smoothstep(-0.9, -0.35, mira.y) * clampf(nivel / 0.4, 0.0, 1.0)
+		# el rayo del aire: del foco al trozo de suelo por delante, ensanchándose y apagándose al bajar
+		var abajo := mira * RAYO_LARGO
+		var lado := (abajo - foco.position).normalized().orthogonal()
+		rayo.polygon = PackedVector2Array([foco.position - lado * 2.0, foco.position + lado * 2.0,
+				abajo + lado * RAYO_ANCHO, abajo - lado * RAYO_ANCHO])
+		var c := LINTERNA_COLOR * Color(1, 1, 1, 0.16)
+		rayo.vertex_colors = PackedColorArray([c, c, Color(c, 0.0), Color(c, 0.0)])
+		rayo.modulate.a = foco.modulate.a
 		linterna_cosas.range_item_cull_mask = capa_johnny
 		luz_johnny.range_item_cull_mask = capa_johnny
 		# con la skin del informático (skins.gd), llega un 50 % más lejos (la skin se puede cambiar en la taquilla)
@@ -185,6 +238,8 @@ func pintar() -> void:
 		linterna_suelo.energy = 1.1 * nivel
 		linterna_cosas.energy = 0.9 * nivel
 		linterna.visible = nivel > 0.01
+		foco.visible = linterna.visible
+		rayo.visible = linterna.visible
 
 
 # Un destello corto (fogonazo de un disparo, explosión): sale de golpe y se apaga deprisa. Sin sombras, que
