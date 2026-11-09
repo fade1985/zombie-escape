@@ -39,7 +39,7 @@ const ICONOS := [   # [programa, icono, nombre]
 	["logros", "escritorio-logros", "Logros"],
 	["dosier", "escritorio-dosier", "Dosier\nVD-7"],
 	["noticias", "noticias", "Noticias"],
-	["colecciones", "colecciones", "Colecciones"],
+	["colecciones", "escritorio-colecciones", "Colecciones"],
 	["apagar", "puerta", "Apagar"],
 ]
 const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV",
