@@ -30,7 +30,7 @@ const LISTA := [
 		"desc": "Llega a la planta 3."},
 	{"id": "fin_jornada", "tema": "edificios", "nombre": "Fin de la jornada", "icono": "trofeo", "premio": 50, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida: limpia el edificio de arriba abajo."},
-	{"id": "liquidacion", "tema": "edificios", "nombre": "Liquidación total", "icono": "centro", "premio": 20, "cuenta": "",
+	{"id": "liquidacion", "tema": "edificios", "nombre": "Liquidación total", "icono": "logro-liquidacion", "premio": 20, "cuenta": "",
 		"mira": "completado", "edificio": "centro", "desc": "Completa el Centro comercial: derrota al gerente."},
 	{"id": "reestructuracion", "tema": "edificios", "nombre": "Reestructuración", "icono": "torre", "premio": 25, "cuenta": "",
 		"mira": "completado", "edificio": "torre", "desc": "Completa Torre Velaria: derrota al Sujeto 1."},
