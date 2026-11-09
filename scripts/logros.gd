@@ -75,9 +75,9 @@ const LISTA := [
 		"desc": "Sube un arma o un arrojable a Épica en el banco de trabajo."},
 	{"id": "arsenal", "tema": "armas", "nombre": "Arsenal completo", "icono": "logro-arsenal", "premio": 15, "cuenta": "total",
 		"mira": "armas", "desc": "Mata un zombi con cada arma: la fregona y todas las de la tienda."},
-	{"id": "especialista", "tema": "armas", "nombre": "Especialista", "icono": "militar", "premio": 15, "cuenta": "",
+	{"id": "especialista", "tema": "armas", "nombre": "Especialista", "icono": "logro-especialista", "premio": 15, "cuenta": "",
 		"mira": "rama", "desc": "Llena una rama entera del árbol de talentos."},
-	{"id": "conserje_total", "tema": "armas", "nombre": "Conserje total", "icono": "medico", "premio": 25, "cuenta": "",
+	{"id": "conserje_total", "tema": "armas", "nombre": "Conserje total", "icono": "logro-conserje_total", "premio": 25, "cuenta": "",
 		"mira": "arbol", "desc": "Llena el árbol de talentos entero."},
 	# ── Supervivientes
 	{"id": "buen_vecino", "tema": "supervivientes", "nombre": "Buen vecino", "icono": "corazon", "premio": 15, "meta": 1, "cuenta": "",
