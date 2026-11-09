@@ -40,7 +40,7 @@ const LISTA := [
 		"desc": "Completa un edificio con la Alerta 5."},
 	{"id": "jornada_expres", "tema": "edificios", "nombre": "Jornada exprés", "icono": "logro-jornada_expres", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida en menos de 15 minutos."},
-	{"id": "empleado_mes", "tema": "edificios", "nombre": "Empleado del mes", "icono": "trofeo", "premio": 20, "meta": 10, "cuenta": "total",
+	{"id": "empleado_mes", "tema": "edificios", "nombre": "Empleado del mes", "icono": "logro-empleado_mes", "premio": 20, "meta": 10, "cuenta": "total",
 		"mira": "victorias", "desc": "Gana 10 partidas, sumando todas."},
 	# ── Jefes
 	{"id": "desahucio", "tema": "jefes", "nombre": "Desahucio", "icono": "jefe", "premio": 20, "meta": 1, "cuenta": "",
