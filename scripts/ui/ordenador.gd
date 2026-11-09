@@ -34,7 +34,7 @@ const CARCASA := Color("#a49a83")      # el plástico del monitor, amarillento d
 # Los textos de estas tablas se traducen al enseñarlos (Idioma.t); las marcas son para tools/traducciones.py
 # [traducir]
 const ICONOS := [   # [programa, icono, nombre]
-	["puntos", "fuerza", "Talentos"],   # (por dentro se sigue llamando "puntos": antes se compraban puntos de talento)
+	["puntos", "escritorio-talentos", "Talentos"],   # (por dentro se sigue llamando "puntos": antes se compraban puntos de talento)
 	["armas", "pistola", "Tienda\nde armas"],
 	["logros", "trofeo", "Logros"],
 	["dosier", "dosier", "Dosier\nVD-7"],
