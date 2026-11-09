@@ -181,15 +181,15 @@ static func hacer_cono() -> ImageTexture:
 
 
 # El brillo del foco de la linterna del pecho (se dibuja con píxeles del tamaño del dibujo): el cristal, casi
-# blanco, y alrededor un resplandor cálido que se apaga en dos o tres píxeles
+# blanco, y alrededor un resplandor cálido muy flojo que se apaga en un par de píxeles
 static func hacer_foco() -> ImageTexture:
-	var lado := 11
+	var lado := 7
 	var img := Image.create(lado, lado, false, Image.FORMAT_RGBA8)
 	var centro := Vector2(lado, lado) / 2.0
 	for y in lado:
 		for x in lado:
 			var d := (Vector2(x + 0.5, y + 0.5) - centro).length()
-			var k := 1.0 if d < 1.0 else pow(clampf(1.0 - (d - 1.0) / 4.5, 0.0, 1.0), 2.0) * 0.55
+			var k := 1.0 if d < 1.0 else pow(clampf(1.0 - (d - 1.0) / 2.5, 0.0, 1.0), 2.0) * 0.3
 			var c := Color(1.0, 0.98, 0.9).lerp(Color(1.0, 0.85, 0.5), clampf(d / 3.0, 0.0, 1.0)) * k
 			img.set_pixel(x, y, Color(c.r, c.g, c.b, 1.0))
 	return ImageTexture.create_from_image(img)
@@ -217,7 +217,7 @@ func _process(delta: float) -> void:
 		var lado := (abajo - foco.position).normalized().orthogonal()
 		rayo.polygon = PackedVector2Array([foco.position - lado * 2.0, foco.position + lado * 2.0,
 				abajo + lado * RAYO_ANCHO, abajo - lado * RAYO_ANCHO])
-		var c := LINTERNA_COLOR * Color(1, 1, 1, 0.16)
+		var c := LINTERNA_COLOR * Color(1, 1, 1, 0.07)
 		rayo.vertex_colors = PackedColorArray([c, c, Color(c, 0.0), Color(c, 0.0)])
 		rayo.modulate.a = foco.modulate.a
 		linterna_cosas.range_item_cull_mask = capa_johnny
