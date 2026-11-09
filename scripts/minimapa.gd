@@ -29,7 +29,7 @@ const PASILLO_Y := 58.0     # dónde empieza (por arriba) el pasillo
 const CASILLA := 32.0
 const PUNTO := Color("#ff3b3b")     # los zombis, con las cámaras
 const BRILLO := Color("#ffb3a0")
-const SALA := Vector2(32, 16)       # cada apartamento en el plano de la planta: todos iguales, sea como sea de grande
+const SALA := Vector2(34, 18)       # cada apartamento en el plano de la planta: todos iguales, sea como sea de grande
 const OSCURA := Color("#2e2a36")    # en el plano de un sitio, las habitaciones aún sin pisar (con la niebla del mapa)
 const DONDE := Color("#e6d68a")     # la habitación en la que está Johnny
 const JOHNNY := Color("#e2382c")    # Johnny: un círculo rojo con el borde claro (los zombis son cuadraditos)
@@ -52,6 +52,7 @@ var camaras := false        # el técnico ya está rescatado: se ven los zombis
 var plano := Image.new()
 var plano_textura: ImageTexture
 var plano_firma := ""
+static var VISIBLE := {}    # lo que se ve de cada icono (sin el hueco de alrededor), medido una vez
 
 
 func _ready() -> void:
@@ -94,11 +95,11 @@ func casillas() -> Array:
 	for s in pasillo.salidas:
 		match s.tipo:
 			"llegada":
-				lista.append({"r": Rect2(MARGEN, medio - 8, PUNTA, 16), "color": GRIS, "aqui": false, "icono": "puerta",
+				lista.append({"r": Rect2(MARGEN, medio - 9, PUNTA, 18), "color": GRIS, "aqui": false, "icono": "puerta",
 					"sos": false, "puerta": Rect2(MARGEN + PUNTA - 2, medio - 3, 8, 6)})
 			"escaleras":
 				var abiertas: bool = planta.jefa_muerta
-				lista.append({"r": Rect2(x0 + largo + 4, medio - 8, PUNTA, 16), "color": VERDE if abiertas else GRIS,
+				lista.append({"r": Rect2(x0 + largo + 4, medio - 9, PUNTA, 18), "color": VERDE if abiertas else GRIS,
 					"aqui": false, "icono": "escalera" if abiertas else "candado", "sos": false,
 					"puerta": Rect2(x0 + largo - 2, medio - 3, 8, 6)})
 			"puerta":
@@ -120,7 +121,8 @@ func casillas() -> Array:
 				var x := par(x0 + float(s.en) / pasillo.ancho * largo)
 				var arriba: bool = s.dir == "arriba"
 				var y := PASILLO_Y - 6 - alto if arriba else PASILLO_Y + 16
-				var puerta := Rect2(x - 3, PASILLO_Y - 8 if arriba else PASILLO_Y + 8, 6, 8)
+				# (el trocito de pasillo entra 2 en la sala y 2 en el pasillo, para abrir los dos muros)
+				var puerta := Rect2(x - 3, y + alto - 2, 6, PASILLO_Y + 2 - (y + alto - 2)) if arriba 					else Rect2(x - 3, PASILLO_Y + 8, 6, y + 2 - (PASILLO_Y + 8))
 				lista.append({"r": Rect2(x - ancho / 2.0, y, ancho, alto), "color": color,
 					# (desde la exposición y las viviendas, que no salen en el plano, se marca la sala de mantenimiento)
 					"aqui": aqui == s.a or (planta.sitios[aqui].tipo in ["expo", "armas", "viviendas"] and sitio.tipo == "mantenimiento"),
@@ -169,39 +171,48 @@ func dibujar_planta() -> void:
 	for c in lista:
 		draw_rect(Rect2(c.r.position + Vector2(2, 2), c.r.size).grow(2), SOMBRA)
 	for c in lista:
-		if c.puerta.has_area():
-			draw_rect(c.puerta.grow(2), BORDE)
-	for c in lista:
 		var r: Rect2 = c.r
 		var color: Color = c.color
 		draw_rect(r.grow(2), BORDE)
-		draw_rect(r, color)
-		# un poco de relieve: luz arriba, sombra abajo
-		draw_rect(Rect2(r.position, Vector2(r.size.x, 2)), color.lightened(0.25))
-		draw_rect(Rect2(r.position + Vector2(0, r.size.y - 2), Vector2(r.size.x, 2)), color.darkened(0.3))
+		if c.get("pasillo", false):
+			draw_rect(r, color)
+			draw_rect(Rect2(r.position, Vector2(r.size.x, 2)), color.lightened(0.2))
+		else:
+			# cada sala, como una habitación vista desde arriba: el muro (más oscuro, con su filo de luz arriba) y,
+			# dentro, el suelo del color de la sala, con su sombra arriba (la del muro)
+			var muro := color.darkened(0.4)
+			draw_rect(r, muro)
+			draw_rect(Rect2(r.position, Vector2(r.size.x, 2)), muro.lightened(0.3))
+			var suelo := r.grow(-2)
+			draw_rect(suelo, color)
+			draw_rect(Rect2(suelo.position, Vector2(suelo.size.x, 2)), color.darkened(0.2))
 		if c.get("pasillo", false):
 			# la raya del medio del pasillo, a trozos, como la de una carretera
 			for x in range(int(r.position.x) + 4, int(r.end.x) - 4, 10):
 				draw_rect(Rect2(x, r.get_center().y - 1, 4, 2), color.darkened(0.25))
 		elif color == GRIS and c.icono == "" and c.has("sitio"):
 			# sin visitar: un «?» pequeño
-			draw_string(letra, Vector2(r.position.x, r.get_center().y + 5), "?", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 16, GRIS.lightened(0.35))   # no-tr (un signo)
-	# los trozos de pasillo, encima, para que la sala y el pasillo queden abiertos
+			draw_string(letra, Vector2(r.position.x, r.get_center().y + 7), "?", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 16, GRIS.lightened(0.35))   # no-tr (un signo)
+	# los trozos de pasillo, encima, con su muro a los lados: abren el muro de la sala y el del pasillo, y en la sala
+	# dejan el umbral de la puerta, del color del pasillo
 	for c in lista:
 		if c.puerta.has_area():
-			draw_rect(c.puerta, PASILLO)
+			var d: Rect2 = c.puerta
+			var hor := d.size.x > d.size.y   # (los de la llegada y las escaleras van de lado)
+			draw_rect(d.grow_individual(0, 2, 0, 2) if hor else d.grow_individual(2, 0, 2, 0), BORDE)
+			draw_rect(d, PASILLO)
 	if camaras:
 		dibujar_zombis(lista)
 	for c in lista:
 		if c.icono != "":
 			icono(c.icono, c.r.get_center())
-	# el "!" del superviviente, en una esquina de su sala
+	# el "!" del superviviente, dentro de su sala
 	for c in lista:
 		if c.sos:
-			var esquina: Vector2 = c.r.position + Vector2(c.r.size.x - 6, -4)
+			var sitio_sos := Vector2(c.r.end.x - 6, c.r.get_center().y)   # dentro de la sala, a la derecha
 			if c.has("sos_x") and c.sos_x > 0.0:
-				esquina = Vector2(c.sos_x - 5, c.r.position.y - 4)
-			exclamacion(esquina + Vector2(0, 6))
+				sitio_sos = Vector2(c.sos_x - 5, c.r.position.y + 2)
+			exclamacion(sitio_sos)
 	# Johnny
 	for c in lista:
 		if c.aqui:
@@ -214,21 +225,25 @@ func dibujar_planta() -> void:
 			marca_johnny(p)
 
 
-# Johnny en el plano: un círculo rojo con el borde claro y un aro que late alrededor
+# Johnny en el plano: un círculo rojo pequeño con el borde claro, quieto
 func marca_johnny(p: Vector2) -> void:
 	p = Vector2(par(p.x), par(p.y))
-	draw_arc(p, 8.0 + sin(tiempo * 6.0) * 1.5, 0.0, TAU, 20, Color(JOHNNY, 0.55), 2.0)
-	draw_circle(p, 6.0, BORDE, true, -1.0, false)
-	draw_circle(p, 5.0, Tema.TINTA, true, -1.0, false)
-	draw_circle(p, 4.0, JOHNNY, true, -1.0, false)
-	draw_rect(Rect2(p - Vector2(2, 2), Vector2(2, 2)), JOHNNY.lightened(0.5))
+	draw_circle(p, 5.0, BORDE, true, -1.0, false)
+	draw_circle(p, 4.0, Tema.TINTA, true, -1.0, false)
+	draw_circle(p, 3.0, JOHNNY, true, -1.0, false)
 
 
 # Un icono del plano (16 × 16) centrado en "centro", con su sombra para que se lea sobre cualquier sala
+# (los dibujos son de 32 × 32 con huecos distintos alrededor: se centra lo que se ve, a la mitad)
 func icono(nombre: String, centro: Vector2) -> void:
-	var r := Rect2(Vector2(par(centro.x - 8), par(centro.y - 8)), Vector2(16, 16))
-	draw_texture_rect(ICONOS[nombre], Rect2(r.position + Vector2(2, 2), r.size), false, SOMBRA)
-	draw_texture_rect(ICONOS[nombre], r, false)
+	var tex: Texture2D = ICONOS[nombre]
+	if not VISIBLE.has(nombre):
+		VISIBLE[nombre] = Rect2(tex.get_image().get_used_rect())
+	var de: Rect2 = VISIBLE[nombre]
+	var tam := de.size / 2.0
+	var r := Rect2(Vector2(par(centro.x - tam.x / 2.0), par(centro.y - tam.y / 2.0)), tam)
+	draw_texture_rect_region(tex, Rect2(r.position + Vector2(2, 2), r.size), de, SOMBRA)
+	draw_texture_rect_region(tex, r, de)
 
 
 # ── El plano del sitio ──
