@@ -2341,6 +2341,40 @@ func probar_atontado_pared() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --ritmo-bombero": el jefe de bomberos en la sala de pruebas, 30 s con Johnny quieto a 5 casillas (sin
+# que le quite vida), normal y luego enfadado: cuántos ataques empieza (bolas, molotovs, hachazo y giro) y cada cuánto
+func probar_ritmo_bombero() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(0, 260)
+	johnny.get_node("Camara").reset_smoothing()
+	for fase in [1, 2]:
+		var b: Node2D = meter_zombi("bombero", johnny.position + Vector2(0, -160))
+		b.fase = fase
+		await get_tree().create_timer(0.2).timeout
+		var ataques := 0
+		var antes := ""
+		var t := 0.0
+		while t < 30.0:
+			b.global_position = b.global_position.lerp(johnny.position + Vector2(0, -160), 0.02)   # (que no se aleje ni se pegue)
+			if b.estado != antes and b.estado in ["bolas", "molotov", "aviso_hacha", "ir_centro", "aviso_giro"]:
+				if not (b.estado == "aviso_giro" and antes == "ir_centro"):
+					ataques += 1
+			antes = b.estado
+			await get_tree().physics_frame
+			t += 1.0 / 60.0
+		print("Ritmo del bombero (%s, 30 s): %d ataques, uno cada %.1f s" % ["normal" if fase == 1 else "enfadado", ataques, 30.0 / maxf(1, ataques)])
+		b.queue_free()
+		await get_tree().process_frame
+	get_tree().quit()
+
+
 # Con "--captura --acido-zombis": cada zombi, quieto encima de un charco de ácido (el de la portera) en la sala de
 # pruebas, y cuánta vida pierde en 2 s: todos se queman menos el gordo (venenoso: aguanta_acido); y debajo, todos los
 # jefes: se queman todos menos el Glotón y el doctor Salas. Foto

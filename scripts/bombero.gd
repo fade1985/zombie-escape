@@ -38,16 +38,18 @@ const ALCANCE_HACHA := 64.0            # hasta dónde llega el hacha (desde su c
 const AVISO_HACHA := 0.4
 const BOLAS := [3, 5]                  # cuántas bolas de fuego de una vez (normal y enfadado), en abanico...
 const ABANICO_BOLAS := 0.26            # ...con 15 grados (en radianes) de una a otra
-const ESPERA_BOLAS := [2.2, 1.6]       # cada cuánto las tira (normal y enfadado)
+const ESPERA_BOLAS := [3.1, 2.2]       # cada cuánto las tira (normal y enfadado; hasta el 9 nov, 2,2 y 1,6)
 const VELOCIDAD_BOLA := 340.0
 const DANO_BOLA := 14
 const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}     # lo que arde Johnny al darle una bola
 const MOLOTOVS := [2, 3]
-const ESPERA_MOLOTOV := [4.0, 2.8]
+const ESPERA_MOLOTOV := [5.6, 3.9]     # (hasta el 9 nov, 4 y 2,8)
 const SEPARA_MOLOTOV := 110.0          # lo menos que se separan los molotovs de una vez (lo que mide su fuego, de borde
                                        # a borde): así no caen unos encima de otros
 const CONOS := [1, 2]                  # conos de fuego en el giro
 const ESPERA_GIRO := [22.0, 18.0]      # cada cuánto gira, normal y enfadado
+const DESCANSO := [1.1, 0.7]           # lo que anda tras las bolas, los molotovs y el giro antes de pensar otro ataque
+                                       # (normal y enfadado; 9 nov, lo pidió el dueño: más respiro. Antes, 0,8 y 0,5)
 const LARGO_MAX := 1600.0              # el cono llega hasta la pared (esto, por si no la encuentra)
 const ABERTURA := 0.35                 # medio cono, en radianes: 20 grados a cada lado del medio (40 en total)
 const RAYOS := 10                      # en cuántos trozos se parte el cono de borde a borde para medir hasta dónde
@@ -168,7 +170,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				else:
 					lanzar_molotovs(johnny)
 			if t >= 0.8:
-				andar(0.5 if enfadado() else 0.8)
+				andar(DESCANSO[fase - 1])
 		"ir_centro":
 			# al centro de la sala, por donde se pueda andar
 			agente.target_position = datos.centro
@@ -198,7 +200,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			if randf() < delta * 2.0:
 				Sonido.tocar("fuego")
 			if t >= TIEMPO_GIRO:
-				andar(0.5 if enfadado() else 0.8)
+				andar(DESCANSO[fase - 1])
 		"tambaleo":
 			frenar(delta, 5.0)
 			if t >= TAMBALEO:
@@ -245,7 +247,7 @@ func a_mano(johnny: Node2D) -> bool:
 
 # Levanta el hacha mirando a Johnny (el aviso: ya no cambia de idea)
 func levantar_hacha(johnny: Node2D) -> void:
-	espera_hacha = 1.6
+	espera_hacha = 2.2   # (hasta el 9 nov, 1,6)
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia != Vector2.ZERO:
 		mirada = hacia.normalized()
