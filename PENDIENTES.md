@@ -13,11 +13,9 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M1** Tutoriales: quitar el icono del título en todos (p. ej. la carpeta de «El ordenador»).
 - **M2** Talentos: cambiar los iconos uno a uno por dibujos de GPT.
 - **M3** Exclamación nueva hecha con GPT (la de los avisos: Noticias nuevas, logros por cobrar…).
 - **M4** Logros: cambiar los iconos uno a uno por dibujos de GPT.
-- **M5** Logros, Resumen: quitar la frase de debajo de «Casi lo tienes» y el «Por cobrar $X» de arriba (lo avisará la exclamación).
 - **M6** Ordenador: cambiar los iconos del escritorio (Talentos, Tienda, Logros, Dosier, Noticias, Colecciones, Apagar) por dibujos de GPT.
 - **M7** La flecha amarilla del principio de la partida, por un dibujo de GPT.
 - **M8** Trasteros: puertas, camas y estanterías más realistas con lo de los muebles.
@@ -30,5 +28,4 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Por limar
 
-- **L1** Al morir: quitar la frase «Te han pillado».
 
