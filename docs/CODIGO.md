@@ -43,7 +43,12 @@ en una línea.
   (`CALIDADES`: Normal, Poco común, Rara y Épica, con su color, su daño, lo de su familia y las piezas que cuesta
   subir a ella en el banco, `coste()`: los arrojables, más baratos; `con_calidad()`, `que_da()`, `al_baul()`,
   `pieza()`): cada arma que lleva Johnny tiene la suya (`johnny.calidades`, `johnny.base()`; lleva una
-  de cada arma: `partida.llevar_arma`) y el baúl guarda armas y paquetes de arrojables con la suya. La **Épica**
+  de cada arma: `partida.llevar_arma`) y el baúl guarda armas y paquetes de arrojables con la suya. **Durabilidad**
+  (9 nov, `nuevas()`): un arma o un montón de arrojables dura la partida en curso y tantas más como su calidad (Normal
+  0, Poco común 1, Rara 2, Épica 3); `johnny.quedan`, `lanzables.quedan` y "quedan" en el baúl. Sacarlo del baúl gasta
+  una (`estrenar()`, marca "usada"); mejorarlo suma una. Al acabar la partida (ganes, caigas o abandones),
+  `Objetos.cerrar_baul` devuelve al baúl lo que lleva con partidas y destruye lo que no tiene (también lo "usado" del
+  baúl); el cartel lo dice (`partida.filas_rotas`). La ficha lo enseña (`texto_partidas()`). Prueba: `--durabilidad`. La **Épica**
   (`EPICA`) trae además un truco de su familia (`TRUCO`, `truco()`): golpe de gracia (cada 4 golpes, uno crítico:
   `johnny.golpear`), balas que atraviesan (`bala.gd`, `atraviesa`, estela morada), estallido (el zombi que mata
   revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños
@@ -79,9 +84,9 @@ en una línea.
   clave, uno de su tipo o el primero). Un montón se señala por su sitio, el nombre de su casilla en el inventario
   (`"l1"`, `"e3"`: `clave_en`, `cuantos_en`, `sitio_de`, `quitar`, `mejorar`); `a_la_mano` y `al_repuesto`, por su
   número. Lo que cuesta uno en la tienda (`PRECIOS`). La clave de un montón es el tipo y, si no es Normal, la calidad
-  detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con `mejorar`). Al completar el edificio
-  van todos al baúl (`partida.equipo_encima`, `montones`), también los Normales; allí se juntan los del mismo tipo y
-  calidad hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
+  detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con `mejorar`). Al acabar la partida
+  vuelven al baúl los que tienen partidas por delante (la durabilidad: `Armas.nuevas`; los Normales se rompen); allí se
+  juntan los del mismo tipo, calidad y partidas hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
   («Sacar 3»). Se prueba con `--montones`. A los jefes, el fuego y las explosiones les hacen la mitad (`A_JEFES`,
   `a_jefe`: lo miran `explosion.gd`, `charco.gd` y `proyectil.gd`).
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).

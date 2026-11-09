@@ -107,6 +107,42 @@ const AURA := [
 ]
 
 
+# ── La durabilidad (9 nov, regla del dueño) ──
+# Un arma o un montón de arrojables dura la partida en la que estás y tantas más como su calidad: la Normal, solo esa;
+# la Poco común, una más; la Rara, dos; la Épica, tres. Se lleva la cuenta en "quedan": las partidas que le quedan
+# DESPUÉS de esta (lo que lleva Johnny: johnny.quedan y lanzables.quedan) o, en el baúl, las que aún puede salir
+# ("baul_equipo": "quedan"). Sacarla del baúl gasta una (y la marca "usada", para no gastar otra si se vuelve a sacar en
+# la misma partida). Al acabar la partida (ganes, caigas o abandones: partida.gd, cerrar_baul), lo que lleva con
+# partidas por delante vuelve al baúl y lo que se ha quedado sin ninguna se destruye, aunque esté dentro del baúl.
+# Mejorarla en el banco le suma una. Las del baúl de antes de esto (sin "quedan") cuentan como sin estrenar: nuevas + 1
+static func nuevas(calidad: int) -> int:
+	return calidad
+
+
+# Las partidas que le quedan a una casilla del baúl (o a un arma suelta: {"id", "calidad", "quedan"})
+static func quedan_de(e: Dictionary) -> int:
+	return int(e.get("quedan", nuevas(int(e.get("calidad", 0))) + 1))
+
+
+# Lo que le pasa a una casilla del baúl al sacarla: si aún no ha salido en esta partida, gasta una y queda "usada".
+# Devuelve las partidas que le quedan después de esta (las que lleva Johnny)
+static func estrenar(e: Dictionary) -> int:
+	if not e.get("usada", false):
+		e.quedan = maxi(quedan_de(e) - 1, 0)
+		e.usada = true
+	return quedan_de(e)
+
+
+# La línea de la ficha que dice cuántas partidas le quedan (inventario.gd). "en_uso": la lleva o ya ha salido del baúl en
+# esta partida (lo que queda es después de esta); si no, en el baúl, las que aún puede salir
+static func texto_partidas(quedan: int, en_uso: bool) -> String:
+	if en_uso and quedan <= 0:
+		return Idioma.t("Última partida: al acabarla, se destruye")
+	if en_uso:
+		return Idioma.n("Le queda %d partida más después de esta", "Le quedan %d partidas más después de esta", quedan) % quedan
+	return Idioma.n("Le queda %d partida", "Le quedan %d partidas", quedan) % quedan
+
+
 # ¿Va al baúl? Las armas, todas (la pistola Normal deja a Johnny sin arma a distancia: SIN_FUEGO; la fregona Normal de la
 # mano, solo si lleva otra cuerpo a cuerpo de repuesto, para que siempre tenga con qué pegar: inventario.gd,
 # fregona_sola); los paquetes de arrojables (su id de Lanzables.DATOS), los mejorados (los Normales se compran en la

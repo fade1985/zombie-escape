@@ -136,6 +136,8 @@ var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuan
 var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
 var calidades := {}        # la calidad de las armas que lleva, en la mano o de repuesto (Armas.CALIDADES): {id: 2};
                            # la que no está, Normal. Lleva una de cada arma, así que basta con su id (partida.llevar_arma)
+var quedan := {}           # las partidas que les quedan después de esta (Armas.nuevas: la durabilidad): {id: 1}; la que
+                           # no está, las de una nueva de su calidad (la que se encuentra o se compra en esta partida)
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
 var balas := 0             # balas que quedan en el cargador del arma de fuego
 var municion := {}         # la munición de reserva, por tipos (Armas.MUNICION): {"balas": 24, ...}. La gasolina, los
@@ -344,6 +346,11 @@ func arma_de(id: String) -> Dictionary:
 # La calidad de un arma que lleva (0 = Normal)
 func calidad(id: String) -> int:
 	return calidades.get(id, 0)
+
+
+# Las partidas que le quedan a un arma que lleva, después de esta (la durabilidad: Armas.nuevas)
+func quedan_de(id: String) -> int:
+	return int(quedan.get(id, Armas.nuevas(calidad(id))))
 
 
 # Los datos de un arma que lleva con su calidad, sin los atributos de Johnny (el cargador o el depósito de verdad)

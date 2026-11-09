@@ -40,7 +40,8 @@ const NUEVO := {
 	"matados": {},        # zombis matados de cada tipo desde el 8 nov ({"normal": 120, ...}, claves de Bestiario.LISTA): Colecciones
 	"muertos_con_ayudas": 0, # los de "muertos" que se mataron en partidas con ayudas: no cuentan para el logro Exterminador (logros.gd)
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...}
-	"baul_equipo": [],    # las armas y los arrojables del baúl, cada uno en su casilla y con su calidad
+	"baul_equipo": [],    # las armas y los arrojables del baúl, cada uno en su casilla y con su calidad (y su
+	                      # durabilidad: "quedan", las partidas que aún puede salir, y "usada" si ya ha salido en esta: Armas.nuevas)
 	                      # (Armas.CALIDADES; parte 4 de la tienda y las piezas): [{"id": "bate", "calidad": 2},
 	                      # {"id": "molotov", "calidad": 1, "n": 3}, ...]. Los arrojables de la misma clase y calidad,
 	                      # juntos hasta 99 por casilla, como los objetos (Objetos.arrojables_al_baul)
@@ -143,10 +144,19 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 	for e in s.baul_equipo:
 		var id: String = str(e.get("id", "")) if e is Dictionary else ""
 		var calidad := clampi(int(e.get("calidad", 0)), 0, Armas.CALIDADES.size() - 1) if e is Dictionary else 0
+		var cosa := {}
 		if Armas.DATOS.has(id):
-			equipo.append({"id": id, "calidad": calidad})
+			cosa = {"id": id, "calidad": calidad}
 		elif Lanzables.DATOS.has(id) and int(e.get("n", 0)) > 0:
-			equipo.append({"id": id, "calidad": calidad, "n": int(e.n)})
+			cosa = {"id": id, "calidad": calidad, "n": int(e.n)}
+		if cosa.is_empty():
+			continue
+		# la durabilidad (Armas.nuevas): las partidas que le quedan y si ya ha salido en esta (las de antes del 9 nov no
+		# lo traen: sin estrenar)
+		cosa.quedan = maxi(0, Armas.quedan_de(e))
+		if e.get("usada", false):
+			cosa.usada = true
+		equipo.append(cosa)
 	s.baul_equipo = equipo
 	# las recetas del banco de trabajo se quitaron del juego el 25 oct: las armas creadas del baúl ("baul_armas"), las
 	# recetas aprendidas ("recetas") y las creadas alguna vez ("creadas", de Colecciones) de un guardado viejo no se

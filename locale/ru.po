@@ -96,6 +96,24 @@ msgid "¡CLONC!"
 msgstr "ДЗЫНЬ!"
 
 #: scripts/armas.gd
+msgid "Última partida: al acabarla, se destruye"
+msgstr "Последний забег: после него сломается"
+
+#: scripts/armas.gd
+msgid "Le queda %d partida más después de esta"
+msgid_plural "Le quedan %d partidas más después de esta"
+msgstr[0] "Останется ещё %d забег после этого"
+msgstr[1] "Останется ещё %d забега после этого"
+msgstr[2] "Останется ещё %d забегов после этого"
+
+#: scripts/armas.gd
+msgid "Le queda %d partida"
+msgid_plural "Le quedan %d partidas"
+msgstr[0] "Осталось забегов: %d"
+msgstr[1] "Осталось забегов: %d"
+msgstr[2] "Осталось забегов: %d"
+
+#: scripts/armas.gd
 msgid "golpe un %d %% más largo y ancho"
 msgstr "удар на %d %% длиннее и шире"
 
@@ -3256,6 +3274,13 @@ msgid "Caíste en la %s de %s"
 msgstr "Ты пал: %s, %s"
 
 #: scripts/partida.gd
+msgid "Sin partidas: se ha roto"
+msgid_plural "Sin partidas: se han roto"
+msgstr[0] "Забеги кончились: сломалось"
+msgstr[1] "Забеги кончились: сломались"
+msgstr[2] "Забеги кончились: сломались"
+
+#: scripts/partida.gd
 msgid "Logro: %s"
 msgstr "Достижение: %s"
 
@@ -4625,8 +4650,8 @@ msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tira
 msgstr "Выбери ячейку, чтобы увидеть ее карточку и кнопки (применить, взять, выбросить...)."
 
 #: scripts/tutoriales.gd
-msgid "Si caes, lo que llevas se pierde; si completas el edificio, pasa al baúl."
-msgstr "Если падешь, все, что при тебе, пропадет; если пройдешь здание, все отправится в сундук."
+msgid "Si caes, lo de la mochila se pierde; si completas el edificio, pasa al baúl. Las armas y los lanzables vuelven al baúl siempre, si les quedan partidas."
+msgstr "Если падёшь, всё из рюкзака пропадёт; если зачистишь здание, оно уйдёт в сундук. Оружие и метательное всегда возвращается в сундук, если у него остались забеги."
 
 #: scripts/tutoriales.gd
 msgid "Dólares"
@@ -4885,8 +4910,8 @@ msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas d
 msgstr "Повышай качество оружия и метательного, уровень за уровнем, деталями того же вида (из рюкзака и из сундука)."
 
 #: scripts/tutoriales.gd
-msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco."
-msgstr "Обычное, Необычное, Редкое и Эпическое: Эпическое еще и дает фишку."
+msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
+msgstr "Обычное, Необычное, Редкое и Эпическое: у Эпического ещё и есть приём. Каждое улучшение также добавляет один забег жизни."
 
 #: scripts/tutoriales.gd
 msgid "Elige la casilla y pulsa «Mejorar»."
@@ -4901,16 +4926,16 @@ msgid "Al abrir el baúl"
 msgstr "Когда открываешь сундук"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas aquí no se pierde aunque caigas: objetos, armas y lanzables mejorados."
-msgstr "Что хранится здесь, не пропадет, даже если падешь: предметы, улучшенное оружие и метательное."
+msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres."
+msgstr "Оружие и метательное служат текущий забег и ещё столько, какое у них качество: Обычное — ни одного; Необычное — один; Редкое — два; Эпическое — три."
 
 #: scripts/tutoriales.gd
-msgid "Elige una casilla o arrástrala para pasarla entre lo que llevas y el baúl."
-msgstr "Выбери ячейку или перетащи ее, чтобы переложить между тем, что при тебе, и сундуком."
+msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."
+msgstr "Взять из сундука — значит потратить забег; если забегов не оставалось, вещь сломается в конце, даже если положишь её обратно."
 
 #: scripts/tutoriales.gd
-msgid "Al completar el edificio, lo que llevas pasa solo al baúl."
-msgstr "Когда проходишь здание, все, что при тебе, само отправляется в сундук."
+msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
+msgstr "В конце забега, зачистил ты здание или пал, всё, у чего остались забеги, само вернётся в сундук. Выбери ячейку или перетащи её, чтобы переложить."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5481,8 +5506,8 @@ msgid "Objetos, armas y arrojables"
 msgstr "Предметы, оружие и метательное"
 
 #: scripts/ui/inventario.gd
-msgid "Aquí no se pierde nada aunque caigas."
-msgstr "Здесь ничего не пропадет, даже если падешь."
+msgid "Las armas y los lanzables duran según su calidad."
+msgstr "Оружие и метательное служат по своему качеству."
 
 #: scripts/ui/inventario.gd
 msgid "Guardar todo"
@@ -5521,8 +5546,8 @@ msgid "Solo caben %d más en el baúl (%d por casilla): el resto se queda contig
 msgstr "В сундук влезет еще только %d (по %d в ячейке): остальное останется у тебя."
 
 #: scripts/ui/inventario.gd
-msgid "Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas."
-msgstr "Убирается вся стопка вместе с такими же, что уже там, и в сундуке она в сохранности, даже если падешь."
+msgid "Se guarda el montón entero, con los que ya haya de estos."
+msgstr "Кладётся вся стопка, вместе с такими же, что уже есть."
 
 #: scripts/ui/inventario.gd
 msgid "%s · En la mochila"
@@ -5609,24 +5634,24 @@ msgid "Arrojable · %s · En el baúl"
 msgstr "Метательное · %s · В сундуке"
 
 #: scripts/ui/inventario.gd
-msgid "Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes."
-msgstr "Выходят стопками, по %d за раз (сколько влезет); вне сундука пропадут, если падешь."
+msgid "Salen de montón en montón, %d cada vez (los que te quepan)."
+msgstr "Выходят стопками, по %d за раз (сколько поместится)."
 
 #: scripts/ui/inventario.gd
 msgid "No te caben: tus montones de estos están llenos y no te queda hueco para otro."
 msgstr "Не влезают: твои стопки таких полны, и места для новой нет."
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
-msgstr "В сундуке будет в сохранности, даже если падешь. Без оружия дальнего боя ты останешься, пока не достанешь его."
+msgid "Te quedas sin arma a distancia hasta que la saques."
+msgstr "Без оружия дальнего боя ты останешься, пока не достанешь его."
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
-msgstr "В сундуке будет в сохранности, даже если падешь; взамен в руке — то, что всегда при тебе: %s."
+msgid "En su lugar, a la mano, la %s de siempre."
+msgstr "Взамен в руке — то, что всегда при тебе: %s."
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas."
-msgstr "В сундуке будет в сохранности, даже если падешь."
+msgid "Se guarda en el baúl, con las partidas que le quedan."
+msgstr "Уходит в сундук с оставшимися забегами."
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
@@ -5637,12 +5662,20 @@ msgid "Se guardan los %d de esta casilla, y en el baúl quedan a salvo aunque ca
 msgstr "Убирается все из этой ячейки (%d), и в сундуке оно в сохранности, даже если падешь."
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas."
+msgstr "В сундуке будет в сохранности, даже если падешь."
+
+#: scripts/ui/inventario.gd
 msgid "%s al repuesto; %s entra en el baúl en su lugar."
 msgstr "%s — в запас, а %s уходит в сундук."
 
 #: scripts/ui/inventario.gd
 msgid "%s a la mano; %s entra en el baúl en su lugar."
 msgstr "%s — в руку, а %s уходит в сундук."
+
+#: scripts/ui/inventario.gd
+msgid "%s: es su última partida; al acabarla, se destruye."
+msgstr "%s: это последний забег; после него сломается."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl no admite más: contigo se quedan %d de %s."
@@ -7154,8 +7187,8 @@ msgid "Comprar · $%d"
 msgstr "Купить · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Продается в Обычном качестве. Если падешь, потеряешь все, что при тебе, поэтому сначала убери это в сундук в мастерской. Если пройдешь здание, все само попадет в сундук. Носишь по два каждого типа: то, что было в руке, станет запасным, а запасное уйдет в сундук; если оно не влезет или его нельзя убрать, то, что было в руке, останется на полу."
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Продаётся в качестве Обычное: служит только этот забег и потом ломается. Ты носишь по два каждого типа: то, что было в руке, уходит в запас, а запасное — в сундук; если не помещается или его нельзя убрать, то, что было в руке, остаётся на полу."
 
 #: scripts/ui/tienda_armas.gd
 msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."

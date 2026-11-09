@@ -177,33 +177,65 @@ static func hueco_baul(s: Dictionary) -> bool:
 # Van en su "baul_equipo" ({"id": el tipo, "calidad", "n"}) y, como los objetos, los del mismo tipo y calidad se juntan
 # en una casilla hasta MONTON; lo que pasa, a otra (el M18 del dueño; lanzables.gd)
 
-# ¿Esa casilla del baúl es de arrojables de ese tipo y esa calidad?
-static func es_arrojable(e: Dictionary, id: String, calidad: int) -> bool:
-	return e.has("n") and e.id == id and int(e.get("calidad", 0)) == calidad
+# ¿Esa casilla del baúl es de arrojables de ese tipo, esa calidad y esas partidas por delante (la durabilidad:
+# Armas.nuevas; "quedan" -1, las de unos sin estrenar)? Los que ya han salido en esta partida ("usada") van aparte
+static func es_arrojable(e: Dictionary, id: String, calidad: int, quedan := -1, usada := false) -> bool:
+	var q := quedan if quedan >= 0 else Armas.nuevas(calidad) + 1
+	return e.has("n") and e.id == id and int(e.get("calidad", 0)) == calidad and Armas.quedan_de(e) == q 		and bool(e.get("usada", false)) == usada
 
 
 # Cuántos de esos arrojables caben en el baúl: lo que falta para llenar sus casillas y MONTON por cada casilla libre
-static func caben_arrojables(s: Dictionary, id: String, calidad: int) -> int:
+static func caben_arrojables(s: Dictionary, id: String, calidad: int, quedan := -1, usada := false) -> int:
 	var n := maxi(0, BAUL - casillas_baul(s)) * MONTON
 	for e in s.baul_equipo:
-		if es_arrojable(e, id, calidad):
+		if es_arrojable(e, id, calidad, quedan, usada):
 			n += maxi(0, MONTON - int(e.n))
 	return n
 
 
 # Mete "n" de esos arrojables en el baúl del guardado "g": en sus casillas que no estén llenas y luego en otras nuevas
-# (al final), aunque no quede sitio (al completar el edificio entra todo; al guardar a mano, se mira antes con
+# (al final), aunque no quede sitio (al acabar la partida entra todo; al guardar a mano, se mira antes con
 # caben_arrojables)
-static func arrojables_al_baul(g: Dictionary, id: String, calidad: int, n: int) -> void:
+static func arrojables_al_baul(g: Dictionary, id: String, calidad: int, n: int, quedan := -1, usada := false) -> void:
 	for e in g.baul_equipo:
-		if n > 0 and es_arrojable(e, id, calidad) and int(e.n) < MONTON:
+		if n > 0 and es_arrojable(e, id, calidad, quedan, usada) and int(e.n) < MONTON:
 			var entran := mini(n, MONTON - int(e.n))
 			e.n = int(e.n) + entran
 			n -= entran
 	while n > 0:
 		var entran := mini(n, MONTON)
-		g.baul_equipo.append({"id": id, "calidad": calidad, "n": entran})
+		var e := {"id": id, "calidad": calidad, "n": entran}
+		if quedan >= 0:
+			e.quedan = quedan
+		if usada:
+			e.usada = true
+		g.baul_equipo.append(e)
 		n -= entran
+
+
+# Al acabar la partida (ganes, caigas o abandones: partida.gd, terminar), la durabilidad (Armas.nuevas): lo que ha
+# salido del baúl en ella y se ha quedado sin partidas se destruye, aunque se haya vuelto a guardar; lo demás deja de
+# estar "usado". Luego entra lo que lleva encima ("equipo": partida.equipo_encima), si le quedan partidas. Devuelve lo
+# destruido que merece decirse en el cartel del final ([{"id", "calidad"}]: sin la fregona ni la pistola Normales ni los
+# arrojables Normales, que se rompen en todas las partidas)
+static func cerrar_baul(g: Dictionary, equipo: Array) -> Array:
+	var rotas := []
+	var quedan := []
+	for e in g.baul_equipo:
+		if e.get("usada", false) and Armas.quedan_de(e) <= 0:
+			rotas.append(e)
+			continue
+		e.erase("usada")
+		quedan.append(e)
+	g.baul_equipo = quedan
+	for cosa in equipo:
+		if int(cosa.get("quedan", 0)) <= 0:
+			rotas.append(cosa)
+		elif cosa.has("n"):
+			arrojables_al_baul(g, cosa.id, cosa.calidad, cosa.n, cosa.quedan)
+		else:
+			g.baul_equipo.append({"id": cosa.id, "calidad": cosa.calidad, "quedan": cosa.quedan})
+	return rotas.filter(func(e): return int(e.get("calidad", 0)) > 0 		or (not e.has("n") and not e.id in Armas.SIEMPRE.values()))
 
 
 # Todo lo que puede ir en el baúl como objeto, en el orden de NOMBRES y, al final, el botiquín (que no es de NOMBRES:

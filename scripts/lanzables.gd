@@ -103,6 +103,8 @@ var cantidades := {"molotov": 0, "granada": 0, "atraedora": 0, "congeladora": 0}
 var mano: Array = []           # las claves de los montones que lleva a mano (sin repetir), en el orden de F
 var repuesto: Array = []       # y las de los de repuesto (puede haber varios de la misma)
 var en_repuesto: Array = []    # cuántos hay en cada montón de repuesto (en el orden de "repuesto")
+var quedan := {}               # las partidas que les quedan después de esta a los de cada clave (la durabilidad:
+                               # Armas.nuevas); la que no está, las de unos nuevos de su calidad (quedan_de)
 var tipo := "molotov"          # el paquete que se lanza ahora (su clave; "" si no lleva nada a mano)
 var apunte := Vector2.INF      # dónde caería, mientras se mantiene el botón (INF: no se apunta)
 var apuntando := false         # se ha visto el botón apretado: al soltarlo, se lanza (y solo entonces)
@@ -145,6 +147,7 @@ func reiniciar(stats: Dictionary) -> void:
 		mano.append("congeladora")
 	repuesto = []
 	en_repuesto = []
+	quedan = {}
 	tipo = "molotov"
 
 
@@ -200,6 +203,7 @@ func sumar(k: String) -> void:
 # llenos (el de la mano, el primero) y luego en montones nuevos: a mano si hay hueco (y si no llevaba nada a mano, es lo
 # que se lanza) y si no, de repuesto. Devuelve los que han entrado (los demás no caben)
 func meter(k: String, n: int) -> int:
+	self.quedan.erase(k)   # (unos nuevos: los de esa clave duran lo que unos nuevos, que es lo más que pueden durar)
 	var quedan := n
 	if k in mano:
 		var entran := clampi(maximo(k) - cuantas(k), 0, quedan)
@@ -224,6 +228,30 @@ func meter(k: String, n: int) -> int:
 			break
 		quedan -= entran
 	return n - quedan
+
+
+# Mete "n" de esa clave que salen del baúl con "q" partidas por delante (la durabilidad: Armas.estrenar). Si ya llevaba
+# de esa clave, se quedan las partidas de los que más tengan. Devuelve los que han entrado
+func meter_de_baul(k: String, n: int, q: int) -> int:
+	var antes := cuantas(k) + total_clave(k)
+	var mas := quedan_de(k)
+	var entran := meter(k, n)
+	quedan[k] = maxi(q, mas) if antes > 0 else q
+	return entran
+
+
+# Las partidas que les quedan después de esta a los de esa clave (la durabilidad: Armas.nuevas)
+func quedan_de(k: String) -> int:
+	return int(quedan.get(k, Armas.nuevas(calidad_de(k))))
+
+
+# Cuántos lleva de esa clave en los montones de repuesto
+func total_clave(k: String) -> int:
+	var n := 0
+	for i in repuesto.size():
+		if repuesto[i] == k:
+			n += en_repuesto[i]
+	return n
 
 
 # Quita los montones que se han acabado. El hueco de la mano lo ocupa otro de repuesto (relevo). Si se acaba el que se
@@ -385,6 +413,12 @@ func quitar(sitio: String, n := 1000) -> int:
 func mejorar(sitio: String, calidad: int) -> String:
 	var k := clave_en(sitio)
 	var nueva := clave(tipo_de(k), calidad)
+	# la durabilidad: las partidas que le quedaban y una más por la subida (Armas.nuevas); si se junta con otros, las de
+	# los que más tengan
+	var q := quedan_de(k) + calidad - calidad_de(k)
+	if cuantas(nueva) + total_clave(nueva) > 0:
+		q = maxi(q, quedan_de(nueva))
+	quedan[nueva] = q
 	var i := sitio.substr(1).to_int()
 	if sitio.begins_with("e"):
 		repuesto[i] = nueva

@@ -72,10 +72,10 @@ static func apuntar(p: Node, num: int) -> void:
 		"mochila": p.mochila, "armas_guardadas": p.armas_guardadas,
 		"dolares": p.dolares, "muertos": p.muertos, "matados": p.matados, "duracion": p.duracion, "al_empezar": p.al_empezar,
 		"johnny": {"vida": j.vida, "tercios": j.tercios, "resucitado": j.resucitado, "copia_usada": j.copia_usada, "huecos": j.huecos,
-			"calidades": j.calidades, "mano": j.mano, "balas": j.balas, "municion": j.municion,
+			"calidades": j.calidades, "quedan": j.quedan, "mano": j.mano, "balas": j.balas, "municion": j.municion,
 			"cargadores": j.cargadores, "deposito": j.deposito},
 		"lanzables": {"cantidades": lz.cantidades, "mano": lz.mano, "repuesto": lz.repuesto,
-			"en_repuesto": lz.en_repuesto, "tipo": lz.tipo},
+			"en_repuesto": lz.en_repuesto, "tipo": lz.tipo, "quedan": lz.quedan},
 	}
 	var texto := var_to_str(foto)
 	Guardado.cambiar(func(g): g.en_curso = texto)
@@ -108,6 +108,7 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	j.copia_usada = fj.get("copia_usada", false)   # (la skin del becario; las guardadas antes, sin)
 	j.huecos = fj.huecos.duplicate()
 	j.calidades = fj.calidades.duplicate()
+	j.quedan = fj.get("quedan", {}).duplicate()   # (la durabilidad; las fotos de antes del 9 nov no la traen: nuevas)
 	j.municion = fj.municion.duplicate()
 	j.cargadores = fj.cargadores.duplicate()
 	j.sostener(fj.mano)
@@ -122,6 +123,7 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	lz.repuesto = foto.lanzables.repuesto.duplicate()
 	lz.en_repuesto = foto.lanzables.en_repuesto.duplicate()
 	lz.tipo = foto.lanzables.tipo
+	lz.quedan = foto.lanzables.get("quedan", {}).duplicate()
 	sobrantes_al_baul(lz, foto)
 	# el superviviente de la partida y el equipo (el acompañante y el rescatado, si ya lo estaba)
 	var sup: Supervivientes = p.supervivientes

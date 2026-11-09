@@ -125,6 +125,7 @@ func _exit_tree() -> void:
 	# Johnny vuelve a llevar lo que llevaba al entrar (también la mochila, las armas de repuesto y los arrojables)
 	johnny.huecos = entrada.huecos
 	johnny.calidades = entrada.calidades
+	johnny.quedan = entrada.get("quedan", {})
 	johnny.balas = entrada.balas
 	johnny.municion = entrada.municion
 	johnny.deposito = entrada.deposito
@@ -139,6 +140,7 @@ func _exit_tree() -> void:
 	lz.repuesto = entrada.lz.repuesto
 	lz.en_repuesto = entrada.lz.en_repuesto
 	lz.tipo = entrada.lz.tipo
+	lz.quedan = entrada.lz.get("quedan", {})
 
 
 # ═════════════ Lo que cambia el panel de pruebas ═════════════
@@ -177,11 +179,12 @@ func _physics_process(delta: float) -> void:
 		var lz: Lanzables = partida.lanzables
 		entrada = {"huecos": johnny.huecos.duplicate(), "mano": johnny.mano, "balas": johnny.balas,
 			"municion": johnny.municion.duplicate(), "deposito": johnny.deposito, "cargadores": johnny.cargadores.duplicate(),
-			"calidades": johnny.calidades.duplicate(), "sin_fin": johnny.municion_sin_fin,
+			"calidades": johnny.calidades.duplicate(), "quedan": johnny.quedan.duplicate(), "sin_fin": johnny.municion_sin_fin,
 			"mochila": partida.mochila.duplicate(), "guardadas": partida.armas_guardadas.duplicate(),
 			"lz": {"cantidades": lz.cantidades.duplicate(), "mano": lz.mano.duplicate(), "repuesto": lz.repuesto.duplicate(),
-				"en_repuesto": lz.en_repuesto.duplicate(), "tipo": lz.tipo}}
+				"en_repuesto": lz.en_repuesto.duplicate(), "tipo": lz.tipo, "quedan": lz.quedan.duplicate()}}
 		johnny.calidades = {}   # (aquí se prueban como son, en Normal)
+		johnny.quedan = {}
 		johnny.municion_sin_fin = sin_fin   # munición sin fin, pero recargando: la reserva no se acaba nunca
 		johnny.coger(lista[indice])
 	reloj += delta

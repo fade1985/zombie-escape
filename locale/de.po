@@ -96,6 +96,22 @@ msgid "¡CLONC!"
 msgstr "KLONK!"
 
 #: scripts/armas.gd
+msgid "Última partida: al acabarla, se destruye"
+msgstr "Letzte Runde: Danach geht sie kaputt"
+
+#: scripts/armas.gd
+msgid "Le queda %d partida más después de esta"
+msgid_plural "Le quedan %d partidas más después de esta"
+msgstr[0] "Noch %d Runde nach dieser"
+msgstr[1] "Noch %d Runden nach dieser"
+
+#: scripts/armas.gd
+msgid "Le queda %d partida"
+msgid_plural "Le quedan %d partidas"
+msgstr[0] "Noch %d Runde"
+msgstr[1] "Noch %d Runden"
+
+#: scripts/armas.gd
 msgid "golpe un %d %% más largo y ancho"
 msgstr "Schlag %d %% länger und breiter"
 
@@ -3254,6 +3270,12 @@ msgid "Caíste en la %s de %s"
 msgstr "Endstation %s, auf dem Weg durch %s"
 
 #: scripts/partida.gd
+msgid "Sin partidas: se ha roto"
+msgid_plural "Sin partidas: se han roto"
+msgstr[0] "Keine Runden mehr: kaputt"
+msgstr[1] "Keine Runden mehr: kaputt"
+
+#: scripts/partida.gd
 msgid "Logro: %s"
 msgstr "Erfolg: %s"
 
@@ -4618,8 +4640,8 @@ msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tira
 msgstr "Wähle einen Platz für seine Karte und Knöpfe (benutzen, ausrüsten, wegwerfen...)."
 
 #: scripts/tutoriales.gd
-msgid "Si caes, lo que llevas se pierde; si completas el edificio, pasa al baúl."
-msgstr "Fällst du, ist dein Gepäck weg; schaffst du das Gebäude, kommt es in die Truhe."
+msgid "Si caes, lo de la mochila se pierde; si completas el edificio, pasa al baúl. Las armas y los lanzables vuelven al baúl siempre, si les quedan partidas."
+msgstr "Wenn du fällst, ist der Rucksackinhalt weg; schaffst du das Gebäude, kommt er in die Truhe. Waffen und Wurfwaffen kommen immer in die Truhe zurück, wenn sie noch Runden haben."
 
 #: scripts/tutoriales.gd
 msgid "Dólares"
@@ -4878,8 +4900,8 @@ msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas d
 msgstr "Verbessere Waffen und Wurfwaffen Stufe für Stufe mit Teilen ihrer Art (aus Rucksack und Truhe)."
 
 #: scripts/tutoriales.gd
-msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco."
-msgstr "Normal, Ungewöhnlich, Selten und Episch: Episch bringt dazu einen Trick."
+msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
+msgstr "Normal, Ungewöhnlich, Selten und Episch: Episch hat dazu einen Trick. Jede Verbesserung gibt außerdem eine Runde mehr Lebensdauer."
 
 #: scripts/tutoriales.gd
 msgid "Elige la casilla y pulsa «Mejorar»."
@@ -4894,16 +4916,16 @@ msgid "Al abrir el baúl"
 msgstr "An der Truhe"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas aquí no se pierde aunque caigas: objetos, armas y lanzables mejorados."
-msgstr "Was hier liegt, ist sicher, auch wenn du fällst: Gegenstände, verbesserte Waffen und Wurfwaffen."
+msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres."
+msgstr "Waffen und Wurfwaffen halten die aktuelle Runde und so viele weitere, wie ihre Qualität sagt: Normal keine, Ungewöhnlich eine, Selten zwei, Episch drei."
 
 #: scripts/tutoriales.gd
-msgid "Elige una casilla o arrástrala para pasarla entre lo que llevas y el baúl."
-msgstr "Wähle oder zieh einen Platz, um ihn zwischen Gepäck und Truhe zu verschieben."
+msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."
+msgstr "Aus der Truhe nehmen kostet eine Runde; war keine mehr übrig, gehen sie am Ende kaputt, auch wenn du sie zurücklegst."
 
 #: scripts/tutoriales.gd
-msgid "Al completar el edificio, lo que llevas pasa solo al baúl."
-msgstr "Schaffst du das Gebäude, landet dein Gepäck von selbst hier."
+msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
+msgstr "Am Ende der Runde, ob du das Gebäude schaffst oder fällst, kommt alles mit Runden übrig von selbst in die Truhe zurück. Wähle ein Feld oder zieh es, um es zu verschieben."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5473,8 +5495,8 @@ msgid "Objetos, armas y arrojables"
 msgstr "Gegenstände, Waffen und Wurfwaffen"
 
 #: scripts/ui/inventario.gd
-msgid "Aquí no se pierde nada aunque caigas."
-msgstr "Hier geht nichts verloren, auch wenn du fällst."
+msgid "Las armas y los lanzables duran según su calidad."
+msgstr "Waffen und Wurfwaffen halten je nach Qualität."
 
 #: scripts/ui/inventario.gd
 msgid "Guardar todo"
@@ -5513,8 +5535,8 @@ msgid "Solo caben %d más en el baúl (%d por casilla): el resto se queda contig
 msgstr "In die Truhe passen nur noch %d (%d pro Platz): Der Rest bleibt bei dir."
 
 #: scripts/ui/inventario.gd
-msgid "Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas."
-msgstr "Der ganze Stapel kommt hinein, zu denen, die schon da sind, und in der Truhe ist er sicher, auch wenn du fällst."
+msgid "Se guarda el montón entero, con los que ya haya de estos."
+msgstr "Der ganze Stapel kommt hinein, zu den gleichen, die schon drin sind."
 
 #: scripts/ui/inventario.gd
 msgid "%s · En la mochila"
@@ -5601,24 +5623,24 @@ msgid "Arrojable · %s · En el baúl"
 msgstr "Wurfwaffe · %s · In der Truhe"
 
 #: scripts/ui/inventario.gd
-msgid "Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes."
-msgstr "Stapelweise, je %d (so viele passen); außerhalb der Truhe sind sie weg, wenn du fällst."
+msgid "Salen de montón en montón, %d cada vez (los que te quepan)."
+msgstr "Sie kommen stapelweise heraus, je %d (so viele, wie passen)."
 
 #: scripts/ui/inventario.gd
 msgid "No te caben: tus montones de estos están llenos y no te queda hueco para otro."
 msgstr "Passen nicht: Deine Stapel davon sind voll, und für einen weiteren ist kein Platz."
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
-msgstr "Sicher in der Truhe, auch wenn du fällst. Du bist ohne Fernkampfwaffe, bis du sie herausholst."
+msgid "Te quedas sin arma a distancia hasta que la saques."
+msgstr "Du bist ohne Fernkampfwaffe, bis du sie herausholst."
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
-msgstr "Sicher in der Truhe, auch wenn du fällst; in die Hand kommt wieder das Übliche: %s."
+msgid "En su lugar, a la mano, la %s de siempre."
+msgstr "In die Hand kommt wieder das Übliche: %s."
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas."
-msgstr "Sicher in der Truhe, auch wenn du fällst."
+msgid "Se guarda en el baúl, con las partidas que le quedan."
+msgstr "Kommt in die Truhe, mit den Runden, die ihr bleiben."
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
@@ -5629,12 +5651,20 @@ msgid "Se guardan los %d de esta casilla, y en el baúl quedan a salvo aunque ca
 msgstr "Alle %d aus diesem Fach kommen hinein und sind in der Truhe sicher, auch wenn du fällst."
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas."
+msgstr "Sicher in der Truhe, auch wenn du fällst."
+
+#: scripts/ui/inventario.gd
 msgid "%s al repuesto; %s entra en el baúl en su lugar."
 msgstr "%s zum Ersatz; %s kommt dafür in die Truhe."
 
 #: scripts/ui/inventario.gd
 msgid "%s a la mano; %s entra en el baúl en su lugar."
 msgstr "%s in die Hand; %s kommt dafür in die Truhe."
+
+#: scripts/ui/inventario.gd
+msgid "%s: es su última partida; al acabarla, se destruye."
+msgstr "%s: Das ist ihre letzte Runde; danach geht sie kaputt."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl no admite más: contigo se quedan %d de %s."
@@ -7135,8 +7165,8 @@ msgid "Comprar · $%d"
 msgstr "Kaufen · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Verkauft in Qualität Normal. Fällst du, ist alles weg, was du trägst, also leg es vorher in die Truhe in der Werkstatt. Schaffst du das Gebäude, kommt alles von selbst in die Truhe. Du trägst zwei pro Art: Die aus deiner Hand wird Ersatz und die Ersatzwaffe kommt in die Truhe; passt sie nicht hinein oder lässt sie sich nicht einlagern, bleibt die aus deiner Hand am Boden."
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Sie werden in Qualität Normal verkauft: Sie halten nur diese Runde und gehen danach kaputt. Du trägst zwei von jeder Art: Die in der Hand wird zum Ersatz und der Ersatz kommt in die Truhe; passt sie nicht hinein oder geht das nicht, bleibt die aus der Hand auf dem Boden."
 
 #: scripts/ui/tienda_armas.gd
 msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."

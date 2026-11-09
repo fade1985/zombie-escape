@@ -469,7 +469,7 @@ func arrojable(r: Rect2, clave: String, k: String, margen := 12.0) -> Control:
 
 # Cuántos de un montón de arrojables (por su clave) caben en el baúl, con los de su clase que ya haya
 func caben_lanzables(s: Dictionary, k: String) -> int:
-	return Objetos.caben_arrojables(s, Lanzables.tipo_de(k), Lanzables.calidad_de(k))
+	return Objetos.caben_arrojables(s, Lanzables.tipo_de(k), Lanzables.calidad_de(k), partida.lanzables.quedan_de(k), true)
 
 
 # El nombre de un paquete por su clave, con su calidad («Molotov (Rara)»)
@@ -645,6 +645,7 @@ func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 	var w: Dictionary = johnny.arma_de(id)
 	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s · %s" % [Armas.tipo_nombre(w.tipo),
 		Armas.calidad_nombre(johnny.calidad(id)), Idioma.t("En la mano") if puesta else Idioma.t("De repuesto")])
+	renglon(caja, Armas.texto_partidas(johnny.quedan_de(id), true), Tema.ROJO if johnny.quedan_de(id) <= 0 else Tema.AMARILLO)
 	if w.tipo == "fuego":
 		var tipo := Armas.municion(id)
 		espacio(caja, 4)
@@ -775,6 +776,7 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 	else:
 		quedan = Idioma.t("Te quedan %d de %d") % [lz.cuantos_en(sitio), lz.maximo(k)]
 	renglon(caja, quedan, Tema.TINTA)
+	renglon(caja, Armas.texto_partidas(lz.quedan_de(k), true), Tema.ROJO if lz.quedan_de(k) <= 0 else Tema.AMARILLO)
 	var que: String = que_hace(k)
 	if a_mano:
 		que += " " + (Idioma.t("Es lo que lanzas ahora.") if k == lz.tipo else Idioma.t("Con F lo eliges para lanzarlo."))
@@ -1018,8 +1020,9 @@ func tirar(todo := false) -> void:
 	elif sel.begins_with("g"):
 		var id: String = partida.armas_guardadas[i]
 		partida.armas_guardadas.remove_at(i)
-		partida.soltar_arma(id, suelo, johnny.calidad(id))   # (con su calidad)
+		partida.soltar_arma(id, suelo, johnny.calidad(id), johnny.quedan_de(id))   # (con su calidad y sus partidas)
 		johnny.calidades.erase(id)
+		johnny.quedan.erase(id)
 		sel = ""
 	elif sel.begins_with("p"):
 		var tipo := "cuerpo" if sel == "p0" else "fuego"
@@ -1033,8 +1036,9 @@ func tirar(todo := false) -> void:
 		johnny.coger(otra)
 		if johnny.mano != mano:
 			johnny.sostener(mano)   # (la otra mano sigue con la suya)
-		partida.soltar_arma(id, suelo, johnny.calidad(id))
+		partida.soltar_arma(id, suelo, johnny.calidad(id), johnny.quedan_de(id))
 		johnny.calidades.erase(id)
+		johnny.quedan.erase(id)
 		salta = [sel]
 		salta_johnny = true
 	else:
@@ -1134,7 +1138,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 		else:
 			casilla_inv(r)
 	if filas * 8 == Objetos.BAUL:
-		rotulo(lienzo, Idioma.t("Aquí no se pierde nada aunque caigas."), MITAD, 346,
+		rotulo(lienzo, Idioma.t("Las armas y los lanzables duran según su calidad."), MITAD, 346,
 			Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, 418)
 	# abajo, el marco de la ficha y los botones que no cambian con lo elegido (el principal va con la ficha)
 	marco_ficha(lienzo, Rect2(64, 402, 832, 182))
@@ -1218,6 +1222,8 @@ func pintar_ficha_baul() -> void:
 	renglon(caja, d.que_es, Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	if d.cuanto != "":
 		renglon(caja, d.cuanto, Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
+	if d.get("partidas", "") != "":   # (la durabilidad: Armas.texto_partidas; en rojo, la última)
+		renglon(caja, d.partidas, Tema.ROJO if d.get("ultima", false) else Tema.AMARILLO, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	espacio(caja, 6)
 	var texto := nota_de(d.que)
 	var nota := renglon(caja, texto[0], texto[1], HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
@@ -1263,7 +1269,8 @@ func ficha_baul() -> Dictionary:
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
 				"que_es": "%s · %s · %s" % [Armas.tipo_nombre(w.tipo), Armas.calidad_nombre(calidad),
 					Idioma.t("En la mano") if sel[0] == "p" else Idioma.t("De repuesto")],
-				"que": que_hace(id) + " "}, true)
+				"que": que_hace(id) + " ", "partidas": Armas.texto_partidas(johnny.quedan_de(id), true),
+				"ultima": johnny.quedan_de(id) <= 0}, true)
 			if Armas.al_baul(id, calidad) and not fregona_sola(sel, id):
 				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo, id == Armas.SIEMPRE.fuego and calidad == 0)
 				d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, not Objetos.hueco_baul(s)]
@@ -1281,13 +1288,14 @@ func ficha_baul() -> Dictionary:
 				"que_es": Idioma.t("Arrojable · %s · %s") % [Armas.calidad_nombre(Lanzables.calidad_de(k)),
 					Idioma.t("A mano") if sel[0] == "l" else Idioma.t("De repuesto")],
 				"cuanto": Idioma.t("Te quedan %d de %d") % [n, lz.maximo(k)],
+				"partidas": Armas.texto_partidas(lz.quedan_de(k), true), "ultima": lz.quedan_de(k) <= 0,
 				"que": que_hace(k) + " "}, true)
 			if caben <= 0:
 				d.que += Idioma.t("El baúl está lleno: haz sitio sacando algo.")
 			elif n > caben:
 				d.que += Idioma.t("Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo.") % [caben, Objetos.MONTON]
 			else:
-				d.que += Idioma.t("Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas.")
+				d.que += Idioma.t("Se guarda el montón entero, con los que ya haya de estos.")
 			d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, caben <= 0]
 		"m":
 			var c: Array = Objetos.casillas(partida.mochila)[i]
@@ -1342,6 +1350,11 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 	var cabe := se_saca(o)
 	var d := {"icono": Objetos.icono(o.id), "nombre": Armas.nombre(o.id, o.calidad), "cuanto": "",
 		"boton": ["sacar", Idioma.t("Sacar"), sacar, not cabe]}
+	# la durabilidad (Armas.nuevas): las partidas que le quedan; si ya ha salido en esta, las de después
+	var casilla: Dictionary = Guardado.cargar().baul_equipo[o.equipo]
+	var usada: bool = casilla.get("usada", false)
+	d.partidas = Armas.texto_partidas(Armas.quedan_de(casilla), usada)
+	d.ultima = usada and Armas.quedan_de(casilla) <= 0
 	if arma:
 		var tipo: String = Armas.datos(o.id).tipo
 		d.que_es = Idioma.t("%s · %s · En el baúl") % [Armas.tipo_nombre(tipo), Armas.calidad_nombre(o.calidad)]
@@ -1359,7 +1372,7 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 		d.boton = ["sacar", Idioma.t("Sacar %d") % tanda, sacar, not cabe]
 		d.que = que_hace(k) + " "
 		if cabe:
-			d.que += Idioma.t("Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes.") % tanda
+			d.que += Idioma.t("Salen de montón en montón, %d cada vez (los que te quepan).") % tanda
 		else:
 			d.que += Idioma.t("No te caben: tus montones de estos están llenos y no te queda hueco para otro.")
 	return d
@@ -1370,11 +1383,11 @@ func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String, hueco_norma
 	if not Objetos.hueco_baul(s):
 		return Idioma.t("El baúl está lleno: haz sitio sacando algo.")
 	if sin_otra and tipo == "fuego" and hueco_normal:
-		return Idioma.t("En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques.")
+		return Idioma.t("Te quedas sin arma a distancia hasta que la saques.")
 	if sin_otra:
-		return Idioma.t("En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre.") % \
+		return Idioma.t("En su lugar, a la mano, la %s de siempre.") % \
 			Idioma.minusculas(Objetos.nombre(Armas.SIEMPRE[tipo]))
-	return Idioma.t("En el baúl queda a salvo aunque caigas.")
+	return Idioma.t("Se guarda en el baúl, con las partidas que le quedan.")
 
 
 # ¿Es la fregona Normal de la mano sin otra arma cuerpo a cuerpo de repuesto? Esa no va al baúl: Johnny se quedaría sin
@@ -1436,15 +1449,22 @@ func sacar_equipo(o: Dictionary) -> void:
 	var fuera := {}
 	var quedan := 0
 	var de_repuesto: bool = o.id in partida.armas_guardadas   # (ya la llevaba de repuesto: se cambia ahí)
+	# la durabilidad (Armas.nuevas): al salir del baúl gasta una partida, si no había salido ya en esta
+	var casilla: Dictionary = Guardado.cargar().baul_equipo[o.equipo].duplicate()
+	var partidas := Armas.estrenar(casilla)
+	var ultima := partidas == 0   # (para el aviso: es su última partida)
 	if Armas.DATOS.has(o.id):
-		fuera = partida.llevar_arma(o.id, o.calidad, true, false)
+		fuera = partida.llevar_arma(o.id, o.calidad, true, false, partidas)
 	else:
 		var k := Lanzables.clave(o.id, o.calidad)
-		quedan = o.n - partida.lanzables.meter(k, mini(o.n, partida.lanzables.maximo(k)))
+		quedan = o.n - partida.lanzables.meter_de_baul(k, mini(o.n, partida.lanzables.maximo(k)), partidas)
 	Guardado.cambiar(func(g):
 		if quedan > 0:
 			g.baul_equipo[o.equipo].n = quedan
+			g.baul_equipo[o.equipo].quedan = casilla.quedan   # (los que se quedan también han salido: el montón entero)
+			g.baul_equipo[o.equipo].usada = true
 		elif not fuera.is_empty():
+			fuera.usada = true   # (la que entra en su lugar ha salido en esta partida)
 			g.baul_equipo[o.equipo] = fuera   # (en la misma casilla)
 		else:
 			g.baul_equipo.remove_at(o.equipo))
@@ -1461,6 +1481,8 @@ func sacar_equipo(o: Dictionary) -> void:
 				Armas.nombre(fuera.id, fuera.calidad)]
 	else:
 		salta = [partida.lanzables.sitio_de(Lanzables.clave(o.id, o.calidad))]
+	if ultima:   # (la durabilidad: Armas.nuevas)
+		aviso = (aviso + " " if aviso != "" else "") + Idioma.t("%s: es su última partida; al acabarla, se destruye.") % 			Armas.nombre(o.id, o.calidad)
 	foco = sel if existe(sel) else ""
 	pintar()
 
@@ -1553,8 +1575,10 @@ func guardar_equipo() -> void:
 			var tipo: String = ("cuerpo" if i == 0 else "fuego") if sel[0] == "p" else Armas.datos(partida.armas_guardadas[i]).tipo
 			var id: String = johnny.huecos[tipo] if sel[0] == "p" else partida.armas_guardadas[i]
 			if Armas.al_baul(id, johnny.calidad(id)) and not fregona_sola(sel, id) and Objetos.hueco_baul(s):
-				e = {"id": id, "calidad": johnny.calidad(id)}
+				# (ha salido en esta partida: "usada", con las partidas que le quedan; la durabilidad, Armas.nuevas)
+				e = {"id": id, "calidad": johnny.calidad(id), "quedan": johnny.quedan_de(id), "usada": true}
 				johnny.calidades.erase(id)
+				johnny.quedan.erase(id)
 				johnny.cargadores.erase(id)
 				if sel[0] == "g":
 					partida.armas_guardadas.remove_at(i)
@@ -1582,7 +1606,8 @@ func guardar_equipo() -> void:
 			var caben := caben_lanzables(s, k)
 			if caben > 0:
 				var n := lz.cuantos_en(sel)
-				e = {"id": Lanzables.tipo_de(k), "calidad": Lanzables.calidad_de(k), "n": lz.quitar(sel, caben)}
+				e = {"id": Lanzables.tipo_de(k), "calidad": Lanzables.calidad_de(k), "quedan": lz.quedan_de(k),
+					"n": lz.quitar(sel, caben)}
 				if n > caben:
 					aviso = Idioma.t("El baúl no admite más: contigo se quedan %d de %s.") % [n - caben, lz.nombre(k)]
 	if e.is_empty():
@@ -1591,7 +1616,7 @@ func guardar_equipo() -> void:
 	var antes: int = cosas_baul(s).size()
 	Guardado.cambiar(func(g):
 		if e.has("n"):   # (los arrojables, con los de su clase que ya haya)
-			Objetos.arrojables_al_baul(g, e.id, e.calidad, e.n)
+			Objetos.arrojables_al_baul(g, e.id, e.calidad, e.n, e.quedan, true)
 		else:
 			g.baul_equipo.append(e))
 	johnny.avisar_arma()
@@ -1948,7 +1973,8 @@ func no_mejora(o: Dictionary, s: Dictionary) -> String:
 		if arriba in lz.mano and lz.cuantas(arriba) + o.n > lz.maximo(arriba):
 			return Idioma.t("Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes.") % [
 				Armas.calidad_nombre(o.calidad + 1), lz.maximo(arriba)]
-	if o.has("tanda") and o.tanda < o.n and Objetos.caben_arrojables(s, o.id, o.calidad + 1) < o.tanda:
+	if o.has("tanda") and o.tanda < o.n and Objetos.caben_arrojables(s, o.id, o.calidad + 1,
+			Armas.quedan_de(s.baul_equipo[o.equipo]) + 1, s.baul_equipo[o.equipo].get("usada", false)) < o.tanda:
 		return Idioma.t("El baúl está lleno: haz sitio para el montón mejorado.")
 	return ""
 
@@ -2001,14 +2027,18 @@ func mejorar() -> void:
 			g.baul[pieza] -= n
 			if g.baul[pieza] <= 0:
 				g.baul.erase(pieza)
+		# la durabilidad (Armas.nuevas): con la subida, una partida más que las que le quedaban
 		if o.has("tanda") and o.tanda < o.n:
-			g.baul_equipo[o.equipo].n = o.n - o.tanda
-			Objetos.arrojables_al_baul(g, o.id, calidad, o.tanda)
+			var e: Dictionary = g.baul_equipo[o.equipo]
+			e.n = o.n - o.tanda
+			Objetos.arrojables_al_baul(g, o.id, calidad, o.tanda, Armas.quedan_de(e) + 1, e.get("usada", false))
 		elif o.has("equipo"):
+			g.baul_equipo[o.equipo].quedan = Armas.quedan_de(g.baul_equipo[o.equipo]) + 1
 			g.baul_equipo[o.equipo].calidad = calidad)
 	if o.has("k"):
 		sel = partida.lanzables.mejorar(o.sitio, calidad)
 	elif not o.has("equipo"):
+		partida.johnny.quedan[o.id] = partida.johnny.quedan_de(o.id) + 1
 		partida.johnny.calidades[o.id] = calidad
 		partida.johnny.avisar_arma()
 	Sonido.tocar("gema")

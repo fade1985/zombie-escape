@@ -423,7 +423,7 @@ func texto_comprar(id: String) -> String:
 # Lo que dice la ficha sin nada elegido, párrafo a párrafo: [texto, color]
 func nota() -> Array:
 	var parrafos := [
-		[Idioma.t("Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."), PLACA.TEXTO],
+		[Idioma.t("Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."), PLACA.TEXTO],
 		[Idioma.t("Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."), PLACA.TEXTO_SUAVE],
 	]
 	if ordenador.partida.dolares > 0:

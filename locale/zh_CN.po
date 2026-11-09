@@ -96,6 +96,20 @@ msgid "¡CLONC!"
 msgstr "当！"
 
 #: scripts/armas.gd
+msgid "Última partida: al acabarla, se destruye"
+msgstr "最后一局：本局结束后会损坏"
+
+#: scripts/armas.gd
+msgid "Le queda %d partida más después de esta"
+msgid_plural "Le quedan %d partidas más después de esta"
+msgstr[0] "本局之后还能用 %d 局"
+
+#: scripts/armas.gd
+msgid "Le queda %d partida"
+msgid_plural "Le quedan %d partidas"
+msgstr[0] "还能用 %d 局"
+
+#: scripts/armas.gd
 msgid "golpe un %d %% más largo y ancho"
 msgstr "挥击范围加长加宽 %d%%"
 
@@ -3252,6 +3266,11 @@ msgid "Caíste en la %s de %s"
 msgstr "你倒在了%s（%s）"
 
 #: scripts/partida.gd
+msgid "Sin partidas: se ha roto"
+msgid_plural "Sin partidas: se han roto"
+msgstr[0] "局数用完：已损坏"
+
+#: scripts/partida.gd
 msgid "Logro: %s"
 msgstr "成就：%s"
 
@@ -4611,8 +4630,8 @@ msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tira
 msgstr "选中一个格子，查看它的说明和按钮（使用、装备、丢弃……）。"
 
 #: scripts/tutoriales.gd
-msgid "Si caes, lo que llevas se pierde; si completas el edificio, pasa al baúl."
-msgstr "如果你倒下，身上的东西会全部丢失；如果通关大楼，它们会存进储物箱。"
+msgid "Si caes, lo de la mochila se pierde; si completas el edificio, pasa al baúl. Las armas y los lanzables vuelven al baúl siempre, si les quedan partidas."
+msgstr "倒下的话，背包里的东西会丢失；通关大楼则会放进储物箱。武器和投掷物只要还有剩余局数，总会回到储物箱。"
 
 #: scripts/tutoriales.gd
 msgid "Dólares"
@@ -4871,8 +4890,8 @@ msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas d
 msgstr "用同类零件（背包里的和储物箱里的）一级一级提升武器和投掷物的品质。"
 
 #: scripts/tutoriales.gd
-msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco."
-msgstr "普通、优秀、稀有和史诗：史诗还会附带一项绝活。"
+msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
+msgstr "普通、优秀、稀有和史诗：史诗还带一个绝招。每次强化也会多加一局寿命。"
 
 #: scripts/tutoriales.gd
 msgid "Elige la casilla y pulsa «Mejorar»."
@@ -4887,16 +4906,16 @@ msgid "Al abrir el baúl"
 msgstr "打开储物箱时"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas aquí no se pierde aunque caigas: objetos, armas y lanzables mejorados."
-msgstr "放在这里的东西，就算你倒下也不会丢：物品，以及升级过的武器和投掷物。"
+msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres."
+msgstr "武器和投掷物能用本局，再加上与品质相同的局数：普通，0 局；优秀，1 局；稀有，2 局；史诗，3 局。"
 
 #: scripts/tutoriales.gd
-msgid "Elige una casilla o arrástrala para pasarla entre lo que llevas y el baúl."
-msgstr "选中一个格子或拖动它，在身上和储物箱之间转移。"
+msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."
+msgstr "从储物箱取出会消耗一局；如果已经没有剩余局数，本局结束时会损坏，即使你再放回去。"
 
 #: scripts/tutoriales.gd
-msgid "Al completar el edificio, lo que llevas pasa solo al baúl."
-msgstr "通关大楼后，身上的东西会自动存进储物箱。"
+msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
+msgstr "本局结束时，无论通关还是倒下，你身上还有剩余局数的东西都会自动回到储物箱。选择一格或拖动它来移动。"
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5465,8 +5484,8 @@ msgid "Objetos, armas y arrojables"
 msgstr "物品、武器和投掷物"
 
 #: scripts/ui/inventario.gd
-msgid "Aquí no se pierde nada aunque caigas."
-msgstr "就算你倒下，这里的东西也不会丢。"
+msgid "Las armas y los lanzables duran según su calidad."
+msgstr "武器和投掷物的寿命取决于品质。"
 
 #: scripts/ui/inventario.gd
 msgid "Guardar todo"
@@ -5505,8 +5524,8 @@ msgid "Solo caben %d más en el baúl (%d por casilla): el resto se queda contig
 msgstr "储物箱只能再放 %d 个（每格 %d 个）：剩下的留在你身上。"
 
 #: scripts/ui/inventario.gd
-msgid "Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas."
-msgstr "整组存入，和箱里已有的同类合并；放在储物箱里，就算你倒下也很安全。"
+msgid "Se guarda el montón entero, con los que ya haya de estos."
+msgstr "整堆放进去，和已有的同类放在一起。"
 
 #: scripts/ui/inventario.gd
 msgid "%s · En la mochila"
@@ -5593,24 +5612,24 @@ msgid "Arrojable · %s · En el baúl"
 msgstr "投掷物 · %s · 在储物箱里"
 
 #: scripts/ui/inventario.gd
-msgid "Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes."
-msgstr "一组一组取出，每次 %d 个（能放多少放多少）；离开储物箱后，倒下就会丢失。"
+msgid "Salen de montón en montón, %d cada vez (los que te quepan)."
+msgstr "一堆一堆取出，每次 %d 个（能装下多少就取多少）。"
 
 #: scripts/ui/inventario.gd
 msgid "No te caben: tus montones de estos están llenos y no te queda hueco para otro."
 msgstr "放不下了：你这种投掷物的几组都满了，也没有空位再放一组。"
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
-msgstr "放在储物箱里，就算倒下也很安全。取出来之前，你没有远程武器。"
+msgid "Te quedas sin arma a distancia hasta que la saques."
+msgstr "取出来之前，你没有远程武器。"
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
-msgstr "放在储物箱里，就算倒下也很安全；你手上会换回那把老%s。"
+msgid "En su lugar, a la mano, la %s de siempre."
+msgstr "你手上会换回那把老%s。"
 
 #: scripts/ui/inventario.gd
-msgid "En el baúl queda a salvo aunque caigas."
-msgstr "放在储物箱里，就算倒下也很安全。"
+msgid "Se guarda en el baúl, con las partidas que le quedan."
+msgstr "放进储物箱，带着剩余的局数。"
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
@@ -5621,12 +5640,20 @@ msgid "Se guardan los %d de esta casilla, y en el baúl quedan a salvo aunque ca
 msgstr "存入此格的全部 %d 个；放在储物箱里，就算倒下也很安全。"
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas."
+msgstr "放在储物箱里，就算倒下也很安全。"
+
+#: scripts/ui/inventario.gd
 msgid "%s al repuesto; %s entra en el baúl en su lugar."
 msgstr "%s换到备用；%s放进储物箱。"
 
 #: scripts/ui/inventario.gd
 msgid "%s a la mano; %s entra en el baúl en su lugar."
 msgstr "%s换到手上；%s放进储物箱。"
+
+#: scripts/ui/inventario.gd
+msgid "%s: es su última partida; al acabarla, se destruye."
+msgstr "%s：这是它的最后一局；本局结束后会损坏。"
 
 #: scripts/ui/inventario.gd
 msgid "El baúl no admite más: contigo se quedan %d de %s."
@@ -7116,8 +7143,8 @@ msgid "Comprar · $%d"
 msgstr "购买 · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "出售的都是普通品质。倒下就会丢失身上带的所有东西，所以要先存进工作间的储物箱。通关大楼后，所有东西都会自动存入储物箱，不用你动手。每种最多带两件：你手上那件会换到备用，备用的那件放进储物箱；如果放不下或不能存放，手上那件会留在地上。"
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "以普通品质出售：只能用本局，本局结束后会损坏。每种类型你带两把：手上的那把转为备用，备用的那把进储物箱；如果放不下或无法存放，手上的那把会掉在地上。"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
