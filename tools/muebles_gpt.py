@@ -86,6 +86,7 @@ MUEBLES = {
     "talento_ninja": ("assets/sources/talento-ninja-gpt.webp", "assets/ui/iconos/talento-ninja.png", 30, 32, False),
     "talento_desfibrilador": ("assets/sources/talento-desfibrilador-gpt.webp", "assets/ui/iconos/talento-desfibrilador.png", 32, 30, False, (),
                               [(175, 570), (1085, 570)]),
+    "talento_blindaje": ("assets/sources/talento-blindaje-gpt.webp", "assets/ui/iconos/talento-blindaje.png", 27, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

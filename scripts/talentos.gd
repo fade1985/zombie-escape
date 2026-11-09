@@ -85,7 +85,7 @@ const LISTA := [
 		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"},
 	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "talento-desfibrilador", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
-	{"id": "blindaje", "rama": "superviviente", "nivel": 4, "nombre": "Blindaje", "max": 3, "icono": "herramientas", "pide": "acero",
+	{"id": "blindaje", "rama": "superviviente", "nivel": 4, "nombre": "Blindaje", "max": 3, "icono": "talento-blindaje", "pide": "acero",
 		"desc": "El escudo de Acero tiene 25 más por punto"},
 	{"id": "sombra", "rama": "superviviente", "nivel": 4, "nombre": "Sombra", "max": 3, "icono": "reflejos", "pide": "ninja",
 		"desc": "La esquiva se recarga un 15 % antes por punto"},
