@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Johnny Rush: Zombie Escape"
+config/version="0.1.0"
 run/main_scene="res://escenas/menu_principal.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Johnny Rush"
@@ -23,6 +24,7 @@ driver/mix_rate.web=32000
 
 [autoload]
 
+Registro="*res://scripts/registro.gd"
 Sonido="*res://scripts/sonido.gd"
 Botones="*res://scripts/ui/botones.gd"
 Temblor="*res://scripts/temblor.gd"

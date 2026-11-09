@@ -2933,7 +2933,7 @@ msgstr "游戏时间！"
 msgid "¡GRRR!"
 msgstr "吼——！"
 
-#: scripts/minijefe.gd
+#: scripts/minijefe.gd scripts/portera.gd
 msgid "¡PUMBA!"
 msgstr "砰！"
 
@@ -6221,6 +6221,18 @@ msgstr "音频"
 #: scripts/ui/opciones.gd
 msgid "Pantalla"
 msgstr "画面"
+
+#: scripts/ui/opciones.gd
+msgid "Abrir el registro de errores"
+msgstr "打开错误日志"
+
+#: scripts/ui/opciones.gd
+msgid "Copiar el registro de errores"
+msgstr "复制错误日志"
+
+#: scripts/ui/opciones.gd
+msgid "Copiado: pégalo en tu mensaje"
+msgstr "已复制：粘贴到你的消息里"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"

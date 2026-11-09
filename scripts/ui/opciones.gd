@@ -319,6 +319,20 @@ func general() -> void:
 		var tutorial := opcion(Idioma.t("Tutorial"), "BotonGrande")
 		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
 	igualar()
+	# El registro de errores (registro.gd), para mandarlo si algo falla: en el ordenador abre su carpeta; en la web y
+	# el móvil no hay archivo a mano, así que lo copia para pegarlo en un mensaje
+	var al_registro := opcion(Idioma.t("Abrir el registro de errores") if Registro.hay_archivo() else Idioma.t("Copiar el registro de errores"))
+	al_registro.name = "registro"   # no-tr
+	al_registro.custom_minimum_size.x = 0
+	al_registro.pressed.connect(func():
+		if Registro.hay_archivo():
+			Registro.abrir_carpeta()
+			return
+		Registro.copiar()
+		al_registro.text = Idioma.t("Copiado: pégalo en tu mensaje")
+		get_tree().create_timer(2.5, true).timeout.connect(func():
+			if is_instance_valid(al_registro):
+				al_registro.text = Idioma.t("Copiar el registro de errores")))
 	if Tactil.activo:
 		var titulo := Label.new()
 		titulo.theme_type_variation = "Sub"

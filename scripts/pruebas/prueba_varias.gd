@@ -4261,3 +4261,35 @@ func probar_crio_carrera() -> void:
 	print("Carrera del crío con esquiva de Johnny: %s" % " · ".join(lineas))
 	Captura.foto("captura-crio-carrera.png")
 	get_tree().quit()
+
+
+# --registro: el registro de errores (registro.gd). La cabecera con el equipo, la miga de la planta, un aviso que se
+# cuenta y sale en el texto con su archivo, «Copiar» deja ese texto en el portapapeles, el archivo godot.log lo tiene, y el
+# botón en Opciones → General (captura-registro-opciones.png)
+func probar_registro() -> void:
+	await get_tree().create_timer(1.0).timeout
+	var avisos_antes: int = Registro.avisos
+	push_warning("aviso de prueba del registro")
+	await get_tree().process_frame
+	var t: String = Registro.texto()
+	print("Registro · cabecera: %s · planta: %s · aviso contado: %s · aviso en el texto con su sitio: %s (esperado: sí, sí, sí, sí)" % [
+		"sí" if t.begins_with("=== Johnny Rush") else "NO", "sí" if "Planta 1 de" in t else "NO",
+		"sí" if Registro.avisos == avisos_antes + 1 else "NO",
+		"sí" if "AVISO: aviso de prueba del registro" in t and "prueba_varias.gd" in t else "NO"])
+	print("Registro · la cabecera:\n" + Registro.cabecera())
+	var copiado: String = Registro.texto()
+	Registro.copiar()
+	var pegado := DisplayServer.clipboard_get().replace("
+", "
+")   # (Windows guarda los saltos de línea a su manera)
+	print("Registro · copiar deja el texto en el portapapeles: %s (esperado: sí)" % ("sí" if pegado.begins_with(copiado.left(2000)) else "NO (%d letras de %d)" % [pegado.length(), copiado.length()]))
+	var log := FileAccess.get_file_as_string("user://logs/godot.log")
+	print("Registro · godot.log en %s: %s (esperado: sí)" % [Registro.carpeta(), "sí" if "=== Johnny Rush" in log else "NO"])
+	var o := Opciones.abrir(self, null, johnny)
+	await get_tree().create_timer(0.3).timeout
+	var b := o.find_child("registro", true, false) as Button
+	print("Registro · botón en Opciones: %s (esperado: Abrir el registro de errores)" % (b.text if b else "NO HAY"))
+	Captura.foto("captura-registro-opciones.png")
+	o.cerrar()
+	await get_tree().create_timer(0.3).timeout
+	get_tree().quit()

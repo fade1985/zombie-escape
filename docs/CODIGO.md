@@ -455,6 +455,13 @@ en una línea.
   vez de en cada paso temblaría con ella. Si a Johnny le llevan de golpe más de `SALTO` (otra habitación, un evento), él
   mismo se lo dice a Godot (`_notification`). Lo que cuelgue de Johnny y se mueva solo, en `_physics_process` (como
   `aura_arma.gd`). Se mide con `--suavidad` (con `--disable-vsync --max-fps 144` delante, como en una pantalla de 144 Hz).
+- `registro.gd` (autoload `Registro`, el primero de todos): el registro de errores para que el jugador lo mande. Godot ya
+  escribe la consola en `user://logs/godot.log` (en Windows, `%APPDATA%\Johnny Rush\logs`, los 5 últimos); esto le pone
+  al arrancar una cabecera (versión del juego, `application/config/version`, sistema, procesador, tarjeta, memoria,
+  pantalla e idioma), las migas `Registro.apuntar("...")` (la planta a la que llega, en `partida.gd`), y los errores y
+  avisos con su archivo, línea y trazas del script, contados en `errores` y `avisos`. Guarda las últimas 400 líneas en
+  memoria para la web, que no tiene archivo. En Opciones → General, «Abrir el registro de errores» (abre la carpeta) o,
+  en la web y el móvil, «Copiar el registro de errores». Se prueba con `--registro`.
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide

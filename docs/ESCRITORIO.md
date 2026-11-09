@@ -23,6 +23,8 @@ las de Godot (`%APPDATA%\Godot\export_templates\4.7.2.stable`). Tarda un par de 
 
 El `.exe` lleva el icono de Johnny (`assets/icono.ico`, hecho de `assets/icono.png`, que también es el icono del
 proyecto: ventana, barra de tareas y pestaña de la web) y su nombre, descripción y versión (`application/*` del preset).
+Con una versión nueva, el número va en dos sitios: `application/file_version` y `product_version` del preset y
+`config/version` de `project.godot` (el que sale en la cabecera del registro de errores, `registro.gd`).
 Para meterlos Godot usa **`rcedit`** (`rcedit-x64.exe`, versión 2.0.0 de https://github.com/electron/rcedit/releases,
 unos 1,3 MB). Es una configuración **de cada equipo**, no va en git: bajarlo a una carpeta (aquí,
 `C:\Users\angel\Tools\rcedit\`) y apuntar su ruta en Godot → Editor → Editor Settings → Export → Windows → Rcedit (o en

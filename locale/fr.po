@@ -2937,7 +2937,7 @@ msgstr "C'EST LA RÉCRÉ !"
 msgid "¡GRRR!"
 msgstr "GRRR !"
 
-#: scripts/minijefe.gd
+#: scripts/minijefe.gd scripts/portera.gd
 msgid "¡PUMBA!"
 msgstr "PAF !"
 
@@ -6243,6 +6243,18 @@ msgstr "Audio"
 #: scripts/ui/opciones.gd
 msgid "Pantalla"
 msgstr "Écran"
+
+#: scripts/ui/opciones.gd
+msgid "Abrir el registro de errores"
+msgstr "Ouvrir le journal d'erreurs"
+
+#: scripts/ui/opciones.gd
+msgid "Copiar el registro de errores"
+msgstr "Copier le journal d'erreurs"
+
+#: scripts/ui/opciones.gd
+msgid "Copiado: pégalo en tu mensaje"
+msgstr "Copié : colle-le dans ton message"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"

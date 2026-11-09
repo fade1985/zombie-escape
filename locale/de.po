@@ -2937,7 +2937,7 @@ msgstr "SPIELZEIT!"
 msgid "¡GRRR!"
 msgstr "GRRR!"
 
-#: scripts/minijefe.gd
+#: scripts/minijefe.gd scripts/portera.gd
 msgid "¡PUMBA!"
 msgstr "RUMMS!"
 
@@ -6243,6 +6243,18 @@ msgstr "Audio"
 #: scripts/ui/opciones.gd
 msgid "Pantalla"
 msgstr "Bildschirm"
+
+#: scripts/ui/opciones.gd
+msgid "Abrir el registro de errores"
+msgstr "Fehlerprotokoll öffnen"
+
+#: scripts/ui/opciones.gd
+msgid "Copiar el registro de errores"
+msgstr "Fehlerprotokoll kopieren"
+
+#: scripts/ui/opciones.gd
+msgid "Copiado: pégalo en tu mensaje"
+msgstr "Kopiert: füge es in deine Nachricht ein"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"

@@ -74,8 +74,8 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       legible a 1280×800 (Steam Deck), charcos verdes y rojos distinguibles sin color, opción de ralentizar el juego.
 - [ ] **Robustez.** ~~Guardar al cambiar de planta para no perder la partida si se cierra~~ (hecho el 29 oct:
       `partida_guardada.gd`, «Continuar partida» en el menú, prueba `--continuar`); rendimiento con hordas
-      grandes en un portátil flojo; cero errores en consola en una partida entera; archivo de registro que el
-      jugador pueda mandar cuando algo falle; pruebas automáticas (`--captura`) antes de cada versión.
+      grandes en un portátil flojo; cero errores en consola en una partida entera; ~~archivo de registro que el
+      jugador pueda mandar cuando algo falle~~ (hecho el 9 nov: `registro.gd`, botón en Opciones → General); pruebas automáticas (`--captura`) antes de cada versión.
 
 ## 3. Lo de fuera del juego
 

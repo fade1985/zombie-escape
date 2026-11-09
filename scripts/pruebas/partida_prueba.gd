@@ -302,6 +302,8 @@
 #                       un resumen al acabar: para cazar en la web lo que la atasca (docs/WEB.md) [pruebas/lentos.gd]
 #   --rendimiento       cuánto tarda cada fotograma durante el latigazo del Glotón (3 y 6 lenguas); en la web, el atasco
 #                       de los draw_circle (docs/WEB.md)                                       [prueba_varias.gd]
+#   --registro          el registro de errores (registro.gd): la cabecera, la planta, un aviso contado, copiarlo, el
+#                       godot.log y su botón en Opciones → General                          [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
@@ -973,6 +975,9 @@ func empezar_prueba() -> void:
 	elif "--dibujos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_dibujos()
+	elif "--registro" in args:
+		set_process(false)   # sin la prueba larga
+		probar_registro()
 	elif "--rendimiento" in args:
 		set_process(false)   # sin la prueba larga
 		probar_rendimiento()

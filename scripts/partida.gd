@@ -381,6 +381,7 @@ func nueva_planta(num: int) -> void:
 	guardar_guardia()   # el guardia es de la planta que se deja: se apunta antes de cambiarla (la azotea ni tiene)
 	tirar_mapas()
 	planta = Planta.generar(num, edificio, jefe_de(num))
+	Registro.apuntar("Planta %d de %s%s" % [num, edificio, " (azotea)" if planta.get("azotea", false) else ""])   # no-tr (para el registro: registro.gd)
 	if planta.mantenimiento >= 0:
 		sala_mantenimiento = planta.sitios[planta.mantenimiento]
 	if planta.viviendas >= 0:
