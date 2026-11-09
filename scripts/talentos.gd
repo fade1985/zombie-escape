@@ -97,7 +97,7 @@ const LISTA := [
 	# ── Químico
 	{"id": "catalizador", "rama": "quimico", "nivel": 1, "nombre": "Catalizador", "max": 5, "icono": "talento-catalizador",
 		"desc": "+10 % de daño de fuego, ácido, rayo y frío por punto"},
-	{"id": "guantes_goma", "rama": "quimico", "nivel": 1, "nombre": "Guantes de goma", "max": 5, "icono": "guantes",
+	{"id": "guantes_goma", "rama": "quimico", "nivel": 1, "nombre": "Guantes de goma", "max": 5, "icono": "talento-guantes-goma",
 		"desc": "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"},
 	{"id": "incendiario", "rama": "quimico", "nivel": 2, "nombre": "Incendiario", "max": 5, "icono": "lanzallamas", "pide": "catalizador",
 		"desc": "Los zombis que prendes arden 0,5 s más por punto"},
