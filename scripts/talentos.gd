@@ -54,7 +54,7 @@ const LISTA := [
 		"desc": "+1 molotov y +1 granada por punto"},
 	{"id": "larguirucho", "rama": "militar", "nivel": 3, "nombre": "Larguirucho", "max": 1, "icono": "talento-larguirucho", "pide": "camorrista",
 		"desc": "Duplica el alcance cuerpo a cuerpo"},
-	{"id": "mirilla", "rama": "militar", "nivel": 3, "nombre": "Mirilla", "max": 1, "icono": "escopeta", "pide": "tirador",
+	{"id": "mirilla", "rama": "militar", "nivel": 3, "nombre": "Mirilla", "max": 1, "icono": "talento-mirilla", "pide": "tirador",
 		"desc": "Uno de cada 3 disparos es un crítico seguro (doble daño)"},
 	{"id": "fabricante", "rama": "militar", "nivel": 3, "nombre": "Fabricante", "max": 1, "icono": "granada", "pide": "artificiero",
 		"desc": "Fuego y explosiones más grandes, y el fuego dura más"},
