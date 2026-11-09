@@ -60,7 +60,7 @@ const LISTA := [
 		"desc": "Fuego y explosiones más grandes, y el fuego dura más"},
 	{"id": "frenesi", "rama": "militar", "nivel": 4, "nombre": "Frenesí", "max": 3, "icono": "talento-frenesi", "pide": "larguirucho",
 		"desc": "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"},
-	{"id": "gatillo", "rama": "militar", "nivel": 4, "nombre": "Gatillo fácil", "max": 3, "icono": "mp5", "pide": "mirilla",
+	{"id": "gatillo", "rama": "militar", "nivel": 4, "nombre": "Gatillo fácil", "max": 3, "icono": "talento-gatillo", "pide": "mirilla",
 		"desc": "Disparas un 10 % más rápido y recargas un 10 % antes por punto"},
 	{"id": "racimo", "rama": "militar", "nivel": 4, "nombre": "Racimo", "max": 3, "icono": "obj-pieza_arrojable", "pide": "fabricante",
 		"desc": "El molotov y la granada sueltan 1 más pequeño alrededor por punto"},
