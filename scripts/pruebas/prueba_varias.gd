@@ -2305,12 +2305,12 @@ func probar_atontado_pared() -> void:
 	johnny.invencible = true
 	johnny.global_position = sala.diana.global_position + Vector2(0, 300)
 	johnny.get_node("Camara").reset_smoothing()
-	var tipos := ["antidisturbios", "gymbro", "mascota", "becario", "gerente"]
+	var tipos := ["antidisturbios", "gymbro", "mascota", "becario", "gerente", "portera"]
 	for azotea in [false, true]:
 		mapa.sitio["azotea"] = azotea
 		var jefes := []
 		for i in tipos.size():
-			var j: Node2D = meter_zombi(tipos[i], johnny.position + Vector2(-360 + i * 180, -200))
+			var j: Node2D = meter_zombi(tipos[i], johnny.position + Vector2(-450 + i * 180, -200))
 			jefes.append(j)
 		await get_tree().create_timer(0.3).timeout
 		jefes[4].mutar()   # (el gerente solo carga ya mutado)
@@ -2338,6 +2338,33 @@ func probar_atontado_pared() -> void:
 			j.queue_free()
 		await get_tree().process_frame
 	mapa.sitio.erase("azotea")
+	# Y la portera de verdad contra una pared: embiste hacia abajo desde 3 casillas de la pared de la sala (foto:
+	# captura-atontado-portera.png, al segundo de estrellarse)
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	var portera: Node2D = meter_zombi("portera", johnny.position)
+	portera.quieto = false
+	var rayo := PhysicsRayQueryParameters2D.create(johnny.global_position, johnny.global_position + Vector2(0, 2000), 1)
+	var pared: Dictionary = portera.get_world_2d().direct_space_state.intersect_ray(rayo)
+	portera.global_position = pared.position - Vector2(0, 96 + portera.radio)
+	johnny.global_position = portera.global_position + Vector2(230, -40)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().physics_frame
+	portera.mirada = Vector2.DOWN
+	portera.cambiar("embestida", {"angulo": PI / 2, "quedan": 0})
+	var en := -1.0
+	var atontada := -1.0
+	for paso in 600:
+		await get_tree().physics_frame
+		if en < 0.0 and portera.estado == "atontado":
+			en = paso / 60.0
+		if en >= 0.0 and portera.estado != "atontado":
+			atontada = paso / 60.0 - en
+			break
+		if en >= 0.0 and paso / 60.0 - en >= 1.0 and paso / 60.0 - en < 1.02:
+			Captura.foto("captura-atontado-portera.png")
+	print("La portera embiste contra la pared: se estrella a los %.2f s y se queda atontada %.1f s (esperado: 5,0)" % [en, atontada])
 	get_tree().quit()
 
 

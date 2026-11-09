@@ -7,7 +7,8 @@
 #   - fregonazo: si Johnny está cerca, marca un trozo de suelo en rojo y da un golpe que quita 20 y empuja
 #   - lejía: tira botellas alrededor de Johnny (la primera, justo donde va a estar) que dejan charco
 #   - ácido (20 oct): levanta la fregona y salpica charcos de ácido (el primero, justo donde va a estar Johnny)
-#   - embestida (20 oct): marca una franja roja, corre en línea recta y remata con un fregonazo en círculo
+#   - embestida (20 oct): marca una franja roja, corre en línea recta y remata con un fregonazo en círculo; si se
+#     estrella contra una pared o un mueble, se queda atontada 5 s (9 nov, lo pidió el dueño), como los demás jefes
 #   - llamar: grita "¡VECINOS!" y aparecen vecinos (normales y rápidos): 2, o 4 enfadada
 # A mitad de vida grita, se pone roja, echa vapor y se vuelve más rápida, y además (todo el doble):
 #   - giro: da vueltas con la fregona persiguiendo a Johnny y escupe polvo en espiral
@@ -45,6 +46,7 @@ const AVISO_CIRCULO := 0.35
 const RADIO_CIRCULO := 125.0
 const DANO_CIRCULO := 20
 const EMBESTIDAS := [1, 2]       # cuántas seguidas en cada fase
+const ATONTADA := 1.5            # lo que se queda atontada al estrellarse en la azotea (fuera, 5 s: Minijefe.ATONTADO_PARED)
 const VECINOS := [2, 4]          # cuántos vecinos llama al gritar en cada fase
 const TIEMPO_GIRO := 2.6
 const DANO_CONTACTO := 10        # si Johnny se le pega, también hace daño
@@ -110,7 +112,7 @@ func _physics_process(delta: float) -> void:
 	Estados.quemar_acido_jefe(self, en_acido, delta)
 	if estado == "muerto":
 		return
-	vapor.actualizar(delta, enfadada() and estado != "muerto", estado not in ["andar", "recuperar"])
+	vapor.actualizar(delta, enfadada() and estado != "muerto", estado not in ["andar", "recuperar", "atontado"])
 	espera_fregonazo -= delta
 	espera_llamar -= delta
 	invulnerable = false
@@ -184,6 +186,10 @@ func _physics_process(delta: float) -> void:
 				Sonido.tocar("rugido")
 		"embestida":
 			embestir(delta, d)
+		"atontado":
+			frenar(delta, 4.0)
+			if t >= tiempo_atontado():
+				andar(0.4)
 		"aviso_circulo":
 			frenar(delta, 6.0)
 			if t >= AVISO_CIRCULO:
@@ -350,6 +356,24 @@ func embestir(delta: float, d: float) -> void:
 	if d < 75.0 or t >= TIEMPO_EMBESTIDA:
 		marcha *= 0.3
 		cambiar("aviso_circulo", {"quedan": datos.quedan})
+	elif t > 0.12 and get_real_velocity().length() < VELOCIDAD_EMBESTIDA * 0.4:
+		estrellarse()   # se ha comido una pared o un mueble
+
+
+# Se ha estrellado: se queda atontada (con estrellitas) un rato, como los jefes que cargan (minijefe.gd)
+func estrellarse() -> void:
+	marcha = Vector2.ZERO
+	cambiar("atontado")
+	Sonido.tocar("portazo")
+	Temblor.temblar(9.0)
+	gritar(Idioma.t("¡PUMBA!"), Color("#ffd23f"))
+	EfectoSuelo.soltar(get_parent(), "golpe-pared", global_position + mirada * radio + Vector2(0, 20))
+
+
+# 5 s (Minijefe.ATONTADO_PARED), menos en la azotea, que se queda ATONTADA
+func tiempo_atontado() -> float:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	return ATONTADA if mapa and mapa.sitio.get("azotea", false) else Minijefe.ATONTADO_PARED
 
 
 # Fregonazo en círculo: golpea todo lo que tiene alrededor (menos lo que tapa una pared o un mueble) y lo echa hacia atrás
@@ -530,6 +554,8 @@ func animar() -> void:
 		"lejia":
 			var n := BOTELLAS + 2 if enfadada() else BOTELLAS
 			fijar("lanzar", dir, avance("lanzar_" + dir, t / (0.3 + n * 0.18 + 0.4)))
+		"atontado":
+			fijar("reposo", dir, 0)
 		"aviso_giro", "giro":
 			dir = DIRS[wrapi(roundi(giro / (PI / 4)), 0, 8)]
 			fijar("quieto", dir, 0)
@@ -554,6 +580,7 @@ func animar() -> void:
 				if sprite.animation != "reposo_" + dir:
 					sprite.play("reposo_" + dir)
 	sprite.position.y = PIE + BAJAR[dir] * 2.0
+	sprite.position.x = sin(tiempo * 9.0) * 2.0 if estado == "atontado" else 0.0   # (atontada, se tambalea)
 	queue_redraw()
 	$Vapor.queue_redraw()
 
@@ -608,3 +635,12 @@ func _draw() -> void:
 # Enfadada, el vapor de la cabeza (va en un nodo aparte, "Vapor", para que se pinte por encima de ella)
 func _pintar_vapor() -> void:
 	vapor.pintar($Vapor)
+	# atontada, estrellitas dando vueltas (como los jefes que cargan: minijefe.gd)
+	if estado == "atontado":
+		for i in 3:
+			var b := tiempo * 5.0 + i * TAU / 3.0
+			var p := Vector2(cos(b) * 26.0, -ARRIBA - 8.0 + sin(b) * 8.0)
+			var estrella := PackedVector2Array()
+			for j in 10:
+				estrella.append(p + Vector2.from_angle(j * TAU / 10.0 - PI / 2.0) * (6.0 if j % 2 == 0 else 2.5))
+			Formas.poligono($Vapor, estrella, Color("#ffd23f"))
