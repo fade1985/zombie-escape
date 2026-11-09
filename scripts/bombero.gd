@@ -612,9 +612,9 @@ func animar() -> void:
 		luz_giro.position = Vector2.from_angle(datos.angulo) * minf(datos.largos[0] * 0.6, 300.0) + Vector2(0, -arriba * 0.3)
 
 
-# Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, el cono por donde va cada fuego,
-# desde sus pies hasta la pared (aviso.gd: en el aviso, rojo y llenándose, con las flechas del lado al que va a girar;
-# girando, naranja)
+# Los avisos, en el suelo (por debajo de él): el arco del hachazo y, antes del giro, el cono por donde irá cada fuego,
+# desde sus pies hasta la pared (aviso.gd: rojo y llenándose, con las flechas del lado al que va a girar). Girando ya
+# no lleva cono debajo: se ve solo el fuego
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -622,20 +622,14 @@ func _draw() -> void:
 		"aviso_hacha":
 			Aviso.golpe(self, Vector2(0, 6), mirada.angle(), 1.1, ALCANCE_HACHA + 10.0, minf(1.0, t / AVISO_HACHA),
 				tiempo, 0.6)
-		"aviso_giro", "giro":
-			var k := minf(1.0, t / AVISO_GIRO) if estado == "aviso_giro" else 1.0
+		"aviso_giro":
+			var k := minf(1.0, t / AVISO_GIRO)
 			var pies := Vector2(0, PIE - 6)
 			var n: int = CONOS[fase - 1]
 			for i in mini(n, datos.puntas.size()):
 				var a: float = datos.angulo + i * TAU / n
-				# el cono, hasta la pared (aviso.gd): en el aviso se llena; girando, lleno y naranja
-				var cono := Aviso.abanico(self, pies, a, ABERTURA, 0.0, k, tiempo, 1.0, 0.0, i)
-				cono.rayos(datos.puntas[i])
-				if estado == "giro":
-					cono.tinte = Llamas.FUEGO[2]
-					cono.destella = false
-			if estado == "aviso_giro":
-				Aviso.flechas_giro(self, pies, datos.sentido, minf(1.0, k * 3.0), tiempo, CONOS.max())
+				Aviso.abanico(self, pies, a, ABERTURA, 0.0, k, tiempo, 1.0, 0.0, i).rayos(datos.puntas[i])
+			Aviso.flechas_giro(self, pies, datos.sentido, minf(1.0, k * 3.0), tiempo, CONOS.max())
 	draw_set_transform(Vector2.ZERO)
 
 
