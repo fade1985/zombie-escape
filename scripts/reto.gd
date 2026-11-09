@@ -181,12 +181,12 @@ static func jugado(f: Dictionary) -> bool:
 	return f.intentos > 0
 
 
-# Lo de debajo del botón de la tarjeta: la regla de hoy, tu marca y el premio (M70). Si ya se ha jugado hoy, que se
-# vuelva mañana (y el premio, solo si se ha cobrado: si no, ya no se puede ganar)
+# Lo de debajo del botón de la tarjeta: la regla de hoy (solo su nombre), tu marca y el premio (M70). Si ya se ha jugado
+# hoy, que se vuelva mañana (y el premio, solo si se ha cobrado: si no, ya no se puede ganar)
 static func texto_tarjeta(f: Dictionary) -> String:
-	var linea: String = Idioma.t("Hoy: %s") % nombre(f.regla)
+	var linea: String = nombre(f.regla)
 	if not jugado(f):
-		return linea + "\n" + Idioma.t("Aún no lo has intentado") + "\n" + Idioma.t("Premio de hoy: $%d") % PREMIO
+		return linea + "\n" + Idioma.t("Premio: $%d") % PREMIO
 	linea += "\n" + marca(f)
 	if f.completado:
 		linea += "\n" + Idioma.t("Premio de hoy: cobrado ($%d)") % PREMIO

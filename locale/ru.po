@@ -3465,16 +3465,8 @@ msgid "Has llegado a la planta %d"
 msgstr "Ты дошел до этажа %d"
 
 #: scripts/reto.gd
-msgid "Hoy: %s"
-msgstr "Сегодня: %s"
-
-#: scripts/reto.gd
-msgid "Aún no lo has intentado"
-msgstr "Ты еще не пробовал"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "Награда дня: $%d"
+msgid "Premio: $%d"
+msgstr "Награда: $%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
@@ -5255,10 +5247,6 @@ msgstr "Незаконченный забег: %s"
 msgid "Vacía"
 msgstr "Пусто"
 
-#: scripts/ui/huecos.gd
-msgid "Empieza de cero"
-msgstr "Начать с нуля"
-
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Инвентарь"
@@ -5992,21 +5980,6 @@ msgstr "Пройди его, чтобы открыть Тревогу 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (из %d)"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y el laboratorio"
-msgstr "Этажей: %d и лаборатория"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y azotea"
-msgstr "Этажей: %d + крыша"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "%d попытка"
-msgstr[1] "%d попытки"
-msgstr[2] "%d попыток"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

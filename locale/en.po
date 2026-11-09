@@ -3460,16 +3460,8 @@ msgid "Has llegado a la planta %d"
 msgstr "You reached floor %d"
 
 #: scripts/reto.gd
-msgid "Hoy: %s"
-msgstr "Today: %s"
-
-#: scripts/reto.gd
-msgid "Aún no lo has intentado"
-msgstr "You haven't tried it yet"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "Today's reward: $%d"
+msgid "Premio: $%d"
+msgstr "Reward: $%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
@@ -5247,10 +5239,6 @@ msgstr "Run in progress: %s"
 msgid "Vacía"
 msgstr "Empty"
 
-#: scripts/ui/huecos.gd
-msgid "Empieza de cero"
-msgstr "Start from scratch"
-
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Inventory"
@@ -5973,20 +5961,6 @@ msgstr "Complete it to unlock Alert 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (of %d)"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y el laboratorio"
-msgstr "%d floors and the lab"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y azotea"
-msgstr "%d floors and a rooftop"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "%d attempt"
-msgstr[1] "%d attempts"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

@@ -3455,16 +3455,8 @@ msgid "Has llegado a la planta %d"
 msgstr "到达了第%d层"
 
 #: scripts/reto.gd
-msgid "Hoy: %s"
-msgstr "今日：%s"
-
-#: scripts/reto.gd
-msgid "Aún no lo has intentado"
-msgstr "还没尝试过"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "今日奖励：$%d"
+msgid "Premio: $%d"
+msgstr "奖励：$%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
@@ -5239,10 +5231,6 @@ msgstr "未完成的一局：%s"
 msgid "Vacía"
 msgstr "空"
 
-#: scripts/ui/huecos.gd
-msgid "Empieza de cero"
-msgstr "从头开始"
-
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "物品栏"
@@ -5954,19 +5942,6 @@ msgstr "通关后解锁警戒1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s（共 %d）"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y el laboratorio"
-msgstr "%d层楼和实验室"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y azotea"
-msgstr "%d 层楼外加天台"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "已尝试 %d 次"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

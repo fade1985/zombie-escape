@@ -3460,16 +3460,8 @@ msgid "Has llegado a la planta %d"
 msgstr "Você chegou ao andar %d"
 
 #: scripts/reto.gd
-msgid "Hoy: %s"
-msgstr "Hoje: %s"
-
-#: scripts/reto.gd
-msgid "Aún no lo has intentado"
-msgstr "Você ainda não tentou"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "Prêmio de hoje: $%d"
+msgid "Premio: $%d"
+msgstr "Prêmio: $%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
@@ -5247,10 +5239,6 @@ msgstr "Pela metade: %s"
 msgid "Vacía"
 msgstr "Vazio"
 
-#: scripts/ui/huecos.gd
-msgid "Empieza de cero"
-msgstr "Comece do zero"
-
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Inventário"
@@ -5973,20 +5961,6 @@ msgstr "Complete para liberar o Alerta 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (de %d)"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y el laboratorio"
-msgstr "%d andares e o laboratório"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y azotea"
-msgstr "%d andares e terraço"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "%d tentativa"
-msgstr[1] "%d tentativas"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

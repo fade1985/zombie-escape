@@ -3460,16 +3460,8 @@ msgid "Has llegado a la planta %d"
 msgstr "Du hast Ebene %d erreicht"
 
 #: scripts/reto.gd
-msgid "Hoy: %s"
-msgstr "Heute: %s"
-
-#: scripts/reto.gd
-msgid "Aún no lo has intentado"
-msgstr "Noch nicht versucht"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "Heutige Belohnung: $%d"
+msgid "Premio: $%d"
+msgstr "Belohnung: $%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
@@ -5247,10 +5239,6 @@ msgstr "Laufende Runde: %s"
 msgid "Vacía"
 msgstr "Leer"
 
-#: scripts/ui/huecos.gd
-msgid "Empieza de cero"
-msgstr "Von vorn beginnen"
-
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Inventar"
@@ -5973,20 +5961,6 @@ msgstr "Schaff es, um Alarm 1 freizuschalten"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (von %d)"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y el laboratorio"
-msgstr "%d Stockwerke und das Labor"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d plantas y azotea"
-msgstr "%d Ebenen und ein Dach"
-
-#: scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "%d Versuch"
-msgstr[1] "%d Versuche"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

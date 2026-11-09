@@ -341,11 +341,7 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 # la regla de hoy, tu marca y el premio
 func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	var b := Button.new()
-	b.text = Idioma.t("Reto del día")
-	b.icon = load("res://assets/ui/iconos/trofeo.png")
-	b.expand_icon = true
-	b.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	b.add_theme_constant_override("icon_max_width", 24)
+	b.text = Idioma.t("Reto del día")   # (sin la copa desde el 9 nov)
 	b.custom_minimum_size.x = 220
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	b.pressed.connect(jugar_reto.bind(id))
@@ -414,10 +410,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 func tarjeta(id: String, s: Dictionary) -> Button:
 	var abierto := Edificios.abierto(s, id)
 	var b := Button.new()
-	var lineas := lineas_descripcion()
-	var medida := medir_tarjetas(s)
-	# 250 da para tres líneas de descripción en español; en otro idioma la tarjeta crece hasta lo que ocupan sus textos
-	b.custom_minimum_size = Vector2(ANCHO_TARJETA, maxf(250 + alto_lineas(maxi(lineas - 3, 0)), medida.y))
+	# 250 de alto, como cuando llevaba la descripción; si en algún idioma los textos ocupan más, crece hasta lo que ocupan
+	b.custom_minimum_size = Vector2(ANCHO_TARJETA, maxf(250, medir_tarjetas(s)))
 	b.disabled = not abierto
 	b.focus_mode = Control.FOCUS_ALL if abierto else Control.FOCUS_NONE
 	b.pressed.connect(jugar_partida.bind(id))
@@ -427,7 +421,7 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 	caja.offset_right = -16
 	caja.offset_top = 14
 	caja.offset_bottom = -14
-	caja.alignment = BoxContainer.ALIGNMENT_BEGIN   # desde arriba: si no, la tarjeta con menos líneas se corre
+	caja.alignment = BoxContainer.ALIGNMENT_CENTER   # el dibujo y los textos, en medio de la tarjeta (9 nov)
 	caja.add_theme_constant_override("separation", 8)
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(caja)
@@ -449,26 +443,20 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size.x = 260
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if i == 1:   # la descripción
-			l.custom_minimum_size.y = maxf(alto_lineas(lineas), medida.x)   # el hueco de la más larga: lo de debajo no se corre
 		if not abierto:
 			l.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(l)
 	return b
 
 
-# Los textos de una tarjeta, cada uno con el estilo de su etiqueta: [texto, estilo] del nombre, la descripción, las plantas y los
-# intentos, y cómo te ha ido (o qué falta para abrirlo)
+# Los textos de una tarjeta, cada uno con el estilo de su etiqueta: [texto, estilo] del nombre y de cómo te ha ido (o qué falta
+# para abrirlo). (Hasta el 9 nov llevaba también la descripción del edificio y las plantas y los intentos)
 func textos_tarjeta(id: String, s: Dictionary) -> Array:
 	var datos: Dictionary = Edificios.LISTA[id]
 	var p: Dictionary = s.edificios.get(id, Guardado.EDIFICIO)
-	var textos := [[Idioma.t(datos.nombre), ""], [Idioma.t(datos.desc), "Sub"]]
+	var textos := [[Idioma.t(datos.nombre), ""]]
 	if Edificios.abierto(s, id):
 		var veces: int = p.partidas
-		# (la torre no acaba en la azotea: acaba en el laboratorio de la planta 40)
-		var plantas := Idioma.t("%d plantas y el laboratorio") if id == "torre" else Idioma.t("%d plantas y azotea")
-		textos.append([plantas % (Planta.PLANTAS - 1) + " · "
-			+ Idioma.n("%d intento", "%d intentos", veces) % veces, "Sub"])
 		var progreso := Idioma.t("¡Sin explorar!")
 		if p.completado:
 			var t: float = p.mejor_tiempo
@@ -501,34 +489,18 @@ func alto_texto(texto: String, estilo: String) -> float:
 	return alto
 
 
-# Lo que ocupan los textos de las tarjetas en el idioma de ahora: x, la descripción más alta (todas dejan ese hueco); y, el alto
-# de la tarjeta que más ocupa, con sus 14 de margen arriba y abajo, el dibujo (64), 8 entre un texto y otro y 12 de sobra para que
-# el último no quede pegado al borde. En ruso y chino las líneas son más altas que en español (la letra de reserva mide 22 en vez de 17)
-func medir_tarjetas(s: Dictionary) -> Vector2:
-	var desc := alto_lineas(lineas_descripcion())   # (lo que dejaba ya, en español)
-	for id in Edificios.LISTA:
-		desc = maxf(desc, alto_texto(textos_tarjeta(id, s)[1][0], "Sub"))
+# El alto de la tarjeta que más ocupa en el idioma de ahora, con sus 14 de margen arriba y abajo, el dibujo (64), 8 entre un texto
+# y otro y 12 de sobra para que el último no quede pegado al borde. En ruso y chino las líneas son más altas que en español (la letra
+# de reserva mide 22 en vez de 17)
+func medir_tarjetas(s: Dictionary) -> float:
 	var total := 0.0
 	for id in Edificios.LISTA:
 		var textos := textos_tarjeta(id, s)
 		var suma := 28.0 + 64.0 + textos.size() * 8.0 + 6.0
-		for i in textos.size():
-			suma += desc if i == 1 else alto_texto(textos[i][0], textos[i][1])
+		for t: Array in textos:
+			suma += alto_texto(t[0], t[1])
 		total = maxf(total, suma)
-	return Vector2(desc, total)
-
-
-# Cuántas líneas ocupa la descripción más larga de los edificios, medidas con la letra del texto gris (no hace falta que
-# esté ya colocada). Todas las tarjetas dejan ese hueco, así lo de debajo queda a la misma altura en todas
-func lineas_descripcion() -> int:
-	var fuente := get_theme_font("font", "Sub")
-	var tam := get_theme_font_size("font_size", "Sub")
-	var cortes := TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE   # los de AUTOWRAP_WORD_SMART
-	var lineas := 1
-	for id in Edificios.LISTA:
-		var alto := fuente.get_multiline_string_size(Edificios.LISTA[id].desc, HORIZONTAL_ALIGNMENT_CENTER, ANCHO_TEXTO, tam, -1, cortes).y
-		lineas = maxi(lineas, roundi(alto / fuente.get_height(tam)))
-	return lineas
+	return total
 
 
 func jugar_partida(id := "apartamentos") -> void:

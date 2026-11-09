@@ -86,8 +86,11 @@ func tarjeta(n: int) -> Button:
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(caja)
 	var lineas := [[Idioma.t("Partida %d") % n, ""]]
-	lineas.append([Idioma.t("En uso") if n == Guardado.hueco else " ", "Sub"])
-	if Guardado.hueco_usado(n):
+	var en_uso := n == Guardado.hueco
+	var usado := Guardado.hueco_usado(n)
+	if en_uso or usado:   # (en las usadas, un hueco donde iría «En uso»: así sus líneas van a la misma altura en todas)
+		lineas.append([Idioma.t("En uso") if en_uso else " ", "Sub"])
+	if usado:
 		var s := Guardado.cargar_archivo(Guardado.ruta(n))
 		var completados := Edificios.LISTA.keys().filter(func(id): return s.edificios.get(id, {}).get("completado", false)).size()
 		lineas.append([Idioma.t("Mejor planta: %d") % s.mejor_planta, "Sub"])
@@ -101,7 +104,7 @@ func tarjeta(n: int) -> Button:
 				Planta.nombre_de({"num": foto.planta, "azotea": azotea, "edificio": foto.edificio})]), ""])
 	else:
 		lineas.append([Idioma.t("Vacía"), ""])
-		lineas.append([Idioma.t("Empieza de cero"), "Sub"])
+		caja.alignment = BoxContainer.ALIGNMENT_CENTER   # la vacía, con sus palabras en medio de la tarjeta (9 nov)
 	for i in lineas.size():
 		var l := Label.new()
 		l.text = lineas[i][0]
@@ -110,7 +113,7 @@ func tarjeta(n: int) -> Button:
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size.x = ANCHO - 24
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if i == 1:   # «En uso», en el amarillo de los avisos
+		if i == 1 and en_uso:   # «En uso», en el amarillo de los avisos
 			l.modulate = Color(1.0, 0.85, 0.35)
 		caja.add_child(l)
 	return b
