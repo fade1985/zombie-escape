@@ -47,7 +47,7 @@ const LISTA := [
 		"desc": "Derrota a la portera."},
 	{"id": "sin_rasguno", "tema": "jefes", "nombre": "Sin un rasguño", "icono": "logro-sin_rasguno", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe sin perder vida en toda la pelea."},
-	{"id": "por_los_pelos", "tema": "jefes", "nombre": "Por los pelos", "icono": "vida", "premio": 10, "meta": 1, "cuenta": "",
+	{"id": "por_los_pelos", "tema": "jefes", "nombre": "Por los pelos", "icono": "logro-por_los_pelos", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe con menos del 10 % de tu vida."},
 	{"id": "visto_y_no_visto", "tema": "jefes", "nombre": "Visto y no visto", "icono": "dash", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe en menos de 30 segundos de pelea."},
