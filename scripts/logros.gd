@@ -93,7 +93,7 @@ const LISTA := [
 	# ── Sorpresas y retos
 	{"id": "caja_fuerte", "tema": "sorpresas", "nombre": "Caja fuerte", "icono": "logro-caja_fuerte", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Abre la cámara acorazada de la Joyería del centro comercial."},
-	{"id": "se_fue_la_luz", "tema": "sorpresas", "nombre": "Se fue la luz", "icono": "obj-bateria", "premio": 5, "meta": 1, "cuenta": "",
+	{"id": "se_fue_la_luz", "tema": "sorpresas", "nombre": "Se fue la luz", "icono": "logro-se_fue_la_luz", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Supera un apagón: llega a la planta siguiente."},
 	{"id": "simulacro", "tema": "sorpresas", "nombre": "Simulacro", "icono": "lanzallamas", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Supera un incendio: llega a la planta siguiente."},
