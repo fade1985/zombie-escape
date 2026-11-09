@@ -494,10 +494,13 @@ func pintar_lanzar() -> void:
 		cursor = mezclar(sitios[antes], cursor, k)
 	if lz.cuantas(lz.tipo) > 0:
 		esquinas(lanzar, cursor)
-	# la F, sobre el que saldrá al pulsarla (el siguiente, como la Q en las armas), cuando ya ha terminado de cambiar
+	# la F, sobre el que saldrá al pulsarla (el siguiente, como la Q en las armas), cuando ya ha terminado de cambiar, y
+	# en su esquina de arriba más cerca del de ahora: la izquierda si está a su derecha y la derecha si vuelve al primero
 	if lista.size() > 1 and giro >= 1.0:
-		var siguiente: Rect2 = sitios[(ahora + 1) % lista.size()]
-		tecla(lanzar, siguiente.position + Vector2(siguiente.size.x - 8, -8), "cambiar_lanzable")
+		var i_sig := (ahora + 1) % lista.size()
+		var siguiente: Rect2 = sitios[i_sig]
+		var x := -4.0 if i_sig > ahora else siguiente.size.x - 8
+		tecla(lanzar, siguiente.position + Vector2(x, -8), "cambiar_lanzable")
 
 
 # ── Las curas ──
