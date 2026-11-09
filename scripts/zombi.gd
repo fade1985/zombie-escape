@@ -415,9 +415,10 @@ func onda_en(_p: Vector2) -> void:
 
 # Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar, y también el policía
 # y el militar (aliado.gd, M43)
-func oir_disparo(donde: Vector2) -> void:
+# Con "todos" (un disparo de Johnny dentro de un apartamento), lo oye esté donde esté
+func oir_disparo(donde: Vector2, todos := false) -> void:
 	# (con la Alerta 5, más lejos; con el reto del día "Oído fino", el triple)
-	if dormido and not sentado and global_position.distance_to(donde) < OIDO * Alerta.oido() * Reto.oido():
+	if dormido and not sentado and (todos or global_position.distance_to(donde) < OIDO * Alerta.oido() * Reto.oido()):
 		despertar()
 
 

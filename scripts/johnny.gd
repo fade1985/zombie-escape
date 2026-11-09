@@ -952,11 +952,14 @@ func soltar_casquillo(angulo: float, cartucho: bool) -> void:
 		color, 4.0, suelo, marca, Vector2(6, 4) if cartucho else Vector2(4, 2), false, false, 2, "Casquillos")   # no-tr (nombre de nodo)
 
 
-# El disparo se oye: despierta a los zombis dormidos que haya cerca
+# El disparo se oye: despierta a los zombis dormidos que haya cerca. Dentro de un apartamento, a todos los de todas sus
+# habitaciones, que van a por Johnny (9 nov, lo pidió el dueño: las armas a distancia y las especiales alertan a todo el piso)
 func oir_disparo() -> void:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	var todos: bool = mapa != null and mapa.sitio.get("tipo", "") == "apartamento"
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi.has_method("oir_disparo"):
-			zombi.oir_disparo(global_position)
+			zombi.oir_disparo(global_position, todos)
 
 
 # Antes de disparar: ¿hay bala en el cargador (o fuego en el depósito)? Si no, recarga. La escopeta puede disparar

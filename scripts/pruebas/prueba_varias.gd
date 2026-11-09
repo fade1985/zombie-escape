@@ -2255,6 +2255,42 @@ func probar_puerta_cierra() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --disparo-alerta": en el primer apartamento, Johnny quieto en la entrada dispara una vez. Antes del
+# disparo, cuántos zombis duermen y en cuántas habitaciones; después, cuántos siguen dormidos (esperado: ninguno) y,
+# 3 s más tarde, cuántos se le han acercado. Foto captura-disparo-alerta.png
+func probar_disparo_alerta() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var destino := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and not planta.sitios[i].limpio:
+			destino = i
+			break
+	await montar(destino, 0, false)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	await get_tree().create_timer(0.3).timeout
+	var zombis := get_tree().get_nodes_in_group("zombis")
+	var dormidos := zombis.filter(func(z): return z.get("dormido"))
+	var habitaciones := {}
+	for z in dormidos:
+		habitaciones[z.zona] = true
+	var lejos := zombis.map(func(z): return z.global_position.distance_to(johnny.global_position))
+	print("Disparo en un apartamento · antes: %d zombis, %d dormidos en %d habitaciones, el más lejos a %.0f" % [
+		zombis.size(), dormidos.size(), habitaciones.size(), lejos.max() if not lejos.is_empty() else 0.0])
+	johnny.oir_disparo()
+	await get_tree().physics_frame
+	print("Disparo en un apartamento · después: %d siguen dormidos (esperado: 0)" % zombis.filter(
+		func(z): return is_instance_valid(z) and z.get("dormido")).size())
+	await get_tree().create_timer(3.0).timeout
+	var cerca := 0.0
+	for i in zombis.size():
+		if is_instance_valid(zombis[i]):
+			cerca += lejos[i] - zombis[i].global_position.distance_to(johnny.global_position)
+	print("Disparo en un apartamento · en 3 s se han acercado a Johnny %.0f de media (esperado: bastante más de 0)" % (cerca / maxf(1, zombis.size())))
+	Captura.foto("captura-disparo-alerta.png")
+	get_tree().quit()
+
+
 # Con "--captura --acido-zombis": cada zombi, quieto encima de un charco de ácido (el de la portera) en la sala de
 # pruebas, y cuánta vida pierde en 2 s: todos se queman menos el gordo (venenoso: aguanta_acido); y debajo, todos los
 # jefes: se queman todos menos el Glotón y el doctor Salas. Foto

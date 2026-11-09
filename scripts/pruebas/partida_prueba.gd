@@ -333,6 +333,7 @@
 #                       andar, atacar, golpe y muerte (el de GPT es el vecino del juego desde el 8 nov) [prueba_varias.gd]
 #   --crio-gpt          lo mismo con el crío (el de PixelLab; y a su lado el de GPT cuando esté su hoja) [prueba_varias.gd]
 #   --puerta-cierra     nada más entrar en un apartamento, la puerta se cierra detrás de Johnny [prueba_varias.gd]
+#   --disparo-alerta    en un apartamento, un disparo de Johnny despierta a todos los zombis de todas las habitaciones [prueba_varias.gd]
 #   --acido-zombis      cada zombi y cada jefe encima de un charco de ácido: todos se queman menos el
 #                       gordo, el Glotón y el doctor Salas [prueba_varias.gd]
 #   --lento-gpt         lo mismo con el arrastrado de GPT, al lado del vecino (para ver su tamaño) [prueba_varias.gd]
@@ -896,6 +897,9 @@ func empezar_prueba() -> void:
 	elif "--puerta-cierra" in args:
 		set_process(false)   # sin la prueba larga
 		probar_puerta_cierra()
+	elif "--disparo-alerta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_disparo_alerta()
 	elif "--acido-zombis" in args:
 		set_process(false)   # sin la prueba larga
 		probar_acido_zombis()
