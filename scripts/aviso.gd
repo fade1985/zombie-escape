@@ -6,8 +6,9 @@
 #     Se corta donde se estrellaría el cuerpo del jefe (contra una pared o un mueble). También la de los latigazos de
 #     tentáculos y lenguas (tentaculo.gd), cortada donde se paran.
 #   - abanico(): el trozo que barre un golpe cuerpo a cuerpo (porrazo, fregonazo, hachazo...), o un círculo entero
-#     (medio ángulo PI). Se va llenando del jefe hacia fuera, como una barra de carga, sin bordes. Puede llegar hasta
-#     las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas). El de los golpes
+#     (medio ángulo PI). Se va llenando del jefe hacia fuera, como una barra de carga, sobre la zona entera oscura y
+#     con dos bordes (el de dentro late cada vez más deprisa: el borrador A, tools/pixelfx/aviso-a.js). Puede llegar
+#     hasta las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas). El de los golpes
 #     cuerpo a cuerpo es golpe(): cortado donde el golpe chocaría con una pared o un mueble (que no atraviesa, tapado()).
 #   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos,
 #     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()) y ahí acaba en la

@@ -131,7 +131,10 @@ en una línea.
   dan a Johnny si no está `Aviso.tapado`, un rayo de la capa 1), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
   criatura; se cortan donde el disparo se pararía en una pared o un mueble y ahí acaban en la estrella de las
   cargas; `Aviso.alcance`, medido en cada fotograma con un círculo del ancho de la barra y la capa 1) y las
-  flechas del giro del bombero. Se prueban con
+  flechas del giro del bombero. Los golpes, círculos y barras van con el estilo del borrador A de pixelfx
+  (`tools/pixelfx/aviso-a.js` y `_aviso.js`, que no se exportan: solo para probar ideas): toda la zona oscura desde el
+  principio, con dos bordes (el de dentro late cada vez más deprisa), el relleno de color con su frente claro y un
+  fogonazo blanco justo antes de pegar (`relleno()` y, en las rayas finas, `hilo()`, con contorno oscuro). Se prueban con
   `--golpes`, `--franja`, `--avisos`, `--disparos` (las barras junto a la pared y en campo abierto) y
   `--golpes-pared` (cada golpe, salto y onda con Johnny tras la pared, y su aviso cortado). Heredan:
   - Apartamentos: `gloton.gd` (+ `lengua.gd`), `gymbro.gd` (+ `pesa.gd`; con los suplementos se vuelve de metal, que se desconcha según pierde armadura y revienta

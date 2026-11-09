@@ -1,16 +1,17 @@
 // Los avisos de los jefes en el suelo (aviso.gd), de pixel art: cada cuadradito de 2 de la cuadrícula del suelo mira
 // dónde cae en el aviso y de qué color va. Lo que se enciende poco a poco dice cuánto falta (con lo último, pega) y,
-// justo antes de pegar, un destello suave. Cuatro formas:
+// justo antes de pegar, un fogonazo blanco. Cuatro formas:
 //   - la franja de una carga: flechas grandes (>), del ancho del jefe, que se encienden una tras otra hacia donde va;
 //     a los lados, raíles de puntos que marcan el ancho; y al final, una estrella de choque si se va a estrellar contra
 //     la pared (y quedarse atontado) o una X si no.
-//   - el abanico de un golpe: se va llenando del jefe hacia fuera, como una barra de carga, sin bordes; lo que falta,
-//     a cuadros flojitos. Con medio ángulo PI, un círculo entero (los de la portera, donde cae un salto); en un salto,
-//     además, la sombra de quien cae en el medio. Puede llegar hasta las paredes (cada rayo, hasta donde choca: el
-//     giro del bombero, el aspirado del glotón), ser de otro color y llevar ondas que van hacia el jefe (aspirando).
+//   - el abanico de un golpe: toda la zona oscura con dos bordes (el de dentro late cada vez más deprisa), y se va
+//     llenando del jefe hacia fuera, como una barra de carga (el estilo, en relleno()). Con medio ángulo PI, un
+//     círculo entero (los de la portera, donde cae un salto); en un salto, además, la sombra de quien cae en el
+//     medio. Puede llegar hasta las paredes (cada rayo, hasta donde choca: el giro del bombero, el aspirado del
+//     glotón), ser de otro color y llevar ondas que van hacia el jefe (aspirando).
 //   - la barra: una franja recta que se llena hacia fuera como el abanico (las lenguas, los latigazos, los alfileres
-//     y las rayas por donde irán los disparos). Si es fina, lo que falta va liso en vez de a cuadros. Si el disparo se
-//     para en una pared (choca), acaba en la estrella de las cargas.
+//     y las rayas por donde irán los disparos), con el mismo estilo. Si es fina, de color con un contorno oscuro
+//     (hilo()). Si el disparo se para en una pared (choca), acaba en la estrella de las cargas.
 //   - las flechas del giro del bombero: dos anillos de flechas alrededor de él que corren hacia el lado al que girará.
 shader_type canvas_item;
 
@@ -130,22 +131,48 @@ vec4 franja(vec2 p) {
 	return color;
 }
 
-// El relleno del abanico y de la barra: "d", lo lejos que está del principio; "hasta", donde acaba (ahí, en "k",
-// pega). Lo lleno, algo más fuerte hacia fuera, con el frente claro; lo que falta, a cuadros flojitos (o liso)
-vec4 relleno(vec2 p, float d, float hasta, bool liso) {
-	vec3 claro = mix(tinte, vec3(1.0), 0.65);
+// El estilo del abanico y de la barra (el borrador A de tools/pixelfx/aviso-a.js): toda la zona se ve desde el
+// principio, oscura y translúcida, con dos bordes (oscuro por fuera; del color por dentro, que late cada vez más deprisa
+// según se acerca el golpe), y se va llenando del color hacia fuera con un frente claro. Así se ve en cualquier suelo.
+// "d", lo lejos que está del principio; "hasta", donde acaba (ahí, en "k", pega); "borde", lo que le queda hasta el borde
+bool late() {
+	float vueltas = 3.0 * k + 6.0 * k * k * k;   // cada vez más deprisa: 9 latidos en todo el aviso
+	return k > 0.35 && fract(vueltas) < 0.5;
+}
+
+vec4 relleno(float d, float hasta, float borde) {
+	vec3 oscuro = tinte * 0.22;
+	vec3 claro = mix(tinte, vec3(1.0), 0.75);
+	if (borde < CELDA) {
+		return vec4(oscuro, 0.9);
+	}
+	if (borde < CELDA * 2.0) {
+		return late() ? vec4(claro, 0.95) : vec4(tinte * 0.7, 0.9);
+	}
 	float lleno = hasta * k;
-	if (d > lleno) {
-		vec2 celda = floor((p + origen) / CELDA);
-		if (!liso && mod(celda.x + celda.y, 2.0) < 0.5) {
-			return vec4(0.0);
-		}
-		return vec4(tinte, (liso ? 0.28 : 0.22) + 0.1 * k);
+	if (d < lleno - CELDA * 1.5) {
+		return vec4(tinte, 0.55 + 0.15 * k);
 	}
-	if (lleno - d < 6.0) {
-		return vec4(claro, 0.8);   // el frente, que avanza hacia fuera
+	if (d < lleno + CELDA * 0.5) {
+		return vec4(claro, 0.95);   // el frente, que avanza hacia fuera
 	}
-	return vec4(tinte, (liso ? 0.5 : 0.3) + 0.25 * k * (d / hasta));   // (las finas, más fuertes: que se vean)
+	return vec4(oscuro, 0.42);
+}
+
+// Lo mismo en una barra fina (las rayas de los disparos): sin hueco para dos bordes, va del color, más flojo lo que
+// falta, con un contorno oscuro por fuera ("a", lo que se aparta del medio)
+vec4 hilo(float d, float hasta, float a) {
+	if (a > medio) {
+		return vec4(tinte * 0.22, 0.85);
+	}
+	float lleno = hasta * k;
+	if (d < lleno - CELDA * 1.5) {
+		return vec4(tinte, 0.9);
+	}
+	if (d < lleno + CELDA * 0.5) {
+		return vec4(mix(tinte, vec3(1.0), 0.75), 0.95);
+	}
+	return vec4(late() ? mix(tinte, vec3(1.0), 0.5) : tinte, 0.45 + 0.1 * k);
 }
 
 vec4 abanico(vec2 p) {
@@ -166,7 +193,11 @@ vec4 abanico(vec2 p) {
 	if (r > hasta) {
 		return vec4(0.0);
 	}
-	vec4 color = relleno(p, r, hasta, false);
+	float borde = hasta - r;
+	if (medio < 3.1) {
+		borde = min(borde, (medio - giro) * r);   // los lados (un círculo entero no tiene)
+	}
+	vec4 color = relleno(r, hasta, borde);
 	// las ondas: arcos claros que van hacia el jefe (cuanto más deprisa, más vivos)
 	if (ondas > 0.0 && mod(r + tiempo * ondas, 28.0) < 6.0) {
 		color = vec4(mix(tinte, vec3(1.0), 0.5), 0.35 + 0.002 * ondas);
@@ -182,8 +213,13 @@ vec4 barra(vec2 p) {
 	float u = dot(p, hacia);
 	float a = abs(dot(p, vec2(-hacia.y, hacia.x)));
 	vec4 color = vec4(0.0);
-	if (u >= inicio && u <= largo && a <= medio) {
-		color = relleno(p, u - inicio, largo - inicio, medio < 6.0);
+	bool fina = medio < 6.0;
+	if (u >= inicio && u <= largo && a <= medio + (fina ? CELDA : 0.0)) {
+		if (fina) {
+			color = hilo(u - inicio, largo - inicio, a);
+		} else {
+			color = relleno(u - inicio, largo - inicio, min(medio - a, min(largo - u, u - inicio)));
+		}
 	}
 	// si el disparo se para en una pared (choca), la estrella de las cargas al final, que sale a partir de la mitad
 	float aparece = clamp((k - 0.25) / 0.35, 0.0, 1.0);
@@ -235,6 +271,7 @@ void fragment() {
 	if (color.a <= 0.0) {
 		discard;
 	}
-	float destello = destella ? clamp((k - 0.94) / 0.06, 0.0, 1.0) * 0.5 : 0.0;
+	// el fogonazo blanco justo antes de pegar (el último 6 %)
+	float destello = destella ? clamp((k - 0.94) / 0.02, 0.0, 1.0) * 0.8 : 0.0;
 	COLOR = mix(color, vec4(1.0, 1.0, 1.0, max(color.a, 0.6)), destello * step(0.3, color.a));
 }
