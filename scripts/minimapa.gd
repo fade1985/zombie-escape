@@ -2,8 +2,8 @@
 # planta, como el de una mazmorra; dentro de un sitio (un piso, la habitación de un jefe, una tienda, la sala de
 # mantenimiento, las viviendas...), el plano de ese sitio (ver "El plano del sitio", abajo).
 # El plano de la planta: el pasillo en medio y, unida a él por un trocito de pasillo, una sala por cada puerta (arriba y
-# abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar, rojo = con zombis dentro, claro = limpio, amarillo = donde estás (con un
-# marco que parpadea). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
+# abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar (con un «?»), rojo = con zombis dentro, claro = limpio; Johnny, un círculo
+# rojo (en el pasillo, donde está). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
 # (supervivientes.gd).
 # Con el técnico rescatado (vive en su habitación de las viviendas y ha arreglado las cámaras de seguridad), el plano
@@ -20,7 +20,6 @@ const GRIS := Color("#4a4552")
 const CLARO := Color("#bdb59c")
 const ROJO := Color("#b34030")
 const VERDE := Color("#6f9a58")
-const AMARILLO := Color("#e0b030")
 const BORDE := Color("#1d1b2c")
 const FONDO := Color("#141219")
 const CUADRICULA := Color("#24212c")
@@ -33,6 +32,8 @@ const BRILLO := Color("#ffb3a0")
 const SALA := Vector2(32, 16)       # cada apartamento en el plano de la planta: todos iguales, sea como sea de grande
 const OSCURA := Color("#2e2a36")    # en el plano de un sitio, las habitaciones aún sin pisar (con la niebla del mapa)
 const DONDE := Color("#e6d68a")     # la habitación en la que está Johnny
+const JOHNNY := Color("#e2382c")    # Johnny: un círculo rojo con el borde claro (los zombis son cuadraditos)
+const PASILLO := Color("#9c9480")   # el suelo del pasillo de la planta
 const PASO := Color("#a39a84")      # los huecos de las puertas de dentro
 const ICONOS := {
 	"puerta": preload("res://assets/ui/iconos/puerta.png"),
@@ -86,7 +87,7 @@ func casillas() -> Array:
 	var medio := PASILLO_Y + 5.0
 	# (la recepcionista de la torre se esconde en el pasillo, detrás del mostrador: su "!", encima de él)
 	var en_mostrador: bool = partida.supervivientes.encerrado() and planta.superviviente.has("mostrador")
-	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": CLARO, "aqui": aqui == 0, "icono": "", "sos": en_mostrador,
+	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": PASILLO, "aqui": aqui == 0, "pasillo": true, "icono": "", "sos": en_mostrador,
 		"puerta": Rect2(), "sitio": -1 if abajo() else 0,
 		"sos_x": x0 + planta.superviviente.mostrador.x / pasillo.ancho * largo if en_mostrador else 0.0})
 	var sos: int = planta.superviviente.sitio if partida.supervivientes.encerrado() else -1
@@ -159,7 +160,8 @@ func _draw() -> void:
 		dibujar_planta()
 
 
-# El plano de la planta: el pasillo, las salas y sus iconos
+# El plano de la planta: el pasillo, las salas y sus iconos. Cada sala de su color (gris sin visitar, con un «?»; roja
+# con zombis; clara ya limpia) y Johnny, un círculo rojo: en el pasillo, donde está; si no, en medio de su sala
 func dibujar_planta() -> void:
 	var letra := get_theme_default_font()
 	var lista := casillas()
@@ -169,19 +171,25 @@ func dibujar_planta() -> void:
 	for c in lista:
 		if c.puerta.has_area():
 			draw_rect(c.puerta.grow(2), BORDE)
-			draw_rect(c.puerta, SUELO)
 	for c in lista:
 		var r: Rect2 = c.r
-		var color: Color = AMARILLO if c.aqui else c.color
+		var color: Color = c.color
 		draw_rect(r.grow(2), BORDE)
 		draw_rect(r, color)
 		# un poco de relieve: luz arriba, sombra abajo
 		draw_rect(Rect2(r.position, Vector2(r.size.x, 2)), color.lightened(0.25))
 		draw_rect(Rect2(r.position + Vector2(0, r.size.y - 2), Vector2(r.size.x, 2)), color.darkened(0.3))
-	# los trozos de pasillo se pintan otra vez por dentro, para que la sala y el pasillo queden abiertos
+		if c.get("pasillo", false):
+			# la raya del medio del pasillo, a trozos, como la de una carretera
+			for x in range(int(r.position.x) + 4, int(r.end.x) - 4, 10):
+				draw_rect(Rect2(x, r.get_center().y - 1, 4, 2), color.darkened(0.25))
+		elif color == GRIS and c.icono == "" and c.has("sitio"):
+			# sin visitar: un «?» pequeño
+			draw_string(letra, Vector2(r.position.x, r.get_center().y + 5), "?", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 16, GRIS.lightened(0.35))   # no-tr (un signo)
+	# los trozos de pasillo, encima, para que la sala y el pasillo queden abiertos
 	for c in lista:
 		if c.puerta.has_area():
-			draw_rect(c.puerta, AMARILLO.darkened(0.15) if c.aqui else SUELO)
+			draw_rect(c.puerta, PASILLO)
 	if camaras:
 		dibujar_zombis(lista)
 	for c in lista:
@@ -193,13 +201,27 @@ func dibujar_planta() -> void:
 			var esquina: Vector2 = c.r.position + Vector2(c.r.size.x - 6, -4)
 			if c.has("sos_x") and c.sos_x > 0.0:
 				esquina = Vector2(c.sos_x - 5, c.r.position.y - 4)
-			# solo el «!», como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4 (antes, blanco en un cuadrito rosa)
-			draw_string_outline(letra, esquina + Vector2(-5, 12), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, 4, Tema.LINEA)
-			draw_string(letra, esquina + Vector2(-5, 12), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, Tema.TINTA)
-	# el marco que parpadea alrededor de donde estás
+			exclamacion(esquina + Vector2(0, 6))
+	# Johnny
 	for c in lista:
 		if c.aqui:
-			draw_rect(c.r.grow(4), Color(AMARILLO, 0.5 + sin(tiempo * 6.0) * 0.3), false, 2.0)
+			var p: Vector2 = c.r.get_center()
+			var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
+			if c.get("pasillo", false) and johnny and partida.mapa and partida.mapa.is_ancestor_of(johnny):
+				var pasillo: Dictionary = partida.planta.sitios[0]
+				p = c.r.position + johnny.position / Vector2(pasillo.ancho, pasillo.alto) * c.r.size
+				p = p.clamp(c.r.position, c.r.end)
+			marca_johnny(p)
+
+
+# Johnny en el plano: un círculo rojo con el borde claro y un aro que late alrededor
+func marca_johnny(p: Vector2) -> void:
+	p = Vector2(par(p.x), par(p.y))
+	draw_arc(p, 8.0 + sin(tiempo * 6.0) * 1.5, 0.0, TAU, 20, Color(JOHNNY, 0.55), 2.0)
+	draw_circle(p, 6.0, BORDE, true, -1.0, false)
+	draw_circle(p, 5.0, Tema.TINTA, true, -1.0, false)
+	draw_circle(p, 4.0, JOHNNY, true, -1.0, false)
+	draw_rect(Rect2(p - Vector2(2, 2), Vector2(2, 2)), JOHNNY.lightened(0.5))
 
 
 # Un icono del plano (16 × 16) centrado en "centro", con su sombra para que se lea sobre cualquier sala
@@ -213,7 +235,7 @@ func icono(nombre: String, centro: Vector2) -> void:
 # Dentro de un sitio, su plano visto desde arriba, una casilla del mapa por píxel del dibujo (sin el muro de fuera):
 # cada habitación clara si ya se ha pisado y a oscuras si no (con la misma niebla del mapa, que se va aclarando a la
 # vez), la de Johnny más amarilla, los huecos de las puertas de dentro y las salidas en verde. Encima, Johnny (un
-# punto amarillo que se mueve con él), la llave si está en el suelo de una habitación ya vista, el «!» del
+# círculo rojo que se mueve con él), la llave si está en el suelo de una habitación ya vista, el «!» del
 # superviviente y, con las cámaras del técnico, los zombis
 
 # ¿Se enseña el plano del sitio? En todos menos en el pasillo de la planta, la exposición y la sala de pruebas
@@ -291,14 +313,9 @@ func dibujar_sitio(fondo: Rect2) -> void:
 	if camaras:
 		for z in vivos():
 			punto((a_plano.call(z.global_position - mapa.global_position) - Vector2(2, 2)).clamp(r.position, r.end - Vector2(4, 4)))
-	# Johnny: un punto amarillo con su borde, y un aro que late
+	# Johnny, un círculo rojo
 	if en_mapa:
-		var p: Vector2 = a_plano.call(johnny.position)
-		p = Vector2(par(p.x), par(p.y))
-		draw_arc(p, 5.0 + sin(tiempo * 6.0) * 1.5, 0.0, TAU, 16, Color(AMARILLO, 0.6), 2.0)
-		draw_rect(Rect2(p - Vector2(3, 3), Vector2(6, 6)).grow(1), BORDE)
-		draw_rect(Rect2(p - Vector2(3, 3), Vector2(6, 6)), AMARILLO)
-		draw_rect(Rect2(p - Vector2(3, 3), Vector2(2, 2)), Color.WHITE)
+		marca_johnny(a_plano.call(johnny.position))
 
 
 # Rehace la imagen del plano si ha cambiado algo: el sitio, la habitación de Johnny o la niebla
