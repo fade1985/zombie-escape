@@ -43,7 +43,7 @@ const LISTA := [
 	{"id": "empleado_mes", "tema": "edificios", "nombre": "Empleado del mes", "icono": "logro-empleado_mes", "premio": 20, "meta": 10, "cuenta": "total",
 		"mira": "victorias", "desc": "Gana 10 partidas, sumando todas."},
 	# ── Jefes
-	{"id": "desahucio", "tema": "jefes", "nombre": "Desahucio", "icono": "jefe", "premio": 20, "meta": 1, "cuenta": "",
+	{"id": "desahucio", "tema": "jefes", "nombre": "Desahucio", "icono": "logro-desahucio", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Derrota a la portera."},
 	{"id": "sin_rasguno", "tema": "jefes", "nombre": "Sin un rasguño", "icono": "casco", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe sin perder vida en toda la pelea."},

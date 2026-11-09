@@ -120,6 +120,7 @@ MUEBLES = {
     "logro_jornada_expres": ("assets/sources/logro-jornada_expres-gpt.webp", "assets/ui/iconos/logro-jornada_expres.png", 32, 31, False),
     "logro_empleado_mes": ("assets/sources/logro-empleado_mes-gpt.webp", "assets/ui/iconos/logro-empleado_mes.png", 32, 31, False, (), [(210, 380), (1060, 380)]),
     "logro_fin_jornada": ("assets/sources/logro-fin_jornada-gpt.webp", "assets/ui/iconos/logro-fin_jornada.png", 27, 32, False),
+    "logro_desahucio": ("assets/sources/logro-desahucio-gpt.webp", "assets/ui/iconos/logro-desahucio.png", 22, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
