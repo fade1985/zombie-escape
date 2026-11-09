@@ -10,8 +10,8 @@ export const meta = {
   name: "Reventón de veneno",
   desc: "A fat body bursts into a crown of green venom seen from above; gobs fly out all round, splat on the floor and hiss, steam curling off.",
   tags: ["nature", "poison", "splash", "liquid", "ground", "one-shot"],
-  size: [160, 112],
-  origin: [80, 72],
+  size: [208, 160],   // (+24 por lado: que la luz no se salga del lienzo, 9 nov)
+  origin: [104, 96],
   duration: 1.4,
   loop: false,
   fps: 30,

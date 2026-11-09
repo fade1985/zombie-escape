@@ -11,8 +11,8 @@ export const meta = {
   name: "Molotov",
   desc: "A bottle smashes on the floor, seen from above: a white snap, fuel thrown out in a ring that catches in a whoosh of flame, sparks, and green glass shards that hop and skid away.",
   tags: ["fire", "impact", "glass", "one-shot"],
-  size: [220, 170],
-  origin: [110, 120],
+  size: [252, 202],   // (+16 por lado: que la luz no se salga del lienzo, 9 nov)
+  origin: [126, 136],
   duration: 1.3,
   loop: false,
   fps: 30,

@@ -9,8 +9,8 @@ export const meta = {
   name: "Curación",
   desc: "A healing burst seen from above: a green disc lights up under the feet with an opening ring, a column of light rises round the body, outlined crosses float up and motes sparkle.",
   tags: ["heal", "buff", "holy", "one-shot"],
-  size: [80, 96],
-  origin: [40, 76],
+  size: [112, 128],   // (+16 por lado: que la luz no se salga del lienzo, 9 nov)
+  origin: [56, 92],
   duration: 1.0,
   loop: false,
   fps: 30,

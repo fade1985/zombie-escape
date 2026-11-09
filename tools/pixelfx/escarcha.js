@@ -15,8 +15,8 @@ export const meta = {
   name: "Escarcha",
   desc: "A frost burst from above: a white pop, a ring of cold opening over the floor leaving frost, ice crystals punching up as it passes, then melting away.",
   tags: ["ice", "frost", "nova", "aoe", "one-shot"],
-  size: [176, 136],
-  origin: [88, 80],
+  size: [208, 168],   // (+16 por lado: que la luz no se salga del lienzo, 9 nov)
+  origin: [104, 96],
   duration: 1.6,
   loop: false,
   fps: 30,
