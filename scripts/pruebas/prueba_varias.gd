@@ -261,7 +261,7 @@ func probar_escudo() -> void:
 # Con "--captura --hud": el HUD (hud.gd), con las armas y los lanzables en la esquina de abajo a la derecha. Con
 # tres lanzables a mano, saca el HUD quieto (captura-hud.png), la barra con todas las cifras de la vida
 # (captura-hud-vida-123.png, -456 y -789), a medio cambiar de arma con la Q (captura-hud-cambio.png), ya cambiada, sin el nombre encima (captura-hud-q.png), a medio cambiar de lanzable con la
-# F (captura-hud-f.png), el modo de atacar al cambiar la ayuda «Disparo asistido» (en la terminal) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
+# F (captura-hud-f.png), ya cambiado, con la F sobre el siguiente (captura-hud-f-quieto.png), el modo de atacar al cambiar la ayuda «Disparo asistido» (en la terminal) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
 func probar_hud() -> void:
 	set_process(false)
 	for t in ["granada", "atraedora"]:
@@ -285,6 +285,8 @@ func probar_hud() -> void:
 	lanzables.cambiar()
 	await get_tree().create_timer(0.08).timeout
 	Captura.foto("captura-hud-f.png")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-hud-f-quieto.png")
 	# el modo de atacar cambia con la ayuda "Disparo asistido" (ya no tiene tecla; la partida de prueba la lleva puesta)
 	var modo_antes: String = johnny.modo
 	var ayuda_antes: bool = Guardado.ajuste("disparo_asistido")
