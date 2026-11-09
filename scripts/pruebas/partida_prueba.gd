@@ -312,6 +312,7 @@
 #                       --todo, todos y no solo los 25 peores                                  [prueba_letras.gd]
 #   --tildes            una foto ampliada por idioma (captura-tildes-<idioma>.png) con las tildes, ñ, ü, ¿ y ¡: que ninguna
 #                       salga al revés ni cambiada                                             [prueba_letras.gd]
+#   --suavidad          Johnny anda 2 s y cuenta cuánto se mueven él y el suelo en cada fotograma (los tirones) [prueba_varias.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el modo de
 #                       atacar con la ayuda Disparo asistido, en el móvil y la vida        [prueba_varias.gd]
 #   --hudmando          las teclas pegadas a las casillas del HUD (cambiar de arma y de lanzable, las curas): con el
@@ -844,6 +845,9 @@ func empezar_prueba() -> void:
 	elif "--curas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_curas_rapidas()
+	elif "--suavidad" in args:
+		set_process(false)   # sin la prueba larga
+		probar_suavidad()
 	elif "--hud" in args:
 		set_process(false)   # sin la prueba larga
 		probar_hud()

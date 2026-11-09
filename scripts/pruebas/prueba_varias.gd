@@ -262,6 +262,70 @@ func probar_escudo() -> void:
 # tres lanzables a mano, saca el HUD quieto (captura-hud.png), la barra con todas las cifras de la vida
 # (captura-hud-vida-123.png, -456 y -789), a medio cambiar de arma con la Q (captura-hud-cambio.png), ya cambiada, sin el nombre encima (captura-hud-q.png), a medio cambiar de lanzable con la
 # F (captura-hud-f.png), ya cambiado, con la F sobre el siguiente (captura-hud-f-quieto.png), el modo de atacar al cambiar la ayuda «Disparo asistido» (en la terminal) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
+# --suavidad: Johnny anda 2 s a la derecha y, en cada fotograma, se apunta cuántos píxeles de la pantalla se mueven él y el
+# suelo, ya redondeados como los dibuja Godot (snap_2d_transforms_to_pixel), y cuántos pasos de física ha habido. Si van a
+# tirones, salen fotogramas en los que uno se mueve y el otro no, o que se mueven distinto. Lo cuenta en la terminal
+func probar_suavidad() -> void:
+	set_process(false)
+	# la cámara sin límites, para que siga a Johnny aunque la habitación sea pequeña; y, con --escala X, la imagen
+	# agrandada como en el juego de verdad (pantalla.gd), que las pruebas no lo hacen
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.limit_left = -100000
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	var escala := float(Captura.dato("--escala", "1"))
+	if escala != 1.0:
+		var ventana := get_window()
+		ventana.content_scale_stretch = Window.CONTENT_SCALE_STRETCH_FRACTIONAL
+		ventana.content_scale_size = Vector2i.ZERO
+		ventana.content_scale_factor = escala
+	await get_tree().create_timer(0.5).timeout
+	camara.limit_left = -100000   # (al cambiar la escala, la partida vuelve a encuadrar la cámara: otra vez sin límites)
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	johnny.global_position.x -= 400.0   # sitio para andar 2 s sin chocar con la pared
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	var filas: Array = []
+	var fisica_antes := Engine.get_physics_frames()
+	var j_antes := Vector2.ZERO
+	var j_paso: Vector2 = johnny.global_position
+	var j_paso_antes: Vector2 = j_paso
+	var s_antes := Vector2.ZERO
+	Input.action_press("derecha")
+	var t := 0.0
+	while t < 2.0:
+		await get_tree().process_frame
+		t += get_process_delta_time()
+		var pasos := Engine.get_physics_frames() - fisica_antes
+		fisica_antes = Engine.get_physics_frames()
+		# con la interpolación (project.godot), Johnny se dibuja entre su sitio del paso de física anterior y el de
+		# este: se calcula igual que Godot, porque get_global_transform_with_canvas da el de este paso
+		if pasos > 0:
+			j_paso_antes = j_paso
+			j_paso = johnny.global_position
+		var dibujado := j_paso
+		if get_tree().physics_interpolation:
+			dibujado = j_paso_antes.lerp(j_paso, Engine.get_physics_interpolation_fraction())
+		var j: Vector2 = (get_viewport().get_canvas_transform() * dibujado * escala).round()
+		var s: Vector2 = (get_viewport().get_canvas_transform().origin * escala).round()
+		filas.append([pasos, j.x - j_antes.x, s.x - s_antes.x])
+		j_antes = j
+		s_antes = s
+	Input.action_release("derecha")
+	filas = filas.slice(20)   # sin el arranque
+	var cuenta := {}
+	for f in filas:
+		var clave := "pasos %d · Johnny %+d · suelo %+d" % f
+		cuenta[clave] = cuenta.get(clave, 0) + 1
+	print("SUAVIDAD · escala %s · %d fotogramas, a %d fps" % [escala, filas.size(), Engine.get_frames_per_second()])
+	for c in cuenta:
+		print("SUAVIDAD · %s: %d" % [c, cuenta[c]])
+	get_tree().quit()
+
+
 func probar_hud() -> void:
 	set_process(false)
 	for t in ["granada", "atraedora"]:
