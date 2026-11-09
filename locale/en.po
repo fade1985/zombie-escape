@@ -3202,10 +3202,6 @@ msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
 msgstr "The key zombie is down! It dropped the key to apt. %s"
 
 #: scripts/partida.gd
-msgid "Te han pillado"
-msgstr "They got you"
-
-#: scripts/partida.gd
 msgid "+1 molotov"
 msgstr "+1 Molotov"
 
@@ -5102,10 +5098,6 @@ msgid "Clic: comprar · $%d"
 msgstr "Click: buy · $%d"
 
 #: scripts/ui/archivador_logros.gd
-msgid "Por cobrar $%d"
-msgstr "To claim $%d"
-
-#: scripts/ui/archivador_logros.gd
 msgid "Logros %d/%d"
 msgstr "Achievements %d/%d"
 
@@ -5120,10 +5112,6 @@ msgstr "Game with assists: no achievements"
 #: scripts/ui/archivador_logros.gd
 msgid "Casi lo tienes"
 msgstr "Almost there"
-
-#: scripts/ui/archivador_logros.gd
-msgid "Elige un apartado a la izquierda para ver sus logros."
-msgstr "Pick a section on the left to see its achievements."
 
 #: scripts/ui/archivador_logros.gd
 msgid "Por cobrar"

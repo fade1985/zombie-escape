@@ -194,17 +194,10 @@ func _draw() -> void:
 	PLACA.dibujar_ahorrado(self, fuente, s.dolares)
 	if cajas_temas.is_empty():
 		return
-	# arriba a la derecha: cuánto tienes por cobrar y cuántos logros llevas
-	var cobrar := 0
-	for l in por_cobrar(Logros.LISTA):
-		cobrar += l.premio
-	var texto_cobrar := Idioma.t("Por cobrar $%d") % cobrar
-	var ancho_cobrar := fuente.get_string_size(texto_cobrar, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
-	draw_string(fuente, Vector2(size.x - 16 - ancho_cobrar, 28), texto_cobrar, HORIZONTAL_ALIGNMENT_LEFT, -1, 16,
-		PLACA.AMARILLO if cobrar > 0 else PLACA.TEXTO_SUAVE)
+	# arriba a la derecha: cuántos logros llevas (lo que falta por cobrar lo avisa el «!» de cada apartado)
 	var texto_logros := Idioma.t("Logros %d/%d") % [conseguidos(Logros.LISTA), Logros.LISTA.size()]
 	var ancho_logros := fuente.get_string_size(texto_logros, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
-	draw_string(fuente, Vector2(size.x - 16 - ancho_cobrar - 24 - ancho_logros, 28), texto_logros, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, PLACA.TEXTO)
+	draw_string(fuente, Vector2(size.x - 16 - ancho_logros, 28), texto_logros, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, PLACA.TEXTO)
 	for t in cajas_temas:
 		dibujar_tema(t, fuente)
 	if pagina == "resumen":
@@ -272,8 +265,6 @@ func dibujar_resumen(fuente: Font) -> void:
 		draw_string(fuente, Vector2(x, titulo_y - 6), Idioma.t("Partida con ayudas: no da logros"), HORIZONTAL_ALIGNMENT_LEFT, ancho, 14, Color("#e8884a"))
 	if casi:
 		titulo(fuente, titulo_y, Idioma.t("Casi lo tienes"), PLACA.TEXTO_SUAVE)
-		if visibles.is_empty():
-			escribir_centrado(fuente, Idioma.t("Elige un apartado a la izquierda para ver sus logros."), titulo_y + 50, PLACA.TEXTO_SUAVE)
 	else:
 		titulo(fuente, titulo_y, Idioma.t("Por cobrar"), PLACA.AMARILLO)
 	if sobran > 0 and not casi:
@@ -304,11 +295,6 @@ func con_sombra(fuente: Font, r: Rect2, nombre: String, cuenta: String) -> void:
 	for capa in [[Vector2(1, 1), Color.BLACK], [Vector2.ZERO, PLACA.TEXTO]]:
 		draw_string(fuente, Vector2(r.position.x + 6, base) + capa[0], nombre, HORIZONTAL_ALIGNMENT_LEFT, ancho, tam, capa[1])
 		draw_string(fuente, Vector2(r.end.x - 6 - ancho_cuenta, base) + capa[0], cuenta, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, capa[1])
-
-
-func escribir_centrado(fuente: Font, texto: String, y: float, color: Color) -> void:
-	var x: float = cajas_temas["resumen"].end.x + 12
-	draw_string(fuente, Vector2(x, y), texto, HORIZONTAL_ALIGNMENT_CENTER, size.x - x - 14, 14, color)
 
 
 # Una fila: el icono (apagado si aún no lo tienes), el nombre, su barra y cuánto lleva si se hace varias veces, lo que

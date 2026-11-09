@@ -3202,10 +3202,6 @@ msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
 msgstr "Der Schlüsselzombie ist erledigt! Er hat den Schlüssel für Wohnung %s fallen lassen"
 
 #: scripts/partida.gd
-msgid "Te han pillado"
-msgstr "Erwischt"
-
-#: scripts/partida.gd
 msgid "+1 molotov"
 msgstr "+1 Molotow"
 
@@ -5102,10 +5098,6 @@ msgid "Clic: comprar · $%d"
 msgstr "Klick: kaufen · $%d"
 
 #: scripts/ui/archivador_logros.gd
-msgid "Por cobrar $%d"
-msgstr "Offen: $%d"
-
-#: scripts/ui/archivador_logros.gd
 msgid "Logros %d/%d"
 msgstr "Erfolge %d/%d"
 
@@ -5120,10 +5112,6 @@ msgstr "Spiel mit Hilfen: keine Erfolge"
 #: scripts/ui/archivador_logros.gd
 msgid "Casi lo tienes"
 msgstr "Fast geschafft"
-
-#: scripts/ui/archivador_logros.gd
-msgid "Elige un apartado a la izquierda para ver sus logros."
-msgstr "Wähle links einen Bereich, um seine Erfolge zu sehen."
 
 #: scripts/ui/archivador_logros.gd
 msgid "Por cobrar"

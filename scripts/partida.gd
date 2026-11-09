@@ -1154,9 +1154,7 @@ func decir(texto: String, segundos := 2.2) -> void:
 func _al_morir_johnny() -> void:
 	if guarda_partida:
 		PartidaGuardada.borrar()   # ya, por si se cierra el juego antes del cartel de derrota
-	$Pantalla/Aviso.text = Idioma.t("Te han pillado")   # (el de la escena está en español)
-	$Pantalla/Aviso.show()
-	# Un momento para verlo caer, y el cartel de derrota
+	# Un momento para verlo caer, y el cartel de derrota (sin letrero encima)
 	await get_tree().create_timer(1.0).timeout
 	terminar(false)
 
@@ -1636,7 +1634,6 @@ func terminar(gano: bool, abandona := false) -> void:
 		ir_al_menu()
 		return
 	get_tree().paused = true
-	$Pantalla/Aviso.hide()
 	var apartamentos := 0
 	var visitados := 0
 	for sitio in planta.sitios:

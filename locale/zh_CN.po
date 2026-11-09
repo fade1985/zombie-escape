@@ -3200,10 +3200,6 @@ msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
 msgstr "拿钥匙的僵尸倒下了！它掉落了%s的钥匙"
 
 #: scripts/partida.gd
-msgid "Te han pillado"
-msgstr "你被逮住了"
-
-#: scripts/partida.gd
 msgid "+1 molotov"
 msgstr "+1 燃烧瓶"
 
@@ -5095,10 +5091,6 @@ msgid "Clic: comprar · $%d"
 msgstr "点击：购买 · $%d"
 
 #: scripts/ui/archivador_logros.gd
-msgid "Por cobrar $%d"
-msgstr "待领取 $%d"
-
-#: scripts/ui/archivador_logros.gd
 msgid "Logros %d/%d"
 msgstr "成就 %d/%d"
 
@@ -5113,10 +5105,6 @@ msgstr "开启了辅助：本局不计成就"
 #: scripts/ui/archivador_logros.gd
 msgid "Casi lo tienes"
 msgstr "就差一点"
-
-#: scripts/ui/archivador_logros.gd
-msgid "Elige un apartado a la izquierda para ver sus logros."
-msgstr "在左边选一个分类查看成就。"
 
 #: scripts/ui/archivador_logros.gd
 msgid "Por cobrar"
