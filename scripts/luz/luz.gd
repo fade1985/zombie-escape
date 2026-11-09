@@ -221,7 +221,7 @@ func _process(delta: float) -> void:
 		# el rayo del aire: un abanico del foco al arco del suelo donde el haz ya luce, justo entre sus dos
 		# bordes (así sus lados siguen los del haz del suelo), que se apaga al bajar
 		var arco := PackedVector2Array([foco.position])
-		var c := LINTERNA_COLOR * Color(1, 1, 1, 0.07)
+		var c := LINTERNA_COLOR * Color(1, 1, 1, 0.03)   # (apenas se intuye)
 		var colores := PackedColorArray([c])
 		for i in 9:
 			var giro := lerpf(-RAYO_ABRE, RAYO_ABRE, i / 8.0)
