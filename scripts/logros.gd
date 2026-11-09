@@ -99,7 +99,7 @@ const LISTA := [
 		"desc": "Supera un incendio: llega a la planta siguiente."},
 	{"id": "contra_marea", "tema": "sorpresas", "nombre": "Contra la marea", "icono": "logro-contra_marea", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Vence a una horda del pasillo."},
-	{"id": "reto_aceptado", "tema": "sorpresas", "nombre": "Reto aceptado", "icono": "diana", "premio": 10, "meta": 1, "cuenta": "",
+	{"id": "reto_aceptado", "tema": "sorpresas", "nombre": "Reto aceptado", "icono": "logro-reto_aceptado", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Completa un reto del día."},
 	{"id": "todas_reglas", "tema": "sorpresas", "nombre": "Ninguna regla me para", "icono": "diana", "premio": 25, "cuenta": "total",
 		"mira": "reglas", "desc": "Completa el reto del día con cada una de sus 7 reglas."},
