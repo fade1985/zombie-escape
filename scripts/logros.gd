@@ -73,7 +73,7 @@ const LISTA := [
 		"desc": "Mejora un arma en el banco de trabajo."},
 	{"id": "joya_corona", "tema": "armas", "nombre": "Joya de la corona", "icono": "logro-joya_corona", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Sube un arma o un arrojable a Épica en el banco de trabajo."},
-	{"id": "arsenal", "tema": "armas", "nombre": "Arsenal completo", "icono": "escopeta", "premio": 15, "cuenta": "total",
+	{"id": "arsenal", "tema": "armas", "nombre": "Arsenal completo", "icono": "logro-arsenal", "premio": 15, "cuenta": "total",
 		"mira": "armas", "desc": "Mata un zombi con cada arma: la fregona y todas las de la tienda."},
 	{"id": "especialista", "tema": "armas", "nombre": "Especialista", "icono": "militar", "premio": 15, "cuenta": "",
 		"mira": "rama", "desc": "Llena una rama entera del árbol de talentos."},

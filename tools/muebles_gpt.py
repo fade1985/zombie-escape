@@ -134,6 +134,7 @@ MUEBLES = {
     "logro_intocable": ("assets/sources/logro-intocable-gpt.webp", "assets/ui/iconos/logro-intocable.png", 32, 32, False),
     "logro_manitas": ("assets/sources/logro-manitas-gpt.webp", "assets/ui/iconos/logro-manitas.png", 32, 31, False, (), [(287, 1052)]),
     "logro_joya_corona": ("assets/sources/logro-joya_corona-gpt.webp", "assets/ui/iconos/logro-joya_corona.png", 30, 32, False),
+    "logro_arsenal": ("assets/sources/logro-arsenal-gpt.webp", "assets/ui/iconos/logro-arsenal.png", 32, 30, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
