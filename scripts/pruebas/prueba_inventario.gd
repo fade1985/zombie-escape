@@ -1747,6 +1747,7 @@ func probar_curas_rapidas() -> void:
 	for z in get_tree().get_nodes_in_group("zombis"):
 		z.queue_free()
 	var a: Node2D = mapa.armaritos[0]
+	a.datos.dentro = "botiquin"   # (M12: dentro hay un botiquín o unas vendas, a medias)
 	mochila.clear()
 	johnny.vida = roundi(johnny.vida_tope() * 0.4)
 	v = johnny.vida
@@ -1754,11 +1755,19 @@ func probar_curas_rapidas() -> void:
 	await get_tree().create_timer(0.5, false).timeout
 	johnny.position = a.position + Vector2(42, 50)   # (a un lado, para que no tape el botiquín al salir)
 	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3, false).timeout
+	var cerrado: bool = not a.datos.cogido   # M11: ya no se abre solo al plantarse delante
+	johnny.con_raton = false   # (sin ratón, el contorno amarillo sale con Johnny delante, zona_usar.gd)
+	await get_tree().create_timer(0.1, false).timeout
+	$Pantalla/HUD.hide()   # (que el minimapa no tape el armarito)
+	Captura.foto("captura-curas-armarito-contorno.png")
+	$Pantalla/HUD.show()
+	a.get_node("Zona").abrir()   # (como el clic encima, zona_usar.gd)
 	await get_tree().create_timer(0.14, false).timeout
 	Captura.foto("captura-curas-armarito.png")
 	await get_tree().create_timer(1.0, false).timeout
-	print("Curas · el armarito: abierto %s · vida %d -> %d (esperado: true · sin cambio) · botiquines en la mochila %d (esperado: 1)" % [
-		a.datos.cogido, v, johnny.vida, mochila.count("botiquin")])
+	print("Curas · el armarito: cerrado al llegar %s · abierto con el clic %s · vida %d -> %d (esperado: true · true · sin cambio) · botiquines en la mochila %d (esperado: 1)" % [
+		cerrado, a.datos.cogido, v, johnny.vida, mochila.count("botiquin")])
 	# al caer, la mitad de los dólares recogidos pasa a la cartera (DOLARES_AL_CAER), con su cartel; luego se deja como estaba
 	var cartera: int = Guardado.cargar().dolares
 	dolares = 7

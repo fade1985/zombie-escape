@@ -859,10 +859,9 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 	return zombis
 
 
-# Un armarito con un botiquín colgado en la pared de arriba de cada baño (Armarito en src/props.js del JS): al
-# abrirlo suelta lo que tiene dentro ("dentro"). M78: un solo botiquín por apartamento, en uno de sus baños elegido al
-# azar, y vendas en los demás (antes, contando por toda la planta, un botiquín y luego dos de vendas, así que el
-# botiquín caía siempre en los mismos baños). Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
+# Un armarito colgado en la pared de arriba de un baño (Armarito en src/props.js del JS): al abrirlo suelta lo que tiene
+# dentro ("dentro"). M12: uno solo por apartamento, en uno de sus baños elegido al azar (los demás, sin armarito), con un
+# botiquín o unas vendas a medias; fuera de los apartamentos (el aseo de empleados del supermercado, M81), siempre el botiquín. Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
 # lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido, dentro}
 # Torre Velaria: la recepcionista se esconde detrás del mostrador del vestíbulo (el pasillo de la planta baja), con la
 # persiana bajada (tornos.gd). Su sitio: el pie del mostrador y, delante, donde espera al subirla; y el de los tornos,
@@ -917,12 +916,14 @@ static func armaritos(sitio: Dictionary) -> Array:
 			if mejor.is_empty() or nota < mejor.nota:
 				mejor = {"x": x, "y": float(s.f0 * CASILLA), "alcance": alcance, "cogido": false, "nota": nota}
 		if not mejor.is_empty():
-			mejor.dentro = "vendas"
 			lista.append(mejor)
-	# M78: el botiquín, en un armarito al azar (con la semilla de la planta, así que la misma planta lo pone igual)
-	if not lista.is_empty():
-		lista[rng.randi() % lista.size()].dentro = "botiquin"
-	return lista
+	if lista.is_empty():
+		return lista
+	# M12: uno solo, en un baño al azar, y dentro un botiquín o unas vendas (con la semilla de la planta, así que la
+	# misma planta lo pone igual)
+	var uno: Dictionary = lista[rng.randi() % lista.size()]
+	uno.dentro = "botiquin" if sitio.get("tienda", "") != "" or rng.randf() < 0.5 else "vendas"
+	return [uno]
 
 
 # Un punto de la habitación con sitio alrededor, lejos de la entrada, de los muebles y de los otros zombis

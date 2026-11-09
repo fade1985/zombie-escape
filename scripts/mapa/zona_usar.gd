@@ -1,5 +1,5 @@
 # La zona invisible de delante de un mueble de la sala de mantenimiento (la mesa del ordenador, ordenador.gd; el
-# baúl, el banco de trabajo y la taquilla, arrimable.gd). Antes el mueble se abría solo al arrimarse; ahora, mientras
+# baúl, el banco de trabajo y la taquilla, arrimable.gd; y el armarito de los baños, armarito.gd). Antes el mueble se abría solo al arrimarse; ahora, mientras
 # Johnny está en la zona, se abre al pulsar la acción de atacar: el clic izquierdo o J (las que tenga puestas en
 # Opciones), RT en el mando y, en el móvil, el botón «Abrir» que sale entonces (tactil.gd). Con el ratón, el clic tiene
 # que caer encima del mueble: si cae en otra parte, no se abre y Johnny ataca como siempre (clic_fuera). Con J o RT no hay
@@ -45,6 +45,7 @@ var contorno: Sprite2D = null   # su contorno amarillo, escondido mientras no to
 var raton := Vector2(-1, -1)    # dónde está el ratón en la pantalla (el último movimiento); negativo si aún no se ha movido
 var puede := Callable()         # si se da, cuándo se puede usar (si no, siempre): mientras no, ni contorno ni se usa, y J ataca
 var cierra := false             # el botón del móvil dice «Cerrar» en vez de «Abrir» (una puerta abierta)
+var al_pie := false             # la distancia, al pie del mueble y no al medio de su dibujo (el armarito, colgado alto en la pared)
 
 
 # "ancho": lo que ocupa el mueble en el suelo
@@ -85,6 +86,12 @@ func _ready() -> void:
 	contorno = Sprite2D.new()
 	contorno.name = "Contorno"   # no-tr
 	contorno.texture = dibujo.texture
+	if dibujo.hframes > 1 or dibujo.vframes > 1:
+		# el armarito del baño tiene dos dibujos (cerrado y abierto): el contorno, de una copia aparte del que se ve ahora
+		# (con la hoja entera, o un trozo de ella, el borde sacaría una raya del dibujo de al lado)
+		var tam := Vector2i(dibujo.texture.get_size()) / Vector2i(dibujo.hframes, dibujo.vframes)
+		var esquina := Vector2i(dibujo.frame % dibujo.hframes, dibujo.frame / dibujo.hframes) * tam
+		contorno.texture = ImageTexture.create_from_image(dibujo.texture.get_image().get_region(Rect2i(esquina, tam)))
 	contorno.scale = dibujo.scale
 	contorno.centered = dibujo.centered
 	contorno.offset = dibujo.offset
@@ -158,7 +165,7 @@ func distancia() -> float:
 	if johnny == null:
 		return INF
 	var medio := global_position
-	if dibujo:
+	if dibujo and not al_pie:
 		medio = dibujo.get_global_transform() * dibujo.get_rect().get_center()
 	return johnny.global_position.distance_to(medio)
 

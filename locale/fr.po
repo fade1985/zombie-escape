@@ -4582,8 +4582,8 @@ msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en e
 msgstr "Les bandages s'utilisent avec {usar_vendas} : ils soignent 25, sans dépasser le tiers où tu es."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "Tu peux en porter 3 dans ton sac à dos. Les armoires à pharmacie des salles de bain s'ouvrent quand tu t'approches et lâchent leur contenu."
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."
+msgstr "Tu peux en porter 3 dans ton sac à dos. Les armoires à pharmacie des salles de bain s'ouvrent de face, comme l'ordinateur, et lâchent leur contenu."
 
 #: scripts/tutoriales.gd
 msgid "El botiquín"

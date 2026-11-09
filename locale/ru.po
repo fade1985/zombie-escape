@@ -4589,8 +4589,8 @@ msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en e
 msgstr "Бинты: {usar_vendas}. Лечат на 25, но не выше текущей трети."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "В рюкзак влезает 3. Шкафчики в ванных открываются, когда подходишь, и вываливают содержимое."
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."
+msgstr "В рюкзак влезает 3. Шкафчики в ванных открываются спереди, как компьютер, и вываливают содержимое."
 
 #: scripts/tutoriales.gd
 msgid "El botiquín"

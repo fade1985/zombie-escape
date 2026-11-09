@@ -4575,8 +4575,8 @@ msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en e
 msgstr "用{usar_vendas}使用绷带：恢复25点，但不会超过当前这一段。"
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "背包里最多放3卷。浴室的小柜子在你靠近时会自动打开，掉出里面的东西。"
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."
+msgstr "背包里最多放3卷。浴室的小柜子要站在前面打开，和电脑一样，会掉出里面的东西。"
 
 #: scripts/tutoriales.gd
 msgid "El botiquín"

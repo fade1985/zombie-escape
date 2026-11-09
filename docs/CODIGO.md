@@ -329,7 +329,7 @@ en una línea.
   la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3, pero en su grupo «Curas» (`CURAS`, 4 casillas, M67: `casillas` las
   pone al final y `ocupadas` cuenta solo las de «Objetos»); se usan con la tecla 1 y la 2,
   `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín y las
-  vendas los sueltan los armaritos de los baños, contando por toda la planta un botiquín y dos de vendas (`Planta.ARMARITO_CADA`; M72: antes, uno y uno por piso), `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
+  vendas los sueltan los armaritos de los baños, uno por apartamento con botiquín o vendas a medias (`Planta.armaritos`, M12; se abren con el clic como el ordenador, `zona_usar.gd`, M11), `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
   cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (un mismo objeto, 99 como mucho en cada una: `MONTON`; el baúl guarda cuántos hay
   y `objetos_baul` los reparte, y `caben_baul` dice cuántos más entran). Y las **piezas**
   de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta

@@ -4582,8 +4582,8 @@ msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en e
 msgstr "Verbände mit {usar_vendas}: Sie heilen 25, aber nicht über dein aktuelles Drittel hinaus."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "Platz für 3 im Rucksack. Badschränkchen öffnen sich vor dir und geben ihren Inhalt frei."
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."
+msgstr "Platz für 3 im Rucksack. Badschränkchen öffnest du von vorne, wie den Computer, und sie geben ihren Inhalt frei."
 
 #: scripts/tutoriales.gd
 msgid "El botiquín"

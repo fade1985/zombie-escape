@@ -1,16 +1,18 @@
 # El armarito del baño (Armarito en src/props.js del JS): colgado en la pared de arriba, con un botiquín o unas vendas
-# dentro ("dentro", planta.gd). Se abre plantándose delante (o delante del mueble que tenga debajo, hasta "alcance"):
-# avisa con "usar" y la partida lo suelta al suelo (abrir_armarito), que Johnny recoge pasando por encima y usa luego con su tecla.
+# dentro ("dentro", planta.gd; uno por apartamento). Se abre como el ordenador (M11): con Johnny delante (o delante del
+# mueble que tenga debajo, hasta "alcance") y el clic encima del armarito, J o RT (zona_usar.gd, con su contorno amarillo).
+# Avisa con "usar" y la partida lo suelta al suelo (abrir_armarito), que Johnny recoge pasando por encima y usa luego con su tecla.
 # Ya abierto, se queda abierto y vacío. El nodo va en el pie de la pared, para ordenarse con la cara del muro (como los apliques).
 extends Node2D
 
 signal usar
 
+const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
+
 var datos: Dictionary      # {x, y, alcance, cogido} (planta.gd): se queda en la planta al salir del piso
 var johnny: Node2D
 var mapa: Node = null      # para mirar la niebla de su habitación (en una sin descubrir, queda a oscuras)
-var zona := -1
-var listo := true          # hay que apartarse antes de volver a intentarlo
+var habitacion := -1       # la habitación que tiene delante (para la niebla)
 var dibujo: Sprite2D
 var brillo: PointLight2D
 var t := 0.0
@@ -33,6 +35,13 @@ func montar(d: Dictionary) -> void:
 	brillo.color = Color("#80ed99")
 	brillo.position = Vector2(0, -50)
 	add_child(brillo)
+	# la zona de delante donde se para Johnny para abrirlo (la misma que el ordenador): solo mientras está lleno
+	var zona := ZONA_USAR.new()
+	zona.montar_rect(Rect2(-46, -11, 92, d.alcance + 10))
+	zona.puede = func() -> bool: return not datos.cogido
+	zona.al_pie = true   # (si no, con el dibujo alto en la pared, la puerta del baño le quitaría el sitio)
+	add_child(zona)
+	zona.usar.connect(usar.emit)
 	vaciar(d.cogido)
 
 
@@ -45,16 +54,7 @@ func vaciar(si := true) -> void:
 func _physics_process(delta: float) -> void:
 	t += delta
 	# como las caras de muro: en una habitación aún sin descubrir se oscurece, y su brillo se apaga
-	var oscuro: float = mapa.niebla.get(zona, 0.0) if mapa and zona >= 0 else 0.0
+	var oscuro: float = mapa.niebla.get(habitacion, 0.0) if mapa and habitacion >= 0 else 0.0
 	dibujo.modulate = Color.WHITE.lerp(Color(0.07, 0.063, 0.11), 0.9 * oscuro)
 	brillo.energy = (0.5 + sin(t * 3.0) * 0.15) * (1.0 - oscuro)
 	brillo.enabled = oscuro < 0.98
-	if datos.cogido or johnny == null or not johnny.vivo:
-		return
-	var p := johnny.global_position
-	var delante: bool = absf(p.x - global_position.x) < 46.0 and p.y > datos.y - 10.0 and p.y - datos.y < datos.alcance
-	if not delante:
-		listo = true
-	elif listo:
-		listo = false
-		usar.emit()

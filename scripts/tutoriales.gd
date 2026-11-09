@@ -40,7 +40,7 @@ const LISTA := {
 	"curas": {"grupo": "Lo básico", "titulo": "Vendas", "icono": "obj-vendas",
 		"cuando": "Al coger las primeras vendas",
 		"lineas": ["Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás.",
-			"Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."]},
+			"Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."]},
 	"botiquin": {"grupo": "Lo básico", "titulo": "El botiquín", "icono": "botiquin",
 		"cuando": "Al coger el primer botiquín",
 		"lineas": ["Úsalo con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido.",

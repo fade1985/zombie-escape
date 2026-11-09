@@ -80,8 +80,8 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   3 vendas (lo que sobra se queda en el suelo y, al pisarlo, avisa). A la
   derecha de la barra de vida salen sus casillas (solo las que llevas, con cuántas y su tecla); pulsar la tecla lo usa
   al momento, y si no sirve (vida llena; el botiquín, además, sin tercios perdidos) avisa y no gasta nada. Los
-  armaritos de los baños se abren al acercarse y sueltan lo suyo (se recoge pasando por encima): en cada piso, el
-  primero un botiquín y el siguiente unas vendas. La Farmacéutica te prepara un botiquín cada partida, y las vendas
+  armaritos de los baños se abren como el ordenador (delante, con el clic encima, J o RT; en el móvil, «Abrir») y sueltan
+  lo suyo (se recoge pasando por encima): uno solo por apartamento, en un baño al azar, con un botiquín o unas vendas a medias. La Farmacéutica te prepara un botiquín cada partida, y las vendas
   también salen en el centro comercial.
 - **Dólares:** se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.
   El talento Sanitario y la alerta 4 siguen cambiando lo que curan. En la sala de pruebas el 1 y el 2 sacan zombis.

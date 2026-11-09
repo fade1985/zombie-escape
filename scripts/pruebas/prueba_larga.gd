@@ -61,6 +61,7 @@ func _process(delta: float) -> void:
 		johnny.vida = 40
 		johnny.position = a.position + Vector2(0, 40)
 		johnny.get_node("Camara").reset_smoothing()
+		a.get_node("Zona").abrir()   # M11: se abre con el clic (zona_usar.gd)
 		$Pantalla/HUD.hide()   # para que se vea la pared de arriba en la foto
 	if antes < 1.4 and tiempo >= 1.4:
 		var a: Node2D = mapa.armaritos[0] if not mapa.armaritos.is_empty() else null
