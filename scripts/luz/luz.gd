@@ -26,7 +26,7 @@ const LINTERNA_GIRO := 10.0                # lo rápido que se vuelve hacia dond
 const LINTERNA_COLOR := Color(1.0, 0.95, 0.82)
 const PECHO := Vector2(0, -38)             # dónde va la linterna, desde los pies de Johnny (unos 27 píxeles del dibujo más arriba)
 const PECHO_DELANTE := Vector2(9, 4)       # cuánto se adelanta del centro hacia donde mira (de lado y hacia abajo)
-const RAYO_LARGO := 95.0                   # dónde llega al suelo el rayo del aire (donde el haz del suelo ya luce)
+const RAYO_LARGO := 110.0                  # dónde llega al suelo el rayo del aire (donde el haz del suelo ya luce)
 const RAYO_ANCHO := 26.0                   # medio ancho del rayo al llegar al suelo
 const FOGONAZO := Color(1.0, 0.82, 0.51)
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
@@ -156,7 +156,8 @@ func cono(capa: int) -> PointLight2D:
 # El dibujo del cono (se hace una vez): mirando hacia la derecha desde el centro. Sale de los pies (lo que hay
 # debajo de la linterna del pecho, en el suelo: si saliera de más arriba, pegado a un muro quedaría dentro de él
 # y se romperían las sombras), pero ahí no alumbra: la linterna apunta hacia delante y un poco hacia abajo, así
-# que la luz llega al suelo algo por delante de Johnny. Como una linterna de verdad, tiene dos partes: el
+# que la luz llega al suelo un paso por delante de Johnny (justo donde acaba el rayo del aire, que va del foco
+# hasta ahí: así se ve un solo haz que baja del pecho al suelo). Como una linterna de verdad, tiene dos partes: el
 # centro del haz, más fuerte y estrecho, que cae a media distancia, y alrededor un halo más flojo y ancho que
 # se va apagando hacia la punta
 static func hacer_cono() -> ImageTexture:
@@ -174,7 +175,7 @@ static func hacer_cono() -> ImageTexture:
 			var halo := (1.0 - smoothstep(LINTERNA_ANCHO * 0.6, LINTERNA_ANCHO, a)) * hacia_punta * 0.75
 			var nucleo := (1.0 - smoothstep(LINTERNA_ANCHO * 0.15, LINTERNA_ANCHO * 0.5, a)) \
 					* smoothstep(0.06, 0.26, d) * (1.0 - smoothstep(0.38, 0.85, d)) * 0.55
-			var k := clampf((halo + nucleo) * smoothstep(0.03, 0.17, d), 0.0, 1.0)
+			var k := clampf((halo + nucleo) * smoothstep(0.12, 0.3, d), 0.0, 1.0)
 			img.set_pixel(x, y, Color(k, k, k, 1.0))
 	textura_cono = ImageTexture.create_from_image(img)
 	return textura_cono
