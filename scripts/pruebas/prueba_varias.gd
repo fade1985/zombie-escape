@@ -3662,6 +3662,15 @@ func probar_archivador_logros() -> void:
 	var dentro: bool = archivador.filas.values().all(func(r: Rect2): return r.end.y <= archivador.size.y - 8)
 	print("Archivador · Edificios: %d filas, todas dentro: %s (esperado: 9, true)" % [archivador.filas.size(), dentro])
 	Captura.foto("captura-archivador-edificios.png")
+	# el resto de apartados, una foto de cada uno (captura-archivador-<apartado>.png), para ver todos los iconos
+	for tema in ["combate", "armas", "supervivientes", "sorpresas", "colecciones"]:
+		archivador.temas[tema].pressed.emit()
+		await get_tree().create_timer(0.4).timeout
+		archivador = ordenador.ventana.find_child("archivador", true, false)
+		Captura.foto("captura-archivador-%s.png" % tema)
+	archivador.temas["edificios"].pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
 	# el Resumen sin nada por cobrar
 	poner.call({"primer_turno": "cobrado", "desahucio": "cobrado"})
 	ordenador.abrir("")
