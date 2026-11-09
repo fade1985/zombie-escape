@@ -613,8 +613,8 @@ func animar() -> void:
 
 
 # Los avisos, en el suelo (por debajo de él): el arco del hachazo y, antes del giro, el cono por donde irá cada fuego,
-# desde sus pies hasta la pared (aviso.gd: rojo y llenándose, con las flechas del lado al que va a girar). Girando ya
-# no lleva cono debajo: se ve solo el fuego
+# desde sus pies hasta la pared (aviso.gd: con el estilo flojo, llenándose, y dos flechas curvas hacia el lado al que
+# va a girar). Girando ya no lleva cono debajo: se ve solo el fuego
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -628,8 +628,10 @@ func _draw() -> void:
 			var n: int = CONOS[fase - 1]
 			for i in mini(n, datos.puntas.size()):
 				var a: float = datos.angulo + i * TAU / n
-				Aviso.abanico(self, pies, a, ABERTURA, 0.0, k, tiempo, 1.0, 0.0, i).rayos(datos.puntas[i])
-			Aviso.flechas_giro(self, pies, datos.sentido, minf(1.0, k * 3.0), tiempo, CONOS.max())
+				var cono := Aviso.abanico(self, pies, a, ABERTURA, 0.0, k, tiempo, 1.0, 0.0, i)
+				cono.rayos(datos.puntas[i])
+				cono.sutil = true
+				cono.flechas = datos.sentido
 	draw_set_transform(Vector2.ZERO)
 
 

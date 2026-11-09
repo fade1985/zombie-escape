@@ -13,7 +13,8 @@
 #   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos,
 #     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()) y ahí acaba en la
 #     estrella de las cargas.
-#   - flechas_giro(): los dos anillos de flechas del giro del bombero.
+#   El cono del giro del bombero lleva dos flechas curvas hacia donde girará (flechas) y, como las marcas de lo que se
+#   lanza (proyectil.gd: molotovs, sartenes, probetas...), un estilo más flojo (sutil).
 # Lo pinta un shader (aviso.gdshader): así no cuesta nada aunque tenga miles de cuadraditos. Cada aviso va en un nodo
 # hijo del jefe, por detrás de él, que se crea solo la primera vez y se esconde cuando deja de pedirse. Un jefe puede
 # tener varios a la vez ("cual": 0, 1, 2...), como las lenguas del glotón (tres, o seis enfadado).
@@ -24,7 +25,7 @@ const SHADER := preload("res://escenas/personajes/aviso.gdshader")
 const ROJO := Color(1, 0.24, 0.35)
 const MAX_RAYOS := 37
 
-var forma := 0          # 0: franja; 1: abanico; 2: barra; 3: flechas del giro
+var forma := 0          # 0: franja; 1: abanico; 2: barra
 var desde := Vector2.ZERO
 var angulo := 0.0
 var largo := 100.0      # lo largo de la franja o de la barra, o hasta dónde llega el abanico
@@ -36,7 +37,8 @@ var sombra := 0.0       # el abanico de un salto: lo que ocupa la sombra de quie
 var tinte := ROJO       # el abanico y la barra: su color
 var ondas := 0.0        # el abanico: lo deprisa que van las ondas hacia el jefe (0, sin ondas)
 var hasta_rayos := PackedFloat32Array()   # el abanico: hasta dónde llega cada rayo, de un borde al otro (vacío: todos igual)
-var sentido := 1.0      # las flechas del giro: hacia qué lado gira
+var flechas := 0.0      # el abanico: las flechas curvas del giro (1, como las agujas del reloj; -1, al revés; 0, sin)
+var sutil := false      # el estilo flojo (el cono del giro, las marcas de lo que se lanza)
 var destella := true    # el destello del final (no, en lo que ya está pasando: aspirando, girando)
 var pedido := 0         # el último fotograma en que se pidió (si deja de pedirse, se esconde)
 static var apagados := false   # el panel de la sala de pruebas los apaga, para ver a los jefes sin ellos
@@ -130,16 +132,6 @@ static func alcance(jefe: Node2D, desde_: Vector2, angulo_: float, largo_: float
 	return minf(largo_, largo_ * hasta[0] + ancho) if hasta[1] < 1.0 else largo_
 
 
-# Las flechas del giro del bombero alrededor de "desde": corren hacia "sentido_" (1, como las agujas del reloj). "k",
-# lo que se ven (0 a 1)
-static func flechas_giro(jefe: Node2D, desde_: Vector2, sentido_: float, k: float, tiempo: float, cual := 0) -> Aviso:
-	var aviso := pedir(jefe, 3, desde_, 0.0, k, tiempo, cual)
-	aviso.sentido = sentido_
-	aviso.largo = 216.0
-	aviso.destella = false
-	return aviso
-
-
 # Que el abanico llegue hasta donde dice cada rayo ("puntas": de un borde al otro, todos a la misma distancia del
 # anterior), en vez de todo igual: hasta las paredes
 func rayos(puntas: Array) -> void:
@@ -176,6 +168,8 @@ static func pedir(jefe: Node2D, forma_: int, desde_: Vector2, angulo_: float, k:
 	aviso.ondas = 0.0
 	aviso.hasta_rayos.clear()
 	aviso.destella = true
+	aviso.flechas = 0.0
+	aviso.sutil = false
 	aviso.pedido = Engine.get_process_frames()
 	aviso.visible = not apagados
 	var m: ShaderMaterial = aviso.material
@@ -208,7 +202,8 @@ func _draw() -> void:
 	m.set_shader_parameter("sombra", sombra)
 	m.set_shader_parameter("tinte", Vector3(tinte.r, tinte.g, tinte.b))
 	m.set_shader_parameter("ondas", ondas)
-	m.set_shader_parameter("sentido", sentido)
+	m.set_shader_parameter("flechas", flechas)
+	m.set_shader_parameter("sutil", sutil)
 	m.set_shader_parameter("destella", destella)
 	m.set_shader_parameter("n_rayos", hasta_rayos.size())
 	if hasta_rayos.size() > 1:

@@ -1149,6 +1149,43 @@ func probar_avisos() -> void:
 		["bombero", "aviso_giro", "AVISO_GIRO"], ["bombero", "giro", 1.0]])
 
 
+# --marcas: lo que lanzan los jefes (proyectil.gd), cada uno con su marca en el suelo (un aviso con el estilo flojo):
+# los cinco a la vez, alrededor de Johnny, a media vuelo y a punto de caer
+func probar_marcas() -> void:
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	johnny.invulnerable = 999.0
+	johnny.position = centro + Vector2(0, -60)
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(2.0, 2.0)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.2, false).timeout
+	var tipos := ["molotov_jefe", "sarten", "probeta_acido", "cafe", "cubo"]
+	for i in tipos.size():
+		var p: Node2D = load("res://escenas/armas/proyectil.tscn").instantiate()
+		p.tipo = tipos[i]
+		p.desde = centro + Vector2(0, 120)
+		p.hasta = centro + Vector2(-200 + i * 100, -60 + (i % 2) * 90)
+		johnny.get_parent().add_child(p)
+	for k in [0.5, 0.95]:
+		await get_tree().create_timer(0.8 * k - (0.4 if k > 0.5 else 0.0), false).timeout
+		Captura.foto("captura-marcas-%d.png" % roundi(k * 100))
+	get_tree().quit()
+
+
 # Para --golpes y --avisos: cada jefe de la lista ([jefe, estado, lo que dura el aviso: un número o el nombre de su
 # constante]), solo, quieto y mirando a la izquierda, con su aviso a medio cargar y casi al final
 func fotos_de_avisos(prefijo: String, lista: Array) -> void:

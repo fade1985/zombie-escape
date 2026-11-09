@@ -55,8 +55,13 @@ func _ready() -> void:
 	if TIPOS[tipo].has("marca"):
 		marca = Node2D.new()
 		marca.z_index = -6   # este nodo va a 5: la marca, a -1, como los charcos
-		marca.draw.connect(pintar_marca)
 		add_child(marca)
+
+
+# La marca se pide en cada fotograma de dibujo (no de física), que si no el aviso se esconde
+func _process(_delta: float) -> void:
+	if marca:
+		pintar_marca(minf(t / TIPOS[tipo].vuelo, 1.0))
 
 
 func _physics_process(delta: float) -> void:
@@ -65,8 +70,6 @@ func _physics_process(delta: float) -> void:
 	var k: float = minf(t / datos.vuelo, 1.0)
 	global_position = desde.lerp(hasta, k)
 	queue_redraw()
-	if marca:
-		marca.queue_redraw()
 	if k >= 1.0:
 		caer(datos)
 
@@ -235,13 +238,11 @@ static func cubo(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
 
 
 # Dónde caerá la sartén: un anillo rojo que se va llenando
-func pintar_marca() -> void:
-	var k: float = minf(t / TIPOS[tipo].vuelo, 1.0)
-	var r: float = TIPOS[tipo].marca
-	var rojo := Color(1, 0.24, 0.35)
-	marca.draw_set_transform(hasta - global_position, 0.0, Vector2(1, 0.6))
-	Formas.disco(marca, Vector2.ZERO, r * k, Color(rojo, 0.12 + 0.15 * k))
-	Formas.arco(marca, Vector2.ZERO, r, 0.0, TAU, 32, Color(rojo, 0.5 + 0.4 * k), 3.0)
+# La marca donde va a caer: un aviso de los jefes (aviso.gd), un círculo aplastado con el estilo flojo, el mismo que
+# el cono del giro del bombero, que se llena mientras vuela. Va en "marca", que está por debajo de todos
+func pintar_marca(k: float) -> void:
+	var aviso := Aviso.abanico(marca, hasta - global_position, 0.0, PI, TIPOS[tipo].marca, k, t, 0.6)
+	aviso.sutil = true
 
 
 # La botella del molotov, con el dibujo del icono (botella de cristal, líquido naranja y trapo ardiendo), dando vueltas

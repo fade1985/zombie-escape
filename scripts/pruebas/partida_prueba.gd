@@ -48,6 +48,8 @@
 #                       franja antes de volver a salir                                     [prueba_jefes_salas.gd]
 #   --golpes            el aviso de los golpes cuerpo a cuerpo de cada jefe                 [prueba_jefes_salas.gd]
 #   --avisos            el resto de los avisos de los jefes (lenguas, rayas, círculos...)  [prueba_jefes_salas.gd]
+#   --marcas            las marcas en el suelo de lo que lanzan los jefes (molotov, sartén, probeta, café y cubo),
+#                       en pleno vuelo y a punto de caer                                    [prueba_jefes_salas.gd]
 #   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --azotea            la azotea y su helipuerto elevado: la rampa, el jefe esperando, la valla y el jefe final
@@ -496,6 +498,9 @@ func empezar_prueba() -> void:
 	elif "--avisos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_avisos()
+	elif "--marcas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_marcas()
 	elif "--gotas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gotas()

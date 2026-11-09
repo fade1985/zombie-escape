@@ -1,6 +1,6 @@
 // Los avisos de los jefes en el suelo (aviso.gd), de pixel art: cada cuadradito de 2 de la cuadrícula del suelo mira
 // dónde cae en el aviso y de qué color va. Lo que se enciende poco a poco dice cuánto falta (con lo último, pega) y,
-// justo antes de pegar, un fogonazo blanco. Cuatro formas:
+// justo antes de pegar, un fogonazo blanco. Tres formas:
 //   - la franja de una carga: flechas grandes (>), del ancho del jefe, que se encienden una tras otra hacia donde va;
 //     a los lados, raíles de puntos que marcan el ancho; y al final, una estrella de choque si se va a estrellar contra
 //     la pared (y quedarse atontado) o una X si no.
@@ -12,10 +12,11 @@
 //   - la barra: una franja recta que se llena hacia fuera como el abanico (las lenguas, los latigazos, los alfileres
 //     y las rayas por donde irán los disparos), con el mismo estilo. Si es fina, de color con un contorno oscuro
 //     (hilo()). Si el disparo se para en una pared (choca), acaba en la estrella de las cargas.
-//   - las flechas del giro del bombero: dos anillos de flechas alrededor de él que corren hacia el lado al que girará.
+//     El cono del giro del bombero lleva además dos flechas curvas hacia donde girará (flecha_curva()) y, como las
+//     marcas de lo que se lanza (molotovs, sartenes, probetas...), el estilo flojo (sutil, relleno_sutil()).
 shader_type canvas_item;
 
-uniform int forma = 0;          // 0: franja; 1: abanico; 2: barra; 3: flechas del giro
+uniform int forma = 0;          // 0: franja; 1: abanico; 2: barra
 uniform vec2 origen;            // de dónde sale, en el mundo
 uniform vec2 hacia = vec2(1.0, 0.0);
 uniform float largo = 100.0;    // lo largo de la franja o de la barra, o hasta dónde llega el abanico
@@ -31,7 +32,8 @@ uniform float ondas = 0.0;      // el abanico: lo deprisa que van las ondas haci
 uniform float rayos[37];        // el abanico: hasta dónde llega cada rayo, de un borde al otro (si n_rayos > 1)
 uniform int n_rayos = 0;
 uniform bool destella = true;   // el destello del final (no, en lo que ya está pasando: aspirando, girando)
-uniform float sentido = 1.0;    // las flechas del giro: 1, como las agujas del reloj; -1, al revés
+uniform float flechas = 0.0;    // el abanico: las flechas curvas del giro (1, como las agujas del reloj; -1, al revés; 0, sin)
+uniform bool sutil = false;     // el estilo flojo (el cono del giro del bombero, las marcas de lo que se lanza)
 
 const float CELDA = 2.0;
 // las flechas de la franja
@@ -140,9 +142,32 @@ bool late() {
 	return k > 0.35 && fract(vueltas) < 0.5;
 }
 
+// El estilo flojo, para lo que es grande o se repite mucho (el cono del giro del bombero, las marcas de los molotovs,
+// sartenes, probetas, cafés y cubos): lo mismo, pero el suelo apenas se oscurece, los bordes no laten y el relleno es
+// más suave (el borrador de tools/pixelfx/_giro.js)
+vec4 relleno_sutil(float d, float hasta, float borde, vec3 oscuro, vec3 claro) {
+	if (borde < CELDA) {
+		return vec4(oscuro, 0.6);
+	}
+	if (borde < CELDA * 2.0) {
+		return vec4(tinte, 0.75);
+	}
+	float lleno = hasta * k;
+	if (d < lleno - CELDA * 1.5) {
+		return vec4(tinte, 0.28 + 0.12 * k);
+	}
+	if (d < lleno + CELDA * 0.5) {
+		return vec4(claro, 0.7);
+	}
+	return vec4(oscuro, 0.18);
+}
+
 vec4 relleno(float d, float hasta, float borde) {
 	vec3 oscuro = tinte * 0.22;
 	vec3 claro = mix(tinte, vec3(1.0), 0.75);
+	if (sutil) {
+		return relleno_sutil(d, hasta, borde, oscuro, claro);
+	}
 	if (borde < CELDA) {
 		return vec4(oscuro, 0.9);
 	}
@@ -175,10 +200,48 @@ vec4 hilo(float d, float hasta, float a) {
 	return vec4(late() ? mix(tinte, vec3(1.0), 0.5) : tinte, 0.45 + 0.1 * k);
 }
 
+// Las flechas curvas del giro del bombero: junto al borde de delante del cono, dos flechas que rodean al jefe hacia
+// donde girará ("flechas"), a media distancia y casi al final, y que se van llenando de claro con el aviso. Con su
+// contorno oscuro. "r" y "ang": dónde cae el cuadradito, desde el jefe
+vec4 flecha_curva(float r, float ang) {
+	float h = atan(hacia.y, hacia.x);
+	// hasta dónde llega el cono por su borde de delante (los rayos van de -medio a +medio)
+	float lejos = n_rayos > 1 ? (flechas > 0.0 ? rayos[n_rayos - 1] : rayos[0]) : largo;
+	float d = ang - (h + flechas * (medio + 0.08));
+	float u = atan(sin(d), cos(d)) * flechas;   // lo que se ha adelantado, en radianes
+	float ve = min(1.0, k * 4.0);
+	for (int i = 0; i < 2; i++) {
+		float r0 = lejos * (i == 0 ? 0.45 : 0.8);
+		float a_lo_largo = u * r0;
+		float a_lo_ancho = abs(r - r0);
+		float cuerpo = r0 * 0.55;
+		float cabeza = 20.0;
+		if (a_lo_largo < -4.0 || a_lo_largo > cuerpo + cabeza + 4.0) {
+			continue;
+		}
+		float ancho = a_lo_largo <= cuerpo ? 5.0 : 13.0 * (1.0 - (a_lo_largo - cuerpo) / cabeza);
+		float va = a_lo_largo / (cuerpo + cabeza);
+		if (a_lo_largo >= 0.0 && a_lo_largo <= cuerpo + cabeza && a_lo_ancho <= ancho) {
+			bool lleno = va < k;
+			return vec4(lleno ? (k > 0.85 ? vec3(1.0) : BRILLO) : ROJO, (lleno ? 0.95 : 0.6) * ve);
+		}
+		if (a_lo_ancho <= max(ancho, 2.0) + 3.0) {
+			return vec4(OSCURO.rgb, 0.7 * ve);
+		}
+	}
+	return vec4(0.0);
+}
+
 vec4 abanico(vec2 p) {
 	vec2 q = vec2(p.x, p.y / aplasta);
 	float r = length(q);
 	float giro = acos(clamp(dot(q, hacia) / max(r, 0.001), -1.0, 1.0));   // lo que se aparta del medio
+	if (flechas != 0.0) {
+		vec4 f = flecha_curva(r, atan(q.y, q.x));
+		if (f.a > 0.0) {
+			return f;
+		}
+	}
 	if (giro > medio) {
 		return vec4(0.0);
 	}
@@ -193,7 +256,8 @@ vec4 abanico(vec2 p) {
 	if (r > hasta) {
 		return vec4(0.0);
 	}
-	float borde = hasta - r;
+	// lo que le queda hasta el borde, en el suelo: si está aplastado, arriba y abajo está más cerca
+	float borde = (hasta - r) * mix(1.0, aplasta, r > 0.0 ? (q.y * q.y) / (r * r) : 0.0);
 	if (medio < 3.1) {
 		borde = min(borde, (medio - giro) * r);   // los lados (un círculo entero no tiene)
 	}
@@ -229,33 +293,6 @@ vec4 barra(vec2 p) {
 	return color;
 }
 
-// Las flechas del giro: dos anillos (de 110 y de 200, con 6 y 10 flechas) que corren hacia el lado al que girará.
-// Rojas y con el contorno oscuro, para que se vean en cualquier suelo
-vec4 flechas_giro(vec2 p) {
-	float r = length(p);
-	float ang = atan(p.y, p.x);
-	for (int anillo = 0; anillo < 2; anillo++) {
-		float radio = anillo == 0 ? 110.0 : 200.0;
-		float n = anillo == 0 ? 6.0 : 10.0;
-		float hueco = 6.2831853 / n;
-		float b = mod(ang - tiempo * 1.2 * sentido, hueco) - hueco * 0.5;   // lo que se aparta de su flecha
-		float t = b * radio * sentido;   // a lo largo del anillo, hacia donde gira
-		float e = r - radio;             // hacia fuera
-		if (abs(e) > 16.0 || abs(t) > 16.0) {
-			continue;
-		}
-		// una flecha (>) que apunta hacia donde gira: la punta delante y los lados por detrás
-		float d = t + abs(e) * 0.8;
-		if (d > -5.0 && d < 5.0 && abs(e) < 13.0) {
-			return vec4(ROJO, 0.95 * k);
-		}
-		if (d > -7.0 && d < 7.0 && abs(e) < 15.0) {
-			return vec4(OSCURO.rgb, OSCURO.a * k);
-		}
-	}
-	return vec4(0.0);
-}
-
 void fragment() {
 	vec2 p = floor(mundo / CELDA) * CELDA + CELDA * 0.5 - origen;
 	vec4 color;
@@ -263,15 +300,13 @@ void fragment() {
 		color = franja(p);
 	} else if (forma == 1) {
 		color = abanico(p);
-	} else if (forma == 2) {
-		color = barra(p);
 	} else {
-		color = flechas_giro(p);
+		color = barra(p);
 	}
 	if (color.a <= 0.0) {
 		discard;
 	}
 	// el fogonazo blanco justo antes de pegar (el último 6 %)
-	float destello = destella ? clamp((k - 0.94) / 0.02, 0.0, 1.0) * 0.8 : 0.0;
+	float destello = destella ? clamp((k - 0.94) / 0.02, 0.0, 1.0) * (sutil ? 0.5 : 0.8) : 0.0;
 	COLOR = mix(color, vec4(1.0, 1.0, 1.0, max(color.a, 0.6)), destello * step(0.3, color.a));
 }

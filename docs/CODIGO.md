@@ -135,12 +135,14 @@ en una línea.
   la criatura, `Aviso.golpe`, se cortan donde chocarían con una pared o un mueble, porque no los atraviesan: solo
   dan a Johnny si no está `Aviso.tapado`, un rayo de la capa 1), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
   criatura; se cortan donde el disparo se pararía en una pared o un mueble y ahí acaban en la estrella de las
-  cargas; `Aviso.alcance`, medido en cada fotograma con un círculo del ancho de la barra y la capa 1) y las
-  flechas del giro del bombero. Los golpes, círculos y barras van con el estilo del borrador A de pixelfx
+  cargas; `Aviso.alcance`, medido en cada fotograma con un círculo del ancho de la barra y la capa 1). El cono del
+  giro del bombero lleva dos flechas curvas hacia donde girará (`flechas`) y, como las marcas en el suelo de lo que
+  lanzan los jefes (`proyectil.gd`: molotovs, sartenes, probetas, cafés y cubos, que son un `Aviso.abanico` aplastado),
+  un estilo más flojo (`sutil`; borradores en `tools/pixelfx/_giro.js` y `giro-a.js`). Los golpes, círculos y barras van con el estilo del borrador A de pixelfx
   (`tools/pixelfx/aviso-a.js` y `_aviso.js`, que no se exportan: solo para probar ideas): toda la zona oscura desde el
   principio, con dos bordes (el de dentro late cada vez más deprisa), el relleno de color con su frente claro y un
   fogonazo blanco justo antes de pegar (`relleno()` y, en las rayas finas, `hilo()`, con contorno oscuro). Se prueban con
-  `--golpes`, `--franja`, `--avisos`, `--disparos` (las barras junto a la pared y en campo abierto) y
+  `--golpes`, `--franja`, `--avisos`, `--marcas`, `--disparos` (las barras junto a la pared y en campo abierto) y
   `--golpes-pared` (cada golpe, salto y onda con Johnny tras la pared, y su aviso cortado). Heredan:
   - Apartamentos: `gloton.gd` (+ `lengua.gd`), `gymbro.gd` (+ `pesa.gd`; con los suplementos se vuelve de metal, que se desconcha según pierde armadura y revienta
   en esquirlas al acabarse, con los sonidos "acero", "metalizar" y "chatarra"; prueba: `--captura --jefe gymbro --metal`), `bombero.gd` (+ `bola_fuego.gd` y `chorro_fuego.gd`, el fuego de los conos del giro: bocanadas de pixelfx que vuelan hasta la pared, se aplastan contra ella y acaban en humo; las balas rebotan en el borde de su burbuja, `bala.rebotar`, con un fogonazo y una onda, `bombero.onda_en`).
