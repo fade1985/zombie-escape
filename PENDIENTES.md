@@ -21,6 +21,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M15** Johnny: la animación de caerse y las estrellas que le dan vueltas en la cabeza, nuevas con GPT.
 - **M16** Bidones contra los jefes: en la sala del Glotón, un bidón de fuego; en la del jefe de bomberos, uno de ácido. Se usa con clic, sale rodando hasta el jefe y lo deja atontado 5 s; al bombero no le afecta mientras es invulnerable. Los dibujos de los bidones, con GPT.
 - **M17** Supervivientes: la animación de forzar la cerradura, nueva con GPT.
+- **M91** Ordenador: las Noticias cambian de sitio. El dueño contará el plan con detalle cuando vuelva GPT; recordárselo entonces.
 
 ## Por limar
 
