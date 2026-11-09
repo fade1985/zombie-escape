@@ -21,8 +21,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M8** Trasteros: puertas, camas y estanterías más realistas con lo de los muebles.
 - **M9** Pasillo del trastero: sus objetos, más realistas con lo de los muebles.
 - **M10** Portal: poner un felpudo grande (el dueño adjuntará una foto de referencia).
-- **M11** Botiquines: se abren con un clic del ratón, como el ordenador.
-- **M12** Armarios de botiquín a la mitad: uno por apartamento (un baño de cada apartamento se queda sin armario).
 - **M13** Apartamentos: todos los muebles de cocina, salón y dormitorios, más realistas con lo de los muebles.
 - **M14** Científicos muertos que llevan los dosieres y el dosier flotante, rehechos con GPT.
 
