@@ -1,6 +1,8 @@
-# El minimapa: un plano de la planta arriba a la derecha, como el de una mazmorra. El pasillo en medio y, unida
-# a él por un trocito de pasillo, una sala por cada puerta (arriba y abajo), la llegada a la izquierda y las
-# escaleras a la derecha. Gris = sin visitar, rojo = con zombis dentro, claro = limpio, amarillo = donde estás (con un
+# El minimapa, arriba a la derecha. En el pasillo de la planta (y en la exposición y la sala de pruebas), el plano de la
+# planta, como el de una mazmorra; dentro de un sitio (un piso, la habitación de un jefe, una tienda, la sala de
+# mantenimiento, las viviendas...), el plano de ese sitio (ver "El plano del sitio", abajo).
+# El plano de la planta: el pasillo en medio y, unida a él por un trocito de pasillo, una sala por cada puerta (arriba y
+# abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar, rojo = con zombis dentro, claro = limpio, amarillo = donde estás (con un
 # marco que parpadea). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
 # (supervivientes.gd).
@@ -28,6 +30,10 @@ const PASILLO_Y := 58.0     # dónde empieza (por arriba) el pasillo
 const CASILLA := 32.0
 const PUNTO := Color("#ff3b3b")     # los zombis, con las cámaras
 const BRILLO := Color("#ffb3a0")
+const SALA := Vector2(32, 16)       # cada apartamento en el plano de la planta: todos iguales, sea como sea de grande
+const OSCURA := Color("#2e2a36")    # en el plano de un sitio, las habitaciones aún sin pisar (con la niebla del mapa)
+const DONDE := Color("#e6d68a")     # la habitación en la que está Johnny
+const PASO := Color("#a39a84")      # los huecos de las puertas de dentro
 const ICONOS := {
 	"puerta": preload("res://assets/ui/iconos/puerta.png"),
 	"herramientas": preload("res://assets/ui/iconos/herramientas.png"),
@@ -41,6 +47,10 @@ var partida: Node           # de donde saca la planta y el sitio en el que está
 var marco := StyleBoxTexture.new()
 var tiempo := 0.0
 var camaras := false        # el técnico ya está rescatado: se ven los zombis
+# El plano del sitio, una casilla por píxel, y lo que lo cambia (para no rehacerlo en cada fotograma)
+var plano := Image.new()
+var plano_textura: ImageTexture
+var plano_firma := ""
 
 
 func _ready() -> void:
@@ -49,6 +59,7 @@ func _ready() -> void:
 	for lado in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
 		marco.set_texture_margin(lado, 14)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST   # (el plano del sitio, ampliado, con sus píxeles enteros)
 	camaras = "tecnico" in Guardado.cargar().rescatados
 	set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	offset_left = -ANCHO - 12
@@ -62,9 +73,9 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
-# Las salas: cada una un diccionario con su rectángulo, su color, si estás ahí, su icono, si está ahí el
-# superviviente y el trocito de pasillo ("puerta") que la une al pasillo, como en el plano de una mazmorra.
-# Los apartamentos más grandes salen más anchos. Todo cae en números pares: 2 unidades = un píxel del dibujo.
+# Las salas del plano de la planta: cada una un diccionario con su rectángulo, su color, si estás ahí, su icono, si está
+# ahí el superviviente y el trocito de pasillo ("puerta") que la une al pasillo, como en el plano de una mazmorra.
+# Todas del mismo tamaño (SALA). Todo cae en números pares: 2 unidades = un píxel del dibujo.
 func casillas() -> Array:
 	var planta: Dictionary = partida.planta
 	var pasillo: Dictionary = planta.sitios[0]
@@ -78,12 +89,6 @@ func casillas() -> Array:
 	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": CLARO, "aqui": aqui == 0, "icono": "", "sos": en_mostrador,
 		"puerta": Rect2(), "sitio": -1 if abajo() else 0,
 		"sos_x": x0 + planta.superviviente.mostrador.x / pasillo.ancho * largo if en_mostrador else 0.0})
-	if abajo():
-		# bajando en el ascensor: el pasillo de la planta baja y, en su puerta A, la sala de mantenimiento
-		var x := par(x0 + float(Planta.PUERTA_A) / pasillo.ancho * largo)
-		lista.append({"r": Rect2(x - 17, PASILLO_Y - 22, 34, 16), "color": CLARO, "aqui": true, "icono": "herramientas",
-			"sos": false, "puerta": Rect2(x - 3, PASILLO_Y - 8, 6, 8)})
-		return lista
 	var sos: int = planta.superviviente.sitio if partida.supervivientes.encerrado() else -1
 	for s in pasillo.salidas:
 		match s.tipo:
@@ -109,9 +114,8 @@ func casillas() -> Array:
 					icono = "herramientas"
 				elif sitio.tipo == "jefe":
 					icono = "jefe"
-				# de 28 a 46 de ancho según lo grande que sea el apartamento
-				var ancho := par(clampf(10.0 + sitio.ancho / CASILLA * 0.8, 28.0, 46.0))
-				var alto := 18.0 if sitio.tipo == "jefe" else 16.0
+				var ancho := SALA.x
+				var alto := SALA.y
 				var x := par(x0 + float(s.en) / pasillo.ancho * largo)
 				var arriba: bool = s.dir == "arriba"
 				var y := PASILLO_Y - 6 - alto if arriba else PASILLO_Y + 16
@@ -137,15 +141,27 @@ func _draw() -> void:
 		return
 	draw_style_box(marco, Rect2(Vector2.ZERO, size))
 	var letra := get_theme_default_font()
-	var titulo: String = Planta.nombre_planta(1) if abajo() else Planta.nombre_de(partida.planta)   # (ya traducido)
-	draw_string_outline(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, 4, BORDE)
-	draw_string(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, Color("#e6c34a"))
-	# el fondo: papel oscuro cuadriculado, como el plano de una mazmorra
+	# arriba, el nombre de la planta o, dentro de un sitio, el del sitio (ya traducidos)
+	var titulo: String = Planta.nombre_de_sitio(partida.planta.sitios[partida.aqui]) if dentro() else Planta.nombre_de(partida.planta)
+	draw_string_outline(letra, Vector2(4, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO - 8, 16, 4, BORDE)
+	draw_string(letra, Vector2(4, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO - 8, 16, Color("#e6c34a"))
+	# el fondo: papel oscuro cuadriculado, como el plano de una mazmorra, con su filo hundido
 	var fondo := Rect2(8, 30, ANCHO - 16, ALTO - 38)
+	draw_rect(fondo.grow(2), BORDE)
 	draw_rect(fondo, FONDO)
 	for gx in range(int(fondo.position.x) + 4, int(fondo.end.x), 8):
 		for gy in range(int(fondo.position.y) + 4, int(fondo.end.y), 8):
 			draw_rect(Rect2(gx, gy, 2, 2), CUADRICULA)
+	draw_rect(Rect2(fondo.position, Vector2(fondo.size.x, 2)), SOMBRA)   # (la sombra del filo de arriba)
+	if dentro():
+		dibujar_sitio(fondo)
+	else:
+		dibujar_planta()
+
+
+# El plano de la planta: el pasillo, las salas y sus iconos
+func dibujar_planta() -> void:
+	var letra := get_theme_default_font()
 	var lista := casillas()
 	# primero las sombras, luego los trocitos de pasillo que unen cada sala y, encima, las salas
 	for c in lista:
@@ -170,7 +186,7 @@ func _draw() -> void:
 		dibujar_zombis(lista)
 	for c in lista:
 		if c.icono != "":
-			draw_texture_rect(ICONOS[c.icono], Rect2(c.r.get_center() - Vector2(8, 8), Vector2(16, 16)), false)
+			icono(c.icono, c.r.get_center())
 	# el "!" del superviviente, en una esquina de su sala
 	for c in lista:
 		if c.sos:
@@ -184,6 +200,145 @@ func _draw() -> void:
 	for c in lista:
 		if c.aqui:
 			draw_rect(c.r.grow(4), Color(AMARILLO, 0.5 + sin(tiempo * 6.0) * 0.3), false, 2.0)
+
+
+# Un icono del plano (16 × 16) centrado en "centro", con su sombra para que se lea sobre cualquier sala
+func icono(nombre: String, centro: Vector2) -> void:
+	var r := Rect2(Vector2(par(centro.x - 8), par(centro.y - 8)), Vector2(16, 16))
+	draw_texture_rect(ICONOS[nombre], Rect2(r.position + Vector2(2, 2), r.size), false, SOMBRA)
+	draw_texture_rect(ICONOS[nombre], r, false)
+
+
+# ── El plano del sitio ──
+# Dentro de un sitio, su plano visto desde arriba, una casilla del mapa por píxel del dibujo (sin el muro de fuera):
+# cada habitación clara si ya se ha pisado y a oscuras si no (con la misma niebla del mapa, que se va aclarando a la
+# vez), la de Johnny más amarilla, los huecos de las puertas de dentro y las salidas en verde. Encima, Johnny (un
+# punto amarillo que se mueve con él), la llave si está en el suelo de una habitación ya vista, el «!» del
+# superviviente y, con las cámaras del técnico, los zombis
+
+# ¿Se enseña el plano del sitio? En todos menos en el pasillo de la planta, la exposición y la sala de pruebas
+func dentro() -> bool:
+	var sitios: Array = partida.planta.sitios
+	return partida.aqui > 0 and partida.aqui < sitios.size() and sitios[partida.aqui].tipo not in ["pasillo", "expo", "armas"]
+
+
+# Las casillas del sitio: las del apartamento (con sus muros) o, si no tiene (la azotea, el laboratorio...), un
+# rectángulo de suelo. "borde": las casillas de muro de fuera, que no se pintan
+func rejilla(sitio: Dictionary) -> Dictionary:
+	if sitio.has("apt"):
+		return {"cols": sitio.apt.cols, "filas": sitio.apt.filas, "dueno": sitio.apt.dueno, "borde": Apartamento.BORDE}
+	var cols := int(sitio.ancho / CASILLA)
+	var filas := int(sitio.alto / CASILLA)
+	var dueno := PackedInt32Array()
+	dueno.resize(cols * filas)
+	dueno.fill(0)
+	return {"cols": cols, "filas": filas, "dueno": dueno, "borde": 0}
+
+
+func dibujar_sitio(fondo: Rect2) -> void:
+	var sitio: Dictionary = partida.planta.sitios[partida.aqui]
+	var mapa: Node = partida.mapa
+	if mapa == null:
+		return
+	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
+	var en_mapa := johnny != null and mapa.is_ancestor_of(johnny)
+	var g := rejilla(sitio)
+	var b: int = g.borde
+	var cols: int = g.cols - b * 2
+	var filas: int = g.filas - b * 2
+	# la escala: lo más grande que quepa, en números pares si se puede (cada casilla, píxeles enteros)
+	var hueco := fondo.grow(-6)
+	var k := minf(hueco.size.x / cols, hueco.size.y / filas)
+	if k >= 2.0:
+		k = floorf(k / 2.0) * 2.0
+	var tam := Vector2(cols, filas) * k
+	var origen := fondo.get_center() - tam / 2.0
+	origen = Vector2(par(origen.x), par(origen.y))
+	var aqui_sala: int = mapa.zona_en(johnny.position) if en_mapa else -1
+	pintar_plano(g, mapa, aqui_sala)
+	var r := Rect2(origen, tam)
+	draw_rect(Rect2(r.position + Vector2(2, 2), r.size).grow(2), SOMBRA)
+	draw_rect(r.grow(2), BORDE)
+	draw_texture_rect(plano_textura, r, false)
+	# de casilla del mapa (en unidades) a punto del plano
+	var a_plano := func(p: Vector2) -> Vector2: return origen + (p / CASILLA - Vector2(b, b)) * k
+	# las salidas (la puerta de entrada, la del ascensor...), en verde por fuera del borde
+	for s in sitio.get("salidas", []):
+		var en: Vector2
+		match s.dir:
+			"abajo": en = Vector2(s.en, g.filas * CASILLA)
+			"arriba": en = Vector2(s.en, 0)
+			"izquierda": en = Vector2(0, s.en)
+			"derecha": en = Vector2(g.cols * CASILLA, s.en)
+			_: continue
+		var p: Vector2 = a_plano.call(en).clamp(r.position, r.end)
+		var hor: bool = s.dir in ["abajo", "arriba"]
+		var trozo := Rect2(p - (Vector2(4, 2) if hor else Vector2(2, 4)), Vector2(8, 4) if hor else Vector2(4, 8))
+		draw_rect(trozo.grow(2), BORDE)
+		draw_rect(trozo, VERDE)
+	# la llave (o la tarjeta) en el suelo, si su habitación ya se ha visto
+	for nombre in ["Llave", "Dorada"]:
+		var llave: Node2D = mapa.cosas.get_node_or_null(nombre) if mapa.cosas else null
+		if llave and mapa.niebla.get(mapa.zona_en(llave.position), 0.0) < 0.5:
+			icono("llave", a_plano.call(llave.position) - Vector2(0, 4))
+	# el «!» del superviviente encerrado, en su habitación
+	var sv: Dictionary = partida.planta.get("superviviente", {})
+	if partida.supervivientes.encerrado() and sv.get("sitio", -1) == partida.aqui and sv.has("sala") and sitio.has("apt"):
+		for sala in sitio.apt.salas:
+			if sala.id == sv.sala:
+				var c: Vector2 = a_plano.call((Vector2(sala.c0, sala.f0) + Vector2(sala.ancho, sala.fondo) / 2.0) * CASILLA)
+				exclamacion(c - Vector2(0, 8))
+	if camaras:
+		for z in vivos():
+			punto((a_plano.call(z.global_position - mapa.global_position) - Vector2(2, 2)).clamp(r.position, r.end - Vector2(4, 4)))
+	# Johnny: un punto amarillo con su borde, y un aro que late
+	if en_mapa:
+		var p: Vector2 = a_plano.call(johnny.position)
+		p = Vector2(par(p.x), par(p.y))
+		draw_arc(p, 5.0 + sin(tiempo * 6.0) * 1.5, 0.0, TAU, 16, Color(AMARILLO, 0.6), 2.0)
+		draw_rect(Rect2(p - Vector2(3, 3), Vector2(6, 6)).grow(1), BORDE)
+		draw_rect(Rect2(p - Vector2(3, 3), Vector2(6, 6)), AMARILLO)
+		draw_rect(Rect2(p - Vector2(3, 3), Vector2(2, 2)), Color.WHITE)
+
+
+# Rehace la imagen del plano si ha cambiado algo: el sitio, la habitación de Johnny o la niebla
+func pintar_plano(g: Dictionary, mapa: Node, aqui_sala: int) -> void:
+	var niebla: Dictionary = mapa.niebla
+	var firma := "%d/%d/%s" % [partida.aqui, aqui_sala, niebla.values().map(func(n): return snappedf(n, 0.05))]
+	if firma == plano_firma and plano_textura:
+		return
+	plano_firma = firma
+	var b: int = g.borde
+	var cols: int = g.cols
+	var dueno: PackedInt32Array = g.dueno
+	plano = Image.create(cols - b * 2, g.filas - b * 2, false, Image.FORMAT_RGBA8)
+	for f in range(b, g.filas - b):
+		for c in range(b, cols - b):
+			var o := dueno[f * cols + c]
+			var color := BORDE
+			if o >= 0:
+				color = (DONDE if o == aqui_sala else CLARO).lerp(OSCURA, niebla.get(o, 0.0))
+			elif o == -2:
+				# el hueco de una puerta: claro si se ve alguna de las dos habitaciones que une
+				var n := 1.0
+				for v in [Vector2i(-1, 0), Vector2i(1, 0), Vector2i(0, -1), Vector2i(0, 1)]:
+					var cc: int = c + v.x
+					var ff: int = f + v.y
+					if cc >= 0 and ff >= 0 and cc < cols and ff < g.filas and dueno[ff * cols + cc] >= 0:
+						n = minf(n, niebla.get(dueno[ff * cols + cc], 0.0))
+				color = PASO.lerp(OSCURA, n)
+			plano.set_pixel(c - b, f - b, color)
+	if plano_textura and plano_textura.get_size() == Vector2(plano.get_size()):
+		plano_textura.update(plano)
+	else:
+		plano_textura = ImageTexture.create_from_image(plano)
+
+
+# El «!» del superviviente, como el de los avisos de la línea de abajo: la letra del juego a 16, hueso con el contorno oscuro
+func exclamacion(centro: Vector2) -> void:
+	var letra := get_theme_default_font()
+	draw_string_outline(letra, centro + Vector2(-10, 6), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, 4, Tema.LINEA)
+	draw_string(letra, centro + Vector2(-10, 6), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, Tema.TINTA)
 
 
 # ── Las cámaras del técnico ──

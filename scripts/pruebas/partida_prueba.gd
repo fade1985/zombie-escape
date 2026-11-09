@@ -244,6 +244,8 @@
 #   --zombis-tienda     (con --edificio centro) cuántos zombis hay en cada tienda y en cada sala   [prueba_sitios.gd]
 #   --dificultad        lo que cambia de una planta a otra (M72): vida y zarpazo de los zombis, vida de la portera y los
 #                       botiquines y vendas de los armaritos (M12: un armarito por apartamento); solo números [prueba_sitios.gd]
+#   --minimapa          el minimapa: dentro de la sala de mantenimiento, en el pasillo (todos los pisos iguales), en un
+#                       piso al entrar y tras pasar a otra habitación, con las cámaras del técnico y en el jefe [prueba_sitios.gd]
 #   --volver            salir de un sitio y volver lo deja como estaba: un piso a medias, ya limpio, el pasillo, el jefe,
 #                       el superviviente, los eventos, la sala de pruebas y lo que ocupa una planta entera; con
 #                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]
@@ -375,6 +377,9 @@ func empezar_prueba() -> void:
 	elif "--volver" in args:
 		set_process(false)   # sin la prueba larga
 		probar_volver()
+	elif "--minimapa" in args:
+		set_process(false)
+		probar_minimapa()
 	elif "--fotos-tiendas" in args:
 		fotos_tiendas()
 	elif "--grito" in args:

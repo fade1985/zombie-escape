@@ -380,6 +380,46 @@ func nodos_ahora() -> String:
 		Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT), Performance.get_monitor(Performance.MEMORY_STATIC) / 1000000.0]
 
 
+# Con "--captura --minimapa": el minimapa (minimapa.gd) en cada sitio: la sala de mantenimiento (captura-minimapa-mant.png),
+# el pasillo con todos los pisos del mismo tamaño (-pasillo), un piso al entrar (-piso) y tras pasar a otra habitación
+# (-piso2), con las cámaras del técnico (-camaras) y la habitación del jefe (-jefe). Luego se cierra
+func probar_minimapa() -> void:
+	johnny.vida = 9999
+	var mini = $Pantalla/Minimapa
+	await get_tree().create_timer(0.5).timeout
+	print("Minimapa · en «%s», plano del sitio: %s (esperado: mantenimiento, true)" % [planta.sitios[aqui].tipo, mini.dentro()])
+	Captura.foto("captura-minimapa-mant.png")
+	await montar(0, 0, false)
+	await get_tree().create_timer(0.5).timeout
+	var anchos := {}
+	for c in mini.casillas():
+		if c.get("sitio", 0) > 0:
+			anchos[c.r.size] = true
+	print("Minimapa · pasillo, plano del sitio: %s · tamaños de los pisos: %s (esperado: false, uno solo)" % [mini.dentro(), anchos.keys()])
+	Captura.foto("captura-minimapa-pasillo.png")
+	var piso := eventos.piso(false)
+	await montar(piso, 0, false)
+	await get_tree().create_timer(1.0).timeout
+	Captura.foto("captura-minimapa-piso.png")
+	var salas: Array = planta.sitios[piso].apt.salas
+	var otra: Dictionary = salas[0]   # (el salón)
+	johnny.position = (Vector2(otra.c0, otra.f0) + Vector2(otra.ancho, otra.fondo) / 2.0) * 32.0
+	await get_tree().create_timer(1.5).timeout
+	print("Minimapa · piso: en la habitación %d (%s), vistas %s" % [mapa.zona_en(johnny.position), otra.uso, planta.sitios[piso].vistas.keys()])
+	Captura.foto("captura-minimapa-piso2.png")
+	mini.camaras = true
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-minimapa-camaras.png")
+	mini.camaras = false
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			await montar(i, 0, false)
+			await get_tree().create_timer(1.0).timeout
+			Captura.foto("captura-minimapa-jefe.png")
+			break
+	get_tree().quit()
+
+
 # Con "--captura --volver": salir de un sitio y volver lo deja como estaba (mapas de partida.gd). Un piso a medias, el
 # mismo ya limpio cruzando la puerta de verdad, el pasillo, la sala del jefe, la joyería (con --edificio centro --joyeria),
 # el superviviente, el incendio, la horda y la sala de pruebas; y lo que ocupa una planta entera y lo que se tarda en
