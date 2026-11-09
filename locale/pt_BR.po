@@ -5951,14 +5951,6 @@ msgid "Salir"
 msgstr "Sair"
 
 #: scripts/ui/menu_principal.gd
-msgid ""
-"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
-"Los controles y el modo de atacar están en Opciones"
-msgstr ""
-"Limpe cada apartamento para abrir a porta e cace o zumbi que leva a chave da síndica\n"
-"Os controles e o modo de ataque estão em Opções"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "Obrigado por jogar!"
 
@@ -6281,8 +6273,8 @@ msgid "Avisar de un texto mal traducido"
 msgstr "Avisar de uma tradução errada"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
-msgstr "Tremor da tela"
+msgid "Temblor"
+msgstr "Tremor"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
@@ -6527,10 +6519,6 @@ msgstr "Muito grande"
 #: scripts/ui/opciones.gd
 msgid "Suave"
 msgstr "Suave"
-
-#: scripts/ui/opciones.gd
-msgid "Sin temblor"
-msgstr "Sem tremor"
 
 #: scripts/ui/opciones.gd
 msgid "Select"
@@ -7287,91 +7275,3 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
-
-#, sin-usar
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Certeza? Aperte de novo"
-
-#, sin-usar
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Clique num quadro para trocar essa tecla ou esse botão"
-
-#, sin-usar
-msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
-msgstr "Na primeira vez que você encontra algo novo, uma janela explica o que acontece e como se faz. Os que você já viu estão em Tutorial."
-
-#, sin-usar
-msgid "Si empiezas otra, la guardada se pierde"
-msgstr "Se começar outra, a salva se perde"
-
-#, sin-usar
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "Limpe o prédio de zumbis, andar por andar"
-
-#, sin-usar
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "Melhor andar alcançado: %d   ·   Dólares guardados: $%d"
-
-#, sin-usar
-msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
-msgstr "Todo inimigo que você encontra fica aqui para sempre. Passe pelos quadros para ver a ficha dele."
-
-#, sin-usar
-msgid "Bestiario"
-msgstr "Bestiário"
-
-#, sin-usar
-msgid "Comunes"
-msgstr "Comuns"
-
-#, sin-usar
-msgid "Objetos nuevos en Colecciones"
-msgstr "Objetos novos nas Coleções"
-
-#, sin-usar
-msgid "Objetos"
-msgstr "Objetos"
-
-#, sin-usar
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s: %d de %d objetos encontrados."
-
-#, sin-usar
-msgid "Dosier"
-msgstr "Dossiê"
-
-#, sin-usar
-msgid "Bestiario · %d / %d"
-msgstr "Bestiário · %d / %d"
-
-#, sin-usar
-msgid "Sin ver"
-msgstr "Não visto"
-
-#, sin-usar
-msgid "%s: sale en %s."
-msgstr "%s · Onde aparece: %s."
-
-#, sin-usar
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "O que você encontra fica aqui para sempre. Passe pelas fichas para ver."
-
-#, sin-usar
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d de %d páginas · %s. Leia em DOSSIE.TXT."
-
-#, sin-usar
-msgid "Página %d · %s"
-msgstr "Página %d · %s"
-
-#, sin-usar
-msgid "Objetos · %s"
-msgstr "Objetos · %s"
-
-#, sin-usar
-msgid "%s (sin encontrar) · %s"
-msgstr "%s (não encontrado) · %s"
-
-#, sin-usar
-msgid "Colecciones y bestiario"
-msgstr "Coleções e bestiário"

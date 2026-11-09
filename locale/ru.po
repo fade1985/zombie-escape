@@ -5970,14 +5970,6 @@ msgid "Salir"
 msgstr "Выход"
 
 #: scripts/ui/menu_principal.gd
-msgid ""
-"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
-"Los controles y el modo de atacar están en Opciones"
-msgstr ""
-"Зачисти каждую квартиру, чтобы открыть ее дверь, и выследи зомби с ключом вахтерши\n"
-"Управление и режим атаки — в настройках"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "Спасибо за игру!"
 
@@ -6301,8 +6293,8 @@ msgid "Avisar de un texto mal traducido"
 msgstr "Сообщить о плохом переводе"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
-msgstr "Дрожание экрана"
+msgid "Temblor"
+msgstr "Дрожание"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
@@ -6547,10 +6539,6 @@ msgstr "Огромный"
 #: scripts/ui/opciones.gd
 msgid "Suave"
 msgstr "Слабое"
-
-#: scripts/ui/opciones.gd
-msgid "Sin temblor"
-msgstr "Без дрожания"
 
 #: scripts/ui/opciones.gd
 msgid "Select"
@@ -7307,91 +7295,3 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
-
-#, sin-usar
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Точно? Нажми еще раз"
-
-#, sin-usar
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Нажми на ячейку, чтобы сменить эту клавишу или кнопку"
-
-#, sin-usar
-msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
-msgstr "Когда впервые встречаешь что-то новое, окно объясняет, что происходит и что делать. Уже просмотренные есть в «Обучении»."
-
-#, sin-usar
-msgid "Si empiezas otra, la guardada se pierde"
-msgstr "Начнёшь новый — сохранённый пропадёт"
-
-#, sin-usar
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "Зачисти здание от зомби, этаж за этажом"
-
-#, sin-usar
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "Лучший этаж: %d   ·   Накоплено: $%d"
-
-#, sin-usar
-msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
-msgstr "Каждый враг, которого ты встретил, остаётся здесь навсегда. Наведи на клетки, чтобы увидеть его карточку."
-
-#, sin-usar
-msgid "Bestiario"
-msgstr "Бестиарий"
-
-#, sin-usar
-msgid "Comunes"
-msgstr "Обычные"
-
-#, sin-usar
-msgid "Objetos nuevos en Colecciones"
-msgstr "Новые предметы в «Коллекциях»"
-
-#, sin-usar
-msgid "Objetos"
-msgstr "Предметы"
-
-#, sin-usar
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s: найдено предметов — %d из %d."
-
-#, sin-usar
-msgid "Dosier"
-msgstr "Досье"
-
-#, sin-usar
-msgid "Bestiario · %d / %d"
-msgstr "Бестиарий · %d / %d"
-
-#, sin-usar
-msgid "Sin ver"
-msgstr "Не встречен"
-
-#, sin-usar
-msgid "%s: sale en %s."
-msgstr "%s — где встречается: %s."
-
-#, sin-usar
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "Все, что находишь и встречаешь, остается здесь навсегда. Наведи на карточки, чтобы посмотреть."
-
-#, sin-usar
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "Страниц: %d из %d — %s. Читай их в ДОСЬЕ.TXT."
-
-#, sin-usar
-msgid "Página %d · %s"
-msgstr "Страница %d · %s"
-
-#, sin-usar
-msgid "Objetos · %s"
-msgstr "Предметы · %s"
-
-#, sin-usar
-msgid "%s (sin encontrar) · %s"
-msgstr "%s (не найдено) · %s"
-
-#, sin-usar
-msgid "Colecciones y bestiario"
-msgstr "Коллекции и бестиарий"

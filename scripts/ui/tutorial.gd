@@ -7,7 +7,7 @@
 #     temas por grupos (los que aún no han salido, con «???») y a la derecha la ficha del elegido. Mientras está
 #     abierto esconde "lo_que_tapa" (el menú de detrás), como Opciones.
 # Las dos avisan al cerrarse con la señal "cerrado". Se manejan con el ratón, las flechas o el mando.
-# La ficha (ficha()): el icono y el título y las líneas (sin fotos desde el 8 nov).
+# La ficha (ficha()): el título y las líneas (sin fotos desde el 8 nov; el icono, solo en la ventana desde el 9 nov).
 class_name Tutorial
 extends CanvasLayer
 
@@ -185,7 +185,7 @@ func ver(cual: String) -> void:
 	elegido = cual
 	for hijo in derecha.get_children():
 		hijo.queue_free()
-	derecha.add_child(ficha(cual))
+	derecha.add_child(ficha(cual, false))
 	for k in botones:
 		var b: Button = botones[k]
 		if b.disabled:
@@ -194,15 +194,22 @@ func ver(cual: String) -> void:
 			b.add_theme_color_override(c, Tema.AMARILLO if k == cual else Tema.TINTA)
 
 
-# La ficha de un tutorial: el icono y el título, y las líneas, con las teclas en amarillo
-static func ficha(cual: String) -> VBoxContainer:
+# La ficha de un tutorial: el título (con su icono en la ventana; en la lista, sin él) y las líneas, con las teclas en amarillo
+static func ficha(cual: String, con_icono := true) -> VBoxContainer:
 	var d: Dictionary = Tutoriales.LISTA[cual]
 	var caja := VBoxContainer.new()
 	caja.add_theme_constant_override("separation", 10)
-	var cabeza := Tema.icono_y_texto(d.icono, Tutoriales.titulo_de(cual), 32)
-	cabeza.alignment = BoxContainer.ALIGNMENT_CENTER
-	(cabeza.get_child(cabeza.get_child_count() - 1) as Label).theme_type_variation = "Titulo"
-	caja.add_child(cabeza)
+	if con_icono:
+		var cabeza := Tema.icono_y_texto(d.icono, Tutoriales.titulo_de(cual), 32)
+		cabeza.alignment = BoxContainer.ALIGNMENT_CENTER
+		(cabeza.get_child(cabeza.get_child_count() - 1) as Label).theme_type_variation = "Titulo"
+		caja.add_child(cabeza)
+	else:
+		var cabeza := Label.new()
+		cabeza.theme_type_variation = "Titulo"
+		cabeza.text = Tutoriales.titulo_de(cual)
+		cabeza.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caja.add_child(cabeza)
 	var texto := RichTextLabel.new()
 	texto.bbcode_enabled = true
 	texto.fit_content = true

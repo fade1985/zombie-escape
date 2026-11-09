@@ -122,7 +122,7 @@
 #                       escopeta, hacia la derecha y en diagonal                           [prueba_armas.gd]
 #   --sensacion         que golpear se note: el parón de cada golpe (cada arma, al matar, el de gracia, explosiones,
 #                       daño a Johnny; sin sumarse, el respiro y la pausa) y el tono de los sonidos [prueba_armas.gd]
-#   --temblor           el ajuste «Temblor de pantalla» de Opciones: el botón (Normal, Suave, Sin temblor), que
+#   --temblor           el ajuste «Temblor» de Opciones: el botón (Normal, Suave, No), que
 #                       se guarda y que multiplica el temblor y el parón de los golpes          [prueba_armas.gd]
 #   --musica            la música por capas: qué capas se oyen explorando, con zombis, en la horda y con el jefe, y
 #                       que van a la par (va sin sonido: lo dice en la terminal)              [prueba_armas.gd]

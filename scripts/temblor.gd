@@ -7,7 +7,7 @@
 #     canción, el fundido a negro de las puertas) va con set_ignore_time_scale
 #   - Temblor.desplazamiento: lo que la cámara se aparta de Johnny aparte del temblor (la presentación del jefe la
 #     lleva hasta él, ui/presentacion.gd); se suma siempre, en unidades pares para que el pixel art no se emborrone
-#   - El ajuste «Temblor de pantalla» de Opciones (Guardado, ajustes.temblor: 1, 0,5 o 0) multiplica la fuerza de
+#   - El ajuste «Temblor» de Opciones (Guardado, ajustes.temblor: 1, 0,5 o 0) multiplica la fuerza de
 #     temblar y lo que dura cada parón; con 0 no hay ni temblor ni parón. Se nota al momento, también desde la pausa
 # Es un autoload: vale desde cualquier sitio y mueve la cámara que esté en uso (la de Johnny).
 # Los números son los del JS: golpe 3 + zombis tocados, matar 3, que te peguen 9, escopeta 4, explosión 14...

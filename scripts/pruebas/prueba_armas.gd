@@ -2596,10 +2596,10 @@ func probar_sensacion() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --temblor": el ajuste «Temblor de pantalla» de Opciones (pestaña General, botón Pantalla). Cuenta: que el botón pasa de
-# Normal a Suave, a Sin temblor y vuelve a Normal, y que cada paso se guarda (1, 0,5 y 0); y, con cada valor, cuánto
+# Con "--captura --temblor": el ajuste «Temblor» de Opciones (pestaña General, botón Pantalla). Cuenta: que el botón pasa de
+# Normal a Suave, a No y vuelve a Normal, y que cada paso se guarda (1, 0,5 y 0); y, con cada valor, cuánto
 # tiembla la cámara con un temblor de 10 y cuánto dura el parón de un golpe de 0,1 s (Temblor.temblar y Temblor.parar:
-# 10 y 100 ms, 5 y 50 ms, 0 y ninguno). Foto: captura-temblor-opciones.png (con «Sin temblor»). Se cierra
+# 10 y 100 ms, 5 y 50 ms, 0 y ninguno). Foto: captura-temblor-opciones.png (con «No»). Se cierra
 func probar_temblor() -> void:
 	var o := Opciones.abrir(self, null, johnny)
 	await get_tree().process_frame
@@ -2607,21 +2607,21 @@ func probar_temblor() -> void:
 	await get_tree().process_frame
 	var boton: Button = null
 	for b in o.contenido.get_children():
-		if b is Button and not b.is_queued_for_deletion() and b.text.begins_with(Idioma.t("Temblor de pantalla")):
+		if b is Button and not b.is_queued_for_deletion() and b.text.begins_with(Idioma.t("Temblor")):
 			boton = b
 	if boton == null:
 		print("ERROR: en Opciones no está el botón del temblor de pantalla")
 		get_tree().quit()
 		return
 	var pasos := []
-	for i in 4:   # Normal -> Suave -> Sin temblor -> Normal
+	for i in 4:   # Normal -> Suave -> No -> Normal
 		if i > 0:
 			boton.pressed.emit()
 		pasos.append([boton.text, Guardado.cargar().ajustes.temblor])
 		if i == 2:
 			await get_tree().process_frame
 			Captura.foto("captura-temblor-opciones.png")
-	print("El botón al pulsarlo: %s (esperado: Normal 1, Suave 0.5, Sin temblor 0, Normal 1)" % [pasos])
+	print("El botón al pulsarlo: %s (esperado: Normal 1, Suave 0.5, No 0, Normal 1)" % [pasos])
 	o.cerrar()
 	# en el móvil, General lleva cuatro filas más: que la pantalla de Opciones siga cabiendo en los 640 de alto
 	Tactil.activo = true

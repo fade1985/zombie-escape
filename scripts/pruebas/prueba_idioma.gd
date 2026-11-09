@@ -51,6 +51,17 @@ static func probar(menu: Control) -> void:
 	var foco := arbol.root.get_viewport().gui_get_focus_owner()
 	print("Volver desde Pantalla: pestaña %s · foco «%s» · Opciones abierta %s (esperado: general, pantalla, true)" % [
 		o.pestana, foco.name if foco else "-", is_instance_valid(o) and not o.is_queued_for_deletion()])
+	# El Tutorial abierto desde Opciones (su botón de General): Esc lo cierra y se vuelve a Opciones, no al menú (9 nov)
+	var tuto := Tutorial.lista(o, o.fondo)
+	await arbol.create_timer(0.4).timeout
+	Captura.foto("captura-idioma-tutorial.png")
+	var esc := InputEventAction.new()
+	esc.action = "ui_cancel"
+	esc.pressed = true
+	Input.parse_input_event(esc)
+	await arbol.create_timer(0.2).timeout
+	print("Esc en el Tutorial de Opciones: Tutorial cerrado %s · Opciones abierta %s (esperado: true, true)" % [
+		not is_instance_valid(tuto) or tuto.is_queued_for_deletion(), is_instance_valid(o) and not o.is_queued_for_deletion()])
 	o.ver("controles")
 	await arbol.create_timer(0.3).timeout
 	Captura.foto("captura-idioma-controles.png")

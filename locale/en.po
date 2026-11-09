@@ -5951,14 +5951,6 @@ msgid "Salir"
 msgstr "Quit"
 
 #: scripts/ui/menu_principal.gd
-msgid ""
-"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
-"Los controles y el modo de atacar están en Opciones"
-msgstr ""
-"Clear every apartment to open its door and hunt down the zombie carrying the super's key\n"
-"Controls and attack mode are in Options"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "Thanks for playing!"
 
@@ -6281,7 +6273,7 @@ msgid "Avisar de un texto mal traducido"
 msgstr "Report a bad translation"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
+msgid "Temblor"
 msgstr "Screen shake"
 
 #: scripts/ui/opciones.gd
@@ -6527,10 +6519,6 @@ msgstr "Extra large"
 #: scripts/ui/opciones.gd
 msgid "Suave"
 msgstr "Reduced"
-
-#: scripts/ui/opciones.gd
-msgid "Sin temblor"
-msgstr "Off"
 
 #: scripts/ui/opciones.gd
 msgid "Select"
@@ -7287,91 +7275,3 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
-
-#, sin-usar
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Sure? Press again"
-
-#, sin-usar
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Press a box to change that key or button"
-
-#, sin-usar
-msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
-msgstr "The first time you run into something new, a window explains what's going on and how to do it. The ones you've seen are in Tutorial."
-
-#, sin-usar
-msgid "Si empiezas otra, la guardada se pierde"
-msgstr "Start another and the saved one is lost"
-
-#, sin-usar
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "Clear the building of zombies, floor by floor"
-
-#, sin-usar
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "Best floor reached: %d   ·   Dollars saved: $%d"
-
-#, sin-usar
-msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
-msgstr "Every enemy you run into stays here forever. Hover over the squares to see their file."
-
-#, sin-usar
-msgid "Bestiario"
-msgstr "Bestiary"
-
-#, sin-usar
-msgid "Comunes"
-msgstr "Common"
-
-#, sin-usar
-msgid "Objetos nuevos en Colecciones"
-msgstr "New items in Collections"
-
-#, sin-usar
-msgid "Objetos"
-msgstr "Items"
-
-#, sin-usar
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s: %d of %d items found."
-
-#, sin-usar
-msgid "Dosier"
-msgstr "Dossier"
-
-#, sin-usar
-msgid "Bestiario · %d / %d"
-msgstr "Bestiary · %d / %d"
-
-#, sin-usar
-msgid "Sin ver"
-msgstr "Unseen"
-
-#, sin-usar
-msgid "%s: sale en %s."
-msgstr "%s: appears in %s."
-
-#, sin-usar
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "What you find or run into stays here for good. Move over the cards to see it."
-
-#, sin-usar
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d of %d pages from %s. Read them in DOSSIER.TXT."
-
-#, sin-usar
-msgid "Página %d · %s"
-msgstr "Page %d · %s"
-
-#, sin-usar
-msgid "Objetos · %s"
-msgstr "Items · %s"
-
-#, sin-usar
-msgid "%s (sin encontrar) · %s"
-msgstr "%s (not found yet) · %s"
-
-#, sin-usar
-msgid "Colecciones y bestiario"
-msgstr "Collections and Bestiary"

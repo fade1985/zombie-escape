@@ -1,6 +1,6 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene cuatro pestañas:
 #   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), la
-#     música, el sonido, la pantalla completa y el temblor de pantalla (Normal, Suave o Sin temblor: lo que tiembla la
+#     música, el sonido, la pantalla completa y el temblor de pantalla (Normal, Suave o No: lo que tiembla la
 #     cámara y lo que se frena el juego al golpear, temblor.gd; se guarda). En el móvil, además, el tamaño y la transparencia de los botones
 #     táctiles y la vibración (se guardan).
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
@@ -79,7 +79,9 @@ const TAMANOS := [[0.8, "Pequeño"], [1.0, "Normal"], [1.2, "Grande"], [1.4, "Mu
 const OPACIDADES := [[1.0, "100 %"], [0.75, "75 %"], [0.5, "50 %"], [0.3, "30 %"]]
 const SI_NO := [[true, "Sí"], [false, "No"]]
 # El temblor de pantalla (temblor.gd): por cuánto se multiplica el temblor de la cámara y el parón de los golpes
-const TEMBLORES := [[1.0, "Normal"], [0.5, "Suave"], [0.0, "Sin temblor"]]
+const TEMBLORES := [[1.0, "Normal"], [0.5, "Suave"], [0.0, "No"]]
+# El hueco entre los botones grandes (General, Idioma, Audio y Pantalla): con 8 iban muy juntos y sobraba media ventana
+const HUECO_GRANDES := 18
 
 const BOTONES_MANDO := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
@@ -120,6 +122,7 @@ var esperando: Button = null   # la casilla que espera una tecla nueva (o null)
 var esperando_accion := ""
 var esperando_mando := false
 var esperando_desde := 0   # cuándo empezó a esperar (ms): lo que llegue justo después es el mismo pulsar
+var ancho_grande := 0.0   # lo que mide el botón grande más ancho de General, Audio y Pantalla (igualar())
 var boton_idioma: Button   # el botón de Idioma de la pestaña General (si está), para devolverle el foco al cambiarlo
 
 
@@ -183,12 +186,14 @@ func construir(cual := "general") -> void:
 	# Las cuatro pestañas, del tamaño de la más grande: así la ventana no cambia al pasar de una a otra. Se monta cada
 	# una de prueba (en una caja que se tira enseguida), se mide y el contenido se queda con lo más ancho y lo más alto
 	var medida := Vector2.ZERO
-	for p in ["general", "controles", "ayudas", "creditos"]:
+	ancho_grande = 0.0
+	for p in ["audio", "pantalla", "general", "controles", "ayudas", "creditos"]:   # (audio y pantalla, solo para el ancho de sus botones)
 		contenido = VBoxContainer.new()
 		contenido.add_theme_constant_override("separation", 8)
 		columna.add_child(contenido)
 		call(p)
-		medida = medida.max(contenido.get_combined_minimum_size())
+		if p in ["general", "controles", "ayudas", "creditos"]:
+			medida = medida.max(contenido.get_combined_minimum_size())
 		columna.remove_child(contenido)
 		contenido.free()
 	casillas.clear()
@@ -221,14 +226,16 @@ func atras() -> void:
 		cerrar()
 
 
-# Los botones grandes de la página (los de General, Audio y Pantalla), todos tan anchos como el más ancho
+# Los botones grandes de la página (los de General, Audio y Pantalla), todos tan anchos como el más ancho de las tres
+# páginas (ancho_grande: construir() las monta todas antes, para medirlas). Y más separados que los demás (HUECO_GRANDES)
 func igualar() -> void:
 	var grandes := contenido.find_children("*", "Button", true, false).filter(func(b): return b.theme_type_variation == "BotonGrande")
-	var ancho := 0.0
 	for b: Button in grandes:
-		ancho = maxf(ancho, b.get_combined_minimum_size().x)
+		ancho_grande = maxf(ancho_grande, b.get_combined_minimum_size().x)
 	for b: Button in grandes:
-		b.custom_minimum_size.x = ancho
+		b.custom_minimum_size.x = ancho_grande
+	if not grandes.is_empty():
+		contenido.add_theme_constant_override("separation", HUECO_GRANDES)
 
 
 func cerrar() -> void:
@@ -252,6 +259,7 @@ func ver(cual: String) -> void:
 				b.remove_theme_color_override(c)
 	for hijo in contenido.get_children():
 		hijo.queue_free()
+	contenido.add_theme_constant_override("separation", 8)   # (igualar() lo abre en las páginas de botones grandes)
 	casillas.clear()
 	esperando = null
 	boton_idioma = null
@@ -332,15 +340,14 @@ func idiomas() -> void:
 	rotulo_idioma.text = Idioma.t("Idioma")
 	rotulo_idioma.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	contenido.add_child(rotulo_idioma)
-	var fila_idioma := HFlowContainer.new()   # (los botones pasan a otra fila si no caben en el ancho)
-	fila_idioma.alignment = FlowContainer.ALIGNMENT_CENTER
-	fila_idioma.custom_minimum_size.x = 600
-	fila_idioma.add_theme_constant_override("h_separation", 6)
-	fila_idioma.add_theme_constant_override("v_separation", 4)
+	var fila_idioma := VBoxContainer.new()   # (uno debajo de otro, desde el 9 nov)
+	fila_idioma.add_theme_constant_override("separation", 4)
 	contenido.add_child(fila_idioma)
 	for i in Idioma.IDIOMAS:
 		var b := Button.new()
 		b.text = i[1]
+		b.custom_minimum_size.x = 260
+		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		var letra := Tema.fuente_del_idioma(i[0])   # (el ruso y el chino se escriben con su letra, en cualquier idioma)
 		if letra != null:
 			b.add_theme_font_override("font", letra)
@@ -356,12 +363,12 @@ func idiomas() -> void:
 			for c in ["font_color", "font_focus_color", "font_hover_color"]:
 				b.add_theme_color_override(c, Tema.AMARILLO)
 		fila_idioma.add_child(b)
-	# El botón de avisar de un texto mal traducido (enlace_avisos), a continuación de los idiomas: así cabe en la segunda fila y no
-	# alarga la pantalla (en ruso, una fila más y «Atrás» se sale de los 640 de alto)
+	# El botón de avisar de un texto mal traducido (enlace_avisos), debajo de los idiomas
 	if enlace_avisos != "" and Idioma.actual != Idioma.ORIGEN:
 		var avisar := Button.new()
 		avisar.name = "avisar_traduccion"   # no-tr
 		avisar.text = Idioma.t("Avisar de un texto mal traducido")
+		avisar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		avisar.pressed.connect(func(): OS.shell_open(enlace_avisos))
 		fila_idioma.add_child(avisar)
 	if boton_idioma:
@@ -387,8 +394,15 @@ func audio() -> void:
 # La pantalla (el botón Pantalla de General): la pantalla completa y el temblor. Se vuelve con la pestaña General
 func pantalla() -> void:
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
-		opcion(Idioma.t("Pantalla completa"), "BotonGrande").pressed.connect(Tactil.pantalla_completa)
-	rotar(Idioma.t("Temblor de pantalla"), "temblor", TEMBLORES, "BotonGrande")
+		var texto_completa := func(si: bool) -> String:
+			return "%s: %s" % [Idioma.t("Pantalla completa"), Idioma.t("Sí") if si else Idioma.t("No")]
+		var completa := opcion(texto_completa.call(DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN), "BotonGrande")
+		completa.pressed.connect(func():
+			# (el texto, con lo que va a ser: en la web la ventana tarda un poco en cambiar)
+			var ahora := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+			Tactil.pantalla_completa()
+			completa.text = texto_completa.call(not ahora))
+	rotar(Idioma.t("Temblor"), "temblor", TEMBLORES, "BotonGrande")
 	igualar()
 	(contenido.get_child(0) as Control).grab_focus.call_deferred()
 
@@ -634,6 +648,8 @@ func texto_musica() -> String:
 func _input(evento: InputEvent) -> void:
 	if esperando:
 		esperar_tecla(evento)
+		return
+	if not find_children("*", "Tutorial", false, false).is_empty():   # no-tr (con el Tutorial abierto encima, su Esc es suyo: vuelve aquí)
 		return
 	if evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa"):
 		get_viewport().set_input_as_handled()

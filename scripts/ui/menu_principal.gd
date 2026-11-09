@@ -51,7 +51,7 @@ func _ready() -> void:
 	centro.visibility_changed.connect(func(): portal.modulate = Color.WHITE if centro.visible else Color(0.35, 0.35, 0.4))
 	var columna := VBoxContainer.new()
 	columna.alignment = BoxContainer.ALIGNMENT_CENTER
-	columna.add_theme_constant_override("separation", 12)
+	columna.add_theme_constant_override("separation", 18)   # (12 hasta el 9 nov: los botones iban muy juntos)
 	centro.add_child(columna)
 
 	# El título (300 × 100): se amplía ×2 sin suavizar
@@ -88,16 +88,7 @@ func _ready() -> void:
 				opciones.grab_focus()))
 	boton(columna, Idioma.t("Salir"), salir, "BotonGrande")
 
-	var ayuda := PanelContainer.new()
-	ayuda.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	ayuda.visible = seguir == null   # con «Continuar partida» no cabe (y quien la lleva a medias ya sabe jugar)
-	columna.add_child(ayuda)
-	var texto := Label.new()
-	texto.theme_type_variation = "Sub"
-	texto.text = Idioma.t("Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
-		+ "Los controles y el modo de atacar están en Opciones")
-	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	ayuda.add_child(texto)
+	# (debajo de los botones iba un marco con consejos para jugar: quitado el 9 nov)
 
 	# (debajo de Salir iban la mejor planta y los dólares ahorrados: quitados el 8 nov, a petición del dueño)
 

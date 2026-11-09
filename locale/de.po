@@ -5951,14 +5951,6 @@ msgid "Salir"
 msgstr "Beenden"
 
 #: scripts/ui/menu_principal.gd
-msgid ""
-"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
-"Los controles y el modo de atacar están en Opciones"
-msgstr ""
-"Säubere jede Wohnung, damit ihre Tür aufgeht, und jag den Zombie mit dem Schlüssel der Portierin\n"
-"Steuerung und Angriffsmodus findest du in den Optionen"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "Danke fürs Spielen!"
 
@@ -6281,8 +6273,8 @@ msgid "Avisar de un texto mal traducido"
 msgstr "Fehlerhafte Übersetzung melden"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
-msgstr "Bildschirmwackeln"
+msgid "Temblor"
+msgstr "Wackeln"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
@@ -6527,10 +6519,6 @@ msgstr "Sehr groß"
 #: scripts/ui/opciones.gd
 msgid "Suave"
 msgstr "Sanft"
-
-#: scripts/ui/opciones.gd
-msgid "Sin temblor"
-msgstr "Kein Wackeln"
 
 #: scripts/ui/opciones.gd
 msgid "Select"
@@ -7287,91 +7275,3 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
-
-#, sin-usar
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Sicher? Drück noch mal"
-
-#, sin-usar
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "Wähle ein Feld, um die Taste zu ändern"
-
-#, sin-usar
-msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
-msgstr "Triffst du zum ersten Mal auf etwas Neues, erklärt ein Fenster, was passiert und wie es geht. Bereits gesehene findest du unter Tutorial."
-
-#, sin-usar
-msgid "Si empiezas otra, la guardada se pierde"
-msgstr "Startest du eine neue, ist die gespeicherte weg"
-
-#, sin-usar
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "Säubere das Haus von Zombies, Stock für Stock"
-
-#, sin-usar
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "Höchste Ebene: %d   ·   Gesparte Dollar: $%d"
-
-#, sin-usar
-msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
-msgstr "Jeder Gegner, dem du begegnest, bleibt hier für immer. Fahr über die Felder, um seine Akte zu sehen."
-
-#, sin-usar
-msgid "Bestiario"
-msgstr "Bestiarium"
-
-#, sin-usar
-msgid "Comunes"
-msgstr "Gewöhnliche"
-
-#, sin-usar
-msgid "Objetos nuevos en Colecciones"
-msgstr "Neue Gegenstände in den Sammlungen"
-
-#, sin-usar
-msgid "Objetos"
-msgstr "Gegenstände"
-
-#, sin-usar
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s: %d von %d Gegenständen gefunden."
-
-#, sin-usar
-msgid "Dosier"
-msgstr "Akte"
-
-#, sin-usar
-msgid "Bestiario · %d / %d"
-msgstr "Bestiarium · %d / %d"
-
-#, sin-usar
-msgid "Sin ver"
-msgstr "Ungesehen"
-
-#, sin-usar
-msgid "%s: sale en %s."
-msgstr "%s · Vorkommen: %s."
-
-#, sin-usar
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "Was du findest oder triffst, bleibt für immer hier. Geh auf die Karten, um es zu sehen."
-
-#, sin-usar
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d von %d Seiten · %s. Lies sie in AKTE.TXT."
-
-#, sin-usar
-msgid "Página %d · %s"
-msgstr "Seite %d · %s"
-
-#, sin-usar
-msgid "Objetos · %s"
-msgstr "Gegenstände · %s"
-
-#, sin-usar
-msgid "%s (sin encontrar) · %s"
-msgstr "%s (nicht gefunden) · %s"
-
-#, sin-usar
-msgid "Colecciones y bestiario"
-msgstr "Sammlungen und Bestiarium"

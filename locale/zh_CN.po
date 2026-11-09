@@ -5932,14 +5932,6 @@ msgid "Salir"
 msgstr "退出"
 
 #: scripts/ui/menu_principal.gd
-msgid ""
-"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
-"Los controles y el modo de atacar están en Opciones"
-msgstr ""
-"清理每套公寓才能打开它的门，还要干掉拿着楼管大妈钥匙的僵尸\n"
-"操作和攻击模式在“选项”里"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Gracias por jugar!"
 msgstr "感谢游玩！"
 
@@ -6261,8 +6253,8 @@ msgid "Avisar de un texto mal traducido"
 msgstr "反馈翻译错误"
 
 #: scripts/ui/opciones.gd
-msgid "Temblor de pantalla"
-msgstr "屏幕抖动"
+msgid "Temblor"
+msgstr "抖动"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
@@ -6507,10 +6499,6 @@ msgstr "特大"
 #: scripts/ui/opciones.gd
 msgid "Suave"
 msgstr "轻微"
-
-#: scripts/ui/opciones.gd
-msgid "Sin temblor"
-msgstr "无抖动"
 
 #: scripts/ui/opciones.gd
 msgid "Select"
@@ -7267,91 +7255,3 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
-
-#, sin-usar
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "确定吗？再按一次"
-
-#, sin-usar
-msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
-msgstr "点击一个格子来更改对应的按键或按钮"
-
-#, sin-usar
-msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
-msgstr "第一次遇到新东西时，会弹出窗口说明发生了什么、该怎么做。看过的都在“教程”里。"
-
-#, sin-usar
-msgid "Si empiezas otra, la guardada se pierde"
-msgstr "开始新的一局会丢失已保存的进度"
-
-#, sin-usar
-msgid "Limpia el edificio de zombis, planta a planta"
-msgstr "一层一层，把大楼里的僵尸清理干净"
-
-#, sin-usar
-msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "最高到达：第%d层   ·   存下的美元：$%d"
-
-#, sin-usar
-msgid "Cada enemigo que te cruzas queda aquí para siempre. Pasa por las casillas para ver su ficha."
-msgstr "你遇到过的每个敌人都会永远留在这里。把光标移到格子上查看它的档案。"
-
-#, sin-usar
-msgid "Bestiario"
-msgstr "图鉴"
-
-#, sin-usar
-msgid "Comunes"
-msgstr "常见"
-
-#, sin-usar
-msgid "Objetos nuevos en Colecciones"
-msgstr "收藏品新增物品"
-
-#, sin-usar
-msgid "Objetos"
-msgstr "物品"
-
-#, sin-usar
-msgid "%s: %d de %d objetos encontrados."
-msgstr "%s：已找到 %d / %d 件物品。"
-
-#, sin-usar
-msgid "Dosier"
-msgstr "档案"
-
-#, sin-usar
-msgid "Bestiario · %d / %d"
-msgstr "图鉴 · %d / %d"
-
-#, sin-usar
-msgid "Sin ver"
-msgstr "未遇见"
-
-#, sin-usar
-msgid "%s: sale en %s."
-msgstr "%s：出现在%s。"
-
-#, sin-usar
-msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
-msgstr "你找到的或遇到的都会永久记录在这里。移到卡片上即可查看。"
-
-#, sin-usar
-msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
-msgstr "%d / %d 页，来自%s。去“档案.TXT”里阅读。"
-
-#, sin-usar
-msgid "Página %d · %s"
-msgstr "第 %d 页 · %s"
-
-#, sin-usar
-msgid "Objetos · %s"
-msgstr "物品 · %s"
-
-#, sin-usar
-msgid "%s (sin encontrar) · %s"
-msgstr "%s（未找到）· %s"
-
-#, sin-usar
-msgid "Colecciones y bestiario"
-msgstr "收藏品和图鉴"
