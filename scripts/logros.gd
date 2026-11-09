@@ -34,7 +34,7 @@ const LISTA := [
 		"mira": "completado", "edificio": "centro", "desc": "Completa el Centro comercial: derrota al gerente."},
 	{"id": "reestructuracion", "tema": "edificios", "nombre": "Reestructuración", "icono": "logro-reestructuracion", "premio": 25, "cuenta": "",
 		"mira": "completado", "edificio": "torre", "desc": "Completa Torre Velaria: derrota al Sujeto 1."},
-	{"id": "alerta_naranja", "tema": "edificios", "nombre": "Alerta naranja", "icono": "alerta", "premio": 20, "meta": 1, "cuenta": "",
+	{"id": "alerta_naranja", "tema": "edificios", "nombre": "Alerta naranja", "icono": "logro-alerta_naranja", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Completa un edificio con la Alerta 3 o más."},
 	{"id": "alerta_maxima", "tema": "edificios", "nombre": "Alerta máxima", "icono": "alerta", "premio": 35, "meta": 1, "cuenta": "",
 		"desc": "Completa un edificio con la Alerta 5."},
