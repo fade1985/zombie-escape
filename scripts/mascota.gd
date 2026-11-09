@@ -4,7 +4,7 @@
 # Es rápida y hace dos cosas:
 #   - Embestida: marca una franja roja en el suelo (0,6 s) y sale disparada en línea recta. Si pilla a Johnny le
 #     quita 22 y le tira; esquivando, le pasa de largo; si se estrella contra una pared o un mueble, se queda
-#     mareada 1,8 s, con estrellitas (¡a por ella!). La carrera es la misma que la carga del antidisturbios.
+#     mareada 5 s, con estrellitas (¡a por ella!). La carrera es la misma que la carga del antidisturbios.
 #   - Salto: se agacha y salta hacia donde está Johnny. Mientras vuela (0,8 s) se ve en el suelo su sombra,
 #     creciendo, donde va a caer; al caer quita 18 a lo que esté en ese círculo. En el aire no se le puede dar.
 # Enfadada (a media vida): 3 embestidas seguidas con menos aviso; si choca con una pared rebota y, tras un aviso corto
@@ -80,7 +80,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 					andar(0.6 if enfadado() else 1.0)
 		"atontado":
 			frenar(delta, 4.0)
-			if t >= MAREADA:
+			if t >= tiempo_atontado(MAREADA):   # (5 s, salvo en la azotea)
 				andar(0.4)
 		"agacharse":
 			frenar(delta, 12.0)

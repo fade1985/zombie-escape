@@ -335,6 +335,7 @@
 #   --crio-gpt          lo mismo con el crío (el de PixelLab; y a su lado el de GPT cuando esté su hoja) [prueba_varias.gd]
 #   --puerta-cierra     nada más entrar en un apartamento, la puerta se cierra detrás de Johnny [prueba_varias.gd]
 #   --disparo-alerta    en un apartamento, un disparo de Johnny despierta a todos los zombis de todas las habitaciones [prueba_varias.gd]
+#   --atontado-pared    los jefes que cargan, al estrellarse, se quedan atontados 5 s (en la azotea, lo de siempre) [prueba_varias.gd]
 #   --acido-zombis      cada zombi y cada jefe encima de un charco de ácido: todos se queman menos el
 #                       gordo, el Glotón y el doctor Salas [prueba_varias.gd]
 #                       (con --con-vomito, el charco del vómito de Gastroenteritis en vez del de ácido)
@@ -905,6 +906,9 @@ func empezar_prueba() -> void:
 	elif "--disparo-alerta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_disparo_alerta()
+	elif "--atontado-pared" in args:
+		set_process(false)   # sin la prueba larga
+		probar_atontado_pared()
 	elif "--acido-zombis" in args:
 		set_process(false)   # sin la prueba larga
 		probar_acido_zombis()

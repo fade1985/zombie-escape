@@ -405,7 +405,7 @@ func pensar_mutado(delta: float, johnny: Node2D) -> void:
 				andar(0.5)
 		"atontado":
 			frenar(delta, 4.0)
-			if t >= ATONTADO:
+			if t >= tiempo_atontado(ATONTADO):   # (5 s, salvo en la azotea)
 				andar(0.4)
 
 

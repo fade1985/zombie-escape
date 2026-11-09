@@ -6,7 +6,7 @@
 #     normal, y por la espalda, el doble. Las explosiones (granadas) y el fuego (molotov) le dan por todos lados.
 #   - Porrazo: si Johnny está cerca y delante, marca en rojo un trozo de suelo (medio segundo) y golpea: 18 y empuja.
 #   - Carga: marca una franja roja y corre en línea recta con el escudo por delante. Si pilla a Johnny le quita
-#     20 y le tira; si se estrella contra una pared o un mueble, se queda atontado 2 s (¡a por su espalda!).
+#     20 y le tira; si se estrella contra una pared o un mueble, se queda atontado 5 s (¡a por su espalda!).
 #   - Silbato: llegan 2 refuerzos.
 # Enfadado (a media vida): gira más deprisa, carga dos veces seguidas y llama a 3.
 extends Minijefe
@@ -74,7 +74,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			cargar(delta, johnny)
 		"atontado":
 			frenar(delta, 4.0)
-			if t >= ATONTADO:
+			if t >= tiempo_atontado(ATONTADO):   # (5 s, salvo en la azotea)
 				andar(0.4)
 		"recuperar":
 			frenar(delta, 5.0)

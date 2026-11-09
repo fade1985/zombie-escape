@@ -2291,6 +2291,56 @@ func probar_disparo_alerta() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --atontado-pared": los jefes que cargan (antidisturbios, Gymbro, mascota, becario y gerente), en la
+# sala de pruebas, se estrellan (estrellarse, a mano) y se mide cuánto se quedan atontados: 5 s. Luego lo mismo
+# haciendo como que la sala es la azotea: lo suyo de siempre (entre 1,4 y 2,2 s). Foto captura-atontado-pared.png
+func probar_atontado_pared() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(0, 300)
+	johnny.get_node("Camara").reset_smoothing()
+	var tipos := ["antidisturbios", "gymbro", "mascota", "becario", "gerente"]
+	for azotea in [false, true]:
+		mapa.sitio["azotea"] = azotea
+		var jefes := []
+		for i in tipos.size():
+			var j: Node2D = meter_zombi(tipos[i], johnny.position + Vector2(-360 + i * 180, -200))
+			jefes.append(j)
+		await get_tree().create_timer(0.3).timeout
+		jefes[4].mutar()   # (el gerente solo carga ya mutado)
+		await get_tree().create_timer(1.5).timeout
+		for j in jefes:
+			j.estrellarse()
+		var cuanto := {}
+		var t := 0.0
+		var foto := false
+		while cuanto.size() < jefes.size() and t < 8.0:
+			await get_tree().physics_frame
+			t += 1.0 / 60.0
+			for i in jefes.size():
+				if not cuanto.has(i) and jefes[i].estado != "atontado":
+					cuanto[i] = t
+			if not azotea and not foto and t >= 2.5:
+				Captura.foto("captura-atontado-pared.png")
+				foto = true
+		var lineas := PackedStringArray()
+		for i in jefes.size():
+			lineas.append("%s %.1f s" % [tipos[i], cuanto.get(i, -1.0)])
+		print("Atontado contra la pared%s: %s (esperado: %s)" % [" en la azotea" if azotea else "", ", ".join(lineas),
+			"lo de siempre, entre 1,4 y 2,2" if azotea else "5,0 todos"])
+		for j in jefes:
+			j.queue_free()
+		await get_tree().process_frame
+	mapa.sitio.erase("azotea")
+	get_tree().quit()
+
+
 # Con "--captura --acido-zombis": cada zombi, quieto encima de un charco de ácido (el de la portera) en la sala de
 # pruebas, y cuánta vida pierde en 2 s: todos se queman menos el gordo (venenoso: aguanta_acido); y debajo, todos los
 # jefes: se queman todos menos el Glotón y el doctor Salas. Foto

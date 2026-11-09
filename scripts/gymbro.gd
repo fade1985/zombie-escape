@@ -101,7 +101,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 					andar(0.6 if enfadado() else 1.0)
 		"atontado":
 			frenar(delta, 4.0)
-			if t >= MAREADO:
+			if t >= tiempo_atontado(MAREADO):   # (5 s, salvo en la azotea)
 				andar(0.4)
 		"agacharse":
 			frenar(delta, 12.0)

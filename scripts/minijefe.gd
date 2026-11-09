@@ -231,7 +231,15 @@ func pared_chocada() -> Vector2:
 	return choque.get_normal() if choque else -mirada
 
 
-# Se ha estrellado: se queda atontado (con estrellitas) "atontado_t" segundos
+# Lo que se queda atontado tras estrellarse contra una pared al cargar: 5 s (9 nov, lo pidió el dueño), menos en la
+# azotea (el jefe final: el gerente), que se queda lo suyo ("normal", el de cada jefe)
+const ATONTADO_PARED := 5.0
+func tiempo_atontado(normal: float) -> float:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	return normal if mapa and mapa.sitio.get("azotea", false) else ATONTADO_PARED
+
+
+# Se ha estrellado: se queda atontado (con estrellitas) un rato (tiempo_atontado)
 func estrellarse() -> void:
 	marcha = Vector2.ZERO
 	cambiar("atontado")
