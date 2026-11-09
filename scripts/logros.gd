@@ -49,7 +49,7 @@ const LISTA := [
 		"desc": "Derrota a un jefe sin perder vida en toda la pelea."},
 	{"id": "por_los_pelos", "tema": "jefes", "nombre": "Por los pelos", "icono": "logro-por_los_pelos", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe con menos del 10 % de tu vida."},
-	{"id": "visto_y_no_visto", "tema": "jefes", "nombre": "Visto y no visto", "icono": "dash", "premio": 10, "meta": 1, "cuenta": "",
+	{"id": "visto_y_no_visto", "tema": "jefes", "nombre": "Visto y no visto", "icono": "logro-visto_y_no_visto", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Derrota a un jefe en menos de 30 segundos de pelea."},
 	{"id": "cazajefes", "tema": "jefes", "nombre": "Cazajefes", "icono": "jefe", "premio": 15, "meta": 25, "cuenta": "total",
 		"mira": "jefes", "desc": "Derrota a 25 jefes, sumando todas tus partidas."},
