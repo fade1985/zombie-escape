@@ -44,7 +44,7 @@ const LISTA := [
 	# ── Militar
 	{"id": "ataque", "rama": "militar", "nivel": 1, "nombre": "Ataque", "max": 5, "icono": "talento-ataque",
 		"desc": "+10 % de daño por punto"},
-	{"id": "punteria", "rama": "militar", "nivel": 1, "nombre": "Puntería", "max": 5, "icono": "diana",
+	{"id": "punteria", "rama": "militar", "nivel": 1, "nombre": "Puntería", "max": 5, "icono": "talento-punteria",
 		"desc": "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"},
 	{"id": "camorrista", "rama": "militar", "nivel": 2, "nombre": "Camorrista", "max": 5, "icono": "bate", "pide": "ataque",
 		"desc": "+10 % de daño cuerpo a cuerpo por punto"},
