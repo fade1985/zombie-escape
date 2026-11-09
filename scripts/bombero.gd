@@ -436,8 +436,11 @@ func decir_inmune() -> void:
 		gritar(Idioma.t("¡INMUNE!"), Llamas.FUEGO[1], 18)
 
 
-# El fuego de los charcos tampoco le quema por dentro
-func herir(_cantidad: float, _color := Color.WHITE) -> void:
+# El fuego de los charcos tampoco le quema por dentro. El ácido sí (9 nov)
+func herir(cantidad: float, color := Color.WHITE) -> void:
+	if color == Estados.LISTA.acido.color:
+		super(cantidad, color)
+		return
 	prender()
 
 

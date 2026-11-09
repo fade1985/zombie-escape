@@ -512,6 +512,11 @@ func mutar() -> void:
 
 # ── La criatura ──
 
+# El doctor Salas no se quema en los charcos de ácido (los demás jefes sí: minijefe.gd, pisar)
+func pisar(_estados_charco: Dictionary) -> void:
+	pass
+
+
 # El fuego de los charcos (llega con el color del fuego) no le quema a la criatura: «¡INMUNE!» de vez en cuando. Lo
 # demás (el calambre del agua, el ácido...), como a cualquier jefe
 func herir(cantidad: float, color := Color.WHITE) -> void:

@@ -332,7 +332,8 @@
 #   --vecino-gpt        el vecino rehecho con GPT junto al de PixelLab, quietos en dos filas en sus 8 direcciones:
 #                       andar, atacar, golpe y muerte (el de GPT es el vecino del juego desde el 8 nov) [prueba_varias.gd]
 #   --crio-gpt          lo mismo con el crío (el de PixelLab; y a su lado el de GPT cuando esté su hoja) [prueba_varias.gd]
-#   --acido-zombis      cada zombi encima de un charco de ácido: todos se queman menos el gordo y el Glotón [prueba_varias.gd]
+#   --acido-zombis      cada zombi y cada jefe encima de un charco de ácido: todos se queman menos el
+#                       gordo, el Glotón y el doctor Salas [prueba_varias.gd]
 #   --lento-gpt         lo mismo con el arrastrado de GPT, al lado del vecino (para ver su tamaño) [prueba_varias.gd]
 #   --gordo-real        el gordo (venenoso) más real (contorno suave, como el crío), quieto en sus 8 direcciones: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --tres-zombis       la vecina, el vecino y el crío (los tres de GPT) juntos, por tríos en sus 8 direcciones (mismas fotos) [prueba_varias.gd]

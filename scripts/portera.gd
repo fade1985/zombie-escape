@@ -79,6 +79,7 @@ var invulnerable := false
 var contacto := DANO_CONTACTO
 var tiempo := 0.0
 var vapor := VaporRabia.new(98.0)   # el vapor de la cabeza, enfadada (vapor_rabia.gd)
+var en_acido := {"dps": 0.0, "acc": 0.0, "tick": 0.0}   # el charco de ácido que pisa (Estados.quemar_acido_jefe; el suyo no)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -106,6 +107,9 @@ func _physics_process(delta: float) -> void:
 		return
 	tiempo += delta
 	t += delta
+	Estados.quemar_acido_jefe(self, en_acido, delta)
+	if estado == "muerto":
+		return
 	vapor.actualizar(delta, enfadada() and estado != "muerto", estado not in ["andar", "recuperar"])
 	espera_fregonazo -= delta
 	espera_llamar -= delta
@@ -470,6 +474,11 @@ func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 # demás charcos ni las mutaciones
 func herir(cantidad: float, _color := Color.WHITE) -> void:
 	recibir_golpe(maxi(1, roundi(cantidad)), Vector2.ZERO)
+
+
+# Lo llaman los charcos en cada paso mientras lo pisa: le quema el ácido (no el suyo: es su "dueno")
+func pisar(estados_charco: Dictionary) -> void:
+	Estados.pisar_acido_jefe(en_acido, estados_charco)
 
 
 func morir() -> void:

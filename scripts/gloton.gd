@@ -307,6 +307,11 @@ func foto(johnny: Node2D) -> void:
 	t = AVISO_LATIGAZO - 0.05
 
 
+# El Glotón no se quema en los charcos de ácido (los demás jefes sí: minijefe.gd, pisar)
+func pisar(_estados_charco: Dictionary) -> void:
+	pass
+
+
 # ── La sangre ácida ──
 
 func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, de_aliado := false) -> void:

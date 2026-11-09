@@ -40,6 +40,33 @@ const LISTA := {
 const TICK_ZOMBI := 0.5   # a los zombis el daño de los estados se les da a pellizcos, cada medio segundo
 
 
+# Los jefes (minijefe.gd y la portera) no llevan estados, pero los charcos de ácido sí les queman (9 nov, lo pidió el
+# dueño; menos al doctor Salas y al Glotón, que no lo pisan). Cada jefe lleva su "a": {"dps", "acc", "tick"}.
+# Lo llaman los charcos en cada paso mientras lo pisa:
+static func pisar_acido_jefe(a: Dictionary, estados: Dictionary) -> void:
+	if estados.has("acido"):
+		a.dps = maxf(a.dps, LISTA.acido.merged(estados.acido, true).dps)
+
+
+# Y el jefe, en cada paso: el daño, a pellizcos cada medio segundo como a los zombis, con unas burbujitas verdes
+static func quemar_acido_jefe(jefe: Node2D, a: Dictionary, delta: float) -> void:
+	if a.dps <= 0.0:
+		a.acc = 0.0
+		a.tick = 0.0
+		return
+	a.acc += a.dps * delta
+	a.tick += delta
+	a.dps = 0.0
+	if a.tick < TICK_ZOMBI:
+		return
+	jefe.herir(a.acc, LISTA.acido.color)
+	a.acc = 0.0
+	a.tick = 0.0
+	for i in 4:
+		Particulas.soltar(jefe, jefe.global_position + Vector2(randf_range(-20, 20), randf_range(-4, 8)),
+			Vector2(randf_range(-10, 10), randf_range(-60, -35)), LISTA.acido.color, 2, 0.4)
+
+
 # Apunta en "pisando" los estados de un charco. Si pisa dos con el mismo estado, cuenta el más fuerte
 # (con "solo_zombis", solo los que les afectan a ellos)
 static func pisar(pisando: Dictionary, estados: Dictionary, solo_zombis := false) -> void:

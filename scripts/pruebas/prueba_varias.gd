@@ -2231,8 +2231,8 @@ func probar_vecino_gpt(tipo := "normal", nombre := "vecino", otras: Array = []) 
 
 
 # Con "--captura --acido-zombis": cada zombi, quieto encima de un charco de ácido (el de la portera) en la sala de
-# pruebas, y cuánta vida pierde en 2 s: todos se queman menos el gordo (venenoso: aguanta_acido) y el Glotón (los
-# minijefes no pisan charcos). Foto
+# pruebas, y cuánta vida pierde en 2 s: todos se queman menos el gordo (venenoso: aguanta_acido); y debajo, todos los
+# jefes: se queman todos menos el Glotón y el doctor Salas. Foto
 # captura-acido-zombis.png
 func probar_acido_zombis() -> void:
 	await pulsar_y_esperar(KEY_F9)
@@ -2249,9 +2249,12 @@ func probar_acido_zombis() -> void:
 	johnny.global_position = sala.diana.global_position + Vector2(260, 260)
 	johnny.get_node("Camara").reset_smoothing()
 	var tipos := ["normal", "vecina", "lento", "rapido", "explosivo", "tentaculos", "venenoso", "gloton"]
+	var jefes := ["portera", "antidisturbios", "cocinero", "gymbro", "bombero", "directora", "mascota", "cientifico_jefe",
+		"modista", "gerente", "informatico", "presentador", "becario", "sujeto_1"]
+	tipos.append_array(jefes)
 	var zombis := {}
 	for i in tipos.size():
-		var donde: Vector2 = johnny.position + Vector2(-420 + i * 120, -170)
+		var donde: Vector2 = sitio_acido(i)
 		var z: Node2D = meter_zombi(tipos[i], donde)
 		if "velocidad" in z and not (z.get("velocidad") is Array or z.get("velocidad") is Dictionary):
 			z.set("velocidad", 0.0)
@@ -2263,17 +2266,26 @@ func probar_acido_zombis() -> void:
 		zombis[tipos[i]] = [z, 0]
 	await get_tree().create_timer(0.5).timeout
 	for t in zombis:
-		zombis[t][0].global_position = johnny.position + Vector2(-420 + tipos.find(t) * 120, -170)
+		zombis[t][0].global_position = sitio_acido(tipos.find(t))
 		zombis[t][1] = zombis[t][0].vida
-	await get_tree().create_timer(2.0).timeout
+	for paso in 120:   # 2 s, cada uno sujeto encima de su charco (los jefes andan y atacan)
+		for tt in zombis:
+			zombis[tt][0].global_position = sitio_acido(tipos.find(tt))
+		await get_tree().physics_frame
 	var lineas := PackedStringArray()
 	for t in zombis:
 		var z: Node2D = zombis[t][0]
-		z.global_position = johnny.position + Vector2(-420 + tipos.find(t) * 120, -170)
 		lineas.append("%s -%d" % [t, zombis[t][1] - z.vida])
-	print("Ácido en los zombis (2 s encima del charco): %s (esperado: todos pierden vida menos venenoso y gloton, -0)" % " · ".join(lineas))
+	print("Ácido en los zombis y los jefes (2 s encima del charco): %s (esperado: todos pierden vida menos venenoso, gloton y cientifico_jefe, -0)" % " · ".join(lineas))
 	Captura.foto("captura-acido-zombis.png")
 	get_tree().quit()
+
+
+# Dónde va el zombi "i" de probar_acido_zombis: los zombis en una fila y los jefes, más separados, en otra debajo
+func sitio_acido(i: int) -> Vector2:
+	if i < 8:
+		return johnny.position + Vector2(-420 + i * 120, -170)
+	return johnny.position + Vector2(-480 + (i - 8) % 8 * 140, 120 + (i - 8) / 8 * 200)
 
 
 # Con "--captura --tentaculos": el zombi de tentáculos con su hoja de PixelLab (zombi_tentaculos.gd). En la sala de
