@@ -30,6 +30,11 @@ document.addEventListener('fullscreenchange', () => {
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# La interpolación de física (project.godot): Godot dibuja lo que se mueve a 60 pasos por segundo en sitios
+	# intermedios, para que en pantallas de 120 o 144 Hz no vaya a saltitos. Aquí se apaga para todo el juego y se
+	# enciende solo en Johnny (johnny.tscn), que es lo que sigue la cámara: lo que se mueve en cada fotograma en vez
+	# de en cada paso (efectos, menús...) temblaría con ella
+	get_tree().root.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var captura := "--captura" in OS.get_cmdline_user_args()
 	if not captura:
 		get_window().size_changed.connect(ajustar_escala)

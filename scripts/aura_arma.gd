@@ -33,7 +33,8 @@ func _ready() -> void:
 	material = propio
 
 
-func _process(delta: float) -> void:
+# (en cada paso de física, como Johnny: la luz va con él, y él se dibuja con interpolación, pantalla.gd)
+func _physics_process(delta: float) -> void:
 	var q: int = johnny.calidad(johnny.huecos[johnny.mano]) if johnny.vivo else 0
 	if q != calidad:
 		cambiar(q)

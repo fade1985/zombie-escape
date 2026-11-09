@@ -20,6 +20,7 @@ shader = ExtResource("cintura")
 shader_parameter/parte = 2
 
 [node name="Johnny" type="CharacterBody2D" groups=["jugador"]]
+physics_interpolation_mode = 1
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("script")

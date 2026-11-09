@@ -51,6 +51,7 @@ const INVULNERABLE := 0.7  # segundos sin recibir daño después de un zarpazo (
 # Lo que anda más lento por cada tercio de vida perdido: con 210 (mejoras.gd), 179 y 147. Con un tercio perdido aún
 # huye del zombi rápido (165); con dos, ya no. En el JS era 0,25 (aquí serían 210, 158 y 105)
 const LENTO_TERCIO := 0.15
+const SALTO := 64.0         # si se mueve más que esto de una vez, es que le han llevado (otra habitación, un evento)
 const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
 const REGENERA_CADA := 5.0 # Ajolote: segundos entre cura y cura (hasta el 27 oct, 3: con 5 puntos, 100 de vida por minuto)
@@ -182,6 +183,7 @@ const CORROEN := ["veneno", "acido", "porqueria"]
 
 
 func _ready() -> void:
+	set_notify_transform(true)   # para saber cuándo le llevan de golpe a otro sitio (_notification)
 	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	efectos.animation_finished.connect(efectos.hide)
 	# (al empezar todavía no hay cámara: el fogonazo del arma que lleva se prepara un poco después)
@@ -359,6 +361,18 @@ func con_critico(dano: float, seguro := false) -> int:
 func adrenalina() -> bool:
 	return stats.adrenalina and vivo and vida < stats.vida_max * Talentos.ADRENALINA.vida
 
+
+
+# Johnny se dibuja con interpolación (pantalla.gd): entre su sitio del paso de física anterior y el de ahora. Si le
+# llevan de golpe a otro sitio, se le dice a Godot que empiece de cero, para que no se le vea cruzar la pantalla
+var sitio_dibujo := Vector2.ZERO
+
+
+func _notification(que: int) -> void:
+	if que == NOTIFICATION_TRANSFORM_CHANGED and is_inside_tree():
+		if global_position.distance_squared_to(sitio_dibujo) > SALTO * SALTO:
+			reset_physics_interpolation()
+		sitio_dibujo = global_position
 
 func _physics_process(delta: float) -> void:
 	espera -= delta

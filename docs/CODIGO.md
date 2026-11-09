@@ -435,6 +435,12 @@ en una línea.
   `Tornos.freno` desde `Zombi.ir_hacia`, con la zona amarilla en el suelo; ya rescatada, al llegar a cada planta dice dónde
   está lo que abre la sala del jefe, `Supervivientes.pista` y `avisar_pista`; acompañando, grita «¡Detrás!» si un zombi va
   a pegar a Johnny por la espalda en medio segundo, `Aliado.avisar`; `--edificio torre --recepcionista`).
+- **Interpolación de física** (`project.godot`): para que en pantallas de 120 o 144 Hz no vaya a saltitos, Godot dibuja en
+  sitios intermedios entre paso y paso de física. `pantalla.gd` la apaga para todo el juego y solo la lleva Johnny
+  (`johnny.tscn`, con todo lo que le cuelga y su cámara, que va al ritmo de la física): lo que se mueve en cada fotograma en
+  vez de en cada paso temblaría con ella. Si a Johnny le llevan de golpe más de `SALTO` (otra habitación, un evento), él
+  mismo se lo dice a Godot (`_notification`). Lo que cuelgue de Johnny y se mueva solo, en `_physics_process` (como
+  `aura_arma.gd`). Se mide con `--suavidad` (con `--disable-vsync --max-fps 144` delante, como en una pantalla de 144 Hz).
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide
