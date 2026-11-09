@@ -69,9 +69,9 @@ const LISTA := [
 	{"id": "sin_tiritas", "tema": "combate", "nombre": "Sin tiritas", "icono": "logro-sin_tiritas", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida sin curarte con vendas ni botiquín."},
 	# ── Armas y talentos
-	{"id": "manitas", "tema": "armas", "nombre": "Manitas", "icono": "herramientas", "premio": 10, "meta": 1, "cuenta": "",
+	{"id": "manitas", "tema": "armas", "nombre": "Manitas", "icono": "logro-manitas", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Mejora un arma en el banco de trabajo."},
-	{"id": "joya_corona", "tema": "armas", "nombre": "Joya de la corona", "icono": "obj-pieza_especial", "premio": 15, "meta": 1, "cuenta": "",
+	{"id": "joya_corona", "tema": "armas", "nombre": "Joya de la corona", "icono": "logro-joya_corona", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Sube un arma o un arrojable a Épica en el banco de trabajo."},
 	{"id": "arsenal", "tema": "armas", "nombre": "Arsenal completo", "icono": "escopeta", "premio": 15, "cuenta": "total",
 		"mira": "armas", "desc": "Mata un zombi con cada arma: la fregona y todas las de la tienda."},
