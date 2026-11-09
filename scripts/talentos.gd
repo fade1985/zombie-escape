@@ -83,7 +83,7 @@ const LISTA := [
 		"desc": "Cada planta, un escudo de 50 que se gasta antes que la vida"},
 	{"id": "ninja", "rama": "superviviente", "nivel": 3, "nombre": "Ninja", "max": 1, "icono": "talento-ninja", "pide": "reflejos",
 		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"},
-	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "medico", "pide": "sanitario",
+	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "talento-desfibrilador", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
 	{"id": "blindaje", "rama": "superviviente", "nivel": 4, "nombre": "Blindaje", "max": 3, "icono": "herramientas", "pide": "acero",
 		"desc": "El escudo de Acero tiene 25 más por punto"},
