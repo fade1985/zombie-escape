@@ -80,7 +80,7 @@ const LISTA := [
 	{"id": "conserje_total", "tema": "armas", "nombre": "Conserje total", "icono": "logro-conserje_total", "premio": 25, "cuenta": "",
 		"mira": "arbol", "desc": "Llena el árbol de talentos entero."},
 	# ── Supervivientes
-	{"id": "buen_vecino", "tema": "supervivientes", "nombre": "Buen vecino", "icono": "corazon", "premio": 15, "meta": 1, "cuenta": "",
+	{"id": "buen_vecino", "tema": "supervivientes", "nombre": "Buen vecino", "icono": "logro-buen_vecino", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."},
 	{"id": "comunidad", "tema": "supervivientes", "nombre": "Comunidad de vecinos", "icono": "apartamentos", "premio": 10, "cuenta": "",
 		"mira": "rescatados", "edificio": "apartamentos", "desc": "Rescata a los 3 supervivientes de los Apartamentos."},
