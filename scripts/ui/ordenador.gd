@@ -35,7 +35,7 @@ const CARCASA := Color("#a49a83")      # el plástico del monitor, amarillento d
 # [traducir]
 const ICONOS := [   # [programa, icono, nombre]
 	["puntos", "escritorio-talentos", "Talentos"],   # (por dentro se sigue llamando "puntos": antes se compraban puntos de talento)
-	["armas", "pistola", "Tienda\nde armas"],
+	["armas", "escritorio-armas", "Tienda\nde armas"],
 	["logros", "trofeo", "Logros"],
 	["dosier", "dosier", "Dosier\nVD-7"],
 	["noticias", "noticias", "Noticias"],
