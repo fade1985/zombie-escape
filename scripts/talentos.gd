@@ -75,7 +75,7 @@ const LISTA := [
 		"desc": "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"},
 	{"id": "durito", "rama": "superviviente", "nivel": 2, "nombre": "Durito", "max": 3, "icono": "talento-durito", "pide": "corpulento",
 		"desc": "Cada golpe que recibes quita 1 menos por punto"},
-	{"id": "reflejos", "rama": "superviviente", "nivel": 2, "nombre": "Reflejos", "max": 5, "icono": "reflejos", "pide": "corpulento",
+	{"id": "reflejos", "rama": "superviviente", "nivel": 2, "nombre": "Reflejos", "max": 5, "icono": "talento-reflejos", "pide": "corpulento",
 		"desc": "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"},
 	{"id": "sanitario", "rama": "superviviente", "nivel": 2, "nombre": "Sanitario", "max": 5, "icono": "botiquin", "pide": "lobezno",
 		"desc": "Los botiquines y las vendas curan 10 más por punto"},
