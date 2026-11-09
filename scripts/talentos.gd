@@ -101,7 +101,7 @@ const LISTA := [
 		"desc": "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"},
 	{"id": "incendiario", "rama": "quimico", "nivel": 2, "nombre": "Incendiario", "max": 5, "icono": "lanzallamas", "pide": "catalizador",
 		"desc": "Los zombis que prendes arden 0,5 s más por punto"},
-	{"id": "desatascador", "rama": "quimico", "nivel": 2, "nombre": "Desatascador", "max": 5, "icono": "desintegrador", "pide": "catalizador",
+	{"id": "desatascador", "rama": "quimico", "nivel": 2, "nombre": "Desatascador", "max": 5, "icono": "talento-desatascador", "pide": "catalizador",
 		"desc": "Con ácido encima, todo les quita un 10 % más por punto"},
 	{"id": "criogenia", "rama": "quimico", "nivel": 2, "nombre": "Criogenia", "max": 3, "icono": "congeladora", "pide": "guantes_goma",
 		"desc": "+1 congeladora por punto, y congelan 0,5 s más por punto"},
