@@ -101,6 +101,7 @@ MUEBLES = {
     "talento_residuo": ("assets/sources/talento-residuo-gpt.webp", "assets/ui/iconos/talento-residuo.png", 32, 29, False),
     "talento_pararrayos": ("assets/sources/talento-pararrayos-gpt.webp", "assets/ui/iconos/talento-pararrayos.png", 16, 32, False),
     "talento_napalm": ("assets/sources/talento-napalm-gpt.webp", "assets/ui/iconos/talento-napalm.png", 30, 32, False, (), [(400, 540)]),
+    "talento_pegajoso": ("assets/sources/talento-pegajoso-gpt.webp", "assets/ui/iconos/talento-pegajoso.png", 31, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
