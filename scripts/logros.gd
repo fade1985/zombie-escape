@@ -101,7 +101,7 @@ const LISTA := [
 		"desc": "Vence a una horda del pasillo."},
 	{"id": "reto_aceptado", "tema": "sorpresas", "nombre": "Reto aceptado", "icono": "logro-reto_aceptado", "premio": 10, "meta": 1, "cuenta": "",
 		"desc": "Completa un reto del día."},
-	{"id": "todas_reglas", "tema": "sorpresas", "nombre": "Ninguna regla me para", "icono": "diana", "premio": 25, "cuenta": "total",
+	{"id": "todas_reglas", "tema": "sorpresas", "nombre": "Ninguna regla me para", "icono": "logro-todas_reglas", "premio": 25, "cuenta": "total",
 		"mira": "reglas", "desc": "Completa el reto del día con cada una de sus 7 reglas."},
 	# ── Colecciones
 	{"id": "cambio_look", "tema": "colecciones", "nombre": "Cambio de look", "icono": "skin-portero", "premio": 5, "cuenta": "",
