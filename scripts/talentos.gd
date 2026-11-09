@@ -68,7 +68,7 @@ const LISTA := [
 		"pide": ["frenesi", "gatillo", "racimo"],
 		"desc": "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"},
 	# ── Superviviente
-	{"id": "corpulento", "rama": "superviviente", "nivel": 1, "nombre": "Corpulento", "max": 5, "icono": "vida",
+	{"id": "corpulento", "rama": "superviviente", "nivel": 1, "nombre": "Corpulento", "max": 5, "icono": "talento-corpulento",
 		"desc": "+10 % de vida máxima por punto"},
 	# (hasta el 29 oct se llamaba Lobezno, pero Wolverine es marca de Marvel; el id se queda, que va en las partidas guardadas)
 	{"id": "lobezno", "rama": "superviviente", "nivel": 1, "nombre": "Ajolote", "max": 5, "icono": "corazon",
