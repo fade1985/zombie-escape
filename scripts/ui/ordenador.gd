@@ -76,7 +76,7 @@ const PIP_LLENO := Color("#e8b923")
 var partida: Node
 var fondo: ColorRect
 var pantalla: Control
-var iconos: VBoxContainer
+var iconos: Control         # los botones del escritorio, colocados a mano (Noticias, sola arriba a la derecha)
 var colocando := false   # marcar: la ventana recién rehecha aún se está colocando, y lo que hay bajo el ratón no es lo que se ve
 var ventana: Control
 var info: Label             # la línea de abajo de la ventana: explica lo que está marcado
@@ -187,16 +187,25 @@ func montar_monitor() -> void:
 	escritorio.set_anchors_preset(Control.PRESET_FULL_RECT)
 	pantalla.add_child(escritorio)
 
-	iconos = VBoxContainer.new()
-	iconos.position = Vector2(10, 12)
-	iconos.add_theme_constant_override("separation", 1)
+	# los iconos, en columna a la izquierda; Noticias, sola en la esquina de arriba a la derecha (como la tele de una
+	# esquina)
+	iconos = Control.new()
+	iconos.set_anchors_preset(Control.PRESET_FULL_RECT)
+	iconos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pantalla.add_child(iconos)
+	var en_columna := 0
 	var nuevos: Array = MESA.novedades(Guardado.cargar())   # al encender; luego los avisos se ponen al día con refrescar_avisos
 	for i in ICONOS:
 		var b := Button.new()
 		b.name = "icono_" + i[0]
 		b.flat = true
 		b.custom_minimum_size = Vector2(132, 72)
+		b.size = b.custom_minimum_size
+		if i[0] == "noticias":
+			b.position = Vector2(pantalla.custom_minimum_size.x - 10 - 132, 12)
+		else:
+			b.position = Vector2(10, 12 + en_columna * 73)
+			en_columna += 1
 		b.add_theme_stylebox_override("normal", caja(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 4, 2))   # sin el margen grande del tema: caben los 7
 		b.add_theme_stylebox_override("hover", caja(Color(1, 1, 1, 0.12), Color(0, 0, 0, 0), 0, 4, 2))
 		b.add_theme_stylebox_override("pressed", caja(Color(1, 1, 1, 0.2), Color(0, 0, 0, 0), 0, 4, 2))

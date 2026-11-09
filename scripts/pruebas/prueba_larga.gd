@@ -878,7 +878,7 @@ func probar_novedades() -> void:
 	await get_tree().create_timer(0.5).timeout
 	var con_marca := []
 	for icono in ordenador.iconos.get_children():
-		if icono.get_children().any(func(c): return c is Label and c.text == "!"):
+		if icono.get_children().any(func(c): return c.name == "marca_nuevo"):
 			con_marca.append(icono.name)
 	print("Escritorio: iconos con «!» %s (esperado: icono_logros, icono_noticias, icono_colecciones)" % [con_marca])
 	Captura.foto("captura-novedades-escritorio.png")
@@ -937,7 +937,7 @@ func probar_avisos_ordenador() -> void:
 	var mesa: Node2D = mapa.ordenador
 	var con_marca := func() -> Array:
 		return ordenador.iconos.get_children().filter(func(icono): return icono.get_children().any(
-			func(c): return c is Label and c.text == "!")).map(func(icono): return str(icono.name))
+			func(c): return c.name == "marca_nuevo")).map(func(icono): return str(icono.name))
 	print("«!» de la mesa antes: %s (esperado: true) · emisiones sin ver %s" % [mesa.get_node("Exclamacion").visible, sin_ver])
 	abrir_ordenador()
 	await get_tree().create_timer(0.5).timeout
