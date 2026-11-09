@@ -27,6 +27,8 @@
 #                       (--gimnasio y --cubos, con --skin X: el tropiezo de Johnny con esa skin)
 #   --aspirar           (con --jefe gloton) su sangre ácida y lo que tira al aspirar a 3, 5, 8 y 12 casillas, normal y
 #                       enfadado                                                           [prueba_jefes.gd]
+#   --sangre            (con --jefe gloton) su sangre ácida: el chorro llega hasta donde estaba Johnny y deja allí
+#                       su charco (dos, enfadado)                                          [prueba_jefes.gd]
 #   --pesas             (con --jefe gymbro) sus suplementos, su salto y las pesas que lanza, en el aire y en el suelo
 #                                                                                          [prueba_jefes.gd]
 #   --cambios           (con --edificio centro --jefe modista) cuántas veces se cambia de maniquí en 20 s, normal y
@@ -410,6 +412,10 @@ func empezar_prueba() -> void:
 	elif "--aspirar" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_aspirar()
+		get_tree().quit()
+	elif "--sangre" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_sangre_gloton()
 		get_tree().quit()
 	elif "--cambios" in args:
 		set_process(false)   # sin la prueba larga

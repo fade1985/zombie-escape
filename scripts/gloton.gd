@@ -14,8 +14,8 @@
 #     unos 80 y de lejos a 105 (en vez de a 210; hasta el 28 oct, a 126 y a 140). También se libra esquivando (esquivando no tira), saliendo del cono (o metiéndose en la
 #     porquería) o poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
 #   - Sangre ácida (9 nov): cada golpe o disparo que le das salpica un chorro de sangre verde que llega hasta donde
-#     estaba Johnny (como la de los zombis, pero mucha más) y deja un charco pequeño de ácido en el suelo, entre él y Johnny (dos si está
-#     enfadado), que quema al pisarlo como el de la portera. Ya no quita vida directamente (hasta el 9 nov, un 1 %).
+#     estaba Johnny (como la de los zombis, pero mucha más) y, al caer allí, deja un charco pequeño de ácido (dos si
+#     está enfadado), que quema al pisarlo como el de la portera. Cuanto más lejos, más tarda en llegar (VUELO). Ya no quita vida directamente (hasta el 9 nov, un 1 %).
 #     Como mucho uno cada 0,25 s (los perdigones de la escopeta cuentan como un golpe). Si le pegan los supervivientes
 #     que acompañan a Johnny, le hacen daño igual pero no salpica.
 #   - Una explosión (granada) le corta lo que esté haciendo (se tambalea): la manera de parar el aspirado.
@@ -54,6 +54,7 @@ const MEDIO_ASPIRAR := 0.85            # medio ángulo del cono por donde aspira
 const DANO_COMER := 30
 const CHARCOS := [1, 2]                # charcos de ácido que deja cada golpe (normal y enfadado)
 const ACIDO_CADA := 0.25               # lo menos entre dos salpicones (los perdigones de un tiro, uno solo)
+const VUELO := [0.3, 1.0, 600.0]       # lo que tarda el chorro en caer: de 0,3 s (pegado) a 1 s (a 600 o más)
 const CHARCO := preload("res://escenas/armas/charco.tscn")
 const TAMBALEO := 0.6                  # lo que le corta una explosión
 const PIE := 30.0                      # a qué altura dibuja los pies respecto a su centro
@@ -328,17 +329,28 @@ func salpicar_acido() -> void:
 	acido_t = ACIDO_CADA
 	Sonido.tocar("chisporroteo")
 	# un chorro de sangre verde que llega hasta donde está Johnny, como el de los zombis pero mucho más (ellos, 24 por golpe)
-	var hacia: Vector2 = (johnny.global_position - global_position).normalized()
-	Particulas.salpicar_hasta(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, johnny.global_position, VERDE, 60)
-	# y los charcos pequeños de ácido, por el camino hacia Johnny (sin pasarse de él)
-	var lejos: float = minf(global_position.distance_to(johnny.global_position), 150.0)
-	for i in CHARCOS[fase - 1]:
+	var hasta: Vector2 = johnny.global_position
+	var vuelo := vuelo_acido(global_position.distance_to(hasta))
+	Particulas.salpicar_hasta(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, hasta, VERDE, 60, vuelo)
+	# y, cuando cae, el charco pequeño de ácido allí (enfadado, dos, uno a cada lado)
+	var sitio := get_parent()
+	var n: int = CHARCOS[fase - 1]
+	await get_tree().create_timer(vuelo, false).timeout
+	if not is_instance_valid(sitio) or not sitio.is_inside_tree():
+		return
+	var lado := Vector2.from_angle(randf() * TAU) * Vector2(26.0, 16.0)
+	for i in n:
 		var charco: Node2D = CHARCO.instantiate()
 		charco.tipo = "sangre_gloton"
-		charco.dueno = self   # a él no le quema
-		var p: Vector2 = global_position + hacia.rotated(randf_range(-0.6, 0.6)) * randf_range(maxf(40.0, lejos * 0.4), maxf(60.0, lejos))
-		charco.position = ((p - get_parent().global_position) / 2.0).round() * 2.0   # (en píxel entero del dibujo)
-		get_parent().add_child.call_deferred(charco)
+		charco.dueno = self if is_instance_valid(self) else null   # a él no le quema
+		var p: Vector2 = hasta + (lado * (1.0 if i == 0 else -1.0) if n > 1 else Vector2.ZERO)
+		charco.position = ((p - sitio.global_position) / 2.0).round() * 2.0   # (en píxel entero del dibujo)
+		sitio.add_child(charco)
+
+
+# Lo que tarda el chorro en llegar a "lejos" (más lejos, más tarda)
+static func vuelo_acido(lejos: float) -> float:
+	return lerpf(VUELO[0], VUELO[1], clampf(lejos / VUELO[2], 0.0, 1.0))
 
 
 # ── Dibujo ──
