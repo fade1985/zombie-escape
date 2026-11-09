@@ -31,7 +31,8 @@ const CAPA_ZOMBIS := 3     # su capa de choque, la 3 de project.godot
 @export var radio := 16.0        # su círculo de choque (Johnny y las balas lo usan para saber si le dan)
 @export var alcance := 18.0      # a qué distancia de Johnny (además de los dos radios) lanza el zarpazo
 @export var empuje := 1.0        # cuánto sale despedido con los golpes (1 = como el normal; más, más lejos)
-@export var giro := 8.0          # lo rápido que cambia de rumbo (el rápido gira poco: se pasa de largo)
+@export var giro := 8.0          # lo rápido que cambia de rumbo
+@export var directo := false     # el crío: si ve a Johnny va derecho a por él (sin la ruta) y frena para darse la vuelta
 @export var bamboleo := 0.2      # cuánto se tambalea de lado a lado al andar
 @export var bamboleo_ritmo := 2.3
 @export var a_tirones := false   # el lento: avanza a tirones, como si se arrastrara con las manos
@@ -266,7 +267,11 @@ func andar(delta: float, johnny: Node2D) -> void:
 	if dano > 0 and distancia_a(johnny) < radio + johnny.RADIO + alcance and se_ve(johnny):
 		empezar_zarpazo(johnny)
 		return
-	ir_hacia(delta, camino_hacia(johnny.global_position), velocidad)
+	var hacia := camino_hacia(johnny.global_position)
+	# El crío (directo): con Johnny a la vista, en línea recta; la ruta, solo si hay paredes o muebles en medio
+	if directo and se_ve(johnny):
+		hacia = global_position.direction_to(johnny.global_position)
+	ir_hacia(delta, hacia, velocidad)
 
 
 # La diana: quieta en su sitio, mirando a Johnny; si la han movido, vuelve
@@ -295,7 +300,13 @@ func camino_hacia(destino: Vector2) -> Vector2:
 func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	if rumbo == Vector2.ZERO:
 		rumbo = hacia
-	rumbo = rumbo.lerp(hacia, 1.0 - exp(-delta * giro)).normalized()
+	if directo:
+		# Gira el rumbo (sin acortarlo, también al darse la vuelta del todo) y, cuanto más tiene que girar, más frena:
+		# así no hace arcos a toda velocidad; se para, se encara y vuelve a salir
+		rumbo = rumbo.rotated(rumbo.angle_to(hacia) * (1.0 - exp(-delta * giro)))
+		rapidez *= maxf(0.25, 0.5 + 0.5 * rumbo.dot(hacia))
+	else:
+		rumbo = rumbo.lerp(hacia, 1.0 - exp(-delta * giro)).normalized()
 	var paso := rumbo + rumbo.orthogonal() * sin(tiempo * bamboleo_ritmo) * bamboleo
 	if a_tirones:
 		rapidez *= 0.55 + 0.45 * absf(sin(tiempo * 2.0))

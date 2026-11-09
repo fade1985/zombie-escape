@@ -17,7 +17,8 @@ velocidad = 165.0
 dano = 10
 radio = 14.0
 empuje = 1.18
-giro = 2.2
+giro = 10.0
+directo = true
 bamboleo = 0.0
 
 [node name="Sombra" type="Node2D" parent="."]

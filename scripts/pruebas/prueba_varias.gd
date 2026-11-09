@@ -4169,3 +4169,68 @@ func probar_dosier_carpeta() -> void:
 	ordenador.apagar()
 	Guardado.cambiar(func(g): g.paginas = copia)
 	get_tree().quit()
+
+
+# Con "--captura --crio-carrera": cómo corre el crío (zombi rápido) hacia Johnny en la sala de pruebas. Primero
+# como era antes (giro 2,2 y sin ir directo), luego como es ahora. Johnny, invencible, espera quieto y, cuando el crío
+# está a punto de llegar, se aparta de lado (a su velocidad, 210) para esquivarlo. Se apunta dónde está el crío en cada
+# paso de física y se dibuja su camino (rojo, antes; verde, ahora; en blanco, el paso de Johnny). En la terminal, lo
+# que tarda en llegar y lo que anda. Foto: captura-crio-carrera.png
+func probar_crio_carrera() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	sala.diana.process_mode = Node.PROCESS_MODE_DISABLED
+	sala.diana.visible = false
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	var base := sala.diana.global_position + Vector2(200, 120)
+	var lineas := PackedStringArray()
+	for como in ["antes", "ahora"]:
+		johnny.global_position = base
+		johnny.get_node("Camara").reset_smoothing()
+		var z: Node2D = meter_zombi("rapido", base + Vector2(-420, 0))
+		if como == "antes":
+			z.giro = 2.2
+			z.directo = false
+		var rastro := Line2D.new()
+		rastro.width = 4.0
+		rastro.default_color = Color(1, 0.2, 0.2, 0.9) if como == "antes" else Color(0.2, 1, 0.3, 0.9)
+		rastro.z_index = 50
+		z.get_parent().add_child(rastro)
+		var paso_johnny := Line2D.new()
+		paso_johnny.width = 3.0
+		paso_johnny.default_color = Color(1, 1, 1, 0.8)
+		paso_johnny.z_index = 50
+		z.get_parent().add_child(paso_johnny)
+		var andado := 0.0
+		var llega := -1
+		var esquiva := -1
+		var antes := z.global_position
+		for paso in 300:   # 5 s como mucho
+			if esquiva < 0 and z.global_position.distance_to(johnny.global_position) < 70.0:   # en el último momento
+				esquiva = paso
+			if esquiva >= 0 and paso - esquiva < 40:   # se aparta 140 hacia abajo en 0,67 s
+				johnny.global_position += Vector2(0, 210.0 / 60.0)
+				paso_johnny.add_point(johnny.global_position)
+			await get_tree().physics_frame
+			andado += antes.distance_to(z.global_position)
+			antes = z.global_position
+			rastro.add_point(z.global_position)
+			if esquiva >= 0 and paso - esquiva >= 40 and z.global_position.distance_to(johnny.global_position) < 50.0:
+				llega = paso
+				break
+		lineas.append("%s: le alcanza en %s pasos, anda %d" % [como, str(llega) if llega >= 0 else "nunca (300)", int(andado)])
+		z.queue_free()
+	johnny.global_position = base + Vector2(-200, -40)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.2).timeout
+	print("Carrera del crío con esquiva de Johnny: %s" % " · ".join(lineas))
+	Captura.foto("captura-crio-carrera.png")
+	get_tree().quit()

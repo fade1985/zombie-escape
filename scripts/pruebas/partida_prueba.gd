@@ -345,6 +345,7 @@
 #   --acido-zombis      cada zombi y cada jefe encima de un charco de ácido: todos se queman menos el
 #                       gordo, el Glotón y el doctor Salas [prueba_varias.gd]
 #                       (con --con-vomito, el charco del vómito de Gastroenteritis en vez del de ácido)
+#   --crio-carrera      cómo corre el crío hacia Johnny, que va y viene: su camino antes (rojo) y ahora (verde) [prueba_varias.gd]
 #   --lento-gpt         lo mismo con el arrastrado de GPT, al lado del vecino (para ver su tamaño) [prueba_varias.gd]
 #   --gordo-real        el gordo (venenoso) más real (contorno suave, como el crío), quieto en sus 8 direcciones: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --tres-zombis       la vecina, el vecino y el crío (los tres de GPT) juntos, por tríos en sus 8 direcciones (mismas fotos) [prueba_varias.gd]
@@ -927,6 +928,9 @@ func empezar_prueba() -> void:
 	elif "--ritmo-bombero" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ritmo_bombero()
+	elif "--crio-carrera" in args:
+		set_process(false)   # sin la prueba larga
+		probar_crio_carrera()
 	elif "--acido-zombis" in args:
 		set_process(false)   # sin la prueba larga
 		probar_acido_zombis()
