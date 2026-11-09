@@ -117,7 +117,7 @@ const LISTA := [
 		"desc": "Los zombis con ácido van un 10 % más lentos por punto"},
 	{"id": "voltaje", "rama": "quimico", "nivel": 4, "nombre": "Alto voltaje", "max": 3, "icono": "talento-voltaje", "pide": "pararrayos",
 		"desc": "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"},
-	{"id": "mezcla", "rama": "quimico", "nivel": 5, "nombre": "Mezcla explosiva", "max": 1, "icono": "obj-pieza_especial",
+	{"id": "mezcla", "rama": "quimico", "nivel": 5, "nombre": "Mezcla explosiva", "max": 1, "icono": "talento-mezcla",
 		"pide": ["napalm", "pegajoso", "voltaje"],
 		"desc": "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"},
 ]
