@@ -89,7 +89,7 @@ const LISTA := [
 		"desc": "El escudo de Acero tiene 25 más por punto"},
 	{"id": "sombra", "rama": "superviviente", "nivel": 4, "nombre": "Sombra", "max": 3, "icono": "talento-sombra", "pide": "ninja",
 		"desc": "La esquiva se recarga un 15 % antes por punto"},
-	{"id": "aliento", "rama": "superviviente", "nivel": 4, "nombre": "Segundo aliento", "max": 3, "icono": "cafe", "pide": "desfibrilador",
+	{"id": "aliento", "rama": "superviviente", "nivel": 4, "nombre": "Segundo aliento", "max": 3, "icono": "talento-aliento", "pide": "desfibrilador",
 		"desc": "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"},
 	{"id": "adrenalina", "rama": "superviviente", "nivel": 5, "nombre": "Adrenalina", "max": 1, "icono": "alerta",
 		"pide": ["blindaje", "sombra", "aliento"],
