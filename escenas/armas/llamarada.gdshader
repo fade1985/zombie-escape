@@ -10,6 +10,8 @@
 //   - En la boca, la llamita azul del piloto (solo mientras echa fuego)
 //   - Encima de la punta, un poco de humo transparente que sube y se deshace (poco: el de antes parecía una nube
 //     negra al final)
+//   - Al apagarla ("apagado", los segundos desde que se soltó): la llama que se va se enfría y sube, de la boquilla
+//     sale una bocanada de humo y el humo de la punta sigue subiendo un rato donde estaba ("largo_humo")
 //   - Si la corta una pared, en la punta se aplasta y se abre; al apagarla, se despega de la boca ("cola")
 // Los bordes entre un color y otro van en damero (dos colores a cuadros), como se hace a mano en pixel art.
 shader_type canvas_item;
@@ -22,6 +24,8 @@ uniform float largo = 0.0;           // hasta dónde llega la punta (en la panta
 uniform float cola = 0.0;            // desde dónde empieza (al apagarla se despega de la boca)
 uniform float alcance = 320.0;       // lo más lejos que llega (para lo que se enfría)
 uniform float cortada = 0.0;         // 1 si la corta una pared antes de su alcance
+uniform float apagado = -1.0;        // los segundos desde que se soltó (-1: echando fuego, o nada)
+uniform float largo_humo = 0.0;      // lo larga que era al soltarla
 
 // la rampa del fuego, de fría a caliente (la del flamethrower de pixelfx)
 const vec3 F0 = vec3(0.290, 0.090, 0.071);   // #4a1712
@@ -40,6 +44,7 @@ const vec3 AZUL2 = vec3(0.659, 0.831, 1.0);    // #a8d4ff
 // el humo
 const vec3 HUMO0 = vec3(0.180, 0.149, 0.188);  // #2e2630
 const vec3 HUMO1 = vec3(0.388, 0.322, 0.337);  // #635256
+const vec3 HUMO2 = vec3(0.549, 0.490, 0.502);  // #8c7d80 (lo de arriba de la bocanada de la boquilla)
 
 varying vec2 mundo;
 
@@ -81,7 +86,9 @@ void fragment() {
 	float T = tiempo;
 	// el centro de su píxel del dibujo, y dónde cae: "x" a lo largo de la llama desde la boca, "y" de lado
 	vec2 p = floor(mundo / 2.0) * 2.0 + 1.0;
-	vec2 r = p - boca;
+	// al apagarla, la llama que se va sube y se enfría (k, de 0 a 1 en lo que tarda en irse)
+	float k = apagado >= 0.0 ? clamp(apagado / 0.4, 0.0, 1.0) : 0.0;
+	vec2 r = p - boca + vec2(0.0, k * k * 26.0);
 	vec2 lado_eje = vec2(-eje.y, eje.x);
 	float x = dot(r, eje);
 	float y = dot(r, lado_eje);
@@ -91,14 +98,16 @@ void fragment() {
 	// la punta (deshilachada; contra la pared, cortada casi en seco), la cola (al apagarla) y nada detrás de la boca
 	float punta = largo - mix(18.0, 6.0, cortada) * capas(vec2(y * 0.09, T * 3.0));
 	float vive = 1.0 - smoothstep(punta - mix(26.0, 8.0, cortada), punta, x);
-	vive *= smoothstep(cola - 20.0, cola, x) * step(-1.0, x);
+	// la cola de la llama que se va, redondeada y deshilachada (no cortada en recto)
+	float colar = cola > 0.0 ? cola + abs(y) * 0.5 + 18.0 * capas(vec2(y * 0.08, T * 4.0)) - 9.0 : cola;
+	vive *= smoothstep(colar - 20.0, colar, x) * step(-1.0, x);
 
 	// ── El chorro a presión: fino, recto, ondula un poco lejos de la boca ──
 	float onda = sin(x * 0.03 - T * 9.0) * x * 0.022 + sin(x * 0.08 - T * 15.0) * x * 0.007;
 	float yy = y - onda;
 	// se deshace hacia la punta (contra la pared llega entero)
 	float entero = 1.0 - smoothstep(largo * mix(0.5, 0.8, cortada), largo * mix(0.85, 1.0, cortada), x);
-	float wc = (2.6 + x * 0.04) * (1.0 + 0.18 * sin(x * 0.35 - T * 38.0)) * entero;
+	float wc = (2.6 + x * 0.04) * (1.0 + 0.18 * sin(x * 0.35 - T * 38.0)) * entero * (1.0 - smoothstep(0.0, 0.5, k));
 	float lc = abs(yy) / max(wc, 0.001);
 	// los golpes de presión: bandas que corren hacia fuera, un color más calientes
 	float golpe = step(fract(x * 0.026 - T * 7.5), 0.14);
@@ -138,7 +147,10 @@ void fragment() {
 	// dentro, las bocanadas más calientes: manchas grandes que van hacia fuera
 	calor += smoothstep(0.55, 0.75, capas(vec2(xe * 0.03 - T * 8.0, ye * 0.05 - T * 0.4))) * 0.14 * (1.0 - le);
 	calor *= 1.0 - smoothstep(punta - mix(26.0, 8.0, cortada), punta + 10.0, xe);
-	calor *= smoothstep(cola - 20.0, cola, xe);
+	float colae = cola > 0.0 ? cola + abs(ye) * 0.5 + 18.0 * capas(vec2(ye * 0.08, T * 4.0)) - 9.0 : cola;
+	calor *= smoothstep(colae - 24.0, colae, xe);
+	calor -= k * 0.42;                 // al irse se enfría
+	calor += (n - 0.5) * 0.4 * k;      // y se rompe en bocanadas
 	calor += damero * 0.03;
 	int llama = -1;
 	if (calor > 0.8) llama = 6;
@@ -156,7 +168,7 @@ void fragment() {
 	}
 
 	// ── El piloto: una llamita azul en la boca, alrededor del chorro (solo mientras echa fuego) ──
-	if (nivel < 5 && cola <= 0.0 && x > -3.0 && x < 10.0) {
+	if (nivel < 5 && cola <= 0.0 && apagado < 0.0 && largo > 0.0 && x > -3.0 && x < 10.0) {
 		float lp = abs(y) - wc;
 		float hasta = 4.0 - x * 0.35 + damero * 0.6;
 		if (lp > -0.5 && lp < hasta) {
@@ -165,17 +177,33 @@ void fragment() {
 	}
 
 	// ── El humo: encima de la punta, transparente, sube y se deshace ──
-	if (nivel < 0 && largo > 40.0) {
-		vec2 d = p - (boca + eje * (largo - 6.0));
+	float lh = apagado >= 0.0 ? largo_humo : largo;
+	if (nivel < 0 && lh > 40.0) {
+		vec2 d = p - (boca + eje * (lh - 6.0));
+		d.y += max(apagado, 0.0) * 35.0;   // al apagarla, sigue subiendo
 		float alto = -d.y;   // lo que ha subido
 		float sigue = sin(alto * 0.05 - T * 2.0) * 6.0 + alto * 0.15 * sign(eje.x);
 		float ancho = 8.0 + alto * 0.45;
 		float h = capas(vec2(d.x * 0.07, d.y * 0.06 + T * 2.4));
 		float densa = (1.0 - abs(d.x - sigue) / ancho) * smoothstep(-6.0, 12.0, alto) * (1.0 - smoothstep(30.0, 85.0, alto));
-		densa *= smoothstep(40.0, 120.0, largo);
+		densa *= smoothstep(40.0, 120.0, lh);
+		if (apagado >= 0.0) densa *= 1.0 - apagado / 0.9;
 		densa = densa * (0.6 + h) - 0.42 + damero * 0.08;
 		if (densa > 0.0) {
 			color = vec4(densa > 0.22 && h > 0.5 ? HUMO1 : HUMO0, 0.55);
+		}
+	}
+	// ── Al apagarla: una bocanada de humo que sale de la boquilla y sube ──
+	if (color.a == 0.0 && apagado >= 0.0 && apagado < 0.7) {
+		float a = apagado;
+		vec2 c = boca + eje * (6.0 + a * 16.0) + vec2(0.0, -a * 50.0);
+		float radio = 6.0 + a * 20.0;
+		vec2 dc = p - c;
+		float h = capas(dc * 0.12 + vec2(0.0, T * 1.5));
+		float densa = 1.0 - length(dc) / radio + (h - 0.5) * 0.6 + damero * 0.08;
+		if (densa > 0.0) {
+			vec3 tono = dc.y < -radio * 0.35 ? HUMO2 : (dc.y < radio * 0.1 ? HUMO1 : HUMO0);   // con luz de arriba
+			color = vec4(tono, 0.75 * (1.0 - smoothstep(0.3, 0.7, a)));
 		}
 	}
 	COLOR = color;

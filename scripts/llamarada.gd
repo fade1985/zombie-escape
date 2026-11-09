@@ -9,7 +9,9 @@
 # debajo de la boca) y se dibuja más arriba: sale a la altura de la boca y va bajando hasta el cuerpo de los zombis.
 # El dibujo lo hace su shader (escenas/armas/llamarada.gdshader): fuego en pixel art, con las bocanadas y los colores
 # (sin humo). Aquí, además, las chispas que saltan, la luz que alumbra alrededor mientras sale (más en los sitios
-# oscuros) y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA).
+# oscuros) y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA). La del lanzallamas, además,
+# se va más despacio (APAGA_LLAMA), enfriándose y subiendo; la boquilla escupe chispas y unas gotas ardiendo, de ella
+# sale una bocanada de humo y el humo de la punta sigue subiendo un rato (apagar(), HUMO; el shader, "apagado").
 #
 # El lanza ácido (Armas.DATOS.desintegrador, efecto "acido") echa por aquí su chorro, igual de largo y con el mismo
 # cono: lo que cambia es el dibujo (escenas/armas/chorro_acido.gdshader: un chorro de ácido a presión que se abre en abanico, verde),
@@ -38,6 +40,9 @@ const ALTURA := 50.0        # a qué altura sale de la boca (como la bala)
 const ALTURA_CUERPO := 26.0 # y a cuál llega al final
 const CRECE := 0.12         # lo que tarda en estirarse hasta su alcance al encenderla
 const APAGA := 0.22         # y lo que tarda en irse al apagarla (se despega de la boca y se aleja)
+const APAGA_LLAMA := 0.4    # la del lanzallamas, más despacio (se enfría y sube mientras se va)
+const HUMO := 0.9           # lo que dura el humo del apagado del lanzallamas (el de la boquilla y el de la punta)
+const BAJA_DIBUJO := 3.0    # el dibujo de la llama, un poco más abajo que la boca de la bala: así sale justo del agujero
 const EMPUJE := 170.0       # empuje base, como el de las balas
 const SOMBREADO := preload("res://escenas/armas/llamarada.gdshader")
 const SOMBREADO_ACIDO := preload("res://escenas/armas/chorro_acido.gdshader")
@@ -72,6 +77,8 @@ var luz: PointLight2D
 var tick_t := TICK          # (empieza lleno: el primer pellizco, en cuanto sale)
 var ticks := 0
 var tiempo := 0.0
+var apagado := -1.0         # el lanzallamas: cuánto hace que se soltó (para el humo y el enfriado); -1, nada
+var largo_humo := 0.0       # y lo larga que era al soltarla (el humo de la punta se queda ahí)
 var saltos := 0             # el rayo: a cuántos zombis más salta la descarga, además del primero (la calidad)
 var abertura := ABRE        # lo que se abre el cono a cada lado (el del rayo, más estrecho)
 var blancos: Array = []     # el rayo: los zombis que toca
@@ -134,11 +141,13 @@ func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var antes := encendida
 	encendida = pedida
 	pedida = false
 	tiempo += delta
 	forma = floori(tiempo * FORMAS)
 	if encendida:
+		apagado = -1.0
 		tope = medir()
 		cola = 0.0
 		largo = minf(largo + alcance / CRECE * delta, tope)
@@ -156,16 +165,39 @@ func _physics_process(delta: float) -> void:
 			chispas(delta)
 		if variante == "llama":
 			gotas_fuego(delta)
-	elif largo > 0.0:
-		cola += alcance / APAGA * delta
-		if cola >= largo:
-			largo = 0.0
-			cola = 0.0
+	else:
+		if antes and variante == "llama" and largo > 20.0:
+			apagar()
+		if apagado >= 0.0:
+			apagado += delta
+			if apagado > HUMO:
+				apagado = -1.0
+		if largo > 0.0:
+			cola += alcance / (APAGA_LLAMA if variante == "llama" else APAGA) * delta
+			if cola >= largo:
+				largo = 0.0
+				cola = 0.0
 	if not encendida:
 		blancos.clear()
 		arcos.clear()
-	visible = largo > 0.0
+	visible = largo > 0.0 or apagado >= 0.0
 	pintar()
+
+
+# Al soltar el lanzallamas: la boquilla escupe unas chispas y unas gotas de gasolina ardiendo que caen cerca (el humo
+# de la boca y el de la punta los pinta el shader mientras corre "apagado")
+func apagar() -> void:
+	apagado = 0.0
+	largo_humo = largo
+	var u := Vector2.from_angle(angulo)
+	var boca := global_position - Vector2(0, ALTURA)
+	for i in 6:
+		var hacia := u * randf_range(40.0, 130.0) + Vector2(randf_range(-40.0, 40.0), -randf_range(20.0, 90.0))
+		Particulas.soltar(self, boca, hacia, Llamas.FUEGO[randi() % 3], 2.0, randf_range(0.2, 0.45))
+	for i in 4:
+		var hacia := u * randf_range(15.0, 70.0) + u.orthogonal() * randf_range(-20.0, 20.0)
+		Particulas.volar(self, global_position + u * randf_range(0.0, 10.0), ALTURA, hacia, randf_range(0.0, 25.0),
+			Llamas.FUEGO[randi() % 3], randf_range(2.0, 3.0))
 
 
 # Hasta dónde llega la llama por el suelo: su alcance o, si antes hay una pared o un mueble, hasta ahí. Si la boca
@@ -294,7 +326,7 @@ func gotitas(delta: float) -> void:
 # altura de la boca a la del cuerpo), pone la luz en medio de la llama y la redibuja (el rayo no usa shader: se dibuja
 # a código en _draw)
 func pintar() -> void:
-	luz.enabled = visible and variante != "acido"   # (el ácido no alumbra)
+	luz.enabled = visible and variante != "acido" and largo > 0.0   # (el ácido no alumbra; el humo tampoco)
 	if not visible:
 		return
 	var u := Vector2.from_angle(angulo)
@@ -305,12 +337,15 @@ func pintar() -> void:
 	if variante != "rayo":
 		var m: ShaderMaterial = material
 		m.set_shader_parameter("tiempo", tiempo)
-		m.set_shader_parameter("boca", global_position + Vector2(0, -ALTURA) - eje * ATRAS)
+		m.set_shader_parameter("boca", global_position + Vector2(0, BAJA_DIBUJO - ALTURA) - eje * ATRAS)
 		m.set_shader_parameter("eje", eje)
 		m.set_shader_parameter("largo", largo * f + ATRAS + (8.0 if cortada else 0.0))   # (que toque la cara de la pared)
 		m.set_shader_parameter("cola", cola * f + ATRAS if cola > 0.0 else 0.0)
 		m.set_shader_parameter("alcance", alcance * f + ATRAS)
 		m.set_shader_parameter("cortada", 1.0 if cortada else 0.0)
+		if variante == "llama":
+			m.set_shader_parameter("apagado", apagado)
+			m.set_shader_parameter("largo_humo", largo_humo * f + ATRAS)
 	# la luz: en medio de lo que se ve, tan grande como la llama, y temblando
 	var medio := (cola + largo) / 2.0
 	luz.position = Vector2(0, -ALTURA) + eje * medio * f
@@ -335,8 +370,8 @@ func _draw() -> void:
 		return
 	var lado := eje.orthogonal() * 240.0
 	var boca := Vector2(0, -ALTURA)
-	var desde := boca - eje * (ATRAS + 10.0)
-	var hasta := boca + eje * (largo * 1.1 + 90.0)   # (de sobra: el humo de la punta sube, aunque la llama vaya hacia arriba)
+	var desde := boca - eje * (ATRAS + 60.0)   # (el humo de la boquilla sube, aunque la llama vaya hacia abajo)
+	var hasta := boca + eje * (maxf(largo, largo_humo if apagado >= 0.0 else 0.0) * 1.1 + 90.0)   # (y el de la punta)
 	Formas.poligono(self, PackedVector2Array([desde + lado, hasta + lado, hasta - lado, desde - lado]), Color.WHITE)
 
 

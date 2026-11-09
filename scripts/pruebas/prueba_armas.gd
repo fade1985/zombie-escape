@@ -242,6 +242,13 @@ func probar_lanzallamas() -> void:
 	Captura.foto("captura-lanzallamas-apagando.png")
 	print("A oscuras: oscuridad %.2f · la llama alumbra %s · al soltar, despegada de la boca %.0f de %.0f (esperado: 0.85, true, más de 0)" % [
 		Luz.nivel, alumbra, johnny.llamarada.cola, johnny.llamarada.largo])
+	# y un poco después: la llama que se va, enfriándose y subiendo, y el humo de la boquilla y de la punta
+	await get_tree().create_timer(0.18).timeout
+	Captura.foto("captura-lanzallamas-apagando2.png")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-lanzallamas-apagando3.png")
+	print("Apagado: humo %.2f s · se ve %s (esperado: entre 0.4 y 0.9, true)" % [johnny.llamarada.apagado,
+		johnny.llamarada.visible])
 	Luz.evento = 0.0
 	await get_tree().create_timer(0.8).timeout
 	# contra la pared: la llama se corta en ella y se aplasta abriéndose (captura-lanzallamas-pared.png)
