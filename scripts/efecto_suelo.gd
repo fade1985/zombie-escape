@@ -74,7 +74,7 @@ const TIPOS := {
 		"origen": Vector2(100, 100), "fotogramas": 24},
 	"chispazo": {"hojas": [preload("res://assets/sprites/chispazo-detras.png"),
 		preload("res://assets/sprites/chispazo-delante.png"), preload("res://assets/sprites/chispazo-brillo.png")],
-		"origen": Vector2(48, 56), "fotogramas": 10},
+		"origen": Vector2(64, 72), "fotogramas": 10},
 	"escarcha": {"hojas": [preload("res://assets/sprites/escarcha-detras.png"),
 		preload("res://assets/sprites/escarcha-delante.png"), preload("res://assets/sprites/escarcha-brillo.png")],
 		"origen": Vector2(88, 80), "fotogramas": 32},

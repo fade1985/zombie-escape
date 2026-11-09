@@ -33,10 +33,13 @@ for (let i = 0; i < n; i++) {
     f.light.fill(0);
     pegar(sheets[capa === "back" ? "detras" : "delante"], composite(f, tmp, null), i);
   }
-  const out = new Uint8ClampedArray(W * H * 4);
+  // el brillo se apaga del todo en los últimos BORDE píxeles del fotograma: si la luz se sale del lienzo, que no deje un
+  // recuadro de bordes rectos al sumarla (9 nov: le pasaba al chispazo)
+  const out = new Uint8ClampedArray(W * H * 4), BORDE = 8;
   for (let k = 0; k < W * H; k++) {
-    const l = luz[k] & 0xffffff;
-    out[k * 4] = l & 255; out[k * 4 + 1] = (l >> 8) & 255; out[k * 4 + 2] = (l >> 16) & 255; out[k * 4 + 3] = l ? 255 : 0;
+    const x = k % W, y = (k / W) | 0, d = Math.min(x, y, W - 1 - x, H - 1 - y), m = Math.min(1, d / BORDE);
+    const l = luz[k] & 0xffffff, r = Math.round((l & 255) * m), g = Math.round(((l >> 8) & 255) * m), b = Math.round(((l >> 16) & 255) * m);
+    out[k * 4] = r; out[k * 4 + 1] = g; out[k * 4 + 2] = b; out[k * 4 + 3] = r || g || b ? 255 : 0;
   }
   pegar(sheets.brillo, out, i);
 }

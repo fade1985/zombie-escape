@@ -15,8 +15,8 @@ export const meta = {
   name: "Chispazo",
   desc: "An electric hit seen from above: a knot of crackling zigzags on a white heart, sparks that jink and fall, and a fern of burn marks that glows out on the floor and cools.",
   tags: ["lightning", "electric", "hit", "impact", "one-shot"],
-  size: [96, 80],
-  origin: [48, 56],
+  size: [128, 112],   // (con sitio para que la luz del golpe no se salga: antes, 96 x 80, y dejaba un recuadro)
+  origin: [64, 72],
   duration: 0.5,
   loop: false,
   fps: 30,
