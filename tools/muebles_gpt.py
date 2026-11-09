@@ -107,6 +107,7 @@ MUEBLES = {
     # los tres iconos pequeños de las ramas del árbol (el emblema redondo de cada columna, que se dibuja a 24 × 24: se hacen
     # ya a ese tamaño para que no se estiren); el hueco de dentro de la correa se vacía con la semilla
     "rama_militar": ("assets/sources/rama-militar-gpt.webp", "assets/ui/iconos/rama-militar.png", 24, 23, False, (), [(620, 950)]),
+    "rama_superviviente": ("assets/sources/rama-superviviente-gpt.webp", "assets/ui/iconos/rama-superviviente.png", 22, 24, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

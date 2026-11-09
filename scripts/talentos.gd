@@ -25,7 +25,7 @@ const PRECIO_PUNTO_VIEJO := 10   # lo que costaba un punto de talento antes del 
 # [traducir]
 const RAMAS := [
 	{"id": "militar", "nombre": "Militar", "icono": "rama-militar"},
-	{"id": "superviviente", "nombre": "Superviviente", "icono": "medico"},
+	{"id": "superviviente", "nombre": "Superviviente", "icono": "rama-superviviente"},
 	{"id": "quimico", "nombre": "Químico", "icono": "obj-bidon_acido"},
 ]
 # [/traducir]
