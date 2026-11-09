@@ -36,7 +36,7 @@ const LISTA := [
 		"mira": "completado", "edificio": "torre", "desc": "Completa Torre Velaria: derrota al Sujeto 1."},
 	{"id": "alerta_naranja", "tema": "edificios", "nombre": "Alerta naranja", "icono": "logro-alerta_naranja", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Completa un edificio con la Alerta 3 o más."},
-	{"id": "alerta_maxima", "tema": "edificios", "nombre": "Alerta máxima", "icono": "alerta", "premio": 35, "meta": 1, "cuenta": "",
+	{"id": "alerta_maxima", "tema": "edificios", "nombre": "Alerta máxima", "icono": "logro-alerta_maxima", "premio": 35, "meta": 1, "cuenta": "",
 		"desc": "Completa un edificio con la Alerta 5."},
 	{"id": "jornada_expres", "tema": "edificios", "nombre": "Jornada exprés", "icono": "cafe", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida en menos de 15 minutos."},
