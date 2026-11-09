@@ -336,6 +336,7 @@
 #   --disparo-alerta    en un apartamento, un disparo de Johnny despierta a todos los zombis de todas las habitaciones [prueba_varias.gd]
 #   --acido-zombis      cada zombi y cada jefe encima de un charco de ácido: todos se queman menos el
 #                       gordo, el Glotón y el doctor Salas [prueba_varias.gd]
+#                       (con --con-vomito, el charco del vómito de Gastroenteritis en vez del de ácido)
 #   --lento-gpt         lo mismo con el arrastrado de GPT, al lado del vecino (para ver su tamaño) [prueba_varias.gd]
 #   --gordo-real        el gordo (venenoso) más real (contorno suave, como el crío), quieto en sus 8 direcciones: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --tres-zombis       la vecina, el vecino y el crío (los tres de GPT) juntos, por tríos en sus 8 direcciones (mismas fotos) [prueba_varias.gd]

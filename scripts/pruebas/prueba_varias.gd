@@ -2320,7 +2320,7 @@ func probar_acido_zombis() -> void:
 		if "velocidad" in z and not (z.get("velocidad") is Array or z.get("velocidad") is Dictionary):
 			z.set("velocidad", 0.0)
 		var charco: Node2D = preload("res://escenas/armas/charco.tscn").instantiate()
-		charco.tipo = "acido"
+		charco.tipo = "vomito" if "--con-vomito" in OS.get_cmdline_user_args() else "acido"   # (con --con-vomito, el de Gastroenteritis)
 		charco.duracion = 3.0
 		charco.position = donde
 		z.get_parent().add_child(charco)
