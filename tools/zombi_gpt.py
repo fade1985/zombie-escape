@@ -55,12 +55,16 @@ LIENZO_ANDAR = {"rapido": 64, "lento": 64}
 # El tamaño, si no es el de la referencia: el arrastrado, al 80 % (9 nov: tendido en el suelo medía casi lo que el vecino
 # de pie y, a su lado, se veía demasiado grande). Las animaciones se miden por el dibujo quieto, así que lo siguen solas
 TAMANO = {"lento": 0.8}
+# Y por vista: el arrastrado de perfil y en diagonal (se le ve el cuerpo a lo largo) salía mucho más grande que de frente
+# (de perfil, 32 de largo y de frente 26 de ancho; el vecino de pie mide 45): esas vistas, más pequeñas
+TAMANO_VISTA = {"lento": {"south-east": 0.8, "east": 0.82, "north-east": 0.82}}
 # Los que van por el suelo (el arrastrado): en el ataque, el golpe y la muerte, cada fotograma a la altura a la que lo
 # dibuja GPT, no con lo más bajo en el suelo. Al dar el zarpazo levanta las dos manos y, con lo más bajo abajo, todo
 # el cuerpo se hundía 5 píxeles justo al atacar
 ALTURA_GPT = False
 ANDAR = 48
 ESCALA_ZOMBI = 1.0
+ESCALA_VISTA = {}
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -183,7 +187,7 @@ def personaje():
     os.makedirs(carpeta, exist_ok=True)
     hechas = {}
     for vista, (dibujo, _, _) in zip(VISTAS, trozos):
-        hechas[vista] = en_lienzo(reducir(dibujo, escala))
+        hechas[vista] = en_lienzo(reducir(dibujo, escala / ESCALA_VISTA.get(vista, 1.0)))
     for vista, de in ESPEJO.items():
         hechas[vista] = ImageOps.mirror(hechas[de])
     for vista, dibujo in hechas.items():
@@ -313,6 +317,7 @@ if __name__ == "__main__":
         ANDAR = LIENZO_ANDAR.get(sys.argv[2], LIENZO)
         ALTURA_GPT = sys.argv[2] == "lento"
         ESCALA_ZOMBI = TAMANO.get(sys.argv[2], 1.0)
+        ESCALA_VISTA = TAMANO_VISTA.get(sys.argv[2], {})
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
