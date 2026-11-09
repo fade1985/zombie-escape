@@ -1170,10 +1170,6 @@ msgstr "ЧАВК!"
 msgid "¡TENGO HAMBRE!"
 msgstr "ХОЧУ ЖРАТЬ!"
 
-#: scripts/gloton.gd
-msgid "-%d ácido"
-msgstr "-%d кислота"
-
 #: scripts/guia.gd
 msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
 msgstr "Зачисти квартиры: когда войдёшь, дверь закроется, пока не останется ни одного зомби"

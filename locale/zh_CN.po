@@ -1168,10 +1168,6 @@ msgstr "啊呜！"
 msgid "¡TENGO HAMBRE!"
 msgstr "饿死我了！"
 
-#: scripts/gloton.gd
-msgid "-%d ácido"
-msgstr "-%d 酸蚀"
-
 #: scripts/guia.gd
 msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
 msgstr "清理公寓：一进去门就会关上，直到一个僵尸都不剩"

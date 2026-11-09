@@ -33,6 +33,7 @@ const TIPOS := {
 	"lejia": {"burbujas": "lejia", "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
 	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
 	"acido": {"burbujas": "acido", "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}}},
+	"sangre_gloton": {"burbujas": "acido", "radio": 30.0, "vida": 5.0, "estados": {"acido": {}, "veneno": {}}},   # los pequeños que salpica el Glotón
 	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}, "vomito": {}}, "solo_zombis": true},
 	# el que deja un zombi que muere con ácido si Johnny tiene el talento Residuo tóxico (zombi.gd, quimica_al_morir):
 	# como el de la portera pero más pequeño, y solo a los zombis
@@ -113,7 +114,7 @@ func _ready() -> void:
 
 
 # La limpiadora de noche (aliado.gd, fregar) se lleva estos: el veneno, el ácido, la lejía y el aceite (los que resbalan)
-const FREGABLES := ["veneno", "reventon", "acido", "lejia", "aceite"]
+const FREGABLES := ["veneno", "reventon", "acido", "sangre_gloton", "lejia", "aceite"]
 
 
 # Fregado: se seca de golpe, a trozos como siempre (el aceite, sin arder: se quita sin más)

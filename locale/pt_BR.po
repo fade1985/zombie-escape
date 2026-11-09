@@ -1169,10 +1169,6 @@ msgstr "NHAC!"
 msgid "¡TENGO HAMBRE!"
 msgstr "TÔ COM FOME!"
 
-#: scripts/gloton.gd
-msgid "-%d ácido"
-msgstr "-%d ácido"
-
 #: scripts/guia.gd
 msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
 msgstr "Limpe os apartamentos: ao entrar, a porta se fecha até não sobrar nenhum zumbi"

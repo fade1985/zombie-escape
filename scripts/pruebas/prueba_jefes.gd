@@ -750,8 +750,9 @@ func probar_metal() -> void:
 	Captura.foto("captura-gymbro-metal-5-revienta.png")
 
 
-# El Glotón: la sangre ácida (primero, la bala de un superviviente: le hace daño a él y a Johnny no le salpica; luego
-# dos golpes de Johnny seguidos: solo el primero salpica, un 1 % de su vida) y el aspirado (hasta dónde llega: al
+# El Glotón: la sangre ácida (primero, la bala de un superviviente: le hace daño a él y no salpica; luego dos golpes
+# de Johnny seguidos: solo el primero salpica, sin quitarle vida, y deja un charco; enfadado, dos. Foto de los charcos,
+# captura-gloton-charcos.png) y el aspirado (hasta dónde llega: al
 # borde de la elipse limpia de su habitación, mire a donde mire; y Johnny puesto a 220 de él: 0,15 s al abrir la boca
 # y otros 0,15 s con toda su fuerza; antes de la foto de los 7,7)
 func probar_gloton() -> void:
@@ -768,10 +769,23 @@ func probar_gloton() -> void:
 	bala._physics_process(1.0 / 60.0)
 	print("Sangre ácida (bala de 10 de un superviviente): Glotón -%d, Johnny -%d (esperado: 10 y 0)" % [
 		antes_jefe - jefa.vida, antes_vida - johnny.vida])
-	antes_vida = johnny.vida
-	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
-	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
-	print("Sangre ácida (dos golpes seguidos de 10): Johnny -%d" % (antes_vida - johnny.vida))
+	var charcos := func() -> int:
+		return get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "sangre_gloton").size()
+	for f in [1, 2]:
+		jefa.fase = f
+		jefa.acido_t = 0.0
+		antes_vida = johnny.vida
+		var antes_charcos: int = charcos.call()
+		jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
+		jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
+		await get_tree().process_frame
+		print("Sangre ácida (fase %d, dos golpes seguidos de 10): Johnny -%d, charcos nuevos %d (esperado: 0 y %d)" % [
+			f, antes_vida - johnny.vida, charcos.call() - antes_charcos, f])
+	jefa.fase = 1
+	await get_tree().create_timer(0.3, true).timeout   # (en la prueba larga, antes de la foto de los 7,7)
+	Captura.foto("captura-gloton-charcos.png")
+	for c in get_tree().get_nodes_in_group("charcos"):
+		c.queue_free()   # (que no estorben al aspirado)
 	for i in 60:
 		var p: Vector2 = jefa.position + Vector2.from_angle(randf() * TAU) * 220.0
 		if mapa.zona_en(p) >= 0:

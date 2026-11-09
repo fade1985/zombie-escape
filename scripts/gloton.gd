@@ -13,12 +13,14 @@
 #     Johnny aunque ande hacia atrás; más lejos, andando hacia atrás le gana, pero se nota mucho: a 8 casillas va a
 #     unos 80 y de lejos a 105 (en vez de a 210; hasta el 28 oct, a 126 y a 140). También se libra esquivando (esquivando no tira), saliendo del cono (o metiéndose en la
 #     porquería) o poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
-#   - Sangre ácida: cada golpe o disparo que le das salpica ácido y Johnny pierde un 1 % de su vida (uno cada
-#     segundo como mucho, para que las armas rápidas no sumen demasiado). Si le pegan los supervivientes que
-#     acompañan a Johnny, le hacen daño igual pero el ácido no le cae a nadie.
+#   - Sangre ácida (9 nov): cada golpe o disparo que le das salpica un chorro de sangre verde hacia Johnny (como la
+#     de los zombis, pero mucha más) y deja un charco pequeño de ácido en el suelo, entre él y Johnny (dos si está
+#     enfadado), que quema al pisarlo como el de la portera. Ya no quita vida directamente (hasta el 9 nov, un 1 %).
+#     Como mucho uno cada 0,25 s (los perdigones de la escopeta cuentan como un golpe). Si le pegan los supervivientes
+#     que acompañan a Johnny, le hacen daño igual pero no salpica.
 #   - Una explosión (granada) le corta lo que esté haciendo (se tambalea): la manera de parar el aspirado.
 # Enfadado (a media vida, «¡TENGO HAMBRE!»): el doble de lenguas, aspira con el doble de fuerza (al máximo arrastra
-# desde 7 casillas, y de lejos Johnny va a 40) y el ácido quita un 2 %.
+# desde 7 casillas, y de lejos Johnny va a 40) y cada golpe deja dos charcos de ácido.
 extends Minijefe
 
 const VELOCIDAD := 55.0
@@ -50,8 +52,9 @@ const ALCANCE_MEDIO := 520.0           # y a cuál el de media distancia
 const ALCANCE_ASPIRAR := 420.0         # hasta dónde aspira donde no hay elipse (la exposición, la tecla 7 en otro sitio)
 const MEDIO_ASPIRAR := 0.85            # medio ángulo del cono por donde aspira
 const DANO_COMER := 30
-const ACIDO := [0.01, 0.02]            # lo que quita el salpicón de sangre ácida (parte de la vida máxima de Johnny)
-const ACIDO_CADA := 1.0                # (hasta el 27 oct, 0,5: con cualquier arma, unos 50-80 de vida por combate)
+const CHARCOS := [1, 2]                # charcos de ácido que deja cada golpe (normal y enfadado)
+const ACIDO_CADA := 0.25               # lo menos entre dos salpicones (los perdigones de un tiro, uno solo)
+const CHARCO := preload("res://escenas/armas/charco.tscn")
 const TAMBALEO := 0.6                  # lo que le corta una explosión
 const PIE := 30.0                      # a qué altura dibuja los pies respecto a su centro
 const BOCA := 0.5                      # a qué altura tiene la boca (parte de "arriba"): adonde va el aire que aspira
@@ -320,21 +323,22 @@ func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, de_aliado 
 
 func salpicar_acido() -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
-	if johnny == null or not johnny.vivo or acido_t > 0.0:
+	if johnny == null or acido_t > 0.0:
 		return
 	acido_t = ACIDO_CADA
-	var dano := maxi(1, roundi(johnny.stats.vida_max * ACIDO[fase - 1]))
-	johnny.quitar_vida(dano, "gloton")
 	Sonido.tocar("chisporroteo")
-	Zombi.texto_flotante(get_parent(), johnny.global_position + Vector2(-24, -72), Idioma.t("-%d ácido") % dano, VERDE, 16)
-	# gotas verdes que saltan de él hacia Johnny, y el chisporroteo al caerle encima
+	# un chorro de sangre verde hacia Johnny, como el de los zombis pero mucho más (ellos, 24 por golpe)
 	var hacia: Vector2 = (johnny.global_position - global_position).normalized()
-	for i in 6:
-		Particulas.soltar(self, global_position + Vector2(randf_range(-20, 20), -arriba * 0.6),
-			hacia.rotated(randf_range(-0.5, 0.5)) * randf_range(150.0, 320.0), VERDE, 3, 0.4)
-	for i in 4:
-		Particulas.soltar(self, johnny.global_position + Vector2(randf_range(-10, 10), -30),
-			Vector2(randf_range(-40, 40), -40), VERDE, 2, 0.35)
+	Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, hacia * 300.0, VERDE, 60)
+	# y los charcos pequeños de ácido, por el camino hacia Johnny (sin pasarse de él)
+	var lejos: float = minf(global_position.distance_to(johnny.global_position), 150.0)
+	for i in CHARCOS[fase - 1]:
+		var charco: Node2D = CHARCO.instantiate()
+		charco.tipo = "sangre_gloton"
+		charco.dueno = self   # a él no le quema
+		var p: Vector2 = global_position + hacia.rotated(randf_range(-0.6, 0.6)) * randf_range(maxf(40.0, lejos * 0.4), maxf(60.0, lejos))
+		charco.position = ((p - get_parent().global_position) / 2.0).round() * 2.0   # (en píxel entero del dibujo)
+		get_parent().add_child.call_deferred(charco)
 
 
 # ── Dibujo ──
