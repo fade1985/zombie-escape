@@ -990,6 +990,10 @@ func probar_noticias() -> void:
 	Captura.foto("captura-aviso-noticias.png")
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
+	if ordenador.fondo == null:   # (abrir_ordenador no lo abre si la partida ha acabado, se cambia de planta o Johnny ha muerto)
+		Captura.fallar("el ordenador no se abre en probar_noticias (terminada %s, cambiando %s, Johnny vivo %s, vida %s)" % [
+			terminada, cambiando, johnny.vivo, johnny.vida])
+		return
 	Captura.foto("captura-escritorio.png")
 	# el marco de madera sigue al ratón: pasar por encima de «Logros» lo marca
 	ordenador.iconos.get_child(2).mouse_entered.emit()

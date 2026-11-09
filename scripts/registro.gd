@@ -15,6 +15,7 @@ const ULTIMAS := 400   # las líneas que se guardan en memoria para copiarlas
 var lineas: PackedStringArray = []
 var errores := 0      # los errores que han saltado desde que se abrió el juego (avisos aparte)
 var avisos := 0
+var distintos := {}   # cada error o aviso distinto (su primera línea y su sitio) → cuántas veces ha salido
 var cerrojo := Mutex.new()   # el registro puede escribirse desde otros hilos (el sonido, la carga de cosas)
 var escucha: Escucha
 
@@ -29,11 +30,20 @@ class Escucha extends Logger:
 	func _log_error(funcion: String, archivo: String, linea: int, codigo: String, razon: String, _editor: bool,
 			tipo: int, trazas: Array[ScriptBacktrace]) -> void:
 		var que := "AVISO" if tipo == Logger.ERROR_TYPE_WARNING else "ERROR"   # no-tr
+		# (un push_error o push_warning dice que viene del motor: el sitio de verdad es el primer paso de la traza del script)
+		for t in trazas:
+			if archivo.ends_with(".cpp") and t.get_frame_count() > 0:
+				archivo = t.get_frame_file(0)
+				linea = t.get_frame_line(0)
+				funcion = t.get_frame_function(0)
+				break
 		var texto := "%s: %s\n   en %s:%d (%s)" % [que, razon if razon != "" else codigo, archivo, linea, funcion]   # no-tr
 		for t in trazas:
 			if not t.is_empty():
 				texto += "\n" + t.format(3)
-		registro.contar(tipo == Logger.ERROR_TYPE_WARNING)
+		registro.contar(tipo == Logger.ERROR_TYPE_WARNING, texto.get_slice("
+", 0) + texto.get_slice("
+", 1))
 		registro.guardar(texto)
 
 
@@ -45,6 +55,17 @@ func _init() -> void:
 
 func _ready() -> void:
 	(func(): print(cabecera())).call_deferred()   # (al final del arranque: así ya sabe el idioma elegido)
+
+
+# Al cerrar, el resumen: cuántos errores y avisos ha habido y cuáles (para ver de un vistazo si una partida ha ido limpia;
+# las pruebas --captura lo dejan al final de su salida: «Registro al cerrar: ...»)
+func _exit_tree() -> void:
+	cerrojo.lock()
+	var lista := distintos.keys().map(func(k): return "   %dx %s" % [distintos[k], k])   # no-tr
+	cerrojo.unlock()
+	print("Registro al cerrar: %d errores y %d avisos%s" % [errores, avisos, (":
+" + "
+".join(lista)) if lista else ""])   # no-tr
 
 
 # Quién es el equipo: lo primero que hay que saber de un fallo
@@ -77,8 +98,9 @@ func guardar(texto: String) -> void:
 	cerrojo.unlock()
 
 
-func contar(es_aviso: bool) -> void:
+func contar(es_aviso: bool, cual: String) -> void:
 	cerrojo.lock()
+	distintos[cual] = distintos.get(cual, 0) + 1
 	if es_aviso:
 		avisos += 1
 	else:

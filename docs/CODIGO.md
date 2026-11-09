@@ -461,7 +461,9 @@ en una línea.
   pantalla e idioma), las migas `Registro.apuntar("...")` (la planta a la que llega, en `partida.gd`), y los errores y
   avisos con su archivo, línea y trazas del script, contados en `errores` y `avisos`. Guarda las últimas 400 líneas en
   memoria para la web, que no tiene archivo. En Opciones → General, «Abrir el registro de errores» (abre la carpeta) o,
-  en la web y el móvil, «Copiar el registro de errores». Se prueba con `--registro`.
+  en la web y el móvil, «Copiar el registro de errores». Al cerrar el juego escribe el resumen, «Registro al cerrar: N
+  errores y M avisos» con cada uno distinto y cuántas veces salió: así se ve de un vistazo si una prueba `--captura` (o
+  la partida de un jugador) ha ido limpia. Se prueba con `--registro`.
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide
