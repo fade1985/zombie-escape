@@ -529,7 +529,8 @@ func direccion() -> String:
 
 
 # Cada estado usa su animación de la hoja: levantar la fregona es el aviso del abanico y del fregonazo, y
-# bajarla, el golpe; la lejía, lanzar; el grito, al enfadarse y al llamar; quieta y dando vueltas, el giro
+# bajarla, el golpe; la lejía, lanzar; el grito, al enfadarse y al llamar; quieta y dando vueltas, el giro;
+# la embestida, su carrera; y atontada, el mareo (de frente)
 func animar() -> void:
 	var dir := direccion()
 	match estado:
@@ -554,8 +555,16 @@ func animar() -> void:
 		"lejia":
 			var n := BOTELLAS + 2 if enfadada() else BOTELLAS
 			fijar("lanzar", dir, avance("lanzar_" + dir, t / (0.3 + n * 0.18 + 0.4)))
+		"embestida":
+			# corriendo echada hacia delante con la fregona por delante (no su andar acelerado)
+			sprite.speed_scale = 1.0
+			if sprite.animation != "embestida_" + dir:
+				sprite.play("embestida_" + dir)
 		"atontado":
-			fijar("reposo", dir, 0)
+			dir = "s"   # el mareo solo está dibujado de frente (de lado PixelLab la giraba hacia la cámara)
+			sprite.speed_scale = 1.0
+			if sprite.animation != "mareo_s":
+				sprite.play("mareo_s")
 		"aviso_giro", "giro":
 			dir = DIRS[wrapi(roundi(giro / (PI / 4)), 0, 8)]
 			fijar("quieto", dir, 0)

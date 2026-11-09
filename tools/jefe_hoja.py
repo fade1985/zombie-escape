@@ -132,8 +132,12 @@ JEFES = {
             "lanzar": ("lanzar", 10, False, False),
             "grito": ("grito", 8, False, False),
             "muerte": ("muerte", 10, False, False),
+            # (9 nov) la carrera de la embestida (sin el primero, que está de pie, ni el último, que repite el
+            # segundo) y el mareo al estrellarse, en bucle y solo de frente (de lado se giraba hacia la cámara)
+            "embestida": ("embestida", 14, True, True, True),
+            "mareo": ("mareo", 8, True, True),
         },
-        "de_frente": ["grito"],
+        "de_frente": ["grito", "mareo"],
         "sangre": 160,                 # solo los salpicones rojo vivo del fregonazo
         "motas": {"lanzar": 300},      # la botella que sale volando
         "sin": {"lanzar_s": [6, 7]},   # de frente, la botella se ve enorme al venir hacia la cámara

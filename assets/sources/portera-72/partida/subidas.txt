@@ -1,9 +1,8 @@
-south upload:76f44a78-9e63-40f6-bc49-3500b621e94f
-south-east upload:11c79114-413d-4e4c-a2a1-195631eee023
-east upload:3660064c-ff50-49b2-9b6a-fb673165e5fa
-north-east upload:1f56ee62-4bfb-4252-9749-ad6663777be0
-north upload:9ee8ba19-fabd-4f06-81cc-72c602bfcc8b
-north-west upload:63cde07a-861d-49e5-8e45-0af01cc2d59f
-west upload:ca30cfad-cba5-4d75-8c35-84f2d7a73198
-south-west upload:4bfb213a-9792-48b9-a9b2-4e2abbda2040
-(subidas el 2026-10-21, caducan a los 3 días)
+south {"ref":"upload:1094c643-6a75-45b9-ba43-c20b4be0c166","upload_id":"1094c643-6a75-45b9-ba43-c20b4be0c166","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+south-east {"ref":"upload:c68788bb-05ca-4865-a16e-5107c76ca0e0","upload_id":"c68788bb-05ca-4865-a16e-5107c76ca0e0","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+east {"ref":"upload:27eae7f8-c553-4e3e-810c-2d2427b8144f","upload_id":"27eae7f8-c553-4e3e-810c-2d2427b8144f","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+north-east {"ref":"upload:66fdd81e-6ce0-4ebe-97f6-a2cd47f2d554","upload_id":"66fdd81e-6ce0-4ebe-97f6-a2cd47f2d554","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+north {"ref":"upload:a41b9544-4d9c-43fd-9232-a77e34ad9b6a","upload_id":"a41b9544-4d9c-43fd-9232-a77e34ad9b6a","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+north-west {"ref":"upload:534db669-2359-448a-b573-b0121e7673b2","upload_id":"534db669-2359-448a-b573-b0121e7673b2","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+west {"ref":"upload:7682dd81-e994-49e5-803c-c836c9ff0401","upload_id":"7682dd81-e994-49e5-803c-c836c9ff0401","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+south-west {"ref":"upload:85a8d167-9d86-4536-b2cd-2951789bacd3","upload_id":"85a8d167-9d86-4536-b2cd-2951789bacd3","width":128,"height":128,"n_frames":1,"expires_in_days":3}
