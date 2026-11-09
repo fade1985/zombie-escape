@@ -95,7 +95,7 @@ const LISTA := [
 		"pide": ["blindaje", "sombra", "aliento"],
 		"desc": "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"},
 	# ── Químico
-	{"id": "catalizador", "rama": "quimico", "nivel": 1, "nombre": "Catalizador", "max": 5, "icono": "obj-gasolina",
+	{"id": "catalizador", "rama": "quimico", "nivel": 1, "nombre": "Catalizador", "max": 5, "icono": "talento-catalizador",
 		"desc": "+10 % de daño de fuego, ácido, rayo y frío por punto"},
 	{"id": "guantes_goma", "rama": "quimico", "nivel": 1, "nombre": "Guantes de goma", "max": 5, "icono": "guantes",
 		"desc": "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"},

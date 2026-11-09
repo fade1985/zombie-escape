@@ -1743,7 +1743,7 @@ func probar_comprar_talentos() -> void:
 # aliento (una vez por planta: captura-altos-aliento.png) y Adrenalina (daño y velocidad: captura-altos-adrenalina.png).
 # Químico: Napalm, Pegajoso, Alto voltaje (el rayo de Pararrayos salta a 4 más: captura-altos-voltaje.png) y Mezcla
 # explosiva (captura-altos-mezcla.png). Al final, en el ordenador, la corona de Militar bloqueada y la de Superviviente
-# comprada, con sus fichas (captura-altos-arbol-militar.png y captura-altos-arbol-superviviente.png). Se cierra
+# comprada, con sus fichas (captura-altos-arbol-militar.png, captura-altos-arbol-superviviente.png y captura-altos-arbol-quimico.png). Se cierra
 func probar_talentos_altos() -> void:
 	var centro: Vector2 = await sala_de_talentos()
 	var guardado_antes := Guardado.cargar()
@@ -1945,6 +1945,17 @@ func probar_talentos_altos() -> void:
 	ordenador.abrir("puntos", "b_ataque")
 	await ensenar_ficha("ataque")
 	Captura.foto("captura-altos-arbol-corona.png")
+	# Químico entero (todos a su máximo), para ver todos sus iconos sin candados
+	var quimico := {}
+	for t in Talentos.LISTA:
+		if t.rama == "quimico":
+			quimico[t.id] = t.max
+	Guardado.cambiar(func(g): g.talentos = g.talentos.merged(quimico, true))
+	ordenador.abrir("puntos", "b_catalizador")
+	await ensenar_ficha("mezcla")
+	Captura.foto("captura-altos-arbol-quimico.png")
+	await ensenar_ficha("catalizador")
+	Captura.foto("captura-altos-arbol-quimico2.png")
 	Guardado.cambiar(func(g):
 		g.dolares = guardado_antes.dolares
 		g.talentos = guardado_antes.talentos)
