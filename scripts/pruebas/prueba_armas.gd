@@ -2012,6 +2012,40 @@ func probar_explosion() -> void:
 # cae un vómito de Johnny (el proyectil de verdad) y al de la derecha, nada. Fotos: recién bañado
 # (captura-vomito.png), al acabarse el charco y escurriéndose (-escurre) y ya limpio (-limpio). Lo que comprueba, en
 # la terminal. Se cierra
+# Con "--captura --gastro-objetivo": el vómito de Gastroenteritis no va a por los que no se queman con el ácido. En la
+# sala de pruebas, el Glotón, el doctor Salas y un gordo pegados a Johnny y un vecino más lejos: el vómito, al vecino
+func probar_gastro_objetivo() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(0, 220)
+	sala.diana.remove_from_group("zombis")
+	var cerca := [meter_zombi("gloton", johnny.position + Vector2(-110, 0)), meter_zombi("cientifico_jefe", johnny.position + Vector2(110, 0)),
+		meter_zombi("venenoso", johnny.position + Vector2(0, 100))]
+	var vecino: Node2D = meter_zombi("normal", johnny.position + Vector2(0, -260))
+	await get_tree().physics_frame
+	var antes := johnny.get_parent().get_children().size()
+	mutaciones.actuar("gastro")
+	var vomito: Node2D = null
+	for n in johnny.get_parent().get_children().slice(antes):
+		if n.get("tipo") == "vomito":
+			vomito = n
+	var a_quien := "nadie"
+	if vomito:
+		var mas_cerca: float = vomito.hasta.distance_to(vecino.global_position)
+		a_quien = "vecino"
+		for z in cerca:
+			if vomito.hasta.distance_to(z.global_position) < mas_cerca:
+				a_quien = z.get_meta("tipo")
+	print("Gastroenteritis con el Glotón, Salas y el gordo pegados y un vecino lejos: el vómito va a %s (esperado: vecino)" % a_quien)
+	get_tree().quit()
+
+
 func probar_vomito() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null

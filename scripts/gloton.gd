@@ -91,6 +91,7 @@ var apuntadas := 0                     # cuántas lleva este latigazo
 
 
 func _ready() -> void:
+	aguanta_acido = true   # (no se quema en los charcos de ácido: minijefe.gd, pisar)
 	super()
 	for i in LENGUAS[1]:
 		var lengua := Lengua.new(PALETA)
@@ -305,11 +306,6 @@ func foto(johnny: Node2D) -> void:
 	mirada = Vector2.from_angle(angulo)
 	cambiar("aviso_latigazo", {"angulo": angulo})
 	t = AVISO_LATIGAZO - 0.05
-
-
-# El Glotón no se quema en los charcos de ácido (los demás jefes sí: minijefe.gd, pisar)
-func pisar(_estados_charco: Dictionary) -> void:
-	pass
 
 
 # ── La sangre ácida ──

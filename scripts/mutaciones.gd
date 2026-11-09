@@ -130,11 +130,14 @@ func actuar(id: String) -> bool:
 			EfectoSuelo.soltar(johnny, "tentaculos", Vector2.ZERO, m.radio / EfectoSuelo.RADIO_TENTACULOS)
 			Sonido.tocar("latigazo")
 		"gastro":
-			# al zombi (o la portera) más cercano que no esté a oscuras ni tras una pared (por encima de los muebles sí)
+			# al zombi (o la portera) más cercano que no esté a oscuras ni tras una pared (por encima de los muebles sí). A
+			# los que no les quema el ácido (el gordo, el Glotón y el doctor Salas: aguanta_acido), no: va a por otro
 			var objetivo: Node2D = null
 			var mejor: float = m.alcance
 			var mapa := get_tree().get_first_node_in_group("mapa")
 			for z in get_tree().get_nodes_in_group("zombis"):
+				if z.get("aguanta_acido"):
+					continue
 				var d := p.distance_to(z.global_position)
 				if d < mejor and not (mapa and (mapa.oculto(z.global_position) or not mapa.muro_entre(p, z.global_position).is_empty())):
 					mejor = d

@@ -151,6 +151,7 @@ var lenguas: Array[Lengua] = []          # las de la criatura
 
 
 func _ready() -> void:
+	aguanta_acido = true   # (no se quema en los charcos de ácido: minijefe.gd, pisar)
 	super()
 	# la cúpula: lo de detrás, por debajo de su dibujo; lo de delante y el brillo, encima (y debajo de $Vapor)
 	for i in 3:
@@ -511,11 +512,6 @@ func mutar() -> void:
 
 
 # ── La criatura ──
-
-# El doctor Salas no se quema en los charcos de ácido (los demás jefes sí: minijefe.gd, pisar)
-func pisar(_estados_charco: Dictionary) -> void:
-	pass
-
 
 # El fuego de los charcos (llega con el color del fuego) no le quema a la criatura: «¡INMUNE!» de vez en cuando. Lo
 # demás (el calambre del agua, el ácido...), como a cualquier jefe

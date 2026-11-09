@@ -50,6 +50,7 @@ var aviso_espera := 0.0
 
 var sonido_golpe := "golpe"   # lo que suena al quitarle vida (el Gymbro de metal: "acero")
 var en_acido := {"dps": 0.0, "acc": 0.0, "tick": 0.0}   # el charco de ácido que pisa (Estados.quemar_acido_jefe)
+var aguanta_acido := false     # el Glotón y el doctor Salas: el ácido de los charcos no les quema (ni les apunta Gastroenteritis)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -292,10 +293,11 @@ func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 		morir()
 
 
-# Lo llaman los charcos en cada paso mientras lo pisa: de los charcos, solo le quema el ácido (el doctor Salas y el
-# Glotón lo cambian: a ellos, nada)
+# Lo llaman los charcos en cada paso mientras lo pisa: de los charcos, solo le quema el ácido (al doctor Salas y al
+# Glotón, nada: aguanta_acido)
 func pisar(estados_charco: Dictionary) -> void:
-	Estados.pisar_acido_jefe(en_acido, estados_charco)
+	if not aguanta_acido:
+		Estados.pisar_acido_jefe(en_acido, estados_charco)
 
 
 # Daño sin golpe (el fuego del molotov mientras está dentro, el ácido de los charcos): no arde ni le hacen nada los demás charcos
