@@ -56,6 +56,9 @@ MUEBLES = {
     "escritorio_dosier": ("assets/sources/escritorio-dosier-gpt.webp", "assets/ui/iconos/escritorio-dosier.png", 28, 22, False),
     # Colecciones, un cuaderno amarillo con su etiqueta crema
     "escritorio_colecciones": ("assets/sources/escritorio-colecciones-gpt.webp", "assets/ui/iconos/escritorio-colecciones.png", 20, 27, False),
+    # Apagar, el símbolo de encendido en rojo; el hueco de dentro del aro se vacía también (las semillas)
+    "escritorio_apagar": ("assets/sources/escritorio-apagar-gpt.webp", "assets/ui/iconos/escritorio-apagar.png", 23, 26, False, (),
+                          [(450, 750), (800, 750)]),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
