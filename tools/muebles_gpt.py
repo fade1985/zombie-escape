@@ -59,6 +59,9 @@ MUEBLES = {
     # Apagar, el símbolo de encendido en rojo; el hueco de dentro del aro se vacía también (las semillas)
     "escritorio_apagar": ("assets/sources/escritorio-apagar-gpt.webp", "assets/ui/iconos/escritorio-apagar.png", 23, 26, False, (),
                           [(450, 750), (800, 750)]),
+    # los iconos del árbol de talentos del ordenador (talentos.gd, "icono"; M2, 9 nov): uno propio por talento, sin
+    # tocar los de los objetos; caben en un cuadrado de 32 (ui/arbol_talentos.gd, en_caja)
+    "talento_ataque": ("assets/sources/talento-ataque-gpt.webp", "assets/ui/iconos/talento-ataque.png", 32, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

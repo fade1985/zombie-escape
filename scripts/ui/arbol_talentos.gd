@@ -285,7 +285,7 @@ func dibujar_talento(t: Dictionary, color: Array) -> void:
 	if motivo == "bloqueado":
 		draw_texture_rect(icono("candado"), Rect2(c - Vector2(16, 16), Vector2(32, 32)), false, Color(0.55, 0.55, 0.55, 0.8))
 	else:
-		draw_texture_rect(icono(t.icono), Rect2(c - Vector2(16, 16), Vector2(32, 32)), false)
+		draw_texture_rect(icono(t.icono), en_caja(icono(t.icono), c, 32.0), false)
 	# los cuadraditos de nivel, debajo
 	var ancho_pips: float = t.max * 6 - 2
 	for i in t.max:
@@ -298,6 +298,13 @@ func hexagono(c: Vector2, r: float, color: Color) -> void:
 	var m := roundf(r / 2.0)
 	draw_colored_polygon(PackedVector2Array([c + Vector2(0, -r), c + Vector2(h, -m), c + Vector2(h, m), c + Vector2(0, r),
 		c + Vector2(-h, m), c + Vector2(-h, -m)]), color)
+
+
+# El sitio de un icono dentro de un cuadrado de lado «lado» con centro «c», sin estirarlo: los de GPT (talento-*.png)
+# no siempre son cuadrados, y el lado más largo llena el cuadrado
+func en_caja(tex: Texture2D, c: Vector2, lado: float) -> Rect2:
+	var t := tex.get_size() * (lado / maxf(tex.get_width(), tex.get_height()))
+	return Rect2(c - t / 2.0, t)
 
 
 # Los iconos se cargan una vez (assets/ui/iconos)

@@ -42,7 +42,7 @@ const MEZCLA := {"radio": 90.0, "dano": 30, "rayo": 1.5}
 # [traducir]
 const LISTA := [
 	# ── Militar
-	{"id": "ataque", "rama": "militar", "nivel": 1, "nombre": "Ataque", "max": 5, "icono": "fuerza",
+	{"id": "ataque", "rama": "militar", "nivel": 1, "nombre": "Ataque", "max": 5, "icono": "talento-ataque",
 		"desc": "+10 % de daño por punto"},
 	{"id": "punteria", "rama": "militar", "nivel": 1, "nombre": "Puntería", "max": 5, "icono": "diana",
 		"desc": "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"},
