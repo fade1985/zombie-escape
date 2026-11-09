@@ -136,9 +136,9 @@ en una línea.
   dan a Johnny si no está `Aviso.tapado`, un rayo de la capa 1), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
   criatura; se cortan donde el disparo se pararía en una pared o un mueble y ahí acaban en la estrella de las
   cargas; `Aviso.alcance`, medido en cada fotograma con un círculo del ancho de la barra y la capa 1). El cono del
-  giro del bombero lleva dos flechas curvas hacia donde girará (`flechas`) y, como las marcas en el suelo de lo que
+  giro del bombero se llena de lado, hacia donde girará, con flechas dentro que corren hacia ahí (`flechas`) y, como las marcas en el suelo de lo que
   lanzan los jefes (`proyectil.gd`: molotovs, sartenes, probetas, cafés y cubos, que son un `Aviso.abanico` aplastado),
-  un estilo más flojo (`sutil`; borradores en `tools/pixelfx/_giro.js` y `giro-a.js`). Los golpes, círculos y barras van con el estilo del borrador A de pixelfx
+  un estilo más flojo (`sutil`; el borrador, en `tools/pixelfx/_giro.js`). Los golpes, círculos y barras van con el estilo del borrador A de pixelfx
   (`tools/pixelfx/aviso-a.js` y `_aviso.js`, que no se exportan: solo para probar ideas): toda la zona oscura desde el
   principio, con dos bordes (el de dentro late cada vez más deprisa), el relleno de color con su frente claro y un
   fogonazo blanco justo antes de pegar (`relleno()` y, en las rayas finas, `hilo()`, con contorno oscuro). Se prueban con

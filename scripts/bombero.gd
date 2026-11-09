@@ -613,8 +613,8 @@ func animar() -> void:
 
 
 # Los avisos, en el suelo (por debajo de él): el arco del hachazo y, antes del giro, el cono por donde irá cada fuego,
-# desde sus pies hasta la pared (aviso.gd: con el estilo flojo, llenándose, y dos flechas curvas hacia el lado al que
-# va a girar). Girando ya no lleva cono debajo: se ve solo el fuego
+# desde sus pies hasta la pared (aviso.gd: con el estilo flojo, llenándose de lado hacia donde va a girar, con
+# flechas dentro que corren hacia ese lado). Girando ya no lleva cono debajo: se ve solo el fuego
 func _draw() -> void:
 	if estado == "muerto":
 		return

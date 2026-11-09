@@ -12,7 +12,7 @@
 //   - la barra: una franja recta que se llena hacia fuera como el abanico (las lenguas, los latigazos, los alfileres
 //     y las rayas por donde irán los disparos), con el mismo estilo. Si es fina, de color con un contorno oscuro
 //     (hilo()). Si el disparo se para en una pared (choca), acaba en la estrella de las cargas.
-//     El cono del giro del bombero lleva además dos flechas curvas hacia donde girará (flecha_curva()) y, como las
+//     El cono del giro del bombero se llena de lado, hacia donde girará, con flechas dentro (cono_giro()) y, como las
 //     marcas de lo que se lanza (molotovs, sartenes, probetas...), el estilo flojo (sutil, relleno_sutil()).
 shader_type canvas_item;
 
@@ -32,7 +32,7 @@ uniform float ondas = 0.0;      // el abanico: lo deprisa que van las ondas haci
 uniform float rayos[37];        // el abanico: hasta dónde llega cada rayo, de un borde al otro (si n_rayos > 1)
 uniform int n_rayos = 0;
 uniform bool destella = true;   // el destello del final (no, en lo que ya está pasando: aspirando, girando)
-uniform float flechas = 0.0;    // el abanico: las flechas curvas del giro (1, como las agujas del reloj; -1, al revés; 0, sin)
+uniform float flechas = 0.0;    // el abanico: el sentido del giro, dentro del cono (1, como las agujas del reloj; -1, al revés; 0, sin)
 uniform bool sutil = false;     // el estilo flojo (el cono del giro del bombero, las marcas de lo que se lanza)
 
 const float CELDA = 2.0;
@@ -200,48 +200,37 @@ vec4 hilo(float d, float hasta, float a) {
 	return vec4(late() ? mix(tinte, vec3(1.0), 0.5) : tinte, 0.45 + 0.1 * k);
 }
 
-// Las flechas curvas del giro del bombero: junto al borde de delante del cono, dos flechas que rodean al jefe hacia
-// donde girará ("flechas"), a media distancia y casi al final, y que se van llenando de claro con el aviso. Con su
-// contorno oscuro. "r" y "ang": dónde cae el cuadradito, desde el jefe
-vec4 flecha_curva(float r, float ang) {
-	float h = atan(hacia.y, hacia.x);
-	// hasta dónde llega el cono por su borde de delante (los rayos van de -medio a +medio)
-	float lejos = n_rayos > 1 ? (flechas > 0.0 ? rayos[n_rayos - 1] : rayos[0]) : largo;
-	float d = ang - (h + flechas * (medio + 0.08));
-	float u = atan(sin(d), cos(d)) * flechas;   // lo que se ha adelantado, en radianes
-	float ve = min(1.0, k * 4.0);
-	for (int i = 0; i < 2; i++) {
-		float r0 = lejos * (i == 0 ? 0.45 : 0.8);
-		float a_lo_largo = u * r0;
-		float a_lo_ancho = abs(r - r0);
-		float cuerpo = r0 * 0.55;
-		float cabeza = 20.0;
-		if (a_lo_largo < -4.0 || a_lo_largo > cuerpo + cabeza + 4.0) {
-			continue;
+// El sentido del giro del bombero dentro de su cono ("flechas": 1, como las agujas del reloj; -1, al revés), para que
+// se vea esté donde esté Johnny: el cono se llena de lado, del borde de atrás al de delante (hacia donde girará), el
+// borde de delante va claro y, por dentro, filas de flechas (>) que corren hacia ese lado. "s", lo que se aparta del
+// medio hacia delante (en radianes); "r", lo lejos del jefe; "borde", lo que queda hasta el borde
+vec4 cono_giro(float s, float r, float borde) {
+	vec3 claro = mix(tinte, vec3(1.0), 0.75);
+	float ancho = 2.0 * medio * r;              // lo que mide el cono de lado a lado, aquí
+	float va = (s + medio) * r;                 // lo que se ha avanzado desde el borde de atrás
+	float delante = (medio - s) * r;            // lo que queda hasta el borde de delante
+	if (delante < CELDA * 2.0 && borde >= CELDA) {
+		return vec4(claro, 0.85);               // el borde de delante, claro
+	}
+	vec4 color = relleno(va, ancho, borde);
+	// las flechas: filas cada 56, que corren de lado hacia delante
+	float fila = mod(r, 56.0) - 28.0;
+	if (r > 40.0 && abs(fila) < 11.0 && borde >= CELDA * 2.0) {
+		float v = mod(va + abs(fila) * 0.9 - tiempo * 50.0, 32.0);   // (>): la punta por delante
+		if (v < 5.0) {
+			return vec4(claro, 0.55 + 0.3 * k);
 		}
-		float ancho = a_lo_largo <= cuerpo ? 5.0 : 13.0 * (1.0 - (a_lo_largo - cuerpo) / cabeza);
-		float va = a_lo_largo / (cuerpo + cabeza);
-		if (a_lo_largo >= 0.0 && a_lo_largo <= cuerpo + cabeza && a_lo_ancho <= ancho) {
-			bool lleno = va < k;
-			return vec4(lleno ? (k > 0.85 ? vec3(1.0) : BRILLO) : ROJO, (lleno ? 0.95 : 0.6) * ve);
-		}
-		if (a_lo_ancho <= max(ancho, 2.0) + 3.0) {
-			return vec4(OSCURO.rgb, 0.7 * ve);
+		if (v < 7.0) {
+			return vec4(tinte * 0.22, 0.5);
 		}
 	}
-	return vec4(0.0);
+	return color;
 }
 
 vec4 abanico(vec2 p) {
 	vec2 q = vec2(p.x, p.y / aplasta);
 	float r = length(q);
 	float giro = acos(clamp(dot(q, hacia) / max(r, 0.001), -1.0, 1.0));   // lo que se aparta del medio
-	if (flechas != 0.0) {
-		vec4 f = flecha_curva(r, atan(q.y, q.x));
-		if (f.a > 0.0) {
-			return f;
-		}
-	}
 	if (giro > medio) {
 		return vec4(0.0);
 	}
@@ -260,6 +249,9 @@ vec4 abanico(vec2 p) {
 	float borde = (hasta - r) * mix(1.0, aplasta, r > 0.0 ? (q.y * q.y) / (r * r) : 0.0);
 	if (medio < 3.1) {
 		borde = min(borde, (medio - giro) * r);   // los lados (un círculo entero no tiene)
+	}
+	if (flechas != 0.0) {
+		return cono_giro(giro * sign(hacia.x * q.y - hacia.y * q.x) * flechas, r, borde);
 	}
 	vec4 color = relleno(r, hasta, borde);
 	// las ondas: arcos claros que van hacia el jefe (cuanto más deprisa, más vivos)

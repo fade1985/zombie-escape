@@ -13,7 +13,7 @@
 #   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos,
 #     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()) y ahí acaba en la
 #     estrella de las cargas.
-#   El cono del giro del bombero lleva dos flechas curvas hacia donde girará (flechas) y, como las marcas de lo que se
+#   El cono del giro del bombero se llena de lado, hacia donde girará, con flechas dentro (flechas) y, como las marcas de lo que se
 #   lanza (proyectil.gd: molotovs, sartenes, probetas...), un estilo más flojo (sutil).
 # Lo pinta un shader (aviso.gdshader): así no cuesta nada aunque tenga miles de cuadraditos. Cada aviso va en un nodo
 # hijo del jefe, por detrás de él, que se crea solo la primera vez y se esconde cuando deja de pedirse. Un jefe puede
@@ -37,7 +37,7 @@ var sombra := 0.0       # el abanico de un salto: lo que ocupa la sombra de quie
 var tinte := ROJO       # el abanico y la barra: su color
 var ondas := 0.0        # el abanico: lo deprisa que van las ondas hacia el jefe (0, sin ondas)
 var hasta_rayos := PackedFloat32Array()   # el abanico: hasta dónde llega cada rayo, de un borde al otro (vacío: todos igual)
-var flechas := 0.0      # el abanico: las flechas curvas del giro (1, como las agujas del reloj; -1, al revés; 0, sin)
+var flechas := 0.0      # el abanico: el sentido del giro, dentro del cono (1, como las agujas del reloj; -1, al revés; 0, sin)
 var sutil := false      # el estilo flojo (el cono del giro, las marcas de lo que se lanza)
 var destella := true    # el destello del final (no, en lo que ya está pasando: aspirando, girando)
 var pedido := 0         # el último fotograma en que se pidió (si deja de pedirse, se esconde)
