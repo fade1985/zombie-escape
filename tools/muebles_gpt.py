@@ -126,6 +126,7 @@ MUEBLES = {
     "logro_visto_y_no_visto": ("assets/sources/logro-visto_y_no_visto-gpt.webp", "assets/ui/iconos/logro-visto_y_no_visto.png", 26, 32, False),
     "logro_cazajefes": ("assets/sources/logro-cazajefes-gpt.webp", "assets/ui/iconos/logro-cazajefes.png", 27, 32, False),
     "logro_fregona_oro": ("assets/sources/logro-fregona_oro-gpt.webp", "assets/ui/iconos/logro-fregona_oro.png", 28, 32, False),
+    "logro_exterminador": ("assets/sources/logro-exterminador-gpt.webp", "assets/ui/iconos/logro-exterminador.png", 29, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

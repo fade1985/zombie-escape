@@ -56,7 +56,7 @@ const LISTA := [
 	# ── Combate
 	{"id": "fregona_oro", "tema": "combate", "nombre": "Fregona de oro", "icono": "logro-fregona_oro", "premio": 10, "meta": 10, "cuenta": "partida",
 		"desc": "Mata 10 zombis a fregonazos en una misma partida."},
-	{"id": "exterminador", "tema": "combate", "nombre": "Exterminador", "icono": "zombi", "premio": 15, "meta": 100, "cuenta": "total",
+	{"id": "exterminador", "tema": "combate", "nombre": "Exterminador", "icono": "logro-exterminador", "premio": 15, "meta": 100, "cuenta": "total",
 		"desc": "Mata 100 zombis, sumando todas tus partidas."},
 	{"id": "limpieza_general", "tema": "combate", "nombre": "Limpieza general", "icono": "zombi", "premio": 20, "meta": 1000, "cuenta": "total",
 		"desc": "Mata 1.000 zombis, sumando todas tus partidas."},
