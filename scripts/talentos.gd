@@ -109,7 +109,7 @@ const LISTA := [
 		"desc": "Los zombis que mueren ardiendo revientan y prenden a los de al lado"},
 	{"id": "residuo", "rama": "quimico", "nivel": 3, "nombre": "Residuo tóxico", "max": 1, "icono": "talento-residuo", "pide": "desatascador",
 		"desc": "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"},
-	{"id": "pararrayos", "rama": "quimico", "nivel": 3, "nombre": "Pararrayos", "max": 1, "icono": "obj-bateria", "pide": "criogenia",
+	{"id": "pararrayos", "rama": "quimico", "nivel": 3, "nombre": "Pararrayos", "max": 1, "icono": "talento-pararrayos", "pide": "criogenia",
 		"desc": "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"},
 	{"id": "napalm", "rama": "quimico", "nivel": 4, "nombre": "Napalm", "max": 3, "icono": "obj-gasolina", "pide": "reaccion",
 		"desc": "El fuego del molotov dura 1 s más por punto"},
