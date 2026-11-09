@@ -715,8 +715,7 @@ func cruzar(i: int) -> void:
 	if cambiando or not johnny.vivo:
 		return
 	if aqui == planta.armas:
-		pruebas()   # la puerta de la sala de pruebas vuelve adonde se estaba
-		return
+		return   # de la sala de pruebas no se sale por la puerta (para no salir sin querer): solo con F9
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
 	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable

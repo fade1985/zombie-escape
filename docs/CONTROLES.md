@@ -105,13 +105,13 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
 ## La sala de pruebas
 
 Todo lo de probar está en un solo sitio. **F9**, desde cualquier sitio de cualquier planta, lleva a la **sala de
-pruebas**; **F9** otra vez (o su puerta) vuelve justo adonde estabas. Con la puerta de un apartamento cerrada, no se
+pruebas**; **F9** otra vez vuelve justo adonde estabas (por su puerta no se sale, para no salir sin querer). Con la puerta de un apartamento cerrada, no se
 puede ir. Solo funciona al jugar desde el editor, en las pruebas `--captura` y en las versiones de prueba de las ramas
 en Vercel (se exportan de desarrollo, `docs/WEB.md`): en la web de verdad y en el `.exe`, F9 no hace nada. Lo que pasa allí no cuenta: los zombis no sueltan
 nada, no se apuntan en las Colecciones y, al salir, Johnny vuelve a llevar lo que llevaba (armas, balas, mochila y
 arrojables).
 
-- **La diana:** un zombi en el centro que no muere ni ataca. **Coma** y **punto** pasan por todas las armas de la
+- **La diana:** un zombi en el centro que no muere ni ataca. Al entrar no está: se pone con su interruptor del panel (P). **Coma** y **punto** pasan por todas las armas de la
   tienda; munición sin fin, pero hay que recargar.
 - **Las líneas de ayuda**, en el suelo: alcance (blanco), a quién apunta (amarillo), por dónde irá la bala (azul a
   rayas), dónde le da a cada zombi (rojo) y el camino de cada bala (verde si da, naranja si pasa rozando, rojo con X

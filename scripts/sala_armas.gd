@@ -56,7 +56,7 @@ static var con_panel := true      # el panel de daño
 static var escondido := true      # el guion: fuera todo de golpe (las líneas y el panel de daño); otra vez, vuelve como estaba.
                                   # Al empezar la partida, la sala sale así, limpia
 static var ayudas := {"alcance": true, "apuntado": true, "trayectoria": true, "circulos": true, "balas": true}
-static var con_diana := true
+static var con_diana := false     # la diana: al entrar no está (se pone con el panel); en las pruebas --captura, sí
 static var sin_fin := true        # munición sin fin
 var partida: Node
 var texto: Label
@@ -86,6 +86,8 @@ func _ready() -> void:
 	z_index = 50   # las líneas, por encima de todo lo del suelo
 	partida = get_tree().current_scene
 	vida_mentira = ZOMBI_VIDA
+	if "--captura" in OS.get_cmdline_user_args():
+		con_diana = true   # las pruebas de armas la necesitan
 	if con_diana:
 		poner_diana()
 	get_tree().node_added.connect(_al_aparecer)
