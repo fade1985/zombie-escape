@@ -109,6 +109,9 @@ MUEBLES = {
     "rama_militar": ("assets/sources/rama-militar-gpt.webp", "assets/ui/iconos/rama-militar.png", 24, 23, False, (), [(620, 950)]),
     "rama_superviviente": ("assets/sources/rama-superviviente-gpt.webp", "assets/ui/iconos/rama-superviviente.png", 22, 24, False),
     "rama_quimico": ("assets/sources/rama-quimico-gpt.webp", "assets/ui/iconos/rama-quimico.png", 24, 24, False),
+    # los iconos de los logros (logros.gd, "icono"; M4, 9 nov): uno propio por logro, sin tocar los de los objetos; se dibujan en un
+    # cuadrado de 32 sin estirarse (ui/archivador_logros.gd, en_caja)
+    "logro_primer_turno": ("assets/sources/logro-primer_turno-gpt.webp", "assets/ui/iconos/logro-primer_turno.png", 28, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

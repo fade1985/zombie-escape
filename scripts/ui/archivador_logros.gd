@@ -306,7 +306,7 @@ func dibujar_fila(id: String, fuente: Font) -> void:
 	draw_rect(r, PLACA.TEXTO if encima(botones[id]) else (PLACA.AMARILLO if cobrar else PLACA.APAGADO))
 	draw_rect(r.grow(-2), Color("#3a3520") if cobrar else Color("#2b2f36"))
 	var lado := minf(32.0, r.size.y - 4)
-	draw_texture_rect(icono(l.icono), Rect2(r.position.x + 5, r.get_center().y - lado / 2.0, lado, lado), false,
+	draw_texture_rect(icono(l.icono), en_caja(icono(l.icono), Vector2(r.position.x + 5 + lado / 2.0, r.get_center().y), lado), false,
 		Color(0.55, 0.55, 0.55, 0.75) if e == "pendiente" else Color.WHITE)
 	var x := r.position.x + lado + 12
 	var ancho := r.end.x - ANCHO_PREMIO - 10 - x
@@ -366,6 +366,13 @@ func cortar(fuente: Font, texto: String, ancho: float, tam: int) -> String:
 	while texto.length() > 1 and fuente.get_string_size(texto + "...", HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > ancho:
 		texto = texto.left(-1)
 	return texto.strip_edges() + "..."
+
+
+# El sitio de un icono dentro de un cuadrado de lado «lado» con centro «c», sin estirarlo: los de GPT (logro-*.png) no
+# siempre son cuadrados, y el lado más largo llena el cuadrado (igual que en ui/arbol_talentos.gd)
+func en_caja(tex: Texture2D, c: Vector2, lado: float) -> Rect2:
+	var t := tex.get_size() * (lado / maxf(tex.get_width(), tex.get_height()))
+	return Rect2(c - t / 2.0, t)
 
 
 # Los iconos se cargan una vez (assets/ui/iconos)

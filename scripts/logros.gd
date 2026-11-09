@@ -24,7 +24,7 @@ extends Node
 # [traducir]
 const LISTA := [
 	# ── Edificios
-	{"id": "primer_turno", "tema": "edificios", "nombre": "Primer turno", "icono": "apartamentos", "premio": 5, "meta": 1, "cuenta": "",
+	{"id": "primer_turno", "tema": "edificios", "nombre": "Primer turno", "icono": "logro-primer_turno", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Limpia tu primer apartamento."},
 	{"id": "sube_conserje", "tema": "edificios", "nombre": "Sube, conserje", "icono": "escalera", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Llega a la planta 3."},
