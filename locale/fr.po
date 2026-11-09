@@ -5499,6 +5499,10 @@ msgid "Las armas y los lanzables duran según su calidad."
 msgstr "Les armes et les lançables durent selon leur qualité."
 
 #: scripts/ui/inventario.gd
+msgid "Ctrl + clic: pasar directo de un lado a otro."
+msgstr "Ctrl + clic : passer directement de l'autre côté."
+
+#: scripts/ui/inventario.gd
 msgid "Guardar todo"
 msgstr "Tout ranger"
 

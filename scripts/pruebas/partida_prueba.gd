@@ -139,6 +139,7 @@
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
 #   --baul              la pantalla del baúl: guardar, sacar y el baúl lleno                 [prueba_inventario.gd]
 #   --baulpistola       dejar la pistola Normal en el baúl: Johnny sin arma a distancia (Q, HUD, banco) y sacarla [prueba_inventario.gd]
+#   --baul-directo      Ctrl + clic en el baúl: la casilla pasa entera al otro lado sin pulsar el botón [prueba_inventario.gd]
 #   --durabilidad       lo que duran las armas y los arrojables: la ficha, sacar del baúl, el aviso y lo que vuelve o se rompe al caer [prueba_inventario.gd]
 #   --baulfregona       la fregona Normal en el baúl: sola no se guarda; con otra de repuesto, sí (M61) [prueba_inventario.gd]
 #   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto; y al comprar una tercera, la de repuesto
@@ -537,6 +538,9 @@ func empezar_prueba() -> void:
 	elif "--baul" in args:
 		set_process(false)   # sin la prueba larga
 		probar_baul()
+	elif "--baul-directo" in args:
+		set_process(false)   # sin la prueba larga
+		probar_baul_directo()
 	elif "--durabilidad" in args:
 		set_process(false)   # sin la prueba larga
 		probar_durabilidad()

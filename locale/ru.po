@@ -5510,6 +5510,10 @@ msgid "Las armas y los lanzables duran según su calidad."
 msgstr "Оружие и метательное служат по своему качеству."
 
 #: scripts/ui/inventario.gd
+msgid "Ctrl + clic: pasar directo de un lado a otro."
+msgstr "Ctrl + клик: сразу переложить на другую сторону."
+
+#: scripts/ui/inventario.gd
 msgid "Guardar todo"
 msgstr "Убрать все"
 

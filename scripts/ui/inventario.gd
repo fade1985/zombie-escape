@@ -1140,6 +1140,8 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	if filas * 8 == Objetos.BAUL:
 		rotulo(lienzo, Idioma.t("Las armas y los lanzables duran según su calidad."), MITAD, 346,
 			Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, 418)
+		rotulo(lienzo, Idioma.t("Ctrl + clic: pasar directo de un lado a otro."), MITAD, 364,
+			Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, 418)
 	# abajo, el marco de la ficha y los botones que no cambian con lo elegido (el principal va con la ficha)
 	marco_ficha(lienzo, Rect2(64, 402, 832, 182))
 	var todo := boton(lienzo, "guardar_todo", Idioma.t("Guardar todo"), guardar_todo)
@@ -1424,6 +1426,33 @@ func que_guardar(s: Dictionary, id: String, n: int, donde: String) -> String:   
 
 
 # ── Baúl: guardar y sacar ──
+
+# Ctrl + clic en el baúl: lo elegido pasa al otro lado sin pulsar el botón. De lo que lleva, la casilla entera al baúl
+# (como «Guardar en el baúl»); del baúl, la casilla entera a lo que lleva: un arma o un montón de arrojables (como
+# «Sacar») y, de un objeto, todos los de esa casilla que quepan (no de uno en uno). Si no cabe nada, suena el «no»
+func pasar_al_momento() -> void:
+	if not sel.begins_with("b"):
+		guardar()
+		return
+	var i := sel.substr(1).to_int()
+	var cosas := cosas_baul(Guardado.cargar())
+	if i >= cosas.size():
+		return
+	var o: Dictionary = cosas[i]
+	if o.equipo >= 0:
+		sacar_equipo(o)
+		return
+	var johnny: Node2D = partida.johnny
+	var municion: bool = o.id in Armas.MUNICION
+	var cabe := func() -> bool: return johnny.sitio(o.id) > 0 if municion else Objetos.cabe(partida.mochila, o.id)
+	if not cabe.call():
+		Sonido.tocar("no")
+		return
+	var hay := func() -> int: return int(Guardado.cargar().baul.get(o.id, 0))
+	var hasta: int = hay.call() - o.n   # (lo que queda en el baúl cuando esta casilla se ha vaciado)
+	while hay.call() > hasta and cabe.call():
+		sel = "b%d" % i
+		sacar_objeto(o.id)
 
 # Saca del baúl lo elegido: un objeto, uno (sacar_objeto); un arma, entera, o un montón de arrojables (sacar_equipo)
 func sacar() -> void:
@@ -2474,6 +2503,10 @@ func estilo(borde: Color, elegida: bool, encima: bool) -> StyleBoxFlat:
 # («Ponérmela», «Usar», «A la mano», «Al repuesto», «Guardar en el baúl», «Sacar» o «Mejorar»), la marca salta a él (con
 # el mando o las flechas, A dos veces y hecho)
 func tocar(clave: String) -> void:
+	if abierto == "baul" and (Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META)):
+		elegir(clave)
+		pasar_al_momento()
+		return
 	Sonido.tocar("click")
 	elegir(clave)
 	var b: Control = principal()

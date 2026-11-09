@@ -5488,6 +5488,10 @@ msgid "Las armas y los lanzables duran según su calidad."
 msgstr "武器和投掷物的寿命取决于品质。"
 
 #: scripts/ui/inventario.gd
+msgid "Ctrl + clic: pasar directo de un lado a otro."
+msgstr "Ctrl + 点击：直接移到另一边。"
+
+#: scripts/ui/inventario.gd
 msgid "Guardar todo"
 msgstr "全部存入"
 

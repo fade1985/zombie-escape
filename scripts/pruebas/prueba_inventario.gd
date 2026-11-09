@@ -435,6 +435,60 @@ func probar_baul() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --baul-directo": Ctrl + clic en el baúl pasa la casilla entera al otro lado sin pulsar el botón
+# (inventario.pasar_al_momento). Con 3 piezas cuerpo a cuerpo en la mochila y, en el baúl, 3 piezas especiales y 2
+# molotovs Raros: un clic sin Ctrl solo elige; con Ctrl, las 3 piezas al baúl, las 3 especiales a la mochila (todas de
+# una vez) y los molotovs a lo que lleva. Cada línea dice lo esperado. Saca captura-baul-directo.png, deja el guardado
+# como estaba y se cierra
+func probar_baul_directo() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.baul = {"pieza_especial": 3}
+		g2.baul_equipo = [{"id": "molotov", "calidad": 2, "n": 2, "quedan": 1}])
+	mochila.clear()
+	mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "pieza_cuerpo"])
+	var ctrl := func(si: bool) -> void:   # aprieta o suelta Ctrl (Input lo apunta como si fuera el teclado)
+		var e := InputEventKey.new()
+		e.keycode = KEY_CTRL
+		e.physical_keycode = KEY_CTRL
+		e.pressed = si
+		Input.parse_input_event(e)
+	var casilla := func(id: String) -> String:   # la casilla del baúl de algo ("b0")
+		return "b%d" % inventario.cosas_baul(Guardado.cargar()).map(func(o): return o.id).find(id)
+	var cuenta := func() -> String:
+		var g := Guardado.cargar()
+		return "mochila %s · baúl %s · molotovs Raros a mano %d" % [Objetos.casillas(mochila), g.baul,
+			lanzables.total("molotov") - lanzables.cuantas("molotov")]
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	mapa.baul.zona.abrir()
+	await get_tree().create_timer(0.3).timeout
+	print("Baúl directo: abierto %s (esperado: true)" % (inventario.abierto == "baul"))
+	inventario.tocar("m0")
+	await get_tree().process_frame
+	print("Clic sin Ctrl en las piezas: %s (esperado: no se mueve nada; mochila [[pieza_cuerpo, 3]])" % cuenta.call())
+	ctrl.call(true)
+	await get_tree().process_frame
+	inventario.tocar("m0")
+	await get_tree().process_frame
+	print("Ctrl + clic en las piezas cuerpo a cuerpo: %s (esperado: mochila [], en el baúl pieza_cuerpo 3)" % cuenta.call())
+	inventario.tocar(casilla.call("pieza_especial"))
+	await get_tree().process_frame
+	print("Ctrl + clic en las piezas especiales del baúl: %s (esperado: mochila [[pieza_especial, 3]], ya no en el baúl)" % cuenta.call())
+	inventario.tocar(casilla.call("molotov"))
+	await get_tree().process_frame
+	print("Ctrl + clic en los molotovs Raros: %s · baúl de equipo %d (esperado: 2 a lo que lleva · 0)" % [cuenta.call(),
+		Guardado.cargar().baul_equipo.size()])
+	ctrl.call(false)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-baul-directo.png")
+	inventario.cerrar()
+	Guardado.escribir(antes)
+	get_tree().quit()
+
+
 # Con "--captura --durabilidad": lo que duran las armas y los arrojables (la regla del dueño del 9 nov: Armas.nuevas).
 # En el baúl, una escopeta Poco común con 1 partida, un bate Raro de antes (sin "quedan": sin estrenar, 3) y 2 molotovs
 # Raros con 1. Saca el tutorial del baúl (captura-durabilidad-tutorial.png). Cuenta en la terminal: la ficha de la escopeta en el baúl (captura-durabilidad-baul.png); que al sacarla
