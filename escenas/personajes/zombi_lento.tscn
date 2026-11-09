@@ -5,7 +5,7 @@
 [ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-gpt.tres" id="frames"]
 
 [sub_resource type="CircleShape2D" id="cuerpo"]
-radius = 17.0
+radius = 14.0
 
 [node name="Zombi" type="CharacterBody2D" groups=["zombis"]]
 collision_layer = 4
@@ -15,19 +15,19 @@ script = ExtResource("script")
 vida_max = 30
 velocidad = 45.0
 dano = 12
-radio = 17.0
+radio = 14.0
 empuje = 0.76
 bamboleo = 0.3
 bamboleo_ritmo = 1.5
 a_tirones = true
-altura = 60.0
+altura = 48.0
 ropas = Array[SpriteFrames]([ExtResource("frames")])
 
 [node name="Sombra" type="Node2D" parent="."]
 position = Vector2(0, 27)
 script = ExtResource("sombra")
-ancho = 62.0
-alto = 18.0
+ancho = 50.0
+alto = 14.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
 shape = SubResource("cuerpo")
@@ -46,6 +46,6 @@ path_desired_distance = 12.0
 target_desired_distance = 12.0
 path_max_distance = 60.0
 avoidance_enabled = true
-radius = 23.0
+radius = 19.0
 neighbor_distance = 120.0
 max_speed = 45.0

@@ -864,7 +864,9 @@ en una línea.
   pidió arrastrarse con una copia con el final del cuerpo en marrón (`capturas/lento-para-gpt-sin-rojo.png`) y
   `rojo_espalda.py` se lo vuelve a pintar; el ataque, el golpe y la muerte de espaldas, el golpe de perfil y el de
   diagonal de frente los monta `espaldas.py` con sus otros dibujos (pasarlo después de `zombi_gpt.py`).
-  `--captura --lento-gpt` lo pone junto al de PixelLab. Desde el 8 nov es **el arrastrado del juego** (`zombi_lento.tscn`
+  Desde el 9 nov, al 80 % (`TAMANO` en `zombi_gpt.py`; rehacerlo entero: `personaje`, `andar` de las 5 vistas, `ataque` y
+  `muerte` de frente, en diagonal y de perfil, `golpe south`, `rojo_espalda.py`, `espaldas.py` y `zombi.py`), con su
+  choque, sombra y altura a escala en `zombi_lento.tscn`. `--captura --lento-gpt` lo pone junto al vecino. Desde el 8 nov es **el arrastrado del juego** (`zombi_lento.tscn`
   y su ficha de Sujetos), con una sola ropa, la marrón: el de PixelLab y sus 6 de colores (`zombi-lento-rojo`, `-bata`…)
   ya no se usan.
 - **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py

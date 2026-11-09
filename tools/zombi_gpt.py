@@ -52,11 +52,15 @@ CORRE = False
 # El lienzo del andar: 48, salvo los que se estiran (el crío corriendo, y el arrastrado, que de perfil echa un brazo
 # muy adelante y el muñón detrás: el de PixelLab ya andaba en 60)
 LIENZO_ANDAR = {"rapido": 64, "lento": 64}
+# El tamaño, si no es el de la referencia: el arrastrado, al 80 % (9 nov: tendido en el suelo medía casi lo que el vecino
+# de pie y, a su lado, se veía demasiado grande). Las animaciones se miden por el dibujo quieto, así que lo siguen solas
+TAMANO = {"lento": 0.8}
 # Los que van por el suelo (el arrastrado): en el ataque, el golpe y la muerte, cada fotograma a la altura a la que lo
 # dibuja GPT, no con lo más bajo en el suelo. Al dar el zarpazo levanta las dos manos y, con lo más bajo abajo, todo
 # el cuerpo se hundía 5 píxeles justo al atacar
 ALTURA_GPT = False
 ANDAR = 48
+ESCALA_ZOMBI = 1.0
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -171,7 +175,7 @@ def en_lienzo(dibujo, corrido=0.0, lado=LIENZO, arriba=None):
 
 def personaje():
     im = Image.open(os.path.join(FUENTE, "personaje.webp"))
-    escala = 8 * im.width / 2016
+    escala = 8 * im.width / 2016 / ESCALA_ZOMBI
     trozos = separar(sin_fondo(im))
     if len(trozos) != len(VISTAS):
         sys.exit("Salen %d dibujos y tienen que ser %d" % (len(trozos), len(VISTAS)))
@@ -308,6 +312,7 @@ if __name__ == "__main__":
         CORRE = sys.argv[2] == "rapido"
         ANDAR = LIENZO_ANDAR.get(sys.argv[2], LIENZO)
         ALTURA_GPT = sys.argv[2] == "lento"
+        ESCALA_ZOMBI = TAMANO.get(sys.argv[2], 1.0)
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
