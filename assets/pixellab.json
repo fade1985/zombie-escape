@@ -1925,7 +1925,7 @@
     "pegas": "De perfil (east) se giraba hacia la cámara a mitad las dos veces (grupos a8da44d1 y a0a8e136, descartados): se usa solo de frente."
    }
   },
-  "sin_usar_en_pixellab": "Grupos de mareo east a8da44d1-8fa5-46ff-80f5-50f7ccf84e38 y a0a8e136-083b-48f0-b60d-2b42ad9f57e5 (descartados). Borrar solo con confirmación del dueño.",
+  "sin_usar_en_pixellab": "La primera lanzar east (en el grupo 2be2c152) no se usa: la de east es la del grupo lanzar2. Nada se borró. Borrar solo con confirmación del dueño. Grupos de mareo east a8da44d1-8fa5-46ff-80f5-50f7ccf84e38 y a0a8e136-083b-48f0-b60d-2b42ad9f57e5 (2026-11-09, descartados: se giraba hacia la cámara). Borrar solo con confirmación del dueño.",
   "cost": "40 generaciones: 6 del modelo (730,05 → 724,05), 5 de la prueba (520,80 → 515,80; entre medias gastaron otras sesiones) y 29 de la tanda (7 direcciones de andar, fregonazo, lanzar y muerte = 28, y la lanzar east repetida; 515,80 → 486,80). Ninguna más repetida.",
   "updated": "2026-10-22"
  },
@@ -4589,233 +4589,233 @@
   },
   "lo_repetido": "Nada repetido. Solo se canceló un envío del ataque del oficinista (south) por usar keep_first_frame=false."
  },
- "torre-directora": {
-  "fecha": "2026-11-05",
-  "nota": "Parte 5 de la Torre Velaria, el primer minijefe: la directora de Recursos Humanos (directora.gd), con la receta del jefe de bomberos (apartamentos-jefes): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con PixMiniMax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Sello, golpe y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/directora-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); sello y golpe también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py directora-72 walk sello golpe muerte), también la vista quieta (rotations/west.png es la del este en espejo, para que case con el andar). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py directora-72 jefe-directora (casilla 98x142; offset del Sprite (-49, -126)).",
-  "coste": "35 generaciones (6 el modelo, 29 las animaciones, ninguna repetida; saldo 1102,55 → 1067,55)",
-  "directora-72": {
-   "character_id": "268f605a-e5f0-45c5-8428-cbee1c748ee1",
-   "size": "72x72",
-   "alto_px": 71,
-   "description": "a tall, stiff zombie woman boss, a Human Resources director, standing upright and rigid with perfect posture, about 66 pixels tall. She wears a sharp, severe charcoal grey skirt suit: a fitted blazer with padded shoulders over a white blouse, a knee-length pencil skirt and black low heels, the suit torn and stained with dark dried blood in places. Her grey hair is pulled back into a very tight bun on top of her head. Thick black rectangular glasses. In her right hand she holds a gigantic red wooden rubber stamp with a thick handle, as big as her head, its flat rubber face stained with red ink. Grey-green rotting zombie skin, dead white eyes behind the glasses, a thin cold disapproving mouth. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
-   "resultado": "A la primera: traje gris, moño, gafas y el sello rojo enorme en la mano. El moño toca el borde de arriba del lienzo (alto 71-72).",
-   "animaciones": {
-    "subject_description": "a tall stiff zombie woman in a dark grey skirt suit with a tight grey hair bun and thick black glasses, holding a giant red rubber stamp in one hand (de lado: ', seen from the side'; de espaldas: ', seen from behind')",
-    "initial_pose": "standing upright and rigid + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / ...) + ', holding the giant red rubber stamp down at her side'",
-    "frases_de_direccion": "las del Gymbro y el bombero ('Strict front view the whole time, facing the camera, she never turns to the side.', etc.)",
-    "andar": {
-     "group": "310f1f46-8f7c-46d3-840c-ae0b296dd38a",
-     "fotogramas": "8 + la vista quieta, sin partida (lienzo 100-104). 7 direcciones.",
-     "action_description": "She walks forward in place in a stiff, brisk, seamless looping walk cycle: her legs step alternately with short precise steps in her pencil skirt, her upper body stays upright and rigid, and the giant red stamp held down at her side only sways very slightly with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines."
-    },
-    "sello": {
-     "group": "733f0768-2330-4553-b682-0244c360a3de",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Suelta el sello hacia el fotograma 3 (hacia el sureste, el 6).",
-     "action_description": "She lifts the giant red rubber stamp with both hands high above her head, then hurls it straight up into the air and out of the picture, her empty arms stretched up for a moment, then lowers her arms and settles cleanly back into the starting stance holding the stamp at her side. No effects, no motion lines, no ink, no blood.",
-     "pegas": "El sello que sale volando se queda suelto en algún fotograma: se quita al montar (motas 100)."
-    },
-    "llamar": {
-     "group": "5067d5b8-a3c5-49fe-800b-1bec21c1db28",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (la evaluación y la lluvia de cajas).",
-     "action_description": "She summons her staff: she raises the giant red stamp high above her head and shakes it in the air while her other hand points sharply forward and her mouth opens wide to shout an order, then she lowers the stamp and settles cleanly back into the starting stance. No effects, no motion lines, no text, no blood."
-    },
-    "golpe": {
-     "group": "633adc16-4788-48fa-83ea-498f31689e4a",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Se usa para el disgusto al caer el último oficinista.",
-     "action_description": "She flinches from a hard blow: her head and shoulders jolt backward and she staggers one short step backward, off balance, still holding the stamp. She stays on her feet. Then she settles cleanly into the starting stance. Nothing comes off: no effects, no particles, no blood.",
-     "pegas": "Pese a 'no blood', salpica sangre y, de lado, pinta una estela blanca del golpe: se quitan al montar (motas 120 y los fotogramas 'sin' de jefe_hoja.py)."
-    },
-    "muerte": {
-     "group": "dce95a89-7f3b-4d33-a635-5da3c149b4c8",
-     "fotogramas": "12 + partida, solo partida. 7 direcciones. Suelta el sello, cae de rodillas y de bruces; de espaldas se queda arrodillada.",
-     "action_description": "She dies: she drops the giant red stamp, staggers, clutches her chest, falls to her knees and then collapses forward, face down on the floor (toward the camera... / toward the right... / away from the camera...), and lies still, flat on the floor, in the last frames. The stamp lies on the floor beside her. No effects, no blood."
+  "torre-directora": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el primer minijefe: la directora de Recursos Humanos (directora.gd), con la receta del jefe de bomberos (apartamentos-jefes): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con PixMiniMax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Sello, golpe y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/directora-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); sello y golpe también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py directora-72 walk sello golpe muerte), también la vista quieta (rotations/west.png es la del este en espejo, para que case con el andar). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py directora-72 jefe-directora (casilla 98x142; offset del Sprite (-49, -126)).",
+    "coste": "35 generaciones (6 el modelo, 29 las animaciones, ninguna repetida; saldo 1102,55 → 1067,55)",
+    "directora-72": {
+      "character_id": "268f605a-e5f0-45c5-8428-cbee1c748ee1",
+      "size": "72x72",
+      "alto_px": 71,
+      "description": "a tall, stiff zombie woman boss, a Human Resources director, standing upright and rigid with perfect posture, about 66 pixels tall. She wears a sharp, severe charcoal grey skirt suit: a fitted blazer with padded shoulders over a white blouse, a knee-length pencil skirt and black low heels, the suit torn and stained with dark dried blood in places. Her grey hair is pulled back into a very tight bun on top of her head. Thick black rectangular glasses. In her right hand she holds a gigantic red wooden rubber stamp with a thick handle, as big as her head, its flat rubber face stained with red ink. Grey-green rotting zombie skin, dead white eyes behind the glasses, a thin cold disapproving mouth. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: traje gris, moño, gafas y el sello rojo enorme en la mano. El moño toca el borde de arriba del lienzo (alto 71-72).",
+      "animaciones": {
+        "subject_description": "a tall stiff zombie woman in a dark grey skirt suit with a tight grey hair bun and thick black glasses, holding a giant red rubber stamp in one hand (de lado: ', seen from the side'; de espaldas: ', seen from behind')",
+        "initial_pose": "standing upright and rigid + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / ...) + ', holding the giant red rubber stamp down at her side'",
+        "frases_de_direccion": "las del Gymbro y el bombero ('Strict front view the whole time, facing the camera, she never turns to the side.', etc.)",
+        "andar": {
+          "group": "310f1f46-8f7c-46d3-840c-ae0b296dd38a",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 100-104). 7 direcciones.",
+          "action_description": "She walks forward in place in a stiff, brisk, seamless looping walk cycle: her legs step alternately with short precise steps in her pencil skirt, her upper body stays upright and rigid, and the giant red stamp held down at her side only sways very slightly with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines."
+        },
+        "sello": {
+          "group": "733f0768-2330-4553-b682-0244c360a3de",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Suelta el sello hacia el fotograma 3 (hacia el sureste, el 6).",
+          "action_description": "She lifts the giant red rubber stamp with both hands high above her head, then hurls it straight up into the air and out of the picture, her empty arms stretched up for a moment, then lowers her arms and settles cleanly back into the starting stance holding the stamp at her side. No effects, no motion lines, no ink, no blood.",
+          "pegas": "El sello que sale volando se queda suelto en algún fotograma: se quita al montar (motas 100)."
+        },
+        "llamar": {
+          "group": "5067d5b8-a3c5-49fe-800b-1bec21c1db28",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (la evaluación y la lluvia de cajas).",
+          "action_description": "She summons her staff: she raises the giant red stamp high above her head and shakes it in the air while her other hand points sharply forward and her mouth opens wide to shout an order, then she lowers the stamp and settles cleanly back into the starting stance. No effects, no motion lines, no text, no blood."
+        },
+        "golpe": {
+          "group": "633adc16-4788-48fa-83ea-498f31689e4a",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Se usa para el disgusto al caer el último oficinista.",
+          "action_description": "She flinches from a hard blow: her head and shoulders jolt backward and she staggers one short step backward, off balance, still holding the stamp. She stays on her feet. Then she settles cleanly into the starting stance. Nothing comes off: no effects, no particles, no blood.",
+          "pegas": "Pese a 'no blood', salpica sangre y, de lado, pinta una estela blanca del golpe: se quitan al montar (motas 120 y los fotogramas 'sin' de jefe_hoja.py)."
+        },
+        "muerte": {
+          "group": "dce95a89-7f3b-4d33-a635-5da3c149b4c8",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Suelta el sello, cae de rodillas y de bruces; de espaldas se queda arrodillada.",
+          "action_description": "She dies: she drops the giant red stamp, staggers, clutches her chest, falls to her knees and then collapses forward, face down on the floor (toward the camera... / toward the right... / away from the camera...), and lies still, flat on the floor, in the last frames. The stamp lies on the floor beside her. No effects, no blood."
+        }
+      }
     }
-   }
-  }
- },
- "torre-informatico": {
-  "fecha": "2026-11-05",
-  "nota": "Parte 5 de la Torre Velaria, el segundo minijefe: el informático (informatico.gd), con la receta de la directora (torre-directora): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Lanzar y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/informatico-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); lanzar y teclear también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py informatico-72 rotations walk lanzar muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py informatico-72 jefe-informatico (casilla 100x111; offset del Sprite (-46, -88)).",
-  "coste": "28 generaciones (6 el modelo, 22 las animaciones, ninguna repetida; saldo 1067,55 → 1039,55)",
-  "informatico-72": {
-   "character_id": "d194929a-e8b0-41bc-8bfb-e32554a89053",
-   "size": "72x72",
-   "alto_px": 71,
-   "description": "a thin, hunched zombie man boss, a computer technician from a server room, standing slouched forward with rounded shoulders, about 64 pixels tall. He wears a baggy dark navy blue hoodie with the hood down, worn grey jeans and dirty white sneakers, the hoodie torn and stained with dark dried blood in places. Messy greasy black hair, big round thick glasses with a cracked lens. Several tangled computer cables in bright colors (yellow, blue and red) hang around his neck like a scarf, their plugs dangling at his chest. In his right hand he holds a white coffee mug stuck to his hand, with a small green spot on it. Grey-green rotting zombie skin, dead pale eyes behind the glasses, dark circles under the eyes, a crooked open mouth. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
-   "resultado": "A la primera: sudadera azul marino, gafas redondas, cables amarillos, azules y rojos al cuello y la taza blanca con su punto verde.",
-   "animaciones": {
-    "subject_description": "a thin hunched zombie man in a baggy navy blue hoodie with big round glasses and colorful computer cables hanging around his neck, holding a white coffee mug in one hand (de lado: ', seen from the side'; de espaldas: 'with messy black hair ... seen from behind', sin las gafas ni los cables)",
-    "initial_pose": "standing slouched forward + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the right...) + ', holding the white coffee mug down at his side'",
-    "frases_de_direccion": "las de la directora y el bombero ('Strict front view the whole time, facing the camera, he never turns to the side.', etc.)",
-    "andar": {
-     "group": "cbe89705-5037-4c14-908c-8efa03683534",
-     "fotogramas": "8 + la vista quieta, sin partida (lienzo 100-104). 7 direcciones.",
-     "action_description": "He shuffles forward in place in a slow, sluggish, seamless looping walk cycle: his legs step alternately with short dragging steps, his shoulders stay slouched and rounded, the cables around his neck swing slightly and the coffee mug in his hand sways a little with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines."
-    },
-    "lanzar": {
-     "group": "3a4dbc6c-b520-4618-8edc-5479989436f4",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Echa el brazo hacia el fotograma 5.",
-     "action_description": "He hurls something with his free hand: keeping the coffee mug in one hand, he swings his other arm back and up over his shoulder with the hand clenched, then whips that arm forward hard in a big sweeping sidearm throw (toward the camera / to the right / toward the lower right of the image / away from the camera...), his body leaning forward with the effort, and then settles cleanly back into the starting stance. His throwing hand is empty: no object, no keyboard, no effects, no motion lines.",
-     "pegas": "Pinta una estela del brazo (blanca de frente; oscura de lado y de espaldas) en el fotograma del lanzamiento y, de lado, una bolita marrón suelta: se quitan al montar (motas 100 y los fotogramas 'sin' de jefe_hoja.py)."
-    },
-    "teclear": {
-     "group": "2cdb247d-3cb8-4a97-9a2a-972853d8d10d",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (el cortocircuito y el apagón).",
-     "action_description": "He hacks the system: he grabs one of the cables around his neck with his free hand and yanks it, then jabs the fingers of that hand frantically in the air in front of his chest as if typing very fast on an invisible keyboard, his head bobbing and his mouth open in a manic grin, then he lowers his hand and settles cleanly back into the starting stance. No effects, no sparks, no keyboard, no motion lines."
-    },
-    "muerte": {
-     "group": "b9493a92-0c83-471a-8c52-936ba703cc2c",
-     "fotogramas": "12 + partida, solo partida. 7 direcciones. Suelta la taza, cae de rodillas y de bruces.",
-     "action_description": "He dies: he drops the coffee mug, staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor, in the last frames. The mug lies on the floor beside him. No effects, no blood."
-    }
-   }
-  }
- },
- "torre-presentador": {
-  "fecha": "2026-11-05",
-  "nota": "Parte 5 de la Torre Velaria, el tercer minijefe: el presentador (presentador.gd), con la receta del informático (torre-informatico): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Grito, chasquear y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/presentador-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); grito y chasquear también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py presentador-72 rotations walk grito muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py presentador-72 jefe-presentador (casilla 99x105; offset del Sprite (-49, -89)). Los muebles de su plató, con create_image_pixflux y la receta de torre-parte2 (guía de py tools/guias_torre.py a fuerza 45; originales en assets/sources/torre/crudos/, sin fondo en assets/sources/salas/torre/; al foco se le quitó a mano el azul que quedaba alrededor de la cabeza).",
-  "coste": "32 generaciones (6 el modelo, 22 las animaciones y 4 los muebles, ninguna repetida; saldo 1039,55 → 1007,55)",
-  "muebles": {
-   "butacas": "a1d60b8c (fila de cuatro butacas rojas vistas de espaldas: 'a row of four red velvet theater seats in an auditorium, seen in 3/4 top-down view from behind...')",
-   "atril": "a3eed325",
-   "foco": "6db39964 (foco de pie con trípode)",
-   "pantalla-plato": "c3ab91da (pantalla gigante de la pared del fondo)"
   },
-  "presentador-72": {
-   "character_id": "db72fb47-473b-4e1c-b683-5b30ca189d4f",
-   "size": "72x72",
-   "alto_px": 69,
-   "description": "a lanky, theatrical zombie man boss, a corporate keynote presenter on stage, standing upright with his chest puffed out and one arm raised in a showy presenter gesture, about 66 pixels tall. He wears a shiny, glossy electric blue suit jacket with wide lapels that gleams with highlights, a black turtleneck underneath, slim black trousers and pointed shiny black shoes, the suit torn and stained with dark dried blood in places. Big slicked-back glossy black pompadour hair, a thin black headset microphone curving from his ear to the corner of his mouth. A wide, too-perfect toothy advertising smile with bright white teeth in a rotting face. Grey-green rotting zombie skin, dead pale eyes. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
-   "resultado": "A la primera: americana azul eléctrico brillante, tupé engominado, micrófono de diadema, una mano en la cadera y la otra levantada. La piel salió más amarillenta que la de los demás.",
-   "animaciones": {
-    "subject_description": "a lanky zombie man in a shiny electric blue suit jacket with a slicked-back black pompadour and a thin headset microphone at his mouth (de lado: ', seen from the side'; de espaldas: '... pompadour, seen from behind', sin el micrófono)",
-    "initial_pose": "standing upright with his chest puffed out, one hand on his hip and the other arm raised in a showy presenter gesture + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / ...); de lado, 'standing upright with his chest puffed out, facing right, seen from the side'; de espaldas, '..., one arm raised in a showy gesture, seen from behind, his back to the camera'",
-    "frases_de_direccion": "las del informático ('Strict front view the whole time, facing the camera, he never turns to the side.', etc.)",
-    "andar": {
-     "group": "96cc6f7d-d42f-4e2a-90a2-c89c1eb8ad43",
-     "fotogramas": "8 + la vista quieta, sin partida (lienzo 96-100). 7 direcciones.",
-     "action_description": "He struts forward in place in a confident, showy, seamless looping walk cycle: his legs step alternately with long bouncy steps, his chest stays puffed out, one hand stays on his hip and his raised hand waves a little to the audience with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines. (De lado, 'his chest stays puffed out and his arms swing a little with each step'.)"
-    },
-    "grito": {
-     "group": "7eeb9dad-20fc-47a4-a4c2-86b04bb82875",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Coge aire en 1-2 y grita del 3 al 7 (de frente se acerca a la cámara: se ve más grande).",
-     "action_description": "He shouts into his headset microphone with all his strength: he leans back and fills his chest, then thrusts his head and upper body forward (toward the camera / toward the lower right of the image / to the right / away from the camera...), his mouth opening extremely wide in a huge shout, both arms flung out wide to the sides, holding the shout for a moment, then he settles cleanly back into the starting stance. No effects, no sound waves, no motion lines, no text."
-    },
-    "chasquear": {
-     "group": "52ad8632-69f6-4683-bc69-02bcd4e87812",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (los focos y el confeti).",
-     "action_description": "He starts the big show: he sweeps his raised arm across in a grand theatrical gesture, then snaps his fingers high above his head with a wide toothy showman grin, then points forward at the audience, and then settles cleanly back into the starting stance. No effects, no sparks, no confetti, no motion lines.",
-     "pegas": "En el fotograma 1 pinta una estela blanca del brazo: se quita al montar (los fotogramas 'sin' de jefe_hoja.py)."
-    },
-    "muerte": {
-     "group": "9ea83fdf-ed77-494b-af2f-4df4c89f7113",
-     "fotogramas": "12 + partida, solo partida. 7 direcciones. Se le cae el micrófono, cae de rodillas y de bruces.",
-     "action_description": "He dies: his headset microphone falls off, he staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor, in the last frames. No effects, no blood."
+  "torre-informatico": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el segundo minijefe: el informático (informatico.gd), con la receta de la directora (torre-directora): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Lanzar y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/informatico-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); lanzar y teclear también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py informatico-72 rotations walk lanzar muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py informatico-72 jefe-informatico (casilla 100x111; offset del Sprite (-46, -88)).",
+    "coste": "28 generaciones (6 el modelo, 22 las animaciones, ninguna repetida; saldo 1067,55 → 1039,55)",
+    "informatico-72": {
+      "character_id": "d194929a-e8b0-41bc-8bfb-e32554a89053",
+      "size": "72x72",
+      "alto_px": 71,
+      "description": "a thin, hunched zombie man boss, a computer technician from a server room, standing slouched forward with rounded shoulders, about 64 pixels tall. He wears a baggy dark navy blue hoodie with the hood down, worn grey jeans and dirty white sneakers, the hoodie torn and stained with dark dried blood in places. Messy greasy black hair, big round thick glasses with a cracked lens. Several tangled computer cables in bright colors (yellow, blue and red) hang around his neck like a scarf, their plugs dangling at his chest. In his right hand he holds a white coffee mug stuck to his hand, with a small green spot on it. Grey-green rotting zombie skin, dead pale eyes behind the glasses, dark circles under the eyes, a crooked open mouth. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: sudadera azul marino, gafas redondas, cables amarillos, azules y rojos al cuello y la taza blanca con su punto verde.",
+      "animaciones": {
+        "subject_description": "a thin hunched zombie man in a baggy navy blue hoodie with big round glasses and colorful computer cables hanging around his neck, holding a white coffee mug in one hand (de lado: ', seen from the side'; de espaldas: 'with messy black hair ... seen from behind', sin las gafas ni los cables)",
+        "initial_pose": "standing slouched forward + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the right...) + ', holding the white coffee mug down at his side'",
+        "frases_de_direccion": "las de la directora y el bombero ('Strict front view the whole time, facing the camera, he never turns to the side.', etc.)",
+        "andar": {
+          "group": "cbe89705-5037-4c14-908c-8efa03683534",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 100-104). 7 direcciones.",
+          "action_description": "He shuffles forward in place in a slow, sluggish, seamless looping walk cycle: his legs step alternately with short dragging steps, his shoulders stay slouched and rounded, the cables around his neck swing slightly and the coffee mug in his hand sways a little with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines."
+        },
+        "lanzar": {
+          "group": "3a4dbc6c-b520-4618-8edc-5479989436f4",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Echa el brazo hacia el fotograma 5.",
+          "action_description": "He hurls something with his free hand: keeping the coffee mug in one hand, he swings his other arm back and up over his shoulder with the hand clenched, then whips that arm forward hard in a big sweeping sidearm throw (toward the camera / to the right / toward the lower right of the image / away from the camera...), his body leaning forward with the effort, and then settles cleanly back into the starting stance. His throwing hand is empty: no object, no keyboard, no effects, no motion lines.",
+          "pegas": "Pinta una estela del brazo (blanca de frente; oscura de lado y de espaldas) en el fotograma del lanzamiento y, de lado, una bolita marrón suelta: se quitan al montar (motas 100 y los fotogramas 'sin' de jefe_hoja.py)."
+        },
+        "teclear": {
+          "group": "2cdb247d-3cb8-4a97-9a2a-972853d8d10d",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (el cortocircuito y el apagón).",
+          "action_description": "He hacks the system: he grabs one of the cables around his neck with his free hand and yanks it, then jabs the fingers of that hand frantically in the air in front of his chest as if typing very fast on an invisible keyboard, his head bobbing and his mouth open in a manic grin, then he lowers his hand and settles cleanly back into the starting stance. No effects, no sparks, no keyboard, no motion lines."
+        },
+        "muerte": {
+          "group": "b9493a92-0c83-471a-8c52-936ba703cc2c",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Suelta la taza, cae de rodillas y de bruces.",
+          "action_description": "He dies: he drops the coffee mug, staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor, in the last frames. The mug lies on the floor beside him. No effects, no blood."
+        }
+      }
     }
-   }
-  }
- },
- "torre-becario": {
-  "fecha": "2026-11-05",
-  "nota": "Parte 5 de la Torre Velaria, el cuarto minijefe: el becario (becario.gd; sus copias, copia_becario.gd, usan la misma hoja), con la receta del presentador (torre-presentador): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Carrito, lanzar y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/becario-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); lanzar también con final = partida. Las vistas quietas (rotations) no vienen en bajar_zip.py: se sacaron del mismo zip (<estado>/rotations/<dirección>.png). Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py becario-72 rotations walk carrito lanzar muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py becario-72 jefe-becario (casilla 109x107; offset del Sprite (-56, -85)). Sin muebles nuevos: el carrito del correo, los vasos de café, el reflejo y el destello de la fotocopiadora se dibujan con código.",
-  "coste": "34 generaciones (6 el modelo, 28 las animaciones, ninguna repetida)",
-  "becario-72": {
-   "character_id": "db0fc771-c130-421f-9986-6a8075254f68",
-   "size": "72x72",
-   "description": "a skinny, nervous young zombie man boss, a clumsy office intern, standing slightly hunched with his shoulders raised, about 64 pixels tall. He wears a white dress shirt several sizes too big for him, with long baggy sleeves and the shirt tail hanging out, a crooked thin red tie, loose khaki trousers and worn brown shoes, the shirt torn and stained with brown coffee and dark dried blood in places. A plain white ID badge card hangs from a blue lanyard around his neck. Under one arm he clutches a thick messy stack of white photocopy papers. Messy short brown hair, a young face. Grey-green rotting zombie skin, dead pale eyes, an anxious open mouth. No logos, no letters, no badges with text, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
-   "resultado": "A la primera: camisa blanca enorme con manchas de café, corbata roja torcida, pantalón caqui, pelo castaño revuelto y la pila de folios bajo el brazo.",
-   "animaciones": {
-    "subject_description": "a skinny young zombie office intern in a baggy oversized white shirt with a crooked red tie, clutching a stack of papers under one arm (de lado: ', seen from the side'; de espaldas: 'a skinny young zombie office intern in a baggy oversized white shirt, seen from behind')",
-    "initial_pose": "standing slightly hunched with his shoulders raised + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the right...) + ', the stack of papers under one arm' (de frente y de lado)",
-    "frases_de_direccion": "las del presentador ('Strict front view the whole time, facing the camera, he never turns to the side.', 'He keeps the same three-quarter front/back view the whole time, facing ... he never turns.', 'Strict side view the whole time, facing right: he never turns toward the camera.', 'Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways.')",
-    "andar": {
-     "group": "a50f957d-ca40-4ddb-b2fd-ae5df0b6cb5e",
-     "fotogramas": "8 + la vista quieta, sin partida (lienzo 96-100). 7 direcciones.",
-     "action_description": "He hurries forward in place in a quick, nervous, seamless looping walk cycle: short hurried steps, his legs stepping alternately, his shoulders hunched, his free arm swinging and the stack of papers pressed under the other arm, his oversized shirt flapping a little. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines. (De espaldas, 'his arms swinging a little', sin los papeles.)"
-    },
-    "carrito": {
-     "group": "c3161187-1cef-4910-85ac-cc60eb4fb548",
-     "fotogramas": "8 + partida, solo partida. 7 direcciones. Suelta los papeles en el 1-2 y corre inclinado del 3 al 8 (el juego hace el bucle 3-8; de espaldas, los brazos estirados se ven como brazos en alto).",
-     "action_description": "He drops his papers and breaks into a frantic charging run (toward the camera / toward the lower right of the image / to the right / away from the camera...): he leans far forward, both arms stretched straight out in front of him at waist height with both hands closed around an invisible horizontal bar, as if pushing something heavy ahead of him, his legs pumping fast in long running strides, his tie and oversized shirt flapping. He keeps running in the last frames. Draw nothing in his hands. No effects, no dust, no motion lines, no objects.",
-     "pegas": "Los papeles que suelta quedan sueltos en el suelo en el 1-3: se quitan al montar (motas 300 en jefe_hoja.py). No dibujó ningún carrito: lo pone el juego."
-    },
-    "lanzar": {
-     "group": "6e4466f2-013d-4717-8da6-e01e7a0fd940",
-     "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. El brazo arriba en el 3-4.",
-     "action_description": "With his free arm he winds back and then throws something underhand high into the air (toward the camera / toward the lower right of the image / to the right / away from the camera...) in a clumsy, hurried throw, his arm swinging forward and up, his hand opening at the top of the swing, the papers still pressed under his other arm, and then he settles cleanly back into the starting stance. His hand is empty. No effects, no objects, no cups, no motion lines.",
-     "pegas": "En vez de nada, tira un folio (fotogramas 2-3 en varias direcciones): se quita al montar (motas 300). Los vasos de café los dibuja el juego."
-    },
-    "muerte": {
-     "group": "6f7d8c23-93b8-47ca-b935-3e3872a77d36",
-     "fotogramas": "12 + partida, solo partida. 7 direcciones. Se le caen los papeles, cae de rodillas y de bruces entre los folios.",
-     "action_description": "He dies: the stack of papers slips from under his arm and scatters onto the floor around his feet, he staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor among the scattered white papers, in the last frames. No effects, no blood. (De espaldas, 'a stack of white papers falls and scatters...')"
-    }
-   }
-  }
- },
- "torre-sujeto-1": {
-  "fecha": "2026-11-05",
-  "nota": "Parte 6 de la Torre Velaria (primera sesión): el Sujeto 1 y la presidenta, y los muebles y paredes del laboratorio de la planta 40. Sujeto 1: create_character_pro_flash a 128x128 (view low top-down), con el sur del gerente-128 de estilo (subido con get_upload_url; usage 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading, same size on the canvas. Do not copy his body, clothes, briefcase or colors.', style_options sin color_palette). Presidenta: a 72x72 con el sur del zombi venenoso de 72 (como los minijefes de la torre). Animaciones con animate_character en modo pixminimax, una dirección por llamada, 1 generación cada una; cada animación un grupo. Del Sujeto 1 solo se generan south, south-east, east, north-east y north (el oeste, en espejo con py tools/espejo_oeste.py, como el científico jefe); rodar, fregonazo y cubo con partida y final = vista quieta pegada en (16, 28) de 160x160; muerte y partirse, solo partida (assets/sources/sujeto-1-128/partida/; los upload:<id> de subidas.txt caducan a los 3 días). Partirse, solo de frente. Bajado con py tools/bajar_zip.py; las vistas quietas, sacadas del zip. La presidenta: tableta (de frente, partida y final) y huir (al este; el juego la voltea), montadas con py tools/presidenta_hoja.py en assets/sprites/presidenta.png. Muebles con create_image_pixflux y la receta de torre-parte2 (guía de py tools/guias_torre.py a fuerza 45, sin fondo con 'guias_torre.py quita'): capsula, capsula-abierta y mesa-laboratorio (la de lado salió con dos mesas diminutas: descartada). Pared del laboratorio: create_image_pixflux 256x128 view side, recortada con textura_pared.py (x 185-237, y 12-126, techo 0-12). El suelo de PixelLab salió liso y con juntas irregulares (descartado): suelo-laboratorio.png se hizo a mano en Python (baldosas blancas de 16 px).",
-  "coste": "primera sesión: 14 los modelos (8 el Sujeto 1, 6 la presidenta), 6 muebles, suelo y pared, y 18 animaciones (6 de frente del Sujeto 1, 2 de la presidenta y 10 de otras direcciones); faltan las otras 10 direcciones del Sujeto 1 (fregonazo ne y n, cubo y muerte en se, e, ne y n); segunda sesión: las 10 que faltaban, 1 generación cada una, todas a la primera",
-  "segunda_sesion": "Las 10 direcciones que faltaban, con las mismas recetas que la primera sesión (PixMiniMax, una dirección por llamada, partida = upload de subidas.txt; muerte 12 fotogramas solo con partida; cubo y fregonazo 8 con partida y final). Frases: ne 'Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see his back, his face stays hidden the whole time, he never turns to face the camera.' (en la muerte, 'He keeps the same three-quarter back view, facing away from the camera, and never turns to face the camera.'); n 'Strict back view the whole time: ...' (muerte: 'Strict back view the whole time, he never turns to face the camera.'); se y e como en el andar. El cubo dibujó otra vez una bola oscura en la mano al echar el brazo atrás (y una raya negra de lado y una roja de espaldas): al montar se quitan esos fotogramas (sin: s 1-4, se 1-5, e 1-3, ne 1-4, n 3) y las motas sueltas. Oeste en espejo (py tools/espejo_oeste.py --lado sujeto-1-128 rotations walk rodar fregonazo cubo muerte). Hoja: py tools/jefe_hoja.py sujeto-1-128 jefe-sujeto-1 (casilla 169x194, offset (-85, -164), escala 1,4).",
-  "sujeto-1-128": {
-   "character_id": "5dcd8151-63d8-4d16-b60a-ad84d09f542c",
-   "size": "128x128",
-   "description": "a huge hulking failed lab clone boss, a giant badly made copy of a young janitor, about 100 pixels tall, broad and muscular with oversized arms and big hands, slightly hunched. He wears the same clothes as the janitor: faded blue denim work overalls (bib overalls with shoulder straps) torn and stretched over his huge body, a cream-white t-shirt under them ripped at the shoulders, a red bandana headband tied around his forehead, scruffy brown hair and heavy brown work boots. Pale grey-white sickly skin with surgical stitch scars across his face and arms, a few clear plastic medical tubes and IV ports stuck into his shoulders and neck, glowing pale green dead eyes and a blank expressionless face. A plastic hospital ID bracelet on one wrist. He holds an enormous wet grey mop as long as his body in his right hand, like a weapon. No logos, no letters, no text. Crisp pixel art, dark outline, detailed shading",
-   "resultado": "A la primera: Johnny enorme y pálido, con el peto vaquero roto, la cinta roja, cicatrices y la fregona gigante.",
-   "animaciones": {
-    "subject_description": "a huge hulking pale clone of a janitor in torn blue denim overalls and a red bandana, holding an enormous grey mop (de lado ', seen from the side'; de espaldas ', seen from behind')",
-    "frases_de_direccion": "las del científico jefe (Strict front view... / Strict three-quarter front view... / Strict side view the whole time, facing right... / Strict three-quarter back view...: we only see his back, his face stays hidden... / Strict back view...); la dirección del movimiento: toward the camera / toward the lower right of the image / to the right / toward the upper right of the image / away from the camera",
-    "andar": {
-     "group": "7d59296a-9069-4649-9c37-e9185b646cd3",
-     "fotogramas": "8 + la vista quieta, sin partida (lienzo 180). De frente, sobre todo balanceo."
-    },
-    "rodar": {
-     "group": "4edc7745-61bc-4186-878f-18dd5b57f4fd",
-     "fotogramas": "8 + partida; partida y final = quieta. Se agacha (1), rueda (2-5) y se levanta (6-8)."
-    },
-    "fregonazo": {
-     "group": "aa269016-b24c-4c36-9358-4eec720535c1",
-     "fotogramas": "8 + partida; partida y final = quieta. La sube por encima del hombro (2-3) y barre el suelo (4-5)."
-    },
-    "cubo": {
-     "group": "64a1b6cb-56da-4b27-a704-3dc4cce580fe",
-     "fotogramas": "8 + partida; partida y final = quieta. Lanza por encima (2-4). Pega: de frente dibujó una bola oscura en la mano y luego en el suelo (2-4): quitar al montar; el cubo lo pinta el juego."
-    },
-    "muerte": {
-     "group": "f5e1f350-42e7-4258-9c23-98316e04f949",
-     "fotogramas": "12 + partida, solo partida. Suelta la fregona, cae de rodillas y de bruces."
-    },
-    "partirse": {
-     "group": "c89ac675-eb58-4c30-b879-b4313f304e26",
-     "fotogramas": "12 + partida, solo partida, solo south. Se encoge, tiembla y acaba con los brazos abiertos (11-12), a punto de partirse en dos."
-    }
-   }
   },
-  "presidenta-72": {
-   "character_id": "1fdb7565-61b5-49bf-858d-586d5e1283c8",
-   "size": "72x72",
-   "description": "a cold, elegant corporate CEO woman, the president of a sinister pharmaceutical company, about 64 pixels tall, standing upright and arrogant. She wears an immaculate tailored white business suit with a white jacket and white trousers, a pale grey silk blouse, white high-heeled shoes, a thin gold necklace. Sleek platinum blonde hair pulled back in a tight bun, a sharp pale face with red lipstick and a cruel calm smile. She holds a black tablet computer in her left hand against her chest. Healthy human skin, not a zombie. No logos, no letters, no text. Crisp pixel art, dark outline, detailed shading",
-   "animaciones": {
-    "tableta": {
-     "group": "785e0bfc-a8e3-4699-85c8-55a8b0fa601e",
-     "fotogramas": "8 + partida, solo south; partida y final = quieta. Toca la tableta y sonríe."
+  "torre-presentador": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el tercer minijefe: el presentador (presentador.gd), con la receta del informático (torre-informatico): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Grito, chasquear y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/presentador-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); grito y chasquear también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py presentador-72 rotations walk grito muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py presentador-72 jefe-presentador (casilla 99x105; offset del Sprite (-49, -89)). Los muebles de su plató, con create_image_pixflux y la receta de torre-parte2 (guía de py tools/guias_torre.py a fuerza 45; originales en assets/sources/torre/crudos/, sin fondo en assets/sources/salas/torre/; al foco se le quitó a mano el azul que quedaba alrededor de la cabeza).",
+    "coste": "32 generaciones (6 el modelo, 22 las animaciones y 4 los muebles, ninguna repetida; saldo 1039,55 → 1007,55)",
+    "muebles": {
+      "butacas": "a1d60b8c (fila de cuatro butacas rojas vistas de espaldas: 'a row of four red velvet theater seats in an auditorium, seen in 3/4 top-down view from behind...')",
+      "atril": "a3eed325",
+      "foco": "6db39964 (foco de pie con trípode)",
+      "pantalla-plato": "c3ab91da (pantalla gigante de la pared del fondo)"
     },
-    "huir": {
-     "group": "9b57c764-39ec-4f27-80ab-4bdab35b002b",
-     "fotogramas": "8 + partida, solo east. Corre en bucle (1-8)."
+    "presentador-72": {
+      "character_id": "db72fb47-473b-4e1c-b683-5b30ca189d4f",
+      "size": "72x72",
+      "alto_px": 69,
+      "description": "a lanky, theatrical zombie man boss, a corporate keynote presenter on stage, standing upright with his chest puffed out and one arm raised in a showy presenter gesture, about 66 pixels tall. He wears a shiny, glossy electric blue suit jacket with wide lapels that gleams with highlights, a black turtleneck underneath, slim black trousers and pointed shiny black shoes, the suit torn and stained with dark dried blood in places. Big slicked-back glossy black pompadour hair, a thin black headset microphone curving from his ear to the corner of his mouth. A wide, too-perfect toothy advertising smile with bright white teeth in a rotting face. Grey-green rotting zombie skin, dead pale eyes. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: americana azul eléctrico brillante, tupé engominado, micrófono de diadema, una mano en la cadera y la otra levantada. La piel salió más amarillenta que la de los demás.",
+      "animaciones": {
+        "subject_description": "a lanky zombie man in a shiny electric blue suit jacket with a slicked-back black pompadour and a thin headset microphone at his mouth (de lado: ', seen from the side'; de espaldas: '... pompadour, seen from behind', sin el micrófono)",
+        "initial_pose": "standing upright with his chest puffed out, one hand on his hip and the other arm raised in a showy presenter gesture + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / ...); de lado, 'standing upright with his chest puffed out, facing right, seen from the side'; de espaldas, '..., one arm raised in a showy gesture, seen from behind, his back to the camera'",
+        "frases_de_direccion": "las del informático ('Strict front view the whole time, facing the camera, he never turns to the side.', etc.)",
+        "andar": {
+          "group": "96cc6f7d-d42f-4e2a-90a2-c89c1eb8ad43",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 96-100). 7 direcciones.",
+          "action_description": "He struts forward in place in a confident, showy, seamless looping walk cycle: his legs step alternately with long bouncy steps, his chest stays puffed out, one hand stays on his hip and his raised hand waves a little to the audience with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines. (De lado, 'his chest stays puffed out and his arms swing a little with each step'.)"
+        },
+        "grito": {
+          "group": "7eeb9dad-20fc-47a4-a4c2-86b04bb82875",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Coge aire en 1-2 y grita del 3 al 7 (de frente se acerca a la cámara: se ve más grande).",
+          "action_description": "He shouts into his headset microphone with all his strength: he leans back and fills his chest, then thrusts his head and upper body forward (toward the camera / toward the lower right of the image / to the right / away from the camera...), his mouth opening extremely wide in a huge shout, both arms flung out wide to the sides, holding the shout for a moment, then he settles cleanly back into the starting stance. No effects, no sound waves, no motion lines, no text."
+        },
+        "chasquear": {
+          "group": "52ad8632-69f6-4683-bc69-02bcd4e87812",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (los focos y el confeti).",
+          "action_description": "He starts the big show: he sweeps his raised arm across in a grand theatrical gesture, then snaps his fingers high above his head with a wide toothy showman grin, then points forward at the audience, and then settles cleanly back into the starting stance. No effects, no sparks, no confetti, no motion lines.",
+          "pegas": "En el fotograma 1 pinta una estela blanca del brazo: se quita al montar (los fotogramas 'sin' de jefe_hoja.py)."
+        },
+        "muerte": {
+          "group": "9ea83fdf-ed77-494b-af2f-4df4c89f7113",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Se le cae el micrófono, cae de rodillas y de bruces.",
+          "action_description": "He dies: his headset microphone falls off, he staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor, in the last frames. No effects, no blood."
+        }
+      }
     }
-   }
   },
-  "muebles": {
-   "capsula": "d002fbfe",
-   "capsula-abierta": "24c8a3d6",
-   "mesa-laboratorio": "b6aa3f95",
-   "mesa-laboratorio-lado": "6ca22589 (descartada)",
-   "pared-laboratorio": "fc3dc81c",
-   "suelo-laboratorio": "4b99d72a (descartado)"
-  }
- },
+  "torre-becario": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el cuarto minijefe: el becario (becario.gd; sus copias, copia_becario.gd, usan la misma hoja), con la receta del presentador (torre-presentador): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con animate_character en modo pixminimax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Carrito, lanzar y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/becario-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); lanzar también con final = partida. Las vistas quietas (rotations) no vienen en bajar_zip.py: se sacaron del mismo zip (<estado>/rotations/<dirección>.png). Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py becario-72 rotations walk carrito lanzar muerte). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py becario-72 jefe-becario (casilla 109x107; offset del Sprite (-56, -85)). Sin muebles nuevos: el carrito del correo, los vasos de café, el reflejo y el destello de la fotocopiadora se dibujan con código.",
+    "coste": "34 generaciones (6 el modelo, 28 las animaciones, ninguna repetida)",
+    "becario-72": {
+      "character_id": "db0fc771-c130-421f-9986-6a8075254f68",
+      "size": "72x72",
+      "description": "a skinny, nervous young zombie man boss, a clumsy office intern, standing slightly hunched with his shoulders raised, about 64 pixels tall. He wears a white dress shirt several sizes too big for him, with long baggy sleeves and the shirt tail hanging out, a crooked thin red tie, loose khaki trousers and worn brown shoes, the shirt torn and stained with brown coffee and dark dried blood in places. A plain white ID badge card hangs from a blue lanyard around his neck. Under one arm he clutches a thick messy stack of white photocopy papers. Messy short brown hair, a young face. Grey-green rotting zombie skin, dead pale eyes, an anxious open mouth. No logos, no letters, no badges with text, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: camisa blanca enorme con manchas de café, corbata roja torcida, pantalón caqui, pelo castaño revuelto y la pila de folios bajo el brazo.",
+      "animaciones": {
+        "subject_description": "a skinny young zombie office intern in a baggy oversized white shirt with a crooked red tie, clutching a stack of papers under one arm (de lado: ', seen from the side'; de espaldas: 'a skinny young zombie office intern in a baggy oversized white shirt, seen from behind')",
+        "initial_pose": "standing slightly hunched with his shoulders raised + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the right...) + ', the stack of papers under one arm' (de frente y de lado)",
+        "frases_de_direccion": "las del presentador ('Strict front view the whole time, facing the camera, he never turns to the side.', 'He keeps the same three-quarter front/back view the whole time, facing ... he never turns.', 'Strict side view the whole time, facing right: he never turns toward the camera.', 'Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways.')",
+        "andar": {
+          "group": "a50f957d-ca40-4ddb-b2fd-ae5df0b6cb5e",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 96-100). 7 direcciones.",
+          "action_description": "He hurries forward in place in a quick, nervous, seamless looping walk cycle: short hurried steps, his legs stepping alternately, his shoulders hunched, his free arm swinging and the stack of papers pressed under the other arm, his oversized shirt flapping a little. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines. (De espaldas, 'his arms swinging a little', sin los papeles.)"
+        },
+        "carrito": {
+          "group": "c3161187-1cef-4910-85ac-cc60eb4fb548",
+          "fotogramas": "8 + partida, solo partida. 7 direcciones. Suelta los papeles en el 1-2 y corre inclinado del 3 al 8 (el juego hace el bucle 3-8; de espaldas, los brazos estirados se ven como brazos en alto).",
+          "action_description": "He drops his papers and breaks into a frantic charging run (toward the camera / toward the lower right of the image / to the right / away from the camera...): he leans far forward, both arms stretched straight out in front of him at waist height with both hands closed around an invisible horizontal bar, as if pushing something heavy ahead of him, his legs pumping fast in long running strides, his tie and oversized shirt flapping. He keeps running in the last frames. Draw nothing in his hands. No effects, no dust, no motion lines, no objects.",
+          "pegas": "Los papeles que suelta quedan sueltos en el suelo en el 1-3: se quitan al montar (motas 300 en jefe_hoja.py). No dibujó ningún carrito: lo pone el juego."
+        },
+        "lanzar": {
+          "group": "6e4466f2-013d-4717-8da6-e01e7a0fd940",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. El brazo arriba en el 3-4.",
+          "action_description": "With his free arm he winds back and then throws something underhand high into the air (toward the camera / toward the lower right of the image / to the right / away from the camera...) in a clumsy, hurried throw, his arm swinging forward and up, his hand opening at the top of the swing, the papers still pressed under his other arm, and then he settles cleanly back into the starting stance. His hand is empty. No effects, no objects, no cups, no motion lines.",
+          "pegas": "En vez de nada, tira un folio (fotogramas 2-3 en varias direcciones): se quita al montar (motas 300). Los vasos de café los dibuja el juego."
+        },
+        "muerte": {
+          "group": "6f7d8c23-93b8-47ca-b935-3e3872a77d36",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Se le caen los papeles, cae de rodillas y de bruces entre los folios.",
+          "action_description": "He dies: the stack of papers slips from under his arm and scatters onto the floor around his feet, he staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera / toward the right / away from the camera...), and lies still, flat on the floor among the scattered white papers, in the last frames. No effects, no blood. (De espaldas, 'a stack of white papers falls and scatters...')"
+        }
+      }
+    }
+  },
+  "torre-sujeto-1": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 6 de la Torre Velaria (primera sesión): el Sujeto 1 y la presidenta, y los muebles y paredes del laboratorio de la planta 40. Sujeto 1: create_character_pro_flash a 128x128 (view low top-down), con el sur del gerente-128 de estilo (subido con get_upload_url; usage 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading, same size on the canvas. Do not copy his body, clothes, briefcase or colors.', style_options sin color_palette). Presidenta: a 72x72 con el sur del zombi venenoso de 72 (como los minijefes de la torre). Animaciones con animate_character en modo pixminimax, una dirección por llamada, 1 generación cada una; cada animación un grupo. Del Sujeto 1 solo se generan south, south-east, east, north-east y north (el oeste, en espejo con py tools/espejo_oeste.py, como el científico jefe); rodar, fregonazo y cubo con partida y final = vista quieta pegada en (16, 28) de 160x160; muerte y partirse, solo partida (assets/sources/sujeto-1-128/partida/; los upload:<id> de subidas.txt caducan a los 3 días). Partirse, solo de frente. Bajado con py tools/bajar_zip.py; las vistas quietas, sacadas del zip. La presidenta: tableta (de frente, partida y final) y huir (al este; el juego la voltea), montadas con py tools/presidenta_hoja.py en assets/sprites/presidenta.png. Muebles con create_image_pixflux y la receta de torre-parte2 (guía de py tools/guias_torre.py a fuerza 45, sin fondo con 'guias_torre.py quita'): capsula, capsula-abierta y mesa-laboratorio (la de lado salió con dos mesas diminutas: descartada). Pared del laboratorio: create_image_pixflux 256x128 view side, recortada con textura_pared.py (x 185-237, y 12-126, techo 0-12). El suelo de PixelLab salió liso y con juntas irregulares (descartado): suelo-laboratorio.png se hizo a mano en Python (baldosas blancas de 16 px).",
+    "coste": "primera sesión: 14 los modelos (8 el Sujeto 1, 6 la presidenta), 6 muebles, suelo y pared, y 18 animaciones (6 de frente del Sujeto 1, 2 de la presidenta y 10 de otras direcciones); faltan las otras 10 direcciones del Sujeto 1 (fregonazo ne y n, cubo y muerte en se, e, ne y n); segunda sesión: las 10 que faltaban, 1 generación cada una, todas a la primera",
+    "segunda_sesion": "Las 10 direcciones que faltaban, con las mismas recetas que la primera sesión (PixMiniMax, una dirección por llamada, partida = upload de subidas.txt; muerte 12 fotogramas solo con partida; cubo y fregonazo 8 con partida y final). Frases: ne 'Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see his back, his face stays hidden the whole time, he never turns to face the camera.' (en la muerte, 'He keeps the same three-quarter back view, facing away from the camera, and never turns to face the camera.'); n 'Strict back view the whole time: ...' (muerte: 'Strict back view the whole time, he never turns to face the camera.'); se y e como en el andar. El cubo dibujó otra vez una bola oscura en la mano al echar el brazo atrás (y una raya negra de lado y una roja de espaldas): al montar se quitan esos fotogramas (sin: s 1-4, se 1-5, e 1-3, ne 1-4, n 3) y las motas sueltas. Oeste en espejo (py tools/espejo_oeste.py --lado sujeto-1-128 rotations walk rodar fregonazo cubo muerte). Hoja: py tools/jefe_hoja.py sujeto-1-128 jefe-sujeto-1 (casilla 169x194, offset (-85, -164), escala 1,4).",
+    "sujeto-1-128": {
+      "character_id": "5dcd8151-63d8-4d16-b60a-ad84d09f542c",
+      "size": "128x128",
+      "description": "a huge hulking failed lab clone boss, a giant badly made copy of a young janitor, about 100 pixels tall, broad and muscular with oversized arms and big hands, slightly hunched. He wears the same clothes as the janitor: faded blue denim work overalls (bib overalls with shoulder straps) torn and stretched over his huge body, a cream-white t-shirt under them ripped at the shoulders, a red bandana headband tied around his forehead, scruffy brown hair and heavy brown work boots. Pale grey-white sickly skin with surgical stitch scars across his face and arms, a few clear plastic medical tubes and IV ports stuck into his shoulders and neck, glowing pale green dead eyes and a blank expressionless face. A plastic hospital ID bracelet on one wrist. He holds an enormous wet grey mop as long as his body in his right hand, like a weapon. No logos, no letters, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: Johnny enorme y pálido, con el peto vaquero roto, la cinta roja, cicatrices y la fregona gigante.",
+      "animaciones": {
+        "subject_description": "a huge hulking pale clone of a janitor in torn blue denim overalls and a red bandana, holding an enormous grey mop (de lado ', seen from the side'; de espaldas ', seen from behind')",
+        "frases_de_direccion": "las del científico jefe (Strict front view... / Strict three-quarter front view... / Strict side view the whole time, facing right... / Strict three-quarter back view...: we only see his back, his face stays hidden... / Strict back view...); la dirección del movimiento: toward the camera / toward the lower right of the image / to the right / toward the upper right of the image / away from the camera",
+        "andar": {
+          "group": "7d59296a-9069-4649-9c37-e9185b646cd3",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 180). De frente, sobre todo balanceo."
+        },
+        "rodar": {
+          "group": "4edc7745-61bc-4186-878f-18dd5b57f4fd",
+          "fotogramas": "8 + partida; partida y final = quieta. Se agacha (1), rueda (2-5) y se levanta (6-8)."
+        },
+        "fregonazo": {
+          "group": "aa269016-b24c-4c36-9358-4eec720535c1",
+          "fotogramas": "8 + partida; partida y final = quieta. La sube por encima del hombro (2-3) y barre el suelo (4-5)."
+        },
+        "cubo": {
+          "group": "64a1b6cb-56da-4b27-a704-3dc4cce580fe",
+          "fotogramas": "8 + partida; partida y final = quieta. Lanza por encima (2-4). Pega: de frente dibujó una bola oscura en la mano y luego en el suelo (2-4): quitar al montar; el cubo lo pinta el juego."
+        },
+        "muerte": {
+          "group": "f5e1f350-42e7-4258-9c23-98316e04f949",
+          "fotogramas": "12 + partida, solo partida. Suelta la fregona, cae de rodillas y de bruces."
+        },
+        "partirse": {
+          "group": "c89ac675-eb58-4c30-b879-b4313f304e26",
+          "fotogramas": "12 + partida, solo partida, solo south. Se encoge, tiembla y acaba con los brazos abiertos (11-12), a punto de partirse en dos."
+        }
+      }
+    },
+    "presidenta-72": {
+      "character_id": "1fdb7565-61b5-49bf-858d-586d5e1283c8",
+      "size": "72x72",
+      "description": "a cold, elegant corporate CEO woman, the president of a sinister pharmaceutical company, about 64 pixels tall, standing upright and arrogant. She wears an immaculate tailored white business suit with a white jacket and white trousers, a pale grey silk blouse, white high-heeled shoes, a thin gold necklace. Sleek platinum blonde hair pulled back in a tight bun, a sharp pale face with red lipstick and a cruel calm smile. She holds a black tablet computer in her left hand against her chest. Healthy human skin, not a zombie. No logos, no letters, no text. Crisp pixel art, dark outline, detailed shading",
+      "animaciones": {
+        "tableta": {
+          "group": "785e0bfc-a8e3-4699-85c8-55a8b0fa601e",
+          "fotogramas": "8 + partida, solo south; partida y final = quieta. Toca la tableta y sonríe."
+        },
+        "huir": {
+          "group": "9b57c764-39ec-4f27-80ab-4bdab35b002b",
+          "fotogramas": "8 + partida, solo east. Corre en bucle (1-8)."
+        }
+      }
+    },
+    "muebles": {
+      "capsula": "d002fbfe",
+      "capsula-abierta": "24c8a3d6",
+      "mesa-laboratorio": "b6aa3f95",
+      "mesa-laboratorio-lado": "6ca22589 (descartada)",
+      "pared-laboratorio": "fc3dc81c",
+      "suelo-laboratorio": "4b99d72a (descartado)"
+    }
+  },
  "supervivientes-torre-48": {
   "kind": "characters",
   "fecha": "2026-11-05",
