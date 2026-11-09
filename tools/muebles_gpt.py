@@ -79,6 +79,7 @@ MUEBLES = {
     "talento_corpulento": ("assets/sources/talento-corpulento-gpt.webp", "assets/ui/iconos/talento-corpulento.png", 29, 32, False),
     # Ajolote (su id es "lobezno")
     "talento_lobezno": ("assets/sources/talento-lobezno-gpt.webp", "assets/ui/iconos/talento-lobezno.png", 32, 21, False),
+    "talento_durito": ("assets/sources/talento-durito-gpt.webp", "assets/ui/iconos/talento-durito.png", 32, 26, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),
