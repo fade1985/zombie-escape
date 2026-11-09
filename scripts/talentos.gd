@@ -103,7 +103,7 @@ const LISTA := [
 		"desc": "Los zombis que prendes arden 0,5 s más por punto"},
 	{"id": "desatascador", "rama": "quimico", "nivel": 2, "nombre": "Desatascador", "max": 5, "icono": "talento-desatascador", "pide": "catalizador",
 		"desc": "Con ácido encima, todo les quita un 10 % más por punto"},
-	{"id": "criogenia", "rama": "quimico", "nivel": 2, "nombre": "Criogenia", "max": 3, "icono": "congeladora", "pide": "guantes_goma",
+	{"id": "criogenia", "rama": "quimico", "nivel": 2, "nombre": "Criogenia", "max": 3, "icono": "talento-criogenia", "pide": "guantes_goma",
 		"desc": "+1 congeladora por punto, y congelan 0,5 s más por punto"},
 	{"id": "reaccion", "rama": "quimico", "nivel": 3, "nombre": "Reacción en cadena", "max": 1, "icono": "molotov", "pide": "incendiario",
 		"desc": "Los zombis que mueren ardiendo revientan y prenden a los de al lado"},
