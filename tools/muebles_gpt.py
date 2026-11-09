@@ -63,6 +63,8 @@ MUEBLES = {
     # tocar los de los objetos; caben en un cuadrado de 32 (ui/arbol_talentos.gd, en_caja)
     "talento_ataque": ("assets/sources/talento-ataque-gpt.webp", "assets/ui/iconos/talento-ataque.png", 32, 32, False),
     "talento_punteria": ("assets/sources/talento-punteria-gpt.webp", "assets/ui/iconos/talento-punteria.png", 30, 32, False),
+    "talento_camorrista": ("assets/sources/talento-camorrista-gpt.webp", "assets/ui/iconos/talento-camorrista.png", 32, 19, False, (),
+                           [(220, 590), (490, 540), (760, 540), (1040, 590), (630, 780)]),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

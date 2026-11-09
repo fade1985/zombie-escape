@@ -46,7 +46,7 @@ const LISTA := [
 		"desc": "+10 % de daño por punto"},
 	{"id": "punteria", "rama": "militar", "nivel": 1, "nombre": "Puntería", "max": 5, "icono": "talento-punteria",
 		"desc": "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"},
-	{"id": "camorrista", "rama": "militar", "nivel": 2, "nombre": "Camorrista", "max": 5, "icono": "bate", "pide": "ataque",
+	{"id": "camorrista", "rama": "militar", "nivel": 2, "nombre": "Camorrista", "max": 5, "icono": "talento-camorrista", "pide": "ataque",
 		"desc": "+10 % de daño cuerpo a cuerpo por punto"},
 	{"id": "tirador", "rama": "militar", "nivel": 2, "nombre": "Tirador", "max": 5, "icono": "pistola", "pide": "ataque",
 		"desc": "+10 % de daño con armas a distancia por punto"},
