@@ -148,6 +148,11 @@ MUEBLES = {
     "logro_contra_marea": ("assets/sources/logro-contra_marea-gpt.webp", "assets/ui/iconos/logro-contra_marea.png", 32, 32, False),
     "logro_reto_aceptado": ("assets/sources/logro-reto_aceptado-gpt.webp", "assets/ui/iconos/logro-reto_aceptado.png", 31, 32, False),
     "logro_todas_reglas": ("assets/sources/logro-todas_reglas-gpt.webp", "assets/ui/iconos/logro-todas_reglas.png", 30, 32, False, (), [(932, 884), (342, 914)]),
+    "logro_cambio_look": ("assets/sources/logro-cambio_look-gpt.webp", "assets/ui/iconos/logro-cambio_look.png", 28, 32, False),
+    "logro_vestuario": ("assets/sources/logro-vestuario-gpt.webp", "assets/ui/iconos/logro-vestuario.png", 31, 32, False, (), [(630, 276), (214, 408), (365, 450), (664, 402), (821, 451), (1064, 391), (408, 994), (682, 1086)]),
+    "logro_naturalista": ("assets/sources/logro-naturalista-gpt.webp", "assets/ui/iconos/logro-naturalista.png", 32, 30, False),
+    "logro_investigador": ("assets/sources/logro-investigador-gpt.webp", "assets/ui/iconos/logro-investigador.png", 29, 32, False),
+    "logro_chatarrero": ("assets/sources/logro-chatarrero-gpt.webp", "assets/ui/iconos/logro-chatarrero.png", 29, 32, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

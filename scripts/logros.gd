@@ -104,15 +104,15 @@ const LISTA := [
 	{"id": "todas_reglas", "tema": "sorpresas", "nombre": "Ninguna regla me para", "icono": "logro-todas_reglas", "premio": 25, "cuenta": "total",
 		"mira": "reglas", "desc": "Completa el reto del día con cada una de sus 7 reglas."},
 	# ── Colecciones
-	{"id": "cambio_look", "tema": "colecciones", "nombre": "Cambio de look", "icono": "skin-portero", "premio": 5, "cuenta": "",
+	{"id": "cambio_look", "tema": "colecciones", "nombre": "Cambio de look", "icono": "logro-cambio_look", "premio": 5, "cuenta": "",
 		"mira": "skin", "desc": "Ponte una skin en la taquilla del vestuario."},
-	{"id": "vestuario", "tema": "colecciones", "nombre": "Vestuario completo", "icono": "skin-bombero", "premio": 15, "cuenta": "",
+	{"id": "vestuario", "tema": "colecciones", "nombre": "Vestuario completo", "icono": "logro-vestuario", "premio": 15, "cuenta": "",
 		"mira": "skins", "desc": "Consigue todas las skins de Johnny."},
-	{"id": "naturalista", "tema": "colecciones", "nombre": "Naturalista", "icono": "colecciones", "premio": 15, "cuenta": "",
+	{"id": "naturalista", "tema": "colecciones", "nombre": "Naturalista", "icono": "logro-naturalista", "premio": 15, "cuenta": "",
 		"mira": "bestiario", "desc": "Completa el bestiario: ve a todos los enemigos."},
-	{"id": "investigador", "tema": "colecciones", "nombre": "Investigador", "icono": "dosier", "premio": 15, "cuenta": "",
+	{"id": "investigador", "tema": "colecciones", "nombre": "Investigador", "icono": "logro-investigador", "premio": 15, "cuenta": "",
 		"mira": "paginas", "desc": "Encuentra todas las páginas del dosier VD-7."},
-	{"id": "chatarrero", "tema": "colecciones", "nombre": "Chatarrero", "icono": "mochila", "premio": 5, "cuenta": "",
+	{"id": "chatarrero", "tema": "colecciones", "nombre": "Chatarrero", "icono": "logro-chatarrero", "premio": 5, "cuenta": "",
 		"mira": "objetos", "desc": "Coge al menos una vez cada objeto de las Colecciones."},
 ]
 # [/traducir]
