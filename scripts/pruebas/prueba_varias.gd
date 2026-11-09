@@ -2365,6 +2365,55 @@ func probar_atontado_pared() -> void:
 		if en >= 0.0 and paso / 60.0 - en >= 1.0 and paso / 60.0 - en < 1.02:
 			Captura.foto("captura-atontado-portera.png")
 	print("La portera embiste contra la pared: se estrella a los %.2f s y se queda atontada %.1f s (esperado: 5,0)" % [en, atontada])
+	portera.queue_free()
+	await get_tree().process_frame
+	# Y el antidisturbios cargando contra la misma pared: de frente y casi de lado (a 12 grados, rozándola), que antes
+	# no le paraba porque resbalaba sin frenar (fotos: captura-atontado-frente.png y captura-atontado-lado.png)
+	for de_lado in [false, true]:
+		var poli: Node2D = meter_zombi("antidisturbios", johnny.position)
+		poli.quieto = false
+		var dir := Vector2.DOWN
+		if de_lado:
+			# hacia el lado con más sitio a lo largo de la pared
+			var suelo: Vector2 = pared.position - Vector2(0, poli.radio + 40)
+			var sitio := {}
+			for x in [-1, 1]:
+				var r := PhysicsRayQueryParameters2D.create(suelo, suelo + Vector2(x * 2000, 0), 1)
+				var choque: Dictionary = poli.get_world_2d().direct_space_state.intersect_ray(r)
+				sitio[x] = suelo.distance_to(choque.position) if choque else 2000.0
+			var x: int = 1 if sitio[1] >= sitio[-1] else -1
+			dir = Vector2(x, 0).rotated(deg_to_rad(12) * x)
+			poli.global_position = suelo
+		else:
+			poli.global_position = pared.position - Vector2(0, 96 + poli.radio)
+		johnny.global_position = poli.global_position + Vector2(0, -260)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().physics_frame
+		poli.mirada = dir
+		poli.cambiar("carga", {"quedan": 0})
+		var cuando := -1.0
+		var dura := -1.0
+		var rapidez := 0.0
+		var contra := ""
+		for paso in 600:
+			await get_tree().physics_frame
+			if poli.estado != "carga" and cuando < 0.0:
+				cuando = paso / 60.0
+				var ultimo: KinematicCollision2D = poli.get_last_slide_collision()
+				contra = ultimo.get_collider().name if ultimo else "nada"
+				if poli.estado != "atontado":
+					break
+			if cuando < 0.0:
+				rapidez = poli.get_real_velocity().length()   # (lo que corría justo antes de acabar la carga)
+			if cuando >= 0.0 and poli.estado != "atontado":
+				dura = paso / 60.0 - cuando
+				break
+			if cuando >= 0.0 and paso / 60.0 - cuando >= 1.0 and paso / 60.0 - cuando < 1.02:
+				Captura.foto("captura-atontado-%s.png" % ("lado" if de_lado else "frente"))
+		print("El antidisturbios carga contra la pared %s: acaba la carga a los %.2f s (%s, contra %s, corría a %d de 400) y se queda atontado %.1f s (esperado: atontado, 5,0)" % [
+			"de lado" if de_lado else "de frente", cuando, poli.estado if dura < 0.0 else "atontado", contra, rapidez, dura])
+		poli.queue_free()
+		await get_tree().process_frame
 	get_tree().quit()
 
 

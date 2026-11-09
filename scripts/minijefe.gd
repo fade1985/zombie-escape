@@ -218,7 +218,7 @@ func embestir(delta: float, johnny: Node2D, rapidez: float, dano: int, cuanto: f
 		Temblor.temblar(10.0)
 		marcha *= 0.2
 		return "pillado"
-	if t > 0.12 and get_real_velocity().length() < rapidez * 0.4:
+	if t > 0.12 and get_real_velocity().length() < rapidez * 0.4 or t > 0.05 and toca_muro(self):
 		return "pared"
 	if t >= cuanto:
 		return "fin"
@@ -237,6 +237,20 @@ const ATONTADO_PARED := 5.0
 func tiempo_atontado(normal: float) -> float:
 	var mapa := get_tree().get_first_node_in_group("mapa")
 	return normal if mapa and mapa.sitio.get("azotea", false) else ATONTADO_PARED
+
+
+# Si en este paso la carga ha tocado una pared de verdad (los muros del mapa), aunque sea de lado o rozándola: así
+# también se estrella (9 nov, lo pidió el dueño). Con un mueble, no: solo si se lo come de frente y frena en seco.
+# En la azotea, como siempre (solo de frente). Lo usan embestir(), el torbellino del Gymbro y la portera
+static func toca_muro(quien: CharacterBody2D) -> bool:
+	var mapa := quien.get_tree().get_first_node_in_group("mapa")
+	if mapa and mapa.sitio.get("azotea", false):
+		return false
+	for i in quien.get_slide_collision_count():
+		var otro := quien.get_slide_collision(i).get_collider()
+		if otro is Node and (otro as Node).is_in_group("muros"):
+			return true
+	return false
 
 
 # Se ha estrellado: se queda atontado (con estrellitas) un rato (tiempo_atontado)

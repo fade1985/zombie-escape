@@ -180,7 +180,7 @@ func girar(delta: float, johnny: Node2D) -> String:
 		Sonido.tocar("golpe")
 		marcha *= 0.2
 		return "pillado"
-	if t > 0.12 and get_real_velocity().length() < VELOCIDAD_TORBELLINO * 0.4:
+	if t > 0.12 and get_real_velocity().length() < VELOCIDAD_TORBELLINO * 0.4 or t > 0.05 and toca_muro(self):
 		return "pared"
 	if t >= TIEMPO_TORBELLINO:
 		return "fin"

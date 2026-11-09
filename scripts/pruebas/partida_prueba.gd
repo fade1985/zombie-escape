@@ -349,7 +349,8 @@
 #   --puerta-cierra     nada más entrar en un apartamento, la puerta se cierra detrás de Johnny [prueba_varias.gd]
 #   --disparo-alerta    en un apartamento, un disparo de Johnny despierta a todos los zombis de todas las habitaciones [prueba_varias.gd]
 #   --atontado-pared    los jefes que cargan (también la portera), al estrellarse, se quedan atontados 5 s (en la azotea,
-#                       lo de siempre); y la portera embistiendo de verdad contra una pared [prueba_varias.gd]
+#                       lo de siempre); la portera embistiendo de verdad contra una pared y el antidisturbios cargando
+#                       contra ella de frente y rozándola de lado (también se atonta) [prueba_varias.gd]
 #   --ritmo-bombero     cuántos ataques empieza el jefe de bomberos en 30 s, normal y enfadado [prueba_varias.gd]
 #   --acido-zombis      cada zombi y cada jefe encima de un charco de ácido: todos se queman menos el
 #                       gordo, el Glotón y el doctor Salas [prueba_varias.gd]

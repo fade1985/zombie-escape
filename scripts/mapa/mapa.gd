@@ -625,6 +625,7 @@ func poner_muros() -> void:
 	var cuerpo := StaticBody2D.new()
 	cuerpo.name = "Muros"
 	cuerpo.add_to_group("obstaculos")
+	cuerpo.add_to_group("muros")   # (las cargas de los jefes: tocar un muro, aunque sea de lado, los atonta; Minijefe.toca_muro)
 	add_child(cuerpo)
 	var abiertos := {}   # "c0,c1" -> [fila de inicio, fila de fin]
 	var cajas := []

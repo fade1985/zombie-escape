@@ -356,8 +356,8 @@ func embestir(delta: float, d: float) -> void:
 	if d < 75.0 or t >= TIEMPO_EMBESTIDA:
 		marcha *= 0.3
 		cambiar("aviso_circulo", {"quedan": datos.quedan})
-	elif t > 0.12 and get_real_velocity().length() < VELOCIDAD_EMBESTIDA * 0.4:
-		estrellarse()   # se ha comido una pared o un mueble
+	elif t > 0.12 and get_real_velocity().length() < VELOCIDAD_EMBESTIDA * 0.4 or t > 0.05 and Minijefe.toca_muro(self):
+		estrellarse()   # se ha comido una pared o un mueble (o ha tocado una pared, aunque sea de lado)
 
 
 # Se ha estrellado: se queda atontada (con estrellitas) un rato, como los jefes que cargan (minijefe.gd)
