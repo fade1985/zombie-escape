@@ -91,12 +91,19 @@ static func trazar(caminos: Array, rng: RandomNumberGenerator, a: Vector2, b: Ve
 # está el lienzo, para cuadrar con ella). Cada píxel se queda con la capa más de dentro que le toque (como pixelfx: así el
 # borde de una rama no tapa el tronco) y se pinta una sola vez. "fuerte": al principio, con su borde gordo y sus ramas
 static func pintar(lienzo: CanvasItem, lista: Array, fuerte: bool, origen: Vector2) -> void:
+	pintar_con(lienzo, lista, GORDO.fuerte if fuerte else GORDO.flojo, GORDO.rama if fuerte else [], [BORDE, CUERPO, CENTRO], origen)
+
+
+# Lo mismo, eligiendo lo gordo de cada capa en el tronco y en las ramas ([] o sin ramas: no se pintan) y sus tres
+# colores (el lanza rayos: sus hebras finas, sus latigazos y el fogonazo blanco del tronco)
+static func pintar_con(lienzo: CanvasItem, lista: Array, gordo_tronco: Array, gordo_rama: Array, colores: Array,
+		origen: Vector2) -> void:
 	var capa := {}   # píxel del dibujo → 0 borde, 1 cuerpo, 2 centro
 	for c in lista:
 		var tronco: bool = c[1] >= 1.0
-		if not tronco and not fuerte:
+		if not tronco and gordo_rama.is_empty():
 			continue
-		var gordo: Array = GORDO["rama" if not tronco else "fuerte" if fuerte else "flojo"]
+		var gordo: Array = gordo_tronco if tronco else gordo_rama
 		var puntos: Array = c[0]
 		for i in puntos.size() - 1:
 			var p: Vector2 = (puntos[i] + origen) / 2.0
@@ -115,6 +122,14 @@ static func pintar(lienzo: CanvasItem, lista: Array, fuerte: bool, origen: Vecto
 								var d := s + Vector2i(dx, dy)
 								if capa.get(d, -1) < k:
 									capa[d] = k
-	var colores := [BORDE, CUERPO, CENTRO]
 	for d in capa:
 		lienzo.draw_rect(Rect2(Vector2(d) * 2.0 - origen, Vector2(2, 2)), colores[capa[d]])
+
+
+# Un disco relleno de radio "r" (en píxeles del dibujo) en "centro" (en el lienzo), cuadrado con la rejilla de los dibujos
+static func disco(lienzo: CanvasItem, centro: Vector2, r: float, color: Color, origen: Vector2) -> void:
+	var c := (centro + origen) / 2.0
+	for y in range(floori(c.y - r), ceili(c.y + r) + 1):
+		for x in range(floori(c.x - r), ceili(c.x + r) + 1):
+			if Vector2(x + 0.5, y + 0.5).distance_squared_to(c) <= r * r:
+				lienzo.draw_rect(Rect2(Vector2(x, y) * 2.0 - origen, Vector2(2, 2)), color)

@@ -189,8 +189,12 @@ en una línea.
 - `relampago.gd` (`Relampago`): el rayo que salta de un sitio a otro (la descarga de un zombi a otro, el estallido de las
   Épicas de rayo y Pararrayos; lo suelta `ArmasCreadas.rayo`, con el chispazo donde da). Dibujado a código como los rayos de
   pixelfx: zigzag partido por la mitad con ramas, borde, cuerpo celeste y centro blanco, rehecho 20 veces por segundo y fuera
-  en 0,22 s. Prueba: `--captura --chispazos`. El rayo continuo del lanza rayos (`llamarada.dibujar_rayo`) se traza y
-  se entinta con lo mismo (`Relampago.trazar` y `pintar`).
+  en 0,22 s. Prueba: `--captura --chispazos`. El rayo continuo del lanza rayos (`llamarada.trazar_rayo`, en cada paso, y
+  `dibujar_rayo`) se traza y se entinta con lo mismo (`Relampago.trazar`, `pintar_con` y `disco`): es la "tormenta" del
+  borrador A de pixelfx (`tools/pixelfx/rayo-tormenta.js`, con `_rayo.js`): tronco con fogonazo blanco de vez en cuando,
+  dos hebras finas que cambian a otro ritmo, nudos de luz que corren hacia los zombis, latigazos a los lados y un nudo que
+  chisporrotea en la boca y en cada zombi, con un halo que suma luz (`llamarada.halo`). Prueba: `--captura
+  --pistola-electrica` (con `--rafaga`, fotos seguidas del rayo para hacer un GIF).
 - Escarcha (M51; `efecto_suelo.gd`, `escarcha` y `escarcha-zombi`): la congeladora ya no explota en fuego. Su explosión
   (`explosion.gd`, `helada`) hace el mismo daño pero suelta el estallido de escarcha de pixelfx (`tools/pixelfx/escarcha.js`,
   a la escala de su radio), con luz fría y sin quemadura en el suelo. Cada zombi que se congela (la congeladora y la cámara

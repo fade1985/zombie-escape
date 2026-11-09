@@ -21,8 +21,9 @@
 # fuego, al jefe de bomberos también le quita vida.
 #
 # El lanza rayos (Armas.DATOS.pistola_electrica, efecto "rayo") también echa por aquí un chorro continuo, pero de
-# electricidad: un rayo celeste en zigzag, más estrecho (ABRE_RAYO), que se dibuja a código (dibujar_rayo: no usa shader y
-# cambia de forma FORMAS veces por segundo), con su luz celeste y sus chispas. En cada pellizco quita su parte del daño
+# electricidad: un rayo celeste en zigzag, más estrecho (ABRE_RAYO), que se dibuja a código (trazar_rayo y dibujar_rayo: no
+# usa shader y cambia de forma FORMAS veces por segundo; la "tormenta" de pixelfx, con hebras, nudos que corren, latigazos
+# y un halo que suma luz), con su luz celeste y sus chispas. En cada pellizco quita su parte del daño
 # por segundo a los zombis que toca y los aturde (ATURDE); y la descarga salta de cada uno al zombi más cercano que
 # tenga a menos de "salto" (ArmasCreadas.EFECTOS.descarga), 1 + "saltos" veces (la calidad del arma), que se lleva medio
 # daño y también se queda aturdido (los arcos se ven, entre zombi y zombi). Ni empuja ni deja nada en el suelo. Al jefe
@@ -57,8 +58,22 @@ const LUZ := Color(1.0, 0.6, 0.28)
 const ABRE_RAYO := 0.1571   # su cono es más estrecho (9° a cada lado)
 const ATURDE := 0.5         # lo que aturde cada pellizco (y lo que sigue aturdido el zombi al soltar)
 const FORMAS := 18.0        # veces por segundo que cambia el zigzag
-const QUIEBRO_RAYO := 0.07  # lo que se aparta del eje (por cada unidad de largo; Relampago.trazar): largo, poco
-const RAMAS_RAYO := 0.9     # las ramitas que le salen
+const QUIEBRO_RAYO := 0.09  # lo que se aparta del eje (por cada unidad de largo; Relampago.trazar): largo, poco
+const RAMAS_RAYO := 0.45    # las ramitas que le salen
+# El rayo es la "tormenta" del borrador A hecho con pixelfx (9 nov): además del tronco, dos hebras finas entrelazadas que
+# cambian de forma a otro ritmo, nudos de luz que corren por el tronco hacia los zombis, latigazos que saltan a los lados
+# y se apagan, y un nudo que chisporrotea en la boca y en cada zombi que toca
+const HEBRAS := [[12.0, 0.6], [24.0, 0.45]]   # cada hebra: cuántas formas por segundo, y su fuerza (0..1)
+const QUIEBRO_HEBRA := 0.13
+const RAMAS_HEBRA := 0.15
+const HEROE := 7            # una de cada tantas formas, el tronco da un fogonazo blanco
+const NUDOS := 3            # los nudos de luz que corren por el tronco
+const NUDOS_VEL := 4.0      # las veces por segundo que lo recorre cada uno
+const LATIGAZOS := 5.0      # latigazos por segundo
+const VIDA_LATIGAZO := 0.1
+const GORDO_HEBRA := [1.0, 0.0, -1.0]   # lo gordo de cada capa (Relampago.pintar_con): las hebras, finas
+const GORDO_TRONCO := [1.6, 1.0, 0.0]
+const BLANCO := Color(1, 1, 1)
 const CELESTES := [Color("#9fe8ff"), Color("#2cf2f0"), Color("#ecffff")]   # las chispas
 const LUZ_RAYO := Color(0.45, 0.9, 1.0)
 const ATRAS := 2.0          # el dibujo empieza un poquito por detrás de la boca: así sale pegada al tubo
@@ -86,6 +101,11 @@ var abertura := ABRE        # lo que se abre el cono a cada lado (el del rayo, m
 var blancos: Array = []     # el rayo: los zombis que toca
 var arcos: Array = []       # el rayo: lo que salta de uno a otro, [desde, hasta] (los zombis)
 var forma := 0              # el rayo: cuál de sus zigzags (cambia FORMAS veces por segundo)
+var latigazos: Array = []   # el rayo: los que están saliendo, {"u" (por dónde del tronco), "a", "l", "t", "semilla"}
+var capas: Array = []       # el rayo, ya trazado (trazar_rayo): [caminos, gordo del tronco, de las ramas, colores]
+var discos: Array = []      # [centro, radio en píxeles del dibujo, color]
+var brillos: Array = []     # la luz que se suma (halo): [centro, radio, color]
+var halo: Node2D            # donde se pinta esa luz, sumando
 var propio: ShaderMaterial  # el del fuego o el del ácido (el rayo se dibuja sin shader)
 
 
@@ -104,6 +124,14 @@ func _ready() -> void:
 	luz.color = LUZ
 	luz.range_item_cull_mask = Luz.TODAS
 	add_child(luz)
+	# el halo del rayo: luz que se suma a lo que hay debajo y luce por sí misma
+	halo = Node2D.new()
+	var suma := CanvasItemMaterial.new()
+	suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	suma.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	halo.material = suma
+	halo.draw.connect(dibujar_halo)
+	add_child(halo)
 	visible = false
 
 
@@ -156,6 +184,9 @@ func _physics_process(delta: float) -> void:
 		Sonido.tocar({"acido": "chorro_acido", "rayo": "rayo"}.get(variante, "llamarada"))
 		if variante == "rayo":
 			buscar_blancos()
+			if randf() < LATIGAZOS * delta:
+				latigazos.append({"u": randf_range(0.15, 0.85), "a": (1.0 if randf() < 0.5 else -1.0) * randf_range(0.6, 1.3),
+					"l": randf_range(28.0, 60.0), "t": 0.0, "semilla": randi()})
 		# el reloj de los pellizcos solo corre con la llama encendida (soltar y volver a pulsar no quema más deprisa)
 		tick_t += delta
 		if tick_t >= TICK:
@@ -185,6 +216,9 @@ func _physics_process(delta: float) -> void:
 	if not encendida:
 		blancos.clear()
 		arcos.clear()
+	for l in latigazos:
+		l.t += delta
+	latigazos = latigazos.filter(func(l): return l.t < VIDA_LATIGAZO)
 	visible = largo > 0.0 or apagado >= 0.0
 	pintar()
 
@@ -393,8 +427,13 @@ func pintar() -> void:
 	luz.texture_scale = ((largo - cola) * 0.6 + 80.0) / 128.0
 	if variante == "rayo":
 		luz.energy = 1.1 * Luz.fuerza() * randf_range(0.65, 1.0)   # el rayo parpadea
+		trazar_rayo(eje, f)
+		halo.queue_redraw()
 	else:
 		luz.energy = 1.4 * Luz.fuerza() * (0.85 + 0.15 * sin(tiempo * 23.0) * sin(tiempo * 7.0))
+		if not brillos.is_empty():   # (venía del lanza rayos)
+			brillos.clear()
+			halo.queue_redraw()
 	queue_redraw()
 
 
@@ -407,7 +446,7 @@ func _draw() -> void:
 	var en_pantalla := u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)
 	var eje := en_pantalla.normalized()
 	if variante == "rayo":
-		dibujar_rayo(eje, en_pantalla.length())
+		dibujar_rayo()
 		return
 	var lado := eje.orthogonal() * 240.0
 	var boca := Vector2(0, -ALTURA)
@@ -482,27 +521,107 @@ func golpe_de_rayo(zombi: Node2D, johnny: Node2D, parte: float) -> void:
 		ArmasCreadas.estallido(zombi, "chispa", d)
 
 
-# El rayo: del labio de la boca (si se acaba, se despega y se va: cola) hasta donde llega, unos rayitos donde choca con
-# la pared y los arcos que saltan de un zombi a otro. Se traza y se entinta como los relámpagos (Relampago.trazar y
-# pintar: como los rayos de pixelfx, zigzag partido por la mitad con ramas, borde, cuerpo y centro de un píxel), el
-# mismo con el mismo "rng" (que no tiemble a cada fotograma: cambia FORMAS veces por segundo)
-func dibujar_rayo(eje: Vector2, f: float) -> void:
-	var rng := RandomNumberGenerator.new()
-	rng.seed = forma * 7919 + 1
+# El rayo, trazado en cada paso (pintar) para que _draw y el halo pinten lo mismo: del labio de la boca (si se acaba,
+# se despega y se va: cola) hasta donde llega, unos rayitos donde choca con la pared y los arcos que saltan de un zombi
+# a otro. Se traza y se entinta como los relámpagos (Relampago.trazar y pintar_con: zigzag partido por la mitad con
+# ramas, borde, cuerpo y centro de un píxel), con el mismo "rng" mientras dura cada forma (que no tiemble a cada
+# fotograma). Encima, lo del borrador A de pixelfx: las hebras, el fogonazo blanco del tronco una de cada HEROE formas,
+# los nudos que corren por él, los latigazos y el nudo que chisporrotea en la boca y en cada zombi
+func trazar_rayo(eje: Vector2, f: float) -> void:
+	capas.clear()
+	discos.clear()
+	brillos.clear()
 	var boca := Vector2(0, -ALTURA)
 	var cortada := tope < alcance - 1.0
 	var desde := boca + eje * (cola * f)
 	var hasta := boca + eje * (largo * f + (8.0 if cortada else 0.0))
-	var caminos := []
-	Relampago.trazar(caminos, rng, desde, hasta, QUIEBRO_RAYO, RAMAS_RAYO)
-	if cortada and largo > 0.0 and cola <= 0.0:
+	var fuerte := cola <= 0.0
+	var colores := [Relampago.BORDE, Relampago.CUERPO, Relampago.CENTRO]
+	# las hebras, por detrás, cada una a su ritmo y con su fuerza (más flojas, más transparentes)
+	for i in HEBRAS.size():
+		var rng := RandomNumberGenerator.new()
+		rng.seed = floori(tiempo * HEBRAS[i][0]) * 7919 + 17 * (i + 1)
+		var hebra := []
+		Relampago.trazar(hebra, rng, desde, hasta, QUIEBRO_HEBRA, RAMAS_HEBRA)
+		var k: float = HEBRAS[i][1] + 0.25 * rng.randf()
+		capas.append([hebra, GORDO_HEBRA if fuerte else [0.0, -1.0, -1.0], [0.0, -1.0, -1.0] if fuerte else [],
+			colores.map(func(c): return Color(c, k))])
+	# el tronco (con un fogonazo blanco de vez en cuando)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = forma * 7919 + 1
+	var tronco := []
+	Relampago.trazar(tronco, rng, desde, hasta, QUIEBRO_RAYO, RAMAS_RAYO)
+	if cortada and largo > 0.0 and fuerte:
 		for i in 4:
-			Relampago.trazar(caminos, rng, hasta, hasta + Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(10.0, 22.0), 0.3, 0.0, 0.55, 2)
-	# los arcos entre zombis
+			Relampago.trazar(tronco, rng, hasta, hasta + Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(10.0, 22.0), 0.3, 0.0, 0.55, 2)
+	var heroe := forma % HEROE == 0
+	capas.append([tronco, Relampago.GORDO.fuerte if fuerte else Relampago.GORDO.flojo, Relampago.GORDO.rama if fuerte else [],
+		[Relampago.CUERPO, Relampago.CENTRO, BLANCO] if heroe else colores])
+	var puntos: Array = tronco[0][0]
+	for i in range(0, puntos.size(), 3):
+		brillos.append([puntos[i], 18.0, Relampago.CUERPO * Color(1, 1, 1, 0.1)])
+	if not fuerte:
+		return
+	# los nudos de luz que corren por el tronco
+	for j in NUDOS:
+		var u := fposmod(tiempo * NUDOS_VEL + float(j) / NUDOS, 1.0)
+		var p: Vector2 = puntos[floori(u * (puntos.size() - 1))]
+		discos.append([p, 2.4, Relampago.CENTRO])
+		discos.append([p, 1.2, BLANCO])
+		brillos.append([p, 16.0, Relampago.CUERPO * Color(1, 1, 1, 0.35)])
+	# los latigazos: una rama que sale del tronco, vive unos fotogramas y se va
+	var lado := eje.angle()
+	for l in latigazos:
+		var p: Vector2 = puntos[floori(l.u * (puntos.size() - 1))]
+		var rl := RandomNumberGenerator.new()
+		rl.seed = l.semilla
+		var latigo := []
+		Relampago.trazar(latigo, rl, p, p + Vector2.from_angle(lado + l.a) * l.l, 0.3, 0.6)
+		var k: float = 1.0 - l.t / VIDA_LATIGAZO
+		capas.append([latigo, GORDO_HEBRA if k > 0.5 else [0.0, -1.0, -1.0], [0.0, -1.0, -1.0] if k > 0.5 else [], colores])
+	# la boca, los zombis que toca y los arcos que saltan de uno a otro (con un nudo más pequeño en el que recibe)
+	nudo(boca, 4.0, 3, 1)
+	brillos.append([boca, 24.0, Relampago.CUERPO * Color(1, 1, 1, 0.3)])
+	for zombi in blancos:
+		if is_instance_valid(zombi):
+			nudo(to_local(zombi.global_position) - Vector2(0, ALTURA_CUERPO), 8.0, 6, zombi.get_instance_id())
 	for arco in arcos:
 		if not is_instance_valid(arco[0]) or not is_instance_valid(arco[1]):
 			continue
 		var a: Vector2 = to_local(arco[0].global_position) - Vector2(0, ALTURA_CUERPO)
 		var b: Vector2 = to_local(arco[1].global_position) - Vector2(0, ALTURA_CUERPO)
-		Relampago.trazar(caminos, rng, a, b)
-	Relampago.pintar(self, caminos, cola <= 0.0, global_position)
+		var salto := []
+		Relampago.trazar(salto, rng, a, b)
+		capas.append([salto, GORDO_TRONCO, Relampago.GORDO.rama, colores])
+		nudo(b, 5.0, 4, arco[1].get_instance_id())
+
+
+# Un nudo que chisporrotea en "c" (de radio "r", en píxeles del dibujo): "n" zigzags cortitos a todos lados, que
+# cambian el doble de deprisa que el tronco, y una bola que late, blanca por dentro, con su luz
+func nudo(c: Vector2, r: float, n: int, sal: int) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = floori(tiempo * FORMAS * 2.0) * 7919 + sal
+	var chispazos := []
+	for i in n:
+		Relampago.trazar(chispazos, rng, c, c + Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(r, r * 2.8), 0.4, 0.0)
+	capas.append([chispazos, GORDO_HEBRA, [], [Relampago.BORDE, Relampago.CUERPO, Relampago.CENTRO]])
+	var late := 0.75 + 0.25 * rng.randf()
+	discos.append([c, (r * 0.45 + 1.0) * late, Relampago.CUERPO])
+	discos.append([c, (r * 0.3 + 0.8) * late, Relampago.CENTRO])
+	discos.append([c, r * 0.15 + 0.6, BLANCO])
+	brillos.append([c, (r * 2.0 + 4.0) * 2.0, Relampago.CUERPO * Color(1, 1, 1, 0.35 * late)])
+	brillos.append([c, (r + 2.0) * 2.0, BLANCO * Color(1, 1, 1, 0.25)])
+
+
+func dibujar_rayo() -> void:
+	for c in capas:
+		Relampago.pintar_con(self, c[0], c[1], c[2], c[3], global_position)
+	for d in discos:
+		Relampago.disco(self, d[0], d[1], d[2], global_position)
+
+
+# El halo del rayo (sumando luz): una mancha suave en cada sitio de "brillos"
+func dibujar_halo() -> void:
+	for b in brillos:
+		var r: float = b[1]
+		halo.draw_texture_rect(Luz.TEXTURA, Rect2(b[0] - Vector2(r, r), Vector2(r, r) * 2.0), false, b[2])

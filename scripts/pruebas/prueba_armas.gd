@@ -361,9 +361,13 @@ func comprar_en_tienda(id: String, foto: String) -> void:
 # Johnny echa fuego con el lanzallamas (o el chorro del lanza ácido) hacia "angulo" durante "segundos" (en cada paso,
 # como si se mantuviera el botón) y, si se pide, saca una foto a la mitad. Lo usan probar_lanzallamas,
 # probar_desintegrador y probar_skin_bombero
+# Con "-- --rafaga" detrás, a partir de la foto saca además una de cada dos pasos hasta el final (<foto>-01.png,
+# -02...: unas 15 a 30 por segundo, para ver cómo se mueve, por ejemplo el rayo del lanza rayos en un GIF)
 func echar_fuego(angulo: float, segundos: float, foto := "") -> void:
 	var t := 0.0
 	var hecha := foto == ""
+	var rafaga := "--rafaga" in OS.get_cmdline_user_args() and not hecha
+	var pasos := 0
 	while t < segundos:
 		johnny.intentar_atacar(angulo)
 		await get_tree().physics_frame
@@ -371,6 +375,10 @@ func echar_fuego(angulo: float, segundos: float, foto := "") -> void:
 		if not hecha and t >= segundos / 2.0:
 			hecha = true
 			Captura.foto(foto)
+		elif hecha and rafaga:
+			pasos += 1
+			if pasos % 2 == 0:
+				Captura.foto(foto.get_basename() + "-%02d.png" % (pasos / 2))
 
 
 # El chorro del lanza ácido (o la llama del lanzallamas) hacia zombis que no caen en ninguna de las 8 direcciones del
