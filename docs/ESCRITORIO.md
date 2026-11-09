@@ -7,6 +7,11 @@ falta una versión nueva, se vuelve a exportar con el mismo comando: no hay que 
 
 ## Exportar
 
+**Antes de exportar una versión que vaya a jugar alguien**, `py tools/antes_de_version.py` (unos 5 minutos): pasa la
+prueba larga y 15 cortas de las partes importantes (horda, incendio, rescate, guardar y continuar, huecos, baúl, tienda,
+logros, reto, idiomas, mando, el centro comercial y la torre) y que no falte ninguna traducción, y dice «TODO BIEN» o qué
+falla (lo que dijo cada una, en `capturas/antes_de_version/`). `--rapida`, sin la larga; `--solo horda continuar`, solo esas.
+
 El preset **«Windows Desktop»** está en `export_presets.cfg` (junto al de «Web»). Las plantillas de Windows ya vienen con
 las de Godot (`%APPDATA%\Godot\export_templates\4.7.2.stable`). Tarda un par de minutos:
 

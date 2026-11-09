@@ -63,6 +63,8 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
   `--jefe X` **solo elige el jefe**: sin otra opción detrás arranca la prueba larga). Si lo
   tocado no tiene parte, añadirle una pequeña en el archivo de su tema y apuntarla en esa lista. **La larga, solo si
   el dueño la pide.** Mirar solo las fotos de lo que se ha tocado.
+- **Antes de exportar el `.exe` o publicar la web:** `py tools/antes_de_version.py` (la larga y 15 cortas, ~5 min) tiene
+  que decir «TODO BIEN». Si una prueba nueva cubre algo importante, añadirla a su lista `PRUEBAS`.
 - Errores: filtrar la salida por `ERROR` o `SCRIPT ERROR`. Una prueba que no compila o que falla a mitad ya no se queda en
   negro: se cierra sola diciendo `ERROR DE LA PRUEBA: …` (con el archivo y la línea; ver `Captura` en `docs/CODIGO.md`).
 - Python es `py` (con Pillow); `PYTHONIOENCODING=utf-8` delante si escribe tildes.
