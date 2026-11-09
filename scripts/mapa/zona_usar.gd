@@ -1,9 +1,10 @@
 # La zona invisible de delante de un mueble de la sala de mantenimiento (la mesa del ordenador, ordenador.gd; el
 # baúl, el banco de trabajo y la taquilla, arrimable.gd; y el armarito de los baños, armarito.gd). Antes el mueble se abría solo al arrimarse; ahora, mientras
 # Johnny está en la zona, se abre al pulsar la acción de atacar: el clic izquierdo o J (las que tenga puestas en
-# Opciones), RT en el mando y, en el móvil, el botón «Abrir» que sale entonces (tactil.gd). Con el ratón, el clic tiene
-# que caer encima del mueble: si cae en otra parte, no se abre y Johnny ataca como siempre (clic_fuera). Con J o RT no hay
-# puntero, así que lo abren estén donde estén y no disparan (johnny.gd, "ante_mueble"). Sin letrero encima (lo pidió el dueño).
+# Opciones), el botón B del mando ("usar"; RT ataca siempre, también delante de una puerta) y, en el móvil, el botón «Abrir»
+# que sale entonces (tactil.gd). Con el ratón, el clic tiene que caer encima del mueble: si cae en otra parte, no se abre y
+# Johnny ataca como siempre (clic_fuera). Con J no hay puntero, así que lo abre esté donde esté y no dispara (johnny.gd,
+# "ante_mueble"). Sin letrero encima (lo pidió el dueño).
 # Las puertas de dentro (puerta_bano.gd) usan la misma zona para cerrarse y volver a abrirse: la ponen con montar_rect
 # (la zona de delante y detrás del hueco), dicen con "puede" cuándo se pueden usar y, con "cierra", que el botón del
 # móvil diga «Cerrar».
@@ -144,7 +145,11 @@ func _physics_process(_delta: float) -> void:
 	if otra != self and mas_cerca_que(otra):
 		johnny.set("ante_mueble", self)
 		clic_fuera = false
-	if johnny.get("ante_mueble") == self and Input.is_action_just_pressed("atacar") and not clic_fuera and activa():
+	if johnny.get("ante_mueble") != self or not activa():
+		return
+	# con el mando se usa con B ("usar"): RT ataca siempre, aunque se esté delante de una puerta; con el teclado y el ratón, con
+	# J o el clic (las que se hayan puesto para atacar)
+	if Input.is_action_just_pressed("usar") or (Input.is_action_just_pressed("atacar") and not clic_fuera and not Controles.con_mando):
 		abrir()
 
 

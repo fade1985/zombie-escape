@@ -3370,6 +3370,44 @@ func probar_apuntar_mando() -> void:
 	print("Mando · RT con el stick suelto: ha atacado %s, mira %s (esperado: true, e)" % [jug.espera > 0.0, jug.direccion])
 	Input.action_release("atacar")
 	await get_tree().create_timer(1.5).timeout
+	# delante de una puerta o un mueble (zona_usar.gd): con el mando RT ataca y B abre; con el teclado, J abre y no ataca
+	var padre := Node2D.new()
+	var dibujo := Sprite2D.new()
+	dibujo.texture = load("res://assets/sprites/felpudo.png")
+	padre.add_child(dibujo)
+	var zona: Area2D = load("res://scripts/mapa/zona_usar.gd").new()
+	padre.add_child(zona)
+	add_child(padre)
+	zona.montar(40)
+	zona.johnny = jug
+	jug.ante_mueble = zona
+	var abierto := [0]
+	zona.usar.connect(func(): abierto[0] += 1)
+	Controles.con_mando = true
+	jug.espera = 0.0
+	Input.action_press("apuntar_derecha", 1.0)
+	Input.action_press("atacar")
+	await esperar.call()
+	print("Mando · RT delante de una puerta: ha atacado %s, se ha abierto %d veces (esperado: true, 0)" % [jug.espera > 0.0, abierto[0]])
+	Input.action_release("atacar")
+	await get_tree().create_timer(1.0).timeout
+	var b_abajo := PruebaMando.boton(JOY_BUTTON_B)
+	Input.parse_input_event(b_abajo)
+	Input.action_press("usar")
+	await esperar.call()
+	Input.action_release("usar")
+	print("Mando · B delante de una puerta: se ha abierto %d veces (esperado: 1)" % abierto[0])
+	Input.action_release("apuntar_derecha")
+	Controles.con_mando = false
+	jug.espera = 0.0
+	Input.action_press("atacar")
+	await esperar.call()
+	Input.action_release("atacar")
+	print("Teclado · J delante de una puerta: se ha abierto %d veces, ha atacado %s (esperado: 2, false)" % [abierto[0], jug.espera > 0.0])
+	jug.ante_mueble = null
+	padre.queue_free()
+	await get_tree().create_timer(1.0).timeout
+	Controles.con_mando = true
 	# el móvil: su joystick derecho es el único botón de atacar, así que sí ataca
 	Tactil.activo = true
 	Tactil.con_dedo = true

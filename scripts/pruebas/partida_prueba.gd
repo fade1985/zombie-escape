@@ -281,8 +281,8 @@
 #                       Opciones, un tutorial, el inventario, la taquilla, el ordenador, una página, el panel de pruebas
 #                       y el cartel del final; que A siga esquivando (project.godot pone A en ui_accept y B en ui_cancel)
 #                                                                  [prueba_varias.gd, pruebas/prueba_mando.gd]
-#   --apuntar-mando     el stick derecho del mando solo apunta (no ataca): RT ataca, hacia donde se apuntó; el joystick
-#                       del móvil sí ataca                                              [prueba_varias.gd]
+#   --apuntar-mando     el stick derecho del mando solo apunta (no ataca): RT ataca, hacia donde se apuntó, también
+#                       delante de una puerta (que se abre con B); el joystick del móvil sí ataca [prueba_varias.gd]
 #   --mandoweb          solo en la web (py tools/medir_web.py 40 --captura --mandoweb): un mando que el navegador no
 #                       reconoce; su L2 lanza y ya no abre la pausa (M73)               [pruebas/prueba_mando.gd]
 #   --formas            que las formas de formas.gd (disco, arco, polígono, polilínea) salgan como las de CanvasItem: dos
