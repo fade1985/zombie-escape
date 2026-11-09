@@ -303,7 +303,7 @@
 #   --rendimiento       cuánto tarda cada fotograma durante el latigazo del Glotón (3 y 6 lenguas); en la web, el atasco
 #                       de los draw_circle (docs/WEB.md)                                       [prueba_varias.gd]
 #   --horda-grande      cuánto cuesta una horda de 50, 100, 150 y 200 zombis (el fotograma, el proceso y la física), y
-#                       con 150 sin esquivarse y quietos; --zombis N, solo con N. Mejor con --disable-vsync delante [prueba_varias.gd]
+#                       con 150 sin esquivarse, quietos, sin dibujar y sin sombra; --zombis N, solo con N. Mejor con --disable-vsync delante [prueba_varias.gd]
 #   --registro          el registro de errores (registro.gd): la cabecera, la planta, un aviso contado, copiarlo, el
 #                       godot.log y su botón en Opciones → General                          [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre

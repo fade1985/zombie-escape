@@ -4299,7 +4299,8 @@ func probar_registro() -> void:
 # lentos) salen en corro alrededor de Johnny (invencible, dando vueltecitas para que tengan que rehacer el camino) y se
 # mide durante 4 s: el fotograma entero (mejor con --disable-vsync delante, para que no espere a la pantalla), el
 # proceso y la física (los monitores de Godot). Con 50, 100, 150 y 200; y con 150, también sin esquivarse entre ellos
-# (avoidance), con todos quietos (lo que cuesta solo dibujarlos) y sin dibujarlos (lo que cuesta solo pensar); y sin
+# (avoidance), con todos quietos (lo que cuesta solo dibujarlos), sin dibujarlos (lo que cuesta solo pensar) y sin sus
+# sombras; y sin
 # ninguno, la base. --zombis N mide solo con N
 func probar_horda_grande() -> void:
 	await pulsar_y_esperar(KEY_F9)
@@ -4311,10 +4312,14 @@ func probar_horda_grande() -> void:
 	for a in get_tree().get_nodes_in_group("aliados"):
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 		a.visible = false
+	# las ayudas de la sala (los círculos rojos de cada zombi, el alcance...) no salen en la partida de verdad, y con 150
+	# zombis costaban 3 ms: fuera mientras se mide
+	for k in SalaArmas.ayudas:
+		SalaArmas.ayudas[k] = false
 	johnny.invencible = true
 	johnny.modo = "quieto"
 	var casa: Vector2 = sala.diana.global_position + Vector2(0, 160)
-	var tandas := [[0, ""], [50, ""], [100, ""], [150, ""], [200, ""], [150, "sin esquivar"], [150, "quietos"], [150, "sin dibujar"]]
+	var tandas := [[0, ""], [50, ""], [100, ""], [150, ""], [200, ""], [150, "sin esquivar"], [150, "quietos"], [150, "sin dibujar"], [150, "sin sombra"]]
 	if Captura.dato("--zombis", "") != "":
 		tandas = [[int(Captura.dato("--zombis", "150")), ""]]
 	var tipos := ["normal", "normal", "rapido", "lento"]
@@ -4333,6 +4338,8 @@ func probar_horda_grande() -> void:
 				z.process_mode = Node.PROCESS_MODE_DISABLED
 			elif como == "sin dibujar":
 				z.visible = false
+			elif como == "sin sombra":
+				z.get_node("Sombra").visible = false
 		await get_tree().create_timer(1.0).timeout
 		var fotogramas: Array[float] = []
 		var proceso := 0.0

@@ -72,9 +72,12 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 - [ ] **Accesibilidad.** ~~Sacudida de pantalla~~ (hecha el 29 oct: «Temblor de pantalla» en Opciones → General,
       `temblor.gd`; quita también el parón de los golpes) y parpadeos ajustables (aviso de fotosensibilidad), texto
       legible a 1280×800 (Steam Deck), charcos verdes y rojos distinguibles sin color, opción de ralentizar el juego.
-- [ ] **Robustez.** ~~Guardar al cambiar de planta para no perder la partida si se cierra~~ (hecho el 29 oct:
-      `partida_guardada.gd`, «Continuar partida» en el menú, prueba `--continuar`); rendimiento con hordas
-      grandes en un portátil flojo; ~~cero errores en consola en una partida entera~~ (hecho el 9 nov: la
+- [x] **Robustez.** ~~Guardar al cambiar de planta para no perder la partida si se cierra~~ (hecho el 29 oct:
+      `partida_guardada.gd`, «Continuar partida» en el menú, prueba `--continuar`); ~~rendimiento con hordas
+      grandes en un portátil flojo~~ (hecho el 9 nov, prueba `--horda-grande`: en la web, lo más flojo a mano, 150 zombis
+      pasan de 23 a 12 ms por fotograma, de 43 a 81 fps, y 200 de 42 a 20 ms; allí pesa dibujar, no pensar. La sombra es
+      una imagen y se dibuja por debajo de todos, junta; el shader de cada zombi no se toca sin fuego, ácido ni vómito. Sin
+      cambiar cómo se mueven: bajar `max_neighbors` no ganaba nada); ~~cero errores en consola en una partida entera~~ (hecho el 9 nov: la
       prueba larga pasa con 0 errores y 0 avisos; lo dice «Registro al cerrar» de `registro.gd`); ~~archivo de registro que el
       jugador pueda mandar cuando algo falle~~ (hecho el 9 nov: `registro.gd`, botón en Opciones → General); ~~pruebas automáticas (`--captura`) antes de cada versión~~ (hecho el 9 nov:
       `py tools/antes_de_version.py`, la larga y 15 cortas en unos 5 minutos).

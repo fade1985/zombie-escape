@@ -46,6 +46,7 @@ var importante := false    # el guardia de la tarjeta y el zombi de la llave: Ni
 var estado := "andar"      # "andar", "zarpazo", "golpe" o "muerto" (y los suyos en cada tipo)
 var direccion := "s"
 var tiempo := 0.0          # para el bamboleo al andar
+var con_quemaduras := false   # si su shader lleva fuego, ácido o vómito (sufrir: sin nada, no se le toca)
 var rumbo := Vector2.ZERO  # hacia dónde anda ahora (gira poco a poco hacia donde quiere ir)
 var zarpazo_dado := false  # si ya ha dado el golpe en este zarpazo (solo uno por animación)
 var momento_zarpazo := 0.429   # en qué punto de la animación de ataque llega la mano (lo pone su hoja)
@@ -700,8 +701,9 @@ func sufrir(delta: float) -> void:
 		frio_t += delta
 		if frio_t >= Peligros.FRIO.congela:
 			congelar(Peligros.FRIO.congelado)
-	var dano := Estados.actualizar(estados, pisando, delta)
-	pisando = {}
+	var dano := Estados.actualizar(estados, pisando, delta) if not (estados.is_empty() and pisando.is_empty()) else 0.0
+	if not pisando.is_empty():
+		pisando = {}
 	if dano > 0.0:
 		estado_acc += dano
 		estado_tick += delta
@@ -732,7 +734,13 @@ func sufrir(delta: float) -> void:
 		if not has_node("herida_acido"):
 			acido_t = 0.0
 	sprite.self_modulate = Color.WHITE if arde or acido or vomito > 0.0 else Estados.tinte(estados, tiempo)
-	Zombi.quemaduras(sprite, 1.0 if arde else 0.0, Zombi.cuanto_acido(acido_t), tiempo, vomito)
+	# el fuego, el ácido y el vómito de su shader: solo mientras lleva algo y el paso de después (que lo apaga). Sin nada,
+	# no se le toca el shader: con una horda de 150, ponérselo a cero a todos en cada paso costaba casi medio ms
+	var fuego := 1.0 if arde else 0.0
+	var manchas := Zombi.cuanto_acido(acido_t)
+	if fuego > 0.0 or manchas > 0.0 or vomito > 0.0 or con_quemaduras:
+		Zombi.quemaduras(sprite, fuego, manchas, tiempo, vomito)
+		con_quemaduras = fuego > 0.0 or manchas > 0.0 or vomito > 0.0
 	if acido or has_node("LuzAcido"):
 		var luz := Brillo.luz_acido(self, altura * 0.8)
 		luz.visible = acido
@@ -741,7 +749,8 @@ func sufrir(delta: float) -> void:
 		congelado -= delta
 		if congelado <= 0.0:
 			deshelar()
-	Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
+	if not estados.is_empty():
+		Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
 
 
 # El fuego y el ácido de un dibujo con el shader de los zombis (escenas/personajes/quemaduras.gdshaderinc): "fuego"

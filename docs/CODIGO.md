@@ -112,7 +112,7 @@ en una línea.
   Pruebas: `--captura --edificio torre --oficinista` y `--escolta`.
   El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
   no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
-  `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
+  `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos (una imagen por tamaño, compartida, y por debajo de los personajes, `z_index` -1, para que se dibujen juntas: con hordas grandes, en la web, ahorra mucho).
   `tentaculo.gd` (`Tentaculo`; se pinta con `trozos`, no con `draw_circle`: en la web se atascaba, ver `docs/WEB.md`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
   latigazos del gerente mutado: levantado y enroscado durante el aviso, estirado como un látigo en el golpe; avisa
   con lo mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes
