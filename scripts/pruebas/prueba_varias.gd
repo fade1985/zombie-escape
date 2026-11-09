@@ -2230,6 +2230,31 @@ func probar_vecino_gpt(tipo := "normal", nombre := "vecino", otras: Array = []) 
 	get_tree().quit()
 
 
+# Con "--captura --puerta-cierra": Johnny entra del pasillo en el primer apartamento y, nada más entrar (sin moverse
+# de donde aparece), la puerta se cierra detrás de él. Foto captura-puerta-cierra.png
+func probar_puerta_cierra() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var destino := -1
+	for i in planta.sitios.size():
+		var s: Dictionary = planta.sitios[i]
+		if s.tipo == "apartamento" and not s.limpio:
+			destino = i
+			break
+	var vuelta := 0
+	if destino < 0:
+		print("Puerta al entrar: no hay ningún apartamento sin limpiar en esta planta (¡mal!)")
+		get_tree().quit()
+		return
+	await montar(destino, vuelta, false)
+	var sitio_entrada: Vector2 = johnny.position
+	johnny.modo = "quieto"
+	await get_tree().create_timer(0.3).timeout
+	print("Puerta al entrar: Johnny se ha movido %.0f, puerta cerrada %s, la de entrada abierta %s (esperado: 0, true, false)" % [
+		johnny.position.distance_to(sitio_entrada), cerrada, mapa.puertas[0].abierta])
+	Captura.foto("captura-puerta-cierra.png")
+	get_tree().quit()
+
+
 # Con "--captura --acido-zombis": cada zombi, quieto encima de un charco de ácido (el de la portera) en la sala de
 # pruebas, y cuánta vida pierde en 2 s: todos se queman menos el gordo (venenoso: aguanta_acido); y debajo, todos los
 # jefes: se queman todos menos el Glotón y el doctor Salas. Foto

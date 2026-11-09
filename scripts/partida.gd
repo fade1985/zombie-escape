@@ -105,7 +105,6 @@ const BILLETES_JEFA := 8           # los que suelta cada jefe al caer (hasta el 
 const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
 	"granada": preload("res://assets/ui/iconos/granada.png")}
-const CIERRE := 110.0     # lo que hay que alejarse de la puerta de entrada para que se cierre
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
 const DESPERTAR := 2.4     # tras una derrota, lo que tarda Johnny en levantarse al empezar (despertar)
 # [traducir]
@@ -849,8 +848,9 @@ func _physics_process(delta: float) -> void:
 		return
 	var quedan: bool = not get_tree().get_nodes_in_group("zombis").is_empty() or (sitio.tipo == "jefe" and not jefa_salio)
 	mirar_ring(sitio)
-	# Al alejarse de la puerta de entrada, se cierra detrás de Johnny
-	if not cerrada and quedan and johnny.position.distance_to(mapa.puertas[0].llegada()) > CIERRE:
+	# Nada más entrar, la puerta se cierra detrás de Johnny: ya no se vuelve al pasillo hasta matarlos a todos (9 nov;
+	# antes se cerraba al alejarse 110 de ella y daba tiempo a darse la vuelta y salir)
+	if not cerrada and quedan:
 		cerrada = true
 		actualizar_puertas()
 		decir(Idioma.t("¡La puerta se ha cerrado detrás de ti!"))
