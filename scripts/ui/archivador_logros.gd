@@ -207,8 +207,10 @@ func _draw() -> void:
 		dibujar_fila(id, fuente)
 
 
+# Lo marcado: lo que tiene el foco o lo que está debajo del ratón (no con el dedo, ni jugando con el mando: el ratón
+# quieto encima de una fila la dejaba iluminada y A pulsaba la que de verdad tiene el foco)
 func encima(b: Button) -> bool:
-	return b.has_focus() or (b.is_hovered() and not (Tactil.activo and Tactil.con_dedo))
+	return b.has_focus() or (b.is_hovered() and not (Tactil.activo and Tactil.con_dedo) and not Controles.con_mando)
 
 
 # Un botón de la izquierda: su nombre y, los de los temas, su barrita, su cuenta y el «!» si hay algo por cobrar

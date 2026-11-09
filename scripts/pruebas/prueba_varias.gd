@@ -3803,6 +3803,27 @@ func probar_archivador_logros() -> void:
 	print("Archivador · Intro en Sin un rasguño: %s, +$%d, página %s, marcado %s (esperado: cobrado, +15, jefes, b_sin_rasguno)" % [
 		Logros.estado(Guardado.cargar(), "sin_rasguno"), Guardado.cargar().dolares - antes, archivador.pagina,
 		get_viewport().gui_get_focus_owner().name])
+	# cobrar con el mando: con la cruceta, del Resumen a la segunda fila, y A (botones del mando de verdad, no la acción)
+	archivador.temas["resumen"].pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
+	# el ratón, quieto encima de la primera fila (con el mando, ya no se ilumina: solo lo que marca el mando)
+	var raton := InputEventMouseMotion.new()
+	raton.position = archivador.get_viewport().get_screen_transform() * archivador.botones["joya_corona"].get_global_rect().get_center()
+	raton.relative = Vector2(20, 0)
+	Input.parse_input_event(raton)
+	await get_tree().process_frame
+	var con_raton: bool = archivador.encima(archivador.botones["joya_corona"])
+	await PruebaMando.pulsar(get_tree(), JOY_BUTTON_DPAD_RIGHT)   # (de Resumen a la primera fila, Joya de la corona)
+	await PruebaMando.pulsar(get_tree(), JOY_BUTTON_DPAD_DOWN)    # (y a la de abajo, Caja fuerte)
+	print("Archivador · ratón quieto en Joya de la corona: iluminada con el ratón %s, y al usar el mando %s (esperado: true, false)" % [
+		con_raton, archivador.encima(archivador.botones["joya_corona"])])
+	antes = Guardado.cargar().dolares
+	await PruebaMando.pulsar(get_tree(), JOY_BUTTON_A)
+	await get_tree().create_timer(0.3).timeout
+	archivador = ordenador.ventana.find_child("archivador", true, false)
+	print("Archivador · mando, derecha, abajo y A en el Resumen: Caja fuerte %s, +$%d (esperado: cobrado, +20)" % [
+		Logros.estado(Guardado.cargar(), "caja_fuerte"), Guardado.cargar().dolares - antes])
 	archivador.temas["edificios"].pressed.emit()
 	await get_tree().create_timer(0.4).timeout
 	archivador = ordenador.ventana.find_child("archivador", true, false)

@@ -1486,7 +1486,7 @@ func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, de
 	marco.add_child(b)
 	var fondo_tarjeta := VERDE if estado in ["puesta", "lleno"] else TARJETA
 	marco.draw.connect(func():
-		var encima := b.has_focus() or b.is_hovered()
+		var encima := b.has_focus() or (b.is_hovered() and not Controles.con_mando)   # (con el mando, solo lo que marca él)
 		marco.draw_rect(Rect2(Vector2.ZERO, marco.size), TARJETA_LUZ if encima and estado != "bloqueada" else fondo_tarjeta)
 		relieve(marco, estado == "puesta", 2.0)
 		if encima:
