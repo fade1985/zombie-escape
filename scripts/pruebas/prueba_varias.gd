@@ -4293,3 +4293,74 @@ func probar_registro() -> void:
 	o.cerrar()
 	await get_tree().create_timer(0.3).timeout
 	get_tree().quit()
+
+
+# --horda-grande: cuánto cuesta una horda (Robustez, LANZAMIENTO.md). En la sala de pruebas, N zombis (normales, rápidos y
+# lentos) salen en corro alrededor de Johnny (invencible, dando vueltecitas para que tengan que rehacer el camino) y se
+# mide durante 4 s: el fotograma entero (mejor con --disable-vsync delante, para que no espere a la pantalla), el
+# proceso y la física (los monitores de Godot). Con 50, 100, 150 y 200; y con 150, también sin esquivarse entre ellos
+# (avoidance), con todos quietos (lo que cuesta solo dibujarlos) y sin dibujarlos (lo que cuesta solo pensar); y sin
+# ninguno, la base. --zombis N mide solo con N
+func probar_horda_grande() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	var casa: Vector2 = sala.diana.global_position + Vector2(0, 160)
+	var tandas := [[0, ""], [50, ""], [100, ""], [150, ""], [200, ""], [150, "sin esquivar"], [150, "quietos"], [150, "sin dibujar"]]
+	if Captura.dato("--zombis", "") != "":
+		tandas = [[int(Captura.dato("--zombis", "150")), ""]]
+	var tipos := ["normal", "normal", "rapido", "lento"]
+	for tanda in tandas:
+		var n: int = tanda[0]
+		var como: String = tanda[1]
+		johnny.global_position = casa
+		for i in n:
+			var ang := TAU * i / n
+			var z: Node2D = meter_zombi(tipos[i % tipos.size()], casa + Vector2.from_angle(ang) * (220.0 + 60.0 * (i % 4)))
+			z.dormido = false
+			z.espabilando = 0.0
+			if como == "sin esquivar":
+				z.agente.avoidance_enabled = false
+			elif como == "quietos":
+				z.process_mode = Node.PROCESS_MODE_DISABLED
+			elif como == "sin dibujar":
+				z.visible = false
+		await get_tree().create_timer(1.0).timeout
+		var fotogramas: Array[float] = []
+		var proceso := 0.0
+		var fisica := 0.0
+		var peor_fisica := 0.0
+		var empezo := Time.get_ticks_usec()
+		var antes := empezo
+		while Time.get_ticks_usec() - empezo < 4000000:
+			var t := (Time.get_ticks_usec() - empezo) / 1000000.0
+			johnny.global_position = casa + Vector2(cos(t * 2.0), sin(t * 2.0)) * 70.0
+			await get_tree().process_frame
+			var ahora := Time.get_ticks_usec()
+			fotogramas.append((ahora - antes) / 1000.0)
+			antes = ahora
+			proceso += Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
+			var f := Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0
+			fisica += f
+			peor_fisica = maxf(peor_fisica, f)
+		var cuantos := fotogramas.size()
+		var media: float = fotogramas.reduce(func(a, b): return a + b, 0.0) / cuantos
+		fotogramas.sort()
+		print("Horda grande · %d zombis%s · fotograma: medio %.1f ms (%.0f fps), el 95%% por debajo de %.1f ms, peor %.1f · proceso %.1f ms · física %.1f ms (peor %.1f) · llamadas de dibujo %d" % [
+			n, (" " + como) if como else "", media, 1000.0 / media, fotogramas[int(cuantos * 0.95)], fotogramas[-1],
+			proceso / cuantos, fisica / cuantos, peor_fisica,
+			RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
+		Captura.foto("captura-horda-grande-%d%s.png" % [n, ("-" + como.replace(" ", "-")) if como else ""])
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z.get("diana") != true:
+				z.queue_free()
+		await get_tree().create_timer(0.5).timeout
+	get_tree().quit()
