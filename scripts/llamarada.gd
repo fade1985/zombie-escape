@@ -42,6 +42,7 @@ const EMPUJE := 170.0       # empuje base, como el de las balas
 const SOMBREADO := preload("res://escenas/armas/llamarada.gdshader")
 const SOMBREADO_ACIDO := preload("res://escenas/armas/chorro_acido.gdshader")
 const CHISPAS := 22.0       # chispas que saltan por segundo
+const GOTAS_FUEGO := 9.0    # el lanzallamas: gotas de gasolina ardiendo que se caen del chorro por segundo
 const GOTITAS := 26.0       # el ácido: gotitas que se escapan del final del chorro por segundo (contra la pared, el doble)
 const VERDES := [Color("#ecf896"), Color("#c7e04a"), Color("#96b430")]   # las del chorro (chorro_acido.gdshader)
 const LUZ := Color(1.0, 0.6, 0.28)
@@ -153,6 +154,8 @@ func _physics_process(delta: float) -> void:
 			gotitas(delta)
 		else:
 			chispas(delta)
+		if variante == "llama":
+			gotas_fuego(delta)
 	elif largo > 0.0:
 		cola += alcance / APAGA * delta
 		if cola >= largo:
@@ -259,6 +262,19 @@ func chispas(delta: float) -> void:
 	Particulas.soltar(self, donde, hacia, colores[randi() % 3], 2.0, randf_range(0.3, 0.6))
 
 
+# El lanzallamas: gotas de gasolina ardiendo que se caen del chorro (como en el "flamethrower" de pixelfx), de por
+# la mitad: siguen un poco hacia delante y caen al suelo, donde se apagan (Particulas.volar, sin marca)
+func gotas_fuego(delta: float) -> void:
+	if largo < 60.0 or randf() > GOTAS_FUEGO * delta:
+		return
+	var u := Vector2.from_angle(angulo)
+	var d := randf_range(0.2, 0.7) * largo
+	var pie := global_position + u * d + u.orthogonal() * randf_range(-0.3, 0.3) * (BOCA + d * abre())
+	var hacia := u * randf_range(60.0, 150.0) + u.orthogonal() * randf_range(-25.0, 25.0)
+	Particulas.volar(self, pie, lerpf(ALTURA, ALTURA_CUERPO, d / alcance), hacia, randf_range(-10.0, 30.0),
+		Llamas.FUEGO[randi() % 3], randf_range(2.0, 3.0))
+
+
 # El ácido: gotitas que se escapan del final del chorro hacia delante y caen al suelo; contra la pared, el doble, y
 # salpican hacia atrás y a los lados (Particulas.volar: caen por su peso y se acaban al llegar al suelo, sin charco)
 func gotitas(delta: float) -> void:
@@ -320,7 +336,7 @@ func _draw() -> void:
 	var lado := eje.orthogonal() * 240.0
 	var boca := Vector2(0, -ALTURA)
 	var desde := boca - eje * (ATRAS + 10.0)
-	var hasta := boca + eje * (largo * 1.1 + 12.0)
+	var hasta := boca + eje * (largo * 1.1 + 90.0)   # (de sobra: el humo de la punta sube, aunque la llama vaya hacia arriba)
 	Formas.poligono(self, PackedVector2Array([desde + lado, hasta + lado, hasta - lado, desde - lado]), Color.WHITE)
 
 

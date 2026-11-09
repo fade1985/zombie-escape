@@ -23,7 +23,7 @@ en una línea.
   hielo, fuego y ácido de los enemigos; el "vomito" de los bañados por la Gastroenteritis, el estado `vomito` que pone
   su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
   con "pelado") y `brillo`.
-- `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas) y
+- `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas: chorro a presión al estilo del "flamethrower" de pixelfx, con piloto azul, lenguas que suben y algo de humo en la punta) y
   `chorro_acido` (lanza ácido); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
 - `luces/`: `lampara.tscn`, `fuego.tscn`, `luz_suave.tres` y los shaders `niebla` y `suelo_a_oscuras`.
 
