@@ -115,7 +115,7 @@ const LISTA := [
 		"desc": "El fuego del molotov dura 1 s más por punto"},
 	{"id": "pegajoso", "rama": "quimico", "nivel": 4, "nombre": "Pegajoso", "max": 3, "icono": "talento-pegajoso", "pide": "residuo",
 		"desc": "Los zombis con ácido van un 10 % más lentos por punto"},
-	{"id": "voltaje", "rama": "quimico", "nivel": 4, "nombre": "Alto voltaje", "max": 3, "icono": "pistola_electrica", "pide": "pararrayos",
+	{"id": "voltaje", "rama": "quimico", "nivel": 4, "nombre": "Alto voltaje", "max": 3, "icono": "talento-voltaje", "pide": "pararrayos",
 		"desc": "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"},
 	{"id": "mezcla", "rama": "quimico", "nivel": 5, "nombre": "Mezcla explosiva", "max": 1, "icono": "obj-pieza_especial",
 		"pide": ["napalm", "pegajoso", "voltaje"],
