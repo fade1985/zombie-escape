@@ -26,6 +26,7 @@ const ALTO_BARRA := 20               # las barras de «Cómo vas»
 # La página que se ve ("resumen" o un tema). Se queda al volver a montar la ventana (al cobrar o cambiar de página)
 static var pagina := "resumen"
 
+const EXCLAMACION := preload("res://assets/ui/exclamacion-pequena.png")
 var ordenador: Node
 var s: Dictionary                    # el guardado
 var temas := {}                      # tema (o "resumen") → su botón de la izquierda
@@ -226,10 +227,8 @@ func dibujar_tema(t: String, fuente: Font) -> void:
 	draw_string(fuente, Vector2(r.position.x + 8, base), nombre, HORIZONTAL_ALIGNMENT_LEFT, ancho, tam,
 		PLACA.AMARILLO if elegido else PLACA.TEXTO)
 	if hay_cobrar:
-		var marca := Rect2(r.end.x - 16, r.position.y + 5, 9, 13)
-		# solo el «!», como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4 (antes, negro en una etiqueta amarilla)
-		draw_string_outline(fuente, Vector2(marca.position.x, marca.end.y - 1), "!", HORIZONTAL_ALIGNMENT_CENTER, marca.size.x, 16, 4, Tema.LINEA)   # no-tr
-		draw_string(fuente, Vector2(marca.position.x, marca.end.y - 1), "!", HORIZONTAL_ALIGNMENT_CENTER, marca.size.x, 16, Tema.TINTA)   # no-tr
+		# el «!» de GPT, de amarillo a naranja (M3; el mismo que en los iconos del escritorio)
+		draw_texture(EXCLAMACION, Vector2(r.end.x - 15, r.position.y + 4))
 	if en_medio:
 		return
 	var cuenta := "%d/%d" % [conseguidos(lista), lista.size()]

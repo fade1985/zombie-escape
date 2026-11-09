@@ -5,8 +5,7 @@
 # dibuja sin que le afecte la luz, para que se vea también a oscuras.
 extends Node2D
 
-const AMARILLO := Color("#ffd23f")
-const TINTA := Color("#1b1712")
+const DIBUJO := preload("res://assets/sprites/exclamacion.png")   # de GPT (M3; tools/muebles_gpt.py)
 const CADA := 1.0      # cada cuánto mira si hay novedades (leer el guardado no es gratis)
 const BOTE := 5.0      # lo que sube y baja, en unidades
 
@@ -22,6 +21,13 @@ func _ready() -> void:
 	var luz := CanvasItemMaterial.new()
 	luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	material = luz
+	# el «!», con su pie donde acababa el rabito del globo de antes (así no hay que mover dónde se pone)
+	var dibujo := Sprite2D.new()
+	dibujo.texture = DIBUJO
+	dibujo.scale = Vector2(2, 2)
+	dibujo.position = Vector2(0, 26 - DIBUJO.get_height())
+	dibujo.use_parent_material = true   # (sin luz, como el nodo)
+	add_child(dibujo)
 	base = position.y
 	refrescar()
 
@@ -40,13 +46,3 @@ func _process(delta: float) -> void:
 		t += delta
 		position.y = base + sin(t * 5.0) * BOTE
 
-
-# El globo: un círculo amarillo con borde, su rabito hacia abajo (hacia lo que avisa) y el «!» (en múltiplos de 2
-# unidades, como un píxel del dibujo)
-func _draw() -> void:
-	Formas.disco(self, Vector2.ZERO, 18.0, TINTA)
-	Formas.poligono(self, PackedVector2Array([Vector2(-8, 12), Vector2(8, 12), Vector2(0, 26)]), TINTA)
-	Formas.disco(self, Vector2.ZERO, 14.0, AMARILLO)
-	Formas.poligono(self, PackedVector2Array([Vector2(-5, 12), Vector2(5, 12), Vector2(0, 21)]), AMARILLO)
-	draw_rect(Rect2(-3, -10, 6, 12), TINTA)
-	draw_rect(Rect2(-3, 5, 6, 5), TINTA)

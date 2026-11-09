@@ -350,19 +350,16 @@ func destino() -> Node2D:
 class Flecha extends Node2D:
 	var t := 0.0
 
+	var dibujo := Sprite2D.new()
+
 	func _ready() -> void:
 		z_index = -1   # en el suelo, como los charcos
+		# la flecha de GPT, pintada en el suelo y mirando a la derecha (M7; tools/muebles_gpt.py): el nodo la gira
+		dibujo.texture = load("res://assets/sprites/flecha-guia.png")
+		dibujo.scale = Vector2(2, 2)
+		add_child(dibujo)
 
 	func _process(delta: float) -> void:
 		t += delta
 		modulate.a = 0.65 + 0.35 * sin(t * 5.0)
-		queue_redraw()
-
-	func _draw() -> void:
-		var avance := sin(t * 5.0) * 5.0
-		var punta := PackedVector2Array([Vector2(24 + avance, 0), Vector2(-12 + avance, -20), Vector2(-3 + avance, 0),
-			Vector2(-12 + avance, 20)])
-		draw_colored_polygon(punta, Tema.AMARILLO)
-		var borde := punta.duplicate()
-		borde.append(punta[0])
-		draw_polyline(borde, Tema.LINEA, 2.0)
+		dibujo.position.x = 6.0 + sin(t * 5.0) * 5.0   # va y viene hacia donde apunta

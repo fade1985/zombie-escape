@@ -35,6 +35,13 @@ MUEBLES = {
     # y el candado de los edificios cerrados, de acero gastado con óxido; el hueco del arco, que el fondo no alcanza
     # desde el borde, se vacía también (la semilla, en el medio del arco de la imagen de GPT)
     "icono_candado": ("assets/sources/candado-gpt.webp", "assets/ui/tarjeta-candado.png", 22, 32, False, (), [(640, 350)]),
+    # el «!» de las novedades (M3, 9 nov): degradado de amarillo a naranja con contorno oscuro, sin globo. El grande,
+    # encima de la mesa del ordenador y de la taquilla (mapa/exclamacion.gd); el pequeño, en los iconos del escritorio de
+    # ConserjeOS y en los apartados de Logros (ui/ordenador.gd, ui/archivador_logros.gd)
+    "exclamacion": ("assets/sources/exclamacion-gpt.webp", "assets/sprites/exclamacion.png", 10, 28, False),
+    "exclamacion_pequena": ("assets/sources/exclamacion-gpt.webp", "assets/ui/exclamacion-pequena.png", 7, 20, False),
+    # la flecha amarilla pintada en el suelo que guía en la primera partida (guia.gd, Flecha; M7, 9 nov), hacia la derecha
+    "flecha_guia": ("assets/sources/flecha-gpt.webp", "assets/sprites/flecha-guia.png", 20, 20, False),
     # la ducha del vestuario y de los baños de los pisos (el "showertray" del catálogo): mampara de cristal azulado de
     # frente, con perfiles de aluminio, sobre su plato blanco
     "ducha": ("assets/sources/ducha-gpt.webp", "assets/sprites/mueble-showertray.png", 36, 66, True),

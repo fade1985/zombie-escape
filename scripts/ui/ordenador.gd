@@ -106,20 +106,16 @@ func encender(p: Node) -> void:
 
 
 # El «!» amarillo que bota en la esquina de arriba a la derecha de un icono del escritorio con algo nuevo
-func marca_nuevo() -> Label:
-	var marca := Label.new()
+func marca_nuevo() -> TextureRect:
+	var marca := TextureRect.new()
 	marca.name = "marca_nuevo"   # no-tr
-	marca.text = "!"
+	# el «!» de GPT, de amarillo a naranja (M3; el mismo que en los apartados de Logros)
+	marca.texture = load("res://assets/ui/exclamacion-pequena.png")
+	marca.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	marca.size = Vector2(24, 24)
 	marca.position = Vector2(102, 2)
-	marca.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	marca.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	marca.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
 	marca.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# solo el «!», como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4 (antes, en un círculo amarillo)
-	marca.add_theme_font_size_override("font_size", 16)
-	marca.add_theme_color_override("font_color", Tema.TINTA)
-	marca.add_theme_constant_override("outline_size", 4)
-	marca.add_theme_color_override("font_outline_color", Tema.LINEA)
 	var bote := marca.create_tween().set_loops()
 	bote.tween_property(marca, "position:y", -3.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	bote.tween_property(marca, "position:y", 3.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
