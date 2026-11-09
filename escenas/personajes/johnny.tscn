@@ -62,6 +62,7 @@ centered = false
 offset = Vector2(-48, -72)
 
 [node name="Camara" type="Camera2D" parent="."]
+process_callback = 0
 limit_left = 0
 limit_top = 0
 limit_right = 960
