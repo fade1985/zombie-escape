@@ -56,7 +56,7 @@ const LISTA := [
 		"desc": "Duplica el alcance cuerpo a cuerpo"},
 	{"id": "mirilla", "rama": "militar", "nivel": 3, "nombre": "Mirilla", "max": 1, "icono": "talento-mirilla", "pide": "tirador",
 		"desc": "Uno de cada 3 disparos es un crítico seguro (doble daño)"},
-	{"id": "fabricante", "rama": "militar", "nivel": 3, "nombre": "Fabricante", "max": 1, "icono": "granada", "pide": "artificiero",
+	{"id": "fabricante", "rama": "militar", "nivel": 3, "nombre": "Fabricante", "max": 1, "icono": "talento-fabricante", "pide": "artificiero",
 		"desc": "Fuego y explosiones más grandes, y el fuego dura más"},
 	{"id": "frenesi", "rama": "militar", "nivel": 4, "nombre": "Frenesí", "max": 3, "icono": "talento-frenesi", "pide": "larguirucho",
 		"desc": "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"},
