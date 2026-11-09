@@ -61,6 +61,23 @@ static func salpicar(desde: Node, suelo: Node, pie: Vector2, altura: float, haci
 			"rebotes": 0, "mancha": "Gotas", "salpicon": true, "estela": not gorda, "antes": pie - Vector2(0, z)})
 
 
+# Un chorro como el de salpicar, pero que llega hasta "hasta" (el Glotón, hasta donde estaba Johnny al darle): cada gota
+# vuela lo justo para caer en "hasta" o cerca (unas pocas se quedan por el camino) y deja allí su mancha
+static func salpicar_hasta(desde: Node, suelo: Node, pie: Vector2, altura: float, hasta: Vector2, color: Color, n := 6) -> void:
+	var lista_de := capa(desde).lista
+	for i in n:
+		var gorda := randf() < 0.25
+		var cae := hasta + Vector2.from_angle(randf() * TAU) * sqrt(randf()) * Vector2(36.0, 22.0)
+		cae = pie.lerp(cae, randf_range(0.85, 1.05) if randf() < 0.85 else randf_range(0.4, 0.85))
+		var vuelo := randf_range(0.4, 0.6)
+		var z := altura + randf_range(-8, 8)
+		var tono := color.lightened(randf_range(0.0, 0.3)) if randf() < 0.5 else color.darkened(randf_range(0.0, 0.3))
+		lista_de.append({"p": pie, "v": (cae - pie) / vuelo, "c": tono, "s": randf_range(4.0, 6.0) if gorda else 2.0,
+			"t": 3.0, "max": 3.0, "r": 0.0, "z": z, "vz": (PESO * vuelo * vuelo / 2.0 - z) / vuelo, "suelo": suelo,
+			"marca": Color(tono, randf_range(0.75, 0.9)), "marca_tam": Vector2.ZERO, "redonda": gorda, "borde": false,
+			"rebotes": 0, "mancha": "Gotas", "salpicon": true, "estela": not gorda, "antes": pie - Vector2(0, z)})
+
+
 # El reventón de un zombi al morir (burst en src/game-efectos.js): "n" trozos de su color, redondos y con su
 # borde oscuro, que saltan en todas direcciones y caen; y gotas de su sangre, que manchan el suelo donde caen.
 # Si "con_anillo", un anillo blanco que se abre

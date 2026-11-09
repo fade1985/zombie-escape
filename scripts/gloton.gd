@@ -13,8 +13,8 @@
 #     Johnny aunque ande hacia atrás; más lejos, andando hacia atrás le gana, pero se nota mucho: a 8 casillas va a
 #     unos 80 y de lejos a 105 (en vez de a 210; hasta el 28 oct, a 126 y a 140). También se libra esquivando (esquivando no tira), saliendo del cono (o metiéndose en la
 #     porquería) o poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
-#   - Sangre ácida (9 nov): cada golpe o disparo que le das salpica un chorro de sangre verde hacia Johnny (como la
-#     de los zombis, pero mucha más) y deja un charco pequeño de ácido en el suelo, entre él y Johnny (dos si está
+#   - Sangre ácida (9 nov): cada golpe o disparo que le das salpica un chorro de sangre verde que llega hasta donde
+#     estaba Johnny (como la de los zombis, pero mucha más) y deja un charco pequeño de ácido en el suelo, entre él y Johnny (dos si está
 #     enfadado), que quema al pisarlo como el de la portera. Ya no quita vida directamente (hasta el 9 nov, un 1 %).
 #     Como mucho uno cada 0,25 s (los perdigones de la escopeta cuentan como un golpe). Si le pegan los supervivientes
 #     que acompañan a Johnny, le hacen daño igual pero no salpica.
@@ -327,9 +327,9 @@ func salpicar_acido() -> void:
 		return
 	acido_t = ACIDO_CADA
 	Sonido.tocar("chisporroteo")
-	# un chorro de sangre verde hacia Johnny, como el de los zombis pero mucho más (ellos, 24 por golpe)
+	# un chorro de sangre verde que llega hasta donde está Johnny, como el de los zombis pero mucho más (ellos, 24 por golpe)
 	var hacia: Vector2 = (johnny.global_position - global_position).normalized()
-	Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, hacia * 300.0, VERDE, 60)
+	Particulas.salpicar_hasta(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, johnny.global_position, VERDE, 60)
 	# y los charcos pequeños de ácido, por el camino hacia Johnny (sin pasarse de él)
 	var lejos: float = minf(global_position.distance_to(johnny.global_position), 150.0)
 	for i in CHARCOS[fase - 1]:
