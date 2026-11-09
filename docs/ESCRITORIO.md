@@ -59,7 +59,9 @@ con `(Get-Item JohnnyRush.exe).VersionInfo` y extrayendo el icono con `ExtractAs
   ventana de `JohnnyRush.exe` y de Godot); lo de salirse con Esc es solo del navegador, ver `docs/WEB.md`.
 - **Sin bordes negros:** la imagen llena la ventana (también en la web; lo hace `pantalla.gd`). En Full HD, 2K y 4K cada píxel
   del dibujo mide 3, 4 y 6 de pantalla justos y se ve 1280×720. En tamaños que no encajan (una ventana de navegador de
-  900 de alto) se agranda lo justo para ver 960×640: llena igual, pero algún píxel sale un poco más ancho que otro.
+  900 de alto) se agranda lo justo para ver 960×640: llena igual, pero algún píxel sale un poco más ancho que otro. En
+  pantallas pequeñas que irían a ×1 (Steam Deck 1280×800, portátiles de 1366×768, 1280×720) también se agranda lo justo,
+  para que la letra se lea (Valve pide 9 píxeles de alto como mínimo en la Deck). Se prueba con `-- --captura --deck --X`.
 - **La sala de pruebas** (antes F11) pasó a **F9**, y solo va al jugar desde el editor o en las pruebas `--captura`
   (`partida.gd`, `OS.is_debug_build() or captura`): el juego exportado no la tiene.
 

@@ -3445,7 +3445,7 @@ func probar_guia_sin_hacer() -> void:
 # La imagen llena la ventana (Pantalla): la escala de cada tamaño de pantalla, que no quedan bordes y que al cambiar de
 # tamaño la ventana se ajustan la escala y la cámara
 func probar_escala() -> void:
-	for caso: Array in [[1920, 1080, 1.5], [1920, 991, 1.5], [1280, 720, 1.0], [1280, 800, 1.0], [1366, 768, 1.0],
+	for caso: Array in [[1920, 1080, 1.5], [1920, 991, 1.5], [1280, 720, 1.125], [1280, 800, 1.25], [1366, 768, 1.2], [1920, 1200, 1.5], [1024, 700, 1.0],
 			[2560, 1440, 2.0], [3840, 2160, 3.0], [2560, 1080, 1.5], [1920, 914, 1.428], [1600, 900, 1.406], [800, 500, 0.781]]:
 		var escala := Pantalla.escala_para(Vector2(caso[0], caso[1]))
 		print("Escala · %d×%d → ×%.3f, se ve %d×%d (esperado: ×%.3f)" % [caso[0], caso[1], escala, caso[0] / escala,

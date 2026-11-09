@@ -5,7 +5,10 @@
 # ×2... Se coge la mayor con la que cabe la pantalla base (los menús están hechos para ella), y lo que sobra se ve de más:
 # en Full HD, ×1,5 y 1280×720. Si sobrara demasiado (una ventana de navegador de 900 de alto, a ×1, enseñaría medio
 # edificio con los muñecos diminutos), se agranda lo justo para la pantalla base, aunque unos píxeles salgan un
-# poco más anchos que otros. En el móvil, siempre lo justo. Las pruebas (--captura) no lo tocan: sus fotos siguen igual.
+# poco más anchos que otros. Y a ×1, si cabe un 10 % más grande, también lo justo (9 nov): en pantallas pequeñas (la Steam
+# Deck, 1280×800; portátiles de 1366×768) la letra se quedaba en 7 píxeles de alto y Valve pide por lo menos 9; así sale un
+# 12-25 % más grande. En el móvil, siempre lo justo. Las pruebas (--captura) no lo tocan: sus fotos siguen igual (con
+# --deck, cualquier prueba se ve en una ventana de 1280×800 con la escala de verdad).
 #
 # La pantalla completa arranca como se dejó la última vez (ajuste «pantalla_completa», que guarda
 # Tactil.pantalla_completa al cambiarla) y se cambia con F11 o Alt+Intro desde cualquier sitio, también con un menú abierto.
@@ -19,6 +22,7 @@ extends Node
 
 const BASE := Vector2(960, 640)   # la pantalla base: siempre se ve por lo menos esto
 const ALTO_MAXIMO := 800.0        # lo más alto que se deja ver antes de agrandar lo justo
+const CRECER_DESDE_X1 := 1.1      # a ×1, si lo justo es por lo menos esto, se agranda (la letra, legible en la Steam Deck)
 const QUEDARSE_ESC := """
 document.addEventListener('fullscreenchange', () => {
 	if (!navigator.keyboard?.lock) return;
@@ -36,7 +40,11 @@ func _ready() -> void:
 	# de en cada paso (efectos, menús...) temblaría con ella
 	get_tree().root.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var captura := "--captura" in OS.get_cmdline_user_args()
-	if not captura:
+	if captura and "--deck" in OS.get_cmdline_user_args():
+		# Con --deck, cualquier prueba se ve como en la Steam Deck: ventana de 1280×800 y la escala del juego de verdad
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_size(Vector2i(1280, 800))
+	if not captura or "--deck" in OS.get_cmdline_user_args():
 		get_window().size_changed.connect(ajustar_escala)
 		ajustar_escala()
 	if OS.has_feature("web"):
@@ -56,7 +64,8 @@ func _ready() -> void:
 static func escala_para(ventana: Vector2) -> float:
 	var justa := minf(ventana.x / BASE.x, ventana.y / BASE.y)
 	var exacta := floorf(justa * 2.0) / 2.0
-	if exacta >= 1.0 and ventana.y / exacta <= ALTO_MAXIMO:
+	var letra_pequena := exacta == 1.0 and justa >= CRECER_DESDE_X1
+	if exacta >= 1.0 and ventana.y / exacta <= ALTO_MAXIMO and not letra_pequena:
 		return exacta
 	return justa
 

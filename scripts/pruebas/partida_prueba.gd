@@ -318,6 +318,8 @@
 #                       --alerta 3 --reto, con su alerta y su reto             [prueba_idioma.gd; lo lanza menu_principal.gd]
 #   --ingles            (con cualquier prueba) el juego en inglés; al cerrar, cuenta los textos sin traducir [idioma.gd]
 #   --lang X            lo mismo con otro idioma: pt_BR, de, fr, ru o zh_CN (--ingles es --lang en)       [idioma.gd]
+#   --deck              (con cualquier prueba) como en la Steam Deck: ventana de 1280×800 y la escala del juego de verdad
+#                       (×1,25), no la entera de las pruebas; para ver si todo cabe y se lee   [pantalla.gd]
 #   --letras            si cada letra de las traducciones la tiene alguna fuente (el cirílico, el chino...) y cuánto mide
 #                       una línea con cada una                                                [prueba_letras.gd]
 #   --medidas           los textos cortos que en cada idioma salen más anchos que en español (se pasan de su caja); con

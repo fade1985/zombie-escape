@@ -50,7 +50,7 @@ class Vigilante extends Logger:
 # --limite <segundos>
 const LIMITE := 150.0
 const LIMITE_LARGA := 900.0
-const SIN_OPCION := ["--captura", "--edificio", "--jefe", "--limite"]   # las que no dicen qué parte se prueba
+const SIN_OPCION := ["--captura", "--edificio", "--jefe", "--limite", "--deck"]   # las que no dicen qué parte se prueba
 
 
 static func vigilar() -> void:
