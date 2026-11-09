@@ -105,7 +105,7 @@ const LISTA := [
 		"desc": "Con ácido encima, todo les quita un 10 % más por punto"},
 	{"id": "criogenia", "rama": "quimico", "nivel": 2, "nombre": "Criogenia", "max": 3, "icono": "talento-criogenia", "pide": "guantes_goma",
 		"desc": "+1 congeladora por punto, y congelan 0,5 s más por punto"},
-	{"id": "reaccion", "rama": "quimico", "nivel": 3, "nombre": "Reacción en cadena", "max": 1, "icono": "molotov", "pide": "incendiario",
+	{"id": "reaccion", "rama": "quimico", "nivel": 3, "nombre": "Reacción en cadena", "max": 1, "icono": "talento-reaccion", "pide": "incendiario",
 		"desc": "Los zombis que mueren ardiendo revientan y prenden a los de al lado"},
 	{"id": "residuo", "rama": "quimico", "nivel": 3, "nombre": "Residuo tóxico", "max": 1, "icono": "obj-bidon_acido", "pide": "desatascador",
 		"desc": "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"},
