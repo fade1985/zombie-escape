@@ -26,8 +26,8 @@ const LINTERNA_GIRO := 10.0                # lo rápido que se vuelve hacia dond
 const LINTERNA_COLOR := Color(1.0, 0.95, 0.82)
 const PECHO := Vector2(0, -38)             # dónde va la linterna, desde los pies de Johnny (unos 27 píxeles del dibujo más arriba)
 const PECHO_DELANTE := Vector2(9, 4)       # cuánto se adelanta del centro hacia donde mira (de lado y hacia abajo)
-const RAYO_LARGO := 110.0                  # dónde llega al suelo el rayo del aire (donde el haz del suelo ya luce)
-const RAYO_ANCHO := 26.0                   # medio ancho del rayo al llegar al suelo
+const RAYO_LARGO := 0.3                    # dónde llega al suelo el rayo del aire, en partes del alcance (donde el haz del suelo ya luce)
+const RAYO_ABRE := LINTERNA_ANCHO * 0.8    # medio ángulo del rayo al llegar al suelo: el borde que se ve del haz del suelo
 const FOGONAZO := Color(1.0, 0.82, 0.51)
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
 const CAPA_SUELO := 2
@@ -181,16 +181,17 @@ static func hacer_cono() -> ImageTexture:
 	return textura_cono
 
 
-# El brillo del foco de la linterna del pecho (se dibuja con píxeles del tamaño del dibujo): el cristal, casi
+# El brillo del foco de la linterna del pecho (se dibuja con píxeles del tamaño del dibujo): el cristal, una
+# crucecita de 5 píxeles casi
 # blanco, y alrededor un resplandor cálido muy flojo que se apaga en un par de píxeles
 static func hacer_foco() -> ImageTexture:
-	var lado := 7
+	var lado := 9
 	var img := Image.create(lado, lado, false, Image.FORMAT_RGBA8)
 	var centro := Vector2(lado, lado) / 2.0
 	for y in lado:
 		for x in lado:
 			var d := (Vector2(x + 0.5, y + 0.5) - centro).length()
-			var k := 1.0 if d < 1.0 else pow(clampf(1.0 - (d - 1.0) / 2.5, 0.0, 1.0), 2.0) * 0.3
+			var k := 1.0 if d < 1.1 else pow(clampf(1.0 - (d - 1.1) / 2.5, 0.0, 1.0), 2.0) * 0.3
 			var c := Color(1.0, 0.98, 0.9).lerp(Color(1.0, 0.85, 0.5), clampf(d / 3.0, 0.0, 1.0)) * k
 			img.set_pixel(x, y, Color(c.r, c.g, c.b, 1.0))
 	return ImageTexture.create_from_image(img)
@@ -213,18 +214,22 @@ func _process(delta: float) -> void:
 		var mira := Vector2.from_angle(linterna.rotation)
 		foco.position = (PECHO + mira * PECHO_DELANTE).round()
 		foco.modulate.a = smoothstep(-0.9, -0.35, mira.y) * clampf(nivel / 0.4, 0.0, 1.0)
-		# el rayo del aire: del foco al trozo de suelo por delante, ensanchándose y apagándose al bajar
-		var abajo := mira * RAYO_LARGO
-		var lado := (abajo - foco.position).normalized().orthogonal()
-		rayo.polygon = PackedVector2Array([foco.position - lado * 2.0, foco.position + lado * 2.0,
-				abajo + lado * RAYO_ANCHO, abajo - lado * RAYO_ANCHO])
-		var c := LINTERNA_COLOR * Color(1, 1, 1, 0.07)
-		rayo.vertex_colors = PackedColorArray([c, c, Color(c, 0.0), Color(c, 0.0)])
-		rayo.modulate.a = foco.modulate.a
 		linterna_cosas.range_item_cull_mask = capa_johnny
 		luz_johnny.range_item_cull_mask = capa_johnny
 		# con la skin del informático (skins.gd), llega un 50 % más lejos (la skin se puede cambiar en la taquilla)
 		var alcance := LINTERNA_ALCANCE * Skins.linterna(str(johnny.get("skin"))) / 128.0
+		# el rayo del aire: un abanico del foco al arco del suelo donde el haz ya luce, justo entre sus dos
+		# bordes (así sus lados siguen los del haz del suelo), que se apaga al bajar
+		var arco := PackedVector2Array([foco.position])
+		var c := LINTERNA_COLOR * Color(1, 1, 1, 0.07)
+		var colores := PackedColorArray([c])
+		for i in 9:
+			var giro := lerpf(-RAYO_ABRE, RAYO_ABRE, i / 8.0)
+			arco.append(mira.rotated(giro) * RAYO_LARGO * alcance * 128.0)
+			colores.append(Color(c, 0.0))
+		rayo.polygon = arco
+		rayo.vertex_colors = colores
+		rayo.modulate.a = foco.modulate.a
 		if linterna_suelo.texture_scale != alcance:
 			linterna_suelo.texture_scale = alcance
 			linterna_cosas.texture_scale = alcance
