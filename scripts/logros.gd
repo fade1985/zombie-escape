@@ -60,7 +60,7 @@ const LISTA := [
 		"desc": "Mata 100 zombis, sumando todas tus partidas."},
 	{"id": "limpieza_general", "tema": "combate", "nombre": "Limpieza general", "icono": "logro-limpieza_general", "premio": 20, "meta": 1000, "cuenta": "total",
 		"desc": "Mata 1.000 zombis, sumando todas tus partidas."},
-	{"id": "piromano", "tema": "combate", "nombre": "Pirómano", "icono": "molotov", "premio": 15, "meta": 5, "cuenta": "partida",
+	{"id": "piromano", "tema": "combate", "nombre": "Pirómano", "icono": "logro-piromano", "premio": 15, "meta": 5, "cuenta": "partida",
 		"desc": "Prende fuego a 5 zombis con un mismo molotov."},
 	{"id": "racha", "tema": "combate", "nombre": "Racha imparable", "icono": "fuerza", "premio": 10, "meta": 30, "cuenta": "partida",
 		"desc": "Mata 30 zombis seguidos sin perder vida."},
