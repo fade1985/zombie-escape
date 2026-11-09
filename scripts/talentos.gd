@@ -52,7 +52,7 @@ const LISTA := [
 		"desc": "+10 % de daño con armas a distancia por punto"},
 	{"id": "artificiero", "rama": "militar", "nivel": 2, "nombre": "Artificiero", "max": 3, "icono": "talento-artificiero", "pide": "punteria",
 		"desc": "+1 molotov y +1 granada por punto"},
-	{"id": "larguirucho", "rama": "militar", "nivel": 3, "nombre": "Larguirucho", "max": 1, "icono": "guantes", "pide": "camorrista",
+	{"id": "larguirucho", "rama": "militar", "nivel": 3, "nombre": "Larguirucho", "max": 1, "icono": "talento-larguirucho", "pide": "camorrista",
 		"desc": "Duplica el alcance cuerpo a cuerpo"},
 	{"id": "mirilla", "rama": "militar", "nivel": 3, "nombre": "Mirilla", "max": 1, "icono": "escopeta", "pide": "tirador",
 		"desc": "Uno de cada 3 disparos es un crítico seguro (doble daño)"},
