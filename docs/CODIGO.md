@@ -595,6 +595,11 @@ en una línea.
   si se cierra antes (Apagar o Esc), sigue encendida. Cada ranura de guardado lleva sus vistas. **VIDEOS.EXE**
   (`programa_videos`, en el ordenador): pestañas por edificio como el Dosier y «Vídeo 1, 2…» (los no vistos, apagados), y el vídeo en
   un reproductor multimedia de los 90 (`reproductor.gd`: pausa, parar, anterior, siguiente y contador; barra y volumen de adorno). Se prueba con `--noticias`.
+  **Ligado al dosier:** ya no suelta páginas ningún jefe. Cada planta tiene su muerto con una página (`planta.cientifico`) y
+  lleva la **primera que te falte** del edificio (`Historia.pendiente`; si no la coges, la lleva el de la planta siguiente: cinco
+  páginas y cuatro plantas, dos partidas). La noticia N se hace con la página N: la tele solo se enciende si has cogido
+  la página de esa planta (`partida.tele_con_pagina`; o si ya no queda ninguna por coger) y `Historia.siguiente_noticia` pide
+  que esté encontrada la página de la noticia. Al coger la página con el apartamento de la tele ya limpio, se enciende al momento.
 - `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,

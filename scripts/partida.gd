@@ -910,11 +910,12 @@ func poner_cientifico(idx: int) -> void:
 	var c: Dictionary = planta.get("cientifico", {})
 	if c.is_empty() or c.sitio != idx:
 		return
-	var pagina := Historia.pendiente(Guardado.cargar(), edificio, planta.num)
-	if pagina.is_empty() and not c.cogida:
+	# la primera página que te falte (si ya la has cogido en esta planta, la que cogiste)
+	var pagina: Dictionary = c.pagina if c.cogida else Historia.pendiente(Guardado.cargar(), edificio)
+	if pagina.is_empty():
 		return
 	var cuerpo := CIENTIFICO.new()
-	cuerpo.montar(pagina if not pagina.is_empty() else c.pagina, c.pos)
+	cuerpo.montar(pagina, c.pos)
 	cuerpo.johnny = johnny
 	cuerpo.mapa = mapa
 	cuerpo.zona = mapa.zona_en(c.pos)
@@ -971,27 +972,16 @@ func _al_coger_pagina(p: Dictionary) -> void:
 	planta.cientifico.cogida = true
 	planta.cientifico.pagina = p
 	leer_pagina(p)
+	encender_tele()   # (si el apartamento de la tele ya estaba limpio)
 
 
-# La página que suelta el jefe del edificio al caer, si aún falta (historia.gd, del_jefe): en el centro comercial,
-# la orden de recogida. La pide el gerente al caer en la azotea (fin_del_edificio())
-func pagina_del_jefe() -> void:
-	var p := Historia.del_jefe(Guardado.cargar(), edificio)
-	if not p.is_empty():
-		leer_pagina(p)
-
-
-# Ha caído el jefe final (el gerente mutado, en la azotea): cuando se ha visto caer, su página del dosier (si aún
-# falta; con el juego parado) y, al cerrarla, llega el helicóptero de Velaria a por Johnny (helicoptero.gd). La
+# Ha caído el jefe final (el gerente mutado, en la azotea): cuando se ha visto caer, el juego sigue y
+# llega el helicóptero de Velaria a por Johnny (helicoptero.gd). La
 # azotea no tiene más salida: el helicóptero suelta una escalera de cuerda y, al llegar Johnny a ella, se acaba el
 # edificio (subir_al_helicoptero)
 func fin_del_edificio() -> void:
 	var donde := aqui
 	await get_tree().create_timer(1.6, false).timeout
-	if donde != aqui:
-		return
-	pagina_del_jefe()
-	await get_tree().create_timer(0.8, false).timeout   # (mientras la página está abierta, no corre)
 	if donde != aqui:
 		return
 	if mapa.laboratorio:
@@ -1026,17 +1016,22 @@ func leer_pagina(p: Dictionary) -> void:
 	menus.pagina(p, paginas.find(p) + 1, paginas.size(), func(): get_tree().paused = false)
 
 
-# M91: al limpiar el apartamento que tiene la tele de la planta, se enciende (pantalla en blanco y un «!» encima) si aún
-# queda alguna noticia de este edificio por ver
-func encender_tele(sitio: Dictionary) -> void:
-	if not sitio.has("tele") or sitio.tele.estado != "apagada":
-		return
-	if Historia.siguiente_noticia(edificio, Guardado.cargar()).is_empty():
-		return
-	sitio.tele.estado = "encendida"
-	Sonido.tocar("compra")
-	if mapa.tele_salon:
-		mapa.tele_salon.encender()
+# M91: la tele de la planta se enciende (pantalla en blanco y un «!» encima) al limpiar su apartamento, si has cogido la
+# página del dosier de esta planta y queda una noticia de este edificio por ver (se mira al limpiar y al coger la página)
+func encender_tele(_sitio := {}) -> void:
+	for otro in planta.sitios:
+		if otro.has("tele") and otro.limpio and otro.tele.estado == "apagada" and tele_con_pagina() \
+				and not Historia.siguiente_noticia(edificio, Guardado.cargar()).is_empty():
+			otro.tele.estado = "encendida"
+			Sonido.tocar("compra")
+			if mapa.tele_salon and mapa.sitio == otro:
+				mapa.tele_salon.encender()
+
+
+# La noticia se hace con la documentación que Johnny le pasa a la periodista: la tele de la planta solo se enciende si en
+# esta planta ya has cogido la página del dosier del muerto (o si ya las tienes todas, y no queda ninguna que pasarle)
+func tele_con_pagina() -> bool:
+	return planta.get("cientifico", {}).get("cogida", false) or Historia.pendiente(Guardado.cargar(), edificio).is_empty()
 
 
 # Con la tele del salón encendida y el clic delante de ella: sale la primera noticia de este edificio que aún no has visto,

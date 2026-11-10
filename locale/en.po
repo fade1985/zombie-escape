@@ -1226,30 +1226,26 @@ msgid "¡SIN SUPLEMENTOS!"
 msgstr "OUT OF SUPPS!"
 
 #: scripts/historia.gd
-msgid "azotea"
-msgstr "rooftop"
-
-#: scripts/historia.gd
-msgid "laboratorio"
-msgstr "lab"
+msgid "junto a un cuerpo de Velaria"
+msgstr "next to a Velaria body"
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Apartamentos"
 msgstr "Dossier VD-7 · Apartments"
 
 #: scripts/historia.gd
-msgid "Cada muerto de Velaria en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre."
-msgstr "Every dead Velaria employee in the building carries a page, and the study director carries the last one. Whatever you find stays here forever."
+msgid "Cada planta tiene un muerto de Velaria con una página. Si no la coges, pasa a la planta siguiente. Lo que encuentres queda aquí para siempre."
+msgstr "Every floor has a dead Velaria employee carrying a page. If you don't take it, it passes to the next floor. Whatever you find stays here forever."
 
 #: scripts/historia.gd
 msgid ""
-"Esta página falta. La lleva alguien de Velaria caído en la %s.\n"
+"Esta página falta. La lleva un muerto de Velaria, en alguna planta: siempre sale la primera que te falte.\n"
 "\n"
 "Búscalo en una partida."
 msgstr ""
-"This page is missing. Someone from Velaria has it, lying dead on the %s.\n"
+"This page is missing. A dead Velaria employee carries it, on some floor: the first one you're missing always turns up.\n"
 "\n"
-"Find them in a run."
+"Look for them in a run."
 
 #: scripts/historia.gd
 msgid "Dra. Inés Lozano, coordinadora del estudio"
@@ -1392,18 +1388,8 @@ msgid "S-1 sabe mi nombre. ¡Evacuad arriba YA!"
 msgstr "S-1 knows my name. Clear the top floors NOW!"
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"This page is missing. The study director has it, all the way up on the roof.\n"
-"\n"
-"You'll have to take it from him."
-
-#: scripts/historia.gd
-msgid "Dr. Héctor Salas, director del estudio"
-msgstr "Dr. Héctor Salas, study director"
+msgid "Ayudante del director del estudio"
+msgstr "The study director's assistant"
 
 #: scripts/historia.gd
 msgid "LISTA DE SUJETOS · SOLO DIRECCIÓN"
@@ -1438,20 +1424,6 @@ msgstr "Janitor: don't trust lab coats. Or whoever rescues you."
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Centro comercial"
 msgstr "Dossier VD-7 · Shopping Mall"
-
-#: scripts/historia.gd
-msgid "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre."
-msgstr "There's a body with a page on every floor, and the manager carries the last one. Whatever you find stays here forever."
-
-#: scripts/historia.gd
-msgid ""
-"Esta página falta. Está junto a un cuerpo, en la %s.\n"
-"\n"
-"Búscalo en una partida."
-msgstr ""
-"This page is missing. It's next to a body, on the %s.\n"
-"\n"
-"Find it in a run."
 
 #: scripts/historia.gd
 msgid "Julián Mora, farmacéutico de Velaria"
@@ -1596,18 +1568,8 @@ msgid "El gerente ya no duerme. Dice que no le hace falta."
 msgstr "The manager doesn't sleep anymore. Says he doesn't need to."
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"This page is missing. The mall manager has it, all the way up on the roof.\n"
-"\n"
-"You'll have to take it from him."
-
-#: scripts/historia.gd
-msgid "Arturo Salcedo, gerente del centro"
-msgstr "Arturo Salcedo, mall manager"
+msgid "Auxiliar de la gerencia del centro"
+msgstr "A clerk from the centre's management"
 
 #: scripts/historia.gd
 msgid "ORDEN DE RECOGIDA · URGENTE"
@@ -1642,10 +1604,6 @@ msgstr "They promised me the good dose. Only this came."
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Torre Velaria"
 msgstr "VD-7 Dossier · Velaria Tower"
-
-#: scripts/historia.gd
-msgid "En cada planta hay un cuerpo con una página, y la última la lleva el Sujeto 1. Lo que encuentres queda aquí para siempre."
-msgstr "On every floor there is a body with a page, and the last one is carried by Subject 1. What you find stays here forever."
 
 #: scripts/historia.gd
 msgid "Dra. Nuria Castell, médica de guardia de Velaria"
@@ -1796,18 +1754,8 @@ msgid "Ayer me dijo «turno de noche». Como el conserje."
 msgstr "Yesterday he said \"night shift\". Like the janitor."
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"This page is missing. Subject 1 has it, at the very top, in the lab on floor 40.\n"
-"\n"
-"You'll have to take it from him."
-
-#: scripts/historia.gd
-msgid "Sujeto 1, el empleado perfecto de Velaria"
-msgstr "Subject 1, Velaria's perfect employee"
+msgid "Asistente de la presidencia de Velaria"
+msgstr "An assistant from Velaria's presidency"
 
 #: scripts/historia.gd
 msgid "FICHA DE SUJETO · SOLO PRESIDENCIA"

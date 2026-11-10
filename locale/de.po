@@ -1226,30 +1226,26 @@ msgid "¡SIN SUPLEMENTOS!"
 msgstr "KEINE SUPPS MEHR!"
 
 #: scripts/historia.gd
-msgid "azotea"
-msgstr "Dach"
-
-#: scripts/historia.gd
-msgid "laboratorio"
-msgstr "Labor"
+msgid "junto a un cuerpo de Velaria"
+msgstr "bei einer Velaria-Leiche"
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Apartamentos"
 msgstr "Akte VD-7 · Mietshaus"
 
 #: scripts/historia.gd
-msgid "Cada muerto de Velaria en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre."
-msgstr "Jeder tote Velaria-Mitarbeiter im Haus trägt eine Seite bei sich, die letzte hat der Studienleiter. Was du findest, bleibt für immer hier."
+msgid "Cada planta tiene un muerto de Velaria con una página. Si no la coges, pasa a la planta siguiente. Lo que encuentres queda aquí para siempre."
+msgstr "Jedes Stockwerk hat einen toten Velaria-Mitarbeiter mit einer Seite. Wenn du sie nicht nimmst, wandert sie ins nächste Stockwerk. Was du findest, bleibt für immer hier."
 
 #: scripts/historia.gd
 msgid ""
-"Esta página falta. La lleva alguien de Velaria caído en la %s.\n"
+"Esta página falta. La lleva un muerto de Velaria, en alguna planta: siempre sale la primera que te falte.\n"
 "\n"
 "Búscalo en una partida."
 msgstr ""
-"Diese Seite fehlt. Ein toter Velaria-Mitarbeiter hat sie. Fundort: %s.\n"
+"Diese Seite fehlt. Ein toter Velaria-Mitarbeiter trägt sie, in irgendeinem Stockwerk: Es taucht immer die erste auf, die dir fehlt.\n"
 "\n"
-"Such ihn in einer Runde."
+"Such ihn in einem Durchgang."
 
 #: scripts/historia.gd
 msgid "Dra. Inés Lozano, coordinadora del estudio"
@@ -1392,18 +1388,8 @@ msgid "S-1 sabe mi nombre. ¡Evacuad arriba YA!"
 msgstr "S-1 kennt meinen Namen. Oben räumen, SOFORT!"
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"Diese Seite fehlt. Der Studienleiter hat sie, ganz oben auf dem Dach.\n"
-"\n"
-"Du wirst sie ihm abnehmen müssen."
-
-#: scripts/historia.gd
-msgid "Dr. Héctor Salas, director del estudio"
-msgstr "Dr. Héctor Salas, Studienleiter"
+msgid "Ayudante del director del estudio"
+msgstr "Assistent des Studienleiters"
 
 #: scripts/historia.gd
 msgid "LISTA DE SUJETOS · SOLO DIRECCIÓN"
@@ -1438,20 +1424,6 @@ msgstr "Hausmeister: Trau keinem Kittel. Auch nicht deinen Rettern."
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Centro comercial"
 msgstr "Akte VD-7 · Einkaufszentrum"
-
-#: scripts/historia.gd
-msgid "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre."
-msgstr "Auf jedem Stock liegt eine Leiche mit einer Seite, die letzte hat der Manager. Was du findest, bleibt für immer hier."
-
-#: scripts/historia.gd
-msgid ""
-"Esta página falta. Está junto a un cuerpo, en la %s.\n"
-"\n"
-"Búscalo en una partida."
-msgstr ""
-"Diese Seite fehlt. Sie liegt neben einer Leiche. Fundort: %s.\n"
-"\n"
-"Such sie in einer Runde."
 
 #: scripts/historia.gd
 msgid "Julián Mora, farmacéutico de Velaria"
@@ -1596,18 +1568,8 @@ msgid "El gerente ya no duerme. Dice que no le hace falta."
 msgstr "Der Geschäftsführer schläft nicht mehr. Braucht er nicht, sagt er."
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"Diese Seite fehlt. Der Manager des Zentrums hat sie, ganz oben auf dem Dach.\n"
-"\n"
-"Du wirst sie ihm abnehmen müssen."
-
-#: scripts/historia.gd
-msgid "Arturo Salcedo, gerente del centro"
-msgstr "Arturo Salcedo, Manager des Zentrums"
+msgid "Auxiliar de la gerencia del centro"
+msgstr "Sachbearbeiter der Centerleitung"
 
 #: scripts/historia.gd
 msgid "ORDEN DE RECOGIDA · URGENTE"
@@ -1642,10 +1604,6 @@ msgstr "Sie versprachen mir die gute Dosis. Kam nur das hier."
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Torre Velaria"
 msgstr "Akte VD-7 · Velaria-Turm"
-
-#: scripts/historia.gd
-msgid "En cada planta hay un cuerpo con una página, y la última la lleva el Sujeto 1. Lo que encuentres queda aquí para siempre."
-msgstr "In jedem Stock liegt eine Leiche mit einer Seite, und die letzte trägt Proband 1. Was du findest, bleibt für immer hier."
 
 #: scripts/historia.gd
 msgid "Dra. Nuria Castell, médica de guardia de Velaria"
@@ -1796,18 +1754,8 @@ msgid "Ayer me dijo «turno de noche». Como el conserje."
 msgstr "Gestern sagte er „Nachtschicht“. Wie der Hausmeister."
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"Diese Seite fehlt. Proband 1 trägt sie, ganz oben, im Labor im 40. Stock.\n"
-"\n"
-"Du wirst sie ihm abnehmen müssen."
-
-#: scripts/historia.gd
-msgid "Sujeto 1, el empleado perfecto de Velaria"
-msgstr "Proband 1, der perfekte Mitarbeiter von Velaria"
+msgid "Asistente de la presidencia de Velaria"
+msgstr "Assistent der Velaria-Präsidentschaft"
 
 #: scripts/historia.gd
 msgid "FICHA DE SUJETO · SOLO PRESIDENCIA"

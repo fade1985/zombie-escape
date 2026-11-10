@@ -1223,30 +1223,26 @@ msgid "¡SIN SUPLEMENTOS!"
 msgstr "补剂没了！"
 
 #: scripts/historia.gd
-msgid "azotea"
-msgstr "天台"
-
-#: scripts/historia.gd
-msgid "laboratorio"
-msgstr "实验室"
+msgid "junto a un cuerpo de Velaria"
+msgstr "在一具Velaria员工的尸体旁"
 
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Apartamentos"
 msgstr "VD-7档案 · 公寓楼"
 
 #: scripts/historia.gd
-msgid "Cada muerto de Velaria en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre."
-msgstr "楼里每个死掉的Velaria员工身上都带着一页，最后一页在研究负责人身上。你找到的内容会永久保存在这里。"
+msgid "Cada planta tiene un muerto de Velaria con una página. Si no la coges, pasa a la planta siguiente. Lo que encuentres queda aquí para siempre."
+msgstr "每层楼都有一具带着一页纸的Velaria员工尸体。如果你没拿，它就会移到下一层。你找到的东西会永远留在这里。"
 
 #: scripts/historia.gd
 msgid ""
-"Esta página falta. La lleva alguien de Velaria caído en la %s.\n"
+"Esta página falta. La lleva un muerto de Velaria, en alguna planta: siempre sale la primera que te falte.\n"
 "\n"
 "Búscalo en una partida."
 msgstr ""
-"这一页缺失。它在一个倒在%s的Velaria员工身上。\n"
+"这一页缺失。某一层的一具Velaria员工尸体带着它：总是你缺的第一页先出现。\n"
 "\n"
-"开一局去找吧。"
+"在一局游戏里去找他吧。"
 
 #: scripts/historia.gd
 msgid "Dra. Inés Lozano, coordinadora del estudio"
@@ -1389,18 +1385,8 @@ msgid "S-1 sabe mi nombre. ¡Evacuad arriba YA!"
 msgstr "S-1 知道我的名字。立刻撤离楼上！"
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"这一页缺失。它在研究负责人身上，就在最高处的天台。\n"
-"\n"
-"你得从他手里抢过来。"
-
-#: scripts/historia.gd
-msgid "Dr. Héctor Salas, director del estudio"
-msgstr "埃克托·萨拉斯博士，研究负责人"
+msgid "Ayudante del director del estudio"
+msgstr "研究主管的助手"
 
 #: scripts/historia.gd
 msgid "LISTA DE SUJETOS · SOLO DIRECCIÓN"
@@ -1435,20 +1421,6 @@ msgstr "门卫：别信穿白大褂的。也别信来救你的人。"
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Centro comercial"
 msgstr "VD-7档案 · 购物中心"
-
-#: scripts/historia.gd
-msgid "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre."
-msgstr "每层楼都有一具尸体带着一页，最后一页在经理身上。你找到的内容会永久保存在这里。"
-
-#: scripts/historia.gd
-msgid ""
-"Esta página falta. Está junto a un cuerpo, en la %s.\n"
-"\n"
-"Búscalo en una partida."
-msgstr ""
-"这一页缺失。它在%s的一具尸体旁边。\n"
-"\n"
-"开一局去找吧。"
 
 #: scripts/historia.gd
 msgid "Julián Mora, farmacéutico de Velaria"
@@ -1593,18 +1565,8 @@ msgid "El gerente ya no duerme. Dice que no le hace falta."
 msgstr "经理不睡觉了。他说已经不需要了。"
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"这一页缺失。它在商场经理身上，就在最高处的天台。\n"
-"\n"
-"你得从他手里抢过来。"
-
-#: scripts/historia.gd
-msgid "Arturo Salcedo, gerente del centro"
-msgstr "阿图罗·萨尔塞多，商场经理"
+msgid "Auxiliar de la gerencia del centro"
+msgstr "商场管理层的职员"
 
 #: scripts/historia.gd
 msgid "ORDEN DE RECOGIDA · URGENTE"
@@ -1639,10 +1601,6 @@ msgstr "说好给我好的那剂。只寄来了这个。"
 #: scripts/historia.gd
 msgid "Dosier VD-7 · Torre Velaria"
 msgstr "VD-7档案 · Velaria大厦"
-
-#: scripts/historia.gd
-msgid "En cada planta hay un cuerpo con una página, y la última la lleva el Sujeto 1. Lo que encuentres queda aquí para siempre."
-msgstr "每一层都有一具尸体带着一页纸，最后一页在1号受试者身上。你找到的东西会永远留在这里。"
 
 #: scripts/historia.gd
 msgid "Dra. Nuria Castell, médica de guardia de Velaria"
@@ -1793,18 +1751,8 @@ msgid "Ayer me dijo «turno de noche». Como el conserje."
 msgstr "昨天他说“夜班”。和那个门卫一样。"
 
 #: scripts/historia.gd
-msgid ""
-"Esta página falta. La lleva el Sujeto 1, arriba del todo, en el laboratorio de la planta 40.\n"
-"\n"
-"Tendrás que quitársela."
-msgstr ""
-"这一页缺失。它在1号受试者身上，在最顶层，40楼的实验室里。\n"
-"\n"
-"你得从他手里夺过来。"
-
-#: scripts/historia.gd
-msgid "Sujeto 1, el empleado perfecto de Velaria"
-msgstr "1号受试者，Velaria的完美员工"
+msgid "Asistente de la presidencia de Velaria"
+msgstr "Velaria总裁办的助理"
 
 #: scripts/historia.gd
 msgid "FICHA DE SUJETO · SOLO PRESIDENCIA"

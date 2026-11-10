@@ -352,20 +352,8 @@ func probar_historia() -> void:
 	ordenador.abrir("dosier", "b_" + ids[2])
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-dosier.png")
-	# la del jefe, si este edificio la tiene (el centro comercial): sin encontrar en el ordenador y luego soltada
-	var del_jefe := Historia.del_jefe(Guardado.cargar(), edificio)
-	if not del_jefe.is_empty():
-		ordenador.abrir("dosier", "b_" + del_jefe.id)
-		await get_tree().create_timer(0.3).timeout
-		Captura.foto("captura-dosier-falta.png")
 	ordenador.abrir("")
 	ordenador.apagar()
-	if not del_jefe.is_empty():
-		pagina_del_jefe()
-		await get_tree().create_timer(0.4).timeout
-		Captura.foto("captura-pagina-jefe.png")
-		print("Página del jefe: %s | en el guardado: %s" % [del_jefe.id, Guardado.cargar().paginas])
-		menus.leida()
 	await montar(planta.mantenimiento, 0, false)
 	await probar_noticias()
 
@@ -975,7 +963,13 @@ func probar_avisos_ordenador() -> void:
 # vacío y con la noticia vista, con el reproductor (captura-videos-vacio.png, captura-videos.png). Deja el guardado como estaba
 func probar_noticias() -> void:
 	var antes := Guardado.cargar().duplicate(true)
-	Guardado.cambiar(func(g): g.videos_vistos = [])
+	Guardado.cambiar(func(g):
+		g.videos_vistos = []
+		g.paginas = [])
+	planta.cientifico.cogida = false
+	for otro in planta.sitios:   # (por si otra prueba que ha corrido antes, como --pagina, la dejó encendida)
+		if otro.has("tele"):
+			otro.tele.estado = "apagada"
 	# una tele por planta, en un salón de un apartamento normal
 	for num in range(1, 5):
 		var p: Dictionary = Planta.generar(num, edificio)
@@ -1005,7 +999,16 @@ func probar_noticias() -> void:
 	await get_tree().create_timer(0.05).timeout
 	print("Tele · al llegar (con zombis): %s (esperado: apagada)" % sitio.tele.estado)
 	await get_tree().create_timer(0.8).timeout
-	print("Tele · al limpiar el apartamento: %s, limpio %s (esperado: encendida, true)" % [sitio.tele.estado, sitio.limpio])
+	print("Tele · apartamento limpio pero sin la página del dosier de la planta: %s, limpio %s (esperado: apagada, true)" % [
+		sitio.tele.estado, sitio.limpio])
+	# coge la página del dosier de esta planta (la primera que falta): ahora sí se enciende
+	var hoja: Dictionary = Historia.pendiente(Guardado.cargar(), edificio)
+	Historia.apuntar(hoja.id)
+	planta.cientifico.cogida = true
+	planta.cientifico.pagina = hoja
+	encender_tele()
+	await get_tree().create_timer(0.2).timeout
+	print("Tele · con la página %s cogida: %s (esperado: encendida)" % [hoja.id, sitio.tele.estado])
 	Captura.foto("captura-tele-encendida.png")
 	# con el clic: sale la primera noticia; cerrada antes de acabar, sigue encendida y sin ver
 	var primera: Dictionary = Historia.siguiente_noticia(edificio, Guardado.cargar())
@@ -1031,7 +1034,9 @@ func probar_noticias() -> void:
 		Guardado.cargar().videos_vistos, primera.get("id", "")])
 	Captura.foto("captura-tele-vista.png")
 	var otra: Dictionary = Historia.siguiente_noticia(edificio, Guardado.cargar())
-	print("Tele · la siguiente noticia del edificio: %s (esperado: la segunda, %s)" % [otra.get("id", ""),
+	print("Tele · la siguiente noticia sin la página 2: «%s» (esperado: nada)" % otra.get("id", ""))
+	Historia.apuntar(Historia.dosier(edificio).paginas[1].id)
+	print("Tele · con la página 2 cogida: %s (esperado: %s)" % [Historia.siguiente_noticia(edificio, Guardado.cargar()).get("id", ""),
 		Historia.noticias_de(edificio)[1].id])
 	# VIDEOS.EXE: vacío y con la noticia vista
 	Guardado.cambiar(func(g): g.videos_vistos = [])
@@ -1045,6 +1050,7 @@ func probar_noticias() -> void:
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-videos-vacio.png")
 	Guardado.cambiar(func(g): g.videos_vistos = Historia.noticias_de(edificio).slice(0, 2).map(func(n): return n.id))
+	ordenador.videos_edificio = edificio
 	ordenador.abrir("videos")
 	await get_tree().create_timer(3.0).timeout
 	Captura.foto("captura-videos.png")
@@ -1072,7 +1078,9 @@ func probar_noticias() -> void:
 	Captura.foto("captura-videos-centro.png")
 	ordenador.abrir("")
 	ordenador.apagar()
-	Guardado.cambiar(func(g): g.videos_vistos = antes.videos_vistos)
+	Guardado.cambiar(func(g):
+		g.videos_vistos = antes.videos_vistos
+		g.paginas = antes.paginas)
 
 
 # Con "--captura --historia-torre": la historia de Torre Velaria (parte 8 del plan). Las cinco hojas del dosier
@@ -1100,9 +1108,8 @@ func probar_historia_torre() -> void:
 		Guardado.edificio(g, "centro").completado = true
 		Guardado.edificio(g, "torre").completado = false)
 	print("Historia torre · falta la 2: «%s»" % Historia.falta("torre", paginas[1]).replace("\n", " "))
-	print("Historia torre · falta la 5: «%s»" % Historia.falta("torre", paginas[4]).replace("\n", " "))
-	print("Historia torre · dónde, de la 1 a la 5: %s (esperado: vestíbulo, planta 10, planta 20, planta 30, laboratorio)" % [
-		paginas.map(func(p): return Historia.donde(p, "torre"))])
+	print("Historia torre · páginas: %d (esperado: 5, todas las lleva un muerto de planta) · pendiente sin ninguna: %s (esperado: tv_visitas)" % [
+		paginas.size(), Historia.pendiente(Guardado.NUEVO, "torre").get("id", "")])
 	print("Historia torre · noticias de la torre: %s (esperado: las 5)" % [Historia.noticias_de("torre").map(func(n): return n.id)])
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout

@@ -4035,7 +4035,7 @@ func probar_raton() -> void:
 # también en el centro comercial son todos científicos de Velaria con su bata. Foto: captura-muertos-dosier.png
 func probar_muertos_dosier() -> void:
 	await get_tree().create_timer(0.5).timeout
-	var muertos: Array = Historia.dosier(edificio).paginas.filter(func(p): return not p.get("jefe", false))
+	var muertos: Array = Historia.dosier(edificio).paginas
 	var capa := CanvasLayer.new()
 	capa.layer = 50
 	add_child(capa)
@@ -4046,7 +4046,7 @@ func probar_muertos_dosier() -> void:
 	capa.add_child(fondo)
 	for i in muertos.size():
 		var cuerpo := CIENTIFICO.new()
-		cuerpo.montar(muertos[i], Vector2(150 + i * 220, 320))
+		cuerpo.montar(muertos[i], Vector2(130 + i * 170, 320))
 		cuerpo.z_index = 0
 		capa.add_child(cuerpo)
 		print("Muerto del dosier %d: %s · con bata: %s" % [i + 1, muertos[i].cuerpo, not muertos[i].look.has("ropa")])
