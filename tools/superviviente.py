@@ -42,7 +42,7 @@ PX, PY = 48, 78          # los pies dentro de la casilla
 FX, FY = 24, 46          # los pies en el dibujo quieto de 48×48 (la última fila con píxeles)
 OX, OY = PX - FX, PY - FY   # (24, 32): dónde va el dibujo quieto dentro de la casilla
 IDLE_FPS, WALK_FPS, ATK_FPS, FALL_FPS = 5, 12, 15, 12
-TIRADOR = ID in ('policia', 'militar')   # lleva un arma de fuego: fogonazo que limpiar y boca que buscar
+TIRADOR = ID in ('policia', 'militar', 'policiagpt', 'militargpt')   # lleva un arma de fuego: fogonazo que limpiar y boca que buscar
 
 rot = {d: Image.open(f'{SRC}/rotations/{d}.png').convert('RGBA') for d in DIRS}
 
@@ -248,7 +248,8 @@ def untint(f, d, ox, oy, force=None):
 def flash(f, d):
     """Píxeles de fogonazo fuera de la silueta quieta (a veces el fogonazo tiñe al personaje entero)."""
     px, body = f.load(), still[d].load()
-    return [(x, y) for y in range(CH) for x in range(CW) if px[x, y][3] and not body[x, y][3] and fire(px[x, y])]
+    # (los de GPT dibujan el fogonazo aparte y a veces pegado al cuerpo: cuenta todo el color de fuego)
+    return [(x, y) for y in range(CH) for x in range(CW) if px[x, y][3] and (ID.endswith('gpt') or not body[x, y][3]) and fire(px[x, y])]
 
 
 def green(f, d):
@@ -272,7 +273,7 @@ for d in (DIRS if os.path.isdir(f'{SRC}/accion') else []):
     assert len(fs) == 9, f'la acción de {d} debería tener 9 fotogramas (el quieto y 8 más)'
     ox, oy = offset(fs, d, 'accion')
     fixed = []
-    if TIRADOR:
+    if TIRADOR and not ID.endswith('gpt'):
         for n in range(1, 9):
             fs[n], touched = untint(fs[n], d, ox, oy, None if TINT is None else n in TINT.get(d, []))
             if touched:

@@ -1,13 +1,14 @@
 """Prepara las carpetas de la médica con GPT (tools/zombi_gpt.py --zombi medica ...) como las espera tools/superviviente.py:
 copia el dibujo quieto, el andar (sin el quieto: del 1 al 8), el pinchazo (accion), la caída (caido) y el forzar la
 cerradura (solo de frente y de espaldas) a assets/sources/superviviente-medicagpt-48/. Luego:
-  py tools/medica_gpt_montar.py
-  py tools/superviviente.py medicagpt
+  py tools/medica_gpt_montar.py [medica|policia]
+  py tools/superviviente.py medicagpt   (o policiagpt)
   py tools/hacer_frames.py assets/sprites/superviviente-medicagpt
 La hoja nueva va aparte (superviviente-medicagpt) hasta que el dueño la elija en vez de la de PixelLab."""
-import json, os, shutil
-DE = "assets/sources/superviviente-medica-gpt-48"
-A = "assets/sources/superviviente-medicagpt-48"
+import json, os, shutil, sys
+QUIEN = sys.argv[1] if len(sys.argv) > 1 else "medica"   # medica o policia
+DE = f"assets/sources/superviviente-{QUIEN}-gpt-48"
+A = f"assets/sources/superviviente-{QUIEN}gpt-48"
 shutil.rmtree(A, ignore_errors=True)
 for c in ("rotations", "walk", "accion", "caido", "forzar"):
     os.makedirs(f"{A}/{c}")

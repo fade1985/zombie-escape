@@ -50,9 +50,9 @@ const DESTELLO := preload("res://escenas/personajes/destello.gdshader")   # el b
 # el martillo da en el suelo (ahí pega) o salta el chispazo del aparato (ahí sale la descarga): la acción son 8
 # fotogramas a 15 por segundo y el fogonazo está en el 4º. La farmacéutica no tiene acción (lo suyo no tiene gesto)
 const HOJAS := {
-	"policia": {"hoja": preload("res://assets/sprites/superviviente-policia.tres"), "fogonazo": 0.2,
-		"boca": {"s": Vector2(-4, -34), "se": Vector2(26, -29), "e": Vector2(23, -37), "ne": Vector2(23, -52),
-			"n": Vector2(-1, -52), "no": Vector2(-29, -50), "o": Vector2(-33, -35), "so": Vector2(-27, -14)}},
+	"policia": {"hoja": preload("res://assets/sprites/superviviente-policiagpt.tres"), "fogonazo": 0.2,
+		"boca": {"s": Vector2(2, -29), "se": Vector2(9, -33), "e": Vector2(16, -31), "ne": Vector2(11, -33),
+			"n": Vector2(9, -34), "no": Vector2(-12, -33), "o": Vector2(-17, -31), "so": Vector2(-10, -33)}},
 	"medico": {"hoja": preload("res://assets/sprites/superviviente-medicagpt.tres"), "fogonazo": 0.27},
 	"militar": {"hoja": preload("res://assets/sprites/superviviente-militar.tres"), "fogonazo": 0.2,
 		"boca": {"s": Vector2(24, -25), "se": Vector2(26, -23), "e": Vector2(32, -36), "ne": Vector2(28, -43),
