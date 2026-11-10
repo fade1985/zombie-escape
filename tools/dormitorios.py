@@ -1,4 +1,4 @@
-# La pared y el suelo de los dormitorios (y, al final, la cocina) de los pisos (M13, 11 nov), de dos imágenes cada uno. Matrimonio: de dos imágenes de GPT: pared de yeso blanco roto
+# La pared y el suelo de los dormitorios (y, al final, la cocina y el salón) de los pisos (M13, 11 nov), de dos imágenes cada uno. Matrimonio: de dos imágenes de GPT: pared de yeso blanco roto
 # con rodapié de roble (assets/sources/dormitorio-matrimonio-pared-gpt.webp) y parqué en espiga del mismo roble
 # (assets/sources/dormitorio-matrimonio-suelo-gpt.webp). Salen reducidas mezclando colores, como los muebles (tools/muebles_gpt.py).
 #   pared → assets/sprites/pared-dormitorio-matrimonio.png  (204 × 48: cuatro trozos de 51, el 2.º y el 4.º en espejo, así empalma
@@ -64,4 +64,7 @@ suelo("individual", "dormitorio-individual-suelo-gpt.webp", 1254, 128)
 # cocina de los pisos (11 nov): yeso crema con rodapié de terracota y baldosas de barro cocido; el suelo, la imagen entera, a 128
 pared_y_techo("pisos", "cocina-pared-gpt.webp", CLARO, "cocina")
 suelo("pisos", "cocina-suelo-gpt.webp", 1254, 128, "cocina")
+# salón de los pisos (11 nov): ladrillo pintado de blanco con rodapié de madera oscura y tablas anchas oscuras; el suelo, la imagen entera, a 128
+pared_y_techo("pisos", "salon-pared-gpt.webp", CLARO, "salon")
+suelo("pisos", "salon-suelo-gpt.webp", 1254, 128, "salon")
 print("hecho")
