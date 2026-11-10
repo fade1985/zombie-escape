@@ -321,7 +321,10 @@
 #   --horda-grande      cuánto cuesta una horda de 50, 100, 150 y 200 zombis (el fotograma, el proceso y la física), y
 #                       con 150 sin esquivarse, quietos, sin dibujar y sin sombra; --zombis N, solo con N. Mejor con --disable-vsync delante [prueba_varias.gd]
 #   --registro          el registro de errores (registro.gd): la cabecera, la planta, un aviso contado, copiarlo, el
-#                       godot.log y su botón en Opciones → General                          [prueba_varias.gd]
+#                       godot.log, y que en Opciones → General ya está «Contáctanos» en su lugar [prueba_varias.gd]
+#   --contacto          «Contáctanos» de Opciones → General (contacto.gd): escribir, el máximo, los datos técnicos (sin el
+#                       nombre del jugador) y el envío, que no sale del ordenador; con --contacto-url URL, sí, a esa
+#                       dirección (un servidor de prueba)                                     [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
@@ -1026,6 +1029,9 @@ func empezar_prueba() -> void:
 	elif "--registro" in args:
 		set_process(false)   # sin la prueba larga
 		probar_registro()
+	elif "--contacto" in args:
+		set_process(false)   # sin la prueba larga
+		probar_contacto()
 	elif "--rendimiento" in args:
 		set_process(false)   # sin la prueba larga
 		probar_rendimiento()

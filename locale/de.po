@@ -6233,16 +6233,8 @@ msgid "Pantalla"
 msgstr "Bildschirm"
 
 #: scripts/ui/opciones.gd
-msgid "Abrir el registro de errores"
-msgstr "Fehlerprotokoll öffnen"
-
-#: scripts/ui/opciones.gd
-msgid "Copiar el registro de errores"
-msgstr "Fehlerprotokoll kopieren"
-
-#: scripts/ui/opciones.gd
-msgid "Copiado: pégalo en tu mensaje"
-msgstr "Kopiert: füge es in deine Nachricht ein"
+msgid "Contáctanos"
+msgstr "Kontakt"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -6267,6 +6259,42 @@ msgstr "Fehlerhafte Übersetzung melden"
 #: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "Wackeln"
+
+#: scripts/ui/opciones.gd
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
+msgstr "Erzähl uns mit deinen eigenen Worten, was nicht funktioniert, was dir nicht gefällt oder was besser sein könnte. Wir beide, die das Spiel machen, lesen es."
+
+#: scripts/ui/opciones.gd
+msgid "Escribe aquí tu mensaje"
+msgstr "Schreib hier deine Nachricht"
+
+#: scripts/ui/opciones.gd
+msgid "Incluir datos técnicos"
+msgstr "Technische Daten anhängen"
+
+#: scripts/ui/opciones.gd
+msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
+msgstr "Die Spielversion, dein System und was zuletzt im Spiel passiert ist, damit wir Fehler finden. Nichts über dich."
+
+#: scripts/ui/opciones.gd
+msgid "Enviar"
+msgstr "Senden"
+
+#: scripts/ui/opciones.gd
+msgid "Escribe tu mensaje antes de enviarlo."
+msgstr "Schreib erst deine Nachricht"
+
+#: scripts/ui/opciones.gd
+msgid "Enviando…"
+msgstr "Wird gesendet…"
+
+#: scripts/ui/opciones.gd
+msgid "¡Gracias! Tu mensaje nos ha llegado."
+msgstr "Danke! Deine Nachricht ist angekommen"
+
+#: scripts/ui/opciones.gd
+msgid "No se ha podido enviar. Mira tu conexión e inténtalo otra vez."
+msgstr "Senden fehlgeschlagen. Prüf deine Verbindung und versuch es noch mal"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."

@@ -84,7 +84,7 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       una imagen y se dibuja por debajo de todos, junta; el shader de cada zombi no se toca sin fuego, ácido ni vómito. Sin
       cambiar cómo se mueven: bajar `max_neighbors` no ganaba nada); ~~cero errores en consola en una partida entera~~ (hecho el 9 nov: la
       prueba larga pasa con 0 errores y 0 avisos; lo dice «Registro al cerrar» de `registro.gd`); ~~archivo de registro que el
-      jugador pueda mandar cuando algo falle~~ (hecho el 9 nov: `registro.gd`, botón en Opciones → General); ~~pruebas automáticas (`--captura`) antes de cada versión~~ (hecho el 9 nov:
+      jugador pueda mandar cuando algo falle~~ (hecho el 9 nov: `registro.gd`; desde el 10 nov va con los mensajes de «Contáctanos», `docs/MENSAJES.md`); ~~pruebas automáticas (`--captura`) antes de cada versión~~ (hecho el 9 nov:
       `py tools/antes_de_version.py`, la larga y 15 cortas en unos 5 minutos).
 
 ## 3. Lo de fuera del juego

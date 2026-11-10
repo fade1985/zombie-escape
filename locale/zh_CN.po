@@ -6211,16 +6211,8 @@ msgid "Pantalla"
 msgstr "画面"
 
 #: scripts/ui/opciones.gd
-msgid "Abrir el registro de errores"
-msgstr "打开错误日志"
-
-#: scripts/ui/opciones.gd
-msgid "Copiar el registro de errores"
-msgstr "复制错误日志"
-
-#: scripts/ui/opciones.gd
-msgid "Copiado: pégalo en tu mensaje"
-msgstr "已复制：粘贴到你的消息里"
+msgid "Contáctanos"
+msgstr "联系我们"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -6245,6 +6237,42 @@ msgstr "反馈翻译错误"
 #: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "抖动"
+
+#: scripts/ui/opciones.gd
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
+msgstr "用你自己的话告诉我们哪里有问题、哪里不喜欢、哪里可以更好。做这个游戏的我们两个人都会看。"
+
+#: scripts/ui/opciones.gd
+msgid "Escribe aquí tu mensaje"
+msgstr "在这里写下你的留言"
+
+#: scripts/ui/opciones.gd
+msgid "Incluir datos técnicos"
+msgstr "附上技术数据"
+
+#: scripts/ui/opciones.gd
+msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
+msgstr "游戏版本、系统，以及游戏里最近发生的事，用来查找错误。不含任何关于你的信息。"
+
+#: scripts/ui/opciones.gd
+msgid "Enviar"
+msgstr "发送"
+
+#: scripts/ui/opciones.gd
+msgid "Escribe tu mensaje antes de enviarlo."
+msgstr "请先写好留言再发送。"
+
+#: scripts/ui/opciones.gd
+msgid "Enviando…"
+msgstr "发送中…"
+
+#: scripts/ui/opciones.gd
+msgid "¡Gracias! Tu mensaje nos ha llegado."
+msgstr "谢谢！我们收到你的留言了。"
+
+#: scripts/ui/opciones.gd
+msgid "No se ha podido enviar. Mira tu conexión e inténtalo otra vez."
+msgstr "发送失败。请检查网络连接后再试一次。"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."

@@ -6233,16 +6233,8 @@ msgid "Pantalla"
 msgstr "Écran"
 
 #: scripts/ui/opciones.gd
-msgid "Abrir el registro de errores"
-msgstr "Ouvrir le journal d'erreurs"
-
-#: scripts/ui/opciones.gd
-msgid "Copiar el registro de errores"
-msgstr "Copier le journal d'erreurs"
-
-#: scripts/ui/opciones.gd
-msgid "Copiado: pégalo en tu mensaje"
-msgstr "Copié : colle-le dans ton message"
+msgid "Contáctanos"
+msgstr "Nous contacter"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -6267,6 +6259,42 @@ msgstr "Signaler une mauvaise traduction"
 #: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "Secousse"
+
+#: scripts/ui/opciones.gd
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
+msgstr "Raconte-nous avec tes mots ce qui ne marche pas, ce qui ne te plaît pas ou ce qui pourrait être mieux. Nous deux, qui faisons le jeu, lisons tout."
+
+#: scripts/ui/opciones.gd
+msgid "Escribe aquí tu mensaje"
+msgstr "Écris ton message ici"
+
+#: scripts/ui/opciones.gd
+msgid "Incluir datos técnicos"
+msgstr "Joindre les données techniques"
+
+#: scripts/ui/opciones.gd
+msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
+msgstr "La version du jeu, ton système et ce qui s'est passé en dernier dans la partie, pour trouver les bugs. Rien sur toi."
+
+#: scripts/ui/opciones.gd
+msgid "Enviar"
+msgstr "Envoyer"
+
+#: scripts/ui/opciones.gd
+msgid "Escribe tu mensaje antes de enviarlo."
+msgstr "Écris ton message avant de l'envoyer."
+
+#: scripts/ui/opciones.gd
+msgid "Enviando…"
+msgstr "Envoi…"
+
+#: scripts/ui/opciones.gd
+msgid "¡Gracias! Tu mensaje nos ha llegado."
+msgstr "Merci ! Ton message nous est bien parvenu."
+
+#: scripts/ui/opciones.gd
+msgid "No se ha podido enviar. Mira tu conexión e inténtalo otra vez."
+msgstr "Impossible de l'envoyer. Vérifie ta connexion et réessaie."
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."

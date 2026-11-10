@@ -26,6 +26,9 @@
   - `VERCEL_ORG_ID` y `VERCEL_PROJECT_ID`: los códigos del proyecto (Vercel → el proyecto → Settings → General).
 - Vercel **no publica por su cuenta** desde git (`"git": { "deploymentEnabled": false }` en `vercel.json`): no tiene
   Godot y publicaría la carpeta `web/` vacía (pasó el 27 oct y la web dio 404). Lo publica siempre el robot.
+- Con la web va también un programita, `api/contacto.js` (`/api/contacto`): recibe los mensajes de «Contáctanos» y abre
+  un aviso en GitHub. Necesita la variable `GITHUB_TOKEN_MENSAJES` en Vercel (Settings → Environment Variables). Todo en
+  `docs/MENSAJES.md`.
 
 ## Exportar en el ordenador, para probar
 

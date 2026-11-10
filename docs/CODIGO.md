@@ -8,6 +8,8 @@ en una línea.
 
 - `project.godot`: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque.
 - `default_bus_layout.tres`: buses de audio. `export_presets.cfg` y `vercel.json`: ver `WEB.md`.
+- `api/contacto.js`: el programita de Vercel que recibe los mensajes de «Contáctanos» y abre con cada uno un aviso en
+  GitHub (`docs/MENSAJES.md`). Se publica con la web.
 - `locale/<idioma>.po` (`en`, `pt_BR`, `de`, `fr`, `ru`, `zh_CN`): las traducciones (el español es el idioma de origen: cada texto del código es su clave). La
   carga `project.godot` (`[internationalization]`) y la pone al día `tools/traducciones.py`. Todo en `docs/IDIOMAS.md`.
 
@@ -476,12 +478,16 @@ en una línea.
   al arrancar una cabecera (versión del juego, `application/config/version`, sistema, procesador, tarjeta, memoria,
   pantalla e idioma), las migas `Registro.apuntar("...")` (la planta a la que llega, en `partida.gd`), y los errores y
   avisos con su archivo, línea y trazas del script, contados en `errores` y `avisos`. Guarda las últimas 400 líneas en
-  memoria para la web, que no tiene archivo. En Opciones → General, «Abrir el registro de errores» (abre la carpeta) o,
-  en la web y el móvil, «Copiar el registro de errores». Al cerrar el juego escribe el resumen, «Registro al cerrar: N
+  memoria para la web, que no tiene archivo; las últimas (`texto(150)`) van con los mensajes de «Contáctanos» si el jugador
+  lo deja (hasta el 10 nov hubo un botón en Opciones para abrirlo o copiarlo). Al cerrar el juego escribe el resumen, «Registro al cerrar: N
   errores y M avisos» con cada uno distinto y cuántas veces salió: así se ve de un vistazo si una prueba `--captura` (o
   la partida de un jugador) ha ido limpia. Detrás, Godot suelta al apagarse unas líneas de «leaked at exit» y «resources
   still in use»: son los dibujos y letras que guardan las `static var` de los scripts, no afectan y se dejan (9 nov).
   Se prueba con `--registro`.
+- `contacto.gd` (`Contacto`): «Contáctanos» de Opciones → General (la página, `contacto()` de `opciones.gd`). Manda el
+  mensaje del jugador y, si lo deja, los datos técnicos (`datos`, sin las rutas con su nombre: `limpiar`) a `api/contacto.js`,
+  en Vercel, que abre un aviso en el repositorio privado de mensajes. En las pruebas no sale nada del ordenador. Todo en
+  `docs/MENSAJES.md`; se prueba con `--contacto`.
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide
@@ -789,6 +795,7 @@ en una línea.
 
 ## tools/
 
+- **Los mensajes de los jugadores:** `mensajes.py` lista los de «Contáctanos» (nuevos y analizados) y los marca (`docs/MENSAJES.md`).
 - **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
 - **Lo dibujado en otro idioma:** `cartel_planta_idiomas.py` hace los carteles de planta con la palabra de cada idioma («FLOOR»,
   «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`).
@@ -992,6 +999,7 @@ en una línea.
 
 - `historial/`: los planes ya terminados (`CENTRO_COMERCIAL.md`, `JEFES_APARTAMENTOS.md`). Solo para saber por qué se
   decidió algo; lo que vale es el código.
+- `MENSAJES.md`: «Contáctanos», adónde llegan los mensajes de los jugadores y cómo los analiza Claude.
 - `IDIOMAS.md` (cómo se traduce el juego y cómo se escribe un texto nuevo) y `GLOSARIO_EN.md` (cómo se dice cada nombre en inglés).
 - `PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md`: del juego JS y de lo dibujado después; valen
   para las ideas y los números.

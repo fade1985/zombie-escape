@@ -6255,16 +6255,8 @@ msgid "Pantalla"
 msgstr "Экран"
 
 #: scripts/ui/opciones.gd
-msgid "Abrir el registro de errores"
-msgstr "Открыть журнал ошибок"
-
-#: scripts/ui/opciones.gd
-msgid "Copiar el registro de errores"
-msgstr "Скопировать журнал ошибок"
-
-#: scripts/ui/opciones.gd
-msgid "Copiado: pégalo en tu mensaje"
-msgstr "Скопировано: вставь в своё сообщение"
+msgid "Contáctanos"
+msgstr "Напиши нам"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -6289,6 +6281,42 @@ msgstr "Сообщить о плохом переводе"
 #: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "Дрожание"
+
+#: scripts/ui/opciones.gd
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
+msgstr "Расскажи своими словами, что не работает, что не нравится или что можно улучшить. Мы оба, кто делает игру, читаем всё."
+
+#: scripts/ui/opciones.gd
+msgid "Escribe aquí tu mensaje"
+msgstr "Напиши здесь своё сообщение"
+
+#: scripts/ui/opciones.gd
+msgid "Incluir datos técnicos"
+msgstr "Добавить технические данные"
+
+#: scripts/ui/opciones.gd
+msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
+msgstr "Версия игры, система и что последнее происходило в игре — чтобы найти ошибки. Ничего о тебе."
+
+#: scripts/ui/opciones.gd
+msgid "Enviar"
+msgstr "Отправить"
+
+#: scripts/ui/opciones.gd
+msgid "Escribe tu mensaje antes de enviarlo."
+msgstr "Сначала напиши сообщение"
+
+#: scripts/ui/opciones.gd
+msgid "Enviando…"
+msgstr "Отправляем…"
+
+#: scripts/ui/opciones.gd
+msgid "¡Gracias! Tu mensaje nos ha llegado."
+msgstr "Спасибо! Сообщение дошло до нас"
+
+#: scripts/ui/opciones.gd
+msgid "No se ha podido enviar. Mira tu conexión e inténtalo otra vez."
+msgstr "Не удалось отправить. Проверь подключение и попробуй ещё раз"
 
 #: scripts/ui/opciones.gd
 msgid "Con alguna de estas ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."

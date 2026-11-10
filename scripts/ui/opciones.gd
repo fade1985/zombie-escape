@@ -214,7 +214,7 @@ func construir(cual := "general") -> void:
 # Volver (o Esc, B, Start): al menú de antes. De Idioma, Audio y Pantalla, a General (con el foco en su botón); de las
 # Licencias, a Créditos; de una pestaña, se cierra Opciones (y se vuelve al menú o a la pausa de detrás)
 func atras() -> void:
-	if pestana in ["idioma", "audio", "pantalla"]:
+	if pestana in ["idioma", "audio", "pantalla", "contacto"]:
 		var de := pestana
 		ver("general")
 		var b := contenido.find_child(de, true, false) as Button
@@ -250,7 +250,7 @@ func ver(cual: String) -> void:
 	pestana = cual
 	for b: Button in pestanas.get_children():
 		# La pestaña en la que estás, con las letras amarillas (las licencias son parte de Créditos, y los idiomas, de General)
-		if b.name == cual or (cual == "licencias" and b.name == "creditos") or (cual in ["idioma", "audio", "pantalla"] and b.name == "general"):
+		if b.name == cual or (cual == "licencias" and b.name == "creditos") or (cual in ["idioma", "audio", "pantalla", "contacto"] and b.name == "general"):
 			b.add_theme_color_override("font_color", Tema.AMARILLO)
 			b.add_theme_color_override("font_focus_color", Tema.AMARILLO)
 			b.add_theme_color_override("font_hover_color", Tema.AMARILLO)
@@ -281,6 +281,9 @@ func ver(cual: String) -> void:
 	elif cual == "pantalla":
 		pantalla()
 		return   # (el foco va a su primer botón)
+	elif cual == "contacto":
+		contacto()
+		return   # (el foco va al cuadro del mensaje)
 	else:
 		controles()
 	(pestanas.get_node(cual) as Button).grab_focus.call_deferred()
@@ -318,21 +321,11 @@ func general() -> void:
 	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
 		var tutorial := opcion(Idioma.t("Tutorial"), "BotonGrande")
 		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
+	# Escribirnos un mensaje, tras el botón Contáctanos (contacto(), desde el 10 nov: en lugar del botón del registro de errores)
+	var a_contacto := opcion(Idioma.t("Contáctanos"), "BotonGrande")
+	a_contacto.name = "contacto"   # no-tr
+	a_contacto.pressed.connect(func(): ver("contacto"))
 	igualar()
-	# El registro de errores (registro.gd), para mandarlo si algo falla: en el ordenador abre su carpeta; en la web y
-	# el móvil no hay archivo a mano, así que lo copia para pegarlo en un mensaje
-	var al_registro := opcion(Idioma.t("Abrir el registro de errores") if Registro.hay_archivo() else Idioma.t("Copiar el registro de errores"))
-	al_registro.name = "registro"   # no-tr
-	al_registro.custom_minimum_size.x = 0
-	al_registro.pressed.connect(func():
-		if Registro.hay_archivo():
-			Registro.abrir_carpeta()
-			return
-		Registro.copiar()
-		al_registro.text = Idioma.t("Copiado: pégalo en tu mensaje")
-		get_tree().create_timer(2.5, true).timeout.connect(func():
-			if is_instance_valid(al_registro):
-				al_registro.text = Idioma.t("Copiar el registro de errores")))
 	if Tactil.activo:
 		var titulo := Label.new()
 		titulo.theme_type_variation = "Sub"
@@ -419,6 +412,85 @@ func pantalla() -> void:
 	rotar(Idioma.t("Temblor"), "temblor", TEMBLORES, "BotonGrande")
 	igualar()
 	(contenido.get_child(0) as Control).grab_focus.call_deferred()
+
+
+# Contáctanos (el botón de General, desde el 10 nov): un cuadro para escribirnos qué falla, qué no le gusta o qué mejoraría,
+# si van los datos técnicos (Sí de entrada; no se guarda) y Enviar. Lo manda contacto.gd. Se vuelve con la pestaña General
+func contacto() -> void:
+	explicar(Idioma.t("Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."))
+	# (en el móvil de la web, Godot no saca el teclado de la pantalla: se escribe en una ventanita del navegador, abajo)
+	var por_ventanita := OS.has_feature("web") and Tactil.activo
+	var cuadro := TextEdit.new()
+	cuadro.name = "mensaje"   # no-tr
+	cuadro.editable = not por_ventanita
+	cuadro.placeholder_text = Idioma.t("Escribe aquí tu mensaje")
+	cuadro.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	cuadro.custom_minimum_size = Vector2(600, 140)
+	cuadro.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	contenido.add_child(cuadro)
+	var letras := Label.new()   # cuántas letras van de las que caben
+	letras.theme_type_variation = "Sub"
+	letras.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	letras.custom_minimum_size.x = 600
+	letras.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	contenido.add_child(letras)
+	var contar := func():
+		if cuadro.text.length() > Contacto.MAX_LETRAS:   # (no se deja pasar del máximo: lo que sobra se corta)
+			cuadro.text = cuadro.text.left(Contacto.MAX_LETRAS)
+			cuadro.set_caret_line(cuadro.get_line_count() - 1)
+			cuadro.set_caret_column(cuadro.get_line(cuadro.get_line_count() - 1).length())
+		letras.text = "%d / %d" % [cuadro.text.length(), Contacto.MAX_LETRAS]
+	cuadro.text_changed.connect(contar)
+	contar.call()
+	var con_datos := [true]   # (en una lista, para que lo cambie el botón)
+	var texto_datos := func() -> String:
+		return "%s: %s" % [Idioma.t("Incluir datos técnicos"), Idioma.t("Sí") if con_datos[0] else Idioma.t("No")]
+	var datos := opcion(texto_datos.call())
+	datos.name = "datos"   # no-tr
+	datos.pressed.connect(func():
+		con_datos[0] = not con_datos[0]
+		datos.text = texto_datos.call())
+	explicar(Idioma.t("La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."))
+	var enviar := opcion(Idioma.t("Enviar"))
+	enviar.name = "enviar"   # no-tr
+	var estado := explicar("")
+	estado.name = "estado"   # no-tr
+	estado.add_theme_color_override("font_color", Tema.AMARILLO)
+	cuadro.text_changed.connect(func(): estado.text = "")   # (al volver a escribir, el aviso de antes sobra)
+	enviar.pressed.connect(func():
+		if cuadro.text.strip_edges().length() < 3:
+			estado.text = Idioma.t("Escribe tu mensaje antes de enviarlo.")
+			return
+		enviar.disabled = true
+		cuadro.editable = false
+		estado.text = Idioma.t("Enviando…")
+		Contacto.enviar(self, cuadro.text, con_datos[0], func(llegado: bool):
+			if not is_instance_valid(estado):
+				return   # (ya se ha ido de esta página: el mensaje ha llegado igual, o no)
+			enviar.disabled = false
+			cuadro.editable = not por_ventanita
+			if llegado:
+				cuadro.text = ""
+				contar.call()
+				estado.text = Idioma.t("¡Gracias! Tu mensaje nos ha llegado.")
+			else:
+				estado.text = Idioma.t("No se ha podido enviar. Mira tu conexión e inténtalo otra vez.")))
+	# Del cuadro se sale hacia abajo con Tab o con el mando (con las flechas, se mueve el cursor por el texto)
+	cuadro.gui_input.connect(func(e: InputEvent):
+		var tab: bool = e is InputEventKey and e.pressed and e.keycode == KEY_TAB and not e.shift_pressed
+		var mando: bool = (e is InputEventJoypadButton or e is InputEventJoypadMotion) and e.is_action_pressed("ui_down")
+		if tab or mando:
+			cuadro.accept_event()
+			datos.grab_focus())
+	# La ventanita del navegador (prompt) del móvil: al tocar el cuadro, y lo escrito pasa al cuadro
+	if por_ventanita:
+		cuadro.gui_input.connect(func(e: InputEvent):
+			if (e is InputEventScreenTouch or e is InputEventMouseButton) and e.pressed and not enviar.disabled:
+				var escrito = JavaScriptBridge.eval("window.prompt(%s, %s)" % [JSON.stringify(Idioma.t("Escribe aquí tu mensaje")), JSON.stringify(cuadro.text)])   # no-tr
+				if escrito is String:
+					cuadro.text = escrito.left(Contacto.MAX_LETRAS)
+					contar.call())
+	cuadro.grab_focus.call_deferred()
 
 
 # Las ayudas: cada una, un botón de Sí/No con lo que hace debajo, y el aviso de los logros arriba. Todas a la vista,

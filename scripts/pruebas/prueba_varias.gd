@@ -4338,8 +4338,8 @@ func probar_crio_carrera() -> void:
 
 
 # --registro: el registro de errores (registro.gd). La cabecera con el equipo, la miga de la planta, un aviso que se
-# cuenta y sale en el texto con su archivo, «Copiar» deja ese texto en el portapapeles, el archivo godot.log lo tiene, y el
-# botón en Opciones → General (captura-registro-opciones.png)
+# cuenta y sale en el texto con su archivo, «Copiar» deja ese texto en el portapapeles y el archivo godot.log lo tiene. Y que
+# en Opciones → General ya no está su botón, sino «Contáctanos» (captura-registro-opciones.png)
 func probar_registro() -> void:
 	await get_tree().create_timer(1.0).timeout
 	var avisos_antes: int = Registro.avisos
@@ -4361,11 +4361,69 @@ func probar_registro() -> void:
 	print("Registro · godot.log en %s: %s (esperado: sí)" % [Registro.carpeta(), "sí" if "=== Johnny Rush" in log else "NO"])
 	var o := Opciones.abrir(self, null, johnny)
 	await get_tree().create_timer(0.3).timeout
-	var b := o.find_child("registro", true, false) as Button
-	print("Registro · botón en Opciones: %s (esperado: Abrir el registro de errores)" % (b.text if b else "NO HAY"))
+	var b := o.find_child("contacto", true, false) as Button
+	print("Registro · en Opciones, sin el botón del registro y con Contáctanos: %s, %s (esperado: sí, Contáctanos)" % [
+		"sí" if o.find_child("registro", true, false) == null else "NO", b.text if b else "NO HAY"])
 	Captura.foto("captura-registro-opciones.png")
 	o.cerrar()
 	await get_tree().create_timer(0.3).timeout
+	get_tree().quit()
+
+
+# --contacto: «Contáctanos» de Opciones → General (contacto.gd). La página vacía y con un mensaje, que no deja pasar de
+# MAX_LETRAS, que sin escribir nada no se manda, que los datos técnicos van (sin las rutas con el nombre del jugador) y que
+# sin la casilla no, y el envío: sin más, no sale nada del ordenador (dice lo que mandaría); con --contacto-url URL se
+# manda de verdad allí (para probarlo contra un servidor de prueba). Esc vuelve a General, al botón Contáctanos.
+# Fotos: captura-contacto.png (vacía), captura-contacto-escrito.png y captura-contacto-enviado.png
+func probar_contacto() -> void:
+	await get_tree().create_timer(0.5, true).timeout
+	var o := Opciones.abrir(self, null, johnny)
+	await get_tree().create_timer(0.3, true).timeout
+	var boton := o.find_child("contacto", true, false) as Button
+	print("Contacto · botón en General: %s (esperado: Contáctanos)" % (boton.text if boton else "NO HAY"))
+	boton.pressed.emit()
+	await get_tree().create_timer(0.3, true).timeout
+	var cuadro := o.find_child("mensaje", true, false) as TextEdit
+	var enviar := o.find_child("enviar", true, false) as Button
+	var datos := o.find_child("datos", true, false) as Button
+	var estado := o.find_child("estado", true, false) as Label
+	print("Contacto · la página: cuadro %s, con el foco %s, Enviar %s, datos «%s» (esperado: sí, sí, sí, Incluir datos técnicos: Sí)" % [
+		"sí" if cuadro else "NO", "sí" if cuadro and cuadro.has_focus() else "NO", "sí" if enviar else "NO", datos.text if datos else "NO HAY"])
+	Captura.foto("captura-contacto.png")
+	enviar.pressed.emit()
+	await get_tree().process_frame
+	print("Contacto · vacío no se manda: «%s» (esperado: Escribe tu mensaje antes de enviarlo.)" % estado.text)
+	cuadro.insert_text_at_caret("x".repeat(Contacto.MAX_LETRAS + 100))
+	await get_tree().process_frame   # (el cuadro avisa de que ha cambiado al acabar el fotograma)
+	await get_tree().process_frame
+	print("Contacto · no pasa del máximo: %d letras (esperado: %d)" % [cuadro.text.length(), Contacto.MAX_LETRAS])
+	cuadro.text = ""
+	cuadro.insert_text_at_caret("El jefe bombero se queda quieto en la esquina y no hay forma de que salga. Por lo demás, me encanta.")
+	await get_tree().process_frame
+	Captura.foto("captura-contacto-escrito.png")
+	var d := Contacto.datos(cuadro.text, true)
+	print("Contacto · con datos: versión %s, sistema %s, registro con la cabecera %s (esperado: sí, sí, sí)" % [
+		"sí" if d.get("version", "") != "" else "NO", "sí" if d.get("sistema", "") != "" else "NO",
+		"sí" if str(d.get("registro", "")).begins_with("=== Johnny Rush") else "NO"])
+	var limpio := Contacto.limpiar("C:\\Users\\Pepe Pérez\\AppData\\x.log · /home/pepe/juego · %s/logs" % OS.get_user_data_dir())
+	print("Contacto · sin el nombre del jugador: %s · «%s» (esperado: sí)" % ["sí" if not "Pepe" in limpio and not "Pérez" in limpio and not "pepe" in limpio and not OS.get_user_data_dir() in limpio else "NO", limpio])
+	datos.pressed.emit()
+	print("Contacto · sin la casilla: «%s», registro %s (esperado: Incluir datos técnicos: No, no)" % [
+		datos.text, "NO" if Contacto.datos("hola", false).has("registro") else "no"])
+	datos.pressed.emit()
+	enviar.pressed.emit()
+	print("Contacto · mandando: «%s», Enviar apagado %s (esperado: Enviando…, sí)" % [estado.text, "sí" if enviar.disabled else "NO"])
+	var hasta := Time.get_ticks_msec() + 16000
+	while enviar.disabled and Time.get_ticks_msec() < hasta:
+		await get_tree().process_frame
+	print("Contacto · enviado: «%s», cuadro vacío %s (esperado: ¡Gracias! Tu mensaje nos ha llegado., sí)" % [estado.text, "sí" if cuadro.text == "" else "NO"])
+	Captura.foto("captura-contacto-enviado.png")
+	o.atras()
+	await get_tree().create_timer(0.2, true).timeout
+	var vuelta := o.find_child("contacto", true, false) as Button
+	print("Contacto · Volver lleva a General, con el foco en Contáctanos: %s, %s (esperado: general, sí)" % [o.pestana, "sí" if vuelta and vuelta.has_focus() else "NO"])
+	o.cerrar()
+	await get_tree().create_timer(0.3, true).timeout
 	get_tree().quit()
 
 
