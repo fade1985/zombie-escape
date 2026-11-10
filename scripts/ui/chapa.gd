@@ -23,19 +23,17 @@ static func dibujar(lienzo: CanvasItem, tam: Vector2) -> void:
 
 
 # Lo ahorrado, arriba a la izquierda, como el marcador de una caja registradora: el billete y, en una pantallita
-# hundida, los dólares en amarillo encima de unos «8» apagados (los segmentos sin encender)
+# hundida, los dólares en amarillo
 static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int) -> void:
 	lienzo.draw_texture_rect(load("res://assets/ui/iconos/billete.png"), Rect2(14, 6, 32, 32), false)
 	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, dolares), dolares, AMARILLO)
 
 
 # La pantallita de un marcador (la de lo ahorrado o la del precio que no llega en la tienda: tienda_armas.gd) en "caja":
-# el «$» y la cifra en "color", encima de unos «8» apagados de su color. Sin "ochos" (la de la tienda), solo las cifras,
-# con el «$» pegado a la primera
-static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color, ochos := true) -> void:
+# el «$» pegado a la cifra, en "color" y con su sombra. Sin los «8» apagados de antes en las casillas vacías (10 nov)
+static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color) -> void:
 	var numero := str(valor)
-	var casillas := maxi(4, numero.length()) if ochos else numero.length()   # una por cifra, todas del ancho de un 8
-	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr
+	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr (cada cifra, del ancho de un 8)
 	var ancho_dolar := fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
 	lienzo.draw_rect(caja, REMACHE)                                                    # el marco
 	lienzo.draw_rect(caja.grow(-2), Color("#050607"))                                  # la sombra de arriba e izquierda...
@@ -44,25 +42,18 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 	lienzo.draw_rect(Rect2(caja.position + Vector2(4, 4), Vector2(caja.size.x - 8, 2)), Color("#1a1e22"))  # el brillo de arriba
 	var base := Vector2(caja.position.x + 9, caja.end.y - 8)
 	lienzo.draw_string(fuente, base, "$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32, color)   # no-tr
-	var apagado := color.darkened(0.85)   # (con el amarillo, el #26231a de siempre más o menos)
 	var sombra := color.darkened(0.65)
-	# cada casilla, su 8 apagado y, en las de la derecha, la cifra encendida (centrada en su casilla) con su sombra
-	for i in casillas:
+	for i in numero.length():
 		var x := base.x + ancho_dolar + i * casilla
-		if ochos:
-			lienzo.draw_string(fuente, Vector2(x, base.y), "8", HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, apagado)   # no-tr
-		var j := i - (casillas - numero.length())
-		if j >= 0:
-			lienzo.draw_string(fuente, Vector2(x, base.y + 2), numero[j], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, sombra)
-			lienzo.draw_string(fuente, Vector2(x, base.y), numero[j], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, color)
+		lienzo.draw_string(fuente, Vector2(x, base.y + 2), numero[i], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, sombra)
+		lienzo.draw_string(fuente, Vector2(x, base.y), numero[i], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, color)
 
 
 # Lo que mide la pantallita de un marcador con ese valor
-static func medida_marcador(fuente: Font, valor: int, ochos := true) -> Vector2:
-	var casillas := maxi(4, str(valor).length()) if ochos else str(valor).length()
+static func medida_marcador(fuente: Font, valor: int) -> Vector2:
 	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr
 	var ancho_dolar := fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
-	return Vector2(ancho_dolar + casilla * casillas + 20, 34)
+	return Vector2(ancho_dolar + casilla * str(valor).length() + 20, 34)
 
 
 # La pantallita del marcador: dónde va y lo que mide (por si se quiere poner algo a su lado)

@@ -537,7 +537,7 @@ en una línea.
   colores y el marcador de lo ahorrado los comparte con la tienda de armas: están en `chapa.gd`.
 - `chapa.gd`: lo que comparten el árbol de talentos y la tienda de armas: los colores de la chapa oscura (`BORDE`,
   `CHAPA`, `REMACHE`, `TEXTO`, `AMARILLO`...), `dibujar` (el marco con sus remaches) y `dibujar_ahorrado` (el billete y
-  la pantallita de caja registradora, con cada cifra sobre un «8» apagado; `caja_ahorrado` dice dónde acaba).
+  la pantallita de caja registradora, con el «$» pegado a la cifra; `caja_ahorrado` dice dónde acaba).
 - `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
   izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
   de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas con el borde verde y lo lleno, además, con «LLENO», apagada si no llega:

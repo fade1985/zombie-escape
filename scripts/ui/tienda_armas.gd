@@ -430,7 +430,7 @@ func partir(fuente: Font, texto: String, ancho: float, tam: int) -> PackedString
 
 # El botón «Comprar · $X», con el texto en amarillo; si no se puede, en gris y diciendo por qué; lo que ya llevas,
 # «Comprada» en grande, en verde y con el borde verde (como su casilla). Si no te llega el dinero, el precio en un
-# marcador como el de lo ahorrado de arriba, en amarillo, sin el billete ni los «8» apagados (10 nov)
+# marcador como el de lo ahorrado de arriba, en amarillo y sin el billete (10 nov)
 func dibujar_comprar(fuente: Font) -> void:
 	var r := Rect2(comprar.position, comprar.size)
 	var texto := texto_comprar(ficha_id)
@@ -442,8 +442,8 @@ func dibujar_comprar(fuente: Font) -> void:
 	draw_rect(r.grow(-2), Color("#3a3f47") if encima and not pulsado else (Color("#2f333a") if se_puede else PLACA.NEGRO))
 	if estado(ficha_id) == "caro":
 		var p := precio(ficha_id)
-		var medida := PLACA.medida_marcador(fuente, p, false)
-		PLACA.dibujar_marcador(self, fuente, Rect2((r.get_center() - medida / 2.0).floor(), medida), p, PLACA.AMARILLO, false)
+		var medida := PLACA.medida_marcador(fuente, p)
+		PLACA.dibujar_marcador(self, fuente, Rect2((r.get_center() - medida / 2.0).floor(), medida), p, PLACA.AMARILLO)
 		return
 	var tam := 24 if se_puede or comprada else 16
 	while tam > 12 and fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > r.size.x - 12:
