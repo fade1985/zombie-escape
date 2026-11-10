@@ -878,6 +878,18 @@ msgid "¡ESTÁS DESPEDIDO!"
 msgstr "YOU'RE FIRED!"
 
 #: scripts/edificios.gd
+msgid "Completa %s"
+msgstr "Complete %s"
+
+#: scripts/edificios.gd
+msgid "Consigue los dosieres"
+msgstr "Get the dossiers"
+
+#: scripts/edificios.gd
+msgid "Ve todos los vídeos"
+msgstr "Watch all the videos"
+
+#: scripts/edificios.gd
 msgid "Apartamentos"
 msgstr "Apartments"
 
@@ -5931,10 +5943,6 @@ msgstr "best time %d:%02d"
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
 msgstr "You reached floor %d of %d"
-
-#: scripts/ui/menu_principal.gd
-msgid "Completa %s para abrirlo"
-msgstr "Complete %s to unlock it"
 
 #: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/reproductor.gd
 msgid "Pausa"

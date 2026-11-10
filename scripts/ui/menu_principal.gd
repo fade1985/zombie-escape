@@ -22,7 +22,9 @@ var centro: CenterContainer       # el menú
 var edificios: CenterContainer    # la pantalla "Elige edificio" (se crea al pulsar JUGAR)
 var tarjetas: HBoxContainer
 var alertas := {}                  # la alerta elegida en cada edificio (alerta.gd)
-var centro_cerrado := false        # solo para la foto de "--edificios": los Apartamentos sin completar, el centro con candado
+# solo para las fotos de "--edificios" (no se guarda): los requisitos de los Apartamentos para abrir el centro comercial,
+# "nada" (ninguno: sin completar, sin páginas y sin vídeos), "medias" (completado, 2 páginas y 1 vídeo) o "todo"
+var foto_requisitos := ""
 
 
 func _ready() -> void:
@@ -140,11 +142,15 @@ func _ready() -> void:
 			jugar_reto(edificio)
 		else:
 			Captura.foto("captura-edificios.png")
-			if "--edificios" in OS.get_cmdline_user_args():   # solo esta pantalla: otra foto con el centro cerrado, y se cierra
-				centro_cerrado = true
-				poner_tarjetas()
-				await get_tree().create_timer(0.3).timeout
-				Captura.foto("captura-edificios-cerrado.png")
+			if "--edificios" in OS.get_cmdline_user_args():   # solo esta pantalla: los requisitos del centro, y se cierra
+				for como in ["nada", "medias", "todo"]:
+					foto_requisitos = como
+					poner_tarjetas()
+					await get_tree().create_timer(0.3).timeout
+					print("Edificios · requisitos «%s»: centro abierto %s (esperado: %s) · torre abierta %s (esperado: false)" % [
+						como, not tarjetas.get_child(1).get_child(0).disabled, como == "todo",
+						not tarjetas.get_child(2).get_child(0).disabled])
+					Captura.foto("captura-edificios-%s.png" % como)
 				get_tree().quit()
 				return
 			jugar_partida(edificio)
@@ -254,8 +260,14 @@ func poner_tarjetas() -> void:
 	for caja in tarjetas.get_children():
 		caja.free()
 	var s := Guardado.cargar()
-	if centro_cerrado:
-		Guardado.edificio(s, "apartamentos").completado = false   # para la foto (no se guarda)
+	if foto_requisitos != "":   # para las fotos de --edificios (no se guarda)
+		var paginas: Array = Historia.dosier("apartamentos").paginas.map(func(p): return p.id)
+		var noticias: Array = Historia.noticias_de("apartamentos").map(func(n): return n.id)
+		var cuantas: int = {"nada": 0, "medias": 2, "todo": 99}[foto_requisitos]
+		Guardado.edificio(s, "apartamentos").completado = foto_requisitos != "nada"
+		s.edificios.apartamentos.victorias = 0 if foto_requisitos == "nada" else 1
+		s.paginas = s.paginas.filter(func(id): return not id in paginas) + paginas.slice(0, cuantas)
+		s.videos_vistos = s.videos_vistos.filter(func(id): return not id in noticias) + noticias.slice(0, cuantas / 2)
 	if Captura.activa() and Captura.dato("--alerta") != "":
 		for id in Edificios.LISTA:   # para la foto: todas abiertas y la pedida, elegida (no se guarda)
 			Guardado.edificio(s, id).alerta_max = Alerta.MAX
@@ -447,14 +459,16 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size.x = 260
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if not abierto:
+		if t.size() > 2 and t[2]:   # un requisito ya cumplido: en verde y sin apagar
+			l.add_theme_color_override("font_color", Tema.VERDE)
+		elif not abierto:
 			l.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(l)
 	return b
 
 
-# Los textos de una tarjeta, cada uno con el estilo de su etiqueta: [texto, estilo] del nombre y de cómo te ha ido (o qué falta
-# para abrirlo). (Hasta el 9 nov llevaba también la descripción del edificio y las plantas y los intentos)
+# Los textos de una tarjeta, cada uno con el estilo de su etiqueta: [texto, estilo] del nombre y de cómo te ha ido (o, cerrado,
+# [texto, estilo, cumplido] de cada requisito para abrirlo). (Hasta el 9 nov llevaba también la descripción del edificio y las plantas y los intentos)
 func textos_tarjeta(id: String, s: Dictionary) -> Array:
 	var datos: Dictionary = Edificios.LISTA[id]
 	var p: Dictionary = s.edificios.get(id, Guardado.EDIFICIO)
@@ -471,7 +485,9 @@ func textos_tarjeta(id: String, s: Dictionary) -> Array:
 			progreso = Idioma.t("Has llegado a la planta %d de %d") % [p.mejor_planta, Planta.PLANTAS]
 		textos.append([progreso, ""])
 	else:
-		textos.append([Idioma.t("Completa %s para abrirlo") % Idioma.t(Edificios.LISTA[datos.abre].el_nombre), ""])
+		# cerrado: lo que pide para abrirse (Edificios.requisitos), un renglón cada uno; los cumplidos, en verde
+		for r: Dictionary in Edificios.requisitos(s, id):
+			textos.append([r.texto + (" · " + r.cuenta if r.cuenta != "" else ""), "", r.hecho])
 	return textos
 
 

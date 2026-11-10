@@ -98,7 +98,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
     tira; B, Esc o Tab cierran.
   - Ratón o dedo: se toca, o se **arrastra** (se encienden los sitios donde vale soltar; encima de Johnny, se pone el
     arma o se usa la cura; en la zona roja de la ficha, se tira la casilla entera; donde no vale, vuelve y tiembla).
-- **Elige edificio:** **<** y **>** cambian el nivel de alerta (completar el edificio abre el siguiente, hasta el 5).
+- **Elige edificio:** **<** y **>** cambian el nivel de alerta (completar el edificio abre el siguiente, hasta el 5). Cada edificio cerrado dice debajo lo que pide para abrirse: completar el de antes, conseguir sus dosieres y ver todos sus vídeos.
   El botón **Reto del día**: el edificio igual para todo el mundo ese día, con la regla rara de hoy (completarlo
   por primera vez cada día, $10 de más en cada edificio).
 

@@ -878,6 +878,18 @@ msgid "¡ESTÁS DESPEDIDO!"
 msgstr "DU BIST GEFEUERT!"
 
 #: scripts/edificios.gd
+msgid "Completa %s"
+msgstr "Schaff %s"
+
+#: scripts/edificios.gd
+msgid "Consigue los dosieres"
+msgstr "Hol dir die Akten"
+
+#: scripts/edificios.gd
+msgid "Ve todos los vídeos"
+msgstr "Sieh dir alle Videos an"
+
+#: scripts/edificios.gd
 msgid "Apartamentos"
 msgstr "Mietshaus"
 
@@ -5931,10 +5943,6 @@ msgstr "Bestzeit %d:%02d"
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
 msgstr "Ebene %d von %d erreicht"
-
-#: scripts/ui/menu_principal.gd
-msgid "Completa %s para abrirlo"
-msgstr "Schaff %s, um es freizuschalten"
 
 #: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/reproductor.gd
 msgid "Pausa"

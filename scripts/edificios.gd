@@ -114,7 +114,31 @@ static func datos(id := "") -> Dictionary:
 	return LISTA[id if id != "" else elegido]
 
 
-# ¿Se puede jugar ya? (el centro comercial, solo después de completar los Apartamentos)
+# ¿Se puede jugar ya? Solo con los tres requisitos del edificio de antes cumplidos (requisitos(); desde el 10 nov: hasta
+# entonces bastaba con completarlo). Los Apartamentos, abiertos desde el principio
 static func abierto(s: Dictionary, id: String) -> bool:
+	if abrir_todo or LISTA[id].abre == "":
+		return true
+	return requisitos(s, id).all(func(r): return r.hecho)
+
+
+# Lo que pide un edificio para abrirse, todo del edificio de antes ("abre"): completarlo, conseguir todas las páginas de
+# su dosier y ver todos sus vídeos (las noticias de la tele de los salones, VIDEOS.EXE). Salen en su tarjeta de «Elige
+# edificio», uno por renglón. Cada uno: {"texto" (ya traducido), "hecho", "cuenta" ("3/5"; "" en el de completarlo)}.
+# (Torre Velaria pide los vídeos del Centro comercial, que aún no tiene teles: M92. Hasta entonces no se puede abrir)
+static func requisitos(s: Dictionary, id: String) -> Array:
 	var antes: String = LISTA[id].abre
-	return abrir_todo or antes == "" or (s.edificios.has(antes) and s.edificios[antes].completado)
+	if antes == "":
+		return []
+	var paginas: Array = Historia.dosier(antes).paginas
+	var halladas := paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
+	var noticias := Historia.noticias_de(antes)
+	var vistas := noticias.filter(func(n): return n.id in s.get("videos_vistos", [])).size()
+	return [
+		{"texto": Idioma.t("Completa %s") % Idioma.t(LISTA[antes].el_nombre), "cuenta": "",
+			"hecho": s.edificios.has(antes) and s.edificios[antes].completado},
+		{"texto": Idioma.t("Consigue los dosieres"), "cuenta": "%d/%d" % [halladas, paginas.size()],
+			"hecho": halladas >= paginas.size()},
+		{"texto": Idioma.t("Ve todos los vídeos"), "cuenta": "%d/%d" % [vistas, noticias.size()],
+			"hecho": vistas >= noticias.size()},
+	]

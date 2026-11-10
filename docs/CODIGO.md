@@ -327,7 +327,10 @@ en una línea.
   `sitio_pruebas`, `en_pruebas`: allí los zombis no cuentan ni sueltan nada). Avisa a la prueba en
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 - `edificios.gd`: la ficha de cada edificio (apartamentos, centro y torre), `MINIJEFES` y el sorteo de qué jefe va en cada planta
-  (`orden_jefes`, `jefe_de()`).
+  (`orden_jefes`, `jefe_de()`). Cuándo se abre cada uno, `abierto()`: con los tres `requisitos()` del edificio de antes
+  (su ficha `abre`) cumplidos (completarlo, todas las páginas de su dosier y todos sus vídeos, desde el 10 nov); salen en
+  la tarjeta cerrada de «Elige edificio», uno por renglón y en verde los cumplidos (`--edificios`: fotos
+  `captura-edificios-nada/medias/todo.png`). La Torre pide los vídeos del Centro, que aún no tiene teles (M92).
 - `alerta.gd` (niveles de alerta), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `reto.gd` (el reto del
   día; su tarjeta en «Elige edificio» dice la regla, tu marca y el premio de hoy, `texto_tarjeta`; se juega una vez al día: el intento se gasta al empezar y el botón sale apagado hasta mañana, `jugado`) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`): el portero, el

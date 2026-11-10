@@ -881,6 +881,18 @@ msgid "¡ESTÁS DESPEDIDO!"
 msgstr "ТЫ УВОЛЕН!"
 
 #: scripts/edificios.gd
+msgid "Completa %s"
+msgstr "Пройди %s"
+
+#: scripts/edificios.gd
+msgid "Consigue los dosieres"
+msgstr "Собери досье"
+
+#: scripts/edificios.gd
+msgid "Ve todos los vídeos"
+msgstr "Посмотри все видео"
+
+#: scripts/edificios.gd
 msgid "Apartamentos"
 msgstr "Жилой дом"
 
@@ -5953,10 +5965,6 @@ msgstr "лучшее время %d:%02d"
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
 msgstr "Ты дошел до этажа %d из %d"
-
-#: scripts/ui/menu_principal.gd
-msgid "Completa %s para abrirlo"
-msgstr "Пройди %s, чтобы открыть его"
 
 #: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/reproductor.gd
 msgid "Pausa"

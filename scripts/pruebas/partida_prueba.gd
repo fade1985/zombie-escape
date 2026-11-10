@@ -14,8 +14,8 @@
 # Sin nada más, la prueba larga (_process, en prueba_larga.gd): un apartamento, el jefe, los menús, el ordenador, el
 # inventario, las armas de efecto, la historia, las Colecciones... y se cierra. Con algo más, solo una parte:
 #   --edificio centro   en el centro comercial (vale también con las demás; lo lee menu_principal.gd)
-#   --edificios         solo la pantalla «Elige edificio»: las dos tarjetas como están en el guardado y con el centro
-#                       comercial cerrado (se cierra sin entrar en la partida; lo lee menu_principal.gd)
+#   --edificios         solo la pantalla «Elige edificio»: las tarjetas como están en el guardado y con los requisitos
+#                       del centro comercial sin cumplir, a medias y cumplidos (se cierra sin entrar; menu_principal.gd)
 #   --despedida         la despedida de «Salir» en la web (M46), aunque no sea la web   [menu_principal.gd]
 #   --huecos            los tres huecos de guardado: el guardado viejo pasa al hueco 1, cambiar de hueco, los ajustes de
 #                       todos, la pantalla «Elige partida» y borrar uno (sus propios archivos)  [prueba_huecos.gd;

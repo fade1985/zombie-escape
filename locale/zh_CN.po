@@ -875,6 +875,18 @@ msgid "¡ESTÁS DESPEDIDO!"
 msgstr "你被开除了！"
 
 #: scripts/edificios.gd
+msgid "Completa %s"
+msgstr "通关%s"
+
+#: scripts/edificios.gd
+msgid "Consigue los dosieres"
+msgstr "收集档案"
+
+#: scripts/edificios.gd
+msgid "Ve todos los vídeos"
+msgstr "看完所有视频"
+
+#: scripts/edificios.gd
 msgid "Apartamentos"
 msgstr "公寓楼"
 
@@ -5909,10 +5921,6 @@ msgstr "最佳用时 %d:%02d"
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
 msgstr "到达了第%d层（共%d层）"
-
-#: scripts/ui/menu_principal.gd
-msgid "Completa %s para abrirlo"
-msgstr "通关%s后解锁"
 
 #: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/reproductor.gd
 msgid "Pausa"
