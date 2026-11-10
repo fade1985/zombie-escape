@@ -7147,10 +7147,6 @@ msgid "No en este reto"
 msgstr "本挑战不可用"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Te faltan $%d"
-msgstr "还差 $%d"
-
-#: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "见面礼"
 

@@ -7191,10 +7191,6 @@ msgid "No en este reto"
 msgstr "Не в этом испытании"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Te faltan $%d"
-msgstr "Не хватает $%d"
-
-#: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "Подарок новичку"
 
