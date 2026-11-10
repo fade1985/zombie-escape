@@ -1923,28 +1923,40 @@ msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de 
 msgstr "Срочно: Башня Velaria погрузилась во тьму этаж за этажом, снизу вверх. Несколько минут назад с вертолетной площадки взлетел вертолет и взял курс на север. Velaria не отвечает на звонки. А мне только что пришло сообщение без подписи: «Это дворник. У меня для тебя кое-что есть»."
 
 #: scripts/historia.gd
-msgid "Número 14. Turno de noche."
-msgstr "Дом 14. Ночная смена."
+msgid "VAYA NOCHE MÁS LARGA ME ESPERA..."
+msgstr "КАКАЯ ЖЕ ДЛИННАЯ НОЧЬ МЕНЯ ЖДЁТ..."
 
 #: scripts/historia.gd
-msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
-msgstr "Джонни — дворник. Он здесь дольше, чем может вспомнить."
+msgid "NO PARO DE OÍR GOLPES Y GRITOS."
+msgstr "ВСЁ ВРЕМЯ СЛЫШУ УДАРЫ И КРИКИ."
 
 #: scripts/historia.gd
-msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
-msgstr "Новые жильцы приехали ночью, в грузовиках. Хлопот с ними не было."
+msgid "ENCIMA NO HE PODIDO REPARAR LO DE LA LUZ..."
+msgstr "К ТОМУ ЖЕ Я ТАК И НЕ ПОЧИНИЛ СВЕТ..."
 
 #: scripts/historia.gd
-msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
-msgstr "Прошлой ночью дом опечатали снаружи. Жильцы все еще спят. Ходят. И кусаются."
+msgid "ESPERO QUE EL GENERADOR AGUANTE UN POCO MÁS."
+msgstr "НАДЕЮСЬ, ГЕНЕРАТОР ЕЩЁ НЕМНОГО ПРОДЕРЖИТСЯ."
 
 #: scripts/historia.gd
-msgid "Nada de esto viene en su contrato."
-msgstr "Ничего такого в его договоре нет."
+msgid "NO PUEDO DORMIR..."
+msgstr "НЕ МОГУ УСНУТЬ..."
 
 #: scripts/historia.gd
-msgid "Pero alguien tendrá que limpiarlo."
-msgstr "Но кому-то придется это убирать."
+msgid "MEJOR VOY A PREPARARME Y SALGO A VER QUÉ PASA."
+msgstr "ЛУЧШЕ СОБЕРУСЬ И ПОЙДУ ПОСМОТРЮ, ЧТО ПРОИСХОДИТ."
+
+#: scripts/historia.gd
+msgid "ESTE TRABAJO NO ESTÁ PAGADO..."
+msgstr "МНЕ ЗА ЭТО НЕ ПЛАТЯТ..."
+
+#: scripts/historia.gd
+msgid "MAÑANA MISMO RENUNCIO EN LAS OFICINAS DE VELARIA."
+msgstr "ЗАВТРА ЖЕ УВОЛЬНЯЮСЬ В ОФИСЕ VELARIA."
+
+#: scripts/historia.gd
+msgid "¡ENCIMA LAS PASTILLAS QUE ME HAN REGALADO LOS QUE TRABAJAN EN EL EDIFICIO PARA DORMIR NO FUNCIONAN!"
+msgstr "ДА ЕЩЁ И СНОТВОРНОЕ, КОТОРОЕ МНЕ ПОДАРИЛИ ТЕ, КТО РАБОТАЕТ В ДОМЕ, НЕ ДЕЙСТВУЕТ!"
 
 #: scripts/historia.gd
 msgid "Johnny se agarra a la escalera. El helicóptero despega."

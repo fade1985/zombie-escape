@@ -1917,28 +1917,40 @@ msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de 
 msgstr "最新消息：Velaria大厦一层一层地陷入黑暗，由下而上。几分钟前，一架直升机从停机坪起飞，朝北飞去。Velaria不接电话。而我刚刚收到一条没有署名的消息：“我是那个清洁工。我有东西给你。”"
 
 #: scripts/historia.gd
-msgid "Número 14. Turno de noche."
-msgstr "14号楼。夜班。"
+msgid "VAYA NOCHE MÁS LARGA ME ESPERA..."
+msgstr "今晚可真够漫长的……"
 
 #: scripts/historia.gd
-msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
-msgstr "Johnny是这里的清洁工。他在这里待了多少年，自己也记不清了。"
+msgid "NO PARO DE OÍR GOLPES Y GRITOS."
+msgstr "敲打声和尖叫声一直没停过。"
 
 #: scripts/historia.gd
-msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
-msgstr "新邻居是夜里坐卡车来的。他们从不惹麻烦。"
+msgid "ENCIMA NO HE PODIDO REPARAR LO DE LA LUZ..."
+msgstr "偏偏电路的毛病我还没修好……"
 
 #: scripts/historia.gd
-msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
-msgstr "昨晚，大楼被人从外面封锁了。邻居们还在睡。他们会走。还会咬人。"
+msgid "ESPERO QUE EL GENERADOR AGUANTE UN POCO MÁS."
+msgstr "希望发电机能再撑一会儿。"
 
 #: scripts/historia.gd
-msgid "Nada de esto viene en su contrato."
-msgstr "这些事，合同里一个字也没提。"
+msgid "NO PUEDO DORMIR..."
+msgstr "我睡不着……"
 
 #: scripts/historia.gd
-msgid "Pero alguien tendrá que limpiarlo."
-msgstr "但总得有人来打扫。"
+msgid "MEJOR VOY A PREPARARME Y SALGO A VER QUÉ PASA."
+msgstr "还是准备一下，出去看看怎么回事吧。"
+
+#: scripts/historia.gd
+msgid "ESTE TRABAJO NO ESTÁ PAGADO..."
+msgstr "这活儿根本不值这点钱……"
+
+#: scripts/historia.gd
+msgid "MAÑANA MISMO RENUNCIO EN LAS OFICINAS DE VELARIA."
+msgstr "明天我就去VELARIA的办公室辞职。"
+
+#: scripts/historia.gd
+msgid "¡ENCIMA LAS PASTILLAS QUE ME HAN REGALADO LOS QUE TRABAJAN EN EL EDIFICIO PARA DORMIR NO FUNCIONAN!"
+msgstr "而且楼里那些员工送我的安眠药根本不管用！"
 
 #: scripts/historia.gd
 msgid "Johnny se agarra a la escalera. El helicóptero despega."

@@ -223,12 +223,15 @@ const NOTICIAS := [
 # [traducir]
 const RELATOS := {
 	"intro": [
-		"Número 14. Turno de noche.",
-		"Johnny es el conserje. Lleva aquí más años de los que recuerda.",
-		"Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema.",
-		"Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden.",
-		"Nada de esto viene en su contrato.",
-		"Pero alguien tendrá que limpiarlo.",
+		"VAYA NOCHE MÁS LARGA ME ESPERA...",
+		"NO PARO DE OÍR GOLPES Y GRITOS.",
+		"ENCIMA NO HE PODIDO REPARAR LO DE LA LUZ...",
+		"ESPERO QUE EL GENERADOR AGUANTE UN POCO MÁS.",
+		"NO PUEDO DORMIR...",
+		"MEJOR VOY A PREPARARME Y SALGO A VER QUÉ PASA.",
+		"ESTE TRABAJO NO ESTÁ PAGADO...",
+		"MAÑANA MISMO RENUNCIO EN LAS OFICINAS DE VELARIA.",
+		"¡ENCIMA LAS PASTILLAS QUE ME HAN REGALADO LOS QUE TRABAJAN EN EL EDIFICIO PARA DORMIR NO FUNCIONAN!",
 	],
 	"apartamentos": [
 		"Johnny se agarra a la escalera. El helicóptero despega.",

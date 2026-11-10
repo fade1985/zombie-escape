@@ -1920,28 +1920,40 @@ msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de 
 msgstr "Breaking news: Velaria Tower has gone dark, floor by floor, from the bottom up. A few minutes ago a helicopter took off from the helipad, heading north. Velaria isn't answering the phone. And I've just received an unsigned message: \"This is the janitor. I have something for you.\""
 
 #: scripts/historia.gd
-msgid "Número 14. Turno de noche."
-msgstr "Number 14. Night shift."
+msgid "VAYA NOCHE MÁS LARGA ME ESPERA..."
+msgstr "WHAT A LONG NIGHT THIS IS GOING TO BE..."
 
 #: scripts/historia.gd
-msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
-msgstr "Johnny is the janitor. He's been here longer than he can remember."
+msgid "NO PARO DE OÍR GOLPES Y GRITOS."
+msgstr "I CAN'T STOP HEARING BANGS AND SCREAMS."
 
 #: scripts/historia.gd
-msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
-msgstr "The new tenants arrived in trucks, at night. They were no trouble at all."
+msgid "ENCIMA NO HE PODIDO REPARAR LO DE LA LUZ..."
+msgstr "AND I STILL HAVEN'T MANAGED TO FIX THE POWER..."
 
 #: scripts/historia.gd
-msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
-msgstr "Last night the building was sealed from the outside. The tenants are still asleep. They walk. And they bite."
+msgid "ESPERO QUE EL GENERADOR AGUANTE UN POCO MÁS."
+msgstr "I HOPE THE GENERATOR HOLDS OUT A BIT LONGER."
 
 #: scripts/historia.gd
-msgid "Nada de esto viene en su contrato."
-msgstr "None of this is in his contract."
+msgid "NO PUEDO DORMIR..."
+msgstr "I CAN'T SLEEP..."
 
 #: scripts/historia.gd
-msgid "Pero alguien tendrá que limpiarlo."
-msgstr "But someone will have to clean it up."
+msgid "MEJOR VOY A PREPARARME Y SALGO A VER QUÉ PASA."
+msgstr "I'D BETTER GET READY AND GO SEE WHAT'S GOING ON."
+
+#: scripts/historia.gd
+msgid "ESTE TRABAJO NO ESTÁ PAGADO..."
+msgstr "THEY DON'T PAY ME ENOUGH FOR THIS..."
+
+#: scripts/historia.gd
+msgid "MAÑANA MISMO RENUNCIO EN LAS OFICINAS DE VELARIA."
+msgstr "FIRST THING TOMORROW, I'M QUITTING AT THE VELARIA OFFICES."
+
+#: scripts/historia.gd
+msgid "¡ENCIMA LAS PASTILLAS QUE ME HAN REGALADO LOS QUE TRABAJAN EN EL EDIFICIO PARA DORMIR NO FUNCIONAN!"
+msgstr "AND THE SLEEPING PILLS THE BUILDING STAFF GAVE ME DON'T EVEN WORK!"
 
 #: scripts/historia.gd
 msgid "Johnny se agarra a la escalera. El helicóptero despega."

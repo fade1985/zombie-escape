@@ -923,6 +923,8 @@ func probar_relato() -> void:
 	await pulsar.call(toque)
 	print("Relato · tecla %d, clic %d, toque %d (esperado: %d, %d, %d; el toque, una sola)" % [con_tecla, con_clic, r.vistas, antes + 1, antes + 2, antes + 3])
 	await pulsar.call(mando.call(JOY_BUTTON_A))
+	while r.vistas < r.lineas.size():   # (las que queden, también con el mando)
+		await pulsar.call(mando.call(JOY_BUTTON_A))
 	await get_tree().create_timer(Relato.FUNDIDO).timeout
 	print("Relato · botón del mando: %d de %d líneas · alto del texto %d de %d · sigue abierta %s (esperado: todas, true)" % [
 		r.vistas, r.lineas.size(), r.columna.size.y, get_viewport().get_visible_rect().size.y, abierto.call() != null])

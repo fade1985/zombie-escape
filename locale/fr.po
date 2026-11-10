@@ -1920,28 +1920,40 @@ msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de 
 msgstr "Dernière minute : la Tour Velaria a plongé dans le noir, étage par étage, de bas en haut. Il y a quelques minutes, un hélicoptère a décollé de l'héliport, cap au nord. Velaria ne répond pas au téléphone. Et je viens de recevoir un message sans signature : « Je suis le concierge. J'ai quelque chose pour toi »."
 
 #: scripts/historia.gd
-msgid "Número 14. Turno de noche."
-msgstr "Numéro 14. Service de nuit."
+msgid "VAYA NOCHE MÁS LARGA ME ESPERA..."
+msgstr "QUELLE LONGUE NUIT M'ATTEND..."
 
 #: scripts/historia.gd
-msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
-msgstr "Johnny est le concierge. Il est là depuis plus d'années qu'il ne s'en souvient."
+msgid "NO PARO DE OÍR GOLPES Y GRITOS."
+msgstr "J'ARRÊTE PAS D'ENTENDRE DES COUPS ET DES CRIS."
 
 #: scripts/historia.gd
-msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
-msgstr "Les nouveaux voisins sont arrivés en camions, de nuit. Ils ne posaient aucun problème."
+msgid "ENCIMA NO HE PODIDO REPARAR LO DE LA LUZ..."
+msgstr "EN PLUS, J'AI PAS RÉUSSI À RÉPARER LE COURANT..."
 
 #: scripts/historia.gd
-msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
-msgstr "Hier soir, on a scellé l'immeuble de l'extérieur. Les voisins dorment toujours. Ils marchent. Et ils mordent."
+msgid "ESPERO QUE EL GENERADOR AGUANTE UN POCO MÁS."
+msgstr "J'ESPÈRE QUE LE GÉNÉRATEUR TIENDRA ENCORE UN PEU."
 
 #: scripts/historia.gd
-msgid "Nada de esto viene en su contrato."
-msgstr "Rien de tout ça ne figure dans son contrat."
+msgid "NO PUEDO DORMIR..."
+msgstr "IMPOSSIBLE DE DORMIR..."
 
 #: scripts/historia.gd
-msgid "Pero alguien tendrá que limpiarlo."
-msgstr "Mais il faudra bien que quelqu'un nettoie."
+msgid "MEJOR VOY A PREPARARME Y SALGO A VER QUÉ PASA."
+msgstr "JE FERAIS MIEUX DE ME PRÉPARER ET D'ALLER VOIR CE QUI SE PASSE."
+
+#: scripts/historia.gd
+msgid "ESTE TRABAJO NO ESTÁ PAGADO..."
+msgstr "ON ME PAIE PAS ASSEZ POUR ÇA..."
+
+#: scripts/historia.gd
+msgid "MAÑANA MISMO RENUNCIO EN LAS OFICINAS DE VELARIA."
+msgstr "DÈS DEMAIN, JE DÉMISSIONNE AUX BUREAUX DE VELARIA."
+
+#: scripts/historia.gd
+msgid "¡ENCIMA LAS PASTILLAS QUE ME HAN REGALADO LOS QUE TRABAJAN EN EL EDIFICIO PARA DORMIR NO FUNCIONAN!"
+msgstr "ET LES SOMNIFÈRES QUE M'ONT OFFERTS LES GENS QUI BOSSENT DANS L'IMMEUBLE NE MARCHENT MÊME PAS !"
 
 #: scripts/historia.gd
 msgid "Johnny se agarra a la escalera. El helicóptero despega."

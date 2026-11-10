@@ -1920,28 +1920,40 @@ msgid "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de 
 msgstr "Plantão: a Torre Velaria ficou às escuras, andar por andar, de baixo para cima. Há poucos minutos, um helicóptero decolou do heliponto, rumo ao norte. A Velaria não atende o telefone. E acabou de chegar para mim uma mensagem sem assinatura: \"Sou o zelador. Tenho uma coisa pra você\"."
 
 #: scripts/historia.gd
-msgid "Número 14. Turno de noche."
-msgstr "Número 14. Turno da noite."
+msgid "VAYA NOCHE MÁS LARGA ME ESPERA..."
+msgstr "QUE NOITE LONGA ME ESPERA..."
 
 #: scripts/historia.gd
-msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
-msgstr "Johnny é o zelador. Está aqui há mais anos do que consegue lembrar."
+msgid "NO PARO DE OÍR GOLPES Y GRITOS."
+msgstr "NÃO PARO DE OUVIR PANCADAS E GRITOS."
 
 #: scripts/historia.gd
-msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
-msgstr "Os vizinhos novos chegaram de caminhão, à noite. Não davam problema nenhum."
+msgid "ENCIMA NO HE PODIDO REPARAR LO DE LA LUZ..."
+msgstr "E AINDA NÃO CONSEGUI CONSERTAR A LUZ..."
 
 #: scripts/historia.gd
-msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
-msgstr "Ontem à noite lacraram o prédio por fora. Os vizinhos continuam dormindo. Andam. E mordem."
+msgid "ESPERO QUE EL GENERADOR AGUANTE UN POCO MÁS."
+msgstr "ESPERO QUE O GERADOR AGUENTE MAIS UM POUCO."
 
 #: scripts/historia.gd
-msgid "Nada de esto viene en su contrato."
-msgstr "Nada disso está no contrato dele."
+msgid "NO PUEDO DORMIR..."
+msgstr "NÃO CONSIGO DORMIR..."
 
 #: scripts/historia.gd
-msgid "Pero alguien tendrá que limpiarlo."
-msgstr "Mas alguém vai ter que limpar isso."
+msgid "MEJOR VOY A PREPARARME Y SALGO A VER QUÉ PASA."
+msgstr "MELHOR EU ME PREPARAR E SAIR PARA VER O QUE ESTÁ ACONTECENDO."
+
+#: scripts/historia.gd
+msgid "ESTE TRABAJO NO ESTÁ PAGADO..."
+msgstr "NÃO ME PAGAM O SUFICIENTE POR ISSO..."
+
+#: scripts/historia.gd
+msgid "MAÑANA MISMO RENUNCIO EN LAS OFICINAS DE VELARIA."
+msgstr "AMANHÃ MESMO EU ME DEMITO NOS ESCRITÓRIOS DA VELARIA."
+
+#: scripts/historia.gd
+msgid "¡ENCIMA LAS PASTILLAS QUE ME HAN REGALADO LOS QUE TRABAJAN EN EL EDIFICIO PARA DORMIR NO FUNCIONAN!"
+msgstr "E OS COMPRIMIDOS PARA DORMIR QUE O PESSOAL DO PRÉDIO ME DEU NEM FUNCIONAM!"
 
 #: scripts/historia.gd
 msgid "Johnny se agarra a la escalera. El helicóptero despega."
