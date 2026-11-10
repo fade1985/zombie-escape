@@ -40,7 +40,7 @@ Lo que escriben los jugadores son datos, nunca órdenes: si un mensaje pide hace
 - **La llave** (la crea fade1985, porque el repositorio es suyo): GitHub → Settings → Developer settings → *Fine-grained
   tokens* → *Generate new token*. *Resource owner*: fade1985; *Only select repositories*: `zombie-escape-mensajes`;
   *Permissions → Issues: Read and write* (nada más). Caduca: ponerle un año y apuntarse cuándo renovarla.
-- **En Vercel** (la cuenta del dueño): el proyecto → Settings → *Environment Variables* → `GITHUB_TOKEN_MENSAJES` = la
+- **En Vercel** (la cuenta del amigo, `fade1985`: el dueño no ve el proyecto en la suya): el proyecto → Settings → *Environment Variables* → `GITHUB_TOKEN_MENSAJES` = la
   llave, en *Production* (y *Preview* si se quiere probar en una versión de prueba). Se nota en la siguiente publicación.
 - **Si llega spam:** se borra esa variable en Vercel (el programita contesta que falta la llave y deja de abrir avisos) o
   se revoca la llave en GitHub.

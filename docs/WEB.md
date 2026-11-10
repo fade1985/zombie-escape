@@ -4,7 +4,7 @@
 
 - **Antes de publicar**, `py tools/antes_de_version.py`: tiene que decir «TODO BIEN» (ver `docs/ESCRITORIO.md`, Exportar).
 - **Los commits a `main` ya no se publican.** Se publica lo que se sube a la rama **`production`**, en
-  https://zombie-escape-two.vercel.app (la cuenta de Vercel es del dueño). Para publicar lo que hay en `main`:
+  https://zombie-escape-two.vercel.app (la cuenta de Vercel es la del amigo, `fade1985`: el proyecto está en «fade1985s-projects»). Para publicar lo que hay en `main`:
 
   ```
   git push origin main:production
