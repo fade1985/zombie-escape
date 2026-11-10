@@ -245,9 +245,9 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 				continue
 			var estilo: String = ESTILO_DE[s.uso]
 			if estilo == "bano":
-				# los baños de los pisos, siempre de azulejo verde (suelo y pared "-b", como el vestuario de mantenimiento); los
+				# los baños de los pisos, siempre de azulejo verde con baldosa hidráulica ("-pisos", de GPT: tools/dormitorios.py); los
 				# aseos de las tiendas, unos según dónde caen
-				estilos[s.id] = textura("bano", "-b", "-b") if not tienda else \
+				estilos[s.id] = textura("bano", "-pisos", "-pisos") if not tienda else \
 					textura("bano", "-a" if h % 2 else "-b", "-a" if (h >> 1) % 2 else "-b")
 			else:
 				# el suelo y la pared, los de su tipo si los tiene fijos (ESTILO_FIJO) y si no, unos según dónde cae la habitación
