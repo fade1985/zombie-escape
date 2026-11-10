@@ -442,8 +442,9 @@ func contacto() -> void:
 		letras.text = "%d / %d" % [cuadro.text.length(), Contacto.MAX_LETRAS]
 	cuadro.text_changed.connect(contar)
 	contar.call()
-	var enviar := opcion(Idioma.t("Enviar"))
+	var enviar := opcion(Idioma.t("Enviar"), "BotonGrande")   # (grande y del mismo ancho que Contáctanos)
 	enviar.name = "enviar"   # no-tr
+	enviar.custom_minimum_size.x = maxf(ancho_grande, enviar.custom_minimum_size.x)
 	var estado := explicar("")
 	estado.name = "estado"   # no-tr
 	estado.add_theme_color_override("font_color", Tema.AMARILLO)
