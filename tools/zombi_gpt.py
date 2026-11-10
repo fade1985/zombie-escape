@@ -46,6 +46,9 @@ ZOMBIS = {
     "medica": ("assets/sources/superviviente-medica-gpt", "assets/sources/superviviente-medica-gpt-48", 5, 96, False, (1.2, 1.12, 1.1)),
     # el policía (superviviente de los Apartamentos, 10 nov): su referencia, capturas/referencia-policia.png, también mide 1920
     "policia": ("assets/sources/superviviente-policia-gpt", "assets/sources/superviviente-policia-gpt-48", 2, 96, False, (1.2, 1.12, 1.1)),
+    # el militar (superviviente de los Apartamentos, 10 nov): su referencia, capturas/referencia-militar.png, mide 1920 y
+    # el fondo a 2, como el policía (el pelo y el casco oscuros)
+    "militar": ("assets/sources/superviviente-militar-gpt", "assets/sources/superviviente-militar-gpt-48", 2, 96, False, (1.2, 1.12, 1.1)),
     "lento": ("assets/sources/zombi-lento-gpt", "assets/sources/zombi-lento-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
 FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
@@ -328,7 +331,7 @@ if __name__ == "__main__":
         ESCALA_ZOMBI = TAMANO.get(sys.argv[2], 1.0)
         ESTIRAR = ESTIRO.get(sys.argv[2], 1.0)
         ESCALA_VISTA = TAMANO_VISTA.get(sys.argv[2], {})
-        if sys.argv[2] in ("medica", "policia"):
+        if sys.argv[2] in ("medica", "policia", "militar"):
             ANCHO_REFERENCIA = 1920
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
