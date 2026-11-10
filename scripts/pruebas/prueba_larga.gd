@@ -1013,7 +1013,9 @@ func probar_noticias() -> void:
 	# con el clic: sale la primera noticia; cerrada antes de acabar, sigue encendida y sin ver
 	var primera: Dictionary = Historia.siguiente_noticia(edificio, Guardado.cargar())
 	tele.zona.abrir()
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-tele-rayas.png")   # (al empezar: solo rayas blancas, grises y negras, sin ningún rótulo)
+	await get_tree().create_timer(2.6).timeout
 	print("Tele · abierta: %s, juego parado %s (esperado: noticia, true)" % [menus.abierto, get_tree().paused])
 	Captura.foto("captura-tele-noticia.png")
 	menus.noticia_vista(false)

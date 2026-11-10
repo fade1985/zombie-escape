@@ -109,7 +109,7 @@ func poner(n: Dictionary) -> void:
 	empezar_trozo(0)
 	en_antena = 0.0
 	boca = 0
-	nieve = 0.3
+	nieve = 0.9   # (todo en rayas un momento; luego aparece la imagen con todo)
 	terminada = false
 	parada = false
 	espera = 0.0
@@ -244,7 +244,7 @@ func _process(delta: float) -> void:
 					else:
 						terminada = true
 						acabada.emit()
-	var hay := not noticia.is_empty()   # (sin nada puesto, la pantalla apagada: sin rótulos)
+	var hay := not noticia.is_empty() and nieve <= 0.0   # (sin nada puesto o con rayas, la pantalla sin rótulos)
 	canal.visible = hay
 	titular.visible = hay
 	cinta.visible = hay
@@ -285,10 +285,18 @@ func pintar_pantalla() -> void:
 		pantalla.draw_rect(Rect2(Vector2.ZERO, t), Color("#06070a"))
 		return
 	if nieve > 0.0:
-		pantalla.draw_rect(Rect2(Vector2.ZERO, t), Color("#202020"))
-		for i in 260:
-			var g := randf()
-			pantalla.draw_rect(Rect2(randi() % int(t.x), randi() % int(t.y), 8, 4), Color(g, g, g))
+		# solo rayas blancas, grises y negras (sin ningún rótulo: salen cuando acaba)
+		var grises := [0.0, 0.0, 0.3, 0.55, 0.8, 1.0]
+		var y := 0
+		while y < int(t.y):
+			var x := 0
+			var alto := 2 + randi() % 4
+			while x < int(t.x):
+				var ancho := 10 + randi() % 60
+				var g: float = grises[randi() % grises.size()]
+				pantalla.draw_rect(Rect2(x, y, ancho, alto), Color(g, g, g))
+				x += ancho
+			y += alto
 		return
 	var calle: Texture2D = CALLES.get(noticia.get("sitio", "14"), CALLES["14"])
 	pantalla.draw_texture_rect(calle, Rect2(Vector2.ZERO, t), false)

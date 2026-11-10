@@ -84,6 +84,11 @@ const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
 const REFUERZOS := 4               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas). M83: antes 2
 const REFUERZOS_VELOCIDAD := 165.0 # y lo deprisa que corren (M83: antes 85, la de un vigilante normal)
 const BILLETES_GUARDIA := 2
+# Los zombis aguantan más según el edificio (12 nov: con la pistola y la fregona se pasaba el juego entero), además de lo
+# de cada planta (ZOMBI_POR_PLANTA): los Apartamentos son los de siempre. Los jefes de planta, algo menos por edificio
+# (ya suben JEFE_POR_PLANTA); el jefe final y el guardia, con su vida de siempre (el guardia ya sube por planta)
+const VIDA_EDIFICIO := {"apartamentos": 1.0, "centro": 1.5, "torre": 2.0}
+const VIDA_EDIFICIO_JEFE := {"apartamentos": 1.0, "centro": 1.3, "torre": 1.6}
 const JEFE_POR_PLANTA := 1.35     # los jefes de planta, su vida por cada planta que se sube (M72: antes 1,25)
 const ZOMBI_POR_PLANTA := 0.1     # los demás zombis, vida y zarpazo de más por cada planta (M72: antes, nada)
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
@@ -99,7 +104,7 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 	"sujeto_1": Color("#d6d2c4")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
-const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
+const MUNICION_ZOMBI := 0.06       # ...o una caja de munición, si no ha soltado otra cosa (12 nov: antes 0,10; solo la del arma que lleva)
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const BILLETES_JEFA := 8           # los que suelta cada jefe al caer (hasta el 27 oct, 3: lo mismo que 43 zombis)
 const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
@@ -1862,16 +1867,22 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			soltar_municion(zombi.position)
 		# y a veces un objeto (los jefes, dos seguros), de los que salen aquí
 		var tienda: String = planta.sitios[aqui].get("tienda", "")
+		# (la munición que sale, solo la de las armas que lleva Johnny: Armas.municion de la de fuego)
+		var queda: String = Armas.municion(johnny.huecos.fuego)
 		if tipo in JEFES:
 			for i in 2:
-				soltar_objeto(Objetos.al_azar(edificio, tienda), zombi.position)
+				var suelto := Objetos.al_azar(edificio, tienda, queda)
+				if suelto != "":
+					soltar_objeto(suelto, zombi.position)
 		else:
-			var obj := Objetos.que_suelta(tipo, edificio, tienda)
+			var obj := Objetos.que_suelta(tipo, edificio, tienda, queda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
 				# con la skin del doctor Salas, a veces otro más al azar
 				if randf() < Skins.doble(johnny.skin):
-					soltar_objeto(Objetos.al_azar(edificio, tienda), zombi.position)
+					var otro := Objetos.al_azar(edificio, tienda, queda)
+					if otro != "":
+						soltar_objeto(otro, zombi.position)
 		# y piezas de mejora de las armas: los jefes, cuatro seguras; cualquier otro zombi, a veces una
 		if tipo in JEFES:
 			for pieza in Objetos.piezas_de_jefe():
@@ -1902,7 +1913,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# El jefe final (el gerente), con su vida justa: ya está en la última planta
 		var de_final := final_de(tipo)
 		var por_planta := pow(JEFE_POR_PLANTA, planta.num - 1) if de_final.is_empty() else 1.0
-		zombi.vida_max = int(zombi.vida_max * por_planta * Alerta.jefe_vida())
+		zombi.vida_max = int(zombi.vida_max * por_planta * Alerta.jefe_vida() * (VIDA_EDIFICIO_JEFE.get(edificio, 1.0) if de_final.is_empty() else 1.0))
 		zombi.enfado = Alerta.jefe_enfado()
 		# Su barra de vida grande, arriba (ui/barra_jefe.gd), y los vecinos que llama
 		var barra_jefa: BarraJefe = $Pantalla/Jefa
@@ -1929,7 +1940,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# guardia, solo el zarpazo: su vida ya sube en poner_guardia(). En la sala de pruebas, como en la planta baja
 		var mas: float = 1.0 + ZOMBI_POR_PLANTA * (planta.num - 1) if not de_mentira else 1.0
 		if tipo != "guardia":
-			zombi.vida_max = roundi(zombi.vida_max * mas)
+			var del_edificio: float = VIDA_EDIFICIO.get(edificio, 1.0) if not de_mentira and zombi.vida_max > 5 else 1.0
+			zombi.vida_max = roundi(zombi.vida_max * mas * del_edificio)
 		if "dano" in zombi:
 			zombi.dano = roundi(zombi.dano * mas)
 	mapa.cosas.add_child(zombi)

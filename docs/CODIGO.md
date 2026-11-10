@@ -309,7 +309,7 @@ en una línea.
   `rescatar_atascados` (la red de seguridad, en cada combate) devuelve al suelo al que lleve medio segundo con el centro
   en un muro, o lo quita sin contarlo; prueba `--jefe portera --atascado`. Cada planta, más dura (M72, en `meter_zombi`): los jefes de
   planta, `JEFE_POR_PLANTA` (×1,35) de vida por planta, y los demás zombis, `ZOMBI_POR_PLANTA` (+10 %) de vida y de
-  zarpazo por planta (el guardia, solo el zarpazo: su vida ya sube en `poner_guardia`); prueba `--dificultad`, que da
+  zarpazo por planta, y de vida además `VIDA_EDIFICIO` (×1 Apartamentos, ×1,5 centro, ×2 torre; los jefes de planta, `VIDA_EDIFICIO_JEFE` ×1,3 y ×1,6: con la pistola y la fregona ya no se pasa el juego) (el guardia, solo el zarpazo: su vida ya sube en `poner_guardia`); prueba `--dificultad`, que da
   los números de cada planta y los de antes. Desde la planta baja, además, zarpazos más fuertes (el `dano` de cada
   escena de zombi: normal y lento 12, rápido 10, dependienta 8, vigilante y guardia 15) y menos respiro tras un golpe
   (`johnny.INVULNERABLE`, 0,7 s). Tras una derrota (M31: `pesadilla` en el guardado), la

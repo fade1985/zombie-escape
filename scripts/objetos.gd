@@ -30,6 +30,8 @@ const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelt
 # Lo que solo suelta un tipo de zombi, y nunca sale al azar: el bidón de ácido, que llena el lanza ácido, el gordo
 # (venenoso)
 const DE_UN_ZOMBI := {"bidon_acido": "venenoso"}
+# Los objetos que son munición de un arma especial (van en los huecos de la munición): solo salen si Johnny lleva esa arma
+const MUNICION_DE_OBJETO := ["gasolina", "bidon_acido", "bateria"]
 # Las piezas para mejorar las armas en el banco de trabajo (ui/inventario.gd, «Banco de trabajo»): una por familia, con la
 # familia de armas a la que sirven (Armas.familia; los arrojables, aparte). Las sueltan los zombis y los jefes, y nada más
 const PIEZAS := {
@@ -274,17 +276,20 @@ static func cabe_baul(s: Dictionary, id: String) -> bool:
 # Qué objeto suelta un zombi al morir ("" = nada): el gordo, solo lo suyo (DE_UN_ZOMBI: el bidón de ácido), 1 de
 # cada 4 veces. "tienda" es el tipo de la tienda donde ha caído ("" en el pasillo o en un apartamento). Las piezas van
 # aparte (pieza_de_zombi)
-static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -> String:
+static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "", municion := "*") -> String:
 	for id in DE_UN_ZOMBI:
 		if DE_UN_ZOMBI[id] == tipo:
-			return id if randf() < SUELTA_PROPIO else ""
-	return al_azar(edificio, tienda) if randf() < SUELTA else ""
+			return id if randf() < SUELTA_PROPIO and (municion == "*" or id == municion) else ""
+	return al_azar(edificio, tienda, municion) if randf() < SUELTA else ""
 
 
 # Un objeto cualquiera de los que salen ahí, menos los de un solo zombi (DE_UN_ZOMBI; el jefe suelta dos seguros) y
 # las piezas (PIEZAS). En los Apartamentos, la gasolina o la batería; en el centro comercial, uno de la lista de su
 # tienda (en el pasillo, de una tienda cualquiera). Con el reto del día "Sin curas" (reto.gd), sin los de curar
-static func al_azar(edificio := "apartamentos", tienda := "") -> String:
+# "municion": con la de las armas que lleva Johnny (Armas.municion de su arma a distancia; "" si no gasta), solo sale la
+# munición que le sirve (la gasolina, la batería y el bidón de ácido, los que llenan el lanzallamas, el lanza rayos y el
+# lanza ácido) y, si no hay otra cosa que soltar, nada; "*" = sin mirar (las pruebas)
+static func al_azar(edificio := "apartamentos", tienda := "", municion := "*") -> String:
 	var lista: Array
 	if edificio == "apartamentos":
 		lista = NOMBRES.keys().filter(func(id): return id not in DE_UN_ZOMBI and id not in SOLO_CENTRO and id not in PIEZAS)
@@ -297,7 +302,9 @@ static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 		if lista.is_empty():   # la farmacia solo tiene vendas: entonces, lo de una tienda cualquiera
 			for t in TIENDAS:
 				lista += TIENDAS[t].filter(func(id): return not id in USABLES and not id in lista)
-	return lista.pick_random()
+	if municion != "*":
+		lista = lista.filter(func(id): return not id in MUNICION_DE_OBJETO or id == municion)
+	return lista.pick_random() if not lista.is_empty() else ""
 
 
 # La pieza que suelta un zombi al morir ("" = ninguna): PIEZA_ZOMBI de las veces, una de las cuatro al azar. Con la
