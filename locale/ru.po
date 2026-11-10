@@ -5218,10 +5218,6 @@ msgid "Partida %d"
 msgstr "Сохранение %d"
 
 #: scripts/ui/huecos.gd
-msgid "En uso"
-msgstr "Используется"
-
-#: scripts/ui/huecos.gd
 msgid "Mejor planta: %d"
 msgstr "Лучший этаж: %d"
 

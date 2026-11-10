@@ -5208,10 +5208,6 @@ msgid "Partida %d"
 msgstr "Save %d"
 
 #: scripts/ui/huecos.gd
-msgid "En uso"
-msgstr "Em uso"
-
-#: scripts/ui/huecos.gd
 msgid "Mejor planta: %d"
 msgstr "Melhor andar: %d"
 

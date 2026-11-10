@@ -71,7 +71,7 @@ func tarjeta_de(n: int) -> Button:
 	return tarjetas.get_child(n - 1).get_child(0)
 
 
-# La tarjeta de un hueco: su número, si está en uso y su resumen (o «Vacía»)
+# La tarjeta de un hueco: su número y su resumen (o «Vacía»). Sin «En uso»: al entrar el jugador aún no ha elegido nada (10 nov)
 func tarjeta(n: int) -> Button:
 	var b := Button.new()
 	b.custom_minimum_size = Vector2(ANCHO, 260)   # (en ruso y chino las líneas son más altas)
@@ -86,10 +86,7 @@ func tarjeta(n: int) -> Button:
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(caja)
 	var lineas := [[Idioma.t("Partida %d") % n, ""]]
-	var en_uso := n == Guardado.hueco
 	var usado := Guardado.hueco_usado(n)
-	if en_uso or usado:   # (en las usadas, un hueco donde iría «En uso»: así sus líneas van a la misma altura en todas)
-		lineas.append([Idioma.t("En uso") if en_uso else " ", "Sub"])
 	if usado:
 		var s := Guardado.cargar_archivo(Guardado.ruta(n))
 		var completados := Edificios.LISTA.keys().filter(func(id): return s.edificios.get(id, {}).get("completado", false)).size()
@@ -113,8 +110,6 @@ func tarjeta(n: int) -> Button:
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size.x = ANCHO - 24
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if i == 1 and en_uso:   # «En uso», en el amarillo de los avisos
-			l.modulate = Color(1.0, 0.85, 0.35)
 		caja.add_child(l)
 	return b
 

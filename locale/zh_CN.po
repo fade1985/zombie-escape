@@ -5198,10 +5198,6 @@ msgid "Partida %d"
 msgstr "存档 %d"
 
 #: scripts/ui/huecos.gd
-msgid "En uso"
-msgstr "使用中"
-
-#: scripts/ui/huecos.gd
 msgid "Mejor planta: %d"
 msgstr "最高楼层：第%d层"
 
