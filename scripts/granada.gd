@@ -78,7 +78,8 @@ func _physics_process(delta: float) -> void:
 	if paso.length() > 0.01:
 		var choque := choque_hasta(global_position + paso * 1.5)
 		if not choque.is_empty():
-			v = v.bounce(choque.normal) * 0.5
+			# (si el rayo sale ya pegado a la pared, no trae hacia dónde rebotar: se queda parada, como antes, sin el error)
+			v = v.bounce(choque.normal) * 0.5 if choque.normal != Vector2.ZERO else Vector2.ZERO
 			paso = Vector2.ZERO
 	global_position += paso
 	# parpadeo rojo: de uno cada 0,4 s a casi continuo al final
