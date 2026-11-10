@@ -4832,8 +4832,8 @@ msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y 
 msgstr "Gib deine gesparten Dollar aus: Talentpunkte (dauerhafte Verbesserungen) sowie Waffen und Wurfwaffen für die Runde."
 
 #: scripts/tutoriales.gd
-msgid "También están los logros, que dan premio, el Dosier, las Noticias y las Colecciones."
-msgstr "Dazu Erfolge mit Belohnung, die Akte, die Nachrichten und die Sammlungen."
+msgid "También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."
+msgstr "Dazu Erfolge mit Belohnung, die Akte, die Videos und die Sammlungen."
 
 #: scripts/tutoriales.gd
 msgid "La taquilla"

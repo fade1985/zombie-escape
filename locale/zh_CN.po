@@ -4822,8 +4822,8 @@ msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y 
 msgstr "花掉存下的美元：买天赋点（永久强化），以及本局用的武器和投掷物。"
 
 #: scripts/tutoriales.gd
-msgid "También están los logros, que dan premio, el Dosier, las Noticias y las Colecciones."
-msgstr "这里还有能领奖励的成就，以及档案、新闻和收藏品。"
+msgid "También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."
+msgstr "这里还有能领奖励的成就，以及档案、视频和收藏品。"
 
 #: scripts/tutoriales.gd
 msgid "La taquilla"

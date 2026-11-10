@@ -106,7 +106,7 @@ const LISTA := {
 	"ordenador": {"grupo": "Sala de mantenimiento", "titulo": "El ordenador", "icono": "dosier",
 		"cuando": "Al encender el ordenador",
 		"lineas": ["Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y armas y lanzables para la partida.",
-			"También están los logros, que dan premio, el Dosier, las Noticias y las Colecciones."]},
+			"También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."]},
 	"taquilla": {"grupo": "Sala de mantenimiento", "titulo": "La taquilla", "icono": "skin-portero",
 		"cuando": "Al abrir la taquilla",
 		"lineas": ["Aquí eliges la ropa de Johnny. Cada una tiene su ventaja.",
