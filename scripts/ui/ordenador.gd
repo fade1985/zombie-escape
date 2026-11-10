@@ -82,6 +82,7 @@ var ventana: Control
 var info: Label             # la línea de abajo de la ventana: explica lo que está marcado
 var tarea: Label
 var reloj: Label
+var videos_edificio := ""     # la pestaña de VIDEOS.EXE que se ve (el edificio)
 var abierta := ""           # el programa abierto ("" = solo el escritorio)
 var aviso: Control               # en Talentos, la ventanita de «¿Seguro?» al resetear (M32); null = no está
 
@@ -982,83 +983,94 @@ func programa_dosier(c: VBoxContainer, foco := "") -> String:
 
 # ── Vídeos ──
 
-# VIDEOS.EXE (M91): las noticias de Canal 8 que ya has visto en las teles de los salones. A la izquierda, la lista; a la
-# derecha, la tele con una barra de avance y los botones de reproducir y parar, que son de adorno: la noticia se ve
-# seguida, igual que en la tele del salón. Devuelve la que hay que dejar marcada: la primera de la lista
+# VIDEOS.EXE (M91): las noticias de Canal 8 que ya has visto en las teles de los salones, repartidas por edificios como
+# el Dosier. A la izquierda, las pestañas de los edificios y, debajo, «Vídeo 1», «Vídeo 2»...: los que aún no has visto
+# salen apagados. A la derecha, el vídeo en un reproductor multimedia de los 90 (reproductor.gd), con los subtítulos
+# debajo de la pantalla. Devuelve la que hay que dejar marcada
 func programa_videos(c: VBoxContainer, foco: String) -> String:
 	var s := Guardado.cargar()
-	var vistas := Historia.videos_vistos(s)
-	if vistas.is_empty():
-		var vacio := Label.new()
-		vacio.text = Idioma.t("Aún no has visto ninguna noticia.\nCuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras.")
-		vacio.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		vacio.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		vacio.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		vacio.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		c.add_child(vacio)
-		info.text = Idioma.t("Aún no has visto ninguna noticia.")
-		return ""
+	var edificios: Array = Historia.DOSIERES.keys()
+	if videos_edificio == "" or not videos_edificio in edificios:
+		videos_edificio = edificios[0]
+		for e in edificios:   # (la primera pestaña con algo visto)
+			if not Historia.noticias_de(e).filter(func(n): return n.id in s.videos_vistos).is_empty():
+				videos_edificio = e
+				break
 	var partes := HBoxContainer.new()
-	partes.add_theme_constant_override("separation", 10)
+	partes.add_theme_constant_override("separation", 12)
 	c.add_child(partes)
 	var izquierda := VBoxContainer.new()
-	izquierda.add_theme_constant_override("separation", 6)
+	izquierda.custom_minimum_size.x = 250
+	izquierda.add_theme_constant_override("separation", 5)
 	partes.add_child(izquierda)
-	# los vídeos, con su propio desplazamiento: así la tele no se mueve al bajar por ellos
+	# las pestañas de los edificios
+	for e in edificios:
+		var pestana := Button.new()
+		pestana.name = "b_edificio_" + e
+		pestana.text = Idioma.t(Edificios.datos(e).nombre)
+		pestana.toggle_mode = true
+		pestana.button_pressed = e == videos_edificio
+		if e == videos_edificio:   # (la pestaña abierta, en amarillo)
+			pestana.add_theme_color_override("font_color", Tema.AMARILLO)
+			pestana.add_theme_color_override("font_pressed_color", Tema.AMARILLO)
+			pestana.add_theme_color_override("font_hover_color", Tema.AMARILLO)
+			pestana.add_theme_color_override("font_focus_color", Tema.AMARILLO)
+		else:
+			pestana.modulate = Color(1, 1, 1, 0.8)
+		pestana.pressed.connect(func():
+			videos_edificio = e
+			abrir("videos", "b_edificio_" + e))
+		izquierda.add_child(pestana)
+		enlazar(pestana, Idioma.t("%s: %d de %d vídeos vistos.") % [Idioma.t(Edificios.datos(e).nombre),
+			Historia.noticias_de(e).filter(func(n): return n.id in s.videos_vistos).size(), Historia.noticias_de(e).size()], func(): pass)
+	# los vídeos del edificio, con su propio desplazamiento
 	var desliza := ScrollContainer.new()
 	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	desliza.follow_focus = true
-	desliza.custom_minimum_size.y = Tele.CAJA_TEXTO.end.y - 40.0
+	desliza.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	izquierda.add_child(desliza)
 	var lista := VBoxContainer.new()
-	lista.custom_minimum_size.x = 340
-	lista.add_theme_constant_override("separation", 6)
+	lista.custom_minimum_size.x = 240
+	lista.add_theme_constant_override("separation", 5)
 	desliza.add_child(lista)
-	var derecha := VBoxContainer.new()
-	derecha.add_theme_constant_override("separation", 6)
-	partes.add_child(derecha)
-	# el reproductor de adorno, debajo de la lista: reproducir, parar y la barra de avance
-	var mandos := HBoxContainer.new()
-	mandos.add_theme_constant_override("separation", 8)
-	izquierda.add_child(mandos)
-	var tele := Tele.new()
-	tele.continuo = true
-	tele.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	derecha.add_child(tele)
-	var b_play := Button.new()
-	b_play.name = "b_play"   # no-tr
-	b_play.text = Idioma.t("Reproducir")
-	b_play.pressed.connect(tele.reproducir)
-	mandos.add_child(b_play)
-	var b_stop := Button.new()
-	b_stop.name = "b_stop"   # no-tr
-	b_stop.text = Idioma.t("Parar")
-	b_stop.pressed.connect(tele.parar)
-	mandos.add_child(b_stop)
-	var avance := ProgressBar.new()
-	avance.name = "avance"   # no-tr
-	avance.show_percentage = false
-	avance.max_value = 1.0
-	avance.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	avance.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	avance.custom_minimum_size.y = 14
-	mandos.add_child(avance)
-	tele.draw.connect(func(): avance.value = tele.progreso())
-	var primera := ""
-	for n in vistas:
-		var sitio: String = Idioma.t(Edificios.datos(Historia.edificio_de(n)).nombre)
-		var b := tarjeta(lista, "b_" + n.id, "noticias", sitio, Historia.titular_de(n), "")
-		if primera == "":
-			primera = "b_" + n.id
-		var ver := func():
-			if tele.noticia != n:
-				tele.poner(n)
-				avance.value = 0.0
-		enlazar(b, Idioma.t("%s: «%s». Pulsa para verla otra vez.") % [sitio, Historia.titular_de(n)], func(): tele.poner(n))
-		b.focus_entered.connect(ver)
-		b.mouse_entered.connect(ver)
-	info.text = Idioma.t("%s, con %s. Pasa por los vídeos para verlos.") % [Historia.canal(), Historia.REPORTERA]
-	return foco if foco != "" else primera
+	var reproductor := Reproductor.new()
+	reproductor.name = "reproductor"
+	reproductor.size_flags_horizontal = Control.SIZE_EXPAND | Control.SIZE_SHRINK_CENTER
+	partes.add_child(reproductor)
+	var noticias: Array = Historia.noticias_de(videos_edificio)
+	var vistos := []   # los botones de los vídeos que se pueden ver
+	var botones := {}
+	for i in noticias.size():
+		var n: Dictionary = noticias[i]
+		var visto: bool = n.id in s.videos_vistos
+		var b := Button.new()
+		b.name = "b_" + n.id
+		b.text = Idioma.t("Vídeo %d") % (i + 1) if visto else Idioma.t("Vídeo %d · sin ver") % (i + 1)
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		lista.add_child(b)
+		botones[n.id] = b
+		if not visto:
+			b.modulate = Color(1, 1, 1, 0.55)
+			enlazar(b, Idioma.t("Vídeo %d: aún no lo has visto. Cuando limpies un piso, una tele del salón lo enseñará.") % (i + 1), Sonido.tocar.bind("no"))
+			continue
+		vistos.append(n)
+		enlazar(b, Idioma.t("Vídeo %d: «%s». Pulsa para verlo.") % [i + 1, Historia.titular_de(n)], func(): reproductor.poner(n))
+	# anterior y siguiente: los vídeos vistos de este edificio
+	reproductor.cambiar.connect(func(delta: int):
+		if vistos.is_empty():
+			return
+		var ahora: int = vistos.find(reproductor.tele.noticia)
+		var otro: Dictionary = vistos[clampi(ahora + delta if ahora >= 0 else 0, 0, vistos.size() - 1)]
+		reproductor.poner(otro)
+		botones[otro.id].grab_focus())
+	info.text = Idioma.t("%s, con %s. Elige un vídeo para verlo.") % [Historia.canal(), Historia.REPORTERA]
+	if foco != "":
+		return foco
+	if vistos.is_empty():
+		info.text = Idioma.t("Aún no has visto ninguna noticia de este edificio: cuando limpies un piso, una tele del salón se encenderá.")
+		return "b_edificio_" + videos_edificio
+	reproductor.poner.call_deferred(vistos[0])   # (el primero, ya puesto)
+	return "b_" + vistos[0].id
 
 
 # ── Colecciones: el bestiario ──

@@ -5966,7 +5966,7 @@ msgstr "到达了第%d层（共%d层）"
 msgid "Completa %s para abrirlo"
 msgstr "通关%s后解锁"
 
-#: scripts/ui/menus.gd scripts/ui/opciones.gd
+#: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/reproductor.gd
 msgid "Pausa"
 msgstr "暂停"
 
@@ -6126,17 +6126,9 @@ msgstr "已保存到维修间电脑的“档案”里"
 msgid "Seguir"
 msgstr "继续"
 
-#: scripts/ui/menus.gd scripts/ui/tele.gd
-msgid "EN DIRECTO"
-msgstr "直播"
-
 #: scripts/ui/menus.gd
-msgid "La tele del salón"
-msgstr "客厅的电视"
-
-#: scripts/ui/menus.gd scripts/ui/ordenador.gd
-msgid "Apagar"
-msgstr "关机"
+msgid "Esc: apagar la tele"
+msgstr "Esc：关掉电视"
 
 #: scripts/ui/menus.gd
 msgid "El fuego"
@@ -6879,32 +6871,32 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "移到各页上即可阅读。"
 
 #: scripts/ui/ordenador.gd
-msgid ""
-"Aún no has visto ninguna noticia.\n"
-"Cuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras."
-msgstr ""
-"你还没看过任何新闻。\n"
-"清理完一套公寓后，客厅里的一台电视会亮起：看完之后，这条新闻就会留在这里，随时可以重看。"
+msgid "%s: %d de %d vídeos vistos."
+msgstr "%s：已看 %d / %d 个视频。"
 
 #: scripts/ui/ordenador.gd
-msgid "Aún no has visto ninguna noticia."
-msgstr "你还没看过任何新闻。"
+msgid "Vídeo %d"
+msgstr "视频 %d"
 
 #: scripts/ui/ordenador.gd
-msgid "Reproducir"
-msgstr "播放"
+msgid "Vídeo %d · sin ver"
+msgstr "视频 %d · 未看"
 
 #: scripts/ui/ordenador.gd
-msgid "Parar"
-msgstr "停止"
+msgid "Vídeo %d: aún no lo has visto. Cuando limpies un piso, una tele del salón lo enseñará."
+msgstr "视频 %d：你还没看过。清理完一套公寓后，客厅里的电视会播放它。"
 
 #: scripts/ui/ordenador.gd
-msgid "%s: «%s». Pulsa para verla otra vez."
-msgstr "%s：「%s」。按一下再看一遍。"
+msgid "Vídeo %d: «%s». Pulsa para verlo."
+msgstr "视频 %d：「%s」。按一下观看。"
 
 #: scripts/ui/ordenador.gd
-msgid "%s, con %s. Pasa por los vídeos para verlos."
-msgstr "%s，主播是%s。把光标移到视频上就能观看。"
+msgid "%s, con %s. Elige un vídeo para verlo."
+msgstr "%s，主播是%s。选一个视频观看。"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no has visto ninguna noticia de este edificio: cuando limpies un piso, una tele del salón se encenderá."
+msgstr "你还没看过这栋楼的任何新闻：清理完一套公寓后，客厅里的一台电视会亮起。"
 
 #: scripts/ui/ordenador.gd
 msgid "Sujetos"
@@ -6995,6 +6987,10 @@ msgid "Vídeos"
 msgstr "视频"
 
 #: scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "关机"
+
+#: scripts/ui/ordenador.gd
 msgid "TALENTOS.EXE"
 msgstr "天赋.EXE"
 
@@ -7062,6 +7058,26 @@ msgstr "按任意按钮继续 · 按 B 跳过"
 msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
 msgstr "按任意键继续 · 按 Esc 跳过"
 
+#: scripts/ui/reproductor.gd
+msgid "Parar"
+msgstr "停止"
+
+#: scripts/ui/reproductor.gd
+msgid "Anterior"
+msgstr "上一个"
+
+#: scripts/ui/reproductor.gd
+msgid "Reproducir"
+msgstr "播放"
+
+#: scripts/ui/reproductor.gd
+msgid "Siguiente"
+msgstr "下一个"
+
+#: scripts/ui/reproductor.gd
+msgid "Reproductor de Canal 8"
+msgstr "频道8播放器"
+
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"
 msgstr "把手机横过来玩更顺手"
@@ -7101,6 +7117,10 @@ msgstr "你又变回了那个普普通通的清洁工。"
 #: scripts/ui/taquilla.gd
 msgid "Te pones: %s. Se queda puesta."
 msgstr "你换上了：%s。会一直穿着。"
+
+#: scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "直播"
 
 #: scripts/ui/tele.gd
 msgid "CANAL 8"

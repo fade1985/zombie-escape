@@ -36,7 +36,6 @@ func montar(d: Dictionary, mueble: Node2D, ancho: float) -> void:
 		Vector2(PANTALLA.position.x, PANTALLA.end.y - 4), Vector2(PANTALLA.position.x, PANTALLA.position.y + 4)])
 	pantalla.color = Color("#f1f4f7")
 	pantalla.material = luz   # (sin luz: una pantalla encendida se ve también a oscuras)
-	pantalla.z_index = 1
 	add_child(pantalla)
 	brillo = PointLight2D.new()
 	brillo.texture = load("res://escenas/luces/luz_suave.tres")

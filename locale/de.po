@@ -5988,7 +5988,7 @@ msgstr "Ebene %d von %d erreicht"
 msgid "Completa %s para abrirlo"
 msgstr "Schaff %s, um es freizuschalten"
 
-#: scripts/ui/menus.gd scripts/ui/opciones.gd
+#: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/reproductor.gd
 msgid "Pausa"
 msgstr "Pause"
 
@@ -6148,17 +6148,9 @@ msgstr "Wird in der Akte auf dem Computer im Wartungsraum gespeichert"
 msgid "Seguir"
 msgstr "Weiter"
 
-#: scripts/ui/menus.gd scripts/ui/tele.gd
-msgid "EN DIRECTO"
-msgstr "LIVE"
-
 #: scripts/ui/menus.gd
-msgid "La tele del salón"
-msgstr "Der Fernseher im Wohnzimmer"
-
-#: scripts/ui/menus.gd scripts/ui/ordenador.gd
-msgid "Apagar"
-msgstr "Ausschalten"
+msgid "Esc: apagar la tele"
+msgstr "Esc: Fernseher ausschalten"
 
 #: scripts/ui/menus.gd
 msgid "El fuego"
@@ -6901,32 +6893,32 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Geh auf die Seiten, um sie zu lesen."
 
 #: scripts/ui/ordenador.gd
-msgid ""
-"Aún no has visto ninguna noticia.\n"
-"Cuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras."
-msgstr ""
-"Du hast noch keine Nachrichten gesehen.\n"
-"Wenn du eine Wohnung geräumt hast, schaltet sich ein Fernseher im Wohnzimmer ein: Benutze ihn, und du kannst die Nachricht hier jederzeit ansehen."
+msgid "%s: %d de %d vídeos vistos."
+msgstr "%s: %d von %d Videos gesehen."
 
 #: scripts/ui/ordenador.gd
-msgid "Aún no has visto ninguna noticia."
-msgstr "Du hast noch keine Nachrichten gesehen."
+msgid "Vídeo %d"
+msgstr "Video %d"
 
 #: scripts/ui/ordenador.gd
-msgid "Reproducir"
-msgstr "Abspielen"
+msgid "Vídeo %d · sin ver"
+msgstr "Video %d · nicht gesehen"
 
 #: scripts/ui/ordenador.gd
-msgid "Parar"
-msgstr "Stopp"
+msgid "Vídeo %d: aún no lo has visto. Cuando limpies un piso, una tele del salón lo enseñará."
+msgstr "Video %d: Du hast es noch nicht gesehen. Wenn du eine Wohnung geräumt hast, zeigt es ein Fernseher im Wohnzimmer."
 
 #: scripts/ui/ordenador.gd
-msgid "%s: «%s». Pulsa para verla otra vez."
-msgstr "%s: «%s». Drücken, um es noch einmal zu sehen."
+msgid "Vídeo %d: «%s». Pulsa para verlo."
+msgstr "Video %d: «%s». Drücken, um es anzusehen."
 
 #: scripts/ui/ordenador.gd
-msgid "%s, con %s. Pasa por los vídeos para verlos."
-msgstr "%s, mit %s. Geh auf die Videos, um sie anzusehen."
+msgid "%s, con %s. Elige un vídeo para verlo."
+msgstr "%s, mit %s. Wähle ein Video, um es anzusehen."
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no has visto ninguna noticia de este edificio: cuando limpies un piso, una tele del salón se encenderá."
+msgstr "Du hast noch keine Nachrichten aus diesem Gebäude gesehen: Wenn du eine Wohnung geräumt hast, schaltet sich ein Fernseher im Wohnzimmer ein."
 
 #: scripts/ui/ordenador.gd
 msgid "Sujetos"
@@ -7017,6 +7009,10 @@ msgid "Vídeos"
 msgstr "Videos"
 
 #: scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Ausschalten"
+
+#: scripts/ui/ordenador.gd
 msgid "TALENTOS.EXE"
 msgstr "TALENTE.EXE"
 
@@ -7084,6 +7080,26 @@ msgstr "Drück eine beliebige Taste am Controller zum Fortfahren · B zum Übers
 msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
 msgstr "Drück eine beliebige Taste zum Fortfahren · Esc zum Überspringen"
 
+#: scripts/ui/reproductor.gd
+msgid "Parar"
+msgstr "Stopp"
+
+#: scripts/ui/reproductor.gd
+msgid "Anterior"
+msgstr "Zurück"
+
+#: scripts/ui/reproductor.gd
+msgid "Reproducir"
+msgstr "Abspielen"
+
+#: scripts/ui/reproductor.gd
+msgid "Siguiente"
+msgstr "Weiter"
+
+#: scripts/ui/reproductor.gd
+msgid "Reproductor de Canal 8"
+msgstr "Kanal-8-Player"
+
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"
 msgstr "Dreh dein Handy quer, dann spielt es sich besser"
@@ -7123,6 +7139,10 @@ msgstr "Du bist wieder der gute alte Hausmeister."
 #: scripts/ui/taquilla.gd
 msgid "Te pones: %s. Se queda puesta."
 msgstr "Angezogen: %s. Bleibt an."
+
+#: scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "LIVE"
 
 #: scripts/ui/tele.gd
 msgid "CANAL 8"

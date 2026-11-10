@@ -403,25 +403,47 @@ func pagina(p: Dictionary, n: int, total: int, al_cerrar: Callable) -> void:
 	boton(fila, Idioma.t("Seguir"), leida).grab_focus.call_deferred()
 
 
-# La noticia que sale en la tele de un salón (M91): se ve entera, seguida, como un vídeo. Al acabar espera un momento y
-# se apaga sola: al_cerrar(true). Con "Apagar" o Esc se cierra antes, sin darla por vista: al_cerrar(false)
+# La noticia que sale en la tele de un salón (M91): solo la pantalla de la tele, grande, con los subtítulos debajo y sin
+# nada más. Se ve entera, seguida, como un vídeo; al acabar espera un momento y se apaga sola: al_cerrar(true). Con Esc
+# (o B del mando) se cierra antes, sin darla por vista: al_cerrar(false)
 func noticia(n: Dictionary, al_cerrar: Callable) -> void:
-	var columna := abrir("noticia", 0.85)
+	cerrar()
+	abierto = "noticia"
 	al_leer = al_cerrar
-	titulo(columna, "%s · %s" % [Historia.canal(), Idioma.t("EN DIRECTO")], Idioma.t("La tele del salón"))
+	fondo = ColorRect.new()
+	fondo.color = Color(0.02, 0.02, 0.03, 0.92)
+	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.theme = Tema.crear()
+	add_child(fondo)
 	var centro := CenterContainer.new()
-	columna.add_child(centro)
+	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.add_child(centro)
+	var marco := PanelContainer.new()   # (un filo oscuro alrededor de la pantalla, como el borde de una tele)
+	var borde := StyleBoxFlat.new()
+	borde.bg_color = Color("#0a0a0e")
+	borde.border_color = Color("#2a2740")
+	borde.set_border_width_all(4)
+	borde.set_content_margin_all(4)
+	marco.add_theme_stylebox_override("panel", borde)
+	centro.add_child(marco)
 	var tele := Tele.new()
+	tele.escala = 2.0
 	tele.continuo = true
-	centro.add_child(tele)
+	marco.add_child(tele)
 	tele.poner(n)
 	tele.acabada.connect(func():
 		# (un momento con la última frase en pantalla, y la tele se apaga)
 		get_tree().create_timer(1.5, true).timeout.connect(noticia_vista.bind(true)))
-	var fila := HBoxContainer.new()
-	fila.alignment = BoxContainer.ALIGNMENT_CENTER
-	columna.add_child(fila)
-	boton(fila, Idioma.t("Apagar"), noticia_vista.bind(false)).grab_focus.call_deferred()
+	var pista := Label.new()   # (muy discreta, abajo del todo)
+	pista.text = Idioma.t("Esc: apagar la tele")
+	pista.theme_type_variation = "Sub"
+	pista.modulate = Color(1, 1, 1, 0.45)
+	pista.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	pista.offset_top = -30
+	pista.offset_left = -120
+	pista.offset_right = 120
+	pista.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	fondo.add_child(pista)
 
 
 func noticia_vista(entera: bool) -> void:

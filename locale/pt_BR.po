@@ -5988,7 +5988,7 @@ msgstr "Você chegou ao andar %d de %d"
 msgid "Completa %s para abrirlo"
 msgstr "Complete %s para liberar"
 
-#: scripts/ui/menus.gd scripts/ui/opciones.gd
+#: scripts/ui/menus.gd scripts/ui/opciones.gd scripts/ui/reproductor.gd
 msgid "Pausa"
 msgstr "Pausa"
 
@@ -6148,17 +6148,9 @@ msgstr "Fica guardada no Dossiê do computador da manutenção"
 msgid "Seguir"
 msgstr "Continuar"
 
-#: scripts/ui/menus.gd scripts/ui/tele.gd
-msgid "EN DIRECTO"
-msgstr "AO VIVO"
-
 #: scripts/ui/menus.gd
-msgid "La tele del salón"
-msgstr "A TV da sala"
-
-#: scripts/ui/menus.gd scripts/ui/ordenador.gd
-msgid "Apagar"
-msgstr "Desligar"
+msgid "Esc: apagar la tele"
+msgstr "Esc: desligar a TV"
 
 #: scripts/ui/menus.gd
 msgid "El fuego"
@@ -6901,32 +6893,32 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Passe pelas páginas para ler."
 
 #: scripts/ui/ordenador.gd
-msgid ""
-"Aún no has visto ninguna noticia.\n"
-"Cuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras."
-msgstr ""
-"Você ainda não assistiu a nenhuma notícia.\n"
-"Quando você limpar um apartamento, uma TV da sala vai ligar: use-a e você a terá aqui para rever quando quiser."
+msgid "%s: %d de %d vídeos vistos."
+msgstr "%s: %d de %d vídeos assistidos."
 
 #: scripts/ui/ordenador.gd
-msgid "Aún no has visto ninguna noticia."
-msgstr "Você ainda não assistiu a nenhuma notícia."
+msgid "Vídeo %d"
+msgstr "Vídeo %d"
 
 #: scripts/ui/ordenador.gd
-msgid "Reproducir"
-msgstr "Reproduzir"
+msgid "Vídeo %d · sin ver"
+msgstr "Vídeo %d · não assistido"
 
 #: scripts/ui/ordenador.gd
-msgid "Parar"
-msgstr "Parar"
+msgid "Vídeo %d: aún no lo has visto. Cuando limpies un piso, una tele del salón lo enseñará."
+msgstr "Vídeo %d: você ainda não assistiu. Quando você limpar um apartamento, uma TV da sala vai mostrá-lo."
 
 #: scripts/ui/ordenador.gd
-msgid "%s: «%s». Pulsa para verla otra vez."
-msgstr "%s: «%s». Aperte para ver de novo."
+msgid "Vídeo %d: «%s». Pulsa para verlo."
+msgstr "Vídeo %d: «%s». Aperte para assistir."
 
 #: scripts/ui/ordenador.gd
-msgid "%s, con %s. Pasa por los vídeos para verlos."
-msgstr "%s, com %s. Passe pelos vídeos para assistir."
+msgid "%s, con %s. Elige un vídeo para verlo."
+msgstr "%s, com %s. Escolha um vídeo para assistir."
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no has visto ninguna noticia de este edificio: cuando limpies un piso, una tele del salón se encenderá."
+msgstr "Você ainda não assistiu a nenhuma notícia deste prédio: quando você limpar um apartamento, uma TV da sala vai ligar."
 
 #: scripts/ui/ordenador.gd
 msgid "Sujetos"
@@ -7017,6 +7009,10 @@ msgid "Vídeos"
 msgstr "Vídeos"
 
 #: scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Desligar"
+
+#: scripts/ui/ordenador.gd
 msgid "TALENTOS.EXE"
 msgstr "TALENTOS.EXE"
 
@@ -7084,6 +7080,26 @@ msgstr "Aperte qualquer botão para continuar · B para pular"
 msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
 msgstr "Aperte qualquer tecla para continuar · Esc para pular"
 
+#: scripts/ui/reproductor.gd
+msgid "Parar"
+msgstr "Parar"
+
+#: scripts/ui/reproductor.gd
+msgid "Anterior"
+msgstr "Anterior"
+
+#: scripts/ui/reproductor.gd
+msgid "Reproducir"
+msgstr "Reproduzir"
+
+#: scripts/ui/reproductor.gd
+msgid "Siguiente"
+msgstr "Próximo"
+
+#: scripts/ui/reproductor.gd
+msgid "Reproductor de Canal 8"
+msgstr "Player do Canal 8"
+
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"
 msgstr "Gire o celular para jogar melhor"
@@ -7123,6 +7139,10 @@ msgstr "Você volta a ser o zelador de sempre."
 #: scripts/ui/taquilla.gd
 msgid "Te pones: %s. Se queda puesta."
 msgstr "Você vestiu: %s. Fica vestida."
+
+#: scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "AO VIVO"
 
 #: scripts/ui/tele.gd
 msgid "CANAL 8"

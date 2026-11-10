@@ -1,11 +1,12 @@
-# La tele vieja de las noticias: la que sale al usar la tele de un salón (ui/menus.gd, noticia) y la de VIDEOS.EXE del ordenador (ui/ordenador.gd). Los dibujos son de PixelLab (tools/tele.py): el mueble de
-# madera con su antena, sus ruedas y su altavoz, que va por encima y tiene la pantalla hueca; dentro, la calle de
-# noche delante del edificio de la noticia (el número 14 o el centro comercial) con la policía, y la reportera de
-# Canal 8 (Marta Ruiz) con su micro, que mueve la boca al hablar y parpadea. Por código: "EN DIRECTO" parpadeando, el
-# logo, el rótulo con su nombre (solo al empezar, como en la tele de verdad), el del titular y la cinta de abajo que
-# corre. Debajo, lo que dice la reportera, saliendo letra a letra (con un "bip" de voz), con letras grandes (M75) y
-# por trozos, los que caben en el cuadro: al acabar uno sale una flechita y, al pulsar, sigue con el siguiente.
+# La emisión de Canal 8 de las noticias, solo la pantalla de la tele (sin el mueble): la que sale al usar la tele de un salón
+# (ui/menus.gd, noticia) y la que va dentro del reproductor de VIDEOS.EXE (ui/reproductor.gd). La calle de noche delante
+# del edificio de la noticia (el número 14, el centro comercial o la torre, de PixelLab, tools/tele.py), con la policía, y la
+# reportera de Canal 8 (Marta Ruiz) con su micro, que mueve la boca al hablar y parpadea. Por código: "EN DIRECTO"
+# parpadeando, el logo, el rótulo con su nombre (solo al empezar, como en la tele de verdad), el del titular y la cinta de
+# abajo que corre. Debajo de la pantalla, los subtítulos: lo que dice la reportera, saliendo letra a letra (con un "bip"
+# de voz), por trozos de dos líneas.
 # Se usa así:  var tele := Tele.new()  ·  tele.poner(noticia)   (una de Historia.NOTICIAS)
+# "escala" (antes de añadirla): lo que se agranda la pantalla de 288 × 164 (2 en la tele del salón, 1,5 en el reproductor).
 # Con tele.continuo = true no hace falta pulsar para seguir: pasa sola de un trozo al siguiente, como un vídeo.
 class_name Tele
 extends Control
@@ -13,7 +14,6 @@ extends Control
 signal acabada   # con "continuo": al terminar de decir la última frase (una sola vez por emisión)
 
 const LETRAS_POR_SEGUNDO := 30.0
-const MUEBLE := preload("res://assets/ui/tele/mueble.png")
 # La reportera: 4 dibujos en fila (la boca cerrada, entreabierta y abierta, y los ojos cerrados)
 const REPORTERA := preload("res://assets/ui/tele/reportera.png")
 const CALLES := {"14": preload("res://assets/ui/tele/calle-14.png"), "torre": preload("res://assets/ui/tele/calle-torre.png"),
@@ -21,14 +21,14 @@ const CALLES := {"14": preload("res://assets/ui/tele/calle-14.png"), "torre": pr
 const CONTORNO := Color("#1d1b2c")
 const ROJO := Color("#c0392b")
 const AZUL := Color("#1d2a6b")
-const MUEBLE_EN := Vector2(24, 0)   # centrado encima del cuadro del texto
-const PANTALLA := Rect2(46, 54, 288, 164)   # el hueco del mueble (lo dice tools/tele.py), más MUEBLE_EN
-const CAJA_TEXTO := Rect2(0, 262, 448, 142)   # lo que dice la reportera, por trozos (partir)
-const LETRA := 18   # el tamaño de esas letras (M75 las subió a 32, pero eran enormes: el dueño las prefiere a 18)
+const PANTALLA := Rect2(0, 0, 288, 164)   # la emisión, antes de agrandarla
+const LETRA := 18   # el tamaño de los subtítulos con la escala de 1,5 (con la de 2, 24)
 const ENTRE_TROZOS := 1.3     # con "continuo", lo que espera entre un trozo y el siguiente (y tras el último)
 const NOMBRE_SEGUNDOS := 4.0   # lo que se ve el rótulo con el nombre de la reportera al empezar
 
+var escala := 1.5
 var noticia: Dictionary
+var caja_texto := Rect2()   # la franja negra de los subtítulos, debajo de la pantalla (en el sitio de la tele)
 var pantalla: Control
 var directo: Label
 var canal: Label
@@ -46,14 +46,20 @@ var continuo := false     # sigue solo de un trozo al siguiente, como un vídeo 
 var parada := false       # en pausa (el stop de VIDEOS.EXE): la imagen se queda quieta
 var terminada := false    # ya ha dicho todo (con "continuo")
 var espera := 0.0         # lo que lleva esperando entre trozos (con "continuo")
+var reproducido := 0.0    # los segundos que lleva puesta la noticia (el contador del reproductor)
 var nieve := 0.0        # el ruido de cambiar de canal, al poner una noticia
 
 
 func _init() -> void:
-	custom_minimum_size = CAJA_TEXTO.end
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+# Monta la pantalla y los subtítulos con la escala elegida (al entrar en el árbol: así se puede poner "escala" antes)
+func _ready() -> void:
+	var tam := PANTALLA.size * escala
+	var letra := roundi(12.0 * escala)
 	pantalla = Control.new()
-	pantalla.position = PANTALLA.position
+	pantalla.scale = Vector2(escala, escala)
 	pantalla.size = PANTALLA.size
 	pantalla.clip_contents = true
 	pantalla.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -65,23 +71,21 @@ func _init() -> void:
 		Vector2(6, 105))
 	titular = rotulo("", Color.WHITE, Vector2(6, 126))
 	cinta = rotulo("", Color("#1b1712"), Vector2(PANTALLA.size.x, 146))
-	# el mueble, por encima de la emisión: su hueco tiene las esquinas redondeadas de una tele vieja
-	var marco := TextureRect.new()
-	marco.texture = MUEBLE
-	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	marco.position = MUEBLE_EN
-	marco.size = MUEBLE.get_size() * 2.0
-	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(marco)
+	# los subtítulos, debajo de la pantalla: dos líneas, centradas
 	texto = Label.new()
-	texto.position = CAJA_TEXTO.position + Vector2(12, 8)
-	texto.size = CAJA_TEXTO.size - Vector2(24, 16)
 	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	texto.add_theme_color_override("font_color", Color("#e8e8d0"))
+	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	texto.add_theme_color_override("font_color", Color("#f4f0dc"))
 	texto.add_theme_constant_override("outline_size", 0)
-	texto.add_theme_font_size_override("font_size", LETRA)
-	texto.add_theme_constant_override("line_spacing", 4)   # con letras de 18, algo de aire entre líneas (a 32 era -8)
+	texto.add_theme_font_size_override("font_size", letra)
+	texto.add_theme_constant_override("line_spacing", 2)
+	var alto_linea := texto.get_line_height() + 2
+	caja_texto = Rect2(0, tam.y, tam.x, alto_linea * 2 + 14)
+	texto.position = caja_texto.position + Vector2(10, 6)
+	texto.size = Vector2(tam.x - 20, alto_linea * 2 + 2)
 	add_child(texto)
+	custom_minimum_size = caja_texto.end
 
 
 func rotulo(t: String, color: Color, donde: Vector2) -> Label:
@@ -109,6 +113,7 @@ func poner(n: Dictionary) -> void:
 	terminada = false
 	parada = false
 	espera = 0.0
+	reproducido = 0.0
 
 
 # Si está hablando, termina el trozo de golpe; si ya lo había terminado, sigue con el siguiente y, después del
@@ -133,7 +138,7 @@ func empezar_trozo(i: int) -> void:
 # Las líneas que caben en el cuadro del texto
 func lineas_que_caben() -> int:
 	var alto := texto.get_line_height() + texto.get_theme_constant("line_spacing")
-	return maxi(1, int((texto.size.y - texto.get_line_height()) / alto) + 1)
+	return maxi(1, int((texto.size.y - texto.get_line_height()) / alto) + 1)   # (dos)
 
 
 # Parte lo que dice la reportera en trozos que quepan en el cuadro, palabra a palabra (se mide con el mismo texto).
@@ -185,6 +190,19 @@ func reproducir() -> void:
 	parada = false
 
 
+# La pausa de VIDEOS.EXE: se queda quieta donde estaba (play sigue)
+func pausar() -> void:
+	parada = true
+
+
+# El botón de en medio del reproductor: pausa si está sonando y, si no, sigue (o empieza de nuevo si había acabado)
+func alternar() -> void:
+	if parada or terminada:
+		reproducir()
+	else:
+		pausar()
+
+
 # El stop de VIDEOS.EXE: vuelve al principio y se queda quieta
 func parar() -> void:
 	if noticia.is_empty():
@@ -200,6 +218,8 @@ func _process(delta: float) -> void:
 	if parada:
 		return
 	tiempo += delta
+	if not terminada:
+		reproducido += delta
 	if nieve > 0.0:
 		nieve -= delta
 	else:
@@ -224,8 +244,12 @@ func _process(delta: float) -> void:
 					else:
 						terminada = true
 						acabada.emit()
-	directo.visible = fmod(tiempo, 1.0) < 0.6
-	nombre.visible = en_antena < NOMBRE_SEGUNDOS
+	var hay := not noticia.is_empty()   # (sin nada puesto, la pantalla apagada: sin rótulos)
+	canal.visible = hay
+	titular.visible = hay
+	cinta.visible = hay
+	directo.visible = hay and fmod(tiempo, 1.0) < 0.6
+	nombre.visible = hay and en_antena < NOMBRE_SEGUNDOS
 	canal.position.x = PANTALLA.size.x - canal.size.x - 10
 	cinta.position.x -= delta * 60.0
 	if cinta.position.x < -cinta.size.x:
@@ -245,19 +269,21 @@ func boca_de(letra: String) -> int:
 	return 1
 
 
-# El cuadro de lo que dice la reportera (el mueble es una imagen, encima de la pantalla)
+# La franja negra de los subtítulos (la pantalla va encima, en su Control)
 func _draw() -> void:
-	draw_rect(CAJA_TEXTO, Color("#10141c"))
-	draw_rect(CAJA_TEXTO, CONTORNO, false, 3.0)
-	# la flechita de que hay más, abajo a la derecha, dando saltitos
+	draw_rect(caja_texto, Color("#0a0a0e"))
+	# la flechita de que hay más (sin "continuo", que pasa solo), abajo a la derecha, dando saltitos
 	if hay_mas():
-		var o := CAJA_TEXTO.end - Vector2(22, 14) + Vector2(0, 2 if fmod(tiempo, 0.8) < 0.4 else 0)
+		var o := caja_texto.end - Vector2(18, 10) + Vector2(0, 2 if fmod(tiempo, 0.8) < 0.4 else 0)
 		draw_colored_polygon(PackedVector2Array([o + Vector2(-6, -6), o + Vector2(6, -6), o]), Color("#e8e8d0"))
 
 
 # Lo de dentro de la pantalla: la calle, la reportera y los rótulos
 func pintar_pantalla() -> void:
 	var t := PANTALLA.size
+	if noticia.is_empty():   # (sin nada puesto, la pantalla apagada)
+		pantalla.draw_rect(Rect2(Vector2.ZERO, t), Color("#06070a"))
+		return
 	if nieve > 0.0:
 		pantalla.draw_rect(Rect2(Vector2.ZERO, t), Color("#202020"))
 		for i in 260:

@@ -516,7 +516,7 @@ en una línea.
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
-  (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias, la de los salones y la de VIDEOS.EXE; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
+  (autoload: el saltito de los botones), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
   `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
 - `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
@@ -591,9 +591,10 @@ en una línea.
   apartamento (`partida.encender_tele`) y si queda alguna noticia sin ver de ese edificio, se enciende («encendida»: pantalla
   en blanco, luz, «!» encima). Con el clic delante (`partida.abrir_tele`) sale `menus.noticia` con el juego parado: la primera
   noticia del edificio (`Historia.noticias_de`, en su orden) que no está en `videos_vistos` del guardado (`Historia.siguiente_noticia`),
-  vista seguida (`Tele.continuo`). Si se ve entera, la tele se apaga para siempre («vista») y la noticia queda en `videos_vistos`;
+  vista seguida (`Tele.continuo`), solo la pantalla de la tele grande con los subtítulos debajo. Si se ve entera, la tele se apaga para siempre («vista») y la noticia queda en `videos_vistos`;
   si se cierra antes (Apagar o Esc), sigue encendida. Cada ranura de guardado lleva sus vistas. **VIDEOS.EXE**
-  (`programa_videos`, en el ordenador): las ya vistas, con la tele, reproducir, parar y una barra de avance de adorno. Se prueba con `--noticias`.
+  (`programa_videos`, en el ordenador): pestañas por edificio como el Dosier y «Vídeo 1, 2…» (los no vistos, apagados), y el vídeo en
+  un reproductor multimedia de los 90 (`reproductor.gd`: pausa, parar, anterior, siguiente y contador; barra y volumen de adorno). Se prueba con `--noticias`.
 - `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,

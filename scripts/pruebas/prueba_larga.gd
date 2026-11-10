@@ -997,7 +997,7 @@ func probar_noticias() -> void:
 	var sitio: Dictionary = planta.sitios[donde]
 	var tele: Node2D = mapa.tele_salon
 	var mueble: Node2D = tele.get_parent()
-	johnny.position = mueble.position + Vector2(0, 56)
+	johnny.position = mueble.position + Vector2(46, 50)   # (a un lado, para ver la pantalla)
 	johnny.con_raton = false   # (sin ratón, el contorno amarillo sale con Johnny delante, zona_usar.gd)
 	johnny.get_node("Camara").reset_smoothing()
 	luz.alternar()   # (sin penumbra, para que se vea)
@@ -1048,16 +1048,28 @@ func probar_noticias() -> void:
 	ordenador.abrir("videos")
 	await get_tree().create_timer(3.0).timeout
 	Captura.foto("captura-videos.png")
-	var reproductor: Tele = ordenador.find_children("*", "Tele", true, false)[0]
-	var avance: ProgressBar = ordenador.ventana.find_child("avance", true, false)
-	print("VIDEOS.EXE · reproduciendo: avance %.2f, parada %s (esperado: >0, false)" % [avance.value, reproductor.parada])
-	ordenador.ventana.find_child("b_stop", true, false).pressed.emit()
+	var rep: Reproductor = ordenador.ventana.find_child("reproductor", true, false)
+	var reproductor: Tele = rep.tele
+	print("VIDEOS.EXE · reproduciendo: avance %.2f, parada %s, subtítulo «%s» (esperado: >0, false)" % [reproductor.progreso(), reproductor.parada, reproductor.texto.text])
+	rep.b_play.pressed.emit()   # (pausa)
 	await get_tree().create_timer(0.3).timeout
-	print("VIDEOS.EXE · tras parar: avance %.2f, parada %s (esperado: 0, true)" % [avance.value, reproductor.parada])
-	ordenador.ventana.find_child("b_play", true, false).pressed.emit()
+	print("VIDEOS.EXE · en pausa: parada %s (esperado: true)" % reproductor.parada)
+	Captura.foto("captura-videos-pausa.png")
+	rep.b_stop.pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	print("VIDEOS.EXE · tras parar: avance %.2f, parada %s (esperado: 0, true)" % [reproductor.progreso(), reproductor.parada])
+	rep.b_play.pressed.emit()
 	await get_tree().create_timer(2.5).timeout
-	print("VIDEOS.EXE · tras reproducir: avance %.2f, parada %s (esperado: >0, false)" % [avance.value, reproductor.parada])
+	print("VIDEOS.EXE · tras reproducir: avance %.2f, parada %s (esperado: >0, false)" % [reproductor.progreso(), reproductor.parada])
+	rep.b_next.pressed.emit()
+	await get_tree().create_timer(0.5).timeout
+	print("VIDEOS.EXE · siguiente: %s (esperado: %s)" % [reproductor.noticia.get("id", ""), Historia.noticias_de(edificio)[1].id])
 	Captura.foto("captura-videos-play.png")
+	# las pestañas de los edificios: el centro, con ninguno visto
+	ordenador.videos_edificio = "centro"
+	ordenador.abrir("videos", "b_edificio_centro")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-videos-centro.png")
 	ordenador.abrir("")
 	ordenador.apagar()
 	Guardado.cambiar(func(g): g.videos_vistos = antes.videos_vistos)
@@ -1107,10 +1119,12 @@ func probar_historia_torre() -> void:
 	var noticias: Array = Historia.noticias_de("torre")
 	Guardado.cambiar(func(g): g.videos_vistos = Historia.NOTICIAS.map(func(n): return n.id))   # (VIDEOS.EXE solo enseña las vistas)
 	for n in noticias:
-		ordenador.abrir("videos", "b_" + n.id)
+		ordenador.videos_edificio = "torre"
+		ordenador.abrir("videos")
 		await get_tree().create_timer(0.3).timeout
 		var tele: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
 		tele.continuo = false   # (a mano, trozo a trozo)
+		tele.poner(n)
 		tele.saltar()
 		await get_tree().create_timer(2.5).timeout   # que se vaya el rótulo del nombre de la reportera
 		for i in tele.trozos.size():
@@ -1185,10 +1199,12 @@ func probar_historia_entera() -> void:
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
 	for n in Historia.NOTICIAS:
-		ordenador.abrir("videos", "b_" + n.id)
+		ordenador.videos_edificio = Historia.edificio_de(n)
+		ordenador.abrir("videos")
 		await get_tree().create_timer(0.3).timeout
 		var tele: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
 		tele.continuo = false   # (a mano, trozo a trozo)
+		tele.poner(n)
 		tele.saltar()
 		await get_tree().create_timer(2.5).timeout   # que se vaya el rótulo del nombre de la reportera
 		# cada trozo de lo que dice (M75), entero: ¿cabe en el cuadro?
