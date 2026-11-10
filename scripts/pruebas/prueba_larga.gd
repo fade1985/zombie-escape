@@ -758,7 +758,7 @@ func probar_tienda_armas() -> void:
 	print("Clic en «Comprar»: en la mano %s · $%d · ficha de «%s» · botón «%s» (esperado: escopeta, $%d, escopeta, Comprada)" % [
 		johnny.huecos.fuego, dolares.call(), tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), 100 - precio_escopeta])
 	Captura.foto("captura-tienda-comprada.png")
-	# sin dinero para la gatling: su precio en rojo, en un marcador como el de lo ahorrado (solo en la tienda: el
+	# sin dinero para la gatling: su precio en un marcador como el de lo ahorrado (sin los «8») (solo en la tienda: el
 	# guardado no se toca)
 	var de_verdad: int = tienda.call().s.dolares
 	tienda.call().s.dolares = 20

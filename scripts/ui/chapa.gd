@@ -29,11 +29,12 @@ static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int) -> 
 	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, dolares), dolares, AMARILLO)
 
 
-# La pantallita de un marcador (la de lo ahorrado o la del precio que no llega, en rojo, en la tienda: tienda_armas.gd)
-# en "caja": el «$» y la cifra en "color", encima de unos «8» apagados de su color
-static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color) -> void:
+# La pantallita de un marcador (la de lo ahorrado o la del precio que no llega en la tienda: tienda_armas.gd) en "caja":
+# el «$» y la cifra en "color", encima de unos «8» apagados de su color. Sin "ochos" (la de la tienda), solo las cifras,
+# con el «$» pegado a la primera
+static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color, ochos := true) -> void:
 	var numero := str(valor)
-	var casillas := maxi(4, numero.length())   # una por cifra, todas del mismo ancho (el de un 8), como en un marcador
+	var casillas := maxi(4, numero.length()) if ochos else numero.length()   # una por cifra, todas del ancho de un 8
 	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr
 	var ancho_dolar := fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
 	lienzo.draw_rect(caja, REMACHE)                                                    # el marco
@@ -48,7 +49,8 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 	# cada casilla, su 8 apagado y, en las de la derecha, la cifra encendida (centrada en su casilla) con su sombra
 	for i in casillas:
 		var x := base.x + ancho_dolar + i * casilla
-		lienzo.draw_string(fuente, Vector2(x, base.y), "8", HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, apagado)   # no-tr
+		if ochos:
+			lienzo.draw_string(fuente, Vector2(x, base.y), "8", HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, apagado)   # no-tr
 		var j := i - (casillas - numero.length())
 		if j >= 0:
 			lienzo.draw_string(fuente, Vector2(x, base.y + 2), numero[j], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, sombra)
@@ -56,8 +58,8 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 
 
 # Lo que mide la pantallita de un marcador con ese valor
-static func medida_marcador(fuente: Font, valor: int) -> Vector2:
-	var casillas := maxi(4, str(valor).length())
+static func medida_marcador(fuente: Font, valor: int, ochos := true) -> Vector2:
+	var casillas := maxi(4, str(valor).length()) if ochos else str(valor).length()
 	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr
 	var ancho_dolar := fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
 	return Vector2(ancho_dolar + casilla * casillas + 20, 34)
