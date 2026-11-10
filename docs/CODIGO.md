@@ -611,7 +611,8 @@ en una línea.
   y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
   y la ficha del elegido). La ficha (`ficha()`): el icono, el título y las líneas (sin fotos desde el 8 nov).
 - `confirmar.gd` (`Confirmar`): la ventanita «¿Estás seguro?» en el centro de la pantalla, con lo que se perdería y
-  Sí / No (el foco empieza en No; Esc o B dicen que no). La usan «Borrar partida» (`huecos.gd`) y «Destruir» del
+  Sí / No (el foco empieza en No; el elegido, sea cual sea, se ve en rojo, y el ratón encima también lo elige; Esc o B
+  dicen que no). La usan «Borrar partida» (`huecos.gd`) y «Destruir» del
   inventario y del baúl. `Confirmar.preguntar(dueño, detalle).respondido` dice si se ha dicho que sí.
 - `relato.gd`: los textos de la historia sobre negro (`Historia.RELATOS`): la introducción y un final por edificio, cada
   uno una sola vez (`relatos` en el guardado; no salen en el reto, y una partida continuada no pasa por la introducción

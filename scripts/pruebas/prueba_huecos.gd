@@ -54,6 +54,15 @@ static func probar(menu: Control) -> void:
 	Captura.foto("captura-huecos-seguro.png")
 	var pregunta: Confirmar = h.find_children("*", "Confirmar", false, false).front()
 	bien("borrar pregunta antes («¿Estás seguro?»)", Guardado.hueco_usado(3) and pregunta != null)
+	# Empieza elegido No, y el elegido es el rojo (sea cual sea): captura-huecos-seguro-si.png, con Sí elegido
+	var b_si: Button = pregunta.find_child("b_si", true, false)
+	var b_no: Button = pregunta.find_child("b_no", true, false)
+	bien("empieza elegido No, en rojo (y Sí normal)", b_no.has_focus() and b_no.theme_type_variation == "BotonRojo"
+			and b_si.theme_type_variation == "")
+	b_si.grab_focus()
+	await arbol.create_timer(0.2).timeout
+	Captura.foto("captura-huecos-seguro-si.png")
+	bien("al elegir Sí, el rojo pasa a Sí", b_si.theme_type_variation == "BotonRojo" and b_no.theme_type_variation == "")
 	pregunta.responder(false)
 	await arbol.process_frame
 	bien("con No no se borra", Guardado.hueco_usado(3))

@@ -1,6 +1,6 @@
 # La ventanita de «¿Estás seguro?», en el centro de la pantalla, para lo que no se puede deshacer (borrar una partida,
 # destruir algo del inventario o del baúl). Debajo, si hace falta, qué se perdería, y los botones Sí y No. Empieza con
-# el foco en No, para que un Intro sin mirar no borre nada; Esc o B también dicen que no.
+# el foco en No, para que un Intro sin mirar no borre nada; Esc o B también dicen que no. El elegido se ve en rojo.
 #   Confirmar.preguntar(dueño, detalle).respondido.connect(func(si): ...)
 # Mientras está abierta, Confirmar.abierta es true (el inventario la mira para no hacer caso de sus atajos).
 class_name Confirmar
@@ -56,16 +56,23 @@ func _ready() -> void:
 	fila.add_theme_constant_override("separation", 16)
 	columna.add_child(fila)
 	var si := Button.new()
+	si.name = "b_si"
 	si.text = Idioma.t("Sí")
-	si.theme_type_variation = "BotonRojo"
 	si.custom_minimum_size.x = 140
 	si.pressed.connect(responder.bind(true))
 	fila.add_child(si)
 	var no := Button.new()
+	no.name = "b_no"
 	no.text = Idioma.t("No")
 	no.custom_minimum_size.x = 140
 	no.pressed.connect(responder.bind(false))
 	fila.add_child(no)
+	# El botón elegido se ve en rojo, sea Sí o No; el otro, con la chapa normal. Pasar el ratón por encima también lo
+	# elige, para que el rojo esté siempre en el que se pulsaría con Intro
+	for b in [si, no]:
+		b.focus_entered.connect(marcar.bind(b, [si, no]))
+		b.mouse_entered.connect(b.grab_focus)
+	marcar(no, [si, no])
 	no.grab_focus.call_deferred()
 	Sonido.tocar("click")
 	# Entra con un pequeño salto, como los menús
@@ -73,6 +80,12 @@ func _ready() -> void:
 	panel.scale = Vector2(0.9, 0.9)
 	panel.resized.connect(func(): panel.pivot_offset = panel.size / 2.0)
 	panel.create_tween().tween_property(panel, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+# Pone en rojo el botón elegido y quita el rojo a los demás
+func marcar(elegido: Button, botones: Array) -> void:
+	for b: Button in botones:
+		b.theme_type_variation = "BotonRojo" if b == elegido else ""
 
 
 func responder(si: bool) -> void:

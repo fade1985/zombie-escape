@@ -151,6 +151,7 @@ static func crear() -> Theme:
 	t.set_type_variation("BotonRojo", "Button")
 	t.set_stylebox("normal", "BotonRojo", _chapa(Color(1.25, 0.7, 0.6)))
 	t.set_stylebox("hover", "BotonRojo", _chapa(Color(1.6, 0.9, 0.75)))
+	t.set_stylebox("focus", "BotonRojo", _chapa(Color(1.6, 0.9, 0.75)))   # elegido: rojo iluminado (no la chapa dorada)
 
 	# Paneles de metal oxidado
 	var panel := StyleBoxTexture.new()
