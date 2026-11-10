@@ -54,7 +54,7 @@ const MUEBLES := {
 	"mattress_limpiadora":       {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-limpiadora"},
 	"storageshelf":          {"len": 88, "dep": 36,  "paredes": "", "archivo": "viviendas/estanteria-trastero"},
 	# lo del pasillo de los trasteros (el de las viviendas): cajas de cartón apiladas, unas altas y otras bajas, y una carretilla
-	# de mano cargada con dos cajas (PixelLab, con las guías de tools/guias_trasteros.py)
+	# de mano cargada con dos cajas (de GPT, tools/muebles_gpt.py)
 	"boxstack":  {"len": 64, "dep": 36, "paredes": "", "archivo": "viviendas/cajas-pila"},
 	"boxpile":   {"len": 56, "dep": 32, "paredes": "", "archivo": "viviendas/cajas-bajas"},
 	"handtruck": {"len": 40, "dep": 28, "paredes": "", "archivo": "viviendas/carretilla"},

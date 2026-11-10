@@ -46,7 +46,7 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'showertray', 'lockerbench', 'stafftoilet', 'staffsink', 'canshelf', 'wastebasket',   # (y los de la sala de mantenimiento)
             'fridge', 'counter', 'stove', 'kitchentable',   # (y la cocina de los pisos, rehecha de frente: tools/guias_cocina.py)
             'mattress_policia', 'mattress_medico', 'mattress_militar', 'mattress_ferretero', 'mattress_farmaceutica',
-            'mattress_tecnico', 'storageshelf', 'boxstack', 'boxpile', 'handtruck',   # (los trasteros de las viviendas: tools/guias_trasteros.py)
+            'mattress_tecnico', 'storageshelf', 'boxstack', 'boxpile', 'handtruck',   # (los trasteros de las viviendas: de GPT, tools/muebles_gpt.py)
             'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp', 'sofaback',
             'cubicle', 'officedesk', 'printer', 'copier', 'serverrack', 'watercooler', 'lobbysofa', 'reception', 'turnstile',
             'filecabinet', 'boardtable', 'execdesk', 'bookcase', 'mixerdesk', 'monitorwall', 'armory', 'interviewtable',

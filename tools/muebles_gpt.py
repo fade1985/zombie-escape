@@ -184,6 +184,15 @@ MUEBLES = {
     # FRENTE). Las otras tres (abierta, y cerrada y abierta en un tabique de lado) siguen saliendo de tools/trastero.py,
     # con los azules sacados de esta
     "puerta_trastero": ("assets/sources/puerta-trastero-gpt.webp", "assets/sprites/puerta-trastero.png", 28, 43, False),
+    # lo del pasillo de las viviendas (M9, 10 nov; antes, de PixelLab con tools/guias_trasteros.py): la pila de cajas de
+    # mudanza (la "boxstack" del catálogo), dos abajo, dos en medio y una arriba
+    "cajas_pila": ("assets/sources/cajas-pila-gpt.webp", "assets/sprites/mueble-boxstack.png", 32, 40, True),
+    # las dos cajas abiertas en el suelo (la "boxpile"), con las solapas levantadas; más bajas que las viejas (27)
+    "cajas_bajas": ("assets/sources/cajas-bajas-gpt.webp", "assets/sprites/mueble-boxpile.png", 28, 19, True),
+    # la carretilla de mudanzas (la "handtruck"), roja con dos cajas; los dos huecos del armazón, encima y debajo de la
+    # barra cruzada, se vacían también (las semillas), para que se vea el suelo de detrás
+    "carretilla": ("assets/sources/carretilla-gpt.webp", "assets/sprites/mueble-handtruck.png", 20, 40, True,
+                   (), [(512, 250), (512, 500)]),
 }
 
 
