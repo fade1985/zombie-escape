@@ -8,10 +8,11 @@
 # añadir edificios nuevos (una entrada más en DOSIERES). Lo único que no hay que tocar es el "id" de una página
 # ya publicada: el guardado de los jugadores apunta las encontradas por su id.
 #
-# Las NOTICIAS: emisiones de Canal 8 que se ven en el programa "Noticias" del ordenador. Van saliendo según se
-# avanza (al empezar, al encontrar ciertas páginas, al completar el edificio): las páginas que encuentra Johnny le
-# llegan a la reportera como de «una fuente de dentro», y en cada una Velaria cambia un poco su versión para tapar
-# el experimento. Las vistas quedan en el guardado ("noticias_vistas").
+# Las NOTICIAS: emisiones de Canal 8 que se ven en la tele de un salón (mapa/tele_salon.gd): cada planta tiene una tele
+# que, al limpiar su apartamento, se enciende y enseña la primera noticia de ese edificio que aún no has visto. Las
+# páginas que encuentra Johnny le llegan a la reportera como de «una fuente de dentro», y en cada una Velaria cambia un
+# poco su versión para tapar el experimento. Las vistas quedan en el guardado ("videos_vistos") y se repiten en el
+# programa VIDEOS.EXE del ordenador.
 #
 # Los RELATOS: los textos que salen una sola vez sobre negro (ui/relato.gd): la introducción y un final por edificio.
 # Los ya salidos quedan en el guardado ("relatos").
@@ -169,9 +170,6 @@ const REPORTERA := "Marta Ruiz"   # no-tr
 
 # Cada emisión:
 #   id        no cambiar una vez publicada (el guardado apunta las vistas por su id)
-#   pagina    sale al encontrar esa página del dosier ("" = no depende de ninguna)
-#   victoria  sale al completar ese edificio ("" = no depende)
-#   (si no depende de nada, sale desde la primera partida)
 #   titular   el rótulo de abajo de la pantalla (corto: unas 30 letras)
 #   texto     lo que cuenta la reportera
 #   sitio     dónde está la reportera (la calle de detrás, ui/tele.gd): "centro" en las del centro comercial; si no
@@ -179,51 +177,51 @@ const REPORTERA := "Marta Ruiz"   # no-tr
 # Los textos, en español; para enseñarlos, titular_de() y texto_de() los dan ya traducidos
 # [traducir]
 const NOTICIAS := [
-	{"id": "n_cierre", "pagina": "", "victoria": "",
+	{"id": "n_cierre",
 		"titular": "Cierran un edificio por un virus",
 		"texto": "Buenas noches. Les hablo desde la puerta del número 14. Desde esta mañana, la seguridad privada de Velaria Corp., la dueña del edificio, no deja entrar ni salir a nadie. Según la empresa, dentro hay un virus muy contagioso. «La situación está controlada», nos dicen. Y piden que nadie se acerque."},
-	{"id": "n_estudio", "pagina": "vd7_protocolo", "victoria": "",
+	{"id": "n_estudio",
 		"titular": "Camiones de noche en el 14",
 		"texto": "Alguien desde dentro del 14 nos ha mandado un documento. Según él, Velaria compró el edificio y lo llenó de gente sin casa, con deudas o enferma, traída de noche en camiones, para probar unas pastillas para dormir. Velaria lo niega: «Era un programa social de vivienda»."},
-	{"id": "n_correo", "pagina": "vd7_correo", "victoria": "",
+	{"id": "n_correo",
 		"titular": "Un correo dice: no hay virus",
 		"texto": "Nuestra fuente del 14 nos manda un correo interno de Velaria: «No hay ningún virus, lo sabemos». La empresa dice que es falso. Y añade que, si alguien está enfermo, será por «unas pastillas para dormir en mal estado, de otra marca». Sigue sin decir qué marca."},
-	{"id": "n_portera", "pagina": "vd7_anexo", "victoria": "",
+	{"id": "n_portera",
 		"titular": "¿Dónde está la portera?",
 		"texto": "La fuente habla ahora de cuatro «noctámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."},
-	{"id": "n_buscado", "pagina": "", "victoria": "apartamentos",
+	{"id": "n_buscado",
 		"titular": "Velaria busca a un conserje",
 		"texto": "Última hora: anoche, un helicóptero de Velaria se posó en la azotea del 14. Al despegar, alguien colgaba de su escalera... y se soltó sobre los árboles de la avenida. Hoy Velaria busca a un empleado de mantenimiento «que se ha llevado documentos de la empresa». ¿Es nuestra fuente?"},
 	# El centro comercial: «Turno infinito»
-	{"id": "n_reformas", "sitio": "centro", "pagina": "", "victoria": "apartamentos",
+	{"id": "n_reformas", "sitio": "centro",
 		"titular": "El centro cierra «por reformas»",
 		"texto": "Buenas noches. El centro comercial de la avenida cierra de noche «por reformas». Pero las luces siguen encendidas hasta el amanecer, la alarma de incendios suena de madrugada y dentro se ve gente moviéndose. Velaria, que tiene allí una farmacia, dice: «Nosotros solo alquilamos un local»."},
-	{"id": "n_velaria_noche", "sitio": "centro", "pagina": "cc_albaran", "victoria": "",
+	{"id": "n_velaria_noche", "sitio": "centro",
 		"titular": "Velaria vende su somnífero",
 		"texto": "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a $3,99. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."},
-	{"id": "n_turnos", "sitio": "centro", "pagina": "cc_turno", "victoria": "",
+	{"id": "n_turnos", "sitio": "centro",
 		"titular": "Empleados que no vuelven a casa",
 		"texto": "Decenas de familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Y les cuento algo mío: mi hermana Elena trabaja allí para Velaria. Desde el lunes no me coge el teléfono."},
-	{"id": "n_audio", "sitio": "centro", "pagina": "cc_correo", "victoria": "",
+	{"id": "n_audio", "sitio": "centro",
 		"titular": "Se filtra un audio del gerente",
 		"texto": "Nos llega un audio del gerente del centro comercial, al teléfono: «Sí, el conserje está aquí. No se irá. Mis empleados no duermen, y él tendrá que dormir alguna vez». Velaria dice que no conoce a ese señor y que, si ha tomado algo suyo, «no habrá leído el prospecto»."},
-	{"id": "n_helicoptero", "sitio": "centro", "pagina": "", "victoria": "centro",
+	{"id": "n_helicoptero", "sitio": "centro",
 		"titular": "Un helicóptero en la azotea",
 		"texto": "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."},
 	# Torre Velaria: la presentación que no llega a hacerse
-	{"id": "n_presentacion", "sitio": "torre", "pagina": "", "victoria": "centro",
+	{"id": "n_presentacion", "sitio": "torre",
 		"titular": "Esta noche, el futuro del trabajo",
 		"texto": "Buenas noches. Les hablo desde la puerta de Torre Velaria. Esta noche, Velaria presenta aquí «el futuro del trabajo», en directo para todo el país. Hay focos, alfombra roja y colas de invitados. La presidenta, Clara Velar, promete «una sorpresa que cambiará los lunes para siempre». Del conserje, ni una palabra."},
-	{"id": "n_simulacro", "sitio": "torre", "pagina": "tv_visitas", "victoria": "",
+	{"id": "n_simulacro", "sitio": "torre",
 		"titular": "La torre cierra «por un simulacro»",
 		"texto": "La presentación se ha cancelado a última hora. Torre Velaria ha cerrado sus puertas «por un simulacro de incendio», y desde entonces no ha salido nadie. Nuestra fuente nos manda la foto de un libro de visitas de hace once años. Hay un nombre: «J. Rush, voluntario. Planta 40»."},
-	{"id": "n_dormidos", "sitio": "torre", "pagina": "tv_bienestar", "victoria": "",
+	{"id": "n_dormidos", "sitio": "torre",
 		"titular": "Dormidos en la puerta giratoria",
 		"texto": "Esta madrugada, varios empleados de la torre han salido por la puerta giratoria... con los ojos cerrados. Dan vueltas y vueltas y vuelven a entrar. Velaria dice que es su nuevo programa de bienestar: «Descansar sin dejar de trabajar». Nuestra fuente dice que el VD-7 va en el aire acondicionado."},
-	{"id": "n_audio_presidenta", "sitio": "torre", "pagina": "tv_sujeto_1", "victoria": "",
+	{"id": "n_audio_presidenta", "sitio": "torre",
 		"titular": "Se filtra un audio de la presidenta",
 		"texto": "Nos llega un audio de la presidenta de Velaria: «¿Que el Sujeto 1 no obedece? Los empleados tampoco, y los tenemos. Presentadlo igual. Y traedme al conserje: lo necesito entero». Velaria dice que el audio es falso, hecho con un ordenador. No dice quién es el Sujeto 1."},
-	{"id": "n_torre_a_oscuras", "sitio": "torre", "pagina": "", "victoria": "torre",
+	{"id": "n_torre_a_oscuras", "sitio": "torre",
 		"titular": "La torre, a oscuras",
 		"texto": "Última hora: Torre Velaria se ha quedado a oscuras, planta a planta, de abajo arriba. Hace unos minutos ha despegado un helicóptero desde el helipuerto, rumbo al norte. Velaria no contesta al teléfono. Y a mí me acaba de llegar un mensaje sin firma: «Soy el conserje. Tengo algo para ti»."},
 ]
@@ -285,29 +283,34 @@ static func apuntar_relato(id: String) -> void:
 			g.relatos.append(id))
 
 
-# Las noticias ya emitidas (las que se pueden ver en el ordenador), en su orden
-static func noticias_emitidas(s: Dictionary) -> Array:
-	return NOTICIAS.filter(func(n): return emitida(s, n))
+# El edificio al que pertenece una noticia ("sitio": "centro", "torre"; sin él, la calle del número 14: los apartamentos)
+static func edificio_de(n: Dictionary) -> String:
+	return {"": "apartamentos", "14": "apartamentos"}.get(n.get("sitio", ""), n.get("sitio", ""))
 
 
-static func emitida(s: Dictionary, n: Dictionary) -> bool:
-	if n.pagina != "" and not encontrada(s, n.pagina):
-		return false
-	if n.victoria != "" and not s.edificios.get(n.victoria, {}).get("completado", false):
-		return false
-	return true
+# Las noticias de un edificio, en su orden (el de las plantas: la baja enseña la primera, la siguiente la segunda...)
+static func noticias_de(edificio: String) -> Array:
+	return NOTICIAS.filter(func(n): return edificio_de(n) == edificio)
 
 
-# Las emitidas que aún no se han visto
-static func noticias_nuevas(s: Dictionary) -> Array:
-	return noticias_emitidas(s).filter(func(n): return not n.id in s.noticias_vistas)
+# La primera noticia de ese edificio que aún no se ha visto en la tele de un salón (para esta ranura de guardado), o {}
+static func siguiente_noticia(edificio: String, s: Dictionary) -> Dictionary:
+	for n in noticias_de(edificio):
+		if not n.id in s.videos_vistos:
+			return n
+	return {}
 
 
-# Apunta una noticia como vista
+# Las noticias ya vistas en una tele, para VIDEOS.EXE del ordenador (en el orden de siempre)
+static func videos_vistos(s: Dictionary) -> Array:
+	return NOTICIAS.filter(func(n): return n.id in s.videos_vistos)
+
+
+# Apunta una noticia como vista (al acabar de verla en la tele de un salón): ya sale en VIDEOS.EXE
 static func ver_noticia(id: String) -> void:
 	Guardado.cambiar(func(g):
-		if not id in g.noticias_vistas:
-			g.noticias_vistas.append(id))
+		if not id in g.videos_vistos:
+			g.videos_vistos.append(id))
 
 
 # El rótulo de una noticia y lo que cuenta la reportera, en el idioma del jugador

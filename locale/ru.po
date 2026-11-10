@@ -3170,12 +3170,8 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "За тобой летит вертолет Velaria!"
 
 #: scripts/partida.gd
-msgid "¡NOTICIAS NUEVAS!"
-msgstr "ЭКСТРЕННЫЙ ВЫПУСК!"
-
-#: scripts/partida.gd
-msgid "Hay noticias nuevas en el ordenador"
-msgstr "На компьютере новые выпуски новостей"
+msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
+msgstr "Новость сохранена в VIDEOS.EXE на компьютере"
 
 #: scripts/partida.gd
 msgid "la tienda de %s"
@@ -6174,6 +6170,18 @@ msgstr "Сохраняется в Досье на компьютере в дво
 msgid "Seguir"
 msgstr "Дальше"
 
+#: scripts/ui/menus.gd scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "ПРЯМОЙ ЭФИР"
+
+#: scripts/ui/menus.gd
+msgid "La tele del salón"
+msgstr "Телевизор в гостиной"
+
+#: scripts/ui/menus.gd scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Выключить"
+
 #: scripts/ui/menus.gd
 msgid "El fuego"
 msgstr "Огонь"
@@ -6915,36 +6923,32 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Наведи на страницы, чтобы прочитать."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d"
-msgstr "Выпуск %d"
+msgid ""
+"Aún no has visto ninguna noticia.\n"
+"Cuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras."
+msgstr ""
+"Ты ещё не смотрел ни одной новости.\n"
+"Когда ты зачистишь квартиру, в гостиной включится телевизор: посмотри его, и новость будет здесь, чтобы пересмотреть её когда захочешь."
 
 #: scripts/ui/ordenador.gd
-msgid "Sin emitir"
-msgstr "Не вышел"
+msgid "Aún no has visto ninguna noticia."
+msgstr "Ты ещё не смотрел ни одной новости."
 
 #: scripts/ui/ordenador.gd
-msgid "¡NUEVA!"
-msgstr "НОВЫЙ!"
+msgid "Reproducir"
+msgstr "Играть"
 
 #: scripts/ui/ordenador.gd
-msgid "Completa %s."
-msgstr "Пройди %s."
+msgid "Parar"
+msgstr "Стоп"
 
 #: scripts/ui/ordenador.gd
-msgid "Sigue buscando páginas del dosier VD-7."
-msgstr "Ищи дальше страницы досье VD-7."
+msgid "%s: «%s». Pulsa para verla otra vez."
+msgstr "%s: «%s». Нажми, чтобы посмотреть ещё раз."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d: aún no ha salido. %s"
-msgstr "Выпуск %d: еще не вышел. %s"
-
-#: scripts/ui/ordenador.gd
-msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
-msgstr "Выпуск %d: «%s». Нажми, чтобы перейти к нему или повторить."
-
-#: scripts/ui/ordenador.gd
-msgid "%s, con %s. Pasa por las emisiones para verlas."
-msgstr "%s, ведущая — %s. Наведи на выпуски, чтобы посмотреть."
+msgid "%s, con %s. Pasa por los vídeos para verlos."
+msgstr "%s, ведущая — %s. Наведи на видео, чтобы посмотреть."
 
 #: scripts/ui/ordenador.gd
 msgid "Sujetos"
@@ -7031,12 +7035,8 @@ msgstr ""
 "VD-7"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias"
-msgstr "Новости"
-
-#: scripts/ui/ordenador.gd
-msgid "Apagar"
-msgstr "Выключить"
+msgid "Vídeos"
+msgstr "Видео"
 
 #: scripts/ui/ordenador.gd
 msgid "TALENTOS.EXE"
@@ -7055,8 +7055,8 @@ msgid "DOSIER.TXT"
 msgstr "ДОСЬЕ.TXT"
 
 #: scripts/ui/ordenador.gd
-msgid "CANAL8.TV"
-msgstr "КАНАЛ8.TV"
+msgid "VIDEOS.EXE"
+msgstr "VIDEOS.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "COLECCION.EXE"
@@ -7075,16 +7075,8 @@ msgid "Dosier VD-7"
 msgstr "Досье VD-7"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias de Canal 8"
-msgstr "Новости Канала 8"
-
-#: scripts/ui/ordenador.gd
-msgid ""
-"Noticias\n"
-"¡NUEVAS!"
-msgstr ""
-"Новости\n"
-"НОВЫЕ!"
+msgid "Vídeos de Canal 8"
+msgstr "Видео Канала 8"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7153,10 +7145,6 @@ msgstr "Ты снова старый добрый дворник."
 #: scripts/ui/taquilla.gd
 msgid "Te pones: %s. Se queda puesta."
 msgstr "Надето: %s. Так и останется."
-
-#: scripts/ui/tele.gd
-msgid "EN DIRECTO"
-msgstr "ПРЯМОЙ ЭФИР"
 
 #: scripts/ui/tele.gd
 msgid "CANAL 8"
@@ -7293,51 +7281,3 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
-
-#, sin-usar
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
-
-#, sin-usar
-msgid "¡QUE ME COMEN!"
-msgstr "МЕНЯ ЖЕ СЪЕДЯТ!"
-
-#, sin-usar
-msgid "la entrada"
-msgstr "вход"
-
-#, sin-usar
-msgid "¡Vienen por %s!"
-msgstr "Лезут через %s!"
-
-#, sin-usar
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "Спасибо! Возвращаюсь к замку"
-
-#, sin-usar
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "ГОТОВО! БЕГИ!"
-
-#, sin-usar
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "Заело! Прикрой меня!"
-
-#, sin-usar
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "Замок весь ржавый… дай мне время"
-
-#, sin-usar
-msgid "Vale… creo que ya noto el muelle"
-msgstr "Так… кажется, пружина поддается"
-
-#, sin-usar
-msgid "¡Toma, he encontrado esto!"
-msgstr "Держи, вот что тут было!"
-
-#, sin-usar
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "Шпилька выпала!… так, есть"
-
-#, sin-usar
-msgid "Ya casi lo tengo…"
-msgstr "Почти получилось…"

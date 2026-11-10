@@ -3166,12 +3166,8 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "Um helicóptero da Velaria está vindo te buscar!"
 
 #: scripts/partida.gd
-msgid "¡NOTICIAS NUEVAS!"
-msgstr "PLANTÃO!"
-
-#: scripts/partida.gd
-msgid "Hay noticias nuevas en el ordenador"
-msgstr "Tem notícias novas no computador"
+msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
+msgstr "Notícia salva em VIDEOS.EXE, no computador"
 
 #: scripts/partida.gd
 msgid "la tienda de %s"
@@ -6152,6 +6148,18 @@ msgstr "Fica guardada no Dossiê do computador da manutenção"
 msgid "Seguir"
 msgstr "Continuar"
 
+#: scripts/ui/menus.gd scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "AO VIVO"
+
+#: scripts/ui/menus.gd
+msgid "La tele del salón"
+msgstr "A TV da sala"
+
+#: scripts/ui/menus.gd scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Desligar"
+
 #: scripts/ui/menus.gd
 msgid "El fuego"
 msgstr "O fogo"
@@ -6893,36 +6901,32 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Passe pelas páginas para ler."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d"
-msgstr "Transmissão %d"
+msgid ""
+"Aún no has visto ninguna noticia.\n"
+"Cuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras."
+msgstr ""
+"Você ainda não assistiu a nenhuma notícia.\n"
+"Quando você limpar um apartamento, uma TV da sala vai ligar: use-a e você a terá aqui para rever quando quiser."
 
 #: scripts/ui/ordenador.gd
-msgid "Sin emitir"
-msgstr "Não exibida"
+msgid "Aún no has visto ninguna noticia."
+msgstr "Você ainda não assistiu a nenhuma notícia."
 
 #: scripts/ui/ordenador.gd
-msgid "¡NUEVA!"
-msgstr "NOVA!"
+msgid "Reproducir"
+msgstr "Reproduzir"
 
 #: scripts/ui/ordenador.gd
-msgid "Completa %s."
-msgstr "Complete %s."
+msgid "Parar"
+msgstr "Parar"
 
 #: scripts/ui/ordenador.gd
-msgid "Sigue buscando páginas del dosier VD-7."
-msgstr "Continue procurando páginas do dossiê VD-7."
+msgid "%s: «%s». Pulsa para verla otra vez."
+msgstr "%s: «%s». Aperte para ver de novo."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d: aún no ha salido. %s"
-msgstr "Transmissão %d: ainda não foi ao ar. %s"
-
-#: scripts/ui/ordenador.gd
-msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
-msgstr "Transmissão %d: \"%s\". Aperte para pular ou repetir."
-
-#: scripts/ui/ordenador.gd
-msgid "%s, con %s. Pasa por las emisiones para verlas."
-msgstr "%s, com %s. Passe pelas transmissões para ver."
+msgid "%s, con %s. Pasa por los vídeos para verlos."
+msgstr "%s, com %s. Passe pelos vídeos para assistir."
 
 #: scripts/ui/ordenador.gd
 msgid "Sujetos"
@@ -7009,12 +7013,8 @@ msgstr ""
 "VD-7"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias"
-msgstr "Notícias"
-
-#: scripts/ui/ordenador.gd
-msgid "Apagar"
-msgstr "Desligar"
+msgid "Vídeos"
+msgstr "Vídeos"
 
 #: scripts/ui/ordenador.gd
 msgid "TALENTOS.EXE"
@@ -7033,8 +7033,8 @@ msgid "DOSIER.TXT"
 msgstr "DOSSIE.TXT"
 
 #: scripts/ui/ordenador.gd
-msgid "CANAL8.TV"
-msgstr "CANAL8.TV"
+msgid "VIDEOS.EXE"
+msgstr "VIDEOS.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "COLECCION.EXE"
@@ -7053,16 +7053,8 @@ msgid "Dosier VD-7"
 msgstr "Dossiê VD-7"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias de Canal 8"
-msgstr "Notícias do Canal 8"
-
-#: scripts/ui/ordenador.gd
-msgid ""
-"Noticias\n"
-"¡NUEVAS!"
-msgstr ""
-"Notícias\n"
-"NOVAS!"
+msgid "Vídeos de Canal 8"
+msgstr "Vídeos do Canal 8"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7131,10 +7123,6 @@ msgstr "Você volta a ser o zelador de sempre."
 #: scripts/ui/taquilla.gd
 msgid "Te pones: %s. Se queda puesta."
 msgstr "Você vestiu: %s. Fica vestida."
-
-#: scripts/ui/tele.gd
-msgid "EN DIRECTO"
-msgstr "AO VIVO"
 
 #: scripts/ui/tele.gd
 msgid "CANAL 8"
@@ -7271,51 +7259,3 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
-
-#, sin-usar
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "NÃO ME DEIXA AQUI!"
-
-#, sin-usar
-msgid "¡QUE ME COMEN!"
-msgstr "TÃO ME COMENDO!"
-
-#, sin-usar
-msgid "la entrada"
-msgstr "a entrada"
-
-#, sin-usar
-msgid "¡Vienen por %s!"
-msgstr "Lá vêm eles! Olha %s!"
-
-#, sin-usar
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "Valeu! Voltando pra fechadura"
-
-#, sin-usar
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "PRONTO! CORRE!"
-
-#, sin-usar
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "Tá emperrada! Me cobre!"
-
-#, sin-usar
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "Essa fechadura tá enferrujada… me dá um tempo"
-
-#, sin-usar
-msgid "Vale… creo que ya noto el muelle"
-msgstr "Beleza… acho que já sinto a mola"
-
-#, sin-usar
-msgid "¡Toma, he encontrado esto!"
-msgstr "Toma, achei isso!"
-
-#, sin-usar
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "Deixei cair o grampo!… pronto, já peguei"
-
-#, sin-usar
-msgid "Ya casi lo tengo…"
-msgstr "Tô quase conseguindo…"

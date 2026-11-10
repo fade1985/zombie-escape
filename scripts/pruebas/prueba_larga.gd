@@ -499,7 +499,7 @@ func probar_ordenador_arriba() -> void:
 			desplazamientos.append("%d/%d" % [d.scroll_vertical, int(d.get_v_scroll_bar().max_value - d.get_v_scroll_bar().page)])
 		print("%s: desplazada %s · marcado %s · info «%s»" % [programa, desplazamientos, foco.name if foco else "nada",
 			ordenador.info.text.left(40)])
-	for programa in ["puntos", "armas", "logros", "dosier", "noticias", "colecciones"]:
+	for programa in ["puntos", "armas", "logros", "dosier", "videos", "colecciones"]:
 		ordenador.abrir(programa)
 		await get_tree().create_timer(0.6).timeout
 		cuenta.call(programa)
@@ -534,7 +534,7 @@ func probar_ordenador_arriba() -> void:
 	# ahí se hace lo diferido después de avisar del fotograma, y es cuando las páginas se iban solas hasta abajo (F13 y F14)
 	for pasos in [60, 5]:
 		Engine.physics_ticks_per_second = pasos
-		for programa in ["puntos", "armas", "logros", "dosier", "noticias", "colecciones"]:
+		for programa in ["puntos", "armas", "logros", "dosier", "videos", "colecciones"]:
 			ordenador.abrir("")
 			await get_tree().create_timer(0.3).timeout
 			await clic_en(ordenador.iconos.get_node("icono_" + programa))
@@ -623,7 +623,7 @@ func probar_ordenador_teclado() -> void:
 		for d: ScrollContainer in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
 			barras.append("%d/%d" % [d.scroll_vertical, int(d.get_v_scroll_bar().max_value - d.get_v_scroll_bar().page)])
 		return "%s %s" % [foco.name if foco else "nada", barras]
-	for programa in ["puntos", "armas", "logros", "dosier", "noticias", "colecciones"]:
+	for programa in ["puntos", "armas", "logros", "dosier", "videos", "colecciones"]:
 		ordenador.abrir(programa)
 		await get_tree().create_timer(0.5).timeout
 		await andar_con_teclado("ui_up")
@@ -878,10 +878,7 @@ func andar_con_teclado(accion: String) -> int:
 func probar_novedades() -> void:
 	set_process(false)
 	var antes := Guardado.cargar()
-	var emisiones: Array = Historia.NOTICIAS.map(func(n): return n.id)
 	Guardado.cambiar(func(g):
-		g.paginas = ["vd7_protocolo", "vd7_correo"]
-		g.noticias_vistas = ["n_cierre"]
 		g.logros = {"manitas": "conseguido"}
 		g.colecciones_nuevo = true
 		g.skins_nuevo = true)
@@ -889,17 +886,17 @@ func probar_novedades() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(1.4).timeout
 	var marca := func(mueble: Node2D) -> bool: return mueble.get_node("Exclamacion").visible
-	print("Con novedades %s: «!» de la mesa %s, de la taquilla %s (esperado: [noticias, colecciones, logros], true, true)" % [
+	print("Con novedades %s: «!» de la mesa %s, de la taquilla %s (esperado: [colecciones, logros], true, true)" % [
 		mapa.ORDENADOR.novedades(Guardado.cargar()), marca.call(mapa.ordenador), marca.call(mapa.taquilla)])
 	Captura.foto("captura-novedades.png")
-	# el escritorio: el rótulo y el «!» de los tres iconos (y de ninguno más)
+	# el escritorio: el rótulo y el «!» de los dos iconos (y de ninguno más)
 	abrir_ordenador()
 	await get_tree().create_timer(0.5).timeout
 	var con_marca := []
 	for icono in ordenador.iconos.get_children():
 		if icono.get_children().any(func(c): return c.name == "marca_nuevo"):
 			con_marca.append(icono.name)
-	print("Escritorio: iconos con «!» %s (esperado: icono_logros, icono_noticias, icono_colecciones)" % [con_marca])
+	print("Escritorio: iconos con «!» %s (esperado: icono_logros, icono_colecciones)" % [con_marca])
 	Captura.foto("captura-novedades-escritorio.png")
 	ordenador.abrir("")
 	ordenador.apagar()
@@ -910,10 +907,6 @@ func probar_novedades() -> void:
 		for ayuda in Logros.AYUDAS:
 			g.ajustes[ayuda] = false)
 	logros.con_ayudas = false
-	avisar_noticias()
-	await get_tree().create_timer(0.35).timeout
-	Captura.foto("captura-novedades-noticias.png")
-	await get_tree().create_timer(1.3).timeout   # (que se apague el grito de las noticias)
 	logros.cumplir("manitas")
 	await get_tree().create_timer(0.35).timeout
 	Captura.foto("captura-novedades-logro.png")
@@ -923,7 +916,6 @@ func probar_novedades() -> void:
 	Captura.foto("captura-novedades-skin.png")
 	# sin nada nuevo, los «!» se esconden (la taquilla al abrirla; la mesa, con lo visto y lo cobrado)
 	Guardado.cambiar(func(g):
-		g.noticias_vistas = emisiones
 		g.logros = {"manitas": "cobrado"}
 		g.colecciones_nuevo = false
 		g.skins_nuevo = false)
@@ -931,25 +923,21 @@ func probar_novedades() -> void:
 	print("Sin novedades %s: «!» de la mesa %s, de la taquilla %s (esperado: [], false, false)" % [
 		mapa.ORDENADOR.novedades(Guardado.cargar()), marca.call(mapa.ordenador), marca.call(mapa.taquilla)])
 	Guardado.cambiar(func(g):
-		for clave in ["paginas", "noticias_vistas", "logros", "colecciones_nuevo", "skins_nuevo", "ajustes"]:
+		for clave in ["logros", "colecciones_nuevo", "skins_nuevo", "ajustes"]:
 			g[clave] = antes[clave])
 
 
 # Con "--captura --avisos-ordenador": los «!» de los iconos de ConserjeOS se quitan nada más mirar o cobrar lo nuevo, sin
-# apagar el ordenador (L16). Con noticias sin ver, un logro por cobrar y algo nuevo en Colecciones, se enciende el
-# ordenador (captura-avisos-1.png: los tres iconos con «!»); se abre Colecciones (se quita el suyo), Noticias (se quita
-# cuando se ha visto la última nueva) y Logros, donde se cobra el premio (captura-avisos-2.png: Noticias y Colecciones
-# ya sin «!», Logros todavía con él; captura-avisos-3.png: ya ninguno). Al apagar, el «!» de la mesa también se va
+# apagar el ordenador (L16). Con un logro por cobrar y algo nuevo en Colecciones, se enciende el ordenador
+# (captura-avisos-1.png: los dos iconos con «!»); se abre Colecciones (se quita el suyo) y Logros, donde se cobra el premio
+# (captura-avisos-2.png: Colecciones ya sin «!», Logros todavía con él; captura-avisos-3.png: ya ninguno). Al apagar, el «!» de la mesa también se va
 # al instante. Deja el guardado como estaba y se cierra
 func probar_avisos_ordenador() -> void:
 	set_process(false)
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
-		g.paginas = ["vd7_protocolo", "vd7_correo"]
-		g.noticias_vistas = ["n_cierre"]
 		g.logros = {"manitas": "conseguido"}
 		g.colecciones_nuevo = true)
-	var sin_ver: Array = Historia.noticias_nuevas(Guardado.cargar()).map(func(n): return "b_" + n.id)
 	johnny.position = Vector2(mapa.ORDENADOR_X, Planta.MURO + 150.0)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(1.4).timeout
@@ -957,23 +945,14 @@ func probar_avisos_ordenador() -> void:
 	var con_marca := func() -> Array:
 		return ordenador.iconos.get_children().filter(func(icono): return icono.get_children().any(
 			func(c): return c.name == "marca_nuevo")).map(func(icono): return str(icono.name))
-	print("«!» de la mesa antes: %s (esperado: true) · emisiones sin ver %s" % [mesa.get_node("Exclamacion").visible, sin_ver])
+	print("«!» de la mesa antes: %s (esperado: true)" % [mesa.get_node("Exclamacion").visible])
 	abrir_ordenador()
 	await get_tree().create_timer(0.5).timeout
-	print("Al encender: iconos con «!» %s (esperado: icono_logros, icono_noticias, icono_colecciones)" % [con_marca.call()])
+	print("Al encender: iconos con «!» %s (esperado: icono_logros, icono_colecciones)" % [con_marca.call()])
 	Captura.foto("captura-avisos-1.png")
 	ordenador.abrir("colecciones")
 	await get_tree().create_timer(0.4).timeout
-	print("Al abrir Colecciones: %s (esperado: icono_logros, icono_noticias)" % [con_marca.call()])
-	# Noticias: la primera sin ver se marca sola; con ella vista aún queda otra
-	ordenador.abrir("noticias")
-	await get_tree().create_timer(0.5).timeout
-	print("Al abrir Noticias (vistas %d de %d): %s (esperado: 1 de %d, icono_logros e icono_noticias)" % [
-		Guardado.cargar().noticias_vistas.size() - 1, sin_ver.size(), con_marca.call(), sin_ver.size()])
-	for id in sin_ver:
-		ordenador.ventana.find_child(id, true, false).grab_focus()
-		await get_tree().create_timer(0.2).timeout
-	print("Con todas las noticias vistas: %s (esperado: icono_logros)" % [con_marca.call()])
+	print("Al abrir Colecciones: %s (esperado: icono_logros)" % [con_marca.call()])
 	Captura.foto("captura-avisos-2.png")
 	ordenador.abrir("logros")
 	await get_tree().create_timer(0.4).timeout
@@ -985,57 +964,103 @@ func probar_avisos_ordenador() -> void:
 	ordenador.apagar()   # (sin esperar el segundo en que el juego mira la mesa)
 	print("«!» de la mesa nada más apagar: %s (esperado: false)" % mesa.get_node("Exclamacion").visible)
 	Guardado.cambiar(func(g):
-		for clave in ["paginas", "noticias_vistas", "logros", "colecciones_nuevo", "dolares"]:
+		for clave in ["logros", "colecciones_nuevo", "dolares"]:
 			g[clave] = antes[clave])
 
 
-# Las noticias: en los Apartamentos, con la página del correo encontrada salen tres emisiones (dos sin ver); en el
-# centro comercial, con los Apartamentos completados y sus dos primeras páginas, salen cinco (dos sin ver). Abre el
-# programa, deja hablar a la reportera un poco y hace la foto; luego otra con todo lo que dice
+# Con "--captura --noticias": la tele del salón que enseña las noticias (M91) y VIDEOS.EXE. Cada planta generada tiene una
+# sola tele; en la de esta planta: apagada al llegar (captura-tele-apagada.png), se enciende al limpiar el apartamento
+# (captura-tele-encendida.png, con el «!» y el contorno), se abre con el clic y se cierra antes sin darla por vista, y
+# luego se ve entera: queda apagada y apuntada (captura-tele-noticia.png, captura-tele-vista.png). Después, VIDEOS.EXE
+# vacío y con la noticia vista, con el reproductor (captura-videos-vacio.png, captura-videos.png). Deja el guardado como estaba
 func probar_noticias() -> void:
-	var ids: Array = Historia.dosier(edificio).paginas.map(func(p): return p.id)
-	var centro := edificio == "centro"
-	Guardado.cambiar(func(g):
-		g.paginas = [ids[0], ids[1]] if centro else ["vd7_protocolo", "vd7_correo"]
-		g.noticias_vistas = ["n_cierre", "n_buscado", "n_reformas"] if centro else ["n_cierre"]
-		# los edificios completados, siempre igual (el final de la prueba vuelve a completar el de la partida): en el
-		# centro, los Apartamentos sí y el centro no (la del helicóptero, aún sin emitir)
-		Guardado.edificio(g, "apartamentos").completado = centro
-		Guardado.edificio(g, "centro").completado = false)
-	print("Noticias emitidas: %s | nuevas: %s" % [Historia.noticias_emitidas(Guardado.cargar()).map(func(n): return n.id),
-		Historia.noticias_nuevas(Guardado.cargar()).map(func(n): return n.id)])
-	avisar_noticias()
+	var antes := Guardado.cargar().duplicate(true)
+	Guardado.cambiar(func(g): g.videos_vistos = [])
+	# una tele por planta, en un salón de un apartamento normal
+	for num in range(1, 5):
+		var p: Dictionary = Planta.generar(num, edificio)
+		var cuantas := 0
+		for sitio in p.sitios:
+			if sitio.has("tele"):
+				cuantas += 1
+		print("Tele · planta %d: %d (esperado: 1)" % [num, cuantas])
+	var donde := -1
+	for j in planta.sitios.size():
+		if planta.sitios[j].has("tele"):
+			donde = j
+	if donde < 0:
+		Captura.fallar("esta planta no tiene tele")
+		return
+	await montar(donde, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var sitio: Dictionary = planta.sitios[donde]
+	var tele: Node2D = mapa.tele_salon
+	var mueble: Node2D = tele.get_parent()
+	johnny.position = mueble.position + Vector2(0, 56)
+	johnny.con_raton = false   # (sin ratón, el contorno amarillo sale con Johnny delante, zona_usar.gd)
+	johnny.get_node("Camara").reset_smoothing()
+	luz.alternar()   # (sin penumbra, para que se vea)
+	sitio.limpio = false
+	await get_tree().create_timer(0.05).timeout
+	print("Tele · al llegar (con zombis): %s (esperado: apagada)" % sitio.tele.estado)
+	await get_tree().create_timer(0.8).timeout
+	print("Tele · al limpiar el apartamento: %s, limpio %s (esperado: encendida, true)" % [sitio.tele.estado, sitio.limpio])
+	Captura.foto("captura-tele-encendida.png")
+	# con el clic: sale la primera noticia; cerrada antes de acabar, sigue encendida y sin ver
+	var primera: Dictionary = Historia.siguiente_noticia(edificio, Guardado.cargar())
+	tele.zona.abrir()
+	await get_tree().create_timer(3.0).timeout
+	print("Tele · abierta: %s, juego parado %s (esperado: noticia, true)" % [menus.abierto, get_tree().paused])
+	Captura.foto("captura-tele-noticia.png")
+	menus.noticia_vista(false)
+	await get_tree().create_timer(0.2).timeout
+	print("Tele · cerrada antes de acabar: %s, vistas %s (esperado: encendida, [])" % [sitio.tele.estado, Guardado.cargar().videos_vistos])
+	# otra vez, y entera (pasando cada trozo en cuanto se dice)
+	tele.zona.abrir()
+	await get_tree().create_timer(0.5).timeout
+	var vista: Tele = menus.find_children("*", "Tele", true, false)[0]
+	var hecho := 0.0
+	while menus.abierto == "noticia" and hecho < 90.0:
+		if vista.hablando():
+			vista.saltar()
+		await get_tree().create_timer(0.4).timeout
+		hecho += 0.4
 	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-aviso-noticias.png")
+	print("Tele · vista entera (en %.0f s): %s, vistas %s (esperado: vista, [%s])" % [hecho, sitio.tele.estado,
+		Guardado.cargar().videos_vistos, primera.get("id", "")])
+	Captura.foto("captura-tele-vista.png")
+	var otra: Dictionary = Historia.siguiente_noticia(edificio, Guardado.cargar())
+	print("Tele · la siguiente noticia del edificio: %s (esperado: la segunda, %s)" % [otra.get("id", ""),
+		Historia.noticias_de(edificio)[1].id])
+	# VIDEOS.EXE: vacío y con la noticia vista
+	Guardado.cambiar(func(g): g.videos_vistos = [])
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
 	if ordenador.fondo == null:   # (abrir_ordenador no lo abre si la partida ha acabado, se cambia de planta o Johnny ha muerto)
-		Captura.fallar("el ordenador no se abre en probar_noticias (terminada %s, cambiando %s, Johnny vivo %s, vida %s)" % [
-			terminada, cambiando, johnny.vivo, johnny.vida])
+		Captura.fallar("el ordenador no se abre en probar_noticias (terminada %s, cambiando %s, Johnny vivo %s)" % [
+			terminada, cambiando, johnny.vivo])
 		return
-	Captura.foto("captura-escritorio.png")
-	# el marco de madera sigue al ratón: pasar por encima de «Logros» lo marca
-	ordenador.iconos.get_child(2).mouse_entered.emit()
-	print("Escritorio · ratón sobre Logros, marcado: %s (esperado: icono_logros)" % get_viewport().gui_get_focus_owner().name)
-	ordenador.abrir("noticias")
+	ordenador.abrir("videos")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-videos-vacio.png")
+	Guardado.cambiar(func(g): g.videos_vistos = Historia.noticias_de(edificio).slice(0, 2).map(func(n): return n.id))
+	ordenador.abrir("videos")
 	await get_tree().create_timer(3.0).timeout
-	Captura.foto("captura-noticias.png")
-	# luego, sin el rótulo del nombre (sale solo al empezar) y con todo lo que dice la reportera (¿cabe en su cuadro?)
-	await get_tree().create_timer(2.0).timeout
-	for t in ordenador.find_children("*", "", true, false):
-		if t is Tele and t.hablando():
-			t.saltar()   # (que termine el primer trozo)
-	await get_tree().create_timer(0.2).timeout
-	Captura.foto("captura-noticias-entera.png")
-	for t in ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele):
-		print("La tele: letras de %d, %d trozos, este con %d líneas (caben %d) · ¿flechita? %s (esperado: 18 · los que hagan falta · true si hay más de 1)" % [
-			Tele.LETRA, t.trozos.size(), t.texto.get_line_count(), t.lineas_que_caben(), t.hay_mas()])
-		t.saltar()   # el trozo siguiente
-	await get_tree().create_timer(1.5).timeout
-	Captura.foto("captura-noticias-trozo2.png")
-	print("Noticias vistas tras abrir: ", Guardado.cargar().noticias_vistas)
+	Captura.foto("captura-videos.png")
+	var reproductor: Tele = ordenador.find_children("*", "Tele", true, false)[0]
+	var avance: ProgressBar = ordenador.ventana.find_child("avance", true, false)
+	print("VIDEOS.EXE · reproduciendo: avance %.2f, parada %s (esperado: >0, false)" % [avance.value, reproductor.parada])
+	ordenador.ventana.find_child("b_stop", true, false).pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	print("VIDEOS.EXE · tras parar: avance %.2f, parada %s (esperado: 0, true)" % [avance.value, reproductor.parada])
+	ordenador.ventana.find_child("b_play", true, false).pressed.emit()
+	await get_tree().create_timer(2.5).timeout
+	print("VIDEOS.EXE · tras reproducir: avance %.2f, parada %s (esperado: >0, false)" % [avance.value, reproductor.parada])
+	Captura.foto("captura-videos-play.png")
 	ordenador.abrir("")
 	ordenador.apagar()
+	Guardado.cambiar(func(g): g.videos_vistos = antes.videos_vistos)
 
 
 # Con "--captura --historia-torre": la historia de Torre Velaria (parte 8 del plan). Las cinco hojas del dosier
@@ -1062,14 +1087,11 @@ func probar_historia_torre() -> void:
 		g.paginas.append_array(["tv_visitas", "tv_sujeto_1"])
 		Guardado.edificio(g, "centro").completado = true
 		Guardado.edificio(g, "torre").completado = false)
-	var de_torre := func() -> Array:
-		return Historia.noticias_emitidas(Guardado.cargar()).filter(func(n): return n.get("sitio", "") == "torre").map(
-			func(n): return n.id)
 	print("Historia torre · falta la 2: «%s»" % Historia.falta("torre", paginas[1]).replace("\n", " "))
 	print("Historia torre · falta la 5: «%s»" % Historia.falta("torre", paginas[4]).replace("\n", " "))
 	print("Historia torre · dónde, de la 1 a la 5: %s (esperado: vestíbulo, planta 10, planta 20, planta 30, laboratorio)" % [
 		paginas.map(func(p): return Historia.donde(p, "torre"))])
-	print("Historia torre · noticias con la 1 y la 4: %s (esperado: n_presentacion, n_simulacro, n_audio_presidenta)" % [de_torre.call()])
+	print("Historia torre · noticias de la torre: %s (esperado: las 5)" % [Historia.noticias_de("torre").map(func(n): return n.id)])
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
 	for id in ["tv_visitas", "tv_bienestar", "tv_sujeto_cero"]:
@@ -1082,12 +1104,13 @@ func probar_historia_torre() -> void:
 			if not p.id in g.paginas:
 				g.paginas.append(p.id)
 		Guardado.edificio(g, "torre").completado = true)
-	print("Historia torre · noticias con todo: %s (esperado: las 5)" % [de_torre.call()])
-	var noticias: Array = Historia.NOTICIAS.filter(func(n): return n.get("sitio", "") == "torre")
+	var noticias: Array = Historia.noticias_de("torre")
+	Guardado.cambiar(func(g): g.videos_vistos = Historia.NOTICIAS.map(func(n): return n.id))   # (VIDEOS.EXE solo enseña las vistas)
 	for n in noticias:
-		ordenador.abrir("noticias", "b_" + n.id)
+		ordenador.abrir("videos", "b_" + n.id)
 		await get_tree().create_timer(0.3).timeout
 		var tele: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
+		tele.continuo = false   # (a mano, trozo a trozo)
 		tele.saltar()
 		await get_tree().create_timer(2.5).timeout   # que se vaya el rótulo del nombre de la reportera
 		for i in tele.trozos.size():
@@ -1138,7 +1161,7 @@ func probar_historia_torre() -> void:
 		print("Relato · torre apuntado: %s (esperado: true)" % ("torre" in Guardado.cargar().relatos))
 	Guardado.cambiar(func(g):
 		g.paginas = antes.paginas
-		g.noticias_vistas = antes.noticias_vistas
+		g.videos_vistos = antes.videos_vistos
 		g.relatos = antes.relatos
 		for e in Historia.DOSIERES:
 			Guardado.edificio(g, e).completado = antes.edificios.get(e, {}).get("completado", false))
@@ -1156,21 +1179,16 @@ func probar_historia_entera() -> void:
 			await get_tree().create_timer(0.3).timeout
 			Captura.foto("captura-hoja-%s.png" % paginas[i].id)
 			menus.leida()
-	# todas las noticias emitidas: todas las páginas encontradas y los dos edificios completados
-	Guardado.cambiar(func(g):
-		for e in Historia.DOSIERES:
-			for p in Historia.DOSIERES[e].paginas:
-				if not p.id in g.paginas:
-					g.paginas.append(p.id)
-		for e in Historia.DOSIERES:
-			Guardado.edificio(g, e).completado = true)
-	print("Noticias emitidas: %d de %d" % [Historia.noticias_emitidas(Guardado.cargar()).size(), Historia.NOTICIAS.size()])
+	# todas las noticias vistas (VIDEOS.EXE solo enseña las vistas)
+	Guardado.cambiar(func(g): g.videos_vistos = Historia.NOTICIAS.map(func(n): return n.id))
+	print("Noticias vistas: %d de %d" % [Historia.videos_vistos(Guardado.cargar()).size(), Historia.NOTICIAS.size()])
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
 	for n in Historia.NOTICIAS:
-		ordenador.abrir("noticias", "b_" + n.id)
+		ordenador.abrir("videos", "b_" + n.id)
 		await get_tree().create_timer(0.3).timeout
 		var tele: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
+		tele.continuo = false   # (a mano, trozo a trozo)
 		tele.saltar()
 		await get_tree().create_timer(2.5).timeout   # que se vaya el rótulo del nombre de la reportera
 		# cada trozo de lo que dice (M75), entero: ¿cabe en el cuadro?
@@ -1201,7 +1219,7 @@ func probar_historia_entera() -> void:
 	ordenador.apagar()
 	Guardado.cambiar(func(g):
 		g.paginas = antes.paginas
-		g.noticias_vistas = antes.noticias_vistas
+		g.videos_vistos = antes.videos_vistos
 		for e in Historia.DOSIERES:
 			Guardado.edificio(g, e).completado = antes.edificios.get(e, {}).get("completado", false))
 

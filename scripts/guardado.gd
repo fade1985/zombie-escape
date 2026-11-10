@@ -55,7 +55,7 @@ const NUEVO := {
 	                      # derrotados, partidas ganadas, armas con las que se ha matado y reglas del reto completadas:
 	                      # {"jefes": 3, "victorias": 1, "armas": ["fregona"], "reglas": ["cuerpo"]}
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
-	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
+	"videos_vistos": [],   # noticias ya vistas en la tele de un salón (ids de Historia.NOTICIAS): salen en VIDEOS.EXE y la tele enseña la siguiente
 	"pesadilla": false,   # la última partida acabó en derrota: la siguiente empieza con Johnny despertándose (partida.despertar)
 	"relatos": [],        # los textos de la historia ya salidos (claves de Historia.RELATOS): cada uno sale una sola vez
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador

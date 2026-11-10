@@ -516,7 +516,7 @@ en una línea.
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
-  (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
+  (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias, la de los salones y la de VIDEOS.EXE; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
   `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
 - `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
@@ -569,7 +569,7 @@ en una línea.
   título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
   pósit (amarillo, con la esquina doblada, pequeño y casi cuadrado: las notas son cortas; la nota, letra a letra como escrita a mano con boli, `a_mano_en`, siempre a 16), pegado abajo a la derecha; las últimas líneas del texto se estrechan para dejarle sitio. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
   cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
-- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
+- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Vídeos, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
   maximizado: arriba lo visto con su barra, dos pestañas (`Bestiario.familias()`: los durmientes, zombis de siempre, y los
   sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose bajo la lámpara de `assets/ui/foco-sujetos.png` (de GPT, `tools/foco_sujetos.py`), con polvo y algún parpadeo, en silueta
   si falta; su frase y cuántos se han matado, `matados` del guardado, que suma `partida.contar_matado` al acabar) y a la
@@ -578,13 +578,22 @@ en una línea.
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se
   vea: `encadenar` le dice a cada botón de una lista con desplazamiento cuál tiene encima y debajo (`--ordenador-teclado`). La tienda es
   `tienda_armas.gd` (`programa_armas` la monta y le pone a cada casilla su línea de abajo); los arrojables se compran de
-  uno en uno con `comprar_lanzable`, mientras quepan. Con dos armas de ese tipo, `comprar_arma` manda la de repuesto al baúl (`partida.repuesto_al_baul`) antes de `llevar_arma`, solo en la tienda. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
+  uno en uno con `comprar_lanzable`, mientras quepan. Con dos armas de ese tipo, `comprar_arma` manda la de repuesto al baúl (`partida.repuesto_al_baul`) antes de `llevar_arma`, solo en la tienda. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Colecciones y Logros por cobrar)
   llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`); se ponen y se quitan con `poner_aviso`, y
-  `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones, ver una noticia o cobrar un logro, sin tener
+  `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones o cobrar un logro, sin tener
   que apagar (y al apagar también se pone al día el «!» de la mesa). Y los avisos de sucesos, además de la
-  línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`: noticias
+  línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`:
   nuevas, logro y skin nueva); la skin sin ver se apunta en `skins_nuevo` del guardado hasta que se abre la taquilla.
   Se prueba con `--novedades` y `--avisos-ordenador` (que se quitan al mirar o cobrar).
+- **Las noticias (M91):** ya no están en el ordenador. Cada planta generada tiene **una tele** que enseña las noticias de
+  Canal 8: `Planta.tele_de_la_planta` marca un mueble `tv` de un salón de un apartamento normal, al azar (`tele: true` en el
+  mueble y `sitio.tele = {"estado": "apagada"}`; `mapa.gd` le cuelga `tele_salon.gd` y su zona de uso). Al limpiar ese
+  apartamento (`partida.encender_tele`) y si queda alguna noticia sin ver de ese edificio, se enciende («encendida»: pantalla
+  en blanco, luz, «!» encima). Con el clic delante (`partida.abrir_tele`) sale `menus.noticia` con el juego parado: la primera
+  noticia del edificio (`Historia.noticias_de`, en su orden) que no está en `videos_vistos` del guardado (`Historia.siguiente_noticia`),
+  vista seguida (`Tele.continuo`). Si se ve entera, la tele se apaga para siempre («vista») y la noticia queda en `videos_vistos`;
+  si se cierra antes (Apagar o Esc), sigue encendida. Cada ranura de guardado lleva sus vistas. **VIDEOS.EXE**
+  (`programa_videos`, en el ordenador): las ya vistas, con la tele, reproducir, parar y una barra de avance de adorno. Se prueba con `--noticias`.
 - `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
@@ -704,7 +713,7 @@ en una línea.
   queda verde vivo, sin que le afecte la penumbra, con halo y una luz verde de verdad (la de `lampara.gd`); si Johnny
   vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
   no dibuja). Se prueba con `--salida`.
-- `cara_pared.gd`, `neon.gd` (el letrero de neón de las tiendas y el rótulo iluminado de los departamentos de la torre), `ventanal.gd` (el ventanal con la ciudad de noche del pasillo de la torre); `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`, `zona_usar.gd` (la zona de delante de esos muebles: con Johnny en ella, se abren con atacar; `johnny.ante_mueble` hace que ese clic no dispare),
+- `cara_pared.gd`, `neon.gd` (el letrero de neón de las tiendas y el rótulo iluminado de los departamentos de la torre), `ventanal.gd` (el ventanal con la ciudad de noche del pasillo de la torre); `tele_salon.gd` (M91: la tele de un salón que enseña las noticias, ver abajo), `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`, `zona_usar.gd` (la zona de delante de esos muebles: con Johnny en ella, se abren con atacar; `johnny.ante_mueble` hace que ese clic no dispare),
   `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo; se
   pone con una `condicion` y se mira cada segundo; su dibujo, de GPT, `assets/sprites/exclamacion.png`, y el pequeño de los
   iconos del escritorio y de Logros, `assets/ui/exclamacion-pequena.png`, los dos de `tools/muebles_gpt.py`)

@@ -1,4 +1,4 @@
-# La tele vieja del programa Noticias (ui/ordenador.gd). Los dibujos son de PixelLab (tools/tele.py): el mueble de
+# La tele vieja de las noticias: la que sale al usar la tele de un salón (ui/menus.gd, noticia) y la de VIDEOS.EXE del ordenador (ui/ordenador.gd). Los dibujos son de PixelLab (tools/tele.py): el mueble de
 # madera con su antena, sus ruedas y su altavoz, que va por encima y tiene la pantalla hueca; dentro, la calle de
 # noche delante del edificio de la noticia (el número 14 o el centro comercial) con la policía, y la reportera de
 # Canal 8 (Marta Ruiz) con su micro, que mueve la boca al hablar y parpadea. Por código: "EN DIRECTO" parpadeando, el
@@ -6,8 +6,11 @@
 # corre. Debajo, lo que dice la reportera, saliendo letra a letra (con un "bip" de voz), con letras grandes (M75) y
 # por trozos, los que caben en el cuadro: al acabar uno sale una flechita y, al pulsar, sigue con el siguiente.
 # Se usa así:  var tele := Tele.new()  ·  tele.poner(noticia)   (una de Historia.NOTICIAS)
+# Con tele.continuo = true no hace falta pulsar para seguir: pasa sola de un trozo al siguiente, como un vídeo.
 class_name Tele
 extends Control
+
+signal acabada   # con "continuo": al terminar de decir la última frase (una sola vez por emisión)
 
 const LETRAS_POR_SEGUNDO := 30.0
 const MUEBLE := preload("res://assets/ui/tele/mueble.png")
@@ -22,6 +25,7 @@ const MUEBLE_EN := Vector2(24, 0)   # centrado encima del cuadro del texto
 const PANTALLA := Rect2(46, 54, 288, 164)   # el hueco del mueble (lo dice tools/tele.py), más MUEBLE_EN
 const CAJA_TEXTO := Rect2(0, 262, 448, 142)   # lo que dice la reportera, por trozos (partir)
 const LETRA := 18   # el tamaño de esas letras (M75 las subió a 32, pero eran enormes: el dueño las prefiere a 18)
+const ENTRE_TROZOS := 1.3     # con "continuo", lo que espera entre un trozo y el siguiente (y tras el último)
 const NOMBRE_SEGUNDOS := 4.0   # lo que se ve el rótulo con el nombre de la reportera al empezar
 
 var noticia: Dictionary
@@ -38,6 +42,10 @@ var letras := 0.0
 var trozos: Array[String] = []   # lo que dice la reportera, en los trozos que caben en el cuadro
 var trozo := 0                  # el que está diciendo
 var boca := 0           # el dibujo de la reportera mientras habla (0, 1 o 2)
+var continuo := false     # sigue solo de un trozo al siguiente, como un vídeo (sin esperar el clic); al acabar, avisa con "acabada"
+var parada := false       # en pausa (el stop de VIDEOS.EXE): la imagen se queda quieta
+var terminada := false    # ya ha dicho todo (con "continuo")
+var espera := 0.0         # lo que lleva esperando entre trozos (con "continuo")
 var nieve := 0.0        # el ruido de cambiar de canal, al poner una noticia
 
 
@@ -98,6 +106,9 @@ func poner(n: Dictionary) -> void:
 	en_antena = 0.0
 	boca = 0
 	nieve = 0.3
+	terminada = false
+	parada = false
+	espera = 0.0
 
 
 # Si está hablando, termina el trozo de golpe; si ya lo había terminado, sigue con el siguiente y, después del
@@ -148,14 +159,46 @@ func partir(todo: String) -> Array[String]:
 
 # ¿Queda otro trozo por decir? (la flechita del cuadro)
 func hay_mas() -> bool:
-	return not hablando() and trozo + 1 < trozos.size()
+	return not continuo and not hablando() and trozo + 1 < trozos.size()
 
 
 func hablando() -> bool:
 	return texto.visible_characters >= 0 and texto.visible_characters < texto.get_total_character_count()
 
 
+# Cuánto lleva dicho de la emisión, de 0 a 1 (la barra de avance de VIDEOS.EXE)
+func progreso() -> float:
+	if trozos.is_empty():
+		return 0.0
+	if terminada:
+		return 1.0
+	var total := maxi(1, texto.get_total_character_count())
+	return (trozo + clampf(letras / total, 0.0, 1.0)) / trozos.size()
+
+
+# El play de VIDEOS.EXE: sigue donde estaba y, si ya había acabado, desde el principio
+func reproducir() -> void:
+	if noticia.is_empty():
+		return
+	if terminada:
+		poner(noticia)
+	parada = false
+
+
+# El stop de VIDEOS.EXE: vuelve al principio y se queda quieta
+func parar() -> void:
+	if noticia.is_empty():
+		return
+	poner(noticia)
+	nieve = 0.0
+	parada = true
+	texto.visible_characters = 0
+	queue_redraw()   # (la barra de avance de VIDEOS.EXE se pone al día al dibujar)
+
+
 func _process(delta: float) -> void:
+	if parada:
+		return
 	tiempo += delta
 	if nieve > 0.0:
 		nieve -= delta
@@ -172,6 +215,15 @@ func _process(delta: float) -> void:
 				boca = boca_de(letra)
 		else:
 			boca = 0
+			if continuo and not terminada and not noticia.is_empty():
+				espera += delta
+				if espera >= ENTRE_TROZOS:
+					espera = 0.0
+					if trozo + 1 < trozos.size():
+						empezar_trozo(trozo + 1)
+					else:
+						terminada = true
+						acabada.emit()
 	directo.visible = fmod(tiempo, 1.0) < 0.6
 	nombre.visible = en_antena < NOMBRE_SEGUNDOS
 	canal.position.x = PANTALLA.size.x - canal.size.x - 10

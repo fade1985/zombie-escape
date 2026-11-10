@@ -18,8 +18,8 @@
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
 #     los edificios, para releerlas. Una carpeta de archivo con una pestaña por edificio (carpeta_dosier.gd): las
 #     páginas como fichas a la izquierda y la hoja a la derecha. Las que faltan salen como páginas arrancadas.
-#   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
-#     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
+#   - "Vídeos" (VIDEOS.EXE): las noticias de Canal 8 que ya has visto en las teles de los salones (historia.gd), con su
+#     barra de avance y los botones de reproducir y parar, de adorno (ui/tele.gd). Sin avisos de novedades.
 #   - "Colecciones": el bestiario (bestiario.gd): cada enemigo visto alguna vez, por familias, con su dibujo, su
 #     frase y cuántos se han matado. Queda entre partidas; el icono avisa si hay algo nuevo.
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta que acaba (todos si
@@ -38,14 +38,14 @@ const ICONOS := [   # [programa, icono, nombre]
 	["armas", "escritorio-armas", "Tienda\nde armas"],
 	["logros", "escritorio-logros", "Logros"],
 	["dosier", "escritorio-dosier", "Dosier\nVD-7"],
-	["noticias", "noticias", "Noticias"],
+	["videos", "noticias", "Vídeos"],
 	["colecciones", "escritorio-colecciones", "Colecciones"],
 	["apagar", "escritorio-apagar", "Apagar"],
 ]
-const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV",
+const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "videos": "VIDEOS.EXE",
 	"colecciones": "COLECCION.EXE"}
 const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
-	"noticias": "Noticias de Canal 8", "colecciones": "Sujetos"}
+	"videos": "Vídeos de Canal 8", "colecciones": "Sujetos"}
 # [/traducir]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
 const ARBOL := preload("res://scripts/ui/arbol_talentos.gd")   # el árbol de talentos (TALENTOS.EXE)
@@ -55,7 +55,7 @@ const CARPETA_DOSIER := preload("res://scripts/ui/carpeta_dosier.gd")   # el dos
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
 # El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
 # [traducir]
-const AVISO_ICONO := {"noticias": "Noticias\n¡NUEVAS!", "colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!"}
+const AVISO_ICONO := {"colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!"}
 # [/traducir]
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -76,7 +76,7 @@ const PIP_LLENO := Color("#e8b923")
 var partida: Node
 var fondo: ColorRect
 var pantalla: Control
-var iconos: Control         # los botones del escritorio, colocados a mano (Noticias, sola arriba a la derecha)
+var iconos: Control         # los botones del escritorio, colocados a mano (Vídeos, solo arriba a la derecha)
 var colocando := false   # marcar: la ventana recién rehecha aún se está colocando, y lo que hay bajo el ratón no es lo que se ve
 var ventana: Control
 var info: Label             # la línea de abajo de la ventana: explica lo que está marcado
@@ -187,7 +187,7 @@ func montar_monitor() -> void:
 	escritorio.set_anchors_preset(Control.PRESET_FULL_RECT)
 	pantalla.add_child(escritorio)
 
-	# los iconos, en columna a la izquierda; Noticias, sola en la esquina de arriba a la derecha (como la tele de una
+	# los iconos, en columna a la izquierda; Vídeos, solo en la esquina de arriba a la derecha (como la tele de una
 	# esquina)
 	iconos = Control.new()
 	iconos.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -200,11 +200,11 @@ func montar_monitor() -> void:
 		b.name = "icono_" + i[0]
 		b.flat = true
 		# 82 de alto (antes 72): con el ratón encima sale el marco de madera del foco, y su borde (unos 8 por cada lado)
-		# pisaba el dibujo por arriba y los rótulos de dos líneas por abajo. Noticias, sola en su esquina, algo más (su
+		# pisaba el dibujo por arriba y los rótulos de dos líneas por abajo. Vídeos, solo en su esquina, algo más (su
 		# tele es más alta). Los 6 de la columna caben igual: 12 + 5 × 84 + 82 = 514, y la barra de tareas empieza en 522
-		b.custom_minimum_size = Vector2(132, 88 if i[0] == "noticias" else 82)
+		b.custom_minimum_size = Vector2(132, 88 if i[0] == "videos" else 82)
 		b.size = b.custom_minimum_size
-		if i[0] == "noticias":
+		if i[0] == "videos":
 			b.position = Vector2(pantalla.custom_minimum_size.x - 10 - 132, 12)
 		else:
 			b.position = Vector2(10, 12 + en_columna * 84)
@@ -333,8 +333,8 @@ func abrir(programa: String, foco := "") -> void:
 		foco = programa_logros(contenido, foco)
 	elif programa == "dosier":
 		foco = programa_dosier(contenido, foco)
-	elif programa == "noticias":
-		foco = programa_noticias(contenido, foco)
+	elif programa == "videos":
+		foco = programa_videos(contenido, foco)
 	elif programa == "colecciones":
 		foco = programa_colecciones(contenido, foco)
 	else:
@@ -454,7 +454,7 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	ventana.draw.connect(func(): relieve(ventana, false, 3.0))
 	ventana.position = Vector2(152, 10)
 	ventana.size = Vector2(718, 508)
-	if programa == "dosier" or programa == "colecciones":
+	if programa == "dosier" or programa == "colecciones" or programa == "videos":
 		# el Dosier, maximizado (tapa los iconos): las hojas llevan mucho texto y así se leen con la letra más grande;
 		# y Colecciones, para que quepan a la vez la ficha grande y la cuadrícula
 		ventana.position = Vector2(4, 4)
@@ -980,56 +980,85 @@ func programa_dosier(c: VBoxContainer, foco := "") -> String:
 	return "b_" + carpeta.vista
 
 
-# ── Noticias ──
+# ── Vídeos ──
 
-# A la izquierda, las emisiones (las que aún no han salido, con candado); a la derecha, la tele. Devuelve la que
-# hay que dejar marcada: la primera sin ver o, si no, la última emitida
-func programa_noticias(c: VBoxContainer, foco: String) -> String:
+# VIDEOS.EXE (M91): las noticias de Canal 8 que ya has visto en las teles de los salones. A la izquierda, la lista; a la
+# derecha, la tele con una barra de avance y los botones de reproducir y parar, que son de adorno: la noticia se ve
+# seguida, igual que en la tele del salón. Devuelve la que hay que dejar marcada: la primera de la lista
+func programa_videos(c: VBoxContainer, foco: String) -> String:
 	var s := Guardado.cargar()
+	var vistas := Historia.videos_vistos(s)
+	if vistas.is_empty():
+		var vacio := Label.new()
+		vacio.text = Idioma.t("Aún no has visto ninguna noticia.\nCuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras.")
+		vacio.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		vacio.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		vacio.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		vacio.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		c.add_child(vacio)
+		info.text = Idioma.t("Aún no has visto ninguna noticia.")
+		return ""
 	var partes := HBoxContainer.new()
 	partes.add_theme_constant_override("separation", 10)
 	c.add_child(partes)
-	# las emisiones, con su propio desplazamiento (ya no caben todas): así la tele no se mueve al bajar por ellas
+	var izquierda := VBoxContainer.new()
+	izquierda.add_theme_constant_override("separation", 6)
+	partes.add_child(izquierda)
+	# los vídeos, con su propio desplazamiento: así la tele no se mueve al bajar por ellos
 	var desliza := ScrollContainer.new()
 	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	desliza.follow_focus = true
-	desliza.custom_minimum_size.y = Tele.CAJA_TEXTO.end.y
-	partes.add_child(desliza)
+	desliza.custom_minimum_size.y = Tele.CAJA_TEXTO.end.y - 40.0
+	izquierda.add_child(desliza)
 	var lista := VBoxContainer.new()
-	lista.custom_minimum_size.x = 220
+	lista.custom_minimum_size.x = 340
 	lista.add_theme_constant_override("separation", 6)
 	desliza.add_child(lista)
+	var derecha := VBoxContainer.new()
+	derecha.add_theme_constant_override("separation", 6)
+	partes.add_child(derecha)
+	# el reproductor de adorno, debajo de la lista: reproducir, parar y la barra de avance
+	var mandos := HBoxContainer.new()
+	mandos.add_theme_constant_override("separation", 8)
+	izquierda.add_child(mandos)
 	var tele := Tele.new()
+	tele.continuo = true
 	tele.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	partes.add_child(tele)
-	var nuevas := Historia.noticias_nuevas(s)
-	var primera_nueva := ""
-	var ultima := ""
-	for i in Historia.NOTICIAS.size():
-		var n: Dictionary = Historia.NOTICIAS[i]
-		var sale := Historia.emitida(s, n)
-		var nueva := n in nuevas
-		var b := tarjeta(lista, "b_" + n.id, "noticias" if sale else "candado", Idioma.t("Emisión %d") % (i + 1),
-			Historia.titular_de(n) if sale else Idioma.t("Sin emitir"), Idioma.t("¡NUEVA!") if nueva else "", "" if sale else "bloqueada")
-		if not sale:
-			var pista := (Idioma.t("Completa %s.") % Idioma.t(Edificios.datos(n.victoria).el_nombre)) if n.victoria != "" else Idioma.t("Sigue buscando páginas del dosier VD-7.")
-			enlazar(b, Idioma.t("Emisión %d: aún no ha salido. %s") % [i + 1, pista], Sonido.tocar.bind("no"))
-			continue
-		ultima = "b_" + n.id
-		if nueva and primera_nueva == "":
-			primera_nueva = ultima
+	derecha.add_child(tele)
+	var b_play := Button.new()
+	b_play.name = "b_play"   # no-tr
+	b_play.text = Idioma.t("Reproducir")
+	b_play.pressed.connect(tele.reproducir)
+	mandos.add_child(b_play)
+	var b_stop := Button.new()
+	b_stop.name = "b_stop"   # no-tr
+	b_stop.text = Idioma.t("Parar")
+	b_stop.pressed.connect(tele.parar)
+	mandos.add_child(b_stop)
+	var avance := ProgressBar.new()
+	avance.name = "avance"   # no-tr
+	avance.show_percentage = false
+	avance.max_value = 1.0
+	avance.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	avance.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	avance.custom_minimum_size.y = 14
+	mandos.add_child(avance)
+	tele.draw.connect(func(): avance.value = tele.progreso())
+	var primera := ""
+	for n in vistas:
+		var sitio: String = Idioma.t(Edificios.datos(Historia.edificio_de(n)).nombre)
+		var b := tarjeta(lista, "b_" + n.id, "noticias", sitio, Historia.titular_de(n), "")
+		if primera == "":
+			primera = "b_" + n.id
 		var ver := func():
 			if tele.noticia != n:
 				tele.poner(n)
-				Historia.ver_noticia(n.id)
-				refrescar_avisos()   # (con la última nueva vista, se quita el aviso de Noticias)
-		enlazar(b, Idioma.t("Emisión %d: «%s». Pulsa para saltar o repetir.") % [i + 1, Historia.titular_de(n)], tele.saltar)
+				avance.value = 0.0
+		enlazar(b, Idioma.t("%s: «%s». Pulsa para verla otra vez.") % [sitio, Historia.titular_de(n)], func(): tele.poner(n))
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
-	info.text = Idioma.t("%s, con %s. Pasa por las emisiones para verlas.") % [Historia.canal(), Historia.REPORTERA]
-	if foco != "":
-		return foco
-	return primera_nueva if primera_nueva != "" else ultima
+	info.text = Idioma.t("%s, con %s. Pasa por los vídeos para verlos.") % [Historia.canal(), Historia.REPORTERA]
+	return foco if foco != "" else primera
 
 
 # ── Colecciones: el bestiario ──

@@ -3162,12 +3162,8 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "一架Velaria的直升机冲你来了！"
 
 #: scripts/partida.gd
-msgid "¡NOTICIAS NUEVAS!"
-msgstr "突发新闻！"
-
-#: scripts/partida.gd
-msgid "Hay noticias nuevas en el ordenador"
-msgstr "电脑上有新的新闻播报"
+msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
+msgstr "新闻已保存到电脑的 VIDEOS.EXE 里"
 
 #: scripts/partida.gd
 msgid "la tienda de %s"
@@ -6130,6 +6126,18 @@ msgstr "已保存到维修间电脑的“档案”里"
 msgid "Seguir"
 msgstr "继续"
 
+#: scripts/ui/menus.gd scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "直播"
+
+#: scripts/ui/menus.gd
+msgid "La tele del salón"
+msgstr "客厅的电视"
+
+#: scripts/ui/menus.gd scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "关机"
+
 #: scripts/ui/menus.gd
 msgid "El fuego"
 msgstr "火"
@@ -6871,36 +6879,32 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "移到各页上即可阅读。"
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d"
-msgstr "第 %d 期"
+msgid ""
+"Aún no has visto ninguna noticia.\n"
+"Cuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras."
+msgstr ""
+"你还没看过任何新闻。\n"
+"清理完一套公寓后，客厅里的一台电视会亮起：看完之后，这条新闻就会留在这里，随时可以重看。"
 
 #: scripts/ui/ordenador.gd
-msgid "Sin emitir"
-msgstr "未播出"
+msgid "Aún no has visto ninguna noticia."
+msgstr "你还没看过任何新闻。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡NUEVA!"
-msgstr "新！"
+msgid "Reproducir"
+msgstr "播放"
 
 #: scripts/ui/ordenador.gd
-msgid "Completa %s."
-msgstr "通关%s。"
+msgid "Parar"
+msgstr "停止"
 
 #: scripts/ui/ordenador.gd
-msgid "Sigue buscando páginas del dosier VD-7."
-msgstr "继续寻找VD-7档案的页面。"
+msgid "%s: «%s». Pulsa para verla otra vez."
+msgstr "%s：「%s」。按一下再看一遍。"
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d: aún no ha salido. %s"
-msgstr "第 %d 期：尚未播出。%s"
-
-#: scripts/ui/ordenador.gd
-msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
-msgstr "第 %d 期：“%s”。点击跳过或重播。"
-
-#: scripts/ui/ordenador.gd
-msgid "%s, con %s. Pasa por las emisiones para verlas."
-msgstr "%s，主播%s。移到各期上即可观看。"
+msgid "%s, con %s. Pasa por los vídeos para verlos."
+msgstr "%s，主播是%s。把光标移到视频上就能观看。"
 
 #: scripts/ui/ordenador.gd
 msgid "Sujetos"
@@ -6987,12 +6991,8 @@ msgstr ""
 "档案"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias"
-msgstr "新闻"
-
-#: scripts/ui/ordenador.gd
-msgid "Apagar"
-msgstr "关机"
+msgid "Vídeos"
+msgstr "视频"
 
 #: scripts/ui/ordenador.gd
 msgid "TALENTOS.EXE"
@@ -7011,8 +7011,8 @@ msgid "DOSIER.TXT"
 msgstr "档案.TXT"
 
 #: scripts/ui/ordenador.gd
-msgid "CANAL8.TV"
-msgstr "8频道.TV"
+msgid "VIDEOS.EXE"
+msgstr "VIDEOS.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "COLECCION.EXE"
@@ -7031,16 +7031,8 @@ msgid "Dosier VD-7"
 msgstr "VD-7档案"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias de Canal 8"
-msgstr "8频道新闻"
-
-#: scripts/ui/ordenador.gd
-msgid ""
-"Noticias\n"
-"¡NUEVAS!"
-msgstr ""
-"新闻\n"
-"有更新！"
+msgid "Vídeos de Canal 8"
+msgstr "频道8视频"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7109,10 +7101,6 @@ msgstr "你又变回了那个普普通通的清洁工。"
 #: scripts/ui/taquilla.gd
 msgid "Te pones: %s. Se queda puesta."
 msgstr "你换上了：%s。会一直穿着。"
-
-#: scripts/ui/tele.gd
-msgid "EN DIRECTO"
-msgstr "直播"
 
 #: scripts/ui/tele.gd
 msgid "CANAL 8"
@@ -7249,51 +7237,3 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
-
-#, sin-usar
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "别把我丢在这儿！"
-
-#, sin-usar
-msgid "¡QUE ME COMEN!"
-msgstr "我要被吃掉了！"
-
-#, sin-usar
-msgid "la entrada"
-msgstr "入口"
-
-#, sin-usar
-msgid "¡Vienen por %s!"
-msgstr "它们从%s过来了！"
-
-#, sin-usar
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "谢了！我接着撬锁"
-
-#, sin-usar
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "开了！快跑！"
-
-#, sin-usar
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "卡住了！掩护我！"
-
-#, sin-usar
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "这锁锈住了……给我点时间"
-
-#, sin-usar
-msgid "Vale… creo que ya noto el muelle"
-msgstr "好……我好像摸到弹簧了"
-
-#, sin-usar
-msgid "¡Toma, he encontrado esto!"
-msgstr "拿着，我找到了这些！"
-
-#, sin-usar
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "发卡掉了！……好，捡到了"
-
-#, sin-usar
-msgid "Ya casi lo tengo…"
-msgstr "马上就好……"

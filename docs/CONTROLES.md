@@ -164,7 +164,7 @@ y se cierra también junto a su parte de arriba. Si Johnny está delante de dos 
 banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
 
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
-  tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
+  tienda de armas, logros, Dosier, Vídeos y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
   atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl. Si
   compras un arma y ya llevas dos de ese tipo, la de la mano baja al repuesto y la de repuesto va al baúl en ese momento;

@@ -484,6 +484,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		var sitio: Dictionary = planta.sitios[normales[orden]]
 		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
 		sitio.armaritos = armaritos(sitio)
+	tele_de_la_planta(planta, normales, rng)
 
 	# Con tarjeta, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
 	if ed.cerrojo == "tarjeta":
@@ -893,6 +894,22 @@ static func cuarto_limpieza(sitio: Dictionary, sala: Dictionary, rng: RandomNumb
 	var otros: Array = sitio.peligros.filter(func(p): return p.tipo != "gas")
 	var gas := Peligros.gas(sitio, rng, true)
 	sitio.peligros = otros + ([gas] if not gas.is_empty() else [])
+
+
+# M91: la tele de la planta que enseña las noticias (mapa/tele_salon.gd): un mueble "tv" de un salón de un apartamento normal,
+# elegido al azar: el mueble lleva "tele": true y su sitio, sitio.tele = {"estado": "apagada"} (hasta limpiar ese apartamento)
+static func tele_de_la_planta(planta: Dictionary, normales: Array, rng: RandomNumberGenerator) -> void:
+	var teles := []   # [sitio, mueble]
+	for i in normales:
+		var sitio: Dictionary = planta.sitios[i]
+		for m in sitio.muebles:
+			if m.tipo == "tv" and sitio.apt.salas.any(func(s): return s.id == m.zona and s.uso == "salon"):
+				teles.append([i, m])
+	if teles.is_empty():
+		return
+	var una: Array = teles[rng.randi() % teles.size()]
+	una[1].tele = true
+	planta.sitios[una[0]].tele = {"estado": "apagada"}
 
 
 static func armaritos(sitio: Dictionary) -> Array:

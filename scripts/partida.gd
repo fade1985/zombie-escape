@@ -327,10 +327,7 @@ func _ready() -> void:
 		decir("%s: %s%s" % [Planta.nombre_de(planta), Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla(Alerta.nivel, edificio)]
 			if Alerta.nivel > 0 else ""] + ("\n" + Reto.aviso() if Reto.activo else "")
 			+ ("\n" + Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila") if botiquin else ""), 4.0)
-		var noticias := not Historia.noticias_nuevas(s).is_empty()
-		if noticias:
-			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
-		supervivientes.avisar_pista(9.0 if noticias else 4.8)   # (la recepcionista rescatada: dónde está la llave o el código)
+		supervivientes.avisar_pista(4.8)   # (la recepcionista rescatada: dónde está la llave o el código)
 		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
 
 
@@ -512,9 +509,6 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		hacer_mapa(idx, sitio)
 	else:
 		sacar_mapa(idx)
-	# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
-	if mapa.ordenador and fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
-		avisar_noticias()
 	mapa.cosas.add_child(johnny)
 	johnny.position = mapa.puertas[por].llegada()
 	johnny.velocity = Vector2.ZERO
@@ -617,6 +611,8 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 		mapa.taquilla.usar.connect(abrir_taquilla)
 	if mapa.baul:   # (el de la sala de mantenimiento o el de pruebas)
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
+	if mapa.tele_salon:   # (la tele del salón que enseña las noticias, M91)
+		mapa.tele_salon.usar.connect(abrir_tele)
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(abrir_armarito.bind(armarito))
@@ -875,6 +871,7 @@ func _physics_process(delta: float) -> void:
 				fin_del_edificio()   # (el jefe de relleno de una azotea sin su final: el de verdad lo llama al caer)
 		else:
 			decir(Idioma.t("¡Piso limpio! La puerta se ha abierto"))
+			encender_tele(sitio)
 			logros.cumplir("primer_turno")
 		actualizar_puertas()
 		Sonido.tocar("limpio")
@@ -1020,23 +1017,43 @@ func subir_al_helicoptero() -> void:
 	subir()
 
 
-# Apunta la página para siempre y la enseña con el juego parado; al cerrarla, avisa si trae noticias
+# Apunta la página para siempre y la enseña con el juego parado
 func leer_pagina(p: Dictionary) -> void:
 	Historia.apuntar(p.id)
 	Sonido.tocar("compra")
 	var paginas: Array = Historia.dosier(edificio).paginas
 	get_tree().paused = true
-	menus.pagina(p, paginas.find(p) + 1, paginas.size(), func():
+	menus.pagina(p, paginas.find(p) + 1, paginas.size(), func(): get_tree().paused = false)
+
+
+# M91: al limpiar el apartamento que tiene la tele de la planta, se enciende (pantalla en blanco y un «!» encima) si aún
+# queda alguna noticia de este edificio por ver
+func encender_tele(sitio: Dictionary) -> void:
+	if not sitio.has("tele") or sitio.tele.estado != "apagada":
+		return
+	if Historia.siguiente_noticia(edificio, Guardado.cargar()).is_empty():
+		return
+	sitio.tele.estado = "encendida"
+	Sonido.tocar("compra")
+	if mapa.tele_salon:
+		mapa.tele_salon.encender()
+
+
+# Con la tele del salón encendida y el clic delante de ella: sale la primera noticia de este edificio que aún no has visto,
+# con el juego parado. Si la ves entera, se apaga para siempre y queda en VIDEOS.EXE del ordenador; si la cierras antes,
+# sigue encendida
+func abrir_tele() -> void:
+	var n := Historia.siguiente_noticia(edificio, Guardado.cargar())
+	var tele: Node2D = mapa.tele_salon
+	if n.is_empty() or terminada or tele == null:
+		return
+	get_tree().paused = true
+	menus.noticia(n, func(entera: bool):
 		get_tree().paused = false
-		if Historia.NOTICIAS.any(func(n): return n.pagina == p.id):
-			avisar_noticias())
-
-
-# Hay alguna emisión de Canal 8 sin ver en el programa Noticias del ordenador (historia.gd)
-func avisar_noticias() -> void:
-	if not terminada:
-		gran_aviso(Idioma.t("¡NOTICIAS NUEVAS!"))
-		decir(Idioma.t("Hay noticias nuevas en el ordenador"), 3.5)
+		if entera:
+			Historia.ver_noticia(n.id)
+			tele.apagar()
+			decir(Idioma.t("Noticia guardada en VIDEOS.EXE, en el ordenador"), 3.5))
 
 
 # Un grito grande encima de Johnny, como el de «¡¡¡LA LLAVE!!!», para lo que no hay que perderse (lo nuevo en el ordenador,

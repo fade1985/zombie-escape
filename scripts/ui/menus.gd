@@ -37,7 +37,7 @@ const PELIGROS := {
 # [/traducir]
 
 var fondo: ColorRect
-var abierto := ""         # "pausa", "fin", "mutacion", "pagina", "opciones", "tutorial" o "" (nada)
+var abierto := ""         # "pausa", "fin", "mutacion", "pagina", "noticia", "opciones", "tutorial" o "" (nada)
 var elegir_mutacion := Callable()   # a quién avisar con la mutación elegida
 var cartas: Array = []    # las dos mutaciones que se ofrecen
 var al_leer := Callable()  # a quién avisar al cerrar la página del dosier
@@ -403,6 +403,34 @@ func pagina(p: Dictionary, n: int, total: int, al_cerrar: Callable) -> void:
 	boton(fila, Idioma.t("Seguir"), leida).grab_focus.call_deferred()
 
 
+# La noticia que sale en la tele de un salón (M91): se ve entera, seguida, como un vídeo. Al acabar espera un momento y
+# se apaga sola: al_cerrar(true). Con "Apagar" o Esc se cierra antes, sin darla por vista: al_cerrar(false)
+func noticia(n: Dictionary, al_cerrar: Callable) -> void:
+	var columna := abrir("noticia", 0.85)
+	al_leer = al_cerrar
+	titulo(columna, "%s · %s" % [Historia.canal(), Idioma.t("EN DIRECTO")], Idioma.t("La tele del salón"))
+	var centro := CenterContainer.new()
+	columna.add_child(centro)
+	var tele := Tele.new()
+	tele.continuo = true
+	centro.add_child(tele)
+	tele.poner(n)
+	tele.acabada.connect(func():
+		# (un momento con la última frase en pantalla, y la tele se apaga)
+		get_tree().create_timer(1.5, true).timeout.connect(noticia_vista.bind(true)))
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	columna.add_child(fila)
+	boton(fila, Idioma.t("Apagar"), noticia_vista.bind(false)).grab_focus.call_deferred()
+
+
+func noticia_vista(entera: bool) -> void:
+	if abierto != "noticia":
+		return
+	cerrar()
+	al_leer.call(entera)
+
+
 func leida() -> void:
 	if abierto != "pagina":
 		return
@@ -428,6 +456,10 @@ func _unhandled_input(evento: InputEvent) -> void:
 	if abierto == "fin" and evento is InputEventKey and evento.pressed and not evento.echo and evento.physical_keycode == KEY_R:
 		get_viewport().set_input_as_handled()
 		al_final(reintentar)
+		return
+	if abierto == "noticia" and evento.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		noticia_vista(false)
 		return
 	if abierto == "pagina" and evento.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()

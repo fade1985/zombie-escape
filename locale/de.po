@@ -3166,12 +3166,8 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "Ein Hubschrauber von Velaria kommt dich holen!"
 
 #: scripts/partida.gd
-msgid "¡NOTICIAS NUEVAS!"
-msgstr "EILMELDUNG!"
-
-#: scripts/partida.gd
-msgid "Hay noticias nuevas en el ordenador"
-msgstr "Neue Nachrichten auf dem Computer"
+msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
+msgstr "Nachricht in VIDEOS.EXE auf dem Computer gespeichert"
 
 #: scripts/partida.gd
 msgid "la tienda de %s"
@@ -6152,6 +6148,18 @@ msgstr "Wird in der Akte auf dem Computer im Wartungsraum gespeichert"
 msgid "Seguir"
 msgstr "Weiter"
 
+#: scripts/ui/menus.gd scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "LIVE"
+
+#: scripts/ui/menus.gd
+msgid "La tele del salón"
+msgstr "Der Fernseher im Wohnzimmer"
+
+#: scripts/ui/menus.gd scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Ausschalten"
+
 #: scripts/ui/menus.gd
 msgid "El fuego"
 msgstr "Das Feuer"
@@ -6893,36 +6901,32 @@ msgid "Pasa por las páginas para leerlas."
 msgstr "Geh auf die Seiten, um sie zu lesen."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d"
-msgstr "Sendung %d"
+msgid ""
+"Aún no has visto ninguna noticia.\n"
+"Cuando limpies un piso, una tele del salón se encenderá: úsala y la tendrás aquí para verla cuando quieras."
+msgstr ""
+"Du hast noch keine Nachrichten gesehen.\n"
+"Wenn du eine Wohnung geräumt hast, schaltet sich ein Fernseher im Wohnzimmer ein: Benutze ihn, und du kannst die Nachricht hier jederzeit ansehen."
 
 #: scripts/ui/ordenador.gd
-msgid "Sin emitir"
-msgstr "Nicht gesendet"
+msgid "Aún no has visto ninguna noticia."
+msgstr "Du hast noch keine Nachrichten gesehen."
 
 #: scripts/ui/ordenador.gd
-msgid "¡NUEVA!"
-msgstr "NEU!"
+msgid "Reproducir"
+msgstr "Abspielen"
 
 #: scripts/ui/ordenador.gd
-msgid "Completa %s."
-msgstr "Schaff %s."
+msgid "Parar"
+msgstr "Stopp"
 
 #: scripts/ui/ordenador.gd
-msgid "Sigue buscando páginas del dosier VD-7."
-msgstr "Such weiter nach Seiten der Akte VD-7."
+msgid "%s: «%s». Pulsa para verla otra vez."
+msgstr "%s: «%s». Drücken, um es noch einmal zu sehen."
 
 #: scripts/ui/ordenador.gd
-msgid "Emisión %d: aún no ha salido. %s"
-msgstr "Sendung %d: noch nicht gelaufen. %s"
-
-#: scripts/ui/ordenador.gd
-msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
-msgstr "Sendung %d: \"%s\". Drück zum Springen oder Wiederholen."
-
-#: scripts/ui/ordenador.gd
-msgid "%s, con %s. Pasa por las emisiones para verlas."
-msgstr "%s, mit %s. Geh auf die Sendungen, um sie zu sehen."
+msgid "%s, con %s. Pasa por los vídeos para verlos."
+msgstr "%s, mit %s. Geh auf die Videos, um sie anzusehen."
 
 #: scripts/ui/ordenador.gd
 msgid "Sujetos"
@@ -7009,12 +7013,8 @@ msgstr ""
 "VD-7"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias"
-msgstr "Nachrichten"
-
-#: scripts/ui/ordenador.gd
-msgid "Apagar"
-msgstr "Ausschalten"
+msgid "Vídeos"
+msgstr "Videos"
 
 #: scripts/ui/ordenador.gd
 msgid "TALENTOS.EXE"
@@ -7033,8 +7033,8 @@ msgid "DOSIER.TXT"
 msgstr "AKTE.TXT"
 
 #: scripts/ui/ordenador.gd
-msgid "CANAL8.TV"
-msgstr "KANAL8.TV"
+msgid "VIDEOS.EXE"
+msgstr "VIDEOS.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "COLECCION.EXE"
@@ -7053,16 +7053,8 @@ msgid "Dosier VD-7"
 msgstr "Akte VD-7"
 
 #: scripts/ui/ordenador.gd
-msgid "Noticias de Canal 8"
-msgstr "Nachrichten von Kanal 8"
-
-#: scripts/ui/ordenador.gd
-msgid ""
-"Noticias\n"
-"¡NUEVAS!"
-msgstr ""
-"Nachrichten\n"
-"NEU!"
+msgid "Vídeos de Canal 8"
+msgstr "Videos von Kanal 8"
 
 #: scripts/ui/ordenador.gd
 msgid ""
@@ -7131,10 +7123,6 @@ msgstr "Du bist wieder der gute alte Hausmeister."
 #: scripts/ui/taquilla.gd
 msgid "Te pones: %s. Se queda puesta."
 msgstr "Angezogen: %s. Bleibt an."
-
-#: scripts/ui/tele.gd
-msgid "EN DIRECTO"
-msgstr "LIVE"
 
 #: scripts/ui/tele.gd
 msgid "CANAL 8"
@@ -7271,51 +7259,3 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
-
-#, sin-usar
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "LASS MICH NICHT HIER!"
-
-#, sin-usar
-msgid "¡QUE ME COMEN!"
-msgstr "DIE FRESSEN MICH!"
-
-#, sin-usar
-msgid "la entrada"
-msgstr "den Eingang"
-
-#, sin-usar
-msgid "¡Vienen por %s!"
-msgstr "Sie kommen durch %s!"
-
-#, sin-usar
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "Danke! Weiter mit dem Schloss"
-
-#, sin-usar
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "GESCHAFFT! LAUF!"
-
-#, sin-usar
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "Klemmt! Gib mir Deckung!"
-
-#, sin-usar
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "Das Schloss ist verrostet… gib mir Zeit"
-
-#, sin-usar
-msgid "Vale… creo que ya noto el muelle"
-msgstr "Okay… ich glaub, ich spür die Feder"
-
-#, sin-usar
-msgid "¡Toma, he encontrado esto!"
-msgstr "Hier, das hab ich gefunden!"
-
-#, sin-usar
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "Haarnadel runtergefallen!… okay, hab sie"
-
-#, sin-usar
-msgid "Ya casi lo tengo…"
-msgstr "Gleich hab ich's…"

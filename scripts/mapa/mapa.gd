@@ -27,6 +27,7 @@ const FUERA := Color(0.05, 0.04, 0.06)   # con "cajas", el muro que sobra alrede
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
+const TELE_SALON := preload("res://scripts/mapa/tele_salon.gd")   # la tele del salón que enseña las noticias (M91)
 const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")   # el «!» de encima de la taquilla con una skin sin ver
 # Lo que se usa de la sala de mantenimiento, en la pared de arriba de sus estancias (planta.gd; lo demás son muebles
 # del catálogo): la mesa del ordenador, en medio de la del despacho, con el corcho colgado a su izquierda; el banco de
@@ -145,6 +146,7 @@ var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de man
 var baul: Node2D = null          # y el baúl y el banco de trabajo
 var banco: Node2D = null
 var taquilla: Node2D = null      # y la taquilla de las skins de Johnny (skins.gd)
+var tele_salon: Node2D = null     # la tele de este sitio que enseña las noticias, si es la de su planta (tele_salon.gd)
 var armaritos: Array = []        # los armaritos con botiquín de los baños (armarito.gd)
 # La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
 # habitaciones ya descubiertas se apuntan en el sitio ("vistas"), así siguen claras al volver.
@@ -881,6 +883,10 @@ func poner_muebles() -> void:
 		mueble.montar(m, sitio.surtido)
 		cosas.add_child(mueble)
 		muebles.append(mueble)
+		if m.get("tele", false) and sitio.has("tele"):
+			tele_salon = TELE_SALON.new()
+			tele_salon.montar(sitio.tele, mueble, m.w)
+			mueble.add_child(tele_salon)
 		if (m.tipo == "lamp" or m.tipo == "nightstand") and not m.get("apagada", false):
 			poner_lampara(mueble, m)   # (las apagadas, sin luz ni brillo: solo el dibujo)
 	if sitio.tipo == "armas":

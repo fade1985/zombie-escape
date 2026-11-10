@@ -64,13 +64,11 @@ func _process(delta: float) -> void:
 	brillo.energy = 0.7 + sin(t * 2.5) * 0.2
 
 
-# Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado: «noticias» (emisiones sin ver),
+# Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado:
 # «colecciones» (un objeto o enemigo nuevo) y «logros» (alguno conseguido y sin cobrar). Lo usan el «!» de la mesa y los
 # iconos del escritorio (ui/ordenador.gd)
 static func novedades(s: Dictionary) -> Array:
 	var lista := []
-	if not Historia.noticias_nuevas(s).is_empty():
-		lista.append("noticias")
 	if s.colecciones_nuevo:
 		lista.append("colecciones")
 	if Logros.LISTA.any(func(l): return Logros.estado(s, l.id) == "conseguido"):
