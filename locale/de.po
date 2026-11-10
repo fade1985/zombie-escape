@@ -3928,18 +3928,6 @@ msgid "¡Estoy en el baño!"
 msgstr "Ich bin im Bad!"
 
 #: scripts/supervivientes.gd
-msgid "¡JOHNNY, VUELVE!"
-msgstr "JOHNNY, ZURÜCK!"
-
-#: scripts/supervivientes.gd
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "LASS MICH NICHT HIER!"
-
-#: scripts/supervivientes.gd
-msgid "¡QUE ME COMEN!"
-msgstr "DIE FRESSEN MICH!"
-
-#: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"
 msgstr "GLEICH GESCHAFFT!"
 
@@ -3958,6 +3946,10 @@ msgstr "BESCHÜTZ MICH, ICH ÖFFNE DIE TÜR!"
 #: scripts/supervivientes.gd
 msgid "¡LO CONSEGUÍ, VÁMONOS!"
 msgstr "GESCHAFFT, WEG HIER!"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "JOHNNY, ZURÜCK!"
 
 #: scripts/supervivientes.gd
 msgid "¡AYÚDAME!"
@@ -7279,6 +7271,14 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "LASS MICH NICHT HIER!"
+
+#, sin-usar
+msgid "¡QUE ME COMEN!"
+msgstr "DIE FRESSEN MICH!"
 
 #, sin-usar
 msgid "la entrada"

@@ -3928,18 +3928,6 @@ msgid "¡Estoy en el baño!"
 msgstr "Estou no banheiro!"
 
 #: scripts/supervivientes.gd
-msgid "¡JOHNNY, VUELVE!"
-msgstr "JOHNNY, VOLTA AQUI!"
-
-#: scripts/supervivientes.gd
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "NÃO ME DEIXA AQUI!"
-
-#: scripts/supervivientes.gd
-msgid "¡QUE ME COMEN!"
-msgstr "TÃO ME COMENDO!"
-
-#: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"
 msgstr "QUASE LÁ!"
 
@@ -3958,6 +3946,10 @@ msgstr "PROTEJA-ME, VOU ABRIR A PORTA!"
 #: scripts/supervivientes.gd
 msgid "¡LO CONSEGUÍ, VÁMONOS!"
 msgstr "CONSEGUI, VAMOS EMBORA!"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "JOHNNY, VOLTA AQUI!"
 
 #: scripts/supervivientes.gd
 msgid "¡AYÚDAME!"
@@ -7279,6 +7271,14 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
+
+#, sin-usar
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "NÃO ME DEIXA AQUI!"
+
+#, sin-usar
+msgid "¡QUE ME COMEN!"
+msgstr "TÃO ME COMENDO!"
 
 #, sin-usar
 msgid "la entrada"

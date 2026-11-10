@@ -3936,18 +3936,6 @@ msgid "¡Estoy en el baño!"
 msgstr "Я в ванной!"
 
 #: scripts/supervivientes.gd
-msgid "¡JOHNNY, VUELVE!"
-msgstr "ДЖОННИ, ВЕРНИСЬ!"
-
-#: scripts/supervivientes.gd
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
-
-#: scripts/supervivientes.gd
-msgid "¡QUE ME COMEN!"
-msgstr "МЕНЯ ЖЕ СЪЕДЯТ!"
-
-#: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"
 msgstr "УЖЕ СКОРО!"
 
@@ -3966,6 +3954,10 @@ msgstr "ПРИКРОЙ МЕНЯ, Я ОТКРОЮ ДВЕРЬ!"
 #: scripts/supervivientes.gd
 msgid "¡LO CONSEGUÍ, VÁMONOS!"
 msgstr "ПОЛУЧИЛОСЬ, УХОДИМ!"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "ДЖОННИ, ВЕРНИСЬ!"
 
 #: scripts/supervivientes.gd
 msgid "¡AYÚDAME!"
@@ -7301,6 +7293,14 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
+
+#, sin-usar
+msgid "¡QUE ME COMEN!"
+msgstr "МЕНЯ ЖЕ СЪЕДЯТ!"
 
 #, sin-usar
 msgid "la entrada"

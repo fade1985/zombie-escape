@@ -3920,18 +3920,6 @@ msgid "¡Estoy en el baño!"
 msgstr "我在浴室！"
 
 #: scripts/supervivientes.gd
-msgid "¡JOHNNY, VUELVE!"
-msgstr "JOHNNY，回来！"
-
-#: scripts/supervivientes.gd
-msgid "¡NO ME DEJES AQUÍ!"
-msgstr "别把我丢在这儿！"
-
-#: scripts/supervivientes.gd
-msgid "¡QUE ME COMEN!"
-msgstr "我要被吃掉了！"
-
-#: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"
 msgstr "快好了！"
 
@@ -3950,6 +3938,10 @@ msgstr "掩护我，我来开门！"
 #: scripts/supervivientes.gd
 msgid "¡LO CONSEGUÍ, VÁMONOS!"
 msgstr "搞定了，快走！"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "JOHNNY，回来！"
 
 #: scripts/supervivientes.gd
 msgid "¡AYÚDAME!"
@@ -7257,6 +7249,14 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "别把我丢在这儿！"
+
+#, sin-usar
+msgid "¡QUE ME COMEN!"
+msgstr "我要被吃掉了！"
 
 #, sin-usar
 msgid "la entrada"
