@@ -11,7 +11,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-- **F21** Menú de inicio: la mano de Johnny que sujeta la fregona tiene 4 dedos en lugar de 5 (el dibujo del fondo del menú, `assets/sources/menu-fondo-gpt.webp`).
 
 ## Mejoras
 
