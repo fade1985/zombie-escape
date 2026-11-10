@@ -59,6 +59,10 @@ MUEBLES = {
     # Apagar, el símbolo de encendido en rojo; el hueco de dentro del aro se vacía también (las semillas)
     "escritorio_apagar": ("assets/sources/escritorio-apagar-gpt.webp", "assets/ui/iconos/escritorio-apagar.png", 23, 26, False, (),
                           [(450, 750), (800, 750)]),
+    # Vídeos, un «play» amarillo (aro con un triángulo dentro, 10 nov); el hueco entre el aro y el triángulo se vacía
+    # también (las semillas)
+    "escritorio_videos": ("assets/sources/escritorio-videos-gpt.webp", "assets/ui/iconos/escritorio-videos.png", 26, 26, False, (),
+                          [(380, 620), (900, 620)]),
     # los iconos del árbol de talentos del ordenador (talentos.gd, "icono"; M2, 9 nov): uno propio por talento, sin
     # tocar los de los objetos; caben en un cuadrado de 32 (ui/arbol_talentos.gd, en_caja)
     "talento_ataque": ("assets/sources/talento-ataque-gpt.webp", "assets/ui/iconos/talento-ataque.png", 32, 32, False),

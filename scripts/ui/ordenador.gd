@@ -39,7 +39,7 @@ const ICONOS := [   # [programa, icono, nombre]
 	["logros", "escritorio-logros", "Logros"],
 	["dosier", "escritorio-dosier", "Dosier\nVD-7"],
 	["colecciones", "escritorio-colecciones", "Colecciones"],
-	["videos", "noticias", "Vídeos"],
+	["videos", "escritorio-videos", "Vídeos"],
 	["apagar", "escritorio-apagar", "Apagar"],   # (solo, en la esquina de arriba a la derecha; antes iba ahí Vídeos, 10 nov)
 ]
 const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "videos": "VIDEOS.EXE",
@@ -202,10 +202,9 @@ func montar_monitor() -> void:
 		b.name = "icono_" + i[0]
 		b.flat = true
 		# 82 de alto (antes 72): con el ratón encima sale el marco de madera del foco, y su borde (unos 8 por cada lado)
-		# pisaba el dibujo por arriba y los rótulos de dos líneas por abajo. Vídeos, el último de la columna, algo más (su
-		# tele es más alta). Los 6 de la columna caben igual: 12 + 5 × 84 + 88 = 520, y la barra de tareas empieza en 522.
-		# Apagar va solo, en la esquina de arriba a la derecha
-		b.custom_minimum_size = Vector2(132, 88 if i[0] == "videos" else 82)
+		# pisaba el dibujo por arriba y los rótulos de dos líneas por abajo. Los 6 de la columna caben igual:
+		# 12 + 5 × 84 + 82 = 514, y la barra de tareas empieza en 522. Apagar va solo, en la esquina de arriba a la derecha
+		b.custom_minimum_size = Vector2(132, 82)
 		b.size = b.custom_minimum_size
 		if i[0] == "apagar":
 			b.position = Vector2(pantalla.custom_minimum_size.x - 10 - 132, 12)
