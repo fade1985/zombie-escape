@@ -3220,6 +3220,82 @@ func probar_efectos_pared() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --efectos-apartamento": lo mismo que --efectos-pared, en un apartamento de verdad (con todas sus
+# habitaciones a la vista y sin zombis). Busca en su mapa un tabique de pie (dos habitaciones, una a cada lado), uno
+# tumbado (para la pared de abajo, con el efecto encima, y la de arriba, con el efecto debajo) y un hueco de puerta, y
+# en cada sitio suelta una explosión y, al lado, un charco de veneno. Fotos captura-efectos-apartamento-<sitio>.png:
+# se cortan en el tabique y no pasan a la otra habitación; por la puerta, sí. Se cierra
+func probar_efectos_apartamento() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var destino := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and not planta.sitios[i].limpio:
+			destino = i
+			break
+	await montar(destino, 0, false)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	zombis_de_prueba([])
+	for sala in mapa.niebla:   # (todas las habitaciones a la vista, para ver si algo pasa a la de al lado)
+		mapa.vistas[sala] = true
+	var C: float = mapa.CASILLA
+	var suelo := func(c: int, f: int) -> bool: return not mapa.es_muro(c, f) and mapa.dueno_en(c, f) >= 0
+	# los sitios: [nombre, dónde va el efecto, hacia dónde queda la pared]
+	var sitios := []
+	var hay := {}
+	for f in range(2, mapa.filas - 2):
+		for c in range(2, mapa.cols - 2):
+			if not mapa.es_muro(c, f):
+				if mapa.dueno_en(c, f) == -2 and not hay.has("puerta"):
+					hay.puerta = true
+					var de_lado: bool = suelo.call(c - 1, f) and suelo.call(c + 1, f)
+					var centro := Vector2(c + 0.5, f + 0.5) * C
+					sitios.append(["puerta", centro - (Vector2(48, 0) if de_lado else Vector2(0, 48))])
+				continue
+			# un tabique de 1 o 2 casillas con habitaciones distintas a cada lado, y largo (la de antes y la de después, también)
+			for grueso in [1, 2]:
+				if not hay.has("de-pie") and suelo.call(c - 1, f) and suelo.call(c + grueso, f) \
+						and mapa.dueno_en(c - 1, f) != mapa.dueno_en(c + grueso, f) \
+						and mapa.es_muro(c, f - 1) and mapa.es_muro(c, f + 1) and suelo.call(c - 1, f - 1) and suelo.call(c - 1, f + 1):
+					hay["de-pie"] = true
+					sitios.append(["de-pie", Vector2(c * C - 24.0, (f + 0.5) * C)])
+				if not hay.has("abajo") and suelo.call(c, f - 1) and suelo.call(c, f + grueso) \
+						and mapa.dueno_en(c, f - 1) != mapa.dueno_en(c, f + grueso) \
+						and mapa.es_muro(c - 1, f) and mapa.es_muro(c + 1, f) and suelo.call(c - 1, f - 1) and suelo.call(c + 1, f - 1) \
+						and suelo.call(c - 1, f + grueso) and suelo.call(c + 1, f + grueso):
+					hay.abajo = true
+					sitios.append(["abajo", Vector2((c + 0.5) * C, f * C - 24.0)])
+					sitios.append(["arriba", Vector2((c + 0.5) * C, (f + grueso) * C + 24.0)])
+	print("Apartamento %d: %d×%d casillas · sitios: %s" % [destino, mapa.cols, mapa.filas, sitios.map(func(s): return s[0])])
+	var sitio_de := johnny.get_parent()
+	johnny.visible = false
+	for s in sitios:
+		johnny.position = s[1]   # (las casillas cuentan desde la esquina del mapa, como la posición de lo de dentro)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(1.2).timeout   # (que se vaya la niebla)
+		var bum: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+		bum.radio = Lanzables.DATOS.granada.radio
+		bum.a_johnny = false
+		bum.position = s[1]
+		sitio_de.add_child(bum)
+		Mancha.quemado(sitio_de, s[1], bum.radio * 0.5)
+		var charco: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+		charco.tipo = "veneno"
+		charco.position = s[1] + (Vector2(0, 90) if s[0] == "de-pie" else Vector2(110, 0))
+		sitio_de.add_child(charco)
+		await get_tree().create_timer(0.15).timeout
+		var en_pantalla: Vector2 = get_viewport().get_canvas_transform() * bum.global_position
+		print("Efectos en «%s»: en la foto, en (%d, %d)" % [s[0], en_pantalla.x, en_pantalla.y])
+		Captura.foto("captura-efectos-apartamento-%s.png" % s[0])
+		await get_tree().create_timer(1.5).timeout
+		Captura.foto("captura-efectos-apartamento-%s-despues.png" % s[0])
+		zombis_de_prueba([])
+	get_tree().quit()
+
+
 # Para probar_granada_pared: un zombi lento quieto, de 500 de vida, en ese sitio. Tras la pared de la derecha de la sala
 # de pruebas ya es fuera del mapa, y meter_zombi lleva al suelo más cercano (a este lado) a quien se pide ahí (10 nov):
 # se le vuelve a poner donde se pedía
