@@ -1392,6 +1392,10 @@ func probar_epicas() -> void:
 	for c in get_tree().get_nodes_in_group("charcos"):
 		c.queue_free()
 	await get_tree().process_frame
+	# (las granadas Épicas que quedan, fuera de la mano: con las tres manos llenas, los molotovs irían al repuesto y no
+	# se lanzarían)
+	if "granada:3" in lanzables.mano:
+		lanzables.quitar("l%d" % lanzables.mano.find("granada:3"))
 	lanzables.meter("molotov:3", 2)
 	lanzables.tipo = "molotov:3"
 	lanzables.lanzar(johnny.position + Vector2(0, -180))

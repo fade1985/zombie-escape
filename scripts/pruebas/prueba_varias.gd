@@ -1459,8 +1459,8 @@ func probar_quimico() -> void:
 
 	# ── Criogenia: las congeladoras del principio y las que caben ──
 	lanzables.reiniciar(johnny.stats)
-	print("Criogenia 3: empieza con %d congeladoras (esperado: 3), a mano %s (esperado: con la congeladora) y caben %d (esperado: 6)" % [
-		lanzables.cuantas("congeladora"), lanzables.mano, lanzables.maximo("congeladora")])
+	print("Criogenia 3: empieza con %d congeladoras (esperado: 3), a mano %s (esperado: con la congeladora) y caben %d (esperado: %d: las %d de un montón y 3 más)" % [
+		lanzables.cuantas("congeladora"), lanzables.mano, lanzables.maximo("congeladora"), Lanzables.MONTON + 3, Lanzables.MONTON])
 
 	# ── Guantes de goma: un segundo dentro del fuego (y los 2 s que sigue quemando al salir) ──
 	johnny.vida = johnny.stats.vida_max
