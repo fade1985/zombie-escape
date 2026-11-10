@@ -1,4 +1,4 @@
-# La pared y el suelo de los dormitorios de los pisos (M13, 11 nov), de dos imágenes cada uno. Matrimonio: de dos imágenes de GPT: pared de yeso blanco roto
+# La pared y el suelo de los dormitorios (y, al final, la cocina) de los pisos (M13, 11 nov), de dos imágenes cada uno. Matrimonio: de dos imágenes de GPT: pared de yeso blanco roto
 # con rodapié de roble (assets/sources/dormitorio-matrimonio-pared-gpt.webp) y parqué en espiga del mismo roble
 # (assets/sources/dormitorio-matrimonio-suelo-gpt.webp). Salen reducidas mezclando colores, como los muebles (tools/muebles_gpt.py).
 #   pared → assets/sprites/pared-dormitorio-matrimonio.png  (204 × 48: cuatro trozos de 51, el 2.º y el 4.º en espejo, así empalma
@@ -25,7 +25,7 @@ def guardar_json(nombre, ancho, alto):
         f.write("\n")
 
 
-def pared_y_techo(nombre, origen, techo_f):
+def pared_y_techo(nombre, origen, techo_f, estilo="dormitorio"):
     # la pared: un trozo de 51 × 48 (el rodapié, las 3 filas de abajo), repetido 4 veces con el 2.º y el 4.º en espejo
     pared = Image.open(FUENTES + origen).convert("RGB")
     trozo = reducir(pared, 51, 48)
@@ -35,8 +35,8 @@ def pared_y_techo(nombre, origen, techo_f):
         tira.paste(trozo if i % 2 == 0 else espejo, (i * 51, 0))
     for x in range(204):   # la última fila, más oscura, donde la pared se curva hacia el suelo
         tira.putpixel((x, 47), tuple(int(v * 0.72) for v in tira.getpixel((x, 47))))
-    tira.save(CARPETA + "pared-dormitorio-" + nombre + ".png")
-    guardar_json("pared-dormitorio-" + nombre, 204, 48)
+    tira.save(CARPETA + "pared-" + estilo + "-" + nombre + ".png")
+    guardar_json("pared-" + estilo + "-" + nombre, 204, 48)
     # el techo: el color medio de la pared, con un degradado suave
     yeso = [tira.getpixel((x, y)) for x in range(204) for y in range(4, 30)]
     medio = tuple(sum(c[i] for c in yeso) // len(yeso) for i in range(3))
@@ -44,14 +44,14 @@ def pared_y_techo(nombre, origen, techo_f):
     for y, f in enumerate(techo_f):
         for x in range(204):
             techo.putpixel((x, y), tuple(min(255, int(v * f)) for v in medio))
-    techo.save(CARPETA + "techo-dormitorio-" + nombre + ".png")
-    guardar_json("techo-dormitorio-" + nombre, 204, 6)
+    techo.save(CARPETA + "techo-" + estilo + "-" + nombre + ".png")
+    guardar_json("techo-" + estilo + "-" + nombre, 204, 6)
 
 
-def suelo(nombre, origen, recorte, lado):
+def suelo(nombre, origen, recorte, lado, estilo="dormitorio"):
     im = Image.open(FUENTES + origen).convert("RGB")
-    reducir(im.crop((0, 0, recorte, recorte)), lado, lado).save(CARPETA + "suelo-dormitorio-" + nombre + ".png")
-    guardar_json("suelo-dormitorio-" + nombre, lado, lado)
+    reducir(im.crop((0, 0, recorte, recorte)), lado, lado).save(CARPETA + "suelo-" + estilo + "-" + nombre + ".png")
+    guardar_json("suelo-" + estilo + "-" + nombre, lado, lado)
 
 
 CLARO = (0.93, 0.96, 0.99, 0.97, 0.95, 0.93)
@@ -61,4 +61,7 @@ suelo("matrimonio", "dormitorio-matrimonio-suelo-gpt.webp", 627, 96)
 # individual (11 nov): pared verde manzana con rodapié blanco y parqué oscuro de listones; el suelo, la imagen entera, a 128
 pared_y_techo("individual", "dormitorio-individual-pared-gpt.webp", CLARO)
 suelo("individual", "dormitorio-individual-suelo-gpt.webp", 1254, 128)
+# cocina de los pisos (11 nov): yeso crema con rodapié de terracota y baldosas de barro cocido; el suelo, la imagen entera, a 128
+pared_y_techo("pisos", "cocina-pared-gpt.webp", CLARO, "cocina")
+suelo("pisos", "cocina-suelo-gpt.webp", 1254, 128, "cocina")
 print("hecho")
