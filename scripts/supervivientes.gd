@@ -141,7 +141,7 @@ const GRITOS := ["¡Socorro!", "¡Aquí dentro!", "¡Ayuda, por favor!", "¡Que 
 const CADA := [2.2, 3.4]
 const OSCURO := 0.9   # de esta oscuridad para arriba (Luz.nivel: el apagón y la tienda de electrónica sin corriente; un piso normal, no) su puerta no se ve
 # Lo que dice si le dan con Johnny lejos (en la horda y en la escolta de la farmacéutica)
-const LLAMADAS := ["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"]   # [traducir]
+const LLAMADAS := ["¡JOHNNY, VUELVE!", "¡NO ME DEJES AQUÍ!", "¡QUE ME COMEN!"]   # [traducir]
 
 # La horda: un minuto corto pero muy lleno (M40, 3 nov: antes eran 2 minutos y unos 107 zombis; ahora unos 150)
 const HORDA := {
@@ -664,7 +664,7 @@ func al_herir(cae: bool, a: Aliado) -> void:
 		gritar(a, FRASE_AYUDA)
 	elif johnny.position.distance_to(a.position) > HORDA.lejos and horda.t - horda.queja_t > 6.0:
 		horda.queja_t = horda.t
-		a.decir(Idioma.t(LLAMADAS[randi() % LLAMADAS.size()]))
+		gritar(a, LLAMADAS[randi() % LLAMADAS.size()])
 
 
 # Un grito del superviviente, como el «¡¡¡LA LLAVE!!!» de Johnny (partida.gran_aviso): letra de 32, amarilla, que sube y

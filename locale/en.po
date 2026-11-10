@@ -429,15 +429,15 @@ msgstr "I can't work like this! Cut the power!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "I'm gonna get electrocuted! The lever!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, come back!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Don't leave me here!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "They're eating me!"
 
@@ -3926,6 +3926,18 @@ msgstr "On each floor, tells you where to find what opens the boss room"
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "I'm in the bathroom!"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "JOHNNY, COME BACK!"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "DON'T LEAVE ME HERE!"
+
+#: scripts/supervivientes.gd
+msgid "¡QUE ME COMEN!"
+msgstr "THEY'RE EATING ME!"
 
 #: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"

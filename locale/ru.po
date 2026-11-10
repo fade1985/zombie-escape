@@ -432,15 +432,15 @@ msgstr "Так я не могу! Вырубай ток!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Меня же шибанет! Рубильник!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Джонни, вернись!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Не бросай меня тут!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "Меня же съедят!"
 
@@ -3934,6 +3934,18 @@ msgstr "На каждом этаже подсказывает, где то, чт
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "Я в ванной!"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "ДЖОННИ, ВЕРНИСЬ!"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
+
+#: scripts/supervivientes.gd
+msgid "¡QUE ME COMEN!"
+msgstr "МЕНЯ ЖЕ СЪЕДЯТ!"
 
 #: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"

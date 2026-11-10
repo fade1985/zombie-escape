@@ -429,15 +429,15 @@ msgstr "Assim não dá! Corta a energia!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Vou tomar choque! A alavanca!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, volta aqui!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Não me deixa aqui!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "Tão me comendo!"
 
@@ -3926,6 +3926,18 @@ msgstr "Ao chegar em cada andar, diz onde está o que abre a sala do chefe"
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "Estou no banheiro!"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "JOHNNY, VOLTA AQUI!"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "NÃO ME DEIXA AQUI!"
+
+#: scripts/supervivientes.gd
+msgid "¡QUE ME COMEN!"
+msgstr "TÃO ME COMENDO!"
 
 #: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"

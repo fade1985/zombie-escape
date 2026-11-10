@@ -429,15 +429,15 @@ msgstr "Je ne peux pas bosser comme ça ! Coupe le courant !"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Je vais m'électrocuter ! Le levier !"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, reviens !"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Ne me laisse pas là !"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "Ils me bouffent !"
 
@@ -3926,6 +3926,18 @@ msgstr "À chaque étage, te dit où se trouve ce qui ouvre la salle du boss"
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "Je suis aux toilettes !"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "JOHNNY, REVIENS !"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "NE ME LAISSE PAS LÀ !"
+
+#: scripts/supervivientes.gd
+msgid "¡QUE ME COMEN!"
+msgstr "ILS ME BOUFFENT !"
 
 #: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"

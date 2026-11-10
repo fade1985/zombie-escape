@@ -426,15 +426,15 @@ msgstr "这样我没法干！快断电！"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "我要触电了！电闸！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny，回来！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "别把我丢在这儿！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "我要被吃掉了！"
 
@@ -3918,6 +3918,18 @@ msgstr "每到一层，告诉你打开头目房间的东西在哪里"
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "我在浴室！"
+
+#: scripts/supervivientes.gd
+msgid "¡JOHNNY, VUELVE!"
+msgstr "JOHNNY，回来！"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "别把我丢在这儿！"
+
+#: scripts/supervivientes.gd
+msgid "¡QUE ME COMEN!"
+msgstr "我要被吃掉了！"
 
 #: scripts/supervivientes.gd
 msgid "¡YA FALTA POCO!"
