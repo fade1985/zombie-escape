@@ -91,6 +91,7 @@ const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": false}, "galeria":
 	"torre": {"tapa": "torre", "alfombra": false}, "vestibulo": {"tapa": "torre", "alfombra": false}}
 const NEON := preload("res://scripts/mapa/neon.gd")
 const FELPUDO := preload("res://assets/sprites/felpudo.png")   # el de las puertas del pasillo de los Apartamentos (dibujar_fondo)
+const FELPUDO_PORTAL := preload("res://assets/sprites/felpudo-portal.png")   # el de la puerta de la calle, en la planta baja
 const VENTANAL := preload("res://scripts/mapa/ventanal.gd")
 const LABORATORIO := preload("res://scripts/peligros/laboratorio.gd")   # la planta 40 de la torre (el Sujeto 1)   # el ventanal con la ciudad de noche del pasillo de la torre
 # Los peligros de las tiendas del centro comercial, y la porquería del Glotón (peligros.gd): cada uno con su nodo
@@ -545,6 +546,12 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 				continue
 			var y: float = MURO / 2.0 + 2 if salida.dir == "arriba" else (sitio.alto - MURO) / 2.0 - 2 - tam.y
 			lienzo.draw_texture(FELPUDO, Vector2(roundf(salida.en / 2.0 - tam.x / 2.0), y))
+		# y el del portal, el de rejilla metálica, de pie delante de la puerta de la calle (la de la izquierda de la planta
+		# baja: tools/felpudo_portal_gpt.py)
+		for salida in sitio.salidas:
+			if salida.get("tipo", "") == "llegada" and salida.dir == "izquierda":
+				var alto_felpudo := FELPUDO_PORTAL.get_height()
+				lienzo.draw_texture(FELPUDO_PORTAL, Vector2(MURO / 2.0 + 2, roundf(salida.en / 2.0 - alto_felpudo / 2.0)))
 	# la línea amarilla pintada a lo largo del pasillo de las viviendas (viviendas.gd: "linea"), de punta a punta
 	for s in sitio.get("apt", {}).get("salas", []):
 		if s.has("linea"):

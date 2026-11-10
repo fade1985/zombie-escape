@@ -76,6 +76,19 @@ func probar_salida() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --portal": el felpudo de rejilla metálica del portal de los Apartamentos, de pie delante de la puerta de
+# la calle (la de la izquierda de la planta baja; tools/felpudo_portal_gpt.py), con Johnny apartado para que se vea entero.
+# Foto: captura-portal.png. Luego se cierra
+func probar_portal() -> void:
+	nueva_planta(1)
+	await montar(0, puerta_de_llegada(), false)
+	johnny.position = Vector2(300, planta.sitios[0].alto / 2.0 + 90)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-portal.png")
+	get_tree().quit()
+
+
 # Con "--captura --llegada": por dónde se llega a cada planta. La planta baja (el portal del edificio) tiene su puerta de
 # llegada a la izquierda; las demás plantas, ninguna: se llega por las escaleras de la derecha, las mismas por las que se
 # sale, y la azotea, por la escalera de su derecha (como la salida de incendios). De cada una dice cuántas puertas tiene a la izquierda, por

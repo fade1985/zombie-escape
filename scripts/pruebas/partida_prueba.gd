@@ -200,6 +200,7 @@
 #   --cartel-sala       la puerta de acero de la sala de mantenimiento en el pasillo de la planta baja y su cartel, en
 #                       español, inglés, francés, ruso y chino                               [prueba_sitios.gd]
 #   --llegada           por dónde se llega a cada planta: el portal a la izquierda, las demás (y la azotea) por la derecha [prueba_sitios.gd]
+#   --portal            el felpudo de rejilla metálica del portal, delante de la puerta de la calle [prueba_sitios.gd]
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos (y de cada tipo), y que no se amontonen [prueba_sitios.gd]
@@ -820,6 +821,9 @@ func empezar_prueba() -> void:
 	elif "--llegada" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llegada()
+	elif "--portal" in args:
+		set_process(false)   # sin la prueba larga
+		probar_portal()
 	elif "--salida" in args:
 		set_process(false)   # sin la prueba larga
 		probar_salida()
