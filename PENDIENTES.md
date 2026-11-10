@@ -14,7 +14,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M17** Supervivientes: la animación de forzar la cerradura, nueva con GPT.
 - **M91** Ordenador: las Noticias cambian de sitio. El dueño contará el plan con detalle cuando vuelva GPT; recordárselo entonces.
 
 ## Por limar
