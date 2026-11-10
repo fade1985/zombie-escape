@@ -215,6 +215,16 @@ MUEBLES = {
     "lampara": ("assets/sources/lampara-gpt.webp", "assets/sprites/mueble-lamp.png", 15, 47, True),
     "planta_salon": ("assets/sources/planta-salon-gpt.webp", "assets/sprites/mueble-plant.png", 19, 34, True, (),
                      [(442, 349), (470, 353), (470, 486), (444, 623), (590, 631), (427, 768), (535, 782)]),
+    # el dormitorio de los pisos (M13, 10 nov; antes, de PixelLab con tools/guias_dormitorio.py). Las dos camas, el armario y la
+    # mesilla se quedan igual de altos y más estrechos, porque GPT los hizo más estrechos que los viejos (su largo en el
+    # catálogo: cama de matrimonio de 124 a 114, individual de 84 a 62, armario de 96 a 78, mesilla de 40 a 34); el escritorio,
+    # igual de ancho y algo más bajo (46 × 37). Los dibujos de lado de la cama de matrimonio y de la mesilla siguen siendo los
+    # de antes. El hueco del reloj de la mesilla, que el fondo no alcanza desde el borde, se vacía con la semilla
+    "cama_matrimonio": ("assets/sources/cama-matrimonio-gpt.webp", "assets/sprites/mueble-doublebed.png", 57, 75, True),
+    "cama": ("assets/sources/cama-gpt.webp", "assets/sprites/mueble-bed.png", 31, 73, True),
+    "armario": ("assets/sources/armario-gpt.webp", "assets/sprites/mueble-wardrobe.png", 39, 72, True),
+    "mesilla": ("assets/sources/mesilla-gpt.webp", "assets/sprites/mueble-nightstand.png", 17, 33, True, (), [(690, 408)]),
+    "escritorio": ("assets/sources/escritorio-gpt.webp", "assets/sprites/mueble-desk.png", 46, 37, True),
 }
 
 
