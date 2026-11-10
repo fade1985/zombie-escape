@@ -1,7 +1,7 @@
 # Algo que se lanza en parábola: el moco del venenoso, la botella de lejía de la portera, el cóctel molotov de
 # Johnny, su vómito (mutación Gastroenteritis), el ácido que salpica la portera o la sartén de aceite hirviendo del cocinero (con su marca roja en el suelo, donde
-# caerá). Vuela por encima de todo (el molotov de Johnny, no de las paredes: se rompe contra ellas) y, al caer, deja un
-# charco. Los de
+# caerá). Vuela por encima de los muebles, pero no de las paredes: se rompe contra ellas, de este lado (hay techo) y,
+# al caer, deja un charco. Los de
 # los zombis, si Johnny está justo donde caen, le hacen daño; el molotov suelta una llamarada que prende a los
 # zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js). El molotov
 # Épico, al romperse, suelta botellitas que dejan charcos más pequeños alrededor (el racimo: Armas.TRUCO)
@@ -47,10 +47,13 @@ var racimo := 0              # molotov Épico: cuántas botellitas suelta al rom
 var dueno: Node2D = null     # quien lo lanza (al cocinero no le quema su aceite; y la skin del glotón le muerde)
 var t := 0.0
 var marca: Node2D = null     # la sartén: su marca en el suelo, por debajo de todos
+var corte := 1.0             # qué parte del vuelo hace antes de dar con una pared (1: llega hasta "hasta")
+var cae_en := Vector2.ZERO   # dónde cae de verdad: "hasta" o, si hay una pared en medio, junto a ella, de este lado
 
 
 func _ready() -> void:
 	global_position = desde
+	cae_en = hasta
 	if tipo == "molotov" or tipo == "molotov_jefe":
 		EfectoSuelo.precalentar(get_parent(), "molotov")   # (mientras vuela: que el primero no pare el juego al romperse)
 	if TIPOS[tipo].has("marca"):
@@ -62,28 +65,31 @@ func _ready() -> void:
 # La marca se pide en cada fotograma de dibujo (no de física), que si no el aviso se esconde
 func _process(_delta: float) -> void:
 	if marca:
-		pintar_marca(minf(t / TIPOS[tipo].vuelo, 1.0))
+		pintar_marca(minf(t / (TIPOS[tipo].vuelo * maxf(corte, 0.01)), 1.0))
 
 
 func _physics_process(delta: float) -> void:
 	var datos: Dictionary = TIPOS[tipo]
+	if t == 0.0:
+		mirar_paredes()
 	t += delta
-	var k: float = minf(t / datos.vuelo, 1.0)
-	var antes := global_position
+	var k: float = minf(t / datos.vuelo, corte)
 	global_position = desde.lerp(hasta, k)
 	queue_redraw()
-	# el molotov de Johnny no vuela por encima de las paredes (en el edificio hay techo, 10 nov): si da con una pared, una
-	# puerta cerrada o una barricada, la botella se rompe ahí mismo, de este lado (los muebles, por encima)
-	if tipo == "molotov":
-		var mapa := get_tree().get_first_node_in_group("mapa")
-		var muro: Dictionary = mapa.muro_entre(antes, global_position) if mapa and antes != global_position else {}
-		if not muro.is_empty():
-			hasta = muro.position - (global_position - antes).normalized() * 14.0
-			global_position = hasta
-			caer(datos)
-			return
-	if k >= 1.0:
+	if k >= corte:
+		hasta = cae_en   # (si ha dado con una pared, se rompe ahí, de este lado)
 		caer(datos)
+
+
+# Nada de lo que se lanza vuela por encima de las paredes (en el edificio hay techo, 10 nov): si hay una pared, una
+# puerta cerrada o una barricada en medio, se rompe contra ella, de este lado (los muebles, sí, por encima). Se mira en
+# el primer paso para que la marca del suelo de los jefes diga desde el principio dónde caerá
+func mirar_paredes() -> void:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	var muro: Dictionary = mapa.muro_entre(desde, hasta) if mapa and desde != hasta else {}
+	if not muro.is_empty():
+		corte = clampf((desde.distance_to(muro.position) - 14.0) / desde.distance_to(hasta), 0.0, 1.0)
+		cae_en = desde.lerp(hasta, corte)
 
 
 func caer(datos: Dictionary) -> void:
@@ -255,7 +261,7 @@ static func cubo(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
 # La marca donde va a caer: un aviso de los jefes (aviso.gd), un círculo aplastado con el estilo flojo, el mismo que
 # el cono del giro del bombero, que se llena mientras vuela. Va en "marca", que está por debajo de todos
 func pintar_marca(k: float) -> void:
-	var aviso := Aviso.abanico(marca, hasta - global_position, 0.0, PI, TIPOS[tipo].marca, k, t, 0.6)
+	var aviso := Aviso.abanico(marca, cae_en - global_position, 0.0, PI, TIPOS[tipo].marca, k, t, 0.6)
 	aviso.sutil = true
 
 

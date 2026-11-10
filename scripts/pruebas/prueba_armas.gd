@@ -2951,6 +2951,24 @@ func probar_granada_pared() -> void:
 	print("«molotov» contra la pared: se rompe en x %d, de este lado %s (esperado: true) · al zombi de donde se apuntaba le quita %d (esperado: 0)" % [
 		rota.x, rota.x < pared_izq, 500 - quemable.vida])
 	zombis_de_prueba([])
+	# y lo que lanzan los zombis y los jefes, igual: el moco del venenoso y la sartén del cocinero (con su marca)
+	for tipo_lanzado in ["veneno", "sarten"]:
+		var lanzado: Node2D = Lanzables.PROYECTIL.instantiate()
+		lanzado.tipo = tipo_lanzado
+		lanzado.desde = sitio
+		lanzado.hasta = tras_pared
+		johnny.get_parent().add_child(lanzado)
+		var cae := lanzado.global_position
+		while is_instance_valid(lanzado):
+			cae = lanzado.global_position
+			await get_tree().physics_frame
+		var charco_x := -INF
+		for c in get_tree().get_nodes_in_group("charcos"):
+			charco_x = maxf(charco_x, c.global_position.x)
+		print("«%s» de un zombi contra la pared: cae en x %d y su charco en x %d, de este lado %s (esperado: true)" % [
+			tipo_lanzado, cae.x, charco_x, cae.x < pared_izq and charco_x < pared_izq])
+		for c in get_tree().get_nodes_in_group("charcos"):
+			c.queue_free()
 
 	# la explosión estalla a 30 de la pared: a la misma distancia, tras la pared no llega y a este lado sí
 	var junto := Vector2(pared_izq - 30.0, y)
