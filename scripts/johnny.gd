@@ -1625,16 +1625,19 @@ func quitar_vida(cantidad: int, de := "") -> void:
 		estrellas.queue_redraw()
 		efectos.hide()
 		partir_cintura(false)
-		# No tiene animación de morirse: se queda quieto y rojo (si estaba en el suelo, tumbado)
+		# Se muere cayéndose de espaldas (los dibujos del tropezón, que se queda en el último: tumbado) y en rojo. Si
+		# ya estaba en el suelo, se queda tumbado
 		sprite.speed_scale = 1.0
+		sprite.sprite_frames = Skins.hoja(HOJA_CAIDA, skin)
+		sprite.offset = -PIES_CAIDA
 		if tumbado:
-			sprite.sprite_frames = Skins.hoja(HOJA_CAIDA, skin)
-			sprite.offset = -PIES_CAIDA
 			sprite.animation = "caer_" + direccion
 			sprite.frame = sprite.sprite_frames.get_frame_count(sprite.animation) - 1
 			sprite.pause()
+			tumbar(1.0)
 		else:
-			cambiar_animacion("reposo_" + direccion)
+			sprite.play("caer_" + direccion)
+			create_tween().tween_method(tumbar, 0.0, 1.0, CAIDA)   # (la sombra se alarga mientras cae)
 		sprite.modulate = Color(1, 0.35, 0.35)
 		murio.emit()
 

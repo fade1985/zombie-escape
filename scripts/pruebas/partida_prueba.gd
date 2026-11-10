@@ -347,6 +347,7 @@
 #                       la partida, «Otra vez» y la R; y por el fuego, por un jefe y ganando    [prueba_varias.gd]
 #   --despertar         tras una derrota (M31): la partida empieza en negro, Johnny tumbado en la sala de mantenimiento,
 #                       se levanta y dice su frase                                            [prueba_varias.gd]
+#   --morir             Johnny se muere y se cae de espaldas, antes del cartel de derrota       [prueba_varias.gd]
 #   --continuar         la partida a medias: se guarda al subir a la 1ª planta, el menú enseña «Continuar partida» y,
 #                       al continuarla, la planta y lo que se llevaba son iguales             [prueba_varias.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
@@ -782,6 +783,9 @@ func empezar_prueba() -> void:
 	elif "--despertar" in args:
 		set_process(false)   # sin la prueba larga
 		probar_despertar()
+	elif "--morir" in args:
+		set_process(false)   # sin la prueba larga
+		probar_morir()
 	elif "--derrota" in args:
 		set_process(false)   # sin la prueba larga
 		probar_derrota()

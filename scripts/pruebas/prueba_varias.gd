@@ -3140,6 +3140,21 @@ func probar_despertar() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --morir": Johnny se muere y se cae de espaldas (johnny.gd, quitar_vida: los dibujos del tropezón),
+# antes del cartel de derrota: empezando a caer, a medias y tumbado
+func probar_morir() -> void:
+	await get_tree().create_timer(0.5).timeout
+	johnny.stats.resucitar = false
+	johnny.invulnerable = 0.0
+	johnny.quitar_vida(johnny.vida)
+	for i in 3:
+		await get_tree().create_timer([0.08, 0.2, 0.5][i]).timeout
+		Captura.foto("captura-morir-%d.png" % (i + 1))
+	if johnny.vivo or not johnny.sprite.animation.begins_with("caer_"):
+		Captura.fallar("Johnny no se ha caído al morir")
+	get_tree().quit()
+
+
 # Con "--captura --derrota": el cartel de derrota (menus.gd, fin). Primero, quién le pega a Johnny (johnny.gd,
 # golpe_de): un zombi, la explosión del dinamitero, su propia granada y el fuego del suelo. Luego cae de verdad por
 # un crío, con un logro, una skin, una página, un enemigo y un objeto nuevos y su mejor marca (captura-derrota.png);
