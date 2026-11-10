@@ -115,7 +115,7 @@ func marca_nuevo() -> TextureRect:
 	marca.texture = load("res://assets/ui/exclamacion-pequena.png")
 	marca.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	marca.size = Vector2(24, 24)
-	marca.position = Vector2(102, 2)
+	marca.position = Vector2(82, 2)   # pegado a la esquina del dibujo (antes en 102: quedaba muy lejos, 10 nov)
 	marca.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
 	marca.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var bote := marca.create_tween().set_loops()
