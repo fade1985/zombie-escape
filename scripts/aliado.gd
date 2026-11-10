@@ -51,8 +51,8 @@ const DESTELLO := preload("res://escenas/personajes/destello.gdshader")   # el b
 # fotogramas a 15 por segundo y el fogonazo está en el 4º. La farmacéutica no tiene acción (lo suyo no tiene gesto)
 const HOJAS := {
 	"policia": {"hoja": preload("res://assets/sprites/superviviente-policiagpt.tres"), "fogonazo": 0.2,
-		"boca": {"s": Vector2(2, -29), "se": Vector2(9, -33), "e": Vector2(16, -31), "ne": Vector2(11, -33),
-			"n": Vector2(9, -34), "no": Vector2(-12, -33), "o": Vector2(-17, -31), "so": Vector2(-10, -33)}},
+		"boca": {"s": Vector2(2, -32), "se": Vector2(10, -35), "e": Vector2(22, -33), "ne": Vector2(17, -35),
+			"n": Vector2(12, -36), "no": Vector2(-19, -34), "o": Vector2(-23, -33), "so": Vector2(-11, -35)}},
 	"medico": {"hoja": preload("res://assets/sprites/superviviente-medicagpt.tres"), "fogonazo": 0.27},
 	"militar": {"hoja": preload("res://assets/sprites/superviviente-militar.tres"), "fogonazo": 0.2,
 		"boca": {"s": Vector2(24, -25), "se": Vector2(26, -23), "e": Vector2(32, -36), "ne": Vector2(28, -43),

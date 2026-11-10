@@ -58,7 +58,10 @@ CORRE = False
 LIENZO_ANDAR = {"rapido": 64, "lento": 64}
 # El tamaño, si no es el de la referencia: el arrastrado, al 80 % (9 nov: tendido en el suelo medía casi lo que el vecino
 # de pie y, a su lado, se veía demasiado grande). Las animaciones se miden por el dibujo quieto, así que lo siguen solas
-TAMANO = {"lento": 0.8}
+TAMANO = {"lento": 0.8, "policia": 1.07}
+# Y el ensanchado (10 nov): el policía de GPT salía más estrecho que Johnny (24 de ancho contra 28 y 12 de perfil contra 16) y
+# se veía enclenque; se le ensancha un 20 % al reducir (todo, también la gorra y los brazos), y de alto, un 7 %
+ESTIRO = {"policia": 1.2}
 # Y por vista: el arrastrado de perfil y en diagonal (se le ve el cuerpo a lo largo) salía mucho más grande que de frente
 # (de perfil, 32 de largo y de frente 26 de ancho; el vecino de pie mide 45): esas vistas, más pequeñas
 TAMANO_VISTA = {"lento": {"south-east": 0.8, "east": 0.82, "north-east": 0.82}}
@@ -69,6 +72,7 @@ ALTURA_GPT = False
 ANDAR = 48
 ESCALA_ZOMBI = 1.0
 ESCALA_VISTA = {}
+ESTIRAR = 1.0   # (el ensanchado de este personaje: ESTIRO)
 ANCHO_REFERENCIA = 2016   # lo que mide de ancho la referencia que se le da a GPT (la de la médica, 1920)
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
@@ -134,7 +138,7 @@ def filas(im):
 def reducir(dibujo, escala):
     """A la escala del juego mezclando colores (premultiplicado: lo transparente no tiñe los bordes) y el borde, sin
     medias tintas"""
-    ancho = max(1, round(dibujo.width / escala))
+    ancho = max(1, round(dibujo.width * ESTIRAR / escala))
     alto = max(1, round(dibujo.height / escala))
     salida = dibujo.convert("RGBa").resize((ancho, alto), Image.BOX).convert("RGBA")
     salida.putalpha(salida.split()[3].point(lambda v: 255 if v > 110 else 0))
@@ -281,7 +285,7 @@ def animacion(anim, vista):
     for otra in espejo:
         ImageOps.mirror(quieto).save(os.path.join(carpeta, "%s-0.png" % otra))
     for n, (dibujo, centro, columna, cima) in enumerate(trozos, 1):
-        corrido = sitio - LIENZO / 2 + (centro - columna) / escala
+        corrido = sitio - LIENZO / 2 + (centro - columna) * ESTIRAR / escala
         arriba = caja[1] + (lado - LIENZO) + cima / escala if CORRE and anim == "andar" else None
         reducido = reducir(dibujo, escala)
         if ALTURA_GPT and anim != "andar":
@@ -322,6 +326,7 @@ if __name__ == "__main__":
         ANDAR = LIENZO_ANDAR.get(sys.argv[2], LIENZO)
         ALTURA_GPT = sys.argv[2] == "lento"
         ESCALA_ZOMBI = TAMANO.get(sys.argv[2], 1.0)
+        ESTIRAR = ESTIRO.get(sys.argv[2], 1.0)
         ESCALA_VISTA = TAMANO_VISTA.get(sys.argv[2], {})
         if sys.argv[2] in ("medica", "policia"):
             ANCHO_REFERENCIA = 1920
