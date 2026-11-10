@@ -93,11 +93,14 @@ en una línea.
   `a_jefe`: lo miran `explosion.gd`, `charco.gd` y `proyectil.gd`).
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
   Rebota en las paredes también en el aire (`choque_hasta`, con `mapa.muro_entre`) y en los muebles solo a ras de suelo;
-  por eso lanzar de un toque (`mas_cercano`) no le apunta a un zombi tras una pared. El molotov vuela por encima de todo.
+  por eso lanzar de un toque (`mas_cercano`) no le apunta a un zombi tras una pared. El molotov de Johnny vuela por
+  encima de los muebles pero no de las paredes (hay techo): se rompe contra ellas, de este lado (`proyectil.gd`); lo que
+  lanzan los zombis sí vuela por encima de todo.
   Su explosión (y el congelado de la congeladora) tampoco pasa las paredes (`explosion.paredes`; desde el 10 nov, todas
   las explosiones, también la del zombi explosivo y la de Mezcla explosiva). Ningún daño de Johnny pasa una pared, puerta
   cerrada o barricada (los muebles, sí): el golpe cuerpo a cuerpo, el barrido de Ninja, Pararrayos, la descarga, el
-  estallido de las Épicas y el fuego del molotov al romperse lo miran con `ArmasCreadas.tapado`. Se prueba con
+  estallido de las Épicas, el fuego del molotov al romperse y los charcos (de todos, para Johnny y para los zombis) lo
+  miran con `ArmasCreadas.tapado`. Se prueba con
   `--granada-pared` (lo demás, con un tabique fino).
 - `sala_armas.gd`: la sala de pruebas (F9 desde cualquier sitio; F9 otra vez, de vuelta): la diana, todas las armas,
   las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al

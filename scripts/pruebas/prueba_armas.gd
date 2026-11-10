@@ -2891,7 +2891,7 @@ func probar_molotov_carga() -> void:
 # Con "--captura --granada-pared": las granadas chocan con las paredes (F20). En la sala de pruebas, contra su pared de la
 # derecha: la granada, la atraedora y la congeladora explotan de este lado y no le dan al zombi de lejos del otro, y las
 # granaditas de la Épica tampoco pasan. De control, lo mismo en campo abierto y por encima de un mueble: caen en el mismo
-# sitio. Y lanzar de un toque: la granada no apunta a un zombi tras la pared, el molotov sí. La explosión tampoco pasa la
+# sitio. El molotov se rompe contra la pared, de este lado. Y lanzar de un toque: nada apunta a un zombi tras la pared. La explosión tampoco pasa la
 # pared: junto a ella, ni daña ni congela a los zombis ni daña a Johnny al otro lado, pero sí a la misma distancia a este, y
 # los muebles no la paran; la del dinamitero, tampoco la pasa (captura-granada-pared.png: la granada parada de este lado).
 # Y lo demás (10 nov), con un tabique fino: ni el golpe de la fregona, ni el barrido de Ninja, ni el rayo que salta, ni
@@ -2935,6 +2935,23 @@ func probar_granada_pared() -> void:
 			clave, libre.x, libre.y, abierto.x - libre.x, 500 - delante.vida])
 		zombis_de_prueba([])
 
+	# el molotov tampoco vuela por encima de la pared (hay techo, 10 nov): se rompe contra ella, de este lado
+	var quemable := zombi_quieto(tras_pared)
+	await get_tree().create_timer(0.4).timeout
+	johnny.global_position = sitio
+	lanzables.cantidades["molotov"] = 2
+	lanzables.tipo = "molotov"
+	lanzables.lanzar(tras_pared)
+	var botella: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() != null and n.get_script().resource_path.ends_with("proyectil.gd")).back()
+	var rota := botella.global_position
+	while is_instance_valid(botella):
+		rota = botella.global_position
+		await get_tree().physics_frame
+	await get_tree().create_timer(1.0).timeout   # (que arda un rato su charco)
+	print("«molotov» contra la pared: se rompe en x %d, de este lado %s (esperado: true) · al zombi de donde se apuntaba le quita %d (esperado: 0)" % [
+		rota.x, rota.x < pared_izq, 500 - quemable.vida])
+	zombis_de_prueba([])
+
 	# la explosión estalla a 30 de la pared: a la misma distancia, tras la pared no llega y a este lado sí
 	var junto := Vector2(pared_izq - 30.0, y)
 	var tras_muro := Vector2(pared_der + 16.0, y)
@@ -2956,6 +2973,8 @@ func probar_granada_pared() -> void:
 		johnny.escudo = 0.0
 		johnny.invulnerable = 0.0
 		johnny.esquiva_t = 0.0
+		johnny.estados.clear()   # (sin el fuego que lleve encima de lo de antes: solo cuenta la explosión)
+		johnny.pisando.clear()
 		await explotar_en("granada", junto)
 		print("Johnny %s: pierde %d (esperado: %s)" % [caso[1], 100 - johnny.vida, caso[2]])
 	johnny.invencible = true
@@ -3041,7 +3060,8 @@ func probar_granada_pared() -> void:
 	print("Épica contra la pared: la grande explota en x %d, la granadita que más lejos llega en x %d (esperado: las dos, menos de %d)" % [
 		grande.x, mas_lejos, pared_izq])
 
-	# lanzar de un toque, sin apuntar (mas_cercano): a un zombi tras la pared solo se le apunta con lo que vuela por encima
+	# lanzar de un toque, sin apuntar (mas_cercano): a un zombi tras la pared no se le apunta con nada (el molotov, desde
+	# el 10 nov, tampoco: ya no vuela por encima)
 	johnny.global_position = sitio
 	var detras := zombi_quieto(Vector2(pared_der + 40.0, y))
 	var nombre := func(z: Node2D) -> String:
@@ -3050,7 +3070,7 @@ func probar_granada_pared() -> void:
 	for clave in ["granada", "atraedora", "congeladora", "molotov"]:
 		lanzables.tipo = clave
 		apunta[clave] = nombre.call(lanzables.mas_cercano())
-	print("De un toque, con un zombi tras la pared: %s (esperado: nadie, salvo el molotov)" % apunta)
+	print("De un toque, con un zombi tras la pared: %s (esperado: nadie, con los cuatro)" % apunta)
 	zombi_quieto(sitio + Vector2(-200, 0))
 	lanzables.tipo = "granada"
 	print("De un toque, y con otro más lejos pero a este lado: la granada, a %s (esperado: el de este lado)" % nombre.call(lanzables.mas_cercano()))
