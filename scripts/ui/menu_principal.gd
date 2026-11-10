@@ -150,6 +150,8 @@ func _ready() -> void:
 					print("Edificios · requisitos «%s»: centro abierto %s (esperado: %s) · torre abierta %s (esperado: false)" % [
 						como, not tarjetas.get_child(1).get_child(0).disabled, como == "todo",
 						not tarjetas.get_child(2).get_child(0).disabled])
+					print("Edificios · tarjeta de los Apartamentos «%s»: «%s» (esperado: nada sin %%, medias · 53%%, todo · 100%%)" % [
+						como, (tarjetas.get_child(0).get_child(0).get_child(0).get_child(2) as Label).text])
 					Captura.foto("captura-edificios-%s.png" % como)
 				get_tree().quit()
 				return
@@ -476,13 +478,16 @@ func textos_tarjeta(id: String, s: Dictionary) -> Array:
 	if Edificios.abierto(s, id):
 		var veces: int = p.partidas
 		var progreso := Idioma.t("¡Sin explorar!")
+		# el tanto por ciento del edificio (completarlo, sus dosieres y sus vídeos: Edificios.porcentaje), si ya hay algo
+		var por_ciento := Edificios.porcentaje(s, id)
+		var con_por_ciento := " · %d%%" % por_ciento if por_ciento > 0 else ""   # no-tr
 		if p.completado:
 			var t: float = p.mejor_tiempo
-			progreso = Idioma.t("Completado ×%d") % p.victorias
+			progreso = Idioma.t("Completado ×%d") % p.victorias + con_por_ciento
 			if t > 0.0:
 				progreso += " · " + Idioma.t("mejor tiempo %d:%02d") % [int(t) / 60, int(t) % 60]
-		elif veces > 0:
-			progreso = Idioma.t("Has llegado a la planta %d de %d") % [p.mejor_planta, Planta.PLANTAS]
+		elif veces > 0 or por_ciento > 0:
+			progreso = Idioma.t("Has llegado a la planta %d de %d") % [p.mejor_planta, Planta.PLANTAS] + con_por_ciento
 		textos.append([progreso, ""])
 	else:
 		# cerrado: lo que pide para abrirse (Edificios.requisitos), un renglón cada uno; los cumplidos, en verde

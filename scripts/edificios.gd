@@ -130,15 +130,32 @@ static func requisitos(s: Dictionary, id: String) -> Array:
 	var antes: String = LISTA[id].abre
 	if antes == "":
 		return []
-	var paginas: Array = Historia.dosier(antes).paginas
-	var halladas := paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
-	var noticias := Historia.noticias_de(antes)
-	var vistas := noticias.filter(func(n): return n.id in s.get("videos_vistos", [])).size()
+	var c := cuentas(s, antes)
 	return [
-		{"texto": Idioma.t("Completa %s") % Idioma.t(LISTA[antes].el_nombre), "cuenta": "",
-			"hecho": s.edificios.has(antes) and s.edificios[antes].completado},
-		{"texto": Idioma.t("Consigue los dosieres"), "cuenta": "%d/%d" % [halladas, paginas.size()],
-			"hecho": halladas >= paginas.size()},
-		{"texto": Idioma.t("Ve todos los vídeos"), "cuenta": "%d/%d" % [vistas, noticias.size()],
-			"hecho": vistas >= noticias.size()},
+		{"texto": Idioma.t("Completa %s") % Idioma.t(LISTA[antes].el_nombre), "cuenta": "", "hecho": c.completado},
+		{"texto": Idioma.t("Consigue los dosieres"), "cuenta": "%d/%d" % [c.halladas, c.paginas],
+			"hecho": c.halladas >= c.paginas},
+		{"texto": Idioma.t("Ve todos los vídeos"), "cuenta": "%d/%d" % [c.vistas, c.noticias],
+			"hecho": c.vistas >= c.noticias},
 	]
+
+
+# Lo que llevas de un edificio: si lo has completado, las páginas de su dosier halladas (de cuántas) y sus vídeos
+# vistos (de cuántos)
+static func cuentas(s: Dictionary, id: String) -> Dictionary:
+	var paginas: Array = Historia.dosier(id).paginas
+	var noticias := Historia.noticias_de(id)
+	var vistos: Array = s.get("videos_vistos", [])
+	return {"completado": s.edificios.has(id) and s.edificios[id].completado,
+		"halladas": paginas.filter(func(p): return Historia.encontrada(s, p.id)).size(), "paginas": paginas.size(),
+		"vistas": noticias.filter(func(n): return n.id in vistos).size(), "noticias": noticias.size()}
+
+
+# El tanto por ciento de un edificio (al lado de «Completado» en su tarjeta): un tercio por completarlo, otro por las
+# páginas de su dosier y otro por sus vídeos, cada página y cada vídeo con su parte de su tercio. Con 5 y 5, cada uno
+# vale 6,7 %; completarlo, 33,3 %. (El centro comercial no pasa del 67 % hasta que tenga teles: M92)
+static func porcentaje(s: Dictionary, id: String) -> int:
+	var c := cuentas(s, id)
+	var partes := (1.0 if c.completado else 0.0) + float(c.halladas) / maxi(c.paginas, 1) \
+			+ float(c.vistas) / maxi(c.noticias, 1)
+	return floori(partes / 3.0 * 100.0 + 0.001)   # (a la baja: el 100 %, solo con todo)
