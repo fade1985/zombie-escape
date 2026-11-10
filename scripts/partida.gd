@@ -1590,6 +1590,9 @@ func ver_relato(id: String) -> void:
 	await Relato.abrir(self, id).cerrado
 	Historia.apuntar_relato(id)
 	get_tree().paused = false
+	# Johnny no hace caso a los mandos mientras se va el negro y medio segundo más: la pulsación que ha cerrado el
+	# texto no le hace atacar
+	johnny.sin_mandos = Relato.FUNDIDO + 0.5
 
 
 # Un texto que sube y se desvanece (al coger un billete)

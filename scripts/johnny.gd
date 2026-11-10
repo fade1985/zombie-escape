@@ -126,7 +126,8 @@ var resucitado := false    # Desfibrilador: solo una vez por partida
 var copia_usada := false   # la «Copia de seguridad» de la skin del becario (skins.gd): solo una vez por partida
 var aliento_usado := false   # Segundo aliento: ya ha curado en esta planta (partida.nueva_planta lo quita)
 var con_adrenalina := false  # Adrenalina: si en el paso de antes estaba por debajo de la mitad (para avisar al entrar)
-var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
+var sin_mandos := 0.0      # lo que le queda sin hacer caso a los mandos tras un relato (ver_relato, en partida.gd)
+var caido_t := 0.0        # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
 var dormido := false       # tirado en el suelo al despertarse tras una derrota (despertar): sin estrellitas
 var caido_max := 0.0       # lo que dura ese tropezón
 var levantado_t := 0.0     # lo que le queda sin poder volver a tropezar
@@ -446,6 +447,14 @@ func _physics_process(delta: float) -> void:
 	# Tirado en el suelo por un tropezón: ni anda, ni ataca, ni rueda hasta que se levanta
 	if caido_t > 0.0:
 		seguir_caido(delta)
+		return
+	# Recién cerrado un relato (la pantalla negra con texto): quieto y sin hacer caso a los mandos un momento, para que
+	# el clic o la tecla con que se ha pasado el texto no le haga atacar ni moverse (10 nov)
+	if sin_mandos > 0.0:
+		sin_mandos -= delta
+		velocity = Vector2.ZERO
+		if sprite.animation != "reposo_" + direccion:
+			sprite.play("reposo_" + direccion)
 		return
 
 	if Input.is_action_just_pressed("cambiar_arma"):

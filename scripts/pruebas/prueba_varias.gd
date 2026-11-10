@@ -931,6 +931,10 @@ func probar_relato() -> void:
 	await get_tree().create_timer(Relato.FUNDIDO).timeout
 	print("Relato · otra pulsación la cierra: abierta %s · juego parado %s · apuntada %s (esperado: false, false, true)" % [
 		abierto.call() != null, get_tree().paused, "intro" in Guardado.cargar().relatos])
+	# Al cerrarla, Johnny no hace caso a los mandos mientras se va el negro y medio segundo más: el clic izquierdo (que la
+	# prueba deja pulsado desde antes) no le hace atacar
+	var ataca_al_cerrar: bool = johnny.ataque_t >= 0.0
+	print("Relato · al cerrarla, Johnny sin mandos %s · atacando con el clic pulsado %s (esperado: true, false)" % [johnny.sin_mandos > 0.0, ataca_al_cerrar])
 	# (con --guiado, la guía de la primera partida espera a que se cierre y entonces empieza)
 	print("Relato · guía activa %s: pista durante la intro «%s», al cerrarla «%s» (con --guiado: «», moverse)" % [guia.activa, pista_antes, guia.pista])
 	Captura.foto("captura-relato-sala.png")   # (la sala de siempre)
