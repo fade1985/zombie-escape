@@ -3027,9 +3027,12 @@ func probar_granada_pared() -> void:
 	get_tree().quit()
 
 
-# Para probar_granada_pared: un zombi lento quieto, de 500 de vida, en ese sitio
+# Para probar_granada_pared: un zombi lento quieto, de 500 de vida, en ese sitio. Tras la pared de la derecha de la sala
+# de pruebas ya es fuera del mapa, y meter_zombi lleva al suelo más cercano (a este lado) a quien se pide ahí (10 nov):
+# se le vuelve a poner donde se pedía
 func zombi_quieto(donde: Vector2) -> Node2D:
 	var zombi := meter_zombi("lento", donde)
+	zombi.position = donde
 	zombi.vida = 500
 	zombi.set_physics_process(false)
 	return zombi
