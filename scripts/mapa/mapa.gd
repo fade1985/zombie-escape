@@ -63,7 +63,7 @@ const VALLA := preload("res://scripts/mapa/valla.gd")
 # se sigue eligiendo según dónde cae). El dormitorio de matrimonio, siempre con el suelo gris azulado y el papel beige, con la
 # puerta arriba y abajo; el individual, con el suelo rojo; el salón, con el suelo de madera de nogal, oscuro y con las tablas en
 # horizontal (tools/suelo_salon.py), para que no se confunda con el del pasillo (que sigue con el de siempre)
-const ESTILO_FIJO := {"dormitorio-matrimonio": ["-a", "-b"], "dormitorio-individual": ["-b", ""], "salon": ["-nogal", ""]}
+const ESTILO_FIJO := {"dormitorio-matrimonio": ["-matrimonio", "-matrimonio"], "dormitorio-individual": ["-b", ""], "salon": ["-nogal", ""]}
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
 # Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
 # techo-<x>. El aseo de las tiendas usa los del baño de los pisos (ESTILO_DE).
