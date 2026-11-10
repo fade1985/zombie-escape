@@ -81,7 +81,9 @@ module.exports = async (req, res) => {
     })
     if (!respuesta.ok) {
       console.error("GitHub no ha abierto el aviso:", respuesta.status, (await respuesta.text()).slice(0, 300))
-      return res.status(502).json({ error: "GitHub no lo ha aceptado" })
+      // (con el código de GitHub, para saber qué pasa sin entrar en Vercel: 401 = la llave está mal o caducada; 403 = le
+      // falta el permiso Issues: Read and write; 404 = la llave no ve el repositorio de mensajes)
+      return res.status(502).json({ error: "GitHub no lo ha aceptado", github: respuesta.status })
     }
     return res.status(201).json({ ok: true })
   } catch (e) {
