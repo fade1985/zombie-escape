@@ -220,7 +220,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
 			if s.uso == "pasillo" and s.get("tipo", "") == "piso":
 				# el de dentro de un piso con pasillo (apartamento.gd), como su salón, que va primero: como en una casa
-				estilos[s.id] = comun if not comun.is_empty() else estilos[0]
+				estilos[s.id] = textura("pasillopiso", "-gpt", "-gpt")   # de GPT: tools/dormitorios.py
 				continue
 			if s.uso == "pasillo":
 				# el pasillo de las viviendas, el de una zona de trasteros: el suelo de hormigón de los trasteros (con su
