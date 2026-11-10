@@ -4373,8 +4373,7 @@ func probar_registro() -> void:
 
 
 # --contacto: «Contáctanos» de Opciones → General (contacto.gd). La página vacía y con un mensaje, que no deja pasar de
-# MAX_LETRAS, que sin escribir nada no se manda, que los datos técnicos van (sin las rutas con el nombre del jugador) y que
-# sin la casilla no, y el envío: sin más, no sale nada del ordenador (dice lo que mandaría); con --contacto-url URL se
+# MAX_LETRAS, que sin escribir nada no se manda, que solo va el texto (sin datos técnicos) y el envío: sin más, no sale nada del ordenador (dice lo que mandaría); con --contacto-url URL se
 # manda de verdad allí (para probarlo contra un servidor de prueba). Esc vuelve a General, al botón Contáctanos.
 # Fotos: captura-contacto.png (vacía), captura-contacto-escrito.png y captura-contacto-enviado.png
 func probar_contacto() -> void:
@@ -4387,10 +4386,10 @@ func probar_contacto() -> void:
 	await get_tree().create_timer(0.3, true).timeout
 	var cuadro := o.find_child("mensaje", true, false) as TextEdit
 	var enviar := o.find_child("enviar", true, false) as Button
-	var datos := o.find_child("datos", true, false) as Button
 	var estado := o.find_child("estado", true, false) as Label
-	print("Contacto · la página: cuadro %s, con el foco %s, Enviar %s, datos «%s» (esperado: sí, sí, sí, Incluir datos técnicos: Sí)" % [
-		"sí" if cuadro else "NO", "sí" if cuadro and cuadro.has_focus() else "NO", "sí" if enviar else "NO", datos.text if datos else "NO HAY"])
+	print("Contacto · la página: cuadro %s, con el foco %s, Enviar %s, sin casilla de datos %s (esperado: sí, sí, sí, sí)" % [
+		"sí" if cuadro else "NO", "sí" if cuadro and cuadro.has_focus() else "NO", "sí" if enviar else "NO",
+		"sí" if o.find_child("datos", true, false) == null else "NO"])
 	Captura.foto("captura-contacto.png")
 	enviar.pressed.emit()
 	await get_tree().process_frame
@@ -4403,16 +4402,7 @@ func probar_contacto() -> void:
 	cuadro.insert_text_at_caret("El jefe bombero se queda quieto en la esquina y no hay forma de que salga. Por lo demás, me encanta.")
 	await get_tree().process_frame
 	Captura.foto("captura-contacto-escrito.png")
-	var d := Contacto.datos(cuadro.text, true)
-	print("Contacto · con datos: versión %s, sistema %s, registro con la cabecera %s (esperado: sí, sí, sí)" % [
-		"sí" if d.get("version", "") != "" else "NO", "sí" if d.get("sistema", "") != "" else "NO",
-		"sí" if str(d.get("registro", "")).begins_with("=== Johnny Rush") else "NO"])
-	var limpio := Contacto.limpiar("C:\\Users\\Pepe Pérez\\AppData\\x.log · /home/pepe/juego · %s/logs" % OS.get_user_data_dir())
-	print("Contacto · sin el nombre del jugador: %s · «%s» (esperado: sí)" % ["sí" if not "Pepe" in limpio and not "Pérez" in limpio and not "pepe" in limpio and not OS.get_user_data_dir() in limpio else "NO", limpio])
-	datos.pressed.emit()
-	print("Contacto · sin la casilla: «%s», registro %s (esperado: Incluir datos técnicos: No, no)" % [
-		datos.text, "NO" if Contacto.datos("hola", false).has("registro") else "no"])
-	datos.pressed.emit()
+	print("Contacto · solo va el texto: %s (esperado: mensaje)" % ", ".join(Contacto.datos(cuadro.text).keys()))
 	enviar.pressed.emit()
 	print("Contacto · mandando: «%s», Enviar apagado %s (esperado: Enviando…, sí)" % [estado.text, "sí" if enviar.disabled else "NO"])
 	var hasta := Time.get_ticks_msec() + 16000

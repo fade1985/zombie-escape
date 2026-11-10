@@ -6251,20 +6251,12 @@ msgid "Temblor"
 msgstr "抖动"
 
 #: scripts/ui/opciones.gd
-msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
-msgstr "用你自己的话告诉我们哪里有问题、哪里不喜欢、哪里可以更好。做这个游戏的我们两个人都会看。"
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
+msgstr "用你自己的话告诉我们哪里有问题、哪里不喜欢、哪里可以更好。"
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"
 msgstr "在这里写下你的留言"
-
-#: scripts/ui/opciones.gd
-msgid "Incluir datos técnicos"
-msgstr "附上技术数据"
-
-#: scripts/ui/opciones.gd
-msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
-msgstr "游戏版本、系统，以及游戏里最近发生的事，用来查找错误。不含任何关于你的信息。"
 
 #: scripts/ui/opciones.gd
 msgid "Enviar"

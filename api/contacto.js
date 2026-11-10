@@ -7,16 +7,14 @@
 // La llave está solo aquí, en Vercel (Settings → Environment Variables → GITHUB_TOKEN_MENSAJES), y solo sirve para abrir
 // avisos en ese repositorio.
 //
-// No se guarda nada del jugador: ni su dirección (IP) ni ningún dato suyo. Solo el mensaje y, si deja marcada la casilla,
-// los datos técnicos (versión, sistema y las últimas líneas del registro, ya limpias de rutas con su nombre: contacto.gd).
+// No se guarda nada del jugador: ni su dirección (IP) ni ningún dato suyo. Solo el texto que ha escrito (sin datos
+// técnicos: lo quiso así el dueño el 10 nov).
 // Contra el abuso: el juego manda una cabecera suya (X-Juego), el mensaje tiene un largo máximo y cada instancia de
 // Vercel acepta unos pocos mensajes por hora desde el mismo sitio (y unos cuantos en total). Si un día llega spam, se
 // borra la llave en Vercel y esto deja de abrir avisos.
 
 const REPO = "fade1985/zombie-escape-mensajes"
 const MAX_MENSAJE = 1000      // lo mismo que deja escribir el juego (contacto.gd, MAX_LETRAS)
-const MAX_REGISTRO = 20000
-const MAX_DATO = 200
 const POR_HORA_DESDE_UN_SITIO = 5
 const POR_HORA_EN_TOTAL = 40
 const HORA = 60 * 60 * 1000
@@ -35,11 +33,6 @@ function demasiados(sitio) {
   en_total.push(ahora)
   for (const [k, v] of llegados) if (v.every((t) => ahora - t >= HORA)) llegados.delete(k)
   return false
-}
-
-// Un dato corto, en una línea y sin «|» (que rompería la tabla)
-function corto(valor) {
-  return String(valor ?? "").replace(/[\r\n|]+/g, " ").trim().slice(0, MAX_DATO) || "?"
 }
 
 // Un texto dentro de un bloque ~~~~: así GitHub no lo convierte en enlaces, menciones (@alguien) ni dibujos
@@ -72,15 +65,7 @@ module.exports = async (req, res) => {
   const titulo = "Mensaje: " + (mensaje.replace(/\s+/g, " ").length > 60
     ? mensaje.replace(/\s+/g, " ").slice(0, 60) + "…"
     : mensaje.replace(/\s+/g, " "))
-  let cuerpo = bloque(mensaje) + "\n\n" +
-    "| Versión | Sistema | Idioma | Dónde |\n|---|---|---|---|\n" +
-    `| ${corto(datos.version)} | ${corto(datos.sistema)} | ${corto(datos.idioma)} | ${corto(datos.plataforma)} |\n`
-  if (datos.registro) {
-    cuerpo += "\n<details><summary>Registro (las últimas líneas)</summary>\n\n" +
-      bloque(String(datos.registro).slice(-MAX_REGISTRO)) + "\n</details>\n"
-  } else {
-    cuerpo += "\n_Sin datos técnicos: el jugador desmarcó la casilla._\n"
-  }
+  const cuerpo = bloque(mensaje) + "\n"   // (solo el texto: lo demás que llegue, se tira)
 
   try {
     const respuesta = await fetch(`https://api.github.com/repos/${REPO}/issues`, {

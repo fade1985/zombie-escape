@@ -478,14 +478,14 @@ en una línea.
   al arrancar una cabecera (versión del juego, `application/config/version`, sistema, procesador, tarjeta, memoria,
   pantalla e idioma), las migas `Registro.apuntar("...")` (la planta a la que llega, en `partida.gd`), y los errores y
   avisos con su archivo, línea y trazas del script, contados en `errores` y `avisos`. Guarda las últimas 400 líneas en
-  memoria para la web, que no tiene archivo; las últimas (`texto(150)`) van con los mensajes de «Contáctanos» si el jugador
-  lo deja (hasta el 10 nov hubo un botón en Opciones para abrirlo o copiarlo). Al cerrar el juego escribe el resumen, «Registro al cerrar: N
+  memoria para la web, que no tiene archivo (hasta el 10 nov hubo un botón en Opciones para abrirlo o copiarlo; ahora está
+  «Contáctanos», que no lo manda). Al cerrar el juego escribe el resumen, «Registro al cerrar: N
   errores y M avisos» con cada uno distinto y cuántas veces salió: así se ve de un vistazo si una prueba `--captura` (o
   la partida de un jugador) ha ido limpia. Detrás, Godot suelta al apagarse unas líneas de «leaked at exit» y «resources
   still in use»: son los dibujos y letras que guardan las `static var` de los scripts, no afectan y se dejan (9 nov).
   Se prueba con `--registro`.
 - `contacto.gd` (`Contacto`): «Contáctanos» de Opciones → General (la página, `contacto()` de `opciones.gd`). Manda el
-  mensaje del jugador y, si lo deja, los datos técnicos (`datos`, sin las rutas con su nombre: `limpiar`) a `api/contacto.js`,
+  mensaje del jugador (solo el texto, sin datos técnicos) a `api/contacto.js`,
   en Vercel, que abre un aviso en el repositorio privado de mensajes. En las pruebas no sale nada del ordenador. Todo en
   `docs/MENSAJES.md`; se prueba con `--contacto`.
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;

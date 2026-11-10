@@ -322,8 +322,8 @@
 #                       con 150 sin esquivarse, quietos, sin dibujar y sin sombra; --zombis N, solo con N. Mejor con --disable-vsync delante [prueba_varias.gd]
 #   --registro          el registro de errores (registro.gd): la cabecera, la planta, un aviso contado, copiarlo, el
 #                       godot.log, y que en Opciones → General ya está «Contáctanos» en su lugar [prueba_varias.gd]
-#   --contacto          «Contáctanos» de Opciones → General (contacto.gd): escribir, el máximo, los datos técnicos (sin el
-#                       nombre del jugador) y el envío, que no sale del ordenador; con --contacto-url URL, sí, a esa
+#   --contacto          «Contáctanos» de Opciones → General (contacto.gd): escribir, el máximo, que solo va el texto
+#                       y el envío, que no sale del ordenador; con --contacto-url URL, sí, a esa
 #                       dirección (un servidor de prueba)                                     [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]

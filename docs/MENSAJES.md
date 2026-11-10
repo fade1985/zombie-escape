@@ -7,9 +7,9 @@ No se le pide nada suyo (ni correo ni nombre: el dueño no quiere datos de jugad
 ## El camino de un mensaje
 
 1. **El juego** (`scripts/contacto.gd`, la página en `opciones.gd`, `contacto()`) lo manda a
-   `https://zombie-escape-two.vercel.app/api/contacto`. Con la casilla «Incluir datos técnicos» (marcada de entrada) van
-   también la versión, el sistema, el idioma y las últimas 150 líneas del registro (`registro.gd`), sin las rutas de su
-   carpeta de usuario, que llevan su nombre (`Contacto.limpiar`). Vale igual en la web y en el `.exe`.
+   `https://zombie-escape-two.vercel.app/api/contacto`. **Solo va el texto**: ni versión, ni sistema, ni registro (el
+   dueño lo quiso así el 10 nov; si hace falta saber más, se le pregunta al jugador en otra versión). Vale igual en la web
+   y en el `.exe`.
 2. **Vercel** (`api/contacto.js`, se publica con la web) comprueba que viene del juego (cabecera `X-Juego`), el largo y
    que no lleguen demasiados seguidos, y abre un **aviso (issue)** en el repositorio **privado**
    `fade1985/zombie-escape-mensajes`. El juego no puede escribir en GitHub por su cuenta: la llave iría dentro del juego

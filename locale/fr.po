@@ -6273,20 +6273,12 @@ msgid "Temblor"
 msgstr "Secousse"
 
 #: scripts/ui/opciones.gd
-msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
-msgstr "Raconte-nous avec tes mots ce qui ne marche pas, ce qui ne te plaît pas ou ce qui pourrait être mieux. Nous deux, qui faisons le jeu, lisons tout."
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
+msgstr "Raconte-nous avec tes mots ce qui ne marche pas, ce qui ne te plaît pas ou ce qui pourrait être mieux."
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"
 msgstr "Écris ton message ici"
-
-#: scripts/ui/opciones.gd
-msgid "Incluir datos técnicos"
-msgstr "Joindre les données techniques"
-
-#: scripts/ui/opciones.gd
-msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
-msgstr "La version du jeu, ton système et ce qui s'est passé en dernier dans la partie, pour trouver les bugs. Rien sur toi."
 
 #: scripts/ui/opciones.gd
 msgid "Enviar"

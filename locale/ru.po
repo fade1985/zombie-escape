@@ -6295,20 +6295,12 @@ msgid "Temblor"
 msgstr "Дрожание"
 
 #: scripts/ui/opciones.gd
-msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
-msgstr "Расскажи своими словами, что не работает, что не нравится или что можно улучшить. Мы оба, кто делает игру, читаем всё."
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
+msgstr "Расскажи своими словами, что не работает, что не нравится или что можно улучшить."
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"
 msgstr "Напиши здесь своё сообщение"
-
-#: scripts/ui/opciones.gd
-msgid "Incluir datos técnicos"
-msgstr "Добавить технические данные"
-
-#: scripts/ui/opciones.gd
-msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
-msgstr "Версия игры, система и что последнее происходило в игре — чтобы найти ошибки. Ничего о тебе."
 
 #: scripts/ui/opciones.gd
 msgid "Enviar"

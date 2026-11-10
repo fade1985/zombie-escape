@@ -6273,20 +6273,12 @@ msgid "Temblor"
 msgstr "Tremor"
 
 #: scripts/ui/opciones.gd
-msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
-msgstr "Conte com suas palavras o que está com problema, o que você não gosta ou o que poderia melhorar. Nós dois que fazemos o jogo lemos tudo."
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
+msgstr "Conte com suas palavras o que está com problema, o que você não gosta ou o que poderia melhorar."
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"
 msgstr "Escreva sua mensagem aqui"
-
-#: scripts/ui/opciones.gd
-msgid "Incluir datos técnicos"
-msgstr "Incluir dados técnicos"
-
-#: scripts/ui/opciones.gd
-msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
-msgstr "A versão do jogo, o sistema e o que aconteceu por último na partida, para encontrar os erros. Nada sobre você."
 
 #: scripts/ui/opciones.gd
 msgid "Enviar"

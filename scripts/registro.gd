@@ -5,8 +5,8 @@
 #   - al arrancar, una cabecera con la versión del juego, el sistema, el procesador y la tarjeta gráfica;
 #   - migas de pan: por dónde iba el jugador (apuntar(), p. ej. al llegar a cada planta);
 #   - los errores con su archivo, línea y de dónde venían (las trazas del script), y cuántos van (errores);
-#   - las últimas líneas también en memoria (ULTIMAS), porque en la web no hay archivo: las últimas van con el mensaje de
-#     «Contáctanos» si el jugador lo deja (contacto.gd; hasta el 10 nov, un botón de Opciones abría la carpeta o lo copiaba).
+#   - las últimas líneas también en memoria (ULTIMAS), porque en la web no hay archivo (hasta el 10 nov, un botón de
+#     Opciones abría la carpeta o lo copiaba; ahora está «Contáctanos», que solo manda lo que escribe el jugador).
 # Se prueba con -- --captura --registro (prueba_varias.gd).
 extends Node
 
@@ -108,10 +108,10 @@ func contar(es_aviso: bool, cual: String) -> void:
 	cerrojo.unlock()
 
 
-# Todo lo que hay en memoria (o las "cuantas" últimas líneas), con la cabecera delante aunque ya no esté entre ellas
-func texto(cuantas := ULTIMAS) -> String:
+# Todo lo que hay en memoria, con la cabecera delante aunque ya no esté entre las últimas líneas
+func texto() -> String:
 	cerrojo.lock()
-	var todo := "\n".join(lineas.slice(maxi(0, lineas.size() - cuantas)))
+	var todo := "\n".join(lineas)
 	cerrojo.unlock()
 	if not todo.begins_with("=== Johnny Rush"):   # no-tr
 		todo = cabecera() + "\n...\n" + todo

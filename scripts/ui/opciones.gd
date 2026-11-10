@@ -415,9 +415,9 @@ func pantalla() -> void:
 
 
 # Contáctanos (el botón de General, desde el 10 nov): un cuadro para escribirnos qué falla, qué no le gusta o qué mejoraría,
-# si van los datos técnicos (Sí de entrada; no se guarda) y Enviar. Lo manda contacto.gd. Se vuelve con la pestaña General
+# y Enviar (solo va el texto, desde el 10 nov: sin datos técnicos). Lo manda contacto.gd. Se vuelve con la pestaña General
 func contacto() -> void:
-	explicar(Idioma.t("Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."))
+	explicar(Idioma.t("Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."))
 	# (en el móvil de la web, Godot no saca el teclado de la pantalla: se escribe en una ventanita del navegador, abajo)
 	var por_ventanita := OS.has_feature("web") and Tactil.activo
 	var cuadro := TextEdit.new()
@@ -442,15 +442,6 @@ func contacto() -> void:
 		letras.text = "%d / %d" % [cuadro.text.length(), Contacto.MAX_LETRAS]
 	cuadro.text_changed.connect(contar)
 	contar.call()
-	var con_datos := [true]   # (en una lista, para que lo cambie el botón)
-	var texto_datos := func() -> String:
-		return "%s: %s" % [Idioma.t("Incluir datos técnicos"), Idioma.t("Sí") if con_datos[0] else Idioma.t("No")]
-	var datos := opcion(texto_datos.call())
-	datos.name = "datos"   # no-tr
-	datos.pressed.connect(func():
-		con_datos[0] = not con_datos[0]
-		datos.text = texto_datos.call())
-	explicar(Idioma.t("La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."))
 	var enviar := opcion(Idioma.t("Enviar"))
 	enviar.name = "enviar"   # no-tr
 	var estado := explicar("")
@@ -464,7 +455,7 @@ func contacto() -> void:
 		enviar.disabled = true
 		cuadro.editable = false
 		estado.text = Idioma.t("Enviando…")
-		Contacto.enviar(self, cuadro.text, con_datos[0], func(llegado: bool):
+		Contacto.enviar(self, cuadro.text, func(llegado: bool):
 			if not is_instance_valid(estado):
 				return   # (ya se ha ido de esta página: el mensaje ha llegado igual, o no)
 			enviar.disabled = false
@@ -481,7 +472,7 @@ func contacto() -> void:
 		var mando: bool = (e is InputEventJoypadButton or e is InputEventJoypadMotion) and e.is_action_pressed("ui_down")
 		if tab or mando:
 			cuadro.accept_event()
-			datos.grab_focus())
+			enviar.grab_focus())
 	# La ventanita del navegador (prompt) del móvil: al tocar el cuadro, y lo escrito pasa al cuadro
 	if por_ventanita:
 		cuadro.gui_input.connect(func(e: InputEvent):

@@ -6273,20 +6273,12 @@ msgid "Temblor"
 msgstr "Screen shake"
 
 #: scripts/ui/opciones.gd
-msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
-msgstr "Tell us in your own words what's broken, what you don't like or what could be better. Both of us who make the game read it."
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
+msgstr "Tell us in your own words what's broken, what you don't like or what could be better."
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"
 msgstr "Write your message here"
-
-#: scripts/ui/opciones.gd
-msgid "Incluir datos técnicos"
-msgstr "Include technical data"
-
-#: scripts/ui/opciones.gd
-msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
-msgstr "The game version, your system and what last happened in the game, to help us find bugs. Nothing about you."
 
 #: scripts/ui/opciones.gd
 msgid "Enviar"

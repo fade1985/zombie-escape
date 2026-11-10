@@ -6273,20 +6273,12 @@ msgid "Temblor"
 msgstr "Wackeln"
 
 #: scripts/ui/opciones.gd
-msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar. Lo leemos los dos que hacemos el juego."
-msgstr "Erzähl uns mit deinen eigenen Worten, was nicht funktioniert, was dir nicht gefällt oder was besser sein könnte. Wir beide, die das Spiel machen, lesen es."
+msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
+msgstr "Erzähl uns mit deinen eigenen Worten, was nicht funktioniert, was dir nicht gefällt oder was besser sein könnte."
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"
 msgstr "Schreib hier deine Nachricht"
-
-#: scripts/ui/opciones.gd
-msgid "Incluir datos técnicos"
-msgstr "Technische Daten anhängen"
-
-#: scripts/ui/opciones.gd
-msgid "La versión del juego, el sistema y lo último que ha pasado en la partida, para encontrar los fallos. Nada sobre ti."
-msgstr "Die Spielversion, dein System und was zuletzt im Spiel passiert ist, damit wir Fehler finden. Nichts über dich."
 
 #: scripts/ui/opciones.gd
 msgid "Enviar"
