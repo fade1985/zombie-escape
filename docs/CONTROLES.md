@@ -168,7 +168,8 @@ banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
   primera partida no se sale al pasillo hasta quitarlos todos (Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!») y
   después sale la flecha de la guía. Con los tutoriales apagados no hay «!».
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
-  tienda de armas, logros, Dosier, Vídeos y Colecciones), un corcho y una papelera. Johnny empieza cada partida solo
+  tienda de armas, logros, Dosier, Vídeos y Colecciones; cada programa lleva un «!» hasta leer su tutorial, que sale
+  al abrirlo la primera vez, y mientras quede alguno no se sale de la sala), un corcho y una papelera. Johnny empieza cada partida solo
   con la fregona: la primera pistola es el **regalo de bienvenida** de la tienda (gratis una sola vez, con un «!» en su
   casilla; hasta cogerla no se sale de la sala) y luego cuesta $10, como el cuchillo. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,

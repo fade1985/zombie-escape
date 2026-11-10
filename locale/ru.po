@@ -2553,7 +2553,7 @@ msgstr "Выжившие"
 msgid "Sorpresas y retos"
 msgstr "Сюрпризы и испытания"
 
-#: scripts/logros.gd scripts/ui/ordenador.gd
+#: scripts/logros.gd scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Colecciones"
 msgstr "Коллекции"
 
@@ -4921,6 +4921,86 @@ msgstr "Дальнобойное оружие продаётся заряжен�
 msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
 msgstr "Джонни начинает только со шваброй: первый пистолет — наш подарок."
 
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Talentos"
+msgstr "Таланты"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Talentos"
+msgstr "Когда открываешь «Таланты»"
+
+#: scripts/tutoriales.gd
+msgid "Gasta aquí los dólares ahorrados en talentos: mejoras para Johnny que duran para siempre, en todas las partidas."
+msgstr "Трать здесь накопленные доллары на таланты: улучшения для Джонни, которые остаются навсегда, в каждом забеге."
+
+#: scripts/tutoriales.gd
+msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada talento sube punto a punto, y para abrir los de abajo hay que llenar antes el de encima."
+msgstr "Есть три ветки: Военный, Выживальщик и Химик. Каждый талант растёт по очку, а чтобы открыть нижние, сначала нужно прокачать до конца верхний."
+
+#: scripts/tutoriales.gd
+msgid "«Resetear talentos» los quita todos para repartirlos de nuevo, pero el dinero gastado se pierde."
+msgstr "«Сбросить таланты» убирает их все, чтобы распределить заново, но потраченные деньги пропадают."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "Достижения"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Logros"
+msgstr "Когда открываешь «Достижения»"
+
+#: scripts/tutoriales.gd
+msgid "Aquí están los retos del juego, ordenados por temas."
+msgstr "Здесь испытания игры, разложенные по темам."
+
+#: scripts/tutoriales.gd
+msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
+msgstr "Получив достижение, возвращайся сюда за наградой: каждое даёт приз в долларах."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Досье VD-7"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el Dosier"
+msgstr "Когда открываешь «Досье»"
+
+#: scripts/tutoriales.gd
+msgid "En cada planta hay un muerto de Velaria con una página del dosier. Cógela y se queda aquí para siempre."
+msgstr "На каждом этаже лежит мёртвый сотрудник Velaria со страницей досье. Подбери её, и она останется здесь навсегда."
+
+#: scripts/tutoriales.gd
+msgid "Cada edificio tiene su dosier. Completarlo es una de las tres cosas que pide el edificio siguiente para abrirse."
+msgstr "У каждого здания своё досье. Собрать его — одно из трёх условий, чтобы открылось следующее здание."
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Colecciones"
+msgstr "Когда открываешь «Коллекции»"
+
+#: scripts/tutoriales.gd
+msgid "Aquí se apuntan los zombis y los jefes que te encuentras, con lo que hacen y dónde salen."
+msgstr "Здесь записаны все зомби и боссы, которых ты встретил: что они делают и где появляются."
+
+#: scripts/tutoriales.gd
+msgid "Los que aún no has visto salen con «???»."
+msgstr "Те, кого ты ещё не видел, показаны как «???»."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Vídeos"
+msgstr "Видео"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Vídeos"
+msgstr "Когда открываешь «Видео»"
+
+#: scripts/tutoriales.gd
+msgid "En las plantas hay teles con las noticias de Canal 8. Las que veas se guardan aquí para volver a verlas."
+msgstr "На этажах стоят телевизоры с новостями Канала 8. Те, что ты посмотрел, сохраняются здесь, чтобы пересмотреть их."
+
+#: scripts/tutoriales.gd
+msgid "Ver todos los vídeos de un edificio también cuenta para abrir el siguiente."
+msgstr "Просмотр всех видео здания тоже засчитывается для открытия следующего."
+
 #: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "Кладовки"
@@ -7031,10 +7111,6 @@ msgid "Aún no te lo has cruzado."
 msgstr "Ты его еще не встречал."
 
 #: scripts/ui/ordenador.gd
-msgid "Talentos"
-msgstr "Таланты"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Tienda\n"
 "de armas"
@@ -7043,20 +7119,12 @@ msgstr ""
 "оружия"
 
 #: scripts/ui/ordenador.gd
-msgid "Logros"
-msgstr "Достижения"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Dosier\n"
 "VD-7"
 msgstr ""
 "Досье\n"
 "VD-7"
-
-#: scripts/ui/ordenador.gd
-msgid "Vídeos"
-msgstr "Видео"
 
 #: scripts/ui/ordenador.gd
 msgid "Apagar"
@@ -7093,10 +7161,6 @@ msgstr "Дерево талантов"
 #: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "Магазин оружия"
-
-#: scripts/ui/ordenador.gd
-msgid "Dosier VD-7"
-msgstr "Досье VD-7"
 
 #: scripts/ui/ordenador.gd
 msgid "Vídeos de Canal 8"

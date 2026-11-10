@@ -2545,7 +2545,7 @@ msgstr "幸存者"
 msgid "Sorpresas y retos"
 msgstr "意外与挑战"
 
-#: scripts/logros.gd scripts/ui/ordenador.gd
+#: scripts/logros.gd scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Colecciones"
 msgstr "收藏品"
 
@@ -4901,6 +4901,86 @@ msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出
 msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
 msgstr "Johnny 开局只有拖把：第一把手枪送给你。"
 
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Talentos"
+msgstr "天赋"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Talentos"
+msgstr "打开天赋时"
+
+#: scripts/tutoriales.gd
+msgid "Gasta aquí los dólares ahorrados en talentos: mejoras para Johnny que duran para siempre, en todas las partidas."
+msgstr "在这里用攒下的美元购买天赋：给Johnny的永久强化，每局都有效。"
+
+#: scripts/tutoriales.gd
+msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada talento sube punto a punto, y para abrir los de abajo hay que llenar antes el de encima."
+msgstr "共有三条分支：士兵、幸存者和化学家。每个天赋一点一点升级，要解锁下面的天赋，得先把上面的点满。"
+
+#: scripts/tutoriales.gd
+msgid "«Resetear talentos» los quita todos para repartirlos de nuevo, pero el dinero gastado se pierde."
+msgstr "「重置天赋」会清空所有天赋以便重新分配，但花掉的钱拿不回来。"
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "成就"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Logros"
+msgstr "打开成就时"
+
+#: scripts/tutoriales.gd
+msgid "Aquí están los retos del juego, ordenados por temas."
+msgstr "这里是游戏的各项挑战，按主题分类。"
+
+#: scripts/tutoriales.gd
+msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
+msgstr "达成后回到这里领取：每个成就都有美元奖励。"
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "VD-7档案"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el Dosier"
+msgstr "打开档案时"
+
+#: scripts/tutoriales.gd
+msgid "En cada planta hay un muerto de Velaria con una página del dosier. Cógela y se queda aquí para siempre."
+msgstr "每层楼都有一具Velaria的尸体，身上带着一页档案。捡起来，它就会永远留在这里。"
+
+#: scripts/tutoriales.gd
+msgid "Cada edificio tiene su dosier. Completarlo es una de las tres cosas que pide el edificio siguiente para abrirse."
+msgstr "每栋楼都有自己的档案。集齐它是解锁下一栋楼的三个条件之一。"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Colecciones"
+msgstr "打开收藏品时"
+
+#: scripts/tutoriales.gd
+msgid "Aquí se apuntan los zombis y los jefes que te encuentras, con lo que hacen y dónde salen."
+msgstr "你遇到的僵尸和首领都会记录在这里，包括它们的能力和出没地点。"
+
+#: scripts/tutoriales.gd
+msgid "Los que aún no has visto salen con «???»."
+msgstr "还没见过的会显示为「???」。"
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Vídeos"
+msgstr "视频"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Vídeos"
+msgstr "打开视频时"
+
+#: scripts/tutoriales.gd
+msgid "En las plantas hay teles con las noticias de Canal 8. Las que veas se guardan aquí para volver a verlas."
+msgstr "楼层里有播放8频道新闻的电视。看过的新闻会保存在这里，可以再看。"
+
+#: scripts/tutoriales.gd
+msgid "Ver todos los vídeos de un edificio también cuenta para abrir el siguiente."
+msgstr "看完一栋楼的所有视频，也算作解锁下一栋楼的条件。"
+
 #: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "储藏室"
@@ -6987,10 +7067,6 @@ msgid "Aún no te lo has cruzado."
 msgstr "你还没遇到过它。"
 
 #: scripts/ui/ordenador.gd
-msgid "Talentos"
-msgstr "天赋"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Tienda\n"
 "de armas"
@@ -6999,20 +7075,12 @@ msgstr ""
 "商店"
 
 #: scripts/ui/ordenador.gd
-msgid "Logros"
-msgstr "成就"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Dosier\n"
 "VD-7"
 msgstr ""
 "VD-7\n"
 "档案"
-
-#: scripts/ui/ordenador.gd
-msgid "Vídeos"
-msgstr "视频"
 
 #: scripts/ui/ordenador.gd
 msgid "Apagar"
@@ -7049,10 +7117,6 @@ msgstr "天赋树"
 #: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "武器商店"
-
-#: scripts/ui/ordenador.gd
-msgid "Dosier VD-7"
-msgstr "VD-7档案"
 
 #: scripts/ui/ordenador.gd
 msgid "Vídeos de Canal 8"

@@ -1306,7 +1306,8 @@ func probar_sala() -> void:
 # empezar, los cinco a la vista (captura-marcas-sala.png); la puerta del pasillo no deja salir y Johnny dice
 # «¡MEJOR INVESTIGO UN POCO MÁS!» (captura-marcas-no-sale.png), sin flecha de la guía. Luego abre la taquilla,
 # el banco y el baúl (cada uno, su tutorial; el del banco en captura-marcas-tutorial-banco.png) y el ordenador, cuyo
-# «!» sigue mientras haya algo nuevo dentro; entra en los trasteros (su tutorial nuevo: captura-marcas-trasteros.png) y
+# «!» sigue mientras haya algo nuevo dentro: abre cada programa, con su tutorial (captura-marcas-escritorio.png y
+# captura-marcas-tutorial-talentos.png), hasta que no queda ningún «!» en los iconos; entra en los trasteros (su tutorial nuevo: captura-marcas-trasteros.png) y
 # vuelve. Sin ningún «!», sale la flecha (captura-marcas-flecha.png) y ya se sale al pasillo. Luego se cierra
 func probar_marcas_sala() -> void:
 	var nombres := ["taquilla", "ordenador", "banco", "baúl", "trasteros"]
@@ -1332,8 +1333,39 @@ func probar_marcas_sala() -> void:
 	await usar_con_tutorial(abrir_cosas.bind("baul"), inventario.cerrar, "baul")
 	await usar_con_tutorial(abrir_ordenador, ordenador.apagar, "ordenador")
 	print("Tras abrir taquilla, banco, baúl y ordenador, «!»: %s (esperado: ordenador, trasteros: aún hay algo nuevo dentro)" % activas.call())
-	Guardado.cambiar(func(g): g.colecciones_nuevo = false)   # (como si se hubiera entrado en Colecciones)
-	print("Visto lo nuevo del ordenador, «!»: %s (esperado: trasteros)" % activas.call())
+	# dentro del ordenador: cada icono lleva su «!» hasta ver su tutorial, que sale al abrir el programa la primera vez
+	abrir_ordenador()
+	await get_tree().create_timer(1.0).timeout
+	var con_marca := func() -> String:
+		var lista := []
+		for i in ordenador.ICONOS:
+			var b: Node = ordenador.iconos.get_node_or_null("icono_" + i[0])
+			if b and b.get_node_or_null("marca_nuevo"):
+				lista.append(i[0])
+		return ", ".join(lista) if not lista.is_empty() else "ninguno"
+	print("En el escritorio, iconos con «!»: %s (esperado: puntos, armas, logros, dosier, colecciones, videos)" % con_marca.call())
+	Captura.foto("captura-marcas-escritorio.png")
+	var vistos := []
+	for programa in ["puntos", "armas", "logros", "dosier", "colecciones", "videos"]:
+		ordenador.abrir(programa)
+		await get_tree().create_timer(0.6).timeout
+		var tuto := ventana_tutorial()
+		vistos.append(tuto.id if tuto else "ninguno")
+		if programa == "puntos":
+			Captura.foto("captura-marcas-tutorial-talentos.png")
+		if tuto:
+			tuto.cerrar()
+		await get_tree().create_timer(0.6).timeout
+		if programa == "puntos":
+			print("Visto el de Talentos, iconos con «!»: %s (esperado: armas, logros, dosier, colecciones, videos)" % con_marca.call())
+	ordenador.abrir("")
+	await get_tree().create_timer(0.3).timeout
+	print("Al abrir cada programa, su tutorial: %s (esperado: talentos, tienda, logros, dosier, colecciones, videos) · iconos con «!»: %s (esperado: ninguno)" % [
+		", ".join(vistos), con_marca.call()])
+	Captura.foto("captura-marcas-escritorio-sin.png")
+	ordenador.apagar()
+	await get_tree().create_timer(0.3).timeout
+	print("Visto lo de dentro del ordenador, «!»: %s (esperado: trasteros)" % activas.call())
 	await cruzar(0)
 	print("Al ir al pasillo otra vez: sigue en «%s» (esperado: mantenimiento)" % planta.sitios[aqui].tipo)
 	# los trasteros: al entrar, su tutorial

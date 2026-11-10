@@ -129,7 +129,8 @@ func poner_aviso(b: Button, icono: Array, nuevo: bool) -> void:
 	var programa: String = icono[0]
 	var rotulo: Label = b.find_child("rotulo_" + programa, true, false)
 	var marca := b.get_node_or_null("marca_nuevo")
-	if nuevo and AVISO_ICONO.has(programa):
+	# (el rótulo amarillo, solo con algo de verdad nuevo: con el tutorial sin ver, solo el «!»)
+	if nuevo and AVISO_ICONO.has(programa) and programa in MESA.novedades(Guardado.cargar(), false):
 		rotulo.text = Idioma.t(AVISO_ICONO[programa])
 		rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
 	else:
@@ -311,9 +312,11 @@ func _process(_delta: float) -> void:
 # Abre un programa ("" = cerrar la ventana y quedarse en el escritorio). "foco": el botón que hay que dejar
 # marcado (al volver a pintar después de comprar algo)
 func abrir(programa: String, foco := "") -> void:
-	# la primera vez que se abre la tienda, su tutorial (antes de montarla: así Intro no compra lo marcado detrás)
-	if programa == "armas" and partida.puede_tutorial("tienda"):
-		await partida.ver_tutorial("tienda")
+	# la primera vez que se abre cada programa, su tutorial (antes de montarlo: así Intro no compra lo marcado detrás)
+	var tuto: String = MESA.TUTORIAL_DE.get(programa, "")
+	if tuto != "" and partida.puede_tutorial(tuto):
+		await partida.ver_tutorial(tuto)
+		refrescar_avisos()   # (visto el tutorial, se quita el «!» de su icono; el de la tienda, cuando se coja la pistola)
 	var antes := abierta
 	abierta = programa
 	cerrar_aviso(false)

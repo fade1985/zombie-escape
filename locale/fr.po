@@ -2549,7 +2549,7 @@ msgstr "Survivants"
 msgid "Sorpresas y retos"
 msgstr "Surprises et défis"
 
-#: scripts/logros.gd scripts/ui/ordenador.gd
+#: scripts/logros.gd scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Colecciones"
 msgstr "Collections"
 
@@ -4911,6 +4911,86 @@ msgstr "Les armes à distance sont livrées chargées, avec des munitions de ré
 msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
 msgstr "Johnny ne commence qu'avec la serpillière : le premier pistolet, c'est cadeau."
 
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Talentos"
+msgstr "Talents"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Talentos"
+msgstr "En ouvrant Talents"
+
+#: scripts/tutoriales.gd
+msgid "Gasta aquí los dólares ahorrados en talentos: mejoras para Johnny que duran para siempre, en todas las partidas."
+msgstr "Dépense ici tes dollars économisés en talents : des améliorations pour Johnny qui durent pour toujours, à chaque partie."
+
+#: scripts/tutoriales.gd
+msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada talento sube punto a punto, y para abrir los de abajo hay que llenar antes el de encima."
+msgstr "Il y a trois branches : Soldat, Survivant et Chimiste. Chaque talent monte point par point, et pour débloquer ceux du dessous, il faut d'abord remplir celui du dessus."
+
+#: scripts/tutoriales.gd
+msgid "«Resetear talentos» los quita todos para repartirlos de nuevo, pero el dinero gastado se pierde."
+msgstr "« Réinitialiser les talents » les retire tous pour les répartir à nouveau, mais l'argent dépensé est perdu."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "Succès"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Logros"
+msgstr "En ouvrant Succès"
+
+#: scripts/tutoriales.gd
+msgid "Aquí están los retos del juego, ordenados por temas."
+msgstr "Voici les défis du jeu, classés par thème."
+
+#: scripts/tutoriales.gd
+msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
+msgstr "Quand tu en obtiens un, reviens ici pour l'encaisser : chaque succès rapporte une prime en dollars."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Dossier VD-7"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el Dosier"
+msgstr "En ouvrant le Dossier"
+
+#: scripts/tutoriales.gd
+msgid "En cada planta hay un muerto de Velaria con una página del dosier. Cógela y se queda aquí para siempre."
+msgstr "À chaque étage, un mort de Velaria porte une page du dossier. Ramasse-la et elle reste ici pour toujours."
+
+#: scripts/tutoriales.gd
+msgid "Cada edificio tiene su dosier. Completarlo es una de las tres cosas que pide el edificio siguiente para abrirse."
+msgstr "Chaque bâtiment a son dossier. Le compléter est l'une des trois conditions pour débloquer le bâtiment suivant."
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Colecciones"
+msgstr "En ouvrant Collections"
+
+#: scripts/tutoriales.gd
+msgid "Aquí se apuntan los zombis y los jefes que te encuentras, con lo que hacen y dónde salen."
+msgstr "Ici sont notés les zombies et les boss que tu croises, avec ce qu'ils font et où ils apparaissent."
+
+#: scripts/tutoriales.gd
+msgid "Los que aún no has visto salen con «???»."
+msgstr "Ceux que tu n'as pas encore vus s'affichent avec « ??? »."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Vídeos"
+msgstr "Vidéos"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Vídeos"
+msgstr "En ouvrant Vidéos"
+
+#: scripts/tutoriales.gd
+msgid "En las plantas hay teles con las noticias de Canal 8. Las que veas se guardan aquí para volver a verlas."
+msgstr "Dans les étages, des télés diffusent les infos de Canal 8. Celles que tu regardes sont gardées ici pour les revoir."
+
+#: scripts/tutoriales.gd
+msgid "Ver todos los vídeos de un edificio también cuenta para abrir el siguiente."
+msgstr "Regarder toutes les vidéos d'un bâtiment compte aussi pour débloquer le suivant."
+
 #: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "Les caves"
@@ -7009,10 +7089,6 @@ msgid "Aún no te lo has cruzado."
 msgstr "Tu ne l'as pas encore croisé."
 
 #: scripts/ui/ordenador.gd
-msgid "Talentos"
-msgstr "Talents"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Tienda\n"
 "de armas"
@@ -7021,20 +7097,12 @@ msgstr ""
 "d'armes"
 
 #: scripts/ui/ordenador.gd
-msgid "Logros"
-msgstr "Succès"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Dosier\n"
 "VD-7"
 msgstr ""
 "Dossier\n"
 "VD-7"
-
-#: scripts/ui/ordenador.gd
-msgid "Vídeos"
-msgstr "Vidéos"
 
 #: scripts/ui/ordenador.gd
 msgid "Apagar"
@@ -7071,10 +7139,6 @@ msgstr "Arbre de talents"
 #: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "Boutique d'armes"
-
-#: scripts/ui/ordenador.gd
-msgid "Dosier VD-7"
-msgstr "Dossier VD-7"
 
 #: scripts/ui/ordenador.gd
 msgid "Vídeos de Canal 8"

@@ -2549,7 +2549,7 @@ msgstr "Survivors"
 msgid "Sorpresas y retos"
 msgstr "Surprises and Challenges"
 
-#: scripts/logros.gd scripts/ui/ordenador.gd
+#: scripts/logros.gd scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Colecciones"
 msgstr "Collections"
 
@@ -4911,6 +4911,86 @@ msgstr "Ranged weapons come loaded and with spare ammo; special ones come full a
 msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
 msgstr "Johnny starts with just the mop: your first pistol is on us."
 
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Talentos"
+msgstr "Talents"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Talentos"
+msgstr "On opening Talents"
+
+#: scripts/tutoriales.gd
+msgid "Gasta aquí los dólares ahorrados en talentos: mejoras para Johnny que duran para siempre, en todas las partidas."
+msgstr "Spend your saved dollars on talents here: upgrades for Johnny that last forever, in every run."
+
+#: scripts/tutoriales.gd
+msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada talento sube punto a punto, y para abrir los de abajo hay que llenar antes el de encima."
+msgstr "There are three branches: Soldier, Survivor and Chemist. Each talent goes up point by point, and to unlock the ones below you must max out the one above first."
+
+#: scripts/tutoriales.gd
+msgid "«Resetear talentos» los quita todos para repartirlos de nuevo, pero el dinero gastado se pierde."
+msgstr "“Reset talents” removes them all so you can spend them again, but the money you spent is lost."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "Achievements"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Logros"
+msgstr "On opening Achievements"
+
+#: scripts/tutoriales.gd
+msgid "Aquí están los retos del juego, ordenados por temas."
+msgstr "Here are the game's challenges, sorted by topic."
+
+#: scripts/tutoriales.gd
+msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
+msgstr "When you get one, come back here to claim it: each achievement pays a prize in dollars."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Dossier VD-7"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el Dosier"
+msgstr "On opening the Dossier"
+
+#: scripts/tutoriales.gd
+msgid "En cada planta hay un muerto de Velaria con una página del dosier. Cógela y se queda aquí para siempre."
+msgstr "On every floor there's a dead Velaria worker carrying a page of the dossier. Pick it up and it stays here forever."
+
+#: scripts/tutoriales.gd
+msgid "Cada edificio tiene su dosier. Completarlo es una de las tres cosas que pide el edificio siguiente para abrirse."
+msgstr "Each building has its own dossier. Completing it is one of the three things the next building needs to unlock."
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Colecciones"
+msgstr "On opening Collections"
+
+#: scripts/tutoriales.gd
+msgid "Aquí se apuntan los zombis y los jefes que te encuentras, con lo que hacen y dónde salen."
+msgstr "Every zombie and boss you run into is logged here, with what they do and where they show up."
+
+#: scripts/tutoriales.gd
+msgid "Los que aún no has visto salen con «???»."
+msgstr "The ones you haven't seen yet show up as “???”."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Vídeos"
+msgstr "Videos"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir Vídeos"
+msgstr "On opening Videos"
+
+#: scripts/tutoriales.gd
+msgid "En las plantas hay teles con las noticias de Canal 8. Las que veas se guardan aquí para volver a verlas."
+msgstr "There are TVs on the floors showing the Canal 8 news. The ones you watch are saved here so you can watch them again."
+
+#: scripts/tutoriales.gd
+msgid "Ver todos los vídeos de un edificio también cuenta para abrir el siguiente."
+msgstr "Watching all of a building's videos also counts toward unlocking the next one."
+
 #: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "The storage rooms"
@@ -7009,10 +7089,6 @@ msgid "Aún no te lo has cruzado."
 msgstr "You haven't run into this one yet."
 
 #: scripts/ui/ordenador.gd
-msgid "Talentos"
-msgstr "Talents"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Tienda\n"
 "de armas"
@@ -7021,20 +7097,12 @@ msgstr ""
 "Shop"
 
 #: scripts/ui/ordenador.gd
-msgid "Logros"
-msgstr "Achievements"
-
-#: scripts/ui/ordenador.gd
 msgid ""
 "Dosier\n"
 "VD-7"
 msgstr ""
 "Dossier\n"
 "VD-7"
-
-#: scripts/ui/ordenador.gd
-msgid "Vídeos"
-msgstr "Videos"
 
 #: scripts/ui/ordenador.gd
 msgid "Apagar"
@@ -7071,10 +7139,6 @@ msgstr "Talent tree"
 #: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "Weapon Shop"
-
-#: scripts/ui/ordenador.gd
-msgid "Dosier VD-7"
-msgstr "Dossier VD-7"
 
 #: scripts/ui/ordenador.gd
 msgid "Vídeos de Canal 8"

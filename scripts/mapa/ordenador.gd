@@ -66,16 +66,26 @@ func _process(delta: float) -> void:
 	brillo.energy = 0.7 + sin(t * 2.5) * 0.2
 
 
-# Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado:
-# «colecciones» (un objeto o enemigo nuevo), «logros» (alguno conseguido y sin cobrar) y «armas» (el regalo de bienvenida
-# de la tienda, la pistola gratis, sin coger: tienda_armas.gd). Lo usan el «!» de la mesa y los
-# iconos del escritorio (ui/ordenador.gd)
-static func novedades(s: Dictionary) -> Array:
+# El tutorial de cada programa de ConserjeOS (Tutoriales.LISTA): sale al abrirlo la primera vez (ui/ordenador.gd, abrir)
+const TUTORIAL_DE := {"puntos": "talentos", "armas": "tienda", "logros": "logros", "dosier": "dosier",
+	"colecciones": "colecciones", "videos": "videos"}
+
+
+# Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado: los que tienen su tutorial sin ver
+# (TUTORIAL_DE; mientras los tutoriales estén encendidos: Tutoriales.marca), «colecciones» (un enemigo nuevo), «logros»
+# (alguno conseguido y sin cobrar) y «armas» (el regalo de bienvenida de la tienda, la pistola gratis, sin coger:
+# tienda_armas.gd). Lo usan el «!» de la mesa y los iconos del escritorio (ui/ordenador.gd); con alguno, el de la mesa
+# sigue y, en la primera partida, no se sale de la sala de mantenimiento (partida.falta_sala). Sin "con_tutoriales",
+# solo lo de verdad nuevo (el rótulo amarillo del icono, «¡NUEVO!» o «¡COBRAR!», sale solo con eso)
+static func novedades(s: Dictionary, con_tutoriales := true) -> Array:
 	var lista := []
-	if s.colecciones_nuevo:
+	for programa in TUTORIAL_DE:
+		if con_tutoriales and Tutoriales.marca(TUTORIAL_DE[programa]):
+			lista.append(programa)
+	if s.colecciones_nuevo and not "colecciones" in lista:
 		lista.append("colecciones")
-	if Logros.LISTA.any(func(l): return Logros.estado(s, l.id) == "conseguido"):
+	if Logros.LISTA.any(func(l): return Logros.estado(s, l.id) == "conseguido") and not "logros" in lista:
 		lista.append("logros")
-	if not s.regalo_cogido:
+	if not s.regalo_cogido and not "armas" in lista:
 		lista.append("armas")
 	return lista
