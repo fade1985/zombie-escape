@@ -737,7 +737,7 @@ func cruzar(i: int) -> void:
 				marca.refrescar()   # (por si se acaba de cerrar un tutorial: se miran cada segundo)
 		if falta_sala() or not Guardado.cargar().regalo_cogido:
 			# (como el de «¡¡¡LA LLAVE!!!», pero por encima del letrero de la guía y más rato, que es más larga)
-			gran_aviso(Idioma.t("¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"), Tema.AMARILLO, 160.0, 2.2)
+			gran_aviso(Idioma.t("¡MEJOR INVESTIGO UN POCO MÁS!"), Tema.AMARILLO, 160.0, 2.2)
 			Sonido.tocar("no")
 			return
 	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable

@@ -1304,7 +1304,7 @@ func probar_sala() -> void:
 
 # Con "--captura --marcas-sala": los «!» de la sala de mantenimiento en la primera partida (mapa.marcas_sala). Al
 # empezar, los cinco a la vista (captura-marcas-sala.png); la puerta del pasillo no deja salir y Johnny dice
-# «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» (captura-marcas-no-sale.png), sin flecha de la guía. Luego abre la taquilla,
+# «¡MEJOR INVESTIGO UN POCO MÁS!» (captura-marcas-no-sale.png), sin flecha de la guía. Luego abre la taquilla,
 # el banco y el baúl (cada uno, su tutorial; el del banco en captura-marcas-tutorial-banco.png) y el ordenador, cuyo
 # «!» sigue mientras haya algo nuevo dentro; entra en los trasteros (su tutorial nuevo: captura-marcas-trasteros.png) y
 # vuelve. Sin ningún «!», sale la flecha (captura-marcas-flecha.png) y ya se sale al pasillo. Luego se cierra

@@ -3046,7 +3046,7 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "Il t'attend en haut, sur l'héliport : monte par la rampe"
 
 #: scripts/partida.gd
-msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
+msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "JE FERAIS MIEUX DE FOUILLER UN PEU PLUS !"
 
 #: scripts/partida.gd

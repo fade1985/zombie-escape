@@ -3042,8 +3042,8 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "首领在楼顶停机坪等着你：走坡道上去"
 
 #: scripts/partida.gd
-msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
-msgstr "我觉得还是再四处看看吧！"
+msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
+msgstr "还是再四处看看吧！"
 
 #: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"

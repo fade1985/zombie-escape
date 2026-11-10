@@ -3050,8 +3050,8 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "Ждет тебя наверху, на вертолетной площадке: поднимайся по пандусу"
 
 #: scripts/partida.gd
-msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
-msgstr "ПОЖАЛУЙ, ОСМОТРЮСЬ ЕЩЁ НЕМНОГО!"
+msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
+msgstr "ЛУЧШЕ ОСМОТРЮСЬ ЕЩЁ НЕМНОГО!"
 
 #: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
