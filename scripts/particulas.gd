@@ -19,6 +19,7 @@ static func capa(desde: Node) -> Particulas:
 		p = Particulas.new()
 		p.add_to_group("particulas")
 		p.z_index = 20   # por encima de los personajes
+		p.material = Recorte.material("punto")   # (ninguna se pinta encima de un muro: recorte.gd)
 		arbol.current_scene.add_child(p)
 	return p
 

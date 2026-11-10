@@ -177,6 +177,7 @@ static func charco(sala: Node, donde: Vector2, radio: float, color: Color) -> vo
 static func quemado(sala: Node, donde: Vector2, radio: float) -> void:
 	var m := Mancha.new()
 	m.position = (donde / CELDA).round() * CELDA
+	m.material = Recorte.material("suelo")   # (la quemadura no pasa a las paredes ni al otro lado: recorte.gd)
 	var ondas := []
 	for k in [3, 5, 8]:
 		ondas.append([k, randf() * TAU, randf_range(0.06, 0.14)])

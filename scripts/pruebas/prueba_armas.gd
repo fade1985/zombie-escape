@@ -3110,6 +3110,116 @@ func probar_granada_pared() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --efectos-pared": lo que se ve de cada efecto soltado pegado a la pared de la derecha de la sala de
+# pruebas no se pinta encima de la pared ni al otro lado (10 nov). Una foto de cada uno en su mejor momento
+# (captura-efectos-pared-<efecto>.png): la explosión, la quemadura que deja, la escarcha de la congeladora, los anillos
+# de la atraedora, el molotov al romperse y su fuego, los charcos de veneno, lejía y ácido y la sangre de un zombi que
+# muere ahí. Se cierra
+func probar_efectos_pared() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var y: float = sala.diana.global_position.y + 40.0
+	var x0: float = sala.diana.global_position.x
+	var pared_izq: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 300, y), Vector2(x0 + 900, y), 1)).position.x
+	var junto := Vector2(pared_izq - 24.0, y)
+	johnny.global_position = Vector2(pared_izq - 220.0, y)
+	johnny.get_node("Camara").reset_smoothing()
+	print("Pared en x %d · los efectos, en x %d" % [pared_izq, junto.x])
+	var sitio_de := johnny.get_parent()
+	var limpiar := func() -> void:
+		for g in ["charcos"]:
+			for c in get_tree().get_nodes_in_group(g):
+				c.queue_free()
+		zombis_de_prueba([])
+	# la explosión (y la quemadura que deja) y la escarcha de la congeladora
+	for helada in [false, true]:
+		var bum: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+		bum.radio = Lanzables.DATOS.granada.radio
+		bum.helada = helada
+		bum.a_johnny = false
+		bum.position = junto
+		sitio_de.add_child(bum)
+		if not helada:
+			Mancha.quemado(sitio_de, junto, bum.radio * 0.5)
+		await get_tree().create_timer(0.15).timeout
+		Captura.foto("captura-efectos-pared-%s.png" % ("escarcha" if helada else "explosion"))
+		await get_tree().create_timer(1.5).timeout
+		if not helada:
+			Captura.foto("captura-efectos-pared-quemado.png")
+	# los anillos de la atraedora
+	var g: Node2D = Lanzables.BOMBA.new()
+	g.tipo = "atraedora"
+	g.desde = junto
+	g.hasta = junto
+	g.radio = Lanzables.DATOS.atraedora.radio
+	g.dano_zombis = 0
+	sitio_de.add_child(g)
+	g.mecha = 0.05
+	while is_instance_valid(g):
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.12).timeout
+	Captura.foto("captura-efectos-pared-atraedora.png")
+	await get_tree().create_timer(1.0).timeout
+	# el molotov y los charcos de lo que lanzan los zombis
+	for tipo in ["molotov", "veneno", "lejia", "acido"]:
+		limpiar.call()
+		var p: Node2D = Lanzables.PROYECTIL.instantiate()
+		p.tipo = tipo
+		p.desde = junto
+		p.hasta = junto
+		sitio_de.add_child(p)
+		while is_instance_valid(p):
+			await get_tree().physics_frame
+		if tipo == "molotov":
+			await get_tree().create_timer(0.2).timeout
+			Captura.foto("captura-efectos-pared-molotov.png")
+		await get_tree().create_timer(1.2).timeout
+		Captura.foto("captura-efectos-pared-%s.png" % ("fuego" if tipo == "molotov" else tipo))
+	limpiar.call()
+	# la sangre de un zombi que muere pegado a la pared, de un golpe hacia ella
+	var z := meter_zombi("normal", junto)
+	z.set_physics_process(false)
+	await get_tree().create_timer(0.2).timeout
+	z.recibir_golpe(9999, Vector2(400, 0))
+	await get_tree().create_timer(1.2).timeout
+	Captura.foto("captura-efectos-pared-sangre.png")
+	# contra la pared de arriba (el fuego que sube se sigue viendo delante de ella, como un personaje) y la de abajo
+	var arriba: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 300, y), Vector2(x0 + 300, y - 2000), 1)).position.y
+	var abajo: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 300, y), Vector2(x0 + 300, y + 2000), 1)).position.y
+	for caso in [["arriba", Vector2(x0 + 300, arriba + 24.0)], ["abajo", Vector2(x0 + 300, abajo - 24.0)]]:
+		johnny.global_position = caso[1] + Vector2(-160, 0)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.5).timeout
+		var bum: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+		bum.radio = Lanzables.DATOS.granada.radio
+		bum.a_johnny = false
+		bum.position = caso[1]
+		sitio_de.add_child(bum)
+		var charco: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+		charco.tipo = "veneno"
+		charco.position = caso[1] + Vector2(150, 0)
+		sitio_de.add_child(charco)
+		await get_tree().create_timer(0.15).timeout
+		Captura.foto("captura-efectos-pared-%s.png" % caso[0])
+		await get_tree().create_timer(1.0).timeout
+		limpiar.call()
+	get_tree().quit()
+
+
 # Para probar_granada_pared: un zombi lento quieto, de 500 de vida, en ese sitio. Tras la pared de la derecha de la sala
 # de pruebas ya es fuera del mapa, y meter_zombi lleva al suelo más cercano (a este lado) a quien se pide ahí (10 nov):
 # se le vuelve a poner donde se pedía

@@ -101,6 +101,8 @@
 #   --granada-pared     las granadas chocan con las paredes (y vuelan por encima de los muebles) y su explosión no las
 #                       pasa: dónde explotan, a quién le dan y a quién apunta lanzar de un toque; y el rebote
 #                       cuando el rayo no dice hacia dónde mira la pared (cara_de_la_pared) [prueba_armas.gd]
+#   --efectos-pared     lo que se ve de cada efecto pegado a una pared (explosión, quemadura, escarcha, atraedora,
+#                       molotov y su fuego, charcos, sangre) no se pinta encima de la pared  [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
 #   --reventon          el gordo revienta al morir (M38): la corona y las gotas, y el charco grande con sus burbujas
 #                       gordas, hasta que se seca; y Johnny dentro, con las manchas de ácido (M65) [prueba_armas.gd]
@@ -727,6 +729,9 @@ func empezar_prueba() -> void:
 	elif "--granada-pared" in args:
 		set_process(false)   # sin la prueba larga
 		probar_granada_pared()
+	elif "--efectos-pared" in args:
+		set_process(false)   # sin la prueba larga
+		probar_efectos_pared()
 	elif "--epicas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_epicas()

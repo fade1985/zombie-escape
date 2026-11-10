@@ -77,10 +77,7 @@ func _ready() -> void:
 		capa.centered = false
 		capa.offset = -ORIGEN
 		capa.scale = Vector2(escala, escala)
-		if i == 1:
-			var suma := CanvasItemMaterial.new()
-			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-			capa.material = suma
+		capa.material = Recorte.material("aire", i == 1)   # (sin pintarse encima de las paredes; la de brillo, sumada)
 		add_child(capa)
 		capas.append(capa)
 

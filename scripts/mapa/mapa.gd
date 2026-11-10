@@ -319,6 +319,11 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		add_child(SalaArmas.new())   # la sala de pruebas: la diana, las líneas de ayuda, su panel de daño y el baúl de pruebas (sala_armas.gd)
 	if sitio.has("apt"):
 		preparar_niebla()
+	Recorte.preparar(self)   # (los efectos no se pintan encima de los muros: recorte.gd)
+	if not has_meta("recorte"):
+		set_meta("recorte", true)
+		tree_exiting.connect(Recorte.quitar.bind(self))
+		tree_entered.connect(Recorte.preparar.bind(self))   # (si se saca del árbol y vuelve)
 	al_entrar()
 	set_process(sitio.has("apt") or sitio.tipo == "expo")
 

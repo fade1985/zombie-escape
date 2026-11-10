@@ -100,6 +100,7 @@ func _ready() -> void:
 	vida_max = TIPOS[tipo].vida * duracion + extra
 	vida = vida_max
 	z_index = -1   # en el suelo: por debajo de todos
+	material = Recorte.material("aire" if tipo == "fuego" else "suelo")   # (ni encima de las paredes ni al otro lado; las llamas suben)
 	add_to_group("charcos")
 	if tipo == "hirviendo":
 		hacer_hirviendo()
@@ -286,6 +287,7 @@ func arder() -> void:
 func dejar_ceniza() -> void:
 	var m := Mancha.new()
 	m.position = position
+	m.material = Recorte.material("suelo")   # (como el charco: sin pasar a las paredes)
 	for c in celdas:
 		if burbujea():
 			if c[1] < 0.75 and c[4] < 0.7:

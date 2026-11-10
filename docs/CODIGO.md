@@ -189,6 +189,13 @@ en una línea.
   `explosion.gd` (lo que se ve es la explosión de pixelfx: `tools/pixelfx/explosion.js`, una copia de "small-explosion" más
   grande y sin las piedras ni la tierra, que caían en raya vista desde arriba; la exporta `exportar_explosion.mjs` en
   `explosion.png` y `explosion-brillo.png`, con sus dos capas; las pequeñas, a la mitad. Prueba: `--captura --explosion`).
+- `recorte.gd` (10 nov): ningún efecto se pinta encima de las paredes ni al otro lado. La explosión, los de pixelfx
+  (`efecto_suelo.gd`, salvo los golpes contra la pared), los charcos, las quemaduras, la ceniza y las partículas llevan
+  uno de sus materiales (`escenas/armas/recorte.gdshader`, y `recorte_suma` para las capas de brillo). El mapa, al
+  montarse, le pasa sus muros como una máscara de un punto por casilla, y cada píxel solo se pinta si entre el centro
+  del efecto y él no hay muro (por las puertas abiertas, sí pasa). Lo que sube (explosión, llamas) se mira a la altura
+  del suelo: se corta en las paredes de los lados y la de abajo, pero por delante de la de arriba se sigue viendo, como
+  un personaje. Prueba: `--captura --efectos-pared`.
 - `charco.gd` (todos los charcos) y `estados.gd` (lo que hacen: veneno, frío, calambrazo, tirado, `frenado`...).
   El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).

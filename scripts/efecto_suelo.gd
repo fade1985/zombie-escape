@@ -179,10 +179,13 @@ func _ready() -> void:
 		capa.scale = Vector2(2, 2) * escala
 		capa.z_as_relative = false
 		capa.z_index = -1 if i == 0 else 4
-		if i == 2:
-			var suma := CanvasItemMaterial.new()
-			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-			capa.material = suma
+		if tipo.begins_with("pared-") or tipo == "golpe-pared":   # (los golpes contra la pared se ven en ella)
+			if i == 2:
+				var suma := CanvasItemMaterial.new()
+				suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+				capa.material = suma
+		else:
+			capa.material = Recorte.material("aire", i == 2)   # sin pintarse encima de las paredes (la 3.ª, sumada)
 		add_child(capa)
 		capas.append(capa)
 	if de_calentar:
