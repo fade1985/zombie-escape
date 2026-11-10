@@ -364,7 +364,7 @@ msgstr "Готово! Можешь включать свет"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "%s починил провод! Вода больше не бьет током"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Помоги, не могу встать!"
 
@@ -451,14 +451,6 @@ msgstr "Погоди, разбираю баррикаду!"
 #: scripts/barricada.gd
 msgid "¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada"
 msgstr "Вход захлопнулся! Защищай дверь, пока %s разбирает баррикаду"
-
-#: scripts/barricada.gd
-msgid "la entrada"
-msgstr "вход"
-
-#: scripts/barricada.gd
-msgid "¡Vienen por %s!"
-msgstr "Лезут через %s!"
 
 #: scripts/barricada.gd
 msgid "¡Barricada fuera! La entrada se ha abierto"
@@ -3964,6 +3956,10 @@ msgid "¡LO CONSEGUÍ, VÁMONOS!"
 msgstr "ПОЛУЧИЛОСЬ, УХОДИМ!"
 
 #: scripts/supervivientes.gd
+msgid "¡AYÚDAME!"
+msgstr "ПОМОГИ!"
+
+#: scripts/supervivientes.gd
 msgid "el salón"
 msgstr "гостиную"
 
@@ -7293,6 +7289,14 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "la entrada"
+msgstr "вход"
+
+#, sin-usar
+msgid "¡Vienen por %s!"
+msgstr "Лезут через %s!"
 
 #, sin-usar
 msgid "¡Gracias! Sigo con la cerradura"

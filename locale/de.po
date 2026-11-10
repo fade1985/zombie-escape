@@ -361,7 +361,7 @@ msgstr "Geflickt! Der Strom kann wieder an"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "Der %s hat das Kabel geflickt! Das Wasser steht nicht mehr unter Strom"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Hilf mir, ich komm nicht hoch!"
 
@@ -448,14 +448,6 @@ msgstr "Warte, ich bau die Barrikade ab!"
 #: scripts/barricada.gd
 msgid "¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada"
 msgstr "Der Eingang ist zu! Verteidige die Tür, während der %s die Barrikade abbaut"
-
-#: scripts/barricada.gd
-msgid "la entrada"
-msgstr "den Eingang"
-
-#: scripts/barricada.gd
-msgid "¡Vienen por %s!"
-msgstr "Sie kommen durch %s!"
 
 #: scripts/barricada.gd
 msgid "¡Barricada fuera! La entrada se ha abierto"
@@ -3956,6 +3948,10 @@ msgid "¡LO CONSEGUÍ, VÁMONOS!"
 msgstr "GESCHAFFT, WEG HIER!"
 
 #: scripts/supervivientes.gd
+msgid "¡AYÚDAME!"
+msgstr "HILF MIR!"
+
+#: scripts/supervivientes.gd
 msgid "el salón"
 msgstr "das Wohnzimmer"
 
@@ -7271,6 +7267,14 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "la entrada"
+msgstr "den Eingang"
+
+#, sin-usar
+msgid "¡Vienen por %s!"
+msgstr "Sie kommen durch %s!"
 
 #, sin-usar
 msgid "¡Gracias! Sigo con la cerradura"

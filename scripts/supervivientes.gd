@@ -170,6 +170,7 @@ const FRASES := [
 ]
 const FRASE_INICIO := "¡PROTÉGEME, ABRIRÉ LA PUERTA!"   # (al cerrarse la puerta: empieza la horda)
 const FRASE_FINAL := "¡LO CONSEGUÍ, VÁMONOS!"
+const FRASE_AYUDA := "¡AYÚDAME!"   # (al caer herido)
 # Por dónde entra cada grupo (en las tiendas, también por sus habitaciones; en español: sale con Idioma.t, también
 # en barricada.gd)
 const POR := {"salon": "el salón", "cocina": "la cocina", "dormitorio": "el dormitorio", "bano": "el baño", "pasillo": "el pasillo",
@@ -660,7 +661,7 @@ func al_herir(cae: bool, a: Aliado) -> void:
 		return
 	if cae:
 		horda.levantando = 0.0
-		a.decir(Idioma.t("¡Ayúdame, no puedo levantarme!"))
+		gritar(a, FRASE_AYUDA)
 	elif johnny.position.distance_to(a.position) > HORDA.lejos and horda.t - horda.queja_t > 6.0:
 		horda.queja_t = horda.t
 		a.decir(Idioma.t(LLAMADAS[randi() % LLAMADAS.size()]))

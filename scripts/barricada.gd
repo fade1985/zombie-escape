@@ -215,7 +215,7 @@ func soltar_provisiones() -> void:
 
 
 # Un grupo de zombis entra por una habitación de la tienda donde no está Johnny (nunca el almacén, donde está
-# él) o por la entrada, y él avisa de por dónde
+# él) o por la entrada (sin avisar de por dónde: más difícil)
 func grupo(n: int, tipos: Array) -> void:
 	var partida: Node = sup.partida
 	n = mini(n, TOPE - get_tree().get_nodes_in_group("zombis").size())
@@ -230,12 +230,10 @@ func grupo(n: int, tipos: Array) -> void:
 	var por_la_entrada: bool = sup.johnny.position.distance_to(entrada.llegada()) > 220.0 \
 		and (salas.is_empty() or randf() < 0.4)
 	var puestos := 0
-	var por := ""
 	if por_la_entrada:
 		for i in n:
 			partida.meter_zombi(tipos.pick_random(), entrada.llegada() + Vector2(randf_range(-24, 24), randf_range(-24, 24)))
 		puestos = n
-		por = Idioma.t("la entrada")
 	elif not salas.is_empty():
 		var sala: Dictionary = salas.pick_random()
 		for i in 120:
@@ -248,9 +246,6 @@ func grupo(n: int, tipos: Array) -> void:
 				continue
 			partida.meter_zombi(tipos.pick_random(), pos)
 			puestos += 1
-		por = Idioma.t(Supervivientes.POR.get(sala.uso, ""))
-	if puestos > 0 and por != "" and randf() < 0.4 and tiempo - dicho_t > 2.6:
-		decir(Idioma.t("¡Vienen por %s!") % por)
 
 
 # Barricada fuera: se abren su puerta y la entrada. Él se une al arrimarse, como siempre (supervivientes.gd)

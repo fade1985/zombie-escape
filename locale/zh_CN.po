@@ -358,7 +358,7 @@ msgstr "修好了！可以合闸送电了"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "%s修好了电线！水里不会再电人了"
 
-#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/tornos.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "帮帮我，我起不来了！"
 
@@ -445,14 +445,6 @@ msgstr "等等，我这就拆路障！"
 #: scripts/barricada.gd
 msgid "¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada"
 msgstr "入口关上了！%s拆路障的时候，守住门口"
-
-#: scripts/barricada.gd
-msgid "la entrada"
-msgstr "入口"
-
-#: scripts/barricada.gd
-msgid "¡Vienen por %s!"
-msgstr "它们从%s过来了！"
 
 #: scripts/barricada.gd
 msgid "¡Barricada fuera! La entrada se ha abierto"
@@ -3948,6 +3940,10 @@ msgid "¡LO CONSEGUÍ, VÁMONOS!"
 msgstr "搞定了，快走！"
 
 #: scripts/supervivientes.gd
+msgid "¡AYÚDAME!"
+msgstr "救我！"
+
+#: scripts/supervivientes.gd
 msgid "el salón"
 msgstr "客厅"
 
@@ -7249,6 +7245,14 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "la entrada"
+msgstr "入口"
+
+#, sin-usar
+msgid "¡Vienen por %s!"
+msgstr "它们从%s过来了！"
 
 #, sin-usar
 msgid "¡Gracias! Sigo con la cerradura"
