@@ -574,8 +574,8 @@ func golpe_ninja() -> void:
 	var alcance: float = w.alcance * stats.alcance * stats.alcance_cuerpo + RADIO
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
-		if hacia.length() > alcance + zombi.radio:
-			continue
+		if hacia.length() > alcance + zombi.radio or ArmasCreadas.tapado(self, global_position, zombi.global_position):
+			continue   # (ni a través de las paredes)
 		var dano: int = ceili(zombi.vida_max * NINJA_JEFE)
 		if zombi is Zombi:
 			dano = ceili(zombi.vida_max * NINJA_IMPORTANTE) if zombi.importante else zombi.vida + 1
@@ -820,8 +820,8 @@ func golpear(angulo: float) -> void:
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		var distancia := hacia.length()
-		if distancia - zombi.radio > w.alcance:
-			continue
+		if distancia - zombi.radio > w.alcance or ArmasCreadas.tapado(self, global_position, zombi.global_position):
+			continue   # (ni a través de las paredes)
 		# angle_difference da lo que hay que girar de un ángulo al otro (de -180° a 180°)
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
 		if desvio <= mitad + 0.2 or distancia < zombi.radio + 12.0:
@@ -1510,7 +1510,8 @@ func pararrayos(quien) -> void:
 	var p: Dictionary = Talentos.PARARRAYOS
 	if not stats.pararrayos or pararrayos_t > 0.0 or not vivo or not is_instance_valid(quien) \
 			or not quien.has_method("recibir_golpe") or quien.get("estado") == "muerto" \
-			or global_position.distance_to(quien.global_position) > p.alcance:
+			or global_position.distance_to(quien.global_position) > p.alcance \
+			or ArmasCreadas.tapado(self, global_position, quien.global_position):
 		return
 	pararrayos_t = p.cada
 	var dano := roundi(p.dano * stats.dano_quimico)

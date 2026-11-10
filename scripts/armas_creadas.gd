@@ -26,6 +26,14 @@ const EFECTOS := {
 }
 
 
+# Si hay una pared (o una puerta cerrada, o una barricada) entre "a" y "b": entonces no se pega a través de ella. Los
+# golpes de Johnny, los rayos, los estallidos, las explosiones y el fuego del molotov la miran (10 nov: antes, pegado a
+# una pared fina, se le daba al de detrás). Los muebles no cuentan
+static func tapado(nodo: Node, a: Vector2, b: Vector2) -> bool:
+	var mapa := nodo.get_tree().get_first_node_in_group("mapa")
+	return mapa != null and not mapa.muro_entre(a, b).is_empty()
+
+
 # La descarga: aturde al zombi y salta al más cercano (a menos de "salto"), que se lleva medio daño y también
 # se queda aturdido; mejorada ("saltos" más, por su calidad), sigue saltando de ese al más cercano que aún no ha
 # pillado. La usaban las chispas sueltas; el rayo continuo (llamarada.gd) usa sus mismos números ("descarga")
@@ -38,7 +46,7 @@ static func descarga(zombi: Node2D, dano: float, aturde: float, saltos := 0) -> 
 		var mejor: float = EFECTOS.descarga.salto
 		for o in zombi.get_tree().get_nodes_in_group("zombis"):
 			var d: float = o.global_position.distance_to(desde.global_position)
-			if not o in pillados and d < mejor:
+			if not o in pillados and d < mejor and not tapado(zombi, desde.global_position, o.global_position):
 				mejor = d
 				otro = o
 		if otro == null:
@@ -64,7 +72,8 @@ static func estallido(zombi: Node2D, tipo: String, dano: float, quema := 1.0) ->
 		Particulas.soltar(sala, donde + Vector2(0, -24), v, color if i % 3 else Color.WHITE, randf_range(3.0, 5.0), 0.35)
 	Sonido.tocar({"llama": "fuego", "acido": "escupitajo", "chispa": "chispa"}[tipo])
 	for otro in zombi.get_tree().get_nodes_in_group("zombis"):
-		if otro == zombi or otro.global_position.distance_to(donde) > Armas.TRUCO.estallido + otro.radio:
+		if otro == zombi or otro.global_position.distance_to(donde) > Armas.TRUCO.estallido + otro.radio \
+				or tapado(zombi, donde, otro.global_position):
 			continue
 		match tipo:
 			"llama":

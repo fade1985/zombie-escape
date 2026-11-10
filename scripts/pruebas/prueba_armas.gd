@@ -2893,8 +2893,9 @@ func probar_molotov_carga() -> void:
 # granaditas de la Épica tampoco pasan. De control, lo mismo en campo abierto y por encima de un mueble: caen en el mismo
 # sitio. Y lanzar de un toque: la granada no apunta a un zombi tras la pared, el molotov sí. La explosión tampoco pasa la
 # pared: junto a ella, ni daña ni congela a los zombis ni daña a Johnny al otro lado, pero sí a la misma distancia a este, y
-# los muebles no la paran; la de otros (sin «paredes») sigue pasándola (captura-granada-pared.png: la granada parada de
-# este lado). Cada línea dice lo esperado. Se cierra
+# los muebles no la paran; la del dinamitero, tampoco la pasa (captura-granada-pared.png: la granada parada de este lado).
+# Y lo demás (10 nov), con un tabique fino: ni el golpe de la fregona, ni el barrido de Ninja, ni el rayo que salta, ni
+# el estallido de la Épica especial, ni el fuego del molotov le dan al de detrás. Cada línea dice lo esperado. Se cierra
 func probar_granada_pared() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
@@ -2959,14 +2960,58 @@ func probar_granada_pared() -> void:
 		print("Johnny %s: pierde %d (esperado: %s)" % [caso[1], 100 - johnny.vida, caso[2]])
 	johnny.invencible = true
 	johnny.vida = johnny.stats.vida_max
-	# la del zombi explosivo sigue pasándola (solo paran las de las granadas)
+	# la del zombi explosivo (y la de Mezcla explosiva, la misma sin dañar a Johnny) tampoco la pasa, desde el 10 nov
 	var tras_explosivo := zombi_quieto(tras_muro)
 	var bum: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
 	bum.radio = 120.0
 	bum.position = junto
 	johnny.get_parent().add_child(bum)
-	print("Explosión de otro (sin «paredes»), tras la pared: le quita %d (esperado: más de 0)" % (500 - tras_explosivo.vida))
+	print("Explosión de otro (la del dinamitero), tras la pared: le quita %d (esperado: 0)" % (500 - tras_explosivo.vida))
 	zombis_de_prueba([])
+
+	# lo demás tampoco pasa las paredes (10 nov). Con un tabique fino en medio del campo abierto (cuenta como pared: no
+	# es un mueble), un zombi a cada lado a la misma distancia: al de detrás no le llega y al de este lado sí
+	var tabique := StaticBody2D.new()
+	var lado := CollisionShape2D.new()
+	lado.shape = RectangleShape2D.new()
+	lado.shape.size = Vector2(8, 240)
+	tabique.add_child(lado)
+	tabique.position = Vector2(sitio.x - 150.0, y)
+	mapa.add_child(tabique)
+	await get_tree().physics_frame
+	var tx := tabique.position.x
+	johnny.set_physics_process(false)   # (que el tabique no lo aparte: se queda donde se le pone)
+	johnny.global_position = Vector2(tx - 24.0, y)
+	if johnny.mano != "cuerpo":
+		johnny.cambiar_mano()
+	var pares := func(caso: String, detras_x: float, delante_x: float, golpe: Callable) -> void:
+		var tapado2 := zombi_quieto(Vector2(tx + detras_x, y))
+		var libre2 := zombi_quieto(Vector2(tx + delante_x, y))
+		await golpe.call()
+		await get_tree().create_timer(0.5).timeout
+		var pierde := func(z): return 500 if not is_instance_valid(z) else 500 - maxi(z.vida, 0)
+		print("%s con un tabique: al de detrás le quita %d (esperado: 0) y al de este lado %d (esperado: más de 0)" % [
+			caso, pierde.call(tapado2), pierde.call(libre2)])
+		zombis_de_prueba([])
+	await pares.call("Golpe de la fregona (a cada lado)", 24.0, -72.0, func():
+		johnny.golpear(0.0)
+		johnny.golpear(PI))
+	await pares.call("Barrido de Ninja", 24.0, -72.0, func(): johnny.golpe_ninja())
+	# (el rayo sale de un zombi pegado al tabique: el de detrás le queda más cerca que el de este lado)
+	await pares.call("Rayo que salta (descarga)", 24.0, -80.0, func():
+		ArmasCreadas.descarga(zombi_quieto(Vector2(tx - 16.0, y)), 20.0, 0.3))
+	await pares.call("Estallido de la Épica especial (calambre)", 24.0, -56.0, func():
+		ArmasCreadas.estallido(zombi_quieto(Vector2(tx - 16.0, y)), "chispa", 20.0))
+	await pares.call("Fuego del molotov al romperse", 30.0, -50.0, func():
+		var p: Node2D = Lanzables.PROYECTIL.instantiate()
+		p.tipo = "molotov"
+		p.desde = Vector2(tx - 10.0, y)
+		p.hasta = p.desde
+		johnny.get_parent().add_child(p)
+		while is_instance_valid(p):
+			await get_tree().physics_frame)
+	tabique.queue_free()
+	johnny.set_physics_process(true)
 
 	# un mueble en medio: se vuela por encima, así que la granada cae igual que en campo abierto
 	var mueble := StaticBody2D.new()

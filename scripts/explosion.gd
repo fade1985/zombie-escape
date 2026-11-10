@@ -1,7 +1,7 @@
 # Una explosión (la del zombi explosivo y la granada). Al aparecer hace daño a Johnny y a los
 # zombis que pillen dentro del círculo (¡reacciones en cadena!), enseña la bola de fuego y se va.
-# Como en el juego (explode en src/game-ataques.js). La de las granadas de Johnny no pasa las paredes ("paredes"); la del
-# zombi explosivo y la de Mezcla explosiva, sí.
+# Como en el juego (explode en src/game-ataques.js). Ninguna pasa las paredes ("paredes"): ni la de las granadas de
+# Johnny, ni la del zombi explosivo, ni la de Mezcla explosiva (estas dos, desde el 10 nov).
 # Lo que se ve es la explosión de pixelfx (tools/pixelfx/explosion.js, exportada con exportar_explosion.mjs): un destello
 # blanco y unos anillos, el fuego que se vuelve humo y sube, chispas, tizones, piedras y la marca del suelo. Dos hojas:
 # el color y el brillo (que se suma, con mezcla "añadir"). Las pequeñas (el racimo de las Épicas), a la mitad de tamaño.
@@ -30,7 +30,8 @@ var de := "granada"           # de quién es, para el cartel de derrota (johnny.
                               # "explosivo"; las demás que le dan a Johnny son de su granada
 var helada := false           # la de la congeladora (M51): en vez de la bola de fuego, el estallido de escarcha de pixelfx
                               # (EfectoSuelo, "escarcha"), con luz fría y sonido de cristal
-var paredes := false          # si la paran las paredes, las puertas cerradas y las barricadas (los muebles, no)
+var paredes := true           # si la paran las paredes, las puertas cerradas y las barricadas (los muebles, no). Desde
+                              # el 10 nov, todas (antes, la del dinamitero y la de Mezcla explosiva las pasaban)
 var tiempo := 0.0
 var capas: Array[Sprite2D] = []
 

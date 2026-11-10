@@ -150,6 +150,8 @@ func llamarada(r: float) -> void:
 		var d: Vector2 = zombi.global_position - hasta
 		if Vector2(d.x, d.y / 0.6).length() > r * 0.8 + zombi.radio or zombi == dueno:
 			continue   # (al que lo tira, el jefe de bomberos, su propio molotov no le hace nada)
+		if ArmasCreadas.tapado(self, hasta, zombi.global_position):
+			continue   # (ni a través de las paredes: el charco tampoco, charco.gd)
 		if zombi.has_method("prender"):
 			zombi.prender(dano_lanzar)
 		if zombi.get("inmune_fuego"):
