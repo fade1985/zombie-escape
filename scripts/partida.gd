@@ -551,7 +551,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if fundir:
 		await create_tween().set_ignore_time_scale().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
 	cambiando = false
-	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "menu")   # la de los menús también suena al explorar
+	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "menu")   # ("menu": la de explorar el edificio)
 	# En el apartamento de la jefa, aparece ella (si aún no ha caído ni está ya ahí)
 	if sitio.tipo == "jefe" and not sitio.limpio and not jefa_salio:
 		await get_tree().create_timer(JEFE_TARDA).timeout

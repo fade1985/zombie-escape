@@ -15,8 +15,8 @@
 # y lo que cambia es qué capas se oyen: según el momento y cuántos zombis hay despiertos (MOMENTOS). Al cambiar a un
 # momento con otra canción, la nueva entra mientras la vieja se apaga:
 #     Sonido.musica("menu")       # "menu" (los menús y explorar las plantas), "horda", "jefe" o "" (se apaga despacio)
-# Explorando el Centro comercial o Torre Velaria, "menu" pone la canción de ese edificio (EXPLORAR): la partida dice en
-# qué edificio se juega con Sonido.edificio (y el menú principal lo deja en "").
+# Dentro de la partida, "menu" pone la canción de explorar de ese edificio (EXPLORAR): la partida dice en qué edificio se
+# juega con Sonido.edificio (y el menú principal lo deja en "").
 #     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
 #
 # Cuando el juego no se ve o no se está usando (otra app u otra pestaña, la pantalla del móvil bloqueada, la ventana
@@ -174,25 +174,28 @@ var siguiente := 0
 # que empiece siempre al principio de uno. Dos capas por canción: la base, que suena siempre, y la que sube y baja
 # (con tres, la web gastaba demasiada memoria: cada capa se guarda allí descomprimida, y otra vez cada vez que empieza)
 const CANCIONES := {
-	"el-ultimo-inquilino": {"compases": 32, "capas": ["base", "bateria"]},   # los menús y explorar
-	"turno-de-noche": {"compases": 52, "capas": ["base", "melodia"]},        # las hordas y los jefes
+	"el-conserje": {"compases": 32, "capas": ["base"]},                      # el menú principal (una sola capa)
+	"turno-de-noche": {"compases": 52, "capas": ["base", "melodia"]},        # las hordas
+	"jefe-de-planta": {"compases": 44, "capas": ["base", "intensa"]},        # las salas de los jefes
+	"planta-por-planta": {"compases": 36, "capas": ["base", "ritmo"]},       # explorar los Apartamentos
 	"ultimas-rebajas": {"compases": 36, "capas": ["base", "ritmo"]},         # explorar el Centro comercial
 	"junta-de-accionistas": {"compases": 36, "capas": ["base", "ritmo"]},    # explorar Torre Velaria
 }
 # Cada momento: su canción y qué capas se oyen según cuántos zombis hay despiertos (filas [desde cuántos, capas], de
-# menos a más). Explorando, la batería entra en cuanto se despierta uno; en la horda, la melodía, cuando son MUCHOS; en
-# la sala del jefe, la melodía entra cuando sale él (el jefe también está en el grupo "zombis")
+# menos a más). Explorando, el ritmo entra en cuanto se despierta uno; en la horda, la melodía, cuando son MUCHOS; en
+# la sala del jefe, la capa intensa entra cuando sale él (el jefe también está en el grupo "zombis")
 const MUCHOS := 6
 const MOMENTOS := {
-	"menu": {"cancion": "el-ultimo-inquilino", "capas": [[0, ["base"]], [1, ["base", "bateria"]]]},
+	"menu": {"cancion": "el-conserje", "capas": [[0, ["base"]]]},
 	"horda": {"cancion": "turno-de-noche", "capas": [[0, ["base"]], [MUCHOS, ["base", "melodia"]]]},
-	"jefe": {"cancion": "turno-de-noche", "capas": [[0, ["base"]], [1, ["base", "melodia"]]]},
+	"jefe": {"cancion": "jefe-de-planta", "capas": [[0, ["base"]], [1, ["base", "intensa"]]]},
+	"explorar_apartamentos": {"cancion": "planta-por-planta", "capas": [[0, ["base"]], [1, ["base", "ritmo"]]]},
 	"explorar_centro": {"cancion": "ultimas-rebajas", "capas": [[0, ["base"]], [1, ["base", "ritmo"]]]},
 	"explorar_torre": {"cancion": "junta-de-accionistas", "capas": [[0, ["base"]], [1, ["base", "ritmo"]]]},
 }
-# Los edificios con canción propia para explorar: su momento (el ritmo entra en cuanto se despierta un zombi). En los
-# demás (los Apartamentos), al explorar suena la de los menús
-const EXPLORAR := {"centro": "explorar_centro", "torre": "explorar_torre"}
+# La canción de explorar de cada edificio: su momento (el ritmo entra en cuanto se despierta un zombi). Fuera de la
+# partida (edificio ""), "menu" es la del menú principal
+const EXPLORAR := {"apartamentos": "explorar_apartamentos", "centro": "explorar_centro", "torre": "explorar_torre"}
 var edificio := ""       # el edificio de la partida que se juega ("" en el menú principal)
 const FUNDIDO := 3.0     # segundos que tarda en pasar de una canción a otra
 const SUBE := 1.0        # segundos que tarda una capa en entrar...
@@ -401,9 +404,9 @@ func fundir(r: AudioStreamPlayer, hasta: float, segundos: float, parar := false)
 			liberar())
 
 
-# Suelta las canciones que ya no suenan y que no van a volver pronto: las de explorar de otro sitio (las de otro
-# edificio, o la de los menús dentro del centro comercial). Así, en la web, no se guardan más de dos canciones a la vez
-# (cada una ocupa allí mucha memoria, ver docs/WEB.md); la de las hordas se queda siempre
+# Suelta las canciones que ya no suenan y que no van a volver pronto: la del menú en la partida, la de explorar de otro
+# edificio y la de los jefes al salir de su sala. Así, en la web, no se guardan más de dos canciones a la vez (cada
+# una ocupa allí mucha memoria, ver docs/WEB.md), y tres solo en la sala del jefe; la de las hordas se queda siempre
 func liberar() -> void:
 	var quedan := ["turno-de-noche", MOMENTOS[EXPLORAR.get(edificio, "menu")].cancion, cancion]
 	for c in capas.keys():

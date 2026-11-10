@@ -2720,11 +2720,11 @@ func sin_paron(respiro := true) -> void:
 
 # Con "--captura --musica": la música por capas (Sonido.musica y sus MOMENTOS), en la sala de pruebas con zombis lentos
 # que no le hacen nada a Johnny. Como va sin sonido, cada línea dice qué canción suena y qué capas se oyen, con lo
-# esperado: explorando sin zombis despiertos, con uno (entra la batería), recién quitado (la batería aguanta) y al rato
-# (se va); la horda con pocos y con MUCHOS (entra la melodía), y que la canción de antes se ha parado; de la horda al jefe
-# (la misma canción sigue por donde iba), antes y después de salir el jefe; que las capas van a la par; las de explorar
-# el Centro comercial y Torre Velaria (con su capa de ritmo, y que se sueltan las que ya no tocan), y que al apagarla se
-# para todo. Tarda un minuto. Se cierra
+# esperado: explorando los Apartamentos sin zombis despiertos, con uno (entra el ritmo), recién quitado (el ritmo aguanta)
+# y al rato (se va); la horda con pocos y con MUCHOS (entra la melodía), y que la canción de antes se ha parado; la del
+# jefe antes y después de salir él (entra la capa intensa); que las capas van a la par; las de explorar el Centro
+# comercial y Torre Velaria (con su capa de ritmo, y que se sueltan las que ya no tocan); la del menú principal, y que
+# al apagarla se para todo. Tarda un minuto. Se cierra
 func probar_musica() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	for n in mapa.get_children():
@@ -2754,38 +2754,34 @@ func probar_musica() -> void:
 	await get_tree().create_timer(2.0).timeout
 	Sonido.musica("menu")
 	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
-	dice.call("explorando sin zombis despiertos", "el-ultimo-inquilino [base]")
+	dice.call("explorando sin zombis despiertos", "planta-por-planta [base]")
 	poner.call(1)
 	await get_tree().create_timer(sube).timeout
-	dice.call("con un zombi despierto", "el-ultimo-inquilino [base, bateria]")
+	dice.call("con un zombi despierto", "planta-por-planta [base, ritmo]")
 	poner.call(0)
 	await get_tree().create_timer(2.0).timeout
-	dice.call("recién quitado el zombi", "la batería aguanta: el-ultimo-inquilino [base, bateria]")
+	dice.call("recién quitado el zombi", "el ritmo aguanta: planta-por-planta [base, ritmo]")
 	await get_tree().create_timer(Sonido.ESPERA + Sonido.BAJA).timeout
-	dice.call("al rato", "el-ultimo-inquilino [base]")
+	dice.call("al rato", "planta-por-planta [base]")
 
 	poner.call(2)
 	Sonido.musica("horda")
 	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
 	dice.call("horda con 2 zombis", "turno-de-noche [base]")
-	var parada: bool = Sonido.capas["el-ultimo-inquilino"].values().all(func(r: AudioStreamPlayer): return not r.playing)
+	var parada: bool = Sonido.capas["planta-por-planta"].values().all(func(r: AudioStreamPlayer): return not r.playing)
 	print("Música, la canción de antes se ha parado: %s (esperado: true)" % parada)
 	poner.call(Sonido.MUCHOS)
 	await get_tree().create_timer(sube).timeout
 	dice.call("horda con %d zombis" % Sonido.MUCHOS, "turno-de-noche [base, melodia]")
 
 	poner.call(0)
-	var iba: float = donde_va.call("turno-de-noche")[0]
 	Sonido.musica("jefe")
-	await get_tree().create_timer(Sonido.SUBE + 0.3).timeout
-	var largo: float = Sonido.capas["turno-de-noche"]["base"].stream.get_length()
-	print("Música, de la horda al jefe sigue por donde iba: ha avanzado %.1f s (esperado: 1.3)" % fposmod(
-		donde_va.call("turno-de-noche")[0] - iba, largo))
-	dice.call("en la sala del jefe, antes de que salga", "turno-de-noche [base]")
+	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
+	dice.call("en la sala del jefe, antes de que salga", "jefe-de-planta [base]")
 	poner.call(1)
 	await get_tree().create_timer(sube).timeout
-	dice.call("ha salido el jefe", "turno-de-noche [base, melodia]")
-	var pos: Array = donde_va.call("turno-de-noche")
+	dice.call("ha salido el jefe", "jefe-de-planta [base, intensa]")
+	var pos: Array = donde_va.call("jefe-de-planta")
 	print("Música, las capas van a la par: se llevan %d ms (esperado: 0)" % roundi((pos.max() - pos.min()) * 1000.0))
 
 	# Las de explorar de cada edificio (Sonido.EXPLORAR): "menu" pone la del edificio de la partida
@@ -2798,8 +2794,8 @@ func probar_musica() -> void:
 	await get_tree().create_timer(sube).timeout
 	dice.call("en el centro comercial con un zombi despierto", "ultimas-rebajas [base, ritmo]")
 	poner.call(0)
-	print("Música, la de los menús soltada en el centro comercial: %s (esperado: true)" % (
-		not Sonido.capas.has("el-ultimo-inquilino")))
+	print("Música, soltadas la de los Apartamentos y la del jefe en el centro comercial: %s (esperado: true)" % (
+		not Sonido.capas.has("planta-por-planta") and not Sonido.capas.has("jefe-de-planta")))
 	Sonido.edificio = "torre"
 	Sonido.musica("horda")
 	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
@@ -2808,6 +2804,10 @@ func probar_musica() -> void:
 	dice.call("explorando Torre Velaria, después de una horda", "junta-de-accionistas [base]")
 	print("Música, canciones guardadas en Torre Velaria: %s (esperado: [turno-de-noche, junta-de-accionistas])" % [
 		Sonido.capas.keys()])
+	Sonido.edificio = ""
+	Sonido.musica("menu")
+	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
+	dice.call("en el menú principal", "el-conserje [base]")
 	Sonido.edificio = "apartamentos"
 
 	Sonido.musica("")

@@ -620,7 +620,7 @@ export function transponer(n, semis) {
 //   tools/efectos/elegir/<nombre>.ogg            la canción entera, con todas sus capas (como suena con zombis)
 //   tools/efectos/elegir/<nombre>-tranquila.ogg  solo la base (como suena sin zombis despiertos), con la misma ganancia
 //   con «juego»: assets/musica/<nombre>-<capa>.ogg, cada capa a su volumen del juego (las dos juntas a «lufs»: -29,7,
-//   como la música de explorar)
+//   como la música de explorar; -25, la de las peleas)
 // Para escuchar van más altas (a -18 LUFS la entera), todas igual, para compararlas.
 export function sacarCancion(raiz, nombre, wav, capas, { juego = false, lufs = -29.7 } = {}) {
   const medida = medirLufs(wav);
@@ -630,9 +630,10 @@ export function sacarCancion(raiz, nombre, wav, capas, { juego = false, lufs = -
     '-c:a', 'libvorbis', '-q:a', '5', path.join(elegir, a)]);
   oir(wav, `${nombre}.ogg`, -18 - medida);
   if (capas.base) oir(capas.base, `${nombre}-tranquila.ogg`, -18 - medida);
-  console.log(`para elegir: tools/efectos/elegir/${nombre}.ogg y -tranquila.ogg (entera a ${medida} LUFS antes de ajustar)`);
+  console.log(`para elegir: tools/efectos/elegir/${nombre}.ogg${capas.base ? " y -tranquila.ogg" : ""} (entera a ${medida} LUFS antes de ajustar)`);
   if (juego) {
-    for (const [capa, archivo] of Object.entries(capas)) {
+    // (una canción de una sola capa, como la del menú, va entera como su «base»)
+    for (const [capa, archivo] of Object.entries(Object.keys(capas).length ? capas : { base: wav })) {
       pasarAOgg(archivo, path.join(raiz, 'assets', 'musica', `${nombre}-${capa}.ogg`), +(lufs - medida).toFixed(1));
     }
   }
