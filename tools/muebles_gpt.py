@@ -225,6 +225,12 @@ MUEBLES = {
     "armario": ("assets/sources/armario-gpt.webp", "assets/sprites/mueble-wardrobe.png", 39, 72, True),
     "mesilla": ("assets/sources/mesilla-gpt.webp", "assets/sprites/mueble-nightstand.png", 17, 33, True, (), [(690, 408)]),
     "escritorio": ("assets/sources/escritorio-gpt.webp", "assets/sprites/mueble-desk.png", 46, 37, True),
+    # y sus dibujos de lado (para las paredes laterales; en la de la derecha se ponen en espejo), con el cabecero a la izquierda: las
+    # dos camas, de 70 de largo como los de antes (48 de alto, algo más bajas), y la mesilla, igual de alta y más estrecha (13);
+    # el hueco del reloj de la mesilla se vacía con la semilla
+    "cama_matrimonio_lado": ("assets/sources/cama-matrimonio-lado-gpt.webp", "assets/sprites/mueble-doublebed-lado.png", 70, 48, True),
+    "cama_lado": ("assets/sources/cama-lado-gpt.webp", "assets/sprites/mueble-bed-lado.png", 70, 48, True),
+    "mesilla_lado": ("assets/sources/mesilla-lado-gpt.webp", "assets/sprites/mueble-nightstand-lado.png", 13, 32, True, (), [(631, 417)]),
 }
 
 
