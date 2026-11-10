@@ -4880,6 +4880,26 @@ msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con p
 msgstr "Ao terminar a partida, completando o prédio ou caindo, o que você leva com partidas pela frente volta sozinho para o baú. Escolha uma casa ou arraste-a para passá-la."
 
 #: scripts/tutoriales.gd
+msgid "La tienda de armas"
+msgstr "A loja de armas"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la tienda de armas"
+msgstr "Ao abrir a loja de armas"
+
+#: scripts/tutoriales.gd
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "São vendidas em qualidade Normal: duram só esta partida e, ao terminar, se destroem. Você leva duas de cada tipo: a que estava na mão passa para a reserva e a da reserva, para o baú; se não couber ou não puder ser guardada, a da mão fica no chão."
+
+#: scripts/tutoriales.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "As à distância vêm carregadas e com munição de reserva; as especiais vêm cheias e vão no espaço das à distância. Os arremessáveis são comprados um por um, enquanto couberem."
+
+#: scripts/tutoriales.gd
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "O Johnny começa só com o esfregão: a primeira pistola é presente nosso."
+
+#: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "Os depósitos"
 
@@ -7020,7 +7040,7 @@ msgstr "COLECAO.EXE"
 msgid "Árbol de talentos"
 msgstr "Árvore de talentos"
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "Loja de armas"
 
@@ -7047,6 +7067,14 @@ msgid ""
 msgstr ""
 "Conquistas\n"
 "RESGATAR!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"¡REGALO!"
+msgstr ""
+"Loja\n"
+"PRESENTE!"
 
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
@@ -7137,8 +7165,8 @@ msgid "LLENO"
 msgstr "CHEIO"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Cómo va la tienda"
-msgstr "Como a loja funciona"
+msgid "¡COMPRA UN ARMA!"
+msgstr "COMPRE UMA ARMA!"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Comprada"
@@ -7157,16 +7185,16 @@ msgid "Te faltan $%d"
 msgstr "Faltam $%d"
 
 #: scripts/ui/tienda_armas.gd
+msgid "Regalo de bienvenida"
+msgstr "Presente de boas-vindas"
+
+#: scripts/ui/tienda_armas.gd
 msgid "Comprar · $%d"
 msgstr "Comprar · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "São vendidas em qualidade Normal: duram só esta partida e, ao terminar, se destroem. Você leva duas de cada tipo: a que estava na mão passa para a reserva e a da reserva, para o baú; se não couber ou não puder ser guardada, a da mão fica no chão."
-
-#: scripts/ui/tienda_armas.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
-msgstr "As à distância vêm carregadas e com munição de reserva; as especiais vêm cheias e vão no espaço das à distância. Os arremessáveis são comprados um por um, enquanto couberem."
+msgid "Pasa por un arma para ver qué hace."
+msgstr "Escolha uma arma para ver o que ela faz."
 
 #: scripts/ui/tienda_armas.gd
 msgid "Área"

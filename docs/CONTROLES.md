@@ -168,7 +168,9 @@ banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
   primera partida no se sale al pasillo hasta quitarlos todos (Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!») y
   después sale la flecha de la guía. Con los tutoriales apagados no hay «!».
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
-  tienda de armas, logros, Dosier, Vídeos y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
+  tienda de armas, logros, Dosier, Vídeos y Colecciones), un corcho y una papelera. Johnny empieza cada partida solo
+  con la fregona: la primera pistola es el **regalo de bienvenida** de la tienda (gratis una sola vez, con un «!» en su
+  casilla; hasta cogerla no se sale de la sala) y luego cuesta $10, como el cuchillo. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
   atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl. Si
   compras un arma y ya llevas dos de ese tipo, la de la mano baja al repuesto y la de repuesto va al baúl en ese momento;
@@ -185,7 +187,7 @@ banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
   las balas atraviesan a un zombi (estela morada); especiales, el zombi que matan revienta y prende, echa ácido o da
   calambre a los de al lado; arrojables, al romperse o explotar sueltan 2 más pequeños. Y el **baúl**
   (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la
-  otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (la fregona Normal de la mano, solo si lleva otra cuerpo a cuerpo de repuesto, que pasa a la mano, para que siempre tenga con qué pegar: `inventario.fregona_sola`, M61; la pistola Normal sí: Johnny se queda sin arma a distancia hasta que la saca, `Armas.SIN_FUEGO`, con el hueco de fuego en `""`; al completar el edificio la fregona y la pistola Normales no pasan al baúl) y arrojables (los del mismo
+  otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (la fregona Normal de la mano, solo si lleva otra cuerpo a cuerpo de repuesto, que pasa a la mano, para que siempre tenga con qué pegar: `inventario.fregona_sola`, M61; cualquier arma a distancia sin otra de repuesto, también: Johnny se queda sin arma a distancia hasta que la saca, `Armas.SIN_FUEGO`, con el hueco de fuego en `""`; al completar el edificio la fregona y la pistola Normales no pasan al baúl) y arrojables (los del mismo
   tipo y calidad juntos, hasta 99, y salen de 5 en 5), cada arma en su casilla y todo con el borde del color de su
   **calidad** (gris Normal, verde Poco común, azul Rara, morado Épica). Lo que lleva encima se pierde si cae; al
   completar el edificio, sus armas y todos sus arrojables pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a

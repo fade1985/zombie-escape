@@ -55,7 +55,7 @@ const CARPETA_DOSIER := preload("res://scripts/ui/carpeta_dosier.gd")   # el dos
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
 # El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
 # [traducir]
-const AVISO_ICONO := {"colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!"}
+const AVISO_ICONO := {"colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!", "armas": "Tienda\n¡REGALO!"}
 # [/traducir]
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -310,6 +310,9 @@ func _process(_delta: float) -> void:
 # Abre un programa ("" = cerrar la ventana y quedarse en el escritorio). "foco": el botón que hay que dejar
 # marcado (al volver a pintar después de comprar algo)
 func abrir(programa: String, foco := "") -> void:
+	# la primera vez que se abre la tienda, su tutorial (antes de montarla: así Intro no compra lo marcado detrás)
+	if programa == "armas" and partida.puede_tutorial("tienda"):
+		await partida.ver_tutorial("tienda")
 	var antes := abierta
 	abierta = programa
 	cerrar_aviso(false)
@@ -835,16 +838,21 @@ func comprar_arma(id: String) -> void:
 		Sonido.tocar("no")
 		return
 	var s := Guardado.cargar()
-	var precio: int = Supervivientes.precio(Armas.PRECIOS[id])
+	var regalo: bool = TIENDA.es_regalo(s, id)   # (la pistola de bienvenida: gratis, una sola vez)
+	var precio: int = 0 if regalo else Supervivientes.precio(Armas.PRECIOS[id])
 	if s.dolares < precio:
 		info.text = Idioma.t("No te llega: te faltan $%d.") % (precio - s.dolares)
 		Sonido.tocar("no")
 		return
 	Sonido.tocar("compra")
 	s.dolares -= precio
+	if regalo:
+		s.regalo_cogido = true
 	if not id in s.armas:
 		s.armas.append(id)
 	Guardado.escribir(s)
+	if regalo:
+		refrescar_avisos()   # (se quita el «!» de ARMAS.EXE)
 	partida.ahorrados = s.dolares
 	var sin_vieja: bool = johnny.huecos[w.tipo] == ""   # (sin arma a distancia: no hay una vieja que pase al repuesto)
 	var vieja: String = Armas.nombre(johnny.huecos[w.tipo], johnny.calidad(johnny.huecos[w.tipo]))

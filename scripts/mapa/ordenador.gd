@@ -67,7 +67,8 @@ func _process(delta: float) -> void:
 
 
 # Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado:
-# «colecciones» (un objeto o enemigo nuevo) y «logros» (alguno conseguido y sin cobrar). Lo usan el «!» de la mesa y los
+# «colecciones» (un objeto o enemigo nuevo), «logros» (alguno conseguido y sin cobrar) y «armas» (el regalo de bienvenida
+# de la tienda, la pistola gratis, sin coger: tienda_armas.gd). Lo usan el «!» de la mesa y los
 # iconos del escritorio (ui/ordenador.gd)
 static func novedades(s: Dictionary) -> Array:
 	var lista := []
@@ -75,4 +76,6 @@ static func novedades(s: Dictionary) -> Array:
 		lista.append("colecciones")
 	if Logros.LISTA.any(func(l): return Logros.estado(s, l.id) == "conseguido"):
 		lista.append("logros")
+	if not s.regalo_cogido:
+		lista.append("armas")
 	return lista

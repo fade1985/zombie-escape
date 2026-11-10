@@ -208,7 +208,7 @@ func siguiente() -> String:
 		return ""
 	if not "atacar" in hechas:
 		return "atacar"
-	if not "pistola" in hechas and johnny.mano == "cuerpo":
+	if not "pistola" in hechas and johnny.mano == "cuerpo" and johnny.huecos.fuego != "":
 		return "pistola"
 	var arma: Dictionary = johnny.base(johnny.huecos.fuego)
 	if not "recargar" in hechas and johnny.mano == "fuego" and not arma.has("deposito") \

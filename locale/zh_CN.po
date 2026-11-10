@@ -4870,6 +4870,26 @@ msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con p
 msgstr "本局结束时，无论通关还是倒下，你身上还有剩余局数的东西都会自动回到储物箱。选择一格或拖动它来移动。"
 
 #: scripts/tutoriales.gd
+msgid "La tienda de armas"
+msgstr "武器商店"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la tienda de armas"
+msgstr "打开武器商店时"
+
+#: scripts/tutoriales.gd
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "以普通品质出售：只能用本局，本局结束后会损坏。每种类型你带两把：手上的那把转为备用，备用的那把进储物箱；如果放不下或无法存放，手上的那把会掉在地上。"
+
+#: scripts/tutoriales.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出售，占用远程武器的位置。投掷物一个一个买，直到放不下为止。"
+
+#: scripts/tutoriales.gd
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Johnny 开局只有拖把：第一把手枪送给你。"
+
+#: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "储藏室"
 
@@ -6998,7 +7018,7 @@ msgstr "收藏.EXE"
 msgid "Árbol de talentos"
 msgstr "天赋树"
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "武器商店"
 
@@ -7025,6 +7045,14 @@ msgid ""
 msgstr ""
 "成就\n"
 "可领取！"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"¡REGALO!"
+msgstr ""
+"商店\n"
+"礼物！"
 
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
@@ -7115,8 +7143,8 @@ msgid "LLENO"
 msgstr "已满"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Cómo va la tienda"
-msgstr "商店说明"
+msgid "¡COMPRA UN ARMA!"
+msgstr "买一把武器吧！"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Comprada"
@@ -7135,16 +7163,16 @@ msgid "Te faltan $%d"
 msgstr "还差 $%d"
 
 #: scripts/ui/tienda_armas.gd
+msgid "Regalo de bienvenida"
+msgstr "见面礼"
+
+#: scripts/ui/tienda_armas.gd
 msgid "Comprar · $%d"
 msgstr "购买 · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "以普通品质出售：只能用本局，本局结束后会损坏。每种类型你带两把：手上的那把转为备用，备用的那把进储物箱；如果放不下或无法存放，手上的那把会掉在地上。"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
-msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出售，占用远程武器的位置。投掷物一个一个买，直到放不下为止。"
+msgid "Pasa por un arma para ver qué hace."
+msgstr "选一把武器，看看它的作用。"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Área"

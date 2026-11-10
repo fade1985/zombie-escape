@@ -4880,6 +4880,26 @@ msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con p
 msgstr "À la fin de la partie, que tu termines l'immeuble ou que tu tombes, ce que tu portes et qui a encore des parties retourne tout seul au coffre. Choisis une case ou fais-la glisser pour la déplacer."
 
 #: scripts/tutoriales.gd
+msgid "La tienda de armas"
+msgstr "La boutique d'armes"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la tienda de armas"
+msgstr "En ouvrant la boutique d'armes"
+
+#: scripts/tutoriales.gd
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Elles sont vendues en qualité Normale : elles ne durent que cette partie et se détruisent à la fin. Tu en portes deux de chaque type : celle que tu avais en main passe en réserve et celle de réserve, au coffre ; si elle ne rentre pas ou ne peut pas être rangée, celle de ta main reste par terre."
+
+#: scripts/tutoriales.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines, et elles vont à l'emplacement à distance. Les lançables s'achètent un par un, tant qu'il reste de la place."
+
+#: scripts/tutoriales.gd
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Johnny ne commence qu'avec la serpillière : le premier pistolet, c'est cadeau."
+
+#: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "Les caves"
 
@@ -7020,7 +7040,7 @@ msgstr "COLLECTION.EXE"
 msgid "Árbol de talentos"
 msgstr "Arbre de talents"
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "Boutique d'armes"
 
@@ -7047,6 +7067,14 @@ msgid ""
 msgstr ""
 "Succès\n"
 "À ENCAISSER !"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"¡REGALO!"
+msgstr ""
+"Boutique\n"
+"CADEAU !"
 
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
@@ -7137,8 +7165,8 @@ msgid "LLENO"
 msgstr "PLEIN"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Cómo va la tienda"
-msgstr "Comment marche la boutique"
+msgid "¡COMPRA UN ARMA!"
+msgstr "ACHÈTE UNE ARME !"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Comprada"
@@ -7157,16 +7185,16 @@ msgid "Te faltan $%d"
 msgstr "Il te manque $%d"
 
 #: scripts/ui/tienda_armas.gd
+msgid "Regalo de bienvenida"
+msgstr "Cadeau de bienvenue"
+
+#: scripts/ui/tienda_armas.gd
 msgid "Comprar · $%d"
 msgstr "Acheter · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Elles sont vendues en qualité Normale : elles ne durent que cette partie et se détruisent à la fin. Tu en portes deux de chaque type : celle que tu avais en main passe en réserve et celle de réserve, au coffre ; si elle ne rentre pas ou ne peut pas être rangée, celle de ta main reste par terre."
-
-#: scripts/ui/tienda_armas.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
-msgstr "Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines, et elles vont à l'emplacement à distance. Les lançables s'achètent un par un, tant qu'il reste de la place."
+msgid "Pasa por un arma para ver qué hace."
+msgstr "Choisis une arme pour voir ce qu'elle fait."
 
 #: scripts/ui/tienda_armas.gd
 msgid "Área"

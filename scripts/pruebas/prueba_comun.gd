@@ -13,6 +13,12 @@ func preparar_prueba() -> void:
 	# Johnny apunta y ataca solo (la ayuda "Disparo asistido"), como siempre en las pruebas: así limpia los
 	# apartamentos y pelea con los jefes sin que nadie juegue. La que quiera el modo libre se lo pone (johnny.modo)
 	Guardado.cambiar(func(g): g.ajustes.disparo_asistido = true)
+	# Johnny ya no empieza con la pistola (Armas.SIEMPRE): las pruebas sí, como antes, con el regalo de bienvenida ya
+	# cogido (si no, no saldría de la sala de mantenimiento). Salvo la del regalo (--regalo, prueba_sitios.gd)
+	if not "--regalo" in OS.get_cmdline_user_args():
+		Guardado.cambiar(func(g): g.regalo_cogido = true)
+		johnny.coger("pistola")
+		johnny.sostener("cuerpo")
 	SalaArmas.escondido = false   # la sala de pruebas, con sus líneas y su panel de daño a la vista (en el juego empieza sin ellos)
 	# sin el repaso de los logros que salen del guardado (logros.gd, revisar): sus avisos saldrían en las fotos de
 	# cualquier prueba; la de --logros lo hace a mano
@@ -30,6 +36,16 @@ func preparar_prueba() -> void:
 		var lentos := preload("res://scripts/pruebas/lentos.gd").new()
 		lentos.partida = self
 		add_child(lentos)
+	# con "--regalo", el regalo de bienvenida de la tienda sin coger y su tutorial sin ver (prueba_sitios.gd, probar_regalo)
+	if "--regalo" in OS.get_cmdline_user_args():
+		tutoriales_prueba = true
+		Guardado.cambiar(func(g):
+			g.regalo_cogido = false
+			g.ajustes.tutoriales = true
+			g.tutoriales.erase("tienda")
+			if not "ordenador" in g.tutoriales:
+				g.tutoriales.append("ordenador"))
+		Tutoriales.vistos_de = ""   # (que lo vuelva a leer)
 	# con "--marcas-sala", los «!» de la sala de mantenimiento en la primera partida (prueba_sitios.gd, probar_marcas_sala):
 	# con la guía y todos los tutoriales sin ver, y algo nuevo dentro del ordenador
 	if "--marcas-sala" in OS.get_cmdline_user_args():

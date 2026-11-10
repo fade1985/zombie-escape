@@ -133,7 +133,7 @@ var levantado_t := 0.0     # lo que le queda sin poder volver a tropezar
 var sombra_ancho := 0.0    # lo ancha que es su sombra de pie (tumbado, se alarga)
 var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuando está en el suelo
 
-var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
+var huecos := Armas.SIEMPRE.duplicate()   # las dos armas que lleva (al empezar, solo la fregona: el hueco de fuego, "")
 var calidades := {}        # la calidad de las armas que lleva, en la mano o de repuesto (Armas.CALIDADES): {id: 2};
                            # la que no está, Normal. Lleva una de cada arma, así que basta con su id (partida.llevar_arma)
 var quedan := {}           # las partidas que les quedan después de esta (Armas.nuevas: la durabilidad): {id: 1}; la que

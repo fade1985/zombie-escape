@@ -61,6 +61,8 @@ const NUEVO := {
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador
 	"bestiario": [],      # enemigos vistos alguna vez (ids de Bestiario.LISTA): el bestiario de Colecciones
 	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)
+	"regalo_cogido": false, # ya se ha cogido el regalo de bienvenida de la tienda de armas: la pistola gratis, una sola vez
+	                        # (tienda_armas.gd). Mientras no, no se sale de la sala de mantenimiento (partida.cruzar)
 	"tutoriales": [],     # tutoriales ya vistos (ids de Tutoriales.LISTA): cada uno sale una sola vez
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"en_curso": "",       # la partida a medias, al empezar la planta en la que va (partida_guardada.gd; "" = ninguna)

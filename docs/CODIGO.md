@@ -544,8 +544,12 @@ en una línea.
   `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
   `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`), qué hace (`INVENTARIO.QUE_HACE`), sus
   números (`ordenador.resumen_corto`) y el botón «Comprar» (`b_comprar`, sin foco: compra lo de la ficha; si ya la llevas dice «Comprada»). Sin nada
-  elegido (al abrir con el ratón), la ficha explica la tienda (`nota`: la calidad Normal, el baúl y lo de
-  esta partida). Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
+  elegido (al abrir con el ratón), la ficha dice que se pase por un arma y lo de esta partida (`nota`); cómo va la
+  tienda lo cuenta su tutorial («tienda», la primera vez que se abre: `ordenador.abrir`). El regalo de bienvenida
+  (desde el 10 nov Johnny empieza solo con la fregona: `Armas.SIEMPRE`): la primera pistola, gratis una sola vez
+  (Guardado `regalo_cogido`, `es_regalo`), con un «!» en su casilla, «¡COMPRA UN ARMA!» en la ficha vacía y «Regalo de
+  bienvenida» en su botón; mientras no se coja, ARMAS.EXE y la mesa del ordenador llevan su «!» (`novedades`) y no se
+  sale de la sala de mantenimiento (`partida.cruzar`). Se prueba con `--regalo`. Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
   el teclado, el mando o el dedo, la marcada (`quien`); tras comprar se rehace con lo comprado elegido. Con el dedo, el
   primer toque enseña y el segundo compra (`al_pulsar`, `listo`). Los textos largos se parten a mano (`partir`; en
   chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino). Las armas que tienen sus

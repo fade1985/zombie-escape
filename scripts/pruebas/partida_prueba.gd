@@ -194,6 +194,9 @@
 #   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!», su barrera (M80) y su tutorial [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles (se abren con
 #                       el clic, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
+#   --regalo            Johnny empieza solo con la fregona y no sale de la sala sin la pistola del regalo de
+#                       bienvenida: el «!» de ARMAS.EXE, el tutorial de la tienda, «¡COMPRA UN ARMA!», el «!» de la
+#                       pistola, «Regalo de bienvenida», cogerla gratis y que luego cuesta $10    [prueba_sitios.gd]
 #   --marcas-sala       en la primera partida, los «!» de la sala de mantenimiento (taquilla, ordenador, banco, baúl y
 #                       puerta de los trasteros): no se sale al pasillo hasta quitarlos, cada mueble con su tutorial,
 #                       el de los trasteros al entrar y, al final, la flecha de la guía     [prueba_sitios.gd]
@@ -832,6 +835,9 @@ func empezar_prueba() -> void:
 	elif "--sala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_sala()
+	elif "--regalo" in args:
+		set_process(false)   # sin la prueba larga
+		probar_regalo()
 	elif "--marcas-sala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_marcas_sala()

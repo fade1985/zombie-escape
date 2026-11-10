@@ -730,10 +730,12 @@ func cruzar(i: int) -> void:
 		return   # de la sala de pruebas no se sale por la puerta (para no salir sin querer): solo con F9
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
-	if sitio.tipo == "mantenimiento" and salida.tipo == "puerta" and salida.get("a", -1) == 0 and guia.activa:
-		for marca in mapa.marcas_sala:
-			marca.refrescar()   # (por si se acaba de cerrar un tutorial: se miran cada segundo)
-		if falta_sala():
+	# (y nunca sin haber cogido la pistola del regalo de bienvenida: Johnny empieza solo con la fregona, tienda_armas.gd)
+	if sitio.tipo == "mantenimiento" and salida.tipo == "puerta" and salida.get("a", -1) == 0:
+		if guia.activa:
+			for marca in mapa.marcas_sala:
+				marca.refrescar()   # (por si se acaba de cerrar un tutorial: se miran cada segundo)
+		if falta_sala() or not Guardado.cargar().regalo_cogido:
 			# (como el de «¡¡¡LA LLAVE!!!», pero por encima del letrero de la guía y más rato, que es más larga)
 			gran_aviso(Idioma.t("¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"), Tema.AMARILLO, 160.0, 2.2)
 			Sonido.tocar("no")
@@ -1551,7 +1553,7 @@ func mirar_tutoriales() -> void:
 		tutorial("tercios")
 	if dolares > 0:
 		tutorial("dolares")
-	if johnny.huecos.cuerpo != "fregona" or johnny.huecos.fuego != "pistola" or not armas_guardadas.is_empty():
+	if johnny.huecos.cuerpo != "fregona" or johnny.huecos.fuego not in ["", "pistola"] or not armas_guardadas.is_empty():
 		tutorial("armas")
 	for id in mochila:
 		tutorial("botiquin" if id == "botiquin" else "curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")

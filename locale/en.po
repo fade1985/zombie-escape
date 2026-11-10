@@ -4880,6 +4880,26 @@ msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con p
 msgstr "When the run ends, whether you clear the building or fall, everything you carry with runs left goes back to the stash on its own. Pick a slot or drag it to move it."
 
 #: scripts/tutoriales.gd
+msgid "La tienda de armas"
+msgstr "The weapon shop"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la tienda de armas"
+msgstr "On opening the weapon shop"
+
+#: scripts/tutoriales.gd
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "They're sold in Normal quality: they only last this run and break when it ends. You carry two of each type: the one in your hand goes to the spare slot and the spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand drops to the floor."
+
+#: scripts/tutoriales.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "Ranged weapons come loaded and with spare ammo; special ones come full and go in the ranged slot. Throwables are bought one at a time, while you have room."
+
+#: scripts/tutoriales.gd
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Johnny starts with just the mop: your first pistol is on us."
+
+#: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "The storage rooms"
 
@@ -7020,7 +7040,7 @@ msgstr "COLLECTION.EXE"
 msgid "Árbol de talentos"
 msgstr "Talent tree"
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "Weapon Shop"
 
@@ -7047,6 +7067,14 @@ msgid ""
 msgstr ""
 "Achievements\n"
 "CLAIM!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"¡REGALO!"
+msgstr ""
+"Shop\n"
+"GIFT!"
 
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
@@ -7137,8 +7165,8 @@ msgid "LLENO"
 msgstr "FULL"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Cómo va la tienda"
-msgstr "How the shop works"
+msgid "¡COMPRA UN ARMA!"
+msgstr "BUY A WEAPON!"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Comprada"
@@ -7157,16 +7185,16 @@ msgid "Te faltan $%d"
 msgstr "You need $%d more"
 
 #: scripts/ui/tienda_armas.gd
+msgid "Regalo de bienvenida"
+msgstr "Welcome gift"
+
+#: scripts/ui/tienda_armas.gd
 msgid "Comprar · $%d"
 msgstr "Buy · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "They're sold in Normal quality: they only last this run and break when it ends. You carry two of each type: the one in your hand goes to the spare slot and the spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand drops to the floor."
-
-#: scripts/ui/tienda_armas.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
-msgstr "Ranged weapons come loaded and with spare ammo; special ones come full and go in the ranged slot. Throwables are bought one at a time, while you have room."
+msgid "Pasa por un arma para ver qué hace."
+msgstr "Pick a weapon to see what it does."
 
 #: scripts/ui/tienda_armas.gd
 msgid "Área"

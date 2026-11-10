@@ -1357,6 +1357,65 @@ func probar_marcas_sala() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --regalo": Johnny empieza solo con la fregona (Armas.SIEMPRE) y la puerta del pasillo no deja salir sin
+# el regalo de bienvenida. En el ordenador, ARMAS.EXE con su «!» (captura-regalo-escritorio.png); al abrir la tienda, su
+# tutorial (captura-regalo-tutorial.png); luego la tienda con «¡COMPRA UN ARMA!» y el «!» en la pistola
+# (captura-regalo-tienda.png) y la ficha de la pistola, «Regalo de bienvenida» (captura-regalo-ficha.png). Se coge gratis,
+# el regalo se gasta y la pistola ya cuesta lo de siempre (captura-regalo-comprada.png); sin «!», se sale al pasillo
+func probar_regalo() -> void:
+	await get_tree().create_timer(1.2).timeout
+	print("Al empezar: huecos %s · regalo cogido %s · «!» del ordenador %s (esperado: fuego vacío, false, true)" % [
+		johnny.huecos, Guardado.cargar().regalo_cogido, mapa.ordenador.marca.activa])
+	await cruzar(0)
+	print("Al ir al pasillo sin la pistola: sigue en «%s» (esperado: mantenimiento)" % planta.sitios[aqui].tipo)
+	get_tree().paused = true
+	ordenador.encender(self)
+	await get_tree().create_timer(1.0).timeout
+	var icono: Node = ordenador.iconos.get_node_or_null("icono_armas")
+	print("ARMAS.EXE con su «!»: %s (esperado: true)" % (icono != null and icono.get_node_or_null("marca_nuevo") != null))
+	Captura.foto("captura-regalo-escritorio.png")
+	ordenador.abrir("armas")
+	await get_tree().create_timer(0.6).timeout
+	var ventana := ventana_tutorial()
+	print("Al abrir la tienda: tutorial «%s» (esperado: tienda)" % (ventana.id if ventana else "ninguno"))
+	Captura.foto("captura-regalo-tutorial.png")
+	if ventana:
+		ventana.cerrar()
+	await get_tree().create_timer(0.6).timeout
+	var tienda: Node = ordenador.ventana.find_child("tienda", true, false) if ordenador.ventana else null
+	if tienda == null:
+		print("ERROR DE LA PRUEBA: no se ha abierto la tienda")
+		get_tree().quit(1)
+		return
+	print("Tienda sin nada elegido: ficha «%s» · «!» en la pistola %s (esperado: «», true)" % [tienda.ficha_id, tienda.con_marca()])
+	Captura.foto("captura-regalo-tienda.png")
+	tienda.ficha_id = "pistola"
+	tienda.comprar.visible = true
+	tienda.queue_redraw()
+	await get_tree().create_timer(0.3).timeout
+	print("Ficha de la pistola: «%s» (esperado: Regalo de bienvenida)" % tienda.texto_comprar("pistola"))
+	Captura.foto("captura-regalo-ficha.png")
+	var antes: int = Guardado.cargar().dolares
+	tienda.comprar_esto("pistola")
+	await get_tree().create_timer(0.6).timeout
+	var s := Guardado.cargar()
+	tienda = ordenador.ventana.find_child("tienda", true, false)
+	print("Cogida: dólares %d → %d · regalo cogido %s · en el hueco de fuego «%s» · el botón dice «%s» (esperado: iguales, true, pistola, Comprada)" % [
+		antes, s.dolares, s.regalo_cogido, johnny.huecos.fuego, tienda.texto_comprar("pistola")])
+	print("La pistola ahora cuesta $%d · «!» en la pistola %s · ARMAS.EXE con «!» %s (esperado: 10, false, false)" % [
+		tienda.precio("pistola"), tienda.con_marca(),
+		ordenador.iconos.get_node_or_null("icono_armas").get_node_or_null("marca_nuevo") != null])
+	Captura.foto("captura-regalo-comprada.png")
+	ordenador.apagar()
+	await get_tree().create_timer(1.2).timeout
+	get_tree().paused = false
+	mapa.ordenador.marca.refrescar()
+	print("«!» del ordenador: %s (esperado: false)" % mapa.ordenador.marca.activa)
+	await cruzar(0)
+	print("Por la puerta del pasillo, con la pistola: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
+	get_tree().quit()
+
+
 # De probar_marcas_sala: abre algo de la sala como con el clic, cuenta qué tutorial sale (y le saca su foto), lo cierra
 # y cierra la pantalla que se abre detrás
 func usar_con_tutorial(abrir: Callable, cerrar: Callable, id: String, foto := "") -> void:

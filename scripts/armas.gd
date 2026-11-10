@@ -26,7 +26,7 @@ class_name Armas
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
 # no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
-const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 0, "escopeta": 30, "mp5": 40, "gatling": 70, "lanzagranadas": 65, "pistola_electrica": 45,
+const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 10, "escopeta": 30, "mp5": 40, "gatling": 70, "lanzagranadas": 65, "pistola_electrica": 45,
 	"lanzallamas": 60, "desintegrador": 60}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
@@ -83,8 +83,11 @@ const EPICA := 3   # la calidad más alta, la que trae el truco
 #   arrojables        racimo: al romperse o explotar sueltan "racimo" más pequeños alrededor, de "racimo_tamano" su
 #                     tamaño y su daño (proyectil.gd y granada.gd)
 const TRUCO := {"gracia": 4, "atraviesa": 1, "estallido": 80.0, "racimo": 2, "racimo_tamano": 0.5}
-const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar (las dos van al baúl; la fregona Normal, solo con otra de repuesto: M61)
-# Lo que hay en el hueco de fuego cuando Johnny ha dejado la pistola en el baúl y no lleva otra arma a distancia: el id es
+# Lo que lleva al empezar: solo la fregona (va al baúl, la Normal solo con otra de repuesto: M61). Desde el 10 nov la
+# pistola ya no viene con Johnny: se compra en la tienda como las demás (la primera, gratis: el regalo de bienvenida,
+# tienda_armas.gd), y sin arma a distancia el hueco de fuego se queda vacío (SIN_FUEGO)
+const SIEMPRE := {"cuerpo": "fregona", "fuego": ""}
+# Lo que hay en el hueco de fuego cuando Johnny no lleva arma a distancia (al empezar, o al guardarla en el baúl): el id es
 # "" y esto, lo que dicen sus datos (nada dispara; solo para que las cuentas del cargador, el daño... no fallen)
 const SIN_FUEGO := {"nombre": "Sin arma a distancia", "tipo": "fuego", "dano": 0, "ritmo": 1.0, "alcance": 0.0,   # [traducir]
 	"velocidad": 0.0, "perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 1.0, "cargador": 0, "recarga": 1.0,

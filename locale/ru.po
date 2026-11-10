@@ -4890,6 +4890,26 @@ msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con p
 msgstr "В конце забега, зачистил ты здание или пал, всё, у чего остались забеги, само вернётся в сундук. Выбери ячейку или перетащи её, чтобы переложить."
 
 #: scripts/tutoriales.gd
+msgid "La tienda de armas"
+msgstr "Магазин оружия"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la tienda de armas"
+msgstr "Когда открываешь магазин оружия"
+
+#: scripts/tutoriales.gd
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Продаётся в качестве Обычное: служит только этот забег и потом ломается. Ты носишь по два каждого типа: то, что было в руке, уходит в запас, а запасное — в сундук; если не помещается или его нельзя убрать, то, что было в руке, остаётся на полу."
+
+#: scripts/tutoriales.gd
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgstr "Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным, и оно занимает место дальнобойного. Метательное покупается по одному, пока есть место."
+
+#: scripts/tutoriales.gd
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Джонни начинает только со шваброй: первый пистолет — наш подарок."
+
+#: scripts/tutoriales.gd
 msgid "Los trasteros"
 msgstr "Кладовки"
 
@@ -7042,7 +7062,7 @@ msgstr "КОЛЛЕКЦИЯ.EXE"
 msgid "Árbol de talentos"
 msgstr "Дерево талантов"
 
-#: scripts/ui/ordenador.gd
+#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"
 msgstr "Магазин оружия"
 
@@ -7069,6 +7089,14 @@ msgid ""
 msgstr ""
 "Достижения\n"
 "ЗАБРАТЬ!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"¡REGALO!"
+msgstr ""
+"Магазин\n"
+"ПОДАРОК!"
 
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
@@ -7159,8 +7187,8 @@ msgid "LLENO"
 msgstr "ПОЛНО"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Cómo va la tienda"
-msgstr "Как устроен магазин"
+msgid "¡COMPRA UN ARMA!"
+msgstr "КУПИ ОРУЖИЕ!"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Comprada"
@@ -7179,16 +7207,16 @@ msgid "Te faltan $%d"
 msgstr "Не хватает $%d"
 
 #: scripts/ui/tienda_armas.gd
+msgid "Regalo de bienvenida"
+msgstr "Подарок новичку"
+
+#: scripts/ui/tienda_armas.gd
 msgid "Comprar · $%d"
 msgstr "Купить · $%d"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Продаётся в качестве Обычное: служит только этот забег и потом ломается. Ты носишь по два каждого типа: то, что было в руке, уходит в запас, а запасное — в сундук; если не помещается или его нельзя убрать, то, что было в руке, остаётся на полу."
-
-#: scripts/ui/tienda_armas.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
-msgstr "Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным, и оно занимает место дальнобойного. Метательное покупается по одному, пока есть место."
+msgid "Pasa por un arma para ver qué hace."
+msgstr "Выбери оружие, чтобы узнать, что оно делает."
 
 #: scripts/ui/tienda_armas.gd
 msgid "Área"

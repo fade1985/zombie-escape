@@ -1274,7 +1274,7 @@ func ficha_baul() -> Dictionary:
 				"que": que_hace(id) + " ", "partidas": Armas.texto_partidas(johnny.quedan_de(id), true),
 				"ultima": johnny.quedan_de(id) <= 0}, true)
 			if Armas.al_baul(id, calidad) and not fregona_sola(sel, id):
-				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo, id == Armas.SIEMPRE.fuego and calidad == 0)
+				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo)
 				d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, not Objetos.hueco_baul(s)]
 			else:
 				d.que += Idioma.t("La %s Normal solo va al baúl si llevas otra arma cuerpo a cuerpo de repuesto: sin ella no tendrías con qué pegar.") % 					Idioma.minusculas(Objetos.nombre(id))
@@ -1381,10 +1381,10 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 
 
 # Lo que pasa al guardar un arma en el baúl ("sin_otra": es la de la mano y no lleva otra de repuesto de su tipo)
-func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String, hueco_normal := false) -> String:
+func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String) -> String:
 	if not Objetos.hueco_baul(s):
 		return Idioma.t("El baúl está lleno: haz sitio sacando algo.")
-	if sin_otra and tipo == "fuego" and hueco_normal:
+	if sin_otra and tipo == "fuego":   # (ya no hay pistola de siempre: Armas.SIEMPRE)
 		return Idioma.t("Te quedas sin arma a distancia hasta que la saques.")
 	if sin_otra:
 		return Idioma.t("En su lugar, a la mano, la %s de siempre.") % \
@@ -1616,13 +1616,10 @@ func guardar_equipo() -> void:
 					var otra: String = partida.repuesto(tipo)
 					if otra != "":
 						partida.armas_guardadas.erase(otra)
-					elif id == Armas.SIEMPRE.fuego and e.calidad == 0:
-						otra = ""   # la pistola Normal sin otra a distancia: Johnny se queda sin ella (vaciar_fuego)
+					elif tipo == "fuego":
+						otra = ""   # sin otra a distancia: Johnny se queda sin arma a distancia (vaciar_fuego)
 					else:
-						otra = Armas.SIEMPRE[tipo]
-						var w: Dictionary = Armas.datos(otra)
-						if w.tipo == "fuego":   # (llena, pero sin regalar munición de reserva: johnny.coger)
-							johnny.cargadores[otra] = w.get("deposito", w.cargador)
+						otra = Armas.SIEMPRE[tipo]   # (la fregona)
 					if otra == "":
 						johnny.vaciar_fuego()
 					else:

@@ -7,7 +7,12 @@
 #
 # A la derecha, una ficha fija con lo elegido: su nombre y su grupo, el dibujo en grande, unos medidores de 10
 # cuadraditos (cada uno comparado con el arma que más tiene de eso), qué hace y el botón «Comprar» con el precio. Sin nada
-# elegido (al abrir con el ratón), la ficha explica cómo va la tienda.
+# elegido (al abrir con el ratón), la ficha dice que se pase por un arma (cómo va la tienda lo cuenta su tutorial, la
+# primera vez: Tutoriales "tienda"); con el regalo de bienvenida sin coger, «¡COMPRA UN ARMA!» en grande.
+#
+# El regalo de bienvenida (Guardado "regalo_cogido"; desde el 10 nov Johnny ya no empieza con la pistola: Armas.SIEMPRE):
+# la primera pistola es gratis, una sola vez en todo el juego. Hasta cogerla, su casilla lleva un «!» y su botón dice
+# «Regalo de bienvenida» en vez del precio; después cuesta lo de siempre (Armas.PRECIOS).
 #
 # Lo elegido es, con el ratón, la última casilla por la que ha pasado (y se queda al ir hacia «Comprar»); con el teclado,
 # el mando o el dedo, la marcada. Con el ratón, el teclado o el mando se compra al pulsar la casilla; con el dedo, el
@@ -156,7 +161,14 @@ func cuadraditos(id: String, medida: String) -> int:
 # ── Cómo está cada cosa ──
 
 func precio(id: String) -> int:
+	if es_regalo(s, id):
+		return 0
 	return Supervivientes.precio(Lanzables.PRECIOS[id] if Lanzables.PRECIOS.has(id) else Armas.PRECIOS[id])
+
+
+# Si esto es el regalo de bienvenida aún sin coger (la pistola gratis; ver arriba). Lo usa también ordenador.comprar_arma
+static func es_regalo(guardado: Dictionary, id: String) -> bool:
+	return id == "pistola" and not guardado.regalo_cogido
 
 
 # "lleva" (un arma en la mano o de repuesto), "lleno" (un arrojable que ya no cabe), "reto" (el reto sin munición no deja
@@ -257,6 +269,7 @@ func _draw() -> void:
 		draw_rect(Rect2(14, t[0] + 20, ancho_titulos - 4, 2), PLACA.APAGADO)
 	for id in casillas:
 		dibujar_casilla(id, fuente)
+	dibujar_marca_regalo()
 	dibujar_ficha(fuente)
 
 
@@ -299,7 +312,28 @@ func dibujar_casilla(id: String, fuente: Font) -> void:
 	draw_string(fuente, Vector2(r.position.x, r.end.y - 7), texto, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, tam, VERDE)
 
 
-# La ficha de la derecha: lo elegido o, sin nada elegido, cómo va la tienda
+# El «!» que bota dentro de la esquina de arriba a la derecha de la casilla del regalo de bienvenida (el de los iconos del
+# escritorio: ordenador.marca_nuevo). Se vuelve a dibujar en cada fotograma mientras está (_process)
+const EXCLAMACION := preload("res://assets/ui/exclamacion-pequena.png")
+func dibujar_marca_regalo() -> void:
+	if not con_marca():
+		return
+	var r: Rect2 = casillas["pistola"]
+	var bote := roundf(sin(ahora() * 10.5) * 3.0)
+	draw_texture(EXCLAMACION, (Vector2(r.end.x - EXCLAMACION.get_width() - 3, r.position.y + 6 + bote)).floor())
+
+
+func con_marca() -> bool:
+	return casillas.has("pistola") and es_regalo(s, "pistola") and estado("pistola") == ""
+
+
+func _process(_delta: float) -> void:
+	if con_marca():
+		queue_redraw()
+
+
+# La ficha de la derecha: lo elegido o, sin nada elegido, que se pase por un arma (o, con el regalo sin coger,
+# «¡COMPRA UN ARMA!» en grande, con la letra y el color del «¡¡¡LA LLAVE!!!» de encima de Johnny: partida.gran_aviso)
 func dibujar_ficha(fuente: Font) -> void:
 	var f := ficha
 	draw_rect(f, PLACA.REMACHE)
@@ -308,8 +342,17 @@ func dibujar_ficha(fuente: Font) -> void:
 	var ancho := f.size.x - 20
 	var x := f.position.x + 10
 	if ficha_id == "":
-		draw_string(fuente, Vector2(x, f.position.y + 21), Idioma.t("Cómo va la tienda").to_upper(), HORIZONTAL_ALIGNMENT_LEFT, ancho, 16, PLACA.TEXTO)
+		draw_string(fuente, Vector2(x, f.position.y + 21), Idioma.t("Tienda de armas").to_upper(), HORIZONTAL_ALIGNMENT_LEFT, ancho, 16, PLACA.TEXTO)
 		var y := f.position.y + 50
+		if es_regalo(s, "pistola"):
+			var lineas := partir(fuente, Idioma.t("¡COMPRA UN ARMA!"), ancho, 32)
+			var alto := fuente.get_height(32)
+			y = f.get_center().y - alto * lineas.size() / 2.0 + fuente.get_ascent(32)
+			for linea in lineas:
+				draw_string_outline(fuente, Vector2(x, y), linea, HORIZONTAL_ALIGNMENT_CENTER, ancho, 32, 8, Color(0.11, 0.1, 0.17))
+				draw_string(fuente, Vector2(x, y), linea, HORIZONTAL_ALIGNMENT_CENTER, ancho, 32, Tema.AMARILLO)
+				y += alto
+			return
 		for parrafo in nota():
 			y = escribir(fuente, parrafo[0], Vector2(x, y), ancho, 14, parrafo[1], f.end.y - 8) + 8
 		return
@@ -412,6 +455,8 @@ func texto_comprar(id: String) -> String:
 		"lleno": return Idioma.t("No te caben más")
 		"reto": return Idioma.t("No en este reto")
 		"caro": return Idioma.t("Te faltan $%d") % (p - s.dolares)
+	if es_regalo(s, id):
+		return Idioma.t("Regalo de bienvenida")
 	if not (Tactil.activo and Tactil.con_dedo):
 		if Controles.con_mando:
 			return Idioma.t("A: comprar · $%d") % p
@@ -420,12 +465,9 @@ func texto_comprar(id: String) -> String:
 	return Idioma.t("Comprar · $%d") % p
 
 
-# Lo que dice la ficha sin nada elegido, párrafo a párrafo: [texto, color]
+# Lo que dice la ficha sin nada elegido, párrafo a párrafo: [texto, color] (cómo va la tienda, en su tutorial)
 func nota() -> Array:
-	var parrafos := [
-		[Idioma.t("Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."), PLACA.TEXTO],
-		[Idioma.t("Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."), PLACA.TEXTO_SUAVE],
-	]
+	var parrafos := [[Idioma.t("Pasa por un arma para ver qué hace."), PLACA.TEXTO]]
 	if ordenador.partida.dolares > 0:
 		parrafos.append([Idioma.t("Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes.") % ordenador.partida.dolares, PLACA.AMARILLO])
 	return parrafos
