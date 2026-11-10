@@ -205,6 +205,16 @@ MUEBLES = {
     # vacían también (las semillas)
     "mesa_cocina": ("assets/sources/mesa-cocina-gpt.webp", "assets/sprites/mueble-kitchentable.png", 56, 29, True,
                     (), [(213, 700), (1322, 699)]),
+    # el salón de los pisos (M13, 10 nov; antes, de PixelLab). La tele con su mueble (32 × 42: GPT la hizo más estrecha que la vieja;
+    # su largo en el catálogo, de 80 a 64), el sofá de espaldas (66 × 24: más bajo que el viejo, que lo deformaba), la estantería
+    # de libros (21 × 42; largo de 46 a 42), la lámpara de pie (encendida, pantalla clara) y la planta (los huecos entre las
+    # hojas, que el fondo no alcanza desde el borde, se vacían con las semillas)
+    "tele": ("assets/sources/tele-gpt.webp", "assets/sprites/mueble-tv.png", 32, 42, True),
+    "sofa_espalda": ("assets/sources/sofa-espalda-gpt.webp", "assets/sprites/mueble-sofaback.png", 66, 24, True),
+    "estanteria_salon": ("assets/sources/estanteria-salon-gpt.webp", "assets/sprites/mueble-bookshelf.png", 21, 42, True),
+    "lampara": ("assets/sources/lampara-gpt.webp", "assets/sprites/mueble-lamp.png", 15, 47, True),
+    "planta_salon": ("assets/sources/planta-salon-gpt.webp", "assets/sprites/mueble-plant.png", 19, 34, True, (),
+                     [(442, 349), (470, 353), (470, 486), (444, 623), (590, 631), (427, 768), (535, 782)]),
 }
 
 

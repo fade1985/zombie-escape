@@ -47,7 +47,7 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'fridge', 'counter', 'stove', 'kitchentable',   # (y la cocina de los pisos: de GPT, tools/muebles_gpt.py)
             'mattress_policia', 'mattress_medico', 'mattress_militar', 'mattress_ferretero', 'mattress_farmaceutica',
             'mattress_tecnico', 'storageshelf', 'boxstack', 'boxpile', 'handtruck',   # (los trasteros de las viviendas: de GPT, tools/muebles_gpt.py)
-            'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp', 'sofaback',
+            'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp', 'sofaback', 'tv', 'bookshelf', 'plant',   # (el salón de los pisos: de GPT)
             'cubicle', 'officedesk', 'printer', 'copier', 'serverrack', 'watercooler', 'lobbysofa', 'reception', 'turnstile',
             'filecabinet', 'boardtable', 'execdesk', 'bookcase', 'mixerdesk', 'monitorwall', 'armory', 'interviewtable',
             'officekitchen', 'towermodel'}   # (y los de Torre Velaria: tools/guias_torre.py)   # (y el dormitorio y la lámpara de pie: tools/guias_dormitorio.py)

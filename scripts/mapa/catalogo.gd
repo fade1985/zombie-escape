@@ -26,9 +26,9 @@ const MUEBLES := {
 	"sofa":       {"len": 132, "dep": 60,  "paredes": "lados", "archivo": "salon/sofa"},
 	# el sofá visto por detrás (girado 180° por PixelLab a partir del de frente), para ponerlo de cara a la tele, en medio del salón
 	"sofaback":   {"len": 132, "dep": 60,  "paredes": "",      "archivo": "salon/sofa-espalda"},
-	"tv":         {"len": 80,  "dep": 40,  "paredes": "",      "archivo": "salon/tele"},
+	"tv":         {"len": 64,  "dep": 40,  "paredes": "",      "archivo": "salon/tele"},
 	"armchair":   {"len": 90,  "dep": 60,  "paredes": "lados", "archivo": "salon/sillon"},
-	"bookshelf":  {"len": 46,  "dep": 34,  "paredes": "",      "archivo": "salon/estanteria"},
+	"bookshelf":  {"len": 42,  "dep": 34,  "paredes": "",      "archivo": "salon/estanteria"},
 	"lamp":       {"len": 30,  "dep": 30,  "paredes": "todas", "archivo": "comun/lampara"},
 	"counter":    {"len": 158, "dep": 50,  "paredes": "",      "archivo": "cocina/encimera"},
 	"fridge":     {"len": 44,  "dep": 58,  "paredes": "",      "archivo": "cocina/nevera"},
