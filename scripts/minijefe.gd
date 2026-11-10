@@ -264,6 +264,18 @@ func estrellarse() -> void:
 	EfectoSuelo.soltar(get_parent(), "golpe-pared", global_position + mirada * radio + Vector2(0, 20))
 
 
+# Le ha dado un bidón (M16, peligros/bidones.gd): se queda atontado "segundos" (con estrellitas), corte lo que corte.
+# Si no se le puede tocar (gritando al enfadarse, la burbuja del bombero), no. Devuelve si se ha atontado. El estado
+# "atontado" lo lleva cada jefe en pensar() (el Glotón y el bombero: hasta datos.dura)
+func atontar(segundos: float) -> bool:
+	if estado in ["muerto", "grito"] or invulnerable:
+		return false
+	marcha = Vector2.ZERO
+	cambiar("atontado", {"dura": segundos})
+	gritar(Idioma.t("¡PUMBA!"), Color("#ffd23f"))
+	return true
+
+
 # El aviso de la embestida, en el suelo: el camino de "largo" por donde va a pasar, con flechas que se encienden en
 # "k" (0 a 1) (de pixel art: aviso.gd). Si hay una pared o un mueble por medio, llega solo hasta ahí, hasta donde se
 # estrellaría su cuerpo, y acaba en una estrella

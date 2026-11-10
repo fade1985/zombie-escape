@@ -46,6 +46,7 @@ var contorno: Sprite2D = null   # su contorno amarillo, escondido mientras no to
 var raton := Vector2(-1, -1)    # dónde está el ratón en la pantalla (el último movimiento); negativo si aún no se ha movido
 var puede := Callable()         # si se da, cuándo se puede usar (si no, siempre): mientras no, ni contorno ni se usa, y J ataca
 var cierra := false             # el botón del móvil dice «Cerrar» en vez de «Abrir» (una puerta abierta)
+var boton := ""                 # si se da, lo que dice el botón del móvil (ya traducido): los bidones de los jefes, «Empujar»
 var al_pie := false             # la distancia, al pie del mueble y no al medio de su dibujo (el armarito, colgado alto en la pared)
 
 

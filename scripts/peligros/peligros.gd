@@ -23,6 +23,8 @@
 #                 sus entradas; el gimnasio del Gymbro no tiene otra)   {tipo, sala, luces ([Vector2])}
 #   cerco.gd      la habitación del jefe de bomberos, en llamas por el borde   {tipo, sala, casillas (casilla -> 1),
 #                                                                               ovalo, avisado}
+#   bidones.gd    los bidones contra el jefe (M16): de fuego en la del Glotón y de ácido en la del bombero
+#                 (Peligros.bidones)   {tipo, sala, contenido ("fuego"/"acido"), cosas ([{pos, usado}])}
 # Y los de los departamentos de Torre Velaria (docs/PLAN_TERCER_EDIFICIO.md, parte 3), también desde de_tienda:
 #   viento.gd   el ventanal roto de la sala grande (Marketing y Dirección)   {tipo, sala, lado ("izquierda"/"derecha"),
 #                                                                             x (la cara de dentro del muro), y0, y1, avisado}
@@ -107,6 +109,11 @@ const CERCO := {
 	"dps": 12.0,         # a Johnny, como el fuego de la cocina (y sigue ardiendo 2 s al salir); a los zombis los prende
 	"parte": 0.45,       # qué parte del suelo arde: todo lo de fuera de la elipse, hasta la pared (como la porquería)
 	"luces": 10,         # luces de fuego repartidas por el borde de la elipse (no hay más luz en la habitación)
+}
+# Los bidones contra el jefe del Glotón y del bombero (M16, bidones.gd; lo que hacen, en sus const)
+const BIDONES := {
+	"cuantos": 3,        # en cada habitación (de un solo uso)
+	"dentro": 0.78,      # a qué parte del radio de la elipse limpia (1: en su borde, donde empieza la franja)
 }
 
 
@@ -343,6 +350,21 @@ static func del_bombero(sitio: Dictionary) -> Array:
 	var reparto := franja_y_ovalo(sitio, CERCO.parte)
 	return [{"tipo": "cerco", "sala": sitio.apt.salas[0].id, "casillas": reparto.casillas, "ovalo": reparto.ovalo,
 		"avisado": false}]
+
+
+# Los bidones contra el jefe (M16, bidones.gd): BIDONES.cuantos de pie en la elipse limpia del medio (franja_y_ovalo),
+# cerca de su borde, repartidos por los lados y el fondo (lejos de la puerta, por donde se entra). "contenido": "fuego"
+# (el Glotón) o "acido" (el bombero). Siempre en el mismo sitio. Cada uno: {pos, usado}
+static func bidones(sitio: Dictionary, contenido: String) -> Dictionary:
+	var ov: Dictionary = franja_y_ovalo(sitio, CERCO.parte if contenido == "acido" else PORQUERIA.parte).ovalo
+	var puerta := -PI / 2.0 if sitio.apt.entrada.lado == "arriba" else PI / 2.0
+	var cosas := []
+	for k in BIDONES.cuantos:
+		# de un lado de la puerta al otro, por el fondo: a 0,6 π, π y 1,4 π de ella
+		var a: float = puerta + PI * lerpf(0.6, 1.4, float(k) / maxf(1.0, BIDONES.cuantos - 1))
+		var p: Vector2 = (ov.centro + Vector2(cos(a) * ov.rx, sin(a) * ov.ry) * BIDONES.dentro) * CASILLA
+		cosas.append({"pos": (p / 2.0).round() * 2.0, "usado": false})
+	return {"tipo": "bidones", "sala": sitio.apt.salas[0].id, "contenido": contenido, "cosas": cosas}
 
 
 # ¿Puede estar ahí una cosa tirada? En el suelo de la sala, a "margen" de las paredes y de los muebles (por arriba

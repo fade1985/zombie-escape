@@ -3349,6 +3349,10 @@ msgstr "Clac ! La boutique est plongée dans le noir"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Attention ! L'eau est électrifiée"
 
+#: scripts/peligros/bidones.gd
+msgid "Empujar"
+msgstr "Pousser"
+
 #: scripts/peligros/camaras.gd
 msgid "¡Una cámara! Si me ve, saltará la alarma"
 msgstr "Une caméra ! Si elle me voit, l'alarme se déclenche"

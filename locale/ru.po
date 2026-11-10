@@ -3357,6 +3357,10 @@ msgstr "Щелк! В магазине вырубился свет"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Осторожно! Вода под током"
 
+#: scripts/peligros/bidones.gd
+msgid "Empujar"
+msgstr "Толкнуть"
+
 #: scripts/peligros/camaras.gd
 msgid "¡Una cámara! Si me ve, saltará la alarma"
 msgstr "Камера! Если она меня увидит, сработает тревога"

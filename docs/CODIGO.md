@@ -262,7 +262,12 @@ en una línea.
 - `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`; al tropezar, Johnny se cae de espaldas, se queda tumbado y se levanta con sus dibujos de PixelLab, sin el arma: `johnny.caer`, hoja `conserje-48-caida`, que monta `tools/caida.py`, y la de cada skin, `tools/caida_skins.py`; se prueba con una skin con `--skin X`), `cerco.gd` (bombero) y
-  `luz_jefe.gd` (la luz fija de esas habitaciones).
+  `luz_jefe.gd` (la luz fija de esas habitaciones) y `bidones.gd` (M16: tres bidones de pie en la elipse limpia, de fuego en la
+  del Glotón y de ácido en la del bombero, `Peligros.bidones`; se empujan como los muebles, con `zona_usar.gd` y su contorno,
+  ruedan en línea recta hacia el jefe y, si le dan, lo atontan 5 s, `Minijefe.atontar`, y revientan en su charco; si no,
+  contra la pared. De un solo uso. Contra la burbuja del giro del bombero no le hacen nada. Dibujos `bidon-<fuego|acido>[-tumbado].png`,
+  de `tools/bidones.py`: de GPT si está `assets/sources/bidon-…-gpt.webp`, si no, provisionales. Prueba:
+  `--captura --jefe gloton --bidon` o `--jefe bombero --bidon`).
   De los departamentos de Torre Velaria: `viento.gd` (el ventanal roto de Marketing y Dirección: arrastra a Johnny y tira a
   los zombis por la ventana, que cuentan sin cuerpo ni botín: `partida.gd`, meta `"ventana"`), `camaras.gd` (Informática y
   Seguridad: la alarma y los refuerzos, dos escoltas de Velaria; se rompen de un tiro desde `bala.gd`, `romper_en`), `gas.gd` y `valvula.gd`

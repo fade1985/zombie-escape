@@ -205,6 +205,11 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta, 5.0)
 			if t >= TAMBALEO:
 				andar(0.4)
+		"atontado":
+			# le ha dado un bidón (M16, peligros/bidones.gd): ATONTA s sin moverse, con estrellitas (minijefe.gd)
+			frenar(delta, 5.0)
+			if t >= datos.get("dura", 5.0):
+				andar(0.4)
 	# mientras sale el fuego, la burbuja de fuego le protege: nada le quita vida (recibir_golpe)
 	if estado == "giro":
 		invulnerable = true
@@ -456,7 +461,7 @@ func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, de_aliado 
 	super(cantidad, fuerza, de_lleno, de_aliado)
 	if estado == "muerto" or vida == antes:
 		return
-	if de_lleno and estado != "grito" and estado != "tambaleo":
+	if de_lleno and estado not in ["grito", "tambaleo", "atontado"]:
 		cambiar("tambaleo")
 		marcha = Vector2.ZERO
 
@@ -599,6 +604,9 @@ func animar() -> void:
 		"tambaleo":
 			fijar("golpe", dir, avance("golpe_" + dir, minf(1.0, t / TAMBALEO)))
 			sprite.position.x = sin(tiempo * 6.0) * 3.0
+		"atontado":
+			fijar("golpe", dir, avance("golpe_" + dir, t / 0.5))
+			sprite.position.x = sin(tiempo * 9.0) * 2.0
 		"grito":
 			fijar("quieto", "s", 0)
 			sprite.position.x = sin(tiempo * 50.0) * 2.0

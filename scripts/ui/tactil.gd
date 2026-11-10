@@ -415,7 +415,10 @@ func dibujar() -> void:
 			"pausa":
 				icono(donde, "pausa", 26 * esc)
 			"abrir":
-				texto(lienzo, donde, Idioma.t("Cerrar") if johnny.ante_mueble and johnny.ante_mueble.cierra else Idioma.t("Abrir"), roundi(16 * esc), Tema.AMARILLO)
+				var dice := Idioma.t("Cerrar") if johnny.ante_mueble and johnny.ante_mueble.cierra else Idioma.t("Abrir")
+				if johnny.ante_mueble and johnny.ante_mueble.boton != "":
+					dice = johnny.ante_mueble.boton   # (los bidones de los jefes: «Empujar»)
+				texto(lienzo, donde, dice, roundi(16 * esc), Tema.AMARILLO)
 	# Mientras se apunta desde lanzar, hasta dónde se ha arrastrado
 	if "lanzar" in dedos.values():
 		var desde: Vector2 = b.lanzar[0]

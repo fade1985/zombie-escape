@@ -24,6 +24,8 @@
 #                       planta baja). OJO: solo elige el jefe; a secas, sin otra opción de esta lista, es la prueba larga
 #   --porqueria, --gimnasio, --cubos, --llamas   (con --jefe gloton, gymbro, portera o bombero) la habitación de ese
 #                       jefe; con --llamas, también su giro con el lanzallamas            [prueba_jefes_salas.gd]
+#   --bidon             (con --jefe gloton o bombero) los bidones contra el jefe (M16): ruedan, lo atontan y
+#                       revientan en su charco; con el bombero, también contra su burbuja  [prueba_jefes_salas.gd]
 #                       (--gimnasio y --cubos, con --skin X: el tropiezo de Johnny con esa skin)
 #   --aspirar           (con --jefe gloton) su sangre ácida y lo que tira al aspirar a 3, 5, 8 y 12 casillas, normal y
 #                       enfadado                                                           [prueba_jefes.gd]
@@ -521,6 +523,9 @@ func empezar_prueba() -> void:
 	elif "--llamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llamas()
+	elif "--bidon" in args:
+		set_process(false)   # sin la prueba larga
+		probar_bidon()
 	elif "--sala-pruebas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_sala_pruebas()

@@ -1244,3 +1244,122 @@ func fotos_de_avisos(prefijo: String, lista: Array) -> void:
 		jefe.queue_free()
 		await get_tree().create_timer(0.1, false).timeout
 	get_tree().quit()
+
+
+# Con "--captura --jefe gloton --bidon" (o "--jefe bombero"): los bidones contra el jefe (M16, peligros/bidones.gd).
+# Monta la habitación del jefe con todo descubierto y mira: que hay 3 bidones de pie en la elipse limpia (ni en la
+# porquería ni en el fuego) y lejos de la puerta; que, con Johnny al lado, el bidón es el mueble que tiene delante; que
+# al empujarlo rueda hasta el jefe, lo atonta (estrellitas, 5 s), revienta en su charco (de fuego o de ácido) y le
+# quita vida; que se apunta como usado; y que, si el jefe se aparta, el bidón llega a la pared y revienta sin atontarle.
+# Con el bombero, además, el tercero contra su burbuja de fuego del giro: revienta y no le atonta ni le quita vida.
+# Cada línea dice lo esperado. Saca captura-bidon-sala.png (la sala con los bidones), captura-bidon-delante.png
+# (Johnny delante de uno, con su contorno amarillo), captura-bidon-rueda.png (rodando hacia el jefe) y
+# captura-bidon-atontado.png (el jefe atontado sobre el charco)
+func probar_bidon() -> void:
+	set_process(false)
+	nueva_planta(2)   # la 1ª planta: con --jefe gloton o bombero, la suya
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca solo: se le mete a mano
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	var lista: Array = sitio.get("peligros", []).filter(func(q): return q.tipo == "bidones")
+	if lista.is_empty() or not planta.jefe in ["gloton", "bombero"]:
+		print("ERROR DE LA PRUEBA: el piso del jefe (%s) no tiene bidones (--bidon es con --jefe gloton o bombero)" % planta.jefe)
+		get_tree().quit(1)
+		return
+	var datos: Dictionary = lista[0]
+	var suelo: Dictionary = sitio.peligros.filter(func(q): return q.tipo in ["porqueria", "cerco"])[0]
+	var en_franja := 0
+	var cerca_puerta := 0
+	for b in datos.cosas:
+		if suelo.casillas.has(Peligros.casilla(b.pos)):
+			en_franja += 1
+		if b.pos.distance_to(johnny.position) < 200.0:
+			cerca_puerta += 1
+	print("Bidón (jefe %s): bidones %d (esperado: 3) · de %s (esperado: %s) · en la franja %d (esperado: 0) · a menos de 200 de donde entra Johnny %d (esperado: 0) · dibujados %d (esperado: 3)" % [
+		planta.jefe, datos.cosas.size(), datos.contenido, "fuego" if planta.jefe == "gloton" else "acido", en_franja,
+		cerca_puerta, mapa.get_node("Bidones").bidones.size()])
+	johnny.modo = "quieto"
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	var centro: Vector2 = suelo.ovalo.centro * Peligros.CASILLA   # (el medio de la elipse limpia: la navegación aún no está lista)
+	var jefe: Node2D = meter_zombi(planta.jefe, centro)
+	jefe.quieto = true
+	var camara: Camera2D = johnny.get_node("Camara")
+	johnny.position = centro + Vector2(0, 140)
+	camara.zoom = Vector2(0.66, 0.66)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-bidon-sala.png")
+	# 1. Johnny al lado del primero (al otro lado del jefe), lo empuja y le da
+	var nodo: Node = mapa.get_node("Bidones")
+	var bidon: Node2D = nodo.bidones[0]
+	var hacia: Vector2 = bidon.position.direction_to(jefe.position)
+	jefe.andar(30.0)
+	johnny.position = bidon.position - hacia * 46.0 + Vector2(0, -10)
+	johnny.velocity = Vector2.ZERO
+	johnny.invulnerable = 99.0   # (que el jefe no le quite vida: solo se mira al jefe)
+	camara.zoom = Vector2(1, 1)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	var delante: bool = johnny.ante_mueble == bidon.zona
+	Captura.foto("captura-bidon-delante.png")
+	var vida0: int = jefe.vida
+	bidon.zona.abrir()
+	await get_tree().create_timer(0.35).timeout   # (la foto sale con algún fotograma de retraso)
+	Captura.foto("captura-bidon-rueda.png")
+	var espera := 0.0
+	while is_instance_valid(bidon) and espera < 4.0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	await get_tree().create_timer(0.3).timeout
+	var atontado: bool = jefe.estado == "atontado"
+	var charcos: int = mapa.cosas.get_children().filter(func(c): return c is Charco).size()
+	Captura.foto("captura-bidon-atontado.png")
+	print("Bidón: Johnny al lado, es lo que tiene delante %s (esperado: true) · al empujarlo, llega al jefe en %.1f s (esperado: menos de 2) · atontado %s (esperado: true) · charcos %d (esperado: 1 o más) · usado %s (esperado: true)" % [
+		delante, espera, atontado, charcos, datos.cosas[0].usado])
+	await get_tree().create_timer(2.2).timeout
+	var a_media: bool = jefe.estado == "atontado"
+	await get_tree().create_timer(2.8).timeout
+	print("Bidón: a los 2,5 s sigue atontado %s (esperado: true) · a los 5,3 s ya no %s (esperado: true) · le ha quitado %d de vida (esperado: más de 0, del charco)" % [
+		a_media, jefe.estado != "atontado", vida0 - jefe.vida])
+	# 2. el segundo, pero el jefe se aparta nada más empujarlo: llega a la pared, revienta y no le atonta
+	bidon = nodo.bidones[0]
+	hacia = bidon.position.direction_to(jefe.position)
+	jefe.andar(30.0)
+	johnny.position = bidon.position - hacia * 46.0 + Vector2(0, -10)
+	await get_tree().create_timer(0.3).timeout
+	bidon.zona.abrir()
+	jefe.position += hacia.orthogonal() * 160.0
+	espera = 0.0
+	while is_instance_valid(bidon) and espera < 5.0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	print("Bidón: si el jefe se aparta, el bidón revienta solo %s (esperado: true) · el jefe, atontado %s (esperado: false) · quedan %d (esperado: 1)" % [
+		not is_instance_valid(bidon), jefe.estado == "atontado", nodo.bidones.size()])
+	# 3. con el bombero, el último contra su burbuja de fuego: revienta y no le hace nada
+	if planta.jefe == "bombero":
+		bidon = nodo.bidones[0]
+		jefe.position = centro
+		hacia = bidon.position.direction_to(jefe.position)
+		johnny.position = bidon.position - hacia * 46.0 + Vector2(0, -10)
+		jefe.avisar_giro(johnny)
+		espera = 0.0
+		while jefe.burbuja < 1.0 and espera < 5.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		var vida1: int = jefe.vida
+		bidon.zona.abrir()
+		while is_instance_valid(bidon) and espera < 8.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		print("Bidón: contra la burbuja del giro, revienta %s (esperado: true) · sigue girando %s (esperado: true) · le quita %d (esperado: 0)" % [
+			not is_instance_valid(bidon), jefe.estado == "giro", vida1 - jefe.vida])
+	get_tree().quit()

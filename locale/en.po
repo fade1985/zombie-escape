@@ -3349,6 +3349,10 @@ msgstr "Clunk! The store's lights just went out"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Watch out! The water is live"
 
+#: scripts/peligros/bidones.gd
+msgid "Empujar"
+msgstr "Push"
+
 #: scripts/peligros/camaras.gd
 msgid "¡Una cámara! Si me ve, saltará la alarma"
 msgstr "A camera! If it sees me, the alarm goes off"

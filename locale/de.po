@@ -3349,6 +3349,10 @@ msgstr "Klack! Im Laden ist der Strom weg"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Achtung! Das Wasser steht unter Strom"
 
+#: scripts/peligros/bidones.gd
+msgid "Empujar"
+msgstr "Schieben"
+
 #: scripts/peligros/camaras.gd
 msgid "¡Una cámara! Si me ve, saltará la alarma"
 msgstr "Eine Kamera! Wenn sie mich sieht, geht der Alarm los"

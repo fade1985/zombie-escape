@@ -328,6 +328,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		if jefe and su_jefe == "gloton":
 			# la habitación del Glotón (sin muebles, ver arriba): el suelo y las paredes llenos de su porquería, que quema
 			sitio.peligros = Peligros.del_gloton(sitio)
+			sitio.peligros.append(Peligros.bidones(sitio, "fuego"))   # (y sus bidones de fuego, M16: peligros/bidones.gd)
 		if jefe and su_jefe == "gymbro":
 			# el gimnasio del Gymbro (lleno de máquinas, ver arriba): mancuernas por el suelo, que hacen caer a Johnny
 			apt.salas[0].nombre = "Gimnasio"   # [traducir]
@@ -340,6 +341,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# la habitación del jefe de bomberos (sin muebles, ver arriba): en llamas por todo el borde menos la puerta
 			apt.salas[0].nombre = "Apartamento en llamas"   # [traducir]
 			sitio.peligros = Peligros.del_bombero(sitio)
+			sitio.peligros.append(Peligros.bidones(sitio, "acido"))   # (y sus bidones de ácido, M16: peligros/bidones.gd)
 		if jefe and planta.jefe in Peligros.LUZ_JEFE.jefes:
 			# y a las cuatro habitaciones de los jefes de los Apartamentos, la misma luz blanca fija (la del gimnasio)
 			sitio.peligros.append(Peligros.luz_de_jefe(sitio))

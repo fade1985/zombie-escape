@@ -3341,6 +3341,10 @@ msgstr "啪！店里的灯灭了"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "小心！水里带电"
 
+#: scripts/peligros/bidones.gd
+msgid "Empujar"
+msgstr "推"
+
 #: scripts/peligros/camaras.gd
 msgid "¡Una cámara! Si me ve, saltará la alarma"
 msgstr "有摄像头！要是被它看到，警报就会响"

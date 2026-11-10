@@ -3349,6 +3349,10 @@ msgstr "Clac! A luz da loja apagou"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Cuidado! A água está dando choque"
 
+#: scripts/peligros/bidones.gd
+msgid "Empujar"
+msgstr "Empurrar"
+
 #: scripts/peligros/camaras.gd
 msgid "¡Una cámara! Si me ve, saltará la alarma"
 msgstr "Uma câmera! Se ela me vir, o alarme dispara"

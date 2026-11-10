@@ -100,6 +100,7 @@ const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": p
 	"porqueria": preload("res://scripts/peligros/porqueria.gd"),   # (y la de la habitación del Glotón, en los Apartamentos)
 	"tropiezos": preload("res://scripts/peligros/tropiezos.gd"),   # (las mancuernas del gimnasio y los cubos de la portera)
 	"cerco": preload("res://scripts/peligros/cerco.gd"),   # (el borde en llamas de la habitación del jefe de bomberos)
+	"bidones": preload("res://scripts/peligros/bidones.gd"),   # (los bidones de fuego del Glotón y de ácido del bombero, M16)
 	"luz_jefe": preload("res://scripts/peligros/luz_jefe.gd"),   # (no es un peligro: la luz fija de las habitaciones de los jefes de los Apartamentos)
 	# los de los departamentos de Torre Velaria: el ventanal roto, las cámaras de seguridad y el gas de las rejillas
 	"viento": preload("res://scripts/peligros/viento.gd"), "camaras": preload("res://scripts/peligros/camaras.gd"),
