@@ -28,6 +28,15 @@ CELDA = 64
 PIVOTE = (32, 56)   # los pies, en la casilla
 TUMBADO = 6         # tumbado, lo de más abajo del cuerpo queda estos píxeles por debajo de los pies (sobre la sombra)
 CAER, LEVANTARSE = 7, 5
+# Los dibujos de levantarse de cada dirección ("levantarse" o "caer", y cuál), siempre LEVANTARSE. Por defecto, los 5
+# de PixelLab. Al sur, al noreste y al norte, su primer dibujo de levantarse ya está agachado y daba un salto desde
+# tumbado: empiezan con uno de caer (sentado o boca arriba), como si se cayera al revés, y se quita uno repetido. Al
+# sur, el último de levantarse sale de espaldas: fuera (después viene el reposo de siempre, de frente).
+LEVANTARSE_DE = {
+    "south": [("caer", 5), ("levantarse", 0), ("levantarse", 1), ("levantarse", 2), ("levantarse", 3)],
+    "north-east": [("caer", 5), ("levantarse", 0), ("levantarse", 2), ("levantarse", 3), ("levantarse", 4)],
+    "north": [("caer", 5), ("levantarse", 0), ("levantarse", 2), ("levantarse", 3), ("levantarse", 4)],
+}
 
 
 def dibujo(anim: str, d: str, i: int) -> Image.Image:
@@ -47,18 +56,27 @@ for fila, d in enumerate(DIRS):
     mover_caer = (round(PIVOTE[0] - px), round(PIVOTE[1] - py))
     tx, ty = pies(dibujo("caer", d, CAER - 1))
     baja = PIVOTE[1] + TUMBADO - (ty + mover_caer[1])   # lo que hay que bajar lo tumbado hasta el suelo
+    def en_caer(i):   # dónde va el dibujo i de caer
+        return (mover_caer[0], mover_caer[1] + round(baja * i / (CAER - 1)))
     for i in range(CAER):
-        m = (mover_caer[0], mover_caer[1] + round(baja * i / (CAER - 1)))
+        m = en_caer(i)
         hoja.alpha_composite(dibujo("caer", d, i), (i * CELDA + m[0], fila * CELDA + m[1]))
-    # levantarse: el primero donde acabó caer (el centro de abajo de lo tumbado) y el último de pie en el pivote
-    ax, ay = pies(dibujo("levantarse", d, 0))
+    # levantarse: los de caer, donde estaban al caer; los de PixelLab, el primero donde acabó caer (el centro de
+    # abajo de lo tumbado), el último de pie en el pivote y los de en medio, poco a poco
+    sec = LEVANTARSE_DE.get(d, [("levantarse", i) for i in range(LEVANTARSE)])
+    assert len(sec) == LEVANTARSE   # (johnny.gd: LEVANTARSE, lo que dura levantarse)
+    suyos = [i for a, i in sec if a == "levantarse"]
+    ax, ay = pies(dibujo("levantarse", d, suyos[0]))
     desde = (tx + mover_caer[0] - ax, ty + mover_caer[1] + baja - ay)
-    fx, fy = pies(dibujo("levantarse", d, LEVANTARSE - 1))
+    fx, fy = pies(dibujo("levantarse", d, suyos[-1]))
     hasta = (PIVOTE[0] - fx, PIVOTE[1] - fy)
-    for i in range(LEVANTARSE):
-        k = i / (LEVANTARSE - 1)
-        m = (round(desde[0] + (hasta[0] - desde[0]) * k), round(desde[1] + (hasta[1] - desde[1]) * k))
-        hoja.alpha_composite(dibujo("levantarse", d, i), ((CAER + i) * CELDA + m[0], fila * CELDA + m[1]))
+    for col, (anim, i) in enumerate(sec):
+        if anim == "caer":
+            m = en_caer(i)
+        else:
+            k = suyos.index(i) / (len(suyos) - 1)
+            m = (round(desde[0] + (hasta[0] - desde[0]) * k), round(desde[1] + (hasta[1] - desde[1]) * k))
+        hoja.alpha_composite(dibujo(anim, d, i), ((CAER + col) * CELDA + m[0], fila * CELDA + m[1]))
     print(f"{d}: caer movido {mover_caer} y baja {baja}; levantarse de {tuple(round(v) for v in desde)} a {tuple(round(v) for v in hasta)}")
 
 hoja.save(SALIDA.with_suffix(".png"))
