@@ -10,12 +10,13 @@ signal usar
 
 const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")
+const POLIGONO := preload("res://scripts/poligono.gd")   # (no un Polygon2D: ver poligono.gd)
 
 # La pantalla del dibujo (mueble-tv.png, 32 × 42 píxeles, a escala 2 y con el pie abajo en medio), en unidades locales
 const PANTALLA := Rect2(-16, -64, 32, 22)
 
 var datos: Dictionary          # sitio.tele: {"estado"}
-var pantalla: Polygon2D
+var pantalla: Node2D
 var brillo: PointLight2D
 var marca: Node2D
 var zona: Area2D
@@ -29,7 +30,7 @@ func montar(d: Dictionary, mueble: Node2D, ancho: float) -> void:
 	name = "TeleSalon"   # no-tr
 	var luz := CanvasItemMaterial.new()
 	luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	pantalla = Polygon2D.new()
+	pantalla = POLIGONO.new()
 	pantalla.polygon = PackedVector2Array([PANTALLA.position + Vector2(4, 0), Vector2(PANTALLA.end.x - 4, PANTALLA.position.y),
 		Vector2(PANTALLA.end.x, PANTALLA.position.y + 4), Vector2(PANTALLA.end.x, PANTALLA.end.y - 4),
 		Vector2(PANTALLA.end.x - 4, PANTALLA.end.y), Vector2(PANTALLA.position.x + 4, PANTALLA.end.y),

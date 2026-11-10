@@ -16,6 +16,7 @@ extends CanvasModulate
 # (la sala de mantenimiento y los trasteros, como un apartamento: se alumbran con la linterna y sus apliques)
 const OSCURIDAD_SALA := {"pasillo": 0.8, "apartamento": 0.84, "jefe": 0.5, "mantenimiento": 0.84, "viviendas": 0.84}
 const PASILLO := 0.8                       # la oscuridad de referencia: a esta, las luces lucen a tope
+const POLIGONO := preload("res://scripts/poligono.gd")   # (no un Polygon2D: ver poligono.gd)
 const SOMBRA := Color(0.03, 0.03, 0.1)     # a qué color tiende lo oscuro (azul noche, casi negro)
 # La linterna de Johnny: la típica de pecho. En el suelo, un cono que sale de debajo de ella (de sus pies) hacia
 # donde mira y hace sombras con los muebles; en el pecho, el foco encendido (un brillito que se ve de frente y
@@ -74,7 +75,7 @@ var linterna: Node2D        # gira con Johnny; dentro, el cono del suelo (con so
 var linterna_suelo: PointLight2D
 var linterna_cosas: PointLight2D
 var foco: Sprite2D          # el brillo de la linterna en el pecho de Johnny
-var rayo: Polygon2D         # y el rayo tenue que va por el aire del foco al suelo
+var rayo: Node2D            # y el rayo tenue que va por el aire del foco al suelo
 static var textura_cono: ImageTexture
 
 
@@ -135,7 +136,7 @@ func seguir_a(quien: Node2D) -> void:
 	propio.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED   # luce por sí mismo, aunque esté oscuro
 	propio.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD        # y suma luz a lo que tiene debajo
 	foco.material = propio
-	rayo = Polygon2D.new()
+	rayo = POLIGONO.new()
 	rayo.name = "Rayo"
 	rayo.material = propio
 	johnny.add_child(rayo)

@@ -196,6 +196,11 @@ en una línea.
   del efecto y él no hay muro (por las puertas abiertas, sí pasa). Lo que sube (explosión, llamas) se mira a la altura
   del suelo: se corta en las paredes de los lados y la de abajo, pero por delante de la de arriba se sigue viendo, como
   un personaje. Prueba: `--captura --efectos-pared`.
+- `poligono.gd` (11 nov): un polígono de color pintado con `draw_polygon`. **No usar `Polygon2D` para nada que cambie
+  cada fotograma** (el rayo de la linterna, la pantalla de la tele): en la web de Godot 4.7.2, al redibujarse con los
+  mismos puntos actualiza su malla atando los índices al búfer equivocado y Chrome llena la consola de avisos de WebGL
+  («element array buffers can not be bound to a different target», «bufferSubData: no buffer»). Es un fallo de Godot
+  (godotengine/godot#124726), arreglado para la 4.8; con ella se podría volver a `Polygon2D`.
 - `charco.gd` (todos los charcos) y `estados.gd` (lo que hacen: veneno, frío, calambrazo, tirado, `frenado`...).
   El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
