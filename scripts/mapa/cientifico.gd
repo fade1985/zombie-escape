@@ -38,11 +38,14 @@ func montar(p: Dictionary, pos: Vector2) -> void:
 	papel.position = Vector2(28, 30)
 	papel.add_child(hoja)
 	add_child(papel)
+	# su resplandor, el mismo que el de la llave del suelo (mapa.poner_llave; lo pidió el dueño, 10 nov): una luz blanca
+	# fija que alumbra todas las capas (luz.gd), para que en un apartamento ilumine también el suelo de la habitación
 	brillo = PointLight2D.new()
 	brillo.texture = load("res://escenas/luces/luz_suave.tres")
-	brillo.texture_scale = 0.22
-	brillo.color = Color("#ffd23f")
-	brillo.position = papel.position
+	brillo.texture_scale = 0.3
+	brillo.color = Color.WHITE
+	brillo.range_item_cull_mask = Luz.TODAS
+	brillo.position = Vector2(papel.position.x, 30 - 3.0)   # (en medio de lo que sube y baja la hoja)
 	add_child(brillo)
 
 
@@ -52,7 +55,7 @@ func _physics_process(delta: float) -> void:
 		return
 	papel.position.y = 30 - absf(sin(t * 2.5)) * 6.0
 	var oscuro: float = mapa.niebla.get(zona, 0.0) if mapa and zona >= 0 else 0.0
-	brillo.energy = (0.6 + sin(t * 3.0) * 0.15) * (1.0 - oscuro)
+	brillo.energy = 1.0 - oscuro   # (con la habitación sin descubrir, no se ve desde fuera)
 	brillo.enabled = oscuro < 0.98
 	if johnny and johnny.vivo and johnny.global_position.distance_to(global_position + papel.position) < ALCANCE:
 		papel.queue_free()

@@ -282,7 +282,8 @@
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
 #   --alerta N          las reglas de esa alerta (1 a 5); con --edificio torre, la Alerta 5 de la torre: los escoltas
 #                       que llegan al leer un ordenador del código (captura-alerta-codigo.png)  [prueba_varias.gd]
-#   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella      [prueba_varias.gd]
+#   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella, y al lado una página del
+#                       dosier con el mismo resplandor                                      [prueba_varias.gd]
 #   --curas             las vendas y el botiquín: casillas del HUD, teclas 1 y 2, el tercio que devuelve el botiquín, la
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --guiado --tercios  en la primera partida, al perder el primer tercio sale la ventana de los tercios (M35)

@@ -450,6 +450,12 @@ func probar_llave() -> void:
 	johnny.position = grande.centro
 	mapa.poner_llave(llave_en)
 	soltar_arma("bate", llave_en + Vector2(70, 0), 3)   # y un arma épica al lado: su luz morada, como la de la llave pero de su color
+	# y, al otro lado, un científico muerto con su página del dosier: su resplandor, el mismo que el de la llave (M14)
+	var cientifico := CIENTIFICO.new()
+	cientifico.mapa = mapa
+	cientifico.zona = grande.id
+	cientifico.montar(Historia.dosier(edificio).paginas[0], llave_en + Vector2(230, 0))
+	mapa.cosas.add_child(cientifico)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.7, false).timeout
 	print("Llave en el suelo: la llave existe %s · su resplandor %s (esperado: true y true)" % [
