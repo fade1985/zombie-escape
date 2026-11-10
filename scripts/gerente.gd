@@ -284,6 +284,7 @@ func llamar_empleados() -> void:
 		var donde := global_position + Vector2(cos(a), sin(a) * 0.8) * 130.0
 		if not libre(donde):
 			donde = global_position + Vector2(cos(a), sin(a) * 0.8) * 75.0
+		donde = NavigationServer2D.map_get_closest_point(agente.get_navigation_map(), donde)   # (y si tampoco, al sitio libre más cercano)
 		pide_zombi.emit(A_TRABAJAR[i], donde)
 
 

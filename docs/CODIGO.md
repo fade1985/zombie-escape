@@ -304,7 +304,10 @@ en una línea.
 
 **Partida y progreso**
 - `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o tarjeta y su guardia, jefes, escaleras,
-  ascensor, dinero, soltar objetos y munición, pausa, fin). Cada planta, más dura (M72, en `meter_zombi`): los jefes de
+  ascensor, dinero, soltar objetos y munición, pausa, fin). Ningún zombi se queda donde no se le puede matar (10 nov):
+  `meter_zombi` lleva al suelo más cercano (`mapa.suelo_cerca`) al que se pida dentro de un muro o fuera del mapa, y
+  `rescatar_atascados` (la red de seguridad, en cada combate) devuelve al suelo al que lleve medio segundo con el centro
+  en un muro, o lo quita sin contarlo; prueba `--jefe portera --atascado`. Cada planta, más dura (M72, en `meter_zombi`): los jefes de
   planta, `JEFE_POR_PLANTA` (×1,35) de vida por planta, y los demás zombis, `ZOMBI_POR_PLANTA` (+10 %) de vida y de
   zarpazo por planta (el guardia, solo el zarpazo: su vida ya sube en `poner_guardia`); prueba `--dificultad`, que da
   los números de cada planta y los de antes. Desde la planta baja, además, zarpazos más fuertes (el `dano` de cada

@@ -1455,6 +1455,30 @@ func hay_sitio(pos: Vector2) -> bool:
 
 
 # Un punto de suelo con sitio alrededor en esa columna "x", a la altura que toque (Vector2.INF si no hay ninguno)
+# El suelo libre más cercano a "pos" (un punto dentro de un muro, de un mueble o fuera del mapa): el punto andable más
+# cercano del mapa de navegación (el que usan los zombis) y, si todavía no lo hay o cae mal, el centro de la casilla de
+# suelo más cercana con sitio para que quepa alguien. Vector2.INF si no hay ninguna (10 nov: un vecino de la portera salió
+# dentro del muro de abajo, se quedó fuera de la sala sin poder matarlo y el combate no se terminaba nunca)
+func suelo_cerca(pos: Vector2) -> Vector2:
+	var p := NavigationServer2D.map_get_closest_point(get_world_2d().navigation_map, pos)
+	if zona_en(p) >= 0 and p.distance_to(pos) < CASILLA * 8:
+		return p
+	var c0 := floori(pos.x / CASILLA)
+	var f0 := floori(pos.y / CASILLA)
+	for r in range(0, maxi(cols, filas) + absi(c0) + absi(f0)):
+		var mejor := Vector2.INF
+		for f in range(f0 - r, f0 + r + 1):
+			for c in range(c0 - r, c0 + r + 1):
+				if maxi(absi(c - c0), absi(f - f0)) != r:
+					continue   # (solo el anillo de casillas a "r" de distancia)
+				var q := Vector2(c + 0.5, f + 0.5) * CASILLA
+				if hay_sitio(q) and q.distance_to(pos) < mejor.distance_to(pos):
+					mejor = q
+		if mejor != Vector2.INF:
+			return mejor
+	return Vector2.INF
+
+
 func punto_libre_en_x(x: float) -> Vector2:
 	for i in 40:
 		var pos := Vector2(x, randf_range(MURO + 30, sitio.alto - MURO - 30))

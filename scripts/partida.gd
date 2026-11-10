@@ -848,6 +848,7 @@ func _physics_process(delta: float) -> void:
 	poner_lugar()
 	if sitio.tipo == "pasillo" or sitio.limpio:
 		return
+	rescatar_atascados(delta)
 	var quedan: bool = not get_tree().get_nodes_in_group("zombis").is_empty() or (sitio.tipo == "jefe" and not jefa_salio)
 	mirar_ring(sitio)
 	# Nada más entrar, la puerta se cierra detrás de Johnny: ya no se vuelve al pasillo hasta matarlos a todos (9 nov;
@@ -1761,11 +1762,48 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 		Mancha.sangre(zombi.get_parent(), donde, randf_range(14.0, 20.0) * (1.8 if jefa else 1.0), color)
 
 
+# Red de seguridad (10 nov): un zombi (o un jefe) con el centro dentro de un muro o fuera del mapa no se puede matar, y
+# mientras quede uno la puerta no se abre y el combate no se termina. Si lleva ahí medio segundo seguido (lo normal es que
+# no pase nunca: los empujones van con move_and_slide y paran en la pared), vuelve al suelo libre más cercano y, si no
+# hay ninguno, se quita sin contarlo. Los que salen volando por el ventanal roto (meta "ventana") ya están muertos
+const ATASCADO := 0.5
+func rescatar_atascados(delta: float) -> void:
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.has_meta("ventana") or z.get("estado") == "muerto":
+			continue
+		if mapa.zona_en(z.position) >= 0:
+			if z.has_meta("atascado"):
+				z.remove_meta("atascado")
+			continue
+		var t: float = z.get_meta("atascado", 0.0) + delta
+		z.set_meta("atascado", t)
+		if t < ATASCADO:
+			continue
+		z.remove_meta("atascado")
+		var suelo: Vector2 = mapa.suelo_cerca(z.position)
+		print("Zombi atascado en ", z.position.round(), ": ", "al suelo en %s" % suelo.round() if suelo != Vector2.INF else "quitado")
+		if suelo == Vector2.INF:
+			z.remove_from_group("zombis")
+			z.queue_free()
+			continue
+		z.position = suelo
+		if "velocity" in z:
+			z.velocity = Vector2.ZERO
+		if "zona" in z:
+			z.zona = mapa.zona_en(suelo)   # (la sala por la que se mueve)
+
+
 # Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa. Con la valla del helipuerto cerrada, dentro
 # del ring (los que llama el jefe, aunque los pida cerca del borde)
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	if mapa.valla and mapa.valla.cerrada:
 		donde = mapa.a_la_plataforma(donde, 30.0)
+	# nunca dentro de un muro ni fuera del mapa (los que llama un jefe, si los pide junto a la pared): al suelo más cercano.
+	# Si no, se queda encerrado donde no se le puede matar y la puerta no se abre nunca (10 nov, la portera)
+	if mapa.zona_en(donde) < 0:
+		var suelo: Vector2 = mapa.suelo_cerca(donde)
+		if suelo != Vector2.INF:
+			donde = suelo
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
 	zombi.set_meta("tipo", tipo)   # quién es (Bestiario.de): el cartel de derrota dice quién te ha pillado
 	var de_mentira := en_pruebas()   # en la sala de pruebas no cuentan: ni se apuntan, ni sueltan nada

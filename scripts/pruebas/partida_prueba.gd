@@ -27,6 +27,9 @@
 #   --bidon             (con --jefe gloton o bombero) los bidones contra el jefe (M16): ruedan, lo atontan y
 #                       revientan en su charco; con el bombero, también contra su burbuja  [prueba_jefes_salas.gd]
 #                       (--gimnasio y --cubos, con --skin X: el tropiezo de Johnny con esa skin)
+#   --atascado          (con --jefe X; sin él, la portera) que ningún zombi se quede metido en un muro o fuera de la
+#                       sala del jefe: los que llama junto a la pared, metidos a la fuerza y empujados contra ella; y
+#                       que el combate se termina                                          [prueba_jefes.gd]
 #   --aspirar           (con --jefe gloton) su sangre ácida y lo que tira al aspirar a 3, 5, 8 y 12 casillas, normal y
 #                       enfadado                                                           [prueba_jefes.gd]
 #   --sangre            (con --jefe gloton) su sangre ácida: el chorro llega hasta donde estaba Johnny y deja allí
@@ -480,6 +483,10 @@ func empezar_prueba() -> void:
 	elif "--cocina" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_cocina()
+		get_tree().quit()
+	elif "--atascado" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_atascado()
 		get_tree().quit()
 	elif "--crios" in args:
 		set_process(false)   # sin la prueba larga

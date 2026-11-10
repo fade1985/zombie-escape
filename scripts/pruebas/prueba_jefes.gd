@@ -733,6 +733,97 @@ func ir_a_la_sala_del_jefe(tipo: String) -> bool:
 	return true
 
 
+# Con "--captura --jefe portera --atascado" (vale con cualquier --jefe de una habitación): que ningún zombi se quede metido
+# en un muro o fuera de la sala del jefe, donde no se le puede matar y el combate no se termina nunca (10 nov: un vecino
+# de la portera salió dentro del muro de abajo, junto a la puerta). En la sala de verdad, con el jefe ya fuera, mira:
+#   1. el jefe pegado a la pared de abajo, junto a la puerta, llamando a los suyos 6 veces: ninguno sale en un muro
+#   2. un zombi pedido justo dentro del muro (meter_zombi): sale en el suelo
+#   3. dos zombis metidos a la fuerza, uno dentro del muro de abajo y otro fuera del mapa: la red de seguridad
+#      (partida.rescatar_atascados) los devuelve al suelo en menos de un segundo
+#   4. dos zombis pegados a la pared de abajo y empujados contra ella con un golpe muy fuerte (el doble que una
+#      explosión): no la cruzan
+#   5. muertos todos, el combate se termina (la habitación, limpia; la puerta, abierta)
+# Cada línea dice lo esperado. Foto: captura-atascado.png (los rescatados, ya dentro, junto a la pared de abajo)
+func probar_atascado() -> void:
+	if not await ir_a_la_sala_del_jefe(Captura.dato("--jefe", "portera")):
+		return
+	johnny.set_physics_process(false)   # quieto
+	johnny.vida = 99999   # (que no lo tiren)
+	var sitio: Dictionary = planta.sitios[aqui]
+	var sala: Dictionary = sitio.apt.salas[0]
+	var abajo: float = (sala.f0 + sala.fondo) * mapa.CASILLA   # el filo de la pared de abajo
+	var puerta_x: float = (sitio.apt.entrada.c + 1) * mapa.CASILLA   # el medio de la puerta de entrada
+	johnny.position = Vector2(puerta_x, sala.f0 * mapa.CASILLA + 120.0)
+	johnny.get_node("Camara").reset_smoothing()
+	var en_muro := func() -> int:
+		return get_tree().get_nodes_in_group("zombis").filter(func(z): return mapa.zona_en(z.position) < 0).size()
+	# 1. el jefe junto a la pared de abajo, a la derecha de la puerta, llamando
+	jefa.quieto = true
+	var cuenta := {"pedidos": 0, "mal": 0}
+	jefa.pide_zombi.connect(func(_tipo, donde):
+		cuenta.pedidos += 1
+		if mapa.zona_en(donde) < 0:
+			cuenta.mal += 1)
+	for i in 6:
+		jefa.position = Vector2(puerta_x + 90.0, abajo - 30.0)
+		if jefa.has_method("llamar"):
+			jefa.llamar("normal", 4, 110.0)   # (los minijefes: Minijefe.llamar)
+		else:
+			jefa.cambiar("llamar")   # (la portera: su estado "llamar", que los saca al rato)
+			await get_tree().create_timer(1.0).timeout
+	await get_tree().physics_frame
+	print("Atascado 1 (jefe %s, junto a la pared de abajo): pedidos %d (esperado: más de 0) · pedidos dentro de un muro %d (esperado: 0) · zombis en un muro %d (esperado: 0)" % [
+		planta.jefe, cuenta.pedidos, cuenta.mal, en_muro.call()])
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != jefa:
+			z.remove_from_group("zombis")
+			z.queue_free()
+	# 2. pedido dentro del muro
+	var pedido: Node2D = meter_zombi("normal", Vector2(puerta_x + 140.0, abajo + 40.0))
+	print("Atascado 2: pedido dentro del muro, sale en el suelo %s (esperado: true)" % (mapa.zona_en(pedido.position) >= 0))
+	# 3. metidos a la fuerza: uno dentro del muro de abajo, a la derecha de la puerta, y otro fuera del mapa
+	var dentro: Node2D = meter_zombi("normal", Vector2(puerta_x + 120.0, abajo - 40.0))
+	var fuera: Node2D = meter_zombi("rapido", Vector2(puerta_x - 120.0, abajo - 40.0))
+	for z in [pedido, dentro, fuera]:
+		z.set_physics_process(false)   # (quietos: que no se vayan hacia Johnny)
+	await get_tree().physics_frame
+	dentro.position = Vector2(puerta_x + 120.0, abajo + 40.0)
+	fuera.position = Vector2(puerta_x - 120.0, abajo + mapa.CASILLA * 4)
+	var espera := 0.0
+	while espera < 1.0 and en_muro.call() > 0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	print("Atascado 3: el del muro, de vuelta en el suelo %s · el de fuera del mapa, de vuelta %s (esperado: true, true) · en %.2f s (esperado: menos de 1)" % [
+		mapa.zona_en(dentro.position) >= 0, mapa.zona_en(fuera.position) >= 0, espera])
+	johnny.position = Vector2(puerta_x, abajo - 150.0)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-atascado.png")
+	# 4. empujados contra la pared con un golpe muy fuerte (la explosión empuja 374)
+	var empujados: Array = []
+	for x in [puerta_x + 60.0, puerta_x - 200.0]:
+		empujados.append(meter_zombi("normal", Vector2(x, abajo - 24.0)))
+	await get_tree().physics_frame
+	for z in empujados:
+		z.recibir_golpe(1, Vector2(0, 800.0))
+	var cruzan := 0
+	for i in 60:
+		await get_tree().physics_frame
+		for z in empujados:
+			if is_instance_valid(z) and mapa.zona_en(z.position) < 0:
+				cruzan += 1
+	print("Atascado 4: empujados contra la pared, pasos con el centro en el muro %d · por debajo del filo %d (esperado: 0, 0)" % [
+		cruzan, empujados.filter(func(z): return is_instance_valid(z) and z.position.y > abajo).size()])
+	# 5. muertos todos: el combate se termina
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.morir()
+	espera = 0.0
+	while espera < 3.0 and not sitio.limpio:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	print("Atascado 5: muertos todos, combate terminado %s · puerta abierta %s (esperado: true, true)" % [sitio.limpio, not cerrada])
+
+
 # Con "--captura --jefe gymbro --pesas": solo lo del Gymbro de probar_gymbro (suplementos, salto y pesas), sin la prueba
 # larga, con dos fotos de las pesas que lanza (el dibujo de PixelLab, como el de las del suelo): en el aire
 # (captura-gymbro-pesas-aire.png) y ya caídas en el suelo (captura-gymbro-pesas-suelo.png)

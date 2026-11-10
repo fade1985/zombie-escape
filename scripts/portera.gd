@@ -210,7 +210,11 @@ func _physics_process(delta: float) -> void:
 				var n: int = VECINOS[fase - 1]
 				for i in n:
 					var a := float(i) / n * TAU + randf_range(-0.5, 0.5)
-					pide_zombi.emit("rapido" if i % 2 else "normal", global_position + Vector2(cos(a) * 120.0, sin(a) * 90.0))
+					var donde := global_position + Vector2(cos(a) * 120.0, sin(a) * 90.0)
+					# donde se pueda estar: si cae dentro de una pared, un mueble o fuera de la sala, al sitio libre más
+					# cercano (10 nov: junto a la pared de abajo, uno salió dentro del muro y se quedó fuera de la sala)
+					donde = NavigationServer2D.map_get_closest_point(agente.get_navigation_map(), donde)
+					pide_zombi.emit("rapido" if i % 2 else "normal", donde)
 			if t >= 1.1:
 				andar(0.6)
 		"grito":
