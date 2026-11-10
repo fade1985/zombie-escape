@@ -25,18 +25,21 @@ def guardar_json(nombre, ancho, alto):
         f.write("\n")
 
 
-def pared_y_techo(nombre, origen, techo_f, estilo="dormitorio"):
+def pared_y_techo(nombre, origen, techo_f, estilo="dormitorio", trozo_ancho=51, trozos=4, json_y_techo=True):
     # la pared: un trozo de 51 × 48 (el rodapié, las 3 filas de abajo), repetido 4 veces con el 2.º y el 4.º en espejo
     pared = Image.open(FUENTES + origen).convert("RGB")
-    trozo = reducir(pared, 51, 48)
+    trozo = reducir(pared, trozo_ancho, 48)
     espejo = trozo.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-    tira = Image.new("RGB", (204, 48))
-    for i in range(4):
-        tira.paste(trozo if i % 2 == 0 else espejo, (i * 51, 0))
-    for x in range(204):   # la última fila, más oscura, donde la pared se curva hacia el suelo
+    ancho = trozo_ancho * trozos
+    tira = Image.new("RGB", (ancho, 48))
+    for i in range(trozos):
+        tira.paste(trozo if i % 2 == 0 else espejo, (i * trozo_ancho, 0))
+    for x in range(ancho):   # la última fila, más oscura, donde la pared se curva hacia el suelo
         tira.putpixel((x, 47), tuple(int(v * 0.72) for v in tira.getpixel((x, 47))))
-    tira.save(CARPETA + "pared-" + estilo + "-" + nombre + ".png")
-    guardar_json("pared-" + estilo + "-" + nombre, 204, 48)
+    tira.save(CARPETA + "pared-" + estilo + ("-" + nombre if nombre else "") + ".png")
+    if not json_y_techo:
+        return
+    guardar_json("pared-" + estilo + ("-" + nombre if nombre else ""), 204, 48)
     # el techo: el color medio de la pared, con un degradado suave
     yeso = [tira.getpixel((x, y)) for x in range(204) for y in range(4, 30)]
     medio = tuple(sum(c[i] for c in yeso) // len(yeso) for i in range(3))
@@ -44,14 +47,15 @@ def pared_y_techo(nombre, origen, techo_f, estilo="dormitorio"):
     for y, f in enumerate(techo_f):
         for x in range(204):
             techo.putpixel((x, y), tuple(min(255, int(v * f)) for v in medio))
-    techo.save(CARPETA + "techo-" + estilo + "-" + nombre + ".png")
-    guardar_json("techo-" + estilo + "-" + nombre, 204, 6)
+    techo.save(CARPETA + "techo-" + estilo + ("-" + nombre if nombre else "") + ".png")
+    guardar_json("techo-" + estilo + ("-" + nombre if nombre else ""), 204, 6)
 
 
-def suelo(nombre, origen, recorte, lado, estilo="dormitorio"):
+def suelo(nombre, origen, recorte, lado, estilo="dormitorio", con_json=True):
     im = Image.open(FUENTES + origen).convert("RGB")
-    reducir(im.crop((0, 0, recorte, recorte)), lado, lado).save(CARPETA + "suelo-" + estilo + "-" + nombre + ".png")
-    guardar_json("suelo-" + estilo + "-" + nombre, lado, lado)
+    reducir(im.crop((0, 0, recorte, recorte)), lado, lado).save(CARPETA + "suelo-" + estilo + ("-" + nombre if nombre else "") + ".png")
+    if con_json:
+        guardar_json("suelo-" + estilo + ("-" + nombre if nombre else ""), lado, lado)
 
 
 CLARO = (0.93, 0.96, 0.99, 0.97, 0.95, 0.93)
@@ -74,4 +78,11 @@ suelo("pisos", "bano-suelo-gpt.webp", 1254, 128, "bano")
 # y tarima de roble claro; el suelo, la imagen entera, a 128. (El pasillo del portal del edificio es otro: tools/portal_gpt.py)
 pared_y_techo("gpt", "pasillo-piso-pared-gpt.webp", CLARO, "pasillopiso")
 suelo("gpt", "pasillo-piso-suelo-gpt.webp", 1254, 128, "pasillopiso")
+# trasteros del edificio (las viviendas de los supervivientes, 11 nov): chapa acanalada crema con el suelo de hormigón gris azulado; la
+# pared de las habitaciones, la del pasillo (con la franja de chapa lagrimada) y el suelo de los dos. Sustituyen a los de tools/trastero.py
+# (que sigue haciendo las puertas y la línea amarilla y no hay que volver a pasar para esto). Sin .json ni techo propios, como antes:
+# el techo-trastero.png de siempre se queda. Pared: 192 de largo, cuatro trozos de 48 (el 2.º y el 4.º en espejo).
+pared_y_techo("", "trastero-pared-gpt.webp", CLARO, "trastero", 48, 4, False)
+pared_y_techo("pasillo", "trastero-pasillo-pared-gpt.webp", CLARO, "trastero", 48, 4, False)
+suelo("", "trastero-suelo-gpt.webp", 1254, 128, "trastero", False)
 print("hecho")
