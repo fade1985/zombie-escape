@@ -1,4 +1,5 @@
-"""El científico de Velaria muerto (cientifico.gd): parte el dibujo de PixelLab en tres capas.
+"""YA NO SE USA (M14, 10 nov: el científico es de GPT, tools/cientifico_muerto_gpt.py; esta pisaría sus dibujos).
+El científico de Velaria muerto (cientifico.gd): parte el dibujo de PixelLab en tres capas.
 
 Uso:  py tools/cientifico_muerto.py
 

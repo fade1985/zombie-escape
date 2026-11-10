@@ -231,6 +231,10 @@ MUEBLES = {
     "cama_matrimonio_lado": ("assets/sources/cama-matrimonio-lado-gpt.webp", "assets/sprites/mueble-doublebed-lado.png", 70, 48, True),
     "cama_lado": ("assets/sources/cama-lado-gpt.webp", "assets/sprites/mueble-bed-lado.png", 70, 48, True),
     "mesilla_lado": ("assets/sources/mesilla-lado-gpt.webp", "assets/sprites/mueble-nightstand-lado.png", 13, 32, True, (), [(631, 417)]),
+    # la página del dosier que flota junto al científico muerto (M14, 10 nov; antes, un rectángulo pintado a mano en
+    # mapa/cientifico.gd): la hoja amarillenta con su clip y la mancha de sangre. Más grande que la de antes (10 × 13): a 12 × 16 los renglones
+    # se emborronaban y parecía una mancha marrón
+    "dosier_pagina": ("assets/sources/dosier-pagina-gpt.webp", "assets/sprites/dosier-pagina.png", 14, 19, False),
 }
 
 

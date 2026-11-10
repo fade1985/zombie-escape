@@ -1,5 +1,5 @@
 # El científico de Velaria muerto en el suelo (historia.gd): tumbado con su bata blanca manchada de sangre seca
-# (sprite de PixelLab con la piel y el pelo de su página; desde la M86 todos los que llevan página son científicos,
+# (de GPT desde la M14, tools/cientifico_muerto_gpt.py, con la piel y el pelo de su página; desde la M86 todos los que llevan página son científicos,
 # también en el centro comercial) y, a su lado, la página del dosier, que brilla y sube y baja hasta que Johnny se arrima.
 # Entonces avisa con "cogida" (la partida la enseña y la guarda). Ya cogida, el cuerpo se queda sin la página.
 extends Node2D
@@ -24,20 +24,19 @@ func montar(p: Dictionary, pos: Vector2) -> void:
 	position = pos
 	look = p.look
 	z_index = -1   # en el suelo: los que pasen por encima se ven delante
-	# el dibujo de PixelLab, en tres capas: el cuerpo, y la piel y el pelo en grises que se pintan con los
-	# colores de su página (tools/cientifico_muerto.py). La piel, apagada y grisácea: lleva tiempo muerto
+	# el dibujo (de GPT), en tres capas: el cuerpo, y la piel y el pelo en grises que se pintan con los
+	# colores de su página (tools/cientifico_muerto_gpt.py). La piel, apagada y grisácea: lleva tiempo muerto
 	capa(CUERPO, Color.WHITE)
 	capa(PIEL, Color(look.skin).lerp(Color("#969696"), 0.35))
 	capa(PELO, look.hair)
-	# la página: un papel con renglones
+	# la página: la hoja de GPT con su clip (M14; tools/muebles_gpt.py dosier_pagina), a escala 2 como los demás
+	var hoja := Sprite2D.new()
+	hoja.texture = PAGINA
+	hoja.scale = Vector2(2, 2)
+	hoja.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	papel = Node2D.new()
 	papel.position = Vector2(28, 30)
-	papel.scale = Vector2(1.4, 1.4)
-	papel.draw.connect(func():
-		papel.draw_rect(Rect2(-7, -9, 14, 18), Historia.PAPEL)
-		papel.draw_rect(Rect2(-7, -9, 14, 18), Historia.TINTA, false, 1.0)
-		for i in 4:
-			papel.draw_line(Vector2(-4, -5 + i * 4), Vector2(4, -5 + i * 4), Color(Historia.TINTA, 0.5), 1.0))
+	papel.add_child(hoja)
 	add_child(papel)
 	brillo = PointLight2D.new()
 	brillo.texture = load("res://escenas/luces/luz_suave.tres")
@@ -65,6 +64,7 @@ func _physics_process(delta: float) -> void:
 const CUERPO := preload("res://assets/sprites/cientifico-muerto.png")
 const PIEL := preload("res://assets/sprites/cientifico-muerto-piel.png")
 const PELO := preload("res://assets/sprites/cientifico-muerto-pelo.png")
+const PAGINA := preload("res://assets/sprites/dosier-pagina.png")
 
 
 # Una capa del dibujo, a escala 2 como los demás sprites, más o menos donde estaba el cuerpo dibujado a mano
