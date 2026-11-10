@@ -3114,7 +3114,9 @@ func probar_granada_pared() -> void:
 # pruebas no se pinta encima de la pared ni al otro lado (10 nov). Una foto de cada uno en su mejor momento
 # (captura-efectos-pared-<efecto>.png): la explosión, la quemadura que deja, la escarcha de la congeladora, los anillos
 # de la atraedora, el molotov al romperse y su fuego, los charcos de veneno, lejía y ácido y la sangre de un zombi que
-# muere ahí. Se cierra
+# muere ahí. Luego, contra la pared de arriba y la de abajo, una explosión y un charco y un molotov de verdad lanzado
+# hacia el otro lado (captura-efectos-pared-<arriba|abajo>-molotov.png: se rompe de este lado y su fuego se ve, cortado
+# en la pared de abajo y delante de la de arriba). Se cierra sola.
 func probar_efectos_pared() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
@@ -3216,6 +3218,21 @@ func probar_efectos_pared() -> void:
 		await get_tree().create_timer(0.15).timeout
 		Captura.foto("captura-efectos-pared-%s.png" % caso[0])
 		await get_tree().create_timer(1.0).timeout
+		limpiar.call()
+		# un molotov de verdad lanzado contra esa pared (apuntando al otro lado): se rompe de este lado y su fuego se ve
+		var lejos: Vector2 = caso[1] + Vector2(0, -200 if caso[0] == "arriba" else 200)
+		var p: Node2D = Lanzables.PROYECTIL.instantiate()
+		p.tipo = "molotov"
+		p.desde = caso[1] + Vector2(0, 120 if caso[0] == "arriba" else -120)
+		p.hasta = lejos
+		sitio_de.add_child(p)
+		while is_instance_valid(p):
+			await get_tree().physics_frame
+		await get_tree().create_timer(0.6).timeout
+		for c in get_tree().get_nodes_in_group("charcos"):
+			print("Molotov contra la pared de %s: charco %s en y %d (pared en y %d)" % [caso[0], c.tipo, c.global_position.y, arriba if caso[0] == "arriba" else abajo])
+		Captura.foto("captura-efectos-pared-%s-molotov.png" % caso[0])
+		await get_tree().create_timer(0.5).timeout
 		limpiar.call()
 	get_tree().quit()
 
