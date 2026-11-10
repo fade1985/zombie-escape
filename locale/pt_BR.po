@@ -3046,6 +3046,10 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "Estão te esperando lá em cima, no heliponto: suba pela rampa"
 
 #: scripts/partida.gd
+msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
+msgstr "ACHO MELHOR INVESTIGAR MAIS UM POUCO!"
+
+#: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Aguente: ainda estão forçando a fechadura"
 
@@ -4874,6 +4878,26 @@ msgstr "Tirá-los do baú gasta uma partida; se não restava nenhuma, se destroe
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
 msgstr "Ao terminar a partida, completando o prédio ou caindo, o que você leva com partidas pela frente volta sozinho para o baú. Escolha uma casa ou arraste-a para passá-la."
+
+#: scripts/tutoriales.gd
+msgid "Los trasteros"
+msgstr "Os depósitos"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en los trasteros"
+msgstr "Ao entrar nos depósitos"
+
+#: scripts/tutoriales.gd
+msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
+msgstr "Aqui moram os sobreviventes que você resgatar, cada um no seu depósito."
+
+#: scripts/tutoriales.gd
+msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
+msgstr "Em cada partida há um trancado em algum andar: dá para ouvi-lo pedir socorro e aparece um «!» no minimapa. Limpe esse apartamento, vá até ele e proteja-o até tirá-lo de lá."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
+msgstr "Se você completar o prédio com ele na equipe, ele se muda para cá. Chegue perto de um dos que moram aqui e ele vai te acompanhar nas próximas partidas (só um de cada vez)."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

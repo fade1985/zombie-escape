@@ -1302,6 +1302,85 @@ func probar_sala() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --marcas-sala": los «!» de la sala de mantenimiento en la primera partida (mapa.marcas_sala). Al
+# empezar, los cinco a la vista (captura-marcas-sala.png); la puerta del pasillo no deja salir y Johnny dice
+# «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» (captura-marcas-no-sale.png), sin flecha de la guía. Luego abre la taquilla,
+# el banco y el baúl (cada uno, su tutorial; el del banco en captura-marcas-tutorial-banco.png) y el ordenador, cuyo
+# «!» sigue mientras haya algo nuevo dentro; entra en los trasteros (su tutorial nuevo: captura-marcas-trasteros.png) y
+# vuelve. Sin ningún «!», sale la flecha (captura-marcas-flecha.png) y ya se sale al pasillo. Luego se cierra
+func probar_marcas_sala() -> void:
+	var nombres := ["taquilla", "ordenador", "banco", "baúl", "trasteros"]
+	var activas := func() -> String:
+		var lista := []
+		for i in mapa.marcas_sala.size():
+			mapa.marcas_sala[i].refrescar()
+			if mapa.marcas_sala[i].activa:
+				lista.append(nombres[i])
+		return ", ".join(lista) if not lista.is_empty() else "ninguno"
+	await get_tree().create_timer(1.2).timeout
+	print("Guía activa: %s · «!» en la sala: %s (esperado: true; los cinco)" % [guia.activa, activas.call()])
+	johnny.direccion = "s"
+	Captura.foto("captura-marcas-sala.png")
+	await cruzar(0)
+	await get_tree().create_timer(0.3).timeout
+	print("Al ir al pasillo: sigue en «%s» · flecha %s (esperado: mantenimiento, false)" % [planta.sitios[aqui].tipo,
+		guia.flecha.visible])
+	Captura.foto("captura-marcas-no-sale.png")
+	# la taquilla, el banco y el baúl, como con el clic: sale su tutorial y, al cerrarlo, su pantalla
+	await usar_con_tutorial(abrir_taquilla, taquilla.cerrar, "taquilla")
+	await usar_con_tutorial(abrir_cosas.bind("banco"), inventario.cerrar, "banco", "captura-marcas-tutorial-banco.png")
+	await usar_con_tutorial(abrir_cosas.bind("baul"), inventario.cerrar, "baul")
+	await usar_con_tutorial(abrir_ordenador, ordenador.apagar, "ordenador")
+	print("Tras abrir taquilla, banco, baúl y ordenador, «!»: %s (esperado: ordenador, trasteros: aún hay algo nuevo dentro)" % activas.call())
+	Guardado.cambiar(func(g): g.colecciones_nuevo = false)   # (como si se hubiera entrado en Colecciones)
+	print("Visto lo nuevo del ordenador, «!»: %s (esperado: trasteros)" % activas.call())
+	await cruzar(0)
+	print("Al ir al pasillo otra vez: sigue en «%s» (esperado: mantenimiento)" % planta.sitios[aqui].tipo)
+	# los trasteros: al entrar, su tutorial
+	await cruzar(1)
+	await get_tree().create_timer(1.0).timeout
+	var ventana := ventana_tutorial()
+	print("En «%s»: tutorial «%s» (esperado: viviendas, trasteros)" % [planta.sitios[aqui].tipo, ventana.id if ventana else "ninguno"])
+	Captura.foto("captura-marcas-trasteros.png")
+	if ventana:
+		ventana.cerrar()
+	await get_tree().create_timer(0.4).timeout
+	await cruzar(0)
+	await get_tree().create_timer(1.2).timeout
+	print("De vuelta en «%s», «!»: %s · falta algo: %s · flecha %s (esperado: mantenimiento, ninguno, false, true)" % [
+		planta.sitios[aqui].tipo, activas.call(), falta_sala(), guia.flecha.visible])
+	Captura.foto("captura-marcas-flecha.png")
+	for i in mini(planta.sitios[aqui].salidas.size(), mapa.puertas.size()):
+		if planta.sitios[aqui].salidas[i].get("a", -1) == 0:
+			await cruzar(i)
+	print("Por la puerta del pasillo: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
+	get_tree().quit()
+
+
+# De probar_marcas_sala: abre algo de la sala como con el clic, cuenta qué tutorial sale (y le saca su foto), lo cierra
+# y cierra la pantalla que se abre detrás
+func usar_con_tutorial(abrir: Callable, cerrar: Callable, id: String, foto := "") -> void:
+	abrir.call()
+	await get_tree().create_timer(0.5).timeout
+	var ventana := ventana_tutorial()
+	print("Al abrir: tutorial «%s» (esperado: %s)" % [ventana.id if ventana else "ninguno", id])
+	if foto != "":
+		Captura.foto(foto)
+	if ventana:
+		ventana.cerrar()
+	await get_tree().create_timer(0.4).timeout
+	cerrar.call()
+	await get_tree().create_timer(0.3).timeout
+
+
+# La ventana de tutorial abierta (ui/tutorial.gd), o null
+func ventana_tutorial() -> Tutorial:
+	for h in get_children():
+		if h is Tutorial and not h.is_queued_for_deletion():
+			return h
+	return null
+
+
 # De probar_sala: los muebles ya no se abren solos al arrimarse (zona_usar.gd). Delante de cada uno, sin pulsar nada,
 # no se abre; con un clic izquierdo se abre, y Johnny (en el modo libre) no dispara. Lejos de los
 # muebles, el clic vuelve a disparar. En el móvil, delante de un mueble sale el botón «Abrir» y tocarlo lo abre. Las

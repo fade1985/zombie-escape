@@ -15,6 +15,7 @@ const HONDO := 44.0
 
 var zona: Area2D      # la de delante (zona_usar.gd)
 var brillo: PointLight2D
+var marca: Node2D    # el «!» de encima (mapa.marcas_sala lo mira)
 var t := 0.0
 
 
@@ -30,10 +31,11 @@ func montar(x: float, arriba: float) -> void:
 	var tam := sprite.texture.get_size()
 	sprite.offset = Vector2(-floorf(tam.x / 2.0), -tam.y)
 	add_child(sprite)
-	# un «!» que bota encima mientras haya algo nuevo en ConserjeOS (L11)
-	var marca := EXCLAMACION.new()
+	# un «!» que bota encima mientras haya algo nuevo en ConserjeOS (L11) o no se haya visto su tutorial (Tutoriales.marca):
+	# no se quita hasta que no queda nada nuevo dentro
+	marca = EXCLAMACION.new()
 	marca.name = "Exclamacion"
-	marca.condicion = func() -> bool: return not novedades(Guardado.cargar()).is_empty()
+	marca.condicion = func() -> bool: return Tutoriales.marca("ordenador") or not novedades(Guardado.cargar()).is_empty()
 	marca.position = Vector2(0, -tam.y * 2.0 - 30.0)
 	add_child(marca)
 

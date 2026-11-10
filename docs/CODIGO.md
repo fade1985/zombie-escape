@@ -434,15 +434,19 @@ en una línea.
   (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste «Tutoriales: Sí/No» (abajo en la lista de Tutorial, con «Que vuelvan a salir todos»). Cada uno sale una sola vez: los
   pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
   mutación sacan el suyo antes de abrirse; las vendas sacan «curas» y el botiquín, «botiquin», el suyo aparte
-  y fuera de la guía, que solo enseña las vendas: M62), `eventos.gd`, `supervivientes.gd` y el menú (el de la alerta). Se prueba
-  con `--tutorial`.
+  y fuera de la guía, que solo enseña las vendas: M62; el de los trasteros, al entrar en las viviendas), `eventos.gd`,
+  `supervivientes.gd` y el menú (el de la alerta). Se prueba con `--tutorial`. `marca(id)` dice si va un «!» encima del
+  mueble de la sala de mantenimiento que enseña ese tutorial (taquilla, ordenador, banco, baúl y la puerta de los
+  trasteros: `mapa.marcas_sala`); `marcas` los apaga en la partida de prueba (salvo `--marcas-sala`).
 - `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
   encendidos): en vez de las ventanas de `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: moverse,
   esquivar, atacar, sacar la pistola, recargar, curarse, lanzar y el jefe), la casilla del HUD que late (`hud.latido`),
   una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la llave y un primer apartamento
   fácil (3 zombis, sin la llave, vendas en el armarito). Lo enseñado se apunta como visto nada más salir la pista, se
   haga o no: tras morir en la primera partida, la siguiente no repite con ventanas lo que ya salió (solo sacará lo que
-  la guía no llegó a enseñar). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
+  la guía no llegó a enseñar). Con la guía, no se sale de la sala de mantenimiento al pasillo mientras quede algún «!»
+  en ella (`partida.falta_sala`: Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» y no sale la flecha; se prueba
+  con `--marcas-sala`). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
   apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`. La
   ventana de los tercios sí sale con la guía, al perder el primero (M35; `--guiado --tercios`).
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos; la horda dura 1 minuto de cerradura con unos 150 zombis en grupos cada vez más seguidos y por tramos de 20 s, `HORDA` y `TIPOS`, M40) y `aliado.gd` (cada superviviente que te
@@ -725,7 +729,8 @@ en una línea.
   vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
   no dibuja). Se prueba con `--salida`.
 - `cara_pared.gd`, `neon.gd` (el letrero de neón de las tiendas y el rótulo iluminado de los departamentos de la torre), `ventanal.gd` (el ventanal con la ciudad de noche del pasillo de la torre); `tele_salon.gd` (M91: la tele de un salón que enseña las noticias, ver abajo), `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`, `zona_usar.gd` (la zona de delante de esos muebles: con Johnny en ella, se abren con atacar; `johnny.ante_mueble` hace que ese clic no dispare),
-  `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo; se
+  `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo, y encima
+  del banco, el baúl y la puerta de los trasteros mientras no se haya visto su tutorial; se
   pone con una `condicion` y se mira cada segundo; su dibujo, de GPT, `assets/sprites/exclamacion.png`, y el pequeño de los
   iconos del escritorio y de Logros, `assets/ui/exclamacion-pequena.png`, los dos de `tools/muebles_gpt.py`)
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `terminal.gd` (los ordenadores con

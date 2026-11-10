@@ -3046,6 +3046,10 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "Il t'attend en haut, sur l'héliport : monte par la rampe"
 
 #: scripts/partida.gd
+msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
+msgstr "JE FERAIS MIEUX DE FOUILLER UN PEU PLUS !"
+
+#: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Tiens bon : le crochetage n'est pas fini"
 
@@ -4874,6 +4878,26 @@ msgstr "Les sortir du coffre coûte une partie ; s'il ne leur en restait aucune,
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
 msgstr "À la fin de la partie, que tu termines l'immeuble ou que tu tombes, ce que tu portes et qui a encore des parties retourne tout seul au coffre. Choisis une case ou fais-la glisser pour la déplacer."
+
+#: scripts/tutoriales.gd
+msgid "Los trasteros"
+msgstr "Les caves"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en los trasteros"
+msgstr "En entrant dans les caves"
+
+#: scripts/tutoriales.gd
+msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
+msgstr "Ici vivent les survivants que tu sauves, chacun dans sa cave."
+
+#: scripts/tutoriales.gd
+msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
+msgstr "À chaque partie, l'un d'eux est enfermé à un étage : on l'entend appeler au secours et un «!» apparaît sur la mini-carte. Nettoie cet appartement, va le chercher et protège-le jusqu'à la sortie."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
+msgstr "Si tu termines le bâtiment avec lui dans l'équipe, il s'installe ici. Approche-toi de l'un de ceux qui vivent ici et il t'accompagnera lors des parties suivantes (un seul à la fois)."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

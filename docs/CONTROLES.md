@@ -163,6 +163,10 @@ empujando (`mapa/puerta_bano.gd`; `-- --captura --puertas`). La de lado, abierta
 y se cierra también junto a su parte de arriba. Si Johnny está delante de dos cosas a la vez (la puerta del taller y el
 banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
 
+- **Los «!» de la primera vez:** la taquilla, el ordenador, el banco, el baúl y la puerta de los trasteros llevan un «!»
+  hasta que se abren (o se entra) y sale su tutorial; el del ordenador sigue mientras haya algo nuevo dentro. En la
+  primera partida no se sale al pasillo hasta quitarlos todos (Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!») y
+  después sale la flecha de la guía. Con los tutoriales apagados no hay «!».
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Vídeos y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,

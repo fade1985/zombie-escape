@@ -146,6 +146,7 @@ var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de man
 var baul: Node2D = null          # y el baúl y el banco de trabajo
 var banco: Node2D = null
 var taquilla: Node2D = null      # y la taquilla de las skins de Johnny (skins.gd)
+var marcas_sala: Array = []      # los «!» de la sala de mantenimiento: taquilla, ordenador, banco, baúl y trasteros (partida.falta_sala)
 var tele_salon: Node2D = null     # la tele de este sitio que enseña las noticias, si es la de su planta (tele_salon.gd)
 var armaritos: Array = []        # los armaritos con botiquín de los baños (armarito.gd)
 # La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
@@ -907,11 +908,23 @@ func poner_muebles() -> void:
 		taquilla = ARRIMABLE.new()   # la de las skins de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
 		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", TAQUILLA_X, MURO, 56.0, 36.0)
 		cosas.add_child(taquilla)
-		var marca_skin := EXCLAMACION.new()   # (hasta que se abra la taquilla con una skin nueva: Skins.desbloquear)
-		marca_skin.name = "Exclamacion"
-		marca_skin.condicion = func() -> bool: return Guardado.cargar().skins_nuevo
-		marca_skin.position = Vector2(0, -load("res://assets/sprites/taquilla.png").get_height() * 2.0 - 30.0)
-		taquilla.add_child(marca_skin)
+		# Los «!» de la sala: encima de lo que tiene un tutorial sin ver (Tutoriales.marca), para que el que empieza vaya a
+		# abrirlo todo (en su primera partida no sale al pasillo hasta quitarlos: partida.falta_sala). La taquilla lo
+		# lleva también con una skin sin ver (hasta que se abra: Skins.desbloquear); el del ordenador es el suyo
+		# (mapa/ordenador.gd), que sale también con novedades dentro
+		var marca_skin := marca_encima(taquilla, "res://assets/sprites/taquilla.png",
+			func() -> bool: return Tutoriales.marca("taquilla") or Guardado.cargar().skins_nuevo)
+		marcas_sala = [marca_skin, ordenador.marca,
+			marca_encima(banco, "res://assets/sprites/banco-trabajo.png", Tutoriales.marca.bind("banco")),
+			marca_encima(baul, "res://assets/sprites/baul.png", Tutoriales.marca.bind("baul"))]
+		# y encima de la puerta de los trasteros (la de la derecha: las viviendas), hasta entrar (partida.montar)
+		if sitio.salidas.size() > 1 and puertas.size() > 1:
+			var marca_trasteros := EXCLAMACION.new()
+			marca_trasteros.name = "ExclamacionTrasteros"
+			marca_trasteros.condicion = Tutoriales.marca.bind("trasteros")
+			marca_trasteros.position = puertas[1].position + Vector2(2, -54)
+			cosas.add_child(marca_trasteros)
+			marcas_sala.append(marca_trasteros)
 		# el corcho del despacho, colgado en la cara del muro de arriba (en su pie, como los escaparates de la galería,
 		# para ordenarse con ella), con su borde de abajo a media pared
 		var corcho := Node2D.new()
@@ -933,6 +946,16 @@ func poner_muebles() -> void:
 # Las puertas de dentro de los pisos, las tiendas y la sala de mantenimiento (puerta_bano.gd con "libre"): una en cada
 # hueco entre habitaciones, cerrada hasta que alguien la abre. Menos en los cerrados con llave (el baño del superviviente
 # y la cámara acorazada): esas las ponen supervivientes.gd y joyeria.gd
+# Un «!» (exclamacion.gd) encima de un mueble de la sala, que se ve mientras "condicion" diga que sí
+func marca_encima(mueble: Node2D, dibujo: String, condicion: Callable) -> Node2D:
+	var marca := EXCLAMACION.new()
+	marca.name = "Exclamacion"
+	marca.condicion = condicion
+	marca.position = Vector2(0, -load(dibujo).get_height() * 2.0 - 30.0)
+	mueble.add_child(marca)
+	return marca
+
+
 func poner_hojas() -> void:
 	for d in sitio.apt.puertas:
 		if d.get("cerrada", false):

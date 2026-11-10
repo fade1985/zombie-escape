@@ -30,6 +30,22 @@ func preparar_prueba() -> void:
 		var lentos := preload("res://scripts/pruebas/lentos.gd").new()
 		lentos.partida = self
 		add_child(lentos)
+	# con "--marcas-sala", los «!» de la sala de mantenimiento en la primera partida (prueba_sitios.gd, probar_marcas_sala):
+	# con la guía y todos los tutoriales sin ver, y algo nuevo dentro del ordenador
+	if "--marcas-sala" in OS.get_cmdline_user_args():
+		guiado_prueba = true
+		tutoriales_prueba = true
+		Tutoriales.marcas = true
+		Tutoriales.olvidar()
+		Guardado.cambiar(func(g):
+			g.partidas = 4   # (como en --guiado: la guía sale por «Que vuelvan a salir todos»)
+			g.guia_otra_vez = true
+			g.ajustes.tutoriales = true
+			g.skins_nuevo = false
+			g.colecciones_nuevo = true   # (su «!» no se quita hasta verlo)
+			for l in g.logros:
+				if g.logros[l] == "conseguido":
+					g.logros[l] = "cobrado")
 	# con "--guiado", la guía de la primera partida (guia.gd; prueba_varias.gd, probar_guiado): como si fuera la primera
 	if "--guiado" in OS.get_cmdline_user_args():
 		guiado_prueba = true

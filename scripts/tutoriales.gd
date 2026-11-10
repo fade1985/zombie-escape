@@ -120,6 +120,11 @@ const LISTA := {
 		"lineas": ["Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres.",
 			"Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar.",
 			"Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."]},
+	"trasteros": {"grupo": "Sala de mantenimiento", "titulo": "Los trasteros", "icono": "medico",
+		"cuando": "Al entrar en los trasteros",
+		"lineas": ["Aquí viven los supervivientes que rescates, cada uno en su trastero.",
+			"En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo.",
+			"Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."]},
 	"centro": {"grupo": "Más edificios", "titulo": "El centro comercial", "icono": "centro",
 		"cuando": "Al llegar al centro comercial",
 		"lineas": ["La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda.",
@@ -163,6 +168,10 @@ const TACTIL := {
 
 static var vistos: Array = []   # los ya vistos: copia de Guardado "tutoriales", que se mira a menudo (mirar_tutoriales)
 static var vistos_de := ""      # de qué archivo son (la prueba con --captura usa otro)
+# Los «!» de la sala de mantenimiento (mapa.gd, mapa/ordenador.gd) encima de lo que tiene un tutorial sin ver: la taquilla,
+# el ordenador, el banco, el baúl y la puerta de los trasteros. En la partida de prueba no salen (partida.gd lo apaga),
+# salvo en la suya (--marcas-sala), para que no cambien las fotos de las demás
+static var marcas := true
 
 
 static func visto(id: String) -> bool:
@@ -175,6 +184,11 @@ static func visto(id: String) -> bool:
 # Si hay que enseñarlo ahora: aún no se ha visto y los tutoriales están encendidos (Opciones → Ayudas)
 static func toca(id: String) -> bool:
 	return Guardado.ajuste("tutoriales") and not visto(id)
+
+
+# Si va el «!» encima del mueble que enseña este tutorial (ver "marcas")
+static func marca(id: String) -> bool:
+	return marcas and toca(id)
 
 
 static func apuntar(id: String) -> void:

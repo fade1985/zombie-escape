@@ -3042,6 +3042,10 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "首领在楼顶停机坪等着你：走坡道上去"
 
 #: scripts/partida.gd
+msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
+msgstr "我觉得还是再四处看看吧！"
+
+#: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "撑住：还在撬锁"
 
@@ -4864,6 +4868,26 @@ msgstr "从储物箱取出会消耗一局；如果已经没有剩余局数，本
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
 msgstr "本局结束时，无论通关还是倒下，你身上还有剩余局数的东西都会自动回到储物箱。选择一格或拖动它来移动。"
+
+#: scripts/tutoriales.gd
+msgid "Los trasteros"
+msgstr "储藏室"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en los trasteros"
+msgstr "进入储藏室时"
+
+#: scripts/tutoriales.gd
+msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
+msgstr "你救出的幸存者住在这里，每人一间储藏室。"
+
+#: scripts/tutoriales.gd
+msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
+msgstr "每一局都有一个人被困在某层楼里：能听到他喊救命，小地图上也会出现“!”。清理那间公寓，去找到他，保护他直到把他带出去。"
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
+msgstr "如果你带着他通关大楼，他就会搬到这里。走到住在这里的某个人身边，他就会在之后几局陪你一起出发（一次只能带一个）。"
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

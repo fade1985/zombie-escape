@@ -3050,6 +3050,10 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "Ждет тебя наверху, на вертолетной площадке: поднимайся по пандусу"
 
 #: scripts/partida.gd
+msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
+msgstr "ПОЖАЛУЙ, ОСМОТРЮСЬ ЕЩЁ НЕМНОГО!"
+
+#: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Держись: замок еще не взломан"
 
@@ -4884,6 +4888,26 @@ msgstr "Взять из сундука — значит потратить за�
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
 msgstr "В конце забега, зачистил ты здание или пал, всё, у чего остались забеги, само вернётся в сундук. Выбери ячейку или перетащи её, чтобы переложить."
+
+#: scripts/tutoriales.gd
+msgid "Los trasteros"
+msgstr "Кладовки"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en los trasteros"
+msgstr "Когда заходишь в кладовки"
+
+#: scripts/tutoriales.gd
+msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
+msgstr "Здесь живут спасённые тобой выжившие, каждый в своей кладовке."
+
+#: scripts/tutoriales.gd
+msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
+msgstr "В каждом забеге кто-то заперт на одном из этажей: слышно, как он зовёт на помощь, а на миникарте появляется «!». Зачисти эту квартиру, доберись до него и защищай, пока не выведешь."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
+msgstr "Если пройдёшь здание вместе с ним, он переедет сюда. Подойди к одному из живущих здесь, и он пойдёт с тобой в следующих забегах (только один за раз)."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

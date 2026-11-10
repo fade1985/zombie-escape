@@ -311,7 +311,7 @@ func mover_flecha() -> void:
 	flecha.rotation = dir.angle()
 
 
-# La puerta a la que lleva la flecha: en la sala de mantenimiento, la del pasillo (si no hay zombis); en el pasillo,
+# La puerta a la que lleva la flecha: en la sala de mantenimiento, la del pasillo (si no hay zombis y ya no queda ningún «!»); en el pasillo,
 # las escaleras con el jefe caído, la sala del jefe con la llave, o el apartamento sin limpiar más cercano (el fácil,
 # antes que ninguno)
 func destino() -> Node2D:
@@ -319,6 +319,8 @@ func destino() -> Node2D:
 	var sitio: Dictionary = planta.sitios[partida.aqui]
 	var puertas: Array = partida.mapa.puertas
 	if sitio.tipo == "mantenimiento":
+		if partida.falta_sala():
+			return null   # (mientras quede algún «!» en la sala, no se sale: partida.falta_sala)
 		for i in sitio.salidas.size():
 			if sitio.salidas[i].get("a", -1) == 0 and i < puertas.size():
 				return puertas[i]

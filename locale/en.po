@@ -3046,6 +3046,10 @@ msgid "Te espera arriba, en el helipuerto: sube por la rampa"
 msgstr "They're waiting up on the helipad: take the ramp"
 
 #: scripts/partida.gd
+msgid "¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"
+msgstr "I'D BETTER LOOK AROUND A BIT MORE!"
+
+#: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Hold on: they're still working on the lock"
 
@@ -4874,6 +4878,26 @@ msgstr "Taking them out of the stash uses up a run; if they had none left, they 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
 msgstr "When the run ends, whether you clear the building or fall, everything you carry with runs left goes back to the stash on its own. Pick a slot or drag it to move it."
+
+#: scripts/tutoriales.gd
+msgid "Los trasteros"
+msgstr "The storage rooms"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en los trasteros"
+msgstr "On entering the storage rooms"
+
+#: scripts/tutoriales.gd
+msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
+msgstr "The survivors you rescue live here, each in their own storage room."
+
+#: scripts/tutoriales.gd
+msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
+msgstr "Every run, one is locked up on some floor: you'll hear them calling for help, and a «!» shows on the minimap. Clear that apartment, go get them and protect them until you're out."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
+msgstr "Complete the building with them on the team and they move in here. Walk up to one who lives here and they'll join you on the next runs (only one at a time)."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

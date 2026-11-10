@@ -261,6 +261,7 @@ func _ready() -> void:
 
 	guarda_partida = not captura
 	guarda_mapas = not captura
+	Tutoriales.marcas = not captura   # (los «!» de la sala de mantenimiento: en la partida de prueba, solo en la suya)
 	if captura:
 		preparar_prueba()   # el guardado de prueba, la alerta y el evento que se piden
 	# «Continuar partida» del menú: la partida a medias, al principio de la planta en la que iba (partida_guardada.gd)
@@ -543,6 +544,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	actualizar_puertas()
 	poner_lugar()
 	guia.al_montar()
+	if sitio.tipo == "viviendas":
+		tutorial("trasteros")   # (cómo van los supervivientes: el «!» de su puerta en la sala de mantenimiento)
 	if sitio.get("peligros", []).any(func(p): return p.tipo in ["frio", "fuego", "agua"]):
 		tutorial("peligros")   # (la cámara frigorífica, la cocina o el agua de las tiendas del centro comercial)
 	elif sitio.get("peligros", []).any(func(p): return p.tipo in ["viento", "camaras", "gas"]):
@@ -627,6 +630,13 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 	poner_terminales(idx)
 	for puerta in mapa.puertas:
 		puerta.empujada.connect(cruzar)
+
+
+# En la primera partida (la de la guía, guia.gd) no se sale de la sala de mantenimiento al pasillo mientras quede alguno
+# de sus «!» (mapa.marcas_sala: la taquilla, el ordenador, el banco, el baúl y la puerta de los trasteros), para que el
+# que empieza lo abra todo y lea sus tutoriales. Hasta entonces, tampoco sale la flecha de la guía (guia.destino)
+func falta_sala() -> bool:
+	return guia.activa and mapa != null and planta.sitios[aqui].tipo == "mantenimiento" 		and mapa.marcas_sala.any(func(m): return m.activa)
 
 
 # Se vuelve a un sitio: su mapa guardado, otra vez a la escena, y el jefe, si se quedó dentro (con su barra de vida)
@@ -720,6 +730,14 @@ func cruzar(i: int) -> void:
 		return   # de la sala de pruebas no se sale por la puerta (para no salir sin querer): solo con F9
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
+	if sitio.tipo == "mantenimiento" and salida.tipo == "puerta" and salida.get("a", -1) == 0 and guia.activa:
+		for marca in mapa.marcas_sala:
+			marca.refrescar()   # (por si se acaba de cerrar un tutorial: se miran cada segundo)
+		if falta_sala():
+			# (como el de «¡¡¡LA LLAVE!!!», pero por encima del letrero de la guía y más rato, que es más larga)
+			gran_aviso(Idioma.t("¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!"), Tema.AMARILLO, 160.0, 2.2)
+			Sonido.tocar("no")
+			return
 	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable
 	if arreglo == "":
 		arreglo = supervivientes.copia.no_cruzar()   # el informático joven, copiando los archivos
@@ -1058,10 +1076,11 @@ func abrir_tele() -> void:
 
 # Un grito grande encima de Johnny, como el de «¡¡¡LA LLAVE!!!», para lo que no hay que perderse (lo nuevo en el ordenador,
 # un logro, una skin): letra de 32, amarilla, que sube y se apaga en 1,4 s. Va además del aviso de abajo, que se lee peor
-func gran_aviso(texto: String, color := Tema.AMARILLO) -> void:
+# ("alto": lo que sube por encima de Johnny; "dura": lo que tarda en irse, más en una frase larga)
+func gran_aviso(texto: String, color := Tema.AMARILLO, alto := 110.0, dura := 1.4) -> void:
 	if johnny == null or not johnny.is_inside_tree():
 		return
-	Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(0, -110), texto, color, 32, true, 1.4)
+	Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(0, -alto), texto, color, 32, true, dura)
 
 
 func _al_coger_llave() -> void:
