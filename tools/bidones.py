@@ -9,8 +9,9 @@ from collections import deque
 from PIL import Image, ImageDraw
 
 RAIZ = os.path.join(os.path.dirname(__file__), "..")
-# de pie, 22 de ancho; tumbado, 30 (en píxeles del dibujo); el alto, según la imagen
-ANCHO = {"": 22, "-tumbado": 30}
+# de pie, 18 de ancho; tumbado, 32 (en píxeles del dibujo; así mide lo mismo de largo que de alto de pie, y no queda
+# tan alto como Johnny); el alto, según la imagen
+ANCHO = {"": 18, "-tumbado": 32}
 # los colores del provisional: cuerpo, sombra, aros, luz, y lo que lleva en medio (la etiqueta) y lo que chorrea
 COLORES = {
     "fuego": {"cuerpo": (176, 38, 34), "sombra": (110, 22, 24), "aro": (82, 18, 20), "luz": (222, 86, 64),
