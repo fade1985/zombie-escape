@@ -7064,14 +7064,6 @@ msgstr ""
 "Erfolge\n"
 "ABHOLEN!"
 
-#: scripts/ui/ordenador.gd
-msgid ""
-"Tienda\n"
-"¡REGALO!"
-msgstr ""
-"Laden\n"
-"GESCHENK!"
-
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
 msgstr "Tippe auf den Bildschirm, um fortzufahren"

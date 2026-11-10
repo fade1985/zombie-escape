@@ -53,9 +53,10 @@ const TIENDA := preload("res://scripts/ui/tienda_armas.gd")   # la tienda de arm
 const ARCHIVADOR := preload("res://scripts/ui/archivador_logros.gd")   # los logros (LOGROS.EXE)
 const CARPETA_DOSIER := preload("res://scripts/ui/carpeta_dosier.gd")   # el dosier (DOSIER.TXT)
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
-# El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
+# El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo). La tienda de armas, con el
+# regalo de bienvenida, no está: su rótulo se queda como siempre y solo lleva el «!» (10 nov)
 # [traducir]
-const AVISO_ICONO := {"colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!", "armas": "Tienda\n¡REGALO!"}
+const AVISO_ICONO := {"colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!"}
 # [/traducir]
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -128,17 +129,17 @@ func poner_aviso(b: Button, icono: Array, nuevo: bool) -> void:
 	var programa: String = icono[0]
 	var rotulo: Label = b.find_child("rotulo_" + programa, true, false)
 	var marca := b.get_node_or_null("marca_nuevo")
-	if nuevo:
+	if nuevo and AVISO_ICONO.has(programa):
 		rotulo.text = Idioma.t(AVISO_ICONO[programa])
 		rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
-		if marca == null:
-			b.add_child(marca_nuevo())
 	else:
 		rotulo.text = Idioma.t(icono[2])
 		rotulo.remove_theme_color_override("font_color")
-		if marca:
-			b.remove_child(marca)
-			marca.queue_free()
+	if nuevo and marca == null:
+		b.add_child(marca_nuevo())
+	elif not nuevo and marca:
+		b.remove_child(marca)
+		marca.queue_free()
 
 
 # Pone al día los avisos de los iconos con lo que dice el guardado ahora: así se quitan en cuanto se mira o se cobra lo

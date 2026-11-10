@@ -7064,14 +7064,6 @@ msgstr ""
 "Conquistas\n"
 "RESGATAR!"
 
-#: scripts/ui/ordenador.gd
-msgid ""
-"Tienda\n"
-"¡REGALO!"
-msgstr ""
-"Loja\n"
-"PRESENTE!"
-
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
 msgstr "Toque na tela para continuar"

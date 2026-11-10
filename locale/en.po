@@ -7064,14 +7064,6 @@ msgstr ""
 "Achievements\n"
 "CLAIM!"
 
-#: scripts/ui/ordenador.gd
-msgid ""
-"Tienda\n"
-"¡REGALO!"
-msgstr ""
-"Shop\n"
-"GIFT!"
-
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
 msgstr "Tap the screen to continue"

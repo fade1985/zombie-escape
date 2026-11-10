@@ -7064,14 +7064,6 @@ msgstr ""
 "Succès\n"
 "À ENCAISSER !"
 
-#: scripts/ui/ordenador.gd
-msgid ""
-"Tienda\n"
-"¡REGALO!"
-msgstr ""
-"Boutique\n"
-"CADEAU !"
-
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
 msgstr "Touche l'écran pour continuer"

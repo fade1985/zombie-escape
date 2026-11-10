@@ -7042,14 +7042,6 @@ msgstr ""
 "成就\n"
 "可领取！"
 
-#: scripts/ui/ordenador.gd
-msgid ""
-"Tienda\n"
-"¡REGALO!"
-msgstr ""
-"商店\n"
-"礼物！"
-
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
 msgstr "点击屏幕继续"

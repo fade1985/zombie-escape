@@ -7086,14 +7086,6 @@ msgstr ""
 "Достижения\n"
 "ЗАБРАТЬ!"
 
-#: scripts/ui/ordenador.gd
-msgid ""
-"Tienda\n"
-"¡REGALO!"
-msgstr ""
-"Магазин\n"
-"ПОДАРОК!"
-
 #: scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
 msgstr "Коснись экрана, чтобы продолжить"
