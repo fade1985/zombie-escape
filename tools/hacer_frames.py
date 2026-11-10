@@ -11,6 +11,7 @@ ESTADOS = {"walk": "andar", "idle": "reposo", "attack": "ataque", "hurt": "golpe
            "fx": "efectos",   # "efectos": fogonazo, humo y casquillo del disparo, para pintarlos encima al andar
            "fall": "caer",   # "caer": el superviviente se desploma y se queda tumbado (tools/superviviente.py), y el tropiezo de Johnny (tools/caida.py)
            "getup": "levantarse",   # y Johnny se levanta (tools/caida.py)
+           "forzar": "forzar",   # "forzar": agachada con la ganzúa en la cerradura (solo al sur y al norte)
            "still": "quieto", "throw": "lanzar", "roar": "grito"}   # estos tres, de la portera
 # Direcciones: sur, sureste, este, noreste, norte, noroeste, oeste, suroeste
 DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",

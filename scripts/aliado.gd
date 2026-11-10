@@ -53,7 +53,7 @@ const HOJAS := {
 	"policia": {"hoja": preload("res://assets/sprites/superviviente-policia.tres"), "fogonazo": 0.2,
 		"boca": {"s": Vector2(-4, -34), "se": Vector2(26, -29), "e": Vector2(23, -37), "ne": Vector2(23, -52),
 			"n": Vector2(-1, -52), "no": Vector2(-29, -50), "o": Vector2(-33, -35), "so": Vector2(-27, -14)}},
-	"medico": {"hoja": preload("res://assets/sprites/superviviente-medica.tres"), "fogonazo": 0.27},
+	"medico": {"hoja": preload("res://assets/sprites/superviviente-medicagpt.tres"), "fogonazo": 0.27},
 	"militar": {"hoja": preload("res://assets/sprites/superviviente-militar.tres"), "fogonazo": 0.2,
 		"boca": {"s": Vector2(24, -25), "se": Vector2(26, -23), "e": Vector2(32, -36), "ne": Vector2(28, -43),
 			"n": Vector2(-1, -51), "no": Vector2(-24, -48), "o": Vector2(-31, -37), "so": Vector2(-27, -16)}},
@@ -330,12 +330,20 @@ func pasar_tarjeta() -> void:
 	get_tree().create_timer(HOJAS.get(def.id, {}).get("fogonazo", 0.3), false).timeout.connect(Sonido.tocar.bind("pitido"))
 
 
+# ¿Tiene su hoja un dibujo de forzar la cerradura en la dirección en que mira? (solo de frente y de espaldas)
+func forzar_con_dibujo() -> bool:
+	return sprite != null and not con_tarjeta and sprite.sprite_frames.has_animation("forzar_" + direccion)
+
+
 # Forzando la cerradura (M63): echado hacia la puerta, trastea a golpecitos (un empujón corto y vuelve, con un temblor
 # de las manos) y de vez en cuando salta una chispita de la cerradura con un clic metálico
 func trastear() -> void:
-	var golpe := pow(maxf(0.0, sin(tiempo * 7.0)), 3.0)   # (casi todo el rato 0 y, a ratos, un empujón corto)
-	cuerpo.position = mira_forzar * (2.0 + golpe * 6.0) + Vector2(0, 2.0)   # (inclinado y un poco agachado)
-	cuerpo.rotation = sin(tiempo * 31.0) * 0.05 + mira_forzar.x * 0.1
+	# (con dibujo propio de forzar —la médica de GPT, de frente y de espaldas—, el dibujo ya se agacha y trastea solo
+	# (dibujar_hoja): sin el meneo; las chispitas y el clic se quedan)
+	if not forzar_con_dibujo():
+		var golpe := pow(maxf(0.0, sin(tiempo * 7.0)), 3.0)   # (casi todo el rato 0 y, a ratos, un empujón corto)
+		cuerpo.position = mira_forzar * (2.0 + golpe * 6.0) + Vector2(0, 2.0)   # (inclinado y un poco agachado)
+		cuerpo.rotation = sin(tiempo * 31.0) * 0.05 + mira_forzar.x * 0.1
 	ganzua_t -= get_physics_process_delta_time()
 	if ganzua_t > 0.0:
 		return
@@ -750,6 +758,10 @@ func dibujar_hoja(delta: float, rapidez: float) -> void:
 		if sprite.is_playing():
 			return
 		accion_t = -1.0   # ha acabado: vuelve a lo de siempre
+	if forzando and rapidez <= 20.0 and en_su_sitio() and forzar_con_dibujo():
+		poner_animacion("forzar_" + direccion)   # agachada trasteando con la ganzúa (en bucle)
+		sprite.speed_scale = 1.0
+		return
 	if rapidez > 20.0:
 		poner_animacion("andar_" + direccion)
 		sprite.speed_scale = ritmo_andar(rapidez)

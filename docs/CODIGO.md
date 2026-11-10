@@ -874,6 +874,7 @@ en una línea.
   al andar, los pies en lo demás). Las 3 vistas del oeste salen en espejo. `py tools/zombi_gpt.py personaje`, luego
   `py tools/zombi_gpt.py <andar|ataque|golpe|muerte> <south|south-east|east|north-east|north>`, y después `zombi.py
   zombi-vecina-48 zombi-vecina` y `hacer_frames.py`. Sale en los apartamentos (`planta.gd`, `horda`), con el coste del vecino.
+  **La médica con GPT (10 nov, M17):** `--zombi medica` (referencia `capturas/referencia-medica.png`, 1920 de ancho) con `personaje`, `andar`, `ataque` (el pinchazo), `muerte` (la caída) y `forzar` (solo `south` y `north`: agachada con la ganzúa; el fotograma 1 es ella de pie, solo para medir). Luego `py tools/medica_gpt_montar.py`, `py tools/superviviente.py medicagpt` y `hacer_frames.py assets/sprites/superviviente-medicagpt`. `aliado.gd` usa esa hoja para `medico` y, si la hoja tiene `forzar_<dir>`, `trastear()` no menea el cuerpo (`forzar_con_dibujo`): lo hace el dibujo. El policía y el militar seguirán el mismo camino.
   Sirve para otros zombis con `--zombi <nombre>` delante (cada uno en su ficha `ZOMBIS`: carpetas, hasta qué gris es fondo,
   lienzo del ataque, golpe y muerte, y si el golpe va con los pies clavados). El **vecino rehecho con GPT** (8 nov):
   `--zombi normal` → `assets/sources/zombi-normal-gpt-48` → `zombi.py zombi-normal-gpt-48 zombi-normal-gpt` (anda a 7

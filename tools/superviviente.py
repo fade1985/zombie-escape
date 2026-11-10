@@ -198,7 +198,7 @@ for d in DIRS:
 # ═════════════ Andar: la plantilla da 8 fotogramas de 48×48 (sin el quieto) ═════════════
 walk = {}
 for d in DIRS:
-    fs = [same_colors(f, rot[d]) for f in load('walk', d)]
+    fs = [f if ID.endswith('gpt') else same_colors(f, rot[d]) for f in load('walk', d)]   # (los de GPT no se igualan: ya vienen del mismo dibujo)
     assert len(fs) == 8, f'faltan fotogramas de andar en {d}'
     # pies al nivel del dibujo quieto y centrado en horizontal según el primer fotograma (tools/walk.py del JS)
     ref, b0 = rot[d].getbbox(), fs[0].getbbox()
@@ -279,7 +279,7 @@ for d in (DIRS if os.path.isdir(f'{SRC}/accion') else []):
                 fixed.append(n)
     attack[d] = [placed(fs[n], ox, oy, d, n, 'accion') for n in range(1, 9)]
     # en qué fotograma (de los 8 usados) se ve el fogonazo (o las chispas): ahí sale la bala (o cura)
-    marks = [flash(f, d) if TIRADOR else green(f, d) if ID == 'medica' else spark(f, d) for f in attack[d]]
+    marks = [flash(f, d) if TIRADOR else green(f, d) if ID.startswith('medica') else spark(f, d) for f in attack[d]]
     hits[d] = cfg['golpe'][d] - 1 if d in cfg.get('golpe', {}) else max(range(8), key=lambda i: len(marks[i]))
     if TIRADOR:
         pts = marks[hits[d]]
@@ -298,8 +298,17 @@ ox, oy = offset(fs, 'south', 'caido')
 fall = {'south': [placed(fs[n], ox, oy, 'south', n, 'caido') for n in range(1, 9)]}
 print(f'caido  south       lienzo {fs[0].size}, desplazado ({ox}, {oy}), 8 fotogramas; se queda en el último')
 
+# ═════════════ Forzar la cerradura (solo GPT): de frente y de espaldas; 0 es el quieto, 1 el de pie (para medir) ═════════════
+forzar = {}
+for d in (['south', 'north'] if os.path.isdir(f'{SRC}/forzar') else []):
+    fs = load('forzar', d)
+    assert len(fs) == 9, f'forzar de {d} debería tener 9 fotogramas'
+    ox, oy = offset(fs, d, 'forzar')
+    forzar[d] = [placed(fs[n], ox, oy, d, n, 'forzar') for n in range(2, 9)]   # el bucle: del 2 al 8
+    print(f'forzar {d:11s} 7 fotogramas')
+
 # ═════════════ Hoja y JSON ═════════════
-blocks = [(n, b) for n, b in [('idle', idle), ('walk', walk), ('attack', attack), ('fall', fall)] if b]
+blocks = [(n, b) for n, b in [('idle', idle), ('walk', walk), ('attack', attack), ('fall', fall), ('forzar', forzar)] if b]
 cols = max(len(DIRS), *(len(fs) for _, b in blocks for fs in b.values()))
 rows_total = 1 + sum(len(b) for _, b in blocks)
 sheet = Image.new('RGBA', (cols * CW, rows_total * CH), (0, 0, 0, 0))
@@ -314,8 +323,8 @@ for name, b in blocks:
             sheet.alpha_composite(f, (i * CW, row * CH))
         dirs[d] = {'row': row, 'frames': len(b[d])}
         row += 1
-    fps = {'idle': IDLE_FPS, 'walk': WALK_FPS, 'attack': ATK_FPS, 'fall': FALL_FPS}[name]
-    anims[name] = {'fps': fps, 'loop': name in ('idle', 'walk'), 'dirs': dirs}
+    fps = {'idle': IDLE_FPS, 'walk': WALK_FPS, 'attack': ATK_FPS, 'fall': FALL_FPS, 'forzar': 10}[name]
+    anims[name] = {'fps': fps, 'loop': name in ('idle', 'walk', 'forzar'), 'dirs': dirs}
 # en qué punto de la acción (de 0 a 1) llega el fogonazo o el pinchazo (el juego saca la bala o cura ahí)
 if attack:
     anims['attack']['hit'] = round(hits['east'] / 8, 3)

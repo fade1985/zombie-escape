@@ -42,6 +42,8 @@ ZOMBIS = {
     "vecina": ("assets/sources/zombi-vecina-gpt", "assets/sources/zombi-vecina-48", 10, 48, False, (1.08, 1.0, 1.0)),
     "normal": ("assets/sources/zombi-normal-gpt", "assets/sources/zombi-normal-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
     "rapido": ("assets/sources/zombi-rapido-gpt", "assets/sources/zombi-rapido-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
+    # la médica (superviviente de los Apartamentos, 10 nov): su referencia, capturas/referencia-medica.png, mide 1920
+    "medica": ("assets/sources/superviviente-medica-gpt", "assets/sources/superviviente-medica-gpt-48", 5, 96, False, (1.2, 1.12, 1.1)),
     "lento": ("assets/sources/zombi-lento-gpt", "assets/sources/zombi-lento-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
 FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
@@ -65,6 +67,7 @@ ALTURA_GPT = False
 ANDAR = 48
 ESCALA_ZOMBI = 1.0
 ESCALA_VISTA = {}
+ANCHO_REFERENCIA = 2016   # lo que mide de ancho la referencia que se le da a GPT (la de la médica, 1920)
 LIENZO = 48
 # las vistas de la fila, de izquierda a derecha, y las que salen de ellas en espejo
 VISTAS = ["south", "south-east", "east", "north-east", "north"]
@@ -179,7 +182,7 @@ def en_lienzo(dibujo, corrido=0.0, lado=LIENZO, arriba=None):
 
 def personaje():
     im = Image.open(os.path.join(FUENTE, "personaje.webp"))
-    escala = 8 * im.width / 2016 / ESCALA_ZOMBI
+    escala = 8 * im.width / ANCHO_REFERENCIA / ESCALA_ZOMBI
     trozos = separar(sin_fondo(im))
     if len(trozos) != len(VISTAS):
         sys.exit("Salen %d dibujos y tienen que ser %d" % (len(trozos), len(VISTAS)))
@@ -217,7 +220,7 @@ def recta(puntos):
 # Una animación de una dirección (andar-s.webp: andar de frente): cada fotograma de la fila, a la misma escala que el
 # personaje y en su lienzo, en <animación>/<dirección>-<n>.png; el 0 es el dibujo quieto (así lo quiere tools/zombi.py)
 def animacion(anim, vista):
-    nombres = {"andar": "walk", "ataque": "ataque", "golpe": "golpe", "muerte": "muerte"}
+    nombres = {"andar": "walk", "ataque": "ataque", "golpe": "golpe", "muerte": "muerte", "forzar": "forzar"}
     corta = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne", "north": "n"}[vista]
     im = sin_fondo(Image.open(os.path.join(FUENTE, "%s-%s.webp" % (anim, corta))))
     # Dónde va cada fotograma en el lienzo. GPT los pone en una rejilla de columnas iguales, pero no de 1/6 del ancho
@@ -318,6 +321,8 @@ if __name__ == "__main__":
         ALTURA_GPT = sys.argv[2] == "lento"
         ESCALA_ZOMBI = TAMANO.get(sys.argv[2], 1.0)
         ESCALA_VISTA = TAMANO_VISTA.get(sys.argv[2], {})
+        if sys.argv[2] == "medica":
+            ANCHO_REFERENCIA = 1920
         del sys.argv[1:3]
     if sys.argv[1:] == ["rellenar"]:
         rellenar()
