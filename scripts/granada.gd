@@ -78,8 +78,10 @@ func _physics_process(delta: float) -> void:
 	if paso.length() > 0.01:
 		var choque := choque_hasta(global_position + paso * 1.5)
 		if not choque.is_empty():
-			# (si el rayo sale ya pegado a la pared, no trae hacia dónde rebotar: se queda parada, como antes, sin el error)
-			v = v.bounce(choque.normal) * 0.5 if choque.normal != Vector2.ZERO else Vector2.ZERO
+			# rebota como una bola de billar y pierde la mitad de la velocidad. Si el rayo sale ya pegado a la pared, no
+			# trae hacia dónde mira la pared: se averigua a mano (cara_de_la_pared)
+			var cara: Vector2 = choque.normal if choque.normal != Vector2.ZERO else cara_de_la_pared(paso)
+			v = v.bounce(cara) * 0.5
 			paso = Vector2.ZERO
 	global_position += paso
 	# parpadeo rojo: de uno cada 0,4 s a casi continuo al final
@@ -101,6 +103,18 @@ func _physics_process(delta: float) -> void:
 
 # Con qué choca de aquí a "fin", y entonces rebota. Cerca del suelo, con paredes y muebles (capa 1); más arriba pasa por
 # encima de los muebles, pero las paredes, las puertas cerradas y las barricadas también la paran en el aire (F20)
+# Hacia dónde mira la pared con la que choca, cuando el rayo no lo dice (sale pegado a ella): se prueba el paso de
+# lado y el de arriba-abajo por separado; el que choca es el que se da la vuelta (las dos en una esquina). Si ninguno
+# choca solo, vuelve por donde ha venido
+func cara_de_la_pared(paso: Vector2) -> Vector2:
+	var cara := Vector2.ZERO
+	if paso.x != 0.0 and not choque_hasta(global_position + Vector2(paso.x * 1.5, 0.0)).is_empty():
+		cara.x = -signf(paso.x)
+	if paso.y != 0.0 and not choque_hasta(global_position + Vector2(0.0, paso.y * 1.5)).is_empty():
+		cara.y = -signf(paso.y)
+	return cara.normalized() if cara != Vector2.ZERO else -paso.normalized()
+
+
 func choque_hasta(fin: Vector2) -> Dictionary:
 	if z < 12.0:
 		var rayo := PhysicsRayQueryParameters2D.create(global_position, fin, 1)

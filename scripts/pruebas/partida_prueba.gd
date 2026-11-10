@@ -99,7 +99,8 @@
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
 #   --molotov-carga     cuánto tarda cada fotograma al caer un molotov entre muchos zombis; con --zombis N, cuántos (12) [prueba_armas.gd]
 #   --granada-pared     las granadas chocan con las paredes (y vuelan por encima de los muebles) y su explosión no las
-#                       pasa: dónde explotan, a quién le dan y a quién apunta lanzar de un toque [prueba_armas.gd]
+#                       pasa: dónde explotan, a quién le dan y a quién apunta lanzar de un toque; y el rebote
+#                       cuando el rayo no dice hacia dónde mira la pared (cara_de_la_pared) [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
 #   --reventon          el gordo revienta al morir (M38): la corona y las gotas, y el charco grande con sus burbujas
 #                       gordas, hasta que se seca; y Johnny dentro, con las manchas de ácido (M65) [prueba_armas.gd]

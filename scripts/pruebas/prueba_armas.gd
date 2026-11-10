@@ -3009,6 +3009,21 @@ func probar_granada_pared() -> void:
 	zombi_quieto(sitio + Vector2(-200, 0))
 	lanzables.tipo = "granada"
 	print("De un toque, y con otro más lejos pero a este lado: la granada, a %s (esperado: el de este lado)" % nombre.call(lanzables.mas_cercano()))
+
+	# el rebote cuando el rayo no dice hacia dónde mira la pared (granada.cara_de_la_pared): pegada a la pared de la
+	# izquierda, yendo en diagonal hacia ella se da la vuelta solo de lado; alejándose, no choca: vuelve por donde iba
+	var g: Node2D = Lanzables.BOMBA.new()
+	g.tipo = "granada"
+	g.desde = Vector2(pared_izq - 6.0, y)
+	g.hasta = g.desde
+	g.radio = Lanzables.DATOS.granada.radio
+	g.dano_zombis = 0
+	johnny.get_parent().add_child(g)
+	g.set_physics_process(false)
+	g.global_position = Vector2(pared_izq - 6.0, y)
+	print("Rebote sin la cara de la pared: hacia ella en diagonal %s (esperado: (-1.0, 0.0)) · alejándose %s (esperado: (1.0, 0.0))" % [
+		g.cara_de_la_pared(Vector2(8.0, 3.0)), g.cara_de_la_pared(Vector2(-8.0, 0.0))])
+	g.queue_free()
 	get_tree().quit()
 
 
