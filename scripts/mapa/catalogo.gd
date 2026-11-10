@@ -31,7 +31,7 @@ const MUEBLES := {
 	"bookshelf":  {"len": 46,  "dep": 34,  "paredes": "",      "archivo": "salon/estanteria"},
 	"lamp":       {"len": 30,  "dep": 30,  "paredes": "todas", "archivo": "comun/lampara"},
 	"counter":    {"len": 158, "dep": 50,  "paredes": "",      "archivo": "cocina/encimera"},
-	"fridge":     {"len": 62,  "dep": 58,  "paredes": "",      "archivo": "cocina/nevera"},
+	"fridge":     {"len": 44,  "dep": 58,  "paredes": "",      "archivo": "cocina/nevera"},
 	"stove":      {"len": 56,  "dep": 50,  "paredes": "",      "archivo": "cocina/fogon"},
 	# la mesa de la cocina con sus dos sillas, una a cada lado (un solo dibujo: van siempre juntas)
 	"kitchentable": {"len": 112, "dep": 54, "paredes": "",     "archivo": "cocina/mesa"},

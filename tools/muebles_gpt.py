@@ -193,6 +193,18 @@ MUEBLES = {
     # barra cruzada, se vacían también (las semillas), para que se vea el suelo de detrás
     "carretilla": ("assets/sources/carretilla-gpt.webp", "assets/sprites/mueble-handtruck.png", 20, 40, True,
                    (), [(512, 250), (512, 500)]),
+    # la cocina de los pisos (M13, 10 nov; antes, de PixelLab con tools/guias_cocina.py). La nevera combi, blanca hueso,
+    # con la caja de cereales y la cesta encima: GPT la hizo mucho más estrecha que la vieja (31 × 65), así que se deja
+    # igual de alta y se estrecha a 22 (su largo en el catálogo, 44, a juego) en vez de dejarla de 92 de alto
+    "nevera": ("assets/sources/nevera-gpt.webp", "assets/sprites/mueble-fridge.png", 22, 65, True),
+    # la encimera con el fregadero, la tabla de cortar y un plato; cuatro puertas crema
+    "encimera": ("assets/sources/encimera-gpt.webp", "assets/sprites/mueble-counter.png", 79, 47, True),
+    # el fogón: cocina de gas con cuatro fuegos, cinco mandos y el horno
+    "fogon": ("assets/sources/fogon-gpt.webp", "assets/sprites/mueble-stove.png", 28, 41, True),
+    # la mesa de la cocina con sus dos sillas; los huecos de debajo de los asientos, entre el travesaño y el asiento, se
+    # vacían también (las semillas)
+    "mesa_cocina": ("assets/sources/mesa-cocina-gpt.webp", "assets/sprites/mueble-kitchentable.png", 56, 29, True,
+                    (), [(213, 700), (1322, 699)]),
 }
 
 

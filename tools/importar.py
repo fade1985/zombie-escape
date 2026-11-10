@@ -44,7 +44,7 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'treadmill', 'benchpress', 'cablemachine', 'dumbbellrack', 'weightplates',   # (las máquinas del gimnasio del Gymbro)
             'wheeliebin', 'trashcan', 'janitorcart',   # (y lo del cuarto de la limpieza de la portera)
             'showertray', 'lockerbench', 'stafftoilet', 'staffsink', 'canshelf', 'wastebasket',   # (y los de la sala de mantenimiento)
-            'fridge', 'counter', 'stove', 'kitchentable',   # (y la cocina de los pisos, rehecha de frente: tools/guias_cocina.py)
+            'fridge', 'counter', 'stove', 'kitchentable',   # (y la cocina de los pisos: de GPT, tools/muebles_gpt.py)
             'mattress_policia', 'mattress_medico', 'mattress_militar', 'mattress_ferretero', 'mattress_farmaceutica',
             'mattress_tecnico', 'storageshelf', 'boxstack', 'boxpile', 'handtruck',   # (los trasteros de las viviendas: de GPT, tools/muebles_gpt.py)
             'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp', 'sofaback',
