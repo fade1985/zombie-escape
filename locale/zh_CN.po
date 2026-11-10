@@ -410,7 +410,7 @@ msgstr "剥线，接上……行了"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "就差缠绝缘胶带了……"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "再坚持一下！"
 
@@ -450,7 +450,7 @@ msgstr "入口关上了！%s拆路障的时候，守住门口"
 msgid "la entrada"
 msgstr "入口"
 
-#: scripts/barricada.gd scripts/supervivientes.gd
+#: scripts/barricada.gd
 msgid "¡Vienen por %s!"
 msgstr "它们从%s过来了！"
 
@@ -3715,16 +3715,8 @@ msgid "¡%s se une al equipo! %s"
 msgstr "%s加入了队伍！%s"
 
 #: scripts/supervivientes.gd
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "谢了！我接着撬锁"
-
-#: scripts/supervivientes.gd
 msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
 msgstr "门关上了！%s撬锁的时候，你要撑住"
-
-#: scripts/supervivientes.gd
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "开了！快跑！"
 
 #: scripts/supervivientes.gd
 msgid "¡Puerta abierta! Salid de aquí"
@@ -3936,28 +3928,24 @@ msgid "¡Estoy en el baño!"
 msgstr "我在浴室！"
 
 #: scripts/supervivientes.gd
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "卡住了！掩护我！"
+msgid "¡YA FALTA POCO!"
+msgstr "快好了！"
 
 #: scripts/supervivientes.gd
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "这锁锈住了……给我点时间"
+msgid "¡MALDITA PUERTA!"
+msgstr "该死的门！"
 
 #: scripts/supervivientes.gd
-msgid "Vale… creo que ya noto el muelle"
-msgstr "好……我好像摸到弹簧了"
+msgid "¡CASI LO TENGO!"
+msgstr "就快成功了！"
 
 #: scripts/supervivientes.gd
-msgid "¡Toma, he encontrado esto!"
-msgstr "拿着，我找到了这些！"
+msgid "¡PROTÉGEME, ABRIRÉ LA PUERTA!"
+msgstr "掩护我，我来开门！"
 
 #: scripts/supervivientes.gd
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "发卡掉了！……好，捡到了"
-
-#: scripts/supervivientes.gd
-msgid "Ya casi lo tengo…"
-msgstr "马上就好……"
+msgid "¡LO CONSEGUÍ, VÁMONOS!"
+msgstr "搞定了，快走！"
 
 #: scripts/supervivientes.gd
 msgid "el salón"
@@ -7261,3 +7249,35 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "谢了！我接着撬锁"
+
+#, sin-usar
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "开了！快跑！"
+
+#, sin-usar
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "卡住了！掩护我！"
+
+#, sin-usar
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "这锁锈住了……给我点时间"
+
+#, sin-usar
+msgid "Vale… creo que ya noto el muelle"
+msgstr "好……我好像摸到弹簧了"
+
+#, sin-usar
+msgid "¡Toma, he encontrado esto!"
+msgstr "拿着，我找到了这些！"
+
+#, sin-usar
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "发卡掉了！……好，捡到了"
+
+#, sin-usar
+msgid "Ya casi lo tengo…"
+msgstr "马上就好……"

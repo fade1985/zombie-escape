@@ -160,17 +160,16 @@ const TIPOS := [
 	["normal", "normal", "rapido", "rapido"],
 	["normal", "rapido", "rapido", "explosivo", "explosivo", "lento"],
 ]
-# Lo que va diciendo según lo que lleva de cerradura (de 0 a 1; en español: sale con Idioma.t)
+# Lo que grita según los segundos de cerradura hechos (no cuentan mientras está caído): a los 15, a los 30 y a los 45 s. Sale
+# como el «¡¡¡LA LLAVE!!!» de Johnny (gritar: letra de 32, amarilla, que sube y se apaga)
 # [traducir]
 const FRASES := [
-	[0.02, "¡Está atascada! ¡Cúbreme!"],
-	[0.15, "Esta cerradura está oxidada… dame tiempo"],
-	[0.32, "Vale… creo que ya noto el muelle"],
-	[0.5, "¡Toma, he encontrado esto!"],
-	[0.62, "¡Se me ha caído la horquilla!… vale, ya la tengo"],
-	[0.8, "Ya casi lo tengo…"],
-	[0.92, "¡Un poco más!"],
+	[15.0, "¡YA FALTA POCO!"],
+	[30.0, "¡MALDITA PUERTA!"],
+	[45.0, "¡CASI LO TENGO!"],
 ]
+const FRASE_INICIO := "¡PROTÉGEME, ABRIRÉ LA PUERTA!"   # (al cerrarse la puerta: empieza la horda)
+const FRASE_FINAL := "¡LO CONSEGUÍ, VÁMONOS!"
 # Por dónde entra cada grupo (en las tiendas, también por sus habitaciones; en español: sale con Idioma.t, también
 # en barricada.gd)
 const POR := {"salon": "el salón", "cocina": "la cocina", "dormitorio": "el dormitorio", "bano": "el baño", "pasillo": "el pasillo",
@@ -579,17 +578,16 @@ func actualizar_horda(delta: float) -> void:
 		if h.levantando >= HORDA.levantar:
 			h.levantando = 0.0
 			a.levantarse()
-			a.decir(Idioma.t("¡Gracias! Sigo con la cerradura"))
 			Particulas.anillo(a, a.global_position, 50.0, Tema.VERDE, 0.4)
 	elif a.en_su_sitio():
 		# la cerradura avanza mientras él esté de pie delante de la puerta
 		h.hecho = minf(HORDA.dura, h.hecho + delta)
 	var k: float = h.hecho / HORDA.dura
-	while h.frase_i < FRASES.size() and k >= FRASES[h.frase_i][0]:
+	while h.frase_i < FRASES.size() and h.hecho >= FRASES[h.frase_i][0]:
 		var frase: Array = FRASES[h.frase_i]
 		h.frase_i += 1
-		a.decir(Idioma.t(frase[1]))
-		if frase[0] == 0.5:
+		gritar(a, frase[1])
+		if frase[0] == 30.0:
 			soltar_provisiones(a)
 	# los últimos 10 segundos: aviso
 	if not a.caido and HORDA.dura - h.hecho <= 10.0 and not h.get("cuenta", false):
@@ -623,6 +621,7 @@ func empezar_horda() -> void:
 	partida.cerrada = true
 	partida.actualizar_puertas()
 	partida.decir(Idioma.t("¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura") % nombre_de(a.def), 4.0)
+	gritar(a, FRASE_INICIO)
 
 
 # Un minuto de cerradura después: la puerta se abre. Los zombis que queden siguen ahí, pero ya se puede salir
@@ -637,7 +636,7 @@ func acabar_horda() -> void:
 	a.remove_from_group("presa")
 	partida.cerrada = false
 	partida.actualizar_puertas()
-	a.decir(Idioma.t("¡YA ESTÁ! ¡CORRE!"))
+	gritar(a, FRASE_FINAL)
 	partida.decir(Idioma.t("¡Puerta abierta! Salid de aquí"), 3.0)
 	Sonido.tocar("limpio")
 	get_tree().create_timer(0.25, false).timeout.connect(Sonido.tocar.bind("puerta"))
@@ -665,6 +664,14 @@ func al_herir(cae: bool, a: Aliado) -> void:
 	elif johnny.position.distance_to(a.position) > HORDA.lejos and horda.t - horda.queja_t > 6.0:
 		horda.queja_t = horda.t
 		a.decir(Idioma.t(LLAMADAS[randi() % LLAMADAS.size()]))
+
+
+# Un grito del superviviente, como el «¡¡¡LA LLAVE!!!» de Johnny (partida.gran_aviso): letra de 32, amarilla, que sube y
+# se apaga en 1,4 s, encima de su cabeza
+func gritar(a: Aliado, texto: String) -> void:
+	if a.get_parent() == null:
+		return
+	Zombi.texto_flotante(a.get_parent(), a.global_position + Vector2(0, -110), Idioma.t(texto), Tema.AMARILLO, 32, true, 1.4)
 
 
 # A mitad: tira un molotov, una granada y dos cajas de munición a sus pies
@@ -696,9 +703,6 @@ func grupo(n: int, tipos: Array, tope: int = HORDA.tope) -> void:
 			continue
 		partida.meter_zombi(tipos.pick_random(), pos)
 		puestos += 1
-	var a: Aliado = rescate.amigo
-	if puestos > 0 and POR.has(sala.uso) and randf() < 0.5 and a.dicho_t > 2.5:
-		a.decir(Idioma.t("¡Vienen por %s!") % Idioma.t(POR[sala.uso]))
 
 
 # ═════════════ Los vecinos, en las viviendas ═════════════
@@ -942,9 +946,16 @@ func probar_horda() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	rescate.amigo.position = johnny.position + Vector2(40, 0)   # le ha seguido hasta la puerta
 	await get_tree().create_timer(0.3, false).timeout
-	print("Horda: %s | puerta %s" % [en_horda(), "cerrada" if partida.cerrada else "abierta"])
+	print("Horda: %s | puerta %s | grito: %s (esperado: ¡PROTÉGEME, ABRIRÉ LA PUERTA!)" % [en_horda(), "cerrada" if partida.cerrada else "abierta",
+		partida.mapa.cosas.get_children().filter(func(n): return n is Label and n.text.begins_with("¡")).map(func(n): return n.text)])
 	if not en_horda():
 		return
+	# el grito de los 15 s (como el de la llave de Johnny: letra de 32, amarilla, encima de su cabeza)
+	horda.hecho = 14.6
+	await get_tree().create_timer(0.8, false).timeout
+	print("Grito a los 15 s: %s (esperado: ¡YA FALTA POCO!)" % [partida.mapa.cosas.get_children().filter(
+		func(n): return n is Label and n.text.begins_with("¡")).map(func(n): return n.text)])
+	Captura.foto("captura-horda-grito.png")
 	horda.hecho = HORDA.dura * 0.49
 	horda.grupo_t = 0.0
 	await get_tree().create_timer(2.0, false).timeout
@@ -981,6 +992,9 @@ func probar_horda() -> void:
 	print("Levantado: %s | vida %d" % [not a.caido, a.vida])
 	horda.hecho = HORDA.dura - 0.3
 	await get_tree().create_timer(0.6, false).timeout
+	print("Grito final: %s (esperado: ¡LO CONSEGUÍ, VÁMONOS!)" % [partida.mapa.cosas.get_children().filter(
+		func(n): return n is Label and n.text.begins_with("¡")).map(func(n): return n.text)])
+	Captura.foto("captura-horda-fin.png")
 	print("Fin de la horda: %s | puerta %s" % [not en_horda(), "cerrada" if partida.cerrada else "abierta"])
 
 

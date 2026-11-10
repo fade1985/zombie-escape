@@ -416,7 +416,7 @@ msgstr "Зачищаю, скручиваю… готово"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Осталось только заизолировать…"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "Еще чуть-чуть!"
 
@@ -456,7 +456,7 @@ msgstr "Вход захлопнулся! Защищай дверь, пока %s 
 msgid "la entrada"
 msgstr "вход"
 
-#: scripts/barricada.gd scripts/supervivientes.gd
+#: scripts/barricada.gd
 msgid "¡Vienen por %s!"
 msgstr "Лезут через %s!"
 
@@ -3731,16 +3731,8 @@ msgid "¡%s se une al equipo! %s"
 msgstr "%s в команде! %s"
 
 #: scripts/supervivientes.gd
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "Спасибо! Возвращаюсь к замку"
-
-#: scripts/supervivientes.gd
 msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
 msgstr "Дверь захлопнулась! Продержись, пока %s взламывает замок"
-
-#: scripts/supervivientes.gd
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "ГОТОВО! БЕГИ!"
 
 #: scripts/supervivientes.gd
 msgid "¡Puerta abierta! Salid de aquí"
@@ -3952,28 +3944,24 @@ msgid "¡Estoy en el baño!"
 msgstr "Я в ванной!"
 
 #: scripts/supervivientes.gd
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "Заело! Прикрой меня!"
+msgid "¡YA FALTA POCO!"
+msgstr "УЖЕ СКОРО!"
 
 #: scripts/supervivientes.gd
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "Замок весь ржавый… дай мне время"
+msgid "¡MALDITA PUERTA!"
+msgstr "ПРОКЛЯТАЯ ДВЕРЬ!"
 
 #: scripts/supervivientes.gd
-msgid "Vale… creo que ya noto el muelle"
-msgstr "Так… кажется, пружина поддается"
+msgid "¡CASI LO TENGO!"
+msgstr "ПОЧТИ ПОЛУЧИЛОСЬ!"
 
 #: scripts/supervivientes.gd
-msgid "¡Toma, he encontrado esto!"
-msgstr "Держи, вот что тут было!"
+msgid "¡PROTÉGEME, ABRIRÉ LA PUERTA!"
+msgstr "ПРИКРОЙ МЕНЯ, Я ОТКРОЮ ДВЕРЬ!"
 
 #: scripts/supervivientes.gd
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "Шпилька выпала!… так, есть"
-
-#: scripts/supervivientes.gd
-msgid "Ya casi lo tengo…"
-msgstr "Почти получилось…"
+msgid "¡LO CONSEGUÍ, VÁMONOS!"
+msgstr "ПОЛУЧИЛОСЬ, УХОДИМ!"
 
 #: scripts/supervivientes.gd
 msgid "el salón"
@@ -7305,3 +7293,35 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "Спасибо! Возвращаюсь к замку"
+
+#, sin-usar
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "ГОТОВО! БЕГИ!"
+
+#, sin-usar
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "Заело! Прикрой меня!"
+
+#, sin-usar
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "Замок весь ржавый… дай мне время"
+
+#, sin-usar
+msgid "Vale… creo que ya noto el muelle"
+msgstr "Так… кажется, пружина поддается"
+
+#, sin-usar
+msgid "¡Toma, he encontrado esto!"
+msgstr "Держи, вот что тут было!"
+
+#, sin-usar
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "Шпилька выпала!… так, есть"
+
+#, sin-usar
+msgid "Ya casi lo tengo…"
+msgstr "Почти получилось…"

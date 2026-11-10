@@ -413,7 +413,7 @@ msgstr "Abisolieren, verbinden… passt"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Fehlt nur noch das Isolierband…"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "Noch ein Stück!"
 
@@ -453,7 +453,7 @@ msgstr "Der Eingang ist zu! Verteidige die Tür, während der %s die Barrikade a
 msgid "la entrada"
 msgstr "den Eingang"
 
-#: scripts/barricada.gd scripts/supervivientes.gd
+#: scripts/barricada.gd
 msgid "¡Vienen por %s!"
 msgstr "Sie kommen durch %s!"
 
@@ -3723,16 +3723,8 @@ msgid "¡%s se une al equipo! %s"
 msgstr "Neu im Team: %s! %s"
 
 #: scripts/supervivientes.gd
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "Danke! Weiter mit dem Schloss"
-
-#: scripts/supervivientes.gd
 msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
 msgstr "Die Tür ist zu! Halte durch: %s knackt das Schloss"
-
-#: scripts/supervivientes.gd
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "GESCHAFFT! LAUF!"
 
 #: scripts/supervivientes.gd
 msgid "¡Puerta abierta! Salid de aquí"
@@ -3944,28 +3936,24 @@ msgid "¡Estoy en el baño!"
 msgstr "Ich bin im Bad!"
 
 #: scripts/supervivientes.gd
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "Klemmt! Gib mir Deckung!"
+msgid "¡YA FALTA POCO!"
+msgstr "GLEICH GESCHAFFT!"
 
 #: scripts/supervivientes.gd
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "Das Schloss ist verrostet… gib mir Zeit"
+msgid "¡MALDITA PUERTA!"
+msgstr "VERDAMMTE TÜR!"
 
 #: scripts/supervivientes.gd
-msgid "Vale… creo que ya noto el muelle"
-msgstr "Okay… ich glaub, ich spür die Feder"
+msgid "¡CASI LO TENGO!"
+msgstr "FAST HAB ICH ES!"
 
 #: scripts/supervivientes.gd
-msgid "¡Toma, he encontrado esto!"
-msgstr "Hier, das hab ich gefunden!"
+msgid "¡PROTÉGEME, ABRIRÉ LA PUERTA!"
+msgstr "BESCHÜTZ MICH, ICH ÖFFNE DIE TÜR!"
 
 #: scripts/supervivientes.gd
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "Haarnadel runtergefallen!… okay, hab sie"
-
-#: scripts/supervivientes.gd
-msgid "Ya casi lo tengo…"
-msgstr "Gleich hab ich's…"
+msgid "¡LO CONSEGUÍ, VÁMONOS!"
+msgstr "GESCHAFFT, WEG HIER!"
 
 #: scripts/supervivientes.gd
 msgid "el salón"
@@ -7283,3 +7271,35 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "Danke! Weiter mit dem Schloss"
+
+#, sin-usar
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "GESCHAFFT! LAUF!"
+
+#, sin-usar
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "Klemmt! Gib mir Deckung!"
+
+#, sin-usar
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "Das Schloss ist verrostet… gib mir Zeit"
+
+#, sin-usar
+msgid "Vale… creo que ya noto el muelle"
+msgstr "Okay… ich glaub, ich spür die Feder"
+
+#, sin-usar
+msgid "¡Toma, he encontrado esto!"
+msgstr "Hier, das hab ich gefunden!"
+
+#, sin-usar
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "Haarnadel runtergefallen!… okay, hab sie"
+
+#, sin-usar
+msgid "Ya casi lo tengo…"
+msgstr "Gleich hab ich's…"

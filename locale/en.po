@@ -413,7 +413,7 @@ msgstr "Strip the wire, join it… okay"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Just the electrical tape left…"
 
-#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
 msgid "¡Un poco más!"
 msgstr "Just a bit more!"
 
@@ -453,7 +453,7 @@ msgstr "The entrance has shut! Defend the door while the %s takes down the barri
 msgid "la entrada"
 msgstr "the entrance"
 
-#: scripts/barricada.gd scripts/supervivientes.gd
+#: scripts/barricada.gd
 msgid "¡Vienen por %s!"
 msgstr "They're coming through %s!"
 
@@ -3723,16 +3723,8 @@ msgid "¡%s se une al equipo! %s"
 msgstr "The %s joins the team! %s"
 
 #: scripts/supervivientes.gd
-msgid "¡Gracias! Sigo con la cerradura"
-msgstr "Thanks! Back to the lock"
-
-#: scripts/supervivientes.gd
 msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
 msgstr "The door slammed shut! Hold out while the %s picks the lock"
-
-#: scripts/supervivientes.gd
-msgid "¡YA ESTÁ! ¡CORRE!"
-msgstr "GOT IT! RUN!"
 
 #: scripts/supervivientes.gd
 msgid "¡Puerta abierta! Salid de aquí"
@@ -3944,28 +3936,24 @@ msgid "¡Estoy en el baño!"
 msgstr "I'm in the bathroom!"
 
 #: scripts/supervivientes.gd
-msgid "¡Está atascada! ¡Cúbreme!"
-msgstr "It's jammed! Cover me!"
+msgid "¡YA FALTA POCO!"
+msgstr "ALMOST THERE!"
 
 #: scripts/supervivientes.gd
-msgid "Esta cerradura está oxidada… dame tiempo"
-msgstr "This lock is all rusted… give me a minute"
+msgid "¡MALDITA PUERTA!"
+msgstr "DAMN DOOR!"
 
 #: scripts/supervivientes.gd
-msgid "Vale… creo que ya noto el muelle"
-msgstr "Okay… I think I can feel the spring"
+msgid "¡CASI LO TENGO!"
+msgstr "ALMOST GOT IT!"
 
 #: scripts/supervivientes.gd
-msgid "¡Toma, he encontrado esto!"
-msgstr "Here, I found these!"
+msgid "¡PROTÉGEME, ABRIRÉ LA PUERTA!"
+msgstr "PROTECT ME, I'LL OPEN THE DOOR!"
 
 #: scripts/supervivientes.gd
-msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
-msgstr "Dropped the bobby pin!… okay, got it"
-
-#: scripts/supervivientes.gd
-msgid "Ya casi lo tengo…"
-msgstr "Almost got it…"
+msgid "¡LO CONSEGUÍ, VÁMONOS!"
+msgstr "I DID IT, LET'S GO!"
 
 #: scripts/supervivientes.gd
 msgid "el salón"
@@ -7283,3 +7271,35 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "Thanks! Back to the lock"
+
+#, sin-usar
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "GOT IT! RUN!"
+
+#, sin-usar
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "It's jammed! Cover me!"
+
+#, sin-usar
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "This lock is all rusted… give me a minute"
+
+#, sin-usar
+msgid "Vale… creo que ya noto el muelle"
+msgstr "Okay… I think I can feel the spring"
+
+#, sin-usar
+msgid "¡Toma, he encontrado esto!"
+msgstr "Here, I found these!"
+
+#, sin-usar
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "Dropped the bobby pin!… okay, got it"
+
+#, sin-usar
+msgid "Ya casi lo tengo…"
+msgstr "Almost got it…"
