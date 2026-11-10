@@ -68,13 +68,15 @@ PINTURA = [(214, 172, 58), (224, 186, 82), (190, 150, 52)]   # la de siempre, la
 TECHO = [(92, 96, 106), (198, 204, 212), (174, 180, 189), (152, 158, 168), (126, 132, 142), (98, 102, 112)]
 
 # ── La puerta: azul liso (pintura en polvo, como la de la foto) ──
-AZUL = (52, 104, 160)
-AZUL_LUZ = (86, 138, 190)
-AZUL_SOMBRA = (38, 80, 128)
-AZUL_HONDO = (26, 54, 92)
-AZUL_CANTO = (120, 164, 206)     # el canto, con luz
+# Desde el 10 nov (M8) la cerrada de frente es de GPT (tools/muebles_gpt.py puerta_trastero); las otras tres, de aquí,
+# con los azules y el metal sacados de ella
+AZUL = (58, 99, 142)
+AZUL_LUZ = (84, 128, 172)
+AZUL_SOMBRA = (44, 79, 116)
+AZUL_HONDO = (30, 54, 84)
+AZUL_CANTO = (112, 152, 192)     # el canto, con luz
 MARCO = [(40, 52, 78), (28, 36, 58)]   # las dos columnas oscuras de los lados de la hoja cerrada
-METAL = [(222, 226, 232), (170, 177, 188), (112, 118, 130)]   # el pomo y su placa: brillo, medio y sombra
+METAL = [(200, 196, 192), (152, 148, 146), (110, 108, 108)]   # el pomo y su placa: brillo, medio y sombra
 
 
 def ruido_toro(tam, celda, rng):
@@ -453,7 +455,7 @@ if __name__ == '__main__':
     pared()
     pared(lagrimada=True)
     linea()
-    puerta_cerrada()
+    # (puerta_cerrada() ya no: la de frente es de GPT, y la pisaría)
     puerta_abierta()
     puerta_lado_cerrada()
     puerta_lado_abierta()

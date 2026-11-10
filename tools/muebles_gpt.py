@@ -171,6 +171,19 @@ MUEBLES = {
     # la planta del pasillo de los Apartamentos (la "plantapasillo" del catálogo): un ficus mustio en su maceta de barro
     # agrietada; algo más baja que Johnny (48)
     "planta_pasillo": ("assets/sources/planta-pasillo-gpt.webp", "assets/sprites/mueble-plantapasillo.png", 24, 42, True),
+    # lo de los trasteros de las viviendas (M8, 10 nov; antes, de PixelLab y de tools/trastero.py). El colchón del suelo,
+    # con la colcha mostaza: no va al juego tal cual, de él salen los nueve, uno por superviviente, con la colcha de su
+    # color (py tools/camas_viviendas.py, después de este); más estrecho que el viejo (42) para no deformarlo
+    "colchon_trastero": ("assets/sources/colchon-trastero-gpt.webp", "assets/sources/viviendas/colchon-gpt.png", 38, 66, False),
+    # la estantería metálica vacía (la "storageshelf" del catálogo): acero galvanizado, cuatro baldas. Los huecos entre
+    # baldas, negro puro, se vacían también (una semilla en cada uno), para que se vea la pared de detrás: en negro
+    # parecía una librería negra
+    "estanteria_trastero": ("assets/sources/estanteria-trastero-gpt.webp", "assets/sprites/mueble-storageshelf.png", 44, 63, True,
+                            (), [(520, 340), (520, 700), (520, 1070)]),
+    # la hoja de la puerta azul, cerrada y de frente (puerta_bano.gd la estira al hueco: tiene que medir 28 × 43, como
+    # FRENTE). Las otras tres (abierta, y cerrada y abierta en un tabique de lado) siguen saliendo de tools/trastero.py,
+    # con los azules sacados de esta
+    "puerta_trastero": ("assets/sources/puerta-trastero-gpt.webp", "assets/sprites/puerta-trastero.png", 28, 43, False),
 }
 
 

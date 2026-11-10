@@ -650,9 +650,11 @@ en una línea.
   crema acanalada con el suelo de hormigón gris azulado y la puerta azul lisa con pomo de metal (`suelo-`, `pared-`,
   `techo-` y `puerta-trastero`, de `tools/trastero.py`; la puerta, `trastero` en `puerta_bano.gd`). Cada una lleva un colchón en el suelo en la esquina de arriba a la derecha, con la
   almohada descolocada y la colcha del color del superviviente, y una estantería metálica vacía en la esquina de arriba a
-  la izquierda (algo separada de ella): `colocados` de `habitacion-<id>` en `catalogo.gd`. Los dos, de PixelLab con las
-  guías de `tools/guias_trasteros.py` (la del colchón sale de la cama de siempre, sin cabecero ni pie); los colores de la
-  colcha, con `tools/camas_viviendas.py` (a partir de `assets/sources/viviendas/colchon.png`).
+  la izquierda (algo separada de ella): `colocados` de `habitacion-<id>` en `catalogo.gd`. Los dos, y la puerta azul de
+  frente, de GPT desde el 10 nov (M8), reducidos con `tools/muebles_gpt.py` (`colchon_trastero`, `estanteria_trastero`,
+  `puerta_trastero`); los colores de la colcha, con `tools/camas_viviendas.py` (a partir de
+  `assets/sources/viviendas/colchon-gpt.png`), y las puertas abiertas y de lado, con `tools/trastero.py`. Los de PixelLab
+  de antes, en `assets/sources/salas/descartes/`.
   El pasillo es el de una zona de trasteros: el mismo suelo de hormigón con una línea amarilla pintada a lo largo
   (`linea-trastero`, la pinta `mapa.dibujar_fondo` a la altura que dice `"linea"` en la sala del pasillo) y la misma
   chapa con una franja de chapa lagrimada abajo (`pared-trastero-pasillo`), las dos de `tools/trastero.py`; contra la

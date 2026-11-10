@@ -41,8 +41,8 @@ const MUEBLES := {
 	"doublebed":  {"len": 124, "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama-matrimonio"},
 	"bed":        {"len": 84,  "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama"},
 	# lo de las habitaciones de los supervivientes (viviendas.gd), que son trasteros: un colchón en el suelo, con la almohada
-	# descolocada y la colcha del color de cada uno (PixelLab, con la guía de tools/guias_trasteros.py; los colores, de
-	# tools/camas_viviendas.py), y una estantería metálica vacía (PixelLab, con su guía)
+	# descolocada y la colcha del color de cada uno (de GPT, tools/muebles_gpt.py; los colores, de
+	# tools/camas_viviendas.py), y una estantería metálica vacía (de GPT, tools/muebles_gpt.py)
 	"mattress_policia":      {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-policia"},
 	"mattress_medico":       {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-medico"},
 	"mattress_militar":      {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-militar"},

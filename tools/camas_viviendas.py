@@ -2,33 +2,36 @@
 almohada descolocada y la colcha del color de cada uno (el mismo de Supervivientes.DATOS en scripts/supervivientes.gd),
 para que se distinga de quién es cada habitación.
 
-  py tools/camas_viviendas.py   → assets/sources/salas/viviendas/colchon-<id>.png (y luego: py tools/importar.py)
+  py tools/muebles_gpt.py colchon_trastero   (el colchón de GPT, reducido)
+  py tools/camas_viviendas.py                → assets/sprites/mueble-mattress_<id>.png y su .json (y luego Godot --import)
 
-Parte del colchón de PixelLab (assets/sources/viviendas/colchon.png, con la colcha mostaza; su guía, la cama individual de
-siempre sin el cabecero ni el pie: tools/guias_trasteros.py) y solo toca los píxeles de la colcha (la mostaza: tono naranja
-y saturados, que en ese dibujo son solo la colcha; las sábanas y la almohada no). A cada uno le cambia el tono y deja la
-luminosidad, así que las sombras y los pliegues quedan como en el original (los mismos pocos colores).
+Desde el 10 nov (M8) parte del colchón de GPT (assets/sources/viviendas/colchon-gpt.png, con la colcha mostaza, ya
+reducido como los muebles) y deja los sprites directamente (no pasa por importar.py: los originales de PixelLab de antes
+están en assets/sources/salas/descartes/). Solo toca los píxeles de la colcha (la mostaza: tono naranja y saturados, que
+en ese dibujo son solo la colcha; las sábanas y la almohada no). A cada uno le cambia el tono y deja la luminosidad, así
+que las sombras y los pliegues quedan como en el original.
 """
-import colorsys, os
+import colorsys, json, os
 from collections import Counter
 from PIL import Image
 
-ORIGEN = 'assets/sources/viviendas/colchon.png'
+ORIGEN = 'assets/sources/viviendas/colchon-gpt.png'
 CAMA = 'assets/sources/salas/dormitorio/cama.png'   # la cama de siempre, de la que sale la guía del colchón
-SALIDA = 'assets/sources/salas/viviendas'
+SALIDA = 'assets/sprites'
 # el color de cada superviviente (Supervivientes.DATOS)
 COLORES = {'policia': '#6fa8ff', 'medico': '#80ed99', 'militar': '#c9e265',
            'ferretero': '#ff9a3c', 'farmaceutica': '#3ddc84', 'tecnico': '#4fe3ff',
            'programador': '#b48cff', 'recepcionista': '#ff6fae', 'limpiadora': '#ffd23c'}
-SAT_MIN, SAT_MAX = 0.45, 0.85   # la colcha no ha de quedar ni grisácea ni chillona
+SAT_MIN, SAT_MAX = 0.45, 0.68   # la colcha no ha de quedar ni grisácea ni chillona (la de GPT, más clara: 0,68)
+OSCURECER = 0.88   # (y algo más oscura que la mostaza, que es un color claro: si no, las demás salen fosforito)
 # los colores de la sangre de la cama de siempre (la mancha de la almohada y el reguero de la sábana, y un píxel suelto de su
 # borde): tools/guias_trasteros.py la quita antes de hacer la guía del colchón
 SANGRE = {(113, 48, 49), (87, 14, 30), (134, 93, 73)}
 CABECERO = 36   # de aquí hacia arriba es el cabecero (su madera no se toca)
 
 
-def es_colcha(h, s):
-    return 0.05 <= h <= 0.15 and s > 0.5
+def es_colcha(h, s, l=0.5):
+    return 0.05 <= h <= 0.15 and s > 0.5 and l < 0.75   # (las sábanas y la almohada, crema muy claro, no)
 
 
 def tono(hexa):
@@ -82,14 +85,19 @@ def main():
                 if a == 0:
                     continue
                 h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
-                if not es_colcha(h, s):
+                if not es_colcha(h, s, l):
                     continue
                 s = min(SAT_MAX, max(SAT_MIN, s))
-                r, g, b = (round(c * 255) for c in colorsys.hls_to_rgb(th, l, s))
+                r, g, b = (round(c * 255) for c in colorsys.hls_to_rgb(th, l * OSCURECER, s))
                 px[x, y] = (r, g, b, a)
                 cambiados += 1
-        im.save(f'{SALIDA}/colchon-{id}.png')
-        print(f'  colchon-{id}.png: {cambiados} píxeles de colcha')
+        sprite = f'{SALIDA}/mueble-mattress_{id}'
+        im.save(sprite + '.png')
+        with open(sprite + '.json', 'w', encoding='utf-8', newline='\n') as f:   # (como los de tools/muebles_gpt.py)
+            json.dump({"cell": [im.width, im.height], "pivot": [im.width // 2, im.height], "scale": 1,
+                       "anims": {"idle": {"fps": 1, "dirs": {"south": {"row": 0, "frames": 1}}}}}, f, indent=2)
+            f.write('\n')
+        print(f'  mueble-mattress_{id}.png: {cambiados} píxeles de colcha')
 
 
 if __name__ == '__main__':
