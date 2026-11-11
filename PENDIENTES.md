@@ -15,6 +15,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 ## Mejoras
 
 - **M92** Teles de noticias en el Centro comercial y la Torre: no tienen salones con tele, así que sus 5 noticias (y los vídeos de VIDEOS.EXE) no salen. El dueño decidirá dónde van más adelante (propuesta: una tienda del Centro y un departamento de la Torre, con la misma mecánica).
+- **M93** Noticias de la tele: mientras salen los subtítulos, que se oiga a la reportera «hablando» con sonidos de 8 bits (sin palabras, como un balbuceo de videojuego antiguo), solo mientras dura cada subtítulo.
 
 ## Por limar
 
