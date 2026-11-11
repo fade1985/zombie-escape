@@ -519,7 +519,8 @@ func sintetizar(notas: Array) -> AudioStreamWAV:
 # ── El gruñido de los botones de los menús (11 nov) ──
 # Un crujido de garganta de muerto, de los que dan miedo en las películas de fantasmas japonesas: un «a-a-a-a-a» hecho
 # de chasquidos sueltos de la garganta (la voz «de fritura», la de quien se queda sin aire), cada uno a destiempo, a veces
-# dos seguidos, que se aceleran y luego se frenan, como algo que intenta hablar. No lleva ningún tono de fondo: cada
+# dos seguidos, a un ritmo casi igual de principio a fin (11 nov: el dueño los quería más graves y lineales, sin
+# acelerarse ni frenarse), y graves, de una garganta grande. No lleva ningún tono de fondo: cada
 # chasquido es un golpe seco que resuena en la «boca» (tres resonancias de una «a» de garganta) y se apaga antes del
 # siguiente. Los primeros gruñidos eran un zumbido grave cortado a un ritmo fijo y sonaban a perro, a pájaro y luego a
 # helicóptero; esto es justo lo contrario: nada fijo.
@@ -532,10 +533,10 @@ const GRUNIDO_ESTILO := "crujido"
 # cada hueco entre dos, doble: cuántos llevan otro pegado, aire: la respiración de fondo, boca: [hercios, lo estrecha
 # que es, fuerza] de cada resonancia
 const GRUNIDO_ESTILOS := {
-	"crujido": {"largo": [1.0, 1.3], "ritmo": [14.0, 30.0, 9.0], "desigual": 0.35, "doble": 0.3, "aire": 0.02,
-		"boca": [[700.0, 13.0, 1.0], [1150.0, 15.0, 0.7], [2600.0, 15.0, 0.3]]},
-	"estertor": {"largo": [0.8, 1.0], "ritmo": [26.0, 45.0, 20.0], "desigual": 0.3, "doble": 0.2, "aire": 0.05,
-		"boca": [[550.0, 11.0, 1.0], [950.0, 13.0, 0.6], [2400.0, 13.0, 0.25]]},
+	"crujido": {"largo": [1.0, 1.3], "ritmo": [17.0, 19.0, 15.0], "desigual": 0.12, "doble": 0.15, "aire": 0.02,
+		"boca": [[430.0, 13.0, 1.0], [720.0, 15.0, 0.7], [1650.0, 15.0, 0.25]]},
+	"estertor": {"largo": [0.8, 1.0], "ritmo": [30.0, 33.0, 27.0], "desigual": 0.1, "doble": 0.1, "aire": 0.05,
+		"boca": [[340.0, 11.0, 1.0], [600.0, 13.0, 0.6], [1450.0, 13.0, 0.2]]},
 }
 
 func grunido(estilo := GRUNIDO_ESTILO) -> AudioStreamWAV:
@@ -562,7 +563,7 @@ func grunido(estilo := GRUNIDO_ESTILO) -> AudioStreamWAV:
 	# 2) La boca: cada resonancia, con la boca que se abre y se cierra un poco al azar mientras dura
 	var salida := PackedFloat32Array()
 	salida.resize(cuantas)
-	var escala := randf_range(0.9, 1.05)
+	var escala := randf_range(0.95, 1.03)
 	for f in e.boca:
 		var x1 := 0.0
 		var x2 := 0.0
@@ -575,7 +576,7 @@ func grunido(estilo := GRUNIDO_ESTILO) -> AudioStreamWAV:
 		var mueve := 1.0
 		for i in cuantas:
 			if i % 64 == 0:   # (la boca se mueve despacio: basta con recalcular cada 64 muestras)
-				mueve = clampf(mueve + randf_range(-0.02, 0.02), 0.88, 1.12)
+				mueve = clampf(mueve + randf_range(-0.01, 0.01), 0.95, 1.05)
 				var w0: float = TAU * minf(f[0] * escala * mueve, MEZCLA * 0.45) / MEZCLA
 				var alfa: float = sin(w0) / (2.0 * f[1])
 				b0 = alfa
