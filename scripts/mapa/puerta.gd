@@ -172,7 +172,8 @@ func _draw() -> void:
 		_:
 			# En los laterales del pasillo: las escaleras (la salida de incendios, en el muro de la derecha) o la puerta
 			# por donde se ha llegado
-			if salida.tipo == "escaleras":
+			# (y la de llegada de la azotea, la misma: se sube por la salida de incendios; sola, sin nada detrás)
+			if salida.tipo == "escaleras" or salida.get("incendios", false):
 				draw_texture_rect(SALIDA, Rect2(-8, -36, 72, 72), false)
 				return
 			if metal:

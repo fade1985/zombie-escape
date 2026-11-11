@@ -595,6 +595,7 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 		"surtido": rng.randi(), "manchas": [], "helipuerto": AZOTEA_ARO, "muebles": []}
 	sitio.salidas = [   # (la única: de aquí se sale en el helicóptero, que suelta su escalera al caer el jefe)
 		{"dir": "derecha", "en": AZOTEA_ENTRADA, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
+			"incendios": true,   # (la roja de la salida de incendios, como la del pasillo: se sube por esas escaleras)
 			"aviso": "Ya no hay vuelta atrás"},   # [traducir]
 	]
 	# manchas de sangre sueltas (las de manchas-suelo.png), sin tapar el aro ni la H
