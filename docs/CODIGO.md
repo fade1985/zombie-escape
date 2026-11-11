@@ -833,7 +833,8 @@ en una línea.
 - `sonidos/`: el gruñido de zombi del botón JUGAR (`grunido.ogg`, de PixelLab, ver
   `pixellab.json` «grunidos-botones»; los demás efectos se sintetizan en `sonido.gd`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
-  25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
+  25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`; y `rubik.ttf`, la letra lisa que eligió el dueño el 11 nov 2026, ver
+  `docs/IDIOMAS.md`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
 - `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab (no va en el juego exportado: solo lo
   usan las herramientas).
 - Los dibujos se importan **sin relleno en lo transparente** (`fix_alpha_border=false`, también por defecto para los nuevos, en

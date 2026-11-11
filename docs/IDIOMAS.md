@@ -144,6 +144,14 @@ traducciones que no tiene ninguna fuente (saldrían como un cuadro) y cuánto mi
 `-- --captura --tildes` saca, por idioma, una foto ampliada (letra a 48) con las tildes, la ñ, la ü y los ¿ ¡: es la que hay que mirar al
 tocar la letra del juego.
 
+**Rubik, la letra lisa elegida (11 nov 2026).** Al dueño la letra del juego le parecía muy simple. Después de ver muestras de
+letras pixeladas (de terror, de recreativa…) eligió una **lisa**, que se lee mejor y cansa menos la vista: **Rubik** (Google Fonts,
+`assets/fuentes/rubik.ttf`, variable de peso 300 a 900; OFL 1.1 **sin nombre reservado**, `rubik-OFL.txt`, que ya se exporta).
+Trae latín y cirílico; para el chino haría falta **Noto Sans SC** (OFL, recortada como Unifont). **Todavía no se usa:** el dueño
+dirá en qué textos va (no en todos). Al ponerla: va **con suavizado** (su `.import` lo deja así; no ponerle `FONT_ANTIALIASING_NONE`
+como a las pixeladas), porque la pantalla se estira con `canvas_items` y Godot la dibuja a la resolución real, lisa y nítida;
+mirar la altura de línea (ocupa algo más que la de hoy), citarla en Créditos → Licencias (`texto_de_licencias`) y probarla en la web.
+
 **Las tildes de la letra del juego (30 oct 2026).** Las vocales con tilde, la ñ, la ü, el ¿ y el ¡ no vienen de PixelLab: las añadió
 `tools/fuente-tildes.py` del juego JS, que dibujaba la tilde de á é í ó ú al revés («`» en vez de «´»), dejaba el punto en la í y
 hacía el ¿ y el ¡ volteando el ? y el ! de arriba abajo (con el gancho en el lado contrario) en vez de girarlos media vuelta.
