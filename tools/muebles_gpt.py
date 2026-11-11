@@ -32,9 +32,9 @@ MUEBLES = {
     # estaban), a 32 de alto como los demás: el
     # edificio de los Apartamentos, de ladrillo con escaleras de incendios, de noche (9 nov)
     "icono_apartamentos": ("assets/sources/apartamentos-gpt.webp", "assets/ui/tarjeta-apartamentos.png", 25, 32, False),
-    # y el del Centro comercial, a juego: dos plantas de hormigón, el cartel luminoso sin letras, el toldo rojo y blanco
-    # y los escaparates con luz (11 nov, bloque M; casi cuadrado: 32 × 32)
-    "icono_centro": ("assets/sources/centro-gpt.webp", "assets/ui/tarjeta-centro.png", 32, 32, False),
+    # y el del Centro comercial, a juego: cuatro plantas de hormigón, el cartel luminoso con la bolsa de la compra (sin
+    # letras: a 32 de alto no se leerían), el toldo rojo y blanco y los escaparates con luz (11 nov, bloque M)
+    "icono_centro": ("assets/sources/centro-gpt.webp", "assets/ui/tarjeta-centro.png", 23, 32, False),
     # y el candado de los edificios cerrados, de acero gastado con óxido; el hueco del arco, que el fondo no alcanza
     # desde el borde, se vacía también (la semilla, en el medio del arco de la imagen de GPT)
     "icono_candado": ("assets/sources/candado-gpt.webp", "assets/ui/tarjeta-candado.png", 22, 32, False, (), [(640, 350)]),
