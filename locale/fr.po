@@ -5271,6 +5271,34 @@ msgstr "Encaisser $%d"
 msgid "Hecho"
 msgstr "Fait"
 
+#: scripts/ui/aviso_luces.gd
+msgid "Aviso de fotosensibilidad"
+msgstr "Avertissement sur la photosensibilité"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Este juego tiene destellos, luces que parpadean y explosiones que pueden provocar ataques epilépticos a personas con epilepsia fotosensible."
+msgstr "Ce jeu contient des flashs, des lumières qui clignotent et des explosions qui peuvent provoquer des crises d'épilepsie chez les personnes atteintes d'épilepsie photosensible."
+
+#: scripts/ui/aviso_luces.gd
+msgid "Si tú o alguien de tu familia ha tenido alguna vez un ataque epiléptico, consulta a un médico antes de jugar."
+msgstr "Si toi ou quelqu'un de ta famille a déjà fait une crise d'épilepsie, consulte un médecin avant de jouer."
+
+#: scripts/ui/aviso_luces.gd
+msgid "Deja de jugar enseguida si notas mareo, visión borrosa, tics en los ojos o en la cara, movimientos que no controlas o desorientación."
+msgstr "Arrête de jouer immédiatement si tu ressens des vertiges, une vision trouble, des tics aux yeux ou au visage, des mouvements involontaires ou une désorientation."
+
+#: scripts/ui/aviso_luces.gd scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "Touche l'écran pour continuer"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Pulsa cualquier botón para continuar"
+msgstr "Appuie sur un bouton pour continuer"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Pulsa cualquier tecla para continuar"
+msgstr "Appuie sur une touche pour continuer"
+
 #: scripts/ui/carpeta_dosier.gd
 msgid "Página %d"
 msgstr "Page %d"
@@ -7135,10 +7163,6 @@ msgid ""
 msgstr ""
 "Succès\n"
 "À ENCAISSER !"
-
-#: scripts/ui/relato.gd
-msgid "Toca la pantalla para continuar"
-msgstr "Touche l'écran pour continuer"
 
 #: scripts/ui/relato.gd
 msgid "Pulsa cualquier botón para continuar · B para saltar"

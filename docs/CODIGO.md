@@ -524,7 +524,8 @@ en una línea.
   `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
   Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
 - `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar los botones de los menús, `grunir`, son 4
-  versiones hechas como una voz ronca en `grunido` (garganta, «rrr» y boca), sin amontonarse; cada efecto cambia un poco al azar de tono y de volumen cada
+  versiones hechas como una voz ronca en `grunido` (garganta, «rrr» y boca), sin amontonarse; hay tres estilos,
+  `GRUNIDO_ESTILOS`, y suena `GRUNIDO_ESTILO`; cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
   prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
   sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y
@@ -551,7 +552,8 @@ en una línea.
   jefe), `menus.gd` (pausa y fin; desde el 11 nov, al ganar el cartel solo trae tiempo, dólares, enemigos derrotados y la nueva mejor marca, sin frase de debajo y con solo «Menú principal» (`fin_gano`, sin R); al caer sigue como se describe aquí; el cartel del final dice al caer
   quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
   peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; y «Otra vez»,
-  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; desde el 11 nov, la tarjeta de un edificio completado solo dice «Récord: m:ss», el reto del día es un botón grande con «Premio $10» debajo y su cuadro al pasar el ratón (`boton_reto`, `cuadro_reto`; prueba `--edificios`), y la Alerta 1 solo da dólares (las piezas, desde la 2); en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
+  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al abrir el juego, encima, el aviso de fotosensibilidad, `aviso_luces.gd`
+  (`AvisoLuces`, una vez por cada vez que se abre el juego; cualquier tecla, clic, toque o botón lo quita; prueba `--aviso`); desde el 11 nov, la tarjeta de un edificio completado solo dice «Récord: m:ss», el reto del día es un botón grande con «Premio $10» debajo y su cuadro al pasar el ratón (`boton_reto`, `cuadro_reto`; prueba `--edificios`), y la Alerta 1 solo da dólares (las piezas, desde la 2); en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
   monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; en General, el botón «Avisar de un texto mal traducido» a continuación de los idiomas (`enlace_avisos`, el formulario de Google del dueño; vacío no sale,
   y en español tampoco; se prueba con `--idioma`), el temblor de
   pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
@@ -800,6 +802,8 @@ en una línea.
   (`--jefe`, `--armas`, `--inventario`...) con el archivo de cada una.
 - `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
   edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
+- `prueba_aviso.gd` (`PruebaAviso`, fuera de la cadena: la lanza el menú con `--aviso`): el aviso de fotosensibilidad sale,
+  no se quita sin querer ni pulsa el botón de detrás, se quita pasado el rato y no vuelve a salir.
 - `prueba_huecos.gd` (`PruebaHuecos`, fuera de la cadena: la lanza el menú con `--huecos`): con sus propios archivos,
   el guardado viejo pasa al hueco 1, cambiar de hueco no cambia los ajustes, la pantalla «Elige partida» y borrar un hueco.
 - `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú

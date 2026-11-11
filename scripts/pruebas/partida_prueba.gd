@@ -17,6 +17,8 @@
 #   --edificios         solo la pantalla «Elige edificio»: las tarjetas como están en el guardado y con los requisitos
 #                       del centro comercial sin cumplir, a medias y cumplidos (se cierra sin entrar; menu_principal.gd)
 #   --despedida         la despedida de «Salir» en la web (M46), aunque no sea la web   [menu_principal.gd]
+#   --aviso             el aviso de fotosensibilidad del menú: sale, no se salta sin querer, no pulsa el botón de
+#                       detrás y sale una sola vez (lo lanza menu_principal.gd)          [prueba_aviso.gd]
 #   --huecos            los tres huecos de guardado: el guardado viejo pasa al hueco 1, cambiar de hueco, los ajustes de
 #                       todos, la pantalla «Elige partida» y borrar uno (sus propios archivos)  [prueba_huecos.gd;
 #                       lo lanza menu_principal.gd]
@@ -350,7 +352,7 @@
 #   --brillo            el «Brillo» de Opciones → General: el botón (de 0 a 100 de 10 en 10, flechas y vuelta), que se
 #                       guarda, y lo clara que sale la pantalla a 0, 50 y 100 (fotos)       [prueba_varias.gd]
 #   --grunido           el gruñido al pulsar los botones de los menús: suena, no se amontona, las casillas del
-#                       inventario no; guarda las versiones en tools/efectos/grunido-N.wav  [prueba_varias.gd]
+#                       inventario no; guarda 2 de cada estilo en tools/efectos/grunido-*.wav [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]

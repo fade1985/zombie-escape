@@ -97,6 +97,9 @@ func _ready() -> void:
 	# (debajo de Salir iban la mejor planta y los dólares ahorrados: quitados el 8 nov, a petición del dueño)
 
 	(seguir if seguir else jugar).grab_focus.call_deferred()
+	# el aviso de fotosensibilidad, encima de todo, la primera vez que sale el menú desde que se abre el juego (aviso_luces.gd)
+	if not Captura.activa() or "--aviso" in OS.get_cmdline_user_args():
+		AvisoLuces.poner(self)
 	if Huecos.a_edificios:   # se acaba de elegir en «Elige partida» una partida sin nada a medias
 		Huecos.a_edificios = false
 		elegir_edificio.call_deferred()
@@ -106,6 +109,10 @@ func _ready() -> void:
 		Captura.foto("captura-menu.png")
 		if "--mando" in OS.get_cmdline_user_args():   # A y B del mando en este menú; luego sigue a la partida, que hace el resto (pruebas/prueba_mando.gd)
 			await PruebaMando.menu_principal(self)
+		if "--aviso" in OS.get_cmdline_user_args():   # el aviso de fotosensibilidad (pruebas/prueba_aviso.gd)
+			await PruebaAviso.probar(self)
+			get_tree().quit()
+			return
 		if "--letras" in OS.get_cmdline_user_args():   # qué letras de las traducciones no tiene ninguna fuente (pruebas/prueba_letras.gd)
 			PruebaLetras.probar()
 			get_tree().quit()

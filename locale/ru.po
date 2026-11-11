@@ -5281,6 +5281,34 @@ msgstr "Забрать $%d"
 msgid "Hecho"
 msgstr "Готово"
 
+#: scripts/ui/aviso_luces.gd
+msgid "Aviso de fotosensibilidad"
+msgstr "Предупреждение о светочувствительности"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Este juego tiene destellos, luces que parpadean y explosiones que pueden provocar ataques epilépticos a personas con epilepsia fotosensible."
+msgstr "В игре есть вспышки, мигающий свет и взрывы, которые могут вызвать эпилептические приступы у людей со светочувствительной эпилепсией."
+
+#: scripts/ui/aviso_luces.gd
+msgid "Si tú o alguien de tu familia ha tenido alguna vez un ataque epiléptico, consulta a un médico antes de jugar."
+msgstr "Если у тебя или у кого-то из твоей семьи когда-либо был эпилептический приступ, посоветуйся с врачом перед игрой."
+
+#: scripts/ui/aviso_luces.gd
+msgid "Deja de jugar enseguida si notas mareo, visión borrosa, tics en los ojos o en la cara, movimientos que no controlas o desorientación."
+msgstr "Немедленно прекрати играть, если почувствуешь головокружение, нечёткость зрения, подёргивания глаз или лица, непроизвольные движения или потерю ориентации."
+
+#: scripts/ui/aviso_luces.gd scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "Коснись экрана, чтобы продолжить"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Pulsa cualquier botón para continuar"
+msgstr "Нажми любую кнопку, чтобы продолжить"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Pulsa cualquier tecla para continuar"
+msgstr "Нажми любую клавишу, чтобы продолжить"
+
 #: scripts/ui/carpeta_dosier.gd
 msgid "Página %d"
 msgstr "Страница %d"
@@ -7157,10 +7185,6 @@ msgid ""
 msgstr ""
 "Достижения\n"
 "ЗАБРАТЬ!"
-
-#: scripts/ui/relato.gd
-msgid "Toca la pantalla para continuar"
-msgstr "Коснись экрана, чтобы продолжить"
 
 #: scripts/ui/relato.gd
 msgid "Pulsa cualquier botón para continuar · B para saltar"

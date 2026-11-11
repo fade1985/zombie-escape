@@ -4542,7 +4542,7 @@ func probar_brillo() -> void:
 
 # --grunido: el gruñido de los botones de los menús (botones.gd y Sonido.grunir). Un botón cualquiera gruñe al pulsarlo,
 # pulsado otra vez enseguida no (GRUNIDO_HUECO), y una casilla del inventario (marca "sin_grunido") nunca. Y guarda las
-# versiones en tools/efectos/grunido-N.wav (fuera de git) para escucharlas, con lo que tarda en hacerse cada una
+# de cada estilo en tools/efectos/grunido-<estilo>-N.wav (fuera de git) para escucharlas, con lo que tarda en hacerse cada una
 func probar_grunido() -> void:
 	await get_tree().create_timer(0.5, true).timeout
 	var b := Button.new()
@@ -4566,11 +4566,12 @@ func probar_grunido() -> void:
 	b.queue_free()
 	casilla.queue_free()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tools/efectos"))
-	for n in Sonido.GRUNIDOS:
-		var empieza := Time.get_ticks_usec()
-		var wav := Sonido.grunido()
-		print("Gruñido · versión %d: %.2f s, hecha en %d ms" % [n + 1, wav.get_length(), (Time.get_ticks_usec() - empieza) / 1000])
-		wav.save_to_wav(ProjectSettings.globalize_path("res://tools/efectos/grunido-%d.wav" % (n + 1)))
+	for estilo in Sonido.GRUNIDO_ESTILOS:   # (dos de cada estilo, para elegir de oído: grunido-<estilo>-N.wav)
+		for n in 2:
+			var empieza := Time.get_ticks_usec()
+			var wav := Sonido.grunido(estilo)
+			print("Gruñido · %s %d: %.2f s, hecho en %d ms" % [estilo, n + 1, wav.get_length(), (Time.get_ticks_usec() - empieza) / 1000])
+			wav.save_to_wav(ProjectSettings.globalize_path("res://tools/efectos/grunido-%s-%d.wav" % [estilo, n + 1]))
 	get_tree().quit()
 
 

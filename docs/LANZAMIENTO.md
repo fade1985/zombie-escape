@@ -71,7 +71,8 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 - [ ] **La música procedural a largo plazo.** Comprobar que no cansa tras diez horas; si cansa, temas fijos para
       menú, jefes y final.
 - [ ] **Accesibilidad.** ~~Sacudida de pantalla~~ (hecha el 29 oct: «Temblor de pantalla» en Opciones → General,
-      `temblor.gd`; quita también el parón de los golpes) y parpadeos ajustables (aviso de fotosensibilidad), ~~texto
+      `temblor.gd`; quita también el parón de los golpes) y parpadeos ajustables (~~aviso de fotosensibilidad~~: hecho el 11 nov, al abrir el juego, `aviso_luces.gd`; los parpadeos
+      siguen sin ajuste), ~~texto
       legible a 1280×800 (Steam Deck)~~ (hecho el 9 nov: a ×1 las minúsculas medían 7 píxeles y Valve pide 9; ahora en
       pantallas que irían a ×1 la imagen crece lo justo, ×1,25 en la Deck, y miden 9. `pantalla.gd`; con `--deck`
       cualquier prueba se ve a 1280×800; revisados menú, Opciones, HUD, inventario, baúl, tiendas, ordenador, dosier,

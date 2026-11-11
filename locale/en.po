@@ -5271,6 +5271,34 @@ msgstr "Claim $%d"
 msgid "Hecho"
 msgstr "Done"
 
+#: scripts/ui/aviso_luces.gd
+msgid "Aviso de fotosensibilidad"
+msgstr "Photosensitivity warning"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Este juego tiene destellos, luces que parpadean y explosiones que pueden provocar ataques epilépticos a personas con epilepsia fotosensible."
+msgstr "This game contains flashes, flickering lights and explosions that may trigger seizures in people with photosensitive epilepsy."
+
+#: scripts/ui/aviso_luces.gd
+msgid "Si tú o alguien de tu familia ha tenido alguna vez un ataque epiléptico, consulta a un médico antes de jugar."
+msgstr "If you or anyone in your family has ever had a seizure, consult a doctor before playing."
+
+#: scripts/ui/aviso_luces.gd
+msgid "Deja de jugar enseguida si notas mareo, visión borrosa, tics en los ojos o en la cara, movimientos que no controlas o desorientación."
+msgstr "Stop playing immediately if you feel dizzy or experience blurred vision, eye or face twitching, involuntary movements or disorientation."
+
+#: scripts/ui/aviso_luces.gd scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "Tap the screen to continue"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Pulsa cualquier botón para continuar"
+msgstr "Press any button to continue"
+
+#: scripts/ui/aviso_luces.gd
+msgid "Pulsa cualquier tecla para continuar"
+msgstr "Press any key to continue"
+
 #: scripts/ui/carpeta_dosier.gd
 msgid "Página %d"
 msgstr "Page %d"
@@ -7135,10 +7163,6 @@ msgid ""
 msgstr ""
 "Achievements\n"
 "CLAIM!"
-
-#: scripts/ui/relato.gd
-msgid "Toca la pantalla para continuar"
-msgstr "Tap the screen to continue"
 
 #: scripts/ui/relato.gd
 msgid "Pulsa cualquier botón para continuar · B para saltar"
