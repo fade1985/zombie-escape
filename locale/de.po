@@ -5276,16 +5276,16 @@ msgid "Aviso de fotosensibilidad"
 msgstr "Warnung zur Lichtempfindlichkeit"
 
 #: scripts/ui/aviso_luces.gd
-msgid "Este juego tiene destellos, luces que parpadean y explosiones que pueden provocar ataques epilépticos a personas con epilepsia fotosensible."
-msgstr "Dieses Spiel enthält Lichtblitze, flackernde Lichter und Explosionen, die bei Menschen mit fotosensitiver Epilepsie Anfälle auslösen können."
+msgid "Este juego contiene destellos, luces intermitentes y explosiones que pueden desencadenar ataques epilépticos en personas con epilepsia fotosensible."
+msgstr "Dieses Spiel enthält Lichtblitze, flackernde Lichter und Explosionen, die bei Menschen mit fotosensitiver Epilepsie epileptische Anfälle auslösen können."
 
 #: scripts/ui/aviso_luces.gd
-msgid "Si tú o alguien de tu familia ha tenido alguna vez un ataque epiléptico, consulta a un médico antes de jugar."
-msgstr "Wenn du oder jemand in deiner Familie schon einmal einen epileptischen Anfall hatte, frag vor dem Spielen einen Arzt."
+msgid "Si tú o algún familiar tenéis antecedentes de ataques epilépticos, consulta a un médico antes de jugar."
+msgstr "Wenn bei dir oder in deiner Familie schon einmal epileptische Anfälle aufgetreten sind, frag vor dem Spielen einen Arzt."
 
 #: scripts/ui/aviso_luces.gd
-msgid "Deja de jugar enseguida si notas mareo, visión borrosa, tics en los ojos o en la cara, movimientos que no controlas o desorientación."
-msgstr "Hör sofort auf zu spielen, wenn dir schwindlig wird oder du verschwommen siehst, Zuckungen an Augen oder Gesicht, unkontrollierte Bewegungen oder Orientierungslosigkeit bemerkst."
+msgid "Suspende el juego inmediatamente y consulta a un médico si experimentas mareos, alteraciones en la visión, tics oculares o musculares, movimientos involuntarios o desorientación."
+msgstr "Hör sofort auf zu spielen und frag einen Arzt, wenn du Schwindel, Sehstörungen, Augen- oder Muskelzucken, unwillkürliche Bewegungen oder Orientierungslosigkeit bemerkst."
 
 #: scripts/ui/aviso_luces.gd scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"

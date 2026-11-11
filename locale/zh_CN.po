@@ -5266,16 +5266,16 @@ msgid "Aviso de fotosensibilidad"
 msgstr "光敏性癫痫警告"
 
 #: scripts/ui/aviso_luces.gd
-msgid "Este juego tiene destellos, luces que parpadean y explosiones que pueden provocar ataques epilépticos a personas con epilepsia fotosensible."
-msgstr "本游戏含有闪光、闪烁的灯光和爆炸画面，可能会使患有光敏性癫痫的人癫痫发作。"
+msgid "Este juego contiene destellos, luces intermitentes y explosiones que pueden desencadenar ataques epilépticos en personas con epilepsia fotosensible."
+msgstr "本游戏含有闪光、闪烁的灯光和爆炸画面，可能会诱发光敏性癫痫患者的癫痫发作。"
 
 #: scripts/ui/aviso_luces.gd
-msgid "Si tú o alguien de tu familia ha tenido alguna vez un ataque epiléptico, consulta a un médico antes de jugar."
-msgstr "如果你或你的家人曾经有过癫痫发作，请在游戏前咨询医生。"
+msgid "Si tú o algún familiar tenéis antecedentes de ataques epilépticos, consulta a un médico antes de jugar."
+msgstr "如果你或你的家人有癫痫发作史，请在游戏前咨询医生。"
 
 #: scripts/ui/aviso_luces.gd
-msgid "Deja de jugar enseguida si notas mareo, visión borrosa, tics en los ojos o en la cara, movimientos que no controlas o desorientación."
-msgstr "如果出现头晕、视线模糊、眼部或面部抽搐、无法控制的动作或方向感丧失，请立即停止游戏。"
+msgid "Suspende el juego inmediatamente y consulta a un médico si experimentas mareos, alteraciones en la visión, tics oculares o musculares, movimientos involuntarios o desorientación."
+msgstr "如果出现头晕、视觉异常、眼部或肌肉抽搐、不自主的动作或方向感丧失，请立即停止游戏并咨询医生。"
 
 #: scripts/ui/aviso_luces.gd scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"

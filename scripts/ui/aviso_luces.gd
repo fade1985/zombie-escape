@@ -56,9 +56,9 @@ func _ready() -> void:
 	titulo.add_theme_color_override("font_color", Tema.AMARILLO)
 	columna.add_child(titulo)
 	for texto in [
-		Idioma.t("Este juego tiene destellos, luces que parpadean y explosiones que pueden provocar ataques epilépticos a personas con epilepsia fotosensible."),
-		Idioma.t("Si tú o alguien de tu familia ha tenido alguna vez un ataque epiléptico, consulta a un médico antes de jugar."),
-		Idioma.t("Deja de jugar enseguida si notas mareo, visión borrosa, tics en los ojos o en la cara, movimientos que no controlas o desorientación."),
+		Idioma.t("Este juego contiene destellos, luces intermitentes y explosiones que pueden desencadenar ataques epilépticos en personas con epilepsia fotosensible."),
+		Idioma.t("Si tú o algún familiar tenéis antecedentes de ataques epilépticos, consulta a un médico antes de jugar."),
+		Idioma.t("Suspende el juego inmediatamente y consulta a un médico si experimentas mareos, alteraciones en la visión, tics oculares o musculares, movimientos involuntarios o desorientación."),
 	]:
 		var l := Label.new()
 		l.text = texto

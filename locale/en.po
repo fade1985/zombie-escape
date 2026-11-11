@@ -5276,16 +5276,16 @@ msgid "Aviso de fotosensibilidad"
 msgstr "Photosensitivity warning"
 
 #: scripts/ui/aviso_luces.gd
-msgid "Este juego tiene destellos, luces que parpadean y explosiones que pueden provocar ataques epilépticos a personas con epilepsia fotosensible."
-msgstr "This game contains flashes, flickering lights and explosions that may trigger seizures in people with photosensitive epilepsy."
+msgid "Este juego contiene destellos, luces intermitentes y explosiones que pueden desencadenar ataques epilépticos en personas con epilepsia fotosensible."
+msgstr "This game contains flashes, flickering lights and explosions that may trigger epileptic seizures in people with photosensitive epilepsy."
 
 #: scripts/ui/aviso_luces.gd
-msgid "Si tú o alguien de tu familia ha tenido alguna vez un ataque epiléptico, consulta a un médico antes de jugar."
-msgstr "If you or anyone in your family has ever had a seizure, consult a doctor before playing."
+msgid "Si tú o algún familiar tenéis antecedentes de ataques epilépticos, consulta a un médico antes de jugar."
+msgstr "If you or anyone in your family has a history of epileptic seizures, consult a doctor before playing."
 
 #: scripts/ui/aviso_luces.gd
-msgid "Deja de jugar enseguida si notas mareo, visión borrosa, tics en los ojos o en la cara, movimientos que no controlas o desorientación."
-msgstr "Stop playing immediately if you feel dizzy or experience blurred vision, eye or face twitching, involuntary movements or disorientation."
+msgid "Suspende el juego inmediatamente y consulta a un médico si experimentas mareos, alteraciones en la visión, tics oculares o musculares, movimientos involuntarios o desorientación."
+msgstr "Stop playing immediately and consult a doctor if you experience dizziness, altered vision, eye or muscle twitching, involuntary movements or disorientation."
 
 #: scripts/ui/aviso_luces.gd scripts/ui/relato.gd
 msgid "Toca la pantalla para continuar"
