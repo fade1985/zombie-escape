@@ -899,7 +899,22 @@ func mover_lanzable(por := "") -> void:
 	var k := lz.clave_en(sel)
 	var donde := ""   # el sitio donde queda el elegido
 	var otro := ""    # y el del que cambia de sitio con él (o con el que se junta)
-	if sel.begins_with("e") and k != "" and not lz.mano_llena_de(i):
+	if por != "" and lz.se_juntan(sel, por):
+		# encima de otro montón de la misma clave que no está lleno: se le pasan los que quepan (juntar). Lo que llega da
+		# el saltito y se queda elegido; si el de donde salían se ha vaciado y era de la mano, su hueco lo ocupa otro
+		var vacia_mano := sel.begins_with("l") and lz.cuantos_en(sel) <= lz.maximo(k) - lz.cuantos_en(por)
+		var antes_mano := lz.mano.size()
+		var antes_rep := lz.repuesto.size()
+		lz.juntar(sel, por)
+		donde = por
+		# (si se ha quitado un montón de antes en la lista de repuesto, el de destino corre un sitio)
+		if por.begins_with("e") and sel.begins_with("e") and lz.repuesto.size() < antes_rep and i < por.substr(1).to_int():
+			donde = "e%d" % (por.substr(1).to_int() - 1)
+		elif por.begins_with("e") and vacia_mano and lz.mano.size() == antes_mano and lz.sitio_de(k).begins_with("l"):
+			donde = lz.sitio_de(k)   # (el de la mano se vació y su relevo ha sido justo ese montón)
+		if lz.cuantos_en(sel) > 0 and lz.clave_en(sel) == k:
+			otro = sel
+	elif sel.begins_with("e") and k != "" and not lz.mano_llena_de(i):
 		var antes := lz.repuesto.size()
 		lz.a_la_mano(i, lz.clave_en(por) if por.begins_with("l") else "")
 		donde = lz.sitio_de(k)
@@ -2075,7 +2090,8 @@ func mejorar() -> void:
 # se levanta y sigue al dedo, y su casilla se queda apagada (levantar; va con el arrastrar de Godot, así que el botón ya
 # no cuenta como tocado). Se encienden los sitios donde se puede soltar (destinos): en el inventario, la mano o el
 # repuesto de su tipo (las armas se cambian), Johnny (se pone el arma, sin marca, o usa la cura, con un óvalo), los arrojables de la mano al
-# repuesto y al revés (encima de otro, se cambian esos dos) y la ficha, que se vuelve la zona roja de tirar (la casilla
+# repuesto y al revés (encima de otro, se cambian esos dos; si es de la misma clave, el mismo tipo y la misma calidad, y no
+# está lleno, se juntan: Lanzables.juntar, también entre dos de repuesto) y la ficha, que se vuelve la zona roja de tirar (la casilla
 # entera); en el baúl, la otra mitad (guardar o sacar). El sitio que hay bajo el dedo crece un poco (mirar). Al soltar,
 # se hace lo mismo que con los botones de la ficha (soltar_en) y lo que llega da un saltito; si no se puede soltar ahí,
 # vuelve a su casilla y, si se ha soltado en otro sitio, tiembla (volver). Con el mando y el teclado no cambia nada
@@ -2177,6 +2193,10 @@ func destinos(clave: String) -> Dictionary:
 		"e":
 			for j in Lanzables.MANO:
 				d["l%d" % j] = "mover"
+			# encima de otro de repuesto de la misma clave (tipo y calidad) que no esté lleno: se juntan
+			for j in Lanzables.REPUESTO:
+				if partida.lanzables.se_juntan(clave, "e%d" % j):
+					d["e%d" % j] = "mover"
 	return d
 
 

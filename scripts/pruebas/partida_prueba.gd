@@ -190,6 +190,8 @@
 #   --montones          los arrojables en montones de 2: varios del mismo tipo, el inventario lleno, otros 2 a la
 #                       mano al acabarse, el baúl (juntos, de 2 en 2), completar el edificio y una partida
 #                       guardada con más de 4 de repuesto (M67: los que sobran, al baúl)  [prueba_inventario.gd]
+#   --juntar-arrojables dos montones de arrojables del mismo tipo y calidad se juntan arrastrando uno encima del otro
+#                       (dos de repuesto, y uno de la mano con uno de repuesto); los de otra calidad, no [prueba_inventario.gd]
 #   --infinito          el HUD con la ayuda de balas infinitas (el «∞» dibujado a mano)    [prueba_inventario.gd]
 #   --municion-suelo    la munición, un molotov y una granada en el suelo (con luz y a oscuras), la caja según el arma y un
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
@@ -676,6 +678,9 @@ func empezar_prueba() -> void:
 	elif "--infinito" in args:
 		set_process(false)   # sin la prueba larga
 		probar_infinito()
+	elif "--juntar-arrojables" in args:
+		set_process(false)   # sin la prueba larga
+		probar_juntar_arrojables()
 	elif "--montones" in args:
 		set_process(false)   # sin la prueba larga
 		probar_montones()

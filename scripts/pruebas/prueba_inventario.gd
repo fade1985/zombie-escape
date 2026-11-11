@@ -1943,3 +1943,38 @@ func responder_confirmar(dueno: Node, si: bool) -> void:
 	for h in dueno.get_children():
 		if h is Confirmar and not h.hecho:
 			h.responder(si)
+
+
+# Dos montones de arrojables del mismo tipo y la misma calidad, sin llenar y en sitios distintos, se juntan arrastrando
+# uno encima del otro (Lanzables.juntar): dos de repuesto entre sí, y uno de la mano con uno de repuesto. Los de otra
+# calidad no se juntan (ni se encienden como sitio donde soltar)
+func probar_juntar_arrojables() -> void:
+	var lz: Lanzables = lanzables
+	var como := func() -> String:
+		return "a mano %s · repuesto %s" % [lz.mano.map(func(k): return "%s %d" % [k, lz.cuantas(k)]),
+			range(lz.repuesto.size()).map(func(j): return "%s %d" % [lz.repuesto[j], lz.en_repuesto[j]])]
+	await get_tree().create_timer(0.5).timeout
+	lz.mano = ["molotov", "granada"]
+	lz.cantidades = {"molotov": 1, "granada": 2, "atraedora": 0, "congeladora": 0}
+	lz.repuesto = ["molotov", "granada", "granada", "molotov:2"]
+	lz.en_repuesto = [1, 1, 1, 1]
+	print("Juntar · al empezar: %s" % como.call())
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.3).timeout
+	print("Juntar · sitios para soltar el molotov Raro (e3): %s (esperado: sin e0, que es Normal)" % [inventario.destinos("e3").keys()])
+	print("Juntar · sitios para soltar la granada e1: %s (esperado: con e2)" % [inventario.destinos("e1").keys()])
+	inventario.soltar_en("e1", "e2")
+	await get_tree().create_timer(0.3).timeout
+	print("Juntar · granada e1 encima de e2: %s · elegida %s (esperado: repuesto [molotov 1, granada 2, molotov:2 1] · e1)" % [
+		como.call(), inventario.sel])
+	Captura.foto("captura-juntar-repuesto.png")
+	inventario.soltar_en("l0", "e0")
+	await get_tree().create_timer(0.3).timeout
+	print("Juntar · molotov de la mano encima del de repuesto: %s · elegido %s (esperado: a mano [molotov 2, granada 2] · repuesto [granada 2, molotov:2 1] · l0)" % [
+		como.call(), inventario.sel])
+	Captura.foto("captura-juntar-mano.png")
+	inventario.soltar_en("e1", "e0")
+	await get_tree().create_timer(0.2).timeout
+	print("Juntar · molotov Raro encima de la granada: %s (esperado: igual que antes, no se juntan)" % como.call())
+	inventario.cerrar()
+	get_tree().quit()

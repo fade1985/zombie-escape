@@ -14,7 +14,8 @@
 #     que no esté lleno (primero el de la mano); si están llenos, a un montón nuevo: a la mano si hay hueco y no lleva
 #     ya esa clave a mano, y si no, al repuesto (y si tampoco, no lo coge: meter, cabe). Cuando se acaba el de la
 #     mano, su hueco lo ocupa otro montón de repuesto de la misma clave; si no hay, uno del mismo tipo y, si tampoco,
-#     el primero (repasar). Desde el inventario se pasan de la mano al repuesto y al revés (a_la_mano, al_repuesto). Un
+#     el primero (repasar). Desde el inventario se pasan de la mano al repuesto y al revés (a_la_mano, al_repuesto) y dos
+#     montones de la misma clave sin llenar se juntan arrastrando uno encima del otro (juntar). Un
 #     montón se señala por su "sitio", el nombre de su casilla en el inventario: "l1" el 2.º a mano, "e3" el 4.º de
 #     repuesto (clave_en, cuantos_en).
 #   - Al completar el edificio, todos los que le quedan van al baúl (partida.equipo_encima), también los Normales. En
@@ -326,6 +327,30 @@ func a_la_mano(j: int, por := "") -> void:
 		en_repuesto[j] = n
 	tipo = k
 	repasar()   # (el montón de repuesto que se ha vaciado, fuera)
+
+
+# ¿Se pueden juntar el montón de "de" con el de "a" ("l1", "e3")? Si son de la misma clave (el mismo tipo y la misma
+# calidad), sitios distintos y al de "a" aún le caben más
+func se_juntan(de: String, a: String) -> bool:
+	var k := clave_en(de)
+	return de != a and k != "" and clave_en(a) == k and cuantos_en(a) < maximo(k)
+
+
+# Desde el inventario (arrastrando uno encima del otro): pasa al montón de "a" todos los de "de" que le quepan; lo que no
+# cabe se queda en "de". Si "de" se vacía, se quita (repasar). Devuelve los que han pasado
+func juntar(de: String, a: String) -> int:
+	if not se_juntan(de, a):
+		return 0
+	var k := clave_en(de)
+	var pasan := mini(cuantos_en(de), maximo(k) - cuantos_en(a))
+	for s in [[de, -pasan], [a, pasan]]:
+		var i: int = s[0].substr(1).to_int()
+		if s[0].begins_with("l"):
+			cantidades[k] += s[1]
+		else:
+			en_repuesto[i] += s[1]
+	repasar()
+	return pasan
 
 
 # ¿Se juntaría con el de la mano sin que pase nada? (el de repuesto "j" es de una clave que ya lleva a mano, y ese montón
