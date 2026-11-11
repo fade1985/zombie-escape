@@ -85,6 +85,51 @@ func probar_frases() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --pasillo-sos": el superviviente encerrado en la planta 2. En el pasillo, sin gritos ni ruidos: solo un «!»
+# encima de la puerta de su piso y otro, solo, en medio de su cuadrado del minimapa (captura-pasillo-sos.png). Luego, lo que te
+# dejas en los apartamentos ya vistos, en medio de su cuadrado del minimapa: la llave, la página del dosier, la tele encendida y
+# el superviviente sin rescatar (captura-pasillo-dejado.png y el minimapa ampliado, captura-pasillo-dejado-mapa.png). Se cierra
+func probar_pasillo_sos() -> void:
+	nueva_planta(2)
+	supervivientes.poner_rescate(Supervivientes.DATOS.medico, 2)
+	planta.superviviente.activo = true
+	planta.superviviente.puerta.cerrada = true
+	await montar(0, 0, false)
+	var p: Node2D = supervivientes.puerta_del_pasillo()
+	johnny.position = p.llegada() + Vector2(120, 40 if p.salida.dir == "arriba" else -40)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(4.0, false).timeout   # (más que lo que tardaba en gritar)
+	var marca: Node = mapa.cosas.get_node_or_null("ExclamacionSuperviviente")
+	var gritos: Array = mapa.cosas.get_children().filter(func(n): return n is Label)
+	print("Pasillo · superviviente (puerta de %s): «!» en su puerta %s · gritos en el pasillo %d (esperado: true · 0)" % [p.salida.dir,
+		marca != null and marca.visible, gritos.size()])
+	Captura.foto("captura-pasillo-sos.png")
+	# lo que se deja: el superviviente con el baño ya abierto, la llave en el suelo, la página y la tele encendida
+	planta.superviviente.puerta.cerrada = false
+	var otros: Array = []
+	for k in planta.sitios.size():
+		if planta.sitios[k].tipo == "apartamento":
+			planta.sitios[k].visitado = true
+			planta.sitios[k].limpio = true
+			otros.append(k)
+	var c: Dictionary = planta.cientifico
+	c.cogida = false
+	planta.llave = {"sitio": c.sitio, "pos": Vector2(100, 100)}
+	for k in otros:
+		if planta.sitios[k].has("tele"):
+			planta.sitios[k].tele.estado = "encendida"
+	var minimapa: Node = $Pantalla/Minimapa
+	minimapa.pagina_t = 0.0
+	await get_tree().create_timer(0.5, false).timeout
+	var dejado := {}
+	for cas in minimapa.casillas():
+		if not cas.get("dejado", []).is_empty():
+			dejado[planta.sitios[cas.sitio].nombre] = cas.dejado
+	print("Pasillo · lo que te dejas: %s (esperado: llave y dosier en uno, tele en otro, carita en el del superviviente)" % dejado)
+	Captura.foto("captura-pasillo-dejado.png")
+	get_tree().quit()
+
+
 func probar_alerta() -> void:
 	var n := Alerta.nivel
 	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.regla(n, edificio)])

@@ -4,8 +4,9 @@
 # El plano de la planta: el pasillo en medio y, pegada a él (con el muro compartido y el hueco de la puerta), una sala
 # por cada puerta (arriba y abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar (con un «?»), rojo = con zombis dentro, claro = limpio; Johnny, un círculo
 # rojo (en el pasillo, donde está). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
-# está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
-# (supervivientes.gd).
+# está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, solo un "!" en medio
+# (supervivientes.gd). Y en medio de cada apartamento, lo que te has dejado en él: la llave, la página del dosier, la
+# noticia de la tele encendida o el superviviente sin rescatar (una carita).
 # Con el técnico rescatado (vive en su habitación de las viviendas y ha arreglado las cámaras de seguridad), el plano
 # enseña los zombis: un puntito rojo por cada uno, también en las salas sin visitar. Donde está Johnny, cada
 # puntito va donde está su zombi y se mueve con él; en las demás salas, en filas.
@@ -42,6 +43,10 @@ const ICONOS := {
 	"llave": preload("res://assets/ui/iconos/llave.png"),
 	"escalera": preload("res://assets/ui/iconos/escalera.png"),
 	"jefe": preload("res://assets/ui/iconos/jefe.png"),
+	# lo que te has dejado en un apartamento: la página del dosier, la noticia de la tele y el superviviente sin rescatar
+	"dosier": preload("res://assets/ui/iconos/dosier.png"),
+	"tele": preload("res://assets/ui/iconos/noticias.png"),
+	"carita": preload("res://assets/ui/iconos/carita.png"),
 }
 
 var partida: Node           # de donde saca la planta y el sitio en el que está Johnny
@@ -52,6 +57,8 @@ var camaras := false        # el técnico ya está rescatado: se ven los zombis
 var plano := Image.new()
 var plano_textura: ImageTexture
 var plano_firma := ""
+var hay_pagina := false    # si queda alguna página del dosier por encontrar (se mira cada segundo: leer el guardado cuesta)
+var pagina_t := 0.0
 static var VISIBLE := {}    # lo que se ve de cada icono (sin el hueco de alrededor), medido una vez
 
 
@@ -72,6 +79,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	tiempo += delta
+	pagina_t -= delta
+	if pagina_t <= 0.0 and partida:
+		pagina_t = 1.0
+		hay_pagina = not Historia.pendiente(Guardado.cargar(), partida.edificio).is_empty()
 	queue_redraw()
 
 
@@ -110,12 +121,23 @@ func casillas() -> Array:
 				var icono := ""
 				if s.cerrojo == "llave":
 					icono = "candado"
-				elif planta.llave.sitio == s.a and sitio.visitado and not planta.tiene_llave and not planta.get("llave_usada", false):
-					icono = "llave"
 				elif sitio.tipo == "mantenimiento":
 					icono = "herramientas"
 				elif sitio.tipo == "jefe":
 					icono = "jefe"
+				# lo que te has dejado en él (en medio de su cuadrado; si son dos, uno al lado del otro). Donde está encerrado el
+				# superviviente, solo su «!» (sin el «?»)
+				var dejado := []
+				if s.a != sos:
+					if sitio.visitado and planta.llave.sitio == s.a and not planta.tiene_llave and not planta.get("llave_usada", false):
+						dejado.append("llave")
+					var c: Dictionary = planta.get("cientifico", {})
+					if sitio.visitado and c.get("sitio", -1) == s.a and not c.cogida and hay_pagina:
+						dejado.append("dosier")
+					if sitio.get("tele", {}).get("estado", "") == "encendida":
+						dejado.append("tele")
+					if partida.supervivientes.hay_sos() and planta.superviviente.get("sitio", -1) == s.a:
+						dejado.append("carita")
 				var ancho := SALA.x
 				var alto := SALA.y
 				var x := par(x0 + float(s.en) / pasillo.ancho * largo)
@@ -126,7 +148,7 @@ func casillas() -> Array:
 				lista.append({"r": Rect2(x - ancho / 2.0, y, ancho, alto), "color": color,
 					# (desde la exposición y las viviendas, que no salen en el plano, se marca la sala de mantenimiento)
 					"aqui": aqui == s.a or (planta.sitios[aqui].tipo in ["expo", "armas", "viviendas"] and sitio.tipo == "mantenimiento"),
-					"icono": icono, "sos": s.a == sos, "puerta": puerta, "sitio": s.a})
+					"icono": icono, "sos": s.a == sos, "puerta": puerta, "sitio": s.a, "dejado": dejado})
 	return lista
 
 
@@ -190,7 +212,7 @@ func dibujar_planta() -> void:
 			# la raya del medio del pasillo, a trozos, como la de una carretera
 			for x in range(int(r.position.x) + 4, int(r.end.x) - 4, 10):
 				draw_rect(Rect2(x, r.get_center().y - 1, 4, 2), color.darkened(0.25))
-		elif color == GRIS and c.icono == "" and c.has("sitio"):
+		elif color == GRIS and c.icono == "" and c.has("sitio") and not c.sos and c.get("dejado", []).is_empty():
 			# sin visitar: un «?» pequeño
 			draw_string(letra, Vector2(r.position.x, r.get_center().y + 7), "?", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 16, GRIS.lightened(0.35))   # no-tr (un signo)
 	# el hueco de cada puerta, encima, abre el muro que comparten la sala y el pasillo
@@ -202,10 +224,13 @@ func dibujar_planta() -> void:
 	for c in lista:
 		if c.icono != "":
 			icono(c.icono, c.r.get_center())
-	# el "!" del superviviente, dentro de su sala
+		var dejado: Array = c.get("dejado", [])
+		for i in dejado.size():
+			icono(dejado[i], c.r.get_center() + Vector2((i - (dejado.size() - 1) / 2.0) * 14.0, 0))
+	# el "!" del superviviente, en medio de su sala
 	for c in lista:
 		if c.sos:
-			var sitio_sos := Vector2(c.r.end.x - 6, c.r.get_center().y)   # dentro de la sala, a la derecha
+			var sitio_sos: Vector2 = c.r.get_center()
 			if c.has("sos_x") and c.sos_x > 0.0:
 				sitio_sos = Vector2(c.sos_x - 5, c.r.position.y + 2)
 			exclamacion(sitio_sos)

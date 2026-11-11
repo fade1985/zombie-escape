@@ -462,8 +462,8 @@ func probar_apagon(foto: Callable, esperar: Callable) -> void:
 	print("Apagón · en la sala del jefe: activo %s, oscuridad %.2f (sin evento, como siempre)" % [activo, Luz.nivel])
 
 
-# Un superviviente que pide ayuda en pleno apagón (F19): desde el pasillo, con su puerta en pantalla y fuera de ella, y
-# dentro de su apartamento, cada foto justo después de un grito
+# Un superviviente que pide ayuda en pleno apagón (F19): desde el pasillo (desde el 11 nov, sin gritos: el «!» de su
+# puerta), con su puerta en pantalla y fuera de ella, y dentro de su apartamento, cada foto justo después de un grito
 func probar_socorro(foto: Callable, esperar: Callable) -> void:
 	var sup: Supervivientes = partida.supervivientes
 	sup.poner_rescate(Supervivientes.DATOS.medico, partida.planta.num)

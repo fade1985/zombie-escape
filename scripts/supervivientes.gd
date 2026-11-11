@@ -147,6 +147,7 @@ const MAX_EQUIPO := 4
 
 # (lo que dice al entrar Johnny en su baño, ya abierto)
 const NO_ME_DEJES := "¡NO ME DEJES AQUÍ!"   # [traducir]
+const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")   # el «!» encima de su puerta, en el pasillo
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
 const GRITOS := ["¡Socorro!", "¡Aquí dentro!", "¡Ayuda, por favor!", "¡Que alguien me saque!", "¡Estoy en el baño!"]   # [traducir]
 const CADA := [2.2, 3.4]
@@ -380,6 +381,15 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 			valvulas.montar()   # la limpiadora: su cuarto lleno de gas y las tres válvulas (valvulas.gd)
 	if sitio.tipo == "viviendas":
 		colocar_vecinos()
+	# en el pasillo, un «!» encima de la puerta de su apartamento (sin gritos ni ruidos): invita a entrar
+	if idx == 0 and hay_sos() and not partida.planta.superviviente.has("mostrador"):
+		var p := puerta_del_pasillo()
+		if p:
+			var marca := EXCLAMACION.new()
+			marca.name = "ExclamacionSuperviviente"   # no-tr
+			marca.condicion = hay_sos
+			marca.position = p.position + Vector2(0, -112.0 if p.salida.dir == "arriba" else -70.0)
+			mapa.cosas.add_child(marca)
 
 
 func _process(delta: float) -> void:
@@ -409,8 +419,8 @@ func _physics_process(delta: float) -> void:
 
 # ═════════════ Encerrado en el baño ═════════════
 
-# Mientras la puerta sigue cerrada, grita y da golpes. Se le oye desde su apartamento (sale de la puerta del baño)
-# y desde el pasillo (sale de la puerta del piso)
+# Mientras la puerta sigue cerrada, grita y da golpes. Se le oye solo desde su apartamento (sale de la puerta del baño);
+# en el pasillo no se le oye: allí hay un «!» encima de la puerta del piso (al_montar)
 func actualizar_socorro(delta: float) -> void:
 	if not encerrado() or barricada.activa():
 		return   # (el ferretero, quitando la barricada, dice otras cosas: barricada.gd)
@@ -423,30 +433,14 @@ func actualizar_socorro(delta: float) -> void:
 	if socorro_t > 0.0:
 		return
 	socorro_t = randf_range(CADA[0], CADA[1])
-	var donde := Vector2.INF
-	var tamano := 18
-	var en_la_puerta := false
-	if partida.aqui == sup.sitio and puerta:
-		donde = puerta.position + Vector2(0, -110)
-		en_la_puerta = true
-		puerta.golpes = 0.45
-		Sonido.tocar("socorro")
-	elif partida.aqui == 0:
-		var p := puerta_del_pasillo()
-		if p:
-			donde = p.position + Vector2(0, 50 if p.salida.dir == "arriba" else -90)
-			tamano = 15
-			Sonido.tocar("socorro_lejos")
-	if donde == Vector2.INF:
+	if partida.aqui != sup.sitio or puerta == null:
 		return
+	puerta.golpes = 0.45
+	Sonido.tocar("socorro")
 	grito_t = tiempo
 	var gritos: Array = rescate.def.get("gritos", GRITOS)
-	# del color de los avisos de la línea de abajo (partida.decir: «Has cogido la llave...»), el hueso de Tema.TINTA, y a su
-	# tamaño (16, con el contorno de 4); antes, rosa
-	if en_la_puerta:
-		frase(donde, Idioma.t(gritos[randi() % gritos.size()]))
-	else:
-		texto_flotante(donde + Vector2(randf_range(-14, 14), 0), Idioma.t(gritos[randi() % gritos.size()]), Tema.TINTA, tamano)
+	# encima de la mitad de la puerta, como los avisos de Johnny (amarillo y en mayúsculas)
+	frase(puerta.position + Vector2(0, -110), Idioma.t(gritos[randi() % gritos.size()]))
 
 
 # En el pasillo, la puerta del apartamento del superviviente
@@ -868,12 +862,7 @@ func dibujar_capa() -> void:
 		var hacia := Vector2.INF
 		var sube := 0.0
 		if partida.aqui == partida.planta.superviviente.sitio and puerta:
-			hacia = puerta.position + Vector2(0, -40)
-		elif partida.aqui == 0:
-			var p := puerta_del_pasillo()
-			if p:
-				hacia = p.position
-				sube = 106.0 if p.salida.dir == "arriba" else 40.0
+			hacia = puerta.position + Vector2(0, -40)   # (en el pasillo, ni flecha: el «!» de su puerta y el del minimapa)
 		if hacia != Vector2.INF:
 			flecha(hacia, rescate.def.color, tiempo - grito_t < 0.7, sube)
 	escolta.dibujar(capa)

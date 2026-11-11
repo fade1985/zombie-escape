@@ -265,6 +265,8 @@
 #                       bajada del mostrador del vestíbulo, subirla, abrir los tornos 60 s (la barra, los tornos que
 #                       frenan, tumbarla y levantarla), el aviso de la planta, el «¡Detrás!» y su habitación, con fotos
 #                                                                                         [prueba_sitios.gd]
+#   --pasillo-sos       el superviviente encerrado: en el pasillo, solo el «!» de su puerta y el del minimapa; y en el
+#                       minimapa, lo que te dejas en cada apartamento (llave, dosier, tele, carita)  [prueba_varias.gd]
 #   --frases            los avisos de Johnny encima de su cabeza (la puerta del jefe, el ascensor, la salida de
 #                       incendios, «¡SE HA ATASCADO!») y lo que dice el superviviente al entrar en su baño y al unirse
 #                                                                                         [prueba_varias.gd]
@@ -878,6 +880,9 @@ func empezar_prueba() -> void:
 	elif "--piso" in args:
 		set_process(false)   # sin la prueba larga
 		probar_piso()
+	elif "--pasillo-sos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_pasillo_sos()
 	elif "--frases" in args:
 		set_process(false)   # sin la prueba larga
 		probar_frases()
