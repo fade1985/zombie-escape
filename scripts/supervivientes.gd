@@ -248,10 +248,12 @@ func elegir() -> void:
 	var quedan := de_edificio(partida.edificio).filter(func(id): return not id in s.rescatados)
 	Planta.tienda_fija = {}
 	Planta.mostrador_fijo = 0
+	Planta.rescate_planta = 0
 	if not quedan.is_empty():
 		var def: Dictionary = DATOS[quedan[randi() % quedan.size()]]
-		# (la recepcionista, siempre en el vestíbulo: la planta 1)
-		poner_rescate(def, 1 if def.has("mostrador") else randi_range(1, Planta.PLANTAS - 1))
+		# (la recepcionista, siempre en el vestíbulo: la planta 1; los demás, nunca en la planta baja, que solo tiene dos
+		# apartamentos: en ella van el científico muerto y la tele de las noticias)
+		poner_rescate(def, 1 if def.has("mostrador") else randi_range(2, Planta.PLANTAS - 1))
 	if s.acompanante in s.rescatados and DATOS.has(s.acompanante):
 		var a := crear(DATOS[s.acompanante], "equipo")
 		a.es_vecino = true
@@ -270,6 +272,7 @@ func poner_rescate(def: Dictionary, num: int) -> void:
 	Planta.tienda_fija = {"planta": num, "tienda": def.tienda, "sala": def.sala, "cuarto": def.get("cuarto", "")} \
 		if def.has("tienda") else {}
 	Planta.mostrador_fijo = num if def.has("mostrador") else 0
+	Planta.rescate_planta = num
 
 
 # Al generar cada planta: si le toca a esta, se cierra la puerta de su baño (el baño ya lo ha guardado planta.gd)

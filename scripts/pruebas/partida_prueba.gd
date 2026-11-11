@@ -265,6 +265,8 @@
 #                       bajada del mostrador del vestíbulo, subirla, abrir los tornos 60 s (la barra, los tornos que
 #                       frenan, tumbarla y levantarla), el aviso de la planta, el «¡Detrás!» y su habitación, con fotos
 #                                                                                         [prueba_sitios.gd]
+#   --eventos-planta    en 200 plantas, que nunca coincidan dos eventos (superviviente, tele, científico) en un mismo
+#                       apartamento                                                       [prueba_sitios.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -873,6 +875,9 @@ func empezar_prueba() -> void:
 	elif "--piso" in args:
 		set_process(false)   # sin la prueba larga
 		probar_piso()
+	elif "--eventos-planta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_eventos_planta()
 	elif "--escondites" in args:
 		set_process(false)   # sin la prueba larga
 		probar_escondites()

@@ -649,6 +649,46 @@ func probar_escondites() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --eventos-planta": en 200 plantas sorteadas (con el superviviente en cada una, menos en la baja), que
+# nunca haya dos eventos en el mismo apartamento (superviviente, tele de las noticias y científico muerto) y cuántas
+# plantas se quedan sin tele. Esperado: «repetidos 0». Luego se cierra
+func probar_eventos_planta() -> void:
+	var antes: int = Planta.rescate_planta
+	var repetidos := 0
+	var sin_tele := 0
+	var sin_cientifico := 0
+	for i in 200:
+		Planta.semilla = 7000 + i
+		var num := 1 + i % 4
+		Planta.rescate_planta = num if num > 1 else 0
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		var usados := []
+		if Planta.rescate_planta == num and not p.superviviente.is_empty():
+			usados.append(p.superviviente.sitio)
+		var tele := -1
+		for k in p.sitios.size():
+			if p.sitios[k].has("tele"):
+				tele = k
+		if tele < 0:
+			sin_tele += 1
+		else:
+			usados.append(tele)
+		if p.cientifico.is_empty():
+			sin_cientifico += 1
+		else:
+			usados.append(p.cientifico.sitio)
+		var unicos := {}
+		for u in usados:
+			unicos[u] = true
+		if unicos.size() != usados.size():
+			repetidos += 1
+			print("  repetido en la semilla %d (planta %d): %s" % [7000 + i, num, usados])
+	Planta.semilla = 0
+	Planta.rescate_planta = antes
+	print("Eventos de la planta: repetidos %d · sin tele %d · sin científico %d (de 200)" % [repetidos, sin_tele, sin_cientifico])
+	get_tree().quit()
+
+
 # Con "--captura --edificio centro --galeria" (M77): la galería de las cuatro primeras plantas, entera y sin penumbra,
 # con sus muebles puestos a mano (Catalogo.SALAS["galeria"].colocados). De cada una dice cuántos muebles tiene (esperado:
 # los puestos a mano), qué hay en la pared de arriba (puertas, escaparates) y saca captura-galeria-<planta>.png

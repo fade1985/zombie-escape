@@ -128,6 +128,7 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	# el superviviente de la partida y el equipo (el acompañante y el rescatado, si ya lo estaba)
 	var sup: Supervivientes = p.supervivientes
 	Planta.tienda_fija = {}
+	Planta.rescate_planta = 0
 	if not foto.rescate.is_empty() and Supervivientes.DATOS.has(foto.rescate.id):
 		sup.poner_rescate(Supervivientes.DATOS[foto.rescate.id], foto.rescate.planta)
 		sup.rescate.rescatado = foto.rescate.rescatado

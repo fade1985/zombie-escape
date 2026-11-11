@@ -73,6 +73,9 @@ static var tienda_fija := {}
 # La recepcionista de Torre Velaria: en qué planta se esconde detrás del mostrador del vestíbulo (la 1; 0 = no le
 # toca a ella). La pone supervivientes.gd al empezar, como tienda_fija
 static var mostrador_fijo := 0
+# En qué planta está el superviviente de esta partida (0 = en ninguna). La pone supervivientes.gd (poner_rescate): en esa
+# planta, el científico muerto y la tele de las noticias van a otros apartamentos (un evento por apartamento como mucho)
+static var rescate_planta := 0
 # La joyería del centro comercial (parte 9): una por partida, en esta planta (la pone partida.gd al empezar; 0 =
 # ninguna). Va en la segunda puerta normal de su planta, nunca en la del jefe ni en la del superviviente
 static var joyeria_planta := 0
@@ -484,7 +487,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		var sitio: Dictionary = planta.sitios[normales[orden]]
 		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
 		sitio.armaritos = armaritos(sitio)
-	tele_de_la_planta(planta, normales, rng)
+	# Un evento por apartamento como mucho (superviviente, tele o científico): la tele, en uno sin el superviviente
+	var de_sos: int = planta.superviviente.sitio if rescate_planta == num and not planta.superviviente.is_empty() else -1
+	var de_tele := tele_de_la_planta(planta, normales.filter(func(i): return i != de_sos), rng)
 
 	# Con tarjeta, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
 	if ed.cerrojo == "tarjeta":
@@ -511,10 +516,21 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		if not candidatos.is_empty():
 			candidatos[rng.randi() % candidatos.size()].llave = true
 			planta.llave = {"sitio": -1, "pos": Vector2.ZERO}
-	# El científico muerto de Velaria (historia.gd), en una habitación de otro apartamento normal si se puede (que
-	# no sea el baño del superviviente). Si sale o no, lo decide la partida: solo si su página falta por encontrar
-	var otros: Array = normales.filter(func(i): return i != donde)
-	var de_cientifico: int = otros[rng.randi() % otros.size()] if not otros.is_empty() else donde
+	# El científico muerto de Velaria (historia.gd), en un apartamento sin otro evento (ni el superviviente ni la tele) y,
+	# si se puede, que no sea el de la llave. Si sale o no, lo decide la partida: solo si su página falta por encontrar.
+	# La tele solo enseña la noticia después de coger su página (partida.gd: tele_con_pagina)
+	var sin_evento: Array = normales.filter(func(i): return i != de_sos and i != de_tele)
+	if sin_evento.is_empty():
+		# (no cabe: el dosier va antes que la noticia, así que esta planta se queda sin tele)
+		quitar_tele(planta, de_tele)
+		de_tele = -1
+		sin_evento = normales.filter(func(i): return i != de_sos)
+	if sin_evento.is_empty():
+		sin_evento = normales
+	var otros: Array = sin_evento.filter(func(i): return i != donde)
+	if otros.is_empty():
+		otros = sin_evento
+	var de_cientifico: int = otros[rng.randi() % otros.size()]
 	var cuartos: Array = planta.sitios[de_cientifico].apt.salas.filter(func(s):
 		# (ni en la cámara acorazada de la joyería, que está cerrada)
 		return ((planta.superviviente.is_empty() or de_cientifico != planta.superviviente.sitio
@@ -898,7 +914,8 @@ static func cuarto_limpieza(sitio: Dictionary, sala: Dictionary, rng: RandomNumb
 
 # M91: la tele de la planta que enseña las noticias (mapa/tele_salon.gd): un mueble "tv" de un salón de un apartamento normal,
 # elegido al azar: el mueble lleva "tele": true y su sitio, sitio.tele = {"estado": "apagada"} (hasta limpiar ese apartamento)
-static func tele_de_la_planta(planta: Dictionary, normales: Array, rng: RandomNumberGenerator) -> void:
+# Devuelve el sitio de la tele, o -1 si no hay ninguna
+static func tele_de_la_planta(planta: Dictionary, normales: Array, rng: RandomNumberGenerator) -> int:
 	var teles := []   # [sitio, mueble]
 	for i in normales:
 		var sitio: Dictionary = planta.sitios[i]
@@ -906,10 +923,21 @@ static func tele_de_la_planta(planta: Dictionary, normales: Array, rng: RandomNu
 			if m.tipo == "tv" and sitio.apt.salas.any(func(s): return s.id == m.zona and s.uso == "salon"):
 				teles.append([i, m])
 	if teles.is_empty():
-		return
+		return -1
 	var una: Array = teles[rng.randi() % teles.size()]
 	una[1].tele = true
 	planta.sitios[una[0]].tele = {"estado": "apagada"}
+	return una[0]
+
+
+# Deja la planta sin la tele de las noticias (vuelve a ser un mueble "tv" más)
+static func quitar_tele(planta: Dictionary, idx: int) -> void:
+	if idx < 0:
+		return
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.erase("tele")
+	for m in sitio.muebles:
+		m.erase("tele")
 
 
 static func armaritos(sitio: Dictionary) -> Array:
