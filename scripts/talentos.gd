@@ -31,80 +31,80 @@ const RAMAS := [
 # [/traducir]
 # El rayo de Pararrayos (johnny.gd, pararrayos): su daño (con el Catalizador, más), lo que aturde, cada cuánto como
 # mucho y lo cerca que tiene que estar el que te ha pegado (los que disparan de lejos, no)
-const PARARRAYOS := {"dano": 20, "aturde": 1.0, "cada": 3.0, "alcance": 200.0}
+const PARARRAYOS := {"dano": 10, "aturde": 0.5, "cada": 3.0, "alcance": 200.0}
 # Adrenalina (johnny.gd): por debajo de "vida" de la vida máxima, + "dano" de daño (se suma, como los demás) y
 # + "velocidad" de velocidad
-const ADRENALINA := {"vida": 0.5, "dano": 0.3, "velocidad": 0.2}
+const ADRENALINA := {"vida": 0.5, "dano": 0.15, "velocidad": 0.1}
 # Mezcla explosiva (zombi.gd, quimica_al_morir): la explosión del que muere con dos efectos (su radio y su daño, que el
 # Catalizador sube), y lo que le dura al zombi la marca del rayo después del calambre ("rayo", en segundos)
-const MEZCLA := {"radio": 90.0, "dano": 30, "rayo": 1.5}
+const MEZCLA := {"radio": 45.0, "dano": 15, "rayo": 1.5}
 
 # [traducir]
 const LISTA := [
 	# ── Militar
 	{"id": "ataque", "rama": "militar", "nivel": 1, "nombre": "Ataque", "max": 5, "icono": "talento-ataque",
-		"desc": "+10 % de daño por punto"},
+		"desc": "+5 % de daño por punto"},
 	{"id": "punteria", "rama": "militar", "nivel": 1, "nombre": "Puntería", "max": 5, "icono": "talento-punteria",
-		"desc": "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"},
+		"desc": "+5 % de daño y de alcance al lanzar el molotov y la granada por punto"},
 	{"id": "camorrista", "rama": "militar", "nivel": 2, "nombre": "Camorrista", "max": 5, "icono": "talento-camorrista", "pide": "ataque",
-		"desc": "+10 % de daño cuerpo a cuerpo por punto"},
+		"desc": "+5 % de daño cuerpo a cuerpo por punto"},
 	{"id": "tirador", "rama": "militar", "nivel": 2, "nombre": "Tirador", "max": 5, "icono": "talento-tirador", "pide": "ataque",
-		"desc": "+10 % de daño con armas a distancia por punto"},
+		"desc": "+5 % de daño con armas a distancia por punto"},
 	{"id": "artificiero", "rama": "militar", "nivel": 2, "nombre": "Artificiero", "max": 3, "icono": "talento-artificiero", "pide": "punteria",
-		"desc": "+1 molotov y +1 granada por punto"},
+		"desc": "+1 molotov y +1 granada cada 2 puntos"},
 	{"id": "larguirucho", "rama": "militar", "nivel": 3, "nombre": "Larguirucho", "max": 1, "icono": "talento-larguirucho", "pide": "camorrista",
-		"desc": "Duplica el alcance cuerpo a cuerpo"},
+		"desc": "Aumenta un 50 % el alcance cuerpo a cuerpo"},
 	{"id": "mirilla", "rama": "militar", "nivel": 3, "nombre": "Mirilla", "max": 1, "icono": "talento-mirilla", "pide": "tirador",
-		"desc": "Uno de cada 3 disparos es un crítico seguro (doble daño)"},
+		"desc": "Uno de cada 6 disparos es un crítico seguro (doble daño)"},
 	{"id": "fabricante", "rama": "militar", "nivel": 3, "nombre": "Fabricante", "max": 1, "icono": "talento-fabricante", "pide": "artificiero",
 		"desc": "Fuego y explosiones más grandes, y el fuego dura más"},
 	{"id": "frenesi", "rama": "militar", "nivel": 4, "nombre": "Frenesí", "max": 3, "icono": "talento-frenesi", "pide": "larguirucho",
-		"desc": "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"},
+		"desc": "Golpeas cuerpo a cuerpo un 5 % más rápido por punto"},
 	{"id": "gatillo", "rama": "militar", "nivel": 4, "nombre": "Gatillo fácil", "max": 3, "icono": "talento-gatillo", "pide": "mirilla",
-		"desc": "Disparas un 10 % más rápido y recargas un 10 % antes por punto"},
+		"desc": "Disparas un 5 % más rápido y recargas un 5 % antes por punto"},
 	{"id": "racimo", "rama": "militar", "nivel": 4, "nombre": "Racimo", "max": 3, "icono": "talento-racimo", "pide": "fabricante",
-		"desc": "El molotov y la granada sueltan 1 más pequeño alrededor por punto"},
+		"desc": "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"},
 	{"id": "veterano", "rama": "militar", "nivel": 5, "nombre": "Veterano", "max": 1, "icono": "talento-veterano",
 		"pide": ["frenesi", "gatillo", "racimo"],
-		"desc": "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"},
+		"desc": "Críticos del 5 % al 10 % de las veces, y cada uno hace 2,5 veces el daño"},
 	# ── Superviviente
 	{"id": "corpulento", "rama": "superviviente", "nivel": 1, "nombre": "Corpulento", "max": 5, "icono": "talento-corpulento",
-		"desc": "+10 % de vida máxima por punto"},
+		"desc": "+5 % de vida máxima por punto"},
 	# (hasta el 29 oct se llamaba Lobezno, pero Wolverine es marca de Marvel; el id se queda, que va en las partidas guardadas)
 	{"id": "lobezno", "rama": "superviviente", "nivel": 1, "nombre": "Ajolote", "max": 5, "icono": "talento-lobezno",
-		"desc": "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"},
+		"desc": "Regeneras 1 de vida cada 10 segundos por punto, hasta la mitad de tu vida"},
 	{"id": "durito", "rama": "superviviente", "nivel": 2, "nombre": "Durito", "max": 3, "icono": "talento-durito", "pide": "corpulento",
-		"desc": "Cada golpe que recibes quita 1 menos por punto"},
+		"desc": "Cada golpe que recibes quita 1 menos cada 2 puntos"},
 	{"id": "reflejos", "rama": "superviviente", "nivel": 2, "nombre": "Reflejos", "max": 5, "icono": "talento-reflejos", "pide": "corpulento",
-		"desc": "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"},
+		"desc": "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"},
 	{"id": "sanitario", "rama": "superviviente", "nivel": 2, "nombre": "Sanitario", "max": 5, "icono": "talento-sanitario", "pide": "lobezno",
-		"desc": "Los botiquines y las vendas curan 10 más por punto"},
+		"desc": "Los botiquines y las vendas curan 5 más por punto"},
 	{"id": "acero", "rama": "superviviente", "nivel": 3, "nombre": "Acero", "max": 1, "icono": "talento-acero", "pide": "durito",
-		"desc": "Cada planta, un escudo de 50 que se gasta antes que la vida"},
+		"desc": "Cada planta, un escudo de 25 que se gasta antes que la vida"},
 	{"id": "ninja", "rama": "superviviente", "nivel": 3, "nombre": "Ninja", "max": 1, "icono": "talento-ninja", "pide": "reflejos",
 		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"},
 	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "talento-desfibrilador", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
 	{"id": "blindaje", "rama": "superviviente", "nivel": 4, "nombre": "Blindaje", "max": 3, "icono": "talento-blindaje", "pide": "acero",
-		"desc": "El escudo de Acero tiene 25 más por punto"},
+		"desc": "El escudo de Acero tiene 12 más por punto"},
 	{"id": "sombra", "rama": "superviviente", "nivel": 4, "nombre": "Sombra", "max": 3, "icono": "talento-sombra", "pide": "ninja",
-		"desc": "La esquiva se recarga un 15 % antes por punto"},
+		"desc": "La esquiva se recarga un 7,5 % antes por punto"},
 	{"id": "aliento", "rama": "superviviente", "nivel": 4, "nombre": "Segundo aliento", "max": 3, "icono": "talento-aliento", "pide": "desfibrilador",
-		"desc": "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"},
+		"desc": "Una vez por planta, al bajar de un tercio de la vida, te curas 7 por punto"},
 	{"id": "adrenalina", "rama": "superviviente", "nivel": 5, "nombre": "Adrenalina", "max": 1, "icono": "talento-adrenalina",
 		"pide": ["blindaje", "sombra", "aliento"],
-		"desc": "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"},
+		"desc": "Por debajo de la mitad de la vida, +15 % de daño y +10 % de velocidad"},
 	# ── Químico
 	{"id": "catalizador", "rama": "quimico", "nivel": 1, "nombre": "Catalizador", "max": 5, "icono": "talento-catalizador",
-		"desc": "+10 % de daño de fuego, ácido, rayo y frío por punto"},
+		"desc": "+5 % de daño de fuego, ácido, rayo y frío por punto"},
 	{"id": "guantes_goma", "rama": "quimico", "nivel": 1, "nombre": "Guantes de goma", "max": 5, "icono": "talento-guantes-goma",
-		"desc": "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"},
+		"desc": "Fuego, ácido, venenos y frío te hacen un 5 % menos por punto"},
 	{"id": "incendiario", "rama": "quimico", "nivel": 2, "nombre": "Incendiario", "max": 5, "icono": "talento-incendiario", "pide": "catalizador",
-		"desc": "Los zombis que prendes arden 0,5 s más por punto"},
+		"desc": "Los zombis que prendes arden 0,25 s más por punto"},
 	{"id": "desatascador", "rama": "quimico", "nivel": 2, "nombre": "Desatascador", "max": 5, "icono": "talento-desatascador", "pide": "catalizador",
-		"desc": "Con ácido encima, todo les quita un 10 % más por punto"},
+		"desc": "Con ácido encima, todo les quita un 5 % más por punto"},
 	{"id": "criogenia", "rama": "quimico", "nivel": 2, "nombre": "Criogenia", "max": 3, "icono": "talento-criogenia", "pide": "guantes_goma",
-		"desc": "+1 congeladora por punto, y congelan 0,5 s más por punto"},
+		"desc": "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"},
 	{"id": "reaccion", "rama": "quimico", "nivel": 3, "nombre": "Reacción en cadena", "max": 1, "icono": "talento-reaccion", "pide": "incendiario",
 		"desc": "Los zombis que mueren ardiendo revientan y prenden a los de al lado"},
 	{"id": "residuo", "rama": "quimico", "nivel": 3, "nombre": "Residuo tóxico", "max": 1, "icono": "talento-residuo", "pide": "desatascador",
@@ -112,11 +112,11 @@ const LISTA := [
 	{"id": "pararrayos", "rama": "quimico", "nivel": 3, "nombre": "Pararrayos", "max": 1, "icono": "talento-pararrayos", "pide": "criogenia",
 		"desc": "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"},
 	{"id": "napalm", "rama": "quimico", "nivel": 4, "nombre": "Napalm", "max": 3, "icono": "talento-napalm", "pide": "reaccion",
-		"desc": "El fuego del molotov dura 1 s más por punto"},
+		"desc": "El fuego del molotov dura 0,5 s más por punto"},
 	{"id": "pegajoso", "rama": "quimico", "nivel": 4, "nombre": "Pegajoso", "max": 3, "icono": "talento-pegajoso", "pide": "residuo",
-		"desc": "Los zombis con ácido van un 10 % más lentos por punto"},
+		"desc": "Los zombis con ácido van un 5 % más lentos por punto"},
 	{"id": "voltaje", "rama": "quimico", "nivel": 4, "nombre": "Alto voltaje", "max": 3, "icono": "talento-voltaje", "pide": "pararrayos",
-		"desc": "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"},
+		"desc": "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más cada 2 puntos"},
 	{"id": "mezcla", "rama": "quimico", "nivel": 5, "nombre": "Mezcla explosiva", "max": 1, "icono": "talento-mezcla",
 		"pide": ["napalm", "pegajoso", "voltaje"],
 		"desc": "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"},
@@ -151,10 +151,15 @@ static func nombre_rama(id: String) -> String:
 # Un número con un decimal como se escribe en el idioma del jugador: 0,5 en español, portugués, alemán, francés y ruso y 0.5
 # en inglés y chino
 static func decimal(x: float) -> String:
-	return Idioma.puntuar(str(x))
+	return Idioma.puntuar(str(roundi(x)) if fmod(x, 1.0) == 0.0 else str(x))
 
 
 # Puntos puestos en un talento
+# Un porcentaje con decimales solo si hacen falta: 5, 7,5, 10, 12,5...
+static func pct(x: float) -> String:
+	return decimal(x)
+
+
 static func nivel_de(s: Dictionary, id: String) -> int:
 	return mini(int(s.talentos.get(id, 0)), talento(id).max)
 
@@ -198,49 +203,49 @@ static func nombres(ids: Array) -> String:
 # Lo que hace cada talento con n puntos sobre los atributos de Johnny (mejoras.gd)
 static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 	match id:
-		"ataque": st.dano *= 1.0 + 0.1 * n
+		"ataque": st.dano *= 1.0 + 0.05 * n
 		"punteria":
-			st.dano_lanzar *= 1.0 + 0.1 * n
-			st.alcance_lanzar *= 1.0 + 0.1 * n
-		"camorrista": st.dano_cuerpo *= 1.0 + 0.1 * n
-		"tirador": st.dano_fuego *= 1.0 + 0.1 * n
-		"artificiero": st.lanzar_extra += n
-		"larguirucho": st.alcance_cuerpo *= 2.0
+			st.dano_lanzar *= 1.0 + 0.05 * n
+			st.alcance_lanzar *= 1.0 + 0.05 * n
+		"camorrista": st.dano_cuerpo *= 1.0 + 0.05 * n
+		"tirador": st.dano_fuego *= 1.0 + 0.05 * n
+		"artificiero": st.lanzar_extra += int(n / 2.0)   # (la mitad: uno más cada 2 puntos)
+		"larguirucho": st.alcance_cuerpo *= 1.5
 		"mirilla": st.mirilla = true
 		"fabricante": st.fabricante = true
-		"corpulento": st.vida_max = roundi(st.vida_max * (1.0 + 0.1 * n))
-		"lobezno": st.regenera += n
-		"durito": st.armadura += n
-		"reflejos": st.esquiva_sola = 11 - n
-		"sanitario": st.botiquin_extra += 10 * n
-		"acero": st.escudo = 50
+		"corpulento": st.vida_max = roundi(st.vida_max * (1.0 + 0.05 * n))
+		"lobezno": st.regenera += n   # (cada REGENERA_CADA, ahora 10 s: la mitad)
+		"durito": st.armadura += int(n / 2.0)
+		"reflejos": st.esquiva_sola = 11.0 - 0.5 * n
+		"sanitario": st.botiquin_extra += 5 * n
+		"acero": st.escudo = 25
 		"ninja": st.ninja = true
 		"desfibrilador": st.resucitar = true
-		"catalizador": st.dano_quimico *= 1.0 + 0.1 * n
-		"guantes_goma": st.resiste_quimico += 0.1 * n
-		"incendiario": st.arde_extra += 0.5 * n
-		"desatascador": st.corroe_extra += 0.1 * n
+		"catalizador": st.dano_quimico *= 1.0 + 0.05 * n
+		"guantes_goma": st.resiste_quimico += 0.05 * n
+		"incendiario": st.arde_extra += 0.25 * n
+		"desatascador": st.corroe_extra += 0.05 * n
 		"criogenia":
-			st.congeladoras += n
-			st.congela_extra += 0.5 * n
+			st.congeladoras += int(n / 2.0)
+			st.congela_extra += 0.25 * n
 		"reaccion": st.reaccion = true
 		"residuo": st.residuo = true
 		"pararrayos": st.pararrayos = true
-		"frenesi": st.ritmo_cuerpo *= 1.0 + 0.1 * n
+		"frenesi": st.ritmo_cuerpo *= 1.0 + 0.05 * n
 		"gatillo":
-			st.ritmo_fuego *= 1.0 + 0.1 * n
-			st.recarga *= 1.0 - 0.1 * n
-		"racimo": st.racimo += n
+			st.ritmo_fuego *= 1.0 + 0.05 * n
+			st.recarga *= 1.0 - 0.05 * n
+		"racimo": st.racimo += int(n / 2.0)
 		"veterano":
-			st.critico += 0.1
-			st.critico_x = 3.0
-		"blindaje": st.escudo += 25 * n
-		"sombra": st.esquiva_espera *= 1.0 - 0.15 * n
-		"aliento": st.aliento += 15 * n
+			st.critico += 0.05
+			st.critico_x = 2.5
+		"blindaje": st.escudo += 12 * n
+		"sombra": st.esquiva_espera *= 1.0 - 0.075 * n
+		"aliento": st.aliento += 7 * n
 		"adrenalina": st.adrenalina = true
-		"napalm": st.napalm += n
-		"pegajoso": st.pegajoso += 0.1 * n
-		"voltaje": st.saltos += n
+		"napalm": st.napalm += 0.5 * n
+		"pegajoso": st.pegajoso += 0.05 * n
+		"voltaje": st.saltos += int(n / 2.0)
 		"mezcla": st.mezcla = true
 
 
@@ -248,30 +253,30 @@ static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 # siguiente (M15). "" en los de un solo punto (para esos vale su "desc")
 static func efecto(id: String, n: int) -> String:
 	match id:
-		"ataque": return Idioma.t("+%d %% de daño") % (10 * n)
-		"punteria": return Idioma.t("+%d %% de daño y alcance") % (10 * n)
-		"camorrista": return Idioma.t("+%d %% cuerpo a cuerpo") % (10 * n)
-		"tirador": return Idioma.t("+%d %% a distancia") % (10 * n)
-		"artificiero": return Idioma.n("+%d molotov y granada", "+%d molotovs y granadas", n) % n
-		"corpulento": return Idioma.t("+%d %% de vida") % (10 * n)
-		"lobezno": return Idioma.t("%d de vida cada 5 s") % n
-		"durito": return Idioma.t("%d menos por golpe") % n
-		"reflejos": return Idioma.t("una esquiva sola cada %d s") % (11 - n)
-		"sanitario": return Idioma.t("+%d de cura") % (10 * n)
-		"catalizador": return Idioma.t("+%d %% de fuego, ácido, rayo y frío") % (10 * n)
-		"guantes_goma": return Idioma.t("%d %% menos de los efectos") % (10 * n)
-		"incendiario": return Idioma.t("+%s s ardiendo") % decimal(0.5 * n)
-		"desatascador": return Idioma.t("+%d %% con ácido") % (10 * n)
-		"criogenia": return Idioma.n("+%d congeladora y +%s s", "+%d congeladoras y +%s s", n) % [n, decimal(0.5 * n)]
-		"frenesi": return Idioma.t("+%d %% de rapidez cuerpo a cuerpo") % (10 * n)
-		"gatillo": return Idioma.t("+%d %% de rapidez y recarga") % (10 * n)
-		"racimo": return Idioma.t("suelta %d más") % n
-		"blindaje": return Idioma.t("escudo de %d") % (50 + 25 * n)
-		"sombra": return Idioma.t("esquiva un %d %% antes") % (15 * n)
-		"aliento": return Idioma.t("+%d de vida por planta") % (15 * n)
-		"napalm": return Idioma.t("+%d s de fuego") % n
-		"pegajoso": return Idioma.t("%d %% más lentos con ácido") % (10 * n)
-		"voltaje": return Idioma.t("salta a %d más") % n
+		"ataque": return Idioma.t("+%s %% de daño") % pct(5.0 * n)
+		"punteria": return Idioma.t("+%s %% de daño y alcance") % pct(5.0 * n)
+		"camorrista": return Idioma.t("+%s %% cuerpo a cuerpo") % pct(5.0 * n)
+		"tirador": return Idioma.t("+%s %% a distancia") % pct(5.0 * n)
+		"artificiero": return Idioma.n("+%d molotov y granada", "+%d molotovs y granadas", n / 2) % (n / 2)
+		"corpulento": return Idioma.t("+%s %% de vida") % pct(5.0 * n)
+		"lobezno": return Idioma.t("%d de vida cada 10 s") % n
+		"durito": return Idioma.t("%d menos por golpe") % (n / 2)
+		"reflejos": return Idioma.t("una esquiva sola cada %s s") % decimal(11.0 - 0.5 * n)
+		"sanitario": return Idioma.t("+%d de cura") % (5 * n)
+		"catalizador": return Idioma.t("+%s %% de fuego, ácido, rayo y frío") % pct(5.0 * n)
+		"guantes_goma": return Idioma.t("%s %% menos de los efectos") % pct(5.0 * n)
+		"incendiario": return Idioma.t("+%s s ardiendo") % decimal(0.25 * n)
+		"desatascador": return Idioma.t("+%s %% con ácido") % pct(5.0 * n)
+		"criogenia": return Idioma.n("+%d congeladora y +%s s", "+%d congeladoras y +%s s", n / 2) % [n / 2, decimal(0.25 * n)]
+		"frenesi": return Idioma.t("+%s %% de rapidez cuerpo a cuerpo") % pct(5.0 * n)
+		"gatillo": return Idioma.t("+%s %% de rapidez y recarga") % pct(5.0 * n)
+		"racimo": return Idioma.t("suelta %d más") % (n / 2)
+		"blindaje": return Idioma.t("escudo de %d") % (25 + 12 * n)
+		"sombra": return Idioma.t("esquiva un %s %% antes") % pct(7.5 * n)
+		"aliento": return Idioma.t("+%d de vida por planta") % (7 * n)
+		"napalm": return Idioma.t("+%s s de fuego") % decimal(0.5 * n)
+		"pegajoso": return Idioma.t("%s %% más lentos con ácido") % pct(5.0 * n)
+		"voltaje": return Idioma.t("salta a %d más") % (n / 2)
 	return ""
 
 

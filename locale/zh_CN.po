@@ -4012,20 +4012,20 @@ msgid "la rebotica"
 msgstr "配药间"
 
 #: scripts/talentos.gd
-msgid "+%d %% de daño"
-msgstr "伤害 +%d%%"
+msgid "+%s %% de daño"
+msgstr "伤害 +%s%%"
 
 #: scripts/talentos.gd
-msgid "+%d %% de daño y alcance"
-msgstr "伤害和范围 +%d%%"
+msgid "+%s %% de daño y alcance"
+msgstr "伤害和范围 +%s%%"
 
 #: scripts/talentos.gd
-msgid "+%d %% cuerpo a cuerpo"
-msgstr "近战 +%d%%"
+msgid "+%s %% cuerpo a cuerpo"
+msgstr "近战 +%s%%"
 
 #: scripts/talentos.gd
-msgid "+%d %% a distancia"
-msgstr "远程 +%d%%"
+msgid "+%s %% a distancia"
+msgstr "远程 +%s%%"
 
 #: scripts/talentos.gd
 msgid "+%d molotov y granada"
@@ -4033,40 +4033,40 @@ msgid_plural "+%d molotovs y granadas"
 msgstr[0] "燃烧瓶和手雷 +%d"
 
 #: scripts/talentos.gd
-msgid "+%d %% de vida"
-msgstr "生命 +%d%%"
+msgid "+%s %% de vida"
+msgstr "生命 +%s%%"
 
 #: scripts/talentos.gd
-msgid "%d de vida cada 5 s"
-msgstr "每5秒恢复 %d 生命"
+msgid "%d de vida cada 10 s"
+msgstr "每10秒恢复 %d 生命"
 
 #: scripts/talentos.gd
 msgid "%d menos por golpe"
 msgstr "每次受击减伤 %d"
 
 #: scripts/talentos.gd
-msgid "una esquiva sola cada %d s"
-msgstr "每 %d 秒自动闪避一次"
+msgid "una esquiva sola cada %s s"
+msgstr "每 %s 秒自动闪避一次"
 
 #: scripts/talentos.gd
 msgid "+%d de cura"
 msgstr "治疗 +%d"
 
 #: scripts/talentos.gd
-msgid "+%d %% de fuego, ácido, rayo y frío"
-msgstr "火焰、酸液、闪电和冰冻 +%d%%"
+msgid "+%s %% de fuego, ácido, rayo y frío"
+msgstr "火焰、酸液、闪电和冰冻 +%s%%"
 
 #: scripts/talentos.gd
-msgid "%d %% menos de los efectos"
-msgstr "受到的效果减少 %d%%"
+msgid "%s %% menos de los efectos"
+msgstr "受到的效果减少 %s%%"
 
 #: scripts/talentos.gd
 msgid "+%s s ardiendo"
 msgstr "燃烧 +%s 秒"
 
 #: scripts/talentos.gd
-msgid "+%d %% con ácido"
-msgstr "酸液 +%d%%"
+msgid "+%s %% con ácido"
+msgstr "酸液 +%s%%"
 
 #: scripts/talentos.gd
 msgid "+%d congeladora y +%s s"
@@ -4074,12 +4074,12 @@ msgid_plural "+%d congeladoras y +%s s"
 msgstr[0] "冰冻弹 +%d，时长 +%s 秒"
 
 #: scripts/talentos.gd
-msgid "+%d %% de rapidez cuerpo a cuerpo"
-msgstr "近战速度 +%d%%"
+msgid "+%s %% de rapidez cuerpo a cuerpo"
+msgstr "近战速度 +%s%%"
 
 #: scripts/talentos.gd
-msgid "+%d %% de rapidez y recarga"
-msgstr "射速和换弹 +%d%%"
+msgid "+%s %% de rapidez y recarga"
+msgstr "射速和换弹 +%s%%"
 
 #: scripts/talentos.gd
 msgid "suelta %d más"
@@ -4090,20 +4090,20 @@ msgid "escudo de %d"
 msgstr "%d 点护盾"
 
 #: scripts/talentos.gd
-msgid "esquiva un %d %% antes"
-msgstr "闪避冷却缩短 %d%%"
+msgid "esquiva un %s %% antes"
+msgstr "闪避冷却缩短 %s%%"
 
 #: scripts/talentos.gd
 msgid "+%d de vida por planta"
 msgstr "每层楼生命 +%d"
 
 #: scripts/talentos.gd
-msgid "+%d s de fuego"
-msgstr "火焰 +%d 秒"
+msgid "+%s s de fuego"
+msgstr "火焰 +%s 秒"
 
 #: scripts/talentos.gd
-msgid "%d %% más lentos con ácido"
-msgstr "沾酸减速 %d%%"
+msgid "%s %% más lentos con ácido"
+msgstr "沾酸减速 %s%%"
 
 #: scripts/talentos.gd
 msgid "salta a %d más"
@@ -4126,56 +4126,56 @@ msgid "Ataque"
 msgstr "攻击"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño por punto"
-msgstr "每点伤害 +10%"
+msgid "+5 % de daño por punto"
+msgstr "每点伤害 +5%"
 
 #: scripts/talentos.gd
 msgid "Puntería"
 msgstr "准头"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"
-msgstr "每点使燃烧瓶和手雷的伤害和投掷距离 +10%"
+msgid "+5 % de daño y de alcance al lanzar el molotov y la granada por punto"
+msgstr "每点使燃烧瓶和手雷的伤害和投掷距离 +5%"
 
 #: scripts/talentos.gd
 msgid "Camorrista"
 msgstr "打架王"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño cuerpo a cuerpo por punto"
-msgstr "每点近战伤害 +10%"
+msgid "+5 % de daño cuerpo a cuerpo por punto"
+msgstr "每点近战伤害 +5%"
 
 #: scripts/talentos.gd
 msgid "Tirador"
 msgstr "神枪手"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño con armas a distancia por punto"
-msgstr "每点远程武器伤害 +10%"
+msgid "+5 % de daño con armas a distancia por punto"
+msgstr "每点远程武器伤害 +5%"
 
 #: scripts/talentos.gd
 msgid "Artificiero"
 msgstr "爆破专家"
 
 #: scripts/talentos.gd
-msgid "+1 molotov y +1 granada por punto"
-msgstr "每点燃烧瓶 +1、手雷 +1"
+msgid "+1 molotov y +1 granada cada 2 puntos"
+msgstr "每2点燃烧瓶 +1、手雷 +1"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
 msgstr "长臂猿"
 
 #: scripts/talentos.gd
-msgid "Duplica el alcance cuerpo a cuerpo"
-msgstr "近战攻击距离翻倍"
+msgid "Aumenta un 50 % el alcance cuerpo a cuerpo"
+msgstr "近战攻击距离增加50%"
 
 #: scripts/talentos.gd
 msgid "Mirilla"
 msgstr "瞄准镜"
 
 #: scripts/talentos.gd
-msgid "Uno de cada 3 disparos es un crítico seguro (doble daño)"
-msgstr "每3发子弹必有1发暴击（双倍伤害）"
+msgid "Uno de cada 6 disparos es un crítico seguro (doble daño)"
+msgstr "每6发子弹必有1发暴击（双倍伤害）"
 
 #: scripts/talentos.gd
 msgid "Fabricante"
@@ -4190,80 +4190,80 @@ msgid "Frenesí"
 msgstr "狂暴"
 
 #: scripts/talentos.gd
-msgid "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"
-msgstr "每点近战攻击速度 +10%"
+msgid "Golpeas cuerpo a cuerpo un 5 % más rápido por punto"
+msgstr "每点近战攻击速度 +5%"
 
 #: scripts/talentos.gd
 msgid "Gatillo fácil"
 msgstr "扳机狂"
 
 #: scripts/talentos.gd
-msgid "Disparas un 10 % más rápido y recargas un 10 % antes por punto"
-msgstr "每点射速 +10%，换弹速度 +10%"
+msgid "Disparas un 5 % más rápido y recargas un 5 % antes por punto"
+msgstr "每点射速 +5%，换弹速度 +5%"
 
 #: scripts/talentos.gd
 msgid "Racimo"
 msgstr "集束"
 
 #: scripts/talentos.gd
-msgid "El molotov y la granada sueltan 1 más pequeño alrededor por punto"
-msgstr "每点使燃烧瓶和手雷向周围多散落1个迷你版"
+msgid "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"
+msgstr "每2点使燃烧瓶和手雷向周围多散落1个迷你版"
 
 #: scripts/talentos.gd
 msgid "Veterano"
 msgstr "老兵"
 
 #: scripts/talentos.gd
-msgid "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"
-msgstr "暴击率从5%提高到15%，每次暴击造成三倍伤害"
+msgid "Críticos del 5 % al 10 % de las veces, y cada uno hace 2,5 veces el daño"
+msgstr "暴击率从5%提高到10%，每次暴击造成2.5倍伤害"
 
 #: scripts/talentos.gd
 msgid "Corpulento"
 msgstr "壮汉"
 
 #: scripts/talentos.gd
-msgid "+10 % de vida máxima por punto"
-msgstr "每点生命上限 +10%"
+msgid "+5 % de vida máxima por punto"
+msgstr "每点生命上限 +5%"
 
 #: scripts/talentos.gd
 msgid "Ajolote"
 msgstr "美西螈"
 
 #: scripts/talentos.gd
-msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
-msgstr "每点每5秒恢复1点生命，最多恢复到一半生命"
+msgid "Regeneras 1 de vida cada 10 segundos por punto, hasta la mitad de tu vida"
+msgstr "每点每10秒恢复1点生命，最多恢复到一半生命"
 
 #: scripts/talentos.gd
 msgid "Durito"
 msgstr "硬骨头"
 
 #: scripts/talentos.gd
-msgid "Cada golpe que recibes quita 1 menos por punto"
-msgstr "每点使每次受到的伤害 -1"
+msgid "Cada golpe que recibes quita 1 menos cada 2 puntos"
+msgstr "每2点使每次受到的伤害 -1"
 
 #: scripts/talentos.gd
 msgid "Reflejos"
 msgstr "反射神经"
 
 #: scripts/talentos.gd
-msgid "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"
-msgstr "每10秒自动闪避一次攻击（每多1点，缩短1秒）"
+msgid "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"
+msgstr "每10.5秒自动闪避一次攻击（每多1点，缩短0.5秒）"
 
 #: scripts/talentos.gd
 msgid "Sanitario"
 msgstr "医护兵"
 
 #: scripts/talentos.gd
-msgid "Los botiquines y las vendas curan 10 más por punto"
-msgstr "每点使急救包和绷带多恢复10点"
+msgid "Los botiquines y las vendas curan 5 más por punto"
+msgstr "每点使急救包和绷带多恢复5点"
 
 #: scripts/talentos.gd
 msgid "Acero"
 msgstr "钢铁"
 
 #: scripts/talentos.gd
-msgid "Cada planta, un escudo de 50 que se gasta antes que la vida"
-msgstr "每层楼获得50点护盾，先于生命消耗"
+msgid "Cada planta, un escudo de 25 que se gasta antes que la vida"
+msgstr "每层楼获得25点护盾，先于生命消耗"
 
 #: scripts/talentos.gd
 msgid "Ninja"
@@ -4286,72 +4286,72 @@ msgid "Blindaje"
 msgstr "装甲板"
 
 #: scripts/talentos.gd
-msgid "El escudo de Acero tiene 25 más por punto"
-msgstr "每点使“钢铁”护盾 +25"
+msgid "El escudo de Acero tiene 12 más por punto"
+msgstr "每点使“钢铁”护盾 +12"
 
 #: scripts/talentos.gd
 msgid "Sombra"
 msgstr "暗影"
 
 #: scripts/talentos.gd
-msgid "La esquiva se recarga un 15 % antes por punto"
-msgstr "每点使闪避冷却缩短15%"
+msgid "La esquiva se recarga un 7,5 % antes por punto"
+msgstr "每点使闪避冷却缩短7.5%"
 
 #: scripts/talentos.gd
 msgid "Segundo aliento"
 msgstr "绝处逢生"
 
 #: scripts/talentos.gd
-msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"
-msgstr "每层楼一次，生命低于三分之一时，每点恢复15点生命"
+msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 7 por punto"
+msgstr "每层楼一次，生命低于三分之一时，每点恢复7点生命"
 
 #: scripts/talentos.gd
 msgid "Adrenalina"
 msgstr "肾上腺素"
 
 #: scripts/talentos.gd
-msgid "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"
-msgstr "生命低于一半时，伤害 +30%，速度 +20%"
+msgid "Por debajo de la mitad de la vida, +15 % de daño y +10 % de velocidad"
+msgstr "生命低于一半时，伤害 +15%，速度 +10%"
 
 #: scripts/talentos.gd
 msgid "Catalizador"
 msgstr "催化剂"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño de fuego, ácido, rayo y frío por punto"
-msgstr "每点火焰、酸液、闪电和冰冻伤害 +10%"
+msgid "+5 % de daño de fuego, ácido, rayo y frío por punto"
+msgstr "每点火焰、酸液、闪电和冰冻伤害 +5%"
 
 #: scripts/talentos.gd
 msgid "Guantes de goma"
 msgstr "橡胶手套"
 
 #: scripts/talentos.gd
-msgid "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"
-msgstr "每点使你受到的火焰、酸液、毒素和冰冻伤害 -10%"
+msgid "Fuego, ácido, venenos y frío te hacen un 5 % menos por punto"
+msgstr "每点使你受到的火焰、酸液、毒素和冰冻伤害 -5%"
 
 #: scripts/talentos.gd
 msgid "Incendiario"
 msgstr "火上浇油"
 
 #: scripts/talentos.gd
-msgid "Los zombis que prendes arden 0,5 s más por punto"
-msgstr "每点使被你点燃的僵尸多烧0.5秒"
+msgid "Los zombis que prendes arden 0,25 s más por punto"
+msgstr "每点使被你点燃的僵尸多烧0.25秒"
 
 #: scripts/talentos.gd
 msgid "Desatascador"
 msgstr "疏通剂"
 
 #: scripts/talentos.gd
-msgid "Con ácido encima, todo les quita un 10 % más por punto"
-msgstr "每点使沾了酸液的僵尸受到的所有伤害 +10%"
+msgid "Con ácido encima, todo les quita un 5 % más por punto"
+msgstr "每点使沾了酸液的僵尸受到的所有伤害 +5%"
 
 #: scripts/talentos.gd
 msgid "Criogenia"
 msgstr "极寒"
 
 #: scripts/talentos.gd
-msgid "+1 congeladora por punto, y congelan 0,5 s más por punto"
-msgstr "每点冰冻弹 +1，冰冻时间 +0.5秒"
+msgid "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"
+msgstr "每2点冰冻弹 +1，冰冻时间 +0.25秒"
 
 #: scripts/talentos.gd
 msgid "Reacción en cadena"
@@ -4382,7 +4382,7 @@ msgid "Napalm"
 msgstr "凝固汽油"
 
 #: scripts/talentos.gd
-msgid "El fuego del molotov dura 1 s más por punto"
+msgid "El fuego del molotov dura 0,5 s más por punto"
 msgstr "每点使燃烧瓶的火焰多持续1秒"
 
 #: scripts/talentos.gd
@@ -4390,16 +4390,16 @@ msgid "Pegajoso"
 msgstr "粘糊糊"
 
 #: scripts/talentos.gd
-msgid "Los zombis con ácido van un 10 % más lentos por punto"
-msgstr "每点使沾了酸液的僵尸移速 -10%"
+msgid "Los zombis con ácido van un 5 % más lentos por punto"
+msgstr "每点使沾了酸液的僵尸移速 -5%"
 
 #: scripts/talentos.gd
 msgid "Alto voltaje"
 msgstr "高压电"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"
-msgstr "每点使闪电枪和“避雷针”的闪电多跳1个僵尸"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más cada 2 puntos"
+msgstr "每2点使闪电枪和“避雷针”的闪电多跳1个僵尸"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"

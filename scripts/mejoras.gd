@@ -49,7 +49,7 @@ static func base() -> Dictionary:
 		"racimo": 0,             # molotovs y granadas pequeños de más al romperse o explotar (Racimo)
 		"aliento": 0,            # vida que cura una vez por planta al bajar de un tercio (Segundo aliento)
 		"adrenalina": false,     # más daño y velocidad por debajo de la mitad de la vida (Adrenalina)
-		"napalm": 0,             # segundos de más que dura el fuego del molotov (Napalm)
+		"napalm": 0.0,            # segundos de más que dura el fuego del molotov (Napalm)
 		"pegajoso": 0.0,         # parte de velocidad que pierden los zombis con ácido (Pegajoso)
 		"saltos": 0,             # zombis de más a los que salta el rayo (Alto voltaje)
 		"mezcla": false,         # los que mueren con dos efectos explotan (Mezcla explosiva)

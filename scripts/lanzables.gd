@@ -69,7 +69,7 @@ const GRANADA := {
 # Lo que les hacen a los jefes (la portera y los Minijefe) el fuego y las explosiones: la mitad (M42), para que no se
 # caigan solo a base de lanzables. Lo miran explosion.gd, charco.gd (el fuego del suelo) y proyectil.gd (la llamarada)
 const A_JEFES := 0.5
-const FABRICANTE := {"radio": 1.3, "duracion": 1.5}   # el talento: fuego y explosiones más grandes y largos
+const FABRICANTE := {"radio": 1.15, "duracion": 1.25}   # el talento: fuego y explosiones más grandes y largos
 # La atraedora y la congeladora (ARROJADIZAS de src/armas-creadas.js): granadas con otro efecto
 #   inicio   como en el molotov y la granada (no se tiene ninguna al empezar) · dano  de la explosión
 #   mecha    segundos hasta que revienta · radio  de la explosión · color  del dibujo, el aviso y los anillos

@@ -54,7 +54,7 @@ const LENTO_TERCIO := 0.15
 const SALTO := 64.0         # si se mueve más que esto de una vez, es que le han llevado (otra habitación, un evento)
 const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
-const REGENERA_CADA := 5.0 # Ajolote: segundos entre cura y cura (hasta el 27 oct, 3: con 5 puntos, 100 de vida por minuto)
+const REGENERA_CADA := 10.0 # Ajolote: segundos entre cura y cura (hasta el 27 oct, 3; hasta el 11 nov, 5: el talento se redujo a la mitad)
 const REGENERA_TOPE := 0.5 # Ajolote: solo cura hasta esta parte de la vida máxima (M15, 28 oct: antes, hasta llenarla)
 const NINJA_ESPERA := 5.0  # Ninja: segundos como poco entre golpe y golpe (las esquivas de en medio no pegan; hasta el 28 oct, 3)
 const NINJA_JEFE := 0.02
@@ -896,7 +896,7 @@ func disparar(angulo: float) -> void:
 	if not pistola_sin_fin():
 		balas -= 1
 	disparos += 1
-	var seguro: bool = stats.mirilla and disparos % 3 == 0   # Mirilla: uno de cada 3 disparos, crítico seguro
+	var seguro: bool = stats.mirilla and disparos % 6 == 0   # Mirilla: uno de cada 6 disparos, crítico seguro
 	var t := tiro(angulo, w, direccion)
 	var salida: Vector2 = t[0]
 	angulo = t[1]

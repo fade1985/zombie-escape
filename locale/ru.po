@@ -4028,20 +4028,20 @@ msgid "la rebotica"
 msgstr "провизорскую"
 
 #: scripts/talentos.gd
-msgid "+%d %% de daño"
-msgstr "+%d %% урона"
+msgid "+%s %% de daño"
+msgstr "+%s %% урона"
 
 #: scripts/talentos.gd
-msgid "+%d %% de daño y alcance"
-msgstr "+%d %% урона и дальности"
+msgid "+%s %% de daño y alcance"
+msgstr "+%s %% урона и дальности"
 
 #: scripts/talentos.gd
-msgid "+%d %% cuerpo a cuerpo"
-msgstr "+%d %% в ближнем бою"
+msgid "+%s %% cuerpo a cuerpo"
+msgstr "+%s %% в ближнем бою"
 
 #: scripts/talentos.gd
-msgid "+%d %% a distancia"
-msgstr "+%d %% в дальнем бою"
+msgid "+%s %% a distancia"
+msgstr "+%s %% в дальнем бою"
 
 #: scripts/talentos.gd
 msgid "+%d molotov y granada"
@@ -4051,11 +4051,11 @@ msgstr[1] "+%d молотова и гранаты"
 msgstr[2] "+%d молотовов и гранат"
 
 #: scripts/talentos.gd
-msgid "+%d %% de vida"
-msgstr "+%d %% здоровья"
+msgid "+%s %% de vida"
+msgstr "+%s %% здоровья"
 
 #: scripts/talentos.gd
-msgid "%d de vida cada 5 s"
+msgid "%d de vida cada 10 s"
 msgstr "%d здоровья каждые 5 с"
 
 #: scripts/talentos.gd
@@ -4063,28 +4063,28 @@ msgid "%d menos por golpe"
 msgstr "на %d меньше за удар"
 
 #: scripts/talentos.gd
-msgid "una esquiva sola cada %d s"
-msgstr "автоуклонение каждые %d с"
+msgid "una esquiva sola cada %s s"
+msgstr "автоуклонение каждые %s с"
 
 #: scripts/talentos.gd
 msgid "+%d de cura"
 msgstr "+%d к лечению"
 
 #: scripts/talentos.gd
-msgid "+%d %% de fuego, ácido, rayo y frío"
-msgstr "+%d %% огня, кислоты, молний и холода"
+msgid "+%s %% de fuego, ácido, rayo y frío"
+msgstr "+%s %% огня, кислоты, молний и холода"
 
 #: scripts/talentos.gd
-msgid "%d %% menos de los efectos"
-msgstr "на %d %% меньше от эффектов"
+msgid "%s %% menos de los efectos"
+msgstr "на %s %% меньше от эффектов"
 
 #: scripts/talentos.gd
 msgid "+%s s ardiendo"
 msgstr "+%s с горения"
 
 #: scripts/talentos.gd
-msgid "+%d %% con ácido"
-msgstr "+%d %% урона с кислотой"
+msgid "+%s %% con ácido"
+msgstr "+%s %% урона с кислотой"
 
 #: scripts/talentos.gd
 msgid "+%d congeladora y +%s s"
@@ -4094,12 +4094,12 @@ msgstr[1] "+%d криобомбы и +%s с"
 msgstr[2] "+%d криобомб и +%s с"
 
 #: scripts/talentos.gd
-msgid "+%d %% de rapidez cuerpo a cuerpo"
-msgstr "+%d %% к скорости ближнего боя"
+msgid "+%s %% de rapidez cuerpo a cuerpo"
+msgstr "+%s %% к скорости ближнего боя"
 
 #: scripts/talentos.gd
-msgid "+%d %% de rapidez y recarga"
-msgstr "+%d %% к скорострельности и перезарядке"
+msgid "+%s %% de rapidez y recarga"
+msgstr "+%s %% к скорострельности и перезарядке"
 
 #: scripts/talentos.gd
 msgid "suelta %d más"
@@ -4110,20 +4110,20 @@ msgid "escudo de %d"
 msgstr "щит на %d"
 
 #: scripts/talentos.gd
-msgid "esquiva un %d %% antes"
-msgstr "уклонение на %d %% быстрее"
+msgid "esquiva un %s %% antes"
+msgstr "уклонение на %s %% быстрее"
 
 #: scripts/talentos.gd
 msgid "+%d de vida por planta"
 msgstr "+%d здоровья за этаж"
 
 #: scripts/talentos.gd
-msgid "+%d s de fuego"
-msgstr "+%d с огня"
+msgid "+%s s de fuego"
+msgstr "+%s с огня"
 
 #: scripts/talentos.gd
-msgid "%d %% más lentos con ácido"
-msgstr "на %d %% медленнее с кислотой"
+msgid "%s %% más lentos con ácido"
+msgstr "на %s %% медленнее с кислотой"
 
 #: scripts/talentos.gd
 msgid "salta a %d más"
@@ -4146,56 +4146,56 @@ msgid "Ataque"
 msgstr "Атака"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño por punto"
-msgstr "+10 % урона за очко"
+msgid "+5 % de daño por punto"
+msgstr "+5 % урона за очко"
 
 #: scripts/talentos.gd
 msgid "Puntería"
 msgstr "Меткость"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"
-msgstr "+10 % урона и дальности броска молотова и гранаты за очко"
+msgid "+5 % de daño y de alcance al lanzar el molotov y la granada por punto"
+msgstr "+5 % урона и дальности броска молотова и гранаты за очко"
 
 #: scripts/talentos.gd
 msgid "Camorrista"
 msgstr "Драчун"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño cuerpo a cuerpo por punto"
-msgstr "+10 % урона в ближнем бою за очко"
+msgid "+5 % de daño cuerpo a cuerpo por punto"
+msgstr "+5 % урона в ближнем бою за очко"
 
 #: scripts/talentos.gd
 msgid "Tirador"
 msgstr "Стрелок"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño con armas a distancia por punto"
-msgstr "+10 % урона оружием дальнего боя за очко"
+msgid "+5 % de daño con armas a distancia por punto"
+msgstr "+5 % урона оружием дальнего боя за очко"
 
 #: scripts/talentos.gd
 msgid "Artificiero"
 msgstr "Сапер"
 
 #: scripts/talentos.gd
-msgid "+1 molotov y +1 granada por punto"
-msgstr "+1 молотов и +1 граната за очко"
+msgid "+1 molotov y +1 granada cada 2 puntos"
+msgstr "+1 молотов и +1 граната за каждые 2 очка"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
 msgstr "Дылда"
 
 #: scripts/talentos.gd
-msgid "Duplica el alcance cuerpo a cuerpo"
-msgstr "Удваивает дальность ближнего боя"
+msgid "Aumenta un 50 % el alcance cuerpo a cuerpo"
+msgstr "Увеличивает дальность ближнего боя на 50 %"
 
 #: scripts/talentos.gd
 msgid "Mirilla"
 msgstr "Прицел"
 
 #: scripts/talentos.gd
-msgid "Uno de cada 3 disparos es un crítico seguro (doble daño)"
-msgstr "Каждый 3-й выстрел — гарантированный крит (двойной урон)"
+msgid "Uno de cada 6 disparos es un crítico seguro (doble daño)"
+msgstr "Каждый 6-й выстрел — гарантированный крит (двойной урон)"
 
 #: scripts/talentos.gd
 msgid "Fabricante"
@@ -4210,80 +4210,80 @@ msgid "Frenesí"
 msgstr "Раж"
 
 #: scripts/talentos.gd
-msgid "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"
-msgstr "Бьешь в ближнем бою на 10 % быстрее за очко"
+msgid "Golpeas cuerpo a cuerpo un 5 % más rápido por punto"
+msgstr "Бьешь в ближнем бою на 5 % быстрее за очко"
 
 #: scripts/talentos.gd
 msgid "Gatillo fácil"
 msgstr "Скорострел"
 
 #: scripts/talentos.gd
-msgid "Disparas un 10 % más rápido y recargas un 10 % antes por punto"
-msgstr "Стреляешь на 10 % быстрее и перезаряжаешь на 10 % быстрее за очко"
+msgid "Disparas un 5 % más rápido y recargas un 5 % antes por punto"
+msgstr "Стреляешь на 5 % быстрее и перезаряжаешь на 5 % быстрее за очко"
 
 #: scripts/talentos.gd
 msgid "Racimo"
 msgstr "Гроздь"
 
 #: scripts/talentos.gd
-msgid "El molotov y la granada sueltan 1 más pequeño alrededor por punto"
-msgstr "Молотов и граната разбрасывают вокруг на 1 мелкую копию больше за очко"
+msgid "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"
+msgstr "Молотов и граната разбрасывают вокруг на 1 мелкую копию больше за каждые 2 очка"
 
 #: scripts/talentos.gd
 msgid "Veterano"
 msgstr "Ветеран"
 
 #: scripts/talentos.gd
-msgid "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"
-msgstr "Криты не в 5 %, а в 15 % случаев, и каждый наносит тройной урон"
+msgid "Críticos del 5 % al 10 % de las veces, y cada uno hace 2,5 veces el daño"
+msgstr "Криты не в 5 %, а в 10 % случаев, и каждый наносит урон ×2,5"
 
 #: scripts/talentos.gd
 msgid "Corpulento"
 msgstr "Здоровяк"
 
 #: scripts/talentos.gd
-msgid "+10 % de vida máxima por punto"
-msgstr "+10 % к максимуму здоровья за очко"
+msgid "+5 % de vida máxima por punto"
+msgstr "+5 % к максимуму здоровья за очко"
 
 #: scripts/talentos.gd
 msgid "Ajolote"
 msgstr "Аксолотль"
 
 #: scripts/talentos.gd
-msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
-msgstr "Восстанавливаешь 1 здоровья каждые 5 секунд за очко, до половины здоровья"
+msgid "Regeneras 1 de vida cada 10 segundos por punto, hasta la mitad de tu vida"
+msgstr "Восстанавливаешь 1 здоровья каждые 10 секунд за очко, до половины здоровья"
 
 #: scripts/talentos.gd
 msgid "Durito"
 msgstr "Крепыш"
 
 #: scripts/talentos.gd
-msgid "Cada golpe que recibes quita 1 menos por punto"
-msgstr "Каждый полученный удар отнимает на 1 меньше за очко"
+msgid "Cada golpe que recibes quita 1 menos cada 2 puntos"
+msgstr "Каждый полученный удар отнимает на 1 меньше за каждые 2 очка"
 
 #: scripts/talentos.gd
 msgid "Reflejos"
 msgstr "Рефлексы"
 
 #: scripts/talentos.gd
-msgid "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"
-msgstr "Сам уклоняешься от одного удара каждые 10 с (на 1 с меньше за каждое следующее очко)"
+msgid "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"
+msgstr "Сам уклоняешься от одного удара каждые 10,5 с (на 0,5 с меньше за каждое следующее очко)"
 
 #: scripts/talentos.gd
 msgid "Sanitario"
 msgstr "Санитар"
 
 #: scripts/talentos.gd
-msgid "Los botiquines y las vendas curan 10 más por punto"
-msgstr "Аптечки и бинты лечат на 10 больше за очко"
+msgid "Los botiquines y las vendas curan 5 más por punto"
+msgstr "Аптечки и бинты лечат на 5 больше за очко"
 
 #: scripts/talentos.gd
 msgid "Acero"
 msgstr "Сталь"
 
 #: scripts/talentos.gd
-msgid "Cada planta, un escudo de 50 que se gasta antes que la vida"
-msgstr "На каждом этаже щит на 50, который тратится раньше здоровья"
+msgid "Cada planta, un escudo de 25 que se gasta antes que la vida"
+msgstr "На каждом этаже щит на 25, который тратится раньше здоровья"
 
 #: scripts/talentos.gd
 msgid "Ninja"
@@ -4306,72 +4306,72 @@ msgid "Blindaje"
 msgstr "Броня"
 
 #: scripts/talentos.gd
-msgid "El escudo de Acero tiene 25 más por punto"
-msgstr "Щит Стали больше на 25 за очко"
+msgid "El escudo de Acero tiene 12 más por punto"
+msgstr "Щит Стали больше на 12 за очко"
 
 #: scripts/talentos.gd
 msgid "Sombra"
 msgstr "Тень"
 
 #: scripts/talentos.gd
-msgid "La esquiva se recarga un 15 % antes por punto"
-msgstr "Уклонение перезаряжается на 15 % быстрее за очко"
+msgid "La esquiva se recarga un 7,5 % antes por punto"
+msgstr "Уклонение перезаряжается на 7,5 % быстрее за очко"
 
 #: scripts/talentos.gd
 msgid "Segundo aliento"
 msgstr "Второе дыхание"
 
 #: scripts/talentos.gd
-msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"
-msgstr "Раз за этаж, когда здоровье падает ниже трети, лечишься на 15 за очко"
+msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 7 por punto"
+msgstr "Раз за этаж, когда здоровье падает ниже трети, лечишься на 7 за очко"
 
 #: scripts/talentos.gd
 msgid "Adrenalina"
 msgstr "Адреналин"
 
 #: scripts/talentos.gd
-msgid "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"
-msgstr "Ниже половины здоровья: +30 % урона и +20 % скорости"
+msgid "Por debajo de la mitad de la vida, +15 % de daño y +10 % de velocidad"
+msgstr "Ниже половины здоровья: +15 % урона и +10 % скорости"
 
 #: scripts/talentos.gd
 msgid "Catalizador"
 msgstr "Катализатор"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño de fuego, ácido, rayo y frío por punto"
-msgstr "+10 % урона огнем, кислотой, молнией и холодом за очко"
+msgid "+5 % de daño de fuego, ácido, rayo y frío por punto"
+msgstr "+5 % урона огнем, кислотой, молнией и холодом за очко"
 
 #: scripts/talentos.gd
 msgid "Guantes de goma"
 msgstr "Перчатки"
 
 #: scripts/talentos.gd
-msgid "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"
-msgstr "Огонь, кислота, яды и холод ранят тебя на 10 % меньше за очко"
+msgid "Fuego, ácido, venenos y frío te hacen un 5 % menos por punto"
+msgstr "Огонь, кислота, яды и холод ранят тебя на 5 % меньше за очко"
 
 #: scripts/talentos.gd
 msgid "Incendiario"
 msgstr "Поджигатель"
 
 #: scripts/talentos.gd
-msgid "Los zombis que prendes arden 0,5 s más por punto"
-msgstr "Подожженные тобой зомби горят на 0,5 с дольше за очко"
+msgid "Los zombis que prendes arden 0,25 s más por punto"
+msgstr "Подожженные тобой зомби горят на 0,25 с дольше за очко"
 
 #: scripts/talentos.gd
 msgid "Desatascador"
 msgstr "Вантуз"
 
 #: scripts/talentos.gd
-msgid "Con ácido encima, todo les quita un 10 % más por punto"
-msgstr "Облитые кислотой зомби получают от всего на 10 % больше урона за очко"
+msgid "Con ácido encima, todo les quita un 5 % más por punto"
+msgstr "Облитые кислотой зомби получают от всего на 5 % больше урона за очко"
 
 #: scripts/talentos.gd
 msgid "Criogenia"
 msgstr "Криогеника"
 
 #: scripts/talentos.gd
-msgid "+1 congeladora por punto, y congelan 0,5 s más por punto"
-msgstr "+1 криобомба за очко, и заморозка длится на 0,5 с дольше за очко"
+msgid "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"
+msgstr "+1 криобомба за каждые 2 очка, и заморозка длится на 0,25 с дольше за очко"
 
 #: scripts/talentos.gd
 msgid "Reacción en cadena"
@@ -4402,24 +4402,24 @@ msgid "Napalm"
 msgstr "Напалм"
 
 #: scripts/talentos.gd
-msgid "El fuego del molotov dura 1 s más por punto"
-msgstr "Огонь молотова горит на 1 с дольше за очко"
+msgid "El fuego del molotov dura 0,5 s más por punto"
+msgstr "Огонь молотова горит на 0,5 с дольше за очко"
 
 #: scripts/talentos.gd
 msgid "Pegajoso"
 msgstr "Липучка"
 
 #: scripts/talentos.gd
-msgid "Los zombis con ácido van un 10 % más lentos por punto"
-msgstr "Облитые кислотой зомби медленнее на 10 % за очко"
+msgid "Los zombis con ácido van un 5 % más lentos por punto"
+msgstr "Облитые кислотой зомби медленнее на 5 % за очко"
 
 #: scripts/talentos.gd
 msgid "Alto voltaje"
 msgstr "Киловольты"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"
-msgstr "Молния молниемета и Громоотвода перескакивает еще на 1 зомби за очко"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más cada 2 puntos"
+msgstr "Молния молниемета и Громоотвода перескакивает еще на 1 зомби за каждые 2 очка"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"

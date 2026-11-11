@@ -4020,20 +4020,20 @@ msgid "la rebotica"
 msgstr "a sala dos fundos"
 
 #: scripts/talentos.gd
-msgid "+%d %% de daño"
-msgstr "+%d %% de dano"
+msgid "+%s %% de daño"
+msgstr "+%s %% de dano"
 
 #: scripts/talentos.gd
-msgid "+%d %% de daño y alcance"
-msgstr "+%d %% de dano e alcance"
+msgid "+%s %% de daño y alcance"
+msgstr "+%s %% de dano e alcance"
 
 #: scripts/talentos.gd
-msgid "+%d %% cuerpo a cuerpo"
-msgstr "+%d %% corpo a corpo"
+msgid "+%s %% cuerpo a cuerpo"
+msgstr "+%s %% corpo a corpo"
 
 #: scripts/talentos.gd
-msgid "+%d %% a distancia"
-msgstr "+%d %% à distância"
+msgid "+%s %% a distancia"
+msgstr "+%s %% à distância"
 
 #: scripts/talentos.gd
 msgid "+%d molotov y granada"
@@ -4042,40 +4042,40 @@ msgstr[0] "+%d molotov e granada"
 msgstr[1] "+%d molotovs e granadas"
 
 #: scripts/talentos.gd
-msgid "+%d %% de vida"
-msgstr "+%d %% de vida"
+msgid "+%s %% de vida"
+msgstr "+%s %% de vida"
 
 #: scripts/talentos.gd
-msgid "%d de vida cada 5 s"
-msgstr "%d de vida a cada 5 s"
+msgid "%d de vida cada 10 s"
+msgstr "%d de vida a cada 10 s"
 
 #: scripts/talentos.gd
 msgid "%d menos por golpe"
 msgstr "%d a menos por golpe"
 
 #: scripts/talentos.gd
-msgid "una esquiva sola cada %d s"
-msgstr "uma esquiva automática a cada %d s"
+msgid "una esquiva sola cada %s s"
+msgstr "uma esquiva automática a cada %s s"
 
 #: scripts/talentos.gd
 msgid "+%d de cura"
 msgstr "+%d de cura"
 
 #: scripts/talentos.gd
-msgid "+%d %% de fuego, ácido, rayo y frío"
-msgstr "+%d %% de fogo, ácido, raio e frio"
+msgid "+%s %% de fuego, ácido, rayo y frío"
+msgstr "+%s %% de fogo, ácido, raio e frio"
 
 #: scripts/talentos.gd
-msgid "%d %% menos de los efectos"
-msgstr "%d %% menos dos efeitos"
+msgid "%s %% menos de los efectos"
+msgstr "%s %% menos dos efeitos"
 
 #: scripts/talentos.gd
 msgid "+%s s ardiendo"
 msgstr "+%s s queimando"
 
 #: scripts/talentos.gd
-msgid "+%d %% con ácido"
-msgstr "+%d %% com ácido"
+msgid "+%s %% con ácido"
+msgstr "+%s %% com ácido"
 
 #: scripts/talentos.gd
 msgid "+%d congeladora y +%s s"
@@ -4084,12 +4084,12 @@ msgstr[0] "+%d bomba de gelo e +%s s"
 msgstr[1] "+%d bombas de gelo e +%s s"
 
 #: scripts/talentos.gd
-msgid "+%d %% de rapidez cuerpo a cuerpo"
-msgstr "+%d %% de rapidez corpo a corpo"
+msgid "+%s %% de rapidez cuerpo a cuerpo"
+msgstr "+%s %% de rapidez corpo a corpo"
 
 #: scripts/talentos.gd
-msgid "+%d %% de rapidez y recarga"
-msgstr "+%d %% de rapidez e recarga"
+msgid "+%s %% de rapidez y recarga"
+msgstr "+%s %% de rapidez e recarga"
 
 #: scripts/talentos.gd
 msgid "suelta %d más"
@@ -4100,20 +4100,20 @@ msgid "escudo de %d"
 msgstr "escudo de %d"
 
 #: scripts/talentos.gd
-msgid "esquiva un %d %% antes"
-msgstr "esquiva %d %% antes"
+msgid "esquiva un %s %% antes"
+msgstr "esquiva %s %% antes"
 
 #: scripts/talentos.gd
 msgid "+%d de vida por planta"
 msgstr "+%d de vida por andar"
 
 #: scripts/talentos.gd
-msgid "+%d s de fuego"
-msgstr "+%d s de fogo"
+msgid "+%s s de fuego"
+msgstr "+%s s de fogo"
 
 #: scripts/talentos.gd
-msgid "%d %% más lentos con ácido"
-msgstr "%d %% mais lentos com ácido"
+msgid "%s %% más lentos con ácido"
+msgstr "%s %% mais lentos com ácido"
 
 #: scripts/talentos.gd
 msgid "salta a %d más"
@@ -4136,56 +4136,56 @@ msgid "Ataque"
 msgstr "Ataque"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño por punto"
-msgstr "+10 % de dano por ponto"
+msgid "+5 % de daño por punto"
+msgstr "+5 % de dano por ponto"
 
 #: scripts/talentos.gd
 msgid "Puntería"
 msgstr "Pontaria"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"
-msgstr "+10 % de dano e de alcance ao arremessar o molotov e a granada, por ponto"
+msgid "+5 % de daño y de alcance al lanzar el molotov y la granada por punto"
+msgstr "+5 % de dano e de alcance ao arremessar o molotov e a granada, por ponto"
 
 #: scripts/talentos.gd
 msgid "Camorrista"
 msgstr "Brigão"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño cuerpo a cuerpo por punto"
-msgstr "+10 % de dano corpo a corpo por ponto"
+msgid "+5 % de daño cuerpo a cuerpo por punto"
+msgstr "+5 % de dano corpo a corpo por ponto"
 
 #: scripts/talentos.gd
 msgid "Tirador"
 msgstr "Atirador"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño con armas a distancia por punto"
-msgstr "+10 % de dano com armas à distância por ponto"
+msgid "+5 % de daño con armas a distancia por punto"
+msgstr "+5 % de dano com armas à distância por ponto"
 
 #: scripts/talentos.gd
 msgid "Artificiero"
 msgstr "Artificeiro"
 
 #: scripts/talentos.gd
-msgid "+1 molotov y +1 granada por punto"
-msgstr "+1 molotov e +1 granada por ponto"
+msgid "+1 molotov y +1 granada cada 2 puntos"
+msgstr "+1 molotov e +1 granada a cada 2 pontos"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
 msgstr "Varapau"
 
 #: scripts/talentos.gd
-msgid "Duplica el alcance cuerpo a cuerpo"
-msgstr "Dobra o alcance corpo a corpo"
+msgid "Aumenta un 50 % el alcance cuerpo a cuerpo"
+msgstr "Aumenta o alcance corpo a corpo em 50 %"
 
 #: scripts/talentos.gd
 msgid "Mirilla"
 msgstr "Luneta"
 
 #: scripts/talentos.gd
-msgid "Uno de cada 3 disparos es un crítico seguro (doble daño)"
-msgstr "Um de cada 3 tiros é crítico garantido (dano em dobro)"
+msgid "Uno de cada 6 disparos es un crítico seguro (doble daño)"
+msgstr "Um de cada 6 tiros é crítico garantido (dano em dobro)"
 
 #: scripts/talentos.gd
 msgid "Fabricante"
@@ -4200,80 +4200,80 @@ msgid "Frenesí"
 msgstr "Frenesi"
 
 #: scripts/talentos.gd
-msgid "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"
-msgstr "Você bate 10 % mais rápido no corpo a corpo por ponto"
+msgid "Golpeas cuerpo a cuerpo un 5 % más rápido por punto"
+msgstr "Você bate 5 % mais rápido no corpo a corpo por ponto"
 
 #: scripts/talentos.gd
 msgid "Gatillo fácil"
 msgstr "Dedo nervoso"
 
 #: scripts/talentos.gd
-msgid "Disparas un 10 % más rápido y recargas un 10 % antes por punto"
-msgstr "Você atira 10 % mais rápido e recarrega 10 % antes por ponto"
+msgid "Disparas un 5 % más rápido y recargas un 5 % antes por punto"
+msgstr "Você atira 5 % mais rápido e recarrega 5 % antes por ponto"
 
 #: scripts/talentos.gd
 msgid "Racimo"
 msgstr "Estilhaço"
 
 #: scripts/talentos.gd
-msgid "El molotov y la granada sueltan 1 más pequeño alrededor por punto"
-msgstr "O molotov e a granada soltam 1 menor ao redor por ponto"
+msgid "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"
+msgstr "O molotov e a granada soltam 1 menor ao redor a cada 2 pontos"
 
 #: scripts/talentos.gd
 msgid "Veterano"
 msgstr "Veterano"
 
 #: scripts/talentos.gd
-msgid "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"
-msgstr "Críticos de 5 % para 15 % das vezes, e cada um causa o triplo de dano"
+msgid "Críticos del 5 % al 10 % de las veces, y cada uno hace 2,5 veces el daño"
+msgstr "Críticos de 5 % para 10 % das vezes, e cada um causa 2,5 vezes o dano"
 
 #: scripts/talentos.gd
 msgid "Corpulento"
 msgstr "Parrudo"
 
 #: scripts/talentos.gd
-msgid "+10 % de vida máxima por punto"
-msgstr "+10 % de vida máxima por ponto"
+msgid "+5 % de vida máxima por punto"
+msgstr "+5 % de vida máxima por ponto"
 
 #: scripts/talentos.gd
 msgid "Ajolote"
 msgstr "Axolote"
 
 #: scripts/talentos.gd
-msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
-msgstr "Regenera 1 de vida a cada 5 segundos por ponto, até a metade da sua vida"
+msgid "Regeneras 1 de vida cada 10 segundos por punto, hasta la mitad de tu vida"
+msgstr "Regenera 1 de vida a cada 10 segundos por ponto, até a metade da sua vida"
 
 #: scripts/talentos.gd
 msgid "Durito"
 msgstr "Durão"
 
 #: scripts/talentos.gd
-msgid "Cada golpe que recibes quita 1 menos por punto"
-msgstr "Cada golpe que você recebe tira 1 a menos por ponto"
+msgid "Cada golpe que recibes quita 1 menos cada 2 puntos"
+msgstr "Cada golpe que você recebe tira 1 a menos a cada 2 pontos"
 
 #: scripts/talentos.gd
 msgid "Reflejos"
 msgstr "Reflexos"
 
 #: scripts/talentos.gd
-msgid "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"
-msgstr "Você desvia sozinho de um golpe a cada 10 s (1 s a menos por ponto extra)"
+msgid "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"
+msgstr "Você desvia sozinho de um golpe a cada 10,5 s (0,5 s a menos por ponto extra)"
 
 #: scripts/talentos.gd
 msgid "Sanitario"
 msgstr "Socorrista"
 
 #: scripts/talentos.gd
-msgid "Los botiquines y las vendas curan 10 más por punto"
-msgstr "Os kits médicos e as bandagens curam 10 a mais por ponto"
+msgid "Los botiquines y las vendas curan 5 más por punto"
+msgstr "Os kits médicos e as bandagens curam 5 a mais por ponto"
 
 #: scripts/talentos.gd
 msgid "Acero"
 msgstr "Aço"
 
 #: scripts/talentos.gd
-msgid "Cada planta, un escudo de 50 que se gasta antes que la vida"
-msgstr "A cada andar, um escudo de 50 que se gasta antes da vida"
+msgid "Cada planta, un escudo de 25 que se gasta antes que la vida"
+msgstr "A cada andar, um escudo de 25 que se gasta antes da vida"
 
 #: scripts/talentos.gd
 msgid "Ninja"
@@ -4296,72 +4296,72 @@ msgid "Blindaje"
 msgstr "Blindagem"
 
 #: scripts/talentos.gd
-msgid "El escudo de Acero tiene 25 más por punto"
-msgstr "O escudo de Aço tem 25 a mais por ponto"
+msgid "El escudo de Acero tiene 12 más por punto"
+msgstr "O escudo de Aço tem 12 a mais por ponto"
 
 #: scripts/talentos.gd
 msgid "Sombra"
 msgstr "Sombra"
 
 #: scripts/talentos.gd
-msgid "La esquiva se recarga un 15 % antes por punto"
-msgstr "A esquiva recarrega 15 % antes por ponto"
+msgid "La esquiva se recarga un 7,5 % antes por punto"
+msgstr "A esquiva recarrega 7,5 % antes por ponto"
 
 #: scripts/talentos.gd
 msgid "Segundo aliento"
 msgstr "Segundo fôlego"
 
 #: scripts/talentos.gd
-msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"
-msgstr "Uma vez por andar, ao cair abaixo de um terço da vida, você se cura 15 por ponto"
+msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 7 por punto"
+msgstr "Uma vez por andar, ao cair abaixo de um terço da vida, você se cura 7 por ponto"
 
 #: scripts/talentos.gd
 msgid "Adrenalina"
 msgstr "Adrenalina"
 
 #: scripts/talentos.gd
-msgid "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"
-msgstr "Abaixo da metade da vida, +30 % de dano e +20 % de velocidade"
+msgid "Por debajo de la mitad de la vida, +15 % de daño y +10 % de velocidad"
+msgstr "Abaixo da metade da vida, +15 % de dano e +10 % de velocidade"
 
 #: scripts/talentos.gd
 msgid "Catalizador"
 msgstr "Catalisador"
 
 #: scripts/talentos.gd
-msgid "+10 % de daño de fuego, ácido, rayo y frío por punto"
-msgstr "+10 % de dano de fogo, ácido, raio e frio por ponto"
+msgid "+5 % de daño de fuego, ácido, rayo y frío por punto"
+msgstr "+5 % de dano de fogo, ácido, raio e frio por ponto"
 
 #: scripts/talentos.gd
 msgid "Guantes de goma"
 msgstr "Luvas de borracha"
 
 #: scripts/talentos.gd
-msgid "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"
-msgstr "Fogo, ácido, venenos e frio te causam 10 % menos por ponto"
+msgid "Fuego, ácido, venenos y frío te hacen un 5 % menos por punto"
+msgstr "Fogo, ácido, venenos e frio te causam 5 % menos por ponto"
 
 #: scripts/talentos.gd
 msgid "Incendiario"
 msgstr "Incendiário"
 
 #: scripts/talentos.gd
-msgid "Los zombis que prendes arden 0,5 s más por punto"
-msgstr "Os zumbis em que você bota fogo queimam 0,5 s a mais por ponto"
+msgid "Los zombis que prendes arden 0,25 s más por punto"
+msgstr "Os zumbis em que você bota fogo queimam 0,25 s a mais por ponto"
 
 #: scripts/talentos.gd
 msgid "Desatascador"
 msgstr "Desentupidor"
 
 #: scripts/talentos.gd
-msgid "Con ácido encima, todo les quita un 10 % más por punto"
-msgstr "Com ácido em cima, tudo tira 10 % a mais deles por ponto"
+msgid "Con ácido encima, todo les quita un 5 % más por punto"
+msgstr "Com ácido em cima, tudo tira 5 % a mais deles por ponto"
 
 #: scripts/talentos.gd
 msgid "Criogenia"
 msgstr "Criogenia"
 
 #: scripts/talentos.gd
-msgid "+1 congeladora por punto, y congelan 0,5 s más por punto"
-msgstr "+1 bomba de gelo por ponto, e elas congelam 0,5 s a mais por ponto"
+msgid "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"
+msgstr "+1 bomba de gelo a cada 2 pontos, e elas congelam 0,25 s a mais por ponto"
 
 #: scripts/talentos.gd
 msgid "Reacción en cadena"
@@ -4392,24 +4392,24 @@ msgid "Napalm"
 msgstr "Napalm"
 
 #: scripts/talentos.gd
-msgid "El fuego del molotov dura 1 s más por punto"
-msgstr "O fogo do molotov dura 1 s a mais por ponto"
+msgid "El fuego del molotov dura 0,5 s más por punto"
+msgstr "O fogo do molotov dura 0,5 s a mais por ponto"
 
 #: scripts/talentos.gd
 msgid "Pegajoso"
 msgstr "Pegajoso"
 
 #: scripts/talentos.gd
-msgid "Los zombis con ácido van un 10 % más lentos por punto"
-msgstr "Os zumbis com ácido ficam 10 % mais lentos por ponto"
+msgid "Los zombis con ácido van un 5 % más lentos por punto"
+msgstr "Os zumbis com ácido ficam 5 % mais lentos por ponto"
 
 #: scripts/talentos.gd
 msgid "Alto voltaje"
 msgstr "Alta tensão"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"
-msgstr "O raio do lança-raios e o do Para-raios pulam para mais 1 zumbi por ponto"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más cada 2 puntos"
+msgstr "O raio do lança-raios e o do Para-raios pulam para mais 1 zumbi a cada 2 pontos"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"

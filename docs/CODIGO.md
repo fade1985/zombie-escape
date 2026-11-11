@@ -413,7 +413,7 @@ en una línea.
   desde `proyectil.caer`), Pegajoso (`zombi.ir_hacia`), Alto voltaje (`saltos`: el rayo del lanza rayos y el de
   Pararrayos) y Mezcla explosiva (`zombi.quimica_al_morir` con `efectos_puestos`; la marca del rayo, `zombi.electrico`,
   la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
-  `--talentos-altos`),
+  `--talentos-altos`). Desde el 11 nov (bloque J) todos los talentos hacen la mitad (el precio no cambia): lo que daba +10 % da +5 %; lo que daba un objeto entero por punto (Artificiero, Durito, Criogenia, Racimo, Alto voltaje) da 1 cada 2 puntos (`int(n / 2.0)`); el Ajolote cura cada 10 s (`REGENERA_CADA`); Larguirucho ×1,5, Mirilla 1 de cada 6, Veterano ×2,5 y +5 %, Fabricante ×1,15 y ×1,25, Pararrayos 10 de daño y 0,5 s, Mezcla explosiva radio 45 y 15 de daño, Adrenalina +15 % y +10 %),
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `idioma.gd` (autoload `Idioma`: el idioma del juego y `Idioma.t("texto")` / `Idioma.n("uno", "varios", n)` para traducir,
   también desde los `static`; se elige en Opciones, se guarda en `ajustes.idioma` y avisa con la señal `cambiado`; con
