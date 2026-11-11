@@ -279,20 +279,15 @@ func tocar(nombre: String) -> void:
 	v.play()
 
 
-# El gruñido de los botones de los menús (botones.gd lo pide al pulsar cualquiera): uno de GRUNIDOS, cada vez otro distinto
-# del de antes. Son gruñidos de zombi de PixelLab (11 nov: los hechos con código sonaban a perro, a pájaro y a helicóptero;
-# los originales, en tools/efectos/pixellab/, fuera de git), pasados a .ogg en mono, a -20 LUFS y con el final suave. Van
-# por su propio reproductor: si se pulsa otro botón mientras suena, el gruñido de antes se corta y empieza el nuevo (si no,
-# se amontonarían); y no más de uno cada GRUNIDO_HUECO ms
-const GRUNIDOS := [
-	preload("res://assets/sonidos/grunido-1.ogg"), preload("res://assets/sonidos/grunido-2.ogg"),
-	preload("res://assets/sonidos/grunido-3.ogg"), preload("res://assets/sonidos/grunido-4.ogg"),
-	preload("res://assets/sonidos/grunido-5.ogg"), preload("res://assets/sonidos/grunido-6.ogg"),
-]
+# El gruñido de los botones de los menús (botones.gd lo pide al pulsar cualquiera): un gruñido de zombi de PixelLab
+# (11 nov: los hechos con código sonaban a perro, a pájaro y a helicóptero). De seis tomas, el dueño eligió la primera, al
+# doble de velocidad sin cambiarle el tono (ffmpeg atempo=2: 0,74 s), en mono, a -20 LUFS y con el final suave; el original,
+# en tools/efectos/pixellab/grunido-1.wav (fuera de git). Va por su propio reproductor: si se pulsa otro botón mientras
+# suena, empieza otra vez (si no, se amontonarían); y no más de uno cada GRUNIDO_HUECO ms
+const GRUNIDO: AudioStream = preload("res://assets/sonidos/grunido.ogg")
 const GRUNIDO_HUECO := 150
 var voz_grunido: AudioStreamPlayer
 var ultimo_grunido := -100000
-var grunido_antes := -1
 
 func grunir() -> void:
 	var ahora := Time.get_ticks_msec()
@@ -302,12 +297,8 @@ func grunir() -> void:
 	if voz_grunido == null:
 		voz_grunido = AudioStreamPlayer.new()
 		voz_grunido.bus = &"Efectos"
+		voz_grunido.stream = GRUNIDO
 		add_child(voz_grunido)
-	var cual := randi() % GRUNIDOS.size()
-	if cual == grunido_antes:   # (uno distinto del de antes)
-		cual = (cual + 1) % GRUNIDOS.size()
-	grunido_antes = cual
-	voz_grunido.stream = GRUNIDOS[cual]
 	voz_grunido.play()
 
 

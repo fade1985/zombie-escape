@@ -523,9 +523,9 @@ en una línea.
 - `formas.gd` (`Formas`): `disco`, `arco`, `poligono` y `polilinea`, lo mismo que `draw_circle`, `draw_arc`, `draw_colored_polygon` y
   `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
   Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
-- `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar los botones de los menús, `grunir`: uno de
-  los 6 de `assets/sonidos/` (`GRUNIDOS`, de PixelLab: los hechos con código sonaban a perro y a helicóptero), cada vez otro,
-  por su propio reproductor (el nuevo corta al de antes); cada efecto cambia un poco al azar de tono y de volumen cada
+- `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar los botones de los menús, `grunir`:
+  `assets/sonidos/grunido.ogg` (`GRUNIDO`, de PixelLab, al doble de velocidad: los hechos con código sonaban a perro y a
+  helicóptero), por su propio reproductor (si se pulsa otra vez, empieza de nuevo); cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
   prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
   sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y
@@ -823,7 +823,7 @@ en una línea.
   accionistas» (Torre Velaria), con `-base.ogg` y `-ritmo.ogg`. Épicas menos la de las hordas y la del menú; las capas
   que suenan a la vez (`CANCIONES`, `MOMENTOS` y `EXPLORAR` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
   (ver `docs/WEB.md`).
-- `sonidos/`: los gruñidos de zombi de los botones de los menús (`grunido-1.ogg` a `-6.ogg`, de PixelLab, ver
+- `sonidos/`: el gruñido de zombi de los botones de los menús (`grunido.ogg`, de PixelLab, ver
   `pixellab.json` «grunidos-botones»; los demás efectos se sintetizan en `sonido.gd`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
   25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).

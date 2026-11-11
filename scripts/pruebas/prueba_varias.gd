@@ -4541,8 +4541,8 @@ func probar_brillo() -> void:
 
 
 # --grunido: el gruñido de los botones de los menús (botones.gd y Sonido.grunir). Un botón cualquiera gruñe al pulsarlo,
-# pulsado otra vez enseguida no (GRUNIDO_HUECO), y una casilla del inventario (marca "sin_grunido") nunca. Y que están los
-# gruñidos (assets/sonidos/grunido-N.ogg), cada uno con su largo, sin repetirse en bucle
+# pulsado otra vez enseguida no (GRUNIDO_HUECO), y una casilla del inventario (marca "sin_grunido") nunca. Y el gruñido
+# (assets/sonidos/grunido.ogg): su largo, sin repetirse en bucle
 func probar_grunido() -> void:
 	await get_tree().create_timer(0.5, true).timeout
 	var b := Button.new()
@@ -4565,11 +4565,8 @@ func probar_grunido() -> void:
 		primero, seguido, en_casilla])
 	b.queue_free()
 	casilla.queue_free()
-	var largos := []
-	for g: AudioStream in Sonido.GRUNIDOS:
-		largos.append("%.2f s%s" % [g.get_length(), " EN BUCLE" if g.get("loop") else ""])
-	print("Gruñido · los %d gruñidos: %s (esperado: unos 1,5 s cada uno, ninguno en bucle)" % [Sonido.GRUNIDOS.size(), largos])
-	print("Gruñido · el reproductor suena con uno de ellos: %s (esperado: true)" % (Sonido.voz_grunido != null and Sonido.voz_grunido.stream in Sonido.GRUNIDOS))
+	print("Gruñido · dura %.2f s, en bucle %s (esperado: 0.74 s, false)" % [Sonido.GRUNIDO.get_length(), Sonido.GRUNIDO.get("loop")])
+	print("Gruñido · el reproductor suena con él: %s (esperado: true)" % (Sonido.voz_grunido != null and Sonido.voz_grunido.stream == Sonido.GRUNIDO))
 	get_tree().quit()
 
 

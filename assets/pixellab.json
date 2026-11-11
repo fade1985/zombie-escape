@@ -5166,35 +5166,35 @@
   "grunidos-botones": {
     "tool": "create_sound_effect",
     "seconds": 1.5,
-    "what": "El gruñido de los botones de los menús (Sonido.grunir): 6 tomas, en assets/sonidos/grunido-N.ogg (mono, -20 LUFS, final suave con ffmpeg); los .wav originales, en tools/efectos/pixellab/ (fuera de git)",
+    "what": "El gruñido de los botones de los menús (Sonido.grunir): 6 tomas; el dueño eligió la 1, que va al doble de velocidad sin cambiar el tono en assets/sonidos/grunido.ogg (ffmpeg atempo=2, mono, -20 LUFS, final suave). Los .wav originales, en tools/efectos/pixellab/grunido-N.wav (fuera de git)",
     "sonidos": [
       {
-        "archivo": "assets/sonidos/grunido-1.ogg",
+        "toma": 1,
         "sound_effect_id": "1d9095d0-f96d-4c4b-a0ea-0b7e789a67b5",
         "prompt": "a terrifying zombie growl: a deep, wet, guttural snarl from a rotting human throat, menacing and hostile, close to the microphone, horror movie, no music"
       },
       {
-        "archivo": "assets/sonidos/grunido-2.ogg",
+        "toma": 2,
         "sound_effect_id": "21154bab-cb08-4961-be28-997c6c1d92ac",
         "prompt": "an undead zombie moaning and growling, low raspy groan with a rattling throat, dark and scary, horror game creature, single growl, dry, no music"
       },
       {
-        "archivo": "assets/sonidos/grunido-3.ogg",
+        "toma": 3,
         "sound_effect_id": "62d96bb5-fdfb-4c7b-8dac-9420108a57ef",
         "prompt": "an aggressive zombie snarl, a short angry growl of a dead man with gurgling and heavy breathing, deep and frightening, horror film sound effect"
       },
       {
-        "archivo": "assets/sonidos/grunido-4.ogg",
+        "toma": 4,
         "sound_effect_id": "8a47a7c2-d3bd-4671-8025-d245ecb1e861",
         "prompt": "a creepy zombie death rattle growl, a slow low croaking groan from a decayed throat, unsettling and evil, horror"
       },
       {
-        "archivo": "assets/sonidos/grunido-5.ogg",
+        "toma": 5,
         "sound_effect_id": "e32e259b-1f5d-445a-a989-c1da920799f6",
         "prompt": "a hungry zombie growling close by, deep throaty rumble turning into a hiss, menacing and realistic, scary horror monster vocal"
       },
       {
-        "archivo": "assets/sonidos/grunido-6.ogg",
+        "toma": 6,
         "sound_effect_id": "a126b8b4-0806-4fa2-8f4a-2148307a671a",
         "prompt": "a feral zombie roar-growl, a short, harsh, distorted guttural scream of an infected human, intense and terrifying, horror movie"
       }
