@@ -52,9 +52,12 @@ const AZOTEA_ARO_LIBRE := 230.0         # lo que queda limpio alrededor del aro 
 # pelea (partida.gd, mirar_ring). No choca: está a ras de suelo
 const PLATAFORMA := Rect2(180, 192, 1048, 614)
 # Los aparatos de la azotea (de GPT: tools/muebles_gpt.py), los mismos en los dos edificios: [tipo, x del centro, y de
-# arriba de lo que ocupa]. En las esquinas, fuera de las líneas blancas y lejos de la puerta (a la derecha, abajo): la
-# torre de antena arriba a la derecha y un aire acondicionado en cada esquina de la izquierda
-const AZOTEA_APARATOS := [["antennas", 1280, 210], ["acunit", 132, 140], ["acunit", 132, 780]]
+# arriba de lo que ocupa]. Un aire acondicionado en cada esquina, lo más esquinado posible pero con AZOTEA_RODEO libre
+# hasta la barandilla por todos sus lados, para que se pueda rodear (Johnny y también el jefe más grande, la criatura
+# del doctor Salas, de radio 48); y la torre de antena contra la barandilla de arriba, a la derecha de la caseta
+const AZOTEA_RODEO := 130.0
+const AZOTEA_APARATOS := [["acunit", 258, 258], ["acunit", 1150, 258], ["acunit", 258, 662], ["acunit", 1150, 662],
+	["antennas", 620, 140]]
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
@@ -574,7 +577,7 @@ static func codigo(planta: Dictionary, normales: Array) -> Dictionary:
 
 # La azotea (la última planta del centro comercial y de los Apartamentos, como en el juego JS): un solo sitio grande
 # y abierto, sin pasillo ni tiendas, con el jefe final. Toda ella, la imagen de GPT (mapa.gd, "azotea"): el helipuerto
-# a ras de suelo, con la barandilla alrededor y tres aparatos en las esquinas (AZOTEA_APARATOS). Se llega por la derecha,
+# a ras de suelo, con la barandilla alrededor y sus aparatos (AZOTEA_APARATOS). Se llega por la derecha,
 # por la escalera, al final de la pasarela, que se cierra detrás para siempre;
 # no tiene más puerta: al caer el jefe llega el helicóptero de Velaria y suelta una escalera de cuerda sobre el
 # helipuerto (helicoptero.gd); al llegar Johnny a ella se acaba el edificio (partida.gd, subir_al_helicoptero). Es un

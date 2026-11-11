@@ -1199,8 +1199,8 @@ func bala_al_jefe(angulo: float, lejos: float, dano: int) -> void:
 func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 	var p := Planta.plataforma(s)
 	print("  helipuerto: el aro %s dentro de las líneas %s (esperado: true)" % [s.helipuerto, p.has_point(s.helipuerto)])
-	# los aparatos (planta.gd, AZOTEA_APARATOS): en el suelo, fuera de las líneas blancas, sin tapar el aro con su
-	# dibujo y lejos de la puerta
+	# los aparatos (planta.gd, AZOTEA_APARATOS): en el suelo, sin tapar el aro con su dibujo ni la llegada; los aires
+	# acondicionados, con AZOTEA_RODEO libre hasta la barandilla por los cuatro lados (para rodearlos)
 	var suelo := Rect2(Planta.MURO, Planta.AZOTEA_MURO_ARRIBA * Planta.CASILLA, s.ancho - 2.0 * Planta.MURO,
 		s.alto - (Planta.AZOTEA_MURO_ARRIBA + Planta.AZOTEA_MURO_ABAJO) * Planta.CASILLA)
 	var malos := 0
@@ -1208,9 +1208,30 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 		var r := Muebles.hueco(m)
 		var alto: float = load("res://assets/sprites/mueble-%s.png" % m.tipo).get_height() * 2.0
 		var dibujo := Rect2(r.position.x, r.end.y - alto, r.size.x, alto)
-		if not suelo.encloses(r) or p.grow(-24.0).intersects(r) or dibujo.get_center().distance_to(s.helipuerto) < Planta.AZOTEA_ARO_LIBRE 				or r.get_center().distance_to(mapa.puertas[0].position) < 250.0:
+		var rodeo := Planta.AZOTEA_RODEO - 1.0 if m.tipo == "acunit" else 0.0
+		if not suelo.grow(-rodeo).encloses(r) or dibujo.get_center().distance_to(s.helipuerto) < Planta.AZOTEA_ARO_LIBRE:
 			malos += 1
-	print("  aparatos: %d | mal puestos %d (esperado: 3, 0)" % [s.muebles.size(), malos])
+		if r.grow(johnny.RADIO).has_point(mapa.puertas[0].llegada()):
+			malos += 1
+	print("  aparatos: %d | mal puestos %d (esperado: 5, 0)" % [s.muebles.size(), malos])
+	# y de verdad: en el hueco de cada lado de cada aire acondicionado cabe la criatura del doctor Salas (radio 48)
+	var circulo := CircleShape2D.new()
+	circulo.radius = 48.0
+	var consulta := PhysicsShapeQueryParameters2D.new()
+	consulta.shape = circulo
+	consulta.collision_mask = 1
+	var atascos := 0
+	for m in s.muebles:
+		if m.tipo != "acunit":
+			continue
+		var r := Muebles.hueco(m)
+		var c := r.get_center()
+		for punto in [Vector2(c.x, (r.position.y + suelo.position.y) / 2.0), Vector2(c.x, (r.end.y + suelo.end.y) / 2.0),
+				Vector2((r.position.x + suelo.position.x) / 2.0, c.y), Vector2((r.end.x + suelo.end.x) / 2.0, c.y)]:
+			consulta.transform = Transform2D(0.0, punto)
+			if not mapa.get_world_2d().direct_space_state.intersect_shape(consulta, 1).is_empty():
+				atascos += 1
+	print("  la criatura cabe alrededor de cada aire acondicionado: huecos con choque %d (esperado: 0)" % atascos)
 	# los muros, por la barandilla: en cada columna de dentro, muro hasta la fila 3 y desde la 27; suelo entre medias
 	var mal := 0
 	for c in range(2, mapa.cols - 2):
