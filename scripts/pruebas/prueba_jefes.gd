@@ -1193,7 +1193,7 @@ func bala_al_jefe(angulo: float, lejos: float, dano: int) -> void:
 
 # El helipuerto elevado de la azotea (planta.gd, mapa.gd y partida.gd, mirar_ring): que está en el centro, que ni la
 # base ni el dibujo de ningún aparato lo tocan, que de abajo solo se sube por la rampa, que el jefe espera arriba sin
-# recibir daño y que, al subir Johnny, la valla cierra la rampa (captura-azotea-valla.png) y ya no se baja
+# recibir daño y que, al subir Johnny, empieza la pelea; la rampa se queda abierta (sin valla, captura-azotea-valla.png)
 func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 	var p := Planta.plataforma(s)
 	var huella := Planta.huella_helipuerto(s)
@@ -1243,11 +1243,11 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 		jefa.recibir_golpe(50, Vector2.RIGHT * 300.0)
 		print("  el jefe espera: %s | estado %s | en el helipuerto %s | un golpe le quita %d (esperado: 0)" % [jefa.esperando,
 			jefa.estado, mapa.en_plataforma(jefa.position), vida_antes - jefa.vida])
-	# Johnny sube por la rampa: la valla se cierra detrás
+	# Johnny sube por la rampa (ya sin valla: se queda abierta)
 	johnny.position = Vector2(Planta.rampa(s).end.x - 30.0, s.helipuerto.y)
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
-	print("  en la rampa: valla %s" % ("cerrada" if mapa.valla.cerrada else "abierta"))
+	print("  en la rampa: valla %s (esperado: ninguna)" % ("ninguna" if not "valla" in mapa else "puesta"))
 	johnny.position = Vector2(p.end.x - 60.0, s.helipuerto.y)
 	await get_tree().create_timer(0.5).timeout
 	camara.zoom = Vector2(0.8, 0.8)
@@ -1255,8 +1255,8 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 	Captura.foto("captura-azotea-valla.png")
 	camara.zoom = Vector2.ONE
 	var fuera := NavigationServer2D.map_get_path(nav, s.helipuerto, abajo, true)
-	print("  arriba: valla %s | el jefe espera %s | aviso: '%s' | se puede bajar andando %s (esperado: false)" % [
-		"cerrada" if mapa.valla.cerrada else "abierta", jefa is Minijefe and jefa.esperando, aviso.text,
+	print("  arriba: valla %s | el jefe espera %s | aviso: '%s' | se puede bajar andando %s (esperado: ninguna, false, true)" % [
+		"ninguna" if not "valla" in mapa else "puesta", jefa is Minijefe and jefa.esperando, aviso.text,
 		not fuera.is_empty() and fuera[-1].distance_to(abajo) < 4.0])
 
 
@@ -1347,7 +1347,7 @@ func probar_azotea(acabar := false) -> void:
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.6).timeout
 	print("  sin el jefe: jefe muerto %s | valla del helipuerto %s | aviso: '%s'" % [planta.jefa_muerta,
-		"cerrada" if mapa.valla.cerrada else "abierta", aviso.text])
+		"ninguna" if not "valla" in mapa else "puesta", aviso.text])
 	if es_final:
 		# al rato, su página del dosier (con el juego parado); al cerrarla, el helicóptero (captura-helicoptero.png)
 		await get_tree().create_timer(1.3).timeout

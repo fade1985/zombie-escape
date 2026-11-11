@@ -3118,10 +3118,6 @@ msgid "¡Piso limpio! La puerta se ha abierto"
 msgstr "Чисто! Дверь открылась"
 
 #: scripts/partida.gd
-msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
-msgstr "Ограда закрылась! Вниз не уйти, пока не одолеешь: %s"
-
-#: scripts/partida.gd
 msgid "Cifra %d de %d. ¡Control de productividad: despiertan todos!"
 msgstr "Цифра %d из %d. Проверка продуктивности: все просыпаются!"
 

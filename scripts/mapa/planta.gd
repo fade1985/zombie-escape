@@ -41,7 +41,7 @@ const AZOTEA_FILAS := 30
 # El helipuerto (helipuerto.png, de tools/azotea.py): una plataforma un poco más alta que el suelo, siempre en el
 # centro de la azotea, con la rampa a la derecha, del lado de la puerta de llegada (L17: se sube de frente, en cuanto
 # se llega por la escalera). Es el ring del jefe
-# final: espera arriba y, en cuanto sube Johnny, una valla cierra la rampa hasta que cae (mapa.gd y partida.gd)
+# final: espera arriba y, en cuanto sube Johnny, empieza la pelea (partida.gd, mirar_ring; sin valla: la rampa queda abierta)
 const PLATAFORMA := Vector2(768, 576)   # lo de arriba, 24 × 18 casillas (con su borde, que no se pisa)
 const PLATAFORMA_ALTO := 24.0           # lo que se eleva: la cara de delante, que se ve por debajo
 const PLATAFORMA_BORDE := 8.0           # el borde de arriba: choca, como la cara

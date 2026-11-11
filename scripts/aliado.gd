@@ -881,7 +881,8 @@ func dibujar_encima() -> void:
 			Color(PAPEL, alfa))
 		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
 			Color(color_frase, alfa))
-	if modo != "equipo":
+	# el nombre (lo que es: «Médica»), solo en su habitación de los trasteros (las viviendas): en el edificio, ya no
+	if modo == "vecino":
 		texto(letra, Supervivientes.nombre_de(def), Vector2(0, 42), 16, Color.WHITE)   # (el nombre, ya traducido)
 
 

@@ -194,6 +194,9 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso]:
 		etiqueta.theme = Tema.crear()
+	# las explicaciones blancas de abajo en el centro (decir) ya no se ven: el dueño las quitó todas. Se siguen
+	# escribiendo en la etiqueta, escondida, porque las pruebas las leen
+	aviso.visible = false
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -586,7 +589,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
 				tutorial("jefes")
 				guia.jefe_presentado()
-			if sitio.has("helipuerto") and aqui == idx and not mapa.valla.cerrada:
+			if sitio.has("helipuerto") and aqui == idx and jefa is Minijefe and jefa.esperando:
 				decir(Idioma.t("Te espera arriba, en el helipuerto: sube por la rampa"), 3.0)
 
 
@@ -897,8 +900,6 @@ func _physics_process(delta: float) -> void:
 	elif not quedan:
 		sitio.limpio = true
 		cerrada = false
-		if mapa.valla:
-			mapa.valla.abrir()   # (la del helipuerto: ya se puede bajar)
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
 			arreglar_ascensor()
@@ -918,29 +919,22 @@ func _physics_process(delta: float) -> void:
 		supervivientes.piso_limpio(aqui)
 
 
-# El ring del helipuerto (la azotea): el jefe espera arriba (minijefe.gd, esperando) y, en cuanto Johnny sube por la
-# rampa y pisa la plataforma, la valla cierra la rampa (valla.gd) y empieza la pelea; de ahí no se baja hasta que cae
-# el jefe (al quedar limpia la azotea se abre). Los acompañantes que se hayan quedado abajo suben con él
+# El helipuerto (la azotea): el jefe espera arriba (minijefe.gd, esperando) y, en cuanto Johnny sube por la rampa y pisa
+# la plataforma, empieza la pelea. Los acompañantes que se hayan quedado abajo suben con él. (Antes una valla cerraba la
+# rampa hasta que caía el jefe: el dueño la quitó el 11 nov; ahora se puede bajar en mitad de la pelea)
 func mirar_ring(sitio: Dictionary) -> void:
-	if not sitio.has("helipuerto") or mapa.valla == null or not jefa_salio:
+	if not sitio.has("helipuerto") or not jefa_salio:
 		return
-	if mapa.valla.cerrada:
-		# nadie sale del ring: el borde es fino, y un empujón muy fuerte podría colar a alguien al otro lado
-		for n in [johnny] + get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("aliados"):
-			if not mapa.en_plataforma(n.global_position):
-				n.global_position = mapa.a_la_plataforma(n.global_position, n.radio + 4.0 if "radio" in n else 24.0)
+	if not (is_instance_valid(jefa) and jefa is Minijefe and jefa.esperando):
 		return
 	if not mapa.en_plataforma(johnny.global_position, johnny.RADIO + 6.0):
 		return
-	mapa.valla.cerrar()
-	if is_instance_valid(jefa) and jefa is Minijefe:
-		jefa.esperando = false
+	jefa.esperando = false
 	var lado := -1.0
 	for a in get_tree().get_nodes_in_group("aliados"):
 		if not mapa.en_plataforma(a.global_position, 16.0):
 			a.global_position = mapa.a_la_plataforma(johnny.global_position + Vector2(36.0, 40.0 * lado), 24.0)
 			lado = -lado
-	decir(Idioma.t("¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s") % Idioma.t(planta.el_jefe), 3.0)
 
 
 # El científico muerto de esta planta, si está en este sitio y su página falta por encontrar (historia.gd). Si
@@ -1208,7 +1202,7 @@ func nombre_jefa() -> String:
 	return ""
 
 
-# Un aviso en el centro de la pantalla que se va solo. Durante la presentación de un jefe no sale: se guarda (el
+# Un aviso en el centro de la pantalla que se va solo (hoy escondido: ver _ready). Durante la presentación de un jefe no sale: se guarda (el
 # último) y sale al acabar (ui/presentacion.gd)
 func decir(texto: String, segundos := 2.2) -> void:
 	if presentacion.activa:
@@ -1868,10 +1862,10 @@ func rescatar_atascados(delta: float) -> void:
 			z.zona = mapa.zona_en(suelo)   # (la sala por la que se mueve)
 
 
-# Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa. Con la valla del helipuerto cerrada, dentro
-# del ring (los que llama el jefe, aunque los pida cerca del borde)
+# Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa. Durante la pelea del helipuerto, encima de
+# él (los que llama el jefe, aunque los pida cerca del borde)
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
-	if mapa.valla and mapa.valla.cerrada:
+	if mapa.sitio.has("helipuerto") and jefa_salio and is_instance_valid(jefa) and jefa is Minijefe and not jefa.esperando:
 		donde = mapa.a_la_plataforma(donde, 30.0)
 	# nunca dentro de un muro ni fuera del mapa (los que llama un jefe, si los pide junto a la pared): al suelo más cercano.
 	# Si no, se queda encerrado donde no se le puede matar y la puerta no se abre nunca (10 nov, la portera)

@@ -1507,3 +1507,57 @@ func probar_menus() -> void:
 	Captura.foto("captura-fin.png")
 	print("Guardado de prueba: ", Guardado.cargar())
 	get_tree().quit()
+
+
+# La tele del salón se usa desde cualquier lado (delante, detrás y los costados), pero solo desde su habitación: desde el
+# otro lado de la pared, no. Johnny en cada lado del mueble (dentro de la zona) y, en el lado de la pared, un poco más
+# allá, ya en la otra habitación
+func probar_tele_detras() -> void:
+	var donde := -1
+	for j in planta.sitios.size():
+		if planta.sitios[j].has("tele"):
+			donde = j
+	if donde < 0:
+		Captura.fallar("esta planta no tiene tele")
+		return
+	await montar(donde, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var tele: Node2D = mapa.tele_salon
+	var mueble: Node2D = tele.get_parent()
+	planta.sitios[donde].tele.estado = "encendida"
+	tele.encender()
+	luz.alternar()
+	var fondo: float = mueble.datos.h
+	var ancho: float = mueble.datos.w
+	var centro: Vector2 = mueble.position - Vector2(0, fondo / 2.0)
+	var lados := {"delante": Vector2(0, fondo / 2.0 + 20), "detras": Vector2(0, -fondo / 2.0 - 22),
+		"izquierda": Vector2(-ancho / 2.0 - 8, 0), "derecha": Vector2(ancho / 2.0 + 8, 0)}
+	for lado in lados:
+		johnny.position = centro + lados[lado]
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		await get_tree().create_timer(0.15).timeout
+		var c := Vector2i((johnny.position / 32.0).floor())
+		var en_muro: bool = mapa.es_muro(c.x, c.y)
+		# (la de los pisos está contra la pared de arriba: «detrás» queda ya en la habitación de al lado, y ahí no vale)
+		var suya: bool = tele.en_su_sala(johnny) and not en_muro
+		print("Tele detrás · %s: en la zona %s, en su habitación %s, se puede usar %s (esperado: se puede usar = en su habitación)" % [
+			lado, johnny.ante_mueble == tele.zona, suya, tele.zona.activa() and johnny.ante_mueble == tele.zona])
+		if lado == "detras":
+			Captura.foto("captura-tele-detras.png")
+	# al otro lado de la pared (lado de la tele, mueble.datos.lado): justo pasado el muro
+	print("Tele detrás · lado de la tele: %s" % mueble.datos.get("lado", "?"))
+	for lado in lados:
+		var paso: Vector2 = lados[lado].normalized()
+		for d in range(20, 140, 8):
+			var p: Vector2 = centro + lados[lado] + paso * d
+			var c := Vector2i((p / 32.0).floor())
+			if not mapa.es_muro(c.x, c.y) and mapa.sala_de(c.x, c.y) != mapa.sala_de(int(centro.x / 32), int(centro.y / 32)):
+				johnny.position = p
+				await get_tree().physics_frame
+				await get_tree().physics_frame
+				print("Tele detrás · tras la pared por %s: en la zona %s, se puede usar %s (esperado: se puede usar false)" % [
+					lado, johnny.ante_mueble == tele.zona, tele.zona.activa() and johnny.ante_mueble == tele.zona])
+				break

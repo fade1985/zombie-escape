@@ -1495,6 +1495,10 @@ func usar_con_tutorial(abrir: Callable, cerrar: Callable, id: String, foto := ""
 	await get_tree().create_timer(0.5).timeout
 	var ventana := ventana_tutorial()
 	print("Al abrir: tutorial «%s» (esperado: %s)" % [ventana.id if ventana else "ninguno", id])
+	# su «!» se quita ya, con el menú todavía abierto (exclamacion.gd sigue mirando en pausa y apuntar los refresca)
+	var con_marca: Array = get_tree().get_nodes_in_group("exclamaciones").filter(func(m): return m.visible).map(
+		func(m): return String(m.get_parent().name))
+	print("  con el menú abierto, «!» en: %s (esperado: sin el de lo que se acaba de abrir)" % ", ".join(con_marca))
 	if foto != "":
 		Captura.foto(foto)
 	if ventana:

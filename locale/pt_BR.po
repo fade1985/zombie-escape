@@ -3114,10 +3114,6 @@ msgid "¡Piso limpio! La puerta se ha abierto"
 msgstr "Tudo limpo! A porta se abriu"
 
 #: scripts/partida.gd
-msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
-msgstr "A grade se fechou! Daqui ninguém desce até acabar com %s"
-
-#: scripts/partida.gd
 msgid "Cifra %d de %d. ¡Control de productividad: despiertan todos!"
 msgstr "Dígito %d de %d. Controle de produtividade: todos acordam!"
 

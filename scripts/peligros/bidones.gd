@@ -15,7 +15,7 @@ extends Node2D
 const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 const CHARCO := preload("res://escenas/armas/charco.tscn")
 
-const ATONTA := 5.0          # lo que deja atontado al jefe
+const ATONTA := 3.0          # lo que deja atontado al jefe (antes 5: el dueño lo bajó a 3)
 const RAPIDEZ := 380.0       # lo deprisa que rueda
 const DURA_MAX := 4.0        # lo más que rueda (si no choca con nada antes)
 const RADIO := 18.0          # lo que ocupa rodando (para chocar)

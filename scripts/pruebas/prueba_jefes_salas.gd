@@ -1325,10 +1325,10 @@ func probar_bidon() -> void:
 	Captura.foto("captura-bidon-atontado.png")
 	print("Bidón: Johnny al lado, es lo que tiene delante %s (esperado: true) · al empujarlo, llega al jefe en %.1f s (esperado: menos de 2) · atontado %s (esperado: true) · charcos %d (esperado: 1 o más) · usado %s (esperado: true)" % [
 		delante, espera, atontado, charcos, datos.cosas[0].usado])
-	await get_tree().create_timer(2.2).timeout
+	await get_tree().create_timer(1.7).timeout
 	var a_media: bool = jefe.estado == "atontado"
-	await get_tree().create_timer(2.8).timeout
-	print("Bidón: a los 2,5 s sigue atontado %s (esperado: true) · a los 5,3 s ya no %s (esperado: true) · le ha quitado %d de vida (esperado: más de 0, del charco)" % [
+	await get_tree().create_timer(1.6).timeout
+	print("Bidón: a los 2 s sigue atontado %s (esperado: true) · a los 3,6 s ya no (atonta 3 s) %s (esperado: true) · le ha quitado %d de vida (esperado: más de 0, del charco)" % [
 		a_media, jefe.estado != "atontado", vida0 - jefe.vida])
 	# 2. el segundo, pero el jefe se aparta nada más empujarlo: llega a la pared, revienta y no le atonta
 	bidon = nodo.bidones[0]

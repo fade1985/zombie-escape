@@ -305,8 +305,8 @@ const SALAS := {
 		# sombra de la cama; la de abajo, encendida, y parpadeando
 		"colocados": {
 			"abajo": [["wardrobe", 2.0], ["nightstand", 5.5], ["doublebed", 8.0], ["nightstand", 10.5]],
-			"arriba": [["wardrobe", 9.0], ["nightstand", 3.85, "izquierda", "apagada"], ["doublebed", 5.25, "izquierda"],
-				["nightstand", 7.62, "izquierda"]],
+			"arriba": [["wardrobe", 9.0], ["nightstand", 4.55, "izquierda", "apagada"], ["doublebed", 5.25, "izquierda"],
+				["nightstand", 7.25, "izquierda"]],
 		},
 	},
 	"dormitorio-individual": {

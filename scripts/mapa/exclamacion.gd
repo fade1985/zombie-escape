@@ -18,6 +18,10 @@ var base := 0.0        # la "y" en que se puso, que es donde está en medio del 
 
 func _ready() -> void:
 	z_index = 20
+	# también con el juego en pausa (con un menú abierto): así, al usar el mueble, el «!» se quita sin esperar a cerrar
+	# el menú. Y en el grupo, para que Tutoriales.apuntar los mire todos al momento
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_to_group("exclamaciones")
 	var luz := CanvasItemMaterial.new()
 	luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	material = luz
@@ -42,7 +46,7 @@ func _process(delta: float) -> void:
 	if espera <= 0.0:
 		espera = CADA
 		refrescar()
-	if activa:
+	if activa and not get_tree().paused:
 		t += delta
 		position.y = base + sin(t * 5.0) * BOTE
 

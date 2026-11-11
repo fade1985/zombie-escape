@@ -687,7 +687,7 @@ en una línea.
   incendios (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
   La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la derecha, frente a la puerta de llegada: `plataforma()`,
   `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
-  (`esperando` en `minijefe.gd`) y, al subir Johnny, `valla.gd` cierra la rampa hasta que cae (`partida.mirar_ring`).
+  (`esperando` en `minijefe.gd`) y, al subir Johnny, empieza la pelea (`partida.mirar_ring`); sin valla: la rampa se queda abierta.
   Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). Sus aparatos van siempre en el
   mismo sitio (`APARATOS`, uno por edificio; ninguno cerca de la puerta, de la rampa ni del helipuerto: lo mira `--azotea`). No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
@@ -765,8 +765,7 @@ en una línea.
   pone con una `condicion` y se mira cada segundo; su dibujo, de GPT, `assets/sprites/exclamacion.png`, y el pequeño de los
   iconos del escritorio y de Logros, `assets/ui/exclamacion-pequena.png`, los dos de `tools/muebles_gpt.py`)
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `terminal.gd` (los ordenadores con
-  las tres cifras del código de la sala del jefe en Torre Velaria: `Planta.codigo` y `partida.poner_terminales`),
-  `valla.gd` (la del helipuerto de la azotea).
+  las tres cifras del código de la sala del jefe en Torre Velaria: `Planta.codigo` y `partida.poner_terminales`).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny y su linterna de pecho: el cono del suelo, el foco en el pecho y el rayo tenue entre los dos; fogonazos; prueba `--captura --linterna`), `lampara.gd`, `fuego.gd`.
 

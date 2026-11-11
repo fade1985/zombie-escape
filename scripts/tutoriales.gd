@@ -224,6 +224,10 @@ static func apuntar(id: String) -> void:
 		return
 	vistos.append(id)
 	Guardado.cambiar(func(s): if not id in s.tutoriales: s.tutoriales.append(id))
+	# los «!» de encima de los muebles (exclamacion.gd), mirados ya: el de este se quita al momento
+	var arbol := Engine.get_main_loop() as SceneTree
+	if arbol:
+		arbol.call_group("exclamaciones", "refrescar")
 
 
 # Que vuelvan a salir todos (el botón de abajo de la lista de Tutorial), también la guía de la primera partida (guia.gd)

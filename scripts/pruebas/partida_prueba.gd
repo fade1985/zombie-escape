@@ -57,7 +57,7 @@
 #                       en pleno vuelo y a punto de caer                                    [prueba_jefes_salas.gd]
 #   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
-#   --azotea            la azotea y su helipuerto elevado: la rampa, el jefe esperando, la valla y el jefe final
+#   --azotea            la azotea y su helipuerto elevado: la rampa (sin valla), el jefe esperando y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
 #   --cupula            la cúpula de cristal del científico jefe con balas de verdad: rebotan en su borde con su onda,
 #                       el daño se lo lleva ella y, rota, ya le dan a él                      [prueba_jefes.gd]
@@ -159,6 +159,7 @@
 #   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, «Piezas al baúl» y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
+#   --tele-detras       la tele del salón se usa por delante, por detrás y por los lados, pero no desde el otro lado de la pared [prueba_larga.gd]
 #   --noticias          la tele del salón con la noticia (se enciende al limpiar, se usa con el clic) y VIDEOS.EXE con su reproductor [prueba_larga.gd]
 #   --coleccion         el programa Colecciones del ordenador (los sujetos): las pestañas, las páginas, la ficha
 #                       grande bajo el foco, las siluetas y los matados de cada zombi      [prueba_larga.gd]
@@ -618,6 +619,10 @@ func empezar_prueba() -> void:
 	elif "--objetos" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_objetos()
+		get_tree().quit()
+	elif "--tele-detras" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_tele_detras()
 		get_tree().quit()
 	elif "--noticias" in args:
 		set_process(false)   # sin la prueba larga

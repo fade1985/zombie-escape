@@ -58,7 +58,6 @@ const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la azotea (tools/azotea.py)
-const VALLA := preload("res://scripts/mapa/valla.gd")
 # El suelo y la pared de las habitaciones de un piso que no dependen de dónde caen (que cambia al voltear el piso):
 # "<uso>-<tipo>" -> [sufijo del suelo, sufijo de la pared] (suelo-<estilo><sufijo>, pared-<estilo><sufijo>; con "" en uno, ese
 # se sigue eligiendo según dónde cae). El dormitorio de matrimonio, siempre con el suelo gris azulado y el papel beige, con la
@@ -169,7 +168,6 @@ var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro,
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
 var laboratorio: Node2D = null   # el de la planta 40 de la torre (laboratorio.gd)
-var valla: Node2D = null          # la valla de la rampa del helipuerto (solo en la azotea; valla.gd)
 # Lo que la partida apunta al salir de un mapa guardado (partida.gd, dejar_mapa)
 var quedan := 0                   # los zombis vivos que se quedan dentro (para el minimapa)
 var jefe: Node2D = null           # el jefe, si se ha salido con él dentro
@@ -584,7 +582,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 # cara de delante, las barandillas de la rampa y la cara de la rampa (un triángulo, que crece hacia la plataforma), en
 # la capa Planta.CAPA_BORDE: paran a los que andan, no a las balas, porque es bajo. La navegación lo recorta (grupo
 # "obstaculos"), así que los zombis y el jefe también suben y bajan por la rampa. En lo alto de la rampa, la valla
-# (valla.gd), metida en el suelo hasta que empieza la pelea
+# (valla.gd) ya no se pone: la rampa se queda abierta
 func poner_helipuerto() -> void:
 	if not sitio.has("helipuerto"):
 		return
@@ -617,9 +615,8 @@ func poner_helipuerto() -> void:
 	triangulo.points = PackedVector2Array([Vector2(r.position.x, r.end.y), Vector2(r.end.x, r.end.y), Vector2(r.position.x, r.end.y + alto)])
 	cara.shape = triangulo
 	cuerpo.add_child(cara)
-	valla = VALLA.new()
-	valla.montar(Rect2(p.end.x - b, r.position.y, b, r.size.y), self)
-	cosas.add_child(valla)
+	# (la valla de franjas rojas y blancas que cerraba la rampa durante la pelea ya no se pone: el dueño la quitó el
+	# 11 nov. La rampa se queda abierta y se puede bajar en mitad de la pelea)
 
 
 # Si un punto está encima del helipuerto, donde se puede estar (sin el borde). "margen": lo que tiene que quedar

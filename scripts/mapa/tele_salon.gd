@@ -50,13 +50,34 @@ func montar(d: Dictionary, mueble: Node2D, ancho: float) -> void:
 	marca.condicion = func() -> bool: return datos.estado == "encendida"
 	marca.position = Vector2(0, -84.0 - 30.0)
 	add_child(marca)
-	# la zona de delante, donde se para Johnny: se usa con el clic, como los botiquines (zona_usar.gd)
+	# la zona de alrededor (delante, detrás y a los lados: una tele contra la pared de abajo se ve de espaldas y Johnny
+	# llega por detrás), donde se para Johnny: se usa con el clic, como los botiquines (zona_usar.gd). Solo desde la
+	# misma habitación que la tele: que no se encienda a través de la pared
+	var fondo: float = mueble.datos.get("h", 40.0)
 	zona = ZONA_USAR.new()
-	zona.montar(ancho)
-	zona.puede = func() -> bool: return datos.estado == "encendida"
+	zona.montar_rect(Rect2(-(ancho + 20) / 2.0, -fondo - 34.0, ancho + 20, fondo + 34.0 + 38.0))
+	zona.puede = func() -> bool: return datos.estado == "encendida" and en_su_sala(zona.johnny)
 	mueble.add_child(zona)
 	zona.usar.connect(usar.emit)
 	refrescar()
+
+
+# Si Johnny está en la misma habitación que la tele (mapa.gd, sala_de), para no usarla desde el otro lado de la pared
+func en_su_sala(quien: Node2D) -> bool:
+	if quien == null:
+		return true   # (sin Johnny en la zona no se usa igualmente; así el contorno con el ratón sale como antes)
+	var mapa := get_parent()
+	while mapa and not mapa.has_method("sala_de"):
+		mapa = mapa.get_parent()
+	if mapa == null:
+		return true
+	var casilla := func(p: Vector2) -> Vector2i: return Vector2i((mapa.to_local(p) / 32.0).floor())   # (32: mapa.CASILLA)
+	# la tele, por el medio de su hueco en el suelo (su pie está en el borde de abajo)
+	var t: Vector2i = casilla.call(get_parent().global_position - Vector2(0, get_parent().datos.get("h", 40.0) / 2.0))
+	var j: Vector2i = casilla.call(quien.global_position)
+	if mapa.es_muro(j.x, j.y):
+		return false
+	return mapa.sala_de(t.x, t.y) == mapa.sala_de(j.x, j.y)
 
 
 # Enciende la pantalla en blanco (al limpiar el apartamento)
