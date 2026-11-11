@@ -2545,7 +2545,7 @@ msgstr "Выжившие"
 msgid "Sorpresas y retos"
 msgstr "Сюрпризы и испытания"
 
-#: scripts/logros.gd scripts/tutoriales.gd scripts/ui/ordenador.gd
+#: scripts/logros.gd scripts/tutoriales.gd
 msgid "Colecciones"
 msgstr "Коллекции"
 
@@ -5230,10 +5230,6 @@ msgid "Ahora: %s · Con otro: %s"
 msgstr "Сейчас: %s · С еще одним: %s"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Al llenarlo abre: %s"
-msgstr "Если прокачать до конца, откроет: %s"
-
-#: scripts/ui/arbol_talentos.gd
 msgid "MÁX"
 msgstr "МАКС"
 
@@ -5242,8 +5238,8 @@ msgid "Bloqueado"
 msgstr "Закрыто"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d: te faltan $%d"
-msgstr "Цена $%d: не хватает $%d"
+msgid "Cuesta $%d"
+msgstr "Цена $%d"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Toca otra vez: comprar · $%d"
@@ -5521,7 +5517,7 @@ msgstr "Деталь · Улучшает оружие"
 msgid "Objeto · Común"
 msgstr "Предмет · Обычный"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/ui/inventario.gd
 msgid "Llevas %d"
 msgstr "С собой: %d"
 
@@ -6879,8 +6875,8 @@ msgid "Necesitas %s al máximo. %s"
 msgstr "Нужно прокачать до максимума: %s. %s"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Cuesta $%d: te faltan $%d."
-msgstr "%s. Цена $%d: не хватает $%d."
+msgid "%s. Cuesta $%d."
+msgstr "%s. Цена $%d."
 
 #: scripts/ui/ordenador.gd
 msgid "%s. Pulsa para subirlo ($%d)."
@@ -6891,8 +6887,8 @@ msgid "No tienes ningún punto puesto."
 msgstr "Ты ещё не вложил ни одного очка."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
-msgstr "Точно? Ты потеряешь все деньги, вложенные в таланты ($%d). Дерево опустеет, и очки можно будет распределить заново."
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
+msgstr "Точно? Ты потеряешь все деньги, вложенные в таланты. Дерево опустеет, и очки можно будет распределить заново."
 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
@@ -6921,22 +6917,6 @@ msgstr "%s: %s Цена за штуку: $%d."
 #: scripts/ui/ordenador.gd
 msgid "Elige un arma: se paga con los dólares ahorrados."
 msgstr "Выбери оружие: платишь накопленными долларами."
-
-#: scripts/ui/ordenador.gd
-msgid "Daño %d/s · Depósito %d s"
-msgstr "Урон %d/с · Бак %d с"
-
-#: scripts/ui/ordenador.gd
-msgid "Daño %s"
-msgstr "Урон %s"
-
-#: scripts/ui/ordenador.gd
-msgid "%s ataques/s"
-msgstr "%s атак/с"
-
-#: scripts/ui/ordenador.gd
-msgid "Cargador %d"
-msgstr "Магазин %d"
 
 #: scripts/ui/ordenador.gd
 msgid "rayo continuo"
@@ -7203,8 +7183,8 @@ msgid "VIDEOS.EXE"
 msgstr "VIDEOS.EXE"
 
 #: scripts/ui/ordenador.gd
-msgid "COLECCION.EXE"
-msgstr "КОЛЛЕКЦИЯ.EXE"
+msgid "SUJETOS.EXE"
+msgstr "ОБЪЕКТЫ.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "Árbol de talentos"
@@ -7217,14 +7197,6 @@ msgstr "Магазин оружия"
 #: scripts/ui/ordenador.gd
 msgid "Vídeos de Canal 8"
 msgstr "Видео Канала 8"
-
-#: scripts/ui/ordenador.gd
-msgid ""
-"Colecciones\n"
-"¡NUEVO!"
-msgstr ""
-"Коллекции\n"
-"НОВОЕ!"
 
 #: scripts/ui/ordenador.gd
 msgid ""

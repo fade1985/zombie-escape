@@ -111,7 +111,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | Reto del día · Alerta · Ayudas | Défi du jour · Alerte · Aides |
 | Dosier · Noticias · Colecciones · Bestiario · emisión | Dossier · Infos · Collections · Bestiaire · émission |
 | ConserjeOS · CONSERJE OS 95 · C:\MANTENIMIENTO | ConciergeOS · CONCIERGE OS 95 · C:\MAINTENANCE |
-| PUNTOS.EXE · ARMAS.EXE · LOGROS.EXE · DOSIER.TXT · COLECCION.EXE | POINTS.EXE · ARMES.EXE · SUCCES.EXE · DOSSIER.TXT · COLLECTION.EXE |
+| PUNTOS.EXE · ARMAS.EXE · LOGROS.EXE · DOSIER.TXT · SUJETOS.EXE (antes COLECCION.EXE) | POINTS.EXE · ARMES.EXE · SUCCES.EXE · DOSSIER.TXT · SUJETS.EXE |
 | skin · ropa (de Johnny) | skin (masculino: *un skin*, *Nouveau skin !*) · tenue |
 | tarjeta de acceso · tarjeta dorada (Joyería) · llave | badge d'accès · carte dorée · clé |
 | cámara acorazada · apertura de emergencia · cuadro eléctrico · palanca · cable pelado | salle forte · ouverture d'urgence · tableau électrique · levier · câble dénudé |

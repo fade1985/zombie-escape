@@ -81,13 +81,14 @@ func montar_resetear() -> void:
 	estilo.bg_color = Color("#2f333a")
 	estilo.border_color = REMACHE
 	estilo.set_border_width_all(2)
-	estilo.set_content_margin_all(3)
-	estilo.content_margin_left = 8
-	estilo.content_margin_right = 4
+	# más bajo y más estrecho que antes (11 nov: iba pegado arriba y abajo de la franja): icono de 24 y letra de 14
+	estilo.set_content_margin_all(2)
+	estilo.content_margin_left = 6
+	estilo.content_margin_right = 6
 	marco.add_theme_stylebox_override("panel", estilo)
 	add_child(marco)
 	var fila := HBoxContainer.new()
-	fila.add_theme_constant_override("separation", 8)
+	fila.add_theme_constant_override("separation", 6)
 	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	marco.add_child(fila)
 	var textos := VBoxContainer.new()
@@ -98,7 +99,7 @@ func montar_resetear() -> void:
 	var se_puede := Talentos.se_puede_resetear(s)
 	var herramientas := TextureRect.new()
 	herramientas.texture = icono("herramientas")
-	herramientas.custom_minimum_size = Vector2(32, 32)
+	herramientas.custom_minimum_size = Vector2(24, 24)
 	herramientas.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	herramientas.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	herramientas.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -109,6 +110,7 @@ func montar_resetear() -> void:
 	fila.move_child(herramientas, 0)
 	var nombre := etiqueta(Idioma.t("Resetear talentos"), TEXTO if se_puede else TEXTO_SUAVE)
 	nombre.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	nombre.add_theme_font_size_override("font_size", 14)
 	textos.add_child(nombre)
 	resetear = Button.new()
 	resetear.name = "b_resetear"
@@ -329,10 +331,25 @@ func _input(evento: InputEvent) -> void:
 		actualizar_ficha()
 
 
+# Al subir un talento, la ventana se vuelve a montar y la ficha nueva no sabía dónde estaba el ratón hasta moverlo: se
+# iba. Mirándolo cada fotograma, sale en cuanto la ventana está colocada, con el nivel nuevo (11 nov)
+func _process(_delta: float) -> void:
+	if modo == "raton" and is_visible_in_tree():
+		actualizar_ficha()
+	if not ordenador.colocando:
+		seguir = ""
+
+
+# El talento recién subido (ordenador.subir): mientras la ventana nueva se coloca, su ficha sigue a la vista, sin parpadear
+static var seguir := ""
+
+
 # El talento que tiene que enseñar la ficha: con el ratón, el que está debajo; con el teclado, el mando o el dedo, el
 # marcado (el toque marca el botón, pero no mueve el ratón de Godot: se quedaría en el sitio de antes)
 func quien() -> String:
 	var con_dedo := Tactil.activo and Tactil.con_dedo
+	if modo == "raton" and not con_dedo and ordenador.colocando and centros.has(seguir):
+		return seguir
 	if modo == "raton" and not con_dedo and not ordenador.colocando:
 		var raton := get_local_mouse_position()
 		for id in centros:
@@ -381,12 +398,7 @@ func lineas_ficha(id: String) -> Array:
 		lineas.append([Idioma.t("¡Al máximo! %s") % ahora_da if ahora_da != "" else Idioma.t("¡Al máximo!"), color])
 	elif n > 0 and ahora_da != "":
 		lineas.append([Idioma.t("Ahora: %s · Con otro: %s") % [ahora_da, Talentos.efecto(id, n + 1)], color])
-	var abre := []
-	for otro in Talentos.LISTA:
-		if id in Talentos.requisitos(otro.id):
-			abre.append(otro.id)
-	if not abre.is_empty() and motivo != "max":
-		lineas.append([Idioma.t("Al llenarlo abre: %s") % Talentos.nombres(abre), TEXTO_SUAVE])
+	# (lo que abre al llenarlo ya no sale: lo dice la ficha del talento siguiente, con lo que pide, 11 nov)
 	return lineas
 
 
@@ -397,7 +409,7 @@ func pie_ficha(id: String) -> String:
 	match motivo:
 		"max": return Idioma.t("MÁX")
 		"bloqueado": return Idioma.t("Bloqueado")
-		"sin_dinero": return Idioma.t("Cuesta $%d: te faltan $%d") % [precio, precio - s.dolares]
+		"sin_dinero": return Idioma.t("Cuesta $%d") % precio   # (solo el precio, sin lo que falta: 11 nov)
 	if Tactil.activo and Tactil.con_dedo:
 		return Idioma.t("Toca otra vez: comprar · $%d") % precio
 	if Controles.con_mando:

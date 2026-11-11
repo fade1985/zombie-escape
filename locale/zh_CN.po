@@ -2537,7 +2537,7 @@ msgstr "幸存者"
 msgid "Sorpresas y retos"
 msgstr "意外与挑战"
 
-#: scripts/logros.gd scripts/tutoriales.gd scripts/ui/ordenador.gd
+#: scripts/logros.gd scripts/tutoriales.gd
 msgid "Colecciones"
 msgstr "收藏品"
 
@@ -5210,10 +5210,6 @@ msgid "Ahora: %s · Con otro: %s"
 msgstr "当前：%s · 再加一点：%s"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Al llenarlo abre: %s"
-msgstr "点满后解锁：%s"
-
-#: scripts/ui/arbol_talentos.gd
 msgid "MÁX"
 msgstr "满级"
 
@@ -5222,8 +5218,8 @@ msgid "Bloqueado"
 msgstr "未解锁"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d: te faltan $%d"
-msgstr "花费 $%d：还差 $%d"
+msgid "Cuesta $%d"
+msgstr "花费 $%d"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Toca otra vez: comprar · $%d"
@@ -5499,7 +5495,7 @@ msgstr "零件 · 升级武器"
 msgid "Objeto · Común"
 msgstr "物品 · 普通"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/ui/inventario.gd
 msgid "Llevas %d"
 msgstr "携带 %d"
 
@@ -6835,8 +6831,8 @@ msgid "Necesitas %s al máximo. %s"
 msgstr "需要先点满%s。%s"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Cuesta $%d: te faltan $%d."
-msgstr "%s。花费 $%d：还差 $%d。"
+msgid "%s. Cuesta $%d."
+msgstr "%s。花费 $%d。"
 
 #: scripts/ui/ordenador.gd
 msgid "%s. Pulsa para subirlo ($%d)."
@@ -6847,8 +6843,8 @@ msgid "No tienes ningún punto puesto."
 msgstr "你还没有分配任何点数。"
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
-msgstr "确定吗？你会失去投入天赋的所有钱（$%d）。天赋树会清空，可以重新分配。"
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
+msgstr "确定吗？你会失去投入天赋的所有钱。天赋树会清空，可以重新分配。"
 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
@@ -6877,22 +6873,6 @@ msgstr "%s：%s每个 $%d。"
 #: scripts/ui/ordenador.gd
 msgid "Elige un arma: se paga con los dólares ahorrados."
 msgstr "选一件武器：用存下的美元支付。"
-
-#: scripts/ui/ordenador.gd
-msgid "Daño %d/s · Depósito %d s"
-msgstr "伤害 %d/秒 · 储罐 %d 秒"
-
-#: scripts/ui/ordenador.gd
-msgid "Daño %s"
-msgstr "伤害 %s"
-
-#: scripts/ui/ordenador.gd
-msgid "%s ataques/s"
-msgstr "%s 次攻击/秒"
-
-#: scripts/ui/ordenador.gd
-msgid "Cargador %d"
-msgstr "弹匣 %d"
 
 #: scripts/ui/ordenador.gd
 msgid "rayo continuo"
@@ -7159,8 +7139,8 @@ msgid "VIDEOS.EXE"
 msgstr "VIDEOS.EXE"
 
 #: scripts/ui/ordenador.gd
-msgid "COLECCION.EXE"
-msgstr "收藏.EXE"
+msgid "SUJETOS.EXE"
+msgstr "实验对象.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "Árbol de talentos"
@@ -7173,14 +7153,6 @@ msgstr "武器商店"
 #: scripts/ui/ordenador.gd
 msgid "Vídeos de Canal 8"
 msgstr "频道8视频"
-
-#: scripts/ui/ordenador.gd
-msgid ""
-"Colecciones\n"
-"¡NUEVO!"
-msgstr ""
-"收藏品\n"
-"有新的！"
 
 #: scripts/ui/ordenador.gd
 msgid ""

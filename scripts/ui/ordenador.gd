@@ -38,12 +38,12 @@ const ICONOS := [   # [programa, icono, nombre]
 	["armas", "escritorio-armas", "Tienda\nde armas"],
 	["logros", "escritorio-logros", "Logros"],
 	["dosier", "escritorio-dosier", "Dosier\nVD-7"],
-	["colecciones", "escritorio-colecciones", "Colecciones"],
+	["colecciones", "escritorio-colecciones", "Sujetos"],   # (antes «Colecciones»: solo es el bestiario, 11 nov)
 	["videos", "escritorio-videos", "Vídeos"],
 	["apagar", "escritorio-apagar", "Apagar"],   # (solo, en la esquina de arriba a la derecha; antes iba ahí Vídeos, 10 nov)
 ]
 const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "videos": "VIDEOS.EXE",
-	"colecciones": "COLECCION.EXE"}
+	"colecciones": "SUJETOS.EXE"}
 const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
 	"videos": "Vídeos de Canal 8", "colecciones": "Sujetos"}
 # [/traducir]
@@ -54,9 +54,10 @@ const ARCHIVADOR := preload("res://scripts/ui/archivador_logros.gd")   # los log
 const CARPETA_DOSIER := preload("res://scripts/ui/carpeta_dosier.gd")   # el dosier (DOSIER.TXT)
 const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
 # El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo). La tienda de armas, con el
-# regalo de bienvenida, no está: su rótulo se queda como siempre y solo lleva el «!» (10 nov)
+# regalo de bienvenida, no está: su rótulo se queda como siempre y solo lleva el «!» (10 nov). Sujetos tampoco, desde el
+# 11 nov: su «¡NUEVO!» sobraba, ya está el «!»
 # [traducir]
-const AVISO_ICONO := {"colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!"}
+const AVISO_ICONO := {"logros": "Logros\n¡COBRAR!"}
 # [/traducir]
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -460,13 +461,10 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	ventana = PanelContainer.new()
 	ventana.add_theme_stylebox_override("panel", caja(BEIS, BEIS, 0, 0, 3))
 	ventana.draw.connect(func(): relieve(ventana, false, 3.0))
-	ventana.position = Vector2(152, 10)
-	ventana.size = Vector2(718, 508)
-	if programa == "dosier" or programa == "colecciones" or programa == "videos":
-		# el Dosier, maximizado (tapa los iconos): las hojas llevan mucho texto y así se leen con la letra más grande;
-		# y Colecciones, para que quepan a la vez la ficha grande y la cuadrícula
-		ventana.position = Vector2(4, 4)
-		ventana.size = Vector2(872, 514)
+	# todas maximizadas (tapan los iconos), como el Dosier desde el principio: así cabe más y se lee con la letra más
+	# grande (11 nov: también Talentos, Armas y Logros)
+	ventana.position = Vector2(4, 4)
+	ventana.size = Vector2(872, 514)
 	pantalla.add_child(ventana)
 	pantalla.move_child(ventana, iconos.get_index() + 1)
 	var columna := VBoxContainer.new()
@@ -509,6 +507,9 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	var margen := MarginContainer.new()
 	for lado in ["left", "right", "top", "bottom"]:
 		margen.add_theme_constant_override("margin_" + lado, 8)
+	if programa == "colecciones" or programa == "videos":
+		# lo de la izquierda, un pelín más adentro: pegado al borde parecía cortarse al pasar el ratón (11 nov)
+		margen.add_theme_constant_override("margin_left", 14)
 	margen.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	columna.add_child(margen)
 	var desliza := ScrollContainer.new()
@@ -521,10 +522,12 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	contenido.add_theme_constant_override("separation", 8)
 	desliza.add_child(contenido)
 
-	# la barra de estado, hundida
+	# la barra de estado, hundida. Escondida desde el 11 nov: lo que explicaba ya lo dice la ficha de cada programa al
+	# pasar por encima (el dueño la quitó en todos). Se sigue montando, sin verse, porque las pruebas leen su texto
 	var hueco := MarginContainer.new()
 	for lado in ["left", "right", "top", "bottom"]:
 		hueco.add_theme_constant_override("margin_" + lado, 3)
+	hueco.visible = false
 	columna.add_child(hueco)
 	var estado_barra := PanelContainer.new()
 	estado_barra.add_theme_stylebox_override("panel", caja(BEIS, BEIS, 0, 0, 5))
@@ -567,7 +570,7 @@ func explica_talento(s: Dictionary, t: Dictionary) -> String:
 	match Talentos.motivo(s, t.id):
 		"bloqueado": texto = Idioma.t("Necesitas %s al máximo. %s") % [Talentos.nombres(Talentos.faltan(s, t.id)), texto]
 		"max": texto = Idioma.t("¡Al máximo! %s") % texto
-		"sin_dinero": texto = Idioma.t("%s. Cuesta $%d: te faltan $%d.") % [texto, precio, precio - s.dolares]
+		"sin_dinero": texto = Idioma.t("%s. Cuesta $%d.") % [texto, precio]
 		"": texto = Idioma.t("%s. Pulsa para subirlo ($%d).") % [texto, precio]
 	return texto
 
@@ -639,7 +642,7 @@ func resetear_talentos() -> void:
 # La ventanita de aviso, como un cuadro de diálogo de Windows 95, en medio del programa: «¿Seguro? Perderás todo el
 # dinero invertido…», con «Sí, resetear» y «Cancelar» (el marcado al salir, por si acaso). Detrás, una sombra que tapa la
 # ventana para que no se pueda pulsar nada más; Esc o B cierran el aviso (_unhandled_input), y las flechas no salen de él
-func preguntar_reseteo(s: Dictionary) -> void:
+func preguntar_reseteo(_s: Dictionary) -> void:
 	cerrar_aviso(false)
 	Sonido.tocar("click")
 	aviso = ColorRect.new()
@@ -682,8 +685,8 @@ func preguntar_reseteo(s: Dictionary) -> void:
 	alerta.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	alerta.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	fila.add_child(alerta)
-	var texto := texto_tarjeta(Idioma.t("¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez.") %
-		s.dolares_talentos, TINTA)
+	# (sin decir cuánto dinero es: 11 nov)
+	var texto := texto_tarjeta(Idioma.t("¿Seguro? Perderás todo el dinero que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."), TINTA)
 	texto.name = "texto"
 	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	texto.custom_minimum_size.x = 320
@@ -764,6 +767,7 @@ func subir(id: String) -> void:
 	var s := Talentos.subir(id)
 	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	partida.aplicar_talentos(s.talentos)
+	ARBOL.seguir = id   # (su ficha se queda a la vista, ya con el nivel nuevo)
 	abrir("puntos", "b_" + id)
 	info.set_deferred("text", Idioma.t("¡%s sube a %d/%d!") % [Talentos.nombre_de(id), Talentos.nivel_de(s, id), Talentos.talento(id).max])   # después de marcar el botón (que pone su explicación)
 
@@ -785,19 +789,6 @@ func programa_armas(c: VBoxContainer, foco := "") -> void:
 		enlazar(tienda.botones[k], Idioma.t("%s: %s Cada uno, $%d.") % [Lanzables.uno(k), que[0].to_lower() + que.substr(1),
 			Supervivientes.precio(Lanzables.PRECIOS[k])], tienda.al_pulsar.bind(k))
 	info.text = Idioma.t("Elige un arma: se paga con los dólares ahorrados.")
-
-
-# Debajo del nombre, como weaponSummary del JS pero sin el tipo (ya lo dice su sección): "Daño 9 · 4 ataques/s" (el
-# lanzallamas, el lanza ácido y el lanza rayos, su daño por segundo y su depósito)
-func resumen_corto(w: Dictionary) -> String:
-	if w.has("deposito"):
-		return Idioma.t("Daño %d/s · Depósito %d s") % [w.dano, roundi(w.deposito)]
-	var dano := "%d × %d" % [w.dano, w.perdigones] if w.get("perdigones", 1) > 1 else str(w.dano)
-	# (cada dato es un texto entero y se unen con « · »: así cada idioma ordena y escribe el suyo)
-	var partes := [Idioma.t("Daño %s") % dano, Idioma.t("%s ataques/s") % Idioma.puntuar(str(w.ritmo).trim_suffix(".0"))]
-	if w.tipo == "fuego":
-		partes.append(Idioma.t("Cargador %d") % w.cargador)
-	return " · ".join(PackedStringArray(partes))
 
 
 # La línea de abajo: sus números y, las que se llenan con un objeto de la mochila, con cuál

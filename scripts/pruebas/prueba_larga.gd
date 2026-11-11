@@ -383,6 +383,18 @@ func probar_colecciones() -> void:
 	var marcado := get_viewport().gui_get_focus_owner()
 	print("Colecciones al abrir: pestaña %s, marcado %s (esperado: durmientes, z_normal)" % [ordenador.familia_vista,
 		marcado.name if marcado else "nada"])
+	# con el ratón encima de una pestaña, fotograma a fotograma: lo de la izquierda no se va ni un instante (11 nov)
+	var pes: Button = ordenador.ventana.find_child("pes_durmientes", true, false)
+	var sitio: Vector2 = get_viewport().get_screen_transform() * pes.get_global_rect().get_center()
+	Input.warp_mouse(sitio)
+	var e := InputEventMouseMotion.new()
+	e.position = sitio
+	e.global_position = sitio
+	e.relative = Vector2(1, 1)
+	Input.parse_input_event(e)
+	for i in 4:
+		Captura.foto("captura-sujetos-raton-%d.png" % i)
+		await get_tree().process_frame
 	ordenador.abrir("colecciones", "z_gerente")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-bestiario-falta.png")
@@ -661,6 +673,9 @@ func probar_arbol_talentos() -> void:
 	await clic_en(boton.call("tirador"))
 	await get_tree().create_timer(0.3).timeout
 	print("Clic en Tirador: nivel %d (esperado: 1, a la primera)" % nivel.call("tirador"))
+	# al subirlo, la ventana se vuelve a montar: la ficha se queda, con el nivel nuevo, sin mover el ratón (11 nov)
+	print("Tras subirlo, sin mover el ratón: ficha de «%s», a la vista %s (esperado: tirador, true)" % [arbol.call().ficha_id, arbol.call().ficha.visible])
+	Captura.foto("captura-arbol-subido.png")
 	# el mando
 	Controles.con_mando = true
 	boton.call("ataque").grab_focus()

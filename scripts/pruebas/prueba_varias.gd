@@ -1880,7 +1880,7 @@ func probar_comprar_talentos() -> void:
 	ordenador.ventana.find_child("b_punteria", true, false).grab_focus()   # (por si el ratón de la ventana está encima de otra tarjeta)
 	await get_tree().create_timer(0.1).timeout
 	s = Guardado.cargar()
-	print("Con $2: Puntería %d · dólares %d · motivo «%s» · info «%s» (esperado: 0 · 2 · sin_dinero · ... Cuesta $5: te faltan $3.)" % [
+	print("Con $2: Puntería %d · dólares %d · motivo «%s» · info «%s» (esperado: 0 · 2 · sin_dinero · ... Cuesta $5.)" % [
 		Talentos.nivel_de(s, "punteria"), s.dolares, Talentos.motivo(s, "punteria"), ordenador.info.text])
 	Captura.foto("captura-talentos-sin-dinero.png")
 	var vida_con: int = johnny.stats.vida_max
@@ -1890,7 +1890,7 @@ func probar_comprar_talentos() -> void:
 	s = Guardado.cargar()
 	var foco := get_viewport().gui_get_focus_owner()
 	var aviso_texto: String = ordenador.aviso.find_child("texto", true, false).text if ordenador.aviso else "no está"
-	print("Al pulsarlo: ventanita «%s» · marcado %s · dólares %d (esperado: ¿Seguro? Perderás todo el dinero... ($50)... · b_cancelar · 2)" % [
+	print("Al pulsarlo: ventanita «%s» · marcado %s · dólares %d (esperado: ¿Seguro? Perderás todo el dinero... (sin decir cuánto) · b_cancelar · 2)" % [
 		aviso_texto, foco.name if foco else "nada", s.dolares])
 	Captura.foto("captura-resetear-seguro.png")
 	# Esc (o B) la cierra sin tocar nada

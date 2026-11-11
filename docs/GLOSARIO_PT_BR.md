@@ -118,7 +118,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Mejorar · Ya es Épica | Melhorar · Já é Épica |
 | logro · conseguido · cobrar (premio) | conquista · desbloqueada / conseguida · resgatar (*RESGATAR $%d*) |
 | ConserjeOS · CONSERJE OS 95 · C:\MANTENIMIENTO | ZeladorOS · ZELADOR OS 95 · C:\MANUTENCAO (sin tildes, como en DOS) |
-| PUNTOS.EXE · ARMAS.EXE · LOGROS.EXE · DOSIER.TXT · CANAL8.TV · COLECCION.EXE | PONTOS.EXE · ARMAS.EXE · CONQUISTAS.EXE · DOSSIE.TXT · CANAL8.TV · COLECAO.EXE |
+| PUNTOS.EXE · ARMAS.EXE · LOGROS.EXE · DOSIER.TXT · CANAL8.TV · SUJETOS.EXE (antes COLECCION.EXE) | PONTOS.EXE · ARMAS.EXE · CONQUISTAS.EXE · DOSSIE.TXT · CANAL8.TV · SUJEITOS.EXE |
 | Puntos e intercambio · Tienda de armas · Noticias · Emisión | Pontos e troca · Loja de armas · Notícias · Transmissão |
 | ¡NOTICIAS NUEVAS! · ÚLTIMA HORA · EN DIRECTO | PLANTÃO! · PLANTÃO · AO VIVO (el *plantão* es el aviso de última hora de la tele brasileña) |
 | ¡Piso limpio! | Tudo limpo! |

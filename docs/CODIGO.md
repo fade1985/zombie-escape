@@ -566,8 +566,8 @@ en una línea.
   izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
   de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas con el borde verde y lo lleno, además, con «LLENO», apagada si no llega:
   `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
-  `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`), qué hace (`INVENTARIO.QUE_HACE`), sus
-  números (`ordenador.resumen_corto`) y el botón «Comprar» (`b_comprar`, sin foco: compra lo de la ficha; si ya la llevas dice «Comprada»). Sin nada
+  `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`), qué hace (`INVENTARIO.QUE_HACE`; sus
+  números y cuántos llevas ya no, desde el 11 nov) y el botón «Comprar» (`b_comprar`, sin foco: compra lo de la ficha; si ya la llevas dice «Comprada»). Sin nada
   elegido (al abrir con el ratón), la ficha dice que se pase por un arma y lo de esta partida (`nota`); cómo va la
   tienda lo cuenta su tutorial («tienda», la primera vez que se abre: `ordenador.abrir`). El regalo de bienvenida
   (desde el 10 nov Johnny empieza solo con la fregona: `Armas.SIEMPRE`): la primera pistola, gratis una sola vez
@@ -605,7 +605,7 @@ en una línea.
   título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
   pósit (amarillo, con la esquina doblada, pequeño y casi cuadrado: las notas son cortas; la nota, letra a letra como escrita a mano con boli, `a_mano_en`, siempre a 16), pegado abajo a la derecha; las últimas líneas del texto se estrechan para dejarle sitio. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
   cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
-- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Vídeos, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
+- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Vídeos, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (desde el 11 nov también su icono y su ventana, SUJETOS.EXE; por dentro sigue siendo "colecciones"). Desde el 11 nov todas las ventanas van maximizadas y sin la barra de explicación de abajo (`info` se sigue montando escondida: las pruebas leen su texto) (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
   maximizado: arriba lo visto con su barra, dos pestañas (`Bestiario.familias()`: los durmientes, zombis de siempre, y los
   sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose bajo la lámpara de `assets/ui/foco-sujetos.png` (de GPT, `tools/foco_sujetos.py`), con polvo y algún parpadeo, en silueta
   si falta; su frase y cuántos se han matado, `matados` del guardado, que suma `partida.contar_matado` al acabar) y a la

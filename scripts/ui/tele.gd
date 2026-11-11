@@ -47,6 +47,8 @@ var parada := false       # en pausa (el stop de VIDEOS.EXE): la imagen se queda
 var terminada := false    # ya ha dicho todo (con "continuo")
 var espera := 0.0         # lo que lleva esperando entre trozos (con "continuo")
 var reproducido := 0.0    # los segundos que lleva puesta la noticia (el contador del reproductor)
+var duracion := 0.0       # lo que dura la emisión entera, sin la nieve: las letras de cada trozo y la espera de después
+var andado := 0.0         # lo que lleva de ella (la barra de avance: así va seguida, también en las esperas, 11 nov)
 var nieve := 0.0        # el ruido de cambiar de canal, al poner una noticia
 
 
@@ -106,6 +108,11 @@ func poner(n: Dictionary) -> void:
 	cinta.text = Idioma.t("ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  ") % Historia.EMPRESA.to_upper()
 	cinta.position.x = PANTALLA.size.x
 	trozos = partir(Historia.texto_de(n))
+	duracion = 0.0
+	for t in trozos:
+		texto.text = t
+		duracion += texto.get_total_character_count() / LETRAS_POR_SEGUNDO + ENTRE_TROZOS
+	andado = 0.0
 	empezar_trozo(0)
 	en_antena = 0.0
 	boca = 0
@@ -177,8 +184,8 @@ func progreso() -> float:
 		return 0.0
 	if terminada:
 		return 1.0
-	var total := maxi(1, texto.get_total_character_count())
-	return (trozo + clampf(letras / total, 0.0, 1.0)) / trozos.size()
+	# por el tiempo, no por las letras dichas: antes se paraba en cada espera entre subtítulos y daba trompicones
+	return clampf(andado / maxf(duracion, 0.01), 0.0, 1.0)
 
 
 # El play de VIDEOS.EXE: sigue donde estaba y, si ya había acabado, desde el principio
@@ -218,12 +225,14 @@ func _process(delta: float) -> void:
 	if parada:
 		return
 	tiempo += delta
-	if not terminada:
+	if not terminada and not noticia.is_empty():   # (sin vídeo puesto, el contador no corre)
 		reproducido += delta
 	if nieve > 0.0:
 		nieve -= delta
 	else:
 		en_antena += delta
+		if not terminada and not noticia.is_empty():
+			andado += delta
 		if hablando():
 			letras += delta * LETRAS_POR_SEGUNDO
 			var antes := texto.visible_characters

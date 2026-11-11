@@ -383,12 +383,9 @@ func dibujar_ficha(fuente: Font) -> void:
 		for i in 10:
 			draw_rect(Rect2(x + ancho - 10 * 11 + 3 + i * 11, y + 3, 8, 8), PLACA.TEXTO if i < llenos else PLACA.APAGADO)
 		y += MEDIDOR
-	# qué hace y sus números (o cuántos llevas)
+	# qué hace (sus números y cuántos llevas ya no salen: 11 nov, lo dicen los medidores)
 	var tope := comprar.position.y - 6
-	y = escribir(fuente, Idioma.t(INVENTARIO.QUE_HACE.get(id, "")), Vector2(x, y + 4), ancho, 14, PLACA.TEXTO, tope) + 2
-	var datos: String = Idioma.t("Llevas %d") % ordenador.partida.lanzables.total(id) if Lanzables.PRECIOS.has(id) \
-		else ordenador.resumen_corto(Armas.DATOS[id])
-	escribir(fuente, datos, Vector2(x, y), ancho, 14, PLACA.TEXTO_SUAVE, tope)
+	escribir(fuente, Idioma.t(INVENTARIO.QUE_HACE.get(id, "")), Vector2(x, y + 4), ancho, 14, PLACA.TEXTO, tope)
 	dibujar_comprar(fuente)
 
 

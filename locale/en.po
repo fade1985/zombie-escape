@@ -2541,7 +2541,7 @@ msgstr "Survivors"
 msgid "Sorpresas y retos"
 msgstr "Surprises and Challenges"
 
-#: scripts/logros.gd scripts/tutoriales.gd scripts/ui/ordenador.gd
+#: scripts/logros.gd scripts/tutoriales.gd
 msgid "Colecciones"
 msgstr "Collections"
 
@@ -5220,10 +5220,6 @@ msgid "Ahora: %s · Con otro: %s"
 msgstr "Now: %s · With one more: %s"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Al llenarlo abre: %s"
-msgstr "Unlocks when full: %s"
-
-#: scripts/ui/arbol_talentos.gd
 msgid "MÁX"
 msgstr "MAX"
 
@@ -5232,8 +5228,8 @@ msgid "Bloqueado"
 msgstr "Locked"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d: te faltan $%d"
-msgstr "Costs $%d: you need $%d more"
+msgid "Cuesta $%d"
+msgstr "Costs $%d"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Toca otra vez: comprar · $%d"
@@ -5510,7 +5506,7 @@ msgstr "Part · Upgrades weapons"
 msgid "Objeto · Común"
 msgstr "Item · Common"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/ui/inventario.gd
 msgid "Llevas %d"
 msgstr "Carrying %d"
 
@@ -6857,8 +6853,8 @@ msgid "Necesitas %s al máximo. %s"
 msgstr "Needs %s maxed out. %s"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Cuesta $%d: te faltan $%d."
-msgstr "%s. Costs $%d: you're $%d short."
+msgid "%s. Cuesta $%d."
+msgstr "%s. Costs $%d."
 
 #: scripts/ui/ordenador.gd
 msgid "%s. Pulsa para subirlo ($%d)."
@@ -6869,8 +6865,8 @@ msgid "No tienes ningún punto puesto."
 msgstr "You haven't spent any points."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos ($%d). El árbol se quedará vacío para repartirlo otra vez."
-msgstr "Sure? You'll lose all the money you've put into talents ($%d). The tree will be empty so you can spend it again."
+msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
+msgstr "Sure? You'll lose all the money you've put into talents. The tree will be empty so you can spend it again."
 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
@@ -6899,22 +6895,6 @@ msgstr "%s: %s Each, $%d."
 #: scripts/ui/ordenador.gd
 msgid "Elige un arma: se paga con los dólares ahorrados."
 msgstr "Pick a weapon: you pay with your saved dollars."
-
-#: scripts/ui/ordenador.gd
-msgid "Daño %d/s · Depósito %d s"
-msgstr "Damage %d/s · Tank %d s"
-
-#: scripts/ui/ordenador.gd
-msgid "Daño %s"
-msgstr "Damage %s"
-
-#: scripts/ui/ordenador.gd
-msgid "%s ataques/s"
-msgstr "%s attacks/s"
-
-#: scripts/ui/ordenador.gd
-msgid "Cargador %d"
-msgstr "Magazine %d"
 
 #: scripts/ui/ordenador.gd
 msgid "rayo continuo"
@@ -7181,8 +7161,8 @@ msgid "VIDEOS.EXE"
 msgstr "VIDEOS.EXE"
 
 #: scripts/ui/ordenador.gd
-msgid "COLECCION.EXE"
-msgstr "COLLECTION.EXE"
+msgid "SUJETOS.EXE"
+msgstr "SUBJECTS.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "Árbol de talentos"
@@ -7195,14 +7175,6 @@ msgstr "Weapon Shop"
 #: scripts/ui/ordenador.gd
 msgid "Vídeos de Canal 8"
 msgstr "Channel 8 Videos"
-
-#: scripts/ui/ordenador.gd
-msgid ""
-"Colecciones\n"
-"¡NUEVO!"
-msgstr ""
-"Collections\n"
-"NEW!"
 
 #: scripts/ui/ordenador.gd
 msgid ""
