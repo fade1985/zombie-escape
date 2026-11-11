@@ -205,7 +205,7 @@ en una línea.
   Los líquidos (veneno, ácido, vómito, lejía, agua, aceite y café; también el agua con corriente de Electrónica, `peligros/agua.gd`) se pintan
   igual, con `Charco.preparar_liquido` y `pintar_liquido`: cuadraditos de un píxel del dibujo (`GOTA`), contorno oscuro, bandas
   que se mecen, luz de arriba a la izquierda y un brillo en vetas; el agua, con anillos de ondas (`pintar_ondas`).
-  El fuego (molotov, y el del aceite al arder), el aceite hirviendo del cocinero y la porquería del Glotón (`peligros/porqueria.gd`,
+  El fuego (molotov, el del aceite al arder y el de la cocina del restaurante, `peligros/fuego.gd`), el aceite hirviendo del cocinero y la porquería del Glotón (`peligros/porqueria.gd`,
   quieta: se pinta una vez) van con el mismo cuadradito y el mismo dibujo.
   El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).

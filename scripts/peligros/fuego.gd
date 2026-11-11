@@ -9,7 +9,8 @@
 extends Node2D
 
 const CASILLA := 32
-const CELDA := 4.0                  # 2 píxeles del dibujo, como el fuego del molotov
+const GOTA := 2.0                   # un píxel del dibujo, como el fuego del molotov (Charco.GOTA)
+const LADO := 16                    # cuadraditos por lado de cada casilla
 const BORDE := 12.0                 # el borde deshilachado del fuego, en unidades (lo de dentro va de un tirón)
 const PINTA := 1.0 / 20.0           # se repinta 20 veces por segundo: de sobra para que tiemble, y gasta menos
 const PRENDE := 0.6                 # lo que tarda una casilla en prenderse del todo
@@ -22,6 +23,8 @@ var se_quema := {}                  # las casillas que pueden arder
 var prendida := {}                  # casilla -> cuándo empezó a arder (para dibujarla creciendo)
 static var ruido := {}              # casilla -> [64 números al azar, siempre los mismos para esa casilla] (para que el
                                     # borde sea irregular; lo comparten cerco.gd y porqueria.gd)
+static var liso := {}               # casilla -> un ruido suave (0-1) para cada uno de sus cuadraditos (liso_de)
+static var ruido_liso: FastNoiseLite
 var t := 0.0
 var ronda := 0.0
 var tick := 0.0
@@ -210,6 +213,23 @@ static func ruido_de(c: Vector2i) -> Array:
 	return ruido[c]
 
 
+# Un ruido suave para cada cuadradito de la casilla (siempre el mismo): el fuego prende, se apaga, tiembla y se
+# deshilacha por trozos, no a puntitos sueltos
+static func liso_de(c: Vector2i) -> PackedFloat32Array:
+	if not liso.has(c):
+		if ruido_liso == null:
+			ruido_liso = FastNoiseLite.new()
+			ruido_liso.seed = 4242
+			ruido_liso.frequency = 0.2
+		var lista := PackedFloat32Array()
+		lista.resize(LADO * LADO)
+		for i in LADO * LADO:
+			var p := Vector2(c) * CASILLA + Vector2(i % LADO, i / LADO) * GOTA
+			lista[i] = ruido_liso.get_noise_2dv(p) * 0.5 + 0.5
+		liso[c] = lista
+	return liso[c]
+
+
 func _draw() -> void:
 	# la ceniza de lo que ya ha ardido (debajo de todo)
 	for c in datos.quemadas:
@@ -217,8 +237,8 @@ func _draw() -> void:
 			continue
 		var r := ruido_de(c)
 		draw_rect(Rect2(Vector2(c) * CASILLA, Vector2(CASILLA, CASILLA)), Color("#1c120e", 0.35))
-		for i in 6:
-			draw_rect(Rect2(Vector2(c) * CASILLA + Vector2(floorf(r[i] * 8.0), floorf(r[i + 6] * 8.0)) * CELDA, Vector2(CELDA, CELDA)),
+		for i in 12:
+			draw_rect(Rect2(Vector2(c) * CASILLA + Vector2(floorf(r[i] * LADO), floorf(r[i + 12] * LADO)) * GOTA, Vector2(GOTA, GOTA)),
 				Color("#2a1a14", 0.6))
 	var llamas := []
 	for c in datos.arde:
@@ -238,7 +258,11 @@ func _draw() -> void:
 				var k := int(r[i] * 64.0)
 				var s := sin(t * 9.0 + r[k] * 20.0)
 				if absf(s) > 0.3:
-					draw_rect(Rect2(o + Vector2(k % 8, k / 8) * CELDA, Vector2(CELDA, CELDA)), Color(Llamas.FUEGO[1] if s > 0.0 else Llamas.FUEGO[3], 0.9))
+					# una manchita de tres píxeles del dibujo, más clara o más oscura
+					var m := o + (Vector2(k % 8, k / 8) * 2.0 + Vector2(0, 0)) * GOTA
+					var color := Color(Llamas.FUEGO[1] if s > 0.0 else Llamas.FUEGO[3], 0.9)
+					draw_rect(Rect2(m, Vector2(GOTA * 2.0, GOTA)), color)
+					draw_rect(Rect2(m + Vector2(0, GOTA), Vector2(GOTA, GOTA)), color)
 		else:
 			# a celdas: lo de dentro de cada borde, recortado con el ruido
 			var dentro := Rect2(o, Vector2(CASILLA, CASILLA))
@@ -247,28 +271,40 @@ func _draw() -> void:
 				var arr := BORDE if fin[2] else 0.0
 				dentro = Rect2(o + Vector2(izq, arr), Vector2(CASILLA - izq - (BORDE if fin[1] else 0.0), CASILLA - arr - (BORDE if fin[3] else 0.0)))
 				draw_rect(dentro, Color(Llamas.FUEGO[2], 0.9))
-			for i in 64:
-				var p := Vector2(i % 8, i / 8) * CELDA
-				if limpio and dentro.has_point(o + p + Vector2(1, 1)):
+			var n := liso_de(c)
+			var tira := [Vector2.ZERO, 0.0, Color.TRANSPARENT]   # [desde, hasta, color]
+			for i in LADO * LADO:
+				var p := Vector2(i % LADO, i / LADO) * GOTA
+				var color := Color.TRANSPARENT
+				if not (limpio and dentro.has_point(o + p + Vector2(1, 1))):
+					# lo que le falta para llegar al borde que se acaba (en unidades)
+					var hondo := 99.0
+					if fin[0]: hondo = minf(hondo, p.x)
+					if fin[1]: hondo = minf(hondo, CASILLA - GOTA - p.x)
+					if fin[2]: hondo = minf(hondo, p.y)
+					if fin[3]: hondo = minf(hondo, CASILLA - GOTA - p.y)
+					# las esquinas que asoman (se acaba por un lado y por arriba o abajo), redondeadas
+					for e in [[0, 2], [1, 2], [0, 3], [1, 3]]:
+						if fin[e[0]] and fin[e[1]]:
+							var centro := Vector2(12.0 if e[0] == 0 else CASILLA - GOTA - 12.0, 12.0 if e[1] == 2 else CASILLA - GOTA - 12.0)
+							if (p.x - centro.x) * (-1.0 if e[0] == 0 else 1.0) > 0.0 and (p.y - centro.y) * (-1.0 if e[1] == 2 else 1.0) > 0.0:
+								hondo = minf(hondo, 12.0 - p.distance_to(centro))
+					if hondo + n[i] * 14.0 >= 7.0 and n[i] <= crece:   # (si no, borde deshilachado, o aún no le ha llegado)
+						if n[i] > queda:
+							color = Color("#6e1d12")   # se está apagando: brasa
+						else:
+							var calor := clampf(hondo / 16.0, 0.0, 1.0) + 0.12 * sin(t * 9.0 + n[i] * 7.0)
+							color = Llamas.FUEGO[1] if calor > 0.85 else Llamas.FUEGO[2] if calor > 0.5 else Llamas.FUEGO[3] if calor > 0.25 else Llamas.FUEGO[4]
+							color.a = 0.9
+				var q := o + p
+				if color.a > 0.0 and q.y == tira[0].y and q.x == tira[1] and color == tira[2]:
+					tira[1] += GOTA
 					continue
-				# lo que le falta para llegar al borde que se acaba (en unidades)
-				var hondo := 99.0
-				if fin[0]: hondo = minf(hondo, p.x)
-				if fin[1]: hondo = minf(hondo, CASILLA - CELDA - p.x)
-				if fin[2]: hondo = minf(hondo, p.y)
-				if fin[3]: hondo = minf(hondo, CASILLA - CELDA - p.y)
-				if hondo + r[i] * 10.0 < 5.0:
-					continue
-				if r[i] > crece:
-					continue   # aún no le ha llegado
-				var color: Color
-				if r[i] > queda:
-					color = Color("#6e1d12")   # se está apagando: brasa
-				else:
-					var calor := clampf(hondo / 16.0, 0.0, 1.0) + 0.12 * sin(t * 9.0 + r[i] * 20.0)
-					color = Llamas.FUEGO[1] if calor > 0.85 else Llamas.FUEGO[2] if calor > 0.5 else Llamas.FUEGO[3] if calor > 0.25 else Llamas.FUEGO[4]
-					color.a = 0.9
-				draw_rect(Rect2(o + p, Vector2(CELDA, CELDA)), color)
+				if tira[2].a > 0.0:
+					draw_rect(Rect2(tira[0], Vector2(tira[1] - tira[0].x, GOTA)), tira[2])
+				tira = [q, q.x + GOTA, color]
+			if tira[2].a > 0.0:
+				draw_rect(Rect2(tira[0], Vector2(tira[1] - tira[0].x, GOTA)), tira[2])
 		# una llama en la mitad de las casillas (siempre en las mismas), más alta cuanto más metida en el fuego
 		if r[0] < 0.55 or c in datos.focos:
 			var metida := 1.0 - fin.count(true) / 4.0
