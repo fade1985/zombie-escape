@@ -1,5 +1,5 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene cuatro pestañas:
-#   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), la
+#   - General: el brillo (boton_brillo), el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), la
 #     música, el sonido, la pantalla completa y el temblor de pantalla (Normal, Suave o No: lo que tiembla la
 #     cámara y lo que se frena el juego al golpear, temblor.gd; se guarda). En el móvil, además, el tamaño y la transparencia de los botones
 #     táctiles y la vibración (se guardan).
@@ -318,6 +318,7 @@ func general() -> void:
 	var a_pantalla := opcion(Idioma.t("Pantalla"), "BotonGrande")
 	a_pantalla.name = "pantalla"   # no-tr
 	a_pantalla.pressed.connect(func(): ver("pantalla"))
+	boton_brillo()
 	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
 		var tutorial := opcion(Idioma.t("Tutorial"), "BotonGrande")
 		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
@@ -380,6 +381,36 @@ func idiomas() -> void:
 		fila_idioma.add_child(avisar)
 	if boton_idioma:
 		boton_idioma.grab_focus.call_deferred()
+
+
+# El brillo (11 nov): «Brillo: 50», de 0 a 100 de 10 en 10 (50, como se ve sin tocar nada). Al pulsarlo sube 10 (y de 100
+# vuelve a 0); con el clic derecho, o las flechas izquierda y derecha (también las del mando), baja o sube. Se guarda y se
+# nota al momento en todo el juego (Pantalla.poner_brillo)
+func boton_brillo() -> Button:
+	var texto := func(v: int) -> String:
+		return "%s: %d" % [Idioma.t("Brillo"), v]
+	var b := opcion(texto.call(int(Guardado.ajuste("brillo"))), "BotonGrande")
+	b.name = "brillo"   # no-tr
+	var cambiar := func(paso: int, dar_la_vuelta: bool):
+		var v := int(Guardado.ajuste("brillo")) + paso
+		v = posmod(v, 110) if dar_la_vuelta else clampi(v, 0, 100)
+		Guardado.cambiar(func(g): g.ajustes.brillo = v)
+		Pantalla.poner_brillo(v)
+		b.text = texto.call(v)
+	b.pressed.connect(cambiar.bind(10, true))
+	b.gui_input.connect(func(evento: InputEvent):
+		var paso := 0
+		if evento is InputEventMouseButton and evento.pressed and evento.button_index == MOUSE_BUTTON_RIGHT:
+			paso = -10
+		elif evento.is_action_pressed("ui_left"):
+			paso = -10
+		elif evento.is_action_pressed("ui_right"):
+			paso = 10
+		if paso != 0:
+			cambiar.call(paso, false)
+			Sonido.tocar("click")
+			b.accept_event())
+	return b
 
 
 # El audio (el botón Audio de General): la música y quitar todo el sonido. Se vuelve con la pestaña General

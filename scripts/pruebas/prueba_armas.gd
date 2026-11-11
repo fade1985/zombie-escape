@@ -2826,7 +2826,7 @@ func probar_musica() -> void:
 	Sonido.edificio = ""
 	Sonido.musica("menu")
 	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
-	dice.call("en el menú principal", "el-conserje [base]")
+	dice.call("en el menú principal", "sin-luz [base]")
 	Sonido.edificio = "apartamentos"
 
 	Sonido.musica("")

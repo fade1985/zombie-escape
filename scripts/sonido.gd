@@ -174,7 +174,7 @@ var siguiente := 0
 # que empiece siempre al principio de uno. Dos capas por canción: la base, que suena siempre, y la que sube y baja
 # (con tres, la web gastaba demasiada memoria: cada capa se guarda allí descomprimida, y otra vez cada vez que empieza)
 const CANCIONES := {
-	"el-conserje": {"compases": 32, "capas": ["base"]},                      # el menú principal (una sola capa)
+	"sin-luz": {"compases": 24, "capas": ["base"]},                          # el menú principal (una sola capa; de terror, desde el 11 nov)
 	"turno-de-noche": {"compases": 52, "capas": ["base", "melodia"]},        # las hordas
 	"jefe-de-planta": {"compases": 44, "capas": ["base", "intensa"]},        # las salas de los jefes
 	"planta-por-planta": {"compases": 36, "capas": ["base", "ritmo"]},       # explorar los Apartamentos
@@ -186,7 +186,7 @@ const CANCIONES := {
 # la sala del jefe, la capa intensa entra cuando sale él (el jefe también está en el grupo "zombis")
 const MUCHOS := 6
 const MOMENTOS := {
-	"menu": {"cancion": "el-conserje", "capas": [[0, ["base"]]]},
+	"menu": {"cancion": "sin-luz", "capas": [[0, ["base"]]]},
 	"horda": {"cancion": "turno-de-noche", "capas": [[0, ["base"]], [MUCHOS, ["base", "melodia"]]]},
 	"jefe": {"cancion": "jefe-de-planta", "capas": [[0, ["base"]], [1, ["base", "intensa"]]]},
 	"explorar_apartamentos": {"cancion": "planta-por-planta", "capas": [[0, ["base"]], [1, ["base", "ritmo"]]]},
@@ -276,6 +276,33 @@ func tocar(nombre: String) -> void:
 	v.stream = grabado
 	v.pitch_scale = 1.0 + randf_range(-varia, varia)
 	v.volume_db = randf_range(-VOLUMEN, VOLUMEN) if varia > 0.0 else 0.0
+	v.play()
+
+
+# El gruñido de los botones de los menús (botones.gd lo pide al pulsar cualquiera): una de sus GRUNIDOS versiones, cada vez
+# otra, y no más de uno cada GRUNIDO_HUECO ms (si se pulsa muy seguido no se amontonan). Las versiones se van haciendo las
+# primeras veces que suena (grunido(), abajo)
+const GRUNIDO_HUECO := 250
+var grunidos: Array[AudioStreamWAV] = []
+var ultimo_grunido := -100000
+var grunido_antes := -1
+
+func grunir() -> void:
+	var ahora := Time.get_ticks_msec()
+	if ahora - ultimo_grunido < GRUNIDO_HUECO:
+		return
+	ultimo_grunido = ahora
+	var cual := grunidos.size()
+	if cual < GRUNIDOS:
+		grunidos.append(grunido())
+	else:
+		cual = (grunido_antes + 1 + randi() % (GRUNIDOS - 1)) % GRUNIDOS   # (uno distinto del de antes)
+	grunido_antes = cual
+	var v := voces[siguiente]
+	siguiente = (siguiente + 1) % VOCES
+	v.stream = grunidos[cual]
+	v.pitch_scale = 1.0
+	v.volume_db = 0.0
 	v.play()
 
 
@@ -482,6 +509,108 @@ func sintetizar(notas: Array) -> AudioStreamWAV:
 	datos.resize(muestras.size() * 2)
 	for i in muestras.size():
 		datos.encode_s16(i * 2, int(clampf(muestras[i], -1.0, 1.0) * 32767.0))
+	var wav := AudioStreamWAV.new()
+	wav.format = AudioStreamWAV.FORMAT_16_BITS
+	wav.mix_rate = MEZCLA
+	wav.data = datos
+	return wav
+
+
+# ── El gruñido de los botones de los menús (11 nov) ──
+# Un «grrr» de zombi serio, hecho como se hace una voz: una garganta que da golpecitos graves e irregulares (unos 70 por
+# segundo, cada uno de fuerza distinta y uno sí uno no más flojo, que es lo que lo hace ronco y da miedo), con un
+# carraspeo que la corta unas 22 veces por segundo (la «rrr») y aire áspero por encima. Todo eso pasa por la «boca»: tres
+# resonancias (FORMANTES) de una «o» cerrada que se abre un poco a la mitad. Al final, saturado para que raspe. Cada
+# versión (GRUNIDOS) sale con su tono, su largo y su carraspeo al azar, para que no suene siempre igual
+const GRUNIDOS := 4
+const GRUNIDO_VOLUMEN := 0.42                       # el pico, de 0 a 1 (los efectos de los menús rondan 0,1-0,3)
+const FORMANTES := [[380.0, 4.0, 1.0], [820.0, 5.0, 0.6], [2300.0, 7.0, 0.18]]   # [hercios, lo estrecha que es, fuerza]
+
+func grunido() -> AudioStreamWAV:
+	var largo := randf_range(0.62, 0.85)
+	var cuantas := int(largo * MEZCLA)
+	var base := randf_range(58.0, 76.0)             # el tono de la garganta
+	var carraspeo := randf_range(17.0, 26.0)        # cuántas veces por segundo se corta (la «rrr»)
+	var muestras := PackedFloat32Array()
+	muestras.resize(cuantas)
+	# 1) La garganta y el aire, sin boca todavía
+	var fase := 0.0
+	var fuerza := 1.0                               # la de este golpecito de la garganta
+	var impar := false
+	var fase_rrr := randf()
+	var aire := 0.0
+	var garganta := PackedFloat32Array()
+	garganta.resize(cuantas)
+	for i in cuantas:
+		var t := float(i) / cuantas
+		# el tono: sube un poco al principio y cae al final, como quien se enfada y se queda sin aire
+		var tono := base * (1.0 + 0.18 * sin(minf(t / 0.35, 1.0) * PI * 0.5) - 0.3 * t * t)
+		fase += tono * randf_range(0.92, 1.08) / MEZCLA   # (cada vuelta un poco desigual: no es una máquina)
+		if fase >= 1.0:
+			fase -= 1.0
+			impar = not impar
+			fuerza = randf_range(0.55, 1.0) * (0.55 if impar else 1.0)
+		# el golpecito: la garganta se abre despacio y se cierra de golpe (lo que suena es el cierre: de ahí lo áspero)
+		var g := 0.0
+		if fase < 0.45:
+			g = 0.5 - 0.5 * cos(PI * fase / 0.45)
+		elif fase < 0.6:
+			g = cos(PI * 0.5 * (fase - 0.45) / 0.15)
+		g *= fuerza
+		var golpe := g - (garganta[i - 1] if i > 0 else 0.0)
+		garganta[i] = g
+		fase_rrr = fmod(fase_rrr + carraspeo * randf_range(0.8, 1.2) / MEZCLA, 1.0)
+		var rrr := 0.35 + 0.65 * pow(0.5 + 0.5 * sin(fase_rrr * TAU), 1.5)
+		aire += (randf_range(-1.0, 1.0) - aire) * 0.2   # ruido apagado
+		muestras[i] = (golpe * 14.0 + aire * 0.1) * rrr
+	# 2) La boca: las tres resonancias, que se abren un poco a la mitad del gruñido
+	var salida := PackedFloat32Array()
+	salida.resize(cuantas)
+	for f in FORMANTES:
+		var x1 := 0.0
+		var x2 := 0.0
+		var y1 := 0.0
+		var y2 := 0.0
+		var b0 := 0.0
+		var a1 := 0.0
+		var a2 := 0.0
+		var a0 := 1.0
+		for i in cuantas:
+			if i % 64 == 0:   # (la boca se mueve despacio: basta con recalcular cada 64 muestras)
+				var t := float(i) / cuantas
+				var abre := 1.0 + 0.35 * sin(t * PI)
+				var w0: float = TAU * minf(f[0] * abre, MEZCLA * 0.45) / MEZCLA
+				var alfa: float = sin(w0) / (2.0 * f[1])
+				b0 = alfa
+				a0 = 1.0 + alfa
+				a1 = -2.0 * cos(w0)
+				a2 = 1.0 - alfa
+			var x := muestras[i]
+			var y := (b0 * x - b0 * x2 - a1 * y1 - a2 * y2) / a0
+			x2 = x1
+			x1 = x
+			y2 = y1
+			y1 = y
+			salida[i] += y * f[2]
+	# 3) El pecho (lo grave de la garganta, sin boca), saturado lo justo para que raspe, sin lo más agudo (dos filtros
+	# seguidos que quitan de unos 1.600 hercios para arriba: si no, sisea como una radio) y con su subida y su final
+	var pecho := 0.0
+	var suave1 := 0.0
+	var suave2 := 0.0
+	var pico := 0.0
+	for i in cuantas:
+		var t := float(i) / cuantas
+		pecho += (muestras[i] - pecho) * 0.04
+		var forma_vol := minf(t / 0.08, 1.0) * pow(1.0 - t, 0.6) * (0.75 + 0.25 * sin(minf(t / 0.4, 1.0) * PI * 0.5))
+		var s := tanh((salida[i] * 2.0 + pecho * 2.5) * 1.3)
+		suave1 += (s - suave1) * 0.37
+		suave2 += (suave1 - suave2) * 0.37
+		salida[i] = suave2 * forma_vol
+		pico = maxf(pico, absf(salida[i]))
+	var datos := PackedByteArray()
+	datos.resize(cuantas * 2)
+	for i in cuantas:
+		datos.encode_s16(i * 2, int(clampf(salida[i] / maxf(pico, 0.001) * GRUNIDO_VOLUMEN, -1.0, 1.0) * 32767.0))
 	var wav := AudioStreamWAV.new()
 	wav.format = AudioStreamWAV.FORMAT_16_BITS
 	wav.mix_rate = MEZCLA

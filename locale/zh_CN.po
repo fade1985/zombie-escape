@@ -6323,6 +6323,10 @@ msgid "Avisar de un texto mal traducido"
 msgstr "反馈翻译错误"
 
 #: scripts/ui/opciones.gd
+msgid "Brillo"
+msgstr "亮度"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "抖动"
 

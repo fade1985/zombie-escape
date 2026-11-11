@@ -2,6 +2,8 @@
 # saltito, y al pulsarlos se aplastan un poco y vuelven. Es un autoload: mira cada nodo que entra en el juego y,
 # si es un botón, le engancha las animaciones. Así no hace falta tocar cada menú.
 # Al terminar siempre vuelven a su tamaño normal, para que la fuente pixel art se vea nítida.
+# Y al pulsarlos (ratón, dedo, Intro o el mando) gruñe un zombi (Sonido.grunir, 11 nov), salvo los que llevan la marca
+# "sin_grunido" (las casillas del inventario: no son botones de menú, y al ordenar se pulsan muchas seguidas).
 extends Node
 
 
@@ -16,6 +18,12 @@ func _nodo_nuevo(nodo: Node) -> void:
 		b.focus_entered.connect(_saltito.bind(b))
 		b.button_down.connect(_aplastar.bind(b))
 		b.button_up.connect(_soltar.bind(b))
+		b.pressed.connect(_grunir.bind(b))
+
+
+func _grunir(b: Button) -> void:
+	if not b.has_meta("sin_grunido"):
+		Sonido.grunir()
 
 
 func _animar(b: Button) -> Tween:

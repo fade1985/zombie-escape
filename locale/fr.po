@@ -6345,6 +6345,10 @@ msgid "Avisar de un texto mal traducido"
 msgstr "Signaler une mauvaise traduction"
 
 #: scripts/ui/opciones.gd
+msgid "Brillo"
+msgstr "Luminosité"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "Secousse"
 

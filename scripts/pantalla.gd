@@ -30,6 +30,17 @@ const CRECER_DESDE_X1 := 1.1      # a ×1, si lo justo es por lo menos esto, se 
 # (--captura) no se frenan fuera: se lanzan a menudo detrás de otras ventanas
 const TOPE := 240
 const FUERA := 30
+# El brillo (ajuste «brillo» de Opciones → General, de 0 a 100; 50 = sin tocar). Una capa por encima de todo (menús,
+# partida, botones táctiles) que vuelve a pintar la pantalla más clara o más oscura (escenas/luces/brillo_pantalla.gdshader).
+# Con el brillo en 50 la capa no está: no gasta nada. A 100 lo oscuro se ve bastante más (gamma 0,55) y a 0 se ve
+# más oscuro pero se sigue viendo (gamma 1,4 y un 15 % menos de luz: con más, la partida, que ya es oscura, quedaba negra)
+const BRILLO_NORMAL := 50
+const BRILLO_CLARO := 0.85    # cuánto baja la gamma de 50 a 100 (en potencias de 2)
+const BRILLO_OSCURO := 0.5    # y cuánto sube de 50 a 0
+const BRILLO_MENOS := 0.15    # cuánta luz se quita además a 0
+const BRILLO_SHADER := preload("res://escenas/luces/brillo_pantalla.gdshader")
+var capa_brillo: CanvasLayer
+var tapa_brillo: ColorRect
 const QUEDARSE_ESC := """
 document.addEventListener('fullscreenchange', () => {
 	if (!navigator.keyboard?.lock) return;
@@ -47,6 +58,7 @@ func _ready() -> void:
 	# de en cada paso (efectos, menús...) temblaría con ella
 	get_tree().root.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var captura := "--captura" in OS.get_cmdline_user_args()
+	poner_brillo.call_deferred()
 	Engine.max_fps = TOPE
 	if captura and "--deck" in OS.get_cmdline_user_args():
 		# Con --deck, cualquier prueba se ve como en la Steam Deck: ventana de 1280×800 y la escala del juego de verdad
@@ -77,6 +89,32 @@ func _notification(que: int) -> void:
 		Engine.max_fps = FUERA
 	elif que == NOTIFICATION_APPLICATION_FOCUS_IN:
 		Engine.max_fps = TOPE
+
+
+# Pone el brillo guardado (o el que se le diga, de 0 a 100). Lo llama Opciones al cambiarlo y esto mismo al arrancar
+func poner_brillo(valor := -1) -> void:
+	if valor < 0:
+		valor = int(Guardado.ajuste("brillo"))
+	var t := clampf((valor - BRILLO_NORMAL) / float(BRILLO_NORMAL), -1.0, 1.0)   # -1 lo más oscuro, 0 normal, 1 lo más claro
+	if is_zero_approx(t):
+		if capa_brillo:
+			capa_brillo.hide()
+		return
+	if capa_brillo == null:
+		capa_brillo = CanvasLayer.new()
+		capa_brillo.layer = 128   # la más alta que hay: por encima de todo
+		add_child(capa_brillo)
+		tapa_brillo = ColorRect.new()
+		tapa_brillo.set_anchors_preset(Control.PRESET_FULL_RECT)
+		tapa_brillo.mouse_filter = Control.MOUSE_FILTER_IGNORE   # (los clics pasan a lo de debajo)
+		var m := ShaderMaterial.new()
+		m.shader = BRILLO_SHADER
+		tapa_brillo.material = m
+		capa_brillo.add_child(tapa_brillo)
+	var material: ShaderMaterial = tapa_brillo.material
+	material.set_shader_parameter("gamma", pow(2.0, -t * (BRILLO_CLARO if t > 0.0 else BRILLO_OSCURO)))
+	material.set_shader_parameter("ganancia", 1.0 + BRILLO_MENOS * minf(t, 0.0))
+	capa_brillo.show()
 
 
 # A qué escala se ve el juego en una ventana de ese tamaño (en píxeles de verdad)

@@ -4488,6 +4488,92 @@ func probar_registro() -> void:
 	get_tree().quit()
 
 
+# --brillo: el «Brillo» de Opciones → General (opciones.gd, boton_brillo, y pantalla.gd, poner_brillo). El botón: de 50
+# sube de 10 en 10 hasta 100 y vuelve a 0; las flechas bajan y suben sin dar la vuelta; se guarda. Y la pantalla: lo clara
+# que sale (la media de luz de la foto) a 0, 50 y 100, que tiene que ir de menos a más.
+# Fotos: captura-brillo-opciones.png (General, con el brillo a 80) y captura-brillo-0.png, -50.png y -100.png (la partida)
+func probar_brillo() -> void:
+	await get_tree().create_timer(0.5, true).timeout
+	var o := Opciones.abrir(self, null, johnny)
+	await get_tree().create_timer(0.3, true).timeout
+	var boton := o.find_child("brillo", true, false) as Button
+	if boton == null:
+		print("ERROR: en Opciones → General no está el botón del brillo")
+		get_tree().quit(1)
+		return
+	var pasos := [[boton.text, Guardado.cargar().ajustes.brillo]]
+	for i in 6:   # 50 → 60 → ... → 100 → 0
+		boton.pressed.emit()
+		pasos.append([boton.text, Guardado.cargar().ajustes.brillo])
+	print("Brillo · al pulsarlo: %s (esperado: de 50 a 100 de 10 en 10 y luego 0)" % [pasos])
+	var flechas := []
+	for accion in ["ui_left", "ui_right", "ui_right", "ui_left"]:   # en 0: no baja de 0; sube a 10, a 20 y baja a 10
+		var ev := InputEventAction.new()
+		ev.action = accion
+		ev.pressed = true
+		boton.gui_input.emit(ev)
+		flechas.append(int(Guardado.cargar().ajustes.brillo))
+	print("Brillo · con las flechas: %s (esperado: [0, 10, 20, 10])" % [flechas])
+	for i in 7:   # 10 → 80
+		boton.pressed.emit()
+	boton.grab_focus()
+	await get_tree().create_timer(0.3, true).timeout
+	Captura.foto("captura-brillo-opciones.png")
+	print("Brillo · en el botón: %s, guardado %s (esperado: Brillo: 80, 80)" % [boton.text, Guardado.cargar().ajustes.brillo])
+	o.cerrar()
+	var luces := []
+	for v in [0, 50, 100]:
+		Pantalla.poner_brillo(v)
+		await get_tree().create_timer(0.3, true).timeout
+		var imagen := get_viewport().get_texture().get_image()
+		imagen.resize(imagen.get_width() / 8, imagen.get_height() / 8, Image.INTERPOLATE_BILINEAR)
+		var suma := 0.0
+		for y in imagen.get_height():
+			for x in imagen.get_width():
+				suma += imagen.get_pixel(x, y).get_luminance()
+		luces.append(snappedf(suma / (imagen.get_width() * imagen.get_height()), 0.001))
+		Captura.foto("captura-brillo-%d.png" % v)
+	print("Brillo · luz media de la pantalla a 0, 50 y 100: %s (esperado: de menos a más) → %s" % [
+		luces, "BIEN" if luces[0] < luces[1] and luces[1] < luces[2] else "MAL"])
+	Guardado.cambiar(func(g): g.ajustes.brillo = 50)
+	Pantalla.poner_brillo()
+	get_tree().quit()
+
+
+# --grunido: el gruñido de los botones de los menús (botones.gd y Sonido.grunir). Un botón cualquiera gruñe al pulsarlo,
+# pulsado otra vez enseguida no (GRUNIDO_HUECO), y una casilla del inventario (marca "sin_grunido") nunca. Y guarda las
+# versiones en tools/efectos/grunido-N.wav (fuera de git) para escucharlas, con lo que tarda en hacerse cada una
+func probar_grunido() -> void:
+	await get_tree().create_timer(0.5, true).timeout
+	var b := Button.new()
+	b.text = "Prueba"
+	add_child(b)
+	var antes := Sonido.ultimo_grunido
+	b.pressed.emit()
+	var primero := Sonido.ultimo_grunido != antes
+	antes = Sonido.ultimo_grunido
+	b.pressed.emit()
+	var seguido := Sonido.ultimo_grunido != antes
+	await get_tree().create_timer(0.3, true).timeout
+	var casilla := Button.new()
+	casilla.set_meta("sin_grunido", true)
+	add_child(casilla)
+	antes = Sonido.ultimo_grunido
+	casilla.pressed.emit()
+	var en_casilla := Sonido.ultimo_grunido != antes
+	print("Gruñido · al pulsar: %s, otra vez enseguida: %s, en una casilla del inventario: %s (esperado: true, false, false)" % [
+		primero, seguido, en_casilla])
+	b.queue_free()
+	casilla.queue_free()
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tools/efectos"))
+	for n in Sonido.GRUNIDOS:
+		var empieza := Time.get_ticks_usec()
+		var wav := Sonido.grunido()
+		print("Gruñido · versión %d: %.2f s, hecha en %d ms" % [n + 1, wav.get_length(), (Time.get_ticks_usec() - empieza) / 1000])
+		wav.save_to_wav(ProjectSettings.globalize_path("res://tools/efectos/grunido-%d.wav" % (n + 1)))
+	get_tree().quit()
+
+
 # --contacto: «Contáctanos» de Opciones → General (contacto.gd). La página vacía y con un mensaje, que no deja pasar de
 # MAX_LETRAS, que sin escribir nada no se manda, que solo va el texto (sin datos técnicos) y el envío: sin más, no sale nada del ordenador (dice lo que mandaría); con --contacto-url URL se
 # manda de verdad allí (para probarlo contra un servidor de prueba). Esc vuelve a General, al botón Contáctanos.

@@ -513,7 +513,9 @@ en una línea.
   `docs/MENSAJES.md`; se prueba con `--contacto`.
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
-  (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. También pone
+  (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Y el **brillo** de Opciones → General
+  (`poner_brillo`, ajuste «brillo» de 0 a 100, 50 = sin tocar): una capa por encima de todo que vuelve a pintar la pantalla
+  más clara o más oscura (`escenas/luces/brillo_pantalla.gdshader`); en 50 no está. Se prueba con `--brillo`. Ver `docs/ESCRITORIO.md`. También pone
   el tope de imágenes por segundo: 240 siempre (`TOPE`, por si el vsync falla y la gráfica se pone a tope) y 30 con el juego en
   segundo plano (`FUERA`: otra ventana delante o minimizado; las pruebas `--captura` no se frenan). En la web, pide
   al navegador que deje Esc para el juego mientras dura la pantalla completa (`QUEDARSE_ESC`, ver `docs/WEB.md`), y a cada
@@ -521,7 +523,8 @@ en una línea.
 - `formas.gd` (`Formas`): `disco`, `arco`, `poligono` y `polilinea`, lo mismo que `draw_circle`, `draw_arc`, `draw_colored_polygon` y
   `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
   Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
-- `sonido.gd` (autoload: efectos sintetizados y música; cada efecto cambia un poco al azar de tono y de volumen cada
+- `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar los botones de los menús, `grunir`, son 4
+  versiones hechas como una voz ronca en `grunido` (garganta, «rrr» y boca), sin amontonarse; cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
   prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
   sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y
@@ -555,7 +558,8 @@ en una línea.
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
-  (autoload: el saltito de los botones), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
+  (autoload: el saltito de los botones y el gruñido al pulsarlos, `Sonido.grunir`; no gruñen los que llevan la marca
+  `sin_grunido`, las casillas del inventario; se prueba con `--grunido`), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
   `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
 - `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
@@ -809,10 +813,10 @@ en una línea.
 
 - `sprites/`: las hojas (`.png` + `.json`) y sus animaciones (`.tres`). Hoja nueva →
   `py tools/hacer_frames.py assets/sprites/<nombre>`.
-- `musica/`: «El conserje» (el menú principal: solo `el-conserje-base.ogg`), «Turno de noche» (las hordas:
+- `musica/`: «Sin luz» (el menú principal, de terror desde el 11 nov: solo `sin-luz-base.ogg`), «Turno de noche» (las hordas:
   `turno-de-noche-base.ogg` y `-melodia.ogg`), «Jefe de planta» (los jefes: `-base.ogg` y `-intensa.ogg`) y las de
   explorar cada edificio: «Planta por planta» (Apartamentos), «Últimas rebajas» (Centro comercial) y «Junta de
-  accionistas» (Torre Velaria), con `-base.ogg` y `-ritmo.ogg`. Todas épicas menos la de las hordas; las capas
+  accionistas» (Torre Velaria), con `-base.ogg` y `-ritmo.ogg`. Épicas menos la de las hordas y la del menú; las capas
   que suenan a la vez (`CANCIONES`, `MOMENTOS` y `EXPLORAR` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
   (ver `docs/WEB.md`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
@@ -1021,7 +1025,9 @@ en una línea.
   (`jefe-de-planta.mjs`, a -25 LUFS como las peleas): comparten los instrumentos de orquesta y el tema principal del
   juego, «el tema de Johnny», en `orquesta.mjs` (cada una lo toca en su tono con `enTono`). Cada una deja en `tools/efectos/elegir/` la
   canción entera y la base sola (con `index.html` para escucharlas todas) y, con `--juego`, sus capas en
-  `assets/musica/` ya a su volumen (`sacarCancion`, que lo mide con ffmpeg).
+  `assets/musica/` ya a su volumen (`sacarCancion`, que lo mide con ffmpeg). El 11 nov, la del menú pasó a ser de terror:
+  `sin-luz.mjs` (re menor, zumbido grave, una caja de música con la cinta que tiembla, latido y notas que chocan);
+  `el-conserje.mjs` se queda por si acaso, sin su `.ogg` en el juego.
   Por capas: cada instrumento dice su `capa` (y la percusión y demás, la suya en `capas` de `crearMotor`), `guardar()`
   saca un `.wav` por capa, a la misma ganancia, que sumados suenan como la canción entera, y la partitura pasa cada uno
   a su `.ogg`. El trailer suma las capas al montar.
