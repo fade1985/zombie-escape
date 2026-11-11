@@ -1681,6 +1681,82 @@ func probar_clic_mueble() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --armarito-clic": delante del armarito de un baño, con el ratón y el clic mantenido encima de él: se abre,
+# Johnny no ataca ni mientras sigue pulsado (ya vacío, el armarito deja de valer, y antes ahí disparaba) y al soltar y
+# volver a hacer clic en otra parte, ataca como siempre. Y la primera vez que se abre sale el tutorial de las curas
+# (captura-armarito-tutorial.png). Luego se cierra
+func probar_armarito_clic() -> void:
+	var bano := -1
+	for j in planta.sitios.size():
+		if not planta.sitios[j].get("armaritos", []).is_empty():
+			bano = j
+			break
+	if bano < 0:
+		print("Armarito clic · no hay ningún baño en esta planta")
+		get_tree().quit()
+		return
+	await montar(bano, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var a: Node2D = mapa.armaritos[0]
+	a.datos.dentro = "botiquin"
+	a.vaciar(false)
+	johnny.position = a.position + Vector2(0, 50)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5, false).timeout
+	johnny.modo = "libre"   # (después de esperar: al empezar, la partida le pone el de Opciones)
+	johnny.con_raton = true
+	mochila.clear()
+	# primera parte, sin tutorial (con él el juego se para y no se ve si dispara): el clic se mantiene encima del armarito
+	var sobre: Vector2 = a.position + Vector2(0, -56)
+	johnny.espera = 0.0
+	johnny.ataque_t = -1.0
+	var disparos := 0
+	clic_raton(sobre, true)
+	for n in 20:
+		await get_tree().physics_frame
+		if johnny.espera > 0.0 or johnny.ataque_t >= 0.0:
+			disparos += 1
+	print("Armarito clic · abierto %s (esperado: true) · fotogramas disparando con el clic pulsado %d (esperado: 0)" % [a.datos.cogido, disparos])
+	clic_raton(sobre, false)
+	await get_tree().create_timer(0.3, false).timeout
+	# un clic lejos, en el suelo: ataca como siempre
+	johnny.espera = 0.0
+	johnny.ataque_t = -1.0
+	var lejos: Vector2 = johnny.position + Vector2(160, 40)
+	clic_raton(lejos, true)
+	await get_tree().create_timer(0.15, false).timeout
+	var ataca: bool = johnny.espera > 0.0 or johnny.ataque_t >= 0.0
+	clic_raton(lejos, false)
+	print("Armarito clic · el clic lejos después ataca %s (esperado: true)" % ataca)
+	await get_tree().create_timer(0.5, false).timeout
+	# segunda parte, con tutorial: la primera vez que se abre, sale el de las curas
+	a.vaciar(false)
+	Tutoriales.olvidar()
+	tutoriales_prueba = true
+	a.get_node("Zona").abrir()
+	await get_tree().create_timer(0.8).timeout
+	var ventana: Tutorial = null
+	for h in get_children():
+		if h is Tutorial and not h.is_queued_for_deletion():
+			ventana = h
+	print("Armarito clic · tutorial abierto: %s (esperado: curas)" % (ventana.id if ventana else "ninguno"))
+	Captura.foto("captura-armarito-tutorial.png")
+	if ventana:
+		ventana.cerrar()
+	await get_tree().create_timer(0.5).timeout
+	# y la segunda vez que se abre, no
+	a.vaciar(false)
+	a.get_node("Zona").abrir()
+	await get_tree().create_timer(0.5).timeout
+	var otra := "ninguno"
+	for h in get_children():
+		if h is Tutorial and not h.is_queued_for_deletion():
+			otra = h.id
+	print("Armarito clic · al abrir otro armarito, tutorial abierto: %s (esperado: ninguno, o botiquin: el del botiquín que suelta, que es otro)" % otra)
+	get_tree().quit()
+
+
 # Con "--captura --ascensor": el ascensor (partida.gd, arreglar_ascensor). En la planta baja no se arregla (la sala
 # está ahí mismo); en la 1ª planta está averiado hasta que cae el jefe (se hace como si cayera: Johnny entra en su
 # sala y el jefe no llega a salir), y al salir al pasillo Johnny dice que lo ha arreglado. Con cosas en la mochila,

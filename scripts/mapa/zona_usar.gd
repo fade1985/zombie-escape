@@ -47,7 +47,8 @@ var raton := Vector2(-1, -1)    # dónde está el ratón en la pantalla (el últ
 var puede := Callable()         # si se da, cuándo se puede usar (si no, siempre): mientras no, ni contorno ni se usa, y J ataca
 var cierra := false             # el botón del móvil dice «Cerrar» en vez de «Abrir» (una puerta abierta)
 var boton := ""                 # si se da, lo que dice el botón del móvil (ya traducido): los bidones de los jefes, «Empujar»
-var al_pie := false             # la distancia, al pie del mueble y no al medio de su dibujo (el armarito, colgado alto en la pared)
+var gasta_clic := true          # el clic que lo usa no dispara hasta soltarlo (todo menos las puertas, que lo ponen a false)
+var al_pie := false            # la distancia, al pie del mueble y no al medio de su dibujo (el armarito, colgado alto en la pared)
 
 
 # "ancho": lo que ocupa el mueble en el suelo
@@ -150,8 +151,14 @@ func _physics_process(_delta: float) -> void:
 		return
 	# con el mando se usa con B ("usar"): RT ataca siempre, aunque se esté delante de una puerta; con el teclado y el ratón, con
 	# J o el clic (las que se hayan puesto para atacar)
-	if Input.is_action_just_pressed("usar") or (Input.is_action_just_pressed("atacar") and not clic_fuera and not Controles.con_mando):
+	if Input.is_action_just_pressed("usar"):
 		abrir()
+	elif Input.is_action_just_pressed("atacar") and not clic_fuera and not Controles.con_mando:
+		abrir()
+		# ese clic ya está gastado: aunque lo siga pulsando (y el mueble ya no se pueda usar, como el armarito vacío o la tele
+		# ya vista), Johnny no dispara hasta que lo suelte (las puertas no: con ellas sigue como siempre)
+		if gasta_clic:
+			johnny.set("clic_gastado", true)
 
 
 # Si este mueble le toca a Johnny antes que "otra" zona (en la que también está): si la otra no se puede usar ahora

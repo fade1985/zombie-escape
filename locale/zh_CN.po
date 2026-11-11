@@ -3138,10 +3138,6 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "一架Velaria的直升机冲你来了！"
 
 #: scripts/partida.gd
-msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
-msgstr "新闻已保存到电脑的 VIDEOS.EXE 里"
-
-#: scripts/partida.gd
 msgid "¡NECESITO UNA TARJETA!"
 msgstr "我需要门禁卡！"
 
@@ -4598,8 +4594,8 @@ msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»
 msgstr "如果觉得太难，可以在“选项 → 辅助”里开启“完整生命”。"
 
 #: scripts/tutoriales.gd
-msgid "Al coger las primeras vendas"
-msgstr "第一次捡到绷带时"
+msgid "Al abrir el primer armarito o coger las primeras vendas"
+msgstr "第一次打开小柜子或捡到绷带时"
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."

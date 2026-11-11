@@ -243,6 +243,7 @@ func poner_uso() -> void:
 	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, ALTO + ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
 	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
+	zona.gasta_clic = false   # (con las puertas, el clic sigue como antes: el dueño las dejó aparte)
 	zona.cierra = abierta >= 1.0
 	zona.usar.connect(usar_a_mano)
 	uso.add_child(zona)

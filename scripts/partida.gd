@@ -1086,8 +1086,7 @@ func abrir_tele() -> void:
 		get_tree().paused = false
 		if entera:
 			Historia.ver_noticia(n.id)
-			tele.apagar()
-			decir(Idioma.t("Noticia guardada en VIDEOS.EXE, en el ordenador"), 3.5))
+			tele.apagar())   # (sin frase al acabar: ya lo explica el ordenador)
 
 
 # Un grito grande encima de Johnny, como el de «¡¡¡LA LLAVE!!!», para lo que no hay que perderse (lo nuevo en el ordenador,
@@ -1488,6 +1487,7 @@ func repuesto(tipo: String) -> String:
 func abrir_armarito(armarito: Node2D) -> void:
 	armarito.vaciar()
 	Sonido.tocar("puerta")
+	tutorial("curas")   # (la primera vez que se abre uno: cómo se usan las curas)
 	soltar_objeto(armarito.datos.get("dentro", "botiquin"), armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
 
 

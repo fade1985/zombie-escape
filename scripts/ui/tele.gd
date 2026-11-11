@@ -73,10 +73,10 @@ func _ready() -> void:
 		Vector2(6, 105))
 	titular = rotulo("", Color.WHITE, Vector2(6, 126))
 	cinta = rotulo("", Color("#1b1712"), Vector2(PANTALLA.size.x, 146))
-	# los subtítulos, debajo de la pantalla: dos líneas, centradas
+	# los subtítulos, debajo de la pantalla: dos líneas, alineadas a la izquierda como unos subtítulos normales
 	texto = Label.new()
 	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	texto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	texto.add_theme_color_override("font_color", Color("#f4f0dc"))
 	texto.add_theme_constant_override("outline_size", 0)

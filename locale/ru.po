@@ -3146,10 +3146,6 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "За тобой летит вертолет Velaria!"
 
 #: scripts/partida.gd
-msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
-msgstr "Новость сохранена в VIDEOS.EXE на компьютере"
-
-#: scripts/partida.gd
 msgid "¡NECESITO UNA TARJETA!"
 msgstr "НУЖНА КАРТА!"
 
@@ -4618,8 +4614,8 @@ msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»
 msgstr "Если тяжело, в «Настройки → Упрощения» есть «Здоровье целиком»."
 
 #: scripts/tutoriales.gd
-msgid "Al coger las primeras vendas"
-msgstr "Когда подбираешь первые бинты"
+msgid "Al abrir el primer armarito o coger las primeras vendas"
+msgstr "Когда открываешь первый шкафчик или подбираешь первые бинты"
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."

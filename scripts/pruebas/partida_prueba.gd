@@ -207,6 +207,8 @@
 #                       el de los trasteros al entrar y, al final, la flecha de la guía     [prueba_sitios.gd]
 #   --clic-mueble       delante del baúl de la sala: un clic lejos no lo abre (y Johnny ataca), uno encima sí, y J
 #                       también                                                              [prueba_sitios.gd]
+#   --armarito-clic     el armarito del baño con el clic mantenido encima: se abre, Johnny no dispara mientras sigue pulsado
+#                       y el tutorial de las curas sale la primera vez que se abre            [prueba_sitios.gd]
 #   --contorno-mueble   el contorno amarillo de los muebles de la sala: con el ratón encima, o con Johnny delante sin
 #                       ratón (mando, teclado, móvil)                                        [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
@@ -847,6 +849,9 @@ func empezar_prueba() -> void:
 	elif "--acustica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_acustica()
+	elif "--armarito-clic" in args:
+		set_process(false)   # sin la prueba larga
+		probar_armarito_clic()
 	elif "--contorno-mueble" in args:
 		set_process(false)   # sin la prueba larga
 		probar_contorno_mueble()

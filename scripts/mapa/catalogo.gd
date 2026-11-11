@@ -306,7 +306,7 @@ const SALAS := {
 		"colocados": {
 			"abajo": [["wardrobe", 2.0], ["nightstand", 5.5], ["doublebed", 8.0], ["nightstand", 10.5]],
 			"arriba": [["wardrobe", 9.0], ["nightstand", 3.85, "izquierda", "apagada"], ["doublebed", 5.25, "izquierda"],
-				["nightstand", 7.88, "izquierda"]],
+				["nightstand", 7.62, "izquierda"]],
 		},
 	},
 	"dormitorio-individual": {
@@ -327,7 +327,7 @@ const SALAS := {
 		# mesilla de lado, en espejo)
 		"colocados": {
 			"abajo": [["desk", 2.5], ["wardrobe", 6.0], ["nightstand", 8.65], ["bed", 10.6]],
-			"arriba": [["desk", 3.0], ["wardrobe", 10.0], ["bed", 5.0, "derecha"], ["nightstand", 6.95, "derecha"]],
+			"arriba": [["desk", 3.0], ["wardrobe", 10.0], ["bed", 5.0, "derecha"], ["nightstand", 6.45, "derecha"]],
 		},
 	},
 	# el de respaldo, para un dormitorio sin tipo: la mitad de las plantillas con la cama de matrimonio y la otra mitad con

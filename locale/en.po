@@ -3142,10 +3142,6 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "A Velaria helicopter is coming for you!"
 
 #: scripts/partida.gd
-msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
-msgstr "News saved in VIDEOS.EXE, on the computer"
-
-#: scripts/partida.gd
 msgid "¡NECESITO UNA TARJETA!"
 msgstr "I NEED A CARD!"
 
@@ -4608,8 +4604,8 @@ msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»
 msgstr "If it gets too hard, Options → Assists has \"Whole health\"."
 
 #: scripts/tutoriales.gd
-msgid "Al coger las primeras vendas"
-msgstr "On picking up your first bandages"
+msgid "Al abrir el primer armarito o coger las primeras vendas"
+msgstr "On opening your first bathroom cabinet or picking up your first bandages"
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."

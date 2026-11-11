@@ -38,7 +38,7 @@ const LISTA := {
 			"Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta).",
 			"Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."]},
 	"curas": {"grupo": "Lo básico", "titulo": "Vendas", "icono": "obj-vendas",
-		"cuando": "Al coger las primeras vendas",
+		"cuando": "Al abrir el primer armarito o coger las primeras vendas",
 		"lineas": ["Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás.",
 			"Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."]},
 	"botiquin": {"grupo": "Lo básico", "titulo": "El botiquín", "icono": "botiquin",
