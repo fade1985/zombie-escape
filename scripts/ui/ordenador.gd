@@ -1032,10 +1032,16 @@ func programa_videos(c: VBoxContainer, foco: String) -> String:
 	desliza.follow_focus = true
 	desliza.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	izquierda.add_child(desliza)
+	# con aire alrededor dentro del desplazamiento, que recorta lo que se sale: al pasar el ratón cada botón crece un
+	# 6 % un momento (el saltito de botones.gd) y, pegado al borde, se le cortaba un trozo por la izquierda (11 nov)
+	var aire := MarginContainer.new()
+	for lado in ["left", "right", "top", "bottom"]:
+		aire.add_theme_constant_override("margin_" + lado, 4 if lado in ["top", "bottom"] else 8)
+	desliza.add_child(aire)
 	var lista := VBoxContainer.new()
-	lista.custom_minimum_size.x = 240
+	lista.custom_minimum_size.x = 234   # (con los 8 + 8 de aire, centrados bajo las pestañas de 250)
 	lista.add_theme_constant_override("separation", 5)
-	desliza.add_child(lista)
+	aire.add_child(lista)
 	var reproductor := Reproductor.new()
 	reproductor.name = "reproductor"
 	reproductor.size_flags_horizontal = Control.SIZE_EXPAND | Control.SIZE_SHRINK_CENTER

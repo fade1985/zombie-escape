@@ -1083,6 +1083,20 @@ func probar_noticias() -> void:
 	ordenador.abrir("videos")
 	await get_tree().create_timer(3.0).timeout
 	Captura.foto("captura-videos.png")
+	# con el ratón encima de una pestaña y de un vídeo, fotograma a fotograma: el botón entero, sin cortarse por la
+	# izquierda (11 nov)
+	for nombre in ["b_edificio_" + edificio, "b_" + Historia.noticias_de(edificio)[0].id]:
+		var boton_v: Button = ordenador.ventana.find_child(nombre, true, false)
+		var sitio_v: Vector2 = get_viewport().get_screen_transform() * boton_v.get_global_rect().get_center()
+		Input.warp_mouse(sitio_v)
+		var mov_v := InputEventMouseMotion.new()
+		mov_v.position = sitio_v
+		mov_v.global_position = sitio_v
+		mov_v.relative = Vector2(1, 1)
+		Input.parse_input_event(mov_v)
+		for i in 3:
+			await get_tree().process_frame
+			Captura.foto("captura-videos-raton-%s-%d.png" % ["pestana" if nombre.begins_with("b_edificio") else "video", i])
 	var rep: Reproductor = ordenador.ventana.find_child("reproductor", true, false)
 	var reproductor: Tele = rep.tele
 	print("VIDEOS.EXE · reproduciendo: avance %.2f, parada %s, subtítulo «%s» (esperado: >0, false)" % [reproductor.progreso(), reproductor.parada, reproductor.texto.text])
