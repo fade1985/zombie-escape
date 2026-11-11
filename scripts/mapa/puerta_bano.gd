@@ -13,7 +13,8 @@
 # y las abren Johnny y los que le acompañan con solo arrimarse, y los zombis despiertos empujándolas un momento. La
 # navegación cuenta con pasar por ellas, para que los zombis vayan a abrirlas.
 # Las libres (menos las de los trasteros) se cierran a mano, como se usan el baúl y el banco (zona_usar.gd: delante de
-# la puerta, el clic encima, J, RT o el botón «Cerrar» del móvil, con el contorno amarillo). Si hay alguien en el hueco,
+# la puerta, el clic encima, J, B o el botón «Cerrar» del móvil, con el contorno amarillo; Johnny no deja de atacar por
+# ello: J y el clic atacan a la vez). Si hay alguien en el hueco,
 # no se cierra: tiembla. Cerrada a mano, Johnny y los suyos no la vuelven a abrir con solo estar delante: hay que irse y
 # volver a arrimarse, o usarla otra vez sin moverse. Los zombis la siguen abriendo empujando.
 # Las demás van cerradas con llave (su hueco lleva "cerrada", y ahí mapa.gd no pone la libre) y la navegación no cuenta
@@ -243,7 +244,7 @@ func poner_uso() -> void:
 	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, ALTO + ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
 	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
-	zona.gasta_clic = false   # (con las puertas, el clic sigue como antes: el dueño las dejó aparte)
+	zona.corta_ataque = false   # (con las puertas Johnny sigue atacando: J o el clic la usan y atacan a la vez)
 	zona.cierra = abierta >= 1.0
 	zona.usar.connect(usar_a_mano)
 	uso.add_child(zona)

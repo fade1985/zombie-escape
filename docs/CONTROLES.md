@@ -16,7 +16,7 @@ cartel del final hablan igual de botones o de teclas. Se prueba con `-- --captur
 | Moverse | WASD o flechas | stick izquierdo |
 | Esquivar | Espacio o Mayús | A o LB |
 | Atacar | ratón + clic o J; solo, con la ayuda *Disparo asistido* | RT (el stick derecho solo apunta: RT ataca hacia donde se apuntó; en el móvil, su joystick derecho sí ataca) |
-| Abrir y cerrar (puertas de los baños, muebles de la sala de mantenimiento) | J o clic encima | B (RT sigue atacando, también delante de una puerta; el botón no se cambia en Opciones) |
+| Abrir y cerrar (puertas de los baños, muebles de la sala de mantenimiento) | J o clic encima (delante de una puerta, Johnny ataca a la vez) | B (RT sigue atacando, también delante de una puerta; el botón no se cambia en Opciones) |
 | Cambiar de arma (cuerpo a cuerpo / distancia) | Q o rueda | Y |
 | Recargar | R | X |
 | Lanzar (mantener para apuntar, soltar para lanzar) | E o clic derecho | LT |
@@ -157,8 +157,10 @@ móvil, cuando Johnny está delante (`-- --captura --contorno-mueble`).
 
 **Cerrar las puertas** de dentro (pisos, tiendas y la sala de mantenimiento; no las de los trasteros): igual que los
 muebles. Desde el principio: las que empiezan cerradas, además de abrirse solas al arrimarse, se abren igual a mano y
-desde algo más lejos. Delante de una abierta sale su contorno amarillo y se cierra con atacar (clic encima, J, RT o el botón
-**Cerrar** del móvil). Si hay alguien en el hueco no se cierra (tiembla). Cerrada así, no se vuelve a abrir sola hasta
+desde algo más lejos. Delante de una abierta sale su contorno amarillo y se cierra con atacar (clic encima o J), con B en el
+mando o con el botón **Cerrar** del móvil. **Con las puertas, Johnny no deja de atacar:** J o el clic encima la cierran (o
+la abren) y a la vez atacan, y mantenidos siguen atacando; RT y el joystick derecho del móvil solo atacan, sin tocarla
+(`-- --captura --puertas`, «Puertas, atacando»). Si hay alguien en el hueco no se cierra (tiembla). Cerrada así, no se vuelve a abrir sola hasta
 que Johnny se aparta y vuelve a arrimarse; sin moverse, se abre otra vez con atacar. Los zombis la siguen abriendo
 empujando (`mapa/puerta_bano.gd`; `-- --captura --puertas`). La de lado, abierta, se queda de pie por encima del hueco
 y se cierra también junto a su parte de arriba. Si Johnny está delante de dos cosas a la vez (la puerta del taller y el

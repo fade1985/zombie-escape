@@ -885,6 +885,7 @@ func probar_puertas() -> void:
 	print("Puertas: Johnny se arrima y se abre %s, ya no choca %s, apuntada en su hueco %s (esperado: true las tres)" % [
 		una.abierta == 1.0, not choca, una.hueco.get("abierta", false)])
 	await probar_cerrar_puerta(una)
+	await probar_atacar_ante_puerta(una)
 
 	# un zombi despierto en una habitación de una sola puerta (cerrada); Johnny, en la de al lado
 	var otra: Node2D = null
@@ -1029,6 +1030,97 @@ func probar_puerta_aliado() -> void:
 	Captura.foto("captura-puerta-aliado.png")
 	print("Puerta del acompañante: médica detrás de la puerta, Johnny del otro lado: la abre %s (esperado: true)" % (una.abierta > 0.0))
 	get_tree().quit()
+
+
+# Delante de una puerta Johnny no deja de atacar (lo pidió el dueño; zona_usar.gd, "corta_ataque"): con J o el clic encima
+# la cierra o la abre y ataca a la vez, y mientras lo mantiene sigue atacando; con el mando, RT solo ataca y B la usa; en
+# el móvil, el joystick derecho solo ataca. Cada línea dice lo esperado
+func probar_atacar_ante_puerta(una: Node2D) -> void:
+	if una.uso == null:
+		return
+	if una.abierta < 1.0:
+		una.usar_a_mano()
+		await get_tree().create_timer(0.6).timeout
+	johnny.position = una.caja.get_center() + (Vector2(0, una.caja.size.y / 2 + 20) if una.de_frente else Vector2(una.caja.size.x / 2 + 20, 0))
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3, false).timeout
+	johnny.modo = "libre"
+	johnny.con_raton = true
+	Controles.con_mando = false
+	# J: la cierra y ataca; mantenida, sigue atacando ya cerrada (antes aquí dejaba de atacar)
+	pulsar_accion("atacar", true)
+	var al_pulsar := await ataca_en(8)
+	await get_tree().create_timer(0.6, false).timeout
+	var cerrada: bool = una.abierta == 0.0
+	var luego := await ataca_en(10)
+	pulsar_accion("atacar", false)
+	print("Puertas, atacando · con J la cierra %s, ataca al pulsar %s y sigue atacando con ella cerrada %s (esperado: true las tres)" % [
+		cerrada, al_pulsar, luego])
+	await get_tree().create_timer(0.3, false).timeout
+	# el clic encima de la puerta: la abre y ataca, y mantenido sigue atacando
+	var zona: Area2D = una.uso.get_node("Zona") if una.uso else null
+	var sobre: Vector2 = zona.dibujo.get_global_transform() * zona.dibujo.get_rect().get_center() if zona and zona.dibujo else una.caja.get_center()
+	clic_raton(sobre, true)
+	al_pulsar = await ataca_en(8)
+	await get_tree().create_timer(0.6, false).timeout
+	var abierta: bool = una.abierta == 1.0
+	luego = await ataca_en(10)
+	clic_raton(sobre, false)
+	print("Puertas, atacando · con el clic encima la abre %s, ataca al pulsar %s y sigue atacando %s (esperado: true las tres)" % [
+		abierta, al_pulsar, luego])
+	await get_tree().create_timer(0.3, false).timeout
+	# el mando: RT ataca y no la toca; B la cierra
+	Controles.con_mando = true
+	pulsar_accion("atacar", true)
+	al_pulsar = await ataca_en(8)
+	await get_tree().create_timer(0.6, false).timeout
+	var sin_tocar: bool = una.abierta == 1.0
+	pulsar_accion("atacar", false)
+	await get_tree().create_timer(0.2, false).timeout
+	pulsar_accion("usar", true)
+	await get_tree().physics_frame
+	pulsar_accion("usar", false)
+	await get_tree().create_timer(0.6, false).timeout
+	print("Puertas, atacando · con el mando RT ataca %s sin tocarla %s y B la cierra %s (esperado: true las tres)" % [
+		al_pulsar, sin_tocar, una.abierta == 0.0])
+	Controles.con_mando = false
+	# el móvil: el joystick derecho ataca delante de ella (cerrada, y abierta) y no la toca
+	var antes := [Tactil.activo, Tactil.con_dedo]
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	johnny.con_raton = false
+	una.usar_a_mano()
+	await get_tree().create_timer(0.6, false).timeout
+	Input.action_press("apuntar_derecha", 1.0)
+	al_pulsar = await ataca_en(10)
+	sin_tocar = una.abierta == 1.0
+	Input.action_release("apuntar_derecha")
+	Tactil.activo = antes[0]
+	Tactil.con_dedo = antes[1]
+	johnny.con_raton = true
+	print("Puertas, atacando · en el móvil, delante de ella abierta, el joystick derecho ataca %s y no la toca %s (esperado: true las dos)" % [
+		al_pulsar, sin_tocar])
+	await get_tree().create_timer(0.3, false).timeout
+
+
+# Una acción como si se pulsara (o soltara) su tecla o botón: un evento de acción, como los botones del móvil (tactil.gd)
+func pulsar_accion(nombre: String, abajo: bool) -> void:
+	var e := InputEventAction.new()
+	e.action = nombre
+	e.pressed = abajo
+	e.strength = 1.0 if abajo else 0.0
+	Input.parse_input_event(e)
+
+
+# Si Johnny ataca en los próximos "pasos" pasos de física (el hueco entre ataques, a cero antes, para que se note)
+func ataca_en(pasos: int) -> bool:
+	johnny.espera = 0.0
+	johnny.ataque_t = -1.0
+	for n in pasos:
+		await get_tree().physics_frame
+		if johnny.espera > 0.0 or johnny.ataque_t >= 0.0:
+			return true
+	return false
 
 
 func probar_cerrar_puerta(una: Node2D) -> void:

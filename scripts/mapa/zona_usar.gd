@@ -1,13 +1,14 @@
 # La zona invisible de delante de un mueble de la sala de mantenimiento (la mesa del ordenador, ordenador.gd; el
 # baúl, el banco de trabajo y la taquilla, arrimable.gd; y el armarito de los baños, armarito.gd). Antes el mueble se abría solo al arrimarse; ahora, mientras
 # Johnny está en la zona, se abre al pulsar la acción de atacar: el clic izquierdo o J (las que tenga puestas en
-# Opciones), el botón B del mando ("usar"; RT ataca siempre, también delante de una puerta) y, en el móvil, el botón «Abrir»
+# Opciones), el botón B del mando ("usar"; RT ataca siempre) y, en el móvil, el botón «Abrir»
 # que sale entonces (tactil.gd). Con el ratón, el clic tiene que caer encima del mueble: si cae en otra parte, no se abre y
 # Johnny ataca como siempre (clic_fuera). Con J no hay puntero, así que lo abre esté donde esté y no dispara (johnny.gd,
 # "ante_mueble"). Sin letrero encima (lo pidió el dueño).
 # Las puertas de dentro (puerta_bano.gd) usan la misma zona para cerrarse y volver a abrirse: la ponen con montar_rect
 # (la zona de delante y detrás del hueco), dicen con "puede" cuándo se pueden usar y, con "cierra", que el botón del
-# móvil diga «Cerrar».
+# móvil diga «Cerrar». Con ellas Johnny no deja de atacar (lo pidió el dueño; "corta_ataque"): J o el clic encima la
+# abren o cierran y a la vez atacan, y en el móvil atacar solo ataca (la puerta, con su botón).
 extends Area2D
 
 signal usar
@@ -47,7 +48,8 @@ var raton := Vector2(-1, -1)    # dónde está el ratón en la pantalla (el últ
 var puede := Callable()         # si se da, cuándo se puede usar (si no, siempre): mientras no, ni contorno ni se usa, y J ataca
 var cierra := false             # el botón del móvil dice «Cerrar» en vez de «Abrir» (una puerta abierta)
 var boton := ""                 # si se da, lo que dice el botón del móvil (ya traducido): los bidones de los jefes, «Empujar»
-var gasta_clic := true          # el clic que lo usa no dispara hasta soltarlo (todo menos las puertas, que lo ponen a false)
+var corta_ataque := true        # delante de él, J o el clic encima lo usan y no atacan, y el clic que lo usa no dispara hasta
+                                # soltarlo. Las puertas lo ponen a false: las usan y Johnny sigue atacando
 var al_pie := false            # la distancia, al pie del mueble y no al medio de su dibujo (el armarito, colgado alto en la pared)
 
 
@@ -153,11 +155,12 @@ func _physics_process(_delta: float) -> void:
 	# J o el clic (las que se hayan puesto para atacar)
 	if Input.is_action_just_pressed("usar"):
 		abrir()
-	elif Input.is_action_just_pressed("atacar") and not clic_fuera and not Controles.con_mando:
+	elif Input.is_action_just_pressed("atacar") and not clic_fuera and not Controles.con_mando 			and (corta_ataque or not (Tactil.activo and Tactil.con_dedo)):
+		# (en el móvil, el botón de atacar no abre ni cierra las puertas: solo ataca; ellas, con su botón «Cerrar»)
 		abrir()
 		# ese clic ya está gastado: aunque lo siga pulsando (y el mueble ya no se pueda usar, como el armarito vacío o la tele
-		# ya vista), Johnny no dispara hasta que lo suelte (las puertas no: con ellas sigue como siempre)
-		if gasta_clic:
+		# ya vista), Johnny no dispara hasta que lo suelte (las puertas no: con ellas sigue atacando)
+		if corta_ataque:
 			johnny.set("clic_gastado", true)
 
 

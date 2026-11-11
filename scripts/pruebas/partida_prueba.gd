@@ -298,7 +298,8 @@
 #                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]
 #   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
 #                       mantenimiento: cerradas, Johnny y un zombi las abren, Johnny las cierra a mano (como el
-#                       baúl) y las vuelve a abrir, y siguen abiertas                         [prueba_sitios.gd]
+#                       baúl) y las vuelve a abrir, y siguen abiertas; delante de una, J, el clic, RT y el
+#                       joystick del móvil siguen atacando (J y el clic, además, la abren o cierran) [prueba_sitios.gd]
 #   --puerta-aliado     un acompañante se queda al otro lado de una puerta cerrada a mano por Johnny y la abre él para
 #                       llegar a Johnny (con la médica del mismo lado que Johnny, no)           [prueba_sitios.gd]
 #   --atasco-puertas    varios zombis de cada tipo (--zombis N, 18) salen a la vez por una misma puerta de un piso, sin

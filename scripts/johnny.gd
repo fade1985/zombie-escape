@@ -174,7 +174,7 @@ var asistido_puesto := false   # cómo estaba la ayuda "Disparo asistido" la úl
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
 var ultimo_apunte := Vector2.DOWN   # modo libre, con el mando: hacia donde se empujó el stick derecho por última vez (RT ataca hacia ahí)
 var clic_gastado := false   # el clic izquierdo (o J) pulsado ya ha servido para usar algo (zona_usar.gd): no dispara hasta soltarlo
-var ante_mueble: Area2D = null  # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): el clic encima lo abre, no dispara
+var ante_mueble: Area2D = null  # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): el clic encima lo abre, no dispara (en las puertas, sí)
 
 const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
 # Los estados de charco que le corroen: con ellos se le ven encima las manchas de ácido, como a los zombis (M65): el
@@ -638,9 +638,10 @@ func apuntar_libre() -> void:
 	if apunte.length() < 1.0:
 		return
 	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado
-	# (delante de un mueble de la sala o de una puerta, el clic encima de él o J son para abrirlo; un clic en otra parte, para
-	# atacar. Con el mando no: RT ataca siempre, y se abre con B)
-	if ataca and (ante_mueble == null or ante_mueble.clic_fuera or not ante_mueble.activa() or Controles.con_mando):
+	# (delante de un mueble de la sala, el clic encima de él o J son para abrirlo; un clic en otra parte, para atacar. Delante
+	# de una puerta, no: la usan y Johnny ataca a la vez, "corta_ataque". Con el mando tampoco: RT ataca siempre, y se abre con B)
+	if ataca and (ante_mueble == null or ante_mueble.clic_fuera or not ante_mueble.activa() or not ante_mueble.corta_ataque
+			or Controles.con_mando):
 		intentar_atacar(ayuda_apunte(apunte.angle()))
 
 
