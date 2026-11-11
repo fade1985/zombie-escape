@@ -584,7 +584,10 @@ func elegir_criatura(johnny: Node2D, d: float) -> void:
 		gritar(Idioma.t("¡GRAAAAH!"), VERDE, 24)
 		Sonido.tocar("rugido")
 		llamar_sujetos()
-	if d < DISTANCIA_PUNETAZO and espera_criatura.punetazo <= 0.0:
+	# (el puñetazo y las lenguas no pasan por un mueble: con uno en medio, sigue andando hasta rodearlo; si no, Johnny
+	# se quedaba a salvo detrás de un aire acondicionado de la azotea, con la criatura pegando al aparato)
+	var se_ve := a_la_vista(johnny)
+	if d < DISTANCIA_PUNETAZO and espera_criatura.punetazo <= 0.0 and se_ve:
 		espera_criatura.punetazo = ESPERAS_CRIATURA.punetazo
 		empezar("aviso_punetazo", angulo)
 		return
@@ -592,7 +595,7 @@ func elegir_criatura(johnny: Node2D, d: float) -> void:
 		espera_criatura.fuego = ESPERAS_CRIATURA.fuego
 		empezar("aviso_fuego", angulo)
 		return
-	if d < LARGO_LENGUA + 20.0 and espera_criatura.lenguas <= 0.0:
+	if d < LARGO_LENGUA + 20.0 and espera_criatura.lenguas <= 0.0 and se_ve:
 		espera_criatura.lenguas = ESPERAS_CRIATURA.lenguas
 		empezar("aviso_lenguas", angulo)
 		return

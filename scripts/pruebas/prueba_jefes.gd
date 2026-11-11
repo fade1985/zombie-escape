@@ -1516,6 +1516,45 @@ func probar_cientifico_jefe(camara: Camera2D) -> void:
 	for z in vecinos:
 		if is_instance_valid(z):
 			z.queue_free()
+	await probar_esquinas("captura-criatura-esquina.png")
+
+
+# En la azotea, Johnny se esconde en una esquina, detrás de un aire acondicionado (planta.gd, AZOTEA_RODEO): el jefe
+# mutado (la criatura del doctor Salas o el gerente, de los más grandes) tiene que pillarle rodeándolo, sin quedarse
+# pegando al aparato (sus golpes no pasan por un mueble). Una foto de la primera esquina
+func probar_esquinas(foto: String) -> void:
+	if not mapa.sitio.has("helipuerto"):
+		return
+	for esquina in [[Vector2(110, 176), Vector2(420, 430)], [Vector2(1298, 816), Vector2(980, 560)]]:
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z != jefa:
+				z.queue_free()
+		for bola in get_tree().get_nodes_in_group("balas_zombi"):
+			bola.queue_free()
+		johnny.position = esquina[0]
+		jefa.position = esquina[1]
+		jefa.velocity = Vector2.ZERO
+		jefa.andar(0.1)
+		johnny.invulnerable = 0.0
+		johnny.golpe_de = ""
+		var suyo: String = Bestiario.de(jefa)
+		var golpe := ""   # el ataque del jefe con el que le da (el que sea: si le da, es que le pilla)
+		var tarda := 0.0
+		for i in 60 * 8:
+			await get_tree().physics_frame
+			johnny.position = esquina[0]   # (quieto en su escondite)
+			johnny.vida = johnny.stats.vida_max
+			if johnny.golpe_de == suyo:
+				golpe = jefa.estado
+				tarda = i / 60.0
+				break
+			johnny.golpe_de = ""
+			johnny.invulnerable = 0.0   # (lo que le dé otra cosa no cuenta ni le protege)
+		if esquina[0].x < 700.0:
+			Captura.foto(foto)
+		print("  Johnny escondido en la esquina %s, detrás del aire acondicionado: %s le pilla %s (con '%s', a los %.1f s) (esperado: true)" % [
+			esquina[0], suyo, golpe != "", golpe, tarda])
+		johnny.vida = johnny.stats.vida_max
 
 
 # El gerente, a media vida, se pincha VD-7 (captura-gerente-jeringa.png) y muta con un fogonazo
@@ -1571,6 +1610,7 @@ func probar_mutado(camara: Camera2D) -> void:
 		if estados.is_empty() or estados[-1] != jefa.estado:
 			estados.append(jefa.estado)
 	print("  embestida: %s" % " → ".join(estados))
+	await probar_esquinas("captura-mutado-esquina.png")
 
 
 # --laboratorio (con --edificio torre): la planta 40 de Torre Velaria, el laboratorio (parte 6), con el jefe que haya (el

@@ -416,7 +416,8 @@ func elegir_mutado(johnny: Node2D, d: float) -> void:
 		espera_mutado.embestida = ESPERAS_MUTADO.embestida
 		empezar("aviso_embestida", angulo)
 		return
-	if d < LARGO_LATIGAZO + 20.0 and espera_mutado.latigazo <= 0.0:
+	# (los tentáculos no pasan por un mueble: con uno en medio, sigue andando hasta rodearlo, como la criatura)
+	if d < LARGO_LATIGAZO + 20.0 and espera_mutado.latigazo <= 0.0 and a_la_vista(johnny):
 		espera_mutado.latigazo = ESPERAS_MUTADO.latigazo
 		empezar("aviso_latigazo", angulo)
 		return
