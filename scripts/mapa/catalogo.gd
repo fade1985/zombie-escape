@@ -95,8 +95,8 @@ const MUEBLES := {
 	"jewelcase":       {"len": 96,  "dep": 44, "paredes": "lados", "archivo": "centro/vitrina-joyeria"},
 	"jewelcabinet":    {"len": 64,  "dep": 36, "paredes": "",      "archivo": "centro/vitrina-alta"},
 	"safe":            {"len": 56,  "dep": 48, "paredes": "",      "archivo": "centro/caja-fuerte"},
-	# Los aparatos de la azotea del centro comercial (PixelLab, con las guías de tools/guias_azotea.py): van sueltos
-	# por la azotea, no contra una pared (los coloca planta.gd)
+	# Los aparatos de la azotea del centro comercial (PixelLab, con las guías de tools/guias_azotea.py). Desde el 11 nov
+	# ya no salen: la azotea entera es la imagen de GPT (planta.gd, azotea); se quedan por si vuelven
 	"acunit":          {"len": 128, "dep": 72, "paredes": "todas", "archivo": "centro/aire-acondicionado"},
 	"airhandler":      {"len": 184, "dep": 60, "paredes": "todas", "archivo": "centro/climatizadora"},
 	"chimney":         {"len": 48,  "dep": 48, "paredes": "todas", "archivo": "centro/chimenea"},   # (ya no sale en la azotea)

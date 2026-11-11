@@ -43,8 +43,8 @@ var tiempo := 0.0
 var vapor := true              # el vapor de la cabeza al enfadarse (el gerente mutado no echa)
 var rabia: VaporRabia          # las nubecitas de ese vapor
 var quieto := false            # la sala de pruebas: ataca y avisa como siempre, pero no se mueve de su sitio
-# La azotea: espera arriba del helipuerto a que suba Johnny, quieto y mirándole, sin atacar ni recibir daño (dice
-# «¡INMUNE!» de vez en cuando); la partida lo suelta al cerrarse la valla (partida.gd, mirar_ring)
+# La azotea: espera en el aro del helipuerto a que Johnny entre en las líneas blancas, quieto y mirándole, sin atacar
+# ni recibir daño (dice «¡INMUNE!» de vez en cuando); la partida lo suelta entonces (partida.gd, mirar_ring)
 var esperando := false
 var aviso_espera := 0.0
 
@@ -57,7 +57,6 @@ var aguanta_acido := false     # el Glotón y el doctor Salas: el ácido de los 
 
 
 func _ready() -> void:
-	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	vida = vida_max
 	contacto = dano_contacto
 	rabia = VaporRabia.new(coronilla if coronilla > 0.0 else arriba - 20.0, orejas)

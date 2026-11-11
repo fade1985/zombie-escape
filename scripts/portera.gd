@@ -88,7 +88,6 @@ var en_acido := {"dps": 0.0, "acc": 0.0, "tick": 0.0}   # el charco de ácido qu
 
 
 func _ready() -> void:
-	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	vida = vida_max
 	$Vapor.draw.connect(_pintar_vapor)
 	vida_cambiada.emit.call_deferred(vida, vida_max)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wgej2368smln"
-path="res://.godot/imported/suelo-hormigon.png-647e8df41f2901d9644abc56524cdbf6.ctex"
+uid="uid://dkl4kbwwu77vc"
+path="res://.godot/imported/azotea-gpt.png-c516ac546f61b1fc389d335c2af7e8e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/suelo-hormigon.png"
-dest_files=["res://.godot/imported/suelo-hormigon.png-647e8df41f2901d9644abc56524cdbf6.ctex"]
+source_file="res://assets/sprites/azotea-gpt.png"
+dest_files=["res://.godot/imported/azotea-gpt.png-c516ac546f61b1fc389d335c2af7e8e9.ctex"]
 
 [params]
 

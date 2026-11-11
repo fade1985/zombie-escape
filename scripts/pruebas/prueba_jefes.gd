@@ -1191,73 +1191,50 @@ func bala_al_jefe(angulo: float, lejos: float, dano: int) -> void:
 		espera += get_physics_process_delta_time()
 
 
-# El helipuerto elevado de la azotea (planta.gd, mapa.gd y partida.gd, mirar_ring): que está en el centro, que ni la
-# base ni el dibujo de ningún aparato lo tocan, que de abajo solo se sube por la rampa, que el jefe espera arriba sin
-# recibir daño y que, al subir Johnny, empieza la pelea; la rampa se queda abierta (sin valla, captura-azotea-valla.png)
+# El helipuerto de la azotea (planta.gd, mapa.gd y partida.gd, mirar_ring), la imagen de GPT entera, a ras de suelo:
+# que el jefe está en el aro, dentro de las líneas blancas; que no hay aparatos; que los muros van por la barandilla
+# (arriba 4 filas, abajo 3, a los lados 2); que Johnny llega por la derecha, fuera de las líneas, y desde ahí se va
+# andando al aro; que el jefe espera sin recibir daño y que, al entrar Johnny en las líneas, empieza la pelea
+# (captura-azotea-ring.png)
 func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 	var p := Planta.plataforma(s)
-	var huella := Planta.huella_helipuerto(s)
-	var encima := 0
-	for m in s.muebles:
-		var r := Muebles.hueco(m)
-		var alto: float = load("res://assets/sprites/mueble-%s.png" % m.tipo).get_height() * 2.0
-		var dibujo := Rect2(r.position.x, r.end.y - alto, r.size.x, alto)
-		if huella.any(func(h): return h.intersects(r) or h.intersects(dibujo)):
-			encima += 1
-	print("  helipuerto: en el centro %s | aparatos encima (o su dibujo): %d (esperado: 0)" % [
-		p.get_center() == Vector2(s.ancho, s.alto) / 2.0, encima])
-	# los aparatos, siempre en el mismo sitio (planta.gd, APARATOS): sin pisarse, dentro del suelo, lejos de la puerta
-	var juntos := 0
-	var sin_suelo := 0
-	var cerca_puerta := 0
-	var sin_pasillo := 0
-	var suelo := Rect2(Planta.MURO, Planta.MURO, s.ancho - 2.0 * Planta.MURO, s.alto - 2.0 * Planta.MURO)
-	var puerta := Vector2(s.ancho - Planta.MURO, s.alto / 2.0)   # (la de llegada, a la derecha)
-	for i in s.muebles.size():
-		var r := Muebles.hueco(s.muebles[i])
-		if not suelo.encloses(r):
-			sin_suelo += 1
-		if puerta.distance_to(r.get_center()) < 180.0:
-			cerca_puerta += 1
-		if huella.any(func(h): return h.grow(Planta.PLATAFORMA_LIBRE - 1.0).intersects(r)):
-			sin_pasillo += 1
-		for j in range(i + 1, s.muebles.size()):
-			if Muebles.hueco(s.muebles[j]).grow(40.0).intersects(r):
-				juntos += 1
-	print("  aparatos fijos: %d | pegados entre sí %d | fuera del suelo %d | cerca de la puerta %d | sin pasillo al helipuerto %d (esperado: 0 en todos)" % [
-		s.muebles.size(), juntos, sin_suelo, cerca_puerta, sin_pasillo])
-	# de abajo (por delante de la cara) al centro: el camino pasa por la rampa
+	print("  helipuerto: el aro %s dentro de las líneas %s | aparatos %d (esperado: true, 0)" % [s.helipuerto,
+		p.has_point(s.helipuerto), s.muebles.size()])
+	# los muros, por la barandilla: en cada columna de dentro, muro hasta la fila 3 y desde la 27; suelo entre medias
+	var mal := 0
+	for c in range(2, mapa.cols - 2):
+		if not (mapa.es_muro(c, Planta.AZOTEA_MURO_ARRIBA - 1) and not mapa.es_muro(c, Planta.AZOTEA_MURO_ARRIBA)
+				and not mapa.es_muro(c, mapa.filas - Planta.AZOTEA_MURO_ABAJO - 1) and mapa.es_muro(c, mapa.filas - Planta.AZOTEA_MURO_ABAJO)):
+			mal += 1
+	for f in range(Planta.AZOTEA_MURO_ARRIBA, mapa.filas - Planta.AZOTEA_MURO_ABAJO):
+		if not (mapa.es_muro(1, f) and not mapa.es_muro(2, f) and not mapa.es_muro(mapa.cols - 3, f) and mapa.es_muro(mapa.cols - 2, f)):
+			mal += 1
+	print("  muros por la barandilla: %d casillas mal (esperado: 0)" % mal)
+	# Johnny llega por la derecha, fuera de las líneas, y hay camino andando hasta el aro
 	var nav := mapa.get_world_2d().navigation_map
-	var abajo := Vector2(s.helipuerto.x, p.end.y + Planta.PLATAFORMA_ALTO + 50.0)
-	var camino := NavigationServer2D.map_get_path(nav, abajo, s.helipuerto, true)
-	var rampa := Planta.rampa(s)
-	var por_la_rampa := false   # (las esquinas del camino quedan fuera, a un radio de zombi: se mira cada tramo)
-	for i in camino.size() - 1:
-		for k in 11:
-			por_la_rampa = por_la_rampa or rampa.has_point(camino[i].lerp(camino[i + 1], k / 10.0))
-	print("  camino de abajo al centro: %d puntos | pasa por la rampa %s | llega %s" % [camino.size(), por_la_rampa,
-		not camino.is_empty() and camino[-1].distance_to(s.helipuerto) < 4.0])
-	# el jefe espera arriba: los golpes no le hacen nada
+	var llegada: Vector2 = mapa.puertas[0].llegada()
+	var camino := NavigationServer2D.map_get_path(nav, llegada, s.helipuerto, true)
+	print("  llegada %s: fuera de las líneas %s | camino hasta el aro %s (esperado: true, true)" % [llegada,
+		not mapa.en_plataforma(llegada, johnny.RADIO + 6.0), not camino.is_empty() and camino[-1].distance_to(s.helipuerto) < 4.0])
+	# el jefe espera en el aro: los golpes no le hacen nada
 	if jefa is Minijefe:
 		var vida_antes: int = jefa.vida
 		jefa.recibir_golpe(50, Vector2.RIGHT * 300.0)
-		print("  el jefe espera: %s | estado %s | en el helipuerto %s | un golpe le quita %d (esperado: 0)" % [jefa.esperando,
+		print("  el jefe espera: %s | estado %s | en el ring %s | un golpe le quita %d (esperado: 0)" % [jefa.esperando,
 			jefa.estado, mapa.en_plataforma(jefa.position), vida_antes - jefa.vida])
-	# Johnny sube por la rampa (ya sin valla: se queda abierta)
-	johnny.position = Vector2(Planta.rampa(s).end.x - 30.0, s.helipuerto.y)
+	# Johnny, en la pasarela (fuera de las líneas): el jefe sigue esperando
+	johnny.position = Vector2(p.end.x + 40.0, s.helipuerto.y)
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
-	print("  en la rampa: valla %s (esperado: ninguna)" % ("ninguna" if not "valla" in mapa else "puesta"))
+	print("  fuera de las líneas: el jefe espera %s (esperado: true)" % (jefa is Minijefe and jefa.esperando))
+	# y entra en ellas: empieza la pelea
 	johnny.position = Vector2(p.end.x - 60.0, s.helipuerto.y)
 	await get_tree().create_timer(0.5).timeout
 	camara.zoom = Vector2(0.8, 0.8)
 	camara.reset_smoothing()
-	Captura.foto("captura-azotea-valla.png")
+	Captura.foto("captura-azotea-ring.png")
 	camara.zoom = Vector2.ONE
-	var fuera := NavigationServer2D.map_get_path(nav, s.helipuerto, abajo, true)
-	print("  arriba: valla %s | el jefe espera %s | aviso: '%s' | se puede bajar andando %s (esperado: ninguna, false, true)" % [
-		"ninguna" if not "valla" in mapa else "puesta", jefa is Minijefe and jefa.esperando, aviso.text,
-		not fuera.is_empty() and fuera[-1].distance_to(abajo) < 4.0])
+	print("  dentro de las líneas: el jefe espera %s | aviso: '%s' (esperado: false)" % [jefa is Minijefe and jefa.esperando, aviso.text])
 
 
 # La azotea del centro comercial: Johnny llega por la escalera y sale el jefe (captura-azotea.png); la azotea entera,
@@ -1268,12 +1245,9 @@ func probar_azotea(acabar := false) -> void:
 	nueva_planta(Planta.PLANTAS)
 	await montar(0, puerta_de_llegada(), false)
 	var s: Dictionary = planta.sitios[0]
-	var tipos := {}
-	for m in s.muebles:
-		tipos[m.tipo] = tipos.get(m.tipo, 0) + 1
-	print("Azotea: %d x %d | aparatos %s | manchas %d | restos %d | jefe: %s (%s)" % [s.ancho, s.alto, tipos,
+	print("Azotea: %d x %d | manchas %d | restos %d | jefe: %s (%s)" % [s.ancho, s.alto,
 		s.manchas.size(), mapa.restos.size(), planta.jefe, planta.el_jefe])
-	johnny.position = mapa.puertas[0].llegada() - Vector2(60, 200)   # se aleja de la escalera (a la derecha, sin pisar la rampa): se cierra detrás
+	johnny.position = mapa.puertas[0].llegada() + Vector2(-10, 120)   # se aleja de la escalera por la pasarela, sin entrar en las líneas: se cierra detrás
 	await get_tree().create_timer(1.4).timeout
 	Captura.foto("captura-azotea.png")
 	print("  ha salido el jefe: %s | escalera de llegada %s | puertas %d (esperado: 1, sin escalera de incendios) | aviso: '%s'" % [

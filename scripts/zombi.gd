@@ -123,7 +123,6 @@ const BARRERA_MARGEN := 6.0               # lo que sobra de burbuja por encima d
 
 
 func _ready() -> void:
-	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	vida = vida_max
 	# su reventón de sangre (M49), preparado para que el primero no pare el juego un momento (solo una vez por color)
 	EfectoSuelo.precalentar(get_parent(), EfectoSuelo.SANGRE.get(get_meta("tipo", ""), "sangre"))

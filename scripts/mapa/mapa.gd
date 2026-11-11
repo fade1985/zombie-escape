@@ -57,7 +57,7 @@ const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
-const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la azotea (tools/azotea.py)
+const AZOTEA := preload("res://assets/sprites/azotea-gpt.png")   # la azotea entera, de GPT (tools/azotea_gpt.py)
 # El suelo y la pared de las habitaciones de un piso que no dependen de dónde caen (que cambia al voltear el piso):
 # "<uso>-<tipo>" -> [sufijo del suelo, sufijo de la pared] (suelo-<estilo><sufijo>, pared-<estilo><sufijo>; con "" en uno, ese
 # se sigue eligiendo según dónde cae). El dormitorio de matrimonio, siempre con el suelo gris azulado y el papel beige, con la
@@ -162,7 +162,7 @@ var expo_sprites: Array = []      # los zombis de la exposición, que van girand
 var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
 var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con oscuro alrededor (viviendas.gd)
-var al_aire := false              # con cajas, la azotea: el murete, gris oscuro y plano por los cuatro lados (arriba, en su cara)
+var al_aire := false              # la azotea: toda ella, la imagen de GPT (AZOTEA), con la barandilla; ni caras ni tapas
 var alzados := {}                 # con cajas, las casillas de la pantalla con tabique que sube (poner_tabiques): Vector2i -> true
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
@@ -178,7 +178,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	sitio = datos
 	add_to_group("mapa")
 	cajas = sitio.get("cajas", false)
-	al_aire = cajas and sitio.get("azotea", false)
+	al_aire = sitio.get("estilo", "") == "azotea"
 	cols = int(sitio.ancho / CASILLA)
 	filas = int(sitio.alto / CASILLA)
 	if sitio.has("dueno"):
@@ -190,11 +190,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			tapa = load("res://assets/sprites/tapa-%s.png" % PASILLOS[estilo].tapa)
 			if PASILLOS[estilo].alfombra:
 				alfombra = load("res://assets/sprites/alfombra-pasillo.png")
-		elif sitio.get("estilo", "") == "azotea":
-			# la azotea del centro comercial (tools/azotea.py): hormigón, y el murete con la ciudad de noche detrás
-			estilos[0] = {"suelo": load("res://assets/sprites/suelo-hormigon.png"),
-				"pared": load("res://assets/sprites/pared-azotea.png"), "techo": load("res://assets/sprites/techo-azotea.png")}
-			tapa = load("res://assets/sprites/tapa-azotea.png")
+		elif al_aire:
+			pass   # la azotea: su suelo, sus muros y su barandilla son la imagen de GPT (dibujar_fondo)
 		elif sitio.get("estilo", "") == "laboratorio":
 			# el laboratorio de la planta 40 de Torre Velaria: baldosas blancas y paneles de laboratorio
 			estilos[0] = {"suelo": load("res://assets/sprites/suelo-laboratorio.png"),
@@ -292,7 +289,6 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	poner_caras()
 	poner_puertas()
 	poner_muebles()
-	poner_helipuerto()
 	poner_apliques()
 	poner_escaparates()
 	poner_peligros()
@@ -434,6 +430,10 @@ func nombre_zona(zona: int) -> String:
 # que los atraviesa
 func dibujar_tapas(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
+	if al_aire:
+		# la azotea: los muros ya se ven en la imagen (la barandilla y la caseta); solo la franja de encima, oscura
+		lienzo.draw_rect(Rect2(-16, -48, cols * 16 + 32, 48), FUERA)
+		return
 	if cajas:
 		# la franja de encima del mapa y el muro que sobra, oscuros, como fuera del mapa; los tabiques, planos, vistos desde arriba, con
 		# su filo de luz y su contorno donde se acaban (donde no sigue tabique, ni plano ni de los que suben)
@@ -509,7 +509,10 @@ func dueno_en(c: int, f: int) -> int:
 # esquina del mapa, así que las baldosas casan aunque una habitación tenga forma de L.
 func dibujar_fondo(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
-	for f in filas:
+	if al_aire:
+		# la azotea entera, la imagen de GPT: el helipuerto, la barandilla, la caseta y la pasarela (planta.gd, azotea)
+		lienzo.draw_texture(AZOTEA, Vector2.ZERO)
+	for f in (0 if al_aire else filas):   # (la azotea ya tiene su suelo: la imagen)
 		var c := 0
 		while c < cols:
 			var muro := es_muro(c, f)
@@ -564,9 +567,6 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		if s.has("linea"):
 			var linea := Rect2(s.c0 * 16, s.linea / 2.0 - 1, s.ancho * 16, LINEA_TRASTERO.get_height())
 			lienzo.draw_texture_rect_region(LINEA_TRASTERO, linea, Rect2(linea.position.x, 0, linea.size.x, linea.size.y))
-	# el helipuerto de la azotea: la plataforma, con su cara y su rampa a la derecha (sus choques, poner_helipuerto)
-	if sitio.has("helipuerto"):
-		lienzo.draw_texture(HELIPUERTO, Planta.plataforma(sitio).position / 2.0)
 	# las manchas de sangre de la azotea: cada una gira de 90 en 90 grados y se voltea al azar
 	for m in sitio.get("manchas", []):
 		lienzo.draw_set_transform(m.pos, m.giro * PI / 2.0, Vector2(-2 if m.espejo else 2, 2))
@@ -578,57 +578,16 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		lienzo.draw_texture(t, -(t.get_size() / 2.0).floor())
 
 
-# Los choques del helipuerto de la azotea (planta.gd): a la plataforma solo se sube por la rampa. Chocan su borde, la
-# cara de delante, las barandillas de la rampa y la cara de la rampa (un triángulo, que crece hacia la plataforma), en
-# la capa Planta.CAPA_BORDE: paran a los que andan, no a las balas, porque es bajo. La navegación lo recorta (grupo
-# "obstaculos"), así que los zombis y el jefe también suben y bajan por la rampa. En lo alto de la rampa, la valla
-# (valla.gd) ya no se pone: la rampa se queda abierta
-func poner_helipuerto() -> void:
-	if not sitio.has("helipuerto"):
-		return
-	var p := Planta.plataforma(sitio)
-	var r := Planta.rampa(sitio)
-	var b := Planta.PLATAFORMA_BORDE
-	var alto := Planta.PLATAFORMA_ALTO
-	var bar := Planta.BARANDILLA
-	var cuerpo := StaticBody2D.new()
-	cuerpo.name = "Helipuerto"
-	cuerpo.collision_layer = Planta.CAPA_BORDE
-	cuerpo.collision_mask = 0
-	cuerpo.add_to_group("obstaculos")
-	add_child(cuerpo)
-	for caja in [Rect2(p.position.x, p.position.y, p.size.x, b),            # el borde de arriba
-			Rect2(p.position.x, p.position.y, b, p.size.y),                   # el de la izquierda
-			Rect2(p.position.x, p.end.y - b, p.size.x, b + alto),             # el de abajo, con la cara de delante
-			Rect2(p.end.x - b, p.position.y, b, r.position.y + bar - p.position.y),    # el de la derecha, encima
-			Rect2(p.end.x - b, r.end.y - bar, b, p.end.y - r.end.y + bar),             # y debajo de la rampa
-			Rect2(r.position.x, r.position.y, r.size.x, bar),                 # las barandillas de la rampa
-			Rect2(r.position.x, r.end.y - bar, r.size.x, bar)]:
-		var forma := CollisionShape2D.new()
-		var rect := RectangleShape2D.new()
-		rect.size = caja.size
-		forma.shape = rect
-		forma.position = caja.get_center()
-		cuerpo.add_child(forma)
-	var cara := CollisionShape2D.new()
-	var triangulo := ConvexPolygonShape2D.new()
-	triangulo.points = PackedVector2Array([Vector2(r.position.x, r.end.y), Vector2(r.end.x, r.end.y), Vector2(r.position.x, r.end.y + alto)])
-	cara.shape = triangulo
-	cuerpo.add_child(cara)
-	# (la valla de franjas rojas y blancas que cerraba la rampa durante la pelea ya no se pone: el dueño la quitó el
-	# 11 nov. La rampa se queda abierta y se puede bajar en mitad de la pelea)
-
-
-# Si un punto está encima del helipuerto, donde se puede estar (sin el borde). "margen": lo que tiene que quedar
-# hasta el borde (el radio de quien esté ahí)
+# Si un punto está dentro del ring del helipuerto (las líneas blancas de la azotea). "margen": lo que tiene que quedar
+# hasta las líneas (el radio de quien esté ahí)
 func en_plataforma(pos: Vector2, margen := 0.0) -> bool:
-	return sitio.has("helipuerto") and Planta.plataforma(sitio).grow(-Planta.PLATAFORMA_BORDE - margen).has_point(pos)
+	return sitio.has("helipuerto") and Planta.plataforma(sitio).grow(-margen).has_point(pos)
 
 
-# El punto de encima del helipuerto más cercano a "pos", con "margen" hasta el borde (los zombis que llama el jefe con
-# la valla cerrada: que salgan dentro del ring)
+# El punto del ring del helipuerto más cercano a "pos", con "margen" hasta las líneas (los zombis que llama el jefe
+# durante la pelea: que salgan dentro del ring)
 func a_la_plataforma(pos: Vector2, margen: float) -> Vector2:
-	var dentro := Planta.plataforma(sitio).grow(-Planta.PLATAFORMA_BORDE - margen)
+	var dentro := Planta.plataforma(sitio).grow(-margen)
 	return pos.clamp(dentro.position, dentro.end)
 
 
@@ -682,6 +641,8 @@ func poner_muros() -> void:
 
 # Una cara en cada tramo de muro que tiene suelo justo debajo, con el papel de la habitación de debajo
 func poner_caras() -> void:
+	if al_aire:
+		return   # la azotea: no tiene paredes, solo la barandilla (ya en la imagen)
 	for f in filas - 1:
 		var c := 0
 		while c < cols:
@@ -697,9 +658,9 @@ func poner_caras() -> void:
 			cara.ancho = (fin - c) * CASILLA
 			cara.pared = estilos[sala].pared
 			cara.techo = estilos[sala].techo
-			cara.moldura = not cajas or al_aire   # con cajas, encima va su tabique (en la azotea no: encima, el cielo)
+			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
-			if centro and sitio.get("estilo", "") != "azotea":   # (el murete es bajo: lo de encima es el cielo)
+			if centro:
 				cara.adornos = restos_de_pared(cara.ancho)
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
@@ -721,7 +682,7 @@ func poner_caras() -> void:
 		dintel.desde = PUERTA_BANO.DINTEL
 		dintel.pared = estilos[sala].pared
 		dintel.techo = estilos[sala].techo
-		dintel.moldura = not cajas or al_aire
+		dintel.moldura = not cajas
 		dintel.puede_tapar = true
 		cosas.add_child(dintel)
 		caras.get_or_add(sala, []).append(dintel)
@@ -771,8 +732,6 @@ func tabique_colgado(c: int, f: int) -> bool:
 # deciden los trozos de tabique que suben ("alzados", en casillas de la pantalla) y se ponen
 func poner_tabiques() -> void:
 	alzados.clear()
-	if al_aire:
-		return   # la azotea: el murete es bajo, ya se ve entero en su cara (lo de encima es el cielo); ninguno sube
 	var tramos := []   # [fila, primera columna, la de después de la última]
 	for f in filas:
 		var c := 0
@@ -1097,9 +1056,8 @@ func preparar_restos() -> void:
 	if libres.is_empty():
 		return
 	var azotea: bool = sitio.get("estilo", "") == "azotea"
-	if sitio.has("helipuerto"):   # en la azotea, nada encima del helipuerto
-		var huella := Planta.huella_helipuerto(sitio)
-		libres = libres.filter(func(c): return not huella.any(func(h): return h.grow(CASILLA).has_point((c + Vector2(0.5, 0.5)) * CASILLA)))
+	if sitio.has("helipuerto"):   # en la azotea, nada encima del aro ni de la H
+		libres = libres.filter(func(c): return ((c + Vector2(0.5, 0.5)) * CASILLA).distance_to(sitio.helipuerto) > Planta.AZOTEA_ARO_LIBRE)
 	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, RESTOS_AZOTEA_MAX if azotea else 24)
 	var lista: Array = RESTOS_AZOTEA if azotea else RESTOS_SUELO
 	for i in cuantos:

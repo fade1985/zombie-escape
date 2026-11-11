@@ -3050,8 +3050,8 @@ msgid "¡%s!  %s"
 msgstr "%s！  %s"
 
 #: scripts/partida.gd
-msgid "Te espera arriba, en el helipuerto: sube por la rampa"
-msgstr "首领在楼顶停机坪等着你：走坡道上去"
+msgid "Te espera en el helipuerto, dentro de las líneas blancas"
+msgstr "首领在停机坪的白线里面等着你"
 
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"

@@ -682,18 +682,20 @@ en una línea.
   sala de venta, 1 en los baños y 3 en las demás salas; de unos 9 por tienda a unos 27. Los cuenta `--zombis-tienda`.
   La sala de mantenimiento se ve como las viviendas ("cajas": vestuario, despacho y taller, cada uno en su caja de
   tabiques con oscuro alrededor), y también los dos edificios enteros: el pasillo de los Apartamentos, sus pisos, las
-  habitaciones de sus jefes y su azotea, y la galería del centro comercial, sus tiendas, las de sus minijefes y su azotea. La azotea, al aire libre, sin tabique que suba (`mapa.al_aire`): su murete, del mismo gris muy oscuro que
-  los tabiques (`TABIQUE.COLOR`) y plano, y arriba la ciudad en su cara, con el cielo encima. Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
+  habitaciones de sus jefes, y la galería del centro comercial, sus tiendas y las de sus minijefes. Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
   (`mapa.cara_de_caja`): encima de una puerta de lado entre dos estancias no sale cara, el tabique se ve plano.
   Por dónde se llega: solo la planta baja (el portal del edificio) tiene una puerta de llegada a la izquierda; en las
   demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo no
   tiene puerta a la izquierda; y la azotea (desde el 28 oct) tiene su puerta de llegada a la derecha, como la salida de
   incendios (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
-  La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la derecha, frente a la puerta de llegada: `plataforma()`,
-  `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
-  (`esperando` en `minijefe.gd`) y, al subir Johnny, empieza la pelea (`partida.mirar_ring`); sin valla: la rampa se queda abierta.
-  Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). Sus aparatos van siempre en el
-  mismo sitio (`APARATOS`, uno por edificio; ninguno cerca de la puerta, de la rampa ni del helipuerto: lo mira `--azotea`). No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
+  La azotea (la misma en el centro comercial y en los Apartamentos; desde el 11 nov) es entera una imagen de GPT
+  (`azotea-gpt.png`, de `tools/azotea_gpt.py`; `mapa.al_aire`: sin caras ni tapas, la imagen hace de suelo, muros y
+  barandilla): el helipuerto de hormigón verde a ras de suelo, con su aro amarillo y su H, las líneas blancas, la
+  barandilla de los cuatro lados, la caseta de arriba a la izquierda y la pasarela de la derecha, donde está la puerta de
+  llegada (`AZOTEA_ENTRADA`). Los muros siguen la barandilla (`AZOTEA_MURO_ARRIBA` 4 filas, `AZOTEA_MURO_ABAJO` 3, a los
+  lados 2). Sin aparatos. Lo de dentro de las líneas blancas (`PLATAFORMA`, `plataforma()`) es el ring del jefe final:
+  espera en el aro (`AZOTEA_ARO`; `esperando` en `minijefe.gd`) y, al entrar Johnny en las líneas, empieza la pelea
+  (`partida.mirar_ring`). No choca nada: se entra y se sale andando. No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` da cada tienda: desde la M77, todas fijas, dibujadas con letras en `Tienda.PLANOS` (la electrónica, con su
@@ -990,8 +992,8 @@ en una línea.
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
   `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
   nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (el colchón con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas, y la pared con chapa lagrimada y la línea amarilla de su pasillo), `guias_trasteros.py` (las guías de PixelLab de las cajas y la carretilla de ese pasillo y de la estantería y el colchón de sus habitaciones; ya no se usa: ahora salen de GPT con `muebles_gpt.py`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py` (el científico muerto de PixelLab; ya no se usa: pisaría el de GPT) y `cientifico_muerto_gpt.py` (el científico muerto de GPT, M14: lo reduce como los muebles y le separa la piel y el pelo en sus capas, que el juego pinta con los colores de cada página).
-- **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `suelo_salon.py` (el suelo de nogal del salón), `azotea.py` (ver
-  `FONDOS.md`).
+- **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `suelo_salon.py` (el suelo de nogal del salón), `azotea_gpt.py` (la azotea
+  entera, de GPT; ver `FONDOS.md`).
 - **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
   `hacer_casillas.py`, `recortes_bestiario.py`.
 - **El logo** (`assets/ui/logo.png`, «JOHNNY RUSH» grande y «ZOMBIE ESCAPE» pequeño debajo; lo ponen `menu_principal.gd` y el final de

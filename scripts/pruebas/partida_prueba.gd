@@ -57,7 +57,7 @@
 #                       en pleno vuelo y a punto de caer                                    [prueba_jefes_salas.gd]
 #   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
-#   --azotea            la azotea y su helipuerto elevado: la rampa (sin valla), el jefe esperando y el jefe final
+#   --azotea            la azotea (la imagen de GPT entera): los muros por la barandilla, el jefe esperando en el aro y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
 #   --cupula            la cúpula de cristal del científico jefe con balas de verdad: rebotan en su borde con su onda,
 #                       el daño se lo lleva ella y, rota, ya le dan a él                      [prueba_jefes.gd]

@@ -188,7 +188,6 @@ const CORROEN := ["veneno", "acido", "porqueria"]
 
 func _ready() -> void:
 	set_notify_transform(true)   # para saber cuándo le llevan de golpe a otro sitio (_notification)
-	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	efectos.animation_finished.connect(efectos.hide)
 	# (al empezar todavía no hay cámara: el fogonazo del arma que lleva se prepara un poco después)
 	get_tree().create_timer(0.5).timeout.connect(preparar_fogonazo)

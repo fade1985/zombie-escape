@@ -3054,8 +3054,8 @@ msgid "¡%s!  %s"
 msgstr "%s!  %s"
 
 #: scripts/partida.gd
-msgid "Te espera arriba, en el helipuerto: sube por la rampa"
-msgstr "Oben auf dem Landeplatz wird auf dich gewartet: Nimm die Rampe"
+msgid "Te espera en el helipuerto, dentro de las líneas blancas"
+msgstr "Auf dem Landeplatz wird auf dich gewartet, innerhalb der weißen Linien"
 
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"

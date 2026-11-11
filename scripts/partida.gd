@@ -580,7 +580,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			# en medio de la sala (la pelea empieza en el centro, nunca junto a una pared); en la azotea, en el helipuerto
 			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.centro_libre())
 			logros.jefe_sale(jefa)   # (empieza su pelea: Sin un rasguño y Visto y no visto)
-			# (en la azotea, espera arriba a que suba Johnny: mirar_ring)
+			# (en la azotea, espera en el aro a que Johnny entre en las líneas blancas: mirar_ring)
 			if sitio.has("helipuerto") and jefa is Minijefe:
 				jefa.esperando = true
 			# (en el laboratorio de la torre, la presidenta maneja la sala mientras dura la pelea: laboratorio.gd)
@@ -592,7 +592,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 				tutorial("jefes")
 				guia.jefe_presentado()
 			if sitio.has("helipuerto") and aqui == idx and jefa is Minijefe and jefa.esperando:
-				decir(Idioma.t("Te espera arriba, en el helipuerto: sube por la rampa"), 3.0)
+				decir(Idioma.t("Te espera en el helipuerto, dentro de las líneas blancas"), 3.0)
 
 
 # Johnny sale del mapa: se quita de la escena y, si no se guarda, se tira. Se apunta lo que hará falta al volver
@@ -921,9 +921,9 @@ func _physics_process(delta: float) -> void:
 		supervivientes.piso_limpio(aqui)
 
 
-# El helipuerto (la azotea): el jefe espera arriba (minijefe.gd, esperando) y, en cuanto Johnny sube por la rampa y pisa
-# la plataforma, empieza la pelea. Los acompañantes que se hayan quedado abajo suben con él. (Antes una valla cerraba la
-# rampa hasta que caía el jefe: el dueño la quitó el 11 nov; ahora se puede bajar en mitad de la pelea)
+# El helipuerto (la azotea): el jefe espera en el aro amarillo (minijefe.gd, esperando) y, en cuanto Johnny entra en
+# las líneas blancas (planta.gd, PLATAFORMA), empieza la pelea. Los acompañantes que se hayan quedado fuera entran con
+# él. (Era una plataforma elevada con su rampa: desde el 11 nov la azotea entera es la imagen de GPT, a ras de suelo)
 func mirar_ring(sitio: Dictionary) -> void:
 	if not sitio.has("helipuerto") or not jefa_salio:
 		return
