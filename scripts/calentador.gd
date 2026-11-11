@@ -11,6 +11,8 @@ const SHADERS := [
 	preload("res://escenas/personajes/destello.gdshader"),
 	preload("res://escenas/personajes/brillo.gdshader"),
 	preload("res://escenas/personajes/aviso.gdshader"),   # (las marcas de los ataques de los jefes)
+	preload("res://escenas/armas/liquido.gdshader"),      # (los charcos: charco.gd, pintar_liquido)
+	preload("res://escenas/armas/fuego_suelo.gdshader"),  # (el fuego del molotov y del aceite)
 ]
 
 static var hecho := false

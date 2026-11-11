@@ -205,6 +205,12 @@ en una línea.
   Los líquidos (veneno, ácido, vómito, lejía, agua, aceite y café; también el agua con corriente de Electrónica, `peligros/agua.gd`) se pintan
   igual, con `Charco.preparar_liquido` y `pintar_liquido`: cuadraditos de un píxel del dibujo (`GOTA`), contorno oscuro, bandas
   que se mecen, luz de arriba a la izquierda y un brillo en vetas; el agua, con anillos de ondas (`pintar_ondas`).
+  Los cuadraditos los pinta la tarjeta gráfica (11 nov): `Charco.hacer_dibujo` los guarda una vez en una textura (un texel por
+  cuadradito) que lleva un hijo `Sprite2D` del charco, y `escenas/armas/liquido.gdshader` hace con ella lo mismo que hacía el
+  código; cada vez solo se le pasan el tiempo (`t`) y lo que lleva hecho (`e`). El fuego del molotov y del aceite, igual, con
+  `fuego_suelo.gdshader` (sus llamas y ascuas las sigue pintando el charco). Los dos llevan el recorte de las paredes del
+  charco (`recorte.gdshaderinc`) y precisión alta (`highp`, para los móviles), y están en `calentador.gd`. Antes costaban
+  0,7 ms cada charco y 1,1 ms cada fuego cada vez que se pintaban; ahora, casi nada (`--charcos` lo mide: «Pintar charcos»).
   El fuego (molotov, el del aceite al arder y el de la cocina del restaurante, `peligros/fuego.gd`), el aceite hirviendo del cocinero y la porquería del Glotón (`peligros/porqueria.gd`,
   quieta: se pinta una vez) van con el mismo cuadradito y el mismo dibujo.
   El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y

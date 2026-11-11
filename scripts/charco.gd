@@ -433,54 +433,77 @@ static func preparar_liquido(lista: Array, r: float, ruido_liso: FastNoiseLite) 
 	return sitios
 
 
-# Pinta los cuadraditos: los de una fila seguidos y del mismo color, de un solo rectángulo. "e", lo que lleva hecho
-# el charco (los que aún no han llegado o ya se han secado no se pintan; el recién secado, un momento más oscuro)
+# Pinta los cuadraditos. Los pinta la tarjeta gráfica (escenas/armas/liquido.gdshader): la primera vez se guardan en
+# una textura (un texel por cuadradito) que lleva un hijo del nodo, detrás de lo que pinta él (burbujas, ondas...); las
+# demás, solo se le pasan "t" y "e". "e", lo que lleva hecho el charco (los que aún no han llegado o ya se han secado no
+# se pintan; el recién secado, un momento más oscuro). Si el nodo se recorta en las paredes (Recorte), el líquido también
+const SHADER_LIQUIDO := preload("res://escenas/armas/liquido.gdshader")
+const SHADER_FUEGO := preload("res://escenas/armas/fuego_suelo.gdshader")
 static var medido_us := 0   # las pruebas (--charcos): lo que tarda pintar_liquido en total, y cuántas veces
 static var medido_veces := 0
 
 
 static func pintar_liquido(n: CanvasItem, lista: Array, col: Dictionary, t: float, e: float) -> void:
 	var desde_us := Time.get_ticks_usec()
-	pintar_cuadraditos(n, lista, col, t, e)
+	var dibujo: Sprite2D = n.get_meta("liquido") if n.has_meta("liquido") else null
+	if dibujo == null:
+		dibujo = hacer_dibujo(n, lista, SHADER_LIQUIDO, func(c: Array) -> Array:
+			return [10.0 if c[7] else (c[5] if c[1] < 0.75 else c[5] + 20.0), c[6], c[2], c[3]])
+		for k in ["borde", "oscuro", "medio", "centro", "brillo"]:
+			dibujo.material.set_shader_parameter(k, col[k])
+		n.set_meta("liquido", dibujo)
+	dibujo.material.set_shader_parameter("t", t)
+	dibujo.material.set_shader_parameter("e", e)
 	medido_us += Time.get_ticks_usec() - desde_us
 	medido_veces += 1
 
 
-static func pintar_cuadraditos(n: CanvasItem, lista: Array, col: Dictionary, t: float, e: float) -> void:
-	var fila := -99999.0
-	var desde := Vector2.ZERO
-	var hasta := 0.0
-	var color_tira := Color.TRANSPARENT
+# El dibujo que pinta la tarjeta gráfica (liquido.gdshader o fuego_suelo.gdshader): un hijo de "n", detrás de lo que
+# pinta él, con una textura de un texel por cuadradito. "texel" da los cuatro números de cada uno (los lee el shader);
+# donde no hay ninguno, el tercero es 1e9 (no aparece nunca)
+static func hacer_dibujo(n: CanvasItem, lista: Array, shader: Shader, texel: Callable) -> Sprite2D:
+	var dibujo := Sprite2D.new()
+	dibujo.name = "Cuadraditos"   # no-tr (nombre de nodo)
+	if lista.is_empty():
+		dibujo.visible = false
+		n.add_child(dibujo)
+		return dibujo
+	var c0 := Vector2i(999999, 999999)
+	var c1 := Vector2i(-999999, -999999)
 	for c in lista:
-		if e < c[2] or e >= c[3] + 0.2:
-			continue
-		var p: Vector2 = c[0]
-		var color: Color
-		if e >= c[3]:
-			color = Color(col.borde, 0.6)
-		elif c[7]:
-			color = col.borde
-		else:
-			var d: float = c[5] + 0.05 * sin(t * 2.2 + c[6])
-			color = col.centro if d < 0.35 else col.medio if d < 0.62 else col.oscuro if d < 0.86 else col.borde
-			if c[1] < 0.75:
-				# el brillo en vetas: líneas casi horizontales que ondulan y se desplazan
-				var v := sin(p.y * 0.35 + sin(p.x * 0.06 + t * 0.7) * 2.2 + c[6] * 0.25) * sin(p.x * 0.045 - t * 0.5 + c[6] * 0.1)
-				if v > 0.86:
-					color = col.brillo
-				elif v > 0.74 and color != col.centro:
-					color = col.centro
-		if p.y == fila and p.x == hasta and color == color_tira:
-			hasta += GOTA
-			continue
-		if color_tira.a > 0.0:
-			n.draw_rect(Rect2(desde, Vector2(hasta - desde.x, GOTA)), color_tira)
-		fila = p.y
-		desde = p
-		hasta = p.x + GOTA
-		color_tira = color
-	if color_tira.a > 0.0:
-		n.draw_rect(Rect2(desde, Vector2(hasta - desde.x, GOTA)), color_tira)
+		var s := Vector2i((c[0] / GOTA).round())
+		c0 = Vector2i(mini(c0.x, s.x), mini(c0.y, s.y))
+		c1 = Vector2i(maxi(c1.x, s.x), maxi(c1.y, s.y))
+	var an := c1.x - c0.x + 1
+	var al := c1.y - c0.y + 1
+	var datos := PackedFloat32Array()
+	datos.resize(an * al * 4)
+	for i in an * al:
+		datos[i * 4 + 2] = 1.0e9   # (ahí no hay líquido)
+	for c in lista:
+		var s := Vector2i((c[0] / GOTA).round()) - c0
+		var i := (s.y * an + s.x) * 4
+		var v: Array = texel.call(c)
+		for k in 4:
+			datos[i + k] = minf(v[k], 1.0e9)
+	var imagen := Image.create_from_data(an, al, false, Image.FORMAT_RGBAF, datos.to_byte_array())
+	dibujo.texture = ImageTexture.create_from_image(imagen)
+	dibujo.centered = false
+	dibujo.scale = Vector2(GOTA, GOTA)
+	dibujo.offset = Vector2(c0)   # (en texels: con la escala, la esquina queda en c0 * GOTA y el nodo, en su sitio)
+	dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	dibujo.show_behind_parent = true
+	dibujo.light_mask = n.light_mask
+	var m := ShaderMaterial.new()
+	m.shader = shader
+	m.set_shader_parameter("esquina", Vector2(c0) * GOTA)
+	var recorte := n.material as ShaderMaterial
+	if recorte and recorte.shader == Recorte.SHADER:
+		m.set_shader_parameter("modo", recorte.get_shader_parameter("modo"))
+		Recorte.poner(m)
+	dibujo.material = m
+	n.add_child(dibujo)
+	return dibujo
 
 
 # Los anillos del agua: cada uno nace cerca del centro, crece y se apaga, a su ritmo. [centro, cada cuánto, desfase, tamaño]
@@ -670,29 +693,21 @@ func _draw() -> void:
 		pintar_burbujeo()
 		return
 	var e := vida_max - vida
-	var tira := [Vector2.ZERO, 0.0, Color.TRANSPARENT]   # [desde, hasta, color]
-	for c in celdas:
-		if e < c[2]:
-			continue
-		var color: Color
-		if e >= c[3]:
-			# ya apagado: brasa un momento y luego ceniza
-			color = Color("#6e1d12") if e - c[3] < BRASA else (Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6))
-		elif e - c[2] < FRENTE:
-			color = Llamas.FUEGO[0]   # el frente del fuego, recién prendido
-		else:
-			var d: float = c[1] + 0.12 * sin(t * 9.0 + c[4] * 7.0)   # el color tiembla un poco, por trozos
-			color = Llamas.FUEGO[1] if d < 0.3 else Llamas.FUEGO[2] if d < 0.55 else Llamas.FUEGO[3] if d < 0.8 else Llamas.FUEGO[4]
-			color.a = 0.9
-		var p: Vector2 = c[0]
-		if p.y == tira[0].y and p.x == tira[1] and color == tira[2]:
-			tira[1] += GOTA
-			continue
-		if tira[2].a > 0.0:
-			draw_rect(Rect2(tira[0], Vector2(tira[1] - tira[0].x, GOTA)), tira[2])
-		tira = [p, p.x + GOTA, color]
-	if tira[2].a > 0.0:
-		draw_rect(Rect2(tira[0], Vector2(tira[1] - tira[0].x, GOTA)), tira[2])
+	# los cuadraditos (prenden del centro hacia fuera, tiemblan, se apagan en brasa y quedan en ceniza), en la tarjeta
+	# gráfica (fuego_suelo.gdshader)
+	var desde_us := Time.get_ticks_usec()
+	var dibujo: Sprite2D = get_meta("liquido") if has_meta("liquido") else null
+	if dibujo == null:
+		dibujo = Charco.hacer_dibujo(self, celdas, SHADER_FUEGO, func(c: Array) -> Array: return [c[1], c[4], c[2], c[3]])
+		for i in 5:
+			dibujo.material.set_shader_parameter("fuego%d" % i, Llamas.FUEGO[i])
+		dibujo.material.set_shader_parameter("brasa", BRASA)
+		dibujo.material.set_shader_parameter("frente", FRENTE)
+		set_meta("liquido", dibujo)
+	dibujo.material.set_shader_parameter("t", t)
+	dibujo.material.set_shader_parameter("e", e)
+	medido_us += Time.get_ticks_usec() - desde_us
+	medido_veces += 1
 	# ascuas: píxeles sueltos que se encienden y se apagan (solo donde arde)
 	for i in ascuas.size():
 		var c: Array = ascuas[i]
