@@ -331,13 +331,42 @@ static func encontrada(s: Dictionary, id: String) -> bool:
 
 
 # La página que lleva el científico muerto de una planta: la primera del dosier del edificio que aún no se ha encontrado
-# ({} si ya están todas). Si no la coges, la lleva el de la planta siguiente; con cuatro plantas y cinco páginas hacen falta
-# dos partidas. (Ya no suelta ninguna el jefe.)
+# ({} si ya están todas). Si no la coges, la lleva el de la planta siguiente; cada página tiene su planta mínima y la 5
+# solo sale tras completar el edificio: pagina_de_planta. (Ya no suelta ninguna el jefe.)
 static func pendiente(s: Dictionary, edificio: String) -> Dictionary:
 	for p in dosier(edificio).paginas:
 		if not encontrada(s, p.id):
 			return p
 	return {}
+
+
+# La página que puede llevar el científico de la planta "num" (1 = la baja; la 5 es la azotea, sin científico), o {} si
+# en esa planta no sale ninguno. Es la primera que falta (pendiente), pero cada una tiene su planta mínima: la 1 sale en
+# cualquiera, la 2 desde la primera, la 3 desde la segunda y la 4 en la tercera. La 5 (la última) solo sale cuando ya se ha
+# completado el edificio (matado a su jefe de la azotea), y en una sola planta por partida, sorteada al empezar ("de_la_5")
+static func pagina_de_planta(s: Dictionary, edificio: String, num: int, de_la_5: int) -> Dictionary:
+	var p := pendiente(s, edificio)
+	if p.is_empty():
+		return {}
+	var i: int = dosier(edificio).paginas.find(p)
+	if i >= 4:
+		return p if num == de_la_5 and s.edificios.get(edificio, {}).get("completado", false) else {}
+	return p if num >= i + 1 else {}
+
+
+# Las noticias de ese edificio que la tele puede poner seguidas: todas las que aún no se han visto y cuya página ya se ha
+# encontrado, en orden (hasta la primera cuya página falta). Si cogiste páginas sin ver su tele, salen todas de golpe
+static func noticias_pendientes(edificio: String, s: Dictionary) -> Array:
+	var lista := []
+	var paginas: Array = dosier(edificio).paginas
+	var noticias := noticias_de(edificio)
+	for i in noticias.size():
+		if noticias[i].id in s.videos_vistos:
+			continue
+		if i >= paginas.size() or not encontrada(s, paginas[i].id):
+			break
+		lista.append(noticias[i])
+	return lista
 
 
 # El título de una página y quién la llevaba, en el idioma del jugador

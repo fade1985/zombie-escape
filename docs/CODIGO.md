@@ -626,16 +626,18 @@ en una línea.
   mueble y `sitio.tele = {"estado": "apagada"}`; `mapa.gd` le cuelga `tele_salon.gd` y su zona de uso). Al limpiar ese
   apartamento (`partida.encender_tele`) y si queda alguna noticia sin ver de ese edificio, se enciende («encendida»: pantalla
   en blanco, luz, «!» encima). Con el clic delante (`partida.abrir_tele`) sale `menus.noticia` con el juego parado: la primera
-  noticia del edificio (`Historia.noticias_de`, en su orden) que no está en `videos_vistos` del guardado (`Historia.siguiente_noticia`),
-  vista seguida (`Tele.continuo`), solo la pantalla de la tele grande con los subtítulos debajo. Si se ve entera, la tele se apaga para siempre («vista») y la noticia queda en `videos_vistos`;
-  si se cierra antes (Apagar o Esc), sigue encendida. Cada ranura de guardado lleva sus vistas. **VIDEOS.EXE**
+  todas las noticias del edificio que no están en `videos_vistos` y cuya página ya se tiene, **seguidas** (`Historia.noticias_pendientes`,
+  `partida.poner_noticia`; así se pone al día quien cogió páginas sin ver su tele), cada una vista seguida (`Tele.continuo`), solo la pantalla de la tele grande con los subtítulos debajo. Cada una vista entera queda en `videos_vistos`; al acabar la última, la tele se apaga para siempre («vista»);
+  si se cierra antes (Apagar o Esc), sigue encendida con las que falten. Cada ranura de guardado lleva sus vistas. **VIDEOS.EXE**
   (`programa_videos`, en el ordenador): pestañas por edificio como el Dosier y «Vídeo 1, 2…» (los no vistos, apagados), y el vídeo en
   un reproductor multimedia de los 90 (`reproductor.gd`: pausa, parar, anterior, siguiente y contador; barra y volumen de adorno). Se prueba con `--noticias`.
   **Ligado al dosier:** ya no suelta páginas ningún jefe. Cada planta tiene su muerto con una página (`planta.cientifico`) y
-  lleva la **primera que te falte** del edificio (`Historia.pendiente`; si no la coges, la lleva el de la planta siguiente: cinco
-  páginas y cuatro plantas, dos partidas). La noticia N se hace con la página N: la tele solo se enciende si has cogido
-  la página de esa planta (`partida.tele_con_pagina`; o si ya no queda ninguna por coger) y `Historia.siguiente_noticia` pide
-  que esté encontrada la página de la noticia. Al coger la página con el apartamento de la tele ya limpio, se enciende al momento.
+  lleva la **primera que te falte** del edificio (`Historia.pendiente`; si no la coges, la lleva el de la planta siguiente),
+  pero cada página tiene su planta mínima (`Historia.pagina_de_planta`, `partida.pagina_aqui`): la 1 en cualquiera, la 2 desde la
+  primera, la 3 desde la segunda, la 4 en la tercera; si la que toca aún no sale en esa planta, allí no hay muerto. La 5 solo
+  sale con el edificio completado, y en una sola planta por partida (`partida.planta_pagina5`, sorteada al empezar). La noticia N
+  se hace con la página N: la tele solo se enciende si has cogido la página de esa planta (`partida.tele_con_pagina`; o si en esa
+  planta no hay página que coger) y queda alguna noticia cuya página ya tienes. Se prueba con `--dosier-plantas`. Al coger la página con el apartamento de la tele ya limpio, se enciende al momento.
 - `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,

@@ -161,6 +161,8 @@
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
 #   --tele-detras       la tele del salón se usa por delante, por detrás y por los lados, pero no desde el otro lado de la pared [prueba_larga.gd]
 #   --noticias          la tele del salón con la noticia (se enciende al limpiar, se usa con el clic) y VIDEOS.EXE con su reproductor [prueba_larga.gd]
+#   --dosier-plantas    en qué plantas sale cada página del dosier (la 5, tras completar el edificio) y la tele que pone
+#                       seguidas las noticias que faltan                                [prueba_larga.gd]
 #   --coleccion         el programa Colecciones del ordenador (los sujetos): las pestañas, las páginas, la ficha
 #                       grande bajo el foco, las siluetas y los matados de cada zombi      [prueba_larga.gd]
 #   --novedades         los avisos de lo nuevo: el «!» de la mesa del ordenador, de la taquilla y de los iconos, y el
@@ -629,6 +631,10 @@ func empezar_prueba() -> void:
 	elif "--noticias" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_noticias()
+		get_tree().quit()
+	elif "--dosier-plantas" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_dosier_plantas()
 		get_tree().quit()
 	elif "--coleccion" in args:
 		set_process(false)   # sin la prueba larga

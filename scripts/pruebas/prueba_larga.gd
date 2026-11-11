@@ -1112,6 +1112,86 @@ func probar_noticias() -> void:
 		g.paginas = antes.paginas)
 
 
+# Con "--captura --dosier-plantas" (bloque I): en qué plantas puede salir cada página del dosier en los tres edificios (la
+# 2 desde la primera, la 3 desde la segunda, la 4 en la tercera; la 5 solo con el edificio completado y en la planta
+# sorteada), la tele que se enciende en una planta sin científico y la tele que pone seguidas todas las noticias que
+# faltan (captura-dosier-plantas-tele.png, con la segunda). El guardado de prueba vuelve a quedar como estaba
+func probar_dosier_plantas() -> void:
+	var antes := Guardado.cargar().duplicate(true)
+	# 1. Las plantas de cada página: «plantas donde sale» con las k primeras ya encontradas
+	for ed_id in ["apartamentos", "centro", "torre"]:
+		var paginas: Array = Historia.dosier(ed_id).paginas
+		for completado in [false, true]:
+			var linea := ""
+			for k in paginas.size():
+				var s: Dictionary = Guardado.NUEVO.duplicate(true)
+				s.paginas = paginas.slice(0, k).map(func(p): return p.id)
+				s.edificios[ed_id] = {"completado": completado}
+				var donde := []
+				for num in range(1, 5):   # (la 5 es la azotea: sin científico)
+					if Historia.pagina_de_planta(s, ed_id, num, 3).get("id", "") == paginas[k].id:
+						donde.append(num)
+				linea += " p%d%s" % [k + 1, donde]
+			print("Dosier · %s, completado %s:%s" % [ed_id, completado, linea])
+	print("Dosier · esperado sin completar: p1[1,2,3,4] p2[2,3,4] p3[3,4] p4[4] p5[]; completado: igual pero p5[3]")
+	# 2. Una tele en una planta sin científico (su página aún no sale aquí) se enciende con las noticias pendientes
+	var pags: Array = Historia.dosier(edificio).paginas
+	Guardado.cambiar(func(g):
+		g.paginas = pags.slice(0, 3).map(func(p): return p.id)
+		g.videos_vistos = [])
+	planta.cientifico.cogida = false
+	var num_antes: int = planta.num
+	planta.num = 1
+	print("Tele · planta baja con la página 4 pendiente: hay página aquí %s, tele puede encenderse %s (esperado: false, true)" % [
+		not pagina_aqui().is_empty(), tele_con_pagina()])
+	planta.num = 4
+	print("Tele · tercera planta con la página 4 sin coger: hay página aquí %s, tele puede encenderse %s (esperado: true, false)" % [
+		not pagina_aqui().is_empty(), tele_con_pagina()])
+	planta.num = 1
+	# 3. Con las páginas 1 a 3 y ninguna noticia vista: la tele pone las tres seguidas
+	var donde := -1
+	for j in planta.sitios.size():
+		if planta.sitios[j].has("tele"):
+			donde = j
+			planta.sitios[j].tele.estado = "apagada"
+	if donde < 0:
+		Captura.fallar("esta planta no tiene tele")
+		return
+	await montar(donde, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var sitio: Dictionary = planta.sitios[donde]
+	var tele: Node2D = mapa.tele_salon
+	johnny.position = tele.get_parent().position + Vector2(46, 50)
+	johnny.get_node("Camara").reset_smoothing()
+	luz.alternar()
+	await get_tree().create_timer(0.8).timeout
+	print("Tele · limpio, sin científico en la planta: %s (esperado: encendida)" % sitio.tele.estado)
+	tele.zona.abrir()
+	await get_tree().create_timer(0.5).timeout
+	var puestas := []
+	var hecho := 0.0
+	while menus.abierto == "noticia" and hecho < 200.0:
+		var vista: Tele = menus.find_children("*", "Tele", true, false)[0]
+		if puestas.is_empty() or puestas[-1] != vista.noticia.id:
+			puestas.append(vista.noticia.id)
+			if puestas.size() == 2:
+				await get_tree().create_timer(1.5).timeout
+				Captura.foto("captura-dosier-plantas-tele.png")
+		if vista.hablando():
+			vista.saltar()
+		await get_tree().create_timer(0.4).timeout
+		hecho += 0.4
+	await get_tree().create_timer(0.3).timeout
+	print("Tele · noticias seguidas: %s (esperado: %s)" % [puestas, Historia.noticias_de(edificio).slice(0, 3).map(func(n): return n.id)])
+	print("Tele · al acabar: %s, vistas %d, juego parado %s (esperado: vista, 3, false)" % [sitio.tele.estado,
+		Guardado.cargar().videos_vistos.size(), get_tree().paused])
+	planta.num = num_antes
+	Guardado.cambiar(func(g):
+		g.videos_vistos = antes.videos_vistos
+		g.paginas = antes.paginas)
+
+
 # Con "--captura --historia-torre": la historia de Torre Velaria (parte 8 del plan). Las cinco hojas del dosier
 # (captura-torre-hoja-N.png); el Dosier del ordenador con la 1 y la 4 encontradas y las demás arrancadas, que dicen
 # dónde buscarlas (vestíbulo, planta 10...; captura-torre-dosier-*.png); cada noticia de la torre en la tele, delante de

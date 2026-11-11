@@ -57,7 +57,7 @@ var camaras := false        # el técnico ya está rescatado: se ven los zombis
 var plano := Image.new()
 var plano_textura: ImageTexture
 var plano_firma := ""
-var hay_pagina := false    # si queda alguna página del dosier por encontrar (se mira cada segundo: leer el guardado cuesta)
+var hay_pagina := false    # si en esta planta hay una página del dosier que coger (se mira cada segundo: leer el guardado cuesta)
 var pagina_t := 0.0
 static var VISIBLE := {}    # lo que se ve de cada icono (sin el hueco de alrededor), medido una vez
 
@@ -82,7 +82,7 @@ func _process(delta: float) -> void:
 	pagina_t -= delta
 	if pagina_t <= 0.0 and partida:
 		pagina_t = 1.0
-		hay_pagina = not Historia.pendiente(Guardado.cargar(), partida.edificio).is_empty()
+		hay_pagina = not partida.pagina_aqui().is_empty()
 	queue_redraw()
 
 

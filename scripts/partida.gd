@@ -139,6 +139,7 @@ var edificio: String = Edificios.elegido
 var ed: Dictionary = Edificios.datos(edificio)
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
 var orden_jefes: Array = []   # el minijefe de cada planta, sorteado al empezar (edificios.gd)
+var planta_pagina5 := 1       # la planta (1 a 4) donde puede salir la página 5 del dosier en esta partida (pagina_aqui)
 var sala_mantenimiento := {}  # la sala de mantenimiento de la planta baja, para bajar a ella en el ascensor
 var sala_viviendas := {}      # y las viviendas de los rescatados, detrás de su puerta de la derecha (viviendas.gd)
 var captura := false       # si es la partida de prueba (la pone pruebas/partida_prueba.gd)
@@ -315,6 +316,7 @@ func _ready() -> void:
 	# los minijefes, uno por planta en orden al azar (sin repetir)
 	orden_jefes = ed.get("minijefes", []).duplicate()
 	orden_jefes.shuffle()
+	planta_pagina5 = randi_range(1, Planta.PLANTAS - 1)   # (la 5, si ya toca, en una sola planta al azar)
 	if captura:
 		ordenar_jefes_prueba()   # el jefe que se quiere ver, en la 1ª planta
 	if guarda_partida:
@@ -944,7 +946,7 @@ func poner_cientifico(idx: int) -> void:
 	if c.is_empty() or c.sitio != idx:
 		return
 	# la primera página que te falte (si ya la has cogido en esta planta, la que cogiste)
-	var pagina: Dictionary = c.pagina if c.cogida else Historia.pendiente(Guardado.cargar(), edificio)
+	var pagina: Dictionary = c.pagina if c.cogida else pagina_aqui()
 	if pagina.is_empty():
 		return
 	var cuerpo := CIENTIFICO.new()
@@ -1054,7 +1056,7 @@ func leer_pagina(p: Dictionary) -> void:
 func encender_tele(_sitio := {}) -> void:
 	for otro in planta.sitios:
 		if otro.has("tele") and otro.limpio and otro.tele.estado == "apagada" and tele_con_pagina() \
-				and not Historia.siguiente_noticia(edificio, Guardado.cargar()).is_empty():
+				and not Historia.noticias_pendientes(edificio, Guardado.cargar()).is_empty():
 			otro.tele.estado = "encendida"
 			Sonido.tocar("compra")
 			if mapa.tele_salon and mapa.sitio == otro:
@@ -1062,25 +1064,42 @@ func encender_tele(_sitio := {}) -> void:
 
 
 # La noticia se hace con la documentación que Johnny le pasa a la periodista: la tele de la planta solo se enciende si en
-# esta planta ya has cogido la página del dosier del muerto (o si ya las tienes todas, y no queda ninguna que pasarle)
+# esta planta ya has cogido la página del dosier del muerto (o si en esta planta no hay ninguna que coger: así las noticias
+# de páginas ya cogidas no se quedan sin ver)
 func tele_con_pagina() -> bool:
-	return planta.get("cientifico", {}).get("cogida", false) or Historia.pendiente(Guardado.cargar(), edificio).is_empty()
+	return planta.get("cientifico", {}).get("cogida", false) or pagina_aqui().is_empty()
 
 
-# Con la tele del salón encendida y el clic delante de ella: sale la primera noticia de este edificio que aún no has visto,
-# con el juego parado. Si la ves entera, se apaga para siempre y queda en VIDEOS.EXE del ordenador; si la cierras antes,
-# sigue encendida
+# La página que lleva el científico de esta planta, o {} si aquí no sale (Historia.pagina_de_planta: cada página tiene su
+# planta mínima y la 5 solo sale tras completar el edificio, en la planta sorteada al empezar)
+func pagina_aqui() -> Dictionary:
+	if planta.get("cientifico", {}).is_empty():
+		return {}
+	return Historia.pagina_de_planta(Guardado.cargar(), edificio, planta.num, planta_pagina5)
+
+
+# Con la tele del salón encendida y el clic delante de ella: salen seguidas, con el juego parado, todas las noticias de este
+# edificio que aún no has visto y cuya página ya tienes (si cogiste páginas sin ver su tele, se ponen al día). Cada una
+# vista entera queda en VIDEOS.EXE del ordenador; al acabar la última, la tele se apaga para siempre. Si la cierras antes,
+# sigue encendida con las que falten
 func abrir_tele() -> void:
-	var n := Historia.siguiente_noticia(edificio, Guardado.cargar())
 	var tele: Node2D = mapa.tele_salon
-	if n.is_empty() or terminada or tele == null:
+	if Historia.noticias_pendientes(edificio, Guardado.cargar()).is_empty() or terminada or tele == null:
 		return
 	get_tree().paused = true
+	poner_noticia(tele)
+
+
+func poner_noticia(tele: Node2D) -> void:
+	var n: Dictionary = Historia.noticias_pendientes(edificio, Guardado.cargar())[0]
 	menus.noticia(n, func(entera: bool):
-		get_tree().paused = false
 		if entera:
 			Historia.ver_noticia(n.id)
-			tele.apagar())   # (sin frase al acabar: ya lo explica el ordenador)
+			if not Historia.noticias_pendientes(edificio, Guardado.cargar()).is_empty():
+				poner_noticia(tele)   # (la siguiente, sin soltar la pausa)
+				return
+			tele.apagar()   # (sin frase al acabar: ya lo explica el ordenador)
+		get_tree().paused = false)
 
 
 # Un grito grande encima de Johnny, como el de «¡¡¡LA LLAVE!!!», para lo que no hay que perderse (lo nuevo en el ordenador,
