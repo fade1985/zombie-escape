@@ -352,7 +352,7 @@
 #   --brillo            el «Brillo» de Opciones → General: el botón (de 0 a 100 de 10 en 10, flechas y vuelta), que se
 #                       guarda, y lo clara que sale la pantalla a 0, 50 y 100 (fotos)       [prueba_varias.gd]
 #   --grunido           el gruñido al pulsar los botones de los menús: suena, no se amontona, las casillas del
-#                       inventario no; guarda 2 de cada estilo en tools/efectos/grunido-*.wav [prueba_varias.gd]
+#                       inventario no; los 6 gruñidos de assets/sonidos/   [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
