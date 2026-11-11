@@ -4540,36 +4540,6 @@ func probar_brillo() -> void:
 	get_tree().quit()
 
 
-# --grunido: el gruñido de los botones de los menús (botones.gd y Sonido.grunir). Un botón cualquiera gruñe al pulsarlo,
-# pulsado otra vez enseguida no (GRUNIDO_HUECO), y una casilla del inventario (marca "sin_grunido") nunca. Y el gruñido
-# (assets/sonidos/grunido.ogg): su largo, sin repetirse en bucle
-func probar_grunido() -> void:
-	await get_tree().create_timer(0.5, true).timeout
-	var b := Button.new()
-	b.text = "Prueba"
-	add_child(b)
-	var antes := Sonido.ultimo_grunido
-	b.pressed.emit()
-	var primero := Sonido.ultimo_grunido != antes
-	antes = Sonido.ultimo_grunido
-	b.pressed.emit()
-	var seguido := Sonido.ultimo_grunido != antes
-	await get_tree().create_timer(0.3, true).timeout
-	var casilla := Button.new()
-	casilla.set_meta("sin_grunido", true)
-	add_child(casilla)
-	antes = Sonido.ultimo_grunido
-	casilla.pressed.emit()
-	var en_casilla := Sonido.ultimo_grunido != antes
-	print("Gruñido · al pulsar: %s, otra vez enseguida: %s, en una casilla del inventario: %s (esperado: true, false, false)" % [
-		primero, seguido, en_casilla])
-	b.queue_free()
-	casilla.queue_free()
-	print("Gruñido · dura %.2f s, en bucle %s (esperado: 0.74 s, false)" % [Sonido.GRUNIDO.get_length(), Sonido.GRUNIDO.get("loop")])
-	print("Gruñido · el reproductor suena con él: %s (esperado: true)" % (Sonido.voz_grunido != null and Sonido.voz_grunido.stream == Sonido.GRUNIDO))
-	get_tree().quit()
-
-
 # --contacto: «Contáctanos» de Opciones → General (contacto.gd). La página vacía y con un mensaje, que no deja pasar de
 # MAX_LETRAS, que sin escribir nada no se manda, que solo va el texto (sin datos técnicos) y el envío: sin más, no sale nada del ordenador (dice lo que mandaría); con --contacto-url URL se
 # manda de verdad allí (para probarlo contra un servidor de prueba). Esc vuelve a General, al botón Contáctanos.

@@ -81,6 +81,7 @@ func _ready() -> void:
 		columna.add_child(donde)
 	# JUGAR abre «Elige partida» (huecos.gd, desde el 8 nov): la que esté a medias se sigue y las demás pasan a «Elige edificio»
 	var jugar := boton(columna, Idioma.t("JUGAR"), abrir_huecos, "BotonGrande")
+	jugar.pressed.connect(Sonido.grunir)   # el gruñido de zombi: solo aquí (11 nov, a petición del dueño)
 	# Opciones (con el Tutorial y la pantalla completa dentro) y Salir, grandes como JUGAR
 	var opciones := boton(columna, Idioma.t("Opciones"), func(): pass, "BotonGrande")
 	opciones.pressed.connect(func():
@@ -109,6 +110,10 @@ func _ready() -> void:
 		Captura.foto("captura-menu.png")
 		if "--mando" in OS.get_cmdline_user_args():   # A y B del mando en este menú; luego sigue a la partida, que hace el resto (pruebas/prueba_mando.gd)
 			await PruebaMando.menu_principal(self)
+		if "--grunido" in OS.get_cmdline_user_args():   # el gruñido de JUGAR (pruebas/prueba_grunido.gd)
+			PruebaGrunido.probar(self)
+			get_tree().quit()
+			return
 		if "--aviso" in OS.get_cmdline_user_args():   # el aviso de fotosensibilidad (pruebas/prueba_aviso.gd)
 			await PruebaAviso.probar(self)
 			get_tree().quit()

@@ -412,7 +412,6 @@ func casilla_inv(r: Rect2, clave := "", icono := "", cuenta := "", color := GRIS
 		var b := Button.new()
 		b.name = clave
 		b.set_meta("borde", color)
-		b.set_meta("sin_grunido", true)   # (las casillas no gruñen al pulsarlas: botones.gd)
 		b.pressed.connect(tocar.bind(clave))
 		b.focus_entered.connect(seguir_marca.bind(clave, b))
 		b.set_drag_forwarding(levantar.bind(clave, b), Callable(), Callable())

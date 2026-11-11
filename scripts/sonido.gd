@@ -279,11 +279,11 @@ func tocar(nombre: String) -> void:
 	v.play()
 
 
-# El gruñido de los botones de los menús (botones.gd lo pide al pulsar cualquiera): un gruñido de zombi de PixelLab
+# El gruñido de zombi del botón JUGAR del menú principal (menu_principal.gd; solo ese, a petición del dueño): de PixelLab
 # (11 nov: los hechos con código sonaban a perro, a pájaro y a helicóptero). De seis tomas, el dueño eligió la primera, al
 # doble de velocidad sin cambiarle el tono (ffmpeg atempo=2: 0,74 s), en mono, a -20 LUFS y con el final suave; el original,
-# en tools/efectos/pixellab/grunido-1.wav (fuera de git). Va por su propio reproductor: si se pulsa otro botón mientras
-# suena, empieza otra vez (si no, se amontonarían); y no más de uno cada GRUNIDO_HUECO ms
+# en tools/efectos/pixellab/grunido-1.wav (fuera de git). Va por su propio reproductor: si se pulsa otra vez mientras
+# suena, empieza de nuevo (si no, se amontonarían); y no más de uno cada GRUNIDO_HUECO ms
 const GRUNIDO: AudioStream = preload("res://assets/sonidos/grunido.ogg")
 const GRUNIDO_HUECO := 150
 var voz_grunido: AudioStreamPlayer

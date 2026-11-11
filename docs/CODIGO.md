@@ -523,7 +523,7 @@ en una línea.
 - `formas.gd` (`Formas`): `disco`, `arco`, `poligono` y `polilinea`, lo mismo que `draw_circle`, `draw_arc`, `draw_colored_polygon` y
   `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
   Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
-- `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar los botones de los menús, `grunir`:
+- `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar JUGAR en el menú principal (solo ahí), `grunir`:
   `assets/sonidos/grunido.ogg` (`GRUNIDO`, de PixelLab, al doble de velocidad: los hechos con código sonaban a perro y a
   helicóptero), por su propio reproductor (si se pulsa otra vez, empieza de nuevo); cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
@@ -560,8 +560,7 @@ en una línea.
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
-  (autoload: el saltito de los botones y el gruñido al pulsarlos, `Sonido.grunir`; no gruñen los que llevan la marca
-  `sin_grunido`, las casillas del inventario; se prueba con `--grunido`), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
+  (autoload: el saltito de los botones), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
   `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
 - `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
@@ -804,6 +803,8 @@ en una línea.
   edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
 - `prueba_aviso.gd` (`PruebaAviso`, fuera de la cadena: la lanza el menú con `--aviso`): el aviso de fotosensibilidad sale,
   no se quita sin querer ni pulsa el botón de detrás, se quita pasado el rato y no vuelve a salir.
+- `prueba_grunido.gd` (`PruebaGrunido`, fuera de la cadena: la lanza el menú con `--grunido`): el gruñido suena al pulsar
+  JUGAR y no con otro botón, no se amontona y no va en bucle.
 - `prueba_huecos.gd` (`PruebaHuecos`, fuera de la cadena: la lanza el menú con `--huecos`): con sus propios archivos,
   el guardado viejo pasa al hueco 1, cambiar de hueco no cambia los ajustes, la pantalla «Elige partida» y borrar un hueco.
 - `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú
@@ -823,7 +824,7 @@ en una línea.
   accionistas» (Torre Velaria), con `-base.ogg` y `-ritmo.ogg`. Épicas menos la de las hordas y la del menú; las capas
   que suenan a la vez (`CANCIONES`, `MOMENTOS` y `EXPLORAR` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
   (ver `docs/WEB.md`).
-- `sonidos/`: el gruñido de zombi de los botones de los menús (`grunido.ogg`, de PixelLab, ver
+- `sonidos/`: el gruñido de zombi del botón JUGAR (`grunido.ogg`, de PixelLab, ver
   `pixellab.json` «grunidos-botones»; los demás efectos se sintetizan en `sonido.gd`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
   25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
