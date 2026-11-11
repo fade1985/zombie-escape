@@ -14,11 +14,7 @@
 extends Node2D
 
 const CASILLA := 32
-const CELDA := 4.0
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
-const AGUA := Color(0.18, 0.36, 0.52, 0.76)
-const HONDA := Color(0.13, 0.28, 0.44, 0.8)
-const ORILLA := Color(0.5, 0.68, 0.82, 0.7)
 const RAYO := Color("#9fe8ff")
 const CABLE := Color("#16171b")
 const COBRE := Color("#d9873f")
@@ -39,6 +35,9 @@ var punta: Vector2           # la punta pelada del cable
 var t := 0.0
 var pulso := 0.0
 var destello := 0.0
+var textura: ImageTexture   # el dibujo del charco (hacer_textura)
+var pixeles: Image
+var esquina: Vector2        # dónde empieza la imagen
 
 
 func montar(d: Dictionary, m: Node) -> void:
@@ -224,34 +223,16 @@ func rayo_hasta(meta: Vector2i) -> Array:
 
 # ── Dibujos ──
 
-# El charco, de una vez: por dentro más hondo, el borde recortado a cuadraditos y una orilla clara
+# El charco, de una vez, con el aspecto de los charcos de agua de los aspersores (el dibujo objeto-charco-lejia.png
+# teñido de azul, charco.gd): contorno negro, orilla azul oscura (más gruesa por abajo), el interior azul claro con
+# alguna mancha y gotitas sueltas alrededor. Como este es grande y con forma de casillas, se calcula píxel a píxel
+# (uno del dibujo = 2 unidades) en una imagen que se pinta entera; el borde se redondea y ondula con algo de ruido
 func dibujar_charco() -> void:
-	for c in datos.casillas:
-		var o := Vector2(c) * CASILLA
-		var fin := []
-		for d in Peligros.LADOS:
-			fin.append(not mojado.has(c + d))
-		if not fin.has(true):
-			# las de dentro, de un tirón (más oscuras: más hondo)
-			var lleno := 0
-			for dx in [-1, 0, 1]:
-				for dy in [-1, 0, 1]:
-					lleno += 1 if mojado.has(c + Vector2i(dx, dy)) else 0
-			charco.draw_rect(Rect2(o, Vector2(CASILLA, CASILLA)), HONDA if lleno == 9 else AGUA)
-			continue
-		var r := RandomNumberGenerator.new()
-		r.seed = hash(c) + 7
-		for i in 64:
-			var p := Vector2(i % 8, i / 8) * CELDA
-			var hondo := 99.0
-			if fin[0]: hondo = minf(hondo, p.x)
-			if fin[1]: hondo = minf(hondo, CASILLA - CELDA - p.x)
-			if fin[2]: hondo = minf(hondo, p.y)
-			if fin[3]: hondo = minf(hondo, CASILLA - CELDA - p.y)
-			var n := r.randf()
-			if hondo + n * 12.0 < 6.0:
-				continue
-			charco.draw_rect(Rect2(o + p, Vector2(CELDA, CELDA)), ORILLA if hondo + n * 12.0 < 10.0 else AGUA)
+	if textura == null:
+		hacer_textura()
+	charco.draw_set_transform(esquina, 0.0, Vector2(2, 2))
+	charco.draw_texture(textura, Vector2.ZERO)
+	charco.draw_set_transform(Vector2.ZERO)
 	# el cable por el suelo, desde el pie de la pared hasta el agua, con una curva
 	var desde: Vector2 = datos.cable_desde + Vector2(0, 4)
 	var lado := Vector2(punta - desde).orthogonal().normalized() * (18.0 if hash(datos.cable) % 2 else -18.0)
@@ -273,6 +254,160 @@ func dibujar_charco() -> void:
 		charco.draw_line(punta, punta + h, COBRE, 2.0)
 
 
+# Los colores: los del dibujo de los charcos de agua (objeto-charco-lejia.png con su tinte azul)
+const PIX_BORDE := Color("#030406")
+const PIX_ORILLA := [Color("#2e609d"), Color("#3265a5")]
+const PIX_MEDIO := Color("#4474af")
+const PIX_DENTRO := [Color("#7dbbf3"), Color("#7ab6f0"), Color("#7fbdf4")]
+const PIX_MANCHA := [Color("#71ace7"), Color("#5083bd")]
+
+# La imagen del charco: cada casilla son 16x16 píxeles del dibujo. "lejos" es, para cada píxel mojado, a cuántos
+# píxeles está del suelo seco; el agua llega hasta donde "lejos" pasa de un umbral que ondula (el borde redondo)
+func hacer_textura() -> void:
+	var c0 := Vector2i(999999, 999999)
+	var c1 := Vector2i(-999999, -999999)
+	for c in datos.casillas:
+		c0 = Vector2i(mini(c0.x, c.x), mini(c0.y, c.y))
+		c1 = Vector2i(maxi(c1.x, c.x), maxi(c1.y, c.y))
+	esquina = Vector2(c0) * CASILLA
+	var an := (c1.x - c0.x + 1) * 16
+	var al := (c1.y - c0.y + 1) * 16
+	var mojada := func(x: int, y: int) -> bool:
+		return x >= 0 and y >= 0 and x < an and y < al and mojado.has(c0 + Vector2i(x / 16, y / 16))
+	var lejos := distancias(an, al, mojada)
+	var semilla := float(hash(c0) % 1000)
+	# la distancia, emborronada (la media de un cuadrado de 7x7): así las esquinas de las casillas no dejan picos
+	var suave := PackedFloat32Array()
+	suave.resize(an * al)
+	for y in al:
+		for x in an:
+			var suma := 0.0
+			for dy in range(-3, 4):
+				for dx in range(-3, 4):
+					var xx := clampi(x + dx, 0, an - 1)
+					var yy := clampi(y + dy, 0, al - 1)
+					suma += minf(lejos[yy * an + xx], 12.0)
+			suave[y * an + x] = suma / 49.0
+	var agua := PackedByteArray()
+	agua.resize(an * al)
+	for y in al:
+		for x in an:
+			var ruido := sin(x * 0.27 + semilla) + sin(y * 0.33 + semilla * 1.7) + sin((x - y) * 0.17 + semilla * 0.3)
+			agua[y * an + x] = 1 if lejos[y * an + x] > 0.0 and suave[y * an + x] > 5.0 + ruido * 1.6 else 0
+	var dentro := func(x: int, y: int) -> bool:
+		return x >= 0 and y >= 0 and x < an and y < al and agua[y * an + x] == 1
+	var hondo := distancias(an, al, dentro)   # a cuántos píxeles del borde del agua
+	var img := Image.create(an, al, false, Image.FORMAT_RGBA8)
+	var r := RandomNumberGenerator.new()
+	r.seed = hash(c0) + 7
+	for y in al:
+		for x in an:
+			if agua[y * an + x] == 0:
+				continue
+			var h: float = hondo[y * an + x]
+			var abajo: bool = not dentro.call(x, y + 2) or not dentro.call(x, y + 3)   # la orilla, más gruesa por abajo
+			var color: Color
+			if h <= 1.0:
+				color = PIX_BORDE
+			elif h <= 2.5 or (abajo and h <= 3.5):
+				color = PIX_ORILLA[0]
+			elif h <= 3.5 or (abajo and h <= 4.5):
+				color = PIX_MEDIO
+			else:
+				color = PIX_DENTRO[0] if r.randf() < 0.85 else PIX_DENTRO[1 + r.randi() % 2]
+			img.set_pixel(x, y, color)
+	# alguna mancha más oscura dentro (como las del dibujo)
+	for i in datos.casillas.size() * 2:
+		var x := r.randi_range(0, an - 3)
+		var y := r.randi_range(0, al - 2)
+		if hondo[y * an + x] > 4.0 and hondo[y * an + x + 2] > 4.0:
+			var color: Color = PIX_MANCHA[r.randi() % 2]
+			img.set_pixel(x, y, color)
+			img.set_pixel(x + 1, y, color)
+			if r.randf() < 0.5:
+				img.set_pixel(x + 1, y + 1, color)
+	# gotitas sueltas en el suelo seco de las casillas del borde, separadas del charco
+	var gotas := 0
+	for i in 400:
+		if gotas >= maxi(3, datos.casillas.size() / 3):
+			break
+		var x := r.randi_range(1, an - 5)
+		var y := r.randi_range(1, al - 4)
+		var w := 4 if r.randf() < 0.5 else 5
+		var libre := true   # sobre las casillas del charco, y sin tocar el agua
+		for dy in range(-1, 5):
+			for dx in range(-1, w + 1):
+				if dentro.call(x + dx, y + dy):
+					libre = false
+		for dy in 4:
+			for dx in w:
+				if not mojada.call(x + dx, y + dy):
+					libre = false
+		if not libre or hondo[y * an + x] > 7.0:
+			continue
+		var cerca_agua := false   # que no quede lejos del charco
+		for dy in range(-6, 9):
+			for dx in range(-6, w + 6):
+				if dentro.call(x + dx, y + dy):
+					cerca_agua = true
+		if not cerca_agua:
+			continue
+		gotas += 1
+		# 4 de alto: contorno negro, arriba claro y abajo la orilla oscura, como las gotas del dibujo
+		for dy in 4:
+			for dx in w:
+				if (dx == 0 or dx == w - 1) and (dy == 0 or dy == 3):
+					continue
+				var color: Color = PIX_BORDE
+				if dx > 0 and dx < w - 1 and dy == 1:
+					color = PIX_DENTRO[0]
+				elif dx > 0 and dx < w - 1 and dy == 2:
+					color = PIX_ORILLA[0]
+				img.set_pixel(x + dx, y + dy, color)
+	pixeles = img
+	textura = ImageTexture.create_from_image(img)
+
+
+# Para cada píxel de la imagen, a cuántos píxeles está del primero que no cumple "vale" (fuera de la imagen tampoco
+# cumple). Dos pasadas, con 1 en recto y 1,4 en diagonal: basta para un borde redondo
+func distancias(an: int, al: int, vale: Callable) -> PackedFloat32Array:
+	var d := PackedFloat32Array()
+	d.resize(an * al)
+	for y in al:
+		for x in an:
+			d[y * an + x] = 9999.0 if vale.call(x, y) else 0.0
+	for y in al:
+		for x in an:
+			var i := y * an + x
+			if d[i] == 0.0:
+				continue
+			var m := d[i]
+			m = minf(m, (d[i - 1] if x > 0 else 0.0) + 1.0)
+			m = minf(m, (d[i - an] if y > 0 else 0.0) + 1.0)
+			m = minf(m, (d[i - an - 1] if x > 0 and y > 0 else 0.0) + 1.4)
+			m = minf(m, (d[i - an + 1] if x < an - 1 and y > 0 else 0.0) + 1.4)
+			d[i] = m
+	for y in range(al - 1, -1, -1):
+		for x in range(an - 1, -1, -1):
+			var i := y * an + x
+			if d[i] == 0.0:
+				continue
+			var m := d[i]
+			m = minf(m, (d[i + 1] if x < an - 1 else 0.0) + 1.0)
+			m = minf(m, (d[i + an] if y < al - 1 else 0.0) + 1.0)
+			m = minf(m, (d[i + an + 1] if x < an - 1 and y < al - 1 else 0.0) + 1.4)
+			m = minf(m, (d[i + an - 1] if x > 0 and y < al - 1 else 0.0) + 1.4)
+			d[i] = m
+	return d
+
+
+# ¿Hay agua dibujada en ese punto? (para que los brillos no caigan en el suelo seco del borde)
+func hay_agua(p: Vector2) -> bool:
+	var q := Vector2i(((p - esquina) / 2.0).floor())
+	return (pixeles != null and q.x >= 0 and q.y >= 0 and q.x < pixeles.get_width() and q.y < pixeles.get_height()
+			and pixeles.get_pixel(q.x, q.y).a > 0.0)
+
+
 # Brillos que van y vienen sobre el agua (los alumbra la linterna)
 func _draw() -> void:
 	for b in brillos:
@@ -280,6 +415,8 @@ func _draw() -> void:
 		if s < 0.2:
 			continue
 		var o: Vector2 = Vector2(b[0]) * CASILLA + Vector2(b[1] + sin(t * 0.7 + b[3]) * 3.0, b[2])
+		if not hay_agua(o) or not hay_agua(o + Vector2(12, 0)):
+			continue
 		draw_rect(Rect2((o / 2.0).floor() * 2.0, Vector2(roundf(2 + s * 4) * 2.0, 2)), Color(0.85, 0.95, 1.0, 0.6 * s))
 
 
