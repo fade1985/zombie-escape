@@ -524,8 +524,9 @@ en una línea.
   `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
   Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
 - `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar los botones de los menús, `grunir`, son 4
-  versiones hechas como una voz ronca en `grunido` (garganta, «rrr» y boca), sin amontonarse; hay tres estilos,
-  `GRUNIDO_ESTILOS`, y suena `GRUNIDO_ESTILO`; cada efecto cambia un poco al azar de tono y de volumen cada
+  versiones de un crujido de garganta en `grunido` (chasquidos sueltos y a destiempo que resuenan en la «boca», sin
+  tono de fondo: los de zumbido sonaban a perro y a helicóptero), sin amontonarse; dos estilos, `GRUNIDO_ESTILOS`
+  («crujido» y «estertor»), y suena `GRUNIDO_ESTILO`; cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
   prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
   sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y

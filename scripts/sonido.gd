@@ -517,58 +517,53 @@ func sintetizar(notas: Array) -> AudioStreamWAV:
 
 
 # ── El gruñido de los botones de los menús (11 nov) ──
-# Un gruñido de zombi serio, hecho como se hace una voz: una garganta que da golpecitos graves e irregulares (de 40 a 60
-# por segundo, cada uno de fuerza distinta y uno sí uno no más flojo, que lo hace sonar una octava más grave y ronco), a
-# veces con otra garganta debajo, con un temblor que la corta (la «rrr») y aire áspero por encima. Todo eso pasa por la
-# «boca»: tres resonancias de una «u/o» oscura, más bajas que las de una persona, para que suene a algo grande. El tono
-# cae al final, como quien se queda sin aire (el primer gruñido subía al principio y sonaba a perro o a pájaro).
-# Hay tres estilos (GRUNIDO_ESTILOS) para elegir de oído; en el juego suena GRUNIDO_ESTILO. Cada versión (GRUNIDOS) sale
-# con su tono, su largo y su temblor al azar, para que no suene siempre igual
+# Un crujido de garganta de muerto, de los que dan miedo en las películas de fantasmas japonesas: un «a-a-a-a-a» hecho
+# de chasquidos sueltos de la garganta (la voz «de fritura», la de quien se queda sin aire), cada uno a destiempo, a veces
+# dos seguidos, que se aceleran y luego se frenan, como algo que intenta hablar. No lleva ningún tono de fondo: cada
+# chasquido es un golpe seco que resuena en la «boca» (tres resonancias de una «a» de garganta) y se apaga antes del
+# siguiente. Los primeros gruñidos eran un zumbido grave cortado a un ritmo fijo y sonaban a perro, a pájaro y luego a
+# helicóptero; esto es justo lo contrario: nada fijo.
+# Dos estilos (GRUNIDO_ESTILOS) para elegir de oído; en el juego suena GRUNIDO_ESTILO. Cada versión (GRUNIDOS) sale con su
+# ritmo, su largo y su boca al azar, para que no suene siempre igual
 const GRUNIDOS := 4
-const GRUNIDO_VOLUMEN := 0.45                       # el pico, de 0 a 1 (los efectos de los menús rondan 0,1-0,3)
-const GRUNIDO_ESTILO := "gemido"
-# largo y tono (de-a), sub: lo flojo del golpecito impar (menos = más grave y ronco), voz2: [cuánto más grave o desafinada
-# va la segunda garganta, su fuerza], rrr: [veces por segundo de-a, lo hondo que corta, lo desigual], aire, gorgoteo,
-# boca: a qué parte se bajan las resonancias, apagar: lo que deja de agudos (menos = más apagado), ataque en segundos
+const GRUNIDO_VOLUMEN := 0.8                        # el pico, de 0 a 1 (alto: los chasquidos sueltos suenan flojos)
+const GRUNIDO_ESTILO := "crujido"
+# largo (de-a, segundos), ritmo: chasquidos por segundo [al empezar, en lo más rápido, al acabar], desigual: lo que cambia
+# cada hueco entre dos, doble: cuántos llevan otro pegado, aire: la respiración de fondo, boca: [hercios, lo estrecha
+# que es, fuerza] de cada resonancia
 const GRUNIDO_ESTILOS := {
-	"gemido": {"largo": [1.1, 1.4], "tono": [44.0, 52.0], "sub": 0.3, "voz2": [0.5, 0.45], "rrr": [7.0, 11.0, 0.45, 0.3],
-		"aire": 0.15, "gorgoteo": 0.0, "boca": 0.78, "apagar": 0.22, "ataque": 0.18},
-	"gutural": {"largo": [0.8, 1.0], "tono": [50.0, 60.0], "sub": 0.45, "voz2": [0.5, 0.25], "rrr": [28.0, 40.0, 0.85, 0.6],
-		"aire": 0.2, "gorgoteo": 0.6, "boca": 0.85, "apagar": 0.28, "ataque": 0.06},
-	"bestia": {"largo": [0.9, 1.1], "tono": [38.0, 46.0], "sub": 0.25, "voz2": [1.03, 0.6], "rrr": [14.0, 18.0, 0.7, 0.4],
-		"aire": 0.35, "gorgoteo": 0.0, "boca": 0.7, "apagar": 0.25, "ataque": 0.1},
+	"crujido": {"largo": [1.0, 1.3], "ritmo": [14.0, 30.0, 9.0], "desigual": 0.35, "doble": 0.3, "aire": 0.02,
+		"boca": [[700.0, 13.0, 1.0], [1150.0, 15.0, 0.7], [2600.0, 15.0, 0.3]]},
+	"estertor": {"largo": [0.8, 1.0], "ritmo": [26.0, 45.0, 20.0], "desigual": 0.3, "doble": 0.2, "aire": 0.05,
+		"boca": [[550.0, 11.0, 1.0], [950.0, 13.0, 0.6], [2400.0, 13.0, 0.25]]},
 }
-const FORMANTES := [[380.0, 4.0, 1.0], [820.0, 5.0, 0.5], [2300.0, 7.0, 0.12]]   # [hercios, lo estrecha que es, fuerza]
 
 func grunido(estilo := GRUNIDO_ESTILO) -> AudioStreamWAV:
 	var e: Dictionary = GRUNIDO_ESTILOS[estilo]
 	var largo := randf_range(e.largo[0], e.largo[1])
 	var cuantas := int(largo * MEZCLA)
-	var base := randf_range(e.tono[0], e.tono[1])
-	# 1) Las gargantas (golpecitos), con el temblor y el aire, sin boca todavía
-	var muestras := _garganta(cuantas, base, e.sub)
-	if e.voz2[1] > 0.0:
-		var otra := _garganta(cuantas, base * e.voz2[0], e.sub)
-		for i in cuantas:
-			muestras[i] += otra[i] * e.voz2[1]
-	var veces := randf_range(e.rrr[0], e.rrr[1])
-	var fase_rrr := randf()
+	# 1) Los chasquidos: cada uno, un golpe seco con un poco de ruido pegado (el roce de la garganta)
+	var golpes := PackedFloat32Array()
+	golpes.resize(cuantas)
+	var pico_ritmo := randf_range(0.3, 0.5)   # cuándo va más deprisa (en partes del largo)
+	var t := randf_range(0.0, 0.03)
+	while t < largo:
+		var x := t / largo
+		var ritmo: float = lerpf(e.ritmo[0], e.ritmo[1], x / pico_ritmo) if x < pico_ritmo else lerpf(e.ritmo[1], e.ritmo[2], (x - pico_ritmo) / (1.0 - pico_ritmo))
+		var fuerza := randf_range(0.5, 1.0)
+		_chasquido(golpes, int(t * MEZCLA), fuerza)
+		if randf() < e.doble:   # otro pegado, más flojo
+			_chasquido(golpes, int((t + randf_range(0.004, 0.008)) * MEZCLA), fuerza * randf_range(0.4, 0.7))
+		t += randf_range(1.0 - e.desigual, 1.0 + e.desigual) / ritmo
 	var aire := 0.0
-	var gorgoteo := 1.0
-	var gorgoteo_a := 1.0
 	for i in cuantas:
-		fase_rrr = fmod(fase_rrr + veces * randf_range(1.0 - e.rrr[3], 1.0 + e.rrr[3]) / MEZCLA, 1.0)
-		var rrr: float = 1.0 - e.rrr[2] * (0.5 - 0.5 * sin(fase_rrr * TAU))
-		aire += (randf_range(-1.0, 1.0) - aire) * 0.2   # ruido apagado
-		if e.gorgoteo > 0.0:   # burbujas: de vez en cuando la voz se hunde y vuelve (líquido en la garganta)
-			if i % 400 == 0:
-				gorgoteo_a = 1.0 - e.gorgoteo * randf() * randf()
-			gorgoteo += (gorgoteo_a - gorgoteo) * 0.01
-		muestras[i] = (muestras[i] * 14.0 + aire * e.aire) * rrr * gorgoteo
-	# 2) La boca: las tres resonancias, bajadas (algo grande) y que apenas se mueven
+		aire += (randf_range(-1.0, 1.0) - aire) * 0.3
+		golpes[i] += aire * e.aire
+	# 2) La boca: cada resonancia, con la boca que se abre y se cierra un poco al azar mientras dura
 	var salida := PackedFloat32Array()
 	salida.resize(cuantas)
-	for f in FORMANTES:
+	var escala := randf_range(0.9, 1.05)
+	for f in e.boca:
 		var x1 := 0.0
 		var x2 := 0.0
 		var y1 := 0.0
@@ -577,38 +572,28 @@ func grunido(estilo := GRUNIDO_ESTILO) -> AudioStreamWAV:
 		var a1 := 0.0
 		var a2 := 0.0
 		var a0 := 1.0
+		var mueve := 1.0
 		for i in cuantas:
 			if i % 64 == 0:   # (la boca se mueve despacio: basta con recalcular cada 64 muestras)
-				var t := float(i) / cuantas
-				var abre := 1.0 + 0.12 * sin(t * PI)
-				var w0: float = TAU * minf(f[0] * e.boca * abre, MEZCLA * 0.45) / MEZCLA
+				mueve = clampf(mueve + randf_range(-0.02, 0.02), 0.88, 1.12)
+				var w0: float = TAU * minf(f[0] * escala * mueve, MEZCLA * 0.45) / MEZCLA
 				var alfa: float = sin(w0) / (2.0 * f[1])
 				b0 = alfa
 				a0 = 1.0 + alfa
 				a1 = -2.0 * cos(w0)
 				a2 = 1.0 - alfa
-			var x := muestras[i]
+			var x := golpes[i]
 			var y := (b0 * x - b0 * x2 - a1 * y1 - a2 * y2) / a0
 			x2 = x1
 			x1 = x
 			y2 = y1
 			y1 = y
 			salida[i] += y * f[2]
-	# 3) El pecho (lo grave de la garganta, sin boca), saturado lo justo para que raspe, sin lo agudo (dos filtros seguidos:
-	# si no, sisea como una radio) y con su entrada y su final
-	var pecho := 0.0
-	var suave1 := 0.0
-	var suave2 := 0.0
+	# 3) Entrada y final: entra enseguida y se apaga en el último cuarto, como quien se queda sin aire
 	var pico := 0.0
-	var ataque: float = e.ataque / largo
 	for i in cuantas:
-		var t := float(i) / cuantas
-		pecho += (muestras[i] - pecho) * 0.04
-		var forma_vol := minf(t / ataque, 1.0) * pow(1.0 - t, 0.7)
-		var s := tanh((salida[i] * 2.0 + pecho * 3.0) * 1.3)
-		suave1 += (s - suave1) * e.apagar
-		suave2 += (suave1 - suave2) * e.apagar
-		salida[i] = suave2 * forma_vol
+		var x := float(i) / cuantas
+		salida[i] *= minf(x / 0.04, 1.0) * minf((1.0 - x) / 0.25, 1.0)
 		pico = maxf(pico, absf(salida[i]))
 	var datos := PackedByteArray()
 	datos.resize(cuantas * 2)
@@ -621,32 +606,12 @@ func grunido(estilo := GRUNIDO_ESTILO) -> AudioStreamWAV:
 	return wav
 
 
-# Los golpecitos de una garganta: se abre despacio y se cierra de golpe (lo que suena es el cierre: de ahí lo áspero).
-# El tono se queda y cae al final; cada vuelta, un poco desigual (no es una máquina), y la impar, más floja ("sub")
-func _garganta(cuantas: int, base: float, sub: float) -> PackedFloat32Array:
-	var golpes := PackedFloat32Array()
-	golpes.resize(cuantas)
-	var fase := randf()
-	var fuerza := 1.0
-	var impar := false
-	var antes := 0.0
-	for i in cuantas:
-		var t := float(i) / cuantas
-		var tono := base * (1.0 - 0.28 * t * t)
-		fase += tono * randf_range(0.9, 1.1) / MEZCLA
-		if fase >= 1.0:
-			fase -= 1.0
-			impar = not impar
-			fuerza = randf_range(0.6, 1.0) * (sub if impar else 1.0)
-		var g := 0.0
-		if fase < 0.45:
-			g = 0.5 - 0.5 * cos(PI * fase / 0.45)
-		elif fase < 0.6:
-			g = cos(PI * 0.5 * (fase - 0.45) / 0.15)
-		g *= fuerza
-		golpes[i] = g - antes
-		antes = g
-	return golpes
+# Un chasquido de la garganta en la muestra «en»: un golpe seco y unas décimas de milésima de ruido que se apaga
+func _chasquido(golpes: PackedFloat32Array, en: int, fuerza: float) -> void:
+	for k in 60:
+		if en + k >= golpes.size():
+			return
+		golpes[en + k] += (fuerza if k == 0 else 0.0) + randf_range(-1.0, 1.0) * fuerza * 0.25 * exp(-k / 12.0)
 
 
 func nota(n: Array, i: int, si_no: float) -> float:
