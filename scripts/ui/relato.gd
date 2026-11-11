@@ -12,10 +12,10 @@ signal cerrado
 
 const ANCHO := 1040.0     # lo más anchas que son las líneas (se parten solas si no caben)...
 const MARGEN := 30.0      # ...y, en una pantalla estrecha, lo que dejan a cada lado
-const ESPERA := 0.6       # segundos que la pantalla no hace caso al salir; a esa hora sale la primera línea
-const POR_LINEA := 2.0    # lo que se queda sola cada línea, antes de la siguiente...
-const POR_LETRA := 0.04   # ...más esto por cada letra: las largas tardan más en leerse
-const FUNDIDO := 0.5      # lo que tarda en aparecer una línea y en irse la pantalla
+const ESPERA := 0.4       # segundos que la pantalla no hace caso al salir; a esa hora sale la primera línea
+const POR_LINEA := 1.2    # lo que se queda sola cada línea, antes de la siguiente (11 nov: 2 iba muy despacio)...
+const POR_LETRA := 0.025  # ...más esto por cada letra: las largas tardan más en leerse
+const FUNDIDO := 0.4      # lo que tarda en aparecer una línea y en irse la pantalla
 const REBOTE := 150       # milisegundos sin hacer caso tras una pulsación: un toque llega dos veces (el dedo y el
                           # ratón que lo imita, ver tactil.gd)
 # Las teclas que no pasan de línea: las que se pulsan para otra cosa (Alt+Tab) y la de la pantalla completa (pantalla.gd)
