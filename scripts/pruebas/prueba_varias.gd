@@ -2041,6 +2041,7 @@ func probar_talentos_altos() -> void:
 
 	# ── Pegajoso: lo rápido que anda un zombi, sin ácido y con ácido ──
 	aplicar_talentos({"pegajoso": 3})
+	johnny.position = centro + Vector2(300, 0)   # (lejos: que el zombi no llegue a Johnny y se pare a darle zarpazos)
 	var lento: Node2D = meter_zombi("normal", centro + Vector2(-300, 0))
 	await get_tree().process_frame
 	lento.vida = 9999
