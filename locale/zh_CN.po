@@ -6387,7 +6387,7 @@ msgid "No se ha podido enviar. Mira tu conexión e inténtalo otra vez."
 msgstr "发送失败。请检查网络连接后再试一次。"
 
 #: scripts/ui/opciones.gd
-msgid "Con ayudas activadas no se consiguen logros en esa partida (aunque las desactives luego). Los que ya tienes se quedan."
+msgid "El uso de ayudas desactiva la obtención de logros en la partida actual, incluso si se desactivan posteriormente. Los logros obtenidos con anterioridad no se verán afectados."
 msgstr "开启其中任何一项辅助后，本局无法获得成就（即使之后关闭也一样）。已经获得的成就会保留。"
 
 #: scripts/ui/opciones.gd

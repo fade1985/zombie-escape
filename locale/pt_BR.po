@@ -6409,7 +6409,7 @@ msgid "No se ha podido enviar. Mira tu conexión e inténtalo otra vez."
 msgstr "Não foi possível enviar. Verifique sua conexão e tente de novo."
 
 #: scripts/ui/opciones.gd
-msgid "Con ayudas activadas no se consiguen logros en esa partida (aunque las desactives luego). Los que ya tienes se quedan."
+msgid "El uso de ayudas desactiva la obtención de logros en la partida actual, incluso si se desactivan posteriormente. Los logros obtenidos con anterioridad no se verán afectados."
 msgstr "Com qualquer uma destas ajudas ligada, você não ganha conquistas nessa partida (mesmo se desligar depois). As que você já tem continuam."
 
 #: scripts/ui/opciones.gd

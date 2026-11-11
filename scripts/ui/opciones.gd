@@ -519,7 +519,7 @@ func contacto() -> void:
 # Las ayudas: cada una, un botón de Sí/No con lo que hace debajo, y el aviso de los logros arriba. Todas a la vista,
 # sin barra (desde que los tutoriales se fueron a la lista de Tutorial, caben)
 func ayudas() -> void:
-	var aviso := explicar(Idioma.t("Con ayudas activadas no se consiguen logros en esa partida (aunque las desactives luego). Los que ya tienes se quedan."))
+	var aviso := explicar(Idioma.t("El uso de ayudas desactiva la obtención de logros en la partida actual, incluso si se desactivan posteriormente. Los logros obtenidos con anterioridad no se verán afectados."))
 	aviso.add_theme_color_override("font_color", Tema.AMARILLO)
 	rotar(Idioma.t("Vida entera"), "vida_entera", SI_NO)
 	explicar(Idioma.t("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."))
