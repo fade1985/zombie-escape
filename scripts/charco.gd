@@ -73,6 +73,9 @@ const BURBUJEO := {
 	# el café de los vasos del becario: marrón, y al secarse deja su mancha
 	"cafe": {"borde": Color("#2a160a"), "oscuro": Color("#4a2a14"), "medio": Color("#6e4222"), "centro": Color("#8a5a30"),
 		"brillo": Color("#d8b48a"), "sin_burbujas": true, "mancha": Color("#2a1a10", 0.4)},
+	# el aceite hirviendo del cocinero (no burbujea como los demás: tiene sus burbujas propias, pintar_hirviendo)
+	"hirviendo": {"borde": Color("#5e3510"), "oscuro": Color("#9a5a16"), "medio": Color("#c07a22"), "centro": Color("#dc9a34"),
+		"brillo": Color("#f8d27a"), "burbuja": Color("#f0c060"), "luz": Color("#fff1c4")},
 }
 # Cuánto tarda en extenderse al caer y cuánto antes de acabar empieza a secarse
 const DERRAMA := 0.25
@@ -84,7 +87,6 @@ const EXTIENDE := 0.35
 const APAGA := 1.4
 const FRENTE := 0.07
 const BRASA := 0.3
-const CELDA := 4.0   # 2 píxeles del dibujo
 const GOTA := 2.0    # los cuadraditos de los charcos que burbujean y del agua: un píxel del dibujo (como Johnny)
 
 var tipo := "veneno"
@@ -179,7 +181,7 @@ func _physics_process(delta: float) -> void:
 			hervir(delta)
 		# Al final se va secando (más transparente)
 		modulate.a = clampf(vida / 0.6, 0.0, 1.0)
-	if not burbujea() or Engine.get_physics_frames() % 2 == 0:   # los líquidos, a 30 fotogramas: tienen muchos cuadraditos
+	if not (burbujea() or tipo == "hirviendo") or Engine.get_physics_frames() % 2 == 0:   # los líquidos, a 30 fotogramas: muchos cuadraditos
 		queue_redraw()
 	var datos: Dictionary = TIPOS[tipo]
 	var johnny := get_tree().get_first_node_in_group("jugador")
@@ -597,17 +599,22 @@ func hacer_hirviendo() -> void:
 	var ondas := []
 	for k in [3, 5]:
 		ondas.append([k, randf() * TAU, randf_range(0.06, 0.12)])
-	var n := ceili(r / CELDA)
+	var ruido_liso := FastNoiseLite.new()
+	ruido_liso.seed = randi()
+	ruido_liso.frequency = 0.06
+	var n := ceili(r / GOTA)
 	for y in range(-n, n + 1):
 		for x in range(-n, n + 1):
-			var p := Vector2(x, y) * CELDA
+			var p := Vector2(x, y) * GOTA
 			var a := atan2(p.y / 0.6, p.x)
 			var borde := 1.0
 			for o in ondas:
 				borde += sin(a * o[0] + o[1]) * o[2]
+			borde *= 1.0 - 0.08 * (ruido_liso.get_noise_2dv(p) * 0.5 + 0.5)
 			var d := Vector2(p.x, p.y / 0.6).length() / r / borde
 			if d <= 1.0:
-				celdas.append([p, d, 0.0, 0.0, randf()])
+				celdas.append([p, d, d, INF, randf()])   # (aparece cuando el aceite llega a "d": pintar_hirviendo)
+	celdas_por_sitio = Charco.preparar_liquido(celdas, r, ruido_liso)
 	# (el grande de la cocina, M82, con más burbujas: las mismas por trozo de suelo)
 	for i in roundi(9 * escala * escala):
 		var c: Array = celdas.pick_random()
@@ -624,26 +631,24 @@ func hervir(delta: float) -> void:
 			Color(1, 0.95, 0.85, 0.4), randf_range(3, 5), 0.7)
 
 
+# Como los demás líquidos (pintar_liquido), hasta donde ha llegado; y sus burbujas, de pixel art: crecen a saltos de
+# píxel con su brillo y revientan en un anillo de gotitas, cada una a su ritmo
 func pintar_hirviendo() -> void:
+	var col: Dictionary = BURBUJEO.hirviendo
 	var hasta := extendido()   # al caer, se extiende en un momento (el de la cocina, M82, despacio)
-	for c in celdas:
-		if c[1] > hasta:
-			continue
-		var color := Color("#5e3510") if c[1] > 0.88 else Color("#9a5a16") if c[1] > 0.6 or c[4] < 0.25 else Color("#c07a22")
-		if c[4] > 0.93:
-			color = Color("#e8b04a")   # brillos
-		draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
-	# las burbujas: crecen y revientan (un anillo claro), cada una a su ritmo
+	Charco.pintar_liquido(self, celdas, col, t, hasta)
 	for b in burbujas:
 		if b[3] > hasta:
 			continue   # (aún no ha llegado ahí el aceite)
 		var k: float = fmod(t + b[1], b[2]) / b[2]
-		var p: Vector2 = b[0] + Vector2(2, 2)
+		var p: Vector2 = b[0]
 		if k < 0.8:
-			Formas.disco(self, p, 1.0 + k * 4.0, Color("#f0c060"))
-			Formas.disco(self, p + Vector2(-1, -1), 1.0, Color("#fff1c4"))
+			var r := 1 + int(k / 0.8 * 2.5)
+			burbuja(p + Vector2(0, 2), r, col.borde, col.borde)   # su sombra, un píxel más abajo
+			burbuja(p, r, col.burbuja, col.luz)
 		else:
-			Formas.arco(self, p, 6.0, 0.0, TAU, 10, Color("#fff1c4", 0.8), 1.5)
+			for o in [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(0, 1), Vector2(-0.7, -0.7), Vector2(0.7, -0.7)]:
+				draw_rect(Rect2((p + o * 7.0 - Vector2(1, 1)).snapped(Vector2(2, 2)), Vector2(2, 2)), Color(col.luz, 0.8))
 
 
 func _draw() -> void:

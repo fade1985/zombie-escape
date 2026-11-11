@@ -4,17 +4,20 @@
 # las paredes. Se decide al generar la planta (Peligros.del_gloton: qué casillas están sucias y cuáles
 # llevan montón) y aquí se dibuja y quema: a Johnny le pone
 # el estado "porqueria" (estados.gd) mientras la pisa (la esquiva la cruza sin daño, como los charcos); a los zombis
-# no les hace nada (es del Glotón). Se dibuja a cuadraditos de pixel art como el fuego de la cocina (fuego.gd): cada
-# casilla sucia entera, con el borde deshilachado donde se acaba, y encima los montones; eso se pinta una vez
-# (el nodo "Suelo") y aparte, repintándose, las burbujas de ácido que revientan y las moscas sobre los montones.
+# no les hace nada (es del Glotón). La diarrea se dibuja como los demás líquidos (Charco.pintar_liquido: cuadraditos
+# de un píxel del dibujo, contorno oscuro, bandas de color y vetas de ácido), pero quieta: es espesa. Encima, los
+# montones; eso se pinta una vez (el nodo "Suelo") y aparte, repintándose, las burbujas de ácido que revientan y las
+# moscas sobre los montones.
 # Las salpicaduras de la pared de arriba son texturas hechas aquí mismo (salpicon), puestas como adornos de las caras
 # de muro (cara_pared.gd), como los restos del centro comercial; en los lomos de los otros tres muros, que se ven
 # desde arriba, van pegotes a celdas (pegote). Y el ácido reluce (luz_de_acido): con las lámparas, luz de sobra.
 extends Node2D
 
 const CASILLA := 32
-const CELDA := 4.0                  # 2 píxeles del dibujo
-const BORDE := 10.0                 # el borde deshilachado de cada charco, en unidades
+const CELDA := 4.0                  # 2 píxeles del dibujo (dónde van los montones y los pegotes)
+const GOTA := 2.0                   # la diarrea y los montones: un píxel del dibujo (Charco.GOTA)
+const REDONDO := 14.0              # el radio de las esquinas de la diarrea que asoman
+const HONDO := 22.0                 # a cuántas unidades del borde la diarrea ya es del color de dentro
 const PINTA := 1.0 / 12.0           # cada cuánto se repintan las burbujas y las moscas
 # Los colores: la diarrea (el charco: borde, medio y claro), la mierda (el montón: contorno, oscuro, medio y brillo),
 # el ácido y las moscas
@@ -23,6 +26,9 @@ const MONTON := [Color("#2e1d0c"), Color("#4a2f12"), Color("#6b4a1f"), Color("#8
 const ACIDO := Color("#b5d634")
 const ACIDO_OSCURO := Color("#7e9a1c")
 const MOSCA := Color("#15100c")
+# la diarrea, como los líquidos de charco.gd (BURBUJEO): del borde al centro y sus vetas de ácido
+const DIARREA := {"borde": Color("#3a350c"), "oscuro": Color("#4a4412"), "medio": Color("#6b661a"), "centro": Color("#8a8626"),
+	"brillo": Color("#7e9a1c")}
 # El resplandor del ácido: unas luces verdosas suaves repartidas por la franja (como las del fuego de la cocina, sin
 # sombras), que laten despacio; son la luz de la habitación (no hay lámparas) y con ellas se ve bien dónde pisar
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
@@ -35,6 +41,7 @@ const LUZ_FUERZA := 0.5
 var datos: Dictionary
 var mapa: Node
 var suelo: Node2D                   # lo que no cambia (charcos y montones), pintado una vez
+var celdas: Array = []              # los cuadraditos de la diarrea, como los de Charco.preparar_liquido (hacer_celdas)
 var moscas: Array = []              # [casilla del montón, fase] de cada mosca que zumba
 var luces: Array = []               # las del resplandor del ácido
 var t := 0.0
@@ -105,35 +112,11 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 
-# Los charcos (cada casilla sucia entera; donde se acaban, el borde a celdas deshilachado con el ruido) y, encima,
-# los montones. Se pinta una sola vez
+# La diarrea (como los demás líquidos, quieta) y, encima, los montones. Se pinta una sola vez
 func pintar_suelo() -> void:
-	for c in datos.casillas:
-		var r := FUEGO.ruido_de(c)
-		var o := Vector2(c) * CASILLA
-		# hacia qué lados se acaba el charco (ahí el borde se deshilacha y se oscurece)
-		var fin := []
-		for d in Peligros.LADOS:
-			fin.append(not datos.casillas.has(c + d))
-		if not fin.has(true):
-			suelo.draw_rect(Rect2(o, Vector2(CASILLA, CASILLA)), CHARCO[1])
-			# algo de textura: unas celdas más claras, más oscuras y de ácido sueltas, siempre las mismas
-			for i in 6:
-				var k := int(r[i] * 64.0)
-				suelo.draw_rect(Rect2(o + Vector2(k % 8, k / 8) * CELDA, Vector2(CELDA, CELDA)),
-					CHARCO[2] if i < 2 else (CHARCO[0] if i < 4 else ACIDO_OSCURO))
-			continue
-		for i in 64:
-			var p := Vector2(i % 8, i / 8) * CELDA
-			# lo que le falta a la celda para llegar al borde que se acaba (en unidades)
-			var hondo := 99.0
-			if fin[0]: hondo = minf(hondo, p.x)
-			if fin[1]: hondo = minf(hondo, CASILLA - CELDA - p.x)
-			if fin[2]: hondo = minf(hondo, p.y)
-			if fin[3]: hondo = minf(hondo, CASILLA - CELDA - p.y)
-			if hondo + r[i] * BORDE < 5.0:
-				continue
-			suelo.draw_rect(Rect2(o + p, Vector2(CELDA, CELDA)), CHARCO[0] if hondo < CELDA * 1.5 else CHARCO[1])
+	if celdas.is_empty():
+		hacer_celdas()
+	Charco.pintar_liquido(suelo, celdas, DIARREA, 0.0, 0.0)
 	for c in datos.casillas:
 		if datos.casillas[c] != 2:
 			continue
@@ -146,20 +129,65 @@ func pintar_suelo() -> void:
 		pegote(c, FUEGO.ruido_de(c), datos.paredes[c])
 
 
+# Los cuadraditos de la diarrea, casilla a casilla: lo lejos que está cada uno del suelo limpio (de los lados y las
+# esquinas de las casillas vecinas limpias, para que las esquinas salgan redondas), con un ruido suave que ondula el
+# borde; los que quedan dentro llevan lo hondos que están (0 dentro, 1 en el borde). Van fila a fila en cada casilla
+func hacer_celdas() -> void:
+	var ruido_liso := FastNoiseLite.new()
+	ruido_liso.seed = int(mapa.sitio.get("surtido", 0)) + 912
+	ruido_liso.frequency = 0.07
+	var lado := int(CASILLA / GOTA)
+	var vecinas := [Vector2i(-1, 0), Vector2i(1, 0), Vector2i(0, -1), Vector2i(0, 1),
+		Vector2i(-1, -1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(1, 1)]
+	for c in datos.casillas:
+		var o := Vector2(c) * CASILLA
+		var limpias := []
+		for v in vecinas:
+			if not datos.casillas.has(c + v):
+				limpias.append(v)
+		for y in lado:
+			for x in lado:
+				var p := Vector2(x, y) * GOTA + Vector2(GOTA, GOTA) / 2.0   # (el centro del cuadradito, en la casilla)
+				var lejos := 99.0
+				for v in limpias:
+					# hasta el lado de la vecina limpia o, si es de esquina, hasta su esquina
+					var q := Vector2(clampf(p.x, 0.0, CASILLA) if v.x == 0 else (0.0 if v.x < 0 else float(CASILLA)),
+						clampf(p.y, 0.0, CASILLA) if v.y == 0 else (0.0 if v.y < 0 else float(CASILLA)))
+					lejos = minf(lejos, p.distance_to(q))
+				# las esquinas que asoman (limpio a un lado y al de arriba o abajo), redondeadas con un arco de radio REDONDO
+				for vx in [-1, 1]:
+					for vy in [-1, 1]:
+						if datos.casillas.has(c + Vector2i(vx, 0)) or datos.casillas.has(c + Vector2i(0, vy)):
+							continue
+						var centro := Vector2(REDONDO if vx < 0 else CASILLA - REDONDO, REDONDO if vy < 0 else CASILLA - REDONDO)
+						if (p.x - centro.x) * vx > 0.0 and (p.y - centro.y) * vy > 0.0:
+							lejos = minf(lejos, REDONDO - p.distance_to(centro))
+				var mundo := o + Vector2(x, y) * GOTA
+				var borde := 5.0 + (ruido_liso.get_noise_2dv(mundo) * 0.5 + 0.5) * 7.0
+				if lejos < borde:
+					continue
+				celdas.append([mundo, clampf(1.0 - (lejos - borde) / HONDO, 0.0, 1.0), -1.0, INF, 0.0])
+	Charco.preparar_liquido(celdas, 1.0e6, ruido_liso)   # (sin luz de un lado: es toda la habitación)
+
+
 # Un pegote de mierda en el lomo de un muro, visto desde arriba: un racimo de celdas, con alguna del borde más
 # oscura, otra de diarrea y una mota de ácido. "forma" (0 a 2) lo hace más grande
 func pegote(c: Vector2i, r: Array, forma: int) -> void:
 	var o: Vector2 = (Vector2(c) * CASILLA + Vector2(6.0 + r[30] * 16.0, 6.0 + r[31] * 16.0)).snapped(Vector2(CELDA, CELDA))
-	var celdas := 6 + forma * 2
-	for i in celdas:
+	var trozos := 6 + forma * 2
+	for i in trozos:
 		var p := o + Vector2(roundf((r[32 + i] - 0.5) * 4.0), roundf((r[40 + i] - 0.5) * 3.0)) * CELDA
 		var color: Color = MONTON[2]
 		if r[48 + i] < 0.3:
 			color = MONTON[1]
 		elif r[48 + i] > 0.85:
 			color = CHARCO[1]
-		suelo.draw_rect(Rect2(p, Vector2(CELDA, CELDA)), color)
-	suelo.draw_rect(Rect2(o, Vector2(CELDA, CELDA)), ACIDO_OSCURO if r[56] < 0.5 else MONTON[3])
+		# cada trozo, de 2x2 píxeles del dibujo con una esquina mordida (el borde, a píxeles de Johnny)
+		var falta := int(r[i] * 4.0)
+		for k in 4:
+			if k != falta:
+				suelo.draw_rect(Rect2(p + Vector2(k % 2, k / 2) * GOTA, Vector2(GOTA, GOTA)), color)
+	suelo.draw_rect(Rect2(o + Vector2(GOTA, 0), Vector2(GOTA, GOTA)), ACIDO_OSCURO if r[56] < 0.5 else MONTON[3])
 
 
 # Un montón de mierda: una pila redondeada (más ancha que alta), con su contorno, la sombra abajo a la derecha, el
@@ -167,25 +195,27 @@ func pegote(c: Vector2i, r: Array, forma: int) -> void:
 func monton(o: Vector2, r: Array) -> void:
 	var rx: float = 10.0 + r[12] * 4.0
 	var ry: float = 6.0 + r[13] * 3.0
-	var n := ceili(rx / CELDA) + 1
+	var n := ceili(rx / GOTA) + 1
 	for y in range(-n, n + 1):
 		for x in range(-n, n + 1):
-			var p := Vector2(x, y) * CELDA
-			var centro := p + Vector2(CELDA, CELDA) / 2.0
+			var p := Vector2(x, y) * GOTA
+			var centro := p + Vector2(GOTA, GOTA) / 2.0
 			var d := Vector2(centro.x / rx, centro.y / ry).length()
 			if d > 1.0:
 				continue
 			var color: Color = MONTON[2]
-			if d > 0.78:
+			if d > 0.85:
 				color = MONTON[0]
 			elif centro.x < -rx * 0.15 and centro.y < -ry * 0.1 and d < 0.6:
 				color = MONTON[3] if d < 0.35 else MONTON[2]
 			elif centro.x > 0.0 and centro.y > 0.0:
 				color = MONTON[1]
-			suelo.draw_rect(Rect2(o + p, Vector2(CELDA, CELDA)), color)
-	suelo.draw_rect(Rect2(o + Vector2(-CELDA / 2.0, -ry - CELDA), Vector2(CELDA, CELDA)), MONTON[1])
-	suelo.draw_rect(Rect2(o + Vector2(-CELDA / 2.0, -ry - CELDA * 2.0), Vector2(CELDA, CELDA)), MONTON[0])
-	suelo.draw_rect(Rect2(o + Vector2(CELDA / 2.0, -ry - CELDA * 2.0), Vector2(CELDA, CELDA)), MONTON[0])
+			suelo.draw_rect(Rect2(o + p, Vector2(GOTA, GOTA)), color)
+	# el pico de arriba: un pegotito con su contorno
+	var pico := o + Vector2(-GOTA, -ry - GOTA * 3.0)
+	suelo.draw_rect(Rect2(pico + Vector2(0, GOTA), Vector2(GOTA * 3.0, GOTA * 2.0)), MONTON[0])
+	suelo.draw_rect(Rect2(pico + Vector2(GOTA, 0), Vector2(GOTA, GOTA)), MONTON[0])
+	suelo.draw_rect(Rect2(pico + Vector2(GOTA, GOTA), Vector2(GOTA, GOTA * 2.0)), MONTON[1])
 
 
 # Lo que se mueve: en un tercio de los charcos, una burbuja de ácido que crece y revienta (siempre en el mismo sitio
@@ -199,14 +229,17 @@ func _draw() -> void:
 		if ciclo > 0.3:
 			continue
 		var k := ciclo / 0.3   # de 0 a 1: crece y revienta
-		var p := Vector2(c) * CASILLA + Vector2(int(r[22] * 5.0) + 1, int(r[23] * 5.0) + 1) * CELDA
+		var p := Vector2(c) * CASILLA + Vector2(int(r[22] * 10.0) + 3, int(r[23] * 10.0) + 3) * GOTA
 		if k < 0.7:
-			draw_rect(Rect2(p, Vector2(CELDA, CELDA)), ACIDO_OSCURO)
-			if k > 0.3:
-				draw_rect(Rect2(p + Vector2(CELDA, 0), Vector2(CELDA, CELDA)), ACIDO)
+			# crece de 1 a 3 píxeles del dibujo: la piel oscura, el ácido dentro y su brillo arriba a la izquierda
+			var g := 1 + int(k / 0.7 * 2.5)
+			draw_rect(Rect2(p - Vector2(g, g - 1) * GOTA, Vector2(g * 2, g * 2 - 1) * GOTA), ACIDO_OSCURO)
+			if g > 1:
+				draw_rect(Rect2(p - Vector2(g - 1, g - 2) * GOTA, Vector2(g * 2 - 2, g * 2 - 3) * GOTA), ACIDO)
+			draw_rect(Rect2(p - Vector2(g - 1, g - 1) * GOTA, Vector2(GOTA, GOTA)), Color.WHITE.lerp(ACIDO, 0.4))
 		else:
-			for d in [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(0, 1)]:
-				draw_rect(Rect2(p + d * CELDA, Vector2(CELDA, CELDA)), ACIDO)
+			for d in [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(-0.7, -0.7), Vector2(0.7, -0.7)]:
+				draw_rect(Rect2((p + d * 8.0).snapped(Vector2(GOTA, GOTA)), Vector2(GOTA, GOTA)), ACIDO)
 	for m in moscas:
 		var o: Vector2 = Peligros.centro(m[0])
 		var p := o + Vector2(cos(t * 2.3 + m[1]) * 12.0, sin(t * 3.7 + m[1] * 2.0) * 4.0 - 16.0)
