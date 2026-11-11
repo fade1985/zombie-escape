@@ -58,7 +58,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | logro · bestiario · dosier · colecciones · noticias | Erfolg · Bestiarium · Akte · Sammlungen · Nachrichten |
 | talento · rama · árbol de talentos · punto | Talent · Zweig · Talentbaum · Punkt |
 | mutación | Mutation |
-| dólares · piezas | Dollar · Teile |
+| dólares · materiales (de fabricación; antes «piezas», 11 nov) | Dollar · Material (Herstellungsmaterial; Plural Materialien) |
 | sala de mantenimiento · ordenador · taquilla · baúl · banco de trabajo · taller | Wartungsraum · Computer · Spind · Truhe · Werkbank · Werkstatt |
 | inventario · mochila · casilla / hueco · montón | Inventar · Rucksack · Platz · Stapel |
 | En la mano · De repuesto · A la mano · Al repuesto | In der Hand · Ersatz · In die Hand · Zum Ersatz |

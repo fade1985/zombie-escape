@@ -26,10 +26,10 @@ msgstr "Как обычно"
 #: scripts/alerta.gd
 msgid ""
 "%s%s\n"
-"+%d %% de dólares y de piezas"
+"+%d %% de dólares y de materiales"
 msgstr ""
 "%s%s\n"
-"+%d %% к долларам и деталям"
+"+%d %% к долларам и материалам"
 
 #: scripts/alerta.gd
 msgid " (y lo de antes)"
@@ -3014,20 +3014,20 @@ msgid "Vendas"
 msgstr "Бинты"
 
 #: scripts/objetos.gd
-msgid "Pieza cuerpo a cuerpo"
-msgstr "Деталь ближнего боя"
+msgid "Material cuerpo a cuerpo"
+msgstr "Материал ближнего боя"
 
 #: scripts/objetos.gd
-msgid "Pieza a distancia"
-msgstr "Деталь дальнего боя"
+msgid "Material a distancia"
+msgstr "Материал дальнего боя"
 
 #: scripts/objetos.gd
-msgid "Pieza especial"
-msgstr "Особая деталь"
+msgid "Material especial"
+msgstr "Особый материал"
 
 #: scripts/objetos.gd
-msgid "Pieza arrojable"
-msgstr "Метательная деталь"
+msgid "Material arrojable"
+msgstr "Метательный материал"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -4750,19 +4750,19 @@ msgid "¡Ojo! La explosión también te hace daño a ti."
 msgstr "Осторожно! Взрыв ранит и тебя."
 
 #: scripts/tutoriales.gd
-msgid "Piezas de mejora"
-msgstr "Детали для улучшения"
+msgid "Materiales de fabricación"
+msgstr "Материалы для изготовления"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pieza"
-msgstr "Когда подбираешь первую деталь"
+msgid "Al coger el primer material"
+msgstr "Когда подбираешь первый материал"
 
 #: scripts/tutoriales.gd
-msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
-msgstr "Детали повышают качество оружия и метательного на верстаке в дворницкой."
+msgid "Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "Материалы для изготовления повышают качество оружия и метательного на верстаке в дворницкой."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los zombis de vez en cuando y los jefes."
 msgstr "Их четыре вида: ближний бой, дальний бой, особые и метательные. Их иногда роняют зомби и всегда — боссы."
 
 #: scripts/tutoriales.gd
@@ -4782,8 +4782,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
 msgstr "Перед каждой атакой он размечает пол: уйди с метки или уклонись!"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
-msgstr "Падая, он роняет доллары, патроны и детали, и открывается лестница."
+msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
+msgstr "Падая, он роняет доллары, патроны и материалы, и открывается лестница."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Mutaciones"
@@ -4922,8 +4922,8 @@ msgid "Al usar el banco de trabajo"
 msgstr "Когда пользуешься верстаком"
 
 #: scripts/tutoriales.gd
-msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
-msgstr "Повышай качество оружия и метательного, уровень за уровнем, деталями того же вида (из рюкзака и из сундука)."
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con los materiales de su familia (los de la mochila y los del baúl)."
+msgstr "Повышай качество оружия и метательного, уровень за уровнем, материалами того же вида (из рюкзака и из сундука)."
 
 #: scripts/tutoriales.gd
 msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
@@ -5450,10 +5450,6 @@ msgid "cerrar"
 msgstr "закрыть"
 
 #: scripts/ui/inventario.gd
-msgid "Ratón o dedo: tocar"
-msgstr "Мышь или палец: нажми"
-
-#: scripts/ui/inventario.gd
 msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Мышь или палец: нажми или перетащи"
 
@@ -5510,8 +5506,8 @@ msgid "Para curar"
 msgstr "Лечение"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza · Mejora armas"
-msgstr "Деталь · Улучшает оружие"
+msgid "Material de fabricación · Mejora armas"
+msgstr "Материал для изготовления · Улучшает оружие"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto · Común"
@@ -5634,14 +5630,6 @@ msgid "Objetos, armas y arrojables"
 msgstr "Предметы, оружие и метательное"
 
 #: scripts/ui/inventario.gd
-msgid "Las armas y los lanzables duran según su calidad."
-msgstr "Оружие и метательное служат по своему качеству."
-
-#: scripts/ui/inventario.gd
-msgid "Ctrl + clic: pasar directo de un lado a otro."
-msgstr "Ctrl + клик: сразу переложить на другую сторону."
-
-#: scripts/ui/inventario.gd
 msgid "Guardar todo"
 msgstr "Убрать все"
 
@@ -5686,8 +5674,8 @@ msgid "%s · En la mochila"
 msgstr "%s · В рюкзаке"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza"
-msgstr "Деталь"
+msgid "Material"
+msgstr "Материал"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto"
@@ -5830,8 +5818,8 @@ msgid "Banco de trabajo"
 msgstr "Верстак"
 
 #: scripts/ui/inventario.gd
-msgid "Tus piezas"
-msgstr "Твои детали"
+msgid "Materiales"
+msgstr "Материалы"
 
 #: scripts/ui/inventario.gd
 msgid "Arrojables de repuesto  %d / %d"
@@ -5846,10 +5834,6 @@ msgid "Armas y arrojables"
 msgstr "Оружие и метательное"
 
 #: scripts/ui/inventario.gd
-msgid "No tienes armas ni arrojables guardados."
-msgstr "У тебя нет сохраненного оружия и метательного."
-
-#: scripts/ui/inventario.gd
 msgid "Tienes %d"
 msgstr "У тебя: %d"
 
@@ -5862,8 +5846,8 @@ msgid "Sube a %s"
 msgstr "После улучшения — %s"
 
 #: scripts/ui/inventario.gd
-msgid "Cuesta %s (tienes %d)."
-msgstr "Цена: %s (у тебя %d)."
+msgid "Cuesta %s."
+msgstr "Цена %s."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica"
@@ -5874,20 +5858,12 @@ msgid "Mejorar a %s"
 msgstr "Улучшить: %s"
 
 #: scripts/ui/inventario.gd
-msgid "mejorar"
-msgstr "улучшить"
-
-#: scripts/ui/inventario.gd
 msgid "No llevas arma a distancia que mejorar."
 msgstr "Нет оружия дальнего боя, которое можно улучшить."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Уже Эпическое: улучшать больше некуда."
-
-#: scripts/ui/inventario.gd
-msgid "Cuesta %s y tienes %d: te faltan %d."
-msgstr "Цена: %s, у тебя %d: не хватает %d."
 
 #: scripts/ui/inventario.gd
 msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
@@ -5898,32 +5874,32 @@ msgid "El baúl está lleno: haz sitio para el montón mejorado."
 msgstr "Сундук полон: освободи место для улучшенной стопки."
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza cuerpo a cuerpo"
-msgid_plural "%d piezas cuerpo a cuerpo"
-msgstr[0] "%d деталь ближнего боя"
-msgstr[1] "%d детали ближнего боя"
-msgstr[2] "%d деталей ближнего боя"
+msgid "%d material cuerpo a cuerpo"
+msgid_plural "%d materiales cuerpo a cuerpo"
+msgstr[0] "%d материал ближнего боя"
+msgstr[1] "%d материала ближнего боя"
+msgstr[2] "%d материалов ближнего боя"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza a distancia"
-msgid_plural "%d piezas a distancia"
-msgstr[0] "%d деталь дальнего боя"
-msgstr[1] "%d детали дальнего боя"
-msgstr[2] "%d деталей дальнего боя"
+msgid "%d material a distancia"
+msgid_plural "%d materiales a distancia"
+msgstr[0] "%d материал дальнего боя"
+msgstr[1] "%d материала дальнего боя"
+msgstr[2] "%d материалов дальнего боя"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza especial"
-msgid_plural "%d piezas especiales"
-msgstr[0] "%d особая деталь"
-msgstr[1] "%d особые детали"
-msgstr[2] "%d особых деталей"
+msgid "%d material especial"
+msgid_plural "%d materiales especiales"
+msgstr[0] "%d особый материал"
+msgstr[1] "%d особых материала"
+msgstr[2] "%d особых материалов"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza arrojable"
-msgid_plural "%d piezas arrojables"
-msgstr[0] "%d метательная деталь"
-msgstr[1] "%d метательные детали"
-msgstr[2] "%d метательных деталей"
+msgid "%d material arrojable"
+msgid_plural "%d materiales arrojables"
+msgstr[0] "%d метательный материал"
+msgstr[1] "%d метательных материала"
+msgstr[2] "%d метательных материалов"
 
 #: scripts/ui/inventario.gd
 msgid "%d bala"
@@ -6077,14 +6053,6 @@ msgstr "Взрывается и замораживает зомби на 3 с."
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "Особое"
-
-#: scripts/ui/inventario.gd
-msgid "Especial"
-msgstr "Особое"
-
-#: scripts/ui/inventario.gd
-msgid "Arrojable"
-msgstr "Метательное"
 
 #: scripts/ui/menu_principal.gd
 msgid "Continuar partida"

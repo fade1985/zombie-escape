@@ -92,7 +92,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | Calidades: Normal · Poco común · Rara · Épica | Normale · Peu commune · Rare · Épique (en femenino, por *arme*) |
 | Truco (de la Épica) | Atout |
 | Vendas · Botiquín · armaritos (del baño) | Bandages · Médikit · armoires à pharmacie |
-| Pieza (de mejora) · piezas cuerpo a cuerpo / a distancia / especial / arrojable | pièce (d'amélioration) · pièce corps à corps / à distance / spéciale / lançable |
+| Material (de fabricación; antes «pieza de mejora», 11 nov) · material cuerpo a cuerpo / a distancia / especial / arrojable | matériau (de fabrication) · matériau corps à corps / à distance / spécial / lançable (masculin : matériaux spéciaux) |
 | cargador · depósito · recarga · reserva | chargeur · réservoir · rechargement · réserve |
 | dólares · puntos (de talento) | dollars · points (de talent) |
 

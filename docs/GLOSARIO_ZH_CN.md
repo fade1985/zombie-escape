@@ -94,7 +94,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Normal · Poco común · Rara · Épica | 普通 · 优秀 · 稀有 · 史诗 |
 | Truco (de la Épica) | 绝活 |
 | Vendas · Botiquín · Desfibrilador | 绷带 · 急救包 · 除颤器 |
-| piezas (de mejora) | 零件 (升级零件) |
+| materiales (de fabricación; antes «piezas de mejora», 11 nov) | 材料 (制作材料) |
 | cargador · depósito · reserva · recargar | 弹匣 · 储罐 · 备弹 · 换弹 |
 
 ## Interfaz

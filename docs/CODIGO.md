@@ -639,7 +639,10 @@ en una línea.
 - `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
-  `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl)
+  `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl;
+  en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
+  banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
+  del nombre; el banco solo dice lo que cuesta, sin lo que tienes ni lo que falta
   y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
 - `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la
   mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.

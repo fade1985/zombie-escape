@@ -26,10 +26,10 @@ msgstr "As usual"
 #: scripts/alerta.gd
 msgid ""
 "%s%s\n"
-"+%d %% de dólares y de piezas"
+"+%d %% de dólares y de materiales"
 msgstr ""
 "%s%s\n"
-"+%d %% dollars and parts"
+"+%d %% dollars and materials"
 
 #: scripts/alerta.gd
 msgid " (y lo de antes)"
@@ -3010,20 +3010,20 @@ msgid "Vendas"
 msgstr "Bandages"
 
 #: scripts/objetos.gd
-msgid "Pieza cuerpo a cuerpo"
-msgstr "Melee part"
+msgid "Material cuerpo a cuerpo"
+msgstr "Melee material"
 
 #: scripts/objetos.gd
-msgid "Pieza a distancia"
-msgstr "Ranged part"
+msgid "Material a distancia"
+msgstr "Ranged material"
 
 #: scripts/objetos.gd
-msgid "Pieza especial"
-msgstr "Special part"
+msgid "Material especial"
+msgstr "Special material"
 
 #: scripts/objetos.gd
-msgid "Pieza arrojable"
-msgstr "Throwable part"
+msgid "Material arrojable"
+msgstr "Throwable material"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -4740,19 +4740,19 @@ msgid "¡Ojo! La explosión también te hace daño a ti."
 msgstr "Careful! The blast hurts you too."
 
 #: scripts/tutoriales.gd
-msgid "Piezas de mejora"
-msgstr "Upgrade parts"
+msgid "Materiales de fabricación"
+msgstr "Crafting materials"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pieza"
-msgstr "On picking up your first part"
+msgid "Al coger el primer material"
+msgstr "On picking up your first material"
 
 #: scripts/tutoriales.gd
-msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
-msgstr "Parts raise the quality of your weapons and throwables at the workbench in the maintenance room."
+msgid "Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "Crafting materials raise the quality of your weapons and throwables at the workbench in the maintenance room."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los zombis de vez en cuando y los jefes."
 msgstr "They come in four kinds: melee, ranged, special and throwable. Zombies drop them now and then, and bosses do too."
 
 #: scripts/tutoriales.gd
@@ -4772,8 +4772,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
 msgstr "It marks the floor before every attack: step out or dodge it!"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
-msgstr "When it goes down it drops dollars, ammo and parts, and the stairs open."
+msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
+msgstr "When it goes down it drops dollars, ammo and materials, and the stairs open."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Mutaciones"
@@ -4912,8 +4912,8 @@ msgid "Al usar el banco de trabajo"
 msgstr "On using the workbench"
 
 #: scripts/tutoriales.gd
-msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
-msgstr "Raise the quality of your weapons and throwables, level by level, with parts of their kind (backpack and stash)."
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con los materiales de su familia (los de la mochila y los del baúl)."
+msgstr "Raise the quality of your weapons and throwables, level by level, with materials of their kind (backpack and stash)."
 
 #: scripts/tutoriales.gd
 msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
@@ -5439,10 +5439,6 @@ msgid "cerrar"
 msgstr "close"
 
 #: scripts/ui/inventario.gd
-msgid "Ratón o dedo: tocar"
-msgstr "Mouse or finger: tap"
-
-#: scripts/ui/inventario.gd
 msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Mouse or finger: tap or drag"
 
@@ -5499,8 +5495,8 @@ msgid "Para curar"
 msgstr "Healing"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza · Mejora armas"
-msgstr "Part · Upgrades weapons"
+msgid "Material de fabricación · Mejora armas"
+msgstr "Crafting material · Upgrades weapons"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto · Común"
@@ -5623,14 +5619,6 @@ msgid "Objetos, armas y arrojables"
 msgstr "Items, weapons and throwables"
 
 #: scripts/ui/inventario.gd
-msgid "Las armas y los lanzables duran según su calidad."
-msgstr "Weapons and throwables last according to their quality."
-
-#: scripts/ui/inventario.gd
-msgid "Ctrl + clic: pasar directo de un lado a otro."
-msgstr "Ctrl + click: move straight to the other side."
-
-#: scripts/ui/inventario.gd
 msgid "Guardar todo"
 msgstr "Stash all"
 
@@ -5675,8 +5663,8 @@ msgid "%s · En la mochila"
 msgstr "%s · In backpack"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza"
-msgstr "Part"
+msgid "Material"
+msgstr "Material"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto"
@@ -5819,8 +5807,8 @@ msgid "Banco de trabajo"
 msgstr "Workbench"
 
 #: scripts/ui/inventario.gd
-msgid "Tus piezas"
-msgstr "Your parts"
+msgid "Materiales"
+msgstr "Materials"
 
 #: scripts/ui/inventario.gd
 msgid "Arrojables de repuesto  %d / %d"
@@ -5835,10 +5823,6 @@ msgid "Armas y arrojables"
 msgstr "Weapons and throwables"
 
 #: scripts/ui/inventario.gd
-msgid "No tienes armas ni arrojables guardados."
-msgstr "You have no weapons or throwables stored."
-
-#: scripts/ui/inventario.gd
 msgid "Tienes %d"
 msgstr "You have %d"
 
@@ -5851,8 +5835,8 @@ msgid "Sube a %s"
 msgstr "Upgrades to %s"
 
 #: scripts/ui/inventario.gd
-msgid "Cuesta %s (tienes %d)."
-msgstr "Costs %s (you have %d)."
+msgid "Cuesta %s."
+msgstr "Costs %s."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica"
@@ -5863,20 +5847,12 @@ msgid "Mejorar a %s"
 msgstr "Upgrade to %s"
 
 #: scripts/ui/inventario.gd
-msgid "mejorar"
-msgstr "upgrade"
-
-#: scripts/ui/inventario.gd
 msgid "No llevas arma a distancia que mejorar."
 msgstr "You have no ranged weapon to upgrade."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Already Epic: it can't be upgraded further."
-
-#: scripts/ui/inventario.gd
-msgid "Cuesta %s y tienes %d: te faltan %d."
-msgstr "Costs %s and you have %d: you're short %d."
 
 #: scripts/ui/inventario.gd
 msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
@@ -5887,28 +5863,28 @@ msgid "El baúl está lleno: haz sitio para el montón mejorado."
 msgstr "The stash is full: make room for the upgraded stack."
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza cuerpo a cuerpo"
-msgid_plural "%d piezas cuerpo a cuerpo"
-msgstr[0] "%d melee part"
-msgstr[1] "%d melee parts"
+msgid "%d material cuerpo a cuerpo"
+msgid_plural "%d materiales cuerpo a cuerpo"
+msgstr[0] "%d melee material"
+msgstr[1] "%d melee materials"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza a distancia"
-msgid_plural "%d piezas a distancia"
-msgstr[0] "%d ranged part"
-msgstr[1] "%d ranged parts"
+msgid "%d material a distancia"
+msgid_plural "%d materiales a distancia"
+msgstr[0] "%d ranged material"
+msgstr[1] "%d ranged materials"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza especial"
-msgid_plural "%d piezas especiales"
-msgstr[0] "%d special part"
-msgstr[1] "%d special parts"
+msgid "%d material especial"
+msgid_plural "%d materiales especiales"
+msgstr[0] "%d special material"
+msgstr[1] "%d special materials"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza arrojable"
-msgid_plural "%d piezas arrojables"
-msgstr[0] "%d throwable part"
-msgstr[1] "%d throwable parts"
+msgid "%d material arrojable"
+msgid_plural "%d materiales arrojables"
+msgstr[0] "%d throwable material"
+msgstr[1] "%d throwable materials"
 
 #: scripts/ui/inventario.gd
 msgid "%d bala"
@@ -6055,14 +6031,6 @@ msgstr "Explodes and freezes zombies for 3 s."
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "Special"
-
-#: scripts/ui/inventario.gd
-msgid "Especial"
-msgstr "Special"
-
-#: scripts/ui/inventario.gd
-msgid "Arrojable"
-msgstr "Throwable"
 
 #: scripts/ui/menu_principal.gd
 msgid "Continuar partida"

@@ -26,10 +26,10 @@ msgstr "一切照旧"
 #: scripts/alerta.gd
 msgid ""
 "%s%s\n"
-"+%d %% de dólares y de piezas"
+"+%d %% de dólares y de materiales"
 msgstr ""
 "%s%s\n"
-"美元和零件 +%d%%"
+"美元和材料 +%d%%"
 
 #: scripts/alerta.gd
 msgid " (y lo de antes)"
@@ -3006,20 +3006,20 @@ msgid "Vendas"
 msgstr "绷带"
 
 #: scripts/objetos.gd
-msgid "Pieza cuerpo a cuerpo"
-msgstr "近战零件"
+msgid "Material cuerpo a cuerpo"
+msgstr "近战材料"
 
 #: scripts/objetos.gd
-msgid "Pieza a distancia"
-msgstr "远程零件"
+msgid "Material a distancia"
+msgstr "远程材料"
 
 #: scripts/objetos.gd
-msgid "Pieza especial"
-msgstr "特殊零件"
+msgid "Material especial"
+msgstr "特殊材料"
 
 #: scripts/objetos.gd
-msgid "Pieza arrojable"
-msgstr "投掷零件"
+msgid "Material arrojable"
+msgstr "投掷材料"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -4730,20 +4730,20 @@ msgid "¡Ojo! La explosión también te hace daño a ti."
 msgstr "小心！爆炸也会伤到你自己。"
 
 #: scripts/tutoriales.gd
-msgid "Piezas de mejora"
-msgstr "升级零件"
+msgid "Materiales de fabricación"
+msgstr "制作材料"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pieza"
-msgstr "第一次捡到零件时"
+msgid "Al coger el primer material"
+msgstr "第一次捡到材料时"
 
 #: scripts/tutoriales.gd
-msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
-msgstr "在维修间的工作台用零件提升武器和投掷物的品质。"
+msgid "Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "在维修间的工作台用制作材料提升武器和投掷物的品质。"
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
-msgstr "零件分为四类：近战、远程、特殊和投掷。僵尸偶尔会掉落，首领也会掉。"
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los zombis de vez en cuando y los jefes."
+msgstr "材料分为四类：近战、远程、特殊和投掷。僵尸偶尔会掉落，首领也会掉。"
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4762,8 +4762,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
 msgstr "每次攻击前它会在地上做标记：离开标记或者闪避开！"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
-msgstr "它倒下时会掉落美元、弹药和零件，楼梯也会打开。"
+msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
+msgstr "它倒下时会掉落美元、弹药和材料，楼梯也会打开。"
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Mutaciones"
@@ -4902,8 +4902,8 @@ msgid "Al usar el banco de trabajo"
 msgstr "使用工作台时"
 
 #: scripts/tutoriales.gd
-msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
-msgstr "用同类零件（背包里的和储物箱里的）一级一级提升武器和投掷物的品质。"
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con los materiales de su familia (los de la mochila y los del baúl)."
+msgstr "用同类材料（背包里的和储物箱里的）一级一级提升武器和投掷物的品质。"
 
 #: scripts/tutoriales.gd
 msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
@@ -5428,10 +5428,6 @@ msgid "cerrar"
 msgstr "关闭"
 
 #: scripts/ui/inventario.gd
-msgid "Ratón o dedo: tocar"
-msgstr "鼠标或手指：点击"
-
-#: scripts/ui/inventario.gd
 msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "鼠标或手指：点击或拖动"
 
@@ -5488,8 +5484,8 @@ msgid "Para curar"
 msgstr "治疗"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza · Mejora armas"
-msgstr "零件 · 升级武器"
+msgid "Material de fabricación · Mejora armas"
+msgstr "制作材料 · 升级武器"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto · Común"
@@ -5612,14 +5608,6 @@ msgid "Objetos, armas y arrojables"
 msgstr "物品、武器和投掷物"
 
 #: scripts/ui/inventario.gd
-msgid "Las armas y los lanzables duran según su calidad."
-msgstr "武器和投掷物的寿命取决于品质。"
-
-#: scripts/ui/inventario.gd
-msgid "Ctrl + clic: pasar directo de un lado a otro."
-msgstr "Ctrl + 点击：直接移到另一边。"
-
-#: scripts/ui/inventario.gd
 msgid "Guardar todo"
 msgstr "全部存入"
 
@@ -5664,8 +5652,8 @@ msgid "%s · En la mochila"
 msgstr "%s · 在背包里"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza"
-msgstr "零件"
+msgid "Material"
+msgstr "材料"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto"
@@ -5808,8 +5796,8 @@ msgid "Banco de trabajo"
 msgstr "工作台"
 
 #: scripts/ui/inventario.gd
-msgid "Tus piezas"
-msgstr "你的零件"
+msgid "Materiales"
+msgstr "材料"
 
 #: scripts/ui/inventario.gd
 msgid "Arrojables de repuesto  %d / %d"
@@ -5824,10 +5812,6 @@ msgid "Armas y arrojables"
 msgstr "武器和投掷物"
 
 #: scripts/ui/inventario.gd
-msgid "No tienes armas ni arrojables guardados."
-msgstr "你没有存放任何武器或投掷物。"
-
-#: scripts/ui/inventario.gd
 msgid "Tienes %d"
 msgstr "你有 %d 个"
 
@@ -5840,8 +5824,8 @@ msgid "Sube a %s"
 msgstr "升至%s"
 
 #: scripts/ui/inventario.gd
-msgid "Cuesta %s (tienes %d)."
-msgstr "需要%s（你有 %d）。"
+msgid "Cuesta %s."
+msgstr "花费 %s。"
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica"
@@ -5852,20 +5836,12 @@ msgid "Mejorar a %s"
 msgstr "升级到%s"
 
 #: scripts/ui/inventario.gd
-msgid "mejorar"
-msgstr "升级"
-
-#: scripts/ui/inventario.gd
 msgid "No llevas arma a distancia que mejorar."
 msgstr "你没有可以升级的远程武器。"
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
 msgstr "已是史诗：无法再升级。"
-
-#: scripts/ui/inventario.gd
-msgid "Cuesta %s y tienes %d: te faltan %d."
-msgstr "需要%s，你有 %d：还差 %d。"
 
 #: scripts/ui/inventario.gd
 msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
@@ -5876,24 +5852,24 @@ msgid "El baúl está lleno: haz sitio para el montón mejorado."
 msgstr "储物箱满了：给升级后的那组腾个地方。"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza cuerpo a cuerpo"
-msgid_plural "%d piezas cuerpo a cuerpo"
-msgstr[0] "%d 个近战零件"
+msgid "%d material cuerpo a cuerpo"
+msgid_plural "%d materiales cuerpo a cuerpo"
+msgstr[0] "%d 个近战材料"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza a distancia"
-msgid_plural "%d piezas a distancia"
-msgstr[0] "%d 个远程零件"
+msgid "%d material a distancia"
+msgid_plural "%d materiales a distancia"
+msgstr[0] "%d 个远程材料"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza especial"
-msgid_plural "%d piezas especiales"
-msgstr[0] "%d 个特殊零件"
+msgid "%d material especial"
+msgid_plural "%d materiales especiales"
+msgstr[0] "%d 个特殊材料"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza arrojable"
-msgid_plural "%d piezas arrojables"
-msgstr[0] "%d 个投掷零件"
+msgid "%d material arrojable"
+msgid_plural "%d materiales arrojables"
+msgstr[0] "%d 个投掷材料"
 
 #: scripts/ui/inventario.gd
 msgid "%d bala"
@@ -6033,14 +6009,6 @@ msgstr "爆炸后将僵尸冰冻3秒。"
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "特殊"
-
-#: scripts/ui/inventario.gd
-msgid "Especial"
-msgstr "特殊"
-
-#: scripts/ui/inventario.gd
-msgid "Arrojable"
-msgstr "投掷物"
 
 #: scripts/ui/menu_principal.gd
 msgid "Continuar partida"

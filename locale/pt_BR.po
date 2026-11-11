@@ -26,10 +26,10 @@ msgstr "Como sempre"
 #: scripts/alerta.gd
 msgid ""
 "%s%s\n"
-"+%d %% de dólares y de piezas"
+"+%d %% de dólares y de materiales"
 msgstr ""
 "%s%s\n"
-"+%d %% de dólares e peças"
+"+%d %% de dólares e materiais"
 
 #: scripts/alerta.gd
 msgid " (y lo de antes)"
@@ -3010,20 +3010,20 @@ msgid "Vendas"
 msgstr "Bandagens"
 
 #: scripts/objetos.gd
-msgid "Pieza cuerpo a cuerpo"
-msgstr "Peça corpo a corpo"
+msgid "Material cuerpo a cuerpo"
+msgstr "Material corpo a corpo"
 
 #: scripts/objetos.gd
-msgid "Pieza a distancia"
-msgstr "Peça à distância"
+msgid "Material a distancia"
+msgstr "Material à distância"
 
 #: scripts/objetos.gd
-msgid "Pieza especial"
-msgstr "Peça especial"
+msgid "Material especial"
+msgstr "Material especial"
 
 #: scripts/objetos.gd
-msgid "Pieza arrojable"
-msgstr "Peça arremessável"
+msgid "Material arrojable"
+msgstr "Material arremessável"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -4740,19 +4740,19 @@ msgid "¡Ojo! La explosión también te hace daño a ti."
 msgstr "Cuidado! A explosão também machuca você."
 
 #: scripts/tutoriales.gd
-msgid "Piezas de mejora"
-msgstr "Peças de melhoria"
+msgid "Materiales de fabricación"
+msgstr "Materiais de fabricação"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pieza"
-msgstr "Ao pegar a primeira peça"
+msgid "Al coger el primer material"
+msgstr "Ao pegar o primeiro material"
 
 #: scripts/tutoriales.gd
-msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
-msgstr "Com as peças você sobe a qualidade das armas e dos arremessáveis, na bancada da sala de manutenção."
+msgid "Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "Com os materiais de fabricação você sobe a qualidade das armas e dos arremessáveis, na bancada da sala de manutenção."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los zombis de vez en cuando y los jefes."
 msgstr "São de quatro famílias: corpo a corpo, à distância, especiais e arremessáveis. Os zumbis soltam de vez em quando, e os chefes também."
 
 #: scripts/tutoriales.gd
@@ -4772,8 +4772,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
 msgstr "Antes de cada ataque ele marca o chão: saia da marca ou desvie!"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
-msgstr "Ao cair, solta dólares, munição e peças, e as escadas se abrem."
+msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
+msgstr "Ao cair, solta dólares, munição e materiais, e as escadas se abrem."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Mutaciones"
@@ -4912,8 +4912,8 @@ msgid "Al usar el banco de trabajo"
 msgstr "Ao usar a bancada"
 
 #: scripts/tutoriales.gd
-msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
-msgstr "Suba a qualidade das suas armas e arremessáveis, nível por nível, com as peças da família deles (as da mochila e as do baú)."
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con los materiales de su familia (los de la mochila y los del baúl)."
+msgstr "Suba a qualidade das suas armas e arremessáveis, nível por nível, com os materiais da família deles (os da mochila e os do baú)."
 
 #: scripts/tutoriales.gd
 msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
@@ -5439,10 +5439,6 @@ msgid "cerrar"
 msgstr "fechar"
 
 #: scripts/ui/inventario.gd
-msgid "Ratón o dedo: tocar"
-msgstr "Mouse ou dedo: tocar"
-
-#: scripts/ui/inventario.gd
 msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Mouse ou dedo: tocar ou arrastar"
 
@@ -5499,8 +5495,8 @@ msgid "Para curar"
 msgstr "Para curar"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza · Mejora armas"
-msgstr "Peça · Melhora armas"
+msgid "Material de fabricación · Mejora armas"
+msgstr "Material de fabricação · Melhora armas"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto · Común"
@@ -5623,14 +5619,6 @@ msgid "Objetos, armas y arrojables"
 msgstr "Objetos, armas e arremessáveis"
 
 #: scripts/ui/inventario.gd
-msgid "Las armas y los lanzables duran según su calidad."
-msgstr "As armas e os arremessáveis duram conforme a sua qualidade."
-
-#: scripts/ui/inventario.gd
-msgid "Ctrl + clic: pasar directo de un lado a otro."
-msgstr "Ctrl + clique: passar direto de um lado para o outro."
-
-#: scripts/ui/inventario.gd
 msgid "Guardar todo"
 msgstr "Guardar tudo"
 
@@ -5675,8 +5663,8 @@ msgid "%s · En la mochila"
 msgstr "%s · Na mochila"
 
 #: scripts/ui/inventario.gd
-msgid "Pieza"
-msgstr "Peça"
+msgid "Material"
+msgstr "Material"
 
 #: scripts/ui/inventario.gd
 msgid "Objeto"
@@ -5819,8 +5807,8 @@ msgid "Banco de trabajo"
 msgstr "Bancada"
 
 #: scripts/ui/inventario.gd
-msgid "Tus piezas"
-msgstr "Suas peças"
+msgid "Materiales"
+msgstr "Materiais"
 
 #: scripts/ui/inventario.gd
 msgid "Arrojables de repuesto  %d / %d"
@@ -5835,10 +5823,6 @@ msgid "Armas y arrojables"
 msgstr "Armas e arremessáveis"
 
 #: scripts/ui/inventario.gd
-msgid "No tienes armas ni arrojables guardados."
-msgstr "Você não tem armas nem arremessáveis guardados."
-
-#: scripts/ui/inventario.gd
 msgid "Tienes %d"
 msgstr "Você tem %d"
 
@@ -5851,8 +5835,8 @@ msgid "Sube a %s"
 msgstr "Sobe para %s"
 
 #: scripts/ui/inventario.gd
-msgid "Cuesta %s (tienes %d)."
-msgstr "Custa %s (você tem %d)."
+msgid "Cuesta %s."
+msgstr "Custa %s."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica"
@@ -5863,20 +5847,12 @@ msgid "Mejorar a %s"
 msgstr "Melhorar para %s"
 
 #: scripts/ui/inventario.gd
-msgid "mejorar"
-msgstr "melhorar"
-
-#: scripts/ui/inventario.gd
 msgid "No llevas arma a distancia que mejorar."
 msgstr "Você não tem arma à distância para melhorar."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Já é Épica: não dá para melhorar mais."
-
-#: scripts/ui/inventario.gd
-msgid "Cuesta %s y tienes %d: te faltan %d."
-msgstr "Custa %s e você tem %d: faltam %d."
 
 #: scripts/ui/inventario.gd
 msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
@@ -5887,28 +5863,28 @@ msgid "El baúl está lleno: haz sitio para el montón mejorado."
 msgstr "O baú está cheio: abra espaço para a pilha melhorada."
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza cuerpo a cuerpo"
-msgid_plural "%d piezas cuerpo a cuerpo"
-msgstr[0] "%d peça corpo a corpo"
-msgstr[1] "%d peças corpo a corpo"
+msgid "%d material cuerpo a cuerpo"
+msgid_plural "%d materiales cuerpo a cuerpo"
+msgstr[0] "%d material corpo a corpo"
+msgstr[1] "%d materiais corpo a corpo"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza a distancia"
-msgid_plural "%d piezas a distancia"
-msgstr[0] "%d peça à distância"
-msgstr[1] "%d peças à distância"
+msgid "%d material a distancia"
+msgid_plural "%d materiales a distancia"
+msgstr[0] "%d material à distância"
+msgstr[1] "%d materiais à distância"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza especial"
-msgid_plural "%d piezas especiales"
-msgstr[0] "%d peça especial"
-msgstr[1] "%d peças especiais"
+msgid "%d material especial"
+msgid_plural "%d materiales especiales"
+msgstr[0] "%d material especial"
+msgstr[1] "%d materiais especiais"
 
 #: scripts/ui/inventario.gd
-msgid "%d pieza arrojable"
-msgid_plural "%d piezas arrojables"
-msgstr[0] "%d peça arremessável"
-msgstr[1] "%d peças arremessáveis"
+msgid "%d material arrojable"
+msgid_plural "%d materiales arrojables"
+msgstr[0] "%d material arremessável"
+msgstr[1] "%d materiais arremessáveis"
 
 #: scripts/ui/inventario.gd
 msgid "%d bala"
@@ -6055,14 +6031,6 @@ msgstr "Explode e deixa os zumbis congelados por 3 s."
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
 msgstr "Especiais"
-
-#: scripts/ui/inventario.gd
-msgid "Especial"
-msgstr "Especial"
-
-#: scripts/ui/inventario.gd
-msgid "Arrojable"
-msgstr "Arremessável"
 
 #: scripts/ui/menu_principal.gd
 msgid "Continuar partida"

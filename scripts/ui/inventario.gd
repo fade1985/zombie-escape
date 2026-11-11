@@ -589,7 +589,8 @@ func marco_ficha(padre: Control, r: Rect2) -> void:
 
 
 # La línea de ayuda de abajo: los botones del mando (A elegir, lo que hacen X e Y con lo elegido —"atajos"— y B
-# cerrar) y, a la derecha, que también va con el ratón o el dedo (en el banco no se arrastra)
+# cerrar) y, a la derecha, que también va con el ratón o el dedo. Solo en el inventario: el baúl y el banco ya no la
+# llevan (11 nov)
 func pintar_ayuda(atajos: Dictionary) -> void:
 	var ayuda := HBoxContainer.new()
 	ayuda.add_theme_constant_override("separation", 5)
@@ -609,7 +610,7 @@ func pintar_ayuda(atajos: Dictionary) -> void:
 		var hueco := Control.new()
 		hueco.custom_minimum_size.x = 11
 		ayuda.add_child(hueco)
-	rotulo(viva, Idioma.t("Ratón o dedo: tocar") if abierto == "banco" else Idioma.t("Ratón o dedo: tocar o arrastrar"), 896, 591,
+	rotulo(viva, Idioma.t("Ratón o dedo: tocar o arrastrar"), 896, 591,
 		Tema.GRIS, HORIZONTAL_ALIGNMENT_RIGHT)
 
 
@@ -725,7 +726,7 @@ func ficha_objeto(caja: VBoxContainer, c: Array) -> Dictionary:
 	var id: String = c[0]
 	var curar := id in Objetos.USABLES
 	cabeza(caja, Objetos.icono(id), Objetos.nombre(id),
-		Idioma.t("Para curar") if curar else Idioma.t("Pieza · Mejora armas") if id in Objetos.PIEZAS else Idioma.t("Objeto · Común"))
+		Idioma.t("Para curar") if curar else Idioma.t("Material de fabricación · Mejora armas") if id in Objetos.PIEZAS else Idioma.t("Objeto · Común"))
 	if c[1] > 1:
 		renglon(caja, Idioma.t("Llevas %d") % c[1], Tema.TINTA)
 	if curar:
@@ -1137,11 +1138,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 				GRIS if o.equipo < 0 else Armas.color(o.calidad), 8.0)
 		else:
 			casilla_inv(r)
-	if filas * 8 == Objetos.BAUL:
-		rotulo(lienzo, Idioma.t("Las armas y los lanzables duran según su calidad."), MITAD, 346,
-			Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, 418)
-		rotulo(lienzo, Idioma.t("Ctrl + clic: pasar directo de un lado a otro."), MITAD, 364,
-			Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, 418)
+	# (los dos renglones de debajo, lo de la durabilidad y Ctrl + clic, ya no salen: 11 nov)
 	# abajo, el marco de la ficha y los botones que no cambian con lo elegido (el principal va con la ficha)
 	marco_ficha(lienzo, Rect2(64, 402, 832, 182))
 	var todo := boton(lienzo, "guardar_todo", Idioma.t("Guardar todo"), guardar_todo)
@@ -1221,7 +1218,7 @@ func pintar_ficha_baul() -> void:
 	viva.add_child(caja)
 	caja.position = Vector2(198, 410) - ORIGEN
 	renglon(caja, d.nombre, Color("#e6dec8"), HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA).theme_type_variation = "Titulo"
-	renglon(caja, d.que_es, Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
+	# (qué es y dónde está, debajo del nombre, ya no sale: 11 nov; sigue en d.que_es para las pruebas)
 	if d.cuanto != "":
 		renglon(caja, d.cuanto, Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	if d.get("partidas", "") != "":   # (la durabilidad: Armas.texto_partidas; en rojo, la última)
@@ -1231,7 +1228,6 @@ func pintar_ficha_baul() -> void:
 	var nota := renglon(caja, texto[0], texto[1], HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	nota.name = "nota"   # (las pruebas la leen)
 	aviso = ""
-	var atajos := {}
 	if not d.boton.is_empty():
 		var b := boton(viva, d.boton[0], d.boton[1], d.boton[2])
 		b.disabled = d.boton[3]
@@ -1239,13 +1235,11 @@ func pintar_ficha_baul() -> void:
 			b.add_theme_color_override(c, Tema.AMARILLO)
 		b.position = Vector2(600, 410) - ORIGEN
 		b.size = Vector2(280, 36)
-		if not b.disabled:
-			atajos["Y"] = Idioma.minusculas(d.boton[1], true)
 	if que_se_destruye() != "":   # lo de la mochila, la munición y el baúl (no las armas que lleva)
 		var x := boton(viva, "destruir", Idioma.t("Destruir"), destruir, "BotonRojo")   # no-tr
 		x.position = Vector2(600, 450) - ORIGEN
 		x.size = Vector2(280, 36)
-	pintar_ayuda(atajos)
+	# (sin la línea de las teclas de abajo: 11 nov)
 
 
 # Lo que dice la ficha de lo elegido en el baúl: el dibujo, el nombre, qué es, cuántos, lo que hace o lo que pasa al
@@ -1303,7 +1297,7 @@ func ficha_baul() -> Dictionary:
 			var c: Array = Objetos.casillas(partida.mochila)[i]
 			var id: String = c[0]
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
-				"que_es": Idioma.t("%s · En la mochila") % (Idioma.t("Pieza") if id in Objetos.PIEZAS
+				"que_es": Idioma.t("%s · En la mochila") % (Idioma.t("Material") if id in Objetos.PIEZAS
 					else Idioma.t("Para curar") if id in Objetos.USABLES else Idioma.t("Objeto")),
 				"cuanto": Idioma.t("Llevas %d") % c[1] if c[1] > 1 else ""}, true)
 			d.que = que_pieza(id) + que_guardar(s, id, c[1], "casilla")
@@ -1327,7 +1321,7 @@ func ficha_baul() -> Dictionary:
 			var cabe := se_saca(o)
 			var tanda := mini(Objetos.tanda(id), o.n)   # cuántos salen de una vez (1 casi siempre; las balas, un hueco)
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
-				"que_es": Idioma.t("%s · En el baúl") % (Idioma.t("Munición") if municion else Idioma.t("Pieza") if id in Objetos.PIEZAS
+				"que_es": Idioma.t("%s · En el baúl") % (Idioma.t("Munición") if municion else Idioma.t("Material") if id in Objetos.PIEZAS
 					else Idioma.t("Para curar") if id in Objetos.USABLES else Idioma.t("Objeto")),
 				"cuanto": (Idioma.t("Hay %d en el baúl") % o.n) if s.baul.get(id, 0) <= o.n
 					else Idioma.t("Hay %d en esta casilla · %d en el baúl") % [o.n, s.baul[id]],
@@ -1822,9 +1816,6 @@ func destruir_ya() -> void:
 # [traducir]
 const PIEZAS_TITULO := {"pieza_cuerpo": "Cuerpo a cuerpo", "pieza_distancia": "A distancia",
 	"pieza_especial": "Especiales", "pieza_arrojable": "Arrojables"}
-# Qué es lo elegido, por su familia («Especial · Rara · En la mano»)
-const FAMILIA_BANCO := {"cuerpo": "Cuerpo a cuerpo", "distancia": "A distancia", "especial": "Especial",
-	"arrojable": "Arrojable"}
 # [/traducir]
 
 
@@ -1836,7 +1827,7 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 	preparar_lienzo(columna)
 	rotulo(lienzo, Idioma.t("Banco de trabajo"), 480, 26, Color("#e6dec8"), HORIZONTAL_ALIGNMENT_CENTER).theme_type_variation = "Titulo"
 	# arriba, las piezas que tiene (las pinta la ficha, que enciende las que gasta lo elegido)
-	rotulo(lienzo, Idioma.t("Tus piezas"), 64, 66, Color("#e6dec8"))
+	rotulo(lienzo, Idioma.t("Materiales"), 64, 66, Color("#e6dec8"))   # (antes «Tus piezas», 11 nov)
 	raya(Rect2(64, 146, 832, 2))
 	# a la izquierda, lo que lleva: sus armas (de cada tipo, la de la mano y la de repuesto) y sus arrojables
 	rotulo(lienzo, Idioma.t("Lo que llevas"), 64, 156, Color("#e6dec8"))
@@ -1873,8 +1864,7 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 				8.0)
 		else:
 			casilla_inv(r)
-	if equipo.is_empty():
-		rotulo(lienzo, Idioma.t("No tienes armas ni arrojables guardados."), MITAD, 302, Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, 418)
+	# (la frase de debajo, «No tienes armas ni arrojables guardados», ya no sale: 11 nov)
 	# abajo, el marco de la ficha y «Cerrar» (el botón de mejorar va con la ficha)
 	marco_ficha(lienzo, Rect2(64, 402, 832, 182))
 	var salir := boton(lienzo, "cerrar", Idioma.t("Cerrar"), cerrar)
@@ -1898,19 +1888,23 @@ func pintar_ficha_banco() -> void:
 	var s := Guardado.cargar()
 	var o := en_banco(s)
 	var pieza := Armas.pieza(o.id)
+	# cada familia, centrada en su cuarto de la fila (antes, pegadas a la izquierda: sobraba hueco a la derecha, 11 nov)
 	for i in Objetos.PIEZAS.size():
 		var p: String = Objetos.PIEZAS.keys()[i]
-		var x := 64.0 + i * 208
 		var hay := Panel.new()
 		hay.name = p
 		hay.add_theme_stylebox_override("panel", estilo(Tema.AMARILLO if p == pieza else Color("#3d3647"), false, false))
 		hay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		viva.add_child(hay)
-		hay.position = Vector2(x, 92) - ORIGEN
 		hay.size = Vector2(42, 42)
 		dibujo(hay, Objetos.icono(p), hay.size, 8.0)
-		rotulo(viva, Idioma.t(PIEZAS_TITULO[p]), x + 52, 92, Tema.AMARILLO if p == pieza else Tema.TINTA)
-		rotulo(viva, Idioma.t("Tienes %d") % piezas(p, s), x + 52, 112, Tema.GRIS)
+		var titulo := rotulo(viva, Idioma.t(PIEZAS_TITULO[p]), 0, 92, Tema.AMARILLO if p == pieza else Tema.TINTA)
+		var cuantas := rotulo(viva, Idioma.t("Tienes %d") % piezas(p, s), 0, 112, Tema.GRIS)
+		var ancho := 52.0 + maxf(titulo.get_minimum_size().x, cuantas.get_minimum_size().x)
+		var x := roundf(64.0 + i * 208 + (208 - ancho) / 2.0)
+		hay.position = Vector2(x, 92) - ORIGEN
+		titulo.position.x = x + 52 - ORIGEN.x
+		cuantas.position.x = x + 52 - ORIGEN.x
 	var grande := Panel.new()
 	grande.add_theme_stylebox_override("panel", estilo(Tema.AMARILLO, false, false))
 	grande.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1923,8 +1917,7 @@ func pintar_ficha_banco() -> void:
 	viva.add_child(caja)
 	caja.position = Vector2(198, 410) - ORIGEN
 	renglon(caja, Armas.nombre(o.id), Color("#e6dec8"), HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA).theme_type_variation = "Titulo"
-	renglon(caja, "%s · %s · %s" % [Idioma.t(FAMILIA_BANCO[Objetos.PIEZAS[pieza]]), Armas.calidad_nombre(o.calidad), o.donde],
-		Tema.GRIS, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
+	# (la línea de debajo del nombre, «Cuerpo a cuerpo · Normal · En la mano», ya no sale: 11 nov)
 	if o.has("k"):
 		renglon(caja, Idioma.t("Te quedan %d de %d") % [o.n, partida.lanzables.maximo(o.k)], Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT,
 			ANCHO_NOTA)
@@ -1946,8 +1939,8 @@ func pintar_ficha_banco() -> void:
 	aviso = ""
 	var no := no_mejora(o, s)
 	var coste := no
-	if no == "":
-		coste = Idioma.t("Cuesta %s (tienes %d).") % [cuantas_piezas(Armas.coste(o.id, o.calidad + 1), pieza), piezas(pieza, s)]
+	if no == "":   # (solo lo que cuesta: ni lo que tienes ni lo que falta, 11 nov)
+		coste = Idioma.t("Cuesta %s.") % cuantas_piezas(Armas.coste(o.id, o.calidad + 1), pieza)
 	renglon(caja, coste, Tema.AMARILLO if no != "" else Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA).name = "coste"
 	var b := boton(viva, "mejorar", Idioma.t("Ya es Épica") if epica else Idioma.t("Mejorar a %s") % arriba, mejorar)
 	b.disabled = no != ""
@@ -1955,7 +1948,7 @@ func pintar_ficha_banco() -> void:
 		b.add_theme_color_override(c, Tema.AMARILLO)
 	b.position = Vector2(600, 418) - ORIGEN
 	b.size = Vector2(280, 40)
-	pintar_ayuda({} if b.disabled else {"Y": Idioma.t("mejorar")})
+	# (sin la línea de las teclas de abajo: 11 nov)
 
 
 # Lo que hay en la casilla elegida del banco: {id (el del arma o el tipo del arrojable), calidad, donde («En la mano»,
@@ -1992,7 +1985,7 @@ func no_mejora(o: Dictionary, s: Dictionary) -> String:
 	var cuesta: int = Armas.coste(o.id, o.calidad + 1)
 	var hay := piezas(pieza, s)
 	if hay < cuesta:
-		return Idioma.t("Cuesta %s y tienes %d: te faltan %d.") % [cuantas_piezas(cuesta, pieza), hay, cuesta - hay]
+		return Idioma.t("Cuesta %s.") % cuantas_piezas(cuesta, pieza)   # (solo lo que cuesta, 11 nov)
 	var arriba := Lanzables.clave(o.id, o.calidad + 1)
 	if o.has("k") and o.sitio.begins_with("l"):
 		var lz: Lanzables = partida.lanzables
@@ -2013,10 +2006,10 @@ func piezas(pieza: String, s: Dictionary) -> int:
 # «1 pieza especial», «6 piezas especiales»: una frase entera por familia, con su singular y su plural
 func cuantas_piezas(n: int, pieza: String) -> String:
 	match pieza:
-		"pieza_cuerpo": return Idioma.n("%d pieza cuerpo a cuerpo", "%d piezas cuerpo a cuerpo", n) % n
-		"pieza_distancia": return Idioma.n("%d pieza a distancia", "%d piezas a distancia", n) % n
-		"pieza_especial": return Idioma.n("%d pieza especial", "%d piezas especiales", n) % n
-	return Idioma.n("%d pieza arrojable", "%d piezas arrojables", n) % n
+		"pieza_cuerpo": return Idioma.n("%d material cuerpo a cuerpo", "%d materiales cuerpo a cuerpo", n) % n
+		"pieza_distancia": return Idioma.n("%d material a distancia", "%d materiales a distancia", n) % n
+		"pieza_especial": return Idioma.n("%d material especial", "%d materiales especiales", n) % n
+	return Idioma.n("%d material arrojable", "%d materiales arrojables", n) % n
 
 
 # Cuántas balas, cartuchos, gasolinas... («1 gasolina», «2 gasolinas»): una frase entera por tipo, con su singular y su

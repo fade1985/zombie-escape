@@ -93,7 +93,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | pesas (del Gymbro) · mancuernas · cubos | halteres · halteres · baldes |
 | Molotov · Granada · Atraedora · Congeladora | Molotov · Granada · Isca · Bomba de gelo |
 | arrojables / lanzables | arremessáveis (los dos) · lanzar = arremessar |
-| piezas (cuerpo a cuerpo, a distancia, especial, arrojable) · piezas de mejora | peças (corpo a corpo, à distância, especial, arremessável) · peças de melhoria |
+| materiales (cuerpo a cuerpo, a distancia, especial, arrojable) · materiales de fabricación (antes «piezas de mejora», 11 nov) | materiais (corpo a corpo, à distância, especial, arremessável) · materiais de fabricação |
 | perdigones · montón (de arrojables) · hueco / casilla | chumbinhos · pilha · espaço |
 | tarjeta de acceso · tarjeta dorada · llave · cámara acorazada · lector de tarjetas · apertura de emergencia | cartão de acesso · cartão dourado · chave · cofre · leitor de cartão · abertura de emergência |
 | desfibrilador · escudo | desfibrilador · escudo |

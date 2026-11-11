@@ -66,7 +66,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | logro · bestiario · dosier · colecciones · noticias | достижение · бестиарий · досье · коллекции · новости (выпуски) |
 | talento · rama · árbol de talentos | талант · ветка · дерево талантов |
 | mutación | мутация |
-| dólares · piezas | доллары · детали |
+| dólares · materiales (de fabricación; antes «piezas», 11 nov) | доллары · материалы (материалы для изготовления) |
 | sala de mantenimiento (Mantenimiento) · viviendas | дворницкая · общежитие |
 | ordenador · taquilla · baúl · banco de trabajo · taller | компьютер · шкафчик · сундук · верстак · мастерская |
 | inventario · mochila | инвентарь · рюкзак |

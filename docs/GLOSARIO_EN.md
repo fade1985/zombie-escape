@@ -38,7 +38,7 @@ armas, objetos, talentos, logros...). Si cambia un nombre, se cambia aquí y en 
 | Ajolote (talento) | Axolotl | antes Lobezno / Wolverine: se cambió el 29 oct porque Wolverine es marca de Marvel |
 | arrojables | throwables | molotov, granadas, atraedora, congeladora |
 | baúl · mochila | stash · backpack | por confirmar |
-| dólares · puntos · piezas | dollars · points · parts | |
+| dólares · puntos · materiales (antes «piezas») | dollars · points · materials | |
 | logro · bestiario · dosier | achievement · bestiary · dossier | |
 
 ## Interfaz
@@ -65,7 +65,7 @@ Salieron al pasar la interfaz; las fases siguientes tienen que igualarlos (nombr
 | Baúl (del taller) · Banco de trabajo · Taquilla | Stash · Workbench · Locker (*Johnny's Locker*) | |
 | Calidades: Normal, Poco común, Rara, Épica | Normal, Uncommon, Rare, Epic | |
 | gasolina · bidón de ácido · baterías | gas can · acid drum · batteries | tipos de munición de depósito |
-| piezas (cuerpo a cuerpo, a distancia, especial, arrojable) | parts (melee, ranged, special, throwable) | |
+| materiales de fabricación (cuerpo a cuerpo, a distancia, especial, arrojable); antes «piezas de mejora», 11 nov | crafting materials (melee, ranged, special, throwable material) | |
 | Tienda de armas · Cambiar (en la tienda) | Weapon Shop · Trade | |
 | partida | run | «Abandonar partida» → *Abandon run*; «Jugar otra vez» → *Play again*; «Otra vez» (cartel de derrota) → *Try again* |
 | ConserjeOS · CONSERJE OS 95 | JanitorOS · JANITOR OS 95 | los nombres de archivo de las ventanas (PUNTOS.EXE...) también se traducen |
@@ -121,7 +121,7 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! (bala en el chaleco) | the Office Worker · the Velaria Bodyguard · TOK! |
 | Canal 8 | Channel 8 |
 | almacén · cámara (frigorífica) · rebotica · probadores · taquillas | storeroom · freezer · back room · fitting rooms · lockers |
-| Tutoriales: lanzables · truco · piezas de mejora · peligros de las tiendas · vida en tercios | throwables · perk · upgrade parts · store hazards · health in thirds |
+| Tutoriales: lanzables · truco · materiales de fabricación · peligros de las tiendas · vida en tercios | throwables · perk · crafting materials · store hazards · health in thirds |
 
 Las noticias y los documentos hablan en dólares, como el resto del juego (*$300*, *$3.99*; hasta el 29 oct, en euros).
 

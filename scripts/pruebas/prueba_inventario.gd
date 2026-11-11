@@ -177,7 +177,7 @@ func probar_baul() -> void:
 	inventario.guardar()
 	await get_tree().process_frame
 	var g := Guardado.cargar()
-	print("Guardada la pieza especial: en el baúl %d, en la mochila %d (esperado: 3, 0) · la marca en «%s», en la casilla de %s (esperado: m0, Pieza cuerpo a cuerpo: la siguiente)" % [
+	print("Guardada la pieza especial: en el baúl %d, en la mochila %d (esperado: 3, 0) · la marca en «%s», en la casilla de %s (esperado: m0, Material cuerpo a cuerpo: la siguiente)" % [
 		g.baul.get("pieza_especial", 0), mochila.count("pieza_especial"), marca.call(), Objetos.nombre(Objetos.casillas(mochila)[0][0])])
 	# ahora: m0 pieza cuerpo a cuerpo, m1 pieza a distancia × 3 y m2 las vendas
 	inventario.tocar(inventario.donde_esta("vendas"))
@@ -272,7 +272,7 @@ func probar_baul() -> void:
 	inventario.destruir()
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-baul-destruir.png")
-	print("Destruir: pregunta «%s» · en el baúl %d (esperado: ¿Destruir Pieza especial ×3?... · 3)" % [
+	print("Destruir: pregunta «%s» · en el baúl %d (esperado: ¿Destruir Material especial ×3?... · 3)" % [
 		texto_confirmar(inventario), Guardado.cargar().baul.get("pieza_especial", 0)])
 	responder_confirmar(inventario, false)
 	await get_tree().process_frame
@@ -282,7 +282,7 @@ func probar_baul() -> void:
 	await get_tree().process_frame
 	responder_confirmar(inventario, true)
 	await get_tree().process_frame
-	print("Destruida la pieza especial: en el baúl %d · dice «%s» · la marca en «%s» (esperado: 0 · Destruido: Pieza especial ×3. · una casilla, no el botón)" % [
+	print("Destruida la pieza especial: en el baúl %d · dice «%s» · la marca en «%s» (esperado: 0 · Destruido: Material especial ×3. · una casilla, no el botón)" % [
 		Guardado.cargar().baul.get("pieza_especial", 0), dice.call(), marca.call()])
 	inventario.tocar(en_baul.call("cartuchos"))
 	await get_tree().process_frame
@@ -768,13 +768,13 @@ func probar_banco_mejorar() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco.png")
 	# la fregona de la mano: a Poco común
-	print("La fregona: elegida %s · botón %s · «%s» · «%s» (esperado: p0 · activo «Mejorar a Poco común» · Sube a Poco común: daño +20 %%... · Cuesta 3 piezas cuerpo a cuerpo (tienes 4).)" % [
+	print("La fregona: elegida %s · botón %s · «%s» · «%s» (esperado: p0 · activo «Mejorar a Poco común» · Sube a Poco común: daño +20 %%... · Cuesta 3 materiales cuerpo a cuerpo.)" % [
 		inventario.sel, boton.call(), dice.call("nota"), dice.call("coste")])
 	inventario.mejorar()
 	await get_tree().process_frame
 	print("Mejorada: calidad %d · piezas cuerpo a cuerpo %s · logro Manitas «%s» · dice «%s» (esperado: 1 · 0 y 1 · conseguido · ¡Mejorado! Ahora es Fregona (Poco común).)" % [
 		johnny.calidad("fregona"), piezas.call("pieza_cuerpo"), Logros.estado(Guardado.cargar(), "manitas"), dice.call("nota")])
-	print("Otra vez: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 6 piezas cuerpo a cuerpo y tienes 1: te faltan 5.)" % [
+	print("Otra vez: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 6 materiales cuerpo a cuerpo.)" % [
 		boton.call(), dice.call("coste")])
 	inventario.mejorar()
 	print("Sin piezas: calidad %d (esperado: 1)" % johnny.calidad("fregona"))
@@ -807,7 +807,7 @@ func probar_banco_mejorar() -> void:
 		boton.call(), dice.call("nota"), dice.call("coste")])
 	inventario.tocar("q2")
 	await get_tree().process_frame
-	print("Los 3 molotovs Poco comunes del baúl: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 2 piezas arrojables y tienes 1: te faltan 1.)" % [
+	print("Los 3 molotovs Poco comunes del baúl: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 2 materiales arrojables.)" % [
 		boton.call(), dice.call("coste")])
 	inventario.cerrar()
 	Guardado.escribir(antes)
@@ -826,7 +826,7 @@ func probar_piezas() -> void:
 	var antes := Guardado.cargar()
 	await get_tree().create_timer(0.5).timeout
 	var quitados := ["explosivos", "despertador", "extintor", "trapo", "alcohol"]
-	print("Piezas: %s · nombres %s (esperado: 4 · Pieza cuerpo a cuerpo, Pieza a distancia, Pieza especial, Pieza arrojable)" % [
+	print("Piezas: %s · nombres %s (esperado: 4 · Material cuerpo a cuerpo, Material a distancia, Material especial, Material arrojable)" % [
 		Objetos.PIEZAS.size(), Objetos.PIEZAS.keys().map(Objetos.nombre)])
 	print("Familias: %s (esperado: cuerpo, distancia, especial, arrojable) · iconos que faltan: %s (esperado: [])" % [
 		Objetos.PIEZAS.values(), Objetos.PIEZAS.keys().filter(

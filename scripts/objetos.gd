@@ -61,8 +61,8 @@ const NOMBRES := {
 	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan con su tecla o desde el inventario (USABLES)
 	"vendas": "Vendas",
 	# las piezas para mejorar las armas (PIEZAS): solo las sueltan los zombis y los jefes
-	"pieza_cuerpo": "Pieza cuerpo a cuerpo", "pieza_distancia": "Pieza a distancia", "pieza_especial": "Pieza especial",
-	"pieza_arrojable": "Pieza arrojable",
+	"pieza_cuerpo": "Material cuerpo a cuerpo", "pieza_distancia": "Material a distancia", "pieza_especial": "Material especial",
+	"pieza_arrojable": "Material arrojable",
 }
 # [/traducir]
 # Los de curar: no son chatarra, se usan (partida.usar_objeto) desde el inventario («Usar») o con su tecla sin abrirlo

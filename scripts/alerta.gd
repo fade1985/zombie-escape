@@ -97,5 +97,5 @@ static func regla(n := nivel, edificio := "") -> String:
 static func resumen(n := nivel, edificio := "") -> String:
 	if n <= 0:
 		return Idioma.t("Como siempre")
-	return Idioma.t("%s%s\n+%d %% de dólares y de piezas") % [regla(n, edificio), Idioma.t(" (y lo de antes)") if n > 1 else "",
+	return Idioma.t("%s%s\n+%d %% de dólares y de materiales") % [regla(n, edificio), Idioma.t(" (y lo de antes)") if n > 1 else "",
 		roundi(DOLARES * n * 100)]
