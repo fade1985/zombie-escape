@@ -733,7 +733,7 @@ en una línea.
   mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
   los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Johnny las cierra a mano
   como se usa el baúl (`zona_usar.gd`, con «Cerrar» en el móvil; `cerrar`, `poner_uso`): no si hay alguien en el hueco
-  (tiembla), y cerrada a mano no se reabre sola hasta que Johnny y los suyos se van de delante (`espera`); usándola
+  (tiembla), y cerrada a mano no se reabre sola hasta que Johnny y los suyos se van de delante (`espera`), salvo para un acompañante que se ha quedado pegado a ella por el lado contrario al de Johnny, que la abre él (`atrancado`, `lado_de`; `--puerta-aliado`, 11 nov); usándola
   otra vez se abre (`-- --captura --puertas`). Cerradas paran la luz,
   las balas, la vista de los zombis y la niebla. Y las cerradas con llave (su hueco lleva `cerrada`): el baño del
   superviviente, las viviendas sin rescatar y la cámara acorazada de la joyería (`acero`). Las viviendas de los ya

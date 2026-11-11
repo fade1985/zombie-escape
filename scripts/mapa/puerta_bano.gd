@@ -274,10 +274,15 @@ func _physics_process(delta: float) -> void:
 	mirar_t = MIRAR
 	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
 	var amigo := johnny != null and arrimo.has_point(johnny.global_position)
+	var atrancado := false   # uno de los suyos, pegado a la puerta por el lado contrario al de Johnny: no puede llegar a él
 	for a in get_tree().get_nodes_in_group("aliados"):
-		if not amigo and a.modo == "equipo" and arrimo.has_point(a.global_position):
+		if a.modo == "equipo" and arrimo.has_point(a.global_position):
 			amigo = true
-	if amigo and not espera:
+			if johnny != null and lado_de(a.global_position) * lado_de(johnny.global_position) < 0.0:
+				atrancado = true
+	# (11 nov) Cerrada a mano, Johnny no la abre arrimándose hasta irse de delante, pero un acompañante que se ha quedado
+	# detrás de ella, al otro lado de Johnny, sí: la abre él para llegar hasta Johnny
+	if amigo and (not espera or atrancado):
 		abrir_empujando()
 		return
 	if not amigo:
@@ -290,6 +295,11 @@ func _physics_process(delta: float) -> void:
 				abrir_empujando()
 			return
 	empuje = 0.0
+
+
+# De qué lado del hueco cae un punto: negativo a un lado, positivo al otro (arriba/abajo en las de frente, izquierda/derecha en las de lado)
+func lado_de(punto: Vector2) -> float:
+	return punto.y - caja.get_center().y if de_frente else punto.x - caja.get_center().x
 
 
 func abrir_empujando() -> void:

@@ -985,6 +985,52 @@ func probar_puertas() -> void:
 # contorno amarillo y la acción de atacar); cerrada, aunque siga delante no se vuelve a abrir sola; usándola otra vez,
 # se abre; cerrada otra vez, al irse y volver se abre sola; y con un zombi en el hueco no se cierra (tiembla).
 # Fotos: captura-puertas-contorno.png (abierta, con el contorno) y captura-puertas-cerrada-a-mano.png
+# Con "--captura --puerta-aliado": un acompañante se queda al otro lado de una puerta que Johnny ha cerrado a mano (11 nov, bloque L).
+# Johnny la abre, la cierra con la médica detrás (por el lado contrario) y se queda cerca de ella, y la médica, que quiere llegar
+# a él, tiene que abrirla ella. Comprueba también que, con la médica del mismo lado que Johnny, no la abre.
+func probar_puerta_aliado() -> void:
+	nueva_planta(2)
+	johnny.invencible = true
+	var idx := piso_con_mas_puertas()
+	if idx < 0:
+		print("Puerta del acompañante: en la 1ª planta no hay ningún sitio con dos puertas de dentro")
+		get_tree().quit()
+		return
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true
+	await montar(idx, 0, false)
+	await get_tree().create_timer(0.3).timeout
+	for a in supervivientes.equipo:
+		a.queue_free()
+	supervivientes.equipo.clear()
+	var datos: Dictionary = Supervivientes.DATOS.medico.duplicate()
+	datos.erase("rescate")
+	var medica: Aliado = supervivientes.crear(datos, "equipo")
+	medica.idx = 0
+	supervivientes.equipo.append(medica)
+	johnny.get_parent().add_child(medica)
+	var una: Node2D = mapa.hojas[0]
+	var hacia := Vector2(0, 1) if una.de_frente else Vector2(1, 0)
+	var medio: float = (una.caja.size.y if una.de_frente else una.caja.size.x) / 2
+	var centro: Vector2 = una.caja.get_center()
+	# 1) abierta; Johnny y la médica (quieta) del mismo lado, a 20; Johnny la cierra a mano: sigue cerrada
+	una.abrir()
+	await get_tree().create_timer(0.7).timeout
+	johnny.position = centro + hacia * (medio + 20.0)
+	medica.set_physics_process(false)
+	medica.global_position = centro + hacia * (medio + 14.0) + Vector2(hacia.y, hacia.x) * 14.0
+	await get_tree().create_timer(0.3).timeout
+	una.usar_a_mano()
+	await get_tree().create_timer(1.2).timeout
+	print("Puerta del acompañante: la cierra Johnny con la médica de su lado: sigue cerrada %s (esperado: true)" % (una.abierta == 0.0))
+	# 2) la médica, al otro lado, pegada a la puerta, con Johnny cerca de ella: la abre ella
+	medica.global_position = centro - hacia * (medio + 14.0)
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-puerta-aliado.png")
+	print("Puerta del acompañante: médica detrás de la puerta, Johnny del otro lado: la abre %s (esperado: true)" % (una.abierta > 0.0))
+	get_tree().quit()
+
+
 func probar_cerrar_puerta(una: Node2D) -> void:
 	# (los compañeros de Johnny, quietos y lejos: si se quedan en el hueco al seguirle, con razón no se cierra)
 	var aliados := get_tree().get_nodes_in_group("aliados")

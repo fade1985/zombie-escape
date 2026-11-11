@@ -294,6 +294,8 @@
 #   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
 #                       mantenimiento: cerradas, Johnny y un zombi las abren, Johnny las cierra a mano (como el
 #                       baúl) y las vuelve a abrir, y siguen abiertas                         [prueba_sitios.gd]
+#   --puerta-aliado     un acompañante se queda al otro lado de una puerta cerrada a mano por Johnny y la abre él para
+#                       llegar a Johnny (con la médica del mismo lado que Johnny, no)           [prueba_sitios.gd]
 #   --atasco-puertas    varios zombis de cada tipo (--zombis N, 18) salen a la vez por una misma puerta de un piso, sin
 #                       ver a Johnny y viéndole: que pasen todos y sin parones              [prueba_sitios.gd]
 #   --congelados        los zombis de los apartamentos de varias plantas (--plantas N, 4), despiertos, con Johnny
@@ -952,6 +954,9 @@ func empezar_prueba() -> void:
 	elif "--puertas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_puertas()
+	elif "--puerta-aliado" in args:
+		set_process(false)   # sin la prueba larga
+		probar_puerta_aliado()
 	elif "--atasco-puertas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_atasco()
