@@ -23,6 +23,13 @@ extends Node
 const BASE := Vector2(960, 640)   # la pantalla base: siempre se ve por lo menos esto
 const ALTO_MAXIMO := 800.0        # lo más alto que se deja ver antes de agrandar lo justo
 const CRECER_DESDE_X1 := 1.1      # a ×1, si lo justo es por lo menos esto, se agranda (la letra, legible en la Steam Deck)
+# Imágenes por segundo. Normalmente las frena el vsync (las que dé la pantalla: 60, 144, 165...), pero si falla
+# (ventana minimizada en Windows, o el vsync quitado en el panel de la tarjeta) el juego dibujaría miles sin
+# necesidad y pondría la gráfica a tope (11 nov). TOPE es el techo de siempre, por encima de cualquier pantalla
+# normal; FUERA, el de cuando el juego no es la ventana activa (otra ventana delante o minimizado). Las pruebas
+# (--captura) no se frenan fuera: se lanzan a menudo detrás de otras ventanas
+const TOPE := 240
+const FUERA := 30
 const QUEDARSE_ESC := """
 document.addEventListener('fullscreenchange', () => {
 	if (!navigator.keyboard?.lock) return;
@@ -40,6 +47,7 @@ func _ready() -> void:
 	# de en cada paso (efectos, menús...) temblaría con ella
 	get_tree().root.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var captura := "--captura" in OS.get_cmdline_user_args()
+	Engine.max_fps = TOPE
 	if captura and "--deck" in OS.get_cmdline_user_args():
 		# Con --deck, cualquier prueba se ve como en la Steam Deck: ventana de 1280×800 y la escala del juego de verdad
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
@@ -58,6 +66,17 @@ func _ready() -> void:
 		return
 	if not captura and Guardado.ajuste("pantalla_completa"):
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+
+# Con el juego en segundo plano (otra ventana delante o minimizado), pocas imágenes por segundo: nadie lo está mirando.
+# Al volver, el tope de siempre (ver TOPE y FUERA)
+func _notification(que: int) -> void:
+	if "--captura" in OS.get_cmdline_user_args() or OS.has_feature("web"):
+		return
+	if que == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		Engine.max_fps = FUERA
+	elif que == NOTIFICATION_APPLICATION_FOCUS_IN:
+		Engine.max_fps = TOPE
 
 
 # A qué escala se ve el juego en una ventana de ese tamaño (en píxeles de verdad)
