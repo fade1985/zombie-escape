@@ -67,14 +67,6 @@ msgstr "Сзади!"
 msgid "Quédate a su lado para levantarlo"
 msgstr "Постой рядом, чтобы помочь подняться"
 
-#: scripts/aliado.gd scripts/supervivientes.gd
-msgid "¡Socorro!"
-msgstr "Помогите!"
-
-#: scripts/aliado.gd
-msgid "¡Llévame contigo!"
-msgstr "Возьми меня с собой!"
-
 #: scripts/aliado.gd
 msgid "¿Te acompaño?"
 msgstr "Можно с тобой?"
@@ -432,15 +424,15 @@ msgstr "Так я не могу! Вырубай ток!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Меня же шибанет! Рубильник!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Джонни, вернись!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Не бросай меня тут!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "Меня же съедят!"
 
@@ -3070,8 +3062,16 @@ msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Держись: замок еще не взломан"
 
 #: scripts/partida.gd
-msgid "La puerta no se abre mientras quede algún zombi"
-msgstr "Дверь не откроется, пока здесь есть зомби"
+msgid "¡SE HA ATASCADO!"
+msgstr "ЗАКЛИНИЛО!"
+
+#: scripts/partida.gd
+msgid "¡TENGO QUE REPARARLO!"
+msgstr "НАДО ЕГО ПОЧИНИТЬ!"
+
+#: scripts/partida.gd
+msgid "¡ESTÁ BLOQUEADO!"
+msgstr "ЗАПЕРТО!"
 
 #: scripts/partida.gd
 msgid "El informático joven se salta el teclado: la puerta se abre"
@@ -3148,6 +3148,18 @@ msgstr "За тобой летит вертолет Velaria!"
 #: scripts/partida.gd
 msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
 msgstr "Новость сохранена в VIDEOS.EXE на компьютере"
+
+#: scripts/partida.gd
+msgid "¡NECESITO UNA TARJETA!"
+msgstr "НУЖНА КАРТА!"
+
+#: scripts/partida.gd
+msgid "¡NECESITO EL CÓDIGO!"
+msgstr "НУЖЕН КОД!"
+
+#: scripts/partida.gd
+msgid "¡NECESITO UNA LLAVE!"
+msgstr "НУЖЕН КЛЮЧ!"
 
 #: scripts/partida.gd
 msgid "la tienda de %s"
@@ -3294,20 +3306,20 @@ msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "Новый скин: %s. Надень его в шкафчике в дворницкой"
 
 #: scripts/partida.gd
-msgid "Johnny: «¡Uf! Vaya pesadilla…»"
-msgstr "Джонни: «Уф! Ну и кошмар…»"
+msgid "¡UF! ¡VAYA PESADILLA!"
+msgstr "ФУХ! НУ И КОШМАР!"
 
 #: scripts/partida.gd
-msgid "Johnny: «¿Me he vuelto a quedar dormido en el trabajo?»"
-msgstr "Джонни: «Я что, опять уснул на работе?»"
+msgid "¿ME HE VUELTO A DORMIR EN EL TRABAJO?"
+msgstr "Я ОПЯТЬ УСНУЛ НА РАБОТЕ?"
 
 #: scripts/partida.gd
-msgid "Johnny: «Juraría que me estaban mordiendo…»"
-msgstr "Джонни: «Готов поклясться, меня кусали…»"
+msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
+msgstr "КЛЯНУСЬ, МЕНЯ КУСАЛИ!"
 
 #: scripts/partida.gd
-msgid "Johnny: «Otra vez ese sueño de los zombis…»"
-msgstr "Джонни: «Опять этот сон про зомби…»"
+msgid "¡OTRA VEZ ESE SUEÑO DE ZOMBIS!"
+msgstr "ОПЯТЬ ЭТОТ СОН ПРО ЗОМБИ!"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
@@ -3671,10 +3683,6 @@ msgid "Militar"
 msgstr "Военный"
 
 #: scripts/supervivientes.gd
-msgid "¡Gracias! ¡Sácame de aquí!"
-msgstr "Спасибо! Вытащи меня отсюда!"
-
-#: scripts/supervivientes.gd
 msgid "La recepcionista: la llave está en el suelo de %s"
 msgstr "Администратор: ключ лежит на полу, %s"
 
@@ -3716,12 +3724,20 @@ msgid "%s fuerza la cerradura · %d:%02d"
 msgstr "%s взламывает замок · %d:%02d"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY POLICÍA!"
+msgstr "Я ПОЛИЦЕЙСКИЙ!"
+
+#: scripts/supervivientes.gd
 msgid "Policía"
 msgstr "Полицейский"
 
 #: scripts/supervivientes.gd
 msgid "Dispara con su pistola cada 0,8 s"
 msgstr "Стреляет из пистолета раз в 0,8 с"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY MÉDICA!"
+msgstr "Я ВРАЧ!"
 
 #: scripts/supervivientes.gd
 msgid "Médica"
@@ -3732,12 +3748,24 @@ msgid "Te cura 5 cada 6 s y 10 al limpiar cada piso"
 msgstr "Лечит тебя на 5 каждые 6 с и на 10 за каждую зачищенную квартиру"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY MILITAR!"
+msgstr "Я ВОЕННЫЙ!"
+
+#: scripts/supervivientes.gd
 msgid "Lanza ráfagas de 3 balas cada 2,5 s"
 msgstr "Стреляет очередями по 3 пули каждые 2,5 с"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY FERRETERO!"
+msgstr "Я МАСТЕР!"
+
+#: scripts/supervivientes.gd
 msgid "Ferretero"
 msgstr "Мастер"
+
+#: scripts/supervivientes.gd
+msgid "¡Socorro!"
+msgstr "Помогите!"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el almacén!"
@@ -3762,6 +3790,10 @@ msgstr "Доски долой! Спасибо, парень. Уходим отс
 #: scripts/supervivientes.gd
 msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
 msgstr "Бежит к замеченным зомби и лупит их молотком (8 урона)"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY FARMACÉUTICA!"
+msgstr "Я ФАРМАЦЕВТ!"
 
 #: scripts/supervivientes.gd
 msgid "Farmacéutica"
@@ -3796,6 +3828,10 @@ msgid "Cada partida empiezas con un botiquín en la mochila"
 msgstr "В начале каждого забега у тебя в рюкзаке аптечка"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY TÉCNICO!"
+msgstr "Я ТЕХНИК!"
+
+#: scripts/supervivientes.gd
 msgid "Técnico"
 msgstr "Техник"
 
@@ -3820,6 +3856,10 @@ msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
 msgstr "Чинит камеры наблюдения: на миникарте видны зомби"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY INFORMÁTICO!"
+msgstr "Я АЙТИШНИК!"
+
+#: scripts/supervivientes.gd
 msgid "Informático joven"
 msgstr "Юный айтишник"
 
@@ -3842,6 +3882,10 @@ msgstr "Каждые 4 с взламывает мозг ближайшего з�
 #: scripts/supervivientes.gd
 msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
 msgstr "Скидка для сотрудников: магазин в компьютере на 15 % дешевле"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY LIMPIADORA!"
+msgstr "Я УБОРЩИЦА!"
 
 #: scripts/supervivientes.gd
 msgid "Limpiadora de noche"
@@ -3876,6 +3920,10 @@ msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "Чинит тебе швабру: удар шваброй бьёт шире"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY RECEPCIONISTA!"
+msgstr "Я АДМИНИСТРАТОР!"
+
+#: scripts/supervivientes.gd
 msgid "Recepcionista"
 msgstr "Администратор"
 
@@ -3902,6 +3950,10 @@ msgstr "Кричит «Сзади!», когда зомби вот-вот уда
 #: scripts/supervivientes.gd
 msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
 msgstr "На каждом этаже подсказывает, где то, что открывает комнату босса"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"

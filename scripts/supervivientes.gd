@@ -44,17 +44,20 @@ const DATOS := {
 	"policia": {"id": "policia", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b"), "shirt": Color("#3d63c9"), "pants": Color("#22336b"),
 			"shoes": Color("#1d1b2c"), "hat": {"kind": "cap", "color": Color("#22336b")}},
+		"soy": "¡SOY POLICÍA!",   # [traducir]
 		"nombre": "Policía", "desc": "Dispara con su pistola cada 0,8 s",   # [traducir]
 		"habilidad": {"tipo": "disparar", "cada": 0.8, "dano": 5, "rafaga": 1}},   # (hasta el 27 oct, cada 1,2 s)
 	"medico": {"id": "medico", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
 		"look": {"skin": Color("#ffd2a8"), "hair": Color("#c0392b"), "shirt": Color("#ffffff"), "pants": Color("#7fd1c7"),
 			"shoes": Color("#3b3550"), "cross": true},
+		"soy": "¡SOY MÉDICA!",   # [traducir]
 		"nombre": "Médica", "desc": "Te cura 5 cada 6 s y 10 al limpiar cada piso",   # [traducir]
 		# (hasta el 27 oct, 3 cada 8 s: 22 de vida por minuto, casi lo mismo que Ajolote con un punto; ahora, 50)
 		"habilidad": {"tipo": "curar", "cada": 6.0, "cura": 5, "al_limpiar": 10}},
 	"militar": {"id": "militar", "edificio": "apartamentos", "color": Color("#c9e265"), "arma": "rifle",
 		"look": {"skin": Color("#c68642"), "hair": Color("#3b2a1a"), "shirt": Color("#6b8e23"), "pants": Color("#4b5320"),
 			"shoes": Color("#2e2a1f"), "hat": {"kind": "helmet", "color": Color("#556b2f")}},
+		"soy": "¡SOY MILITAR!",   # [traducir]
 		"nombre": "Militar",   # no-tr: lo traduce nombre_de() con contexto (sin él, «Militar» es la rama de talentos)
 		"desc": "Lanza ráfagas de 3 balas cada 2,5 s",   # [traducir]
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
@@ -64,6 +67,7 @@ const DATOS := {
 		"look": {"skin": Color("#d39b6a"), "hair": Color("#6e6e6e"), "shirt": Color("#4a6fa5"), "pants": Color("#3e4a5c"),
 			"shoes": Color("#4a3426"), "chaleco": Color("#ff8a1f"), "bigote": true,
 			"hat": {"kind": "cap", "color": Color("#3c5a3c"), "chapa": false}},
+		"soy": "¡SOY FERRETERO!",   # [traducir]
 		"nombre": "Ferretero",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],   # [traducir]
 		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",   # [traducir]
@@ -74,6 +78,7 @@ const DATOS := {
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#2b1d14"), "shirt": Color("#f4f6f8"), "pants": Color("#55606e"),
 			"shoes": Color("#3b3550"), "bata": Color("#8fd3e8"), "cross": true, "cross_color": Color("#2fbf5b"),
 			"peinado": "moño"},   # no-tr (un id: el peinado, persona.gd)
+		"soy": "¡SOY FARMACÉUTICA!",   # [traducir]
 		"nombre": "Farmacéutica",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en la rebotica!", "¡Estoy herida!", "¡Ayuda, por favor!", "¡Aquí detrás!"],   # [traducir]
 		"rescate": "escolta", "al_abrir": "¡Me han mordido la pierna! No puedo correr",   # [traducir]
@@ -84,6 +89,7 @@ const DATOS := {
 		"tienda": "electronica", "sala": "almacen",
 		"look": {"skin": Color("#8d5524"), "hair": Color("#1a1a1a"), "shirt": Color("#2a3f6b"), "pants": Color("#3a3f4b"),
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
+		"soy": "¡SOY TÉCNICO!",   # [traducir]
 		"nombre": "Técnico",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],   # [traducir]
 		"rescate": "averia", "al_abrir": "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado",   # [traducir]
@@ -99,6 +105,7 @@ const DATOS := {
 		"tienda": "informatica", "sala": "servidores",
 		"look": {"skin": Color("#e0b48a"), "hair": Color("#3a2618"), "shirt": Color("#8a8f99"), "pants": Color("#33405c"),
 			"shoes": Color("#e8e8e8"), "tarjeta": true},
+		"soy": "¡SOY INFORMÁTICO!",   # [traducir]
 		"nombre": "Informático joven",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en la sala de servidores!", "¡Aquí dentro!", "¡No me dejéis aquí!", "¡Que alguien me oiga!"],   # [traducir]
 		"rescate": "copia", "al_abrir": "¡Gracias! Pero no me voy sin los archivos de Velaria",   # [traducir]
@@ -112,6 +119,7 @@ const DATOS := {
 		"tienda": "rrhh", "sala": "bano", "cuarto": "limpieza",
 		"look": {"skin": Color("#c99a72"), "hair": Color("#2b211c"), "shirt": Color("#8fb8e0"), "pants": Color("#5a5f6a"),
 			"shoes": Color("#22222a"), "peinado": "moño"},   # no-tr (un id: el peinado, persona.gd)
+		"soy": "¡SOY LIMPIADORA!",   # [traducir]
 		"nombre": "Limpiadora de noche",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Cerrad el gas!", "¡Las válvulas!", "¡Aquí dentro! *cof, cof*", "¡No puedo respirar!"],   # [traducir]
 		"rescate": "valvulas", "al_abrir": "¡Aire! Gracias, chico. Yo también limpio este edificio de noche",   # [traducir]
@@ -125,6 +133,7 @@ const DATOS := {
 		"mostrador": true,
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#1a1a1a"), "shirt": Color("#24305e"), "pants": Color("#24305e"),
 			"shoes": Color("#1d1b2c"), "tarjeta": true},
+		"soy": "¡SOY RECEPCIONISTA!",   # [traducir]
 		"nombre": "Recepcionista",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en recepción!", "¡Detrás del mostrador!", "¡No puedo subir la persiana!", "¡Que alguien me oiga!"],   # [traducir]
 		"rescate": "tornos", "al_abrir": "¡Por fin alguien vivo! Abro los tornos y nos vamos",   # [traducir]
@@ -136,12 +145,15 @@ const DESCUENTO := 0.85   # el precio de empleado del informático joven
 const FREGONA_ANCHA := 200.0 / 140.0   # la fregona arreglada por la limpiadora de noche: barre 200° en vez de 140° (johnny.gd)
 const MAX_EQUIPO := 4
 
+# (lo que dice al entrar Johnny en su baño, ya abierto)
+const NO_ME_DEJES := "¡NO ME DEJES AQUÍ!"   # [traducir]
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
 const GRITOS := ["¡Socorro!", "¡Aquí dentro!", "¡Ayuda, por favor!", "¡Que alguien me saque!", "¡Estoy en el baño!"]   # [traducir]
 const CADA := [2.2, 3.4]
 const OSCURO := 0.9   # de esta oscuridad para arriba (Luz.nivel: el apagón y la tienda de electrónica sin corriente; un piso normal, no) su puerta no se ve
 # Lo que dice si le dan con Johnny lejos (en la horda y en la escolta de la farmacéutica)
-const LLAMADAS := ["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"]   # [traducir] (la escolta y el evento de la farmacia)
+# (también en la escolta y el evento de la farmacia)
+const LLAMADAS := ["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"]   # [traducir]
 
 # La horda: un minuto corto pero muy lleno (M40, 3 nov: antes eran 2 minutos y unos 107 zombis; ahora unos 150)
 const HORDA := {
@@ -384,6 +396,10 @@ func _physics_process(delta: float) -> void:
 		npc.visible = not partida.mapa.oculto(npc.position)
 		if partida.planta.superviviente.has("mostrador"):
 			tornos.mirar(npc)   # (escondida mientras la persiana siga bajada; al llegar Johnny, la sube)
+		if not encerrado() and johnny.vivo and not npc.pidio and rescate.def.get("al_abrir", "") == "" \
+				and partida.mapa.zona_en(johnny.position) == partida.planta.superviviente.sala:
+			npc.pidio = true   # Johnny entra en su baño, ya abierto: se lo pide (encima de su cabeza)
+			npc.decir(Idioma.t(NO_ME_DEJES))
 		if not encerrado() and johnny.vivo and johnny.position.distance_to(npc.position) < 60.0:
 			unir(npc)
 	for v in vecinos:
@@ -409,8 +425,10 @@ func actualizar_socorro(delta: float) -> void:
 	socorro_t = randf_range(CADA[0], CADA[1])
 	var donde := Vector2.INF
 	var tamano := 18
+	var en_la_puerta := false
 	if partida.aqui == sup.sitio and puerta:
 		donde = puerta.position + Vector2(0, -110)
+		en_la_puerta = true
 		puerta.golpes = 0.45
 		Sonido.tocar("socorro")
 	elif partida.aqui == 0:
@@ -425,7 +443,10 @@ func actualizar_socorro(delta: float) -> void:
 	var gritos: Array = rescate.def.get("gritos", GRITOS)
 	# del color de los avisos de la línea de abajo (partida.decir: «Has cogido la llave...»), el hueso de Tema.TINTA, y a su
 	# tamaño (16, con el contorno de 4); antes, rosa
-	texto_flotante(donde + Vector2(randf_range(-14, 14), 0), Idioma.t(gritos[randi() % gritos.size()]), Tema.TINTA, tamano)
+	if en_la_puerta:
+		frase(donde, Idioma.t(gritos[randi() % gritos.size()]))
+	else:
+		texto_flotante(donde + Vector2(randf_range(-14, 14), 0), Idioma.t(gritos[randi() % gritos.size()]), Tema.TINTA, tamano)
 
 
 # En el pasillo, la puerta del apartamento del superviviente
@@ -460,6 +481,32 @@ func texto_flotante(donde: Vector2, texto: String, color: Color, tamano := 18, v
 	tween.chain().tween_callback(etiqueta.queue_free)
 
 
+# Lo que dice desde dentro de su escondite, encima de la mitad de la puerta: como los avisos de Johnny (el de la llave),
+# amarillo y en mayúsculas, que sube y se apaga
+func frase(donde: Vector2, texto: String, vida := 1.8) -> void:
+	texto = texto.to_upper()
+	var etiqueta := Label.new()
+	etiqueta.text = texto
+	etiqueta.theme = Tema.crear()
+	var grande := texto.length() <= 30
+	etiqueta.add_theme_font_size_override("font_size", 32 if grande else 16)   # nítida solo a 16 o 32
+	etiqueta.add_theme_color_override("font_color", Tema.AMARILLO)
+	etiqueta.add_theme_constant_override("outline_size", 8 if grande else 4)
+	etiqueta.add_theme_color_override("font_outline_color", Color(0.11, 0.1, 0.17))
+	etiqueta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	etiqueta.size = Vector2(900, 40)
+	etiqueta.position = donde - Vector2(450, 20)
+	etiqueta.z_index = 50
+	var sin_luz := CanvasItemMaterial.new()   # (sin que le afecte la luz, como los gritos)
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	etiqueta.material = sin_luz
+	partida.mapa.cosas.add_child(etiqueta)
+	var tween := etiqueta.create_tween().set_parallel()
+	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 30.0, vida).set_ease(Tween.EASE_OUT)
+	tween.tween_property(etiqueta, "modulate:a", 0.0, 0.5).set_delay(vida - 0.5)
+	tween.chain().tween_callback(etiqueta.queue_free)
+
+
 # Se ha limpiado el piso "idx": si es el suyo, se abre la puerta del baño; y la médica cura un poco. La del
 # ferretero no: se queda cerrada hasta que quita la barricada (empieza sola: barricada.gd)
 func piso_limpio(idx: int) -> void:
@@ -487,7 +534,8 @@ func abrir_escondite(idx: int) -> void:
 	await get_tree().create_timer(0.4, false).timeout
 	if npc and partida.aqui == idx:
 		var dice: String = rescate.def.get("al_abrir", "")
-		npc.decir(Idioma.t(dice) if dice != "" else Idioma.t("¡Gracias! ¡Sácame de aquí!"))
+		if dice != "":
+			npc.decir(Idioma.t(dice))
 
 
 # La recepcionista ya rescatada: al llegar a una planta, al rato ("espera" segundos), dice dónde está lo que abre la sala
@@ -543,7 +591,11 @@ func unir(a: Aliado) -> void:
 	rescate.sitio = partida.aqui
 	npc = null
 	partida.decir(Idioma.t("¡%s se une al equipo! %s") % [nombre_de(a.def), desc_de(a.def)], 3.5)
-	partida.tutorial("supervivientes")
+	# (sin el tutorial: ya se explica todo en los trasteros, al empezar)
+	a.callar()   # (se quita el «¡NO ME DEJES AQUÍ!») y, al segundo, dice lo que es
+	get_tree().create_timer(1.0, false).timeout.connect(func():
+		if is_instance_valid(a) and a.is_inside_tree() and a.def.has("soy"):
+			a.decir(Idioma.t(a.def.soy)))
 	Sonido.tocar("limpio")
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
 	if a.def.get("rescate", "") == "escolta":

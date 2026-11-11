@@ -67,14 +67,6 @@ msgstr "身后！"
 msgid "Quédate a su lado para levantarlo"
 msgstr "待在旁边把人扶起来"
 
-#: scripts/aliado.gd scripts/supervivientes.gd
-msgid "¡Socorro!"
-msgstr "救命！"
-
-#: scripts/aliado.gd
-msgid "¡Llévame contigo!"
-msgstr "带上我！"
-
 #: scripts/aliado.gd
 msgid "¿Te acompaño?"
 msgstr "我跟你一起走？"
@@ -426,15 +418,15 @@ msgstr "这样我没法干！快断电！"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "我要触电了！电闸！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny，回来！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "别把我丢在这儿！"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "我要被吃掉了！"
 
@@ -3062,8 +3054,16 @@ msgid "Aguanta: aún está forzando la cerradura"
 msgstr "撑住：还在撬锁"
 
 #: scripts/partida.gd
-msgid "La puerta no se abre mientras quede algún zombi"
-msgstr "只要还有僵尸，门就打不开"
+msgid "¡SE HA ATASCADO!"
+msgstr "门卡住了！"
+
+#: scripts/partida.gd
+msgid "¡TENGO QUE REPARARLO!"
+msgstr "我得把它修好！"
+
+#: scripts/partida.gd
+msgid "¡ESTÁ BLOQUEADO!"
+msgstr "被封住了！"
 
 #: scripts/partida.gd
 msgid "El informático joven se salta el teclado: la puerta se abre"
@@ -3140,6 +3140,18 @@ msgstr "一架Velaria的直升机冲你来了！"
 #: scripts/partida.gd
 msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
 msgstr "新闻已保存到电脑的 VIDEOS.EXE 里"
+
+#: scripts/partida.gd
+msgid "¡NECESITO UNA TARJETA!"
+msgstr "我需要门禁卡！"
+
+#: scripts/partida.gd
+msgid "¡NECESITO EL CÓDIGO!"
+msgstr "我需要密码！"
+
+#: scripts/partida.gd
+msgid "¡NECESITO UNA LLAVE!"
+msgstr "我需要钥匙！"
 
 #: scripts/partida.gd
 msgid "la tienda de %s"
@@ -3278,20 +3290,20 @@ msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "新皮肤：%s。去维修间的储物柜换上吧"
 
 #: scripts/partida.gd
-msgid "Johnny: «¡Uf! Vaya pesadilla…»"
-msgstr "Johnny：“呼！好可怕的噩梦……”"
+msgid "¡UF! ¡VAYA PESADILLA!"
+msgstr "呼！好可怕的噩梦！"
 
 #: scripts/partida.gd
-msgid "Johnny: «¿Me he vuelto a quedar dormido en el trabajo?»"
-msgstr "Johnny：“我又在上班时睡着了？”"
+msgid "¿ME HE VUELTO A DORMIR EN EL TRABAJO?"
+msgstr "我又在上班时睡着了？"
 
 #: scripts/partida.gd
-msgid "Johnny: «Juraría que me estaban mordiendo…»"
-msgstr "Johnny：“我敢发誓刚才有东西在咬我……”"
+msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
+msgstr "我发誓刚才有东西在咬我！"
 
 #: scripts/partida.gd
-msgid "Johnny: «Otra vez ese sueño de los zombis…»"
-msgstr "Johnny：“又是那个僵尸的梦……”"
+msgid "¡OTRA VEZ ESE SUEÑO DE ZOMBIS!"
+msgstr "又是那个僵尸梦！"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
@@ -3655,10 +3667,6 @@ msgid "Militar"
 msgstr "士兵"
 
 #: scripts/supervivientes.gd
-msgid "¡Gracias! ¡Sácame de aquí!"
-msgstr "谢谢！快带我离开这儿！"
-
-#: scripts/supervivientes.gd
 msgid "La recepcionista: la llave está en el suelo de %s"
 msgstr "前台接待：钥匙掉在%s的地上"
 
@@ -3700,12 +3708,20 @@ msgid "%s fuerza la cerradura · %d:%02d"
 msgstr "%s正在撬锁 · %d:%02d"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY POLICÍA!"
+msgstr "我是警察！"
+
+#: scripts/supervivientes.gd
 msgid "Policía"
 msgstr "警察"
 
 #: scripts/supervivientes.gd
 msgid "Dispara con su pistola cada 0,8 s"
 msgstr "每0.8秒用手枪开一枪"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY MÉDICA!"
+msgstr "我是医生！"
 
 #: scripts/supervivientes.gd
 msgid "Médica"
@@ -3716,12 +3732,24 @@ msgid "Te cura 5 cada 6 s y 10 al limpiar cada piso"
 msgstr "每6秒为你恢复5点生命，每清理一套公寓恢复10点"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY MILITAR!"
+msgstr "我是军人！"
+
+#: scripts/supervivientes.gd
 msgid "Lanza ráfagas de 3 balas cada 2,5 s"
 msgstr "每2.5秒打出一轮3发点射"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY FERRETERO!"
+msgstr "我是五金店老板！"
+
+#: scripts/supervivientes.gd
 msgid "Ferretero"
 msgstr "五金店老板"
+
+#: scripts/supervivientes.gd
+msgid "¡Socorro!"
+msgstr "救命！"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el almacén!"
@@ -3746,6 +3774,10 @@ msgstr "木板拆完了！谢了，小伙子。咱们走"
 #: scripts/supervivientes.gd
 msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
 msgstr "看见僵尸就冲上去抡锤子（8点伤害）"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY FARMACÉUTICA!"
+msgstr "我是药剂师！"
 
 #: scripts/supervivientes.gd
 msgid "Farmacéutica"
@@ -3780,6 +3812,10 @@ msgid "Cada partida empiezas con un botiquín en la mochila"
 msgstr "每局开始时背包里自带一个急救包"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY TÉCNICO!"
+msgstr "我是电工！"
+
+#: scripts/supervivientes.gd
 msgid "Técnico"
 msgstr "电工"
 
@@ -3804,6 +3840,10 @@ msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
 msgstr "修好监控摄像头：小地图上会显示僵尸"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY INFORMÁTICO!"
+msgstr "我是网管！"
+
+#: scripts/supervivientes.gd
 msgid "Informático joven"
 msgstr "年轻网管"
 
@@ -3826,6 +3866,10 @@ msgstr "每 4 秒入侵最近僵尸的大脑，让它定住 1 秒；摄像头看
 #: scripts/supervivientes.gd
 msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
 msgstr "员工价：电脑商店便宜 15%"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY LIMPIADORA!"
+msgstr "我是保洁员！"
 
 #: scripts/supervivientes.gd
 msgid "Limpiadora de noche"
@@ -3860,6 +3904,10 @@ msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "帮你修好拖把：拖把横扫范围更大"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY RECEPCIONISTA!"
+msgstr "我是前台！"
+
+#: scripts/supervivientes.gd
 msgid "Recepcionista"
 msgstr "前台接待"
 
@@ -3886,6 +3934,10 @@ msgstr "僵尸要从背后偷袭你时，她会喊「身后！」"
 #: scripts/supervivientes.gd
 msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
 msgstr "每到一层，告诉你打开头目房间的东西在哪里"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "别把我丢在这儿！"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"

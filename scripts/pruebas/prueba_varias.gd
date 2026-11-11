@@ -15,6 +15,76 @@ extends "res://scripts/pruebas/prueba_sitios.gd"
 # en el centro comercial, el guardia; en la torre, los escoltas que llegan al leer un ordenador del código:
 # captura-alerta-codigo.png) y
 # captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
+# Con "--captura --frases": los avisos de Johnny encima de su cabeza (amarillos, como el de la llave). En el pasillo de la
+# planta 2, la puerta del jefe sin llave, el ascensor y la salida de incendios: la primera vez, su frase
+# (captura-frase-jefe.png, -ascensor.png, -escaleras.png); la segunda, nada. En un apartamento con zombis, «¡SE HA
+# ATASCADO!» (captura-frase-atascado.png). Y el superviviente: al entrar Johnny en su baño abierto, «¡NO ME DEJES AQUÍ!»
+# encima de él (captura-frase-no-me-dejes.png) y, al segundo de unirse, lo que es (captura-frase-soy.png). Luego se cierra
+func probar_frases() -> void:
+	var avisos := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n is Label and n.text.begins_with("¡")).map(
+			func(n): return n.text)
+	nueva_planta(2)
+	await montar(0, 0, false)
+	var pasillo: Dictionary = planta.sitios[0]
+	for que in ["jefe", "ascensor", "escaleras"]:
+		var i := -1
+		for k in pasillo.salidas.size():
+			var sal: Dictionary = pasillo.salidas[k]
+			if (que == "jefe" and sal.cerrojo == "llave") or (que != "jefe" and sal.tipo == que):
+				i = k
+		johnny.position = mapa.puertas[i].llegada()
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.3, false).timeout
+		cruzar(i)
+		await get_tree().create_timer(0.35, false).timeout
+		var primera: Array = avisos.call()
+		Captura.foto("captura-frase-%s.png" % que)
+		await get_tree().create_timer(1.6, false).timeout
+		cruzar(i)
+		await get_tree().create_timer(0.3, false).timeout
+		print("Frase · %s: la primera vez %s, la segunda %s (esperado: una frase, luego [])" % [que, primera, avisos.call()])
+	# un apartamento con zombis: la puerta se cierra al entrar y al empujarla, atascada (cada vez)
+	var con_zombis := -1
+	for k in planta.sitios.size():
+		if planta.sitios[k].tipo == "apartamento" and not planta.sitios[k].zombis.is_empty() and con_zombis < 0:
+			con_zombis = k
+	await montar(con_zombis, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.set_physics_process(false)   # (quietos, que no le peguen)
+	await get_tree().create_timer(0.4, false).timeout
+	await get_tree().create_timer(2.6, false).timeout   # (que se vaya el «¡La puerta se ha cerrado detrás de ti!»)
+	cruzar(0)
+	await get_tree().create_timer(0.35, false).timeout
+	print("Frase · atascado: %s (esperado: [¡SE HA ATASCADO!])" % [avisos.call()])
+	Captura.foto("captura-frase-atascado.png")
+	await montar(0, 0, false)   # (de vuelta al pasillo: con la puerta cerrada, probar_aqui no deja)
+	# el superviviente, en su baño ya abierto
+	await supervivientes.probar_aqui(false)
+	await get_tree().create_timer(1.2, false).timeout
+	var sup: Dictionary = planta.superviviente
+	var npc: Aliado = supervivientes.npc
+	var dentro := Vector2.INF
+	for k in 30:
+		var punto: Vector2 = supervivientes.puerta.position.lerp(npc.position, k / 30.0)
+		if mapa.zona_en(punto) == sup.sala and punto.distance_to(npc.position) > 70.0:
+			dentro = punto
+			break
+	print("Frase · superviviente: %s, baño cerrado %s, sitio dentro %s" % [npc.def.id, sup.puerta.get("cerrada"), dentro != Vector2.INF])
+	if dentro != Vector2.INF:
+		johnny.position = dentro
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.5, false).timeout
+		print("Frase · al entrar en su baño: '%s' (esperado: ¡NO ME DEJES AQUÍ!)" % npc.dicho)
+		Captura.foto("captura-frase-no-me-dejes.png")
+	johnny.position = npc.position + Vector2(0, 30)
+	await get_tree().create_timer(1.4, false).timeout
+	print("Frase · al unirse: '%s' (esperado: ¡SOY …!) · tutorial en cola %s (esperado: false)" % [npc.dicho,
+		"supervivientes" in cola_tutoriales])
+	Captura.foto("captura-frase-soy.png")
+	get_tree().quit()
+
+
 func probar_alerta() -> void:
 	var n := Alerta.nivel
 	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.regla(n, edificio)])

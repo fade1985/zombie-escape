@@ -22,7 +22,6 @@ const CADA := [6.0, 3.0]   # segundos entre grupo y grupo, al principio y al fin
 const GRUPO := [2, 5]      # zombis por grupo, igual
 const TOPE := 30           # zombis a la vez, como mucho
 const TIPOS := [["lento", "normal", "normal"], ["normal", "normal", "rapido", "rapido", "explosivo", "lento"]]
-const COLOR := Color("#ffc58a")   # lo que dice, encima de la puerta
 # Lo que va diciendo según lo que lleva (de 0 a 1); con 0.5 pasa las provisiones por debajo de la puerta. En español;
 # sale con Idioma.t
 # [traducir]
@@ -202,7 +201,7 @@ func decir(texto: String) -> void:
 	if puerta == null or sup.partida.aqui != sup.partida.planta.superviviente.sitio:
 		return
 	dicho_t = tiempo
-	sup.texto_flotante(puerta.position + Vector2(0, -110), texto, COLOR, 18, 2.6)
+	sup.frase(puerta.position + Vector2(0, -110), texto, 2.6)
 
 
 # A mitad: un molotov, una granada y dos cajas de munición, por debajo de la puerta

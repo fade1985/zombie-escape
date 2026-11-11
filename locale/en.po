@@ -67,14 +67,6 @@ msgstr "Behind you!"
 msgid "Quédate a su lado para levantarlo"
 msgstr "Stay close to help them up"
 
-#: scripts/aliado.gd scripts/supervivientes.gd
-msgid "¡Socorro!"
-msgstr "Help!"
-
-#: scripts/aliado.gd
-msgid "¡Llévame contigo!"
-msgstr "Take me with you!"
-
 #: scripts/aliado.gd
 msgid "¿Te acompaño?"
 msgstr "Can I tag along?"
@@ -429,15 +421,15 @@ msgstr "I can't work like this! Cut the power!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "I'm gonna get electrocuted! The lever!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, come back!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡No me dejes aquí!"
 msgstr "Don't leave me here!"
 
-#: scripts/averia.gd scripts/copia.gd scripts/tornos.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd scripts/tornos.gd
 msgid "¡Que me comen!"
 msgstr "They're eating me!"
 
@@ -3066,8 +3058,16 @@ msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Hold on: they're still working on the lock"
 
 #: scripts/partida.gd
-msgid "La puerta no se abre mientras quede algún zombi"
-msgstr "The door stays shut while any zombie is left"
+msgid "¡SE HA ATASCADO!"
+msgstr "IT'S JAMMED!"
+
+#: scripts/partida.gd
+msgid "¡TENGO QUE REPARARLO!"
+msgstr "I HAVE TO FIX IT!"
+
+#: scripts/partida.gd
+msgid "¡ESTÁ BLOQUEADO!"
+msgstr "IT'S BLOCKED!"
 
 #: scripts/partida.gd
 msgid "El informático joven se salta el teclado: la puerta se abre"
@@ -3144,6 +3144,18 @@ msgstr "A Velaria helicopter is coming for you!"
 #: scripts/partida.gd
 msgid "Noticia guardada en VIDEOS.EXE, en el ordenador"
 msgstr "News saved in VIDEOS.EXE, on the computer"
+
+#: scripts/partida.gd
+msgid "¡NECESITO UNA TARJETA!"
+msgstr "I NEED A CARD!"
+
+#: scripts/partida.gd
+msgid "¡NECESITO EL CÓDIGO!"
+msgstr "I NEED THE CODE!"
+
+#: scripts/partida.gd
+msgid "¡NECESITO UNA LLAVE!"
+msgstr "I NEED A KEY!"
 
 #: scripts/partida.gd
 msgid "la tienda de %s"
@@ -3286,20 +3298,20 @@ msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "New skin: %s. Put it on in the maintenance room locker"
 
 #: scripts/partida.gd
-msgid "Johnny: «¡Uf! Vaya pesadilla…»"
-msgstr "Johnny: \"Phew! What a nightmare…\""
+msgid "¡UF! ¡VAYA PESADILLA!"
+msgstr "PHEW! WHAT A NIGHTMARE!"
 
 #: scripts/partida.gd
-msgid "Johnny: «¿Me he vuelto a quedar dormido en el trabajo?»"
-msgstr "Johnny: \"Did I fall asleep at work again?\""
+msgid "¿ME HE VUELTO A DORMIR EN EL TRABAJO?"
+msgstr "DID I FALL ASLEEP AT WORK AGAIN?"
 
 #: scripts/partida.gd
-msgid "Johnny: «Juraría que me estaban mordiendo…»"
-msgstr "Johnny: \"I could swear they were biting me…\""
+msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
+msgstr "I SWEAR THEY WERE BITING ME!"
 
 #: scripts/partida.gd
-msgid "Johnny: «Otra vez ese sueño de los zombis…»"
-msgstr "Johnny: \"That zombie dream again…\""
+msgid "¡OTRA VEZ ESE SUEÑO DE ZOMBIS!"
+msgstr "THAT ZOMBIE DREAM AGAIN!"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
@@ -3663,10 +3675,6 @@ msgid "Militar"
 msgstr "Soldier"
 
 #: scripts/supervivientes.gd
-msgid "¡Gracias! ¡Sácame de aquí!"
-msgstr "Thank you! Get me out of here!"
-
-#: scripts/supervivientes.gd
 msgid "La recepcionista: la llave está en el suelo de %s"
 msgstr "The receptionist: the key is on the floor of %s"
 
@@ -3708,12 +3716,20 @@ msgid "%s fuerza la cerradura · %d:%02d"
 msgstr "The %s is picking the lock · %d:%02d"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY POLICÍA!"
+msgstr "I'M A COP!"
+
+#: scripts/supervivientes.gd
 msgid "Policía"
 msgstr "Cop"
 
 #: scripts/supervivientes.gd
 msgid "Dispara con su pistola cada 0,8 s"
 msgstr "Fires a pistol every 0.8 s"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY MÉDICA!"
+msgstr "I'M A DOCTOR!"
 
 #: scripts/supervivientes.gd
 msgid "Médica"
@@ -3724,12 +3740,24 @@ msgid "Te cura 5 cada 6 s y 10 al limpiar cada piso"
 msgstr "Heals you 5 every 6 s, and 10 for each apartment you clear"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY MILITAR!"
+msgstr "I'M A SOLDIER!"
+
+#: scripts/supervivientes.gd
 msgid "Lanza ráfagas de 3 balas cada 2,5 s"
 msgstr "Fires 3-round bursts every 2.5 s"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY FERRETERO!"
+msgstr "I'M THE HARDWARE GUY!"
+
+#: scripts/supervivientes.gd
 msgid "Ferretero"
 msgstr "Hardware Guy"
+
+#: scripts/supervivientes.gd
+msgid "¡Socorro!"
+msgstr "Help!"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el almacén!"
@@ -3754,6 +3782,10 @@ msgstr "Boards off! Thanks, kid. Let's get out of here"
 #: scripts/supervivientes.gd
 msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
 msgstr "Goes after any zombie he sees and hammers it (8 damage)"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY FARMACÉUTICA!"
+msgstr "I'M A PHARMACIST!"
 
 #: scripts/supervivientes.gd
 msgid "Farmacéutica"
@@ -3788,6 +3820,10 @@ msgid "Cada partida empiezas con un botiquín en la mochila"
 msgstr "You start every run with a medkit in your backpack"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY TÉCNICO!"
+msgstr "I'M A TECHNICIAN!"
+
+#: scripts/supervivientes.gd
 msgid "Técnico"
 msgstr "Technician"
 
@@ -3812,6 +3848,10 @@ msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
 msgstr "Fixes the security cameras: the minimap shows the zombies"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY INFORMÁTICO!"
+msgstr "I WORK IN IT!"
+
+#: scripts/supervivientes.gd
 msgid "Informático joven"
 msgstr "IT Kid"
 
@@ -3834,6 +3874,10 @@ msgstr "Every 4 s, he hacks the nearest zombie's brain and freezes it for 1 s; c
 #: scripts/supervivientes.gd
 msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
 msgstr "Staff discount: the computer shop is 15% cheaper"
+
+#: scripts/supervivientes.gd
+msgid "¡SOY LIMPIADORA!"
+msgstr "I'M A CLEANER!"
 
 #: scripts/supervivientes.gd
 msgid "Limpiadora de noche"
@@ -3868,6 +3912,10 @@ msgid "Te arregla la fregona: el fregonazo barre más ancho"
 msgstr "Fixes your mop: mop swings sweep wider"
 
 #: scripts/supervivientes.gd
+msgid "¡SOY RECEPCIONISTA!"
+msgstr "I'M THE RECEPTIONIST!"
+
+#: scripts/supervivientes.gd
 msgid "Recepcionista"
 msgstr "Receptionist"
 
@@ -3894,6 +3942,10 @@ msgstr "Shouts \"Behind you!\" when a zombie is about to hit you from behind"
 #: scripts/supervivientes.gd
 msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
 msgstr "On each floor, tells you where to find what opens the boss room"
+
+#: scripts/supervivientes.gd
+msgid "¡NO ME DEJES AQUÍ!"
+msgstr "DON'T LEAVE ME HERE!"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"

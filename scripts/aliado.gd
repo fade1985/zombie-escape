@@ -98,8 +98,10 @@ var caido := false
 var inv_t := 0.0
 var golpe_t := 0.0
 var levantar := 0.0        # de 0 a 1: lo que lleva Johnny levantándole (lo pone supervivientes.gd)
-var dicho := ""            # lo que acaba de decir (bocadillo) y desde cuándo
+var dicho := ""            # lo que acaba de decir (encima de su cabeza: decir) y desde cuándo
 var dicho_t := 99.0
+var dicho_etiqueta: Label = null   # la frase que tiene encima ahora mismo (decir; callar la quita)
+var pidio := false         # ya ha dicho «¡NO ME DEJES AQUÍ!» (supervivientes.gd)
 var vivo: bool:
 	get: return not caido
 
@@ -696,9 +698,44 @@ func presa_de(z: Node2D, jugador: Node2D, lejos: float) -> bool:
 	return da < dp * 0.8 or jugador.global_position.distance_to(global_position) > lejos
 
 
+# Lo dice encima de su cabeza, como los avisos de Johnny (el de la llave): amarillo, en mayúsculas, sube un poco y se
+# apaga. Va de hijo suyo, así que le sigue mientras anda
 func decir(texto: String) -> void:
 	dicho = texto
 	dicho_t = 0.0
+	callar()
+	texto = texto.to_upper()
+	var etiqueta := Label.new()
+	etiqueta.text = texto
+	etiqueta.theme = Tema.crear()
+	var grande := texto.length() <= 30
+	etiqueta.add_theme_font_size_override("font_size", 32 if grande else 16)   # nítida solo a 16 o 32
+	etiqueta.add_theme_color_override("font_color", Tema.AMARILLO)
+	etiqueta.add_theme_constant_override("outline_size", 8 if grande else 4)
+	etiqueta.add_theme_color_override("font_outline_color", Color(0.11, 0.1, 0.17))
+	etiqueta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	etiqueta.size = Vector2(900, 40)
+	var alto := -64.0 if persona else -104.0
+	etiqueta.position = Vector2(-450, alto - 40.0)
+	etiqueta.z_index = 50
+	etiqueta.z_as_relative = false
+	var sin_luz := CanvasItemMaterial.new()   # (sin que le afecte la luz, como su nombre)
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	etiqueta.material = sin_luz
+	add_child(etiqueta)
+	dicho_etiqueta = etiqueta
+	var vida := 2.4
+	var tween := etiqueta.create_tween().set_parallel()
+	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 24.0, vida).set_ease(Tween.EASE_OUT)
+	tween.tween_property(etiqueta, "modulate:a", 0.0, 0.5).set_delay(vida - 0.5)
+	tween.chain().tween_callback(etiqueta.queue_free)
+
+
+# Quita la frase que tenga encima (al unirse al equipo, el «¡NO ME DEJES AQUÍ!»)
+func callar() -> void:
+	if is_instance_valid(dicho_etiqueta):
+		dicho_etiqueta.queue_free()
+	dicho_etiqueta = null
 
 
 func rumbo(v: Vector2) -> String:
@@ -827,17 +864,11 @@ func dibujar_encima() -> void:
 			if levantar > 0.0:
 				Formas.arco(encima, Vector2.ZERO, 60.0, -PI / 2.0, -PI / 2.0 + levantar * TAU, 48, Tema.AMARILLO, 6.0)
 			texto(letra, Idioma.t("Quédate a su lado para levantarlo"), Vector2(0, 86), 16, Tema.AMARILLO)
-	# el bocadillo: lo que acaba de decir o, si está esperando, su frase de siempre
+	# el bocadillo: solo el de los vecinos de las viviendas (lo que dicen los demás sale encima de su cabeza: decir)
 	var frase := ""
 	var alfa := 1.0
 	var color_frase := Color("#2b2233")
-	if dicho_t < 3.2:
-		frase = dicho
-		alfa = clampf((3.2 - dicho_t) / 0.4, 0.0, 1.0)
-	elif modo == "encerrado":
-		frase = Idioma.t("¡Socorro!") if asustado else Idioma.t("¡Llévame contigo!")
-		color_frase = Tema.ROJO if asustado else Color("#2f9e44")
-	elif modo == "vecino" and partida.supervivientes.vecino_cerca() == self:
+	if modo == "vecino" and dicho_t >= 2.4 and partida.supervivientes.vecino_cerca() == self:
 		frase = Idioma.t("¿Te acompaño?")   # solo el que está más cerca de Johnny (si no, se pisan los bocadillos)
 		color_frase = Color("#2f9e44")
 	if frase != "":

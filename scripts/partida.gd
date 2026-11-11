@@ -113,11 +113,11 @@ const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.pn
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
 const DESPERTAR := 2.4     # tras una derrota, lo que tarda Johnny en levantarse al empezar (despertar)
 # [traducir]
-const FRASES_DESPERTAR := [   # lo que dice al levantarse (una al azar)
-	"Johnny: «¡Uf! Vaya pesadilla…»",
-	"Johnny: «¿Me he vuelto a quedar dormido en el trabajo?»",
-	"Johnny: «Juraría que me estaban mordiendo…»",
-	"Johnny: «Otra vez ese sueño de los zombis…»",
+const FRASES_DESPERTAR := [   # lo que dice al levantarse (una al azar), encima de su cabeza (gran_aviso)
+	"¡UF! ¡VAYA PESADILLA!",
+	"¿ME HE VUELTO A DORMIR EN EL TRABAJO?",
+	"¡JURARÍA QUE ME ESTABAN MORDIENDO!",
+	"¡OTRA VEZ ESE SUEÑO DE ZOMBIS!",
 ]
 # [/traducir]
 const ARRIBA_EXTRA := 44   # lo que la cámara deja ver por encima del mapa (la cara del muro de arriba y su moldura)
@@ -170,6 +170,7 @@ var raton := Raton.new()
 var terminada := false
 var al_empezar := {}       # lo que ya se tenía al empezar (logros, skins, páginas...): el cartel del final enseña lo
                            # nuevo (conseguido())
+var avisos_dichos := {}   # los avisos de Johnny que solo salen una vez (aviso_una_vez): «portal», «ascensor_2»...
 var cola_tutoriales: Array = []   # los tutoriales que esperan a salir (tutorial()); el primero, el que sale o va a salir
 var tutoriales_prueba := false    # en la partida de prueba no salen, salvo en la suya (--tutorial)
 var guiado_prueba := false        # ni la guía de la primera partida, salvo en la suya (--guiado)
@@ -330,9 +331,16 @@ func _ready() -> void:
 		empezar_prueba()
 	else:
 		await mutacion_al_empezar()
-		decir("%s: %s%s" % [Planta.nombre_de(planta), Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla(Alerta.nivel, edificio)]
-			if Alerta.nivel > 0 else ""] + ("\n" + Reto.aviso() if Reto.activo else "")
-			+ ("\n" + Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila") if botiquin else ""), 4.0)
+		# (sin la frase del objetivo, que ya lo explica el ordenador: solo la alerta, el reto y el botiquín, si los hay)
+		var al_empezar: Array = []
+		if Alerta.nivel > 0:
+			al_empezar.append("%s: %s" % [Alerta.nombre(), Alerta.regla(Alerta.nivel, edificio)])
+		if Reto.activo:
+			al_empezar.append(Reto.aviso())
+		if botiquin:
+			al_empezar.append(Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila"))
+		if not al_empezar.is_empty():
+			decir("\n".join(al_empezar), 4.0)
 		supervivientes.avisar_pista(4.8)   # (la recepcionista rescatada: dónde está la llave o el código)
 		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
 
@@ -750,7 +758,10 @@ func cruzar(i: int) -> void:
 		Sonido.tocar("no")
 		return
 	if sitio.tipo != "pasillo" and cerrada:
-		decir(Idioma.t("Aguanta: aún está forzando la cerradura") if supervivientes.en_horda() else Idioma.t("La puerta no se abre mientras quede algún zombi"))
+		if supervivientes.en_horda():
+			decir(Idioma.t("Aguanta: aún está forzando la cerradura"))
+		else:
+			gran_aviso(Idioma.t("¡SE HA ATASCADO!"))   # (cada vez: la puerta se abre al no quedar zombis)
 		Sonido.tocar("no")
 		return
 	var espera := supervivientes.escolta.no_cruzar()   # la farmacéutica herida, lejos o en el suelo
@@ -760,8 +771,13 @@ func cruzar(i: int) -> void:
 		return
 	match salida.cerrojo:
 		"nunca":
-			decir(Planta.aviso_de(salida))   # (ya traducido)
-			Sonido.tocar("no")
+			if salida.tipo == "ascensor":
+				aviso_una_vez("ascensor_%d" % planta.num, Idioma.t("¡TENGO QUE REPARARLO!"))
+			elif salida.tipo == "llegada" and not sitio.get("azotea", false):
+				aviso_una_vez("portal", Idioma.t("¡ESTÁ BLOQUEADO!"))   # (el portal de la planta baja)
+			else:
+				decir(Planta.aviso_de(salida))   # (ya traducido)
+				Sonido.tocar("no")
 			return
 		"llave":
 			# (en la torre, el informático joven del equipo teclea el código sin tenerlo)
@@ -769,8 +785,7 @@ func cruzar(i: int) -> void:
 			if sin_codigo:
 				planta.tiene_llave = true
 			if not planta.tiene_llave:
-				decir(Planta.aviso_de(salida))
-				Sonido.tocar("no")
+				aviso_una_vez("jefe_%d" % planta.num, falta_llave())
 				return
 			# La llave se gasta al abrir: la puerta queda abierta para siempre
 			planta.tiene_llave = false
@@ -782,8 +797,7 @@ func cruzar(i: int) -> void:
 			Sonido.tocar("compra")
 		"jefa":
 			if not planta.jefa_muerta:
-				decir(Planta.aviso_de(salida))
-				Sonido.tocar("no")
+				aviso_una_vez("escaleras_%d" % planta.num, falta_llave())   # (la salida de incendios)
 				return
 	Sonido.tocar("puerta")
 	if salida.tipo == "escaleras":
@@ -1082,7 +1096,27 @@ func abrir_tele() -> void:
 func gran_aviso(texto: String, color := Tema.AMARILLO, alto := 110.0, dura := 1.4) -> void:
 	if johnny == null or not johnny.is_inside_tree():
 		return
-	Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(0, -alto), texto, color, 32, true, dura)
+	var etiqueta := Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(0, -alto), texto, color, 32,
+		true, dura)
+	var sin_luz := CanvasItemMaterial.new()   # (que no lo apague la penumbra de los pisos)
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	etiqueta.material = sin_luz
+
+
+# Un aviso de Johnny encima de su cabeza (como el de la llave) que solo sale la primera vez: las siguientes, ni frase ni
+# sonido. "clave" dice cuándo vuelve a valer (con el número de la planta, una vez por planta)
+func aviso_una_vez(clave: String, texto: String) -> void:
+	if avisos_dichos.has(clave):
+		return
+	avisos_dichos[clave] = true
+	gran_aviso(texto)
+	Sonido.tocar("no")
+
+
+# Lo que dice Johnny ante la puerta del jefe o la salida de incendios cerradas: le falta la llave (o la tarjeta, o el código)
+func falta_llave() -> String:
+	return {"tarjeta": Idioma.t("¡NECESITO UNA TARJETA!"), "codigo": Idioma.t("¡NECESITO EL CÓDIGO!")}.get(
+		ed.cerrojo, Idioma.t("¡NECESITO UNA LLAVE!"))
 
 
 func _al_coger_llave() -> void:
@@ -1207,7 +1241,7 @@ func despertar() -> void:
 	johnny.despertar(DESPERTAR)
 	create_tween().tween_property(negro, "modulate:a", 0.0, 0.8)
 	await get_tree().create_timer(0.6, false).timeout
-	decir(Idioma.t(FRASES_DESPERTAR.pick_random()), DESPERTAR)
+	gran_aviso(Idioma.t(FRASES_DESPERTAR.pick_random()), Tema.AMARILLO, 110.0, DESPERTAR)
 	await get_tree().create_timer(DESPERTAR, false).timeout
 
 
