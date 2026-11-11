@@ -25,6 +25,14 @@ msgstr "Как обычно"
 
 #: scripts/alerta.gd
 msgid ""
+"%s\n"
+"+%d %% de dólares"
+msgstr ""
+"%s\n"
+"+%d %% к долларам"
+
+#: scripts/alerta.gd
+msgid ""
 "%s%s\n"
 "+%d %% de dólares y de materiales"
 msgstr ""
@@ -3214,10 +3222,6 @@ msgid "Tienes la vida al máximo"
 msgstr "Здоровье и так полное"
 
 #: scripts/partida.gd
-msgid "%d:%02d · ¡récord!"
-msgstr "%d:%02d · рекорд!"
-
-#: scripts/partida.gd
 msgid "¡Reto completado!"
 msgstr "Испытание пройдено!"
 
@@ -3285,7 +3289,7 @@ msgstr[0] "Новое в бестиарии"
 msgstr[1] "Новое в бестиарии"
 msgstr[2] "Новое в бестиарии"
 
-#: scripts/partida.gd
+#: scripts/partida.gd scripts/ui/menus.gd
 msgid "¡Nueva mejor marca!"
 msgstr "Новый рекорд!"
 
@@ -3452,18 +3456,6 @@ msgstr "этаж %d"
 #: scripts/reto.gd
 msgid "Has llegado a la planta %d"
 msgstr "Ты дошел до этажа %d"
-
-#: scripts/reto.gd
-msgid "Premio: $%d"
-msgstr "Награда: $%d"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: cobrado ($%d)"
-msgstr "Награда дня: забрана ($%d)"
-
-#: scripts/reto.gd
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "Сегодня уже сыграно: приходи завтра"
 
 #: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
@@ -6091,16 +6083,32 @@ msgid "%s (de %d)"
 msgstr "%s (из %d)"
 
 #: scripts/ui/menu_principal.gd
+msgid "Premio $%d"
+msgstr "Награда $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio $%d cobrado"
+msgstr "Награда $%d забрана"
+
+#: scripts/ui/menu_principal.gd
+msgid "Vuelve mañana"
+msgstr "Приходи завтра"
+
+#: scripts/ui/menu_principal.gd
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "Сегодня уже сыграно: приходи завтра"
+
+#: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
 msgstr "Не исследовано!"
 
 #: scripts/ui/menu_principal.gd
-msgid "Completado ×%d"
-msgstr "Пройдено ×%d"
+msgid "Récord: %d:%02d"
+msgstr "Рекорд: %d:%02d"
 
 #: scripts/ui/menu_principal.gd
-msgid "mejor tiempo %d:%02d"
-msgstr "лучшее время %d:%02d"
+msgid "Completado ×%d"
+msgstr "Пройдено ×%d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
@@ -6159,20 +6167,28 @@ msgid "Abandonar partida"
 msgstr "Бросить забег"
 
 #: scripts/ui/menus.gd
-msgid "Plantas superadas"
-msgstr "Пройдено этажей"
+msgid "Tiempo"
+msgstr "Время"
+
+#: scripts/ui/menus.gd
+msgid "Dólares conseguidos"
+msgstr "Заработано долларов"
+
+#: scripts/ui/menus.gd
+msgid "+$%d  (tienes $%d)"
+msgstr "+$%d  (всего $%d)"
 
 #: scripts/ui/menus.gd
 msgid "Enemigos derrotados"
 msgstr "Убито врагов"
 
 #: scripts/ui/menus.gd
-msgid "Apartamentos visitados (última planta)"
-msgstr "Квартир посещено (последний этаж)"
+msgid "Plantas superadas"
+msgstr "Пройдено этажей"
 
 #: scripts/ui/menus.gd
-msgid "Tiempo"
-msgstr "Время"
+msgid "Apartamentos visitados (última planta)"
+msgstr "Квартир посещено (последний этаж)"
 
 #: scripts/ui/menus.gd
 msgid "Reto del día · %s"
@@ -6187,30 +6203,6 @@ msgid "Tu mejor marca de hoy: %s"
 msgstr "Твой лучший результат сегодня: %s"
 
 #: scripts/ui/menus.gd
-msgid "Dólares conseguidos"
-msgstr "Заработано долларов"
-
-#: scripts/ui/menus.gd
-msgid "+$%d  (tienes $%d)"
-msgstr "+$%d  (всего $%d)"
-
-#: scripts/ui/menus.gd
-msgid "De ellos, por la %s"
-msgstr "Из них бонус (%s)"
-
-#: scripts/ui/menus.gd
-msgid "De ellos, por completar el reto de hoy"
-msgstr "Из них за испытание дня"
-
-#: scripts/ui/menus.gd
-msgid "¡Nivel nuevo!"
-msgstr "Новый уровень!"
-
-#: scripts/ui/menus.gd
-msgid "%s abierta"
-msgstr "Открыта: %s"
-
-#: scripts/ui/menus.gd
 msgid "Dólares salvados (la mitad)"
 msgstr "Сохранено долларов (половина)"
 
@@ -6223,16 +6215,12 @@ msgid "Conseguido en esta partida"
 msgstr "Получено за забег"
 
 #: scripts/ui/menus.gd
-msgid "Jugar otra vez"
-msgstr "Сыграть еще"
+msgid "Menú principal"
+msgstr "Главное меню"
 
 #: scripts/ui/menus.gd
 msgid "Otra vez"
 msgstr "Еще раз"
-
-#: scripts/ui/menus.gd
-msgid "Menú principal"
-msgstr "Главное меню"
 
 #: scripts/ui/menus.gd
 msgid "Te ha pillado"

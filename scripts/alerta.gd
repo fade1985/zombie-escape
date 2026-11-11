@@ -77,9 +77,9 @@ static func dolares_extra(dolares: int) -> int:
 
 
 # Por cuánto se multiplican las piezas que sueltan los zombis (y las de los jefes): 1 + 0,2 por nivel (con la Alerta 5,
-# el doble: del 6 % al 12 %, y de 4 a 8 por jefe)
+# el doble: del 6 % al 12 %, y de 4 a 8 por jefe). La Alerta 1 solo da dólares (11 nov): las piezas, desde la 2
 static func mas_piezas() -> float:
-	return 1.0 + PIEZAS * nivel
+	return 1.0 + PIEZAS * nivel if nivel >= 2 else 1.0
 
 
 # El nombre corto ("Alerta 3") y lo que trae ese nivel, para los textos
@@ -97,5 +97,7 @@ static func regla(n := nivel, edificio := "") -> String:
 static func resumen(n := nivel, edificio := "") -> String:
 	if n <= 0:
 		return Idioma.t("Como siempre")
+	if n == 1:   # (la Alerta 1 solo da dólares)
+		return Idioma.t("%s\n+%d %% de dólares") % [regla(n, edificio), roundi(DOLARES * n * 100)]
 	return Idioma.t("%s%s\n+%d %% de dólares y de materiales") % [regla(n, edificio), Idioma.t(" (y lo de antes)") if n > 1 else "",
 		roundi(DOLARES * n * 100)]

@@ -25,6 +25,14 @@ msgstr "Comme d'habitude"
 
 #: scripts/alerta.gd
 msgid ""
+"%s\n"
+"+%d %% de dólares"
+msgstr ""
+"%s\n"
+"+%d %% de dollars"
+
+#: scripts/alerta.gd
+msgid ""
 "%s%s\n"
 "+%d %% de dólares y de materiales"
 msgstr ""
@@ -3210,10 +3218,6 @@ msgid "Tienes la vida al máximo"
 msgstr "Ta vie est au maximum"
 
 #: scripts/partida.gd
-msgid "%d:%02d · ¡récord!"
-msgstr "%d:%02d · record !"
-
-#: scripts/partida.gd
 msgid "¡Reto completado!"
 msgstr "Défi réussi !"
 
@@ -3277,7 +3281,7 @@ msgid_plural "Nuevos en el bestiario"
 msgstr[0] "Nouveau dans le bestiaire"
 msgstr[1] "Nouveaux dans le bestiaire"
 
-#: scripts/partida.gd
+#: scripts/partida.gd scripts/ui/menus.gd
 msgid "¡Nueva mejor marca!"
 msgstr "Nouveau record !"
 
@@ -3444,18 +3448,6 @@ msgstr "étage %d"
 #: scripts/reto.gd
 msgid "Has llegado a la planta %d"
 msgstr "Tu as atteint l'étage %d"
-
-#: scripts/reto.gd
-msgid "Premio: $%d"
-msgstr "Récompense : $%d"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: cobrado ($%d)"
-msgstr "Récompense du jour : encaissée ($%d)"
-
-#: scripts/reto.gd
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "Déjà joué aujourd'hui : reviens demain"
 
 #: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
@@ -6069,16 +6061,32 @@ msgid "%s (de %d)"
 msgstr "%s (sur %d)"
 
 #: scripts/ui/menu_principal.gd
+msgid "Premio $%d"
+msgstr "Récompense $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio $%d cobrado"
+msgstr "Récompense $%d encaissée"
+
+#: scripts/ui/menu_principal.gd
+msgid "Vuelve mañana"
+msgstr "Reviens demain"
+
+#: scripts/ui/menu_principal.gd
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "Déjà joué aujourd'hui : reviens demain"
+
+#: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
 msgstr "Inexploré !"
 
 #: scripts/ui/menu_principal.gd
-msgid "Completado ×%d"
-msgstr "Terminé ×%d"
+msgid "Récord: %d:%02d"
+msgstr "Record : %d:%02d"
 
 #: scripts/ui/menu_principal.gd
-msgid "mejor tiempo %d:%02d"
-msgstr "meilleur temps %d:%02d"
+msgid "Completado ×%d"
+msgstr "Terminé ×%d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
@@ -6137,20 +6145,28 @@ msgid "Abandonar partida"
 msgstr "Abandonner"
 
 #: scripts/ui/menus.gd
-msgid "Plantas superadas"
-msgstr "Étages passés"
+msgid "Tiempo"
+msgstr "Temps"
+
+#: scripts/ui/menus.gd
+msgid "Dólares conseguidos"
+msgstr "Dollars gagnés"
+
+#: scripts/ui/menus.gd
+msgid "+$%d  (tienes $%d)"
+msgstr "+$%d  (tu as $%d)"
 
 #: scripts/ui/menus.gd
 msgid "Enemigos derrotados"
 msgstr "Ennemis vaincus"
 
 #: scripts/ui/menus.gd
-msgid "Apartamentos visitados (última planta)"
-msgstr "Appartements visités (dernier étage)"
+msgid "Plantas superadas"
+msgstr "Étages passés"
 
 #: scripts/ui/menus.gd
-msgid "Tiempo"
-msgstr "Temps"
+msgid "Apartamentos visitados (última planta)"
+msgstr "Appartements visités (dernier étage)"
 
 #: scripts/ui/menus.gd
 msgid "Reto del día · %s"
@@ -6165,30 +6181,6 @@ msgid "Tu mejor marca de hoy: %s"
 msgstr "Ton meilleur score du jour : %s"
 
 #: scripts/ui/menus.gd
-msgid "Dólares conseguidos"
-msgstr "Dollars gagnés"
-
-#: scripts/ui/menus.gd
-msgid "+$%d  (tienes $%d)"
-msgstr "+$%d  (tu as $%d)"
-
-#: scripts/ui/menus.gd
-msgid "De ellos, por la %s"
-msgstr "Dont bonus %s"
-
-#: scripts/ui/menus.gd
-msgid "De ellos, por completar el reto de hoy"
-msgstr "Dont défi du jour réussi"
-
-#: scripts/ui/menus.gd
-msgid "¡Nivel nuevo!"
-msgstr "Nouveau niveau !"
-
-#: scripts/ui/menus.gd
-msgid "%s abierta"
-msgstr "%s débloquée"
-
-#: scripts/ui/menus.gd
 msgid "Dólares salvados (la mitad)"
 msgstr "Dollars sauvés (la moitié)"
 
@@ -6201,16 +6193,12 @@ msgid "Conseguido en esta partida"
 msgstr "Obtenu pendant cette partie"
 
 #: scripts/ui/menus.gd
-msgid "Jugar otra vez"
-msgstr "Rejouer"
+msgid "Menú principal"
+msgstr "Menu principal"
 
 #: scripts/ui/menus.gd
 msgid "Otra vez"
 msgstr "Réessayer"
-
-#: scripts/ui/menus.gd
-msgid "Menú principal"
-msgstr "Menu principal"
 
 #: scripts/ui/menus.gd
 msgid "Te ha pillado"

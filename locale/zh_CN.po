@@ -25,6 +25,14 @@ msgstr "一切照旧"
 
 #: scripts/alerta.gd
 msgid ""
+"%s\n"
+"+%d %% de dólares"
+msgstr ""
+"%s\n"
+"美元 +%d%%"
+
+#: scripts/alerta.gd
+msgid ""
 "%s%s\n"
 "+%d %% de dólares y de materiales"
 msgstr ""
@@ -3206,10 +3214,6 @@ msgid "Tienes la vida al máximo"
 msgstr "生命已满"
 
 #: scripts/partida.gd
-msgid "%d:%02d · ¡récord!"
-msgstr "%d:%02d · 新纪录！"
-
-#: scripts/partida.gd
 msgid "¡Reto completado!"
 msgstr "挑战完成！"
 
@@ -3269,7 +3273,7 @@ msgid "Nuevo en el bestiario"
 msgid_plural "Nuevos en el bestiario"
 msgstr[0] "图鉴新增"
 
-#: scripts/partida.gd
+#: scripts/partida.gd scripts/ui/menus.gd
 msgid "¡Nueva mejor marca!"
 msgstr "新纪录！"
 
@@ -3436,18 +3440,6 @@ msgstr "第%d层"
 #: scripts/reto.gd
 msgid "Has llegado a la planta %d"
 msgstr "到达了第%d层"
-
-#: scripts/reto.gd
-msgid "Premio: $%d"
-msgstr "奖励：$%d"
-
-#: scripts/reto.gd
-msgid "Premio de hoy: cobrado ($%d)"
-msgstr "今日奖励：已领取（$%d）"
-
-#: scripts/reto.gd
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "今天已经玩过了：明天再来"
 
 #: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
@@ -6047,16 +6039,32 @@ msgid "%s (de %d)"
 msgstr "%s（共 %d）"
 
 #: scripts/ui/menu_principal.gd
+msgid "Premio $%d"
+msgstr "奖励 $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio $%d cobrado"
+msgstr "奖励 $%d 已领取"
+
+#: scripts/ui/menu_principal.gd
+msgid "Vuelve mañana"
+msgstr "明天再来"
+
+#: scripts/ui/menu_principal.gd
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "今天已经玩过了：明天再来"
+
+#: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
 msgstr "尚未探索！"
 
 #: scripts/ui/menu_principal.gd
-msgid "Completado ×%d"
-msgstr "已通关 ×%d"
+msgid "Récord: %d:%02d"
+msgstr "纪录：%d:%02d"
 
 #: scripts/ui/menu_principal.gd
-msgid "mejor tiempo %d:%02d"
-msgstr "最佳用时 %d:%02d"
+msgid "Completado ×%d"
+msgstr "已通关 ×%d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
@@ -6115,20 +6123,28 @@ msgid "Abandonar partida"
 msgstr "放弃本局"
 
 #: scripts/ui/menus.gd
-msgid "Plantas superadas"
-msgstr "通过楼层"
+msgid "Tiempo"
+msgstr "用时"
+
+#: scripts/ui/menus.gd
+msgid "Dólares conseguidos"
+msgstr "获得美元"
+
+#: scripts/ui/menus.gd
+msgid "+$%d  (tienes $%d)"
+msgstr "+$%d  （共有 $%d）"
 
 #: scripts/ui/menus.gd
 msgid "Enemigos derrotados"
 msgstr "击败敌人"
 
 #: scripts/ui/menus.gd
-msgid "Apartamentos visitados (última planta)"
-msgstr "探索公寓（最后一层）"
+msgid "Plantas superadas"
+msgstr "通过楼层"
 
 #: scripts/ui/menus.gd
-msgid "Tiempo"
-msgstr "用时"
+msgid "Apartamentos visitados (última planta)"
+msgstr "探索公寓（最后一层）"
 
 #: scripts/ui/menus.gd
 msgid "Reto del día · %s"
@@ -6143,30 +6159,6 @@ msgid "Tu mejor marca de hoy: %s"
 msgstr "你今天的最佳成绩：%s"
 
 #: scripts/ui/menus.gd
-msgid "Dólares conseguidos"
-msgstr "获得美元"
-
-#: scripts/ui/menus.gd
-msgid "+$%d  (tienes $%d)"
-msgstr "+$%d  （共有 $%d）"
-
-#: scripts/ui/menus.gd
-msgid "De ellos, por la %s"
-msgstr "其中，来自%s"
-
-#: scripts/ui/menus.gd
-msgid "De ellos, por completar el reto de hoy"
-msgstr "其中，来自完成今日挑战"
-
-#: scripts/ui/menus.gd
-msgid "¡Nivel nuevo!"
-msgstr "新等级！"
-
-#: scripts/ui/menus.gd
-msgid "%s abierta"
-msgstr "%s已解锁"
-
-#: scripts/ui/menus.gd
 msgid "Dólares salvados (la mitad)"
 msgstr "保住的美元（一半）"
 
@@ -6179,16 +6171,12 @@ msgid "Conseguido en esta partida"
 msgstr "本局收获"
 
 #: scripts/ui/menus.gd
-msgid "Jugar otra vez"
-msgstr "再玩一局"
+msgid "Menú principal"
+msgstr "主菜单"
 
 #: scripts/ui/menus.gd
 msgid "Otra vez"
 msgstr "再来一次"
-
-#: scripts/ui/menus.gd
-msgid "Menú principal"
-msgstr "主菜单"
 
 #: scripts/ui/menus.gd
 msgid "Te ha pillado"

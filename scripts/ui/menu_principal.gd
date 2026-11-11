@@ -13,6 +13,7 @@
 extends Control
 
 # el título y el fondo, de GPT (tools/menu_gpt.py); el logo viejo, assets/ui/logo.png, sigue en el trailer
+const PLACA := preload("res://scripts/ui/chapa.gd")   # los colores de la chapa (también los del cuadro del reto)
 const LOGO := preload("res://assets/ui/titulo.png")
 const FONDO := preload("res://assets/ui/menu-fondo.png")
 const ANCHO_TARJETA := 312   # el ancho de una tarjeta de "Elige edificio": que quepa el selector de alerta de debajo (306), si no ensancha la suya
@@ -150,9 +151,19 @@ func _ready() -> void:
 					print("Edificios · requisitos «%s»: centro abierto %s (esperado: %s) · torre abierta %s (esperado: false)" % [
 						como, not tarjetas.get_child(1).get_child(0).disabled, como == "todo",
 						not tarjetas.get_child(2).get_child(0).disabled])
-					print("Edificios · tarjeta de los Apartamentos «%s»: «%s» (esperado: nada sin %%, medias · 53%%, todo · 100%%)" % [
+					print("Edificios · tarjeta de los Apartamentos «%s»: «%s» (esperado: sin completar, «Has llegado a la planta N de 5» y, completado, «Récord: m:ss»: sin las veces ni el tanto por ciento)" % [
 						como, (tarjetas.get_child(0).get_child(0).get_child(0).get_child(2) as Label).text])
 					Captura.foto("captura-edificios-%s.png" % como)
+				# el cuadro del reto del día (11 nov): con el ratón encima del botón de los Apartamentos
+				var reto_b: Button = tarjetas.get_child(0).find_children("*", "Button", true, false).filter(func(x): return x.has_meta("cuadro"))[0]
+				reto_b.mouse_entered.emit()
+				await get_tree().create_timer(0.3).timeout
+				var cuadro: Control = reto_b.get_meta("cuadro")
+				print("Edificios · reto del día: botón «%s» de %s · cuadro a la vista %s (esperado: true) en %s dentro de la pantalla %s (esperado: true)" % [
+					reto_b.text, reto_b.size, cuadro.visible, cuadro.global_position, get_viewport_rect().encloses(cuadro.get_global_rect())])
+				Captura.foto("captura-edificios-reto.png")
+				reto_b.mouse_exited.emit()
+				print("Edificios · reto del día: cuadro a la vista al apartar el ratón %s (esperado: false)" % cuadro.visible)
 				get_tree().quit()
 				return
 			jugar_partida(edificio)
@@ -352,26 +363,119 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	mas.pressed.connect(cambiar.bind(1))
 
 
-# Debajo del selector de alerta: el botón del reto del día (reto.gd; apagado si ya se ha jugado hoy, M71) y, debajo,
-# la regla de hoy, tu marca y el premio
+# Debajo del selector de alerta: el botón del reto del día (reto.gd; apagado si ya se ha jugado hoy, M71), grande, con el
+# premio debajo en amarillo (como el precio de la tienda de armas) y, al pasar el ratón o marcarlo, su cuadro (11 nov)
 func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
+	var f := Reto.ficha(s, id, Reto.hoy())
 	var b := Button.new()
-	b.text = Idioma.t("Reto del día")   # (sin la copa desde el 9 nov)
-	b.custom_minimum_size.x = 220
+	b.text = Idioma.t("Reto del día")
+	b.theme_type_variation = "BotonGrande"   # no-tr
+	b.custom_minimum_size = Vector2(280, 52)
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	b.pressed.connect(jugar_reto.bind(id))
-	var f := Reto.ficha(s, id, Reto.hoy())
-	if Reto.jugado(f):   # una vez al día (M71): apagado hasta mañana
+	var jugado := Reto.jugado(f)
+	if jugado:   # una vez al día (M71): apagado hasta mañana
 		b.disabled = true
 		b.focus_mode = Control.FOCUS_NONE
 	caja.add_child(b)
-	var explica := Label.new()
-	explica.theme_type_variation = "Sub"
-	explica.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	explica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	explica.custom_minimum_size = Vector2(300, 0)
-	explica.text = Reto.texto_tarjeta(f)
-	caja.add_child(explica)
+	var premio := Label.new()
+	premio.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if not jugado:
+		premio.text = Idioma.t("Premio $%d") % Reto.PREMIO
+		premio.add_theme_color_override("font_color", PLACA.AMARILLO)
+	else:
+		premio.text = Idioma.t("Premio $%d cobrado") % Reto.PREMIO if f.completado else Idioma.t("Vuelve mañana")
+		premio.add_theme_color_override("font_color", PLACA.TEXTO_SUAVE)
+	caja.add_child(premio)
+	var cuadro := cuadro_reto(f)
+	cuadro.visible = false
+	b.add_child(cuadro)
+	var enseñar := func(si: bool):
+		if si:
+			cuadro.visible = true
+			cuadro.size = cuadro.get_combined_minimum_size()
+			var donde := b.global_position + Vector2((b.size.x - cuadro.size.x) / 2.0, -cuadro.size.y - 8)
+			var pantalla := get_viewport_rect().size
+			cuadro.global_position = Vector2(clampf(donde.x, 6.0, pantalla.x - cuadro.size.x - 6.0), maxf(6.0, donde.y))
+		else:
+			cuadro.visible = false
+	b.mouse_entered.connect(enseñar.bind(true))
+	b.mouse_exited.connect(enseñar.bind(false))
+	b.focus_entered.connect(enseñar.bind(true))
+	b.focus_exited.connect(enseñar.bind(false))
+	b.set_meta("cuadro", cuadro)   # (las pruebas lo leen)
+	# apagado el botón no recibe el ratón: el cuadro sale también al pasar por encima del premio
+	if jugado:
+		premio.mouse_filter = Control.MOUSE_FILTER_STOP
+		premio.mouse_entered.connect(enseñar.bind(true))
+		premio.mouse_exited.connect(enseñar.bind(false))
+
+
+# El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): la regla de hoy en la cabecera,
+# qué hace, tu marca y, abajo, el premio (en amarillo si aún se puede cobrar)
+func cuadro_reto(f: Dictionary) -> PanelContainer:
+	var cuadro := PanelContainer.new()
+	cuadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cuadro.top_level = true
+	cuadro.z_index = 20
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = Color("#101215")
+	estilo.border_color = PLACA.AMARILLO
+	estilo.set_border_width_all(2)
+	cuadro.add_theme_stylebox_override("panel", estilo)
+	var columna := VBoxContainer.new()
+	columna.add_theme_constant_override("separation", 4)
+	columna.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	columna.custom_minimum_size.x = 260
+	cuadro.add_child(columna)
+	var cabecera := PanelContainer.new()
+	var fondo := StyleBoxFlat.new()
+	fondo.bg_color = Color("#6b5a10")
+	fondo.set_content_margin_all(4)
+	fondo.content_margin_left = 8
+	fondo.content_margin_right = 8
+	cabecera.add_theme_stylebox_override("panel", fondo)
+	cabecera.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	columna.add_child(cabecera)
+	cabecera.add_child(etiqueta_reto(Reto.nombre(f.regla), Color.WHITE))
+	var margen := MarginContainer.new()
+	margen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for lado in ["left", "right"]:
+		margen.add_theme_constant_override("margin_" + lado, 8)
+	columna.add_child(margen)
+	var textos := VBoxContainer.new()
+	textos.add_theme_constant_override("separation", 4)
+	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margen.add_child(textos)
+	textos.add_child(etiqueta_reto(Reto.desc(f.regla), PLACA.TEXTO, true))
+	textos.add_child(etiqueta_reto(Reto.marca(f), Color("#ff9a5c"), true))
+	if Reto.jugado(f):
+		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
+	var pie := etiqueta_reto(Idioma.t("Premio $%d") % Reto.PREMIO if not f.completado
+		else Idioma.t("Premio $%d cobrado") % Reto.PREMIO, Color.BLACK if not Reto.jugado(f) else PLACA.TEXTO_SUAVE)
+	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var fondo_pie := StyleBoxFlat.new()
+	fondo_pie.bg_color = PLACA.AMARILLO if not Reto.jugado(f) else Color("#2f333a")
+	fondo_pie.set_content_margin_all(4)
+	pie.add_theme_stylebox_override("normal", fondo_pie)
+	var abajo := MarginContainer.new()
+	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for lado in ["left", "right", "bottom"]:
+		abajo.add_theme_constant_override("margin_" + lado, 6)
+	abajo.add_child(pie)
+	columna.add_child(abajo)
+	return cuadro
+
+
+func etiqueta_reto(texto: String, color: Color, partir := false) -> Label:
+	var l := Label.new()
+	l.text = texto
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	l.add_theme_color_override("font_color", color)
+	if partir:
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.custom_minimum_size.x = 244
+	return l
 
 
 # El reto del día de un edificio (reto.gd): el de hoy, sin alerta. En la prueba, "--reto <regla>" fuerza esa regla
@@ -482,10 +586,9 @@ func textos_tarjeta(id: String, s: Dictionary) -> Array:
 		var por_ciento := Edificios.porcentaje(s, id)
 		var con_por_ciento := " · %d%%" % por_ciento if por_ciento > 0 else ""   # no-tr
 		if p.completado:
+			# completado: solo «Récord: 3:12» (11 nov; sin las veces ni el tanto por ciento)
 			var t: float = p.mejor_tiempo
-			progreso = Idioma.t("Completado ×%d") % p.victorias + con_por_ciento
-			if t > 0.0:
-				progreso += " · " + Idioma.t("mejor tiempo %d:%02d") % [int(t) / 60, int(t) % 60]
+			progreso = Idioma.t("Récord: %d:%02d") % [int(t) / 60, int(t) % 60] if t > 0.0 else Idioma.t("Completado ×%d") % p.victorias
 		elif veces > 0 or por_ciento > 0:
 			progreso = Idioma.t("Has llegado a la planta %d de %d") % [p.mejor_planta, Planta.PLANTAS] + con_por_ciento
 		textos.append([progreso, ""])

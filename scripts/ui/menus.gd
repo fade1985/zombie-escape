@@ -41,6 +41,7 @@ var abierto := ""         # "pausa", "fin", "mutacion", "pagina", "noticia", "op
 var elegir_mutacion := Callable()   # a quién avisar con la mutación elegida
 var cartas: Array = []    # las dos mutaciones que se ofrecen
 var al_leer := Callable()  # a quién avisar al cerrar la página del dosier
+var fin_gano := false      # si el cartel del final es de victoria (sin «Otra vez» ni la R)
 var fin_desde := 0         # cuándo se abrió el cartel del final (Time.get_ticks_msec), para ESPERA_FIN
 
 
@@ -202,7 +203,8 @@ func pausa(partida: Node, foco := "") -> void:
 func fin(r: Dictionary) -> void:
 	var columna := abrir("fin")
 	fin_desde = Time.get_ticks_msec()
-	titulo(columna, r.titulo, r.sub)
+	fin_gano = r.gano
+	titulo(columna, r.titulo, "" if r.gano else r.sub)   # (al ganar, sin la frase de debajo: 11 nov)
 	var lista := VBoxContainer.new()
 	lista.custom_minimum_size.x = 440
 	var ficha := quien_te_pilla(r.get("asesino", ""))
@@ -215,29 +217,25 @@ func fin(r: Dictionary) -> void:
 		columna.add_child(fila)
 	else:
 		columna.add_child(lista)
-	dato(lista, "apartamentos", Idioma.t("Plantas superadas"), r.plantas)
-	dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
-	dato(lista, "puerta", Idioma.t("Apartamentos visitados (última planta)"), r.visitados)
-	if r.tiempo != "":
-		dato(lista, "trofeo", Idioma.t("Tiempo"), r.tiempo)
-	if r.get("reto", "") != "":
-		dato(lista, "trofeo", Idioma.t("Reto del día · %s") % r.reto, Idioma.t("%s · ¡mejor marca de hoy!") % r.marca if r.mejor
-			else Idioma.t("Tu mejor marca de hoy: %s") % r.marca, Color("#f7c440") if r.mejor else Tema.TINTA)
 	if r.gano:
-		var premio: int = r.get("premio_reto", 0)
-		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares + r.extra + premio, r.cartera], Tema.VERDE)
-		if r.get("alerta", 0) > 0:
-			dato(lista, "alerta", Idioma.t("De ellos, por la %s") % Alerta.nombre(r.alerta), "+$%d" % r.extra, Tema.VERDE)
-		if premio > 0:
-			dato(lista, "trofeo", Idioma.t("De ellos, por completar el reto de hoy"), "+$%d" % premio, Tema.VERDE)
-		if r.get("abierta", 0) > 0:
-			dato(lista, "alerta", Idioma.t("¡Nivel nuevo!"), Idioma.t("%s abierta") % Alerta.nombre(r.abierta), Color("#f7c440"))
+		# al ganar (11 nov): solo el tiempo, los dólares, los enemigos derrotados y, si la hay, la nueva mejor marca
+		dato(lista, "trofeo", Idioma.t("Tiempo"), r.tiempo)
+		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares + r.extra + r.get("premio_reto", 0), r.cartera], Tema.VERDE)
+		dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
+		if r.get("nueva_marca", false):
+			dato(lista, "trofeo", Idioma.t("¡Nueva mejor marca!"), "", Color("#f7c440"))
 	else:
+		dato(lista, "apartamentos", Idioma.t("Plantas superadas"), r.plantas)
+		dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
+		dato(lista, "puerta", Idioma.t("Apartamentos visitados (última planta)"), r.visitados)
+		if r.get("reto", "") != "":
+			dato(lista, "trofeo", Idioma.t("Reto del día · %s") % r.reto, Idioma.t("%s · ¡mejor marca de hoy!") % r.marca if r.mejor
+				else Idioma.t("Tu mejor marca de hoy: %s") % r.marca, Color("#f7c440") if r.mejor else Tema.TINTA)
 		# si caes, te quedas la mitad de lo recogido (partida.gd, DOLARES_AL_CAER) y la otra mitad se pierde
 		dato(lista, "billete", Idioma.t("Dólares salvados (la mitad)"), Idioma.t("+$%d  (tienes $%d)") % [r.salvados, r.cartera], Tema.VERDE)
 		dato(lista, "billete", Idioma.t("Dólares perdidos"), "$%d" % (r.dolares - r.salvados), Tema.ROJO)
 	# lo conseguido en esta partida, solo si hay algo nuevo
-	var conseguido: Array = r.get("conseguido", [])
+	var conseguido: Array = [] if r.gano else r.get("conseguido", [])
 	if not conseguido.is_empty():
 		var cabeza := Label.new()
 		cabeza.theme_type_variation = "Sub"
@@ -250,14 +248,20 @@ func fin(r: Dictionary) -> void:
 	var botones := VBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)
-	# «Otra vez» vuelve a empezar el edificio; con teclado, también la R (en el móvil y con mando no se dice)
-	var con_r := not Tactil.activo and not Controles.con_mando
-	var otra_vez := Idioma.t("Jugar otra vez") if r.gano else Idioma.t("Otra vez")
-	var otra := boton(botones, "%s (R)" % otra_vez if con_r else otra_vez, al_final.bind(reintentar), "BotonGrande")   # no-tr
-	boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
+	# Al caer, «Otra vez» vuelve a empezar el edificio; con teclado, también la R (en el móvil y con mando no se dice). Al ganar
+	# (11 nov), solo «Menú principal»
+	var principal: Button
+	var otra: Button = null
+	if r.gano:
+		principal = boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal), "BotonGrande")   # no-tr
+	else:
+		var con_r := not Tactil.activo and not Controles.con_mando
+		var otra_vez := Idioma.t("Otra vez")
+		otra = boton(botones, "%s (R)" % otra_vez if con_r else otra_vez, al_final.bind(reintentar), "BotonGrande")   # no-tr
+		principal = boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
 	for b in botones.get_children():
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	otra.grab_focus.call_deferred()
+	(otra if otra else principal).grab_focus.call_deferred()
 
 
 # Los botones del cartel del final (y la R): no hacen caso hasta pasado ESPERA_FIN desde que se abrió
@@ -475,7 +479,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			elegir(cartas[n].id)
 		return
-	if abierto == "fin" and evento is InputEventKey and evento.pressed and not evento.echo and evento.physical_keycode == KEY_R:
+	if abierto == "fin" and not fin_gano and evento is InputEventKey and evento.pressed and not evento.echo and evento.physical_keycode == KEY_R:
 		get_viewport().set_input_as_handled()
 		al_final(reintentar)
 		return

@@ -1746,7 +1746,7 @@ func terminar(gano: bool, abandona := false) -> void:
 				visitados += 1
 	var tiempo := ""
 	if gano:
-		tiempo = (Idioma.t("%d:%02d · ¡récord!") if record[0] else "%d:%02d") % [int(duracion) / 60, int(duracion) % 60]
+		tiempo = "%d:%02d" % [int(duracion) / 60, int(duracion) % 60]   # no-tr
 	menus.fin({
 		"gano": gano,
 		"titulo": (Idioma.t("¡Reto completado!") if Reto.activo else Idioma.t("¡Edificio completado!")) if gano else Idioma.t("¡Derrota!"),
@@ -1761,6 +1761,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"muertos": muertos,
 		"visitados": "%d / %d" % [visitados, apartamentos],
 		"tiempo": tiempo,
+		"nueva_marca": gano and (record[0] or mejor[0]),   # (el récord del edificio o la mejor marca del reto)
 		"dolares": dolares,
 		"salvados": salvados,
 		"cartera": s.dolares,
