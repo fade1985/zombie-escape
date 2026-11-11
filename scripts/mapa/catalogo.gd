@@ -95,15 +95,16 @@ const MUEBLES := {
 	"jewelcase":       {"len": 96,  "dep": 44, "paredes": "lados", "archivo": "centro/vitrina-joyeria"},
 	"jewelcabinet":    {"len": 64,  "dep": 36, "paredes": "",      "archivo": "centro/vitrina-alta"},
 	"safe":            {"len": 56,  "dep": 48, "paredes": "",      "archivo": "centro/caja-fuerte"},
-	# Los aparatos de la azotea del centro comercial (PixelLab, con las guías de tools/guias_azotea.py). Desde el 11 nov
-	# ya no salen: la azotea entera es la imagen de GPT (planta.gd, azotea); se quedan por si vuelven
+	# Los aparatos de la azotea (planta.gd, AZOTEA_APARATOS): el aire acondicionado ("acunit") y la torre de antena
+	# ("antennas"), de GPT desde el 11 nov (tools/muebles_gpt.py); los demás, de PixelLab (con las guías de
+	# tools/guias_azotea.py), ya no salen
 	"acunit":          {"len": 128, "dep": 72, "paredes": "todas", "archivo": "centro/aire-acondicionado"},
 	"airhandler":      {"len": 184, "dep": 60, "paredes": "todas", "archivo": "centro/climatizadora"},
 	"chimney":         {"len": 48,  "dep": 48, "paredes": "todas", "archivo": "centro/chimenea"},   # (ya no sale en la azotea)
 	"vent":            {"len": 44,  "dep": 44, "paredes": "todas", "archivo": "centro/extractor"},
 	# y los de la azotea de los Apartamentos (con el extractor): depósito de agua, antenas y (ya no sale) tendedero
 	"watertank":       {"len": 96,  "dep": 64, "paredes": "todas", "archivo": "azotea/deposito-agua"},
-	"antennas":        {"len": 64,  "dep": 40, "paredes": "todas", "archivo": "azotea/antenas"},
+	"antennas":        {"len": 72,  "dep": 40, "paredes": "todas", "archivo": "azotea/antenas"},
 	"clothesline":     {"len": 160, "dep": 24, "paredes": "todas", "archivo": "azotea/tendedero"},   # (ya no sale en la azotea)
 	# las máquinas del gimnasio del Gymbro (su habitación; PixelLab, con las guías de tools/guias_gimnasio.py): la
 	# cinta de correr y el banco de press salen de la pared hacia la habitación; la máquina de poleas, alta, solo en

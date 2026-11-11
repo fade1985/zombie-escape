@@ -1198,8 +1198,19 @@ func bala_al_jefe(angulo: float, lejos: float, dano: int) -> void:
 # (captura-azotea-ring.png)
 func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 	var p := Planta.plataforma(s)
-	print("  helipuerto: el aro %s dentro de las líneas %s | aparatos %d (esperado: true, 0)" % [s.helipuerto,
-		p.has_point(s.helipuerto), s.muebles.size()])
+	print("  helipuerto: el aro %s dentro de las líneas %s (esperado: true)" % [s.helipuerto, p.has_point(s.helipuerto)])
+	# los aparatos (planta.gd, AZOTEA_APARATOS): en el suelo, fuera de las líneas blancas, sin tapar el aro con su
+	# dibujo y lejos de la puerta
+	var suelo := Rect2(Planta.MURO, Planta.AZOTEA_MURO_ARRIBA * Planta.CASILLA, s.ancho - 2.0 * Planta.MURO,
+		s.alto - (Planta.AZOTEA_MURO_ARRIBA + Planta.AZOTEA_MURO_ABAJO) * Planta.CASILLA)
+	var malos := 0
+	for m in s.muebles:
+		var r := Muebles.hueco(m)
+		var alto: float = load("res://assets/sprites/mueble-%s.png" % m.tipo).get_height() * 2.0
+		var dibujo := Rect2(r.position.x, r.end.y - alto, r.size.x, alto)
+		if not suelo.encloses(r) or p.grow(-24.0).intersects(r) or dibujo.get_center().distance_to(s.helipuerto) < Planta.AZOTEA_ARO_LIBRE 				or r.get_center().distance_to(mapa.puertas[0].position) < 250.0:
+			malos += 1
+	print("  aparatos: %d | mal puestos %d (esperado: 3, 0)" % [s.muebles.size(), malos])
 	# los muros, por la barandilla: en cada columna de dentro, muro hasta la fila 3 y desde la 27; suelo entre medias
 	var mal := 0
 	for c in range(2, mapa.cols - 2):

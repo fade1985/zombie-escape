@@ -35,6 +35,11 @@ MUEBLES = {
     # y el del Centro comercial, a juego: cuatro plantas de hormigón, el cartel luminoso con la bolsa de la compra (sin
     # letras: a 32 de alto no se leerían), el toldo rojo y blanco y los escaparates con luz (11 nov, bloque M)
     "icono_centro": ("assets/sources/centro-gpt.webp", "assets/ui/tarjeta-centro.png", 23, 32, False),
+    # los aparatos de la azotea (planta.gd, AZOTEA_APARATOS; 11 nov, bloque M): el aire acondicionado industrial, gris
+    # sucio con su ventilador y dos cables, y la torre de antena de celosía roja y blanca. La torre es toda huecos: el
+    # negro de entre las barras no se llega desde el borde, así que se vacía todo el negro puro ("negro")
+    "aire_acondicionado": ("assets/sources/aire-acondicionado-gpt.webp", "assets/sprites/mueble-acunit.png", 64, 57, True),
+    "torre_antena": ("assets/sources/torre-antena-gpt.webp", "assets/sprites/mueble-antennas.png", 36, 86, True, (), "negro"),
     # y el candado de los edificios cerrados, de acero gastado con óxido; el hueco del arco, que el fondo no alcanza
     # desde el borde, se vacía también (la semilla, en el medio del arco de la imagen de GPT)
     "icono_candado": ("assets/sources/candado-gpt.webp", "assets/ui/tarjeta-candado.png", 22, 32, False, (), [(640, 350)]),
@@ -249,6 +254,8 @@ def pasar(origen, sprite, ancho, alto, con_json, quitar=(), semillas=()):
     im = Image.open(origen).convert("RGBA")
     W, H = im.size
     px = im.load()
+    if semillas == "negro":   # (todo el negro puro, también el de los huecos encerrados)
+        semillas = [(x, y) for y in range(H) for x in range(W) if max(px[x, y][:3]) < 6]
     # el fondo: el negro puro que se llega desde el borde
     fondo = bytearray(W * H)
     cola = deque([(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)] + list(semillas))

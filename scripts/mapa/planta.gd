@@ -51,6 +51,10 @@ const AZOTEA_ARO_LIBRE := 230.0         # lo que queda limpio alrededor del aro 
 # Lo de dentro de las líneas blancas: el ring del jefe final. Espera en el aro y, en cuanto entra Johnny, empieza la
 # pelea (partida.gd, mirar_ring). No choca: está a ras de suelo
 const PLATAFORMA := Rect2(180, 192, 1048, 614)
+# Los aparatos de la azotea (de GPT: tools/muebles_gpt.py), los mismos en los dos edificios: [tipo, x del centro, y de
+# arriba de lo que ocupa]. En las esquinas, fuera de las líneas blancas y lejos de la puerta (a la derecha, abajo): la
+# torre de antena arriba a la derecha y un aire acondicionado en cada esquina de la izquierda
+const AZOTEA_APARATOS := [["antennas", 1280, 210], ["acunit", 132, 140], ["acunit", 132, 780]]
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
@@ -570,7 +574,7 @@ static func codigo(planta: Dictionary, normales: Array) -> Dictionary:
 
 # La azotea (la última planta del centro comercial y de los Apartamentos, como en el juego JS): un solo sitio grande
 # y abierto, sin pasillo ni tiendas, con el jefe final. Toda ella, la imagen de GPT (mapa.gd, "azotea"): el helipuerto
-# a ras de suelo, con la barandilla alrededor (sin aparatos: el dueño los quitó el 11 nov). Se llega por la derecha,
+# a ras de suelo, con la barandilla alrededor y tres aparatos en las esquinas (AZOTEA_APARATOS). Se llega por la derecha,
 # por la escalera, al final de la pasarela, que se cierra detrás para siempre;
 # no tiene más puerta: al caer el jefe llega el helicóptero de Velaria y suelta una escalera de cuerda sobre el
 # helipuerto (helicoptero.gd); al llegar Johnny a ella se acaba el edificio (partida.gd, subir_al_helicoptero). Es un
@@ -593,6 +597,8 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Azotea", "ancho": ancho, "alto": alto, "estilo": "azotea",   # [traducir]
 		"dueno": dueno, "zombis": [], "limpio": false, "visitado": true,
 		"surtido": rng.randi(), "manchas": [], "helipuerto": AZOTEA_ARO, "muebles": []}
+	for a in AZOTEA_APARATOS:
+		sitio.muebles.append(Muebles.nuevo(a[0], {"lado": "arriba", "base": float(a[2])}, float(a[1]), 0))
 	sitio.salidas = [   # (la única: de aquí se sale en el helicóptero, que suelta su escalera al caer el jefe)
 		{"dir": "derecha", "en": AZOTEA_ENTRADA, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
 			"incendios": true,   # (la roja de la salida de incendios, como la del pasillo: se sube por esas escaleras)
@@ -602,7 +608,7 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	for i in rng.randi_range(5, 8):
 		var pos := Vector2(rng.randf_range(MURO + 40, ancho - MURO - 60),
 			rng.randf_range(AZOTEA_MURO_ARRIBA * CASILLA + 30, alto - AZOTEA_MURO_ABAJO * CASILLA - 30))
-		if pos.distance_to(AZOTEA_ARO) > AZOTEA_ARO_LIBRE:
+		if pos.distance_to(AZOTEA_ARO) > AZOTEA_ARO_LIBRE and lejos_de_muebles(sitio, pos, 20.0):
 			sitio.manchas.append({"pos": pos, "dibujo": rng.randi() % 10, "giro": rng.randi() % 4, "espejo": rng.randf() < 0.5})
 	planta.sitios.append(sitio)
 	return planta

@@ -1056,8 +1056,11 @@ func preparar_restos() -> void:
 	if libres.is_empty():
 		return
 	var azotea: bool = sitio.get("estilo", "") == "azotea"
-	if sitio.has("helipuerto"):   # en la azotea, nada encima del aro ni de la H
-		libres = libres.filter(func(c): return ((c + Vector2(0.5, 0.5)) * CASILLA).distance_to(sitio.helipuerto) > Planta.AZOTEA_ARO_LIBRE)
+	if sitio.has("helipuerto"):   # en la azotea, nada encima del aro ni de la H, ni debajo de los aparatos
+		var lejos := func(c: Vector2) -> bool:
+			var pos := (c + Vector2(0.5, 0.5)) * CASILLA
+			return pos.distance_to(sitio.helipuerto) > Planta.AZOTEA_ARO_LIBRE and Planta.lejos_de_muebles(sitio, pos, 16.0)
+		libres = libres.filter(lejos)
 	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, RESTOS_AZOTEA_MAX if azotea else 24)
 	var lista: Array = RESTOS_AZOTEA if azotea else RESTOS_SUELO
 	for i in cuantos:
