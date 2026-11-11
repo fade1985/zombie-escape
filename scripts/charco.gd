@@ -20,7 +20,6 @@
 class_name Charco
 extends Node2D
 
-const LEJIA := preload("res://assets/sprites/objeto-charco-lejia.png")
 const LUZ_FUEGO := preload("res://escenas/luces/fuego.tscn")
 
 # Cada tipo: su dibujo, su tamaño (radio), cuánto dura y los estados que pone. "solo_zombis": a Johnny no le
@@ -39,11 +38,11 @@ const TIPOS := {
 	# como el de la portera pero más pequeño, y solo a los zombis
 	"residuo": {"burbujas": "acido", "radio": 40.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
-	"aceite": {"dibujo": LEJIA, "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}, "tinte": Color(1.0, 0.8, 0.25)},
+	"aceite": {"burbujas": "aceite", "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}},
 	"hirviendo": {"radio": 60.0, "vida": 6.0, "estados": {"fuego": {"dps": 12.0}}, "prende": true},   # el del cocinero
 	# el agua de los aspersores (la alarma de incendios, eventos.gd): solo resbala, y no se seca mientras dure
 	# el café de los vasos del becario (becario.gd): solo resbala
-	"cafe": {"dibujo": LEJIA, "radio": 50.0, "vida": 6.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.6, 0.38, 0.22)},
+	"cafe": {"burbujas": "cafe", "radio": 50.0, "vida": 6.0, "estados": {"resbaladizo": {}}},
 	# el agua de los cubos del Sujeto 1 (sujeto_1.gd): solo resbala, 6 s
 	"agua_cubo": {"burbujas": "agua", "radio": 56.0, "vida": 6.0, "estados": {"resbaladizo": {}}},
 	"agua": {"burbujas": "agua", "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}},
@@ -68,6 +67,12 @@ const BURBUJEO := {
 	# pero sin burbujas ni vapor, y al secarse no deja mancha
 	"agua": {"borde": Color("#1d3f6a"), "oscuro": Color("#2e609d"), "medio": Color("#4f8fd0"), "centro": Color("#7dbbf3"),
 		"brillo": Color("#d8f0ff"), "luz": Color("#ffffff"), "sin_burbujas": true, "ondas": true},
+	# el aceite de la probeta del científico jefe: dorado, con el brillo grasiento; no se seca (al acabar arde, arder)
+	"aceite": {"borde": Color("#5a3a0c"), "oscuro": Color("#8a5a14"), "medio": Color("#c08a22"), "centro": Color("#e6b84a"),
+		"brillo": Color("#fff0b0"), "sin_burbujas": true, "no_seca": true},
+	# el café de los vasos del becario: marrón, y al secarse deja su mancha
+	"cafe": {"borde": Color("#2a160a"), "oscuro": Color("#4a2a14"), "medio": Color("#6e4222"), "centro": Color("#8a5a30"),
+		"brillo": Color("#d8b48a"), "sin_burbujas": true, "mancha": Color("#2a1a10", 0.4)},
 }
 # Cuánto tarda en extenderse al caer y cuánto antes de acabar empieza a secarse
 const DERRAMA := 0.25
@@ -155,10 +160,10 @@ func _physics_process(delta: float) -> void:
 	vida -= delta
 	t += delta
 	if vida <= 0.0:
-		if tipo == "fuego" or burbujea():
-			dejar_ceniza()
-		elif tipo == "aceite":
+		if tipo == "aceite":
 			arder()
+		elif tipo == "fuego" or burbujea():
+			dejar_ceniza()
 		queue_free()
 		return
 	if tipo == "fuego":
@@ -218,16 +223,19 @@ func hacer_fuego() -> void:
 	var ondas := []
 	for k in [3, 5, 7]:
 		ondas.append([k, randf() * TAU, randf_range(0.05, 0.12)])
-	var n := ceili(r / CELDA)
+	var ruido_liso := FastNoiseLite.new()   # como en los líquidos: trozos, no puntitos sueltos
+	ruido_liso.seed = randi()
+	ruido_liso.frequency = 0.09
+	var n := ceili(r / GOTA)
 	for y in range(-n, n + 1):
 		for x in range(-n, n + 1):
-			var p := Vector2(x, y) * CELDA
+			var p := Vector2(x, y) * GOTA
 			var a := atan2(p.y / 0.6, p.x)
 			var borde := 1.0
 			for o in ondas:
 				borde += sin(a * o[0] + o[1]) * o[2]
 			var d := Vector2(p.x, p.y / 0.6).length() / r / borde
-			var ruido := randf()
+			var ruido := ruido_liso.get_noise_2dv(p) * 0.5 + 0.5   # (0-1, suave)
 			if d > 1.0 or (d > 0.85 and ruido < 0.4):
 				continue
 			# prende del centro hacia fuera; se apaga a trozos, antes por los bordes
@@ -240,7 +248,7 @@ func hacer_fuego() -> void:
 		if c[1] > 0.8:
 			continue
 		var grande: float = 1.0 - c[1]
-		llamas.append([c[0].x + 2.0, c[0].y + 2.0, roundf(4 + grande * 5 + i % 2), roundf(6 + grande * 13 + (i % 3) * 2), randf() * 10.0, c[2], c[3]])
+		llamas.append([c[0].x + 1.0, c[0].y + 1.0, roundf(4 + grande * 5 + i % 2), roundf(6 + grande * 13 + (i % 3) * 2), randf() * 10.0, c[2], c[3]])
 	llamas.sort_custom(func(a, b): return a[1] < b[1])
 	for i in 24:
 		ascuas.append(celdas.pick_random())
@@ -303,7 +311,7 @@ func dejar_ceniza() -> void:
 			if c[1] < 0.75 and c[6] < 2.0:   # (por manchas: c[6] es un ruido suave)
 				m.celdas.append([c[0], BURBUJEO[TIPOS[tipo].burbujas].mancha, Vector2(GOTA, GOTA)])
 		else:
-			m.celdas.append([c[0], Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6)])
+			m.celdas.append([c[0], Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6), Vector2(GOTA, GOTA)])
 	get_parent().add_child(m)
 
 
@@ -335,6 +343,8 @@ func hacer_burbujeo() -> void:
 			var ruido := randf()
 			var aparece := d * DERRAMA + ruido * 0.04
 			var seca := vida_max - SECA * (1.0 - d * 0.6) * (0.6 + liso * 0.4)   # se seca por manchas, no a puntitos
+			if BURBUJEO[TIPOS[tipo].burbujas].get("no_seca", false):
+				seca = vida_max + 1.0
 			celdas.append([p, d, aparece, seca, ruido])
 	celdas_por_sitio = Charco.preparar_liquido(celdas, r, ruido_liso)
 	if BURBUJEO[TIPOS[tipo].burbujas].get("ondas", false):
@@ -643,14 +653,8 @@ func _draw() -> void:
 	if burbujea():
 		pintar_burbujeo()
 		return
-	if tipo != "fuego":
-		var datos: Dictionary = TIPOS[tipo]
-		var dibujo: Texture2D = datos.dibujo
-		# A escala 2, como todo el pixel art (estirarlo a su radio exacto deformaría los píxeles)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
-		draw_texture(dibujo, -Vector2(dibujo.get_size()) / 2.0, datos.get("tinte", Color.WHITE))
-		return
 	var e := vida_max - vida
+	var tira := [Vector2.ZERO, 0.0, Color.TRANSPARENT]   # [desde, hasta, color]
 	for c in celdas:
 		if e < c[2]:
 			continue
@@ -661,10 +665,18 @@ func _draw() -> void:
 		elif e - c[2] < FRENTE:
 			color = Llamas.FUEGO[0]   # el frente del fuego, recién prendido
 		else:
-			var d: float = c[1] + 0.12 * sin(t * 9.0 + c[4] * 20.0)   # el color tiembla un poco
+			var d: float = c[1] + 0.12 * sin(t * 9.0 + c[4] * 7.0)   # el color tiembla un poco, por trozos
 			color = Llamas.FUEGO[1] if d < 0.3 else Llamas.FUEGO[2] if d < 0.55 else Llamas.FUEGO[3] if d < 0.8 else Llamas.FUEGO[4]
 			color.a = 0.9
-		draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
+		var p: Vector2 = c[0]
+		if p.y == tira[0].y and p.x == tira[1] and color == tira[2]:
+			tira[1] += GOTA
+			continue
+		if tira[2].a > 0.0:
+			draw_rect(Rect2(tira[0], Vector2(tira[1] - tira[0].x, GOTA)), tira[2])
+		tira = [p, p.x + GOTA, color]
+	if tira[2].a > 0.0:
+		draw_rect(Rect2(tira[0], Vector2(tira[1] - tira[0].x, GOTA)), tira[2])
 	# ascuas: píxeles sueltos que se encienden y se apagan (solo donde arde)
 	for i in ascuas.size():
 		var c: Array = ascuas[i]

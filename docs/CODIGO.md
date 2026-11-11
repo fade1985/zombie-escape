@@ -202,9 +202,10 @@ en una línea.
   («element array buffers can not be bound to a different target», «bufferSubData: no buffer»). Es un fallo de Godot
   (godotengine/godot#124726), arreglado para la 4.8; con ella se podría volver a `Polygon2D`.
 - `charco.gd` (todos los charcos) y `estados.gd` (lo que hacen: veneno, frío, calambrazo, tirado, `frenado`...).
-  Los líquidos (veneno, ácido, vómito, lejía y agua; también el agua con corriente de Electrónica, `peligros/agua.gd`) se pintan
+  Los líquidos (veneno, ácido, vómito, lejía, agua, aceite y café; también el agua con corriente de Electrónica, `peligros/agua.gd`) se pintan
   igual, con `Charco.preparar_liquido` y `pintar_liquido`: cuadraditos de un píxel del dibujo (`GOTA`), contorno oscuro, bandas
   que se mecen, luz de arriba a la izquierda y un brillo en vetas; el agua, con anillos de ondas (`pintar_ondas`).
+  El fuego (molotov, y el del aceite al arder) va con el mismo cuadradito; el aceite hirviendo del cocinero, aún con el de 2x2 (`CELDA`).
   El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
   `efecto_suelo.gd` hace los efectos de pixelfx que salen una vez en el suelo (sus tres hojas y el precalentado para que

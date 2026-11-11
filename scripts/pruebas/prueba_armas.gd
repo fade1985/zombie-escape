@@ -935,6 +935,11 @@ func probar_charcos() -> void:
 	agua.tipo = "agua_cubo"
 	agua.position = johnny.position + Vector2(130, -250)
 	johnny.get_parent().add_child(agua)
+	for k in 2:   # el aceite (a los 2 s arde) y el café, a los lados
+		var otro: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+		otro.tipo = ["aceite", "cafe"][k]
+		otro.position = johnny.position + Vector2(-190 + k * 480, -250)
+		johnny.get_parent().add_child(otro)
 	await get_tree().create_timer(0.1).timeout
 	Captura.foto("captura-charcos-caen.png")
 	await get_tree().create_timer(0.8).timeout
