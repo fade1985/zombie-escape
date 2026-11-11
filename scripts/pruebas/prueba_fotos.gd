@@ -417,10 +417,11 @@ func fotos_peligros(s: Dictionary) -> void:
 			await RenderingServer.frame_post_draw
 		Captura.foto("captura-peligro-%s.png" % d.tipo)
 		if d.tipo == "agua":
-			# el dibujo del charco solo, a 4 aumentos, para compararlo con los de los aspersores (objeto-charco-lejia.png)
-			var dibujo: Image = nodo.pixeles.duplicate()
-			dibujo.resize(dibujo.get_width() * 4, dibujo.get_height() * 4, Image.INTERPOLATE_NEAREST)
-			dibujo.save_png(Captura.CARPETA + "captura-peligro-agua-dibujo.png")
+			# y otra sin el destello del calambrazo, para ver el charco con sus colores
+			while nodo.destello > 0.0:
+				await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+			Captura.foto("captura-peligro-agua-quieta.png")
 		var vivos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z.estado != "muerto")
 		print("Peligro %s en %s: Johnny %d de vida | zombis vivos %d (vida %s) | congelados %d | ardiendo %d" % [d.tipo, s.nombre,
 			johnny.vida, vivos.size(), vivos.map(func(z): return z.vida), vivos.filter(func(z): return z.get("congelado") != null and z.congelado > 0.0).size(),

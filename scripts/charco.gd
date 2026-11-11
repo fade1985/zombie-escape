@@ -14,7 +14,7 @@
 # de los fogones y las freidoras de su cocina (M82, cocinero.gd) es el mismo, más grande y con "crece": en vez de
 # extenderse de golpe, se va extendiendo despacio por el suelo (y solo quema hasta donde ha llegado).
 #
-# El veneno, el ácido, el vómito y la lejía ("burbujas" en TIPOS) se dibujan como el fuego, a cuadraditos y con el borde
+# El veneno, el ácido, el vómito, la lejía y el agua ("burbujas" en TIPOS; el agua, sin burbujas ni vapor) se dibujan como el fuego, a cuadraditos y con el borde
 # ondulado: se extienden desde el centro, sus colores tiemblan, en vez de llamas tienen burbujitas que crecen y
 # revientan, echan algo de vapor y al secarse desaparecen a trozos, antes por los bordes, dejando una mancha.
 class_name Charco
@@ -45,8 +45,8 @@ const TIPOS := {
 	# el café de los vasos del becario (becario.gd): solo resbala
 	"cafe": {"dibujo": LEJIA, "radio": 50.0, "vida": 6.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.6, 0.38, 0.22)},
 	# el agua de los cubos del Sujeto 1 (sujeto_1.gd): solo resbala, 6 s
-	"agua_cubo": {"dibujo": LEJIA, "radio": 56.0, "vida": 6.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.55, 0.8, 1.0)},
-	"agua": {"dibujo": LEJIA, "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.55, 0.8, 1.0)},
+	"agua_cubo": {"burbujas": "agua", "radio": 56.0, "vida": 6.0, "estados": {"resbaladizo": {}}},
+	"agua": {"burbujas": "agua", "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}},
 }
 # Los colores de los charcos que burbujean: del borde al centro, los brillos, la burbuja (y su brillo), el vapor y
 # la mancha que dejan al secarse
@@ -64,6 +64,10 @@ const BURBUJEO := {
 	"lejia": {"borde": Color("#76888e"), "oscuro": Color("#a8b8bc"), "medio": Color("#cfdcdd"), "centro": Color("#e9f0ee"),
 		"brillo": Color("#ffffff"), "burbuja": Color("#fbfdfc"), "luz": Color("#ffffff"), "vapor": Color(0.95, 0.97, 0.97, 0.3),
 		"mancha": Color("#3a4246", 0.4)},
+	# el agua (los aspersores y los cubos; también el charco con corriente de Electrónica, agua.gd): azul, con brillos
+	# pero sin burbujas ni vapor, y al secarse no deja mancha
+	"agua": {"borde": Color("#1d3f6a"), "oscuro": Color("#2e609d"), "medio": Color("#4f8fd0"), "centro": Color("#7dbbf3"),
+		"brillo": Color("#d8f0ff"), "sin_burbujas": true},
 }
 # Cuánto tarda en extenderse al caer y cuánto antes de acabar empieza a secarse
 const DERRAMA := 0.25
@@ -285,6 +289,8 @@ func arder() -> void:
 # Al apagarse del todo, la ceniza se queda en el suelo como una mancha más (el veneno, el ácido y el vómito dejan
 # la suya, más clarita y solo por el centro)
 func dejar_ceniza() -> void:
+	if burbujea() and not BURBUJEO[TIPOS[tipo].burbujas].has("mancha"):
+		return
 	var m := Mancha.new()
 	m.position = position
 	m.material = Recorte.material("suelo")   # (como el charco: sin pasar a las paredes)
@@ -321,6 +327,8 @@ func hacer_burbujeo() -> void:
 			var aparece := d * DERRAMA + ruido * 0.04
 			var seca := vida_max - SECA * (1.0 - d * 0.6) * (0.5 + ruido * 0.5)
 			celdas.append([p, d, aparece, seca, ruido])
+	if BURBUJEO[TIPOS[tipo].burbujas].get("sin_burbujas", false):
+		return
 	# cada burbuja: [su celda, cuándo empieza, cada cuánto revienta, lo grande que se hace (en píxeles del dibujo)]
 	for i in 30:
 		var c: Array = celdas.pick_random()
@@ -338,6 +346,8 @@ func hacer_burbujeo() -> void:
 
 # Algo de vapor que sube de donde aún hay charco
 func echar_vapor() -> void:
+	if not BURBUJEO[TIPOS[tipo].burbujas].has("vapor"):
+		return
 	if randf() < 6.0 * get_physics_process_delta_time():
 		var a := randf() * TAU
 		var r := sqrt(randf()) * radio() * 0.8
