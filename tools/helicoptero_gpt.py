@@ -54,13 +54,14 @@ for y in range(H):
                 px[x, y] = COLA_COLOR
             else:
                 quitar[y * W + x] = 1
-# el fondo: el negro que se llega desde el borde (y lo que se ha quitado)
+# el fondo: el negro puro que se llega desde el borde (y lo que se ha quitado). Puro: las ruedas y la panza son casi
+# negras (de 13 a 28) y con más margen se las comía
 cola = deque([(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)])
 while cola:
     x, y = cola.popleft()
     if x < 0 or y < 0 or x >= W or y >= H or quitar[y * W + x] == 2:
         continue
-    if not quitar[y * W + x] and max(px[x, y]) >= 24:
+    if not quitar[y * W + x] and max(px[x, y]) >= 6:
         continue
     quitar[y * W + x] = 2
     cola.extend(((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)))

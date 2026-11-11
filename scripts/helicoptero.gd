@@ -18,16 +18,17 @@ const LLEGADA := 4.0               # lo que tarda en llegar desde fuera
 const DESDE := Vector2(900, -420)  # de dónde viene, respecto al helipuerto
 const DIBUJO := preload("res://assets/sprites/helicoptero.png")   # el cuerpo, sin las aspas (2 unidades por píxel)
 # Sitios del dibujo, en sus píxeles (los da py tools/helicoptero_gpt.py al montarlo)
-const ORIGEN := Vector2(48.0, 30.5)    # el centro de la cabina: lo que va a "altura" encima del nodo (la escalera
-                                       # cuelga 53 unidades más abajo: de debajo de las ruedas)
-const BUJE := Vector2(61.5, 1.0)       # la punta del mástil, donde gira el rotor grande
+const ORIGEN := Vector2(48.0, 33.0)    # el centro de la cabina: lo que va a "altura" encima del nodo
+const BUJE := Vector2(62.0, 1.5)       # la punta del mástil, donde gira el rotor grande
 const COLA := Vector2(146.0, 32.0)     # el rotor pequeño, en el costado de la cola
-const LUZ_ROJA := Vector2(151.5, 4.0)  # en lo alto de la aleta
+const LUZ_ROJA := Vector2(151.5, 4.5)  # en lo alto de la aleta
 const ROTOR := 140.0               # lo largo de cada pala, en unidades (como las de la imagen de GPT)
 const FOCO_ALCANCE := 300.0        # lo lejos del helipuerto que llega a mirar el foco
 const ESCALERA_ESPERA := 1.0       # lo que espera, ya quieto, a soltar la escalera
 const ESCALERA_TIEMPO := 2.0       # lo que tarda en desenrollarse hasta el suelo
-const ESCALERA_X := -12.0          # dónde cuelga, respecto al centro del helipuerto (de los patines)
+const ESCALERA_X := -12.0          # dónde cuelga, respecto al centro del helipuerto (debajo de la puerta del logo)
+const ESCALERA_ARRIBA := 22.0      # de dónde sale, por debajo de ORIGEN: de dentro de la panza (el cuerpo se pinta
+                                   # encima y tapa su arranque: así sale del helicóptero y no del aire)
 const ESCALERA_ANCHO := 20.0       # lo ancha que es, entre cuerdas
 const ALCANCE := 52.0              # lo cerca de la punta que hay que estar para agarrarse
 const CUERDA := "#cfae72"
@@ -122,7 +123,7 @@ func _draw() -> void:
 	Formas.disco(self, Vector2.ZERO, 160.0 * s, Color(0, 0, 0, 0.3 * s))
 	draw_set_transform(Vector2.ZERO)
 	# el haz del foco: de la lámpara de debajo del morro al círculo del suelo
-	var lampara := Vector2(-54, -altura + 33).rotated(inclinado)
+	var lampara := Vector2(-54, -altura + 26).rotated(inclinado)   # (debajo del morro)
 	var lado := Vector2(70, 0)
 	Formas.poligono(self, PackedVector2Array([lampara + Vector2(-6, 0), lampara + Vector2(6, 0), foco_en + lado,
 		foco_en - lado]), Color(1, 0.96, 0.8, 0.16))
@@ -133,12 +134,12 @@ func _draw() -> void:
 	cuerpo(Vector2(0, -roundf(altura / 2.0) * 2.0))   # (de 2 en 2, como sus píxeles)
 
 
-# La escalera de cuerda, a cuadraditos de 2 unidades: cuelga de los patines y baja frenando hasta el suelo. Una vez
+# La escalera de cuerda, a cuadraditos de 2 unidades: sale de la panza y baja frenando hasta el suelo. Una vez
 # abajo, un aro amarillo en el suelo marca hasta dónde hay que llegar
 func dibujar_escalera() -> void:
 	if escalera <= 0.0:
 		return
-	var arriba := -altura + 53.0
+	var arriba := -altura + ESCALERA_ARRIBA
 	var largo := (-2.0 - arriba) * (1.0 - pow(1.0 - escalera, 2.0))
 	var filas := int(largo / 2.0)
 	var mitad := ESCALERA_ANCHO / 2.0
