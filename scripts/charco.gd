@@ -435,7 +435,18 @@ static func preparar_liquido(lista: Array, r: float, ruido_liso: FastNoiseLite) 
 
 # Pinta los cuadraditos: los de una fila seguidos y del mismo color, de un solo rectángulo. "e", lo que lleva hecho
 # el charco (los que aún no han llegado o ya se han secado no se pintan; el recién secado, un momento más oscuro)
+static var medido_us := 0   # las pruebas (--charcos): lo que tarda pintar_liquido en total, y cuántas veces
+static var medido_veces := 0
+
+
 static func pintar_liquido(n: CanvasItem, lista: Array, col: Dictionary, t: float, e: float) -> void:
+	var desde_us := Time.get_ticks_usec()
+	pintar_cuadraditos(n, lista, col, t, e)
+	medido_us += Time.get_ticks_usec() - desde_us
+	medido_veces += 1
+
+
+static func pintar_cuadraditos(n: CanvasItem, lista: Array, col: Dictionary, t: float, e: float) -> void:
 	var fila := -99999.0
 	var desde := Vector2.ZERO
 	var hasta := 0.0

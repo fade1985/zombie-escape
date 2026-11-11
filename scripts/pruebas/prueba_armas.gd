@@ -955,6 +955,12 @@ func probar_charcos() -> void:
 	await get_tree().create_timer(0.5).timeout
 	Captura.foto("captura-charcos-oscuro.png")
 	Luz.evento = 0.0
+	# lo que cuesta pintarlos (los cuadraditos de un píxel del dibujo son muchos): durante 1 s, con los que quedan
+	Charco.medido_us = 0
+	Charco.medido_veces = 0
+	await get_tree().create_timer(1.0).timeout
+	print("Pintar charcos: %d veces en 1 s, %.2f ms cada vez, %.1f ms por segundo (de 1000)" % [Charco.medido_veces,
+		Charco.medido_us / 1000.0 / maxi(1, Charco.medido_veces), Charco.medido_us / 1000.0])
 	await get_tree().create_timer(3.0).timeout
 	Captura.foto("captura-charcos-mancha.png")
 	# los mocos en el aire (proyectil.gd): miran hacia donde van, hacia arriba al salir y de cabeza al caer. Tres a la
