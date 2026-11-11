@@ -181,7 +181,7 @@ en una línea.
     `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
     espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`
     (el doctor Salas; las lenguas de la criatura, `lengua.gd`; lo seguido que ataca la criatura se mide con `--criatura`). `helicoptero.gd`: el que llega al final (su cuerpo,
-    `helicoptero.png` de PixelLab; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
+    `helicoptero.png`, de GPT con `tools/helicoptero_gpt.py`, que le quita las aspas; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
     el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; los
   alfileres de la modista y las tazas y grapadoras del oficinista, que dan vueltas), `salpicadura.gd`
@@ -990,7 +990,7 @@ en una línea.
   cartel EXIT (apagado y encendido): `py tools/puerta_salida.py`.
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
-  `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
+  `taquilla.py`, `helicoptero_gpt.py` (el helicóptero de Velaria, de GPT), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
   nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (el colchón con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas, y la pared con chapa lagrimada y la línea amarilla de su pasillo), `guias_trasteros.py` (las guías de PixelLab de las cajas y la carretilla de ese pasillo y de la estantería y el colchón de sus habitaciones; ya no se usa: ahora salen de GPT con `muebles_gpt.py`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py` (el científico muerto de PixelLab; ya no se usa: pisaría el de GPT) y `cientifico_muerto_gpt.py` (el científico muerto de GPT, M14: lo reduce como los muebles y le separa la piel y el pelo en sus capas, que el juego pinta con los colores de cada página).
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `suelo_salon.py` (el suelo de nogal del salón), `azotea_gpt.py` (la azotea
   entera, de GPT; ver `FONDOS.md`).

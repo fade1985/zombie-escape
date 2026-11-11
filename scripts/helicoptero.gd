@@ -3,8 +3,8 @@
 # Viene de fuera, por la derecha, bajando poco a poco, y se queda encima del helipuerto con el rotor girando y un
 # foco que busca a Johnny por el suelo. No ataca: al rato suelta una escalera de cuerda hasta el suelo, en el centro
 # del helipuerto, y en cuanto Johnny llega a ella se acaba el edificio (la señal "agarrada", que recoge partida.gd).
-# El cuerpo es un dibujo de PixelLab (helicoptero.png, de tools/helicoptero.py): negro, con la raya verde y la hoja
-# de Velaria. Lo que se mueve lo pinta el código encima: el rotor grande y el de la cola girando, y la luz roja de la
+# El cuerpo es un dibujo de GPT (helicoptero.png, de tools/helicoptero_gpt.py; 11 nov, bloque M): un helicóptero
+# ejecutivo azul marino casi negro, con líneas color crema y la luna morada de Velaria en la puerta. Lo que se mueve lo pinta el código encima: el rotor grande y el de la cola girando, y la luz roja de la
 # aleta, que parpadea. El nodo está en el suelo (ahí va su sombra) y el aparato se pinta "altura" unidades más arriba.
 # Se crea con Helicoptero.new(), poniéndole "destino" (el centro del helipuerto) y "johnny".
 class_name Helicoptero
@@ -17,12 +17,13 @@ const ALTURA := 170.0              # a qué altura se queda encima del helipuert
 const LLEGADA := 4.0               # lo que tarda en llegar desde fuera
 const DESDE := Vector2(900, -420)  # de dónde viene, respecto al helipuerto
 const DIBUJO := preload("res://assets/sprites/helicoptero.png")   # el cuerpo, sin las aspas (2 unidades por píxel)
-# Sitios del dibujo, en sus píxeles (los da py tools/helicoptero.py al montarlo)
-const ORIGEN := Vector2(48.0, 34.5)    # el centro de la cabina: lo que va a "altura" encima del nodo
-const BUJE := Vector2(55.0, 1.0)       # la punta del mástil, donde gira el rotor grande
-const COLA := Vector2(146.0, 20.0)     # el rotor pequeño, en el costado de la aleta
-const LUZ_ROJA := Vector2(150.0, 3.0)  # en lo alto de la aleta
-const ROTOR := 216.0               # lo largo de cada pala, en unidades
+# Sitios del dibujo, en sus píxeles (los da py tools/helicoptero_gpt.py al montarlo)
+const ORIGEN := Vector2(48.0, 30.5)    # el centro de la cabina: lo que va a "altura" encima del nodo (la escalera
+                                       # cuelga 53 unidades más abajo: de debajo de las ruedas)
+const BUJE := Vector2(61.5, 1.0)       # la punta del mástil, donde gira el rotor grande
+const COLA := Vector2(146.0, 32.0)     # el rotor pequeño, en el costado de la cola
+const LUZ_ROJA := Vector2(151.5, 4.0)  # en lo alto de la aleta
+const ROTOR := 140.0               # lo largo de cada pala, en unidades (como las de la imagen de GPT)
 const FOCO_ALCANCE := 300.0        # lo lejos del helipuerto que llega a mirar el foco
 const ESCALERA_ESPERA := 1.0       # lo que espera, ya quieto, a soltar la escalera
 const ESCALERA_TIEMPO := 2.0       # lo que tarda en desenrollarse hasta el suelo
@@ -34,6 +35,7 @@ const CUERDA_SOMBRA := "#6e5632"
 const PELDANO := "#8e6a38"
 const PELDANO_LUZ := "#b88d4e"
 const CONTORNO := "#0d0e12"
+const PALA := "#6e727c"           # las palas, grises como las de la imagen de GPT
 
 var destino := Vector2.ZERO
 var johnny: Node2D
@@ -169,7 +171,7 @@ func cuerpo(donde: Vector2) -> void:
 	var cola: Vector2 = en.call(COLA)
 	var palita := Vector2.from_angle(giro * 1.6) * 21.0
 	Formas.disco(self, cola, 22.0, Color(0.7, 0.72, 0.76, 0.12))
-	draw_line(cola - palita, cola + palita, Color(CONTORNO), 4.0)
+	draw_line(cola - palita, cola + palita, Color(PALA), 4.0)
 	# el rotor grande: un disco borroso y dos palas que giran (visto un poco desde arriba)
 	var buje: Vector2 = en.call(BUJE)
 	draw_set_transform(buje, inclinado, Vector2(1.0, 0.22))
@@ -178,7 +180,7 @@ func cuerpo(donde: Vector2) -> void:
 	for i in 2:
 		var a := giro + i * PI
 		var hasta := Vector2(cos(a) * ROTOR, sin(a) * ROTOR * 0.22).rotated(inclinado)
-		draw_line(buje, buje + hasta, Color(CONTORNO, 0.9), 6.0)
+		draw_line(buje, buje + hasta, Color(PALA), 6.0)
 	draw_rect(Rect2(buje - Vector2(6, 3), Vector2(12, 6)), Color(CONTORNO))
 	# la luz roja de la aleta, que parpadea
 	if fmod(t, 1.0) < 0.18:
