@@ -67,7 +67,7 @@ const BURBUJEO := {
 	# el agua (los aspersores y los cubos; también el charco con corriente de Electrónica, agua.gd): azul, con brillos
 	# pero sin burbujas ni vapor, y al secarse no deja mancha
 	"agua": {"borde": Color("#1d3f6a"), "oscuro": Color("#2e609d"), "medio": Color("#4f8fd0"), "centro": Color("#7dbbf3"),
-		"brillo": Color("#d8f0ff"), "sin_burbujas": true},
+		"brillo": Color("#d8f0ff"), "luz": Color("#ffffff"), "sin_burbujas": true, "ondas": true},
 }
 # Cuánto tarda en extenderse al caer y cuánto antes de acabar empieza a secarse
 const DERRAMA := 0.25
@@ -80,6 +80,7 @@ const APAGA := 1.4
 const FRENTE := 0.07
 const BRASA := 0.3
 const CELDA := 4.0   # 2 píxeles del dibujo
+const GOTA := 2.0    # los cuadraditos de los charcos que burbujean y del agua: un píxel del dibujo (como Johnny)
 
 var tipo := "veneno"
 var fregado := false       # la limpiadora de noche lo ha fregado: se seca enseguida (fregar)
@@ -97,6 +98,8 @@ var celdas: Array = []     # el fuego: [posición, distancia al centro (0-1), cu
 var llamas: Array = []     # [x, y, ancho, alto, semilla, prende, apaga]
 var ascuas: Array = []
 var burbujas: Array = []   # el aceite hirviendo: [sitio, cuándo empieza, cada cuánto revienta, lo lejos del centro]; el veneno, ver hacer_burbujeo
+var ondas_agua: Array = []    # el agua: los anillos que crecen y se apagan (hacer_ondas)
+var celdas_por_sitio := {}    # los charcos que burbujean: cada cuadradito, por su sitio (preparar_liquido)
 var gordas: Array = []     # las burbujas gordas del reventón: [su celda, desfase, cada cuánto revienta, lo grande que se hace]
 
 
@@ -171,7 +174,8 @@ func _physics_process(delta: float) -> void:
 			hervir(delta)
 		# Al final se va secando (más transparente)
 		modulate.a = clampf(vida / 0.6, 0.0, 1.0)
-	queue_redraw()
+	if not burbujea() or Engine.get_physics_frames() % 2 == 0:   # los líquidos, a 30 fotogramas: tienen muchos cuadraditos
+		queue_redraw()
 	var datos: Dictionary = TIPOS[tipo]
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	# ningún charco cruza las paredes: al otro lado de un tabique ni Johnny ni los zombis lo pisan (hasta el 10 nov, solo
@@ -296,8 +300,8 @@ func dejar_ceniza() -> void:
 	m.material = Recorte.material("suelo")   # (como el charco: sin pasar a las paredes)
 	for c in celdas:
 		if burbujea():
-			if c[1] < 0.75 and c[4] < 0.7:
-				m.celdas.append([c[0], BURBUJEO[TIPOS[tipo].burbujas].mancha])
+			if c[1] < 0.75 and c[6] < 2.0:   # (por manchas: c[6] es un ruido suave)
+				m.celdas.append([c[0], BURBUJEO[TIPOS[tipo].burbujas].mancha, Vector2(GOTA, GOTA)])
 		else:
 			m.celdas.append([c[0], Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6)])
 	get_parent().add_child(m)
@@ -312,21 +316,29 @@ func hacer_burbujeo() -> void:
 	var ondas := []
 	for k in [3, 5, 7]:
 		ondas.append([k, randf() * TAU, randf_range(0.05, 0.11)])
-	var n := ceili(r / CELDA)
+	var ruido_liso := FastNoiseLite.new()   # un ruido suave: el borde ondula sin dejar puntitos sueltos
+	ruido_liso.seed = randi()
+	ruido_liso.frequency = 0.06
+	var n := ceili(r / GOTA)
 	for y in range(-n, n + 1):
 		for x in range(-n, n + 1):
-			var p := Vector2(x, y) * CELDA
+			var p := Vector2(x, y) * GOTA
 			var a := atan2(p.y / 0.6, p.x)
 			var borde := 1.0
 			for o in ondas:
 				borde += sin(a * o[0] + o[1]) * o[2]
+			var liso := ruido_liso.get_noise_2dv(p) * 0.5 + 0.5
+			borde *= 1.0 - 0.1 * liso
 			var d := Vector2(p.x, p.y / 0.6).length() / r / borde
-			var ruido := randf()
-			if d > 1.0 or (d > 0.9 and ruido < 0.35):
+			if d > 1.0:
 				continue
+			var ruido := randf()
 			var aparece := d * DERRAMA + ruido * 0.04
-			var seca := vida_max - SECA * (1.0 - d * 0.6) * (0.5 + ruido * 0.5)
+			var seca := vida_max - SECA * (1.0 - d * 0.6) * (0.6 + liso * 0.4)   # se seca por manchas, no a puntitos
 			celdas.append([p, d, aparece, seca, ruido])
+	celdas_por_sitio = Charco.preparar_liquido(celdas, r, ruido_liso)
+	if BURBUJEO[TIPOS[tipo].burbujas].get("ondas", false):
+		ondas_agua = Charco.hacer_ondas(celdas, 2, r)
 	if BURBUJEO[TIPOS[tipo].burbujas].get("sin_burbujas", false):
 		return
 	# cada burbuja: [su celda, cuándo empieza, cada cuánto revienta, lo grande que se hace (en píxeles del dibujo)]
@@ -360,25 +372,16 @@ func echar_vapor() -> void:
 func pintar_burbujeo() -> void:
 	var col: Dictionary = BURBUJEO[TIPOS[tipo].burbujas]
 	var e := vida_max - vida
-	for c in celdas:
-		if e < c[2] or e >= c[3] + 0.2:
-			continue
-		var color: Color
-		if e >= c[3]:
-			color = Color(col.borde, 0.6)   # recién secado: un momento más oscuro, y se va
-		else:
-			var d: float = c[1] + 0.08 * sin(t * 4.0 + c[4] * 20.0)   # tiembla, más despacio que el fuego (es líquido)
-			color = col.centro if d < 0.3 else col.medio if d < 0.6 else col.oscuro if d < 0.86 else col.borde
-			if c[4] > 0.95 and sin(t * 3.0 + c[4] * 50.0) > 0.3:
-				color = col.brillo
-		draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
+	Charco.pintar_liquido(self, celdas, col, t, e)
+	if col.get("ondas", false):
+		Charco.pintar_ondas(self, ondas_agua, celdas_por_sitio, col, t)
 	# las burbujas: crecen a saltos de píxel y revientan en gotitas, cada una a su ritmo (no si su trozo ya se seca)
 	for b in burbujas:
 		var c: Array = b[0]
 		if e < c[2] + 0.15 or e >= c[3] - 0.3:
 			continue
 		var k: float = fmod(t + b[1], b[2]) / b[2]
-		var p: Vector2 = c[0] + Vector2(2, 2)
+		var p: Vector2 = c[0]
 		var grande: int = b[3]
 		if k < 0.75:
 			var r := 1 + int(k / 0.75 * grande)
@@ -389,6 +392,104 @@ func pintar_burbujeo() -> void:
 			for o in [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(-0.7, -0.7), Vector2(0.7, -0.7)]:
 				draw_rect(Rect2((p + o * lejos - Vector2(1, 1)).snapped(Vector2(2, 2)), Vector2(2, 2)), col.luz)
 	pintar_burbujas_gordas(col, e)
+
+
+# ── El dibujo de los líquidos (los charcos que burbujean y el agua; también el agua con corriente, agua.gd) ──
+# Cada cuadradito es un píxel del dibujo (GOTA) y lleva, desde la posición 5: su color de base (lo cerca del borde, más
+# oscuro abajo a la derecha porque la luz viene de arriba a la izquierda), su fase (un ruido suave: las bandas de color
+# se mecen como olas, no parpadea cada uno por su cuenta) y si es del contorno (siempre del color más oscuro).
+# Encima, un brillo en vetas que resbala despacio (como el de "toxic-puddle" de pixelfx) y, en el agua, anillos de
+# ondas (como los de "ripples"). Las celdas: [posición, d (0 centro, 1 borde), aparece, se seca, ruido, ...]
+
+# Completa cada celda y devuelve un diccionario sitio -> celda (para el contorno y las ondas). "r", el tamaño del
+# charco (para la luz); las posiciones, desde su centro
+static func preparar_liquido(lista: Array, r: float, ruido_liso: FastNoiseLite) -> Dictionary:
+	var sitios := {}
+	for c in lista:
+		sitios[Vector2i((c[0] / GOTA).round())] = c
+	for c in lista:
+		var p: Vector2 = c[0]
+		var s := Vector2i((p / GOTA).round())
+		var contorno := false
+		for v in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			if not sitios.has(s + v):
+				contorno = true
+		var luz := (p.x / r + p.y / (0.6 * r)) * 0.09
+		c.append(c[1] + luz)                                             # 5: su color de base
+		c.append(ruido_liso.get_noise_2d(p.x * 0.6, p.y * 0.6) * 6.0)   # 6: su fase
+		c.append(contorno)                                               # 7: del contorno
+	return sitios
+
+
+# Pinta los cuadraditos: los de una fila seguidos y del mismo color, de un solo rectángulo. "e", lo que lleva hecho
+# el charco (los que aún no han llegado o ya se han secado no se pintan; el recién secado, un momento más oscuro)
+static func pintar_liquido(n: CanvasItem, lista: Array, col: Dictionary, t: float, e: float) -> void:
+	var fila := -99999.0
+	var desde := Vector2.ZERO
+	var hasta := 0.0
+	var color_tira := Color.TRANSPARENT
+	for c in lista:
+		if e < c[2] or e >= c[3] + 0.2:
+			continue
+		var p: Vector2 = c[0]
+		var color: Color
+		if e >= c[3]:
+			color = Color(col.borde, 0.6)
+		elif c[7]:
+			color = col.borde
+		else:
+			var d: float = c[5] + 0.05 * sin(t * 2.2 + c[6])
+			color = col.centro if d < 0.35 else col.medio if d < 0.62 else col.oscuro if d < 0.86 else col.borde
+			if c[1] < 0.75:
+				# el brillo en vetas: líneas casi horizontales que ondulan y se desplazan
+				var v := sin(p.y * 0.35 + sin(p.x * 0.06 + t * 0.7) * 2.2 + c[6] * 0.25) * sin(p.x * 0.045 - t * 0.5 + c[6] * 0.1)
+				if v > 0.86:
+					color = col.brillo
+				elif v > 0.74 and color != col.centro:
+					color = col.centro
+		if p.y == fila and p.x == hasta and color == color_tira:
+			hasta += GOTA
+			continue
+		if color_tira.a > 0.0:
+			n.draw_rect(Rect2(desde, Vector2(hasta - desde.x, GOTA)), color_tira)
+		fila = p.y
+		desde = p
+		hasta = p.x + GOTA
+		color_tira = color
+	if color_tira.a > 0.0:
+		n.draw_rect(Rect2(desde, Vector2(hasta - desde.x, GOTA)), color_tira)
+
+
+# Los anillos del agua: cada uno nace cerca del centro, crece y se apaga, a su ritmo. [centro, cada cuánto, desfase, tamaño]
+static func hacer_ondas(lista: Array, cuantas: int, r: float) -> Array:
+	var ondas := []
+	for i in 30:
+		var c: Array = lista.pick_random()
+		if c[1] < 0.45:
+			ondas.append([c[0], randf_range(1.8, 2.6), randf() * 3.0, r * randf_range(0.35, 0.5)])
+		if ondas.size() >= cuantas:
+			break
+	return ondas
+
+
+static func pintar_ondas(n: CanvasItem, ondas: Array, sitios: Dictionary, col: Dictionary, t: float) -> void:
+	for o in ondas:
+		var q: float = fmod(t + o[2], o[1]) / o[1]
+		if q > 0.85:
+			continue
+		var radio_onda: float = 4.0 + q * o[3]
+		var color: Color = col.centro.lerp(col.luz, 1.0 - q)
+		var pasos := maxi(12, int(radio_onda * 0.8))
+		for i in pasos:
+			if i % 3 == 0:
+				continue   # el anillo, a trozos (como las crestas de "ripples")
+			var a := TAU * i / pasos
+			var p: Vector2 = o[0] + Vector2(cos(a) * radio_onda, sin(a) * radio_onda * 0.6)
+			var s := Vector2i((p / GOTA).round())
+			var c: Array = sitios.get(s, [])
+			if c.is_empty() or c[7] or c[1] > 0.85:
+				continue
+			n.draw_rect(Rect2(Vector2(s) * GOTA, Vector2(GOTA, GOTA)), color)
 
 
 # Las burbujas gordas del reventón, como las de "toxic-puddle" de pixelfx: se hinchan en una cúpula con la piel oscura

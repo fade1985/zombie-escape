@@ -14,7 +14,6 @@
 extends Node2D
 
 const CASILLA := 32
-const CELDA := 4.0   # los cuadraditos del agua: 2x2 píxeles del dibujo, como en charco.gd
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const RAYO := Color("#9fe8ff")
 const CABLE := Color("#16171b")
@@ -35,7 +34,9 @@ var punta: Vector2           # la punta pelada del cable
 var t := 0.0
 var pulso := 0.0
 var destello := 0.0
-var celdas: Array = []       # los cuadraditos del agua: [posición, lo cerca del borde (0-1), ruido] (hacer_celdas)
+var celdas: Array = []       # los cuadraditos del agua, como los de Charco.preparar_liquido (hacer_celdas)
+var sitios := {}             # cada cuadradito, por su sitio
+var ondas: Array = []        # los anillos de ondas (Charco.hacer_ondas)
 
 
 func montar(d: Dictionary, m: Node) -> void:
@@ -164,7 +165,8 @@ func _physics_process(delta: float) -> void:
 				Sonido.tocar("chispa")
 		luz_cable.energy = (0.5 + 0.35 * randf() + destello * 4.0) * Luz.fuerza()
 	charco.modulate = Color.WHITE.lerp(Color(1.7, 2.0, 2.3), destello / 0.2)
-	charco.queue_redraw()   # el agua tiembla
+	if Engine.get_physics_frames() % 2 == 0:
+		charco.queue_redraw()   # el agua se mueve (a 30 fotogramas: tiene muchos cuadraditos)
 	chispas.queue_redraw()
 
 
@@ -219,19 +221,15 @@ func rayo_hasta(meta: Vector2i) -> Array:
 
 # ── Dibujos ──
 
-# El charco, con el estilo de los demás charcos (el ácido, el veneno, el agua de los aspersores: pintar_burbujeo de
-# charco.gd, con sus colores del agua): cuadraditos de 2x2 píxeles del dibujo, más oscuros hacia el borde, el borde
-# ondulado y deshilachado, los colores que tiemblan y algún brillo. Encima, el cable
+# El charco, con el dibujo de los demás líquidos (Charco.pintar_liquido, con los colores del agua): cuadraditos de un
+# píxel del dibujo, contorno oscuro, bandas de color que se mecen, la luz de arriba a la izquierda, un brillo en vetas
+# que resbala y unos anillos de ondas. Encima, el cable
 func dibujar_charco() -> void:
 	if celdas.is_empty():
 		hacer_celdas()
 	var col: Dictionary = Charco.BURBUJEO.agua
-	for c in celdas:
-		var d: float = c[1] + 0.08 * sin(t * 4.0 + c[2] * 20.0)
-		var color: Color = col.centro if d < 0.3 else col.medio if d < 0.6 else col.oscuro if d < 0.86 else col.borde
-		if c[2] > 0.95 and sin(t * 3.0 + c[2] * 50.0) > 0.3:
-			color = col.brillo
-		charco.draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
+	Charco.pintar_liquido(charco, celdas, col, t, 0.0)
+	Charco.pintar_ondas(charco, ondas, sitios, col, t)
 	# el cable por el suelo, desde el pie de la pared hasta el agua, con una curva
 	var desde: Vector2 = datos.cable_desde + Vector2(0, 4)
 	var lado := Vector2(punta - desde).orthogonal().normalized() * (18.0 if hash(datos.cable) % 2 else -18.0)
@@ -263,39 +261,57 @@ func hacer_celdas() -> void:
 		c0 = Vector2i(mini(c0.x, c.x), mini(c0.y, c.y))
 		c1 = Vector2i(maxi(c1.x, c.x), maxi(c1.y, c.y))
 	var esquina := Vector2(c0) * CASILLA
-	var lado := int(CASILLA / CELDA)
+	var lado := int(CASILLA / Charco.GOTA)
 	var an := (c1.x - c0.x + 1) * lado
 	var al := (c1.y - c0.y + 1) * lado
 	var mojada := func(x: int, y: int) -> bool:
 		return x >= 0 and y >= 0 and x < an and y < al and mojado.has(c0 + Vector2i(x / lado, y / lado))
 	var lejos := distancias(an, al, mojada)
-	var semilla := float(hash(c0) % 1000)
+	for i in lejos.size():
+		lejos[i] = minf(lejos[i], 12.0)
+	var suave := borronear(borronear(lejos, an, al, 1, 0), an, al, 0, 1)   # la media de un cuadrado de 9x9
+	var ruido_liso := FastNoiseLite.new()
+	ruido_liso.seed = hash(c0)
+	ruido_liso.frequency = 0.06
 	var agua := PackedByteArray()
 	agua.resize(an * al)
 	for y in al:
 		for x in an:
-			if lejos[y * an + x] <= 0.0:
-				continue
-			var suma := 0.0
-			for dy in range(-2, 3):
-				for dx in range(-2, 3):
-					suma += minf(lejos[clampi(y + dy, 0, al - 1) * an + clampi(x + dx, 0, an - 1)], 6.0)
-			var ruido := sin(x * 0.55 + semilla) + sin(y * 0.66 + semilla * 1.7) + sin((x - y) * 0.34 + semilla * 0.3)
-			agua[y * an + x] = 1 if suma / 25.0 > 2.5 + ruido * 0.8 else 0
+			var ruido := ruido_liso.get_noise_2d(x * Charco.GOTA, y * Charco.GOTA)
+			agua[y * an + x] = 1 if lejos[y * an + x] > 0.0 and suave[y * an + x] > 5.0 + ruido * 2.2 else 0
 	var dentro := func(x: int, y: int) -> bool:
 		return x >= 0 and y >= 0 and x < an and y < al and agua[y * an + x] == 1
 	var hondo := distancias(an, al, dentro)
-	var r := RandomNumberGenerator.new()
-	r.seed = hash(c0) + 7
+	var centro := Vector2(an, al) * Charco.GOTA / 2.0
 	for y in al:
 		for x in an:
-			if agua[y * an + x] == 0:
-				continue
-			var ruido := r.randf()
-			var h: float = hondo[y * an + x]
-			if h <= 1.0 and ruido < 0.35:
-				continue   # el borde, deshilachado (como el de charco.gd)
-			celdas.append([esquina + Vector2(x, y) * CELDA, clampf(1.0 - (h - 1.0) / 5.0, 0.0, 1.0), ruido])
+			if agua[y * an + x] == 1:
+				var h: float = hondo[y * an + x]
+				celdas.append([Vector2(x, y) * Charco.GOTA - centro, clampf(1.0 - (h - 1.0) / 10.0, 0.0, 1.0), -1.0, INF, 0.0])
+	sitios = Charco.preparar_liquido(celdas, minf(an, al) * Charco.GOTA / 2.0, ruido_liso)
+	ondas = Charco.hacer_ondas(celdas, clampi(datos.casillas.size() / 4, 2, 6), 48.0)
+	# las posiciones, del centro del charco a las del mundo
+	for c in celdas:
+		c[0] += esquina + centro
+	for o in ondas:
+		o[0] += esquina + centro
+	var mundo := {}
+	for k in sitios:
+		mundo[k + Vector2i(((esquina + centro) / Charco.GOTA).round())] = sitios[k]
+	sitios = mundo
+
+
+# Media de cada valor con los 4 de cada lado, en una dirección (dx, dy): dos pasadas hacen un cuadrado
+func borronear(v: PackedFloat32Array, an: int, al: int, dx: int, dy: int) -> PackedFloat32Array:
+	var out := PackedFloat32Array()
+	out.resize(an * al)
+	for y in al:
+		for x in an:
+			var suma := 0.0
+			for k in range(-4, 5):
+				suma += v[clampi(y + k * dy, 0, al - 1) * an + clampi(x + k * dx, 0, an - 1)]
+			out[y * an + x] = suma / 9.0
+	return out
 
 
 # Para cada cuadradito, a cuántos está del primero que no cumple "vale" (fuera de la cuadrícula tampoco cumple).
