@@ -4591,6 +4591,8 @@ func probar_brillo() -> void:
 	var titulo := barra.get_parent().get_child(0) as Label
 	print("Brillo · la barra: «%s», en %d, de %d a %d de %d en %d, punto en la mitad %s (esperado: Brillo: 50, 50, 0 a 100 de 5 en 5, sí)" % [
 		titulo.text, barra.value, barra.min_value, barra.max_value, barra.step, barra.step, "sí" if is_equal_approx(barra.ratio, 0.5) else "NO"])
+	print("Brillo · la primera de la página: %s, con el foco: %s (esperado: sí, sí; desde el 12 nov, encima de Pantalla completa y Temblor)" % [
+		"sí" if barra.get_parent().get_parent().get_index() == 0 else "NO", "sí" if barra.has_focus() else "NO"])
 	# La chapa, como la de los botones: normal, iluminada con el ratón encima o la barra elegida y apretada al arrastrar
 	var marco := o.find_child("marco_brillo", true, false) as PanelContainer
 	var chapa := func() -> String:
@@ -4598,9 +4600,12 @@ func probar_brillo() -> void:
 			if marco.get_theme_stylebox("panel") == marco.get_theme_stylebox(estado, "Button"):
 				return estado
 		return "otra"
-	var estados := [chapa.call()]
 	await get_tree().create_timer(0.3, true).timeout
 	Captura.foto("captura-brillo-opciones.png")
+	# (la barra empieza elegida, por ser lo primero de la página: se suelta para ver la chapa normal)
+	barra.release_focus()
+	await get_tree().process_frame
+	var estados := [chapa.call()]
 	for donde in [marco.get_global_rect().get_center(), barra.get_global_rect().get_center(), Vector2(10, 10)]:   # encima de la chapa, del punto y fuera
 		var sitio: Vector2 = get_viewport().get_screen_transform() * donde
 		Input.warp_mouse(sitio)
@@ -4705,6 +4710,16 @@ func probar_volumen() -> void:
 	musica.pressed.emit()   # (la música, apagada a mano: al mover el volumen por encima de 10, no se vuelve a encender)
 	barra.value = 80
 	print("Volumen · música apagada a mano y el volumen de 60 a 80: %s (esperado: Música: No · Sonido: Sí)" % textos.call())
+	# La barra, la primera de Audio y con el foco al entrar; y a la misma altura que la del brillo en Pantalla (12 nov)
+	var marco := barra.get_parent().get_parent() as Control
+	var y_volumen := marco.global_position.y
+	print("Volumen · la primera de la página: %s, con el foco: %s" % [
+		"sí" if marco.get_index() == 0 else "NO", "sí" if barra.has_focus() else "NO"])
+	o.ver("pantalla")
+	await get_tree().create_timer(0.3, true).timeout
+	var marco_brillo := o.find_child("marco_brillo", true, false) as Control
+	print("Volumen · a la altura del brillo: %s y %s → %s" % [y_volumen, marco_brillo.global_position.y,
+		"BIEN" if is_equal_approx(y_volumen, marco_brillo.global_position.y) else "MAL"])
 	o.cerrar()
 	Guardado.cambiar(func(g):
 		g.ajustes.volumen = 100

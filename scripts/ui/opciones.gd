@@ -511,7 +511,7 @@ func audio() -> void:
 		Sonido.silenciar(not Sonido.silenciado())
 		sonido.text = texto_sonido())
 	var antes := [int(Guardado.ajuste("volumen"))]
-	barra_chapa("volumen", Idioma.t("Volumen"), antes[0], func(v: int):   # no-tr
+	var volumen := barra_chapa("volumen", Idioma.t("Volumen"), antes[0], func(v: int):   # no-tr
 		Sonido.poner_volumen(v)
 		if v == 0 or (v >= 10 and antes[0] < 10):   # (en silencio, los dos en No; al volver a subirlo, en Sí)
 			Guardado.cambiar(func(g): g.ajustes.musica = v > 0)
@@ -522,13 +522,18 @@ func audio() -> void:
 		antes[0] = v
 		if v != int(Guardado.ajuste("volumen")):
 			Guardado.cambiar(func(g): g.ajustes.volumen = v))
+	# (la barra, la primera de la página, como la del brillo en Pantalla: así las dos quedan a la misma altura. Se pone
+	# arriba después de hacerla porque cambia los textos de Música y Sonido, que tienen que estar hechos antes)
+	contenido.move_child(contenido.get_node("marco_volumen"), 0)
 	igualar()
 	(contenido.get_node("marco_volumen") as Control).custom_minimum_size.x = ancho_grande
-	musica.grab_focus.call_deferred()
+	volumen.grab_focus.call_deferred()
 
 
-# La pantalla (el botón Pantalla de General): la pantalla completa, el brillo (barra_brillo) y el temblor. Se vuelve con la pestaña General
+# La pantalla (el botón Pantalla de General): el brillo (barra_brillo; el primero, a la misma altura que el volumen en
+# Audio), la pantalla completa y el temblor. Se vuelve con la pestaña General
 func pantalla() -> void:
+	var brillo := barra_brillo()
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		var texto_completa := func(si: bool) -> String:
 			return "%s: %s" % [Idioma.t("Pantalla completa"), Idioma.t("Sí") if si else Idioma.t("No")]
@@ -538,12 +543,10 @@ func pantalla() -> void:
 			var ahora := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 			Tactil.pantalla_completa()
 			completa.text = texto_completa.call(not ahora))
-	var brillo := barra_brillo()
 	rotar(Idioma.t("Temblor"), "temblor", TEMBLORES, "BotonGrande")
 	igualar()
 	(contenido.get_node("marco_brillo") as Control).custom_minimum_size.x = ancho_grande
-	# (el foco, en lo primero de la página: la pantalla completa o, en iPhone, que no la tiene, la barra del brillo)
-	(contenido.get_child(0) if contenido.get_child(0) is Button else brillo).grab_focus.call_deferred()
+	brillo.grab_focus.call_deferred()   # (el foco, en lo primero de la página)
 
 
 # Contáctanos (el botón de General, desde el 10 nov): un cuadro para escribirnos qué falla, qué no le gusta o qué mejoraría,
