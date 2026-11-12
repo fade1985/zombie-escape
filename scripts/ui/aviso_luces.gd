@@ -53,7 +53,7 @@ func _ready() -> void:
 	titulo.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA_TITULO))   # (en negrita)
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	titulo.add_theme_font_size_override("font_size", 32)
+	titulo.add_theme_font_size_override("font_size", Tema.TAM_LISA_TITULO)
 	titulo.add_theme_color_override("font_color", Tema.AMARILLO)
 	columna.add_child(titulo)
 	for texto in [

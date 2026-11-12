@@ -36,6 +36,8 @@ const FUENTE_LISA := preload("res://assets/fuentes/rubik.ttf")
 const FUENTE_LISA_CHINO := preload("res://assets/fuentes/noto-sans-sc-recortada.woff2")
 const PESO_LISA := 400          # el grosor del texto con la letra lisa...
 const PESO_LISA_TITULO := 700   # ...y el de los títulos y los botones
+const TAM_LISA := 19            # el tamaño del texto con la letra lisa (la pixelada va a 16: el dueño la quiso algo más grande)...
+const TAM_LISA_TITULO := 36     # ...y el de los títulos (la pixelada, a 32)
 static var _tema_liso: Theme
 const BOTON := preload("res://assets/ui/boton-oscuro.png")
 const PANEL := preload("res://assets/ui/panel-oscuro.png")
@@ -129,6 +131,9 @@ static func crear_liso() -> Theme:
 		return _tema_liso
 	var t: Theme = crear().duplicate()
 	t.default_font = lisa(PESO_LISA)
+	t.default_font_size = TAM_LISA
+	t.set_font_size("font_size", "Button", TAM_LISA)
+	t.set_font_size("font_size", "Titulo", TAM_LISA_TITULO)
 	var gruesa := lisa(PESO_LISA_TITULO)
 	for tipo in ["Titulo", "Button", "BotonGrande", "BotonRojo", "Celda"]:
 		t.set_font("font", tipo, gruesa)

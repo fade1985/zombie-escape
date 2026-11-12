@@ -323,6 +323,8 @@
 #                                                                                          [prueba_varias.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, el del primer botiquín, la lista desde la pausa, el del
 #                       baúl antes del baúl y el botón «Tutoriales: No»                         [prueba_varias.gd]
+#   --tutoriales-alto   la ventana de cada tutorial, una a una: que la más alta quepa en la pantalla (con --lang, en
+#                       otro idioma)                                                    [prueba_varias.gd]
 #   --tutoriales-torre  (con --edificio torre) los dos tutoriales de la torre: «Torre Velaria» (el código) y
 #                       «Peligros de la torre», que sale solo al entrar en el primer departamento con peligro [prueba_varias.gd]
 #   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se
@@ -1064,6 +1066,9 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--tutoriales-alto" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tutoriales_alto()
 	elif "--tutoriales-torre" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutoriales_torre()

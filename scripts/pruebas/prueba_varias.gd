@@ -1151,6 +1151,34 @@ func probar_tutoriales_torre() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --tutoriales-alto" (y --lang para otro idioma): abre la ventana de cada tutorial, una a una, y mide cuál es la
+# más alta, para ver que con la letra lisa (más grande que la pixelada) ninguna se sale de la pantalla. Foto de la más alta:
+# captura-tutorial-mas-alto.png. Luego se cierra
+func probar_tutoriales_alto() -> void:
+	Tutoriales.olvidar()
+	tutoriales_prueba = true
+	guia.activa = false
+	var alto_pantalla := get_viewport().get_visible_rect().size.y
+	var mas_alto := ""
+	var maximo := 0.0
+	for id: String in Tutoriales.LISTA:
+		var t := Tutorial.ventana(self, id)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var panel: Control = t.get_child(0).get_child(0).get_child(0)
+		if panel.size.y > maximo:
+			maximo = panel.size.y
+			mas_alto = id
+		t.queue_free()
+		await get_tree().process_frame
+	print("Tutorial · el más alto: «%s», %d de %d de alto · cabe: %s (esperado: true)" % [mas_alto, maximo, alto_pantalla,
+		maximo <= alto_pantalla])
+	Tutorial.ventana(self, mas_alto)
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-tutorial-mas-alto.png")
+	get_tree().quit()
+
+
 func probar_tutorial() -> void:
 	Tutoriales.olvidar()
 	tutoriales_prueba = true

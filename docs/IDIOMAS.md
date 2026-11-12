@@ -149,7 +149,8 @@ letras pixeladas (de terror, de recreativa…) eligió una **lisa**, que se lee 
 `assets/fuentes/rubik.ttf`, variable de peso 300 a 900; OFL 1.1 **sin nombre reservado**, `rubik-OFL.txt`, que ya se exporta).
 Trae latín y cirílico. **Desde el 12 nov la usan los tutoriales (`tutorial.gd`) y el aviso de fotosensibilidad
 (`aviso_luces.gd`)**, con `Tema.crear_liso()`: el tema de siempre con Rubik de 400 en los textos y de 700 en títulos y botones
-(`Tema.lisa(peso)`; los pesos, `PESO_LISA` y `PESO_LISA_TITULO`). El resto del juego sigue con la letra pixelada. Para el chino,
+(`Tema.lisa(peso)`; los pesos, `PESO_LISA` y `PESO_LISA_TITULO`), y algo más grande que la pixelada para que se lea mejor:
+19 los textos y botones y 36 los títulos (`TAM_LISA` y `TAM_LISA_TITULO`; la pixelada va a 16 y 32). El resto del juego sigue con la letra pixelada. Para el chino,
 **Noto Sans SC** (`noto-sans-sc-recortada.woff2`, OFL 1.1, `noto-sans-sc-OFL.txt`; variable, ~400 KB), recortada a los caracteres de
 `locale/zh_CN.po` con `py tools/recortar_noto_sc.py <NotoSansSC[wght].ttf>` (de Google Fonts): **hay que lanzarlo otra vez cuando la
 traducción china traiga caracteres nuevos**; mientras, esos salen con Unifont (pixelados, no un cuadro). Su licencia reserva el
@@ -158,7 +159,8 @@ Las reservas van en la propia letra (Rubik → Noto Sans SC del mismo peso → U
 (`allow_system_fallback = false`): si falta algo, se ve igual en el ordenador que en la web. Van **con suavizado** (no ponerles
 `FONT_ANTIALIASING_NONE` como a las pixeladas): la pantalla se estira con `canvas_items` y Godot las dibuja a la resolución real,
 lisas y nítidas. Las dos se citan en Créditos y en Licencias (`LETRAS_DE_OTROS` de `opciones.gd`). Pruebas: `--aviso` y
-`--tutorial`, con `--lang ru` y `--lang zh_CN`.
+`--tutorial`, con `--lang ru` y `--lang zh_CN`, y `--tutoriales-alto` (que la ventana del tutorial más alto quepa en la pantalla;
+con `--lang fr`, el idioma en que más ocupan).
 
 **Las tildes de la letra del juego (30 oct 2026).** Las vocales con tilde, la ñ, la ü, el ¿ y el ¡ no vienen de PixelLab: las añadió
 `tools/fuente-tildes.py` del juego JS, que dibujaba la tilde de á é í ó ú al revés («`» en vez de «´»), dejaba el punto en la í y
