@@ -4,11 +4,12 @@
 #     derecha Químico: el orden del árbol, ui/arbol_talentos.gd, COLORES; el principal de cada una)
 #   - Tienda de armas: la mirilla, de metal (gris acero; antes, en rojo)
 #   - Sujetos: el cuaderno, casi negro (gris muy oscuro, para que se vea el borde)
+#   - Vídeos: el «play», azul
 #   - La interrogación de los sujetos sin ver (assets/ui/interrogacion.png), aún más negra
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
 # Se pasa después de tools/muebles_gpt.py (que los saca amarillos de la imagen de GPT):
-#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier escritorio_colecciones interrogacion
+#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier escritorio_colecciones escritorio_videos interrogacion
 #   py tools/colorear_iconos.py
 # Si un icono ya está coloreado, no lo vuelve a tocar.
 import colorsys
@@ -25,6 +26,7 @@ ICONOS = [
     ("assets/ui/iconos/escritorio-armas.png", ["#9aa4ae"]),
     ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
     ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], {"viveza": 0.35}),
+    ("assets/ui/iconos/escritorio-videos.png", ["#3a78d4"], {"desde": 0.0}),   # (también el borde naranja oscuro: en azul se notaba)
     ("assets/ui/interrogacion.png", ["#141418"], {"desde": 0.05}),   # (la de los sujetos sin ver, casi negro del todo)
 ]
 

@@ -81,6 +81,7 @@ func _ready() -> void:
 	texto.add_theme_color_override("font_color", Color("#f4f0dc"))
 	texto.add_theme_constant_override("outline_size", 0)
 	texto.add_theme_font_size_override("font_size", letra)
+	texto.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))   # (con la letra lisa: se lee mejor, 12 nov)
 	texto.add_theme_constant_override("line_spacing", 2)
 	var alto_linea := texto.get_line_height() + 2
 	caja_texto = Rect2(0, tam.y, tam.x, alto_linea * 2 + 14)
