@@ -354,8 +354,8 @@
 #   --contacto          «Contáctanos» de Opciones → General (contacto.gd): escribir, el máximo, que solo va el texto
 #                       y el envío, que no sale del ordenador; con --contacto-url URL, sí, a esa
 #                       dirección (un servidor de prueba)                                     [prueba_varias.gd]
-#   --brillo            el «Brillo» de Opciones → Pantalla: el desplegable (de 0 a 100 de 10 en 10, elegir y flechas),
-#                       que se guarda, y lo clara que sale la pantalla a 0, 50 y 100 (fotos) [prueba_varias.gd]
+#   --brillo            el «Brillo» de Opciones → Pantalla: la barra (de 0 a 100 de 5 en 5, en la mitad al empezar,
+#                       moverla y flechas), que se guarda, y lo clara que sale la pantalla a 0, 50 y 100 (fotos) [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]

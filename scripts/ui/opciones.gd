@@ -386,56 +386,73 @@ func idiomas() -> void:
 		boton_idioma.grab_focus.call_deferred()
 
 
-# El brillo (11 nov; desde el 12 nov en Pantalla y con un desplegable): «Brillo: 50» y, al pulsarlo, la lista de 0 a 100 de 10
-# en 10 (50, como se ve sin tocar nada) para elegir uno. Con el desplegable cerrado, las flechas izquierda y derecha (también
-# las del mando) bajan o suben 10 sin abrirlo. Se guarda y se nota al momento en todo el juego (Pantalla.poner_brillo)
-func desplegable_brillo() -> OptionButton:
-	var b := OptionButton.new()
-	b.theme_type_variation = "BotonGrande"
-	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	b.custom_minimum_size.x = 360
-	b.fit_to_longest_item = false   # (lo ancho lo pone igualar(), como a los demás botones grandes)
-	b.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	b.name = "brillo"   # no-tr
-	for v in range(0, 101, 10):
-		b.add_item(str(v), v)
-	var poner_texto := func(v: int):   # (el botón dice «Brillo: N»; la lista, solo los números)
-		b.text = "%s: %d" % [Idioma.t("Brillo"), v]
-	var cambiar := func(v: int):
-		v = clampi(v, 0, 100)
-		Guardado.cambiar(func(g): g.ajustes.brillo = v)
+# El brillo (11 nov; desde el 12 nov en Pantalla y con una barra): «Brillo: 50» encima de una barra recta con un punto que se
+# arrastra de izquierda a derecha, de 0 a 100 de 5 en 5 (50, en la mitad, es como se ve sin tocar nada y como empieza el
+# juego la primera vez). También se mueve con un clic en la barra, la rueda del ratón o, con ella elegida, las flechas
+# izquierda y derecha (también las del mando). Se guarda y se nota al momento en todo el juego (Pantalla.poner_brillo)
+func barra_brillo() -> HSlider:
+	var caja := VBoxContainer.new()
+	caja.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	caja.add_theme_constant_override("separation", 10)
+	contenido.add_child(caja)
+	var titulo := Label.new()
+	titulo.theme_type_variation = "Titulo"
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caja.add_child(titulo)
+	var barra := HSlider.new()
+	barra.name = "brillo"   # no-tr
+	barra.min_value = 0
+	barra.max_value = 100
+	barra.step = 5
+	barra.custom_minimum_size.x = 360   # (al final de pantalla(), tan ancha como los botones grandes)
+	barra.value = clampi(int(Guardado.ajuste("brillo")), 0, 100)
+	titulo.text = "%s: %d" % [Idioma.t("Brillo"), int(barra.value)]
+	barra.value_changed.connect(func(valor: float):
+		var v := int(valor)
+		titulo.text = "%s: %d" % [Idioma.t("Brillo"), v]
 		Pantalla.poner_brillo(v)
-		b.select(b.get_item_index(v))
-		poner_texto.call(v)
-	var ahora := clampi(snappedi(int(Guardado.ajuste("brillo")), 10), 0, 100)
-	b.select(b.get_item_index(ahora))
-	poner_texto.call(ahora)
-	b.item_selected.connect(func(i: int): cambiar.call(b.get_item_id(i)))
-	b.gui_input.connect(func(evento: InputEvent):
-		var paso := 0
-		if evento.is_action_pressed("ui_left"):
-			paso = -10
-		elif evento.is_action_pressed("ui_right"):
-			paso = 10
-		if paso != 0:
-			cambiar.call(int(Guardado.ajuste("brillo")) + paso)
-			Sonido.tocar("click")
-			b.accept_event())
-	# La lista: con la letra y la chapa de los botones, y la casilla elegida con el borde amarillo (como en Controles)
-	var lista := b.get_popup()
-	lista.add_theme_stylebox_override("panel", Tema._chapa(Color.WHITE))
-	lista.add_theme_stylebox_override("hover", Tema._pastilla(Tema.AMARILLO))
-	lista.add_theme_font_size_override("font_size", 24)
-	lista.add_theme_constant_override("v_separation", 0)   # (apretada: once números tienen que caber bajo el botón)
-	var nada := ImageTexture.create_from_image(Image.create_empty(1, 1, false, Image.FORMAT_RGBA8))
-	for icono in ["radio_checked", "radio_unchecked"]:   # (sin los circulitos: el elegido ya sale con el borde amarillo)
-		lista.add_theme_icon_override(icono, nada)
-	lista.add_theme_constant_override("outline_size", 4)
-	for c in ["font_color", "font_hover_color"]:
-		lista.add_theme_color_override(c, Color("#e6dec8"))
-	lista.add_theme_color_override("font_outline_color", Tema.LINEA)
-	contenido.add_child(b)
-	return b
+		if v != int(Guardado.ajuste("brillo")):
+			Guardado.cambiar(func(g): g.ajustes.brillo = v))
+	# Cómo se ve: la barra de metal oscuro con el borde negro, lo que va del principio al punto en amarillo, y el punto
+	# redondo color hueso (amarillo al pasar por encima o con la barra elegida, que además lleva el marco amarillo)
+	var tira := func(color: Color) -> StyleBoxFlat:
+		var s := StyleBoxFlat.new()
+		s.bg_color = color
+		s.border_color = Tema.LINEA
+		s.set_border_width_all(3)
+		s.set_corner_radius_all(6)
+		s.content_margin_top = 7
+		s.content_margin_bottom = 7
+		return s
+	barra.add_theme_stylebox_override("slider", tira.call(Tema.METAL))
+	barra.add_theme_stylebox_override("grabber_area", tira.call(Tema.AMARILLO.darkened(0.25)))
+	barra.add_theme_stylebox_override("grabber_area_highlight", tira.call(Tema.AMARILLO))
+	var marco := StyleBoxFlat.new()
+	marco.draw_center = false
+	marco.border_color = Tema.AMARILLO
+	marco.set_border_width_all(3)
+	marco.set_corner_radius_all(8)
+	marco.set_expand_margin_all(8)
+	barra.add_theme_stylebox_override("focus", marco)
+	barra.add_theme_icon_override("grabber", _punto(Color("#e6dec8")))
+	barra.add_theme_icon_override("grabber_highlight", _punto(Tema.AMARILLO))
+	caja.add_child(barra)
+	return barra
+
+
+# El punto de la barra del brillo: un círculo de 30 px del color dado, con el borde negro
+func _punto(color: Color) -> ImageTexture:
+	const LADO := 30
+	var imagen := Image.create_empty(LADO, LADO, false, Image.FORMAT_RGBA8)
+	var centro := Vector2(LADO, LADO) / 2.0
+	for y in LADO:
+		for x in LADO:
+			var d := (Vector2(x, y) + Vector2(0.5, 0.5)).distance_to(centro)
+			if d <= LADO / 2.0 - 3.0:
+				imagen.set_pixel(x, y, color)
+			elif d <= LADO / 2.0:
+				imagen.set_pixel(x, y, Tema.LINEA)
+	return ImageTexture.create_from_image(imagen)
 
 
 # El audio (el botón Audio de General): la música y quitar todo el sonido. Se vuelve con la pestaña General
@@ -454,7 +471,7 @@ func audio() -> void:
 	musica.grab_focus.call_deferred()
 
 
-# La pantalla (el botón Pantalla de General): la pantalla completa, el brillo (desplegable_brillo) y el temblor. Se vuelve con la pestaña General
+# La pantalla (el botón Pantalla de General): la pantalla completa, el brillo (barra_brillo) y el temblor. Se vuelve con la pestaña General
 func pantalla() -> void:
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		var texto_completa := func(si: bool) -> String:
@@ -465,10 +482,12 @@ func pantalla() -> void:
 			var ahora := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 			Tactil.pantalla_completa()
 			completa.text = texto_completa.call(not ahora))
-	desplegable_brillo()
+	var brillo := barra_brillo()
 	rotar(Idioma.t("Temblor"), "temblor", TEMBLORES, "BotonGrande")
 	igualar()
-	(contenido.get_child(0) as Control).grab_focus.call_deferred()
+	brillo.custom_minimum_size.x = ancho_grande
+	# (el foco, en lo primero de la página: la pantalla completa o, en iPhone, que no la tiene, la barra del brillo)
+	(contenido.get_child(0) if contenido.get_child(0) is Button else brillo).grab_focus.call_deferred()
 
 
 # Contáctanos (el botón de General, desde el 10 nov): un cuadro para escribirnos qué falla, qué no le gusta o qué mejoraría,

@@ -44,8 +44,8 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   esquivaba. Al enchufar uno así, `Controles.ordenar_mando` le da el orden estándar del navegador (`ORDEN_WEB`); a los
   reconocidos no los toca. Se prueba solo en la web, con un mando de mentira que la prueba enchufa desde el navegador:
   exportar a `web/` (de desarrollo), arrancar su servidor y `py tools/medir_web.py 45 --captura --mandoweb`.
-- **Opciones** (menú y pausa): **brillo** (en Pantalla, un desplegable de 0 a 100 de 10 en 10, 50 = sin tocar:
-  al pulsarlo sale la lista para elegir; cerrado, las flechas izquierda y derecha bajan y suben 10), **idioma** (español o inglés; si nunca se ha elegido, el del sistema), música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
+- **Opciones** (menú y pausa): **brillo** (en Pantalla, una barra con un punto que se arrastra, de 0 a 100 de 5 en 5, 50 = sin
+  tocar y en la mitad al empezar; también con un clic en la barra, la rueda o, con ella elegida, las flechas izquierda y derecha), **idioma** (español o inglés; si nunca se ha elegido, el del sistema), música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
   tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*, *Disparo asistido* (Johnny apunta y ataca solo; sin ella, el modo libre, el de
   siempre: ya no hay tecla para cambiarlo); no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se

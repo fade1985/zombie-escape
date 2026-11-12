@@ -4516,50 +4516,46 @@ func probar_registro() -> void:
 	get_tree().quit()
 
 
-# --brillo: el «Brillo» de Opciones → Pantalla (opciones.gd, desplegable_brillo, y pantalla.gd, poner_brillo). El desplegable:
-# dice «Brillo: 50», su lista va de 0 a 100 de 10 en 10, al elegir uno de la lista se pone y se guarda, y con el desplegable
-# cerrado las flechas bajan y suben 10 sin pasar de 0 ni de 100. Y la pantalla: lo clara que sale (la media de luz de la
-# foto) a 0, 50 y 100, que tiene que ir de menos a más.
-# Fotos: captura-brillo-opciones.png (Pantalla, con el brillo a 80), captura-brillo-lista.png (la lista abierta) y
+# --brillo: el «Brillo» de Opciones → Pantalla (opciones.gd, barra_brillo, y pantalla.gd, poner_brillo). La barra: dice
+# «Brillo: 50» con el punto en la mitad, va de 0 a 100 de 5 en 5, al moverla se pone y se guarda, y con ella elegida las
+# flechas bajan y suben sin pasar de 0 ni de 100. Y la pantalla: lo clara que sale (la media de luz de la foto) a 0, 50 y
+# 100, que tiene que ir de menos a más.
+# Fotos: captura-brillo-opciones.png (Pantalla, con el brillo a 50 y la barra elegida) y captura-brillo-80.png (a 80), y
 # captura-brillo-0.png, -50.png y -100.png (la partida)
 func probar_brillo() -> void:
 	await get_tree().create_timer(0.5, true).timeout
 	var o := Opciones.abrir(self, null, johnny)
 	o.ver("pantalla")
 	await get_tree().create_timer(0.3, true).timeout
-	var boton := o.find_child("brillo", true, false) as OptionButton
-	if boton == null:
-		print("ERROR: en Opciones → Pantalla no está el desplegable del brillo")
+	var barra := o.find_child("brillo", true, false) as HSlider
+	if barra == null:
+		print("ERROR: en Opciones → Pantalla no está la barra del brillo")
 		get_tree().quit(1)
 		return
-	var numeros := []
-	for i in boton.item_count:
-		numeros.append(boton.get_item_text(i))
-	print("Brillo · el desplegable: «%s», la lista %s (esperado: Brillo: 50, de 0 a 100 de 10 en 10)" % [boton.text, numeros])
-	var elegidos := []
-	for v in [30, 100, 0]:   # elegir de la lista
-		boton.select(boton.get_item_index(v))
-		boton.item_selected.emit(boton.get_item_index(v))
-		elegidos.append([boton.text, int(Guardado.cargar().ajustes.brillo)])
-	print("Brillo · al elegir 30, 100 y 0: %s (esperado: el texto y lo guardado, iguales)" % [elegidos])
+	var titulo := barra.get_parent().get_child(0) as Label
+	print("Brillo · la barra: «%s», en %d, de %d a %d de %d en %d, punto en la mitad %s (esperado: Brillo: 50, 50, 0 a 100 de 5 en 5, sí)" % [
+		titulo.text, barra.value, barra.min_value, barra.max_value, barra.step, barra.step, "sí" if is_equal_approx(barra.ratio, 0.5) else "NO"])
+	barra.grab_focus()
+	await get_tree().create_timer(0.3, true).timeout
+	Captura.foto("captura-brillo-opciones.png")
+	var movida := []
+	for v in [30, 100, 0]:   # arrastrar el punto
+		barra.value = v
+		movida.append([titulo.text, int(Guardado.cargar().ajustes.brillo)])
+	print("Brillo · al moverla a 30, 100 y 0: %s (esperado: el texto y lo guardado, iguales)" % [movida])
 	var flechas := []
-	for accion in ["ui_left", "ui_right", "ui_right", "ui_left"]:   # en 0: no baja de 0; sube a 10, a 20 y baja a 10
+	for accion in ["ui_left", "ui_right", "ui_right", "ui_left"]:   # en 0: no baja de 0; sube a 5, a 10 y baja a 5
 		var ev := InputEventAction.new()
 		ev.action = accion
 		ev.pressed = true
-		boton.gui_input.emit(ev)
+		get_viewport().push_input(ev)
+		await get_tree().process_frame
 		flechas.append(int(Guardado.cargar().ajustes.brillo))
-	print("Brillo · con las flechas: %s, en el desplegable «%s» (esperado: [0, 10, 20, 10], Brillo: 10)" % [flechas, boton.text])
-	boton.select(boton.get_item_index(80))
-	boton.item_selected.emit(boton.get_item_index(80))
-	boton.grab_focus()
+	print("Brillo · con las flechas: %s, «%s» (esperado: [0, 5, 10, 5], Brillo: 5)" % [flechas, titulo.text])
+	barra.value = 80
 	await get_tree().create_timer(0.3, true).timeout
-	Captura.foto("captura-brillo-opciones.png")
-	print("Brillo · en el desplegable: %s, guardado %s (esperado: Brillo: 80, 80)" % [boton.text, Guardado.cargar().ajustes.brillo])
-	boton.show_popup()
-	await get_tree().create_timer(0.3, true).timeout
-	Captura.foto("captura-brillo-lista.png")
-	boton.get_popup().hide()
+	Captura.foto("captura-brillo-80.png")
+	print("Brillo · en la barra: %s, guardado %s (esperado: Brillo: 80, 80)" % [titulo.text, Guardado.cargar().ajustes.brillo])
 	o.cerrar()
 	var luces := []
 	for v in [0, 50, 100]:
