@@ -1,11 +1,12 @@
 # Colorea los iconos amarillos del escritorio del ordenador que van de otro color (12 nov):
+#   - Dosier VD-7: la carpeta, marrón como un fichero de cartón
 #   - Talentos: cada una de las tres flechas con el color de su rama (izquierda Militar, en medio Superviviente,
 #     derecha Químico: el orden del árbol, ui/arbol_talentos.gd, COLORES; el principal de cada una)
 #   - Tienda de armas: la mirilla, en rojo (el del icono de Apagar)
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
 # Se pasa después de tools/muebles_gpt.py (que los saca amarillos de la imagen de GPT):
-#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas
+#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier
 #   py tools/colorear_iconos.py
 # Si un icono ya está coloreado, no lo vuelve a tocar.
 import colorsys
@@ -17,6 +18,7 @@ AMARILLO = "#d6a521"   # el amarillo de Químico, que es como están pintados lo
 ICONOS = [
     ("assets/ui/iconos/escritorio-talentos.png", ["#d2452b", "#4f9e34", "#d6a521"]),
     ("assets/ui/iconos/escritorio-armas.png", ["#d33a34"]),
+    ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
 ]
 
 

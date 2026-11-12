@@ -856,7 +856,7 @@ en una línea.
   manos y sangre (lo que lleva cada una, a mano en `RECETAS`). Las de piso y las de dentro de frente son tres dibujos, para que no sean todas
   iguales. Las limpias se quedan para las zonas seguras (`ZONAS_SEGURAS` en `mapa.gd`). Si se regenera una puerta, hay que pasarlo otra vez.
 - **Los iconos del escritorio de otro color:** `colorear_iconos.py` pone cada flecha de `escritorio-talentos.png` del color de su
-  rama (Militar, Superviviente y Químico, de izquierda a derecha) y la mirilla de `escritorio-armas.png` en rojo. `muebles_gpt.py`
+  rama (Militar, Superviviente y Químico, de izquierda a derecha) la mirilla de `escritorio-armas.png` en rojo y la carpeta de `escritorio-dosier.png` en marrón. `muebles_gpt.py`
   los saca amarillos: si se regeneran, hay que pasarlo otra vez (lo ya coloreado no lo vuelve a tocar).
 - **La puerta de la pared de abajo:** `puerta_abajo.py` hace `puerta-abajo.png`, el hueco en el muro con su marco y la hoja vista desde arriba
   (esa pared se ve por detrás), en tres modelos: madera sucia, madera limpia y cristal del centro comercial; la pinta `puerta.gd`.
