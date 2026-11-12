@@ -53,6 +53,7 @@ var casillas := {}                   # id → su recuadro
 var titulos := []                    # [y, título] de cada grupo
 var comprar: Button                  # el botón «Comprar» de la ficha
 var ficha := Rect2()
+var lisa := Tema.lisa(Tema.PESO_LISA)   # (hecha una vez: se dibuja a menudo)
 var ficha_id := ""                   # lo que enseña la ficha ("" = cómo va la tienda)
 var ficha_desde := 0.0               # desde cuándo (en s): un toque del dedo justo al elegirlo no compra
 var listo := {}                      # id → si al pulsarlo ya enseñaba su ficha (con el dedo, el segundo toque)
@@ -377,7 +378,6 @@ func dibujar_ficha(fuente: Font) -> void:
 	var tam_dibujo := Vector2(dibujo.get_size()) * zoom
 	draw_texture_rect(dibujo, Rect2((cuadro.get_center() - tam_dibujo / 2.0).floor(), tam_dibujo), false)
 	# debajo del dibujo, con la letra lisa (se lee mejor; el nombre de arriba y el botón, con la pixelada): los medidores
-	var lisa := Tema.lisa(Tema.PESO_LISA)
 	var y := cuadro.end.y + 6
 	for m in medidas(id):
 		draw_string(lisa, Vector2(x, y + 13), Idioma.t(m[0]), HORIZONTAL_ALIGNMENT_LEFT, 112, TAM_LISA, PLACA.TEXTO)

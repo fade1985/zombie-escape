@@ -19,9 +19,11 @@ const PLACA := preload("res://scripts/ui/chapa.gd")
 const VERDE := Color("#7fa86a")
 const VERDE_BORDE := Color("#5f8a4f")
 const ANCHO_TEMAS := 160             # la columna de los botones de la izquierda
-const ALTO_FILA := 36                # lo más alta que es una fila (si no caben, menos)
+const ALTO_FILA := 40                # lo más alta que es una fila (si no caben, menos; 40 desde la letra lisa, 12 nov)
 const ANCHO_PREMIO := 92             # la placa del premio
 const ALTO_BARRA := 20               # las barras de «Cómo vas»
+const TAM_NOMBRE := 14               # la letra lisa (Rubik) del nombre de cada logro...
+const TAM_DESC := 12                 # ...y la de lo que pide (12 nov; antes, la pixelada a 16 y 14)
 
 # La página que se ve ("resumen" o un tema). Se queda al volver a montar la ventana (al cobrar o cambiar de página)
 static var pagina := "resumen"
@@ -38,6 +40,8 @@ var sobran := 0                      # en el Resumen, los que no caben en «Por 
 var casi := false                    # en el Resumen, si enseña «Casi lo tienes» (no hay nada por cobrar)
 var titulo_y := 0.0                  # en el Resumen, dónde va el título de arriba, y el de «Cómo vas»
 var como_vas_y := 0.0
+var lisa := Tema.lisa(Tema.PESO_LISA)   # lo que pide cada logro (hechas una vez: se dibuja a menudo)
+var lisa_gruesa := Tema.lisa(600)       # y su nombre, algo más grueso
 
 
 func montar(o: Node, guardado: Dictionary) -> void:
@@ -299,7 +303,8 @@ func con_sombra(fuente: Font, r: Rect2, nombre: String, cuenta: String) -> void:
 
 
 # Una fila: el icono (apagado si aún no lo tienes), el nombre, su barra y cuánto lleva si se hace varias veces, lo que
-# pide (cortado si no cabe: entero sale en la línea de abajo) y la placa del premio. Lo que falta cobrar, en amarillo
+# pide (cortado si no cabe: entero sale en la línea de abajo) y la placa del premio. Lo que falta cobrar, en amarillo.
+# El nombre y lo que pide, con la letra lisa (se leen mejor); la cuenta y el premio, con la pixelada
 func dibujar_fila(id: String, fuente: Font) -> void:
 	var r: Rect2 = filas[id]
 	var l := Logros.datos(id)
@@ -314,20 +319,21 @@ func dibujar_fila(id: String, fuente: Font) -> void:
 	var ancho := r.end.x - ANCHO_PREMIO - 10 - x
 	var con_desc := r.size.y >= 30
 	var nombre := Logros.nombre_de(id)
-	var base := r.position.y + (fuente.get_ascent(16) + 1 if con_desc else r.size.y / 2.0 + fuente.get_ascent(16) / 2.0 - 2)
-	draw_string(fuente, Vector2(x, base), nombre, HORIZONTAL_ALIGNMENT_LEFT, ancho, 16,
+	# (con lo que pide debajo: el nombre arriba y lo que pide pegado abajo, con aire entre los dos)
+	var base: float = r.position.y + (TAM_NOMBRE + 3.0 if con_desc else r.size.y / 2.0 + TAM_NOMBRE * 0.35)
+	draw_string(lisa_gruesa, Vector2(x, base), nombre, HORIZONTAL_ALIGNMENT_LEFT, ancho, TAM_NOMBRE,
 		PLACA.AMARILLO if cobrar else (PLACA.TEXTO if e == "cobrado" else Color("#b8b2a0")))
 	var m := meta(l)
 	if m > 1 and e == "pendiente":
 		var cuenta := "%d/%d" % [hecho(l), m]
 		var ancho_cuenta := fuente.get_string_size(cuenta, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x
-		var bx := x + fuente.get_string_size(nombre, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 8
+		var bx := x + lisa_gruesa.get_string_size(nombre, HORIZONTAL_ALIGNMENT_LEFT, -1, TAM_NOMBRE).x + 8
 		var ancho_barra := minf(70.0, x + ancho - ancho_cuenta - 6 - bx)
 		if ancho_barra >= 24:
 			barra(Rect2(bx, base - 10, ancho_barra, 9), hecho(l), m)
 			draw_string(fuente, Vector2(bx + ancho_barra + 6, base), cuenta, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, PLACA.TEXTO_SUAVE)
 	if con_desc:
-		draw_string(fuente, Vector2(x, r.end.y - 5), cortar(fuente, Logros.desc_de(id), ancho, 14), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, PLACA.TEXTO_SUAVE)
+		draw_string(lisa, Vector2(x, r.end.y - 6), cortar(lisa, Logros.desc_de(id), ancho, TAM_DESC), HORIZONTAL_ALIGNMENT_LEFT, -1, TAM_DESC, PLACA.TEXTO_SUAVE)
 	dibujar_premio(Rect2(r.end.x - ANCHO_PREMIO - 6, r.get_center().y - 11, ANCHO_PREMIO, 22), l, e, fuente)
 
 
