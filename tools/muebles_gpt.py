@@ -49,7 +49,8 @@ MUEBLES = {
     "exclamacion": ("assets/sources/exclamacion-gpt.webp", "assets/sprites/exclamacion.png", 10, 28, False),
     "exclamacion_pequena": ("assets/sources/exclamacion-gpt.webp", "assets/ui/exclamacion-pequena.png", 7, 20, False),
     # la interrogación grande de los sujetos que aún no se han visto (ui/ordenador.gd, programa Sujetos; 12 nov): con el
-    # dibujo de la «!» (GPT con ella de modelo); a su rejilla, unos 37 px de la imagen por píxel
+    # dibujo de la «!» (GPT con ella de modelo); a su rejilla, unos 37 px de la imagen por píxel. Sale amarilla: después,
+    # py tools/colorear_iconos.py la pone casi negra
     "interrogacion": ("assets/sources/interrogacion-gpt.webp", "assets/ui/interrogacion.png", 20, 40, False),
     # la flecha amarilla pintada en el suelo que guía en la primera partida (guia.gd, Flecha; M7, 9 nov), hacia la derecha
     "flecha_guia": ("assets/sources/flecha-gpt.webp", "assets/sprites/flecha-guia.png", 20, 20, False),

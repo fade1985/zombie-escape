@@ -625,7 +625,7 @@ en una línea.
   cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Vídeos, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (desde el 11 nov también su icono y su ventana, SUJETOS.EXE; por dentro sigue siendo "colecciones"). Desde el 11 nov todas las ventanas van maximizadas y sin la barra de explicación de abajo (`info` se sigue montando escondida: las pruebas leen su texto) (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
   maximizado: arriba lo visto con su barra, dos pestañas (`Bestiario.familias()`: los durmientes, zombis de siempre, y los
-  sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose bajo la lámpara de `assets/ui/foco-sujetos.png` (de GPT, `tools/foco_sujetos.py`), con polvo y algún parpadeo; si falta, una interrogación
+  sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose bajo la lámpara de `assets/ui/foco-sujetos.png` (de GPT, `tools/foco_sujetos.py`), con polvo y algún parpadeo; si falta, una interrogación casi negra
   grande, `assets/ui/interrogacion.png`, la de GPT con el dibujo de la «!»; debajo, con la letra lisa, su nombre, dónde sale, su frase y cuántos se han matado, `matados` del guardado, que suma `partida.contar_matado` al acabar) y a la
   derecha la cuadrícula (`casilla_zombi`; jefes con marco dorado; los que faltan, con la interrogación). Se prueba con `--coleccion`. Al comprar o subir algo
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
@@ -856,7 +856,7 @@ en una línea.
   manos y sangre (lo que lleva cada una, a mano en `RECETAS`). Las de piso y las de dentro de frente son tres dibujos, para que no sean todas
   iguales. Las limpias se quedan para las zonas seguras (`ZONAS_SEGURAS` en `mapa.gd`). Si se regenera una puerta, hay que pasarlo otra vez.
 - **Los iconos del escritorio de otro color:** `colorear_iconos.py` pone cada flecha de `escritorio-talentos.png` del color de su
-  rama (Militar, Superviviente y Químico, de izquierda a derecha), la mirilla de `escritorio-armas.png` de metal (gris acero), la carpeta de `escritorio-dosier.png` en marrón y el cuaderno de `escritorio-colecciones.png` (Sujetos) casi negro. `muebles_gpt.py`
+  rama (Militar, Superviviente y Químico, de izquierda a derecha), la mirilla de `escritorio-armas.png` de metal (gris acero), la carpeta de `escritorio-dosier.png` en marrón y el cuaderno de `escritorio-colecciones.png` (Sujetos) y la interrogación de los sujetos sin ver (`assets/ui/interrogacion.png`) casi negros. `muebles_gpt.py`
   los saca amarillos: si se regeneran, hay que pasarlo otra vez (lo ya coloreado no lo vuelve a tocar).
 - **La puerta de la pared de abajo:** `puerta_abajo.py` hace `puerta-abajo.png`, el hueco en el muro con su marco y la hoja vista desde arriba
   (esa pared se ve por detrás), en tres modelos: madera sucia, madera limpia y cristal del centro comercial; la pinta `puerta.gd`.

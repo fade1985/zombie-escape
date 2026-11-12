@@ -4,10 +4,11 @@
 #     derecha Químico: el orden del árbol, ui/arbol_talentos.gd, COLORES; el principal de cada una)
 #   - Tienda de armas: la mirilla, de metal (gris acero; antes, en rojo)
 #   - Sujetos: el cuaderno, casi negro (gris muy oscuro, para que se vea el borde)
+#   - La interrogación de los sujetos sin ver (assets/ui/interrogacion.png), igual que el cuaderno
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
 # Se pasa después de tools/muebles_gpt.py (que los saca amarillos de la imagen de GPT):
-#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier escritorio_colecciones
+#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier escritorio_colecciones interrogacion
 #   py tools/colorear_iconos.py
 # Si un icono ya está coloreado, no lo vuelve a tocar.
 import colorsys
@@ -15,14 +16,16 @@ from PIL import Image
 
 AMARILLO = "#d6a521"   # el amarillo de Químico, que es como están pintados los iconos
 
-# [icono, colores(, viveza)]: un color por trozo amarillo, de izquierda a derecha; con uno solo, todo el icono de ese
-# color. "viveza", lo poco vivo que puede ser un amarillo para contar (0.45 si no se dice; en Sujetos, menos, para coger
-# también el borde de arriba del cuaderno, más apagado, sin tocar la etiqueta crema)
+# [icono, colores(, ajustes)]: un color por trozo amarillo, de izquierda a derecha; con uno solo, todo el icono de ese
+# color. Los ajustes, si hacen falta: "viveza", lo poco vivo que puede ser un amarillo para contar (0.45 si no se dice;
+# en Sujetos, menos, para coger también el borde de arriba del cuaderno, más apagado, sin tocar la etiqueta crema), y
+# "desde", el tono más rojizo que cuenta (0.08 si no se dice; en la interrogación, menos: abajo es naranja)
 ICONOS = [
     ("assets/ui/iconos/escritorio-talentos.png", ["#d2452b", "#4f9e34", "#d6a521"]),
     ("assets/ui/iconos/escritorio-armas.png", ["#9aa4ae"]),
     ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
-    ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], 0.35),
+    ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], {"viveza": 0.35}),
+    ("assets/ui/interrogacion.png", ["#3a3a42"], {"desde": 0.05}),   # (la de los sujetos sin ver, como el cuaderno)
 ]
 
 
@@ -31,20 +34,20 @@ def hsv(hexa):
     return colorsys.rgb_to_hsv(r, g, b)
 
 
-def amarillo(px, x, y, viveza):
+def amarillo(px, x, y, viveza, desde):
     r, g, b, a = px[x, y]
     if a == 0:
         return False
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-    return s > viveza and 0.08 < h < 0.2 and v > 0.1
+    return s > viveza and desde < h < 0.2 and v > 0.1
 
 
 # Los trozos de amarillo que se tocan (en las flechas, cada una es uno: las separa el borde oscuro), de izquierda a derecha
-def trozos(px, w, h, viveza):
+def trozos(px, w, h, viveza, desde):
     grupo, lista = set(), []
     for y in range(h):
         for x in range(w):
-            if (x, y) in grupo or not amarillo(px, x, y, viveza):
+            if (x, y) in grupo or not amarillo(px, x, y, viveza, desde):
                 continue
             pila, trozo = [(x, y)], []
             grupo.add((x, y))
@@ -52,7 +55,7 @@ def trozos(px, w, h, viveza):
                 cx, cy = pila.pop()
                 trozo.append((cx, cy))
                 for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
-                    if 0 <= nx < w and 0 <= ny < h and (nx, ny) not in grupo and amarillo(px, nx, ny, viveza):
+                    if 0 <= nx < w and 0 <= ny < h and (nx, ny) not in grupo and amarillo(px, nx, ny, viveza, desde):
                         grupo.add((nx, ny))
                         pila.append((nx, ny))
             lista.append(trozo)
@@ -60,10 +63,11 @@ def trozos(px, w, h, viveza):
 
 
 ref = hsv(AMARILLO)
-for ruta, colores, *viveza in ICONOS:
+for ruta, colores, *ajustes in ICONOS:
+    ajustes = ajustes[0] if ajustes else {}
     im = Image.open(ruta).convert("RGBA")
     px = im.load()
-    partes = trozos(px, *im.size, viveza[0] if viveza else 0.45)
+    partes = trozos(px, *im.size, ajustes.get("viveza", 0.45), ajustes.get("desde", 0.08))
     if len(colores) == 1:
         partes = [[p for t in partes for p in t]]
     todos = [colorsys.rgb_to_hsv(*(c / 255 for c in px[p][:3])) for t in partes for p in t]
