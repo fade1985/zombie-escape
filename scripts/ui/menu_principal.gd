@@ -13,6 +13,7 @@
 extends Control
 
 # el título y el fondo, de GPT (tools/menu_gpt.py); el logo viejo, assets/ui/logo.png, sigue en el trailer
+const SOBRE_MARCO := 16   # el cuadro del reto acaba esto por encima del final de la tarjeta del edificio (su marco)
 const TAM_RETO := 17   # la letra lisa (Rubik) del reto del día: su cuadro y lo de debajo del botón (12 nov)
 const PLACA := preload("res://scripts/ui/chapa.gd")   # los colores de la chapa (también los del cuadro del reto)
 const LOGO := preload("res://assets/ui/titulo.png")
@@ -172,7 +173,7 @@ func _ready() -> void:
 				reto_b.mouse_entered.emit()
 				await get_tree().create_timer(0.3).timeout
 				var cuadro: Control = reto_b.get_meta("cuadro")
-				print("Edificios · reto del día: botón «%s» de %s · cuadro a la vista %s (esperado: true) en %s dentro de la pantalla %s (esperado: true) · su borde de abajo %.0f, el botón empieza en %.0f (esperado: el borde, 8 por encima)" % [
+				print("Edificios · reto del día: botón «%s» de %s · cuadro a la vista %s (esperado: true) en %s dentro de la pantalla %s (esperado: true) · su borde de abajo %.0f, el botón empieza en %.0f (esperado: el borde, 8 o más por encima)" % [
 					reto_b.text, reto_b.size, cuadro.visible, cuadro.global_position, get_viewport_rect().encloses(cuadro.get_global_rect()),
 					cuadro.get_global_rect().end.y, reto_b.global_position.y])
 				Captura.foto("captura-edificios-reto.png")
@@ -405,10 +406,13 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	var cuadro := cuadro_reto(f)
 	cuadro.visible = false
 	b.add_child(cuadro)
-	# encima del botón, con su borde de abajo a 8 del botón. Las frases partidas en líneas no saben lo que miden hasta que
-	# se colocan: al crecer el cuadro, se vuelve a subir (si no, su parte de abajo quedaba tapada por el botón, 12 nov)
+	# encima del botón, con su borde de abajo a 8 del botón y por encima del marco de abajo de la tarjeta del edificio (si
+	# no, ese marco y sus remaches salían a los lados de la última línea y parecía que se metía por debajo, 12 nov). Las
+	# frases partidas en líneas no saben lo que miden hasta que se colocan: al crecer el cuadro, se vuelve a subir
+	var tarjeta_edificio: Control = caja.get_child(0)
 	var colocar := func():
-		var donde := b.global_position + Vector2((b.size.x - cuadro.size.x) / 2.0, -cuadro.size.y - 8)
+		var abajo := minf(b.global_position.y - 8, tarjeta_edificio.get_global_rect().end.y - SOBRE_MARCO)
+		var donde := Vector2(b.global_position.x + (b.size.x - cuadro.size.x) / 2.0, abajo - cuadro.size.y)
 		var pantalla := get_viewport_rect().size
 		cuadro.global_position = Vector2(clampf(donde.x, 6.0, pantalla.x - cuadro.size.x - 6.0), maxf(6.0, donde.y))
 	cuadro.resized.connect(colocar)
