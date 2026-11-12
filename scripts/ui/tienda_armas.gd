@@ -29,6 +29,7 @@ const CASILLA := 62                  # lo más grande que es una casilla (si no 
 const HUECO := 6                     # entre casilla y casilla
 const TITULO := 24                   # lo alto del título de cada grupo, con su raya
 const MEDIDOR := 18                  # lo alto de cada medidor de la ficha
+const TAM_LISA := 15                 # la letra lisa (Rubik) de debajo del dibujo: los medidores y qué hace (12 nov)
 const ALTO_BOTON := 40
 # Los grupos, en orden: [familia (Armas.familia; "arrojable" para los de Lanzables), título]
 # [traducir]
@@ -375,17 +376,18 @@ func dibujar_ficha(fuente: Font) -> void:
 		dibujo = icono(id)
 	var tam_dibujo := Vector2(dibujo.get_size()) * zoom
 	draw_texture_rect(dibujo, Rect2((cuadro.get_center() - tam_dibujo / 2.0).floor(), tam_dibujo), false)
-	# los medidores
+	# debajo del dibujo, con la letra lisa (se lee mejor; el nombre de arriba y el botón, con la pixelada): los medidores
+	var lisa := Tema.lisa(Tema.PESO_LISA)
 	var y := cuadro.end.y + 6
 	for m in medidas(id):
-		draw_string(fuente, Vector2(x, y + 13), Idioma.t(m[0]), HORIZONTAL_ALIGNMENT_LEFT, 112, 14, PLACA.TEXTO)
+		draw_string(lisa, Vector2(x, y + 13), Idioma.t(m[0]), HORIZONTAL_ALIGNMENT_LEFT, 112, TAM_LISA, PLACA.TEXTO)
 		var llenos := cuadraditos(id, m[1])
 		for i in 10:
 			draw_rect(Rect2(x + ancho - 10 * 11 + 3 + i * 11, y + 3, 8, 8), PLACA.TEXTO if i < llenos else PLACA.APAGADO)
 		y += MEDIDOR
 	# qué hace (sus números y cuántos llevas ya no salen: 11 nov, lo dicen los medidores)
 	var tope := comprar.position.y - 6
-	escribir(fuente, Idioma.t(INVENTARIO.QUE_HACE.get(id, "")), Vector2(x, y + 4), ancho, 14, PLACA.TEXTO, tope)
+	escribir(lisa, Idioma.t(INVENTARIO.QUE_HACE.get(id, "")), Vector2(x, y + 4), ancho, TAM_LISA, PLACA.TEXTO, tope)
 	dibujar_comprar(fuente)
 
 
