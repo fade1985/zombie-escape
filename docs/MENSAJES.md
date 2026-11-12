@@ -2,6 +2,8 @@
 
 Desde el 10 nov 2026, Opciones → General tiene el botón **Contáctanos** (antes estaba el del registro de errores). El
 jugador escribe con sus palabras qué falla, qué no le gusta o qué mejoraría (hasta 1.000 letras) y le da a Enviar.
+Desde el 12 nov 2026 también sirve para avisar de un **texto mal escrito o mal traducido** (lo dice la pantalla): esos
+mensajes pueden venir en cualquier idioma y se corrigen en `locale/<idioma>.po` (`docs/IDIOMAS.md`).
 No se le pide nada suyo (ni correo ni nombre: el dueño no quiere datos de jugadores).
 
 ## El camino de un mensaje

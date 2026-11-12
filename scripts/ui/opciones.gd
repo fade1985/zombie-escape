@@ -25,11 +25,6 @@ signal cerrado
 # Pestaña Créditos. Quién ha hecho el juego, en una línea («Un juego de …»): vacía, no sale (29 oct 2026: el dueño la
 # rellenará cuando lo tengan claro)
 const AUTORES := ""
-# El botón de General «Avisar de un texto mal traducido» (30 oct 2026: no hay nadie nativo que revise los idiomas y se corrige con
-# lo que avisen los jugadores, docs/LANZAMIENTO.md): abre este enlace, un formulario de Google del dueño (idioma, texto que está mal,
-# cómo debería decir y dónde sale; las respuestas le llegan al correo). Vacío, no sale. Tampoco sale en español, el idioma
-# original. (Es una variable para que la prueba --idioma la pueda vaciar)
-static var enlace_avisos := "https://docs.google.com/forms/d/e/1FAIpQLSepY4FoOSeVYz_cpaGj4DJg-pTGPMNbCZSU8FQ_ixWT6ktq1Q/viewform"
 # Las letras que no son nuestras: [nombre, autores, su licencia]. La licencia (SIL OFL 1.1) pide citarlas y que su texto vaya
 # con el juego: los .txt se exportan (export_presets.cfg, include_filter) y el botón Licencias los enseña
 const LETRAS_DE_OTROS := [
@@ -357,7 +352,7 @@ func idiomas() -> void:
 	# Los botones, más grandes desde el 12 nov (a petición del dueño): la letra de BotonGrande (32), tan anchos como los botones
 	# grandes de General (ancho_grande) y estirados de alto hasta llenar el sitio que hay hasta «Volver» (el contenido mide lo que la
 	# pestaña más alta), con el mismo hueco por debajo que en General. Llevan menos hueco por arriba y por abajo que el botón grande
-	# normal: es lo mínimo que miden, y así los siete (y el de avisar de una traducción) caben sin empujar «Volver» fuera
+	# normal: es lo mínimo que miden
 	var chapas := {}
 	for estado in ["normal", "hover", "pressed", "focus", "disabled"]:
 		var s: StyleBox = Tema.crear().get_stylebox(estado, "Button").duplicate()
@@ -388,14 +383,6 @@ func idiomas() -> void:
 			for c in ["font_color", "font_focus_color", "font_hover_color"]:
 				b.add_theme_color_override(c, Tema.AMARILLO)
 		fila_idioma.add_child(b)
-	# El botón de avisar de un texto mal traducido (enlace_avisos), debajo de los idiomas
-	if enlace_avisos != "" and Idioma.actual != Idioma.ORIGEN:
-		var avisar := Button.new()
-		avisar.name = "avisar_traduccion"   # no-tr
-		avisar.text = Idioma.t("Avisar de un texto mal traducido")
-		avisar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		avisar.pressed.connect(func(): OS.shell_open(enlace_avisos))
-		fila_idioma.add_child(avisar)
 	if boton_idioma:
 		boton_idioma.grab_focus.call_deferred()
 
@@ -463,9 +450,12 @@ func pantalla() -> void:
 
 
 # Contáctanos (el botón de General, desde el 10 nov): un cuadro para escribirnos qué falla, qué no le gusta o qué mejoraría,
-# y Enviar (solo va el texto, desde el 10 nov: sin datos técnicos). Lo manda contacto.gd. Se vuelve con la pestaña General
+# y Enviar (solo va el texto, desde el 10 nov: sin datos técnicos). Lo manda contacto.gd. Se vuelve con la pestaña General.
+# También es para avisar de un texto mal escrito o mal traducido (12 nov: sustituye al botón «Avisar de un texto mal traducido»
+# de la lista de idiomas, que abría un formulario de Google)
 func contacto() -> void:
 	explicar(Idioma.t("Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."))
+	explicar(Idioma.t("También sirve para avisarnos de un texto mal escrito o mal traducido."))
 	# (en el móvil de la web, Godot no saca el teclado de la pantalla: se escribe en una ventanita del navegador, abajo)
 	var por_ventanita := OS.has_feature("web") and Tactil.activo
 	var cuadro := TextEdit.new()

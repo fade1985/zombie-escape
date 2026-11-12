@@ -363,8 +363,8 @@
 #                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
 #   --guiado --sin-hacer  la guía con un jugador que no hace lo que le piden: lo enseñado cuenta igual como visto y su
 #                       ventana no se repite en la partida siguiente, tras morir (F18)         [prueba_varias.gd]
-#   --idioma            solo el menú, Opciones (4 pestañas y las licencias, y el botón de avisar de un texto mal traducido, con
-#                       y sin enlace), el cambio de idioma en caliente y «Elige edificio»; con
+#   --idioma            solo el menú, Opciones (4 pestañas, la lista de idiomas, Contáctanos y las licencias), el cambio de
+#                       idioma en caliente y «Elige edificio»; con
 #                       --alerta 3 --reto, con su alerta y su reto             [prueba_idioma.gd; lo lanza menu_principal.gd]
 #   --ingles            (con cualquier prueba) el juego en inglés; al cerrar, cuenta los textos sin traducir [idioma.gd]
 #   --lang X            lo mismo con otro idioma: pt_BR, de, fr, ru o zh_CN (--ingles es --lang en)       [idioma.gd]

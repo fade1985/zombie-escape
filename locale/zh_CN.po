@@ -6347,10 +6347,6 @@ msgid "Vibración"
 msgstr "振动"
 
 #: scripts/ui/opciones.gd
-msgid "Avisar de un texto mal traducido"
-msgstr "反馈翻译错误"
-
-#: scripts/ui/opciones.gd
 msgid "Brillo"
 msgstr "亮度"
 
@@ -6361,6 +6357,10 @@ msgstr "抖动"
 #: scripts/ui/opciones.gd
 msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
 msgstr "用你自己的话告诉我们哪里有问题、哪里不喜欢、哪里可以更好。"
+
+#: scripts/ui/opciones.gd
+msgid "También sirve para avisarnos de un texto mal escrito o mal traducido."
+msgstr "也可以用来告诉我们哪里有错字或翻译错误。"
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"

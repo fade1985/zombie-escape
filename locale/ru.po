@@ -6391,10 +6391,6 @@ msgid "Vibración"
 msgstr "Вибрация"
 
 #: scripts/ui/opciones.gd
-msgid "Avisar de un texto mal traducido"
-msgstr "Сообщить о плохом переводе"
-
-#: scripts/ui/opciones.gd
 msgid "Brillo"
 msgstr "Яркость"
 
@@ -6405,6 +6401,10 @@ msgstr "Дрожание"
 #: scripts/ui/opciones.gd
 msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
 msgstr "Расскажи своими словами, что не работает, что не нравится или что можно улучшить."
+
+#: scripts/ui/opciones.gd
+msgid "También sirve para avisarnos de un texto mal escrito o mal traducido."
+msgstr "Здесь же можно сообщить об опечатке или плохом переводе."
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"

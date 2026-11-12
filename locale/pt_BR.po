@@ -6369,10 +6369,6 @@ msgid "Vibración"
 msgstr "Vibração"
 
 #: scripts/ui/opciones.gd
-msgid "Avisar de un texto mal traducido"
-msgstr "Avisar de uma tradução errada"
-
-#: scripts/ui/opciones.gd
 msgid "Brillo"
 msgstr "Brilho"
 
@@ -6383,6 +6379,10 @@ msgstr "Tremor"
 #: scripts/ui/opciones.gd
 msgid "Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."
 msgstr "Conte com suas palavras o que está com problema, o que você não gosta ou o que poderia melhorar."
+
+#: scripts/ui/opciones.gd
+msgid "También sirve para avisarnos de un texto mal escrito o mal traducido."
+msgstr "Também serve para nos avisar de um texto mal escrito ou mal traduzido."
 
 #: scripts/ui/opciones.gd
 msgid "Escribe aquí tu mensaje"
