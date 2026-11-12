@@ -663,7 +663,7 @@ en una línea.
   en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
   banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
   del nombre; el banco solo dice lo que cuesta, sin lo que tienes ni lo que falta
-  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
+  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista; la frase de cada carta, con la letra lisa).
 - `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la
   mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
@@ -856,7 +856,7 @@ en una línea.
   manos y sangre (lo que lleva cada una, a mano en `RECETAS`). Las de piso y las de dentro de frente son tres dibujos, para que no sean todas
   iguales. Las limpias se quedan para las zonas seguras (`ZONAS_SEGURAS` en `mapa.gd`). Si se regenera una puerta, hay que pasarlo otra vez.
 - **Los iconos del escritorio de otro color:** `colorear_iconos.py` pone cada flecha de `escritorio-talentos.png` del color de su
-  rama (Militar, Superviviente y Químico, de izquierda a derecha), la mirilla de `escritorio-armas.png` de metal (gris acero), la copa de `escritorio-logros.png` dorada, la carpeta de `escritorio-dosier.png` en marrón, el «play» de `escritorio-videos.png` en azul y el cuaderno de `escritorio-colecciones.png` (Sujetos) y la interrogación de los sujetos sin ver (`assets/ui/interrogacion.png`) casi negros. `muebles_gpt.py`
+  rama (Militar, Superviviente y Químico, de izquierda a derecha), la mirilla de `escritorio-armas.png` de metal (gris acero), la copa de `escritorio-logros.png` dorada, la carpeta de `escritorio-dosier.png` en marrón, el «play» de `escritorio-videos.png` en azul, el rojo de `escritorio-apagar.png` más oscuro y el cuaderno de `escritorio-colecciones.png` (Sujetos) y la interrogación de los sujetos sin ver (`assets/ui/interrogacion.png`) casi negros. `muebles_gpt.py`
   los saca amarillos: si se regeneran, hay que pasarlo otra vez (lo ya coloreado no lo vuelve a tocar: lo apunta dentro del PNG).
 - **La puerta de la pared de abajo:** `puerta_abajo.py` hace `puerta-abajo.png`, el hueco en el muro con su marco y la hoja vista desde arriba
   (esa pared se ve por detrás), en tres modelos: madera sucia, madera limpia y cristal del centro comercial; la pinta `puerta.gd`.

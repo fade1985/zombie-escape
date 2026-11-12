@@ -6,6 +6,7 @@
 #   - Sujetos: el cuaderno, casi negro (gris muy oscuro, para que se vea el borde)
 #   - Logros: la copa, dorada
 #   - Vídeos: el «play», azul
+#   - Apagar (ya era rojo): solo más oscuro (OSCURECER, al final)
 #   - La interrogación de los sujetos sin ver (assets/ui/interrogacion.png), aún más negra
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
@@ -98,3 +99,28 @@ for ruta, colores, *ajustes in ICONOS:
     marca.add_text("coloreado", " ".join(colores))
     im.save(ruta, pnginfo=marca)
     print("%s: coloreado" % ruta)
+
+
+# Los que ya eran de su color y solo se oscurecen: [icono, cuánta luz les queda]. Solo lo de color (no el borde oscuro
+# ni los brillos blancos), con la misma marca dentro del PNG
+OSCURECER = [
+    ("assets/ui/iconos/escritorio-apagar.png", 0.72),   # Apagar, de rojo a rojo más oscuro (12 nov)
+]
+for ruta, luz in OSCURECER:
+    im = Image.open(ruta)
+    if "coloreado" in im.info:
+        print("%s: ya está oscurecido (%s), no se toca" % (ruta, im.info["coloreado"]))
+        continue
+    im = im.convert("RGBA")
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, a = px[x, y]
+            h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            if a and s > 0.45 and v > 0.1:
+                nr, ng, nb = colorsys.hsv_to_rgb(h, s, v * luz)
+                px[x, y] = (round(nr * 255), round(ng * 255), round(nb * 255), a)
+    marca = PngInfo()
+    marca.add_text("coloreado", "luz %s" % luz)
+    im.save(ruta, pnginfo=marca)
+    print("%s: oscurecido" % ruta)

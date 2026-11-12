@@ -1,18 +1,21 @@
 # La taquilla de Johnny, en el vestuario de la sala de mantenimiento (la pone mapa.gd): al arrimarse
 # (mapa/arrimable.gd → partida.abrir_taquilla) el juego se para y sale esta ventanita para elegir la skin
-# (skins.gd): a la izquierda, Johnny de frente con la skin marcada (en silueta si aún no se tiene), y a la derecha
+# (skins.gd): a la izquierda, Johnny de frente con la skin marcada (si aún no se tiene, la interrogación de Sujetos: sin
+# pistas), y a la derecha
 # la lista: el conserje de siempre y las skins, con su cara de icono y lo que hacen puestas; las que faltan, con «???»
 # y cómo se consiguen. Se elige una y Johnny se la pone en el acto, y se queda puesta (Skins.poner). Va con el ratón
 # o el dedo, con flechas e Intro (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra.
 extends CanvasLayer
 
 const COLOR := Color("#9fd3ff")   # el color de la taquilla (el del título)
+const TAM_LISA := 16        # la frase de cada carta (lo que hace o cómo se consigue), con la letra lisa (12 nov; antes, la pixelada a 15)
 const ALTO_LISTA := 420.0   # lo alto de la lista de skins: lo que cabe en la pantalla de 640 con el título y el pie (M90)
 
 var partida: Node
 var fondo: ColorRect
 var info: Label
 var vista: AnimatedSprite2D      # Johnny de frente, con la skin marcada
+var signo: Sprite2D              # en su sitio, la interrogación, con una skin que aún no se tiene
 var nombre_vista: Label
 var cartas := {}                 # id → su botón ("" = el conserje de siempre)
 var puestos := {}                # id → la etiqueta «Puesta» de su carta (al lado del nombre)
@@ -88,6 +91,15 @@ func abrir(p: Node) -> void:
 	vista.material.set_shader_parameter("parte", 0)
 	hueco.add_child(vista)
 	vista.play("reposo_s")
+	# la interrogación de los sujetos sin ver (la misma: assets/ui/interrogacion.png), a 3 y de pie donde Johnny
+	signo = Sprite2D.new()
+	signo.texture = load("res://assets/ui/interrogacion.png")
+	signo.centered = false
+	signo.scale = Vector2(3, 3)
+	signo.position = (vista.position - Vector2(signo.texture.get_width() / 2.0, signo.texture.get_height()) * 3).round()
+	signo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	signo.hide()
+	hueco.add_child(signo)
 	nombre_vista = Label.new()
 	nombre_vista.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	nombre_vista.custom_minimum_size.x = 160
@@ -166,8 +178,9 @@ func abrir(p: Node) -> void:
 			frase = Idioma.t("Sin efecto especial.")
 		else:
 			frase = Skins.efecto(id)
-		var efecto := etiqueta(textos, frase, 15)
+		var efecto := etiqueta(textos, frase, TAM_LISA)
 		efecto.theme_type_variation = "Sub"
+		efecto.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))   # (con la letra lisa: se lee mejor, 12 nov)
 		efecto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 	info = Label.new()
@@ -219,14 +232,16 @@ func refrescar() -> void:
 		puestos[id].text = Idioma.t("Puesta") if id == puesto else ""
 
 
-# La vista enseña esa skin (al pasar por su carta): si aún no se tiene, en silueta y «???»
+# La vista enseña esa skin (al pasar por su carta): si aún no se tiene, la interrogación y «???» (12 nov; antes, en
+# silueta, que daba pistas)
 func marcar(id: String) -> void:
 	if fondo == null:
 		return
 	marcado = id
 	vista.sprite_frames = Skins.hoja(hoja, id)
 	vista.play("reposo_s")
-	vista.modulate = Color.WHITE if tiene(id) else Color(0.05, 0.04, 0.08, 0.9)
+	vista.visible = tiene(id)
+	signo.visible = not tiene(id)
 	nombre_vista.text = Skins.nombre(id) if tiene(id) else "???"
 
 

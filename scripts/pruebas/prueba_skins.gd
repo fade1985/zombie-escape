@@ -53,9 +53,13 @@ func probar_skins() -> void:
 	await get_tree().create_timer(0.3).timeout
 	if taquilla.abierta():
 		var puesto: bool = taquilla.elegir("portero")
-		# (la foto con todas en «???»: que su pista quepa en la carta, también la larga del jefe de bomberos)
+		# (la foto con todas en «???»: que su pista quepa en la carta, también la larga del jefe de bomberos; en la
+		# vista, la interrogación en vez de Johnny: sin pistas, 12 nov)
+		taquilla.marcar("portero")
 		await get_tree().create_timer(0.2).timeout
 		Captura.foto("captura-skins-taquilla-sin.png")
+		print("Sin desbloquear: en la vista, la interrogación %s y Johnny escondido %s (esperado: true, true)" % [
+			taquilla.signo.visible, not taquilla.vista.visible])
 		print("Sin desbloquear: ¿puesto? %s (esperado: false) · Johnny lleva «%s» · dice «%s»" % [
 			puesto, johnny.skin, taquilla.info.text])
 		taquilla.cerrar()
