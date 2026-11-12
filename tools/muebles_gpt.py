@@ -53,8 +53,8 @@ MUEBLES = {
     # los iconos del escritorio de ConserjeOS (ui/ordenador.gd, ICONOS; M6, 9 nov), solo para el escritorio (los de
     # assets/ui/iconos/ de siempre se siguen usando en otros sitios): Talentos, tres flechas amarillas hacia arriba
     # (Talentos y la Tienda de armas salen amarillos: después se pasa py tools/colorear_iconos.py, que pone cada
-    # flecha del color de su rama, la mirilla en rojo y
-    # la carpeta del Dosier en marrón, 12 nov)
+    # flecha del color de su rama, la mirilla en rojo,
+    # la carpeta del Dosier en marrón y el cuaderno de Sujetos casi negro, 12 nov)
     "escritorio_talentos": ("assets/sources/escritorio-talentos-gpt.webp", "assets/ui/iconos/escritorio-talentos.png", 30, 23, False),
     # Tienda de armas, una mirilla amarilla; el centro y los cuatro huecos entre los aros, que el fondo no alcanza
     # desde el borde, se vacían también (las semillas)
@@ -65,7 +65,7 @@ MUEBLES = {
                           [(230, 400), (1020, 400)]),
     # Dosier VD-7, una carpeta amarilla lisa (colorear_iconos.py la pone marrón)
     "escritorio_dosier": ("assets/sources/escritorio-dosier-gpt.webp", "assets/ui/iconos/escritorio-dosier.png", 28, 22, False),
-    # Colecciones, un cuaderno amarillo con su etiqueta crema
+    # Colecciones, un cuaderno amarillo con su etiqueta crema (colorear_iconos.py lo pone casi negro)
     "escritorio_colecciones": ("assets/sources/escritorio-colecciones-gpt.webp", "assets/ui/iconos/escritorio-colecciones.png", 20, 27, False),
     # Apagar, el símbolo de encendido en rojo; el hueco de dentro del aro se vacía también (las semillas)
     "escritorio_apagar": ("assets/sources/escritorio-apagar-gpt.webp", "assets/ui/iconos/escritorio-apagar.png", 23, 26, False, (),

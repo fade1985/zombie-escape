@@ -3,10 +3,11 @@
 #   - Talentos: cada una de las tres flechas con el color de su rama (izquierda Militar, en medio Superviviente,
 #     derecha Químico: el orden del árbol, ui/arbol_talentos.gd, COLORES; el principal de cada una)
 #   - Tienda de armas: la mirilla, en rojo (el del icono de Apagar)
+#   - Sujetos: el cuaderno, casi negro (gris muy oscuro, para que se vea el borde)
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
 # Se pasa después de tools/muebles_gpt.py (que los saca amarillos de la imagen de GPT):
-#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier
+#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier escritorio_colecciones
 #   py tools/colorear_iconos.py
 # Si un icono ya está coloreado, no lo vuelve a tocar.
 import colorsys
@@ -14,11 +15,14 @@ from PIL import Image
 
 AMARILLO = "#d6a521"   # el amarillo de Químico, que es como están pintados los iconos
 
-# [icono, colores]: un color por trozo amarillo, de izquierda a derecha; con uno solo, todo el icono de ese color
+# [icono, colores(, viveza)]: un color por trozo amarillo, de izquierda a derecha; con uno solo, todo el icono de ese
+# color. "viveza", lo poco vivo que puede ser un amarillo para contar (0.45 si no se dice; en Sujetos, menos, para coger
+# también el borde de arriba del cuaderno, más apagado, sin tocar la etiqueta crema)
 ICONOS = [
     ("assets/ui/iconos/escritorio-talentos.png", ["#d2452b", "#4f9e34", "#d6a521"]),
     ("assets/ui/iconos/escritorio-armas.png", ["#d33a34"]),
     ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
+    ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], 0.35),
 ]
 
 
@@ -27,20 +31,20 @@ def hsv(hexa):
     return colorsys.rgb_to_hsv(r, g, b)
 
 
-def amarillo(px, x, y):
+def amarillo(px, x, y, viveza):
     r, g, b, a = px[x, y]
     if a == 0:
         return False
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-    return s > 0.45 and 0.08 < h < 0.2 and v > 0.1
+    return s > viveza and 0.08 < h < 0.2 and v > 0.1
 
 
 # Los trozos de amarillo que se tocan (en las flechas, cada una es uno: las separa el borde oscuro), de izquierda a derecha
-def trozos(px, w, h):
+def trozos(px, w, h, viveza):
     grupo, lista = set(), []
     for y in range(h):
         for x in range(w):
-            if (x, y) in grupo or not amarillo(px, x, y):
+            if (x, y) in grupo or not amarillo(px, x, y, viveza):
                 continue
             pila, trozo = [(x, y)], []
             grupo.add((x, y))
@@ -48,7 +52,7 @@ def trozos(px, w, h):
                 cx, cy = pila.pop()
                 trozo.append((cx, cy))
                 for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
-                    if 0 <= nx < w and 0 <= ny < h and (nx, ny) not in grupo and amarillo(px, nx, ny):
+                    if 0 <= nx < w and 0 <= ny < h and (nx, ny) not in grupo and amarillo(px, nx, ny, viveza):
                         grupo.add((nx, ny))
                         pila.append((nx, ny))
             lista.append(trozo)
@@ -56,17 +60,19 @@ def trozos(px, w, h):
 
 
 ref = hsv(AMARILLO)
-for ruta, colores in ICONOS:
+for ruta, colores, *viveza in ICONOS:
     im = Image.open(ruta).convert("RGBA")
     px = im.load()
-    partes = trozos(px, *im.size)
+    partes = trozos(px, *im.size, viveza[0] if viveza else 0.45)
     if len(colores) == 1:
         partes = [[p for t in partes for p in t]]
-    if len(partes) != len(colores) or len(partes[0]) < 20:
+    todos = [colorsys.rgb_to_hsv(*(c / 255 for c in px[p][:3])) for t in partes for p in t]
+    medio = sum(t[0] for t in todos) / len(todos) if todos else 0   # el tono medio del amarillo de ahora
+    # (ya coloreado: no quedan los trozos de amarillo de antes o, como el marrón del Dosier, que también cuenta como
+    # amarillo, su tono medio ya no es el del amarillo)
+    if len(partes) != len(colores) or len(partes[0]) < 20 or abs(medio - ref[0]) > 0.025:
         print("%s: ya está coloreado (o el dibujo ha cambiado), no se toca" % ruta)
         continue
-    todos = [colorsys.rgb_to_hsv(*(c / 255 for c in px[p][:3])) for t in partes for p in t]
-    medio = sum(t[0] for t in todos) / len(todos)   # el tono medio del amarillo de ahora
     for parte, color in zip(partes, colores):
         th, ts, tv = hsv(color)
         for p in parte:
