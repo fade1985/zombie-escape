@@ -4520,7 +4520,10 @@ func probar_registro() -> void:
 # «Brillo: 50» con el punto en la mitad, va de 0 a 100 de 5 en 5, al moverla se pone y se guarda, y con ella elegida las
 # flechas bajan y suben sin pasar de 0 ni de 100. Y la pantalla: lo clara que sale (la media de luz de la foto) a 0, 50 y
 # 100, que tiene que ir de menos a más.
-# Fotos: captura-brillo-opciones.png (Pantalla, con el brillo a 50 y la barra elegida) y captura-brillo-80.png (a 80), y
+# La chapa que la rodea hace como la de los botones: se ilumina con el ratón encima o con la barra elegida y se aprieta
+# mientras se arrastra el punto.
+# Fotos: captura-brillo-opciones.png (Pantalla, con el brillo a 50), -elegida.png (la barra elegida), -arrastrando.png
+# (arrastrando el punto) y captura-brillo-80.png (a 80), y
 # captura-brillo-0.png, -50.png y -100.png (la partida)
 func probar_brillo() -> void:
 	await get_tree().create_timer(0.5, true).timeout
@@ -4535,9 +4538,39 @@ func probar_brillo() -> void:
 	var titulo := barra.get_parent().get_child(0) as Label
 	print("Brillo · la barra: «%s», en %d, de %d a %d de %d en %d, punto en la mitad %s (esperado: Brillo: 50, 50, 0 a 100 de 5 en 5, sí)" % [
 		titulo.text, barra.value, barra.min_value, barra.max_value, barra.step, barra.step, "sí" if is_equal_approx(barra.ratio, 0.5) else "NO"])
-	barra.grab_focus()
+	# La chapa, como la de los botones: normal, iluminada con el ratón encima o la barra elegida y apretada al arrastrar
+	var marco := o.find_child("marco_brillo", true, false) as PanelContainer
+	var chapa := func() -> String:
+		for estado in ["normal", "hover", "pressed"]:
+			if marco.get_theme_stylebox("panel") == marco.get_theme_stylebox(estado, "Button"):
+				return estado
+		return "otra"
+	var estados := [chapa.call()]
 	await get_tree().create_timer(0.3, true).timeout
 	Captura.foto("captura-brillo-opciones.png")
+	for donde in [marco.get_global_rect().get_center(), barra.get_global_rect().get_center(), Vector2(10, 10)]:   # encima de la chapa, del punto y fuera
+		var sitio: Vector2 = get_viewport().get_screen_transform() * donde
+		Input.warp_mouse(sitio)
+		var raton := InputEventMouseMotion.new()
+		raton.position = sitio
+		raton.global_position = sitio
+		raton.relative = Vector2(1, 1)
+		Input.parse_input_event(raton)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		estados.append(chapa.call())
+	barra.grab_focus()
+	await get_tree().process_frame
+	estados.append(chapa.call())
+	barra.drag_started.emit()
+	await get_tree().create_timer(0.03, true).timeout
+	estados.append(chapa.call())
+	Captura.foto("captura-brillo-arrastrando.png")
+	barra.drag_ended.emit(true)
+	estados.append(chapa.call())
+	print("Brillo · la chapa: %s (esperado: normal; hover con el ratón encima y encima del punto; normal al irse; hover elegida; pressed arrastrando; hover al soltar)" % [estados])
+	await get_tree().create_timer(0.3, true).timeout
+	Captura.foto("captura-brillo-elegida.png")
 	var movida := []
 	for v in [30, 100, 0]:   # arrastrar el punto
 		barra.value = v

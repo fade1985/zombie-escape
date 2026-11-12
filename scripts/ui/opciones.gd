@@ -389,22 +389,31 @@ func idiomas() -> void:
 # El brillo (11 nov; desde el 12 nov en Pantalla y con una barra): «Brillo: 50» encima de una barra recta con un punto que se
 # arrastra de izquierda a derecha, de 0 a 100 de 5 en 5 (50, en la mitad, es como se ve sin tocar nada y como empieza el
 # juego la primera vez). También se mueve con un clic en la barra, la rueda del ratón o, con ella elegida, las flechas
-# izquierda y derecha (también las del mando). Se guarda y se nota al momento en todo el juego (Pantalla.poner_brillo)
+# izquierda y derecha (también las del mando). Se guarda y se nota al momento en todo el juego (Pantalla.poner_brillo).
+# Va dentro de una chapa como la de los botones grandes (marco_brillo) que hace lo mismo que ellos: se ilumina y da un
+# saltito al pasar por encima o al elegir la barra, y mientras se arrastra el punto se oscurece y se aplasta (botones.gd)
 func barra_brillo() -> HSlider:
+	var marco := PanelContainer.new()
+	marco.name = "marco_brillo"   # no-tr
+	marco.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	contenido.add_child(marco)   # (antes de leer la chapa del tema: hasta estar dentro no lo tiene)
+	var chapa := {}
+	for estado in ["normal", "hover", "pressed"]:
+		chapa[estado] = marco.get_theme_stylebox(estado, "Button")
 	var caja := VBoxContainer.new()
-	caja.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	caja.add_theme_constant_override("separation", 10)
-	contenido.add_child(caja)
-	var titulo := Label.new()
-	titulo.theme_type_variation = "Titulo"
+	caja.add_theme_constant_override("separation", 6)
+	marco.add_child(caja)
+	var titulo := Label.new()   # (con la letra, el tamaño y el color del texto de los botones grandes)
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.add_theme_font_size_override("font_size", marco.get_theme_font_size("font_size", "BotonGrande"))
+	titulo.add_theme_color_override("font_color", marco.get_theme_color("font_color", "Button"))
 	caja.add_child(titulo)
 	var barra := HSlider.new()
 	barra.name = "brillo"   # no-tr
 	barra.min_value = 0
 	barra.max_value = 100
 	barra.step = 5
-	barra.custom_minimum_size.x = 360   # (al final de pantalla(), tan ancha como los botones grandes)
+	barra.size_flags_horizontal = Control.SIZE_EXPAND_FILL   # (la chapa, al final de pantalla(), tan ancha como los botones grandes)
 	barra.value = clampi(int(Guardado.ajuste("brillo")), 0, 100)
 	titulo.text = "%s: %d" % [Idioma.t("Brillo"), int(barra.value)]
 	barra.value_changed.connect(func(valor: float):
@@ -414,7 +423,7 @@ func barra_brillo() -> HSlider:
 		if v != int(Guardado.ajuste("brillo")):
 			Guardado.cambiar(func(g): g.ajustes.brillo = v))
 	# Cómo se ve: la barra de metal oscuro con el borde negro, lo que va del principio al punto en amarillo, y el punto
-	# redondo color hueso (amarillo al pasar por encima o con la barra elegida, que además lleva el marco amarillo)
+	# redondo color hueso (amarillo al pasar por encima o con la barra elegida)
 	var tira := func(color: Color) -> StyleBoxFlat:
 		var s := StyleBoxFlat.new()
 		s.bg_color = color
@@ -427,16 +436,39 @@ func barra_brillo() -> HSlider:
 	barra.add_theme_stylebox_override("slider", tira.call(Tema.METAL))
 	barra.add_theme_stylebox_override("grabber_area", tira.call(Tema.AMARILLO.darkened(0.25)))
 	barra.add_theme_stylebox_override("grabber_area_highlight", tira.call(Tema.AMARILLO))
-	var marco := StyleBoxFlat.new()
-	marco.draw_center = false
-	marco.border_color = Tema.AMARILLO
-	marco.set_border_width_all(3)
-	marco.set_corner_radius_all(8)
-	marco.set_expand_margin_all(8)
-	barra.add_theme_stylebox_override("focus", marco)
+	barra.add_theme_stylebox_override("focus", StyleBoxEmpty.new())   # (elegida, lo que se ilumina es la chapa)
 	barra.add_theme_icon_override("grabber", _punto(Color("#e6dec8")))
 	barra.add_theme_icon_override("grabber_highlight", _punto(Tema.AMARILLO))
 	caja.add_child(barra)
+	# La chapa, como la de un botón: iluminada con el ratón encima o la barra elegida, y apretada mientras se arrastra
+	var encima := [false]
+	var arrastrando := [false]
+	var poner_chapa := func():
+		var estado := "pressed" if arrastrando[0] else ("hover" if encima[0] or barra.has_focus() else "normal")
+		marco.add_theme_stylebox_override("panel", chapa[estado])
+	poner_chapa.call()
+	# (al pasar de la chapa a la barra, la chapa cree que el ratón se ha ido: se mira si sigue dentro de ella)
+	var mirar_raton := func():
+		var dentro := marco.get_global_rect().has_point(marco.get_global_mouse_position())
+		if dentro and not encima[0]:
+			Botones.saltito(marco)
+		encima[0] = dentro
+		poner_chapa.call()
+	for control: Control in [marco, barra]:
+		control.mouse_entered.connect(mirar_raton)
+		control.mouse_exited.connect(mirar_raton)
+	barra.focus_entered.connect(func():
+		poner_chapa.call()
+		Botones.saltito(marco))
+	barra.focus_exited.connect(poner_chapa)
+	barra.drag_started.connect(func():
+		arrastrando[0] = true
+		poner_chapa.call()
+		Botones.aplastar(marco))
+	barra.drag_ended.connect(func(_cambiado: bool):
+		arrastrando[0] = false
+		poner_chapa.call()
+		Botones.soltar(marco))
 	return barra
 
 
@@ -485,7 +517,7 @@ func pantalla() -> void:
 	var brillo := barra_brillo()
 	rotar(Idioma.t("Temblor"), "temblor", TEMBLORES, "BotonGrande")
 	igualar()
-	brillo.custom_minimum_size.x = ancho_grande
+	(contenido.get_node("marco_brillo") as Control).custom_minimum_size.x = ancho_grande
 	# (el foco, en lo primero de la página: la pantalla completa o, en iPhone, que no la tiene, la barra del brillo)
 	(contenido.get_child(0) if contenido.get_child(0) is Button else brillo).grab_focus.call_deferred()
 
