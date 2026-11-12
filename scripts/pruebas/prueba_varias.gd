@@ -1065,7 +1065,7 @@ func probar_relato() -> void:
 	var ataca_al_cerrar: bool = johnny.ataque_t >= 0.0
 	print("Relato · al cerrarla, Johnny sin mandos %s · atacando con el clic pulsado %s (esperado: true, false)" % [johnny.sin_mandos > 0.0, ataca_al_cerrar])
 	# (con --guiado, la guía de la primera partida espera a que se cierre y entonces empieza)
-	print("Relato · guía activa %s: pista durante la intro «%s», al cerrarla «%s» (con --guiado: «», moverse)" % [guia.activa, pista_antes, guia.pista])
+	print("Relato · guía activa %s: pista durante la intro «%s», al cerrarla «%s» (con --guiado: «», «»)" % [guia.activa, pista_antes, guia.pista])
 	Captura.foto("captura-relato-sala.png")   # (la sala de siempre)
 	# el final de los Apartamentos, agarrando la escalera. Lo que se pulsa al salir no cuenta (ESPERA)
 	planta.num = Planta.PLANTAS
@@ -3557,12 +3557,20 @@ func probar_guiado() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("Guía · activa (no es la primera partida, pero se pidió repetirla): %s · pedida aún: %s (esperado: true, false)" % [
 		guia.activa, Guardado.cargar().guia_otra_vez])
-	await esperar.call("moverse", "captura-guiado-moverse.png")
+	# al empezar, la ventana «Moverse y esquivar» (en la partida de prueba no sale sola: se abre aquí) y ninguna pista
+	var al_empezar := tutorial_al_empezar()
+	print("Guía · ventana al empezar «%s» · «Cómo se juega» ya visto %s · pista «%s» (esperado: moverse, true, «»)" % [
+		al_empezar, Tutoriales.visto("jugar"), guia.pista])
+	ver_tutorial(al_empezar)
+	await get_tree().create_timer(0.9, true, false, true).timeout
+	Captura.foto("captura-guiado-ventana-%s.png" % Idioma.actual)
+	for h in get_children():
+		if h is Tutorial:
+			h.cerrar()
 	johnny.position += Vector2(120, 0)
-	await get_tree().create_timer(1.6).timeout
-	await esperar.call("esquivar", "captura-guiado-esquivar.png")
-	johnny.esquivar(Vector2.LEFT)
 	await get_tree().create_timer(1.8).timeout
+	print("Guía · tras la ventana, sin pistas de moverse ni esquivar: pista «%s» · juego parado %s (esperado: «», false)" % [
+		guia.pista, get_tree().paused])
 	print("Guía · flecha a la vista en la sala de mantenimiento: %s (esperado: true)" % guia.flecha.visible)
 	Captura.foto("captura-guiado-flecha.png")
 	# el pasillo: el aviso y la flecha hacia el apartamento fácil
@@ -3654,8 +3662,7 @@ func probar_guia_sin_hacer() -> void:
 		print("Guía sin hacer · pista «%s» (esperado: %s)" % [guia.pista, id])
 		guia.desde = Guia.DURA
 		await get_tree().create_timer(0.2).timeout
-	await pasar.call("moverse")
-	await pasar.call("esquivar")
+	tutorial_al_empezar()   # (la ventana «Moverse y esquivar» apunta «Cómo se juega» como visto)
 	guia.jefe_presentado()
 	await pasar.call("jefe")
 	print("Guía sin hacer · vistos jugar %s, jefes %s · sin salir aún: lanzables %s (esperado: true, true, false)" % [

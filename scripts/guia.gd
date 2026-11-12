@@ -1,6 +1,6 @@
 # El tutorial disimulado (docs/LANZAMIENTO.md, apartado 2): en la primera partida, la planta baja de los Apartamentos
 # enseña a jugar sin parar el juego. En vez de las ventanas de los tutoriales (tutoriales.gd) salen:
-#   - pistas: un letrero pequeño encima de Johnny con la tecla en amarillo («Esquiva con Espacio»), justo cuando hace
+#   - pistas: un letrero pequeño encima de Johnny con la tecla en amarillo («Recarga con R»), justo cuando hace
 #     falta; se va solo en cuanto se hace (o a los DURA segundos);
 #   - el HUD que late: la casilla de lo que toca usar (hud.gd, "latido");
 #   - una flecha en el suelo, delante de Johnny, hacia donde hay que ir: en la sala de mantenimiento, la puerta del
@@ -10,7 +10,9 @@
 # Y el primer apartamento al que lleva la flecha es fácil a propósito: pocos zombis, sin la llave y con unas vendas en el
 # armarito del baño (preparar_planta).
 #
-# Las pistas, en orden (PISTAS): moverse y esquivar al empezar; al ver un zombi despierto, atacar; luego sacar la
+# Moverse y esquivar no van en pistas: al empezar sale su ventana, «Moverse y esquivar» (partida.tutorial_al_empezar,
+# que apunta también «Cómo se juega» como visto: lo demás lo enseñan las pistas).
+# Las pistas, en orden (PISTAS): al ver un zombi despierto, atacar; luego sacar la
 # pistola, recargar con medio cargador, curarse con vendas al estar herido y lanzar con tres zombis cerca. El jefe se
 # cuenta con la línea de avisos (partida.decir) o con una pista con tiempo.
 # Lo que se enseña así se apunta como visto (Tutoriales.apuntar) nada más salir, se haga o no: si no, al morir en la
@@ -39,8 +41,6 @@ const CUBRE := ["jugar", "apartamentos", "lanzables", "municion", "curas", "jefe
 # y la casilla del HUD que late mientras sale. "atacar" usa la frase del modo de atacar (Tutoriales.atacar_modo)
 # [traducir]
 const PISTAS := {
-	"moverse": {"texto": "Muévete con {moverse}", "tutorial": "", "latido": ""},
-	"esquivar": {"texto": "Esquiva con {esquivar}: no te hacen daño", "tutorial": "jugar", "latido": ""},
 	"atacar": {"texto": "", "tutorial": "", "latido": ""},   # (su frase es la del modo de atacar)
 	"pistola": {"texto": "Saca la pistola con {cambiar_arma}", "tutorial": "", "latido": "armas"},
 	"recargar": {"texto": "Recarga con {recargar}", "tutorial": "municion", "latido": "balas"},
@@ -57,7 +57,6 @@ var hechas: Array = []        # las pistas ya enseñadas
 var pista := ""               # la que se ve ahora
 var desde := 0.0              # cuánto lleva a la vista
 var cumplida := false         # si ya se ha hecho lo que pide (se queda en cuanto pasa una vez)
-var inicio := Vector2.ZERO    # dónde estaba Johnny al salir "moverse"
 var lanzables_antes := 0      # los lanzables a mano al salir "lanzar" (al bajar, ha lanzado)
 var vendas_antes := 0
 var facil := -1               # el apartamento fácil (su número de sitio)
@@ -200,10 +199,6 @@ func _process(delta: float) -> void:
 # La pista que toca ahora (la primera de la lista que aún no se ha enseñado y viene a cuento), o ""
 func siguiente() -> String:
 	var despiertos := zombis_despiertos()
-	if not "moverse" in hechas:
-		return "moverse"
-	if not "esquivar" in hechas:
-		return "esquivar"
 	if despiertos.is_empty():
 		return ""
 	if not "atacar" in hechas:
@@ -230,7 +225,6 @@ func poner(id: String) -> void:
 		hechas.append(id)
 	if PISTAS[id].tutorial != "":
 		Tutoriales.apuntar(PISTAS[id].tutorial)
-	inicio = johnny.global_position
 	lanzables_antes = lanzables_a_mano()
 	vendas_antes = partida.mochila.count("vendas")
 	letrero.text = Tutoriales.con_teclas(Tutoriales.atacar_modo() if id == "atacar" else Idioma.t(PISTAS[id].texto))
@@ -243,10 +237,6 @@ func poner(id: String) -> void:
 # Si ya se ha hecho lo que pide la pista
 func hecha(id: String) -> bool:
 	match id:
-		"moverse":
-			return johnny.global_position.distance_to(inicio) > 80.0
-		"esquivar":
-			return johnny.esquiva_t > 0.0
 		"atacar":
 			return johnny.ataque_t >= 0.0 or (Guardado.ajuste("disparo_asistido") and desde > 4.0)
 		"pistola":

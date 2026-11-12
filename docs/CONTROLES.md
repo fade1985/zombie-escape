@@ -59,8 +59,9 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   superviviente, cada evento sorpresa, el ordenador, la taquilla, el banco, el baúl, el centro comercial, sus peligros
   y la alerta) sale una ventana con el juego parado: foto, qué pasa y con qué teclas (las del jugador, las del mando si
   hay uno enchufado o los botones del móvil). **Entendido**, Esc o B la cierran. El botón **Tutorial** del menú
-  principal y de la pausa las vuelve a enseñar; las que aún no han salido, con «???» (menos *Cómo se juega*).
-  En la **primera partida**, la planta baja no saca las ventanas de lo básico: lo enseña jugando (`guia.gd`), con
+  principal y de la pausa las vuelve a enseñar; las que aún no han salido, con «???» (menos *Cómo se juega* y *Moverse y esquivar*).
+  En la **primera partida**, al empezar sale *Moverse y esquivar* (las teclas de moverse y de la esquiva) y, después,
+  la planta baja no saca las demás ventanas de lo básico: lo enseña jugando (`guia.gd`), con
   pistas encima de Johnny que se van al hacerlo, la casilla del HUD que toca latiendo y una flecha en el suelo (la de
   la vida en tercios sí sale, al perder el primero: es cuando más falta hace). El botón
   *Que vuelvan a salir todos* (abajo en Tutorial) también la reactiva: sale en la próxima partida de los Apartamentos

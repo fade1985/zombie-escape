@@ -1198,14 +1198,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "Dieser Zombie hat den Schlüssel für Wohnung %s!"
 
 #: scripts/guia.gd
-msgid "Muévete con {moverse}"
-msgstr "Beweg dich mit {moverse}"
-
-#: scripts/guia.gd
-msgid "Esquiva con {esquivar}: no te hacen daño"
-msgstr "Weiche mit {esquivar} aus: Dabei passiert dir nichts"
-
-#: scripts/guia.gd
 msgid "Saca la pistola con {cambiar_arma}"
 msgstr "Zieh die Pistole mit {cambiar_arma}"
 
@@ -4546,6 +4538,22 @@ msgstr "Weiche mit {esquivar} aus: ein kurzer Sprint, bei dem dir nichts passier
 #: scripts/tutoriales.gd
 msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
 msgstr "Wechsle mit {cambiar_arma} zwischen Mopp und Pistole, und pausiere mit {pausa}."
+
+#: scripts/tutoriales.gd
+msgid "Moverse y esquivar"
+msgstr "Bewegen und Ausweichen"
+
+#: scripts/tutoriales.gd
+msgid "Al empezar la primera partida"
+msgstr "Zu Beginn der ersten Runde"
+
+#: scripts/tutoriales.gd
+msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño."
+msgstr "Weiche mit {esquivar} aus: Johnny macht einen kurzen Sprint in seine Laufrichtung, und solange er dauert, passiert ihm nichts."
+
+#: scripts/tutoriales.gd
+msgid "Úsala para salir de un apuro o pasar entre los zombis. Se recarga enseguida, en menos de un segundo."
+msgstr "Damit kommst du aus der Klemme oder schlüpfst an Zombies vorbei. Es lädt sich schnell wieder auf, in weniger als einer Sekunde."
 
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"

@@ -1201,14 +1201,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "У этого зомби ключ от кв. %s!"
 
 #: scripts/guia.gd
-msgid "Muévete con {moverse}"
-msgstr "Движение: {moverse}"
-
-#: scripts/guia.gd
-msgid "Esquiva con {esquivar}: no te hacen daño"
-msgstr "Уклонение: {esquivar} — тебя не ранить"
-
-#: scripts/guia.gd
 msgid "Saca la pistola con {cambiar_arma}"
 msgstr "Достать пистолет: {cambiar_arma}"
 
@@ -4556,6 +4548,22 @@ msgstr "Уклонение: {esquivar} — короткий рывок, во в�
 #: scripts/tutoriales.gd
 msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
 msgstr "Сменить швабру на пистолет и обратно: {cambiar_arma}; пауза: {pausa}."
+
+#: scripts/tutoriales.gd
+msgid "Moverse y esquivar"
+msgstr "Движение и уклонение"
+
+#: scripts/tutoriales.gd
+msgid "Al empezar la primera partida"
+msgstr "В начале первого забега"
+
+#: scripts/tutoriales.gd
+msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño."
+msgstr "Уклонение: {esquivar} — Джонни делает короткий рывок туда, куда идёт, и пока рывок длится, его не ранить."
+
+#: scripts/tutoriales.gd
+msgid "Úsala para salir de un apuro o pasar entre los zombis. Se recarga enseguida, en menos de un segundo."
+msgstr "Так можно выбраться из передряги или проскочить между зомби. Перезаряжается быстро, меньше чем за секунду."
 
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"

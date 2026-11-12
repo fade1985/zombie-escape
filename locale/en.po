@@ -1198,14 +1198,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "That zombie has the key to apt. %s!"
 
 #: scripts/guia.gd
-msgid "Muévete con {moverse}"
-msgstr "Move with {moverse}"
-
-#: scripts/guia.gd
-msgid "Esquiva con {esquivar}: no te hacen daño"
-msgstr "Dodge with {esquivar}: nothing can hurt you"
-
-#: scripts/guia.gd
 msgid "Saca la pistola con {cambiar_arma}"
 msgstr "Draw the pistol with {cambiar_arma}"
 
@@ -4546,6 +4538,22 @@ msgstr "Dodge with {esquivar}: a short dash where nothing can hurt you."
 #: scripts/tutoriales.gd
 msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
 msgstr "Swap between the mop and the pistol with {cambiar_arma}, and pause the game with {pausa}."
+
+#: scripts/tutoriales.gd
+msgid "Moverse y esquivar"
+msgstr "Moving and dodging"
+
+#: scripts/tutoriales.gd
+msgid "Al empezar la primera partida"
+msgstr "At the start of your first run"
+
+#: scripts/tutoriales.gd
+msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño."
+msgstr "Dodge with {esquivar}: Johnny makes a short dash the way he's heading, and nothing can hurt him while it lasts."
+
+#: scripts/tutoriales.gd
+msgid "Úsala para salir de un apuro o pasar entre los zombis. Se recarga enseguida, en menos de un segundo."
+msgstr "Use it to get out of a tight spot or slip past zombies. It recharges quickly, in under a second."
 
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"

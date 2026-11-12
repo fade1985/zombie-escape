@@ -1,7 +1,7 @@
 # Los tutoriales: la ventana que sale la primera vez que Johnny se encuentra algo nuevo (cómo se juega, los lanzables,
 # el primer jefe...) y explica qué pasa y cómo se hace. Cada uno sale una sola vez (Guardado: "tutoriales", los vistos)
 # y se puede volver a ver en el apartado Tutorial del menú principal y de la pausa (ui/tutorial.gd), donde los que aún
-# no han salido están con «???» (menos «Cómo se juega», que se puede leer antes de jugar). Se apagan en
+# no han salido están con «???» (menos «Cómo se juega» y «Moverse y esquivar», que se pueden leer antes de jugar). Se apagan en
 # Opciones → Ayudas (ajuste "tutoriales"), que también tiene un botón para que vuelvan a salir todos.
 #
 # Cada ficha: grupo (su apartado en la lista), titulo, icono (assets/ui/iconos), cuando (cuándo sale, para la lista y
@@ -26,6 +26,13 @@ const LISTA := {
 			"{atacar_modo}",
 			"Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño.",
 			"Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."]},
+	# (sale en la primera partida, la de la guía, nada más empezar: partida.tutorial_al_empezar; en las demás, «Cómo se
+	# juega», que ya lo cuenta)
+	"moverse": {"grupo": "Lo básico", "titulo": "Moverse y esquivar", "icono": "dash",
+		"cuando": "Al empezar la primera partida",
+		"lineas": ["Muévete con {moverse}.",
+			"Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño.",
+			"Úsala para salir de un apuro o pasar entre los zombis. Se recarga enseguida, en menos de un segundo."]},
 	"apartamentos": {"grupo": "Lo básico", "titulo": "Limpia los apartamentos", "icono": "puerta",
 		"cuando": "Al salir al pasillo",
 		"lineas": ["Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un zombi.",
@@ -241,7 +248,7 @@ static func olvidar() -> void:
 
 # Si sale en la lista del apartado Tutorial (los demás, con «???»)
 static func se_ve(id: String) -> bool:
-	return id == "jugar" or visto(id)
+	return id in ["jugar", "moverse"] or visto(id)
 
 
 # El nombre de un grupo (de GRUPOS), ya traducido

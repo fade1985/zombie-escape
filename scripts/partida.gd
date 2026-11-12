@@ -347,7 +347,17 @@ func _ready() -> void:
 		if not al_empezar.is_empty():
 			decir("\n".join(al_empezar), 4.0)
 		supervivientes.avisar_pista(4.8)   # (la recepcionista rescatada: dónde está la llave o el código)
-		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
+		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind(tutorial_al_empezar()))
+
+
+# La ventana del principio de la partida: en la primera (con la guía, guia.gd), «Moverse y esquivar», y lo demás de
+# «Cómo se juega» lo enseña la guía con sus pistas (por eso se apunta ya como visto, como hacía su pista de esquivar);
+# en las demás, «Cómo se juega», que ya cuenta moverse y esquivar
+func tutorial_al_empezar() -> String:
+	if not guia.activa:
+		return "jugar"
+	Tutoriales.apuntar("jugar")
+	return "moverse"
 
 
 # Empieza con una partida guardada (partida_guardada.gd): todo como estaba al llegar a su planta, sin volver a contar

@@ -470,8 +470,8 @@ en una línea.
   mueble de la sala de mantenimiento que enseña ese tutorial (taquilla, ordenador, banco, baúl y la puerta de los
   trasteros: `mapa.marcas_sala`); `marcas` los apaga en la partida de prueba (salvo `--marcas-sala`).
 - `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
-  encendidos): en vez de las ventanas de `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: moverse,
-  esquivar, atacar, sacar la pistola, recargar, curarse, lanzar y el jefe), la casilla del HUD que late (`hud.latido`),
+  encendidos): al empezar, la ventana *Moverse y esquivar* (`partida.tutorial_al_empezar`); en vez de las ventanas de
+  `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: atacar, sacar la pistola, recargar, curarse, lanzar y el jefe), la casilla del HUD que late (`hud.latido`),
   una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la llave y un primer apartamento
   fácil (3 zombis, sin la llave, vendas en el armarito). Lo enseñado se apunta como visto nada más salir la pista, se
   haga o no: tras morir en la primera partida, la siguiente no repite con ventanas lo que ya salió (solo sacará lo que
