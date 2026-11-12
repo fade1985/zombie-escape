@@ -19,4 +19,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Por limar
 
+- **L35** Interrogaciones negras (las de lo que aún no se tiene o no se ha visto: skins de la taquilla, bestiario del ordenador): rehacerlas con GPT para que queden más finas. Para más adelante.
 
