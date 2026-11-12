@@ -79,6 +79,7 @@ const SI_NO := [[true, "Sí"], [false, "No"]]
 const TEMBLORES := [[1.0, "Normal"], [0.5, "Suave"], [0.0, "No"]]
 # El hueco entre los botones grandes (General, Idioma, Audio y Pantalla): con 8 iban muy juntos y sobraba media ventana
 const HUECO_GRANDES := 18
+const TAM_TABLA := 17   # la letra lisa de los textos de la tabla de Controles (las casillas, con la pixelada, van a 16)
 
 const BOTONES_MANDO := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
@@ -737,19 +738,21 @@ func controles() -> void:
 	tabla.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	caja.add_child(tabla)
 	celda(tabla, "", "Sub")
-	celda(tabla, Idioma.t("Teclado y ratón"), "Sub")
-	celda(tabla, Idioma.t("Mando"), "Sub")
+	celda(tabla, Idioma.t("Teclado y ratón"), "Sub", true)
+	celda(tabla, Idioma.t("Mando"), "Sub", true)
 	for f in FILAS:
 		celda(tabla, Idioma.t(f[0]))
 		if f[1].is_empty():   # apuntar
-			celda(tabla, Idioma.t("Ratón"), "Sub")
-			celda(tabla, Idioma.t("Stick dcho."), "Sub")
+			celda(tabla, Idioma.t("Ratón"), "Sub", true)
+			celda(tabla, Idioma.t("Stick dcho."), "Sub", true)
 			continue
 		casilla(tabla, f[1][0], false)
 		casilla(tabla, f[1][0], true)
 	# Debajo de la tabla, lo que ha pasado (esperando una tecla, cambiado, restablecido...): vacío hasta que pasa algo
 	aviso = Label.new()
 	aviso.theme_type_variation = "Sub"
+	aviso.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))
+	aviso.add_theme_font_size_override("font_size", TAM_TABLA)
 	aviso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	contenido.add_child(aviso)
 	opcion(Idioma.t("Restablecer controles")).pressed.connect(func():
@@ -758,11 +761,19 @@ func controles() -> void:
 		aviso.text = Idioma.t("Vuelven a estar los controles de serie"))
 
 
-func celda(tabla: GridContainer, texto: String, variacion := "") -> void:
+# (los textos de la tabla que no son casillas, con la letra lisa, Rubik, a TAM_TABLA, desde el 12 nov; las casillas siguen con la
+# pixelada. "en_columna": los que van en la columna de las teclas o del mando, con el hueco por dentro de las casillas, para que
+# empiecen donde empieza su texto)
+func celda(tabla: GridContainer, texto: String, variacion := "", en_columna := false) -> Label:
 	var l := Label.new()
 	l.text = texto
 	l.theme_type_variation = variacion
+	l.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))
+	l.add_theme_font_size_override("font_size", TAM_TABLA)
+	if en_columna:
+		l.add_theme_stylebox_override("normal", Tema.celda_vacia())
 	tabla.add_child(l)
+	return l
 
 
 # Una casilla de la tabla que se puede pulsar para cambiar la tecla (o el botón del mando) de una acción
