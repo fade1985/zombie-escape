@@ -4,16 +4,19 @@
 #     derecha Químico: el orden del árbol, ui/arbol_talentos.gd, COLORES; el principal de cada una)
 #   - Tienda de armas: la mirilla, de metal (gris acero; antes, en rojo)
 #   - Sujetos: el cuaderno, casi negro (gris muy oscuro, para que se vea el borde)
+#   - Logros: la copa, dorada
 #   - Vídeos: el «play», azul
 #   - La interrogación de los sujetos sin ver (assets/ui/interrogacion.png), aún más negra
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
 # Se pasa después de tools/muebles_gpt.py (que los saca amarillos de la imagen de GPT):
-#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_dosier escritorio_colecciones escritorio_videos interrogacion
+#   py tools/muebles_gpt.py escritorio_talentos escritorio_armas escritorio_logros escritorio_dosier escritorio_colecciones escritorio_videos interrogacion
 #   py tools/colorear_iconos.py
-# Si un icono ya está coloreado, no lo vuelve a tocar.
+# Si un icono ya está coloreado, no lo vuelve a tocar: lo deja apuntado dentro del PNG ("coloreado", que Godot no mira)
+# y, en los de antes de la marca, lo nota porque ya no le queda el amarillo de siempre.
 import colorsys
 from PIL import Image
+from PIL.PngImagePlugin import PngInfo
 
 AMARILLO = "#d6a521"   # el amarillo de Químico, que es como están pintados los iconos
 
@@ -26,6 +29,7 @@ ICONOS = [
     ("assets/ui/iconos/escritorio-armas.png", ["#9aa4ae"]),
     ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
     ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], {"viveza": 0.35}),
+    ("assets/ui/iconos/escritorio-logros.png", ["#c8941e"], {"desde": 0.0}),   # (dorado: algo más anaranjado que el amarillo)
     ("assets/ui/iconos/escritorio-videos.png", ["#3a78d4"], {"desde": 0.0}),   # (también el borde naranja oscuro: en azul se notaba)
     ("assets/ui/interrogacion.png", ["#141418"], {"desde": 0.05}),   # (la de los sujetos sin ver, casi negro del todo)
 ]
@@ -67,7 +71,11 @@ def trozos(px, w, h, viveza, desde):
 ref = hsv(AMARILLO)
 for ruta, colores, *ajustes in ICONOS:
     ajustes = ajustes[0] if ajustes else {}
-    im = Image.open(ruta).convert("RGBA")
+    im = Image.open(ruta)
+    if "coloreado" in im.info:
+        print("%s: ya está coloreado (%s), no se toca" % (ruta, im.info["coloreado"]))
+        continue
+    im = im.convert("RGBA")
     px = im.load()
     partes = trozos(px, *im.size, ajustes.get("viveza", 0.45), ajustes.get("desde", 0.08))
     if len(colores) == 1:
@@ -86,5 +94,7 @@ for ruta, colores, *ajustes in ICONOS:
             h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
             nr, ng, nb = colorsys.hsv_to_rgb((th + h - medio) % 1.0, min(1, s * ts / ref[1]), min(1, v * tv / ref[2]))
             px[p] = (round(nr * 255), round(ng * 255), round(nb * 255), a)
-    im.save(ruta)
+    marca = PngInfo()
+    marca.add_text("coloreado", " ".join(colores))
+    im.save(ruta, pnginfo=marca)
     print("%s: coloreado" % ruta)
