@@ -159,7 +159,8 @@ idiomas (`idiomas()`), en negrita: cada nombre en su idioma, el chino con Noto S
 las letras de los nombres de `Idioma.IDIOMAS`). En Controles (`controles()`), los textos de la tabla que no son casillas (las acciones, las cabeceras, «Ratón» y el
 aviso de debajo) van con Rubik a 17 (`TAM_TABLA`); las casillas que se pulsan para cambiar la tecla, con la pixelada (12 nov). En Ayudas, todas las frases (también la
 amarilla de los logros) van con Rubik: `explicar(texto, true)`, a 16 (`TAM_AYUDAS`), con las líneas algo más juntas y más anchas
-(`ANCHO_LISA`, 690) para que la página quepa entera también en ruso. Para el chino,
+(`ANCHO_LISA`, 690) para que la página quepa entera también en ruso. En Créditos, las frases y los títulos amarillos de los apartados (en negrita), y
+en Licencias la frase de arriba y todo el texto legal, también con Rubik; los botones, con la pixelada (12 nov). Para el chino,
 **Noto Sans SC** (`noto-sans-sc-recortada.woff2`, OFL 1.1, `noto-sans-sc-OFL.txt`; variable, ~400 KB), recortada a los caracteres de
 `locale/zh_CN.po` con `py tools/recortar_noto_sc.py <NotoSansSC[wght].ttf>` (de Google Fonts): **hay que lanzarlo otra vez cuando la
 traducción china traiga caracteres nuevos**; mientras, esos salen con Unifont (pixelados, no un cuadro). Su licencia reserva el

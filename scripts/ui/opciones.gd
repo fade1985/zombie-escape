@@ -642,15 +642,18 @@ func creditos() -> void:
 		var quien := Label.new()
 		quien.text = AUTORES
 		quien.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		quien.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))
+		quien.add_theme_font_size_override("font_size", TAM_AYUDAS)
 		contenido.add_child(quien)
+	# (las frases y los títulos de los apartados, con la letra lisa desde el 12 nov; el botón Licencias, con la pixelada)
 	apartado(Idioma.t("Hecho con Godot Engine"))
-	explicar("godotengine.org")   # no-tr
+	explicar("godotengine.org", true)   # no-tr
 	apartado(Idioma.t("Tipografías"))
 	for l in LETRAS_DE_OTROS:
-		explicar("%s · %s" % [l[0], l[1]])
+		explicar("%s · %s" % [l[0], l[1]], true)
 	apartado(Idioma.t("Herramientas"))
-	explicar(Idioma.t("Dibujos hechos con PixelLab"))
-	explicar(Idioma.t("Programado y traducido con ayuda de Claude"))
+	explicar(Idioma.t("Dibujos hechos con PixelLab"), true)
+	explicar(Idioma.t("Programado y traducido con ayuda de Claude"), true)
 	var boton := opcion(Idioma.t("Licencias"))
 	boton.pressed.connect(func(): ver("licencias"))
 
@@ -661,6 +664,8 @@ func apartado(texto: String) -> void:
 	l.text = texto
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.add_theme_color_override("font_color", Tema.AMARILLO)
+	l.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA_TITULO))   # (con la letra lisa, en negrita: 12 nov)
+	l.add_theme_font_size_override("font_size", TAM_TABLA)
 	contenido.add_child(l)
 
 
@@ -670,8 +675,10 @@ func licencias() -> void:
 	var volver := opcion(Idioma.t("Volver a los créditos"))
 	volver.pressed.connect(func(): ver("creditos"))
 	volver.grab_focus.call_deferred()
-	explicar(Idioma.t("Los textos legales, tal como se publicaron (en inglés)"))
-	var caja := RichTextLabel.new()
+	explicar(Idioma.t("Los textos legales, tal como se publicaron (en inglés)"), true)
+	var caja := RichTextLabel.new()   # (con la letra lisa desde el 12 nov, como la frase de arriba; el botón, con la pixelada)
+	caja.add_theme_font_override("normal_font", Tema.lisa(Tema.PESO_LISA))
+	caja.add_theme_font_size_override("normal_font_size", TAM_AYUDAS)
 	caja.custom_minimum_size = Vector2(620, 280)
 	caja.focus_mode = Control.FOCUS_ALL
 	caja.add_theme_color_override("default_color", Tema.GRIS)
