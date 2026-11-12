@@ -6067,10 +6067,6 @@ msgid "%s (de %d)"
 msgstr "%s（共 %d）"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio $%d"
-msgstr "奖励 $%d"
-
-#: scripts/ui/menu_principal.gd
 msgid "Premio $%d cobrado"
 msgstr "奖励 $%d 已领取"
 
@@ -6081,6 +6077,14 @@ msgstr "明天再来"
 #: scripts/ui/menu_principal.gd
 msgid "Ya lo has jugado hoy: vuelve mañana"
 msgstr "今天已经玩过了：明天再来"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio $%d"
+msgstr "奖励 $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio"
+msgstr "奖励"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

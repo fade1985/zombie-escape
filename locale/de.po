@@ -6089,10 +6089,6 @@ msgid "%s (de %d)"
 msgstr "%s (von %d)"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio $%d"
-msgstr "Belohnung $%d"
-
-#: scripts/ui/menu_principal.gd
 msgid "Premio $%d cobrado"
 msgstr "Belohnung $%d erhalten"
 
@@ -6103,6 +6099,14 @@ msgstr "Komm morgen wieder"
 #: scripts/ui/menu_principal.gd
 msgid "Ya lo has jugado hoy: vuelve mañana"
 msgstr "Heute schon gespielt: komm morgen wieder"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio $%d"
+msgstr "Belohnung $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio"
+msgstr "Belohnung"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

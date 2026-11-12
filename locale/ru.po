@@ -6111,10 +6111,6 @@ msgid "%s (de %d)"
 msgstr "%s (из %d)"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio $%d"
-msgstr "Награда $%d"
-
-#: scripts/ui/menu_principal.gd
 msgid "Premio $%d cobrado"
 msgstr "Награда $%d забрана"
 
@@ -6125,6 +6121,14 @@ msgstr "Приходи завтра"
 #: scripts/ui/menu_principal.gd
 msgid "Ya lo has jugado hoy: vuelve mañana"
 msgstr "Сегодня уже сыграно: приходи завтра"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio $%d"
+msgstr "Награда $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Premio"
+msgstr "Награда"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

@@ -28,6 +28,7 @@ const RADIO := 24                    # del hexágono (de la punta de arriba al c
 const ARRIBA := PLACA.ARRIBA         # lo alto de la franja de lo ahorrado
 const CABECERA := 34                 # lo alto del emblema y el nombre de cada rama
 const ANCHO_FICHA := 236
+const TAM_FICHA := 17                # la letra lisa (Rubik) de la ficha, algo más pequeña que la de siempre (19): así cabe (12 nov)
 
 # Cómo se está moviendo el jugador por la pantalla: "raton" (la ficha sigue al ratón) o "foco" (el teclado o el mando: la
 # ficha es la del talento marcado). Se queda al volver a montar la ventana después de comprar
@@ -136,12 +137,17 @@ func montar_ficha() -> void:
 	add_child(ficha)
 
 
-func etiqueta(texto: String, color: Color, partir := false) -> Label:
+# Un texto de la ficha. "peso": con la letra lisa (Rubik) de ese grosor, como las frases de los menús (12 nov); 0, con la
+# pixelada (la del pie, que hace de botón, y la de «Resetear talentos»)
+func etiqueta(texto: String, color: Color, partir := false, peso := 0) -> Label:
 	var l := Label.new()
 	l.text = texto
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	l.add_theme_color_override("font_color", color)
 	l.add_theme_constant_override("outline_size", 0)
+	if peso > 0:
+		l.add_theme_font_override("font", Tema.lisa(peso))
+		l.add_theme_font_size_override("font_size", TAM_FICHA)
 	if partir:
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size.x = ANCHO_FICHA - 16
@@ -447,10 +453,10 @@ func llenar_ficha(id: String) -> void:
 	var fila := HBoxContainer.new()
 	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cabecera.add_child(fila)
-	var nombre := etiqueta(Talentos.nombre_de(id), Color.WHITE)
+	var nombre := etiqueta(Talentos.nombre_de(id), Color.WHITE, false, Tema.PESO_LISA_TITULO)
 	nombre.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	fila.add_child(nombre)
-	fila.add_child(etiqueta("%d/%d" % [Talentos.nivel_de(s, id), t.max], AMARILLO))   # no-tr
+	fila.add_child(etiqueta("%d/%d" % [Talentos.nivel_de(s, id), t.max], AMARILLO, false, Tema.PESO_LISA_TITULO))   # no-tr
 	var lineas := lineas_ficha(id)
 	var margen := MarginContainer.new()
 	margen.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -462,7 +468,7 @@ func llenar_ficha(id: String) -> void:
 	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margen.add_child(textos)
 	for linea in lineas:
-		textos.add_child(etiqueta(linea[0], linea[1], true))
+		textos.add_child(etiqueta(linea[0], linea[1], true, Tema.PESO_LISA))
 	# el pie: un botón pintado (el de verdad es el hexágono), del color de la rama si se puede comprar
 	var motivo := Talentos.motivo(s, id)
 	var pie := etiqueta(pie_ficha(id), Color.WHITE if motivo == "" else TEXTO_SUAVE)

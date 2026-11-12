@@ -216,6 +216,11 @@ static func crear() -> Theme:
 	t.set_stylebox("panel", "Pastilla", _pastilla(OXIDO))
 	t.set_type_variation("PastillaOn", "PanelContainer")
 	t.set_stylebox("panel", "PastillaOn", _pastilla(AMARILLO))
+
+	# Los avisos que salen al dejar el ratón encima de un botón (tooltip_text: los del reproductor de la tele), con la
+	# letra lisa, como las frases de los menús (12 nov)
+	t.set_font("font", "TooltipLabel", lisa(PESO_LISA))
+	t.set_font_size("font_size", "TooltipLabel", 17)
 	_tema = t
 	return t
 

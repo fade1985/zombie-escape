@@ -160,7 +160,9 @@ las letras de los nombres de `Idioma.IDIOMAS`). En Controles (`controles()`), lo
 aviso de debajo) van con Rubik a 17 (`TAM_TABLA`); las casillas que se pulsan para cambiar la tecla, con la pixelada (12 nov). En Ayudas, todas las frases (también la
 amarilla de los logros) van con Rubik: `explicar(texto, true)`, a 16 (`TAM_AYUDAS`), con las líneas algo más juntas y más anchas
 (`ANCHO_LISA`, 690) para que la página quepa entera también en ruso. En Créditos, las frases y los títulos amarillos de los apartados (en negrita), y
-en Licencias la frase de arriba y todo el texto legal, también con Rubik; los botones, con la pixelada (12 nov). Para el chino,
+en Licencias la frase de arriba y todo el texto legal, también con Rubik; los botones, con la pixelada (12 nov). Las ventanitas que salen al pasar el ratón
+también: la ficha de los talentos (`arbol_talentos.gd`, a 17, `TAM_FICHA`; el pie, que hace de botón, con la pixelada), el cuadro del
+reto del día (`menu_principal.gd`, a 17, `TAM_RETO`) y los avisos de `tooltip_text` (`TooltipLabel` en `Tema.crear()`) (12 nov). Para el chino,
 **Noto Sans SC** (`noto-sans-sc-recortada.woff2`, OFL 1.1, `noto-sans-sc-OFL.txt`; variable, ~400 KB), recortada a los caracteres de
 `locale/zh_CN.po` con `py tools/recortar_noto_sc.py <NotoSansSC[wght].ttf>` (de Google Fonts): **hay que lanzarlo otra vez cuando la
 traducción china traiga caracteres nuevos**; mientras, esos salen con Unifont (pixelados, no un cuadro). Su licencia reserva el

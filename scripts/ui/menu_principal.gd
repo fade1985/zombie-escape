@@ -13,6 +13,7 @@
 extends Control
 
 # el título y el fondo, de GPT (tools/menu_gpt.py); el logo viejo, assets/ui/logo.png, sigue en el trailer
+const TAM_RETO := 17   # la letra lisa (Rubik) del reto del día: su cuadro y lo de debajo del botón (12 nov)
 const PLACA := preload("res://scripts/ui/chapa.gd")   # los colores de la chapa (también los del cuadro del reto)
 const LOGO := preload("res://assets/ui/titulo.png")
 const FONDO := preload("res://assets/ui/menu-fondo.png")
@@ -376,7 +377,8 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 
 
 # Debajo del selector de alerta: el botón del reto del día (reto.gd; apagado si ya se ha jugado hoy, M71), grande, con el
-# premio debajo en amarillo (como el precio de la tienda de armas) y, al pasar el ratón o marcarlo, su cuadro (11 nov)
+# premio debajo como el dinero de la tienda de armas («$» y la cifra en su pantallita: premio_reto, 12 nov) y, al pasar
+# el ratón o marcarlo, su cuadro (11 nov)
 func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	var f := Reto.ficha(s, id, Reto.hoy())
 	var b := Button.new()
@@ -390,14 +392,14 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 		b.disabled = true
 		b.focus_mode = Control.FOCUS_NONE
 	caja.add_child(b)
-	var premio := Label.new()
-	premio.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var premio: Control
 	if not jugado:
-		premio.text = Idioma.t("Premio $%d") % Reto.PREMIO
-		premio.add_theme_color_override("font_color", PLACA.AMARILLO)
+		premio = premio_reto()
 	else:
-		premio.text = Idioma.t("Premio $%d cobrado") % Reto.PREMIO if f.completado else Idioma.t("Vuelve mañana")
-		premio.add_theme_color_override("font_color", PLACA.TEXTO_SUAVE)
+		var texto := etiqueta_reto(Idioma.t("Premio $%d cobrado") % Reto.PREMIO if f.completado else Idioma.t("Vuelve mañana"),
+			PLACA.TEXTO_SUAVE)
+		texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		premio = texto
 	caja.add_child(premio)
 	var cuadro := cuadro_reto(f)
 	cuadro.visible = false
@@ -449,7 +451,7 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	cabecera.add_theme_stylebox_override("panel", fondo)
 	cabecera.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	columna.add_child(cabecera)
-	cabecera.add_child(etiqueta_reto(Reto.nombre(f.regla), Color.WHITE))
+	cabecera.add_child(etiqueta_reto(Reto.nombre(f.regla), Color.WHITE, false, Tema.PESO_LISA_TITULO))
 	var margen := MarginContainer.new()
 	margen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for lado in ["left", "right"]:
@@ -463,13 +465,18 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	textos.add_child(etiqueta_reto(Reto.marca(f), Color("#ff9a5c"), true))
 	if Reto.jugado(f):
 		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
-	var pie := etiqueta_reto(Idioma.t("Premio $%d") % Reto.PREMIO if not f.completado
-		else Idioma.t("Premio $%d cobrado") % Reto.PREMIO, Color.BLACK if not Reto.jugado(f) else PLACA.TEXTO_SUAVE)
-	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var fondo_pie := StyleBoxFlat.new()
-	fondo_pie.bg_color = PLACA.AMARILLO if not Reto.jugado(f) else Color("#2f333a")
-	fondo_pie.set_content_margin_all(4)
-	pie.add_theme_stylebox_override("normal", fondo_pie)
+	var pie: Control
+	if not Reto.jugado(f):   # aún se puede cobrar: como el dinero de la tienda de armas (12 nov)
+		pie = premio_reto()
+	else:
+		var texto := etiqueta_reto(Idioma.t("Premio $%d") % Reto.PREMIO if not f.completado
+			else Idioma.t("Premio $%d cobrado") % Reto.PREMIO, PLACA.TEXTO_SUAVE)
+		texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var fondo_pie := StyleBoxFlat.new()
+		fondo_pie.bg_color = Color("#2f333a")
+		fondo_pie.set_content_margin_all(4)
+		texto.add_theme_stylebox_override("normal", fondo_pie)
+		pie = texto
 	var abajo := MarginContainer.new()
 	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for lado in ["left", "right", "bottom"]:
@@ -479,15 +486,38 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	return cuadro
 
 
-func etiqueta_reto(texto: String, color: Color, partir := false) -> Label:
+# Un texto del reto, con la letra lisa (Rubik) de ese grosor y algo más pequeña que la de siempre, para que quepa (12 nov)
+func etiqueta_reto(texto: String, color: Color, partir := false, peso := Tema.PESO_LISA) -> Label:
 	var l := Label.new()
 	l.text = texto
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	l.add_theme_color_override("font_color", color)
+	l.add_theme_font_override("font", Tema.lisa(peso))
+	l.add_theme_font_size_override("font_size", TAM_RETO)
 	if partir:
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size.x = 244
 	return l
+
+
+# El premio del reto que aún se puede cobrar, como el dinero de la tienda de armas: «Premio» y, a su lado, la pantallita
+# hundida con el «$» y la cifra en amarillo (chapa.gd, dibujar_marcador; sin los «8» apagados de fondo) (12 nov)
+func premio_reto() -> HBoxContainer:
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_theme_constant_override("separation", 8)
+	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var palabra := etiqueta_reto(Idioma.t("Premio"), PLACA.AMARILLO, false, Tema.PESO_LISA_TITULO)
+	palabra.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	fila.add_child(palabra)
+	var fuente := get_theme_default_font()   # (la pixelada, la del marcador de la tienda)
+	var pantallita := Control.new()
+	pantallita.custom_minimum_size = PLACA.medida_marcador(fuente, Reto.PREMIO)
+	pantallita.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pantallita.draw.connect(func():
+		PLACA.dibujar_marcador(pantallita, fuente, Rect2(Vector2.ZERO, pantallita.size), Reto.PREMIO, PLACA.AMARILLO))
+	fila.add_child(pantallita)
+	return fila
 
 
 # El reto del día de un edificio (reto.gd): el de hoy, sin alerta. En la prueba, "--reto <regla>" fuerza esa regla
