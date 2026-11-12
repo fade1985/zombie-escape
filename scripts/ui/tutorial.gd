@@ -102,7 +102,8 @@ func montar_lista(columna: VBoxContainer) -> void:
 	titulo.theme_type_variation = "Titulo"
 	titulo.text = Idioma.t("Tutorial")
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	columna.add_child(titulo)
+	titulo.theme = Tema.crear()   # (el título, la lista de temas y los botones de abajo, con la letra pixelada del juego,
+	columna.add_child(titulo)    # como el resto de menús: solo la ficha de la derecha, que es para leer, va con la lisa; 12 nov)
 	var lado := HBoxContainer.new()
 	lado.add_theme_constant_override("separation", 24)
 	columna.add_child(lado)
@@ -110,6 +111,7 @@ func montar_lista(columna: VBoxContainer) -> void:
 	scroll.custom_minimum_size = Vector2(260, ALTO_LISTA)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.follow_focus = true
+	scroll.theme = Tema.crear()
 	lado.add_child(scroll)
 	# un margen a la izquierda, para que los temas no vayan pegados al borde de la ventana
 	var margen := MarginContainer.new()
@@ -152,6 +154,7 @@ func montar_lista(columna: VBoxContainer) -> void:
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	fila.add_theme_constant_override("separation", 12)
+	fila.theme = Tema.crear()
 	columna.add_child(fila)
 	var si_no := func() -> String:
 		return "%s: %s" % [Idioma.t("Tutoriales"), Idioma.t("Sí" if Guardado.cargar().ajustes.tutoriales else "No")]
