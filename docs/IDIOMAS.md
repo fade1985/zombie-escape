@@ -151,8 +151,8 @@ Trae latín y cirílico. **Desde el 12 nov la usan los tutoriales (`tutorial.gd`
 (`aviso_luces.gd`)**, con `Tema.crear_liso()`: el tema de siempre con Rubik de 400 en los textos y de 700 en títulos y botones
 (`Tema.lisa(peso)`; los pesos, `PESO_LISA` y `PESO_LISA_TITULO`), y algo más grande que la pixelada para que se lea mejor:
 19 los textos y botones y 36 los títulos (`TAM_LISA` y `TAM_LISA_TITULO`; la pixelada va a 16 y 32). El resto del juego sigue con la letra pixelada. En la lista de
-Tutorial (menú y pausa), el título «Tutorial», la lista de temas y los botones de abajo van con la pixelada, para ir con el
-arte del juego (12 nov); con Rubik, solo la ficha de la derecha. En Contáctanos (`opciones.gd`, `contacto()`), las dos frases de
+Tutorial (menú y pausa), el título «Tutorial» y los botones de abajo van con la pixelada, para ir con el arte del juego
+(12 nov); la lista de temas (con los grupos, más ancha: 285, y los títulos largos en dos líneas) y la ficha de la derecha, con Rubik. En Contáctanos (`opciones.gd`, `contacto()`), las dos frases de
 arriba, el cuadro donde se escribe y el aviso de debajo de Enviar también van con Rubik (12 nov). Y los botones de la lista de
 idiomas (`idiomas()`), en negrita: cada nombre en su idioma, el chino con Noto Sans SC (`tools/recortar_noto_sc.py` le mete
 las letras de los nombres de `Idioma.IDIOMAS`). Para el chino,

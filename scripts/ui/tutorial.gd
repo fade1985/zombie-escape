@@ -102,16 +102,15 @@ func montar_lista(columna: VBoxContainer) -> void:
 	titulo.theme_type_variation = "Titulo"
 	titulo.text = Idioma.t("Tutorial")
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	titulo.theme = Tema.crear()   # (el título, la lista de temas y los botones de abajo, con la letra pixelada del juego,
-	columna.add_child(titulo)    # como el resto de menús: solo la ficha de la derecha, que es para leer, va con la lisa; 12 nov)
+	titulo.theme = Tema.crear()   # (el título y los botones de abajo, con la letra pixelada del juego, como el resto de menús;
+	columna.add_child(titulo)    # la lista de temas y la ficha de la derecha, con la lisa; 12 nov)
 	var lado := HBoxContainer.new()
 	lado.add_theme_constant_override("separation", 24)
 	columna.add_child(lado)
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(260, ALTO_LISTA)
+	scroll.custom_minimum_size = Vector2(285, ALTO_LISTA)   # (285 desde la letra lisa, 12 nov: cabe «Materiales de fabricación»)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.follow_focus = true
-	scroll.theme = Tema.crear()
 	lado.add_child(scroll)
 	# un margen a la izquierda, para que los temas no vayan pegados al borde de la ventana
 	var margen := MarginContainer.new()
@@ -127,6 +126,7 @@ func montar_lista(columna: VBoxContainer) -> void:
 		var g := Label.new()
 		g.theme_type_variation = "Sub"
 		g.text = Tutoriales.nombre_grupo(grupo)
+		g.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		temas.add_child(g)
 		for cual in Tutoriales.LISTA:
 			if Tutoriales.LISTA[cual].grupo != grupo:
@@ -134,6 +134,7 @@ func montar_lista(columna: VBoxContainer) -> void:
 			var b := Button.new()
 			b.theme_type_variation = "Celda"
 			b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+			b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART   # (con la letra lisa, los títulos largos, en dos líneas: en ruso y francés no caben)
 			if Tutoriales.se_ve(cual):
 				b.text = Tutoriales.titulo_de(cual)
 				b.focus_entered.connect(ver.bind(cual))
