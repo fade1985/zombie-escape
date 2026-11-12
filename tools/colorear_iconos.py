@@ -25,7 +25,7 @@ ICONOS = [
     ("assets/ui/iconos/escritorio-armas.png", ["#9aa4ae"]),
     ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
     ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], {"viveza": 0.35}),
-    ("assets/ui/interrogacion.png", ["#222228"], {"desde": 0.05}),   # (la de los sujetos sin ver, más negra que el cuaderno)
+    ("assets/ui/interrogacion.png", ["#141418"], {"desde": 0.05}),   # (la de los sujetos sin ver, casi negro del todo)
 ]
 
 
