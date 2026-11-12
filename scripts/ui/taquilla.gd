@@ -145,15 +145,14 @@ func abrir(p: Node) -> void:
 		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		margen.add_child(dentro)
 		var imagen := TextureRect.new()
-		imagen.texture = load("res://assets/ui/iconos/skin-%s.png" % ("conserje" if id == "" else id))
-		imagen.custom_minimum_size = Vector2(32, 32)
+		# (las que aún no se tienen, la interrogación en vez de su cara: sin pistas, 12 nov)
+		imagen.texture = load("res://assets/ui/iconos/skin-%s.png" % ("conserje" if id == "" else id)) if tiene(id) 			else signo.texture
+		imagen.custom_minimum_size = Vector2(32, 32 if tiene(id) else 40)   # (la interrogación, a su tamaño: 20 × 40)
 		imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		imagen.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		imagen.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if not tiene(id):
-			imagen.modulate = Color(1, 1, 1, 0.35)   # apagado, como en Colecciones
 		dentro.add_child(imagen)
 		var textos := VBoxContainer.new()
 		textos.add_theme_constant_override("separation", 0)

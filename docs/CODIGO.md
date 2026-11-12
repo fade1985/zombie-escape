@@ -663,7 +663,7 @@ en una línea.
   en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
   banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
   del nombre; el banco solo dice lo que cuesta, sin lo que tienes ni lo que falta
-  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista; la frase de cada carta, con la letra lisa).
+  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista y en su carta; la frase de cada carta, con la letra lisa).
 - `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la
   mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
