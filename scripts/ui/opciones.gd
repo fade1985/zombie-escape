@@ -353,10 +353,22 @@ func idiomas() -> void:
 	var fila_idioma := VBoxContainer.new()   # (uno debajo de otro, desde el 9 nov)
 	fila_idioma.add_theme_constant_override("separation", 4)
 	contenido.add_child(fila_idioma)
+	# Los botones, más grandes desde el 12 nov (a petición del dueño): la letra de BotonGrande (32), más anchos y con menos hueco
+	# por arriba y por abajo que el botón grande normal, para que los siete (y el de avisar de una traducción) quepan sin
+	# empujar «Volver» fuera de la pantalla
+	var chapas := {}
+	for estado in ["normal", "hover", "pressed", "focus", "disabled"]:
+		var s: StyleBox = Tema.crear().get_stylebox(estado, "Button").duplicate()
+		s.content_margin_top = 4
+		s.content_margin_bottom = 6
+		chapas[estado] = s
 	for i in Idioma.IDIOMAS:
 		var b := Button.new()
 		b.text = i[1]
-		b.custom_minimum_size.x = 260
+		b.theme_type_variation = "BotonGrande"
+		b.custom_minimum_size.x = 340
+		for estado in chapas:
+			b.add_theme_stylebox_override(estado, chapas[estado])
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		var letra := Tema.fuente_del_idioma(i[0])   # (el ruso y el chino se escriben con su letra, en cualquier idioma)
 		if letra != null:
