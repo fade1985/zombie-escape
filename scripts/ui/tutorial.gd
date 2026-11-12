@@ -15,6 +15,7 @@ signal cerrado
 
 const ANCHO := 520.0       # el de la ficha
 const ALTO_LISTA := 430.0  # el de la lista de temas (con barra si no caben)
+const TAM_LISTA := 17      # la letra de la lista de temas (la lisa va a 19: 17 para que los títulos quepan en su cajita)
 const ESPERA := 0.6        # segundos que la ventana no hace caso al salir
 
 var id := ""               # la ficha de la ventana ("" = es la lista)
@@ -120,8 +121,11 @@ func montar_lista(columna: VBoxContainer) -> void:
 	var temas := VBoxContainer.new()
 	temas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	temas.add_theme_constant_override("separation", 0)
+	temas.theme = Tema.crear_liso().duplicate()   # (la lista, con la letra lisa algo más pequeña, TAM_LISTA: así los títulos caben
+	temas.theme.set_font_size("font_size", "Celda", TAM_LISTA)   # dentro de la cajita amarilla del elegido, con su hueco)
+	temas.theme.set_font_size("font_size", "Label", TAM_LISTA)
 	margen.add_child(temas)
-	var vacio := StyleBoxEmpty.new()
+	var vacio := Tema.celda_vacia()
 	for grupo in Tutoriales.GRUPOS:
 		var g := Label.new()
 		g.theme_type_variation = "Sub"

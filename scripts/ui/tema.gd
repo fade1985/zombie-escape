@@ -188,7 +188,7 @@ static func crear() -> Theme:
 	# una cajita de metal con el borde amarillo
 	t.set_type_variation("Celda", "Button")
 	var celda := _pastilla(AMARILLO)
-	t.set_stylebox("normal", "Celda", StyleBoxEmpty.new())
+	t.set_stylebox("normal", "Celda", celda_vacia())   # (con el mismo hueco que la cajita: el texto no se pega a su borde)
 	t.set_stylebox("hover", "Celda", celda)
 	t.set_stylebox("focus", "Celda", celda)
 	t.set_stylebox("pressed", "Celda", celda)
@@ -243,6 +243,16 @@ static func _pastilla(borde: Color) -> StyleBoxFlat:
 	s.content_margin_right = 10
 	s.content_margin_top = 3
 	s.content_margin_bottom = 3
+	return s
+
+
+# Una casilla sin cajita (la de Celda sin elegir, y los «???» del Tutorial), con el mismo hueco por dentro que _pastilla: así el
+# texto no se mueve al elegirla ni toca el borde amarillo (12 nov)
+static func celda_vacia() -> StyleBoxEmpty:
+	var s := StyleBoxEmpty.new()
+	var con_caja := _pastilla(AMARILLO)
+	for lado in [SIDE_LEFT, SIDE_RIGHT, SIDE_TOP, SIDE_BOTTOM]:
+		s.set_content_margin(lado, con_caja.get_content_margin(lado))
 	return s
 
 
