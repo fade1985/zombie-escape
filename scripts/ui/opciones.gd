@@ -351,11 +351,13 @@ func idiomas() -> void:
 	rotulo_idioma.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	contenido.add_child(rotulo_idioma)
 	var fila_idioma := VBoxContainer.new()   # (uno debajo de otro, desde el 9 nov)
-	fila_idioma.add_theme_constant_override("separation", 4)
+	fila_idioma.add_theme_constant_override("separation", 8)
+	fila_idioma.size_flags_vertical = Control.SIZE_EXPAND_FILL   # (llena el sitio hasta «Volver»: ver abajo)
 	contenido.add_child(fila_idioma)
-	# Los botones, más grandes desde el 12 nov (a petición del dueño): la letra de BotonGrande (32), más anchos y con menos hueco
-	# por arriba y por abajo que el botón grande normal, para que los siete (y el de avisar de una traducción) quepan sin
-	# empujar «Volver» fuera de la pantalla
+	# Los botones, más grandes desde el 12 nov (a petición del dueño): la letra de BotonGrande (32), tan anchos como los botones
+	# grandes de General (ancho_grande) y estirados de alto hasta llenar el sitio que hay hasta «Volver» (el contenido mide lo que la
+	# pestaña más alta), con el mismo hueco por debajo que en General. Llevan menos hueco por arriba y por abajo que el botón grande
+	# normal: es lo mínimo que miden, y así los siete (y el de avisar de una traducción) caben sin empujar «Volver» fuera
 	var chapas := {}
 	for estado in ["normal", "hover", "pressed", "focus", "disabled"]:
 		var s: StyleBox = Tema.crear().get_stylebox(estado, "Button").duplicate()
@@ -366,7 +368,8 @@ func idiomas() -> void:
 		var b := Button.new()
 		b.text = i[1]
 		b.theme_type_variation = "BotonGrande"
-		b.custom_minimum_size.x = 340
+		b.custom_minimum_size.x = maxf(340.0, ancho_grande)
+		b.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		for estado in chapas:
 			b.add_theme_stylebox_override(estado, chapas[estado])
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
