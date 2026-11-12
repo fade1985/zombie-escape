@@ -2,7 +2,7 @@
 #   - Dosier VD-7: la carpeta, marrón como un fichero de cartón
 #   - Talentos: cada una de las tres flechas con el color de su rama (izquierda Militar, en medio Superviviente,
 #     derecha Químico: el orden del árbol, ui/arbol_talentos.gd, COLORES; el principal de cada una)
-#   - Tienda de armas: la mirilla, en rojo (el del icono de Apagar)
+#   - Tienda de armas: la mirilla, de metal (gris acero; antes, en rojo)
 #   - Sujetos: el cuaderno, casi negro (gris muy oscuro, para que se vea el borde)
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
@@ -20,7 +20,7 @@ AMARILLO = "#d6a521"   # el amarillo de Químico, que es como están pintados lo
 # también el borde de arriba del cuaderno, más apagado, sin tocar la etiqueta crema)
 ICONOS = [
     ("assets/ui/iconos/escritorio-talentos.png", ["#d2452b", "#4f9e34", "#d6a521"]),
-    ("assets/ui/iconos/escritorio-armas.png", ["#d33a34"]),
+    ("assets/ui/iconos/escritorio-armas.png", ["#9aa4ae"]),
     ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
     ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], 0.35),
 ]

@@ -53,7 +53,7 @@ MUEBLES = {
     # los iconos del escritorio de ConserjeOS (ui/ordenador.gd, ICONOS; M6, 9 nov), solo para el escritorio (los de
     # assets/ui/iconos/ de siempre se siguen usando en otros sitios): Talentos, tres flechas amarillas hacia arriba
     # (Talentos y la Tienda de armas salen amarillos: después se pasa py tools/colorear_iconos.py, que pone cada
-    # flecha del color de su rama, la mirilla en rojo,
+    # flecha del color de su rama, la mirilla de metal,
     # la carpeta del Dosier en marrón y el cuaderno de Sujetos casi negro, 12 nov)
     "escritorio_talentos": ("assets/sources/escritorio-talentos-gpt.webp", "assets/ui/iconos/escritorio-talentos.png", 30, 23, False),
     # Tienda de armas, una mirilla amarilla; el centro y los cuatro huecos entre los aros, que el fondo no alcanza
