@@ -18,6 +18,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M93** Noticias de la tele: mientras salen los subtítulos, que se oiga a la reportera «hablando» con sonidos de 8 bits (sin palabras, como un balbuceo de videojuego antiguo), solo mientras dura cada subtítulo.
 - **M94** Pasillo de los Apartamentos: poner extintores. Para más adelante.
 - **M95** Pasillo de mantenimiento: poner ventanas, moquetas y cuadros. Para más adelante.
+- **M96** Baños: poner toallas y estanterías de baño. Para más adelante.
 
 ## Por limar
 
