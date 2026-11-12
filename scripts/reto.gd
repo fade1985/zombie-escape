@@ -22,7 +22,7 @@ const REGLAS := {
 	"rapidos": {"nombre": "Zombis rápidos", "desc": "todos un 35 % más rápidos (los jefes, no)"},
 	"cristal": {"nombre": "De cristal", "desc": "Johnny con la mitad de vida"},
 	"llena": {"nombre": "Casa llena", "desc": "el doble de zombis en cada sitio"},
-	"oido": {"nombre": "Oído fino", "desc": "los zombis dormidos de todo el apartamento despiertan aunque uses un arma cuerpo a cuerpo"},
+	"oido": {"nombre": "Oído fino", "desc": "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"},
 }
 # [/traducir]
 const MAS_RAPIDOS := 1.35   # rapidos: la velocidad de los zombis (no la de los jefes; partida.gd, meter_zombi)

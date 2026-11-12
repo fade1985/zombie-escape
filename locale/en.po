@@ -3502,8 +3502,8 @@ msgid "Oído fino"
 msgstr "Sharp ears"
 
 #: scripts/reto.gd
-msgid "los zombis dormidos de todo el apartamento despiertan aunque uses un arma cuerpo a cuerpo"
-msgstr "sleeping zombies across the whole apartment wake up even if you use a melee weapon"
+msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
+msgstr "even melee hits wake up the whole apartment"
 
 #: scripts/skins.gd
 msgid "Conserje"

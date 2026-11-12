@@ -434,7 +434,7 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 
 
 # El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): la regla de hoy en la cabecera,
-# qué hace y tu marca
+# tu marca y, debajo, qué hace, con mayúscula (12 nov)
 func cuadro_reto(f: Dictionary) -> PanelContainer:
 	var cuadro := PanelContainer.new()
 	cuadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -469,8 +469,9 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	textos.add_theme_constant_override("separation", 4)
 	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margen.add_child(textos)
-	textos.add_child(etiqueta_reto(Reto.desc(f.regla), PLACA.TEXTO, true))
 	textos.add_child(etiqueta_reto(Reto.marca(f), Color("#ff9a5c"), true))
+	var que_hace := Reto.desc(f.regla)   # (empieza en minúscula, para el aviso del principio: «Reto del día · X: ...»)
+	textos.add_child(etiqueta_reto(que_hace.left(1).to_upper() + que_hace.substr(1), PLACA.TEXTO, true))
 	if Reto.jugado(f):
 		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
 	# (el premio ya no va aquí: sale debajo del botón, y dos veces quedaba feo, 12 nov)

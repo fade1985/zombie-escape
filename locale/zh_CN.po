@@ -3494,8 +3494,8 @@ msgid "Oído fino"
 msgstr "顺风耳"
 
 #: scripts/reto.gd
-msgid "los zombis dormidos de todo el apartamento despiertan aunque uses un arma cuerpo a cuerpo"
-msgstr "整间公寓里睡着的僵尸都会醒来，哪怕你只用近战武器"
+msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
+msgstr "连近战攻击都会吵醒整间公寓"
 
 #: scripts/skins.gd
 msgid "Conserje"
