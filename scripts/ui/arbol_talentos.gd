@@ -415,7 +415,7 @@ func pie_ficha(id: String) -> String:
 	match motivo:
 		"max": return Idioma.t("MÁX")
 		"bloqueado": return Idioma.t("Bloqueado")
-		"sin_dinero": return Idioma.t("Cuesta $%d") % precio   # (solo el precio, sin lo que falta: 11 nov)
+		"sin_dinero": return "$%d" % precio   # (solo el precio, en un marcador como el de la tienda de armas: marcador_precio, 12 nov)
 	if Tactil.activo and Tactil.con_dedo:
 		return Idioma.t("Toca otra vez: comprar · $%d") % precio
 	if Controles.con_mando:
@@ -470,19 +470,38 @@ func llenar_ficha(id: String) -> void:
 	for linea in lineas:
 		textos.add_child(etiqueta(linea[0], linea[1], true, Tema.PESO_LISA))
 	# el pie: un botón pintado (el de verdad es el hexágono), del color de la rama si se puede comprar
+	# (sin dinero, solo el precio, en un marcador como el de la tienda de armas)
 	var motivo := Talentos.motivo(s, id)
-	var pie := etiqueta(pie_ficha(id), Color.WHITE if motivo == "" else TEXTO_SUAVE)
-	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var fondo_pie := StyleBoxFlat.new()
-	fondo_pie.bg_color = color[1] if motivo == "" else Color("#2f333a")
-	fondo_pie.set_content_margin_all(4)
-	pie.add_theme_stylebox_override("normal", fondo_pie)
+	var pie: Control
+	if motivo == "sin_dinero":
+		pie = marcador_precio(Talentos.precio(id))
+	else:
+		var letrero := etiqueta(pie_ficha(id), Color.WHITE if motivo == "" else TEXTO_SUAVE)
+		letrero.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var fondo_pie := StyleBoxFlat.new()
+		fondo_pie.bg_color = color[1] if motivo == "" else Color("#2f333a")
+		fondo_pie.set_content_margin_all(4)
+		letrero.add_theme_stylebox_override("normal", fondo_pie)
+		pie = letrero
 	var abajo := MarginContainer.new()
 	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for lado in ["left", "right", "bottom"]:
 		abajo.add_theme_constant_override("margin_" + lado, 6)
 	abajo.add_child(pie)
 	columna.add_child(abajo)
+
+
+# El precio de un talento que aún no te puedes pagar: «$X» en un marcador, como el de lo ahorrado de arriba, en
+# amarillo y centrado (igual que la tienda de armas cuando no te llega el dinero)
+func marcador_precio(precio: int) -> Control:
+	var caja := Control.new()
+	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var fuente := get_theme_default_font()
+	var medida := PLACA.medida_marcador(fuente, precio)
+	caja.custom_minimum_size.y = medida.y
+	caja.draw.connect(func():
+		PLACA.dibujar_marcador(caja, fuente, Rect2(((caja.size - medida) / 2.0).floor(), medida), precio, PLACA.AMARILLO))
+	return caja
 
 
 # Al pulsar un hexágono: con el dedo, si su ficha no estaba ya a la vista, el toque solo la enseña

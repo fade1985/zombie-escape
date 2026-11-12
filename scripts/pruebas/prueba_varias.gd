@@ -3543,7 +3543,7 @@ func probar_guiado_tercios() -> void:
 
 func probar_guiado() -> void:
 	johnny.invencible = true
-	# sin el superviviente que acompaña a Johnny (si lo hay): mataría él a los zombis antes de la pista de lanzar
+	# sin el superviviente que acompaña a Johnny (si lo hay): mataría él a los zombis antes de tiempo
 	for a in supervivientes.equipo:
 		a.queue_free()
 	supervivientes.equipo.clear()
@@ -3558,6 +3558,23 @@ func probar_guiado() -> void:
 		await get_tree().create_timer(0.4).timeout
 		print("Guía · pista «%s» (esperado: %s) · latido «%s»" % [guia.pista, id, get_node("Pantalla/HUD").latido])
 		Captura.foto(foto)
+	# espera a que salga la ventana del tutorial "id" (lanzar y curarse ya no son pistas: van con su ventana), le saca
+	# su foto y la cierra
+	var ventana_de := func(id: String) -> void:
+		var v: Tutorial = null
+		for _i in 40:
+			for h in get_children():
+				if h is Tutorial and not h.is_queued_for_deletion():
+					v = h
+			if v:
+				break
+			await get_tree().create_timer(0.1, true, false, true).timeout
+		await get_tree().create_timer(0.9, true, false, true).timeout
+		print("Guía · ventana «%s» (esperado: %s) · pista a la vez «%s» (esperado: «»)" % [v.id if v else "ninguna", id, guia.pista])
+		Captura.foto("captura-guiado-ventana-%s.png" % id)
+		if v:
+			v.cerrar()
+		await get_tree().create_timer(0.3).timeout
 	await get_tree().create_timer(0.5).timeout
 	print("Guía · activa (no es la primera partida, pero se pidió repetirla): %s · pedida aún: %s (esperado: true, false)" % [
 		guia.activa, Guardado.cargar().guia_otra_vez])
@@ -3600,18 +3617,19 @@ func probar_guiado() -> void:
 	print("Guía · el fácil: %d zombis, con la llave %s, armarito %s (esperado: ≤%d, false, vendas)" % [facil.zombis.size(),
 		facil.zombis.any(func(z): return z.get("llave", false)),
 		facil.armaritos[0].dentro if not facil.get("armaritos", []).is_empty() else "sin baño", Guia.FACIL])
-	# el apartamento fácil: los zombis, despiertos y quietos, a la vista
+	# el apartamento fácil: al cerrarse la puerta (la primera pelea), la ventana de los lanzables; luego los zombis,
+	# despiertos y quietos, a la vista
 	await montar(guia.facil, 0)
-	await get_tree().create_timer(0.3).timeout
+	await ventana_de.call("lanzables")
 	var zombis := get_tree().get_nodes_in_group("zombis")
 	# hacia el centro de la habitación (Johnny entra por la puerta, que puede estar arriba o abajo): si quedaran fuera,
-	# el mapa los metería dentro, más cerca de Guia.CERCA, y la pista de lanzar saldría antes de tiempo
+	# el mapa los metería dentro, más cerca (y saldrían de la foto)
 	var hacia: Vector2 = (Vector2(planta.sitios[aqui].ancho, planta.sitios[aqui].alto) / 2.0 - johnny.position).normalized()
 	var lado := hacia.orthogonal()
 	for i in zombis.size():
 		zombis[i].dormido = false
 		zombis[i].set_physics_process(false)
-		zombis[i].position = johnny.position + hacia * 330.0 + lado * (-200.0 + 200.0 * i)   # (más lejos que Guia.CERCA)
+		zombis[i].position = johnny.position + hacia * 330.0 + lado * (-200.0 + 200.0 * i)
 	johnny.set_physics_process(false)   # (quieto: que no los mate ni gaste las balas él solo en el modo asistido)
 	await esperar.call("atacar", "captura-guiado-atacar.png")
 	await get_tree().create_timer(4.2).timeout   # (en el modo asistido se va sola a los 4 s)
@@ -3622,16 +3640,15 @@ func probar_guiado() -> void:
 	await esperar.call("recargar", "captura-guiado-recargar.png")
 	johnny.empezar_recarga()
 	await get_tree().create_timer(1.7).timeout
-	mochila.append("vendas")
+	# herido y con vendas: sin pista de curarse (sale la ventana de las vendas al cogerlas); con tres zombis cerca, sin
+	# pista de lanzar
 	johnny.vida = johnny.stats.vida_max - 30
-	await esperar.call("vendas", "captura-guiado-vendas.png")
-	usar_cura("vendas")
-	await get_tree().create_timer(1.7).timeout
+	mochila.append("vendas")
+	await ventana_de.call("curas")
 	for i in zombis.size():
 		zombis[i].position = johnny.position + hacia * 150.0 + lado * (-120.0 + 120.0 * i)
-	await esperar.call("lanzar", "captura-guiado-lanzar.png")
-	lanzables.cantidades[lanzables.tipo] -= 1
-	await get_tree().create_timer(1.7).timeout
+	await get_tree().create_timer(1.5).timeout
+	print("Guía · herido, con vendas y zombis cerca: pista «%s» (esperado: «»)" % guia.pista)
 	print("Guía · vistos jugar %s, municion %s, curas %s, lanzables %s · ventanas abiertas: %d (esperado: true ×4, 0)" % [
 		Tutoriales.visto("jugar"), Tutoriales.visto("municion"), Tutoriales.visto("curas"), Tutoriales.visto("lanzables"),
 		ventanas.call()])

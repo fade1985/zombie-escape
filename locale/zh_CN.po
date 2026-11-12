@@ -1203,14 +1203,6 @@ msgid "Recarga con {recargar}"
 msgstr "用{recargar}换弹"
 
 #: scripts/guia.gd
-msgid "Cúrate con {usar_vendas}"
-msgstr "用{usar_vendas}治疗"
-
-#: scripts/guia.gd
-msgid "Mantén {lanzar} para apuntar y suelta para lanzar"
-msgstr "按住{lanzar}瞄准，松开扔出"
-
-#: scripts/guia.gd
 msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
 msgstr "离开地上的标记，或者用{esquivar}闪避！"
 
@@ -5208,10 +5200,6 @@ msgstr "满级"
 #: scripts/ui/arbol_talentos.gd
 msgid "Bloqueado"
 msgstr "未解锁"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "花费 $%d"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Toca otra vez: comprar · $%d"

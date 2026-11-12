@@ -1206,14 +1206,6 @@ msgid "Recarga con {recargar}"
 msgstr "Recharge avec {recargar}"
 
 #: scripts/guia.gd
-msgid "Cúrate con {usar_vendas}"
-msgstr "Soigne-toi avec {usar_vendas}"
-
-#: scripts/guia.gd
-msgid "Mantén {lanzar} para apuntar y suelta para lanzar"
-msgstr "Maintiens {lanzar} pour viser et relâche pour lancer"
-
-#: scripts/guia.gd
 msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
 msgstr "Sors de la marque au sol ou esquive avec {esquivar} !"
 
@@ -5218,10 +5210,6 @@ msgstr "MAX"
 #: scripts/ui/arbol_talentos.gd
 msgid "Bloqueado"
 msgstr "Bloqué"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "Coûte $%d"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Toca otra vez: comprar · $%d"

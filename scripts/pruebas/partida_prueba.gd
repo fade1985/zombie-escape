@@ -360,7 +360,8 @@
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
 #   --guiado            el tutorial disimulado de la primera partida: la ventana «Moverse y esquivar» del principio
-#                       (foto captura-guiado-ventana-<idioma>; mirarla con --lang ru y --lang zh_CN), las pistas sobre Johnny, el latido del HUD, la
+#                       (foto captura-guiado-ventana-<idioma>; mirarla con --lang ru y --lang zh_CN), las ventanas de
+#                       Lanzables y Vendas (sin pistas de lanzar ni de curarse), las pistas sobre Johnny, el latido del HUD, la
 #                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
 #   --guiado --sin-hacer  la guía con un jugador que no hace lo que le piden: lo enseñado cuenta igual como visto y su
 #                       ventana no se repite en la partida siguiente, tras morir (F18)         [prueba_varias.gd]

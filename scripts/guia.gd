@@ -11,10 +11,10 @@
 # armarito del baño (preparar_planta).
 #
 # Moverse y esquivar no van en pistas: al empezar sale su ventana, «Moverse y esquivar» (partida.tutorial_al_empezar,
-# que apunta también «Cómo se juega» como visto: lo demás lo enseñan las pistas).
-# Las pistas, en orden (PISTAS): al ver un zombi despierto, atacar; luego sacar la
-# pistola, recargar con medio cargador, curarse con vendas al estar herido y lanzar con tres zombis cerca. El jefe se
-# cuenta con la línea de avisos (partida.decir) o con una pista con tiempo.
+# que apunta también «Cómo se juega» como visto: lo demás lo enseñan las pistas). Lanzar y curarse tampoco: salen sus
+# ventanas, «Lanzables» en la primera pelea y «Vendas» al abrir el primer armarito (o coger las primeras vendas).
+# Las pistas, en orden (PISTAS): al ver un zombi despierto, atacar; luego sacar la pistola y recargar con medio
+# cargador. El jefe se cuenta con la línea de avisos (partida.decir) o con una pista con tiempo.
 # Lo que se enseña así se apunta como visto (Tutoriales.apuntar) nada más salir, se haga o no: si no, al morir en la
 # primera partida, la siguiente (ya sin guía) lo volvería a explicar con su ventana. Queda en el apartado Tutorial del
 # menú. Las ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial); después, solo las de lo que
@@ -30,12 +30,11 @@ const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const DURA := 12.0          # lo más que se queda una pista sin hacerse
 const MINIMO := 1.5         # lo menos que se ve una pista (para que dé tiempo a leerla)
 const FACIL := 3            # los zombis del primer apartamento
-const CERCA := 300.0        # a qué distancia cuentan los zombis para la pista de lanzar
 const LEJOS_FLECHA := 150.0 # más cerca de la puerta que esto, la flecha se va
 
 # Las ventanas que la guía enseña a su manera (no salen mientras está activa)
 # (la de los tercios sí sale, con su ventana: es cuando más falta hace entenderlos, M35)
-const CUBRE := ["jugar", "apartamentos", "lanzables", "municion", "curas", "jefes"]
+const CUBRE := ["jugar", "apartamentos", "municion", "jefes"]
 
 # Cada pista: su frase (con las teclas entre llaves, como en tutoriales.gd), la ventana que cuenta como vista al salir
 # y la casilla del HUD que late mientras sale. "atacar" usa la frase del modo de atacar (Tutoriales.atacar_modo)
@@ -44,8 +43,6 @@ const PISTAS := {
 	"atacar": {"texto": "", "tutorial": "", "latido": ""},   # (su frase es la del modo de atacar)
 	"pistola": {"texto": "Saca la pistola con {cambiar_arma}", "tutorial": "", "latido": "armas"},
 	"recargar": {"texto": "Recarga con {recargar}", "tutorial": "municion", "latido": "balas"},
-	"vendas": {"texto": "Cúrate con {usar_vendas}", "tutorial": "curas", "latido": "curas"},
-	"lanzar": {"texto": "Mantén {lanzar} para apuntar y suelta para lanzar", "tutorial": "lanzables", "latido": "lanzar"},
 	"jefe": {"texto": "¡Sal de la marca del suelo o esquiva con {esquivar}!", "tutorial": "jefes", "latido": ""},
 }
 # [/traducir]
@@ -57,8 +54,6 @@ var hechas: Array = []        # las pistas ya enseñadas
 var pista := ""               # la que se ve ahora
 var desde := 0.0              # cuánto lleva a la vista
 var cumplida := false         # si ya se ha hecho lo que pide (se queda en cuanto pasa una vez)
-var lanzables_antes := 0      # los lanzables a mano al salir "lanzar" (al bajar, ha lanzado)
-var vendas_antes := 0
 var facil := -1               # el apartamento fácil (su número de sitio)
 var dicho: Array = []         # los avisos de la línea de abajo ya dichos ("pasillo", "llave")
 var letrero := RichTextLabel.new()
@@ -209,11 +204,6 @@ func siguiente() -> String:
 	if not "recargar" in hechas and johnny.mano == "fuego" and not arma.has("deposito") \
 			and johnny.balas <= arma.cargador / 2 and johnny.recargando <= 0.0:
 		return "recargar"
-	if not "vendas" in hechas and "vendas" in partida.mochila and partida.puede_curar("vendas"):
-		return "vendas"
-	var cerca := despiertos.filter(func(z): return z.global_position.distance_to(johnny.global_position) < CERCA)
-	if not "lanzar" in hechas and cerca.size() >= 3 and lanzables_a_mano() > 0:
-		return "lanzar"
 	return ""
 
 
@@ -225,8 +215,6 @@ func poner(id: String) -> void:
 		hechas.append(id)
 	if PISTAS[id].tutorial != "":
 		Tutoriales.apuntar(PISTAS[id].tutorial)
-	lanzables_antes = lanzables_a_mano()
-	vendas_antes = partida.mochila.count("vendas")
 	letrero.text = Tutoriales.con_teclas(Tutoriales.atacar_modo() if id == "atacar" else Idioma.t(PISTAS[id].texto))
 	letrero.visible = true
 	letrero.reset_size()
@@ -243,10 +231,6 @@ func hecha(id: String) -> bool:
 			return johnny.mano == "fuego"
 		"recargar":
 			return johnny.recargando > 0.0
-		"vendas":
-			return partida.mochila.count("vendas") < vendas_antes
-		"lanzar":
-			return lanzables_a_mano() < lanzables_antes
 	return false   # (la del jefe se va sola, a los DURA segundos)
 
 
@@ -274,13 +258,6 @@ func mirar_avisos() -> void:
 func zombis_despiertos() -> Array:
 	return get_tree().get_nodes_in_group("zombis").filter(func(z):
 		return is_instance_valid(z) and not z.get("dormido") and z.get("estado") != "muerto")
-
-
-func lanzables_a_mano() -> int:
-	var n := 0
-	for k in partida.lanzables.cantidades:
-		n += partida.lanzables.cantidades[k]
-	return n
 
 
 func poner_latido(cual: String) -> void:

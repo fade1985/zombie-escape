@@ -1209,14 +1209,6 @@ msgid "Recarga con {recargar}"
 msgstr "Перезарядка: {recargar}"
 
 #: scripts/guia.gd
-msgid "Cúrate con {usar_vendas}"
-msgstr "Лечение: {usar_vendas}"
-
-#: scripts/guia.gd
-msgid "Mantén {lanzar} para apuntar y suelta para lanzar"
-msgstr "Держи {lanzar}, чтобы прицелиться, и отпусти, чтобы бросить"
-
-#: scripts/guia.gd
 msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
 msgstr "Уйди с метки на полу или уклонись: {esquivar}!"
 
@@ -5228,10 +5220,6 @@ msgstr "МАКС"
 #: scripts/ui/arbol_talentos.gd
 msgid "Bloqueado"
 msgstr "Закрыто"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Cuesta $%d"
-msgstr "Цена $%d"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Toca otra vez: comprar · $%d"
