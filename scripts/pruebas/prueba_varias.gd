@@ -3543,6 +3543,10 @@ func probar_guiado_tercios() -> void:
 
 func probar_guiado() -> void:
 	johnny.invencible = true
+	# sin el superviviente que acompaña a Johnny (si lo hay): mataría él a los zombis antes de la pista de lanzar
+	for a in supervivientes.equipo:
+		a.queue_free()
+	supervivientes.equipo.clear()
 	var ventanas := func() -> int:
 		return get_children().filter(func(h): return h is Tutorial).size()
 	# espera a que salga la pista "id" (o se canse) y saca su foto
@@ -3571,7 +3575,16 @@ func probar_guiado() -> void:
 	await get_tree().create_timer(1.8).timeout
 	print("Guía · tras la ventana, sin pistas de moverse ni esquivar: pista «%s» · juego parado %s (esperado: «», false)" % [
 		guia.pista, get_tree().paused])
-	print("Guía · flecha a la vista en la sala de mantenimiento: %s (esperado: true)" % guia.flecha.visible)
+	# la flecha hacia la puerta del pasillo: mientras quede algún «!» en la sala (la taquilla, el ordenador...), no;
+	# mirados todos, sí
+	var marcas: int = mapa.marcas_sala.filter(func(m): return m.activa).size()
+	var con_marcas: bool = guia.flecha.visible
+	for m in mapa.marcas_sala:
+		m.condicion = func() -> bool: return false   # (como si ya se hubiera mirado)
+		m.refrescar()
+	await get_tree().create_timer(0.3).timeout
+	print("Guía · flecha en la sala de mantenimiento: con %d «!» %s · sin ellos %s (esperado: >0, false, true)" % [
+		marcas, con_marcas, guia.flecha.visible])
 	Captura.foto("captura-guiado-flecha.png")
 	# el pasillo: el aviso y la flecha hacia el apartamento fácil
 	await montar(0, planta.sitios[aqui].salidas[0].vuelta)
@@ -3591,10 +3604,14 @@ func probar_guiado() -> void:
 	await montar(guia.facil, 0)
 	await get_tree().create_timer(0.3).timeout
 	var zombis := get_tree().get_nodes_in_group("zombis")
+	# hacia el centro de la habitación (Johnny entra por la puerta, que puede estar arriba o abajo): si quedaran fuera,
+	# el mapa los metería dentro, más cerca de Guia.CERCA, y la pista de lanzar saldría antes de tiempo
+	var hacia: Vector2 = (Vector2(planta.sitios[aqui].ancho, planta.sitios[aqui].alto) / 2.0 - johnny.position).normalized()
+	var lado := hacia.orthogonal()
 	for i in zombis.size():
 		zombis[i].dormido = false
 		zombis[i].set_physics_process(false)
-		zombis[i].position = johnny.position + Vector2(-200 + 200 * i, -330)   # (más lejos que Guia.CERCA)
+		zombis[i].position = johnny.position + hacia * 330.0 + lado * (-200.0 + 200.0 * i)   # (más lejos que Guia.CERCA)
 	johnny.set_physics_process(false)   # (quieto: que no los mate ni gaste las balas él solo en el modo asistido)
 	await esperar.call("atacar", "captura-guiado-atacar.png")
 	await get_tree().create_timer(4.2).timeout   # (en el modo asistido se va sola a los 4 s)
@@ -3611,7 +3628,7 @@ func probar_guiado() -> void:
 	usar_cura("vendas")
 	await get_tree().create_timer(1.7).timeout
 	for i in zombis.size():
-		zombis[i].position = johnny.position + Vector2(-120 + 120 * i, -150)
+		zombis[i].position = johnny.position + hacia * 150.0 + lado * (-120.0 + 120.0 * i)
 	await esperar.call("lanzar", "captura-guiado-lanzar.png")
 	lanzables.cantidades[lanzables.tipo] -= 1
 	await get_tree().create_timer(1.7).timeout
