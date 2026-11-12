@@ -20,6 +20,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M95** Pasillo de mantenimiento: poner ventanas, moquetas y cuadros. Para más adelante.
 - **M96** Baños: poner toallas y estanterías de baño. Para más adelante.
 - **M97** Explicación de la ruleta y del cambio de arma: quitarla de donde sale ahora y ponerla en el tutorial, cuando se compra la pistola. Para más adelante.
+- **M98** Noticias de la tele: el recuadro de los subtítulos tiene que ser lo bastante grande para que quepan dos líneas de subtítulos. Para más adelante.
 
 ## Por limar
 
