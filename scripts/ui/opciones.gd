@@ -1,6 +1,6 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene cuatro pestañas:
-#   - General: el brillo (boton_brillo), el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), la
-#     música, el sonido, la pantalla completa y el temblor de pantalla (Normal, Suave o No: lo que tiembla la
+#   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), Audio (la música y el sonido) y
+#     Pantalla (la pantalla completa, el brillo y el temblor de pantalla: Normal, Suave o No, lo que tiembla la
 #     cámara y lo que se frena el juego al golpear, temblor.gd; se guarda). En el móvil, además, el tamaño y la transparencia de los botones
 #     táctiles y la vibración (se guardan).
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
@@ -315,7 +315,6 @@ func general() -> void:
 	var a_pantalla := opcion(Idioma.t("Pantalla"), "BotonGrande")
 	a_pantalla.name = "pantalla"   # no-tr
 	a_pantalla.pressed.connect(func(): ver("pantalla"))
-	boton_brillo()
 	if johnny == null:   # en el menú principal (en la pausa, el Tutorial tiene su propio botón)
 		var tutorial := opcion(Idioma.t("Tutorial"), "BotonGrande")
 		tutorial.pressed.connect(func(): Tutorial.lista(self, fondo).cerrado.connect(tutorial.grab_focus))
@@ -387,33 +386,55 @@ func idiomas() -> void:
 		boton_idioma.grab_focus.call_deferred()
 
 
-# El brillo (11 nov): «Brillo: 50», de 0 a 100 de 10 en 10 (50, como se ve sin tocar nada). Al pulsarlo sube 10 (y de 100
-# vuelve a 0); con el clic derecho, o las flechas izquierda y derecha (también las del mando), baja o sube. Se guarda y se
-# nota al momento en todo el juego (Pantalla.poner_brillo)
-func boton_brillo() -> Button:
-	var texto := func(v: int) -> String:
-		return "%s: %d" % [Idioma.t("Brillo"), v]
-	var b := opcion(texto.call(int(Guardado.ajuste("brillo"))), "BotonGrande")
+# El brillo (11 nov; desde el 12 nov en Pantalla y con un desplegable): «Brillo: 50» y, al pulsarlo, la lista de 0 a 100 de 10
+# en 10 (50, como se ve sin tocar nada) para elegir uno. Con el desplegable cerrado, las flechas izquierda y derecha (también
+# las del mando) bajan o suben 10 sin abrirlo. Se guarda y se nota al momento en todo el juego (Pantalla.poner_brillo)
+func desplegable_brillo() -> OptionButton:
+	var b := OptionButton.new()
+	b.theme_type_variation = "BotonGrande"
+	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	b.custom_minimum_size.x = 360
+	b.fit_to_longest_item = false   # (lo ancho lo pone igualar(), como a los demás botones grandes)
+	b.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	b.name = "brillo"   # no-tr
-	var cambiar := func(paso: int, dar_la_vuelta: bool):
-		var v := int(Guardado.ajuste("brillo")) + paso
-		v = posmod(v, 110) if dar_la_vuelta else clampi(v, 0, 100)
+	for v in range(0, 101, 10):
+		b.add_item(str(v), v)
+	var poner_texto := func(v: int):   # (el botón dice «Brillo: N»; la lista, solo los números)
+		b.text = "%s: %d" % [Idioma.t("Brillo"), v]
+	var cambiar := func(v: int):
+		v = clampi(v, 0, 100)
 		Guardado.cambiar(func(g): g.ajustes.brillo = v)
 		Pantalla.poner_brillo(v)
-		b.text = texto.call(v)
-	b.pressed.connect(cambiar.bind(10, true))
+		b.select(b.get_item_index(v))
+		poner_texto.call(v)
+	var ahora := clampi(snappedi(int(Guardado.ajuste("brillo")), 10), 0, 100)
+	b.select(b.get_item_index(ahora))
+	poner_texto.call(ahora)
+	b.item_selected.connect(func(i: int): cambiar.call(b.get_item_id(i)))
 	b.gui_input.connect(func(evento: InputEvent):
 		var paso := 0
-		if evento is InputEventMouseButton and evento.pressed and evento.button_index == MOUSE_BUTTON_RIGHT:
-			paso = -10
-		elif evento.is_action_pressed("ui_left"):
+		if evento.is_action_pressed("ui_left"):
 			paso = -10
 		elif evento.is_action_pressed("ui_right"):
 			paso = 10
 		if paso != 0:
-			cambiar.call(paso, false)
+			cambiar.call(int(Guardado.ajuste("brillo")) + paso)
 			Sonido.tocar("click")
 			b.accept_event())
+	# La lista: con la letra y la chapa de los botones, y la casilla elegida con el borde amarillo (como en Controles)
+	var lista := b.get_popup()
+	lista.add_theme_stylebox_override("panel", Tema._chapa(Color.WHITE))
+	lista.add_theme_stylebox_override("hover", Tema._pastilla(Tema.AMARILLO))
+	lista.add_theme_font_size_override("font_size", 24)
+	lista.add_theme_constant_override("v_separation", 0)   # (apretada: once números tienen que caber bajo el botón)
+	var nada := ImageTexture.create_from_image(Image.create_empty(1, 1, false, Image.FORMAT_RGBA8))
+	for icono in ["radio_checked", "radio_unchecked"]:   # (sin los circulitos: el elegido ya sale con el borde amarillo)
+		lista.add_theme_icon_override(icono, nada)
+	lista.add_theme_constant_override("outline_size", 4)
+	for c in ["font_color", "font_hover_color"]:
+		lista.add_theme_color_override(c, Color("#e6dec8"))
+	lista.add_theme_color_override("font_outline_color", Tema.LINEA)
+	contenido.add_child(b)
 	return b
 
 
@@ -433,7 +454,7 @@ func audio() -> void:
 	musica.grab_focus.call_deferred()
 
 
-# La pantalla (el botón Pantalla de General): la pantalla completa y el temblor. Se vuelve con la pestaña General
+# La pantalla (el botón Pantalla de General): la pantalla completa, el brillo (desplegable_brillo) y el temblor. Se vuelve con la pestaña General
 func pantalla() -> void:
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		var texto_completa := func(si: bool) -> String:
@@ -444,6 +465,7 @@ func pantalla() -> void:
 			var ahora := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 			Tactil.pantalla_completa()
 			completa.text = texto_completa.call(not ahora))
+	desplegable_brillo()
 	rotar(Idioma.t("Temblor"), "temblor", TEMBLORES, "BotonGrande")
 	igualar()
 	(contenido.get_child(0) as Control).grab_focus.call_deferred()
