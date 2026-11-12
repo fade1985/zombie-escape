@@ -1091,6 +1091,8 @@ const ESCENARIO := Vector2(404, 208)   # donde sale el enemigo grande, con su lu
 const PIES_ESCENARIO := 186.0
 const TECHO_ESCENARIO := 46.0
 const FONDO_ESCENARIO := preload("res://assets/ui/foco-sujetos.png")   # su fondo, 202 × 90 (tools/foco_sujetos.py)
+const TAM_LISA_NOMBRE := 24   # la letra lisa (Rubik) de debajo del escenario: el nombre, en negrita...
+const TAM_LISA_FICHA := 17    # ...y lo demás (dónde sale, los matados y la frase; antes, la pixelada, 12 nov)
 const CASILLA_ZOMBI := 100     # cada casilla de la cuadrícula de la derecha (4 por fila)
 const POR_PAGINA := 12         # las casillas de cada página de la cuadrícula (4 × 3)
 var familia_vista := "durmientes"   # la pestaña abierta de Colecciones (Bestiario.familias)
@@ -1102,7 +1104,7 @@ var pagina_vista := 0               # y su página
 # con su barra; debajo, una pestaña por familia (los durmientes, los zombis de siempre, y los sonámbulos, los jefes) y, a
 # la derecha, las flechas de las páginas de la cuadrícula (si tiene más de una); a la izquierda, el que se esté mirando,
 # grande y moviéndose bajo un foco, con su nombre, dónde sale, su frase y cuántos se han matado; a la derecha, la
-# cuadrícula de la familia: los vistos a color, los que faltan en silueta negra y los jefes con marco dorado. "foco":
+# cuadrícula de la familia: los vistos a color, los que faltan con una interrogación y los jefes con marco dorado. "foco":
 # "z_<id>" abre su familia y su página con él marcado; "pes_<familia>", esa pestaña; "pag_ant" o "pag_sig", la flecha.
 # Devuelve lo que hay que marcar
 func programa_colecciones(c: VBoxContainer, foco: String) -> String:
@@ -1290,8 +1292,8 @@ func mostrar(lado: CenterContainer, clave: String, hacer: Callable) -> void:
 	lado.add_child(hacer.call())
 
 
-# Una casilla de la cuadrícula: un botón con el dibujo de frente del enemigo, encajado; en silueta negra si aún no se ha
-# visto y con marco dorado si es un jefe. Al pulsarla, su ficha sale a la izquierda (sus bordes los pone senalar_casilla)
+# Una casilla de la cuadrícula: un botón con el dibujo de frente del enemigo, encajado (una interrogación si aún no se ha
+# visto) y con marco dorado si es un jefe. Al pulsarla, su ficha sale a la izquierda (sus bordes los pone senalar_casilla)
 func casilla_zombi(padre: Container, id: String, visto: bool) -> Button:
 	var b := Button.new()
 	b.name = "z_" + id
@@ -1304,7 +1306,8 @@ func casilla_zombi(padre: Container, id: String, visto: bool) -> Button:
 	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(centro)
 	var imagen := TextureRect.new()
-	imagen.texture = Bestiario.retrato(id)
+	# los que aún no se han visto, la interrogación grande (como la «!» de los avisos): sin pistas (12 nov; antes, su silueta)
+	imagen.texture = Bestiario.retrato(id) if visto else interrogacion()
 	# a escala entera, lo más grande que quepa (como mucho, a 2)
 	var t := imagen.texture.get_size()
 	var escala := clampf(floorf((CASILLA_ZOMBI - 4) / maxf(t.x, t.y)), 1.0, 2.0)
@@ -1315,8 +1318,6 @@ func casilla_zombi(padre: Container, id: String, visto: bool) -> Button:
 	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	imagen.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if not visto:
-		imagen.modulate = Color.BLACK   # la silueta
 	centro.add_child(imagen)
 	return b
 
@@ -1335,8 +1336,8 @@ func senalar_casilla(cuadricula: GridContainer, clave: String) -> void:
 			b.add_theme_stylebox_override(e, elegida if es else encima)
 
 
-# La ficha de un enemigo, a la izquierda: él grande y moviéndose (en silueta, quieto, si no se ha visto) en un escenario con
-# su luz, y debajo su nombre, dónde sale, su frase y cuántos se han matado
+# La ficha de un enemigo, a la izquierda: él grande y moviéndose en un escenario con su luz (si no se ha visto, la
+# interrogación grande: sin pistas), y debajo su nombre, dónde sale, su frase y cuántos se han matado
 func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	var d: Dictionary = Bestiario.LISTA[id]
 	var columna := VBoxContainer.new()
@@ -1372,13 +1373,21 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	dibujo.scale = Vector2(escala, escala)
 	dibujo.position = (pies - Vector2(usado.position.x + usado.size.x / 2.0, usado.position.y + usado.size.y) * escala).round()
 	dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	if not visto:
-		dibujo.modulate = Color.BLACK   # la silueta
+	if not visto:   # (en su sitio, la interrogación, de pie en el charco de luz y a 3: 12 nov; antes, su silueta negra)
+		dibujo.free()
+		var signo := Sprite2D.new()
+		signo.texture = interrogacion()
+		signo.centered = false
+		signo.scale = Vector2(3, 3)
+		signo.position = (pies - Vector2(signo.texture.get_width() / 2.0, signo.texture.get_height()) * 3).round()
+		signo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		dibujo = signo
+		dibujo.name = "dibujo"
 	escenario.add_child(dibujo)
 	polvo_y_parpadeo(escenario)
 
-	var nombre := texto_tarjeta(Bestiario.nombre(id) if visto else "???", TINTA)
-	nombre.add_theme_font_size_override("font_size", 24)
+	# debajo del escenario, todo con la letra lisa (se lee mejor; 12 nov): el nombre, en negrita
+	var nombre := texto_lisa(Bestiario.nombre(id) if visto else "???", TINTA, TAM_LISA_NOMBRE, Tema.PESO_LISA_TITULO)
 	nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(nombre)
 	# dónde sale y cuántos se han matado, en la misma línea (así cabe el escenario alto)
@@ -1386,10 +1395,10 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	linea.alignment = BoxContainer.ALIGNMENT_CENTER
 	linea.add_theme_constant_override("separation", 12)
 	columna.add_child(linea)
-	linea.add_child(texto_tarjeta(Idioma.t("Sale en: %s") % (sale_en(d) if visto else "???"), TINTA_SUAVE))
+	linea.add_child(texto_lisa(Idioma.t("Sale en: %s") % (sale_en(d) if visto else "???"), TINTA_SUAVE))
 	if visto:
-		linea.add_child(texto_tarjeta(Idioma.t("Matados: %d") % Bestiario.matados(s, id), VERDE_OSCURO))
-	var frase := texto_tarjeta(Bestiario.frase(id) if visto else Idioma.t("Aún no te lo has cruzado."), TINTA)
+		linea.add_child(texto_lisa(Idioma.t("Matados: %d") % Bestiario.matados(s, id), VERDE_OSCURO))
+	var frase := texto_lisa(Bestiario.frase(id) if visto else Idioma.t("Aún no te lo has cruzado."), TINTA)
 	frase.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	frase.custom_minimum_size.x = FICHA_ANCHO
 	frase.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1397,8 +1406,14 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	return columna
 
 
+# La interrogación de los sujetos que aún no se han visto: la de GPT reducida, con el dibujo de la «!» de los avisos
+# (tools/muebles_gpt.py, "interrogacion")
+func interrogacion() -> Texture2D:
+	return load("res://assets/ui/interrogacion.png")
+
+
 # El fondo del escenario de la ficha: la sala a oscuras con la lámpara y su cono de luz (la imagen de GPT reducida,
-# assets/ui/foco-sujetos.png), a 2 unidades por píxel como todo el juego. La luz deja ver la silueta negra de los que
+# assets/ui/foco-sujetos.png), a 2 unidades por píxel como todo el juego. La luz alumbra la interrogación de los que
 # aún no se han visto
 func pintar_escenario(e: Control) -> void:
 	e.draw_texture_rect(FONDO_ESCENARIO, Rect2(Vector2.ZERO, e.size), false)
@@ -1551,6 +1566,14 @@ func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, de
 	for senal in [b.focus_entered, b.focus_exited, b.mouse_entered, b.mouse_exited]:
 		senal.connect(marco.queue_redraw)
 	return b
+
+
+# Un texto con la letra lisa (Rubik), del tamaño y el grosor dados (la ficha de Sujetos)
+func texto_lisa(texto: String, color: Color, tam := TAM_LISA_FICHA, peso := Tema.PESO_LISA) -> Label:
+	var l := texto_tarjeta(texto, color)
+	l.add_theme_font_override("font", Tema.lisa(peso))
+	l.add_theme_font_size_override("font_size", tam)
+	return l
 
 
 func texto_tarjeta(texto: String, color: Color) -> Label:

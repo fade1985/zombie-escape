@@ -361,7 +361,7 @@ func probar_historia() -> void:
 # Colecciones (bestiario.gd y el programa del ordenador; también solo, con --coleccion): deja en el guardado
 # parte de los enemigos vistos y unos cuantos matados, y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
 # (captura-escritorio-nuevo.png), la pestaña de los durmientes con el vecino (captura-colecciones.png), la de los
-# sonámbulos con el gerente en silueta (captura-bestiario-falta.png), los durmientes con el oficinista
+# sonámbulos con el gerente sin ver (la interrogación) (captura-bestiario-falta.png), los durmientes con el oficinista
 # (captura-bestiario-torre.png), los sonámbulos con la criatura, el más grande (captura-bestiario-grande.png), y su
 # segunda página con el Sujeto 1 (captura-bestiario-pagina.png). Luego cuenta en la terminal lo visto de cada familia,
 # comprueba los totales, las flechas de las páginas y que matar uno lo apunta

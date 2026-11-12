@@ -168,7 +168,7 @@
 #   --dosier-plantas    en qué plantas sale cada página del dosier (la 5, tras completar el edificio) y la tele que pone
 #                       seguidas las noticias que faltan                                [prueba_larga.gd]
 #   --coleccion         el programa Colecciones del ordenador (los sujetos): las pestañas, las páginas, la ficha
-#                       grande bajo el foco, las siluetas y los matados de cada zombi      [prueba_larga.gd]
+#                       grande bajo el foco, las interrogaciones de los que faltan y los matados de cada zombi      [prueba_larga.gd]
 #   --novedades         los avisos de lo nuevo: el «!» de la mesa del ordenador, de la taquilla y de los iconos, y el
 #                       grito grande de los logros y las skins                         [prueba_larga.gd]
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
