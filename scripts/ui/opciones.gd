@@ -79,7 +79,9 @@ const SI_NO := [[true, "Sí"], [false, "No"]]
 const TEMBLORES := [[1.0, "Normal"], [0.5, "Suave"], [0.0, "No"]]
 # El hueco entre los botones grandes (General, Idioma, Audio y Pantalla): con 8 iban muy juntos y sobraba media ventana
 const HUECO_GRANDES := 18
-const TAM_TABLA := 17   # la letra lisa de los textos de la tabla de Controles (las casillas, con la pixelada, van a 16)
+const TAM_TABLA := 17   # la letra lisa de los textos de la tabla de Controles (la pixelada va a 16)
+const TAM_AYUDAS := 16  # la de las frases con la letra lisa de explicar() (Ayudas): a 17 no cabe la página en ruso...
+const ANCHO_LISA := 690 # ...y su ancho (más que las demás, 620: con la lisa se parten en más líneas y no cabría)
 
 const BOTONES_MANDO := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
@@ -605,24 +607,31 @@ func contacto() -> void:
 # Las ayudas: cada una, un botón de Sí/No con lo que hace debajo, y el aviso de los logros arriba. Todas a la vista,
 # sin barra (desde que los tutoriales se fueron a la lista de Tutorial, caben)
 func ayudas() -> void:
-	var aviso := explicar(Idioma.t("El uso de ayudas desactiva la obtención de logros en la partida actual, incluso si se desactivan posteriormente. Los logros obtenidos con anterioridad no se verán afectados."))
+	var aviso := explicar(Idioma.t("El uso de ayudas desactiva la obtención de logros en la partida actual, incluso si se desactivan posteriormente. Los logros obtenidos con anterioridad no se verán afectados."), true)
 	aviso.add_theme_color_override("font_color", Tema.AMARILLO)
 	rotar(Idioma.t("Vida entera"), "vida_entera", SI_NO)
-	explicar(Idioma.t("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."))
+	explicar(Idioma.t("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."), true)
 	rotar(Idioma.t("Pistola sin fin"), "pistola_sin_fin", SI_NO)
-	explicar(Idioma.t("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."))
+	explicar(Idioma.t("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."), true)
 	rotar(Idioma.t("Lanzar apuntando solo"), "lanzar_solo", SI_NO)
-	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."))
+	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."), true)
 	rotar(Idioma.t("Disparo asistido"), "disparo_asistido", SI_NO)
-	explicar(Idioma.t("Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."))
+	explicar(Idioma.t("Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."), true)
 
 
-func explicar(texto: String) -> Label:
+# "lisa": con la letra lisa (Rubik, a TAM_AYUDAS y con las líneas algo más juntas: así cabe Ayudas entera, también en ruso), como las frases de
+# Ayudas desde el 12 nov
+func explicar(texto: String, lisa := false) -> Label:
 	var l := Label.new()
 	l.theme_type_variation = "Sub"
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.custom_minimum_size.x = 620   # (el ancho de la tabla de Controles: así se mide como se ve y no sobra hueco abajo)
+	if lisa:
+		l.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))
+		l.add_theme_font_size_override("font_size", TAM_AYUDAS)
+		l.add_theme_constant_override("line_spacing", -3)
+		l.custom_minimum_size.x = ANCHO_LISA
 	l.text = texto
 	contenido.add_child(l)
 	return l
