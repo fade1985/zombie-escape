@@ -45,7 +45,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   reconocidos no los toca. Se prueba solo en la web, con un mando de mentira que la prueba enchufa desde el navegador:
   exportar a `web/` (de desarrollo), arrancar su servidor y `py tools/medir_web.py 45 --captura --mandoweb`.
 - **Opciones** (menú y pausa): **brillo** (en Pantalla, una barra con un punto que se arrastra, de 0 a 100 de 5 en 5, 50 = sin
-  tocar y en la mitad al empezar; también con un clic en la barra, la rueda o, con ella elegida, las flechas izquierda y derecha), **idioma** (español o inglés; si nunca se ha elegido, el del sistema), música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
+  tocar y en la mitad al empezar; también con un clic en la barra, la rueda o, con ella elegida, las flechas izquierda y derecha), **idioma** (español o inglés; si nunca se ha elegido, el del sistema), música, sonido, **volumen** (en Audio, una barra como la del brillo, de 0 a 100 de 5 en 5, 100 = el de siempre; a 0 no se oye nada y Música y Sonido se ponen en No; al subirlo desde menos de 10 hasta 10 o más, los dos en Sí; prueba `--volumen`), **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
   tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*, *Disparo asistido* (Johnny apunta y ataca solo; sin ella, el modo libre, el de
   siempre: ya no hay tecla para cambiarlo); no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se

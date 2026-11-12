@@ -395,8 +395,17 @@ func idiomas() -> void:
 # Va dentro de una chapa como la de los botones grandes (marco_brillo) que hace lo mismo que ellos: se ilumina y da un
 # saltito al pasar por encima o al elegir la barra, y mientras se arrastra el punto se oscurece y se aplasta (botones.gd)
 func barra_brillo() -> HSlider:
+	return barra_chapa("brillo", Idioma.t("Brillo"), int(Guardado.ajuste("brillo")), func(v: int):   # no-tr
+		Pantalla.poner_brillo(v)
+		if v != int(Guardado.ajuste("brillo")):
+			Guardado.cambiar(func(g): g.ajustes.brillo = v))
+
+
+# Una barra de 0 a 100 de 5 en 5 dentro de su chapa, como la del brillo (y la del volumen, en Audio): «Texto: 50»
+# encima, la barra se llama "nombre" y la chapa "marco_<nombre>". "al_cambiar(valor)", cada vez que se mueve
+func barra_chapa(nombre: String, texto: String, valor: int, al_cambiar: Callable) -> HSlider:
 	var marco := PanelContainer.new()
-	marco.name = "marco_brillo"   # no-tr
+	marco.name = "marco_" + nombre   # no-tr
 	marco.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	contenido.add_child(marco)   # (antes de leer la chapa del tema: hasta estar dentro no lo tiene)
 	var chapa := {}
@@ -411,19 +420,17 @@ func barra_brillo() -> HSlider:
 	titulo.add_theme_color_override("font_color", marco.get_theme_color("font_color", "Button"))
 	caja.add_child(titulo)
 	var barra := HSlider.new()
-	barra.name = "brillo"   # no-tr
+	barra.name = nombre
 	barra.min_value = 0
 	barra.max_value = 100
 	barra.step = 5
-	barra.size_flags_horizontal = Control.SIZE_EXPAND_FILL   # (la chapa, al final de pantalla(), tan ancha como los botones grandes)
-	barra.value = clampi(int(Guardado.ajuste("brillo")), 0, 100)
-	titulo.text = "%s: %d" % [Idioma.t("Brillo"), int(barra.value)]
-	barra.value_changed.connect(func(valor: float):
-		var v := int(valor)
-		titulo.text = "%s: %d" % [Idioma.t("Brillo"), v]
-		Pantalla.poner_brillo(v)
-		if v != int(Guardado.ajuste("brillo")):
-			Guardado.cambiar(func(g): g.ajustes.brillo = v))
+	barra.size_flags_horizontal = Control.SIZE_EXPAND_FILL   # (la chapa, al final de la página, tan ancha como los botones grandes)
+	barra.value = clampi(valor, 0, 100)
+	titulo.text = "%s: %d" % [texto, int(barra.value)]
+	barra.value_changed.connect(func(nuevo: float):
+		var v := int(nuevo)
+		titulo.text = "%s: %d" % [texto, v]
+		al_cambiar.call(v))
 	# Cómo se ve: la barra de metal oscuro con el borde negro, lo que va del principio al punto en amarillo, y el punto
 	# redondo color hueso (amarillo al pasar por encima o con la barra elegida)
 	var tira := func(color: Color) -> StyleBoxFlat:
@@ -474,7 +481,7 @@ func barra_brillo() -> HSlider:
 	return barra
 
 
-# El punto de la barra del brillo: un círculo de 30 px del color dado, con el borde negro
+# El punto de la barra del brillo y del volumen: un círculo de 30 px del color dado, con el borde negro
 func _punto(color: Color) -> ImageTexture:
 	const LADO := 30
 	var imagen := Image.create_empty(LADO, LADO, false, Image.FORMAT_RGBA8)
@@ -489,7 +496,9 @@ func _punto(color: Color) -> ImageTexture:
 	return ImageTexture.create_from_image(imagen)
 
 
-# El audio (el botón Audio de General): la música y quitar todo el sonido. Se vuelve con la pestaña General
+# El audio (el botón Audio de General): la música, quitar todo el sonido y el volumen (12 nov: una barra como la del
+# brillo, de 0 a 100 de 5 en 5; 100, el de siempre). A 0 no se oye nada y Música y Sonido se ponen en No; al volver a
+# subirlo desde menos de 10 hasta 10 o más, los dos se ponen en Sí. Se vuelve con la pestaña General
 func audio() -> void:
 	var musica := opcion(texto_musica(), "BotonGrande")
 	musica.pressed.connect(func():
@@ -501,7 +510,20 @@ func audio() -> void:
 	sonido.pressed.connect(func():
 		Sonido.silenciar(not Sonido.silenciado())
 		sonido.text = texto_sonido())
+	var antes := [int(Guardado.ajuste("volumen"))]
+	barra_chapa("volumen", Idioma.t("Volumen"), antes[0], func(v: int):   # no-tr
+		Sonido.poner_volumen(v)
+		if v == 0 or (v >= 10 and antes[0] < 10):   # (en silencio, los dos en No; al volver a subirlo, en Sí)
+			Guardado.cambiar(func(g): g.ajustes.musica = v > 0)
+			Sonido.musica_si(v > 0)
+			Sonido.silenciar(v == 0)
+			musica.text = texto_musica()
+			sonido.text = texto_sonido()
+		antes[0] = v
+		if v != int(Guardado.ajuste("volumen")):
+			Guardado.cambiar(func(g): g.ajustes.volumen = v))
 	igualar()
+	(contenido.get_node("marco_volumen") as Control).custom_minimum_size.x = ancho_grande
 	musica.grab_focus.call_deferred()
 
 

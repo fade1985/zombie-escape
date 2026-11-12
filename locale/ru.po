@@ -6391,6 +6391,10 @@ msgid "Brillo"
 msgstr "Яркость"
 
 #: scripts/ui/opciones.gd
+msgid "Volumen"
+msgstr "Громкость"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "Дрожание"
 

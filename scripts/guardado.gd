@@ -74,8 +74,9 @@ const NUEVO := {
 	# idioma: "es" o "en", el elegido en Opciones (idioma.gd); "" = nunca se ha elegido: el del sistema
 	# temblor: cuánto tiembla la pantalla y cuánto se frena el juego al golpear (temblor.gd): 1 normal, 0,5 suave, 0 nada
 	# brillo: el de Opciones → Pantalla (una barra), de 0 a 100 de 5 en 5; 50 es como se ve sin tocar nada (pantalla.gd, poner_brillo)
+	# volumen: el de Opciones → Audio (otra barra), de 0 a 100 de 5 en 5; 100 es el de siempre y 0, nada (sonido.gd, poner_volumen)
 	"ajustes": {"musica": true, "teclas": {},
-		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true, "temblor": 1.0, "brillo": 50,
+		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true, "temblor": 1.0, "brillo": 50, "volumen": 100,
 		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "disparo_asistido": false, "tutoriales": true, "idioma": "", "pantalla_completa": false},
 }
 

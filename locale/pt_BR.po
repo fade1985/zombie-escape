@@ -6369,6 +6369,10 @@ msgid "Brillo"
 msgstr "Brilho"
 
 #: scripts/ui/opciones.gd
+msgid "Volumen"
+msgstr "Volume"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "Tremor"
 

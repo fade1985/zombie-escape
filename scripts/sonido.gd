@@ -225,6 +225,7 @@ func _ready() -> void:
 	if Captura.activa() and not "--trailer" in OS.get_cmdline_user_args():   # (el trailer se graba con sus sonidos)
 		silenciar(true)
 	musica_si(Guardado.cargar().ajustes.musica)
+	poner_volumen()
 	if OS.has_feature("web"):
 		# en el navegador, sus avisos de "la página se ha ocultado" (cambiar de pestaña, bloquear el móvil...) y de
 		# "la página ha perdido el foco": con la ventana detrás de otra o en otra pantalla, la página no está oculta
@@ -468,6 +469,14 @@ func silenciado() -> bool:
 
 func aplicar_silencio() -> void:
 	AudioServer.set_bus_mute(0, quieto or fuera)
+
+
+# El volumen de todo (Opciones → Audio, de 0 a 100; si no se dice, el guardado): 100 es el de siempre y 0, nada. Va al
+# cuadrado, como lo oye el oído: a 50 suena a la mitad (sin eso, casi igual que a 100)
+func poner_volumen(valor := -1) -> void:
+	if valor < 0:
+		valor = int(Guardado.ajuste("volumen"))
+	AudioServer.set_bus_volume_db(0, linear_to_db(pow(valor / 100.0, 2.0)) if valor > 0 else -80.0)
 
 
 # La música encendida o apagada (el ajuste del menú de pausa)

@@ -4662,6 +4662,58 @@ func probar_brillo() -> void:
 	get_tree().quit()
 
 
+# --volumen: el «Volumen» de Opciones → Audio, una barra como la del brillo (de 0 a 100 de 5 en 5, a 100 al empezar) que se
+# guarda y cambia el volumen de todo; a 0, Música y Sonido en No y nada se oye; al subirlo de nuevo, a 5 siguen en No y a
+# 10, los dos en Sí. Fotos: captura-volumen.png (a 100, con Sonido en No: la prueba va callada), captura-volumen-0.png y
+# captura-volumen-50.png
+func probar_volumen() -> void:
+	await get_tree().create_timer(0.5, true).timeout
+	var o := Opciones.abrir(self, null, johnny)
+	o.ver("audio")
+	await get_tree().create_timer(0.3, true).timeout
+	var barra := o.find_child("volumen", true, false) as HSlider
+	if barra == null:
+		print("ERROR: en Opciones → Audio no está la barra del volumen")
+		get_tree().quit(1)
+		return
+	var titulo := barra.get_parent().get_child(0) as Label
+	var botones := o.find_children("*", "Button", true, false).filter(func(b): return b.theme_type_variation == "BotonGrande")
+	var textos := func() -> String:
+		return " · ".join(botones.map(func(b): return b.text))
+	var db := func() -> float:
+		return snappedf(AudioServer.get_bus_volume_db(0), 0.1)
+	print("Volumen · la barra: «%s», de %d a %d de %d en %d · volumen %s dB · %s (esperado: Volumen: 100, 0 a 100 de 5 en 5, 0 dB, Música: Sí · Sonido: No)" % [
+		titulo.text, barra.min_value, barra.max_value, barra.step, barra.step, db.call(), textos.call()])
+	Captura.foto("captura-volumen.png")
+	barra.value = 50
+	await get_tree().create_timer(0.3, true).timeout
+	print("Volumen · a 50: %s dB, guardado %s (esperado: -12 dB, 50)" % [db.call(), Guardado.cargar().ajustes.volumen])
+	Captura.foto("captura-volumen-50.png")
+	barra.value = 0
+	await get_tree().create_timer(0.3, true).timeout
+	print("Volumen · a 0: %s dB · %s · música guardada %s, sonido quitado %s (esperado: -80 dB, Música: No · Sonido: No, false, true)" % [
+		db.call(), textos.call(), Guardado.cargar().ajustes.musica, Sonido.silenciado()])
+	Captura.foto("captura-volumen-0.png")
+	barra.value = 5
+	var a_5: String = textos.call()
+	barra.value = 10
+	print("Volumen · a 5: %s · a 10: %s, música guardada %s, sonido quitado %s (esperado: los dos No · los dos Sí, true, false)" % [
+		a_5, textos.call(), Guardado.cargar().ajustes.musica, Sonido.silenciado()])
+	Sonido.silenciar(false)
+	barra.value = 60
+	var musica: Button = botones[0]
+	musica.pressed.emit()   # (la música, apagada a mano: al mover el volumen por encima de 10, no se vuelve a encender)
+	barra.value = 80
+	print("Volumen · música apagada a mano y el volumen de 60 a 80: %s (esperado: Música: No · Sonido: Sí)" % textos.call())
+	o.cerrar()
+	Guardado.cambiar(func(g):
+		g.ajustes.volumen = 100
+		g.ajustes.musica = true)
+	Sonido.poner_volumen()
+	Sonido.silenciar(true)
+	get_tree().quit()
+
+
 # --contacto: «Contáctanos» de Opciones → General (contacto.gd). La página vacía y con un mensaje, que no deja pasar de
 # MAX_LETRAS, que sin escribir nada no se manda, que solo va el texto (sin datos técnicos) y el envío: sin más, no sale nada del ordenador (dice lo que mandaría); con --contacto-url URL se
 # manda de verdad allí (para probarlo contra un servidor de prueba). Esc vuelve a General, al botón Contáctanos.

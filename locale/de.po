@@ -6369,6 +6369,10 @@ msgid "Brillo"
 msgstr "Helligkeit"
 
 #: scripts/ui/opciones.gd
+msgid "Volumen"
+msgstr "Lautstärke"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "Wackeln"
 

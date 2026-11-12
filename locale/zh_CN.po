@@ -6347,6 +6347,10 @@ msgid "Brillo"
 msgstr "亮度"
 
 #: scripts/ui/opciones.gd
+msgid "Volumen"
+msgstr "音量"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor"
 msgstr "抖动"
 
