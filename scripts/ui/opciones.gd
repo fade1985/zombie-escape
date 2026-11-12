@@ -367,9 +367,8 @@ func idiomas() -> void:
 		for estado in chapas:
 			b.add_theme_stylebox_override(estado, chapas[estado])
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		var letra := Tema.fuente_del_idioma(i[0])   # (el ruso y el chino se escriben con su letra, en cualquier idioma)
-		if letra != null:
-			b.add_theme_font_override("font", letra)
+		b.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA_TITULO))   # (con la letra lisa, Rubik, desde el 12 nov: con
+		# ella van el ruso y, por su reserva Noto Sans SC, el chino; tools/recortar_noto_sc.py le mete las letras de los nombres)
 		b.pressed.connect(func():   # al elegirlo, de vuelta a General (con el foco en el botón del idioma)
 			pestana = "general"
 			if i[0] == Idioma.actual:

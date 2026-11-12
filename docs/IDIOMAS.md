@@ -153,7 +153,9 @@ Trae latín y cirílico. **Desde el 12 nov la usan los tutoriales (`tutorial.gd`
 19 los textos y botones y 36 los títulos (`TAM_LISA` y `TAM_LISA_TITULO`; la pixelada va a 16 y 32). El resto del juego sigue con la letra pixelada. En la lista de
 Tutorial (menú y pausa), el título «Tutorial», la lista de temas y los botones de abajo van con la pixelada, para ir con el
 arte del juego (12 nov); con Rubik, solo la ficha de la derecha. En Contáctanos (`opciones.gd`, `contacto()`), las dos frases de
-arriba, el cuadro donde se escribe y el aviso de debajo de Enviar también van con Rubik (12 nov). Para el chino,
+arriba, el cuadro donde se escribe y el aviso de debajo de Enviar también van con Rubik (12 nov). Y los botones de la lista de
+idiomas (`idiomas()`), en negrita: cada nombre en su idioma, el chino con Noto Sans SC (`tools/recortar_noto_sc.py` le mete
+las letras de los nombres de `Idioma.IDIOMAS`). Para el chino,
 **Noto Sans SC** (`noto-sans-sc-recortada.woff2`, OFL 1.1, `noto-sans-sc-OFL.txt`; variable, ~400 KB), recortada a los caracteres de
 `locale/zh_CN.po` con `py tools/recortar_noto_sc.py <NotoSansSC[wght].ttf>` (de Google Fonts): **hay que lanzarlo otra vez cuando la
 traducción china traiga caracteres nuevos**; mientras, esos salen con Unifont (pixelados, no un cuadro). Su licencia reserva el
