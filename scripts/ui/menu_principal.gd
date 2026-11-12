@@ -464,6 +464,7 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	margen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for lado in ["left", "right"]:
 		margen.add_theme_constant_override("margin_" + lado, 8)
+	margen.add_theme_constant_override("margin_top", 10)   # (el doble de aire bajo la cabecera, 12 nov)
 	columna.add_child(margen)
 	var textos := VBoxContainer.new()
 	textos.add_theme_constant_override("separation", 4)
@@ -476,7 +477,7 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
 	# (el premio ya no va aquí: sale debajo del botón, y dos veces quedaba feo, 12 nov)
 	var abajo := Control.new()
-	abajo.custom_minimum_size.y = 8   # (aire bajo la marca: con 4 se pegaba al borde, 12 nov)
+	abajo.custom_minimum_size.y = 24   # (aire bajo la última línea: el doble que antes, 12 nov)
 	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	columna.add_child(abajo)
 	return cuadro
