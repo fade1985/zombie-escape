@@ -10,7 +10,7 @@
 #   - el texto, a todo lo ancho (sin foto: el dueño la quitó el 7 nov);
 #   - la nota a mano, en un pósit amarillo algo torcido, abajo a la derecha.
 # Las que aún no se tienen («Página arrancada») son solo el trozo de arriba, roto por abajo, con lo que dice
-# Historia.falta() en vez del texto.
+# Historia.falta() en vez del texto, con la letra lisa (Rubik, como los tutoriales: 12 nov).
 #
 # Que quepa todo: la hoja mide de alto lo que necesita. Si con eso pasa de "alto_max", prueba con la letra más
 # pequeña (del texto, 16 → 14 → 12; y el título, de 32 a 16) hasta que quepa; si ni así, crece. Nunca se corta texto
@@ -39,6 +39,7 @@ var total := 1
 var arrancada := false
 var con_clip := false                # un clip arriba (el de la carpeta del ordenador)
 var fuente: Font
+var letra_texto: Font                # la del texto de debajo de la raya: la del juego o, en la arrancada, la lisa
 
 # Lo que sale de colocar()
 var tam := 16                        # la letra del texto (y de la nota)
@@ -68,6 +69,7 @@ func montar(pagina: Dictionary, ed: String, n: int, de: int, rota: bool, ancho: 
 	total = de
 	arrancada = rota
 	fuente = Tema.FUENTE
+	letra_texto = Tema.lisa(Tema.PESO_LISA) if rota else fuente
 	semilla = hash(str(p.get("id", "")))
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -89,7 +91,7 @@ func colocar(ancho: float, t: int, t_titulo: int, compacto: bool) -> float:
 	tam = t
 	tam_titulo = t_titulo
 	compacta = compacto
-	alto_linea = alto_de(tam) + 1.0
+	alto_linea = (roundf(tam * 1.3) if arrancada else alto_de(tam)) + 1.0   # (la lisa, con algo más de aire)
 	franja_y = 36.0 if compacta else 64.0
 	tipo_y = franja_y + (26.0 if compacta else 32.0)
 	titulo_y = tipo_y + fuente.get_height(16) + (1 if compacta else 2)
@@ -152,14 +154,14 @@ func escribir(texto: String, y: float, sitio: Callable) -> float:
 		var hueco: Vector2 = sitio.call(y)
 		for trozo in trocear(parrafo):
 			var prueba: String = linea + (" " if trozo[1] and linea != "" else "") + trozo[0]
-			if linea != "" and ancho_de(prueba, tam) > hueco.y:
-				lineas.append([linea, Vector2(hueco.x, y + fuente.get_ascent(tam))])
+			if linea != "" and letra_texto.get_string_size(prueba, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > hueco.y:
+				lineas.append([linea, Vector2(hueco.x, y + letra_texto.get_ascent(tam))])
 				y += alto_linea
 				hueco = sitio.call(y)
 				linea = trozo[0]
 			else:
 				linea = prueba
-		lineas.append([linea, Vector2(hueco.x, y + fuente.get_ascent(tam))])
+		lineas.append([linea, Vector2(hueco.x, y + letra_texto.get_ascent(tam))])
 		y += alto_linea
 	return y
 
@@ -253,7 +255,7 @@ func _draw() -> void:
 	cabecera(w)
 	sello(w)
 	for l in lineas:
-		draw_string(fuente, l[1], l[0], HORIZONTAL_ALIGNMENT_LEFT, -1, tam, TINTA)
+		draw_string(letra_texto, l[1], l[0], HORIZONTAL_ALIGNMENT_LEFT, -1, tam, TINTA)
 	if not arrancada and a_mano != "":
 		posit()
 	if con_clip:
