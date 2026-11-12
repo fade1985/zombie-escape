@@ -411,6 +411,7 @@
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla); vale con --edificio X  [prueba_varias.gd]
+#                       (y un golpe cuerpo a cuerpo con «Oído fino»: despierta a todos los dormidos del apartamento)
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Ajolote, los
 #                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
 #                       números de jefes, mutaciones y aliados                             [prueba_varias.gd]

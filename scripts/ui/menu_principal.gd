@@ -426,7 +426,7 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 
 
 # El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): la regla de hoy en la cabecera,
-# qué hace, tu marca y, abajo, el premio (en amarillo si aún se puede cobrar)
+# qué hace y tu marca
 func cuadro_reto(f: Dictionary) -> PanelContainer:
 	var cuadro := PanelContainer.new()
 	cuadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -465,23 +465,10 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	textos.add_child(etiqueta_reto(Reto.marca(f), Color("#ff9a5c"), true))
 	if Reto.jugado(f):
 		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
-	var pie: Control
-	if not Reto.jugado(f):   # aún se puede cobrar: como el dinero de la tienda de armas (12 nov)
-		pie = premio_reto()
-	else:
-		var texto := etiqueta_reto(Idioma.t("Premio $%d") % Reto.PREMIO if not f.completado
-			else Idioma.t("Premio $%d cobrado") % Reto.PREMIO, PLACA.TEXTO_SUAVE)
-		texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		var fondo_pie := StyleBoxFlat.new()
-		fondo_pie.bg_color = Color("#2f333a")
-		fondo_pie.set_content_margin_all(4)
-		texto.add_theme_stylebox_override("normal", fondo_pie)
-		pie = texto
-	var abajo := MarginContainer.new()
+	# (el premio ya no va aquí: sale debajo del botón, y dos veces quedaba feo, 12 nov)
+	var abajo := Control.new()
+	abajo.custom_minimum_size.y = 4
 	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for lado in ["left", "right", "bottom"]:
-		abajo.add_theme_constant_override("margin_" + lado, 6)
-	abajo.add_child(pie)
 	columna.add_child(abajo)
 	return cuadro
 

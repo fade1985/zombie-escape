@@ -428,8 +428,8 @@ func onda_en(_p: Vector2) -> void:
 # y el militar (aliado.gd, M43)
 # Con "todos" (un disparo de Johnny dentro de un apartamento), lo oye esté donde esté
 func oir_disparo(donde: Vector2, todos := false) -> void:
-	# (con la Alerta 5, más lejos; con el reto del día "Oído fino", el triple)
-	if dormido and not sentado and (todos or global_position.distance_to(donde) < OIDO * Alerta.oido() * Reto.oido()):
+	# (con la Alerta 5, más lejos)
+	if dormido and not sentado and (todos or global_position.distance_to(donde) < OIDO * Alerta.oido()):
 		despertar()
 
 

@@ -3502,8 +3502,8 @@ msgid "Oído fino"
 msgstr "Ouvido fino"
 
 #: scripts/reto.gd
-msgid "los zombis dormidos te oyen desde el triple de lejos"
-msgstr "os zumbis dormindo te ouvem de três vezes mais longe"
+msgid "los zombis dormidos de todo el apartamento despiertan aunque uses un arma cuerpo a cuerpo"
+msgstr "os zumbis dormindo de todo o apartamento acordam mesmo que você use uma arma corpo a corpo"
 
 #: scripts/skins.gd
 msgid "Conserje"
@@ -6099,10 +6099,6 @@ msgstr "Volte amanhã"
 #: scripts/ui/menu_principal.gd
 msgid "Ya lo has jugado hoy: vuelve mañana"
 msgstr "Você já jogou hoje: volte amanhã"
-
-#: scripts/ui/menu_principal.gd
-msgid "Premio $%d"
-msgstr "Prêmio $%d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Premio"

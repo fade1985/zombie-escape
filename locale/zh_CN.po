@@ -3494,8 +3494,8 @@ msgid "Oído fino"
 msgstr "顺风耳"
 
 #: scripts/reto.gd
-msgid "los zombis dormidos te oyen desde el triple de lejos"
-msgstr "睡着的僵尸能在三倍距离外听见你"
+msgid "los zombis dormidos de todo el apartamento despiertan aunque uses un arma cuerpo a cuerpo"
+msgstr "整间公寓里睡着的僵尸都会醒来，哪怕你只用近战武器"
 
 #: scripts/skins.gd
 msgid "Conserje"
@@ -6077,10 +6077,6 @@ msgstr "明天再来"
 #: scripts/ui/menu_principal.gd
 msgid "Ya lo has jugado hoy: vuelve mañana"
 msgstr "今天已经玩过了：明天再来"
-
-#: scripts/ui/menu_principal.gd
-msgid "Premio $%d"
-msgstr "奖励 $%d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Premio"

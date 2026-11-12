@@ -289,9 +289,9 @@ func probar_reto() -> void:
 		Reto.regla = r
 		aplicar_talentos(talentos)
 		var z := meter_zombi("normal", Vector2(200, 200))
-		print("%s · munición: %s · oscuras: %s · curas: %s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
+		print("%s · munición: %s · oscuras: %s · curas: %s · velocidad %.0f · vida %d · zombis x%.1f" % [
 			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_curas(),
-			z.velocidad, johnny.stats.vida_max, Reto.mas_zombis(), Zombi.OIDO * Reto.oido()])
+			z.velocidad, johnny.stats.vida_max, Reto.mas_zombis()])
 		z.queue_free()
 	Reto.regla = regla
 	aplicar_talentos(talentos)
@@ -310,6 +310,18 @@ func probar_reto() -> void:
 		johnny.balas, johnny.reserva(), lanzables.cantidades.molotov, lanzables.cantidades.granada, Luz.nivel, Luz.evento,
 		lamparas.filter(func(n): return n.fuerza == 0.0).size(), lamparas.size(), lugar.text])
 	Captura.foto("captura-reto-piso.png")
+	# «Oído fino» (12 nov): un golpe cuerpo a cuerpo dentro del apartamento despierta a todos los dormidos (con otra
+	# regla, no despierta a nadie)
+	var regla_hoy := Reto.regla
+	for r in ["cuerpo", "oido"]:
+		Reto.regla = r
+		var dormidos := func() -> int:
+			return get_tree().get_nodes_in_group("zombis").filter(func(z): return z is Zombi and z.dormido and not z.sentado).size()
+		var antes_golpe: int = dormidos.call()
+		johnny.golpe_ruidoso()
+		print("Reto «%s», golpe cuerpo a cuerpo en el apartamento: dormidos %d -> %d (esperado: con Oído fino, 0; con otra, los mismos)" % [
+			Reto.nombre(), antes_golpe, dormidos.call()])
+	Reto.regla = regla_hoy
 	# el final, dos veces: cayendo en la 3ª planta y luego completando el edificio (las dos mejoran la marca de hoy)
 	var antes: Dictionary = Guardado.cargar().edificios[edificio].duplicate()
 	planta.num = 3

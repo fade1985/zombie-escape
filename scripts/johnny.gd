@@ -572,6 +572,7 @@ func soltar_estela() -> void:
 func golpe_ninja() -> void:
 	var w: Dictionary = base(huecos.cuerpo)
 	var alcance: float = w.alcance * stats.alcance * stats.alcance_cuerpo + RADIO
+	golpe_ruidoso()
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() > alcance + zombi.radio or ArmasCreadas.tapado(self, global_position, zombi.global_position):
@@ -823,6 +824,7 @@ func golpear(angulo: float) -> void:
 	var fuerte := false   # algún golpe crítico o que mata (el parón dura más)
 	var de_gracia: bool = w.calidad >= Armas.EPICA and gracia >= Armas.TRUCO.gracia - 1
 	Tajo.lanzar(self, angulo, w)   # (el golpe de un arma mejorada deja su estela del color de la calidad)
+	golpe_ruidoso()
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		var distancia := hacia.length()
@@ -977,11 +979,22 @@ func soltar_casquillo(angulo: float, cartucho: bool) -> void:
 # El disparo se oye: despierta a los zombis dormidos que haya cerca. Dentro de un apartamento, a todos los de todas sus
 # habitaciones, que van a por Johnny (9 nov, lo pidió el dueño: las armas a distancia y las especiales alertan a todo el piso)
 func oir_disparo() -> void:
-	var mapa := get_tree().get_first_node_in_group("mapa")
-	var todos: bool = mapa != null and mapa.sitio.get("tipo", "") == "apartamento"
+	var todos := en_apartamento()
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi.has_method("oir_disparo"):
 			zombi.oir_disparo(global_position, todos)
+
+
+func en_apartamento() -> bool:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	return mapa != null and mapa.sitio.get("tipo", "") == "apartamento"
+
+
+# Con el reto del día «Oído fino» (reto.gd, 12 nov), un golpe cuerpo a cuerpo dentro de un apartamento (o de una tienda)
+# se oye como un disparo: despierta a todos los dormidos. Fuera, sigue sin hacer ruido
+func golpe_ruidoso() -> void:
+	if Reto.es("oido") and en_apartamento():
+		oir_disparo()
 
 
 # Antes de disparar: ¿hay bala en el cargador (o fuego en el depósito)? Si no, recarga. La escopeta puede disparar

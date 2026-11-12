@@ -22,17 +22,18 @@ const REGLAS := {
 	"rapidos": {"nombre": "Zombis rápidos", "desc": "todos un 35 % más rápidos (los jefes, no)"},
 	"cristal": {"nombre": "De cristal", "desc": "Johnny con la mitad de vida"},
 	"llena": {"nombre": "Casa llena", "desc": "el doble de zombis en cada sitio"},
-	"oido": {"nombre": "Oído fino", "desc": "los zombis dormidos te oyen desde el triple de lejos"},
+	"oido": {"nombre": "Oído fino", "desc": "los zombis dormidos de todo el apartamento despiertan aunque uses un arma cuerpo a cuerpo"},
 }
 # [/traducir]
 const MAS_RAPIDOS := 1.35   # rapidos: la velocidad de los zombis (no la de los jefes; partida.gd, meter_zombi)
 const VIDA := 0.5           # cristal: la vida máxima de Johnny (partida.gd, aplicar_talentos)
 const MAS_ZOMBIS := 2.0     # llena: el presupuesto de zombis de cada sitio (planta.gd, horda) y las oleadas de la horda
-const OIDO := 3.0           # oido: la distancia a la que los zombis dormidos oyen los disparos (zombi.gd)
 # El premio: estos dólares de más la primera vez que se completa el reto de hoy en cada edificio (premio(); se suman
 # a los recogidos en partida.gd, terminar)
 const PREMIO := 10
-# "oscuras" usa lo del apagón (eventos.gd, al_montar) y "cuerpo" y "curas" se miran donde se reparte cada cosa
+# "oscuras" usa lo del apagón (eventos.gd, al_montar) y "cuerpo" y "curas" se miran donde se reparte cada cosa. "oido"
+# (12 nov; antes, el triple de lejos): cada golpe cuerpo a cuerpo dentro de un apartamento suena como un disparo y
+# despierta a todos los dormidos de sus habitaciones (johnny.gd, golpear y golpe_ninja)
 
 # El reto que se juega: si es el reto, de qué día ("2026-10-22") y con qué regla (una clave de REGLAS)
 static var activo := false
@@ -104,10 +105,6 @@ static func vida() -> float:
 
 static func mas_zombis() -> float:
 	return MAS_ZOMBIS if es("llena") else 1.0
-
-
-static func oido() -> float:
-	return OIDO if es("oido") else 1.0
 
 
 # ── Los textos ──
