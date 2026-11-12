@@ -4,7 +4,7 @@
 #     derecha Químico: el orden del árbol, ui/arbol_talentos.gd, COLORES; el principal de cada una)
 #   - Tienda de armas: la mirilla, de metal (gris acero; antes, en rojo)
 #   - Sujetos: el cuaderno, casi negro (gris muy oscuro, para que se vea el borde)
-#   - La interrogación de los sujetos sin ver (assets/ui/interrogacion.png), igual que el cuaderno
+#   - La interrogación de los sujetos sin ver (assets/ui/interrogacion.png), aún más negra
 # Gira el tono del amarillo y le pone la viveza y la luz del color nuevo, sin tocar el borde oscuro: las luces y las
 # sombras del dibujo se quedan como estaban.
 # Se pasa después de tools/muebles_gpt.py (que los saca amarillos de la imagen de GPT):
@@ -25,7 +25,7 @@ ICONOS = [
     ("assets/ui/iconos/escritorio-armas.png", ["#9aa4ae"]),
     ("assets/ui/iconos/escritorio-dosier.png", ["#a8743a"]),
     ("assets/ui/iconos/escritorio-colecciones.png", ["#3a3a42"], {"viveza": 0.35}),
-    ("assets/ui/interrogacion.png", ["#3a3a42"], {"desde": 0.05}),   # (la de los sujetos sin ver, como el cuaderno)
+    ("assets/ui/interrogacion.png", ["#222228"], {"desde": 0.05}),   # (la de los sujetos sin ver, más negra que el cuaderno)
 ]
 
 
