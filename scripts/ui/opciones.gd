@@ -527,8 +527,12 @@ func pantalla() -> void:
 # También es para avisar de un texto mal escrito o mal traducido (12 nov: sustituye al botón «Avisar de un texto mal traducido»
 # de la lista de idiomas, que abría un formulario de Google)
 func contacto() -> void:
-	explicar(Idioma.t("Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar."))
-	explicar(Idioma.t("También sirve para avisarnos de un texto mal escrito o mal traducido."))
+	# Las frases, el cuadro y el aviso de debajo de Enviar, con la letra lisa (Rubik, como los tutoriales: se lee mejor; 12 nov)
+	var lisa := func(c: Control) -> void:
+		c.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))
+		c.add_theme_font_size_override("font_size", Tema.TAM_LISA)
+	lisa.call(explicar(Idioma.t("Cuéntanos con tus palabras qué falla, qué no te gusta o qué se podría mejorar.")))
+	lisa.call(explicar(Idioma.t("También sirve para avisarnos de un texto mal escrito o mal traducido.")))
 	# (en el móvil de la web, Godot no saca el teclado de la pantalla: se escribe en una ventanita del navegador, abajo)
 	var por_ventanita := OS.has_feature("web") and Tactil.activo
 	var cuadro := TextEdit.new()
@@ -538,6 +542,7 @@ func contacto() -> void:
 	cuadro.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	cuadro.custom_minimum_size = Vector2(600, 140)
 	cuadro.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	lisa.call(cuadro)
 	contenido.add_child(cuadro)
 	var letras := Label.new()   # cuántas letras van de las que caben
 	letras.theme_type_variation = "Sub"
@@ -558,6 +563,7 @@ func contacto() -> void:
 	enviar.custom_minimum_size.x = maxf(ancho_grande, enviar.custom_minimum_size.x)
 	var estado := explicar("")
 	estado.name = "estado"   # no-tr
+	lisa.call(estado)
 	estado.add_theme_color_override("font_color", Tema.AMARILLO)
 	cuadro.text_changed.connect(func(): estado.text = "")   # (al volver a escribir, el aviso de antes sobra)
 	enviar.pressed.connect(func():
