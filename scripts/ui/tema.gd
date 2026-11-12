@@ -27,6 +27,16 @@ const FUENTE_JEFE := preload("res://assets/fuentes/jersey-25.ttf")
 # unifont-OFL.txt; recortada a los hanzi comunes de GB2312). Las dos, sin suavizado (en su .import)
 const FUENTE_CIRILICO := preload("res://assets/fuentes/ark-pixel-16.woff2")
 const FUENTE_CHINO := preload("res://assets/fuentes/unifont-16-zh.woff2")
+# La letra lisa (12 nov 2026, la eligió el dueño: se lee mejor y cansa menos la vista): la de los tutoriales y la del aviso de
+# fotosensibilidad (crear_liso). Rubik, de Google Fonts (OFL 1.1, rubik-OFL.txt), con latín y cirílico, y para el chino Noto Sans SC
+# (OFL 1.1, noto-sans-sc-OFL.txt), recortada a los caracteres de la traducción china (tools/recortar_noto_sc.py). Las dos son variables
+# (todos los grosores en un archivo) y van CON suavizado: la pantalla se estira con canvas_items y Godot las dibuja a la resolución
+# real, lisas y nítidas
+const FUENTE_LISA := preload("res://assets/fuentes/rubik.ttf")
+const FUENTE_LISA_CHINO := preload("res://assets/fuentes/noto-sans-sc-recortada.woff2")
+const PESO_LISA := 400          # el grosor del texto con la letra lisa...
+const PESO_LISA_TITULO := 700   # ...y el de los títulos y los botones
+static var _tema_liso: Theme
 const BOTON := preload("res://assets/ui/boton-oscuro.png")
 const PANEL := preload("res://assets/ui/panel-oscuro.png")
 
@@ -91,6 +101,39 @@ static func tiene_letra(codigo: int) -> bool:
 	var c: FontFile = FUENTE_CIRILICO
 	var d: FontFile = FUENTE_CHINO
 	return a.has_char(codigo) or b.has_char(codigo) or c.has_char(codigo) or d.has_char(codigo)
+
+
+# La letra lisa de un grosor (de 300 a 900), con sus reservas: el chino liso (del mismo grosor) y, por si a la traducción china le
+# llega un carácter que el recorte no tiene, Unifont (pixelado, pero no sale un cuadro). Las reservas van en la propia letra, planas
+# (ver poner_fuentes). Sin las letras del sistema: así, si falta algo, se ve en el ordenador igual que en la web
+static func lisa(peso: int) -> FontVariation:
+	var rubik: FontFile = FUENTE_LISA
+	var chino: FontFile = FUENTE_LISA_CHINO
+	for f: FontFile in [rubik, chino]:
+		f.allow_system_fallback = false
+	var grosor := {TextServerManager.get_primary_interface().name_to_tag("wght"): peso}
+	var chino_grosor := FontVariation.new()
+	chino_grosor.base_font = chino
+	chino_grosor.variation_opentype = grosor
+	var v := FontVariation.new()
+	v.base_font = rubik
+	v.variation_opentype = grosor
+	v.fallbacks = [chino_grosor, FUENTE_CHINO]
+	return v
+
+
+# El tema con la letra lisa: el mismo de siempre (crear()), pero con Rubik en vez de la letra pixelada. Lo usan los tutoriales
+# (tutorial.gd) y el aviso de fotosensibilidad (aviso_luces.gd)
+static func crear_liso() -> Theme:
+	if _tema_liso:
+		return _tema_liso
+	var t: Theme = crear().duplicate()
+	t.default_font = lisa(PESO_LISA)
+	var gruesa := lisa(PESO_LISA_TITULO)
+	for tipo in ["Titulo", "Button", "BotonGrande", "BotonRojo", "Celda"]:
+		t.set_font("font", tipo, gruesa)
+	_tema_liso = t
+	return t
 
 
 static func crear() -> Theme:

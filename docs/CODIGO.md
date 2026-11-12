@@ -565,7 +565,7 @@ en una línea.
   pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
-  respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
+  respaldo; `crear_liso()`, el mismo tema con la letra lisa Rubik, para los tutoriales y el aviso de fotosensibilidad), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
   (autoload: el saltito de los botones), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
   `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
@@ -833,7 +833,8 @@ en una línea.
 - `sonidos/`: el gruñido de zombi del botón JUGAR (`grunido.ogg`, de PixelLab, ver
   `pixellab.json` «grunidos-botones»; los demás efectos se sintetizan en `sonido.gd`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
-  25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`; y `rubik.ttf`, la letra lisa que eligió el dueño el 11 nov 2026, ver
+  25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`; y `rubik.ttf`, la letra lisa que eligió el dueño el 11 nov 2026,
+  la de los tutoriales y el aviso de fotosensibilidad, con su chino `noto-sans-sc-recortada.woff2` (`tools/recortar_noto_sc.py`); ver
   `docs/IDIOMAS.md`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
 - `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab (no va en el juego exportado: solo lo
   usan las herramientas).

@@ -45,7 +45,7 @@ func _ready() -> void:
 	var fondo := ColorRect.new()
 	fondo.color = Color(0.04, 0.03, 0.06, 0.8 if id != "" else 0.85)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
-	fondo.theme = Tema.crear()
+	fondo.theme = Tema.crear_liso()   # (la letra lisa, Rubik: se lee mejor)
 	add_child(fondo)
 	var centro := CenterContainer.new()
 	centro.set_anchors_preset(Control.PRESET_FULL_RECT)

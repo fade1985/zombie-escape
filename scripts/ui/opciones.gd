@@ -36,6 +36,8 @@ const LETRAS_DE_OTROS := [
 	["Jersey 25", "The Soft Type Project Authors", "res://assets/fuentes/jersey-25-OFL.txt"],   # no-tr
 	["Ark Pixel", "TakWolf", "res://assets/fuentes/ark-pixel-OFL.txt"],   # no-tr
 	["GNU Unifont", "Roman Czyborra, Paul Hardy et al.", "res://assets/fuentes/unifont-OFL.txt"],   # no-tr
+	["Rubik", "The Rubik Project Authors", "res://assets/fuentes/rubik-OFL.txt"],   # no-tr
+	["Noto Sans SC", "Adobe, Google", "res://assets/fuentes/noto-sans-sc-OFL.txt"],   # no-tr
 ]
 
 # Todos los textos de las tablas de aquí abajo se traducen al enseñarlos (Idioma.t); las marcas son para

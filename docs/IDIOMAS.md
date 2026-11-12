@@ -147,10 +147,18 @@ tocar la letra del juego.
 **Rubik, la letra lisa elegida (11 nov 2026).** Al dueño la letra del juego le parecía muy simple. Después de ver muestras de
 letras pixeladas (de terror, de recreativa…) eligió una **lisa**, que se lee mejor y cansa menos la vista: **Rubik** (Google Fonts,
 `assets/fuentes/rubik.ttf`, variable de peso 300 a 900; OFL 1.1 **sin nombre reservado**, `rubik-OFL.txt`, que ya se exporta).
-Trae latín y cirílico; para el chino haría falta **Noto Sans SC** (OFL, recortada como Unifont). **Todavía no se usa:** el dueño
-dirá en qué textos va (no en todos). Al ponerla: va **con suavizado** (su `.import` lo deja así; no ponerle `FONT_ANTIALIASING_NONE`
-como a las pixeladas), porque la pantalla se estira con `canvas_items` y Godot la dibuja a la resolución real, lisa y nítida;
-mirar la altura de línea (ocupa algo más que la de hoy), citarla en Créditos → Licencias (`texto_de_licencias`) y probarla en la web.
+Trae latín y cirílico. **Desde el 12 nov la usan los tutoriales (`tutorial.gd`) y el aviso de fotosensibilidad
+(`aviso_luces.gd`)**, con `Tema.crear_liso()`: el tema de siempre con Rubik de 400 en los textos y de 700 en títulos y botones
+(`Tema.lisa(peso)`; los pesos, `PESO_LISA` y `PESO_LISA_TITULO`). El resto del juego sigue con la letra pixelada. Para el chino,
+**Noto Sans SC** (`noto-sans-sc-recortada.woff2`, OFL 1.1, `noto-sans-sc-OFL.txt`; variable, ~400 KB), recortada a los caracteres de
+`locale/zh_CN.po` con `py tools/recortar_noto_sc.py <NotoSansSC[wght].ttf>` (de Google Fonts): **hay que lanzarlo otra vez cuando la
+traducción china traiga caracteres nuevos**; mientras, esos salen con Unifont (pixelados, no un cuadro). Su licencia reserva el
+nombre «Source» (viene de Source Han Sans): el recorte se llama «Noto Sans SC», así que cumple; no ponerle «Source» en el nombre.
+Las reservas van en la propia letra (Rubik → Noto Sans SC del mismo peso → Unifont) y sin letras del sistema
+(`allow_system_fallback = false`): si falta algo, se ve igual en el ordenador que en la web. Van **con suavizado** (no ponerles
+`FONT_ANTIALIASING_NONE` como a las pixeladas): la pantalla se estira con `canvas_items` y Godot las dibuja a la resolución real,
+lisas y nítidas. Las dos se citan en Créditos y en Licencias (`LETRAS_DE_OTROS` de `opciones.gd`). Pruebas: `--aviso` y
+`--tutorial`, con `--lang ru` y `--lang zh_CN`.
 
 **Las tildes de la letra del juego (30 oct 2026).** Las vocales con tilde, la ñ, la ü, el ¿ y el ¡ no vienen de PixelLab: las añadió
 `tools/fuente-tildes.py` del juego JS, que dibujaba la tilde de á é í ó ú al revés («`» en vez de «´»), dejaba el punto en la í y

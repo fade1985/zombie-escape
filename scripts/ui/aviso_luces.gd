@@ -37,7 +37,7 @@ func _ready() -> void:
 	fondo = ColorRect.new()
 	fondo.color = Color.BLACK
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
-	fondo.theme = Tema.crear()
+	fondo.theme = Tema.crear_liso()   # (la letra lisa, Rubik: se lee mejor)
 	add_child(fondo)
 	var centro := CenterContainer.new()
 	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -50,6 +50,7 @@ func _ready() -> void:
 	centro.add_child(columna)
 	var titulo := Label.new()
 	titulo.text = Idioma.t("Aviso de fotosensibilidad")
+	titulo.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA_TITULO))   # (en negrita)
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	titulo.add_theme_font_size_override("font_size", 32)
