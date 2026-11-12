@@ -52,6 +52,9 @@ MUEBLES = {
     # dibujo de la «!» (GPT con ella de modelo); a su rejilla, unos 37 px de la imagen por píxel. Sale amarilla: después,
     # py tools/colorear_iconos.py la pone casi negra
     "interrogacion": ("assets/sources/interrogacion-gpt.webp", "assets/ui/interrogacion.png", 20, 40, False),
+    # el fondo del menú del banco de trabajo (ui/inventario.gd, pintar_banco; 12 nov): el banco de frente, con el tablero
+    # perforado y el cajón, del tamaño del lienzo del menú (912 × 616, a 2 unidades por píxel). Sin fondo que quitar
+    "banco_fondo": ("assets/sources/banco-fondo-gpt.webp", "assets/ui/banco-fondo.png", 456, 308, False),
     # la flecha amarilla pintada en el suelo que guía en la primera partida (guia.gd, Flecha; M7, 9 nov), hacia la derecha
     "flecha_guia": ("assets/sources/flecha-gpt.webp", "assets/sprites/flecha-guia.png", 20, 20, False),
     # los iconos del escritorio de ConserjeOS (ui/ordenador.gd, ICONOS; M6, 9 nov), solo para el escritorio (los de

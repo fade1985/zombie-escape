@@ -310,9 +310,9 @@ func sitio(nombre: String, r: Rect2, nodo: Control = null) -> void:
 
 
 # Una raya que separa las partes del lienzo (en coordenadas de la pantalla)
-func raya(r: Rect2) -> void:
+func raya(r: Rect2, color := Color("#3d3647")) -> void:
 	var c := ColorRect.new()
-	c.color = Color("#3d3647")
+	c.color = color
 	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lienzo.add_child(c)
 	c.position = r.position - ORIGEN
@@ -841,6 +841,8 @@ func rotulo(padre: Control, s: String, x: float, y: float, color := Tema.TINTA, 
 	t.text = s
 	t.horizontal_alignment = alinear
 	t.add_theme_color_override("font_color", color)
+	if color in [TINTA_BANCO, ACENTO_BANCO, GRIS_BANCO]:   # (los oscuros del banco, sobre la madera: sin el contorno)
+		t.add_theme_constant_override("outline_size", 0)
 	var w := ancho if ancho > 0.0 else 300.0
 	if ancho > 0.0:
 		t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1075,6 +1077,12 @@ func tirar(todo := false) -> void:
 # pintar la ficha (pintar_ficha_baul)
 
 const MITAD := 476.0          # donde empieza la mitad del baúl
+# El banco de trabajo (12 nov): su fondo y los colores de lo que va encima del tablero de madera clara
+const FONDO_BANCO := preload("res://assets/ui/banco-fondo.png")   # 456 × 308, a 2: el lienzo entero
+const TINTA_BANCO := Color("#2b1d12")    # los textos: marrón muy oscuro (antes, hueso claro sobre el gris)
+const ACENTO_BANCO := Color("#8a3410")   # lo que antes iba en amarillo: óxido oscuro
+const GRIS_BANCO := Color("#5c4630")     # «Tienes 4»
+const RAYA_BANCO := Color("#6e5236")     # las rayas que separan
 const ANCHO_NOTA := 380.0     # lo ancho que es el texto de la ficha del baúl
 
 
@@ -1840,14 +1848,25 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 	var lz: Lanzables = partida.lanzables
 	asegurar_sel()
 	preparar_lienzo(columna)
+	# el fondo: el banco de frente, con su tablero perforado y el cajón (de GPT, tools/muebles_gpt.py; 12 nov, antes el
+	# recuadro gris). Lo de encima del tablero va en oscuro (TINTA_BANCO); la ficha, en su recuadro, como siempre
+	var fondo_banco := TextureRect.new()
+	fondo_banco.texture = FONDO_BANCO
+	fondo_banco.size = lienzo.custom_minimum_size
+	fondo_banco.stretch_mode = TextureRect.STRETCH_SCALE
+	fondo_banco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	fondo_banco.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	fondo_banco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lienzo.add_child(fondo_banco)
+	# (el título, claro y con su contorno, como siempre: va sobre la barra de metal de arriba)
 	rotulo(lienzo, Idioma.t("Banco de trabajo"), 480, 26, Color("#e6dec8"), HORIZONTAL_ALIGNMENT_CENTER).theme_type_variation = "Titulo"
 	# arriba, las piezas que tiene (las pinta la ficha, que enciende las que gasta lo elegido)
-	rotulo(lienzo, Idioma.t("Materiales"), 64, 66, Color("#e6dec8"))   # (antes «Tus piezas», 11 nov)
-	raya(Rect2(64, 146, 832, 2))
+	rotulo(lienzo, Idioma.t("Materiales"), 64, 66, TINTA_BANCO)   # (antes «Tus piezas», 11 nov)
+	raya(Rect2(64, 146, 832, 2), RAYA_BANCO)
 	# a la izquierda, lo que lleva: sus armas (de cada tipo, la de la mano y la de repuesto) y sus arrojables
-	rotulo(lienzo, Idioma.t("Lo que llevas"), 64, 156, Color("#e6dec8"))
-	rotulo(lienzo, Idioma.t("Armas"), 64, 180, Tema.AMARILLO)
-	rotulo(lienzo, Idioma.t("Arrojables"), en_fila(5, 0).position.x, 180, Tema.AMARILLO)
+	rotulo(lienzo, Idioma.t("Lo que llevas"), 64, 156, TINTA_BANCO)
+	rotulo(lienzo, Idioma.t("Armas"), 64, 180, ACENTO_BANCO)
+	rotulo(lienzo, Idioma.t("Arrojables"), en_fila(5, 0).position.x, 180, ACENTO_BANCO)
 	for i in 2:
 		var tipo: String = ["cuerpo", "fuego"][i]
 		var id: String = johnny.huecos[tipo]
@@ -1860,17 +1879,17 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 			casilla_inv(en_fila(i * 2 + 1, 202))
 	for i in Lanzables.MANO:
 		arrojable(en_fila(5 + i, 202), "l%d" % i, lz.mano[i] if i < lz.mano.size() else "", 8.0)
-	rotulo(lienzo, Idioma.t("Arrojables de repuesto  %d / %d") % [lz.repuesto.size(), Lanzables.REPUESTO], 64, 254, Tema.AMARILLO)
+	rotulo(lienzo, Idioma.t("Arrojables de repuesto  %d / %d") % [lz.repuesto.size(), Lanzables.REPUESTO], 64, 254, ACENTO_BANCO)
 	for i in Lanzables.REPUESTO:
 		arrojable(en_fila(i, 276), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 8.0)
-	raya(Rect2(452, 156, 2, 236))
+	raya(Rect2(452, 156, 2, 236), RAYA_BANCO)
 	# a la derecha, las armas y los paquetes del baúl (los objetos no se mejoran), con el color de su calidad. Si no
 	# caben en 4 filas, las casillas se hacen más pequeñas
 	var equipo: Array = s.baul_equipo
 	var filas := maxi(2, ceili(equipo.size() / 8.0))
 	var paso := mini(46, floori(184.0 / filas))
-	rotulo(lienzo, Idioma.t("En el baúl"), MITAD, 156, Color("#e6dec8"))
-	rotulo(lienzo, Idioma.t("Armas y arrojables"), MITAD, 180, Tema.AMARILLO)
+	rotulo(lienzo, Idioma.t("En el baúl"), MITAD, 156, TINTA_BANCO)
+	rotulo(lienzo, Idioma.t("Armas y arrojables"), MITAD, 180, ACENTO_BANCO)
 	for i in filas * 8:
 		var r := Rect2(MITAD + (i % 8) * paso, 202 + floori(i / 8.0) * paso, paso - 4, paso - 4)
 		if i < equipo.size():
@@ -1913,8 +1932,8 @@ func pintar_ficha_banco() -> void:
 		viva.add_child(hay)
 		hay.size = Vector2(42, 42)
 		dibujo(hay, Objetos.icono(p), hay.size, 8.0)
-		var titulo := rotulo(viva, Idioma.t(PIEZAS_TITULO[p]), 0, 92, Tema.AMARILLO if p == pieza else Tema.TINTA)
-		var cuantas := rotulo(viva, Idioma.t("Tienes %d") % piezas(p, s), 0, 112, Tema.GRIS)
+		var titulo := rotulo(viva, Idioma.t(PIEZAS_TITULO[p]), 0, 92, ACENTO_BANCO if p == pieza else TINTA_BANCO)
+		var cuantas := rotulo(viva, Idioma.t("Tienes %d") % piezas(p, s), 0, 112, GRIS_BANCO)
 		var ancho := 52.0 + maxf(titulo.get_minimum_size().x, cuantas.get_minimum_size().x)
 		var x := roundf(64.0 + i * 208 + (208 - ancho) / 2.0)
 		hay.position = Vector2(x, 92) - ORIGEN

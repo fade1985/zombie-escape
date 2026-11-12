@@ -658,7 +658,7 @@ en una línea.
   planta no hay página que coger) y queda alguna noticia cuya página ya tienes. Se prueba con `--dosier-plantas`. Al coger la página con el apartamento de la tele ya limpio, se enciende al momento.
 - `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
-  arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
+  arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl;
   en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
   banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
