@@ -3940,7 +3940,7 @@ func probar_apuntar_mando() -> void:
 	print("Mando · RT con el stick suelto: ha atacado %s, mira %s (esperado: true, e)" % [jug.espera > 0.0, jug.direccion])
 	Input.action_release("atacar")
 	await get_tree().create_timer(1.5).timeout
-	# delante de una puerta o un mueble (zona_usar.gd): con el mando RT ataca y B abre; con el teclado, J abre y no ataca
+	# delante de una puerta o un mueble (zona_usar.gd): con el mando RT ataca y B abre; con el teclado, E abre y J solo ataca
 	var padre := Node2D.new()
 	var dibujo := Sprite2D.new()
 	dibujo.texture = load("res://assets/sprites/felpudo.png")
@@ -3973,7 +3973,7 @@ func probar_apuntar_mando() -> void:
 	Input.action_press("atacar")
 	await esperar.call()
 	Input.action_release("atacar")
-	print("Teclado · J delante de una puerta: se ha abierto %d veces, ha atacado %s (esperado: 2, false)" % [abierto[0], jug.espera > 0.0])
+	print("Teclado · J delante de una puerta: se ha abierto %d veces, ha atacado %s (esperado: 1, true)" % [abierto[0], jug.espera > 0.0])
 	jug.ante_mueble = null
 	padre.queue_free()
 	await get_tree().create_timer(1.0).timeout

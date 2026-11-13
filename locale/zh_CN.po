@@ -6553,6 +6553,10 @@ msgid "Lanzar (mantener y soltar)"
 msgstr "投掷（按住后松开）"
 
 #: scripts/ui/opciones.gd
+msgid "Interactuar (puertas y muebles)"
+msgstr "互动（门和家具）"
+
+#: scripts/ui/opciones.gd
 msgid "Molotov o granada"
 msgstr "燃烧瓶或手雷"
 

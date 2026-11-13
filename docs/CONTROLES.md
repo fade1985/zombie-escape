@@ -16,10 +16,10 @@ cartel del final hablan igual de botones o de teclas. Se prueba con `-- --captur
 | Moverse | WASD o flechas | stick izquierdo |
 | Esquivar | Espacio o Mayús | A o LB |
 | Atacar | ratón + clic o J; solo, con la ayuda *Disparo asistido* | RT (el stick derecho solo apunta: RT ataca hacia donde se apuntó; en el móvil, su joystick derecho sí ataca) |
-| Abrir y cerrar (puertas de los baños, muebles de la sala de mantenimiento) | J o clic encima (delante de una puerta, Johnny ataca a la vez) | B (RT sigue atacando, también delante de una puerta; el botón no se cambia en Opciones) |
-| Cambiar de arma (cuerpo a cuerpo / distancia) | Q o rueda | Y |
+| Interactuar: abrir y cerrar puertas de los baños y muebles de la sala de mantenimiento | E (desde el 13 nov; J y el clic solo atacan, también delante de un mueble o una puerta) | B (RT solo ataca) |
+| Cambiar de arma (cuerpo a cuerpo / distancia) | Z o rueda | Y |
 | Recargar | R | X |
-| Lanzar (mantener para apuntar, soltar para lanzar) | E o clic derecho | LT |
+| Lanzar (mantener para apuntar, soltar para lanzar) | Q o clic derecho | LT |
 | Cambiar lo que se lanza (3 a mano) | F | RB |
 | Usar las vendas (curan 25) | 1 | cruceta izquierda |
 | Usar el botiquín (devuelve un tercio y cura 40) | 2 | cruceta derecha |
@@ -82,7 +82,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   3 vendas (lo que sobra se queda en el suelo y, al pisarlo, avisa). A la
   derecha de la barra de vida salen sus casillas (solo las que llevas, con cuántas y su tecla); pulsar la tecla lo usa
   al momento, y si no sirve (vida llena; el botiquín, además, sin tercios perdidos) avisa y no gasta nada. Los
-  armaritos de los baños se abren como el ordenador (delante, con el clic encima, J o RT; en el móvil, «Abrir») y sueltan
+  armaritos de los baños se abren como el ordenador (delante, con E o B; en el móvil, «Abrir») y sueltan
   lo suyo (se recoge pasando por encima): uno solo por apartamento, en un baño al azar, con un botiquín o unas vendas a medias. La Farmacéutica te prepara un botiquín cada partida, y las vendas
   también salen en el centro comercial.
 - **Dólares:** se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.
@@ -148,20 +148,19 @@ cada prueba se explica lo que comprueba y las fotos que saca.
 La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba pone en cuál estás):
 
 **Abrir los muebles** (el ordenador, la taquilla, el banco de trabajo y el baúl): ya no se abren solos al arrimarse.
-Con Johnny delante (sin letrero) se abren con la acción de **atacar**: clic izquierdo o
-J (las que tenga puestas en Opciones), **RT** en el mando y, en el móvil, el botón **Abrir** que sale entonces encima
-del arco de botones. Mientras está delante de uno, el clic abre y no dispara; al apartarse, vuelve a disparar
-(`mapa/zona_usar.gd`; se prueba con `-- --captura --sala`). Para que se sepa que se usan, les sale un **contorno
-amarillo**: con el ratón, al pasarlo por encima del mueble (esté Johnny donde esté); con el mando, el teclado o en el
-móvil, cuando Johnny está delante (`-- --captura --contorno-mueble`).
+Con Johnny delante (sin letrero) se abren con la acción **Interactuar** (`usar`): **E** en el teclado (se cambia en
+Opciones → Controles, «Interactuar»), **B** en el mando y, en el móvil, el botón **Abrir** que sale entonces encima del
+arco de botones. Desde el 13 nov atacar (J, el clic, RT) **solo ataca**, también delante de un mueble o una puerta
+(`mapa/zona_usar.gd`; se prueba con `-- --captura --sala` y `--clic-mueble`). Para que se sepa que se usan, les sale un
+**contorno amarillo** cuando Johnny está delante, esté el ratón donde esté (`-- --captura --contorno-mueble`).
 
 **Cerrar las puertas** de dentro (pisos, tiendas y la sala de mantenimiento; no las de los trasteros): igual que los
 muebles. Desde el principio: las que empiezan cerradas, además de abrirse solas al arrimarse, se abren igual a mano y
-desde algo más lejos. Delante de una abierta sale su contorno amarillo y se cierra con atacar (clic encima o J), con B en el
-mando o con el botón **Cerrar** del móvil. **Con las puertas, Johnny no deja de atacar:** J o el clic encima la cierran (o
-la abren) y a la vez atacan, y mantenidos siguen atacando; RT y el joystick derecho del móvil solo atacan, sin tocarla
+desde algo más lejos. Delante de una abierta sale su contorno amarillo y se cierra con **E**, con B en el mando o con el
+botón **Cerrar** del móvil. **Con las puertas, Johnny ataca sin tocarlas:** J, el clic o RT solo atacan, y la puerta se
+queda como está
 (`-- --captura --puertas`, «Puertas, atacando»). Si hay alguien en el hueco no se cierra (tiembla). Cerrada así, no se vuelve a abrir sola hasta
-que Johnny se aparta y vuelve a arrimarse; sin moverse, se abre otra vez con atacar. Los zombis la siguen abriendo
+que Johnny se aparta y vuelve a arrimarse; sin moverse, se abre otra vez con E. Los zombis la siguen abriendo
 empujando (`mapa/puerta_bano.gd`; `-- --captura --puertas`). La de lado, abierta, se queda de pie por encima del hueco
 y se cierra también junto a su parte de arriba. Si Johnny está delante de dos cosas a la vez (la puerta del taller y el
 banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.

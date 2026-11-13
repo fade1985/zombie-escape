@@ -118,26 +118,14 @@ func _process(_delta: float) -> void:
 		contorno.visible = resaltado()
 
 
-# Si toca enseñar el contorno: con el ratón, si está encima del mueble (lo mismo que cuenta para el clic); sin él (mando,
-# teclado o el dedo en el móvil), si Johnny está delante y ya se puede abrir
+# Si toca enseñar el contorno: cuando Johnny está delante y ya se puede usar (con E ya no hay que apuntar con el ratón)
 func resaltado() -> bool:
-	if not activa():
-		return false
-	var dedo := Tactil.activo and Tactil.con_dedo
-	# (el ratón, en la pantalla; pasado al dibujo cada vez, porque la cámara se mueve aunque el ratón esté quieto)
-	var en_dibujo := dibujo.get_global_transform_with_canvas().affine_inverse() * raton
-	if not dedo and raton.x >= 0.0 and dibujo.get_rect().grow(4).has_point(en_dibujo):
-		return true
-	return johnny != null and johnny.get("ante_mueble") == self and (dedo or not johnny.get("con_raton"))
+	return activa() and johnny != null and johnny.get("ante_mueble") == self
 
 
-# Cada vez que se pulsa "atacar", apunta si ha sido un clic fuera del mueble (llega antes que _physics_process)
 func _input(evento: InputEvent) -> void:
 	if evento is InputEventMouse:
 		raton = evento.position
-	if johnny == null or not evento.is_action_pressed("atacar"):
-		return
-	clic_fuera = evento is InputEventMouseButton and not encima(evento)
 
 
 func _physics_process(_delta: float) -> void:
@@ -151,17 +139,10 @@ func _physics_process(_delta: float) -> void:
 		clic_fuera = false
 	if johnny.get("ante_mueble") != self or not activa():
 		return
-	# con el mando se usa con B ("usar"): RT ataca siempre, aunque se esté delante de una puerta; con el teclado y el ratón, con
-	# J o el clic (las que se hayan puesto para atacar)
+	# se usa con la acción "usar": E en el teclado, B en el mando y, en el móvil, el botón «Abrir» / «Cerrar». Atacar (J, el
+	# clic, RT) solo ataca, también delante de un mueble o una puerta (13 nov, lo pidió el dueño)
 	if Input.is_action_just_pressed("usar"):
 		abrir()
-	elif Input.is_action_just_pressed("atacar") and not clic_fuera and not Controles.con_mando 			and (corta_ataque or not (Tactil.activo and Tactil.con_dedo)):
-		# (en el móvil, el botón de atacar no abre ni cierra las puertas: solo ataca; ellas, con su botón «Cerrar»)
-		abrir()
-		# ese clic ya está gastado: aunque lo siga pulsando (y el mueble ya no se pueda usar, como el armarito vacío o la tele
-		# ya vista), Johnny no dispara hasta que lo suelte (las puertas no: con ellas sigue atacando)
-		if corta_ataque:
-			johnny.set("clic_gastado", true)
 
 
 # Si este mueble le toca a Johnny antes que "otra" zona (en la que también está): si la otra no se puede usar ahora

@@ -51,6 +51,7 @@ const FILAS := [
 	["Cambiar de arma", ["cambiar_arma"]],
 	["Recargar", ["recargar"]],
 	["Lanzar (mantener y soltar)", ["lanzar"]],
+	["Interactuar (puertas y muebles)", ["usar"]],
 	["Molotov o granada", ["cambiar_lanzable"]],
 	["Usar vendas", ["usar_vendas"]],
 	["Usar botiquín", ["usar_botiquin"]],

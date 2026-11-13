@@ -13,7 +13,7 @@ class_name Controles
 
 # Las acciones que se pueden cambiar (las de probar, como 1-6, no)
 const ACCIONES := ["arriba", "izquierda", "abajo", "derecha", "atacar", "esquivar", "cambiar_arma", "recargar",
-	"lanzar", "cambiar_lanzable", "usar_vendas", "usar_botiquin", "inventario", "pausa"]
+	"lanzar", "usar", "cambiar_lanzable", "usar_vendas", "usar_botiquin", "inventario", "pausa"]
 
 
 # ¿Se está jugando con el mando? Lo último que ha tocado el jugador (fijarse, desde pantalla.gd): un botón o un stick del

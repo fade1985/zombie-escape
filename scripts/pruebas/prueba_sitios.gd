@@ -1076,8 +1076,8 @@ func probar_puerta_aliado() -> void:
 	get_tree().quit()
 
 
-# Delante de una puerta Johnny no deja de atacar (lo pidió el dueño; zona_usar.gd, "corta_ataque"): con J o el clic encima
-# la cierra o la abre y ataca a la vez, y mientras lo mantiene sigue atacando; con el mando, RT solo ataca y B la usa; en
+# Delante de una puerta Johnny ataca sin tocarla (desde el 13 nov atacar solo ataca; zona_usar.gd): con J o el clic
+# encima ataca y la puerta se queda como está; E la cierra y la abre; con el mando, RT solo ataca y B la usa; en
 # el móvil, el joystick derecho solo ataca. Cada línea dice lo esperado
 func probar_atacar_ante_puerta(una: Node2D) -> void:
 	if una.uso == null:
@@ -1091,27 +1091,36 @@ func probar_atacar_ante_puerta(una: Node2D) -> void:
 	johnny.modo = "libre"
 	johnny.con_raton = true
 	Controles.con_mando = false
-	# J: la cierra y ataca; mantenida, sigue atacando ya cerrada (antes aquí dejaba de atacar)
+	# J: ataca y no la toca; E la cierra
 	pulsar_accion("atacar", true)
 	var al_pulsar := await ataca_en(8)
 	await get_tree().create_timer(0.6, false).timeout
-	var cerrada: bool = una.abierta == 0.0
+	var cerrada: bool = una.abierta == 1.0
 	var luego := await ataca_en(10)
 	pulsar_accion("atacar", false)
-	print("Puertas, atacando · con J la cierra %s, ataca al pulsar %s y sigue atacando con ella cerrada %s (esperado: true las tres)" % [
+	print("Puertas, atacando · con J no la toca %s, ataca al pulsar %s y sigue atacando %s (esperado: true las tres)" % [
 		cerrada, al_pulsar, luego])
+	pulsar_accion("usar", true)
+	await get_tree().physics_frame
+	pulsar_accion("usar", false)
+	await get_tree().create_timer(0.6, false).timeout
+	print("Puertas, atacando · con E la cierra %s (esperado: true)" % (una.abierta == 0.0))
 	await get_tree().create_timer(0.3, false).timeout
-	# el clic encima de la puerta: la abre y ataca, y mantenido sigue atacando
+	# el clic encima de la puerta (ya cerrada con E): ataca y no la abre
 	var zona: Area2D = una.uso.get_node("Zona") if una.uso else null
 	var sobre: Vector2 = zona.dibujo.get_global_transform() * zona.dibujo.get_rect().get_center() if zona and zona.dibujo else una.caja.get_center()
 	clic_raton(sobre, true)
 	al_pulsar = await ataca_en(8)
 	await get_tree().create_timer(0.6, false).timeout
-	var abierta: bool = una.abierta == 1.0
+	var abierta: bool = una.abierta == 0.0
 	luego = await ataca_en(10)
 	clic_raton(sobre, false)
-	print("Puertas, atacando · con el clic encima la abre %s, ataca al pulsar %s y sigue atacando %s (esperado: true las tres)" % [
+	print("Puertas, atacando · con el clic encima no la abre %s, ataca al pulsar %s y sigue atacando %s (esperado: true las tres)" % [
 		abierta, al_pulsar, luego])
+	pulsar_accion("usar", true)
+	await get_tree().physics_frame
+	pulsar_accion("usar", false)
+	await get_tree().create_timer(0.6, false).timeout
 	await get_tree().create_timer(0.3, false).timeout
 	# el mando: RT ataca y no la toca; B la cierra
 	Controles.con_mando = true
@@ -1796,8 +1805,8 @@ func clic_raton(donde: Vector2, abajo: bool) -> void:
 
 
 # Con "--captura --contorno-mueble": el contorno amarillo de los muebles de la sala (zona_usar.gd). Con Johnny lejos del
-# baúl, el ratón encima lo enciende (captura-contorno-raton.png) y fuera lo apaga; con Johnny delante, sin ratón (mando,
-# teclado o móvil), se enciende (captura-contorno-delante.png), y con el ratón lejos, no. Cada línea dice lo esperado
+# baúl, el ratón encima ya no lo enciende (captura-contorno-raton.png); con Johnny delante se enciende (captura-contorno-delante.png),
+# esté el ratón donde esté (desde el 13 nov, con E no hay que apuntar). Cada línea dice lo esperado
 func probar_contorno_mueble() -> void:
 	var baul: Node = mapa.baul
 	var raton := func(donde: Vector2) -> void:
@@ -1809,7 +1818,7 @@ func probar_contorno_mueble() -> void:
 	await get_tree().create_timer(0.5).timeout
 	raton.call(baul.position + Vector2(0, -30))
 	await get_tree().create_timer(0.2).timeout
-	print("Contorno: ratón encima del baúl, Johnny lejos · se ve %s (esperado: true) · el del banco %s (esperado: false)" % [
+	print("Contorno: ratón encima del baúl, Johnny lejos · se ve %s (esperado: false) · el del banco %s (esperado: false)" % [
 		baul.zona.contorno.visible, mapa.banco.zona.contorno.visible])
 	Captura.foto("captura-contorno-raton.png")
 	raton.call(johnny.position + Vector2(120, 40))
@@ -1820,7 +1829,7 @@ func probar_contorno_mueble() -> void:
 	await get_tree().create_timer(0.4).timeout
 	raton.call(johnny.position + Vector2(160, 90))   # el ratón lejos del baúl
 	await get_tree().create_timer(0.2).timeout
-	print("Contorno: Johnny delante con el ratón lejos · se ve %s (esperado: false)" % baul.zona.contorno.visible)
+	print("Contorno: Johnny delante con el ratón lejos · se ve %s (esperado: true)" % baul.zona.contorno.visible)
 	johnny.con_raton = false   # como si jugara con el mando
 	await get_tree().create_timer(0.2).timeout
 	print("Contorno: Johnny delante sin ratón · se ve %s (esperado: true)" % baul.zona.contorno.visible)
@@ -1829,7 +1838,7 @@ func probar_contorno_mueble() -> void:
 
 
 # Con "--captura --clic-mueble": con Johnny delante del baúl (zona_usar.gd), un clic lejos del baúl no lo abre y Johnny
-# ataca hacia allí; un clic encima del baúl lo abre y no ataca; y J (sin puntero) también lo abre. La pantalla del
+# ataca hacia allí; un clic encima del baúl tampoco lo abre y Johnny ataca (desde el 13 nov atacar solo ataca); E lo abre. La pantalla del
 # baúl no llega a abrirse: "usar" solo se cuenta. Foto: captura-clic-mueble.png (Johnny delante del baúl). Luego se cierra
 func probar_clic_mueble() -> void:
 	var baul: Node = mapa.baul
@@ -1863,8 +1872,8 @@ func probar_clic_mueble() -> void:
 	ataca = johnny.espera > 0.0 or johnny.ataque_t >= 0.0
 	clic_raton(sobre, false)
 	await get_tree().physics_frame
-	print("Clic mueble: clic encima · se abre %d (esperado: 1) · ataca %s (esperado: false)" % [veces[0], ataca])
-	# J, sin puntero: lo abre aunque el ratón esté lejos
+	print("Clic mueble: clic encima · se abre %d (esperado: 0) · ataca %s (esperado: true)" % [veces[0], ataca])
+	# J no lo abre; E, sí, aunque el ratón esté lejos
 	for abajo in [true, false]:
 		var k := InputEventKey.new()
 		k.physical_keycode = KEY_J
@@ -1872,7 +1881,15 @@ func probar_clic_mueble() -> void:
 		Input.parse_input_event(k)
 		await get_tree().physics_frame
 		await get_tree().physics_frame
-	print("Clic mueble: con J · se abre %d (esperado: 2)" % veces[0])
+	print("Clic mueble: con J · se abre %d (esperado: 0)" % veces[0])
+	for abajo in [true, false]:
+		var k := InputEventKey.new()
+		k.physical_keycode = KEY_E
+		k.pressed = abajo
+		Input.parse_input_event(k)
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+	print("Clic mueble: con E · se abre %d (esperado: 1)" % veces[0])
 	get_tree().quit()
 
 
@@ -1912,8 +1929,13 @@ func probar_armarito_clic() -> void:
 		await get_tree().physics_frame
 		if johnny.espera > 0.0 or johnny.ataque_t >= 0.0:
 			disparos += 1
-	print("Armarito clic · abierto %s (esperado: true) · fotogramas disparando con el clic pulsado %d (esperado: 0)" % [a.datos.cogido, disparos])
+	print("Armarito clic · abierto con el clic %s (esperado: false) · fotogramas disparando con el clic pulsado %d (esperado: más de 0)" % [a.datos.cogido, disparos])
 	clic_raton(sobre, false)
+	pulsar_accion("usar", true)
+	await get_tree().physics_frame
+	pulsar_accion("usar", false)
+	await get_tree().create_timer(0.3, false).timeout
+	print("Armarito clic · abierto con E %s (esperado: true)" % a.datos.cogido)
 	await get_tree().create_timer(0.3, false).timeout
 	# un clic lejos, en el suelo: ataca como siempre
 	johnny.espera = 0.0

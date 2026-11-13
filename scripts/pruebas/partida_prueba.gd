@@ -208,19 +208,19 @@
 #   --linterna          la linterna de pecho de Johnny a oscuras, mirando en 5 direcciones   [prueba_fotos.gd]
 #   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!», su barrera (M80) y su tutorial [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles (se abren con
-#                       el clic, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
+#                       E, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
 #   --regalo            Johnny empieza solo con la fregona y no sale de la sala sin la pistola del regalo de
 #                       bienvenida: el «!» de ARMAS.EXE, el tutorial de la tienda, «¡COMPRA UN ARMA!», el «!» de la
 #                       pistola, «Regalo de bienvenida», cogerla gratis y que luego cuesta $10    [prueba_sitios.gd]
 #   --marcas-sala       en la primera partida, los «!» de la sala de mantenimiento (taquilla, ordenador, banco, baúl y
 #                       puerta de los trasteros): no se sale al pasillo hasta quitarlos, cada mueble con su tutorial,
 #                       el de los trasteros al entrar y, al final, la flecha de la guía     [prueba_sitios.gd]
-#   --clic-mueble       delante del baúl de la sala: un clic lejos no lo abre (y Johnny ataca), uno encima sí, y J
-#                       también                                                              [prueba_sitios.gd]
-#   --armarito-clic     el armarito del baño con el clic mantenido encima: se abre, Johnny no dispara mientras sigue pulsado
+#   --clic-mueble       delante del baúl de la sala: un clic lejos o encima no lo abre (Johnny ataca), y E sí
+#                                                                                    [prueba_sitios.gd]
+#   --armarito-clic     el armarito del baño: el clic encima no lo abre (Johnny ataca), E sí
 #                       y el tutorial de las curas sale la primera vez que se abre            [prueba_sitios.gd]
-#   --contorno-mueble   el contorno amarillo de los muebles de la sala: con el ratón encima, o con Johnny delante sin
-#                       ratón (mando, teclado, móvil)                                        [prueba_sitios.gd]
+#   --contorno-mueble   el contorno amarillo de los muebles de la sala: solo con Johnny delante (ya no con el ratón
+#                       encima)                                        [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
 #   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel, sin muebles, y el nombre de la planta y de sus

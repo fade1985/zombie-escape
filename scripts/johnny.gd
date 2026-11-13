@@ -639,10 +639,8 @@ func apuntar_libre() -> void:
 	if apunte.length() < 1.0:
 		return
 	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado
-	# (delante de un mueble de la sala, el clic encima de él o J son para abrirlo; un clic en otra parte, para atacar. Delante
-	# de una puerta, no: la usan y Johnny ataca a la vez, "corta_ataque". Con el mando tampoco: RT ataca siempre, y se abre con B)
-	if ataca and (ante_mueble == null or ante_mueble.clic_fuera or not ante_mueble.activa() or not ante_mueble.corta_ataque
-			or Controles.con_mando):
+	# (delante de un mueble o una puerta también se ataca: se usan con E, B en el mando o su botón en el móvil)
+	if ataca:
 		intentar_atacar(ayuda_apunte(apunte.angle()))
 
 

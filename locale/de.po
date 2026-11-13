@@ -6573,6 +6573,10 @@ msgid "Lanzar (mantener y soltar)"
 msgstr "Werfen (halten und loslassen)"
 
 #: scripts/ui/opciones.gd
+msgid "Interactuar (puertas y muebles)"
+msgstr "Interagieren (Türen und Möbel)"
+
+#: scripts/ui/opciones.gd
 msgid "Molotov o granada"
 msgstr "Molotow oder Granate"
 

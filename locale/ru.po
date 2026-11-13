@@ -6593,6 +6593,10 @@ msgid "Lanzar (mantener y soltar)"
 msgstr "Бросок (зажми и отпусти)"
 
 #: scripts/ui/opciones.gd
+msgid "Interactuar (puertas y muebles)"
+msgstr "Действие (двери и мебель)"
+
+#: scripts/ui/opciones.gd
 msgid "Molotov o granada"
 msgstr "Молотов или граната"
 
