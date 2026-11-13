@@ -46,6 +46,31 @@ func probar_cartel_sala() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --pasillo-baja" (M95): el pasillo de la planta baja de los Apartamentos con lo que lleva colgado en la pared
+# de arriba (cuadros, la manguera de incendios y el extintor) y su alfombra larga, con Johnny a la izquierda, en medio y a la
+# derecha (captura-pasillo-baja-izquierda.png, -medio.png y -derecha.png). Dice qué cuelga en cada planta de las cuatro
+# primeras (cuadros distintos en cada una: cuatro en la baja y cinco en las demás; la manguera, el extintor y la alfombra,
+# solo en la baja). Luego se cierra
+func probar_pasillo_baja() -> void:
+	await montar(0, 0, false)
+	for donde in [["izquierda", 260.0], ["medio", 900.0], ["derecha", 1500.0]]:
+		johnny.position = Vector2(donde[1], planta.sitios[0].alto / 2.0)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.5).timeout
+		Captura.foto("captura-pasillo-baja-%s.png" % donde[0])
+	for num in range(1, 5):
+		var pasillo: Dictionary = Planta.generar(num).sitios[0]
+		var cuadros: Array = pasillo.colgados.map(func(c): return c.dibujo).filter(func(d): return d.begins_with("cuadro"))
+		var otros: Array = pasillo.colgados.map(func(c): return c.dibujo).filter(func(d): return not d.begins_with("cuadro"))
+		var distintos := {}
+		for d in cuadros:
+			distintos[d] = true
+		print("Pasillo de la planta %d: %d cuadros (%d distintos) %s · además %s · alfombra %s" % [num, cuadros.size(),
+			distintos.size(), cuadros, otros, pasillo.get("alfombra", false)])
+	print("(esperado: en la 1, 4 cuadros distintos, manguera, extintor y alfombra; en las demás, 5 distintos y nada más)")
+	get_tree().quit()
+
+
 # Con "--captura --salida": la salida de incendios del fondo del pasillo (la puerta roja de las escaleras, en el muro de la
 # derecha, y su cartel EXIT en la pared de arriba), con Johnny delante: primero con la planta sin pasar (cartel apagado) y
 # luego, al caer el jefe, con el cartel encendido y alumbrando. Dice si cada cosa está como toca y, al volver al pasillo de una

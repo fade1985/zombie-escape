@@ -86,9 +86,9 @@ const ESTILO_TIENDA := {
 	"juntas": [["direccion"], "direccion"]}
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
 # los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)
-const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": false}, "galeria": {"tapa": "centro", "alfombra": false},
+const PASILLOS := {"pasillo": {"tapa": "pasillo"}, "galeria": {"tapa": "centro"},
 	# los de Torre Velaria: el distribuidor de oficina (moqueta gris y cristal esmerilado) y el vestíbulo (mármol y piedra)
-	"torre": {"tapa": "torre", "alfombra": false}, "vestibulo": {"tapa": "torre", "alfombra": false}}
+	"torre": {"tapa": "torre"}, "vestibulo": {"tapa": "torre"}}
 const NEON := preload("res://scripts/mapa/neon.gd")
 const FELPUDO := preload("res://assets/sprites/felpudo.png")   # el de las puertas del pasillo de los Apartamentos (dibujar_fondo)
 const FELPUDO_PORTAL := preload("res://assets/sprites/felpudo-portal.png")   # el de la puerta de la calle, en la planta baja
@@ -188,8 +188,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			var estilo: String = sitio.get("estilo", "pasillo")
 			estilos[0] = textura(estilo, "")
 			tapa = load("res://assets/sprites/tapa-%s.png" % PASILLOS[estilo].tapa)
-			if PASILLOS[estilo].alfombra:
-				alfombra = load("res://assets/sprites/alfombra-pasillo.png")
+			if sitio.get("alfombra", false):   # M95: la del pasillo de la planta baja de los Apartamentos (planta.gd)
+				alfombra = load("res://assets/sprites/alfombra-baja.png")
 		elif al_aire:
 			pass   # la azotea: su suelo, sus muros y su barandilla son la imagen de GPT (dibujar_fondo)
 		elif sitio.get("estilo", "") == "laboratorio":
@@ -291,6 +291,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	poner_muebles()
 	poner_apliques()
 	poner_escaparates()
+	poner_colgados()
 	poner_peligros()
 	if sitio.has("laboratorio"):
 		# el laboratorio de la planta 40 (la cabina de la presidenta, las cápsulas, los láseres y el gas)
@@ -543,10 +544,10 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 				for i in PLETINA.size():
 					lienzo.draw_rect(Rect2(c * 16 + 6 + i, f * 16, 1, 16), PLETINA[i])
 	if alfombra:
-		# la alfombra larga del pasillo, por el centro y de punta a punta (a media escala)
-		var largo := (cols - 4) * 16 - 56
-		var y := filas * 8 - 16
-		lienzo.draw_texture_rect_region(alfombra, Rect2(32 + 28, y, largo, 32), Rect2(0, 0, largo * 2, alfombra.get_height()))
+		# la alfombra larga del pasillo, por el centro y de punta a punta (de GPT, ya del largo del pasillo:
+		# tools/pasillo_gpt.py), entre los felpudos de arriba y los de abajo
+		var tam_alfombra := alfombra.get_size()
+		lienzo.draw_texture(alfombra, Vector2(roundf((cols * 16 - tam_alfombra.x) / 2.0), roundf(filas * 8 - tam_alfombra.y / 2.0)))
 	# los felpudos del pasillo de los Apartamentos, en el suelo delante de cada piso y de la sala de mantenimiento (todos
 	# iguales, sin letras: tools/felpudo_gpt.py)
 	if sitio.tipo == "pasillo" and sitio.get("estilo", "pasillo") == "pasillo":
@@ -1042,6 +1043,29 @@ func poner_escaparates() -> void:
 			mancha.flip_h = dado_restos.randf() < 0.5
 			mancha.position = dibujo.position + Vector2(dado_restos.randf_range(0.25, 0.75) * t.x * 2, t.y * 0.8)
 			nodo.add_child(mancha)
+		cosas.add_child(nodo)
+
+
+# M95: lo que va colgado en la pared de arriba del pasillo de los Apartamentos (planta.gd, "colgados"): los cuadros
+# y, en la planta baja, la manguera de incendios y el extintor (de GPT: tools/pasillo_gpt.py). Cada uno con su medio a
+# "alto" unidades por encima del suelo y una sombra suave en la pared, como el cartel de MANTENIMIENTO. Van en el pie
+# de la cara del muro, como los apliques, para ordenarse con ella.
+func poner_colgados() -> void:
+	for c in sitio.get("colgados", []):
+		var nodo := Node2D.new()
+		nodo.position = Vector2(c.x, MURO + 1)
+		var textura: Texture2D = load("res://assets/sprites/%s.png" % c.dibujo)
+		var sombra := Sprite2D.new()
+		sombra.texture = textura
+		sombra.scale = Vector2(2, 2)
+		sombra.position = Vector2(2, 2 - c.alto)
+		sombra.modulate = Color(0, 0, 0, 0.25)
+		nodo.add_child(sombra)
+		var dibujo := Sprite2D.new()
+		dibujo.texture = textura
+		dibujo.scale = Vector2(2, 2)
+		dibujo.position = Vector2(0, -c.alto)
+		nodo.add_child(dibujo)
 		cosas.add_child(nodo)
 
 

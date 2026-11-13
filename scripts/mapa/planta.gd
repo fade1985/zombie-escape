@@ -22,6 +22,9 @@ const PLANTAS := 5                # planta baja y cuatro más (en el centro come
 # La sala de mantenimiento: tres estancias de 10 × 10 casillas, una al lado de otra (el vestuario, el despacho y el
 # taller), con un tabique de una casilla entre ellas y el muro de fuera alrededor (1152 × 448, algo más ancha que la
 # pantalla: la cámara se mueve un poco al andar)
+# M95: los cuadros del pasillo de los Apartamentos (de GPT: tools/pasillo_gpt.py)
+const CUADROS := ["cuadro-bosque", "cuadro-flores", "cuadro-pueblo", "cuadro-lago", "cuadro-velero", "cuadro-retrato",
+	"cuadro-bodegon", "cuadro-molino"]
 const SALA_ESTANCIA := 10
 const SALA_COLS := 2 + SALA_ESTANCIA * 3 + 2 + 2
 const SALA_FILAS := 2 + SALA_ESTANCIA + 2
@@ -439,6 +442,24 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 				junto = s.en - 36.0 - 8.0 - medio_planta
 			if junto - medio_planta >= MURO:   # (y sin meterse en el muro de la izquierda)
 				pasillo.muebles.append(Muebles.nuevo("plantapasillo", {"lado": "arriba", "base": MURO}, junto, 0))
+		# M95: los cuadros de la pared de arriba, en los huecos que dejan las puertas, los apliques, las macetas y los
+		# carteles (contando desde la puerta de la izquierda, la del ascensor y la de la derecha; a la derecha del todo no
+		# caben, por el cartel EXIT), distintos en cada planta de los ocho que hay, empezando en cada planta por uno
+		# distinto: cinco y, en la planta baja, cuatro, porque en la punta de la izquierda van la manguera de incendios y el
+		# extintor, junto al portal; y en la baja, también la alfombra larga del suelo (mapa.gd, tools/pasillo_gpt.py)
+		var arriba_x: Array = pasillo.salidas.filter(func(s): return s.dir == "arriba").map(func(s): return s.en)
+		arriba_x.sort()
+		var en_x: Array = [arriba_x[0] - 146, arriba_x[1] - 168, arriba_x[1] + 296,
+			arriba_x[2] + 120] if arriba_x.size() == 3 else []   # (la puerta de la izquierda, el ascensor y la de la derecha)
+		if not baja and not en_x.is_empty():
+			en_x.push_front(MURO + 86)
+		pasillo.colgados = []
+		for i in en_x.size():
+			pasillo.colgados.append({"x": en_x[i], "alto": 72, "dibujo": CUADROS[((num - 1) * 5 + i) % CUADROS.size()]})
+		if baja:
+			pasillo.colgados.append({"x": MURO + 56, "alto": 60, "dibujo": "manguera"})
+			pasillo.colgados.append({"x": MURO + 114, "alto": 44, "dibujo": "extintor"})
+			pasillo.alfombra = true
 	if baja:
 		planta.armas = planta.sitios.size()
 		planta.sitios.append(sala_armas(planta.mantenimiento))
