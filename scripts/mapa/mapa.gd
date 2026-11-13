@@ -329,6 +329,9 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 # Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
 # la de su habitación)
 func al_entrar() -> void:
+	# los «!» de encima de los muebles, mirados ya: mientras este mapa estaba guardado fuera de la escena no se enteraron de que
+	# se había visto un tutorial (el de los trasteros) y, al volver, se verían hasta su próximo repaso (hasta 1 s)
+	get_tree().call_group("exclamaciones", "refrescar")
 	Luz.capa_johnny = Luz.CAPA_COSAS
 	for quien in get_tree().get_nodes_in_group("jugador") + get_tree().get_nodes_in_group("presa"):
 		quien.remove_meta("sala")
