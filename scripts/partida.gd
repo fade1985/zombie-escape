@@ -225,9 +225,6 @@ func _ready() -> void:
 	add_child(menus)
 	menus.continuar.connect(seguir)
 	menus.abandonar.connect(terminar.bind(false, true))
-	menus.reintentar.connect(func():
-		get_tree().paused = false
-		get_tree().reload_current_scene())
 	menus.menu_principal.connect(ir_al_menu)
 	add_child(ordenador)
 	ordenador.apagado.connect(func(): get_tree().paused = false)
@@ -387,7 +384,7 @@ func continuar_partida(foto: Dictionary) -> void:
 
 func _exit_tree() -> void:
 	if semilla_propia:
-		Planta.semilla = 0   # (la siguiente partida, o «Otra vez», sortea la suya)
+		Planta.semilla = 0   # (la siguiente partida sortea la suya)
 	tirar_mapas()
 
 

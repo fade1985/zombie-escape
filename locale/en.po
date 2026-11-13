@@ -6221,10 +6221,6 @@ msgid "Menú principal"
 msgstr "Main menu"
 
 #: scripts/ui/menus.gd
-msgid "Otra vez"
-msgstr "Try again"
-
-#: scripts/ui/menus.gd
 msgid "Te ha pillado"
 msgstr "Taken down by"
 
@@ -7367,3 +7363,7 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "Otra vez"
+msgstr "Try again"

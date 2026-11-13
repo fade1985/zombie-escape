@@ -13,7 +13,6 @@ extends CanvasLayer
 
 signal continuar
 signal abandonar
-signal reintentar
 signal menu_principal
 
 const ESPERA_FIN := 500   # milisegundos que el cartel del final no hace caso a sus botones: por si venías pegando
@@ -41,7 +40,6 @@ var abierto := ""         # "pausa", "fin", "mutacion", "pagina", "noticia", "op
 var elegir_mutacion := Callable()   # a quién avisar con la mutación elegida
 var cartas: Array = []    # las dos mutaciones que se ofrecen
 var al_leer := Callable()  # a quién avisar al cerrar la página del dosier
-var fin_gano := false      # si el cartel del final es de victoria (sin «Otra vez» ni la R)
 var fin_desde := 0         # cuándo se abrió el cartel del final (Time.get_ticks_msec), para ESPERA_FIN
 
 
@@ -203,7 +201,6 @@ func pausa(partida: Node, foco := "") -> void:
 func fin(r: Dictionary) -> void:
 	var columna := abrir("fin")
 	fin_desde = Time.get_ticks_msec()
-	fin_gano = r.gano
 	titulo(columna, r.titulo, "" if r.gano else r.sub)   # (al ganar, sin la frase de debajo: 11 nov)
 	var lista := VBoxContainer.new()
 	lista.custom_minimum_size.x = 440
@@ -248,23 +245,13 @@ func fin(r: Dictionary) -> void:
 	var botones := VBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)
-	# Al caer, «Otra vez» vuelve a empezar el edificio; con teclado, también la R (en el móvil y con mando no se dice). Al ganar
-	# (11 nov), solo «Menú principal»
-	var principal: Button
-	var otra: Button = null
-	if r.gano:
-		principal = boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal), "BotonGrande")   # no-tr
-	else:
-		var con_r := not Tactil.activo and not Controles.con_mando
-		var otra_vez := Idioma.t("Otra vez")
-		otra = boton(botones, "%s (R)" % otra_vez if con_r else otra_vez, al_final.bind(reintentar), "BotonGrande")   # no-tr
-		principal = boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
-	for b in botones.get_children():
-		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	(otra if otra else principal).grab_focus.call_deferred()
+	# Solo «Menú principal», al ganar (11 nov) y al caer (13 nov, M102: antes, al caer, había también «Otra vez», con la R)
+	var principal := boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal), "BotonGrande")
+	principal.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	principal.grab_focus.call_deferred()
 
 
-# Los botones del cartel del final (y la R): no hacen caso hasta pasado ESPERA_FIN desde que se abrió
+# El botón del cartel del final: no hace caso hasta pasado ESPERA_FIN desde que se abrió
 func al_final(senal: Signal) -> void:
 	if abierto == "fin" and Time.get_ticks_msec() - fin_desde >= ESPERA_FIN:
 		senal.emit()
@@ -478,10 +465,6 @@ func _unhandled_input(evento: InputEvent) -> void:
 		if n >= 0 and n < cartas.size():
 			get_viewport().set_input_as_handled()
 			elegir(cartas[n].id)
-		return
-	if abierto == "fin" and not fin_gano and evento is InputEventKey and evento.pressed and not evento.echo and evento.physical_keycode == KEY_R:
-		get_viewport().set_input_as_handled()
-		al_final(reintentar)
 		return
 	if abierto == "noticia" and evento.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()

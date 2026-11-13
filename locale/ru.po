@@ -6243,10 +6243,6 @@ msgid "Menú principal"
 msgstr "Главное меню"
 
 #: scripts/ui/menus.gd
-msgid "Otra vez"
-msgstr "Еще раз"
-
-#: scripts/ui/menus.gd
 msgid "Te ha pillado"
 msgstr "Тебя сцапали"
 
@@ -7389,3 +7385,7 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Otra vez"
+msgstr "Еще раз"

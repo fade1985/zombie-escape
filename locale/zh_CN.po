@@ -6199,10 +6199,6 @@ msgid "Menú principal"
 msgstr "主菜单"
 
 #: scripts/ui/menus.gd
-msgid "Otra vez"
-msgstr "再来一次"
-
-#: scripts/ui/menus.gd
 msgid "Te ha pillado"
 msgstr "你被它逮住了"
 
@@ -7345,3 +7341,7 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Otra vez"
+msgstr "再来一次"

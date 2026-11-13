@@ -555,10 +555,10 @@ en una línea.
   sangre (brillo arriba, sombra abajo) y el texto encima con contorno, sin caja; los últimos diez segundos, el número
   en grande. Cada uno le pasa su texto, sus colores y lo hecho.
 - `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
-  jefe), `menus.gd` (pausa y fin; desde el 11 nov, al ganar el cartel solo trae tiempo, dólares, enemigos derrotados y la nueva mejor marca, sin frase de debajo y con solo «Menú principal» (`fin_gano`, sin R); al caer sigue como se describe aquí; el cartel del final dice al caer
+  jefe), `menus.gd` (pausa y fin; desde el 11 nov, al ganar el cartel solo trae tiempo, dólares, enemigos derrotados y la nueva mejor marca, sin frase de debajo y con solo «Menú principal»; desde el 13 nov (M102), al caer también: se quitó «Otra vez» y su tecla R; el cartel del final dice al caer
   quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
-  peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; y «Otra vez»,
-  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al abrir el juego, encima, el aviso de fotosensibilidad, `aviso_luces.gd`
+  peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; su botón,
+  «Menú principal», no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al abrir el juego, encima, el aviso de fotosensibilidad, `aviso_luces.gd`
   (`AvisoLuces`, una vez por cada vez que se abre el juego; cualquier tecla, clic, toque o botón lo quita; prueba `--aviso`); desde el 11 nov, la tarjeta de un edificio completado solo dice «Récord: m:ss», el reto del día es un botón grande con «Premio $10» debajo y su cuadro al pasar el ratón (`boton_reto`, `cuadro_reto`; prueba `--edificios`), y la Alerta 1 solo da dólares (las piezas, desde la 2); en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
   monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; la lista de idiomas, con botones que llenan el sitio hasta «Volver»; Contáctanos, también para avisar de un texto mal
   traducido (desde el 12 nov, en vez del botón aparte con un formulario de Google); el temblor de

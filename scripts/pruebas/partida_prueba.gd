@@ -388,7 +388,7 @@
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una, ver lo que cambia y el efecto (M54) [prueba_larga.gd]
 #   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
 #   --derrota           el cartel de derrota: quién te ha pillado (un zombi, explosiones, el fuego), lo conseguido en
-#                       la partida, «Otra vez» y la R; y por el fuego, por un jefe y ganando    [prueba_varias.gd]
+#                       la partida y «Menú principal», su único botón; y por el fuego, por un jefe y ganando [prueba_varias.gd]
 #   --despertar         tras una derrota (M31): la partida empieza en negro, Johnny tumbado en la sala de mantenimiento,
 #                       se levanta y dice su frase                                            [prueba_varias.gd]
 #   --morir             Johnny se muere y se cae de espaldas, antes del cartel de derrota       [prueba_varias.gd]

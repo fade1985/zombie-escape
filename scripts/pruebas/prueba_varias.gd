@@ -3320,7 +3320,7 @@ func probar_morir() -> void:
 # Con "--captura --derrota": el cartel de derrota (menus.gd, fin). Primero, quién le pega a Johnny (johnny.gd,
 # golpe_de): un zombi, la explosión del dinamitero, su propia granada y el fuego del suelo. Luego cae de verdad por
 # un crío, con un logro, una skin, una página, un enemigo y un objeto nuevos y su mejor marca (captura-derrota.png);
-# «Otra vez» y la R no hacen caso el primer medio segundo y luego sí. Y el cartel otra vez: por el fuego y sin nada
+# «Menú principal», su único botón (M102), no hace caso el primer medio segundo y luego sí. Y el cartel otra vez: por el fuego y sin nada
 # nuevo (captura-derrota-fuego.png), por un jefe grande (captura-derrota-jefe.png) y ganando (captura-derrota-gana.png)
 func probar_derrota() -> void:
 	await get_tree().create_timer(0.5).timeout
@@ -3370,24 +3370,27 @@ func probar_derrota() -> void:
 	johnny.recibir_dano(9999, crio)
 	while menus.abierto != "fin":
 		await get_tree().process_frame
-	# «Otra vez» y la R: sin volver a empezar de verdad, se cuenta cuántas veces piden volver a empezar
-	for c in menus.reintentar.get_connections():
-		menus.reintentar.disconnect(c.callable)
-	var otra_vez := [0]
-	menus.reintentar.connect(func(): otra_vez[0] += 1)
-	var boton: Button = menus.fondo.find_children("*", "Button", true, false)[0]
+	# «Menú principal», el único botón (M102): sin irse de verdad al menú, se cuenta cuántas veces lo pide. La R, que
+	# antes volvía a empezar, ya no hace nada
+	for c in menus.menu_principal.get_connections():
+		menus.menu_principal.disconnect(c.callable)
+	var al_menu := [0]
+	menus.menu_principal.connect(func(): al_menu[0] += 1)
+	var los_botones: Array = menus.fondo.find_children("*", "Button", true, false)
+	var boton: Button = los_botones[0]
 	boton.pressed.emit()
-	pulsar_r()
 	await get_tree().create_timer(0.1).timeout
-	var antes: int = otra_vez[0]
+	var antes: int = al_menu[0]
 	await get_tree().create_timer(0.6).timeout
-	print("Cae por «%s» · «%s» · conseguido: %d filas · al abrirse, «Otra vez» y la R: %d veces (esperado: 0)" % [
-		johnny.golpe_de, boton.text, conseguido(Guardado.cargar()).size(), antes])
+	print("Cae por «%s» · botones: %d, «%s», marcado %s (esperado: 1, Menú principal, true) · conseguido: %d filas · al abrirse, el botón: %d veces (esperado: 0)" % [
+		johnny.golpe_de, los_botones.size(), boton.text, boton.has_focus(), conseguido(Guardado.cargar()).size(), antes])
 	Captura.foto("captura-derrota.png")
-	boton.pressed.emit()
 	pulsar_r()
 	await get_tree().create_timer(0.1).timeout
-	print("Pasado medio segundo, «Otra vez» y la R: %d veces (esperado: 2)" % otra_vez[0])
+	print("Con la R: %d veces · cartel abierto %s (esperado: 0, true)" % [al_menu[0], menus.abierto == "fin"])
+	boton.pressed.emit()
+	await get_tree().create_timer(0.1).timeout
+	print("Pasado medio segundo, el botón: %d veces (esperado: 1)" % al_menu[0])
 	# 4) por el fuego y sin nada nuevo; por un jefe grande (con todo lo nuevo); y ganando (con todo lo nuevo)
 	for caso in [["fuego", false, false], ["gloton", true, false], ["", true, true]]:
 		terminada = false
@@ -3402,7 +3405,7 @@ func probar_derrota() -> void:
 	get_tree().quit()
 
 
-# Pulsa y suelta la R (la del cartel del final)
+# Pulsa y suelta la R (la que antes volvía a empezar desde el cartel de derrota: ya no tiene que hacer nada)
 func pulsar_r() -> void:
 	for pulsada in [true, false]:
 		var evento := InputEventKey.new()
@@ -4127,10 +4130,10 @@ func probar_mando() -> void:
 	while menus.abierto != "fin" and tope < 120:
 		await get_tree().process_frame
 		tope += 1
-	for c in menus.reintentar.get_connections():
-		menus.reintentar.disconnect(c.callable)
-	var otra_vez := [0]
-	menus.reintentar.connect(func(): otra_vez[0] += 1)
+	for c in menus.menu_principal.get_connections():
+		menus.menu_principal.disconnect(c.callable)
+	var otra_vez := [0]   # (las veces que el botón, «Menú principal», hace caso)
+	menus.menu_principal.connect(func(): otra_vez[0] += 1)
 	await get_tree().create_timer(0.05).timeout
 	var rapido := PruebaMando.marcado(self)
 	await pulsar_a.call()
@@ -4138,7 +4141,7 @@ func probar_mando() -> void:
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto("captura-mando-final.png")
 	await pulsar_a.call()
-	print("Mando · cartel del final: marcado «%s» · A con prisa: %d veces · A pasado medio segundo: %d (esperado: Otra vez, 0, 1)" % [rapido, con_prisa, otra_vez[0]])
+	print("Mando · cartel del final: marcado «%s» · A con prisa: %d veces · A pasado medio segundo: %d (esperado: Menú principal, 0, 1)" % [rapido, con_prisa, otra_vez[0]])
 	get_tree().quit()
 
 
