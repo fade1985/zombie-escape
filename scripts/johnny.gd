@@ -172,6 +172,8 @@ var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siemp
 var modo := "libre"        # cómo se ataca (ver arriba)
 var asistido_puesto := false   # cómo estaba la ayuda "Disparo asistido" la última vez que se miró (mirar_asistido)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
+var mirilla_mando: Sprite2D = null   # la mirilla que se mueve con el stick derecho del mando (modo libre): ver poner_mirilla_mando()
+const DISTANCIA_MIRILLA := 170.0     # a cuánto de Johnny sale esa mirilla, en la dirección que se apunta
 var ultimo_apunte := Vector2.DOWN   # modo libre, con el mando: hacia donde se empujó el stick derecho por última vez (RT ataca hacia ahí)
 var clic_gastado := false   # el clic izquierdo (o J) pulsado ya ha servido para usar algo (zona_usar.gd): no dispara hasta soltarlo
 var ante_mueble: Area2D = null  # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): el clic encima lo abre, no dispara (en las puertas, sí)
@@ -187,6 +189,17 @@ const CORROEN := ["veneno", "acido", "porqueria"]
 
 
 func _ready() -> void:
+	mirilla_mando = Sprite2D.new()
+	mirilla_mando.texture = Raton.dibujar(1)
+	mirilla_mando.scale = Vector2(2, 2)   # (cada píxel del dibujo, 2 unidades, como los demás dibujos del juego)
+	mirilla_mando.z_index = 60
+	mirilla_mando.top_level = true        # (no gira ni se mueve con Johnny: se coloca en el mundo)
+	var luz := CanvasItemMaterial.new()
+	luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED   # (se ve también a oscuras)
+	mirilla_mando.material = luz
+	mirilla_mando.visible = false
+	add_child(mirilla_mando)
+	get_tree().process_frame.connect(poner_mirilla_mando)   # (también con el juego parado, para esconderla)
 	set_notify_transform(true)   # para saber cuándo le llevan de golpe a otro sitio (_notification)
 	efectos.animation_finished.connect(efectos.hide)
 	# (al empezar todavía no hay cámara: el fogonazo del arma que lleva se prepara un poco después)
@@ -610,6 +623,16 @@ func apuntar_y_atacar() -> void:
 	var a_tiro: bool = w.tipo == "fuego" or hacia.length() - objetivo.radio <= w.alcance
 	if a_tiro:
 		intentar_atacar(hacia.angle())
+
+
+# La mirilla del mando (13 nov): jugando con el mando en el modo libre, una mirilla como la del ratón, delante de Johnny en
+# la dirección en que apunta con el stick derecho (o en la última a la que apuntó: RT ataca hacia ella). Con el ratón, el
+# móvil, el modo asistido o un menú abierto, escondida
+func poner_mirilla_mando() -> void:
+	var ver := Controles.con_mando and modo == "libre" and vivo and not con_raton and not get_tree().paused 			and not (Tactil.activo and Tactil.con_dedo)
+	mirilla_mando.visible = ver
+	if ver:
+		mirilla_mando.global_position = (global_position + ultimo_apunte.normalized() * DISTANCIA_MIRILLA).round()
 
 
 # Modo libre: apunta con el stick derecho (solo apunta; ataca RT) o con el ratón (y ataca con el clic o J). En el móvil, su

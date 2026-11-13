@@ -612,6 +612,37 @@ func probar_ordenador_iconos() -> void:
 	ordenador.apagar()
 
 
+# Con "--captura --mirilla-mando": jugando con el mando en el modo libre, sale una mirilla delante de Johnny que sigue al
+# stick derecho; con el ratón, en el modo asistido o con el juego parado, no (captura-mirilla-mando.png)
+func probar_mirilla_mando() -> void:
+	await get_tree().create_timer(0.5).timeout
+	Controles.con_mando = true
+	johnny.modo = "libre"
+	johnny.con_raton = false
+	johnny.ultimo_apunte = Vector2.RIGHT
+	await get_tree().create_timer(0.3).timeout
+	var m: Node2D = johnny.mirilla_mando
+	print("Mirilla del mando · a la vista %s, a la derecha de Johnny %s (esperado: true, true)" % [m.visible, m.global_position.x > johnny.global_position.x + 100.0])
+	Captura.foto("captura-mirilla-mando.png")
+	Input.action_press("apuntar_arriba", 1.0)
+	await get_tree().create_timer(0.3).timeout
+	Input.action_release("apuntar_arriba")
+	print("Mirilla del mando · con el stick arriba, encima de Johnny %s (esperado: true)" % (m.global_position.y < johnny.global_position.y - 100.0))
+	johnny.con_raton = true
+	await get_tree().create_timer(0.2).timeout
+	print("Mirilla del mando · con el ratón a la vista %s (esperado: false)" % m.visible)
+	johnny.con_raton = false
+	johnny.modo = "asistido"
+	await get_tree().create_timer(0.2).timeout
+	print("Mirilla del mando · en asistido a la vista %s (esperado: false)" % m.visible)
+	johnny.modo = "libre"
+	await get_tree().create_timer(0.2).timeout
+	get_tree().paused = true
+	await get_tree().create_timer(0.2, true).timeout
+	print("Mirilla del mando · con el juego parado a la vista %s (esperado: false)" % m.visible)
+	get_tree().paused = false
+
+
 # Con "--captura --ordenador-b": con botones del mando de verdad (PruebaMando.pulsar), B en cada programa del ordenador lo
 # cierra (vuelve al escritorio) y B en el escritorio apaga el ordenador; también con el foco en un icono o sin foco
 func probar_ordenador_b() -> void:

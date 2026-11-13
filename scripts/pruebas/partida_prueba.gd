@@ -176,6 +176,7 @@
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
+#   --mirilla-mando     con el mando, la mirilla delante de Johnny que sigue al stick derecho (esconderse con el ratón, asistido, pausa) [prueba_larga.gd]
 #   --ordenador-b       el botón B del mando en el ordenador de la sala: cierra el programa y luego apaga el ordenador [prueba_larga.gd]
 #   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
 #   --ordenador-iconos  los iconos del escritorio del ordenador con el ratón encima: el dibujo y el rótulo, dentro del
@@ -684,6 +685,10 @@ func empezar_prueba() -> void:
 	elif "--ordenador-iconos" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_ordenador_iconos()
+		get_tree().quit()
+	elif "--mirilla-mando" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_mirilla_mando()
 		get_tree().quit()
 	elif "--ordenador-b" in args:
 		set_process(false)   # sin la prueba larga
