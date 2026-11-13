@@ -24,3 +24,4 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Por limar
 
+- **L36** Pasillo de dentro de los pisos de los Apartamentos: se repite la misma mancha de sangre y queda mal. Pedir a GPT más manchas distintas y repartirlas para que no se note. Para más adelante.
