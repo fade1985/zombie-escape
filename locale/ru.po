@@ -5421,28 +5421,16 @@ msgid "Arrojables"
 msgstr "Метательное"
 
 #: scripts/ui/inventario.gd
-msgid "F cambia"
-msgstr "F — смена"
+msgid "Objetos"
+msgstr "Предметы"
 
 #: scripts/ui/inventario.gd
-msgid "Dinero"
-msgstr "Деньги"
+msgid "Munición"
+msgstr "Патроны"
 
 #: scripts/ui/inventario.gd
-msgid "Objetos  %d / %d"
-msgstr "Предметы  %d / %d"
-
-#: scripts/ui/inventario.gd
-msgid "Munición  %d / %d"
-msgstr "Патроны  %d / %d"
-
-#: scripts/ui/inventario.gd
-msgid "Arrojables %d/%d"
-msgstr "Метательное %d/%d"
-
-#: scripts/ui/inventario.gd
-msgid "Curas %d/%d"
-msgstr "Лечение %d/%d"
+msgid "Curas"
+msgstr "Лечение"
 
 #: scripts/ui/inventario.gd
 msgctxt "inventario"
@@ -5566,10 +5554,6 @@ msgid "Sirve para mejorar %s en el banco de trabajo del taller."
 msgstr "Нужна, чтобы улучшать %s на верстаке в мастерской."
 
 #: scripts/ui/inventario.gd
-msgid "Munición"
-msgstr "Патроны"
-
-#: scripts/ui/inventario.gd
 msgid "%d en este hueco · llevas %d"
 msgstr "%d в этой ячейке · всего %d"
 
@@ -5640,6 +5624,22 @@ msgstr "Сундук"
 #: scripts/ui/inventario.gd
 msgid "Lo que llevas"
 msgstr "При тебе"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos  %d / %d"
+msgstr "Предметы  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Munición  %d / %d"
+msgstr "Патроны  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables %d/%d"
+msgstr "Метательное %d/%d"
+
+#: scripts/ui/inventario.gd
+msgid "Curas %d/%d"
+msgstr "Лечение %d/%d"
 
 #: scripts/ui/inventario.gd
 msgid "Baúl  %d / %d"
@@ -7397,6 +7397,14 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "F cambia"
+msgstr "F — смена"
+
+#, sin-usar
+msgid "Dinero"
+msgstr "Деньги"
 
 #, sin-usar
 msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."

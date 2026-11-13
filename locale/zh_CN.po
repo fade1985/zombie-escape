@@ -5399,28 +5399,16 @@ msgid "Arrojables"
 msgstr "投掷物"
 
 #: scripts/ui/inventario.gd
-msgid "F cambia"
-msgstr "F 切换"
+msgid "Objetos"
+msgstr "物品"
 
 #: scripts/ui/inventario.gd
-msgid "Dinero"
-msgstr "现金"
+msgid "Munición"
+msgstr "弹药"
 
 #: scripts/ui/inventario.gd
-msgid "Objetos  %d / %d"
-msgstr "物品  %d / %d"
-
-#: scripts/ui/inventario.gd
-msgid "Munición  %d / %d"
-msgstr "弹药  %d / %d"
-
-#: scripts/ui/inventario.gd
-msgid "Arrojables %d/%d"
-msgstr "投掷物 %d/%d"
-
-#: scripts/ui/inventario.gd
-msgid "Curas %d/%d"
-msgstr "治疗 %d/%d"
+msgid "Curas"
+msgstr "治疗"
 
 #: scripts/ui/inventario.gd
 msgctxt "inventario"
@@ -5544,10 +5532,6 @@ msgid "Sirve para mejorar %s en el banco de trabajo del taller."
 msgstr "用于在工作间的工作台升级%s。"
 
 #: scripts/ui/inventario.gd
-msgid "Munición"
-msgstr "弹药"
-
-#: scripts/ui/inventario.gd
 msgid "%d en este hueco · llevas %d"
 msgstr "此格 %d · 共携带 %d"
 
@@ -5618,6 +5602,22 @@ msgstr "储物箱"
 #: scripts/ui/inventario.gd
 msgid "Lo que llevas"
 msgstr "随身物品"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos  %d / %d"
+msgstr "物品  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Munición  %d / %d"
+msgstr "弹药  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables %d/%d"
+msgstr "投掷物 %d/%d"
+
+#: scripts/ui/inventario.gd
+msgid "Curas %d/%d"
+msgstr "治疗 %d/%d"
 
 #: scripts/ui/inventario.gd
 msgid "Baúl  %d / %d"
@@ -7353,6 +7353,14 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "F cambia"
+msgstr "F 切换"
+
+#, sin-usar
+msgid "Dinero"
+msgstr "现金"
 
 #, sin-usar
 msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."

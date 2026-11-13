@@ -5410,28 +5410,16 @@ msgid "Arrojables"
 msgstr "Throwables"
 
 #: scripts/ui/inventario.gd
-msgid "F cambia"
-msgstr "F to switch"
+msgid "Objetos"
+msgstr "Items"
 
 #: scripts/ui/inventario.gd
-msgid "Dinero"
-msgstr "Money"
+msgid "Munición"
+msgstr "Ammo"
 
 #: scripts/ui/inventario.gd
-msgid "Objetos  %d / %d"
-msgstr "Items  %d / %d"
-
-#: scripts/ui/inventario.gd
-msgid "Munición  %d / %d"
-msgstr "Ammo  %d / %d"
-
-#: scripts/ui/inventario.gd
-msgid "Arrojables %d/%d"
-msgstr "Throwables %d/%d"
-
-#: scripts/ui/inventario.gd
-msgid "Curas %d/%d"
-msgstr "Healing %d/%d"
+msgid "Curas"
+msgstr "Healing"
 
 #: scripts/ui/inventario.gd
 msgctxt "inventario"
@@ -5555,10 +5543,6 @@ msgid "Sirve para mejorar %s en el banco de trabajo del taller."
 msgstr "Used to upgrade %s at the workbench in the workshop."
 
 #: scripts/ui/inventario.gd
-msgid "Munición"
-msgstr "Ammo"
-
-#: scripts/ui/inventario.gd
 msgid "%d en este hueco · llevas %d"
 msgstr "%d in this slot · carrying %d"
 
@@ -5629,6 +5613,22 @@ msgstr "Stash"
 #: scripts/ui/inventario.gd
 msgid "Lo que llevas"
 msgstr "What you carry"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos  %d / %d"
+msgstr "Items  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Munición  %d / %d"
+msgstr "Ammo  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables %d/%d"
+msgstr "Throwables %d/%d"
+
+#: scripts/ui/inventario.gd
+msgid "Curas %d/%d"
+msgstr "Healing %d/%d"
 
 #: scripts/ui/inventario.gd
 msgid "Baúl  %d / %d"
@@ -7375,6 +7375,14 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "F cambia"
+msgstr "F to switch"
+
+#, sin-usar
+msgid "Dinero"
+msgstr "Money"
 
 #, sin-usar
 msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."

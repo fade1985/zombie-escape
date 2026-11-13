@@ -158,6 +158,7 @@ const MOCHILA_EN := Vector2(-61, -45)   # dónde va su esquina en la pantalla (l
 const PAPEL := preload("res://assets/ui/inventario-papel.png")
 const CINTA := preload("res://assets/ui/inventario-cinta.png")
 const ETIQUETA := preload("res://assets/ui/inventario-etiqueta.png")
+const CHAPA := preload("res://scripts/ui/chapa.gd")   # la pantallita del dinero, la de la tienda de armas
 # Lo que hace cada arma de la tienda y cada arrojable (se traduce al enseñarlo, en que_hace; el ordenador también lo lee)
 # [traducir]
 const QUE_HACE := {
@@ -205,23 +206,22 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 		var x := 118.0 if i == 0 else 298.0
 		var id: String = johnny.huecos[tipo]
 		var r := Rect2(x, 172, 64, 64)
-		sitio("p%d" % i, r, casilla_inv(r, "p%d" % i, Objetos.icono(id), carga_corta(id), borde(id), 0.0))
+		sitio("p%d" % i, r, casilla_inv(r, "p%d" % i, Objetos.icono(id), "", borde(id), 0.0))   # (sin «12/12»: M100)
 		rotulo(lienzo, Idioma.t("En la mano"), x + 32, 238, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_CENTER)
 		var otra: String = partida.repuesto(tipo)
 		r = Rect2(x, 262, 64, 64)
 		if otra != "":
 			sitio("r%d" % i, r, casilla_inv(r, "g%d" % partida.armas_guardadas.find(otra), Objetos.icono(otra),
-				carga_corta(otra), borde(otra), 0.0))
+				"", borde(otra), 0.0))
 		else:
 			sitio("r%d" % i, r, casilla_inv(r))
 		rotulo(lienzo, Idioma.t("De repuesto"), x + 32, 328, Tema.GRIS, HORIZONTAL_ALIGNMENT_CENTER)
 	# debajo, los arrojables a mano (F cambia entre ellos): el que se lanza ahora, con un marco amarillo alrededor
-	cinta(Idioma.t("Arrojables"), 118, 356)
-	rotulo(lienzo, Idioma.t("F cambia"), 362, 356, Tema.GRIS, HORIZONTAL_ALIGNMENT_RIGHT)
+	cinta(Idioma.t("Arrojables"), 118, 356)   # (sin «F cambia» a la derecha desde el M100)
 	for i in Lanzables.MANO:
 		var x := 120.0 + i * 84
 		var k: String = lz.mano[i] if i < lz.mano.size() else ""
-		sitio("l%d" % i, Rect2(x, 382, 72, 72), arrojable(Rect2(x, 382, 72, 72), "l%d" % i, k, 8.0))
+		sitio("l%d" % i, Rect2(x, 382, 72, 72), arrojable(Rect2(x, 382, 72, 72), "l%d" % i, k, 8.0, false))
 		if k == "":
 			continue
 		rotulo(lienzo, nombre_lanzable(k), x + 36, 456, Tema.TINTA, HORIZONTAL_ALIGNMENT_CENTER, 84)
@@ -237,24 +237,23 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			lienzo.add_child(ahora)
 			ahora.position = Vector2(x - 4, 378) - ORIGEN
 			ahora.size = Vector2(80, 80)
-	# y abajo, el dinero y, debajo, la etiqueta de la llave (en el HUD no se ven)
-	var caja := Panel.new()
-	caja.add_theme_stylebox_override("panel", estilo(Color("#2a2631"), false, false))
-	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	lienzo.add_child(caja)
-	caja.position = Vector2(118, 488) - ORIGEN
-	caja.size = Vector2(200, 38)
-	var billete := dibujo(caja, "billete", Vector2(38, 38), 0.0)
-	billete.position.x += 4
-	rotulo(lienzo, Idioma.t("Dinero"), 166, 496, Tema.AMARILLO)
-	rotulo(lienzo, "$%d" % partida.cartera(), 306, 496, Tema.TINTA, HORIZONTAL_ALIGNMENT_RIGHT)
+	# y abajo, la etiqueta de la llave y, a su derecha, el dinero en la pantallita de la tienda de armas (chapa.gd: el «$»
+	# y la cifra en amarillo, sin los «8» apagados). En el HUD no se ven
 	hueco_llave()
+	var dinero := Control.new()
+	dinero.name = "dinero"
+	dinero.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var fuente: Font = Tema.FUENTE
+	dinero.size = CHAPA.medida_marcador(fuente, partida.cartera())
+	dinero.draw.connect(func(): CHAPA.dibujar_marcador(dinero, fuente, Rect2(Vector2.ZERO, dinero.size), partida.cartera(), CHAPA.AMARILLO))
+	lienzo.add_child(dinero)
+	dinero.position = Vector2(262, 507) - ORIGEN
 	# en medio, los tres grupos de 8: los objetos de la mochila, la munición y, abajo, dos de 4: a la izquierda los
 	# arrojables de repuesto y a la derecha las curas (M67)
 	raya(Rect2(380, 148, 2, 430))
 	var llenas := Objetos.casillas(partida.mochila)
 	var objetos := Objetos.ocupadas(partida.mochila)   # las curas van al final de "llenas"
-	cinta(Idioma.t("Objetos  %d / %d") % [objetos, Objetos.MOCHILA], 392, 146)
+	cinta(Idioma.t("Objetos"), 392, 146)   # (sin «0 / 8» desde el M100; igual los demás)
 	for i in Objetos.MOCHILA:
 		if i < objetos:
 			var n: int = llenas[i][1]
@@ -262,7 +261,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 		else:
 			casilla_inv(rejilla(i, 170))
 	var balas: Array = johnny.huecos_municion()
-	cinta(Idioma.t("Munición  %d / %d") % [balas.size(), Armas.HUECOS_MUNICION], 392, 278)
+	cinta(Idioma.t("Munición"), 392, 278)
 	for i in Armas.HUECOS_MUNICION:
 		if i < balas.size():
 			casilla_inv(rejilla(i, 302), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 10.0)
@@ -270,10 +269,10 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			casilla_inv(rejilla(i, 302))
 	# (los títulos, más cortos que los de arriba para que quepan los dos: el de las curas, pegado al borde derecho; con
 	# sus cintas, en algunos idiomas se tocarían, así que cada uno tiene su largo máximo)
-	cinta(Idioma.t("Arrojables %d/%d") % [lz.repuesto.size(), Lanzables.REPUESTO], 392, 410, HORIZONTAL_ALIGNMENT_LEFT, 114.0)
+	cinta(Idioma.t("Arrojables"), 392, 410, HORIZONTAL_ALIGNMENT_LEFT, 114.0)
 	for i in Lanzables.REPUESTO:
-		sitio("e%d" % i, cuadro(i, 0), arrojable(cuadro(i, 0), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 10.0))
-	cinta(Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], cuadro(3, 1).end.x, 410, HORIZONTAL_ALIGNMENT_RIGHT, 76.0)
+		sitio("e%d" % i, cuadro(i, 0), arrojable(cuadro(i, 0), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 10.0, false))
+	cinta(Idioma.t("Curas"), cuadro(3, 1).end.x, 410, HORIZONTAL_ALIGNMENT_RIGHT, 76.0)
 	for i in Objetos.CURAS:
 		var j := objetos + i
 		if j < llenas.size():
@@ -297,11 +296,11 @@ func hueco_llave() -> void:
 	var caja := estampa(ETIQUETA, ETIQUETA.get_size() * 2.0)
 	caja.modulate = Color.WHITE if tiene else Color(0.5, 0.48, 0.45)
 	lienzo.add_child(caja)
-	caja.position = Vector2(118, 532) - ORIGEN
+	caja.position = Vector2(118, 504) - ORIGEN
 	var icono := dibujo(caja, "llave", Vector2(42, 40), 8.0)
 	icono.modulate.a = 1.0 if tiene else 0.35
 	var nombre: String = Idioma.t("Tarjeta") if partida.ed.cerrojo == "tarjeta" else Idioma.t("Llave")
-	var t := rotulo(lienzo, partida.nombre_jefa() if tiene else nombre, 160, 541, TINTA_BANCO, HORIZONTAL_ALIGNMENT_LEFT, 0.0)
+	var t := rotulo(lienzo, partida.nombre_jefa() if tiene else nombre, 160, 513, TINTA_BANCO, HORIZONTAL_ALIGNMENT_LEFT, 0.0)
 	if not tiene:
 		t.modulate.a = 0.45
 	# (lo que no cabe antes del ojal, con la letra más pequeña)
@@ -513,12 +512,13 @@ func dibujo(padre: Control, icono: String, lado: Vector2, margen: float) -> Text
 	return r
 
 
-# La casilla de un montón de arrojables ("" la deja vacía): su dibujo y cuántos quedan en él, de los que caben
-func arrojable(r: Rect2, clave: String, k: String, margen := 12.0) -> Control:
+# La casilla de un montón de arrojables ("" la deja vacía): su dibujo y cuántos quedan en él, de los que caben (con
+# "con_cuenta" en falso, sin eso: así va en el inventario desde el M100; el baúl y el banco lo siguen diciendo)
+func arrojable(r: Rect2, clave: String, k: String, margen := 12.0, con_cuenta := true) -> Control:
 	if k == "":
 		return casilla_inv(r)
 	var lz: Lanzables = partida.lanzables
-	return casilla_inv(r, clave, icono_lanzable(k), "%d/%d" % [lz.cuantos_en(clave), lz.maximo(k)],
+	return casilla_inv(r, clave, icono_lanzable(k), "%d/%d" % [lz.cuantos_en(clave), lz.maximo(k)] if con_cuenta else "",
 		Armas.color(Lanzables.calidad_de(k)), margen)
 
 
@@ -768,9 +768,16 @@ func barra(caja: VBoxContainer, nombre: String, valor: int) -> void:
 	cuadros.draw.connect(func():
 		for i in 10:
 			var r := Rect2(i * 11, 0, 8, 9)
-			cuadros.draw_rect(r, Tema.AMARILLO if i < valor else Color("#332e3a"))
+			cuadros.draw_rect(r, color_barra(valor) if i < valor else Color("#332e3a"))
 			cuadros.draw_rect(r, Tema.LINEA, false, 1.0))
 	hilera.add_child(cuadros)
+
+
+# El color de los cuadraditos llenos de una barra (M100): rojos si hay 3 o menos, amarillos de 4 a 7 y verdes de 8 a 10
+static func color_barra(valor: int) -> Color:
+	if valor <= 3:
+		return Color("#e0483c")
+	return Tema.AMARILLO if valor <= 7 else Color("#5cc94a")
 
 
 # Las balitas del cargador, una por bala (las gastadas, apagadas); los cartuchos, con su dibujo

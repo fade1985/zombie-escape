@@ -660,7 +660,10 @@ en una línea.
   referencia vaciada, `assets/ui/inventario-mochila.png`; sin el marco gris ni el título), más pequeño que antes para que
   se vea la mochila entera (casillas de 48, armas de 64, Johnny a ×3; la letra, igual), con la ficha en un papel
   cuadriculado con clip (`FICHA`, letra oscura), los títulos de grupo en tiras de cinta (`cinta`) y la llave en una
-  etiqueta de cartón (`hueco_llave`); los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Dentro:
+  etiqueta de cartón (`hueco_llave`) con el dinero a su derecha en la pantallita de la tienda de armas
+  (`chapa.gd`). Sin números «x/y»: ni en los títulos ni en las casillas de armas y arrojables; sin «F cambia». Los
+  cuadraditos de las barras de la ficha, por colores (`color_barra`: rojos hasta 3, amarillos de 4 a 7, verdes de 8
+  a 10). Los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Dentro:
   (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; `en_banco`, `no_mejora`,
