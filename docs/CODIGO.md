@@ -876,7 +876,8 @@ en una línea.
   y alarga la alfombra hasta lo que mide el pasillo (sus dos puntas y, en medio, un medallón repetido, antes de reducir:
   `alfombra-baja.png`, 776 × 36). `planta.gd` (`colgados`, `CUADROS`) cuelga en la pared de arriba cuadros distintos en cada
   planta (cinco; en la baja, cuatro), en los huecos entre puertas, apliques, macetas y carteles (a la derecha del todo no, por el
-  cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; y en todas las plantas (M99), la alfombra
+  cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; en todas, otro extintor justo debajo del
+  cartel EXIT de la salida de incendios (M94); y en todas las plantas (M99), la alfombra
   larga por el centro del suelo (`alfombra`). Los pinta `mapa.gd` (`poner_colgados`, con su sombra en la pared, y `dibujar_fondo`). Prueba: `--captura --pasillo-baja`.
 - **Los baños de los pisos, con toallas (M96, 13 nov):** tres imágenes de GPT reducidas con `muebles_gpt.py` (`toallero.png`,
   la toalla gris en su barra negra; `toalla-gancho.png`, la blanca colgada de un gancho; `balda-bano.png`, la balda blanca con

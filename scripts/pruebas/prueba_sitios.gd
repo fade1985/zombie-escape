@@ -73,7 +73,7 @@ func probar_pasillo_baja() -> void:
 			distintos[d] = true
 		print("Pasillo de la planta %d: %d cuadros (%d distintos) %s · además %s · alfombra %s" % [num, cuadros.size(),
 			distintos.size(), cuadros, otros, pasillo.get("alfombra", false)])
-	print("(esperado: en la 1, 4 cuadros distintos, manguera y extintor; en las demás, 5 distintos y nada más; alfombra en todas)")
+	print("(esperado: en la 1, 4 cuadros distintos, manguera y dos extintores; en las demás, 5 distintos y un extintor (M94); alfombra en todas)")
 	get_tree().quit()
 
 

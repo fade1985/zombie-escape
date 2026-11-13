@@ -459,6 +459,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		if baja:
 			pasillo.colgados.append({"x": MURO + 56, "alto": 60, "dibujo": "manguera"})
 			pasillo.colgados.append({"x": MURO + 114, "alto": 44, "dibujo": "extintor"})
+		# M94: y en todas las plantas, otro extintor junto a la salida de incendios, justo debajo de su cartel EXIT (su centro, a
+		# 76 del fondo del pasillo: mapa.gd, CARTEL_SALIDA_A; más bajo que el de la manguera, para no tocar el cartel)
+		pasillo.colgados.append({"x": ancho - MURO - 76, "alto": 34, "dibujo": "extintor"})
 		pasillo.alfombra = true
 	if baja:
 		planta.armas = planta.sitios.size()
