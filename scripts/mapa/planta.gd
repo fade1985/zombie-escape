@@ -500,6 +500,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		var sitio: Dictionary = planta.sitios[normales[orden]]
 		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
 		sitio.armaritos = armaritos(sitio)
+		sitio.colgados_bano = colgados_bano(sitio)
 	# Un evento por apartamento como mucho (superviviente, tele o científico): la tele, en uno sin el superviviente
 	var de_sos: int = planta.superviviente.sitio if rescate_planta == num and not planta.superviviente.is_empty() else -1
 	var de_tele := tele_de_la_planta(planta, normales.filter(func(i): return i != de_sos), rng)
@@ -967,6 +968,84 @@ static func armaritos(sitio: Dictionary) -> Array:
 	var uno: Dictionary = lista[rng.randi() % lista.size()]
 	uno.dentro = "botiquin" if sitio.get("tienda", "") != "" or rng.randf() < 0.5 else "vendas"
 	return [uno]
+
+
+# M96: lo que va colgado en la pared de arriba de los baños de los pisos (de GPT: tools/muebles_gpt.py), pintado en su
+# cara del muro (mapa.gd, poner_caras): una toalla, la del toallero o la del gancho (al azar), al lado de la ducha, y la
+# balda con toallas en medio del hueco más grande que quede, sin tapar el armarito, las puertas ni los muebles de esa
+# pared. Cada uno: {x (su centro), y (el pie de la pared), alto (su centro, en unidades sobre el pie), dibujo}. Con su
+# propio dado (de la semilla del sitio), para no cambiar lo demás que sale al azar en la planta
+const BANO_COLGADOS := {"toallero": [44.0, 48.0, 52.0], "toalla-gancho": [32.0, 56.0, 48.0],
+	"balda-bano": [56.0, 48.0, 56.0]}   # ancho, alto y altura de su centro, en unidades
+const BANO_MARGEN := 8.0   # lo que se separan de lo demás y de las esquinas
+
+static func colgados_bano(sitio: Dictionary) -> Array:
+	var apt: Dictionary = sitio.apt
+	var dado := RandomNumberGenerator.new()
+	dado.seed = int(sitio.get("surtido", 0)) + 96
+	var lista := []
+	for s in apt.salas.filter(func(s): return s.uso == "bano" and s.has("dueno_bano")):
+		var y := float(s.f0 * CASILLA)
+		var izq := float(s.c0 * CASILLA)
+		var der := float((s.c0 + s.ancho) * CASILLA)
+		# lo que ya ocupa la pared: donde encima no hay muro (una puerta), los muebles pegados a ella y el armarito
+		var ocupado := []
+		for c in range(s.c0, s.c0 + s.ancho):
+			var d: int = apt.dueno[(s.f0 - 1) * apt.cols + c]
+			if d >= 0 or d == -2:
+				ocupado.append([c * CASILLA, (c + 1) * CASILLA])
+		var ducha := (izq + der) / 2.0
+		for m in sitio.muebles:
+			var h := Muebles.hueco(m)
+			if m.zona == s.id and h.position.y < y + 8.0:
+				ocupado.append([h.position.x, h.end.x])
+				if m.tipo == "showertray":
+					ducha = m.x
+		for a in sitio.get("armaritos", []):
+			if is_equal_approx(a.y, y) and a.x > izq and a.x < der:
+				ocupado.append([a.x - 26.0, a.x + 26.0])
+		# la toalla, pegada a la ducha por el lado donde haya sitio; si no cabe, en el primer hueco donde quepa
+		var toalla := "toallero" if dado.randf() < 0.5 else "toalla-gancho"
+		var w: float = BANO_COLGADOS[toalla][0]
+		var en := -1.0
+		for hueco in huecos_pared(ocupado, izq, der):
+			if hueco[1] - hueco[0] < w + BANO_MARGEN * 2.0:
+				continue
+			if ducha < (izq + der) / 2.0 and hueco[0] >= ducha:
+				en = hueco[0] + BANO_MARGEN + w / 2.0
+				break
+			if ducha >= (izq + der) / 2.0 and hueco[1] <= ducha:
+				en = hueco[1] - BANO_MARGEN - w / 2.0   # (el último que quede a la izquierda de la ducha)
+			elif en < 0.0 and ducha >= (izq + der) / 2.0:
+				en = hueco[0] + BANO_MARGEN + w / 2.0
+		if en >= 0.0:
+			lista.append({"x": en, "y": y, "alto": BANO_COLGADOS[toalla][2], "dibujo": toalla})
+			ocupado.append([en - w / 2.0, en + w / 2.0])
+		# la balda, en medio del hueco más ancho que quede
+		w = BANO_COLGADOS["balda-bano"][0]
+		var mejor := []
+		for hueco in huecos_pared(ocupado, izq, der):
+			if mejor.is_empty() or hueco[1] - hueco[0] > mejor[1] - mejor[0]:
+				mejor = hueco
+		if not mejor.is_empty() and mejor[1] - mejor[0] >= w + BANO_MARGEN * 2.0:
+			lista.append({"x": roundf((mejor[0] + mejor[1]) / 2.0), "y": y, "alto": BANO_COLGADOS["balda-bano"][2],
+				"dibujo": "balda-bano"})
+	return lista
+
+
+# Los tramos libres de una pared, de izquierda a derecha, entre "izq" y "der" y fuera de lo "ocupado" ([desde, hasta])
+static func huecos_pared(ocupado: Array, izq: float, der: float) -> Array:
+	var tramos := ocupado.duplicate()
+	tramos.sort_custom(func(a, b): return a[0] < b[0])
+	var huecos := []
+	var x := izq
+	for t in tramos:
+		if t[0] > x:
+			huecos.append([x, minf(t[0], der)])
+		x = maxf(x, t[1])
+	if x < der:
+		huecos.append([x, der])
+	return huecos.filter(func(h): return h[1] > h[0])
 
 
 # Un punto de la habitación con sitio alrededor, lejos de la entrada, de los muebles y de los otros zombis

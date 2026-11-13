@@ -878,6 +878,12 @@ en una línea.
   planta (cinco; en la baja, cuatro), en los huecos entre puertas, apliques, macetas y carteles (a la derecha del todo no, por el
   cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; y en todas las plantas (M99), la alfombra
   larga por el centro del suelo (`alfombra`). Los pinta `mapa.gd` (`poner_colgados`, con su sombra en la pared, y `dibujar_fondo`). Prueba: `--captura --pasillo-baja`.
+- **Los baños de los pisos, con toallas (M96, 13 nov):** tres imágenes de GPT reducidas con `muebles_gpt.py` (`toallero.png`,
+  la toalla gris en su barra negra; `toalla-gancho.png`, la blanca colgada de un gancho; `balda-bano.png`, la balda blanca con
+  toallas). `planta.gd` (`colgados_bano`, con su propio dado) pone en la pared de arriba de cada baño una de las dos toallas al
+  lado de la ducha y la balda en medio del hueco más ancho que quede, sin tapar el armarito, las puertas ni los muebles. Las
+  pinta `mapa.gd` (`poner_caras`) como adornos de la cara del muro, con su sombra, así que se oscurecen con la niebla de
+  la habitación. Prueba: `--captura --piso`.
 - **Las manchas de sangre del pasillo de dentro de los pisos (L36, 13 nov):** el suelo de ese pasillo traía dos manchas pintadas
   que, al repetirse el trozo, salían iguales por todas partes; `dormitorios.py` las tapa (`tapar`: un rectángulo de tablas de las
   mismas filas, corrido a un lado) antes de reducir. Ahora van sueltas: `manchas_gpt.py` saca doce distintas, rojas y líquidas, de

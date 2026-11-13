@@ -673,6 +673,14 @@ func poner_caras() -> void:
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
 				cara.adornos += colgados(cara)
+			# M96: las toallas y la balda de los baños de los pisos (planta.gd, colgados_bano), con su sombra suave
+			for cb in sitio.get("colgados_bano", []):
+				if is_equal_approx(cb.y, cara.position.y) and cb.x >= cara.position.x and cb.x < cara.position.x + cara.ancho:
+					var t: Texture2D = load("res://assets/sprites/%s.png" % cb.dibujo)
+					var en := Vector2(floorf((cb.x - cara.position.x) / 2.0 - t.get_width() / 2.0),
+						floorf(-cb.alto / 2.0 - t.get_height() / 2.0))
+					cara.adornos.append({"dibujo": t, "x": en.x + 1, "y": en.y + 1, "color": Color(0, 0, 0, 0.25)})
+					cara.adornos.append({"dibujo": t, "x": en.x, "y": en.y})
 			cosas.add_child(cara)
 			if not caras.has(sala):
 				caras[sala] = []

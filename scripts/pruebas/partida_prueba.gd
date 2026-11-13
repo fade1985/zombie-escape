@@ -234,7 +234,7 @@
 #   --portal            el felpudo de rejilla metálica del portal, delante de la puerta de la calle [prueba_sitios.gd]
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba, y su pasillo con las
-#                       manchas de sangre sueltas (L36)                                     [prueba_sitios.gd]
+#                       manchas de sangre sueltas (L36), y sus baños con las toallas (M96)  [prueba_sitios.gd]
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos (y de cada tipo), y que no se amontonen [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera [prueba_sitios.gd]

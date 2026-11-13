@@ -257,6 +257,11 @@ MUEBLES = {
     # mapa/cientifico.gd): la hoja amarillenta con su clip y la mancha de sangre. Más grande que la de antes (10 × 13): a 12 × 16 los renglones
     # se emborronaban y parecía una mancha marrón
     "dosier_pagina": ("assets/sources/dosier-pagina-gpt.webp", "assets/sprites/dosier-pagina.png", 14, 19, False),
+    # M96 (13 nov): lo que va colgado en la pared de arriba de los baños de los pisos (planta.gd, colgados_bano): el
+    # toallero negro con la toalla gris, la toalla blanca colgada de un gancho y la balda blanca con toallas y una planta
+    "toallero": ("assets/sources/toallero-gpt.webp", "assets/sprites/toallero.png", 22, 24, False),
+    "toalla_gancho": ("assets/sources/toalla-gancho-gpt.webp", "assets/sprites/toalla-gancho.png", 16, 28, False),
+    "balda_bano": ("assets/sources/balda-bano-gpt.webp", "assets/sprites/balda-bano.png", 28, 24, False),
 }
 
 
