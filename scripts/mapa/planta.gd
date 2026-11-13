@@ -975,8 +975,8 @@ static func armaritos(sitio: Dictionary) -> Array:
 # balda con toallas en medio del hueco más grande que quede, sin tapar el armarito, las puertas ni los muebles de esa
 # pared. Cada uno: {x (su centro), y (el pie de la pared), alto (su centro, en unidades sobre el pie), dibujo}. Con su
 # propio dado (de la semilla del sitio), para no cambiar lo demás que sale al azar en la planta
-const BANO_COLGADOS := {"toallero": [44.0, 48.0, 52.0], "toalla-gancho": [32.0, 56.0, 48.0],
-	"balda-bano": [56.0, 48.0, 56.0]}   # ancho, alto y altura de su centro, en unidades
+const BANO_COLGADOS := {"toallero": [44.0, 48.0, 42.0], "toalla-gancho": [32.0, 56.0, 42.0],
+	"balda-bano": [56.0, 48.0, 56.0]}   # ancho, alto y altura de su centro, en unidades (las toallas, más bajas que el armarito)
 const BANO_MARGEN := 8.0   # lo que se separan de lo demás y de las esquinas
 
 static func colgados_bano(sitio: Dictionary) -> Array:
