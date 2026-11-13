@@ -500,6 +500,13 @@ func marcar_hueco(b: Button) -> void:
 # píxeles no se deformen)
 func dibujo(padre: Control, icono: String, lado: Vector2, margen: float) -> TextureRect:
 	var tex: Texture2D = load("res://assets/ui/iconos/%s.png" % icono)
+	# las armas, con el dibujo de la tienda de armas (assets/ui/tienda, de 48: 13 nov) si cabe; en las casillas pequeñas
+	# del baúl y del banco, y la fregona, que no se vende, con el icono de siempre
+	var de_tienda := "res://assets/ui/tienda/%s.png" % icono
+	if ResourceLoader.exists(de_tienda):
+		var grande: Texture2D = load(de_tienda)
+		if grande.get_width() <= lado.x - margen and grande.get_height() <= lado.y - margen:
+			tex = grande
 	var k := maxi(1, floori(minf((lado.x - margen) / tex.get_width(), (lado.y - margen) / tex.get_height())))
 	var r := estampa(tex, tex.get_size() * k)
 	padre.add_child(r)
