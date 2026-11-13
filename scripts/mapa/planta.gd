@@ -446,7 +446,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# carteles (contando desde la puerta de la izquierda, la del ascensor y la de la derecha; a la derecha del todo no
 		# caben, por el cartel EXIT), distintos en cada planta de los ocho que hay, empezando en cada planta por uno
 		# distinto: cinco y, en la planta baja, cuatro, porque en la punta de la izquierda van la manguera de incendios y el
-		# extintor, junto al portal; y en la baja, también la alfombra larga del suelo (mapa.gd, tools/pasillo_gpt.py)
+		# extintor, junto al portal. Y en todas, la alfombra larga del suelo (M99; mapa.gd, tools/pasillo_gpt.py)
 		var arriba_x: Array = pasillo.salidas.filter(func(s): return s.dir == "arriba").map(func(s): return s.en)
 		arriba_x.sort()
 		var en_x: Array = [arriba_x[0] - 146, arriba_x[1] - 168, arriba_x[1] + 296,
@@ -459,7 +459,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		if baja:
 			pasillo.colgados.append({"x": MURO + 56, "alto": 60, "dibujo": "manguera"})
 			pasillo.colgados.append({"x": MURO + 114, "alto": 44, "dibujo": "extintor"})
-			pasillo.alfombra = true
+		pasillo.alfombra = true
 	if baja:
 		planta.armas = planta.sitios.size()
 		planta.sitios.append(sala_armas(planta.mantenimiento))

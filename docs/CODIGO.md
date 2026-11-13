@@ -876,8 +876,8 @@ en una línea.
   y alarga la alfombra hasta lo que mide el pasillo (sus dos puntas y, en medio, un medallón repetido, antes de reducir:
   `alfombra-baja.png`, 776 × 36). `planta.gd` (`colgados`, `CUADROS`) cuelga en la pared de arriba cuadros distintos en cada
   planta (cinco; en la baja, cuatro), en los huecos entre puertas, apliques, macetas y carteles (a la derecha del todo no, por el
-  cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal y la alfombra larga por el centro del suelo
-  (`alfombra`). Los pinta `mapa.gd` (`poner_colgados`, con su sombra en la pared, y `dibujar_fondo`). Prueba: `--captura --pasillo-baja`.
+  cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; y en todas las plantas (M99), la alfombra
+  larga por el centro del suelo (`alfombra`). Los pinta `mapa.gd` (`poner_colgados`, con su sombra en la pared, y `dibujar_fondo`). Prueba: `--captura --pasillo-baja`.
 - **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de

@@ -228,7 +228,8 @@
 #   --cartel-sala       la puerta de acero de la sala de mantenimiento en el pasillo de la planta baja y su cartel, en
 #                       español, inglés, francés, ruso y chino                               [prueba_sitios.gd]
 #   --pasillo-baja      M95: el pasillo de la planta baja con su alfombra, la manguera, el extintor y los cuadros, en tres
-#                       fotos; y qué cuadros lleva cada planta (distintos, 4 en la baja y 5 en las demás) [prueba_sitios.gd]
+#                       fotos, y el de la 2ª planta con la misma alfombra (M99); y qué cuadros lleva cada planta
+#                       (distintos, 4 en la baja y 5 en las demás)                         [prueba_sitios.gd]
 #   --llegada           por dónde se llega a cada planta: el portal a la izquierda, las demás (y la azotea) por la derecha [prueba_sitios.gd]
 #   --portal            el felpudo de rejilla metálica del portal, delante de la puerta de la calle [prueba_sitios.gd]
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
