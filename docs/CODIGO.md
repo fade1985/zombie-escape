@@ -878,6 +878,13 @@ en una línea.
   planta (cinco; en la baja, cuatro), en los huecos entre puertas, apliques, macetas y carteles (a la derecha del todo no, por el
   cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; y en todas las plantas (M99), la alfombra
   larga por el centro del suelo (`alfombra`). Los pinta `mapa.gd` (`poner_colgados`, con su sombra en la pared, y `dibujar_fondo`). Prueba: `--captura --pasillo-baja`.
+- **Las manchas de sangre del pasillo de dentro de los pisos (L36, 13 nov):** el suelo de ese pasillo traía dos manchas pintadas
+  que, al repetirse el trozo, salían iguales por todas partes; `dormitorios.py` las tapa (`tapar`: un rectángulo de tablas de las
+  mismas filas, corrido a un lado) antes de reducir. Ahora van sueltas: `manchas_gpt.py` saca ocho distintas de una imagen de GPT
+  con fondo blanco (`assets/sources/pasillo/manchas-sangre-gpt.webp`: el blanco pasa a transparencia, para que los bordes finos
+  dejen ver el suelo) y las reduce «como los muebles» (`sangre-suelo-1.png` ... `-8.png`). `mapa.gd` (`manchas_del_pasillo`) pone
+  de 4 a 5 distintas en cada pasillo de piso, en casillas al azar separadas, giradas y volteadas, y solo donde caben enteras sobre
+  su suelo (no encima de un tabique); se pintan con los restos. Prueba: `--captura --piso` (`captura-piso-<lado>-pasillo.png`).
 - **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de

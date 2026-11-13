@@ -51,8 +51,24 @@ def pared_y_techo(nombre, origen, techo_f, estilo="dormitorio", trozo_ancho=51, 
     guardar_json("techo-" + estilo + ("-" + nombre if nombre else ""), 204, 6)
 
 
-def suelo(nombre, origen, recorte, lado, estilo="dormitorio", con_json=True):
-    im = Image.open(FUENTES + origen).convert("RGB")
+def tapar(im, trozos):
+    """L36: tapa una mancha pintada en la imagen de GPT (al repetirse el suelo, salía igual por todas partes) con un
+    rectángulo de tablas de las mismas filas, corrido "dx" a un lado, fundido 16 píxeles por la izquierda y la derecha.
+    trozos: [((x0, y0, x1, y1), dx)] en píxeles de la imagen grande"""
+    im = im.copy()
+    for (x0, y0, x1, y1), dx in trozos:
+        trozo = im.crop((x0 + dx, y0, x1 + dx, y1))
+        mascara = Image.new("L", trozo.size, 255)
+        for i in range(16):
+            for y in range(trozo.height):
+                mascara.putpixel((i, y), 255 * (i + 1) // 17)
+                mascara.putpixel((trozo.width - 1 - i, y), 255 * (i + 1) // 17)
+        im.paste(trozo, (x0, y0), mascara)
+    return im
+
+
+def suelo(nombre, origen, recorte, lado, estilo="dormitorio", con_json=True, trozos=()):
+    im = tapar(Image.open(FUENTES + origen).convert("RGB"), trozos)
     reducir(im.crop((0, 0, recorte, recorte)), lado, lado).save(CARPETA + "suelo-" + estilo + ("-" + nombre if nombre else "") + ".png")
     if con_json:
         guardar_json("suelo-" + estilo + ("-" + nombre if nombre else ""), lado, lado)
@@ -77,7 +93,10 @@ suelo("pisos", "bano-suelo-gpt.webp", 1254, 128, "bano")
 # pasillo (y recibidor) de dentro de los pisos (11 nov): pintura crema arriba y rayas crema y beige abajo con moldura y rodapié de roble,
 # y tarima de roble claro; el suelo, la imagen entera, a 128. (El pasillo del portal del edificio es otro: tools/portal_gpt.py)
 pared_y_techo("gpt", "pasillo-piso-pared-gpt.webp", CLARO, "pasillopiso")
-suelo("gpt", "pasillo-piso-suelo-gpt.webp", 1254, 128, "pasillopiso")
+# (sin las dos manchas de sangre que traía la imagen, que se repetían iguales por todo el pasillo: L36; las de ahora son
+# sueltas y distintas, tools/manchas_gpt.py)
+suelo("gpt", "pasillo-piso-suelo-gpt.webp", 1254, 128, "pasillopiso",
+      trozos=[((1031, 306, 1240, 620), -400), ((1, 866, 180, 1180), 400)])
 # trasteros del edificio (las viviendas de los supervivientes, 11 nov): chapa acanalada crema con el suelo de hormigón gris azulado; la
 # pared de las habitaciones, la del pasillo (con la franja de chapa lagrimada) y el suelo de los dos. Sustituyen a los de tools/trastero.py
 # (que sigue haciendo las puertas y la línea amarilla y no hay que volver a pasar para esto). Sin .json ni techo propios, como antes:

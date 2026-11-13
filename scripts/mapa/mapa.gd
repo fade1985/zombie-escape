@@ -262,6 +262,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
 		preparar_restos()
+	elif sitio.has("apt"):
+		manchas_del_pasillo()
 
 	var fondo := Node2D.new()
 	fondo.name = "Fondo"
@@ -1093,6 +1095,53 @@ func preparar_restos() -> void:
 		restos.append({"dibujo": load("res://assets/sprites/resto-%s.png" % nombre),
 			"pos": (casilla + Vector2(0.5, 0.5)) * CASILLA + Vector2(dado_restos.randi_range(-4, 4), dado_restos.randi_range(-4, 4)) * 2.0,
 			"giro": dado_restos.randi() % 4, "espejo": dado_restos.randf() < 0.5})
+
+
+# L36: las manchas de sangre sueltas del suelo del pasillo de dentro de los pisos (de GPT: tools/manchas_gpt.py; antes
+# iba una pintada en el suelo, que se repetía igual por todo el pasillo): de 4 a 5 en cada pasillo, distintas, en casillas al
+# azar separadas entre sí, giradas de 90 en 90 grados y volteadas al azar. Se pintan con los restos (dibujar_fondo). Con su
+# propio dado (de la semilla del sitio): al volver, siguen igual
+const MANCHAS_PASILLO := 8   # sangre-suelo-1.png ... -8.png
+func manchas_del_pasillo() -> void:
+	for s in sitio.apt.salas:
+		if s.uso != "pasillo" or s.get("tipo", "") != "piso":
+			continue
+		var dado := RandomNumberGenerator.new()
+		dado.seed = int(sitio.get("surtido", 0)) + 41 + s.id
+		var casillas := []
+		for f in range(s.f0, s.f0 + s.fondo):
+			for c in range(s.c0, s.c0 + s.ancho):
+				if dueno[f * cols + c] == s.id:
+					casillas.append(Vector2(c, f))
+		var dibujos := range(1, MANCHAS_PASILLO + 1)
+		var puestas := []
+		var cuantas := dado.randi_range(4, 5)
+		for intento in 200:
+			if puestas.size() >= cuantas or casillas.is_empty() or dibujos.is_empty():
+				break
+			var casilla: Vector2 = casillas[dado.randi() % casillas.size()]
+			var i_dibujo := dado.randi() % dibujos.size()
+			var textura: Texture2D = load("res://assets/sprites/sangre-suelo-%d.png" % dibujos[i_dibujo])
+			var giro := dado.randi() % 4
+			var espejo := dado.randf() < 0.5
+			if puestas.any(func(p): return p.distance_to(casilla) < 5.0):
+				continue
+			# entera sobre el suelo del pasillo: ni encima de un tabique ni asomando a otra habitación
+			var tam := textura.get_size() * 2.0
+			if giro % 2 == 1:
+				tam = Vector2(tam.y, tam.x)
+			var pos := (casilla + Vector2(0.5, 0.5)) * CASILLA
+			var hueco := Rect2(pos - tam / 2.0, tam)
+			var cabe := true
+			for f in range(floori(hueco.position.y / CASILLA), floori((hueco.end.y - 1.0) / CASILLA) + 1):
+				for c in range(floori(hueco.position.x / CASILLA), floori((hueco.end.x - 1.0) / CASILLA) + 1):
+					if c < 0 or f < 0 or c >= cols or f >= filas or dueno[f * cols + c] != s.id:
+						cabe = false
+			if not cabe:
+				continue
+			puestas.append(casilla)
+			dibujos.remove_at(i_dibujo)
+			restos.append({"dibujo": textura, "pos": pos, "giro": giro, "espejo": espejo})
 
 
 # Los restos de una cara de muro de "ancho" unidades: [{dibujo, x, y}] en píxeles del dibujo, contando desde la
