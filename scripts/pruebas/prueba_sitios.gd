@@ -210,7 +210,7 @@ func probar_piso() -> void:
 				await get_tree().create_timer(0.8).timeout
 				var nombre: String = s.get("tipo", s.uso) if s.uso != "bano" else "bano-" + apt.salas[s.dueno_bano].tipo
 				Captura.foto("captura-piso-%s-%s.png" % [lado, nombre])
-		# L36: el pasillo, con sus manchas de sangre sueltas (de 4 a 5, distintas) y el suelo ya sin la mancha pintada; Johnny,
+		# L36: el pasillo, con sus manchas de sangre sueltas (de 6 a 8, distintas, con salpicones alrededor) y el suelo ya sin la mancha pintada; Johnny,
 		# junto a la primera, para que se vea con su linterna
 		var de_sangre: Array = mapa.restos.filter(func(r): return r.dibujo.resource_path.get_file().begins_with("sangre-suelo"))
 		if not de_sangre.is_empty():
@@ -221,8 +221,8 @@ func probar_piso() -> void:
 		var distintas := {}
 		for n in sangre:
 			distintas[n] = true
-		print("Piso (puerta %s): manchas de sangre en el pasillo %s, distintas %d (esperado: de 4 a 5, todas distintas)" % [
-			lado, sangre, distintas.size()])
+		print("Piso (puerta %s): manchas de sangre en el pasillo %s, distintas %d (esperado: de 6 a 8, todas distintas) · gotas de salpicón %d (esperado: muchas)" % [
+			lado, sangre, distintas.size(), mapa.salpicones.size()])
 		print("Piso (puerta %s): %d × %d casillas · %s" % [lado, apt.cols, apt.filas,
 			" · ".join(apt.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
 		# (de momento, solo los puestos a mano: los 4 del dormitorio de matrimonio, los 4 del individual, los 7 del salón, los 5

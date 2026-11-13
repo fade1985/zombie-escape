@@ -165,6 +165,7 @@ var cajas := false                # cada habitación, una caja cerrada por sus t
 var al_aire := false              # la azotea: toda ella, la imagen de GPT (AZOTEA), con la barandilla; ni caras ni tapas
 var alzados := {}                 # con cajas, las casillas de la pantalla con tabique que sube (poner_tabiques): Vector2i -> true
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
+var salpicones: Array = []        # L36: las gotas de alrededor de las manchas del pasillo de los pisos: [Rect2, Color], en unidades
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
 var laboratorio: Node2D = null   # el de la planta 40 de la torre (laboratorio.gd)
@@ -579,6 +580,10 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		var t: Texture2D = r.dibujo
 		lienzo.draw_set_transform(r.pos, r.giro * PI / 2.0, Vector2(-2 if r.espejo else 2, 2))
 		lienzo.draw_texture(t, -(t.get_size() / 2.0).floor())
+	# y los salpicones de alrededor de las manchas del pasillo de los pisos (salpicar_mancha), ya en unidades
+	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	for g in salpicones:
+		lienzo.draw_rect(g[0], g[1])
 
 
 # Si un punto está dentro del ring del helipuerto (las líneas blancas de la azotea). "margen": lo que tiene que quedar
@@ -1098,10 +1103,13 @@ func preparar_restos() -> void:
 
 
 # L36: las manchas de sangre sueltas del suelo del pasillo de dentro de los pisos (de GPT: tools/manchas_gpt.py; antes
-# iba una pintada en el suelo, que se repetía igual por todo el pasillo): de 4 a 5 en cada pasillo, distintas, en casillas al
-# azar separadas entre sí, giradas de 90 en 90 grados y volteadas al azar. Se pintan con los restos (dibujar_fondo). Con su
-# propio dado (de la semilla del sitio): al volver, siguen igual
-const MANCHAS_PASILLO := 8   # sangre-suelo-1.png ... -8.png
+# iba una pintada en el suelo, que se repetía igual por todo el pasillo): de 6 a 8 en cada pasillo, distintas, en casillas al
+# azar separadas entre sí, giradas de 90 en 90 grados y volteadas al azar, y solo donde caben enteras sobre su suelo. Cada una,
+# con salpicones de gotas alrededor, lanzadas hacia fuera, como los de los tiros (Mancha.salpicon: cuadraditos, la gota gorda
+# en cruz y la fina alargada). Se pintan con los restos (dibujar_fondo). Con su propio dado (de la semilla del sitio): al
+# volver, siguen igual
+const MANCHAS_PASILLO := 12   # sangre-suelo-1.png ... -12.png
+const SALPICON_COLORES := [Color("#b8141a", 0.95), Color("#8a0d12", 0.95), Color("#d2302a", 0.9)]
 func manchas_del_pasillo() -> void:
 	for s in sitio.apt.salas:
 		if s.uso != "pasillo" or s.get("tipo", "") != "piso":
@@ -1115,8 +1123,8 @@ func manchas_del_pasillo() -> void:
 					casillas.append(Vector2(c, f))
 		var dibujos := range(1, MANCHAS_PASILLO + 1)
 		var puestas := []
-		var cuantas := dado.randi_range(4, 5)
-		for intento in 200:
+		var cuantas := dado.randi_range(6, 8)
+		for intento in 300:
 			if puestas.size() >= cuantas or casillas.is_empty() or dibujos.is_empty():
 				break
 			var casilla: Vector2 = casillas[dado.randi() % casillas.size()]
@@ -1142,6 +1150,33 @@ func manchas_del_pasillo() -> void:
 			puestas.append(casilla)
 			dibujos.remove_at(i_dibujo)
 			restos.append({"dibujo": textura, "pos": pos, "giro": giro, "espejo": espejo})
+			salpicar_mancha(dado, pos, tam, s.id)
+
+
+# Los salpicones de alrededor de una mancha del pasillo (manchas_del_pasillo): gotas que salen del borde hacia fuera, en
+# cuadraditos de 2 unidades como las de Mancha.salpicon; la gorda, una cruz de 4 o 6, y la fina, un trazo de 1 a 5
+# cuadraditos hacia donde iba. Solo las que caen en el suelo del pasillo ("sala")
+func salpicar_mancha(dado: RandomNumberGenerator, pos: Vector2, tam: Vector2, sala: int) -> void:
+	var celda := func(centro: Vector2, lado: float, color: Color) -> void:
+		var c := floori(centro.x / CASILLA)
+		var f := floori(centro.y / CASILLA)
+		if c < 0 or f < 0 or c >= cols or f >= filas or dueno[f * cols + c] != sala:
+			return
+		salpicones.append([Rect2(((centro - Vector2(lado, lado) / 2.0) / 2.0).round() * 2.0, Vector2(lado, lado)), color])
+	for k in dado.randi_range(12, 20):
+		var dir := Vector2.from_angle(dado.randf() * TAU)
+		var punto := pos + Vector2(dir.x * tam.x, dir.y * tam.y) * 0.4 + dir * dado.randf_range(4.0, 40.0)
+		var color: Color = SALPICON_COLORES[dado.randi() % SALPICON_COLORES.size()]
+		if dado.randf() < 0.3:
+			var g := 4.0 if dado.randf() < 0.6 else 6.0
+			celda.call(punto, g, color)
+			celda.call(punto + Vector2(g / 2.0, 0), g - 2.0, color)
+			celda.call(punto - Vector2(g / 2.0, 0), g - 2.0, color)
+			celda.call(punto + dir * (g / 2.0 + 2.0), 2.0, color)
+		else:
+			var pasos := dado.randi_range(1, 5)
+			for i in pasos:
+				celda.call(punto - dir * i * 2.0, 4.0 if i == 0 and pasos > 3 else 2.0, color)
 
 
 # Los restos de una cara de muro de "ancho" unidades: [{dibujo, x, y}] en píxeles del dibujo, contando desde la
