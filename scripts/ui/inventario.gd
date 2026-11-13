@@ -501,7 +501,7 @@ func marcar_hueco(b: Button) -> void:
 func dibujo(padre: Control, icono: String, lado: Vector2, margen: float) -> TextureRect:
 	var tex: Texture2D = load("res://assets/ui/iconos/%s.png" % icono)
 	# las armas, con el dibujo de la tienda de armas (assets/ui/tienda, de 48: 13 nov) si cabe; en las casillas pequeñas
-	# del baúl y del banco, y la fregona, que no se vende, con el icono de siempre. Esos dibujos ya traen aire alrededor:
+	# del baúl y del banco, con el icono de siempre (la fregona, que no se vende, también tiene el suyo en assets/ui/tienda). Esos dibujos ya traen aire alrededor:
 	# sin margen (si no, en las fichas grandes del baúl y del banco saldrían a × 1, más pequeños que el icono)
 	var de_tienda := "res://assets/ui/tienda/%s.png" % icono
 	if ResourceLoader.exists(de_tienda):

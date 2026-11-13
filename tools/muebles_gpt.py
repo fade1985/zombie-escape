@@ -15,6 +15,9 @@ from collections import deque
 from PIL import Image
 
 MUEBLES = {
+    # el dibujo de la fregona para la mochila (inventario.gd, como los de la tienda de armas: en diagonal, de 48 con aire alrededor;
+    # 13 nov). Sale a 44x44 y se centra en 48x48 al final de este archivo (el mocho, abajo a la izquierda)
+    "fregona": ("assets/sources/fregona-gpt.png", "assets/ui/tienda/fregona.png", 44, 44, False),
     # el banco de trabajo del taller (arrimable.gd, mapa.gd): acero gris con el tablero perforado naranja
     "banco": ("assets/sources/banco-trabajo-gpt.webp", "assets/sprites/banco-trabajo.png", 48, 58, False),
     # la estantería del taller, entre el banco y el baúl (el "canshelf" del catálogo): de acero galvanizado con cajas
@@ -301,3 +304,10 @@ def pasar(origen, sprite, ancho, alto, con_json, quitar=(), semillas=()):
 
 for nombre in sys.argv[1:] or list(MUEBLES):
     pasar(*MUEBLES[nombre])
+
+# la fregona va centrada en un lienzo de 48x48, como los demás dibujos de assets/ui/tienda
+if "fregona" in (sys.argv[1:] or ["fregona"]):
+    pequena = Image.open("assets/ui/tienda/fregona.png").convert("RGBA")
+    lienzo = Image.new("RGBA", (48, 48), (0, 0, 0, 0))
+    lienzo.paste(pequena, (2, 2))
+    lienzo.save("assets/ui/tienda/fregona.png")
