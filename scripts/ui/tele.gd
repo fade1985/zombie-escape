@@ -76,6 +76,9 @@ func _ready() -> void:
 	# los subtítulos, debajo de la pantalla: dos líneas, alineadas a la izquierda como unos subtítulos normales
 	texto = Label.new()
 	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	# las líneas se reparten con el trozo entero, no con lo que lleva dicho: así las letras salen ya en su sitio y la
+	# primera línea no da un salto hacia arriba cuando empieza la segunda (M98)
+	texto.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	texto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	texto.add_theme_color_override("font_color", Color("#f4f0dc"))
@@ -83,11 +86,13 @@ func _ready() -> void:
 	texto.add_theme_font_size_override("font_size", letra)
 	texto.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))   # (con la letra lisa: se lee mejor, 12 nov)
 	texto.add_theme_constant_override("line_spacing", 2)
-	var alto_linea := texto.get_line_height() + 2
+	# el recuadro, con sitio para dos líneas enteras (M98: antes se medía la línea con el texto aún sin añadir, cuando
+	# todavía no sabe que lleva la letra lisa, que es más alta, y solo cabía una)
+	add_child(texto)
+	var alto_linea := alto_de_linea() + 2
 	caja_texto = Rect2(0, tam.y, tam.x, alto_linea * 2 + 14)
 	texto.position = caja_texto.position + Vector2(10, 6)
 	texto.size = Vector2(tam.x - 20, alto_linea * 2 + 2)
-	add_child(texto)
 	custom_minimum_size = caja_texto.end
 
 
@@ -143,10 +148,21 @@ func empezar_trozo(i: int) -> void:
 	letras = 0.0
 
 
+# Lo que mide de alto una línea de los subtítulos: se mide con letras puestas (latinas, rusas y chinas, para que el
+# recuadro sea igual en todos los idiomas)
+func alto_de_linea() -> int:
+	var antes := texto.text
+	texto.text = "Ágj Жу 国"
+	var alto := texto.get_line_height(0)
+	texto.text = antes
+	return alto
+
+
 # Las líneas que caben en el cuadro del texto
 func lineas_que_caben() -> int:
-	var alto := texto.get_line_height() + texto.get_theme_constant("line_spacing")
-	return maxi(1, int((texto.size.y - texto.get_line_height()) / alto) + 1)   # (dos)
+	var linea := alto_de_linea()
+	var alto := linea + texto.get_theme_constant("line_spacing")
+	return maxi(1, int((texto.size.y - linea) / alto) + 1)   # (dos)
 
 
 # Parte lo que dice la reportera en trozos que quepan en el cuadro, palabra a palabra (se mide con el mismo texto).

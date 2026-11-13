@@ -986,7 +986,7 @@ func probar_avisos_ordenador() -> void:
 # Con "--captura --noticias": la tele del salón que enseña las noticias (M91) y VIDEOS.EXE. Cada planta generada tiene una
 # sola tele; en la de esta planta: apagada al llegar (captura-tele-apagada.png), se enciende al limpiar el apartamento
 # (captura-tele-encendida.png, con el «!» y el contorno), se abre con el clic y se cierra antes sin darla por vista, y
-# luego se ve entera: queda apagada y apuntada (captura-tele-noticia.png, captura-tele-vista.png). Después, VIDEOS.EXE
+# luego se ve entera: queda apagada y apuntada (captura-tele-noticia.png, captura-tele-dos-lineas.png con los subtítulos en sus dos líneas, captura-tele-vista.png). Después, VIDEOS.EXE
 # vacío y con la noticia vista, con el reproductor (captura-videos-vacio.png, captura-videos.png). Deja el guardado como estaba
 func probar_noticias() -> void:
 	var antes := Guardado.cargar().duplicate(true)
@@ -1045,6 +1045,14 @@ func probar_noticias() -> void:
 	await get_tree().create_timer(2.6).timeout
 	print("Tele · abierta: %s, juego parado %s (esperado: noticia, true)" % [menus.abierto, get_tree().paused])
 	Captura.foto("captura-tele-noticia.png")
+	# el recuadro de los subtítulos: con sitio para las dos líneas del trozo, que no se salen de la franja negra (M98)
+	var la_tele: Tele = menus.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
+	await get_tree().create_timer(1.5, true).timeout
+	var lineas: int = la_tele.texto.get_line_count()
+	var alto_texto: float = lineas * la_tele.texto.get_line_height() + (lineas - 1) * la_tele.texto.get_theme_constant("line_spacing")
+	print("Tele · subtítulos: %d líneas, %d de alto en un recuadro de %d (esperado: 2 líneas y que quepan con aire: %s)" % [
+		lineas, alto_texto, la_tele.caja_texto.size.y, alto_texto + 16 <= la_tele.caja_texto.size.y])
+	Captura.foto("captura-tele-dos-lineas.png")
 	menus.noticia_vista(false)
 	await get_tree().create_timer(0.2).timeout
 	print("Tele · cerrada antes de acabar: %s, vistas %s (esperado: encendida, [])" % [sitio.tele.estado, Guardado.cargar().videos_vistos])
