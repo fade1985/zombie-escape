@@ -5397,10 +5397,6 @@ msgstr "Partie en cours : %s"
 msgid "Vacía"
 msgstr "Vide"
 
-#: scripts/ui/inventario.gd scripts/ui/opciones.gd
-msgid "Inventario"
-msgstr "Inventaire"
-
 #: scripts/ui/inventario.gd
 msgid "En la mano"
 msgstr "En main"
@@ -6595,6 +6591,10 @@ msgstr "Utiliser les bandages"
 #: scripts/ui/opciones.gd
 msgid "Usar botiquín"
 msgstr "Utiliser le médikit"
+
+#: scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Inventaire"
 
 #: scripts/ui/opciones.gd
 msgid "Moverse"

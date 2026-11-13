@@ -5386,10 +5386,6 @@ msgstr "未完成的一局：%s"
 msgid "Vacía"
 msgstr "空"
 
-#: scripts/ui/inventario.gd scripts/ui/opciones.gd
-msgid "Inventario"
-msgstr "物品栏"
-
 #: scripts/ui/inventario.gd
 msgid "En la mano"
 msgstr "手上"
@@ -6573,6 +6569,10 @@ msgstr "使用绷带"
 #: scripts/ui/opciones.gd
 msgid "Usar botiquín"
 msgstr "使用急救包"
+
+#: scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "物品栏"
 
 #: scripts/ui/opciones.gd
 msgid "Moverse"

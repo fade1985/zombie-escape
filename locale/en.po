@@ -5397,10 +5397,6 @@ msgstr "Run in progress: %s"
 msgid "Vacía"
 msgstr "Empty"
 
-#: scripts/ui/inventario.gd scripts/ui/opciones.gd
-msgid "Inventario"
-msgstr "Inventory"
-
 #: scripts/ui/inventario.gd
 msgid "En la mano"
 msgstr "In hand"
@@ -6595,6 +6591,10 @@ msgstr "Use bandages"
 #: scripts/ui/opciones.gd
 msgid "Usar botiquín"
 msgstr "Use medkit"
+
+#: scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Inventory"
 
 #: scripts/ui/opciones.gd
 msgid "Moverse"

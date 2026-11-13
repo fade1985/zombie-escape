@@ -656,7 +656,12 @@ en una línea.
   sale con el edificio completado, y en una sola planta por partida (`partida.planta_pagina5`, sorteada al empezar). La noticia N
   se hace con la página N: la tele solo se enciende si has cogido la página de esa planta (`partida.tele_con_pagina`; o si en esa
   planta no hay página que coger) y queda alguna noticia cuya página ya tienes. Se prueba con `--dosier-plantas`. Al coger la página con el apartamento de la tele ya limpio, se enciende al momento.
-- `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
+- `inventario.gd`: el inventario «todo a la vista», desde el M100 (13 nov) dentro de una mochila abierta de GPT (la
+  referencia vaciada, `assets/ui/inventario-mochila.png`; sin el marco gris ni el título), más pequeño que antes para que
+  se vea la mochila entera (casillas de 48, armas de 64, Johnny a ×3; la letra, igual), con la ficha en un papel
+  cuadriculado con clip (`FICHA`, letra oscura), los títulos de grupo en tiras de cinta (`cinta`) y la llave en una
+  etiqueta de cartón (`hueco_llave`); los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Dentro:
+  (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
   arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl;
@@ -1042,6 +1047,9 @@ en una línea.
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
   `taquilla.py`, `helicoptero_gpt.py` (el helicóptero de Velaria, de GPT), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
   nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (el colchón con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas, y la pared con chapa lagrimada y la línea amarilla de su pasillo), `guias_trasteros.py` (las guías de PixelLab de las cajas y la carretilla de ese pasillo y de la estantería y el colchón de sus habitaciones; ya no se usa: ahora salen de GPT con `muebles_gpt.py`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py` (el científico muerto de PixelLab; ya no se usa: pisaría el de GPT) y `cientifico_muerto_gpt.py` (el científico muerto de GPT, M14: lo reduce como los muebles y le separa la piel y el pelo en sus capas, que el juego pinta con los colores de cada página).
+- **El inventario en la mochila (M100):** `inventario_gpt.py` reduce como los muebles la mochila (la de la referencia
+  vaciada por GPT; la ensancha o estrecha para que su forro caiga donde van las casillas y escribe su `MOCHILA_EN`), el
+  papel de la ficha, la cinta de los títulos y la etiqueta de la llave (`assets/sources/inventario/` → `assets/ui/inventario-*.png`).
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `suelo_salon.py` (el suelo de nogal del salón), `azotea_gpt.py` (la azotea
   entera, de GPT; ver `FONDOS.md`).
 - **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),

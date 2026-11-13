@@ -5397,10 +5397,6 @@ msgstr "Pela metade: %s"
 msgid "Vacía"
 msgstr "Vazio"
 
-#: scripts/ui/inventario.gd scripts/ui/opciones.gd
-msgid "Inventario"
-msgstr "Inventário"
-
 #: scripts/ui/inventario.gd
 msgid "En la mano"
 msgstr "Na mão"
@@ -6595,6 +6591,10 @@ msgstr "Usar bandagens"
 #: scripts/ui/opciones.gd
 msgid "Usar botiquín"
 msgstr "Usar kit médico"
+
+#: scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Inventário"
 
 #: scripts/ui/opciones.gd
 msgid "Moverse"

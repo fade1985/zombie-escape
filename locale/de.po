@@ -5397,10 +5397,6 @@ msgstr "Laufende Runde: %s"
 msgid "Vacía"
 msgstr "Leer"
 
-#: scripts/ui/inventario.gd scripts/ui/opciones.gd
-msgid "Inventario"
-msgstr "Inventar"
-
 #: scripts/ui/inventario.gd
 msgid "En la mano"
 msgstr "In der Hand"
@@ -6595,6 +6591,10 @@ msgstr "Verband benutzen"
 #: scripts/ui/opciones.gd
 msgid "Usar botiquín"
 msgstr "Medikit benutzen"
+
+#: scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Inventar"
 
 #: scripts/ui/opciones.gd
 msgid "Moverse"

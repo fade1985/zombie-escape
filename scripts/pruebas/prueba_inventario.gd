@@ -1380,6 +1380,28 @@ func probar_montones() -> void:
 # repuesto), captura-inventario-objeto.png (la pieza a distancia, con su ficha), captura-inventario-destruir.png (con «Destruir»
 # a medias; la 2.ª pulsación la destruye), captura-inventario-municion.png,
 # captura-inventario-arrojable.png, captura-inventario-pistola_electrica.png y captura-inventario-lanzallamas.png
+# --mochila: el inventario en la mochila (M100): la cinta de los títulos, el papel de la ficha y la etiqueta de la llave,
+# sin la llave y con ella; y en portugués y en ruso, que los títulos de los arrojables de repuesto y las curas, con sus
+# cintas, no se tocan (captura-mochila-*.png)
+func probar_mochila() -> void:
+	lanzables.repuesto = []
+	lanzables.en_repuesto = []
+	dar_lanzable("atraedora")
+	dar_lanzable("congeladora")
+	mochila.append_array(["botiquin", "vendas"])
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-mochila-sin-llave.png")
+	planta.tiene_llave = true
+	for codigo in ["es", "pt_BR", "ru"]:
+		Idioma.poner(codigo, false)
+		inventario.pintar()
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-mochila-%s.png" % codigo)
+	Idioma.poner(Idioma.ORIGEN, false)
+	get_tree().quit()
+
+
 func probar_inventario() -> void:
 	var lz: Lanzables = lanzables
 	var inv = inventario
@@ -1530,7 +1552,7 @@ func probar_arrastrar() -> void:
 		inv.soltar_en(clave, a_donde)
 		await get_tree().process_frame
 	# la escopeta (de repuesto) a la mano, de verdad: se encienden la mano y la zona roja (Johnny, sin óvalo: L29), y la mano crece
-	await arrastrar(guardada.call("escopeta"), Vector2(346, 160), "captura-arrastrar-escopeta.png")
+	await arrastrar(guardada.call("escopeta"), Vector2(330, 204), "captura-arrastrar-escopeta.png")
 	print("Arrastrando la escopeta: el ratón empezó en su casilla %s · se arrastraba %s · encendidos %s · bajo el ratón «%s» (esperado: true · true · [\"luz_p1\", \"luz_tirar\"] · p1)" % [
 		en_el_aire.casilla, en_el_aire.arrastrando, en_el_aire.luces, en_el_aire.encima])
 	await get_tree().create_timer(0.06).timeout
@@ -1542,7 +1564,7 @@ func probar_arrastrar() -> void:
 	print("La pistola en Johnny: mano %s · repuesto %s (esperado: Pistola · [\"fregona\", \"escopeta\"])" % [
 		Objetos.nombre(johnny.huecos.fuego), armas_guardadas])
 	# las dos piezas cuerpo a cuerpo (m0) a la zona roja, de verdad: se tira la casilla entera
-	await arrastrar("m0", Vector2(773, 338), "captura-arrastrar-tirar.png")
+	await arrastrar("m0", Vector2(737, 363), "captura-arrastrar-tirar.png")
 	print("Las piezas cuerpo a cuerpo a la zona roja: encendidos %s · bajo el ratón «%s» · mochila %s (esperado: [\"luz_tirar\"] · tirar · [[\"botiquin\", 1]])" % [
 		en_el_aire.luces, en_el_aire.encima, Objetos.casillas(mochila)])
 	# el botiquín (ahora m0) en Johnny: se cura y el inventario sigue abierto

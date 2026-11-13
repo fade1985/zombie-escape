@@ -144,8 +144,20 @@ func dar_foco(c) -> void:   # (sin tipo: puede llegar ya borrado)
 # moverse la marca solo se vuelven a pintar la ficha y la ayuda de abajo (pintar_ficha); todo, al hacer algo.
 
 const ORIGEN := Vector2(24, 12)    # la esquina del panel del inventario en la pantalla
-const LADO := 52                   # las casillas de los tres grupos de 8
-const ANCHO_FICHA := 222.0         # lo ancho que es lo de dentro de la ficha
+# Desde el M100 (13 nov) el inventario va dentro de una mochila abierta y es más pequeño que antes (las casillas, de 52
+# a 48; las armas, de 76 a 64; Johnny, a ×3), para que alrededor se vea la mochila entera. La letra, igual (16)
+const LADO := 48                   # las casillas de los tres grupos de 8 (las de las armas, 64, y las de los arrojables a
+# mano, 72, sin apenas margen: así sus dibujos siguen a × 2, como antes; el grande de la ficha, 96, a × 3)
+const PASO := 54                   # de una casilla a la siguiente
+const FICHA := Rect2(618, 146, 238, 434)   # el papel de la ficha (sin el clip, que sobresale por arriba)
+const ANCHO_FICHA := 214.0         # lo ancho que es lo de dentro de la ficha
+# Lo del M100, de GPT y reducido con tools/inventario_gpt.py: la mochila de fondo (su forro, de 100,140 a 860,584 de la
+# pantalla), el papel de la ficha, la cinta de los títulos y la etiqueta de la llave. Todo, a 2
+const MOCHILA := preload("res://assets/ui/inventario-mochila.png")
+const MOCHILA_EN := Vector2(-61, -45)   # dónde va su esquina en la pantalla (lo dice tools/inventario_gpt.py)
+const PAPEL := preload("res://assets/ui/inventario-papel.png")
+const CINTA := preload("res://assets/ui/inventario-cinta.png")
+const ETIQUETA := preload("res://assets/ui/inventario-etiqueta.png")
 # Lo que hace cada arma de la tienda y cada arrojable (se traduce al enseñarlo, en que_hace; el ordenador también lo lee)
 # [traducir]
 const QUE_HACE := {
@@ -176,38 +188,43 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	var lz: Lanzables = partida.lanzables
 	asegurar_sel()
 	preparar_lienzo(columna)
-	rotulo(lienzo, Idioma.t("Inventario"), 480, 26, Color("#e6dec8"), HORIZONTAL_ALIGNMENT_CENTER).theme_type_variation = "Titulo"
+	# el fondo: la mochila de lona abierta, con todo dentro, sobre el forro (M100, de GPT; sin el marco gris ni el título
+	# «Inventario» de antes). Es más grande que la pantalla: se sale por los lados, arriba y abajo
+	columna.get_parent().add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	var mochila := estampa(MOCHILA, MOCHILA.get_size() * 2.0)
+	lienzo.add_child(mochila)
+	mochila.position = MOCHILA_EN - ORIGEN
 	# Johnny, grande, entre sus armas: a la izquierda las de cuerpo a cuerpo y a la derecha las de distancia (arriba
 	# la de la mano y abajo la de repuesto)
 	muneco(johnny)
-	sitio("johnny", Rect2(154, 124, 140, 216))
-	rotulo(lienzo, Idioma.t("Cuerpo a cuerpo"), 64, 90, Tema.AMARILLO)
-	rotulo(lienzo, Idioma.t("A distancia"), 384, 90, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_RIGHT)
+	sitio("johnny", Rect2(186, 170, 108, 160))
+	cinta(Idioma.t("Cuerpo a cuerpo"), 118, 146)
+	cinta(Idioma.t("A distancia"), 362, 146, HORIZONTAL_ALIGNMENT_RIGHT)
 	for i in 2:
 		var tipo: String = ["cuerpo", "fuego"][i]
-		var x := 64.0 if i == 0 else 308.0
+		var x := 118.0 if i == 0 else 298.0
 		var id: String = johnny.huecos[tipo]
-		var r := Rect2(x, 122, 76, 76)
-		sitio("p%d" % i, r, casilla_inv(r, "p%d" % i, Objetos.icono(id), carga_corta(id), borde(id)))
-		rotulo(lienzo, Idioma.t("En la mano"), x + 38, 202, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_CENTER)
+		var r := Rect2(x, 172, 64, 64)
+		sitio("p%d" % i, r, casilla_inv(r, "p%d" % i, Objetos.icono(id), carga_corta(id), borde(id), 0.0))
+		rotulo(lienzo, Idioma.t("En la mano"), x + 32, 238, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_CENTER)
 		var otra: String = partida.repuesto(tipo)
-		r = Rect2(x, 232, 76, 76)
+		r = Rect2(x, 262, 64, 64)
 		if otra != "":
 			sitio("r%d" % i, r, casilla_inv(r, "g%d" % partida.armas_guardadas.find(otra), Objetos.icono(otra),
-				carga_corta(otra), borde(otra)))
+				carga_corta(otra), borde(otra), 0.0))
 		else:
 			sitio("r%d" % i, r, casilla_inv(r))
-		rotulo(lienzo, Idioma.t("De repuesto"), x + 38, 312, Tema.GRIS, HORIZONTAL_ALIGNMENT_CENTER)
+		rotulo(lienzo, Idioma.t("De repuesto"), x + 32, 328, Tema.GRIS, HORIZONTAL_ALIGNMENT_CENTER)
 	# debajo, los arrojables a mano (F cambia entre ellos): el que se lanza ahora, con un marco amarillo alrededor
-	rotulo(lienzo, Idioma.t("Arrojables"), 64, 350, Tema.AMARILLO)
-	rotulo(lienzo, Idioma.t("F cambia"), 384, 350, Tema.GRIS, HORIZONTAL_ALIGNMENT_RIGHT)
+	cinta(Idioma.t("Arrojables"), 118, 356)
+	rotulo(lienzo, Idioma.t("F cambia"), 362, 356, Tema.GRIS, HORIZONTAL_ALIGNMENT_RIGHT)
 	for i in Lanzables.MANO:
-		var x := 82.0 + i * 102
+		var x := 120.0 + i * 84
 		var k: String = lz.mano[i] if i < lz.mano.size() else ""
-		sitio("l%d" % i, Rect2(x, 380, 84, 84), arrojable(Rect2(x, 380, 84, 84), "l%d" % i, k))
+		sitio("l%d" % i, Rect2(x, 382, 72, 72), arrojable(Rect2(x, 382, 72, 72), "l%d" % i, k, 8.0))
 		if k == "":
 			continue
-		rotulo(lienzo, nombre_lanzable(k), x + 42, 468, Tema.TINTA, HORIZONTAL_ALIGNMENT_CENTER, 100)
+		rotulo(lienzo, nombre_lanzable(k), x + 36, 456, Tema.TINTA, HORIZONTAL_ALIGNMENT_CENTER, 84)
 		if k == lz.tipo:
 			var ahora := Panel.new()
 			var e := StyleBoxFlat.new()
@@ -218,74 +235,112 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			ahora.add_theme_stylebox_override("panel", e)
 			ahora.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			lienzo.add_child(ahora)
-			ahora.position = Vector2(x - 4, 376) - ORIGEN
-			ahora.size = Vector2(92, 92)
-	# y abajo del todo, a la altura de «Seguir», el dinero y el hueco de la llave (en el HUD no se ven)
+			ahora.position = Vector2(x - 4, 378) - ORIGEN
+			ahora.size = Vector2(80, 80)
+	# y abajo, el dinero y, debajo, la etiqueta de la llave (en el HUD no se ven)
 	var caja := Panel.new()
 	caja.add_theme_stylebox_override("panel", estilo(Color("#2a2631"), false, false))
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lienzo.add_child(caja)
-	caja.position = Vector2(64, 544) - ORIGEN
+	caja.position = Vector2(118, 488) - ORIGEN
 	caja.size = Vector2(200, 38)
 	var billete := dibujo(caja, "billete", Vector2(38, 38), 0.0)
 	billete.position.x += 4
-	rotulo(lienzo, Idioma.t("Dinero"), 112, 552, Tema.AMARILLO)
-	rotulo(lienzo, "$%d" % partida.cartera(), 252, 552, Tema.TINTA, HORIZONTAL_ALIGNMENT_RIGHT)
+	rotulo(lienzo, Idioma.t("Dinero"), 166, 496, Tema.AMARILLO)
+	rotulo(lienzo, "$%d" % partida.cartera(), 306, 496, Tema.TINTA, HORIZONTAL_ALIGNMENT_RIGHT)
 	hueco_llave()
 	# en medio, los tres grupos de 8: los objetos de la mochila, la munición y, abajo, dos de 4: a la izquierda los
 	# arrojables de repuesto y a la derecha las curas (M67)
-	raya(Rect2(393, 92, 2, 492))
+	raya(Rect2(380, 148, 2, 430))
 	var llenas := Objetos.casillas(partida.mochila)
 	var objetos := Objetos.ocupadas(partida.mochila)   # las curas van al final de "llenas"
-	rotulo(lienzo, Idioma.t("Objetos  %d / %d") % [objetos, Objetos.MOCHILA], 406, 89, Tema.AMARILLO)
+	cinta(Idioma.t("Objetos  %d / %d") % [objetos, Objetos.MOCHILA], 392, 146)
 	for i in Objetos.MOCHILA:
 		if i < objetos:
 			var n: int = llenas[i][1]
-			casilla_inv(rejilla(i, 116), "m%d" % i, Objetos.icono(llenas[i][0]), "×%d" % n if n > 1 else "")
+			casilla_inv(rejilla(i, 170), "m%d" % i, Objetos.icono(llenas[i][0]), "×%d" % n if n > 1 else "", GRIS, 10.0)
 		else:
-			casilla_inv(rejilla(i, 116))
+			casilla_inv(rejilla(i, 170))
 	var balas: Array = johnny.huecos_municion()
-	rotulo(lienzo, Idioma.t("Munición  %d / %d") % [balas.size(), Armas.HUECOS_MUNICION], 406, 239, Tema.AMARILLO)
+	cinta(Idioma.t("Munición  %d / %d") % [balas.size(), Armas.HUECOS_MUNICION], 392, 278)
 	for i in Armas.HUECOS_MUNICION:
 		if i < balas.size():
-			casilla_inv(rejilla(i, 266), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]))
+			casilla_inv(rejilla(i, 302), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 10.0)
 		else:
-			casilla_inv(rejilla(i, 266))
-	# (los títulos, más cortos que los de arriba para que quepan los dos: el de las curas, pegado al borde derecho)
-	rotulo(lienzo, Idioma.t("Arrojables %d/%d") % [lz.repuesto.size(), Lanzables.REPUESTO], 406, 389, Tema.AMARILLO)
+			casilla_inv(rejilla(i, 302))
+	# (los títulos, más cortos que los de arriba para que quepan los dos: el de las curas, pegado al borde derecho; con
+	# sus cintas, en algunos idiomas se tocarían, así que cada uno tiene su largo máximo)
+	cinta(Idioma.t("Arrojables %d/%d") % [lz.repuesto.size(), Lanzables.REPUESTO], 392, 410, HORIZONTAL_ALIGNMENT_LEFT, 114.0)
 	for i in Lanzables.REPUESTO:
-		sitio("e%d" % i, cuadro(i, 0), arrojable(cuadro(i, 0), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else ""))
-	rotulo(lienzo, Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], cuadro(3, 1).end.x, 389, Tema.AMARILLO,
-		HORIZONTAL_ALIGNMENT_RIGHT)
+		sitio("e%d" % i, cuadro(i, 0), arrojable(cuadro(i, 0), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 10.0))
+	cinta(Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], cuadro(3, 1).end.x, 410, HORIZONTAL_ALIGNMENT_RIGHT, 76.0)
 	for i in Objetos.CURAS:
 		var j := objetos + i
 		if j < llenas.size():
 			var n: int = llenas[j][1]
-			casilla_inv(cuadro(i, 1), "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "")
+			casilla_inv(cuadro(i, 1), "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "", GRIS, 10.0)
 		else:
 			casilla_inv(cuadro(i, 1))
 	var seguir := boton(lienzo, "cerrar", Idioma.t("Seguir", "inventario"), cerrar)   # vuelve a la partida: «Resume»
-	seguir.position = Vector2(406, 544) - ORIGEN
-	seguir.size = Vector2(226, 38)
-	sitio("tirar", Rect2(650, 92, 246, 492))   # la ficha: al arrastrar algo que se puede tirar, se vuelve la zona roja
+	seguir.position = Vector2(392, 544) - ORIGEN
+	seguir.size = Vector2(216, 36)
+	sitio("tirar", FICHA)   # la ficha: al arrastrar algo que se puede tirar, se vuelve la zona roja
 	pintar_ficha()
 	return lienzo.find_child(sel, false, false)
 
 
-# El hueco de la llave de la jefa (o de la tarjeta de acceso, en el centro comercial), al lado del dinero: apagado y con
-# su nombre en gris hasta que Johnny la coge; entonces se enciende, con borde amarillo y el nombre de la puerta que abre
+# El hueco de la llave de la jefa (o de la tarjeta de acceso, en el centro comercial), al lado del dinero: una etiqueta
+# de cartón con su cordel (M100), apagada y con su nombre desvaído hasta que Johnny la coge; entonces se enciende, con
+# el nombre de la puerta que abre (hasta el M100, un recuadro con el borde amarillo)
 func hueco_llave() -> void:
 	var tiene: bool = partida.planta.tiene_llave
-	var caja := Panel.new()
-	caja.add_theme_stylebox_override("panel", estilo(Tema.AMARILLO if tiene else Color("#2a2631"), false, false))
-	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var caja := estampa(ETIQUETA, ETIQUETA.get_size() * 2.0)
+	caja.modulate = Color.WHITE if tiene else Color(0.5, 0.48, 0.45)
 	lienzo.add_child(caja)
-	caja.position = Vector2(270, 544) - ORIGEN
-	caja.size = Vector2(114, 38)
-	var icono := dibujo(caja, "llave", Vector2(38, 38), 8.0)
-	icono.modulate = Color.WHITE if tiene else Color(1, 1, 1, 0.25)
+	caja.position = Vector2(118, 532) - ORIGEN
+	var icono := dibujo(caja, "llave", Vector2(42, 40), 8.0)
+	icono.modulate.a = 1.0 if tiene else 0.35
 	var nombre: String = Idioma.t("Tarjeta") if partida.ed.cerrojo == "tarjeta" else Idioma.t("Llave")
-	rotulo(lienzo, partida.nombre_jefa() if tiene else nombre, 312, 552, Tema.AMARILLO if tiene else Tema.GRIS)
+	var t := rotulo(lienzo, partida.nombre_jefa() if tiene else nombre, 160, 541, TINTA_BANCO, HORIZONTAL_ALIGNMENT_LEFT, 0.0)
+	if not tiene:
+		t.modulate.a = 0.45
+	# (lo que no cabe antes del ojal, con la letra más pequeña)
+	var tam := 16
+	while tam > 11 and Tema.FUENTE.get_string_size(t.text, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > 72:
+		tam -= 1
+	if tam < 16:
+		t.add_theme_font_size_override("font_size", tam)
+		t.position.y += (16 - tam) / 2.0
+
+
+# Un título de grupo sobre una tira de cinta de papel (M100), con la letra oscura: la cinta se estira al largo del
+# texto (sus puntas rotas, quietas) y va a 2, como todo. Como rotulo: a la izquierda, x es donde empieza el texto; a
+# la derecha, donde acaba. Con "ancho_max", si en este idioma el texto no cabe, se achica la letra (hasta 11)
+func cinta(s: String, x: float, y: float, alinear := HORIZONTAL_ALIGNMENT_LEFT, ancho_max := 0.0) -> Label:
+	var t := rotulo(lienzo, s, x, y, TINTA_BANCO, alinear)
+	var tam := t.get_theme_font_size("font_size")
+	var ancho := Tema.FUENTE.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x
+	if ancho_max > 0.0 and ancho > ancho_max:
+		var antes := tam
+		while tam > 11 and ancho > ancho_max:
+			tam -= 1
+			ancho = Tema.FUENTE.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x
+		t.add_theme_font_size_override("font_size", tam)
+		t.position.y += floorf((antes - tam) / 2.0)
+	var izquierda := x - ancho if alinear == HORIZONTAL_ALIGNMENT_RIGHT else x
+	var tira := NinePatchRect.new()
+	tira.texture = CINTA
+	tira.patch_margin_left = 4
+	tira.patch_margin_right = 4
+	tira.axis_stretch_horizontal = NinePatchRect.AXIS_STRETCH_MODE_TILE_FIT
+	tira.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	tira.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tira.scale = Vector2(2, 2)
+	tira.size = Vector2(ceilf((ancho + 12.0) / 2.0), CINTA.get_height())
+	lienzo.add_child(tira)
+	lienzo.move_child(tira, t.get_index())
+	tira.position = Vector2(izquierda - 6.0, y - 1.0) - ORIGEN
+	return t
 
 
 # El panel, sin márgenes por dentro, con el lienzo donde va cada cosa en su sitio (el inventario y el baúl)
@@ -321,13 +376,13 @@ func raya(r: Rect2, color := Color("#3d3647")) -> void:
 
 # El sitio de la casilla i de un grupo de 8 (4 por fila) que empieza en "y"
 func rejilla(i: int, y: float) -> Rect2:
-	return Rect2(406 + (i % 4) * (LADO + 6), y + floori(i / 4.0) * (LADO + 6), LADO, LADO)
+	return Rect2(392 + (i % 4) * PASO, y + floori(i / 4.0) * PASO, LADO, LADO)
 
 
 # Abajo, en el sitio del tercer grupo de 8, los dos de 4 (2 × 2): "bloque" 0 los arrojables de repuesto y 1 las curas,
 # con un poco más de hueco entre los dos
 func cuadro(i: int, bloque: int) -> Rect2:
-	var r := rejilla(bloque * 2 + i % 2 + floori(i / 2.0) * 4, 416)
+	var r := rejilla(bloque * 2 + i % 2 + floori(i / 2.0) * 4, 434)
 	r.position.x += bloque * 6
 	return r
 
@@ -372,15 +427,15 @@ func existe(clave: String) -> bool:
 	return false
 
 
-# Johnny grande (× 4) en medio, con su sombra: de frente y respirando, con su skin y el arma que tiene en la mano. Si
+# Johnny grande (× 3; × 4 hasta el M100) en medio, con su sombra: de frente y respirando, con su skin y el arma que tiene en la mano. Si
 # se acaba de poner un arma o de curar, da un saltito
 func muneco(johnny: Node2D) -> void:
-	var pies := Vector2(224, 330) - ORIGEN
+	var pies := Vector2(240, 322) - ORIGEN
 	var sombra := Control.new()
 	sombra.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sombra.draw.connect(func():
 		sombra.draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.24))
-		Formas.disco(sombra, Vector2.ZERO, 34.0, Color(0, 0, 0, 0.43)))
+		Formas.disco(sombra, Vector2.ZERO, 26.0, Color(0, 0, 0, 0.43)))
 	lienzo.add_child(sombra)
 	sombra.position = pies
 	var w: Dictionary = Armas.datos(johnny.huecos[johnny.mano])
@@ -389,14 +444,14 @@ func muneco(johnny: Node2D) -> void:
 	vista.sprite_frames = Skins.hoja(w.hoja, johnny.skin)
 	vista.centered = false
 	vista.offset = -w.pies
-	vista.scale = Vector2(4, 4)
+	vista.scale = Vector2(3, 3)
 	vista.position = pies
 	vista.material = johnny.sprite.material.duplicate()   # (el de partir la cintura, entero, como en la taquilla)
 	vista.material.set_shader_parameter("parte", 0)
 	lienzo.add_child(vista)
 	vista.play("reposo_s")
 	if salta_johnny:
-		saltar(vista, 16.0)
+		saltar(vista, 12.0)
 
 
 # Una casilla del inventario en su sitio (en coordenadas de la pantalla): su dibujo, lo más grande que quepa (dejando
@@ -524,12 +579,16 @@ func pintar_ficha() -> void:
 	viva = Control.new()
 	viva.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lienzo.add_child(viva)
-	marco_ficha(viva, Rect2(650, 92, 246, 492))
+	# la ficha, en una hoja de papel cuadriculado con su clip (M100; antes, el marco oscuro de marco_ficha): el clip
+	# sobresale por arriba
+	var papel := estampa(PAPEL, PAPEL.get_size() * 2.0)
+	viva.add_child(papel)
+	papel.position = Vector2(FICHA.position.x, FICHA.end.y - papel.size.y) - ORIGEN   # (el clip sobresale por arriba)
 	var caja := VBoxContainer.new()
 	caja.add_theme_constant_override("separation", 0)
 	caja.custom_minimum_size.x = ANCHO_FICHA
 	viva.add_child(caja)
-	caja.position = Vector2(662, 104) - ORIGEN
+	caja.position = Vector2(630, 158) - ORIGEN
 	asegurar_sel()
 	# lo de cada cosa: la cabeza de la ficha y lo de debajo, lo que hace ("que") y sus botones ([nombre, texto, al
 	# pulsar, apagado])
@@ -549,7 +608,7 @@ func pintar_ficha() -> void:
 	# los botones, abajo del todo; el principal, con las letras amarillas
 	var botones := VBoxContainer.new()
 	botones.add_theme_constant_override("separation", 4)
-	botones.custom_minimum_size.x = 214
+	botones.custom_minimum_size.x = 206
 	viva.add_child(botones)
 	var atajos := {}   # lo que hacen X e Y con lo elegido, para la línea de ayuda
 	for b in d.botones:
@@ -561,16 +620,23 @@ func pintar_ficha() -> void:
 				pulsar.add_theme_color_override(c, Tema.AMARILLO)
 		if not b[3] and b[0] != "destruir":   # (sin atajo: no se destruye nada sin querer)
 			atajos["X" if b[0] == "tirar" else "Y"] = Idioma.t("tirar") if b[0] == "tirar" else Idioma.minusculas(b[1], true)
-	botones.position = Vector2(666, 578 - botones.get_combined_minimum_size().y) - ORIGEN
+	botones.position = Vector2(634, 572 - botones.get_combined_minimum_size().y) - ORIGEN
 	# Si en este idioma lo que hace (más largo que en español: ruso, alemán) llegaría a los botones, se achica la letra
 	# (hasta 12) hasta que quepa
-	var libre := (578.0 - botones.get_combined_minimum_size().y) - (104.0 + caja.get_combined_minimum_size().y - nota.get_combined_minimum_size().y) - 4.0
+	var libre := (572.0 - botones.get_combined_minimum_size().y) - (158.0 + caja.get_combined_minimum_size().y - nota.get_combined_minimum_size().y) - 4.0
 	var cortes := TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE   # (los del texto que se parte solo)
 	var tam := 16
 	while tam > 12 and Tema.FUENTE.get_multiline_string_size(texto[0], HORIZONTAL_ALIGNMENT_LEFT, ANCHO_FICHA, tam, -1, cortes).y > libre:
 		tam -= 1
 	if tam < 16:
 		nota.add_theme_font_size_override("font_size", tam)
+	# sobre el papel, todo en tinta oscura y sin contorno: lo claro, marrón casi negro; lo amarillo, óxido; lo rojo, rojo
+	# oscuro, y lo gris, marrón (los de encima de la madera del banco)
+	for t in caja.find_children("*", "Label", true, false):
+		var c: Color = t.get_theme_color("font_color")
+		t.add_theme_color_override("font_color", {Tema.AMARILLO: ACENTO_BANCO, Tema.ROJO: Color("#a3161a"),
+			Tema.GRIS: GRIS_BANCO}.get(c, TINTA_BANCO))
+		t.add_theme_constant_override("outline_size", 0)
 	pintar_ayuda(atajos)
 
 
@@ -595,7 +661,7 @@ func pintar_ayuda(atajos: Dictionary) -> void:
 	var ayuda := HBoxContainer.new()
 	ayuda.add_theme_constant_override("separation", 5)
 	viva.add_child(ayuda)
-	ayuda.position = Vector2(64, 590) - ORIGEN
+	ayuda.position = Vector2(118, 598) - ORIGEN
 	var partes := [["A", Idioma.t("elegir")]]
 	for k in ["X", "Y"]:
 		if k in atajos:
@@ -610,18 +676,18 @@ func pintar_ayuda(atajos: Dictionary) -> void:
 		var hueco := Control.new()
 		hueco.custom_minimum_size.x = 11
 		ayuda.add_child(hueco)
-	rotulo(viva, Idioma.t("Ratón o dedo: tocar o arrastrar"), 896, 591,
+	rotulo(viva, Idioma.t("Ratón o dedo: tocar o arrastrar"), 842, 599,
 		Tema.GRIS, HORIZONTAL_ALIGNMENT_RIGHT)
 
 
 # Lo de arriba de la ficha: el dibujo grande, el nombre y, debajo, qué es
 func cabeza(caja: VBoxContainer, icono: String, nombre: String, que_es: String) -> void:
 	var grande := Panel.new()
-	grande.custom_minimum_size = Vector2(108, 108)
+	grande.custom_minimum_size = Vector2(96, 96)
 	grande.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	grande.add_theme_stylebox_override("panel", estilo(Tema.AMARILLO, false, false))
 	caja.add_child(grande)
-	dibujo(grande, icono, Vector2(108, 108), 12.0)
+	dibujo(grande, icono, Vector2(96, 96), 0.0)
 	espacio(caja, 4)
 	renglon(caja, nombre, Color("#e6dec8")).theme_type_variation = "Titulo"
 	# El «qué es» va en una sola línea: si en este idioma no cabe a tamaño 16 (ruso: «Дальний бой · Необычное · В руках»),

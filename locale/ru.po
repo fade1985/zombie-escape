@@ -5408,10 +5408,6 @@ msgstr "Незаконченный забег: %s"
 msgid "Vacía"
 msgstr "Пусто"
 
-#: scripts/ui/inventario.gd scripts/ui/opciones.gd
-msgid "Inventario"
-msgstr "Инвентарь"
-
 #: scripts/ui/inventario.gd
 msgid "En la mano"
 msgstr "В руках"
@@ -6617,6 +6613,10 @@ msgstr "Применить бинты"
 #: scripts/ui/opciones.gd
 msgid "Usar botiquín"
 msgstr "Применить аптечку"
+
+#: scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Инвентарь"
 
 #: scripts/ui/opciones.gd
 msgid "Moverse"

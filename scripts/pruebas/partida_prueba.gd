@@ -151,6 +151,8 @@
 #   --skins-torre       las cinco skins de Torre Velaria: desbloqueo, taquilla, caras, Despido, linterna,
 #                       munición, Copia de seguridad y la mutación al empezar                [prueba_skins.gd]
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
+#   --mochila           el inventario en la mochila (M100): cintas, papel y etiqueta de la llave, sin ella y con ella,
+#                       en español, portugués y ruso                                     [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
 #   --baul              la pantalla del baúl: guardar, sacar y el baúl lleno                 [prueba_inventario.gd]
 #   --baulpistola       dejar la pistola Normal en el baúl: Johnny sin arma a distancia (Q, HUD, banco) y sacarla [prueba_inventario.gd]
@@ -721,6 +723,9 @@ func empezar_prueba() -> void:
 	elif "--inventario" in args:
 		set_process(false)   # sin la prueba larga
 		probar_inventario()
+	elif "--mochila" in args:
+		set_process(false)   # sin la prueba larga
+		probar_mochila()
 	elif "--arrastrar" in args:
 		set_process(false)   # sin la prueba larga
 		probar_arrastrar()
