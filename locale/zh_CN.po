@@ -44,12 +44,12 @@ msgid " (y lo de antes)"
 msgstr " （外加之前的）"
 
 #: scripts/alerta.gd
-msgid "+25 % de zombis"
-msgstr "僵尸数量 +25%"
+msgid "+25 % de durmientes"
+msgstr "沉睡者数量 +25%"
 
 #: scripts/alerta.gd
-msgid "Zombis un 10 % más rápidos"
-msgstr "僵尸速度加快10%"
+msgid "Durmientes un 10 % más rápidos"
+msgstr "沉睡者速度加快10%"
 
 #: scripts/alerta.gd
 msgid "Jefes con +25 % de vida, y se enfadan antes"
@@ -60,12 +60,12 @@ msgid "Botiquines, vendas y Ajolote curan la mitad"
 msgstr "急救包、绷带和美西螈的治疗量减半"
 
 #: scripts/alerta.gd
-msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
-msgstr "保安（或拿钥匙的僵尸）血量翻倍，僵尸也能从更远处听见你"
+msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
+msgstr "保安（或拿钥匙的沉睡者）血量翻倍，沉睡者也能从更远处听见你"
 
 #: scripts/alerta.gd
-msgid "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
-msgstr "每台存有密码的电脑都会叫来两名保镖，僵尸也能从更远处听见你"
+msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
+msgstr "每台存有密码的电脑都会叫来两名保镖，沉睡者也能从更远处听见你"
 
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
@@ -108,9 +108,9 @@ msgid "cargador un %d %% más grande y recarga un %d %% más rápida"
 msgstr "弹匣扩容 %d%%，换弹加快 %d%%"
 
 #: scripts/armas.gd
-msgid "depósito un %d %% más grande y la descarga salta a %d zombi más"
-msgid_plural "depósito un %d %% más grande y la descarga salta a %d zombis más"
-msgstr[0] "储罐扩容 %d%%，电弧多跳 %d 个僵尸"
+msgid "depósito un %d %% más grande y la descarga salta a %d durmiente más"
+msgid_plural "depósito un %d %% más grande y la descarga salta a %d durmientes más"
+msgstr[0] "储罐扩容 %d%%，电弧多跳 %d 个沉睡者"
 
 #: scripts/armas.gd
 msgid "depósito un %d %% más grande"
@@ -129,16 +129,16 @@ msgid "Truco: cada %d golpes que dan, uno es crítico (doble daño)."
 msgstr "绝活：每命中 %d 次，必有一次暴击（双倍伤害）。"
 
 #: scripts/armas.gd
-msgid "Truco: sus balas atraviesan a un zombi y siguen."
-msgstr "绝活：子弹能穿透一个僵尸继续飞。"
+msgid "Truco: sus balas atraviesan a un durmiente y siguen."
+msgstr "绝活：子弹能穿透一个沉睡者继续飞。"
 
 #: scripts/armas.gd
-msgid "Truco: sus balas atraviesan a %d zombis y siguen."
-msgstr "绝活：子弹能穿透 %d 个僵尸继续飞。"
+msgid "Truco: sus balas atraviesan a %d durmientes y siguen."
+msgstr "绝活：子弹能穿透 %d 个沉睡者继续飞。"
 
 #: scripts/armas.gd
-msgid "Truco: los zombis que mata revientan y pasan su efecto a los de al lado."
-msgstr "绝活：被它杀死的僵尸会爆开，把效果传给旁边的僵尸。"
+msgid "Truco: los durmientes que mata revientan y pasan su efecto a los de al lado."
+msgstr "绝活：被它杀死的沉睡者会爆开，把效果传给旁边的沉睡者。"
 
 #: scripts/armas.gd
 msgid "Truco: al romperse suelta %d más pequeños alrededor."
@@ -885,8 +885,8 @@ msgid "los Apartamentos"
 msgstr "公寓楼"
 
 #: scripts/edificios.gd
-msgid "Vecinos zombi, pisos a oscuras y una portera con muy mal genio"
-msgstr "僵尸邻居、漆黑的房间，还有一个脾气超差的楼管大妈"
+msgid "Vecinos durmientes, pisos a oscuras y una portera con muy mal genio"
+msgstr "沉睡者邻居、漆黑的房间，还有一个脾气超差的楼管大妈"
 
 #: scripts/edificios.gd
 msgid "la portera"
@@ -897,8 +897,8 @@ msgid "el doctor Salas"
 msgstr "萨拉斯博士"
 
 #: scripts/edificios.gd
-msgid "limpia los apartamentos y caza al zombi que lleva la llave de la portera"
-msgstr "清理各户公寓，干掉拿着楼管大妈钥匙的僵尸"
+msgid "limpia los apartamentos y caza al durmiente que lleva la llave de la portera"
+msgstr "清理各户公寓，干掉拿着楼管大妈钥匙的沉睡者"
 
 #: scripts/edificios.gd
 msgid "Centro comercial"
@@ -1154,7 +1154,7 @@ msgstr "走廊里有尸潮！"
 
 #: scripts/eventos.gd
 msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
-msgstr "一大波僵尸正沿着走廊涌来……做好准备！"
+msgstr "一大波沉睡者正沿着走廊涌来……做好准备！"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -1177,12 +1177,12 @@ msgid "¡TENGO HAMBRE!"
 msgstr "饿死我了！"
 
 #: scripts/guia.gd
-msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
-msgstr "清理公寓：一进去门就会关上，直到一个僵尸都不剩"
+msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un durmiente"
+msgstr "清理公寓：一进去门就会关上，直到一个沉睡者都不剩"
 
 #: scripts/guia.gd
-msgid "¡Ese zombi lleva la llave del %s!"
-msgstr "那个僵尸拿着%s的钥匙！"
+msgid "¡Ese durmiente lleva la llave del %s!"
+msgstr "那个沉睡者拿着%s的钥匙！"
 
 #: scripts/guia.gd
 msgid "Saca la pistola con {cambiar_arma}"
@@ -2276,40 +2276,40 @@ msgid "Fregona de oro"
 msgstr "金拖把"
 
 #: scripts/logros.gd
-msgid "Mata 10 zombis a fregonazos en una misma partida."
-msgstr "在一局中用拖把打死10个僵尸。"
+msgid "Mata 10 durmientes a fregonazos en una misma partida."
+msgstr "在一局中用拖把打死10个沉睡者。"
 
 #: scripts/logros.gd
 msgid "Exterminador"
 msgstr "除害专家"
 
 #: scripts/logros.gd
-msgid "Mata 100 zombis, sumando todas tus partidas."
-msgstr "累计杀死100个僵尸。"
+msgid "Mata 100 durmientes, sumando todas tus partidas."
+msgstr "累计杀死100个沉睡者。"
 
 #: scripts/logros.gd
 msgid "Limpieza general"
 msgstr "大扫除"
 
 #: scripts/logros.gd
-msgid "Mata 1.000 zombis, sumando todas tus partidas."
-msgstr "累计杀死1000个僵尸。"
+msgid "Mata 1.000 durmientes, sumando todas tus partidas."
+msgstr "累计杀死1000个沉睡者。"
 
 #: scripts/logros.gd
 msgid "Pirómano"
 msgstr "纵火狂"
 
 #: scripts/logros.gd
-msgid "Prende fuego a 5 zombis con un mismo molotov."
-msgstr "用一个燃烧瓶点燃5个僵尸。"
+msgid "Prende fuego a 5 durmientes con un mismo molotov."
+msgstr "用一个燃烧瓶点燃5个沉睡者。"
 
 #: scripts/logros.gd
 msgid "Racha imparable"
 msgstr "势不可挡"
 
 #: scripts/logros.gd
-msgid "Mata 30 zombis seguidos sin perder vida."
-msgstr "连续杀死30个僵尸，不掉血。"
+msgid "Mata 30 durmientes seguidos sin perder vida."
+msgstr "连续杀死30个沉睡者，不掉血。"
 
 #: scripts/logros.gd
 msgid "Intocable"
@@ -2348,8 +2348,8 @@ msgid "Arsenal completo"
 msgstr "全副武装"
 
 #: scripts/logros.gd
-msgid "Mata un zombi con cada arma: la fregona y todas las de la tienda."
-msgstr "用每种武器各杀一个僵尸：拖把和商店里的所有武器。"
+msgid "Mata un durmiente con cada arma: la fregona y todas las de la tienda."
+msgstr "用每种武器各杀一个沉睡者：拖把和商店里的所有武器。"
 
 #: scripts/logros.gd
 msgid "Especialista"
@@ -2653,7 +2653,7 @@ msgstr "电梯坏了"
 
 #: scripts/mapa/planta.gd
 msgid "El edificio sigue infestado: aún no puedes irte"
-msgstr "大楼里还满是僵尸：你现在还不能走"
+msgstr "大楼里还满是沉睡者：你现在还不能走"
 
 #: scripts/mapa/planta.gd
 msgid "Bloqueadas: acaba antes con %s"
@@ -2892,16 +2892,16 @@ msgid "Tentacular"
 msgstr "触手缠身"
 
 #: scripts/mutaciones.gd
-msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"
-msgstr "每4秒从你胸口冒出一条触手，把周围的僵尸推开并击晕1秒"
+msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los durmientes de alrededor y los aturde 1 s"
+msgstr "每4秒从你胸口冒出一条触手，把周围的沉睡者推开并击晕1秒"
 
 #: scripts/mutaciones.gd
 msgid "Gastroenteritis"
 msgstr "肠胃炎"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"
-msgstr "每3秒朝最近的僵尸吐一口酸液：留下一滩酸水，灼伤踩到的僵尸"
+msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
+msgstr "每3秒朝最近的沉睡者吐一口酸液：留下一滩酸水，灼伤踩到的沉睡者"
 
 #: scripts/mutaciones.gd
 msgid "Insensible"
@@ -2916,16 +2916,16 @@ msgid "Caníbal"
 msgstr "食人魔"
 
 #: scripts/mutaciones.gd
-msgid "Cada zombi que matas te cura un 2 % de la vida"
-msgstr "每杀死一个僵尸，恢复2%的生命"
+msgid "Cada durmiente que matas te cura un 2 % de la vida"
+msgstr "每杀死一个沉睡者，恢复2%的生命"
 
 #: scripts/mutaciones.gd
 msgid "Ansiedad"
 msgstr "焦虑"
 
 #: scripts/mutaciones.gd
-msgid "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"
-msgstr "视野里的僵尸越多，近战攻击越快（每个+10%，最多+50%）"
+msgid "Golpeas más rápido cuerpo a cuerpo cuantos más durmientes tengas a la vista (+10 % cada uno, hasta +50 %)"
+msgstr "视野里的沉睡者越多，近战攻击越快（每个+10%，最多+50%）"
 
 #: scripts/mutaciones.gd
 msgid "Endurecimiento"
@@ -2940,28 +2940,28 @@ msgid "Locura"
 msgstr "疯狂"
 
 #: scripts/mutaciones.gd
-msgid "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"
-msgstr "每4秒发出一声狂吼，让周围的僵尸晕头转向2秒"
+msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
+msgstr "每4秒发出一声狂吼，让周围的沉睡者晕头转向2秒"
 
 #: scripts/mutaciones.gd
 msgid "Flatulento"
 msgstr "屁王"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"
-msgstr "每3秒放出腐蚀性气体，灼伤附近的僵尸并使其麻痹2秒"
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
+msgstr "每3秒放出腐蚀性气体，灼伤附近的沉睡者并使其麻痹2秒"
 
 #: scripts/objetos.gd
-msgid "la suelta algún zombi, y los jefes seguro"
-msgstr "部分僵尸会掉落，首领必掉"
+msgid "la suelta algún durmiente, y los jefes seguro"
+msgstr "部分沉睡者会掉落，首领必掉"
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
 msgstr "胖子会掉落"
 
 #: scripts/objetos.gd
-msgid "lo suelta cualquier zombi"
-msgstr "任何僵尸都可能掉落"
+msgid "lo suelta cualquier durmiente"
+msgstr "任何沉睡者都可能掉落"
 
 #: scripts/objetos.gd scripts/talentos.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
 msgid "%s y %s"
@@ -3156,8 +3156,8 @@ msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
 msgstr "保安倒下了！他掉落了门禁卡"
 
 #: scripts/partida.gd
-msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
-msgstr "拿钥匙的僵尸倒下了！它掉落了%s的钥匙"
+msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
+msgstr "拿钥匙的沉睡者倒下了！它掉落了%s的钥匙"
 
 #: scripts/partida.gd
 msgid "+1 molotov"
@@ -3272,8 +3272,8 @@ msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
 msgstr "我发誓刚才有东西在咬我！"
 
 #: scripts/partida.gd
-msgid "¡OTRA VEZ ESE SUEÑO DE ZOMBIS!"
-msgstr "又是那个僵尸梦！"
+msgid "¡OTRA VEZ ESE SUEÑO DE DURMIENTES!"
+msgstr "又是那个沉睡者的梦！"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
@@ -3440,8 +3440,8 @@ msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada q
 msgstr "小柜子都是空的，治疗物品不会掉落、不卖，也没人给你配"
 
 #: scripts/reto.gd
-msgid "Zombis rápidos"
-msgstr "快速僵尸"
+msgid "Durmientes rápidos"
+msgstr "快速沉睡者"
 
 #: scripts/reto.gd
 msgid "todos un 35 % más rápidos (los jefes, no)"
@@ -3460,8 +3460,8 @@ msgid "Casa llena"
 msgstr "人满为患"
 
 #: scripts/reto.gd
-msgid "el doble de zombis en cada sitio"
-msgstr "每个地方的僵尸数量翻倍"
+msgid "el doble de durmientes en cada sitio"
+msgstr "每个地方的沉睡者数量翻倍"
 
 #: scripts/reto.gd
 msgid "Oído fino"
@@ -3492,8 +3492,8 @@ msgid "El glotón"
 msgstr "大胃王"
 
 #: scripts/skins.gd
-msgid "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 3 % de vida."
-msgstr "谁伤你谁买单：僵尸直接死亡，首领损失3%的生命。"
+msgid "Quien te hace daño lo paga: un durmiente muere y un jefe pierde un 3 % de vida."
+msgstr "谁伤你谁买单：沉睡者直接死亡，首领损失3%的生命。"
 
 #: scripts/skins.gd
 msgid "Mata al Glotón por primera vez."
@@ -3524,8 +3524,8 @@ msgid "Mata al jefe de bomberos por primera vez."
 msgstr "首次杀死消防队长。"
 
 #: scripts/skins.gd
-msgid "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "僵尸掉落物品时，有50%的几率再多掉一件。"
+msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "沉睡者掉落物品时，有50%的几率再多掉一件。"
 
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
@@ -3548,8 +3548,8 @@ msgid "Mata al antidisturbios por primera vez."
 msgstr "首次杀死防暴警察。"
 
 #: scripts/skins.gd
-msgid "Los zombis dormidos no se despiertan al entrar en su habitación y te ven a la mitad de distancia."
-msgstr "你走进沉睡僵尸的房间时它们不会醒来，而且它们只能在一半的距离内发现你。"
+msgid "Los durmientes no se despiertan al entrar en su habitación y te ven a la mitad de distancia."
+msgstr "你走进房间时，沉睡者不会醒来，而且只能在一半的距离内发现你。"
 
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
@@ -3576,8 +3576,8 @@ msgid "La directora"
 msgstr "人事总监"
 
 #: scripts/skins.gd
-msgid "«Despido»: el primer golpe a un zombi dormido lo mata (a los jefes, no)."
-msgstr "“开除”：对睡着的僵尸的第一击直接将其杀死（首领除外）。"
+msgid "«Despido»: el primer golpe a un durmiente que sigue dormido lo mata (a los jefes, no)."
+msgstr "“开除”：对仍在沉睡的沉睡者的第一击直接将其杀死（首领除外）。"
 
 #: scripts/skins.gd
 msgid "Mata a la directora de Recursos Humanos por primera vez."
@@ -3629,8 +3629,8 @@ msgid "La recepcionista: la llave está en el suelo de %s"
 msgstr "前台接待：钥匙掉在%s的地上"
 
 #: scripts/supervivientes.gd
-msgid "La recepcionista: la llave la lleva un zombi de %s"
-msgstr "前台接待：钥匙在%s的一只僵尸身上"
+msgid "La recepcionista: la llave la lleva un durmiente de %s"
+msgstr "前台接待：钥匙在%s的某个沉睡者身上"
 
 #: scripts/supervivientes.gd
 msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
@@ -3730,8 +3730,8 @@ msgid "¡Fuera tablas! Gracias, chaval. Vámonos de aquí"
 msgstr "木板拆完了！谢了，小伙子。咱们走"
 
 #: scripts/supervivientes.gd
-msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
-msgstr "看见僵尸就冲上去抡锤子（8点伤害）"
+msgid "Va a por los durmientes que ve y les da martillazos (8 de daño)"
+msgstr "看见沉睡者就冲上去抡锤子（8点伤害）"
 
 #: scripts/supervivientes.gd
 msgid "¡SOY FARMACÉUTICA!"
@@ -3790,12 +3790,12 @@ msgid "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado"
 msgstr "谢谢！走之前我得把那根裸露的电线修好"
 
 #: scripts/supervivientes.gd
-msgid "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano"
-msgstr "每3秒放一次电，让最近的僵尸定住1.5秒"
+msgid "Cada 3 s, una descarga deja quieto 1,5 s al durmiente más cercano"
+msgstr "每3秒放一次电，让最近的沉睡者定住1.5秒"
 
 #: scripts/supervivientes.gd
-msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
-msgstr "修好监控摄像头：小地图上会显示僵尸"
+msgid "Arregla las cámaras de seguridad: el minimapa enseña los durmientes"
+msgstr "修好监控摄像头：小地图上会显示沉睡者"
 
 #: scripts/supervivientes.gd
 msgid "¡SOY INFORMÁTICO!"
@@ -3818,8 +3818,8 @@ msgid "¡Gracias! Pero no me voy sin los archivos de Velaria"
 msgstr "谢谢！不过不带走维拉里亚的文件我不走"
 
 #: scripts/supervivientes.gd
-msgid "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven"
-msgstr "每 4 秒入侵最近僵尸的大脑，让它定住 1 秒；摄像头看不见他"
+msgid "Cada 4 s, se cuela en el cerebro del durmiente más cercano y lo deja quieto 1 s; las cámaras no le ven"
+msgstr "每 4 秒入侵最近沉睡者的大脑，让它定住 1 秒；摄像头看不见他"
 
 #: scripts/supervivientes.gd
 msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
@@ -3886,8 +3886,8 @@ msgid "¡Por fin alguien vivo! Abro los tornos y nos vamos"
 msgstr "终于见到活人了！我去开闸机，咱们走"
 
 #: scripts/supervivientes.gd
-msgid "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda"
-msgstr "僵尸要从背后偷袭你时，她会喊「身后！」"
+msgid "Te avisa con un «¡Detrás!» cuando un durmiente va a pegarte por la espalda"
+msgstr "沉睡者要从背后偷袭你时，她会喊「身后！」"
 
 #: scripts/supervivientes.gd
 msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
@@ -4236,8 +4236,8 @@ msgid "Ninja"
 msgstr "忍者"
 
 #: scripts/talentos.gd
-msgid "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"
-msgstr "闪避结束时发动范围攻击，秒杀周围僵尸（最多每5秒一次）"
+msgid "Al acabar una esquiva, golpe en área que mata a los durmientes (como mucho cada 5 s)"
+msgstr "闪避结束时发动范围攻击，秒杀周围沉睡者（最多每5秒一次）"
 
 #: scripts/talentos.gd
 msgid "Desfibrilador"
@@ -4300,8 +4300,8 @@ msgid "Incendiario"
 msgstr "火上浇油"
 
 #: scripts/talentos.gd
-msgid "Los zombis que prendes arden 0,25 s más por punto"
-msgstr "每点使被你点燃的僵尸多烧0.25秒"
+msgid "Los durmientes que prendes arden 0,25 s más por punto"
+msgstr "每点使被你点燃的沉睡者多烧0.25秒"
 
 #: scripts/talentos.gd
 msgid "Desatascador"
@@ -4309,7 +4309,7 @@ msgstr "疏通剂"
 
 #: scripts/talentos.gd
 msgid "Con ácido encima, todo les quita un 5 % más por punto"
-msgstr "每点使沾了酸液的僵尸受到的所有伤害 +5%"
+msgstr "每点使沾了酸液的沉睡者受到的所有伤害 +5%"
 
 #: scripts/talentos.gd
 msgid "Criogenia"
@@ -4324,24 +4324,24 @@ msgid "Reacción en cadena"
 msgstr "连锁反应"
 
 #: scripts/talentos.gd
-msgid "Los zombis que mueren ardiendo revientan y prenden a los de al lado"
-msgstr "烧死的僵尸会爆开，点燃旁边的僵尸"
+msgid "Los durmientes que mueren ardiendo revientan y prenden a los de al lado"
+msgstr "烧死的沉睡者会爆开，点燃旁边的沉睡者"
 
 #: scripts/talentos.gd
 msgid "Residuo tóxico"
 msgstr "有毒废料"
 
 #: scripts/talentos.gd
-msgid "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
-msgstr "沾着酸液死去的僵尸会留下一滩酸液（对你无害）"
+msgid "Los durmientes que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
+msgstr "沾着酸液死去的沉睡者会留下一滩酸液（对你无害）"
 
 #: scripts/talentos.gd
 msgid "Pararrayos"
 msgstr "避雷针"
 
 #: scripts/talentos.gd
-msgid "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
-msgstr "打你的僵尸会挨一道闪电，被击晕，闪电还会跳到另一个僵尸身上（最多每3秒一次）"
+msgid "Al durmiente que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
+msgstr "打你的沉睡者会挨一道闪电，被击晕，闪电还会跳到另一个沉睡者身上（最多每3秒一次）"
 
 #: scripts/talentos.gd
 msgid "Napalm"
@@ -4356,24 +4356,24 @@ msgid "Pegajoso"
 msgstr "粘糊糊"
 
 #: scripts/talentos.gd
-msgid "Los zombis con ácido van un 5 % más lentos por punto"
-msgstr "每点使沾了酸液的僵尸移速 -5%"
+msgid "Los durmientes con ácido van un 5 % más lentos por punto"
+msgstr "每点使沾了酸液的沉睡者移速降低5%"
 
 #: scripts/talentos.gd
 msgid "Alto voltaje"
 msgstr "高压电"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más cada 2 puntos"
-msgstr "每2点使闪电枪和“避雷针”的闪电多跳1个僵尸"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más cada 2 puntos"
+msgstr "每2点使闪电枪和“避雷针”的闪电多跳1个沉睡者"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"
 msgstr "爆炸配方"
 
 #: scripts/talentos.gd
-msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
-msgstr "同时带有两种效果（火焰、酸液、闪电或冰冻）死去的僵尸会爆炸（对你无害）"
+msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
+msgstr "同时带有两种效果（火焰、酸液、闪电或冰冻）死去的沉睡者会爆炸（对你无害）"
 
 #: scripts/tornos.gd
 msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
@@ -4436,8 +4436,8 @@ msgid "Si prefieres que Johnny apunte solo, en Opciones → Ayudas está «Dispa
 msgstr "如果想让 Johnny 自己瞄准，可以在“选项 → 辅助”里开启“辅助射击”。"
 
 #: scripts/tutoriales.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
-msgstr "Johnny会自动瞄准并攻击最近的僵尸：你只管走位。"
+msgid "Johnny apunta y ataca solo al durmiente más cercano: tú preocúpate de moverte."
+msgstr "Johnny会自动瞄准并攻击最近的沉睡者：你只管走位。"
 
 #: scripts/tutoriales.gd
 msgid "el joystick (toca y arrastra en la mitad izquierda)"
@@ -4524,8 +4524,8 @@ msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mi
 msgstr "用{esquivar}闪避：Johnny会朝前进方向短距离冲刺，冲刺期间不会受到伤害。"
 
 #: scripts/tutoriales.gd
-msgid "Úsala para salir de un apuro o pasar entre los zombis. Se recarga enseguida, en menos de un segundo."
-msgstr "用它躲开危险，或从僵尸之间穿过去。冷却很快，不到一秒。"
+msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
+msgstr "用它躲开危险，或从沉睡者之间穿过去。冷却很快，不到一秒。"
 
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"
@@ -4536,12 +4536,12 @@ msgid "Al salir al pasillo"
 msgstr "走进走廊时"
 
 #: scripts/tutoriales.gd
-msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un zombi."
-msgstr "一进公寓，门就会在你身后关上，直到一个僵尸都不剩才会打开。"
+msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un durmiente."
+msgstr "一进公寓，门就会在你身后关上，直到一个沉睡者都不剩才会打开。"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe de la planta está cerrada con llave: la lleva un zombi de otro apartamento y la suelta al caer."
-msgstr "这层楼首领的房间锁着：钥匙在另一套公寓的某个僵尸身上，它倒下时会掉落。"
+msgid "La sala del jefe de la planta está cerrada con llave: la lleva un durmiente de otro apartamento y la suelta al caer."
+msgstr "这层楼首领的房间锁着：钥匙在另一套公寓的某个沉睡者身上，它倒下时会掉落。"
 
 #: scripts/tutoriales.gd
 msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
@@ -4560,8 +4560,8 @@ msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la v
 msgstr "你的生命条被两条线分成三段。生命降到一条线以下时，那一段就失去了：它会变暗，绷带也无法再补满。"
 
 #: scripts/tutoriales.gd
-msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
-msgstr "每失去一段，你都会走得更慢：失去两段后，就跑不过快速僵尸了。"
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los durmientes rápidos."
+msgstr "每失去一段，你都会走得更慢：失去两段后，就跑不过快速沉睡者了。"
 
 #: scripts/tutoriales.gd
 msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
@@ -4632,8 +4632,8 @@ msgid "Al coger el primer billete"
 msgstr "第一次捡到钞票时"
 
 #: scripts/tutoriales.gd
-msgid "Los zombis a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "僵尸有时会掉钞票，首领会掉很多：走过去就能捡起来。"
+msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "沉睡者有时会掉钞票，首领会掉很多：走过去就能捡起来。"
 
 #: scripts/tutoriales.gd
 msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
@@ -4732,8 +4732,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "在维修间的工作台用制作材料提升武器和投掷物的品质。"
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los zombis de vez en cuando y los jefes."
-msgstr "材料分为四类：近战、远程、特殊和投掷。僵尸偶尔会掉落，首领也会掉。"
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los durmientes de vez en cuando y los jefes."
+msgstr "材料分为四类：近战、远程、特殊和投掷。沉睡者偶尔会掉落，首领也会掉。"
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4832,8 +4832,8 @@ msgid "Los aspersores llenan el suelo de charcos que resbalan."
 msgstr "喷淋头会让地面积满水洼，非常滑。"
 
 #: scripts/tutoriales.gd
-msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los zombis: ¡llévalos hasta él! Esquivando cruzas sin daño."
-msgstr "有些水洼里会掉进裸露的电线，Johnny和僵尸碰到都会触电：把它们引过去！闪避着就能毫发无伤地穿过。"
+msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los durmientes: ¡llévalos hasta él! Esquivando cruzas sin daño."
+msgstr "有些水洼里会掉进裸露的电线，Johnny和沉睡者碰到都会触电：把它们引过去！闪避着就能毫发无伤地穿过。"
 
 #: scripts/tutoriales.gd
 msgid "En la primera horda"
@@ -5000,8 +5000,8 @@ msgid "Al abrir Colecciones"
 msgstr "打开收藏品时"
 
 #: scripts/tutoriales.gd
-msgid "Aquí se apuntan los zombis y los jefes que te encuentras, con lo que hacen y dónde salen."
-msgstr "你遇到的僵尸和首领都会记录在这里，包括它们的能力和出没地点。"
+msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen."
+msgstr "你遇到的沉睡者和首领都会记录在这里，包括它们的能力和出没地点。"
 
 #: scripts/tutoriales.gd
 msgid "Los que aún no has visto salen con «???»."
@@ -5072,8 +5072,8 @@ msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda d
 msgstr "冷库会冻人，厨房会烧人，电器店的水会电人（店里的配电箱可以断电）。"
 
 #: scripts/tutoriales.gd
-msgid "También hacen daño a los zombis despiertos: ¡llévalos hasta ellos!"
-msgstr "它们对醒着的僵尸也有伤害：把僵尸引过去！"
+msgid "También hacen daño a los durmientes despiertos: ¡llévalos hasta ellos!"
+msgstr "它们对醒着的沉睡者也有伤害：把沉睡者引过去！"
 
 #: scripts/tutoriales.gd
 msgid "Esquivando los cruzas sin daño."
@@ -5088,8 +5088,8 @@ msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». 
 msgstr "店员不会冲向你：她会躲开，然后尖叫“啊啊啊！！！”。她的尖叫会吵醒整个商店。"
 
 #: scripts/tutoriales.gd
-msgid "Los zombis que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
-msgstr "听到尖叫的僵尸会被金色泡泡罩住：子弹会被弹开，攻击、火焰和水坑都伤不到它们。"
+msgid "Los durmientes que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
+msgstr "听到尖叫的沉睡者会被金色泡泡罩住：子弹会被弹开，攻击、火焰和水坑都伤不到它们。"
 
 #: scripts/tutoriales.gd
 msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
@@ -5104,8 +5104,8 @@ msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está 
 msgstr "头目的房间要用三位数密码打开。每位数字都在某个部门一台开着的电脑上：屏幕会发出绿光。"
 
 #: scripts/tutoriales.gd
-msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los zombis."
-msgstr "站到电脑前就能读出数字，但会触发“效率检查”，所有僵尸都会醒来。"
+msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los durmientes."
+msgstr "站到电脑前就能读出数字，但会触发“效率检查”，所有沉睡者都会醒来。"
 
 #: scripts/tutoriales.gd
 msgid "Peligros de la torre"
@@ -5116,16 +5116,16 @@ msgid "En el primer departamento con peligro"
 msgstr "第一次进入有危险的部门时"
 
 #: scripts/tutoriales.gd
-msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los zombis que llegan al borde salen volando."
-msgstr "市场部破碎的落地窗会把你往外吸：贴着办公桌走过去。被吹到窗边的僵尸会飞出去。"
+msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los durmientes que llegan al borde salen volando."
+msgstr "市场部破碎的落地窗会把你往外吸：贴着办公桌走过去。被吹到窗边的沉睡者会飞出去。"
 
 #: scripts/tutoriales.gd
 msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
 msgstr "被安保部的摄像头看见就会拉响警报，保镖随即赶到：先一枪把它打坏。"
 
 #: scripts/tutoriales.gd
-msgid "El gas de Recursos Humanos duerme a los zombis, pero despiertan frenéticos. La válvula del archivo lo corta."
-msgstr "人力资源部的毒气会让僵尸睡着，但它们醒来时会发狂。档案室的阀门可以关掉毒气。"
+msgid "El gas de Recursos Humanos duerme a los durmientes, pero despiertan frenéticos. La válvula del archivo lo corta."
+msgstr "人力资源部的毒气会让沉睡者睡着，但它们醒来时会发狂。档案室的阀门可以关掉毒气。"
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
@@ -5953,20 +5953,20 @@ msgid "y la de repuesto pasa a la mano"
 msgstr "备用的会换到手上"
 
 #: scripts/ui/inventario.gd
-msgid "Barre un abanico muy ancho y echa lejos a los zombis."
-msgstr "扇形横扫范围很大，能把僵尸击飞。"
+msgid "Barre un abanico muy ancho y echa lejos a los durmientes."
+msgstr "扇形横扫范围很大，能把沉睡者击飞。"
 
 #: scripts/ui/inventario.gd
-msgid "Un golpe fuerte que empuja a los zombis."
-msgstr "重重一击，能把僵尸击退。"
+msgid "Un golpe fuerte que empuja a los durmientes."
+msgstr "重重一击，能把沉睡者击退。"
 
 #: scripts/ui/inventario.gd
 msgid "Muy rápido, pero hay que arrimarse."
 msgstr "出手很快，但得贴近才行。"
 
 #: scripts/ui/inventario.gd
-msgid "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante."
-msgstr "很慢，但普通僵尸一击就倒。攻击距离远，只打正前方。"
+msgid "Lenta, pero un durmiente normal cae de un solo golpe. Llega lejos, recto hacia delante."
+msgstr "很慢，但普通沉睡者一击就倒。攻击距离远，只打正前方。"
 
 #: scripts/ui/inventario.gd
 msgid "Desenvaina de golpe y corta de abajo arriba. Rápida, con un abanico medio."
@@ -6001,24 +6001,24 @@ msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ác
 msgstr "持续喷射酸液，腐蚀一切。用酸液桶加满。"
 
 #: scripts/ui/inventario.gd
-msgid "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías."
-msgstr "持续放电，能击晕僵尸并跳到旁边的僵尸身上。用电池充满。"
+msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."
+msgstr "持续放电，能击晕沉睡者并跳到旁边的沉睡者身上。用电池充满。"
 
 #: scripts/ui/inventario.gd
-msgid "Se rompe y deja un charco de fuego que quema a los zombis."
-msgstr "摔碎后留下一滩火，灼烧僵尸。"
+msgid "Se rompe y deja un charco de fuego que quema a los durmientes."
+msgstr "摔碎后留下一滩火，灼烧沉睡者。"
 
 #: scripts/ui/inventario.gd
 msgid "Bota, rueda y explota a los 2 segundos."
 msgstr "弹跳、滚动，2秒后爆炸。"
 
 #: scripts/ui/inventario.gd
-msgid "Suena, atrae a los zombis 3 s y explota."
-msgstr "发出响声，吸引僵尸3秒后爆炸。"
+msgid "Suena, atrae a los durmientes 3 s y explota."
+msgstr "发出响声，吸引沉睡者3秒后爆炸。"
 
 #: scripts/ui/inventario.gd
-msgid "Explota y deja a los zombis congelados 3 s."
-msgstr "爆炸后将僵尸冰冻3秒。"
+msgid "Explota y deja a los durmientes congelados 3 s."
+msgstr "爆炸后将沉睡者冰冻3秒。"
 
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
@@ -6413,16 +6413,16 @@ msgid "Lanzar apuntando solo"
 msgstr "自动瞄准投掷"
 
 #: scripts/ui/opciones.gd
-msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
-msgstr "燃烧瓶、手雷和其他投掷物会自动飞向你看到的最近的僵尸。如果一个都看不到，就照常投掷。"
+msgid "El molotov, la granada y las arrojadizas van solos al durmiente más cercano que veas. Si no ves ninguno, se lanzan como siempre."
+msgstr "燃烧瓶、手雷和其他投掷物会自动飞向你看到的最近的沉睡者。如果一个都看不到，就照常投掷。"
 
 #: scripts/ui/opciones.gd
 msgid "Disparo asistido"
 msgstr "辅助射击"
 
 #: scripts/ui/opciones.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
-msgstr "Johnny会自动瞄准并攻击最近的僵尸。你只需要专心走位。"
+msgid "Johnny apunta y ataca solo al durmiente más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny会自动瞄准并攻击最近的沉睡者。你只需要专心走位。"
 
 #: scripts/ui/opciones.gd
 msgid "Hecho con Godot Engine"

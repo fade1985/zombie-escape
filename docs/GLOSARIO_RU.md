@@ -6,6 +6,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 
 ## Reglas de gramática que impone el juego
 
+- **«zombi» → *спящий* (plural *спящие*)** (decidido el 13 nov), **declinado** según la frase (*спящего*, *спящих*, *спящим*, *спящими*). Nunca *зомби*.
 - **El ruso declina y el juego pega nombres en nominativo.** Las frases con un `%s` de nombre (superviviente, jefe, planta,
   edificio, arma) se escriben para que el nombre vaya **de sujeto** o **detrás de dos puntos / entre paréntesis**, en forma de
   rótulo: «Сначала одолей: %s», «Босс повержен: %s!», «Ты пал: %s, %s», «Где: %s», «магазин босса (%s)».
@@ -41,10 +42,10 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | Пост охраны · Главная кухня · Ателье · Магазин игрушек | |
 | los Apartamentos · el Centro comercial | Жилой дом · Торговый центр (жилой дом, торговый центр en frase) | |
 | Velaria, Velaria Corp., Torre Velaria, Velaria Noche | Velaria (en latino, marca; no se declina) · Башня Velaria · «Velaria Ночь» | |
-| Zombis de la torre: oficinista · escolta de Velaria · ¡TOC! | Офисный работник · Телохранитель Velaria · ТУК! | |
+| Durmientes de la torre: oficinista · escolta de Velaria · ¡TOC! | Офисный работник · Телохранитель Velaria · ТУК! | |
 | VD-7 · Marta Ruiz · Elena · Canal 8 | VD-7 · Марта Руис · Елена · Канал 8 | |
 | Dirección (de Velaria) · gerencia (del centro) | Дирекция · руководство | |
-| Zombis: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Сосед, Соседка, Ползун, Пацан, Подрывник, Спрут, Толстяк | |
+| Durmientes: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Сосед, Соседка, Ползун, Пацан, Подрывник, Спрут, Толстяк | |
 | dependienta · vigilante · guardia de la tarjeta · maniquí | Продавщица · Охранник · Охранник с картой · Манекен | |
 | durmiente · noctámbulo · Sujeto 0 · sujetos | спящий · полуночник · Объект 0 · объекты / подопытные | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Полицейский · Военный · Врач · Мастер · Фармацевт · Техник | |

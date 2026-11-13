@@ -19,9 +19,9 @@ const REGLAS := {
 	"cuerpo": {"nombre": "Solo cuerpo a cuerpo", "desc": "la pistola va vacía y no cae munición, ni molotovs ni granadas"},
 	"oscuras": {"nombre": "Todo a oscuras", "desc": "todas las plantas como en un apagón: solo se ve con la linterna"},
 	"curas": {"nombre": "Sin curas", "desc": "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"},
-	"rapidos": {"nombre": "Zombis rápidos", "desc": "todos un 35 % más rápidos (los jefes, no)"},
+	"rapidos": {"nombre": "Durmientes rápidos", "desc": "todos un 35 % más rápidos (los jefes, no)"},
 	"cristal": {"nombre": "De cristal", "desc": "Johnny con la mitad de vida"},
-	"llena": {"nombre": "Casa llena", "desc": "el doble de zombis en cada sitio"},
+	"llena": {"nombre": "Casa llena", "desc": "el doble de durmientes en cada sitio"},
 	"oido": {"nombre": "Oído fino", "desc": "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"},
 }
 # [/traducir]

@@ -639,9 +639,9 @@ func ayudas() -> void:
 	rotar(Idioma.t("Pistola sin fin"), "pistola_sin_fin", SI_NO)
 	explicar(Idioma.t("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."), true)
 	rotar(Idioma.t("Lanzar apuntando solo"), "lanzar_solo", SI_NO)
-	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."), true)
+	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al durmiente más cercano que veas. Si no ves ninguno, se lanzan como siempre."), true)
 	rotar(Idioma.t("Disparo asistido"), "disparo_asistido", SI_NO)
-	explicar(Idioma.t("Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."), true)
+	explicar(Idioma.t("Johnny apunta y ataca solo al durmiente más cercano. Tú solo te preocupas de moverte."), true)
 
 
 # "lisa": con la letra lisa (Rubik, a TAM_AYUDAS y con las líneas algo más juntas: así cabe Ayudas entera, también en ruso), como las frases de

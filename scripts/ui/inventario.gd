@@ -162,10 +162,10 @@ const CHAPA := preload("res://scripts/ui/chapa.gd")   # la pantallita del dinero
 # Lo que hace cada arma de la tienda y cada arrojable (se traduce al enseñarlo, en que_hace; el ordenador también lo lee)
 # [traducir]
 const QUE_HACE := {
-	"fregona": "Barre un abanico muy ancho y echa lejos a los zombis.",
-	"bate": "Un golpe fuerte que empuja a los zombis.",
+	"fregona": "Barre un abanico muy ancho y echa lejos a los durmientes.",
+	"bate": "Un golpe fuerte que empuja a los durmientes.",
 	"cuchillo": "Muy rápido, pero hay que arrimarse.",
-	"motosierra": "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante.",
+	"motosierra": "Lenta, pero un durmiente normal cae de un solo golpe. Llega lejos, recto hacia delante.",
 	"katana": "Desenvaina de golpe y corta de abajo arriba. Rápida, con un abanico medio.",
 	"pistola": "Dispara de una en una, recto y lejos.",
 	"escopeta": "Cinco perdigones en abanico. Se recarga de cartucho en cartucho.",
@@ -174,11 +174,11 @@ const QUE_HACE := {
 	"lanzagranadas": "Granadas que revientan al tocar algo y hacen daño alrededor (¡también a ti!). Se recarga de una en una.",
 	"lanzallamas": "Llamarada continua que quema a todos. Se llena con gasolina.",
 	"desintegrador": "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido.",
-	"pistola_electrica": "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías.",
-	"molotov": "Se rompe y deja un charco de fuego que quema a los zombis.",
+	"pistola_electrica": "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías.",
+	"molotov": "Se rompe y deja un charco de fuego que quema a los durmientes.",
 	"granada": "Bota, rueda y explota a los 2 segundos.",
-	"atraedora": "Suena, atrae a los zombis 3 s y explota.",
-	"congeladora": "Explota y deja a los zombis congelados 3 s.",
+	"atraedora": "Suena, atrae a los durmientes 3 s y explota.",
+	"congeladora": "Explota y deja a los durmientes congelados 3 s.",
 }
 # [/traducir]
 const PRINCIPALES := ["poner", "usar", "a_la_mano", "al_repuesto", "guardar", "sacar", "mejorar"]   # los de la ficha que no son tirar

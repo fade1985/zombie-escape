@@ -332,16 +332,16 @@ static func de_edificio(edificio: String) -> Array:
 	return NOMBRES.keys()
 
 
-# Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier zombi (el bidón
+# Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier durmiente (el bidón
 # de ácido, solo el gordo, y las piezas, los zombis y los jefes, en los dos edificios); en el centro comercial, las
 # tiendas que lo sueltan ("Ferretería, electrónica y supermercado")
 static func donde(id: String, edificio: String) -> String:
 	if id in PIEZAS:
-		return Idioma.t("la suelta algún zombi, y los jefes seguro")
+		return Idioma.t("la suelta algún durmiente, y los jefes seguro")
 	if id == "bidon_acido":
 		return Idioma.t("lo suelta el gordo")
 	if edificio != "centro":
-		return Idioma.t("lo suelta cualquier zombi")
+		return Idioma.t("lo suelta cualquier durmiente")
 	var tiendas := []
 	for tipo in TIENDAS:
 		if id in TIENDAS[tipo]:

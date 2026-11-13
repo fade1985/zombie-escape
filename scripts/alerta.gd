@@ -15,14 +15,14 @@ const MAX := 5
 # [traducir]
 const REGLAS := [
 	"",
-	"+25 % de zombis",
-	"Zombis un 10 % más rápidos",
+	"+25 % de durmientes",
+	"Durmientes un 10 % más rápidos",
 	"Jefes con +25 % de vida, y se enfadan antes",
 	"Botiquines, vendas y Ajolote curan la mitad",
-	"El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos",
+	"El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos",
 ]
 # En Torre Velaria no hay guardia ni llave (la sala del jefe se abre con el código): su Alerta 5 cambia esa mitad
-const REGLA_5_TORRE := "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
+const REGLA_5_TORRE := "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
 # [/traducir]
 const MAS_ZOMBIS := 1.25     # A1: el presupuesto de zombis de cada sitio (planta.gd, horda)
 const MAS_RAPIDOS := 1.1     # A2: la velocidad de los zombis (no la de los jefes)

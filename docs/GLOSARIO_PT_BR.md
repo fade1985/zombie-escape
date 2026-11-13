@@ -5,6 +5,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 
 ## Reglas
 
+- **«zombi» → *adormecido(s)*** (decidido el 13 nov: en el juego ya no hay «zombis», hay «durmientes»). Nunca *zumbi*.
 - **Portugués de Brasil**, informal y seco, como el español. Nada de portuguesismos de Portugal (*apartamento*, *elevador*,
   *andar*, *banheiro*, *celular*, *tela cheia*, *mouse*, *time*...).
 - **Trato al jugador: `você`**. En la interfaz y los tutoriales, imperativo normal (*Aperte*, *Clique*, *Escolha*, *Abaixe a
@@ -40,13 +41,13 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Velaria, Velaria Corp., VD-7, Marta Ruiz | igual | |
 | Canal 8 | Canal 8 | |
 | Torre Velaria · Turno infinito · Dirección · Velaria Noche | Torre Velaria · Turno Infinito · Diretoria · Velaria Noite | |
-| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! | o funcionário · o guarda-costas da Velaria · TOC! | |
+| Durmientes de la torre: el oficinista · el escolta de Velaria · ¡TOC! | o funcionário · o guarda-costas da Velaria · TOC! | |
 | durmiente · noctámbulo | adormecido · noctâmbulo | |
 | Sujeto 0 · sujetos | Sujeito 0 · sujeitos (y *cobaias* en los gritos de Salas) | |
 | piso (vivienda) · edificio | apartamento (*apto.*) · prédio | |
 | puertas Bajo C · 1ºD | apto. TC · apto. 1D | T de *térreo* |
 
-## Zombis (bestiario)
+## Durmientes (bestiario)
 
 | Español | Portugués |
 |---|---|
@@ -158,7 +159,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 |---|---|
 | Tentacular · Gastroenteritis · Insensible · Caníbal · Ansiedad · Endurecimiento · Locura · Flatulento | Tentacular · Gastroenterite · Insensível · Canibal · Ansiedade · Pele grossa · Loucura · Flatulento |
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | Zelador · O síndico · O glutão · O maromba · O bombeiro |
-| Solo cuerpo a cuerpo · Todo a oscuras · Sin curas · Zombis rápidos · De cristal · Casa llena · Oído fino | Só corpo a corpo · Tudo no escuro · Sem curas · Zumbis rápidos · De vidro · Casa cheia · Ouvido fino |
+| Solo cuerpo a cuerpo · Todo a oscuras · Sin curas · Durmientes rápidos · De cristal · Casa llena · Oído fino | Só corpo a corpo · Tudo no escuro · Sem curas · Adormecidos rápidos · De vidro · Casa cheia · Ouvido fino |
 
 ## Mapa (plantas, salas, tiendas)
 

@@ -44,12 +44,12 @@ msgid " (y lo de antes)"
 msgstr " (e os anteriores)"
 
 #: scripts/alerta.gd
-msgid "+25 % de zombis"
-msgstr "+25 % de zumbis"
+msgid "+25 % de durmientes"
+msgstr "+25 % de adormecidos"
 
 #: scripts/alerta.gd
-msgid "Zombis un 10 % más rápidos"
-msgstr "Zumbis 10 % mais rápidos"
+msgid "Durmientes un 10 % más rápidos"
+msgstr "Adormecidos 10 % mais rápidos"
 
 #: scripts/alerta.gd
 msgid "Jefes con +25 % de vida, y se enfadan antes"
@@ -60,12 +60,12 @@ msgid "Botiquines, vendas y Ajolote curan la mitad"
 msgstr "Kits médicos, bandagens e Axolote curam a metade"
 
 #: scripts/alerta.gd
-msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
-msgstr "O guarda (ou o zumbi da chave) aguenta o dobro e os zumbis te ouvem de mais longe"
+msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
+msgstr "O guarda (ou o adormecido da chave) aguenta o dobro e os adormecidos te ouvem de mais longe"
 
 #: scripts/alerta.gd
-msgid "Cada ordenador del código llama a dos escoltas y los zombis te oyen más lejos"
-msgstr "Cada computador do código chama dois guarda-costas e os zumbis te ouvem de mais longe"
+msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
+msgstr "Cada computador do código chama dois guarda-costas e os adormecidos te ouvem de mais longe"
 
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
@@ -108,10 +108,10 @@ msgid "cargador un %d %% más grande y recarga un %d %% más rápida"
 msgstr "pente %d %% maior e recarga %d %% mais rápida"
 
 #: scripts/armas.gd
-msgid "depósito un %d %% más grande y la descarga salta a %d zombi más"
-msgid_plural "depósito un %d %% más grande y la descarga salta a %d zombis más"
-msgstr[0] "tanque %d %% maior e a descarga pula para mais %d zumbi"
-msgstr[1] "tanque %d %% maior e a descarga pula para mais %d zumbis"
+msgid "depósito un %d %% más grande y la descarga salta a %d durmiente más"
+msgid_plural "depósito un %d %% más grande y la descarga salta a %d durmientes más"
+msgstr[0] "tanque %d %% maior e a descarga pula para mais %d adormecido"
+msgstr[1] "tanque %d %% maior e a descarga pula para mais %d adormecidos"
 
 #: scripts/armas.gd
 msgid "depósito un %d %% más grande"
@@ -130,16 +130,16 @@ msgid "Truco: cada %d golpes que dan, uno es crítico (doble daño)."
 msgstr "Truque: a cada %d golpes que acerta, um é crítico (dano em dobro)."
 
 #: scripts/armas.gd
-msgid "Truco: sus balas atraviesan a un zombi y siguen."
-msgstr "Truque: as balas atravessam um zumbi e seguem em frente."
+msgid "Truco: sus balas atraviesan a un durmiente y siguen."
+msgstr "Truque: as balas atravessam um adormecido e seguem em frente."
 
 #: scripts/armas.gd
-msgid "Truco: sus balas atraviesan a %d zombis y siguen."
-msgstr "Truque: as balas atravessam %d zumbis e seguem em frente."
+msgid "Truco: sus balas atraviesan a %d durmientes y siguen."
+msgstr "Truque: as balas atravessam %d adormecidos e seguem em frente."
 
 #: scripts/armas.gd
-msgid "Truco: los zombis que mata revientan y pasan su efecto a los de al lado."
-msgstr "Truque: os zumbis que ela mata explodem e passam o efeito para os do lado."
+msgid "Truco: los durmientes que mata revientan y pasan su efecto a los de al lado."
+msgstr "Truque: os adormecidos que ela mata explodem e passam o efeito para os do lado."
 
 #: scripts/armas.gd
 msgid "Truco: al romperse suelta %d más pequeños alrededor."
@@ -886,8 +886,8 @@ msgid "los Apartamentos"
 msgstr "os Apartamentos"
 
 #: scripts/edificios.gd
-msgid "Vecinos zombi, pisos a oscuras y una portera con muy mal genio"
-msgstr "Vizinhos zumbis, apartamentos no escuro e uma síndica muito mal-humorada"
+msgid "Vecinos durmientes, pisos a oscuras y una portera con muy mal genio"
+msgstr "Vizinhos adormecidos, apartamentos no escuro e uma síndica muito mal-humorada"
 
 #: scripts/edificios.gd
 msgid "la portera"
@@ -898,8 +898,8 @@ msgid "el doctor Salas"
 msgstr "o doutor Salas"
 
 #: scripts/edificios.gd
-msgid "limpia los apartamentos y caza al zombi que lleva la llave de la portera"
-msgstr "limpe os apartamentos e cace o zumbi que leva a chave da síndica"
+msgid "limpia los apartamentos y caza al durmiente que lleva la llave de la portera"
+msgstr "limpe os apartamentos e cace o adormecido que leva a chave da síndica"
 
 #: scripts/edificios.gd
 msgid "Centro comercial"
@@ -1178,12 +1178,12 @@ msgid "¡TENGO HAMBRE!"
 msgstr "TÔ COM FOME!"
 
 #: scripts/guia.gd
-msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
-msgstr "Limpe os apartamentos: ao entrar, a porta se fecha até não sobrar nenhum zumbi"
+msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un durmiente"
+msgstr "Limpe os apartamentos: ao entrar, a porta se fecha até não sobrar nenhum adormecido"
 
 #: scripts/guia.gd
-msgid "¡Ese zombi lleva la llave del %s!"
-msgstr "Esse zumbi está com a chave do apto. %s!"
+msgid "¡Ese durmiente lleva la llave del %s!"
+msgstr "Esse adormecido está com a chave do apto. %s!"
 
 #: scripts/guia.gd
 msgid "Saca la pistola con {cambiar_arma}"
@@ -2278,40 +2278,40 @@ msgid "Fregona de oro"
 msgstr "Esfregão de ouro"
 
 #: scripts/logros.gd
-msgid "Mata 10 zombis a fregonazos en una misma partida."
-msgstr "Mate 10 zumbis com o esfregão numa mesma partida."
+msgid "Mata 10 durmientes a fregonazos en una misma partida."
+msgstr "Mate 10 adormecidos com o esfregão numa mesma partida."
 
 #: scripts/logros.gd
 msgid "Exterminador"
 msgstr "Exterminador"
 
 #: scripts/logros.gd
-msgid "Mata 100 zombis, sumando todas tus partidas."
-msgstr "Mate 100 zumbis, somando todas as suas partidas."
+msgid "Mata 100 durmientes, sumando todas tus partidas."
+msgstr "Mate 100 adormecidos, somando todas as suas partidas."
 
 #: scripts/logros.gd
 msgid "Limpieza general"
 msgstr "Faxina geral"
 
 #: scripts/logros.gd
-msgid "Mata 1.000 zombis, sumando todas tus partidas."
-msgstr "Mate 1.000 zumbis, somando todas as suas partidas."
+msgid "Mata 1.000 durmientes, sumando todas tus partidas."
+msgstr "Mate 1.000 adormecidos, somando todas as suas partidas."
 
 #: scripts/logros.gd
 msgid "Pirómano"
 msgstr "Piromaníaco"
 
 #: scripts/logros.gd
-msgid "Prende fuego a 5 zombis con un mismo molotov."
-msgstr "Bote fogo em 5 zumbis com um mesmo molotov."
+msgid "Prende fuego a 5 durmientes con un mismo molotov."
+msgstr "Bote fogo em 5 adormecidos com um mesmo molotov."
 
 #: scripts/logros.gd
 msgid "Racha imparable"
 msgstr "Imparável"
 
 #: scripts/logros.gd
-msgid "Mata 30 zombis seguidos sin perder vida."
-msgstr "Mate 30 zumbis seguidos sem perder vida."
+msgid "Mata 30 durmientes seguidos sin perder vida."
+msgstr "Mate 30 adormecidos seguidos sem perder vida."
 
 #: scripts/logros.gd
 msgid "Intocable"
@@ -2350,8 +2350,8 @@ msgid "Arsenal completo"
 msgstr "Arsenal completo"
 
 #: scripts/logros.gd
-msgid "Mata un zombi con cada arma: la fregona y todas las de la tienda."
-msgstr "Mate um zumbi com cada arma: o esfregão e todas as da loja."
+msgid "Mata un durmiente con cada arma: la fregona y todas las de la tienda."
+msgstr "Mate um adormecido com cada arma: o esfregão e todas as da loja."
 
 #: scripts/logros.gd
 msgid "Especialista"
@@ -2894,16 +2894,16 @@ msgid "Tentacular"
 msgstr "Tentacular"
 
 #: scripts/mutaciones.gd
-msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"
-msgstr "A cada 4 s sai um tentáculo do seu peito que afasta os zumbis em volta e os atordoa por 1 s"
+msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los durmientes de alrededor y los aturde 1 s"
+msgstr "A cada 4 s sai um tentáculo do seu peito que afasta os adormecidos em volta e os atordoa por 1 s"
 
 #: scripts/mutaciones.gd
 msgid "Gastroenteritis"
 msgstr "Gastroenterite"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"
-msgstr "A cada 3 s você lança um vômito de ácido no zumbi mais próximo: deixa uma poça que queima os zumbis que pisam nela"
+msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
+msgstr "A cada 3 s você lança um vômito de ácido no adormecido mais próximo: deixa uma poça que queima os adormecidos que pisam nela"
 
 #: scripts/mutaciones.gd
 msgid "Insensible"
@@ -2918,16 +2918,16 @@ msgid "Caníbal"
 msgstr "Canibal"
 
 #: scripts/mutaciones.gd
-msgid "Cada zombi que matas te cura un 2 % de la vida"
-msgstr "Cada zumbi que você mata te cura 2 % da vida"
+msgid "Cada durmiente que matas te cura un 2 % de la vida"
+msgstr "Cada adormecido que você mata te cura 2 % da vida"
 
 #: scripts/mutaciones.gd
 msgid "Ansiedad"
 msgstr "Ansiedade"
 
 #: scripts/mutaciones.gd
-msgid "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"
-msgstr "Você bate mais rápido no corpo a corpo quanto mais zumbis tiver à vista (+10 % cada um, até +50 %)"
+msgid "Golpeas más rápido cuerpo a cuerpo cuantos más durmientes tengas a la vista (+10 % cada uno, hasta +50 %)"
+msgstr "Você bate mais rápido no corpo a corpo quanto mais adormecidos tiver à vista (+10 % cada um, até +50 %)"
 
 #: scripts/mutaciones.gd
 msgid "Endurecimiento"
@@ -2942,28 +2942,28 @@ msgid "Locura"
 msgstr "Loucura"
 
 #: scripts/mutaciones.gd
-msgid "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"
-msgstr "A cada 4 s você grita tão alto que os zumbis em volta ficam desorientados por 2 s"
+msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
+msgstr "A cada 4 s você grita tão alto que os adormecidos em volta ficam desorientados por 2 s"
 
 #: scripts/mutaciones.gd
 msgid "Flatulento"
 msgstr "Flatulento"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"
-msgstr "A cada 3 s você solta gases corrosivos que queimam e paralisam por 2 s os zumbis próximos"
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
+msgstr "A cada 3 s você solta gases corrosivos que queimam e paralisam por 2 s os adormecidos próximos"
 
 #: scripts/objetos.gd
-msgid "la suelta algún zombi, y los jefes seguro"
-msgstr "alguns zumbis deixam cair, e os chefes sempre"
+msgid "la suelta algún durmiente, y los jefes seguro"
+msgstr "alguns adormecidos deixam cair, e os chefes sempre"
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
 msgstr "o gordo deixa cair"
 
 #: scripts/objetos.gd
-msgid "lo suelta cualquier zombi"
-msgstr "qualquer zumbi deixa cair"
+msgid "lo suelta cualquier durmiente"
+msgstr "qualquer adormecido deixa cair"
 
 #: scripts/objetos.gd scripts/talentos.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
 msgid "%s y %s"
@@ -3158,8 +3158,8 @@ msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
 msgstr "O guarda caiu! Ele soltou o cartão de acesso"
 
 #: scripts/partida.gd
-msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
-msgstr "O zumbi da chave caiu! Ele soltou a chave do apto. %s"
+msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
+msgstr "O adormecido da chave caiu! Ele soltou a chave do apto. %s"
 
 #: scripts/partida.gd
 msgid "+1 molotov"
@@ -3278,8 +3278,8 @@ msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
 msgstr "JURO QUE ESTAVAM ME MORDENDO!"
 
 #: scripts/partida.gd
-msgid "¡OTRA VEZ ESE SUEÑO DE ZOMBIS!"
-msgstr "DE NOVO ESSE SONHO DE ZUMBIS!"
+msgid "¡OTRA VEZ ESE SUEÑO DE DURMIENTES!"
+msgstr "DE NOVO ESSE SONHO DE ADORMECIDOS!"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
@@ -3446,8 +3446,8 @@ msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada q
 msgstr "os armarinhos estão vazios e nada que cure cai, é vendido ou preparado para você"
 
 #: scripts/reto.gd
-msgid "Zombis rápidos"
-msgstr "Zumbis rápidos"
+msgid "Durmientes rápidos"
+msgstr "Adormecidos rápidos"
 
 #: scripts/reto.gd
 msgid "todos un 35 % más rápidos (los jefes, no)"
@@ -3466,8 +3466,8 @@ msgid "Casa llena"
 msgstr "Casa cheia"
 
 #: scripts/reto.gd
-msgid "el doble de zombis en cada sitio"
-msgstr "o dobro de zumbis em cada lugar"
+msgid "el doble de durmientes en cada sitio"
+msgstr "o dobro de adormecidos em cada lugar"
 
 #: scripts/reto.gd
 msgid "Oído fino"
@@ -3498,8 +3498,8 @@ msgid "El glotón"
 msgstr "O glutão"
 
 #: scripts/skins.gd
-msgid "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 3 % de vida."
-msgstr "Quem te machuca paga caro: um zumbi morre e um chefe perde 3 % da vida."
+msgid "Quien te hace daño lo paga: un durmiente muere y un jefe pierde un 3 % de vida."
+msgstr "Quem te machuca paga caro: um adormecido morre e um chefe perde 3 % da vida."
 
 #: scripts/skins.gd
 msgid "Mata al Glotón por primera vez."
@@ -3530,8 +3530,8 @@ msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Mate o chefe dos bombeiros pela primeira vez."
 
 #: scripts/skins.gd
-msgid "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "Quando um zumbi solta um item, em 50 % das vezes ele solta mais um."
+msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "Quando um adormecido solta um item, em 50 % das vezes ele solta mais um."
 
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
@@ -3554,8 +3554,8 @@ msgid "Mata al antidisturbios por primera vez."
 msgstr "Mate o policial de choque pela primeira vez."
 
 #: scripts/skins.gd
-msgid "Los zombis dormidos no se despiertan al entrar en su habitación y te ven a la mitad de distancia."
-msgstr "Os zumbis adormecidos não acordam quando você entra no quarto deles e só te veem da metade da distância."
+msgid "Los durmientes no se despiertan al entrar en su habitación y te ven a la mitad de distancia."
+msgstr "Os adormecidos não acordam quando você entra no quarto deles e só te veem da metade da distância."
 
 #: scripts/skins.gd
 msgid "Mata a la modista por primera vez."
@@ -3582,8 +3582,8 @@ msgid "La directora"
 msgstr "A diretora de RH"
 
 #: scripts/skins.gd
-msgid "«Despido»: el primer golpe a un zombi dormido lo mata (a los jefes, no)."
-msgstr "\"Demissão\": o primeiro golpe num zumbi dormindo mata ele (nos chefes, não)."
+msgid "«Despido»: el primer golpe a un durmiente que sigue dormido lo mata (a los jefes, no)."
+msgstr "\"Demissão\": o primeiro golpe num adormecido que ainda dorme o mata (nos chefes, não)."
 
 #: scripts/skins.gd
 msgid "Mata a la directora de Recursos Humanos por primera vez."
@@ -3635,8 +3635,8 @@ msgid "La recepcionista: la llave está en el suelo de %s"
 msgstr "A recepcionista: a chave está no chão de %s"
 
 #: scripts/supervivientes.gd
-msgid "La recepcionista: la llave la lleva un zombi de %s"
-msgstr "A recepcionista: um zumbi de %s está com a chave"
+msgid "La recepcionista: la llave la lleva un durmiente de %s"
+msgstr "A recepcionista: um adormecido de %s está com a chave"
 
 #: scripts/supervivientes.gd
 msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
@@ -3736,8 +3736,8 @@ msgid "¡Fuera tablas! Gracias, chaval. Vámonos de aquí"
 msgstr "Tábuas fora! Valeu, parceiro. Vamos sair daqui"
 
 #: scripts/supervivientes.gd
-msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
-msgstr "Vai atrás dos zumbis que vê e dá marteladas (8 de dano)"
+msgid "Va a por los durmientes que ve y les da martillazos (8 de daño)"
+msgstr "Vai atrás dos adormecidos que vê e dá marteladas (8 de dano)"
 
 #: scripts/supervivientes.gd
 msgid "¡SOY FARMACÉUTICA!"
@@ -3796,12 +3796,12 @@ msgid "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado"
 msgstr "Valeu! Antes de ir, preciso consertar aquele fio desencapado"
 
 #: scripts/supervivientes.gd
-msgid "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano"
-msgstr "A cada 3 s, uma descarga deixa o zumbi mais próximo parado por 1,5 s"
+msgid "Cada 3 s, una descarga deja quieto 1,5 s al durmiente más cercano"
+msgstr "A cada 3 s, uma descarga deixa o adormecido mais próximo parado por 1,5 s"
 
 #: scripts/supervivientes.gd
-msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
-msgstr "Conserta as câmeras de segurança: o minimapa mostra os zumbis"
+msgid "Arregla las cámaras de seguridad: el minimapa enseña los durmientes"
+msgstr "Conserta as câmeras de segurança: o minimapa mostra os adormecidos"
 
 #: scripts/supervivientes.gd
 msgid "¡SOY INFORMÁTICO!"
@@ -3824,8 +3824,8 @@ msgid "¡Gracias! Pero no me voy sin los archivos de Velaria"
 msgstr "Valeu! Mas não saio sem os arquivos da Velaria"
 
 #: scripts/supervivientes.gd
-msgid "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven"
-msgstr "A cada 4 s, invade o cérebro do zumbi mais próximo e o deixa parado 1 s; as câmeras não o veem"
+msgid "Cada 4 s, se cuela en el cerebro del durmiente más cercano y lo deja quieto 1 s; las cámaras no le ven"
+msgstr "A cada 4 s, invade o cérebro do adormecido mais próximo e o deixa parado 1 s; as câmeras não o veem"
 
 #: scripts/supervivientes.gd
 msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
@@ -3892,8 +3892,8 @@ msgid "¡Por fin alguien vivo! Abro los tornos y nos vamos"
 msgstr "Finalmente alguém vivo! Eu abro as catracas e a gente vai embora"
 
 #: scripts/supervivientes.gd
-msgid "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda"
-msgstr "Grita \"Atrás de você!\" quando um zumbi vai te atacar pelas costas"
+msgid "Te avisa con un «¡Detrás!» cuando un durmiente va a pegarte por la espalda"
+msgstr "Grita \"Atrás de você!\" quando um adormecido vai te atacar pelas costas"
 
 #: scripts/supervivientes.gd
 msgid "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"
@@ -4244,8 +4244,8 @@ msgid "Ninja"
 msgstr "Ninja"
 
 #: scripts/talentos.gd
-msgid "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"
-msgstr "Ao terminar uma esquiva, golpe em área que mata os zumbis (no máximo a cada 5 s)"
+msgid "Al acabar una esquiva, golpe en área que mata a los durmientes (como mucho cada 5 s)"
+msgstr "Ao terminar uma esquiva, golpe em área que mata os adormecidos (no máximo a cada 5 s)"
 
 #: scripts/talentos.gd
 msgid "Desfibrilador"
@@ -4308,8 +4308,8 @@ msgid "Incendiario"
 msgstr "Incendiário"
 
 #: scripts/talentos.gd
-msgid "Los zombis que prendes arden 0,25 s más por punto"
-msgstr "Os zumbis em que você bota fogo queimam 0,25 s a mais por ponto"
+msgid "Los durmientes que prendes arden 0,25 s más por punto"
+msgstr "Os adormecidos em que você bota fogo queimam 0,25 s a mais por ponto"
 
 #: scripts/talentos.gd
 msgid "Desatascador"
@@ -4332,24 +4332,24 @@ msgid "Reacción en cadena"
 msgstr "Reação em cadeia"
 
 #: scripts/talentos.gd
-msgid "Los zombis que mueren ardiendo revientan y prenden a los de al lado"
-msgstr "Os zumbis que morrem queimando explodem e botam fogo nos do lado"
+msgid "Los durmientes que mueren ardiendo revientan y prenden a los de al lado"
+msgstr "Os adormecidos que morrem queimando explodem e botam fogo nos do lado"
 
 #: scripts/talentos.gd
 msgid "Residuo tóxico"
 msgstr "Resíduo tóxico"
 
 #: scripts/talentos.gd
-msgid "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
-msgstr "Os zumbis que morrem com ácido deixam uma poça de ácido (em você não faz nada)"
+msgid "Los durmientes que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
+msgstr "Os adormecidos que morrem com ácido deixam uma poça de ácido (em você não faz nada)"
 
 #: scripts/talentos.gd
 msgid "Pararrayos"
 msgstr "Para-raios"
 
 #: scripts/talentos.gd
-msgid "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
-msgstr "O zumbi que te bate leva um raio que o atordoa e pula para outro (no máximo a cada 3 s)"
+msgid "Al durmiente que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
+msgstr "O adormecido que te bate leva um raio que o atordoa e pula para outro (no máximo a cada 3 s)"
 
 #: scripts/talentos.gd
 msgid "Napalm"
@@ -4364,24 +4364,24 @@ msgid "Pegajoso"
 msgstr "Pegajoso"
 
 #: scripts/talentos.gd
-msgid "Los zombis con ácido van un 5 % más lentos por punto"
-msgstr "Os zumbis com ácido ficam 5 % mais lentos por ponto"
+msgid "Los durmientes con ácido van un 5 % más lentos por punto"
+msgstr "Os adormecidos com ácido ficam 5 % mais lentos por ponto"
 
 #: scripts/talentos.gd
 msgid "Alto voltaje"
 msgstr "Alta tensão"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más cada 2 puntos"
-msgstr "O raio do lança-raios e o do Para-raios pulam para mais 1 zumbi a cada 2 pontos"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más cada 2 puntos"
+msgstr "O raio do lança-raios e o do Para-raios pulam para mais 1 adormecido a cada 2 pontos"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"
 msgstr "Mistura explosiva"
 
 #: scripts/talentos.gd
-msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
-msgstr "Os zumbis que morrem com dois efeitos ao mesmo tempo (fogo, ácido, raio ou frio) explodem (em você não faz nada)"
+msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
+msgstr "Os adormecidos que morrem com dois efeitos ao mesmo tempo (fogo, ácido, raio ou frio) explodem (em você não faz nada)"
 
 #: scripts/tornos.gd
 msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
@@ -4444,8 +4444,8 @@ msgid "Si prefieres que Johnny apunte solo, en Opciones → Ayudas está «Dispa
 msgstr "Se preferir que o Johnny mire sozinho, em Opções → Ajudas tem \"Tiro assistido\"."
 
 #: scripts/tutoriales.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
-msgstr "Johnny mira e ataca sozinho o zumbi mais próximo: você só se preocupa em se mexer."
+msgid "Johnny apunta y ataca solo al durmiente más cercano: tú preocúpate de moverte."
+msgstr "Johnny mira e ataca sozinho o adormecido mais próximo: você só se preocupa em se mexer."
 
 #: scripts/tutoriales.gd
 msgid "el joystick (toca y arrastra en la mitad izquierda)"
@@ -4532,8 +4532,8 @@ msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mi
 msgstr "Desvie com {esquivar}: Johnny dá uma arrancada curta para onde está indo e, enquanto ela dura, nada o machuca."
 
 #: scripts/tutoriales.gd
-msgid "Úsala para salir de un apuro o pasar entre los zombis. Se recarga enseguida, en menos de un segundo."
-msgstr "Use para sair de um aperto ou passar entre os zumbis. Recarrega rapidinho, em menos de um segundo."
+msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
+msgstr "Use para sair de um aperto ou passar entre os adormecidos. Recarrega rapidinho, em menos de um segundo."
 
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"
@@ -4544,12 +4544,12 @@ msgid "Al salir al pasillo"
 msgstr "Ao sair no corredor"
 
 #: scripts/tutoriales.gd
-msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un zombi."
-msgstr "Ao entrar num apartamento, a porta se fecha atrás de você e só abre quando não sobrar nenhum zumbi."
+msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un durmiente."
+msgstr "Ao entrar num apartamento, a porta se fecha atrás de você e só abre quando não sobrar nenhum adormecido."
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe de la planta está cerrada con llave: la lleva un zombi de otro apartamento y la suelta al caer."
-msgstr "A sala do chefe do andar está trancada: a chave está com um zumbi de outro apartamento, que a solta ao cair."
+msgid "La sala del jefe de la planta está cerrada con llave: la lleva un durmiente de otro apartamento y la suelta al caer."
+msgstr "A sala do chefe do andar está trancada: a chave está com um adormecido de outro apartamento, que a solta ao cair."
 
 #: scripts/tutoriales.gd
 msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
@@ -4568,8 +4568,8 @@ msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la v
 msgstr "Sua barra de vida é dividida em três terços por duas linhas. Quando a vida desce de uma linha, esse terço se perde: escurece e as bandagens já não o enchem."
 
 #: scripts/tutoriales.gd
-msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
-msgstr "A cada terço perdido você anda mais devagar: com dois perdidos, já não escapa dos zumbis rápidos."
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los durmientes rápidos."
+msgstr "A cada terço perdido você anda mais devagar: com dois perdidos, já não escapa dos adormecidos rápidos."
 
 #: scripts/tutoriales.gd
 msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
@@ -4640,8 +4640,8 @@ msgid "Al coger el primer billete"
 msgstr "Ao pegar a primeira nota"
 
 #: scripts/tutoriales.gd
-msgid "Los zombis a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Os zumbis às vezes soltam notas, e os chefes, muitas: passe por cima para pegar."
+msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Os adormecidos às vezes soltam notas, e os chefes, muitas: passe por cima para pegar."
 
 #: scripts/tutoriales.gd
 msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
@@ -4740,8 +4740,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Com os materiais de fabricação você sobe a qualidade das armas e dos arremessáveis, na bancada da sala de manutenção."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los zombis de vez en cuando y los jefes."
-msgstr "São de quatro famílias: corpo a corpo, à distância, especiais e arremessáveis. Os zumbis soltam de vez em quando, e os chefes também."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los durmientes de vez en cuando y los jefes."
+msgstr "São de quatro famílias: corpo a corpo, à distância, especiais e arremessáveis. Os adormecidos soltam de vez em quando, e os chefes também."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4840,8 +4840,8 @@ msgid "Los aspersores llenan el suelo de charcos que resbalan."
 msgstr "Os sprinklers enchem o chão de poças escorregadias."
 
 #: scripts/tutoriales.gd
-msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los zombis: ¡llévalos hasta él! Esquivando cruzas sin daño."
-msgstr "Em algumas cai um fio desencapado que dá choque no Johnny e nos zumbis: leve eles até lá! Desviando, você passa sem dano."
+msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los durmientes: ¡llévalos hasta él! Esquivando cruzas sin daño."
+msgstr "Em algumas cai um fio desencapado que dá choque no Johnny e nos adormecidos: leve eles até lá! Desviando, você passa sem dano."
 
 #: scripts/tutoriales.gd
 msgid "En la primera horda"
@@ -5008,8 +5008,8 @@ msgid "Al abrir Colecciones"
 msgstr "Ao abrir Coleções"
 
 #: scripts/tutoriales.gd
-msgid "Aquí se apuntan los zombis y los jefes que te encuentras, con lo que hacen y dónde salen."
-msgstr "Aqui ficam anotados os zumbis e os chefes que você encontra, com o que fazem e onde aparecem."
+msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen."
+msgstr "Aqui ficam anotados os adormecidos e os chefes que você encontra, com o que fazem e onde aparecem."
 
 #: scripts/tutoriales.gd
 msgid "Los que aún no has visto salen con «???»."
@@ -5080,8 +5080,8 @@ msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda d
 msgstr "A câmara fria congela, a cozinha queima e a água da loja de eletrônicos dá choque (o quadro elétrico dela corta a energia)."
 
 #: scripts/tutoriales.gd
-msgid "También hacen daño a los zombis despiertos: ¡llévalos hasta ellos!"
-msgstr "Também machucam os zumbis acordados: leve eles até lá!"
+msgid "También hacen daño a los durmientes despiertos: ¡llévalos hasta ellos!"
+msgstr "Também machucam os adormecidos acordados: leve eles até lá!"
 
 #: scripts/tutoriales.gd
 msgid "Esquivando los cruzas sin daño."
@@ -5096,8 +5096,8 @@ msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». 
 msgstr "A vendedora não vem atrás de você: ela se afasta e grita \"AAAHHH!!!\". O grito dela acorda a loja inteira."
 
 #: scripts/tutoriales.gd
-msgid "Los zombis que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
-msgstr "Os zumbis que a ouvem ficam cobertos por uma bolha dourada: as balas ricocheteiam, e nem golpes, nem fogo, nem poças machucam eles."
+msgid "Los durmientes que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
+msgstr "Os adormecidos que a ouvem ficam cobertos por uma bolha dourada: as balas ricocheteiam, e nem golpes, nem fogo, nem poças machucam eles."
 
 #: scripts/tutoriales.gd
 msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
@@ -5112,8 +5112,8 @@ msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está 
 msgstr "A sala do chefe abre com um código de três dígitos. Cada dígito está num computador ligado de algum departamento: a tela brilha em verde."
 
 #: scripts/tutoriales.gd
-msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los zombis."
-msgstr "Pare na frente dele para ler, mas dispara o “controle de produtividade” e todos os zumbis acordam."
+msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los durmientes."
+msgstr "Pare na frente dele para ler, mas dispara o “controle de produtividade” e todos os adormecidos acordam."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de la torre"
@@ -5124,16 +5124,16 @@ msgid "En el primer departamento con peligro"
 msgstr "No primeiro departamento com perigo"
 
 #: scripts/tutoriales.gd
-msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los zombis que llegan al borde salen volando."
-msgstr "A janela quebrada do Marketing te puxa para fora: atravesse colado nas mesas. Os zumbis que chegam à beira saem voando."
+msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los durmientes que llegan al borde salen volando."
+msgstr "A janela quebrada do Marketing te puxa para fora: atravesse colado nas mesas. Os adormecidos que chegam à beira saem voando."
 
 #: scripts/tutoriales.gd
 msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
 msgstr "Se uma câmera da Segurança te vir, o alarme dispara e chegam guarda-costas: quebre-a com um tiro antes."
 
 #: scripts/tutoriales.gd
-msgid "El gas de Recursos Humanos duerme a los zombis, pero despiertan frenéticos. La válvula del archivo lo corta."
-msgstr "O gás do RH faz os zumbis dormirem, mas eles acordam frenéticos. A válvula do arquivo corta o gás."
+msgid "El gas de Recursos Humanos duerme a los durmientes, pero despiertan frenéticos. La válvula del archivo lo corta."
+msgstr "O gás do RH faz os adormecidos dormirem, mas eles acordam frenéticos. A válvula do arquivo corta o gás."
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
@@ -5973,20 +5973,20 @@ msgid "y la de repuesto pasa a la mano"
 msgstr "e a de reserva vai para a mão"
 
 #: scripts/ui/inventario.gd
-msgid "Barre un abanico muy ancho y echa lejos a los zombis."
-msgstr "Varre um leque bem largo e joga os zumbis longe."
+msgid "Barre un abanico muy ancho y echa lejos a los durmientes."
+msgstr "Varre um leque bem largo e joga os adormecidos longe."
 
 #: scripts/ui/inventario.gd
-msgid "Un golpe fuerte que empuja a los zombis."
-msgstr "Um golpe forte que empurra os zumbis."
+msgid "Un golpe fuerte que empuja a los durmientes."
+msgstr "Um golpe forte que empurra os adormecidos."
 
 #: scripts/ui/inventario.gd
 msgid "Muy rápido, pero hay que arrimarse."
 msgstr "Muito rápida, mas tem que chegar perto."
 
 #: scripts/ui/inventario.gd
-msgid "Lenta, pero un zombi normal cae de un solo golpe. Llega lejos, recto hacia delante."
-msgstr "Lenta, mas um zumbi normal cai com um só golpe. Alcança longe, em linha reta à frente."
+msgid "Lenta, pero un durmiente normal cae de un solo golpe. Llega lejos, recto hacia delante."
+msgstr "Lenta, mas um adormecido normal cai com um só golpe. Alcança longe, em linha reta à frente."
 
 #: scripts/ui/inventario.gd
 msgid "Desenvaina de golpe y corta de abajo arriba. Rápida, con un abanico medio."
@@ -6021,24 +6021,24 @@ msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ác
 msgstr "Jato de ácido contínuo que corrói todos. Abastece com galões de ácido."
 
 #: scripts/ui/inventario.gd
-msgid "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías."
-msgstr "Raio contínuo que atordoa e pula para o zumbi do lado. Abastece com baterias."
+msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."
+msgstr "Raio contínuo que atordoa e pula para o adormecido do lado. Abastece com baterias."
 
 #: scripts/ui/inventario.gd
-msgid "Se rompe y deja un charco de fuego que quema a los zombis."
-msgstr "Quebra e deixa uma poça de fogo que queima os zumbis."
+msgid "Se rompe y deja un charco de fuego que quema a los durmientes."
+msgstr "Quebra e deixa uma poça de fogo que queima os adormecidos."
 
 #: scripts/ui/inventario.gd
 msgid "Bota, rueda y explota a los 2 segundos."
 msgstr "Quica, rola e explode em 2 segundos."
 
 #: scripts/ui/inventario.gd
-msgid "Suena, atrae a los zombis 3 s y explota."
-msgstr "Faz barulho, atrai os zumbis por 3 s e explode."
+msgid "Suena, atrae a los durmientes 3 s y explota."
+msgstr "Faz barulho, atrai os adormecidos por 3 s e explode."
 
 #: scripts/ui/inventario.gd
-msgid "Explota y deja a los zombis congelados 3 s."
-msgstr "Explode e deixa os zumbis congelados por 3 s."
+msgid "Explota y deja a los durmientes congelados 3 s."
+msgstr "Explode e deixa os adormecidos congelados por 3 s."
 
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Especiales"
@@ -6433,16 +6433,16 @@ msgid "Lanzar apuntando solo"
 msgstr "Arremesso automático"
 
 #: scripts/ui/opciones.gd
-msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
-msgstr "O molotov, a granada e os outros arremessáveis vão sozinhos até o zumbi mais próximo que você vê. Se não vir nenhum, são arremessados como sempre."
+msgid "El molotov, la granada y las arrojadizas van solos al durmiente más cercano que veas. Si no ves ninguno, se lanzan como siempre."
+msgstr "O molotov, a granada e os outros arremessáveis vão sozinhos até o adormecido mais próximo que você vê. Se não vir nenhum, são arremessados como sempre."
 
 #: scripts/ui/opciones.gd
 msgid "Disparo asistido"
 msgstr "Tiro assistido"
 
 #: scripts/ui/opciones.gd
-msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
-msgstr "Johnny mira e ataca sozinho o zumbi mais próximo. Você só se preocupa em se mexer."
+msgid "Johnny apunta y ataca solo al durmiente más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny mira e ataca sozinho o adormecido mais próximo. Você só se preocupa em se mexer."
 
 #: scripts/ui/opciones.gd
 msgid "Hecho con Godot Engine"

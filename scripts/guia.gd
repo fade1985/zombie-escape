@@ -145,7 +145,7 @@ func al_montar() -> void:
 	if partida.planta.sitios[partida.aqui].tipo == "pasillo" and not "pasillo" in dicho:
 		dicho.append("pasillo")
 		Tutoriales.apuntar("apartamentos")
-		partida.decir(Idioma.t("Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"), 5.0)
+		partida.decir(Idioma.t("Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un durmiente"), 5.0)
 
 
 # El zombi de la llave lleva una llavecita encima, que sube y baja
@@ -253,7 +253,7 @@ func mirar_avisos() -> void:
 		for z in zombis_despiertos():
 			if z.has_meta("llave"):
 				dicho.append("llave")
-				partida.decir(Idioma.t("¡Ese zombi lleva la llave del %s!") % partida.nombre_jefa(), 3.5)
+				partida.decir(Idioma.t("¡Ese durmiente lleva la llave del %s!") % partida.nombre_jefa(), 3.5)
 
 
 func zombis_despiertos() -> Array:

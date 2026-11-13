@@ -71,7 +71,7 @@ const DATOS := {
 		"nombre": "Ferretero",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],   # [traducir]
 		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",   # [traducir]
-		"desc": "Va a por los zombis que ve y les da martillazos (8 de daño)",   # [traducir]
+		"desc": "Va a por los durmientes que ve y les da martillazos (8 de daño)",   # [traducir]
 		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0}},   # (alcance: lo cerca que tiene que estar para pegar)
 	"farmaceutica": {"id": "farmaceutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
 		"tienda": "farmacia", "sala": "rebotica",
@@ -93,9 +93,9 @@ const DATOS := {
 		"nombre": "Técnico",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],   # [traducir]
 		"rescate": "averia", "al_abrir": "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado",   # [traducir]
-		"desc": "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano",   # [traducir]
+		"desc": "Cada 3 s, una descarga deja quieto 1,5 s al durmiente más cercano",   # [traducir]
 		"habilidad": {"tipo": "aturdir", "cada": 3.0, "segundos": 1.5, "alcance": 260.0},   # (hasta el 27 oct, 1 s cada 4)
-		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los zombis"},   # [traducir]
+		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los durmientes"},   # [traducir]
 	# los de Torre Velaria (parte 7 del plan; viven al final del pasillo de las viviendas: Viviendas.TORRE). El
 	# informático joven (id "programador": "informatico" es el minijefe del centro de datos), el que hacía las prácticas
 	# con el becario: en la sala de servidores de Informática, protegerle mientras copia los archivos (copia.gd). Con él
@@ -109,7 +109,7 @@ const DATOS := {
 		"nombre": "Informático joven",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en la sala de servidores!", "¡Aquí dentro!", "¡No me dejéis aquí!", "¡Que alguien me oiga!"],   # [traducir]
 		"rescate": "copia", "al_abrir": "¡Gracias! Pero no me voy sin los archivos de Velaria",   # [traducir]
-		"desc": "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven",   # [traducir]
+		"desc": "Cada 4 s, se cuela en el cerebro del durmiente más cercano y lo deja quieto 1 s; las cámaras no le ven",   # [traducir]
 		"habilidad": {"tipo": "aturdir", "cada": 4.0, "segundos": 1.0, "alcance": 220.0},
 		"mejora": "Precio de empleado: la tienda del ordenador, un 15 % más barata"},   # [traducir]
 	# la limpiadora de noche (otra como Johnny): encerrada en el cuarto de la limpieza de Recursos Humanos, lleno de gas;
@@ -137,7 +137,7 @@ const DATOS := {
 		"nombre": "Recepcionista",   # [traducir]
 		"gritos": ["¡Socorro!", "¡Estoy en recepción!", "¡Detrás del mostrador!", "¡No puedo subir la persiana!", "¡Que alguien me oiga!"],   # [traducir]
 		"rescate": "tornos", "al_abrir": "¡Por fin alguien vivo! Abro los tornos y nos vamos",   # [traducir]
-		"desc": "Te avisa con un «¡Detrás!» cuando un zombi va a pegarte por la espalda",   # [traducir]
+		"desc": "Te avisa con un «¡Detrás!» cuando un durmiente va a pegarte por la espalda",   # [traducir]
 		"habilidad": {"tipo": "avisar", "cada": 4.0, "antes": 0.5},
 		"mejora": "Al llegar a cada planta, te dice dónde está lo que abre la sala del jefe"},   # [traducir]
 }
@@ -558,7 +558,7 @@ func pista() -> String:
 				return Idioma.t("La recepcionista: la llave está en el suelo de %s") % Planta.nombre_de_sitio(planta.sitios[planta.llave.sitio])
 			for sitio in planta.sitios:
 				if sitio.get("zombis", []).any(func(z): return z.get("llave", false)):
-					return Idioma.t("La recepcionista: la llave la lleva un zombi de %s") % Planta.nombre_de_sitio(sitio)
+					return Idioma.t("La recepcionista: la llave la lleva un durmiente de %s") % Planta.nombre_de_sitio(sitio)
 		"tarjeta":
 			if planta.get("guardia", {}).get("vivo", false):
 				return Idioma.t("La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo")

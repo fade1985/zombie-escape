@@ -5,6 +5,7 @@ armas, objetos, talentos, logros...). Si cambia un nombre, se cambia aquí y en 
 
 ## Reglas
 
+- **«zombi» → *sleeper(s)*** (decidido el 13 nov: en el juego ya no hay «zombis», hay «durmientes»). Mayúscula solo al principio de frase o título (*Fast Sleepers*); *the key sleeper* = el zombi de la llave.
 - **Inglés americano** (*apartment*, *elevator*, *janitor*, *flashlight*, *gray*...).
 - El tono del español se mantiene: seco, algo irónico, frases cortas. Los gritos de los jefes se **adaptan**, no se
   traducen palabra por palabra (¡QUE ACABO DE FREGAR! → *I JUST MOPPED!*).
@@ -108,7 +109,7 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | Español | Inglés |
 |---|---|
 | Supervivientes (sin artículo, con mayúscula): Policía · Militar · Médica · Farmacéutica · Ferretero · Técnico | Cop · Soldier · Doctor · Pharmacist · Hardware Guy · Technician |
-| Zombis: el vecino · la vecina · el reptante · el niño · el dinamitero · el de los tentáculos · el gordo · la dependienta · el vigilante · el guardia · el maniquí | the Neighbor · the Neighbor Lady · the Crawler · the Kid · the Bomber · the Tentacle Guy · the Fat Man · the Sales Clerk · the Security Guard · the Keycard Guard · the Mannequin |
+| Durmientes: el vecino · la vecina · el reptante · el niño · el dinamitero · el de los tentáculos · el gordo · la dependienta · el vigilante · el guardia · el maniquí | the Neighbor · the Neighbor Lady · the Crawler · the Kid · the Bomber · the Tentacle Guy · the Fat Man · the Sales Clerk · the Security Guard · the Keycard Guard · the Mannequin |
 | Jefes: la criatura · el gerente mutado | the Creature · the Mutated Manager |
 | Gritos de la portera: ¡QUE ACABO DE FREGAR! · ¡VECINOS! · ¡LEJÍA! · ¡ÁCIDO! · ¡A BARRER! | I JUST MOPPED! · TENANTS! · BLEACH! · ACID! · CLEAN SWEEP! |
 | Gerente: ¡A TRABAJAR! · ¡AQUÍ NO PARA NADIE! | BACK TO WORK! · NOBODY CLOCKS OUT! |
@@ -117,11 +118,11 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | Antidisturbios: ¡ATRÁS! · ¡QUEDAS DETENIDO! | GET BACK! · YOU'RE UNDER ARREST! |
 | Glotón: ¡HAMBRE! · ¡ÑAM! | HUNGRY! · CHOMP! |
 | Dr. Salas: ¡MÁS SUJETOS! · ¡NO ME TOCARÁS! | MORE TEST SUBJECTS! · HANDS OFF, JANITOR! |
-| Zombis: ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! (en el bestiario sigue «¡OFERTAS!»: *SALE!*) |
+| Durmientes: ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! (en el bestiario sigue «¡OFERTAS!»: *SALE!*) |
 | durmiente · noctámbulo | sleeper · nightwalker |
 | Sujeto 0 · «Asunto:» | Subject 0 · «Subject:» |
 | Torre Velaria · Turno infinito · Dirección · SOLO DIRECCIÓN · Velaria Noche | Velaria Tower · Endless Shift · Head Office · DIRECTOR ONLY · Velaria Night |
-| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! (bala en el chaleco) | the Office Worker · the Velaria Bodyguard · TOK! |
+| Durmientes de la torre: el oficinista · el escolta de Velaria · ¡TOC! (bala en el chaleco) | the Office Worker · the Velaria Bodyguard · TOK! |
 | Canal 8 | Channel 8 |
 | almacén · cámara (frigorífica) · rebotica · probadores · taquillas | storeroom · freezer · back room · fitting rooms · lockers |
 | Tutoriales: lanzables · truco · materiales de fabricación · peligros de las tiendas · vida en tercios | throwables · perk · crafting materials · store hazards · health in thirds |

@@ -29,21 +29,21 @@ const TRAS_PRESENTACION := 1.0   # lo que tardan en actuar cuando acaba la prese
 # [traducir]
 const LISTA := [
 	{"id": "tentacular", "nombre": "Tentacular", "icono": "dash",
-		"desc": "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"},
+		"desc": "Cada 4 s te sale un tentáculo del pecho que aparta a los durmientes de alrededor y los aturde 1 s"},
 	{"id": "gastro", "nombre": "Gastroenteritis", "icono": "molotov",
-		"desc": "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"},
+		"desc": "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"},
 	{"id": "insensible", "nombre": "Insensible", "icono": "casco",
 		"desc": "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"},
 	{"id": "canibal", "nombre": "Caníbal", "icono": "corazon",
-		"desc": "Cada zombi que matas te cura un 2 % de la vida"},
+		"desc": "Cada durmiente que matas te cura un 2 % de la vida"},
 	{"id": "ansiedad", "nombre": "Ansiedad", "icono": "cafe",
-		"desc": "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"},
+		"desc": "Golpeas más rápido cuerpo a cuerpo cuantos más durmientes tengas a la vista (+10 % cada uno, hasta +50 %)"},
 	{"id": "endurecimiento", "nombre": "Endurecimiento", "icono": "fuerza",
 		"desc": "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"},
 	{"id": "locura", "nombre": "Locura", "icono": "jefe",
-		"desc": "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"},
+		"desc": "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"},
 	{"id": "flatulento", "nombre": "Flatulento", "icono": "herramientas",
-		"desc": "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"},
+		"desc": "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"},
 ]
 # [/traducir]
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")

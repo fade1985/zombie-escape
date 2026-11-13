@@ -5,6 +5,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 
 ## Reglas de gramática que impone el juego
 
+- **«zombi» → *der Schläfer* (plural igual: *die Schläfer*)** (decidido el 13 nov). Dativo plural con -n (*den Schläfern*), genitivo singular con -s (*des Schläfers*). Nunca *Zombie*; el de la llave, *Schlüsselschläfer*.
 - **Supervivientes sin artículo** (`Polizist`, `Ärztin`, `Soldat`, `Handwerker`, `Apothekerin`, `Techniker`): las frases con un
   superviviente cualquiera se escriben con dos puntos o estilo titular para no tener que declinar («Neu im Team: %s!», «%s am
   Boden!»). Donde el superviviente es siempre el mismo, se pone el artículo en la frase: técnico (avería) `der %s`, handwerker
@@ -30,12 +31,12 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | el cocinero · la modista · la mascota | der Koch · die Schneiderin · das Maskottchen | |
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | Sicherheitsbüro · Großküche · Schneiderei · Spielwaren | |
 | los Apartamentos · el Centro comercial | das Mietshaus · das Einkaufszentrum | |
-| Zombis: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Nachbar, Nachbarin, Kriecher, Bengel, Sprengmeister, Tentakeltyp, Dicke | |
+| Durmientes: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Nachbar, Nachbarin, Kriecher, Bengel, Sprengmeister, Tentakeltyp, Dicke | |
 | dependienta · vigilante · guardia (de la tarjeta) · maniquí | Verkäuferin · Wachmann · Wächter (Kartenwächter) · Schaufensterpuppe | |
 | durmiente · noctámbulo · Sujeto 0 | Schläfer · Nachtschwärmer · Proband 0 | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Polizist · Soldat · Ärztin · Handwerker · Apothekerin · Techniker | |
 | Velaria Corp. · Torre Velaria · Velaria Noche · Turno infinito | Velaria Corp. · Velaria-Turm · Velaria Nacht · Endlosschicht | |
-| Zombis de la torre: oficinista · escolta de Velaria · ¡TOC! | Büroangestellter · Velaria-Leibwächter · TOCK! | |
+| Durmientes de la torre: oficinista · escolta de Velaria · ¡TOC! | Büroangestellter · Velaria-Leibwächter · TOCK! | |
 | Canal 8 · CANAL8.TV | Kanal 8 · KANAL8.TV | |
 | ConserjeOS · CONSERJE OS 95 · C:\MANTENIMIENTO | HausmeisterOS · HAUSMEISTER OS 95 · C:\WARTUNG | |
 | Dirección (de Velaria) · gerencia (del centro) | Geschäftsleitung · Leitung | |

@@ -5,6 +5,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 
 ## Reglas
 
+- **«zombi» → *dormeur(s)*** (decidido el 13 nov: en el juego ya no hay «zombis», hay «durmientes»). Nunca *zombie*.
 - **Tipografía francesa:** espacio normal antes de `!` `?` `:` `;` y dentro de las comillas (`« texte »`). Comillas rectas `"` y
   apóstrofo recto `'` donde el español lleva comillas rectas.
 - Títulos y nombres: solo la primera palabra en mayúscula (uso francés: *Défi du jour*, *Arbre de talents*), salvo nombres propios.
@@ -36,7 +37,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | Poste de sécurité · Cuisine centrale · Atelier de couture · Magasin de jouets | |
 | los Apartamentos · el Centro comercial | les Appartements · le Centre commercial | |
 | Velaria, Velaria Corp., Torre Velaria, Velaria Noche | Velaria, Velaria Corp., Tour Velaria, Velaria Nuit | |
-| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! | l'employé de bureau · le garde du corps de Velaria · TOC ! | |
+| Durmientes de la torre: el oficinista · el escolta de Velaria · ¡TOC! | l'employé de bureau · le garde du corps de Velaria · TOC ! | |
 | Canal 8 · CANAL8.TV | Canal 8 · CANAL8.TV | |
 | Turno infinito (programa) | Jour sans fin | guiño a *Un jour sans fin* (*Groundhog Day*) |
 | Dirección (de Velaria) · Gerencia (del centro) | Direction · Gérance | SOLO DIRECCIÓN = *RÉSERVÉ À LA DIRECTION* |
@@ -51,7 +52,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | Policía · Militar · Médica | Flic · Soldat · Médecin (*la médecin*) |
 | Farmacéutica · Ferretero · Técnico | Pharmacienne · Quincaillier · Technicien |
 
-## Zombis (bestiario)
+## Durmientes (bestiario)
 
 | Español | Francés |
 |---|---|

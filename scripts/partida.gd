@@ -117,7 +117,7 @@ const FRASES_DESPERTAR := [   # lo que dice al levantarse (una al azar), encima 
 	"¡UF! ¡VAYA PESADILLA!",
 	"¿ME HE VUELTO A DORMIR EN EL TRABAJO?",
 	"¡JURARÍA QUE ME ESTABAN MORDIENDO!",
-	"¡OTRA VEZ ESE SUEÑO DE ZOMBIS!",
+	"¡OTRA VEZ ESE SUEÑO DE DURMIENTES!",
 ]
 # [/traducir]
 const ARRIBA_EXTRA := 44   # lo que la cámara deja ver por encima del mapa (la cara del muro de arriba y su moldura)
@@ -1217,7 +1217,7 @@ func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
 		dato.erase("llave")
 		planta.llave = {"sitio": aqui, "pos": zombi.position}
 		mapa.call_deferred("poner_llave", zombi.position)
-		decir(Idioma.t("¡Ha caído el zombi de la llave! Ha soltado la llave del %s") % nombre_jefa(), 3.0))
+		decir(Idioma.t("¡Ha caído el durmiente de la llave! Ha soltado la llave del %s") % nombre_jefa(), 3.0))
 
 
 # El nombre del apartamento de la jefa ("2ºC"...), ya traducido ("2C")

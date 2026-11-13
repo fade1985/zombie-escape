@@ -5,17 +5,18 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 
 ## Reglas
 
+- **«zombi» → 沉睡者** (decidido el 13 nov; sin plural ni medida propia: «%d 个沉睡者»). Nunca 僵尸.
 - **Caracteres:** solo GB2312 nivel 1 (los ~3.700 más usados), comprobado carácter a carácter con un script. Por eso faltan
   algunas onomatopeyas típicas, que son de nivel 2 (哐 哔 嘟 嗷 噜 咚 咔 嗒 嘣): se usan otras (当！ 嘘——！ 啊呜！ 叮！ 蹦！).
   Otros evitados por lo mismo: 霰 (escopeta = 散弹枪), 飙, 攥, 烊, 娅, 黏.
 - **Puntuación de ancho completo** (，。！？：；（）、“”). Las comillas españolas «» pasan a “”. Los puntos suspensivos, «……».
   Los `%d`/`%s`, cifras, horas (23:10) y siglas (VD-7, MP5, DNA, S-1, LB, RT…) en ASCII; «???» de la taquilla, también.
 - **Porcentajes** pegados a la cifra («+25%», «%d%%»), como se escribe en chino.
-- **Decimales con punto** (3.99欧元, 0.8秒). Miles sin separador (10000盒, 1000个僵尸). Segundos: «4 s» → «4秒».
-- **Sin espacios** entre palabras chinas; un espacio entre `%d` y el chino solo cuando ayuda a leer («%d 个僵尸»).
+- **Decimales con punto** (3.99欧元, 0.8秒). Miles sin separador (10000盒, 1000个沉睡者). Segundos: «4 s» → «4秒».
+- **Sin espacios** entre palabras chinas; un espacio entre `%d` y el chino solo cuando ayuda a leer («%d 个沉睡者»).
 - **Trato al jugador:** 你 (informal). Imperativos directos: 按、点击、选择、拉下…
 - **Gritos de jefes:** cortos (≤ 8 caracteres), con «！». Sin mayúsculas en chino: la fuerza va en la frase.
-- **Plural:** el chino no tiene; un solo valor (sirve para 1 y para muchos: «%d 个僵尸»).
+- **Plural:** el chino no tiene; un solo valor (sirve para 1 y para muchos: «%d 个沉睡者»).
 - **Frases con nombres que llegan por `%s`:** los supervivientes llegan sin artículo (警察、电工…), y en chino no hacen falta
   artículos. Donde el orden del español no vale para el chino (los `%s` no se pueden reordenar), la frase se rehace con dos puntos o
   paréntesis: «Caíste en la %s de %s» = 你倒在了%s（%s） → «你倒在了1楼（公寓楼）»; «Junto al cuerpo de %s» = 发现于尸体旁：%s.
@@ -26,7 +27,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 |---|---|---|
 | Johnny | Johnny | letras latinas (la marca) |
 | Velaria · Velaria Corp. · Torre Velaria | Velaria · Velaria公司 · Velaria大厦 | latinas |
-| Zombis de la torre: el oficinista · el escolta de Velaria · ¡TOC! | 上班族 · Velaria保镖 · 咚！ | |
+| Durmientes de la torre: el oficinista · el escolta de Velaria · ¡TOC! | 上班族 · Velaria保镖 · 咚！ | |
 | VD-7 | VD-7 | |
 | Marta Ruiz · Elena Ruiz | Marta Ruiz · Elena Ruiz | **latinas**: `Historia.REPORTERA` es `# no-tr` y el juego escribe «Marta Ruiz» tal cual; para que la reportera y su hermana se reconozcan, las dos se quedan así |
 | el doctor Salas · Héctor Salas | 萨拉斯博士 · 埃克托·萨拉斯 | «Dr./Dra.» = …博士 (detrás del nombre) |
@@ -52,7 +53,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Supervivientes: Policía · Militar · Médica · Farmacéutica · Ferretero · Técnico | 警察 · 士兵 · 医生 · 药剂师 · 五金店老板 · 电工 | sin artículo, como en inglés |
 | superviviente(s) | 幸存者 | |
 
-## Zombis
+## Durmientes
 
 | Español | Chino |
 |---|---|
@@ -61,7 +62,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | la dependienta · el vigilante · el guardia (de la tarjeta) · el maniquí | 店员 · 巡逻保安 · 持卡保安 · 假人模特 |
 | durmiente · noctámbulo | 沉睡者 · 夜行者 |
 | sujeto(s) · Sujeto 0 | 受试者 · 0号受试者 (el Dr. Salas, en sus gritos: 实验品) |
-| horda | 尸潮 (y «一大波僵尸», guiño a Plants vs. Zombies) |
+| horda | 尸潮 (y «一大波沉睡者») |
 
 ## Lugares
 
@@ -160,7 +161,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Tentacular · Gastroenteritis · Insensible · Caníbal | 触手缠身 · 肠胃炎 · 麻木 · 食人魔 |
 | Ansiedad · Endurecimiento · Locura · Flatulento | 焦虑 · 皮糙肉厚 · 疯狂 · 屁王 |
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | 清洁工 · 楼管大爷 · 大胃王 · 健身哥 · 消防员 |
-| Reto: Solo cuerpo a cuerpo · Todo a oscuras · Sin curas · Zombis rápidos | 只许近战 · 一片漆黑 · 不许治疗 · 快速僵尸 |
+| Reto: Solo cuerpo a cuerpo · Todo a oscuras · Sin curas · Durmientes rápidos | 只许近战 · 一片漆黑 · 不许治疗 · 快速沉睡者 |
 | Reto: De cristal · Casa llena · Oído fino | 玻璃人 · 人满为患 · 顺风耳 |
 
 ## Gritos (adaptados)

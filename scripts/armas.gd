@@ -194,8 +194,8 @@ static func que_da(id: String, calidad: int) -> String:
 		"especial":
 			var deposito := roundi((c.deposito - 1.0) * 100)
 			if DATOS[id].has("saltos"):   # (el lanza rayos; cada frase, entera, con su singular y su plural)
-				extra = Idioma.n("depósito un %d %% más grande y la descarga salta a %d zombi más",
-					"depósito un %d %% más grande y la descarga salta a %d zombis más", c.saltos) % [deposito, c.saltos]
+				extra = Idioma.n("depósito un %d %% más grande y la descarga salta a %d durmiente más",
+					"depósito un %d %% más grande y la descarga salta a %d durmientes más", c.saltos) % [deposito, c.saltos]
 			else:
 				extra = Idioma.t("depósito un %d %% más grande") % deposito
 		"arrojable":
@@ -210,10 +210,10 @@ static func truco(id: String) -> String:
 		"cuerpo":
 			return Idioma.t("Truco: cada %d golpes que dan, uno es crítico (doble daño).") % TRUCO.gracia
 		"distancia":
-			return Idioma.t("Truco: sus balas atraviesan a un zombi y siguen.") if TRUCO.atraviesa == 1 else \
-				Idioma.t("Truco: sus balas atraviesan a %d zombis y siguen.") % TRUCO.atraviesa
+			return Idioma.t("Truco: sus balas atraviesan a un durmiente y siguen.") if TRUCO.atraviesa == 1 else \
+				Idioma.t("Truco: sus balas atraviesan a %d durmientes y siguen.") % TRUCO.atraviesa
 		"especial":
-			return Idioma.t("Truco: los zombis que mata revientan y pasan su efecto a los de al lado.")
+			return Idioma.t("Truco: los durmientes que mata revientan y pasan su efecto a los de al lado.")
 	if id == "molotov":
 		return Idioma.t("Truco: al romperse suelta %d más pequeños alrededor.") % TRUCO.racimo
 	return Idioma.t("Truco: al explotar suelta %d más pequeños alrededor.") % TRUCO.racimo

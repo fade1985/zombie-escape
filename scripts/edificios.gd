@@ -30,7 +30,7 @@ const LISTA := {
 	"apartamentos": {
 		"nombre": "Apartamentos",
 		"el_nombre": "los Apartamentos",
-		"desc": "Vecinos zombi, pisos a oscuras y una portera con muy mal genio",
+		"desc": "Vecinos durmientes, pisos a oscuras y una portera con muy mal genio",
 		"generador": "apartamento",
 		"sitios": "apartamentos",
 		"cerrojo": "llave",
@@ -40,7 +40,7 @@ const LISTA := {
 		"azotea": true,
 		"final": "cientifico_jefe",
 		"el_final": "el doctor Salas",
-		"objetivo": "limpia los apartamentos y caza al zombi que lleva la llave de la portera",
+		"objetivo": "limpia los apartamentos y caza al durmiente que lleva la llave de la portera",
 		"abre": "",
 		"pasillo": "pasillo",
 	},
