@@ -48,10 +48,10 @@ MUEBLES = {
     # ConserjeOS y en los apartados de Logros (ui/ordenador.gd, ui/archivador_logros.gd)
     "exclamacion": ("assets/sources/exclamacion-gpt.webp", "assets/sprites/exclamacion.png", 10, 28, False),
     "exclamacion_pequena": ("assets/sources/exclamacion-gpt.webp", "assets/ui/exclamacion-pequena.png", 7, 20, False),
-    # la interrogación grande de los sujetos que aún no se han visto (ui/ordenador.gd, programa Sujetos; 12 nov): con el
-    # dibujo de la «!» (GPT con ella de modelo); a su rejilla, unos 37 px de la imagen por píxel. Sale amarilla: después,
-    # py tools/colorear_iconos.py la pone casi negra
-    "interrogacion": ("assets/sources/interrogacion-gpt.webp", "assets/ui/interrogacion.png", 20, 40, False),
+    # la interrogación grande de los sujetos que aún no se han visto (ui/ordenador.gd, programa Sujetos, y ui/taquilla.gd;
+    # 12 nov): rehecha más fina (L35, 13 nov), GPT con una interrogación curva de modelo; trazo de 2 píxeles, a su rejilla
+    # justa, 32 px de la imagen por píxel. Sale amarilla: después, py tools/colorear_iconos.py la pone casi negra
+    "interrogacion": ("assets/sources/interrogacion-gpt.webp", "assets/ui/interrogacion.png", 14, 33, False),
     # el fondo del menú del banco de trabajo (ui/inventario.gd, pintar_banco; 12 nov): el banco de frente, con el tablero
     # perforado y el cajón, del tamaño del lienzo del menú (912 × 616, a 2 unidades por píxel). Sin fondo que quitar
     "banco_fondo": ("assets/sources/banco-fondo-gpt.webp", "assets/ui/banco-fondo.png", 456, 308, False),
