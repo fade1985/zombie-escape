@@ -1571,7 +1571,8 @@ func probar_marcas_sala() -> void:
 # el regalo de bienvenida. En el ordenador, ARMAS.EXE con su «!» (captura-regalo-escritorio.png); al abrir la tienda, su
 # tutorial (captura-regalo-tutorial.png); luego la tienda con «¡COMPRA UN ARMA!» y el «!» en la pistola
 # (captura-regalo-tienda.png) y la ficha de la pistola, «Regalo de bienvenida» (captura-regalo-ficha.png). Se coge gratis,
-# el regalo se gasta y la pistola ya cuesta lo de siempre (captura-regalo-comprada.png); sin «!», se sale al pasillo
+# sale la ventana «Cambiar de arma» (captura-regalo-cambiar-arma.png, M97), el regalo se gasta y la pistola ya cuesta lo
+# de siempre (captura-regalo-comprada.png); sin «!», se sale al pasillo
 func probar_regalo() -> void:
 	await get_tree().create_timer(1.2).timeout
 	print("Al empezar: huecos %s · regalo cogido %s · «!» del ordenador %s (esperado: fuego vacío, false, true)" % [
@@ -1607,6 +1608,14 @@ func probar_regalo() -> void:
 	Captura.foto("captura-regalo-ficha.png")
 	var antes: int = Guardado.cargar().dolares
 	tienda.comprar_esto("pistola")
+	await get_tree().create_timer(0.6).timeout
+	# nada más cogerla, la ventana de cómo se cambia de arma (M97); y «Cómo se juega» ya no lo cuenta
+	ventana = ventana_tutorial()
+	print("Al coger la pistola: tutorial «%s» (esperado: cambiar_arma) · «Cómo se juega» habla de cambiar de arma: %s (esperado: false)" % [
+		ventana.id if ventana else "ninguno", Tutoriales.LISTA.jugar.lineas.any(func(l): return "{cambiar_arma}" in l)])
+	Captura.foto("captura-regalo-cambiar-arma.png")
+	if ventana:
+		ventana.cerrar()
 	await get_tree().create_timer(0.6).timeout
 	var s := Guardado.cargar()
 	tienda = ordenador.ventana.find_child("tienda", true, false)

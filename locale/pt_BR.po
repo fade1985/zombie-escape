@@ -4528,8 +4528,8 @@ msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
 msgstr "Desvie com {esquivar}: uma arrancada curta em que nada te machuca."
 
 #: scripts/tutoriales.gd
-msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
-msgstr "Troque entre o esfregão e a pistola com {cambiar_arma}, e pause o jogo com {pausa}."
+msgid "Pausa el juego con {pausa}."
+msgstr "Pause o jogo com {pausa}."
 
 #: scripts/tutoriales.gd
 msgid "Moverse y esquivar"
@@ -4662,6 +4662,22 @@ msgstr "São guardados ao fim da partida: todos se você completar o prédio, e 
 #: scripts/tutoriales.gd
 msgid "Se gastan en el ordenador de la sala de mantenimiento."
 msgstr "Você gasta no computador da sala de manutenção."
+
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Cambiar de arma"
+msgstr "Trocar de arma"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera pistola"
+msgstr "Ao pegar a primeira pistola"
+
+#: scripts/tutoriales.gd
+msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
+msgstr "Agora você leva duas armas na mão: o esfregão, de corpo a corpo, e a pistola, à distância."
+
+#: scripts/tutoriales.gd
+msgid "Cambia de una a otra con {cambiar_arma}."
+msgstr "Troque de uma para a outra com {cambiar_arma}."
 
 #: scripts/tutoriales.gd
 msgid "Armas nuevas"
@@ -6561,10 +6577,6 @@ msgid "Esquivar"
 msgstr "Desviar"
 
 #: scripts/ui/opciones.gd
-msgid "Cambiar de arma"
-msgstr "Trocar de arma"
-
-#: scripts/ui/opciones.gd
 msgid "Recargar"
 msgstr "Recarregar"
 
@@ -7363,6 +7375,10 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
+
+#, sin-usar
+msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
+msgstr "Troque entre o esfregão e a pistola com {cambiar_arma}, e pause o jogo com {pausa}."
 
 #, sin-usar
 msgid "Otra vez"

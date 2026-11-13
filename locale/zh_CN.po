@@ -4518,8 +4518,8 @@ msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
 msgstr "用{esquivar}闪避：短距离冲刺，期间不会受到伤害。"
 
 #: scripts/tutoriales.gd
-msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
-msgstr "用{cambiar_arma}在拖把和手枪之间切换，用{pausa}暂停游戏。"
+msgid "Pausa el juego con {pausa}."
+msgstr "用{pausa}暂停游戏。"
 
 #: scripts/tutoriales.gd
 msgid "Moverse y esquivar"
@@ -4652,6 +4652,22 @@ msgstr "钱在一局结束时存下：通关大楼全部保留，倒下或放弃
 #: scripts/tutoriales.gd
 msgid "Se gastan en el ordenador de la sala de mantenimiento."
 msgstr "可以在维修间的电脑上花掉。"
+
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Cambiar de arma"
+msgstr "切换武器"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera pistola"
+msgstr "拿到第一把手枪时"
+
+#: scripts/tutoriales.gd
+msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
+msgstr "现在你手上拿着两件武器：近战的拖把和远程的手枪。"
+
+#: scripts/tutoriales.gd
+msgid "Cambia de una a otra con {cambiar_arma}."
+msgstr "用{cambiar_arma}切换。"
 
 #: scripts/tutoriales.gd
 msgid "Armas nuevas"
@@ -6539,10 +6555,6 @@ msgid "Esquivar"
 msgstr "闪避"
 
 #: scripts/ui/opciones.gd
-msgid "Cambiar de arma"
-msgstr "切换武器"
-
-#: scripts/ui/opciones.gd
 msgid "Recargar"
 msgstr "换弹"
 
@@ -7341,6 +7353,10 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
+msgstr "用{cambiar_arma}在拖把和手枪之间切换，用{pausa}暂停游戏。"
 
 #, sin-usar
 msgid "Otra vez"

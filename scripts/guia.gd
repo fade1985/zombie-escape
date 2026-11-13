@@ -13,6 +13,7 @@
 # Moverse y esquivar no van en pistas: al empezar sale su ventana, «Moverse y esquivar» (partida.tutorial_al_empezar,
 # que apunta también «Cómo se juega» como visto: lo demás lo enseñan las pistas). Lanzar y curarse tampoco: salen sus
 # ventanas, «Lanzables» en la primera pelea y «Vendas» al abrir el primer armarito (o coger las primeras vendas).
+# Cambiar de arma tiene también su ventana, «Cambiar de arma», pero sale antes, en la tienda, al coger la pistola de regalo (M97).
 # Las pistas, en orden (PISTAS): al ver un zombi despierto, atacar; luego sacar la pistola y recargar con medio
 # cargador. El jefe se cuenta con la línea de avisos (partida.decir) o con una pista con tiempo.
 # Lo que se enseña así se apunta como visto (Tutoriales.apuntar) nada más salir, se haga o no: si no, al morir en la

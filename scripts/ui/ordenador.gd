@@ -865,6 +865,10 @@ func comprar_arma(id: String) -> void:
 	else:
 		texto = Idioma.t("¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.") % [Armas.nombre(id), vieja]
 	info.set_deferred("text", texto)   # después de marcar el botón (que pone su explicación)
+	# con la pistola de regalo, la primera arma a distancia: cómo se cambia de una a otra (M97; antes lo contaba «Cómo se
+	# juega», al empezar, cuando aún no había pistola)
+	if regalo and partida.puede_tutorial("cambiar_arma"):
+		await partida.ver_tutorial("cambiar_arma")
 
 
 # Un arrojable más para esta partida (como cogerlo del suelo: lanzables.sumar), si cabe y le llega

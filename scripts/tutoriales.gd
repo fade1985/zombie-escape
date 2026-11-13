@@ -25,7 +25,7 @@ const LISTA := {
 		"lineas": ["Muévete con {moverse}.",
 			"{atacar_modo}",
 			"Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño.",
-			"Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."]},
+			"Pausa el juego con {pausa}."]},   # (cambiar de arma ya no va aquí: en «Cambiar de arma», al coger la pistola, M97)
 	# (sale en la primera partida, la de la guía, nada más empezar: partida.tutorial_al_empezar; en las demás, «Cómo se
 	# juega», que ya lo cuenta)
 	"moverse": {"grupo": "Lo básico", "titulo": "Moverse y esquivar", "icono": "dash",
@@ -62,6 +62,11 @@ const LISTA := {
 		"lineas": ["Los zombis a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos.",
 			"Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.",
 			"Se gastan en el ordenador de la sala de mantenimiento."]},
+	# (sale en la tienda de armas, nada más coger la pistola de regalo: ui/ordenador.gd, comprar_arma; M97)
+	"cambiar_arma": {"grupo": "Armas", "titulo": "Cambiar de arma", "icono": "pistola",
+		"cuando": "Al coger la primera pistola",
+		"lineas": ["Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia.",
+			"Cambia de una a otra con {cambiar_arma}."]},
 	"armas": {"grupo": "Armas", "titulo": "Armas nuevas", "icono": "escopeta", "cuando": "Al llevar otra arma",
 		"lineas": ["Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}.",
 			"Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario}).",

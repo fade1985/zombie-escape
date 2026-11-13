@@ -4528,8 +4528,8 @@ msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
 msgstr "Weiche mit {esquivar} aus: ein kurzer Sprint, bei dem dir nichts passiert."
 
 #: scripts/tutoriales.gd
-msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
-msgstr "Wechsle mit {cambiar_arma} zwischen Mopp und Pistole, und pausiere mit {pausa}."
+msgid "Pausa el juego con {pausa}."
+msgstr "Pausiere mit {pausa}."
 
 #: scripts/tutoriales.gd
 msgid "Moverse y esquivar"
@@ -4662,6 +4662,22 @@ msgstr "Am Rundenende werden sie gespeichert: alle bei Erfolg, die Hälfte, wenn
 #: scripts/tutoriales.gd
 msgid "Se gastan en el ordenador de la sala de mantenimiento."
 msgstr "Ausgeben kannst du sie am Computer im Wartungsraum."
+
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Cambiar de arma"
+msgstr "Waffe wechseln"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera pistola"
+msgstr "Bei der ersten Pistole"
+
+#: scripts/tutoriales.gd
+msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
+msgstr "Jetzt hast du zwei Waffen in der Hand: den Mopp für den Nahkampf und die Pistole für den Fernkampf."
+
+#: scripts/tutoriales.gd
+msgid "Cambia de una a otra con {cambiar_arma}."
+msgstr "Du wechselst mit {cambiar_arma}."
 
 #: scripts/tutoriales.gd
 msgid "Armas nuevas"
@@ -6561,10 +6577,6 @@ msgid "Esquivar"
 msgstr "Ausweichen"
 
 #: scripts/ui/opciones.gd
-msgid "Cambiar de arma"
-msgstr "Waffe wechseln"
-
-#: scripts/ui/opciones.gd
 msgid "Recargar"
 msgstr "Nachladen"
 
@@ -7363,6 +7375,10 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
+msgstr "Wechsle mit {cambiar_arma} zwischen Mopp und Pistole, und pausiere mit {pausa}."
 
 #, sin-usar
 msgid "Otra vez"

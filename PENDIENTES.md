@@ -19,7 +19,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M94** Pasillo de los Apartamentos: poner extintores. Para más adelante.
 - **M95** Pasillo de mantenimiento: poner ventanas, moquetas y cuadros. Para más adelante.
 - **M96** Baños: poner toallas y estanterías de baño. Para más adelante.
-- **M97** Explicación de la ruleta y del cambio de arma: quitarla de donde sale ahora y ponerla en el tutorial, cuando se compra la pistola. Para más adelante.
 - **M99** Pasillo de los Apartamentos: poner moqueta. Para más adelante.
 - **M100** Inventario: cambiarle la forma cogiendo cosas de la imagen de referencia `assets/sources/inventario/referencia-mochila.webp` (la mochila abierta, con el papel del objeto a la derecha). Qué se coge de ella, lo dirá el dueño. Para más adelante.
 - **M101** Inventario: Johnny más dinámico, que no se vea tan estático (en la referencia del M100 sale en pose, agarrando la fregona). Para más adelante.
