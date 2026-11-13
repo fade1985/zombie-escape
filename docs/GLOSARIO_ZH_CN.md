@@ -90,7 +90,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Lanzallamas · Lanza ácido · Lanza rayos | 火焰喷射器 · 酸液枪 · 闪电枪 |
 | Balas de pistola · Cartuchos · Gasolina · Bidón de ácido · Batería | 手枪子弹 · 散弹 · 汽油 · 酸液桶 · 电池 |
 | Molotov · Granada · Atraedora · Congeladora · arrojables | 燃烧瓶 · 手雷 · 诱饵弹 · 冰冻弹 · 投掷物 |
-| Cuerpo a cuerpo · A distancia · Especial | 近战 · 远程 · 特殊 |
+| Cuerpo a cuerpo · A distancia · Especial · Arrojable | 近战 · 远程 · 特殊 · 投掷物 |
 | Normal · Poco común · Rara · Épica | 普通 · 优秀 · 稀有 · 史诗 |
 | Truco (de la Épica) | 绝活 |
 | Vendas · Botiquín · Desfibrilador | 绷带 · 急救包 · 除颤器 |
@@ -109,7 +109,8 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Teclas: Espacio · Mayús · Intro · Borrar · Flecha izq. · Clic izq./dcho. · Clic rueda · Rueda | 空格 · Shift · 回车 · 退格 · 左方向键 · 鼠标左键/右键 · 鼠标中键 · 滚轮 |
 | Mando: Stick izq./dcho. · Cruceta arriba · Guía · Select/Start/LB/RT | 左摇杆/右摇杆 · 十字键上 · 指南 · igual |
 | Inventario · mochila · baúl · Banco de trabajo · Taquilla (de Johnny) | 物品栏 · 背包 · 储物箱 · 工作台 · 储物柜 |
-| En la mano · De repuesto · A la mano · Al repuesto | 手上 · 备用 · 放到手上 · 放入备用 |
+| Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | 已装备 · 收起 |
+| barras de la ficha: Daño · Cadencia · Alcance · Empuje | 伤害 · 攻速 · 距离 · 击退 |
 | Ponérmela · Tirar al suelo · Destruir · Usar · Sacar · Guardar | 装备 · 丢在地上 · 销毁 · 使用 · 取出 · 存入 |
 | Seguir (inventario) · Continuar (pausa) · Seguir (dosier) | 继续 |
 | Pausa · Abandonar partida · Jugar otra vez · Otra vez (cartel de derrota) · Menú principal | 暂停 · 放弃本局 · 再玩一局 · 再来一次 · 主菜单 |

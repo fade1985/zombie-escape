@@ -61,9 +61,10 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | dólares · materiales (de fabricación; antes «piezas», 11 nov) | Dollar · Material (Herstellungsmaterial; Plural Materialien) |
 | sala de mantenimiento · ordenador · taquilla · baúl · banco de trabajo · taller | Wartungsraum · Computer · Spind · Truhe · Werkbank · Werkstatt |
 | inventario · mochila · casilla / hueco · montón | Inventar · Rucksack · Platz · Stapel |
-| En la mano · De repuesto · A la mano · Al repuesto | In der Hand · Ersatz · In die Hand · Zum Ersatz |
+| Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Ausgerüstet · Verstaut |
+| barras de la ficha: Daño · Cadencia · Alcance · Empuje | Schaden · Kadenz · Distanz · Wucht |
 | Objetos · Munición · Arrojables / lanzables | Gegenstände · Munition · Wurfwaffen |
-| Cuerpo a cuerpo · A distancia · Especiales | Nahkampf · Fernkampf · Spezial |
+| Cuerpo a cuerpo · A distancia · Especial(es) · Arrojable | Nahkampf · Fernkampf · Spezial · Wurfwaffe |
 | calidades: Normal · Poco común · Rara · Épica · truco | Normal · Ungewöhnlich · Selten · Episch · Trick |
 | crítico · esquiva · escudo | kritischer Treffer (Krit) · Ausweichen · Schild |
 | vida · tercio | Leben · Drittel |

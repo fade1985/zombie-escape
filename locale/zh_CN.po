@@ -4722,8 +4722,8 @@ msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "用{lanzar}投掷：按住瞄准，松开扔出。"
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
-msgstr "用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸。手边能带3个，备用最多8个。"
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸。手边最多带3个。"
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -5387,12 +5387,12 @@ msgid "Vacía"
 msgstr "空"
 
 #: scripts/ui/inventario.gd
-msgid "En la mano"
-msgstr "手上"
+msgid "Equipada"
+msgstr "已装备"
 
 #: scripts/ui/inventario.gd
-msgid "De repuesto"
-msgstr "备用"
+msgid "Guardada"
+msgstr "收起"
 
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
@@ -5440,6 +5440,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "鼠标或手指：点击或拖动"
 
 #: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "特殊"
+
+#: scripts/ui/inventario.gd
 msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
 msgstr "手枪留在储物箱里了，你没有别的远程武器。从里面取出来才能再开枪。"
 
@@ -5472,7 +5476,7 @@ msgid "Daño"
 msgstr "伤害"
 
 #: scripts/ui/inventario.gd
-msgid "Ritmo"
+msgid "Cadencia"
 msgstr "攻速"
 
 #: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
@@ -5480,8 +5484,8 @@ msgid "Alcance"
 msgstr "距离"
 
 #: scripts/ui/inventario.gd
-msgid "Barrido"
-msgstr "横扫"
+msgid "Empuje"
+msgstr "击退"
 
 #: scripts/ui/inventario.gd
 msgid "Recarga"
@@ -5544,12 +5548,8 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "用于加满%s（每格可放 %d）。一次丢一个。"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s"
-msgstr "投掷物 · %s"
-
-#: scripts/ui/inventario.gd
-msgid "A mano"
-msgstr "手上"
+msgid "Arrojable"
+msgstr "投掷物"
 
 #: scripts/ui/inventario.gd
 msgid "Te quedan %d de %d · %d en total"
@@ -5612,10 +5612,6 @@ msgid "Munición  %d / %d"
 msgstr "弹药  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables %d/%d"
-msgstr "投掷物 %d/%d"
-
-#: scripts/ui/inventario.gd
 msgid "Curas %d/%d"
 msgstr "治疗 %d/%d"
 
@@ -5636,6 +5632,14 @@ msgid "Cerrar"
 msgstr "关闭"
 
 #: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "手上"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "备用"
+
+#: scripts/ui/inventario.gd
 msgid "Guardar en el baúl"
 msgstr "存进储物箱"
 
@@ -5654,6 +5658,10 @@ msgstr "%s · 备弹 %d"
 #: scripts/ui/inventario.gd
 msgid "Arrojable · %s · %s"
 msgstr "投掷物 · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "手上"
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio sacando algo."
@@ -5820,10 +5828,6 @@ msgid "Materiales"
 msgstr "材料"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "备用投掷物  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "En el baúl"
 msgstr "储物箱里"
 
@@ -5864,8 +5868,8 @@ msgid "Ya es Épica: no se puede mejorar más."
 msgstr "已是史诗：无法再升级。"
 
 #: scripts/ui/inventario.gd
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
-msgstr "你手上已经有另一组%s，合在一起放不下（最多 %d 个）：先把一组移到备用。"
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "你手上已经有另一组%s，合在一起放不下（最多 %d 个）。"
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio para el montón mejorado."
@@ -7353,19 +7357,3 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
-
-#, sin-usar
-msgid "F cambia"
-msgstr "F 切换"
-
-#, sin-usar
-msgid "Dinero"
-msgstr "现金"
-
-#, sin-usar
-msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
-msgstr "用{cambiar_arma}在拖把和手枪之间切换，用{pausa}暂停游戏。"
-
-#, sin-usar
-msgid "Otra vez"
-msgstr "再来一次"

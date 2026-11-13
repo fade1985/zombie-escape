@@ -4742,8 +4742,8 @@ msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить."
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
-msgstr "Что бросать, меняется так: {cambiar_lanzable}. Молотов поджигает, граната взрывается. В руке 3, и до 8 в запасе."
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "Что бросать, меняется так: {cambiar_lanzable}. Молотов поджигает, граната взрывается. В руке до 3."
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -5409,12 +5409,12 @@ msgid "Vacía"
 msgstr "Пусто"
 
 #: scripts/ui/inventario.gd
-msgid "En la mano"
-msgstr "В руках"
+msgid "Equipada"
+msgstr "Экипировано"
 
 #: scripts/ui/inventario.gd
-msgid "De repuesto"
-msgstr "Запас"
+msgid "Guardada"
+msgstr "Убрано"
 
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
@@ -5462,6 +5462,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Мышь или палец: нажми или перетащи"
 
 #: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "Особое"
+
+#: scripts/ui/inventario.gd
 msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
 msgstr "Пистолет остался в сундуке, а другого оружия дальнего боя у тебя нет. Достань его оттуда, чтобы снова стрелять."
 
@@ -5494,16 +5498,16 @@ msgid "Daño"
 msgstr "Урон"
 
 #: scripts/ui/inventario.gd
-msgid "Ritmo"
-msgstr "Темп"
+msgid "Cadencia"
+msgstr "Частота"
 
 #: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Alcance"
 msgstr "Дальность"
 
 #: scripts/ui/inventario.gd
-msgid "Barrido"
-msgstr "Размах"
+msgid "Empuje"
+msgstr "Толчок"
 
 #: scripts/ui/inventario.gd
 msgid "Recarga"
@@ -5566,12 +5570,8 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "Заправляет: %s (по %d в ячейке). Выбрасывается по одному."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s"
-msgstr "Метательное · %s"
-
-#: scripts/ui/inventario.gd
-msgid "A mano"
-msgstr "В руке"
+msgid "Arrojable"
+msgstr "Метательное"
 
 #: scripts/ui/inventario.gd
 msgid "Te quedan %d de %d · %d en total"
@@ -5634,10 +5634,6 @@ msgid "Munición  %d / %d"
 msgstr "Патроны  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables %d/%d"
-msgstr "Метательное %d/%d"
-
-#: scripts/ui/inventario.gd
 msgid "Curas %d/%d"
 msgstr "Лечение %d/%d"
 
@@ -5658,6 +5654,14 @@ msgid "Cerrar"
 msgstr "Закрыть"
 
 #: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "В руках"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "Запас"
+
+#: scripts/ui/inventario.gd
 msgid "Guardar en el baúl"
 msgstr "В сундук"
 
@@ -5676,6 +5680,10 @@ msgstr "%s · запас %d"
 #: scripts/ui/inventario.gd
 msgid "Arrojable · %s · %s"
 msgstr "Метательное · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "В руке"
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio sacando algo."
@@ -5842,10 +5850,6 @@ msgid "Materiales"
 msgstr "Материалы"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "Запасное метательное  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "En el baúl"
 msgstr "В сундуке"
 
@@ -5886,8 +5890,8 @@ msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Уже Эпическое: улучшать больше некуда."
 
 #: scripts/ui/inventario.gd
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
-msgstr "В руке уже другая стопка (%s), и вместе они не влезут (максимум %d): сначала переложи одну в запас."
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "В руке уже другая стопка (%s), и вместе они не влезут (максимум %d)."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio para el montón mejorado."
@@ -7397,19 +7401,3 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
-
-#, sin-usar
-msgid "F cambia"
-msgstr "F — смена"
-
-#, sin-usar
-msgid "Dinero"
-msgstr "Деньги"
-
-#, sin-usar
-msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
-msgstr "Сменить швабру на пистолет и обратно: {cambiar_arma}; пауза: {pausa}."
-
-#, sin-usar
-msgid "Otra vez"
-msgstr "Еще раз"

@@ -73,9 +73,8 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano. Toda la munición se puede guardar
   en el baúl (un hueco entero de una vez, o arrastrándolo) y sale de él hasta un hueco por pulsación (24 balas, 12
   cartuchos; la gasolina, el ácido y las baterías, de una en una) o lo que quepa.
-- **Lanzables:** en montones de 2 (más con la calidad y los talentos): 3 a mano y 4 de repuesto, con varios del mismo
-  tipo, hasta llenarlos (sin tope por tipo). Al acabarse el de la mano entran otros 3 de repuesto (de los suyos o, si
-  no quedan, el primero).
+- **Lanzables:** en montones de 2 (más con la calidad y los talentos): solo los 3 a mano, uno de cada clase (desde el
+  13 nov no hay de repuesto). Con su montón lleno, no se coge otro de esos; al acabarse uno, su hueco queda libre.
 - **Vida en tercios:** el tercio que pierdes ya no se cura y, por cada uno, Johnny anda un 15 % más lento (210, 179 y
   147; el zombi rápido va a 165). Solo el botiquín devuelve un tercio perdido.
 - **Curas:** las vendas (25 de vida, sin pasar del tercio en el que estás) y el botiquín (devuelve un tercio perdido y
@@ -89,9 +88,9 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
 - **Dólares:** se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.
   El talento Sanitario y la alerta 4 siguen cambiando lo que curan. En la sala de pruebas el 1 y el 2 sacan zombis.
 - **Inventario «todo a la vista»:** Johnny en medio con sus armas (dos de cada tipo: la de la mano y la de repuesto) y
-  sus 3 arrojables; la mochila y la munición (8 de cada) y, debajo, los arrojables de repuesto y las curas (4 de cada,
-  M67: las vendas y el botiquín ya no ocupan sitio en «Objetos»); a la derecha, la ficha de lo
-  elegido con sus botones (**Ponérmela**, **Usar**, **A la mano**, **Al repuesto**, **Tirar al suelo**, **Destruir**).
+  sus 3 arrojables; la mochila y la munición (8 de cada) y, debajo, las 2 casillas de las curas (M67: las vendas y el
+  botiquín no ocupan sitio en «Objetos»); a la derecha, la ficha de lo elegido (debajo del nombre, solo su familia:
+  Cuerpo a cuerpo, A distancia, Especial o Arrojable) con sus botones (**Ponérmela**, **Usar**, **Tirar al suelo**, **Destruir**).
   **Destruir** (botón rojo, también en el baúl) quita para siempre la casilla elegida entera: lo de la mochila y la
   munición, y en el baúl también sus objetos, armas y paquetes de arrojables (para hacer sitio); no las armas ni los
   arrojables que lleva Johnny. Pide confirmación: sale en el centro «¿Estás seguro?» con lo que se

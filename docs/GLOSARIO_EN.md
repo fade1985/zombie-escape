@@ -59,7 +59,9 @@ Salieron al pasar la interfaz; las fases siguientes tienen que igualarlos (nombr
 | Español | Inglés | Notas |
 |---|---|---|
 | Objetos · Munición · Arrojables | Items · Ammo · Throwables | los tres apartados de la mochila |
-| Cuerpo a cuerpo · A distancia · En la mano · De repuesto | Melee · Ranged · In hand · Spare | |
+| Cuerpo a cuerpo · A distancia · Especial · Arrojable (debajo del nombre, en la ficha) | Melee · Ranged · Special · Throwable | |
+| Equipada · Guardada (las armas del inventario) | Equipped · Stowed | (13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) |
+| barras de la ficha: Daño · Cadencia · Alcance · Empuje · Recarga | Damage · Rate · Range · Push · Reload | 13 nov: antes «Ritmo» y «Barrido» |
 | Seguir (cerrar el inventario) · Continuar (pausa) · Seguir (página del dosier) | Resume · Resume · Continue | «Seguir» lleva contexto `inventario` |
 | Ponérmela · Tirar al suelo · Destruir | Equip · Drop · Destroy | |
 | Baúl (del taller) · Banco de trabajo · Taquilla | Stash · Workbench · Locker (*Johnny's Locker*) | |

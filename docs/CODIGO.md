@@ -437,8 +437,8 @@ en una línea.
   los enseña usa esas funciones, no la tabla directa (`docs/IDIOMAS.md`).
 - `partida_guardada.gd` (la partida a medias: al empezar cada planta, una foto de lo que lleva la partida en `en_curso`
   del guardado; «Continuar partida» del menú vuelve al principio de esa planta, que sale igual porque la semilla de
-  la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida. Una foto de antes de la M67 con más de 4
-  arrojables de repuesto: los que sobran pasan al baúl al continuar, `sobrantes_al_baul`)
+  la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida. Una foto de antes del 13 nov con
+  arrojables de repuesto (ya no hay): pasan al baúl al continuar, `sobrantes_al_baul`)
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla. Tres huecos
   (M45): el progreso de cada uno en `guardado.json` (el 1, el de siempre), `guardado-2.json` y `guardado-3.json`; los
@@ -664,8 +664,8 @@ en una línea.
   (`chapa.gd`). Sin números «x/y»: ni en los títulos ni en las casillas de armas y arrojables; sin «F cambia». Los
   cuadraditos de las barras de la ficha, por colores (`color_barra`: rojos hasta 3, amarillos de 4 a 7, verdes de 8
   a 10). Los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Dentro:
-  (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
-  arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
+  (en medio, la mochila y la munición, 8 y 8, y abajo, centradas, las 2 casillas
+  de las curas, `cuadro`; desde el 13 nov no hay arrojables de repuesto, `Lanzables.REPUESTO` es 0; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl;
   en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el

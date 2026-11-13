@@ -22,7 +22,7 @@
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila (los objetos)
-const CURAS := 4             # y las de las curas, aparte (M67: junto a los arrojables de repuesto, en el inventario)
+const CURAS := 2             # y las de las curas, aparte (13 nov: antes 4, junto a los arrojables de repuesto, que ya no hay)
 const BAUL := 32             # casillas del baúl: una por cada objeto distinto, una por cada arma y una por cada clase de arrojables
 const MONTON := 99           # lo máximo de un mismo objeto (o de una clase de arrojables) en una casilla del baúl (sobre todo las balas, que se amontonan): lo que pasa va a otra casilla
 const SUELTA := 0.04         # probabilidad de que un zombi suelte un objeto (0,10 con 7 objetos; ahora son la gasolina y la batería)

@@ -147,7 +147,8 @@ static func poner(p: Node, foto: Dictionary) -> void:
 		sup.equipo.append(a)
 
 
-# Las fotos de antes del M67 llevan hasta 8 montones de repuesto y ahora caben Lanzables.REPUESTO (4): los que sobran
+# Las fotos de antes del 13 nov llevan montones de repuesto (hasta 8 antes del M67, luego 4) y ahora caben
+# Lanzables.REPUESTO (ninguno): los que sobran
 # van al baúl, para que no se pierdan, y la foto se queda sin ellos (si el juego se cierra otra vez, no se meten dos veces)
 static func sobrantes_al_baul(lz: Lanzables, foto: Dictionary) -> void:
 	if lz.repuesto.size() <= Lanzables.REPUESTO:

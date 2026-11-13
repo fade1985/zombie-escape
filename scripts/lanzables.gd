@@ -9,7 +9,7 @@
 #     (el mismo que buscaría el modo de atacar asistido); si no se ve ninguno, se apunta como siempre.
 #   - Van en montones (el M18 del dueño, 28 oct): cada hueco lleva un montón de un tipo y una calidad, de hasta MONTON
 #     (2; más con la calidad y los talentos: maximo). Lleva MANO montones a mano, uno de cada clave (F o RB cambian lo
-#     que se lanza entre ellos), y REPUESTO de repuesto, donde puede haber varios de la misma. No hay tope por tipo: se
+#     que se lanza entre ellos), y REPUESTO de repuesto (desde el 13 nov, ninguno). No hay tope por tipo: se
 #     coge mientras quede sitio. Al empezar, el molotov y la granada, a mano. Lo que consigue va al montón de su clave
 #     que no esté lleno (primero el de la mano); si están llenos, a un montón nuevo: a la mano si hay hueco y no lleva
 #     ya esa clave a mano, y si no, al repuesto (y si tampoco, no lo coge: meter, cabe). Cuando se acaba el de la
@@ -95,7 +95,9 @@ const ARTIFICIERO := ["molotov", "granada"]   # a los que el talento Artificiero
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 const BOMBA := preload("res://scripts/granada.gd")
 const MANO := 3            # los montones que lleva a mano (F cambia entre ellos)
-const REPUESTO := 4        # y los de repuesto (M67: antes 8; los otros 4 huecos del inventario son de las curas)
+const REPUESTO := 0        # y los de repuesto: ninguno desde el 13 nov (M67: antes 4; y antes aún, 8). El código de
+                           # repuesto sigue, pero no se usa: solo se llevan los 3 a mano (los que sobran de una partida
+                           # guardada van al baúl: partida_guardada.gd, sobrantes_al_baul)
 const MONTON := 2          # los que caben en un montón (M74: antes 3; M42: antes 5; y antes aún, un tope por tipo: 5 molotovs, 4 granadas y 3 de las otras)
 
 var johnny: Node2D

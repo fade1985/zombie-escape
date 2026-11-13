@@ -84,7 +84,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 |---|---|
 | Fregona · Bate · Cuchillo · Pistola · Escopeta · MP5 | Serpillière · Batte · Couteau · Pistolet · Fusil à pompe · MP5 (*le MP5*) |
 | Lanzallamas · Lanza ácido · Lanza rayos | Lance-flammes · Lance-acide · Lance-éclairs |
-| Cuerpo a cuerpo · A distancia · Especial(es) | Corps à corps · À distance · Spéciale(s) |
+| Cuerpo a cuerpo · A distancia · Especial(es) · Arrojable | Corps à corps · À distance · Spéciale(s) · Lançable |
 | Balas de pistola · Cartuchos · Gasolina · Bidón de ácido · Batería | Balles de pistolet · Cartouches · Jerrican · Bidon d'acide · Batterie |
 | ¡Sin balas! ... | Plus de balles ! · Plus de cartouches ! · Plus d'essence ! · Plus d'acide ! · Plus de batterie ! |
 | arrojables / lanzables | lançables (Lançable · Pièce lançable) |
@@ -103,7 +103,8 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | partida · Abandonar partida · Jugar otra vez · Otra vez (cartel de derrota) | partie · Abandonner · Rejouer · Réessayer |
 | Restablecer controles · controles | Commandes par défaut · commandes |
 | Mochila · Baúl · Banco de trabajo · Taquilla (de Johnny) · Tienda de armas | Sac à dos · Coffre · Établi · Casier (de Johnny) · Boutique d'armes |
-| En la mano / A mano · De repuesto · A la mano · Al repuesto | En main · De rechange · En main · En rechange |
+| Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Équipée · Rangée |
+| barras de la ficha: Daño · Cadencia · Alcance · Empuje | Dégâts · Cadence · Portée · Poussée |
 | hueco / casilla · montón | emplacement / case · pile |
 | Ponérmela · Tirar al suelo · Destruir · Usar · Sacar · Guardar | Équiper · Jeter · Détruire · Utiliser · Sortir · Ranger |
 | Seguir (inventario) · Continuar (pausa) · Seguir (dosier) | Reprendre · Reprendre · Continuer |

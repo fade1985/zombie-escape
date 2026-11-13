@@ -82,7 +82,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 |---|---|
 | Fregona · Bate · Cuchillo · Pistola · Escopeta · MP5 | Esfregão · Taco · Faca · Pistola · Escopeta · MP5 |
 | Lanzallamas · Lanza ácido · Lanza rayos | Lança-chamas · Lança-ácido · Lança-raios |
-| Cuerpo a cuerpo · A distancia | Corpo a corpo · À distância |
+| Cuerpo a cuerpo · A distancia · Especial · Arrojable | Corpo a corpo · À distância · Especial · Arremessável |
 | Calidades: Normal, Poco común, Rara, Épica | Normal, Incomum, Rara, Épica (concuerdan con *arma*) |
 | Truco (de la Épica) | Truque |
 | Balas de pistola · Cartuchos · Gasolina · Bidón de ácido · Batería | Balas de pistola · Cartuchos · Gasolina · Galão de ácido · Bateria |
@@ -113,7 +113,8 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Pausa · Continuar · Seguir (inventario y dosier) · Abandonar partida · Jugar otra vez · Otra vez (cartel de derrota) | Pausa · Continuar · Continuar · Abandonar partida · Jogar de novo · Tentar de novo |
 | partida · planta · edificio · apartamento | partida · andar · prédio · apartamento |
 | Inventario · mochila · baúl · banco de trabajo · taquilla | Inventário · mochila · baú · bancada · armário (*Armário do Johnny*) |
-| En la mano · De repuesto · A la mano · Al repuesto | Na mão · Reserva · Para a mão · Para a reserva |
+| Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Equipada · Guardada |
+| barras de la ficha: Daño · Cadencia · Alcance · Empuje | Dano · Cadência · Alcance · Empurrão |
 | Ponérmela · Tirar al suelo · Destruir · Sacar · Guardar | Equipar · Largar no chão · Destruir · Retirar · Guardar |
 | Mejorar · Ya es Épica | Melhorar · Já é Épica |
 | logro · conseguido · cobrar (premio) | conquista · desbloqueada / conseguida · resgatar (*RESGATAR $%d*) |

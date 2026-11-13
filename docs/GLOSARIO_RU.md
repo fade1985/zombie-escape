@@ -71,7 +71,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | ordenador · taquilla · baúl · banco de trabajo · taller | компьютер · шкафчик · сундук · верстак · мастерская |
 | inventario · mochila | инвентарь · рюкзак |
 | Objetos · Munición · Arrojables | Предметы · Патроны · Метательное |
-| Cuerpo a cuerpo · A distancia · Especiales | Ближний бой · Дальний бой · Особое |
+| Cuerpo a cuerpo · A distancia · Especial(es) · Arrojable | Ближний бой · Дальний бой · Особое · Метательное |
 | calidades: Normal · Poco común · Rara · Épica | Обычное · Необычное · Редкое · Эпическое (concuerdan con «оружие») |
 | truco (de la Épica) | Фишка |
 | crítico · vida | крит · здоровье |
@@ -152,7 +152,8 @@ Desatascador = Вантуз, Criogenia = Криогеника, Reacción en cade
 | Jugar otra vez · Otra vez (cartel de derrota) · Menú principal · Abandonar partida | Сыграть еще · Еще раз · Главное меню · Бросить забег |
 | Elige edificio · Pantalla completa · General · Controles · Ayudas | Выбери здание · Полный экран · Общие · Управление · Упрощения |
 | Ayudas: Vida entera · Pistola sin fin · Lanzar apuntando solo | Здоровье целиком · Бесконечный пистолет · Броски с автонаводкой |
-| inventario: En la mano · De repuesto · A la mano · Al repuesto · A mano | В руках · Запасное · В руку · В запас · В руке |
+| inventario: Equipada · Guardada (las armas; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Экипировано · Убрано |
+| barras de la ficha: Daño · Cadencia · Alcance · Empuje | Урон · Частота · Дальность · Толчок |
 | Ponérmela · Tirar al suelo · Usar · Destruir · Sacar · Guardar todo | Взять · Выбросить · Применить · Уничтожить · Достать · Убрать все |
 | casilla / hueco · montón | ячейка · стопка |
 | ConserjeOS · CONSERJE OS 95 · C:\MANTENIMIENTO | ДворникOS · ДВОРНИК OS 95 · C:\ДВОРНИЦКАЯ |

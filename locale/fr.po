@@ -4732,8 +4732,8 @@ msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "Lance avec {lanzar} : maintiens pour viser et relâche pour lancer."
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
-msgstr "Ce que tu lances se change avec {cambiar_lanzable} : le molotov met le feu et la grenade explose. Tu en as 3 en main et jusqu'à 8 de rechange."
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "Ce que tu lances se change avec {cambiar_lanzable} : le molotov met le feu et la grenade explose. Tu en as jusqu'à 3 en main."
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -5398,12 +5398,12 @@ msgid "Vacía"
 msgstr "Vide"
 
 #: scripts/ui/inventario.gd
-msgid "En la mano"
-msgstr "En main"
+msgid "Equipada"
+msgstr "Équipée"
 
 #: scripts/ui/inventario.gd
-msgid "De repuesto"
-msgstr "De rechange"
+msgid "Guardada"
+msgstr "Rangée"
 
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
@@ -5451,6 +5451,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Souris ou doigt : toucher ou glisser"
 
 #: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "Spéciale"
+
+#: scripts/ui/inventario.gd
 msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
 msgstr "Le pistolet est resté au coffre et tu n'as pas d'autre arme à distance. Reprends-le de là pour tirer à nouveau."
 
@@ -5483,7 +5487,7 @@ msgid "Daño"
 msgstr "Dégâts"
 
 #: scripts/ui/inventario.gd
-msgid "Ritmo"
+msgid "Cadencia"
 msgstr "Cadence"
 
 #: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
@@ -5491,8 +5495,8 @@ msgid "Alcance"
 msgstr "Portée"
 
 #: scripts/ui/inventario.gd
-msgid "Barrido"
-msgstr "Balayage"
+msgid "Empuje"
+msgstr "Poussée"
 
 #: scripts/ui/inventario.gd
 msgid "Recarga"
@@ -5555,12 +5559,8 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "Recharge %s (%d par emplacement). Se jette un par un."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s"
-msgstr "Lançable · %s"
-
-#: scripts/ui/inventario.gd
-msgid "A mano"
-msgstr "En main"
+msgid "Arrojable"
+msgstr "Lançable"
 
 #: scripts/ui/inventario.gd
 msgid "Te quedan %d de %d · %d en total"
@@ -5623,10 +5623,6 @@ msgid "Munición  %d / %d"
 msgstr "Munitions  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables %d/%d"
-msgstr "Lançables %d/%d"
-
-#: scripts/ui/inventario.gd
 msgid "Curas %d/%d"
 msgstr "Soins %d/%d"
 
@@ -5647,6 +5643,14 @@ msgid "Cerrar"
 msgstr "Fermer"
 
 #: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "En main"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "De rechange"
+
+#: scripts/ui/inventario.gd
 msgid "Guardar en el baúl"
 msgstr "Ranger au coffre"
 
@@ -5665,6 +5669,10 @@ msgstr "%s · réserve %d"
 #: scripts/ui/inventario.gd
 msgid "Arrojable · %s · %s"
 msgstr "Lançable · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "En main"
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio sacando algo."
@@ -5831,10 +5839,6 @@ msgid "Materiales"
 msgstr "Matériaux"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "Lançables de rechange  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "En el baúl"
 msgstr "Dans le coffre"
 
@@ -5875,8 +5879,8 @@ msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Déjà Épique : impossible d'aller plus loin."
 
 #: scripts/ui/inventario.gd
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
-msgstr "Tu as déjà en main une autre pile %s et ensemble elles ne rentrent pas (au maximum, %d) : passe-en une en rechange avant."
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "Tu as déjà en main une autre pile %s et ensemble elles ne rentrent pas (au maximum, %d)."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio para el montón mejorado."
@@ -7375,19 +7379,3 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
-
-#, sin-usar
-msgid "F cambia"
-msgstr "F : changer"
-
-#, sin-usar
-msgid "Dinero"
-msgstr "Argent"
-
-#, sin-usar
-msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
-msgstr "Passe de la serpillière au pistolet avec {cambiar_arma}, et mets le jeu en pause avec {pausa}."
-
-#, sin-usar
-msgid "Otra vez"
-msgstr "Réessayer"

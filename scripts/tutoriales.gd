@@ -77,7 +77,7 @@ const LISTA := {
 			"Sin munición, Johnny saca el arma de cuerpo a cuerpo."]},
 	"lanzables": {"grupo": "Armas", "titulo": "Lanzables", "icono": "molotov", "cuando": "En la primera pelea",
 		"lineas": ["Lanza con {lanzar}: mantén para apuntar y suelta para lanzar.",
-			"Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto.",
+			"Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano.",
 			"¡Ojo! La explosión también te hace daño a ti."]},
 	"piezas": {"grupo": "Armas", "titulo": "Materiales de fabricación", "icono": "obj-pieza_cuerpo",
 		"cuando": "Al coger el primer material",

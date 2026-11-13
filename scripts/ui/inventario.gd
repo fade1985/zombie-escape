@@ -3,8 +3,8 @@
 #   - Inventario (Tab, I o Select): Johnny grande en medio, de
 #     frente, con su skin y el arma que tiene en la mano; a los lados, sus armas (a la izquierda las de cuerpo a cuerpo
 #     y a la derecha las de distancia; arriba la de la mano y abajo la de repuesto: partida.llevar_arma), y debajo, los
-#     3 arrojables a mano (lanzables.gd) y, abajo del todo, el dinero y el hueco de la llave (no están en el HUD). En medio, la mochila (8), la munición (8, por tipos:
-#     Armas.MUNICION) y, abajo, dos grupos de 4 (M67): los arrojables de repuesto y las curas (Objetos.USABLES; son de
+#     3 arrojables a mano (lanzables.gd; desde el 13 nov no hay de repuesto) y, abajo del todo, el dinero y el hueco de la llave (no están en el HUD). En medio, la mochila (8), la munición (8, por tipos:
+#     Armas.MUNICION) y, abajo, las 2 casillas de las curas (Objetos.USABLES; son de
 #     la mochila, pero van aparte y no ocupan casilla de «Objetos»). A la derecha, la ficha de lo elegido (qué es, el cargador, las
 #     barras y qué hace) y sus botones: "Ponérmela" (las de repuesto), "Usar" (lo de curar:
 #     Objetos.USABLES), "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina,
@@ -207,7 +207,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 		var id: String = johnny.huecos[tipo]
 		var r := Rect2(x, 172, 64, 64)
 		sitio("p%d" % i, r, casilla_inv(r, "p%d" % i, Objetos.icono(id), "", borde(id), 0.0))   # (sin «12/12»: M100)
-		rotulo(lienzo, Idioma.t("En la mano"), x + 32, 238, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_CENTER)
+		rotulo(lienzo, Idioma.t("Equipada"), x + 32, 238, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_CENTER)
 		var otra: String = partida.repuesto(tipo)
 		r = Rect2(x, 262, 64, 64)
 		if otra != "":
@@ -215,7 +215,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 				"", borde(otra), 0.0))
 		else:
 			sitio("r%d" % i, r, casilla_inv(r))
-		rotulo(lienzo, Idioma.t("De repuesto"), x + 32, 328, Tema.GRIS, HORIZONTAL_ALIGNMENT_CENTER)
+		rotulo(lienzo, Idioma.t("Guardada"), x + 32, 328, Tema.GRIS, HORIZONTAL_ALIGNMENT_CENTER)
 	# debajo, los arrojables a mano (F cambia entre ellos): el que se lanza ahora, con un marco amarillo alrededor
 	cinta(Idioma.t("Arrojables"), 118, 356)   # (sin «F cambia» a la derecha desde el M100)
 	for i in Lanzables.MANO:
@@ -248,8 +248,8 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	dinero.draw.connect(func(): CHAPA.dibujar_marcador(dinero, fuente, Rect2(Vector2.ZERO, dinero.size), partida.cartera(), CHAPA.AMARILLO))
 	lienzo.add_child(dinero)
 	dinero.position = Vector2(262, 507) - ORIGEN
-	# en medio, los tres grupos de 8: los objetos de la mochila, la munición y, abajo, dos de 4: a la izquierda los
-	# arrojables de repuesto y a la derecha las curas (M67)
+	# en medio, los dos grupos de 8: los objetos de la mochila y la munición y, abajo, las 2 casillas de las curas, en
+	# medio (13 nov: antes, 4, y a su izquierda 4 de arrojables de repuesto)
 	raya(Rect2(380, 148, 2, 430))
 	var llenas := Objetos.casillas(partida.mochila)
 	var objetos := Objetos.ocupadas(partida.mochila)   # las curas van al final de "llenas"
@@ -267,19 +267,14 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			casilla_inv(rejilla(i, 302), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 10.0)
 		else:
 			casilla_inv(rejilla(i, 302))
-	# (los títulos, más cortos que los de arriba para que quepan los dos: el de las curas, pegado al borde derecho; con
-	# sus cintas, en algunos idiomas se tocarían, así que cada uno tiene su largo máximo)
-	cinta(Idioma.t("Arrojables"), 392, 410, HORIZONTAL_ALIGNMENT_LEFT, 114.0)
-	for i in Lanzables.REPUESTO:
-		sitio("e%d" % i, cuadro(i, 0), arrojable(cuadro(i, 0), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 10.0, false))
-	cinta(Idioma.t("Curas"), cuadro(3, 1).end.x, 410, HORIZONTAL_ALIGNMENT_RIGHT, 76.0)
+	cinta(Idioma.t("Curas"), (cuadro(0).position.x + cuadro(Objetos.CURAS - 1).end.x) / 2.0, 410, HORIZONTAL_ALIGNMENT_CENTER)
 	for i in Objetos.CURAS:
 		var j := objetos + i
 		if j < llenas.size():
 			var n: int = llenas[j][1]
-			casilla_inv(cuadro(i, 1), "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "", GRIS, 10.0)
+			casilla_inv(cuadro(i), "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "", GRIS, 10.0)
 		else:
-			casilla_inv(cuadro(i, 1))
+			casilla_inv(cuadro(i))
 	var seguir := boton(lienzo, "cerrar", Idioma.t("Seguir", "inventario"), cerrar)   # vuelve a la partida: «Resume»
 	seguir.position = Vector2(392, 544) - ORIGEN
 	seguir.size = Vector2(216, 36)
@@ -314,7 +309,7 @@ func hueco_llave() -> void:
 
 # Un título de grupo sobre una tira de cinta de papel (M100), con la letra oscura: la cinta se estira al largo del
 # texto (sus puntas rotas, quietas) y va a 2, como todo. Como rotulo: a la izquierda, x es donde empieza el texto; a
-# la derecha, donde acaba. Con "ancho_max", si en este idioma el texto no cabe, se achica la letra (hasta 11)
+# la derecha, donde acaba; centrado, su mitad. Con "ancho_max", si en este idioma el texto no cabe, se achica la letra (hasta 11)
 func cinta(s: String, x: float, y: float, alinear := HORIZONTAL_ALIGNMENT_LEFT, ancho_max := 0.0) -> Label:
 	var t := rotulo(lienzo, s, x, y, TINTA_BANCO, alinear)
 	var tam := t.get_theme_font_size("font_size")
@@ -326,7 +321,7 @@ func cinta(s: String, x: float, y: float, alinear := HORIZONTAL_ALIGNMENT_LEFT, 
 			ancho = Tema.FUENTE.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x
 		t.add_theme_font_size_override("font_size", tam)
 		t.position.y += floorf((antes - tam) / 2.0)
-	var izquierda := x - ancho if alinear == HORIZONTAL_ALIGNMENT_RIGHT else x
+	var izquierda := x - ancho if alinear == HORIZONTAL_ALIGNMENT_RIGHT else x - floorf(ancho / 2.0) if alinear == HORIZONTAL_ALIGNMENT_CENTER else x
 	var tira := NinePatchRect.new()
 	tira.texture = CINTA
 	tira.patch_margin_left = 4
@@ -378,11 +373,10 @@ func rejilla(i: int, y: float) -> Rect2:
 	return Rect2(392 + (i % 4) * PASO, y + floori(i / 4.0) * PASO, LADO, LADO)
 
 
-# Abajo, en el sitio del tercer grupo de 8, los dos de 4 (2 × 2): "bloque" 0 los arrojables de repuesto y 1 las curas,
-# con un poco más de hueco entre los dos
-func cuadro(i: int, bloque: int) -> Rect2:
-	var r := rejilla(bloque * 2 + i % 2 + floori(i / 2.0) * 4, 434)
-	r.position.x += bloque * 6
+# Abajo, en el sitio del tercer grupo de 8, las casillas de las curas (Objetos.CURAS), en una fila y centradas
+func cuadro(i: int) -> Rect2:
+	var r := rejilla(i, 434)
+	r.position.x += (rejilla(3, 0).end.x - rejilla(Objetos.CURAS - 1, 0).end.x) / 2.0
 	return r
 
 
@@ -700,6 +694,15 @@ func cabeza(caja: VBoxContainer, icono: String, nombre: String, que_es: String) 
 		linea.add_theme_font_size_override("font_size", tam)
 
 
+# Cómo se dice la familia de un arma, lo que sale en la ficha debajo de su nombre (13 nov: antes, también su calidad y
+# si es la de la mano o la de repuesto)
+static func familia_nombre(id: String) -> String:
+	match Armas.familia(id):
+		"cuerpo": return Idioma.t("Cuerpo a cuerpo")
+		"especial": return Idioma.t("Especial")
+	return Idioma.t("A distancia")
+
+
 # La ficha de un arma ("puesta": la de la mano; si no, la de repuesto): si es de fuego, lo que le queda en el cargador
 # (con sus balitas) y en la reserva; las barras, lo que hace y sus botones. La de la mano se puede tirar si lleva otra de
 # repuesto (que pasa a la mano)
@@ -710,8 +713,7 @@ func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 		return {"que": Idioma.t("La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."),
 			"botones": []}
 	var w: Dictionary = johnny.arma_de(id)
-	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s · %s" % [Armas.tipo_nombre(w.tipo),
-		Armas.calidad_nombre(johnny.calidad(id)), Idioma.t("En la mano") if puesta else Idioma.t("De repuesto")])
+	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), familia_nombre(id))
 	renglon(caja, Armas.texto_partidas(johnny.quedan_de(id), true), Tema.ROJO if johnny.quedan_de(id) <= 0 else Tema.AMARILLO)
 	if w.tipo == "fuego":
 		var tipo := Armas.municion(id)
@@ -741,10 +743,10 @@ func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 # alcance del bate (cuerpo a cuerpo) o de la pistola, y el barrido de la fregona
 func barras(w: Dictionary) -> Array:
 	var lista := [[Idioma.t("Daño"), w.dano * w.get("perdigones", 1) / 4.0],
-		[Idioma.t("Ritmo"), 10.0 if w.has("deposito") else w.ritmo / 0.8]]
+		[Idioma.t("Cadencia"), 10.0 if w.has("deposito") else w.ritmo / 0.8]]
 	if w.tipo == "cuerpo":
 		lista.append([Idioma.t("Alcance"), w.alcance / 7.0])
-		lista.append([Idioma.t("Barrido"), w.arco / 14.0])
+		lista.append([Idioma.t("Empuje"), w.arco / 14.0])
 	else:
 		lista.append([Idioma.t("Alcance"), w.alcance / 42.0])
 		lista.append([Idioma.t("Recarga"), 10.0 - w.recarga * (w.cargador if w.cartucho else 1) * 3.0])   # (la escopeta, uno a uno)
@@ -841,8 +843,7 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 	var lz: Lanzables = partida.lanzables
 	var k := lz.clave_en(sitio)
 	var a_mano := sitio.begins_with("l")
-	cabeza(caja, icono_lanzable(k), nombre_lanzable(k),
-		Idioma.t("Arrojable · %s") % (Idioma.t("A mano") if a_mano else Idioma.t("De repuesto")))
+	cabeza(caja, icono_lanzable(k), nombre_lanzable(k), Idioma.t("Arrojable"))
 	var todos := lz.total(Lanzables.tipo_de(k))   # (de ese tipo, en todos sus montones)
 	var quedan: String
 	if todos > lz.cuantos_en(sitio):
@@ -856,6 +857,8 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 		que += " " + (Idioma.t("Es lo que lanzas ahora.") if k == lz.tipo else Idioma.t("Con F lo eliges para lanzarlo."))
 		if lz.relevo(k) >= 0:
 			que += " " + Idioma.t("Cuando se acabe, entra otro montón de los de repuesto.")
+		if Lanzables.REPUESTO <= 0:   # (13 nov: ya no hay repuesto al que pasarlo)
+			return {"que": que, "botones": []}
 		return {"que": que, "botones": [["al_repuesto", Idioma.t("Al repuesto"), mover_lanzable,
 			lz.repuesto.size() >= Lanzables.REPUESTO]]}
 	var j := sitio.substr(1).to_int()
@@ -1199,11 +1202,8 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 			casilla_inv(en_fila(i, 276), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 8.0)
 		else:
 			casilla_inv(en_fila(i, 276))
-	# y en la última fila, los arrojables de repuesto y, a su derecha, las curas (M67)
-	rotulo(lienzo, Idioma.t("Arrojables %d/%d") % [lz.repuesto.size(), Lanzables.REPUESTO], 64, 326, Tema.AMARILLO)
-	for i in Lanzables.REPUESTO:
-		arrojable(en_fila(i, 348), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 8.0)
-	var curas := en_fila(Lanzables.REPUESTO, 348).position.x + 12
+	# y en la última fila, las curas (13 nov: antes, a la derecha de 4 arrojables de repuesto)
+	var curas := en_fila(0, 348).position.x
 	rotulo(lienzo, Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], curas, 326, Tema.AMARILLO)
 	for i in Objetos.CURAS:
 		var r := en_fila(i, 348)
@@ -1952,9 +1952,6 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 			casilla_inv(en_fila(i * 2 + 1, 202))
 	for i in Lanzables.MANO:
 		arrojable(en_fila(5 + i, 202), "l%d" % i, lz.mano[i] if i < lz.mano.size() else "", 8.0)
-	rotulo(lienzo, Idioma.t("Arrojables de repuesto  %d / %d") % [lz.repuesto.size(), Lanzables.REPUESTO], 64, 254, ACENTO_BANCO)
-	for i in Lanzables.REPUESTO:
-		arrojable(en_fila(i, 276), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 8.0)
 	raya(Rect2(452, 156, 2, 236), RAYA_BANCO)
 	# a la derecha, las armas y los paquetes del baúl (los objetos no se mejoran), con el color de su calidad. Si no
 	# caben en 4 filas, las casillas se hacen más pequeñas
@@ -2097,7 +2094,7 @@ func no_mejora(o: Dictionary, s: Dictionary) -> String:
 	if o.has("k") and o.sitio.begins_with("l"):
 		var lz: Lanzables = partida.lanzables
 		if arriba in lz.mano and lz.cuantas(arriba) + o.n > lz.maximo(arriba):
-			return Idioma.t("Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes.") % [
+			return Idioma.t("Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d).") % [
 				Armas.calidad_nombre(o.calidad + 1), lz.maximo(arriba)]
 	if o.has("tanda") and o.tanda < o.n and Objetos.caben_arrojables(s, o.id, o.calidad + 1,
 			Armas.quedan_de(s.baul_equipo[o.equipo]) + 1, s.baul_equipo[o.equipo].get("usada", false)) < o.tanda:

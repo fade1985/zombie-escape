@@ -4732,8 +4732,8 @@ msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "Throw with {lanzar}: hold to aim, release to throw."
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
-msgstr "Switch what you throw with {cambiar_lanzable}: the Molotov starts a fire and the grenade explodes. You carry 3 in hand and up to 8 spare."
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "Switch what you throw with {cambiar_lanzable}: the Molotov starts a fire and the grenade explodes. You carry up to 3 in hand."
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -5398,12 +5398,12 @@ msgid "Vacía"
 msgstr "Empty"
 
 #: scripts/ui/inventario.gd
-msgid "En la mano"
-msgstr "In hand"
+msgid "Equipada"
+msgstr "Equipped"
 
 #: scripts/ui/inventario.gd
-msgid "De repuesto"
-msgstr "Spare"
+msgid "Guardada"
+msgstr "Stowed"
 
 #: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Arrojables"
@@ -5451,6 +5451,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Mouse or finger: tap or drag"
 
 #: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "Special"
+
+#: scripts/ui/inventario.gd
 msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
 msgstr "The pistol stayed in the stash and you carry no other ranged weapon. Take it out of there to shoot again."
 
@@ -5483,16 +5487,16 @@ msgid "Daño"
 msgstr "Damage"
 
 #: scripts/ui/inventario.gd
-msgid "Ritmo"
-msgstr "Speed"
+msgid "Cadencia"
+msgstr "Rate"
 
 #: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/tienda_armas.gd
 msgid "Alcance"
 msgstr "Range"
 
 #: scripts/ui/inventario.gd
-msgid "Barrido"
-msgstr "Sweep"
+msgid "Empuje"
+msgstr "Push"
 
 #: scripts/ui/inventario.gd
 msgid "Recarga"
@@ -5555,12 +5559,8 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "Fills %s (%d fit in each slot). Dropped one at a time."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s"
-msgstr "Throwable · %s"
-
-#: scripts/ui/inventario.gd
-msgid "A mano"
-msgstr "In hand"
+msgid "Arrojable"
+msgstr "Throwable"
 
 #: scripts/ui/inventario.gd
 msgid "Te quedan %d de %d · %d en total"
@@ -5623,10 +5623,6 @@ msgid "Munición  %d / %d"
 msgstr "Ammo  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables %d/%d"
-msgstr "Throwables %d/%d"
-
-#: scripts/ui/inventario.gd
 msgid "Curas %d/%d"
 msgstr "Healing %d/%d"
 
@@ -5647,6 +5643,14 @@ msgid "Cerrar"
 msgstr "Close"
 
 #: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "In hand"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "Spare"
+
+#: scripts/ui/inventario.gd
 msgid "Guardar en el baúl"
 msgstr "Put in stash"
 
@@ -5665,6 +5669,10 @@ msgstr "%s · reserve %d"
 #: scripts/ui/inventario.gd
 msgid "Arrojable · %s · %s"
 msgstr "Throwable · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "In hand"
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio sacando algo."
@@ -5831,10 +5839,6 @@ msgid "Materiales"
 msgstr "Materials"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "Spare throwables  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "En el baúl"
 msgstr "In the stash"
 
@@ -5875,8 +5879,8 @@ msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Already Epic: it can't be upgraded further."
 
 #: scripts/ui/inventario.gd
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
-msgstr "You already carry another %s stack in hand and together they won't fit (max %d): move one to spare first."
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "You already carry another %s stack in hand and together they won't fit (max %d)."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: haz sitio para el montón mejorado."
@@ -7375,19 +7379,3 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
-
-#, sin-usar
-msgid "F cambia"
-msgstr "F to switch"
-
-#, sin-usar
-msgid "Dinero"
-msgstr "Money"
-
-#, sin-usar
-msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
-msgstr "Swap between the mop and the pistol with {cambiar_arma}, and pause the game with {pausa}."
-
-#, sin-usar
-msgid "Otra vez"
-msgstr "Try again"
