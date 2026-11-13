@@ -115,6 +115,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Inventario · mochila · baúl · banco de trabajo · taquilla | Inventário · mochila · baú · bancada · armário (*Armário do Johnny*) |
 | Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Equipada · Guardada |
 | barras de la ficha: Daño · Cadencia · Alcance · Empuje | Dano · Cadência · Alcance · Empurrão |
+| Durabilidad: %d (las partidas que le quedan, de 0 a 3) (13 nov: la ficha ya no dice «Le quedan N partidas») | Durabilidade: %d |
 | Ponérmela · Tirar al suelo · Destruir · Sacar · Guardar | Equipar · Largar no chão · Destruir · Retirar · Guardar |
 | Mejorar · Ya es Épica | Melhorar · Já é Épica |
 | logro · conseguido · cobrar (premio) | conquista · desbloqueada / conseguida · resgatar (*RESGATAR $%d*) |

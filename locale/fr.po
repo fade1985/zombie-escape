@@ -96,20 +96,8 @@ msgid "¡CLONC!"
 msgstr "CLONG !"
 
 #: scripts/armas.gd
-msgid "Última partida: al acabarla, se destruye"
-msgstr "Dernière partie : elle se détruit à la fin"
-
-#: scripts/armas.gd
-msgid "Le queda %d partida más después de esta"
-msgid_plural "Le quedan %d partidas más después de esta"
-msgstr[0] "Encore %d partie après celle-ci"
-msgstr[1] "Encore %d parties après celle-ci"
-
-#: scripts/armas.gd
-msgid "Le queda %d partida"
-msgid_plural "Le quedan %d partidas"
-msgstr[0] "Il reste %d partie"
-msgstr[1] "Il reste %d parties"
+msgid "Durabilidad: %d"
+msgstr "Durabilité : %d"
 
 #: scripts/armas.gd
 msgid "golpe un %d %% más largo y ancho"
@@ -4932,8 +4920,8 @@ msgid "Al abrir el baúl"
 msgstr "En ouvrant le coffre"
 
 #: scripts/tutoriales.gd
-msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres."
-msgstr "Les armes et les lançables durent la partie en cours plus autant que leur qualité : Normale, aucune ; Peu commune, une ; Rare, deux ; Épique, trois."
+msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres. Esas que les quedan son su durabilidad, de 0 a 3."
+msgstr "Les armes et les lançables durent la partie en cours plus autant que leur qualité : Normale, aucune ; Peu commune, une ; Rare, deux ; Épique, trois. Ces parties restantes sont leur durabilité, de 0 à 3."
 
 #: scripts/tutoriales.gd
 msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."

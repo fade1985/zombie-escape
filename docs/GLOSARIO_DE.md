@@ -63,6 +63,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | inventario · mochila · casilla / hueco · montón | Inventar · Rucksack · Platz · Stapel |
 | Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Ausgerüstet · Verstaut |
 | barras de la ficha: Daño · Cadencia · Alcance · Empuje | Schaden · Kadenz · Distanz · Wucht |
+| Durabilidad: %d (las partidas que le quedan, de 0 a 3) (13 nov: la ficha ya no dice «Le quedan N partidas») | Haltbarkeit: %d |
 | Objetos · Munición · Arrojables / lanzables | Gegenstände · Munition · Wurfwaffen |
 | Cuerpo a cuerpo · A distancia · Especial(es) · Arrojable | Nahkampf · Fernkampf · Spezial · Wurfwaffe |
 | calidades: Normal · Poco común · Rara · Épica · truco | Normal · Ungewöhnlich · Selten · Episch · Trick |

@@ -154,6 +154,7 @@ Desatascador = Вантуз, Criogenia = Криогеника, Reacción en cade
 | Ayudas: Vida entera · Pistola sin fin · Lanzar apuntando solo | Здоровье целиком · Бесконечный пистолет · Броски с автонаводкой |
 | inventario: Equipada · Guardada (las armas; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Экипировано · Убрано |
 | barras de la ficha: Daño · Cadencia · Alcance · Empuje | Урон · Частота · Дальность · Толчок |
+| Durabilidad: %d (las partidas que le quedan, de 0 a 3) (13 nov: la ficha ya no dice «Le quedan N partidas») | Прочность: %d |
 | Ponérmela · Tirar al suelo · Usar · Destruir · Sacar · Guardar todo | Взять · Выбросить · Применить · Уничтожить · Достать · Убрать все |
 | casilla / hueco · montón | ячейка · стопка |
 | ConserjeOS · CONSERJE OS 95 · C:\MANTENIMIENTO | ДворникOS · ДВОРНИК OS 95 · C:\ДВОРНИЦКАЯ |

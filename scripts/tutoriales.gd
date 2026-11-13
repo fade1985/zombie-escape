@@ -129,7 +129,7 @@ const LISTA := {
 			"Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida.",
 			"Elige la casilla y pulsa «Mejorar»."]},
 	"baul": {"grupo": "Sala de mantenimiento", "titulo": "El baúl", "icono": "mochila", "cuando": "Al abrir el baúl",
-		"lineas": ["Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres.",
+		"lineas": ["Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres. Esas que les quedan son su durabilidad, de 0 a 3.",
 			"Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar.",
 			"Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."]},
 	"tienda": {"grupo": "Sala de mantenimiento", "titulo": "La tienda de armas", "icono": "pistola",

@@ -105,6 +105,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | Mochila · Baúl · Banco de trabajo · Taquilla (de Johnny) · Tienda de armas | Sac à dos · Coffre · Établi · Casier (de Johnny) · Boutique d'armes |
 | Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | Équipée · Rangée |
 | barras de la ficha: Daño · Cadencia · Alcance · Empuje | Dégâts · Cadence · Portée · Poussée |
+| Durabilidad: %d (las partidas que le quedan, de 0 a 3) (13 nov: la ficha ya no dice «Le quedan N partidas») | Durabilité : %d |
 | hueco / casilla · montón | emplacement / case · pile |
 | Ponérmela · Tirar al suelo · Destruir · Usar · Sacar · Guardar | Équiper · Jeter · Détruire · Utiliser · Sortir · Ranger |
 | Seguir (inventario) · Continuar (pausa) · Seguir (dosier) | Reprendre · Reprendre · Continuer |

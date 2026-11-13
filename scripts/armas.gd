@@ -136,14 +136,17 @@ static func estrenar(e: Dictionary) -> int:
 	return quedan_de(e)
 
 
-# La línea de la ficha que dice cuántas partidas le quedan (inventario.gd). "en_uso": la lleva o ya ha salido del baúl en
-# esta partida (lo que queda es después de esta); si no, en el baúl, las que aún puede salir
+# La línea de la ficha con la durabilidad (inventario.gd): desde el 13 nov, solo un número de 0 a 3 (durabilidad)
 static func texto_partidas(quedan: int, en_uso: bool) -> String:
-	if en_uso and quedan <= 0:
-		return Idioma.t("Última partida: al acabarla, se destruye")
-	if en_uso:
-		return Idioma.n("Le queda %d partida más después de esta", "Le quedan %d partidas más después de esta", quedan) % quedan
-	return Idioma.n("Le queda %d partida", "Le quedan %d partidas", quedan) % quedan
+	return Idioma.t("Durabilidad: %d") % durabilidad(quedan, en_uso)
+
+
+# La durabilidad que se enseña: las partidas que le quedan después de la que se juega con ella. Recién estrenada, la de su
+# calidad (nuevas: Normal 0, Poco común 1, Rara 2, Épica 3), y baja una con cada partida. "en_uso": la lleva o ya ha
+# salido del baúl en esta partida ("quedan" ya es después de esta); si no, en el baúl, "quedan" son las veces que aún
+# puede salir, y la partida en que salga no cuenta
+static func durabilidad(quedan: int, en_uso: bool) -> int:
+	return maxi(0, quedan if en_uso else quedan - 1)
 
 
 # ¿Va al baúl? Las armas, todas (la pistola Normal deja a Johnny sin arma a distancia: SIN_FUEGO; la fregona Normal de la

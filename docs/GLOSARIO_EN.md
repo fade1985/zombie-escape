@@ -62,6 +62,7 @@ Salieron al pasar la interfaz; las fases siguientes tienen que igualarlos (nombr
 | Cuerpo a cuerpo · A distancia · Especial · Arrojable (debajo del nombre, en la ficha) | Melee · Ranged · Special · Throwable | |
 | Equipada · Guardada (las armas del inventario) | Equipped · Stowed | (13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) |
 | barras de la ficha: Daño · Cadencia · Alcance · Empuje · Recarga | Damage · Rate · Range · Push · Reload | 13 nov: antes «Ritmo» y «Barrido» |
+| Durabilidad: %d (las partidas que le quedan, de 0 a 3) | Durability: %d | (13 nov: la ficha ya no dice «Le quedan N partidas») |
 | Seguir (cerrar el inventario) · Continuar (pausa) · Seguir (página del dosier) | Resume · Resume · Continue | «Seguir» lleva contexto `inventario` |
 | Ponérmela · Tirar al suelo · Destruir | Equip · Drop · Destroy | |
 | Baúl (del taller) · Banco de trabajo · Taquilla | Stash · Workbench · Locker (*Johnny's Locker*) | |

@@ -507,7 +507,7 @@ func probar_durabilidad() -> void:
 		var t: Label = inventario.fondo.find_child("nota", true, false)
 		return t.text if t else "-"
 	var lineas := func() -> String:   # todas las líneas de la ficha del baúl, juntas
-		return " | ".join(inventario.fondo.find_children("*", "Label", true, false).map(func(l): return l.text) 			.filter(func(t): return "partida" in t))
+		return " | ".join(inventario.fondo.find_children("*", "Label", true, false).map(func(l): return l.text) 			.filter(func(t): return "Durabilidad" in t))
 	var casilla := func(id: String) -> String:   # la casilla del baúl de un arma o un arrojable ("b0")
 		return "b%d" % inventario.cosas_baul(Guardado.cargar()).map(func(o): return o.id).find(id)
 	var en_baul := func(id: String) -> Dictionary:
@@ -533,10 +533,10 @@ func probar_durabilidad() -> void:
 	inventario.tocar(casilla.call("escopeta"))
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-durabilidad-baul.png")
-	print("La escopeta en el baúl: «%s» (esperado: Le queda 1 partida)" % lineas.call())
+	print("La escopeta en el baúl: «%s» (esperado: Durabilidad: 0, ya estrenada antes: 1 vez más que puede salir, y esa no cuenta)" % lineas.call())
 	inventario.tocar(casilla.call("bate"))
 	await get_tree().process_frame
-	print("El bate de antes: «%s» (esperado: Le quedan 3 partidas: sin estrenar)" % lineas.call())
+	print("El bate de antes: «%s» (esperado: Durabilidad: 2, sin estrenar: la de su calidad, Rara)" % lineas.call())
 	inventario.tocar(casilla.call("escopeta"))
 	await get_tree().process_frame
 	inventario.sacar()
@@ -552,7 +552,7 @@ func probar_durabilidad() -> void:
 	print("Guardada otra vez: en el baúl %s (esperado: quedan 0, usada true)" % en_baul.call("escopeta"))
 	inventario.tocar(casilla.call("escopeta"))
 	await get_tree().process_frame
-	print("Su ficha: «%s» (esperado: Última partida: al acabarla, se destruye)" % lineas.call())
+	print("Su ficha: «%s» (esperado: Durabilidad: 0)" % lineas.call())
 	inventario.sacar()
 	await get_tree().process_frame
 	print("Sacada otra vez: le quedan %d (esperado: 0: no gasta otra)" % johnny.quedan_de("escopeta"))

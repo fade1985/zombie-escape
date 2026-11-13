@@ -96,18 +96,8 @@ msgid "¡CLONC!"
 msgstr "当！"
 
 #: scripts/armas.gd
-msgid "Última partida: al acabarla, se destruye"
-msgstr "最后一局：本局结束后会损坏"
-
-#: scripts/armas.gd
-msgid "Le queda %d partida más después de esta"
-msgid_plural "Le quedan %d partidas más después de esta"
-msgstr[0] "本局之后还能用 %d 局"
-
-#: scripts/armas.gd
-msgid "Le queda %d partida"
-msgid_plural "Le quedan %d partidas"
-msgstr[0] "还能用 %d 局"
+msgid "Durabilidad: %d"
+msgstr "耐久：%d"
 
 #: scripts/armas.gd
 msgid "golpe un %d %% más largo y ancho"
@@ -4922,8 +4912,8 @@ msgid "Al abrir el baúl"
 msgstr "打开储物箱时"
 
 #: scripts/tutoriales.gd
-msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres."
-msgstr "武器和投掷物能用本局，再加上与品质相同的局数：普通，0 局；优秀，1 局；稀有，2 局；史诗，3 局。"
+msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres. Esas que les quedan son su durabilidad, de 0 a 3."
+msgstr "武器和投掷物能用本局，再加上与品质相同的局数：普通，0 局；优秀，1 局；稀有，2 局；史诗，3 局。剩下的局数就是耐久，0 到 3。"
 
 #: scripts/tutoriales.gd
 msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."

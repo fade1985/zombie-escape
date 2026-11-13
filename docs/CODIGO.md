@@ -50,7 +50,7 @@ en una línea.
   0, Poco común 1, Rara 2, Épica 3); `johnny.quedan`, `lanzables.quedan` y "quedan" en el baúl. Sacarlo del baúl gasta
   una (`estrenar()`, marca "usada"); mejorarlo suma una. Al acabar la partida (ganes, caigas o abandones),
   `Objetos.cerrar_baul` devuelve al baúl lo que lleva con partidas y destruye lo que no tiene (también lo "usado" del
-  baúl); el cartel lo dice (`partida.filas_rotas`). La ficha lo enseña (`texto_partidas()`). Prueba: `--durabilidad`. La **Épica**
+  baúl); el cartel lo dice (`partida.filas_rotas`). La ficha lo enseña como «Durabilidad: N», de 0 a 3 (`texto_partidas()`, `durabilidad()`; 13 nov). Prueba: `--durabilidad`. La **Épica**
   (`EPICA`) trae además un truco de su familia (`TRUCO`, `truco()`): golpe de gracia (cada 4 golpes, uno crítico:
   `johnny.golpear`), balas que atraviesan (`bala.gd`, `atraviesa`, estela morada), estallido (el zombi que mata
   revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños

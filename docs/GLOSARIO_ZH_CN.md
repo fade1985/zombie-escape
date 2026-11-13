@@ -111,6 +111,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Inventario · mochila · baúl · Banco de trabajo · Taquilla (de Johnny) | 物品栏 · 背包 · 储物箱 · 工作台 · 储物柜 |
 | Equipada · Guardada (las armas del inventario; 13 nov: antes «En la mano · De repuesto»; ya no hay arrojables de repuesto) | 已装备 · 收起 |
 | barras de la ficha: Daño · Cadencia · Alcance · Empuje | 伤害 · 攻速 · 距离 · 击退 |
+| Durabilidad: %d (las partidas que le quedan, de 0 a 3) (13 nov: la ficha ya no dice «Le quedan N partidas») | 耐久：%d |
 | Ponérmela · Tirar al suelo · Destruir · Usar · Sacar · Guardar | 装备 · 丢在地上 · 销毁 · 使用 · 取出 · 存入 |
 | Seguir (inventario) · Continuar (pausa) · Seguir (dosier) | 继续 |
 | Pausa · Abandonar partida · Jugar otra vez · Otra vez (cartel de derrota) · Menú principal | 暂停 · 放弃本局 · 再玩一局 · 再来一次 · 主菜单 |
