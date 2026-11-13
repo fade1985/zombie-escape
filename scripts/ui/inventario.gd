@@ -261,13 +261,14 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 		else:
 			casilla_inv(rejilla(i, 170))
 	var balas: Array = johnny.huecos_municion()
-	cinta(Idioma.t("Munición"), 392, 278)
+	# (los tres grupos, repartidos a lo alto hasta «Seguir», con el mismo hueco entre ellos: 13 nov)
+	cinta(Idioma.t("Munición"), 392, 296)
 	for i in Armas.HUECOS_MUNICION:
 		if i < balas.size():
-			casilla_inv(rejilla(i, 302), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 10.0)
+			casilla_inv(rejilla(i, 320), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 10.0)
 		else:
-			casilla_inv(rejilla(i, 302))
-	cinta(Idioma.t("Curas"), (cuadro(0).position.x + cuadro(Objetos.CURAS - 1).end.x) / 2.0, 410, HORIZONTAL_ALIGNMENT_CENTER)
+			casilla_inv(rejilla(i, 320))
+	cinta(Idioma.t("Curas"), (cuadro(0).position.x + cuadro(Objetos.CURAS - 1).end.x) / 2.0, 446, HORIZONTAL_ALIGNMENT_CENTER)
 	for i in Objetos.CURAS:
 		var j := objetos + i
 		if j < llenas.size():
@@ -375,7 +376,7 @@ func rejilla(i: int, y: float) -> Rect2:
 
 # Abajo, en el sitio del tercer grupo de 8, las casillas de las curas (Objetos.CURAS), en una fila y centradas
 func cuadro(i: int) -> Rect2:
-	var r := rejilla(i, 434)
+	var r := rejilla(i, 470)
 	r.position.x += (rejilla(3, 0).end.x - rejilla(Objetos.CURAS - 1, 0).end.x) / 2.0
 	return r
 
