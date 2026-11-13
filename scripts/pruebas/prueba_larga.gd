@@ -612,6 +612,29 @@ func probar_ordenador_iconos() -> void:
 	ordenador.apagar()
 
 
+# Con "--captura --ordenador-b": con botones del mando de verdad (PruebaMando.pulsar), B en cada programa del ordenador lo
+# cierra (vuelve al escritorio) y B en el escritorio apaga el ordenador; también con el foco en un icono o sin foco
+func probar_ordenador_b() -> void:
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	await get_tree().create_timer(0.6).timeout
+	for programa in ["puntos", "armas", "logros", "dosier", "videos", "colecciones"]:
+		ordenador.abrir(programa)
+		await get_tree().create_timer(0.5).timeout
+		var cual := ""
+		for c: Control in ordenador.ventana.find_children("*", "Control", true, false):
+			if c.focus_mode == Control.FOCUS_ALL and c.is_visible_in_tree():
+				c.grab_focus()
+				cual = "%s (%s)" % [c.name, c.get_class()]
+				break
+		await PruebaMando.pulsar(get_tree(), JOY_BUTTON_B)
+		print("Ordenador · foco en %s" % cual)
+		print("Ordenador · B en «%s»: programa abierto «%s» (esperado: vacío) · ordenador encendido %s (esperado: true)" % [
+			programa, ordenador.abierta, ordenador.fondo != null])
+	await PruebaMando.pulsar(get_tree(), JOY_BUTTON_B)
+	print("Ordenador · B en el escritorio: encendido %s (esperado: false)" % (ordenador.fondo != null))
+
+
 func probar_ordenador_teclado() -> void:
 	var antes := Guardado.cargar()
 	await get_tree().create_timer(0.3).timeout
