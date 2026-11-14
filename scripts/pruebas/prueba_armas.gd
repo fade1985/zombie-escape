@@ -1515,6 +1515,71 @@ func probar_aura() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --disuelto": los zombis que mueren con ácido encima se deshacen (disuelto.gd). En la sala de pruebas,
+# a media luz, un zombi normal y uno de tentáculos (el que no tiene animación de caer) con el ácido del lanza ácido, y
+# uno que además arde (gana el fuego: se vuelve carbón). Fotos al caer (captura-disuelto-1.png), cubierto de ácido (2),
+# a medio deshacerse (3), sin cuerpo (4) y con el charco seco (5)
+func probar_disuelto() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	Luz.evento = 0.4
+	var z := []
+	for tipo in ["normal", "tentaculos", "normal"]:
+		z.append(meter_zombi(tipo, johnny.position + Vector2(-130 + z.size() * 130, -110)))
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.aturdido = 30.0
+		zombi.vida = 6
+		ArmasCreadas.herir(zombi, "acido", 4)
+	z[2].prender(4.0)
+	# a esperar a que el ácido los mate a los tres
+	var reloj := 0.0
+	while reloj < 8.0 and z.any(func(x): return x.estado != "muerto"):
+		await get_tree().process_frame
+		reloj += get_process_delta_time()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-disuelto-1.png")
+	var d: Node = null
+	for n in z[0].get_children():
+		if n is Disuelto:
+			d = n
+	var tentaculos: bool = z[1].get_children().any(func(n): return n is Disuelto)
+	var quemado: bool = z[2].get_children().any(func(n): return n is Quemado and not n is Disuelto)
+	print("Disuelto: muertos %s · el normal se deshace %s · el de tentáculos se deshace %s · el que arde se quema %s · luz verde al caer %s (esperado: true, true, true, true y true)" % [
+		z.all(func(x): return x.estado == "muerto"), d != null, tentaculos, quemado, z[0].has_node("LuzAcido")])
+	if d == null:
+		Luz.evento = 0.0
+		get_tree().quit()
+		return
+	var m: ShaderMaterial = z[0].sprite.material
+	var esperar := func(hasta: float) -> void:
+		while d.t - d.caida < hasta:
+			await get_tree().process_frame
+	await esperar.call(0.9)
+	Captura.foto("captura-disuelto-2.png")
+	print("Disuelto: cubierto · comido %.2f deshecho %.2f (esperado: casi 1 y 0)" % [m.get_shader_parameter("comido"), m.get_shader_parameter("deshecho")])
+	await esperar.call(2.1)
+	Captura.foto("captura-disuelto-3.png")
+	print("Disuelto: a medias · deshecho %.2f (esperado: cerca de 0.5) · brilla %s (esperado: true)" % [
+		m.get_shader_parameter("deshecho"), z[0].sprite.has_node("Brillo") and z[0].sprite.get_node("Brillo").visible])
+	await esperar.call(3.5)
+	Captura.foto("captura-disuelto-4.png")
+	print("Disuelto: al acabar · cuerpo visible %s · luz verde %s (esperado: false y false)" % [
+		z[0].sprite.visible, z[0].has_node("LuzAcido") and not z[0].get_node("LuzAcido").is_queued_for_deletion()])
+	await esperar.call(Disuelto.DESHECHO + Disuelto.SECA - 0.1)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-disuelto-5.png")
+	print("Disuelto: seco · sigue trabajando %s (esperado: false)" % d.is_processing())
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --tajos": el haz de color del golpe de las armas cuerpo a cuerpo mejoradas (tajo.gd), que sigue el gesto
 # del dibujo de cada una. En la sala de pruebas, con cada arma en Épica, un golpe hacia cada una de las 8
 # direcciones, con la foto recortada de Johnny a medio haz (captura-tajo-<arma>-<dirección>.png). Se cierra

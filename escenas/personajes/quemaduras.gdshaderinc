@@ -6,6 +6,9 @@
 //     sueltas y el resto del cuerpo se tiñe un poco de naranja. Con menos de 1, las llamas se encogen (quemado.gd)
 //   - "acido" (0-1): le roe el ácido. Manchas verdes que crecen con "acido", con un borde verde oscuro, el centro
 //     oscuro de lo que ya se ha comido, burbujas que se hinchan y revientan, y gotas que resbalan por el cuerpo
+//     "comido" (0-1, disuelto.gd): al morir con ácido, las manchas crecen hasta cubrirle entero. "deshecho" (0-1):
+//     después, el ácido se lo come: se agujerea desde lo más comido (y antes por arriba) con un borde verde que hierve,
+//     hasta que no queda nada
 //   - "vomito" (0-1): bañado en vómito (la Gastroenteritis). Le cae encima: le cubre casi entera la cabeza y los
 //     hombros y, más abajo, a trozos; con su borde oscuro, grumos y chorretones que le escurren hacia abajo. Con
 //     menos de 1 se va quedando en menos
@@ -28,6 +31,8 @@ uniform float semilla = 0.0;
 uniform float alto = 46.0;
 uniform float vomito = 0.0;
 uniform float metal = 0.0;
+uniform float comido = 0.0;
+uniform float deshecho = 0.0;
 uniform float pelado = 0.0;
 
 const vec3 FUEGO0 = vec3(1.0, 0.953, 0.69);     // #fff3b0, el corazón de la llama (como Llamas.FUEGO)
@@ -80,7 +85,7 @@ float ruido(vec2 p) {
 
 // Lo metido que está un píxel en una mancha de ácido (menos de 0: fuera). Crecen con "acido" y respiran un poco
 float mancha(vec2 p) {
-	float umbral = 0.7 - 0.14 * acido - 0.02 * sin(t * 2.0);
+	float umbral = 0.7 - 0.14 * acido - 1.0 * comido - 0.02 * sin(t * 2.0);
 	return 0.7 * ruido(p * 0.22 + vec2(3.1, 7.7) + semilla) + 0.3 * ruido(p * 0.6 + semilla * 1.7) - umbral;
 }
 
@@ -165,7 +170,8 @@ void fragment() {
 		} else if (d < 0.035) {
 			r = mix(r, VERDE_OSCURO, 0.85);
 		} else if (d > 0.13) {
-			r = mix(r, ROIDO, 0.85);
+			// lo comido; al morir con ácido (comido), a manchas de verde oscuro para que no parezca carbón
+			r = mix(r, mix(ROIDO, VERDE_OSCURO, 0.8 * comido * ruido(p * 0.35 + semilla * 1.3)), 0.85);
 		} else {
 			r = VERDE * (0.55 + 0.8 * claro);
 			brilla = BRILLO_ACIDO;
@@ -186,6 +192,17 @@ void fragment() {
 			bool debajo = texture(TEXTURE, UV - vec2(0.0, (o - 1.0) * px.y)).a > 0.5 && mancha(q + vec2(0.0, 1.0)) > 0.035;
 			if (sale && !debajo) {
 				r = VERDE_CLARO;
+				brilla = BRILLO_ACIDO;
+			}
+		}
+		// se deshace (disuelto.gd): desaparece lo más comido y lo de más arriba; el borde del agujero hierve en verde
+		if (deshecho > 0.0) {
+			float m = d + 0.35 * clamp(-p.y / alto, 0.0, 1.0) + 0.06 * azar(p + semilla);
+			float corte = 1.85 - 1.95 * deshecho;
+			if (m > corte) {
+				a = 0.0;
+			} else if (m > corte - 0.07) {
+				r = azar(p + floor(t * 6.0)) < 0.3 ? VERDE_PALIDO : VERDE_CLARO;
 				brilla = BRILLO_ACIDO;
 			}
 		}

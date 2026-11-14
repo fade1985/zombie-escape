@@ -581,8 +581,10 @@ func morir() -> void:
 	Sonido.tocar("muerte")
 	$Sombra.apagar()
 	var cae: bool = sprite.sprite_frames.has_animation("muerte_" + direccion)
-	Zombi.quemaduras(sprite, 0.0, 0.0, tiempo)   # (si cae ardiendo, le vuelve a poner el fuego quemado.gd)
-	if has_node("LuzAcido"):
+	# muere con ácido encima (y sin arder: si no, gana el fuego): se deshace (disuelto.gd), con sus manchas y su luz
+	var disuelve := arder_t <= 0.0 and con_acido()
+	Zombi.quemaduras(sprite, 0.0, 1.0 if disuelve else 0.0, tiempo)   # (si cae ardiendo, le vuelve a poner el fuego quemado.gd)
+	if has_node("LuzAcido") and not disuelve:
 		get_node("LuzAcido").queue_free()
 	if arder_t > 0.0 and not cae:
 		# murió ardiendo (sin animación de caer): queda chamuscado y su luz se apaga poco a poco
@@ -594,12 +596,16 @@ func morir() -> void:
 		poner_animacion("muerte")
 		if arder_t > 0.0:
 			Quemado.empezar(self, sprite, talla_restos)   # cae en llamas, se vuelve carbón y se deshace en ceniza
+		elif disuelve:
+			Disuelto.disolver(self, sprite, talla_restos, true)
 	else:
 		# Sin animación de morir (el de tentáculos): se queda quieto, cae de lado y se oscurece
 		sprite.pause()
 		var tween := create_tween().set_parallel()
 		tween.tween_property(sprite, "rotation", PI / 2 * (1 if randf() < 0.5 else -1), 0.35)
 		tween.tween_property(sprite, "modulate", Color(0.55, 0.5, 0.55), 0.35)
+		if disuelve:
+			Disuelto.disolver(self, sprite, talla_restos, false)
 	remove_from_group("zombis")
 	# El cuerpo ya no choca ni se aparta de nadie: se queda en el suelo, por debajo de los que siguen de pie
 	$Choque.set_deferred("disabled", true)

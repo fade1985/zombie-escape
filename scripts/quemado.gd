@@ -172,6 +172,18 @@ func dibujar_restos() -> void:
 		restos.draw_texture_rect_region(RESTOS, Rect2(pieza[0], Vector2(CELDA_RESTOS, CELDA_RESTOS) * 2.0), pieza[1])
 
 
+# El color de cada cuadrito de la quemadura del suelo, con "d" lo lejos que está del centro (0-1). Disuelto (el que
+# muere con ácido) lo cambia por los de su charco
+func color_suelo(d: float) -> Color:
+	if randf() < 0.05:
+		return Color8(122, 116, 110, 204)   # mota de ceniza
+	elif d < 0.45:
+		return Color8(20, 15, 13, 230)
+	elif d < 0.75:
+		return Color8(42, 26, 20, 178)
+	return Color8(58, 42, 34, 102)
+
+
 func preparar_restos() -> void:
 	# lo que mide el cuerpo tendido, en píxeles del dibujo
 	var minimo := Vector2(-10, -16)
@@ -199,16 +211,7 @@ func preparar_restos() -> void:
 			var d := Vector2(dx, dy).length() - bulto / 2.0 + randf_range(-0.08, 0.08)
 			if d > 1.0:
 				continue
-			var color: Color
-			if randf() < 0.05:
-				color = Color8(122, 116, 110, 204)   # mota de ceniza
-			elif d < 0.45:
-				color = Color8(20, 15, 13, 230)
-			elif d < 0.75:
-				color = Color8(42, 26, 20, 178)
-			else:
-				color = Color8(58, 42, 34, 102)
-			celdas.append([encajar(centro + Vector2(px, py) * 2.0), color])
+			celdas.append([encajar(centro + Vector2(px, py) * 2.0), color_suelo(d)])
 	var fila: int = FILAS.get(talla, 2)
 	var lado := -1.0 if randf() < 0.5 else 1.0
 	var piezas := []

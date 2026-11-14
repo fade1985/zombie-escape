@@ -119,6 +119,8 @@
 #                       bala, con luz y a oscuras                                           [prueba_armas.gd]
 #   --tajos             el haz de color del golpe de cada arma cuerpo a cuerpo mejorada, que sigue el gesto de su
 #                       dibujo, en 8 direcciones                                            [prueba_armas.gd]
+#   --disuelto          los zombis que mueren con ácido se deshacen (disuelto.gd): uno normal, uno de tentáculos
+#                       y uno que además arde (gana el fuego)                               [prueba_armas.gd]
 #   --fogonazos         el fogonazo de pixelfx (fogonazo.gd) de la pistola, la MP5 y la escopeta en las 8 direcciones,
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --raton             el ratón en la partida: escondido (asistido), mirilla (libre), flecha en los menús [prueba_varias.gd]
@@ -868,6 +870,9 @@ func empezar_prueba() -> void:
 	elif "--tajos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tajos()
+	elif "--disuelto" in args:
+		set_process(false)   # sin la prueba larga
+		probar_disuelto()
 	elif "--aura" in args:
 		set_process(false)   # sin la prueba larga
 		probar_aura()
