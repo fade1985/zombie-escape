@@ -619,15 +619,27 @@ func probar_mirilla_mando() -> void:
 	Controles.con_mando = true
 	johnny.modo = "libre"
 	johnny.con_raton = false
-	johnny.ultimo_apunte = Vector2.RIGHT
-	await get_tree().create_timer(0.3).timeout
 	var m: Node2D = johnny.mirilla_mando
-	print("Mirilla del mando · a la vista %s, a la derecha de Johnny %s (esperado: true, true)" % [m.visible, m.global_position.x > johnny.global_position.x + 100.0])
+	# con el stick suelto, sin mirilla, y RT ataca hacia donde mira Johnny (14 nov)
+	johnny.direccion = "n"
+	await get_tree().create_timer(0.3).timeout
+	print("Mirilla del mando · con el stick suelto a la vista %s (esperado: false)" % m.visible)
+	johnny.espera = 0.0
+	Input.action_press("atacar")
+	for n in 8:
+		await get_tree().physics_frame
+	Input.action_release("atacar")
+	print("Mirilla del mando · RT con el stick suelto: ataca %s, mira «%s» (esperado: true, n)" % [johnny.espera > 0.0, johnny.direccion])
+	await get_tree().create_timer(1.0).timeout
+	# con el stick empujado, ataque fijado: la mirilla sale y sigue al stick
+	Input.action_press("apuntar_derecha", 1.0)
+	await get_tree().create_timer(0.3).timeout
+	print("Mirilla del mando · con el stick a la derecha: a la vista %s, a la derecha de Johnny %s (esperado: true, true)" % [m.visible, m.global_position.x > johnny.global_position.x + 100.0])
 	print("Mirilla del mando · la del ratón «%s» (esperado: oculto: solo una mirilla)" % raton.puesto)
 	Captura.foto("captura-mirilla-mando.png")
+	Input.action_release("apuntar_derecha")
 	Input.action_press("apuntar_arriba", 1.0)
 	await get_tree().create_timer(0.3).timeout
-	Input.action_release("apuntar_arriba")
 	print("Mirilla del mando · con el stick arriba, encima de Johnny %s (esperado: true)" % (m.global_position.y < johnny.global_position.y - 100.0))
 	johnny.con_raton = true
 	await get_tree().create_timer(0.2).timeout
@@ -642,6 +654,7 @@ func probar_mirilla_mando() -> void:
 	await get_tree().create_timer(0.2, true).timeout
 	print("Mirilla del mando · con el juego parado a la vista %s (esperado: false)" % m.visible)
 	get_tree().paused = false
+	Input.action_release("apuntar_arriba")
 	# al salir del juego Johnny deja el árbol antes de borrarse: la mirilla no puede pedir el árbol (antes, «paused» en null)
 	var padre := johnny.get_parent()
 	padre.remove_child(johnny)

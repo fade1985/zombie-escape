@@ -625,14 +625,18 @@ func apuntar_y_atacar() -> void:
 		intentar_atacar(hacia.angle())
 
 
-# La mirilla del mando (13 nov): jugando con el mando en el modo libre, una mirilla como la del ratón, delante de Johnny en
-# la dirección en que apunta con el stick derecho (o en la última a la que apuntó: RT ataca hacia ella). Con el ratón, el
-# móvil, el modo asistido o un menú abierto, escondida
+# La mirilla del mando (13 nov): jugando con el mando en el modo libre, mientras se empuja el stick derecho (el "ataque
+# fijado", 14 nov), una mirilla como la del ratón delante de Johnny, en la dirección en que apunta. Con el stick suelto
+# no sale: RT ataca hacia donde mira Johnny (apuntar_libre). Con el ratón, el móvil, el modo asistido o un menú abierto,
+# escondida
 func poner_mirilla_mando() -> void:
 	# (al salir del juego Johnny deja el árbol antes de borrarse y la señal aún llega: sin árbol, nada que hacer)
 	if not is_inside_tree():
 		return
 	var ver := Controles.con_mando and modo == "libre" and vivo and not con_raton and not get_tree().paused 			and not (Tactil.activo and Tactil.con_dedo)
+	if ver:
+		var stick := Input.get_vector("apuntar_izquierda", "apuntar_derecha", "apuntar_arriba", "apuntar_abajo")
+		ver = stick.length() > 0.5 and not Input.is_action_pressed("lanzar")
 	mirilla_mando.visible = ver
 	if ver:
 		mirilla_mando.global_position = (global_position + ultimo_apunte.normalized() * DISTANCIA_MIRILLA).round()
@@ -660,8 +664,9 @@ func apuntar_libre() -> void:
 	elif con_raton:
 		apunte = get_global_mouse_position() - global_position
 	elif ataca and Controles.con_mando:
-		# RT con el stick suelto: hacia donde se apuntó por última vez
-		apunte = ultimo_apunte
+		# RT con el stick suelto (14 nov, lo pidió el dueño): hacia donde mira Johnny (al andar, hacia donde anda; quieto,
+		# hacia donde miró la última vez). Con el stick empujado, hacia la mirilla (arriba)
+		apunte = Vector2.from_angle(DIRS.find(direccion) * PI / 4)
 	if apunte.length() < 1.0:
 		return
 	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado

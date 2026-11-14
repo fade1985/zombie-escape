@@ -176,7 +176,7 @@
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
-#   --mirilla-mando     con el mando, la mirilla delante de Johnny que sigue al stick derecho (esconderse con el ratón, asistido, pausa) [prueba_larga.gd]
+#   --mirilla-mando     con el mando: stick suelto, sin mirilla y RT hacia donde mira; stick empujado, mirilla que lo sigue (y escondida con ratón, asistido, pausa) [prueba_larga.gd]
 #   --ordenador-b       el botón B del mando en el ordenador de la sala: cierra el programa y luego apaga el ordenador [prueba_larga.gd]
 #   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
 #   --ordenador-iconos  los iconos del escritorio del ordenador con el ratón encima: el dibujo y el rótulo, dentro del

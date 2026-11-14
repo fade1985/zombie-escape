@@ -15,7 +15,7 @@ cartel del final hablan igual de botones o de teclas. Se prueba con `-- --captur
 |---|---|---|
 | Moverse | WASD o flechas | stick izquierdo |
 | Esquivar | Espacio o Mayús | A o LB |
-| Atacar | ratón + clic o J; solo, con la ayuda *Disparo asistido* | RT (el stick derecho solo apunta: RT ataca hacia donde se apuntó; en el móvil, su joystick derecho sí ataca) |
+| Atacar | ratón + clic o J; solo, con la ayuda *Disparo asistido* | RT. En el modo libre, con el stick derecho suelto, RT ataca hacia donde mira Johnny (sin mirilla); con el stick empujado (ataque fijado), sale una mirilla delante de Johnny y RT ataca hacia ella (14 nov). En el móvil, su joystick derecho sí ataca |
 | Interactuar: abrir y cerrar puertas de los baños y muebles de la sala de mantenimiento | E (desde el 13 nov; J y el clic solo atacan, también delante de un mueble o una puerta) | B (RT solo ataca) |
 | Cambiar de arma (cuerpo a cuerpo / distancia) | Z o rueda | Y |
 | Recargar | R | X |

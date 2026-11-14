@@ -3969,10 +3969,12 @@ func probar_apuntar_mando() -> void:
 	print("Mando · B delante de una puerta: se ha abierto %d veces (esperado: 1)" % abierto[0])
 	Input.action_release("apuntar_derecha")
 	Controles.con_mando = false
+	jug.con_raton = true   # (con el teclado se apunta con el ratón)
 	jug.espera = 0.0
 	Input.action_press("atacar")
 	await esperar.call()
 	Input.action_release("atacar")
+	jug.con_raton = false
 	print("Teclado · J delante de una puerta: se ha abierto %d veces, ha atacado %s (esperado: 1, true)" % [abierto[0], jug.espera > 0.0])
 	jug.ante_mueble = null
 	padre.queue_free()
