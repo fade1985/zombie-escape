@@ -6241,6 +6241,10 @@ msgid "Conseguido en esta partida"
 msgstr "Получено за забег"
 
 #: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "Играть снова"
+
+#: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Главное меню"
 

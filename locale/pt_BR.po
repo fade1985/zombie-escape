@@ -6221,6 +6221,10 @@ msgid "Conseguido en esta partida"
 msgstr "Conquistado nesta partida"
 
 #: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "Jogar de novo"
+
+#: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Menu principal"
 

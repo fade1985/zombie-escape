@@ -6221,6 +6221,10 @@ msgid "Conseguido en esta partida"
 msgstr "In dieser Runde erhalten"
 
 #: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "Nochmal spielen"
+
+#: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Hauptmenü"
 

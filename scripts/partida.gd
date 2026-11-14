@@ -225,6 +225,9 @@ func _ready() -> void:
 	add_child(menus)
 	menus.continuar.connect(seguir)
 	menus.abandonar.connect(terminar.bind(false, true))
+	menus.reintentar.connect(func():   # «Jugar otra vez»: el mismo edificio, desde la sala de mantenimiento
+		get_tree().paused = false
+		get_tree().reload_current_scene())
 	menus.menu_principal.connect(ir_al_menu)
 	add_child(ordenador)
 	ordenador.apagado.connect(func(): get_tree().paused = false)

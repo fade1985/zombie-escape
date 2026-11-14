@@ -3320,7 +3320,8 @@ func probar_morir() -> void:
 # Con "--captura --derrota": el cartel de derrota (menus.gd, fin). Primero, quién le pega a Johnny (johnny.gd,
 # golpe_de): un zombi, la explosión del dinamitero, su propia granada y el fuego del suelo. Luego cae de verdad por
 # un crío, con un logro, una skin, una página, un enemigo y un objeto nuevos y su mejor marca (captura-derrota.png);
-# «Menú principal», su único botón (M102), no hace caso el primer medio segundo y luego sí. Y el cartel otra vez: por el fuego y sin nada
+# sus dos botones, «Jugar otra vez» (marcado) y «Menú principal», no hacen caso el primer medio segundo y luego sí (la R,
+# nada). Y el cartel otra vez: por el fuego y sin nada
 # nuevo (captura-derrota-fuego.png), por un jefe grande (captura-derrota-jefe.png) y ganando (captura-derrota-gana.png)
 func probar_derrota() -> void:
 	await get_tree().create_timer(0.5).timeout
@@ -3370,27 +3371,32 @@ func probar_derrota() -> void:
 	johnny.recibir_dano(9999, crio)
 	while menus.abierto != "fin":
 		await get_tree().process_frame
-	# «Menú principal», el único botón (M102): sin irse de verdad al menú, se cuenta cuántas veces lo pide. La R, que
-	# antes volvía a empezar, ya no hace nada
-	for c in menus.menu_principal.get_connections():
-		menus.menu_principal.disconnect(c.callable)
+	# «Jugar otra vez» y «Menú principal»: sin irse de verdad, se cuenta cuántas veces se pide cada uno. La R no hace nada
+	for senal in [menus.reintentar, menus.menu_principal]:
+		for c in senal.get_connections():
+			senal.disconnect(c.callable)
 	var al_menu := [0]
+	var otra_vez := [0]
 	menus.menu_principal.connect(func(): al_menu[0] += 1)
+	menus.reintentar.connect(func(): otra_vez[0] += 1)
 	var los_botones: Array = menus.fondo.find_children("*", "Button", true, false)
 	var boton: Button = los_botones[0]
+	var al_principal: Button = los_botones[1]
 	boton.pressed.emit()
+	al_principal.pressed.emit()
 	await get_tree().create_timer(0.1).timeout
-	var antes: int = al_menu[0]
+	var antes: int = otra_vez[0] + al_menu[0]
 	await get_tree().create_timer(0.6).timeout
-	print("Cae por «%s» · botones: %d, «%s», marcado %s (esperado: 1, Menú principal, true) · conseguido: %d filas · al abrirse, el botón: %d veces (esperado: 0)" % [
-		johnny.golpe_de, los_botones.size(), boton.text, boton.has_focus(), conseguido(Guardado.cargar()).size(), antes])
+	print("Cae por «%s» · botones: %d, «%s» y «%s», marcado el primero %s (esperado: 2, Jugar otra vez y Menú principal, true) · conseguido: %d filas · al abrirse, los botones: %d veces (esperado: 0)" % [
+		johnny.golpe_de, los_botones.size(), boton.text, al_principal.text, boton.has_focus(), conseguido(Guardado.cargar()).size(), antes])
 	Captura.foto("captura-derrota.png")
 	pulsar_r()
 	await get_tree().create_timer(0.1).timeout
-	print("Con la R: %d veces · cartel abierto %s (esperado: 0, true)" % [al_menu[0], menus.abierto == "fin"])
+	print("Con la R: %d veces · cartel abierto %s (esperado: 0, true)" % [otra_vez[0] + al_menu[0], menus.abierto == "fin"])
 	boton.pressed.emit()
+	al_principal.pressed.emit()
 	await get_tree().create_timer(0.1).timeout
-	print("Pasado medio segundo, el botón: %d veces (esperado: 1)" % al_menu[0])
+	print("Pasado medio segundo, «Jugar otra vez»: %d veces y «Menú principal»: %d (esperado: 1 y 1)" % [otra_vez[0], al_menu[0]])
 	# 4) por el fuego y sin nada nuevo; por un jefe grande (con todo lo nuevo); y ganando (con todo lo nuevo)
 	for caso in [["fuego", false, false], ["gloton", true, false], ["", true, true]]:
 		terminada = false

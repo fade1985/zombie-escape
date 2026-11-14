@@ -13,6 +13,7 @@ extends CanvasLayer
 
 signal continuar
 signal abandonar
+signal reintentar
 signal menu_principal
 
 const ESPERA_FIN := 500   # milisegundos que el cartel del final no hace caso a sus botones: por si venías pegando
@@ -245,13 +246,16 @@ func fin(r: Dictionary) -> void:
 	var botones := VBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)
-	# Solo «Menú principal», al ganar (11 nov) y al caer (13 nov, M102: antes, al caer, había también «Otra vez», con la R)
-	var principal := boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal), "BotonGrande")
-	principal.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	principal.grab_focus.call_deferred()
+	# «Jugar otra vez» (14 nov) vuelve a empezar el mismo edificio, que arranca en la sala de mantenimiento (tras caer, con
+	# Johnny despertándose); debajo, «Menú principal». Al ganar y al caer. Sin la R (M102 la quitó con el «Otra vez» de antes)
+	var otra := boton(botones, Idioma.t("Jugar otra vez"), al_final.bind(reintentar), "BotonGrande")
+	boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
+	for b in botones.get_children():
+		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	otra.grab_focus.call_deferred()
 
 
-# El botón del cartel del final: no hace caso hasta pasado ESPERA_FIN desde que se abrió
+# Los botones del cartel del final: no hacen caso hasta pasado ESPERA_FIN desde que se abrió
 func al_final(senal: Signal) -> void:
 	if abierto == "fin" and Time.get_ticks_msec() - fin_desde >= ESPERA_FIN:
 		senal.emit()

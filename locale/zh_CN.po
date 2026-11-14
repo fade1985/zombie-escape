@@ -6201,6 +6201,10 @@ msgid "Conseguido en esta partida"
 msgstr "本局收获"
 
 #: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "再玩一次"
+
+#: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "主菜单"
 

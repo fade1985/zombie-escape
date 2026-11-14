@@ -6221,6 +6221,10 @@ msgid "Conseguido en esta partida"
 msgstr "Unlocked this run"
 
 #: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "Play again"
+
+#: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Main menu"
 
