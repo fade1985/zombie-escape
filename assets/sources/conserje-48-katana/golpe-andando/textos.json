@@ -1,0 +1,50 @@
+{
+ "group": "600ef45c-440e-4811-b288-5551e2c74563",
+ "animation_name": "golpe-andando-katana",
+ "coste_total": "8 generaciones (1 por direccion, ninguna repetida)",
+ "nota": "Texto comun para east, west, south-east, south-west; propios para south, north y las diagonales de espaldas (el json solo tenia el comun de pie, los otros los escribi yo). Fotograma de partida y llegada: primer dibujo del paso de cada direccion (casilla 96x96 de la hoja).",
+ "south": {
+  "job_id": "64e9874d-f85b-401b-bdd7-27167a4e9e71",
+  "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, carrying a katana in a dark navy scabbard",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, facing the camera, seen from the front",
+  "action_description": "Seen from the front the whole time: he faces the camera and never turns. He keeps walking forward in place at a steady pace the whole time and never stops: his legs keep striding alternately through one full walk cycle, knees lifting and boots stepping one after the other, exactly like a looping walk cycle. While his legs keep walking, only his upper body attacks: he draws the katana from the dark navy scabbard at his left hip in one lightning-fast motion and sweeps it in a single rising diagonal cut in front of him, from low by his left knee up to above his right shoulder, leaving a pale crescent-shaped streak of light curving upward along the arc of the blade. He holds the finish for an instant with the blade raised high, then he sheathes the katana again, still walking, ending in the same mid-stride walking pose he started in. The tail of the red bandana flicks with the motion. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+ },
+ "east": {
+  "job_id": "916e006c-2978-416a-bfd3-74fc67d27001",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, facing right, seen in profile",
+  "action_description": "(texto comun) He keeps walking forward in place at a steady pace the whole time and never stops: his legs keep striding alternately through one full walk cycle, knees lifting and boots stepping one after the other, exactly like a looping walk cycle. While his legs keep walking, only his upper body attacks: he draws the katana from the dark navy scabbard at his left hip in one lightning-fast motion and sweeps it in a single rising diagonal cut in front of him, from low near the floor in front of his legs up to above his shoulder, leaving a pale crescent-shaped streak of light curving upward along the arc of the blade. He holds the finish for an instant with the blade raised high, then he sheathes the katana again, still walking, ending in the same mid-stride walking pose he started in. He keeps facing the same direction the whole time. The tail of the red bandana flicks with the motion. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+ },
+ "west": {
+  "job_id": "532508da-2438-402c-ab77-caae3869c01b",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, facing left, seen in profile",
+  "action_description": "(texto comun, igual que east)"
+ },
+ "south-east": {
+  "job_id": "e2fe5e02-6f4a-4bdb-8804-7c9ce0ccf8da",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, facing the camera and turned toward the right (three-quarter front view)",
+  "action_description": "(texto comun, igual que east)"
+ },
+ "south-west": {
+  "job_id": "27625329-38f0-48af-a275-9bf6df88c9f8",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, facing the camera and turned toward the left (three-quarter front view)",
+  "action_description": "(texto comun, igual que east)"
+ },
+ "north": {
+  "job_id": "faa0d883-c460-408f-bcc7-62245b1d34b6",
+  "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, carrying a katana in a dark navy scabbard",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, seen from behind, his back to the camera, walking away toward the top of the image",
+  "action_description": "Seen from behind the whole time: he keeps his back to the camera and never turns around, his face is never visible. He keeps walking forward in place, away from the camera, at a steady pace the whole time and never stops: his legs keep striding alternately through one full walk cycle, boots stepping one after the other, exactly like a looping walk cycle. While his legs keep walking, only his upper body attacks: he draws the katana from the dark navy scabbard at his left hip in one lightning-fast motion and sweeps it in a single rising diagonal cut in front of him, away from the camera, from low near the floor up to above his shoulder, leaving a pale crescent-shaped streak of light curving upward along the arc of the blade. He holds the finish for an instant with the blade raised high, then he sheathes the katana again, still walking, ending in the same mid-stride walking pose he started in, still seen from behind. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+ },
+ "north-east": {
+  "job_id": "16263a2f-9a16-4297-98fb-07b2a739ebfa",
+  "subject_description": "(el de north)",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, seen from behind and turned toward the right (three-quarter back view), walking away from the camera",
+  "action_description": "Seen from behind the whole time, three-quarter back view turned toward the right: he never turns to face the camera, his face is never visible. He keeps walking forward in place ... (igual que el comun, con vista de espaldas; sin 'He keeps facing the same direction')"
+ },
+ "north-west": {
+  "job_id": "99c3b5d3-443d-4b6d-87cd-ee633096593f",
+  "subject_description": "(el de north)",
+  "initial_pose": "mid-stride walking pose, legs apart, carrying the sheathed katana at his side, seen from behind and turned toward the left (three-quarter back view), walking away from the camera",
+  "action_description": "Igual que north-east pero 'turned toward the left'"
+ }
+}

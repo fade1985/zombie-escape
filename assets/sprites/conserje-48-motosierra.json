@@ -168,6 +168,45 @@
         }
       },
       "hit": 0.5
+    },
+    "attackwalk": {
+      "fps": 22,
+      "loop": false,
+      "hit": 0.5,
+      "dirs": {
+        "south": {
+          "row": 25,
+          "frames": 10
+        },
+        "south-east": {
+          "row": 26,
+          "frames": 10
+        },
+        "east": {
+          "row": 27,
+          "frames": 10
+        },
+        "north-east": {
+          "row": 28,
+          "frames": 10
+        },
+        "north": {
+          "row": 29,
+          "frames": 10
+        },
+        "north-west": {
+          "row": 30,
+          "frames": 12
+        },
+        "west": {
+          "row": 31,
+          "frames": 9
+        },
+        "south-west": {
+          "row": 32,
+          "frames": 10
+        }
+      }
     }
   },
   "source": "Hecha con tools/arma.py a partir de assets/sources/conserje-48-motosierra/"

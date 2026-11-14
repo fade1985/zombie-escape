@@ -810,7 +810,7 @@ func atacar(angulo: float) -> void:
 	ataque_t = 0.0
 	var nombre := "ataque_" + direccion
 	# Golpea mientras anda: si la hoja del arma trae ese golpe dibujado entero, con las piernas andando
-	# (tools/golpe_andando.py: de momento, la fregona), se usa ese y no hace falta partirlo por la cintura
+	# (tools/golpe_andando.py: lo traen las cinco armas de golpe), se usa ese y no hace falta partirlo por la cintura
 	if w.tipo == "cuerpo" and velocity.length() > 20.0 and sprite.sprite_frames.has_animation("ataqueandando_" + direccion):
 		nombre = "ataqueandando_" + direccion
 	var largo_anim := sprite.sprite_frames.get_frame_count(nombre) / sprite.sprite_frames.get_animation_speed(nombre)

@@ -18,10 +18,10 @@ en una línea.
 - `menu_principal.tscn`: la escena de inicio. `partida.tscn`: Johnny y la pantalla (el mapa lo monta `partida.gd`).
 - `partida_prueba.tscn`: la misma con el script de prueba; el menú la abre en vez de la otra con `--captura`.
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y uno por jefe. Los
-  shaders: `cintura` (Johnny partido por la cintura al golpear andando, en las armas de golpe que no traen ese golpe
-  dibujado entero: la fregona sí lo trae, `ataqueandando_<dirección>`, de `tools/golpe_andando.py`, y `johnny.atacar`
-  usa ese; `johnny.acompasar_golpe` cambia entre el de pie y el de andando si se para o echa a andar a mitad. En las
-  demás, qué es pierna lo dice la imagen
+  shaders: `cintura` (Johnny partido por la cintura al golpear andando, solo para un arma de golpe que no traiga ese
+  golpe dibujado entero: las cinco de ahora lo traen, `ataqueandando_<dirección>`, de `tools/golpe_andando.py`, y
+  `johnny.atacar` usa ese; `johnny.acompasar_golpe` cambia entre el de pie y el de andando si se para o echa a andar a
+  mitad. Si no lo trae, qué es pierna lo dice la imagen
   `assets/sprites/<hoja>-piernas.png` de cada arma de golpe, que saca `tools/piernas.py` y pone `johnny.poner_mascara_piernas`;
   de ella se pintan las piernas de andar y con ella se le quitan las suyas al golpe; prueba: `--captura --ataque-andando`;
   incluye `quemaduras.gdshaderinc` para arder

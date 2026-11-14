@@ -254,6 +254,45 @@
         }
       },
       "hit": 0.333
+    },
+    "attackwalk": {
+      "fps": 22,
+      "loop": false,
+      "hit": 0.333,
+      "dirs": {
+        "south": {
+          "row": 25,
+          "frames": 8
+        },
+        "south-east": {
+          "row": 26,
+          "frames": 6
+        },
+        "east": {
+          "row": 27,
+          "frames": 6
+        },
+        "north-east": {
+          "row": 28,
+          "frames": 6
+        },
+        "north": {
+          "row": 29,
+          "frames": 7
+        },
+        "north-west": {
+          "row": 30,
+          "frames": 7
+        },
+        "west": {
+          "row": 31,
+          "frames": 6
+        },
+        "south-west": {
+          "row": 32,
+          "frames": 6
+        }
+      }
     }
   },
   "source": "Hecha con tools/arma.py a partir de assets/sources/conserje-48-cuchillo/"

@@ -616,10 +616,10 @@ func probar_ordenador_iconos() -> void:
 # "--izquierda"): las de golpe, hacia abajo, a la derecha, arriba y a la izquierda (90, 0, -90 y 180); las de fuego, solo
 # hacia abajo. Cuatro fotos durante el ataque y una después, recortadas alrededor de Johnny y sin penumbra
 # (captura-andando-<arma>-<ángulo>-<n>.png), para ver que las piernas salen enteras y que no queda nada pintado al
-# acabar. La fregona trae el golpe andando dibujado entero ("ataqueandando_", tools/golpe_andando.py); las otras de
-# golpe se parten por la cintura (cintura.gdshader y las piernas de tools/piernas.py). En la terminal: que las de golpe
-# tienen su máscara de piernas, cuál trae el golpe entero, y que las piernas de andar solo se ven al partirlo. Johnny,
-# sin zombis ni compañeros cerca
+# acabar. Las cinco de golpe traen el golpe andando dibujado entero ("ataqueandando_", tools/golpe_andando.py); una
+# que no lo trajera se partiría por la cintura (cintura.gdshader y las piernas de tools/piernas.py). En la terminal:
+# que las de golpe tienen su máscara de piernas y el golpe entero, y que las piernas de andar no se ven (solo al
+# partirlo). Johnny, sin zombis ni compañeros cerca
 func probar_ataque_andando() -> void:
 	await get_tree().create_timer(0.5).timeout
 	for z in get_tree().get_nodes_in_group("zombis"):
@@ -635,10 +635,10 @@ func probar_ataque_andando() -> void:
 	for id in armas:
 		johnny.coger(id)
 		var de_golpe: bool = johnny.arma().tipo == "cuerpo"
-		# (la fregona trae el golpe andando dibujado entero, tools/golpe_andando.py: no se parte por la cintura)
+		# (las de golpe traen el golpe andando dibujado entero, tools/golpe_andando.py: no se parten por la cintura)
 		var entero: bool = johnny.sprite.sprite_frames.has_animation("ataqueandando_s")
 		print("Ataque andando · %s: máscara de piernas %s (esperado: %s) · golpe andando dibujado entero %s (esperado: %s)" % [id,
-			johnny.sprite.material.get_shader_parameter("con_mascara"), de_golpe, entero, id == "fregona"])
+			johnny.sprite.material.get_shader_parameter("con_mascara"), de_golpe, entero, de_golpe])
 		# las de golpe, hacia abajo, a la derecha, arriba y a la izquierda (el golpe mira hacia ahí y las piernas andan
 		# hacia el lado); las de fuego, solo hacia abajo (siguen andando enteras)
 		var angulos := [90, 0, -90, 180] if de_golpe else [90]

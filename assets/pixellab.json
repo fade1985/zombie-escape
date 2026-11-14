@@ -232,6 +232,12 @@
   },
   "cost": "10 generaciones",
   "updated": "2026-10-12",
+  "golpe_andando": {
+   "nota": "Golpear mientras anda, dibujado entero (2026-11-14), el que está en el juego (ataqueandando_<dirección>; lo monta py tools/golpe_andando.py conserje-48-bate). Misma receta que la fregona (conserje-48-guardia → golpe_andando): PixMiniMax, una llamada por dirección, y de partida y de llegada el primer dibujo del paso de esa dirección tal cual está en la hoja del juego. 12 fotogramas más el de partida. El bate, gris de aluminio (el dibujo de partida ya lo lleva así). En las diagonales de espaldas se le ve la cara al girar, como en el golpe de pie. Los textos de cada dirección, en assets/sources/conserje-48-bate/golpe-andando/textos.json; los fotogramas, en esa carpeta.",
+   "group": "a37610ba-0645-4d09-84a6-157f134a8dbb",
+   "animation_name": "golpe-andando-bate",
+   "cost": "9 generaciones (8 y 1 repetida: north-east, que se giraba y daba dos barridos; la buena está en el grupo f0865058-cefa-4562-ae8b-5e5a62af08ba, golpe-andando-bate-2)"
+  },
   "ataque": {
    "nota": "Barrido horizontal con estela blanca de aire, las 8 direcciones. PixMiniMax, 12 fotogramas más el de partida, lienzo de 96x96. Fotogramas en assets/sources/conserje-48-bate/ataque/. Tres textos: el común (east, y también south, south-east, west y south-west cambiando initial_pose), el de las diagonales de espaldas y el de espaldas. De frente salieron dos barridos seguidos: se usa solo el primero. En las diagonales de espaldas Johnny gira un poco el cuerpo durante el barrido; se dio por bueno.",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat",
@@ -287,6 +293,12 @@
   },
   "cost": "10 generaciones",
   "updated": "2026-10-13",
+  "golpe_andando": {
+   "nota": "Golpear mientras anda, dibujado entero (2026-11-14), el que está en el juego (ataqueandando_<dirección>; lo monta py tools/golpe_andando.py conserje-48-cuchillo). Misma receta que la fregona (conserje-48-guardia → golpe_andando): PixMiniMax, una llamada por dirección, y de partida y de llegada el primer dibujo del paso de esa dirección tal cual está en la hoja del juego. 8 fotogramas más el de partida (con 12 rellena con posturas inventadas). Todas bien a la primera. Los textos de cada dirección, en assets/sources/conserje-48-cuchillo/golpe-andando/textos.json; los fotogramas, en esa carpeta.",
+   "group": "a9c039ab-5f2f-433d-9f5c-8b20baf659e7",
+   "animation_name": "golpe-andando-cuchillo",
+   "cost": "8 generaciones"
+  },
   "ataque": {
    "nota": "PixMiniMax, 8 fotogramas más el de partida (no 12: el cuchillo ataca 4 veces por segundo y solo se usan 6), lienzo de partida de 96x96. Fotogramas en assets/sources/conserje-48-cuchillo/ataque/. De lado y en las diagonales de frente es un pinchazo con una rayita blanca corta en la punta; de frente y de espaldas PixelLab dibuja un tajo con una línea larga, y al dueño le gustó ese efecto de corte, así que se dejó. Lecciones: la palabra 'slash' hace que dibuje medias lunas enormes; con 12 fotogramas rellena el hueco con posturas inventadas; de frente (south) con el texto común Johnny se gira de lado, hace falta el texto estricto.",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a kitchen knife",
@@ -4965,6 +4977,12 @@
   },
   "cost": "10 generaciones",
   "updated": "2026-11-06",
+  "golpe_andando": {
+   "nota": "Golpear mientras anda, dibujado entero (2026-11-14), el que está en el juego (ataqueandando_<dirección>; lo monta py tools/golpe_andando.py conserje-48-motosierra). Misma receta que la fregona (conserje-48-guardia → golpe_andando): PixMiniMax, una llamada por dirección, y de partida y de llegada el primer dibujo del paso de esa dirección tal cual está en la hoja del juego. 12 fotogramas más el de partida. Todas bien a la primera. La levanta pronto y la deja caer hacia el dibujo 7; con ella arriba y al agacharse las piernas casi no andan. Al oeste, el dibujo 2 trae una mancha gris: no se usa. Los textos de cada dirección, en assets/sources/conserje-48-motosierra/golpe-andando/textos.json; los fotogramas, en esa carpeta.",
+   "group": "97ece1ad-cb32-4e6b-926d-7fa948e06cd6",
+   "animation_name": "golpe-andando-motosierra",
+   "cost": "16 generaciones (2 por dirección: la casilla es de 112x112)"
+  },
   "ataque": {
    "nota": "Levantarla por encima de la cabeza y dejarla caer. PixMiniMax, 12 fotogramas más el de partida, de una en una con el quieto pegado en un lienzo de 96x96 en (16, 26) como partida y llegada. Todas bien a la primera. Fotogramas en assets/sources/conserje-48-motosierra/sin_sangre/ataque/ (el 0 de PixelLab salía con colores 1 punto distintos: se cambió por el dibujo quieto). Cuatro textos: el común (east, west, south-east y south-west cambiando initial_pose), el de frente, el de espaldas y el de las diagonales de espaldas.",
    "group": "c4de8c01-71ab-418a-9f1d-9d2bed5a2083",
@@ -4998,6 +5016,12 @@
   },
   "cost": "10 generaciones",
   "updated": "2026-11-06",
+  "golpe_andando": {
+   "nota": "Golpear mientras anda, dibujado entero (2026-11-14), el que está en el juego (ataqueandando_<dirección>; lo monta py tools/golpe_andando.py conserje-48-katana). Misma receta que la fregona (conserje-48-guardia → golpe_andando): PixMiniMax, una llamada por dirección, y de partida y de llegada el primer dibujo del paso de esa dirección tal cual está en la hoja del juego. 12 fotogramas más el de partida. Todas bien a la primera. La media luna sale entre el dibujo 3 y el 5 según la dirección. Los textos de cada dirección, en assets/sources/conserje-48-katana/golpe-andando/textos.json; los fotogramas, en esa carpeta.",
+   "group": "600ef45c-440e-4811-b288-5551e2c74563",
+   "animation_name": "golpe-andando-katana",
+   "cost": "8 generaciones"
+  },
   "ataque": {
    "nota": "Desenvainar con un corte de abajo arriba que deja una media luna de luz, y volver a envainar. PixMiniMax (animate_character mode pixminimax), 12 fotogramas más el de partida, de una en una con el quieto pegado en un lienzo de 96x96 en (16, 26) como partida y llegada. Todas bien a la primera; la media luna sale en el fotograma 3 o 4. Cada dirección quedó en su propio grupo de animación (ataque-katana). Cuatro textos: el común (east, west, south-east y south-west cambiando initial_pose), el de frente (south: de la rodilla izquierda a por encima del hombro derecho), el de espaldas (north) y el de las diagonales de espaldas. El fotograma 0 se cambió por el dibujo quieto (pegado sin máscara, si no arma.py dice que no coincide).",
    "animation_name": "ataque-katana",

@@ -504,8 +504,10 @@ def main():
         px = hoja.load()
         grises = COMO_GRIS.get(arma, {})
         de_antes = cargar(DE_ANTES[arma]).load() if arma in DE_ANTES else None
+        # (las filas que la hoja de antes no tenía, las del golpe andando de tools/golpe_andando.py, se dejan como están)
+        alto_antes = cargar(DE_ANTES[arma]).height if arma in DE_ANTES else hoja.height
         rojos = {}
-        for y in range(hoja.height) if grises else ():
+        for y in range(min(hoja.height, alto_antes)) if grises else ():
             for x in range(hoja.width):
                 c = px[x, y]
                 if c[3] and c[:3] in grises:
