@@ -118,7 +118,7 @@
 #   --aura              lo que se ve de la calidad del arma en la mano: la luz, las chispas y la estela del golpe y de la
 #                       bala, con luz y a oscuras                                           [prueba_armas.gd]
 #   --tajos             el haz de color del golpe de cada arma cuerpo a cuerpo mejorada, que sigue el gesto de su
-#                       dibujo, en 4 direcciones                                            [prueba_armas.gd]
+#                       dibujo, en 8 direcciones                                            [prueba_armas.gd]
 #   --fogonazos         el fogonazo de pixelfx (fogonazo.gd) de la pistola, la MP5 y la escopeta en las 8 direcciones,
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --raton             el ratón en la partida: escondido (asistido), mirilla (libre), flecha en los menús [prueba_varias.gd]

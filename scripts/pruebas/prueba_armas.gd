@@ -1516,8 +1516,8 @@ func probar_aura() -> void:
 
 
 # Con "--captura --tajos": el haz de color del golpe de las armas cuerpo a cuerpo mejoradas (tajo.gd), que sigue el gesto
-# del dibujo de cada una. En la sala de pruebas, con cada arma en Épica, un golpe hacia la derecha, abajo, la izquierda y
-# arriba, con la foto recortada de Johnny a medio haz (captura-tajo-<arma>-<dirección>.png). Se cierra
+# del dibujo de cada una. En la sala de pruebas, con cada arma en Épica, un golpe hacia cada una de las 8
+# direcciones, con la foto recortada de Johnny a medio haz (captura-tajo-<arma>-<dirección>.png). Se cierra
 func probar_tajos() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
@@ -1533,7 +1533,7 @@ func probar_tajos() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	sala.diana.visible = false
 	sala.diana.remove_from_group("zombis")
-	var direcciones := {"e": 0.0, "s": PI / 2, "o": PI, "n": -PI / 2}
+	var direcciones := {"e": 0.0, "se": PI / 4, "s": PI / 2, "so": 3 * PI / 4, "o": PI, "no": -3 * PI / 4, "n": -PI / 2, "ne": -PI / 4}
 	for id in ["fregona", "bate", "cuchillo", "motosierra", "katana"]:
 		llevar_arma(id, Armas.EPICA, true, false)
 		await get_tree().create_timer(0.5).timeout
