@@ -129,6 +129,12 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
     quieto centrado en un lienzo mayor. Para el ataque de la fregona: el de 64×64 pegado en uno de 96×96 en la
     posición (16, 20).
   - No pedir parpadeos: los hace largos y repetidos. Se añaden a mano después.
+  - **Golpear mientras anda (14 nov):** sale bien pidiéndolo entero. Fotograma de partida y de llegada: el primer
+    dibujo del paso de esa dirección, tal cual está en la hoja del juego (la casilla entera; se sube con
+    `get_upload_url` y se pasa como `upload:<id>`, sin pegar base64), y en el texto, que las piernas no paran de andar
+    («He keeps walking forward in place... While his legs keep walking, only his upper body attacks...»). 1 generación
+    por dirección a 96 px y 12 fotogramas; la fregona, las 8 a la primera. Texto en `assets/pixellab.json`
+    (`conserje-48-guardia` → `golpe_andando`); lo monta `tools/golpe_andando.py`. Faltan bate, cuchillo, motosierra y katana.
 - **Un arma en la mano es un "estado" del personaje** (`create_character_state`, unas 10 generaciones): una copia
   con las 8 rotaciones cambiadas. Las animaciones se hacen sobre cada estado por separado, así que cada arma
   necesita su estado y sus propias animaciones de andar y de atacar (unas 30–45 generaciones por arma).

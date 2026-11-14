@@ -8,6 +8,7 @@ import sys
 
 # Nombre de cada estado del juego en español (los que no estén aquí, o no estén en la hoja, no se pasan)
 ESTADOS = {"walk": "andar", "idle": "reposo", "attack": "ataque", "hurt": "golpe", "death": "muerte",
+           "attackwalk": "ataqueandando",   # golpear mientras anda, dibujado entero (tools/golpe_andando.py)
            "fx": "efectos",   # "efectos": fogonazo, humo y casquillo del disparo, para pintarlos encima al andar
            "fall": "caer",   # "caer": el superviviente se desploma y se queda tumbado (tools/superviviente.py), y el tropiezo de Johnny (tools/caida.py)
            "getup": "levantarse",   # y Johnny se levanta (tools/caida.py)

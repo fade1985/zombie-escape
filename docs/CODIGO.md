@@ -18,7 +18,10 @@ en una línea.
 - `menu_principal.tscn`: la escena de inicio. `partida.tscn`: Johnny y la pantalla (el mapa lo monta `partida.gd`).
 - `partida_prueba.tscn`: la misma con el script de prueba; el menú la abre en vez de la otra con `--captura`.
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y uno por jefe. Los
-  shaders: `cintura` (Johnny partido por la cintura al golpear andando: qué es pierna lo dice la imagen
+  shaders: `cintura` (Johnny partido por la cintura al golpear andando, en las armas de golpe que no traen ese golpe
+  dibujado entero: la fregona sí lo trae, `ataqueandando_<dirección>`, de `tools/golpe_andando.py`, y `johnny.atacar`
+  usa ese; `johnny.acompasar_golpe` cambia entre el de pie y el de andando si se para o echa a andar a mitad. En las
+  demás, qué es pierna lo dice la imagen
   `assets/sprites/<hoja>-piernas.png` de cada arma de golpe, que saca `tools/piernas.py` y pone `johnny.poner_mascara_piernas`;
   de ella se pintan las piernas de andar y con ella se le quitan las suyas al golpe; prueba: `--captura --ataque-andando`;
   incluye `quemaduras.gdshaderinc` para arder
@@ -1037,7 +1040,9 @@ en una línea.
   C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es
   naranja, sin `boca: fogonazo` y la boca a mano en `armas.gd`; `andar.ciclo` y `andar.espejo` para el andar. Retoques:
-  `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `piernas.py` (las piernas de cada hoja de golpe, para partir a
+  `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `golpe_andando.py` (mete en la hoja el golpe dado mientras
+  anda, dibujado entero por PixelLab: filas nuevas al final, animación `attackwalk`; después, `cara.py <skin> <arma>`
+  con cada skin y `piernas.py <arma>`), `piernas.py` (las piernas de cada hoja de golpe, para partir a
   Johnny por la cintura al golpear andando: `<hoja>-piernas.png`; hay que volver a pasarlo si se rehace el paso o el golpe
   de una hoja, y `--ver` deja fotos para repasar el recorte), `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
   ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y

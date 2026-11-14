@@ -265,6 +265,45 @@
         }
       },
       "hit": 0.333
+    },
+    "attackwalk": {
+      "fps": 22,
+      "loop": false,
+      "hit": 0.333,
+      "dirs": {
+        "south": {
+          "row": 25,
+          "frames": 11
+        },
+        "south-east": {
+          "row": 26,
+          "frames": 10
+        },
+        "east": {
+          "row": 27,
+          "frames": 11
+        },
+        "north-east": {
+          "row": 28,
+          "frames": 12
+        },
+        "north": {
+          "row": 29,
+          "frames": 11
+        },
+        "north-west": {
+          "row": 30,
+          "frames": 10
+        },
+        "west": {
+          "row": 31,
+          "frames": 11
+        },
+        "south-west": {
+          "row": 32,
+          "frames": 10
+        }
+      }
     }
   },
   "source": "Hecha con tools/arma.py a partir de assets/sources/conserje-48-guardia/"

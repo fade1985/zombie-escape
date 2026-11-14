@@ -809,6 +809,10 @@ func atacar(angulo: float) -> void:
 	var w := arma()
 	ataque_t = 0.0
 	var nombre := "ataque_" + direccion
+	# Golpea mientras anda: si la hoja del arma trae ese golpe dibujado entero, con las piernas andando
+	# (tools/golpe_andando.py: de momento, la fregona), se usa ese y no hace falta partirlo por la cintura
+	if w.tipo == "cuerpo" and velocity.length() > 20.0 and sprite.sprite_frames.has_animation("ataqueandando_" + direccion):
+		nombre = "ataqueandando_" + direccion
 	var largo_anim := sprite.sprite_frames.get_frame_count(nombre) / sprite.sprite_frames.get_animation_speed(nombre)
 	if w.tipo == "cuerpo":
 		# La animación del golpe dura medio segundo como mucho (la motosierra, su "golpe_dura": se ve subir), y nunca
@@ -1329,7 +1333,8 @@ func animar() -> void:
 	# Mientras dura el ataque se deja su animación (se puso al empezarlo). Si es un golpe y va andando, el
 	# cuerpo da el golpe y las piernas siguen andando debajo, para que no parezca que flota
 	if ataque_t >= 0.0:
-		var partir: bool = rapidez > 20.0 and arma().tipo == "cuerpo"
+		# (con el golpe dibujado entero andando, no se parte: ver acompasar_golpe)
+		var partir: bool = rapidez > 20.0 and arma().tipo == "cuerpo" and not acompasar_golpe(rapidez)
 		partir_cintura(partir)
 		if partir:
 			var p := paso()
@@ -1355,6 +1360,24 @@ func animar() -> void:
 		# quieto echando fuego con el lanzallamas: en la postura de apuntar, sin respirar
 		cambiar_animacion(("quieto_" if llamarada.pedida else "reposo_") + direccion)
 		sprite.speed_scale = 1.0
+
+
+# Mientras golpea con un arma que trae el golpe andando dibujado entero ("ataqueandando_<dirección>"): si echa a andar a
+# mitad del golpe de pie, o se para a mitad del golpe andando, cambia de uno a otro por donde iba, para que no dé el
+# golpe andando con las piernas quietas ni al revés. Dice si la hoja tiene ese golpe (y entonces no se parte por la cintura)
+func acompasar_golpe(rapidez: float) -> bool:
+	var hacia := String(sprite.animation).get_slice("_", 1)
+	var hoja := sprite.sprite_frames
+	if arma().tipo != "cuerpo" or not hoja.has_animation("ataqueandando_" + hacia) or not hoja.has_animation("ataque_" + hacia):
+		return false
+	var toca := ("ataqueandando_" if rapidez > 20.0 else "ataque_") + hacia
+	if sprite.animation != toca:
+		var dibujos := hoja.get_frame_count(toca)
+		var por_donde := clampf(ataque_t / ataque_dur, 0.0, 0.999) * dibujos
+		sprite.play(toca)
+		sprite.speed_scale = dibujos / hoja.get_animation_speed(toca) / ataque_dur
+		sprite.set_frame_and_progress(int(por_donde), por_donde - int(por_donde))
+	return true
 
 
 # El lanza ácido gotea por la boquilla (goteo.gd) mientras lo lleva en la mano de pie, sin echar el chorro y con
