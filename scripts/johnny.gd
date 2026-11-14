@@ -1286,6 +1286,7 @@ func sostener(hueco: String) -> void:
 	sprite.sprite_frames = hoja
 	efectos.sprite_frames = hoja
 	piernas.sprite_frames = hoja
+	poner_mascara_piernas(w)
 	sprite.offset = -w.pies
 	efectos.offset = -w.pies
 	piernas.offset = -w.pies
@@ -1506,6 +1507,17 @@ func tiempo_fuego() -> float:
 func partir_cintura(si: bool) -> void:
 	piernas.visible = si
 	sprite.material.set_shader_parameter("parte", 1 if si else 0)
+
+
+# Le dice al shader qué píxeles de la hoja de esa arma son piernas: su máscara (assets/sprites/<hoja>-piernas.png, de
+# tools/piernas.py; la misma para todas las skins, que solo cambian la cabeza). Solo la tienen las armas de golpe; sin
+# ella, el shader lo adivina por el color (y falla). Se pone al cambiar de arma, no cada vez que golpea
+func poner_mascara_piernas(w: Dictionary) -> void:
+	var ruta: String = w.hoja.resource_path.trim_suffix(".tres") + "-piernas.png"
+	var mascara: Texture2D = load(ruta) if ResourceLoader.exists(ruta) else null
+	for dibujo: AnimatedSprite2D in [sprite, piernas]:
+		dibujo.material.set_shader_parameter("mascara", mascara)
+		dibujo.material.set_shader_parameter("con_mascara", mascara != null)
 
 
 # Le pone una skin (skins.gd; "" = el conserje de siempre): las hojas de esa skin para el arma que lleva, sin

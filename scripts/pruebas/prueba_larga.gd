@@ -612,6 +612,71 @@ func probar_ordenador_iconos() -> void:
 	ordenador.apagar()
 
 
+# Con "--captura --ataque-andando": cada arma, atacando mientras Johnny anda a la derecha (o a la izquierda, con
+# "--izquierda"): las de golpe, hacia abajo, a la derecha, arriba y a la izquierda (90, 0, -90 y 180); las de fuego, solo
+# hacia abajo. Cuatro fotos durante el ataque y una después, recortadas alrededor de Johnny y sin penumbra
+# (captura-andando-<arma>-<ángulo>-<n>.png), para ver que las piernas salen enteras (cintura.gdshader y las piernas de
+# tools/piernas.py) y que no queda nada pintado al acabar. En la terminal: que las de golpe tienen su máscara de piernas
+# y que las piernas de andar solo se ven durante el golpe. Johnny, sin zombis ni compañeros cerca
+func probar_ataque_andando() -> void:
+	await get_tree().create_timer(0.5).timeout
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	for a in get_tree().get_nodes_in_group("aliados"):   # (escondidos y quietos, para que no tapen)
+		a.hide()
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	luz.alternar()   # (sin penumbra, para que se vea)
+	var lado := "izquierda" if "--izquierda" in OS.get_cmdline_user_args() else "derecha"
+	var inicio: Vector2 = johnny.position
+	var armas := ["fregona", "bate", "cuchillo", "motosierra", "katana", "pistola", "escopeta", "mp5", "gatling",
+		"lanzagranadas", "lanzallamas", "desintegrador", "pistola_electrica"]
+	for id in armas:
+		johnny.coger(id)
+		var de_golpe: bool = johnny.arma().tipo == "cuerpo"
+		print("Ataque andando · %s: máscara de piernas %s (esperado: %s)" % [id,
+			johnny.sprite.material.get_shader_parameter("con_mascara"), de_golpe])
+		# las de golpe, hacia abajo, a la derecha, arriba y a la izquierda (el golpe mira hacia ahí y las piernas andan
+		# hacia el lado); las de fuego, solo hacia abajo (siguen andando enteras)
+		var angulos := [90, 0, -90, 180] if de_golpe else [90]
+		for angulo in angulos:
+			johnny.modo = "quieto"
+			johnny.espera = 0.0
+			Input.action_press(lado)
+			await get_tree().create_timer(0.35).timeout
+			johnny.espera = 0.0
+			johnny.intentar_atacar(deg_to_rad(angulo))
+			var dura: float = johnny.ataque_dur if de_golpe else 0.3
+			for n in 4:
+				await get_tree().create_timer(dura * 0.22).timeout
+				foto_johnny("captura-andando-%s-%d-%d.png" % [id, angulo, n])
+				if n == 1:
+					print("Ataque andando · %s hacia %d: piernas a la vista %s (esperado: %s) · animación «%s»" % [id, angulo,
+						johnny.piernas.visible, de_golpe, johnny.sprite.animation])
+			await get_tree().create_timer(0.5).timeout
+			foto_johnny("captura-andando-%s-%d-4.png" % [id, angulo])
+			print("Ataque andando · %s hacia %d, después: piernas a la vista %s (esperado: false) · animación «%s»" % [id, angulo,
+				johnny.piernas.visible, johnny.sprite.animation])
+			Input.action_release(lado)
+			await get_tree().create_timer(0.3).timeout
+			# de vuelta a donde empezó, para que no se choque con la pared
+			johnny.position = inicio
+			johnny.get_node("Camara").reset_smoothing()
+			await get_tree().create_timer(0.15).timeout
+
+
+# Un recorte de la pantalla alrededor de Johnny (160 x 160 unidades), ampliado ×2, en capturas/
+func foto_johnny(nombre: String) -> void:
+	await RenderingServer.frame_post_draw
+	var img := get_viewport().get_texture().get_image()
+	var escala: float = img.get_width() / get_viewport().get_visible_rect().size.x
+	var centro: Vector2 = (get_viewport().get_canvas_transform() * (johnny.global_position + Vector2(0, -30))) * escala
+	var lado := int(160 * escala)
+	var r := Rect2i(Vector2i(centro) - Vector2i(lado, lado) / 2, Vector2i(lado, lado)).intersection(Rect2i(Vector2i.ZERO, img.get_size()))
+	var trozo := img.get_region(r)
+	trozo.resize(trozo.get_width() * 2, trozo.get_height() * 2, Image.INTERPOLATE_NEAREST)
+	trozo.save_png(Captura.CARPETA + nombre)
+
+
 # Con "--captura --mirilla-mando": jugando con el mando en el modo libre, sale una mirilla delante de Johnny que sigue al
 # stick derecho; con el ratón, en el modo asistido o con el juego parado, no (captura-mirilla-mando.png)
 func probar_mirilla_mando() -> void:

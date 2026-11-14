@@ -52,9 +52,15 @@ const vec3 VOMITO3 = vec3(0.353, 0.259, 0.078);   // #5a4214, el borde
 const float BRILLO_ACIDO = 0.55;   // lo que luce el ácido a oscuras (el fuego, del todo)
 
 varying vec2 lugar;
+#ifdef DIBUJO
+varying vec4 tinte;   // el color que le pone el nodo (modulate), sin el dibujo
+#endif
 
 void vertex() {
 	lugar = VERTEX;
+#ifdef DIBUJO
+	tinte = COLOR;
+#endif
 }
 
 // Un número al azar (0-1) para cada sitio
@@ -88,7 +94,14 @@ void fragment() {
 #ifdef RECORTE
 	RECORTE   // lo que quita quien lo incluye antes de pintar nada (Johnny partido por la cintura: cintura.gdshader)
 #endif
+#ifdef DIBUJO
+	// Quien lo incluye dice de dónde sale el dibujo (las piernas de Johnny: cintura.gdshader). Aquí COLOR ya trae el
+	// dibujo de la hoja multiplicado por el tinte del nodo, así que no vale: se hace la misma cuenta con el otro dibujo
+	vec4 otro = DIBUJO;
+	vec4 c = otro * (otro * tinte);
+#else
 	vec4 c = texture(TEXTURE, UV) * COLOR;
+#endif
 	vec3 r = mix(c.rgb, vec3(0.72, 0.9, 1.0), hielo);
 	float claro = dot(r, vec3(0.3, 0.59, 0.11));
 	float a = c.a;

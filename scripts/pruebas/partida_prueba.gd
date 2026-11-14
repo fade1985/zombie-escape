@@ -176,6 +176,7 @@
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
+#   --ataque-andando    cada arma atacando mientras Johnny anda (las de golpe, hacia los cuatro lados): fotos del golpe o el disparo y de después, recortadas alrededor de Johnny (las piernas, las marcas) [prueba_larga.gd]
 #   --mirilla-mando     con el mando: stick suelto, sin mirilla y RT hacia donde mira; stick empujado, mirilla que lo sigue (y escondida con ratón, asistido, pausa) [prueba_larga.gd]
 #   --ordenador-b       el botón B del mando en el ordenador de la sala: cierra el programa y luego apaga el ordenador [prueba_larga.gd]
 #   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
@@ -685,6 +686,10 @@ func empezar_prueba() -> void:
 	elif "--ordenador-iconos" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_ordenador_iconos()
+		get_tree().quit()
+	elif "--ataque-andando" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_ataque_andando()
 		get_tree().quit()
 	elif "--mirilla-mando" in args:
 		set_process(false)   # sin la prueba larga
