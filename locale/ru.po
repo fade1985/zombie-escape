@@ -3176,8 +3176,8 @@ msgid "+munición"
 msgstr "+патроны"
 
 #: scripts/partida.gd
-msgid "No puedo llevar más"
-msgstr "Больше не унесу"
+msgid "¡NO PUEDO LLEVAR MÁS!"
+msgstr "БОЛЬШЕ НЕ УНЕСУ!"
 
 #: scripts/partida.gd
 msgid "No se puede usar"

@@ -17,7 +17,7 @@ var johnny: Node2D
 var icono: Texture2D = ICONO
 var tamano := 0.75
 var puede := func() -> bool: return true
-var al_no_caber := Callable()   # si lo hay, se llama al pisarlo sin que quepa (una vez cada vez que se pisa: «No puedo llevar más»)
+var al_no_caber := Callable()   # si lo hay, se llama al pisarlo sin que quepa (una vez cada vez que se pisa: «¡NO PUEDO LLEVAR MÁS!»)
 var pisado := false
 var tirado := false
 var salida := Vector2.ZERO    # si no es cero, hacia dónde sale despedido (en vez de a un lado al azar)

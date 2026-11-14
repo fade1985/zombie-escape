@@ -1369,18 +1369,13 @@ func icono_caja() -> Texture2D:
 
 
 # Johnny pisa algo del suelo que no le cabe (un objeto, un arrojable o munición, con todo su sitio lleno): lo dice
-# encima de su cabeza. Como mucho una vez cada 1,5 s, para que un montón de cosas juntas no lo repita sin parar
+# encima de su cabeza, con el grito grande y amarillo de «¡¡¡LA LLAVE!!!» (gran_aviso). Como mucho una vez cada 1,5 s, para que un montón de cosas juntas no lo repita sin parar
 func no_puedo_mas() -> void:
 	var ahora := Time.get_ticks_msec()
 	if ahora < no_puedo_mas_hasta:
 		return
 	no_puedo_mas_hasta = ahora + 1500
-	var etiqueta := Zombi.texto_flotante(mapa.cosas, johnny.global_position + Vector2(0, -92), Idioma.t("No puedo llevar más"),
-		Tema.TINTA, 18, true, 1.2)
-	etiqueta.z_index = 50
-	var sin_luz := CanvasItemMaterial.new()   # (sin que le afecte la luz: si no, en una sala a oscuras no se lee)
-	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	etiqueta.material = sin_luz
+	gran_aviso(Idioma.t("¡NO PUEDO LLEVAR MÁS!"))
 
 
 # Un objeto en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el

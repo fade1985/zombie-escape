@@ -3174,8 +3174,8 @@ msgid "+munición"
 msgstr "+munição"
 
 #: scripts/partida.gd
-msgid "No puedo llevar más"
-msgstr "Não consigo carregar mais"
+msgid "¡NO PUEDO LLEVAR MÁS!"
+msgstr "NÃO CONSIGO CARREGAR MAIS!"
 
 #: scripts/partida.gd
 msgid "No se puede usar"

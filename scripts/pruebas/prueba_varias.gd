@@ -791,7 +791,7 @@ func probar_gastro() -> void:
 # vez cada 5 s; lo que le quitaría a un jefe); Ajolote (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
 # cuchillo, la MP5 y la cura de la médica; su propia granada a los pies (como mucho 25); los premios del reto
 # del día y los billetes de los jefes. La segunda parte (27 oct, tarde): el tope de curas (2 botiquines y 3 vendas; un
-# armarito abierto con la mochila llena deja el botiquín en el suelo y Johnny dice «No puedo llevar más», captura-equilibrio-tope.png) y
+# armarito abierto con la mochila llena deja el botiquín en el suelo y Johnny grita «¡NO PUEDO LLEVAR MÁS!», captura-equilibrio-tope.png) y
 # qué hay en los armaritos de la planta; Ninja con el guardia o el zombi de la llave (un 25 %); los números de los
 # jefes, las mutaciones y los aliados; el reto «Sin curas» en la farmacia. Al final sube a la planta 2 con el incendio
 # superado: el aviso con su premio (captura-equilibrio-incendio.png). Se cierra

@@ -3172,8 +3172,8 @@ msgid "+munición"
 msgstr "+弹药"
 
 #: scripts/partida.gd
-msgid "No puedo llevar más"
-msgstr "拿不下了"
+msgid "¡NO PUEDO LLEVAR MÁS!"
+msgstr "拿不下了！"
 
 #: scripts/partida.gd
 msgid "No se puede usar"
