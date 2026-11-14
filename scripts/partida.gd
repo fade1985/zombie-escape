@@ -1112,6 +1112,7 @@ func poner_noticia(tele: Node2D) -> void:
 # Un grito grande encima de Johnny, como el de «¡¡¡LA LLAVE!!!», para lo que no hay que perderse (lo nuevo en el ordenador,
 # un logro, una skin): letra de 32, amarilla, que sube y se apaga en 1,4 s. Va además del aviso de abajo, que se lee peor
 # ("alto": lo que sube por encima de Johnny; "dura": lo que tarda en irse, más en una frase larga)
+# Si Johnny está tan al borde de la pantalla que la frase se cortaría, se corre hacia dentro hasta verse entera
 func gran_aviso(texto: String, color := Tema.AMARILLO, alto := 110.0, dura := 1.4) -> void:
 	if johnny == null or not johnny.is_inside_tree():
 		return
@@ -1120,6 +1121,14 @@ func gran_aviso(texto: String, color := Tema.AMARILLO, alto := 110.0, dura := 1.
 	var sin_luz := CanvasItemMaterial.new()   # (que no lo apague la penumbra de los pisos)
 	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	etiqueta.material = sin_luz
+	# Con Johnny pegado a un lado de la pantalla, la frase se corre hacia dentro lo justo para leerse entera (sigue a la
+	# altura de su cabeza). "a_la_vista" es el trozo del mapa que se ve ahora mismo
+	var a_la_vista: Rect2 = get_viewport().get_canvas_transform().affine_inverse() * get_viewport().get_visible_rect()
+	var ancho: float = etiqueta.get_minimum_size().x
+	var margen := 12.0
+	if ancho + margen * 2.0 <= a_la_vista.size.x:
+		etiqueta.global_position.x = clampf(etiqueta.global_position.x, a_la_vista.position.x + margen,
+			a_la_vista.end.x - ancho - margen)
 
 
 # Un aviso de Johnny encima de su cabeza (como el de la llave) que solo sale la primera vez: las siguientes, ni frase ni
