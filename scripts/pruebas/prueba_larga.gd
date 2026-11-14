@@ -641,6 +641,25 @@ func probar_mirilla_mando() -> void:
 	Input.action_press("apuntar_arriba", 1.0)
 	await get_tree().create_timer(0.3).timeout
 	print("Mirilla del mando · con el stick arriba, encima de Johnny %s (esperado: true)" % (m.global_position.y < johnny.global_position.y - 100.0))
+	# el stick empujado a medias (no hasta el tope) también apunta y RT ataca hacia él, aunque Johnny ande al revés
+	# (antes, con el stick sin llegar al tope no hacía nada: Johnny miraba hacia donde andaba y RT no atacaba)
+	Input.action_release("apuntar_arriba")
+	Input.action_press("izquierda")
+	for fuerza in [0.6, 0.8, 1.0]:
+		Input.action_press("apuntar_derecha", fuerza)
+		await get_tree().create_timer(0.3).timeout
+		johnny.espera = 0.0
+		Input.action_press("atacar")
+		for n in 8:
+			await get_tree().physics_frame
+		Input.action_release("atacar")
+		print("Mirilla del mando · andando a la izquierda, stick a la derecha al %d %%: mirilla %s, mira «%s», ataca %s (esperado: true, e, true)" % [
+			int(fuerza * 100), m.visible, johnny.direccion, johnny.espera > 0.0])
+		Input.action_release("apuntar_derecha")
+		await get_tree().create_timer(0.6).timeout
+	Input.action_release("izquierda")
+	Input.action_press("apuntar_arriba", 1.0)
+	await get_tree().create_timer(0.2).timeout
 	johnny.con_raton = true
 	await get_tree().create_timer(0.2).timeout
 	print("Mirilla del mando · con el ratón a la vista %s (esperado: false)" % m.visible)

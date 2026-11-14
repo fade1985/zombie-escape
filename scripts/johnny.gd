@@ -663,11 +663,14 @@ func apuntar_libre() -> void:
 			ataca = true
 	elif con_raton:
 		apunte = get_global_mouse_position() - global_position
+		if apunte.length() < 1.0:
+			apunte = Vector2.ZERO   # con el ratón justo encima de Johnny no hay hacia dónde
 	elif ataca and Controles.con_mando:
 		# RT con el stick suelto (14 nov, lo pidió el dueño): hacia donde mira Johnny (al andar, hacia donde anda; quieto,
 		# hacia donde miró la última vez). Con el stick empujado, hacia la mirilla (arriba)
 		apunte = Vector2.from_angle(DIRS.find(direccion) * PI / 4)
-	if apunte.length() < 1.0:
+	# (no «length() < 1»: el stick va de 0 a 1 y, sin llegar al tope, Johnny no miraba hacia él ni RT atacaba, 14 nov)
+	if apunte == Vector2.ZERO:
 		return
 	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado
 	# (delante de un mueble o una puerta también se ataca: se usan con E, B en el mando o su botón en el móvil)
