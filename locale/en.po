@@ -3174,8 +3174,8 @@ msgid "+munición"
 msgstr "+ammo"
 
 #: scripts/partida.gd
-msgid "Ya llevas %d"
-msgstr "Already carrying %d"
+msgid "No puedo llevar más"
+msgstr "I can't carry any more"
 
 #: scripts/partida.gd
 msgid "No se puede usar"

@@ -1283,6 +1283,9 @@ func soltar_billetes(cuantos: int, donde: Vector2) -> void:
 		mapa.cosas.add_child.call_deferred(billete)
 
 
+var no_puedo_mas_hasta := 0   # hasta cuándo (Time.get_ticks_msec) no vuelve a decir «No puedo llevar más»
+
+
 # Lo que vale un billete al cogerlo: $1 (con la skin del gerente, la mitad de las veces $2: Skins.comision)
 func valor_billete() -> int:
 	return 2 if randf() < Skins.comision(johnny.skin) else 1
@@ -1299,6 +1302,7 @@ func soltar_lanzable(k: String, donde: Vector2) -> void:
 	cosa.tamano = 1.0
 	cosa.position = donde
 	cosa.puede = lanzables.cabe.bind(k)
+	cosa.al_no_caber = no_puedo_mas
 	cosa.cogido.connect(func():
 		lanzables.sumar(k)
 		Sonido.tocar("compra")
@@ -1325,9 +1329,16 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 	cosa.position = donde
 	if tipo == "":
 		cosa.puede = johnny.quiere_municion
+		# (solo si lleva un arma que gaste balas: sin ella la caja no es para él, y no dice nada)
+		cosa.al_no_caber = func():
+			for id in [johnny.huecos.fuego, repuesto("fuego")]:
+				if id != "" and not Armas.datos(id).has("relleno"):
+					no_puedo_mas()
+					return
 	else:
 		cosa.tirado = true
 		cosa.puede = func() -> bool: return johnny.sitio(tipo) >= cuanta
+		cosa.al_no_caber = no_puedo_mas
 	cosa.cogido.connect(func():
 		if tipo == "":
 			johnny.sumar_municion()
@@ -1357,6 +1368,21 @@ func icono_caja() -> Texture2D:
 	return icono_municion(tipo if tipo in Armas.MUNICION else "balas")
 
 
+# Johnny pisa algo del suelo que no le cabe (un objeto, un arrojable o munición, con todo su sitio lleno): lo dice
+# encima de su cabeza. Como mucho una vez cada 1,5 s, para que un montón de cosas juntas no lo repita sin parar
+func no_puedo_mas() -> void:
+	var ahora := Time.get_ticks_msec()
+	if ahora < no_puedo_mas_hasta:
+		return
+	no_puedo_mas_hasta = ahora + 1500
+	var etiqueta := Zombi.texto_flotante(mapa.cosas, johnny.global_position + Vector2(0, -92), Idioma.t("No puedo llevar más"),
+		Tema.TINTA, 18, true, 1.2)
+	etiqueta.z_index = 50
+	var sin_luz := CanvasItemMaterial.new()   # (sin que le afecte la luz: si no, en una sala a oscuras no se lee)
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	etiqueta.material = sin_luz
+
+
 # Un objeto en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el
 # bidón de ácido y la batería, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
 # a la mochila hasta que se aparte). "salida": hacia dónde sale despedido, en vez de a un lado al azar (el armarito del baño)
@@ -1370,8 +1396,7 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector
 	cosa.tirado = tirado
 	cosa.position = donde
 	cosa.puede = func() -> bool: return johnny.sitio(id) > 0 if id in Armas.MUNICION else Objetos.cabe(mochila, id)
-	if Objetos.TOPE.has(id):   # las curas: si ya lleva su tope, al pisarla lo dice
-		cosa.al_no_caber = func(): numero(cosa.position + Vector2(0, -24), Idioma.t("Ya llevas %d") % Objetos.TOPE[id], Tema.TINTA)
+	cosa.al_no_caber = no_puedo_mas
 	cosa.cogido.connect(func():
 		mochila.append(id)
 		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
