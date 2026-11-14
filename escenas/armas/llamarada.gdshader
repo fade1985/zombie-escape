@@ -139,6 +139,10 @@ void fragment() {
 	we *= 1.0 + cortada * 0.6 * smoothstep(largo - 60.0, largo, xe);
 	we += cortada * 26.0 * smoothstep(largo - 36.0, largo, xe);
 	we *= 0.55 + 0.8 * n;
+	// la punta se cierra en redondo (si no, el cono llegaba con todo su ancho al final y se cortaba en recto, como con
+	// tijera); contra la pared no: ahí se aplasta
+	float fin = (1.0 - cortada) * smoothstep(punta - 150.0, punta - 6.0, xe);
+	we = max(we * (0.04 + 0.96 * sqrt(max(1.0 - fin * fin, 0.0))), 0.001);
 	float le = abs(ye) / we;
 	float calor = (1.0 - le) * (0.35 + 0.75 * smoothstep(0.0, 120.0, xe)) - t * 0.4 + (n - 0.5) * 0.35;
 	calor += golpe * 0.1 * (1.0 - le);
