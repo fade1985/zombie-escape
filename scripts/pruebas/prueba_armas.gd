@@ -857,6 +857,50 @@ func probar_impacto() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --bala-pared": Johnny pegado a la pared de la izquierda de la sala de pruebas dispara contra ella con la
+# pistola, la MP5 y la escopeta. La boca del arma queda al otro lado de la pared: las balas tienen que nacer delante y
+# dar en ella, ninguna puede verse pasada la pared (johnny.ante_pared). Foto: captura-bala-pared.png
+func probar_bala_pared() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	var rayo := PhysicsRayQueryParameters2D.create(johnny.global_position, johnny.global_position + Vector2(-2000, 0), 1)
+	var pared := get_world_2d().direct_space_state.intersect_ray(rayo)
+	if not pared:
+		print("Bala y pared · no hay pared a la izquierda")
+		get_tree().quit()
+		return
+	johnny.global_position = pared.position + Vector2(johnny.RADIO + 1.0, 0)
+	johnny.get_node("Camara").reset_smoothing()
+	Luz.evento = 0.5
+	var balas := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n.get_script() == preload("res://scripts/bala.gd"))
+	for id in ["pistola", "mp5", "escopeta"]:
+		llevar_arma(id, 0, true, false)
+		await get_tree().create_timer(0.5).timeout
+		johnny.direccion = "o"
+		johnny.balas = johnny.arma().cargador
+		var boca: float = johnny.tiro(PI, johnny.arma(), "o")[0].x
+		johnny.disparar(PI)
+		var nacen: int = balas.call().size()
+		var pasadas := 0
+		for i in 20:
+			for b in balas.call():
+				if b.global_position.x < pared.position.x - 0.5:
+					pasadas += 1
+			if id == "pistola" and i == 1:
+				await get_tree().process_frame
+				Captura.foto("captura-bala-pared.png")
+			await get_tree().physics_frame
+		print("Bala y pared · %s: salen de x=%.0f con la pared en x=%.0f (esperado: delante, mayor) | nacen %d | pasadas de la pared: %d (esperado: 0) | quedan: %d (esperado: 0)" % [
+			id, boca, pared.position.x, nacen, pasadas, balas.call().size()])
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --charcos": los charcos que burbujean (charco.gd: veneno, ácido y vómito) junto a uno de fuego, para
 # compararlos. En la sala de pruebas, en fila delante de Johnny: fotos al caer (se extienden), con sus
 # burbujas, cuando empiezan a secarse a trozos y con la mancha que dejan. Cuenta si se pisan y se cierra

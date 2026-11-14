@@ -741,7 +741,7 @@ func echar_fuego(angulo: float, w: Dictionary) -> void:
 		var sobra := absf(desvio) - (Llamarada.abre_de(w) - MARGEN_CHORRO)
 		if sobra > 0.0:
 			a += signf(desvio) * sobra
-	llamarada.mantener(suelo_de_boca(w, direccion), a, w)
+	llamarada.mantener(ante_pared(suelo_de_boca(w, direccion)), a, w)
 	deposito = maxf(0.0, deposito - get_physics_process_delta_time())
 	if deposito <= 0.0:
 		empezar_recarga()
@@ -887,6 +887,17 @@ func golpear(angulo: float) -> void:
 		Temblor.temblar(3.0 + tocados)
 
 
+# Pegado a una pared (o a un mueble), la boca del arma queda al otro lado: la bala nacería ya pasada la pared y la
+# atravesaría. Si entre Johnny y "punto" hay algo de la capa 1, devuelve el sitio justo delante de ese choque, y la bala
+# (o la granada, el chorro...) sale de ahí y da en la pared
+func ante_pared(punto: Vector2) -> Vector2:
+	var rayo := PhysicsRayQueryParameters2D.create(global_position, punto, 1)
+	var pared := get_world_2d().direct_space_state.intersect_ray(rayo)
+	if pared.is_empty():
+		return punto
+	return pared.position - global_position.direction_to(punto) * 2.0
+
+
 # De dónde sale la bala y hacia dónde va: [salida, ángulo]. Sale de la boca del arma, como se ve en el dibujo (en
 # píxeles del dibujo desde los pies, x2 para pasar a unidades; los pies van 16 unidades por debajo del centro de
 # Johnny). La bala de verdad va 50 más abajo, a ras de suelo, y se dibuja 50 más arriba (ver bala.gd): así sale de la
@@ -895,7 +906,7 @@ func golpear(angulo: float) -> void:
 # Las armas creadas a distancia (las gotas y las chispas) van como siempre, paralelas
 func tiro(angulo: float, w: Dictionary, hacia: String) -> Array:
 	var boca: Vector2 = w.boca[hacia] * 2.0
-	var salida := global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
+	var salida := ante_pared(global_position + Vector2(boca.x, 16.0 + boca.y + 50.0))
 	var blanco := blanco_en_linea(angulo, w)
 	if blanco == null or w.has("efecto"):
 		return [salida, angulo]
