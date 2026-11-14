@@ -50,6 +50,9 @@ func que_toca() -> String:
 		return "flecha"
 	if johnny.modo == "asistido" and not (partida.lanzables.apuntando and johnny.con_raton):
 		return "oculto"
+	# jugando con el mando, la mirilla es la de johnny.gd (poner_mirilla_mando), que sigue al stick: la del ratón, escondida
+	if Controles.con_mando and not johnny.con_raton:
+		return "oculto"
 	return "mirilla"
 
 

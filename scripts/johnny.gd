@@ -629,6 +629,9 @@ func apuntar_y_atacar() -> void:
 # la dirección en que apunta con el stick derecho (o en la última a la que apuntó: RT ataca hacia ella). Con el ratón, el
 # móvil, el modo asistido o un menú abierto, escondida
 func poner_mirilla_mando() -> void:
+	# (al salir del juego Johnny deja el árbol antes de borrarse y la señal aún llega: sin árbol, nada que hacer)
+	if not is_inside_tree():
+		return
 	var ver := Controles.con_mando and modo == "libre" and vivo and not con_raton and not get_tree().paused 			and not (Tactil.activo and Tactil.con_dedo)
 	mirilla_mando.visible = ver
 	if ver:

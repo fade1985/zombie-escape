@@ -623,6 +623,7 @@ func probar_mirilla_mando() -> void:
 	await get_tree().create_timer(0.3).timeout
 	var m: Node2D = johnny.mirilla_mando
 	print("Mirilla del mando · a la vista %s, a la derecha de Johnny %s (esperado: true, true)" % [m.visible, m.global_position.x > johnny.global_position.x + 100.0])
+	print("Mirilla del mando · la del ratón «%s» (esperado: oculto: solo una mirilla)" % raton.puesto)
 	Captura.foto("captura-mirilla-mando.png")
 	Input.action_press("apuntar_arriba", 1.0)
 	await get_tree().create_timer(0.3).timeout
@@ -641,6 +642,13 @@ func probar_mirilla_mando() -> void:
 	await get_tree().create_timer(0.2, true).timeout
 	print("Mirilla del mando · con el juego parado a la vista %s (esperado: false)" % m.visible)
 	get_tree().paused = false
+	# al salir del juego Johnny deja el árbol antes de borrarse: la mirilla no puede pedir el árbol (antes, «paused» en null)
+	var padre := johnny.get_parent()
+	padre.remove_child(johnny)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	padre.add_child(johnny)
+	print("Mirilla del mando · Johnny fuera del árbol dos fotogramas sin error (esperado: sin SCRIPT ERROR antes de esta línea)")
 
 
 # Con "--captura --ordenador-b": con botones del mando de verdad (PruebaMando.pulsar), B en cada programa del ordenador lo
