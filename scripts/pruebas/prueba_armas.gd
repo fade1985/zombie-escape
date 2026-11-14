@@ -1515,6 +1515,42 @@ func probar_aura() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --tajos": el haz de color del golpe de las armas cuerpo a cuerpo mejoradas (tajo.gd), que sigue el gesto
+# del dibujo de cada una. En la sala de pruebas, con cada arma en Épica, un golpe hacia la derecha, abajo, la izquierda y
+# arriba, con la foto recortada de Johnny a medio haz (captura-tajo-<arma>-<dirección>.png). Se cierra
+func probar_tajos() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	var direcciones := {"e": 0.0, "s": PI / 2, "o": PI, "n": -PI / 2}
+	for id in ["fregona", "bate", "cuchillo", "motosierra", "katana"]:
+		llevar_arma(id, Armas.EPICA, true, false)
+		await get_tree().create_timer(0.5).timeout
+		for dir in direcciones:
+			johnny.direccion = dir
+			johnny.atacar(direcciones[dir])
+			while johnny.golpe_pendiente:
+				await get_tree().process_frame
+			await get_tree().create_timer(0.05).timeout
+			var tajos := johnny.get_children().filter(func(n): return n is Tajo)
+			print("%s hacia %s: gesto %s, %d haz (esperado: %s, 1)" % [id, dir, tajos[0].gesto if tajos else "-",
+				tajos.size(), johnny.arma().gesto])
+			recorte("captura-tajo-%s-%s.png" % [id, dir])
+			await get_tree().create_timer(0.8).timeout
+	get_tree().quit()
+
+
 # Con "--captura --fogonazos": el fogonazo de pixelfx (fogonazo.gd) en la sala de pruebas, a media luz. Con la pistola,
 # la MP5 y la escopeta, un disparo hacia cada una de las 8 direcciones con la foto de la llama recortada alrededor de
 # Johnny (captura-fogonazo-<arma>-<dirección>.png); hacia la derecha, también el humo (-humo-1 y -humo-2). Luego una

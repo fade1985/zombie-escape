@@ -7,6 +7,8 @@
 #   arco      cuerpo a cuerpo: grados del abanico que barre
 #   empuje    cuánto echa para atrás al zombi (1 = normal)
 #   parada    cuerpo a cuerpo: segundos que el juego se queda casi parado al acertar (Temblor.parar), que el golpe pese
+#   gesto     cuerpo a cuerpo: cómo se mueve el arma en el dibujo del golpe, para que el haz de color de las mejoradas
+#             siga ese camino (tajo.gd): "barrido", "caida", "subida" o "estocada"
 #   hoja      las animaciones de Johnny con esa arma en la mano
 #   pies      dónde caen los pies de Johnny en su hoja (en píxeles del dibujo): la escopeta es más alta
 #   momento   en qué punto de la animación de golpe llega el arma (lo dice la hoja del juego)
@@ -231,14 +233,14 @@ const DATOS := {
 	# (la fregona hacía 8 hasta el 27 oct: con 10, un zombi normal cae en 3 golpes y no en 4, y la primera partida se
 	# lleva mejor; valoración del equilibrio)
 	"fregona": {
-		"nombre": "Fregona", "tipo": "cuerpo", "dano": 10, "ritmo": 1.8, "alcance": 62.0, "arco": 140.0,   # [traducir]
+		"nombre": "Fregona", "tipo": "cuerpo", "gesto": "caida", "dano": 10, "ritmo": 1.8, "alcance": 62.0, "arco": 140.0,   # [traducir]
 		"empuje": 2.0, "parada": 0.05, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-guardia.tres"),
 		"punta": {"s": Vector2(21, -38), "se": Vector2(-18, -36), "e": Vector2(-18, -39), "ne": Vector2(-19, -38),
 			"n": Vector2(-21, -38), "no": Vector2(18, -40), "o": Vector2(18, -39), "so": Vector2(20, -38)},
 	},
 	"bate": {
-		"nombre": "Bate", "tipo": "cuerpo", "dano": 16, "ritmo": 1.6, "alcance": 66.0, "arco": 110.0,   # [traducir]
+		"nombre": "Bate", "tipo": "cuerpo", "gesto": "barrido", "dano": 16, "ritmo": 1.6, "alcance": 66.0, "arco": 110.0,   # [traducir]
 		"empuje": 1.5, "parada": 0.07, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-bate.tres"),
 		"punta": {"s": Vector2(-19, -47), "se": Vector2(-17, -46), "e": Vector2(-18, -45), "ne": Vector2(-17, -45),
@@ -247,7 +249,7 @@ const DATOS := {
 	# (el cuchillo daba 4 golpes por segundo hasta el 27 oct: 36 de daño por segundo, el mejor cuerpo a cuerpo y el más
 	# barato a la vez; con 3, 27, algo más que el bate)
 	"cuchillo": {
-		"nombre": "Cuchillo", "tipo": "cuerpo", "dano": 9, "ritmo": 3.0, "alcance": 46.0, "arco": 60.0,   # [traducir]
+		"nombre": "Cuchillo", "tipo": "cuerpo", "gesto": "estocada", "dano": 9, "ritmo": 3.0, "alcance": 46.0, "arco": 60.0,   # [traducir]
 		"empuje": 0.5, "parada": 0.03, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-cuchillo.tres"),
 		"punta": {"s": Vector2(-10, -14), "se": Vector2(19, -27), "e": Vector2(16, -24), "ne": Vector2(18, -27),
@@ -260,7 +262,7 @@ const DATOS := {
 	# para que se vea subir. Como sube tanto, su casilla es más grande: de 112x112, con los pies en 56,88. "sangra":
 	# de la punta de la espada caen gotas de sangre de vez en cuando (goteo.gd)
 	"motosierra": {
-		"nombre": "Motosierra", "tipo": "cuerpo", "dano": 34, "ritmo": 0.9, "alcance": 76.0, "arco": 70.0,   # [traducir]
+		"nombre": "Motosierra", "tipo": "cuerpo", "gesto": "caida", "dano": 34, "ritmo": 0.9, "alcance": 76.0, "arco": 70.0,   # [traducir]
 		"empuje": 2.5, "parada": 0.12, "momento": 0.5, "golpe_dura": 0.7, "sangra": true, "pies": Vector2(56, 88),
 		"hoja": preload("res://assets/sprites/conserje-48-motosierra.tres"),
 		"punta": {"s": Vector2(22, 0), "se": Vector2(27, -1), "e": Vector2(30, -13), "ne": Vector2(27, -35),
@@ -272,7 +274,7 @@ const DATOS := {
 	# ("momento" 0,2: en el tercero de sus 10 fotogramas). Su casilla es la de siempre, de 96x96, pero con los pies más
 	# abajo (48,84), porque el corte sube por encima de la cabeza. "punta": el final de la vaina (o del mango)
 	"katana": {
-		"nombre": "Katana", "tipo": "cuerpo", "dano": 20, "ritmo": 1.4, "alcance": 70.0, "arco": 100.0,   # [traducir]
+		"nombre": "Katana", "tipo": "cuerpo", "gesto": "subida", "dano": 20, "ritmo": 1.4, "alcance": 70.0, "arco": 100.0,   # [traducir]
 		"empuje": 1.2, "parada": 0.06, "momento": 0.2, "pies": Vector2(48, 84),
 		"hoja": preload("res://assets/sprites/conserje-48-katana.tres"),
 		"punta": {"s": Vector2(16, -9), "se": Vector2(-16, -13), "e": Vector2(-15, -13), "ne": Vector2(-19, -12),
