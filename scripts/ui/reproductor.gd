@@ -53,6 +53,14 @@ func poner(n: Dictionary) -> void:
 	tele.poner(n)
 
 
+# Un clic izquierdo en la pantalla (o en los subtítulos) va más deprisa: acaba la frase y, ya acabada, pasa a la siguiente
+func _gui_input(evento: InputEvent) -> void:
+	if evento is InputEventMouseButton and evento.pressed and evento.button_index == MOUSE_BUTTON_LEFT \
+			and Rect2(tele.position, tele.custom_minimum_size).has_point(evento.position):
+		accept_event()
+		tele.adelantar()
+
+
 # Un botón redondo con su dibujo (se dibuja por código, para no depender de que la letra tenga las flechas)
 func boton_icono(nombre: String, icono: String, r: Rect2, redondo: bool, pista: String) -> Button:
 	var b := Button.new()

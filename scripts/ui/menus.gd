@@ -396,7 +396,8 @@ func pagina(p: Dictionary, n: int, total: int, al_cerrar: Callable) -> void:
 
 # La noticia que sale en la tele de un salón (M91): solo la pantalla de la tele, grande, con los subtítulos debajo y sin
 # nada más. Se ve entera, seguida, como un vídeo; al acabar espera un momento y se apaga sola: al_cerrar(true). Con Esc
-# (o B del mando) se cierra antes, sin darla por vista: al_cerrar(false)
+# (o B del mando) se cierra antes, sin darla por vista: al_cerrar(false). Con el clic izquierdo (o un toque, o A del mando,
+# Intro o Espacio) se va más deprisa, como en los relatos: acaba la frase de golpe y, ya acabada, pasa a la siguiente
 func noticia(n: Dictionary, al_cerrar: Callable) -> void:
 	cerrar()
 	abierto = "noticia"
@@ -407,9 +408,11 @@ func noticia(n: Dictionary, al_cerrar: Callable) -> void:
 	fondo.theme = Tema.crear()
 	add_child(fondo)
 	var centro := CenterContainer.new()
+	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE   # (los clics, al fondo: también los que caen en la tele)
 	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
 	fondo.add_child(centro)
 	var marco := PanelContainer.new()   # (un filo oscuro alrededor de la pantalla, como el borde de una tele)
+	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var borde := StyleBoxFlat.new()
 	borde.bg_color = Color("#0a0a0e")
 	borde.border_color = Color("#2a2740")
@@ -422,17 +425,21 @@ func noticia(n: Dictionary, al_cerrar: Callable) -> void:
 	tele.continuo = true
 	marco.add_child(tele)
 	tele.poner(n)
+	tele.name = "Tele"
+	fondo.gui_input.connect(func(evento: InputEvent):
+		if evento is InputEventMouseButton and evento.pressed and evento.button_index == MOUSE_BUTTON_LEFT:
+			tele.adelantar())
 	tele.acabada.connect(func():
 		# (un momento con la última frase en pantalla, y la tele se apaga)
 		get_tree().create_timer(1.5, true).timeout.connect(noticia_vista.bind(true)))
 	var pista := Label.new()   # (muy discreta, abajo del todo)
-	pista.text = Idioma.t("Esc: apagar la tele")
+	pista.text = Idioma.t("Clic: pasar la frase · Esc: apagar la tele")
 	pista.theme_type_variation = "Sub"
 	pista.modulate = Color(1, 1, 1, 0.45)
 	pista.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	pista.offset_top = -30
-	pista.offset_left = -120
-	pista.offset_right = 120
+	pista.offset_left = -240
+	pista.offset_right = 240
 	pista.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	fondo.add_child(pista)
 
@@ -469,6 +476,12 @@ func _unhandled_input(evento: InputEvent) -> void:
 	if abierto == "noticia" and evento.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		noticia_vista(false)
+		return
+	if abierto == "noticia" and evento.is_action_pressed("ui_accept"):   # (A del mando, Intro o Espacio: como el clic)
+		get_viewport().set_input_as_handled()
+		var tele := fondo.find_child("Tele", true, false) as Tele
+		if tele:
+			tele.adelantar()
 		return
 	if abierto == "pagina" and evento.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()

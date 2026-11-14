@@ -6277,8 +6277,8 @@ msgid "Seguir"
 msgstr "Дальше"
 
 #: scripts/ui/menus.gd
-msgid "Esc: apagar la tele"
-msgstr "Esc: выключить телевизор"
+msgid "Clic: pasar la frase · Esc: apagar la tele"
+msgstr "Клик: дальше · Esc: выключить телевизор"
 
 #: scripts/ui/menus.gd
 msgid "El fuego"

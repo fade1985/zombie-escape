@@ -1147,6 +1147,22 @@ func probar_noticias() -> void:
 	print("Tele · subtítulos: %d líneas, %d de alto en un recuadro de %d (esperado: 2 líneas y que quepan con aire: %s)" % [
 		lineas, alto_texto, la_tele.caja_texto.size.y, alto_texto + 16 <= la_tele.caja_texto.size.y])
 	Captura.foto("captura-tele-dos-lineas.png")
+	# el clic izquierdo va más deprisa (14 nov): con la reportera hablando, la frase sale entera; con otro, la siguiente
+	while not la_tele.hablando():
+		await get_tree().process_frame
+	var en_trozo: int = la_tele.trozo
+	var pasos: Array[bool] = []
+	for paso in 2:
+		for apretado in [true, false]:
+			var clic := InputEventMouseButton.new()
+			clic.button_index = MOUSE_BUTTON_LEFT
+			clic.pressed = apretado
+			clic.position = get_viewport().get_visible_rect().size / 2.0
+			clic.global_position = clic.position
+			get_viewport().push_input(clic)
+		await get_tree().create_timer(0.1, true).timeout
+		pasos.append(not la_tele.hablando() and la_tele.trozo == en_trozo if paso == 0 else la_tele.trozo == en_trozo + 1)
+	print("Tele · clic izquierdo: la frase entera de golpe %s y, con otro, la siguiente %s (esperado: true, true)" % pasos)
 	menus.noticia_vista(false)
 	await get_tree().create_timer(0.2).timeout
 	print("Tele · cerrada antes de acabar: %s, vistas %s (esperado: encendida, [])" % [sitio.tele.estado, Guardado.cargar().videos_vistos])

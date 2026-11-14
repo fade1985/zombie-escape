@@ -8,6 +8,7 @@
 # Se usa así:  var tele := Tele.new()  ·  tele.poner(noticia)   (una de Historia.NOTICIAS)
 # "escala" (antes de añadirla): lo que se agranda la pantalla de 288 × 164 (2 en la tele del salón, 1,5 en el reproductor).
 # Con tele.continuo = true no hace falta pulsar para seguir: pasa sola de un trozo al siguiente, como un vídeo.
+# tele.adelantar() es el clic del que tiene prisa: acaba la frase de golpe y, ya acabada, pasa a la siguiente.
 class_name Tele
 extends Control
 
@@ -49,6 +50,7 @@ var espera := 0.0         # lo que lleva esperando entre trozos (con "continuo")
 var reproducido := 0.0    # los segundos que lleva puesta la noticia (el contador del reproductor)
 var duracion := 0.0       # lo que dura la emisión entera, sin la nieve: las letras de cada trozo y la espera de después
 var andado := 0.0         # lo que lleva de ella (la barra de avance: así va seguida, también en las esperas, 11 nov)
+var fines: Array[float] = []   # a qué altura de la emisión acaba cada trozo, con su espera (para la barra, al adelantar)
 var nieve := 0.0        # el ruido de cambiar de canal, al poner una noticia
 
 
@@ -115,9 +117,11 @@ func poner(n: Dictionary) -> void:
 	cinta.position.x = PANTALLA.size.x
 	trozos = partir(Historia.texto_de(n))
 	duracion = 0.0
+	fines.clear()
 	for t in trozos:
 		texto.text = t
 		duracion += texto.get_total_character_count() / LETRAS_POR_SEGUNDO + ENTRE_TROZOS
+		fines.append(duracion)
 	andado = 0.0
 	empezar_trozo(0)
 	en_antena = 0.0
@@ -139,6 +143,24 @@ func saltar() -> void:
 		empezar_trozo(trozo + 1)
 	elif not noticia.is_empty():
 		poner(noticia)
+
+
+# El clic del que tiene prisa (la tele del salón y el reproductor): si la reportera está hablando, la frase sale entera
+# de golpe; si ya la había dicho, pasa a la siguiente sin esperar (y, tras la última, la emisión se acaba). Con las
+# rayas del principio, en pausa o ya acabada no hace nada. La barra de avance salta a donde toca
+func adelantar() -> void:
+	if noticia.is_empty() or parada or terminada or nieve > 0.0:
+		return
+	if not continuo:
+		saltar()
+	elif hablando():
+		letras = texto.get_total_character_count()
+		texto.visible_characters = -1
+		espera = 0.0
+		andado = fines[trozo] - ENTRE_TROZOS
+	else:
+		espera = ENTRE_TROZOS   # (el siguiente fotograma ya pasa de trozo o acaba)
+		andado = fines[trozo]
 
 
 func empezar_trozo(i: int) -> void:
