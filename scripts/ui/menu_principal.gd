@@ -83,8 +83,9 @@ func _ready() -> void:
 	# JUGAR abre «Elige partida» (huecos.gd, desde el 8 nov): la que esté a medias se sigue y las demás pasan a «Elige edificio»
 	var jugar := boton(columna, Idioma.t("JUGAR"), abrir_huecos, "BotonGrande")
 	jugar.pressed.connect(Sonido.grunir)   # el gruñido de zombi: solo aquí (11 nov, a petición del dueño)
-	# Opciones (con el Tutorial y la pantalla completa dentro) y Salir, grandes como JUGAR
-	var opciones := boton(columna, Idioma.t("Opciones"), func(): pass, "BotonGrande")
+	# Opciones (con el Tutorial y la pantalla completa dentro) y Salir, grandes como JUGAR y, como él, en mayúsculas
+	# (to_upper: así valen las traducciones de «Opciones» y «Salir» de los demás menús, en todos los idiomas)
+	var opciones := boton(columna, Idioma.t("Opciones").to_upper(), func(): pass, "BotonGrande")
 	opciones.pressed.connect(func():
 		var idioma_antes := Idioma.actual
 		Opciones.abrir(self, centro).cerrado.connect(func():
@@ -92,7 +93,7 @@ func _ready() -> void:
 				get_tree().reload_current_scene()
 			else:
 				opciones.grab_focus()))
-	boton(columna, Idioma.t("Salir"), salir, "BotonGrande")
+	boton(columna, Idioma.t("Salir").to_upper(), salir, "BotonGrande")
 
 	# (debajo de los botones iba un marco con consejos para jugar: quitado el 9 nov)
 
