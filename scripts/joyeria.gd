@@ -260,15 +260,15 @@ func coger_premio() -> void:
 	var johnny: Node2D = partida.johnny
 	var suelo: Dictionary = partida.llevar_arma(id, d.premio.calidad)
 	var arma: String = Armas.nombre(id, d.premio.calidad)
+	var fajo: int = partida.sumar_dolares(d.premio.fajo)   # (sin pasar del tope: partida.TOPE)
 	var texto: String
 	if suelo.is_empty():
-		texto = Idioma.t("¡%s! Ya la llevas en la mano. Y un fajo de billetes: +$%d") % [arma, d.premio.fajo]
+		texto = Idioma.t("¡%s! Ya la llevas en la mano. Y un fajo de billetes: +$%d") % [arma, fajo]
 	else:
 		texto = Idioma.t("¡%s! Ya la llevas en la mano; %s se queda en el suelo. Y un fajo de billetes: +$%d") % [
-			arma, Armas.nombre(suelo.id, suelo.calidad), d.premio.fajo]
-	partida.dolares += d.premio.fajo
+			arma, Armas.nombre(suelo.id, suelo.calidad), fajo]
 	Sonido.tocar("compra")
-	partida.numero(johnny.position + Vector2(0, -60), "+$%d" % d.premio.fajo, Tema.VERDE)
+	partida.numero(johnny.position + Vector2(0, -60), "+$%d" % fajo, Tema.VERDE)
 	partida.decir(texto, 4.5)
 
 

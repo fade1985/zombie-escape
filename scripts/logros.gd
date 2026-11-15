@@ -122,6 +122,7 @@ const TEMAS := {"edificios": "Edificios", "jefes": "Jefes", "combate": "Combate"
 	"supervivientes": "Supervivientes", "sorpresas": "Sorpresas y retos", "colecciones": "Colecciones"}
 # [/traducir]
 
+const TOPE: int = preload("res://scripts/ui/chapa.gd").MAXIMO   # el tope de los dólares («MAX»; partida.TOPE)
 const AL_PRENDER := 5.0   # segundos tras lanzar un molotov en los que sus llamas cuentan para "Pirómano"
 const JEFE_RAPIDO := 30.0     # Visto y no visto: los segundos de pelea con el jefe, como mucho
 const JEFE_APURADO := 0.1     # Por los pelos: la parte de su vida máxima que le queda a Johnny, como mucho
@@ -337,12 +338,13 @@ func avisar() -> void:
 	por_avisar.clear()
 
 
-# Cobra el premio de uno conseguido (desde el ordenador). Devuelve los dólares cobrados (0 si no se podía)
+# Cobra el premio de uno conseguido (desde el ordenador). Devuelve los dólares cobrados (0 si no se podía). Si con él
+# se pasaría del tope de los dólares («MAX», partida.TOPE), no se cobra: espera, conseguido, a que se gaste algo
 static func cobrar(id: String) -> int:
 	var l := datos(id)
 	var cobrado := [0]
 	Guardado.cambiar(func(g):
-		if estado(g, id) == "conseguido":
+		if estado(g, id) == "conseguido" and g.dolares + l.premio <= TOPE:
 			g.logros[id] = "cobrado"
 			g.dolares += l.premio
 			cobrado[0] = l.premio)

@@ -110,6 +110,10 @@ const BILLETES_JEFA := 8           # los que suelta cada jefe al caer (hasta el 
 const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
 const MUTAGENO := preload("res://assets/ui/iconos/mutageno.png")   # el mutágeno del suelo (soltar_mutageno)
 const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su verde, el del mutágeno)
+# El tope de los dólares (lo ahorrado más lo de la partida: cartera) y del mutágeno: lo que cabe en el marcador del
+# inventario, «MAX» (15 nov, lo pidió el dueño). Al llegar, los enemigos dejan de soltarlos y lo que hay en el suelo no
+# se coge, hasta que se gaste algo
+const TOPE: int = CHAPA_UI.MAXIMO
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
 	"granada": preload("res://assets/ui/iconos/granada.png")}
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
@@ -1288,6 +1292,8 @@ func cartera() -> int:
 # Un mutágeno en el suelo, donde ha caído un durmiente (todos menos los jefes, que dan su mutación): se coge como un
 # billete y se ve, verde, en el inventario (inventario.gd, junto a los dólares)
 func soltar_mutageno(donde: Vector2) -> void:
+	if mutageno >= TOPE:   # (en el tope, MAX, ya no sueltan)
+		return
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	cosa.icono = MUTAGENO
@@ -1295,6 +1301,7 @@ func soltar_mutageno(donde: Vector2) -> void:
 	cosa.a_oscuras = true   # (se ve un poco aunque el piso esté a oscuras: los durmientes caen en cualquier rincón)
 	cosa.add_to_group("mutagenos")
 	cosa.position = donde
+	cosa.puede = func() -> bool: return mutageno < TOPE
 	cosa.cogido.connect(func():
 		mutageno += 1
 		Sonido.tocar("mutageno")
@@ -1302,15 +1309,29 @@ func soltar_mutageno(donde: Vector2) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Suelta billetes donde ha caído un zombi
+# Los dólares que aún caben hasta el tope (TOPE, contando lo ahorrado)
+func cabe_dolares() -> int:
+	return maxi(0, TOPE - cartera())
+
+
+# Suma dólares a la partida sin pasar del tope. Devuelve los que han entrado
+func sumar_dolares(n: int) -> int:
+	var entran := mini(n, cabe_dolares())
+	dolares += entran
+	return entran
+
+
+# Suelta billetes donde ha caído un zombi (en el tope, MAX, ninguno)
 func soltar_billetes(cuantos: int, donde: Vector2) -> void:
+	if cabe_dolares() <= 0:
+		return
 	for i in cuantos:
 		var billete := BILLETE.new()
 		billete.johnny = johnny
 		billete.position = donde
+		billete.puede = func() -> bool: return cabe_dolares() > 0
 		billete.cogido.connect(func():
-			var vale := valor_billete()
-			dolares += vale
+			var vale := sumar_dolares(valor_billete())
 			Sonido.tocar("moneda")
 			numero(billete.position, "+$%d" % vale, Tema.VERDE))
 		mapa.cosas.add_child.call_deferred(billete)
@@ -1809,7 +1830,7 @@ func terminar(gano: bool, abandona := false) -> void:
 			for id in mochila:
 				g.baul[id] = g.baul.get(id, 0) + 1
 			g.victorias += 1
-		g.dolares += salvados
+		g.dolares = mini(g.dolares + salvados, TOPE)   # (los de la alerta o el reto no pasan del tope)
 		g.dolares_total += salvados
 		if not gano and not abandona:
 			g.pesadilla = true   # la próxima partida empieza con Johnny despertándose (despertar)

@@ -373,8 +373,7 @@ func premio() -> void:
 func superado() -> String:
 	if not empezado or not evento in ["apagon", "incendio"]:
 		return ""
-	var n: int = HORDA.billetes + partida.planta.num - 1
-	partida.dolares += n
+	var n: int = partida.sumar_dolares(HORDA.billetes + partida.planta.num - 1)   # (sin pasar del tope)
 	Sonido.tocar("limpio")
 	if evento == "apagon":
 		return Idioma.t("¡Apagón superado! +$%d") % n

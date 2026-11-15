@@ -448,7 +448,11 @@ en una línea.
   el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los
   durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
   marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una
-  debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Cuánto
+  debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Y 10.000
+  es el tope de verdad (`partida.TOPE`, 15 nov): con la cartera (lo ahorrado más lo de la partida) o el mutágeno en MAX,
+  los enemigos dejan de soltarlos, lo que hay en el suelo no se coge (`puede`), los fajos (eventos, joyería) suman solo
+  lo que cabe (`sumar_dolares`, `cabe_dolares`), lo ahorrado al acabar no pasa de ahí y un logro cuyo premio no quepa no
+  se cobra hasta gastar algo (`Logros.cobrar`, `Logros.TOPE`). Lo prueba `--mutageno`. Cuánto
   da una partida: `--durmientes-planta` (unos 300 en los Apartamentos y 340 en el centro y la torre, más las hordas).
   Prueba: `--mutageno`. Se gasta en los talentos del ordenador (ver `talentos.gd`, arriba), que lo enseñan arriba a la
   izquierda en vez de lo ahorrado (`CHAPA.dibujar_mutageno`).

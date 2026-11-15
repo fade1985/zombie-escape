@@ -1799,7 +1799,8 @@ func probar_municion_zombi() -> void:
 # lado de Johnny y cuenta los que caen (foto: captura-mutageno-suelo.png); Johnny pasa por encima y los coge; la partida
 # guardada a medias lo apunta y lo devuelve (PartidaGuardada); y el inventario lo enseña debajo de los dólares, en verde
 # y con la hélice en vez del «$» (captura-mutageno-inventario.png), con 7 (captura-mutageno-pocos.png) y con 10.000 o
-# más, «8MAX» (captura-mutageno-max.png). Se cierra
+# más, «8MAX» (captura-mutageno-max.png). Y el tope (TOPE, «MAX»): con él no caen billetes ni mutágeno, lo del suelo no
+# se coge y los fajos no suman más. Se cierra
 func probar_mutageno() -> void:
 	johnny.direccion = "o"   # (que la linterna no alumbre lo que cae)
 	await get_tree().create_timer(0.3).timeout
@@ -1853,6 +1854,29 @@ func probar_mutageno() -> void:
 	abrir_cosas("inventario")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-mutageno-max.png")
+	inventario.cerrar()
+	await get_tree().create_timer(0.2).timeout
+	# en el tope (MAX) no sueltan nada y lo del suelo no se coge, hasta que se gasta algo
+	var billetes := func() -> int:
+		return mapa.cosas.get_children().filter(func(c): return c is BILLETE and c.icono == BILLETE.ICONO).size()
+	var b0: int = billetes.call()
+	var m0: int = get_tree().get_nodes_in_group("mutagenos").size()
+	soltar_billetes(3, johnny.position + Vector2(-200, 40))
+	soltar_mutageno(johnny.position + Vector2(-200, 40))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Tope: con MAX caen %d billetes y %d mutágenos (esperado: 0 y 0) · un fajo de 50 suma %d (esperado: 0)" % [
+		billetes.call() - b0, get_tree().get_nodes_in_group("mutagenos").size() - m0, sumar_dolares(50)])
+	mutageno = TOPE - 1
+	dolares = TOPE - ahorrados - 10
+	soltar_mutageno(johnny.position + Vector2(-200, 40))
+	soltar_mutageno(johnny.position + Vector2(-230, 40))
+	await get_tree().create_timer(0.8).timeout
+	johnny.position += Vector2(-215, 40)
+	for k in 60:
+		await get_tree().physics_frame
+	print("Tope: con %d (uno menos que MAX) y dos en el suelo, coge %d y deja %d (esperado: 1 y 1) · un fajo de 50 suma %d (esperado: 10)" % [
+		TOPE - 1, mutageno - (TOPE - 1), get_tree().get_nodes_in_group("mutagenos").size() - m0, sumar_dolares(50)])
 	get_tree().quit()
 
 
