@@ -384,6 +384,11 @@ func probar_colecciones() -> void:
 	var marcado := get_viewport().gui_get_focus_owner()
 	print("Colecciones al abrir: pestaña %s, marcado %s (esperado: durmientes, z_normal)" % [ordenador.familia_vista,
 		marcado.name if marcado else "nada"])
+	var ficha_al_abrir := ""
+	for h in ordenador.ventana.find_children("*", "CenterContainer", true, false):
+		if h.has_meta("ficha"):
+			ficha_al_abrir = h.get_meta("ficha")
+	print("Sujetos al abrir: ficha «%s» (esperado: vacia, ningún sujeto elegido)" % ficha_al_abrir)
 	if Guardado.cargar().sujetos_nuevos != ["normal"]:
 		push_error("Sujetos: el «!» del nuevo se ha quitado con solo abrir el programa (tiene que esperar al clic)")
 	# con el ratón encima de una pestaña, fotograma a fotograma: lo de la izquierda no se va ni un instante (11 nov)
@@ -891,6 +896,67 @@ func probar_arbol_talentos() -> void:
 # y A lo compra. Con el dedo: el primer toque en la atraedora solo enseña la ficha (captura-tienda-dedo.png) y el segundo
 # compra una. Empieza con el baúl vacío. Y la ficha en alemán,
 # ruso y chino (captura-tienda-de.png...). Cada línea dice lo esperado. Deja el guardado como estaba
+# Perder el foco abre el menú de pausa, pero solo jugando y sin otra pantalla abierta (17 nov)
+func probar_pausa_foco() -> void:
+	await get_tree().create_timer(0.5).timeout
+	# en las pruebas nunca se pausa solo: sin esa guarda no se podría probar, así que se quita un momento
+	pausar_por_foco()
+	print("Foco perdido en la prueba: pausado %s (esperado: false, en las pruebas no)" % get_tree().paused)
+	captura = false
+	pausar_por_foco()
+	await get_tree().process_frame
+	print("Foco perdido jugando: pausado %s · menú «%s» (esperado: true, pausa)" % [get_tree().paused, menus.abierto])
+	Captura.foto("captura-pausa-foco.png")
+	pausar_por_foco()
+	print("Otra vez con el menú abierto: sigue «%s» (esperado: el mismo)" % menus.abierto)
+	seguir()
+	await get_tree().process_frame
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.3).timeout
+	pausar_por_foco()
+	print("Con el inventario abierto: menú «%s» (esperado: vacío, sigue el inventario)" % menus.abierto)
+	captura = true
+
+
+# La tienda de armas gasta lo ganado en la partida primero y lo ahorrado después, y enseña la suma (17 nov)
+func probar_cartera_tienda() -> void:
+	var precio: int = Supervivientes.precio(Armas.PRECIOS["bate"])
+	Guardado.cambiar(func(g):
+		g.dolares = precio
+		g.baul = {}
+		g.baul_equipo = [])
+	ahorrados = precio
+	dolares = 4
+	PartidaGuardada.apuntar(self, 1)   # (la foto de la partida a medias, con 4 dólares)
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas")
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-tienda-cartera.png")
+	print("Cartera: la tienda enseña %d (esperado: %d = ahorrado %d + partida 4)" % [cartera(), precio + 4, precio])
+	ordenador.comprar_arma("bate")
+	await get_tree().create_timer(0.4).timeout
+	var s := Guardado.cargar()
+	print("Compra con partida 4 y ahorrado %d: partida %d, ahorrado %d (guardado %d), foto %d (esperado: 0, 4, 4, 0)" % [
+		precio, dolares, ahorrados, s.dolares, PartidaGuardada.guardada(s).get("dolares", -1)])
+	Captura.foto("captura-tienda-cartera-despues.png")
+	# con de sobra en la partida, no se toca lo ahorrado
+	Guardado.cambiar(func(g): g.dolares = 0)
+	ahorrados = 0
+	dolares = precio + 10
+	ordenador.comprar_arma("bate")
+	await get_tree().create_timer(0.4).timeout
+	print("Compra con partida %d y ahorrado 0: partida %d, ahorrado %d (esperado: 10, 0)" % [precio + 10, dolares, ahorrados])
+	# y sin llegar, no compra
+	dolares = 0
+	ahorrados = precio - 1
+	Guardado.cambiar(func(g): g.dolares = precio - 1)
+	var armas_antes: int = Guardado.cargar().baul_equipo.size()
+	ordenador.comprar_arma("bate")
+	print("Sin llegar: baúl %d → %d (esperado: igual)" % [armas_antes, Guardado.cargar().baul_equipo.size()])
+
+
 func probar_tienda_armas() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
@@ -959,15 +1025,18 @@ func probar_tienda_armas() -> void:
 	Captura.foto("captura-tienda-comprada.png")
 	# sin dinero para la gatling: su precio en un marcador como el de lo ahorrado (solo en la tienda: el
 	# guardado no se toca)
-	var de_verdad: int = tienda.call().s.dolares
-	tienda.call().s.dolares = 20
+	var de_verdad: int = ahorrados
+	var de_partida: int = self.dolares
+	ahorrados = 20
+	self.dolares = 0
 	await mover_raton(boton.call("gatling").get_global_rect().get_center())
 	tienda.call().queue_redraw()
 	await get_tree().process_frame
 	print("Sin dinero para la gatling: estado «%s» · botón «%s» (esperado: caro, $%d)" % [
 		tienda.call().estado("gatling"), tienda.call().texto_comprar("gatling"), tienda.call().precio("gatling")])
 	Captura.foto("captura-tienda-cara.png")
-	tienda.call().s.dolares = de_verdad
+	ahorrados = de_verdad
+	self.dolares = de_partida
 	tienda.call().queue_redraw()
 	# el mando
 	Controles.con_mando = true

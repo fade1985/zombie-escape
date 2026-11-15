@@ -831,6 +831,17 @@ func en_frase(nombre: String) -> String:
 	return nombre.to_lower() if Idioma.actual == Idioma.ORIGEN else nombre
 
 
+# Paga una compra de la tienda de armas con todo lo que se tiene: primero lo ganado en esta partida y, si no llega, lo
+# ahorrado (17 nov, lo pidió el dueño). Lo gastado de la partida se quita también de la partida a medias, para que
+# cerrar el juego y darle a «Continuar partida» no lo devuelva
+func pagar(s: Dictionary, precio: int) -> void:
+	var de_partida := mini(precio, partida.dolares)
+	partida.dolares -= de_partida
+	s.dolares = maxi(s.dolares - (precio - de_partida), 0)
+	partida.ahorrados = s.dolares
+	PartidaGuardada.gastar_dolares(s, de_partida)
+
+
 func comprar_arma(id: String) -> void:
 	var s := Guardado.cargar()
 	var regalo: bool = TIENDA.es_regalo(s, id)   # (la pistola de bienvenida: gratis, una sola vez)
@@ -839,12 +850,12 @@ func comprar_arma(id: String) -> void:
 		info.text = Idioma.t("El baúl está lleno: haz sitio en él para poder comprar.")
 		Sonido.tocar("no")
 		return
-	if s.dolares < precio:
-		info.text = Idioma.t("No te llega: te faltan $%d.") % (precio - s.dolares)
+	if partida.cartera() < precio:
+		info.text = Idioma.t("No te llega: te faltan $%d.") % (precio - partida.cartera())
 		Sonido.tocar("no")
 		return
 	Sonido.tocar("compra")
-	s.dolares -= precio
+	pagar(s, precio)
 	if regalo:
 		s.regalo_cogido = true
 	if not id in s.armas:
@@ -854,7 +865,6 @@ func comprar_arma(id: String) -> void:
 	s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
 	Guardado.escribir(s)
 	refrescar_avisos()   # (con el regalo, se quita el «!» de ARMAS.EXE)
-	partida.ahorrados = s.dolares
 	abrir("armas", "b_" + id)
 	var texto := Idioma.t("¡Regalo! %s va al baúl: sácala de allí para llevarla.") if regalo \
 		else Idioma.t("¡Compra hecha! %s va al baúl.")
@@ -873,21 +883,20 @@ func comprar_lanzable(k: String) -> void:
 	elif Objetos.caben_arrojables(s, k, 0) <= 0:
 		no = Idioma.t("El baúl está lleno: haz sitio en él para poder comprar.")
 	var precio: int = 0 if regalo else Supervivientes.precio(Lanzables.PRECIOS[k])
-	if no == "" and s.dolares < precio:
-		no = Idioma.t("No te llega: te faltan $%d.") % (precio - s.dolares)
+	if no == "" and partida.cartera() < precio:
+		no = Idioma.t("No te llega: te faltan $%d.") % (precio - partida.cartera())
 	if no != "":
 		info.text = no
 		Sonido.tocar("no")
 		return
 	Sonido.tocar("compra")
-	s.dolares -= precio
+	pagar(s, precio)
 	if regalo:
 		s.regalos_lanzables.append(k)
 	Objetos.arrojables_al_baul(s, k, 0, 1)
 	s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
 	Guardado.escribir(s)
 	refrescar_avisos()
-	partida.ahorrados = s.dolares
 	abrir("armas", "b_" + k)
 	var n := 0   # los que hay ya en el baúl (Normales y sin estrenar, como los de la tienda)
 	for e in s.baul_equipo:
@@ -1125,8 +1134,10 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 	var s := Guardado.cargar()
 	# (el «!» de un enemigo nuevo no se quita al abrir, sino al hacer clic en su casilla: 15 nov. Al abrir, sin nada
 	# pedido, se va a la pestaña y la página del primero sin mirar)
+	var sin_elegir := false   # (al abrir, ni siquiera el nuevo sale elegido: solo se va a su sitio, 17 nov)
 	if foco == "" and not s.sujetos_nuevos.is_empty() and s.sujetos_nuevos[0] in Bestiario.LISTA:
 		foco = "z_" + s.sujetos_nuevos[0]
+		sin_elegir = true
 	if foco.begins_with("z_") and foco.substr(2) in Bestiario.LISTA:
 		familia_vista = Bestiario.familia(foco.substr(2))
 		pagina_vista = Bestiario.de_familia(familia_vista).find(foco.substr(2)) / POR_PAGINA
@@ -1248,13 +1259,28 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 		b.focus_neighbor_top = b.get_path()
 	de_arriba[0].focus_neighbor_left = de_arriba[0].get_path()
 	de_arriba[-1].focus_neighbor_right = de_arriba[-1].get_path()
-	# al abrir, en la ficha: el pedido o el primero de la familia
-	var empieza: String = foco if foco.begins_with("z_") and foco.substr(2) in ids else "z_" + ids[0]
-	var primero: String = empieza.substr(2)
-	mostrar(lado, empieza, ficha_bestiario.bind(s, primero, Bestiario.visto(s, primero)))
-	senalar_casilla(cuadricula, empieza)
+	# al abrir, sin nadie elegido (17 nov): la ficha vacía, con su «elige uno», hasta que el jugador elija. Solo si se
+	# pide uno (un «!» o tras mirar un enemigo nuevo) sale su ficha. Con el teclado, el foco va a la primera casilla
+	# (sin elegirla)
+	if foco.begins_with("z_") and foco.substr(2) in ids and not sin_elegir:
+		mostrar(lado, foco, ficha_bestiario.bind(s, foco.substr(2), Bestiario.visto(s, foco.substr(2))))
+		senalar_casilla(cuadricula, foco)
+	else:
+		mostrar(lado, "vacia", func():
+			var hueco := Control.new()
+			hueco.custom_minimum_size = Vector2(FICHA_ANCHO, ESCENARIO.y)
+			var l := texto_tarjeta(Idioma.t("Elige un sujeto de la cuadrícula para ver su ficha."), TINTA_SUAVE)
+			l.set_anchors_preset(Control.PRESET_FULL_RECT)
+			l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			hueco.add_child(l)
+			return hueco)
+		senalar_casilla(cuadricula, "")
 	info.text = Idioma.t("Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha.")
-	return foco if foco.begins_with("pes_") or foco.begins_with("pag_") else empieza
+	if foco.begins_with("pes_") or foco.begins_with("pag_"):
+		return foco
+	return foco if foco.begins_with("z_") and foco.substr(2) in ids else "z_" + ids[0]
 
 
 # Las pestañas y las flechas de Colecciones: como una tarjeta, con borde oscuro la abierta, la marcada y la de debajo

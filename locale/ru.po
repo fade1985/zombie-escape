@@ -7118,6 +7118,10 @@ msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apu
 msgstr "Враг, которого ты еще не встречал. Те, кого увидишь в забеге, записываются сюда."
 
 #: scripts/ui/ordenador.gd
+msgid "Elige un sujeto de la cuadrícula para ver su ficha."
+msgstr "Выбери объект в сетке, чтобы увидеть его досье."
+
+#: scripts/ui/ordenador.gd
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha."
 msgstr "Каждый враг, которого ты встретил, остаётся здесь навсегда. Выбери клетку, чтобы увидеть его карточку."
 

@@ -197,6 +197,9 @@
 #                       marco de madera (fotos captura-ordenador-icono-*.png, ampliadas)       [prueba_larga.gd]
 #   --arbol-talentos    la ficha del árbol de talentos del ordenador con el ratón (sale al pasar por encima), el
 #                       mando (sigue a la marca) y el dedo (el primer toque la enseña, el segundo compra) [prueba_larga.gd]
+#   --cartera-tienda    la tienda de armas enseña lo ahorrado más lo de la partida y compra gastando primero lo de la
+#                       partida (y lo quita de la foto de la partida a medias)              [prueba_larga.gd]
+#   --pausa-foco        perder el foco abre el menú de pausa (nunca con otra pantalla abierta)  [prueba_larga.gd]
 #   --tienda-armas      la tienda de armas del ordenador: la ficha explica la tienda al abrir y sigue al ratón, al
 #                       mando y al dedo; se compra con «Comprar», con A y con dos toques     [prueba_larga.gd]
 #   --muertos-dosier    (con --edificio X) los muertos que llevan las páginas del dosier de ese edificio, en fila sobre
@@ -737,6 +740,14 @@ func empezar_prueba() -> void:
 	elif "--arbol-talentos" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_arbol_talentos()
+		get_tree().quit()
+	elif "--pausa-foco" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_pausa_foco()
+		get_tree().quit()
+	elif "--cartera-tienda" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_cartera_tienda()
 		get_tree().quit()
 	elif "--tienda-armas" in args:
 		set_process(false)   # sin la prueba larga

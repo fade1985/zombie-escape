@@ -7099,6 +7099,10 @@ msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apu
 msgstr "Um inimigo que você ainda não encontrou. Os que você vir numa partida ficam registrados aqui."
 
 #: scripts/ui/ordenador.gd
+msgid "Elige un sujeto de la cuadrícula para ver su ficha."
+msgstr "Escolha um sujeito da grade para ver a ficha dele."
+
+#: scripts/ui/ordenador.gd
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha."
 msgstr "Todo inimigo que você encontra fica aqui para sempre. Escolha um quadro para ver a ficha dele."
 

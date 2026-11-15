@@ -83,6 +83,15 @@ static func apuntar(p: Node, num: int) -> void:
 
 # Al gastar mutágeno en un talento (talentos.gd, subir): se le quita también a la foto que haya en el guardado "s" (sin
 # bajar de 0), para que cerrar el juego no lo devuelva. No escribe el guardado: lo hace el que llama
+# Lo mismo con los dólares de la partida gastados en la tienda de armas (ordenador.gd, pagar)
+static func gastar_dolares(s: Dictionary, cuanto: int) -> void:
+	var foto := guardada(s)
+	if foto.is_empty():
+		return
+	foto.dolares = maxi(int(foto.get("dolares", 0)) - cuanto, 0)
+	s.en_curso = var_to_str(foto)
+
+
 static func gastar_mutageno(s: Dictionary, cuanto: int) -> void:
 	var foto := guardada(s)
 	if foto.is_empty():

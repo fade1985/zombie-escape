@@ -2965,6 +2965,11 @@ func probar_muebles_materiales() -> void:
 		pulsar_accion("usar", true)
 		await get_tree().physics_frame
 		pulsar_accion("usar", false)
+		if intento == 0:   # el nombre de lo que da, encima de Johnny (17 nov)
+			await get_tree().create_timer(0.25, false).timeout
+			var avisos := johnny.get_parent().get_children().filter(func(c): return c is Label and c.modulate.a > 0.0 and c.size.y > 30)
+			print("Muebles materiales · aviso encima de Johnny: %s (esperado: VACÍO o el nombre del material en mayúsculas)" % [avisos.map(func(c): return c.text)])
+			Captura.foto("captura-mueble-aviso.png")
 		johnny.position = mueble.position + Vector2(140, 60)   # apartado, para que el material se quede en el suelo
 		await get_tree().create_timer(0.15, false).timeout
 		piezas = mapa.cosas.get_children().filter(func(c): return c.get("icono") is Texture2D \

@@ -198,7 +198,7 @@ func estado(id: String) -> String:
 			return "lleno"
 	elif not Objetos.hueco_baul(s):
 		return "lleno"
-	return "caro" if s.dolares < precio(id) else ""
+	return "caro" if ordenador.partida.cartera() < precio(id) else ""
 
 
 func nombre(id: String) -> String:
@@ -274,7 +274,7 @@ func poner_vecinos() -> void:
 func _draw() -> void:
 	var fuente := get_theme_default_font()
 	PLACA.dibujar(self, size)
-	PLACA.dibujar_ahorrado(self, fuente, s.dolares, true)   # (con 4 casillas, como en el inventario: 15 nov)
+	PLACA.dibujar_ahorrado(self, fuente, ordenador.partida.cartera(), true)   # (con 4 casillas, como en el inventario: 15 nov)
 	if casillas.is_empty():
 		return
 	var ancho_titulos := ficha.position.x - 24
@@ -475,8 +475,6 @@ func texto_comprar(id: String) -> String:
 # Lo que dice la ficha sin nada elegido, párrafo a párrafo: [texto, color] (cómo va la tienda, en su tutorial)
 func nota() -> Array:
 	var parrafos := [[Idioma.t("Pasa por un arma para ver qué hace."), PLACA.TEXTO]]
-	if ordenador.partida.dolares > 0:
-		parrafos.append([Idioma.t("Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes.") % ordenador.partida.dolares, PLACA.AMARILLO])
 	return parrafos
 
 

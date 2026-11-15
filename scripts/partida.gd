@@ -281,6 +281,11 @@ func _ready() -> void:
 
 	guarda_partida = not captura
 	guarda_mapas = not captura
+	if OS.has_feature("web") and not captura:
+		# (web) pestaña oculta o ventana sin foco: se pausa como con Esc
+		al_ocultar = JavaScriptBridge.create_callback(_pestana_oculta)
+		JavaScriptBridge.get_interface("document").addEventListener("visibilitychange", al_ocultar)
+		JavaScriptBridge.get_interface("window").addEventListener("blur", al_ocultar)
 	Tutoriales.marcas = not captura   # (los «!» de la sala de mantenimiento: en la partida de prueba, solo en la suya)
 	if captura:
 		preparar_prueba()   # el guardado de prueba, la alerta y el evento que se piden
@@ -404,6 +409,9 @@ func continuar_partida(foto: Dictionary) -> void:
 
 
 func _exit_tree() -> void:
+	if al_ocultar != null:
+		JavaScriptBridge.get_interface("document").removeEventListener("visibilitychange", al_ocultar)
+		JavaScriptBridge.get_interface("window").removeEventListener("blur", al_ocultar)
 	if semilla_propia:
 		Planta.semilla = 0   # (la siguiente partida sortea la suya)
 	tirar_mapas()
@@ -1684,7 +1692,9 @@ func abrir_armarito(armarito: Node2D) -> void:
 	armarito.vaciar()
 	Sonido.tocar("puerta")
 	tutorial("curas")   # (la primera vez que se abre uno: cómo se usan las vendas y los botiquines, M110)
-	soltar_objeto(armarito.datos.get("dentro", "botiquin"), armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
+	var dentro: String = armarito.datos.get("dentro", "botiquin")
+	gran_aviso(Objetos.nombre(dentro).to_upper())   # (lo que da, encima de Johnny)
+	soltar_objeto(dentro, armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
 
 
 # Delante de un mueble que se abre (el armario, la mesilla, el escritorio o la librería; Fase 4): se abre una vez y, a
@@ -1697,8 +1707,9 @@ func abrir_mueble(mueble: Node2D) -> void:
 	var medio: Vector2 = mueble.position + Vector2(0, -mueble.datos.h / 2.0)
 	var pieza := Objetos.pieza_de_mueble()
 	if pieza == "":
-		numero(medio + Vector2(0, -40), Idioma.t("Vacío"), Tema.TINTA)
+		gran_aviso(Idioma.t("Vacío").to_upper())
 		return
+	gran_aviso(Objetos.nombre(pieza).to_upper())   # (lo que da, encima de Johnny)
 	# sale del borde del mueble que mira a Johnny, despedido hacia él
 	var hacia: Vector2 = (johnny.position - medio).normalized()
 	var borde := Vector2(mueble.datos.w, mueble.datos.h) / 2.0 + Vector2(10, 10)
@@ -1869,6 +1880,27 @@ func numero(donde: Vector2, texto: String, color: Color) -> void:
 	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 30, 0.7)
 	tween.tween_property(etiqueta, "modulate:a", 0.0, 0.7).set_delay(0.3)
 	tween.chain().tween_callback(etiqueta.queue_free)
+
+
+var al_ocultar: JavaScriptObject   # (web) el aviso del navegador cuando la página se oculta o pierde el foco
+
+
+# Fuera del navegador: al cambiar de ventana o minimizar, se pausa (nunca en las pruebas)
+func _notification(que: int) -> void:
+	if que == NOTIFICATION_APPLICATION_FOCUS_OUT and not OS.has_feature("web"):
+		pausar_por_foco()
+
+
+func _pestana_oculta(_args: Array) -> void:
+	if bool(JavaScriptBridge.eval("document.hidden || !document.hasFocus()", true)):   # no-tr
+		pausar_por_foco()
+
+
+# Pausa solo si se está jugando y no hay otra pantalla abierta
+func pausar_por_foco() -> void:
+	if captura or not is_inside_tree() or johnny == null or get_tree().paused or cambiando:
+		return
+	pausar()
 
 
 # Esc o Start: el juego se para y sale el menú de pausa
