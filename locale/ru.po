@@ -4030,8 +4030,8 @@ msgid "+%s %% a distancia"
 msgstr "+%s %% в дальнем бою"
 
 #: scripts/talentos.gd
-msgid "+%d de cada lanzable"
-msgstr "+%d к каждому метательному"
+msgid "+%d en cada montón de lanzables"
+msgstr "+%d в каждой стопке метательных"
 
 #: scripts/talentos.gd
 msgid "+%s %% de vida"
@@ -4158,8 +4158,8 @@ msgid "Artificiero"
 msgstr "Сапер"
 
 #: scripts/talentos.gd
-msgid "+1 de cada lanzable por punto"
-msgstr "+1 к каждому метательному за очко"
+msgid "+1 lanzable en cada montón por punto"
+msgstr "+1 метательное в каждой стопке за очко"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
@@ -7408,6 +7408,14 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "+%d de cada lanzable"
+msgstr "+%d к каждому метательному"
+
+#, sin-usar
+msgid "+1 de cada lanzable por punto"
+msgstr "+1 к каждому метательному за очко"
 
 #, sin-usar
 msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."

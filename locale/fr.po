@@ -4024,8 +4024,8 @@ msgid "+%s %% a distancia"
 msgstr "+%s %% à distance"
 
 #: scripts/talentos.gd
-msgid "+%d de cada lanzable"
-msgstr "+%d de chaque lançable"
+msgid "+%d en cada montón de lanzables"
+msgstr "+%d dans chaque pile de lançables"
 
 #: scripts/talentos.gd
 msgid "+%s %% de vida"
@@ -4152,8 +4152,8 @@ msgid "Artificiero"
 msgstr "Artificier"
 
 #: scripts/talentos.gd
-msgid "+1 de cada lanzable por punto"
-msgstr "+1 de chaque lançable par point"
+msgid "+1 lanzable en cada montón por punto"
+msgstr "+1 lançable dans chaque pile par point"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
@@ -7389,6 +7389,14 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#, sin-usar
+msgid "+%d de cada lanzable"
+msgstr "+%d de chaque lançable"
+
+#, sin-usar
+msgid "+1 de cada lanzable por punto"
+msgstr "+1 de chaque lançable par point"
 
 #, sin-usar
 msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."

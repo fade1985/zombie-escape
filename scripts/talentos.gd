@@ -53,7 +53,7 @@ const LISTA := [
 	{"id": "tirador", "rama": "militar", "nivel": 2, "nombre": "Tirador", "max": 5, "icono": "talento-tirador", "pide": "ataque",
 		"desc": "+5 % de daño con armas a distancia por punto"},
 	{"id": "artificiero", "rama": "militar", "nivel": 2, "nombre": "Artificiero", "max": 3, "icono": "talento-artificiero", "pide": "punteria",
-		"desc": "+1 de cada lanzable por punto"},
+		"desc": "+1 lanzable en cada montón por punto"},
 	{"id": "larguirucho", "rama": "militar", "nivel": 3, "nombre": "Larguirucho", "max": 1, "icono": "talento-larguirucho", "pide": "camorrista",
 		"desc": "Aumenta un 50 % el alcance cuerpo a cuerpo"},
 	{"id": "mirilla", "rama": "militar", "nivel": 3, "nombre": "Mirilla", "max": 1, "icono": "talento-mirilla", "pide": "tirador",
@@ -215,7 +215,7 @@ static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 			st.alcance_lanzar *= 1.0 + 0.05 * n
 		"camorrista": st.dano_cuerpo *= 1.0 + 0.05 * n
 		"tirador": st.dano_fuego *= 1.0 + 0.05 * n
-		"artificiero": st.lanzar_extra += n   # (uno más de cada lanzable por punto: 15 nov)
+		"artificiero": st.lanzar_extra += n   # (uno más en cada montón de lanzables por punto: 15 nov; L38)
 		"larguirucho": st.alcance_cuerpo *= 1.5
 		"mirilla": st.mirilla = true
 		"fabricante": st.fabricante = true
@@ -261,7 +261,7 @@ static func efecto(id: String, n: int) -> String:
 		"punteria": return Idioma.t("+%s %% de daño y alcance") % pct(5.0 * n)
 		"camorrista": return Idioma.t("+%s %% cuerpo a cuerpo") % pct(5.0 * n)
 		"tirador": return Idioma.t("+%s %% a distancia") % pct(5.0 * n)
-		"artificiero": return Idioma.t("+%d de cada lanzable") % n
+		"artificiero": return Idioma.t("+%d en cada montón de lanzables") % n
 		"corpulento": return Idioma.t("+%s %% de vida") % pct(5.0 * n)
 		"lobezno": return Idioma.t("%d de vida cada 10 s") % n
 		"durito": return Idioma.t("%d menos por golpe") % (2 * n)
