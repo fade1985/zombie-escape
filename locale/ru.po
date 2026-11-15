@@ -7255,10 +7255,6 @@ msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQ
 msgstr "СРОЧНО  ·  %s: «СИТУАЦИЯ ПОД КОНТРОЛЕМ»  ·  НЕ ПОДХОДИТЕ К ЗДАНИЮ  ·  "
 
 #: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "ПОЛНО"
-
-#: scripts/ui/tienda_armas.gd
 msgid "¡COMPRA UN ARMA!"
 msgstr "КУПИ ОРУЖИЕ!"
 
@@ -7267,8 +7263,8 @@ msgid "Comprada"
 msgstr "Куплено"
 
 #: scripts/ui/tienda_armas.gd
-msgid "No te caben más"
-msgstr "Больше не влезает"
+msgid "LLENO"
+msgstr "ПОЛНО"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"

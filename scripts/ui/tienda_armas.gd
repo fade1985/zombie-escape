@@ -1,9 +1,9 @@
 # La tienda de armas del ordenador (ARMAS.EXE, en ordenador.gd): la misma chapa oscura que el árbol de talentos
 # (chapa.gd), con lo ahorrado arriba a la izquierda y todo a la vez, sin desplazarse.
 #
-# A la izquierda, una fila por grupo (Cuerpo a cuerpo, A distancia, Especiales y Arrojables) y en cada una sus casillas:
-# el icono (el precio sale en la ficha). Lo que llevas, con el borde verde (sin letrero), los arrojables que ya no te
-# caben, «LLENO», y lo que no puedes pagar sale apagado.
+# A la izquierda, una fila por grupo (Cuerpo a cuerpo, A distancia, Especiales y Lanzables) y en cada una sus casillas:
+# el icono (el precio sale en la ficha). Lo que llevas y los lanzables que ya no te caben, con el borde verde (sin
+# letrero: el «LLENO» lo dice el botón de la ficha, 15 nov), y lo que no puedes pagar sale apagado.
 #
 # A la derecha, una ficha fija con lo elegido: su nombre y su grupo, el dibujo en grande, unos medidores de 10
 # cuadraditos (cada uno comparado con el arma que más tiene de eso), qué hace y el botón «Comprar» con el precio. Sin nada
@@ -275,18 +275,16 @@ func _draw() -> void:
 	dibujar_ficha(fuente)
 
 
-# Una casilla: oscura con borde gris y el icono (el precio sale en la ficha, al pasar por encima). Lo que llevas, con el
-# borde verde; lo que ya no cabe, también con «LLENO»; lo que no se puede comprar, apagado. La elegida, con el borde claro
-func dibujar_casilla(id: String, fuente: Font) -> void:
+# Una casilla: oscura con borde gris y el icono (el precio sale en la ficha, al pasar por encima). Lo que llevas y lo que
+# ya no cabe, con el borde verde (desde el 15 nov, sin «LLENO» encima: lo dice el botón); lo que no se puede comprar, apagado. La elegida, con el borde claro
+func dibujar_casilla(id: String, _fuente: Font) -> void:
 	var r: Rect2 = casillas[id]
 	var e := estado(id)
 	var borde := PLACA.REMACHE
 	var relleno := Color("#1c1f24")
 	var apagada := e in ["caro", "reto"]
-	var texto := ""
 	if e in ["lleva", "lleno"]:
 		borde = VERDE_BORDE
-		texto = "" if e == "lleva" else Idioma.t("LLENO")
 	elif apagada:
 		borde = PLACA.APAGADO
 		relleno = PLACA.NEGRO
@@ -297,21 +295,12 @@ func dibujar_casilla(id: String, fuente: Font) -> void:
 	var color := Color(0.55, 0.55, 0.55, 0.75) if apagada else Color.WHITE
 	var dibujo := dibujo_tienda(id)
 	if dibujo:
-		# el de la tienda (48), a su tamaño y en el centro; «LLENO» va encima, en una franja oscura
+		# el de la tienda (48), a su tamaño y en el centro
 		var lado48 := Vector2(dibujo.get_size())
 		draw_texture_rect(dibujo, Rect2((r.get_center() - lado48 / 2.0).floor(), lado48), false, color)
-		if texto != "":
-			draw_rect(Rect2(r.position.x + 2, r.end.y - 20, r.size.x - 4, 18), Color(relleno, 0.85))
 	else:
-		var lado := minf(32.0, r.size.y - 26) if texto != "" else minf(32.0, r.size.y - 12)
-		var arriba := r.position.y + 6 if texto != "" else r.get_center().y - lado / 2.0
-		draw_texture_rect(icono(id), Rect2(r.get_center().x - lado / 2.0, arriba, lado, lado), false, color)
-	if texto == "":
-		return
-	var tam := 16
-	while tam > 10 and fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > r.size.x - 6:
-		tam -= 2   # (que «LLENO» quepa en todos los idiomas)
-	draw_string(fuente, Vector2(r.position.x, r.end.y - 7), texto, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, tam, VERDE)
+		var lado := minf(32.0, r.size.y - 12)
+		draw_texture_rect(icono(id), Rect2(r.get_center().x - lado / 2.0, r.get_center().y - lado / 2.0, lado, lado), false, color)
 
 
 # El «!» que bota dentro de la esquina de arriba a la derecha de la casilla del regalo de bienvenida (el de los iconos del
@@ -431,12 +420,12 @@ func partir(fuente: Font, texto: String, ancho: float, tam: int) -> PackedString
 # El botón de comprar. Desde el 15 nov (lo pidió el dueño), solo el precio, en un marcador como el de lo ahorrado de
 # arriba («$» y cifras de reloj) pero sin las rayas apagadas: amarillo si te llega (con un borde claro al pasar por
 # encima o marcarlo) y gris si no. Si no se puede por otra cosa, en gris diciendo por qué; lo que ya llevas, «Comprada»
-# en grande, en verde y con el borde verde (como su casilla); el regalo de bienvenida, dicho
+# (y lo que ya no cabe, «LLENO») en grande, en verde y con el borde verde (como su casilla); el regalo de bienvenida, dicho
 func dibujar_comprar(fuente: Font) -> void:
 	var r := Rect2(comprar.position, comprar.size)
 	var texto := texto_comprar(ficha_id)
 	var se_puede := estado(ficha_id) == ""
-	var comprada := estado(ficha_id) == "lleva"
+	var comprada := estado(ficha_id) in ["lleva", "lleno"]   # (lo que ya no cabe, «LLENO», igual: 15 nov)
 	var encima := se_puede and (comprar.is_hovered() or comprar.has_focus())
 	var pulsado := se_puede and comprar.button_pressed
 	if estado(ficha_id) == "caro" or (se_puede and not es_regalo(s, ficha_id)):
@@ -462,7 +451,7 @@ func texto_comprar(id: String) -> String:
 	var p := precio(id)
 	match estado(id):
 		"lleva": return Idioma.t("Comprada")   # (y se da por hecho que la llevas)
-		"lleno": return Idioma.t("No te caben más")
+		"lleno": return Idioma.t("LLENO")   # (como «Comprada»; antes «No te caben más», 15 nov)
 		"reto": return Idioma.t("No en este reto")
 		"caro": return "$%d" % p   # (dibujado en rojo, como un marcador: dibujar_comprar)
 	if es_regalo(s, id):

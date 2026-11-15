@@ -7237,10 +7237,6 @@ msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQ
 msgstr "BREAKING NEWS  ·  %s: \"THE SITUATION IS UNDER CONTROL\"  ·  STAY AWAY FROM THE BUILDING  ·  "
 
 #: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "FULL"
-
-#: scripts/ui/tienda_armas.gd
 msgid "¡COMPRA UN ARMA!"
 msgstr "BUY A WEAPON!"
 
@@ -7249,8 +7245,8 @@ msgid "Comprada"
 msgstr "Purchased"
 
 #: scripts/ui/tienda_armas.gd
-msgid "No te caben más"
-msgstr "No room for more"
+msgid "LLENO"
+msgstr "FULL"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"

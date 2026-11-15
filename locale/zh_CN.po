@@ -7219,10 +7219,6 @@ msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQ
 msgstr "最新消息  ·  %s：“情况已经得到控制”  ·  请勿靠近大楼  ·  "
 
 #: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "已满"
-
-#: scripts/ui/tienda_armas.gd
 msgid "¡COMPRA UN ARMA!"
 msgstr "买一把武器吧！"
 
@@ -7231,8 +7227,8 @@ msgid "Comprada"
 msgstr "已购买"
 
 #: scripts/ui/tienda_armas.gd
-msgid "No te caben más"
-msgstr "放不下了"
+msgid "LLENO"
+msgstr "已满"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"

@@ -887,8 +887,8 @@ func probar_arbol_talentos() -> void:
 # Con "--captura --tienda-armas": la tienda de armas del ordenador (tienda_armas.gd), con 100 $. Al abrir, la ficha
 # explica la tienda (captura-tienda-nota.png). Con el ratón: al pasar por la escopeta la ficha la enseña
 # (captura-tienda-raton.png), se queda al ir hacia «Comprar» y «Comprar» la compra. Con el mando: la cruceta pasa del
-# cuchillo al bate, la ficha lo sigue y dice «A: comprar» (captura-tienda-mando.png), y A lo compra. Con el dedo: el
-# primer toque en la granada solo enseña la ficha (captura-tienda-dedo.png) y el segundo compra una. Y la ficha en alemán,
+# cuchillo al bate, la ficha lo sigue (con el precio en su marcador) (captura-tienda-mando.png), y A lo compra. Con el dedo: el
+# primer toque en la atraedora (la granada ya tiene su montón lleno) solo enseña la ficha (captura-tienda-dedo.png) y el segundo compra una. Y la ficha en alemán,
 # ruso y chino (captura-tienda-de.png...). Cada línea dice lo esperado. Deja el guardado como estaba
 func probar_tienda_armas() -> void:
 	var antes := Guardado.cargar()
@@ -978,15 +978,15 @@ func probar_tienda_armas() -> void:
 	# el dedo
 	Tactil.activo = true
 	Tactil.con_dedo = true
-	var granadas: int = lanzables.total("granada")
-	await tocar(boton.call("granada").get_global_rect().get_center())
-	print("Dedo, primer toque en la granada: llevas %d (antes %d) · ficha de «%s» (esperado: las mismas, granada)" % [
-		lanzables.total("granada"), granadas, tienda.call().ficha_id])
+	var atraedoras: int = lanzables.total("atraedora")
+	await tocar(boton.call("atraedora").get_global_rect().get_center())
+	print("Dedo, primer toque en la atraedora: llevas %d (antes %d) · ficha de «%s» (esperado: las mismas, atraedora)" % [
+		lanzables.total("atraedora"), atraedoras, tienda.call().ficha_id])
 	Captura.foto("captura-tienda-dedo.png")
 	await get_tree().create_timer(0.4).timeout
-	await tocar(boton.call("granada").get_global_rect().get_center())
+	await tocar(boton.call("atraedora").get_global_rect().get_center())
 	await get_tree().create_timer(0.3).timeout
-	print("Dedo, segundo toque: llevas %d (esperado: %d) · info «%s» · listo %s" % [lanzables.total("granada"), granadas + 1, ordenador.info.text, tienda.call().listo])
+	print("Dedo, segundo toque: llevas %d (esperado: %d) · info «%s» · listo %s" % [lanzables.total("atraedora"), atraedoras + 1, ordenador.info.text, tienda.call().listo])
 	Tactil.activo = false
 	# en los idiomas más largos (y en chino, sin espacios): la ficha de la motosierra cabe (captura-tienda-<idioma>.png)
 	var idioma := Idioma.actual

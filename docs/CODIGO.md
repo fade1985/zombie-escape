@@ -630,7 +630,7 @@ en una línea.
   `dibujar_mutageno` (el marcador fijo del inventario, con la hélice en verde, en el árbol de talentos).
 - `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
   izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
-  de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas con el borde verde y lo lleno, además, con «LLENO», apagada si no llega:
+  de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas y lo lleno, con el borde verde, sin letrero (el botón de la ficha dice «LLENO» desde el 15 nov), apagada si no llega:
   `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
   `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`; los llenos, con los colores de las barras
   del inventario, `INVENTARIO.color_barra`, desde el 15 nov), qué hace (`INVENTARIO.QUE_HACE`; sus

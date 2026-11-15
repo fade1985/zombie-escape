@@ -7237,10 +7237,6 @@ msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQ
 msgstr "PLANTÃO  ·  %s: \"A SITUAÇÃO ESTÁ SOB CONTROLE\"  ·  NÃO SE APROXIMEM DO PRÉDIO  ·  "
 
 #: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "CHEIO"
-
-#: scripts/ui/tienda_armas.gd
 msgid "¡COMPRA UN ARMA!"
 msgstr "COMPRE UMA ARMA!"
 
@@ -7249,8 +7245,8 @@ msgid "Comprada"
 msgstr "Comprada"
 
 #: scripts/ui/tienda_armas.gd
-msgid "No te caben más"
-msgstr "Não cabe mais"
+msgid "LLENO"
+msgstr "CHEIO"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"
