@@ -4092,8 +4092,8 @@ msgid "Puntería"
 msgstr "Aim"
 
 #: scripts/talentos.gd
-msgid "+5 % de daño y de alcance al lanzar el molotov y la granada por punto"
-msgstr "+5% damage and range when throwing molotovs and grenades, per point"
+msgid "+5 % de daño y de alcance al utilizar un lanzable por punto"
+msgstr "+5% damage and range when using a throwable, per point"
 
 #: scripts/talentos.gd
 msgid "Camorrista"

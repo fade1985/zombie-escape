@@ -4086,8 +4086,8 @@ msgid "Puntería"
 msgstr "准头"
 
 #: scripts/talentos.gd
-msgid "+5 % de daño y de alcance al lanzar el molotov y la granada por punto"
-msgstr "每点使燃烧瓶和手雷的伤害和投掷距离 +5%"
+msgid "+5 % de daño y de alcance al utilizar un lanzable por punto"
+msgstr "每点使投掷物的伤害和投掷距离 +5%"
 
 #: scripts/talentos.gd
 msgid "Camorrista"

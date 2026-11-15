@@ -4098,8 +4098,8 @@ msgid "Puntería"
 msgstr "Меткость"
 
 #: scripts/talentos.gd
-msgid "+5 % de daño y de alcance al lanzar el molotov y la granada por punto"
-msgstr "+5 % урона и дальности броска молотова и гранаты за очко"
+msgid "+5 % de daño y de alcance al utilizar un lanzable por punto"
+msgstr "+5 % урона и дальности при использовании метательного за очко"
 
 #: scripts/talentos.gd
 msgid "Camorrista"
