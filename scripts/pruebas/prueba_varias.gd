@@ -417,24 +417,24 @@ func probar_escudo() -> void:
 	aplicar_talentos({"acero": 1})
 	johnny.vida = johnny.stats.vida_max
 	await get_tree().create_timer(1.5).timeout   # (la barra se llena poco a poco)
-	print("Escudo · con Acero: %d (esperado: 50), barra a la vista %s (esperado: true)" % [roundi(johnny.escudo), hud.con_escudo()])
+	print("Escudo · con Acero: %d (esperado: 25), barra a la vista %s (esperado: true)" % [roundi(johnny.escudo), hud.con_escudo()])
 	Captura.foto("captura-escudo.png")
 	var vida: int = johnny.vida
 	var golpe := func(n: int) -> void:
 		johnny.invulnerable = 0.0
 		johnny.recibir_dano(n)
 	golpe.call(20)
-	print("Escudo · golpe de 20: escudo %d, vida -%d (esperado: 30 y 0)" % [roundi(johnny.escudo), vida - johnny.vida])
+	print("Escudo · golpe de 20: escudo %d, vida -%d (esperado: 5 y 0)" % [roundi(johnny.escudo), vida - johnny.vida])
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-escudo-golpe.png")
 	aplicar_talentos({"acero": 1, "durito": 3})
 	golpe.call(20)
-	print("Escudo · golpe de 20 con Durito 3: escudo %d, vida -%d (esperado: 13 y 0)" % [roundi(johnny.escudo), vida - johnny.vida])
+	print("Escudo · golpe de 20 con Durito 3: escudo %d, vida -%d (esperado: 0 y 9: quita 14, 6 menos, y el escudo para 5)" % [roundi(johnny.escudo), vida - johnny.vida])
 	johnny.quitar_vida(4)
-	print("Escudo · 4 de un charco: escudo %d, vida -%d (esperado: 9 y 0)" % [roundi(johnny.escudo), vida - johnny.vida])
+	print("Escudo · 4 de un charco: escudo %d, vida -%d (esperado: 0 y 13)" % [roundi(johnny.escudo), vida - johnny.vida])
 	aplicar_talentos({"acero": 1})
 	golpe.call(24)
-	print("Escudo · golpe de 24 con 9 de escudo: escudo %d, vida -%d (esperado: 0 y 15)" % [roundi(johnny.escudo), vida - johnny.vida])
+	print("Escudo · golpe de 24 sin escudo: escudo %d, vida -%d (esperado: 0 y 37)" % [roundi(johnny.escudo), vida - johnny.vida])
 	await get_tree().create_timer(3.0).timeout   # (lo perdido, en claro, tarda en bajar como en la de vida)
 	print("Escudo · roto: barra a la vista %s (esperado: false)" % hud.con_escudo())
 	Captura.foto("captura-escudo-roto.png")
@@ -886,7 +886,7 @@ func probar_equilibrio() -> void:
 	# ── El daño mínimo de un golpe ──
 	johnny.stats.esquiva_sola = 0
 	johnny.escudo = 0.0
-	johnny.stats.armadura = 3   # (Durito al máximo: 3 desde el 28 oct)
+	johnny.stats.armadura = 6   # (Durito al máximo: 6 desde el 15 nov, 2 por punto)
 	johnny.stats.dano_recibido = 0.5
 	johnny.invulnerable = 0.0
 	var v0: int = johnny.vida
@@ -896,7 +896,7 @@ func probar_equilibrio() -> void:
 	johnny.invulnerable = 0.0
 	v0 = johnny.vida
 	johnny.recibir_dano(10)
-	print("Un golpe de 10 con Durito 3 e Insensible quita %d (esperado: 3) · con Durito 3 solo, %d (esperado: 7)" % [
+	print("Un golpe de 10 con Durito 3 e Insensible quita %d (esperado: 3, el mínimo) · con Durito 3 solo, %d (esperado: 4)" % [
 		con_las_dos, v0 - johnny.vida])
 
 	# ── Ninja: sin moverse en la esquiva (velocidad 0), un zombi duro pegado a Johnny ──
@@ -1668,10 +1668,10 @@ func probar_quimico() -> void:
 	print("Catalizador 5: el lanzallamas quita %.0f (sin él, %.0f; esperado: 30 y 37,5) y lo que arde el prendido × %.2f (esperado: 1.25)" % [
 		johnny.arma().dano, sin, johnny.arma().get("quema", 1.0)])
 
-	# ── Criogenia: las congeladoras del principio y las que caben ──
+	# ── Criogenia: desde el 15 nov ya no da congeladoras (solo las deja congelados más tiempo) ──
 	lanzables.reiniciar(johnny.stats)
-	print("Criogenia 3: empieza con %d congeladoras (esperado: 1), a mano %s (esperado: con la congeladora) y caben %d (esperado: %d: las %d de un montón y 1 más)" % [
-		lanzables.cuantas("congeladora"), lanzables.mano, lanzables.maximo("congeladora"), Lanzables.MONTON + 1, Lanzables.MONTON])
+	print("Criogenia 3: empieza con %d congeladoras (esperado: 0), a mano %s (esperado: sin la congeladora) y caben %d (esperado: %d, las de un montón)" % [
+		lanzables.cuantas("congeladora"), lanzables.mano, lanzables.maximo("congeladora"), Lanzables.MONTON])
 
 	# ── Guantes de goma: un segundo dentro del fuego (y los 2 s que sigue quemando al salir) ──
 	johnny.vida = johnny.stats.vida_max
@@ -1699,6 +1699,7 @@ func probar_quimico() -> void:
 	await get_tree().process_frame
 	z2.vida = 500
 	z2.aturdido = 30.0   # quieto hasta justo antes de que explote (a los 2 s), y entonces se suelta para medir lo suyo
+	lanzables.sumar("congeladora")   # (desde el 15 nov Criogenia ya no da congeladoras: se le da una)
 	lanzables.tipo = "congeladora"
 	lanzables.lanzar(z2.position)
 	await get_tree().create_timer(1.95, false).timeout
@@ -1751,7 +1752,7 @@ func probar_quimico() -> void:
 	johnny.position = d.position + Vector2(-8, 0)
 	for k in 6:
 		await get_tree().physics_frame
-	print("Residuo tóxico: deja %d charco (esperado: 1); el zombi de encima lleva ácido %s (esperado: true) y Johnny encima %s (esperado: false)" % [
+	print("Residuo tóxico: deja %d charco (esperado: 1); el zombi de encima lleva ácido %s (esperado: true) y Johnny encima %s (esperado: true: desde el 15 nov afecta a todos)" % [
 		residuos.size(), e.estados.has("acido"), johnny.estados.has("acido")])
 	johnny.position = centro
 	await get_tree().create_timer(0.3, false).timeout
@@ -1862,7 +1863,7 @@ func probar_equilibrio_talentos() -> void:
 	johnny.invulnerable = 0.0
 	var v0: int = johnny.vida
 	johnny.recibir_dano(10)
-	print("Durito 3: un zarpazo de 10 quita %d (esperado: 9: con 3 puntos, 1 menos; con Durito 5, antes, 5) · vida máxima con Corpulento 5: %d (esperado: 125)" % [
+	print("Durito 3: un zarpazo de 10 quita %d (esperado: 4: con 3 puntos, 6 menos; antes del 15 nov, 9) · vida máxima con Corpulento 5: %d (esperado: 125)" % [
 		v0 - johnny.vida, johnny.stats.vida_max])
 
 	# ── Ajolote: cura hasta la mitad, no más ──
@@ -2047,7 +2048,14 @@ func probar_talentos_altos() -> void:
 		johnny.arma_de("fregona").ritmo, fregona.ritmo, johnny.arma_de("pistola").ritmo, pistola.ritmo,
 		johnny.arma_de("pistola").recarga, pistola.recarga])
 
-	# ── Racimo: el molotov y la granada, 3 pequeños más (lanzados lejos de Johnny) ──
+	# ── Artificiero (15 nov): 1 más de cada lanzable por punto, en cada montón; al empezar, molotovs y granadas ──
+	aplicar_talentos({"artificiero": 3})
+	lanzables.reiniciar(johnny.stats)
+	print("Artificiero 3: empieza con %d molotovs, %d granadas y %d congeladoras (esperado: 5, 5 y 0) · en un montón caben %d atraedoras y %d congeladoras (esperado: %d y %d)" % [
+		lanzables.cuantas("molotov"), lanzables.cuantas("granada"), lanzables.cuantas("congeladora"),
+		lanzables.maximo("atraedora"), lanzables.maximo("congeladora"), Lanzables.MONTON + 3, Lanzables.MONTON + 3])
+
+	# ── Racimo: el molotov y la granada, 3 pequeños más cada uno (lanzados lejos de Johnny) ──
 	aplicar_talentos({"racimo": 3})
 	lanzables.reiniciar(johnny.stats)
 	lanzables.tipo = "molotov"
@@ -2056,7 +2064,7 @@ func probar_talentos_altos() -> void:
 	lanzables.tipo = "granada"
 	lanzables.lanzar(centro + Vector2(220, 0))
 	var granada: Node = sala.get_child(-1)
-	print("Racimo 3: el molotov soltará %d botellitas y la granada %d granaditas (esperado: 1 y 1; sin el talento, 0 si no son Épicas)" % [
+	print("Racimo 3: el molotov soltará %d botellitas y la granada %d granaditas (esperado: 3 y 3; sin el talento, 0 si no son Épicas)" % [
 		botella.racimo, granada.racimo])
 	var hijas := []
 	for espera in 200:   # hasta que la granada explota y salen sus granaditas
@@ -2066,7 +2074,7 @@ func probar_talentos_altos() -> void:
 		await get_tree().physics_frame
 	await get_tree().create_timer(0.8, false).timeout   # (las granaditas explotan a los 0,7 s)
 	Captura.foto("captura-altos-racimo.png")
-	print("Racimo 3: al explotar la granada salen %d granaditas (esperado: 1)" % hijas.size())
+	print("Racimo 3: al explotar la granada salen %d granaditas (esperado: 3)" % hijas.size())
 	await get_tree().create_timer(0.7, false).timeout
 	for ch in get_tree().get_nodes_in_group("charcos"):
 		ch.queue_free()
@@ -2080,7 +2088,7 @@ func probar_talentos_altos() -> void:
 	aplicar_talentos({})
 	johnny.escudo = 0.0
 	aplicar_talentos({"acero": 1, "blindaje": 3, "sombra": 3})
-	print("Blindaje 3: escudo de %d al comprarlo (esperado: 25 + 36 = 61) · Sombra 3: la esquiva se recarga en %.2f s (esperado: 0,9 × 0,775 = 0,70)" % [
+	print("Blindaje 3: escudo de %d al comprarlo (esperado: 25 + 15 = 40) · Sombra 3: la esquiva se recarga en %.2f s (esperado: 0,9 × 0,775 = 0,70)" % [
 		roundi(johnny.escudo), johnny.stats.esquiva_espera])
 
 	# ── Segundo aliento: de 40, un golpe de 15; y otra vez en la misma planta ──
@@ -2161,20 +2169,22 @@ func probar_talentos_altos() -> void:
 		fila[k].aturdido = 30.0
 		fila[k].position = centro + Vector2(40 + 70 * k, 0)
 		fila[k].set_physics_process(false)
+	johnny.position = centro   # (lo de antes lo ha movido: el rayo solo salta al que está cerca)
 	johnny.invulnerable = 0.0
 	johnny.pararrayos_t = 0.0
 	johnny.recibir_dano(10, fila[0])
 	await get_tree().process_frame
 	Captura.foto("captura-altos-voltaje.png")
-	print("Alto voltaje 3: lo que quita el rayo a los 6 de la fila %s (esperado: 10 al que pega, 5 a los 2 siguientes y 0 a los demás: con 3 puntos salta a 1 más)" % [
+	print("Alto voltaje 3: lo que quita el rayo a los 6 de la fila %s (esperado: 10 al que pega, 5 a los 4 siguientes y 0 al último: con 3 puntos salta a 3 más)" % [
 		fila.map(func(z): return 500 - z.vida)])
 	for z in fila:
 		z.queue_free()
 	await get_tree().create_timer(0.3, false).timeout
 
-	# ── Mezcla explosiva: uno con un solo efecto (nada) y otro con dos (explota, y a Johnny no le hace nada) ──
+	# ── Mezcla explosiva: uno con un solo efecto (nada) y otro con dos (explota, y desde el 15 nov a Johnny también le hace daño) ──
 	aplicar_talentos({"mezcla": 1})
 	johnny.vida = 100
+	johnny.position = centro
 	johnny.invulnerable = 0.0
 	var m: Node2D = meter_zombi("normal", centro + Vector2(60, 0))
 	var vecinos := [meter_zombi("normal", centro + Vector2(120, 0)), meter_zombi("normal", centro + Vector2(60, 60))]
@@ -2202,7 +2212,7 @@ func probar_talentos_altos() -> void:
 	m2.recibir_golpe(9999, Vector2.ZERO)
 	await get_tree().create_timer(0.15, false).timeout
 	Captura.foto("captura-altos-mezcla.png")
-	print("Mezcla explosiva: el que muere con fuego y ácido explota: a los de al lado les quita %s (esperado: [15, 15]) y a Johnny, a 60, %d (esperado: 0)" % [
+	print("Mezcla explosiva: el que muere con fuego y ácido explota: a los de al lado les quita %s (esperado: [15, 15]) y a Johnny, a 60, %d (esperado: 15)" % [
 		vecinos.map(func(z): return 500 - z.vida), 100 - johnny.vida])
 	for z in [m, m2] + vecinos:
 		z.queue_free()

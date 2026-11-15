@@ -36,7 +36,7 @@ const TIPOS := {
 	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}, "vomito": {}}, "solo_zombis": true},
 	# el que deja un zombi que muere con ácido si Johnny tiene el talento Residuo tóxico (zombi.gd, quimica_al_morir):
 	# como el de la portera pero más pequeño, y solo a los zombis
-	"residuo": {"burbujas": "acido", "radio": 40.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
+	"residuo": {"burbujas": "acido", "radio": 40.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}},   # (a Johnny también: 15 nov)
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
 	"aceite": {"burbujas": "aceite", "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}},
 	"hirviendo": {"radio": 60.0, "vida": 6.0, "estados": {"fuego": {"dps": 12.0}}, "prende": true},   # el del cocinero

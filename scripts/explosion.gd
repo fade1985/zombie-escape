@@ -25,7 +25,7 @@ var radio := 90.0
 var dano := 30
 var dano_zombis := -1     # si es distinto (la granada con Puntería les hace más a ellos): -1 = el mismo
 var origen: Node = null       # quien ha reventado (no se hace daño a sí mismo)
-var a_johnny := true          # si le hace daño a Johnny (la de Mezcla explosiva, no: zombi.gd)
+var a_johnny := true          # si le hace daño a Johnny
 var de := "granada"           # de quién es, para el cartel de derrota (johnny.gd, golpe_de): la del dinamitero lleva
                               # "explosivo"; las demás que le dan a Johnny son de su granada
 var helada := false           # la de la congeladora (M51): en vez de la bola de fuego, el estallido de escarcha de pixelfx

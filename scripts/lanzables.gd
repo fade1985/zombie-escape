@@ -91,7 +91,6 @@ const UNO := {"molotov": "Molotov", "granada": "Granada", "atraedora": "Atraedor
 const PRECIOS := {"molotov": 5, "granada": 5, "atraedora": 8, "congeladora": 8}
 const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a"), "atraedora": Color("#ffd23f"),
 	"congeladora": Color("#9fe8ff")}   # (los de ARROJADIZAS)
-const ARTIFICIERO := ["molotov", "granada"]   # a los que el talento Artificiero les suma unidades (lanzar_extra)
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 const BOMBA := preload("res://scripts/granada.gd")
 const MANO := 3            # los montones que lleva a mano (F cambia entre ellos)
@@ -148,12 +147,12 @@ static func calidad_de(k: String) -> int:
 	return k.get_slice(":", 1).to_int() if ":" in k else 0
 
 
-# Al empezar la partida: las de siempre, más las del Artificiero, a mano (todas Normales). Con Criogenia, también sus
-# congeladoras, a mano
+# Al empezar la partida: las de siempre, más las del Artificiero, a mano (todas Normales). Las que no se tienen al
+# empezar (la atraedora y la congeladora) no salen por el Artificiero: con él solo caben más en cada montón
 func reiniciar(stats: Dictionary) -> void:
 	cantidades = {}
 	for k in DATOS:
-		cantidades[k] = DATOS[k].inicio + extra_talentos(k, stats)
+		cantidades[k] = DATOS[k].inicio + (extra_talentos(k, stats) if DATOS[k].inicio > 0 else 0)
 	mano = ["molotov", "granada"]
 	if cantidades.congeladora > 0:
 		mano.append("congeladora")
@@ -421,11 +420,10 @@ func maximo(k: String) -> int:
 	return MONTON + extra_talentos(tipo_de(k), johnny.stats) + Armas.CALIDADES[calidad_de(k)].unidades
 
 
-# Las unidades de más de un tipo por los talentos: el Artificiero, molotovs y granadas; Criogenia, congeladoras
-static func extra_talentos(t: String, stats: Dictionary) -> int:
-	if t in ARTIFICIERO:
-		return stats.lanzar_extra
-	return stats.congeladoras if t == "congeladora" else 0
+# Las unidades de más de un tipo por los talentos: el Artificiero, en todos (desde el 15 nov; antes solo molotovs y
+# granadas, y Criogenia daba congeladoras)
+static func extra_talentos(_t: String, stats: Dictionary) -> int:
+	return stats.lanzar_extra
 
 
 # Quita "n" del montón de ese sitio (al guardarlos en el baúl; sin "n", el montón entero): devuelve cuántos ha quitado.
@@ -622,8 +620,7 @@ func lanzar(donde: Vector2) -> void:
 			g.fabricante = johnny.stats.fabricante
 			g.congela_extra = johnny.stats.congela_extra
 		g.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0
-		if t == "granada":
-			g.racimo += johnny.stats.racimo   # (Racimo: la granada, 1 granadita más por punto)
+		g.racimo += johnny.stats.racimo   # (Racimo: todos los lanzables, 1 más pequeño por punto)
 		sala.add_child(g)
 	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)
 

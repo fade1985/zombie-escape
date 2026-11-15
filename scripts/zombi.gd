@@ -627,8 +627,8 @@ func efectos_puestos() -> int:
 
 
 # Los talentos de Químico al morir: Reacción en cadena (si muere ardiendo, revienta y prende a los de al lado, como el
-# truco de las Épicas), Residuo tóxico (si lleva ácido, deja un charco de ácido que solo daña a los zombis) y Mezcla
-# explosiva (si lleva dos efectos a la vez, explota; a Johnny no le hace nada). Los que prende, mancha o revienta pueden
+# truco de las Épicas), Residuo tóxico (si lleva ácido, deja un charco de ácido que daña a todos, también a Johnny) y
+# Mezcla explosiva (si lleva dos efectos a la vez, explota, y a Johnny también le hace daño: 15 nov). Los que prende, mancha o revienta pueden
 # morir igual y seguir la cadena
 func quimica_al_morir() -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
@@ -638,7 +638,7 @@ func quimica_al_morir() -> void:
 		var boom := BOOM.instantiate()
 		boom.radio = Talentos.MEZCLA.radio
 		boom.dano_zombis = roundi(Talentos.MEZCLA.dano * johnny.stats.dano_quimico)   # (con el Catalizador, más)
-		boom.a_johnny = false
+		boom.dano = Talentos.MEZCLA.dano   # (a Johnny, lo de la tabla, sin el Catalizador)
 		boom.position = position
 		get_parent().add_child.call_deferred(boom)
 	if johnny.stats.reaccion and arder_t > 0.0:

@@ -1702,10 +1702,11 @@ func quitar_vida(cantidad: int, de := "") -> void:
 	if vida > 0:
 		avisar_adrenalina()
 	if vida == 0 and stats.resucitar and not resucitado:
-		# Desfibrilador: la primera vez que cae, vuelve con toda la vida
+		# Desfibrilador: la primera vez que cae, vuelve con la mitad de la vida (15 nov: antes, con toda), en el tercio
+		# del medio
 		resucitado = true
-		vida = stats.vida_max
-		tercios = 3
+		vida = ceili(stats.vida_max / 2.0)
+		tercios = 2
 		invulnerable = 2.0
 		vida_cambiada.emit(vida, stats.vida_max)
 		EfectoSuelo.soltar(self, "desfibrilador", Vector2.ZERO)   # (M55: las dos descargas y el latido; le sigue)

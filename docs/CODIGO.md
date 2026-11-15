@@ -408,7 +408,7 @@ en una línea.
   quien no tiene a Johnny a mano. Químico (M14): Catalizador suma daño al lanzallamas, al lanza ácido, al lanza rayos, al
   molotov y a la congeladora (`johnny.arma_de`, `lanzables.lanzar`); Guantes de goma quita daño de los estados
   (`johnny.gd`); Incendiario alarga lo que arden (`zombi.prender` y `contagiar`); Desatascador sube lo que come el ácido
-  (`ArmasCreadas.con_acido`); Criogenia da congeladoras (`Lanzables.extra_talentos`) y las hace durar (`granada.gd`);
+  (`ArmasCreadas.con_acido`); Criogenia las hace durar más congeladas (`granada.gd`; desde el 15 nov ya no da congeladoras);
   Reacción en cadena y Residuo tóxico, al morir el zombi (`zombi.quimica_al_morir`: el estallido de las Épicas y un
   charco `residuo`, `charco.gd`), y Pararrayos, al recibir un golpe (`johnny.pararrayos`, con `Talentos.PARARRAYOS`).
   En el ordenador, las tres ramas a la vez (`arbol_talentos.gd`, ver más abajo). Se prueba con `--quimico`. Desde el 6 nov
@@ -434,7 +434,7 @@ en una línea.
   desde `proyectil.caer`), Pegajoso (`zombi.ir_hacia`), Alto voltaje (`saltos`: el rayo del lanza rayos y el de
   Pararrayos) y Mezcla explosiva (`zombi.quimica_al_morir` con `efectos_puestos`; la marca del rayo, `zombi.electrico`,
   la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
-  `--talentos-altos`). Desde el 11 nov (bloque J) todos los talentos hacen la mitad (el precio no cambia): lo que daba +10 % da +5 %; lo que daba un objeto entero por punto (Artificiero, Durito, Criogenia, Racimo, Alto voltaje) da 1 cada 2 puntos (`int(n / 2.0)`); el Ajolote cura cada 10 s (`REGENERA_CADA`); Larguirucho ×1,5, Mirilla 1 de cada 6, Veterano ×2,5 y +5 %, Fabricante ×1,15 y ×1,25, Pararrayos 10 de daño y 0,5 s, Mezcla explosiva radio 45 y 15 de daño, Adrenalina +15 % y +10 %),
+  `--talentos-altos`). Desde el 11 nov (bloque J) todos los talentos hacen la mitad (el precio no cambia): lo que daba +10 % da +5 %; lo que daba un objeto entero por punto (Artificiero, Durito, Criogenia, Racimo, Alto voltaje) da 1 cada 2 puntos (`int(n / 2.0)`); el Ajolote cura cada 10 s (`REGENERA_CADA`); Larguirucho ×1,5, Mirilla 1 de cada 6, Veterano ×2,5 y +5 %, Fabricante ×1,15 y ×1,25, Pararrayos 10 de daño y 0,5 s, Mezcla explosiva radio 45 y 15 de daño, Adrenalina +15 % y +10 %), y desde el 15 nov (lo pidió el dueño): Artificiero +1 de cada lanzable por punto (en cada montón, `Lanzables.extra_talentos`; al empezar, solo molotovs y granadas, los que se tienen de salida), Racimo 1 por punto y en todos los lanzables, Durito 2 menos por punto, Reflejos cada 10 s con un punto (10,5 − 0,5 por punto), Desfibrilador con la mitad de la vida (y el tercio del medio), Blindaje 5 por punto, Criogenia sin congeladoras, Alto voltaje 1 durmiente más por punto, y el charco de Residuo tóxico y la explosión de Mezcla explosiva (15) también le hacen daño a Johnny,
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `idioma.gd` (autoload `Idioma`: el idioma del juego y `Idioma.t("texto")` / `Idioma.n("uno", "varios", n)` para traducir,
   también desde los `static`; se elige en Opciones, se guarda en `ajustes.idioma` y avisa con la señal `cambiado`; con

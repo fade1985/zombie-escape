@@ -3988,10 +3988,8 @@ msgid "+%s %% a distancia"
 msgstr "+%s %% à distance"
 
 #: scripts/talentos.gd
-msgid "+%d molotov y granada"
-msgid_plural "+%d molotovs y granadas"
-msgstr[0] "+%d molotov et grenade"
-msgstr[1] "+%d molotovs et grenades"
+msgid "+%d de cada lanzable"
+msgstr "+%d de chaque lançable"
 
 #: scripts/talentos.gd
 msgid "+%s %% de vida"
@@ -4030,10 +4028,8 @@ msgid "+%s %% con ácido"
 msgstr "+%s %% sous acide"
 
 #: scripts/talentos.gd
-msgid "+%d congeladora y +%s s"
-msgid_plural "+%d congeladoras y +%s s"
-msgstr[0] "+%d bombe gel et +%s s"
-msgstr[1] "+%d bombes gel et +%s s"
+msgid "+%s s congelados"
+msgstr "+%s s gelés"
 
 #: scripts/talentos.gd
 msgid "+%s %% de rapidez cuerpo a cuerpo"
@@ -4120,8 +4116,8 @@ msgid "Artificiero"
 msgstr "Artificier"
 
 #: scripts/talentos.gd
-msgid "+1 molotov y +1 granada cada 2 puntos"
-msgstr "+1 molotov et +1 grenade tous les 2 points"
+msgid "+1 de cada lanzable por punto"
+msgstr "+1 de chaque lançable par point"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
@@ -4168,8 +4164,8 @@ msgid "Racimo"
 msgstr "Grappe"
 
 #: scripts/talentos.gd
-msgid "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"
-msgstr "Le molotov et la grenade lâchent 1 mini-charge de plus autour tous les 2 points"
+msgid "Los lanzables sueltan 1 más pequeño alrededor por punto"
+msgstr "Les lançables lâchent 1 mini-charge de plus autour par point"
 
 #: scripts/talentos.gd
 msgid "Veterano"
@@ -4200,16 +4196,16 @@ msgid "Durito"
 msgstr "Dur à cuire"
 
 #: scripts/talentos.gd
-msgid "Cada golpe que recibes quita 1 menos cada 2 puntos"
-msgstr "Chaque coup reçu enlève 1 de moins tous les 2 points"
+msgid "Cada golpe que recibes quita 2 menos por punto"
+msgstr "Chaque coup reçu enlève 2 de moins par point"
 
 #: scripts/talentos.gd
 msgid "Reflejos"
 msgstr "Réflexes"
 
 #: scripts/talentos.gd
-msgid "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"
-msgstr "Tu esquives tout seul un coup toutes les 10,5 s (0,5 s de moins par point en plus)"
+msgid "Esquivas el próximo golpe que vayas a recibir cada 10 s (0,5 s menos por cada punto más)"
+msgstr "Tu esquives tout seul le prochain coup que tu vas recevoir toutes les 10 s (0,5 s de moins par point en plus)"
 
 #: scripts/talentos.gd
 msgid "Sanitario"
@@ -4240,16 +4236,16 @@ msgid "Desfibrilador"
 msgstr "Défibrillateur"
 
 #: scripts/talentos.gd
-msgid "Una vez por edificio, si caes, resucitas con toda la vida"
-msgstr "Une fois par bâtiment, si tu tombes, tu ressuscites avec toute ta vie"
+msgid "Una vez por edificio, si caes, resucitas con la mitad de la vida"
+msgstr "Une fois par bâtiment, si tu tombes, tu ressuscites avec la moitié de ta vie"
 
 #: scripts/talentos.gd
 msgid "Blindaje"
 msgstr "Blindage"
 
 #: scripts/talentos.gd
-msgid "El escudo de Acero tiene 12 más por punto"
-msgstr "Le bouclier d'Acier gagne 12 de plus par point"
+msgid "El escudo de Acero tiene 5 más por punto"
+msgstr "Le bouclier d'Acier gagne 5 de plus par point"
 
 #: scripts/talentos.gd
 msgid "Sombra"
@@ -4312,8 +4308,8 @@ msgid "Criogenia"
 msgstr "Cryogénie"
 
 #: scripts/talentos.gd
-msgid "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"
-msgstr "+1 bombe gel tous les 2 points, et elles gèlent 0,25 s de plus par point"
+msgid "Congelan 0,25 s más por punto"
+msgstr "Les bombes gel gèlent 0,25 s de plus par point"
 
 #: scripts/talentos.gd
 msgid "Reacción en cadena"
@@ -4328,8 +4324,8 @@ msgid "Residuo tóxico"
 msgstr "Déchet toxique"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
-msgstr "Les dormeurs qui meurent sous acide laissent une flaque d'acide (sans effet sur toi)"
+msgid "Los durmientes que mueren con ácido dejan un charco de ácido que afecta a todos"
+msgstr "Les dormeurs qui meurent sous acide laissent une flaque d'acide qui touche tout le monde"
 
 #: scripts/talentos.gd
 msgid "Pararrayos"
@@ -4360,16 +4356,16 @@ msgid "Alto voltaje"
 msgstr "Haute tension"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más cada 2 puntos"
-msgstr "L'éclair du lance-éclairs et celui du Paratonnerre sautent sur 1 dormeur de plus tous les 2 points"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más por punto"
+msgstr "L'éclair du lance-éclairs et celui du Paratonnerre sautent sur 1 dormeur de plus par point"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"
 msgstr "Mélange explosif"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
-msgstr "Les dormeurs qui meurent avec deux effets à la fois (feu, acide, foudre ou froid) explosent (sans effet sur toi)"
+msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan"
+msgstr "Les dormeurs qui meurent avec deux effets à la fois (feu, acide, foudre ou froid) explosent"
 
 #: scripts/tornos.gd
 msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"

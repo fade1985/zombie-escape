@@ -3994,11 +3994,8 @@ msgid "+%s %% a distancia"
 msgstr "+%s %% в дальнем бою"
 
 #: scripts/talentos.gd
-msgid "+%d molotov y granada"
-msgid_plural "+%d molotovs y granadas"
-msgstr[0] "+%d молотов и граната"
-msgstr[1] "+%d молотова и гранаты"
-msgstr[2] "+%d молотовов и гранат"
+msgid "+%d de cada lanzable"
+msgstr "+%d к каждому метательному"
 
 #: scripts/talentos.gd
 msgid "+%s %% de vida"
@@ -4037,11 +4034,8 @@ msgid "+%s %% con ácido"
 msgstr "+%s %% урона с кислотой"
 
 #: scripts/talentos.gd
-msgid "+%d congeladora y +%s s"
-msgid_plural "+%d congeladoras y +%s s"
-msgstr[0] "+%d криобомба и +%s с"
-msgstr[1] "+%d криобомбы и +%s с"
-msgstr[2] "+%d криобомб и +%s с"
+msgid "+%s s congelados"
+msgstr "+%s с заморозки"
 
 #: scripts/talentos.gd
 msgid "+%s %% de rapidez cuerpo a cuerpo"
@@ -4128,8 +4122,8 @@ msgid "Artificiero"
 msgstr "Сапер"
 
 #: scripts/talentos.gd
-msgid "+1 molotov y +1 granada cada 2 puntos"
-msgstr "+1 молотов и +1 граната за каждые 2 очка"
+msgid "+1 de cada lanzable por punto"
+msgstr "+1 к каждому метательному за очко"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
@@ -4176,8 +4170,8 @@ msgid "Racimo"
 msgstr "Гроздь"
 
 #: scripts/talentos.gd
-msgid "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"
-msgstr "Молотов и граната разбрасывают вокруг на 1 мелкую копию больше за каждые 2 очка"
+msgid "Los lanzables sueltan 1 más pequeño alrededor por punto"
+msgstr "Метательное разбрасывает вокруг на 1 мелкую копию больше за очко"
 
 #: scripts/talentos.gd
 msgid "Veterano"
@@ -4208,16 +4202,16 @@ msgid "Durito"
 msgstr "Крепыш"
 
 #: scripts/talentos.gd
-msgid "Cada golpe que recibes quita 1 menos cada 2 puntos"
-msgstr "Каждый полученный удар отнимает на 1 меньше за каждые 2 очка"
+msgid "Cada golpe que recibes quita 2 menos por punto"
+msgstr "Каждый полученный удар отнимает на 2 меньше за очко"
 
 #: scripts/talentos.gd
 msgid "Reflejos"
 msgstr "Рефлексы"
 
 #: scripts/talentos.gd
-msgid "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"
-msgstr "Сам уклоняешься от одного удара каждые 10,5 с (на 0,5 с меньше за каждое следующее очко)"
+msgid "Esquivas el próximo golpe que vayas a recibir cada 10 s (0,5 s menos por cada punto más)"
+msgstr "Каждые 10 с сам уклоняешься от следующего удара (на 0,5 с меньше за каждое следующее очко)"
 
 #: scripts/talentos.gd
 msgid "Sanitario"
@@ -4248,16 +4242,16 @@ msgid "Desfibrilador"
 msgstr "Дефибриллятор"
 
 #: scripts/talentos.gd
-msgid "Una vez por edificio, si caes, resucitas con toda la vida"
-msgstr "Раз за здание, если падешь, воскресаешь с полным здоровьем"
+msgid "Una vez por edificio, si caes, resucitas con la mitad de la vida"
+msgstr "Раз за здание, если падешь, воскресаешь с половиной здоровья"
 
 #: scripts/talentos.gd
 msgid "Blindaje"
 msgstr "Броня"
 
 #: scripts/talentos.gd
-msgid "El escudo de Acero tiene 12 más por punto"
-msgstr "Щит Стали больше на 12 за очко"
+msgid "El escudo de Acero tiene 5 más por punto"
+msgstr "Щит Стали больше на 5 за очко"
 
 #: scripts/talentos.gd
 msgid "Sombra"
@@ -4320,8 +4314,8 @@ msgid "Criogenia"
 msgstr "Криогеника"
 
 #: scripts/talentos.gd
-msgid "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"
-msgstr "+1 криобомба за каждые 2 очка, и заморозка длится на 0,25 с дольше за очко"
+msgid "Congelan 0,25 s más por punto"
+msgstr "Криобомбы замораживают на 0,25 с дольше за очко"
 
 #: scripts/talentos.gd
 msgid "Reacción en cadena"
@@ -4336,8 +4330,8 @@ msgid "Residuo tóxico"
 msgstr "Токсичные отходы"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
-msgstr "Спящие, умершие в кислоте, оставляют кислотную лужу (тебе она не вредит)"
+msgid "Los durmientes que mueren con ácido dejan un charco de ácido que afecta a todos"
+msgstr "Спящие, умершие в кислоте, оставляют кислотную лужу, которая вредит всем"
 
 #: scripts/talentos.gd
 msgid "Pararrayos"
@@ -4368,16 +4362,16 @@ msgid "Alto voltaje"
 msgstr "Киловольты"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más cada 2 puntos"
-msgstr "Молния молниемета и Громоотвода перескакивает еще на 1 спящего за каждые 2 очка"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más por punto"
+msgstr "Молния молниемета и Громоотвода перескакивает еще на 1 спящего за очко"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"
 msgstr "Гремучая смесь"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
-msgstr "Спящие, умершие сразу с двумя эффектами (огонь, кислота, молния или холод), взрываются (тебе это не вредит)"
+msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan"
+msgstr "Спящие, умершие сразу с двумя эффектами (огонь, кислота, молния или холод), взрываются"
 
 #: scripts/tornos.gd
 msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"

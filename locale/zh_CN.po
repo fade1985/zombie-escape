@@ -3982,9 +3982,8 @@ msgid "+%s %% a distancia"
 msgstr "远程 +%s%%"
 
 #: scripts/talentos.gd
-msgid "+%d molotov y granada"
-msgid_plural "+%d molotovs y granadas"
-msgstr[0] "燃烧瓶和手雷 +%d"
+msgid "+%d de cada lanzable"
+msgstr "每种投掷物 +%d"
 
 #: scripts/talentos.gd
 msgid "+%s %% de vida"
@@ -4023,9 +4022,8 @@ msgid "+%s %% con ácido"
 msgstr "酸液 +%s%%"
 
 #: scripts/talentos.gd
-msgid "+%d congeladora y +%s s"
-msgid_plural "+%d congeladoras y +%s s"
-msgstr[0] "冰冻弹 +%d，时长 +%s 秒"
+msgid "+%s s congelados"
+msgstr "冰冻 +%s 秒"
 
 #: scripts/talentos.gd
 msgid "+%s %% de rapidez cuerpo a cuerpo"
@@ -4112,8 +4110,8 @@ msgid "Artificiero"
 msgstr "爆破专家"
 
 #: scripts/talentos.gd
-msgid "+1 molotov y +1 granada cada 2 puntos"
-msgstr "每2点燃烧瓶 +1、手雷 +1"
+msgid "+1 de cada lanzable por punto"
+msgstr "每点使每种投掷物 +1"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
@@ -4160,8 +4158,8 @@ msgid "Racimo"
 msgstr "集束"
 
 #: scripts/talentos.gd
-msgid "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"
-msgstr "每2点使燃烧瓶和手雷向周围多散落1个迷你版"
+msgid "Los lanzables sueltan 1 más pequeño alrededor por punto"
+msgstr "每点使投掷物向周围多散落1个迷你版"
 
 #: scripts/talentos.gd
 msgid "Veterano"
@@ -4192,16 +4190,16 @@ msgid "Durito"
 msgstr "硬骨头"
 
 #: scripts/talentos.gd
-msgid "Cada golpe que recibes quita 1 menos cada 2 puntos"
-msgstr "每2点使每次受到的伤害 -1"
+msgid "Cada golpe que recibes quita 2 menos por punto"
+msgstr "每点使每次受到的伤害 -2"
 
 #: scripts/talentos.gd
 msgid "Reflejos"
 msgstr "反射神经"
 
 #: scripts/talentos.gd
-msgid "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"
-msgstr "每10.5秒自动闪避一次攻击（每多1点，缩短0.5秒）"
+msgid "Esquivas el próximo golpe que vayas a recibir cada 10 s (0,5 s menos por cada punto más)"
+msgstr "每10秒自动闪避下一次攻击（每多1点，缩短0.5秒）"
 
 #: scripts/talentos.gd
 msgid "Sanitario"
@@ -4232,16 +4230,16 @@ msgid "Desfibrilador"
 msgstr "除颤器"
 
 #: scripts/talentos.gd
-msgid "Una vez por edificio, si caes, resucitas con toda la vida"
-msgstr "每栋楼一次，倒下后满血复活"
+msgid "Una vez por edificio, si caes, resucitas con la mitad de la vida"
+msgstr "每栋楼一次，倒下后以一半生命复活"
 
 #: scripts/talentos.gd
 msgid "Blindaje"
 msgstr "装甲板"
 
 #: scripts/talentos.gd
-msgid "El escudo de Acero tiene 12 más por punto"
-msgstr "每点使“钢铁”护盾 +12"
+msgid "El escudo de Acero tiene 5 más por punto"
+msgstr "每点使“钢铁”护盾 +5"
 
 #: scripts/talentos.gd
 msgid "Sombra"
@@ -4304,8 +4302,8 @@ msgid "Criogenia"
 msgstr "极寒"
 
 #: scripts/talentos.gd
-msgid "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"
-msgstr "每2点冰冻弹 +1，冰冻时间 +0.25秒"
+msgid "Congelan 0,25 s más por punto"
+msgstr "每点使冰冻弹的冰冻时间 +0.25秒"
 
 #: scripts/talentos.gd
 msgid "Reacción en cadena"
@@ -4320,8 +4318,8 @@ msgid "Residuo tóxico"
 msgstr "有毒废料"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
-msgstr "沾着酸液死去的沉睡者会留下一滩酸液（对你无害）"
+msgid "Los durmientes que mueren con ácido dejan un charco de ácido que afecta a todos"
+msgstr "沾着酸液死去的沉睡者会留下一滩酸液，对所有人都有伤害"
 
 #: scripts/talentos.gd
 msgid "Pararrayos"
@@ -4352,16 +4350,16 @@ msgid "Alto voltaje"
 msgstr "高压电"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más cada 2 puntos"
-msgstr "每2点使闪电枪和“避雷针”的闪电多跳1个沉睡者"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más por punto"
+msgstr "每点使闪电枪和“避雷针”的闪电多跳1个沉睡者"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"
 msgstr "爆炸配方"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
-msgstr "同时带有两种效果（火焰、酸液、闪电或冰冻）死去的沉睡者会爆炸（对你无害）"
+msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan"
+msgstr "同时带有两种效果（火焰、酸液、闪电或冰冻）死去的沉睡者会爆炸"
 
 #: scripts/tornos.gd
 msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"

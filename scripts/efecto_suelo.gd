@@ -40,7 +40,7 @@
 #  - "curacion": la médica cura a Johnny (M56, rehecha en la M66; aliado.curar): un círculo de luz verde a sus pies con
 #    un anillo que se abre, una columna de luz que le sube alrededor, cruces con borde y chispitas
 #    (tools/pixelfx/curacion.js). Va de hijo de Johnny, para que le siga.
-#  - "desfibrilador": Johnny vuelve con toda la vida por el talento Desfibrilador (M55; johnny.gd, recibir_dano): dos
+#  - "desfibrilador": Johnny vuelve con la mitad de la vida por el talento Desfibrilador (M55; johnny.gd, recibir_dano): dos
 #    descargas en el pecho con rayitos, chispas y anillo eléctrico, y luego un latido verde sobre la cabeza
 #    (tools/pixelfx/desfibrilador.js). También va de hijo de Johnny.
 #  - "mutar": Johnny elige una mutación (M54; partida.elegir_mutacion): se enciende de morado, dos hebras de ADN le suben

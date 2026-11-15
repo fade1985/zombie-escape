@@ -3988,10 +3988,8 @@ msgid "+%s %% a distancia"
 msgstr "+%s%% ranged"
 
 #: scripts/talentos.gd
-msgid "+%d molotov y granada"
-msgid_plural "+%d molotovs y granadas"
-msgstr[0] "+%d molotov and grenade"
-msgstr[1] "+%d molotovs and grenades"
+msgid "+%d de cada lanzable"
+msgstr "+%d of each throwable"
 
 #: scripts/talentos.gd
 msgid "+%s %% de vida"
@@ -4030,10 +4028,8 @@ msgid "+%s %% con ácido"
 msgstr "+%s%% with acid"
 
 #: scripts/talentos.gd
-msgid "+%d congeladora y +%s s"
-msgid_plural "+%d congeladoras y +%s s"
-msgstr[0] "+%d freeze bomb and +%s s"
-msgstr[1] "+%d freeze bombs and +%s s"
+msgid "+%s s congelados"
+msgstr "+%s s frozen"
 
 #: scripts/talentos.gd
 msgid "+%s %% de rapidez cuerpo a cuerpo"
@@ -4120,8 +4116,8 @@ msgid "Artificiero"
 msgstr "Demolitions"
 
 #: scripts/talentos.gd
-msgid "+1 molotov y +1 granada cada 2 puntos"
-msgstr "+1 molotov and +1 grenade every 2 points"
+msgid "+1 de cada lanzable por punto"
+msgstr "+1 of each throwable per point"
 
 #: scripts/talentos.gd
 msgid "Larguirucho"
@@ -4168,8 +4164,8 @@ msgid "Racimo"
 msgstr "Cluster"
 
 #: scripts/talentos.gd
-msgid "El molotov y la granada sueltan 1 más pequeño alrededor cada 2 puntos"
-msgstr "Molotovs and grenades drop 1 extra mini one around them every 2 points"
+msgid "Los lanzables sueltan 1 más pequeño alrededor por punto"
+msgstr "Throwables drop 1 extra mini one around them per point"
 
 #: scripts/talentos.gd
 msgid "Veterano"
@@ -4200,16 +4196,16 @@ msgid "Durito"
 msgstr "Tough Cookie"
 
 #: scripts/talentos.gd
-msgid "Cada golpe que recibes quita 1 menos cada 2 puntos"
-msgstr "Each hit you take does 1 less damage every 2 points"
+msgid "Cada golpe que recibes quita 2 menos por punto"
+msgstr "Each hit you take does 2 less damage per point"
 
 #: scripts/talentos.gd
 msgid "Reflejos"
 msgstr "Reflexes"
 
 #: scripts/talentos.gd
-msgid "Esquivas solo un golpe cada 10,5 s (0,5 s menos por cada punto más)"
-msgstr "You automatically dodge one hit every 10.5 s (0.5 s less per extra point)"
+msgid "Esquivas el próximo golpe que vayas a recibir cada 10 s (0,5 s menos por cada punto más)"
+msgstr "You automatically dodge the next hit coming your way every 10 s (0.5 s less per extra point)"
 
 #: scripts/talentos.gd
 msgid "Sanitario"
@@ -4240,16 +4236,16 @@ msgid "Desfibrilador"
 msgstr "Defibrillator"
 
 #: scripts/talentos.gd
-msgid "Una vez por edificio, si caes, resucitas con toda la vida"
-msgstr "Once per building, if you go down, you come back with full health"
+msgid "Una vez por edificio, si caes, resucitas con la mitad de la vida"
+msgstr "Once per building, if you go down, you come back with half your health"
 
 #: scripts/talentos.gd
 msgid "Blindaje"
 msgstr "Armor Plating"
 
 #: scripts/talentos.gd
-msgid "El escudo de Acero tiene 12 más por punto"
-msgstr "The Steel shield has 12 more per point"
+msgid "El escudo de Acero tiene 5 más por punto"
+msgstr "The Steel shield has 5 more per point"
 
 #: scripts/talentos.gd
 msgid "Sombra"
@@ -4312,8 +4308,8 @@ msgid "Criogenia"
 msgstr "Cryogenics"
 
 #: scripts/talentos.gd
-msgid "+1 congeladora cada 2 puntos, y congelan 0,25 s más por punto"
-msgstr "+1 freeze bomb every 2 points, and they freeze 0.25 s longer per point"
+msgid "Congelan 0,25 s más por punto"
+msgstr "Freeze bombs freeze 0.25 s longer per point"
 
 #: scripts/talentos.gd
 msgid "Reacción en cadena"
@@ -4328,8 +4324,8 @@ msgid "Residuo tóxico"
 msgstr "Toxic Waste"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
-msgstr "Sleepers that die with acid on them leave an acid puddle (it doesn't hurt you)"
+msgid "Los durmientes que mueren con ácido dejan un charco de ácido que afecta a todos"
+msgstr "Sleepers that die with acid on them leave an acid puddle that hurts everyone"
 
 #: scripts/talentos.gd
 msgid "Pararrayos"
@@ -4360,16 +4356,16 @@ msgid "Alto voltaje"
 msgstr "High Voltage"
 
 #: scripts/talentos.gd
-msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más cada 2 puntos"
-msgstr "The lightning gun's bolt and the Lightning Rod's bolt jump to 1 more sleeper every 2 points"
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 durmiente más por punto"
+msgstr "The lightning gun's bolt and the Lightning Rod's bolt jump to 1 more sleeper per point"
 
 #: scripts/talentos.gd
 msgid "Mezcla explosiva"
 msgstr "Explosive Mix"
 
 #: scripts/talentos.gd
-msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
-msgstr "Sleepers that die with two effects at once (fire, acid, lightning or cold) explode (it doesn't hurt you)"
+msgid "Los durmientes que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan"
+msgstr "Sleepers that die with two effects at once (fire, acid, lightning or cold) explode"
 
 #: scripts/tornos.gd
 msgid "¡Se han cerrado las puertas! Protege a la %s mientras abre los tornos"
