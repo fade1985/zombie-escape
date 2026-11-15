@@ -1721,6 +1721,8 @@ func mirar_tutoriales() -> void:
 		tutorial("tercios")
 	if dolares > 0:
 		tutorial("dolares")
+	if mutageno > 0:
+		tutorial("mutageno")
 	if johnny.huecos.cuerpo != "fregona" or johnny.huecos.fuego not in ["", "pistola"] or not armas_guardadas.is_empty():
 		tutorial("armas")
 	for id in mochila:

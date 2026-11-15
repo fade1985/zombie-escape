@@ -1247,6 +1247,29 @@ func probar_tutoriales_alto() -> void:
 	get_tree().quit()
 
 
+# Con --tutorial-mutageno: el primer mutágeno que coge Johnny trae su tutorial (la parte 3 del mutágeno, 15 nov;
+# captura-tutorial-mutageno.png)
+func probar_tutorial_mutageno() -> void:
+	Tutoriales.olvidar()
+	tutoriales_prueba = true
+	guia.activa = false
+	Guardado.cambiar(func(g): g.ajustes.tutoriales = true)
+	await get_tree().create_timer(0.5).timeout
+	soltar_mutageno(johnny.position)   # (a sus pies: lo coge en seguida)
+	await get_tree().create_timer(1.5).timeout
+	var t: Tutorial = null
+	for h in get_children():
+		if h is Tutorial and not h.is_queued_for_deletion():
+			t = h
+	print("Tutorial del mutágeno · mutágeno %d · ventana %s (esperado: 1 · mutageno)" % [mutageno, t.id if t else "ninguna"])
+	Captura.foto("captura-tutorial-mutageno.png")
+	var escena := get_tree()
+	if t:
+		t.cerrar()
+	await escena.create_timer(0.5).timeout
+	escena.quit()
+
+
 func probar_tutorial() -> void:
 	Tutoriales.olvidar()
 	tutoriales_prueba = true

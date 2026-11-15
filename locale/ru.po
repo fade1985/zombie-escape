@@ -4645,6 +4645,26 @@ msgstr "Они сохраняются в конце забега: все, есл
 msgid "Se gastan en el ordenador de la sala de mantenimiento."
 msgstr "Тратятся на компьютере в дворницкой."
 
+#: scripts/tutoriales.gd
+msgid "Mutágeno"
+msgstr "Мутаген"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer mutágeno"
+msgstr "Когда подбираешь первый мутаген"
+
+#: scripts/tutoriales.gd
+msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "В спящих — мутировавшая ДНК: иногда, падая, они роняют немного мутагена. Пройди по нему, чтобы подобрать."
+
+#: scripts/tutoriales.gd
+msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
+msgstr "Он сохраняется, если пройдёшь здание. Если падёшь или сдашься, потеряешь то, что собрал за этот забег."
+
+#: scripts/tutoriales.gd
+msgid "Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."
+msgstr "Его тратят в «Мутациях», на компьютере в дворницкой: улучшения для Джонни, которые остаются навсегда."
+
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Cambiar de arma"
 msgstr "Сменить оружие"

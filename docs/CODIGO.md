@@ -451,7 +451,7 @@ en una línea.
   de GPT, `tools/muebles_gpt.py mutageno`, y el sonido `"mutageno"`). Se cuenta en `partida.mutageno` y va en la partida
   guardada a medias (`PartidaGuardada`). Al completar el edificio, el que quede pasa al guardado ("mutageno",
   `partida.terminar`; lo pidió el dueño el 15 nov); si caes o abandonas, el de esa partida se pierde, y el guardado no
-  (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. Se ve, el guardado más el de la partida
+  (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. La primera vez que se coge, su tutorial («mutageno», en `mirar_tutoriales`; prueba `--tutorial-mutageno`). Se ve, el guardado más el de la partida
   (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los
   durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
   marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una vacía (las cifras de todos los marcadores son de reloj

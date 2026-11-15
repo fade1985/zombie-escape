@@ -4639,6 +4639,26 @@ msgstr "São guardados ao fim da partida: todos se você completar o prédio, e 
 msgid "Se gastan en el ordenador de la sala de mantenimiento."
 msgstr "Você gasta no computador da sala de manutenção."
 
+#: scripts/tutoriales.gd
+msgid "Mutágeno"
+msgstr "Mutágeno"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer mutágeno"
+msgstr "Ao pegar o primeiro mutágeno"
+
+#: scripts/tutoriales.gd
+msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "Os adormecidos têm DNA mutado por dentro: às vezes, ao cair, soltam um pouco de mutágeno. Passe por cima para pegar."
+
+#: scripts/tutoriales.gd
+msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
+msgstr "Ele fica guardado se você completar o prédio. Se você cair ou abandonar, perde o que pegou nessa partida."
+
+#: scripts/tutoriales.gd
+msgid "Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."
+msgstr "É gasto em Mutações, no computador da sala de manutenção: melhorias para o Johnny que valem para sempre."
+
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Cambiar de arma"
 msgstr "Trocar de arma"

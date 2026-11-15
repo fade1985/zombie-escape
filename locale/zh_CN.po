@@ -4633,6 +4633,26 @@ msgstr "钱在一局结束时存下：通关大楼全部保留，倒下或放弃
 msgid "Se gastan en el ordenador de la sala de mantenimiento."
 msgstr "可以在维修间的电脑上花掉。"
 
+#: scripts/tutoriales.gd
+msgid "Mutágeno"
+msgstr "诱变剂"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer mutágeno"
+msgstr "第一次捡到诱变剂时"
+
+#: scripts/tutoriales.gd
+msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "沉睡者体内带着变异的DNA：倒下时偶尔会掉落一点诱变剂。走过去就能捡起来。"
+
+#: scripts/tutoriales.gd
+msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
+msgstr "通关大楼就会保留。倒下或放弃的话，会失去这一局捡到的诱变剂。"
+
+#: scripts/tutoriales.gd
+msgid "Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."
+msgstr "在维修间电脑的“变异”里使用：给Johnny的永久强化。"
+
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Cambiar de arma"
 msgstr "切换武器"

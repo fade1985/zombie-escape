@@ -67,6 +67,11 @@ const LISTA := {
 		"lineas": ["Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos.",
 			"Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.",
 			"Se gastan en el ordenador de la sala de mantenimiento."]},
+	# (15 nov: el mutágeno, que paga las mutaciones; sale como el de los dólares, desde partida.mirar_tutoriales)
+	"mutageno": {"grupo": "Lo básico", "titulo": "Mutágeno", "icono": "mutageno", "cuando": "Al coger el primer mutágeno",
+		"lineas": ["Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo.",
+			"Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida.",
+			"Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."]},
 	# (sale en la tienda de armas, nada más coger la pistola de regalo: ui/ordenador.gd, comprar_arma; M97)
 	"cambiar_arma": {"grupo": "Armas", "titulo": "Cambiar de arma", "icono": "pistola",
 		"cuando": "Al coger la primera pistola",
