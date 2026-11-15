@@ -299,6 +299,11 @@ en una línea.
 - Elegir una mutación (M54; `efecto_suelo.gd`, `mutar`, en vez del anillo morado de antes): en `partida.elegir_mutacion`,
   Johnny se enciende de morado, dos hebras de ADN le suben enroscadas, ondas blandas por el suelo y burbujitas
   (`tools/pixelfx/mutar.js`, de hijo de Johnny). Se precalienta al abrir el recuadro. Prueba: `--captura --mutaciones`.
+- El recuadro de elegir mutación (`menus.mutacion`, desde el 16 nov): arriba la frase del virus como el grito de la llave
+  (letra pixelada a 32 con contorno, en blanco) y «¡¡¡DIFERENTE!!!»; dos tarjetas-botón con el dibujo grande del efecto
+  (`assets/ui/mutaciones/<id>.png`, 100×100 a escala 2, de GPT con `tools/muebles_gpt.py`) y, debajo y fuera, el nombre y
+  lo que hace con la letra lisa. Se elige con el ratón, 1 y 2 o el mando. La prueba `--mutaciones` saca también
+  `captura-mutacion-larga.png` con las dos explicaciones más largas, para ver que no se sale en ningún idioma.
 - El rugido de los jefes (M57; `efecto_suelo.gd`, `rugido`): en su presentación (`ui/presentacion.gd`), al gritar, ondas
   de sonido que salen de la cabeza (con borde oscuro, para que se lean en cualquier suelo), un destello rojizo y una onda
   de polvo a sus pies con piedrecitas (`tools/pixelfx/rugido.js`). Va junto al jefe, no de hijo (hay jefes que crecen);

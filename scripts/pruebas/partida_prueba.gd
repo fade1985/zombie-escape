@@ -430,6 +430,7 @@
 #   --hudmando          las teclas pegadas a las casillas del HUD (cambiar de arma y de lanzable, las curas): con el
 #                       teclado, las suyas; tocando el mando, los dibujos de sus botones (M44)  [prueba_varias.gd]
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una, ver lo que cambia y el efecto (M54) [prueba_larga.gd]
+#                       y la foto con las dos explicaciones más largas (captura-mutacion-larga.png)
 #   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
 #   --derrota           el cartel de derrota: quién te ha pillado (un zombi, explosiones, el fuego), lo conseguido en
 #                       la partida y «Menú principal», su único botón; y por el fuego, por un jefe y ganando [prueba_varias.gd]

@@ -1773,6 +1773,12 @@ func probar_mutaciones_solo() -> void:
 	Captura.foto("captura-mutar.png")
 	await get_tree().create_timer(1.2).timeout
 	print("  al acabar, efectos %d (esperado: 0)" % johnny.get_children().filter(func(n): return n is EfectoSuelo).size())
+	# y el recuadro con las dos explicaciones más largas, para ver que en ningún idioma se sale de la pantalla
+	# (captura-mutacion-larga.png; no elige ninguna)
+	menus.mutacion([Mutaciones.mutacion("gastro"), Mutaciones.mutacion("ansiedad")], func(_id: String): pass)
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-mutacion-larga.png")
+	menus.cerrar()
 	get_tree().quit()
 
 

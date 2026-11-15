@@ -476,7 +476,7 @@ func abrir_mutacion() -> void:
 	get_tree().paused = true
 	if puede_tutorial("mutaciones"):
 		await ver_tutorial("mutaciones")   # la primera vez, antes de las cartas, qué son
-	menus.mutacion(opciones, mutaciones.tengo.size(), elegir_mutacion)
+	menus.mutacion(opciones, elegir_mutacion)
 
 
 # La skin del Sujeto 1 (skins.gd): al empezar la partida, el recuadro de las mutaciones para elegir una. Espera a que

@@ -141,6 +141,16 @@ MUEBLES = {
     "pieza_distancia": ("assets/sources/pieza-distancia-gpt.webp", "assets/ui/iconos/obj-pieza_distancia.png", 30, 30, False),
     "pieza_especial": ("assets/sources/pieza-especial-gpt.webp", "assets/ui/iconos/obj-pieza_especial.png", 30, 30, False),
     "pieza_arrojable": ("assets/sources/pieza-arrojable-gpt.webp", "assets/ui/iconos/obj-pieza_arrojable.png", 20, 30, False),
+    # los dibujos grandes de los efectos secundarios (ui/menus.gd, mutacion; 16 nov): uno por mutación, en un cuadrado de
+    # 100 (se centran en un lienzo de 100x100 al final de este archivo); a 2 unidades por píxel, 200 en la pantalla
+    "mutacion_tentacular": ("assets/sources/mutacion-tentacular-gpt.webp", "assets/ui/mutaciones/tentacular.png", 96, 100, False),
+    "mutacion_gastro": ("assets/sources/mutacion-gastro-gpt.webp", "assets/ui/mutaciones/gastro.png", 97, 100, False),
+    "mutacion_insensible": ("assets/sources/mutacion-insensible-gpt.webp", "assets/ui/mutaciones/insensible.png", 100, 98, False),
+    "mutacion_canibal": ("assets/sources/mutacion-canibal-gpt.webp", "assets/ui/mutaciones/canibal.png", 85, 100, False),
+    "mutacion_ansiedad": ("assets/sources/mutacion-ansiedad-gpt.webp", "assets/ui/mutaciones/ansiedad.png", 100, 94, False),
+    "mutacion_endurecimiento": ("assets/sources/mutacion-endurecimiento-gpt.webp", "assets/ui/mutaciones/endurecimiento.png", 94, 100, False),
+    "mutacion_locura": ("assets/sources/mutacion-locura-gpt.webp", "assets/ui/mutaciones/locura.png", 100, 99, False),
+    "mutacion_flatulento": ("assets/sources/mutacion-flatulento-gpt.webp", "assets/ui/mutaciones/flatulento.png", 95, 100, False),
     "rama_militar": ("assets/sources/rama-militar-gpt.webp", "assets/ui/iconos/rama-militar.png", 24, 23, False, (), [(620, 950)]),
     "rama_superviviente": ("assets/sources/rama-superviviente-gpt.webp", "assets/ui/iconos/rama-superviviente.png", 22, 24, False),
     "rama_quimico": ("assets/sources/rama-quimico-gpt.webp", "assets/ui/iconos/rama-quimico.png", 24, 24, False),
@@ -328,4 +338,12 @@ for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith("pieza
     pequena = Image.open(ruta).convert("RGBA")
     lienzo = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
     lienzo.paste(pequena, ((32 - pequena.width) // 2, (32 - pequena.height) // 2))
+    lienzo.save(ruta)
+
+# los efectos secundarios, centrados en un lienzo de 100x100 (todas las tarjetas de la pantalla de elegir, iguales)
+for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith("mutacion_")]:
+    ruta = MUEBLES[nombre][1]
+    pequena = Image.open(ruta).convert("RGBA")
+    lienzo = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+    lienzo.paste(pequena, ((100 - pequena.width) // 2, (100 - pequena.height) // 2))
     lienzo.save(ruta)

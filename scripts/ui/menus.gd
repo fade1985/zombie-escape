@@ -324,15 +324,22 @@ func quien_te_pilla(id: String) -> Control:
 	return ficha
 
 
-# El recuadro de las mutaciones: dos cartas (icono, nombre y lo que hace). "llevas": las que ya tiene
-func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
+# El recuadro de las mutaciones (16 nov): arriba, la frase del virus como el grito de «¡¡¡LA LLAVE!!!» encima de Johnny
+# (la letra pixelada a 32 con su contorno, pero en blanco) y «¡¡¡DIFERENTE!!!»; debajo, dos tarjetas con el dibujo grande
+# de cada efecto (de GPT, assets/ui/mutaciones/<id>.png, 100x100 a escala 2) y, fuera de la tarjeta, su nombre y lo que
+# hace con la letra lisa. Se elige con el ratón, con 1 y 2 o con el mando (las tarjetas son botones)
+func mutacion(opciones: Array, al_elegir: Callable) -> void:
 	var columna := abrir("mutacion", 0.8)
 	elegir_mutacion = al_elegir
 	cartas = opciones
 	var virus := Label.new()
 	virus.text = Idioma.t("La exposición prolongada al virus hace que te sientas...")
-	virus.theme_type_variation = "Sub"
+	virus.add_theme_font_size_override("font_size", 32)
+	virus.add_theme_color_override("font_color", Color.WHITE)
+	virus.add_theme_constant_override("outline_size", 8)
+	virus.add_theme_color_override("font_outline_color", Color(0.11, 0.1, 0.17))   # (el de Zombi.texto_flotante)
 	virus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	virus.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART   # (en dos renglones si no cabe)
 	columna.add_child(virus)
 	var t := Label.new()
 	t.theme_type_variation = "Titulo"
@@ -342,40 +349,63 @@ func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
 	columna.add_child(t)
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
-	fila.add_theme_constant_override("separation", 16)
+	fila.add_theme_constant_override("separation", 40)
 	columna.add_child(fila)
+	# la tarjeta: una caja de metal oscuro con el borde oxidado; con el ratón encima o elegida, el borde amarillo
+	var caja := func(borde: Color, grosor: int) -> StyleBoxFlat:
+		var s := StyleBoxFlat.new()
+		s.bg_color = Tema.METAL
+		s.border_color = borde
+		s.set_border_width_all(grosor)
+		s.shadow_color = Tema.LINEA
+		s.shadow_size = 2
+		return s
+	var normal: StyleBoxFlat = caja.call(Tema.OXIDO, 2)
+	var marcada: StyleBoxFlat = caja.call(Tema.AMARILLO, 4)
 	var primera: Button = null
 	for i in opciones.size():
 		var m: Dictionary = opciones[i]
+		var lado := VBoxContainer.new()
+		lado.custom_minimum_size.x = 320
+		lado.add_theme_constant_override("separation", 6)
+		fila.add_child(lado)
 		var carta := Button.new()
-		carta.custom_minimum_size = Vector2(260, 200)
+		carta.custom_minimum_size = Vector2(216, 216)
+		carta.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		for estilo in ["normal", "pressed", "disabled"]:
+			carta.add_theme_stylebox_override(estilo, normal)
+		for estilo in ["hover", "focus", "hover_pressed"]:
+			carta.add_theme_stylebox_override(estilo, marcada)
 		carta.pressed.connect(func(): elegir(m.id))
-		fila.add_child(carta)
-		var dentro := VBoxContainer.new()
-		dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
-		dentro.offset_left = 16
-		dentro.offset_right = -16
-		dentro.offset_top = 12
-		dentro.offset_bottom = -12
-		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		carta.add_child(dentro)
-		var cabeza := Tema.icono_y_texto(m.icono, "%d. %s" % [i + 1, m.nombre], 32)
-		cabeza.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		dentro.add_child(cabeza)
+		lado.add_child(carta)
+		var dibujo := TextureRect.new()
+		dibujo.texture = load("res://assets/ui/mutaciones/%s.png" % m.id)
+		dibujo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		dibujo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		dibujo.set_anchors_preset(Control.PRESET_FULL_RECT)
+		dibujo.set_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 8)   # (200x200: escala 2)
+		dibujo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		carta.add_child(dibujo)
+		var nombre := Label.new()
+		nombre.text = "%d. %s" % [i + 1, m.nombre]   # (el número, la tecla que la elige)
+		nombre.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA_TITULO))
+		nombre.add_theme_font_size_override("font_size", 24)
+		nombre.add_theme_color_override("font_color", Tema.AMARILLO)
+		nombre.add_theme_constant_override("outline_size", 0)
+		nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		nombre.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lado.add_child(nombre)
 		var desc := Label.new()
 		desc.text = m.desc
+		desc.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA))
+		desc.add_theme_font_size_override("font_size", Tema.TAM_LISA)
+		desc.add_theme_constant_override("outline_size", 0)
+		desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc.add_theme_font_size_override("font_size", 16)
-		desc.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		desc.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		dentro.add_child(desc)
+		lado.add_child(desc)
 		if primera == null:
 			primera = carta
-	var pie := Label.new()
-	pie.text = Idioma.t("Efecto secundario %d de %d · dura hasta que acabe la partida") % [llevas + 1, Mutaciones.MAXIMO]
-	pie.theme_type_variation = "Sub"
-	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	columna.add_child(pie)
 	primera.grab_focus.call_deferred()
 
 
