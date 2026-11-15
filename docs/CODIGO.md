@@ -451,8 +451,9 @@ en una línea.
   (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. Se ve, el guardado más el de la partida
   (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los
   durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
-  marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una (el de los relojes digitales, siete rayas con las
-  puntas en pico, dibujado a cuadraditos: `OCHO`, `dibujar_ocho`)
+  marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una vacía (las cifras de todos los marcadores son de reloj
+  digital desde el 15 nov: siete rayas con las puntas en pico, dibujadas a cuadraditos, cada cifra con las suyas encendidas
+  y las demás apagadas: `RAYAS`, `ENCENDIDAS`, `dibujar_cifra`)
   debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Y 10.000
   es el tope de verdad (`partida.TOPE`, 15 nov): con la cartera (lo ahorrado más lo de la partida) o el mutágeno en MAX,
   los enemigos dejan de soltarlos, lo que hay en el suelo no se coge (`puede`), los fajos (eventos, joyería) suman solo
