@@ -3,22 +3,23 @@
 # (M16, 28 oct: el 4, con un talento debajo de cada uno del 3, y el 5, la «corona» de la rama, que pide los tres del 4
 # al máximo).
 #
-# Cada punto de un talento se compra directamente en él, con los dólares ahorrados, en el ordenador de la sala de
-# mantenimiento (ui/ordenador.gd, TALENTOS.EXE): cada punto sube un nivel y cuesta según la fila del árbol en la que
-# está (PRECIOS). Lo comprado es para siempre (se guarda en "talentos" del guardado, y lo gastado en
-# "dolares_talentos": lo que se pierde al resetear, que no devuelve nada). Los dólares de la partida en curso no cuentan hasta que
-# acaba (todos si completas el edificio; la mitad si caes). Hasta el 6 nov se compraban antes «puntos de talento» a
-# $10 y luego se gastaban; los que tenían los guardados viejos sin gastar se cambiaron por dólares (guardado.gd).
+# Cada punto de un talento se compra directamente en él, con el mutágeno de la partida en curso (partida.mutageno: lo
+# suelta cada durmiente; parte 2 del mutágeno, 15 nov), en el ordenador de la sala de mantenimiento (ui/ordenador.gd,
+# TALENTOS.EXE): cada punto sube un nivel y cuesta más que el anterior del mismo talento (PRECIOS: 25, 50, 75, 100 y
+# 125; los de un solo punto, 125). Llenar el árbol entero sale por 7.800. El mutágeno que no se gasta se pierde al
+# acabar la partida; lo comprado es para siempre (se guarda en "talentos" del guardado). Resetear es gratis y no
+# devuelve nada. Hasta el 15 nov se pagaban con los dólares ahorrados, y antes del 6 nov con «puntos de talento»: los
+# guardados de entonces empiezan el árbol de cero (guardado.gd, "talentos_mutageno").
 #
 # Para tocar un talento basta con cambiar su línea en LISTA: "max" es cuántos puntos admite, "pide" el talento
 # que hay que tener al máximo antes (o una lista, si son varios); lo que hace con n puntos está en aplicar_uno(). Lo que no es un número
 # (esquivar solo, el escudo, el golpe de Ninja, resucitar...) lo lee Johnny de sus atributos (johnny.gd).
 class_name Talentos
 
-# Lo que cuesta cada punto, según la fila del árbol (el "nivel" del talento): los de abajo, más fuertes, más caros.
-# Llenar el árbol entero sale por unos $1.290
-const PRECIOS := {1: 5, 2: 10, 3: 15, 4: 20, 5: 25}
-const PRECIO_PUNTO_VIEJO := 10   # lo que costaba un punto de talento antes del 6 nov (guardado.gd convierte los que sobraban)
+# Lo que cuesta, en mutágeno, cada punto dentro de un talento: el 1.º, el 2.º... Los talentos de un solo punto cuestan
+# PRECIO_UNICO. Llenar el árbol entero sale por 7.800 (2.600 cada rama); una partida da unos 300-340
+const PRECIOS := [25, 50, 75, 100, 125]
+const PRECIO_UNICO := 125
 
 # Los textos de RAMAS y de LISTA (nombre y desc) se traducen al enseñarlos, con nombre_rama(), nombre_de() y desc_de().
 # Ojo: las desc no acaban en punto, porque ordenador.gd les pega detrás «. Te hace falta 1 punto.» y similares
@@ -164,20 +165,24 @@ static func nivel_de(s: Dictionary, id: String) -> int:
 	return mini(int(s.talentos.get(id, 0)), talento(id).max)
 
 
-# Lo que cuesta un punto de este talento
-static func precio(id: String) -> int:
-	return PRECIOS[int(talento(id).nivel)]
+# Lo que cuesta en mutágeno el próximo punto de este talento (con los que ya tiene en "s"; al máximo, lo del último)
+static func precio(s: Dictionary, id: String) -> int:
+	var t := talento(id)
+	if int(t.max) == 1:
+		return PRECIO_UNICO
+	return PRECIOS[clampi(nivel_de(s, id), 0, PRECIOS.size() - 1)]
 
 
-# ¿Se le puede poner un punto más? Devuelve "" si se puede, o el motivo: "max", "bloqueado" o "sin_dinero"
-static func motivo(s: Dictionary, id: String) -> String:
+# ¿Se le puede poner un punto más con este mutágeno? Devuelve "" si se puede, o el motivo: "max", "bloqueado" o
+# "sin_mutageno"
+static func motivo(s: Dictionary, id: String, mutageno: int) -> String:
 	var t := talento(id)
 	if nivel_de(s, id) >= t.max:
 		return "max"
 	if not faltan(s, id).is_empty():
 		return "bloqueado"
-	if s.dolares < precio(id):
-		return "sin_dinero"
+	if mutageno < precio(s, id):
+		return "sin_mutageno"
 	return ""
 
 
@@ -306,19 +311,22 @@ static func resetear() -> Dictionary:
 	var s := Guardado.cargar()
 	if not se_puede_resetear(s):
 		return {}
-	s.dolares_talentos = 0
 	s.talentos = {}
 	Guardado.escribir(s)
 	return s
 
 
-# Compra un punto de un talento con lo ahorrado. Devuelve el guardado nuevo, o {} si no se puede
-static func subir(id: String) -> Dictionary:
+# Compra un punto de un talento con el mutágeno de la partida "p" (se le resta a p.mutageno). Devuelve el guardado
+# nuevo, o {} si no se puede.
+# Lo gastado se quita también de la partida a medias (la foto del principio de la planta: partida_guardada.gd): si
+# no, cerrar el juego y darle a «Continuar partida» devolvería el mutágeno y se quedarían los talentos
+static func subir(id: String, p: Node) -> Dictionary:
 	var s := Guardado.cargar()
-	if motivo(s, id) != "":
+	if motivo(s, id, p.mutageno) != "":
 		return {}
-	s.dolares -= precio(id)
-	s.dolares_talentos += precio(id)
+	var cuesta := precio(s, id)
+	p.mutageno -= cuesta
 	s.talentos[id] = nivel_de(s, id) + 1
+	PartidaGuardada.gastar_mutageno(s, cuesta)
 	Guardado.escribir(s)
 	return s

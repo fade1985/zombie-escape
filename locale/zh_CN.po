@@ -5194,20 +5194,20 @@ msgid "Bloqueado"
 msgstr "未解锁"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Toca otra vez: comprar · $%d"
-msgstr "再点一次：购买 · $%d"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
-msgid "A: comprar · $%d"
-msgstr "A：购买 · $%d"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
-msgid "Intro: comprar · $%d"
-msgstr "回车：购买 · $%d"
+msgid "Toca otra vez: comprar · %d"
+msgstr "再点一次：购买 · %d"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Clic: comprar · $%d"
-msgstr "点击：购买 · $%d"
+msgid "A: comprar · %d"
+msgstr "A：购买 · %d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Intro: comprar · %d"
+msgstr "回车：购买 · %d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Clic: comprar · %d"
+msgstr "点击：购买 · %d"
 
 #: scripts/ui/archivador_logros.gd
 msgid "Logros %d/%d"
@@ -6790,33 +6790,29 @@ msgstr "C:\\维修间\\%s"
 msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
 msgstr "清空天赋树上的所有点数。花掉的钱不会退还。"
 
-#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
-msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
-msgstr "本局的 $%d 会在结束时存下：通关大楼全部保留，倒下则保留一半。"
-
 #: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "每一点都用存下的钱购买，提升一级。想进入下一层级，先把它要求的天赋点满。"
+msgid "Cada punto se paga con mutágeno y sube un nivel; el que no gastes se pierde al acabar la partida. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "每一点都用诱变剂购买，提升一级；没花掉的诱变剂在本局结束时会失去。想进入下一层级，先把它要求的天赋点满。"
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"
 msgstr "需要先点满%s。%s"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Cuesta $%d."
-msgstr "%s。花费 $%d。"
+msgid "%s. Cuesta %d de mutágeno."
+msgstr "%s。花费 %d 诱变剂。"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Pulsa para subirlo ($%d)."
-msgstr "%s。点击升级（$%d）。"
+msgid "%s. Pulsa para subirlo (%d de mutágeno)."
+msgstr "%s。点击升级（%d 诱变剂）。"
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
 msgstr "你还没有分配任何点数。"
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
-msgstr "确定吗？你会失去投入天赋的所有钱。天赋树会清空，可以重新分配。"
+msgid "¿Seguro? Perderás todo el mutágeno que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
+msgstr "确定吗？你会失去投入天赋的所有诱变剂。天赋树会清空，可以重新分配。"
 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
@@ -6831,8 +6827,8 @@ msgid "Lo que gastaste en los talentos no se devuelve."
 msgstr "花在天赋上的钱不会退还。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
-msgstr "完成！天赋树已清空，可以重新分配。你存了 $%d。"
+msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes %d de mutágeno."
+msgstr "完成！天赋树已清空，可以重新分配。你有 %d 诱变剂。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"
@@ -7239,12 +7235,24 @@ msgid "Regalo de bienvenida"
 msgstr "见面礼"
 
 #: scripts/ui/tienda_armas.gd
+msgid "A: comprar · $%d"
+msgstr "A：购买 · $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Intro: comprar · $%d"
+msgstr "回车：购买 · $%d"
+
+#: scripts/ui/tienda_armas.gd
 msgid "Comprar · $%d"
 msgstr "购买 · $%d"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Pasa por un arma para ver qué hace."
 msgstr "选一把武器，看看它的作用。"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
+msgstr "本局的 $%d 会在结束时存下：通关大楼全部保留，倒下则保留一半。"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Área"

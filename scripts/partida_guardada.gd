@@ -81,6 +81,16 @@ static func apuntar(p: Node, num: int) -> void:
 	Guardado.cambiar(func(g): g.en_curso = texto)
 
 
+# Al gastar mutágeno en un talento (talentos.gd, subir): se le quita también a la foto que haya en el guardado "s" (sin
+# bajar de 0), para que cerrar el juego no lo devuelva. No escribe el guardado: lo hace el que llama
+static func gastar_mutageno(s: Dictionary, cuanto: int) -> void:
+	var foto := guardada(s)
+	if foto.is_empty():
+		return
+	foto.mutageno = maxi(int(foto.get("mutageno", 0)) - cuanto, 0)
+	s.en_curso = var_to_str(foto)
+
+
 # La partida, al empezar con una foto (partida.gd, _ready): todo lo de la partida como estaba al llegar a su planta.
 # Lo que se genera (la planta) lo hace después partida.gd, como al subir
 static func poner(p: Node, foto: Dictionary) -> void:

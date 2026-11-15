@@ -37,6 +37,13 @@ static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int) -> 
 	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, dolares), dolares, AMARILLO)
 
 
+# El mutágeno de la partida, en el mismo sitio que lo ahorrado (en el árbol de talentos, que se paga con él: 15 nov):
+# el frasco y, en la pantallita, la hélice y la cifra en verde (como en el inventario)
+static func dibujar_mutageno(lienzo: CanvasItem, fuente: Font, mutageno: int) -> void:
+	lienzo.draw_texture_rect(load("res://assets/ui/iconos/mutageno.png"), Rect2(14, 6, 32, 32), false)
+	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, mutageno, true), mutageno, VERDE, true)
+
+
 # La pantallita de un marcador (la de lo ahorrado o la del precio que no llega en la tienda: tienda_armas.gd) en "caja":
 # el «$» pegado a la cifra, en "color" y con su sombra. Sin los «8» apagados de antes en las casillas vacías (10 nov).
 # Con "adn", la del mutágeno (inventario.gd): en vez del «$», la doble hélice (ADN).
@@ -75,13 +82,14 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 		lienzo.draw_string(fuente, Vector2(x, base.y), numero[i], HORIZONTAL_ALIGNMENT_LEFT, -1, 32, color)
 
 
-# La doble hélice del mutágeno, con su esquina de arriba a la izquierda en "pos": primero la sombra, como las cifras
-static func dibujar_adn(lienzo: CanvasItem, pos: Vector2, color: Color, sombra: Color) -> void:
-	for capa in [[Vector2(0, 2), sombra], [Vector2.ZERO, color]]:
+# La doble hélice del mutágeno, con su esquina de arriba a la izquierda en "pos": primero la sombra, como las cifras.
+# "pixel": lo que mide cada cuadradito (la pequeña del pie de la ficha de un talento, arbol_talentos.gd, va a 1)
+static func dibujar_adn(lienzo: CanvasItem, pos: Vector2, color: Color, sombra: Color, pixel := PIXEL_ADN) -> void:
+	for capa in [[Vector2(0, pixel), sombra], [Vector2.ZERO, color]]:
 		for f in ADN.size():
 			for c in ADN[f].length():
 				if ADN[f][c] == "#":
-					lienzo.draw_rect(Rect2(pos + capa[0] + Vector2(c, f) * PIXEL_ADN, Vector2.ONE * PIXEL_ADN), capa[1])
+					lienzo.draw_rect(Rect2(pos + capa[0] + Vector2(c, f) * pixel, Vector2.ONE * pixel), capa[1])
 
 
 # Lo que ocupa el símbolo de delante de la cifra (el «$» o la hélice), con su aire hasta ella
@@ -104,5 +112,5 @@ static func medida_fija(fuente: Font) -> Vector2:
 
 
 # La pantallita del marcador: dónde va y lo que mide (por si se quiere poner algo a su lado)
-static func caja_ahorrado(fuente: Font, dolares: int) -> Rect2:
-	return Rect2(Vector2(52, 5), medida_marcador(fuente, dolares))
+static func caja_ahorrado(fuente: Font, dolares: int, adn := false) -> Rect2:
+	return Rect2(Vector2(52, 5), medida_marcador(fuente, dolares, adn))

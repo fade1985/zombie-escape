@@ -240,14 +240,15 @@ func _process(delta: float) -> void:
 		probar_menus()
 
 
-# El ordenador: con $60 en el guardado de prueba sube Ataque y Puntería ($5 cada punto), compra la escopeta y hace fotos
+# El ordenador: con 60 de mutágeno sube Ataque y Puntería (25 el primer punto), con $60 en el guardado de prueba compra
+# la escopeta y hace fotos
 func probar_ordenador() -> void:
 	Guardado.cambiar(func(g):
 		g.dolares = 60
-		g.dolares_talentos = 0
 		g.talentos = {}
 		g.armas = [])
 	ahorrados = 60
+	mutageno = 60
 	aplicar_talentos({})
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -270,7 +271,7 @@ func probar_ordenador() -> void:
 	ordenador.cobrar_logro("desahucio")
 	print("Logros: %s | $%d ahorrados tras cobrar" % [Guardado.cargar().logros, Guardado.cargar().dolares])
 	var g := Guardado.cargar()
-	print("Ordenador: $%d ahorrados, $%d gastados en talentos, talentos %s, armas %s | daño x%.2f | lleva %s" % [g.dolares, g.dolares_talentos,
+	print("Ordenador: $%d ahorrados, mutágeno %d (esperado: 60 - 25 - 25 = 10), talentos %s, armas %s | daño x%.2f | lleva %s" % [g.dolares, mutageno,
 		g.talentos, g.armas, johnny.stats.dano, johnny.huecos])
 	ordenador.abrir("")
 	ordenador.apagar()
@@ -485,10 +486,12 @@ func probar_colecciones() -> void:
 # captura-arriba-clic.png (tras subir un talento con un clic)
 func probar_ordenador_arriba() -> void:
 	var antes := Guardado.cargar()
+	var mutageno_antes := mutageno
 	Guardado.cambiar(func(g):
 		g.dolares = 60
 		g.talentos = {})   # (que Ataque se pueda subir)
 	ahorrados = 60
+	mutageno = 200
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -568,9 +571,9 @@ func probar_ordenador_arriba() -> void:
 	ordenador.apagar()
 	Guardado.cambiar(func(g):
 		g.dolares = antes.dolares
-		g.dolares_talentos = antes.dolares_talentos
 		g.talentos = antes.talentos)
 	ahorrados = antes.dolares
+	mutageno = mutageno_antes
 
 
 # Hace clic de verdad, con el ratón, en el centro de ese botón (Godot lo recibe como cualquier otro clic)
@@ -808,17 +811,17 @@ func probar_ordenador_teclado() -> void:
 	Guardado.cambiar(func(g): g.merge(antes, true))
 
 
-# Con "--captura --arbol-talentos": la ficha del árbol de talentos del ordenador (arbol_talentos.gd), con 100 $, Ataque
+# Con "--captura --arbol-talentos": la ficha del árbol de talentos del ordenador (arbol_talentos.gd), con 200 de mutágeno (cada compra, 25), Ataque
 # lleno y Puntería a 2. Con el ratón: sale al pasar por encima de Tirador (captura-arbol-raton.png), se va al apartarlo y
 # un clic compra. Con el mando: la cruceta pasa de Ataque a Camorrista, la ficha la sigue y dice «A: comprar»
 # (captura-arbol-mando.png), y A compra. Con el dedo: el primer toque en Corpulento solo enseña la ficha, «Toca otra vez»
 # (captura-arbol-dedo.png), y el segundo compra. Cada línea dice lo esperado. Deja el guardado como estaba
 func probar_arbol_talentos() -> void:
 	var antes := Guardado.cargar()
+	var mutageno_antes := mutageno
 	Guardado.cambiar(func(g):
-		g.dolares = 100
 		g.talentos = {"ataque": 5, "punteria": 2})
-	ahorrados = 100
+	mutageno = 200
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -829,14 +832,15 @@ func probar_arbol_talentos() -> void:
 	var nivel := func(id: String) -> int: return Talentos.nivel_de(Guardado.cargar(), id)
 	# el ratón
 	await mover_raton(boton.call("tirador").get_global_rect().get_center())
-	print("Ratón encima de Tirador: ficha de «%s», a la vista %s, pie «%s» (esperado: tirador, true, Clic: comprar · $10)" % [
+	print("Ratón encima de Tirador: ficha de «%s», a la vista %s, pie «%s» (esperado: tirador, true, Clic: comprar · 25)" % [
 		arbol.call().ficha_id, arbol.call().ficha.visible, arbol.call().pie_ficha("tirador")])
 	Captura.foto("captura-arbol-raton.png")
 	await mover_raton(arbol.call().get_global_rect().position + Vector2(30, 30))
 	print("Ratón apartado: ficha de «%s», a la vista %s (esperado: nada, false)" % [arbol.call().ficha_id, arbol.call().ficha.visible])
 	await clic_en(boton.call("tirador"))
 	await get_tree().create_timer(0.3).timeout
-	print("Clic en Tirador: nivel %d (esperado: 1, a la primera)" % nivel.call("tirador"))
+	print("Clic en Tirador: nivel %d · mutágeno %d · el siguiente punto, %d · arriba, %d (esperado: 1, a la primera · 175 · 50 · 175)" % [
+		nivel.call("tirador"), mutageno, Talentos.precio(Guardado.cargar(), "tirador"), arbol.call().mutageno])
 	# al subirlo, la ventana se vuelve a montar: la ficha se queda, con el nivel nuevo, sin mover el ratón (11 nov)
 	print("Tras subirlo, sin mover el ratón: ficha de «%s», a la vista %s (esperado: tirador, true)" % [arbol.call().ficha_id, arbol.call().ficha.visible])
 	Captura.foto("captura-arbol-subido.png")
@@ -845,7 +849,7 @@ func probar_arbol_talentos() -> void:
 	boton.call("ataque").grab_focus()
 	await pulsar_mando(JOY_BUTTON_DPAD_DOWN)
 	var foco := get_viewport().gui_get_focus_owner()
-	print("Mando, abajo desde Ataque: marcado %s · ficha de «%s» · pie «%s» (esperado: b_camorrista, camorrista, A: comprar · $10)" % [
+	print("Mando, abajo desde Ataque: marcado %s · ficha de «%s» · pie «%s» (esperado: b_camorrista, camorrista, A: comprar · 25)" % [
 		foco.name if foco else "nada", arbol.call().ficha_id, arbol.call().pie_ficha("camorrista")])
 	Captura.foto("captura-arbol-mando.png")
 	await pulsar_mando(JOY_BUTTON_A)
@@ -858,21 +862,33 @@ func probar_arbol_talentos() -> void:
 	Tactil.activo = true
 	Tactil.con_dedo = true
 	await tocar(boton.call("corpulento").get_global_rect().get_center())
-	print("Dedo, primer toque en Corpulento: nivel %d · ficha de «%s» · pie «%s» (esperado: 0, corpulento, Toca otra vez: comprar · $5)" % [
-		nivel.call("corpulento"), arbol.call().ficha_id, arbol.call().pie_ficha("corpulento")])
+	print("Dedo, primer toque en Corpulento: nivel %d · ficha de «%s» · pie «%s» · ficha de %d de ancho (esperado: 0, corpulento, Toca otra vez: comprar · 25 · %d)" % [
+		nivel.call("corpulento"), arbol.call().ficha_id, arbol.call().pie_ficha("corpulento"), arbol.call().ficha.size.x, arbol.call().ANCHO_FICHA + 4])
 	Captura.foto("captura-arbol-dedo.png")
 	await get_tree().create_timer(0.4).timeout
 	await tocar(boton.call("corpulento").get_global_rect().get_center())
 	await get_tree().create_timer(0.3).timeout
-	print("Dedo, segundo toque: nivel %d (esperado: 1)" % nivel.call("corpulento"))
+	print("Dedo, segundo toque: nivel %d · mutágeno %d (esperado: 1 · 125)" % [nivel.call("corpulento"), mutageno])
 	Tactil.activo = false
+	# el pie más largo («... comprar · 125», con la hélice detrás), en cada idioma: que quepa en la ficha
+	var idioma := Idioma.actual
+	var anchos := {}
+	for codigo in Idioma.codigos():
+		Idioma.poner(codigo, false)
+		var mayor := 0.0
+		for texto in ["Toca otra vez: comprar · %d", "Intro: comprar · %d", "Clic: comprar · %d",
+				"A: comprar · %d"]:
+			var l: Label = arbol.call().etiqueta(Idioma.t(texto) % 125, Color.WHITE)
+			arbol.call().add_child(l)
+			mayor = maxf(mayor, l.get_minimum_size().x + 14)   # (y la hélice, con su hueco, y los márgenes de la franja)
+			l.free()
+		anchos[codigo] = roundi(mayor)
+	Idioma.poner(idioma, false)
+	print("Pie más largo de la ficha en cada idioma %s (esperado: todos hasta %d)" % [anchos, arbol.call().ANCHO_FICHA - 12])
 	ordenador.abrir("")
 	ordenador.apagar()
-	Guardado.cambiar(func(g):
-		g.dolares = antes.dolares
-		g.dolares_talentos = antes.dolares_talentos
-		g.talentos = antes.talentos)
-	ahorrados = antes.dolares
+	Guardado.cambiar(func(g): g.talentos = antes.talentos)
+	mutageno = mutageno_antes
 
 
 # Con "--captura --tienda-armas": la tienda de armas del ordenador (tienda_armas.gd), con 100 $. Al abrir, la ficha

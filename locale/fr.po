@@ -5200,20 +5200,20 @@ msgid "Bloqueado"
 msgstr "Bloqué"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Toca otra vez: comprar · $%d"
-msgstr "Touche encore : acheter · $%d"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
-msgid "A: comprar · $%d"
-msgstr "A : acheter · $%d"
-
-#: scripts/ui/arbol_talentos.gd scripts/ui/tienda_armas.gd
-msgid "Intro: comprar · $%d"
-msgstr "Entrée : acheter · $%d"
+msgid "Toca otra vez: comprar · %d"
+msgstr "Touche encore : acheter · %d"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Clic: comprar · $%d"
-msgstr "Clic : acheter · $%d"
+msgid "A: comprar · %d"
+msgstr "A : acheter · %d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Intro: comprar · %d"
+msgstr "Entrée : acheter · %d"
+
+#: scripts/ui/arbol_talentos.gd
+msgid "Clic: comprar · %d"
+msgstr "Clic : acheter · %d"
 
 #: scripts/ui/archivador_logros.gd
 msgid "Logros %d/%d"
@@ -6808,33 +6808,29 @@ msgstr "C:\\MAINTENANCE\\%s"
 msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
 msgstr "Retire tous les points de l'arbre. Ce que tu as dépensé n'est pas remboursé."
 
-#: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
-msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
-msgstr "Les $%d de cette partie sont gardés à la fin : tous si tu termines le bâtiment, la moitié si tu tombes."
-
 #: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con lo ahorrado y sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "Chaque point se paie avec tes économies et monte d'un niveau. Pour passer au niveau suivant, remplis d'abord le talent demandé."
+msgid "Cada punto se paga con mutágeno y sube un nivel; el que no gastes se pierde al acabar la partida. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Chaque point se paie avec du mutagène et monte d'un niveau ; celui que tu ne dépenses pas est perdu à la fin de la partie. Pour passer au niveau suivant, remplis d'abord le talent demandé."
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"
 msgstr "Il faut %s au maximum. %s"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Cuesta $%d."
-msgstr "%s. Coûte $%d."
+msgid "%s. Cuesta %d de mutágeno."
+msgstr "%s. Coûte %d mutagène."
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Pulsa para subirlo ($%d)."
-msgstr "%s. Appuie pour le monter ($%d)."
+msgid "%s. Pulsa para subirlo (%d de mutágeno)."
+msgstr "%s. Appuie pour le monter (%d mutagène)."
 
 #: scripts/ui/ordenador.gd
 msgid "No tienes ningún punto puesto."
 msgstr "Tu n'as placé aucun point."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Perderás todo el dinero que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
-msgstr "Sûr ? Tu vas perdre tout l'argent investi dans les talents. L'arbre sera vide pour être redistribué."
+msgid "¿Seguro? Perderás todo el mutágeno que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
+msgstr "Sûr ? Tu vas perdre tout le mutagène investi dans les talents. L'arbre sera vide pour être redistribué."
 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
@@ -6849,8 +6845,8 @@ msgid "Lo que gastaste en los talentos no se devuelve."
 msgstr "Ce que tu as dépensé en talents n'est pas remboursé."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes $%d ahorrados."
-msgstr "C'est fait ! L'arbre est vide, prêt à être redistribué. Tu as $%d d'économies."
+msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes %d de mutágeno."
+msgstr "C'est fait ! L'arbre est vide, prêt à être redistribué. Mutagène : %d."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"
@@ -7257,12 +7253,24 @@ msgid "Regalo de bienvenida"
 msgstr "Cadeau de bienvenue"
 
 #: scripts/ui/tienda_armas.gd
+msgid "A: comprar · $%d"
+msgstr "A : acheter · $%d"
+
+#: scripts/ui/tienda_armas.gd
+msgid "Intro: comprar · $%d"
+msgstr "Entrée : acheter · $%d"
+
+#: scripts/ui/tienda_armas.gd
 msgid "Comprar · $%d"
 msgstr "Acheter · $%d"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Pasa por un arma para ver qué hace."
 msgstr "Choisis une arme pour voir ce qu'elle fait."
+
+#: scripts/ui/tienda_armas.gd
+msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
+msgstr "Les $%d de cette partie sont gardés à la fin : tous si tu termines le bâtiment, la moitié si tu tombes."
 
 #: scripts/ui/tienda_armas.gd
 msgid "Área"

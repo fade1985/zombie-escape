@@ -29,7 +29,8 @@ const NUEVO := {
 	"dolares": 0,         # dólares ahorrados (en el JS se llamaban "keys")
 	"dolares_total": 0,   # dólares conseguidos en total
 	"puntos": 0,          # solo de los guardados viejos: los puntos de talento sin gastar, que al cargar se cambian por dólares
-	"dolares_talentos": 0, # dólares gastados en el árbol de talentos (lo que se pierde al resetearlo)
+	"talentos_mutageno": true, # los talentos ya se pagan con mutágeno (15 nov). Un guardado de antes no lo trae: al
+	                           # cargarlo, su árbol se vacía una vez, sin devolver nada (cargar_archivo)
 	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
 	"armas": [],          # armas desbloqueadas (encontradas o compradas). La fregona siempre está
 	"partidas": 0,
@@ -114,7 +115,7 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 		s.ajustes = comunes.ajustes
 	s.ajustes = NUEVO.ajustes.duplicate(true).merged(s.ajustes, true)   # copia: las constantes no se pueden cambiar
 	# JSON guarda todos los números con decimales: los que son de contar, otra vez enteros
-	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "dolares_talentos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
+	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
 		s[clave] = int(s[clave])
 	for id in s.matados:
 		s.matados[id] = int(s.matados[id])
@@ -125,11 +126,13 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 		if s.talentos[t] > tope:
 			s.puntos += s.talentos[t] - tope
 			s.talentos[t] = tope
-	# Los talentos se compran con dólares desde el 6 nov: un guardado de antes no sabe lo gastado en el árbol (se cuenta
-	# a lo que costaba entonces cada punto) y los puntos que tenía sin gastar se le cambian por dólares, a ese precio
-	if not leido.has("dolares_talentos"):
-		s.dolares_talentos = Talentos.puestos(s) * Talentos.PRECIO_PUNTO_VIEJO
-	s.dolares += s.puntos * Talentos.PRECIO_PUNTO_VIEJO
+	# Los talentos se pagan con mutágeno desde el 15 nov (antes, con dólares, y antes del 6 nov, con puntos de talento):
+	# un guardado de antes empieza el árbol de cero, una sola vez y sin devolver nada (lo pidió el dueño: «como volver a
+	# empezar»). Los puntos sin gastar de los guardados de antes del 6 nov se cambiaban por dólares, a $10: eso se queda
+	if not leido.has("talentos_mutageno"):
+		s.talentos = {}
+		s.talentos_mutageno = true
+	s.dolares += s.puntos * 10
 	s.puntos = 0
 	# los objetos que ya no existen desaparecen del baúl y de los encontrados (Colecciones): el mechero, la llave
 	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco, el

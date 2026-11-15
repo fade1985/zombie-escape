@@ -458,9 +458,10 @@
 #   --talentos-altos    los niveles 4 y 5 de las tres ramas: cada talento con sus números, fotos del racimo, el
 #                       Segundo aliento, la Adrenalina, el rayo de Alto voltaje y la Mezcla explosiva, y las coronas
 #                       en el ordenador                                                      [prueba_varias.gd]
-#   --comprar-talentos  los talentos se compran con dólares, punto a punto (sus precios, sin dinero), el botón
-#                       «Resetear talentos» (M32: pregunta, no devuelve el dinero y Johnny pierde lo que le
-#                       daban) y un guardado viejo con puntos sin gastar, cambiados por dólares  [prueba_varias.gd]
+#   --comprar-talentos  los talentos se compran con el mutágeno de la partida, punto a punto (sus precios, sin
+#                       mutágeno bastante, lo que se le quita a la partida a medias), el botón «Resetear talentos»
+#                       (M32: pregunta, no devuelve nada y Johnny pierde lo que le daban) y un guardado de antes del
+#                       mutágeno, que empieza el árbol de cero una sola vez                  [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
 #   --flatulento        el alcance de la mutación Flatulento (140): quién se paraliza a 50, 110 y 190, y su nube [prueba_varias.gd]
