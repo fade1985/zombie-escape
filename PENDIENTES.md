@@ -11,6 +11,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
+- **F22** Fregona mejorada: si Johnny la deja en el suelo, se pierde para siempre (no vuelve ni al baúl ni a la partida siguiente).
 
 ## Mejoras
 
@@ -21,4 +22,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M104** Minimapa: ponerlo abajo, en el medio de la pantalla (ahora está arriba a la derecha). Para más adelante.
 
 ## Por limar
+
+- **L37** Sala de mantenimiento: el ordenador lleva un «!» de más porque Colecciones y Sujetos siguen marcados hasta que se les hace clic (viene de la Fase 1).
+- **L38** Talento Artificiero: su texto dice «+1 de cada lanzable», pero desde las Fases 2 y 3 solo hace más grande el montón de cada casilla. Cambiar el texto.
 
