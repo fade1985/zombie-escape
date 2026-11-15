@@ -28,7 +28,7 @@ const AMARILLO := PLACA.AMARILLO     # lo ahorrado y los cuadraditos llenos
 const RADIO := 24                    # del hexágono (de la punta de arriba al centro)
 const ARRIBA := PLACA.ARRIBA         # lo alto de la franja de lo ahorrado
 const CABECERA := 34                 # lo alto del emblema y el nombre de cada rama
-const ANCHO_FICHA := 244              # (15 nov: 236 → 244, para que quepa «Toca otra vez: comprar · 125» con la hélice)
+const ANCHO_FICHA := 244              # (15 nov: 236 → 244, para que cupiera «Toca otra vez: comprar · 125» con la hélice)
 const TAM_FICHA := 17                # la letra lisa (Rubik) de la ficha, algo más pequeña que la de siempre (19): así cabe (12 nov)
 
 # Cómo se está moviendo el jugador por la pantalla: "raton" (la ficha sigue al ratón) o "foco" (el teclado o el mando: la
@@ -411,22 +411,13 @@ func lineas_ficha(id: String) -> Array:
 	return lineas
 
 
-# El pie de la ficha: cómo se compra y cuánto cuesta (o por qué no se puede). Detrás del precio, llenar_ficha dibuja la
-# hélice del mutágeno (con «de mutágeno» escrito no cabía en la ficha)
+# El pie de la ficha: lo que cuesta (o por qué no se puede). Desde el 15 nov (lo pidió el dueño), solo el precio, que
+# llenar_ficha pinta en un marcador con la hélice (marcador_precio); antes, «Clic: comprar · 25» y la hélice pequeña
 func pie_ficha(id: String) -> String:
-	var motivo := Talentos.motivo(s, id, mutageno)
-	var precio := Talentos.precio(s, id)
-	match motivo:
+	match Talentos.motivo(s, id, mutageno):
 		"max": return Idioma.t("MÁX")
 		"bloqueado": return Idioma.t("Bloqueado")
-		"sin_mutageno": return str(precio)   # (solo el precio, en un marcador verde con la hélice: marcador_precio)
-	if Tactil.activo and Tactil.con_dedo:
-		return Idioma.t("Toca otra vez: comprar · %d") % precio
-	if Controles.con_mando:
-		return Idioma.t("A: comprar · %d") % precio
-	if modo == "foco":
-		return Idioma.t("Intro: comprar · %d") % precio
-	return Idioma.t("Clic: comprar · %d") % precio
+	return str(Talentos.precio(s, id))
 
 
 func llenar_ficha(id: String) -> void:
@@ -473,42 +464,20 @@ func llenar_ficha(id: String) -> void:
 	margen.add_child(textos)
 	for linea in lineas:
 		textos.add_child(etiqueta(linea[0], linea[1], true, Tema.PESO_LISA))
-	# el pie: un botón pintado (el de verdad es el hexágono), del color de la rama si se puede comprar
-	# (sin mutágeno bastante, solo el precio, en un marcador verde con la hélice)
+	# el pie: el precio en un marcador con la hélice (en verde si te llega el mutágeno; si no, apagado), o, al máximo o
+	# bloqueado, una franja gris que lo dice
 	var motivo := Talentos.motivo(s, id, mutageno)
 	var pie: Control
-	if motivo == "sin_mutageno":
-		pie = marcador_precio(Talentos.precio(s, id))
+	if motivo in ["", "sin_mutageno"]:
+		pie = marcador_precio(Talentos.precio(s, id), PLACA.VERDE if motivo == "" else TEXTO_SUAVE)
 	else:
-		var letrero := etiqueta(pie_ficha(id), Color.WHITE if motivo == "" else TEXTO_SUAVE)
+		var letrero := etiqueta(pie_ficha(id), TEXTO_SUAVE)
 		letrero.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var fondo_pie := StyleBoxFlat.new()
-		fondo_pie.bg_color = color[1] if motivo == "" else Color("#2f333a")
+		fondo_pie.bg_color = Color("#2f333a")
 		fondo_pie.set_content_margin_all(4)
-		if motivo == "":
-			# con la hélice pequeña del mutágeno detrás del precio, los dos juntos en medio de la franja
-			var franja := PanelContainer.new()
-			franja.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			franja.add_theme_stylebox_override("panel", fondo_pie)
-			var fila_pie := HBoxContainer.new()
-			fila_pie.alignment = BoxContainer.ALIGNMENT_CENTER
-			fila_pie.add_theme_constant_override("separation", 3)
-			fondo_pie.content_margin_left = 2
-			fondo_pie.content_margin_right = 2
-			fila_pie.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			franja.add_child(fila_pie)
-			fila_pie.add_child(letrero)
-			var helice := Control.new()
-			helice.name = "helice"
-			helice.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			helice.custom_minimum_size = Vector2(PLACA.ADN[0].length(), PLACA.ADN.size() + 1)
-			helice.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-			helice.draw.connect(func(): PLACA.dibujar_adn(helice, Vector2.ZERO, Color.WHITE, color[2], 1.0))
-			fila_pie.add_child(helice)
-			pie = franja
-		else:
-			letrero.add_theme_stylebox_override("normal", fondo_pie)
-			pie = letrero
+		letrero.add_theme_stylebox_override("normal", fondo_pie)
+		pie = letrero
 	var abajo := MarginContainer.new()
 	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for lado in ["left", "right", "bottom"]:
@@ -517,16 +486,18 @@ func llenar_ficha(id: String) -> void:
 	columna.add_child(abajo)
 
 
-# El precio de un talento que aún no te puedes pagar: la hélice y la cifra en un marcador, como el del mutágeno de
-# arriba, en verde y centrado (como la tienda de armas cuando no te llega el dinero, pero en mutágeno)
-func marcador_precio(precio: int) -> Control:
+# El precio de una mutación: la hélice y la cifra en un marcador como el del mutágeno de arriba, centrado y solo con
+# las rayas encendidas de cada cifra (lo pidió el dueño el 15 nov), en "color"
+func marcador_precio(precio: int, color: Color) -> Control:
 	var caja := Control.new()
+	caja.name = "precio"
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var fuente := get_theme_default_font()
 	var medida := PLACA.medida_marcador(fuente, precio, true)
 	caja.custom_minimum_size.y = medida.y
 	caja.draw.connect(func():
-		PLACA.dibujar_marcador(caja, fuente, Rect2(((caja.size - medida) / 2.0).floor(), medida), precio, PLACA.VERDE, true))
+		PLACA.dibujar_marcador(caja, fuente, Rect2(((caja.size - medida) / 2.0).floor(), medida), precio, color, true, false,
+			true))
 	return caja
 
 

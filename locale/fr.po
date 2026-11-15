@@ -5203,22 +5203,6 @@ msgstr "MAX"
 msgid "Bloqueado"
 msgstr "Bloqué"
 
-#: scripts/ui/arbol_talentos.gd
-msgid "Toca otra vez: comprar · %d"
-msgstr "Touche encore : acheter · %d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "A: comprar · %d"
-msgstr "A : acheter · %d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Intro: comprar · %d"
-msgstr "Entrée : acheter · %d"
-
-#: scripts/ui/arbol_talentos.gd
-msgid "Clic: comprar · %d"
-msgstr "Clic : acheter · %d"
-
 #: scripts/ui/archivador_logros.gd
 msgid "Logros %d/%d"
 msgstr "Succès %d/%d"

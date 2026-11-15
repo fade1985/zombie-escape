@@ -616,8 +616,8 @@ en una línea.
   ramas a la vez, cada una de su color (`COLORES`: Militar rojo, Superviviente verde, Químico amarillo), dibujada con
   código (`_draw`): cada talento es un hexágono con su icono y sus cuadraditos, y las rayas al que pide se encienden al
   llenarlo. Encima de cada hexágono, un botón transparente `b_<id>`. La ficha (qué hace, ahora y con otro, qué abre y
-  el pie con el precio y, detrás, una hélice pequeña del mutágeno; si no llega, solo el precio en el marcador verde:
-  `marcador_precio`) sale al lado del que está bajo el ratón o, con el teclado, el mando o el dedo, del marcado
+  el pie: desde el 15 nov solo el precio, en un marcador con la hélice y sin las rayas apagadas de las cifras, verde si
+  llega y gris si no: `marcador_precio`, `CHAPA.dibujar_marcador` con `solo_luz`) sale al lado del que está bajo el ratón o, con el teclado, el mando o el dedo, del marcado
   (`quien`, `modo`); con el dedo, el primer toque solo la enseña y el segundo compra (`al_pulsar`, `listo`). Las flechas
   van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Arriba a la izquierda, el mutágeno (`mutageno`,
   el guardado más el de la partida, en el mismo marcador fijo que el inventario, sin dibujo al lado: `CHAPA.dibujar_mutageno`). Prueba: `--arbol-talentos`

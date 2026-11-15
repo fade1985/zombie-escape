@@ -834,7 +834,7 @@ func probar_arbol_talentos() -> void:
 	var nivel := func(id: String) -> int: return Talentos.nivel_de(Guardado.cargar(), id)
 	# el ratón
 	await mover_raton(boton.call("tirador").get_global_rect().get_center())
-	print("Ratón encima de Tirador: ficha de «%s», a la vista %s, pie «%s» (esperado: tirador, true, Clic: comprar · 25)" % [
+	print("Ratón encima de Tirador: ficha de «%s», a la vista %s, pie «%s» (esperado: tirador, true, 25)" % [
 		arbol.call().ficha_id, arbol.call().ficha.visible, arbol.call().pie_ficha("tirador")])
 	Captura.foto("captura-arbol-raton.png")
 	await mover_raton(arbol.call().get_global_rect().position + Vector2(30, 30))
@@ -851,7 +851,7 @@ func probar_arbol_talentos() -> void:
 	boton.call("ataque").grab_focus()
 	await pulsar_mando(JOY_BUTTON_DPAD_DOWN)
 	var foco := get_viewport().gui_get_focus_owner()
-	print("Mando, abajo desde Ataque: marcado %s · ficha de «%s» · pie «%s» (esperado: b_camorrista, camorrista, A: comprar · 25)" % [
+	print("Mando, abajo desde Ataque: marcado %s · ficha de «%s» · pie «%s» (esperado: b_camorrista, camorrista, 25)" % [
 		foco.name if foco else "nada", arbol.call().ficha_id, arbol.call().pie_ficha("camorrista")])
 	Captura.foto("captura-arbol-mando.png")
 	await pulsar_mando(JOY_BUTTON_A)
@@ -864,7 +864,7 @@ func probar_arbol_talentos() -> void:
 	Tactil.activo = true
 	Tactil.con_dedo = true
 	await tocar(boton.call("corpulento").get_global_rect().get_center())
-	print("Dedo, primer toque en Corpulento: nivel %d · ficha de «%s» · pie «%s» · ficha de %d de ancho (esperado: 0, corpulento, Toca otra vez: comprar · 25 · %d)" % [
+	print("Dedo, primer toque en Corpulento: nivel %d · ficha de «%s» · pie «%s» · ficha de %d de ancho (esperado: 0, corpulento, 25 · %d)" % [
 		nivel.call("corpulento"), arbol.call().ficha_id, arbol.call().pie_ficha("corpulento"), arbol.call().ficha.size.x, arbol.call().ANCHO_FICHA + 4])
 	Captura.foto("captura-arbol-dedo.png")
 	await get_tree().create_timer(0.4).timeout
@@ -872,21 +872,9 @@ func probar_arbol_talentos() -> void:
 	await get_tree().create_timer(0.3).timeout
 	print("Dedo, segundo toque: nivel %d · mutágeno %d (esperado: 1 · 125)" % [nivel.call("corpulento"), mutageno])
 	Tactil.activo = false
-	# el pie más largo («... comprar · 125», con la hélice detrás), en cada idioma: que quepa en la ficha
-	var idioma := Idioma.actual
-	var anchos := {}
-	for codigo in Idioma.codigos():
-		Idioma.poner(codigo, false)
-		var mayor := 0.0
-		for texto in ["Toca otra vez: comprar · %d", "Intro: comprar · %d", "Clic: comprar · %d",
-				"A: comprar · %d"]:
-			var l: Label = arbol.call().etiqueta(Idioma.t(texto) % 125, Color.WHITE)
-			arbol.call().add_child(l)
-			mayor = maxf(mayor, l.get_minimum_size().x + 14)   # (y la hélice, con su hueco, y los márgenes de la franja)
-			l.free()
-		anchos[codigo] = roundi(mayor)
-	Idioma.poner(idioma, false)
-	print("Pie más largo de la ficha en cada idioma %s (esperado: todos hasta %d)" % [anchos, arbol.call().ANCHO_FICHA - 12])
+	# el pie, desde el 15 nov solo el precio en un marcador con la hélice (sin rayas apagadas): que el de 125 quepa
+	var medida := preload("res://scripts/ui/chapa.gd").medida_marcador(arbol.call().get_theme_default_font(), 125, true)
+	print("Pie con el precio: marcador %s de ancho para 125 (esperado: hasta %d)" % [medida.x, arbol.call().ANCHO_FICHA - 12])
 	ordenador.abrir("")
 	ordenador.apagar()
 	Guardado.cambiar(func(g):

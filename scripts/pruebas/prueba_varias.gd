@@ -1974,7 +1974,7 @@ func probar_comprar_talentos() -> void:
 		var b: Button = ordenador.ventana.find_child(nombre, true, false)
 		return " | ".join(b.get_parent().find_children("*", "Label", true, false).map(func(l): return l.text)) if b else "no está"
 	await ensenar_ficha("ataque")
-	print("Fichas: Ataque «%s» · Camorrista «%s» · arriba, %d de mutágeno (esperado: ... comprar · 25 · Necesitas Ataque al máximo ... Bloqueado · 600)" % [
+	print("Fichas: Ataque «%s» · Camorrista «%s» · arriba, %d de mutágeno (esperado: ... | 25 · Necesitas Ataque al máximo ... Bloqueado · 600)" % [
 		tarjeta.call("b_ataque"), tarjeta.call("b_camorrista"), ordenador.ventana.find_child("arbol", true, false).mutageno])
 	Captura.foto("captura-talentos-precios.png")
 	for i in 5:

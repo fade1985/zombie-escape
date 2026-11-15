@@ -69,8 +69,10 @@ static func dibujar_mutageno(lienzo: CanvasItem, fuente: Font, mutageno: int) ->
 # Con "adn", la del mutágeno (inventario.gd): en vez del «$», la doble hélice (ADN).
 # Con "fijo" (los dos del inventario, 15 nov): siempre CIFRAS casillas, del mismo ancho con «$» o con hélice, y en cada
 # casilla vacía un «8» apagado (dibujar_cifra con -1); de MAXIMO en adelante, «8MAX» (las letras, de la letra de siempre)
+# Con "solo_luz" (el precio de la ficha de una mutación, arbol_talentos.gd, 15 nov), sin las rayas apagadas: solo se ven
+# las encendidas
 static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color, adn := false,
-		fijo := false) -> void:
+		fijo := false, solo_luz := false) -> void:
 	var numero := str(valor)
 	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr (cada cifra, del ancho de un 8)
 	var ancho_dolar := ancho_simbolo(fuente, adn) if not fijo else maxf(ancho_simbolo(fuente, false), ancho_simbolo(fuente, true))
@@ -89,7 +91,7 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 		dibujar_adn(lienzo, Vector2(base.x, base.y - ADN.size() * PIXEL_ADN + 2), color, sombra)
 	else:
 		lienzo.draw_string(fuente, base, "$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32, color)   # no-tr
-	var apagado := color.darkened(0.82)   # las rayas sin encender
+	var apagado := Color.TRANSPARENT if solo_luz else color.darkened(0.82)   # las rayas sin encender
 	for i in apagadas + numero.length():
 		var x := base.x + ancho_dolar + i * casilla
 		var arriba := Vector2(x + roundf((casilla - CIFRA_TAM.x) / 2.0), base.y - CIFRA_TAM.y + 1)
@@ -113,6 +115,8 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 static func dibujar_cifra(lienzo: CanvasItem, pos: Vector2, cifra: int, color: Color, apagado: Color) -> void:
 	var luz: String = ENCENDIDAS[cifra] if cifra >= 0 else ""
 	for k in RAYAS:
+		if not k in luz and apagado.a == 0.0:
+			continue
 		for r in RAYAS[k]:
 			lienzo.draw_rect(Rect2(pos + Vector2(r[0], r[1]), Vector2(r[2], r[3])), color if k in luz else apagado)
 
