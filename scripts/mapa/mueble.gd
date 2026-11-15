@@ -6,7 +6,7 @@
 # Variantes: mueble-<tipo> es la de siempre y mueble-<tipo>-b, -c... las demás. Cada sitio elige una por tipo con
 # su número "surtido": todas las neveras de una casa son iguales, pero la de al lado puede tener otra.
 #
-# Los que se abren (Objetos.MUEBLES_CON_PIEZA: el armario, la mesilla, el escritorio y la librería; Fase 4, 15 nov) llevan
+# Los que se abren (Objetos.MUEBLES_CON_PIEZA: el armario, la mesilla... y en el centro y la torre los suyos; 15 y 16 nov) llevan
 # además la zona de delante (zona_usar.gd, con su contorno amarillo), como el armarito del baño: avisan con "usar" y la
 # partida los abre (abrir_mueble), que a veces sueltan un material. Ya abierto ("abierto" en sus datos, que se quedan en
 # la planta) no se vuelve a abrir. Su dibujo no cambia, de momento.

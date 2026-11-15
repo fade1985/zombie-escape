@@ -1724,18 +1724,24 @@ func probar_dinero() -> void:
 	var semilla_antes := Planta.semilla
 	for edificio in ["apartamentos", "centro", "torre"]:
 		var linea := []
+		var tipos := {}   # los muebles de cada tipo (sin los del pasillo), en todas las plantas
 		for num in range(1, Planta.PLANTAS + 1):
 			var suma := 0
-			var tipos := {}
 			for k in veces:
 				Planta.semilla = 1000 + k * 37
 				var pl := Planta.generar(num, edificio, "")
 				for sitio in pl.sitios:
 					for z in sitio.get("zombis", []):
 						suma += 1
-						tipos[z.tipo] = tipos.get(z.tipo, 0) + 1
+					if sitio.tipo == "pasillo":
+						continue
+					for m in sitio.get("muebles", []):
+						tipos[m.tipo] = tipos.get(m.tipo, 0) + 1
 			linea.append("planta %d: %.1f" % [num, suma / float(veces)])
 		print("Dinero · %s · durmientes de media: %s" % [edificio, " · ".join(linea)])
+		var muebles: Array = tipos.keys()
+		muebles.sort_custom(func(a, b): return tipos[a] > tipos[b])
+		print("Muebles · %s · por planta: %s" % [edificio, ", ".join(muebles.map(func(t): return "%s %.1f" % [t, tipos[t] / float(veces * Planta.PLANTAS)]))])
 	Planta.semilla = semilla_antes
 	get_tree().quit()
 

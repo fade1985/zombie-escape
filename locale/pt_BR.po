@@ -2962,8 +2962,8 @@ msgid "Cada 6 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "A cada 6 s você solta gases corrosivos que queimam e paralisam por 2 s os adormecidos próximos"
 
 #: scripts/objetos.gd
-msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
-msgstr "sai dos guarda-roupas, criados-mudos, escrivaninhas e estantes (no Shopping e na torre, dos chefes)"
+msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas registradoras, archivadores..."
+msgstr "sai dos móveis que se abrem: guarda-roupas, criados-mudos, escrivaninhas, caixas registradoras, arquivos..."
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -4784,8 +4784,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Com os materiais de fabricação você sobe a qualidade das armas e dos arremessáveis, na bancada da sala de manutenção."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
-msgstr "São de quatro famílias: corpo a corpo, à distância, especiais e arremessáveis. Nos Apartamentos ficam nos guarda-roupas, nos criados-mudos, nas escrivaninhas e nas estantes: abra-os de frente, como o computador. No Shopping e na torre, os chefes soltam."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Están dentro de los muebles que se abren (armarios, mesillas, escritorios, cajas registradoras, archivadores...): búscalos por su contorno amarillo y ábrelos desde delante, como el ordenador."
+msgstr "São de quatro famílias: corpo a corpo, à distância, especiais e arremessáveis. Ficam dentro dos móveis que se abrem (guarda-roupas, criados-mudos, escrivaninhas, caixas registradoras, arquivos...): procure o contorno amarelo e abra-os de frente, como o computador."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."

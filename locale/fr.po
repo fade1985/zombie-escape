@@ -2962,8 +2962,8 @@ msgid "Cada 6 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "Toutes les 6 s, tu lâches des gaz corrosifs qui brûlent et paralysent 2 s les dormeurs proches"
 
 #: scripts/objetos.gd
-msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
-msgstr "se trouve dans les armoires, les tables de chevet, les bureaux et les bibliothèques (au centre commercial et dans la tour, lâché par les boss)"
+msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas registradoras, archivadores..."
+msgstr "se trouve dans les meubles qui s'ouvrent : armoires, tables de chevet, bureaux, caisses enregistreuses, classeurs..."
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -4784,8 +4784,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Les matériaux de fabrication servent à monter la qualité des armes et des lançables, à l'établi de la salle de maintenance."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
-msgstr "Il y en a de quatre familles : corps à corps, à distance, spéciaux et lançables. Dans les Appartements, ils sont dans les armoires, les tables de chevet, les bureaux et les bibliothèques : ouvre-les de face, comme l'ordinateur. Au Centre commercial et dans la tour, ce sont les boss qui en lâchent."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Están dentro de los muebles que se abren (armarios, mesillas, escritorios, cajas registradoras, archivadores...): búscalos por su contorno amarillo y ábrelos desde delante, como el ordenador."
+msgstr "Il y en a de quatre familles : corps à corps, à distance, spéciaux et lançables. Ils sont dans les meubles qui s'ouvrent (armoires, tables de chevet, bureaux, caisses enregistreuses, classeurs...) : repère le contour jaune et ouvre-les de face, comme l'ordinateur."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."

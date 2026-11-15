@@ -95,7 +95,7 @@ const LISTA := {
 	"piezas": {"grupo": "Armas", "titulo": "Materiales de fabricación", "icono": "obj-pieza_cuerpo",
 		"cuando": "Al coger el primer material",
 		"lineas": ["Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento.",
-			"Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes.",
+			"Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Están dentro de los muebles que se abren (armarios, mesillas, escritorios, cajas registradoras, archivadores...): búscalos por su contorno amarillo y ábrelos desde delante, como el ordenador.",
 			"Van en la mochila: si completas el edificio, pasan al baúl."]},
 	"jefes": {"grupo": "Plantas y jefes", "titulo": "Jefes", "icono": "jefe", "cuando": "Al llegar al primer jefe",
 		"lineas": ["Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso.",

@@ -2962,8 +2962,8 @@ msgid "Cada 6 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "Alle 6 s lässt du ätzende Gase ab, die Schläfer in der Nähe verätzen und 2 s lähmen"
 
 #: scripts/objetos.gd
-msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
-msgstr "steckt in Kleiderschränken, Nachttischen, Schreibtischen und Bücherregalen (im Einkaufszentrum und im Turm: von Bossen)"
+msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas registradoras, archivadores..."
+msgstr "steckt in Möbeln, die man öffnen kann: Kleiderschränke, Nachttische, Schreibtische, Kassen, Aktenschränke..."
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -4784,8 +4784,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Mit Herstellungsmaterial verbesserst du Waffen und Wurfwaffen an der Werkbank im Wartungsraum."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
-msgstr "Es gibt vier Arten: Nahkampf, Fernkampf, Spezial und Wurfwaffen. Im Mietshaus steckt es in Kleiderschränken, Nachttischen, Schreibtischen und Bücherregalen: Öffne sie von vorne, wie den Computer. Im Einkaufszentrum und im Turm lassen es die Bosse fallen."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Están dentro de los muebles que se abren (armarios, mesillas, escritorios, cajas registradoras, archivadores...): búscalos por su contorno amarillo y ábrelos desde delante, como el ordenador."
+msgstr "Es gibt vier Arten: Nahkampf, Fernkampf, Spezial und Wurfwaffen. Es steckt in Möbeln, die man öffnen kann (Kleiderschränke, Nachttische, Schreibtische, Kassen, Aktenschränke...): Achte auf den gelben Umriss und öffne sie von vorne, wie den Computer."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."

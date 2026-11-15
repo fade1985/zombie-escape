@@ -52,12 +52,17 @@ const PIEZA_PARA := {
 	"arrojable": "los lanzables (el molotov, la granada, la atraedora y la congeladora)",
 }
 # [/traducir]
-# Los muebles que se abren como el armarito del baño (mueble.gd, partida.abrir_mueble): el armario, la mesilla, el
-# escritorio y la librería. Cada uno se abre una vez y, PIEZA_MUEBLE de las veces, suelta un material (cada familia, un
-# 25 %); si no, está vacío
-const MUEBLES_CON_PIEZA := ["wardrobe", "nightstand", "desk", "bookshelf"]
+# Los muebles que se abren como el armarito del baño (mueble.gd, partida.abrir_mueble). En los Apartamentos, el armario,
+# la mesilla, el escritorio y la librería; en el centro comercial (16 nov, al dejar los jefes de soltarlos), la caja
+# registradora, el perchero de ropa, el mueble de las teles, las taquillas y el mostrador de la farmacia; en la torre,
+# el archivador, la mesa del despacho, la librería, el armero y el armario de los servidores. Más o menos los mismos por
+# planta en los tres (unos 15-16 de media). Cada uno se abre una vez y, PIEZA_MUEBLE de las veces, suelta un material
+# (cada familia, un 25 %); si no, está vacío
+const MUEBLES_CON_PIEZA := ["wardrobe", "nightstand", "desk", "bookshelf",
+	"checkout", "clothesrack", "tvshelf", "lockers", "pharmacycounter",
+	"filecabinet", "execdesk", "bookcase", "armory", "serverrack"]
 const PIEZA_MUEBLE := 0.35   # probabilidad de que un mueble tenga un material (con la alerta, más: Alerta.mas_piezas)
-const PIEZAS_JEFE := 4       # las que suelta cada jefe al caer en el centro comercial y en la torre, seguras (cada una, de una familia al azar)
+const PIEZAS_JEFE := 4       # las que soltaba cada jefe al caer en el centro comercial y en la torre (desde el 16 nov ya no: los muebles)
 
 # Los nombres de los objetos que son chatarra, las vendas y las piezas; para enseñarlos, nombre(), que los traduce
 # [traducir]
@@ -422,11 +427,11 @@ static func de_edificio(edificio: String) -> Array:
 
 
 # Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier durmiente (el bidón
-# de ácido, solo el gordo, y las piezas, los muebles y, fuera de los Apartamentos, los jefes); en el centro comercial, las
+# de ácido, solo el gordo, y las piezas, los muebles que se abren, en los tres edificios); en el centro comercial, las
 # tiendas que lo sueltan ("Ferretería, electrónica y supermercado")
 static func donde(id: String, edificio: String) -> String:
 	if id in PIEZAS:
-		return Idioma.t("sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)")
+		return Idioma.t("sale de los muebles que se abren: armarios, mesillas, escritorios, cajas registradoras, archivadores...")
 	if id == "bidon_acido":
 		return Idioma.t("lo suelta el gordo")
 	if edificio != "centro":
