@@ -11,7 +11,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-- **F22** Fregona mejorada: si Johnny la deja en el suelo, se pierde para siempre (no vuelve ni al baúl ni a la partida siguiente).
 
 ## Mejoras
 
