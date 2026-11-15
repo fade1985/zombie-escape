@@ -23,5 +23,4 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Por limar
 
-- **L37** Sala de mantenimiento: el ordenador lleva un «!» de más porque Colecciones y Sujetos siguen marcados hasta que se les hace clic (viene de la Fase 1).
 
