@@ -1084,64 +1084,61 @@ func probar_repuesto() -> void:
 
 
 # Con "--captura --tienda": la tienda de armas del ordenador con sus cuatro secciones (Cuerpo a cuerpo, A distancia,
-# Especiales y Arrojables) y los arrojables, que se compran de uno en uno (Lanzables.PRECIOS; ordenador.gd,
-# comprar_lanzable). Con $40: la atraedora va a la mano y la congeladora, con la mano llena, al repuesto; tres molotovs
-# llenan su montón de la mano y el cuarto empieza otro montón de repuesto (no hay tope por tipo: M18); sin hueco (la
-# mano y el repuesto llenos a la fuerza) no se compra; y sin dinero tampoco. Cada línea dice lo esperado. Fotos:
-# captura-tienda.png (arriba: las armas) y captura-tienda-arrojables.png (abajo: los arrojables, «Llevas N»). Deja los
-# dólares como estaban
+# Especiales y Lanzables) y los lanzables, que se compran de uno en uno (Lanzables.PRECIOS; ordenador.gd,
+# comprar_lanzable). Puesta al día el 15 nov: desde el 13 nov no hay repuesto (Lanzables.REPUESTO 0), solo MANO (3)
+# montones a mano, de MONTON (2) cada uno (más con las mutaciones y la calidad: Lanzables.maximo). Al empezar, el molotov
+# y la granada, con sus montones llenos. Sin dinero no se compra; con $40, la atraedora va al hueco libre de la mano y
+# la segunda llena su montón; con la mano llena, la congeladora no cabe; con su montón lleno, ni otra atraedora ni otro
+# molotov. Cada línea dice lo esperado. Fotos: captura-tienda.png (las secciones) y captura-tienda-arrojables.png (la
+# ficha de la atraedora, ya «Lleno»). Deja los dólares como estaban
 func probar_tienda() -> void:
 	var antes := Guardado.cargar()
-	Guardado.cambiar(func(g): g.dolares = 40)
-	ahorrados = 40
 	var lz: Lanzables = lanzables
 	var cuenta := func() -> String:
-		return "%s · mano %s · repuesto %s %s · $%d" % [lz.cantidades, lz.mano, lz.repuesto, lz.en_repuesto,
-			Guardado.cargar().dolares]
+		return "%s · mano %s · $%d" % [lz.cantidades, lz.mano, Guardado.cargar().dolares]
+	var cuesta := func(k: String) -> int: return Supervivientes.precio(Lanzables.PRECIOS[k])
 	await get_tree().create_timer(0.5).timeout
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
 	ordenador.abrir("armas", "b_cuchillo")
 	await get_tree().create_timer(0.3).timeout
-	ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0].scroll_vertical = 0   # la foto, desde arriba
-	await get_tree().process_frame
-	var titulos := ordenador.ventana.find_children("*", "Label", true, false).map(func(l): return l.text).filter(
-		func(t): return not "Daño" in t and (t.begins_with("Cuerpo a cuerpo") or t.begins_with("A distancia") or
-			t.begins_with("Especiales") or t.begins_with("Lanzables")))   # (las tarjetas dicen «Daño»)
-	print("Secciones: %s (esperado: Cuerpo a cuerpo, A distancia..., Especiales..., Lanzables...)" % [titulos])
+	var tienda: Control = ordenador.ventana.find_child("tienda", true, false)
+	print("Secciones: %s (esperado: [Cuerpo a cuerpo, A distancia, Especiales, Lanzables])" % [tienda.filas.map(func(f): return f[1])])
 	print("Familias: escopeta %s, lanzallamas %s, bate %s (esperado: distancia, especial, cuerpo)" % [
 		Armas.familia("escopeta"), Armas.familia("lanzallamas"), Armas.familia("bate")])
 	Captura.foto("captura-tienda.png")
-	print("Al empezar: %s (esperado: molotov 2, granada 2, atraedora 0, congeladora 0 · mano [molotov, granada] · $40)" % cuenta.call())
+	var monton := lz.maximo("atraedora")
+	print("Al empezar: %s · montones de %d · huecos a mano %d, de repuesto %d (esperado: molotov %d, granada %d, atraedora 0, congeladora 0 · mano [molotov, granada] · montones de %d · 3 · 0)" % [
+		cuenta.call(), monton, Lanzables.MANO, Lanzables.REPUESTO, lz.maximo("molotov"), lz.maximo("granada"), monton])
+	# sin dinero
+	Guardado.cambiar(func(g): g.dolares = cuesta.call("atraedora") - 1)
+	ahorrados = cuesta.call("atraedora") - 1
 	ordenador.comprar_lanzable("atraedora")
 	await get_tree().process_frame
-	print("Compra una atraedora: %s · dice «%s» (esperado: atraedora 1, a la mano · $32)" % [cuenta.call(), ordenador.info.text])
-	# sin hueco: la mano y el repuesto llenos a la fuerza (con solo cuatro tipos no pasa jugando), y se deja como estaba
-	var mano: Array = lz.mano.duplicate()
-	var repuesto: Array = lz.repuesto.duplicate()
-	var en_repuesto: Array = lz.en_repuesto.duplicate()
-	lz.repuesto.assign(["molotov", "molotov", "molotov", "molotov", "molotov", "molotov", "molotov", "molotov"])
-	lz.en_repuesto.assign([5, 5, 5, 5, 5, 5, 5, 5])
-	ordenador.comprar_lanzable("congeladora")
-	print("Sin hueco, una congeladora: congeladora %d · $%d · dice «%s» (esperado: 0 · $32 · no te caben más)" % [
-		lz.total("congeladora"), Guardado.cargar().dolares, ordenador.info.text])
-	lz.mano.assign(mano)
-	lz.repuesto.assign(repuesto)
-	lz.en_repuesto.assign(en_repuesto)
+	print("Una atraedora con $%d: atraedora %d · dice «%s» (esperado: 0 · No te llega: te faltan $1.)" % [
+		ahorrados, lz.total("atraedora"), ordenador.info.text])
+	Guardado.cambiar(func(g): g.dolares = 40)
+	ahorrados = 40
+	ordenador.comprar_lanzable("atraedora")
+	await get_tree().process_frame
+	print("Compra una atraedora: %s · dice «%s» (esperado: atraedora 1, a la mano · $%d · ya llevas 1 atraedora)" % [
+		cuenta.call(), ordenador.info.text, 40 - cuesta.call("atraedora")])
 	ordenador.comprar_lanzable("congeladora")
 	await get_tree().process_frame
-	print("Compra una congeladora: %s (esperado: congeladora 1, de repuesto · $24)" % cuenta.call())
-	for i in 3:
-		ordenador.comprar_lanzable("molotov")
+	print("Con la mano llena, una congeladora: congeladora %d · $%d · dice «%s» (esperado: 0 · $%d · no te caben más)" % [
+		lz.total("congeladora"), Guardado.cargar().dolares, ordenador.info.text, 40 - cuesta.call("atraedora")])
+	for i in monton - 1:
+		ordenador.comprar_lanzable("atraedora")
 		await get_tree().process_frame
-	print("Compra tres molotovs: %s · dice «%s» (esperado: molotov 5 · $9 · ya llevas 5 molotovs)" % [cuenta.call(), ordenador.info.text])
+	print("Llena su montón: %s (esperado: atraedora %d · $%d)" % [cuenta.call(), monton, 40 - cuesta.call("atraedora") * monton])
+	ordenador.comprar_lanzable("atraedora")
+	await get_tree().process_frame
+	print("Otra atraedora, con su montón lleno: atraedora %d · $%d · dice «%s» (esperado: %d · $%d · no te caben más)" % [
+		lz.total("atraedora"), Guardado.cargar().dolares, ordenador.info.text, monton, 40 - cuesta.call("atraedora") * monton])
 	ordenador.comprar_lanzable("molotov")
 	await get_tree().process_frame
-	print("Otro molotov, con su montón lleno: %s · dice «%s» (esperado: molotov 5 · repuesto [congeladora, molotov] [1, 1] · $4 · ya llevas 6 molotovs)" % [
-		cuenta.call(), ordenador.info.text])
-	ordenador.comprar_lanzable("granada")
-	await get_tree().process_frame
-	print("Una granada con $4: %s · dice «%s» (esperado: granada 2 · $4 · te faltan $1)" % [cuenta.call(), ordenador.info.text])
+	print("Un molotov, con su montón lleno: molotov %d · dice «%s» (esperado: %d · no te caben más)" % [
+		lz.total("molotov"), ordenador.info.text, lz.maximo("molotov")])
 	ordenador.abrir("armas", "b_atraedora")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tienda-arrojables.png")

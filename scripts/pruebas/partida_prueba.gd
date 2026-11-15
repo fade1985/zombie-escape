@@ -168,7 +168,7 @@
 #   --baulfregona       la fregona Normal en el baúl: sola no se guarda; con otra de repuesto, sí (M61) [prueba_inventario.gd]
 #   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto; y al comprar una tercera, la de repuesto
 #                       va al baúl (M26)                                                  [prueba_inventario.gd]
-#   --tienda            la tienda de armas: sus secciones y comprar arrojables de uno en uno [prueba_inventario.gd]
+#   --tienda            la tienda de armas: sus secciones y comprar lanzables de uno en uno [prueba_inventario.gd]
 #   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, «Piezas al baúl» y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
