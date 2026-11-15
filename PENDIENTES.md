@@ -20,7 +20,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M103** Usar muebles y puertas con la tecla E en vez del clic izquierdo del ratón. Para más adelante.
 - **M104** Minimapa: ponerlo abajo, en el medio de la pantalla (ahora está arriba a la derecha). Para más adelante.
 - **M111** Minimapa dentro de un apartamento: el icono de lo que hay, en la habitación donde está: la tele, el dosier, el superviviente y la llave (la llave y el «!» del superviviente encerrado ya salen; faltan la tele y el dosier).
-- **M113** Munición que sueltan durmientes y sonámbulos: solo la de las armas que lleva Johnny (si no lleva la pistola pero sí un arma especial, que salga la de esa y no la de la pistola).
 
 ## Por limar
 
