@@ -1039,7 +1039,7 @@ func probar_repuesto() -> void:
 # Especiales y Lanzables). Desde el 15 nov lo comprado va al baúl, sin estrenar (ordenador.gd, comprar_arma y
 # comprar_lanzable), y no a la mano: sin dinero no se compra; con dinero, el bate y dos atraedoras van al baúl (las dos
 # en una casilla) y Johnny sigue con lo suyo; con el baúl lleno, ni un arma ni un lanzable de otro tipo («Baúl lleno»,
-# y dice que hagas sitio), pero otra atraedora sí, que cabe en su casilla. Al empezar, sin lanzables. Cada línea dice
+# y dice que hagas sitio), pero otra atraedora sí, si cabe en su casilla. Al empezar, sin lanzables. Cada línea dice
 # lo esperado. Fotos: captura-tienda.png (las secciones), captura-tienda-comprado.png (la atraedora comprada) y
 # captura-tienda-lleno.png (la ficha del bate con el baúl lleno). Deja los dólares y el baúl como estaban
 func probar_tienda() -> void:
@@ -1085,8 +1085,12 @@ func probar_tienda() -> void:
 	ordenador.abrir("armas", "b_atraedora")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tienda-comprado.png")
-	# el baúl lleno (con la casilla de las atraedoras): ni el arma ni la granada; otra atraedora sí
+	# el baúl lleno, con sitio en la casilla de las atraedoras (le quitamos una: desde la Fase 3 caben las de un montón,
+	# Objetos.monton_arrojables): ni el arma ni la granada; otra atraedora sí
 	Guardado.cambiar(func(g):
+		for e in g.baul_equipo:
+			if e.id == "atraedora":
+				e.n = 1
 		while Objetos.casillas_baul(g) < Objetos.BAUL:
 			g.baul_equipo.append({"id": "cuchillo", "calidad": 1}))
 	var dolares: int = Guardado.cargar().dolares
@@ -1107,7 +1111,7 @@ func probar_tienda() -> void:
 		ordenador.info.text, Guardado.cargar().dolares, dolares])
 	ordenador.comprar_lanzable("atraedora")
 	await get_tree().process_frame
-	print("Otra atraedora con el baúl lleno: dice «%s» · $%d (esperado: ¡Compra hecha! Atraedora va al baúl (tienes 3 allí). · $%d: cabe en su casilla)" % [
+	print("Otra atraedora con el baúl lleno: dice «%s» · $%d (esperado: ¡Compra hecha! Atraedora va al baúl (tienes 2 allí). · $%d: cabe en su casilla)" % [
 		ordenador.info.text, Guardado.cargar().dolares, dolares - cuesta.call("atraedora")])
 	ordenador.abrir("")
 	ordenador.apagar()
