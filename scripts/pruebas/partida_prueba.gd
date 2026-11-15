@@ -155,6 +155,8 @@
 #   --skins             las skins: desbloqueo, taquilla, caras y lo que hace cada una        [prueba_skins.gd]
 #   --skins-torre       las cinco skins de Torre Velaria: desbloqueo, taquilla, caras, Despido, linterna,
 #                       munición, Copia de seguridad y la mutación al empezar                [prueba_skins.gd]
+#   --taquilla-scroll   la lista de la taquilla sin cartas cortadas (M112): rueda, barra y cruceta, en
+#                       todos los idiomas                                                   [prueba_skins.gd]
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
 #   --mochila           el inventario en la mochila (M100): cintas, papel y etiqueta de la llave, sin ella y con ella,
 #                       en español, portugués y ruso                                     [prueba_inventario.gd]
@@ -622,6 +624,9 @@ func empezar_prueba() -> void:
 	elif "--skins-torre" in args:
 		set_process(false)   # sin la prueba larga
 		probar_skins_torre()
+	elif "--taquilla-scroll" in args:
+		set_process(false)   # sin la prueba larga
+		probar_taquilla_scroll()
 	elif "--banco" in args:
 		set_process(false)   # sin la prueba larga
 		probar_banco()

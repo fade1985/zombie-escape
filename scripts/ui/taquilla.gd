@@ -22,6 +22,8 @@ var puestos := {}                # id → la etiqueta «Puesta» de su carta (al
 var hoja: SpriteFrames           # la hoja de la fregona de siempre (la vista enseña la de cada skin)
 var tenidos: Array = []          # las skins que se tienen (al abrir)
 var marcado := ""                # la skin que enseña la vista
+var desliza: ScrollContainer     # la caja de la lista, que se desliza
+var paso := 0.0                  # lo que baja la lista de una carta a la siguiente (su alto y el hueco; igualar)
 
 
 func _ready() -> void:
@@ -112,10 +114,14 @@ func abrir(p: Node) -> void:
 	lista.sort_children.connect(igualar.bind(lista))
 	# (M90: con las skins del centro comercial ya no caben todas a la vez en la pantalla: la lista va en una caja de
 	# ALTO_LISTA que se desliza con la rueda, y con el teclado o el mando sigue a la carta que se elige)
-	var desliza := ScrollContainer.new()
+	# (M112: y sin cartas cortadas por la mitad: la caja mide justo las cartas enteras que caben en ALTO_LISTA y se
+	# desliza de carta en carta; lo ajusta igualar, que es quien sabe lo alta que sale cada carta en cada idioma)
+	desliza = ScrollContainer.new()
 	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	desliza.follow_focus = true
 	desliza.custom_minimum_size.y = ALTO_LISTA
+	desliza.gui_input.connect(rueda)
+	desliza.get_v_scroll_bar().gui_input.connect(rueda)
 	fila.add_child(desliza)
 	desliza.add_child(lista)
 	var todos := ids()
@@ -213,6 +219,29 @@ func igualar(lista: VBoxContainer) -> void:
 			alto = maxf(alto, hijo.get_combined_minimum_size().y)
 	for marco in lista.get_children():
 		marco.custom_minimum_size.y = alto
+	# (M112) el paso: una carta y el hueco que la separa de la siguiente. La caja, tan alta como las cartas enteras que
+	# caben en ALTO_LISTA (con sus huecos, menos el último) y la barra, que solo pare en múltiplos del paso: así,
+	# arriba siempre empieza una carta y abajo siempre acaba otra (también al arrastrar la barra o con el dedo, y
+	# cuando la lista baja sola tras la carta que se elige con el teclado o el mando)
+	if alto <= 0.0:
+		return
+	var hueco := float(lista.get_theme_constant("separation"))
+	paso = alto + hueco
+	var caben := clampi(int((ALTO_LISTA + hueco) / paso), 1, lista.get_child_count())
+	desliza.custom_minimum_size.y = caben * paso - hueco
+	desliza.get_v_scroll_bar().step = paso
+
+
+# (M112) La rueda (sobre la lista o sobre su barra): una carta entera por cada golpe, en vez de lo que baje la caja
+# por su cuenta (que la dejaría a medias)
+func rueda(evento: InputEvent) -> void:
+	if not (evento is InputEventMouseButton and evento.pressed) or paso <= 0.0:
+		return
+	var sentido := {MOUSE_BUTTON_WHEEL_UP: -1, MOUSE_BUTTON_WHEEL_DOWN: 1}.get(evento.button_index, 0) as int
+	if sentido == 0:
+		return
+	desliza.scroll_vertical = int(desliza.scroll_vertical + sentido * paso)
+	desliza.accept_event()
 
 
 func etiqueta(padre: Container, texto: String, tamano: int) -> Label:

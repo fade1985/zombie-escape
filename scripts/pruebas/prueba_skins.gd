@@ -877,3 +877,89 @@ func probar_skins_torre() -> void:
 	johnny.modo = modo
 	Guardado.cambiar(func(g): g.skins = []; g.skin = "")
 	get_tree().quit()
+
+
+# Con "--captura --taquilla-scroll" (M112): la lista de la taquilla, sin cartas cortadas por la mitad. Con unas skins
+# conseguidas y otras no (como en la foto del dueño), en cada idioma: la caja mide justo un número de cartas enteras y,
+# con la rueda (de verdad, con el ratón encima), con la barra arrastrada a medias y con la cruceta del mando bajando y
+# subiendo hasta los dos extremos, ninguna carta se ve a medias. Fotos: captura-taquilla-scroll-<idioma>-arriba.png,
+# -rueda.png (dos golpes de rueda), -abajo.png (la cruceta hasta la última). Deja el idioma y las skins como estaban
+func probar_taquilla_scroll() -> void:
+	set_process(false)
+	var antes_idioma: String = Idioma.actual
+	Guardado.cambiar(func(g): g.skins = ["gloton", "gymbro", "bombero", "cocinero"]; g.skin = "")
+	johnny.vestir("")
+	await get_tree().create_timer(0.3).timeout
+	var fallos := 0
+	for codigo in Idioma.codigos():
+		Idioma.poner(codigo, false)
+		get_tree().paused = true
+		taquilla.abrir(self)
+		await get_tree().create_timer(0.4).timeout   # (que acabe el saltito de entrada)
+		var d: ScrollContainer = taquilla.desliza
+		var info := "%s: caja %d de alto, paso %.0f, %d cartas a la vista de %d" % [codigo, d.size.y, taquilla.paso,
+			roundi((d.size.y + 6) / taquilla.paso), taquilla.cartas.size()]
+		fallos += contar_cortadas(codigo + " al abrir")
+		if codigo in ["es", "de", "ru"]:
+			Captura.foto("captura-taquilla-scroll-%s-arriba.png" % codigo)
+		# la rueda, de verdad: dos golpes con el ratón encima de la lista
+		var sitio: Vector2 = get_viewport().get_screen_transform() * d.get_global_rect().get_center()
+		Input.warp_mouse(sitio)
+		await get_tree().process_frame
+		for i in 2:
+			for pulsado in [true, false]:
+				var e := InputEventMouseButton.new()
+				e.button_index = MOUSE_BUTTON_WHEEL_DOWN
+				e.pressed = pulsado
+				e.position = sitio
+				e.global_position = sitio
+				Input.parse_input_event(e)
+				await get_tree().process_frame
+		await get_tree().process_frame
+		info += " · tras 2 golpes de rueda, bajada %d (esperado: %.0f)" % [d.scroll_vertical, minf(2 * taquilla.paso,
+			d.get_v_scroll_bar().max_value - d.get_v_scroll_bar().page)]
+		fallos += contar_cortadas(codigo + " tras la rueda")
+		if codigo in ["es", "de", "ru"]:
+			Captura.foto("captura-taquilla-scroll-%s-rueda.png" % codigo)
+		# la barra arrastrada a medias (a 1,4 cartas): se queda en una carta entera
+		d.get_v_scroll_bar().value = taquilla.paso * 1.4
+		await get_tree().process_frame
+		info += " · barra a 1,4 cartas → %d" % d.scroll_vertical
+		fallos += contar_cortadas(codigo + " con la barra")
+		# la cruceta del mando: desde la primera carta, hasta abajo del todo y otra vez arriba
+		(taquilla.cartas[""] as Button).grab_focus()
+		await get_tree().process_frame
+		for i in taquilla.cartas.size() - 1:
+			await PruebaMando.pulsar(get_tree(), JOY_BUTTON_DPAD_DOWN)
+			fallos += contar_cortadas("%s cruceta abajo %d" % [codigo, i + 1])
+		var foco: Control = get_viewport().gui_get_focus_owner()
+		info += " · con la cruceta abajo del todo, marcada la última %s, bajada %d de %d (esperado: true, la misma)" % [
+			foco == taquilla.cartas[taquilla.ids()[-1]], d.scroll_vertical,
+			d.get_v_scroll_bar().max_value - d.get_v_scroll_bar().page]
+		if codigo in ["es", "de", "ru"]:
+			Captura.foto("captura-taquilla-scroll-%s-abajo.png" % codigo)
+		for i in taquilla.cartas.size() - 1:
+			await PruebaMando.pulsar(get_tree(), JOY_BUTTON_DPAD_UP)
+			fallos += contar_cortadas("%s cruceta arriba %d" % [codigo, i + 1])
+		info += " · y arriba otra vez, bajada %d (esperado: 0)" % d.scroll_vertical
+		print(info)
+		taquilla.cerrar()
+	print("Taquilla con scroll: cartas cortadas %d veces (esperado: 0)" % fallos)
+	Idioma.poner(antes_idioma, false)
+	Guardado.cambiar(func(g): g.skins = []; g.skin = "")
+	get_tree().quit()
+
+
+# Cuántas cartas de la taquilla se ven a medias (ni enteras ni fuera de la caja); las dice si hay alguna
+func contar_cortadas(cuando: String) -> int:
+	var caja: Rect2 = taquilla.desliza.get_global_rect()
+	var cortadas := []
+	for id in taquilla.cartas:
+		var r: Rect2 = (taquilla.cartas[id] as Button).get_global_rect()
+		var dentro := r.position.y >= caja.position.y - 0.5 and r.end.y <= caja.end.y + 0.5
+		var fuera := r.end.y <= caja.position.y + 0.5 or r.position.y >= caja.end.y - 0.5
+		if not dentro and not fuera:
+			cortadas.append(id if id != "" else "conserje")
+	if cortadas:
+		print("  ¡Cortadas! %s: %s (bajada %d)" % [cuando, cortadas, taquilla.desliza.scroll_vertical])
+	return 1 if cortadas else 0
