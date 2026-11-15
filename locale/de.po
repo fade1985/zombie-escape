@@ -2973,7 +2973,7 @@ msgstr "die Spezialwaffen (Flammenwerfer, Säurewerfer und Blitzwerfer)"
 msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "die Wurfwaffen (Molotow, Granate, Köder und Eisbombe)"
 
-#: scripts/objetos.gd scripts/tutoriales.gd
+#: scripts/objetos.gd
 msgid "Vendas"
 msgstr "Verbände"
 
@@ -4576,36 +4576,32 @@ msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»
 msgstr "Wird es dir zu schwer: Unter Optionen → Hilfen gibt es \"Ganzes Leben\"."
 
 #: scripts/tutoriales.gd
-msgid "Al abrir el primer armarito o coger las primeras vendas"
-msgstr "Beim ersten Öffnen eines Badschränkchens oder bei den ersten Verbänden"
+msgid "Vendas y botiquines"
+msgstr "Verbände und Medikits"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el primer armarito o coger la primera cura"
+msgstr "Beim ersten Öffnen eines Badschränkchens oder beim ersten Heilmittel"
+
+#: scripts/tutoriales.gd
+msgid "Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan unas vendas o un botiquín."
+msgstr "Badschränkchen öffnest du von vorne, wie den Computer, und sie geben Verbände oder ein Medikit frei."
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
 msgstr "Verbände mit {usar_vendas}: Sie heilen 25, aber nicht über dein aktuelles Drittel hinaus."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."
-msgstr "Platz für 3 im Rucksack. Badschränkchen öffnest du von vorne, wie den Computer, und sie geben ihren Inhalt frei."
-
-#: scripts/tutoriales.gd
-msgid "El botiquín"
-msgstr "Das Medikit"
-
-#: scripts/tutoriales.gd
-msgid "Al coger el primer botiquín"
-msgstr "Beim ersten Medikit"
-
-#: scripts/tutoriales.gd
-msgid "Úsalo con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
-msgstr "Benutze es mit {usar_botiquin}: Es heilt 40 und bringt ein verlorenes Drittel deiner Lebensenergie zurück."
+msgid "El botiquín se usa con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
+msgstr "Das Medikit benutzt du mit {usar_botiquin}: Es heilt 40 und bringt ein verlorenes Drittel deiner Lebensenergie zurück."
 
 #: scripts/tutoriales.gd
 msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
 msgstr "Nur damit bekommst du verlorene Drittel zurück, abgesehen vom Talent Zweite Luft. Heb es auf, bis du eins verlierst."
 
 #: scripts/tutoriales.gd
-msgid "Caben 2 en la mochila; los que sobran se quedan en el suelo o van al baúl."
-msgstr "Platz für 2 im Rucksack; überzählige bleiben am Boden liegen oder kommen in die Truhe."
+msgid "En la mochila caben 3 vendas y 2 botiquines; los que sobran se quedan en el suelo o van al baúl."
+msgstr "In den Rucksack passen 3 Verbände und 2 Medikits; überzählige bleiben am Boden liegen oder kommen in die Truhe."
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"

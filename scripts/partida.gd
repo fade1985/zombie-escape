@@ -1568,7 +1568,7 @@ func repuesto(tipo: String) -> String:
 func abrir_armarito(armarito: Node2D) -> void:
 	armarito.vaciar()
 	Sonido.tocar("puerta")
-	tutorial("curas")   # (la primera vez que se abre uno: cómo se usan las curas)
+	tutorial("curas")   # (la primera vez que se abre uno: cómo se usan las vendas y los botiquines, M110)
 	soltar_objeto(armarito.datos.get("dentro", "botiquin"), armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
 
 
@@ -1671,7 +1671,7 @@ func mirar_tutoriales() -> void:
 	if johnny.huecos.cuerpo != "fregona" or johnny.huecos.fuego not in ["", "pistola"] or not armas_guardadas.is_empty():
 		tutorial("armas")
 	for id in mochila:
-		tutorial("botiquin" if id == "botiquin" else "curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")
+		tutorial("curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")
 
 
 # En la sala de pruebas no salen, ni en la partida de prueba (salvo en la suya, --tutorial)

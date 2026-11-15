@@ -336,7 +336,7 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --guiado --tercios  en la primera partida, al perder el primer tercio sale la ventana de los tercios (M35)
 #                                                                                          [prueba_varias.gd]
-#   --tutorial          los tutoriales: la ventana, la cola, el del primer botiquín, la lista desde la pausa, el del
+#   --tutorial          los tutoriales: la ventana, la cola, el de las curas al coger un botiquín, la lista desde la pausa, el del
 #                       baúl antes del baúl y el botón «Tutoriales: No»                         [prueba_varias.gd]
 #   --tutoriales-alto   la ventana de cada tutorial, una a una: que la más alta quepa en la pantalla (con --lang, en
 #                       otro idioma)                                                    [prueba_varias.gd]

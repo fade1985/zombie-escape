@@ -474,7 +474,7 @@ en una línea.
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
   (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste «Tutoriales: Sí/No» (abajo en la lista de Tutorial, con «Que vuelvan a salir todos»). Cada uno sale una sola vez: los
   pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
-  mutación sacan el suyo antes de abrirse; las vendas sacan «curas» y el botiquín, «botiquin», el suyo aparte
+  mutación sacan el suyo antes de abrirse; las vendas y el botiquín sacan los dos «curas», uno solo para las dos curas (M110)
   y fuera de la guía, que solo enseña las vendas: M62; el de los trasteros, al entrar en las viviendas), `eventos.gd`,
   `supervivientes.gd` y el menú (el de la alerta). Se prueba con `--tutorial`. `marca(id)` dice si va un «!» encima del
   mueble de la sala de mantenimiento que enseña ese tutorial (taquilla, ordenador, banco, baúl y la puerta de los

@@ -1970,7 +1970,7 @@ func probar_armarito_clic() -> void:
 	for h in get_children():
 		if h is Tutorial and not h.is_queued_for_deletion():
 			otra = h.id
-	print("Armarito clic · al abrir otro armarito, tutorial abierto: %s (esperado: ninguno, o botiquin: el del botiquín que suelta, que es otro)" % otra)
+	print("Armarito clic · al abrir otro armarito, tutorial abierto: %s (esperado: ninguno: el de las curas ya salió y es el mismo para vendas y botiquín, M110)" % otra)
 	get_tree().quit()
 
 

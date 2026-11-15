@@ -2973,7 +2973,7 @@ msgstr "as armas especiais (o lança-chamas, o lança-ácido e o lança-raios)"
 msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "os arremessáveis (o molotov, a granada, a isca e a bomba de gelo)"
 
-#: scripts/objetos.gd scripts/tutoriales.gd
+#: scripts/objetos.gd
 msgid "Vendas"
 msgstr "Bandagens"
 
@@ -4576,36 +4576,32 @@ msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»
 msgstr "Se ficar difícil demais, em Opções → Ajudas tem \"Vida inteira\"."
 
 #: scripts/tutoriales.gd
-msgid "Al abrir el primer armarito o coger las primeras vendas"
-msgstr "Ao abrir o primeiro armarinho ou pegar as primeiras bandagens"
+msgid "Vendas y botiquines"
+msgstr "Bandagens e kits médicos"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el primer armarito o coger la primera cura"
+msgstr "Ao abrir o primeiro armarinho ou pegar a primeira cura"
+
+#: scripts/tutoriales.gd
+msgid "Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan unas vendas o un botiquín."
+msgstr "Os armarinhos dos banheiros se abrem de frente, como o computador, e soltam bandagens ou um kit médico."
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
 msgstr "As bandagens se usam com {usar_vendas}: curam 25, sem passar do terço em que você está."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 en la mochila. Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan lo suyo."
-msgstr "Cabem 3 na mochila. Os armarinhos dos banheiros se abrem de frente, como o computador, e soltam o que têm."
-
-#: scripts/tutoriales.gd
-msgid "El botiquín"
-msgstr "O kit médico"
-
-#: scripts/tutoriales.gd
-msgid "Al coger el primer botiquín"
-msgstr "Ao pegar o primeiro kit médico"
-
-#: scripts/tutoriales.gd
-msgid "Úsalo con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
-msgstr "Use com {usar_botiquin}: cura 40 e devolve um terço de vida perdido."
+msgid "El botiquín se usa con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
+msgstr "O kit médico se usa com {usar_botiquin}: cura 40 e devolve um terço de vida perdido."
 
 #: scripts/tutoriales.gd
 msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
 msgstr "É a única coisa que recupera os terços perdidos, além do talento Segundo fôlego. Guarde para quando perder um."
 
 #: scripts/tutoriales.gd
-msgid "Caben 2 en la mochila; los que sobran se quedan en el suelo o van al baúl."
-msgstr "Cabem 2 na mochila; os que sobram ficam no chão ou vão para o baú."
+msgid "En la mochila caben 3 vendas y 2 botiquines; los que sobran se quedan en el suelo o van al baúl."
+msgstr "Na mochila cabem 3 bandagens e 2 kits médicos; os que sobram ficam no chão ou vão para o baú."
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
