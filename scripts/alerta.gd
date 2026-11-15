@@ -33,7 +33,7 @@ const GUARDIA_VIDA := 2.0    # A5: la vida del guardia de la tarjeta (o del zomb
 const OIDO := 1.5            # ...y la distancia a la que se oyen los disparos
 const ESCOLTAS_CODIGO := 2   # A5 en la torre: los escoltas que llegan al leer cada ordenador del código (partida.gd)
 const DOLARES := 0.2         # recompensa: dólares de más por cada nivel (al completar el edificio)
-const PIEZAS := 0.2          # recompensa: piezas de más por cada nivel (las que sueltan los zombis y los jefes)
+const PIEZAS := 0.2          # recompensa: piezas de más por cada nivel (más muebles con material; fuera de los Apartamentos, las de los jefes)
 
 # El nivel de la partida que se juega (0 = sin alerta)
 static var nivel := 0
@@ -76,8 +76,9 @@ static func dolares_extra(dolares: int) -> int:
 	return roundi(dolares * DOLARES * nivel)
 
 
-# Por cuánto se multiplican las piezas que sueltan los zombis (y las de los jefes): 1 + 0,2 por nivel (con la Alerta 5,
-# el doble: del 6 % al 12 %, y de 4 a 8 por jefe). La Alerta 1 solo da dólares (11 nov): las piezas, desde la 2
+# Por cuánto se multiplica la probabilidad de que un mueble tenga material (y las piezas de los jefes del centro y de la
+# torre): 1 + 0,2 por nivel (con la Alerta 5, el doble: del 35 % al 70 %, y de 4 a 8 por jefe). La Alerta 1 solo da
+# dólares (11 nov): las piezas, desde la 2
 static func mas_piezas() -> float:
 	return 1.0 + PIEZAS * nivel if nivel >= 2 else 1.0
 

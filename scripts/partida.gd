@@ -660,6 +660,9 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 	if mapa.tele_salon:   # (la tele del salón que enseña las noticias, M91)
 		mapa.tele_salon.usar.connect(abrir_tele)
+	for mueble in mapa.muebles:   # (el armario, la mesilla, el escritorio y la librería: Objetos.MUEBLES_CON_PIEZA)
+		if mueble.datos.tipo in Objetos.MUEBLES_CON_PIEZA:
+			mueble.usar.connect(abrir_mueble.bind(mueble))
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(abrir_armarito.bind(armarito))
@@ -1657,6 +1660,25 @@ func abrir_armarito(armarito: Node2D) -> void:
 	soltar_objeto(armarito.datos.get("dentro", "botiquin"), armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
 
 
+# Delante de un mueble que se abre (el armario, la mesilla, el escritorio o la librería; Fase 4): se abre una vez y, a
+# veces, suelta un material (Objetos.pieza_de_mueble) hacia Johnny, que lo coge pasando por encima; si no, «Vacío»
+func abrir_mueble(mueble: Node2D) -> void:
+	if mueble.datos.get("abierto", false):
+		return
+	mueble.abrir()
+	Sonido.tocar("puerta")
+	var medio: Vector2 = mueble.position + Vector2(0, -mueble.datos.h / 2.0)
+	var pieza := Objetos.pieza_de_mueble()
+	if pieza == "":
+		numero(medio + Vector2(0, -40), Idioma.t("Vacío"), Tema.TINTA)
+		return
+	# sale del borde del mueble que mira a Johnny, despedido hacia él
+	var hacia: Vector2 = (johnny.position - medio).normalized()
+	var borde := Vector2(mueble.datos.w, mueble.datos.h) / 2.0 + Vector2(10, 10)
+	var donde := medio + hacia * minf(borde.x / maxf(absf(hacia.x), 0.01), borde.y / maxf(absf(hacia.y), 0.01))
+	soltar_objeto(pieza, donde, false, hacia * randf_range(110.0, 160.0))
+
+
 # Cura "cura" de vida, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)
 func curar_con(cura: int, sobre: Node2D) -> void:
 	johnny.curar(cura)
@@ -2121,13 +2143,10 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			soltar_mutageno(zombi.position)
 			for i in (2 if randf() < Skins.doble(johnny.skin) else 1):
 				soltar_premio_durmiente(zombi.position)
-		# y piezas de mejora de las armas: los jefes, cuatro seguras; cualquier otro zombi, a veces una
-		if tipo in JEFES:
+		# y piezas de mejora de las armas: en el centro comercial y en la torre, los jefes, cuatro seguras (en los
+		# Apartamentos salen de los muebles, abrir_mueble; los zombis ya no sueltan, Fase 4)
+		if tipo in JEFES and edificio != "apartamentos":
 			for pieza in Objetos.piezas_de_jefe():
-				soltar_objeto(pieza, zombi.position)
-		else:
-			var pieza := Objetos.pieza_de_zombi()
-			if pieza != "":
 				soltar_objeto(pieza, zombi.position)
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:

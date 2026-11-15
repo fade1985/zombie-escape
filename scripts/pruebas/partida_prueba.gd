@@ -248,6 +248,8 @@
 #                                                                                    [prueba_sitios.gd]
 #   --armarito-clic     el armarito del baño: el clic encima no lo abre (Johnny ataca), E sí
 #                       y el tutorial de las curas sale la primera vez que se abre            [prueba_sitios.gd]
+#   --muebles-materiales  el armario, la mesilla, el escritorio y la librería se abren con E y sueltan un material (o
+#                       «Vacío»), una sola vez, y el tutorial de los materiales al cogerlo  [prueba_sitios.gd]
 #   --contorno-mueble   el contorno amarillo de los muebles de la sala: solo con Johnny delante (ya no con el ratón
 #                       encima)                                        [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
@@ -990,6 +992,9 @@ func empezar_prueba() -> void:
 	elif "--armarito-clic" in args:
 		set_process(false)   # sin la prueba larga
 		probar_armarito_clic()
+	elif "--muebles-materiales" in args:
+		set_process(false)   # sin la prueba larga
+		probar_muebles_materiales()
 	elif "--contorno-mueble" in args:
 		set_process(false)   # sin la prueba larga
 		probar_contorno_mueble()

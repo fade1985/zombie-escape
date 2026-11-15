@@ -2962,8 +2962,8 @@ msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "Alle 3 s lässt du ätzende Gase ab, die Schläfer in der Nähe verätzen und 2 s lähmen"
 
 #: scripts/objetos.gd
-msgid "la suelta algún durmiente, y los jefes seguro"
-msgstr "von manchen Schläfern, von Bossen immer"
+msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
+msgstr "steckt in Kleiderschränken, Nachttischen, Schreibtischen und Bücherregalen (im Einkaufszentrum und im Turm: von Bossen)"
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -3196,6 +3196,10 @@ msgstr "MEHR KANN ICH NICHT TRAGEN!"
 #: scripts/partida.gd scripts/ui/inventario.gd
 msgid "%s: es su última partida; al acabarla, se destruye."
 msgstr "%s: Das ist ihre letzte Runde; danach geht sie kaputt."
+
+#: scripts/partida.gd
+msgid "Vacío"
+msgstr "Leer"
 
 #: scripts/partida.gd
 msgid "No se puede usar"
@@ -4780,8 +4784,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Mit Herstellungsmaterial verbesserst du Waffen und Wurfwaffen an der Werkbank im Wartungsraum."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
-msgstr "Es gibt vier Arten: Nahkampf, Fernkampf, Spezial und Wurfwaffen. Schläfer lassen es ab und zu fallen, Bosse auch."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
+msgstr "Es gibt vier Arten: Nahkampf, Fernkampf, Spezial und Wurfwaffen. Im Mietshaus steckt es in Kleiderschränken, Nachttischen, Schreibtischen und Bücherregalen: Öffne sie von vorne, wie den Computer. Im Einkaufszentrum und im Turm lassen es die Bosse fallen."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4800,8 +4804,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {
 msgstr "Vor jedem Angriff markiert er den Boden: Raus da oder weiche mit {esquivar} aus!"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
-msgstr "Besiegt hinterlässt er Dollar, Munition und Material, und die Treppe geht auf."
+msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
+msgstr "Besiegt hinterlässt er Dollar und Munition (im Einkaufszentrum und im Turm auch Material), und die Treppe geht auf."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"

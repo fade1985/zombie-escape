@@ -183,8 +183,8 @@ banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
   Glotón; quien te hace daño lo paga: un jefe pierde el 3 % de su vida), el gymbro (el Gymbro; cuerpo a cuerpo +50 %) y
   el bombero (el jefe de bomberos; lo que quema +50 % y el fuego no le hace nada). Lo que dan se suma a los talentos.
 - **Taller** (derecha): el **banco de trabajo**, que sube de calidad, nivel a nivel, las armas y los
-  paquetes de arrojables (los que lleva y los del baúl) con las piezas de su familia que sueltan los zombis y los
-  jefes: las armas, 3 para Poco común, 6 para Rara y 10 para Épica; los arrojables, que se gastan, 1, 2 y 4. Valen las
+  paquetes de arrojables (los que lleva y los del baúl) con las piezas de su familia (los materiales: en los Apartamentos, dentro
+  de los armarios, las mesillas, los escritorios y las librerías; en el centro y la torre, los sueltan los jefes): las armas, 3 para Poco común, 6 para Rara y 10 para Épica; los arrojables, que se gastan, 1, 2 y 4. Valen las
   de la mochila (se gastan primero) y las del baúl. Se maneja como el baúl: elegir la casilla y «Mejorar» (o Y en el
   mando). La **Épica** trae un truco: cuerpo a cuerpo, cada 4 golpes uno es crítico (con un anillo morado en cada zombi que pilla); a distancia,
   las balas atraviesan a un zombi (estela morada); especiales, el zombi que matan revienta y prende, echa ácido o da

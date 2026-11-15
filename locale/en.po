@@ -2962,8 +2962,8 @@ msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "Every 3 s you let out corrosive gas that burns nearby sleepers and paralyzes them for 2 s"
 
 #: scripts/objetos.gd
-msgid "la suelta algún durmiente, y los jefes seguro"
-msgstr "dropped by some sleepers, and always by bosses"
+msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
+msgstr "found in wardrobes, nightstands, desks and bookshelves (in the mall and the tower, dropped by bosses)"
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -3196,6 +3196,10 @@ msgstr "I CAN'T CARRY ANY MORE!"
 #: scripts/partida.gd scripts/ui/inventario.gd
 msgid "%s: es su última partida; al acabarla, se destruye."
 msgstr "%s: this is its last run; it breaks when the run ends."
+
+#: scripts/partida.gd
+msgid "Vacío"
+msgstr "Empty"
 
 #: scripts/partida.gd
 msgid "No se puede usar"
@@ -4780,8 +4784,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Crafting materials raise the quality of your weapons and throwables at the workbench in the maintenance room."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
-msgstr "They come in four kinds: melee, ranged, special and throwable. Sleepers drop them now and then, and bosses do too."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
+msgstr "They come in four kinds: melee, ranged, special and throwable. In the Apartments they're inside wardrobes, nightstands, desks and bookshelves: open them from right in front, like the computer. In the Shopping Mall and the tower, bosses drop them."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4800,8 +4804,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {
 msgstr "It marks the floor before every attack: step out or dodge it with {esquivar}!"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
-msgstr "When it goes down it drops dollars, ammo and materials, and the stairs open."
+msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
+msgstr "When it goes down it drops dollars and ammo (in the Shopping Mall and the tower, materials too), and the stairs open."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"
