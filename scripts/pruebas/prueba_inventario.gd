@@ -2293,7 +2293,8 @@ func probar_botin() -> void:
 # una Poco común apartada sin estrenar (prueba_comun.gd: "fregona", 2 veces que puede salir). Al empezar, Johnny la lleva
 # en la mano y ha gastado una (partida.dar_fregona); al acabar (Objetos.cerrar_baul, de mentira sobre una copia del
 # guardado) se aparta otra vez y no va al baúl; en la partida siguiente gasta la última y, al acabarla, se rompe (y
-# vuelve la Normal). Si se guarda en el baúl a mano, al acabar sale de allí. Un guardado de antes la saca del baúl
+# vuelve la Normal). Si se guarda en el baúl a mano, al acabar sale de allí; si se deja en el suelo, también vuelve (F22).
+# Un guardado de antes la saca del baúl
 # (Objetos.apartar_fregona). Y de verdad: con la última partida, al caer, el cartel del final dice que se ha roto
 # (captura-fregona-rota.png) y el guardado ya no la tiene. Cada línea dice lo esperado. Deja el guardado como estaba
 func probar_fregona_mejorada() -> void:
@@ -2319,6 +2320,19 @@ func probar_fregona_mejorada() -> void:
 	Objetos.cerrar_baul(copia, [])
 	print("Guardada en el baúl a mano: apartada %s · en el baúl %d (esperado: quedan 1 · 0)" % [copia.fregona,
 		copia.baul_equipo.filter(Objetos.es_fregona_mejorada).size()])
+	# dejada en el suelo (ni la lleva ni está en el baúl): no se pierde, vuelve a su sitio (F22); si era su última, se rompe
+	copia = g.duplicate(true)
+	rotas = Objetos.cerrar_baul(copia, [{"id": "pistola", "calidad": 0, "quedan": 0}])
+	print("Dejada en el suelo: apartada %s · rotas %s (esperado: calidad 1, quedan 1, sin usada · [Pistola])" % [copia.fregona, nombres.call(rotas)])
+	copia = g.duplicate(true)
+	copia.fregona.quedan = 0
+	rotas = Objetos.cerrar_baul(copia, [])
+	print("Dejada en el suelo en su última partida: apartada %s · rotas %s (esperado: {} · [Fregona (Poco común)])" % [copia.fregona, nombres.call(rotas)])
+	copia = g.duplicate(true)
+	copia.fregona.quedan = 0
+	copia.baul_equipo.append({"id": "fregona", "calidad": 1, "quedan": 0, "usada": true})
+	rotas = Objetos.cerrar_baul(copia, [])
+	print("Guardada en el baúl en su última partida: apartada %s · rotas %s (esperado: {} · [Fregona (Poco común)], una vez)" % [copia.fregona, nombres.call(rotas)])
 	# un guardado de antes, con dos en el baúl: la mejor, a su sitio; la otra se queda
 	copia = {"fregona": {}, "baul_equipo": [{"id": "fregona", "calidad": 1, "quedan": 2}, {"id": "fregona", "calidad": 3, "quedan": 1},
 		{"id": "bate", "calidad": 0, "quedan": 1}]}

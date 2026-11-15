@@ -253,7 +253,7 @@ static func arrojables_al_baul(g: Dictionary, id: String, calidad: int, n: int, 
 # estar "usado". Luego entra lo que lleva encima ("equipo": partida.equipo_encima), si le quedan partidas. Devuelve lo
 # destruido que merece decirse en el cartel del final ([{"id", "calidad"}]: sin la fregona ni la pistola Normales ni los
 # arrojables Normales, que se rompen en todas las partidas). La fregona mejorada no se queda en el baúl: se aparta
-# (apartar_fregona), y si se ha quedado sin partidas se rompe y el cartel lo dice
+# (apartar_fregona), también si se ha dejado en el suelo, y si se ha quedado sin partidas se rompe y el cartel lo dice
 static func cerrar_baul(g: Dictionary, equipo: Array) -> Array:
 	var rotas := []
 	var quedan := []
@@ -264,9 +264,10 @@ static func cerrar_baul(g: Dictionary, equipo: Array) -> Array:
 		e.erase("usada")
 		quedan.append(e)
 	g.baul_equipo = quedan
-	# la fregona mejorada con la que ha empezado: ahora se mira si la lleva o la ha guardado en el baúl (si la ha dejado
-	# en el suelo, se pierde, como cualquier arma)
+	# la fregona mejorada con la que ha empezado: ahora se mira si la lleva o la ha guardado en el baúl
+	var empezada := {}
 	if g.fregona.get("usada", false):
+		empezada = g.fregona
 		g.fregona = {}
 	var llevada := {}
 	for cosa in equipo:
@@ -278,6 +279,13 @@ static func cerrar_baul(g: Dictionary, equipo: Array) -> Array:
 			arrojables_al_baul(g, cosa.id, cosa.calidad, cosa.n, cosa.quedan)
 		else:
 			g.baul_equipo.append({"id": cosa.id, "calidad": cosa.calidad, "quedan": cosa.quedan})
+	# si no la lleva ni está en el baúl (ni se ha roto ya, llevada o guardada en su última partida), la ha dejado en el
+	# suelo: no se pierde, vuelve a su sitio con las partidas que le quedan (F22, 15 nov); si era su última, se rompe
+	if not empezada.is_empty() and llevada.is_empty() and not rotas.any(es_fregona_mejorada) 			and not g.baul_equipo.any(es_fregona_mejorada):
+		if Armas.quedan_de(empezada) <= 0:
+			rotas.append({"id": empezada.id, "calidad": empezada.calidad, "quedan": 0})
+		else:
+			llevada = {"id": empezada.id, "calidad": empezada.calidad, "quedan": empezada.quedan}
 	apartar_fregona(g, llevada)
 	return rotas.filter(func(e): return int(e.get("calidad", 0)) > 0 		or (not e.has("n") and not e.id in Armas.SIEMPRE.values()))
 
