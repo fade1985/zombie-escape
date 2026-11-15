@@ -124,6 +124,15 @@ static func a_jefe(zombi: Node) -> float:
 	return A_JEFES if zombi is Minijefe or zombi.get_meta("tipo", "") == "portera" else 1.0
 
 
+# M107 (15 nov): lo que lanza Johnny, al explotar (la granada, la atraedora, la congeladora) o al romperse (el molotov),
+# dentro de un apartamento se oye como un disparo (johnny.oir_disparo): despierta a todos los dormidos del piso, que van
+# a por él. Fuera de los apartamentos no hace ruido (como antes)
+static func ruido(desde: Node) -> void:
+	var johnny := desde.get_tree().get_first_node_in_group("jugador")
+	if johnny and johnny.has_method("en_apartamento") and johnny.en_apartamento():
+		johnny.oir_disparo()
+
+
 # La clave de un paquete: el tipo y, si no es Normal, su calidad («molotov:2»)
 static func clave(k: String, calidad: int) -> String:
 	return k if calidad <= 0 else "%s:%d" % [k, calidad]

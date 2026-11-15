@@ -2459,6 +2459,36 @@ func probar_disparo_alerta() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --arrojable-alerta" (M107): en el primer apartamento, Johnny quieto en la entrada lanza de verdad un
+# molotov y, con todos dormidos otra vez, una granada, cerca y sin dar a nadie. Tras cada uno, cuántos siguen dormidos
+# (esperado: ninguno). Foto captura-arrojable-alerta.png
+func probar_arrojable_alerta() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var destino := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and not planta.sitios[i].limpio:
+			destino = i
+			break
+	await montar(destino, 0, false)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	await get_tree().create_timer(0.3).timeout
+	var zombis := get_tree().get_nodes_in_group("zombis")
+	var dormidos := func() -> int: return zombis.filter(func(z): return is_instance_valid(z) and z.get("dormido")).size()
+	for clave in ["molotov", "granada"]:
+		for z in zombis:   # (todos dormidos otra vez, para el segundo)
+			if is_instance_valid(z) and "dormido" in z:
+				z.dormido = true
+		var antes: int = dormidos.call()
+		lanzables.tipo = clave
+		lanzables.lanzar(johnny.position + Vector2(40, 0))
+		await get_tree().create_timer(2.6).timeout   # (la granada explota a los 2 s)
+		print("Arrojable en un apartamento · %s: antes %d dormidos de %d, después %d (esperado: más de 0 y luego 0)" % [
+			clave, antes, zombis.size(), dormidos.call()])
+	Captura.foto("captura-arrojable-alerta.png")
+	get_tree().quit()
+
+
 # Con "--captura --atontado-pared": los jefes que cargan (antidisturbios, Gymbro, mascota, becario y gerente), en la
 # sala de pruebas, se estrellan (estrellarse, a mano) y se mide cuánto se quedan atontados: 5 s. Luego lo mismo
 # haciendo como que la sala es la azotea: lo suyo de siempre (entre 1,4 y 2,2 s). Foto captura-atontado-pared.png

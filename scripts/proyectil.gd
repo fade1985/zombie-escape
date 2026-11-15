@@ -118,6 +118,8 @@ func caer(datos: Dictionary) -> void:
 			Sonido.tocar("cristal")
 			Sonido.tocar("chof")
 		_: Sonido.tocar("chof")
+	if tipo == "molotov":
+		Lanzables.ruido(self)   # (M107: el de Johnny, dentro de un apartamento, despierta a todo el piso)
 	if tipo == "molotov" or tipo == "molotov_jefe":
 		llamarada(charco.radio())
 	if racimo > 0:

@@ -84,7 +84,9 @@ en una línea.
   tocar a un zombi, una pared o al llegar a su alcance con la explosión de la granada de mano (también a Johnny, como
   mucho `Lanzables.DANO_JOHNNY`). Tambor de 6 que se recarga de una en una (`cartucho`); usa el fogonazo de la escopeta
   y su sonido `"lanzagranadas"`. Receta en `assets/pixellab.json` → `conserje-48-lanzagranadas`; prueba `--lanzagranadas`.
-- `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
+- `lanzables.gd`: molotov, granada, atraedora y congeladora. Dentro de un apartamento, al explotar o romperse se oyen como
+  un disparo y despiertan a todo el piso, que va a por Johnny (`ruido`, M107, 15 nov: lo llaman `granada.explotar` y
+  `proyectil.caer`; prueba `--arrojable-alerta`). Van en **montones** (M18, 28 oct): cada hueco lleva un montón
   de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
   de cada clave, F cambia; sus cuentas en `cantidades`) y 4 de repuesto (`REPUESTO`, 8 hasta la M67; `repuesto` y sus cuentas en `en_repuesto`,
   con varios de la misma clave). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones

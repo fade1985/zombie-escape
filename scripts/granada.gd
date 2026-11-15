@@ -126,6 +126,7 @@ func choque_hasta(fin: Vector2) -> Dictionary:
 # ¡Boom! La explosión de siempre (con Puntería, más daño a los zombis). A Johnny, como mucho DANO_JOHNNY (25), como
 # la atraedora y la congeladora: hasta el 27 oct su propia granada le quitaba 80, casi toda la vida y dos tercios
 func explotar() -> void:
+	Lanzables.ruido(self)   # (M107: dentro de un apartamento, despierta a todo el piso)
 	var boom := EXPLOSION.instantiate()
 	boom.radio = radio
 	boom.dano = mini(dano_zombis, Lanzables.DANO_JOHNNY)

@@ -21,7 +21,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M104** Minimapa: ponerlo abajo, en el medio de la pantalla (ahora está arriba a la derecha). Para más adelante.
 - **M105** Banco de trabajo: subir el recuadro oscuro de abajo (la ficha del arma, con «Mejorar» y «Cerrar») y meterlo dentro del panel marrón clarito, debajo de los objetos. Para más adelante.
 - **M106** Pasillo de las puertas de los apartamentos, en todas las plantas: bajar un poco los cuadros de la pared de arriba, que están altos. Para más adelante.
-- **M107** Arrojables: si uno explota dentro de un apartamento, despierta a todos los zombis y van hacia Johnny, como con los disparos de las armas a distancia. Para más adelante.
 - **M108** Moqueta del pasillo de la planta baja (la de la sala de mantenimiento): más sucia, ahora se ve impoluta al lado de lo demás. Para más adelante.
 - **M109** Avisos encima de la cabeza de Johnny («Apunta con el ratón y ataca con J o Clic izq...», «Saca la pistola con Z o Rueda»): quitarlos de ahí y pasarlos a un tutorial. Para más adelante.
 

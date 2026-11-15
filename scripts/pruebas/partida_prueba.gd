@@ -414,6 +414,7 @@
 #   --crio-gpt          lo mismo con el crío (el de PixelLab; y a su lado el de GPT cuando esté su hoja) [prueba_varias.gd]
 #   --puerta-cierra     nada más entrar en un apartamento, la puerta se cierra detrás de Johnny [prueba_varias.gd]
 #   --disparo-alerta    en un apartamento, un disparo de Johnny despierta a todos los zombis de todas las habitaciones [prueba_varias.gd]
+#   --arrojable-alerta  en un apartamento, el molotov y la granada de Johnny despiertan a todos los zombis (M107) [prueba_varias.gd]
 #   --atontado-pared    los jefes que cargan (también la portera), al estrellarse, se quedan atontados 5 s (en la azotea,
 #                       lo de siempre); la portera embistiendo de verdad contra una pared y el antidisturbios cargando
 #                       contra ella de frente y rozándola de lado (también se atonta) [prueba_varias.gd]
@@ -1078,6 +1079,9 @@ func empezar_prueba() -> void:
 	elif "--disparo-alerta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_disparo_alerta()
+	elif "--arrojable-alerta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_arrojable_alerta()
 	elif "--atontado-pared" in args:
 		set_process(false)   # sin la prueba larga
 		probar_atontado_pared()
