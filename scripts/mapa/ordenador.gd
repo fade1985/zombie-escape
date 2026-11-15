@@ -71,11 +71,19 @@ const TUTORIAL_DE := {"puntos": "talentos", "armas": "tienda", "logros": "logros
 	"colecciones": "colecciones", "videos": "videos"}
 
 
+# Si el ordenador tiene algo que el que empieza tiene que ver antes de salir de la sala de mantenimiento en la primera
+# partida (partida.falta_sala): su tutorial, el de algún programa sin abrir (TUTORIAL_DE) o el regalo de bienvenida sin
+# coger. Un enemigo nuevo sin mirar en Sujetos o un logro sin cobrar dejan el «!» de la mesa (novedades), pero no
+# impiden salir: llegan jugando y se miran cuando se quiera (L37, 15 nov)
+static func falta_ver(s: Dictionary) -> bool:
+	return Tutoriales.marca("ordenador") or TUTORIAL_DE.values().any(func(t): return Tutoriales.marca(t)) 		or preload("res://scripts/ui/tienda_armas.gd").regalo_pendiente(s)
+
+
 # Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado: los que tienen su tutorial sin ver
 # (TUTORIAL_DE; mientras los tutoriales estén encendidos: Tutoriales.marca), «colecciones» (un enemigo nuevo), «logros»
 # (alguno conseguido y sin cobrar) y «armas» (algo del regalo de bienvenida de la tienda sin coger: la pistola o los
 # lanzables gratis, tienda_armas.gd, regalo_pendiente). Lo usan el «!» de la mesa y los iconos del escritorio (ui/ordenador.gd); con alguno, el de la mesa
-# sigue y, en la primera partida, no se sale de la sala de mantenimiento (partida.falta_sala). Sin "con_tutoriales",
+# sigue (para salir de la sala de mantenimiento en la primera partida solo cuenta parte: falta_ver). Sin "con_tutoriales",
 # solo lo de verdad nuevo (el rótulo amarillo del icono, «¡NUEVO!» o «¡COBRAR!», sale solo con eso)
 static func novedades(s: Dictionary, con_tutoriales := true) -> Array:
 	var lista := []

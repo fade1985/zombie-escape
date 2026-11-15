@@ -1572,8 +1572,12 @@ func probar_sala() -> void:
 # el banco y el baúl (cada uno, su tutorial; el del banco en captura-marcas-tutorial-banco.png) y el ordenador, cuyo
 # «!» sigue mientras haya algo nuevo dentro: abre cada programa, con su tutorial (captura-marcas-escritorio.png y
 # captura-marcas-tutorial-talentos.png), hasta que no queda ningún «!» en los iconos; entra en los trasteros (su tutorial nuevo: captura-marcas-trasteros.png) y
-# vuelve. Sin ningún «!», sale la flecha (captura-marcas-flecha.png) y ya se sale al pasillo. Luego se cierra
+# vuelve. Sin ningún «!» que falte, sale la flecha (captura-marcas-flecha.png) y ya se sale al pasillo. Hay un enemigo
+# nuevo sin mirar en Sujetos: su «!» se queda en Colecciones y en la mesa del ordenador, pero no impide salir (L37,
+# ordenador.falta_ver). Luego se cierra
 func probar_marcas_sala() -> void:
+	var nuevos_antes: Array = Guardado.cargar().sujetos_nuevos.duplicate()
+	Guardado.cambiar(func(g): g.sujetos_nuevos = [Bestiario.LISTA.keys()[0]])
 	var nombres := ["taquilla", "ordenador", "banco", "baúl", "trasteros"]
 	var activas := func() -> String:
 		var lista := []
@@ -1624,12 +1628,13 @@ func probar_marcas_sala() -> void:
 			print("Visto el de Talentos, iconos con «!»: %s (esperado: armas, logros, dosier, colecciones, videos)" % con_marca.call())
 	ordenador.abrir("")
 	await get_tree().create_timer(0.3).timeout
-	print("Al abrir cada programa, su tutorial: %s (esperado: talentos, tienda, logros, dosier, colecciones, videos) · iconos con «!»: %s (esperado: ninguno)" % [
+	print("Al abrir cada programa, su tutorial: %s (esperado: talentos, tienda, logros, dosier, colecciones, videos) · iconos con «!»: %s (esperado: colecciones, el enemigo sin mirar)" % [
 		", ".join(vistos), con_marca.call()])
 	Captura.foto("captura-marcas-escritorio-sin.png")
 	ordenador.apagar()
 	await get_tree().create_timer(0.3).timeout
-	print("Visto lo de dentro del ordenador, «!»: %s (esperado: trasteros)" % activas.call())
+	print("Visto lo de dentro del ordenador, «!»: %s · ¿le falta ver algo al ordenador? %s (esperado: ordenador, trasteros · false: el de Sujetos no cuenta)" % [
+		activas.call(), mapa.ordenador.falta_ver(Guardado.cargar())])
 	await cruzar(0)
 	print("Al ir al pasillo otra vez: sigue en «%s» (esperado: mantenimiento)" % planta.sitios[aqui].tipo)
 	# los trasteros: al entrar, su tutorial
@@ -1643,13 +1648,14 @@ func probar_marcas_sala() -> void:
 	await get_tree().create_timer(0.4).timeout
 	await cruzar(0)
 	await get_tree().create_timer(1.2).timeout
-	print("De vuelta en «%s», «!»: %s · falta algo: %s · flecha %s (esperado: mantenimiento, ninguno, false, true)" % [
+	print("De vuelta en «%s», «!»: %s · falta algo: %s · flecha %s (esperado: mantenimiento, ordenador (el de Sujetos), false, true)" % [
 		planta.sitios[aqui].tipo, activas.call(), falta_sala(), guia.flecha.visible])
 	Captura.foto("captura-marcas-flecha.png")
 	for i in mini(planta.sitios[aqui].salidas.size(), mapa.puertas.size()):
 		if planta.sitios[aqui].salidas[i].get("a", -1) == 0:
 			await cruzar(i)
 	print("Por la puerta del pasillo: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
+	Guardado.cambiar(func(g): g.sujetos_nuevos = nuevos_antes)
 	get_tree().quit()
 
 

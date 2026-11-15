@@ -676,9 +676,14 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 
 # En la primera partida (la de la guía, guia.gd) no se sale de la sala de mantenimiento al pasillo mientras quede alguno
 # de sus «!» (mapa.marcas_sala: la taquilla, el ordenador, el banco, el baúl y la puerta de los trasteros), para que el
-# que empieza lo abra todo y lea sus tutoriales. Hasta entonces, tampoco sale la flecha de la guía (guia.destino)
+# que empieza lo abra todo y lea sus tutoriales. Hasta entonces, tampoco sale la flecha de la guía (guia.destino). El
+# del ordenador cuenta solo por lo que hay que ver (ordenador.falta_ver): un enemigo nuevo en Sujetos o un logro sin
+# cobrar dejan su «!», pero no encierran a nadie en la sala (L37)
 func falta_sala() -> bool:
-	return guia.activa and mapa != null and planta.sitios[aqui].tipo == "mantenimiento" 		and mapa.marcas_sala.any(func(m): return m.activa)
+	if not guia.activa or mapa == null or planta.sitios[aqui].tipo != "mantenimiento":
+		return false
+	var s := Guardado.cargar()
+	return mapa.marcas_sala.any(func(m): return m.activa and (m != mapa.ordenador.marca or mapa.ordenador.falta_ver(s)))
 
 
 # Se vuelve a un sitio: su mapa guardado, otra vez a la escena, y el jefe, si se quedó dentro (con su barra de vida)

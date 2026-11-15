@@ -555,8 +555,9 @@ en una línea.
   (`partida.ver_tutorial`). Además, una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la
   llave y un primer apartamento fácil (3 zombis, sin la llave, vendas en el armarito). Lo demás (*Vendas*, *Jefes*,
   *La vida en tercios*...), con sus ventanas de siempre. Con la guía, no se sale de la sala de mantenimiento al pasillo mientras quede algún «!»
-  en ella (`partida.falta_sala`: Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» y no sale la flecha; se prueba
-  con `--marcas-sala`). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
+  en ella (`partida.falta_sala`: Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» y no sale la flecha; el del ordenador
+  cuenta solo por sus tutoriales y el regalo, `ordenador.falta_ver`: un enemigo nuevo en Sujetos o un logro sin cobrar
+  no encierran a nadie, L37; se prueba con `--marcas-sala`). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
   apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`. La
   ventana de los tercios sí sale con la guía, al perder el primero (M35; `--guiado --tercios`).
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos; la horda dura 1 minuto de cerradura con unos 150 zombis en grupos cada vez más seguidos y por tramos de 20 s, `HORDA` y `TIPOS`, M40) y `aliado.gd` (cada superviviente que te
