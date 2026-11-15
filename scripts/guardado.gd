@@ -47,7 +47,9 @@ const NUEVO := {
 	                      # durabilidad: "quedan", las partidas que aún puede salir, y "usada" si ya ha salido en esta: Armas.nuevas)
 	                      # (Armas.CALIDADES; parte 4 de la tienda y las piezas): [{"id": "bate", "calidad": 2},
 	                      # {"id": "molotov", "calidad": 1, "n": 3}, ...]. Los arrojables de la misma clase y calidad,
-	                      # juntos hasta 99 por casilla, como los objetos (Objetos.arrojables_al_baul)
+	                      # juntos en una casilla hasta lo que cabe en un montón en la mano (Objetos.monton_arrojables)
+	"montones_baul": true, # las casillas del baúl ya son de montones pequeños (15 nov; antes, 99 de todo). Un guardado
+	                       # de antes no lo trae: al cargarlo, sus arrojables se reparten una vez (cargar_archivo)
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en las viviendas (viviendas.gd)
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"skin": "",           # la skin que lleva Johnny (skins.gd; "" = el conserje de siempre)
@@ -169,6 +171,26 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 			cosa.usada = true
 		equipo.append(cosa)
 	s.baul_equipo = equipo
+	# Un guardado de antes de los montones pequeños del baúl (15 nov; la Fase 3 del dueño): los arrojables que pasan de
+	# lo que cabe ahora en una casilla (Objetos.monton_arrojables) se reparten en varias, una sola vez (después, si se
+	# quitan talentos, los montones que ya están no se tocan). Los objetos no hace falta: el baúl guarda cuántos hay y se
+	# reparten solos (Objetos.monton). No se pierde nada aunque pase de las 32 casillas: lo que sobra se queda, y no se
+	# puede guardar más hasta sacarlo (lo pidió el dueño)
+	if not leido.has("montones_baul"):
+		var repartido := []
+		for e in s.baul_equipo:
+			if not e.has("n"):
+				repartido.append(e)
+				continue
+			var tope := Objetos.monton_arrojables(s, e.id, e.calidad)
+			var n: int = e.n
+			while n > 0:
+				var trozo: Dictionary = e.duplicate()
+				trozo.n = mini(n, tope)
+				repartido.append(trozo)
+				n -= trozo.n
+		s.baul_equipo = repartido
+		s.montones_baul = true
 	# las recetas del banco de trabajo se quitaron del juego el 25 oct: las armas creadas del baúl ("baul_armas"), las
 	# recetas aprendidas ("recetas") y las creadas alguna vez ("creadas", de Colecciones) de un guardado viejo no se
 	# leen (solo se copia lo que está en NUEVO) y desaparecen al volver a escribirlo

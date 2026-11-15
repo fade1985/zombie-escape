@@ -19,7 +19,7 @@
 #     montón se señala por su "sitio", el nombre de su casilla en el inventario: "l1" el 2.º a mano, "e3" el 4.º de
 #     repuesto (clave_en, cuantos_en).
 #   - Al completar el edificio, todos los que le quedan van al baúl (partida.equipo_encima), también los Normales. En
-#     el baúl, los del mismo tipo y calidad se juntan en una casilla de hasta 99, como los objetos
+#     el baúl, los del mismo tipo y calidad se juntan en casillas de un montón como el de la mano (Objetos.monton_arrojables)
 #     (Objetos.arrojables_al_baul), y se sacan de montón en montón.
 #   - La atraedora y la congeladora (ARROJADIZAS): se lanzan como la granada, con su propio efecto. Se
 #     cuentan como el molotov y la granada, pero no se tienen al empezar ni las sueltan los zombis: solo se compran.
@@ -418,7 +418,13 @@ func color(k: String) -> Color:
 
 # Los que caben en un montón: MONTON, más los del Artificiero (o Criogenia) y los de su calidad
 func maximo(k: String) -> int:
-	return MONTON + extra_talentos(tipo_de(k), johnny.stats) + Armas.CALIDADES[calidad_de(k)].unidades
+	return cabe_en_monton(tipo_de(k), calidad_de(k), johnny.stats)
+
+
+# Los que caben en un montón de ese tipo y esa calidad con esos atributos (también en una casilla del baúl:
+# Objetos.monton_arrojables, con los talentos del guardado)
+static func cabe_en_monton(t: String, calidad: int, stats: Dictionary) -> int:
+	return MONTON + extra_talentos(t, stats) + Armas.CALIDADES[calidad].unidades
 
 
 # Las unidades de más de un tipo por los talentos: el Artificiero, en todos (desde el 15 nov; antes solo molotovs y
