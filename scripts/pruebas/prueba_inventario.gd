@@ -126,8 +126,8 @@ func probar_baul_fregona() -> void:
 # cuerpo a cuerpo y tres a distancia, Johnny
 # se arrima al baúl y cuenta en la terminal: que se abre con la marca en lo primero que se puede guardar, que guardar
 # una casilla mete todos los de esa casilla (y la marca se queda en la siguiente), que las vendas también se guardan
-# (y se vuelven a poner), que la gasolina se guarda desde la munición y se saca de una en una (la marca se queda en
-# «Sacar uno»), que las balas y los cartuchos también se guardan (el hueco entero, y también arrastrando) y salen
+# (y se vuelven a poner), que la gasolina se guarda desde la munición y sale la casilla entera («Sacar 2»; Fase 3,
+# Objetos.tanda), que las balas y los cartuchos también se guardan (el hueco entero, y también arrastrando) y salen
 # hasta un hueco de una vez, o lo que quepa (captura-baul-municion.png), y que «Guardar todo» lo mete todo, la
 # munición también. Que «Destruir» pide confirmación (la primera pulsación lo deja a medias, elegir otra casilla o esperar
 # 3 s lo cancela) y la segunda quita para siempre la casilla entera: un objeto, un hueco de munición, un arma y un
@@ -192,7 +192,7 @@ func probar_baul() -> void:
 	mochila.insert(0, "vendas")
 	Guardado.cambiar(func(g2): g2.baul.erase("vendas"))
 	inventario.pintar()
-	# la gasolina, desde su hueco de munición, y luego sacarla otra vez, de una en una
+	# la gasolina, desde su hueco de munición, y luego sacarla otra vez: la casilla entera, como toda la munición
 	inventario.tocar("u%d" % johnny.huecos_municion().map(func(h): return h[0]).find("gasolina"))
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-baul-guardar.png")
@@ -204,15 +204,11 @@ func probar_baul() -> void:
 		mochila.count("gasolina")])
 	inventario.tocar(en_baul.call("gasolina"))
 	await get_tree().process_frame
-	print("Elegida la gasolina del baúl: «Sacar uno» %s, la marca en «%s» (esperado: activo, sacar) · dice «%s»" % [
+	print("Elegida la gasolina del baúl: «Sacar 2» %s, la marca en «%s» (esperado: activo, sacar) · dice «%s»" % [
 		boton.call("sacar"), marca.call(), dice.call()])
 	inventario.sacar()
 	await get_tree().process_frame
-	print("Sacada una: en el baúl %d, en la mochila %d · la marca en «%s» (esperado: 1, 1, sacar: se puede sacar otra)" % [
-		Guardado.cargar().baul.get("gasolina", 0), mochila.count("gasolina"), marca.call()])
-	inventario.sacar()
-	await get_tree().process_frame
-	print("Sacada otra: en el baúl %d, en la mochila %d · la marca en «%s» (esperado: 0, 2, %s: ya no queda, la casilla pasa a la pieza especial)" % [
+	print("Sacada la casilla: en el baúl %d, en la mochila %d · la marca en «%s» (esperado: 0, 2, %s: ya no queda, la casilla pasa a la pieza especial)" % [
 		Guardado.cargar().baul.get("gasolina", 0), mochila.count("gasolina"), marca.call(), en_baul.call("pieza_especial")])
 	# las balas y los cartuchos: desde su hueco de munición se guarda el hueco entero (también arrastrándolo) y salen de una
 	# tanda (un hueco: 24 balas, 12 cartuchos), o lo que quepa. 60 balas son tres huecos (24, 24 y 12)
@@ -290,7 +286,7 @@ func probar_baul() -> void:
 	inventario.destruir()
 	responder_confirmar(inventario, true)
 	await get_tree().process_frame
-	print("Destruidos los cartuchos del baúl: quedan %d (esperado: 0 de 40)" % Guardado.cargar().baul.get("cartuchos", 0))
+	print("Destruidos los cartuchos del baúl: quedan %d (esperado: 28 de 40: solo la casilla elegida, de 12)" % Guardado.cargar().baul.get("cartuchos", 0))
 	for id in ["bate", "molotov"]:   # un arma y un paquete de arrojables
 		inventario.tocar("b%d" % inventario.cosas_baul(Guardado.cargar()).map(func(o): return o.id if o.equipo >= 0 else "").find(id))
 		await get_tree().process_frame
