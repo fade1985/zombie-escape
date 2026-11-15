@@ -128,6 +128,14 @@ func marca_nuevo() -> TextureRect:
 	return marca
 
 
+# El «!» que bota en la esquina de arriba a la derecha de un botón de "ancho" (la casilla o la pestaña de un enemigo
+# nuevo de Sujetos)
+func poner_marca(b: Control, ancho: float) -> void:
+	var marca := marca_nuevo()
+	marca.position.x = ancho - 20
+	b.add_child(marca)
+
+
 # Pone o quita el aviso de un icono del escritorio ("icono": su fila de ICONOS): el rótulo en amarillo y el «!» que bota
 func poner_aviso(b: Button, icono: Array, nuevo: bool) -> void:
 	var programa: String = icono[0]
@@ -1123,10 +1131,10 @@ var pagina_vista := 0               # y su página
 # Devuelve lo que hay que marcar
 func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 	var s := Guardado.cargar()
-	if s.colecciones_nuevo:
-		# ya está visto: el aviso del icono se quita hasta que haya algo nuevo
-		s = Guardado.cambiar(func(g): g.colecciones_nuevo = false)
-		refrescar_avisos()
+	# (el «!» de un enemigo nuevo no se quita al abrir, sino al hacer clic en su casilla: 15 nov. Al abrir, sin nada
+	# pedido, se va a la pestaña y la página del primero sin mirar)
+	if foco == "" and not s.sujetos_nuevos.is_empty() and s.sujetos_nuevos[0] in Bestiario.LISTA:
+		foco = "z_" + s.sujetos_nuevos[0]
 	if foco.begins_with("z_") and foco.substr(2) in Bestiario.LISTA:
 		familia_vista = Bestiario.familia(foco.substr(2))
 		pagina_vista = Bestiario.de_familia(familia_vista).find(foco.substr(2)) / POR_PAGINA
@@ -1165,6 +1173,8 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 		b.custom_minimum_size.x = 200
 		estilo_pestana(b, fam == familia_vista)
 		pestanas.add_child(b)
+		if suyos.any(func(id): return Bestiario.es_nuevo(s, id)):   # con un enemigo nuevo sin mirar, su «!»
+			poner_marca(b, b.custom_minimum_size.x)
 		enlazar(b, Idioma.t("%s: %d de %d vistos.") % [nombre_familia(fam), hechos, suyos.size()], func():
 			if familia_vista != fam:
 				familia_vista = fam
@@ -1212,8 +1222,17 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 		var visto := Bestiario.visto(s, id)
 		var clave := "z_" + id
 		var b := casilla_zombi(cuadricula, id, visto)
+		var nuevo := Bestiario.es_nuevo(s, id)
+		if nuevo:
+			poner_marca(b, CASILLA_ZOMBI)   # visto por primera vez y aún sin mirar: su «!», hasta el clic
 		var hacer := ficha_bestiario.bind(s, id, visto)
 		var ver := func():
+			if nuevo:
+				# mirado: fuera su «!» (y el de su pestaña y el del icono, si era el último); se vuelve a abrir con él elegido
+				Bestiario.mirado(id)
+				refrescar_avisos()
+				abrir("colecciones", clave)
+				return
 			mostrar(lado, clave, hacer)
 			senalar_casilla(cuadricula, clave)
 		enlazar(b, (Idioma.t("%s: sale en %s. Matados: %d.") % [Bestiario.nombre(id), sale_en(Bestiario.LISTA[id], true),

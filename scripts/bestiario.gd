@@ -206,6 +206,16 @@ static func visto(s: Dictionary, id: String) -> bool:
 	return id in s.get("bestiario", [])
 
 
+# ¿Visto por primera vez y aún sin elegir en Sujetos? (lleva el «!» hasta que se hace clic en su casilla)
+static func es_nuevo(s: Dictionary, id: String) -> bool:
+	return id in s.get("sujetos_nuevos", [])
+
+
+# Elegido en Sujetos: se le quita el «!» (y al icono, si era el último)
+static func mirado(id: String) -> void:
+	Guardado.cambiar(func(g): g.sujetos_nuevos.erase(id))
+
+
 # ── Apuntar ──
 # Se llama cada vez que nace un enemigo (muchas veces por sala), así que no puede reescribir el guardado cada
 # vez: se recuerda lo que ya está apuntado y solo se escribe la primera vez que se ve uno nuevo. Lo recordado se
@@ -230,7 +240,8 @@ static func apuntar(id: String) -> void:
 	Guardado.cambiar(func(g):
 		if not id in g.bestiario:
 			g.bestiario.append(id)
-			g.colecciones_nuevo = true)
+			if not id in g.sujetos_nuevos:
+				g.sujetos_nuevos.append(id))
 	apuntados[id] = true
 	apuntados_en = Guardado.escrituras   # la escritura es nuestra: lo recordado sigue valiendo
 
@@ -240,7 +251,7 @@ static func todo_visto() -> void:
 	Guardado.cambiar(func(g):
 		g.encontrados = Objetos.NOMBRES.keys()
 		g.bestiario = LISTA.keys()
-		g.colecciones_nuevo = true)
+		g.sujetos_nuevos = LISTA.keys())
 
 
 # ── El retrato ──

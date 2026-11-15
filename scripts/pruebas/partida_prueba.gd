@@ -209,6 +209,8 @@
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)
 #                       gastando piezas                                                [prueba_inventario.gd]
 #   --municion          la munición por tipos y los arrojables (3 a mano; sin repuesto desde el 13 nov) [prueba_inventario.gd]
+#   --tirar-lanzables   los lanzables se tiran al suelo desde el inventario (uno y el montón entero) y se recogen
+#                       con su calidad y sus partidas                                      [prueba_inventario.gd]
 #   --montones          los arrojables en montones de 2: el de la mano lleno, la mano llena, al acabarse uno, el
 #                       baúl (juntos, de 2 en 2), completar el edificio y una partida guardada con montones de
 #                       repuesto (13 nov: todos al baúl)                                [prueba_inventario.gd]
@@ -301,6 +303,8 @@
 #                       bajada del mostrador del vestíbulo, subirla, abrir los tornos 60 s (la barra, los tornos que
 #                       frenan, tumbarla y levantarla), el aviso de la planta, el «¡Detrás!» y su habitación, con fotos
 #                                                                                         [prueba_sitios.gd]
+#   --sujetos-nuevos    el «!» de un enemigo nuevo en Sujetos (icono, pestaña y casilla): no se quita al abrir, sí al
+#                       hacer clic en él                                                    [prueba_varias.gd]
 #   --pasillo-sos       el superviviente encerrado: en el pasillo, solo el «!» de su puerta y el del minimapa; y en el
 #                       minimapa, lo que te dejas en cada apartamento (llave, dosier, tele, carita)  [prueba_varias.gd]
 #   --minimapa-cosas    el minimapa dentro de un apartamento (M111): la tele, la página del dosier y la llave en su
@@ -459,7 +463,7 @@
 #   --quimico           la rama Químico de los talentos: cada talento con sus números, las fotos del nivel 3 y el
 #                       árbol con las tres ramas en el ordenador                            [prueba_varias.gd]
 #   --equilibrio-talentos  Durito hasta 3 (y los puntos de más, devueltos), Ajolote hasta la mitad, el alcance de
-#                       Puntería, Mirilla (1 de cada 3, en amarillo) y las tarjetas «Ahora / Con otro» [prueba_varias.gd]
+#                       Puntería, Mirilla (1 de cada 3, en amarillo) y la ficha con solo «Ahora»     [prueba_varias.gd]
 #   --talentos-altos    los niveles 4 y 5 de las tres ramas: cada talento con sus números, fotos del racimo, el
 #                       Segundo aliento, la Adrenalina, el rayo de Alto voltaje y la Mezcla explosiva, y las coronas
 #                       en el ordenador                                                      [prueba_varias.gd]
@@ -749,6 +753,9 @@ func empezar_prueba() -> void:
 	elif "--infinito" in args:
 		set_process(false)   # sin la prueba larga
 		probar_infinito()
+	elif "--tirar-lanzables" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tirar_lanzables()
 	elif "--montones" in args:
 		set_process(false)   # sin la prueba larga
 		probar_montones()
@@ -990,6 +997,9 @@ func empezar_prueba() -> void:
 	elif "--piso" in args:
 		set_process(false)   # sin la prueba larga
 		probar_piso()
+	elif "--sujetos-nuevos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_sujetos_nuevos()
 	elif "--pasillo-sos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pasillo_sos()

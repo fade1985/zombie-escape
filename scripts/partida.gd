@@ -115,7 +115,8 @@ const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su verde, el del mut
 # se coge, hasta que se gaste algo
 const TOPE: int = CHAPA_UI.MAXIMO
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
-	"granada": preload("res://assets/ui/iconos/granada.png")}
+	"granada": preload("res://assets/ui/iconos/granada.png"), "atraedora": preload("res://assets/ui/iconos/atraedora.png"),
+	"congeladora": preload("res://assets/ui/iconos/congeladora.png")}
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
 const DESPERTAR := 2.4     # tras una derrota, lo que tarda Johnny en levantarse al empezar (despertar)
 # [traducir]
@@ -1358,20 +1359,43 @@ func valor_billete() -> int:
 
 # Un molotov o una granada en el suelo: se coge pasando por encima, si cabe en la mochila (en el reto "Solo
 # cuerpo a cuerpo", no caen)
-func soltar_lanzable(k: String, donde: Vector2) -> void:
-	if Reto.sin_municion():
+# Un lanzable en el suelo, de la clave "k" (el tipo y, si no es Normal, su calidad: Lanzables.clave). "tirado": lo ha
+# tirado Johnny desde el inventario (no vuelve hasta que se aparte), con las partidas que le quedaban ("quedan",
+# Armas.nuevas; -1, las de uno nuevo)
+func soltar_lanzable(k: String, donde: Vector2, tirado := false, quedan := -1) -> void:
+	if Reto.sin_municion() and not tirado:
 		return
+	var tipo := Lanzables.tipo_de(k)
+	var calidad := Lanzables.calidad_de(k)
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
-	cosa.icono = ICONOS_LANZABLES[k]
+	cosa.icono = ICONOS_LANZABLES[tipo]
 	cosa.tamano = 1.0
+	cosa.tirado = tirado
 	cosa.position = donde
 	cosa.puede = lanzables.cabe.bind(k)
 	cosa.al_no_caber = no_puedo_mas
+	if calidad > 0:   # (como las armas mejoradas: un brillo del color de su calidad)
+		var brillo := PointLight2D.new()
+		brillo.texture = load("res://escenas/luces/luz_suave.tres")
+		brillo.texture_scale = 0.2
+		brillo.color = Armas.color(calidad)
+		brillo.range_item_cull_mask = Luz.TODAS
+		brillo.position = Vector2(0, -8)
+		cosa.add_child(brillo)
 	cosa.cogido.connect(func():
-		lanzables.sumar(k)
+		if quedan >= 0:
+			lanzables.meter_de_baul(k, 1, quedan)   # (con sus partidas, como al sacarlo del baúl)
+		else:
+			lanzables.sumar(k)
 		Sonido.tocar("compra")
-		numero(cosa.position, Idioma.t("+1 molotov") if k == "molotov" else Idioma.t("+1 granada"), Lanzables.COLORES[k]))
+		var texto: String
+		match tipo:
+			"molotov": texto = Idioma.t("+1 molotov")
+			"granada": texto = Idioma.t("+1 granada")
+			"atraedora": texto = Idioma.t("+1 atraedora")
+			_: texto = Idioma.t("+1 congeladora")
+		numero(cosa.position, texto, Armas.color(calidad) if calidad > 0 else Lanzables.COLORES[tipo]))
 	mapa.cosas.add_child.call_deferred(cosa)
 
 

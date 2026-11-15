@@ -8,8 +8,8 @@
 #     la mochila, pero van aparte y no ocupan casilla de «Objetos»). A la derecha, la ficha de lo elegido (qué es, el cargador, las
 #     barras y qué hace) y sus botones: "Ponérmela" (las de repuesto), "Usar" (lo de curar:
 #     Objetos.USABLES), "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina,
-#     los bidones de ácido y las baterías, de uno en uno; las balas, el hueco entero en una caja; y las armas: la de la mano, solo si
-#     lleva otra de repuesto, que pasa a la mano). Con las flechas o el mando, la ficha sigue a la marca; A (o tocar)
+#     los bidones de ácido y las baterías, de uno en uno; las balas, el hueco entero en una caja; los arrojables, de uno en
+#     uno, con su calidad y su durabilidad; y las armas: la de la mano, solo si lleva otra de repuesto, que pasa a la mano). Con las flechas o el mando, la ficha sigue a la marca; A (o tocar)
 #     la lleva al botón principal de la ficha (A dos veces y hecho), X (o Supr) tira, Y hace lo del botón principal y F
 #     cambia el arrojable que se lanza.
 #   - Baúl (al arrimarse a él en la sala de mantenimiento): la pantalla partida en
@@ -852,7 +852,7 @@ func ficha_municion(caja: VBoxContainer, h: Array) -> Dictionary:
 
 
 # La ficha de un montón de arrojables ("l1" a mano o "e3" de repuesto): cuántos quedan y lo que hace; se pasa de la mano
-# al repuesto y al revés (no se tiran)
+# al repuesto y al revés, y se tiran al suelo como las armas (15 nov, lo pidió el dueño)
 func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 	var lz: Lanzables = partida.lanzables
 	var k := lz.clave_en(sitio)
@@ -872,9 +872,9 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 		if lz.relevo(k) >= 0:
 			que += " " + Idioma.t("Cuando se acabe, entra otro montón de los de repuesto.")
 		if Lanzables.REPUESTO <= 0:   # (13 nov: ya no hay repuesto al que pasarlo)
-			return {"que": que, "botones": []}
+			return {"que": que, "botones": [["tirar", Idioma.t("Tirar al suelo"), tirar, false]]}
 		return {"que": que, "botones": [["al_repuesto", Idioma.t("Al repuesto"), mover_lanzable,
-			lz.repuesto.size() >= Lanzables.REPUESTO]]}
+			lz.repuesto.size() >= Lanzables.REPUESTO], ["tirar", Idioma.t("Tirar al suelo"), tirar, false]]}
 	var j := sitio.substr(1).to_int()
 	if lz.mano_llena_de(j):
 		que += " " + Idioma.t("Ya llevas a mano un montón lleno de estos: entrará cuando se acabe.")
@@ -882,7 +882,8 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 		que += " " + Idioma.t("«A la mano» llena con estos el montón que llevas a mano.")
 	elif lz.mano.size() >= Lanzables.MANO:
 		que += " " + Idioma.t("«A la mano» lo cambia por %s, que pasa aquí.") % Idioma.minusculas(nombre_lanzable(lz.tipo))
-	return {"que": que, "botones": [["a_la_mano", Idioma.t("A la mano"), mover_lanzable, lz.mano_llena_de(j)]]}
+	return {"que": que, "botones": [["a_la_mano", Idioma.t("A la mano"), mover_lanzable, lz.mano_llena_de(j)],
+		["tirar", Idioma.t("Tirar al suelo"), tirar, false]]}
 
 
 # Una línea de la ficha (si no cabe en "ancho", se parte en varias)
@@ -1088,7 +1089,7 @@ func poner_guardada() -> void:
 
 
 # Tira al suelo, a los pies de Johnny, lo elegido: un objeto de la mochila (uno), un arma (la de la mano, solo si lleva
-# otra de repuesto, que pasa a la mano) o munición (la gasolina, los bidones de ácido y las baterías, de uno en uno; las balas, todas
+# otra de repuesto, que pasa a la mano), un lanzable (uno, con su calidad y su durabilidad) o munición (la gasolina, los bidones de ácido y las baterías, de uno en uno; las balas, todas
 # las del hueco en una caja que las devuelve). Con "todo" (soltándolo en la zona roja), la casilla o el hueco entero, en
 # fila a sus pies. Si ya no queda nada de lo elegido, la ficha vuelve al arma de la mano
 func tirar(todo := false) -> void:
@@ -1124,6 +1125,17 @@ func tirar(todo := false) -> void:
 		var id: String = llenas[i][0]
 		a_sus_pies.call(id, llenas[i][1] if todo else 1)
 		if not id in mochila:
+			sel = ""
+	elif sel.begins_with("l") or sel.begins_with("e"):
+		var lz: Lanzables = partida.lanzables
+		var k := lz.clave_en(sel)
+		if k == "":
+			return
+		var q := lz.quedan_de(k)   # (sus partidas: vuelven con él al recogerlo)
+		var n := lz.quitar(sel, lz.cuantos_en(sel) if todo else 1)
+		for j in n:
+			partida.soltar_lanzable(k, suelo + Vector2((j - (n - 1) / 2.0) * 14.0, 0), true, q)
+		if lz.clave_en(sel) != k:
 			sel = ""
 	elif sel.begins_with("g"):
 		var id: String = partida.armas_guardadas[i]
@@ -2294,9 +2306,11 @@ func destinos(clave: String) -> Dictionary:
 		"u":
 			d["tirar"] = "tirar"
 		"l":
+			d["tirar"] = "tirar"
 			for j in Lanzables.REPUESTO:
 				d["e%d" % j] = "mover"
 		"e":
+			d["tirar"] = "tirar"
 			for j in Lanzables.MANO:
 				d["l%d" % j] = "mover"
 			# encima de otro de repuesto de la misma clave (tipo y calidad) que no esté lleno: se juntan
@@ -2413,6 +2427,9 @@ func que_se_tira(clave: String) -> String:
 		"u":
 			var h: Array = partida.johnny.huecos_municion()[i]
 			return cuenta_municion(h[0], h[1]) if h[1] > 1 else Armas.municion_nombre(h[0])
+		"l", "e":
+			var n: int = partida.lanzables.cuantos_en(clave)
+			return nombre_lanzable(partida.lanzables.clave_en(clave)) + (" ×%d" % n if n > 1 else "")
 	return ""
 
 

@@ -85,6 +85,40 @@ func probar_frases() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --sujetos-nuevos": un enemigo visto por primera vez (el crío, "rapido") lleva su «!» en el icono de
+# Sujetos, en su pestaña y en su casilla; abrir el programa no lo quita (captura-sujetos-nuevo.png), hacer clic en su
+# casilla sí, los tres (captura-sujetos-mirado.png). Se cierra
+func probar_sujetos_nuevos() -> void:
+	await sala_de_talentos()
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g):
+		g.bestiario = ["normal", "lento"]
+		g.sujetos_nuevos = [])
+	Bestiario.apuntar("rapido")   # (como al nacer uno en la partida)
+	var marca := func(nombre: String) -> bool:
+		var b: Node = ordenador.ventana.find_child(nombre, true, false)
+		return b != null and b.get_node_or_null("marca_nuevo") != null
+	abrir_ordenador()
+	await get_tree().create_timer(0.5).timeout
+	print("Sujetos · apuntado el crío: sin mirar %s · el icono avisa %s (esperado: [\"rapido\"] · true)" % [
+		Guardado.cargar().sujetos_nuevos, "colecciones" in mapa.ORDENADOR.novedades(Guardado.cargar())])
+	ordenador.abrir("colecciones")
+	await get_tree().create_timer(0.4).timeout
+	print("Sujetos · abierto: «!» en la casilla %s, en la pestaña %s · sin mirar %s (esperado: true, true · [\"rapido\"])" % [
+		marca.call("z_rapido"), marca.call("pes_durmientes"), Guardado.cargar().sujetos_nuevos])
+	Captura.foto("captura-sujetos-nuevo.png")
+	ordenador.ventana.find_child("z_rapido", true, false).pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	print("Sujetos · clic en el crío: «!» en la casilla %s, en la pestaña %s · sin mirar %s · el icono avisa %s (esperado: false, false · [] · false)" % [
+		marca.call("z_rapido"), marca.call("pes_durmientes"), Guardado.cargar().sujetos_nuevos,
+		"colecciones" in mapa.ORDENADOR.novedades(Guardado.cargar())])
+	Captura.foto("captura-sujetos-mirado.png")
+	Guardado.cambiar(func(g):
+		g.bestiario = antes.bestiario
+		g.sujetos_nuevos = antes.sujetos_nuevos)
+	get_tree().quit()
+
+
 # Con "--captura --pasillo-sos": el superviviente encerrado en la planta 2. En el pasillo, sin gritos ni ruidos: solo un «!»
 # encima de la puerta de su piso y otro, solo, en medio de su cuadrado del minimapa (captura-pasillo-sos.png). Luego, lo que te
 # dejas en los apartamentos ya vistos, en medio de su cuadrado del minimapa: la llave, la página del dosier, la tele encendida y
@@ -104,6 +138,17 @@ func probar_pasillo_sos() -> void:
 	print("Pasillo · superviviente (puerta de %s): «!» en su puerta %s · gritos en el pasillo %d (esperado: true · 0)" % [p.salida.dir,
 		marca != null and marca.visible, gritos.size()])
 	Captura.foto("captura-pasillo-sos.png")
+	# al volver al pasillo (se saca su mapa guardado), sigue habiendo un solo «!» (15 nov: se ponía otro cada vez)
+	var piso := -1
+	for k in planta.sitios.size():
+		if planta.sitios[k].tipo == "apartamento":
+			piso = k
+			break
+	for vuelta in 2:
+		await montar(piso, 0, false)
+		await montar(0, 0, false)
+	var marcas: Array = mapa.cosas.get_children().filter(func(n): return str(n.name).begins_with("ExclamacionSuperviviente"))
+	print("Pasillo · tras entrar y salir 2 veces: «!» en su puerta %d (esperado: 1)" % marcas.size())
 	# lo que se deja: el superviviente con el baño ya abierto, la llave en el suelo, la página y la tele encendida
 	planta.superviviente.puerta.cerrada = false
 	var otros: Array = []
@@ -1816,7 +1861,7 @@ func probar_quimico() -> void:
 	ordenador.abrir("puntos", "b_incendiario")
 	await ensenar_ficha("incendiario")
 	Captura.foto("captura-quimico-arbol.png")
-	print("Árbol: %d hexágonos (esperado: 36, las tres ramas a la vez) · ficha de Incendiario «%s» (esperado: ... Ahora: ... · Con otro: ...)" % [
+	print("Árbol: %d hexágonos (esperado: 36, las tres ramas a la vez) · ficha de Incendiario «%s» (esperado: ... Ahora: ..., sin «Con otro»)" % [
 		ordenador.ventana.find_child("arbol", true, false).botones.size(), ficha_de("incendiario")])
 	Guardado.cambiar(func(gu): gu.talentos = guardado_antes.talentos)
 	get_tree().quit()
@@ -1942,12 +1987,12 @@ func probar_equilibrio_talentos() -> void:
 	ordenador.abrir("puntos", "b_punteria")
 	await ensenar_ficha("punteria")
 	Captura.foto("captura-talentos-militar.png")
-	print("Ficha: Puntería 3 «%s» (esperado: ... Ahora: %s · Con otro: %s ...)" % [ficha_de("punteria"),
-		Talentos.efecto("punteria", 3), Talentos.efecto("punteria", 4)])
+	print("Ficha: Puntería 3 «%s» (esperado: ... Ahora: %s, sin «Con otro»)" % [ficha_de("punteria"),
+		Talentos.efecto("punteria", 3)])
 	await ensenar_ficha("durito")
 	Captura.foto("captura-talentos-superviviente.png")
-	print("Ficha: Durito 1 «%s» (esperado: ... Ahora: %s · Con otro: %s ...)" % [ficha_de("durito"),
-		Talentos.efecto("durito", 1), Talentos.efecto("durito", 2)])
+	print("Ficha: Durito 1 «%s» (esperado: ... Ahora: %s, sin «Con otro»)" % [ficha_de("durito"),
+		Talentos.efecto("durito", 1)])
 	Guardado.cambiar(func(g):
 		g.dolares = guardado_antes.dolares
 		g.talentos = guardado_antes.talentos)
@@ -3874,6 +3919,34 @@ func probar_guiado() -> void:
 			print("Guía · al caer el zombi, la llavecita se va: %s (esperado: true)" % (z.get_node_or_null("MarcaLlave") == null))
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto("captura-guiado-llave.png")
+	# con la llave y la página cogidas, la tele de las noticias encendida: la flecha lleva antes a la tele; vista, al jefe
+	var con_tele := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].has("tele"):
+			con_tele = i
+	if con_tele < 0:
+		print("Guía · tele: esta planta no tiene tele (no se puede probar)")
+	else:
+		planta.tiene_llave = true
+		planta.sitios[con_tele].limpio = true
+		planta.sitios[con_tele].tele.estado = "encendida"
+		await montar(0, 0, false)
+		var puerta_de := func(a: int) -> Node2D:
+			for i in planta.sitios[0].salidas.size():
+				if planta.sitios[0].salidas[i].get("a", -1) == a:
+					return mapa.puertas[i]
+			return null
+		var al_jefe: Node2D = null
+		for i in planta.sitios[0].salidas.size():
+			if planta.sitios[0].salidas[i].get("cerrojo", "") == "llave":
+				al_jefe = mapa.puertas[i]
+		print("Guía · con la llave y la tele encendida, la flecha va a la tele: %s (esperado: true)" % (guia.destino() == puerta_de.call(con_tele)))
+		johnny.position = mapa.puertas[0].llegada()
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.6).timeout
+		Captura.foto("captura-guiado-tele.png")
+		planta.sitios[con_tele].tele.estado = "vista"
+		print("Guía · vista la tele, la flecha va al jefe: %s (esperado: true)" % (guia.destino() == al_jefe and al_jefe != null))
 	# al subir a la planta siguiente, se apaga
 	nueva_planta(2)
 	print("Guía · en la 1ª planta: activa %s (esperado: false)" % guia.activa)

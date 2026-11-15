@@ -1280,6 +1280,46 @@ func probar_infinito() -> void:
 # al completar el edificio, lo Normal se destruye (sin partidas por delante: la durabilidad); y una partida guardada de antes, con
 # montones de repuesto, los manda todos al baúl. Fotos: captura-montones.png (el inventario con un montón elegido) y
 # captura-montones-baul.png (el baúl con las granadas juntas). Deja el guardado como estaba y se cierra
+# Con "--captura --tirar-lanzables": los lanzables se tiran al suelo desde el inventario, como las armas (15 nov): uno
+# con «Tirar al suelo» y el resto del montón soltándolo en la zona roja; en el suelo, los Raros con su brillo
+# (captura-tirar-lanzables.png); al apartarse y volver, se recogen con su calidad y sus partidas. Se cierra
+func probar_tirar_lanzables() -> void:
+	var lz: Lanzables = lanzables
+	var raro := Lanzables.clave("molotov", 2)
+	lz.vaciar()
+	lz.meter_de_baul(raro, 2, 1)
+	lz.meter("granada", 2)
+	await get_tree().create_timer(0.5).timeout
+	abrir_cosas("inventario")
+	await get_tree().process_frame
+	inventario.tocar(lz.sitio_de(raro))
+	await get_tree().process_frame
+	var boton: Node = inventario.fondo.find_child("tirar", true, false)
+	print("Tirar · la ficha del molotov Raro tiene «Tirar al suelo»: %s · se arrastra a la zona roja: %s (esperado: true · true)" % [
+		boton != null, inventario.destinos(lz.sitio_de(raro)).has("tirar")])
+	inventario.tirar()
+	print("Tirar · tira uno: le quedan %d (esperado: 1)" % lz.cuantas(raro))
+	inventario.tocar(lz.sitio_de(raro))
+	inventario.tirar(true)
+	print("Tirar · el resto (zona roja): le quedan %d · a mano %s (esperado: 0 · [\"granada\"])" % [lz.cuantas(raro), lz.mano])
+	inventario.tocar(lz.sitio_de("granada"))
+	inventario.tirar()
+	inventario.cerrar()
+	await get_tree().create_timer(0.6).timeout
+	var en_suelo := func() -> int:
+		return mapa.cosas.get_children().filter(func(n): return n is BILLETE and n.icono in ICONOS_LANZABLES.values()).size()
+	print("Tirar · en el suelo %d · ¿los recoge sin apartarse? %s (esperado: 3 · false)" % [en_suelo.call(), lz.cuantas(raro) > 0])
+	Captura.foto("captura-tirar-lanzables.png")
+	var donde: Vector2 = johnny.position
+	johnny.position = donde + Vector2(260, 0)
+	await get_tree().create_timer(0.5).timeout
+	johnny.position = donde
+	await get_tree().create_timer(1.5).timeout
+	print("Tirar · al volver los recoge: molotov Raro %d con %d partidas · granadas %d · en el suelo %d (esperado: 2 con 1 · 2 · 0)" % [
+		lz.cuantas(raro), lz.quedan_de(raro), lz.cuantas("granada"), en_suelo.call()])
+	get_tree().quit()
+
+
 func probar_montones() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):

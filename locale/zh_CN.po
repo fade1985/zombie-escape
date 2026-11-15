@@ -3176,6 +3176,14 @@ msgid "+1 granada"
 msgstr "+1 手雷"
 
 #: scripts/partida.gd
+msgid "+1 atraedora"
+msgstr "+1 诱饵弹"
+
+#: scripts/partida.gd
+msgid "+1 congeladora"
+msgstr "+1 冰冻弹"
+
+#: scripts/partida.gd
 msgid "+munición"
 msgstr "+弹药"
 
@@ -5226,8 +5234,8 @@ msgid "¡Al máximo!"
 msgstr "已满级！"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Ahora: %s · Con otro: %s"
-msgstr "当前：%s · 再加一点：%s"
+msgid "Ahora: %s"
+msgstr "当前：%s"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "MÁX"

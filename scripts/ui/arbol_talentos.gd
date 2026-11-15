@@ -406,7 +406,8 @@ func lineas_ficha(id: String) -> Array:
 	elif motivo == "max":
 		lineas.append([Idioma.t("¡Al máximo! %s") % ahora_da if ahora_da != "" else Idioma.t("¡Al máximo!"), color])
 	elif n > 0 and ahora_da != "":
-		lineas.append([Idioma.t("Ahora: %s · Con otro: %s") % [ahora_da, Talentos.efecto(id, n + 1)], color])
+		# solo lo que da ahora: lo que daría con otro se sobreentiende (15 nov, lo pidió el dueño)
+		lineas.append([Idioma.t("Ahora: %s") % ahora_da, color])
 	# (lo que abre al llenarlo ya no sale: lo dice la ficha del talento siguiente, con lo que pide, 11 nov)
 	return lineas
 

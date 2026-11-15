@@ -3178,6 +3178,14 @@ msgid "+1 granada"
 msgstr "+1 granada"
 
 #: scripts/partida.gd
+msgid "+1 atraedora"
+msgstr "+1 isca"
+
+#: scripts/partida.gd
+msgid "+1 congeladora"
+msgstr "+1 bomba de gelo"
+
+#: scripts/partida.gd
 msgid "+munición"
 msgstr "+munição"
 
@@ -5232,8 +5240,8 @@ msgid "¡Al máximo!"
 msgstr "No máximo!"
 
 #: scripts/ui/arbol_talentos.gd
-msgid "Ahora: %s · Con otro: %s"
-msgstr "Agora: %s · Com mais um: %s"
+msgid "Ahora: %s"
+msgstr "Agora: %s"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "MÁX"

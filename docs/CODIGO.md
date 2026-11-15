@@ -514,7 +514,9 @@ en una línea.
   textos se ven con `--historia`, y los relatos con `--relato`; los de Torre Velaria, solos, con `--historia-torre`. En la
   torre las páginas dicen su planta como «vestíbulo» o «planta 10» (`donde(p, edificio)`) y la última la suelta el Sujeto 1
   en el «laboratorio») y `bestiario.gd` (sus fichas;
-  `recorte` lo calcula `tools/recortes_bestiario.py`).
+  `recorte` lo calcula `tools/recortes_bestiario.py`). Un enemigo visto por primera vez va a `sujetos_nuevos` del
+  guardado: su casilla, su pestaña y el icono de Sujetos llevan el «!» hasta que se hace clic en él (`es_nuevo`,
+  `mirado`; 15 nov). Prueba: `--sujetos-nuevos`.
 - `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
   (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste «Tutoriales: Sí/No» (abajo en la lista de Tutorial, con «Que vuelvan a salir todos»). Cada uno sale una sola vez: los
@@ -525,7 +527,8 @@ en una línea.
   mueble de la sala de mantenimiento que enseña ese tutorial (taquilla, ordenador, banco, baúl y la puerta de los
   trasteros: `mapa.marcas_sala`); `marcas` los apaga en la partida de prueba (salvo `--marcas-sala`).
 - `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
-  encendidos): al empezar, la ventana *Moverse y esquivar* (`partida.tutorial_al_empezar`; *Cómo se juega* y *Limpia
+  encendidos). Su flecha, con la tele de las noticias encendida (al coger la página del dosier), lleva antes a la tele
+  que al jefe (`tele_por_ver`, 15 nov). Al empezar, la ventana *Moverse y esquivar* (`partida.tutorial_al_empezar`; *Cómo se juega* y *Limpia
   los apartamentos*, `CUBRE`, no salen con ella). En la primera pelea saca las ventanas de `PASOS`: *Atacar* (al
   despertarse el primer zombi o al cerrarse la puerta, antes que *Lanzables*: `guia.mostrar("atacar")` en partida.gd),
   *Cambiar de arma* (si no salió ya en la tienda) y *Munición y recarga* con medio cargador; tras cada una, la casilla
@@ -737,7 +740,9 @@ en una línea.
   en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
   banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
   del nombre; el banco solo dice lo que cuesta, sin lo que tienes ni lo que falta
-  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista y en su carta; la frase de cada carta, con la letra lisa; la lista mide justo las cartas enteras que caben y la rueda, la barra y la cruceta la mueven de carta en carta, sin cortar ninguna: `igualar` y `rueda`, M112).
+  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). Los lanzables se tiran al suelo como las armas,
+  de uno en uno o el montón en la zona roja, y vuelven con su calidad y sus partidas (`partida.soltar_lanzable` con
+  "tirado"; 15 nov, prueba `--tirar-lanzables`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista y en su carta; la frase de cada carta, con la letra lisa; la lista mide justo las cartas enteras que caben y la rueda, la barra y la cruceta la mueven de carta en carta, sin cortar ninguna: `igualar` y `rueda`, M112).
 - `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la
   mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)

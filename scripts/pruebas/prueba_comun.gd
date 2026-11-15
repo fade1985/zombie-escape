@@ -58,7 +58,7 @@ func preparar_prueba() -> void:
 			g.guia_otra_vez = true
 			g.ajustes.tutoriales = true
 			g.skins_nuevo = false
-			g.colecciones_nuevo = true   # (su «!» no se quita hasta verlo)
+			g.sujetos_nuevos = ["normal"]   # (su «!» no se quita hasta hacer clic en él)
 			for l in g.logros:
 				if g.logros[l] == "conseguido":
 					g.logros[l] = "cobrado")

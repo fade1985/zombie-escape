@@ -82,7 +82,7 @@ static func novedades(s: Dictionary, con_tutoriales := true) -> Array:
 	for programa in TUTORIAL_DE:
 		if con_tutoriales and Tutoriales.marca(TUTORIAL_DE[programa]):
 			lista.append(programa)
-	if s.colecciones_nuevo and not "colecciones" in lista:
+	if not s.sujetos_nuevos.is_empty() and not "colecciones" in lista:
 		lista.append("colecciones")
 	if Logros.LISTA.any(func(l): return Logros.estado(s, l.id) == "conseguido") and not "logros" in lista:
 		lista.append("logros")

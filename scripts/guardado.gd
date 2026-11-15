@@ -63,7 +63,9 @@ const NUEVO := {
 	"relatos": [],        # los textos de la historia ya salidos (claves de Historia.RELATOS): cada uno sale una sola vez
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador
 	"bestiario": [],      # enemigos vistos alguna vez (ids de Bestiario.LISTA): el bestiario de Colecciones
-	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)
+	"sujetos_nuevos": [], # enemigos vistos por primera vez y aún sin elegir en Sujetos (ids de Bestiario.LISTA): su
+	                      # casilla, su pestaña y el icono llevan el «!» hasta que se hace clic en él (15 nov; antes,
+	                      # "colecciones_nuevo", que se quitaba con solo abrir el programa)
 	"regalo_cogido": false, # ya se ha cogido el regalo de bienvenida de la tienda de armas: la pistola gratis, una sola vez
 	                        # (tienda_armas.gd). Mientras no, no se sale de la sala de mantenimiento (partida.cruzar)
 	"tutoriales": [],     # tutoriales ya vistos (ids de Tutoriales.LISTA): cada uno sale una sola vez

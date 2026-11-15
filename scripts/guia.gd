@@ -4,7 +4,8 @@
 #     (o a los DURA segundos);
 #   - una flecha en el suelo, delante de Johnny, hacia donde hay que ir: en la sala de mantenimiento, la puerta del
 #     pasillo; en el pasillo, el apartamento sin limpiar más cercano (el fácil, primero), la sala del jefe con la llave
-#     y las escaleras tras el jefe;
+#     y las escaleras tras el jefe. Con la tele de las noticias encendida (al coger la página del dosier), antes que
+#     nada su apartamento (15 nov, lo pidió el dueño: primero la tele y luego el jefe);
 #   - una llavecita encima del zombi que lleva la llave del jefe.
 # Y el primer apartamento al que lleva la flecha es fácil a propósito: pocos zombis, sin la llave y con unas vendas en el
 # armarito del baño (preparar_planta).
@@ -223,8 +224,8 @@ func mover_flecha() -> void:
 
 
 # La puerta a la que lleva la flecha: en la sala de mantenimiento, la del pasillo (si no hay zombis y ya no queda ningún «!»); en el pasillo,
-# las escaleras con el jefe caído, la sala del jefe con la llave, o el apartamento sin limpiar más cercano (el fácil,
-# antes que ninguno)
+# las escaleras con el jefe caído, el apartamento con la tele encendida sin ver (tele_por_ver), la sala del jefe con la
+# llave, o el apartamento sin limpiar más cercano (el fácil, antes que ninguno)
 func destino() -> Node2D:
 	var planta: Dictionary = partida.planta
 	var sitio: Dictionary = planta.sitios[partida.aqui]
@@ -240,11 +241,14 @@ func destino() -> Node2D:
 		return null
 	var mejor: Node2D = null
 	var nota := INF
+	var tele := tele_por_ver()
 	for i in mini(sitio.salidas.size(), puertas.size()):
 		var s: Dictionary = sitio.salidas[i]
 		var vale := false
 		if planta.jefa_muerta:
 			vale = s.tipo == "escaleras"
+		elif tele >= 0:
+			vale = s.get("a", -1) == tele
 		elif planta.tiene_llave:
 			vale = s.get("cerrojo", "") == "llave"
 		elif s.tipo == "puerta" and s.get("cerrojo", "") == "":
@@ -257,6 +261,16 @@ func destino() -> Node2D:
 			nota = d
 			mejor = puertas[i]
 	return mejor
+
+
+# El apartamento de esta planta con la tele de las noticias encendida y aún sin ver (mapa/tele_salon.gd: se enciende al
+# coger la página del dosier), o -1
+func tele_por_ver() -> int:
+	var sitios: Array = partida.planta.sitios
+	for k in sitios.size():
+		if sitios[k].get("tele", {}).get("estado", "") == "encendida":
+			return k
+	return -1
 
 
 # La flecha amarilla del suelo, con su borde oscuro, que respira

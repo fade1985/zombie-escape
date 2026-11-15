@@ -374,7 +374,7 @@ func probar_colecciones() -> void:
 	Guardado.cambiar(func(g):
 		g.bestiario = vistos
 		g.matados = {"normal": 128, "lento": 41, "rapido": 37, "portera": 3, "dependienta": 12}
-		g.colecciones_nuevo = true)
+		g.sujetos_nuevos = ["normal"])
 	abrir_ordenador()
 	await get_tree().create_timer(0.5).timeout   # el encendido del monitor dura 0,35 s
 	Captura.foto("captura-escritorio-nuevo.png")   # el icono avisa de que hay algo nuevo
@@ -384,6 +384,8 @@ func probar_colecciones() -> void:
 	var marcado := get_viewport().gui_get_focus_owner()
 	print("Colecciones al abrir: pestaña %s, marcado %s (esperado: durmientes, z_normal)" % [ordenador.familia_vista,
 		marcado.name if marcado else "nada"])
+	if Guardado.cargar().sujetos_nuevos != ["normal"]:
+		push_error("Sujetos: el «!» del nuevo se ha quitado con solo abrir el programa (tiene que esperar al clic)")
 	# con el ratón encima de una pestaña, fotograma a fotograma: lo de la izquierda no se va ni un instante (11 nov)
 	var pes: Button = ordenador.ventana.find_child("pes_durmientes", true, false)
 	var sitio: Vector2 = get_viewport().get_screen_transform() * pes.get_global_rect().get_center()
@@ -467,8 +469,6 @@ func probar_colecciones() -> void:
 		print("Familia %s: %d/%d vistos" % [fam, suyos.filter(func(id): return id in g.bestiario).size(), suyos.size()])
 	if suman != Bestiario.LISTA.size() or Bestiario.LISTA.size() != 30:   # (con la vecina, 8 nov)
 		push_error("Colecciones: las familias suman %d y el bestiario tiene %d (esperado: 30 y 30)" % [suman, Bestiario.LISTA.size()])
-	if g.colecciones_nuevo:
-		push_error("Colecciones: el aviso de nuevo sigue puesto después de abrir el programa")
 	# matar uno lo cuenta en la partida (al acabar pasa al guardado); en la sala de pruebas, no (ver meter_zombi)
 	var antes: int = matados.get("lento", 0)
 	contar_matado("lento")
@@ -1068,7 +1068,7 @@ func probar_novedades() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
 		g.logros = {"manitas": "conseguido"}
-		g.colecciones_nuevo = true
+		g.sujetos_nuevos = ["normal"]
 		g.skins_nuevo = true)
 	johnny.position = Vector2((mapa.TAQUILLA_X + mapa.ORDENADOR_X) / 2.0, Planta.MURO + 150.0)
 	johnny.get_node("Camara").reset_smoothing()
@@ -1105,13 +1105,13 @@ func probar_novedades() -> void:
 	# sin nada nuevo, los «!» se esconden (la taquilla al abrirla; la mesa, con lo visto y lo cobrado)
 	Guardado.cambiar(func(g):
 		g.logros = {"manitas": "cobrado"}
-		g.colecciones_nuevo = false
+		g.sujetos_nuevos = []
 		g.skins_nuevo = false)
 	await get_tree().create_timer(1.4).timeout
 	print("Sin novedades %s: «!» de la mesa %s, de la taquilla %s (esperado: [], false, false)" % [
 		mapa.ORDENADOR.novedades(Guardado.cargar()), marca.call(mapa.ordenador), marca.call(mapa.taquilla)])
 	Guardado.cambiar(func(g):
-		for clave in ["logros", "colecciones_nuevo", "skins_nuevo", "ajustes"]:
+		for clave in ["logros", "sujetos_nuevos", "skins_nuevo", "ajustes"]:
 			g[clave] = antes[clave])
 
 
@@ -1125,7 +1125,7 @@ func probar_avisos_ordenador() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
 		g.logros = {"manitas": "conseguido"}
-		g.colecciones_nuevo = true)
+		g.sujetos_nuevos = ["normal"])
 	johnny.position = Vector2(mapa.ORDENADOR_X, Planta.MURO + 150.0)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(1.4).timeout
@@ -1152,7 +1152,7 @@ func probar_avisos_ordenador() -> void:
 	ordenador.apagar()   # (sin esperar el segundo en que el juego mira la mesa)
 	print("«!» de la mesa nada más apagar: %s (esperado: false)" % mesa.get_node("Exclamacion").visible)
 	Guardado.cambiar(func(g):
-		for clave in ["logros", "colecciones_nuevo", "dolares"]:
+		for clave in ["logros", "sujetos_nuevos", "dolares"]:
 			g[clave] = antes[clave])
 
 

@@ -381,8 +381,11 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 			valvulas.montar()   # la limpiadora: su cuarto lleno de gas y las tres válvulas (valvulas.gd)
 	if sitio.tipo == "viviendas":
 		colocar_vecinos()
-	# en el pasillo, un «!» encima de la puerta de su apartamento (sin gritos ni ruidos): invita a entrar
-	if idx == 0 and hay_sos() and not partida.planta.superviviente.has("mostrador"):
+	# en el pasillo, un «!» encima de la puerta de su apartamento (sin gritos ni ruidos): invita a entrar. Uno solo: el
+	# mapa del pasillo se guarda al salir y se saca igual al volver, con el «!» que ya tenía (15 nov: se ponía otro cada
+	# vez, y cada uno botando a su ritmo se veían varios «!» uno encima de otro)
+	var ya_puesta: bool = mapa.cosas.get_node_or_null("ExclamacionSuperviviente") != null   # no-tr
+	if idx == 0 and hay_sos() and not partida.planta.superviviente.has("mostrador") and not ya_puesta:
 		var p := puerta_del_pasillo()
 		if p:
 			var marca := EXCLAMACION.new()
