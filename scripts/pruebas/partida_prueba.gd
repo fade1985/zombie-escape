@@ -85,6 +85,8 @@
 #                       (con --rafaga, además, fotos seguidas del chorro: -rayo-01.png... para un GIF)
 #   --lanza-hielo       el lanza hielo: comprarlo, el chorro, enfriar y congelar zombis, la pared, la bombona de
 #                       nitrógeno y dos skins                                              [prueba_armas.gd]
+#   --anicos            el lanza hielo, parte 2: el bloque de hielo de los congelados, el doble de daño, los añicos
+#                       al rematarlos y el charco de agua que dejan                        [prueba_armas.gd]
 #   --motosierra        la motosierra: comprarla, la gota de sangre, el golpe por encima de la cabeza (a quién le
 #                       da), las 8 direcciones y dos skins                                 [prueba_armas.gd]
 #   --bate              el bate de metal: quieto, el golpe, las 8 direcciones y dos skins   [prueba_armas.gd]
@@ -774,6 +776,9 @@ func empezar_prueba() -> void:
 	elif "--lanzallamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanzallamas()
+	elif "--anicos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_anicos()
 	elif "--lanza-hielo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanza_hielo()

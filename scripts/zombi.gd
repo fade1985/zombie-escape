@@ -29,6 +29,10 @@ const CAPA_ZOMBIS := 3     # su capa de choque, la 3 de project.godot
 const HELOR_FRENA := 0.6
 const HELOR_ESPERA := 0.4
 const HELOR_PASA := 0.5
+# Añicos (15 nov): un golpe o una bala a un zombi congelado le quita el doble (con su número azul hielo) y, si lo mata,
+# revienta en trozos de hielo (reventar_hielo)
+const ANICOS := 2.0
+const HIELO := Color("#9edef8")
 
 @export var vida_max := 30
 @export var velocidad := 80.0    # unidades por segundo
@@ -88,6 +92,8 @@ var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (p
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
 var helor := 0.0           # lo que le ha enfriado el lanza hielo (0..1; enfriar): azul y lento; a 1, se congela
 var helor_espera := 0.0    # y cuánto hace que no le da el chorro (al rato, se le va pasando)
+var bloque: EfectoSuelo = null   # el bloque de hielo que le envuelve mientras está congelado (congelar)
+var en_anicos := false     # ha muerto congelado y ha reventado en añicos (reventar_hielo): ni cuerpo ni sangre
 var gaseado := 0.0         # dormido por el gas de las rejillas de Recursos Humanos (peligros/gas.gd): quieto...
 var frenesi := 0.0         # ...y, al despertar, frenético (más rápido) este rato
 var electrico := 0.0       # le ha dado un rayo hace poco (ArmasCreadas.aturdir): para Mezcla explosiva
@@ -550,18 +556,23 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 		destello_barrera = 1.0
 		return
 	cantidad = ArmasCreadas.con_acido(self, cantidad)
+	var al_hielo := congelado > 0.0   # (añicos: congelado, le quita el doble)
+	if al_hielo:
+		cantidad = roundi(cantidad * ANICOS)
+		Sonido.tocar("cristal")
 	vida -= cantidad
 	herido.emit(cantidad, true)
 	if diana:
 		vida = vida_max
 	velocity = fuerza * empuje
-	numero_flotante(cantidad)
+	numero_flotante(cantidad, al_hielo)
 	Sonido.tocar("golpe")
 	a_golpes = true
 	destellar()
 	# la sangre salta hacia donde va el golpe (más si es el último). El 8 nov, el dueño pidió más, que se note que se les
 	# da bien: antes 5 y 10, luego 16 y 32
-	Particulas.salpicar(self, suelo(), global_position + Vector2(0, 6), altura * 0.5, fuerza, color_sangre,
+	# (congelado, en vez de sangre salta hielo)
+	Particulas.salpicar(self, suelo(), global_position + Vector2(0, 6), altura * 0.5, fuerza, HIELO if al_hielo else color_sangre,
 		48 if vida <= 0 else 24)
 	# Se gira hacia quien le ha pegado (al revés del empuje)
 	mirar_hacia(-fuerza)
@@ -584,11 +595,52 @@ func morir() -> void:
 		encogerse()
 		return
 	estado = "muerto"
-	if congelado > 0.0:
-		deshelar()   # (muere congelado: el hielo revienta)
-	Sonido.tocar("chof")
 	Sonido.tocar("muerte")
 	$Sombra.apagar()
+	if congelado > 0.0:
+		reventar_hielo()   # (muere congelado: revienta en añicos, sin cuerpo)
+	else:
+		caer_muerto()
+	remove_from_group("zombis")
+	# El cuerpo ya no choca ni se aparta de nadie: se queda en el suelo, por debajo de los que siguen de pie
+	$Choque.set_deferred("disabled", true)
+	agente.avoidance_enabled = false
+	z_index = -1
+	quimica_al_morir()
+	murio.emit()
+
+
+# Muere congelado (añicos): el bloque de hielo y el zombi revientan en trozos que saltan y se funden (el efecto
+# "anicos", EfectoSuelo) y queda un charco de agua que se va secando (charco.gd, "deshielo"). No queda cuerpo: el
+# dibujo se esconde (y partida.sangre no le pone sangre)
+func reventar_hielo() -> void:
+	en_anicos = true
+	congelado = 0.0
+	quitar_bloque()
+	Sonido.tocar("deshielo")
+	Sonido.tocar("cristal")
+	sprite.visible = false
+	if has_node("LuzAcido"):
+		get_node("LuzAcido").queue_free()
+	if llamas:
+		llamas.visible = false
+	var pies := global_position + Vector2(0, sprite.position.y + 2)
+	EfectoSuelo.soltar(get_parent(), "anicos", pies, escala_hielo())
+	var agua: Node2D = CHARCO.instantiate()
+	agua.tipo = "deshielo"
+	agua.escala = escala_hielo()
+	agua.position = (pies / 2.0).round() * 2.0
+	get_parent().add_child.call_deferred(agua)
+
+
+# Lo grande que es su hielo (el bloque, los añicos y el charco), según lo ancho que es: el normal, 1
+func escala_hielo() -> float:
+	return clampf(radio / 16.0, 0.9, 1.5)
+
+
+# La muerte de siempre: cae (o, sin animación de caer, se tumba), con el fuego o el ácido si los lleva
+func caer_muerto() -> void:
+	Sonido.tocar("chof")
 	var cae: bool = sprite.sprite_frames.has_animation("muerte_" + direccion)
 	# muere con ácido encima (y sin arder: si no, gana el fuego): se deshace (disuelto.gd), con sus manchas y su luz
 	var disuelve := arder_t <= 0.0 and con_acido()
@@ -615,14 +667,7 @@ func morir() -> void:
 		tween.tween_property(sprite, "modulate", Color(0.55, 0.5, 0.55), 0.35)
 		if disuelve:
 			Disuelto.disolver(self, sprite, talla_restos, false)
-	remove_from_group("zombis")
-	# El cuerpo ya no choca ni se aparta de nadie: se queda en el suelo, por debajo de los que siguen de pie
-	$Choque.set_deferred("disabled", true)
-	agente.avoidance_enabled = false
-	z_index = -1
 	Cuerpo.caer(self, sprite)   # si tendido se metería en una pared, resbala al caer
-	quimica_al_morir()
-	murio.emit()
 
 
 # Si lleva ácido encima: el de un charco o el que le sigue royendo (la herida del lanza ácido)
@@ -794,6 +839,7 @@ static func cuanto_acido(puesto: float) -> float:
 # vuelve a moverse su dibujo
 func deshelar() -> void:
 	congelado = 0.0
+	quitar_bloque()
 	sprite.material.set_shader_parameter("hielo", 0.0)
 	sprite.play()
 	Sonido.tocar("deshielo")
@@ -884,6 +930,19 @@ func congelar(segundos: float) -> void:
 	sprite.material.set_shader_parameter("hielo", 0.6)   # azul hielo (el mismo shader del destello)
 	Sonido.tocar("cristal")
 	EfectoSuelo.soltar(get_parent(), "escarcha-zombi", global_position)   # (M51: el estallido de escarcha pequeño)
+	# y le envuelve el bloque de hielo (15 nov), de hijo suyo para que le siga, hasta que se deshiele o muera
+	if bloque == null:
+		bloque = EfectoSuelo.new()
+		bloque.tipo = "bloque-hielo"
+		bloque.escala = escala_hielo()
+		bloque.position = Vector2(0, sprite.position.y + 2)
+		add_child(bloque)
+
+
+func quitar_bloque() -> void:
+	if bloque:
+		bloque.queue_free()
+		bloque = null
 
 
 # Ardiendo: la quemadura a pellizcos, y el número cada medio segundo (o si ya le mata). Cada "contagia" segundos
@@ -952,10 +1011,10 @@ func mareo(delta: float) -> void:
 	poner_animacion("andar")
 
 
-func numero_flotante(cantidad: int) -> void:
+func numero_flotante(cantidad: int, hielo := false) -> void:
 	if diana:
 		return
-	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), cantidad)
+	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), cantidad, hielo)
 
 
 # El número de un golpe o una bala (en los zombis y los jefes): blanco o, si es crítico, amarillo, grande y con «!», para
@@ -965,8 +1024,10 @@ static var de_bala := false   # lo pone bala.gd mientras da a un zombi (el chale
 const MUERTE_FUERTE := 360.0   # el empuje de un golpe que revienta al zombi si lo mata (la explosión empuja 374)
 const CRITICO := Color("#ffd23f")
 
-static func numero_golpe(sala: Node, donde: Vector2, cantidad: int) -> void:
-	if critico:
+static func numero_golpe(sala: Node, donde: Vector2, cantidad: int, hielo := false) -> void:
+	if hielo:   # (añicos: contra un congelado, azul hielo y grande; con «!» si además es crítico)
+		Zombi.texto_flotante(sala, donde + Vector2(-6, -12), ("%d!" if critico else "%d") % cantidad, HIELO, 28 if not critico else 32)
+	elif critico:
 		Zombi.texto_flotante(sala, donde + Vector2(-6, -12), "%d!" % cantidad, CRITICO, 32)
 	else:
 		Zombi.texto_flotante(sala, donde, str(cantidad))

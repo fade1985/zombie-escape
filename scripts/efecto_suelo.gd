@@ -23,6 +23,14 @@
 #  - "deshielo": el hielo que revienta cuando a un zombi se le acaba el congelado o muere congelado (zombi.deshelar), con la
 #    idea del "ice-shatter" de pixelfx (tools/pixelfx/deshielo.js): grietas y un destello, y trozos de hielo que saltan,
 #    caen, rebotan, resbalan y se funden entre vaho.
+#  - "anicos": un zombi congelado que muere revienta en añicos (15 nov; zombi.reventar_hielo), con la idea del final del
+#    "ice/freeze" y del "shatter-death" de pixelfx (tools/pixelfx/anicos.js): el bloque se pone blanco y se agrieta, y sus
+#    caras y trozos del zombi helado salen volando, caen, rebotan, resbalan y se funden. El agua que queda es aparte
+#    (charco.gd, "deshielo").
+#  - "bloque-hielo": el bloque de hielo facetado que envuelve al zombi congelado (15 nov; zombi.congelar), el del
+#    "ice/freeze" de pixelfx (tools/pixelfx/bloque-hielo.js): cristaliza cara a cara y luego se queda, con luz que barre y
+#    destellos. No se acaba solo: con "bucle", al llegar al final vuelve a ese fotograma, y lo quita el zombi. Va de hijo
+#    del zombi (para que le siga) y con su z relativa (delante de él, no de todos).
 #  - "pisoton": el golpe de un jefe contra el suelo (M58; gymbro.gd y mascota.gd al aterrizar de un salto,
 #    cientifico_jefe.gd en el puñetazo), con la idea del "dirt-explosion" de pixelfx (tools/pixelfx/golpe-suelo.js): polvo,
 #    grietas, una onda que se abre por el suelo y cascotes. Hecho para una onda de 200 (la zona del salto del Gymbro): con
@@ -86,6 +94,12 @@ const TIPOS := {
 	"deshielo": {"hojas": [preload("res://assets/sprites/deshielo-detras.png"),
 		preload("res://assets/sprites/deshielo-delante.png"), preload("res://assets/sprites/deshielo-brillo.png")],
 		"origen": Vector2(56, 62), "fotogramas": 18},
+	"anicos": {"hojas": [preload("res://assets/sprites/anicos-detras.png"),
+		preload("res://assets/sprites/anicos-delante.png"), preload("res://assets/sprites/anicos-brillo.png")],
+		"origen": Vector2(75, 80), "fotogramas": 24},
+	"bloque-hielo": {"hojas": [preload("res://assets/sprites/bloque-hielo-detras.png"),
+		preload("res://assets/sprites/bloque-hielo-delante.png"), preload("res://assets/sprites/bloque-hielo-brillo.png")],
+		"origen": Vector2(32, 66), "fotogramas": 34, "bucle": 10},
 	"pisoton": {"hojas": [preload("res://assets/sprites/golpe-suelo-detras.png"),
 		preload("res://assets/sprites/golpe-suelo-delante.png"), preload("res://assets/sprites/golpe-suelo-brillo.png")],
 		"origen": Vector2(120, 80), "fotogramas": 22},
@@ -185,8 +199,8 @@ func _ready() -> void:
 		capa.centered = false
 		capa.offset = -datos.origen
 		capa.scale = Vector2(2, 2) * escala
-		capa.z_as_relative = false
-		capa.z_index = -1 if i == 0 else 4
+		capa.z_as_relative = datos.has("bucle")   # (el del bucle va pegado a quien lo lleva: justo detrás y delante de él)
+		capa.z_index = (-1 if i == 0 else 1) if datos.has("bucle") else (-1 if i == 0 else 4)
 		if tipo.begins_with("pared-") or tipo == "golpe-pared":   # (los golpes contra la pared se ven en ella)
 			if i == 2:
 				var suma := CanvasItemMaterial.new()
@@ -209,7 +223,10 @@ func _process(delta: float) -> void:
 			queue_free()
 		return
 	var cuadro := int(t * FPS)
-	if cuadro >= TIPOS[tipo].fotogramas:
+	var datos: Dictionary = TIPOS[tipo]
+	if datos.has("bucle") and cuadro >= datos.fotogramas:
+		cuadro = datos.bucle + (cuadro - datos.bucle) % (datos.fotogramas - datos.bucle)
+	elif cuadro >= datos.fotogramas:
 		queue_free()
 		return
 	for capa in capas:

@@ -254,8 +254,13 @@ en una línea.
   a la escala de su radio), con luz fría y sin quemadura en el suelo. Cada zombi que se congela (la congeladora y la cámara
   frigorífica, `zombi.congelar`) suelta la pequeña (`escarcha-zombi.js`). La congeladora usa el congelado de verdad
   (`zombi.congelar`: azul hielo con el shader, el dibujo parado, copos; cuenta para Mezcla explosiva). Prueba: `--captura --escarcha`.
-  Y `deshielo`: cuando se le acaba el congelado, o muere congelado (`zombi.deshelar`), el hielo revienta en trozos
+  Y `deshielo`: cuando se le acaba el congelado (`zombi.deshelar`), el hielo revienta en trozos
   (`tools/pixelfx/deshielo.js`, la idea del `ice-shatter` de pixelfx), con su sonido (`deshielo`).
+  Mientras está congelado le envuelve el `bloque-hielo` (15 nov; `tools/pixelfx/bloque-hielo.js`, el bloque facetado del
+  `ice/freeze`): un `EfectoSuelo` hijo del zombi con `bucle` (tras formarse, repite sus últimos fotogramas hasta que se
+  quita). Añicos: un golpe o una bala a un congelado quita el doble (`Zombi.ANICOS`, número azul hielo y esquirlas en vez
+  de sangre) y, si lo mata, `zombi.reventar_hielo`: sin cuerpo ni sangre, el efecto `anicos` (`tools/pixelfx/anicos.js`)
+  y un charco de agua que solo se ve y se seca (`charco.gd`, `deshielo`). Prueba: `--anicos`.
 - Golpes de los jefes (M58; `efecto_suelo.gd`, `pisoton` y `golpe-pared`, con la idea del `dirt-explosion` de pixelfx):
   el pisotón (`tools/pixelfx/golpe-suelo.js`: polvo, grietas, una onda por el suelo y cascotes) al aterrizar el Gymbro y
   la mascota y en el puñetazo del científico, a la escala de su zona (`EfectoSuelo.ONDA_PISOTON`); y el golpe contra la

@@ -1957,6 +1957,9 @@ func ir_al_menu() -> void:
 # que los mata, hacia donde va el golpe (zombi.gd: recibir_golpe). Siguen reventando el explosivo (su explosión: trozos
 # color fuego y sin anillo) y los jefes (los trozos de su color)
 func sangre(tipo: String, zombi: Node2D) -> void:
+	if zombi.get("en_anicos"):   # muerto congelado: ha reventado en hielo (zombi.reventar_hielo), sin sangre
+		Temblor.temblar(3.0)
+		return
 	var color: Color = MANCHAS.get(tipo, SANGRE)
 	var jefa := tipo in JEFES
 	if jefa or tipo == "explosivo":

@@ -45,6 +45,8 @@ const TIPOS := {
 	"cafe": {"burbujas": "cafe", "radio": 50.0, "vida": 6.0, "estados": {"resbaladizo": {}}},
 	# el agua de los cubos del Sujeto 1 (sujeto_1.gd): solo resbala, 6 s
 	"agua_cubo": {"burbujas": "agua", "radio": 56.0, "vida": 6.0, "estados": {"resbaladizo": {}}},
+	# el hielo de un zombi que muere congelado, derretido (zombi.reventar_hielo): solo se ve (ni resbala ni daña) y se seca
+	"deshielo": {"burbujas": "agua", "radio": 36.0, "vida": 5.0, "estados": {}},
 	"agua": {"burbujas": "agua", "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}},
 }
 # Los colores de los charcos que burbujean: del borde al centro, los brillos, la burbuja (y su brillo), el vapor y
@@ -184,6 +186,8 @@ func _physics_process(delta: float) -> void:
 	if not (burbujea() or tipo == "hirviendo") or Engine.get_physics_frames() % 2 == 0:   # los líquidos, a 30 fotogramas: muchos cuadraditos
 		queue_redraw()
 	var datos: Dictionary = TIPOS[tipo]
+	if datos.estados.is_empty():
+		return   # (el que solo se ve: el agua del deshielo)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	# ningún charco cruza las paredes: al otro lado de un tabique ni Johnny ni los zombis lo pisan (hasta el 10 nov, solo
 	# el vómito de Gastroenteritis y el residuo; el fuego del molotov, roto contra la pared, quemaba al de detrás)

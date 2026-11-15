@@ -588,6 +588,69 @@ func probar_lanza_hielo() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --anicos": el lanza hielo, parte 2 (15 nov). En la sala de pruebas, tres zombis (normal, lento y
+# venenoso) se congelan: el bloque de hielo que les envuelve; un golpe a uno congelado le quita el doble (con su número
+# azul) y uno a uno sin congelar, lo normal; rematados congelados revientan en añicos, sin cuerpo ni sangre, y dejan un
+# charco de agua que no resbala y se seca. Uno sin congelar muere como siempre
+func probar_anicos() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(-120, 200)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	var z := []
+	for par in [["normal", Vector2(110, -20)], ["lento", Vector2(210, 30)], ["venenoso", Vector2(330, -10)], ["normal", Vector2(-160, 20)]]:
+		var zombi: Node2D = meter_zombi(par[0], johnny.position + par[1])
+		zombi.vida = 100
+		z.append(zombi)
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.aturdido = 30.0   # quietos
+	for i in 3:
+		z[i].congelar(8.0)
+	await get_tree().create_timer(0.25).timeout
+	Captura.foto("captura-anicos-formando.png")
+	await get_tree().create_timer(0.9).timeout
+	Captura.foto("captura-anicos-bloque.png")
+	print("Congelados: bloque %s (esperado: true, true, true, false)" % [z.map(func(zz): return zz.bloque != null)])
+
+	# un golpe de 10 al congelado y otro al que no
+	z[0].recibir_golpe(10, Vector2(50, 0))
+	z[3].recibir_golpe(10, Vector2(-50, 0))
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-anicos-golpe.png")
+	print("Golpe de 10: al congelado le quita %d, al otro %d (esperado: 20, 10)" % [100 - z[0].vida, 100 - z[3].vida])
+
+	# rematados: los congelados revientan; el otro cae como siempre
+	for zombi in z:
+		zombi.recibir_golpe(200, Vector2(80, 0))
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-anicos-revientan.png")
+	await get_tree().create_timer(0.25).timeout
+	Captura.foto("captura-anicos-trozos.png")
+	var charcos := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "deshielo")
+	print("Rematados: en añicos %s · se ven %s · bloques %s · charcos de agua %d (esperado: true, true, true, false; false, false, false, true; null x4; 3)" % [
+		z.map(func(zz): return zz.en_anicos), z.map(func(zz): return zz.sprite.visible), z.map(func(zz): return zz.bloque), charcos.size()])
+	await get_tree().create_timer(1.0).timeout
+	Captura.foto("captura-anicos-charco.png")
+	var vida_johnny: int = johnny.vida
+	johnny.global_position = charcos[0].global_position
+	await get_tree().create_timer(0.5).timeout
+	print("Johnny en el charco: estados %s · vida -%d (esperado: sin resbaladizo; 0)" % [johnny.get("estados"), vida_johnny - johnny.vida])
+	await get_tree().create_timer(4.0).timeout
+	print("A los 6 s: charcos de agua %d (esperado: 0)" % get_tree().get_nodes_in_group("charcos").filter(func(c): return is_instance_valid(c) and c.tipo == "deshielo").size())
+	get_tree().quit()
+
+
 func probar_desintegrador() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):
