@@ -1057,7 +1057,7 @@ func probar_equilibrio() -> void:
 		load("res://scripts/bombero.gd").ESPERA_GIRO, load("res://scripts/gloton.gd").ACIDO_CADA,
 		load("res://scripts/gymbro.gd").VUELO, load("res://scripts/mascota.gd").AVISO_REBOTE])
 	var mut: Dictionary = Mutaciones.MUT
-	print("Mutaciones: Caníbal %.2f · Insensible %.2f · Endurecimiento %d · Ansiedad +%d %% por zombi · Locura cada %.0f s a %.0f (esperado: 0.02, 0.65, 60, 10, 4 y 200)" % [
+	print("Mutaciones: Caníbal %.2f · Insensible %.2f · Endurecimiento %d · Ansiedad +%d %% por zombi · Locura cada %.0f s a %.0f (esperado: 0.02, 0.75, 50, 10, 6 y 200)" % [
 		mut.canibal.cura, mut.insensible.dano, mut.endurecimiento.escudo, roundi(mut.ansiedad.cada_zombi * 100),
 		mut.locura.cada, mut.locura.radio])
 	var poli: Dictionary = Supervivientes.DATOS.policia.habilidad
@@ -1076,7 +1076,7 @@ func probar_equilibrio() -> void:
 	var s := {"retos": {}}
 	var primera := Reto.premio(s, "apartamentos")
 	s.retos.apartamentos.completado = true
-	print("Premio del reto: la primera vez de hoy $%d, ya completado $%d (esperado: 10 y 0) · billetes de un jefe %d (esperado: 8)" % [
+	print("Premio del reto: la primera vez de hoy $%d, ya completado $%d (esperado: 10 y 0) · billetes de un jefe %d (esperado: 10)" % [
 		primera, Reto.premio(s, "apartamentos"), BILLETES_JEFA])
 	eventos.evento = "incendio"
 	eventos.empezado = true
@@ -1713,6 +1713,51 @@ func probar_flatulento() -> void:
 		print("Flatulento · zombi a %d: paralizado %s, con gases %s (esperado: %s)" % [
 			roundi(johnny.position.distance_to(zombis[k].position)), zombis[k].aturdido > 0.0,
 			zombis[k].estados.has("gases"), "true, true" if k < 2 else "false, false"])
+	get_tree().quit()
+
+
+# Con "--captura --dinero": genera muchas plantas de cada edificio (sin montarlas) y cuenta los durmientes que salen de
+# media en cada una, sin el jefe (para echar la cuenta del dinero por planta y por partida: 16 nov). Solo la terminal
+func probar_dinero() -> void:
+	set_process(false)
+	var veces := 40
+	var semilla_antes := Planta.semilla
+	for edificio in ["apartamentos", "centro", "torre"]:
+		var linea := []
+		for num in range(1, Planta.PLANTAS + 1):
+			var suma := 0
+			var tipos := {}
+			for k in veces:
+				Planta.semilla = 1000 + k * 37
+				var pl := Planta.generar(num, edificio, "")
+				for sitio in pl.sitios:
+					for z in sitio.get("zombis", []):
+						suma += 1
+						tipos[z.tipo] = tipos.get(z.tipo, 0) + 1
+			linea.append("planta %d: %.1f" % [num, suma / float(veces)])
+		print("Dinero · %s · durmientes de media: %s" % [edificio, " · ".join(linea)])
+	Planta.semilla = semilla_antes
+	get_tree().quit()
+
+
+# Con "--captura --endurecimiento": la mutación Endurecimiento (16 nov) da su escudo de 50 una sola vez. Se elige,
+# un golpe de 30 se come parte, al subir de planta solo vuelve lo de Acero (si lo tiene) más lo que quedaba (20), y gastado
+# entero, en la siguiente ya no hay nada suyo. Solo números en la terminal, con lo esperado al lado. Se cierra sola
+func probar_endurecimiento() -> void:
+	set_process(false)
+	await get_tree().create_timer(0.5).timeout
+	elegir_mutacion("endurecimiento")
+	var acero: float = johnny.stats.escudo
+	print("Endurecimiento · al elegirla: escudo %d, suyo %d (esperado: %d y 50)" % [roundi(johnny.escudo), roundi(johnny.escudo_mut), roundi(johnny.escudo)])
+	johnny.quitar_vida(roundi(acero) + 30)
+	print("Endurecimiento · tras un golpe de %d: suyo %d (esperado: 20)" % [roundi(acero) + 30, roundi(johnny.escudo_mut)])
+	await subir()
+	print("Endurecimiento · planta %d: escudo %d, suyo %d, barra llena %d (esperado: %d, 20 y %d)" % [planta.num, roundi(johnny.escudo),
+		roundi(johnny.escudo_mut), roundi(johnny.escudo_tope), roundi(acero) + 20, roundi(acero) + 20])
+	johnny.quitar_vida(roundi(acero) + 20)
+	await subir()
+	print("Endurecimiento · planta %d tras gastarlo: escudo %d, suyo %d (esperado: %d y 0)" % [planta.num, roundi(johnny.escudo),
+		roundi(johnny.escudo_mut), roundi(acero)])
 	get_tree().quit()
 
 

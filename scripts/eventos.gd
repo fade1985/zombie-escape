@@ -10,7 +10,8 @@
 #             derecha, alternando: lo cogen entre dos), y van a por él; si Johnny se mete en un piso, los que quedan le
 #             esperan en el pasillo. Al acabar con todos, un premio
 # El apagón y el incendio también dan premio (desde el 27 oct; antes solo ponían las cosas difíciles): al subir a la
-# siguiente planta, los mismos dólares que la horda, directos a la cartera de la partida (superado())
+# siguiente planta, los mismos dólares que la horda, directos a la cartera de la partida (superado()). Los tres dan
+# además munición de las armas de fuego que lleva Johnny (partida.soltar_municion_armas; 16 nov)
 #
 # Empieza la primera vez que Johnny pisa el pasillo de la planta (en la planta baja, al salir de la sala de
 # mantenimiento), con un cartel grande en la pantalla. Lo que dura, toda la planta.
@@ -58,8 +59,8 @@ const HORDA := {
 	"fuera": 520.0,          # a cuánto de Johnny, a lo largo del pasillo, salen como poco (la pantalla mide 960: nadie
                              # aparece delante de él) y hasta 180 más lejos; si por un lado no hay pasillo, por el otro
 	"lejos": 720.0,          # (si no hubiera sitio por ninguno de los dos lados, a cuánto de él sale como poco)
-	"billetes": 3,           # el premio: estos billetes, uno más por planta, y una caja de munición (el apagón y
-                             # el incendio, los mismos dólares, sin la caja: superado())
+	"billetes": 3,           # el premio: estos billetes, uno más por planta, y munición de sus armas (el apagón y
+                             # el incendio, lo mismo, al llegar a la planta siguiente: superado())
 }
 
 var partida: Node
@@ -361,8 +362,8 @@ func premio() -> void:
 	var johnny: Node2D = partida.johnny
 	var n: int = HORDA.billetes + partida.planta.num - 1
 	partida.soltar_billetes(n, johnny.position + Vector2(0, 40))
-	partida.soltar_municion(johnny.position + Vector2(40, 30))
-	partida.decir(Idioma.t("¡Horda vencida! Te deja $%d y una caja de munición") % n, 3.5)
+	partida.soltar_municion_armas(johnny.position + Vector2(40, 30))   # (16 nov: munición de las armas que lleva)
+	partida.decir(Idioma.t("¡Horda vencida! Te deja $%d y munición de tus armas") % n, 3.5)
 	Sonido.tocar("limpio")
 	# el logro Contra la marea, cuando ya se ha leído lo del premio (su aviso lo taparía)
 	get_tree().create_timer(3.5, false).timeout.connect(partida.logros.cumplir.bind("contra_marea"))
@@ -581,7 +582,8 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 	await partida.montar(0, 1, false)
 	await esperar.call(0.3)
 	print("Horda · al volver, en el pasillo: %d" % get_tree().get_nodes_in_group("zombis").size())
-	# los que quedan, de golpe, y todos al suelo
+	# los que quedan, de golpe, y todos al suelo (con la pistola, para ver que el premio trae su munición: 16 nov)
+	partida.llevar_arma("pistola")
 	var dolares: int = partida.dolares
 	horda.t = 0.0
 	for i in 60:
@@ -596,6 +598,7 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 	await esperar.call(1.5)
 	print("Horda · vencida: %s · dólares %d -> %d · aviso '%s' · lugar '%s'" % [horda.hecha,
 		dolares, partida.dolares, partida.aviso.text, partida.lugar.text])
+	print("Horda · cajas de munición en el suelo con la pistola: %d (esperado: 1 o más: la del premio y las de los durmientes, que con la reserva llena se quedan)" % get_tree().get_nodes_in_group("cajas_municion").size())
 	foto.call("horda-premio")
 
 

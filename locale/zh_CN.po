@@ -1125,8 +1125,8 @@ msgid "¡Ahí viene la horda!"
 msgstr "尸潮来了！"
 
 #: scripts/eventos.gd
-msgid "¡Horda vencida! Te deja $%d y una caja de munición"
-msgstr "尸潮被击退！掉落了$%d和一箱弹药"
+msgid "¡Horda vencida! Te deja $%d y munición de tus armas"
+msgstr "尸潮被击退！掉落了$%d和你武器的弹药"
 
 #: scripts/eventos.gd
 msgid "¡Apagón superado! +$%d"
@@ -2908,16 +2908,16 @@ msgid "Gastroenteritis"
 msgstr "肠胃炎"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
-msgstr "每3秒朝最近的沉睡者吐一口酸液：留下一滩酸水，灼伤踩到的沉睡者"
+msgid "Cada 4 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
+msgstr "每4秒朝最近的沉睡者吐一口酸液：留下一滩酸水，灼伤踩到的沉睡者"
 
 #: scripts/mutaciones.gd
 msgid "Insensible"
 msgstr "麻木"
 
 #: scripts/mutaciones.gd
-msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
-msgstr "身体失去知觉：受到的伤害减少35%"
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 25 % menos de daño"
+msgstr "身体失去知觉：受到的伤害减少25%"
 
 #: scripts/mutaciones.gd
 msgid "Caníbal"
@@ -2940,24 +2940,24 @@ msgid "Endurecimiento"
 msgstr "皮糙肉厚"
 
 #: scripts/mutaciones.gd
-msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
-msgstr "皮肤变硬：每层楼获得60点护盾，先于生命消耗"
+msgid "La piel se endurece: un escudo de 50 que se gasta antes que la vida y, una vez gastado, ya no vuelve"
+msgstr "皮肤变硬：获得50点护盾，先于生命消耗，用完就不再恢复"
 
 #: scripts/mutaciones.gd
 msgid "Locura"
 msgstr "疯狂"
 
 #: scripts/mutaciones.gd
-msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
-msgstr "每4秒发出一声狂吼，让周围的沉睡者晕头转向2秒"
+msgid "Cada 6 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
+msgstr "每6秒发出一声狂吼，让周围的沉睡者晕头转向2秒"
 
 #: scripts/mutaciones.gd
 msgid "Flatulento"
 msgstr "屁王"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
-msgstr "每3秒放出腐蚀性气体，灼伤附近的沉睡者并使其麻痹2秒"
+msgid "Cada 6 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
+msgstr "每6秒放出腐蚀性气体，灼伤附近的沉睡者并使其麻痹2秒"
 
 #: scripts/objetos.gd
 msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
@@ -7370,6 +7370,30 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "¡Horda vencida! Te deja $%d y una caja de munición"
+msgstr "尸潮被击退！掉落了$%d和一箱弹药"
+
+#, sin-usar
+msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
+msgstr "每3秒朝最近的沉睡者吐一口酸液：留下一滩酸水，灼伤踩到的沉睡者"
+
+#, sin-usar
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
+msgstr "身体失去知觉：受到的伤害减少35%"
+
+#, sin-usar
+msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
+msgstr "皮肤变硬：每层楼获得60点护盾，先于生命消耗"
+
+#, sin-usar
+msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
+msgstr "每4秒发出一声狂吼，让周围的沉睡者晕头转向2秒"
+
+#, sin-usar
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
+msgstr "每3秒放出腐蚀性气体，灼伤附近的沉睡者并使其麻痹2秒"
 
 #, sin-usar
 msgid "+%d de cada lanzable"

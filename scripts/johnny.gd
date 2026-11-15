@@ -112,6 +112,9 @@ var acido_t := 0.0         # lo que lleva algo que corroe encima (CORROEN): las 
 var llamas: Llamas         # las llamas que le salen si arde
 var a_la_vista := 0        # Ansiedad: los zombis despiertos que se ven en pantalla
 var escudo := 0.0          # Acero y Endurecimiento: lo que le queda de escudo en esta planta (se gasta antes que la vida)
+var escudo_mut := 0.0      # lo que queda del escudo de Endurecimiento: se da una vez por partida y lo gastado no vuelve
+                           # (16 nov). Va dentro de "escudo": cada golpe gasta antes lo de Acero (el de cada planta)
+var escudo_tope := 0.0     # lo que tenía de escudo al empezar la planta (o al ganarlo): lo lleno de su barra (hud.gd)
 var despedido_t := 0.0     # sin poder usar el arma de fuego (el sello de la directora: despedir())
 var esquiva_t := 0.0       # lo que le queda al acelerón de la esquiva (0 = no está esquivando)
 var esquiva_espera := 0.0  # lo que falta para poder esquivar otra vez
@@ -262,7 +265,8 @@ func poner_stats(nuevos: Dictionary) -> void:
 	vida = mini(vida, vida_tope())
 	if stats.escudo > antes.escudo:
 		escudo += stats.escudo - antes.escudo
-	escudo = mini(escudo, stats.escudo)
+	escudo = minf(escudo, stats.escudo + escudo_mut)   # (lo que queda de Endurecimiento no lo quita)
+	escudo_tope = minf(maxf(escudo_tope, escudo), stats.escudo + escudo_mut)
 	vida_cambiada.emit(vida, stats.vida_max)
 
 
@@ -1682,6 +1686,7 @@ func quitar_vida(cantidad: int, de := "") -> void:
 	if escudo > 0.0:
 		var parado := minf(escudo, cantidad)
 		escudo -= parado
+		escudo_mut = minf(escudo_mut, escudo)   # (gasta antes lo de Acero: lo de Endurecimiento, lo último)
 		cantidad = roundi(cantidad - parado)
 		if cantidad <= 0:
 			return

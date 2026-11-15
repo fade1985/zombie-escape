@@ -73,7 +73,7 @@ static func apuntar(p: Node, num: int) -> void:
 		"dolares": p.dolares, "mutageno": p.mutageno, "muertos": p.muertos, "matados": p.matados, "duracion": p.duracion, "al_empezar": p.al_empezar,
 		"johnny": {"vida": j.vida, "tercios": j.tercios, "resucitado": j.resucitado, "copia_usada": j.copia_usada, "huecos": j.huecos,
 			"calidades": j.calidades, "quedan": j.quedan, "mano": j.mano, "balas": j.balas, "municion": j.municion,
-			"cargadores": j.cargadores, "deposito": j.deposito},
+			"cargadores": j.cargadores, "deposito": j.deposito, "escudo_mut": j.escudo_mut},
 		"lanzables": {"cantidades": lz.cantidades, "mano": lz.mano, "repuesto": lz.repuesto,
 			"en_repuesto": lz.en_repuesto, "tipo": lz.tipo, "quedan": lz.quedan},
 	}
@@ -122,6 +122,8 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	j.quedan = fj.get("quedan", {}).duplicate()   # (la durabilidad; las fotos de antes del 9 nov no la traen: nuevas)
 	j.municion = fj.municion.duplicate()
 	j.cargadores = fj.cargadores.duplicate()
+	# lo que quedaba del escudo de Endurecimiento (las fotos de antes del 16 nov no lo traen: entero, si la tenía)
+	j.escudo_mut = fj.get("escudo_mut", float(j.stats.escudo_mut))
 	j.sostener(fj.mano)
 	j.balas = fj.balas
 	j.deposito = fj.deposito

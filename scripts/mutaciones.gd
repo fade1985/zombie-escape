@@ -8,20 +8,20 @@
 # Si no hay a quién hacérselo, no gasta la vez: lo intenta en el siguiente paso. Mientras se presenta un jefe
 # (ui/presentacion.gd) ninguna actúa: su vez llega TRAS_PRESENTACION segundos después de que acabe.
 # Caníbal se cura en partida.gd (al morir un zombi), Ansiedad está en johnny.gd (arma) y el escudo de
-# Endurecimiento se pone en cada planta (partida.gd). A la portera no le afectan.
+# Endurecimiento se pone una vez al elegirla y lo gastado ya no vuelve (johnny.escudo_mut). A la portera no le afectan.
 class_name Mutaciones
 extends Node
 
 # Los números de cada una (provisionales, los del JS). Tentacular: el empujón los manda a unos 150 de distancia
 const MUT := {
 	"tentacular": {"cada": 4.0, "radio": 90.0, "empuje": 520.0, "aturde": 1.0},
-	"gastro": {"cada": 3.0, "alcance": 420.0},
-	"insensible": {"dano": 0.65},   # (27 oct: antes 0,5, 5 %, 80 y cada 5 s a 140; Ansiedad, +5 % por zombi)
+	"gastro": {"cada": 4.0, "alcance": 420.0},   # (16 nov: antes cada 3 s)
+	"insensible": {"dano": 0.75},   # (16 nov: antes 0,65; 27 oct: antes 0,5, 5 %, 80 y cada 5 s a 140; Ansiedad, +5 % por zombi)
 	"canibal": {"cura": 0.02},
 	"ansiedad": {"cada_zombi": 0.1, "tope": 0.5},   # ritmo del cuerpo a cuerpo por zombi a la vista, y como mucho
-	"endurecimiento": {"escudo": 60},
-	"locura": {"cada": 4.0, "radio": 200.0, "lio": 2.0},
-	"flatulento": {"cada": 3.0, "radio": 140.0, "dps": 10.0, "paraliza": 2.0},   # (27 oct: el radio, antes 70)
+	"endurecimiento": {"escudo": 50},   # una vez por partida: lo gastado no vuelve (16 nov: antes 60 en cada planta)
+	"locura": {"cada": 6.0, "radio": 200.0, "lio": 2.0},   # (16 nov: antes cada 4 s)
+	"flatulento": {"cada": 6.0, "radio": 140.0, "dps": 10.0, "paraliza": 2.0},   # (16 nov: antes cada 3 s; 27 oct: el radio, antes 70)
 }
 const MAXIMO := 4
 const TRAS_PRESENTACION := 1.0   # lo que tardan en actuar cuando acaba la presentación de un jefe
@@ -31,19 +31,19 @@ const LISTA := [
 	{"id": "tentacular", "nombre": "Tentacular", "icono": "dash",
 		"desc": "Cada 4 s te sale un tentáculo del pecho que aparta a los durmientes de alrededor y los aturde 1 s"},
 	{"id": "gastro", "nombre": "Gastroenteritis", "icono": "molotov",
-		"desc": "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"},
+		"desc": "Cada 4 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"},
 	{"id": "insensible", "nombre": "Insensible", "icono": "casco",
-		"desc": "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"},
+		"desc": "Pierdes la sensibilidad del cuerpo: recibes un 25 % menos de daño"},
 	{"id": "canibal", "nombre": "Caníbal", "icono": "corazon",
 		"desc": "Cada durmiente que matas te cura un 2 % de la vida"},
 	{"id": "ansiedad", "nombre": "Ansiedad", "icono": "cafe",
 		"desc": "Golpeas más rápido cuerpo a cuerpo cuantos más durmientes tengas a la vista (+10 % cada uno, hasta +50 %)"},
 	{"id": "endurecimiento", "nombre": "Endurecimiento", "icono": "fuerza",
-		"desc": "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"},
+		"desc": "La piel se endurece: un escudo de 50 que se gasta antes que la vida y, una vez gastado, ya no vuelve"},
 	{"id": "locura", "nombre": "Locura", "icono": "jefe",
-		"desc": "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"},
+		"desc": "Cada 6 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"},
 	{"id": "flatulento", "nombre": "Flatulento", "icono": "herramientas",
-		"desc": "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"},
+		"desc": "Cada 6 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"},
 ]
 # [/traducir]
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")

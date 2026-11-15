@@ -105,10 +105,11 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 	"sujeto_1": Color("#d6d2c4")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
-const MUNICION_ZOMBI := 0.2        # ...y el 20 %, munición de un arma de fuego que lleve (sin ninguna, el billete; 15 nov: antes
-                                   # 0,06, y solo si no había soltado otra cosa)
+const MUNICION_ZOMBI := 0.1        # ...y el 10 %, munición de un arma de fuego que lleve (sin ninguna, el billete; 16 nov: antes
+                                   # 0,2; 15 nov: antes 0,06, y solo si no había soltado otra cosa)
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
-const BILLETES_JEFA := 8           # los que suelta cada jefe al caer (hasta el 27 oct, 3: lo mismo que 43 zombis)
+const BILLETES_JEFA := 10          # lo único que suelta cada jefe al caer, también el de la azotea (16 nov: antes 8, más
+                                   # munición, dos objetos y, fuera de los Apartamentos, cuatro materiales; hasta el 27 oct, 3)
 const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
 const MUTAGENO := preload("res://assets/ui/iconos/mutageno.png")   # el mutágeno del suelo (soltar_mutageno)
 const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su verde, el del mutágeno)
@@ -434,7 +435,9 @@ func nueva_planta(num: int) -> void:
 	logros.planta_nueva()
 	eventos.nueva_planta()
 	guia.nueva_planta()   # (después de los eventos: en la planta baja de la guía no hay)
-	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
+	# Acero: escudo nuevo en cada planta; Endurecimiento, solo lo que le quede (lo gastado no vuelve: 16 nov)
+	johnny.escudo = johnny.stats.escudo + johnny.escudo_mut
+	johnny.escudo_tope = johnny.escudo
 	johnny.aliento_usado = false   # (y el Segundo aliento vuelve a estar listo)
 
 
@@ -494,8 +497,12 @@ func elegir_mutacion(id: String) -> void:
 	Sonido.tocar("compra")
 	var antes: int = johnny.stats.escudo_mut
 	aplicar_talentos(Guardado.cargar().talentos)
-	# Endurecimiento: el escudo ya, sin esperar a la siguiente planta
-	johnny.escudo += johnny.stats.escudo_mut - antes
+	# Endurecimiento: su escudo ya, una sola vez (lo gastado no vuelve en las plantas siguientes: johnny.escudo_mut)
+	var gana: int = johnny.stats.escudo_mut - antes
+	if gana > 0:
+		johnny.escudo_mut += gana
+		johnny.escudo += gana
+		johnny.escudo_tope += gana
 	get_tree().paused = false
 	EfectoSuelo.soltar(johnny, "mutar", Vector2.ZERO)   # (M54: el ADN que sube, las ondas y las burbujas; le sigue)
 	var m := Mutaciones.mutacion(id)
@@ -905,6 +912,7 @@ func subir() -> void:
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
 	if superado != "":
+		soltar_municion_armas(johnny.position + Vector2(40, 30))   # (y munición de sus armas: 16 nov)
 		logros.cumplir({"apagon": "se_fue_la_luz", "incendio": "simulacro"}[superado])
 
 
@@ -1466,13 +1474,27 @@ func soltar_municion_zombi(donde: Vector2) -> bool:
 	return true
 
 
-# Lo que suelta un durmiente además del mutágeno (15 nov): un billete el 80 % de las veces (BILLETE_ZOMBI) y munición de
-# un arma de fuego que lleve el 20 % (MUNICION_ZOMBI: soltar_municion_zombi, una u otra si lleva dos). Sin arma de fuego
+# Lo que suelta un durmiente además del mutágeno (16 nov): un billete el 90 % de las veces y munición de
+# un arma de fuego que lleve el 10 % (MUNICION_ZOMBI: soltar_municion_zombi, una u otra si lleva dos). Sin arma de fuego
 # (o en el reto sin munición), también el billete
 func soltar_premio_durmiente(donde: Vector2) -> void:
 	if randf() < MUNICION_ZOMBI and soltar_municion_zombi(donde):
 		return
 	soltar_billetes(1, donde)
+
+
+# El premio de munición de los eventos (eventos.gd; 16 nov): una de cada arma de fuego que lleve Johnny, la de la mano y
+# la de repuesto (una caja, o lo que llena una especial: soltar_municion_zombi). Sin ninguna, nada
+func soltar_municion_armas(donde: Vector2) -> void:
+	if Reto.sin_municion():
+		return
+	for id in [johnny.huecos.fuego, repuesto("fuego")]:
+		if id == "":
+			continue
+		if Armas.datos(id).has("relleno"):
+			soltar_objeto(Armas.datos(id).relleno, donde)
+		else:
+			soltar_municion(donde)
 
 
 # La munición que gastan las armas de fuego que lleva Johnny, la de la mano y la de repuesto (Armas.municion: en las
@@ -2125,19 +2147,12 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# cosa más (soltar_premio_durmiente: un billete o munición), y con la skin del doctor Salas, la mitad de las
 		# veces otra (Skins.doble); ya no sueltan objetos (las vendas, la gasolina, la batería, el bidón de ácido del
 		# gordo: Objetos.que_suelta). El guardia, sus billetes, su mutágeno y a veces un objeto, como antes. Los jefes,
-		# sus billetes, dos de munición de las armas que lleva y dos objetos de los que salen aquí (no dan mutágeno: dan
-		# su mutación)
+		# solo sus billetes (16 nov: ni munición, ni objetos, ni materiales; no dan mutágeno: dan su mutación)
 		var tienda: String = planta.sitios[aqui].get("tienda", "")
 		# (la munición que sale, solo la de las armas que lleva Johnny: la de la mano y la de repuesto)
 		var queda := municion_que_lleva()
 		if tipo in JEFES:
 			soltar_billetes(BILLETES_JEFA, zombi.position)
-			for i in 2:
-				soltar_municion_zombi(zombi.position)
-			for i in 2:
-				var suelto := Objetos.al_azar(edificio, tienda, queda)
-				if suelto != "":
-					soltar_objeto(suelto, zombi.position)
 		elif tipo == "guardia":
 			soltar_billetes(BILLETES_GUARDIA, zombi.position)
 			soltar_mutageno(zombi.position)
@@ -2148,11 +2163,6 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			soltar_mutageno(zombi.position)
 			for i in (2 if randf() < Skins.doble(johnny.skin) else 1):
 				soltar_premio_durmiente(zombi.position)
-		# y piezas de mejora de las armas: en el centro comercial y en la torre, los jefes, cuatro seguras (en los
-		# Apartamentos salen de los muebles, abrir_mueble; los zombis ya no sueltan, Fase 4)
-		if tipo in JEFES and edificio != "apartamentos":
-			for pieza in Objetos.piezas_de_jefe():
-				soltar_objeto(pieza, zombi.position)
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))

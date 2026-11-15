@@ -55,7 +55,7 @@ static func base() -> Dictionary:
 		# De las mutaciones: solo duran la partida
 		"canibal": 0.0,          # parte de la vida que cura cada zombi que matas (Caníbal)
 		"ansiedad": false,       # golpes más rápidos cuantos más zombis a la vista (Ansiedad)
-		"escudo_mut": 0,         # escudo de más en cada planta (Endurecimiento)
+		"escudo_mut": 0,         # el escudo que da Endurecimiento, una vez por partida (lo que queda: johnny.escudo_mut)
 	}
 
 

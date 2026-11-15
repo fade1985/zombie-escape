@@ -1126,8 +1126,8 @@ msgid "¡Ahí viene la horda!"
 msgstr "Voilà la horde !"
 
 #: scripts/eventos.gd
-msgid "¡Horda vencida! Te deja $%d y una caja de munición"
-msgstr "Horde vaincue ! Elle te laisse $%d et une caisse de munitions"
+msgid "¡Horda vencida! Te deja $%d y munición de tus armas"
+msgstr "Horde vaincue ! Elle te laisse $%d et des munitions pour tes armes"
 
 #: scripts/eventos.gd
 msgid "¡Apagón superado! +$%d"
@@ -2910,16 +2910,16 @@ msgid "Gastroenteritis"
 msgstr "Gastro-entérite"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
-msgstr "Toutes les 3 s, tu vomis de l'acide sur le dormeur le plus proche : il laisse une flaque qui brûle les dormeurs qui marchent dedans"
+msgid "Cada 4 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
+msgstr "Toutes les 4 s, tu vomis de l'acide sur le dormeur le plus proche : il laisse une flaque qui brûle les dormeurs qui marchent dedans"
 
 #: scripts/mutaciones.gd
 msgid "Insensible"
 msgstr "Insensible"
 
 #: scripts/mutaciones.gd
-msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
-msgstr "Tu ne sens plus ton corps : tu subis 35 % de dégâts en moins"
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 25 % menos de daño"
+msgstr "Tu ne sens plus ton corps : tu subis 25 % de dégâts en moins"
 
 #: scripts/mutaciones.gd
 msgid "Caníbal"
@@ -2942,24 +2942,24 @@ msgid "Endurecimiento"
 msgstr "Carapace"
 
 #: scripts/mutaciones.gd
-msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
-msgstr "Ta peau durcit : un bouclier de 60 à chaque étage, qui s'use avant ta vie"
+msgid "La piel se endurece: un escudo de 50 que se gasta antes que la vida y, una vez gastado, ya no vuelve"
+msgstr "Ta peau durcit : un bouclier de 50 qui s'use avant ta vie et qui, une fois épuisé, ne revient plus"
 
 #: scripts/mutaciones.gd
 msgid "Locura"
 msgstr "Folie"
 
 #: scripts/mutaciones.gd
-msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
-msgstr "Toutes les 4 s, tu hurles si fort que les dormeurs autour de toi sont désorientés 2 s"
+msgid "Cada 6 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
+msgstr "Toutes les 6 s, tu hurles si fort que les dormeurs autour de toi sont désorientés 2 s"
 
 #: scripts/mutaciones.gd
 msgid "Flatulento"
 msgstr "Flatulent"
 
 #: scripts/mutaciones.gd
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
-msgstr "Toutes les 3 s, tu lâches des gaz corrosifs qui brûlent et paralysent 2 s les dormeurs proches"
+msgid "Cada 6 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
+msgstr "Toutes les 6 s, tu lâches des gaz corrosifs qui brûlent et paralysent 2 s les dormeurs proches"
 
 #: scripts/objetos.gd
 msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
@@ -7389,6 +7389,30 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#, sin-usar
+msgid "¡Horda vencida! Te deja $%d y una caja de munición"
+msgstr "Horde vaincue ! Elle te laisse $%d et une caisse de munitions"
+
+#, sin-usar
+msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
+msgstr "Toutes les 3 s, tu vomis de l'acide sur le dormeur le plus proche : il laisse une flaque qui brûle les dormeurs qui marchent dedans"
+
+#, sin-usar
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
+msgstr "Tu ne sens plus ton corps : tu subis 35 % de dégâts en moins"
+
+#, sin-usar
+msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
+msgstr "Ta peau durcit : un bouclier de 60 à chaque étage, qui s'use avant ta vie"
+
+#, sin-usar
+msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
+msgstr "Toutes les 4 s, tu hurles si fort que les dormeurs autour de toi sont désorientés 2 s"
+
+#, sin-usar
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
+msgstr "Toutes les 3 s, tu lâches des gaz corrosifs qui brûlent et paralysent 2 s les dormeurs proches"
 
 #, sin-usar
 msgid "+%d de cada lanzable"

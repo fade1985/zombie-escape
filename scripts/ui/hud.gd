@@ -577,10 +577,10 @@ func mover_barra(delta: float) -> void:
 	barra.position.y = fila.size.y - ALTO + roundf(cos(tiempo * 55.0) * 2.0 * temblor)   # (abajo en la fila, como las curas)
 
 
-# Como mover_barra, con el escudo: lo lleno es lo que le queda de lo que le dan en cada planta (Acero, Blindaje y
-# Endurecimiento). Un golpe al escudo hace temblar solo su barra, porque la vida no se toca
+# Como mover_barra, con el escudo: lo lleno es lo que tenía al empezar la planta (Acero y Blindaje, nuevo en cada una, y
+# lo que quede de Endurecimiento, que no vuelve). Un golpe al escudo hace temblar solo su barra, porque la vida no se toca
 func mover_escudo(delta: float) -> void:
-	var tope: float = maxf(johnny.stats.escudo + johnny.stats.escudo_mut, johnny.escudo)
+	var tope: float = maxf(johnny.escudo_tope, johnny.escudo)
 	var parte := clampf(johnny.escudo / tope, 0.0, 1.0) if tope > 0.0 else 0.0
 	if escudo_vista < 0.0:
 		escudo_vista = parte
