@@ -1719,7 +1719,8 @@ func probar_arrastrar() -> void:
 	await soltar.call("m0", "johnny")
 	print("El botiquín en Johnny: vida %s → %s · abierto «%s» · dice «%s» (esperado: sube · inventario · Te has curado...)" % [
 		vida_antes, johnny.vida, inv.abierto, nota.call()])
-	print("La granada se puede soltar en %s (esperado: [])" % [inv.destinos("l1").keys()])
+	# la granada: solo a la zona roja (los lanzables se tiran al suelo desde la Fase 1, 15 nov)
+	print("La granada se puede soltar en %s (esperado: [\"tirar\"])" % [inv.destinos("l1").keys()])
 	# el bate (p0) en Johnny: no se puede (ya lo lleva en la mano), vuelve a su casilla
 	print("El bate se puede soltar en %s (esperado: [\"r0\", \"tirar\"])" % [inv.destinos("p0").keys()])
 	await soltar.call("p0", "johnny")
@@ -1755,9 +1756,10 @@ func probar_arrastrar() -> void:
 	await soltar.call("b%d" % inv.objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find("pieza_especial"), "llevas")
 	print("Una pieza especial fuera del baúl: en el baúl %d · en la mochila %d (esperado: 1 · 1)" % [
 		Guardado.cargar().baul.get("pieza_especial", 0), mochila.count("pieza_especial")])
+	# la fregona Normal al baúl: con el bate de repuesto, entra y el bate pasa a la mano (M61; sola, no: fregona_sola)
 	await soltar.call("p0", "baul")
-	print("La fregona al baúl: se puede soltar en %s · mano %s (esperado: [] · Fregona)" % [inv.destinos("p0").keys(),
-		Objetos.nombre(johnny.huecos.cuerpo)])
+	print("La fregona al baúl: mano %s · en el baúl %s (esperado: Bate · true)" % [Objetos.nombre(johnny.huecos.cuerpo),
+		Guardado.cargar().baul_equipo.any(func(e): return e.id == "fregona")])
 	inv.cerrar()
 	Guardado.cambiar(func(g2):
 		g2.baul = antes.baul
