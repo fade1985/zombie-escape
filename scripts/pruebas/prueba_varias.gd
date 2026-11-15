@@ -130,6 +130,62 @@ func probar_pasillo_sos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --minimapa-cosas" (M111): el minimapa dentro de un apartamento, con cada cosa en su habitación. En el
+# de la tele, con la tele encendida, la página del dosier y la llave en el suelo, las tres en la habitación de la tele
+# (en fila, sin taparse): captura-minimapa-cosas.png; ya vista la tele y cogidas la página y la llave, ninguna:
+# captura-minimapa-cosas-cogidas.png. En el del superviviente, encerrado (su «!»: captura-minimapa-cosas-sos.png) y con
+# la puerta ya abierta (su carita, donde está él: captura-minimapa-cosas-carita.png)
+func probar_minimapa_cosas() -> void:
+	nueva_planta(2)
+	supervivientes.poner_rescate(Supervivientes.DATOS.medico, 2)
+	planta.superviviente.activo = true
+	planta.superviviente.puerta.cerrada = true
+	var minimapa: Node = $Pantalla/Minimapa
+	var nombres := func() -> Array: return minimapa.cosas_del_sitio(planta.sitios[aqui], mapa).map(func(c): return c.nombre)
+	# el apartamento de la tele y la habitación donde está
+	var idx := -1
+	for k in planta.sitios.size():
+		if planta.sitios[k].has("tele"):
+			idx = k
+	var sitio: Dictionary = planta.sitios[idx]
+	var sala_tele: Dictionary = {}
+	for m in sitio.muebles:
+		if m.get("tele", false):
+			for s in sitio.apt.salas:
+				if s.id == m.zona:
+					sala_tele = s
+	sitio.tele.estado = "encendida"
+	sitio.zombis = []
+	planta.cientifico = {"sitio": idx, "pos": sala_tele.centro + Vector2(40, 0), "cogida": false}
+	await montar(idx, 0, false)
+	mapa.poner_llave(sala_tele.centro - Vector2(40, 0))
+	print("Minimapa cosas · antes de verlas: %s (esperado: [] o solo el «!» si el superviviente está aquí)" % [nombres.call()])
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	minimapa.pagina_t = 0.0
+	await get_tree().create_timer(1.0, false).timeout
+	print("Minimapa cosas · en el de la tele: %s (esperado: llave, tele y dosier)" % [nombres.call()])
+	Captura.foto("captura-minimapa-cosas.png")
+	sitio.tele.estado = "vista"
+	planta.cientifico.cogida = true
+	mapa.cosas.get_node("Llave").queue_free()
+	await get_tree().create_timer(0.5, false).timeout
+	print("Minimapa cosas · ya cogidas: %s (esperado: ninguna, salvo el «!» si el superviviente está aquí)" % [nombres.call()])
+	Captura.foto("captura-minimapa-cosas-cogidas.png")
+	# el superviviente: encerrado y con la puerta ya abierta
+	var de_sos: int = planta.superviviente.sitio
+	await montar(de_sos, 0, false)   # (con sus zombis: si el piso está limpio, se abre su puerta)
+	await get_tree().create_timer(1.0, false).timeout
+	print("Minimapa cosas · superviviente encerrado: %s (esperado: !)" % [nombres.call()])
+	Captura.foto("captura-minimapa-cosas-sos.png")
+	supervivientes.abrir_escondite(de_sos)
+	await get_tree().create_timer(1.5, false).timeout
+	print("Minimapa cosas · con la puerta abierta: %s (esperado: carita)" % [nombres.call()])
+	Captura.foto("captura-minimapa-cosas-carita.png")
+	get_tree().quit()
+
+
 func probar_alerta() -> void:
 	var n := Alerta.nivel
 	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.regla(n, edificio)])

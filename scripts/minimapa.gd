@@ -271,8 +271,8 @@ func icono(nombre: String, centro: Vector2) -> void:
 # Dentro de un sitio, su plano visto desde arriba, una casilla del mapa por píxel del dibujo (sin el muro de fuera):
 # cada habitación clara si ya se ha pisado y a oscuras si no (con la misma niebla del mapa, que se va aclarando a la
 # vez), la de Johnny más amarilla, los huecos de las puertas de dentro y las salidas en verde. Encima, Johnny (un
-# círculo rojo que se mueve con él), la llave si está en el suelo de una habitación ya vista, el «!» del
-# superviviente y, con las cámaras del técnico, los zombis
+# círculo rojo que se mueve con él), en su habitación (si ya se ha visto) lo que te falta por coger o ver: la llave, la
+# tele con su noticia, la página del dosier y el superviviente (cosas_del_sitio); y, con las cámaras del técnico, los zombis
 
 # ¿Se enseña el plano del sitio? En todos menos en el pasillo de la planta, la exposición y la sala de pruebas
 func dentro() -> bool:
@@ -334,24 +334,68 @@ func dibujar_sitio(fondo: Rect2) -> void:
 		var trozo := Rect2(p - (Vector2(4, 2) if hor else Vector2(2, 4)), Vector2(8, 4) if hor else Vector2(4, 8))
 		draw_rect(trozo.grow(2), BORDE)
 		draw_rect(trozo, VERDE)
-	# la llave (o la tarjeta) en el suelo, si su habitación ya se ha visto
-	for nombre in ["Llave", "Dorada"]:
-		var llave: Node2D = mapa.cosas.get_node_or_null(nombre) if mapa.cosas else null
-		if llave and mapa.niebla.get(mapa.zona_en(llave.position), 0.0) < 0.5:
-			icono("llave", a_plano.call(llave.position) - Vector2(0, 4))
-	# el «!» del superviviente encerrado, en su habitación
-	var sv: Dictionary = partida.planta.get("superviviente", {})
-	if partida.supervivientes.encerrado() and sv.get("sitio", -1) == partida.aqui and sv.has("sala") and sitio.has("apt"):
-		for sala in sitio.apt.salas:
-			if sala.id == sv.sala:
-				var c: Vector2 = a_plano.call((Vector2(sala.c0, sala.f0) + Vector2(sala.ancho, sala.fondo) / 2.0) * CASILLA)
-				exclamacion(c - Vector2(0, 8))
+	# lo que hay que coger o ver, cada cosa en su sitio (M111). Si caen varias en la misma habitación, en fila, una al
+	# lado de la otra (como en el plano de la planta), para que no se tapen
+	var por_sala := {}
+	for cosa in cosas_del_sitio(sitio, mapa):
+		if not por_sala.has(cosa.zona):
+			por_sala[cosa.zona] = []
+		por_sala[cosa.zona].append(cosa)
+	for grupo in por_sala.values():
+		var medio := Vector2.ZERO
+		for cosa in grupo:
+			medio += a_plano.call(cosa.pos)
+		medio /= grupo.size()
+		for i in grupo.size():
+			var p: Vector2 = a_plano.call(grupo[i].pos) if grupo.size() == 1 else medio + Vector2((i - (grupo.size() - 1) / 2.0) * 16.0, 0)
+			if grupo[i].nombre == "!":
+				exclamacion(p - Vector2(0, 8))
+			else:
+				icono(grupo[i].nombre, p - Vector2(0, 4))
 	if camaras:
 		for z in vivos():
 			punto((a_plano.call(z.global_position - mapa.global_position) - Vector2(2, 2)).clamp(r.position, r.end - Vector2(4, 4)))
 	# Johnny, un círculo rojo
 	if en_mapa:
 		marca_johnny(a_plano.call(johnny.position))
+
+
+# Lo que se marca dentro del sitio, cada cosa con su icono, su punto (en unidades del mapa) y su habitación
+# ("zona"), solo si esa habitación ya se ha visto y mientras no la hayas cogido o visto:
+#   llave   la llave (o la tarjeta dorada) en el suelo
+#   tele    la tele del salón encendida, con su noticia sin ver
+#   dosier  el científico muerto con la página del dosier sin coger
+#   !       el superviviente encerrado (este sale aunque no se haya visto su habitación: se le oye gritar)
+#   carita  el superviviente con la puerta ya abierta, esperando a que Johnny se le arrime
+func cosas_del_sitio(sitio: Dictionary, mapa: Node) -> Array:
+	var lista := []
+	var poner := func(nombre: String, pos: Vector2, aunque_no_se_vea := false) -> void:
+		var zona: int = mapa.zona_en(pos)
+		if zona < 0:
+			zona = mapa.zona_en(pos + Vector2(0, CASILLA))   # (el pie de un mueble pegado a la pared)
+		if aunque_no_se_vea or mapa.niebla.get(zona, 0.0) < 0.5:
+			lista.append({"nombre": nombre, "pos": pos, "zona": zona})
+	for nombre in ["Llave", "Dorada"]:
+		var llave: Node2D = mapa.cosas.get_node_or_null(nombre) if mapa.cosas else null
+		if llave:
+			poner.call("llave", llave.position)
+	var tele: Node2D = mapa.get("tele_salon")
+	if is_instance_valid(tele) and sitio.get("tele", {}).get("estado", "") == "encendida":
+		poner.call("tele", tele.global_position - mapa.global_position)
+	var c: Dictionary = partida.planta.get("cientifico", {})
+	if c.get("sitio", -1) == partida.aqui and not c.get("cogida", false) and hay_pagina:
+		poner.call("dosier", c.pos)
+	var sv: Dictionary = partida.planta.get("superviviente", {})
+	if sv.get("sitio", -1) == partida.aqui and partida.supervivientes.hay_sos():
+		var npc: Node2D = partida.supervivientes.npc
+		if partida.supervivientes.encerrado():
+			if sv.has("sala") and sitio.has("apt"):
+				for sala in sitio.apt.salas:
+					if sala.id == sv.sala:
+						poner.call("!", (Vector2(sala.c0, sala.f0) + Vector2(sala.ancho, sala.fondo) / 2.0) * CASILLA, true)
+		elif is_instance_valid(npc):
+			poner.call("carita", npc.position)
+	return lista
 
 
 # Rehace la imagen del plano si ha cambiado algo: el sitio, la habitación de Johnny o la niebla
