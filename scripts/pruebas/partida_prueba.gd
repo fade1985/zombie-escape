@@ -83,10 +83,10 @@
 #   --lanzallamas, --desintegrador, --pistola-electrica   cada arma de efecto: comprarla, su daño, su depósito o su
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #                       (con --rafaga, además, fotos seguidas del chorro: -rayo-01.png... para un GIF)
-#   --lanza-hielo       el lanza hielo: comprarlo, el chorro, enfriar y congelar zombis, la pared, la bombona de
-#                       nitrógeno y dos skins                                              [prueba_armas.gd]
-#   --anicos            el lanza hielo, parte 2: el bloque de hielo de los congelados, el doble de daño, los añicos
-#                       al rematarlos y el charco de agua que dejan                        [prueba_armas.gd]
+#   --lanza-hielo       el lanza hielo: comprarlo, el chorro, enfriar y congelar zombis, congelar a un jefe (poco y
+#                       con críticos), la pared, la bombona de nitrógeno y dos skins       [prueba_armas.gd]
+#   --anicos            el lanza hielo, parte 2: el bloque de hielo de los congelados, que mueren de un golpe y
+#                       revientan en añicos, el charco de agua y la portera congelada      [prueba_armas.gd]
 #   --motosierra        la motosierra: comprarla, la gota de sangre, el golpe por encima de la cabeza (a quién le
 #                       da), las 8 direcciones y dos skins                                 [prueba_armas.gd]
 #   --bate              el bate de metal: quieto, el golpe, las 8 direcciones y dos skins   [prueba_armas.gd]

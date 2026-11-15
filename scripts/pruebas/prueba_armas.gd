@@ -545,6 +545,36 @@ func probar_lanza_hielo() -> void:
 		zombi.remove_from_group("zombis")
 		zombi.queue_free()
 
+	# un jefe (el Gymbro, andando sin moverse de su sitio y sin atacar): tarda el doble en congelarse (3 s de nube), se
+	# queda congelado 2 s, todo golpe es crítico (amarillo, el doble) y al deshelarse 3 s sin que el frío le haga nada
+	var jefe: Node2D = meter_zombi("gymbro", johnny.position + Vector2(170, 0))
+	await get_tree().process_frame
+	jefe.quieto = true
+	jefe.andar(999.0)
+	johnny.invulnerable = 60.0
+	await echar_fuego(0.0, 1.8)
+	var jefe_a_medias: bool = jefe.congelado > 0.0
+	await echar_fuego(0.0, 1.5, "captura-lanza-hielo-jefe.png")
+	var jefe_congelado: float = jefe.congelado
+	await get_tree().create_timer(0.3).timeout
+	var vida_jefe: int = jefe.vida
+	jefe.recibir_golpe(10, Vector2(50, 0))
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-lanza-hielo-jefe-critico.png")
+	print("Jefe: a los 1,8 s congelado %s · a los 3,3 s %.1f s · golpe de 10 le quita %d · vivo %s (esperado: false, unos 1.8, %d, true)" % [
+		jefe_a_medias, jefe_congelado, vida_jefe - jefe.vida, jefe.estado != "muerto", roundi(10 * johnny.stats.critico_x)])
+	await get_tree().create_timer(1.8).timeout
+	var tras: float = jefe.congelado
+	await echar_fuego(0.0, 1.0)
+	print("Jefe deshelado: congelado %.1f · frío tras 1 s de nube %.2f (esperado: 0, 0: aún sin frío)" % [tras, jefe.frio().helor])
+	vida_jefe = jefe.vida
+	jefe.recibir_golpe(10, Vector2(50, 0))
+	print("Jefe sin congelar: golpe de 10 le quita %d (esperado: 10)" % [vida_jefe - jefe.vida])
+	jefe.remove_from_group("zombis")
+	jefe.queue_free()
+	johnny.invulnerable = 0.0
+	await get_tree().create_timer(0.5).timeout
+
 	# al soltar, y contra la pared
 	await echar_fuego(0.0, 0.6)
 	for i in 5:
@@ -589,9 +619,9 @@ func probar_lanza_hielo() -> void:
 
 
 # Con "--captura --anicos": el lanza hielo, parte 2 (15 nov). En la sala de pruebas, tres zombis (normal, lento y
-# venenoso) se congelan: el bloque de hielo que les envuelve; un golpe a uno congelado le quita el doble (con su número
-# azul) y uno a uno sin congelar, lo normal; rematados congelados revientan en añicos, sin cuerpo ni sangre, y dejan un
-# charco de agua que no resbala y se seca. Uno sin congelar muere como siempre
+# venenoso) se congelan: el bloque de hielo que les envuelve; un golpe de 1 a uno congelado lo mata (revienta en
+# añicos, sin cuerpo ni sangre, y deja un charco de agua que no resbala y se seca) y uno a uno sin congelar le quita lo
+# normal. Uno sin congelar muere como siempre. Y la portera (jefa, sin Minijefe): congelada, el golpe es crítico
 func probar_anicos() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
@@ -623,16 +653,17 @@ func probar_anicos() -> void:
 	Captura.foto("captura-anicos-bloque.png")
 	print("Congelados: bloque %s (esperado: true, true, true, false)" % [z.map(func(zz): return zz.bloque != null)])
 
-	# un golpe de 10 al congelado y otro al que no
-	z[0].recibir_golpe(10, Vector2(50, 0))
+	# un golpe de 1 al congelado (muere) y uno de 10 al que no
+	z[0].recibir_golpe(1, Vector2(50, 0))
 	z[3].recibir_golpe(10, Vector2(-50, 0))
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-anicos-golpe.png")
-	print("Golpe de 10: al congelado le quita %d, al otro %d (esperado: 20, 10)" % [100 - z[0].vida, 100 - z[3].vida])
+	print("Golpe de 1 al congelado: muerto %s · golpe de 10 al otro: le quita %d (esperado: true, 10)" % [z[0].estado == "muerto", 100 - z[3].vida])
 
-	# rematados: los congelados revientan; el otro cae como siempre
-	for zombi in z:
-		zombi.recibir_golpe(200, Vector2(80, 0))
+	# los otros dos congelados, también de un golpe de 1; el otro cae como siempre
+	z[1].recibir_golpe(1, Vector2(80, 0))
+	z[2].recibir_golpe(1, Vector2(80, 0))
+	z[3].recibir_golpe(200, Vector2(80, 0))
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-anicos-revientan.png")
 	await get_tree().create_timer(0.25).timeout
@@ -648,6 +679,26 @@ func probar_anicos() -> void:
 	print("Johnny en el charco: estados %s · vida -%d (esperado: sin resbaladizo; 0)" % [johnny.get("estados"), vida_johnny - johnny.vida])
 	await get_tree().create_timer(4.0).timeout
 	print("A los 6 s: charcos de agua %d (esperado: 0)" % get_tree().get_nodes_in_group("charcos").filter(func(c): return is_instance_valid(c) and c.tipo == "deshielo").size())
+
+	# la portera: dos pellizcos de frío de 1 (a la mitad, a los jefes) la congelan; congelada, un golpe es crítico
+	johnny.global_position = sala.diana.global_position + Vector2(-120, 200)
+	johnny.invulnerable = 60.0
+	var portera: Node2D = meter_zombi("portera", johnny.position + Vector2(170, 0))
+	await get_tree().process_frame
+	portera.quieto = true
+	portera.andar(999.0)
+	portera.enfriar(1.0, 4.0)
+	var medio: bool = portera.congelado > 0.0
+	portera.enfriar(1.0, 4.0)
+	await get_tree().create_timer(0.8).timeout
+	var vida_p: int = portera.vida
+	portera.recibir_golpe(10, Vector2(50, 0))
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-anicos-portera.png")
+	print("Portera: con medio frío congelada %s · luego %.1f s · golpe de 10 le quita %d (esperado: false, unos 1.2, %d)" % [
+		medio, portera.congelado, vida_p - portera.vida, roundi(10 * johnny.stats.critico_x)])
+	await get_tree().create_timer(1.5).timeout
+	print("Portera a los 2,4 s: congelada %s (esperado: false)" % [portera.congelado > 0.0])
 	get_tree().quit()
 
 

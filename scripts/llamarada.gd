@@ -33,7 +33,7 @@
 # cono: su dibujo es escenas/armas/chorro_hielo.gdshader (bocanadas de niebla helada que salen sin prisa, se hinchan, se
 # juntan y bajan, con cristalitos que destellan); alumbra un poco, de azul frío; suelta cristalitos y copos que caen; y,
 # en vez de prenderlos, los enfría (zombi.enfriar): se ponen azules y lentos y, con "congela" segundos de nube, se quedan
-# congelados "congelado" segundos. No hace daño ni empuja; a los jefes, que no se congelan, no les hace nada.
+# congelados "congelado" segundos. No hace daño ni empuja. Los jefes se congelan menos (minijefe.enfriar).
 class_name Llamarada
 extends Node2D
 
@@ -292,7 +292,7 @@ func quemar() -> void:
 		EfectoSuelo.soltar(sala, "chorro-" + cual, zombi.global_position)
 		if variante == "hielo":
 			# sin daño (el arma no tiene; si algún día lo tiene, sin empujón ni encogerse y con el número azul) y lo enfría
-			# (los jefes no se congelan)
+			# (los jefes, a su manera: minijefe.gd)
 			var dh: int = johnny.con_critico(dps * TICK) if dps > 0.0 else 0
 			if dh > 0:
 				zombi.herir(dh, HIELOS[2])

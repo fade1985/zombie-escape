@@ -258,9 +258,12 @@ en una línea.
   (`tools/pixelfx/deshielo.js`, la idea del `ice-shatter` de pixelfx), con su sonido (`deshielo`).
   Mientras está congelado le envuelve el `bloque-hielo` (15 nov; `tools/pixelfx/bloque-hielo.js`, el bloque facetado del
   `ice/freeze`): un `EfectoSuelo` hijo del zombi con `bucle` (tras formarse, repite sus últimos fotogramas hasta que se
-  quita). Añicos: un golpe o una bala a un congelado quita el doble (`Zombi.ANICOS`, número azul hielo y esquirlas en vez
-  de sangre) y, si lo mata, `zombi.reventar_hielo`: sin cuerpo ni sangre, el efecto `anicos` (`tools/pixelfx/anicos.js`)
+  quita). Añicos: un golpe o una bala a un congelado lo mata de una vez (número azul hielo y esquirlas en vez
+  de sangre): `zombi.reventar_hielo`: sin cuerpo ni sangre, el efecto `anicos` (`tools/pixelfx/anicos.js`)
   y un charco de agua que solo se ve y se seca (`charco.gd`, `deshielo`). Prueba: `--anicos`.
+  Los jefes (`Minijefe` y la portera) llevan su frío aparte (`hielo_jefe.gd`, `HieloJefe`): se enfrían a la mitad,
+  se congelan solo 2 s (con el mismo bloque, más grande), congelados todo golpe es crítico y, al deshelarse, 3 s sin
+  frío. Prueba: `--lanza-hielo` (el Gymbro) y `--anicos` (la portera).
 - Golpes de los jefes (M58; `efecto_suelo.gd`, `pisoton` y `golpe-pared`, con la idea del `dirt-explosion` de pixelfx):
   el pisotón (`tools/pixelfx/golpe-suelo.js`: polvo, grietas, una onda por el suelo y cascotes) al aterrizar el Gymbro y
   la mascota y en el puñetazo del científico, a la escala de su zona (`EfectoSuelo.ONDA_PISOTON`); y el golpe contra la

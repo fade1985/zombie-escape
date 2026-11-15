@@ -51,6 +51,9 @@ var aviso_espera := 0.0
 var sonido_golpe := "golpe"   # lo que suena al quitarle vida (el Gymbro de metal: "acero")
 var en_acido := {"dps": 0.0, "acc": 0.0, "tick": 0.0}   # el charco de ácido que pisa (Estados.quemar_acido_jefe)
 var aguanta_acido := false     # el Glotón y el doctor Salas: el ácido de los charcos no les quema (ni les apunta Gastroenteritis)
+var hielo: HieloJefe            # el frío del lanza hielo (hielo_jefe.gd): se congelan poco y, congelados, todo es crítico
+var congelado: float:
+	get: return hielo.congelado if hielo else 0.0
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -87,6 +90,8 @@ func andar(cuanto: float) -> void:
 func _physics_process(delta: float) -> void:
 	if estado == "muerto":
 		return
+	if frio().paso(delta):
+		return   # (congelado)
 	tiempo += delta
 	t += delta
 	Estados.quemar_acido_jefe(self, en_acido, delta)
@@ -135,6 +140,18 @@ func _physics_process(delta: float) -> void:
 # Lo que hace en cada estado: lo pone cada jefe
 func pensar(_delta: float, _johnny: Node2D) -> void:
 	pass
+
+
+# (se hace la primera vez que se pide: así vale aunque el _ready de un jefe no llame al de aquí)
+func frio() -> HieloJefe:
+	if hielo == null:
+		hielo = HieloJefe.new(self, arriba)
+	return hielo
+
+
+# El chorro del lanza hielo le da (llamarada.gd, como a los zombis): hielo_jefe.gd ("_segundos", lo de los zombis, no cuenta)
+func enfriar(cuanto: float, _segundos: float) -> void:
+	frio().enfriar(cuanto)
 
 
 func animar() -> void:
@@ -314,15 +331,22 @@ func morder(cantidad: int) -> void:
 func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 	if cantidad <= 0:
 		return
+	# congelado, un golpe o una bala (no el fuego) es siempre crítico, con su número amarillo (hielo_jefe.gd)
+	var era := Zombi.critico
+	var helado_golpe := congelado > 0.0 and fuerza != Vector2.ZERO
+	cantidad = frio().golpe(cantidad, fuerza)
 	vida = max(vida - cantidad, 0)
 	# Los jefes apenas se mueven con los golpes
 	marcha += fuerza.normalized() * 8.0
 	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-20, 0), -arriba), cantidad)
+	Zombi.critico = era
 	Sonido.tocar(sonido_golpe)
-	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre
-		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, fuerza, Color("#7a1f1a"), 5)
+	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre (congelado, hielo)
+		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, fuerza,
+			Zombi.HIELO if helado_golpe else Color("#7a1f1a"), 5)
 	vida_cambiada.emit(vida, vida_max)
 	if vida <= 0:
+		frio().deshelar()
 		morir()
 
 

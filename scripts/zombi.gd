@@ -29,9 +29,8 @@ const CAPA_ZOMBIS := 3     # su capa de choque, la 3 de project.godot
 const HELOR_FRENA := 0.6
 const HELOR_ESPERA := 0.4
 const HELOR_PASA := 0.5
-# Añicos (15 nov): un golpe o una bala a un zombi congelado le quita el doble (con su número azul hielo) y, si lo mata,
-# revienta en trozos de hielo (reventar_hielo)
-const ANICOS := 2.0
+# Añicos (15 nov): un golpe o una bala a un zombi congelado lo mata de una vez (con su número azul hielo) y revienta
+# en trozos de hielo (reventar_hielo). A los jefes, en cambio, todo golpe congelados es crítico (minijefe.gd)
 const HIELO := Color("#9edef8")
 
 @export var vida_max := 30
@@ -556,9 +555,9 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 		destello_barrera = 1.0
 		return
 	cantidad = ArmasCreadas.con_acido(self, cantidad)
-	var al_hielo := congelado > 0.0   # (añicos: congelado, le quita el doble)
+	var al_hielo := congelado > 0.0 and not diana   # (añicos: congelado, de un golpe muere)
 	if al_hielo:
-		cantidad = roundi(cantidad * ANICOS)
+		cantidad = maxi(cantidad, vida)
 		Sonido.tocar("cristal")
 	vida -= cantidad
 	herido.emit(cantidad, true)

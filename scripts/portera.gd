@@ -67,6 +67,9 @@ var vida := 600
 var fase := 1                 # 2 = enfadada
 var enfado := 0.5             # a qué parte de la vida se enfada (con la Alerta 3, antes: alerta.gd)
 var quieto := false           # la sala de pruebas: ataca y avisa como siempre, pero no se mueve de su sitio
+var hielo: HieloJefe = null   # el frío del lanza hielo, como los demás jefes (hielo_jefe.gd)
+var congelado: float:
+	get: return hielo.congelado if hielo else 0.0
 var estado := "andar"
 var t := 0.0                  # tiempo que lleva en el estado
 var dur := 1.2                # cuánto anda antes de atacar
@@ -106,6 +109,8 @@ func cambiar(nuevo: String, nuevos_datos := {}) -> void:
 func _physics_process(delta: float) -> void:
 	if estado == "muerto":
 		return
+	if frio().paso(delta):
+		return   # (congelada)
 	tiempo += delta
 	t += delta
 	Estados.quemar_acido_jefe(self, en_acido, delta)
@@ -470,6 +475,17 @@ func mover() -> void:
 
 # ── Recibir golpes y morir ──
 
+# El frío del lanza hielo (hielo_jefe.gd): se congela poco y, congelada, todo golpe es crítico
+func frio() -> HieloJefe:
+	if hielo == null:
+		hielo = HieloJefe.new(self, ARRIBA)
+	return hielo
+
+
+func enfriar(cuanto: float, _segundos: float) -> void:
+	frio().enfriar(cuanto)
+
+
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if estado == "muerto" or invulnerable:
 		return
@@ -485,15 +501,22 @@ func morder(cantidad: int) -> void:
 
 # Le quita esa vida: el número, el sonido, su sangre y, si llega a 0, cae
 func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
+	# congelada, un golpe o una bala es siempre crítico, con su número amarillo (hielo_jefe.gd)
+	var era := Zombi.critico
+	var helado_golpe := congelado > 0.0 and fuerza != Vector2.ZERO
+	cantidad = frio().golpe(cantidad, fuerza)
 	vida = max(vida - cantidad, 0)
 	# Los jefes apenas se mueven con los golpes
 	marcha += fuerza.normalized() * 8.0
 	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-20, 0), -ARRIBA), cantidad)
+	Zombi.critico = era
 	Sonido.tocar("golpe")
-	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre
-		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), ARRIBA * 0.5, fuerza, Color("#7a1f1a"), 5)
+	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre (congelada, hielo)
+		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), ARRIBA * 0.5, fuerza,
+			Zombi.HIELO if helado_golpe else Color("#7a1f1a"), 5)
 	vida_cambiada.emit(vida, vida_max)
 	if vida <= 0:
+		frio().deshelar()
 		morir()
 
 
