@@ -6035,8 +6035,8 @@ msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ác
 msgstr "Säurestrahl ohne Pause, der alles verätzt. Wird mit Säurefässern gefüllt."
 
 #: scripts/ui/inventario.gd
-msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
-msgstr "Eisnebel ohne Pause, der alles abkühlt, bis es einfriert. Wird mit Stickstoffflaschen gefüllt."
+msgid "Nube helada que no hace daño: enfría a todos hasta congelarlos, y luego se rematan con otra arma. Se llena con bombonas de nitrógeno."
+msgstr "Eiswolke ohne Schaden: kühlt alle ab, bis sie einfrieren, dann erledigst du sie mit einer anderen Waffe. Wird mit Stickstoffflaschen gefüllt."
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."
@@ -6893,6 +6893,10 @@ msgstr "%s: %s Je $%d."
 #: scripts/ui/ordenador.gd
 msgid "Elige un arma: se paga con los dólares ahorrados."
 msgstr "Wähle eine Waffe: Bezahlt wird mit den gesparten Dollar."
+
+#: scripts/ui/ordenador.gd
+msgid "%s: no hace daño, su nube congela a los durmientes; depósito de %d s que se llena con %s."
+msgstr "%s: kein Schaden, die Wolke friert Schläfer ein; Tank für %d s, gefüllt mit %s."
 
 #: scripts/ui/ordenador.gd
 msgid "rayo continuo"

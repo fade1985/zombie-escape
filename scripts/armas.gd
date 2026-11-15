@@ -383,18 +383,18 @@ const DATOS := {
 	# con los pies en 48,80, y echa el rayo en la postura quieta (de frente la lleva vertical con la boca al suelo y de
 	# espaldas vertical sobre el hombro, para que el rayo salga hacia donde Johnny mira). La boca NO sale de arma.py: es
 	# la punta del arma de cada postura quieta, medida en la hoja
-	# el lanza hielo (15 nov): un lanzallamas de frío. Como el lanzallamas, no dispara: echa un chorro continuo de niebla
-	# helada mientras se ataca (llamarada.gd, con su efecto "hielo") que llega a 9 casillas, con un depósito de "deposito"
-	# segundos que se llena entero en "recarga" segundos con una bombona de nitrógeno de la mochila. Hace poco daño (por
-	# segundo) y no empuja: lo suyo es enfriar. El zombi al que le da se va poniendo azul y más lento y, tras "congela"
-	# segundos de chorro (se le pasa poco a poco si deja de darle), se queda congelado "congelado" segundos (zombi.gd,
-	# enfriar y congelar). Su hoja (conserje-48-lanza-hielo) es la del lanzallamas con las bombonas de la espalda en
+	# el lanza hielo (15 nov): no dispara: mientras se ataca echa una nube de congelación (llamarada.gd, con su efecto
+	# "hielo") que llega a 9 casillas, con un depósito de "deposito" segundos que se llena entero en "recarga" segundos
+	# con una bombona de nitrógeno de la mochila. No hace daño ni empuja (16 nov, el dueño: para que no sea otro
+	# lanzallamas): lo suyo es congelar, y luego se remata con otra arma. El zombi al que le da se va poniendo azul y más
+	# lento y, tras "congela" segundos de nube (se le pasa poco a poco si deja de darle), se queda congelado "congelado"
+	# segundos (zombi.gd, enfriar y congelar). Su hoja (conserje-48-lanza-hielo) es la del lanzallamas con las bombonas de la espalda en
 	# blanco y azul hielo y sin la llamita del piloto (tools/hoja_lanza_hielo.py, que hace lo mismo que la del lanza ácido
 	# y apunta también dónde está la punta del tubo, de donde cae el vaho frío, goteo.gd). La boca, la del lanza ácido
 	"lanza_hielo": {
-		"nombre": "Lanza hielo", "tipo": "fuego", "dano": 12, "ritmo": 2.5, "alcance": 288.0, "velocidad": 620.0,   # [traducir]
+		"nombre": "Lanza hielo", "tipo": "fuego", "dano": 0, "ritmo": 2.5, "alcance": 288.0, "velocidad": 620.0,   # [traducir]
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.0, "cargador": 12, "recarga": 1.5,
-		"cartucho": false, "deposito": 8.0, "relleno": "nitrogeno", "efecto": "hielo", "congela": 1.0, "congelado": 3.0,
+		"cartucho": false, "deposito": 8.0, "relleno": "nitrogeno", "efecto": "hielo", "congela": 1.5, "congelado": 4.0,
 		"pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-lanza-hielo.tres"),
 		"boca": {"s": Vector2(1, 0), "se": Vector2(24, -11), "e": Vector2(26, -20), "ne": Vector2(24, -33),

@@ -796,6 +796,8 @@ func programa_armas(c: VBoxContainer, foco := "") -> void:
 func resumen(w: Dictionary) -> String:
 	var nombre := Idioma.t(w.nombre)
 	var con: String = Armas.relleno_uno(w.relleno) if w.has("relleno") else ""   # con qué se llena (un objeto de la mochila)
+	if w.get("efecto", "") == "hielo":
+		return Idioma.t("%s: no hace daño, su nube congela a los durmientes; depósito de %d s que se llena con %s.") % [nombre, roundi(w.deposito), con]
 	if w.has("deposito"):
 		var chorro := Idioma.t("rayo continuo") if w.get("efecto", "") == "rayo" else Idioma.t("chorro continuo")
 		if con != "":

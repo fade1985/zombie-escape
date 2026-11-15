@@ -6035,8 +6035,8 @@ msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ác
 msgstr "Continuous acid stream that corrodes everything. Refills with acid drums."
 
 #: scripts/ui/inventario.gd
-msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
-msgstr "Continuous freezing mist that chills everything until it freezes solid. Refills with nitrogen tanks."
+msgid "Nube helada que no hace daño: enfría a todos hasta congelarlos, y luego se rematan con otra arma. Se llena con bombonas de nitrógeno."
+msgstr "Icy cloud that deals no damage: it chills everyone until they freeze, then you finish them off with another weapon. Refills with nitrogen tanks."
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."
@@ -6893,6 +6893,10 @@ msgstr "%s: %s Each, $%d."
 #: scripts/ui/ordenador.gd
 msgid "Elige un arma: se paga con los dólares ahorrados."
 msgstr "Pick a weapon: you pay with your saved dollars."
+
+#: scripts/ui/ordenador.gd
+msgid "%s: no hace daño, su nube congela a los durmientes; depósito de %d s que se llena con %s."
+msgstr "%s: deals no damage, its cloud freezes sleepers; %d s tank refilled with %s."
 
 #: scripts/ui/ordenador.gd
 msgid "rayo continuo"

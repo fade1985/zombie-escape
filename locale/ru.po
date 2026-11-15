@@ -6054,8 +6054,8 @@ msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ác
 msgstr "Непрерывная струя кислоты, разъедающая всех. Заправляется бочками кислоты."
 
 #: scripts/ui/inventario.gd
-msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
-msgstr "Непрерывный ледяной туман, который охлаждает всех, пока они не замерзнут. Заправляется баллонами азота."
+msgid "Nube helada que no hace daño: enfría a todos hasta congelarlos, y luego se rematan con otra arma. Se llena con bombonas de nitrógeno."
+msgstr "Ледяное облако без урона: охлаждает всех, пока они не замерзнут, а потом их добивают другим оружием. Заправляется баллонами азота."
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."
@@ -6912,6 +6912,10 @@ msgstr "%s: %s Цена за штуку: $%d."
 #: scripts/ui/ordenador.gd
 msgid "Elige un arma: se paga con los dólares ahorrados."
 msgstr "Выбери оружие: платишь накопленными долларами."
+
+#: scripts/ui/ordenador.gd
+msgid "%s: no hace daño, su nube congela a los durmientes; depósito de %d s que se llena con %s."
+msgstr "%s: не наносит урона, облако замораживает спящих; бак на %d с, заправляется %s."
 
 #: scripts/ui/ordenador.gd
 msgid "rayo continuo"

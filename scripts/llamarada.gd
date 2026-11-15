@@ -29,12 +29,11 @@
 # daño y también se queda aturdido (los arcos se ven, entre zombi y zombi). Ni empuja ni deja nada en el suelo. Al jefe
 # de bomberos también le quita vida (no es fuego).
 #
-# El lanza hielo (Armas.DATOS.lanza_hielo, efecto "hielo", 15 nov) echa por aquí su chorro de niebla helada, con el mismo
-# cono: su dibujo es escenas/armas/chorro_hielo.gdshader (el "frost-breath" de pixelfx: un chorro blanco a presión, bocanadas
-# de niebla azul que se hinchan y caen, rayas de viento y cristalitos que destellan); alumbra un poco, de azul frío; suelta
-# cristalitos que saltan y copos que caen; y, en vez de prenderlos, los enfría (zombi.enfriar): se ponen azules y lentos y,
-# con "congela" segundos de chorro, se quedan congelados "congelado" segundos. Hace poco daño y no empuja. Al jefe de
-# bomberos le quita vida como el ácido (no es fuego); a los jefes, que no se congelan, solo el daño.
+# El lanza hielo (Armas.DATOS.lanza_hielo, efecto "hielo", 15 nov) echa por aquí su nube de congelación, con el mismo
+# cono: su dibujo es escenas/armas/chorro_hielo.gdshader (bocanadas de niebla helada que salen sin prisa, se hinchan, se
+# juntan y bajan, con cristalitos que destellan); alumbra un poco, de azul frío; suelta cristalitos y copos que caen; y,
+# en vez de prenderlos, los enfría (zombi.enfriar): se ponen azules y lentos y, con "congela" segundos de nube, se quedan
+# congelados "congelado" segundos. No hace daño ni empuja; a los jefes, que no se congelan, no les hace nada.
 class_name Llamarada
 extends Node2D
 
@@ -292,9 +291,11 @@ func quemar() -> void:
 		# lo que hace el chorro al darle (M59), en el suelo debajo de él (el golpe, a la altura del cuerpo)
 		EfectoSuelo.soltar(sala, "chorro-" + cual, zombi.global_position)
 		if variante == "hielo":
-			# poco daño, sin empujón ni encogerse, con el número azul; y lo enfría (los jefes no se congelan: solo el daño)
-			var dh: int = johnny.con_critico(dps * TICK)
-			zombi.herir(dh, HIELOS[2])
+			# sin daño (el arma no tiene; si algún día lo tiene, sin empujón ni encogerse y con el número azul) y lo enfría
+			# (los jefes no se congelan)
+			var dh: int = johnny.con_critico(dps * TICK) if dps > 0.0 else 0
+			if dh > 0:
+				zombi.herir(dh, HIELOS[2])
 			if zombi.is_in_group("zombis") and zombi.has_method("enfriar"):
 				zombi.enfriar(TICK / congela, congelado)
 			continue

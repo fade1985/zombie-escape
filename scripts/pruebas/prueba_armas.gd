@@ -489,7 +489,7 @@ func probar_lanza_hielo() -> void:
 	var w := Armas.datos(id)
 	johnny.modo = "quieto"
 	await get_tree().create_timer(0.3).timeout
-	print("Lanza hielo en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · daño %.0f/s · empuje %.1f · relleno %s · icono «%s» (esperado: Lanza hielo, conserje-48-lanza-hielo.tres, hielo, 288 (9), 8, 12, 0.0, nitrogeno, lanza_hielo)" % [
+	print("Lanza hielo en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · daño %.0f/s · empuje %.1f · relleno %s · icono «%s» (esperado: Lanza hielo, conserje-48-lanza-hielo.tres, hielo, 288 (9), 8, 0, 0.0, nitrogeno, lanza_hielo)" % [
 		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
 		w.deposito, w.dano, w.empuje, w.relleno, Objetos.icono(id)])
 
@@ -525,21 +525,21 @@ func probar_lanza_hielo() -> void:
 	await echar_fuego(0.0, 0.6, "captura-lanza-hielo-chorro.png")
 	var helor: Array = z.map(func(zz): return snappedf(zz.helor, 0.01))
 	var lento: float = z[0].sprite.speed_scale
-	await echar_fuego(0.0, 0.6, "captura-lanza-hielo-congelando.png")
+	await echar_fuego(0.0, 1.0, "captura-lanza-hielo-congelando.png")
 	var congelados: Array = z.map(func(zz): return zz.congelado > 0.0)
 	await get_tree().create_timer(0.5).timeout   # (que se vaya la niebla: se ven azules y quietos)
 	Captura.foto("captura-lanza-hielo-congelados.png")
-	print("Chorro 0,6 s: frío %s · el primero anda al %.0f %% (esperado: unos 0.5, 0.5 y 0; menos de 100)" % [helor, lento * 100.0])
-	print("Chorro 1,2 s: congelados %s · pierden %d, %d y %d · Johnny -%d (esperado: true, true, false; unos 14, unos 14, 0; 0)" % [
+	print("Nube 0,6 s: frío %s · el primero anda al %.0f %% (esperado: unos 0.5, 0.5 y 0; menos de 100)" % [helor, lento * 100.0])
+	print("Nube 1,6 s: congelados %s · pierden %d, %d y %d · Johnny -%d (esperado: true, true, false; 0, 0, 0; 0)" % [
 		congelados, 500 - z[0].vida, 500 - z[1].vida, 500 - z[2].vida, vida_johnny - johnny.vida])
-	await get_tree().create_timer(2.8).timeout
-	print("A los 3,3 s: siguen congelados %s · frío %s (esperado: false, false, false; 0, 0, 0)" % [
+	await get_tree().create_timer(3.8).timeout
+	print("A los 4,3 s: siguen congelados %s · frío %s (esperado: false, false, false; 0, 0, 0)" % [
 		z.map(func(zz): return zz.congelado > 0.0), z.map(func(zz): return snappedf(zz.helor, 0.01))])
 	# se le pasa el frío si deja de darle: medio segundo de chorro y luego 1,5 s sin
 	await echar_fuego(0.0, 0.5)
 	var con_frio: float = z[0].helor
 	await get_tree().create_timer(1.5).timeout
-	print("Se le pasa: frío %.2f → %.2f (esperado: unos 0.5 → 0) · hielo en el shader %.2f (esperado: 0)" % [
+	print("Se le pasa: frío %.2f → %.2f (esperado: unos 0.33 → 0) · hielo en el shader %.2f (esperado: 0)" % [
 		con_frio, z[0].helor, z[0].sprite.material.get_shader_parameter("hielo")])
 	for zombi in z:
 		zombi.remove_from_group("zombis")

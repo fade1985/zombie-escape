@@ -6016,8 +6016,8 @@ msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ác
 msgstr "持续喷射酸液，腐蚀一切。用酸液桶加满。"
 
 #: scripts/ui/inventario.gd
-msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
-msgstr "持续喷出冰雾，让所有人越来越冷直到冻住。用液氮罐加满。"
+msgid "Nube helada que no hace daño: enfría a todos hasta congelarlos, y luego se rematan con otra arma. Se llena con bombonas de nitrógeno."
+msgstr "不造成伤害的冰雾：让所有人越来越冷直到冻住，然后用别的武器解决他们。用液氮罐加满。"
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."
@@ -6874,6 +6874,10 @@ msgstr "%s：%s每个 $%d。"
 #: scripts/ui/ordenador.gd
 msgid "Elige un arma: se paga con los dólares ahorrados."
 msgstr "选一件武器：用存下的美元支付。"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: no hace daño, su nube congela a los durmientes; depósito de %d s que se llena con %s."
+msgstr "%s：不造成伤害，冰雾会冻住沉睡者；储罐可用 %d 秒，用%s加满。"
 
 #: scripts/ui/ordenador.gd
 msgid "rayo continuo"

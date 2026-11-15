@@ -32,8 +32,8 @@ en una línea.
   su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
   con "pelado") y `brillo`.
 - `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas: chorro a presión al estilo del "flamethrower" de pixelfx, con piloto azul, lenguas que suben y algo de humo en la punta) y
-  `chorro_acido` (lanza ácido) y `chorro_hielo` (lanza hielo: el "frost-breath" de pixelfx, chorro blanco, niebla azul que
-  se hincha y cae, rayas de viento y cristalitos); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
+  `chorro_acido` (lanza ácido) y `chorro_hielo` (lanza hielo: una nube de congelación, bocanadas de niebla que salen sin prisa,
+  se hinchan, se juntan y bajan, con cristalitos; el lanza hielo no hace daño, solo congela); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
 - `luces/`: `lampara.tscn`, `fuego.tscn`, `luz_suave.tres` y los shaders `niebla` y `suelo_a_oscuras`.
 
 ## scripts/
