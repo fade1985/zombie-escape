@@ -676,7 +676,7 @@ en una línea.
   a 10). Los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Dentro:
   (en medio, la mochila y la munición, 8 y 8, y abajo, centradas, las 2 casillas
   de las curas, `cuadro`; desde el 13 nov no hay arrojables de repuesto, `Lanzables.REPUESTO` es 0; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
-  arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; `en_banco`, `no_mejora`,
+  arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; desde el M105, 15 nov, la ficha va dentro del tablero claro, justo debajo de las casillas, y las del baúl caben en el alto de 2 filas; `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl;
   en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
   banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo

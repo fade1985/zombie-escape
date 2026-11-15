@@ -1962,12 +1962,13 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 			casilla_inv(en_fila(i * 2 + 1, 202))
 	for i in Lanzables.MANO:
 		arrojable(en_fila(5 + i, 202), "l%d" % i, lz.mano[i] if i < lz.mano.size() else "", 8.0)
-	raya(Rect2(452, 156, 2, 236), RAYA_BANCO)
-	# a la derecha, las armas y los paquetes del baúl (los objetos no se mejoran), con el color de su calidad. Si no
-	# caben en 4 filas, las casillas se hacen más pequeñas
+	raya(Rect2(452, 156, 2, 138), RAYA_BANCO)
+	# a la derecha, las armas y los paquetes del baúl (los objetos no se mejoran), con el color de su calidad. Caben en
+	# el alto de 2 filas (M105, 15 nov: la ficha va justo debajo, dentro del tablero); si hay más, las casillas se hacen
+	# más pequeñas
 	var equipo: Array = s.baul_equipo
 	var filas := maxi(2, ceili(equipo.size() / 8.0))
-	var paso := mini(46, floori(184.0 / filas))
+	var paso := mini(46, floori(96.0 / filas))
 	rotulo(lienzo, Idioma.t("En el baúl"), MITAD, 156, TINTA_BANCO)
 	rotulo(lienzo, Idioma.t("Armas y arrojables"), MITAD, 180, ACENTO_BANCO)
 	for i in filas * 8:
@@ -1979,10 +1980,11 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 		else:
 			casilla_inv(r)
 	# (la frase de debajo, «No tienes armas ni arrojables guardados», ya no sale: 11 nov)
-	# abajo, el marco de la ficha y «Cerrar» (el botón de mejorar va con la ficha)
-	marco_ficha(lienzo, Rect2(64, 402, 832, 182))
+	# debajo, el marco de la ficha y «Cerrar» (el botón de mejorar va con la ficha). Dentro del tablero claro (M105, 15
+	# nov: antes, más abajo, 402-584, encima de la balda y del cajón)
+	marco_ficha(lienzo, Rect2(64, 302, 832, 152))
 	var salir := boton(lienzo, "cerrar", Idioma.t("Cerrar"), cerrar)
-	salir.position = Vector2(600, 538) - ORIGEN
+	salir.position = Vector2(600, 404) - ORIGEN
 	salir.size = Vector2(280, 38)
 	pintar_ficha()
 	return lienzo.find_child(sel, false, false)
@@ -2023,13 +2025,13 @@ func pintar_ficha_banco() -> void:
 	grande.add_theme_stylebox_override("panel", estilo(Tema.AMARILLO, false, false))
 	grande.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	viva.add_child(grande)
-	grande.position = Vector2(80, 418) - ORIGEN
+	grande.position = Vector2(80, 328) - ORIGEN   # (M105: la ficha, más arriba)
 	grande.size = Vector2(100, 100)
 	dibujo(grande, Objetos.icono(o.id), grande.size, 16.0)
 	var caja := VBoxContainer.new()
 	caja.add_theme_constant_override("separation", 0)
 	viva.add_child(caja)
-	caja.position = Vector2(198, 410) - ORIGEN
+	caja.position = Vector2(198, 310) - ORIGEN
 	renglon(caja, Armas.nombre(o.id), Color("#e6dec8"), HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA).theme_type_variation = "Titulo"
 	# (la línea de debajo del nombre, «Cuerpo a cuerpo · Normal · En la mano», ya no sale: 11 nov)
 	if o.has("k"):
@@ -2060,7 +2062,7 @@ func pintar_ficha_banco() -> void:
 	b.disabled = no != ""
 	for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color"]:
 		b.add_theme_color_override(c, Tema.AMARILLO)
-	b.position = Vector2(600, 418) - ORIGEN
+	b.position = Vector2(600, 318) - ORIGEN
 	b.size = Vector2(280, 40)
 	# (sin la línea de las teclas de abajo: 11 nov)
 
