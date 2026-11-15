@@ -892,7 +892,11 @@ en una línea.
 - **El pasillo de los Apartamentos, decorado (M95, 13 nov):** `pasillo_gpt.py` reduce «como los muebles» las imágenes de GPT de
   `assets/sources/pasillo/` (la manguera de incendios, el extintor y ocho cuadros: `manguera.png`, `extintor.png`, `cuadro-*.png`)
   y alarga la alfombra hasta lo que mide el pasillo (sus dos puntas y, en medio, un medallón repetido, antes de reducir:
-  `alfombra-baja.png`, 776 × 36). `planta.gd` (`colgados`, `CUADROS`) cuelga en la pared de arriba cuadros distintos en cada
+  776 × 36) y luego la ensucia (M108, `ensuciar`, con semilla fija: sale siempre igual): camino pisado más gris y oscuro por
+  el centro, manchones desteñidos, cercos de mugre, manchas de café, grasa y sangre vieja, calvas, polvo y migas (más por los
+  bordes largos), algún mordisco en los bordes y las puntas deshilachadas, con flecos de 1 a 3 píxeles (por eso
+  `alfombra-baja.png` mide 782 × 36). Lo sucio va tramado a puntitos, como en pixel art. Solo la alfombra:
+  `py tools/pasillo_gpt.py alfombra`. `planta.gd` (`colgados`, `CUADROS`) cuelga en la pared de arriba cuadros distintos en cada
   planta (cinco; en la baja, cuatro), en los huecos entre puertas, apliques, macetas y carteles (a la derecha del todo no, por el
   cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; en todas, otro extintor justo debajo del
   cartel EXIT de la salida de incendios (M94); y en todas las plantas (M99), la alfombra
