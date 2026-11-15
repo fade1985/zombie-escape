@@ -1798,7 +1798,8 @@ func probar_municion_zombi() -> void:
 # Con "--captura --mutageno" (15 nov): el mutágeno que suelta cada durmiente (soltar_mutageno). Mata a 3 durmientes al
 # lado de Johnny y cuenta los que caen (foto: captura-mutageno-suelo.png); Johnny pasa por encima y los coge; la partida
 # guardada a medias lo apunta y lo devuelve (PartidaGuardada); y el inventario lo enseña debajo de los dólares, en verde
-# y con la hélice en vez del «$» (captura-mutageno-inventario.png). Se cierra
+# y con la hélice en vez del «$» (captura-mutageno-inventario.png), con 7 (captura-mutageno-pocos.png) y con 10.000 o
+# más, «8MAX» (captura-mutageno-max.png). Se cierra
 func probar_mutageno() -> void:
 	johnny.direccion = "o"   # (que la linterna no alumbre lo que cae)
 	await get_tree().create_timer(0.3).timeout
@@ -1837,7 +1838,21 @@ func probar_mutageno() -> void:
 	var marcador: Control = inventario.find_child("mutageno", true, false)
 	print("Mutágeno: en el inventario %s, debajo del dinero %s (esperado: true y true)" % [marcador != null,
 		marcador != null and marcador.position.y > inventario.find_child("dinero", true, false).position.y])
+	print("Mutágeno: los dos marcadores miden %s y %s (esperado: lo mismo)" % [marcador.size if marcador else null,
+		inventario.find_child("dinero", true, false).size])
 	Captura.foto("captura-mutageno-inventario.png")
+	# con pocos (un «8» apagado en cada casilla vacía) y con 10.000 o más («8MAX», los dos)
+	inventario.cerrar()
+	mutageno = 7
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-mutageno-pocos.png")
+	inventario.cerrar()
+	mutageno = 10000
+	dolares = 10000 - ahorrados + 250
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-mutageno-max.png")
 	get_tree().quit()
 
 

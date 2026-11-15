@@ -441,7 +441,9 @@ en una línea.
   de GPT, `tools/muebles_gpt.py mutageno`, y el sonido `"mutageno"`). Se cuenta en `partida.mutageno`, va en la partida
   guardada a medias (`PartidaGuardada`) y no pasa al guardado: el que no se gasta se pierde al acabar la partida. Se ve en
   el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los
-  durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Cuánto
+  durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
+  marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una
+  debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Cuánto
   da una partida: `--durmientes-planta` (unos 300 en los Apartamentos y 340 en el centro y la torre, más las hordas).
   Prueba: `--mutageno`.
 - `idioma.gd` (autoload `Idioma`: el idioma del juego y `Idioma.t("texto")` / `Idioma.n("uno", "varios", n)` para traducir,

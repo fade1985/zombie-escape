@@ -239,15 +239,16 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			ahora.size = Vector2(80, 80)
 	# y abajo, la etiqueta de la llave y, a su derecha, el dinero en la pantallita de la tienda de armas (chapa.gd: el «$»
 	# y la cifra en amarillo, sin los «8» apagados) y, debajo, el mutágeno de la partida (15 nov: la hélice y la cifra en
-	# verde). En el HUD no se ven
+	# verde). Los dos, del mismo tamaño (4 cifras, con un «8» apagado en cada casilla; desde 10.000, «8MAX»: CHAPA, fijo).
+	# En el HUD no se ven
 	hueco_llave()
 	var fuente: Font = Tema.FUENTE
 	for m in [["dinero", partida.cartera(), CHAPA.AMARILLO, false, 488], ["mutageno", partida.mutageno, CHAPA.VERDE, true, 526]]:
 		var marcador := Control.new()
 		marcador.name = m[0]
 		marcador.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		marcador.size = CHAPA.medida_marcador(fuente, m[1], m[3])
-		marcador.draw.connect(func(): CHAPA.dibujar_marcador(marcador, fuente, Rect2(Vector2.ZERO, marcador.size), m[1], m[2], m[3]))
+		marcador.size = CHAPA.medida_fija(fuente)
+		marcador.draw.connect(func(): CHAPA.dibujar_marcador(marcador, fuente, Rect2(Vector2.ZERO, marcador.size), m[1], m[2], m[3], true))
 		lienzo.add_child(marcador)
 		marcador.position = Vector2(262, m[4]) - ORIGEN
 	# en medio, los dos grupos de 8: los objetos de la mochila y la munición y, abajo, las 2 casillas de las curas, en
