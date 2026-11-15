@@ -18,8 +18,9 @@
 #     guardados, que ya no se pierden si Johnny cae. Abajo, la ficha de lo elegido
 #     con su botón: «Guardar en el baúl» mete todo lo de esa casilla (también las vendas y el botiquín y todo el
 #     hueco de munición, balas y cartuchos incluidos; con el baúl lleno, solo caben más de lo que ya tiene) y
-#     «Sacar uno», un objeto de uno en uno (a la mochila o a la munición; las balas y los cartuchos, hasta un hueco
-#     entero de una vez: Objetos.tanda). «Guardar todo» mete todo lo que se pueda, la munición también.
+#     «Sacar uno», un objeto de uno en uno (a la mochila o a la munición; la munición, la casilla entera de una vez:
+#     Objetos.tanda). «Guardar todo» mete todo lo que se pueda, la munición también. En cada casilla cabe lo de un
+#     hueco de munición, un montón de curas o un montón de arrojables (Objetos.monton y monton_arrojables)
 #   - Banco de trabajo (al arrimarse a él en el taller): como el baúl, pero para
 #     subir de calidad las armas y los paquetes de arrojables, los que lleva y los del baúl, gastando piezas de su
 #     familia (ver «Banco de trabajo», abajo).
@@ -1281,15 +1282,16 @@ func en_fila(i: int, y: float) -> Rect2:
 	return Rect2(64 + i * 46, y, 42, 42)
 
 
-# Los objetos del baúl, en el orden de Objetos.todos(): [[id, cuántos], ...], una por casilla (Objetos.MONTON como mucho:
-# primero las llenas y al final la que sobra, así que de 250 balas salen 99, 99 y 52)
+# Los objetos del baúl, en el orden de Objetos.todos(): [[id, cuántos], ...], una por casilla (Objetos.monton como mucho:
+# primero las llenas y al final la que sobra, así que de 50 balas salen 24, 24 y 2)
 func objetos_baul(s: Dictionary) -> Array:
 	var lista := []
 	for id in Objetos.todos():
 		var quedan: int = s.baul.get(id, 0)
+		var tope := Objetos.monton(id)
 		while quedan > 0:
-			lista.append([id, mini(quedan, Objetos.MONTON)])
-			quedan -= Objetos.MONTON
+			lista.append([id, mini(quedan, tope)])
+			quedan -= tope
 	return lista
 
 
@@ -1413,7 +1415,8 @@ func ficha_baul() -> Dictionary:
 			if caben <= 0:
 				d.que += Idioma.t("El baúl está lleno: haz sitio sacando algo.")
 			elif n > caben:
-				d.que += Idioma.t("Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo.") % [caben, Objetos.MONTON]
+				d.que += Idioma.t("Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo.") % [caben,
+					Objetos.monton_arrojables(s, Lanzables.tipo_de(k), Lanzables.calidad_de(k))]
 			else:
 				d.que += Idioma.t("Se guarda el montón entero, con los que ya haya de estos.")
 			d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, caben <= 0]
@@ -1443,7 +1446,7 @@ func ficha_baul() -> Dictionary:
 				return d
 			var municion: bool = id in Armas.MUNICION
 			var cabe := se_saca(o)
-			var tanda := mini(Objetos.tanda(id), o.n)   # cuántos salen de una vez (1 casi siempre; las balas, un hueco)
+			var tanda := mini(Objetos.tanda(id), o.n)   # cuántos salen de una vez (1, o de la munición, la casilla entera)
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
 				"que_es": Idioma.t("%s · En el baúl") % (Idioma.t("Munición") if municion else Idioma.t("Material") if id in Objetos.PIEZAS
 					else Idioma.t("Para curar") if id in Objetos.USABLES else Idioma.t("Objeto")),
@@ -1535,7 +1538,7 @@ func que_guardar(s: Dictionary, id: String, n: int, donde: String) -> String:   
 	if caben <= 0:
 		return Idioma.t("El baúl está lleno: haz sitio sacando algo.")
 	if n > caben:
-		return Idioma.t("Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo.") % [caben, Objetos.MONTON]
+		return Idioma.t("Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo.") % [caben, Objetos.monton(id)]
 	if n > 1:
 		if donde == "hueco":
 			return Idioma.t("Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas.") % n
@@ -1570,7 +1573,7 @@ func pasar_al_momento() -> void:
 	var hasta: int = hay.call() - o.n   # (lo que queda en el baúl cuando esta casilla se ha vaciado)
 	while hay.call() > hasta and cabe.call():
 		sel = "b%d" % i
-		sacar_objeto(o.id)
+		sacar_objeto(o.id, hay.call() - hasta)
 
 # Saca del baúl lo elegido: un objeto, uno (sacar_objeto); un arma, entera, o un montón de arrojables (sacar_equipo)
 func sacar() -> void:
@@ -1579,7 +1582,7 @@ func sacar() -> void:
 	if not sel.begins_with("b") or i >= cosas.size():
 		return
 	if cosas[i].equipo < 0:
-		sacar_objeto(cosas[i].id)
+		sacar_objeto(cosas[i].id, cosas[i].n)
 	else:
 		sacar_equipo(cosas[i])
 
@@ -1637,22 +1640,25 @@ func sacar_equipo(o: Dictionary) -> void:
 # Saca del baúl uno de ese objeto: a la mochila o, si es munición (la gasolina, el bidón de ácido...), a sus huecos (y
 # si el arma que la gasta está vacía, se carga). Si no cabe, no sale. La marca se queda en «Sacar uno» mientras queden:
 # con el mando, A, A, A... y salen de uno en uno
-func sacar_objeto(id: String) -> void:
+func sacar_objeto(id: String, de_la_casilla := 0) -> void:   # de_la_casilla: los que hay en la elegida (0: no importa)
 	var johnny: Node2D = partida.johnny
 	var municion: bool = id in Armas.MUNICION
 	if not (johnny.sitio(id) > 0 if municion else Objetos.cabe(partida.mochila, id)):
 		Sonido.tocar("no")
 		return
-	# cuántos salen: uno, o de las balas y los cartuchos, hasta un hueco entero (lo que haya y lo que quepa)
+	# cuántos salen: uno, o de la munición, su casilla entera (lo que haya en ella y lo que quepa)
 	var cuantos := 1
 	if municion:
 		cuantos = mini(mini(Objetos.tanda(id), int(Guardado.cargar().baul.get(id, 0))), johnny.sitio(id))
+		if de_la_casilla > 0:
+			cuantos = mini(cuantos, de_la_casilla)
 	Guardado.cambiar(func(g):
 		g.baul[id] -= cuantos
 		if g.baul[id] <= 0:
 			g.baul.erase(id))
 	if id in Objetos.NOMBRES or not municion:
-		partida.mochila.append(id)   # (la gasolina, el bidón de ácido y la batería, también: Johnny los cuenta ahí)
+		for _v in cuantos:
+			partida.mochila.append(id)   # (la gasolina, el bidón de ácido y la batería, también: Johnny los cuenta ahí)
 	else:
 		johnny.meter_municion(id, cuantos)
 	if municion:
@@ -1699,7 +1705,7 @@ func guardar() -> void:
 		Sonido.tocar("no")
 		return
 	var sobran := n - (llevaba - lleva(id))
-	if sobran > 0:   # (no ha cabido todo: la casilla del baúl llega a 99 o no queda sitio)
+	if sobran > 0:   # (no ha cabido todo: la casilla del baúl se llena o no queda sitio)
 		aviso = Idioma.t("El baúl no admite más: contigo se quedan %d de %s.") % [sobran, Idioma.minusculas(Objetos.nombre(id))]
 	partida.johnny.avisar_arma()
 	Sonido.tocar("soltar" if con_dedo else "cambiar")
@@ -1793,7 +1799,7 @@ func guardar_todo() -> void:
 	for id in guardables():
 		if meter_en_baul(id):
 			guardados += 1
-			if lleva(id) > 0:   # (algo ha entrado, pero no todo: casilla de 99 llena)
+			if lleva(id) > 0:   # (algo ha entrado, pero no todo: su casilla llena)
 				no_caben.append(Idioma.minusculas(Objetos.nombre(id)))
 		else:
 			no_caben.append(Idioma.minusculas(Objetos.nombre(id)))
@@ -1819,7 +1825,7 @@ func lleva(id: String) -> int:
 func meter_en_baul(id: String, cuantos := 0) -> bool:
 	if id == "":
 		return false
-	var caben := Objetos.caben_baul(Guardado.cargar(), id)   # (las casillas del baúl son de MONTON como mucho: lo que no cabe se queda)
+	var caben := Objetos.caben_baul(Guardado.cargar(), id)   # (las casillas del baúl son de Objetos.monton como mucho: lo que no cabe se queda)
 	if caben <= 0:
 		return false
 	var n := 0
@@ -1916,7 +1922,7 @@ func destruir_ya() -> void:
 			var o: Dictionary = cosas_baul(Guardado.cargar())[i]
 			Guardado.cambiar(func(g):
 				if o.equipo < 0:
-					g.baul[o.id] -= o.n   # (solo la casilla elegida: de 250 balas, 99; o todo lo que haya si cabe en ella)
+					g.baul[o.id] -= o.n   # (solo la casilla elegida: de 50 balas, 24; o todo lo que haya si cabe en ella)
 					if g.baul[o.id] <= 0:
 						g.baul.erase(o.id)
 				else:

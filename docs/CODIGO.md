@@ -108,8 +108,9 @@ en una línea.
   número. Lo que cuesta uno en la tienda (`PRECIOS`). La clave de un montón es el tipo y, si no es Normal, la calidad
   detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con `mejorar`). Al acabar la partida
   vuelven al baúl los que tienen partidas por delante (la durabilidad: `Armas.nuevas`; los Normales se rompen); allí se
-  juntan los del mismo tipo, calidad y partidas hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
-  («Sacar 3»). Se prueba con `--montones`. A los jefes, el fuego y las explosiones les hacen la mitad (`A_JEFES`,
+  juntan los del mismo tipo, calidad y partidas en casillas de un montón como el de la mano, con los talentos del guardado
+  (`Objetos.monton_arrojables`, `cabe_en_monton`; `Objetos.arrojables_al_baul`, `caben_arrojables`; si sube el Artificiero, los
+  llenos no cambian) y salen de montón en montón («Sacar 2»). Se prueba con `--montones` y `--casillas-baul`. A los jefes, el fuego y las explosiones les hacen la mitad (`A_JEFES`,
   `a_jefe`: lo miran `explosion.gd`, `charco.gd` y `proyectil.gd`).
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
   Rebota en las paredes también en el aire (`choque_hasta`, con `mapa.muro_entre`) y en los muebles solo a ras de suelo;
@@ -419,8 +420,10 @@ en una línea.
   pone al final y `ocupadas` cuenta solo las de «Objetos»); se usan con la tecla 1 y la 2,
   `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín y las
   vendas los sueltan los armaritos de los baños, uno por apartamento con botiquín o vendas a medias (`Planta.armaritos`, M12; se abren con el clic como el ordenador, `zona_usar.gd`, M11), `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
-  cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (un mismo objeto, 99 como mucho en cada una: `MONTON`; el baúl guarda cuántos hay
-  y `objetos_baul` los reparte, y `caben_baul` dice cuántos más entran). Y las **piezas**
+  cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (lo que cabe en cada una, `monton`: la munición, un hueco de munición, `Armas.MUNICION.hueco`;
+  las curas, su `TOPE`; las piezas, `MONTON`, 99. El baúl guarda cuántos hay y `objetos_baul` los reparte, `caben_baul` dice
+  cuántos más entran y `tanda`, cuántos salen: la munición, la casilla entera. Puede pasar de 32: no deja guardar más;
+  prueba `--casillas-baul`). Y las **piezas**
   de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta
   cualquier zombi (`pieza_de_zombi()`, 6 %) y cada jefe (`piezas_de_jefe()`, 4), en `partida.meter_zombi`, y con la
   alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
@@ -506,7 +509,8 @@ en una línea.
   la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida. Una foto de antes del 13 nov con
   arrojables de repuesto (ya no hay): pasan al baúl al continuar, `sobrantes_al_baul`)
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
-  `baul_equipo`, las armas y los arrojables con su calidad; aparte, `fregona`, la fregona mejorada (15 nov); los arrojables, juntos hasta 99 por casilla. Tres huecos
+  `baul_equipo`, las armas y los arrojables con su calidad; aparte, `fregona`, la fregona mejorada (15 nov); los arrojables, juntos hasta lo que cabe en un montón (`Objetos.monton_arrojables`); un guardado de antes de eso
+  (sin `montones_baul`) reparte al cargar sus montones de 99, una vez y sin perder nada aunque pase de 32 casillas. Tres huecos
   (M45): el progreso de cada uno en `guardado.json` (el 1, el de siempre), `guardado-2.json` y `guardado-3.json`; los
   ajustes de Opciones, de los tres, en `guardado-ajustes.json` con el hueco en uso. `base` es el nombre sin `.json`
   (la prueba usa `usar("user://guardado-prueba")`), `elegir_hueco`, `hueco_usado`, `borrar_hueco`), `huecos.gd`

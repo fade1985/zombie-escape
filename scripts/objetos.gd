@@ -26,7 +26,7 @@ class_name Objetos
 const MOCHILA := 8           # casillas de la mochila (los objetos)
 const CURAS := 2             # y las de las curas, aparte (13 nov: antes 4, junto a los arrojables de repuesto, que ya no hay)
 const BAUL := 32             # casillas del baúl: una por cada objeto distinto, una por cada arma y una por cada clase de arrojables
-const MONTON := 99           # lo máximo de un mismo objeto (o de una clase de arrojables) en una casilla del baúl (sobre todo las balas, que se amontonan): lo que pasa va a otra casilla
+const MONTON := 99           # lo máximo de un mismo objeto en una casilla del baúl si no es munición ni curas (las piezas): lo demás, monton()
 const SUELTA := 0.04         # probabilidad de que un zombi suelte un objeto (0,10 con 7 objetos; ahora son la gasolina y la batería)
 const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelte lo suyo (y nada más)
 # Lo que solo suelta un tipo de zombi, y nunca sale al azar: el bidón de ácido, que llena el lanza ácido, el gordo
@@ -163,14 +163,34 @@ static func cabe(mochila: Array, id: String) -> bool:
 	return id in mochila or id in USABLES or ocupadas(mochila) < MOCHILA
 
 
-# Casillas ocupadas del baúl: una por cada MONTON de cada objeto (99 como mucho en cada una: el baúl guarda cuántos hay y
-# se reparten en casillas llenas y una última con lo que sobra), y una por cada arma y cada casilla de arrojables
-# ("baul_equipo" del guardado; los arrojables, también hasta 99 en cada una: arrojables_al_baul)
+# Lo que cabe de un objeto en una casilla del baúl (la Fase 3 del dueño, 15 nov; antes, 99 de todo): la munición
+# (las balas, los cartuchos, la cinta, las granadas de 40 mm y también la gasolina, el bidón de ácido, la batería y el
+# nitrógeno), lo de un hueco de munición de la mochila (Armas.MUNICION: 24 balas, 12 cartuchos, 3 bidones...); las
+# curas, lo de su montón en la mochila (TOPE); lo demás (las piezas), MONTON
+static func monton(id: String) -> int:
+	if id in Armas.MUNICION:
+		return int(Armas.MUNICION[id].hueco)
+	return TOPE.get(id, MONTON)
+
+
+# Lo que cabe de unos arrojables en una casilla del baúl: lo mismo que en un montón en la mano (Lanzables.cabe_en_monton:
+# 2, más uno por cada punto del Artificiero y los de su calidad), con los talentos del guardado "s" (el baúl se abre en
+# la sala de mantenimiento, sin partida). Si sube el Artificiero, los montones que ya están no cambian: solo caben más
+# en los nuevos y en los que no estén llenos
+static func monton_arrojables(s: Dictionary, id: String, calidad: int) -> int:
+	return Lanzables.cabe_en_monton(id, calidad, Talentos.aplicar(Mejoras.base(), s.get("talentos", {})))
+
+
+# Casillas ocupadas del baúl: las de cada objeto (el baúl guarda cuántos hay y se reparten en casillas llenas, de
+# monton(), y una última con lo que sobra), y una por cada arma y cada casilla de arrojables ("baul_equipo" del
+# guardado; los arrojables, hasta monton_arrojables en cada una: arrojables_al_baul). Puede pasar de BAUL (al acabar la
+# partida entra todo, y un guardado de antes de los montones pequeños se reparte en más casillas): entonces no se puede
+# guardar nada más hasta sacar lo que sobra
 static func casillas_baul(s: Dictionary) -> int:
 	var n: int = s.get("baul_equipo", []).size()
 	for id in s.baul:
 		if s.baul[id] > 0:
-			n += ceili(s.baul[id] / float(MONTON))
+			n += ceili(s.baul[id] / float(monton(id)))
 	return n
 
 
@@ -181,7 +201,7 @@ static func hueco_baul(s: Dictionary) -> bool:
 
 # ── Los arrojables en el baúl ──
 # Van en su "baul_equipo" ({"id": el tipo, "calidad", "n"}) y, como los objetos, los del mismo tipo y calidad se juntan
-# en una casilla hasta MONTON; lo que pasa, a otra (el M18 del dueño; lanzables.gd)
+# en una casilla hasta monton_arrojables; lo que pasa, a otra (el M18 del dueño; lanzables.gd)
 
 # ¿Esa casilla del baúl es de arrojables de ese tipo, esa calidad y esas partidas por delante (la durabilidad:
 # Armas.nuevas; "quedan" -1, las de unos sin estrenar)? Los que ya han salido en esta partida ("usada") van aparte
@@ -190,12 +210,13 @@ static func es_arrojable(e: Dictionary, id: String, calidad: int, quedan := -1, 
 	return e.has("n") and e.id == id and int(e.get("calidad", 0)) == calidad and Armas.quedan_de(e) == q 		and bool(e.get("usada", false)) == usada
 
 
-# Cuántos de esos arrojables caben en el baúl: lo que falta para llenar sus casillas y MONTON por cada casilla libre
+# Cuántos de esos arrojables caben en el baúl: lo que falta para llenar sus casillas y un montón por cada casilla libre
 static func caben_arrojables(s: Dictionary, id: String, calidad: int, quedan := -1, usada := false) -> int:
-	var n := maxi(0, BAUL - casillas_baul(s)) * MONTON
+	var tope := monton_arrojables(s, id, calidad)
+	var n := maxi(0, BAUL - casillas_baul(s)) * tope
 	for e in s.baul_equipo:
 		if es_arrojable(e, id, calidad, quedan, usada):
-			n += maxi(0, MONTON - int(e.n))
+			n += maxi(0, tope - int(e.n))
 	return n
 
 
@@ -203,13 +224,14 @@ static func caben_arrojables(s: Dictionary, id: String, calidad: int, quedan := 
 # (al final), aunque no quede sitio (al acabar la partida entra todo; al guardar a mano, se mira antes con
 # caben_arrojables)
 static func arrojables_al_baul(g: Dictionary, id: String, calidad: int, n: int, quedan := -1, usada := false) -> void:
+	var tope := monton_arrojables(g, id, calidad)
 	for e in g.baul_equipo:
-		if n > 0 and es_arrojable(e, id, calidad, quedan, usada) and int(e.n) < MONTON:
-			var entran := mini(n, MONTON - int(e.n))
+		if n > 0 and es_arrojable(e, id, calidad, quedan, usada) and int(e.n) < tope:
+			var entran := mini(n, tope - int(e.n))
 			e.n = int(e.n) + entran
 			n -= entran
 	while n > 0:
-		var entran := mini(n, MONTON)
+		var entran := mini(n, tope)
 		var e := {"id": id, "calidad": calidad, "n": entran}
 		if quedan >= 0:
 			e.quedan = quedan
@@ -304,18 +326,19 @@ static func todos() -> Array:
 	return lista
 
 
-# Cuántos salen del baúl de una vez al sacarlos: las balas y los cartuchos, hasta un hueco de munición entero (de uno
-# en uno serían eternos); todo lo demás (la gasolina, las piezas, las curas...), de uno en uno
+# Cuántos salen del baúl de una vez al sacarlos: la munición (la gasolina y los bidones también), una casilla entera,
+# que es un hueco de munición (monton); todo lo demás (las piezas, las curas), de uno en uno
 static func tanda(id: String) -> int:
-	return 1 if id in NOMBRES or not id in Armas.MUNICION else int(Armas.MUNICION[id].hueco)
+	return monton(id) if id in Armas.MUNICION else 1
 
 
-# Cuántos más de ese objeto caben en el baúl: lo que falta para llenar su última casilla (hasta MONTON) y MONTON por cada
-# casilla libre
+# Cuántos más de ese objeto caben en el baúl: lo que falta para llenar su última casilla (hasta monton) y un montón por
+# cada casilla libre
 static func caben_baul(s: Dictionary, id: String) -> int:
 	var hay: int = s.baul.get(id, 0)
-	var en_la_ultima := (MONTON - hay % MONTON) % MONTON
-	return en_la_ultima + maxi(0, BAUL - casillas_baul(s)) * MONTON
+	var tope := monton(id)
+	var en_la_ultima := (tope - hay % tope) % tope
+	return en_la_ultima + maxi(0, BAUL - casillas_baul(s)) * tope
 
 
 # ¿Cabe al menos uno en el baúl? Si su última casilla no está llena va a ella; si no, hace falta una libre
