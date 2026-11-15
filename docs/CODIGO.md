@@ -431,7 +431,7 @@ en una línea.
   los abre una vez, `datos.abierto`, con un 35 % de material, `pieza_de_mueble()`, cada familia al 25 %); en el centro
   comercial y en la torre, cada jefe (`piezas_de_jefe()`, 4, en `partida.meter_zombi`). Con la alerta salen más
   (`Alerta.mas_piezas()`: más muebles con material y más piezas de jefe). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
-  de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (PixelLab, 32×32; ver `assets/pixellab.json` → `piezas`).
+  de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (32×32; desde el 15 nov, de GPT con `tools/muebles_gpt.py`: engranaje de bronce, de plata y de oro y matraz verde; los de antes eran de PixelLab).
   `talentos.gd` (**el jugador los ve como «mutaciones»** desde el 15 nov, lo pidió el dueño: el programa es MUTACIONES.EXE,
   el botón «Resetear mutaciones» y el árbol ya no tiene nombre en la barra de tareas; por dentro siguen siendo talentos, y
   las mutaciones de los jefes, `mutaciones.gd`, se llaman para el jugador «efectos secundarios»). Tres ramas, `RAMAS`:

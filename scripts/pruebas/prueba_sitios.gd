@@ -2984,14 +2984,19 @@ func probar_muebles_materiales() -> void:
 	Captura.foto("captura-mueble-material.png")
 	# ya abierto: delante otra vez, E no lo vuelve a abrir
 	johnny.position = mueble.position + Vector2(0, 20)
+	# solo queda sin ver el tutorial de los materiales (si no, sale antes otro, como el de cambiar de arma)
 	Tutoriales.olvidar()
+	for id in Tutoriales.LISTA:
+		if id != "piezas":
+			Tutoriales.apuntar(id)
 	tutoriales_prueba = true
-	await get_tree().create_timer(0.3, false).timeout
+	# (desde aquí, relojes que corren también en pausa: si Johnny pisa el material, el tutorial para el juego)
+	await get_tree().create_timer(0.3).timeout
 	var antes := piezas.size()
 	pulsar_accion("usar", true)
 	await get_tree().physics_frame
 	pulsar_accion("usar", false)
-	await get_tree().create_timer(0.3, false).timeout
+	await get_tree().create_timer(0.3).timeout
 	var ahora: int = mapa.cosas.get_children().filter(func(c): return c.get("icono") is Texture2D \
 		and c.icono.resource_path.contains("obj-pieza") and not c.is_queued_for_deletion()).size()
 	print("Muebles materiales · al pulsar E otra vez, materiales en el suelo %d (esperado: %d o menos)" % [ahora, antes])

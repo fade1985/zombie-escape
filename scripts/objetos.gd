@@ -2,7 +2,7 @@
 # mochila (MOCHILA casillas; los iguales se apilan en una). Al completar el edificio pasan al baúl de la sala de
 # mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se pueden guardar a mano
 # (ui/inventario.gd, «Guardar de la mochila»). Las piezas (PIEZAS) sirven para mejorar las armas en el banco de trabajo.
-# Su dibujo es assets/ui/iconos/obj-<id>.png (el del botiquín, botiquin.png), todos de 32×32 y de PixelLab. La gasolina, el bidón de ácido y la
+# Su dibujo es assets/ui/iconos/obj-<id>.png (el del botiquín, botiquin.png), todos de 32×32, de PixelLab (las piezas, de GPT: tools/muebles_gpt.py). La gasolina, el bidón de ácido y la
 # batería son además la munición del lanzallamas, el lanza ácido y el lanza rayos: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).
 #

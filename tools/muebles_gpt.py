@@ -134,6 +134,13 @@ MUEBLES = {
     # el mutágeno (15 nov): la doble hélice de ADN mutado, con manchas y gotas verdes, que sueltan los durmientes (partida.gd,
     # soltar_mutageno) y que sale en el inventario junto a los dólares. Los huecos entre peldaños, todo el negro puro
     "mutageno": ("assets/sources/mutageno-gpt.webp", "assets/ui/iconos/mutageno.png", 30, 32, False, (), "negro"),
+    # los materiales de mejora de las armas (Objetos.PIEZAS; Fase 4, 15 nov): un engranaje de bronce (cuerpo a cuerpo), uno
+    # de plata (a distancia), uno de oro (especiales) y un matraz con líquido verde (lanzables). Salen a 30 de alto y se
+    # centran en un lienzo de 32x32 al final de este archivo, como los iconos de antes
+    "pieza_cuerpo": ("assets/sources/pieza-cuerpo-gpt.webp", "assets/ui/iconos/obj-pieza_cuerpo.png", 30, 30, False),
+    "pieza_distancia": ("assets/sources/pieza-distancia-gpt.webp", "assets/ui/iconos/obj-pieza_distancia.png", 30, 30, False),
+    "pieza_especial": ("assets/sources/pieza-especial-gpt.webp", "assets/ui/iconos/obj-pieza_especial.png", 30, 30, False),
+    "pieza_arrojable": ("assets/sources/pieza-arrojable-gpt.webp", "assets/ui/iconos/obj-pieza_arrojable.png", 20, 30, False),
     "rama_militar": ("assets/sources/rama-militar-gpt.webp", "assets/ui/iconos/rama-militar.png", 24, 23, False, (), [(620, 950)]),
     "rama_superviviente": ("assets/sources/rama-superviviente-gpt.webp", "assets/ui/iconos/rama-superviviente.png", 22, 24, False),
     "rama_quimico": ("assets/sources/rama-quimico-gpt.webp", "assets/ui/iconos/rama-quimico.png", 24, 24, False),
@@ -314,3 +321,11 @@ if "fregona" in (sys.argv[1:] or ["fregona"]):
     lienzo = Image.new("RGBA", (48, 48), (0, 0, 0, 0))
     lienzo.paste(pequena, (2, 2))
     lienzo.save("assets/ui/tienda/fregona.png")
+
+# los materiales, centrados en un lienzo de 32x32 (los iconos de los objetos son todos de 32x32: partida.soltar_objeto)
+for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith("pieza_")]:
+    ruta = MUEBLES[nombre][1]
+    pequena = Image.open(ruta).convert("RGBA")
+    lienzo = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+    lienzo.paste(pequena, ((32 - pequena.width) // 2, (32 - pequena.height) // 2))
+    lienzo.save(ruta)
