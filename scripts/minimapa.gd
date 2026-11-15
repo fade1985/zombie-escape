@@ -334,8 +334,8 @@ func dibujar_sitio(fondo: Rect2) -> void:
 		var trozo := Rect2(p - (Vector2(4, 2) if hor else Vector2(2, 4)), Vector2(8, 4) if hor else Vector2(4, 8))
 		draw_rect(trozo.grow(2), BORDE)
 		draw_rect(trozo, VERDE)
-	# lo que hay que coger o ver, cada cosa en su sitio (M111). Si caen varias en la misma habitación, en fila, una al
-	# lado de la otra (como en el plano de la planta), para que no se tapen
+	# lo que hay que coger o ver, cada cosa en medio de su habitación (M111). Si caen varias en la misma habitación, en
+	# fila, una al lado de la otra (como en el plano de la planta), para que no se tapen
 	var por_sala := {}
 	for cosa in cosas_del_sitio(sitio, mapa):
 		if not por_sala.has(cosa.zona):
@@ -360,8 +360,9 @@ func dibujar_sitio(fondo: Rect2) -> void:
 		marca_johnny(a_plano.call(johnny.position))
 
 
-# Lo que se marca dentro del sitio, cada cosa con su icono, su punto (en unidades del mapa) y su habitación
-# ("zona"), solo si esa habitación ya se ha visto y mientras no la hayas cogido o visto:
+# Lo que se marca dentro del sitio, cada cosa con su icono, su habitación ("zona") y el punto donde va el icono (en
+# unidades del mapa): el centro de su habitación, que solo se avisa de que ahí hay algo, no de dónde está. Solo si esa
+# habitación ya se ha visto y mientras no la hayas cogido o visto:
 #   llave   la llave (o la tarjeta dorada) en el suelo
 #   tele    la tele del salón encendida, con su noticia sin ver
 #   dosier  el científico muerto con la página del dosier sin coger
@@ -373,8 +374,13 @@ func cosas_del_sitio(sitio: Dictionary, mapa: Node) -> Array:
 		var zona: int = mapa.zona_en(pos)
 		if zona < 0:
 			zona = mapa.zona_en(pos + Vector2(0, CASILLA))   # (el pie de un mueble pegado a la pared)
-		if aunque_no_se_vea or mapa.niebla.get(zona, 0.0) < 0.5:
-			lista.append({"nombre": nombre, "pos": pos, "zona": zona})
+		if not aunque_no_se_vea and mapa.niebla.get(zona, 0.0) >= 0.5:
+			return
+		# en medio de su habitación, no donde está: solo se avisa de que en esa habitación hay algo
+		for sala in sitio.get("apt", {}).get("salas", []):
+			if sala.id == zona:
+				pos = (Vector2(sala.c0, sala.f0) + Vector2(sala.ancho, sala.fondo) / 2.0) * CASILLA
+		lista.append({"nombre": nombre, "pos": pos, "zona": zona})
 	for nombre in ["Llave", "Dorada"]:
 		var llave: Node2D = mapa.cosas.get_node_or_null(nombre) if mapa.cosas else null
 		if llave:

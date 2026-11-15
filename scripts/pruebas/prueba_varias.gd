@@ -134,7 +134,7 @@ func probar_pasillo_sos() -> void:
 # de la tele, con la tele encendida, la página del dosier y la llave en el suelo, las tres en la habitación de la tele
 # (en fila, sin taparse): captura-minimapa-cosas.png; ya vista la tele y cogidas la página y la llave, ninguna:
 # captura-minimapa-cosas-cogidas.png. En el del superviviente, encerrado (su «!»: captura-minimapa-cosas-sos.png) y con
-# la puerta ya abierta (su carita, donde está él: captura-minimapa-cosas-carita.png)
+# la puerta ya abierta (su carita: captura-minimapa-cosas-carita.png). Cada icono, en medio de su habitación
 func probar_minimapa_cosas() -> void:
 	nueva_planta(2)
 	supervivientes.poner_rescate(Supervivientes.DATOS.medico, 2)
