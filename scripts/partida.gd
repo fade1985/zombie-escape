@@ -170,8 +170,11 @@ var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd),
 var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a cuerpo y una a distancia (llevar_arma)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
-var mutageno := 0          # el mutágeno que lleva (15 nov): lo suelta cada durmiente y se gasta en los talentos del
-                           # ordenador; el que no se gasta se pierde al acabar la partida (no va al guardado)
+var mutageno := 0          # el mutágeno cogido en esta partida (15 nov): lo suelta cada durmiente y se gasta en los
+                           # talentos del ordenador. Al completar el edificio, el que quede pasa al guardado; si caes
+                           # o abandonas, se pierde (terminar)
+var mutageno_ahorrado := 0 # el mutágeno guardado de otras partidas ("mutageno" del guardado): se ve sumado al de esta
+                           # (mutageno_total) y al comprar talentos se gasta después del de esta (Talentos.subir)
 var muertos := 0           # zombis matados en esta partida
 var matados := {}          # los mismos, por tipo ({"normal": 12, ...}): al acabar, a los de siempre (Colecciones)
 var duracion := 0.0        # segundos jugados (sin contar la pausa)
@@ -301,6 +304,7 @@ func _ready() -> void:
 		if Reto.activo:
 			Reto.ficha(g, edificio).intentos += 1)
 	ahorrados = s.dolares
+	mutageno_ahorrado = s.mutageno
 	# la primera partida enseña a jugar en la planta baja de los Apartamentos (guia.gd)
 	guia.activa = (s.partidas == 1 or s.guia_otra_vez) and edificio == "apartamentos" and not Reto.activo \
 		and Guardado.ajuste("tutoriales") and (not captura or guiado_prueba)
@@ -373,6 +377,7 @@ func tutorial_al_empezar() -> String:
 func continuar_partida(foto: Dictionary) -> void:
 	PartidaGuardada.poner(self, foto)
 	ahorrados = Guardado.cargar().dolares
+	mutageno_ahorrado = Guardado.cargar().mutageno
 	var num: int = foto.planta
 	if num > 1:
 		# la sala de mantenimiento y las viviendas son las de la planta baja (nueva_planta(1) las apunta): se sacan de ella
@@ -1289,10 +1294,16 @@ func cartera() -> int:
 	return ahorrados + dolares
 
 
+# El mutágeno que se ve (en el inventario y en el árbol de talentos) y que se puede gastar: el guardado más el de
+# esta partida
+func mutageno_total() -> int:
+	return mutageno_ahorrado + mutageno
+
+
 # Un mutágeno en el suelo, donde ha caído un durmiente (todos menos los jefes, que dan su mutación): se coge como un
 # billete y se ve, verde, en el inventario (inventario.gd, junto a los dólares)
 func soltar_mutageno(donde: Vector2) -> void:
-	if mutageno >= TOPE:   # (en el tope, MAX, ya no sueltan)
+	if mutageno_total() >= TOPE:   # (en el tope, MAX, ya no sueltan)
 		return
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
@@ -1301,7 +1312,7 @@ func soltar_mutageno(donde: Vector2) -> void:
 	cosa.a_oscuras = true   # (se ve un poco aunque el piso esté a oscuras: los durmientes caen en cualquier rincón)
 	cosa.add_to_group("mutagenos")
 	cosa.position = donde
-	cosa.puede = func() -> bool: return mutageno < TOPE
+	cosa.puede = func() -> bool: return mutageno_total() < TOPE
 	cosa.cogido.connect(func():
 		mutageno += 1
 		Sonido.tocar("mutageno")
@@ -1832,6 +1843,8 @@ func terminar(gano: bool, abandona := false) -> void:
 			g.victorias += 1
 		g.dolares = mini(g.dolares + salvados, TOPE)   # (los de la alerta o el reto no pasan del tope)
 		g.dolares_total += salvados
+		if gano:   # el mutágeno de esta partida se guarda solo si completas el edificio (si caes o abandonas, se pierde)
+			g.mutageno = mini(g.mutageno + mutageno, TOPE)
 		if not gano and not abandona:
 			g.pesadilla = true   # la próxima partida empieza con Johnny despertándose (despertar)
 		if gano and not Reto.activo:   # (el reto no cuenta como edificio completado ni abre alertas)

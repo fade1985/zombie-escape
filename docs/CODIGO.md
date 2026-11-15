@@ -412,12 +412,14 @@ en una línea.
   Reacción en cadena y Residuo tóxico, al morir el zombi (`zombi.quimica_al_morir`: el estallido de las Épicas y un
   charco `residuo`, `charco.gd`), y Pararrayos, al recibir un golpe (`johnny.pararrayos`, con `Talentos.PARARRAYOS`).
   En el ordenador, las tres ramas a la vez (`arbol_talentos.gd`, ver más abajo). Se prueba con `--quimico`. Cada punto
-  se compra en su talento. Desde el 15 nov, con el **mutágeno** de la partida (`partida.mutageno`; antes, desde el 6 nov,
+  se compra en su talento. Desde el 15 nov, con **mutágeno** (el guardado más el de la partida, `partida.mutageno_total`; antes, desde el 6 nov,
   con los dólares ahorrados, y antes, con puntos de talento): dentro de cada talento el 1.º punto cuesta 25, el 2.º 50,
   el 3.º 75, el 4.º 100 y el 5.º 125 (`Talentos.PRECIOS`); los de un solo punto, 125 (`PRECIO_UNICO`); el árbol entero,
   7.800. `Talentos.precio(s, id)` es lo del punto siguiente, `motivo(s, id, mutageno)` dice si se puede («sin_mutageno»
-  si no llega) y `subir(id, partida)` se lo resta a la partida y también a la partida guardada a medias
-  (`PartidaGuardada.gastar_mutageno`: si no, cerrar el juego y seguirla lo devolvería). Lo comprado es para siempre
+  si no llega) y `subir(id, partida)` lo cobra: primero del cogido en esta partida (`partida.mutageno`, el que se
+  perdería al caer) y lo que falte, del guardado ("mutageno"); lo de la partida se quita también de la partida guardada
+  a medias (`PartidaGuardada.gastar_mutageno`: si no, cerrar el juego y seguirla lo devolvería). Se prueba en
+  `--comprar-talentos`. Lo comprado es para siempre
   (en "talentos" del guardado). Un guardado de antes del cambio empieza el árbol de cero, una sola vez y sin devolver
   nada (`guardado.gd`, la marca `talentos_mutageno`); `dolares_talentos` ya no existe.
   «Resetear talentos» (M32): quita todos los puntos, gratis pero sin devolver lo gastado (desde el 6 nov; antes devolvía
@@ -443,9 +445,11 @@ en una línea.
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - **El mutágeno** (15 nov): cada durmiente que muere (todos menos los jefes, que dan su mutación; ni en la sala de pruebas
   ni los que caen por el ventanal) suelta uno (`partida.soltar_mutageno`, un billete con el dibujo `assets/ui/iconos/mutageno.png`,
-  de GPT, `tools/muebles_gpt.py mutageno`, y el sonido `"mutageno"`). Se cuenta en `partida.mutageno`, va en la partida
-  guardada a medias (`PartidaGuardada`) y no pasa al guardado: el que no se gasta se pierde al acabar la partida. Se ve en
-  el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los
+  de GPT, `tools/muebles_gpt.py mutageno`, y el sonido `"mutageno"`). Se cuenta en `partida.mutageno` y va en la partida
+  guardada a medias (`PartidaGuardada`). Al completar el edificio, el que quede pasa al guardado ("mutageno",
+  `partida.terminar`; lo pidió el dueño el 15 nov); si caes o abandonas, el de esa partida se pierde, y el guardado no
+  (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. Se ve, el guardado más el de la partida
+  (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los
   durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
   marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una
   debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Y 10.000
@@ -456,7 +460,7 @@ en una línea.
   avisa el tutorial de Logros y el mensaje del archivador). Lo prueba `--mutageno`. Cuánto
   da una partida: `--durmientes-planta` (unos 300 en los Apartamentos y 340 en el centro y la torre, más las hordas).
   Prueba: `--mutageno`. Se gasta en los talentos del ordenador (ver `talentos.gd`, arriba), que lo enseñan arriba a la
-  izquierda en vez de lo ahorrado (`CHAPA.dibujar_mutageno`).
+  izquierda, igual que el inventario, en vez de lo ahorrado (`CHAPA.dibujar_mutageno`).
 - `idioma.gd` (autoload `Idioma`: el idioma del juego y `Idioma.t("texto")` / `Idioma.n("uno", "varios", n)` para traducir,
   también desde los `static`; se elige en Opciones, se guarda en `ajustes.idioma` y avisa con la señal `cambiado`; con
   `--captura` es español salvo con `--ingles`, y al cerrar cuenta los textos sin traducir. Cómo se escribe un texto,
@@ -610,14 +614,14 @@ en una línea.
   el pie con el precio y, detrás, una hélice pequeña del mutágeno; si no llega, solo el precio en el marcador verde:
   `marcador_precio`) sale al lado del que está bajo el ratón o, con el teclado, el mando o el dedo, del marcado
   (`quien`, `modo`); con el dedo, el primer toque solo la enseña y el segundo compra (`al_pulsar`, `listo`). Las flechas
-  van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Arriba a la izquierda, el mutágeno de la
-  partida (`mutageno`, el frasco y el marcador verde con la hélice: `CHAPA.dibujar_mutageno`). Prueba: `--arbol-talentos`
+  van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Arriba a la izquierda, el mutágeno (`mutageno`,
+  el guardado más el de la partida, en el mismo marcador fijo que el inventario, sin dibujo al lado: `CHAPA.dibujar_mutageno`). Prueba: `--arbol-talentos`
   (también mide el pie más largo en cada idioma). La chapa y sus colores los comparte con la tienda de armas: están en
   `chapa.gd`.
 - `chapa.gd`: lo que comparten el árbol de talentos y la tienda de armas: los colores de la chapa oscura (`BORDE`,
   `CHAPA`, `REMACHE`, `TEXTO`, `AMARILLO`...), `dibujar` (el marco con sus remaches), `dibujar_ahorrado` (el billete y
   la pantallita de caja registradora, con el «$» pegado a la cifra; `caja_ahorrado` dice dónde acaba) y
-  `dibujar_mutageno` (lo mismo con el frasco del mutágeno y la hélice en verde, en el árbol de talentos).
+  `dibujar_mutageno` (el marcador fijo del inventario, con la hélice en verde, en el árbol de talentos).
 - `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
   izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
   de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas con el borde verde y lo lleno, además, con «LLENO», apagada si no llega:

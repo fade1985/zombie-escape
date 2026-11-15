@@ -1805,6 +1805,7 @@ func probar_mutageno() -> void:
 	johnny.direccion = "o"   # (que la linterna no alumbre lo que cae)
 	await get_tree().create_timer(0.3).timeout
 	mutageno = 0
+	mutageno_ahorrado = 0   # (el tope cuenta también el guardado: aquí, solo el de la partida)
 	var durmientes := []
 	for i in 3:
 		durmientes.append(meter_zombi("normal", johnny.position + Vector2(-200 - i * 60, 40)))

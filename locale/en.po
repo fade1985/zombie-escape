@@ -6813,8 +6813,8 @@ msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelv
 msgstr "Removes every point from the tree. What you spent on them is not refunded."
 
 #: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con mutágeno y sube un nivel; el que no gastes se pierde al acabar la partida. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "Each point is paid with mutagen and adds a level; whatever you don't spend is lost when the run ends. To reach the next tier, max out the talent it asks for first."
+msgid "Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Each point is paid with mutagen and adds a level. The mutagen you pick up in a run is kept if you clear the building and lost if you die or abandon. To reach the next tier, max out the talent it asks for first."
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"

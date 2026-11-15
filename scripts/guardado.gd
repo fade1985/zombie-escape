@@ -29,6 +29,8 @@ const NUEVO := {
 	"dolares": 0,         # dólares ahorrados (en el JS se llamaban "keys")
 	"dolares_total": 0,   # dólares conseguidos en total
 	"puntos": 0,          # solo de los guardados viejos: los puntos de talento sin gastar, que al cargar se cambian por dólares
+	"mutageno": 0,        # el mutágeno guardado (15 nov): el de cada partida pasa aquí si se completa el edificio; si
+	                      # se cae o se abandona, se pierde (partida.terminar). Se gasta en los talentos (talentos.gd)
 	"talentos_mutageno": true, # los talentos ya se pagan con mutágeno (15 nov). Un guardado de antes no lo trae: al
 	                           # cargarlo, su árbol se vacía una vez, sin devolver nada (cargar_archivo)
 	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
@@ -115,7 +117,7 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 		s.ajustes = comunes.ajustes
 	s.ajustes = NUEVO.ajustes.duplicate(true).merged(s.ajustes, true)   # copia: las constantes no se pueden cambiar
 	# JSON guarda todos los números con decimales: los que son de contar, otra vez enteros
-	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
+	for clave in ["mejor_planta", "dolares", "dolares_total", "mutageno", "puntos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
 		s[clave] = int(s[clave])
 	for id in s.matados:
 		s.matados[id] = int(s.matados[id])

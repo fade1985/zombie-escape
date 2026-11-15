@@ -6795,8 +6795,8 @@ msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelv
 msgstr "清空天赋树上的所有点数。花掉的钱不会退还。"
 
 #: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con mutágeno y sube un nivel; el que no gastes se pierde al acabar la partida. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "每一点都用诱变剂购买，提升一级；没花掉的诱变剂在本局结束时会失去。想进入下一层级，先把它要求的天赋点满。"
+msgid "Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "每一点都用诱变剂购买，提升一级。一局里捡到的诱变剂，通关大楼就会保留，倒下或放弃则会失去。想进入下一层级，先把它要求的天赋点满。"
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"

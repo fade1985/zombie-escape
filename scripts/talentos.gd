@@ -3,11 +3,12 @@
 # (M16, 28 oct: el 4, con un talento debajo de cada uno del 3, y el 5, la «corona» de la rama, que pide los tres del 4
 # al máximo).
 #
-# Cada punto de un talento se compra directamente en él, con el mutágeno de la partida en curso (partida.mutageno: lo
-# suelta cada durmiente; parte 2 del mutágeno, 15 nov), en el ordenador de la sala de mantenimiento (ui/ordenador.gd,
-# TALENTOS.EXE): cada punto sube un nivel y cuesta más que el anterior del mismo talento (PRECIOS: 25, 50, 75, 100 y
-# 125; los de un solo punto, 125). Llenar el árbol entero sale por 7.800. El mutágeno que no se gasta se pierde al
-# acabar la partida; lo comprado es para siempre (se guarda en "talentos" del guardado). Resetear es gratis y no
+# Cada punto de un talento se compra directamente en él, con mutágeno (lo suelta cada durmiente; parte 2 del mutágeno,
+# 15 nov), en el ordenador de la sala de mantenimiento (ui/ordenador.gd, TALENTOS.EXE): cada punto sube un nivel y
+# cuesta más que el anterior del mismo talento (PRECIOS: 25, 50, 75, 100 y 125; los de un solo punto, 125). Llenar el
+# árbol entero sale por 7.800. Se puede gastar el guardado más el de la partida en curso (partida.mutageno_total): se
+# gasta primero el de la partida (el que se perdería al caer) y luego el guardado. Lo comprado es para siempre (se
+# guarda en "talentos" del guardado). Resetear es gratis y no
 # devuelve nada. Hasta el 15 nov se pagaban con los dólares ahorrados, y antes del 6 nov con «puntos de talento»: los
 # guardados de entonces empiezan el árbol de cero (guardado.gd, "talentos_mutageno").
 #
@@ -316,17 +317,21 @@ static func resetear() -> Dictionary:
 	return s
 
 
-# Compra un punto de un talento con el mutágeno de la partida "p" (se le resta a p.mutageno). Devuelve el guardado
-# nuevo, o {} si no se puede.
-# Lo gastado se quita también de la partida a medias (la foto del principio de la planta: partida_guardada.gd): si
-# no, cerrar el juego y darle a «Continuar partida» devolvería el mutágeno y se quedarían los talentos
+# Compra un punto de un talento con el mutágeno de la partida "p": primero el cogido en esta partida (p.mutageno) y,
+# si no llega, lo que falte del guardado ("mutageno"; lo pidió el dueño: si luego caes, solo pierdes lo que quedara de
+# esta partida). Devuelve el guardado nuevo, o {} si no se puede.
+# Lo gastado de esta partida se quita también de la partida a medias (la foto del principio de la planta:
+# partida_guardada.gd): si no, cerrar el juego y darle a «Continuar partida» lo devolvería y se quedarían los talentos
 static func subir(id: String, p: Node) -> Dictionary:
 	var s := Guardado.cargar()
-	if motivo(s, id, p.mutageno) != "":
+	if motivo(s, id, p.mutageno_ahorrado + p.mutageno) != "":
 		return {}
 	var cuesta := precio(s, id)
-	p.mutageno -= cuesta
+	var de_partida := mini(cuesta, p.mutageno)
+	p.mutageno -= de_partida
+	s.mutageno = maxi(s.mutageno - (cuesta - de_partida), 0)
+	p.mutageno_ahorrado = s.mutageno
 	s.talentos[id] = nivel_de(s, id) + 1
-	PartidaGuardada.gastar_mutageno(s, cuesta)
+	PartidaGuardada.gastar_mutageno(s, de_partida)
 	Guardado.escribir(s)
 	return s

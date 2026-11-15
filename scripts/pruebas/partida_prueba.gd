@@ -462,6 +462,8 @@
 #                       mutágeno bastante, lo que se le quita a la partida a medias), el botón «Resetear talentos»
 #                       (M32: pregunta, no devuelve nada y Johnny pierde lo que le daban) y un guardado de antes del
 #                       mutágeno, que empieza el árbol de cero una sola vez                  [prueba_varias.gd]
+#   --mutageno-guardado el mutágeno de la partida se guarda solo si completas el edificio (al caer o abandonar,
+#                       se pierde) y el inventario enseña el guardado más el de la partida   [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
 #   --flatulento        el alcance de la mutación Flatulento (140): quién se paraliza a 50, 110 y 190, y su nube [prueba_varias.gd]
@@ -1220,6 +1222,11 @@ func empezar_prueba() -> void:
 		set_process(false)   # sin la prueba larga
 		await probar_comprar_talentos()
 		get_tree().quit()
+	elif "--mutageno-guardado" in args:
+		set_process(false)   # sin la prueba larga
+		var escena := get_tree()   # (al abandonar, lo último de la prueba, la partida sale de la escena)
+		await probar_mutageno_guardado()
+		escena.quit()
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)

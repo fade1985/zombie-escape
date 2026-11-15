@@ -6,7 +6,7 @@
 # ahora y con otro punto, qué abre y lo que cuesta. Con el ratón, el teclado o el mando se compra al pulsarlo; con el dedo,
 # el primer toque solo enseña la ficha y el segundo compra (que no se gaste mutágeno sin querer).
 #
-# Arriba, en la misma chapa, el mutágeno de la partida (con lo que se pagan, desde el 15 nov; antes, lo ahorrado) y el
+# Arriba, en la misma chapa, el mutágeno (con lo que se pagan, desde el 15 nov; antes, lo ahorrado) y el
 # botón «Resetear talentos». Todo se dibuja con código (_draw); encima de
 # cada hexágono hay un botón transparente, "b_<id>", que es el que se marca y se pulsa (como las tarjetas del ordenador)
 extends Control
@@ -37,7 +37,7 @@ static var modo := "raton"
 
 var ordenador: Node
 var s: Dictionary                    # el guardado
-var mutageno := 0                    # el de la partida (partida.mutageno), con lo que se pagan
+var mutageno := 0                    # el guardado más el de la partida (partida.mutageno_total), con lo que se pagan
 var botones := {}                    # id del talento → su botón
 var centros := {}                    # id → el centro de su hexágono
 var columnas := []                   # [x, ancho] de cada rama
@@ -51,7 +51,7 @@ var listo := {}                      # id → si al pulsarlo ya enseñaba su fic
 func montar(o: Node, guardado: Dictionary) -> void:
 	ordenador = o
 	s = guardado
-	mutageno = o.partida.mutageno if o.partida else 0
+	mutageno = o.partida.mutageno_total() if o.partida else 0
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	custom_minimum_size = Vector2(0, 380)

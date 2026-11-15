@@ -2,7 +2,7 @@
 # (mapa/ordenador.gd) el juego se pausa y sale la pantalla: un monitor viejo con su escritorio, sus iconos, la
 # barra de tareas con el reloj y una ventana para cada programa:
 #   - "Talentos": el árbol de talentos (arbol_talentos.gd), con las tres ramas a la vez; cada punto se compra en su
-#     talento con el mutágeno de la partida (talentos.gd; antes del 15 nov, con los dólares ahorrados). Lo comprado
+#     talento con mutágeno (talentos.gd; antes del 15 nov, con los dólares ahorrados). Lo comprado
 #     se nota al momento.
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS), en calidad Normal (parte 4 de la
 #     tienda y las piezas: Armas.CALIDADES), y queda desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
@@ -24,8 +24,9 @@
 #   - "Colecciones": el bestiario (bestiario.gd): cada enemigo visto alguna vez, por familias, con su dibujo, su
 #     frase y cuántos se han matado. Queda entre partidas; el icono avisa si hay algo nuevo.
 # En la tienda solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta que acaba
-# (todos si completas el edificio; la mitad si caes). Los talentos, en cambio, se pagan con el mutágeno de esta
-# partida (partida.mutageno), que se pierde al acabarla.
+# (todos si completas el edificio; la mitad si caes). Los talentos, en cambio, se pagan con mutágeno: el guardado y
+# el de esta partida (partida.mutageno_total; el de esta partida se guarda si completas el edificio y se pierde si
+# caes o abandonas).
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
 extends CanvasLayer
 
@@ -548,7 +549,7 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	return contenido
 
 
-# ── Talentos: cada punto se compra en su talento, con el mutágeno de la partida ──
+# ── Talentos: cada punto se compra en su talento, con mutágeno ──
 
 # Las tres ramas a la vez en una chapa oscura, cada talento un hexágono con su ficha al pasar por encima (arbol_talentos.gd).
 # Aquí se le pone a cada botón lo que explica en la línea de abajo y lo que hace al pulsarlo
@@ -562,14 +563,14 @@ func programa_puntos(c: VBoxContainer) -> void:
 	enlazar(arbol.resetear, Idioma.t("Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."), resetear_talentos)
 	for t in Talentos.LISTA:
 		enlazar(arbol.botones[t.id], explica_talento(s, t), arbol.al_pulsar.bind(t.id))
-	info.text = Idioma.t("Cada punto se paga con mutágeno y sube un nivel; el que no gastes se pierde al acabar la partida. Para pasar al nivel siguiente, llena antes el talento que pide.")
+	info.text = Idioma.t("Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes el talento que pide.")
 
 
 # Lo que dice la línea de abajo de un talento marcado
 func explica_talento(s: Dictionary, t: Dictionary) -> String:
 	var texto: String = Talentos.desc_de(t.id)
 	var precio := Talentos.precio(s, t.id)
-	match Talentos.motivo(s, t.id, partida.mutageno):
+	match Talentos.motivo(s, t.id, partida.mutageno_total()):
 		"bloqueado": texto = Idioma.t("Necesitas %s al máximo. %s") % [Talentos.nombres(Talentos.faltan(s, t.id)), texto]
 		"max": texto = Idioma.t("¡Al máximo! %s") % texto
 		"sin_mutageno": texto = Idioma.t("%s. Cuesta %d de mutágeno.") % [texto, precio]
@@ -756,11 +757,11 @@ func reseteo_confirmado() -> void:
 	Sonido.tocar("compra")
 	partida.aplicar_talentos(s.talentos)
 	abrir("puntos", "b_resetear")
-	info.set_deferred("text", Idioma.t("¡Hecho! El árbol está vacío para volver a repartirlo. Tienes %d de mutágeno.") % partida.mutageno)
+	info.set_deferred("text", Idioma.t("¡Hecho! El árbol está vacío para volver a repartirlo. Tienes %d de mutágeno.") % partida.mutageno_total())
 
 
 func subir(id: String) -> void:
-	var motivo := Talentos.motivo(Guardado.cargar(), id, partida.mutageno)
+	var motivo := Talentos.motivo(Guardado.cargar(), id, partida.mutageno_total())
 	if motivo != "":
 		Sonido.tocar("no")
 		return   # la línea de info ya dice por qué no se puede

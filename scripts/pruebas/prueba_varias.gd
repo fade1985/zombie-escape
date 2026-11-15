@@ -1957,9 +1957,11 @@ func probar_comprar_talentos() -> void:
 		Talentos.precio(vacio, "veterano"), arbol_entero])
 	Guardado.cambiar(func(g):
 		g.dolares = 100
+		g.mutageno = 0
 		g.talentos = {})
 	ahorrados = 100
 	mutageno = 600
+	mutageno_ahorrado = 0
 	aplicar_talentos({})
 	PartidaGuardada.apuntar(self, 1)   # una partida a medias, con los 600 (la prueba no la apunta sola)
 	await get_tree().create_timer(0.3).timeout
@@ -1994,6 +1996,22 @@ func probar_comprar_talentos() -> void:
 	print("Con 2: Puntería %d · mutágeno %d · motivo «%s» · info «%s» · ficha «%s» (esperado: 0 · 2 · sin_mutageno · ... Cuesta 25 de mutágeno. · ... 25)" % [
 		Talentos.nivel_de(s, "punteria"), mutageno, Talentos.motivo(s, "punteria", mutageno), ordenador.info.text, ficha_de("punteria")])
 	Captura.foto("captura-talentos-sin-dinero.png")
+	# primero se gasta el de la partida y, si no llega, el guardado: con 100 guardados y 80 de la partida, Puntería
+	# 1, 2 y 3 (25 + 50 + 75 = 150) gastan los 80 de la partida y 70 del guardado
+	Guardado.cambiar(func(g): g.mutageno = 100)
+	mutageno_ahorrado = 100
+	mutageno = 80
+	for i in 3:
+		ordenador.subir("punteria")
+	await get_tree().create_timer(0.3).timeout
+	s = Guardado.cargar()
+	print("Gastar 150 con 100 guardados y 80 de la partida: Puntería %d · de la partida %d · guardado %d (en la partida %d) · total %d · arriba %d (esperado: 3 · 0 · 30 · 30 · 30 · 30)" % [
+		Talentos.nivel_de(s, "punteria"), mutageno, s.mutageno, mutageno_ahorrado, mutageno_total(),
+		ordenador.ventana.find_child("arbol", true, false).mutageno])
+	Captura.foto("captura-talentos-guardado.png")
+	Guardado.cambiar(func(g): g.mutageno = 0)
+	mutageno_ahorrado = 0
+	mutageno = 2
 	var vida_con: int = johnny.stats.vida_max
 	print("Resetear: botón «%s» (esperado: Resetear talentos)" % tarjeta.call("b_resetear"))
 	ordenador.resetear_talentos()
@@ -2041,6 +2059,39 @@ func probar_comprar_talentos() -> void:
 	Guardado.escribir(s)
 	Guardado.cambiar(func(g): g.talentos = {"ataque": 3})
 	print("Ya convertido, con Ataque 3 otra vez: al cargarlo, Ataque %d (esperado: 3: solo se vacía una vez)" % Talentos.nivel_de(Guardado.cargar(), "ataque"))
+	Guardado.escribir(antes)
+
+
+# Con "--captura --mutageno-guardado": el mutágeno de la partida pasa al guardado solo si completas el edificio. Con
+# 100 guardados y 80 cogidos: al caer se queda en 100; al completarlo, 180 (captura-mutageno-fin.png); al abandonar
+# con otros 80, sigue en 180. El
+# inventario enseña el guardado más el de la partida. Deja el guardado como estaba
+func probar_mutageno_guardado() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g): g.mutageno = 100)
+	mutageno_ahorrado = 100
+	mutageno = 80
+	await get_tree().create_timer(0.3).timeout
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	print("Inventario: mutágeno %d (esperado: 100 + 80 = 180)" % mutageno_total())
+	Captura.foto("captura-mutageno-inventario.png")
+	inventario.cerrar()
+	await get_tree().create_timer(0.2).timeout
+	terminar(false)
+	await get_tree().create_timer(0.5).timeout
+	print("Al caer: guardado %d (esperado: 100)" % Guardado.cargar().mutageno)
+	terminada = false
+	planta.num = Planta.PLANTAS
+	terminar(true)
+	await get_tree().create_timer(0.5).timeout
+	print("Al completar el edificio: guardado %d (esperado: 180)" % Guardado.cargar().mutageno)
+	Captura.foto("captura-mutageno-fin.png")
+	# abandonar, lo último: se va al menú (sin esperar nada después, que la prueba ya no está en la escena)
+	terminada = false
+	mutageno = 80
+	terminar(false, true)
+	print("Al abandonar con otros 80: guardado %d (esperado: 180)" % Guardado.cargar().mutageno)
 	Guardado.escribir(antes)
 
 

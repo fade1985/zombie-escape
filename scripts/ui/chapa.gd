@@ -37,11 +37,11 @@ static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int) -> 
 	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, dolares), dolares, AMARILLO)
 
 
-# El mutágeno de la partida, en el mismo sitio que lo ahorrado (en el árbol de talentos, que se paga con él: 15 nov):
-# el frasco y, en la pantallita, la hélice y la cifra en verde (como en el inventario)
+# El mutágeno (el guardado y el de la partida, lo mismo que en el inventario), arriba a la izquierda del árbol de
+# talentos, que se paga con él (15 nov): sin dibujo al lado, el marcador fijo del inventario, con la hélice y la
+# cifra en verde
 static func dibujar_mutageno(lienzo: CanvasItem, fuente: Font, mutageno: int) -> void:
-	lienzo.draw_texture_rect(load("res://assets/ui/iconos/mutageno.png"), Rect2(14, 6, 32, 32), false)
-	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, mutageno, true), mutageno, VERDE, true)
+	dibujar_marcador(lienzo, fuente, Rect2(Vector2(14, 5), medida_fija(fuente)), mutageno, VERDE, true, true)
 
 
 # La pantallita de un marcador (la de lo ahorrado o la del precio que no llega en la tienda: tienda_armas.gd) en "caja":
@@ -112,5 +112,5 @@ static func medida_fija(fuente: Font) -> Vector2:
 
 
 # La pantallita del marcador: dónde va y lo que mide (por si se quiere poner algo a su lado)
-static func caja_ahorrado(fuente: Font, dolares: int, adn := false) -> Rect2:
-	return Rect2(Vector2(52, 5), medida_marcador(fuente, dolares, adn))
+static func caja_ahorrado(fuente: Font, dolares: int) -> Rect2:
+	return Rect2(Vector2(52, 5), medida_marcador(fuente, dolares))

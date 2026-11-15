@@ -6831,8 +6831,8 @@ msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelv
 msgstr "Снимает все очки с дерева. Потраченное на них не возвращается."
 
 #: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con mutágeno y sube un nivel; el que no gastes se pierde al acabar la partida. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "Каждое очко оплачивается мутагеном и даёт новый уровень; всё, что не потратишь, пропадёт в конце забега. Чтобы перейти на следующий ярус, сначала прокачай до максимума нужный талант."
+msgid "Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Каждое очко оплачивается мутагеном и даёт новый уровень. Мутаген, собранный за забег, сохраняется, если пройдёшь здание, и пропадает, если ты падёшь или сдашься. Чтобы перейти на следующий ярус, сначала прокачай до максимума нужный талант."
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"

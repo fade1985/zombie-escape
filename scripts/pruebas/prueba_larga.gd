@@ -820,8 +820,10 @@ func probar_arbol_talentos() -> void:
 	var antes := Guardado.cargar()
 	var mutageno_antes := mutageno
 	Guardado.cambiar(func(g):
+		g.mutageno = 0   # (sin contar el guardado: solo los 200 de la partida)
 		g.talentos = {"ataque": 5, "punteria": 2})
 	mutageno = 200
+	mutageno_ahorrado = 0
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -887,8 +889,11 @@ func probar_arbol_talentos() -> void:
 	print("Pie más largo de la ficha en cada idioma %s (esperado: todos hasta %d)" % [anchos, arbol.call().ANCHO_FICHA - 12])
 	ordenador.abrir("")
 	ordenador.apagar()
-	Guardado.cambiar(func(g): g.talentos = antes.talentos)
+	Guardado.cambiar(func(g):
+		g.mutageno = antes.mutageno
+		g.talentos = antes.talentos)
 	mutageno = mutageno_antes
+	mutageno_ahorrado = antes.mutageno
 
 
 # Con "--captura --tienda-armas": la tienda de armas del ordenador (tienda_armas.gd), con 100 $. Al abrir, la ficha
