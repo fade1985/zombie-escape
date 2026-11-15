@@ -2960,8 +2960,8 @@ msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "每3秒放出腐蚀性气体，灼伤附近的沉睡者并使其麻痹2秒"
 
 #: scripts/objetos.gd
-msgid "la suelta algún durmiente, y los jefes seguro"
-msgstr "部分沉睡者会掉落，首领必掉"
+msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
+msgstr "藏在衣柜、床头柜、书桌和书架里（在购物中心和大厦里由首领掉落）"
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -3190,6 +3190,10 @@ msgstr "+弹药"
 #: scripts/partida.gd
 msgid "¡NO PUEDO LLEVAR MÁS!"
 msgstr "拿不下了！"
+
+#: scripts/partida.gd
+msgid "Vacío"
+msgstr "空"
 
 #: scripts/partida.gd
 msgid "No se puede usar"
@@ -4766,8 +4770,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "在维修间的工作台用制作材料提升武器和投掷物的品质。"
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
-msgstr "材料分为四类：近战、远程、特殊和投掷。沉睡者偶尔会掉落，首领也会掉。"
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
+msgstr "材料分为四类：近战、远程、特殊和投掷。在公寓楼里，它们藏在衣柜、床头柜、书桌和书架里：像电脑一样站在前面打开。在购物中心和大厦里，由首领掉落。"
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4786,8 +4790,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {
 msgstr "每次攻击前它会在地上做标记：离开标记，或者用{esquivar}闪避开！"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
-msgstr "它倒下时会掉落美元、弹药和材料，楼梯也会打开。"
+msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
+msgstr "它倒下时会掉落美元和弹药（在购物中心和大厦里还会掉材料），楼梯也会打开。"
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"

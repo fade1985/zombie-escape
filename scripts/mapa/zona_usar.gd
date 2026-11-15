@@ -1,5 +1,6 @@
 # La zona invisible de delante de un mueble de la sala de mantenimiento (la mesa del ordenador, ordenador.gd; el
-# baúl, el banco de trabajo y la taquilla, arrimable.gd; y el armarito de los baños, armarito.gd). Antes el mueble se abría solo al arrimarse; ahora, mientras
+# baúl, el banco de trabajo y la taquilla, arrimable.gd; el armarito de los baños, armarito.gd; y el armario, la mesilla,
+# el escritorio y la librería de los Apartamentos, mueble.gd). Antes el mueble se abría solo al arrimarse; ahora, mientras
 # Johnny está en la zona, se abre al pulsar la acción de atacar: el clic izquierdo o J (las que tenga puestas en
 # Opciones), el botón B del mando ("usar"; RT ataca siempre) y, en el móvil, el botón «Abrir»
 # que sale entonces (tactil.gd). Con el ratón, el clic tiene que caer encima del mueble: si cae en otra parte, no se abre y

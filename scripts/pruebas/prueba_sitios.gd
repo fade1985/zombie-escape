@@ -2859,3 +2859,98 @@ func probar_congelados() -> void:
 	Planta.semilla = 0
 	Engine.time_scale = 1.0
 	get_tree().quit()
+
+
+# Con "--captura --muebles-materiales" (Fase 4): los muebles que se abren (el armario, la mesilla, el escritorio y la
+# librería, Objetos.MUEBLES_CON_PIEZA). Johnny delante de uno de la pared de arriba: el contorno amarillo
+# (captura-mueble-contorno.png); se abre con E y suelta un material (si sale vacío, «Vacío», se cierra a mano y se vuelve
+# a abrir hasta que salga uno; captura-mueble-material.png, con Johnny apartado para que se vea en el suelo); ya abierto,
+# sin contorno y E no lo vuelve a abrir; al coger el material sale el tutorial de los materiales
+# (captura-mueble-tutorial.png). Y cuántos muebles de esos hay en la planta. Luego se cierra
+func probar_muebles_materiales() -> void:
+	var cuantos := 0
+	var sitio := -1
+	for j in planta.sitios.size():
+		for m in planta.sitios[j].get("muebles", []):
+			if m.tipo in Objetos.MUEBLES_CON_PIEZA:
+				cuantos += 1
+				if sitio < 0 and m.lado == "arriba":
+					sitio = j
+	print("Muebles materiales · en esta planta se abren %d muebles (con un 35 %% de material, unos %d)" % [cuantos, roundi(cuantos * Objetos.PIEZA_MUEBLE)])
+	if sitio < 0:
+		print("Muebles materiales · no hay ninguno en la pared de arriba")
+		get_tree().quit()
+		return
+	await montar(sitio, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var mueble: Node2D = null
+	for m in mapa.muebles:
+		if m.datos.tipo in Objetos.MUEBLES_CON_PIEZA and m.datos.lado == "arriba":
+			mueble = m
+			break
+	# todo el piso descubierto, para que se vea el mueble
+	for s in planta.sitios[sitio].apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	johnny.position = mueble.position + Vector2(0, 20)
+	johnny.get_node("Camara").reset_smoothing()
+	mochila.clear()
+	await get_tree().create_timer(0.6, false).timeout
+	var zona: Area2D = mueble.get_node("Zona")
+	print("Muebles materiales · %s: contorno con Johnny delante %s (esperado: true)" % [mueble.datos.tipo, zona.contorno.visible])
+	Captura.foto("captura-mueble-contorno.png")
+	# se abre con E; si sale vacío, se cierra a mano y otra vez (hasta 30), para ver un material (sin imán, para que se
+	# quede en el suelo y salga en la foto)
+	var iman: float = johnny.stats.iman
+	johnny.stats.iman = 0.0
+	var vacios := 0
+	var piezas: Array = []
+	for intento in 30:
+		mueble.datos.abierto = false
+		pulsar_accion("usar", true)
+		await get_tree().physics_frame
+		pulsar_accion("usar", false)
+		johnny.position = mueble.position + Vector2(140, 60)   # apartado, para que el material se quede en el suelo
+		await get_tree().create_timer(0.15, false).timeout
+		piezas = mapa.cosas.get_children().filter(func(c): return c.get("icono") is Texture2D \
+			and c.icono.resource_path.contains("obj-pieza") and not c.is_queued_for_deletion())
+		if not piezas.is_empty():
+			break
+		vacios += 1
+		if vacios == 1:
+			await get_tree().create_timer(0.2, false).timeout
+			Captura.foto("captura-mueble-vacio.png")
+		johnny.position = mueble.position + Vector2(0, 20)
+		await get_tree().create_timer(0.3, false).timeout
+	await get_tree().create_timer(0.8, false).timeout
+	print("Muebles materiales · vacíos antes del primer material %d · materiales en el suelo %d (esperado: 1) · %s" % [
+		vacios, piezas.size(), piezas[0].icono.resource_path.get_file() if piezas else "-"])
+	print("Muebles materiales · abierto %s (esperado: true) · contorno %s (esperado: false)" % [mueble.datos.abierto, zona.contorno.visible])
+	Captura.foto("captura-mueble-material.png")
+	# ya abierto: delante otra vez, E no lo vuelve a abrir
+	johnny.position = mueble.position + Vector2(0, 20)
+	Tutoriales.olvidar()
+	tutoriales_prueba = true
+	await get_tree().create_timer(0.3, false).timeout
+	var antes := piezas.size()
+	pulsar_accion("usar", true)
+	await get_tree().physics_frame
+	pulsar_accion("usar", false)
+	await get_tree().create_timer(0.3, false).timeout
+	var ahora: int = mapa.cosas.get_children().filter(func(c): return c.get("icono") is Texture2D \
+		and c.icono.resource_path.contains("obj-pieza") and not c.is_queued_for_deletion()).size()
+	print("Muebles materiales · al pulsar E otra vez, materiales en el suelo %d (esperado: %d o menos)" % [ahora, antes])
+	# a coger el material: sale el tutorial
+	johnny.stats.iman = iman
+	if piezas:
+		johnny.position = piezas[0].position
+	await get_tree().create_timer(1.0).timeout
+	var ventana: Tutorial = null
+	for h in get_children():
+		if h is Tutorial and not h.is_queued_for_deletion():
+			ventana = h
+	print("Muebles materiales · en la mochila %s · tutorial: %s (esperado: una pieza_* y piezas)" % [mochila, ventana.id if ventana else "ninguno"])
+	Captura.foto("captura-mueble-tutorial.png")
+	get_tree().quit()

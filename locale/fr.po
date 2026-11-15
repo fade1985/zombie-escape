@@ -2962,8 +2962,8 @@ msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "Toutes les 3 s, tu lâches des gaz corrosifs qui brûlent et paralysent 2 s les dormeurs proches"
 
 #: scripts/objetos.gd
-msgid "la suelta algún durmiente, y los jefes seguro"
-msgstr "certains dormeurs en lâchent, et les boss à coup sûr"
+msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
+msgstr "se trouve dans les armoires, les tables de chevet, les bureaux et les bibliothèques (au centre commercial et dans la tour, lâché par les boss)"
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -3192,6 +3192,10 @@ msgstr "+munitions"
 #: scripts/partida.gd
 msgid "¡NO PUEDO LLEVAR MÁS!"
 msgstr "JE NE PEUX PAS EN PORTER PLUS !"
+
+#: scripts/partida.gd
+msgid "Vacío"
+msgstr "Vide"
 
 #: scripts/partida.gd
 msgid "No se puede usar"
@@ -4772,8 +4776,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Les matériaux de fabrication servent à monter la qualité des armes et des lançables, à l'établi de la salle de maintenance."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
-msgstr "Il y en a de quatre familles : corps à corps, à distance, spéciaux et lançables. Les dormeurs en lâchent de temps en temps, et les boss aussi."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
+msgstr "Il y en a de quatre familles : corps à corps, à distance, spéciaux et lançables. Dans les Appartements, ils sont dans les armoires, les tables de chevet, les bureaux et les bibliothèques : ouvre-les de face, comme l'ordinateur. Au Centre commercial et dans la tour, ce sont les boss qui en lâchent."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4792,8 +4796,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {
 msgstr "Avant chaque attaque, il marque le sol : sors de la marque ou esquive-la avec {esquivar} !"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
-msgstr "En tombant, il lâche des dollars, des munitions et des matériaux, et l'escalier s'ouvre."
+msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
+msgstr "En tombant, il lâche des dollars et des munitions (au Centre commercial et dans la tour, des matériaux aussi), et l'escalier s'ouvre."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"

@@ -417,9 +417,12 @@ en una línea.
   las curas, su `TOPE`; las piezas, `MONTON`, 99. El baúl guarda cuántos hay y `objetos_baul` los reparte, `caben_baul` dice
   cuántos más entran y `tanda`, cuántos salen: la munición, la casilla entera. Puede pasar de 32: no deja guardar más;
   prueba `--casillas-baul`). Y las **piezas**
-  de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta
-  cualquier zombi (`pieza_de_zombi()`, 6 %) y cada jefe (`piezas_de_jefe()`, 4), en `partida.meter_zombi`, y con la
-  alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
+  de mejora de las armas (`PIEZAS`, «materiales» en el juego: cuerpo a cuerpo, a distancia, especial y arrojable): no salen
+  al azar ni de los zombis (Fase 4, 15 nov): en los Apartamentos, de los muebles que se abren (`MUEBLES_CON_PIEZA`: el
+  armario, la mesilla, el escritorio y la librería; `mueble.gd` les pone la zona de `zona_usar.gd` y `partida.abrir_mueble`
+  los abre una vez, `datos.abierto`, con un 35 % de material, `pieza_de_mueble()`, cada familia al 25 %); en el centro
+  comercial y en la torre, cada jefe (`piezas_de_jefe()`, 4, en `partida.meter_zombi`). Con la alerta salen más
+  (`Alerta.mas_piezas()`: más muebles con material y más piezas de jefe). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
   de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (PixelLab, 32×32; ver `assets/pixellab.json` → `piezas`).
   `talentos.gd` (**el jugador los ve como «mutaciones»** desde el 15 nov, lo pidió el dueño: el programa es MUTACIONES.EXE,
   el botón «Resetear mutaciones» y el árbol ya no tiene nombre en la barra de tareas; por dentro siguen siendo talentos, y
@@ -831,7 +834,7 @@ en una línea.
   en la pared de arriba, a la izquierda de la primera puerta, el cartel de «TRASTEROS» (`cartel_trasteros.gd`: la placa
   azul vieja de una imagen de GPT sin letras, `cartel-trasteros.png` de `tools/cartel_trasteros.py`, estirada por en medio, y
   encima «TRASTEROS» traducido con `Tema.FUENTE` a 16). El pasillo empieza y acaba donde las habitaciones (`ENTRADA` y `FINAL`, 0).
-- `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
+- `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd` (el armario, la mesilla, el escritorio y la librería se abren y a veces dan un material: `Objetos.MUEBLES_CON_PIEZA`).
 - `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
   mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
   los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Johnny las cierra a mano

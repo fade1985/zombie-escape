@@ -869,12 +869,12 @@ func probar_piezas() -> void:
 		Alerta.nivel = nivel
 		var salen := 0
 		for i in 20000:
-			if Objetos.pieza_de_zombi() != "":
+			if Objetos.pieza_de_mueble() != "":
 				salen += 1
 		var del_jefe := Objetos.piezas_de_jefe().size()
 		Alerta.nivel = nivel_antes
-		return "alerta %d: zombi %.1f %% · jefe %d" % [nivel, salen / 200.0, del_jefe]
-	print("Tasas: %s | %s | %s (esperado: zombi 6,0 y jefe 4 | zombi 9,0 y jefe 6 | zombi 12,0 y jefe 8, con unas décimas de más o de menos)" % [
+		return "alerta %d: mueble %.1f %% · jefe %d" % [nivel, salen / 200.0, del_jefe]
+	print("Tasas: %s | %s | %s (esperado: mueble 35,0 y jefe 4 | mueble 56,0 y jefe 6 | mueble 70,0 y jefe 8, con unas décimas de más o de menos)" % [
 		tasa.call(0), tasa.call(3), tasa.call(5)])
 	print("Resumen de la Alerta 5: «%s»" % Alerta.resumen(5).replace("\n", " · "))
 	# «Piezas al baúl» (el botón del panel de pruebas) mete 10 de cada pieza en el baúl
@@ -891,27 +891,28 @@ func probar_piezas() -> void:
 	inventario.cerrar()
 	await get_tree().process_frame
 	Guardado.cambiar(func(g): g.baul = {"gasolina": 1})
-	# un zombi normal suelta una pieza de verdad (seis de cada cien): se matan de veinte en veinte hasta que sale una
+	# los zombis ya no sueltan piezas (Fase 4: salen de los muebles): se matan 200 y no sale ninguna
 	var piezas_en_suelo := func() -> Array:
 		return mapa.cosas.get_children().filter(func(c): return c.get_script() == BILLETE and c.icono != null and "obj-pieza_" in c.icono.resource_path)
-	var matados := 0
-	while piezas_en_suelo.call().is_empty() and matados < 600:
-		for i in 20:
-			var z: Node2D = meter_zombi("normal", johnny.position + Vector2(260, 0))
-			z.recibir_golpe(9999, Vector2.ZERO)
-		matados += 20
-		await get_tree().process_frame
-		await get_tree().process_frame
-	print("Zombis normales matados hasta que suelta una pieza: %d (esperado: salió alguna, unos 17 de media; piezas en el suelo: %d)" % [
-		matados, piezas_en_suelo.call().size()])
-	# la portera suelta cuatro
+	for i in 200:
+		var z: Node2D = meter_zombi("normal", johnny.position + Vector2(260, 0))
+		z.recibir_golpe(9999, Vector2.ZERO)
+		if i % 20 == 19:
+			await get_tree().process_frame
+	await get_tree().process_frame
+	print("Zombis normales matados: 200 · piezas en el suelo %d (esperado: 0)" % piezas_en_suelo.call().size())
+	# un jefe del centro comercial (o de la torre) sí suelta cuatro: la portera, haciendo como si fuera el centro (en los
+	# Apartamentos, ninguna)
 	var antes_jefe: int = piezas_en_suelo.call().size()
+	var edificio_antes := edificio
+	edificio = "centro"
 	var portera: Node2D = meter_zombi("portera", johnny.position + Vector2(-260, 0))
 	portera.recibir_golpe(99999, Vector2.ZERO)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	edificio = edificio_antes
 	var del_jefe: int = piezas_en_suelo.call().size() - antes_jefe
-	print("La portera al caer suelta %d piezas (esperado: 4)" % del_jefe)
+	print("La portera al caer en el centro comercial suelta %d piezas (esperado: 4)" % del_jefe)
 	var total_suelo: int = piezas_en_suelo.call().size()
 	# Johnny las recoge: de una en una, yendo a cada sitio donde quedan
 	var cogidas := 0

@@ -5,9 +5,17 @@
 # En las paredes de los lados lleva su dibujo de lado (hecho para la pared izquierda: en la derecha, en espejo).
 # Variantes: mueble-<tipo> es la de siempre y mueble-<tipo>-b, -c... las demás. Cada sitio elige una por tipo con
 # su número "surtido": todas las neveras de una casa son iguales, pero la de al lado puede tener otra.
+#
+# Los que se abren (Objetos.MUEBLES_CON_PIEZA: el armario, la mesilla, el escritorio y la librería; Fase 4, 15 nov) llevan
+# además la zona de delante (zona_usar.gd, con su contorno amarillo), como el armarito del baño: avisan con "usar" y la
+# partida los abre (abrir_mueble), que a veces sueltan un material. Ya abierto ("abierto" en sus datos, que se quedan en
+# la planta) no se vuelve a abrir. Su dibujo no cambia, de momento.
 extends StaticBody2D
 
+signal usar
+
 const LETRAS := "bcdefghijklmnopqrstuvwxyz"
+const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 
 var datos: Dictionary
 var zona := -1
@@ -75,3 +83,20 @@ func montar(m: Dictionary, surtido: int) -> void:
 		Vector2(-m.w / 2.0, 0)])
 	sombra.occluder = huella
 	add_child(sombra)
+	if m.tipo in Objetos.MUEBLES_CON_PIEZA:
+		poner_zona()
+
+
+# La zona donde se para Johnny para abrirlo: alrededor de todo su hueco del suelo (está pegado a una pared, pero puede
+# ser la de arriba, la de abajo o una de los lados), solo mientras sigue cerrado
+func poner_zona() -> void:
+	var zona_usar := ZONA_USAR.new()
+	zona_usar.montar_rect(Rect2(-datos.w / 2.0 - 28.0, -datos.h - 28.0, datos.w + 56.0, datos.h + 56.0))
+	zona_usar.puede = func() -> bool: return not datos.get("abierto", false)
+	add_child(zona_usar)
+	zona_usar.usar.connect(usar.emit)
+
+
+# Ya abierto: se apunta en sus datos (en la planta) y deja de tener contorno
+func abrir() -> void:
+	datos.abierto = true

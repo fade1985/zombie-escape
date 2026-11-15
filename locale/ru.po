@@ -2964,8 +2964,8 @@ msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmie
 msgstr "Каждые 3 с ты выпускаешь едкие газы, которые жгут и парализуют ближайших спящих на 2 с"
 
 #: scripts/objetos.gd
-msgid "la suelta algún durmiente, y los jefes seguro"
-msgstr "выпадает из некоторых спящих, а из боссов — всегда"
+msgid "sale de los armarios, las mesillas, los escritorios y las librerías (en el centro y la torre, de los jefes)"
+msgstr "лежит в шкафах, тумбочках, письменных столах и книжных полках (в торговом центре и в башне — выпадает из боссов)"
 
 #: scripts/objetos.gd
 msgid "lo suelta el gordo"
@@ -3194,6 +3194,10 @@ msgstr "+патроны"
 #: scripts/partida.gd
 msgid "¡NO PUEDO LLEVAR MÁS!"
 msgstr "БОЛЬШЕ НЕ УНЕСУ!"
+
+#: scripts/partida.gd
+msgid "Vacío"
+msgstr "Пусто"
 
 #: scripts/partida.gd
 msgid "No se puede usar"
@@ -4778,8 +4782,8 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Материалы для изготовления повышают качество оружия и метательного на верстаке в дворницкой."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
-msgstr "Их четыре вида: ближний бой, дальний бой, особые и метательные. Их иногда роняют спящие и всегда — боссы."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. En los Apartamentos están en los armarios, las mesillas, los escritorios y las librerías: ábrelos desde delante, como el ordenador. En el centro comercial y en la torre los sueltan los jefes."
+msgstr "Их четыре вида: ближний бой, дальний бой, особые и метательные. В жилом доме они лежат в шкафах, тумбочках, письменных столах и книжных полках: открывай их спереди, как компьютер. В торговом центре и в башне их роняют боссы."
 
 #: scripts/tutoriales.gd
 msgid "Van en la mochila: si completas el edificio, pasan al baúl."
@@ -4798,8 +4802,8 @@ msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {
 msgstr "Перед каждой атакой он размечает пол: уйди с метки или уклонись ({esquivar})!"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
-msgstr "Падая, он роняет доллары, патроны и материалы, и открывается лестница."
+msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
+msgstr "Падая, он роняет доллары и патроны (в торговом центре и в башне ещё и материалы), и открывается лестница."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"
