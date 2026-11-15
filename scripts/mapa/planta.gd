@@ -454,8 +454,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		if not baja and not en_x.is_empty():
 			en_x.push_front(MURO + 86)
 		pasillo.colgados = []
-		for i in en_x.size():
-			pasillo.colgados.append({"x": en_x[i], "alto": 72, "dibujo": CUADROS[((num - 1) * 5 + i) % CUADROS.size()]})
+		for i in en_x.size():   # (su medio, a 60 del suelo: M106, 15 nov, antes a 72, se veían altos)
+			pasillo.colgados.append({"x": en_x[i], "alto": 60, "dibujo": CUADROS[((num - 1) * 5 + i) % CUADROS.size()]})
 		if baja:
 			pasillo.colgados.append({"x": MURO + 56, "alto": 60, "dibujo": "manguera"})
 			pasillo.colgados.append({"x": MURO + 114, "alto": 44, "dibujo": "extintor"})
