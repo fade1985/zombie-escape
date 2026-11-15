@@ -158,6 +158,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Español | Portugués |
 |---|---|
 | Tentacular · Gastroenteritis · Insensible · Caníbal · Ansiedad · Endurecimiento · Locura · Flatulento | Tentacular · Gastroenterite · Insensível · Canibal · Ansiedade · Pele grossa · Loucura · Flatulento |
+| Mutágeno (lo que suelta cada durmiente y paga los talentos (15 nov); en el marcador, una hélice de ADN en vez del «$») | Mutágeno |
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | Zelador · O síndico · O glutão · O maromba · O bombeiro |
 | Solo cuerpo a cuerpo · Todo a oscuras · Sin curas · Durmientes rápidos · De cristal · Casa llena · Oído fino | Só corpo a corpo · Tudo no escuro · Sem curas · Adormecidos rápidos · De vidro · Casa cheia · Ouvido fino |
 

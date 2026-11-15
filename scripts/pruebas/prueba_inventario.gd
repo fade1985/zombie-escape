@@ -1795,6 +1795,52 @@ func probar_municion_zombi() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --mutageno" (15 nov): el mutágeno que suelta cada durmiente (soltar_mutageno). Mata a 3 durmientes al
+# lado de Johnny y cuenta los que caen (foto: captura-mutageno-suelo.png); Johnny pasa por encima y los coge; la partida
+# guardada a medias lo apunta y lo devuelve (PartidaGuardada); y el inventario lo enseña debajo de los dólares, en verde
+# y con la hélice en vez del «$» (captura-mutageno-inventario.png). Se cierra
+func probar_mutageno() -> void:
+	johnny.direccion = "o"   # (que la linterna no alumbre lo que cae)
+	await get_tree().create_timer(0.3).timeout
+	mutageno = 0
+	var durmientes := []
+	for i in 3:
+		durmientes.append(meter_zombi("normal", johnny.position + Vector2(-200 - i * 60, 40)))
+	await get_tree().process_frame
+	for z in durmientes:
+		z.set_physics_process(false)
+		z.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.8).timeout
+	var en_suelo: Array = get_tree().get_nodes_in_group("mutagenos")
+	print("Mutágeno: 3 durmientes muertos dejan %d en el suelo (esperado: 3)" % en_suelo.size())
+	Captura.foto("captura-mutageno-suelo.png")
+	for m in en_suelo:
+		if not is_instance_valid(m):   # (ya cogido: el imán lo ha llevado hasta Johnny al pasar por el de al lado)
+			continue
+		johnny.position = m.global_position
+		for k in 30:
+			await get_tree().physics_frame
+	await get_tree().create_timer(0.3).timeout
+	print("Mutágeno: Johnny lleva %d (esperado: 3) y en el suelo quedan %d (esperado: 0)" % [mutageno,
+		get_tree().get_nodes_in_group("mutagenos").size()])
+	# la partida guardada a medias (al llegar a una planta): lo apunta y, al seguir, lo devuelve
+	PartidaGuardada.apuntar(self, planta.num)
+	var foto: Dictionary = str_to_var(Guardado.cargar().get("en_curso", ""))
+	mutageno = 0
+	PartidaGuardada.poner(self, foto)
+	print("Mutágeno: en la partida guardada %s y al seguirla lleva %d (esperado: 3 y 3)" % [foto.get("mutageno"), mutageno])
+	PartidaGuardada.borrar()
+	# el inventario: debajo de los dólares, en verde y con la hélice
+	mutageno = 128
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	var marcador: Control = inventario.find_child("mutageno", true, false)
+	print("Mutágeno: en el inventario %s, debajo del dinero %s (esperado: true y true)" % [marcador != null,
+		marcador != null and marcador.position.y > inventario.find_child("dinero", true, false).position.y])
+	Captura.foto("captura-mutageno-inventario.png")
+	get_tree().quit()
+
+
 # Con "--captura --atraedora": los dibujos nuevos de la atraedora (PixelLab, 26 oct: el haz de dinamita con el
 # despertador) y de la congeladora (el extintor con el temporizador de números rojos). Johnny lleva tres de cada una
 # (la congeladora entra de repuesto y pasa a la mano al cambiarla por la atraedora). De cada una: una lanzada, a mitad

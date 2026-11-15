@@ -11,6 +11,12 @@ const NEGRO := Color("#1a1c20")      # el relleno de lo bloqueado
 const TEXTO := Color("#d8d0b8")
 const TEXTO_SUAVE := Color("#8a8f98")
 const AMARILLO := Color("#ffe066")   # lo ahorrado y los cuadraditos llenos
+const VERDE := Color("#b0d98c")      # el mutágeno: el verde de la piel de los durmientes, un poco más vivo para que se lea
+# El símbolo del mutágeno en su marcador, en lugar del «$»: una doble hélice de ADN, a cuadraditos de PIXEL_ADN (cada
+# fila, de arriba abajo; «#», lleno). Las dos tiras se cruzan en medio y entre ellas van los peldaños
+const ADN := ["#.....#", "#.###.#", "#.....#", "#.###.#", ".#...#.", "..#.#..", "...#...", "..#.#..", ".#...#.", "#.###.#",
+	"#.....#", "#.###.#", "#.....#"]
+const PIXEL_ADN := 2.0
 const ARRIBA := 44                   # lo alto de la franja de lo ahorrado
 
 
@@ -30,30 +36,49 @@ static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int) -> 
 
 
 # La pantallita de un marcador (la de lo ahorrado o la del precio que no llega en la tienda: tienda_armas.gd) en "caja":
-# el «$» pegado a la cifra, en "color" y con su sombra. Sin los «8» apagados de antes en las casillas vacías (10 nov)
-static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color) -> void:
+# el «$» pegado a la cifra, en "color" y con su sombra. Sin los «8» apagados de antes en las casillas vacías (10 nov).
+# Con "adn", la del mutágeno (inventario.gd): en vez del «$», la doble hélice (ADN)
+static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color, adn := false) -> void:
 	var numero := str(valor)
 	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr (cada cifra, del ancho de un 8)
-	var ancho_dolar := fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
+	var ancho_dolar := ancho_simbolo(fuente, adn)
 	lienzo.draw_rect(caja, REMACHE)                                                    # el marco
 	lienzo.draw_rect(caja.grow(-2), Color("#050607"))                                  # la sombra de arriba e izquierda...
 	lienzo.draw_rect(Rect2(caja.position + Vector2(3, 3), caja.size - Vector2(5, 5)), Color("#3a3f47"))   # ...la luz de abajo y derecha
 	lienzo.draw_rect(Rect2(caja.position + Vector2(3, 3), caja.size - Vector2(6, 6)), Color("#0d1012"))   # y el cristal
 	lienzo.draw_rect(Rect2(caja.position + Vector2(4, 4), Vector2(caja.size.x - 8, 2)), Color("#1a1e22"))  # el brillo de arriba
 	var base := Vector2(caja.position.x + 9, caja.end.y - 8)
-	lienzo.draw_string(fuente, base, "$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32, color)   # no-tr
 	var sombra := color.darkened(0.65)
+	if adn:
+		dibujar_adn(lienzo, Vector2(base.x, base.y - ADN.size() * PIXEL_ADN + 2), color, sombra)
+	else:
+		lienzo.draw_string(fuente, base, "$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32, color)   # no-tr
 	for i in numero.length():
 		var x := base.x + ancho_dolar + i * casilla
 		lienzo.draw_string(fuente, Vector2(x, base.y + 2), numero[i], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, sombra)
 		lienzo.draw_string(fuente, Vector2(x, base.y), numero[i], HORIZONTAL_ALIGNMENT_CENTER, casilla, 32, color)
 
 
+# La doble hélice del mutágeno, con su esquina de arriba a la izquierda en "pos": primero la sombra, como las cifras
+static func dibujar_adn(lienzo: CanvasItem, pos: Vector2, color: Color, sombra: Color) -> void:
+	for capa in [[Vector2(0, 2), sombra], [Vector2.ZERO, color]]:
+		for f in ADN.size():
+			for c in ADN[f].length():
+				if ADN[f][c] == "#":
+					lienzo.draw_rect(Rect2(pos + capa[0] + Vector2(c, f) * PIXEL_ADN, Vector2.ONE * PIXEL_ADN), capa[1])
+
+
+# Lo que ocupa el símbolo de delante de la cifra (el «$» o la hélice), con su aire hasta ella
+static func ancho_simbolo(fuente: Font, adn := false) -> float:
+	if adn:
+		return ADN[0].length() * PIXEL_ADN + 6.0
+	return fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
+
+
 # Lo que mide la pantallita de un marcador con ese valor
-static func medida_marcador(fuente: Font, valor: int) -> Vector2:
+static func medida_marcador(fuente: Font, valor: int, adn := false) -> Vector2:
 	var casilla := fuente.get_string_size("8", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 2.0   # no-tr
-	var ancho_dolar := fuente.get_string_size("$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 4.0   # no-tr
-	return Vector2(ancho_dolar + casilla * str(valor).length() + 20, 34)
+	return Vector2(ancho_simbolo(fuente, adn) + casilla * str(valor).length() + 20, 34)
 
 
 # La pantallita del marcador: dónde va y lo que mide (por si se quiere poner algo a su lado)

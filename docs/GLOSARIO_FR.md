@@ -157,6 +157,7 @@ Sufijos sueltos: « gauche», « droite», « haut», « bas».
 | Español | Francés |
 |---|---|
 | Tentacular · Gastroenteritis · Insensible · Caníbal · Ansiedad · Endurecimiento · Locura · Flatulento | Tentaculaire · Gastro-entérite · Insensible · Cannibale · Anxiété · Carapace · Folie · Flatulent |
+| Mutágeno (lo que suelta cada durmiente y paga los talentos (15 nov); en el marcador, una hélice de ADN en vez del «$») | Mutagène |
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | Concierge · Le gardien · Le glouton · Le gymbro · Le pompier |
 
 ## Gritos (adaptados, no traducidos)

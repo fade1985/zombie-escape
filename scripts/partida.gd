@@ -108,6 +108,8 @@ const MUNICION_ZOMBI := 0.06       # ...o una caja de munición, si no ha soltad
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const BILLETES_JEFA := 8           # los que suelta cada jefe al caer (hasta el 27 oct, 3: lo mismo que 43 zombis)
 const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
+const MUTAGENO := preload("res://assets/ui/iconos/mutageno.png")   # el mutágeno del suelo (soltar_mutageno)
+const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su verde, el del mutágeno)
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
 	"granada": preload("res://assets/ui/iconos/granada.png")}
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
@@ -164,6 +166,8 @@ var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd),
 var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a cuerpo y una a distancia (llevar_arma)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
+var mutageno := 0          # el mutágeno que lleva (15 nov): lo suelta cada durmiente y se gasta en los talentos del
+                           # ordenador; el que no se gasta se pierde al acabar la partida (no va al guardado)
 var muertos := 0           # zombis matados en esta partida
 var matados := {}          # los mismos, por tipo ({"normal": 12, ...}): al acabar, a los de siempre (Colecciones)
 var duracion := 0.0        # segundos jugados (sin contar la pausa)
@@ -1281,6 +1285,23 @@ func cartera() -> int:
 	return ahorrados + dolares
 
 
+# Un mutágeno en el suelo, donde ha caído un durmiente (todos menos los jefes, que dan su mutación): se coge como un
+# billete y se ve, verde, en el inventario (inventario.gd, junto a los dólares)
+func soltar_mutageno(donde: Vector2) -> void:
+	var cosa := BILLETE.new()
+	cosa.johnny = johnny
+	cosa.icono = MUTAGENO
+	cosa.tamano = 0.75
+	cosa.a_oscuras = true   # (se ve un poco aunque el piso esté a oscuras: los durmientes caen en cualquier rincón)
+	cosa.add_to_group("mutagenos")
+	cosa.position = donde
+	cosa.cogido.connect(func():
+		mutageno += 1
+		Sonido.tocar("mutageno")
+		numero(cosa.position, "+1", CHAPA_UI.VERDE))
+	mapa.cosas.add_child.call_deferred(cosa)
+
+
 # Suelta billetes donde ha caído un zombi
 func soltar_billetes(cuantos: int, donde: Vector2) -> void:
 	for i in cuantos:
@@ -1995,6 +2016,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			_al_caer_guardia(zombi)
 		var cuantos := BILLETES_JEFA if tipo in JEFES else BILLETES_GUARDIA if tipo == "guardia" else (1 if randf() < BILLETE_ZOMBI else 0)
 		soltar_billetes(cuantos, zombi.position)
+		# y cada durmiente, un mutágeno (los jefes, no: dan su mutación)
+		if not tipo in JEFES:
+			soltar_mutageno(zombi.position)
 		# a veces, un molotov o una granada
 		var soltado := cuantos > 0
 		for k in ["molotov", "granada"]:

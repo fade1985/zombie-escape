@@ -159,6 +159,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Español | Chino |
 |---|---|
 | Tentacular · Gastroenteritis · Insensible · Caníbal | 触手缠身 · 肠胃炎 · 麻木 · 食人魔 |
+| Mutágeno (lo que suelta cada durmiente y paga los talentos (15 nov); en el marcador, una hélice de ADN en vez del «$») | 诱变剂 |
 | Ansiedad · Endurecimiento · Locura · Flatulento | 焦虑 · 皮糙肉厚 · 疯狂 · 屁王 |
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | 清洁工 · 楼管大爷 · 大胃王 · 健身哥 · 消防员 |
 | Reto: Solo cuerpo a cuerpo · Todo a oscuras · Sin curas · Durmientes rápidos | 只许近战 · 一片漆黑 · 不许治疗 · 快速沉睡者 |

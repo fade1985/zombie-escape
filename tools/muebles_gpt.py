@@ -131,6 +131,9 @@ MUEBLES = {
     "talento_mezcla": ("assets/sources/talento-mezcla-gpt.webp", "assets/ui/iconos/talento-mezcla.png", 32, 32, False),
     # los tres iconos pequeños de las ramas del árbol (el emblema redondo de cada columna, que se dibuja a 24 × 24: se hacen
     # ya a ese tamaño para que no se estiren); el hueco de dentro de la correa se vacía con la semilla
+    # el mutágeno (15 nov): la doble hélice de ADN mutado, con manchas y gotas verdes, que sueltan los durmientes (partida.gd,
+    # soltar_mutageno) y que sale en el inventario junto a los dólares. Los huecos entre peldaños, todo el negro puro
+    "mutageno": ("assets/sources/mutageno-gpt.webp", "assets/ui/iconos/mutageno.png", 30, 32, False, (), "negro"),
     "rama_militar": ("assets/sources/rama-militar-gpt.webp", "assets/ui/iconos/rama-militar.png", 24, 23, False, (), [(620, 950)]),
     "rama_superviviente": ("assets/sources/rama-superviviente-gpt.webp", "assets/ui/iconos/rama-superviviente.png", 22, 24, False),
     "rama_quimico": ("assets/sources/rama-quimico-gpt.webp", "assets/ui/iconos/rama-quimico.png", 24, 24, False),

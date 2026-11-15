@@ -334,6 +334,39 @@ func probar_zombis_tienda() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --durmientes-planta": cuántos durmientes (zombis que no son jefes) trae cada planta de cada edificio al
+# generarse, con 8 semillas por planta (el guardia de la tarjeta, aparte). No cuenta los que llegan luego (la horda del
+# rescate, los eventos, los que llama un jefe, los escoltas de la alarma). Para saber cuánto mutágeno da una partida
+func probar_durmientes_planta() -> void:
+	for ed in Edificios.LISTA:
+		var linea := []
+		var suma := 0.0
+		for num in range(1, Planta.PLANTAS + 1):
+			var total := 0
+			var minimo := 9999
+			var maximo := 0
+			for i in 8:
+				Planta.semilla = 2000 + i * 7 + num
+				var minis: Array = Edificios.LISTA[ed].minijefes
+				var jefe: String = minis[num - 1] if num <= minis.size() else Edificios.LISTA[ed].final
+				var p: Dictionary = Planta.generar(num, ed, jefe)
+				var n := 0
+				for s in p.sitios:
+					for z in s.zombis:
+						if not z.tipo in JEFES:
+							n += 1
+				if p.get("guardia", {}).size() > 0:
+					n += 1
+				total += n
+				minimo = mini(minimo, n)
+				maximo = maxi(maximo, n)
+			suma += total / 8.0
+			linea.append("planta %d: %.0f (%d-%d)" % [num, total / 8.0, minimo, maximo])
+		print("Durmientes de %s: %s | partida entera: %.0f" % [ed, " · ".join(linea), suma])
+	Planta.semilla = 0
+	get_tree().quit()
+
+
 func probar_zombis_sala() -> void:
 	var pisos := 0
 	var total := 0

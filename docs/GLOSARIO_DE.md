@@ -59,6 +59,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | logro · bestiario · dosier · colecciones · noticias | Erfolg · Bestiarium · Akte · Sammlungen · Nachrichten |
 | talento · rama · árbol de talentos · punto | Talent · Zweig · Talentbaum · Punkt |
 | mutación | Mutation |
+| mutágeno (lo que suelta cada durmiente y paga los talentos (15 nov); en el marcador, una hélice de ADN en vez del «$») | Mutagen |
 | dólares · materiales (de fabricación; antes «piezas», 11 nov) | Dollar · Material (Herstellungsmaterial; Plural Materialien) |
 | sala de mantenimiento · ordenador · taquilla · baúl · banco de trabajo · taller | Wartungsraum · Computer · Spind · Truhe · Werkbank · Werkstatt |
 | inventario · mochila · casilla / hueco · montón | Inventar · Rucksack · Platz · Stapel |

@@ -213,6 +213,8 @@
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
 #   --municion-zombi    la munición que suelta un durmiente: solo la de las armas que lleva (la mano y el repuesto;
 #                       las especiales, su gasolina, bidón o batería; solo cuerpo a cuerpo, nada) [prueba_inventario.gd]
+#   --mutageno          el mutágeno que suelta cada durmiente: cae, se coge, va en la partida guardada y sale en el
+#                       inventario, debajo de los dólares                                   [prueba_inventario.gd]
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
 #                       en el HUD y en el inventario                                       [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar (--fotos-tiendas con
@@ -249,6 +251,7 @@
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba, y su pasillo con las
 #                       manchas de sangre sueltas (L36), y sus baños con las toallas (M96)  [prueba_sitios.gd]
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos (y de cada tipo), y que no se amontonen [prueba_sitios.gd]
+#   --durmientes-planta cuántos durmientes trae cada planta de cada edificio y la partida entera (el mutágeno que da) [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera [prueba_sitios.gd]
 #   --torre             (con --edificio torre) Torre Velaria, el esqueleto (tercer edificio, parte 1): sus plantas, sus
@@ -747,6 +750,9 @@ func empezar_prueba() -> void:
 	elif "--municion-zombi" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion_zombi()
+	elif "--mutageno" in args:
+		set_process(false)   # sin la prueba larga
+		probar_mutageno()
 	elif "--atraedora" in args:
 		set_process(false)   # sin la prueba larga
 		probar_atraedora()
@@ -1018,6 +1024,9 @@ func empezar_prueba() -> void:
 	elif "--zombis-sala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_zombis_sala()
+	elif "--durmientes-planta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_durmientes_planta()
 	elif "--dificultad" in args:
 		set_process(false)   # sin la prueba larga
 		probar_dificultad()

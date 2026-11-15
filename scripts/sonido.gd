@@ -42,6 +42,7 @@ const EFECTOS := {
 	"golpe": {"hueco": 40, "notas": [[240, 0.06, "cuadrada", 0.025, -120]]},          # hit (zombi herido)
 	"muerte": {"hueco": 50, "notas": [[300, 0.12, "triangulo", 0.07, 400]]},          # kill
 	"moneda": {"hueco": 45, "notas": [[988, 0.05, "cuadrada", 0.025], [1319, 0.08, "cuadrada", 0.025, 0, 0.05]]},
+	"mutageno": {"hueco": 45, "notas": [[420, 0.06, "seno", 0.035, 260], [760, 0.07, "seno", 0.03, 180, 0.05]]},   # el mutágeno (burbujeo)
 	"gema": {"fijo": true, "notas": [[1200, 0.08, "seno", 0.06], [1800, 0.15, "seno", 0.05, 0, 0.07]]},
 	"dano": {"notas": [[180, 0.25, "sierra", 0.06, -90]]},                             # hurt
 	"esquiva": {"notas": [[260, 0.12, "seno", 0.05, 420]]},                            # dash

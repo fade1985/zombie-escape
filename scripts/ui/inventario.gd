@@ -3,7 +3,7 @@
 #   - Inventario (Tab, I o Select): Johnny grande en medio, de
 #     frente, con su skin y el arma que tiene en la mano; a los lados, sus armas (a la izquierda las de cuerpo a cuerpo
 #     y a la derecha las de distancia; arriba la de la mano y abajo la de repuesto: partida.llevar_arma), y debajo, los
-#     3 arrojables a mano (lanzables.gd; desde el 13 nov no hay de repuesto) y, abajo del todo, el dinero y el hueco de la llave (no están en el HUD). En medio, la mochila (8), la munición (8, por tipos:
+#     3 arrojables a mano (lanzables.gd; desde el 13 nov no hay de repuesto) y, abajo del todo, el dinero, el mutágeno y el hueco de la llave (no están en el HUD). En medio, la mochila (8), la munición (8, por tipos:
 #     Armas.MUNICION) y, abajo, las 2 casillas de las curas (Objetos.USABLES; son de
 #     la mochila, pero van aparte y no ocupan casilla de «Objetos»). A la derecha, la ficha de lo elegido (qué es, el cargador, las
 #     barras y qué hace) y sus botones: "Ponérmela" (las de repuesto), "Usar" (lo de curar:
@@ -238,16 +238,18 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			ahora.position = Vector2(x - 4, 378) - ORIGEN
 			ahora.size = Vector2(80, 80)
 	# y abajo, la etiqueta de la llave y, a su derecha, el dinero en la pantallita de la tienda de armas (chapa.gd: el «$»
-	# y la cifra en amarillo, sin los «8» apagados). En el HUD no se ven
+	# y la cifra en amarillo, sin los «8» apagados) y, debajo, el mutágeno de la partida (15 nov: la hélice y la cifra en
+	# verde). En el HUD no se ven
 	hueco_llave()
-	var dinero := Control.new()
-	dinero.name = "dinero"
-	dinero.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var fuente: Font = Tema.FUENTE
-	dinero.size = CHAPA.medida_marcador(fuente, partida.cartera())
-	dinero.draw.connect(func(): CHAPA.dibujar_marcador(dinero, fuente, Rect2(Vector2.ZERO, dinero.size), partida.cartera(), CHAPA.AMARILLO))
-	lienzo.add_child(dinero)
-	dinero.position = Vector2(262, 507) - ORIGEN
+	for m in [["dinero", partida.cartera(), CHAPA.AMARILLO, false, 488], ["mutageno", partida.mutageno, CHAPA.VERDE, true, 526]]:
+		var marcador := Control.new()
+		marcador.name = m[0]
+		marcador.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		marcador.size = CHAPA.medida_marcador(fuente, m[1], m[3])
+		marcador.draw.connect(func(): CHAPA.dibujar_marcador(marcador, fuente, Rect2(Vector2.ZERO, marcador.size), m[1], m[2], m[3]))
+		lienzo.add_child(marcador)
+		marcador.position = Vector2(262, m[4]) - ORIGEN
 	# en medio, los dos grupos de 8: los objetos de la mochila y la munición y, abajo, las 2 casillas de las curas, en
 	# medio (13 nov: antes, 4, y a su izquierda 4 de arrojables de repuesto)
 	raya(Rect2(380, 148, 2, 430))

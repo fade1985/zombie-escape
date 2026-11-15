@@ -96,6 +96,7 @@ son **adaptaciones**, no traducciones literales.
 | Logros: Alerta naranja / máxima · Sube, conserje · Liquidación total · Visto y no visto · Sin tiritas | Orange Alert / Red Alert · Going Up · Everything Must Go · In a Flash · No Band-Aids |
 | Logros: Comunidad de vecinos · Chatarrero · Caja fuerte · Ninguna regla me para | Tenants' Association · Packrat · Safecracker · No Rule Stops Me |
 | Mutaciones: Tentacular · Gastroenteritis · Insensible · Caníbal · Ansiedad · Endurecimiento · Locura · Flatulento | Tentacular · Gastroenteritis · Numb · Cannibal · Anxiety · Thick Skin · Madness · Flatulent |
+| Mutágeno (lo que suelta cada durmiente y paga los talentos (15 nov); en el marcador, una hélice de ADN en vez del «$») | Mutagen |
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | Janitor · The Super · The Glutton · The Gymbro · The Fireman |
 | pasillo · cámara acorazada · tarjeta dorada | hallway · vault · gold card |
 | apertura de emergencia · cuadro eléctrico · palanca · cable (pelado) · horda | emergency override · electrical panel · lever · wire · horde |
