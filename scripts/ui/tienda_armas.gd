@@ -262,7 +262,7 @@ func poner_vecinos() -> void:
 func _draw() -> void:
 	var fuente := get_theme_default_font()
 	PLACA.dibujar(self, size)
-	PLACA.dibujar_ahorrado(self, fuente, s.dolares)
+	PLACA.dibujar_ahorrado(self, fuente, s.dolares, true)   # (con 4 casillas, como en el inventario: 15 nov)
 	if casillas.is_empty():
 		return
 	var ancho_titulos := ficha.position.x - 24

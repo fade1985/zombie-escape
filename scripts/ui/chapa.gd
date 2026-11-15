@@ -49,9 +49,10 @@ static func dibujar(lienzo: CanvasItem, tam: Vector2) -> void:
 
 # Lo ahorrado, arriba a la izquierda, como el marcador de una caja registradora: el billete y, en una pantallita
 # hundida, los dólares en amarillo
-static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int) -> void:
+# Con "fijo", el marcador de 4 casillas del inventario (en la tienda de armas: lo pidió el dueño el 15 nov)
+static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int, fijo := false) -> void:
 	lienzo.draw_texture_rect(load("res://assets/ui/iconos/billete.png"), Rect2(14, 6, 32, 32), false)
-	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, dolares), dolares, AMARILLO)
+	dibujar_marcador(lienzo, fuente, caja_ahorrado(fuente, dolares, fijo), dolares, AMARILLO, false, fijo)
 
 
 # El mutágeno (el guardado y el de la partida, lo mismo que en el inventario), arriba a la izquierda del árbol de
@@ -144,5 +145,5 @@ static func medida_fija(fuente: Font) -> Vector2:
 
 
 # La pantallita del marcador: dónde va y lo que mide (por si se quiere poner algo a su lado)
-static func caja_ahorrado(fuente: Font, dolares: int) -> Rect2:
-	return Rect2(Vector2(52, 5), medida_marcador(fuente, dolares))
+static func caja_ahorrado(fuente: Font, dolares: int, fijo := false) -> Rect2:
+	return Rect2(Vector2(52, 5), medida_fija(fuente) if fijo else medida_marcador(fuente, dolares))
