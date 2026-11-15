@@ -1032,7 +1032,7 @@ func probar_relato() -> void:
 	var r: Relato = abierto.call()
 	print("Relato · intro: abierta %s · juego parado %s · cambiando %s · píxeles encendidos en el primer fotograma %d (esperado: true, true, false, 0)" % [
 		r != null, get_tree().paused, cambiando, encendidos])
-	var pista_antes := guia.pista
+	var paso_antes := guia.paso
 	# sola: la primera línea al cabo de ESPERA y la segunda cuando toca
 	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
 	var sola := r.vistas
@@ -1065,7 +1065,7 @@ func probar_relato() -> void:
 	var ataca_al_cerrar: bool = johnny.ataque_t >= 0.0
 	print("Relato · al cerrarla, Johnny sin mandos %s · atacando con el clic pulsado %s (esperado: true, false)" % [johnny.sin_mandos > 0.0, ataca_al_cerrar])
 	# (con --guiado, la guía de la primera partida espera a que se cierre y entonces empieza)
-	print("Relato · guía activa %s: pista durante la intro «%s», al cerrarla «%s» (con --guiado: «», «»)" % [guia.activa, pista_antes, guia.pista])
+	print("Relato · guía activa %s: paso durante la intro «%s», al cerrarla «%s» (con --guiado: «», «»)" % [guia.activa, paso_antes, guia.paso])
 	Captura.foto("captura-relato-sala.png")   # (la sala de siempre)
 	# el final de los Apartamentos, agarrando la escalera. Lo que se pulsa al salir no cuenta (ESPERA)
 	planta.num = Planta.PLANTAS
@@ -3556,8 +3556,9 @@ func probar_relieve() -> void:
 	get_tree().quit()
 
 
-# --guiado: el tutorial disimulado de la primera partida (guia.gd): las pistas encima de Johnny en orden, el latido del
-# HUD, la flecha del suelo, el apartamento fácil, la llavecita del zombi de la llave y que no sale ninguna ventana
+# --guiado: el tutorial disimulado de la primera partida (guia.gd): sus ventanas en orden («Atacar» antes que «Lanzables»,
+# «Cambiar de arma», «Munición y recarga»: ya no hay letreros encima de Johnny, M109), el latido del HUD tras cada una,
+# la flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave
 # Con "--captura --guiado --tercios": en la primera partida (con la guía), el primer tercio perdido saca la ventana de
 # «La vida en tercios» (M35; antes, solo una frase en la línea de abajo). Foto: captura-tutorial-tercios.png. Se cierra
 func probar_guiado_tercios() -> void:
@@ -3588,17 +3589,9 @@ func probar_guiado() -> void:
 	supervivientes.equipo.clear()
 	var ventanas := func() -> int:
 		return get_children().filter(func(h): return h is Tutorial).size()
-	# espera a que salga la pista "id" (o se canse) y saca su foto
-	var esperar := func(id: String, foto: String) -> void:
-		for _i in 40:
-			if guia.pista == id:
-				break
-			await get_tree().create_timer(0.1).timeout
-		await get_tree().create_timer(0.4).timeout
-		print("Guía · pista «%s» (esperado: %s) · latido «%s»" % [guia.pista, id, get_node("Pantalla/HUD").latido])
-		Captura.foto(foto)
-	# espera a que salga la ventana del tutorial "id" (lanzar y curarse ya no son pistas: van con su ventana), le saca
-	# su foto y la cierra
+	var latido := func() -> String:
+		return get_node("Pantalla/HUD").latido
+	# espera a que salga la ventana del tutorial "id", le saca su foto y la cierra
 	var ventana_de := func(id: String) -> void:
 		var v: Tutorial = null
 		for _i in 40:
@@ -3609,7 +3602,7 @@ func probar_guiado() -> void:
 				break
 			await get_tree().create_timer(0.1, true, false, true).timeout
 		await get_tree().create_timer(0.9, true, false, true).timeout
-		print("Guía · ventana «%s» (esperado: %s) · pista a la vez «%s» (esperado: «»)" % [v.id if v else "ninguna", id, guia.pista])
+		print("Guía · ventana «%s» (esperado: %s) · juego parado %s (esperado: true)" % [v.id if v else "ninguna", id, get_tree().paused])
 		Captura.foto("captura-guiado-ventana-%s.png" % id)
 		if v:
 			v.cerrar()
@@ -3617,10 +3610,10 @@ func probar_guiado() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("Guía · activa (no es la primera partida, pero se pidió repetirla): %s · pedida aún: %s (esperado: true, false)" % [
 		guia.activa, Guardado.cargar().guia_otra_vez])
-	# al empezar, la ventana «Moverse y esquivar» (en la partida de prueba no sale sola: se abre aquí) y ninguna pista
+	# al empezar, la ventana «Moverse y esquivar» (en la partida de prueba no sale sola: se abre aquí)
 	var al_empezar := tutorial_al_empezar()
-	print("Guía · ventana al empezar «%s» · «Cómo se juega» ya visto %s · pista «%s» (esperado: moverse, true, «»)" % [
-		al_empezar, Tutoriales.visto("jugar"), guia.pista])
+	print("Guía · ventana al empezar «%s» · «Cómo se juega» ya visto %s · «Atacar» aún no %s (esperado: moverse, true, true)" % [
+		al_empezar, Tutoriales.visto("jugar"), not Tutoriales.visto("atacar")])
 	ver_tutorial(al_empezar)
 	await get_tree().create_timer(0.9, true, false, true).timeout
 	Captura.foto("captura-guiado-ventana-%s.png" % Idioma.actual)
@@ -3629,8 +3622,8 @@ func probar_guiado() -> void:
 			h.cerrar()
 	johnny.position += Vector2(120, 0)
 	await get_tree().create_timer(1.8).timeout
-	print("Guía · tras la ventana, sin pistas de moverse ni esquivar: pista «%s» · juego parado %s (esperado: «», false)" % [
-		guia.pista, get_tree().paused])
+	print("Guía · tras la ventana, sin zombis: paso «%s» · otra ventana %d · juego parado %s (esperado: «», 0, false)" % [
+		guia.paso, ventanas.call(), get_tree().paused])
 	# la flecha hacia la puerta del pasillo: mientras quede algún «!» en la sala (la taquilla, el ordenador...), no;
 	# mirados todos, sí
 	var marcas: int = mapa.marcas_sala.filter(func(m): return m.activa).size()
@@ -3656,9 +3649,10 @@ func probar_guiado() -> void:
 	print("Guía · el fácil: %d zombis, con la llave %s, armarito %s (esperado: ≤%d, false, vendas)" % [facil.zombis.size(),
 		facil.zombis.any(func(z): return z.get("llave", false)),
 		facil.armaritos[0].dentro if not facil.get("armaritos", []).is_empty() else "sin baño", Guia.FACIL])
-	# el apartamento fácil: al cerrarse la puerta (la primera pelea), la ventana de los lanzables; luego los zombis,
-	# despiertos y quietos, a la vista
+	# el apartamento fácil: al cerrarse la puerta (la primera pelea), la ventana «Atacar» y, detrás, la de los lanzables;
+	# luego los zombis, despiertos y quietos, a la vista
 	await montar(guia.facil, 0)
+	await ventana_de.call("atacar")
 	await ventana_de.call("lanzables")
 	var zombis := get_tree().get_nodes_in_group("zombis")
 	# hacia el centro de la habitación (Johnny entra por la puerta, que puede estar arriba o abajo): si quedaran fuera,
@@ -3670,15 +3664,25 @@ func probar_guiado() -> void:
 		zombis[i].set_physics_process(false)
 		zombis[i].position = johnny.position + hacia * 330.0 + lado * (-200.0 + 200.0 * i)
 	johnny.set_physics_process(false)   # (quieto: que no los mate ni gaste las balas él solo en el modo asistido)
-	await esperar.call("atacar", "captura-guiado-atacar.png")
-	await get_tree().create_timer(4.2).timeout   # (en el modo asistido se va sola a los 4 s)
-	await esperar.call("pistola", "captura-guiado-pistola.png")
+	# con la fregona en la mano y la pistola guardada: «Cambiar de arma» (no salió en la tienda) y luego late la casilla
+	# de las armas, hasta cambiar
+	await ventana_de.call("cambiar_arma")
+	await get_tree().create_timer(0.6).timeout
+	print("Guía · tras «Cambiar de arma», late «%s» (esperado: armas) · letrero encima de Johnny: ninguno" % latido.call())
+	Captura.foto("captura-guiado-latido-armas.png")
 	johnny.cambiar_mano()
-	await get_tree().create_timer(1.7).timeout
+	await get_tree().create_timer(0.4).timeout
+	print("Guía · al sacar la pistola, late «%s» (esperado: «»)" % latido.call())
+	# con medio cargador: «Munición y recarga» y luego late la casilla de las balas, hasta recargar
 	johnny.balas = 2
-	await esperar.call("recargar", "captura-guiado-recargar.png")
+	await ventana_de.call("municion")
+	await get_tree().create_timer(0.6).timeout
+	print("Guía · tras «Munición y recarga», late «%s» (esperado: balas)" % latido.call())
+	Captura.foto("captura-guiado-latido-balas.png")
 	johnny.empezar_recarga()
-	await get_tree().create_timer(1.7).timeout
+	await get_tree().create_timer(0.4).timeout
+	print("Guía · al recargar, late «%s» (esperado: «»)" % latido.call())
+	await get_tree().create_timer(1.3).timeout
 	# herido y con vendas: sin pista de curarse (sale la ventana de las vendas al cogerlas); con tres zombis cerca, sin
 	# pista de lanzar
 	johnny.vida = johnny.stats.vida_max - 30
@@ -3687,10 +3691,10 @@ func probar_guiado() -> void:
 	for i in zombis.size():
 		zombis[i].position = johnny.position + hacia * 150.0 + lado * (-120.0 + 120.0 * i)
 	await get_tree().create_timer(1.5).timeout
-	print("Guía · herido, con vendas y zombis cerca: pista «%s» (esperado: «»)" % guia.pista)
-	print("Guía · vistos jugar %s, municion %s, curas %s, lanzables %s · ventanas abiertas: %d (esperado: true ×4, 0)" % [
-		Tutoriales.visto("jugar"), Tutoriales.visto("municion"), Tutoriales.visto("curas"), Tutoriales.visto("lanzables"),
-		ventanas.call()])
+	print("Guía · herido, con vendas y zombis cerca: paso «%s» · ventanas abiertas %d (esperado: «», 0)" % [guia.paso, ventanas.call()])
+	print("Guía · vistos jugar %s, atacar %s, cambiar_arma %s, municion %s, curas %s, lanzables %s (esperado: true ×6)" % [
+		Tutoriales.visto("jugar"), Tutoriales.visto("atacar"), Tutoriales.visto("cambiar_arma"), Tutoriales.visto("municion"),
+		Tutoriales.visto("curas"), Tutoriales.visto("lanzables")])
 	# el zombi de la llave, en otro apartamento: su llavecita y el aviso al despertar
 	for z in zombis:
 		z.queue_free()
@@ -3721,29 +3725,39 @@ func probar_guiado() -> void:
 	get_tree().quit()
 
 
-# --guiado --sin-hacer: un jugador que no hace nada de lo que le piden las pistas y muere: en la partida siguiente (ya sin
-# guía) no se le vuelve a explicar con ventanas lo que ya salió en las pistas; lo que nunca salió, sí
+# --guiado --sin-hacer: un jugador que no hace lo que le pide la guía: la casilla que late se cansa a los DURA segundos;
+# «Jefes» ya no lo tapa la guía (sale su ventana) y, en la partida siguiente (ya sin guía), lo ya enseñado no se repite y
+# lo que nunca salió, sí
 func probar_guia_sin_hacer() -> void:
 	johnny.invencible = true
 	var ventanas := func() -> int:
-		return get_children().filter(func(h): return h is Tutorial).size()
-	var pasar := func(id: String) -> void:   # espera a que salga "id" y la deja agotar sin hacerla
-		for _i in 40:
-			if guia.pista == id:
-				break
-			await get_tree().create_timer(0.1).timeout
-		print("Guía sin hacer · pista «%s» (esperado: %s)" % [guia.pista, id])
-		guia.desde = Guia.DURA
-		await get_tree().create_timer(0.2).timeout
+		return get_children().filter(func(h): return h is Tutorial and not h.is_queued_for_deletion()).size()
+	var cerrar := func() -> void:
+		for h in get_children():
+			if h is Tutorial:
+				h.cerrar()
+		await get_tree().create_timer(0.3).timeout
 	tutorial_al_empezar()   # (la ventana «Moverse y esquivar» apunta «Cómo se juega» como visto)
-	guia.jefe_presentado()
-	await pasar.call("jefe")
-	print("Guía sin hacer · vistos jugar %s, jefes %s · sin salir aún: lanzables %s (esperado: true, true, false)" % [
-		Tutoriales.visto("jugar"), Tutoriales.visto("jefes"), Tutoriales.visto("lanzables")])
+	tutorial("jefes")
+	await get_tree().create_timer(0.5).timeout
+	print("Guía sin hacer · con la guía, la ventana «Jefes»: %d (esperado: 1)" % ventanas.call())
+	await cerrar.call()
+	# «Munición y recarga» y, sin recargar, la casilla de las balas late hasta cansarse
+	guia.mostrar("recargar")
+	await get_tree().create_timer(0.5).timeout
+	await cerrar.call()
+	var latia: String = get_node("Pantalla/HUD").latido
+	guia.desde = Guia.DURA - 0.1
+	await get_tree().create_timer(0.4).timeout
+	print("Guía sin hacer · sin recargar, latía «%s» y a los %d s «%s» (esperado: balas, «»)" % [latia, Guia.DURA,
+		get_node("Pantalla/HUD").latido])
+	print("Guía sin hacer · vistos jugar %s, jefes %s, municion %s · sin salir aún: lanzables %s (esperado: true, true, true, false)" % [
+		Tutoriales.visto("jugar"), Tutoriales.visto("jefes"), Tutoriales.visto("municion"), Tutoriales.visto("lanzables")])
 	# la partida siguiente, ya sin guía
 	guia.apagar()
 	tutorial("jugar")
 	tutorial("jefes")
+	tutorial("municion")
 	await get_tree().create_timer(0.5).timeout
 	print("Guía sin hacer · ventanas de lo ya enseñado: %d (esperado: 0)" % ventanas.call())
 	tutorial("lanzables")

@@ -33,6 +33,10 @@ const LISTA := {
 		"lineas": ["Muévete con {moverse}.",
 			"Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño.",
 			"Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."]},
+	# (solo en la primera partida, la de la guía, en la primera pelea: guia.gd; en las demás lo cuenta «Cómo se juega»,
+	# que al verse lo apunta también: partida.ver_tutorial)
+	"atacar": {"grupo": "Lo básico", "titulo": "Atacar", "icono": "fregona", "cuando": "En la primera pelea",
+		"lineas": ["{atacar_modo}"]},
 	"apartamentos": {"grupo": "Lo básico", "titulo": "Limpia los apartamentos", "icono": "puerta",
 		"cuando": "Al salir al pasillo",
 		"lineas": ["Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un durmiente.",
@@ -86,7 +90,7 @@ const LISTA := {
 			"Van en la mochila: si completas el edificio, pasan al baúl."]},
 	"jefes": {"grupo": "Plantas y jefes", "titulo": "Jefes", "icono": "jefe", "cuando": "Al llegar al primer jefe",
 		"lineas": ["Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso.",
-			"Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!",
+			"Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!",
 			"Al caer suelta dólares, munición y materiales, y se abren las escaleras."]},
 	"mutaciones": {"grupo": "Plantas y jefes", "titulo": "Mutaciones", "icono": "zombi",
 		"cuando": "Antes de la primera mutación",
@@ -279,8 +283,7 @@ static func texto(id: String) -> String:
 	return "\n".join(lineas)
 
 
-# Una frase ya traducida con sus {acciones} cambiadas por las teclas, en amarillo (también la usan las pistas de la
-# primera partida, guia.gd)
+# Una frase ya traducida con sus {acciones} cambiadas por las teclas, en amarillo
 static func con_teclas(texto_traducido: String) -> String:
 	var t := texto_traducido.replace("{atacar_modo}", atacar_modo())
 	while t.contains("{"):

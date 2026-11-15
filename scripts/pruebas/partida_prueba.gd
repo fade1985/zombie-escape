@@ -375,11 +375,13 @@
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
 #   --guiado            el tutorial disimulado de la primera partida: la ventana «Moverse y esquivar» del principio
-#                       (foto captura-guiado-ventana-<idioma>; mirarla con --lang ru y --lang zh_CN), las ventanas de
-#                       Lanzables y Vendas (sin pistas de lanzar ni de curarse), las pistas sobre Johnny, el latido del HUD, la
-#                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
-#   --guiado --sin-hacer  la guía con un jugador que no hace lo que le piden: lo enseñado cuenta igual como visto y su
-#                       ventana no se repite en la partida siguiente, tras morir (F18)         [prueba_varias.gd]
+#                       (foto captura-guiado-ventana-<idioma>; mirarla con --lang ru y --lang zh_CN), las de la primera
+#                       pelea en orden (Atacar, Lanzables, Cambiar de arma, Munición y recarga, Vendas: fotos
+#                       captura-guiado-ventana-<id>; sin letreros encima de Johnny, M109), el latido del HUD tras cada
+#                       una (captura-guiado-latido-armas y -balas), la flecha del suelo, el apartamento fácil y la
+#                       llavecita del zombi de la llave                                       [prueba_varias.gd]
+#   --guiado --sin-hacer  la guía con un jugador que no hace lo que le piden: la casilla que late se cansa, «Jefes» sale
+#                       con la guía y lo ya enseñado no se repite en la partida siguiente, tras morir (F18) [prueba_varias.gd]
 #   --idioma            solo el menú, Opciones (4 pestañas, la lista de idiomas, Contáctanos y las licencias), el cambio de
 #                       idioma en caliente y «Elige edificio»; con
 #                       --alerta 3 --reto, con su alerta y su reto             [prueba_idioma.gd; lo lanza menu_principal.gd]

@@ -1,8 +1,7 @@
 # El tutorial disimulado (docs/LANZAMIENTO.md, apartado 2): en la primera partida, la planta baja de los Apartamentos
-# enseña a jugar sin parar el juego. En vez de las ventanas de los tutoriales (tutoriales.gd) salen:
-#   - pistas: un letrero pequeño encima de Johnny con la tecla en amarillo («Recarga con R»), justo cuando hace
-#     falta; se va solo en cuanto se hace (o a los DURA segundos);
-#   - el HUD que late: la casilla de lo que toca usar (hud.gd, "latido");
+# enseña a jugar con las ventanas de los tutoriales (tutoriales.gd) justo cuando hace falta, y además:
+#   - el HUD que late: tras cerrar la ventana, la casilla de lo que toca usar (hud.gd, "latido") late hasta que se hace
+#     (o a los DURA segundos);
 #   - una flecha en el suelo, delante de Johnny, hacia donde hay que ir: en la sala de mantenimiento, la puerta del
 #     pasillo; en el pasillo, el apartamento sin limpiar más cercano (el fácil, primero), la sala del jefe con la llave
 #     y las escaleras tras el jefe;
@@ -10,77 +9,51 @@
 # Y el primer apartamento al que lleva la flecha es fácil a propósito: pocos zombis, sin la llave y con unas vendas en el
 # armarito del baño (preparar_planta).
 #
-# Moverse y esquivar no van en pistas: al empezar sale su ventana, «Moverse y esquivar» (partida.tutorial_al_empezar,
-# que apunta también «Cómo se juega» como visto: lo demás lo enseñan las pistas). Lanzar y curarse tampoco: salen sus
-# ventanas, «Lanzables» en la primera pelea y «Vendas» al abrir el primer armarito (o coger las primeras vendas).
-# Cambiar de arma tiene también su ventana, «Cambiar de arma», pero sale antes, en la tienda, al coger la pistola de regalo (M97).
-# Las pistas, en orden (PISTAS): al ver un zombi despierto, atacar; luego sacar la pistola y recargar con medio
-# cargador. El jefe se cuenta con la línea de avisos (partida.decir) o con una pista con tiempo.
-# Lo que se enseña así se apunta como visto (Tutoriales.apuntar) nada más salir, se haga o no: si no, al morir en la
-# primera partida, la siguiente (ya sin guía) lo volvería a explicar con su ventana. Queda en el apartado Tutorial del
-# menú. Las ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial); después, solo las de lo que
-# la guía no llegó a enseñar.
+# Las ventanas: al empezar, «Moverse y esquivar» (partida.tutorial_al_empezar, que apunta también «Cómo se juega» como
+# visto: lo demás va saliendo luego). Las que pide la guía (PASOS), en orden: «Atacar» en la primera pelea (al despertarse
+# el primer zombi o al cerrarse la puerta del primer apartamento, antes que «Lanzables»: partida.gd); en una pelea con la
+# fregona en la mano y la pistola guardada, la casilla de las armas late hasta cambiar (con la ventana «Cambiar de arma»
+# delante si no salió ya en la tienda, al coger la pistola de regalo, M97), y «Munición y recarga» con la pistola en la
+# mano y medio cargador, antes de quedarse sin balas. «Vendas», «Jefes» y las
+# demás salen como en cualquier partida. Hasta el 15 nov (M109) esto eran letreros encima de la cabeza de Johnny.
+# Las ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial).
 #
 # Se enciende en partida.gd (_ready) si es la primera partida, en los Apartamentos y con los tutoriales encendidos
-# (Opciones → Ayudas); se apaga al subir a la planta siguiente. Lo engancha partida.gd: nueva_planta(), al_montar(),
-# marcar_llave() y jefe_presentado(). Se prueba con --captura --guiado (prueba_varias.gd).
+# (Opciones → Ayudas); se apaga al subir a la planta siguiente. Lo engancha partida.gd: nueva_planta(), al_montar() y
+# marcar_llave(). Se prueba con --captura --guiado (prueba_varias.gd).
 class_name Guia
 extends Node
 
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
-const DURA := 12.0          # lo más que se queda una pista sin hacerse
-const MINIMO := 1.5         # lo menos que se ve una pista (para que dé tiempo a leerla)
+const DURA := 12.0          # lo más que late una casilla del HUD sin hacerse lo que pide
 const FACIL := 3            # los zombis del primer apartamento
 const LEJOS_FLECHA := 150.0 # más cerca de la puerta que esto, la flecha se va
 
-# Las ventanas que la guía enseña a su manera (no salen mientras está activa)
-# (la de los tercios sí sale, con su ventana: es cuando más falta hace entenderlos, M35)
-const CUBRE := ["jugar", "apartamentos", "municion", "jefes"]
+# Las ventanas que no salen mientras la guía está activa: «Cómo se juega» (la cuentan «Moverse y esquivar» y las de
+# PASOS) y «Limpia los apartamentos» (lo dice la línea de abajo al salir al pasillo, al_montar)
+const CUBRE := ["jugar", "apartamentos"]
 
-# Cada pista: su frase (con las teclas entre llaves, como en tutoriales.gd), la ventana que cuenta como vista al salir
-# y la casilla del HUD que late mientras sale. "atacar" usa la frase del modo de atacar (Tutoriales.atacar_modo)
-# [traducir]
-const PISTAS := {
-	"atacar": {"texto": "", "tutorial": "", "latido": ""},   # (su frase es la del modo de atacar)
-	"pistola": {"texto": "Saca la pistola con {cambiar_arma}", "tutorial": "", "latido": "armas"},
-	"recargar": {"texto": "Recarga con {recargar}", "tutorial": "municion", "latido": "balas"},
-	"jefe": {"texto": "¡Sal de la marca del suelo o esquiva con {esquivar}!", "tutorial": "jefes", "latido": ""},
+# Cada paso: la ventana que sale y la casilla del HUD que late después, hasta que se hace (hecho())
+const PASOS := {
+	"atacar": {"tutorial": "atacar", "latido": ""},
+	"pistola": {"tutorial": "cambiar_arma", "latido": "armas"},
+	"recargar": {"tutorial": "municion", "latido": "balas"},
 }
-# [/traducir]
 
 var partida: Node
 var johnny: Node2D
 var activa := false
-var hechas: Array = []        # las pistas ya enseñadas
-var pista := ""               # la que se ve ahora
-var desde := 0.0              # cuánto lleva a la vista
-var cumplida := false         # si ya se ha hecho lo que pide (se queda en cuanto pasa una vez)
+var hechos: Array = []        # los pasos ya enseñados
+var paso := ""                # el último enseñado, mientras late su casilla
+var desde := 0.0              # cuánto lleva latiendo
 var facil := -1               # el apartamento fácil (su número de sitio)
 var dicho: Array = []         # los avisos de la línea de abajo ya dichos ("pasillo", "llave")
-var letrero := RichTextLabel.new()
 var flecha := Flecha.new()
 
 
 func preparar(p: Node) -> void:
 	partida = p
 	johnny = p.johnny
-	letrero.bbcode_enabled = true
-	letrero.fit_content = true
-	letrero.autowrap_mode = TextServer.AUTOWRAP_OFF
-	letrero.scroll_active = false
-	letrero.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	letrero.theme = Tema.crear()
-	letrero.add_theme_font_size_override("normal_font_size", 16)
-	letrero.add_theme_constant_override("outline_size", 6)
-	letrero.add_theme_color_override("font_outline_color", Tema.LINEA)
-	var fondo := StyleBoxFlat.new()
-	fondo.bg_color = Color(Tema.LINEA, 0.75)
-	fondo.border_color = Color(Tema.AMARILLO, 0.6)
-	fondo.set_border_width_all(2)
-	fondo.set_content_margin_all(6)
-	letrero.add_theme_stylebox_override("normal", fondo)
-	letrero.visible = false
-	p.get_node("Pantalla").add_child(letrero)
 
 
 # Al generar cada planta: fuera de la planta baja se apaga. En la planta baja, sin evento sorpresa y con su apartamento
@@ -124,8 +97,7 @@ func nueva_planta() -> void:
 
 func apagar() -> void:
 	activa = false
-	pista = ""
-	letrero.visible = false
+	paso = ""
 	flecha.visible = false
 	poner_latido("")
 
@@ -164,86 +136,57 @@ func marcar_llave(zombi: Node2D) -> void:
 	tween.tween_property(marca, "position:y", -100.0, 0.5).set_trans(Tween.TRANS_SINE)
 
 
-# Tras la presentación del jefe: cómo se esquivan sus ataques (una pista que se va sola)
-func jefe_presentado() -> void:
-	if activa and not "jefe" in hechas:
-		poner("jefe")
-
-
 func _process(delta: float) -> void:
 	if not activa or partida.mapa == null or partida.cambiando or partida.terminada or not johnny.vivo:
-		letrero.visible = false
 		poner_latido("")
 		return
 	mover_flecha()
 	mirar_avisos()
-	if pista == "":
-		pista = siguiente()
-		if pista != "":
-			poner(pista)
-	if pista != "":
+	var toca := siguiente()
+	if toca != "":
+		mostrar(toca)
+	# la casilla del HUD del último paso late hasta que se hace (con su ventana abierta, el juego está parado y no corre)
+	if paso != "":
 		desde += delta
-		cumplida = cumplida or hecha(pista)   # (lo hecho cuenta aunque pase enseguida, como la esquiva)
-		if (cumplida and desde >= MINIMO) or desde >= DURA:
-			pista = ""
-			letrero.visible = false
-			poner_latido("")
-		else:
-			colocar_letrero()
+		if hecho(paso) or desde >= DURA:
+			paso = ""
+		poner_latido(PASOS[paso].latido if paso != "" else "")
 
 
-# La pista que toca ahora (la primera de la lista que aún no se ha enseñado y viene a cuento), o ""
+# El paso que toca ahora (el primero de la lista que aún no se ha enseñado y viene a cuento), o "". Todos, en una pelea
 func siguiente() -> String:
-	var despiertos := zombis_despiertos()
-	if despiertos.is_empty():
+	if zombis_despiertos().is_empty():
 		return ""
-	if not "atacar" in hechas:
+	if not "atacar" in hechos:
 		return "atacar"
-	if not "pistola" in hechas and johnny.mano == "cuerpo" and johnny.huecos.fuego != "":
+	if not "pistola" in hechos and johnny.mano == "cuerpo" and johnny.huecos.fuego != "":
 		return "pistola"
 	var arma: Dictionary = johnny.base(johnny.huecos.fuego)
-	if not "recargar" in hechas and johnny.mano == "fuego" and not arma.has("deposito") \
+	if not "recargar" in hechos and johnny.mano == "fuego" and not arma.has("deposito") \
 			and johnny.balas <= arma.cargador / 2 and johnny.recargando <= 0.0:
 		return "recargar"
 	return ""
 
 
-func poner(id: String) -> void:
-	pista = id
+# Saca la ventana de un paso (partida.tutorial: si ya se vio, no sale) y, tras ella, que lata su casilla. También la
+# llama partida.gd con "atacar" al cerrarse la puerta de la primera pelea
+func mostrar(id: String) -> void:
+	if not activa or id in hechos:
+		return
+	hechos.append(id)
+	partida.tutorial(PASOS[id].tutorial)
+	paso = id
 	desde = 0.0
-	cumplida = false
-	if not id in hechas:
-		hechas.append(id)
-	if PISTAS[id].tutorial != "":
-		Tutoriales.apuntar(PISTAS[id].tutorial)
-	letrero.text = Tutoriales.con_teclas(Tutoriales.atacar_modo() if id == "atacar" else Idioma.t(PISTAS[id].texto))
-	letrero.visible = true
-	letrero.reset_size()
-	poner_latido(PISTAS[id].latido)
-	colocar_letrero()
 
 
-# Si ya se ha hecho lo que pide la pista
-func hecha(id: String) -> bool:
+# Si ya se ha hecho lo que pide el paso
+func hecho(id: String) -> bool:
 	match id:
-		"atacar":
-			return johnny.ataque_t >= 0.0 or (Guardado.ajuste("disparo_asistido") and desde > 4.0)
 		"pistola":
 			return johnny.mano == "fuego"
 		"recargar":
 			return johnny.recargando > 0.0
-	return false   # (la del jefe se va sola, a los DURA segundos)
-
-
-# Encima de la cabeza de Johnny, centrado, subiendo y bajando un poco
-func colocar_letrero() -> void:
-	var en: Vector2 = johnny.get_global_transform_with_canvas().origin
-	var sube := sin(desde * 4.0) * 2.0
-	letrero.visible = true   # (vuelve a salir tras un cambio de sitio o una ventana)
-	poner_latido(PISTAS[pista].latido)
-	letrero.reset_size()
-	letrero.position = (en + Vector2(-letrero.size.x / 2.0, -118.0 + sube)).round()
-	letrero.modulate.a = clampf(desde / 0.25, 0.0, 1.0)
+	return true   # (atacar no hace latir nada)
 
 
 # Los avisos de la línea de abajo, una vez cada uno: el zombi de la llave al despertar (el primer tercio perdido ya no:

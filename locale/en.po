@@ -1185,18 +1185,6 @@ msgstr "Clear the apartments: walk in and the door shuts until not a single slee
 msgid "¡Ese durmiente lleva la llave del %s!"
 msgstr "That sleeper has the key to apt. %s!"
 
-#: scripts/guia.gd
-msgid "Saca la pistola con {cambiar_arma}"
-msgstr "Draw the pistol with {cambiar_arma}"
-
-#: scripts/guia.gd
-msgid "Recarga con {recargar}"
-msgstr "Reload with {recargar}"
-
-#: scripts/guia.gd
-msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
-msgstr "Step out of the mark on the floor or dodge with {esquivar}!"
-
 #: scripts/gymbro.gd
 msgid "¡NO PAIN, NO GAIN!"
 msgstr "NO PAIN, NO GAIN!"
@@ -4535,6 +4523,14 @@ msgstr "Dodge with {esquivar}: Johnny makes a short dash the way he's heading, a
 msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
 msgstr "Use it to get out of a tight spot or slip past sleepers. It recharges quickly, in under a second."
 
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "Attack"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "In the first fight"
+
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"
 msgstr "Clear the apartments"
@@ -4712,10 +4708,6 @@ msgid "Lanzables"
 msgstr "Throwables"
 
 #: scripts/tutoriales.gd
-msgid "En la primera pelea"
-msgstr "In the first fight"
-
-#: scripts/tutoriales.gd
 msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "Throw with {lanzar}: hold to aim, release to throw."
 
@@ -4756,8 +4748,8 @@ msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se e
 msgstr "Every floor has its boss, with a health bar at the top. At half health it gets angry and more dangerous."
 
 #: scripts/tutoriales.gd
-msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
-msgstr "It marks the floor before every attack: step out or dodge it!"
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!"
+msgstr "It marks the floor before every attack: step out or dodge it with {esquivar}!"
 
 #: scripts/tutoriales.gd
 msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
@@ -6559,10 +6551,6 @@ msgstr "Move: right"
 #: scripts/ui/opciones.gd
 msgid "Apuntar"
 msgstr "Aim"
-
-#: scripts/ui/opciones.gd
-msgid "Atacar"
-msgstr "Attack"
 
 #: scripts/ui/opciones.gd
 msgid "Esquivar"

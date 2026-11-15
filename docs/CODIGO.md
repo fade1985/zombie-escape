@@ -480,12 +480,15 @@ en una línea.
   mueble de la sala de mantenimiento que enseña ese tutorial (taquilla, ordenador, banco, baúl y la puerta de los
   trasteros: `mapa.marcas_sala`); `marcas` los apaga en la partida de prueba (salvo `--marcas-sala`).
 - `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
-  encendidos): al empezar, la ventana *Moverse y esquivar* (`partida.tutorial_al_empezar`); en vez de las ventanas de
-  `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: atacar, sacar la pistola, recargar y el jefe; lanzar y curarse, con sus ventanas de siempre), la casilla del HUD que late (`hud.latido`),
-  una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la llave y un primer apartamento
-  fácil (3 zombis, sin la llave, vendas en el armarito). Lo enseñado se apunta como visto nada más salir la pista, se
-  haga o no: tras morir en la primera partida, la siguiente no repite con ventanas lo que ya salió (solo sacará lo que
-  la guía no llegó a enseñar). Con la guía, no se sale de la sala de mantenimiento al pasillo mientras quede algún «!»
+  encendidos): al empezar, la ventana *Moverse y esquivar* (`partida.tutorial_al_empezar`; *Cómo se juega* y *Limpia
+  los apartamentos*, `CUBRE`, no salen con ella). En la primera pelea saca las ventanas de `PASOS`: *Atacar* (al
+  despertarse el primer zombi o al cerrarse la puerta, antes que *Lanzables*: `guia.mostrar("atacar")` en partida.gd),
+  *Cambiar de arma* (si no salió ya en la tienda) y *Munición y recarga* con medio cargador; tras cada una, la casilla
+  del HUD que toca late (`hud.latido`) hasta que se hace o pasan `DURA` segundos. Hasta el 15 nov (M109) eso eran
+  letreros encima de Johnny. *Atacar* solo sale con la guía: al ver *Cómo se juega* se apunta también
+  (`partida.ver_tutorial`). Además, una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la
+  llave y un primer apartamento fácil (3 zombis, sin la llave, vendas en el armarito). Lo demás (*Vendas*, *Jefes*,
+  *La vida en tercios*...), con sus ventanas de siempre. Con la guía, no se sale de la sala de mantenimiento al pasillo mientras quede algún «!»
   en ella (`partida.falta_sala`: Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» y no sale la flecha; se prueba
   con `--marcas-sala`). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
   apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`. La

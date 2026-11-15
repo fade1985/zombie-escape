@@ -1186,18 +1186,6 @@ msgstr "Зачисти квартиры: когда войдёшь, дверь �
 msgid "¡Ese durmiente lleva la llave del %s!"
 msgstr "У этого спящего ключ от кв. %s!"
 
-#: scripts/guia.gd
-msgid "Saca la pistola con {cambiar_arma}"
-msgstr "Достать пистолет: {cambiar_arma}"
-
-#: scripts/guia.gd
-msgid "Recarga con {recargar}"
-msgstr "Перезарядка: {recargar}"
-
-#: scripts/guia.gd
-msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
-msgstr "Уйди с метки на полу или уклонись: {esquivar}!"
-
 #: scripts/gymbro.gd
 msgid "¡NO PAIN, NO GAIN!"
 msgstr "NO PAIN, NO GAIN!"
@@ -4543,6 +4531,14 @@ msgstr "Уклонение: {esquivar} — Джонни делает корот�
 msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
 msgstr "Так можно выбраться из передряги или проскочить между спящими. Перезаряжается быстро, меньше чем за секунду."
 
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "Атака"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "В первой драке"
+
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"
 msgstr "Зачисти квартиры"
@@ -4720,10 +4716,6 @@ msgid "Lanzables"
 msgstr "Метательное"
 
 #: scripts/tutoriales.gd
-msgid "En la primera pelea"
-msgstr "В первой драке"
-
-#: scripts/tutoriales.gd
 msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить."
 
@@ -4764,8 +4756,8 @@ msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se e
 msgstr "На каждом этаже свой босс, его полоска здоровья — вверху. На половине здоровья он звереет и становится опаснее."
 
 #: scripts/tutoriales.gd
-msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
-msgstr "Перед каждой атакой он размечает пол: уйди с метки или уклонись!"
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!"
+msgstr "Перед каждой атакой он размечает пол: уйди с метки или уклонись ({esquivar})!"
 
 #: scripts/tutoriales.gd
 msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
@@ -6579,10 +6571,6 @@ msgstr "Движение: вправо"
 #: scripts/ui/opciones.gd
 msgid "Apuntar"
 msgstr "Прицел"
-
-#: scripts/ui/opciones.gd
-msgid "Atacar"
-msgstr "Атака"
 
 #: scripts/ui/opciones.gd
 msgid "Esquivar"

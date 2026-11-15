@@ -1184,18 +1184,6 @@ msgstr "清理公寓：一进去门就会关上，直到一个沉睡者都不剩
 msgid "¡Ese durmiente lleva la llave del %s!"
 msgstr "那个沉睡者拿着%s的钥匙！"
 
-#: scripts/guia.gd
-msgid "Saca la pistola con {cambiar_arma}"
-msgstr "用{cambiar_arma}掏出手枪"
-
-#: scripts/guia.gd
-msgid "Recarga con {recargar}"
-msgstr "用{recargar}换弹"
-
-#: scripts/guia.gd
-msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
-msgstr "离开地上的标记，或者用{esquivar}闪避！"
-
 #: scripts/gymbro.gd
 msgid "¡NO PAIN, NO GAIN!"
 msgstr "NO PAIN, NO GAIN!"
@@ -4527,6 +4515,14 @@ msgstr "用{esquivar}闪避：Johnny会朝前进方向短距离冲刺，冲刺�
 msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
 msgstr "用它躲开危险，或从沉睡者之间穿过去。冷却很快，不到一秒。"
 
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "攻击"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "第一次战斗时"
+
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"
 msgstr "清理公寓"
@@ -4704,10 +4700,6 @@ msgid "Lanzables"
 msgstr "投掷物"
 
 #: scripts/tutoriales.gd
-msgid "En la primera pelea"
-msgstr "第一次战斗时"
-
-#: scripts/tutoriales.gd
 msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "用{lanzar}投掷：按住瞄准，松开扔出。"
 
@@ -4748,8 +4740,8 @@ msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se e
 msgstr "每层楼都有一个首领，生命条显示在上方。生命掉到一半时它会暴怒，变得更加危险。"
 
 #: scripts/tutoriales.gd
-msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
-msgstr "每次攻击前它会在地上做标记：离开标记或者闪避开！"
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!"
+msgstr "每次攻击前它会在地上做标记：离开标记，或者用{esquivar}闪避开！"
 
 #: scripts/tutoriales.gd
 msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
@@ -6539,10 +6531,6 @@ msgstr "移动：右"
 #: scripts/ui/opciones.gd
 msgid "Apuntar"
 msgstr "瞄准"
-
-#: scripts/ui/opciones.gd
-msgid "Atacar"
-msgstr "攻击"
 
 #: scripts/ui/opciones.gd
 msgid "Esquivar"

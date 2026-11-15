@@ -351,7 +351,7 @@ func _ready() -> void:
 
 
 # La ventana del principio de la partida: en la primera (con la guía, guia.gd), «Moverse y esquivar», y lo demás de
-# «Cómo se juega» lo enseña la guía con sus pistas (por eso se apunta ya como visto, como hacía su pista de esquivar);
+# «Cómo se juega» lo enseña la guía en la primera pelea, con la ventana «Atacar» (por eso se apunta ya como visto);
 # en las demás, «Cómo se juega», que ya cuenta moverse y esquivar
 func tutorial_al_empezar() -> String:
 	if not guia.activa:
@@ -599,8 +599,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			# y su presentación: la cámara lo enfoca mientras grita y sale su nombre (en la prueba, solo en la suya)
 			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
-				tutorial("jefes")
-				guia.jefe_presentado()
+				tutorial("jefes")   # (cómo se esquivan sus ataques; también en la primera partida, la de la guía)
 			if sitio.has("helipuerto") and aqui == idx and jefa is Minijefe and jefa.esperando:
 				decir(Idioma.t("Te espera en el helipuerto, dentro de las líneas blancas"), 3.0)
 
@@ -908,7 +907,8 @@ func _physics_process(delta: float) -> void:
 		actualizar_puertas()
 		decir(Idioma.t("¡La puerta se ha cerrado detrás de ti!"))
 		Sonido.tocar("portazo")
-		tutorial("lanzables")   # (la primera pelea)
+		guia.mostrar("atacar")   # (la primera pelea, en la primera partida: antes que los lanzables; guia.gd)
+		tutorial("lanzables")
 	elif not quedan:
 		sitio.limpio = true
 		cerrada = false
@@ -1654,6 +1654,8 @@ func puede_tutorial(id: String) -> bool:
 # mutación la sacan con el juego ya parado, y se abren detrás)
 func ver_tutorial(id: String) -> void:
 	Tutoriales.apuntar(id)
+	if id == "jugar":
+		Tutoriales.apuntar("atacar")   # (ya lo cuenta: «Atacar» sale solo en la primera partida, con la guía)
 	var parado := get_tree().paused
 	get_tree().paused = true
 	await Tutorial.ventana(self, id).cerrado

@@ -1185,18 +1185,6 @@ msgstr "Räum die Wohnungen: Beim Betreten fällt die Tür zu, bis kein Schläfe
 msgid "¡Ese durmiente lleva la llave del %s!"
 msgstr "Dieser Schläfer hat den Schlüssel für Wohnung %s!"
 
-#: scripts/guia.gd
-msgid "Saca la pistola con {cambiar_arma}"
-msgstr "Zieh die Pistole mit {cambiar_arma}"
-
-#: scripts/guia.gd
-msgid "Recarga con {recargar}"
-msgstr "Lade mit {recargar} nach"
-
-#: scripts/guia.gd
-msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
-msgstr "Raus aus der Markierung am Boden oder weiche mit {esquivar} aus!"
-
 #: scripts/gymbro.gd
 msgid "¡NO PAIN, NO GAIN!"
 msgstr "NO PAIN, NO GAIN!"
@@ -4535,6 +4523,14 @@ msgstr "Weiche mit {esquivar} aus: Johnny macht einen kurzen Sprint in seine Lau
 msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
 msgstr "Damit kommst du aus der Klemme oder schlüpfst an Schläfern vorbei. Es lädt sich schnell wieder auf, in weniger als einer Sekunde."
 
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "Angreifen"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "Im ersten Kampf"
+
 #: scripts/tutoriales.gd
 msgid "Limpia los apartamentos"
 msgstr "Säubere die Wohnungen"
@@ -4712,10 +4708,6 @@ msgid "Lanzables"
 msgstr "Wurfwaffen"
 
 #: scripts/tutoriales.gd
-msgid "En la primera pelea"
-msgstr "Im ersten Kampf"
-
-#: scripts/tutoriales.gd
 msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
 msgstr "Wirf mit {lanzar}: halten zum Zielen, loslassen zum Werfen."
 
@@ -4756,8 +4748,8 @@ msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se e
 msgstr "Jeder Stock hat seinen Boss, mit Lebensleiste oben. Bei halbem Leben wird er wütend und gefährlicher."
 
 #: scripts/tutoriales.gd
-msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
-msgstr "Vor jedem Angriff markiert er den Boden: Raus da oder ausweichen!"
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!"
+msgstr "Vor jedem Angriff markiert er den Boden: Raus da oder weiche mit {esquivar} aus!"
 
 #: scripts/tutoriales.gd
 msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras."
@@ -6559,10 +6551,6 @@ msgstr "Bewegen: rechts"
 #: scripts/ui/opciones.gd
 msgid "Apuntar"
 msgstr "Zielen"
-
-#: scripts/ui/opciones.gd
-msgid "Atacar"
-msgstr "Angreifen"
 
 #: scripts/ui/opciones.gd
 msgid "Esquivar"
