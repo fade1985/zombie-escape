@@ -349,9 +349,9 @@ func dibujar_sitio(fondo: Rect2) -> void:
 		for i in grupo.size():
 			var p: Vector2 = a_plano.call(grupo[i].pos) if grupo.size() == 1 else medio + Vector2((i - (grupo.size() - 1) / 2.0) * 16.0, 0)
 			if grupo[i].nombre == "!":
-				exclamacion(p - Vector2(0, 8))
+				exclamacion(p)
 			else:
-				icono(grupo[i].nombre, p - Vector2(0, 4))
+				icono(grupo[i].nombre, p)
 	if camaras:
 		for z in vivos():
 			punto((a_plano.call(z.global_position - mapa.global_position) - Vector2(2, 2)).clamp(r.position, r.end - Vector2(4, 4)))
