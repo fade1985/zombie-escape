@@ -2346,16 +2346,16 @@ msgid "Especialista"
 msgstr "Spezialist"
 
 #: scripts/logros.gd
-msgid "Llena una rama entera del árbol de talentos."
-msgstr "Füll einen ganzen Zweig des Talentbaums."
+msgid "Llena una rama entera de mutaciones."
+msgstr "Füll einen ganzen Zweig der Mutationen."
 
 #: scripts/logros.gd
 msgid "Conserje total"
 msgstr "Hausmeister pur"
 
 #: scripts/logros.gd
-msgid "Llena el árbol de talentos entero."
-msgstr "Füll den ganzen Talentbaum."
+msgid "Llena todas las mutaciones."
+msgstr "Füll alle Mutationen."
 
 #: scripts/logros.gd
 msgid "Buen vecino"
@@ -2498,8 +2498,8 @@ msgid "Combate"
 msgstr "Kampf"
 
 #: scripts/logros.gd
-msgid "Armas y talentos"
-msgstr "Waffen und Talente"
+msgid "Armas y mutaciones"
+msgstr "Waffen und Mutationen"
 
 #: scripts/logros.gd scripts/tutoriales.gd
 msgid "Supervivientes"
@@ -3602,8 +3602,8 @@ msgid "Mata al becario por primera vez."
 msgstr "Erledige den Praktikanten zum ersten Mal."
 
 #: scripts/skins.gd
-msgid "Empiezas cada partida con una mutación: eliges una de dos al llegar."
-msgstr "Du startest jede Runde mit einer Mutation: Bei der Ankunft wählst du eine von zwei."
+msgid "Empiezas cada partida con un efecto secundario: eliges uno de dos al llegar."
+msgstr "Du startest jede Runde mit einer Nebenwirkung: Bei der Ankunft wählst du eine von zwei."
 
 #: scripts/skins.gd
 msgid "Mata al Sujeto 1 por primera vez."
@@ -4564,8 +4564,8 @@ msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas 
 msgstr "Mit jedem verlorenen Drittel bist du langsamer: Mit zwei verlorenen entkommst du den schnellen Schläfern nicht mehr."
 
 #: scripts/tutoriales.gd
-msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
-msgstr "Verlorene Drittel bleiben verloren, auch auf der nächsten Ebene. Nur ein Medikit bringt eins zurück (und das Talent Zweite Luft, einmal pro Ebene)."
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y la mutación Segundo aliento, una vez por planta)."
+msgstr "Verlorene Drittel bleiben verloren, auch auf der nächsten Ebene. Nur ein Medikit bringt eins zurück (und die Mutation Zweite Luft, einmal pro Ebene)."
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
@@ -4592,8 +4592,8 @@ msgid "El botiquín se usa con {usar_botiquin}: cura 40 y te devuelve un tercio 
 msgstr "Das Medikit benutzt du mit {usar_botiquin}: Es heilt 40 und bringt ein verlorenes Drittel deiner Lebensenergie zurück."
 
 #: scripts/tutoriales.gd
-msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
-msgstr "Nur damit bekommst du verlorene Drittel zurück, abgesehen vom Talent Zweite Luft. Heb es auf, bis du eins verlierst."
+msgid "Es lo único que recupera los tercios perdidos, aparte de la mutación Segundo aliento. Guárdalo para cuando pierdas uno."
+msgstr "Nur damit bekommst du verlorene Drittel zurück, abgesehen von der Mutation Zweite Luft. Heb es auf, bis du eins verlierst."
 
 #: scripts/tutoriales.gd
 msgid "En la mochila caben 3 vendas y 2 botiquines; los que sobran se quedan en el suelo o van al baúl."
@@ -4748,20 +4748,20 @@ msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras
 msgstr "Besiegt hinterlässt er Dollar, Munition und Material, und die Treppe geht auf."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
-msgid "Mutaciones"
-msgstr "Mutationen"
+msgid "Efectos secundarios"
+msgstr "Nebenwirkungen"
 
 #: scripts/tutoriales.gd
-msgid "Antes de la primera mutación"
-msgstr "Vor der ersten Mutation"
+msgid "Antes del primer efecto secundario"
+msgstr "Vor der ersten Nebenwirkung"
 
 #: scripts/tutoriales.gd
 msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
 msgstr "Nach jedem Boss verändert dich das Virus: Wähle eine von zwei Karten (auch mit 1 und 2)."
 
 #: scripts/tutoriales.gd
-msgid "Cada mutación te da algo bueno y, a veces, algo malo."
-msgstr "Jede Mutation bringt Gutes und manchmal auch Schlechtes."
+msgid "Cada efecto secundario te da algo bueno y, a veces, algo malo."
+msgstr "Jede Nebenwirkung bringt Gutes und manchmal auch Schlechtes."
 
 #: scripts/tutoriales.gd
 msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
@@ -4852,8 +4852,8 @@ msgid "Al encender el ordenador"
 msgstr "Am Computer"
 
 #: scripts/tutoriales.gd
-msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y armas y lanzables para la partida."
-msgstr "Gib deine gesparten Dollar aus: Talentpunkte (dauerhafte Verbesserungen) sowie Waffen und Wurfwaffen für die Runde."
+msgid "Gasta el mutágeno en mutaciones (mejoras para siempre) y los dólares ahorrados en armas y lanzables para la partida."
+msgstr "Gib Mutagen für Mutationen aus (dauerhafte Verbesserungen) und deine gesparten Dollar für Waffen und Wurfwaffen für die Runde."
 
 #: scripts/tutoriales.gd
 msgid "También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."
@@ -4936,24 +4936,24 @@ msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
 msgstr "Johnny startet nur mit dem Mopp: Die erste Pistole schenken wir dir."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
-msgid "Talentos"
-msgstr "Talente"
+msgid "Mutaciones"
+msgstr "Mutationen"
 
 #: scripts/tutoriales.gd
-msgid "Al abrir Talentos"
-msgstr "Beim Öffnen der Talente"
+msgid "Al abrir Mutaciones"
+msgstr "Beim Öffnen der Mutationen"
 
 #: scripts/tutoriales.gd
-msgid "Gasta aquí los dólares ahorrados en talentos: mejoras para Johnny que duran para siempre, en todas las partidas."
-msgstr "Gib hier die gesparten Dollar für Talente aus: Verbesserungen für Johnny, die für immer gelten, in jeder Runde."
+msgid "Gasta aquí el mutágeno en mutaciones: mejoras para Johnny que duran para siempre, en todas las partidas."
+msgstr "Gib hier Mutagen für Mutationen aus: Verbesserungen für Johnny, die für immer gelten, in jeder Runde."
 
 #: scripts/tutoriales.gd
-msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada talento sube punto a punto, y para abrir los de abajo hay que llenar antes el de encima."
-msgstr "Es gibt drei Zweige: Soldat, Überlebender und Chemiker. Jedes Talent steigt Punkt für Punkt, und um die unteren freizuschalten, musst du zuerst das darüber voll ausbauen."
+msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada mutación sube punto a punto, y para abrir las de abajo hay que llenar antes la de encima."
+msgstr "Es gibt drei Zweige: Soldat, Überlebender und Chemiker. Jede Mutation steigt Punkt für Punkt, und um die unteren freizuschalten, musst du zuerst die darüber voll ausbauen."
 
 #: scripts/tutoriales.gd
-msgid "«Resetear talentos» los quita todos para repartirlos de nuevo, pero el dinero gastado se pierde."
-msgstr "„Talente zurücksetzen“ entfernt alle, damit du sie neu verteilen kannst, aber das ausgegebene Geld ist weg."
+msgid "«Resetear mutaciones» las quita todas para repartirlas de nuevo, pero el mutágeno gastado se pierde."
+msgstr "„Mutationen zurücksetzen“ entfernt alle, damit du neu verteilen kannst, aber das ausgegebene Mutagen ist weg."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Logros"
@@ -5176,8 +5176,8 @@ msgid "el botón de pausa, bajo el minimapa"
 msgstr "dem Pause-Knopf unter der Minikarte"
 
 #: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
-msgid "Resetear talentos"
-msgstr "Talente zurücksetzen"
+msgid "Resetear mutaciones"
+msgstr "Mutationen zurücksetzen"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Necesitas %s al máximo"
@@ -6229,8 +6229,8 @@ msgid "¡¡¡DIFERENTE!!!"
 msgstr "ANDERS!!!"
 
 #: scripts/ui/menus.gd
-msgid "Mutación %d de %d · dura hasta que acabe la partida"
-msgstr "Mutation %d von %d · hält bis zum Ende der Runde"
+msgid "Efecto secundario %d de %d · dura hasta que acabe la partida"
+msgstr "Nebenwirkung %d von %d · hält bis zum Ende der Runde"
 
 #: scripts/ui/menus.gd
 msgid "Página %d de %d"
@@ -6809,12 +6809,12 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\WARTUNG\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
-msgstr "Entfernt alle Punkte aus dem Baum. Was du dafür ausgegeben hast, bekommst du nicht zurück."
+msgid "Quita todos los puntos de las mutaciones. Lo que gastaste en ellos no se devuelve."
+msgstr "Entfernt alle Punkte aus den Mutationen. Was du dafür ausgegeben hast, bekommst du nicht zurück."
 
 #: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "Jeder Punkt wird mit Mutagen bezahlt und bringt eine Stufe. Was du in einer Runde einsammelst, behältst du, wenn du das Gebäude schaffst; fällst du oder gibst auf, ist es weg. Für die nächste Reihe musst du zuerst das geforderte Talent voll ausbauen."
+msgid "Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes la mutación que pide."
+msgstr "Jeder Punkt wird mit Mutagen bezahlt und bringt eine Stufe. Was du in einer Runde einsammelst, behältst du, wenn du das Gebäude schaffst; fällst du oder gibst auf, ist es weg. Für die nächste Reihe musst du zuerst die geforderte Mutation voll ausbauen."
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"
@@ -6825,7 +6825,7 @@ msgid "%s. Cuesta %d de mutágeno."
 msgstr "%s. Kostet %d Mutagen."
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Pulsa para subirlo (%d de mutágeno)."
+msgid "%s. Pulsa para subirla (%d de mutágeno)."
 msgstr "%s. Drück zum Steigern (%d Mutagen)."
 
 #: scripts/ui/ordenador.gd
@@ -6833,8 +6833,8 @@ msgid "No tienes ningún punto puesto."
 msgstr "Du hast noch keinen Punkt verteilt."
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Perderás todo el mutágeno que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
-msgstr "Sicher? Du verlierst das ganze Mutagen, das du in Talente gesteckt hast. Der Baum wird leer und kann neu verteilt werden."
+msgid "¿Seguro? Perderás todo el mutágeno que has invertido en las mutaciones. Se quedarán vacías para repartirlo otra vez."
+msgstr "Sicher? Du verlierst das ganze Mutagen, das du in Mutationen gesteckt hast. Sie werden leer und können neu verteilt werden."
 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
@@ -6845,12 +6845,12 @@ msgid "Cancelar"
 msgstr "Abbrechen"
 
 #: scripts/ui/ordenador.gd
-msgid "Lo que gastaste en los talentos no se devuelve."
-msgstr "Was du für Talente ausgegeben hast, bekommst du nicht zurück."
+msgid "Lo que gastaste en las mutaciones no se devuelve."
+msgstr "Was du für Mutationen ausgegeben hast, bekommst du nicht zurück."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes %d de mutágeno."
-msgstr "Erledigt! Der Baum ist leer und kann neu verteilt werden. Du hast %d Mutagen."
+msgid "¡Hecho! Las mutaciones están vacías para volver a repartirlo. Tienes %d de mutágeno."
+msgstr "Erledigt! Die Mutationen sind leer und können neu verteilt werden. Du hast %d Mutagen."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"
@@ -7117,8 +7117,8 @@ msgid "Apagar"
 msgstr "Ausschalten"
 
 #: scripts/ui/ordenador.gd
-msgid "TALENTOS.EXE"
-msgstr "TALENTE.EXE"
+msgid "MUTACIONES.EXE"
+msgstr "MUTATIONEN.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "ARMAS.EXE"
@@ -7139,10 +7139,6 @@ msgstr "VIDEOS.EXE"
 #: scripts/ui/ordenador.gd
 msgid "SUJETOS.EXE"
 msgstr "PROBANDEN.EXE"
-
-#: scripts/ui/ordenador.gd
-msgid "Árbol de talentos"
-msgstr "Talentbaum"
 
 #: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"

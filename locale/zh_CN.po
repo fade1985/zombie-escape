@@ -2344,16 +2344,16 @@ msgid "Especialista"
 msgstr "专家"
 
 #: scripts/logros.gd
-msgid "Llena una rama entera del árbol de talentos."
-msgstr "点满天赋树的一整个分支。"
+msgid "Llena una rama entera de mutaciones."
+msgstr "点满一整个分支的变异。"
 
 #: scripts/logros.gd
 msgid "Conserje total"
 msgstr "全能清洁工"
 
 #: scripts/logros.gd
-msgid "Llena el árbol de talentos entero."
-msgstr "点满整棵天赋树。"
+msgid "Llena todas las mutaciones."
+msgstr "点满所有变异。"
 
 #: scripts/logros.gd
 msgid "Buen vecino"
@@ -2496,8 +2496,8 @@ msgid "Combate"
 msgstr "战斗"
 
 #: scripts/logros.gd
-msgid "Armas y talentos"
-msgstr "武器与天赋"
+msgid "Armas y mutaciones"
+msgstr "武器与变异"
 
 #: scripts/logros.gd scripts/tutoriales.gd
 msgid "Supervivientes"
@@ -3596,8 +3596,8 @@ msgid "Mata al becario por primera vez."
 msgstr "首次杀死实习生。"
 
 #: scripts/skins.gd
-msgid "Empiezas cada partida con una mutación: eliges una de dos al llegar."
-msgstr "每局开始时获得一个变异：到达时二选一。"
+msgid "Empiezas cada partida con un efecto secundario: eliges uno de dos al llegar."
+msgstr "每局开始时获得一个副作用：到达时二选一。"
 
 #: scripts/skins.gd
 msgid "Mata al Sujeto 1 por primera vez."
@@ -4558,8 +4558,8 @@ msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas 
 msgstr "每失去一段，你都会走得更慢：失去两段后，就跑不过快速沉睡者了。"
 
 #: scripts/tutoriales.gd
-msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
-msgstr "失去的段数上楼后也不会恢复。只有急救包能恢复一段（还有“绝处逢生”天赋，每层一次）。"
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y la mutación Segundo aliento, una vez por planta)."
+msgstr "失去的段数上楼后也不会恢复。只有急救包能恢复一段（还有“绝处逢生”变异，每层一次）。"
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
@@ -4586,8 +4586,8 @@ msgid "El botiquín se usa con {usar_botiquin}: cura 40 y te devuelve un tercio 
 msgstr "用{usar_botiquin}使用急救包：恢复40点，并恢复失去的一段生命。"
 
 #: scripts/tutoriales.gd
-msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
-msgstr "除了“绝处逢生”天赋，只有它能恢复失去的段数。留到失去一段时再用。"
+msgid "Es lo único que recupera los tercios perdidos, aparte de la mutación Segundo aliento. Guárdalo para cuando pierdas uno."
+msgstr "除了“绝处逢生”变异，只有它能恢复失去的段数。留到失去一段时再用。"
 
 #: scripts/tutoriales.gd
 msgid "En la mochila caben 3 vendas y 2 botiquines; los que sobran se quedan en el suelo o van al baúl."
@@ -4742,20 +4742,20 @@ msgid "Al caer suelta dólares, munición y materiales, y se abren las escaleras
 msgstr "它倒下时会掉落美元、弹药和材料，楼梯也会打开。"
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
-msgid "Mutaciones"
-msgstr "变异"
+msgid "Efectos secundarios"
+msgstr "副作用"
 
 #: scripts/tutoriales.gd
-msgid "Antes de la primera mutación"
-msgstr "第一次变异前"
+msgid "Antes del primer efecto secundario"
+msgstr "第一次副作用前"
 
 #: scripts/tutoriales.gd
 msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
 msgstr "打败首领后，病毒会改变你：从两张卡中选一张（也可以按1和2）。"
 
 #: scripts/tutoriales.gd
-msgid "Cada mutación te da algo bueno y, a veces, algo malo."
-msgstr "每种变异都会带来好处，有时也会带来坏处。"
+msgid "Cada efecto secundario te da algo bueno y, a veces, algo malo."
+msgstr "每种副作用都会带来好处，有时也会带来坏处。"
 
 #: scripts/tutoriales.gd
 msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
@@ -4846,8 +4846,8 @@ msgid "Al encender el ordenador"
 msgstr "打开电脑时"
 
 #: scripts/tutoriales.gd
-msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y armas y lanzables para la partida."
-msgstr "花掉存下的美元：买天赋点（永久强化），以及本局用的武器和投掷物。"
+msgid "Gasta el mutágeno en mutaciones (mejoras para siempre) y los dólares ahorrados en armas y lanzables para la partida."
+msgstr "用诱变剂买变异（永久强化），用存下的美元买本局用的武器和投掷物。"
 
 #: scripts/tutoriales.gd
 msgid "También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."
@@ -4930,24 +4930,24 @@ msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
 msgstr "Johnny 开局只有拖把：第一把手枪送给你。"
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
-msgid "Talentos"
-msgstr "天赋"
+msgid "Mutaciones"
+msgstr "变异"
 
 #: scripts/tutoriales.gd
-msgid "Al abrir Talentos"
-msgstr "打开天赋时"
+msgid "Al abrir Mutaciones"
+msgstr "打开变异时"
 
 #: scripts/tutoriales.gd
-msgid "Gasta aquí los dólares ahorrados en talentos: mejoras para Johnny que duran para siempre, en todas las partidas."
-msgstr "在这里用攒下的美元购买天赋：给Johnny的永久强化，每局都有效。"
+msgid "Gasta aquí el mutágeno en mutaciones: mejoras para Johnny que duran para siempre, en todas las partidas."
+msgstr "在这里用诱变剂购买变异：给Johnny的永久强化，每局都有效。"
 
 #: scripts/tutoriales.gd
-msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada talento sube punto a punto, y para abrir los de abajo hay que llenar antes el de encima."
-msgstr "共有三条分支：士兵、幸存者和化学家。每个天赋一点一点升级，要解锁下面的天赋，得先把上面的点满。"
+msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada mutación sube punto a punto, y para abrir las de abajo hay que llenar antes la de encima."
+msgstr "共有三条分支：士兵、幸存者和化学家。每个变异一点一点升级，要解锁下面的变异，得先把上面的点满。"
 
 #: scripts/tutoriales.gd
-msgid "«Resetear talentos» los quita todos para repartirlos de nuevo, pero el dinero gastado se pierde."
-msgstr "「重置天赋」会清空所有天赋以便重新分配，但花掉的钱拿不回来。"
+msgid "«Resetear mutaciones» las quita todas para repartirlas de nuevo, pero el mutágeno gastado se pierde."
+msgstr "「重置变异」会清空所有变异以便重新分配，但花掉的诱变剂拿不回来。"
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Logros"
@@ -5170,8 +5170,8 @@ msgid "el botón de pausa, bajo el minimapa"
 msgstr "小地图下方的暂停按钮"
 
 #: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
-msgid "Resetear talentos"
-msgstr "重置天赋"
+msgid "Resetear mutaciones"
+msgstr "重置变异"
 
 #: scripts/ui/arbol_talentos.gd
 msgid "Necesitas %s al máximo"
@@ -6211,8 +6211,8 @@ msgid "¡¡¡DIFERENTE!!!"
 msgstr "不一样了！！！"
 
 #: scripts/ui/menus.gd
-msgid "Mutación %d de %d · dura hasta que acabe la partida"
-msgstr "变异 %d / %d · 持续到本局结束"
+msgid "Efecto secundario %d de %d · dura hasta que acabe la partida"
+msgstr "副作用 %d / %d · 持续到本局结束"
 
 #: scripts/ui/menus.gd
 msgid "Página %d de %d"
@@ -6791,12 +6791,12 @@ msgid "C:\\MANTENIMIENTO\\%s"
 msgstr "C:\\维修间\\%s"
 
 #: scripts/ui/ordenador.gd
-msgid "Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."
-msgstr "清空天赋树上的所有点数。花掉的钱不会退还。"
+msgid "Quita todos los puntos de las mutaciones. Lo que gastaste en ellos no se devuelve."
+msgstr "清空所有变异的点数。花掉的不会退还。"
 
 #: scripts/ui/ordenador.gd
-msgid "Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes el talento que pide."
-msgstr "每一点都用诱变剂购买，提升一级。一局里捡到的诱变剂，通关大楼就会保留，倒下或放弃则会失去。想进入下一层级，先把它要求的天赋点满。"
+msgid "Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes la mutación que pide."
+msgstr "每一点都用诱变剂购买，提升一级。一局里捡到的诱变剂，通关大楼就会保留，倒下或放弃则会失去。想进入下一层级，先把它要求的变异点满。"
 
 #: scripts/ui/ordenador.gd
 msgid "Necesitas %s al máximo. %s"
@@ -6807,7 +6807,7 @@ msgid "%s. Cuesta %d de mutágeno."
 msgstr "%s。花费 %d 诱变剂。"
 
 #: scripts/ui/ordenador.gd
-msgid "%s. Pulsa para subirlo (%d de mutágeno)."
+msgid "%s. Pulsa para subirla (%d de mutágeno)."
 msgstr "%s。点击升级（%d 诱变剂）。"
 
 #: scripts/ui/ordenador.gd
@@ -6815,8 +6815,8 @@ msgid "No tienes ningún punto puesto."
 msgstr "你还没有分配任何点数。"
 
 #: scripts/ui/ordenador.gd
-msgid "¿Seguro? Perderás todo el mutágeno que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."
-msgstr "确定吗？你会失去投入天赋的所有诱变剂。天赋树会清空，可以重新分配。"
+msgid "¿Seguro? Perderás todo el mutágeno que has invertido en las mutaciones. Se quedarán vacías para repartirlo otra vez."
+msgstr "确定吗？你会失去投入变异的所有诱变剂。变异会清空，可以重新分配。"
 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
@@ -6827,12 +6827,12 @@ msgid "Cancelar"
 msgstr "取消"
 
 #: scripts/ui/ordenador.gd
-msgid "Lo que gastaste en los talentos no se devuelve."
-msgstr "花在天赋上的钱不会退还。"
+msgid "Lo que gastaste en las mutaciones no se devuelve."
+msgstr "花在变异上的诱变剂不会退还。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! El árbol está vacío para volver a repartirlo. Tienes %d de mutágeno."
-msgstr "完成！天赋树已清空，可以重新分配。你有 %d 诱变剂。"
+msgid "¡Hecho! Las mutaciones están vacías para volver a repartirlo. Tienes %d de mutágeno."
+msgstr "完成！变异已清空，可以重新分配。你有 %d 诱变剂。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"
@@ -7099,8 +7099,8 @@ msgid "Apagar"
 msgstr "关机"
 
 #: scripts/ui/ordenador.gd
-msgid "TALENTOS.EXE"
-msgstr "天赋.EXE"
+msgid "MUTACIONES.EXE"
+msgstr "变异.EXE"
 
 #: scripts/ui/ordenador.gd
 msgid "ARMAS.EXE"
@@ -7121,10 +7121,6 @@ msgstr "VIDEOS.EXE"
 #: scripts/ui/ordenador.gd
 msgid "SUJETOS.EXE"
 msgstr "实验对象.EXE"
-
-#: scripts/ui/ordenador.gd
-msgid "Árbol de talentos"
-msgstr "天赋树"
 
 #: scripts/ui/ordenador.gd scripts/ui/tienda_armas.gd
 msgid "Tienda de armas"

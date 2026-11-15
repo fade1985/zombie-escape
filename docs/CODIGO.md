@@ -403,7 +403,10 @@ en una línea.
   cualquier zombi (`pieza_de_zombi()`, 6 %) y cada jefe (`piezas_de_jefe()`, 4), en `partida.meter_zombi`, y con la
   alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
   de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (PixelLab, 32×32; ver `assets/pixellab.json` → `piezas`).
-  `talentos.gd` (tres ramas, `RAMAS`: Militar, Superviviente y Químico, cada talento una línea en `LISTA` y lo que hace
+  `talentos.gd` (**el jugador los ve como «mutaciones»** desde el 15 nov, lo pidió el dueño: el programa es MUTACIONES.EXE,
+  el botón «Resetear mutaciones» y el árbol ya no tiene nombre en la barra de tareas; por dentro siguen siendo talentos, y
+  las mutaciones de los jefes, `mutaciones.gd`, se llaman para el jugador «efectos secundarios»). Tres ramas, `RAMAS`:
+  Militar, Superviviente y Químico, cada talento una línea en `LISTA` y lo que hace
   en `aplicar_uno`, sobre los atributos de `mejoras.gd`; para lo que no es un número, `Mejoras.de_johnny` se los da a
   quien no tiene a Johnny a mano. Químico (M14): Catalizador suma daño al lanzallamas, al lanza ácido, al lanza rayos, al
   molotov y a la congeladora (`johnny.arma_de`, `lanzables.lanzar`); Guantes de goma quita daño de los estados
@@ -422,7 +425,7 @@ en una línea.
   `--comprar-talentos`. Lo comprado es para siempre
   (en "talentos" del guardado). Un guardado de antes del cambio empieza el árbol de cero, una sola vez y sin devolver
   nada (`guardado.gd`, la marca `talentos_mutageno`); `dolares_talentos` ya no existe.
-  «Resetear talentos» (M32): quita todos los puntos, gratis pero sin devolver lo gastado (desde el 6 nov; antes devolvía
+  «Resetear mutaciones» (M32; antes «Resetear talentos»): quita todos los puntos, gratis pero sin devolver lo gastado (desde el 6 nov; antes devolvía
   todo menos 20 $), con una ventanita que pregunta «¿Seguro?» (`Talentos.resetear`, `ordenador.resetear_talentos`, `preguntar_reseteo`, `aviso`); se prueba con
   `--comprar-talentos` (también los precios, la partida a medias y el guardado viejo). Revisión de
   Militar y Superviviente (M15): Durito llega a 3 (`guardado.gd` devuelve en dólares los puntos que sobren si un talento
@@ -609,7 +612,7 @@ en una línea.
   (autoload: el saltito de los botones), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; `adelantar()` es el clic izquierdo del que tiene prisa, en la tele del salón y en el reproductor (también A del mando, Intro o Espacio en la del salón): acaba la frase de golpe y, ya acabada, pasa a la siguiente; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
   `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
   trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
-- `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
+- `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (MUTACIONES.EXE desde el 15 nov; antes TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
   ramas a la vez, cada una de su color (`COLORES`: Militar rojo, Superviviente verde, Químico amarillo), dibujada con
   código (`_draw`): cada talento es un hexágono con su icono y sus cuadraditos, y las rayas al que pide se encienden al
   llenarlo. Encima de cada hexágono, un botón transparente `b_<id>`. La ficha (qué hace, ahora y con otro, qué abre y

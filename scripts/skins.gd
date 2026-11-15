@@ -116,7 +116,7 @@ const LISTA := {
 		"efecto": "«Copia de seguridad»: una vez por partida, al caer, te levantas con 25 de vida.",
 		"como": "Mata al becario por primera vez.", "jefe": "becario", "copia": 25},
 	"sujeto": {"nombre": "El Sujeto 1",
-		"efecto": "Empiezas cada partida con una mutación: eliges una de dos al llegar.",
+		"efecto": "Empiezas cada partida con un efecto secundario: eliges uno de dos al llegar.",
 		"como": "Mata al Sujeto 1 por primera vez.", "jefe": "sujeto_1", "mutacion": true},
 }
 # [/traducir]

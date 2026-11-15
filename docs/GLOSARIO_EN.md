@@ -3,6 +3,8 @@
 Para que el inglés suene siempre igual. **Provisional hasta que lo apruebe el dueño** (antes de empezar con los datos:
 armas, objetos, talentos, logros...). Si cambia un nombre, se cambia aquí y en `locale/en.po` (buscar y reemplazar).
 
+**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (Mutation(s); «Resetear mutaciones» = Reset mutations; el programa, MUTATIONS.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (Side effect(s)). Lo de abajo que diga talento/mutación se lee así.
+
 ## Reglas
 
 - **«zombi» → *sleeper(s)*** (decidido el 13 nov: en el juego ya no hay «zombis», hay «durmientes»). Mayúscula solo al principio de frase o título (*Fast Sleepers*); *the key sleeper* = el zombi de la llave.

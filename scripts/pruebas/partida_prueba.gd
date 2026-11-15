@@ -459,7 +459,7 @@
 #                       Segundo aliento, la Adrenalina, el rayo de Alto voltaje y la Mezcla explosiva, y las coronas
 #                       en el ordenador                                                      [prueba_varias.gd]
 #   --comprar-talentos  los talentos se compran con el mutágeno de la partida, punto a punto (sus precios, sin
-#                       mutágeno bastante, lo que se le quita a la partida a medias), el botón «Resetear talentos»
+#                       mutágeno bastante, lo que se le quita a la partida a medias), el botón «Resetear mutaciones»
 #                       (M32: pregunta, no devuelve nada y Johnny pierde lo que le daban) y un guardado de antes del
 #                       mutágeno, que empieza el árbol de cero una sola vez                  [prueba_varias.gd]
 #   --mutageno-guardado el mutágeno de la partida se guarda solo si completas el edificio (al caer o abandonar,

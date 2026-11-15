@@ -158,7 +158,7 @@ func elegir(nombre: String) -> void:
 					boton("Sala: " + JEFES.get(tipo, tipo), cerrar_y.bind(partida.ir_al_jefe.bind(tipo)))
 			pie.text = "F9 vuelve de la exposición. Lejos de esta planta, F9 lleva a su sala de pruebas  ·  P: cerrar"
 		"Varios":
-			boton("Mutaciones", cerrar_y.bind(partida.abrir_mutacion))
+			boton("Efectos secundarios", cerrar_y.bind(partida.abrir_mutacion))
 			boton("Soltar un objeto", cerrar_y.bind(func():
 				partida.soltar_objeto(Objetos.al_azar(partida.edificio, ""), partida.johnny.position + Vector2(0, 50))))
 			boton("Piezas al baúl", partida.dar_objetos)

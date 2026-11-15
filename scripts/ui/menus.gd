@@ -157,7 +157,7 @@ func pausa(partida: Node, foco := "") -> void:
 	derecha.add_child(Tema.icono_y_texto("granada", Idioma.t("Granadas: %d") % lz.total("granada"), 20))
 	if not partida.mutaciones.tengo.is_empty():
 		var muts := Label.new()
-		muts.text = Idioma.t("Mutaciones")
+		muts.text = Idioma.t("Efectos secundarios")
 		muts.theme_type_variation = "Sub"
 		derecha.add_child(muts)
 		for id in partida.mutaciones.tengo:
@@ -372,7 +372,7 @@ func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
 		if primera == null:
 			primera = carta
 	var pie := Label.new()
-	pie.text = Idioma.t("Mutación %d de %d · dura hasta que acabe la partida") % [llevas + 1, Mutaciones.MAXIMO]
+	pie.text = Idioma.t("Efecto secundario %d de %d · dura hasta que acabe la partida") % [llevas + 1, Mutaciones.MAXIMO]
 	pie.theme_type_variation = "Sub"
 	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(pie)

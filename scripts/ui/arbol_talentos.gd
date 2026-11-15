@@ -112,7 +112,7 @@ func montar_resetear() -> void:
 	herramientas.modulate = Color.WHITE if se_puede else Color(0.6, 0.6, 0.6, 0.7)
 	fila.add_child(herramientas)
 	fila.move_child(herramientas, 0)
-	var nombre := etiqueta(Idioma.t("Resetear talentos"), TEXTO if se_puede else TEXTO_SUAVE)
+	var nombre := etiqueta(Idioma.t("Resetear mutaciones"), TEXTO if se_puede else TEXTO_SUAVE)
 	nombre.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	nombre.add_theme_font_size_override("font_size", 14)
 	textos.add_child(nombre)

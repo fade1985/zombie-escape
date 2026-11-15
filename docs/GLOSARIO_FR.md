@@ -3,6 +3,8 @@
 Traducido desde el español mirando el inglés. Francés de Francia, con **«tu»** (imperativo: «Appuie», «Choisis», «Tiens bon»).
 Johnny es hombre (participios en masculino: «Tu es tombé»).
 
+**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (Mutation(s); «Resetear mutaciones» = Réinitialiser les mutations; el programa, MUTATIONS.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (Effet(s) secondaire(s)). Lo de abajo que diga talento/mutación se lee así.
+
 ## Reglas
 
 - **«zombi» → *dormeur(s)*** (decidido el 13 nov: en el juego ya no hay «zombis», hay «durmientes»). Nunca *zombie*.

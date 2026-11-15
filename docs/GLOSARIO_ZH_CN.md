@@ -3,6 +3,8 @@
 Para que el chino suene siempre igual. **Provisional: sin revisión de una persona nativa.** Si cambia un nombre, se cambia aquí
 y en `locale/zh_CN.po` (buscar y reemplazar).
 
+**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (变异 (antes, el de los jefes); «Resetear mutaciones» = 重置变异; el programa, 变异.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (副作用). Lo de abajo que diga talento/mutación se lee así.
+
 ## Reglas
 
 - **«zombi» → 沉睡者** (decidido el 13 nov; sin plural ni medida propia: «%d 个沉睡者»). Nunca 僵尸.

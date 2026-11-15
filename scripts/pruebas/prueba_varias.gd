@@ -1932,7 +1932,7 @@ func probar_equilibrio_talentos() -> void:
 
 
 # Con "--captura --comprar-talentos": los talentos se compran con el mutágeno de la partida, punto a punto, en el
-# ordenador (15 nov; antes, con dólares), y el botón «Resetear talentos» (M32) no devuelve lo gastado. Primero, los
+# ordenador (15 nov; antes, con dólares), y el botón «Resetear mutaciones» (M32) no devuelve lo gastado. Primero, los
 # precios: 25, 50, 75, 100 y 125 dentro de cada talento, 125 los de un solo punto, 7.800 el árbol entero. Con 600:
 # Ataque 5 (375), Camorrista 2 (25 + 50) y Corpulento 1 (25); los dólares ahorrados no se tocan. Lo gastado se le quita
 # también a la partida a medias (si no, cerrar el juego lo devolvería). Luego, con 2, Puntería no se puede. El reseteo
@@ -2013,7 +2013,7 @@ func probar_comprar_talentos() -> void:
 	mutageno_ahorrado = 0
 	mutageno = 2
 	var vida_con: int = johnny.stats.vida_max
-	print("Resetear: botón «%s» (esperado: Resetear talentos)" % tarjeta.call("b_resetear"))
+	print("Resetear: botón «%s» (esperado: Resetear mutaciones)" % tarjeta.call("b_resetear"))
 	ordenador.resetear_talentos()
 	await get_tree().create_timer(0.4).timeout
 	var foco := get_viewport().gui_get_focus_owner()
@@ -2036,7 +2036,7 @@ func probar_comprar_talentos() -> void:
 	ordenador.aviso.find_child("b_si", true, false).emit_signal("pressed")
 	await get_tree().create_timer(0.4).timeout
 	s = Guardado.cargar()
-	print("«Sí, resetear»: talentos %s · mutágeno %d · dólares %d · info «%s» (esperado: {} · 2 · 100 · ¡Hecho! El árbol está vacío... Tienes 2 de mutágeno.)" % [
+	print("«Sí, resetear»: talentos %s · mutágeno %d · dólares %d · info «%s» (esperado: {} · 2 · 100 · ¡Hecho! Las mutaciones están vacías... Tienes 2 de mutágeno.)" % [
 		s.talentos, mutageno, s.dolares, ordenador.info.text])
 	print("Johnny: vida máxima %d (con Corpulento 1, %d; esperado: la de siempre, %d) · vida %d (esperado: no más que la máxima)" % [
 		johnny.stats.vida_max, vida_con, Mejoras.base().vida_max, johnny.vida])

@@ -4,6 +4,8 @@ Ruso estándar, con **ты** e imperativos naturales («Нажми», «Выбе
 traducen). Comillas «ёлочки»; la «ё» se escribe «е» (как в книгах), salvo donde haría falta para no confundir (no ha hecho falta).
 Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с); miles con espacio (10 000) o sin separar (1000).
 
+**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (мутация / мутации; «Resetear mutaciones» = Сбросить мутации; el programa, МУТАЦИИ.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (побочный эффект / побочные эффекты). Lo de abajo que diga talento/mutación se lee así.
+
 ## Reglas de gramática que impone el juego
 
 - **«zombi» → *спящий* (plural *спящие*)** (decidido el 13 nov), **declinado** según la frase (*спящего*, *спящих*, *спящим*, *спящими*). Nunca *зомби*.

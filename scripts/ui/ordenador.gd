@@ -37,7 +37,7 @@ const CARCASA := Color("#a49a83")      # el plástico del monitor, amarillento d
 # Los textos de estas tablas se traducen al enseñarlos (Idioma.t); las marcas son para tools/traducciones.py
 # [traducir]
 const ICONOS := [   # [programa, icono, nombre]
-	["puntos", "escritorio-talentos", "Talentos"],   # (por dentro se sigue llamando "puntos": antes se compraban puntos de talento)
+	["puntos", "escritorio-talentos", "Mutaciones"],   # (por dentro se sigue llamando "puntos", y los talentos, talentos: el dueño los llamó mutaciones el 15 nov)
 	["armas", "escritorio-armas", "Tienda\nde armas"],
 	["logros", "escritorio-logros", "Logros"],
 	["dosier", "escritorio-dosier", "Dosier\nVD-7"],
@@ -45,9 +45,9 @@ const ICONOS := [   # [programa, icono, nombre]
 	["videos", "escritorio-videos", "Vídeos"],
 	["apagar", "escritorio-apagar", "Apagar"],   # (solo, en la esquina de arriba a la derecha; antes iba ahí Vídeos, 10 nov)
 ]
-const NOMBRES := {"puntos": "TALENTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "videos": "VIDEOS.EXE",
+const NOMBRES := {"puntos": "MUTACIONES.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "videos": "VIDEOS.EXE",
 	"colecciones": "SUJETOS.EXE"}
-const TAREAS := {"puntos": "Árbol de talentos", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
+const TAREAS := {"armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
 	"videos": "Vídeos de Canal 8", "colecciones": "Sujetos"}
 # [/traducir]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
@@ -560,10 +560,10 @@ func programa_puntos(c: VBoxContainer) -> void:
 	arbol.montar(self, s)
 	c.add_child(arbol)
 	# Resetear (M32): quita los puntos del árbol, sin devolver lo gastado. Se pulsa dos veces, por si acaso
-	enlazar(arbol.resetear, Idioma.t("Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve."), resetear_talentos)
+	enlazar(arbol.resetear, Idioma.t("Quita todos los puntos de las mutaciones. Lo que gastaste en ellos no se devuelve."), resetear_talentos)
 	for t in Talentos.LISTA:
 		enlazar(arbol.botones[t.id], explica_talento(s, t), arbol.al_pulsar.bind(t.id))
-	info.text = Idioma.t("Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes el talento que pide.")
+	info.text = Idioma.t("Cada punto se paga con mutágeno y sube un nivel. El que coges en una partida se guarda si completas el edificio y se pierde si caes o abandonas. Para pasar al nivel siguiente, llena antes la mutación que pide.")
 
 
 # Lo que dice la línea de abajo de un talento marcado
@@ -574,7 +574,7 @@ func explica_talento(s: Dictionary, t: Dictionary) -> String:
 		"bloqueado": texto = Idioma.t("Necesitas %s al máximo. %s") % [Talentos.nombres(Talentos.faltan(s, t.id)), texto]
 		"max": texto = Idioma.t("¡Al máximo! %s") % texto
 		"sin_mutageno": texto = Idioma.t("%s. Cuesta %d de mutágeno.") % [texto, precio]
-		"": texto = Idioma.t("%s. Pulsa para subirlo (%d de mutágeno).") % [texto, precio]
+		"": texto = Idioma.t("%s. Pulsa para subirla (%d de mutágeno).") % [texto, precio]
 	return texto
 
 
@@ -670,7 +670,7 @@ func preguntar_reseteo(_s: Dictionary) -> void:
 	barra.add_theme_stylebox_override("panel", caja(AZUL, AZUL, 0, 0, 3))
 	columna.add_child(barra)
 	var titulo := Label.new()
-	titulo.text = Idioma.t("Resetear talentos")
+	titulo.text = Idioma.t("Resetear mutaciones")
 	barra.add_child(titulo)
 	var margen := MarginContainer.new()
 	for lado in ["left", "right", "top", "bottom"]:
@@ -689,7 +689,7 @@ func preguntar_reseteo(_s: Dictionary) -> void:
 	alerta.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	fila.add_child(alerta)
 	# (sin decir cuánto dinero es: 11 nov)
-	var texto := texto_tarjeta(Idioma.t("¿Seguro? Perderás todo el mutágeno que has invertido en los talentos. El árbol se quedará vacío para repartirlo otra vez."), TINTA)
+	var texto := texto_tarjeta(Idioma.t("¿Seguro? Perderás todo el mutágeno que has invertido en las mutaciones. Se quedarán vacías para repartirlo otra vez."), TINTA)
 	texto.name = "texto"
 	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	texto.custom_minimum_size.x = 320
@@ -707,7 +707,7 @@ func preguntar_reseteo(_s: Dictionary) -> void:
 		b.focus_neighbor_top = b.get_path_to(b)
 		b.focus_neighbor_bottom = b.get_path_to(b)
 	no.grab_focus.call_deferred()
-	info.text = Idioma.t("Lo que gastaste en los talentos no se devuelve.")
+	info.text = Idioma.t("Lo que gastaste en las mutaciones no se devuelve.")
 
 
 # Un botón de la ventanita de aviso, como los de Windows 95: con relieve, más claro con el ratón encima y con el punteado
@@ -745,7 +745,7 @@ func cerrar_aviso(volver := true) -> void:
 		var b := ventana.find_child("b_resetear", true, false)
 		if b:
 			b.grab_focus()
-		info.text = Idioma.t("Quita todos los puntos del árbol. Lo que gastaste en ellos no se devuelve.")
+		info.text = Idioma.t("Quita todos los puntos de las mutaciones. Lo que gastaste en ellos no se devuelve.")
 
 
 # «Sí, resetear» en la ventanita: quita todos los puntos (lo gastado no se devuelve) y Johnny pierde lo que le daban
@@ -757,7 +757,7 @@ func reseteo_confirmado() -> void:
 	Sonido.tocar("compra")
 	partida.aplicar_talentos(s.talentos)
 	abrir("puntos", "b_resetear")
-	info.set_deferred("text", Idioma.t("¡Hecho! El árbol está vacío para volver a repartirlo. Tienes %d de mutágeno.") % partida.mutageno_total())
+	info.set_deferred("text", Idioma.t("¡Hecho! Las mutaciones están vacías para volver a repartirlo. Tienes %d de mutágeno.") % partida.mutageno_total())
 
 
 func subir(id: String) -> void:

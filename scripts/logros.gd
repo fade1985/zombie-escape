@@ -76,9 +76,9 @@ const LISTA := [
 	{"id": "arsenal", "tema": "armas", "nombre": "Arsenal completo", "icono": "logro-arsenal", "premio": 15, "cuenta": "total",
 		"mira": "armas", "desc": "Mata un durmiente con cada arma: la fregona y todas las de la tienda."},
 	{"id": "especialista", "tema": "armas", "nombre": "Especialista", "icono": "logro-especialista", "premio": 15, "cuenta": "",
-		"mira": "rama", "desc": "Llena una rama entera del árbol de talentos."},
+		"mira": "rama", "desc": "Llena una rama entera de mutaciones."},
 	{"id": "conserje_total", "tema": "armas", "nombre": "Conserje total", "icono": "logro-conserje_total", "premio": 25, "cuenta": "",
-		"mira": "arbol", "desc": "Llena el árbol de talentos entero."},
+		"mira": "arbol", "desc": "Llena todas las mutaciones."},
 	# ── Supervivientes
 	{"id": "buen_vecino", "tema": "supervivientes", "nombre": "Buen vecino", "icono": "logro-buen_vecino", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."},
@@ -118,7 +118,7 @@ const LISTA := [
 # [/traducir]
 # Los apartados del programa Logros del ordenador, en orden
 # [traducir]
-const TEMAS := {"edificios": "Edificios", "jefes": "Jefes", "combate": "Combate", "armas": "Armas y talentos",
+const TEMAS := {"edificios": "Edificios", "jefes": "Jefes", "combate": "Combate", "armas": "Armas y mutaciones",
 	"supervivientes": "Supervivientes", "sorpresas": "Sorpresas y retos", "colecciones": "Colecciones"}
 # [/traducir]
 
