@@ -1362,18 +1362,47 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
+# La munición que suelta un enemigo al morir: solo la de las armas de fuego que lleva Johnny, la de la mano o la de
+# repuesto (una de las dos, al azar). Si gasta balas, cartuchos, cinta o granadas, una caja (soltar_municion); si es una
+# especial, lo que la llena (una gasolina, un bidón de ácido o una batería: soltar_objeto). Si solo lleva la de cuerpo
+# a cuerpo, nada (15 nov, M113)
+func soltar_municion_zombi(donde: Vector2) -> void:
+	var armas := [johnny.huecos.fuego, repuesto("fuego")].filter(func(id): return id != "")
+	if armas.is_empty() or Reto.sin_municion():
+		return
+	var id: String = armas.pick_random()
+	if Armas.datos(id).has("relleno"):
+		soltar_objeto(Armas.datos(id).relleno, donde)
+	else:
+		soltar_municion(donde)
+
+
+# La munición que gastan las armas de fuego que lleva Johnny, la de la mano y la de repuesto (Armas.municion: en las
+# especiales, lo que las llena). Vacía si solo lleva la de cuerpo a cuerpo
+func municion_que_lleva() -> Array:
+	var lista := []
+	for id in [johnny.huecos.fuego, repuesto("fuego")]:
+		if id != "" and not Armas.municion(id) in lista:
+			lista.append(Armas.municion(id))
+	return lista
+
+
 # El dibujo de la munición de un tipo (Armas.MUNICION)
 func icono_municion(tipo: String) -> Texture2D:
 	return load("res://assets/ui/iconos/%s.png" % Armas.MUNICION[tipo].icono)
 
 
 # El dibujo de una caja de munición del suelo: el de la munición que daría al cogerla (la del arma de
-# johnny.arma_de_caja; la MP5 gasta las balas de la pistola, pero se pinta su caja verde). Si ahora no es para ninguna,
-# el de la munición del arma de fuego que lleva, o las balas de pistola si esa se llena con un objeto de la mochila
+# johnny.arma_de_caja; la MP5 gasta las balas de la pistola, pero se pinta su caja verde). Si ahora no es para ninguna
+# (las lleva llenas), el de la munición del arma de fuego que lleva en la mano o, si esa se llena con un objeto de la
+# mochila, la de repuesto; y si ninguna gasta balas, las de pistola
 func icono_caja() -> Texture2D:
 	var id: String = johnny.arma_de_caja()
-	if id == "" and johnny.huecos.fuego != "" and not Armas.datos(johnny.huecos.fuego).has("relleno"):
-		id = johnny.huecos.fuego
+	if id == "":
+		for otra in [johnny.huecos.fuego, repuesto("fuego")]:
+			if otra != "" and not Armas.datos(otra).has("relleno"):
+				id = otra
+				break
 	if id == "mp5":
 		return ICONO_MP5
 	var tipo := Armas.municion(id) if id != "" else ""
@@ -1972,16 +2001,16 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			if randf() < Lanzables.DATOS[k].suelta:
 				soltar_lanzable(k, zombi.position)
 				soltado = true
-		# o una caja de munición (la portera, dos seguras)
+		# o munición de las armas que lleva (la portera, dos seguras): soltar_municion_zombi
 		if tipo in JEFES:
 			for i in 2:
-				soltar_municion(zombi.position)
+				soltar_municion_zombi(zombi.position)
 		elif not soltado and randf() < MUNICION_ZOMBI:
-			soltar_municion(zombi.position)
+			soltar_municion_zombi(zombi.position)
 		# y a veces un objeto (los jefes, dos seguros), de los que salen aquí
 		var tienda: String = planta.sitios[aqui].get("tienda", "")
-		# (la munición que sale, solo la de las armas que lleva Johnny: Armas.municion de la de fuego)
-		var queda: String = Armas.municion(johnny.huecos.fuego)
+		# (la munición que sale, solo la de las armas que lleva Johnny: la de la mano y la de repuesto)
+		var queda := municion_que_lleva()
 		if tipo in JEFES:
 			for i in 2:
 				var suelto := Objetos.al_azar(edificio, tienda, queda)

@@ -1743,6 +1743,58 @@ func probar_municion_suelo() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --municion-zombi": la munición que suelta un durmiente al morir (M113, soltar_municion_zombi), solo la
+# de las armas que lleva Johnny, en la mano o de repuesto. Con cada combinación de armas, 40 veces, y dice qué ha caído
+# (los dibujos: cajas de munición u objetos de las especiales) y qué munición dejan pasar los objetos que sueltan
+# (municion_que_lleva; 300 objetos al azar). Foto: captura-municion-zombi.png (el lanzallamas en la mano y la escopeta
+# de repuesto: gasolinas y cajas de cartuchos)
+func probar_municion_zombi() -> void:
+	mochila.clear()
+	johnny.direccion = "o"   # (que la linterna no alumbre lo que cae)
+	await get_tree().create_timer(0.3).timeout
+	var casos := [
+		["", "", "nada"],
+		["pistola", "", "solo cajas de pistola"],
+		["lanzallamas", "", "solo gasolina"],
+		["lanzallamas", "escopeta", "gasolina y cajas de cartuchos, mitad y mitad"],
+		["mp5", "desintegrador", "cajas de la MP5 y bidones de ácido"],
+		["pistola_electrica", "lanzallamas", "baterías y gasolina"],
+		["gatling", "lanzagranadas", "solo cajas de la gatling (la caja es para la de la mano)"],
+	]
+	for caso in casos:
+		armas_guardadas.clear()
+		if caso[0] == "":
+			johnny.sostener("cuerpo")
+			johnny.huecos.fuego = ""
+		else:
+			johnny.coger(caso[0])
+		if caso[1] != "":
+			armas_guardadas.append(caso[1])
+		var antes: Array = mapa.cosas.get_children()
+		for i in 40:
+			soltar_municion_zombi(johnny.position + Vector2(230 + (i % 8) * 34, -70 + (i / 8) * 34))
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var nuevas: Array = mapa.cosas.get_children().filter(func(c): return not c in antes and c is BILLETE)
+		var cuenta := {}
+		for c in nuevas:
+			var k: String = c.icono.resource_path.get_file().get_basename()
+			cuenta[k] = cuenta.get(k, 0) + 1
+		var de_objetos := {}
+		for i in 300:
+			var o := Objetos.al_azar(edificio, "", municion_que_lleva())
+			if o in Objetos.MUNICION_DE_OBJETO:
+				de_objetos[o] = de_objetos.get(o, 0) + 1
+		print("Munición de durmiente con «%s» en la mano y «%s» de repuesto: %s; objetos de munición: %s (esperado: %s)" % [
+			caso[0], caso[1], cuenta, de_objetos, caso[2]])
+		if caso[0] == "lanzallamas" and caso[1] == "escopeta":
+			await get_tree().create_timer(0.6).timeout
+			Captura.foto("captura-municion-zombi.png")
+		for c in nuevas:
+			c.queue_free()
+	get_tree().quit()
+
+
 # Con "--captura --atraedora": los dibujos nuevos de la atraedora (PixelLab, 26 oct: el haz de dinamita con el
 # despertador) y de la congeladora (el extintor con el temporizador de números rojos). Johnny lleva tres de cada una
 # (la congeladora entra de repuesto y pasa a la mano al cambiarla por la atraedora). De cada una: una lanzada, a mitad

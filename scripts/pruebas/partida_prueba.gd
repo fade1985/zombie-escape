@@ -209,6 +209,8 @@
 #   --infinito          el HUD con la ayuda de balas infinitas (el «∞» dibujado a mano)    [prueba_inventario.gd]
 #   --municion-suelo    la munición, un molotov y una granada en el suelo (con luz y a oscuras), la caja según el arma y un
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
+#   --municion-zombi    la munición que suelta un durmiente: solo la de las armas que lleva (la mano y el repuesto;
+#                       las especiales, su gasolina, bidón o batería; solo cuerpo a cuerpo, nada) [prueba_inventario.gd]
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
 #                       en el HUD y en el inventario                                       [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar (--fotos-tiendas con
@@ -735,6 +737,9 @@ func empezar_prueba() -> void:
 	elif "--municion-suelo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion_suelo()
+	elif "--municion-zombi" in args:
+		set_process(false)   # sin la prueba larga
+		probar_municion_zombi()
 	elif "--atraedora" in args:
 		set_process(false)   # sin la prueba larga
 		probar_atraedora()

@@ -276,20 +276,20 @@ static func cabe_baul(s: Dictionary, id: String) -> bool:
 # Qué objeto suelta un zombi al morir ("" = nada): el gordo, solo lo suyo (DE_UN_ZOMBI: el bidón de ácido), 1 de
 # cada 4 veces. "tienda" es el tipo de la tienda donde ha caído ("" en el pasillo o en un apartamento). Las piezas van
 # aparte (pieza_de_zombi)
-static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "", municion := "*") -> String:
+static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "", municion: Variant = "*") -> String:
 	for id in DE_UN_ZOMBI:
 		if DE_UN_ZOMBI[id] == tipo:
-			return id if randf() < SUELTA_PROPIO and (municion == "*" or id == municion) else ""
+			return id if randf() < SUELTA_PROPIO and (municion is String or id in municion) else ""
 	return al_azar(edificio, tienda, municion) if randf() < SUELTA else ""
 
 
 # Un objeto cualquiera de los que salen ahí, menos los de un solo zombi (DE_UN_ZOMBI; el jefe suelta dos seguros) y
 # las piezas (PIEZAS). En los Apartamentos, la gasolina o la batería; en el centro comercial, uno de la lista de su
 # tienda (en el pasillo, de una tienda cualquiera). Con el reto del día "Sin curas" (reto.gd), sin los de curar
-# "municion": con la de las armas que lleva Johnny (Armas.municion de su arma a distancia; "" si no gasta), solo sale la
-# munición que le sirve (la gasolina, la batería y el bidón de ácido, los que llenan el lanzallamas, el lanza rayos y el
-# lanza ácido) y, si no hay otra cosa que soltar, nada; "*" = sin mirar (las pruebas)
-static func al_azar(edificio := "apartamentos", tienda := "", municion := "*") -> String:
+# "municion": con la lista de la que gastan las armas que lleva Johnny (partida.municion_que_lleva: la de la mano y la de
+# repuesto), solo sale la munición que le sirve (la gasolina, la batería y el bidón de ácido, los que llenan el
+# lanzallamas, el lanza rayos y el lanza ácido) y, si no hay otra cosa que soltar, nada; "*" = sin mirar (las pruebas)
+static func al_azar(edificio := "apartamentos", tienda := "", municion: Variant = "*") -> String:
 	var lista: Array
 	if edificio == "apartamentos":
 		lista = NOMBRES.keys().filter(func(id): return id not in DE_UN_ZOMBI and id not in SOLO_CENTRO and id not in PIEZAS)
@@ -302,8 +302,8 @@ static func al_azar(edificio := "apartamentos", tienda := "", municion := "*") -
 		if lista.is_empty():   # la farmacia solo tiene vendas: entonces, lo de una tienda cualquiera
 			for t in TIENDAS:
 				lista += TIENDAS[t].filter(func(id): return not id in USABLES and not id in lista)
-	if municion != "*":
-		lista = lista.filter(func(id): return not id in MUNICION_DE_OBJETO or id == municion)
+	if municion is Array:
+		lista = lista.filter(func(id): return not id in MUNICION_DE_OBJETO or id in municion)
 	return lista.pick_random() if not lista.is_empty() else ""
 
 
