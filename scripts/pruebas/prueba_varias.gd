@@ -4169,6 +4169,10 @@ func probar_mando() -> void:
 	await pulsar_b.call()
 	print("Mando · página, B: %s (esperado: «», false)" % estado.call())
 	# el panel de pruebas: B lo cierra
+	var espera := 0   # (si Johnny está cruzando una puerta, el panel no se abre: se espera a que acabe)
+	while cambiando and espera < 300:
+		await get_tree().process_frame
+		espera += 1
 	abrir_panel_pruebas()
 	await get_tree().create_timer(0.3).timeout
 	var abierto := panel_pruebas.abierto()
@@ -4182,10 +4186,10 @@ func probar_mando() -> void:
 	while menus.abierto != "fin" and tope < 120:
 		await get_tree().process_frame
 		tope += 1
-	for c in menus.menu_principal.get_connections():
-		menus.menu_principal.disconnect(c.callable)
-	var otra_vez := [0]   # (las veces que el botón, «Menú principal», hace caso)
-	menus.menu_principal.connect(func(): otra_vez[0] += 1)
+	for c in menus.reintentar.get_connections():   # (que no vuelva a cargar el edificio: la prueba se repetiría)
+		menus.reintentar.disconnect(c.callable)
+	var otra_vez := [0]   # (las veces que el botón marcado, «Jugar otra vez», hace caso)
+	menus.reintentar.connect(func(): otra_vez[0] += 1)
 	await get_tree().create_timer(0.05).timeout
 	var rapido := PruebaMando.marcado(self)
 	await pulsar_a.call()
@@ -4193,7 +4197,7 @@ func probar_mando() -> void:
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto("captura-mando-final.png")
 	await pulsar_a.call()
-	print("Mando · cartel del final: marcado «%s» · A con prisa: %d veces · A pasado medio segundo: %d (esperado: Menú principal, 0, 1)" % [rapido, con_prisa, otra_vez[0]])
+	print("Mando · cartel del final: marcado «%s» · A con prisa: %d veces · A pasado medio segundo: %d (esperado: Jugar otra vez, 0, 1)" % [rapido, con_prisa, otra_vez[0]])
 	get_tree().quit()
 
 
