@@ -476,6 +476,118 @@ func chorro_torcido(arma: String) -> void:
 #   - los bidones de ácido: de 4000 gordos, cerca de 1 de cada 4 suelta uno (y nada más); ni los otros zombis ni el
 #     reparto al azar los dan nunca; y en las Colecciones salen en los dos edificios, con «lo suelta el gordo»
 # Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+# El lanza hielo (15 nov): comprarlo, sus números, el chorro de niebla helada con tres zombis en línea (se van poniendo
+# azules y lentos y, al segundo de chorro, se congelan; el de más allá de las 9 casillas, nada), cómo se les pasa, el
+# chorro contra la pared y al soltarlo, el depósito con la bombona de nitrógeno, dos direcciones y dos skins
+func probar_lanza_hielo() -> void:
+	Guardado.cambiar(func(g2):
+		g2.skins = ["portero", "gymbro"]
+		g2.skin = "")
+	johnny.vestir("")
+	await comprar_en_tienda("lanza_hielo", "captura-lanza-hielo-tienda.png")
+	var id := "lanza_hielo"
+	var w := Armas.datos(id)
+	johnny.modo = "quieto"
+	await get_tree().create_timer(0.3).timeout
+	print("Lanza hielo en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · daño %.0f/s · empuje %.1f · relleno %s · icono «%s» (esperado: Lanza hielo, conserje-48-lanza-hielo.tres, hielo, 288 (9), 8, 12, 0.0, nitrogeno, lanza_hielo)" % [
+		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
+		w.deposito, w.dano, w.empuje, w.relleno, Objetos.icono(id)])
+
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger(id)
+	johnny.municion_sin_fin = false
+	while "nitrogeno" in mochila:
+		mochila.erase("nitrogeno")
+	mochila.append_array(["nitrogeno", "nitrogeno"])
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+
+	# el chorro: medio segundo (se enfrían a medias) y otro medio (se congelan)
+	var z := []
+	for d in [Vector2(110, 0), Vector2(230, 0), Vector2(400, 0)]:
+		var zombi: Node2D = meter_zombi("lento", johnny.position + d)
+		zombi.vida = 500
+		z.append(zombi)
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.aturdido = 30.0   # quietos
+	var vida_johnny: int = johnny.vida
+	await echar_fuego(0.0, 0.6, "captura-lanza-hielo-chorro.png")
+	var helor: Array = z.map(func(zz): return snappedf(zz.helor, 0.01))
+	var lento: float = z[0].sprite.speed_scale
+	await echar_fuego(0.0, 0.6, "captura-lanza-hielo-congelando.png")
+	var congelados: Array = z.map(func(zz): return zz.congelado > 0.0)
+	await get_tree().create_timer(0.5).timeout   # (que se vaya la niebla: se ven azules y quietos)
+	Captura.foto("captura-lanza-hielo-congelados.png")
+	print("Chorro 0,6 s: frío %s · el primero anda al %.0f %% (esperado: unos 0.5, 0.5 y 0; menos de 100)" % [helor, lento * 100.0])
+	print("Chorro 1,2 s: congelados %s · pierden %d, %d y %d · Johnny -%d (esperado: true, true, false; unos 14, unos 14, 0; 0)" % [
+		congelados, 500 - z[0].vida, 500 - z[1].vida, 500 - z[2].vida, vida_johnny - johnny.vida])
+	await get_tree().create_timer(2.8).timeout
+	print("A los 3,3 s: siguen congelados %s · frío %s (esperado: false, false, false; 0, 0, 0)" % [
+		z.map(func(zz): return zz.congelado > 0.0), z.map(func(zz): return snappedf(zz.helor, 0.01))])
+	# se le pasa el frío si deja de darle: medio segundo de chorro y luego 1,5 s sin
+	await echar_fuego(0.0, 0.5)
+	var con_frio: float = z[0].helor
+	await get_tree().create_timer(1.5).timeout
+	print("Se le pasa: frío %.2f → %.2f (esperado: unos 0.5 → 0) · hielo en el shader %.2f (esperado: 0)" % [
+		con_frio, z[0].helor, z[0].sprite.material.get_shader_parameter("hielo")])
+	for zombi in z:
+		zombi.remove_from_group("zombis")
+		zombi.queue_free()
+
+	# al soltar, y contra la pared
+	await echar_fuego(0.0, 0.6)
+	for i in 5:
+		await get_tree().physics_frame
+	Captura.foto("captura-lanza-hielo-soltando.png")
+	await get_tree().create_timer(0.5).timeout
+	var puesto: Vector2 = johnny.global_position
+	johnny.global_position = sala.diana.global_position + Vector2(380, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await echar_fuego(0.0, 0.6, "captura-lanza-hielo-pared.png")
+	print("Contra la pared: llega a %.0f de %.0f (esperado: menos de 288)" % [johnny.llamarada.tope, johnny.llamarada.alcance])
+	johnny.global_position = puesto
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+
+	# el depósito: vacío con una bombona, se llena solo y la gasta
+	while "nitrogeno" in mochila:
+		mochila.erase("nitrogeno")
+	mochila.append("nitrogeno")
+	johnny.deposito = 0.1
+	await echar_fuego(PI, 0.3)
+	await get_tree().create_timer(1.7).timeout
+	Captura.foto("captura-lanza-hielo-deposito.png")
+	print("Depósito vacío con una bombona: depósito %.1f s · bombonas que quedan %d · el texto «%s» (esperado: 8.0, 0, Lanza hielo   8 s · ...x0)" % [
+		johnny.deposito, mochila.count("nitrogeno"), texto_del_arma()])
+
+	# dos direcciones más y dos skins
+	johnny.municion_sin_fin = true
+	for d in ["s", "no"]:
+		johnny.direccion = d
+		await echar_fuego(johnny.DIRS.find(d) * PI / 4, 0.5, "captura-lanza-hielo-%s.png" % d)
+		await get_tree().create_timer(0.4).timeout
+	for skin in ["portero", "gymbro"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		await echar_fuego(0.0, 0.4, "captura-lanza-hielo-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-lanza-hielo-%s.tres)" % [skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.3).timeout
+	get_tree().quit()
+
+
 func probar_desintegrador() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):

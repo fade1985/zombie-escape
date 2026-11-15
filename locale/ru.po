@@ -219,6 +219,10 @@ msgid "Lanza ácido"
 msgstr "Кислотомет"
 
 #: scripts/armas.gd
+msgid "Lanza hielo"
+msgstr "Ледомет"
+
+#: scripts/armas.gd
 msgid "Lanza rayos"
 msgstr "Молниемет"
 
@@ -241,6 +245,10 @@ msgstr "бочкой кислоты"
 #: scripts/armas.gd
 msgid "una batería"
 msgstr "батареей"
+
+#: scripts/armas.gd
+msgid "una bombona de nitrógeno"
+msgstr "баллоном азота"
 
 #: scripts/armas.gd
 msgid "Balas de pistola"
@@ -325,6 +333,18 @@ msgstr "Батарея села!"
 #: scripts/armas.gd
 msgid "el lanza rayos"
 msgstr "молниемет"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bombona de nitrógeno"
+msgstr "Баллон азота"
+
+#: scripts/armas.gd
+msgid "¡Sin nitrógeno!"
+msgstr "Нет азота!"
+
+#: scripts/armas.gd
+msgid "el lanza hielo"
+msgstr "ледомет"
 
 #: scripts/averia.gd
 msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
@@ -2968,8 +2988,8 @@ msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el l
 msgstr "оружие дальнего боя (пистолет, MP5, дробовик, гатлинг и гранатомёт)"
 
 #: scripts/objetos.gd
-msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
-msgstr "особое оружие (огнемет, кислотомет и молниемет)"
+msgid "las armas especiales (el lanzallamas, el lanza ácido, el lanza rayos y el lanza hielo)"
+msgstr "особое оружие (огнемет, кислотомет, молниемет и ледомет)"
 
 #: scripts/objetos.gd
 msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
@@ -5940,6 +5960,13 @@ msgstr[1] "%d бочки кислоты"
 msgstr[2] "%d бочек кислоты"
 
 #: scripts/ui/inventario.gd
+msgid "%d bombona de nitrógeno"
+msgid_plural "%d bombonas de nitrógeno"
+msgstr[0] "%d баллон азота"
+msgstr[1] "%d баллона азота"
+msgstr[2] "%d баллонов азота"
+
+#: scripts/ui/inventario.gd
 msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d батарея"
@@ -6025,6 +6052,10 @@ msgstr "Непрерывное пламя, которое жжет всех. З�
 #: scripts/ui/inventario.gd
 msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
 msgstr "Непрерывная струя кислоты, разъедающая всех. Заправляется бочками кислоты."
+
+#: scripts/ui/inventario.gd
+msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
+msgstr "Непрерывный ледяной туман, который охлаждает всех, пока они не замерзнут. Заправляется баллонами азота."
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."

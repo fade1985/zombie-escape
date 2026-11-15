@@ -63,6 +63,7 @@ const COLORES_DEPOSITO := {
 	"gasolina": [Color("#ff9f1c"), Color("#ffd23f"), Color("#b8561c")],
 	"bidon_acido": [Color("#c7e04a"), Color("#ecf896"), Color("#608028")],
 	"bateria": [Color("#2cc8e8"), Color("#b8f4ff"), Color("#1b7f9c")],
+	"nitrogeno": [Color("#9edef8"), Color("#ecfaff"), Color("#3a76b6")],
 }
 
 var johnny: Node2D

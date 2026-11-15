@@ -32,7 +32,8 @@ en una línea.
   su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
   con "pelado") y `brillo`.
 - `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas: chorro a presión al estilo del "flamethrower" de pixelfx, con piloto azul, lenguas que suben y algo de humo en la punta) y
-  `chorro_acido` (lanza ácido); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
+  `chorro_acido` (lanza ácido) y `chorro_hielo` (lanza hielo: el "frost-breath" de pixelfx, chorro blanco, niebla azul que
+  se hincha y cae, rayas de viento y cristalitos); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
 - `luces/`: `lampara.tscn`, `fuego.tscn`, `luz_suave.tres` y los shaders `niebla` y `suelo_a_oscuras`.
 
 ## scripts/
@@ -46,7 +47,9 @@ en una línea.
   munición (`municion`, `reserva()`, `meter_municion()`, `arma_de_caja()`) y el depósito del lanzallamas y el lanza
   ácido (`echar_fuego`, `rellenos()`, `coger_relleno`). `mejoras.gd`: sus atributos.
 - `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
-  llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. `familia()`:
+  llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. El lanza hielo
+  (`lanza_hielo`) se llena con la bombona de nitrógeno (`nitrogeno`); su hoja, `tools/hoja_lanza_hielo.py` (la del lanza
+  ácido con otros colores), y sus iconos, `tools/icono_lanza_hielo.py` e `icono_nitrogeno.py`. `familia()`:
   cuerpo a cuerpo, A distancia o especial (por dentro, las dos últimas son de tipo `"fuego"`). Las **calidades**
   (`CALIDADES`: Normal, Poco común, Rara y Épica, con su color, su daño, lo de su familia y las piezas que cuesta
   subir a ella en el banco, `coste()`: los arrojables, más baratos; `con_calidad()`, `que_da()`, `al_baul()`,
@@ -66,8 +69,10 @@ en una línea.
   golpe, que suelta `johnny.golpear` y sigue el `gesto` del dibujo de cada arma: de lado, de arriba abajo, de abajo arriba o recto) y la trazadora de la bala (`bala.calidad`). Se prueba con `--aura` y `--tajos`.
 - `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
   ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas (ya no las echa ningún arma).
-- `llamarada.gd`: la llama continua del lanzallamas, el chorro del lanza ácido y el rayo del lanza rayos (cono, daño
-  cada 0,25 s, empuje, luz; `variante`: "llama", "acido" o "rayo". El rayo se dibuja a código —zigzag, ramitas y
+- `llamarada.gd`: la llama continua del lanzallamas, el chorro del lanza ácido, el rayo del lanza rayos y la niebla del
+  lanza hielo (cono, daño cada 0,25 s, empuje, luz; `variante`: "llama", "acido", "rayo" o "hielo". El hielo enfría a los
+  zombis, `zombi.enfriar`: azules y lentos (`helor`, `HELOR_*`) y, con "congela" segundos de chorro, congelados "congelado"
+  segundos; los copos que caen, `copos`. El rayo se dibuja a código —zigzag, ramitas y
   arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
   `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido, y la de sangre de la punta de la
   motosierra (`sangra` en `armas.gd`). La **motosierra** (6 nov): golpe lento y fuerte por encima de la cabeza
@@ -263,7 +268,9 @@ en una línea.
   zombi tocado, `chorro-fuego` (una bocanada que lo lame y sube) o `chorro-acido` (gotas, burbujas y vapor), y, si el chorro
   se corta en una pared, `pared-fuego` o `pared-acido` (más anchos; el ácido chorrea). Un efecto con cuatro versiones:
   `tools/pixelfx/chorro-golpe.js`, `-acido.js`, `chorro-pared.js` y `-acido.js`. Se precalientan al sacar el arma.
-  Pruebas: `--captura --lanzallamas` y `--desintegrador`.
+  El lanza hielo, `chorro-hielo` y `pared-hielo` (niebla que cae, esquirlas que escarchan el suelo y cristalitos:
+  `chorro-golpe-hielo.js` y `chorro-pared-hielo.js`, el tipo "hielo" de `chorro-golpe.js`).
+  Pruebas: `--captura --lanzallamas`, `--desintegrador` y `--lanza-hielo`.
 - Recoger y curar (M53 y M56; `efecto_suelo.gd`): `recoger`, el destello dorado al coger algo del suelo (`billete.gd`:
   billetes, lanzables, objetos, armas y munición; `tools/pixelfx/recoger.js`), y `curacion`, la médica cura a Johnny
   (`aliado.curar`; `curacion.js`, rehecha en la M66: un círculo de luz verde con un anillo a sus pies, una columna de luz que

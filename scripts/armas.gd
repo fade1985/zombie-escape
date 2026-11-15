@@ -21,7 +21,7 @@
 #   relleno   no gastan munición de reserva: un objeto de la mochila (la gasolina, el bidón de ácido o la batería, que
 #             van en los huecos de la munición) las llena enteras en "recarga" segundos
 #   deposito  el lanzallamas, el lanza ácido y el lanza rayos no tienen cargador: un depósito de esos segundos de chorro
-#   efecto    lo que hacen (llamarada.gd): "llama", "acido" o "rayo" · cano  hacia dónde apunta el tubo · saltos  el rayo
+#   efecto    lo que hacen (llamarada.gd): "llama", "acido", "rayo" o "hielo" · cano  hacia dónde apunta el tubo · saltos  el rayo
 #             salta a ese número de zombis más, además del primero (la calidad suma)
 class_name Armas
 
@@ -29,7 +29,7 @@ class_name Armas
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
 # no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
 const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 10, "escopeta": 30, "mp5": 40, "gatling": 70, "lanzagranadas": 65, "pistola_electrica": 45,
-	"lanzallamas": 60, "desintegrador": 60}
+	"lanzallamas": 60, "desintegrador": 60, "lanza_hielo": 60}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
 # "distancia" (pistola, escopeta y MP5) o "especial" (lanzallamas, lanza ácido y lanza rayos: las de "efecto").
@@ -383,6 +383,24 @@ const DATOS := {
 	# con los pies en 48,80, y echa el rayo en la postura quieta (de frente la lleva vertical con la boca al suelo y de
 	# espaldas vertical sobre el hombro, para que el rayo salga hacia donde Johnny mira). La boca NO sale de arma.py: es
 	# la punta del arma de cada postura quieta, medida en la hoja
+	# el lanza hielo (15 nov): un lanzallamas de frío. Como el lanzallamas, no dispara: echa un chorro continuo de niebla
+	# helada mientras se ataca (llamarada.gd, con su efecto "hielo") que llega a 9 casillas, con un depósito de "deposito"
+	# segundos que se llena entero en "recarga" segundos con una bombona de nitrógeno de la mochila. Hace poco daño (por
+	# segundo) y no empuja: lo suyo es enfriar. El zombi al que le da se va poniendo azul y más lento y, tras "congela"
+	# segundos de chorro (se le pasa poco a poco si deja de darle), se queda congelado "congelado" segundos (zombi.gd,
+	# enfriar y congelar). Su hoja (conserje-48-lanza-hielo) es la del lanzallamas con las bombonas de la espalda en
+	# blanco y azul hielo y sin la llamita del piloto (tools/hoja_lanza_hielo.py, que hace lo mismo que la del lanza ácido
+	# y apunta también dónde está la punta del tubo, de donde cae el vaho frío, goteo.gd). La boca, la del lanza ácido
+	"lanza_hielo": {
+		"nombre": "Lanza hielo", "tipo": "fuego", "dano": 12, "ritmo": 2.5, "alcance": 288.0, "velocidad": 620.0,   # [traducir]
+		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.0, "cargador": 12, "recarga": 1.5,
+		"cartucho": false, "deposito": 8.0, "relleno": "nitrogeno", "efecto": "hielo", "congela": 1.0, "congelado": 3.0,
+		"pies": Vector2(48, 72),
+		"hoja": preload("res://assets/sprites/conserje-48-lanza-hielo.tres"),
+		"boca": {"s": Vector2(1, 0), "se": Vector2(24, -11), "e": Vector2(26, -20), "ne": Vector2(24, -33),
+			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)},
+		"cano": CANO_LANZALLAMAS,
+	},
 	"pistola_electrica": {
 		"nombre": "Lanza rayos", "tipo": "fuego", "dano": 25, "ritmo": 2.5, "alcance": 256.0, "velocidad": 620.0,   # [traducir]
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.0, "cargador": 12, "recarga": 1.5,
@@ -443,6 +461,7 @@ const RELLENOS := {
 	"gasolina": {"uno": "una gasolina"},
 	"bidon_acido": {"uno": "un bidón de ácido"},
 	"bateria": {"uno": "una batería"},
+	"nitrogeno": {"uno": "una bombona de nitrógeno"},
 }
 # [/traducir]
 
@@ -470,6 +489,8 @@ const MUNICION := {
 	"bidon_acido": {"nombre": "Bidón de ácido", "icono": "obj-bidon_acido", "hueco": 3, "sin": "¡Sin ácido!",
 		"para": "el lanza ácido"},
 	"bateria": {"nombre": "Batería", "icono": "obj-bateria", "hueco": 3, "sin": "¡Sin batería!", "para": "el lanza rayos"},
+	"nitrogeno": {"nombre": "Bombona de nitrógeno", "icono": "obj-nitrogeno", "hueco": 3, "sin": "¡Sin nitrógeno!",
+		"para": "el lanza hielo"},
 }
 # [/traducir]
 const HUECOS_MUNICION := 8

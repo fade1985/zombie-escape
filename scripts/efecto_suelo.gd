@@ -35,6 +35,8 @@
 #    pellizco): una bocanada de llamas que lo lame y sube, o un chisporroteo de gotas, burbujas y vapor verde
 #    (tools/pixelfx/chorro-golpe.js y -acido.js). Y "pared-fuego" y "pared-acido": los mismos contra la pared, donde se
 #    corta el chorro (M60), más anchos y, el ácido, chorreando hasta el suelo (chorro-pared.js y -acido.js).
+#    "chorro-hielo" y "pared-hielo", los del lanza hielo (15 nov): niebla helada que se abre y cae, esquirlas que saltan
+#    y escarchan el suelo y cristalitos (tools/pixelfx/chorro-golpe-hielo.js y chorro-pared-hielo.js).
 #  - "recoger": el destello al coger algo del suelo (M53; billete.gd: billetes, lanzables, objetos, armas y munición): una
 #    estrellita dorada, un anillito y chispitas (tools/pixelfx/recoger.js).
 #  - "curacion": la médica cura a Johnny (M56, rehecha en la M66; aliado.curar): un círculo de luz verde a sus pies con
@@ -104,6 +106,12 @@ const TIPOS := {
 		"origen": Vector2(80, 92), "fotogramas": 10},
 	"pared-acido": {"hojas": [preload("res://assets/sprites/chorro-pared-acido-detras.png"),
 		preload("res://assets/sprites/chorro-pared-acido-delante.png"), preload("res://assets/sprites/chorro-pared-acido-brillo.png")],
+		"origen": Vector2(72, 82), "fotogramas": 10},
+	"chorro-hielo": {"hojas": [preload("res://assets/sprites/chorro-golpe-hielo-detras.png"),
+		preload("res://assets/sprites/chorro-golpe-hielo-delante.png"), preload("res://assets/sprites/chorro-golpe-hielo-brillo.png")],
+		"origen": Vector2(48, 68), "fotogramas": 10},
+	"pared-hielo": {"hojas": [preload("res://assets/sprites/chorro-pared-hielo-detras.png"),
+		preload("res://assets/sprites/chorro-pared-hielo-delante.png"), preload("res://assets/sprites/chorro-pared-hielo-brillo.png")],
 		"origen": Vector2(72, 82), "fotogramas": 10},
 	"recoger": {"hojas": [preload("res://assets/sprites/recoger-detras.png"),
 		preload("res://assets/sprites/recoger-delante.png"), preload("res://assets/sprites/recoger-brillo.png")],

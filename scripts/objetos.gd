@@ -31,7 +31,7 @@ const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelt
 # (venenoso)
 const DE_UN_ZOMBI := {"bidon_acido": "venenoso"}
 # Los objetos que son munición de un arma especial (van en los huecos de la munición): solo salen si Johnny lleva esa arma
-const MUNICION_DE_OBJETO := ["gasolina", "bidon_acido", "bateria"]
+const MUNICION_DE_OBJETO := ["gasolina", "bidon_acido", "bateria", "nitrogeno"]
 # Las piezas para mejorar las armas en el banco de trabajo (ui/inventario.gd, «Banco de trabajo»): una por familia, con la
 # familia de armas a la que sirven (Armas.familia; los arrojables, aparte). Las sueltan los zombis y los jefes, y nada más
 const PIEZAS := {
@@ -43,7 +43,7 @@ const PIEZAS := {
 const PIEZA_PARA := {
 	"cuerpo": "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierra y la katana)",
 	"distancia": "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el lanzagranadas)",
-	"especial": "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)",
+	"especial": "las armas especiales (el lanzallamas, el lanza ácido, el lanza rayos y el lanza hielo)",
 	"arrojable": "los lanzables (el molotov, la granada, la atraedora y la congeladora)",
 }
 # [/traducir]
@@ -58,6 +58,8 @@ const NOMBRES := {
 	"bidon_acido": "Bidón de ácido",
 	# la batería, la munición del lanza rayos: en los dos edificios
 	"bateria": "Batería",
+	# la bombona de nitrógeno, la munición del lanza hielo: en los dos edificios (en el centro, el restaurante y el súper)
+	"nitrogeno": "Bombona de nitrógeno",
 	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan con su tecla o desde el inventario (USABLES)
 	"vendas": "Vendas",
 	# las piezas para mejorar las armas (PIEZAS): solo las sueltan los zombis y los jefes
@@ -88,8 +90,8 @@ const SOLO_CENTRO := ["vendas"]      # solo en el centro comercial (y en los arm
 const TIENDAS := {
 	"ferreteria": ["bateria", "gasolina"],
 	"electronica": ["bateria"],
-	"restaurante": ["gasolina"],
-	"supermercado": ["bateria", "vendas"],
+	"restaurante": ["gasolina", "nitrogeno"],
+	"supermercado": ["bateria", "vendas", "nitrogeno"],
 	"farmacia": ["vendas"],
 	"joyeria": ["bateria"],
 }

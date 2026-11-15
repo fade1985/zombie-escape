@@ -24,6 +24,11 @@ const CORRILLO := 140.0    # al despertar, despierta también a los que tiene a 
 const ESPABILAR := 0.5     # lo que tarda en echar a andar después de despertar
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 const CAPA_ZOMBIS := 3     # su capa de choque, la 3 de project.godot
+# El frío del lanza hielo (enfriar): lo que frena con todo el frío (casi congelado, un 60 % más lento), lo que tarda en
+# empezar a pasársele si deja de darle el chorro y lo que se le pasa por segundo después
+const HELOR_FRENA := 0.6
+const HELOR_ESPERA := 0.4
+const HELOR_PASA := 0.5
 
 @export var vida_max := 30
 @export var velocidad := 80.0    # unidades por segundo
@@ -81,6 +86,8 @@ var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
 var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (peligros.gd): a los 4, se congela
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
+var helor := 0.0           # lo que le ha enfriado el lanza hielo (0..1; enfriar): azul y lento; a 1, se congela
+var helor_espera := 0.0    # y cuánto hace que no le da el chorro (al rato, se le va pasando)
 var gaseado := 0.0         # dormido por el gas de las rejillas de Recursos Humanos (peligros/gas.gd): quieto...
 var frenesi := 0.0         # ...y, al despertar, frenético (más rápido) este rato
 var electrico := 0.0       # le ha dado un rayo hace poco (ArmasCreadas.aturdir): para Mezcla explosiva
@@ -313,6 +320,8 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	if frenesi > 0.0:
 		rapidez *= Peligros.GAS.rapido   # (despierta frenético del gas)
 	rapidez *= Estados.frenado(estados)   # el frío de la cámara
+	if helor > 0.0:
+		rapidez *= 1.0 - HELOR_FRENA * helor   # el lanza hielo (enfriar)
 	if not Tornos.frenan.is_empty():
 		rapidez *= Tornos.freno(global_position)   # los tornos a medio abrir de la recepcionista (tornos.gd)
 	if con_acido():
@@ -754,6 +763,8 @@ func sufrir(delta: float) -> void:
 		congelado -= delta
 		if congelado <= 0.0:
 			deshelar()
+	elif helor > 0.0:
+		entrar_en_calor(delta)
 	if not estados.is_empty():
 		Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
 
@@ -823,6 +834,46 @@ func gas_y_frenesi(delta: float) -> void:
 				Vector2(randf_range(-20, 20), -40), Color("#c77dff"), 2, 0.35)
 		if frenesi <= 0.0:
 			agente.max_speed /= Peligros.GAS.rapido
+
+
+# El chorro del lanza hielo le da (llamarada.gd, en cada pellizco): "cuanto" más de frío (1 = congelado) y, si llega,
+# se congela "segundos". Mientras se enfría se va poniendo azul, anda y se mueve más despacio y echa vaho y copos
+# (entrar_en_calor); congelado, el chorro ya no le hace nada más que el daño
+func enfriar(cuanto: float, segundos: float) -> void:
+	if congelado > 0.0 or estado == "muerto":
+		return
+	helor_espera = 0.0
+	helor += cuanto
+	if helor >= 1.0:
+		helor = 0.0
+		sprite.speed_scale = 1.0
+		congelar(segundos)
+	else:
+		pintar_helor()
+
+
+# Cada paso, con algo de frío del lanza hielo: el vaho y los copos que suelta y, si hace rato que no le da el chorro, se
+# le va pasando (HELOR_PASA por segundo)
+func entrar_en_calor(delta: float) -> void:
+	helor_espera += delta
+	if helor_espera > HELOR_ESPERA:
+		helor = maxf(helor - HELOR_PASA * delta, 0.0)
+	pintar_helor()
+	if randf() < 10.0 * helor * delta:
+		var p := global_position + Vector2(randf_range(-radio, radio) * 0.7, -randf_range(altura * 0.3, altura))
+		Particulas.soltar(self, p, Vector2(randf_range(-10, 10), randf_range(-8, 20)),
+			Color.WHITE if randf() < 0.4 else Color("#9edef8"), 2, randf_range(0.4, 0.7))
+	if randf() < 4.0 * helor * delta:
+		var boca := global_position + Vector2(randf_range(-4, 4), -altura * 0.8)
+		for i in 3:
+			Particulas.soltar(self, boca + Vector2(randf_range(-3, 3), randf_range(-2, 2)), Vector2(randf_range(-12, 12), randf_range(-24, -10)),
+				Color(0.92, 0.97, 1.0, 0.45), randf_range(2, 4), randf_range(0.5, 0.8))
+
+
+# Lo azul que se ve (el "hielo" de su shader: congelado es 0,6) y lo despacio que se mueve su dibujo, según su helor
+func pintar_helor() -> void:
+	sprite.material.set_shader_parameter("hielo", 0.12 + 0.36 * helor if helor > 0.0 else 0.0)
+	sprite.speed_scale = 1.0 - HELOR_FRENA * helor
 
 
 # Se queda helado: quieto, azul y con el dibujo parado, soltando escarcha

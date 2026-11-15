@@ -218,6 +218,10 @@ msgid "Lanza ácido"
 msgstr "Acid launcher"
 
 #: scripts/armas.gd
+msgid "Lanza hielo"
+msgstr "Ice launcher"
+
+#: scripts/armas.gd
 msgid "Lanza rayos"
 msgstr "Lightning gun"
 
@@ -240,6 +244,10 @@ msgstr "an acid drum"
 #: scripts/armas.gd
 msgid "una batería"
 msgstr "a battery"
+
+#: scripts/armas.gd
+msgid "una bombona de nitrógeno"
+msgstr "a nitrogen tank"
 
 #: scripts/armas.gd
 msgid "Balas de pistola"
@@ -324,6 +332,18 @@ msgstr "Out of batteries!"
 #: scripts/armas.gd
 msgid "el lanza rayos"
 msgstr "the lightning gun"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bombona de nitrógeno"
+msgstr "Nitrogen tank"
+
+#: scripts/armas.gd
+msgid "¡Sin nitrógeno!"
+msgstr "Out of nitrogen!"
+
+#: scripts/armas.gd
+msgid "el lanza hielo"
+msgstr "the ice launcher"
 
 #: scripts/averia.gd
 msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
@@ -2966,8 +2986,8 @@ msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el l
 msgstr "ranged weapons (the pistol, the MP5, the shotgun, the Gatling and the grenade launcher)"
 
 #: scripts/objetos.gd
-msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
-msgstr "special weapons (the flamethrower, the acid launcher and the lightning gun)"
+msgid "las armas especiales (el lanzallamas, el lanza ácido, el lanza rayos y el lanza hielo)"
+msgstr "special weapons (the flamethrower, the acid launcher, the lightning gun and the ice launcher)"
 
 #: scripts/objetos.gd
 msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
@@ -5923,6 +5943,12 @@ msgstr[0] "%d acid drum"
 msgstr[1] "%d acid drums"
 
 #: scripts/ui/inventario.gd
+msgid "%d bombona de nitrógeno"
+msgid_plural "%d bombonas de nitrógeno"
+msgstr[0] "%d nitrogen tank"
+msgstr[1] "%d nitrogen tanks"
+
+#: scripts/ui/inventario.gd
 msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d battery"
@@ -6007,6 +6033,10 @@ msgstr "Continuous flame that burns everything. Refills with gas cans."
 #: scripts/ui/inventario.gd
 msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
 msgstr "Continuous acid stream that corrodes everything. Refills with acid drums."
+
+#: scripts/ui/inventario.gd
+msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
+msgstr "Continuous freezing mist that chills everything until it freezes solid. Refills with nitrogen tanks."
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."

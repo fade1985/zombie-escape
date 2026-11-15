@@ -4,7 +4,10 @@
 //    gotas que salpican y caen cada una en su sitio (con su altura, z), burbujas que crecen y revientan y vapor verde.
 //  - M60, contra la pared, donde se corta el chorro (chorro-pared.js y chorro-pared-acido.js): lo mismo, más ancho y
 //    aplastado (el chorro se abre contra la pared) y, el ácido, con chorretones que caen hasta el suelo.
-// "tipo": "fuego" o "acido" · "height": a qué altura da · "spread": lo que se abre (1 en un zombi) · "chorretones": el
+//  - El del lanza hielo (chorro-golpe-hielo.js y chorro-pared-hielo.js, 15 nov): una bocanada de niebla helada que se
+//    abre y cae (el aire frío pesa), esquirlas de hielo que saltan, caen y se quedan un momento en el suelo como escarcha,
+//    y unos cristalitos que destellan.
+// "tipo": "fuego", "acido" o "hielo" · "height": a qué altura da · "spread": lo que se abre (1 en un zombi) · "chorretones": el
 // ácido en la pared. El origen es el suelo, debajo del golpe. Lo exporta exportar.mjs.
 import { Particles, Lights, P, Rng, fit, clamp, ease, TAU, WHITE, hex, mix } from "../../core/index.js";
 
@@ -25,7 +28,7 @@ const VISTA = 0.6;
 
 export function create(o) {
   const C = fit(o.palette, 7), CH = C.map((c) => (typeof c === "string" ? hex(c) : c)), R = new Rng(o.seed), H = o.height, S = o.spread;
-  const fuego = o.tipo === "fuego";
+  const fuego = o.tipo === "fuego", hielo = o.tipo === "hielo";
   const ps = new Particles({ rng: R, ground: () => 999, sparks: [C[6], C[5], C[4], C[3]], haze: C[5] }), lights = new Lights();
   const gotas = [], burbujas = [], chorros = [];
   let t = 0;
@@ -41,6 +44,21 @@ export function create(o) {
     }
     ps.spawn(P.SMOKE, R.range(-3, 3), -H - 6, R.range(-6, 6), -R.range(14, 22), R.range(0.3, 0.42), hex("#3a302c"), R.range(2.5, 3.5), 0.12);
     lights.add(0, -H, 30 + 14 * S, C[4], 0.6, 0.3);
+  } else if (hielo) {
+    // el hielo: esquirlas que saltan y caen, niebla que se abre y baja, y cristalitos que destellan
+    for (let i = 0; i < 7 + 6 * S; i++) {
+      const a = R.range(0, TAU), sp = R.range(30, 100) * S;
+      gotas.push({ x: Math.cos(a) * 2, y: Math.sin(a) * 2, z: H + R.range(-3, 4), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp * VISTA, vz: R.range(30, 90), s: R.range(0.8, 1.9), c: R.pick([CH[4], CH[5], CH[5], CH[6]]), suelo: -1 });
+    }
+    for (let i = 0; i < 5 + 3 * S; i++) {
+      const a = R.range(0, TAU), sp = R.range(10, 26) * S;
+      ps.spawn(P.VAPOUR, Math.cos(a) * 3 * S, -H + Math.sin(a) * 2, Math.cos(a) * sp, Math.sin(a) * sp * VISTA + R.range(6, 16), R.range(0.3, 0.45), R.pick([C[4], C[5], C[5]]), R.range(2.5, 4.5) * Math.max(1, S * 0.8), R.range(0, 0.08));
+    }
+    for (let i = 0; i < 3 + 2 * S; i++) {
+      const a = R.range(0, TAU), sp = R.range(60, 130);
+      ps.spawn(P.SPARK, 0, -H, Math.cos(a) * sp, Math.sin(a) * sp * VISTA - 20, R.range(0.1, 0.24));
+    }
+    lights.add(0, -H, 22 + 10 * S, C[4], 0.4, 0.25);
   } else {
     // el ácido: gotas que salpican, burbujas y vapor
     for (let i = 0; i < 8 + 6 * S; i++) {
@@ -77,6 +95,12 @@ export function create(o) {
         if (g.suelo < 0) continue;
         const k = (1 - clamp((t - g.suelo) / 0.2)) * (1 - clamp((t - 0.38) / 0.1));
         if (k <= 0) continue;
+        if (hielo) {
+          p.dot(g.x, g.y, g.c, k);
+          if (g.s > 1.3) { p.dot(g.x + 1, g.y, C[4], k); p.dot(g.x - 1, g.y, C[3], k * 0.8); }
+          if ((Math.floor(t * 20) + Math.round(g.x)) % 4 === 0) p.dot(g.x, g.y - 1, C[6], k);
+          continue;
+        }
         p.ellipse(g.x, g.y, g.s * 1.3, g.s * 0.8, mix(g.c, C[0], 0.3), k);
         if ((Math.floor(t * 30) + Math.round(g.x)) % 3 === 0) p.dot(g.x, g.y - 1, C[6], k);
       }
@@ -98,6 +122,12 @@ export function create(o) {
       for (const g of gotas) {
         if (g.suelo >= 0 || fin <= 0) continue;
         p.dot(g.x, g.y, CH[0], 0.35 * fin);
+        if (hielo) {
+          // una esquirla: un rombito con su brillo (las grandes, en cruz)
+          p.dot(g.x, g.y - g.z, g.c, fin);
+          if (g.s > 1.3) { p.dot(g.x + 1, g.y - g.z, C[3], fin); p.dot(g.x, g.y - g.z - 1, C[6], fin); p.dot(g.x, g.y - g.z + 1, C[2], fin); }
+          continue;
+        }
         if (g.s > 1.3) p.circle(g.x, g.y - g.z, g.s, g.c, fin);
         else p.dot(g.x, g.y - g.z, g.c, fin);
         p.dot(g.x - 0.5, g.y - g.z - 0.5, C[6], 0.8 * fin);

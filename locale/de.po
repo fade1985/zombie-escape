@@ -218,6 +218,10 @@ msgid "Lanza ácido"
 msgstr "Säurewerfer"
 
 #: scripts/armas.gd
+msgid "Lanza hielo"
+msgstr "Eiswerfer"
+
+#: scripts/armas.gd
 msgid "Lanza rayos"
 msgstr "Blitzwerfer"
 
@@ -240,6 +244,10 @@ msgstr "einem Säurefass"
 #: scripts/armas.gd
 msgid "una batería"
 msgstr "einer Batterie"
+
+#: scripts/armas.gd
+msgid "una bombona de nitrógeno"
+msgstr "einer Stickstoffflasche"
 
 #: scripts/armas.gd
 msgid "Balas de pistola"
@@ -324,6 +332,18 @@ msgstr "Batterie leer!"
 #: scripts/armas.gd
 msgid "el lanza rayos"
 msgstr "den Blitzwerfer"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bombona de nitrógeno"
+msgstr "Stickstoffflasche"
+
+#: scripts/armas.gd
+msgid "¡Sin nitrógeno!"
+msgstr "Kein Stickstoff!"
+
+#: scripts/armas.gd
+msgid "el lanza hielo"
+msgstr "den Eiswerfer"
 
 #: scripts/averia.gd
 msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
@@ -2966,8 +2986,8 @@ msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el l
 msgstr "die Fernkampfwaffen (Pistole, MP5, Flinte, Gatling und Granatwerfer)"
 
 #: scripts/objetos.gd
-msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
-msgstr "die Spezialwaffen (Flammenwerfer, Säurewerfer und Blitzwerfer)"
+msgid "las armas especiales (el lanzallamas, el lanza ácido, el lanza rayos y el lanza hielo)"
+msgstr "die Spezialwaffen (Flammenwerfer, Säurewerfer, Blitzwerfer und Eiswerfer)"
 
 #: scripts/objetos.gd
 msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
@@ -5923,6 +5943,12 @@ msgstr[0] "%d Säurefass"
 msgstr[1] "%d Säurefässer"
 
 #: scripts/ui/inventario.gd
+msgid "%d bombona de nitrógeno"
+msgid_plural "%d bombonas de nitrógeno"
+msgstr[0] "%d Stickstoffflasche"
+msgstr[1] "%d Stickstoffflaschen"
+
+#: scripts/ui/inventario.gd
 msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d Batterie"
@@ -6007,6 +6033,10 @@ msgstr "Dauerflamme, die alles verbrennt. Wird mit Benzin gefüllt."
 #: scripts/ui/inventario.gd
 msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
 msgstr "Säurestrahl ohne Pause, der alles verätzt. Wird mit Säurefässern gefüllt."
+
+#: scripts/ui/inventario.gd
+msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
+msgstr "Eisnebel ohne Pause, der alles abkühlt, bis es einfriert. Wird mit Stickstoffflaschen gefüllt."
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."

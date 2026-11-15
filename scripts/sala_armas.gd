@@ -42,7 +42,7 @@ const CRITICO := Color("#ffb020")
 const TINTA := Color(0.11, 0.1, 0.17)
 # Lo que hace cada arma con efecto (su "efecto", armas_creadas.gd), para la ficha
 const EFECTOS := {"llama": "llamarada continua que atraviesa", "acido": "chorro de ácido continuo que atraviesa",
-	"rayo": "rayo continuo que aturde y salta de un zombi a otro"}
+	"rayo": "rayo continuo que aturde y salta de un zombi a otro", "hielo": "niebla helada continua que enfría hasta congelar"}
 
 var johnny: Node2D
 var diana: Zombi
@@ -419,7 +419,7 @@ func escribir() -> void:
 	var perdigones: int = w.get("perdigones", 1)
 	var deposito: bool = w.has("deposito")
 	if deposito:
-		l.append("Daño %s por segundo · %s" % [decimal(w.dano, 1), {"acido": "chorro de ácido continuo", "rayo": "rayo continuo"}.get(w.efecto, "llamarada continua")])
+		l.append("Daño %s por segundo · %s" % [decimal(w.dano, 1), {"acido": "chorro de ácido continuo", "rayo": "rayo continuo", "hielo": "niebla helada continua"}.get(w.efecto, "llamarada continua")])
 		l.append("Alcance %d (%s casillas)" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1)])
 		l.append("Depósito %s s · se llena con %s en %s s" % [decimal(w.deposito, 1), Armas.RELLENOS[w.relleno].uno, decimal(w.recarga, 2)])
 		if w.efecto == "rayo":

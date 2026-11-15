@@ -35,7 +35,7 @@ from PIL import Image
 
 RAIZ = Path(__file__).resolve().parent.parent
 SPRITES = RAIZ / "assets" / "sprites"
-ARMAS = ["guardia", "bate", "cuchillo", "motosierra", "katana", "pistola", "escopeta", "mp5", "gatling", "lanzagranadas", "lanzallamas", "desintegrador", "lanza-rayos"]
+ARMAS = ["guardia", "bate", "cuchillo", "motosierra", "katana", "pistola", "escopeta", "mp5", "gatling", "lanzagranadas", "lanzallamas", "desintegrador", "lanza-rayos", "lanza-hielo"]
 DIRECCIONES = ["south", "south-east", "east", "north-east", "north", "north-west", "west", "south-west"]
 BARBILLA = 12     # hasta esta fila (del dibujo de 48) llega la cabeza de siempre
 PARECIDO = 60     # dos colores se parecen si la suma de sus diferencias es menor que esto
@@ -64,6 +64,14 @@ COMO_GRIS = {"lanzallamas": {
     (96, 128, 40): (98, 86, 73),
     (48, 80, 44): (52, 63, 76),
 }}
+# Y las del lanza hielo, azules (tools/hoja_lanza_hielo.py)
+COMO_GRIS["lanza-hielo"] = {
+    (236, 250, 255): (163, 184, 199),
+    (158, 222, 248): (119, 142, 155),
+    (102, 178, 228): (143, 130, 120),
+    (58, 118, 182): (98, 86, 73),
+    (34, 62, 112): (52, 63, 76),
+}
 # Y el bate de metal (tools/bate_metal.py): sus grises y los negros de la cinta se miran como la madera que eran en
 # ese mismo píxel (la hoja de madera, guardada en assets/sources), para que la cabeza nueva quede igual que antes
 COMO_GRIS["bate"] = __import__("bate_metal").como_madera()

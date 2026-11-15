@@ -218,6 +218,10 @@ msgid "Lanza ácido"
 msgstr "Lance-acide"
 
 #: scripts/armas.gd
+msgid "Lanza hielo"
+msgstr "Lance-glace"
+
+#: scripts/armas.gd
 msgid "Lanza rayos"
 msgstr "Lance-éclairs"
 
@@ -240,6 +244,10 @@ msgstr "un bidon d'acide"
 #: scripts/armas.gd
 msgid "una batería"
 msgstr "une batterie"
+
+#: scripts/armas.gd
+msgid "una bombona de nitrógeno"
+msgstr "une bonbonne d'azote"
 
 #: scripts/armas.gd
 msgid "Balas de pistola"
@@ -324,6 +332,18 @@ msgstr "Plus de batterie !"
 #: scripts/armas.gd
 msgid "el lanza rayos"
 msgstr "le lance-éclairs"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bombona de nitrógeno"
+msgstr "Bonbonne d'azote"
+
+#: scripts/armas.gd
+msgid "¡Sin nitrógeno!"
+msgstr "Plus d'azote !"
+
+#: scripts/armas.gd
+msgid "el lanza hielo"
+msgstr "le lance-glace"
 
 #: scripts/averia.gd
 msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
@@ -2966,8 +2986,8 @@ msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el l
 msgstr "les armes à distance (le pistolet, le MP5, le fusil à pompe, la Gatling et le lance-grenades)"
 
 #: scripts/objetos.gd
-msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
-msgstr "les armes spéciales (le lance-flammes, le lance-acide et le lance-éclairs)"
+msgid "las armas especiales (el lanzallamas, el lanza ácido, el lanza rayos y el lanza hielo)"
+msgstr "les armes spéciales (le lance-flammes, le lance-acide, le lance-éclairs et le lance-glace)"
 
 #: scripts/objetos.gd
 msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
@@ -5923,6 +5943,12 @@ msgstr[0] "%d bidon d'acide"
 msgstr[1] "%d bidons d'acide"
 
 #: scripts/ui/inventario.gd
+msgid "%d bombona de nitrógeno"
+msgid_plural "%d bombonas de nitrógeno"
+msgstr[0] "%d bonbonne d'azote"
+msgstr[1] "%d bonbonnes d'azote"
+
+#: scripts/ui/inventario.gd
 msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d batterie"
@@ -6007,6 +6033,10 @@ msgstr "Jet de flammes continu qui brûle tout le monde. Se recharge au jerrican
 #: scripts/ui/inventario.gd
 msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
 msgstr "Jet d'acide continu qui ronge tout le monde. Se recharge avec des bidons d'acide."
+
+#: scripts/ui/inventario.gd
+msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
+msgstr "Brume glacée continue qui refroidit tout le monde jusqu'à le geler. Se recharge avec des bonbonnes d'azote."
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."

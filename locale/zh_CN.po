@@ -217,6 +217,10 @@ msgid "Lanza ácido"
 msgstr "酸液枪"
 
 #: scripts/armas.gd
+msgid "Lanza hielo"
+msgstr "冰冻枪"
+
+#: scripts/armas.gd
 msgid "Lanza rayos"
 msgstr "闪电枪"
 
@@ -239,6 +243,10 @@ msgstr "一桶酸液"
 #: scripts/armas.gd
 msgid "una batería"
 msgstr "一块电池"
+
+#: scripts/armas.gd
+msgid "una bombona de nitrógeno"
+msgstr "一罐液氮"
 
 #: scripts/armas.gd
 msgid "Balas de pistola"
@@ -323,6 +331,18 @@ msgstr "没电了！"
 #: scripts/armas.gd
 msgid "el lanza rayos"
 msgstr "闪电枪"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bombona de nitrógeno"
+msgstr "液氮罐"
+
+#: scripts/armas.gd
+msgid "¡Sin nitrógeno!"
+msgstr "没液氮了！"
+
+#: scripts/armas.gd
+msgid "el lanza hielo"
+msgstr "冰冻枪"
 
 #: scripts/averia.gd
 msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
@@ -2964,8 +2984,8 @@ msgid "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el l
 msgstr "远程武器（手枪、MP5、散弹枪、加特林和榴弹发射器）"
 
 #: scripts/objetos.gd
-msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
-msgstr "特殊武器（火焰喷射器、酸液枪和闪电枪）"
+msgid "las armas especiales (el lanzallamas, el lanza ácido, el lanza rayos y el lanza hielo)"
+msgstr "特殊武器（火焰喷射器、酸液枪、闪电枪和冰冻枪）"
 
 #: scripts/objetos.gd
 msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
@@ -5906,6 +5926,11 @@ msgid_plural "%d bidones de ácido"
 msgstr[0] "%d 桶酸液"
 
 #: scripts/ui/inventario.gd
+msgid "%d bombona de nitrógeno"
+msgid_plural "%d bombonas de nitrógeno"
+msgstr[0] "%d 罐液氮"
+
+#: scripts/ui/inventario.gd
 msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d 块电池"
@@ -5989,6 +6014,10 @@ msgstr "持续喷火，烧遍一切。用汽油加满。"
 #: scripts/ui/inventario.gd
 msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
 msgstr "持续喷射酸液，腐蚀一切。用酸液桶加满。"
+
+#: scripts/ui/inventario.gd
+msgid "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno."
+msgstr "持续喷出冰雾，让所有人越来越冷直到冻住。用液氮罐加满。"
 
 #: scripts/ui/inventario.gd
 msgid "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías."

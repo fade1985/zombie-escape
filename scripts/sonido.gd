@@ -78,6 +78,9 @@ const EFECTOS := {
 	"llamarada": {"hueco": 200, "notas": [[95, 0.26, "sierra", 0.035, -25], [420, 0.18, "sierra", 0.01, -250, 0.02]]},
 	# el chorro del lanza ácido: un siseo de agua a presión (fino y grave a la vez) que se repite pisándose (llamarada.gd)
 	"chorro_acido": {"hueco": 120, "notas": [[3200, 0.2, "ruido", 0.018, -1400], [900, 0.17, "ruido", 0.012, -300, 0.03]]},
+	# el chorro del lanza hielo: un soplido de gas frío (más agudo y suave que el del ácido) con un tintineo de cristalitos
+	"chorro_hielo": {"hueco": 130, "notas": [[5200, 0.22, "ruido", 0.014, -2600], [1700, 0.2, "ruido", 0.009, -500, 0.02],
+		[3100, 0.04, "triangulo", 0.004, 500, 0.09]]},
 	# el rayo del lanza rayos: un zumbido grave con chasquidos agudos, que se repite pisándose (llamarada.gd)
 	"rayo": {"hueco": 90, "notas": [[110, 0.12, "sierra", 0.03, 50], [3000, 0.05, "ruido", 0.016, -2200, 0.015],
 		[1700, 0.04, "cuadrada", 0.008, -900, 0.06]]},

@@ -28,6 +28,13 @@
 # tenga a menos de "salto" (ArmasCreadas.EFECTOS.descarga), 1 + "saltos" veces (la calidad del arma), que se lleva medio
 # daño y también se queda aturdido (los arcos se ven, entre zombi y zombi). Ni empuja ni deja nada en el suelo. Al jefe
 # de bomberos también le quita vida (no es fuego).
+#
+# El lanza hielo (Armas.DATOS.lanza_hielo, efecto "hielo", 15 nov) echa por aquí su chorro de niebla helada, con el mismo
+# cono: su dibujo es escenas/armas/chorro_hielo.gdshader (el "frost-breath" de pixelfx: un chorro blanco a presión, bocanadas
+# de niebla azul que se hinchan y caen, rayas de viento y cristalitos que destellan); alumbra un poco, de azul frío; suelta
+# cristalitos que saltan y copos que caen; y, en vez de prenderlos, los enfría (zombi.enfriar): se ponen azules y lentos y,
+# con "congela" segundos de chorro, se quedan congelados "congelado" segundos. Hace poco daño y no empuja. Al jefe de
+# bomberos le quita vida como el ácido (no es fuego); a los jefes, que no se congelan, solo el daño.
 class_name Llamarada
 extends Node2D
 
@@ -48,6 +55,11 @@ const HUMO := 0.9           # lo que dura el humo del apagado del lanzallamas (e
 const EMPUJE := 170.0       # empuje base, como el de las balas
 const SOMBREADO := preload("res://escenas/armas/llamarada.gdshader")
 const SOMBREADO_ACIDO := preload("res://escenas/armas/chorro_acido.gdshader")
+const SOMBREADO_HIELO := preload("res://escenas/armas/chorro_hielo.gdshader")
+const APAGA_HIELO := 0.36   # la niebla, como el ácido: se ve cómo se deshace
+const HIELOS := [Color("#ffffff"), Color("#cdeffc"), Color("#9edef8")]   # los cristalitos y copos (chorro_hielo.gdshader)
+const LUZ_HIELO := Color(0.55, 0.8, 1.0)
+const COPOS := 14.0         # copos que caen de la niebla por segundo
 const CHISPAS := 22.0       # chispas que saltan por segundo
 const GOTAS_FUEGO := 9.0    # el lanzallamas: gotas de gasolina ardiendo que se caen del chorro por segundo
 const GOTITAS := 26.0       # el ácido: gotitas que se escapan del final del chorro por segundo (contra la pared, el doble)
@@ -79,7 +91,7 @@ const LUZ_RAYO := Color(0.45, 0.9, 1.0)
 const ATRAS := 2.0          # el dibujo empieza un poquito por detrás de la boca: así sale pegada al tubo
 
 var pedida := false         # se ha pedido fuego en este paso (mantener)
-var variante := "llama"     # "llama" (el lanzallamas), "acido" (el lanza ácido) o "rayo" (el lanza rayos): lo dice el arma
+var variante := "llama"     # "llama" (el lanzallamas), "acido" (el lanza ácido), "rayo" (el lanza rayos) o "hielo" (el lanza hielo): lo dice el arma
 var encendida := false
 var angulo := 0.0
 var alcance := 320.0
@@ -106,7 +118,9 @@ var capas: Array = []       # el rayo, ya trazado (trazar_rayo): [caminos, gordo
 var discos: Array = []      # [centro, radio en píxeles del dibujo, color]
 var brillos: Array = []     # la luz que se suma (halo): [centro, radio, color]
 var halo: Node2D            # donde se pinta esa luz, sumando
-var propio: ShaderMaterial  # el del fuego o el del ácido (el rayo se dibuja sin shader)
+var propio: ShaderMaterial  # el del fuego, el del ácido o el del hielo (el rayo se dibuja sin shader)
+var congela := 1.0          # el hielo: los segundos de chorro que tarda en congelar a un zombi, y lo que le dura
+var congelado := 3.0
 
 
 # Lo que se abre el cono de un arma a cada lado (Johnny lo usa para girar el chorro hacia el zombi)
@@ -158,14 +172,16 @@ func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 		variante = efecto
 		# el fuego y el ácido, con su shader; el rayo se dibuja a código, y alumbra de celeste
 		material = null if variante == "rayo" else propio
-		propio.shader = SOMBREADO_ACIDO if variante == "acido" else SOMBREADO
-		luz.color = LUZ_RAYO if variante == "rayo" else LUZ
+		propio.shader = {"acido": SOMBREADO_ACIDO, "hielo": SOMBREADO_HIELO}.get(variante, SOMBREADO)
+		luz.color = {"rayo": LUZ_RAYO, "hielo": LUZ_HIELO}.get(variante, LUZ)
+	congela = w.get("congela", 1.0)
+	congelado = w.get("congelado", 3.0)
 	# (los efectos de pixelfx de cada uno, preparados para que el primero no pare el juego; solo la primera vez)
 	var sala: Node = get_parent().get_parent()
 	if variante == "rayo":
 		EfectoSuelo.precalentar(sala, "chispazo")
 	else:
-		var cual := "acido" if variante == "acido" else "fuego"
+		var cual := cual_efecto()
 		EfectoSuelo.precalentar(sala, "chorro-" + cual)
 		EfectoSuelo.precalentar(sala, "pared-" + cual)
 
@@ -181,7 +197,7 @@ func _physics_process(delta: float) -> void:
 		tope = medir()
 		cola = 0.0
 		largo = minf(largo + alcance / CRECE * delta, tope)
-		Sonido.tocar({"acido": "chorro_acido", "rayo": "rayo"}.get(variante, "llamarada"))
+		Sonido.tocar({"acido": "chorro_acido", "rayo": "rayo", "hielo": "chorro_hielo"}.get(variante, "llamarada"))
 		if variante == "rayo":
 			buscar_blancos()
 			if randf() < LATIGAZOS * delta:
@@ -197,6 +213,8 @@ func _physics_process(delta: float) -> void:
 			salpicar(delta)
 		else:
 			chispas(delta)
+		if variante == "hielo":
+			copos(delta)
 		if variante == "llama":
 			gotas_fuego(delta)
 	else:
@@ -209,7 +227,7 @@ func _physics_process(delta: float) -> void:
 			if apagado > HUMO:
 				apagado = -1.0
 		if largo > 0.0:
-			cola += alcance / {"llama": APAGA_LLAMA, "acido": APAGA_ACIDO}.get(variante, APAGA) * delta
+			cola += alcance / {"llama": APAGA_LLAMA, "acido": APAGA_ACIDO, "hielo": APAGA_HIELO}.get(variante, APAGA) * delta
 			if cola >= largo:
 				largo = 0.0
 				cola = 0.0
@@ -264,7 +282,7 @@ func quemar() -> void:
 		electrocutar(johnny)
 		return
 	var sala: Node = johnny.get_parent()
-	var cual := "acido" if variante == "acido" else "fuego"
+	var cual := cual_efecto()
 	# contra la pared, donde se corta el chorro (M60): el fuego se aplasta y se abre, el ácido salpica y chorrea
 	if tope < alcance - 1.0 and largo >= tope - 1.0:
 		EfectoSuelo.soltar(sala, "pared-" + cual, global_position + u * tope)
@@ -273,6 +291,13 @@ func quemar() -> void:
 			continue
 		# lo que hace el chorro al darle (M59), en el suelo debajo de él (el golpe, a la altura del cuerpo)
 		EfectoSuelo.soltar(sala, "chorro-" + cual, zombi.global_position)
+		if variante == "hielo":
+			# poco daño, sin empujón ni encogerse, con el número azul; y lo enfría (los jefes no se congelan: solo el daño)
+			var dh: int = johnny.con_critico(dps * TICK)
+			zombi.herir(dh, HIELOS[2])
+			if zombi.is_in_group("zombis") and zombi.has_method("enfriar"):
+				zombi.enfriar(TICK / congela, congelado)
+			continue
 		if variante == "acido":
 			var da: int = johnny.con_critico(dps * TICK)
 			if empuja or zombi.get("inmune_fuego"):
@@ -329,8 +354,26 @@ func chispas(delta: float) -> void:
 	var donde := global_position + u * d - Vector2(0, lerpf(ALTURA, ALTURA_CUERPO, d / alcance))
 	donde += u.orthogonal() * randf_range(-0.6, 0.6) * (BOCA + d * abre())
 	var hacia := u * randf_range(60.0, 140.0) + Vector2(randf_range(-20.0, 20.0), -randf_range(40.0, 90.0))
-	var colores: Array = CELESTES if variante == "rayo" else Llamas.FUEGO
+	var colores: Array = {"rayo": CELESTES, "hielo": HIELOS}.get(variante, Llamas.FUEGO)
 	Particulas.soltar(self, donde, hacia, colores[randi() % 3], 2.0, randf_range(0.3, 0.6))
+
+
+# El hielo: copos que se caen de la niebla, de por la mitad hasta la punta, y bajan despacio meciéndose (Particulas.volar,
+# que los deja caer hasta el suelo desde su altura)
+func copos(delta: float) -> void:
+	if largo < 40.0 or randf() > COPOS * delta:
+		return
+	var u := Vector2.from_angle(angulo)
+	var d := randf_range(0.3, 1.0) * largo
+	var pie := global_position + u * d + u.orthogonal() * randf_range(-0.7, 0.7) * (BOCA + d * abre())
+	var hacia := u * randf_range(20.0, 60.0) + u.orthogonal() * randf_range(-15.0, 15.0)
+	Particulas.volar(self, pie, lerpf(ALTURA, ALTURA_CUERPO, d / alcance), hacia, randf_range(0.0, 10.0),
+		HIELOS[randi() % 3], 2.0)
+
+
+# El nombre de los efectos de pixelfx de cada chorro al dar en algo ("chorro-<esto>" y "pared-<esto>", EfectoSuelo)
+func cual_efecto() -> String:
+	return {"acido": "acido", "hielo": "hielo"}.get(variante, "fuego")
 
 
 # El lanzallamas: gotas de gasolina ardiendo que se caen del chorro (como en el "flamethrower" de pixelfx), de por
@@ -401,7 +444,7 @@ func soltar_acido() -> void:
 # altura de la boca a la del cuerpo), pone la luz en medio de la llama y la redibuja (el rayo no usa shader: se dibuja
 # a código en _draw)
 func pintar() -> void:
-	luz.enabled = visible and variante != "acido" and largo > 0.0   # (el ácido no alumbra; el humo tampoco)
+	luz.enabled = visible and variante != "acido" and largo > 0.0   # (el ácido no alumbra; el humo tampoco; el hielo, poco)
 	if not visible:
 		return
 	var u := Vector2.from_angle(angulo)
@@ -430,7 +473,7 @@ func pintar() -> void:
 		trazar_rayo(eje, f)
 		halo.queue_redraw()
 	else:
-		luz.energy = 1.4 * Luz.fuerza() * (0.85 + 0.15 * sin(tiempo * 23.0) * sin(tiempo * 7.0))
+		luz.energy = (0.7 if variante == "hielo" else 1.4) * Luz.fuerza() * (0.85 + 0.15 * sin(tiempo * 23.0) * sin(tiempo * 7.0))
 		if not brillos.is_empty():   # (venía del lanza rayos)
 			brillos.clear()
 			halo.queue_redraw()

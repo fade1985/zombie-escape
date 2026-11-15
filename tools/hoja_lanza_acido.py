@@ -29,6 +29,8 @@ RAIZ = Path(__file__).resolve().parent.parent
 SPRITES = RAIZ / "assets" / "sprites"
 DE = "conserje-48-lanzallamas"
 A = "conserje-48-desintegrador"
+SCRIPT = "hoja_lanza_acido.py"         # (tools/hoja_lanza_hielo.py cambia estos tres y VERDES, y usa este mismo main)
+MUESTRA = "captura-lanza-acido.png"
 # Cada rojo de las bombonas por su verde: brillo, medio, medio tostado, sombra tostada y sombra (el brillo, más amarillo;
 # las sombras, más azuladas, como en los grises que dibujó PixelLab)
 VERDES = {
@@ -229,17 +231,17 @@ def main():
         if not n:
             sin_llama.append(f"{direc} {fila},{col}")
     hoja.save(SPRITES / f"{A}.png", optimize=True)
-    datos["source"] = f"Hecha con tools/hoja_lanza_acido.py a partir de {DE}.png (la del lanzallamas)"
+    datos["source"] = f"Hecha con tools/{SCRIPT} a partir de {DE}.png (la del lanzallamas)"
     with open(SPRITES / f"{A}.json", "w", encoding="utf-8", newline="\n") as f:
         json.dump(datos, f, ensure_ascii=False, indent=2)
         f.write("\n")
     tres = (SPRITES / f"{DE}.tres").read_text(encoding="utf-8").replace(f"{DE}.png", f"{A}.png")
     tres = tres.rstrip("\n") + "\n" + puntas_tres(px, datos, cw, ch, pivote)
     (SPRITES / f"{A}.tres").write_text(tres, encoding="utf-8", newline="\n")
-    print(f"{A}: {verdes} píxeles de las bombonas en verde; {len(lista)} dibujos, {borrados} píxeles de llama borrados",
+    print(f"{A}: {verdes} píxeles de las bombonas cambiados; {len(lista)} dibujos, {borrados} píxeles de llama borrados",
           f"(sin llama que borrar: {', '.join(sin_llama)})" if sin_llama else "")
     if "muestra" in sys.argv:
-        revisar(antes, hoja, lista, cw, ch, pivote, RAIZ / "capturas" / "captura-lanza-acido.png")
+        revisar(antes, hoja, lista, cw, ch, pivote, RAIZ / "capturas" / MUESTRA)
 
 
 if __name__ == "__main__":

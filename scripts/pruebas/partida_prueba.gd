@@ -83,6 +83,8 @@
 #   --lanzallamas, --desintegrador, --pistola-electrica   cada arma de efecto: comprarla, su daño, su depósito o su
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #                       (con --rafaga, además, fotos seguidas del chorro: -rayo-01.png... para un GIF)
+#   --lanza-hielo       el lanza hielo: comprarlo, el chorro, enfriar y congelar zombis, la pared, la bombona de
+#                       nitrógeno y dos skins                                              [prueba_armas.gd]
 #   --motosierra        la motosierra: comprarla, la gota de sangre, el golpe por encima de la cabeza (a quién le
 #                       da), las 8 direcciones y dos skins                                 [prueba_armas.gd]
 #   --bate              el bate de metal: quieto, el golpe, las 8 direcciones y dos skins   [prueba_armas.gd]
@@ -772,6 +774,9 @@ func empezar_prueba() -> void:
 	elif "--lanzallamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanzallamas()
+	elif "--lanza-hielo" in args:
+		set_process(false)   # sin la prueba larga
+		probar_lanza_hielo()
 	elif "--desintegrador" in args:
 		set_process(false)   # sin la prueba larga
 		probar_desintegrador()

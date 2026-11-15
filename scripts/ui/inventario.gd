@@ -174,6 +174,7 @@ const QUE_HACE := {
 	"lanzagranadas": "Granadas que revientan al tocar algo y hacen daño alrededor (¡también a ti!). Se recarga de una en una.",
 	"lanzallamas": "Llamarada continua que quema a todos. Se llena con gasolina.",
 	"desintegrador": "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido.",
+	"lanza_hielo": "Niebla helada continua que enfría a todos hasta congelarlos. Se llena con bombonas de nitrógeno.",
 	"pistola_electrica": "Rayo continuo que aturde y salta al durmiente de al lado. Se llena con baterías.",
 	"molotov": "Se rompe y deja un charco de fuego que quema a los durmientes.",
 	"granada": "Bota, rueda y explota a los 2 segundos.",
@@ -2141,6 +2142,7 @@ func cuenta_municion(tipo: String, n: int) -> String:
 		"granadas_40": return Idioma.n("%d granada de 40 mm", "%d granadas de 40 mm", n) % n
 		"gasolina": return Idioma.n("%d gasolina", "%d gasolinas", n) % n
 		"bidon_acido": return Idioma.n("%d bidón de ácido", "%d bidones de ácido", n) % n
+		"nitrogeno": return Idioma.n("%d bombona de nitrógeno", "%d bombonas de nitrógeno", n) % n
 	return Idioma.n("%d batería", "%d baterías", n) % n
 
 
