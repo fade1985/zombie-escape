@@ -1653,18 +1653,23 @@ func probar_marcas_sala() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --regalo": Johnny empieza solo con la fregona (Armas.SIEMPRE) y la puerta del pasillo no deja salir sin
-# el regalo de bienvenida. En el ordenador, ARMAS.EXE con su «!» (captura-regalo-escritorio.png); al abrir la tienda, su
-# tutorial (captura-regalo-tutorial.png); luego la tienda con «¡COMPRA UN ARMA!» y el «!» en la pistola
-# (captura-regalo-tienda.png) y la ficha de la pistola, «Regalo de bienvenida» (captura-regalo-ficha.png). Se coge gratis,
-# sale la ventana «Cambiar de arma» (captura-regalo-cambiar-arma.png, M97), el regalo se gasta y la pistola ya cuesta lo
-# de siempre (captura-regalo-comprada.png); sin «!», se sale al pasillo
+# Con "--captura --regalo": Johnny empieza solo con la fregona (Armas.SIEMPRE) y sin lanzables (15 nov), y la puerta del
+# pasillo no deja salir sin el regalo de bienvenida. En el ordenador, ARMAS.EXE con su «!» (captura-regalo-escritorio.png);
+# al abrir la tienda, su tutorial (captura-regalo-tutorial.png); luego la tienda con «¡COMPRA UN ARMA!» y el «!» en la
+# pistola, el molotov, la granada y la atraedora (captura-regalo-tienda.png) y la ficha de la pistola, «Regalo de
+# bienvenida» (captura-regalo-ficha.png). Se cogen gratis: van al baúl (con el primer lanzable, su tutorial:
+# captura-regalo-lanzables.png); ya cuestan lo de siempre (captura-regalo-comprada.png). El baúl, con su «!»; al abrirlo
+# se quita y se saca todo; al cerrarlo, «Cambiar de arma» (captura-regalo-cambiar-arma.png). Sin «!», se sale al pasillo
 func probar_regalo() -> void:
+	var guardado_antes := Guardado.cargar()
+	Guardado.cambiar(func(g):   # (con el baúl vacío, como en la primera partida: lo de otras pruebas no cabría)
+		g.baul = {}
+		g.baul_equipo = [])
 	await get_tree().create_timer(1.2).timeout
-	print("Al empezar: huecos %s · regalo cogido %s · «!» del ordenador %s (esperado: fuego vacío, false, true)" % [
-		johnny.huecos, Guardado.cargar().regalo_cogido, mapa.ordenador.marca.activa])
+	print("Al empezar: huecos %s · lanzables %s · regalo cogido %s · «!» del ordenador %s (esperado: fuego vacío, [], false, true)" % [
+		johnny.huecos, lanzables.montones(), Guardado.cargar().regalo_cogido, mapa.ordenador.marca.activa])
 	await cruzar(0)
-	print("Al ir al pasillo sin la pistola: sigue en «%s» (esperado: mantenimiento)" % planta.sitios[aqui].tipo)
+	print("Al ir al pasillo sin el regalo: sigue en «%s» (esperado: mantenimiento)" % planta.sitios[aqui].tipo)
 	get_tree().paused = true
 	ordenador.encender(self)
 	await get_tree().create_timer(1.0).timeout
@@ -1684,7 +1689,9 @@ func probar_regalo() -> void:
 		print("ERROR DE LA PRUEBA: no se ha abierto la tienda")
 		get_tree().quit(1)
 		return
-	print("Tienda sin nada elegido: ficha «%s» · «!» en la pistola %s (esperado: «», true)" % [tienda.ficha_id, tienda.con_marca()])
+	var marcas: Array = tienda.regalos_a_la_vista()
+	marcas.sort()
+	print("Tienda sin nada elegido: ficha «%s» · «!» en %s (esperado: «», [atraedora, granada, molotov, pistola])" % [tienda.ficha_id, marcas])
 	Captura.foto("captura-regalo-tienda.png")
 	tienda.ficha_id = "pistola"
 	tienda.comprar.visible = true
@@ -1695,29 +1702,69 @@ func probar_regalo() -> void:
 	var antes: int = Guardado.cargar().dolares
 	tienda.comprar_esto("pistola")
 	await get_tree().create_timer(0.6).timeout
-	# nada más cogerla, la ventana de cómo se cambia de arma (M97); y «Cómo se juega» ya no lo cuenta
 	ventana = ventana_tutorial()
-	print("Al coger la pistola: tutorial «%s» (esperado: cambiar_arma) · «Cómo se juega» habla de cambiar de arma: %s (esperado: false)" % [
-		ventana.id if ventana else "ninguno", Tutoriales.LISTA.jugar.lineas.any(func(l): return "{cambiar_arma}" in l)])
-	Captura.foto("captura-regalo-cambiar-arma.png")
+	print("Coge la pistola: dice «%s» · tutorial «%s» · en el hueco de fuego «%s» (esperado: ¡Regalo! Pistola va al baúl..., ninguno, «»)" % [
+		ordenador.info.text, ventana.id if ventana else "ninguno", johnny.huecos.fuego])
+	print("ARMAS.EXE aún con «!»: %s (esperado: true, quedan los lanzables)" % (
+		ordenador.iconos.get_node_or_null("icono_armas").get_node_or_null("marca_nuevo") != null))
+	ordenador.comprar_lanzable("molotov")
+	await get_tree().create_timer(0.9, true).timeout
+	ventana = ventana_tutorial()
+	print("Coge el molotov: tutorial «%s» (esperado: lanzables)" % (ventana.id if ventana else "ninguno"))
+	Captura.foto("captura-regalo-lanzables.png")
 	if ventana:
 		ventana.cerrar()
 	await get_tree().create_timer(0.6).timeout
+	ordenador.comprar_lanzable("granada")
+	await get_tree().process_frame
+	ordenador.comprar_lanzable("atraedora")
+	await get_tree().create_timer(0.3).timeout
 	var s := Guardado.cargar()
 	tienda = ordenador.ventana.find_child("tienda", true, false)
-	print("Cogida: dólares %d → %d · regalo cogido %s · en el hueco de fuego «%s» · el botón dice «%s» (esperado: iguales, true, pistola, Comprada)" % [
-		antes, s.dolares, s.regalo_cogido, johnny.huecos.fuego, tienda.texto_comprar("pistola")])
-	print("La pistola ahora cuesta $%d · «!» en la pistola %s · ARMAS.EXE con «!» %s (esperado: 10, false, false)" % [
-		tienda.precio("pistola"), tienda.con_marca(),
+	print("Cogido: dólares %d → %d · regalo cogido %s · lanzables del regalo %s · dice «%s» (esperado: iguales, true, los 3, ¡Regalo! Atraedora va al baúl (tienes 1 allí).)" % [
+		antes, s.dolares, s.regalo_cogido, s.regalos_lanzables, ordenador.info.text])
+	print("En el baúl: %s (esperado: pistola, molotov ×1, granada ×1, atraedora ×1)" % [
+		s.baul_equipo.map(func(e): return "%s%s" % [e.id, " ×%d" % e.n if e.has("n") else ""])])
+	print("Ahora cuestan: pistola $%d, molotov $%d, atraedora $%d · «!» %s · ARMAS.EXE con «!» %s (esperado: 10, 2, 4, [], false)" % [
+		tienda.precio("pistola"), tienda.precio("molotov"), tienda.precio("atraedora"), tienda.regalos_a_la_vista(),
 		ordenador.iconos.get_node_or_null("icono_armas").get_node_or_null("marca_nuevo") != null])
+	tienda.ficha_id = "atraedora"
+	tienda.queue_redraw()
+	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-regalo-comprada.png")
 	ordenador.apagar()
 	await get_tree().create_timer(1.2).timeout
 	get_tree().paused = false
-	mapa.ordenador.marca.refrescar()
-	print("«!» del ordenador: %s (esperado: false)" % mapa.ordenador.marca.activa)
+	for m in mapa.marcas_sala:
+		m.refrescar()
+	print("Novedades del ordenador: %s · «!» del baúl: %s (esperado: sin «armas» (lo demás, de otras pruebas), true)" % [
+		mapa.ordenador.novedades(Guardado.cargar()), mapa.marcas_sala[3].activa])
+	# el baúl: al abrirlo se quita su «!»; se saca todo
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.4).timeout
+	for id in ["pistola", "molotov", "granada", "atraedora"]:
+		var i: int = inventario.cosas_baul(Guardado.cargar()).map(func(o): return o.id).find(id)
+		inventario.tocar("b%d" % i)
+		await get_tree().process_frame
+		inventario.sacar()
+		await get_tree().process_frame
+	print("Sacado del baúl: huecos %s · lanzables %s · «!» del baúl apuntado %s (esperado: fregona y pistola, [molotov 1, granada 1, atraedora 1], false)" % [
+		johnny.huecos, lanzables.montones(), Guardado.cargar().baul_nuevo])
+	inventario.cerrar()
+	await get_tree().create_timer(1.5).timeout
+	ventana = ventana_tutorial()
+	print("Al cerrar el baúl: tutorial «%s» (esperado: cambiar_arma)" % (ventana.id if ventana else "ninguno"))
+	Captura.foto("captura-regalo-cambiar-arma.png")
+	if ventana:
+		ventana.cerrar()
+	await get_tree().create_timer(0.6).timeout
+	for m in mapa.marcas_sala:
+		m.refrescar()
 	await cruzar(0)
-	print("Por la puerta del pasillo, con la pistola: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
+	print("Por la puerta del pasillo, con el regalo: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
+	Guardado.cambiar(func(g):
+		g.baul = guardado_antes.baul
+		g.baul_equipo = guardado_antes.baul_equipo)
 	get_tree().quit()
 
 

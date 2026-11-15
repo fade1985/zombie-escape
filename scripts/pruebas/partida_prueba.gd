@@ -170,9 +170,9 @@
 #   --baul-directo      Ctrl + clic en el baúl: la casilla pasa entera al otro lado sin pulsar el botón [prueba_inventario.gd]
 #   --durabilidad       lo que duran las armas y los arrojables: la ficha, sacar del baúl, el aviso y lo que vuelve o se rompe al caer [prueba_inventario.gd]
 #   --baulfregona       la fregona Normal en el baúl: sola no se guarda; con otra de repuesto, sí (M61) [prueba_inventario.gd]
-#   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto; y al comprar una tercera, la de repuesto
-#                       va al baúl (M26)                                                  [prueba_inventario.gd]
-#   --tienda            la tienda de armas: sus secciones y comprar lanzables de uno en uno [prueba_inventario.gd]
+#   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto               [prueba_inventario.gd]
+#   --tienda            la tienda de armas: sus secciones y que lo comprado va al baúl (con el baúl lleno, no se
+#                       compra)                                                              [prueba_inventario.gd]
 #   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, «Piezas al baúl» y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
@@ -219,6 +219,11 @@
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
 #   --municion-zombi    la munición que suelta un durmiente: solo la de las armas que lleva (la mano y el repuesto;
 #                       las especiales, su gasolina, bidón o batería; solo cuerpo a cuerpo, nada) [prueba_inventario.gd]
+#   --botin             lo que suelta un durmiente (15 nov): siempre el mutágeno y un billete (80 %) o munición (20 %;
+#                       sin arma de fuego, el billete); con la skin del doctor Salas, a veces otra cosa; nunca
+#                       lanzables ni objetos                                                 [prueba_inventario.gd]
+#   --fregona-mejorada  la fregona mejorada (15 nov): empieza con ella, gasta una por partida, no se queda en el baúl
+#                       y, al romperse, el cartel del final lo dice y vuelve la Normal       [prueba_inventario.gd]
 #   --mutageno          el mutágeno que suelta cada durmiente: cae, se coge, va en la partida guardada y sale en el
 #                       inventario, debajo de los dólares                                   [prueba_inventario.gd]
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
@@ -229,9 +234,11 @@
 #   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!», su barrera (M80) y su tutorial [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles (se abren con
 #                       E, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
-#   --regalo            Johnny empieza solo con la fregona y no sale de la sala sin la pistola del regalo de
-#                       bienvenida: el «!» de ARMAS.EXE, el tutorial de la tienda, «¡COMPRA UN ARMA!», el «!» de la
-#                       pistola, «Regalo de bienvenida», cogerla gratis y que luego cuesta $10    [prueba_sitios.gd]
+#   --regalo            Johnny empieza solo con la fregona y sin lanzables y no sale de la sala sin el regalo de
+#                       bienvenida (la pistola, un molotov, una granada y una atraedora): el «!» de ARMAS.EXE, el
+#                       tutorial de la tienda, «¡COMPRA UN ARMA!», los «!» del regalo, «Regalo de bienvenida», cogerlo
+#                       gratis (al baúl, con el tutorial de los lanzables), que luego cuesta lo de siempre, el «!» del
+#                       baúl y sacarlo de allí (con «Cambiar de arma»)                       [prueba_sitios.gd]
 #   --marcas-sala       en la primera partida, los «!» de la sala de mantenimiento (taquilla, ordenador, banco, baúl y
 #                       puerta de los trasteros): no se sale al pasillo hasta quitarlos, cada mueble con su tutorial,
 #                       el de los trasteros al entrar y, al final, la flecha de la guía     [prueba_sitios.gd]
@@ -490,8 +497,19 @@ extends "res://scripts/pruebas/trailer.gd"
 
 
 # Ya en la sala de mantenimiento: la prueba que se haya pedido (si no, la larga, que sigue en _process)
+# Las pruebas que miran cómo empieza Johnny de verdad, sin lanzables (15 nov: se compran en la tienda y van al baúl)
+const SIN_LANZABLES := ["--regalo", "--tienda", "--guiado", "--marcas-sala", "--botin", "--fregona-mejorada"]
+
+
 func empezar_prueba() -> void:
 	var args := OS.get_cmdline_user_args()
+	# Johnny ya no empieza con lanzables (Lanzables.reiniciar): las demás pruebas sí, como antes del 15 nov, con 2
+	# molotovs y 2 granadas a mano (más los del Artificiero), para que sus cuentas no cambien
+	if not Array(args).any(func(a): return a in SIN_LANZABLES) and lanzables.mano.is_empty():
+		for k in ["molotov", "granada"]:
+			lanzables.cantidades[k] = 2 + Lanzables.extra_talentos(k, johnny.stats)
+			lanzables.mano.append(k)
+		lanzables.tipo = "molotov"
 	if "--trailer" in args:
 		grabar_trailer()
 	elif "--volver" in args:
@@ -765,6 +783,12 @@ func empezar_prueba() -> void:
 	elif "--municion-zombi" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion_zombi()
+	elif "--botin" in args:
+		set_process(false)   # sin la prueba larga
+		probar_botin()
+	elif "--fregona-mejorada" in args:
+		set_process(false)   # sin la prueba larga
+		probar_fregona_mejorada()
 	elif "--mutageno" in args:
 		set_process(false)   # sin la prueba larga
 		probar_mutageno()

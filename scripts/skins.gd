@@ -90,7 +90,7 @@ const LISTA := {
 		"como": "Mata al Gymbro por primera vez.", "jefe": "gymbro", "cuerpo": 1.5},
 	"bombero": {"nombre": "El bombero", "efecto": "Las armas que queman hacen un 50 % más de daño y el fuego no te quema.",
 		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 1.5, "ignifugo": true},
-	"salas": {"nombre": "El doctor Salas", "efecto": "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más.",
+	"salas": {"nombre": "El doctor Salas", "efecto": "Un 50 % de las veces, cada durmiente suelta otro billete o más munición.",
 		"como": "Mata al doctor Salas por primera vez.", "jefe": "cientifico_jefe", "doble": 0.5},
 	"cocinero": {"nombre": "El cocinero", "efecto": "Las vendas y los botiquines curan un 50 % más.",
 		"como": "Mata al cocinero por primera vez.", "jefe": "cocinero", "cura": 1.5},

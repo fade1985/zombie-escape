@@ -3193,6 +3193,10 @@ msgstr "+munitions"
 msgid "¡NO PUEDO LLEVAR MÁS!"
 msgstr "JE NE PEUX PAS EN PORTER PLUS !"
 
+#: scripts/partida.gd scripts/ui/inventario.gd
+msgid "%s: es su última partida; al acabarla, se destruye."
+msgstr "%s : c'est sa dernière partie ; à la fin, elle se détruit."
+
 #: scripts/partida.gd
 msgid "No se puede usar"
 msgstr "Impossible à utiliser"
@@ -3546,8 +3550,8 @@ msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Tue le chef pompier pour la première fois."
 
 #: scripts/skins.gd
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "Quand un dormeur lâche un objet, dans 50 % des cas il en lâche un autre."
+msgid "Un 50 % de las veces, cada durmiente suelta otro billete o más munición."
+msgstr "Dans 50 % des cas, chaque dormeur lâche un billet de plus ou plus de munitions."
 
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
@@ -4656,8 +4660,8 @@ msgid "Al coger el primer billete"
 msgstr "En ramassant le premier billet"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Les dormeurs lâchent parfois des billets, et les boss beaucoup : passe dessus pour les ramasser."
+msgid "Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Presque tous les dormeurs lâchent un billet en tombant (les autres, des munitions), et les boss beaucoup : passe dessus pour les ramasser."
 
 #: scripts/tutoriales.gd
 msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
@@ -4676,8 +4680,8 @@ msgid "Al coger el primer mutágeno"
 msgstr "En ramassant ton premier mutagène"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "Les dormeurs ont de l'ADN muté en eux : parfois, en tombant, ils lâchent un peu de mutagène. Passe dessus pour le ramasser."
+msgid "Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "Les dormeurs ont de l'ADN muté en eux : en tombant, ils lâchent un peu de mutagène. Passe dessus pour le ramasser."
 
 #: scripts/tutoriales.gd
 msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
@@ -4692,12 +4696,12 @@ msgid "Cambiar de arma"
 msgstr "Changer d'arme"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pistola"
-msgstr "En prenant le premier pistolet"
+msgid "Al llevar la primera arma a distancia"
+msgstr "En portant la première arme à distance"
 
 #: scripts/tutoriales.gd
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "Tu as maintenant deux armes en main : la serpillière, au corps à corps, et le pistolet, à distance."
+msgid "Ahora llevas dos armas en la mano: una de cuerpo a cuerpo, como la fregona, y otra a distancia, como la pistola."
+msgstr "Tu as maintenant deux armes en main : une de corps à corps, comme la serpillière, et une à distance, comme le pistolet."
 
 #: scripts/tutoriales.gd
 msgid "Cambia de una a otra con {cambiar_arma}."
@@ -4748,12 +4752,16 @@ msgid "Lanzables"
 msgstr "Lançables"
 
 #: scripts/tutoriales.gd
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "Lance avec {lanzar} : maintiens pour viser et relâche pour lancer."
+msgid "Al conseguir el primer lanzable"
+msgstr "En obtenant le premier lançable"
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "Ce que tu lances se change avec {cambiar_lanzable} : le molotov met le feu et la grenade explose. Tu en as jusqu'à 3 en main."
+msgid "Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
+msgstr "Les lançables s'achètent à la boutique d'armes de l'ordinateur et vont au coffre : sors-les de là pour les emporter."
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis."
+msgstr "Lance avec {lanzar} : maintiens pour viser et relâche pour lancer. Change de lançable avec {cambiar_lanzable} : le molotov met le feu, la grenade explose et le leurre attire les zombies."
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -4972,16 +4980,16 @@ msgid "Al abrir la tienda de armas"
 msgstr "En ouvrant la boutique d'armes"
 
 #: scripts/tutoriales.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Elles sont vendues en qualité Normale : elles ne durent que cette partie et se détruisent à la fin. Tu en portes deux de chaque type : celle que tu avais en main passe en réserve et celle de réserve, au coffre ; si elle ne rentre pas ou ne peut pas être rangée, celle de ta main reste par terre."
+msgid "Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar."
+msgstr "Ce que tu achètes va au coffre, neuf : sors-le quand tu veux l'emporter. Si le coffre est plein, fais de la place avant d'acheter."
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines, et elles vont à l'emplacement à distance. Les lançables s'achètent un par un, tant qu'il reste de la place."
+msgid "Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno."
+msgstr "Tout est vendu en qualité Normale : ça dure la partie où tu le sors du coffre. Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines. Les lançables s'achètent un par un."
 
 #: scripts/tutoriales.gd
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Johnny ne commence qu'avec la serpillière : le premier pistolet, c'est cadeau."
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."
+msgstr "Johnny ne commence qu'avec la serpillière : le premier pistolet, c'est cadeau, et aussi un molotov, une grenade et un leurre."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Mutaciones"
@@ -5813,10 +5821,6 @@ msgstr "En rechange : %s ; au coffre à sa place : %s."
 #: scripts/ui/inventario.gd
 msgid "%s a la mano; %s entra en el baúl en su lugar."
 msgstr "En main : %s ; au coffre à sa place : %s."
-
-#: scripts/ui/inventario.gd
-msgid "%s: es su última partida; al acabarla, se destruye."
-msgstr "%s : c'est sa dernière partie ; à la fin, elle se détruit."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl no admite más: contigo se quedan %d de %s."
@@ -6943,44 +6947,32 @@ msgid "cargador de %d"
 msgstr "chargeur de %d"
 
 #: scripts/ui/ordenador.gd
-msgid "Ya llevas %s."
-msgstr "Déjà en main : %s."
-
-#: scripts/ui/ordenador.gd
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "Déjà en rechange : %s. Équipe-la depuis l'inventaire."
+msgid "El baúl está lleno: haz sitio en él para poder comprar."
+msgstr "Le coffre est plein : fais-y de la place pour pouvoir acheter."
 
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "Pas assez : il te manque $%d."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "Acheté ! En main : %s ; en rechange : %s ; au coffre : %s."
+msgid "¡Regalo! %s va al baúl: sácala de allí para llevarla."
+msgstr "Cadeau ! Au coffre : %s. Sors-le de là pour l'emporter."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano."
-msgstr "Acheté ! En main : %s."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "Acheté ! En main : %s ; en rechange : %s."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "Acheté ! En main : %s ; par terre : %s (tu en avais déjà deux)."
+msgid "¡Compra hecha! %s va al baúl."
+msgstr "Acheté ! Au coffre : %s."
 
 #: scripts/ui/ordenador.gd
 msgid "En el reto «%s» no se lleva nada que lanzar."
 msgstr "Avec le défi « %s », tu n'as rien à lancer."
 
 #: scripts/ui/ordenador.gd
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "Plus de place pour des %s : tes piles sont pleines et il ne te reste aucun emplacement pour une autre."
+msgid "¡Regalo! %s va al baúl (tienes %d allí)."
+msgstr "Cadeau ! Au coffre : %s (tu en as %d là-bas)."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "Acheté ! Tu as maintenant %d %s."
+msgid "¡Compra hecha! %s va al baúl (tienes %d allí)."
+msgstr "Acheté ! Au coffre : %s (tu en as %d là-bas)."
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
@@ -7283,12 +7275,8 @@ msgid "¡COMPRA UN ARMA!"
 msgstr "ACHÈTE UNE ARME !"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Comprada"
-msgstr "Achetée"
-
-#: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "PLEIN"
+msgid "Baúl lleno"
+msgstr "Coffre plein"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"
@@ -7397,3 +7385,83 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#, sin-usar
+msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "Quand un dormeur lâche un objet, dans 50 % des cas il en lâche un autre."
+
+#, sin-usar
+msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Les dormeurs lâchent parfois des billets, et les boss beaucoup : passe dessus pour les ramasser."
+
+#, sin-usar
+msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "Les dormeurs ont de l'ADN muté en eux : parfois, en tombant, ils lâchent un peu de mutagène. Passe dessus pour le ramasser."
+
+#, sin-usar
+msgid "Al coger la primera pistola"
+msgstr "En prenant le premier pistolet"
+
+#, sin-usar
+msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
+msgstr "Tu as maintenant deux armes en main : la serpillière, au corps à corps, et le pistolet, à distance."
+
+#, sin-usar
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "Lance avec {lanzar} : maintiens pour viser et relâche pour lancer."
+
+#, sin-usar
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "Ce que tu lances se change avec {cambiar_lanzable} : le molotov met le feu et la grenade explose. Tu en as jusqu'à 3 en main."
+
+#, sin-usar
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Elles sont vendues en qualité Normale : elles ne durent que cette partie et se détruisent à la fin. Tu en portes deux de chaque type : celle que tu avais en main passe en réserve et celle de réserve, au coffre ; si elle ne rentre pas ou ne peut pas être rangée, celle de ta main reste par terre."
+
+#, sin-usar
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
+msgstr "Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines, et elles vont à l'emplacement à distance. Les lançables s'achètent un par un, tant qu'il reste de la place."
+
+#, sin-usar
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Johnny ne commence qu'avec la serpillière : le premier pistolet, c'est cadeau."
+
+#, sin-usar
+msgid "Ya llevas %s."
+msgstr "Déjà en main : %s."
+
+#, sin-usar
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "Déjà en rechange : %s. Équipe-la depuis l'inventaire."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "Acheté ! En main : %s ; en rechange : %s ; au coffre : %s."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano."
+msgstr "Acheté ! En main : %s."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "Acheté ! En main : %s ; en rechange : %s."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "Acheté ! En main : %s ; par terre : %s (tu en avais déjà deux)."
+
+#, sin-usar
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "Plus de place pour des %s : tes piles sont pleines et il ne te reste aucun emplacement pour une autre."
+
+#, sin-usar
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "Acheté ! Tu as maintenant %d %s."
+
+#, sin-usar
+msgid "Comprada"
+msgstr "Achetée"
+
+#, sin-usar
+msgid "LLENO"
+msgstr "PLEIN"

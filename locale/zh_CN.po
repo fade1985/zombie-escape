@@ -3191,6 +3191,10 @@ msgstr "+弹药"
 msgid "¡NO PUEDO LLEVAR MÁS!"
 msgstr "拿不下了！"
 
+#: scripts/partida.gd scripts/ui/inventario.gd
+msgid "%s: es su última partida; al acabarla, se destruye."
+msgstr "%s：这是它的最后一局；本局结束后会损坏。"
+
 #: scripts/partida.gd
 msgid "No se puede usar"
 msgstr "无法使用"
@@ -3540,8 +3544,8 @@ msgid "Mata al jefe de bomberos por primera vez."
 msgstr "首次杀死消防队长。"
 
 #: scripts/skins.gd
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "沉睡者掉落物品时，有50%的几率再多掉一件。"
+msgid "Un 50 % de las veces, cada durmiente suelta otro billete o más munición."
+msgstr "每个沉睡者有50%的几率多掉一张钞票或更多弹药。"
 
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
@@ -4650,8 +4654,8 @@ msgid "Al coger el primer billete"
 msgstr "第一次捡到钞票时"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "沉睡者有时会掉钞票，首领会掉很多：走过去就能捡起来。"
+msgid "Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos."
+msgstr "几乎每个沉睡者倒下时都会掉一张钞票（其余的掉弹药），首领会掉很多：走过去就能捡起来。"
 
 #: scripts/tutoriales.gd
 msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
@@ -4670,8 +4674,8 @@ msgid "Al coger el primer mutágeno"
 msgstr "第一次捡到诱变剂时"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "沉睡者体内带着变异的DNA：倒下时偶尔会掉落一点诱变剂。走过去就能捡起来。"
+msgid "Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "沉睡者体内带着变异的DNA：倒下时会掉落一点诱变剂。走过去就能捡起来。"
 
 #: scripts/tutoriales.gd
 msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
@@ -4686,12 +4690,12 @@ msgid "Cambiar de arma"
 msgstr "切换武器"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pistola"
-msgstr "拿到第一把手枪时"
+msgid "Al llevar la primera arma a distancia"
+msgstr "第一次拿上远程武器时"
 
 #: scripts/tutoriales.gd
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "现在你手上拿着两件武器：近战的拖把和远程的手枪。"
+msgid "Ahora llevas dos armas en la mano: una de cuerpo a cuerpo, como la fregona, y otra a distancia, como la pistola."
+msgstr "现在你手上拿着两件武器：一件近战武器，比如拖把；一件远程武器，比如手枪。"
 
 #: scripts/tutoriales.gd
 msgid "Cambia de una a otra con {cambiar_arma}."
@@ -4742,12 +4746,16 @@ msgid "Lanzables"
 msgstr "投掷物"
 
 #: scripts/tutoriales.gd
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "用{lanzar}投掷：按住瞄准，松开扔出。"
+msgid "Al conseguir el primer lanzable"
+msgstr "第一次得到投掷物时"
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸。手边最多带3个。"
+msgid "Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
+msgstr "投掷物在电脑上的武器商店购买，会放进储物箱：从那里取出来才能带上。"
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis."
+msgstr "用{lanzar}投掷：按住瞄准，松开扔出。用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸，诱饵弹会把僵尸引过去。"
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -4966,16 +4974,16 @@ msgid "Al abrir la tienda de armas"
 msgstr "打开武器商店时"
 
 #: scripts/tutoriales.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "以普通品质出售：只能用本局，本局结束后会损坏。每种类型你带两把：手上的那把转为备用，备用的那把进储物箱；如果放不下或无法存放，手上的那把会掉在地上。"
+msgid "Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar."
+msgstr "买到的东西会全新放进储物箱：想带上时再从里面取出。储物箱满了的话，购买前先腾出位置。"
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出售，占用远程武器的位置。投掷物一个一个买，直到放不下为止。"
+msgid "Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno."
+msgstr "所有东西都以普通品质出售：从储物箱取出的那一局可以使用。远程武器装满弹药出售，并附带备弹；特殊武器装满出售。投掷物一个一个买。"
 
 #: scripts/tutoriales.gd
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Johnny 开局只有拖把：第一把手枪送给你。"
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."
+msgstr "Johnny 开局只有拖把：第一把手枪送给你，还有一个燃烧瓶、一颗手雷和一个诱饵弹。"
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Mutaciones"
@@ -5806,10 +5814,6 @@ msgstr "%s换到备用；%s放进储物箱。"
 #: scripts/ui/inventario.gd
 msgid "%s a la mano; %s entra en el baúl en su lugar."
 msgstr "%s换到手上；%s放进储物箱。"
-
-#: scripts/ui/inventario.gd
-msgid "%s: es su última partida; al acabarla, se destruye."
-msgstr "%s：这是它的最后一局；本局结束后会损坏。"
 
 #: scripts/ui/inventario.gd
 msgid "El baúl no admite más: contigo se quedan %d de %s."
@@ -6924,44 +6928,32 @@ msgid "cargador de %d"
 msgstr "弹匣 %d 发"
 
 #: scripts/ui/ordenador.gd
-msgid "Ya llevas %s."
-msgstr "你已经有%s了。"
-
-#: scripts/ui/ordenador.gd
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "你的备用里已经有%s了：去物品栏装备它吧。"
+msgid "El baúl está lleno: haz sitio en él para poder comprar."
+msgstr "储物箱满了：腾出位置才能购买。"
 
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "钱不够：还差 $%d。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "购买成功！%s拿到手上；%s换到备用；%s放进储物箱。"
+msgid "¡Regalo! %s va al baúl: sácala de allí para llevarla."
+msgstr "礼物！%s放进了储物箱：从那里取出来才能带上。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano."
-msgstr "购买成功！%s拿到手上。"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "购买成功！%s拿到手上；%s换到备用。"
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "购买成功！%s拿到手上；%s留在地上：你已经带了两件。"
+msgid "¡Compra hecha! %s va al baúl."
+msgstr "购买成功！%s放进了储物箱。"
 
 #: scripts/ui/ordenador.gd
 msgid "En el reto «%s» no se lleva nada que lanzar."
 msgstr "“%s”挑战中不能携带投掷物。"
 
 #: scripts/ui/ordenador.gd
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "%s放不下了：你的几组都满了，也没有空位再放一组。"
+msgid "¡Regalo! %s va al baúl (tienes %d allí)."
+msgstr "礼物！%s放进了储物箱（里面有%d个）。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "购买成功！你现在带着 %d 个%s。"
+msgid "¡Compra hecha! %s va al baúl (tienes %d allí)."
+msgstr "购买成功！%s放进了储物箱（里面有%d个）。"
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
@@ -7264,12 +7256,8 @@ msgid "¡COMPRA UN ARMA!"
 msgstr "买一把武器吧！"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Comprada"
-msgstr "已购买"
-
-#: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "已满"
+msgid "Baúl lleno"
+msgstr "储物箱已满"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"
@@ -7378,3 +7366,83 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "沉睡者掉落物品时，有50%的几率再多掉一件。"
+
+#, sin-usar
+msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "沉睡者有时会掉钞票，首领会掉很多：走过去就能捡起来。"
+
+#, sin-usar
+msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "沉睡者体内带着变异的DNA：倒下时偶尔会掉落一点诱变剂。走过去就能捡起来。"
+
+#, sin-usar
+msgid "Al coger la primera pistola"
+msgstr "拿到第一把手枪时"
+
+#, sin-usar
+msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
+msgstr "现在你手上拿着两件武器：近战的拖把和远程的手枪。"
+
+#, sin-usar
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "用{lanzar}投掷：按住瞄准，松开扔出。"
+
+#, sin-usar
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸。手边最多带3个。"
+
+#, sin-usar
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "以普通品质出售：只能用本局，本局结束后会损坏。每种类型你带两把：手上的那把转为备用，备用的那把进储物箱；如果放不下或无法存放，手上的那把会掉在地上。"
+
+#, sin-usar
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
+msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出售，占用远程武器的位置。投掷物一个一个买，直到放不下为止。"
+
+#, sin-usar
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Johnny 开局只有拖把：第一把手枪送给你。"
+
+#, sin-usar
+msgid "Ya llevas %s."
+msgstr "你已经有%s了。"
+
+#, sin-usar
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "你的备用里已经有%s了：去物品栏装备它吧。"
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "购买成功！%s拿到手上；%s换到备用；%s放进储物箱。"
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano."
+msgstr "购买成功！%s拿到手上。"
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "购买成功！%s拿到手上；%s换到备用。"
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "购买成功！%s拿到手上；%s留在地上：你已经带了两件。"
+
+#, sin-usar
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "%s放不下了：你的几组都满了，也没有空位再放一组。"
+
+#, sin-usar
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "购买成功！你现在带着 %d 个%s。"
+
+#, sin-usar
+msgid "Comprada"
+msgstr "已购买"
+
+#, sin-usar
+msgid "LLENO"
+msgstr "已满"

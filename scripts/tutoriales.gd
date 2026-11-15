@@ -64,18 +64,19 @@ const LISTA := {
 			"Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...).",
 			"Si caes, lo de la mochila se pierde; si completas el edificio, pasa al baúl. Las armas y los lanzables vuelven al baúl siempre, si les quedan partidas."]},
 	"dolares": {"grupo": "Lo básico", "titulo": "Dólares", "icono": "billete", "cuando": "Al coger el primer billete",
-		"lineas": ["Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos.",
+		"lineas": ["Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos.",
 			"Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.",
 			"Se gastan en el ordenador de la sala de mantenimiento."]},
 	# (15 nov: el mutágeno, que paga las mutaciones; sale como el de los dólares, desde partida.mirar_tutoriales)
 	"mutageno": {"grupo": "Lo básico", "titulo": "Mutágeno", "icono": "mutageno", "cuando": "Al coger el primer mutágeno",
-		"lineas": ["Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo.",
+		"lineas": ["Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo.",
 			"Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida.",
 			"Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."]},
-	# (sale en la tienda de armas, nada más coger la pistola de regalo: ui/ordenador.gd, comprar_arma; M97)
+	# (sale al llevar la primera arma a distancia, sacada del baúl o cogida del suelo: partida.mirar_tutoriales; M97.
+	# Hasta el 15 nov salía en la tienda, al coger la pistola de regalo, que ahora va al baúl)
 	"cambiar_arma": {"grupo": "Armas", "titulo": "Cambiar de arma", "icono": "pistola",
-		"cuando": "Al coger la primera pistola",
-		"lineas": ["Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia.",
+		"cuando": "Al llevar la primera arma a distancia",
+		"lineas": ["Ahora llevas dos armas en la mano: una de cuerpo a cuerpo, como la fregona, y otra a distancia, como la pistola.",
 			"Cambia de una a otra con {cambiar_arma}."]},
 	"armas": {"grupo": "Armas", "titulo": "Armas nuevas", "icono": "escopeta", "cuando": "Al llevar otra arma",
 		"lineas": ["Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}.",
@@ -85,9 +86,11 @@ const LISTA := {
 		"lineas": ["Recarga con {recargar}; al vaciarse el cargador, recarga solo.",
 			"Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador.",
 			"Sin munición, Johnny saca el arma de cuerpo a cuerpo."]},
-	"lanzables": {"grupo": "Armas", "titulo": "Lanzables", "icono": "molotov", "cuando": "En la primera pelea",
-		"lineas": ["Lanza con {lanzar}: mantén para apuntar y suelta para lanzar.",
-			"Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano.",
+	# (15 nov: sale con el primer lanzable, comprado o regalado en la tienda, que va al baúl, o sacado del baúl:
+	# ui/ordenador.gd, comprar_lanzable, y partida.mirar_tutoriales. Antes, en la primera pelea)
+	"lanzables": {"grupo": "Armas", "titulo": "Lanzables", "icono": "molotov", "cuando": "Al conseguir el primer lanzable",
+		"lineas": ["Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos.",
+			"Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis.",
 			"¡Ojo! La explosión también te hace daño a ti."]},
 	"piezas": {"grupo": "Armas", "titulo": "Materiales de fabricación", "icono": "obj-pieza_cuerpo",
 		"cuando": "Al coger el primer material",
@@ -144,9 +147,9 @@ const LISTA := {
 			"Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."]},
 	"tienda": {"grupo": "Sala de mantenimiento", "titulo": "La tienda de armas", "icono": "pistola",
 		"cuando": "Al abrir la tienda de armas",
-		"lineas": ["Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo.",
-			"Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan.",
-			"Johnny solo empieza con la fregona: la primera pistola te la regalamos."]},
+		"lineas": ["Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar.",
+			"Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno.",
+			"Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."]},
 	# Los de los programas del ordenador: salen al abrir cada uno la primera vez (ordenador.gd, TUTORIAL_DE) y, hasta
 	# entonces, su icono lleva un «!» (mapa/ordenador.gd, novedades)
 	"talentos": {"grupo": "Sala de mantenimiento", "titulo": "Mutaciones", "icono": "escritorio-talentos",

@@ -22,12 +22,15 @@
 #     el baúl, los del mismo tipo y calidad se juntan en una casilla de hasta 99, como los objetos
 #     (Objetos.arrojables_al_baul), y se sacan de montón en montón.
 #   - La atraedora y la congeladora (ARROJADIZAS): se lanzan como la granada, con su propio efecto. Se
-#     cuentan como el molotov y la granada, pero no se tienen al empezar ni las sueltan los zombis: solo se compran.
+#     cuentan como el molotov y la granada.
+#   - Desde el 15 nov no se empieza con ninguno ni los suelta ningún zombi (ni la barricada ni los supervivientes): se
+#     compran en la tienda (van al baúl) o se sacan del baúl. La primera vez, la tienda regala un molotov, una granada y
+#     una atraedora (tienda_armas.gd, REGALO_LANZABLES).
 #   - Los cuatro se compran de uno en uno en la tienda de armas del ordenador (PRECIOS; ordenador.gd, comprar_lanzable).
 #   - Cada paquete tiene su calidad (Armas.CALIDADES; parte 4 de la tienda y las piezas): la que no es Normal hace más
 #     daño, con más radio, y caben más en su montón. Los de un tipo con dos calidades van en montones distintos: su
 #     "clave" es el tipo y, si no es Normal, su calidad detrás («molotov:2», unos molotovs Raros; clave, tipo_de y
-#     calidad_de). Lo de la tienda, lo de empezar y lo que sueltan los zombis es Normal.
+#     calidad_de). Lo de la tienda es Normal.
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
 # explota a los 2 s (granada.gd).
 class_name Lanzables
@@ -35,8 +38,8 @@ extends Node2D
 
 # Números del molotov (provisionales, como en el JS)
 const MOLOTOV := {
-	"inicio": 2,       # botellas al empezar la partida
-	"suelta": 0.03,    # probabilidad de que un zombi suelte una al morir (M42: antes 0,06; con diez a mano se mataba a los jefes muy fácil)
+	"inicio": 0,       # botellas al empezar la partida (desde el 15 nov, ninguna: se compran en la tienda o se sacan del baúl;
+	                   # antes 2. Y desde entonces ya no las suelta ningún zombi: antes, un 3 % de las veces)
 	"alcance": 300.0,  # lo más lejos que se puede lanzar
 	"vuelo": 0.55,     # segundos en el aire
 	"altura": 110.0,   # altura de la parábola
@@ -55,8 +58,7 @@ const MOLOTOV := {
 }
 # Números de la granada
 const GRANADA := {
-	"inicio": 2,
-	"suelta": 0.025,   # (M42: antes 0,05)
+	"inicio": 0,       # (como el molotov: antes 2, y un 2,5 % de las veces la soltaba un zombi)
 	"vuelo": 0.45,     # segundos hasta tocar el suelo
 	"mecha": 2.0,      # segundos desde el lanzamiento hasta que explota
 	"radio": 110.0,    # radio de la explosión
@@ -148,19 +150,19 @@ static func calidad_de(k: String) -> int:
 	return k.get_slice(":", 1).to_int() if ":" in k else 0
 
 
-# Al empezar la partida: las de siempre, más las del Artificiero, a mano (todas Normales). Las que no se tienen al
-# empezar (la atraedora y la congeladora) no salen por el Artificiero: con él solo caben más en cada montón
-func reiniciar(stats: Dictionary) -> void:
+# Al empezar la partida: los de "inicio" de cada uno (desde el 15 nov, ninguno: ni con el Artificiero, que solo hace
+# que quepan más en cada montón)
+func reiniciar(_stats: Dictionary) -> void:
 	cantidades = {}
+	mano = []
 	for k in DATOS:
-		cantidades[k] = DATOS[k].inicio + (extra_talentos(k, stats) if DATOS[k].inicio > 0 else 0)
-	mano = ["molotov", "granada"]
-	if cantidades.congeladora > 0:
-		mano.append("congeladora")
+		cantidades[k] = DATOS[k].inicio
+		if cantidades[k] > 0:
+			mano.append(k)
 	repuesto = []
 	en_repuesto = []
 	quedan = {}
-	tipo = "molotov"
+	tipo = mano[0] if not mano.is_empty() else ""
 
 
 # El reto "Solo cuerpo a cuerpo": sin nada que lanzar

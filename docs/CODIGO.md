@@ -59,7 +59,10 @@ en una línea.
   0, Poco común 1, Rara 2, Épica 3); `johnny.quedan`, `lanzables.quedan` y "quedan" en el baúl. Sacarlo del baúl gasta
   una (`estrenar()`, marca "usada"); mejorarlo suma una. Al acabar la partida (ganes, caigas o abandones),
   `Objetos.cerrar_baul` devuelve al baúl lo que lleva con partidas y destruye lo que no tiene (también lo "usado" del
-  baúl); el cartel lo dice (`partida.filas_rotas`). La ficha lo enseña como «Durabilidad: N», de 0 a 3 (`texto_partidas()`, `durabilidad()`; 13 nov). Prueba: `--durabilidad`. La **Épica**
+  baúl); el cartel lo dice (`partida.filas_rotas`). La **fregona mejorada** (15 nov) no se queda en el baúl: se aparta
+  en "fregona" del guardado (`Objetos.apartar_fregona`, también la de un guardado de antes que estaba en el baúl) y
+  Johnny empieza cada partida con ella, gastando una (`partida.dar_fregona`, con `estrenar`); al quedarse sin partidas se
+  rompe (el cartel lo dice) y vuelve la Normal. Prueba: `--fregona-mejorada`. La ficha lo enseña como «Durabilidad: N», de 0 a 3 (`texto_partidas()`, `durabilidad()`; 13 nov). Prueba: `--durabilidad`. La **Épica**
   (`EPICA`) trae además un truco de su familia (`TRUCO`, `truco()`): golpe de gracia (cada 4 golpes, uno crítico:
   `johnny.golpear`), balas que atraviesan (`bala.gd`, `atraviesa`, estela morada), estallido (el zombi que mata
   revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños
@@ -89,7 +92,11 @@ en una línea.
   tocar a un zombi, una pared o al llegar a su alcance con la explosión de la granada de mano (también a Johnny, como
   mucho `Lanzables.DANO_JOHNNY`). Tambor de 6 que se recarga de una en una (`cartucho`); usa el fogonazo de la escopeta
   y su sonido `"lanzagranadas"`. Receta en `assets/pixellab.json` → `conserje-48-lanzagranadas`; prueba `--lanzagranadas`.
-- `lanzables.gd`: molotov, granada, atraedora y congeladora. Dentro de un apartamento, al explotar o romperse se oyen como
+- `lanzables.gd`: molotov, granada, atraedora y congeladora. Desde el 15 nov Johnny no empieza con ninguno (`reiniciar`,
+  `inicio` 0) ni los suelta ningún zombi, ni la barricada ni los supervivientes: se compran en la tienda (van al baúl) y
+  se sacan del baúl (las pruebas sí empiezan con 2 molotovs y 2 granadas, como antes: `partida_prueba.empezar_prueba`,
+  salvo las de `SIN_LANZABLES`). Su tutorial sale con el primero que se consigue (`partida.mirar_tutoriales` y
+  `ordenador.comprar_lanzable`). Dentro de un apartamento, al explotar o romperse se oyen como
   un disparo y despiertan a todo el piso, que va a por Johnny (`ruido`, M107, 15 nov: lo llaman `granada.explotar` y
   `proyectil.caer`; prueba `--arrojable-alerta`). Van en **montones** (M18, 28 oct): cada hueco lleva un montón
   de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
@@ -391,8 +398,8 @@ en una línea.
 - `alerta.gd` (niveles de alerta), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `reto.gd` (el reto del
   día; su tarjeta en «Elige edificio» dice la regla, tu marca y el premio de hoy, `texto_tarjeta`; se juega una vez al día: el intento se gasta al empezar y el botón sale apagado hasta mañana, `jugado`) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`): el portero, el
-  glotón, el gymbro, el bombero, el doctor Salas (M36: `doble()`, un objeto de más la mitad de las veces que un zombi
-  suelta uno, en `partida.gd`; se consigue matando al doctor Salas), el cocinero (M90: `cura()`, las vendas y los
+  glotón, el gymbro, el bombero, el doctor Salas (M36: `doble()`; desde el 15 nov, la mitad de las veces el durmiente
+  suelta otra cosa más, otro billete o munición, en `partida.gd`; se consigue matando al doctor Salas), el cocinero (M90: `cura()`, las vendas y los
   botiquines curan un 50 % más, en `partida.cura_de`), el antidisturbios (M90: `aguante()`, tras un golpe 1,2 s sin
   recibir otro en vez de 0,7, y `firme()`, nada le tira al suelo; en `johnny.gd`: `recibir_dano`, `pisar` y `caer`) y
   la modista (M90: `camuflaje()`, los zombis dormidos no se despiertan porque Johnny entre en su habitación y le ven a
@@ -461,6 +468,10 @@ en una línea.
   la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
   `--talentos-altos`). Desde el 11 nov (bloque J) todos los talentos hacen la mitad (el precio no cambia): lo que daba +10 % da +5 %; lo que daba un objeto entero por punto (Artificiero, Durito, Criogenia, Racimo, Alto voltaje) da 1 cada 2 puntos (`int(n / 2.0)`); el Ajolote cura cada 10 s (`REGENERA_CADA`); Larguirucho ×1,5, Mirilla 1 de cada 6, Veterano ×2,5 y +5 %, Fabricante ×1,15 y ×1,25, Pararrayos 10 de daño y 0,5 s, Mezcla explosiva radio 45 y 15 de daño, Adrenalina +15 % y +10 %), y desde el 15 nov (lo pidió el dueño): Artificiero +1 de cada lanzable por punto (en cada montón, `Lanzables.extra_talentos`; al empezar, solo molotovs y granadas, los que se tienen de salida), Racimo 1 por punto y en todos los lanzables, Durito 2 menos por punto, Reflejos cada 10 s con un punto (10,5 − 0,5 por punto), Desfibrilador con la mitad de la vida (y el tercio del medio), Blindaje 5 por punto, Criogenia sin congeladoras, Alto voltaje 1 durmiente más por punto, y el charco de Residuo tóxico y la explosión de Mezcla explosiva (15) también le hacen daño a Johnny,
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
+- **Lo que suelta un durmiente** (15 nov, lo pidió el dueño; `partida.gd`, `zombi.murio`): siempre su mutágeno y una cosa
+  más, un billete el 80 % de las veces y munición de un arma de fuego que lleve el 20 % (`soltar_premio_durmiente`,
+  `BILLETE_ZOMBI`, `MUNICION_ZOMBI`; sin arma de fuego, el billete). Ya no sueltan objetos (`Objetos.que_suelta` solo lo
+  mira el guardia) ni lanzables. Los jefes y el guardia, como antes, sin lanzables. Prueba: `--botin`.
 - **El mutágeno** (15 nov): cada durmiente que muere (todos menos los jefes, que dan su mutación; ni en la sala de pruebas
   ni los que caen por el ventanal) suelta uno (`partida.soltar_mutageno`, un billete con el dibujo `assets/ui/iconos/mutageno.png`,
   de GPT, `tools/muebles_gpt.py mutageno`, y el sonido `"mutageno"`). Se cuenta en `partida.mutageno` y va en la partida
@@ -495,7 +506,7 @@ en una línea.
   la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida. Una foto de antes del 13 nov con
   arrojables de repuesto (ya no hay): pasan al baúl al continuar, `sobrantes_al_baul`)
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
-  `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla. Tres huecos
+  `baul_equipo`, las armas y los arrojables con su calidad; aparte, `fregona`, la fregona mejorada (15 nov); los arrojables, juntos hasta 99 por casilla. Tres huecos
   (M45): el progreso de cada uno en `guardado.json` (el 1, el de siempre), `guardado-2.json` y `guardado-3.json`; los
   ajustes de Opciones, de los tres, en `guardado-ajustes.json` con el hueco en uso. `base` es el nombre sin `.json`
   (la prueba usa `usar("user://guardado-prueba")`), `elegir_hueco`, `hueco_usado`, `borrar_hueco`), `huecos.gd`
@@ -530,8 +541,8 @@ en una línea.
   encendidos). Su flecha, con la tele de las noticias encendida (al coger la página del dosier), lleva antes a la tele
   que al jefe (`tele_por_ver`, 15 nov). Al empezar, la ventana *Moverse y esquivar* (`partida.tutorial_al_empezar`; *Cómo se juega* y *Limpia
   los apartamentos*, `CUBRE`, no salen con ella). En la primera pelea saca las ventanas de `PASOS`: *Atacar* (al
-  despertarse el primer zombi o al cerrarse la puerta, antes que *Lanzables*: `guia.mostrar("atacar")` en partida.gd),
-  *Cambiar de arma* (si no salió ya en la tienda) y *Munición y recarga* con medio cargador; tras cada una, la casilla
+  despertarse el primer zombi o al cerrarse la puerta: `guia.mostrar("atacar")` en partida.gd; *Lanzables* sale con el primero que se consigue),
+  *Cambiar de arma* (si no salió ya) y *Munición y recarga* con medio cargador; tras cada una, la casilla
   del HUD que toca late (`hud.latido`) hasta que se hace o pasan `DURA` segundos. Hasta el 15 nov (M109) eso eran
   letreros encima de Johnny. *Atacar* solo sale con la guía: al ver *Cómo se juega* se apunta también
   (`partida.ver_tutorial`). Además, una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la
@@ -654,13 +665,16 @@ en una línea.
   del inventario, `INVENTARIO.color_barra`, desde el 15 nov), qué hace (`INVENTARIO.QUE_HACE`; sus
   números y cuántos llevas ya no, desde el 11 nov) y el botón de comprar (`b_comprar`, sin foco: compra lo de la ficha). Desde el 15 nov solo enseña el precio, en un
   marcador como el de lo ahorrado pero sin rayas apagadas (`CHAPA.dibujar_marcador` con `solo_luz`): amarillo si llega y
-  gris si no (`dibujar_comprar`); si ya la llevas dice «Comprada». Sin nada
+  gris si no (`dibujar_comprar`); con el baúl lleno (lo comprado va allí desde el 15 nov), «Baúl lleno» y no se compra
+  (`estado` "lleno"). Sin nada
   elegido (al abrir con el ratón), la ficha dice que se pase por un arma y lo de esta partida (`nota`); cómo va la
   tienda lo cuenta su tutorial («tienda», la primera vez que se abre: `ordenador.abrir`). El regalo de bienvenida
   (desde el 10 nov Johnny empieza solo con la fregona: `Armas.SIEMPRE`): la primera pistola, gratis una sola vez
-  (Guardado `regalo_cogido`, `es_regalo`), con un «!» en su casilla, «¡COMPRA UN ARMA!» en la ficha vacía y «Regalo de
-  bienvenida» en su botón; mientras no se coja, ARMAS.EXE y la mesa del ordenador llevan su «!» (`novedades`) y no se
-  sale de la sala de mantenimiento (`partida.cruzar`). Se prueba con `--regalo`. Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
+  (Guardado `regalo_cogido`, `es_regalo`), y desde el 15 nov también un molotov, una granada y una atraedora
+  (`REGALO_LANZABLES`, Guardado `regalos_lanzables`), con un «!» en cada casilla (`regalos_a_la_vista`), «¡COMPRA UN
+  ARMA!» en la ficha vacía y «Regalo de bienvenida» en su botón. Va al baúl, como todo lo comprado. Mientras quede algo
+  sin coger (`regalo_pendiente`), ARMAS.EXE y la mesa del ordenador llevan su «!» (`novedades`) y no se sale de la sala
+  de mantenimiento (`partida.cruzar`). Se prueba con `--regalo`. Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
   el teclado, el mando o el dedo, la marcada (`quien`); tras comprar se rehace con lo comprado elegido. Con el dedo, el
   primer toque enseña y el segundo compra (`al_pulsar`, `listo`). Los textos largos se parten a mano (`partir`; en
   chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino). Las armas que tienen sus
@@ -700,8 +714,12 @@ en una línea.
   el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
   prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se
   vea: `encadenar` le dice a cada botón de una lista con desplazamiento cuál tiene encima y debajo (`--ordenador-teclado`). La tienda es
-  `tienda_armas.gd` (`programa_armas` la monta y le pone a cada casilla su línea de abajo); los arrojables se compran de
-  uno en uno con `comprar_lanzable`, mientras quepan. Con dos armas de ese tipo, `comprar_arma` manda la de repuesto al baúl (`partida.repuesto_al_baul`) antes de `llevar_arma`, solo en la tienda. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: cada programa con su tutorial sin ver, que sale al abrirlo la primera vez, `MESA.TUTORIAL_DE`; Colecciones y Logros por cobrar; la tienda sin el regalo cogido. El rótulo amarillo, solo con lo de verdad nuevo, no por el tutorial; se prueba con `--marcas-sala`)
+  `tienda_armas.gd` (`programa_armas` la monta y le pone a cada casilla su línea de abajo). Desde el 15 nov lo comprado
+  va al baúl, sin estrenar (`comprar_arma`; los arrojables, de uno en uno, `comprar_lanzable`, a su casilla con
+  `Objetos.arrojables_al_baul`), y el baúl lleva un «!» hasta abrirlo (Guardado `baul_nuevo`, `mapa.marcas_sala`). Con el
+  baúl lleno no se compra. Antes iba a la mano (y con dos armas de ese tipo, la de repuesto al baúl: `repuesto_al_baul`,
+  quitado). Las pruebas que compran un arma para usarla la sacan con `comprar_y_llevar` (`prueba_comun.gd`); la tienda
+  se prueba con `--tienda` y `--tienda-armas`. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: cada programa con su tutorial sin ver, que sale al abrirlo la primera vez, `MESA.TUTORIAL_DE`; Colecciones y Logros por cobrar; la tienda sin el regalo cogido. El rótulo amarillo, solo con lo de verdad nuevo, no por el tutorial; se prueba con `--marcas-sala`)
   llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`); se ponen y se quitan con `poner_aviso`, y
   `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones o cobrar un logro, sin tener
   que apagar (y al apagar también se pone al día el «!» de la mesa). Y los avisos de sucesos, además de la

@@ -12,9 +12,9 @@
 #
 # Las ventanas: al empezar, «Moverse y esquivar» (partida.tutorial_al_empezar, que apunta también «Cómo se juega» como
 # visto: lo demás va saliendo luego). Las que pide la guía (PASOS), en orden: «Atacar» en la primera pelea (al despertarse
-# el primer zombi o al cerrarse la puerta del primer apartamento, antes que «Lanzables»: partida.gd); en una pelea con la
+# el primer zombi o al cerrarse la puerta del primer apartamento: partida.gd; «Lanzables», desde el 15 nov, con el primero que se consigue); en una pelea con la
 # fregona en la mano y la pistola guardada, la casilla de las armas late hasta cambiar (con la ventana «Cambiar de arma»
-# delante si no salió ya en la tienda, al coger la pistola de regalo, M97), y «Munición y recarga» con la pistola en la
+# delante si no salió ya; en la primera partida no sale al sacar la pistola del baúl: partida.mirar_tutoriales, M97), y «Munición y recarga» con la pistola en la
 # mano y medio cargador, antes de quedarse sin balas. «Vendas», «Jefes» y las
 # demás salen como en cualquier partida. Hasta el 15 nov (M109) esto eran letreros encima de la cabeza de Johnny.
 # Las ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial).

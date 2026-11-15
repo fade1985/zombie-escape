@@ -18,7 +18,9 @@
 # lejía, la pistola de agua, la cinta americana, la bombona de gas, la jeringuilla, el aceite y el bocadillo (con las
 # arrojadizas del centro comercial; el lanzallamas, el lanza ácido y el lanza rayos pasaron a la tienda de
 # armas).
-# Uno solo lo suelta un zombi, en los dos edificios (DE_UN_ZOMBI): el bidón de ácido.
+# Uno solo lo suelta un zombi, en los dos edificios (DE_UN_ZOMBI): el bidón de ácido. Desde el 15 nov los durmientes ya no
+# sueltan objetos (solo el mutágeno y un billete o munición: partida.soltar_premio_durmiente; el bidón de ácido sale como
+# munición del lanza ácido): que_suelta lo usa solo el guardia.
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila (los objetos)
@@ -221,7 +223,8 @@ static func arrojables_al_baul(g: Dictionary, id: String, calidad: int, n: int, 
 # salido del baúl en ella y se ha quedado sin partidas se destruye, aunque se haya vuelto a guardar; lo demás deja de
 # estar "usado". Luego entra lo que lleva encima ("equipo": partida.equipo_encima), si le quedan partidas. Devuelve lo
 # destruido que merece decirse en el cartel del final ([{"id", "calidad"}]: sin la fregona ni la pistola Normales ni los
-# arrojables Normales, que se rompen en todas las partidas)
+# arrojables Normales, que se rompen en todas las partidas). La fregona mejorada no se queda en el baúl: se aparta
+# (apartar_fregona), y si se ha quedado sin partidas se rompe y el cartel lo dice
 static func cerrar_baul(g: Dictionary, equipo: Array) -> Array:
 	var rotas := []
 	var quedan := []
@@ -232,14 +235,59 @@ static func cerrar_baul(g: Dictionary, equipo: Array) -> Array:
 		e.erase("usada")
 		quedan.append(e)
 	g.baul_equipo = quedan
+	# la fregona mejorada con la que ha empezado: ahora se mira si la lleva o la ha guardado en el baúl (si la ha dejado
+	# en el suelo, se pierde, como cualquier arma)
+	if g.fregona.get("usada", false):
+		g.fregona = {}
+	var llevada := {}
 	for cosa in equipo:
 		if int(cosa.get("quedan", 0)) <= 0:
 			rotas.append(cosa)
+		elif es_fregona_mejorada(cosa):
+			llevada = {"id": cosa.id, "calidad": cosa.calidad, "quedan": cosa.quedan}
 		elif cosa.has("n"):
 			arrojables_al_baul(g, cosa.id, cosa.calidad, cosa.n, cosa.quedan)
 		else:
 			g.baul_equipo.append({"id": cosa.id, "calidad": cosa.calidad, "quedan": cosa.quedan})
+	apartar_fregona(g, llevada)
 	return rotas.filter(func(e): return int(e.get("calidad", 0)) > 0 		or (not e.has("n") and not e.id in Armas.SIEMPRE.values()))
+
+
+# ── La fregona mejorada (15 nov, lo pidió el dueño) ──
+# La fregona de calidad mayor que Normal no va al baúl: se aparta en "fregona" del guardado ({"id", "calidad", "quedan"}:
+# las partidas que aún puede salir, como en el baúl) y Johnny empieza cada partida con ella en la mano, gastando una
+# (Armas.estrenar: partida.dar_fregona). Es la única arma que se gasta sola. Cuando se queda sin partidas, se rompe al
+# acabar (cerrar_baul, con su fila en el cartel del final) y vuelve la Normal de siempre (Armas.SIEMPRE)
+
+static func es_fregona_mejorada(e: Dictionary) -> bool:
+	return str(e.get("id", "")) == Armas.SIEMPRE.cuerpo and int(e.get("calidad", 0)) > 0 and not e.has("n")
+
+
+# Aparta la mejor fregona mejorada (más calidad y, si empatan, más partidas): de la que ya estaba apartada (si no ha
+# salido en esta partida), la que lleva Johnny ("llevada", al acabar: cerrar_baul) y las del baúl (las de un guardado de
+# antes del 15 nov, al cargarlo: Guardado.cargar_archivo, o la que ha guardado a mano en esta partida). Las que sobran,
+# si hay más de una, se quedan en el baúl
+static func apartar_fregona(g: Dictionary, llevada: Dictionary) -> void:
+	var fuera := []   # las que no están en el baúl
+	if not g.fregona.is_empty() and not g.fregona.get("usada", false):
+		fuera.append(g.fregona)
+	if not llevada.is_empty():
+		fuera.append(llevada)
+	var todas: Array = fuera + g.baul_equipo.filter(es_fregona_mejorada)
+	if todas.is_empty():
+		g.fregona = {}
+		return
+	var mejor: Dictionary = todas[0]
+	for e in todas:
+		if int(e.calidad) > int(mejor.calidad) or (int(e.calidad) == int(mejor.calidad) and Armas.quedan_de(e) > Armas.quedan_de(mejor)):
+			mejor = e
+	for i in range(g.baul_equipo.size() - 1, -1, -1):
+		if is_same(g.baul_equipo[i], mejor):
+			g.baul_equipo.remove_at(i)
+	for e in fuera:
+		if not is_same(e, mejor):
+			g.baul_equipo.append({"id": e.id, "calidad": int(e.calidad), "quedan": Armas.quedan_de(e)})
+	g.fregona = {"id": Armas.SIEMPRE.cuerpo, "calidad": int(mejor.calidad), "quedan": Armas.quedan_de(mejor)}
 
 
 # Todo lo que puede ir en el baúl como objeto, en el orden de NOMBRES y, al final, el botiquín (que no es de NOMBRES:
@@ -275,8 +323,8 @@ static func cabe_baul(s: Dictionary, id: String) -> bool:
 	return caben_baul(s, id) > 0
 
 
-# Qué objeto suelta un zombi al morir ("" = nada): el gordo, solo lo suyo (DE_UN_ZOMBI: el bidón de ácido), 1 de
-# cada 4 veces. "tienda" es el tipo de la tienda donde ha caído ("" en el pasillo o en un apartamento). Las piezas van
+# Qué objeto suelta un zombi al morir ("" = nada; desde el 15 nov solo lo mira el guardia: partida.gd): el gordo, solo
+# lo suyo (DE_UN_ZOMBI: el bidón de ácido), 1 de cada 4 veces. "tienda" es el tipo de la tienda donde ha caído ("" en el pasillo o en un apartamento). Las piezas van
 # aparte (pieza_de_zombi)
 static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "", municion: Variant = "*") -> String:
 	for id in DE_UN_ZOMBI:

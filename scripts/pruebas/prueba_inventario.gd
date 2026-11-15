@@ -967,13 +967,12 @@ func probar_piezas() -> void:
 
 
 # Con "--captura --repuesto": Johnny lleva como mucho dos armas de cada tipo, la de la mano y la de repuesto
-# (partida.llevar_arma). Compra en la tienda del ordenador un lanza ácido y un lanza rayos (con el segundo ya
-# llevaba dos de fuego: el lanza ácido se queda en el suelo), el bate y el cuchillo (el cuchillo deja el bate en el
-# suelo) y no le deja comprar la pistola que lleva de repuesto, tira la fregona de repuesto desde el
-# inventario y vuelve a coger el bate del suelo (va al repuesto, sin cambiarle la de la mano). Saca
-# captura-repuesto.png (el inventario con las dos de repuesto). Luego, M26: con dos de fuego, la de repuesto (si se
-# puede guardar) va al baúl al comprar la tercera, con el baúl lleno no, y sale captura-repuesto-baul.png (el aviso).
-# Cada línea dice lo esperado. Deja los dólares, las armas compradas y el baúl como estaban
+# (partida.llevar_arma). Se lleva un lanza ácido y un lanza rayos (con el segundo ya llevaba dos de fuego: el lanza
+# ácido se queda en el suelo), el bate y el cuchillo (el cuchillo deja el bate en el suelo), tira la fregona de
+# repuesto desde el inventario y vuelve a coger el bate del suelo (va al repuesto, sin cambiarle la de la mano). Saca
+# captura-repuesto.png (el inventario con las dos de repuesto). Hasta el 15 nov las compraba en la tienda (y con dos de
+# fuego, la de repuesto iba al baúl, M26); ahora lo comprado va al baúl (--tienda). Cada línea dice lo esperado. Deja
+# los dólares, las armas compradas y el baúl como estaban
 func probar_repuesto() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
@@ -993,33 +992,22 @@ func probar_repuesto() -> void:
 		return mapa.cosas.get_children().filter(es_arma).map(func(c): return c.icono.resource_path.get_file().get_basename())
 	await get_tree().create_timer(0.5).timeout
 	print("Al empezar: %s (esperado: mano Fregona y Pistola · repuesto [])" % armas.call())
-	# la tienda del ordenador
-	abrir_ordenador()
-	await get_tree().create_timer(0.4).timeout
-	ordenador.abrir("armas")
-	ordenador.comprar_arma("desintegrador")
+	# (hasta el 15 nov las compraba en la tienda; ahora lo comprado va al baúl: se las lleva como al sacarlas de allí)
+	llevar_arma("desintegrador")
 	await get_tree().process_frame
-	print("Compra el lanza ácido: %s (esperado: mano Fregona y Lanza ácido · repuesto [\"Pistola\"])" % armas.call())
-	ordenador.comprar_arma("pistola_electrica")
+	print("Se lleva el lanza ácido: %s (esperado: mano Fregona y Lanza ácido · repuesto [\"Pistola\"])" % armas.call())
+	llevar_arma("pistola_electrica")
 	await get_tree().process_frame
-	print("Compra el lanza rayos: %s · en el suelo %s (esperado: mano Fregona y Lanza rayos · repuesto [\"Pistola\"] · [\"desintegrador\"]) · dice «%s»" % [
-		armas.call(), suelo.call(), ordenador.info.text])
-	ordenador.comprar_arma("bate")
+	print("Se lleva el lanza rayos: %s · en el suelo %s (esperado: mano Fregona y Lanza rayos · repuesto [\"Pistola\"] · [\"desintegrador\"])" % [
+		armas.call(), suelo.call()])
+	llevar_arma("bate")
 	await get_tree().process_frame
-	print("Compra el bate: %s · dice «%s» (esperado: mano Bate y Lanza rayos · repuesto [\"Pistola\", \"Fregona\"] · la fregona pasa al repuesto)" % [
-		armas.call(), ordenador.info.text])
-	ordenador.comprar_arma("cuchillo")
+	print("Se lleva el bate: %s (esperado: mano Bate y Lanza rayos · repuesto [\"Pistola\", \"Fregona\"] · la fregona pasa al repuesto)" % [
+		armas.call()])
+	llevar_arma("cuchillo")
 	await get_tree().process_frame
-	print("Compra el cuchillo: %s · en el suelo %s · dice «%s» (esperado: mano Cuchillo y Lanza rayos · repuesto [\"Pistola\", \"Fregona\"] · [\"desintegrador\", \"bate\"] · el bate se queda en el suelo)" % [
-		armas.call(), suelo.call(), ordenador.info.text])
-	var dolares_antes: int = Guardado.cargar().dolares
-	ordenador.comprar_arma("pistola")
-	await get_tree().process_frame
-	print("Compra la pistola de repuesto: %s · $%d → $%d · dice «%s» (esperado: igual, sin pagar, ya la llevas de repuesto)" % [
-		armas.call(), dolares_antes, Guardado.cargar().dolares, ordenador.info.text])
-	ordenador.abrir("")
-	ordenador.apagar()
-	await get_tree().process_frame
+	print("Se lleva el cuchillo: %s · en el suelo %s (esperado: mano Cuchillo y Lanza rayos · repuesto [\"Pistola\", \"Fregona\"] · [\"desintegrador\", \"bate\"] · el bate se queda en el suelo)" % [
+		armas.call(), suelo.call()])
 	# tira la fregona de repuesto y vuelve a coger el bate del suelo, lejos de lo demás
 	abrir_cosas("inventario")
 	inventario.tocar("g%d" % armas_guardadas.find("fregona"))
@@ -1040,42 +1028,6 @@ func probar_repuesto() -> void:
 	Captura.foto("captura-repuesto.png")
 	inventario.cerrar()
 	await get_tree().process_frame
-	# M26: con los dos huecos llenos, la de repuesto va al baúl (si cabe y se puede guardar) y la de la mano baja al
-	# repuesto. Sin la pistola de repuesto (que no se guarda), el lanza rayos mejorado hace de repuesto: al comprar el MP5
-	# va al baúl con su calidad, aunque Johnny no complete el edificio (se lee del guardado). Con el baúl lleno, todo
-	# como siempre: la de la mano al suelo y la de repuesto no se mueve
-	Guardado.cambiar(func(g):
-		g.dolares = 300
-		g.baul_equipo = [])
-	ahorrados = 300
-	armas_guardadas.erase("pistola")
-	var baul := func() -> Array:
-		return Guardado.cargar().baul_equipo.map(func(e): return "%s %d" % [e.id, e.calidad])
-	abrir_ordenador()
-	await get_tree().create_timer(0.4).timeout
-	ordenador.abrir("armas")
-	ordenador.comprar_arma("escopeta")
-	await get_tree().process_frame
-	johnny.calidades["pistola_electrica"] = 2   # el lanza rayos de repuesto, mejorado
-	print("Compra la escopeta: %s · baúl %s (esperado: mano Cuchillo y Escopeta · repuesto [\"Bate\", \"Lanza rayos\"] · baúl []: había hueco)" % [armas.call(), baul.call()])
-	ordenador.comprar_arma("mp5")
-	await get_tree().process_frame
-	await get_tree().process_frame
-	print("Compra el MP5 con dos de fuego: %s · baúl %s · calidad en Johnny %d · en el suelo %s · dice «%s» (esperado: mano Cuchillo y MP5 · repuesto [\"Bate\", \"Escopeta\"] · baúl [\"pistola_electrica 2\"] · 0 · lo de antes, sin armas nuevas)" % [
-		armas.call(), baul.call(), johnny.calidad("pistola_electrica"), suelo.call(), ordenador.info.text])
-	Captura.foto("captura-repuesto-baul.png")
-	Guardado.cambiar(func(g):
-		g.baul_equipo = []
-		for i in Objetos.BAUL:
-			g.baul_equipo.append({"id": "bate", "calidad": 1}))
-	ordenador.comprar_arma("lanzallamas")
-	await get_tree().process_frame
-	await get_tree().process_frame
-	print("Compra el lanzallamas con el baúl lleno: %s · baúl %d casillas · en el suelo %s · dice «%s» (esperado: mano Cuchillo y Lanzallamas · repuesto [\"Bate\", \"Escopeta\"] · 32 · el MP5 se queda en el suelo)" % [
-		armas.call(), Guardado.cargar().baul_equipo.size(), suelo.call(), ordenador.info.text])
-	ordenador.abrir("")
-	ordenador.apagar()
-	await get_tree().process_frame
 	Guardado.cambiar(func(g):
 		g.dolares = antes.dolares
 		g.armas = antes.armas
@@ -1084,19 +1036,21 @@ func probar_repuesto() -> void:
 
 
 # Con "--captura --tienda": la tienda de armas del ordenador con sus cuatro secciones (Cuerpo a cuerpo, A distancia,
-# Especiales y Lanzables) y los lanzables, que se compran de uno en uno (Lanzables.PRECIOS; ordenador.gd,
-# comprar_lanzable). Puesta al día el 15 nov: desde el 13 nov no hay repuesto (Lanzables.REPUESTO 0), solo MANO (3)
-# montones a mano, de MONTON (2) cada uno (más con las mutaciones y la calidad: Lanzables.maximo). Al empezar, el molotov
-# y la granada, con sus montones llenos. Sin dinero no se compra; con $40, la atraedora va al hueco libre de la mano y
-# la segunda llena su montón; con la mano llena, la congeladora no cabe; con su montón lleno, ni otra atraedora ni otro
-# molotov. Cada línea dice lo esperado. Fotos: captura-tienda.png (las secciones) y captura-tienda-arrojables.png (la
-# ficha de la atraedora, ya «Lleno»). Deja los dólares como estaban
+# Especiales y Lanzables). Desde el 15 nov lo comprado va al baúl, sin estrenar (ordenador.gd, comprar_arma y
+# comprar_lanzable), y no a la mano: sin dinero no se compra; con dinero, el bate y dos atraedoras van al baúl (las dos
+# en una casilla) y Johnny sigue con lo suyo; con el baúl lleno, ni un arma ni un lanzable de otro tipo («Baúl lleno»,
+# y dice que hagas sitio), pero otra atraedora sí, que cabe en su casilla. Al empezar, sin lanzables. Cada línea dice
+# lo esperado. Fotos: captura-tienda.png (las secciones), captura-tienda-comprado.png (la atraedora comprada) y
+# captura-tienda-lleno.png (la ficha del bate con el baúl lleno). Deja los dólares y el baúl como estaban
 func probar_tienda() -> void:
 	var antes := Guardado.cargar()
 	var lz: Lanzables = lanzables
-	var cuenta := func() -> String:
-		return "%s · mano %s · $%d" % [lz.cantidades, lz.mano, Guardado.cargar().dolares]
-	var cuesta := func(k: String) -> int: return Supervivientes.precio(Lanzables.PRECIOS[k])
+	var cuesta := func(k: String) -> int: return Supervivientes.precio(Lanzables.PRECIOS[k] if Lanzables.PRECIOS.has(k) else Armas.PRECIOS[k])
+	var baul := func() -> Array:
+		return Guardado.cargar().baul_equipo.map(func(e): return "%s%s" % [e.id, " ×%d" % e.n if e.has("n") else ""])
+	Guardado.cambiar(func(g):
+		g.baul = {}
+		g.baul_equipo = [])
 	await get_tree().create_timer(0.5).timeout
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -1107,44 +1061,61 @@ func probar_tienda() -> void:
 	print("Familias: escopeta %s, lanzallamas %s, bate %s (esperado: distancia, especial, cuerpo)" % [
 		Armas.familia("escopeta"), Armas.familia("lanzallamas"), Armas.familia("bate")])
 	Captura.foto("captura-tienda.png")
-	var monton := lz.maximo("atraedora")
-	print("Al empezar: %s · montones de %d · huecos a mano %d, de repuesto %d (esperado: molotov %d, granada %d, atraedora 0, congeladora 0 · mano [molotov, granada] · montones de %d · 3 · 0)" % [
-		cuenta.call(), monton, Lanzables.MANO, Lanzables.REPUESTO, lz.maximo("molotov"), lz.maximo("granada"), monton])
+	print("Al empezar: lanzables %s · mano %s (esperado: [] · [])" % [lz.montones(), lz.mano])
 	# sin dinero
 	Guardado.cambiar(func(g): g.dolares = cuesta.call("atraedora") - 1)
 	ahorrados = cuesta.call("atraedora") - 1
 	ordenador.comprar_lanzable("atraedora")
 	await get_tree().process_frame
-	print("Una atraedora con $%d: atraedora %d · dice «%s» (esperado: 0 · No te llega: te faltan $1.)" % [
-		ahorrados, lz.total("atraedora"), ordenador.info.text])
-	Guardado.cambiar(func(g): g.dolares = 40)
-	ahorrados = 40
+	print("Una atraedora con $%d: baúl %s · dice «%s» (esperado: [] · No te llega: te faltan $1.)" % [
+		ahorrados, baul.call(), ordenador.info.text])
+	# con dinero: al baúl
+	Guardado.cambiar(func(g): g.dolares = 100)
+	ahorrados = 100
+	ordenador.comprar_arma("bate")
+	await get_tree().process_frame
+	print("Compra el bate: baúl %s · en la mano %s · dice «%s» · $%d (esperado: [bate] · fregona · ¡Compra hecha! Bate va al baúl. · $%d)" % [
+		baul.call(), johnny.huecos.cuerpo, ordenador.info.text, Guardado.cargar().dolares, 100 - cuesta.call("bate")])
 	ordenador.comprar_lanzable("atraedora")
 	await get_tree().process_frame
-	print("Compra una atraedora: %s · dice «%s» (esperado: atraedora 1, a la mano · $%d · ya llevas 1 atraedora)" % [
-		cuenta.call(), ordenador.info.text, 40 - cuesta.call("atraedora")])
-	ordenador.comprar_lanzable("congeladora")
-	await get_tree().process_frame
-	print("Con la mano llena, una congeladora: congeladora %d · $%d · dice «%s» (esperado: 0 · $%d · no te caben más)" % [
-		lz.total("congeladora"), Guardado.cargar().dolares, ordenador.info.text, 40 - cuesta.call("atraedora")])
-	for i in monton - 1:
-		ordenador.comprar_lanzable("atraedora")
-		await get_tree().process_frame
-	print("Llena su montón: %s (esperado: atraedora %d · $%d)" % [cuenta.call(), monton, 40 - cuesta.call("atraedora") * monton])
 	ordenador.comprar_lanzable("atraedora")
 	await get_tree().process_frame
-	print("Otra atraedora, con su montón lleno: atraedora %d · $%d · dice «%s» (esperado: %d · $%d · no te caben más)" % [
-		lz.total("atraedora"), Guardado.cargar().dolares, ordenador.info.text, monton, 40 - cuesta.call("atraedora") * monton])
-	ordenador.comprar_lanzable("molotov")
-	await get_tree().process_frame
-	print("Un molotov, con su montón lleno: molotov %d · dice «%s» (esperado: %d · no te caben más)" % [
-		lz.total("molotov"), ordenador.info.text, lz.maximo("molotov")])
+	print("Compra dos atraedoras: baúl %s · lanzables encima %s · dice «%s» · «!» del baúl %s (esperado: [bate, atraedora ×2] · [] · ¡Compra hecha! Atraedora va al baúl (tienes 2 allí). · true)" % [
+		baul.call(), lz.montones(), ordenador.info.text, Guardado.cargar().baul_nuevo])
 	ordenador.abrir("armas", "b_atraedora")
 	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-tienda-arrojables.png")
+	Captura.foto("captura-tienda-comprado.png")
+	# el baúl lleno (con la casilla de las atraedoras): ni el arma ni la granada; otra atraedora sí
+	Guardado.cambiar(func(g):
+		while Objetos.casillas_baul(g) < Objetos.BAUL:
+			g.baul_equipo.append({"id": "cuchillo", "calidad": 1}))
+	var dolares: int = Guardado.cargar().dolares
+	ordenador.abrir("armas", "b_bate")
+	await get_tree().create_timer(0.3).timeout
+	tienda = ordenador.ventana.find_child("tienda", true, false)
+	print("Con el baúl lleno: el bate «%s» (%s), la granada «%s», la atraedora «%s» (esperado: Baúl lleno (lleno), Baúl lleno, $%d)" % [
+		tienda.texto_comprar("bate"), tienda.estado("bate"), tienda.texto_comprar("granada"), tienda.texto_comprar("atraedora"),
+		cuesta.call("atraedora")])
+	Captura.foto("captura-tienda-lleno.png")
+	ordenador.comprar_arma("bate")
+	await get_tree().process_frame
+	print("Compra el bate con el baúl lleno: dice «%s» · $%d → $%d (esperado: El baúl está lleno: haz sitio en él para poder comprar. · iguales)" % [
+		ordenador.info.text, dolares, Guardado.cargar().dolares])
+	ordenador.comprar_lanzable("granada")
+	await get_tree().process_frame
+	print("Una granada con el baúl lleno: dice «%s» · $%d (esperado: El baúl está lleno... · $%d)" % [
+		ordenador.info.text, Guardado.cargar().dolares, dolares])
+	ordenador.comprar_lanzable("atraedora")
+	await get_tree().process_frame
+	print("Otra atraedora con el baúl lleno: dice «%s» · $%d (esperado: ¡Compra hecha! Atraedora va al baúl (tienes 3 allí). · $%d: cabe en su casilla)" % [
+		ordenador.info.text, Guardado.cargar().dolares, dolares - cuesta.call("atraedora")])
 	ordenador.abrir("")
 	ordenador.apagar()
-	Guardado.cambiar(func(g): g.dolares = antes.dolares)
+	Guardado.cambiar(func(g):
+		g.dolares = antes.dolares
+		g.baul = antes.baul
+		g.baul_equipo = antes.baul_equipo
+		g.baul_nuevo = false)
 	get_tree().quit()
 
 
@@ -2144,3 +2115,108 @@ func responder_confirmar(dueno: Node, si: bool) -> void:
 	for h in dueno.get_children():
 		if h is Confirmar and not h.hecho:
 			h.responder(si)
+
+
+# Con "--captura --botin" (15 nov, lo pidió el dueño): lo que suelta un durmiente al caer. Siempre su mutágeno y una cosa
+# más: un billete el 80 % de las veces y munición el 20 % (partida.soltar_premio_durmiente; sin arma de fuego, siempre el
+# billete). Nunca lanzables ni objetos (antes, a veces un molotov, una granada, vendas, gasolina...). Con la skin del
+# doctor Salas, la mitad de las veces otra cosa más. Mata 40 durmientes en cada caso, lejos de Johnny, y cuenta lo que
+# cae (por su dibujo). Foto: captura-botin.png (con la pistola). Cada línea dice lo esperado. Se cierra
+func probar_botin() -> void:
+	johnny.direccion = "o"   # (que la linterna no alumbre lo que cae)
+	johnny.invencible = true
+	var skin_antes: String = johnny.skin
+	var dolares_antes: int = Guardado.cargar().dolares
+	Guardado.cambiar(func(g): g.dolares = 0)   # (en el tope ya no caen billetes: cabe_dolares)
+	ahorrados = 0
+	await get_tree().create_timer(0.3).timeout
+	var casos := [
+		["pistola", "", "mutágeno 40 · billetes ~32 · munición ~8 · ningún lanzable ni objeto (las piezas, sí: la Fase 4)"],
+		["", "", "mutágeno 40 · billetes 40 · nada más que piezas (sin arma de fuego)"],
+		["pistola", "salas", "mutágeno 40 · entre billetes y munición ~60 · nada más que piezas"],
+	]
+	for caso in casos:
+		mutageno = 0
+		mutageno_ahorrado = 0
+		dolares = 0
+		johnny.skin = caso[1] if caso[1] != "" else skin_antes
+		if caso[0] == "":
+			johnny.sostener("cuerpo")
+			johnny.huecos.fuego = ""
+		else:
+			johnny.coger(caso[0])
+			johnny.sostener("cuerpo")
+		var antes: Array = mapa.cosas.get_children()
+		var zombis := []
+		for i in 40:
+			zombis.append(meter_zombi("normal", johnny.position + Vector2(-420 + (i % 10) * 40, 160 + (i / 10) * 40)))
+		await get_tree().process_frame
+		for z in zombis:
+			z.set_physics_process(false)
+			z.recibir_golpe(9999, Vector2.ZERO)
+		await get_tree().create_timer(0.6).timeout
+		var cuenta := {}
+		for c in mapa.cosas.get_children():
+			if c in antes or not "icono" in c:
+				continue
+			var k: String = "billete" if c.icono == null else c.icono.resource_path.get_file().get_basename()
+			cuenta[k] = cuenta.get(k, 0) + 1
+		print("Botín de 40 durmientes con «%s» en la mano y la skin «%s»: %s · mutágeno cogido %d · dólares cogidos %d (esperado: %s)" % [
+			caso[0], johnny.skin, cuenta, mutageno, dolares, caso[2]])
+		if caso[0] == "pistola" and caso[1] == "":
+			Captura.foto("captura-botin.png")
+		for c in mapa.cosas.get_children():
+			if not c in antes and "icono" in c:
+				c.queue_free()
+		await get_tree().process_frame
+	johnny.skin = skin_antes
+	Guardado.cambiar(func(g): g.dolares = dolares_antes)
+	get_tree().quit()
+
+
+# Con "--captura --fregona-mejorada" (15 nov, lo pidió el dueño): la fregona mejorada no va al baúl. La prueba empieza con
+# una Poco común apartada sin estrenar (prueba_comun.gd: "fregona", 2 veces que puede salir). Al empezar, Johnny la lleva
+# en la mano y ha gastado una (partida.dar_fregona); al acabar (Objetos.cerrar_baul, de mentira sobre una copia del
+# guardado) se aparta otra vez y no va al baúl; en la partida siguiente gasta la última y, al acabarla, se rompe (y
+# vuelve la Normal). Si se guarda en el baúl a mano, al acabar sale de allí. Un guardado de antes la saca del baúl
+# (Objetos.apartar_fregona). Y de verdad: con la última partida, al caer, el cartel del final dice que se ha roto
+# (captura-fregona-rota.png) y el guardado ya no la tiene. Cada línea dice lo esperado. Deja el guardado como estaba
+func probar_fregona_mejorada() -> void:
+	var antes := Guardado.cargar()
+	await get_tree().create_timer(0.5).timeout
+	var g := Guardado.cargar()
+	print("Al empezar: en la mano %s · calidad %d · le quedan %d después de esta · apartada %s (esperado: fregona · 1 · 1 · quedan 1, usada)" % [
+		johnny.huecos.cuerpo, johnny.calidad("fregona"), johnny.quedan_de("fregona"), g.fregona])
+	var nombres := func(lista: Array) -> Array: return lista.map(func(e): return Armas.nombre(e.id, int(e.calidad)))
+	# al acabar esta partida (de mentira, sobre una copia)
+	var copia: Dictionary = g.duplicate(true)
+	var rotas := Objetos.cerrar_baul(copia, equipo_encima())
+	print("Al acabarla: apartada %s · en el baúl %s · rotas %s (esperado: calidad 1, quedan 1 · 0 · sin la fregona: [Pistola], la Normal de la prueba)" % [
+		copia.fregona, copia.baul_equipo.filter(Objetos.es_fregona_mejorada).size(), nombres.call(rotas)])
+	# la partida siguiente: gasta la última
+	var partidas := Armas.estrenar(copia.fregona)
+	print("En la siguiente: le quedan %d después de esa (esperado: 0)" % partidas)
+	rotas = Objetos.cerrar_baul(copia, [{"id": "fregona", "calidad": 1, "quedan": partidas}])
+	print("Al acabar la siguiente: apartada %s · rotas %s (esperado: {} · [Fregona (Poco común)])" % [copia.fregona, nombres.call(rotas)])
+	# guardada a mano en el baúl en esta partida: al acabar, sale del baúl a su sitio
+	copia = g.duplicate(true)
+	copia.baul_equipo.append({"id": "fregona", "calidad": 1, "quedan": 1, "usada": true})
+	Objetos.cerrar_baul(copia, [])
+	print("Guardada en el baúl a mano: apartada %s · en el baúl %d (esperado: quedan 1 · 0)" % [copia.fregona,
+		copia.baul_equipo.filter(Objetos.es_fregona_mejorada).size()])
+	# un guardado de antes, con dos en el baúl: la mejor, a su sitio; la otra se queda
+	copia = {"fregona": {}, "baul_equipo": [{"id": "fregona", "calidad": 1, "quedan": 2}, {"id": "fregona", "calidad": 3, "quedan": 1},
+		{"id": "bate", "calidad": 0, "quedan": 1}]}
+	Objetos.apartar_fregona(copia, {})
+	print("Guardado de antes: apartada %s · en el baúl %s (esperado: calidad 3 · [fregona 1, bate 0])" % [copia.fregona,
+		copia.baul_equipo.map(func(e): return "%s %d" % [e.id, e.calidad])])
+	# de verdad: es su última partida y cae
+	johnny.quedan["fregona"] = 0
+	Guardado.cambiar(func(g2): g2.fregona.quedan = 0)
+	terminar(false)
+	await get_tree().create_timer(1.0, true).timeout
+	Captura.foto("captura-fregona-rota.png")
+	print("Al caer en su última partida: apartada %s (esperado: {}: se ha roto y vuelve la Normal)" % Guardado.cargar().fregona)
+	Guardado.escribir(antes)
+	Guardado.cambiar(func(g2): g2.fregona = {})
+	get_tree().quit()

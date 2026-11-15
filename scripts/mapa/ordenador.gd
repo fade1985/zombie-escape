@@ -73,8 +73,8 @@ const TUTORIAL_DE := {"puntos": "talentos", "armas": "tienda", "logros": "logros
 
 # Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado: los que tienen su tutorial sin ver
 # (TUTORIAL_DE; mientras los tutoriales estén encendidos: Tutoriales.marca), «colecciones» (un enemigo nuevo), «logros»
-# (alguno conseguido y sin cobrar) y «armas» (el regalo de bienvenida de la tienda, la pistola gratis, sin coger:
-# tienda_armas.gd). Lo usan el «!» de la mesa y los iconos del escritorio (ui/ordenador.gd); con alguno, el de la mesa
+# (alguno conseguido y sin cobrar) y «armas» (algo del regalo de bienvenida de la tienda sin coger: la pistola o los
+# lanzables gratis, tienda_armas.gd, regalo_pendiente). Lo usan el «!» de la mesa y los iconos del escritorio (ui/ordenador.gd); con alguno, el de la mesa
 # sigue y, en la primera partida, no se sale de la sala de mantenimiento (partida.falta_sala). Sin "con_tutoriales",
 # solo lo de verdad nuevo (el rótulo amarillo del icono, «¡NUEVO!» o «¡COBRAR!», sale solo con eso)
 static func novedades(s: Dictionary, con_tutoriales := true) -> Array:
@@ -86,6 +86,6 @@ static func novedades(s: Dictionary, con_tutoriales := true) -> Array:
 		lista.append("colecciones")
 	if Logros.LISTA.any(func(l): return Logros.estado(s, l.id) == "conseguido") and not "logros" in lista:
 		lista.append("logros")
-	if not s.regalo_cogido and not "armas" in lista:
+	if preload("res://scripts/ui/tienda_armas.gd").regalo_pendiente(s) and not "armas" in lista:
 		lista.append("armas")
 	return lista

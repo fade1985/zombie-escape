@@ -3758,7 +3758,8 @@ func probar_relieve() -> void:
 	get_tree().quit()
 
 
-# --guiado: el tutorial disimulado de la primera partida (guia.gd): sus ventanas en orden («Atacar» antes que «Lanzables»,
+# --guiado: el tutorial disimulado de la primera partida (guia.gd): sus ventanas en orden («Atacar»; «Lanzables», al coger
+# el primero,
 # «Cambiar de arma», «Munición y recarga»: ya no hay letreros encima de Johnny, M109), el latido del HUD tras cada una,
 # la flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave
 # Con "--captura --guiado --tercios": en la primera partida (con la guía), el primer tercio perdido saca la ventana de
@@ -3851,10 +3852,12 @@ func probar_guiado() -> void:
 	print("Guía · el fácil: %d zombis, con la llave %s, armarito %s (esperado: ≤%d, false, vendas)" % [facil.zombis.size(),
 		facil.zombis.any(func(z): return z.get("llave", false)),
 		facil.armaritos[0].dentro if not facil.get("armaritos", []).is_empty() else "sin baño", Guia.FACIL])
-	# el apartamento fácil: al cerrarse la puerta (la primera pelea), la ventana «Atacar» y, detrás, la de los lanzables;
-	# luego los zombis, despiertos y quietos, a la vista
+	# el apartamento fácil: al cerrarse la puerta (la primera pelea), la ventana «Atacar»; con el primer lanzable encima,
+	# la de los lanzables (15 nov: ya no sale en la primera pelea, y Johnny no empieza con ninguno); luego los zombis,
+	# despiertos y quietos, a la vista
 	await montar(guia.facil, 0)
 	await ventana_de.call("atacar")
+	lanzables.sumar("molotov")
 	await ventana_de.call("lanzables")
 	var zombis := get_tree().get_nodes_in_group("zombis")
 	# hacia el centro de la habitación (Johnny entra por la puerta, que puede estar arriba o abajo): si quedaran fuera,

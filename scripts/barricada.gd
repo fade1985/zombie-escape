@@ -5,7 +5,7 @@
 # A él no le pueden tumbar (está dentro): lo que hay que defender es la barricada. Los zombis que pillan más cerca
 # la puerta que a Johnny, o todos si Johnny se aleja, van a aporrearla; y mientras haya alguno pegado a ella, él
 # no avanza (la barra se pone roja). Las tablas van cayendo según avanza y, a mitad, pasa por debajo de la puerta
-# un molotov, una granada y dos cajas de munición. Al acabar se abren su puerta y la entrada, se une al arrimarse
+# dos cajas de munición (hasta el 15 nov, también un molotov y una granada). Al acabar se abren su puerta y la entrada, se une al arrimarse
 # (como siempre) y ya no hay otra horda al salir con él.
 #
 # Lo monta supervivientes.gd: dibujar() en su capa de la pantalla. Empieza solo, al quedarse limpia la tienda con
@@ -204,11 +204,10 @@ func decir(texto: String) -> void:
 	sup.frase(puerta.position + Vector2(0, -110), texto, 2.6)
 
 
-# A mitad: un molotov, una granada y dos cajas de munición, por debajo de la puerta
+# A mitad: dos cajas de munición, por debajo de la puerta (hasta el 15 nov, también un molotov y una granada: los
+# lanzables ya solo se compran)
 func soltar_provisiones() -> void:
 	var donde := delante()
-	sup.partida.soltar_lanzable("molotov", donde + Vector2(-34, 10))
-	sup.partida.soltar_lanzable("granada", donde + Vector2(34, 10))
 	sup.partida.soltar_municion(donde + Vector2(-12, 24))
 	sup.partida.soltar_municion(donde + Vector2(12, 24))
 
@@ -317,7 +316,7 @@ func probar() -> void:
 	hecho = DURA * 0.5 - 0.2
 	grupo_t = 0.4
 	await get_tree().create_timer(1.2, false).timeout
-	print("Barricada a %d s: tablas %d | zombis %d | provisiones en el suelo %d (esperado: de 1 a 4, el molotov, la granada y 2 cajas de munición menos las que ya haya cogido Johnny)" % [int(hecho), sup.puerta.tablas,
+	print("Barricada a %d s: tablas %d | zombis %d | provisiones en el suelo %d (esperado: de 0 a 2, las 2 cajas de munición menos las que ya haya cogido Johnny; sin lanzables)" % [int(hecho), sup.puerta.tablas,
 		get_tree().get_nodes_in_group("zombis").size(), partida.mapa.cosas.get_children().filter(
 		func(n): return n.get("icono") in sup.iconos_lanzables() or n.is_in_group("cajas_municion")).size()])
 	Captura.foto("captura-ferretero-barricada.png")

@@ -91,7 +91,8 @@ const VIDA_EDIFICIO := {"apartamentos": 1.0, "centro": 1.5, "torre": 2.0}
 const VIDA_EDIFICIO_JEFE := {"apartamentos": 1.0, "centro": 1.3, "torre": 1.6}
 const JEFE_POR_PLANTA := 1.35     # los jefes de planta, su vida por cada planta que se sube (M72: antes 1,25)
 const ZOMBI_POR_PLANTA := 0.1     # los demás zombis, vida y zarpazo de más por cada planta (M72: antes, nada)
-const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
+const BILLETE_ZOMBI := 0.8         # lo que suelta cada durmiente además del mutágeno (15 nov, lo pidió el dueño): un billete
+                                   # el 80 % de las veces (soltar_premio_durmiente; antes, un 7 %)
 # La sangre de cada tipo de zombi: el color de su piel (los trozos al reventar) y el de su mancha (del JS)
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
@@ -104,7 +105,8 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 	"sujeto_1": Color("#d6d2c4")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
-const MUNICION_ZOMBI := 0.06       # ...o una caja de munición, si no ha soltado otra cosa (12 nov: antes 0,10; solo la del arma que lleva)
+const MUNICION_ZOMBI := 0.2        # ...y el 20 %, munición de un arma de fuego que lleve (sin ninguna, el billete; 15 nov: antes
+                                   # 0,06, y solo si no había soltado otra cosa)
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const BILLETES_JEFA := 8           # los que suelta cada jefe al caer (hasta el 27 oct, 3: lo mismo que 43 zombis)
 const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
@@ -318,6 +320,7 @@ func _ready() -> void:
 	aplicar_talentos(s.talentos)
 	johnny.vida = johnny.stats.vida_max
 	lanzables.reiniciar(johnny.stats)
+	dar_fregona()
 	if Reto.sin_municion():   # el reto "Solo cuerpo a cuerpo": la pistola vacía y sin lanzables
 		johnny.balas = 0
 		johnny.municion.clear()
@@ -766,12 +769,13 @@ func cruzar(i: int) -> void:
 		return   # de la sala de pruebas no se sale por la puerta (para no salir sin querer): solo con F9
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
-	# (y nunca sin haber cogido la pistola del regalo de bienvenida: Johnny empieza solo con la fregona, tienda_armas.gd)
+	# (y nunca sin haber cogido el regalo de bienvenida, la pistola y los lanzables: Johnny empieza solo con la fregona,
+	# tienda_armas.gd, regalo_pendiente)
 	if sitio.tipo == "mantenimiento" and salida.tipo == "puerta" and salida.get("a", -1) == 0:
 		if guia.activa:
 			for marca in mapa.marcas_sala:
 				marca.refrescar()   # (por si se acaba de cerrar un tutorial: se miran cada segundo)
-		if falta_sala() or not Guardado.cargar().regalo_cogido:
+		if falta_sala() or preload("res://scripts/ui/tienda_armas.gd").regalo_pendiente(Guardado.cargar()):
 			# (como el de «¡¡¡LA LLAVE!!!», pero por encima del letrero de la guía y más rato, que es más larga)
 			gran_aviso(Idioma.t("¡MEJOR INVESTIGO UN POCO MÁS!"), Tema.AMARILLO, 160.0, 2.2)
 			Sonido.tocar("no")
@@ -921,8 +925,7 @@ func _physics_process(delta: float) -> void:
 		actualizar_puertas()
 		decir(Idioma.t("¡La puerta se ha cerrado detrás de ti!"))
 		Sonido.tocar("portazo")
-		guia.mostrar("atacar")   # (la primera pelea, en la primera partida: antes que los lanzables; guia.gd)
-		tutorial("lanzables")
+		guia.mostrar("atacar")   # (la primera pelea, en la primera partida; guia.gd)
 	elif not quedan:
 		sitio.limpio = true
 		cerrada = false
@@ -1443,15 +1446,25 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 # repuesto (una de las dos, al azar). Si gasta balas, cartuchos, cinta o granadas, una caja (soltar_municion); si es una
 # especial, lo que la llena (una gasolina, un bidón de ácido o una batería: soltar_objeto). Si solo lleva la de cuerpo
 # a cuerpo, nada (15 nov, M113)
-func soltar_municion_zombi(donde: Vector2) -> void:
+func soltar_municion_zombi(donde: Vector2) -> bool:
 	var armas := [johnny.huecos.fuego, repuesto("fuego")].filter(func(id): return id != "")
 	if armas.is_empty() or Reto.sin_municion():
-		return
+		return false
 	var id: String = armas.pick_random()
 	if Armas.datos(id).has("relleno"):
 		soltar_objeto(Armas.datos(id).relleno, donde)
 	else:
 		soltar_municion(donde)
+	return true
+
+
+# Lo que suelta un durmiente además del mutágeno (15 nov): un billete el 80 % de las veces (BILLETE_ZOMBI) y munición de
+# un arma de fuego que lleve el 20 % (MUNICION_ZOMBI: soltar_municion_zombi, una u otra si lleva dos). Sin arma de fuego
+# (o en el reto sin munición), también el billete
+func soltar_premio_durmiente(donde: Vector2) -> void:
+	if randf() < MUNICION_ZOMBI and soltar_municion_zombi(donde):
+		return
+	soltar_billetes(1, donde)
 
 
 # La munición que gastan las armas de fuego que lleva Johnny, la de la mano y la de repuesto (Armas.municion: en las
@@ -1546,8 +1559,8 @@ func soltar_arma(id: String, donde: Vector2, calidad := 0, quedan := -1) -> void
 # Johnny lleva como mucho dos armas de cada tipo (cuerpo a cuerpo y a distancia): la de la mano y la de repuesto
 # (armas_guardadas), y una de cada arma, cada una con su calidad (johnny.calidades). Al llevarse otra (comprarla,
 # sacarla del baúl o de la vitrina de la joyería), va a la mano y la que llevaba pasa al repuesto; si ya tenía una de
-# repuesto, la de la mano se queda en el suelo, a sus pies (la tienda, antes, manda la de repuesto al baúl:
-# repuesto_al_baul). Si ya llevaba esa misma arma, se cambian: la nueva ocupa
+# repuesto, la de la mano se queda en el suelo, a sus pies (hasta el 15 nov, lo comprado iba a la mano y la tienda
+# mandaba antes la de repuesto al baúl, M26; ahora lo comprado va al baúl). Si ya llevaba esa misma arma, se cambian: la nueva ocupa
 # su sitio (llena) y la vieja se queda en el suelo. La que coge del suelo ("a_la_mano" falso) va al repuesto si está
 # libre, para no cambiarle el arma en plena pelea. Con "al_suelo" falso (al sacarla del baúl), la que sobra no se deja
 # en el suelo: solo se devuelve, para guardarla en su lugar. Devuelve la que sobra ({"id", "calidad"}; vacío si ninguna)
@@ -1588,32 +1601,27 @@ func llevar_arma(id: String, calidad := 0, a_la_mano := true, al_suelo := true, 
 	return fuera
 
 
+# Al empezar: la fregona mejorada, si hay una apartada (Objetos.apartar_fregona), a la mano en lugar de la Normal. Gasta
+# una partida, como al sacarla del baúl (Armas.estrenar, que la marca "usada": en una partida a medias que se continúa
+# no gasta otra). Si es la última, lo dice
+func dar_fregona() -> void:
+	var f: Dictionary = Guardado.cargar().fregona
+	if f.is_empty() or johnny.huecos.cuerpo != Armas.SIEMPRE.cuerpo:
+		return
+	var partidas := Armas.estrenar(f)
+	Guardado.cambiar(func(g): g.fregona = f)
+	johnny.calidades[f.id] = int(f.calidad)
+	poner_quedan(f.id, partidas)
+	if partidas == 0:
+		decir.call_deferred(Idioma.t("%s: es su última partida; al acabarla, se destruye.") % Armas.nombre(f.id, int(f.calidad)), 4.0)
+
+
 # Las partidas que le quedan a un arma que se lleva (la durabilidad: Armas.nuevas); -1, las de una nueva de su calidad
 func poner_quedan(id: String, quedan: int) -> void:
 	if quedan < 0:
 		johnny.quedan.erase(id)
 	else:
 		johnny.quedan[id] = quedan
-
-
-# Con los dos huecos de ese tipo llenos, saca el arma de repuesto y la guarda en el baúl, para que al llevarse otra (la
-# tienda del ordenador, M26) la de la mano baje al repuesto en vez de quedarse en el suelo. Se guarda en el momento, como
-# «Guardar en el baúl» del inventario: ya no se pierde si Johnny cae. Devuelve la guardada ({"id", "calidad"}) o vacío
-# si no hace falta o no se puede (no lleva repuesto o el baúl está lleno: Armas.al_baul): entonces no cambia nada y llevar_arma deja la de la mano en el suelo, como siempre
-func repuesto_al_baul(tipo: String) -> Dictionary:
-	var id := repuesto(tipo)
-	if id == "":
-		return {}
-	var calidad: int = johnny.calidad(id)
-	if not Armas.al_baul(id, calidad) or not Objetos.hueco_baul(Guardado.cargar()):
-		return {}
-	var guardada := {"id": id, "calidad": calidad, "quedan": johnny.quedan_de(id), "usada": true}   # (ha salido en esta partida)
-	armas_guardadas.erase(id)
-	johnny.calidades.erase(id)
-	johnny.quedan.erase(id)
-	johnny.cargadores.erase(id)
-	Guardado.cambiar(func(g): g.baul_equipo.append(guardada))
-	return guardada
 
 
 # Lo que lleva encima que vuelve al baúl al acabar la partida (Armas.al_baul), como en el guardado ("baul_equipo"): sus
@@ -1749,6 +1757,14 @@ func mirar_tutoriales() -> void:
 		tutorial("mutageno")
 	if johnny.huecos.cuerpo != "fregona" or johnny.huecos.fuego not in ["", "pistola"] or not armas_guardadas.is_empty():
 		tutorial("armas")
+	# con la primera arma a distancia en la mano, cómo se cambia de una a otra (M97; hasta el 15 nov, al coger la
+	# pistola del regalo en la tienda, que ahora va al baúl)
+	if johnny.huecos.fuego != "" and not guia.activa:   # (en la primera partida lo saca la guía, en la primera pelea)
+		tutorial("cambiar_arma")
+	# y con el primer lanzable encima, cómo se lanzan (15 nov; antes, en la primera pelea). Si se ha comprado antes, ya
+	# salió en la tienda (ui/ordenador.gd, comprar_lanzable)
+	if lanzables.montones().any(func(m): return m[1] > 0):
+		tutorial("lanzables")
 	for id in mochila:
 		tutorial("curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")
 
@@ -2077,41 +2093,34 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		sangre(tipo, zombi)
 		if tipo == "guardia":
 			_al_caer_guardia(zombi)
-		var cuantos := BILLETES_JEFA if tipo in JEFES else BILLETES_GUARDIA if tipo == "guardia" else (1 if randf() < BILLETE_ZOMBI else 0)
-		soltar_billetes(cuantos, zombi.position)
-		# y cada durmiente, un mutágeno (los jefes, no: dan su mutación)
-		if not tipo in JEFES:
-			soltar_mutageno(zombi.position)
-		# a veces, un molotov o una granada
-		var soltado := cuantos > 0
-		for k in ["molotov", "granada"]:
-			if randf() < Lanzables.DATOS[k].suelta:
-				soltar_lanzable(k, zombi.position)
-				soltado = true
-		# o munición de las armas que lleva (la portera, dos seguras): soltar_municion_zombi
-		if tipo in JEFES:
-			for i in 2:
-				soltar_municion_zombi(zombi.position)
-		elif not soltado and randf() < MUNICION_ZOMBI:
-			soltar_municion_zombi(zombi.position)
-		# y a veces un objeto (los jefes, dos seguros), de los que salen aquí
+		# Lo que suelta (15 nov, lo pidió el dueño). Ya nadie suelta lanzables (antes, a veces un molotov o una granada:
+		# se compran en la tienda). Cada durmiente, siempre su mutágeno (soltar_mutageno, hasta el tope) y siempre una
+		# cosa más (soltar_premio_durmiente: un billete o munición), y con la skin del doctor Salas, la mitad de las
+		# veces otra (Skins.doble); ya no sueltan objetos (las vendas, la gasolina, la batería, el bidón de ácido del
+		# gordo: Objetos.que_suelta). El guardia, sus billetes, su mutágeno y a veces un objeto, como antes. Los jefes,
+		# sus billetes, dos de munición de las armas que lleva y dos objetos de los que salen aquí (no dan mutágeno: dan
+		# su mutación)
 		var tienda: String = planta.sitios[aqui].get("tienda", "")
 		# (la munición que sale, solo la de las armas que lleva Johnny: la de la mano y la de repuesto)
 		var queda := municion_que_lleva()
 		if tipo in JEFES:
+			soltar_billetes(BILLETES_JEFA, zombi.position)
+			for i in 2:
+				soltar_municion_zombi(zombi.position)
 			for i in 2:
 				var suelto := Objetos.al_azar(edificio, tienda, queda)
 				if suelto != "":
 					soltar_objeto(suelto, zombi.position)
-		else:
+		elif tipo == "guardia":
+			soltar_billetes(BILLETES_GUARDIA, zombi.position)
+			soltar_mutageno(zombi.position)
 			var obj := Objetos.que_suelta(tipo, edificio, tienda, queda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
-				# con la skin del doctor Salas, a veces otro más al azar
-				if randf() < Skins.doble(johnny.skin):
-					var otro := Objetos.al_azar(edificio, tienda, queda)
-					if otro != "":
-						soltar_objeto(otro, zombi.position)
+		else:
+			soltar_mutageno(zombi.position)
+			for i in (2 if randf() < Skins.doble(johnny.skin) else 1):
+				soltar_premio_durmiente(zombi.position)
 		# y piezas de mejora de las armas: los jefes, cuatro seguras; cualquier otro zombi, a veces una
 		if tipo in JEFES:
 			for pieza in Objetos.piezas_de_jefe():

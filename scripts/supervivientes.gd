@@ -10,7 +10,8 @@
 # La horda: al ir a salir del piso con él, la puerta de entrada se cierra de golpe. Él se pone a forzar la
 # cerradura (1 minuto de trabajo, M40) mientras entran zombis por las habitaciones, cada vez más y peores. Si Johnny
 # se aleja de él, van a por él; si lo tumban, la cerradura no avanza hasta que Johnny lo levanta (quedarse a su
-# lado). Va diciendo cómo lo lleva y, a mitad, suelta un molotov y una granada. Arriba, la barra y la cuenta atrás.
+# lado). Va diciendo cómo lo lleva y, a mitad, suelta dos cajas de munición (hasta el 15 nov, también un molotov y una
+# granada). Arriba, la barra y la cuenta atrás.
 #
 # Al ganar con él en el equipo se viene a vivir a las viviendas (Guardado: rescatados) y ya no vuelve a salir. Las
 # viviendas (mapa/viviendas.gd) son un pasillo detrás de la puerta de la derecha de la sala de mantenimiento, con una
@@ -728,10 +729,9 @@ func gritar(a: Aliado, texto: String) -> void:
 	Zombi.texto_flotante(a.get_parent(), a.global_position + Vector2(0, -110), Idioma.t(texto), Tema.AMARILLO, 32, true, 1.4)
 
 
-# A mitad: tira un molotov, una granada y dos cajas de munición a sus pies
+# A mitad: tira dos cajas de munición a sus pies (hasta el 15 nov, también un molotov y una granada: los lanzables ya
+# solo se compran)
 func soltar_provisiones(a: Aliado) -> void:
-	partida.soltar_lanzable("molotov", a.position + Vector2(-30, 30))
-	partida.soltar_lanzable("granada", a.position + Vector2(30, 30))
 	partida.soltar_municion(a.position + Vector2(-10, 40))
 	partida.soltar_municion(a.position + Vector2(10, 40))
 
@@ -1009,7 +1009,7 @@ func probar_horda() -> void:
 	horda.grupo_t = 0.0
 	await get_tree().create_timer(2.0, false).timeout
 	var a: Aliado = rescate.amigo
-	print("Horda a %d s: zombis %d | dice '%s' | molotovs/granadas en el suelo %d" % [int(horda.hecho),
+	print("Horda a %d s: zombis %d | dice '%s' | molotovs/granadas en el suelo %d (esperado: 0: ya no los da)" % [int(horda.hecho),
 		get_tree().get_nodes_in_group("zombis").size(), a.dicho, partida.mapa.cosas.get_children().filter(
 		func(n): return n.get("icono") in iconos_lanzables()).size()])
 	Captura.foto("captura-horda.png")

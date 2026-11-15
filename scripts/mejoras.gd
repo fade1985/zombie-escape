@@ -23,7 +23,7 @@ static func base() -> Dictionary:
 		"dano_fuego": 1.0,       # x daño con armas de fuego (Tirador)
 		"dano_lanzar": 1.0,      # x daño del molotov y la granada (Puntería)
 		"alcance_lanzar": 1.0,   # x lo lejos que se lanzan (Puntería)
-		"lanzar_extra": 0,       # lanzables de más en cada montón, y molotovs y granadas al empezar (Artificiero)
+		"lanzar_extra": 0,       # lanzables de más en cada montón (Artificiero; hasta el 15 nov, también al empezar)
 		"mirilla": false,        # cada 3 disparos, el siguiente es crítico (Mirilla)
 		"fabricante": false,     # fuego y explosiones más grandes (Fabricante)
 		"regenera": 0,           # vida que recuperas cada 5 s (Ajolote)

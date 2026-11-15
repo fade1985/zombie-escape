@@ -3195,6 +3195,10 @@ msgstr "+патроны"
 msgid "¡NO PUEDO LLEVAR MÁS!"
 msgstr "БОЛЬШЕ НЕ УНЕСУ!"
 
+#: scripts/partida.gd scripts/ui/inventario.gd
+msgid "%s: es su última partida; al acabarla, se destruye."
+msgstr "%s: это последний забег; после него сломается."
+
 #: scripts/partida.gd
 msgid "No se puede usar"
 msgstr "Нельзя использовать"
@@ -3552,8 +3556,8 @@ msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Убей брандмейстера в первый раз."
 
 #: scripts/skins.gd
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "Когда спящий роняет предмет, в 50 % случаев он роняет ещё один."
+msgid "Un 50 % de las veces, cada durmiente suelta otro billete o más munición."
+msgstr "В 50 % случаев каждый спящий роняет ещё одну купюру или больше патронов."
 
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
@@ -4662,8 +4666,8 @@ msgid "Al coger el primer billete"
 msgstr "Когда подбираешь первую купюру"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Спящие иногда роняют купюры, а боссы — много: пройди по ним, чтобы подобрать."
+msgid "Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Почти каждый спящий, падая, роняет купюру (остальные — патроны), а боссы — много: пройди по ним, чтобы подобрать."
 
 #: scripts/tutoriales.gd
 msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
@@ -4682,8 +4686,8 @@ msgid "Al coger el primer mutágeno"
 msgstr "Когда подбираешь первый мутаген"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "В спящих — мутировавшая ДНК: иногда, падая, они роняют немного мутагена. Пройди по нему, чтобы подобрать."
+msgid "Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "В спящих — мутировавшая ДНК: падая, они роняют немного мутагена. Пройди по нему, чтобы подобрать."
 
 #: scripts/tutoriales.gd
 msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
@@ -4698,12 +4702,12 @@ msgid "Cambiar de arma"
 msgstr "Сменить оружие"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pistola"
-msgstr "Когда берешь первый пистолет"
+msgid "Al llevar la primera arma a distancia"
+msgstr "Когда берешь первое дальнобойное оружие"
 
 #: scripts/tutoriales.gd
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "Теперь в руках у тебя два оружия: швабра для ближнего боя и пистолет для дальнего."
+msgid "Ahora llevas dos armas en la mano: una de cuerpo a cuerpo, como la fregona, y otra a distancia, como la pistola."
+msgstr "Теперь в руках у тебя два оружия: одно для ближнего боя, как швабра, и одно для дальнего, как пистолет."
 
 #: scripts/tutoriales.gd
 msgid "Cambia de una a otra con {cambiar_arma}."
@@ -4754,12 +4758,16 @@ msgid "Lanzables"
 msgstr "Метательное"
 
 #: scripts/tutoriales.gd
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить."
+msgid "Al conseguir el primer lanzable"
+msgstr "Когда получаешь первое метательное"
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "Что бросать, меняется так: {cambiar_lanzable}. Молотов поджигает, граната взрывается. В руке до 3."
+msgid "Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
+msgstr "Метательное покупается в магазине оружия на компьютере и попадает в сундук: достань его оттуда, чтобы взять с собой."
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis."
+msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить. Сменить метательное: {cambiar_lanzable}. Молотов поджигает, граната взрывается, а приманка зовёт зомби."
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -4978,16 +4986,16 @@ msgid "Al abrir la tienda de armas"
 msgstr "Когда открываешь магазин оружия"
 
 #: scripts/tutoriales.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Продаётся в качестве Обычное: служит только этот забег и потом ломается. Ты носишь по два каждого типа: то, что было в руке, уходит в запас, а запасное — в сундук; если не помещается или его нельзя убрать, то, что было в руке, остаётся на полу."
+msgid "Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar."
+msgstr "Купленное попадает в сундук нетронутым: доставай его, когда захочешь взять с собой. Если сундук полон, освободи место перед покупкой."
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным, и оно занимает место дальнобойного. Метательное покупается по одному, пока есть место."
+msgid "Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno."
+msgstr "Всё продаётся в качестве Обычное: служит тот забег, в котором ты достаёшь это из сундука. Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным. Метательное покупается по одному."
 
 #: scripts/tutoriales.gd
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Джонни начинает только со шваброй: первый пистолет — наш подарок."
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."
+msgstr "Джонни начинает только со шваброй: первый пистолет — наш подарок, а ещё молотов, граната и приманка."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Mutaciones"
@@ -5820,10 +5828,6 @@ msgstr "%s — в запас, а %s уходит в сундук."
 #: scripts/ui/inventario.gd
 msgid "%s a la mano; %s entra en el baúl en su lugar."
 msgstr "%s — в руку, а %s уходит в сундук."
-
-#: scripts/ui/inventario.gd
-msgid "%s: es su última partida; al acabarla, se destruye."
-msgstr "%s: это последний забег; после него сломается."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl no admite más: contigo se quedan %d de %s."
@@ -6962,44 +6966,32 @@ msgid "cargador de %d"
 msgstr "магазин на %d"
 
 #: scripts/ui/ordenador.gd
-msgid "Ya llevas %s."
-msgstr "Это уже при тебе: %s."
-
-#: scripts/ui/ordenador.gd
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "%s уже у тебя в запасе: возьми в руку через инвентарь."
+msgid "El baúl está lleno: haz sitio en él para poder comprar."
+msgstr "Сундук полон: освободи в нём место, чтобы купить."
 
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "Не хватает: нужно еще $%d."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "Куплено! %s — в руку, %s уходит в запас, а %s — в сундук."
+msgid "¡Regalo! %s va al baúl: sácala de allí para llevarla."
+msgstr "Подарок! %s — в сундук: достань его оттуда, чтобы взять с собой."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano."
-msgstr "Куплено! %s — в руку."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "Куплено! %s — в руку, а %s уходит в запас."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "Куплено! %s — в руку, а %s остается на полу: у тебя уже было два."
+msgid "¡Compra hecha! %s va al baúl."
+msgstr "Куплено! %s — в сундук."
 
 #: scripts/ui/ordenador.gd
 msgid "En el reto «%s» no se lleva nada que lanzar."
 msgstr "В испытании «%s» ничего метательного не положено."
 
 #: scripts/ui/ordenador.gd
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "%s больше не влезают: стопки полны, и места для новой нет."
+msgid "¡Regalo! %s va al baúl (tienes %d allí)."
+msgstr "Подарок! %s — в сундук (там у тебя %d)."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "Куплено! В запасе: %d (%s)."
+msgid "¡Compra hecha! %s va al baúl (tienes %d allí)."
+msgstr "Куплено! %s — в сундук (там у тебя %d)."
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
@@ -7302,12 +7294,8 @@ msgid "¡COMPRA UN ARMA!"
 msgstr "КУПИ ОРУЖИЕ!"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Comprada"
-msgstr "Куплено"
-
-#: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "ПОЛНО"
+msgid "Baúl lleno"
+msgstr "Сундук полон"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"
@@ -7416,3 +7404,83 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "Когда спящий роняет предмет, в 50 % случаев он роняет ещё один."
+
+#, sin-usar
+msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Спящие иногда роняют купюры, а боссы — много: пройди по ним, чтобы подобрать."
+
+#, sin-usar
+msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "В спящих — мутировавшая ДНК: иногда, падая, они роняют немного мутагена. Пройди по нему, чтобы подобрать."
+
+#, sin-usar
+msgid "Al coger la primera pistola"
+msgstr "Когда берешь первый пистолет"
+
+#, sin-usar
+msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
+msgstr "Теперь в руках у тебя два оружия: швабра для ближнего боя и пистолет для дальнего."
+
+#, sin-usar
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить."
+
+#, sin-usar
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "Что бросать, меняется так: {cambiar_lanzable}. Молотов поджигает, граната взрывается. В руке до 3."
+
+#, sin-usar
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Продаётся в качестве Обычное: служит только этот забег и потом ломается. Ты носишь по два каждого типа: то, что было в руке, уходит в запас, а запасное — в сундук; если не помещается или его нельзя убрать, то, что было в руке, остаётся на полу."
+
+#, sin-usar
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
+msgstr "Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным, и оно занимает место дальнобойного. Метательное покупается по одному, пока есть место."
+
+#, sin-usar
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Джонни начинает только со шваброй: первый пистолет — наш подарок."
+
+#, sin-usar
+msgid "Ya llevas %s."
+msgstr "Это уже при тебе: %s."
+
+#, sin-usar
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "%s уже у тебя в запасе: возьми в руку через инвентарь."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "Куплено! %s — в руку, %s уходит в запас, а %s — в сундук."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano."
+msgstr "Куплено! %s — в руку."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "Куплено! %s — в руку, а %s уходит в запас."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "Куплено! %s — в руку, а %s остается на полу: у тебя уже было два."
+
+#, sin-usar
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "%s больше не влезают: стопки полны, и места для новой нет."
+
+#, sin-usar
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "Куплено! В запасе: %d (%s)."
+
+#, sin-usar
+msgid "Comprada"
+msgstr "Куплено"
+
+#, sin-usar
+msgid "LLENO"
+msgstr "ПОЛНО"

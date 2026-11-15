@@ -350,7 +350,7 @@ func comprar_en_tienda(id: String, foto: String) -> void:
 	await get_tree().create_timer(0.3).timeout
 	print("En la tienda: %s a la venta por $%d · dice «%s»" % [Armas.DATOS[id].nombre, Armas.PRECIOS[id], ordenador.info.text])
 	Captura.foto(foto)
-	ordenador.comprar_arma(id)
+	comprar_y_llevar(id)
 	await get_tree().process_frame
 	print("Comprado: en la mano %s · dice «%s»" % [johnny.huecos.fuego, ordenador.info.text])
 	ordenador.abrir("")
@@ -3773,7 +3773,7 @@ func probar_motosierra() -> void:
 	await get_tree().create_timer(0.3).timeout
 	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("motosierra"), Armas.PRECIOS.motosierra, ordenador.info.text])
 	Captura.foto("captura-motosierra-tienda.png")
-	ordenador.comprar_arma("motosierra")
+	comprar_y_llevar("motosierra")
 	await get_tree().process_frame
 	ordenador.abrir("")
 	ordenador.apagar()
@@ -3882,7 +3882,7 @@ func probar_katana() -> void:
 	await get_tree().create_timer(0.3).timeout
 	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("katana"), Armas.PRECIOS.katana, ordenador.info.text])
 	Captura.foto("captura-katana-tienda.png")
-	ordenador.comprar_arma("katana")
+	comprar_y_llevar("katana")
 	await get_tree().process_frame
 	ordenador.abrir("")
 	ordenador.apagar()
@@ -4025,7 +4025,7 @@ func probar_gatling() -> void:
 	await get_tree().create_timer(0.3).timeout
 	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("gatling"), Armas.PRECIOS.gatling, ordenador.info.text])
 	Captura.foto("captura-gatling-tienda.png")
-	ordenador.comprar_arma("gatling")
+	comprar_y_llevar("gatling")
 	await get_tree().process_frame
 	ordenador.abrir("")
 	ordenador.apagar()
@@ -4158,7 +4158,7 @@ func probar_lanzagranadas() -> void:
 	print("En la tienda: %s por $%d · dice «%s»" % [Armas.nombre("lanzagranadas"), Armas.PRECIOS.lanzagranadas,
 		ordenador.info.text])
 	Captura.foto("captura-lanzagranadas-tienda.png")
-	ordenador.comprar_arma("lanzagranadas")
+	comprar_y_llevar("lanzagranadas")
 	await get_tree().process_frame
 	ordenador.abrir("")
 	ordenador.apagar()

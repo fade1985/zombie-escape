@@ -11,8 +11,11 @@
 # primera vez: Tutoriales "tienda"); con el regalo de bienvenida sin coger, «¡COMPRA UN ARMA!» en grande.
 #
 # El regalo de bienvenida (Guardado "regalo_cogido"; desde el 10 nov Johnny ya no empieza con la pistola: Armas.SIEMPRE):
-# la primera pistola es gratis, una sola vez en todo el juego. Hasta cogerla, su casilla lleva un «!» y su botón dice
-# «Regalo de bienvenida» en vez del precio; después cuesta lo de siempre (Armas.PRECIOS).
+# la primera pistola es gratis, una sola vez en todo el juego, y desde el 15 nov también un molotov, una granada y una
+# atraedora (REGALO_LANZABLES; Guardado "regalos_lanzables": Johnny ya no empieza con lanzables). Hasta cogerlo, cada
+# casilla del regalo lleva un «!» y su botón dice «Regalo de bienvenida» en vez del precio; después cuesta lo de siempre
+# (Armas.PRECIOS). Como todo lo que se compra, va al baúl (ordenador.gd, comprar_arma y comprar_lanzable): con el baúl
+# lleno, la tienda no deja comprar (estado "lleno").
 #
 # Lo elegido es, con el ratón, la última casilla por la que ha pasado (y se queda al ir hacia «Comprar»); con el teclado,
 # el mando o el dedo, la marcada. Con el ratón, el teclado o el mando se compra al pulsar la casilla; con el dedo, el
@@ -168,24 +171,33 @@ func precio(id: String) -> int:
 	return Supervivientes.precio(Lanzables.PRECIOS[id] if Lanzables.PRECIOS.has(id) else Armas.PRECIOS[id])
 
 
-# Si esto es el regalo de bienvenida aún sin coger (la pistola gratis; ver arriba). Lo usa también ordenador.comprar_arma
+# Si esto es el regalo de bienvenida aún sin coger (la pistola gratis, o uno de los lanzables gratis; ver arriba). Lo usa
+# también ordenador.gd, al comprar
+const REGALO_LANZABLES := ["molotov", "granada", "atraedora"]
 static func es_regalo(guardado: Dictionary, id: String) -> bool:
-	return id == "pistola" and not guardado.regalo_cogido
+	if id == "pistola":
+		return not guardado.regalo_cogido
+	return id in REGALO_LANZABLES and not id in guardado.regalos_lanzables
 
 
-# "lleva" (un arma en la mano o de repuesto), "lleno" (un arrojable que ya no cabe), "reto" (el reto sin munición no deja
-# llevar arrojables), "caro" (no te llega) o "" (se puede comprar)
+# ¿Queda algo del regalo de bienvenida sin coger? (el «!» de ARMAS.EXE: mapa/ordenador.gd, novedades; y hasta cogerlo
+# todo no se sale de la sala de mantenimiento: partida.cruzar)
+static func regalo_pendiente(guardado: Dictionary) -> bool:
+	return es_regalo(guardado, "pistola") or REGALO_LANZABLES.any(func(k): return es_regalo(guardado, k))
+
+
+# "lleno" (no cabe en el baúl, adonde va lo comprado desde el 15 nov: un arma necesita una casilla libre; un arrojable,
+# sitio en su casilla o una libre), "reto" (el reto sin munición no deja llevar arrojables), "caro" (no te llega) o ""
+# (se puede comprar). Hasta el 15 nov, lo comprado iba a la mano: "lleva" era el arma que ya llevabas y "lleno", el
+# arrojable que ya no te cabía encima
 func estado(id: String) -> String:
-	var partida: Node = ordenador.partida
 	if Lanzables.PRECIOS.has(id):
-		if not partida.lanzables.cabe(id):
-			return "lleno"
 		if Reto.sin_municion():
 			return "reto"
-	else:
-		var tipo: String = Armas.DATOS[id].tipo
-		if partida.johnny.huecos[tipo] == id or partida.repuesto(tipo) == id:
-			return "lleva"
+		if Objetos.caben_arrojables(s, id, 0) <= 0:
+			return "lleno"
+	elif not Objetos.hueco_baul(s):
+		return "lleno"
 	return "caro" if s.dolares < precio(id) else ""
 
 
@@ -275,17 +287,15 @@ func _draw() -> void:
 	dibujar_ficha(fuente)
 
 
-# Una casilla: oscura con borde gris y el icono (el precio sale en la ficha, al pasar por encima). Lo que llevas y lo que
-# ya no cabe, con el borde verde (desde el 15 nov, sin «LLENO» encima: lo dice el botón); lo que no se puede comprar, apagado. La elegida, con el borde claro
+# Una casilla: oscura con borde gris y el icono (el precio sale en la ficha, al pasar por encima). Lo que no se puede
+# comprar (tampoco con el baúl lleno, desde el 15 nov), apagado. La elegida, con el borde claro
 func dibujar_casilla(id: String, _fuente: Font) -> void:
 	var r: Rect2 = casillas[id]
 	var e := estado(id)
 	var borde := PLACA.REMACHE
 	var relleno := Color("#1c1f24")
-	var apagada := e in ["caro", "reto"]
-	if e in ["lleva", "lleno"]:
-		borde = VERDE_BORDE
-	elif apagada:
+	var apagada := e in ["caro", "reto", "lleno"]
+	if apagada:
 		borde = PLACA.APAGADO
 		relleno = PLACA.NEGRO
 	if id == ficha_id:
@@ -303,19 +313,23 @@ func dibujar_casilla(id: String, _fuente: Font) -> void:
 		draw_texture_rect(icono(id), Rect2(r.get_center().x - lado / 2.0, r.get_center().y - lado / 2.0, lado, lado), false, color)
 
 
-# El «!» que bota dentro de la esquina de arriba a la derecha de la casilla del regalo de bienvenida (el de los iconos del
-# escritorio: ordenador.marca_nuevo). Se vuelve a dibujar en cada fotograma mientras está (_process)
+# El «!» que bota dentro de la esquina de arriba a la derecha de cada casilla del regalo de bienvenida (el de los iconos
+# del escritorio: ordenador.marca_nuevo). Se vuelve a dibujar en cada fotograma mientras está (_process)
 const EXCLAMACION := preload("res://assets/ui/exclamacion-pequena.png")
 func dibujar_marca_regalo() -> void:
-	if not con_marca():
-		return
-	var r: Rect2 = casillas["pistola"]
 	var bote := roundf(sin(ahora() * 10.5) * 3.0)
-	draw_texture(EXCLAMACION, (Vector2(r.end.x - EXCLAMACION.get_width() - 3, r.position.y + 6 + bote)).floor())
+	for id in regalos_a_la_vista():
+		var r: Rect2 = casillas[id]
+		draw_texture(EXCLAMACION, (Vector2(r.end.x - EXCLAMACION.get_width() - 3, r.position.y + 6 + bote)).floor())
+
+
+# Las casillas del regalo de bienvenida que aún se pueden coger
+func regalos_a_la_vista() -> Array:
+	return casillas.keys().filter(func(id): return es_regalo(s, id) and estado(id) == "")
 
 
 func con_marca() -> bool:
-	return casillas.has("pistola") and es_regalo(s, "pistola") and estado("pistola") == ""
+	return not regalos_a_la_vista().is_empty()
 
 
 func _process(_delta: float) -> void:
@@ -419,13 +433,13 @@ func partir(fuente: Font, texto: String, ancho: float, tam: int) -> PackedString
 
 # El botón de comprar. Desde el 15 nov (lo pidió el dueño), solo el precio, en un marcador como el de lo ahorrado de
 # arriba («$» y cifras de reloj) pero sin las rayas apagadas: amarillo si te llega (con un borde claro al pasar por
-# encima o marcarlo) y gris si no. Si no se puede por otra cosa, en gris diciendo por qué; lo que ya llevas, «Comprada»
-# (y lo que ya no cabe, «LLENO») en grande, en verde y con el borde verde (como su casilla); el regalo de bienvenida, dicho
+# encima o marcarlo) y gris si no. Si no se puede por otra cosa, en gris diciendo por qué (con el baúl lleno, «Baúl
+# lleno»; hasta el 15 nov, lo que ya llevabas, «Comprada», en verde); el regalo de bienvenida, dicho
 func dibujar_comprar(fuente: Font) -> void:
 	var r := Rect2(comprar.position, comprar.size)
 	var texto := texto_comprar(ficha_id)
 	var se_puede := estado(ficha_id) == ""
-	var comprada := estado(ficha_id) in ["lleva", "lleno"]   # (lo que ya no cabe, «LLENO», igual: 15 nov)
+	var comprada := false   # (hasta el 15 nov, lo que ya llevabas o ya no te cabía, en verde: ahora todo va al baúl)
 	var encima := se_puede and (comprar.is_hovered() or comprar.has_focus())
 	var pulsado := se_puede and comprar.button_pressed
 	if estado(ficha_id) == "caro" or (se_puede and not es_regalo(s, ficha_id)):
@@ -450,8 +464,7 @@ func dibujar_comprar(fuente: Font) -> void:
 func texto_comprar(id: String) -> String:
 	var p := precio(id)
 	match estado(id):
-		"lleva": return Idioma.t("Comprada")   # (y se da por hecho que la llevas)
-		"lleno": return Idioma.t("LLENO")   # (como «Comprada»; antes «No te caben más», 15 nov)
+		"lleno": return Idioma.t("Baúl lleno")   # (lo comprado va al baúl: 15 nov; antes, «LLENO», lo que no te cabía encima)
 		"reto": return Idioma.t("No en este reto")
 		"caro": return "$%d" % p   # (dibujado en rojo, como un marcador: dibujar_comprar)
 	if es_regalo(s, id):

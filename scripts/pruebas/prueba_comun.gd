@@ -8,6 +8,19 @@ func _ready() -> void:
 	super()
 
 
+# Compra un arma en la tienda del ordenador (ya abierto) y la saca del baúl a la mano, como hacía la tienda hasta el
+# 15 nov (ahora lo comprado va al baúl): para las pruebas que compran un arma para usarla
+func comprar_y_llevar(id: String) -> void:
+	var antes: int = Guardado.cargar().baul_equipo.size()
+	ordenador.comprar_arma(id)
+	var g := Guardado.cargar()
+	if g.baul_equipo.size() <= antes:
+		return   # (no se ha comprado: no le llega o el baúl está lleno)
+	var e: Dictionary = g.baul_equipo.pop_back()
+	Guardado.escribir(g)
+	llevar_arma(id, 0, true, true, Armas.estrenar(e))
+
+
 func preparar_prueba() -> void:
 	Guardado.usar("user://guardado-prueba")   # la prueba no toca el guardado de verdad (ni sus ajustes)
 	# Johnny apunta y ataca solo (la ayuda "Disparo asistido"), como siempre en las pruebas: así limpia los
@@ -16,9 +29,16 @@ func preparar_prueba() -> void:
 	# Johnny ya no empieza con la pistola (Armas.SIEMPRE): las pruebas sí, como antes, con el regalo de bienvenida ya
 	# cogido (si no, no saldría de la sala de mantenimiento). Salvo la del regalo (--regalo, prueba_sitios.gd)
 	if not "--regalo" in OS.get_cmdline_user_args():
-		Guardado.cambiar(func(g): g.regalo_cogido = true)
+		Guardado.cambiar(func(g):
+			g.regalo_cogido = true
+			g.regalos_lanzables = preload("res://scripts/ui/tienda_armas.gd").REGALO_LANZABLES.duplicate())
 		johnny.coger("pistola")
 		johnny.sostener("cuerpo")
+	# sin la fregona mejorada apartada de otra prueba (15 nov: partida.dar_fregona), salvo en la suya
+	# (--fregona-mejorada, prueba_inventario.gd), que empieza con una Poco común sin estrenar
+	Guardado.cambiar(func(g):
+		g.baul_nuevo = false
+		g.fregona = {"id": "fregona", "calidad": 1, "quedan": 2} if "--fregona-mejorada" in OS.get_cmdline_user_args() else {})
 	SalaArmas.escondido = false   # la sala de pruebas, con sus líneas y su panel de daño a la vista (en el juego empieza sin ellos)
 	# sin el repaso de los logros que salen del guardado (logros.gd, revisar): sus avisos saldrían en las fotos de
 	# cualquier prueba; la de --logros lo hace a mano
@@ -41,8 +61,13 @@ func preparar_prueba() -> void:
 		tutoriales_prueba = true
 		Guardado.cambiar(func(g):
 			g.regalo_cogido = false
+			g.regalos_lanzables = []
 			g.ajustes.tutoriales = true
 			g.tutoriales.erase("tienda")
+			g.tutoriales.erase("lanzables")
+			g.tutoriales.erase("cambiar_arma")
+			if not "baul" in g.tutoriales:
+				g.tutoriales.append("baul")
 			if not "ordenador" in g.tutoriales:
 				g.tutoriales.append("ordenador"))
 		Tutoriales.vistos_de = ""   # (que lo vuelva a leer)

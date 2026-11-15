@@ -68,6 +68,13 @@ const NUEVO := {
 	                      # "colecciones_nuevo", que se quitaba con solo abrir el programa)
 	"regalo_cogido": false, # ya se ha cogido el regalo de bienvenida de la tienda de armas: la pistola gratis, una sola vez
 	                        # (tienda_armas.gd). Mientras no, no se sale de la sala de mantenimiento (partida.cruzar)
+	"regalos_lanzables": [], # los lanzables del regalo de bienvenida ya cogidos (15 nov: un molotov, una granada y una
+	                         # atraedora gratis, una sola vez cada uno: tienda_armas.gd, REGALO_LANZABLES)
+	"baul_nuevo": false,  # hay algo recién comprado en el baúl que aún no se ha visto (el «!» del baúl, hasta abrirlo:
+	                      # lo comprado va al baúl desde el 15 nov)
+	"fregona": {},        # la fregona mejorada (15 nov): no va al baúl, Johnny empieza cada partida con ella y gasta una
+	                      # partida en cada una ({"calidad", "quedan" y "usada"}, como una casilla del baúl: Armas.estrenar;
+	                      # vacío, la Normal de siempre). Al romperse, vuelve la Normal (Objetos.cerrar_baul)
 	"tutoriales": [],     # tutoriales ya vistos (ids de Tutoriales.LISTA): cada uno sale una sola vez
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"en_curso": "",       # la partida a medias, al empezar la planta en la que va (partida_guardada.gd; "" = ninguna)
@@ -169,6 +176,18 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 			cosa.usada = true
 		equipo.append(cosa)
 	s.baul_equipo = equipo
+	# la fregona mejorada (15 nov: Objetos.apartar_fregona). Un guardado de antes no la tiene apartada: la mejor de su
+	# baúl pasa a su sitio, una sola vez
+	if not s.fregona is Dictionary or s.fregona.is_empty() or int(s.fregona.get("calidad", 0)) <= 0:
+		s.fregona = {}
+	else:
+		var f := {"id": Armas.SIEMPRE.cuerpo, "calidad": clampi(int(s.fregona.calidad), 1, Armas.CALIDADES.size() - 1),
+			"quedan": maxi(0, Armas.quedan_de(s.fregona))}
+		if s.fregona.get("usada", false):
+			f.usada = true
+		s.fregona = f
+	if not leido.has("fregona"):
+		Objetos.apartar_fregona(s, {})
 	# las recetas del banco de trabajo se quitaron del juego el 25 oct: las armas creadas del baúl ("baul_armas"), las
 	# recetas aprendidas ("recetas") y las creadas alguna vez ("creadas", de Colecciones) de un guardado viejo no se
 	# leen (solo se copia lo que está en NUEVO) y desaparecen al volver a escribirlo

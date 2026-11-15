@@ -259,7 +259,7 @@ func probar_ordenador() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-ordenador.png")
 	ordenador.abrir("armas")
-	ordenador.comprar_arma("escopeta")
+	comprar_y_llevar("escopeta")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tienda.png")
 	# los logros: uno cobrado, uno por cobrar y algo de progreso en los demás
@@ -886,14 +886,24 @@ func probar_arbol_talentos() -> void:
 
 # Con "--captura --tienda-armas": la tienda de armas del ordenador (tienda_armas.gd), con 100 $. Al abrir, la ficha
 # explica la tienda (captura-tienda-nota.png). Con el ratón: al pasar por la escopeta la ficha la enseña
-# (captura-tienda-raton.png), se queda al ir hacia «Comprar» y «Comprar» la compra. Con el mando: la cruceta pasa del
-# cuchillo al bate, la ficha lo sigue (con el precio en su marcador) (captura-tienda-mando.png), y A lo compra. Con el dedo: el
-# primer toque en la atraedora (la granada ya tiene su montón lleno) solo enseña la ficha (captura-tienda-dedo.png) y el segundo compra una. Y la ficha en alemán,
+# (captura-tienda-raton.png), se queda al ir hacia «Comprar» y «Comprar» la compra (va al baúl desde el 15 nov). Con el
+# mando: la cruceta pasa del cuchillo al bate, la ficha lo sigue (con el precio en su marcador) (captura-tienda-mando.png),
+# y A lo compra. Con el dedo: el primer toque en la atraedora solo enseña la ficha (captura-tienda-dedo.png) y el segundo
+# compra una. Empieza con el baúl vacío. Y la ficha en alemán,
 # ruso y chino (captura-tienda-de.png...). Cada línea dice lo esperado. Deja el guardado como estaba
 func probar_tienda_armas() -> void:
 	var antes := Guardado.cargar()
-	Guardado.cambiar(func(g): g.dolares = 100)
+	Guardado.cambiar(func(g):
+		g.dolares = 100
+		g.baul = {}
+		g.baul_equipo = [])
 	ahorrados = 100
+	var en_baul := func(id: String) -> int:   # cuántos hay de eso en el baúl (lo comprado va allí desde el 15 nov)
+		var n := 0
+		for e in Guardado.cargar().baul_equipo:
+			if e.id == id:
+				n += int(e.get("n", 1))
+		return n
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -943,8 +953,9 @@ func probar_tienda_armas() -> void:
 	var precio_escopeta: int = tienda.call().precio("escopeta")
 	await clic_en(boton.call("comprar"))
 	await get_tree().create_timer(0.3).timeout
-	print("Clic en «Comprar»: en la mano %s · $%d · ficha de «%s» · botón «%s» (esperado: escopeta, $%d, escopeta, Comprada)" % [
-		johnny.huecos.fuego, dolares.call(), tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), 100 - precio_escopeta])
+	print("Clic en «Comprar»: escopetas en el baúl %d · en la mano %s · $%d · ficha de «%s» · botón «%s» (esperado: 1, pistola, $%d, escopeta, $%d: se puede comprar otra)" % [
+		en_baul.call("escopeta"), johnny.huecos.fuego, dolares.call(), tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"),
+		100 - precio_escopeta, precio_escopeta])
 	Captura.foto("captura-tienda-comprada.png")
 	# sin dinero para la gatling: su precio en un marcador como el de lo ahorrado (solo en la tienda: el
 	# guardado no se toca)
@@ -969,8 +980,8 @@ func probar_tienda_armas() -> void:
 	await pulsar_mando(JOY_BUTTON_A)
 	await get_tree().create_timer(0.3).timeout
 	foco = get_viewport().gui_get_focus_owner()
-	print("Mando, A: cuerpo a cuerpo %s · sigue marcado %s · ficha de «%s» (esperado: bate, b_bate, bate)" % [
-		johnny.huecos.cuerpo, foco.name if foco else "nada", tienda.call().ficha_id])
+	print("Mando, A: bates en el baúl %d · sigue marcado %s · ficha de «%s» (esperado: 1, b_bate, bate)" % [
+		en_baul.call("bate"), foco.name if foco else "nada", tienda.call().ficha_id])
 	await pulsar_mando(JOY_BUTTON_DPAD_UP)
 	foco = get_viewport().gui_get_focus_owner()
 	print("Mando, arriba desde el bate: marcado %s (esperado: b_bate, no se sale)" % [foco.name if foco else "nada"])
@@ -978,15 +989,15 @@ func probar_tienda_armas() -> void:
 	# el dedo
 	Tactil.activo = true
 	Tactil.con_dedo = true
-	var atraedoras: int = lanzables.total("atraedora")
+	var atraedoras: int = en_baul.call("atraedora")
 	await tocar(boton.call("atraedora").get_global_rect().get_center())
-	print("Dedo, primer toque en la atraedora: llevas %d (antes %d) · ficha de «%s» (esperado: las mismas, atraedora)" % [
-		lanzables.total("atraedora"), atraedoras, tienda.call().ficha_id])
+	print("Dedo, primer toque en la atraedora: en el baúl %d (antes %d) · ficha de «%s» (esperado: las mismas, atraedora)" % [
+		en_baul.call("atraedora"), atraedoras, tienda.call().ficha_id])
 	Captura.foto("captura-tienda-dedo.png")
 	await get_tree().create_timer(0.4).timeout
 	await tocar(boton.call("atraedora").get_global_rect().get_center())
 	await get_tree().create_timer(0.3).timeout
-	print("Dedo, segundo toque: llevas %d (esperado: %d) · info «%s» · listo %s" % [lanzables.total("atraedora"), atraedoras + 1, ordenador.info.text, tienda.call().listo])
+	print("Dedo, segundo toque: en el baúl %d (esperado: %d) · info «%s» · listo %s" % [en_baul.call("atraedora"), atraedoras + 1, ordenador.info.text, tienda.call().listo])
 	Tactil.activo = false
 	# en los idiomas más largos (y en chino, sin espacios): la ficha de la motosierra cabe (captura-tienda-<idioma>.png)
 	var idioma := Idioma.actual
@@ -1000,7 +1011,10 @@ func probar_tienda_armas() -> void:
 	ordenador.apagar()
 	Guardado.cambiar(func(g):
 		g.dolares = antes.dolares
-		g.armas = antes.armas)
+		g.armas = antes.armas
+		g.baul = antes.baul
+		g.baul_equipo = antes.baul_equipo
+		g.baul_nuevo = false)
 	ahorrados = antes.dolares
 
 
@@ -1617,7 +1631,7 @@ func probar_cosas() -> void:
 	await get_tree().create_timer(0.6).timeout
 	abrir_ordenador()
 	ordenador.abrir("armas")
-	ordenador.comprar_arma("bate")
+	comprar_y_llevar("bate")
 	ordenador.abrir("")
 	ordenador.apagar()
 	abrir_cosas("inventario")

@@ -896,7 +896,8 @@ func poner_muebles() -> void:
 			func() -> bool: return Tutoriales.marca("taquilla") or Guardado.cargar().skins_nuevo)
 		marcas_sala = [marca_skin, ordenador.marca,
 			marca_encima(banco, "res://assets/sprites/banco-trabajo.png", Tutoriales.marca.bind("banco")),
-			marca_encima(baul, "res://assets/sprites/baul.png", Tutoriales.marca.bind("baul"))]
+			marca_encima(baul, "res://assets/sprites/baul.png",
+				func() -> bool: return Tutoriales.marca("baul") or Guardado.cargar().baul_nuevo)]   # (y con algo recién comprado: 15 nov)
 		# y encima de la puerta de los trasteros (la de la derecha: las viviendas), hasta entrar (partida.montar)
 		if sitio.salidas.size() > 1 and puertas.size() > 1:
 			var marca_trasteros := EXCLAMACION.new()

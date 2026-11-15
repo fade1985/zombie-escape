@@ -119,6 +119,8 @@ const AURA := [
 # ("baul_equipo": "quedan"). Sacarla del baúl gasta una (y la marca "usada", para no gastar otra si se vuelve a sacar en
 # la misma partida). Al acabar la partida (ganes, caigas o abandones: partida.gd, cerrar_baul), lo que lleva con
 # partidas por delante vuelve al baúl y lo que se ha quedado sin ninguna se destruye, aunque esté dentro del baúl.
+# La fregona mejorada no vuelve al baúl: Johnny empieza cada partida con ella y gasta una en cada una (15 nov:
+# Objetos.apartar_fregona y partida.dar_fregona).
 # Mejorarla en el banco le suma una. Las del baúl de antes de esto (sin "quedan") cuentan como sin estrenar: nuevas + 1
 static func nuevas(calidad: int) -> int:
 	return calidad

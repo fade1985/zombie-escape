@@ -3193,6 +3193,10 @@ msgstr "+ammo"
 msgid "¡NO PUEDO LLEVAR MÁS!"
 msgstr "I CAN'T CARRY ANY MORE!"
 
+#: scripts/partida.gd scripts/ui/inventario.gd
+msgid "%s: es su última partida; al acabarla, se destruye."
+msgstr "%s: this is its last run; it breaks when the run ends."
+
 #: scripts/partida.gd
 msgid "No se puede usar"
 msgstr "Can't use that"
@@ -3546,8 +3550,8 @@ msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Kill the fire chief for the first time."
 
 #: scripts/skins.gd
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "When a sleeper drops an item, 50 % of the time it drops another one."
+msgid "Un 50 % de las veces, cada durmiente suelta otro billete o más munición."
+msgstr "50 % of the time, each sleeper drops an extra bill or more ammo."
 
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
@@ -4656,8 +4660,8 @@ msgid "Al coger el primer billete"
 msgstr "On picking up your first bill"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Sleepers sometimes drop bills, and bosses drop plenty: walk over them to pick them up."
+msgid "Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Almost every sleeper drops a bill when it falls (the rest, ammo), and bosses drop plenty: walk over them to pick them up."
 
 #: scripts/tutoriales.gd
 msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
@@ -4676,8 +4680,8 @@ msgid "Al coger el primer mutágeno"
 msgstr "On picking up your first mutagen"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "Sleepers carry mutated DNA inside: sometimes, when they fall, they drop a little mutagen. Walk over it to pick it up."
+msgid "Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "Sleepers carry mutated DNA inside: when they fall, they drop a little mutagen. Walk over it to pick it up."
 
 #: scripts/tutoriales.gd
 msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
@@ -4692,12 +4696,12 @@ msgid "Cambiar de arma"
 msgstr "Switch weapon"
 
 #: scripts/tutoriales.gd
-msgid "Al coger la primera pistola"
-msgstr "On getting your first pistol"
+msgid "Al llevar la primera arma a distancia"
+msgstr "On carrying your first ranged weapon"
 
 #: scripts/tutoriales.gd
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "You now hold two weapons: the mop, melee, and the pistol, ranged."
+msgid "Ahora llevas dos armas en la mano: una de cuerpo a cuerpo, como la fregona, y otra a distancia, como la pistola."
+msgstr "You now hold two weapons: a melee one, like the mop, and a ranged one, like the pistol."
 
 #: scripts/tutoriales.gd
 msgid "Cambia de una a otra con {cambiar_arma}."
@@ -4748,12 +4752,16 @@ msgid "Lanzables"
 msgstr "Throwables"
 
 #: scripts/tutoriales.gd
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "Throw with {lanzar}: hold to aim, release to throw."
+msgid "Al conseguir el primer lanzable"
+msgstr "On getting your first throwable"
 
 #: scripts/tutoriales.gd
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "Switch what you throw with {cambiar_lanzable}: the Molotov starts a fire and the grenade explodes. You carry up to 3 in hand."
+msgid "Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
+msgstr "Throwables are bought in the computer's Weapon Shop and go to the stash: take them out of there to carry them."
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis."
+msgstr "Throw with {lanzar}: hold to aim, release to throw. Switch throwables with {cambiar_lanzable}: the Molotov starts a fire, the grenade explodes and the decoy lures the zombies."
 
 #: scripts/tutoriales.gd
 msgid "¡Ojo! La explosión también te hace daño a ti."
@@ -4972,16 +4980,16 @@ msgid "Al abrir la tienda de armas"
 msgstr "On opening the weapon shop"
 
 #: scripts/tutoriales.gd
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "They're sold in Normal quality: they only last this run and break when it ends. You carry two of each type: the one in your hand goes to the spare slot and the spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand drops to the floor."
+msgid "Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar."
+msgstr "What you buy goes to the stash, unused: take it out whenever you want to carry it. If the stash is full, make room before buying."
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "Ranged weapons come loaded and with spare ammo; special ones come full and go in the ranged slot. Throwables are bought one at a time, while you have room."
+msgid "Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno."
+msgstr "Everything is sold in Normal quality: it lasts the run in which you take it out of the stash. Ranged weapons come loaded and with spare ammo; special ones come full. Throwables are bought one at a time."
 
 #: scripts/tutoriales.gd
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Johnny starts with just the mop: your first pistol is on us."
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."
+msgstr "Johnny starts with just the mop: your first pistol is on us, and so are a Molotov, a grenade and a decoy."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Mutaciones"
@@ -5813,10 +5821,6 @@ msgstr "%s goes to spare; %s goes into the stash instead."
 #: scripts/ui/inventario.gd
 msgid "%s a la mano; %s entra en el baúl en su lugar."
 msgstr "%s goes to hand; %s goes into the stash instead."
-
-#: scripts/ui/inventario.gd
-msgid "%s: es su última partida; al acabarla, se destruye."
-msgstr "%s: this is its last run; it breaks when the run ends."
 
 #: scripts/ui/inventario.gd
 msgid "El baúl no admite más: contigo se quedan %d de %s."
@@ -6943,44 +6947,32 @@ msgid "cargador de %d"
 msgstr "%d-round magazine"
 
 #: scripts/ui/ordenador.gd
-msgid "Ya llevas %s."
-msgstr "You already have the %s."
-
-#: scripts/ui/ordenador.gd
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "You already have the %s as a spare: equip it from the inventory."
+msgid "El baúl está lleno: haz sitio en él para poder comprar."
+msgstr "The stash is full: make room in it to buy."
 
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "Not enough: you're $%d short."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "Bought! %s in hand; %s goes to spare and %s goes into the stash."
+msgid "¡Regalo! %s va al baúl: sácala de allí para llevarla."
+msgstr "Gift! %s goes to the stash: take it out of there to carry it."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano."
-msgstr "Bought! %s in hand."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "Bought! %s in hand; %s goes to spare."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "Bought! %s in hand; %s stays on the floor: you already had two."
+msgid "¡Compra hecha! %s va al baúl."
+msgstr "Bought! %s goes to the stash."
 
 #: scripts/ui/ordenador.gd
 msgid "En el reto «%s» no se lleva nada que lanzar."
 msgstr "In the \"%s\" challenge you don't carry anything to throw."
 
 #: scripts/ui/ordenador.gd
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "You can't fit any more %s: your stacks are full and you have no slot left for another."
+msgid "¡Regalo! %s va al baúl (tienes %d allí)."
+msgstr "Gift! %s goes to the stash (you have %d there)."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "Bought! You now carry %d %s."
+msgid "¡Compra hecha! %s va al baúl (tienes %d allí)."
+msgstr "Bought! %s goes to the stash (you have %d there)."
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que tienes por cobrar y cómo vas en cada apartado."
@@ -7283,12 +7275,8 @@ msgid "¡COMPRA UN ARMA!"
 msgstr "BUY A WEAPON!"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Comprada"
-msgstr "Purchased"
-
-#: scripts/ui/tienda_armas.gd
-msgid "LLENO"
-msgstr "FULL"
+msgid "Baúl lleno"
+msgstr "Stash full"
 
 #: scripts/ui/tienda_armas.gd
 msgid "No en este reto"
@@ -7397,3 +7385,83 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "When a sleeper drops an item, 50 % of the time it drops another one."
+
+#, sin-usar
+msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Sleepers sometimes drop bills, and bosses drop plenty: walk over them to pick them up."
+
+#, sin-usar
+msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
+msgstr "Sleepers carry mutated DNA inside: sometimes, when they fall, they drop a little mutagen. Walk over it to pick it up."
+
+#, sin-usar
+msgid "Al coger la primera pistola"
+msgstr "On getting your first pistol"
+
+#, sin-usar
+msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
+msgstr "You now hold two weapons: the mop, melee, and the pistol, ranged."
+
+#, sin-usar
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "Throw with {lanzar}: hold to aim, release to throw."
+
+#, sin-usar
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
+msgstr "Switch what you throw with {cambiar_lanzable}: the Molotov starts a fire and the grenade explodes. You carry up to 3 in hand."
+
+#, sin-usar
+msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "They're sold in Normal quality: they only last this run and break when it ends. You carry two of each type: the one in your hand goes to the spare slot and the spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand drops to the floor."
+
+#, sin-usar
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
+msgstr "Ranged weapons come loaded and with spare ammo; special ones come full and go in the ranged slot. Throwables are bought one at a time, while you have room."
+
+#, sin-usar
+msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
+msgstr "Johnny starts with just the mop: your first pistol is on us."
+
+#, sin-usar
+msgid "Ya llevas %s."
+msgstr "You already have the %s."
+
+#, sin-usar
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "You already have the %s as a spare: equip it from the inventory."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "Bought! %s in hand; %s goes to spare and %s goes into the stash."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano."
+msgstr "Bought! %s in hand."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "Bought! %s in hand; %s goes to spare."
+
+#, sin-usar
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "Bought! %s in hand; %s stays on the floor: you already had two."
+
+#, sin-usar
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "You can't fit any more %s: your stacks are full and you have no slot left for another."
+
+#, sin-usar
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "Bought! You now carry %d %s."
+
+#, sin-usar
+msgid "Comprada"
+msgstr "Purchased"
+
+#, sin-usar
+msgid "LLENO"
+msgstr "FULL"

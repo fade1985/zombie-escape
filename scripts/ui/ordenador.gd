@@ -5,14 +5,13 @@
 #     talento con mutágeno (talentos.gd; antes del 15 nov, con los dólares ahorrados). Lo comprado
 #     se nota al momento.
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS), en calidad Normal (parte 4 de la
-#     tienda y las piezas: Armas.CALIDADES), y queda desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
-#     tienes una de repuesto, esa va al baúl en el momento (partida.repuesto_al_baul; si no cabe o no se puede
-#     guardar, la de la mano se queda en el suelo: partida.llevar_arma, dos de cada tipo como mucho). Desde el
+#     tienda y las piezas: Armas.CALIDADES), y queda desbloqueada en el guardado. Desde el 15 nov va al baúl, sin
+#     estrenar (antes, a la mano): se saca de allí para llevarla, y con el baúl lleno no se puede comprar. Desde el
 #     25 oct también vende el lanzallamas, el lanza ácido y el lanza rayos, que antes se creaban en el banco.
 #     Todo a la vez en una chapa oscura, con la ficha de lo elegido a la derecha (tienda_armas.gd). Cuatro grupos,
 #     las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
-#     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, mientras quepan (van a sus montones de
-#     5); los que sobren al completar el edificio van al baúl.
+#     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno y también van al baúl (15 nov), mientras
+#     quepan. La primera vez, la pistola, un molotov, una granada y una atraedora son gratis (el regalo de bienvenida).
 #   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. En la chapa oscura, como un
 #     archivador (archivador_logros.gd): a la izquierda, el Resumen y un apartado por tema (Logros.TEMAS); a la
 #     derecha, la página elegida. Los conseguidos se cobran aquí (su premio va a los dólares ahorrados).
@@ -833,19 +832,13 @@ func en_frase(nombre: String) -> String:
 
 
 func comprar_arma(id: String) -> void:
-	var w: Dictionary = Armas.DATOS[id]
-	var johnny: Node = partida.johnny
-	if johnny.huecos[w.tipo] == id:
-		info.text = Idioma.t("Ya llevas %s.") % en_frase(Armas.nombre(id))
-		Sonido.tocar("no")
-		return
-	if partida.repuesto(w.tipo) == id:
-		info.text = Idioma.t("Ya llevas %s de repuesto: póntela desde el inventario.") % en_frase(Armas.nombre(id))
-		Sonido.tocar("no")
-		return
 	var s := Guardado.cargar()
 	var regalo: bool = TIENDA.es_regalo(s, id)   # (la pistola de bienvenida: gratis, una sola vez)
 	var precio: int = 0 if regalo else Supervivientes.precio(Armas.PRECIOS[id])
+	if not Objetos.hueco_baul(s):
+		info.text = Idioma.t("El baúl está lleno: haz sitio en él para poder comprar.")
+		Sonido.tocar("no")
+		return
 	if s.dolares < precio:
 		info.text = Idioma.t("No te llega: te faltan $%d.") % (precio - s.dolares)
 		Sonido.tocar("no")
@@ -856,42 +849,30 @@ func comprar_arma(id: String) -> void:
 		s.regalo_cogido = true
 	if not id in s.armas:
 		s.armas.append(id)
+	# al baúl, en Normal y sin estrenar (las mejoradas salen del banco y de la joyería): desde el 15 nov ya no va a la mano
+	s.baul_equipo.append({"id": id, "calidad": 0, "quedan": Armas.nuevas(0) + 1})
+	s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
 	Guardado.escribir(s)
-	if regalo:
-		refrescar_avisos()   # (se quita el «!» de ARMAS.EXE)
+	refrescar_avisos()   # (con el regalo, se quita el «!» de ARMAS.EXE)
 	partida.ahorrados = s.dolares
-	var sin_vieja: bool = johnny.huecos[w.tipo] == ""   # (sin arma a distancia: no hay una vieja que pase al repuesto)
-	var vieja: String = Armas.nombre(johnny.huecos[w.tipo], johnny.calidad(johnny.huecos[w.tipo]))
-	var al_baul: Dictionary = partida.repuesto_al_baul(w.tipo)   # (con los dos huecos llenos, la de repuesto va al baúl: M26)
-	var suelo: Dictionary = partida.llevar_arma(id)   # (en Normal: las mejoradas salen del banco y de la joyería)
 	abrir("armas", "b_" + id)
-	var texto: String
-	if not al_baul.is_empty():
-		texto = Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl.") % [
-			Armas.nombre(id), vieja, Armas.nombre(al_baul.id, al_baul.calidad)]
-	elif sin_vieja:
-		texto = Idioma.t("¡Compra hecha! %s a la mano.") % Armas.nombre(id)
-	elif suelo.is_empty():
-		texto = Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto.") % [Armas.nombre(id), vieja]
-	else:
-		texto = Idioma.t("¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.") % [Armas.nombre(id), vieja]
-	info.set_deferred("text", texto)   # después de marcar el botón (que pone su explicación)
-	# con la pistola de regalo, la primera arma a distancia: cómo se cambia de una a otra (M97; antes lo contaba «Cómo se
-	# juega», al empezar, cuando aún no había pistola)
-	if regalo and partida.puede_tutorial("cambiar_arma"):
-		await partida.ver_tutorial("cambiar_arma")
+	var texto := Idioma.t("¡Regalo! %s va al baúl: sácala de allí para llevarla.") if regalo \
+		else Idioma.t("¡Compra hecha! %s va al baúl.")
+	info.set_deferred("text", texto % Armas.nombre(id))   # después de marcar el botón (que pone su explicación)
 
 
-# Un arrojable más para esta partida (como cogerlo del suelo: lanzables.sumar), si cabe y le llega
+# Un arrojable más, al baúl (15 nov; antes iba a la mano), si cabe y le llega. La primera vez, el molotov, la granada y
+# la atraedora son gratis (el regalo de bienvenida: TIENDA.REGALO_LANZABLES). Con el primero, su tutorial (si no ha
+# salido ya al llevar uno)
 func comprar_lanzable(k: String) -> void:
-	var lz: Lanzables = partida.lanzables
 	var no := ""
+	var s := Guardado.cargar()
+	var regalo: bool = TIENDA.es_regalo(s, k)
 	if Reto.sin_municion():
 		no = Idioma.t("En el reto «%s» no se lleva nada que lanzar.") % Reto.nombre("cuerpo")
-	elif not lz.cabe(k):
-		no = Idioma.t("No te caben más %s: tus montones están llenos y no te queda hueco para otro.") % Lanzables.varios(k)
-	var s := Guardado.cargar()
-	var precio: int = Supervivientes.precio(Lanzables.PRECIOS[k])
+	elif Objetos.caben_arrojables(s, k, 0) <= 0:
+		no = Idioma.t("El baúl está lleno: haz sitio en él para poder comprar.")
+	var precio: int = 0 if regalo else Supervivientes.precio(Lanzables.PRECIOS[k])
 	if no == "" and s.dolares < precio:
 		no = Idioma.t("No te llega: te faltan $%d.") % (precio - s.dolares)
 	if no != "":
@@ -900,12 +881,23 @@ func comprar_lanzable(k: String) -> void:
 		return
 	Sonido.tocar("compra")
 	s.dolares -= precio
+	if regalo:
+		s.regalos_lanzables.append(k)
+	Objetos.arrojables_al_baul(s, k, 0, 1)
+	s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
 	Guardado.escribir(s)
+	refrescar_avisos()
 	partida.ahorrados = s.dolares
-	lz.sumar(k)
 	abrir("armas", "b_" + k)
-	var n := lz.total(k)
-	info.set_deferred("text", Idioma.t("¡Compra hecha! Ya llevas %d %s.") % [n, Lanzables.varios(k) if n != 1 else en_frase(Lanzables.uno(k))])
+	var n := 0   # los que hay ya en el baúl (Normales y sin estrenar, como los de la tienda)
+	for e in s.baul_equipo:
+		if Objetos.es_arrojable(e, k, 0):
+			n += int(e.n)
+	var texto := Idioma.t("¡Regalo! %s va al baúl (tienes %d allí).") if regalo \
+		else Idioma.t("¡Compra hecha! %s va al baúl (tienes %d allí).")
+	info.set_deferred("text", texto % [Lanzables.uno(k), n])
+	if partida.puede_tutorial("lanzables"):
+		await partida.ver_tutorial("lanzables")
 
 
 # ── Logros ──

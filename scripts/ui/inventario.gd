@@ -70,6 +70,8 @@ func _ready() -> void:
 func abrir(que: String, p: Node) -> void:
 	partida = p
 	abierto = que
+	if que == "baul" and Guardado.cargar().baul_nuevo:   # (ya has visto lo recién comprado: se quita el «!» del baúl)
+		Guardado.cambiar(func(g): g.baul_nuevo = false)
 	sel = ""
 	foco = ""
 	aviso = ""
