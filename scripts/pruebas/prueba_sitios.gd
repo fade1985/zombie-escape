@@ -1731,7 +1731,7 @@ func probar_regalo() -> void:
 		antes, s.dolares, s.regalo_cogido, s.regalos_lanzables, ordenador.info.text])
 	print("En el baúl: %s (esperado: pistola, molotov ×1, granada ×1, atraedora ×1)" % [
 		s.baul_equipo.map(func(e): return "%s%s" % [e.id, " ×%d" % e.n if e.has("n") else ""])])
-	print("Ahora cuestan: pistola $%d, molotov $%d, atraedora $%d · «!» %s · ARMAS.EXE con «!» %s (esperado: 10, 2, 4, [], false)" % [
+	print("Ahora cuestan: pistola $%d, molotov $%d, atraedora $%d · «!» %s · ARMAS.EXE con «!» %s (esperado: 25, 5, 10, [], false)" % [
 		tienda.precio("pistola"), tienda.precio("molotov"), tienda.precio("atraedora"), tienda.regalos_a_la_vista(),
 		ordenador.iconos.get_node_or_null("icono_armas").get_node_or_null("marca_nuevo") != null])
 	tienda.ficha_id = "atraedora"

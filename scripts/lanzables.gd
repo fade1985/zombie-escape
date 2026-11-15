@@ -91,7 +91,7 @@ const UNO := {"molotov": "Molotov", "granada": "Granada", "atraedora": "Atraedor
 # [/traducir]
 # Lo que cuesta uno en la tienda de armas del ordenador (el dueño, 25 oct): se compran de uno en uno, para esa partida
 # (15 nov, lo pidió el dueño: antes 5, 5, 8 y 8)
-const PRECIOS := {"molotov": 2, "granada": 2, "atraedora": 4, "congeladora": 4}
+const PRECIOS := {"molotov": 5, "granada": 5, "atraedora": 10, "congeladora": 10}   # (16 nov: antes 2, 2, 4 y 4)
 const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a"), "atraedora": Color("#ffd23f"),
 	"congeladora": Color("#9fe8ff")}   # (los de ARROJADIZAS)
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")

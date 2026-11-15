@@ -27,9 +27,11 @@ class_name Armas
 
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
-# no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
-const PRECIOS := {"cuchillo": 10, "bate": 15, "motosierra": 35, "katana": 30, "pistola": 10, "escopeta": 30, "mp5": 40, "gatling": 70, "lanzagranadas": 65, "pistola_electrica": 45,
-	"lanzallamas": 60, "desintegrador": 60, "lanza_hielo": 60}
+# no se vende: se lleva siempre. El 16 nov, unas 2,7 veces los de antes (lo pidió el dueño, con la cuenta del dinero de
+# los Apartamentos: unos $300 una partida ganada y la mitad de lo recogido al caer): una perdida da para una barata o
+# media y una ganada, para la más cara (la Gatling, dos tercios de una victoria). Una Normal dura solo una partida
+const PRECIOS := {"cuchillo": 25, "bate": 40, "motosierra": 95, "katana": 80, "pistola": 25, "escopeta": 80, "mp5": 110, "gatling": 190, "lanzagranadas": 175, "pistola_electrica": 120,
+	"lanzallamas": 160, "desintegrador": 160, "lanza_hielo": 160}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
 # "distancia" (pistola, escopeta y MP5) o "especial" (lanzallamas, lanza ácido y lanza rayos: las de "efecto").

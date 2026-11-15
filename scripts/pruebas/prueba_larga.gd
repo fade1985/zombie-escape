@@ -960,10 +960,10 @@ func probar_cartera_tienda() -> void:
 func probar_tienda_armas() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
-		g.dolares = 100
+		g.dolares = 200   # (para dos escopetas: 16 nov, precios nuevos)
 		g.baul = {}
 		g.baul_equipo = [])
-	ahorrados = 100
+	ahorrados = 200
 	var en_baul := func(id: String) -> int:   # cuántos hay de eso en el baúl (lo comprado va allí desde el 15 nov)
 		var n := 0
 		for e in Guardado.cargar().baul_equipo:
@@ -1021,7 +1021,7 @@ func probar_tienda_armas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	print("Clic en «Comprar»: escopetas en el baúl %d · en la mano %s · $%d · ficha de «%s» · botón «%s» (esperado: 1, pistola, $%d, escopeta, $%d: se puede comprar otra)" % [
 		en_baul.call("escopeta"), johnny.huecos.fuego, dolares.call(), tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"),
-		100 - precio_escopeta, precio_escopeta])
+		200 - precio_escopeta, precio_escopeta])
 	Captura.foto("captura-tienda-comprada.png")
 	# sin dinero para la gatling: su precio en un marcador como el de lo ahorrado (solo en la tienda: el
 	# guardado no se toca)
