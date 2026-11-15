@@ -47,7 +47,7 @@ const ICONOS := [   # [programa, icono, nombre]
 ]
 const NOMBRES := {"puntos": "MUTACIONES.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "videos": "VIDEOS.EXE",
 	"colecciones": "SUJETOS.EXE"}
-const TAREAS := {"armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
+const TAREAS := {"puntos": "Mutaciones", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
 	"videos": "Vídeos de Canal 8", "colecciones": "Sujetos"}
 # [/traducir]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)

@@ -87,7 +87,7 @@ const LISTA := {
 	"piezas": {"grupo": "Armas", "titulo": "Materiales de fabricación", "icono": "obj-pieza_cuerpo",
 		"cuando": "Al coger el primer material",
 		"lineas": ["Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento.",
-			"Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los durmientes de vez en cuando y los jefes.",
+			"Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes.",
 			"Van en la mochila: si completas el edificio, pasan al baúl."]},
 	"jefes": {"grupo": "Plantas y jefes", "titulo": "Jefes", "icono": "jefe", "cuando": "Al llegar al primer jefe",
 		"lineas": ["Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso.",
@@ -140,7 +140,7 @@ const LISTA := {
 	"tienda": {"grupo": "Sala de mantenimiento", "titulo": "La tienda de armas", "icono": "pistola",
 		"cuando": "Al abrir la tienda de armas",
 		"lineas": ["Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo.",
-			"Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan.",
+			"Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan.",
 			"Johnny solo empieza con la fregona: la primera pistola te la regalamos."]},
 	# Los de los programas del ordenador: salen al abrir cada uno la primera vez (ordenador.gd, TUTORIAL_DE) y, hasta
 	# entonces, su icono lleva un «!» (mapa/ordenador.gd, novedades)

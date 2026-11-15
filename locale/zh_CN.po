@@ -2328,7 +2328,7 @@ msgid "Joya de la corona"
 msgstr "镇店之宝"
 
 #: scripts/logros.gd
-msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgid "Sube un arma o un lanzable a Épica en el banco de trabajo."
 msgstr "在工作台把一件武器或投掷物升到史诗。"
 
 #: scripts/logros.gd
@@ -2968,7 +2968,7 @@ msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
 msgstr "特殊武器（火焰喷射器、酸液枪和闪电枪）"
 
 #: scripts/objetos.gd
-msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "投掷物（燃烧瓶、手雷、诱饵弹和冰冻弹）"
 
 #: scripts/objetos.gd
@@ -2988,7 +2988,7 @@ msgid "Material especial"
 msgstr "特殊材料"
 
 #: scripts/objetos.gd
-msgid "Material arrojable"
+msgid "Material lanzable"
 msgstr "投掷材料"
 
 #: scripts/objetos.gd
@@ -4689,7 +4689,7 @@ msgstr "每种武器用各自的弹药（子弹、散弹……）。地上的弹
 msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
 msgstr "没有弹药时，Johnny会换上近战武器。"
 
-#: scripts/tutoriales.gd
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Lanzables"
 msgstr "投掷物"
 
@@ -4718,7 +4718,7 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "在维修间的工作台用制作材料提升武器和投掷物的品质。"
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los durmientes de vez en cuando y los jefes."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
 msgstr "材料分为四类：近战、远程、特殊和投掷。沉睡者偶尔会掉落，首领也会掉。"
 
 #: scripts/tutoriales.gd
@@ -4922,7 +4922,7 @@ msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se d
 msgstr "以普通品质出售：只能用本局，本局结束后会损坏。每种类型你带两把：手上的那把转为备用，备用的那把进储物箱；如果放不下或无法存放，手上的那把会掉在地上。"
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
 msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出售，占用远程武器的位置。投掷物一个一个买，直到放不下为止。"
 
 #: scripts/tutoriales.gd
@@ -5358,10 +5358,6 @@ msgstr "已装备"
 msgid "Guardada"
 msgstr "收起"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
-msgid "Arrojables"
-msgstr "投掷物"
-
 #: scripts/ui/inventario.gd
 msgid "Objetos"
 msgstr "物品"
@@ -5512,7 +5508,7 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "用于加满%s（每格可放 %d）。一次丢一个。"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable"
+msgid "Lanzable"
 msgstr "投掷物"
 
 #: scripts/ui/inventario.gd
@@ -5584,7 +5580,7 @@ msgid "Baúl  %d / %d"
 msgstr "储物箱  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Objetos, armas y arrojables"
+msgid "Objetos, armas y lanzables"
 msgstr "物品、武器和投掷物"
 
 #: scripts/ui/inventario.gd
@@ -5620,7 +5616,7 @@ msgid "%s · reserva %d"
 msgstr "%s · 备弹 %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · %s"
+msgid "Lanzable · %s · %s"
 msgstr "投掷物 · %s · %s"
 
 #: scripts/ui/inventario.gd
@@ -5720,7 +5716,7 @@ msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de l
 msgstr "它会到你手上；你手上那件换到备用（如果已经带了两件，手上那件放进储物箱）。"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · En el baúl"
+msgid "Lanzable · %s · En el baúl"
 msgstr "投掷物 · %s · 在储物箱里"
 
 #: scripts/ui/inventario.gd
@@ -5796,7 +5792,7 @@ msgid "En el baúl"
 msgstr "储物箱里"
 
 #: scripts/ui/inventario.gd
-msgid "Armas y arrojables"
+msgid "Armas y lanzables"
 msgstr "武器和投掷物"
 
 #: scripts/ui/inventario.gd
@@ -5855,8 +5851,8 @@ msgid_plural "%d materiales especiales"
 msgstr[0] "%d 个特殊材料"
 
 #: scripts/ui/inventario.gd
-msgid "%d material arrojable"
-msgid_plural "%d materiales arrojables"
+msgid "%d material lanzable"
+msgid_plural "%d materiales lanzables"
 msgstr[0] "%d 个投掷材料"
 
 #: scripts/ui/inventario.gd
@@ -7225,18 +7221,6 @@ msgstr "本挑战不可用"
 #: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "见面礼"
-
-#: scripts/ui/tienda_armas.gd
-msgid "A: comprar · $%d"
-msgstr "A：购买 · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Intro: comprar · $%d"
-msgstr "回车：购买 · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Comprar · $%d"
-msgstr "购买 · $%d"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Pasa por un arma para ver qué hace."

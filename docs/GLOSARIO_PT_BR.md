@@ -3,7 +3,7 @@
 Decisiones de la traducción al portugués de Brasil. Se traduce desde el español, con el inglés (`locale/en.po`) como
 referencia de la intención. Por confirmar con el dueño (y, a ser posible, con una persona brasileña).
 
-**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (Mutação / Mutações; «Resetear mutaciones» = Resetar mutações; el programa, MUTAÇÕES.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (Efeito(s) colateral(is)). Lo de abajo que diga talento/mutación se lee así.
+**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (Mutação / Mutações; «Resetear mutaciones» = Resetar mutações; el programa, MUTAÇÕES.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (Efeito(s) colateral(is)). Lo de abajo que diga talento/mutación se lee así. Y los *arrojables* se llaman ahora **lanzables** (la traducción no cambia: ya era la misma palabra).
 
 ## Reglas
 

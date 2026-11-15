@@ -44,7 +44,7 @@ const PIEZA_PARA := {
 	"cuerpo": "las armas cuerpo a cuerpo (la fregona, el cuchillo, el bate, la motosierra y la katana)",
 	"distancia": "las armas a distancia (la pistola, la MP5, la escopeta, la gatling y el lanzagranadas)",
 	"especial": "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)",
-	"arrojable": "los arrojables (el molotov, la granada, la atraedora y la congeladora)",
+	"arrojable": "los lanzables (el molotov, la granada, la atraedora y la congeladora)",
 }
 # [/traducir]
 const PIEZA_ZOMBI := 0.06    # probabilidad de que cualquier zombi suelte una pieza (una de las cuatro, al azar)
@@ -62,7 +62,7 @@ const NOMBRES := {
 	"vendas": "Vendas",
 	# las piezas para mejorar las armas (PIEZAS): solo las sueltan los zombis y los jefes
 	"pieza_cuerpo": "Material cuerpo a cuerpo", "pieza_distancia": "Material a distancia", "pieza_especial": "Material especial",
-	"pieza_arrojable": "Material arrojable",
+	"pieza_arrojable": "Material lanzable",
 }
 # [/traducir]
 # Los de curar: no son chatarra, se usan (partida.usar_objeto) desde el inventario («Usar») o con su tecla sin abrirlo

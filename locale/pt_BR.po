@@ -2330,7 +2330,7 @@ msgid "Joya de la corona"
 msgstr "Joia da coroa"
 
 #: scripts/logros.gd
-msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgid "Sube un arma o un lanzable a Épica en el banco de trabajo."
 msgstr "Suba uma arma ou um arremessável para Épica na bancada."
 
 #: scripts/logros.gd
@@ -2970,7 +2970,7 @@ msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
 msgstr "as armas especiais (o lança-chamas, o lança-ácido e o lança-raios)"
 
 #: scripts/objetos.gd
-msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "os arremessáveis (o molotov, a granada, a isca e a bomba de gelo)"
 
 #: scripts/objetos.gd
@@ -2990,7 +2990,7 @@ msgid "Material especial"
 msgstr "Material especial"
 
 #: scripts/objetos.gd
-msgid "Material arrojable"
+msgid "Material lanzable"
 msgstr "Material arremessável"
 
 #: scripts/objetos.gd
@@ -4695,7 +4695,7 @@ msgstr "Cada arma gasta a sua (balas, cartuchos...). Uma caixa de munição do c
 msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
 msgstr "Sem munição, Johnny saca a arma de corpo a corpo."
 
-#: scripts/tutoriales.gd
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Lanzables"
 msgstr "Arremessáveis"
 
@@ -4724,7 +4724,7 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Com os materiais de fabricação você sobe a qualidade das armas e dos arremessáveis, na bancada da sala de manutenção."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los durmientes de vez en cuando y los jefes."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
 msgstr "São de quatro famílias: corpo a corpo, à distância, especiais e arremessáveis. Os adormecidos soltam de vez em quando, e os chefes também."
 
 #: scripts/tutoriales.gd
@@ -4928,7 +4928,7 @@ msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se d
 msgstr "São vendidas em qualidade Normal: duram só esta partida e, ao terminar, se destroem. Você leva duas de cada tipo: a que estava na mão passa para a reserva e a da reserva, para o baú; se não couber ou não puder ser guardada, a da mão fica no chão."
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
 msgstr "As à distância vêm carregadas e com munição de reserva; as especiais vêm cheias e vão no espaço das à distância. Os arremessáveis são comprados um por um, enquanto couberem."
 
 #: scripts/tutoriales.gd
@@ -5365,10 +5365,6 @@ msgstr "Equipada"
 msgid "Guardada"
 msgstr "Guardada"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
-msgid "Arrojables"
-msgstr "Arremessáveis"
-
 #: scripts/ui/inventario.gd
 msgid "Objetos"
 msgstr "Objetos"
@@ -5519,7 +5515,7 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "Abastece %s (cabem %d em cada espaço). Ao largar, sai um por vez."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable"
+msgid "Lanzable"
 msgstr "Arremessável"
 
 #: scripts/ui/inventario.gd
@@ -5591,7 +5587,7 @@ msgid "Baúl  %d / %d"
 msgstr "Baú  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Objetos, armas y arrojables"
+msgid "Objetos, armas y lanzables"
 msgstr "Objetos, armas e arremessáveis"
 
 #: scripts/ui/inventario.gd
@@ -5627,7 +5623,7 @@ msgid "%s · reserva %d"
 msgstr "%s · reserva %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · %s"
+msgid "Lanzable · %s · %s"
 msgstr "Arremessável · %s · %s"
 
 #: scripts/ui/inventario.gd
@@ -5727,7 +5723,7 @@ msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de l
 msgstr "Vai para a mão; a que você leva passa para a reserva (se já levar duas, a da mão entra no baú no lugar dela)."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · En el baúl"
+msgid "Lanzable · %s · En el baúl"
 msgstr "Arremessável · %s · No baú"
 
 #: scripts/ui/inventario.gd
@@ -5803,7 +5799,7 @@ msgid "En el baúl"
 msgstr "No baú"
 
 #: scripts/ui/inventario.gd
-msgid "Armas y arrojables"
+msgid "Armas y lanzables"
 msgstr "Armas e arremessáveis"
 
 #: scripts/ui/inventario.gd
@@ -5865,8 +5861,8 @@ msgstr[0] "%d material especial"
 msgstr[1] "%d materiais especiais"
 
 #: scripts/ui/inventario.gd
-msgid "%d material arrojable"
-msgid_plural "%d materiales arrojables"
+msgid "%d material lanzable"
+msgid_plural "%d materiales lanzables"
 msgstr[0] "%d material arremessável"
 msgstr[1] "%d materiais arremessáveis"
 
@@ -7243,18 +7239,6 @@ msgstr "Não neste desafio"
 #: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "Presente de boas-vindas"
-
-#: scripts/ui/tienda_armas.gd
-msgid "A: comprar · $%d"
-msgstr "A: comprar · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Intro: comprar · $%d"
-msgstr "Enter: comprar · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Comprar · $%d"
-msgstr "Comprar · $%d"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Pasa por un arma para ver qué hace."

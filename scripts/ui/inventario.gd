@@ -217,7 +217,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			sitio("r%d" % i, r, casilla_inv(r))
 		rotulo(lienzo, Idioma.t("Guardada"), x + 32, 328, Tema.GRIS, HORIZONTAL_ALIGNMENT_CENTER)
 	# debajo, los arrojables a mano (F cambia entre ellos): el que se lanza ahora, con un marco amarillo alrededor
-	cinta(Idioma.t("Arrojables"), 118, 356)   # (sin «F cambia» a la derecha desde el M100)
+	cinta(Idioma.t("Lanzables"), 118, 356)   # (sin «F cambia» a la derecha desde el M100)
 	for i in Lanzables.MANO:
 		var x := 120.0 + i * 84
 		var k: String = lz.mano[i] if i < lz.mano.size() else ""
@@ -856,7 +856,7 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 	var lz: Lanzables = partida.lanzables
 	var k := lz.clave_en(sitio)
 	var a_mano := sitio.begins_with("l")
-	cabeza(caja, icono_lanzable(k), nombre_lanzable(k), Idioma.t("Arrojable"))
+	cabeza(caja, icono_lanzable(k), nombre_lanzable(k), Idioma.t("Lanzable"))
 	var todos := lz.total(Lanzables.tipo_de(k))   # (de ese tipo, en todos sus montones)
 	var quedan: String
 	if todos > lz.cuantos_en(sitio):
@@ -1186,7 +1186,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	# mano; debajo, los objetos, la munición y los arrojables de repuesto
 	rotulo(lienzo, Idioma.t("Lo que llevas"), 64, 86, Color("#e6dec8"))
 	rotulo(lienzo, Idioma.t("Armas"), 64, 110, Tema.AMARILLO)
-	rotulo(lienzo, Idioma.t("Arrojables"), en_fila(5, 0).position.x, 110, Tema.AMARILLO)
+	rotulo(lienzo, Idioma.t("Lanzables"), en_fila(5, 0).position.x, 110, Tema.AMARILLO)
 	for i in 2:
 		var tipo: String = ["cuerpo", "fuego"][i]
 		var id: String = johnny.huecos[tipo]
@@ -1238,7 +1238,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	var filas := maxi(ceili(Objetos.BAUL / 8.0), ceili(cosas.size() / 8.0))
 	var paso := mini(52, floori(264.0 / filas))
 	rotulo(lienzo, Idioma.t("Baúl  %d / %d") % [Objetos.casillas_baul(s), Objetos.BAUL], MITAD, 86, Color("#e6dec8"))
-	rotulo(lienzo, Idioma.t("Objetos, armas y arrojables"), MITAD, 110, Tema.GRIS)
+	rotulo(lienzo, Idioma.t("Objetos, armas y lanzables"), MITAD, 110, Tema.GRIS)
 	for i in filas * 8:
 		var r := Rect2(MITAD + (i % 8) * paso, 132 + floori(i / 8.0) * paso, paso - 6, paso - 6)
 		if i < cosas.size():
@@ -1390,7 +1390,7 @@ func ficha_baul() -> Dictionary:
 			var n := lz.cuantos_en(sel)
 			var caben := caben_lanzables(s, k)
 			d.merge({"icono": icono_lanzable(k), "nombre": nombre_lanzable(k),
-				"que_es": Idioma.t("Arrojable · %s · %s") % [Armas.calidad_nombre(Lanzables.calidad_de(k)),
+				"que_es": Idioma.t("Lanzable · %s · %s") % [Armas.calidad_nombre(Lanzables.calidad_de(k)),
 					Idioma.t("A mano") if sel[0] == "l" else Idioma.t("De repuesto")],
 				"cuanto": Idioma.t("Te quedan %d de %d") % [n, lz.maximo(k)],
 				"partidas": Armas.texto_partidas(lz.quedan_de(k), true), "ultima": lz.quedan_de(k) <= 0,
@@ -1472,7 +1472,7 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 	else:
 		var k := Lanzables.clave(o.id, o.calidad)
 		var tanda := mini(o.n, partida.lanzables.maximo(k))   # (un montón)
-		d.que_es = Idioma.t("Arrojable · %s · En el baúl") % Armas.calidad_nombre(o.calidad)
+		d.que_es = Idioma.t("Lanzable · %s · En el baúl") % Armas.calidad_nombre(o.calidad)
 		d.cuanto = Idioma.t("Hay %d en el baúl") % o.n
 		d.boton = ["sacar", Idioma.t("Sacar %d") % tanda, sacar, not cabe]
 		d.que = que_hace(k) + " "
@@ -1924,7 +1924,7 @@ func destruir_ya() -> void:
 # Cómo se titula cada familia de piezas, arriba (las frases con cuántas piezas, en cuantas_piezas)
 # [traducir]
 const PIEZAS_TITULO := {"pieza_cuerpo": "Cuerpo a cuerpo", "pieza_distancia": "A distancia",
-	"pieza_especial": "Especiales", "pieza_arrojable": "Arrojables"}
+	"pieza_especial": "Especiales", "pieza_arrojable": "Lanzables"}
 # [/traducir]
 
 
@@ -1952,7 +1952,7 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 	# a la izquierda, lo que lleva: sus armas (de cada tipo, la de la mano y la de repuesto) y sus arrojables
 	rotulo(lienzo, Idioma.t("Lo que llevas"), 64, 156, TINTA_BANCO)
 	rotulo(lienzo, Idioma.t("Armas"), 64, 180, ACENTO_BANCO)
-	rotulo(lienzo, Idioma.t("Arrojables"), en_fila(5, 0).position.x, 180, ACENTO_BANCO)
+	rotulo(lienzo, Idioma.t("Lanzables"), en_fila(5, 0).position.x, 180, ACENTO_BANCO)
 	for i in 2:
 		var tipo: String = ["cuerpo", "fuego"][i]
 		var id: String = johnny.huecos[tipo]
@@ -1973,7 +1973,7 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 	var filas := maxi(2, ceili(equipo.size() / 8.0))
 	var paso := mini(46, floori(96.0 / filas))
 	rotulo(lienzo, Idioma.t("En el baúl"), MITAD, 156, TINTA_BANCO)
-	rotulo(lienzo, Idioma.t("Armas y arrojables"), MITAD, 180, ACENTO_BANCO)
+	rotulo(lienzo, Idioma.t("Armas y lanzables"), MITAD, 180, ACENTO_BANCO)
 	for i in filas * 8:
 		var r := Rect2(MITAD + (i % 8) * paso, 202 + floori(i / 8.0) * paso, paso - 4, paso - 4)
 		if i < equipo.size():
@@ -2128,7 +2128,7 @@ func cuantas_piezas(n: int, pieza: String) -> String:
 		"pieza_cuerpo": return Idioma.n("%d material cuerpo a cuerpo", "%d materiales cuerpo a cuerpo", n) % n
 		"pieza_distancia": return Idioma.n("%d material a distancia", "%d materiales a distancia", n) % n
 		"pieza_especial": return Idioma.n("%d material especial", "%d materiales especiales", n) % n
-	return Idioma.n("%d material arrojable", "%d materiales arrojables", n) % n
+	return Idioma.n("%d material lanzable", "%d materiales lanzables", n) % n
 
 
 # Cuántas balas, cartuchos, gasolinas... («1 gasolina», «2 gasolinas»): una frase entera por tipo, con su singular y su

@@ -37,7 +37,7 @@ const GRUPOS := [
 	["cuerpo", "Cuerpo a cuerpo"],
 	["distancia", "A distancia"],
 	["especial", "Especiales"],
-	["arrojable", "Arrojables"],
+	["arrojable", "Lanzables"],
 ]
 # [/traducir]
 
@@ -383,7 +383,8 @@ func dibujar_ficha(fuente: Font) -> void:
 		draw_string(lisa, Vector2(x, y + 13), Idioma.t(m[0]), HORIZONTAL_ALIGNMENT_LEFT, 112, TAM_LISA, PLACA.TEXTO)
 		var llenos := cuadraditos(id, m[1])
 		for i in 10:
-			draw_rect(Rect2(x + ancho - 10 * 11 + 3 + i * 11, y + 3, 8, 8), PLACA.TEXTO if i < llenos else PLACA.APAGADO)
+			# llenos, con los colores de las barras del inventario (rojos, amarillos o verdes según cuántos: 15 nov)
+			draw_rect(Rect2(x + ancho - 10 * 11 + 3 + i * 11, y + 3, 8, 8), INVENTARIO.color_barra(llenos) if i < llenos else PLACA.APAGADO)
 		y += MEDIDOR
 	# qué hace (sus números y cuántos llevas ya no salen: 11 nov, lo dicen los medidores)
 	var tope := comprar.position.y - 6
@@ -427,23 +428,27 @@ func partir(fuente: Font, texto: String, ancho: float, tam: int) -> PackedString
 	return lineas
 
 
-# El botón «Comprar · $X», con el texto en amarillo; si no se puede, en gris y diciendo por qué; lo que ya llevas,
-# «Comprada» en grande, en verde y con el borde verde (como su casilla). Si no te llega el dinero, el precio en un
-# marcador como el de lo ahorrado de arriba, en amarillo y sin el billete (10 nov)
+# El botón de comprar. Desde el 15 nov (lo pidió el dueño), solo el precio, en un marcador como el de lo ahorrado de
+# arriba («$» y cifras de reloj) pero sin las rayas apagadas: amarillo si te llega (con un borde claro al pasar por
+# encima o marcarlo) y gris si no. Si no se puede por otra cosa, en gris diciendo por qué; lo que ya llevas, «Comprada»
+# en grande, en verde y con el borde verde (como su casilla); el regalo de bienvenida, dicho
 func dibujar_comprar(fuente: Font) -> void:
 	var r := Rect2(comprar.position, comprar.size)
 	var texto := texto_comprar(ficha_id)
 	var se_puede := estado(ficha_id) == ""
 	var comprada := estado(ficha_id) == "lleva"
-	var encima := se_puede and comprar.is_hovered()
+	var encima := se_puede and (comprar.is_hovered() or comprar.has_focus())
 	var pulsado := se_puede and comprar.button_pressed
-	draw_rect(r, PLACA.TEXTO if se_puede else (VERDE_BORDE if comprada else PLACA.APAGADO))
-	draw_rect(r.grow(-2), Color("#3a3f47") if encima and not pulsado else (Color("#2f333a") if se_puede else PLACA.NEGRO))
-	if estado(ficha_id) == "caro":
+	if estado(ficha_id) == "caro" or (se_puede and not es_regalo(s, ficha_id)):
 		var p := precio(ficha_id)
 		var medida := PLACA.medida_marcador(fuente, p)
-		PLACA.dibujar_marcador(self, fuente, Rect2((r.get_center() - medida / 2.0).floor(), medida), p, PLACA.AMARILLO)
+		var caja := Rect2((r.get_center() - medida / 2.0).floor() + Vector2(0, 2 if pulsado else 0), medida)
+		if encima:
+			draw_rect(caja.grow(2), PLACA.TEXTO)
+		PLACA.dibujar_marcador(self, fuente, caja, p, PLACA.AMARILLO if se_puede else PLACA.TEXTO_SUAVE, false, false, true)
 		return
+	draw_rect(r, PLACA.TEXTO if se_puede else (VERDE_BORDE if comprada else PLACA.APAGADO))
+	draw_rect(r.grow(-2), Color("#3a3f47") if encima and not pulsado else (Color("#2f333a") if se_puede else PLACA.NEGRO))
 	var tam := 24 if se_puede or comprada else 16
 	while tam > 12 and fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > r.size.x - 12:
 		tam -= 2
@@ -462,12 +467,7 @@ func texto_comprar(id: String) -> String:
 		"caro": return "$%d" % p   # (dibujado en rojo, como un marcador: dibujar_comprar)
 	if es_regalo(s, id):
 		return Idioma.t("Regalo de bienvenida")
-	if not (Tactil.activo and Tactil.con_dedo):
-		if Controles.con_mando:
-			return Idioma.t("A: comprar · $%d") % p
-		if modo == "foco":
-			return Idioma.t("Intro: comprar · $%d") % p
-	return Idioma.t("Comprar · $%d") % p
+	return "$%d" % p   # (solo el precio, en un marcador: dibujar_comprar; antes «Comprar · $X», 15 nov)
 
 
 # Lo que dice la ficha sin nada elegido, párrafo a párrafo: [texto, color] (cómo va la tienda, en su tutorial)

@@ -3,7 +3,7 @@
 Alemán estándar, con **du**. Voz seca e irónica; los gritos se adaptan. Comillas rectas `"`. Los avisos, sin punto final (como en
 español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch: Der %s flickt das Kabel»).
 
-**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (Mutation / Mutationen; «Resetear mutaciones» = Mutationen zurücksetzen; el programa, MUTATIONEN.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (Nebenwirkung(en)). Lo de abajo que diga talento/mutación se lee así.
+**Nombres nuevos (15 nov, lo pidió el dueño):** lo que por dentro (y más abajo, en este glosario) se llama *talento*, el jugador lo ve como **mutación** (Mutation / Mutationen; «Resetear mutaciones» = Mutationen zurücksetzen; el programa, MUTATIONEN.EXE; el árbol ya no tiene nombre) y las *mutaciones* de los jefes son ahora **efectos secundarios** (Nebenwirkung(en)). Lo de abajo que diga talento/mutación se lee así. Y los *arrojables* se llaman ahora **lanzables** (la traducción no cambia: ya era la misma palabra).
 
 ## Reglas de gramática que impone el juego
 

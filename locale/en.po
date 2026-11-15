@@ -2330,7 +2330,7 @@ msgid "Joya de la corona"
 msgstr "Crown Jewel"
 
 #: scripts/logros.gd
-msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgid "Sube un arma o un lanzable a Épica en el banco de trabajo."
 msgstr "Upgrade a weapon or a throwable to Epic at the workbench."
 
 #: scripts/logros.gd
@@ -2970,7 +2970,7 @@ msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
 msgstr "special weapons (the flamethrower, the acid launcher and the lightning gun)"
 
 #: scripts/objetos.gd
-msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "throwables (the Molotov, the grenade, the decoy and the freeze bomb)"
 
 #: scripts/objetos.gd
@@ -2990,7 +2990,7 @@ msgid "Material especial"
 msgstr "Special material"
 
 #: scripts/objetos.gd
-msgid "Material arrojable"
+msgid "Material lanzable"
 msgstr "Throwable material"
 
 #: scripts/objetos.gd
@@ -4695,7 +4695,7 @@ msgstr "Each weapon uses its own (bullets, shells...). An ammo box on the floor 
 msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
 msgstr "Out of ammo, Johnny pulls out his melee weapon."
 
-#: scripts/tutoriales.gd
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Lanzables"
 msgstr "Throwables"
 
@@ -4724,7 +4724,7 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Crafting materials raise the quality of your weapons and throwables at the workbench in the maintenance room."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los durmientes de vez en cuando y los jefes."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
 msgstr "They come in four kinds: melee, ranged, special and throwable. Sleepers drop them now and then, and bosses do too."
 
 #: scripts/tutoriales.gd
@@ -4928,7 +4928,7 @@ msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se d
 msgstr "They're sold in Normal quality: they only last this run and break when it ends. You carry two of each type: the one in your hand goes to the spare slot and the spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand drops to the floor."
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
 msgstr "Ranged weapons come loaded and with spare ammo; special ones come full and go in the ranged slot. Throwables are bought one at a time, while you have room."
 
 #: scripts/tutoriales.gd
@@ -5365,10 +5365,6 @@ msgstr "Equipped"
 msgid "Guardada"
 msgstr "Stowed"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
-msgid "Arrojables"
-msgstr "Throwables"
-
 #: scripts/ui/inventario.gd
 msgid "Objetos"
 msgstr "Items"
@@ -5519,7 +5515,7 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "Fills %s (%d fit in each slot). Dropped one at a time."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable"
+msgid "Lanzable"
 msgstr "Throwable"
 
 #: scripts/ui/inventario.gd
@@ -5591,7 +5587,7 @@ msgid "Baúl  %d / %d"
 msgstr "Stash  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Objetos, armas y arrojables"
+msgid "Objetos, armas y lanzables"
 msgstr "Items, weapons and throwables"
 
 #: scripts/ui/inventario.gd
@@ -5627,7 +5623,7 @@ msgid "%s · reserva %d"
 msgstr "%s · reserve %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · %s"
+msgid "Lanzable · %s · %s"
 msgstr "Throwable · %s · %s"
 
 #: scripts/ui/inventario.gd
@@ -5727,7 +5723,7 @@ msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de l
 msgstr "It goes to your hand; the one you carry moves to spare (if you carry two, the one in hand goes into the stash instead)."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · En el baúl"
+msgid "Lanzable · %s · En el baúl"
 msgstr "Throwable · %s · In stash"
 
 #: scripts/ui/inventario.gd
@@ -5803,7 +5799,7 @@ msgid "En el baúl"
 msgstr "In the stash"
 
 #: scripts/ui/inventario.gd
-msgid "Armas y arrojables"
+msgid "Armas y lanzables"
 msgstr "Weapons and throwables"
 
 #: scripts/ui/inventario.gd
@@ -5865,8 +5861,8 @@ msgstr[0] "%d special material"
 msgstr[1] "%d special materials"
 
 #: scripts/ui/inventario.gd
-msgid "%d material arrojable"
-msgid_plural "%d materiales arrojables"
+msgid "%d material lanzable"
+msgid_plural "%d materiales lanzables"
 msgstr[0] "%d throwable material"
 msgstr[1] "%d throwable materials"
 
@@ -7243,18 +7239,6 @@ msgstr "Not in this challenge"
 #: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "Welcome gift"
-
-#: scripts/ui/tienda_armas.gd
-msgid "A: comprar · $%d"
-msgstr "A: buy · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Intro: comprar · $%d"
-msgstr "Enter: buy · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Comprar · $%d"
-msgstr "Buy · $%d"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Pasa por un arma para ver qué hace."

@@ -935,7 +935,7 @@ func probar_tienda_armas() -> void:
 	await mover_raton(boton.call("pistola_electrica").get_global_rect().get_center())
 	Captura.foto("captura-tienda-pistola_electrica.png")
 	await mover_raton(boton.call("escopeta").get_global_rect().get_center())
-	print("Ratón encima de la escopeta: ficha de «%s» · botón «%s» (esperado: escopeta, Comprar · $%d)" % [
+	print("Ratón encima de la escopeta: ficha de «%s» · botón «%s» (esperado: escopeta, $%d)" % [
 		tienda.call().ficha_id, tienda.call().texto_comprar("escopeta"), tienda.call().precio("escopeta")])
 	Captura.foto("captura-tienda-raton.png")
 	await mover_raton(boton.call("comprar").get_global_rect().get_center())
@@ -963,7 +963,7 @@ func probar_tienda_armas() -> void:
 	boton.call("cuchillo").grab_focus()
 	await pulsar_mando(JOY_BUTTON_DPAD_RIGHT)
 	foco = get_viewport().gui_get_focus_owner()
-	print("Mando, derecha desde el cuchillo: marcado %s · ficha de «%s» · botón «%s» (esperado: b_bate, bate, A: comprar · $%d)" % [
+	print("Mando, derecha desde el cuchillo: marcado %s · ficha de «%s» · botón «%s» (esperado: b_bate, bate, $%d)" % [
 		foco.name if foco else "nada", tienda.call().ficha_id, tienda.call().texto_comprar("bate"), tienda.call().precio("bate")])
 	Captura.foto("captura-tienda-mando.png")
 	await pulsar_mando(JOY_BUTTON_A)

@@ -632,8 +632,11 @@ en una línea.
   izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
   de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas con el borde verde y lo lleno, además, con «LLENO», apagada si no llega:
   `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
-  `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`), qué hace (`INVENTARIO.QUE_HACE`; sus
-  números y cuántos llevas ya no, desde el 11 nov) y el botón «Comprar» (`b_comprar`, sin foco: compra lo de la ficha; si ya la llevas dice «Comprada»). Sin nada
+  `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`; los llenos, con los colores de las barras
+  del inventario, `INVENTARIO.color_barra`, desde el 15 nov), qué hace (`INVENTARIO.QUE_HACE`; sus
+  números y cuántos llevas ya no, desde el 11 nov) y el botón de comprar (`b_comprar`, sin foco: compra lo de la ficha). Desde el 15 nov solo enseña el precio, en un
+  marcador como el de lo ahorrado pero sin rayas apagadas (`CHAPA.dibujar_marcador` con `solo_luz`): amarillo si llega y
+  gris si no (`dibujar_comprar`); si ya la llevas dice «Comprada». Sin nada
   elegido (al abrir con el ratón), la ficha dice que se pase por un arma y lo de esta partida (`nota`); cómo va la
   tienda lo cuenta su tutorial («tienda», la primera vez que se abre: `ordenador.abrir`). El regalo de bienvenida
   (desde el 10 nov Johnny empieza solo con la fregona: `Armas.SIEMPRE`): la primera pistola, gratis una sola vez

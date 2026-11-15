@@ -2332,7 +2332,7 @@ msgid "Joya de la corona"
 msgstr "Венец творения"
 
 #: scripts/logros.gd
-msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgid "Sube un arma o un lanzable a Épica en el banco de trabajo."
 msgstr "Улучши оружие или метательное до Эпического на верстаке."
 
 #: scripts/logros.gd
@@ -2972,7 +2972,7 @@ msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
 msgstr "особое оружие (огнемет, кислотомет и молниемет)"
 
 #: scripts/objetos.gd
-msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgid "los lanzables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "метательное оружие (молотов, граната, приманка и криобомба)"
 
 #: scripts/objetos.gd
@@ -2992,7 +2992,7 @@ msgid "Material especial"
 msgstr "Особый материал"
 
 #: scripts/objetos.gd
-msgid "Material arrojable"
+msgid "Material lanzable"
 msgstr "Метательный материал"
 
 #: scripts/objetos.gd
@@ -4701,7 +4701,7 @@ msgstr "Каждое оружие тратит свои патроны (пули
 msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
 msgstr "Без патронов Джонни достает оружие ближнего боя."
 
-#: scripts/tutoriales.gd
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Lanzables"
 msgstr "Метательное"
 
@@ -4730,7 +4730,7 @@ msgid "Con los materiales de fabricación se sube la calidad de las armas y los 
 msgstr "Материалы для изготовления повышают качество оружия и метательного на верстаке в дворницкой."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Los sueltan los durmientes de vez en cuando y los jefes."
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Los sueltan los durmientes de vez en cuando y los jefes."
 msgstr "Их четыре вида: ближний бой, дальний бой, особые и метательные. Их иногда роняют спящие и всегда — боссы."
 
 #: scripts/tutoriales.gd
@@ -4934,7 +4934,7 @@ msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se d
 msgstr "Продаётся в качестве Обычное: служит только этот забег и потом ломается. Ты носишь по два каждого типа: то, что было в руке, уходит в запас, а запасное — в сундук; если не помещается или его нельзя убрать, то, что было в руке, остаётся на полу."
 
 #: scripts/tutoriales.gd
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los arrojables se compran de uno en uno, mientras te quepan."
+msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
 msgstr "Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным, и оно занимает место дальнобойного. Метательное покупается по одному, пока есть место."
 
 #: scripts/tutoriales.gd
@@ -5372,10 +5372,6 @@ msgstr "Экипировано"
 msgid "Guardada"
 msgstr "Убрано"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
-msgid "Arrojables"
-msgstr "Метательное"
-
 #: scripts/ui/inventario.gd
 msgid "Objetos"
 msgstr "Предметы"
@@ -5526,7 +5522,7 @@ msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
 msgstr "Заправляет: %s (по %d в ячейке). Выбрасывается по одному."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable"
+msgid "Lanzable"
 msgstr "Метательное"
 
 #: scripts/ui/inventario.gd
@@ -5598,7 +5594,7 @@ msgid "Baúl  %d / %d"
 msgstr "Сундук  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Objetos, armas y arrojables"
+msgid "Objetos, armas y lanzables"
 msgstr "Предметы, оружие и метательное"
 
 #: scripts/ui/inventario.gd
@@ -5634,7 +5630,7 @@ msgid "%s · reserva %d"
 msgstr "%s · запас %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · %s"
+msgid "Lanzable · %s · %s"
 msgstr "Метательное · %s · %s"
 
 #: scripts/ui/inventario.gd
@@ -5734,7 +5730,7 @@ msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de l
 msgstr "Пойдет в руку; то, что в руке, станет запасным (если у тебя уже два, то, что в руке, уйдет в сундук)."
 
 #: scripts/ui/inventario.gd
-msgid "Arrojable · %s · En el baúl"
+msgid "Lanzable · %s · En el baúl"
 msgstr "Метательное · %s · В сундуке"
 
 #: scripts/ui/inventario.gd
@@ -5810,7 +5806,7 @@ msgid "En el baúl"
 msgstr "В сундуке"
 
 #: scripts/ui/inventario.gd
-msgid "Armas y arrojables"
+msgid "Armas y lanzables"
 msgstr "Оружие и метательное"
 
 #: scripts/ui/inventario.gd
@@ -5875,8 +5871,8 @@ msgstr[1] "%d особых материала"
 msgstr[2] "%d особых материалов"
 
 #: scripts/ui/inventario.gd
-msgid "%d material arrojable"
-msgid_plural "%d materiales arrojables"
+msgid "%d material lanzable"
+msgid_plural "%d materiales lanzables"
 msgstr[0] "%d метательный материал"
 msgstr[1] "%d метательных материала"
 msgstr[2] "%d метательных материалов"
@@ -7261,18 +7257,6 @@ msgstr "Не в этом испытании"
 #: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "Подарок новичку"
-
-#: scripts/ui/tienda_armas.gd
-msgid "A: comprar · $%d"
-msgstr "A: купить · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Intro: comprar · $%d"
-msgstr "Enter: купить · $%d"
-
-#: scripts/ui/tienda_armas.gd
-msgid "Comprar · $%d"
-msgstr "Купить · $%d"
 
 #: scripts/ui/tienda_armas.gd
 msgid "Pasa por un arma para ver qué hace."

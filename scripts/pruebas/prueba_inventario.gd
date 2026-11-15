@@ -812,7 +812,7 @@ func probar_banco_mejorar() -> void:
 		boton.call(), dice.call("nota"), dice.call("coste")])
 	inventario.tocar("q2")
 	await get_tree().process_frame
-	print("Los 3 molotovs Poco comunes del baúl: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 2 materiales arrojables.)" % [
+	print("Los 3 molotovs Poco comunes del baúl: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 2 materiales lanzables.)" % [
 		boton.call(), dice.call("coste")])
 	inventario.cerrar()
 	Guardado.escribir(antes)
@@ -1107,8 +1107,8 @@ func probar_tienda() -> void:
 	await get_tree().process_frame
 	var titulos := ordenador.ventana.find_children("*", "Label", true, false).map(func(l): return l.text).filter(
 		func(t): return not "Daño" in t and (t.begins_with("Cuerpo a cuerpo") or t.begins_with("A distancia") or
-			t.begins_with("Especiales") or t.begins_with("Arrojables")))   # (las tarjetas dicen «Daño»)
-	print("Secciones: %s (esperado: Cuerpo a cuerpo, A distancia..., Especiales..., Arrojables...)" % [titulos])
+			t.begins_with("Especiales") or t.begins_with("Lanzables")))   # (las tarjetas dicen «Daño»)
+	print("Secciones: %s (esperado: Cuerpo a cuerpo, A distancia..., Especiales..., Lanzables...)" % [titulos])
 	print("Familias: escopeta %s, lanzallamas %s, bate %s (esperado: distancia, especial, cuerpo)" % [
 		Armas.familia("escopeta"), Armas.familia("lanzallamas"), Armas.familia("bate")])
 	Captura.foto("captura-tienda.png")
