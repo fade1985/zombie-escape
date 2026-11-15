@@ -191,7 +191,7 @@ func pintar_latido() -> void:
 
 func icono(nombre: String) -> Texture2D:
 	if not texturas.has(nombre):
-		texturas[nombre] = load("res://assets/ui/iconos/%s.png" % nombre)
+		texturas[nombre] = Objetos.textura(nombre)   # (las armas, con el dibujo de la tienda)
 	return texturas[nombre]
 
 
@@ -243,6 +243,8 @@ func hueco_de(r: Rect2) -> Rect2:
 func icono_dentro(c: Control, nombre: String, r: Rect2, corrido: Vector2, color: Color) -> void:
 	var tex := icono(nombre)
 	var lado := roundf(r.size.x * 32.0 / 44.0)
+	if Objetos.de_tienda(tex):
+		lado = hueco_de(r).size.x   # el de la tienda (las armas) llena su cuadro en diagonal: justo el hueco, sin cortarle las puntas
 	var donde := Rect2(r.get_center() - Vector2(lado, lado) / 2.0 + corrido, Vector2(lado, lado))
 	var visto := donde.intersection(hueco_de(r))
 	if visto.size.x <= 0.0 or visto.size.y <= 0.0:

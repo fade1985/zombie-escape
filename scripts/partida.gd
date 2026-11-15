@@ -1575,8 +1575,8 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector
 func soltar_arma(id: String, donde: Vector2, calidad := 0, quedan := -1) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
-	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(id))
-	cosa.tamano = 1.4
+	cosa.icono = Objetos.textura(Objetos.icono(id))
+	cosa.tamano = 1.0 if Objetos.de_tienda(cosa.icono) else 1.4   # el dibujo de la tienda (de 48) a × 1 (el icono viejo, de 32, iba a × 1,4)
 	cosa.tirado = true
 	cosa.position = donde
 	if calidad > 0:

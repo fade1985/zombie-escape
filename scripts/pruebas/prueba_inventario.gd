@@ -1293,6 +1293,54 @@ func probar_tirar_lanzables() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --dibujos-armas": los dibujos de la tienda de armas en todos los sitios donde sale un arma
+# (Objetos.textura, 16 nov), cada uno del tamaño del icono viejo: el HUD y las armas tiradas en el suelo, una Rara con su
+# brillo (captura-dibujos-armas-suelo.png), los botones del móvil (-movil), el menú de pausa (-pausa), el inventario
+# (-inventario) y las casillas pequeñas del baúl y del banco (-baul, -banco). El premio de la joyería, con --joyeria.
+# Deja el guardado como estaba y se cierra
+func probar_dibujos_armas() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.baul = {}
+		g2.baul_equipo = [{"id": "mp5", "calidad": 1, "quedan": 3}, {"id": "lanzallamas", "calidad": 2, "quedan": 3},
+			{"id": "bate", "calidad": 0, "quedan": 3}, {"id": "pistola_electrica", "calidad": 0, "quedan": 3}])
+	await get_tree().create_timer(0.5).timeout
+	llevar_arma("katana", 1, true, false)
+	llevar_arma("escopeta", 2, true, false)
+	soltar_arma("lanzagranadas", johnny.position + Vector2(-90, 40), 3)
+	soltar_arma("motosierra", johnny.position + Vector2(90, 40))
+	soltar_arma("fregona", johnny.position + Vector2(0, 90))
+	await get_tree().create_timer(0.8).timeout
+	var de_tienda: int = mapa.cosas.get_children().filter(func(n): return n is BILLETE and Objetos.de_tienda(n.icono)).size()
+	print("Dibujos · en el suelo, con el dibujo de la tienda: %d (esperado: 3) · el de la escopeta: %s · el de una cura: %s" % [
+		de_tienda, Objetos.textura("escopeta").resource_path, Objetos.textura(Objetos.icono("botiquin")).resource_path])
+	Captura.foto("captura-dibujos-armas-suelo.png")
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-dibujos-armas-movil.png")
+	Tactil.activo = false
+	await get_tree().process_frame
+	pausar()
+	await get_tree().create_timer(0.4, true).timeout
+	Captura.foto("captura-dibujos-armas-pausa.png")
+	seguir()
+	await get_tree().process_frame
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4, true).timeout
+	Captura.foto("captura-dibujos-armas-inventario.png")
+	inventario.cerrar()
+	for que in ["baul", "banco"]:
+		await get_tree().create_timer(0.3).timeout
+		get_tree().paused = true
+		inventario.abrir(que, self)   # (sin su tutorial)
+		await get_tree().create_timer(0.4, true).timeout
+		Captura.foto("captura-dibujos-armas-%s.png" % que)
+		inventario.cerrar()
+	Guardado.escribir(antes)
+	get_tree().quit()
+
+
 func probar_montones() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):

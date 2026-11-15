@@ -694,7 +694,12 @@ en una línea.
   chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino). Las armas que tienen sus
   dibujos de la tienda (`assets/ui/tienda/<id>.png`, 48 en diagonal, para la casilla, y `<id>-grande.png`, 96x48 en
   horizontal, para la ficha a ×2; `dibujo_tienda`, de PixelLab: `assets/pixellab.json` → `tienda-dibujos`) los usan; las
-  demás, el icono de siempre.
+  demás, el icono de siempre. Desde el 16 nov el dibujo de 48 sale en **todos** los sitios donde hay un arma (también la
+  fregona): `Objetos.textura(nombre)` da el de la tienda si lo hay y, si no, el icono de 32 (`Objetos.de_tienda` dice
+  cuál es). Lo usan el HUD, los botones del móvil, la pausa (`Tema.icono_y_texto`), el inventario, el baúl y el banco
+  (`inventario.dibujo`: en las casillas pequeñas, en el cuadro de 32 del icono viejo), las armas del suelo
+  (`partida.soltar_arma`, a ×1) y el premio de la joyería (64 de lado). Cada sitio lo pone en el cuadro que ocupaba el
+  icono viejo. Prueba: `--dibujos-armas` (y `--edificio centro --joyeria`).
 - `archivador_logros.gd`: los logros de ConserjeOS (LOGROS.EXE), desde el 7 nov. La misma chapa oscura, como un
   archivador: arriba, lo ahorrado y, a la derecha, «Logros 10/42» y «Por cobrar $X». A la izquierda, un botón por página
   (`b_tema_<tema>`): «Resumen» y uno por apartado de `Logros.TEMAS`, con su barrita, su cuenta y un «!» si tiene algo por

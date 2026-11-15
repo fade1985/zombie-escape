@@ -216,6 +216,8 @@
 #   --municion          la munición por tipos y los arrojables (3 a mano; sin repuesto desde el 13 nov) [prueba_inventario.gd]
 #   --tirar-lanzables   los lanzables se tiran al suelo desde el inventario (uno y el montón entero) y se recogen
 #                       con su calidad y sus partidas                                      [prueba_inventario.gd]
+#   --dibujos-armas     los dibujos de la tienda de armas en todos los sitios donde sale un arma: HUD, suelo, móvil,
+#                       pausa, inventario, baúl y banco (el premio de la joyería, con --joyeria) [prueba_inventario.gd]
 #   --montones          los arrojables en montones de 2: el de la mano lleno, la mano llena, al acabarse uno, el
 #                       baúl (juntos, de 2 en 2), completar el edificio y una partida guardada con montones de
 #                       repuesto (13 nov: todos al baúl)                                [prueba_inventario.gd]
@@ -798,6 +800,9 @@ func empezar_prueba() -> void:
 	elif "--tirar-lanzables" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tirar_lanzables()
+	elif "--dibujos-armas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_dibujos_armas()
 	elif "--montones" in args:
 		set_process(false)   # sin la prueba larga
 		probar_montones()

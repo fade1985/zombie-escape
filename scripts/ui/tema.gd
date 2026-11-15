@@ -267,7 +267,7 @@ static func icono_y_texto(icono: String, texto: String, tamano := 24) -> HBoxCon
 	fila.add_theme_constant_override("separation", 6)
 	if icono != "":
 		var imagen := TextureRect.new()
-		imagen.texture = load("res://assets/ui/iconos/%s.png" % icono)
+		imagen.texture = Objetos.textura(icono)   # (las armas, con el dibujo de la tienda, en el mismo cuadro)
 		imagen.custom_minimum_size = Vector2(tamano, tamano)
 		imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

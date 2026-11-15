@@ -506,18 +506,18 @@ func marcar_hueco(b: Button) -> void:
 # El dibujo de un icono en medio de una casilla de ese tamaño, lo más grande que quepa a escala entera (para que los
 # píxeles no se deformen)
 func dibujo(padre: Control, icono: String, lado: Vector2, margen: float) -> TextureRect:
-	var tex: Texture2D = load("res://assets/ui/iconos/%s.png" % icono)
-	# las armas, con el dibujo de la tienda de armas (assets/ui/tienda, de 48: 13 nov) si cabe; en las casillas pequeñas
-	# del baúl y del banco, con el icono de siempre (la fregona, que no se vende, también tiene el suyo en assets/ui/tienda). Esos dibujos ya traen aire alrededor:
-	# sin margen (si no, en las fichas grandes del baúl y del banco saldrían a × 1, más pequeños que el icono)
-	var de_tienda := "res://assets/ui/tienda/%s.png" % icono
-	if ResourceLoader.exists(de_tienda):
-		var grande: Texture2D = load(de_tienda)
-		if grande.get_width() <= lado.x and grande.get_height() <= lado.y:
-			tex = grande
-			margen = 0.0
-	var k := maxi(1, floori(minf((lado.x - margen) / tex.get_width(), (lado.y - margen) / tex.get_height())))
-	var r := estampa(tex, tex.get_size() * k)
+	# las armas, con el dibujo de la tienda de armas (Objetos.textura: de 48, 13 nov; la fregona, que no se vende, también
+	# tiene el suyo). Esos dibujos ya traen aire alrededor: sin margen (si no, en las fichas grandes del baúl y del banco
+	# saldrían a × 1, más pequeños que el icono). En las casillas donde no cabe a × 1 (las pequeñas del baúl y del banco:
+	# 16 nov), se encoge al cuadro que ocupaba el icono viejo (32, con su aire alrededor y sin tocar el borde)
+	var tex := Objetos.textura(icono)
+	var k := maxf(1.0, floorf(minf((lado.x - margen) / tex.get_width(), (lado.y - margen) / tex.get_height())))
+	if Objetos.de_tienda(tex):
+		k = floorf(minf(lado.x / tex.get_width(), lado.y / tex.get_height()))
+		if k < 1.0:
+			var cuadro := 32.0 * maxf(1.0, floorf(minf((lado.x - margen) / 32.0, (lado.y - margen) / 32.0)))
+			k = minf(cuadro, minf(lado.x, lado.y)) / maxf(tex.get_width(), tex.get_height())
+	var r := estampa(tex, (tex.get_size() * k).floor())
 	padre.add_child(r)
 	r.position = ((lado - r.size) / 2.0).floor()
 	return r

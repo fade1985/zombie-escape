@@ -236,8 +236,9 @@ func poner_premio() -> void:
 	var cosa := BILLETE.new()
 	cosa.name = "Vitrina"
 	cosa.johnny = partida.johnny
-	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(d.premio.arma))
-	cosa.tamano = 2.0
+	cosa.icono = Objetos.textura(Objetos.icono(d.premio.arma))
+	# el dibujo de la tienda (de 48) en el mismo cuadro que el icono viejo (de 32 a × 2: 64 unidades)
+	cosa.tamano = 64.0 / cosa.icono.get_width()
 	cosa.tirado = true   # (quieta: no sale despedida)
 	cosa.position = d.premio.pos
 	var brillo := PointLight2D.new()

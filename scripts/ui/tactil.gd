@@ -429,8 +429,7 @@ func dibujar() -> void:
 func icono(donde: Vector2, nombre: String, lado: float) -> void:
 	# se guardan: si no, la imagen se suelta antes de que se pinte y sale un cuadrado blanco
 	if not iconos.has(nombre):
-		var ruta := "res://assets/ui/iconos/%s.png" % nombre
-		iconos[nombre] = load(ruta) if ResourceLoader.exists(ruta) else null
+		iconos[nombre] = Objetos.textura(nombre)   # (las armas, con el dibujo de la tienda, en el mismo cuadro)
 	var t: Texture2D = iconos[nombre]
 	if t == null:
 		return

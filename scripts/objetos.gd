@@ -142,6 +142,22 @@ static func icono(id: String) -> String:
 	return id
 
 
+# El dibujo de un icono (el nombre que da icono()) para pintarlo en cualquier sitio del juego: las armas y la fregona,
+# con el de la tienda de armas (assets/ui/tienda/<nombre>.png, de 48, en diagonal y llenando su cuadro: 16 nov); lo
+# demás (objetos, munición, lanzables, materiales...), con el icono de siempre (assets/ui/iconos/<nombre>.png, de 32).
+# null si no hay ninguno. Cada sitio lo encaja en el cuadro donde iba el icono viejo (ver de_tienda())
+static func textura(nombre: String) -> Texture2D:
+	for ruta in ["res://assets/ui/tienda/%s.png" % nombre, "res://assets/ui/iconos/%s.png" % nombre]:
+		if ResourceLoader.exists(ruta):
+			return load(ruta)
+	return null
+
+
+# Si ese dibujo es uno de la tienda de armas (de 48 y sin margen que quitarle: llena su cuadro)
+static func de_tienda(tex: Texture2D) -> bool:
+	return tex != null and tex.resource_path.begins_with("res://assets/ui/tienda/")
+
+
 # Las casillas de la mochila (una lista de ids, uno por objeto): [[id, cuántos], ...] en el orden en que se cogieron y,
 # al final, las curas (USABLES, en su orden): en el inventario van aparte, en su grupo «Curas» (M67), y no ocupan
 # casilla de «Objetos» (ocupadas). La gasolina, el bidón de ácido y la batería no ocupan casilla de la mochila, sino
