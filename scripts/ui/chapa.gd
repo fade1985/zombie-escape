@@ -20,6 +20,19 @@ const PIXEL_ADN := 2.0
 const CIFRAS := 4        # las casillas de los marcadores fijos (los del inventario): hasta 9999...
 const MAXIMO := 10000    # ...y de aquí en adelante, «MAX»
 const ARRIBA := 44                   # lo alto de la franja de lo ahorrado
+# El «8» apagado de las casillas vacías de los marcadores fijos: el de los relojes digitales, siete rayas de 3 de grueso
+# con las puntas en pico y un hueco entre ellas (lo pidió el dueño, con un dibujo, el 15 nov; antes era el «8» de la
+# letra). Del tamaño de las cifras de la letra a 32 (OCHO_TAM: 16 × 19), a cuadraditos: [x, y, ancho, alto] de cada trozo
+const OCHO_TAM := Vector2(16, 19)
+const OCHO := [
+	[4, 0, 8, 1], [3, 1, 10, 1], [4, 2, 8, 1],        # arriba
+	[4, 8, 8, 1], [3, 9, 10, 1], [4, 10, 8, 1],       # en medio
+	[4, 16, 8, 1], [3, 17, 10, 1], [4, 18, 8, 1],     # abajo
+	[1, 2, 1, 7], [0, 3, 1, 5], [2, 3, 1, 5],         # arriba a la izquierda
+	[14, 2, 1, 7], [13, 3, 1, 5], [15, 3, 1, 5],      # arriba a la derecha
+	[1, 10, 1, 7], [0, 11, 1, 5], [2, 11, 1, 5],      # abajo a la izquierda
+	[14, 10, 1, 7], [13, 11, 1, 5], [15, 11, 1, 5],   # abajo a la derecha
+]
 
 
 # La chapa, con su marco y un remache en cada esquina
@@ -48,7 +61,7 @@ static func dibujar_mutageno(lienzo: CanvasItem, fuente: Font, mutageno: int) ->
 # el «$» pegado a la cifra, en "color" y con su sombra. Sin los «8» apagados de antes en las casillas vacías (10 nov).
 # Con "adn", la del mutágeno (inventario.gd): en vez del «$», la doble hélice (ADN).
 # Con "fijo" (los dos del inventario, 15 nov): siempre CIFRAS casillas, del mismo ancho con «$» o con hélice, y en cada
-# casilla un «8» apagado (los segmentos sin encender) debajo de la cifra; de MAXIMO en adelante, «8MAX»
+# casilla un «8» apagado (los segmentos sin encender: OCHO, dibujar_ocho) debajo de la cifra; de MAXIMO en adelante, «8MAX»
 static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valor: int, color: Color, adn := false,
 		fijo := false) -> void:
 	var numero := str(valor)
@@ -72,14 +85,20 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 	if fijo:
 		for i in CIFRAS:
 			if i < apagadas or numero[i - apagadas].is_valid_int():   # (las letras de MAX, sin «8» debajo)
-				lienzo.draw_string(fuente, Vector2(base.x + ancho_dolar + i * casilla, base.y), "8", HORIZONTAL_ALIGNMENT_CENTER,
-					casilla, 32, color.darkened(0.82))   # no-tr
+				var x := base.x + ancho_dolar + i * casilla + roundf((casilla - OCHO_TAM.x) / 2.0)
+				dibujar_ocho(lienzo, Vector2(x, base.y - OCHO_TAM.y + 1), color.darkened(0.82))
 	for i in numero.length():
 		# centrada a mano en su casilla: la «A» de MAX es más ancha que un 8 y, con el ancho de la casilla, Godot no la pinta
 		var x := base.x + ancho_dolar + (i + apagadas) * casilla
 		x += roundf((casilla - fuente.get_string_size(numero[i], HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x) / 2.0)
 		lienzo.draw_string(fuente, Vector2(x, base.y + 2), numero[i], HORIZONTAL_ALIGNMENT_LEFT, -1, 32, sombra)
 		lienzo.draw_string(fuente, Vector2(x, base.y), numero[i], HORIZONTAL_ALIGNMENT_LEFT, -1, 32, color)
+
+
+# El «8» apagado (OCHO), con su esquina de arriba a la izquierda en "pos"
+static func dibujar_ocho(lienzo: CanvasItem, pos: Vector2, color: Color) -> void:
+	for r in OCHO:
+		lienzo.draw_rect(Rect2(pos + Vector2(r[0], r[1]), Vector2(r[2], r[3])), color)
 
 
 # La doble hélice del mutágeno, con su esquina de arriba a la izquierda en "pos": primero la sombra, como las cifras.
