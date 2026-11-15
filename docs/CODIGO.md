@@ -451,8 +451,9 @@ en una línea.
   debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Y 10.000
   es el tope de verdad (`partida.TOPE`, 15 nov): con la cartera (lo ahorrado más lo de la partida) o el mutágeno en MAX,
   los enemigos dejan de soltarlos, lo que hay en el suelo no se coge (`puede`), los fajos (eventos, joyería) suman solo
-  lo que cabe (`sumar_dolares`, `cabe_dolares`), lo ahorrado al acabar no pasa de ahí y un logro cuyo premio no quepa no
-  se cobra hasta gastar algo (`Logros.cobrar`, `Logros.TOPE`). Lo prueba `--mutageno`. Cuánto
+  lo que cabe (`sumar_dolares`, `cabe_dolares`), lo ahorrado al acabar no pasa de ahí y, al cobrar un logro, se suma
+  solo lo que cabe: el logro queda cobrado igual y lo demás se pierde para siempre (`Logros.cobrar`, `Logros.TOPE`; lo
+  avisa el tutorial de Logros y el mensaje del archivador). Lo prueba `--mutageno`. Cuánto
   da una partida: `--durmientes-planta` (unos 300 en los Apartamentos y 340 en el centro y la torre, más las hordas).
   Prueba: `--mutageno`. Se gasta en los talentos del ordenador (ver `talentos.gd`, arriba), que lo enseñan arriba a la
   izquierda en vez de lo ahorrado (`CHAPA.dibujar_mutageno`).

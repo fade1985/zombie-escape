@@ -4971,6 +4971,10 @@ msgstr "Voici les défis du jeu, classés par thème."
 msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
 msgstr "Quand tu en obtiens un, reviens ici pour l'encaisser : chaque succès rapporte une prime en dollars."
 
+#: scripts/tutoriales.gd
+msgid "Ojo: no se puede pasar del máximo de dólares (MAX). Si al cobrar un logro su premio no cabe, el logro cuenta como conseguido, pero lo que no cabe se pierde para siempre."
+msgstr "Attention : impossible de dépasser le maximum de dollars (MAX). Si la prime d'un succès ne rentre pas quand tu l'encaisses, le succès compte quand même, mais ce qui ne rentre pas est perdu pour toujours."
+
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Dosier VD-7"
 msgstr "Dossier VD-7"
@@ -6977,8 +6981,16 @@ msgid "Premio: $%d. Llevas %d de %d."
 msgstr "Récompense : $%d. Tu en es à %d sur %d."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
-msgstr "$%d encaissés ! Tu peux maintenant les dépenser en points ou en armes."
+msgid "¡Cobrados $%d! Ya puedes gastarlos en armas."
+msgstr "$%d encaissés ! Tu peux maintenant les dépenser en armes."
+
+#: scripts/ui/ordenador.gd
+msgid "Tienes el máximo de dólares: el logro queda conseguido, pero su premio se pierde."
+msgstr "Tu as le maximum de dollars : le succès compte, mais sa prime est perdue."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Cobrados $%d! El resto no cabe: ya tienes el máximo de dólares."
+msgstr "$%d encaissés ! Le reste ne rentre pas : tu as déjà le maximum de dollars."
 
 #: scripts/ui/ordenador.gd
 msgid "%s: %d de %d páginas del dosier."

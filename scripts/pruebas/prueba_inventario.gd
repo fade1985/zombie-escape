@@ -1877,6 +1877,19 @@ func probar_mutageno() -> void:
 		await get_tree().physics_frame
 	print("Tope: con %d (uno menos que MAX) y dos en el suelo, coge %d y deja %d (esperado: 1 y 1) · un fajo de 50 suma %d (esperado: 10)" % [
 		TOPE - 1, mutageno - (TOPE - 1), get_tree().get_nodes_in_group("mutagenos").size() - m0, sumar_dolares(50)])
+	# los logros: con MAX, cobrar uno lo deja cobrado sin premio; si cabe una parte, cobra esa parte (y el resto se pierde)
+	dolares = 0
+	var premio: int = Logros.datos("desahucio").premio
+	var cobros := []
+	for ahorro in [TOPE, TOPE - 5]:
+		Guardado.cambiar(func(g):
+			g.dolares = ahorro
+			g.logros["desahucio"] = "conseguido")
+		var cobrado := Logros.cobrar("desahucio")
+		var g := Guardado.cargar()
+		cobros.append([cobrado, g.dolares, Logros.estado(g, "desahucio")])
+	print("Tope en los logros (premio $%d): con MAX cobra %s; con 5 menos, %s; y otra vez, %d (esperado: [0, %d, cobrado], [5, %d, cobrado] y -1)" % [
+		premio, cobros[0], cobros[1], Logros.cobrar("desahucio"), TOPE, TOPE])
 	get_tree().quit()
 
 

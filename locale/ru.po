@@ -4977,6 +4977,10 @@ msgstr "Здесь испытания игры, разложенные по те
 msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
 msgstr "Получив достижение, возвращайся сюда за наградой: каждое даёт приз в долларах."
 
+#: scripts/tutoriales.gd
+msgid "Ojo: no se puede pasar del máximo de dólares (MAX). Si al cobrar un logro su premio no cabe, el logro cuenta como conseguido, pero lo que no cabe se pierde para siempre."
+msgstr "Внимание: больше максимума долларов (MAX) не накопить. Если при получении награда не влезает, достижение всё равно засчитывается, но то, что не влезло, пропадает навсегда."
+
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Dosier VD-7"
 msgstr "Досье VD-7"
@@ -6995,8 +6999,16 @@ msgid "Premio: $%d. Llevas %d de %d."
 msgstr "Награда: $%d. Прогресс: %d из %d."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
-msgstr "Получено $%d! Теперь их можно потратить на очки или оружие."
+msgid "¡Cobrados $%d! Ya puedes gastarlos en armas."
+msgstr "Получено $%d! Теперь их можно потратить на оружие."
+
+#: scripts/ui/ordenador.gd
+msgid "Tienes el máximo de dólares: el logro queda conseguido, pero su premio se pierde."
+msgstr "У тебя максимум долларов: достижение засчитано, но награда пропадает."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Cobrados $%d! El resto no cabe: ya tienes el máximo de dólares."
+msgstr "Получено $%d! Остальное не влезает: у тебя уже максимум долларов."
 
 #: scripts/ui/ordenador.gd
 msgid "%s: %d de %d páginas del dosier."

@@ -947,15 +947,22 @@ func explica_logro(l: Dictionary, e: String, hecho: int, meta: int) -> String:
 
 
 func cobrar_logro(id: String) -> void:
-	var dinero := Logros.cobrar(id)
-	if dinero == 0:
+	var dinero := Logros.cobrar(id, partida.dolares)
+	if dinero < 0:
 		Sonido.tocar("no")
 		return
-	Sonido.tocar("compra")
+	var premio: int = Logros.datos(id).premio
+	Sonido.tocar("compra" if dinero > 0 else "no")
 	partida.ahorrados = Guardado.cargar().dolares
 	refrescar_avisos()   # (con el último premio cobrado, se quita el aviso de Logros)
 	abrir("logros", "b_" + id)
-	info.set_deferred("text", Idioma.t("¡Cobrados $%d! Ya puedes gastarlos en puntos o armas.") % dinero)
+	# con el máximo de dólares (MAX, partida.TOPE), lo que no cabe se pierde: el logro queda conseguido igual
+	var texto := Idioma.t("¡Cobrados $%d! Ya puedes gastarlos en armas.") % dinero   # (los talentos, con mutágeno)
+	if dinero == 0:
+		texto = Idioma.t("Tienes el máximo de dólares: el logro queda conseguido, pero su premio se pierde.")
+	elif dinero < premio:
+		texto = Idioma.t("¡Cobrados $%d! El resto no cabe: ya tienes el máximo de dólares.") % dinero
+	info.set_deferred("text", texto)
 
 
 # ── Dosier ──

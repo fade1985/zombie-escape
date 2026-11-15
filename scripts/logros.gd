@@ -338,16 +338,17 @@ func avisar() -> void:
 	por_avisar.clear()
 
 
-# Cobra el premio de uno conseguido (desde el ordenador). Devuelve los dólares cobrados (0 si no se podía). Si con él
-# se pasaría del tope de los dólares («MAX», partida.TOPE), no se cobra: espera, conseguido, a que se gaste algo
-static func cobrar(id: String) -> int:
+# Cobra el premio de uno conseguido (desde el ordenador). Devuelve los dólares cobrados, o -1 si no se podía. Sin pasar
+# del tope de los dólares («MAX», TOPE, contando los "en_partida", los de la partida en curso): lo que no cabe se pierde
+# para siempre y el logro queda cobrado igual (lo pidió el dueño el 15 nov; lo explica el tutorial de Logros)
+static func cobrar(id: String, en_partida := 0) -> int:
 	var l := datos(id)
-	var cobrado := [0]
+	var cobrado := [-1]
 	Guardado.cambiar(func(g):
-		if estado(g, id) == "conseguido" and g.dolares + l.premio <= TOPE:
+		if estado(g, id) == "conseguido":
 			g.logros[id] = "cobrado"
-			g.dolares += l.premio
-			cobrado[0] = l.premio)
+			cobrado[0] = clampi(TOPE - g.dolares - en_partida, 0, l.premio)
+			g.dolares += cobrado[0])
 	return cobrado[0]
 
 

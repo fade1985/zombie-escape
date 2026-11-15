@@ -4965,6 +4965,10 @@ msgstr "这里是游戏的各项挑战，按主题分类。"
 msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
 msgstr "达成后回到这里领取：每个成就都有美元奖励。"
 
+#: scripts/tutoriales.gd
+msgid "Ojo: no se puede pasar del máximo de dólares (MAX). Si al cobrar un logro su premio no cabe, el logro cuenta como conseguido, pero lo que no cabe se pierde para siempre."
+msgstr "注意：美元不能超过上限（MAX）。领取成就时如果奖励放不下，成就仍算达成，但放不下的部分会永久失去。"
+
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Dosier VD-7"
 msgstr "VD-7档案"
@@ -6959,8 +6963,16 @@ msgid "Premio: $%d. Llevas %d de %d."
 msgstr "奖励：$%d。进度 %d / %d。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
-msgstr "已领取 $%d！现在可以用来买天赋点或武器了。"
+msgid "¡Cobrados $%d! Ya puedes gastarlos en armas."
+msgstr "已领取 $%d！现在可以用来买武器了。"
+
+#: scripts/ui/ordenador.gd
+msgid "Tienes el máximo de dólares: el logro queda conseguido, pero su premio se pierde."
+msgstr "美元已达上限：成就算作达成，但奖励就此失去。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Cobrados $%d! El resto no cabe: ya tienes el máximo de dólares."
+msgstr "已领取 $%d！其余的放不下：美元已达上限。"
 
 #: scripts/ui/ordenador.gd
 msgid "%s: %d de %d páginas del dosier."
