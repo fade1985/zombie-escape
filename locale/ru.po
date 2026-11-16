@@ -7256,12 +7256,28 @@ msgid "No te llega: te faltan $%d."
 msgstr "Не хватает: нужно еще $%d."
 
 #: scripts/ui/ordenador.gd
+msgid "¡Regalo! %s, a la mano."
+msgstr "Подарок! %s — в руке."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s, a la mano."
+msgstr "Куплено! %s — в руке."
+
+#: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl: sácala de allí para llevarla."
 msgstr "Подарок! %s — в сундук: достань его оттуда, чтобы взять с собой."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s va al baúl."
 msgstr "Куплено! %s — в сундук."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Regalo! %s, encima (llevas %d)."
+msgstr "Подарок! %s — при тебе (у тебя %d)."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s, encima (llevas %d)."
+msgstr "Куплено! %s — при тебе (у тебя %d)."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl (tienes %d allí)."

@@ -7214,12 +7214,28 @@ msgid "No te llega: te faltan $%d."
 msgstr "钱不够：还差 $%d。"
 
 #: scripts/ui/ordenador.gd
+msgid "¡Regalo! %s, a la mano."
+msgstr "礼物！%s拿在了手上。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s, a la mano."
+msgstr "购买成功！%s拿在了手上。"
+
+#: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl: sácala de allí para llevarla."
 msgstr "礼物！%s放进了储物箱：从那里取出来才能带上。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s va al baúl."
 msgstr "购买成功！%s放进了储物箱。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Regalo! %s, encima (llevas %d)."
+msgstr "礼物！%s带在了身上（身上有%d个）。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s, encima (llevas %d)."
+msgstr "购买成功！%s带在了身上（身上有%d个）。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl (tienes %d allí)."

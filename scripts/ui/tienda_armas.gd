@@ -15,8 +15,8 @@
 # la primera pistola es gratis, una sola vez en todo el juego, y desde el 15 nov también un molotov, una granada y una
 # atraedora (REGALO_LANZABLES; Guardado "regalos_lanzables": Johnny ya no empieza con lanzables). Hasta cogerlo, cada
 # casilla del regalo lleva un «!» y su botón dice «Regalo de bienvenida» en vez del precio; después cuesta lo de siempre
-# (Armas.PRECIOS). Como todo lo que se compra, va al baúl (ordenador.gd, comprar_arma y comprar_lanzable): con el baúl
-# lleno, la tienda no deja comprar (estado "lleno").
+# (Armas.PRECIOS). Lo que se compra va encima si a Johnny le cabe y, si no, al baúl (ordenador.gd, comprar_arma y
+# comprar_lanzable; 16 nov): sin sitio en ninguno de los dos, la tienda no deja comprar (estado "lleno").
 #
 # Lo elegido es, con el ratón, la última casilla por la que ha pasado (y se queda al ir hacia «Comprar»); con el teclado,
 # el mando o el dedo, la marcada. Con el ratón, el teclado o el mando se compra al pulsar la casilla; con el dedo, el
@@ -191,11 +191,13 @@ static func regalo_pendiente(guardado: Dictionary) -> bool:
 # sitio en su casilla o una libre), "caro" (no te llega) o ""
 # (se puede comprar). Hasta el 15 nov, lo comprado iba a la mano: "lleva" era el arma que ya llevabas y "lleno", el
 # arrojable que ya no te cabía encima
+# (Desde el 16 nov, lo comprado va primero encima si le cabe: ordenador.gd, cabe_encima; solo está "lleno" si no cabe
+# ni encima ni en el baúl)
 func estado(id: String) -> String:
 	if Lanzables.PRECIOS.has(id):
-		if Objetos.caben_arrojables(s, id, 0) <= 0:
+		if Objetos.caben_arrojables(s, id, 0) <= 0 and not ordenador.partida.lanzables.cabe(Lanzables.clave(id, 0)):
 			return "lleno"
-	elif not Objetos.hueco_baul(s):
+	elif not Objetos.hueco_baul(s) and not ordenador.cabe_encima(id):
 		return "lleno"
 	return "caro" if ordenador.partida.cartera() < precio(id) else ""
 
