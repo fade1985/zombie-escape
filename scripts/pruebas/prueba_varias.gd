@@ -4825,6 +4825,7 @@ func probar_archivador_logros() -> void:
 	ordenador.abrir("logros")
 	await get_tree().create_timer(0.4).timeout
 	var archivador: Control = ordenador.ventana.find_child("archivador", true, false)
+	print("Archivador · dinero: %d (esperado 85, lo mismo que la tienda de armas y el inventario)" % cartera())
 	print("Archivador · al abrir: página %s, filas %s, marcado %s (esperado: resumen, [sin_rasguno, joya_corona, caja_fuerte], b_tema_resumen)" % [
 		archivador.pagina, archivador.visibles, get_viewport().gui_get_focus_owner().name])
 	Captura.foto("captura-archivador-resumen.png")
