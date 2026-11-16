@@ -2883,17 +2883,13 @@ func probar_reglas_t2() -> void:
 	print("M123 · al salir al pasillo con la llave: ventana «%s» (esperado: antes_jefe)" % ventana.call())
 	cerrar.call()
 	await get_tree().create_timer(0.5, true).timeout
-	# «Guarda las balas», detrás de «Jefes» (como en la presentación del jefe)
-	Guardado.cambiar(func(g): g.tutoriales.erase("jefes"))
-	Tutoriales.vistos_de = ""
-	tutorial("jefes")
-	tutorial("balas_jefes")
-	await get_tree().create_timer(1.0, true).timeout
-	var primera: String = ventana.call()
-	cerrar.call()
-	await get_tree().create_timer(1.0, true).timeout
+	# «Guarda las balas», al coger la primera caja de munición (16 nov; antes, detrás de «Jefes»)
+	johnny.coger("pistola")
+	johnny.municion["balas"] = 0
+	soltar_municion(johnny.position + Vector2(60, 0))
+	await get_tree().create_timer(1.5, true).timeout
 	Captura.foto("captura-t2-balas.png")
-	print("M123 · al llegar al jefe: primero «%s», luego «%s» (esperado: jefes, balas_jefes)" % [primera, ventana.call()])
+	print("M123 · al coger la primera caja de munición: ventana «%s» (esperado: balas_jefes)" % ventana.call())
 	cerrar.call()
 	Guardado.escribir(antes)
 	get_tree().quit()

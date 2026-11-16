@@ -3435,7 +3435,7 @@ func probar_muebles_materiales() -> void:
 # Con "--captura --comida" (M124, 16 nov): la comida favorita de los supervivientes. Con la médica y el policía viviendo
 # en los trasteros: cuántas neveras y encimeras se abren en la planta; delante de una, su contorno, y con E suelta una
 # comida (la manzana o el dónut; si sale vacía, se cierra a mano y otra vez: captura-comida-nevera.png) y su tutorial
-# (captura-comida-tutorial.png). Luego en los trasteros: delante de la médica, sin su manzana, «ESTOY MUY DÉBIL» en blanco
+# (captura-comida-tutorial.png). Luego en los trasteros: delante de la médica, sin su manzana, «¿NO TENDRÁS POR AHÍ UNA MANZANA?» en blanco
 # (captura-comida-debil.png); con el dónut en la mochila, el policía se lo come y te acompaña
 # (captura-comida-acompana.png); y con la manzana en el baúl, la médica (y el policía vuelve a su trastero). Al final, el
 # guardado como estaba
@@ -3534,7 +3534,7 @@ func probar_comida() -> void:
 	var policia: Aliado = sup.vecinos.filter(func(v): return v.def.id == "policia")[0]
 	await sup.arrimarse(medica)
 	await sup.usar_delante()
-	print("Comida · la médica sin su manzana: dice «%s» · acompaña '%s' (esperado: Estoy muy débil, '')" % [medica.dicho, Guardado.cargar().acompanante])
+	print("Comida · la médica sin su manzana: dice «%s» · acompaña '%s' (esperado: ¿No tendrás por ahí una manzana?, '')" % [medica.dicho, Guardado.cargar().acompanante])
 	Captura.foto("captura-comida-debil.png")
 	mochila.append("donut")
 	await sup.arrimarse(policia)

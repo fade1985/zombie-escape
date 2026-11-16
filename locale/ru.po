@@ -1190,44 +1190,24 @@ msgid "Caíste en la oleada %d del garaje"
 msgstr "Ты пал на волне %d в паркинге"
 
 #: scripts/garaje.gd
-msgid "Sin cuerpo a cuerpo"
-msgstr "Без ближнего боя"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."
-msgstr "Сегодня нельзя оружие ближнего боя, даже швабру."
+msgid "Sin armas cuerpo a cuerpo"
+msgstr "Без оружия ближнего боя"
 
 #: scripts/garaje.gd
 msgid "Sin armas a distancia"
 msgstr "Без дальнего боя"
 
 #: scripts/garaje.gd
-msgid "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."
-msgstr "Сегодня нельзя оружие дальнего боя: ни пистолет, ни дробовик, ни остальное."
-
-#: scripts/garaje.gd
 msgid "Sin armas especiales"
 msgstr "Без особого оружия"
 
 #: scripts/garaje.gd
-msgid "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."
-msgstr "Сегодня нельзя особое оружие: то, что стреляет огнем, кислотой, льдом или молниями."
+msgid "Sin armas lanzables"
+msgstr "Без метательного оружия"
 
 #: scripts/garaje.gd
-msgid "Sin lanzables"
-msgstr "Без метательного"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."
-msgstr "Сегодня нельзя ничего метать: ни молотовы, ни гранаты, ни остальное."
-
-#: scripts/garaje.gd
-msgid "Sin curas"
-msgstr "Без лечения"
-
-#: scripts/garaje.gd
-msgid "Hoy no valen las vendas ni los botiquines."
-msgstr "Сегодня нельзя бинты и аптечки."
+msgid "Sin botiquines ni vendas"
+msgstr "Без аптечек и бинтов"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -3976,8 +3956,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
 
 #: scripts/supervivientes.gd
-msgid "Estoy muy débil"
-msgstr "Совсем нет сил"
+msgid "¿No tendrás por ahí un dónut?"
+msgstr "Не найдется у тебя пончика?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una manzana?"
+msgstr "Не найдется у тебя яблока?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una lata de judías?"
+msgstr "Не найдется у тебя банки фасоли?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un yogur de fresa?"
+msgstr "Не найдется у тебя клубничного йогурта?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un bocadillo de chorizo?"
+msgstr "Не найдется у тебя бутерброда с чоризо?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una bebida energética?"
+msgstr "Не найдется у тебя энергетика?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una porción de pizza?"
+msgstr "Не найдется у тебя куска пиццы?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un termo de café?"
+msgstr "Не найдется у тебя термоса с кофе?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una ensalada?"
+msgstr "Не найдется у тебя салата?"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -4918,6 +4930,10 @@ msgstr "На каждом новом этаже он снова ломается
 #: scripts/tutoriales.gd
 msgid "Guarda las balas"
 msgstr "Береги патроны"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer cargador"
+msgstr "Когда подбираешь первый магазин"
 
 #: scripts/tutoriales.gd
 msgid "Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos."
@@ -6428,18 +6444,6 @@ msgid "Reto del día"
 msgstr "Испытание дня"
 
 #: scripts/ui/menu_principal.gd
-msgid "Garaje · %d oleadas"
-msgstr "Паркинг · волн: %d"
-
-#: scripts/ui/menu_principal.gd
-msgid "Condición de hoy: %s"
-msgstr "Условие дня: %s"
-
-#: scripts/ui/menu_principal.gd
-msgid "Ya lo has jugado hoy en este edificio: vuelve mañana"
-msgstr "Сегодня ты уже играл в этом здании: возвращайся завтра"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
 msgstr "Не исследовано!"
 
@@ -7666,247 +7670,3 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
-
-#, sin-usar
-msgid "Completa un reto del día."
-msgstr "Пройди испытание дня."
-
-#, sin-usar
-msgid "Completa el reto del día con cada una de sus 7 reglas."
-msgstr "Пройди испытание дня с каждым из 7 его правил."
-
-#, sin-usar
-msgid "¡Reto completado!"
-msgstr "Испытание пройдено!"
-
-#, sin-usar
-msgid "Reto del día · %s: %s"
-msgstr "Испытание дня · %s: %s"
-
-#, sin-usar
-msgid "Reto: %s"
-msgstr "Испытание: %s"
-
-#, sin-usar
-msgid "Completado en %d:%02d"
-msgstr "Пройдено за %d:%02d"
-
-#, sin-usar
-msgid "sin marca"
-msgstr "без рекорда"
-
-#, sin-usar
-msgid "Sin marca"
-msgstr "Без рекорда"
-
-#, sin-usar
-msgid "planta %d"
-msgstr "этаж %d"
-
-#, sin-usar
-msgid "Has llegado a la planta %d"
-msgstr "Ты дошел до этажа %d"
-
-#, sin-usar
-msgid "Solo cuerpo a cuerpo"
-msgstr "Только ближний бой"
-
-#, sin-usar
-msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
-msgstr "пистолет пуст, и не выпадают ни патроны, ни молотовы, ни гранаты"
-
-#, sin-usar
-msgid "Todo a oscuras"
-msgstr "Кромешная тьма"
-
-#, sin-usar
-msgid "todas las plantas como en un apagón: solo se ve con la linterna"
-msgstr "на всех этажах как при блэкауте: видно только с фонариком"
-
-#, sin-usar
-msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
-msgstr "аптечки в шкафчиках пусты, и ничего лечащего не выпадает, не продается и не готовится для тебя"
-
-#, sin-usar
-msgid "Durmientes rápidos"
-msgstr "Быстрые спящие"
-
-#, sin-usar
-msgid "todos un 35 % más rápidos (los jefes, no)"
-msgstr "все на 35 % быстрее (кроме боссов)"
-
-#, sin-usar
-msgid "De cristal"
-msgstr "Стеклянный"
-
-#, sin-usar
-msgid "Johnny con la mitad de vida"
-msgstr "у Джонни половина здоровья"
-
-#, sin-usar
-msgid "Casa llena"
-msgstr "Аншлаг"
-
-#, sin-usar
-msgid "el doble de durmientes en cada sitio"
-msgstr "вдвое больше спящих везде"
-
-#, sin-usar
-msgid "Oído fino"
-msgstr "Чуткий слух"
-
-#, sin-usar
-msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
-msgstr "даже удары в ближнем бою будят всю квартиру"
-
-#, sin-usar
-msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
-msgstr "Испытание дня — здание с необычным правилом, одно и то же для всех. Играется раз в день, а если пройдешь, дает $10."
-
-#, sin-usar
-msgid "Premio $%d cobrado"
-msgstr "Награда $%d забрана"
-
-#, sin-usar
-msgid "Vuelve mañana"
-msgstr "Приходи завтра"
-
-#, sin-usar
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "Сегодня уже сыграно: приходи завтра"
-
-#, sin-usar
-msgid "Premio"
-msgstr "Награда"
-
-#, sin-usar
-msgid "Reto del día · %s"
-msgstr "Испытание дня · %s"
-
-#, sin-usar
-msgid "%s · ¡mejor marca de hoy!"
-msgstr "%s · лучший результат дня!"
-
-#, sin-usar
-msgid "Tu mejor marca de hoy: %s"
-msgstr "Твой лучший результат сегодня: %s"
-
-#, sin-usar
-msgid "En el reto «%s» no se lleva nada que lanzar."
-msgstr "В испытании «%s» ничего метательного не положено."
-
-#, sin-usar
-msgid "No en este reto"
-msgstr "Не в этом испытании"
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "В сундуке %d: улучшается одна стопка, %d"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "В руке уже другая стопка (%s), и вместе они не влезут (максимум %d)."
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "Сундук полон: освободи место для улучшенной стопки."
-
-#, sin-usar
-msgid "Alerta %d"
-msgstr "Тревога %d"
-
-#, sin-usar
-msgid "Sin alerta"
-msgstr "Без тревоги"
-
-#, sin-usar
-msgid ""
-"%s\n"
-"+%d %% de dólares"
-msgstr ""
-"%s\n"
-"+%d %% к долларам"
-
-#, sin-usar
-msgid ""
-"%s%s\n"
-"+%d %% de dólares y de materiales"
-msgstr ""
-"%s%s\n"
-"+%d %% к долларам и материалам"
-
-#, sin-usar
-msgid " (y lo de antes)"
-msgstr " (плюс предыдущие)"
-
-#, sin-usar
-msgid "+25 % de durmientes"
-msgstr "+25 % спящих"
-
-#, sin-usar
-msgid "Durmientes un 10 % más rápidos"
-msgstr "Спящие быстрее на 10 %"
-
-#, sin-usar
-msgid "Jefes con +25 % de vida, y se enfadan antes"
-msgstr "У боссов +25 % здоровья, и они раньше звереют"
-
-#, sin-usar
-msgid "Botiquines, vendas y Ajolote curan la mitad"
-msgstr "Аптечки, бинты и Аксолотль лечат вдвое слабее"
-
-#, sin-usar
-msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
-msgstr "Охранник (или спящий с ключом) вдвое живучее, а спящие слышат тебя издалека"
-
-#, sin-usar
-msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-msgstr "Каждый компьютер с кодом вызывает двух телохранителей, а спящие слышат тебя издалека"
-
-#, sin-usar
-msgid "radio un %d %% más grande y caben %d más"
-msgstr "радиус больше на %d %%, а в стопку влезает на %d больше"
-
-#, sin-usar
-msgid "Alerta naranja"
-msgstr "Оранжевая тревога"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 3 o más."
-msgstr "Пройди здание на Тревоге 3 или выше."
-
-#, sin-usar
-msgid "Alerta máxima"
-msgstr "Красная тревога"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 5."
-msgstr "Пройди здание на Тревоге 5."
-
-#, sin-usar
-msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
-msgstr "Если пройдешь здание, оставишь себе все; если падешь или сдашься — половину."
-
-#, sin-usar
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
-msgstr "Каждый раз, когда достаешь оружие или метательное, оно тратит один забег прочности. При 0 оно уничтожается в конце этого забега."
-
-#, sin-usar
-msgid "Alerta y Reto del día"
-msgstr "Тревога и Испытание дня"
-
-#, sin-usar
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
-msgstr "Под каждым пройденным зданием выбирай тревогу клавишами < и >: сложнее, но больше долларов. Пройди его на самой высокой, чтобы открыть следующую."
-
-#, sin-usar
-msgid "Complétalo para abrir la Alerta 1"
-msgstr "Пройди его, чтобы открыть Тревогу 1"
-
-#, sin-usar
-msgid "Dólares salvados (la mitad)"
-msgstr "Сохранено долларов (половина)"
-
-#, sin-usar
-msgid "Elige un sujeto de la cuadrícula para ver su ficha."
-msgstr "Выбери объект в сетке, чтобы увидеть его досье."

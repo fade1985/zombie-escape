@@ -121,8 +121,8 @@ const LISTA := {
 		"lineas": ["Al vencer al jefe, Johnny arregla el ascensor del pasillo: baja a la sala de mantenimiento y te devuelve a esta planta.",
 			"Úsalo para comprar, mejorar o sacar cosas del baúl a mitad de partida.",
 			"En cada planta nueva vuelve a estar averiado hasta que cae su jefe."]},
-	# (16 nov, M123: detrás de «Jefes», en la primera pelea; partida.gd)
-	"balas_jefes": {"grupo": "Plantas y jefes", "titulo": "Guarda las balas", "icono": "pistola", "cuando": "Al llegar al primer jefe",
+	# (16 nov, M123: al coger la primera caja de munición, partida.soltar_municion; antes, detrás de «Jefes», en la primera pelea)
+	"balas_jefes": {"grupo": "Plantas y jefes", "titulo": "Guarda las balas", "icono": "pistola", "cuando": "Al coger el primer cargador",
 		"lineas": ["Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos.",
 			"Guarda las balas de tus armas a distancia para ellos y limpia los apartamentos con la fregona o tu arma cuerpo a cuerpo."]},
 	# (16 nov, M123: la primera vez que sale al pasillo de la planta baja con la llave del jefe; partida.cruzar)

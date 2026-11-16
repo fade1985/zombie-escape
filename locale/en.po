@@ -1188,44 +1188,24 @@ msgid "Caíste en la oleada %d del garaje"
 msgstr "You fell on wave %d of the garage"
 
 #: scripts/garaje.gd
-msgid "Sin cuerpo a cuerpo"
-msgstr "No melee"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."
-msgstr "No melee weapons today, not even the mop."
+msgid "Sin armas cuerpo a cuerpo"
+msgstr "No melee weapons"
 
 #: scripts/garaje.gd
 msgid "Sin armas a distancia"
 msgstr "No ranged weapons"
 
 #: scripts/garaje.gd
-msgid "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."
-msgstr "No ranged weapons today: no pistol, no shotgun, none of them."
-
-#: scripts/garaje.gd
 msgid "Sin armas especiales"
 msgstr "No special weapons"
 
 #: scripts/garaje.gd
-msgid "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."
-msgstr "No special weapons today: the ones that spray fire, acid, ice or lightning."
+msgid "Sin armas lanzables"
+msgstr "No throwing weapons"
 
 #: scripts/garaje.gd
-msgid "Sin lanzables"
-msgstr "No throwables"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."
-msgstr "Nothing you throw today: no molotovs, no grenades, nothing else."
-
-#: scripts/garaje.gd
-msgid "Sin curas"
-msgstr "No healing"
-
-#: scripts/garaje.gd
-msgid "Hoy no valen las vendas ni los botiquines."
-msgstr "No bandages or medkits today."
+msgid "Sin botiquines ni vendas"
+msgstr "No medkits or bandages"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -3968,8 +3948,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "DON'T LEAVE ME HERE!"
 
 #: scripts/supervivientes.gd
-msgid "Estoy muy débil"
-msgstr "I'm too weak"
+msgid "¿No tendrás por ahí un dónut?"
+msgstr "Any chance you've got a donut?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una manzana?"
+msgstr "Any chance you've got an apple?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una lata de judías?"
+msgstr "Any chance you've got a can of beans?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un yogur de fresa?"
+msgstr "Any chance you've got a strawberry yogurt?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un bocadillo de chorizo?"
+msgstr "Any chance you've got a chorizo sandwich?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una bebida energética?"
+msgstr "Any chance you've got an energy drink?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una porción de pizza?"
+msgstr "Any chance you've got a slice of pizza?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un termo de café?"
+msgstr "Any chance you've got a coffee flask?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una ensalada?"
+msgstr "Any chance you've got a salad?"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -4910,6 +4922,10 @@ msgstr "On every new floor it's broken again until its boss falls."
 #: scripts/tutoriales.gd
 msgid "Guarda las balas"
 msgstr "Save your bullets"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer cargador"
+msgstr "On picking up the first magazine"
 
 #: scripts/tutoriales.gd
 msgid "Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos."
@@ -6407,18 +6423,6 @@ msgid "Reto del día"
 msgstr "Daily Challenge"
 
 #: scripts/ui/menu_principal.gd
-msgid "Garaje · %d oleadas"
-msgstr "Garage · %d waves"
-
-#: scripts/ui/menu_principal.gd
-msgid "Condición de hoy: %s"
-msgstr "Today's condition: %s"
-
-#: scripts/ui/menu_principal.gd
-msgid "Ya lo has jugado hoy en este edificio: vuelve mañana"
-msgstr "You already played it today in this building: come back tomorrow"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
 msgstr "Unexplored!"
 
@@ -7645,247 +7649,3 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
-
-#, sin-usar
-msgid "Completa un reto del día."
-msgstr "Complete a Daily Challenge."
-
-#, sin-usar
-msgid "Completa el reto del día con cada una de sus 7 reglas."
-msgstr "Complete the Daily Challenge with each of its 7 rules."
-
-#, sin-usar
-msgid "¡Reto completado!"
-msgstr "Challenge complete!"
-
-#, sin-usar
-msgid "Reto del día · %s: %s"
-msgstr "Daily Challenge · %s: %s"
-
-#, sin-usar
-msgid "Reto: %s"
-msgstr "Challenge: %s"
-
-#, sin-usar
-msgid "Completado en %d:%02d"
-msgstr "Completed in %d:%02d"
-
-#, sin-usar
-msgid "sin marca"
-msgstr "no record"
-
-#, sin-usar
-msgid "Sin marca"
-msgstr "No record"
-
-#, sin-usar
-msgid "planta %d"
-msgstr "floor %d"
-
-#, sin-usar
-msgid "Has llegado a la planta %d"
-msgstr "You reached floor %d"
-
-#, sin-usar
-msgid "Solo cuerpo a cuerpo"
-msgstr "Melee only"
-
-#, sin-usar
-msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
-msgstr "the pistol starts empty and no ammo, Molotovs or grenades drop"
-
-#, sin-usar
-msgid "Todo a oscuras"
-msgstr "Lights out"
-
-#, sin-usar
-msgid "todas las plantas como en un apagón: solo se ve con la linterna"
-msgstr "every floor as in a blackout: you can only see with the flashlight"
-
-#, sin-usar
-msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
-msgstr "the cabinets are empty and nothing that heals drops, is sold or gets prepared for you"
-
-#, sin-usar
-msgid "Durmientes rápidos"
-msgstr "Fast sleepers"
-
-#, sin-usar
-msgid "todos un 35 % más rápidos (los jefes, no)"
-msgstr "all 35 % faster (bosses excluded)"
-
-#, sin-usar
-msgid "De cristal"
-msgstr "Fragile"
-
-#, sin-usar
-msgid "Johnny con la mitad de vida"
-msgstr "Johnny with half his health"
-
-#, sin-usar
-msgid "Casa llena"
-msgstr "Packed house"
-
-#, sin-usar
-msgid "el doble de durmientes en cada sitio"
-msgstr "twice as many sleepers in every place"
-
-#, sin-usar
-msgid "Oído fino"
-msgstr "Sharp ears"
-
-#, sin-usar
-msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
-msgstr "even melee hits wake up the whole apartment"
-
-#, sin-usar
-msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
-msgstr "The Daily Challenge is a building with a weird rule, the same for everyone. You can play it once a day and, if you complete it, it gives $10."
-
-#, sin-usar
-msgid "Premio $%d cobrado"
-msgstr "Reward $%d claimed"
-
-#, sin-usar
-msgid "Vuelve mañana"
-msgstr "Come back tomorrow"
-
-#, sin-usar
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "Already played today: come back tomorrow"
-
-#, sin-usar
-msgid "Premio"
-msgstr "Reward"
-
-#, sin-usar
-msgid "Reto del día · %s"
-msgstr "Daily Challenge · %s"
-
-#, sin-usar
-msgid "%s · ¡mejor marca de hoy!"
-msgstr "%s · today's best!"
-
-#, sin-usar
-msgid "Tu mejor marca de hoy: %s"
-msgstr "Your best today: %s"
-
-#, sin-usar
-msgid "En el reto «%s» no se lleva nada que lanzar."
-msgstr "In the \"%s\" challenge you don't carry anything to throw."
-
-#, sin-usar
-msgid "No en este reto"
-msgstr "Not in this challenge"
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "%d in the stash: upgrading one stack of %d"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "You already carry another %s stack in hand and together they won't fit (max %d)."
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "The stash is full: make room for the upgraded stack."
-
-#, sin-usar
-msgid "Alerta %d"
-msgstr "Alert %d"
-
-#, sin-usar
-msgid "Sin alerta"
-msgstr "No alert"
-
-#, sin-usar
-msgid ""
-"%s\n"
-"+%d %% de dólares"
-msgstr ""
-"%s\n"
-"+%d %% dollars"
-
-#, sin-usar
-msgid ""
-"%s%s\n"
-"+%d %% de dólares y de materiales"
-msgstr ""
-"%s%s\n"
-"+%d %% dollars and materials"
-
-#, sin-usar
-msgid " (y lo de antes)"
-msgstr " (and the previous ones)"
-
-#, sin-usar
-msgid "+25 % de durmientes"
-msgstr "+25 % sleepers"
-
-#, sin-usar
-msgid "Durmientes un 10 % más rápidos"
-msgstr "Sleepers 10 % faster"
-
-#, sin-usar
-msgid "Jefes con +25 % de vida, y se enfadan antes"
-msgstr "Bosses with +25 % health, and they get angry sooner"
-
-#, sin-usar
-msgid "Botiquines, vendas y Ajolote curan la mitad"
-msgstr "Medkits, bandages and Axolotl heal half as much"
-
-#, sin-usar
-msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
-msgstr "The guard (or the key sleeper) takes twice the damage and sleepers hear you from farther away"
-
-#, sin-usar
-msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-msgstr "Each code computer calls two bodyguards and sleepers hear you from farther away"
-
-#, sin-usar
-msgid "radio un %d %% más grande y caben %d más"
-msgstr "radius %d %% bigger and %d more fit per stack"
-
-#, sin-usar
-msgid "Alerta naranja"
-msgstr "Orange Alert"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 3 o más."
-msgstr "Complete a building on Alert 3 or higher."
-
-#, sin-usar
-msgid "Alerta máxima"
-msgstr "Red Alert"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 5."
-msgstr "Complete a building on Alert 5."
-
-#, sin-usar
-msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
-msgstr "If you complete the building you keep them all; if you fall or abandon, half."
-
-#, sin-usar
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
-msgstr "Every time you take out a weapon or a throwable, it uses up one run of its durability. At 0, it's destroyed when that run ends."
-
-#, sin-usar
-msgid "Alerta y Reto del día"
-msgstr "Alert and Daily Challenge"
-
-#, sin-usar
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
-msgstr "Under each completed building you pick the alert with < and >: harder, more dollars. Complete it on the highest to unlock the next."
-
-#, sin-usar
-msgid "Complétalo para abrir la Alerta 1"
-msgstr "Complete it to unlock Alert 1"
-
-#, sin-usar
-msgid "Dólares salvados (la mitad)"
-msgstr "Dollars saved (half)"
-
-#, sin-usar
-msgid "Elige un sujeto de la cuadrícula para ver su ficha."
-msgstr "Pick a subject from the grid to see its file."

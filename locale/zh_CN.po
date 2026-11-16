@@ -1186,44 +1186,24 @@ msgid "Caíste en la oleada %d del garaje"
 msgstr "你倒在了车库的第 %d 波"
 
 #: scripts/garaje.gd
-msgid "Sin cuerpo a cuerpo"
-msgstr "不许近战"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."
-msgstr "今天不许用任何近战武器，连拖把也不行。"
+msgid "Sin armas cuerpo a cuerpo"
+msgstr "不许近战武器"
 
 #: scripts/garaje.gd
 msgid "Sin armas a distancia"
 msgstr "不许远程武器"
 
 #: scripts/garaje.gd
-msgid "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."
-msgstr "今天不许用任何远程武器：手枪、散弹枪和其他都不行。"
-
-#: scripts/garaje.gd
 msgid "Sin armas especiales"
 msgstr "不许特殊武器"
 
 #: scripts/garaje.gd
-msgid "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."
-msgstr "今天不许用特殊武器：喷火、酸液、冰冻或闪电的那些。"
+msgid "Sin armas lanzables"
+msgstr "不许投掷武器"
 
 #: scripts/garaje.gd
-msgid "Sin lanzables"
-msgstr "不许投掷物"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."
-msgstr "今天不许扔任何东西：燃烧瓶、手雷和其他都不行。"
-
-#: scripts/garaje.gd
-msgid "Sin curas"
-msgstr "不许治疗"
-
-#: scripts/garaje.gd
-msgid "Hoy no valen las vendas ni los botiquines."
-msgstr "今天不许用绷带和急救包。"
+msgid "Sin botiquines ni vendas"
+msgstr "不许急救包和绷带"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -3960,8 +3940,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "别把我丢在这儿！"
 
 #: scripts/supervivientes.gd
-msgid "Estoy muy débil"
-msgstr "我太虚弱了"
+msgid "¿No tendrás por ahí un dónut?"
+msgstr "你身上有没有甜甜圈？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una manzana?"
+msgstr "你身上有没有苹果？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una lata de judías?"
+msgstr "你身上有没有豆子罐头？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un yogur de fresa?"
+msgstr "你身上有没有草莓酸奶？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un bocadillo de chorizo?"
+msgstr "你身上有没有香肠三明治？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una bebida energética?"
+msgstr "你身上有没有能量饮料？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una porción de pizza?"
+msgstr "你身上有没有一块披萨？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un termo de café?"
+msgstr "你身上有没有保温壶咖啡？"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una ensalada?"
+msgstr "你身上有没有沙拉？"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -4902,6 +4914,10 @@ msgstr "每到新的一层，它又会坏掉，直到那层的首领倒下。"
 #: scripts/tutoriales.gd
 msgid "Guarda las balas"
 msgstr "留着子弹"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer cargador"
+msgstr "捡到第一个弹匣时"
 
 #: scripts/tutoriales.gd
 msgid "Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos."
@@ -6386,18 +6402,6 @@ msgid "Reto del día"
 msgstr "每日挑战"
 
 #: scripts/ui/menu_principal.gd
-msgid "Garaje · %d oleadas"
-msgstr "地下车库 · %d 波"
-
-#: scripts/ui/menu_principal.gd
-msgid "Condición de hoy: %s"
-msgstr "今天的条件：%s"
-
-#: scripts/ui/menu_principal.gd
-msgid "Ya lo has jugado hoy en este edificio: vuelve mañana"
-msgstr "今天这栋楼已经玩过了：明天再来"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
 msgstr "尚未探索！"
 
@@ -7624,247 +7628,3 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
-
-#, sin-usar
-msgid "Completa un reto del día."
-msgstr "完成一次每日挑战。"
-
-#, sin-usar
-msgid "Completa el reto del día con cada una de sus 7 reglas."
-msgstr "在全部7种规则下各完成一次每日挑战。"
-
-#, sin-usar
-msgid "¡Reto completado!"
-msgstr "挑战完成！"
-
-#, sin-usar
-msgid "Reto del día · %s: %s"
-msgstr "每日挑战 · %s：%s"
-
-#, sin-usar
-msgid "Reto: %s"
-msgstr "挑战：%s"
-
-#, sin-usar
-msgid "Completado en %d:%02d"
-msgstr "用时 %d:%02d 完成"
-
-#, sin-usar
-msgid "sin marca"
-msgstr "无纪录"
-
-#, sin-usar
-msgid "Sin marca"
-msgstr "无纪录"
-
-#, sin-usar
-msgid "planta %d"
-msgstr "第%d层"
-
-#, sin-usar
-msgid "Has llegado a la planta %d"
-msgstr "到达了第%d层"
-
-#, sin-usar
-msgid "Solo cuerpo a cuerpo"
-msgstr "只许近战"
-
-#, sin-usar
-msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
-msgstr "手枪是空的，也不会掉落弹药、燃烧瓶和手雷"
-
-#, sin-usar
-msgid "Todo a oscuras"
-msgstr "一片漆黑"
-
-#, sin-usar
-msgid "todas las plantas como en un apagón: solo se ve con la linterna"
-msgstr "每层楼都像停电一样：只能靠手电筒看路"
-
-#, sin-usar
-msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
-msgstr "小柜子都是空的，治疗物品不会掉落、不卖，也没人给你配"
-
-#, sin-usar
-msgid "Durmientes rápidos"
-msgstr "快速沉睡者"
-
-#, sin-usar
-msgid "todos un 35 % más rápidos (los jefes, no)"
-msgstr "全部加快35%（首领除外）"
-
-#, sin-usar
-msgid "De cristal"
-msgstr "玻璃人"
-
-#, sin-usar
-msgid "Johnny con la mitad de vida"
-msgstr "Johnny只有一半生命"
-
-#, sin-usar
-msgid "Casa llena"
-msgstr "人满为患"
-
-#, sin-usar
-msgid "el doble de durmientes en cada sitio"
-msgstr "每个地方的沉睡者数量翻倍"
-
-#, sin-usar
-msgid "Oído fino"
-msgstr "顺风耳"
-
-#, sin-usar
-msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
-msgstr "连近战攻击都会吵醒整间公寓"
-
-#, sin-usar
-msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
-msgstr "“每日挑战”是一栋带怪规则的大楼，所有人都一样。每天只能玩一次，通关可得 $10。"
-
-#, sin-usar
-msgid "Premio $%d cobrado"
-msgstr "奖励 $%d 已领取"
-
-#, sin-usar
-msgid "Vuelve mañana"
-msgstr "明天再来"
-
-#, sin-usar
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "今天已经玩过了：明天再来"
-
-#, sin-usar
-msgid "Premio"
-msgstr "奖励"
-
-#, sin-usar
-msgid "Reto del día · %s"
-msgstr "每日挑战 · %s"
-
-#, sin-usar
-msgid "%s · ¡mejor marca de hoy!"
-msgstr "%s · 今日最佳！"
-
-#, sin-usar
-msgid "Tu mejor marca de hoy: %s"
-msgstr "你今天的最佳成绩：%s"
-
-#, sin-usar
-msgid "En el reto «%s» no se lleva nada que lanzar."
-msgstr "“%s”挑战中不能携带投掷物。"
-
-#, sin-usar
-msgid "No en este reto"
-msgstr "本挑战不可用"
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "储物箱里有 %d 个：升级其中一组，共 %d 个"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "你手上已经有另一组%s，合在一起放不下（最多 %d 个）。"
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "储物箱满了：给升级后的那组腾个地方。"
-
-#, sin-usar
-msgid "Alerta %d"
-msgstr "警戒 %d"
-
-#, sin-usar
-msgid "Sin alerta"
-msgstr "无警戒"
-
-#, sin-usar
-msgid ""
-"%s\n"
-"+%d %% de dólares"
-msgstr ""
-"%s\n"
-"美元 +%d%%"
-
-#, sin-usar
-msgid ""
-"%s%s\n"
-"+%d %% de dólares y de materiales"
-msgstr ""
-"%s%s\n"
-"美元和材料 +%d%%"
-
-#, sin-usar
-msgid " (y lo de antes)"
-msgstr " （外加之前的）"
-
-#, sin-usar
-msgid "+25 % de durmientes"
-msgstr "沉睡者数量 +25%"
-
-#, sin-usar
-msgid "Durmientes un 10 % más rápidos"
-msgstr "沉睡者速度加快10%"
-
-#, sin-usar
-msgid "Jefes con +25 % de vida, y se enfadan antes"
-msgstr "首领生命 +25%，而且更快暴怒"
-
-#, sin-usar
-msgid "Botiquines, vendas y Ajolote curan la mitad"
-msgstr "急救包、绷带和美西螈的治疗量减半"
-
-#, sin-usar
-msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
-msgstr "保安（或拿钥匙的沉睡者）血量翻倍，沉睡者也能从更远处听见你"
-
-#, sin-usar
-msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-msgstr "每台存有密码的电脑都会叫来两名保镖，沉睡者也能从更远处听见你"
-
-#, sin-usar
-msgid "radio un %d %% más grande y caben %d más"
-msgstr "范围扩大 %d%%，每组可多带 %d 个"
-
-#, sin-usar
-msgid "Alerta naranja"
-msgstr "橙色警戒"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 3 o más."
-msgstr "在警戒3或以上通关一栋楼。"
-
-#, sin-usar
-msgid "Alerta máxima"
-msgstr "红色警戒"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 5."
-msgstr "在警戒5下通关一栋楼。"
-
-#, sin-usar
-msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
-msgstr "通关整栋楼，钞票全部归你；倒下或放弃，只保留一半。"
-
-#, sin-usar
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
-msgstr "每次取出一件武器或投掷物，都会消耗一局耐久。耐久为0时，那一局结束后就会销毁。"
-
-#, sin-usar
-msgid "Alerta y Reto del día"
-msgstr "警戒与每日挑战"
-
-#, sin-usar
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
-msgstr "每栋已通关的大楼下面，用 < 和 > 选择警戒：越难，美元越多。在最高警戒下通关，就能解锁下一个。"
-
-#, sin-usar
-msgid "Complétalo para abrir la Alerta 1"
-msgstr "通关后解锁警戒1"
-
-#, sin-usar
-msgid "Dólares salvados (la mitad)"
-msgstr "保住的美元（一半）"
-
-#, sin-usar
-msgid "Elige un sujeto de la cuadrícula para ver su ficha."
-msgstr "在网格中选择一个实验对象，查看其档案。"

@@ -197,7 +197,7 @@ banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
   tipo y calidad juntos, hasta 99, y salen de 5 en 5), cada arma en su casilla y todo con el borde del color de su
   **calidad** (gris Normal, verde Poco común, azul Rara, morado Épica). Lo que lleva encima se pierde si cae; al
   completar el edificio, sus armas y todos sus arrojables pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, los **trasteros** de los rescatados (arriba pone «Trasteros»; en el código, «viviendas»): E delante de uno para que te acompañe una
-  partida (uno a la vez), solo con su comida favorita en la mochila o en el baúl (si no, «ESTOY MUY DÉBIL»; M124).
+  partida (uno a la vez), solo con su comida favorita en la mochila o en el baúl (si no, te la pide: «¿No tendrás por ahí una manzana?»; M124).
 
 Al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el **ascensor** del pasillo: baja a esta sala y
 vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado y la azotea no tiene.

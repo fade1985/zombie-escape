@@ -276,7 +276,7 @@
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
 #   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
 #   --comida            (M124) la nevera y la encimera dan la comida favorita de los de los trasteros, su tutorial, y en
-#                       los trasteros, con E: sin ella «ESTOY MUY DÉBIL»; con ella (mochila o baúl), te acompaña [prueba_sitios.gd]
+#                       los trasteros, con E: sin ella te la pide; con ella (mochila o baúl), te acompaña [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel, sin muebles, y el nombre de la planta y de sus
 #                       puertas en el idioma de la prueba (con --lang en, un número más que en español)   [prueba_sitios.gd]
 #   --cartel-sala       la puerta de acero de la sala de mantenimiento en el pasillo de la planta baja y su cartel, en

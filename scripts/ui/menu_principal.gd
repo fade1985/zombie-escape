@@ -454,8 +454,9 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 		debajo.mouse_exited.connect(enseñar.bind(false))
 
 
-# El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): «Garaje · 25 oleadas» en la
-# cabecera; la condición de hoy, qué no vale y, debajo, tu récord con ella en este edificio
+# El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): la condición de hoy en la
+# cabecera («Sin armas a distancia») y, debajo, tu récord con ella en este edificio. Nada más (16 nov: antes, «Garaje · 25
+# oleadas» arriba, una frase de qué no vale y, ya jugado, «vuelve mañana»)
 func cuadro_reto(s: Dictionary, id: String, cond: String) -> PanelContainer:
 	var cuadro := PanelContainer.new()
 	cuadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -480,7 +481,7 @@ func cuadro_reto(s: Dictionary, id: String, cond: String) -> PanelContainer:
 	cabecera.add_theme_stylebox_override("panel", fondo)
 	cabecera.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	columna.add_child(cabecera)
-	cabecera.add_child(etiqueta_reto(Idioma.t("Garaje · %d oleadas") % Garaje.OLEADAS, Color.WHITE, false, Tema.PESO_LISA_TITULO))
+	cabecera.add_child(etiqueta_reto(Garaje.nombre(cond), Color.WHITE, false, Tema.PESO_LISA_TITULO))
 	var margen := MarginContainer.new()
 	margen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for lado in ["left", "right"]:
@@ -490,11 +491,7 @@ func cuadro_reto(s: Dictionary, id: String, cond: String) -> PanelContainer:
 	textos.add_theme_constant_override("separation", 4)
 	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margen.add_child(textos)
-	textos.add_child(etiqueta_reto(Idioma.t("Condición de hoy: %s") % Garaje.nombre(cond), PLACA.AMARILLO, true, Tema.PESO_LISA_TITULO))
-	textos.add_child(etiqueta_reto(Garaje.desc(cond), PLACA.TEXTO, true))
 	textos.add_child(etiqueta_reto(Garaje.texto_record(Garaje.record(s, id, cond)), Color("#ff9a5c"), true))
-	if Garaje.jugado(s, id):
-		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy en este edificio: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
 	var abajo := Control.new()
 	abajo.custom_minimum_size.y = 8   # (aire bajo el récord: con 4 se pegaba al borde, 12 nov)
 	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE

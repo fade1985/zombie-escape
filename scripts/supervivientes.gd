@@ -151,8 +151,18 @@ const MAX_EQUIPO := 4
 
 # (lo que dice al entrar Johnny en su baño, ya abierto)
 const NO_ME_DEJES := "¡NO ME DEJES AQUÍ!"   # [traducir]
-# lo que dice el vecino de los trasteros si le pides que venga sin su comida favorita (M124)
-const DEBIL := "Estoy muy débil"   # [traducir]
+# lo que dice el vecino de los trasteros si le pides que venga sin su comida favorita (M124; 16 nov: antes, «Estoy muy
+# débil», y su comida salía dibujada debajo de él): la pide por su nombre. Una frase entera por comida, para que cada
+# idioma ponga su «un»/«una» (Objetos.COMIDAS)
+# [traducir]
+const PIDE := {
+	"donut": "¿No tendrás por ahí un dónut?", "manzana": "¿No tendrás por ahí una manzana?",
+	"judias": "¿No tendrás por ahí una lata de judías?", "yogur": "¿No tendrás por ahí un yogur de fresa?",
+	"bocadillo": "¿No tendrás por ahí un bocadillo de chorizo?", "energetica": "¿No tendrás por ahí una bebida energética?",
+	"pizza": "¿No tendrás por ahí una porción de pizza?", "cafe": "¿No tendrás por ahí un termo de café?",
+	"ensalada": "¿No tendrás por ahí una ensalada?",
+}
+# [/traducir]
 const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")   # el «!» encima de su puerta, en el pasillo
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
@@ -791,7 +801,6 @@ func colocar_vecinos() -> void:
 		v.position = v.casa
 		partida.mapa.cosas.add_child(v)
 		vecinos.append(v)
-		v.poner_comida()   # (debajo de su nombre, su comida favorita)
 		# delante de él se usa con la E, como un mueble (M124): le das su comida y te acompaña (pedir_vecino)
 		var zona := ZONA_USAR.new()
 		zona.montar_rect(Rect2(-70, -90, 140, 170))
@@ -815,7 +824,7 @@ func vecino_cerca() -> Aliado:
 
 
 # La E delante de un vecino (M124): si llevas su comida favorita (en la mochila o, si no, en el baúl), se la das, se la
-# come y se viene contigo (y el que te acompañaba vuelve a su habitación); si no, dice «ESTOY MUY DÉBIL» en blanco
+# come y se viene contigo (y el que te acompañaba vuelve a su habitación); si no, te la pide en blanco («¿No tendrás por ahí una manzana?»: PIDE)
 func pedir_vecino(v: Aliado) -> void:
 	if v.modo != "vecino":
 		return
@@ -828,7 +837,7 @@ func pedir_vecino(v: Aliado) -> void:
 			if g.baul[comida] <= 0:
 				g.baul.erase(comida))
 	else:
-		v.decir(Idioma.t(DEBIL), Color.WHITE)
+		v.decir(Idioma.t(PIDE.get(comida, "")), Color.WHITE)
 		Sonido.tocar("no")
 		return
 	partida.decir(Idioma.t("Le das: %s · %s te acompaña esta partida") % [Objetos.nombre(comida), nombre_de(v.def)], 3.0)

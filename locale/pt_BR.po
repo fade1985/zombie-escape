@@ -1188,44 +1188,24 @@ msgid "Caíste en la oleada %d del garaje"
 msgstr "Você caiu na onda %d da garagem"
 
 #: scripts/garaje.gd
-msgid "Sin cuerpo a cuerpo"
-msgstr "Sem corpo a corpo"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."
-msgstr "Hoje não vale nenhuma arma corpo a corpo, nem mesmo o esfregão."
+msgid "Sin armas cuerpo a cuerpo"
+msgstr "Sem armas de corpo a corpo"
 
 #: scripts/garaje.gd
 msgid "Sin armas a distancia"
 msgstr "Sem armas à distância"
 
 #: scripts/garaje.gd
-msgid "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."
-msgstr "Hoje não vale nenhuma arma à distância: nem a pistola, nem a escopeta, nem as outras."
-
-#: scripts/garaje.gd
 msgid "Sin armas especiales"
 msgstr "Sem armas especiais"
 
 #: scripts/garaje.gd
-msgid "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."
-msgstr "Hoje não valem as armas especiais: as que soltam fogo, ácido, gelo ou raios."
+msgid "Sin armas lanzables"
+msgstr "Sem armas arremessáveis"
 
 #: scripts/garaje.gd
-msgid "Sin lanzables"
-msgstr "Sem arremessáveis"
-
-#: scripts/garaje.gd
-msgid "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."
-msgstr "Hoje não vale nada que se arremesse: nem molotovs, nem granadas, nem os outros."
-
-#: scripts/garaje.gd
-msgid "Sin curas"
-msgstr "Sem curas"
-
-#: scripts/garaje.gd
-msgid "Hoy no valen las vendas ni los botiquines."
-msgstr "Hoje não valem as bandagens nem os kits médicos."
+msgid "Sin botiquines ni vendas"
+msgstr "Sem kits médicos nem bandagens"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -3968,8 +3948,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "NÃO ME DEIXA AQUI!"
 
 #: scripts/supervivientes.gd
-msgid "Estoy muy débil"
-msgstr "Tô sem forças"
+msgid "¿No tendrás por ahí un dónut?"
+msgstr "Você não teria por aí uma rosquinha?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una manzana?"
+msgstr "Você não teria por aí uma maçã?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una lata de judías?"
+msgstr "Você não teria por aí uma lata de feijão?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un yogur de fresa?"
+msgstr "Você não teria por aí um iogurte de morango?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un bocadillo de chorizo?"
+msgstr "Você não teria por aí um sanduíche de chouriço?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una bebida energética?"
+msgstr "Você não teria por aí um energético?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una porción de pizza?"
+msgstr "Você não teria por aí uma fatia de pizza?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí un termo de café?"
+msgstr "Você não teria por aí uma garrafa térmica de café?"
+
+#: scripts/supervivientes.gd
+msgid "¿No tendrás por ahí una ensalada?"
+msgstr "Você não teria por aí uma salada?"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -4910,6 +4922,10 @@ msgstr "Em cada andar novo ele volta a ficar quebrado até o chefe cair."
 #: scripts/tutoriales.gd
 msgid "Guarda las balas"
 msgstr "Guarde as balas"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer cargador"
+msgstr "Ao pegar o primeiro pente"
 
 #: scripts/tutoriales.gd
 msgid "Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos."
@@ -6407,18 +6423,6 @@ msgid "Reto del día"
 msgstr "Desafio do dia"
 
 #: scripts/ui/menu_principal.gd
-msgid "Garaje · %d oleadas"
-msgstr "Garagem · %d ondas"
-
-#: scripts/ui/menu_principal.gd
-msgid "Condición de hoy: %s"
-msgstr "Condição de hoje: %s"
-
-#: scripts/ui/menu_principal.gd
-msgid "Ya lo has jugado hoy en este edificio: vuelve mañana"
-msgstr "Você já jogou hoje neste prédio: volte amanhã"
-
-#: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
 msgstr "Inexplorado!"
 
@@ -7645,247 +7649,3 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
-
-#, sin-usar
-msgid "Completa un reto del día."
-msgstr "Complete um desafio do dia."
-
-#, sin-usar
-msgid "Completa el reto del día con cada una de sus 7 reglas."
-msgstr "Complete o desafio do dia com cada uma das 7 regras."
-
-#, sin-usar
-msgid "¡Reto completado!"
-msgstr "Desafio concluído!"
-
-#, sin-usar
-msgid "Reto del día · %s: %s"
-msgstr "Desafio do dia · %s: %s"
-
-#, sin-usar
-msgid "Reto: %s"
-msgstr "Desafio: %s"
-
-#, sin-usar
-msgid "Completado en %d:%02d"
-msgstr "Concluído em %d:%02d"
-
-#, sin-usar
-msgid "sin marca"
-msgstr "sem recorde"
-
-#, sin-usar
-msgid "Sin marca"
-msgstr "Sem recorde"
-
-#, sin-usar
-msgid "planta %d"
-msgstr "andar %d"
-
-#, sin-usar
-msgid "Has llegado a la planta %d"
-msgstr "Você chegou ao andar %d"
-
-#, sin-usar
-msgid "Solo cuerpo a cuerpo"
-msgstr "Só corpo a corpo"
-
-#, sin-usar
-msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
-msgstr "a pistola começa vazia e não cai munição, nem molotovs nem granadas"
-
-#, sin-usar
-msgid "Todo a oscuras"
-msgstr "Tudo no escuro"
-
-#, sin-usar
-msgid "todas las plantas como en un apagón: solo se ve con la linterna"
-msgstr "todos os andares como num apagão: só se vê com a lanterna"
-
-#, sin-usar
-msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
-msgstr "os armarinhos estão vazios e nada que cure cai, é vendido ou preparado para você"
-
-#, sin-usar
-msgid "Durmientes rápidos"
-msgstr "Adormecidos rápidos"
-
-#, sin-usar
-msgid "todos un 35 % más rápidos (los jefes, no)"
-msgstr "todos 35 % mais rápidos (os chefes, não)"
-
-#, sin-usar
-msgid "De cristal"
-msgstr "De vidro"
-
-#, sin-usar
-msgid "Johnny con la mitad de vida"
-msgstr "Johnny com metade da vida"
-
-#, sin-usar
-msgid "Casa llena"
-msgstr "Casa cheia"
-
-#, sin-usar
-msgid "el doble de durmientes en cada sitio"
-msgstr "o dobro de adormecidos em cada lugar"
-
-#, sin-usar
-msgid "Oído fino"
-msgstr "Ouvido fino"
-
-#, sin-usar
-msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
-msgstr "até os golpes corpo a corpo acordam o apartamento inteiro"
-
-#, sin-usar
-msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
-msgstr "O Desafio do dia é um prédio com uma regra esquisita, o mesmo para todos. Joga-se uma vez por dia e, se você completar, dá $10."
-
-#, sin-usar
-msgid "Premio $%d cobrado"
-msgstr "Prêmio $%d resgatado"
-
-#, sin-usar
-msgid "Vuelve mañana"
-msgstr "Volte amanhã"
-
-#, sin-usar
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "Você já jogou hoje: volte amanhã"
-
-#, sin-usar
-msgid "Premio"
-msgstr "Prêmio"
-
-#, sin-usar
-msgid "Reto del día · %s"
-msgstr "Desafio do dia · %s"
-
-#, sin-usar
-msgid "%s · ¡mejor marca de hoy!"
-msgstr "%s · recorde de hoje!"
-
-#, sin-usar
-msgid "Tu mejor marca de hoy: %s"
-msgstr "Seu recorde de hoje: %s"
-
-#, sin-usar
-msgid "En el reto «%s» no se lleva nada que lanzar."
-msgstr "No desafio \"%s\" você não leva nada para arremessar."
-
-#, sin-usar
-msgid "No en este reto"
-msgstr "Não neste desafio"
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "Tem %d no baú: melhora uma pilha de %d"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "Você já tem na mão outra pilha %s e juntas não cabem (no máximo, %d)."
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "O baú está cheio: abra espaço para a pilha melhorada."
-
-#, sin-usar
-msgid "Alerta %d"
-msgstr "Alerta %d"
-
-#, sin-usar
-msgid "Sin alerta"
-msgstr "Sem alerta"
-
-#, sin-usar
-msgid ""
-"%s\n"
-"+%d %% de dólares"
-msgstr ""
-"%s\n"
-"+%d %% de dólares"
-
-#, sin-usar
-msgid ""
-"%s%s\n"
-"+%d %% de dólares y de materiales"
-msgstr ""
-"%s%s\n"
-"+%d %% de dólares e materiais"
-
-#, sin-usar
-msgid " (y lo de antes)"
-msgstr " (e os anteriores)"
-
-#, sin-usar
-msgid "+25 % de durmientes"
-msgstr "+25 % de adormecidos"
-
-#, sin-usar
-msgid "Durmientes un 10 % más rápidos"
-msgstr "Adormecidos 10 % mais rápidos"
-
-#, sin-usar
-msgid "Jefes con +25 % de vida, y se enfadan antes"
-msgstr "Chefes com +25 % de vida, e se irritam mais cedo"
-
-#, sin-usar
-msgid "Botiquines, vendas y Ajolote curan la mitad"
-msgstr "Kits médicos, bandagens e Axolote curam a metade"
-
-#, sin-usar
-msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
-msgstr "O guarda (ou o adormecido da chave) aguenta o dobro e os adormecidos te ouvem de mais longe"
-
-#, sin-usar
-msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-msgstr "Cada computador do código chama dois guarda-costas e os adormecidos te ouvem de mais longe"
-
-#, sin-usar
-msgid "radio un %d %% más grande y caben %d más"
-msgstr "raio %d %% maior e cabem mais %d"
-
-#, sin-usar
-msgid "Alerta naranja"
-msgstr "Alerta laranja"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 3 o más."
-msgstr "Complete um prédio com Alerta 3 ou mais."
-
-#, sin-usar
-msgid "Alerta máxima"
-msgstr "Alerta máximo"
-
-#, sin-usar
-msgid "Completa un edificio con la Alerta 5."
-msgstr "Complete um prédio com Alerta 5."
-
-#, sin-usar
-msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
-msgstr "Se você completar o prédio, fica com tudo; se cair ou abandonar, com a metade."
-
-#, sin-usar
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
-msgstr "Cada vez que você retira uma arma ou um lançável, ele gasta uma partida da durabilidade. Com 0, é destruído no fim dessa partida."
-
-#, sin-usar
-msgid "Alerta y Reto del día"
-msgstr "Alerta e Desafio do dia"
-
-#, sin-usar
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
-msgstr "Embaixo de cada prédio completado você escolhe o alerta com < e >: mais difícil, mais dólares. Complete no mais alto para abrir o seguinte."
-
-#, sin-usar
-msgid "Complétalo para abrir la Alerta 1"
-msgstr "Complete para liberar o Alerta 1"
-
-#, sin-usar
-msgid "Dólares salvados (la mitad)"
-msgstr "Dólares salvos (a metade)"
-
-#, sin-usar
-msgid "Elige un sujeto de la cuadrícula para ver su ficha."
-msgstr "Escolha um sujeito da grade para ver a ficha dele."

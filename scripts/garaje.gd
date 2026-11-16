@@ -38,15 +38,16 @@ const MUNICION := 0.10           # lo que tiene cada durmiente de soltar munici�
 const LEJOS := 380.0             # a cuánto de Johnny salen, como poco
 const RENDIJA := 3.0             # (s) un durmiente fuera del suelo por el que se anda tanto rato, al suelo más cercano
 
-# Las condiciones del día: cada día toca una (condicion_de). "nombre" sale en el cuadro del botón, arriba en la partida y
-# en el cartel del final; "desc", en el cuadro del botón. La clave es la familia que no vale (familia())
+# Las condiciones del día: cada día toca una (condicion_de). "nombre" sale en el cuadro del botón (con el récord: nada
+# más, 16 nov; antes, también una frase de qué no vale), arriba en la partida y en el cartel del final. La clave es la
+# familia que no vale (familia())
 # [traducir]
 const CONDICIONES := {
-	"cuerpo": {"nombre": "Sin cuerpo a cuerpo", "desc": "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."},
-	"distancia": {"nombre": "Sin armas a distancia", "desc": "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."},
-	"especial": {"nombre": "Sin armas especiales", "desc": "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."},
-	"lanzables": {"nombre": "Sin lanzables", "desc": "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."},
-	"curas": {"nombre": "Sin curas", "desc": "Hoy no valen las vendas ni los botiquines."},
+	"cuerpo": {"nombre": "Sin armas cuerpo a cuerpo"},
+	"distancia": {"nombre": "Sin armas a distancia"},
+	"especial": {"nombre": "Sin armas especiales"},
+	"lanzables": {"nombre": "Sin armas lanzables"},
+	"curas": {"nombre": "Sin botiquines ni vendas"},
 }
 # [/traducir]
 
@@ -98,10 +99,6 @@ static func quitar() -> void:
 
 static func nombre(c := condicion) -> String:
 	return Idioma.t(CONDICIONES[c].nombre) if c in CONDICIONES else ""
-
-
-static func desc(c := condicion) -> String:
-	return Idioma.t(CONDICIONES[c].desc) if c in CONDICIONES else ""
 
 
 # ── Lo prohibido ──

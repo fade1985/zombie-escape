@@ -648,7 +648,6 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
 				tutorial("jefes")   # (cómo se esquivan sus ataques; también en la primera partida, la de la guía)
-				tutorial("balas_jefes")   # (y detrás, que guarde las balas para ellos: M123)
 			if sitio.has("helipuerto") and aqui == idx and jefa is Minijefe and jefa.esperando:
 				decir(Idioma.t("Te espera en el helipuerto, dentro de las líneas blancas"), 3.0)
 				tutorial("azotea")   # (lo mismo, y lo del helicóptero, en su ventana: el aviso de abajo no se ve)
@@ -1524,6 +1523,7 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 	cosa.cogido.connect(func():
 		if tipo == "":
 			johnny.sumar_municion()
+			tutorial("balas_jefes")   # (con el primer cargador, que guarde las balas para los jefes: 16 nov; antes, en la primera pelea)
 		else:
 			johnny.meter_municion(tipo, cuanta)
 			johnny.coger_municion(tipo)

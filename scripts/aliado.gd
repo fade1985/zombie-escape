@@ -116,7 +116,6 @@ var cazando := false       # ha dejado la fila: sigue con los zombis que vea has
 var volviendo := false     # ha dejado la caza por quedarse lejos de Johnny: hasta estar en su puesto, no vuelve a salir
 var agente: NavigationAgent2D   # le busca el camino rodeando paredes y muebles (como a los zombis)
 var encima: Node2D         # la vida, el bocadillo y su nombre, por encima de todo
-var icono_comida: Sprite2D = null   # vecino: su comida favorita, debajo de su nombre (poner_comida; M124)
 
 
 func preparar(datos: Dictionary, en_modo: String) -> void:
@@ -224,8 +223,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		dibujar_hoja(delta, rapidez)
 	encima.queue_redraw()
-	if icono_comida:
-		icono_comida.visible = modo == "vecino"
 
 
 # En fila india por donde ha pasado Johnny: el primero (idx 0) va a la huella que queda SEPARACION unidades por
@@ -702,7 +699,7 @@ func presa_de(z: Node2D, jugador: Node2D, lejos: float) -> bool:
 
 # Lo dice encima de su cabeza, como los avisos de Johnny (el de la llave): amarillo, en mayúsculas, sube un poco y se
 # apaga. Va de hijo suyo, así que le sigue mientras anda
-func decir(texto: String, color := Tema.AMARILLO) -> void:   # (color: blanco, el «ESTOY MUY DÉBIL» de los trasteros)
+func decir(texto: String, color := Tema.AMARILLO) -> void:   # (color: blanco, lo que pide un vecino de los trasteros)
 	dicho = texto
 	dicho_t = 0.0
 	callar()
@@ -886,24 +883,6 @@ func dibujar_encima() -> void:
 	# el nombre (lo que es: «Médica»), solo en su habitación de los trasteros (las viviendas): en el edificio, ya no
 	if modo == "vecino":
 		texto(letra, Supervivientes.nombre_de(def), Vector2(0, 42), 16, Color.WHITE)   # (el nombre, ya traducido)
-
-
-# Vecino de los trasteros (M124): debajo de su nombre, el icono de su comida favorita, la que hay que darle para que te
-# acompañe, a 2 unidades por píxel y sin luz, como el nombre. Es un dibujo aparte: pintado en "encima", junto a las
-# letras, salía como un cuadro blanco
-func poner_comida() -> void:
-	var tex := Objetos.textura(Objetos.icono(def.get("comida", ""))) if def.get("comida", "") != "" else null
-	if tex == null:
-		return
-	icono_comida = Sprite2D.new()
-	icono_comida.texture = tex
-	icono_comida.scale = Vector2(2, 2)
-	icono_comida.position = Vector2(0, 84)
-	icono_comida.z_index = 40
-	var sin_luz := CanvasItemMaterial.new()
-	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	icono_comida.material = sin_luz
-	add_child(icono_comida)
 
 
 func texto(letra: Font, cual: String, donde: Vector2, tamano: int, color: Color) -> void:
