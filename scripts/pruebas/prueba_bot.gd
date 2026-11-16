@@ -112,10 +112,9 @@ func reponer_johnny() -> void:
 	johnny.recargando = 0.0
 	johnny.esquiva_espera = 0.0
 	# y dos molotovs y dos granadas a mano, como las demás pruebas (los tira bot.gd, lanzar)
-	lanzables.mano.clear()
+	lanzables.vaciar()
 	for k in ["molotov", "granada"]:
-		lanzables.cantidades[k] = 2
-		lanzables.mano.append(k)
+		lanzables.poner(k, 2)
 	lanzables.tipo = "molotov"
 
 
@@ -769,14 +768,9 @@ func probar_bot_garaje() -> void:
 	llevar_arma(perfil.fuego[0], perfil.fuego[1], true, false)
 	if johnny.mano != "fuego":
 		johnny.cambiar_mano()
-	lanzables.mano.clear()
-	lanzables.repuesto.clear()
-	lanzables.en_repuesto.clear()
-	for k in lanzables.cantidades:
-		lanzables.cantidades[k] = 0
+	lanzables.vaciar()
 	for k in perfil.lanzables:
-		lanzables.mano.append(k)
-		lanzables.cantidades[k] = lanzables.maximo(k)
+		lanzables.poner(k, lanzables.maximo(k))
 		if perfil.repuesto:
 			lanzables.repuesto.append(k)
 			lanzables.en_repuesto.append(lanzables.maximo(k))

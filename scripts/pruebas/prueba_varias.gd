@@ -386,7 +386,7 @@ func probar_reto() -> void:
 	mochila.append("vendas")
 	for c in Garaje.CONDICIONES:
 		Garaje.condicion = c
-		lanzables.cantidades["molotov"] = 2
+		lanzables.poner("molotov", 2)
 		lanzables.tipo = "molotov"
 		johnny.vida = 50
 		abrir_cosas("baul")
@@ -1005,7 +1005,7 @@ func probar_equilibrio() -> void:
 	# una granada a los pies de Johnny: le quita como mucho 25 (menos, si lleva Durito)
 	johnny.invulnerable = 0.0
 	johnny.escudo = 0.0
-	lanzables.cantidades.granada = maxi(lanzables.cantidades.granada, 1)
+	lanzables.poner("granada", maxi(lanzables.cuantas("granada"), 1))
 	lanzables.tipo = "granada"
 	lanzables.lanzar(johnny.global_position)
 	v0 = johnny.vida
@@ -3907,7 +3907,7 @@ func probar_continuar() -> void:
 	var lleva := func() -> Dictionary:
 		return {"planta": planta.num, "firma": firma.call(), "vida": johnny.vida, "huecos": johnny.huecos.duplicate(),
 			"calidades": johnny.calidades.duplicate(), "mochila": mochila.duplicate(), "dolares": dolares,
-			"mutaciones": mutaciones.tengo.duplicate(), "molotov": lanzables.cantidades.molotov,
+			"mutaciones": mutaciones.tengo.duplicate(), "molotov": lanzables.cuantas("molotov"),
 			"jefes": orden_jefes.duplicate(), "partidas": Guardado.cargar().partidas}
 	await get_tree().create_timer(0.5).timeout
 	if continuar_antes.is_empty():
@@ -3916,7 +3916,7 @@ func probar_continuar() -> void:
 		mochila.append("vendas")
 		elegir_mutacion(Mutaciones.LISTA[0].id)
 		dolares = 12
-		lanzables.cantidades.molotov = 5
+		lanzables.poner("molotov", 5)
 		await subir()
 		await get_tree().create_timer(0.5).timeout
 		continuar_antes = lleva.call()

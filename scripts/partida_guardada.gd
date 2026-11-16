@@ -69,7 +69,7 @@ static func apuntar(p: Node, num: int) -> void:
 		"johnny": {"vida": j.vida, "tercios": j.tercios, "resucitado": j.resucitado, "copia_usada": j.copia_usada, "huecos": j.huecos,
 			"calidades": j.calidades, "quedan": j.quedan, "mano": j.mano, "balas": j.balas, "municion": j.municion,
 			"cargadores": j.cargadores, "deposito": j.deposito, "escudo_mut": j.escudo_mut},
-		"lanzables": {"cantidades": lz.cantidades, "mano": lz.mano, "repuesto": lz.repuesto,
+		"lanzables": {"mano": lz.mano, "en_mano": lz.en_mano, "elegido": lz.elegido, "repuesto": lz.repuesto,
 			"en_repuesto": lz.en_repuesto, "tipo": lz.tipo, "quedan": lz.quedan},
 	}
 	var texto := var_to_str(foto)
@@ -136,11 +136,15 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	j.vida_cambiada.emit(j.vida, j.stats.vida_max)
 	j.avisar_arma()
 	var lz: Lanzables = p.lanzables
-	lz.cantidades = foto.lanzables.cantidades.duplicate()
 	lz.mano = foto.lanzables.mano.duplicate()
+	# cuántos hay en cada montón de la mano (las fotos de antes del 16 nov, con un montón por clave, los traen en
+	# "cantidades": {clave: cuántos})
+	var cuantos: Array = foto.lanzables.en_mano if foto.lanzables.has("en_mano") \
+		else lz.mano.map(func(k): return foto.lanzables.get("cantidades", {}).get(k, 0))
+	lz.en_mano = cuantos.map(func(n): return int(n))
 	lz.repuesto = foto.lanzables.repuesto.duplicate()
-	lz.en_repuesto = foto.lanzables.en_repuesto.duplicate()
-	lz.tipo = foto.lanzables.tipo
+	lz.en_repuesto = foto.lanzables.en_repuesto.map(func(n): return int(n))
+	lz.elegido = int(foto.lanzables.get("elegido", maxi(lz.mano.find(foto.lanzables.get("tipo", "")), 0)))
 	lz.quedan = foto.lanzables.get("quedan", {}).duplicate()
 	sobrantes_al_baul(lz, foto)
 	# el superviviente de la partida y el equipo (el acompañante y el rescatado, si ya lo estaba)

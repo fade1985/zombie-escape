@@ -101,9 +101,10 @@ en una línea.
   `ordenador.comprar_lanzable`). Dentro de un apartamento, al explotar o romperse se oyen como
   un disparo y despiertan a todo el piso, que va a por Johnny (`ruido`, M107, 15 nov: lo llaman `granada.explotar` y
   `proyectil.caer`; prueba `--arrojable-alerta`). Van en **montones** (M18, 28 oct): cada hueco lleva un montón
-  de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
-  de cada clave, F cambia; sus cuentas en `cantidades`) y 4 de repuesto (`REPUESTO`, 8 hasta la M67; `repuesto` y sus cuentas en `en_repuesto`,
-  con varios de la misma clave). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
+  de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, sus cuentas en
+  `en_mano`; desde el 16 nov también dos o tres de la misma clave; F cambia el que se lanza, `elegido`, y `tipo` es su
+  clave; `poner` los prepara en las pruebas; en el inventario se arrastran de un hueco a otro de la mano: `mover_en_mano`)
+  y de repuesto (`REPUESTO`, ninguno desde el 13 nov; `repuesto` y sus cuentas en `en_repuesto`). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
   sin llenar, luego en uno nuevo). Al acabarse el de la mano entra otro de repuesto (`repasar`, `relevo`: el de su
   clave, uno de su tipo o el primero). Un montón se señala por su sitio, el nombre de su casilla en el inventario
   (`"l1"`, `"e3"`: `clave_en`, `cuantos_en`, `sitio_de`, `quitar`, `mejorar`); `a_la_mano` y `al_repuesto`, por su

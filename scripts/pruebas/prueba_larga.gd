@@ -109,7 +109,7 @@ func _process(delta: float) -> void:
 		var prueba := meter_zombi("lento", mapa.punto_libre(johnny.position, 120.0))
 		var donde: Vector2 = prueba.global_position
 		lanzables.lanzar(donde)
-		print("Molotov hacia ", donde, " | quedan ", lanzables.cantidades)
+		print("Molotov hacia ", donde, " | quedan ", lanzables.montones())
 		# un zombi que cae al lado de Johnny: revienta y deja su mancha
 		var muerto := meter_zombi("normal", johnny.position + Vector2(-60, 40))
 		muerto.recibir_golpe(999, Vector2.ZERO)

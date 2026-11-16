@@ -91,7 +91,7 @@ var salto_arma := 0.0
 var destello_arma := 0.0
 # Los lanzables: el que se ve, el de antes (de donde vienen las esquinas al cambiar) y cuántos había
 var tipo_visto := ""
-var tipo_antes := ""
+var antes_i := -1   # el montón de los lanzables que se lanzaba antes de cambiar con la F (su sitio en la fila)
 var cuenta_antes := -1
 var giro := 1.0
 var salto_cuenta := 0.0
@@ -493,12 +493,14 @@ func pintar_armas() -> void:
 func mirar_lanzar(delta: float) -> void:
 	var lz: Lanzables = partida.lanzables
 	var n := lz.cuantas(lz.tipo)
-	if lz.tipo != tipo_visto:
+	# (el montón que se lanza, por su sitio y su clave: desde el 16 nov puede llevar dos de la misma)
+	var visto := "%d %s" % [lz.elegido, lz.tipo] if lz.tipo != "" else ""
+	if visto != tipo_visto:
 		if tipo_visto != "":
 			giro = 0.0             # otro lanzable: gira el tambor
-			tipo_antes = tipo_visto
+			antes_i = tipo_visto.get_slice(" ", 0).to_int()
 			destello_lanzar = 1.0
-		tipo_visto = lz.tipo
+		tipo_visto = visto
 	elif n != cuenta_antes and cuenta_antes >= 0:
 		salto_cuenta = 1.0         # uno más o uno menos: el número da un saltito
 	cuenta_antes = n
@@ -513,8 +515,8 @@ func mirar_lanzar(delta: float) -> void:
 # ahora, grande como la del arma en la mano, y las demás medianas. Al cambiar con la F, la del de antes encoge mientras
 # la del nuevo crece (con el muelle), así que la fila mide siempre lo mismo
 func sitios_lanzables(lista: Array) -> Array:
-	var ahora := maxi(lista.find(partida.lanzables.tipo), 0)
-	var antes := lista.find(tipo_antes) if giro < 1.0 else -1
+	var ahora := clampi(partida.lanzables.elegido, 0, lista.size() - 1)
+	var antes := antes_i if giro < 1.0 and antes_i < lista.size() else -1
 	var k := muelle(giro) if antes >= 0 else 1.0
 	var sitios := []
 	var x := 2.0
@@ -538,8 +540,8 @@ func pintar_lanzar() -> void:
 	var sitios := sitios_lanzables(lista)
 	for i in lista.size():
 		var t: String = lista[i]
-		var n := lz.cuantas(t)
-		var activo := t == lz.tipo
+		var n := lz.cuantos_en("l%d" % i)
+		var activo := t != "" and i == lz.elegido
 		var r: Rect2 = sitios[i]
 		if activo:
 			con_salto(lanzar, r, 1.0 - giro)
@@ -555,9 +557,9 @@ func pintar_lanzar() -> void:
 		texto(lanzar, donde, s, 16, Color(Tema.TINTA if n > 0 else Tema.ROJO, 1.0 if activo else 0.7))
 		lanzar.draw_set_transform(Vector2.ZERO)
 	# las esquinas, sobre el de ahora (viniendo del de antes al cambiar)
-	var ahora := maxi(lista.find(lz.tipo), 0)
+	var ahora := clampi(lz.elegido, 0, lista.size() - 1)
 	var cursor: Rect2 = sitios[ahora]
-	var antes := lista.find(tipo_antes)
+	var antes := antes_i if antes_i < lista.size() else -1
 	if giro < 1.0 and antes >= 0:
 		cursor = mezclar(sitios[antes], cursor, k)
 	if lz.cuantas(lz.tipo) > 0:

@@ -8,14 +8,14 @@
 #   - Con la ayuda "Lanzar apuntando solo" (Opciones > Ayudas), va siempre al zombi más cercano a la vista
 #     (el mismo que buscaría el modo de atacar asistido); si no se ve ninguno, se apunta como siempre.
 #   - Van en montones (el M18 del dueño, 28 oct): cada hueco lleva un montón de un tipo y una calidad, de hasta MONTON
-#     (2; más con la calidad y los talentos: maximo). Lleva MANO montones a mano, uno de cada clave (F o RB cambian lo
-#     que se lanza entre ellos), y REPUESTO de repuesto (desde el 13 nov, ninguno). No hay tope por tipo: se
-#     coge mientras quede sitio. Al empezar, el molotov y la granada, a mano. Lo que consigue va al montón de su clave
-#     que no esté lleno (primero el de la mano); si están llenos, a un montón nuevo: a la mano si hay hueco y no lleva
-#     ya esa clave a mano, y si no, al repuesto (y si tampoco, no lo coge: meter, cabe). Cuando se acaba el de la
-#     mano, su hueco lo ocupa otro montón de repuesto de la misma clave; si no hay, uno del mismo tipo y, si tampoco,
-#     el primero (repasar). Desde el inventario se pasan de la mano al repuesto y al revés (a_la_mano, al_repuesto) y dos
-#     montones de la misma clave sin llenar se juntan arrastrando uno encima del otro (juntar). Un
+#     (2; más con la calidad y los talentos: maximo). Lleva MANO montones a mano, de la clave que quiera: desde el 16 nov
+#     también dos o tres de la misma (F o RB cambian lo que se lanza entre ellos: elegido), y REPUESTO de repuesto (desde
+#     el 13 nov, ninguno). No hay tope por tipo: se coge mientras quede sitio. Lo que consigue va a los montones de su
+#     clave que no estén llenos (primero los de la mano); si están llenos, a un montón nuevo: a la mano si hay hueco, y si
+#     no, al repuesto (y si tampoco, no lo coge: meter, cabe). Cuando se acaba el que se lanza, se lanza otro de su clave
+#     (o el que ocupa su sitio); el hueco lo ocupa otro de repuesto, si hay (repasar). Desde el inventario se pasan de la
+#     mano al repuesto y al revés (a_la_mano, al_repuesto), se cambian de sitio en la mano (mover_en_mano) y dos montones
+#     de la misma clave sin llenar se juntan arrastrando uno encima del otro (juntar). Un
 #     montón se señala por su "sitio", el nombre de su casilla en el inventario: "l1" el 2.º a mano, "e3" el 4.º de
 #     repuesto (clave_en, cuantos_en).
 #   - Al completar el edificio, todos los que le quedan van al baúl (partida.equipo_encima), también los Normales. En
@@ -104,16 +104,27 @@ const MONTON := 2          # los que caben en un montón (M74: antes 3; M42: ant
 
 var johnny: Node2D
 var partida: Node
-var cantidades := {"molotov": 0, "granada": 0, "atraedora": 0, "congeladora": 0}   # cuántos hay en el montón de la mano de cada clave (0 si no la lleva a mano)
-var mano: Array = []           # las claves de los montones que lleva a mano (sin repetir), en el orden de F
+var mano: Array = []           # las claves de los montones que lleva a mano, en el orden de F (desde el 16 nov pueden
+                               # repetirse: dos o tres montones de molotovs, si quiere)
+var en_mano: Array = []        # cuántos hay en cada montón de la mano (en el orden de "mano")
+var elegido := 0               # el montón de la mano que se lanza ahora (su sitio en "mano")
 var repuesto: Array = []       # y las de los de repuesto (puede haber varios de la misma)
 var en_repuesto: Array = []    # cuántos hay en cada montón de repuesto (en el orden de "repuesto")
 var quedan := {}               # las partidas que les quedan después de esta a los de cada clave (la durabilidad:
                                # Armas.nuevas); la que no está, las de unos nuevos de su calidad (quedan_de)
-var tipo := "molotov"          # el paquete que se lanza ahora (su clave; "" si no lleva nada a mano)
+var tocado := -1               # el montón de la mano en el que acaba de entrar algo (meter: sitio_de lo enseña)
 var apunte := Vector2.INF      # dónde caería, mientras se mantiene el botón (INF: no se apunta)
 var apuntando := false         # se ha visto el botón apretado: al soltarlo, se lanza (y solo entonces)
 var t := 0.0
+# La clave del montón que se lanza ahora ("" si no lleva nada a mano). Al darle una clave, se elige el primer montón de
+# la mano que la tenga (si no lleva ninguno, no cambia)
+var tipo: String:
+	get:
+		return mano[elegido] if elegido >= 0 and elegido < mano.size() else ""
+	set(valor):
+		var i := mano.find(valor)
+		if i >= 0:
+			elegido = i
 
 
 func _ready() -> void:
@@ -153,25 +164,37 @@ static func calidad_de(k: String) -> int:
 # Al empezar la partida: los de "inicio" de cada uno (desde el 15 nov, ninguno: ni con el Artificiero, que solo hace
 # que quepan más en cada montón)
 func reiniciar(_stats: Dictionary) -> void:
-	cantidades = {}
 	mano = []
+	en_mano = []
 	for k in DATOS:
-		cantidades[k] = DATOS[k].inicio
-		if cantidades[k] > 0:
+		if DATOS[k].inicio > 0:
 			mano.append(k)
+			en_mano.append(DATOS[k].inicio)
+	elegido = 0
 	repuesto = []
 	en_repuesto = []
 	quedan = {}
-	tipo = mano[0] if not mano.is_empty() else ""
+	tocado = -1
 
 
 # El reto "Solo cuerpo a cuerpo": sin nada que lanzar
 func vaciar() -> void:
-	for k in cantidades:
-		cantidades[k] = 0
+	mano = []
+	en_mano = []
 	repuesto = []
 	en_repuesto = []
-	repasar()
+	elegido = 0
+
+
+# Pone "n" en el primer montón de la mano de esa clave (si no lleva ninguno, uno nuevo al final): para las pruebas y la
+# sala de pruebas, que preparan lo que lleva sin pasar por meter
+func poner(k: String, n: int) -> void:
+	var i := mano.find(k)
+	if i < 0:
+		mano.append(k)
+		en_mano.append(n)
+	else:
+		en_mano[i] = n
 
 
 # La clave del montón de ese sitio ("l1", "e3"; "" si está vacío)
@@ -186,26 +209,30 @@ func clave_en(sitio: String) -> String:
 func cuantos_en(sitio: String) -> int:
 	var i := sitio.substr(1).to_int()
 	if sitio.begins_with("l"):
-		return cuantas(mano[i]) if i < mano.size() else 0
+		return en_mano[i] if i < en_mano.size() else 0
 	return en_repuesto[i] if sitio.begins_with("e") and i < en_repuesto.size() else 0
 
 
-# El sitio de un montón de esa clave: el de la mano si la lleva a mano y si no, el primero de repuesto ("" si no lleva)
+# El sitio de un montón de esa clave: el de la mano en el que acaba de entrar algo (tocado), si es de esa clave; si no,
+# el primero de la mano y, si no la lleva a mano, el primero de repuesto ("" si no lleva)
 func sitio_de(k: String) -> String:
+	if tocado >= 0 and tocado < mano.size() and mano[tocado] == k:
+		return "l%d" % tocado
 	if k in mano:
 		return "l%d" % mano.find(k)
 	return "e%d" % repuesto.find(k) if k in repuesto else ""
 
 
-# ¿Le cabe uno más de esa clave? En un montón suyo que no esté lleno, o en uno nuevo: a mano (si hay hueco y no la lleva
-# ya a mano) o de repuesto
+# ¿Le cabe uno más de esa clave? En un montón suyo que no esté lleno, o en uno nuevo: a mano si hay hueco (desde el 16 nov,
+# aunque ya lleve otro de esa clave) o de repuesto
 func cabe(k: String) -> bool:
-	if k in mano and cuantas(k) < maximo(k):
-		return true
+	for i in mano.size():
+		if mano[i] == k and en_mano[i] < maximo(k):
+			return true
 	for i in repuesto.size():
 		if repuesto[i] == k and en_repuesto[i] < maximo(k):
 			return true
-	return (mano.size() < MANO and not k in mano) or repuesto.size() < REPUESTO
+	return mano.size() < MANO or repuesto.size() < REPUESTO
 
 
 # Coger uno (del suelo o de la tienda)
@@ -213,16 +240,18 @@ func sumar(k: String) -> void:
 	meter(k, 1)
 
 
-# Mete "n" de esa clave (los que coge, los que compra o los que saca del baúl): primero en sus montones que no estén
-# llenos (el de la mano, el primero) y luego en montones nuevos: a mano si hay hueco (y si no llevaba nada a mano, es lo
-# que se lanza) y si no, de repuesto. Devuelve los que han entrado (los demás no caben)
+# Mete "n" de esa clave (los que coge o los que saca del baúl): primero en sus montones que no estén llenos (los de la
+# mano, en orden) y luego en montones nuevos: a mano si hay hueco (aunque ya lleve otro de esa clave: 16 nov, lo pidió el
+# dueño) y si no, de repuesto. Devuelve los que han entrado (los demás no caben)
 func meter(k: String, n: int) -> int:
 	self.quedan.erase(k)   # (unos nuevos: los de esa clave duran lo que unos nuevos, que es lo más que pueden durar)
 	var quedan := n
-	if k in mano:
-		var entran := clampi(maximo(k) - cuantas(k), 0, quedan)
-		cantidades[k] = cuantas(k) + entran
-		quedan -= entran
+	for i in mano.size():
+		if quedan > 0 and mano[i] == k and en_mano[i] < maximo(k):
+			var entran := mini(quedan, maximo(k) - en_mano[i])
+			en_mano[i] += entran
+			quedan -= entran
+			tocado = i
 	for i in repuesto.size():
 		if quedan > 0 and repuesto[i] == k and en_repuesto[i] < maximo(k):
 			var entran := mini(quedan, maximo(k) - en_repuesto[i])
@@ -230,11 +259,12 @@ func meter(k: String, n: int) -> int:
 			quedan -= entran
 	while quedan > 0:
 		var entran := mini(quedan, maximo(k))
-		if mano.size() < MANO and not k in mano:
+		if mano.size() < MANO:
+			if mano.is_empty():
+				elegido = 0   # (no llevaba nada a mano: es lo que se lanza)
 			mano.append(k)
-			cantidades[k] = entran
-			if tipo == "":
-				tipo = k
+			en_mano.append(entran)
+			tocado = mano.size() - 1
 		elif repuesto.size() < REPUESTO:
 			repuesto.append(k)
 			en_repuesto.append(entran)
@@ -247,7 +277,7 @@ func meter(k: String, n: int) -> int:
 # Mete "n" de esa clave que salen del baúl con "q" partidas por delante (la durabilidad: Armas.estrenar). Si ya llevaba
 # de esa clave, se quedan las partidas de los que más tengan. Devuelve los que han entrado
 func meter_de_baul(k: String, n: int, q: int) -> int:
-	var antes := cuantas(k) + total_clave(k)
+	var antes := total_clave(k)
 	var mas := quedan_de(k)
 	var entran := meter(k, n)
 	quedan[k] = maxi(q, mas) if antes > 0 else q
@@ -259,9 +289,12 @@ func quedan_de(k: String) -> int:
 	return int(quedan.get(k, Armas.nuevas(calidad_de(k))))
 
 
-# Cuántos lleva de esa clave en los montones de repuesto
+# Cuántos lleva de esa clave, en todos sus montones (a mano y de repuesto)
 func total_clave(k: String) -> int:
 	var n := 0
+	for i in mano.size():
+		if mano[i] == k:
+			n += en_mano[i]
 	for i in repuesto.size():
 		if repuesto[i] == k:
 			n += en_repuesto[i]
@@ -269,76 +302,85 @@ func total_clave(k: String) -> int:
 
 
 # Quita los montones que se han acabado. El hueco de la mano lo ocupa otro de repuesto (relevo). Si se acaba el que se
-# lanzaba, se lanza el que ocupa su sitio (o el siguiente de la mano)
+# lanzaba, se lanza otro montón de la misma clave que lleve a mano y, si no hay, el que ocupa su sitio (o el de antes)
 func repasar() -> void:
 	for j in range(repuesto.size() - 1, -1, -1):
 		if en_repuesto[j] <= 0:
 			repuesto.remove_at(j)
 			en_repuesto.remove_at(j)
+	var lanzaba := tipo
+	var acabado := false   # (se ha acabado el que se lanzaba)
 	var i := 0
 	while i < mano.size():
-		var era: String = mano[i]
-		if cuantas(era) > 0:
+		if en_mano[i] > 0:
 			i += 1
 			continue
-		var j := relevo(era)
-		if j < 0:
-			mano.remove_at(i)
-		else:
-			cantidades[era] = 0
+		if i == elegido:
+			acabado = true
+		var j := relevo(mano[i])
+		if j >= 0:
 			mano[i] = repuesto[j]
-			cantidades[mano[i]] = en_repuesto[j]
+			en_mano[i] = en_repuesto[j]
 			repuesto.remove_at(j)
 			en_repuesto.remove_at(j)
-		if tipo == era:
-			tipo = mano[mini(i, mano.size() - 1)] if not mano.is_empty() else ""
-	for k in cantidades.keys():   # (lo que no está a mano, a 0; los mejorados, fuera)
-		if not k in mano:
-			if calidad_de(k) > 0:
-				cantidades.erase(k)
-			else:
-				cantidades[k] = 0
-	if not tipo in mano:
-		tipo = mano[0] if not mano.is_empty() else ""
+			continue
+		mano.remove_at(i)
+		en_mano.remove_at(i)
+		if i < elegido:
+			elegido -= 1
+		if tocado == i:
+			tocado = -1
+		elif tocado > i:
+			tocado -= 1
+	elegido = clampi(elegido, 0, maxi(mano.size() - 1, 0))
+	if acabado and lanzaba in mano and mano[elegido] != lanzaba:
+		elegido = mano.find(lanzaba)
 
 
-# El montón de repuesto que pasa a la mano cuando se acaba el de esa clave (-1 si no queda ninguno): uno de la misma
-# clave, si no uno del mismo tipo y si no, el primero (de los que no lleva ya a mano)
+# El montón de repuesto que pasa a la mano cuando se acaba uno de esa clave (-1 si no queda ninguno): uno de la misma
+# clave, si no uno del mismo tipo y si no, el primero
 func relevo(k: String) -> int:
-	var libres := range(repuesto.size()).filter(func(j): return repuesto[j] == k or not repuesto[j] in mano)
-	for j in libres:
-		if repuesto[j] == k:
-			return j
-	for j in libres:
+	if repuesto.is_empty():
+		return -1
+	if k in repuesto:
+		return repuesto.find(k)
+	for j in repuesto.size():
 		if tipo_de(repuesto[j]) == tipo_de(k):
 			return j
-	return libres[0] if not libres.is_empty() else -1
+	return 0
 
 
-# Desde el inventario: pasa el montón "j" del repuesto a la mano, y es lo que se lanza. Si ya lleva esa clave a mano, se
-# juntan (el de la mano se llena y lo que sobra se queda de repuesto). Si no, con la mano llena, cambia por lo que se
-# lanzaba, que pasa a su sitio en el repuesto; con "por" (arrastrándolo encima de uno de la mano), cambia por ese
+# Desde el inventario: pasa el montón "j" del repuesto a la mano, y es lo que se lanza. Si lleva a mano uno de esa clave
+# sin llenar, se juntan (lo que sobra se queda de repuesto). Si no, a un hueco libre de la mano; con la mano llena, cambia
+# por lo que se lanzaba, que pasa a su sitio en el repuesto; con "por" (la clave de uno de la mano, arrastrándolo
+# encima), cambia por ese
 func a_la_mano(j: int, por := "") -> void:
 	if j < 0 or j >= repuesto.size():
 		return
 	var k: String = repuesto[j]
-	if k in mano:
-		var entran := clampi(maximo(k) - cuantas(k), 0, en_repuesto[j])
-		cantidades[k] += entran
+	var a := -1
+	for i in mano.size():
+		if mano[i] == k and en_mano[i] < maximo(k):
+			a = i
+			break
+	if a >= 0:
+		var entran := clampi(maximo(k) - en_mano[a], 0, en_repuesto[j])
+		en_mano[a] += entran
 		en_repuesto[j] -= entran
 	elif mano.size() < MANO and not por in mano:
 		mano.append(k)
-		cantidades[k] = en_repuesto[j]
+		en_mano.append(en_repuesto[j])
 		en_repuesto[j] = 0
+		a = mano.size() - 1
 	else:
-		var fuera := por if por in mano else tipo
-		var n := cuantas(fuera)
-		mano[mano.find(fuera)] = k
-		cantidades[fuera] = 0
-		cantidades[k] = en_repuesto[j]
+		a = mano.find(por) if por in mano else elegido
+		var fuera: String = mano[a]
+		var n: int = en_mano[a]
+		mano[a] = k
+		en_mano[a] = en_repuesto[j]
 		repuesto[j] = fuera
 		en_repuesto[j] = n
-	tipo = k
+	elegido = a
 	repasar()   # (el montón de repuesto que se ha vaciado, fuera)
 
 
@@ -359,36 +401,61 @@ func juntar(de: String, a: String) -> int:
 	for s in [[de, -pasan], [a, pasan]]:
 		var i: int = s[0].substr(1).to_int()
 		if s[0].begins_with("l"):
-			cantidades[k] += s[1]
+			en_mano[i] += s[1]
 		else:
 			en_repuesto[i] += s[1]
 	repasar()
 	return pasan
 
 
-# ¿Se juntaría con el de la mano sin que pase nada? (el de repuesto "j" es de una clave que ya lleva a mano, y ese montón
-# está lleno)
-func mano_llena_de(j: int) -> bool:
-	return j < repuesto.size() and repuesto[j] in mano and cuantas(repuesto[j]) >= maximo(repuesto[j])
+# Desde el inventario: el montón de la mano "i" pasa al sitio "j" de la mano (16 nov). Si allí hay otro de la misma clave
+# sin llenar, se juntan (juntar); si hay otro, se cambian de sitio; si está vacío, va al final de los que lleva. El que se
+# lanzaba sigue siendo el mismo montón. Devuelve el sitio donde queda ("l2")
+func mover_en_mano(i: int, j: int) -> String:
+	if i < 0 or i >= mano.size() or i == j:
+		return "l%d" % i
+	if se_juntan("l%d" % i, "l%d" % j):
+		var antes := mano.size()
+		juntar("l%d" % i, "l%d" % j)
+		return "l%d" % (j - 1 if mano.size() < antes and i < j else j)
+	var lanza := elegido
+	j = mini(j, mano.size() - 1)
+	var k: String = mano[i]
+	var n: int = en_mano[i]
+	mano[i] = mano[j]
+	en_mano[i] = en_mano[j]
+	mano[j] = k
+	en_mano[j] = n
+	elegido = j if lanza == i else i if lanza == j else lanza
+	return "l%d" % j
+
+
+# ¿Se juntaría con el de la mano sin que pase nada? Desde el 16 nov nunca: si los de su clave están llenos, va a un hueco
+# libre o se cambia por el que se lanza (a_la_mano)
+func mano_llena_de(_j: int) -> bool:
+	return false
 
 
 # Y al revés: el montón "i" de la mano, al repuesto, si hay hueco
 func al_repuesto(i: int) -> void:
 	if i < 0 or i >= mano.size() or repuesto.size() >= REPUESTO:
 		return
-	var k: String = mano[i]
-	repuesto.append(k)
-	en_repuesto.append(cuantas(k))
+	repuesto.append(mano[i])
+	en_repuesto.append(en_mano[i])
 	mano.remove_at(i)
-	cantidades[k] = 0
-	if tipo == k:
-		tipo = mano[0] if not mano.is_empty() else ""
+	en_mano.remove_at(i)
+	if i < elegido:
+		elegido -= 1
 	repasar()
 
 
-# Las que le quedan en el montón de la mano de esa clave (las de repuesto: cuantos_en)
+# Las que le quedan en un montón de la mano de esa clave: el que se lanza, si es de esa clave, y si no, el primero (0 si
+# no la lleva a mano; las de un sitio concreto, cuantos_en)
 func cuantas(k: String) -> int:
-	return cantidades.get(k, 0)
+	if k != "" and k == tipo:
+		return en_mano[elegido]
+	var i := mano.find(k)
+	return en_mano[i] if i >= 0 else 0
 
 
 # El nombre de un paquete («molotovs»), en plural y en minúscula, para dentro de una frase, en el idioma del jugador
@@ -443,7 +510,7 @@ func quitar(sitio: String, n := 1000) -> int:
 	if fuera <= 0:
 		return 0
 	if sitio.begins_with("l"):
-		cantidades[mano[i]] -= fuera
+		en_mano[i] -= fuera
 	else:
 		en_repuesto[i] -= fuera
 	repasar()
@@ -453,9 +520,9 @@ func quitar(sitio: String, n := 1000) -> int:
 # Cuántos lleva de un tipo, sumando todos sus montones (el menú de pausa y la tienda)
 func total(t: String) -> int:
 	var n := 0
-	for k in mano:
-		if tipo_de(k) == t:
-			n += cuantas(k)
+	for i in mano.size():
+		if tipo_de(mano[i]) == t:
+			n += en_mano[i]
 	for i in repuesto.size():
 		if tipo_de(repuesto[i]) == t:
 			n += en_repuesto[i]
@@ -465,8 +532,8 @@ func total(t: String) -> int:
 # Todos los montones que lleva, a mano y de repuesto: [[clave, cuántos], ...] (lo que va al baúl al completar el edificio)
 func montones() -> Array:
 	var lista := []
-	for k in mano:
-		lista.append([k, cuantas(k)])
+	for i in mano.size():
+		lista.append([mano[i], en_mano[i]])
 	for i in repuesto.size():
 		lista.append([repuesto[i], en_repuesto[i]])
 	return lista
@@ -480,7 +547,7 @@ func tipos() -> Array:
 func cambiar() -> void:
 	if mano.is_empty():
 		return
-	tipo = mano[(mano.find(tipo) + 1) % mano.size()]
+	elegido = (elegido + 1) % mano.size()
 	Sonido.tocar("pitido")
 
 
@@ -570,7 +637,7 @@ func lanzar(donde: Vector2) -> void:
 		return
 	Sonido.tocar("lanzar")
 	var sala: Node = johnny.get_parent()
-	cantidades[tipo] -= 1
+	en_mano[elegido] -= 1
 	var t := tipo_de(tipo)
 	var calidad: Dictionary = Armas.CALIDADES[calidad_de(tipo)]
 	if t == "molotov":

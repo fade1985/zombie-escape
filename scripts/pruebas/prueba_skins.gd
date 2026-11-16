@@ -526,7 +526,7 @@ func probar_skin_bombero() -> void:
 		var cuanto := {}
 		for skin in ["", "bombero"]:
 			johnny.vestir(skin)
-			lanzables.cantidades.molotov = maxi(lanzables.cantidades.molotov, 1)
+			lanzables.poner("molotov", maxi(lanzables.cuantas("molotov"), 1))
 			lanzables.tipo = tipo
 			lanzables.lanzar(johnny.global_position + Vector2(-200, 100))
 			var p: Node = johnny.get_parent().get_children().filter(func(n): return n.get("hasta") != null and n.get("dano_lanzar") != null).back()
@@ -584,7 +584,7 @@ func probar_skin_bombero() -> void:
 		zombi.vida = 2000
 		await get_tree().process_frame
 		zombi.aturdido = 6.0
-		lanzables.cantidades.molotov = maxi(lanzables.cantidades.molotov, 1)
+		lanzables.poner("molotov", maxi(lanzables.cuantas("molotov"), 1))
 		lanzables.tipo = "molotov"
 		var vida_antes: int = zombi.vida
 		lanzables.lanzar(zombi.global_position)

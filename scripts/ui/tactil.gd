@@ -409,7 +409,7 @@ func dibujar() -> void:
 				# el que vendría después de los que lleva a mano (el ⇄ del JS: la fuente pixel art no tiene flechas)
 				var ks := lz.tipos()
 				if not ks.is_empty():
-					var otro: String = ks[(ks.find(lz.tipo) + 1) % ks.size()]
+					var otro: String = ks[(lz.elegido + 1) % ks.size()]
 					icono(donde, Lanzables.tipo_de(otro), 22 * esc)
 			"atacar":
 				icono(donde, Objetos.icono(johnny.huecos[johnny.mano]), 56 * esc)

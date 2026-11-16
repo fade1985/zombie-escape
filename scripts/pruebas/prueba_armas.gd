@@ -3362,7 +3362,7 @@ func probar_granada_pared() -> void:
 	var quemable := zombi_quieto(tras_pared)
 	await get_tree().create_timer(0.4).timeout
 	johnny.global_position = sitio
-	lanzables.cantidades["molotov"] = 2
+	lanzables.poner("molotov", 2)
 	lanzables.tipo = "molotov"
 	lanzables.lanzar(tras_pared)
 	var botella: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() != null and n.get_script().resource_path.ends_with("proyectil.gd")).back()
@@ -3769,7 +3769,7 @@ func lanzar_y_esperar(clave: String, sitio: Vector2, donde: Vector2, foto := "",
 	johnny.global_position = sitio
 	johnny.velocity = Vector2.ZERO
 	johnny.get_node("Camara").reset_smoothing()
-	lanzables.cantidades[clave] = 2
+	lanzables.poner(clave, 2)
 	lanzables.tipo = clave
 	lanzables.lanzar(donde)
 	var g: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() == Lanzables.BOMBA).back()

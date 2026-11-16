@@ -135,11 +135,11 @@ func _exit_tree() -> void:
 	partida.mochila = entrada.mochila
 	partida.armas_guardadas = entrada.guardadas
 	var lz: Lanzables = partida.lanzables
-	lz.cantidades = entrada.lz.cantidades
 	lz.mano = entrada.lz.mano
+	lz.en_mano = entrada.lz.en_mano
 	lz.repuesto = entrada.lz.repuesto
 	lz.en_repuesto = entrada.lz.en_repuesto
-	lz.tipo = entrada.lz.tipo
+	lz.elegido = entrada.lz.elegido
 	lz.quedan = entrada.lz.get("quedan", {})
 
 
@@ -181,8 +181,8 @@ func _physics_process(delta: float) -> void:
 			"municion": johnny.municion.duplicate(), "deposito": johnny.deposito, "cargadores": johnny.cargadores.duplicate(),
 			"calidades": johnny.calidades.duplicate(), "quedan": johnny.quedan.duplicate(), "sin_fin": johnny.municion_sin_fin,
 			"mochila": partida.mochila.duplicate(), "guardadas": partida.armas_guardadas.duplicate(),
-			"lz": {"cantidades": lz.cantidades.duplicate(), "mano": lz.mano.duplicate(), "repuesto": lz.repuesto.duplicate(),
-				"en_repuesto": lz.en_repuesto.duplicate(), "tipo": lz.tipo, "quedan": lz.quedan.duplicate()}}
+			"lz": {"mano": lz.mano.duplicate(), "en_mano": lz.en_mano.duplicate(), "repuesto": lz.repuesto.duplicate(),
+				"en_repuesto": lz.en_repuesto.duplicate(), "elegido": lz.elegido, "quedan": lz.quedan.duplicate()}}
 		johnny.calidades = {}   # (aquí se prueban como son, en Normal)
 		johnny.quedan = {}
 		johnny.municion_sin_fin = sin_fin   # munición sin fin, pero recargando: la reserva no se acaba nunca

@@ -236,7 +236,8 @@
 #                       con su calidad y sus partidas                                      [prueba_inventario.gd]
 #   --dibujos-armas     los dibujos de la tienda de armas en todos los sitios donde sale un arma: HUD, suelo, móvil,
 #                       pausa, inventario, baúl y banco (el premio de la joyería, con --joyeria) [prueba_inventario.gd]
-#   --montones          los arrojables en montones de 2: el de la mano lleno, la mano llena, al acabarse uno, el
+#   --montones          los arrojables en montones de 2: el de la mano lleno, la mano llena, dos o tres montones del
+#                       mismo a mano (16 nov: F, arrastrarlos a otro hueco, juntarlos, sacarlos del baúl), al acabarse uno, el
 #                       baúl (juntos, de 2 en 2), completar el edificio y una partida guardada con montones de
 #                       repuesto (13 nov: todos al baúl)                                [prueba_inventario.gd]
 #   --infinito          el HUD con la ayuda de balas infinitas (el «∞» dibujado a mano)    [prueba_inventario.gd]
@@ -560,8 +561,7 @@ func empezar_prueba() -> void:
 	# molotovs y 2 granadas a mano (más los del Artificiero), para que sus cuentas no cambien
 	if not Array(args).any(func(a): return a in SIN_LANZABLES) and lanzables.mano.is_empty():
 		for k in ["molotov", "granada"]:
-			lanzables.cantidades[k] = 2 + Lanzables.extra_talentos(k, johnny.stats)
-			lanzables.mano.append(k)
+			lanzables.poner(k, 2 + Lanzables.extra_talentos(k, johnny.stats))
 		lanzables.tipo = "molotov"
 	if "--trailer" in args:
 		grabar_trailer()

@@ -1221,7 +1221,7 @@ func probar_municion() -> void:
 		lz.cambiar()
 		vistos.append(lz.tipo)
 	print("F tres veces: %s (esperado: atraedora → molotov → atraedora → molotov)" % " → ".join(vistos))
-	lz.cantidades.molotov = lz.maximo("molotov")
+	lz.poner("molotov", lz.maximo("molotov"))
 	print("Un molotov del suelo con su montón de la mano lleno (%d de %d): ¿lo coge? %s (esperado: false: no hay repuesto)" % [
 		lz.cuantas("molotov"), lz.maximo("molotov"), lz.cabe("molotov")])
 	await get_tree().create_timer(0.3).timeout
@@ -1370,7 +1370,7 @@ func probar_montones() -> void:
 		g2.baul_equipo = [])
 	var lz: Lanzables = lanzables
 	var como := func() -> String:   # la mano y el repuesto, con cuántos hay en cada montón
-		return "a mano %s · repuesto %s" % [lz.mano.map(func(k): return "%s %d" % [k, lz.cuantas(k)]),
+		return "a mano %s · repuesto %s" % [range(lz.mano.size()).map(func(i): return "%s %d" % [lz.mano[i], lz.en_mano[i]]),
 			range(lz.repuesto.size()).map(func(j): return "%s %d" % [lz.repuesto[j], lz.en_repuesto[j]])]
 	var baul := func() -> Array:   # los arrojables del baúl, corto: ["molotov 0 ×10"...]
 		return Guardado.cargar().baul_equipo.filter(func(e): return e.has("n")).map(
@@ -1378,14 +1378,49 @@ func probar_montones() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("Al empezar: %s · caben en un montón %d (esperado: a mano [molotov 2, granada 2] · repuesto [] · 2)" % [como.call(),
 		lz.maximo("molotov")])
+	# desde el 16 nov se pueden llevar a mano dos o tres montones del mismo: el que no cabe en su montón, a uno nuevo
 	for i in 4:
 		lz.sumar("molotov")
-	print("Coge 4 molotovs: %s · molotovs %d (esperado: a mano [molotov 2, granada 2] · repuesto [] · 2: su montón ya estaba lleno)" % [
+	print("Coge 4 molotovs: %s · molotovs %d (esperado: a mano [molotov 2, granada 2, molotov 2] · repuesto [] · 4: otro montón de molotovs en el hueco libre; los otros 2 no caben)" % [
 		como.call(), lz.total("molotov")])
 	var entran := lz.meter("granada", 100)
-	print("Mete 100 granadas: entran %d (esperado: 0)" % entran)
-	print("¿Coge otra granada? %s · ¿una atraedora? %s (esperado: false · true, a la mano, que tiene un hueco)" % [
-		lz.cabe("granada"), lz.cabe("atraedora")])
+	print("Mete 100 granadas: entran %d · ¿coge otro molotov? %s · ¿una atraedora? %s (esperado: 0 · false · false: la mano, llena)" % [
+		entran, lz.cabe("molotov"), lz.cabe("atraedora")])
+	var vistos := ["l%d" % lz.elegido]
+	for i in 3:
+		lz.cambiar()
+		vistos.append("l%d" % lz.elegido)
+	print("F tres veces: %s (esperado: l0 → l1 → l2 → l0: cada montón, también los dos de molotovs)" % " → ".join(vistos))
+	johnny.invulnerable = 5.0   # (por si alguno le cae cerca)
+	lz.elegido = 2
+	lz.lanzar(johnny.global_position + Vector2(-280, 60))
+	lz.sumar("molotov")
+	print("Lanza uno del 2.º montón de molotovs y coge otro: %s · entra en %s (esperado: a mano [molotov 2, granada 2, molotov 2] · l2: el montón sin llenar)" % [
+		como.call(), lz.sitio_de("molotov")])
+	# en el inventario, arrastrar un montón a otro hueco de la mano: se cambian de sitio (y se lanza el mismo montón)
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.3).timeout
+	inventario.soltar_en("l2", "l1")
+	await get_tree().process_frame
+	print("Arrastra el 2.º de molotovs (l2) al hueco de las granadas (l1): %s · lanza l%d (esperado: a mano [molotov 2, molotov 2, granada 2] · lanza l1: el mismo montón)" % [
+		como.call(), lz.elegido])
+	inventario.cerrar()
+	await get_tree().process_frame
+	lz.elegido = 0
+	for i in Lanzables.MONTON:
+		lz.lanzar(johnny.global_position + Vector2(-280, 60))
+	print("Se acaba el 1.er montón de molotovs: %s · lanza %s (esperado: a mano [molotov 2, granada 2] · molotov: el otro montón de molotovs)" % [
+		como.call(), lz.tipo])
+	# dos montones de la misma clave sin llenar, uno encima del otro: se juntan
+	lz.mano = ["molotov", "granada", "molotov"]
+	lz.en_mano = [1, 2, 1]
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.3).timeout
+	inventario.soltar_en("l2", "l0")
+	await get_tree().process_frame
+	print("Junta dos montones de 1 molotov: %s (esperado: a mano [molotov 2, granada 2])" % como.call())
+	inventario.cerrar()
+	await get_tree().create_timer(4.5).timeout   # (que se apague el fuego)
 	entran = lz.meter("atraedora", 8)
 	print("Mete 8 atraedoras: entran %d · ¿coge una congeladora? %s (esperado: 2 · false: la mano, llena)" % [entran,
 		lz.cabe("congeladora")])
@@ -1431,6 +1466,12 @@ func probar_montones() -> void:
 	inventario.sacar()
 	await get_tree().process_frame
 	print("Saca un montón: baúl %s · granadas %d (esperado: [granada 0 ×2] · 2)" % [baul.call(), lz.total("granada")])
+	inventario.tocar("b0")
+	await get_tree().process_frame
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Saca el otro: baúl %s · %s (esperado: [] · a mano [atraedora 2, granada 2, granada 2]: dos montones de granadas, 16 nov)" % [
+		baul.call(), como.call()])
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-montones-baul.png")
 	inventario.cerrar()
@@ -1612,9 +1653,9 @@ func probar_inventario() -> void:
 	johnny.balas = 8
 	johnny.meter_municion("balas", 30)
 	mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "pieza_distancia", "botiquin", "gasolina", "gasolina"])
-	lz.mano = ["molotov", "granada"]
-	lz.repuesto = []
-	lz.en_repuesto = []
+	lz.vaciar()
+	for k in ["molotov", "granada"]:
+		lz.poner(k, 2 + Lanzables.extra_talentos(k, johnny.stats))
 	lz.tipo = "molotov"
 	dar_lanzable("atraedora")
 	dar_lanzable("congeladora")
@@ -1726,9 +1767,9 @@ func probar_arrastrar() -> void:
 	llevar_arma("pistola")     # la pistola a la mano y la escopeta al repuesto
 	johnny.meter_municion("balas", 30)
 	mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "botiquin", "gasolina", "gasolina"])
-	lz.mano = ["molotov", "granada"]
-	lz.repuesto = []
-	lz.en_repuesto = []
+	lz.vaciar()
+	for k in ["molotov", "granada"]:
+		lz.poner(k, 2 + Lanzables.extra_talentos(k, johnny.stats))
 	lz.tipo = "molotov"
 	dar_lanzable("atraedora")     # a la mano (la tercera)
 	johnny.vida = johnny.vida_tope() - 60

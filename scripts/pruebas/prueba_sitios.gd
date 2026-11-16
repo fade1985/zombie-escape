@@ -2346,7 +2346,7 @@ func probar_joyeria() -> void:
 		d.premio.arma, d.premio.calidad, johnny.huecos, armas_guardadas, d.premio.fajo, d.premio.pos, Logros.estado(Guardado.cargar(), "caja_fuerte")])
 	var manos_antes: Dictionary = johnny.huecos.duplicate()
 	var dolares_antes := dolares
-	var molotovs_antes: int = lanzables.cantidades.molotov
+	var molotovs_antes: int = lanzables.cuantas("molotov")
 	johnny.position = d.premio.pos + Vector2(0, 170)   # (más lejos que el imán de las cosas del suelo: que no vuele aún)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.6, false).timeout
@@ -2355,7 +2355,7 @@ func probar_joyeria() -> void:
 	await get_tree().create_timer(0.6, false).timeout
 	print("Cogido: %s · manos %s → %s · guardadas %s · calidad de la nueva %d (esperado: 3) · dólares %d → %d · molotovs %d → %d · dice «%s»" % [d.premio.cogido,
 		manos_antes, johnny.huecos, armas_guardadas, johnny.calidad(d.premio.arma), dolares_antes, dolares, molotovs_antes,
-		lanzables.cantidades.molotov, aviso.text])
+		lanzables.cuantas("molotov"), aviso.text])
 	# la segunda apertura, más abajo, prepara otro premio
 	d.erase("premio")
 	# la otra manera: el guardia cae en el pasillo y suelta la tarjeta dorada junto a la suya

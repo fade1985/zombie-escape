@@ -232,7 +232,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 		if k == "":
 			continue
 		rotulo(lienzo, nombre_lanzable(k), x + 36, 456, Tema.TINTA, HORIZONTAL_ALIGNMENT_CENTER, 84)
-		if k == lz.tipo:
+		if i == lz.elegido:   # (por su sitio: desde el 16 nov puede llevar dos montones de la misma clave)
 			var ahora := Panel.new()
 			var e := StyleBoxFlat.new()
 			e.draw_center = false
@@ -865,7 +865,7 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 	renglon(caja, Armas.texto_partidas(lz.quedan_de(k)), Tema.ROJO if lz.quedan_de(k) <= 0 else Tema.AMARILLO)
 	var que: String = que_hace(k)
 	if a_mano:
-		que += " " + (Idioma.t("Es lo que lanzas ahora.") if k == lz.tipo else Idioma.t("Con F lo eliges para lanzarlo."))
+		que += " " + (Idioma.t("Es lo que lanzas ahora.") if sitio == "l%d" % lz.elegido else Idioma.t("Con F lo eliges para lanzarlo."))
 		if lz.relevo(k) >= 0:
 			que += " " + Idioma.t("Cuando se acabe, entra otro montón de los de repuesto.")
 		if Lanzables.REPUESTO <= 0:   # (13 nov: ya no hay repuesto al que pasarlo)
@@ -980,7 +980,8 @@ func repintar() -> void:
 	pintar()
 
 
-# Pasa el montón de arrojables elegido de la mano al repuesto o al revés (lanzables.gd); la ficha sigue con él, en su
+# Pasa el montón de arrojables elegido de la mano al repuesto o al revés, o a otro hueco de la mano (16 nov:
+# lanzables.gd, mover_en_mano); la ficha sigue con él, en su
 # sitio nuevo. Con "por" (el sitio de otro montón, al soltarlo encima), cambia con ese. Si a mano ya lleva esa clase, se
 # juntan. Lo que cambia de sitio da un saltito
 func mover_lanzable(por := "") -> void:
@@ -1003,6 +1004,11 @@ func mover_lanzable(por := "") -> void:
 		elif por.begins_with("e") and vacia_mano and lz.mano.size() == antes_mano and lz.sitio_de(k).begins_with("l"):
 			donde = lz.sitio_de(k)   # (el de la mano se vació y su relevo ha sido justo ese montón)
 		if lz.cuantos_en(sel) > 0 and lz.clave_en(sel) == k:
+			otro = sel
+	elif sel.begins_with("l") and por.begins_with("l") and k != "":
+		# a otro hueco de la mano (16 nov): se cambian de sitio (a uno vacío, al final de los que lleva)
+		donde = lz.mover_en_mano(i, por.substr(1).to_int())
+		if lz.clave_en(sel) != "" and sel != donde:
 			otro = sel
 	elif sel.begins_with("e") and k != "" and not lz.mano_llena_de(i):
 		var antes := lz.repuesto.size()
@@ -2312,6 +2318,7 @@ func destinos(clave: String) -> Dictionary:
 			"l", "e":
 				if caben_lanzables(s, partida.lanzables.clave_en(clave)) > 0:
 					d["baul"] = "guardar"
+				huecos_mano(clave, d)
 			"b":
 				if se_saca(cosas_baul(s)[i]):
 					d["llevas"] = "sacar"
@@ -2336,6 +2343,7 @@ func destinos(clave: String) -> Dictionary:
 			d["tirar"] = "tirar"
 			for j in Lanzables.REPUESTO:
 				d["e%d" % j] = "mover"
+			huecos_mano(clave, d)
 		"e":
 			d["tirar"] = "tirar"
 			for j in Lanzables.MANO:
@@ -2346,6 +2354,16 @@ func destinos(clave: String) -> Dictionary:
 					d["e%d" % j] = "mover"
 	otras_casillas(clave, d)
 	return d
+
+
+# Un montón de arrojables de la mano ("l1") se puede soltar en los otros huecos de la mano (16 nov): se cambia de sitio
+# con lo que haya o, si es de la misma clave y no está lleno, se juntan (mover_lanzable)
+func huecos_mano(clave: String, d: Dictionary) -> void:
+	if clave[0] != "l":
+		return
+	for j in Lanzables.MANO:
+		if "l%d" % j != clave:
+			d["l%d" % j] = "mover"
 
 
 # Las otras casillas de su grupo (16 nov): soltarlo en una lo lleva allí o lo cambia por lo que haya (colocar_en)
@@ -2581,7 +2599,7 @@ func soltar_en(clave: String, a_donde: String, punto := Vector2.INF) -> void:
 			poner_guardada()
 		"tirar": tirar(true)
 		"usar": usar(true)
-		"mover": mover_lanzable(otro_lanzable(a_donde))
+		"mover": mover_lanzable(a_donde if clave[0] == "l" and a_donde[0] == "l" else otro_lanzable(a_donde))
 		"guardar": guardar()
 		"sacar": sacar()
 		"colocar": colocar_en(clave, a_donde)
