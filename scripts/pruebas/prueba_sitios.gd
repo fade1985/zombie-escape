@@ -2509,7 +2509,7 @@ func probar_guardia() -> void:
 	n0 = cosas.call()
 	guardia.recibir_golpe(99999, Vector2.ZERO)
 	await get_tree().create_timer(0.8, false).timeout
-	print("Guardia · el de la tarjeta, al caer, suelta %d cosas (billetes y mutágeno; la tarjeta aparte)" % (cosas.call() - n0))
+	print("Guardia · el de la tarjeta, al caer, suelta %d cosas (esperado: 10, 5 dólares y 5 mutágenos; la tarjeta aparte)" % (cosas.call() - n0))
 	get_tree().quit()
 
 

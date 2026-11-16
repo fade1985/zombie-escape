@@ -83,7 +83,8 @@ const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
 const REFUERZOS := 4               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas). M83: antes 2
 const REFUERZOS_VELOCIDAD := 165.0 # y lo deprisa que corren (M83: antes 85, la de un vigilante normal)
-const BILLETES_GUARDIA := 2
+const BILLETES_GUARDIA := 5        # lo que suelta el guardia de la tarjeta además de la tarjeta (17 nov): 5 dólares...
+const MUTAGENOS_GUARDIA := 5       # ...y 5 mutágenos (nada más: ya no el objeto suelto)
 # Los zombis aguantan más según el edificio (12 nov: con la pistola y la fregona se pasaba el juego entero), además de lo
 # de cada planta (ZOMBI_POR_PLANTA): los Apartamentos son los de siempre. Los jefes de planta, algo menos por edificio
 # (ya suben JEFE_POR_PLANTA); el jefe final y el guardia, con su vida de siempre (el guardia ya sube por planta)
@@ -2290,10 +2291,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			soltar_billetes(BILLETES_JEFA, zombi.position)
 		elif tipo == "guardia":
 			soltar_billetes(BILLETES_GUARDIA, zombi.position)
-			soltar_mutageno(zombi.position)
-			var obj := Objetos.que_suelta(tipo, edificio, tienda, queda)
-			if obj != "":
-				soltar_objeto(obj, zombi.position)
+			for i in MUTAGENOS_GUARDIA:
+				soltar_mutageno(zombi.position)
 		else:
 			soltar_mutageno(zombi.position)
 			for i in (2 if randf() < Skins.doble(johnny.skin) else 1):

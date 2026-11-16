@@ -135,7 +135,7 @@ en una línea.
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
-  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye). Los guardas que trae su silbato (`partida._al_silbar`) llevan la marca `llamado`, como los vecinos que llama un jefe: al caer no sueltan nada (ni dólares, ni mutágeno, ni munición); solo suelta él (`--captura --edificio centro --guardia`).
+  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye). Los guardas que trae su silbato (`partida._al_silbar`) llevan la marca `llamado`, como los vecinos que llama un jefe: al caer no sueltan nada (ni dólares, ni mutágeno, ni munición); solo suelta él, además de la tarjeta, 5 dólares y 5 mutágenos (`BILLETES_GUARDIA` y `MUTAGENOS_GUARDIA`; ya no un objeto suelto; `--captura --edificio centro --guardia`).
   Los de Torre Velaria: `zombi_oficinista.gd` (guarda las distancias y tira tazas y grapadoras, `bala_zombi.gd`) y
   `zombi_escolta.gd` (el chaleco para media bala de frente, con `Zombi.de_bala`, que pone `bala.gd`; el táser deja a Johnny
   tieso con el `"calambre"` de `estados.gd`, desde `dar_zarpazo`, que cualquier tipo puede cambiar). Salen en los
