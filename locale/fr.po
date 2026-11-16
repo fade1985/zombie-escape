@@ -6415,10 +6415,6 @@ msgid "¡¡¡DIFERENTE!!!"
 msgstr "DIFFÉRENT !!!"
 
 #: scripts/ui/menus.gd
-msgid "Efecto secundario %d de %d · dura hasta que acabe la partida"
-msgstr "Effet secondaire %d sur %d · dure jusqu'à la fin de la partie"
-
-#: scripts/ui/menus.gd
 msgid "Página %d de %d"
 msgstr "Page %d sur %d"
 
@@ -7435,10 +7431,6 @@ msgid "Pasa por un arma para ver qué hace."
 msgstr "Choisis une arme pour voir ce qu'elle fait."
 
 #: scripts/ui/tienda_armas.gd
-msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
-msgstr "Les $%d de cette partie sont gardés à la fin : tous si tu termines le bâtiment, la moitié si tu tombes."
-
-#: scripts/ui/tienda_armas.gd
 msgid "Área"
 msgstr "Zone"
 
@@ -7529,115 +7521,3 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
-
-#, sin-usar
-msgid "¡Horda vencida! Te deja $%d y una caja de munición"
-msgstr "Horde vaincue ! Elle te laisse $%d et une caisse de munitions"
-
-#, sin-usar
-msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
-msgstr "Toutes les 3 s, tu vomis de l'acide sur le dormeur le plus proche : il laisse une flaque qui brûle les dormeurs qui marchent dedans"
-
-#, sin-usar
-msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
-msgstr "Tu ne sens plus ton corps : tu subis 35 % de dégâts en moins"
-
-#, sin-usar
-msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
-msgstr "Ta peau durcit : un bouclier de 60 à chaque étage, qui s'use avant ta vie"
-
-#, sin-usar
-msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
-msgstr "Toutes les 4 s, tu hurles si fort que les dormeurs autour de toi sont désorientés 2 s"
-
-#, sin-usar
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
-msgstr "Toutes les 3 s, tu lâches des gaz corrosifs qui brûlent et paralysent 2 s les dormeurs proches"
-
-#, sin-usar
-msgid "+%d de cada lanzable"
-msgstr "+%d de chaque lançable"
-
-#, sin-usar
-msgid "+1 de cada lanzable por punto"
-msgstr "+1 de chaque lançable par point"
-
-#, sin-usar
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "Quand un dormeur lâche un objet, dans 50 % des cas il en lâche un autre."
-
-#, sin-usar
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Les dormeurs lâchent parfois des billets, et les boss beaucoup : passe dessus pour les ramasser."
-
-#, sin-usar
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "Les dormeurs ont de l'ADN muté en eux : parfois, en tombant, ils lâchent un peu de mutagène. Passe dessus pour le ramasser."
-
-#, sin-usar
-msgid "Al coger la primera pistola"
-msgstr "En prenant le premier pistolet"
-
-#, sin-usar
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "Tu as maintenant deux armes en main : la serpillière, au corps à corps, et le pistolet, à distance."
-
-#, sin-usar
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "Lance avec {lanzar} : maintiens pour viser et relâche pour lancer."
-
-#, sin-usar
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "Ce que tu lances se change avec {cambiar_lanzable} : le molotov met le feu et la grenade explose. Tu en as jusqu'à 3 en main."
-
-#, sin-usar
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Elles sont vendues en qualité Normale : elles ne durent que cette partie et se détruisent à la fin. Tu en portes deux de chaque type : celle que tu avais en main passe en réserve et celle de réserve, au coffre ; si elle ne rentre pas ou ne peut pas être rangée, celle de ta main reste par terre."
-
-#, sin-usar
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines, et elles vont à l'emplacement à distance. Les lançables s'achètent un par un, tant qu'il reste de la place."
-
-#, sin-usar
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Johnny ne commence qu'avec la serpillière : le premier pistolet, c'est cadeau."
-
-#, sin-usar
-msgid "Ya llevas %s."
-msgstr "Déjà en main : %s."
-
-#, sin-usar
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "Déjà en rechange : %s. Équipe-la depuis l'inventaire."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "Acheté ! En main : %s ; en rechange : %s ; au coffre : %s."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano."
-msgstr "Acheté ! En main : %s."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "Acheté ! En main : %s ; en rechange : %s."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "Acheté ! En main : %s ; par terre : %s (tu en avais déjà deux)."
-
-#, sin-usar
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "Plus de place pour des %s : tes piles sont pleines et il ne te reste aucun emplacement pour une autre."
-
-#, sin-usar
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "Acheté ! Tu as maintenant %d %s."
-
-#, sin-usar
-msgid "Comprada"
-msgstr "Achetée"
-
-#, sin-usar
-msgid "LLENO"
-msgstr "PLEIN"

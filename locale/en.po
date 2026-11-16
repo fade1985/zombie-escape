@@ -6415,10 +6415,6 @@ msgid "¡¡¡DIFERENTE!!!"
 msgstr "DIFFERENT!!!"
 
 #: scripts/ui/menus.gd
-msgid "Efecto secundario %d de %d · dura hasta que acabe la partida"
-msgstr "Side effect %d of %d · lasts until the run ends"
-
-#: scripts/ui/menus.gd
 msgid "Página %d de %d"
 msgstr "Page %d of %d"
 
@@ -7435,10 +7431,6 @@ msgid "Pasa por un arma para ver qué hace."
 msgstr "Pick a weapon to see what it does."
 
 #: scripts/ui/tienda_armas.gd
-msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
-msgstr "The $%d from this run get saved when it ends: all of it if you clear the building, half if you die."
-
-#: scripts/ui/tienda_armas.gd
 msgid "Área"
 msgstr "Area"
 
@@ -7529,115 +7521,3 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
-
-#, sin-usar
-msgid "¡Horda vencida! Te deja $%d y una caja de munición"
-msgstr "Horde defeated! It leaves you $%d and a box of ammo"
-
-#, sin-usar
-msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
-msgstr "Every 3 s you spew acid vomit at the nearest sleeper: it leaves a puddle that burns any sleeper that steps in it"
-
-#, sin-usar
-msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
-msgstr "You lose all feeling in your body: you take 35 % less damage"
-
-#, sin-usar
-msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
-msgstr "Your skin hardens: a 60-point shield on every floor that gets used up before your health"
-
-#, sin-usar
-msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
-msgstr "Every 4 s you scream so loud that nearby sleepers get disoriented for 2 s"
-
-#, sin-usar
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
-msgstr "Every 3 s you let out corrosive gas that burns nearby sleepers and paralyzes them for 2 s"
-
-#, sin-usar
-msgid "+%d de cada lanzable"
-msgstr "+%d of each throwable"
-
-#, sin-usar
-msgid "+1 de cada lanzable por punto"
-msgstr "+1 of each throwable per point"
-
-#, sin-usar
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "When a sleeper drops an item, 50 % of the time it drops another one."
-
-#, sin-usar
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Sleepers sometimes drop bills, and bosses drop plenty: walk over them to pick them up."
-
-#, sin-usar
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "Sleepers carry mutated DNA inside: sometimes, when they fall, they drop a little mutagen. Walk over it to pick it up."
-
-#, sin-usar
-msgid "Al coger la primera pistola"
-msgstr "On getting your first pistol"
-
-#, sin-usar
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "You now hold two weapons: the mop, melee, and the pistol, ranged."
-
-#, sin-usar
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "Throw with {lanzar}: hold to aim, release to throw."
-
-#, sin-usar
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "Switch what you throw with {cambiar_lanzable}: the Molotov starts a fire and the grenade explodes. You carry up to 3 in hand."
-
-#, sin-usar
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "They're sold in Normal quality: they only last this run and break when it ends. You carry two of each type: the one in your hand goes to the spare slot and the spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand drops to the floor."
-
-#, sin-usar
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "Ranged weapons come loaded and with spare ammo; special ones come full and go in the ranged slot. Throwables are bought one at a time, while you have room."
-
-#, sin-usar
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Johnny starts with just the mop: your first pistol is on us."
-
-#, sin-usar
-msgid "Ya llevas %s."
-msgstr "You already have the %s."
-
-#, sin-usar
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "You already have the %s as a spare: equip it from the inventory."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "Bought! %s in hand; %s goes to spare and %s goes into the stash."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano."
-msgstr "Bought! %s in hand."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "Bought! %s in hand; %s goes to spare."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "Bought! %s in hand; %s stays on the floor: you already had two."
-
-#, sin-usar
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "You can't fit any more %s: your stacks are full and you have no slot left for another."
-
-#, sin-usar
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "Bought! You now carry %d %s."
-
-#, sin-usar
-msgid "Comprada"
-msgstr "Purchased"
-
-#, sin-usar
-msgid "LLENO"
-msgstr "FULL"

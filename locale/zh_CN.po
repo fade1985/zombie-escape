@@ -6396,10 +6396,6 @@ msgid "¡¡¡DIFERENTE!!!"
 msgstr "不一样了！！！"
 
 #: scripts/ui/menus.gd
-msgid "Efecto secundario %d de %d · dura hasta que acabe la partida"
-msgstr "副作用 %d / %d · 持续到本局结束"
-
-#: scripts/ui/menus.gd
 msgid "Página %d de %d"
 msgstr "第 %d / %d 页"
 
@@ -7416,10 +7412,6 @@ msgid "Pasa por un arma para ver qué hace."
 msgstr "选一把武器，看看它的作用。"
 
 #: scripts/ui/tienda_armas.gd
-msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
-msgstr "本局的 $%d 会在结束时存下：通关大楼全部保留，倒下则保留一半。"
-
-#: scripts/ui/tienda_armas.gd
 msgid "Área"
 msgstr "范围"
 
@@ -7510,115 +7502,3 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
-
-#, sin-usar
-msgid "¡Horda vencida! Te deja $%d y una caja de munición"
-msgstr "尸潮被击退！掉落了$%d和一箱弹药"
-
-#, sin-usar
-msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
-msgstr "每3秒朝最近的沉睡者吐一口酸液：留下一滩酸水，灼伤踩到的沉睡者"
-
-#, sin-usar
-msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
-msgstr "身体失去知觉：受到的伤害减少35%"
-
-#, sin-usar
-msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
-msgstr "皮肤变硬：每层楼获得60点护盾，先于生命消耗"
-
-#, sin-usar
-msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
-msgstr "每4秒发出一声狂吼，让周围的沉睡者晕头转向2秒"
-
-#, sin-usar
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
-msgstr "每3秒放出腐蚀性气体，灼伤附近的沉睡者并使其麻痹2秒"
-
-#, sin-usar
-msgid "+%d de cada lanzable"
-msgstr "每种投掷物 +%d"
-
-#, sin-usar
-msgid "+1 de cada lanzable por punto"
-msgstr "每点使每种投掷物 +1"
-
-#, sin-usar
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "沉睡者掉落物品时，有50%的几率再多掉一件。"
-
-#, sin-usar
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "沉睡者有时会掉钞票，首领会掉很多：走过去就能捡起来。"
-
-#, sin-usar
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "沉睡者体内带着变异的DNA：倒下时偶尔会掉落一点诱变剂。走过去就能捡起来。"
-
-#, sin-usar
-msgid "Al coger la primera pistola"
-msgstr "拿到第一把手枪时"
-
-#, sin-usar
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "现在你手上拿着两件武器：近战的拖把和远程的手枪。"
-
-#, sin-usar
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "用{lanzar}投掷：按住瞄准，松开扔出。"
-
-#, sin-usar
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸。手边最多带3个。"
-
-#, sin-usar
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "以普通品质出售：只能用本局，本局结束后会损坏。每种类型你带两把：手上的那把转为备用，备用的那把进储物箱；如果放不下或无法存放，手上的那把会掉在地上。"
-
-#, sin-usar
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "远程武器装满弹药出售，并附带备弹；特殊武器装满出售，占用远程武器的位置。投掷物一个一个买，直到放不下为止。"
-
-#, sin-usar
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Johnny 开局只有拖把：第一把手枪送给你。"
-
-#, sin-usar
-msgid "Ya llevas %s."
-msgstr "你已经有%s了。"
-
-#, sin-usar
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "你的备用里已经有%s了：去物品栏装备它吧。"
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "购买成功！%s拿到手上；%s换到备用；%s放进储物箱。"
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano."
-msgstr "购买成功！%s拿到手上。"
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "购买成功！%s拿到手上；%s换到备用。"
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "购买成功！%s拿到手上；%s留在地上：你已经带了两件。"
-
-#, sin-usar
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "%s放不下了：你的几组都满了，也没有空位再放一组。"
-
-#, sin-usar
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "购买成功！你现在带着 %d 个%s。"
-
-#, sin-usar
-msgid "Comprada"
-msgstr "已购买"
-
-#, sin-usar
-msgid "LLENO"
-msgstr "已满"

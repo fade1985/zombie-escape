@@ -6434,10 +6434,6 @@ msgid "¡¡¡DIFERENTE!!!"
 msgstr "ДРУГИМ!!!"
 
 #: scripts/ui/menus.gd
-msgid "Efecto secundario %d de %d · dura hasta que acabe la partida"
-msgstr "Побочный эффект %d из %d · действует до конца забега"
-
-#: scripts/ui/menus.gd
 msgid "Página %d de %d"
 msgstr "Страница %d из %d"
 
@@ -7454,10 +7450,6 @@ msgid "Pasa por un arma para ver qué hace."
 msgstr "Выбери оружие, чтобы узнать, что оно делает."
 
 #: scripts/ui/tienda_armas.gd
-msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
-msgstr "$%d этого забега сохранятся в конце: все, если пройдешь здание, половина — если падешь."
-
-#: scripts/ui/tienda_armas.gd
 msgid "Área"
 msgstr "Площадь"
 
@@ -7548,115 +7540,3 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
-
-#, sin-usar
-msgid "¡Horda vencida! Te deja $%d y una caja de munición"
-msgstr "Орда разбита! Тебе $%d и ящик патронов"
-
-#, sin-usar
-msgid "Cada 3 s le lanzas un vómito de ácido al durmiente más cercano: deja un charco que quema a los durmientes que lo pisan"
-msgstr "Каждые 3 с ты блюешь кислотой в ближайшего спящего: остается лужа, которая жжет наступивших в нее спящих"
-
-#, sin-usar
-msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
-msgstr "Тело теряет чувствительность: получаешь на 35 % меньше урона"
-
-#, sin-usar
-msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
-msgstr "Кожа грубеет: на каждом этаже щит на 60, который тратится раньше здоровья"
-
-#, sin-usar
-msgid "Cada 4 s gritas tan fuerte que los durmientes de alrededor se desorientan 2 s"
-msgstr "Каждые 4 с ты орешь так громко, что спящие вокруг теряют ориентацию на 2 с"
-
-#, sin-usar
-msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los durmientes cercanos"
-msgstr "Каждые 3 с ты выпускаешь едкие газы, которые жгут и парализуют ближайших спящих на 2 с"
-
-#, sin-usar
-msgid "+%d de cada lanzable"
-msgstr "+%d к каждому метательному"
-
-#, sin-usar
-msgid "+1 de cada lanzable por punto"
-msgstr "+1 к каждому метательному за очко"
-
-#, sin-usar
-msgid "Cuando un durmiente suelta un objeto, un 50 % de las veces suelta otro más."
-msgstr "Когда спящий роняет предмет, в 50 % случаев он роняет ещё один."
-
-#, sin-usar
-msgid "Los durmientes a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Спящие иногда роняют купюры, а боссы — много: пройди по ним, чтобы подобрать."
-
-#, sin-usar
-msgid "Los durmientes llevan dentro ADN mutado: a veces, al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "В спящих — мутировавшая ДНК: иногда, падая, они роняют немного мутагена. Пройди по нему, чтобы подобрать."
-
-#, sin-usar
-msgid "Al coger la primera pistola"
-msgstr "Когда берешь первый пистолет"
-
-#, sin-usar
-msgid "Ahora llevas dos armas en la mano: la fregona, de cuerpo a cuerpo, y la pistola, a distancia."
-msgstr "Теперь в руках у тебя два оружия: швабра для ближнего боя и пистолет для дальнего."
-
-#, sin-usar
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
-msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить."
-
-#, sin-usar
-msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas hasta 3 a mano."
-msgstr "Что бросать, меняется так: {cambiar_lanzable}. Молотов поджигает, граната взрывается. В руке до 3."
-
-#, sin-usar
-msgid "Se venden en calidad Normal: duran solo esta partida y, al acabarla, se destruyen. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Продаётся в качестве Обычное: служит только этот забег и потом ломается. Ты носишь по два каждого типа: то, что было в руке, уходит в запас, а запасное — в сундук; если не помещается или его нельзя убрать, то, что было в руке, остаётся на полу."
-
-#, sin-usar
-msgid "Las de A distancia vienen llenas y con munición de reserva; las especiales, llenas, y van en el hueco de las de A distancia. Los lanzables se compran de uno en uno, mientras te quepan."
-msgstr "Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным, и оно занимает место дальнобойного. Метательное покупается по одному, пока есть место."
-
-#, sin-usar
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos."
-msgstr "Джонни начинает только со шваброй: первый пистолет — наш подарок."
-
-#, sin-usar
-msgid "Ya llevas %s."
-msgstr "Это уже при тебе: %s."
-
-#, sin-usar
-msgid "Ya llevas %s de repuesto: póntela desde el inventario."
-msgstr "%s уже у тебя в запасе: возьми в руку через инвентарь."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
-msgstr "Куплено! %s — в руку, %s уходит в запас, а %s — в сундук."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano."
-msgstr "Куплено! %s — в руку."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
-msgstr "Куплено! %s — в руку, а %s уходит в запас."
-
-#, sin-usar
-msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
-msgstr "Куплено! %s — в руку, а %s остается на полу: у тебя уже было два."
-
-#, sin-usar
-msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
-msgstr "%s больше не влезают: стопки полны, и места для новой нет."
-
-#, sin-usar
-msgid "¡Compra hecha! Ya llevas %d %s."
-msgstr "Куплено! В запасе: %d (%s)."
-
-#, sin-usar
-msgid "Comprada"
-msgstr "Куплено"
-
-#, sin-usar
-msgid "LLENO"
-msgstr "ПОЛНО"
