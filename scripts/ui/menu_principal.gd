@@ -606,6 +606,8 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if t.size() > 2 and t[2]:   # un requisito ya cumplido: en verde y sin apagar
 			l.add_theme_color_override("font_color", Tema.VERDE)
+		elif t.size() > 3 and t[3]:   # el récord del edificio completado, en el amarillo del juego (L46, 16 nov)
+			l.add_theme_color_override("font_color", Tema.AMARILLO)
 		elif not abierto:
 			l.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(l)
@@ -624,8 +626,6 @@ func textos_tarjeta(id: String, s: Dictionary) -> Array:
 		# el tanto por ciento del edificio (completarlo, sus dosieres y sus vídeos: Edificios.porcentaje), si ya hay algo
 		var por_ciento := Edificios.porcentaje(s, id)
 		var con_por_ciento := " · %d%%" % por_ciento if por_ciento > 0 else ""   # no-tr
-		elif t.size() > 3 and t[3]:   # el récord del edificio completado, en el amarillo del juego (L46, 16 nov)
-			l.add_theme_color_override("font_color", Tema.AMARILLO)
 		if p.completado:
 			# completado: solo «Récord: 3:12» (11 nov; sin las veces ni el tanto por ciento)
 			var t: float = p.mejor_tiempo
