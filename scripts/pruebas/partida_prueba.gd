@@ -508,6 +508,7 @@
 #   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador; y los
 #                       42 logros (M17; los dos de la torre, del 5 nov): el repaso del guardado, los de jefes, racha, arsenal, ganar, garaje y horda, y
 #                       el ordenador por apartados                                          [prueba_varias.gd]
+#   --vida-colores      la barra de vida del HUD por tercios: verde, amarilla y roja        [prueba_varias.gd]
 #   --archivador-logros el programa Logros del ordenador (el archivador): el Resumen, las páginas, cobrar con el
 #                       teclado, «Casi lo tienes», muchos por cobrar y el aviso de las ayudas [prueba_varias.gd]
 #   --dosier-carpeta    el Dosier del ordenador (la carpeta): las pestañas, las fichas, la hoja arrancada, el teclado
@@ -1371,6 +1372,9 @@ func empezar_prueba() -> void:
 	elif "--logros" in args:
 		set_process(false)   # sin la prueba larga
 		probar_logros()
+	elif "--vida-colores" in args:
+		set_process(false)   # sin la prueba larga
+		probar_vida_colores()
 	elif "--archivador-logros" in args:
 		set_process(false)   # sin la prueba larga
 		probar_archivador_logros()

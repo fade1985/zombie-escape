@@ -5468,3 +5468,18 @@ func matar_garaje() -> void:
 		await get_tree().create_timer(0.25, false).timeout
 		if garaje.descanso >= 0.0:
 			return
+
+
+# --vida-colores: la barra de vida del HUD por tercios (hud.gd, 16 nov): con los tres, verde; con dos, amarillo; con
+# uno, rojo. Una foto con la vida llena, otra a la mitad y otra a un quinto (captura-vida-verde/amarilla/roja.png)
+func probar_vida_colores() -> void:
+	set_process(false)
+	await get_tree().create_timer(0.5).timeout
+	var maxima: int = johnny.stats.vida_max
+	for paso in [[3, maxima, "verde"], [2, roundi(maxima * 0.5), "amarilla"], [1, roundi(maxima * 0.2), "roja"]]:
+		johnny.tercios = paso[0]
+		johnny.vida = paso[1]
+		await get_tree().create_timer(1.2).timeout
+		print("Vida %d/%d, tercios %d → barra %s" % [johnny.vida, maxima, johnny.tercios, paso[2]])
+		Captura.foto("captura-vida-%s.png" % paso[2])
+	get_tree().quit()

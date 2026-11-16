@@ -700,6 +700,15 @@ func mirar_balas(delta: float) -> void:
 	balas_antes = b
 
 
+# Los colores de la vida, uno por tercio (con uno, con dos y con los tres): el de la barra y el que late con poca vida,
+# el brillo de arriba y el que late, y la sombra de abajo
+const TONOS_VIDA := [
+	[Color("#8a1f1a"), Color("#e0503a"), Color("#c24a38"), Color("#ff8a6a"), Color("#6a1512")],   # rojo
+	[Color("#a8801a"), Color("#e0b030"), Color("#d4aa36"), Color("#ffd870"), Color("#6e520e")],   # amarillo
+	[Color("#3d7a26"), Color("#62b03a"), Color("#5ea23e"), Color("#9ad870"), Color("#28521a")],   # verde
+]
+
+
 func pintar_barra() -> void:
 	var vida: float = johnny.vida
 	var maxima: float = johnny.stats.vida_max
@@ -715,9 +724,11 @@ func pintar_barra() -> void:
 	var luz := 0.0
 	if vida / maxima < 0.34 and johnny.vivo:
 		luz = 0.35 * pow(absf(sin(tiempo * PI * 1.6)), 4.0)
-	barra.draw_rect(lleno, Color("#8a1f1a").lerp(Color("#e0503a"), luz))
-	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, lleno.size.y * 0.45)), Color("#c24a38").lerp(Color("#ff8a6a"), luz))
-	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y * 0.8), Vector2(lleno.size.x, lleno.size.y * 0.2)), Color("#6a1512"))
+	# el color va por tercios de la vida que tiene: con los tres, verde; con dos, amarillo; con uno, rojo (16 nov)
+	var tonos: Array = TONOS_VIDA[clampi(ceili(vida / maxima * 3.0 - 0.001), 1, 3) - 1]
+	barra.draw_rect(lleno, tonos[0].lerp(tonos[1], luz))
+	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, lleno.size.y * 0.45)), tonos[2].lerp(tonos[3], luz))
+	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y * 0.8), Vector2(lleno.size.x, lleno.size.y * 0.2)), tonos[4])
 	# Las dos rayas que separan los tercios (con la ayuda "Vida entera" la vida no va en tercios: sin rayas)
 	var en_tercios: bool = not Guardado.ajuste("vida_entera")
 	for i in ([1, 2] if en_tercios else []):
