@@ -1198,10 +1198,6 @@ msgid "¡TENGO HAMBRE!"
 msgstr "J'AI FAIM !"
 
 #: scripts/guia.gd
-msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un durmiente"
-msgstr "Nettoie les appartements : quand tu entres, la porte se ferme tant qu'il reste un seul dormeur"
-
-#: scripts/guia.gd
 msgid "¡Ese durmiente lleva la llave del %s!"
 msgstr "Ce dormeur a la clé de l'appart %s !"
 
@@ -2529,7 +2525,7 @@ msgstr "Survivants"
 msgid "Sorpresas y retos"
 msgstr "Surprises et défis"
 
-#: scripts/logros.gd scripts/tutoriales.gd
+#: scripts/logros.gd
 msgid "Colecciones"
 msgstr "Collections"
 
@@ -4524,16 +4520,16 @@ msgid "Al empezar"
 msgstr "Au début"
 
 #: scripts/tutoriales.gd
-msgid "Muévete con {moverse}."
-msgstr "Déplace-toi avec {moverse}."
+msgid "Muévete con {moverse} y esquiva con {esquivar}: mientras esquivas, no te hacen daño."
+msgstr "Déplace-toi avec {moverse} et esquive avec {esquivar} : pendant l'esquive, tu ne prends aucun dégât."
 
 #: scripts/tutoriales.gd
 msgid "{atacar_modo}"
 msgstr "{atacar_modo}"
 
 #: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
-msgstr "Esquive avec {esquivar} : une courte accélération pendant laquelle rien ne te blesse."
+msgid "Abre y cierra muebles y puertas con {usar}, cuando estés delante y se marquen en amarillo."
+msgstr "Ouvre et ferme meubles et portes avec {usar}, quand tu es devant et qu'ils sont surlignés en jaune."
 
 #: scripts/tutoriales.gd
 msgid "Pausa el juego con {pausa}."
@@ -4548,12 +4544,12 @@ msgid "Al empezar la primera partida"
 msgstr "Au début de la première partie"
 
 #: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño."
-msgstr "Esquive avec {esquivar} : Johnny fait une courte accélération dans la direction où il va et, pendant ce temps, rien ne le blesse."
+msgid "Muévete con {moverse}."
+msgstr "Déplace-toi avec {moverse}."
 
 #: scripts/tutoriales.gd
-msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
-msgstr "Sers-t'en pour te sortir d'un mauvais pas ou te faufiler entre les dormeurs. Elle se recharge vite, en moins d'une seconde."
+msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño. Se recarga en menos de un segundo."
+msgstr "Esquive avec {esquivar} : une courte accélération pendant laquelle tu ne prends aucun dégât. Elle se recharge en moins d'une seconde."
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Atacar"
@@ -4572,12 +4568,12 @@ msgid "Al salir al pasillo"
 msgstr "En sortant dans le couloir"
 
 #: scripts/tutoriales.gd
-msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un durmiente."
-msgstr "Quand tu entres dans un appartement, la porte se referme derrière toi et ne s'ouvre plus tant qu'il reste un seul dormeur."
+msgid "Al entrar en un apartamento, la puerta se cierra hasta que no quede ni un durmiente."
+msgstr "Quand tu entres dans un appartement, la porte reste fermée jusqu'à ce qu'il ne reste plus un seul dormeur."
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe de la planta está cerrada con llave: la lleva un durmiente de otro apartamento y la suelta al caer."
-msgstr "La salle du boss de l'étage est fermée à clé : un dormeur d'un autre appartement a la clé et la lâche en tombant."
+msgid "La sala del jefe está cerrada con llave: la lleva un durmiente de algún apartamento. Al caer la suelta: pasa por encima para cogerla."
+msgstr "La salle du boss est fermée à clé : un dormeur d'un appartement la porte. Quand il tombe, il la lâche : passe dessus pour la ramasser."
 
 #: scripts/tutoriales.gd
 msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
@@ -4592,20 +4588,20 @@ msgid "Al perder un tercio de vida"
 msgstr "En perdant un tiers de vie"
 
 #: scripts/tutoriales.gd
-msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
-msgstr "Ta barre de vie est divisée en trois tiers par deux traits. Quand ta vie passe sous un trait, ce tiers est perdu : il s'assombrit et les bandages ne le remplissent plus."
+msgid "Tu vida va en tres tercios. El que pierdes se oscurece y las vendas ya no lo llenan."
+msgstr "Ta vie est divisée en trois tiers. Celui que tu perds devient sombre et les bandages ne le remplissent plus."
 
 #: scripts/tutoriales.gd
-msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los durmientes rápidos."
-msgstr "Chaque tiers perdu te ralentit : avec deux tiers perdus, tu n'échappes plus aux dormeurs rapides."
+msgid "Por cada tercio perdido andas más lento, y no se recupera al subir de planta."
+msgstr "Pour chaque tiers perdu, tu avances plus lentement, et il ne se récupère pas en montant d'étage."
 
 #: scripts/tutoriales.gd
-msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y la mutación Segundo aliento, una vez por planta)."
-msgstr "Les tiers perdus le restent quand tu montes d'étage. Seul le médikit en rend un (et la mutation Second souffle, une fois par étage)."
+msgid "Solo el botiquín te devuelve uno (y la mutación Segundo aliento, una vez por planta)."
+msgstr "Seul le médikit t'en rend un (et la mutation Second souffle, une fois par étage)."
 
 #: scripts/tutoriales.gd
-msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
-msgstr "Si c'est trop dur, Options → Aides propose « Vie entière »."
+msgid "¿Se te hace cuesta arriba? En Opciones → Ayudas está «Vida entera»."
+msgstr "Trop difficile pour toi ? Dans Options → Aides, tu trouveras « Vie entière »."
 
 #: scripts/tutoriales.gd
 msgid "Vendas y botiquines"
@@ -4616,24 +4612,20 @@ msgid "Al abrir el primer armarito o coger la primera cura"
 msgstr "En ouvrant ta première armoire à pharmacie ou en ramassant ton premier soin"
 
 #: scripts/tutoriales.gd
-msgid "Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan unas vendas o un botiquín."
-msgstr "Les armoires à pharmacie des salles de bain s'ouvrent de face, comme l'ordinateur, et lâchent des bandages ou un médikit."
+msgid "Abre los armaritos de los baños con {usar}: dan unas vendas o un botiquín."
+msgstr "Ouvre les armoires à pharmacie des salles de bain avec {usar} : elles donnent des bandages ou un médikit."
 
 #: scripts/tutoriales.gd
-msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
-msgstr "Les bandages s'utilisent avec {usar_vendas} : ils soignent 25, sans dépasser le tiers où tu es."
+msgid "Vendas, con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
+msgstr "Bandages, avec {usar_vendas} : ils soignent 25, sans dépasser le tiers où tu te trouves."
 
 #: scripts/tutoriales.gd
-msgid "El botiquín se usa con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
-msgstr "Le médikit s'utilise avec {usar_botiquin} : il soigne 40 et te rend un tiers de vie perdu."
+msgid "Botiquín, con {usar_botiquin}: cura 40 y te devuelve un tercio perdido. Guárdalo para entonces."
+msgstr "Médikit, avec {usar_botiquin} : il soigne 40 et te rend un tiers perdu. Garde-le pour ce moment-là."
 
 #: scripts/tutoriales.gd
-msgid "Es lo único que recupera los tercios perdidos, aparte de la mutación Segundo aliento. Guárdalo para cuando pierdas uno."
-msgstr "C'est la seule chose qui rend les tiers perdus, à part la mutation Second souffle. Garde-le pour quand tu en perds un."
-
-#: scripts/tutoriales.gd
-msgid "En la mochila caben 3 vendas y 2 botiquines; los que sobran se quedan en el suelo o van al baúl."
-msgstr "Ton sac à dos peut porter 3 bandages et 2 médikits ; ceux en trop restent par terre ou vont au coffre."
+msgid "Llevas como mucho 3 vendas y 2 botiquines."
+msgstr "Tu peux porter au maximum 3 bandages et 2 médikits."
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
@@ -4644,16 +4636,16 @@ msgid "Al coger el primer objeto"
 msgstr "En ramassant le premier objet"
 
 #: scripts/tutoriales.gd
-msgid "Lo que recoges va a la mochila. El inventario se abre con {inventario}: tus armas, la munición, los lanzables y la mochila."
-msgstr "Ce que tu ramasses va dans le sac à dos. L'inventaire s'ouvre avec {inventario} : tes armes, les munitions, les lançables et le sac à dos."
+msgid "Abre el inventario con {inventario}: tus armas, la munición, los lanzables y la mochila."
+msgstr "Ouvre l'inventaire avec {inventario} : tes armes, les munitions, les lançables et le sac à dos."
 
 #: scripts/tutoriales.gd
-msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...)."
-msgstr "Choisis une case pour voir sa fiche et ses boutons (utiliser, équiper, jeter...)."
+msgid "Elige una casilla para ver qué es y qué puedes hacer con ella."
+msgstr "Choisis une case pour voir ce que c'est et ce que tu peux en faire."
 
 #: scripts/tutoriales.gd
-msgid "Si caes, lo de la mochila se pierde; si completas el edificio, pasa al baúl. Las armas y los lanzables vuelven al baúl siempre, si les quedan partidas."
-msgstr "Si tu tombes, le contenu du sac à dos est perdu ; si tu termines l'immeuble, il va au coffre. Les armes et les lançables retournent toujours au coffre s'il leur reste des parties."
+msgid "Si caes o abandonas, pierdes lo de la mochila; si completas el edificio, pasa al baúl."
+msgstr "Si tu tombes ou abandonnes, tu perds ce qui est dans le sac à dos ; si tu termines l'immeuble, ça passe dans le coffre."
 
 #: scripts/tutoriales.gd
 msgid "Dólares"
@@ -4664,16 +4656,16 @@ msgid "Al coger el primer billete"
 msgstr "En ramassant le premier billet"
 
 #: scripts/tutoriales.gd
-msgid "Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Presque tous les dormeurs lâchent un billet en tombant (les autres, des munitions), et les boss beaucoup : passe dessus pour les ramasser."
+msgid "Los durmientes sueltan billetes al caer, y los jefes, muchos: pasa por encima para cogerlos."
+msgstr "Les dormeurs lâchent des billets en tombant, et les boss en lâchent beaucoup : passe dessus pour les ramasser."
 
 #: scripts/tutoriales.gd
-msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
-msgstr "Ils sont gardés à la fin de la partie : tous si tu termines le bâtiment, la moitié si tu tombes ou abandonnes."
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
+msgstr "Si tu termines l'immeuble, tu les gardes tous ; si tu tombes ou abandonnes, la moitié."
 
 #: scripts/tutoriales.gd
-msgid "Se gastan en el ordenador de la sala de mantenimiento."
-msgstr "Ils se dépensent sur l'ordinateur de la salle de maintenance."
+msgid "Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."
+msgstr "Ils se dépensent à la boutique d'armes de l'ordinateur de la salle de maintenance."
 
 #: scripts/tutoriales.gd
 msgid "Mutágeno"
@@ -4684,16 +4676,16 @@ msgid "Al coger el primer mutágeno"
 msgstr "En ramassant ton premier mutagène"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "Les dormeurs ont de l'ADN muté en eux : en tombant, ils lâchent un peu de mutagène. Passe dessus pour le ramasser."
+msgid "Al caer, los durmientes sueltan mutágeno: pasa por encima para cogerlo."
+msgstr "En tombant, les dormeurs lâchent du mutagène : passe dessus pour le ramasser."
 
 #: scripts/tutoriales.gd
-msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
-msgstr "Il est gardé si tu termines le bâtiment. Si tu tombes ou abandonnes, tu perds celui ramassé pendant cette partie."
+msgid "Solo te lo quedas si completas el edificio: si caes o abandonas, pierdes el de esa partida."
+msgstr "Tu ne le gardes que si tu termines l'immeuble : si tu tombes ou abandonnes, tu perds celui de cette partie."
 
 #: scripts/tutoriales.gd
-msgid "Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."
-msgstr "Il se dépense dans Mutations, sur l'ordinateur de la salle de maintenance : des améliorations pour Johnny qui durent pour toujours."
+msgid "Se gasta en Mutaciones, en el ordenador: mejoras para Johnny que duran para siempre."
+msgstr "Il se dépense dans Mutations, sur l'ordinateur : des améliorations pour Johnny qui durent pour toujours."
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Cambiar de arma"
@@ -4720,16 +4712,16 @@ msgid "Al llevar otra arma"
 msgstr "En prenant une autre arme"
 
 #: scripts/tutoriales.gd
-msgid "Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}."
-msgstr "Tu as deux armes en main : une de corps à corps et une à distance. Tu passes de l'une à l'autre avec {cambiar_arma}."
+msgid "Llevas dos armas en la mano (cuerpo a cuerpo y a distancia: cambias con {cambiar_arma}) y una de repuesto de cada tipo."
+msgstr "Tu as deux armes en main (corps à corps et à distance : tu changes avec {cambiar_arma}) et une de rechange de chaque type."
 
 #: scripts/tutoriales.gd
-msgid "Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario})."
-msgstr "Les autres sont de rechange, une de chaque type, et se changent dans l'inventaire ({inventario})."
+msgid "Las de repuesto se cambian en el inventario ({inventario})."
+msgstr "Celles de rechange se changent dans l'inventaire ({inventario})."
 
 #: scripts/tutoriales.gd
-msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica."
-msgstr "La couleur du bord indique sa qualité : gris Normale, vert Peu commune, bleu Rare et violet Épique."
+msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica. Cuanto mejor, más partidas dura."
+msgstr "La couleur du contour indique sa qualité : gris Normale, vert Peu commune, bleu Rare et violet Épique. Plus elle est bonne, plus elle dure de parties."
 
 #: scripts/tutoriales.gd
 msgid "Munición y recarga"
@@ -4744,12 +4736,16 @@ msgid "Recarga con {recargar}; al vaciarse el cargador, recarga solo."
 msgstr "Recharge avec {recargar} ; quand le chargeur est vide, il se recharge tout seul."
 
 #: scripts/tutoriales.gd
-msgid "Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador."
-msgstr "Chaque arme utilise les siennes (balles, cartouches...). Une caisse de munitions au sol te donne un chargeur."
+msgid "Cada arma gasta su munición. Una caja de munición del suelo te da un cargador."
+msgstr "Chaque arme consomme ses propres munitions. Une boîte de munitions trouvée au sol te donne un chargeur."
 
 #: scripts/tutoriales.gd
 msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
 msgstr "Sans munitions, Johnny sort l'arme de corps à corps."
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! Disparar dentro de un apartamento despierta a todos los durmientes."
+msgstr "Attention ! Tirer dans un appartement réveille tous les dormeurs."
 
 #: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Lanzables"
@@ -4760,16 +4756,20 @@ msgid "Al conseguir el primer lanzable"
 msgstr "En obtenant le premier lançable"
 
 #: scripts/tutoriales.gd
-msgid "Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
-msgstr "Les lançables s'achètent à la boutique d'armes de l'ordinateur et vont au coffre : sors-les de là pour les emporter."
+msgid "Se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
+msgstr "Ils s'achètent à la boutique d'armes de l'ordinateur et vont dans le coffre : sors-les de là pour les emporter."
 
 #: scripts/tutoriales.gd
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis."
-msgstr "Lance avec {lanzar} : maintiens pour viser et relâche pour lancer. Change de lançable avec {cambiar_lanzable} : le molotov met le feu, la grenade explose et le leurre attire les zombies."
+msgid "Mantén {lanzar} para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}."
+msgstr "Maintiens {lanzar} pour viser et relâche pour lancer. Change de lançable avec {cambiar_lanzable}."
 
 #: scripts/tutoriales.gd
-msgid "¡Ojo! La explosión también te hace daño a ti."
-msgstr "Attention ! L'explosion te blesse aussi."
+msgid "Molotov: fuego. Granada: explota. Atraedora: llama a los durmientes y explota. Congeladora: los congela."
+msgstr "Molotov : du feu. Grenade : elle explose. Leurre : il attire les dormeurs et explose. Bombe gel : elle les gèle."
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! El fuego y las explosiones también te hacen daño a ti."
+msgstr "Attention ! Le feu et les explosions te font aussi des dégâts."
 
 #: scripts/tutoriales.gd
 msgid "Materiales de fabricación"
@@ -4780,32 +4780,36 @@ msgid "Al coger el primer material"
 msgstr "En ramassant le premier matériau"
 
 #: scripts/tutoriales.gd
-msgid "Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
-msgstr "Les matériaux de fabrication servent à monter la qualité des armes et des lançables, à l'établi de la salle de maintenance."
+msgid "Sirven para mejorar armas y lanzables en el banco de trabajo de la sala de mantenimiento."
+msgstr "Ils servent à améliorer armes et lançables à l'établi de la salle de maintenance."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Están dentro de los muebles que se abren (armarios, mesillas, escritorios, cajas registradoras, archivadores...): búscalos por su contorno amarillo y ábrelos desde delante, como el ordenador."
-msgstr "Il y en a de quatre familles : corps à corps, à distance, spéciaux et lançables. Ils sont dans les meubles qui s'ouvrent (armoires, tables de chevet, bureaux, caisses enregistreuses, classeurs...) : repère le contour jaune et ouvre-les de face, comme l'ordinateur."
+msgid "Están en armarios, mesillas, escritorios, cajas registradoras, archivadores... Ponte delante y ábrelos con {usar}. No todos tienen."
+msgstr "On en trouve dans les armoires, les tables de chevet, les bureaux, les caisses enregistreuses, les classeurs... Place-toi devant et ouvre-les avec {usar}. Tous n'en contiennent pas."
 
 #: scripts/tutoriales.gd
-msgid "Van en la mochila: si completas el edificio, pasan al baúl."
-msgstr "Elles vont dans le sac à dos : si tu termines le bâtiment, elles passent au coffre."
+msgid "Van en la mochila: si completas el edificio, pasan al baúl; si caes, se pierden."
+msgstr "Ils vont dans le sac à dos : si tu termines l'immeuble, ils passent dans le coffre ; si tu tombes, ils sont perdus."
 
 #: scripts/tutoriales.gd
 msgid "Al llegar al primer jefe"
 msgstr "En arrivant au premier boss"
 
 #: scripts/tutoriales.gd
-msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso."
-msgstr "Chaque étage a son boss, avec sa barre de vie en haut. À mi-vie, il s'énerve et devient plus dangereux."
+msgid "Cada planta tiene su jefe. A media vida se enfada y se vuelve más peligroso."
+msgstr "Chaque étage a son boss. À mi-vie, il s'énerve et devient plus dangereux."
 
 #: scripts/tutoriales.gd
-msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!"
-msgstr "Avant chaque attaque, il marque le sol : sors de la marque ou esquive-la avec {esquivar} !"
+msgid "Avisa antes de atacar, casi siempre con una marca en el suelo: ¡sal de ella o esquiva con {esquivar}!"
+msgstr "Il prévient avant d'attaquer, presque toujours par une marque au sol : sors-en ou esquive avec {esquivar} !"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
-msgstr "En tombant, il lâche des dollars et des munitions (au Centre commercial et dans la tour, des matériaux aussi), et l'escalier s'ouvre."
+msgid "Algunos tienen cerca cosas para usar contra ellos con {usar}, como los bidones."
+msgstr "Certains ont près d'eux des choses à utiliser contre eux avec {usar}, comme les bidons."
+
+#: scripts/tutoriales.gd
+msgid "Al caer suelta muchos dólares y se abren las escaleras."
+msgstr "En tombant, il lâche beaucoup de dollars et les escaliers s'ouvrent."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"
@@ -4816,16 +4820,12 @@ msgid "Antes del primer efecto secundario"
 msgstr "Avant le premier effet secondaire"
 
 #: scripts/tutoriales.gd
-msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
-msgstr "Quand tu bats un boss, le virus te change : choisis l'une des deux cartes (aussi avec 1 et 2)."
+msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas."
+msgstr "Quand tu bats un boss, le virus te transforme : choisis l'une des deux cartes."
 
 #: scripts/tutoriales.gd
-msgid "Cada efecto secundario te da algo bueno y, a veces, algo malo."
-msgstr "Chaque effet secondaire a du bon et, parfois, du mauvais."
-
-#: scripts/tutoriales.gd
-msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
-msgstr "Elles durent jusqu'à la fin de la partie, et tu peux en avoir 4 au maximum."
+msgid "Cada una te da un poder hasta que acaba la partida. Llevas como mucho 4."
+msgstr "Chacune te donne un pouvoir jusqu'à la fin de la partie. Tu peux en porter 4 au maximum."
 
 #: scripts/tutoriales.gd
 msgid "El ascensor"
@@ -4836,28 +4836,160 @@ msgid "Al arreglar el ascensor"
 msgstr "En réparant l'ascenseur"
 
 #: scripts/tutoriales.gd
-msgid "Johnny ha arreglado el ascensor del pasillo: baja a la sala de mantenimiento y vuelve a esta misma planta."
-msgstr "Johnny a réparé l'ascenseur du couloir : il descend à la salle de maintenance et revient à ce même étage."
+msgid "Al vencer al jefe, Johnny arregla el ascensor del pasillo: baja a la sala de mantenimiento y te devuelve a esta planta."
+msgstr "Quand tu bats le boss, Johnny répare l'ascenseur du couloir : il descend à la salle de maintenance et te ramène à cet étage."
 
 #: scripts/tutoriales.gd
-msgid "Úsalo para ir al ordenador, al banco de trabajo o al baúl en mitad de la partida."
-msgstr "Utilise-le pour aller à l'ordinateur, à l'établi ou au coffre en pleine partie."
+msgid "Úsalo para comprar, mejorar o sacar cosas del baúl a mitad de partida."
+msgstr "Utilise-le pour acheter, améliorer ou sortir des objets du coffre en pleine partie."
 
 #: scripts/tutoriales.gd
-msgid "Al rescatar al primero"
-msgstr "En sauvant le premier"
+msgid "En cada planta nueva vuelve a estar averiado hasta que cae su jefe."
+msgstr "À chaque nouvel étage, il retombe en panne jusqu'à ce que son boss tombe."
 
 #: scripts/tutoriales.gd
-msgid "Se une al equipo: te acompaña y te ayuda a su manera."
-msgstr "Il rejoint l'équipe : il t'accompagne et t'aide à sa façon."
+msgid "La azotea"
+msgstr "Le toit"
 
 #: scripts/tutoriales.gd
-msgid "Cada uno tiene su rescate. No te alejes de él y, si cae, quédate a su lado para levantarlo."
-msgstr "Chacun a son sauvetage. Ne t'éloigne pas de lui et, s'il tombe, reste à côté pour le relever."
+msgid "Al llegar a la azotea"
+msgstr "En arrivant sur le toit"
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio con él, se muda a las viviendas (la puerta de la derecha de la sala de mantenimiento) y podrá acompañarte."
-msgstr "Si tu termines le bâtiment avec lui, il s'installe dans les logements (la porte de droite de la salle de maintenance) et pourra t'accompagner."
+msgid "El último jefe del edificio te espera en el helipuerto: entra en las líneas blancas para empezar la pelea."
+msgstr "Le dernier boss de l'immeuble t'attend sur l'héliport : entre dans les lignes blanches pour lancer le combat."
+
+#: scripts/tutoriales.gd
+msgid "Al vencerlo llega un helicóptero: arrímate a su escalera para escapar."
+msgstr "Quand tu le bats, un hélicoptère arrive : approche-toi de son échelle pour t'échapper."
+
+#: scripts/tutoriales.gd
+msgid "Al oír al primero pedir socorro"
+msgstr "En entendant le premier appeler à l'aide"
+
+#: scripts/tutoriales.gd
+msgid "Si en la planta hay un superviviente encerrado, se le oye pedir socorro y sale un «!» en el minimapa."
+msgstr "S'il y a un survivant enfermé à l'étage, on l'entend appeler à l'aide et un « ! » apparaît sur la minicarte."
+
+#: scripts/tutoriales.gd
+msgid "Ve a por él y protégelo mientras hace lo suyo para salir. Si cae, quédate a su lado para levantarlo."
+msgstr "Va le chercher et protège-le pendant qu'il fait le nécessaire pour sortir. S'il tombe, reste à côté de lui pour le relever."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él, se muda a los trasteros y podrá acompañarte."
+msgstr "Si tu termines l'immeuble avec lui, il emménage dans les caves et pourra t'accompagner."
+
+#: scripts/tutoriales.gd
+msgid "Rescate en los apartamentos"
+msgstr "Sauvetage dans les appartements"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al primero de los apartamentos"
+msgstr "En trouvant le premier, dans les appartements"
+
+#: scripts/tutoriales.gd
+msgid "Al salir del piso con él, la puerta se cierra de golpe: se pone a forzar la cerradura y entran durmientes por las habitaciones."
+msgstr "Quand tu sors de l'appart avec lui, la porte se referme d'un coup : il se met à crocheter la serrure et des dormeurs entrent par les chambres."
+
+#: scripts/tutoriales.gd
+msgid "Quédate cerca y protégelo. Si lo tumban, la cerradura no avanza: ponte a su lado para levantarlo."
+msgstr "Reste près de lui et protège-le. S'il est mis à terre, la serrure n'avance plus : place-toi à côté de lui pour le relever."
+
+#: scripts/tutoriales.gd
+msgid "El ferretero"
+msgstr "Le quincaillier"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al ferretero"
+msgstr "En trouvant le quincaillier"
+
+#: scripts/tutoriales.gd
+msgid "Se ha atrincherado en el almacén: al limpiar la tienda, se pone a quitar las tablas y entran durmientes."
+msgstr "Il s'est retranché dans la réserve : quand tu as nettoyé le magasin, il se met à retirer les planches et des dormeurs entrent."
+
+#: scripts/tutoriales.gd
+msgid "Defiende su puerta: mientras haya un durmiente pegado a ella, no avanza."
+msgstr "Défends sa porte : tant qu'un dormeur est collé contre elle, il n'avance pas."
+
+#: scripts/tutoriales.gd
+msgid "La farmacéutica"
+msgstr "La pharmacienne"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la farmacéutica"
+msgstr "En trouvant la pharmacienne"
+
+#: scripts/tutoriales.gd
+msgid "Está herida y va cojeando: llévala hasta la puerta de las escaleras de la planta."
+msgstr "Elle est blessée et boite : emmène-la jusqu'à la porte des escaliers de l'étage."
+
+#: scripts/tutoriales.gd
+msgid "Por el camino salen durmientes. No te alejes de ella: si se queda sola, van a por ella."
+msgstr "En chemin, des dormeurs surgissent. Ne t'éloigne pas d'elle : si elle reste seule, ils lui sautent dessus."
+
+#: scripts/tutoriales.gd
+msgid "El técnico"
+msgstr "Le technicien"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al técnico"
+msgstr "En trouvant le technicien"
+
+#: scripts/tutoriales.gd
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
+msgstr "Il ne part pas sans réparer le câble dénudé, mais il ne peut pas tant que le courant passe : place-toi devant le tableau électrique du magasin pour abaisser le levier."
+
+#: scripts/tutoriales.gd
+msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
+msgstr "Tout devient noir et des dormeurs entrent : protège-le jusqu'à ce qu'il ait fini."
+
+#: scripts/tutoriales.gd
+msgid "El informático joven"
+msgstr "Le jeune informaticien"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al informático joven"
+msgstr "En trouvant le jeune informaticien"
+
+#: scripts/tutoriales.gd
+msgid "No se va sin copiar los archivos de Velaria: la puerta se cierra y entran durmientes. Protégelo hasta que acabe."
+msgstr "Il ne part pas sans copier les fichiers de Velaria : la porte se ferme et des dormeurs entrent. Protège-le jusqu'à ce qu'il ait fini."
+
+#: scripts/tutoriales.gd
+msgid "Mientras copia, saltan las cámaras de la sala: rómpelas antes de un tiro y te ahorras escoltas."
+msgstr "Pendant la copie, les caméras de la salle se déclenchent : brise-les d'un tir avant et tu éviteras des gardes du corps."
+
+#: scripts/tutoriales.gd
+msgid "La limpiadora de noche"
+msgstr "La femme de ménage de nuit"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la limpiadora de noche"
+msgstr "En trouvant la femme de ménage de nuit"
+
+#: scripts/tutoriales.gd
+msgid "Está encerrada en el cuarto de la limpieza, lleno de gas. Para abrirlo, cierra las tres válvulas del departamento: ponte delante de cada una."
+msgstr "Elle est enfermée dans le placard à balais, rempli de gaz. Pour l'ouvrir, ferme les trois vannes du département : place-toi devant chacune."
+
+#: scripts/tutoriales.gd
+msgid "Cada válvula silba al cerrarse y despierta frenéticos a los durmientes de cerca."
+msgstr "Chaque vanne siffle en se fermant et réveille en furie les dormeurs proches."
+
+#: scripts/tutoriales.gd
+msgid "La recepcionista"
+msgstr "La réceptionniste"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la recepcionista"
+msgstr "En trouvant la réceptionniste"
+
+#: scripts/tutoriales.gd
+msgid "Quiere abrir los tornos de la entrada con su tarjeta: mientras tanto, entran durmientes por las puertas del vestíbulo."
+msgstr "Elle veut ouvrir les tourniquets de l'entrée avec son badge : pendant ce temps, des dormeurs entrent par les portes du hall."
+
+#: scripts/tutoriales.gd
+msgid "Protégela hasta que acabe. Si la tumban, ponte a su lado para levantarla."
+msgstr "Protège-la jusqu'à ce qu'elle ait fini. Si elle est mise à terre, place-toi à côté d'elle pour la relever."
 
 #: scripts/tutoriales.gd
 msgid "En el primer apagón"
@@ -4872,8 +5004,8 @@ msgid "En la sala del jefe todo sigue como siempre."
 msgstr "Dans la salle du boss, rien ne change."
 
 #: scripts/tutoriales.gd
-msgid "Al subir a la planta siguiente, te llevas un premio en dólares."
-msgstr "En montant à l'étage suivant, tu gagnes une prime en dollars."
+msgid "Al subir a la planta siguiente, te llevas un premio en dólares y munición."
+msgstr "Quand tu montes à l'étage suivant, tu gagnes une récompense en dollars et en munitions."
 
 #: scripts/tutoriales.gd
 msgid "En la primera alarma de incendios"
@@ -4884,8 +5016,8 @@ msgid "Los aspersores llenan el suelo de charcos que resbalan."
 msgstr "Les sprinklers couvrent le sol de flaques glissantes."
 
 #: scripts/tutoriales.gd
-msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los durmientes: ¡llévalos hasta él! Esquivando cruzas sin daño."
-msgstr "Dans certaines tombe un câble dénudé qui électrocute Johnny et les dormeurs : attire-les dessus ! En esquivant, tu traverses sans dégâts."
+msgid "En algunos cae un cable pelado que da calambrazos a ti y a los durmientes: ¡llévalos hasta él! Esquivando lo cruzas sin daño."
+msgstr "Dans certains, un câble dénudé tombe : il électrocute toi et les dormeurs. Attire-les dessus ! En esquivant, tu le traverses sans dégâts."
 
 #: scripts/tutoriales.gd
 msgid "En la primera horda"
@@ -4900,8 +5032,8 @@ msgid "Si te metes en un piso, los que queden te esperan fuera. Aquí los lanzab
 msgstr "Si tu te réfugies dans un appartement, ceux qui restent t'attendent dehors. Ici, les lançables tombent à pic."
 
 #: scripts/tutoriales.gd
-msgid "Al acabar con todos, te deja dólares y una caja de munición."
-msgstr "Quand tu les as tous éliminés, elle te laisse des dollars et une caisse de munitions."
+msgid "Al acabar con todos, te deja dólares y munición."
+msgstr "Quand tu les as tous éliminés, il te laisse des dollars et des munitions."
 
 #: scripts/tutoriales.gd
 msgid "El ordenador"
@@ -4912,12 +5044,12 @@ msgid "Al encender el ordenador"
 msgstr "En allumant l'ordinateur"
 
 #: scripts/tutoriales.gd
-msgid "Gasta el mutágeno en mutaciones (mejoras para siempre) y los dólares ahorrados en armas y lanzables para la partida."
-msgstr "Dépense le mutagène en mutations (améliorations définitives) et les dollars économisés en armes et lançables pour la partie."
+msgid "Gasta el mutágeno en Mutaciones (mejoras para siempre) y los dólares en la Tienda de armas."
+msgstr "Dépense le mutagène dans Mutations (des améliorations pour toujours) et les dollars à la Boutique d'armes."
 
 #: scripts/tutoriales.gd
-msgid "También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."
-msgstr "Il y a aussi les succès, qui rapportent des récompenses, le Dossier, les Vidéos et les Collections."
+msgid "También están los Logros, que dan premio, el Dosier, los Vídeos y Sujetos."
+msgstr "Il y a aussi les Succès, qui donnent une récompense, le Dossier, les Vidéos et Sujets."
 
 #: scripts/tutoriales.gd
 msgid "La taquilla"
@@ -4928,12 +5060,12 @@ msgid "Al abrir la taquilla"
 msgstr "En ouvrant le casier"
 
 #: scripts/tutoriales.gd
-msgid "Aquí eliges la ropa de Johnny. Cada una tiene su ventaja."
-msgstr "Ici, tu choisis la tenue de Johnny. Chacune a son avantage."
+msgid "Aquí eliges la ropa de Johnny. Cada traje nuevo tiene su ventaja."
+msgstr "Ici, tu choisis la tenue de Johnny. Chaque nouveau costume a son avantage."
 
 #: scripts/tutoriales.gd
-msgid "Se consiguen venciendo a ciertos jefes: las que te faltan salen con «???» y cómo conseguirlas."
-msgstr "Tu les obtiens en battant certains boss : celles qui te manquent s'affichent avec « ??? » et comment les obtenir."
+msgid "Se consiguen venciendo a cada jefe por primera vez: los que te faltan salen con «???»."
+msgstr "On les obtient en battant chaque boss pour la première fois : ceux qui te manquent apparaissent avec « ??? »."
 
 #: scripts/tutoriales.gd
 msgid "El banco de trabajo"
@@ -4944,12 +5076,12 @@ msgid "Al usar el banco de trabajo"
 msgstr "En utilisant l'établi"
 
 #: scripts/tutoriales.gd
-msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con los materiales de su familia (los de la mochila y los del baúl)."
-msgstr "Monte la qualité de tes armes et lançables, niveau par niveau, avec les matériaux de leur famille (ceux du sac à dos et ceux du coffre)."
+msgid "Mejora tus armas y lanzables con los materiales de su familia (los de la mochila y los del baúl)."
+msgstr "Améliore tes armes et tes lançables avec les matériaux de leur famille (ceux du sac à dos et ceux du coffre)."
 
 #: scripts/tutoriales.gd
-msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
-msgstr "Normale, Peu commune, Rare et Épique : l'Épique a en plus une astuce. Chaque amélioration donne aussi une partie de vie en plus."
+msgid "Normal, Poco común, Rara y Épica: cada mejora dura una partida más, y la Épica trae un truco."
+msgstr "Normale, Peu commune, Rare et Épique : chaque amélioration dure une partie de plus, et l'Épique apporte un atout."
 
 #: scripts/tutoriales.gd
 msgid "Elige la casilla y pulsa «Mejorar»."
@@ -4964,16 +5096,16 @@ msgid "Al abrir el baúl"
 msgstr "En ouvrant le coffre"
 
 #: scripts/tutoriales.gd
-msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres. Esas que les quedan son su durabilidad, de 0 a 3."
-msgstr "Les armes et les lançables durent la partie en cours plus autant que leur qualité : Normale, aucune ; Peu commune, une ; Rare, deux ; Épique, trois. Ces parties restantes sont leur durabilité, de 0 à 3."
+msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
+msgstr "Ce que tu ranges dans le coffre ne se perd jamais : armes, lançables, munitions et objets."
 
 #: scripts/tutoriales.gd
-msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."
-msgstr "Les sortir du coffre coûte une partie ; s'il ne leur en restait aucune, ils se détruisent à la fin, même si tu les ranges à nouveau."
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
+msgstr "Chaque fois que tu sors une arme ou un lançable, il perd une partie de durabilité. À 0, il est détruit à la fin de cette partie."
 
 #: scripts/tutoriales.gd
-msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
-msgstr "À la fin de la partie, que tu termines l'immeuble ou que tu tombes, ce que tu portes et qui a encore des parties retourne tout seul au coffre. Choisis une case ou fais-la glisser pour la déplacer."
+msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
+msgstr "À la fin de la partie, ce qui dure encore retourne tout seul dans le coffre. Choisis une case ou fais-la glisser pour la déplacer."
 
 #: scripts/tutoriales.gd
 msgid "La tienda de armas"
@@ -4984,16 +5116,16 @@ msgid "Al abrir la tienda de armas"
 msgstr "En ouvrant la boutique d'armes"
 
 #: scripts/tutoriales.gd
-msgid "Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar."
-msgstr "Ce que tu achètes va au coffre, neuf : sors-le quand tu veux l'emporter. Si le coffre est plein, fais de la place avant d'acheter."
+msgid "Lo que compras va al baúl: sácalo de allí para llevarlo. Si el baúl está lleno, haz sitio antes."
+msgstr "Ce que tu achètes va dans le coffre : sors-le de là pour l'emporter. Si le coffre est plein, fais de la place avant."
 
 #: scripts/tutoriales.gd
-msgid "Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno."
-msgstr "Tout est vendu en qualité Normale : ça dure la partie où tu le sors du coffre. Les armes à distance sont livrées chargées, avec des munitions de réserve ; les spéciales, pleines. Les lançables s'achètent un par un."
+msgid "Todo es Normal: dura solo la partida en la que lo sacas. Las armas a distancia traen munición."
+msgstr "Tout est Normal : ça ne dure que la partie où tu le sors. Les armes à distance viennent avec des munitions."
 
 #: scripts/tutoriales.gd
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."
-msgstr "Johnny ne commence qu'avec la serpillière : le premier pistolet, c'est cadeau, et aussi un molotov, une grenade et un leurre."
+msgid "Johnny empieza solo con la fregona: la primera pistola es un regalo, y también un molotov, una granada y una atraedora."
+msgstr "Johnny commence avec la serpillière seule : le premier pistolet est un cadeau, de même qu'un molotov, une grenade et un leurre."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Mutaciones"
@@ -5004,16 +5136,16 @@ msgid "Al abrir Mutaciones"
 msgstr "En ouvrant Mutations"
 
 #: scripts/tutoriales.gd
-msgid "Gasta aquí el mutágeno en mutaciones: mejoras para Johnny que duran para siempre, en todas las partidas."
-msgstr "Dépense ici le mutagène en mutations : des améliorations pour Johnny qui durent pour toujours, à chaque partie."
+msgid "Gasta el mutágeno en mejoras para siempre, en tres ramas: Militar, Superviviente y Químico."
+msgstr "Dépense le mutagène en améliorations pour toujours, réparties en trois branches : Militaire, Survivant et Chimiste."
 
 #: scripts/tutoriales.gd
-msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada mutación sube punto a punto, y para abrir las de abajo hay que llenar antes la de encima."
-msgstr "Il y a trois branches : Soldat, Survivant et Chimiste. Chaque mutation monte point par point, et pour débloquer celles du dessous, il faut d'abord remplir celle du dessus."
+msgid "Para abrir una mutación hay que llenar antes la que tiene encima."
+msgstr "Pour débloquer une mutation, il faut d'abord remplir celle qui est au-dessus."
 
 #: scripts/tutoriales.gd
-msgid "«Resetear mutaciones» las quita todas para repartirlas de nuevo, pero el mutágeno gastado se pierde."
-msgstr "« Réinitialiser les mutations » les retire toutes pour les répartir à nouveau, mais le mutagène dépensé est perdu."
+msgid "«Resetear mutaciones» las quita para repartirlas otra vez, pero el mutágeno gastado se pierde."
+msgstr "« Réinitialiser les mutations » les retire pour les répartir à nouveau, mais le mutagène dépensé est perdu."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Logros"
@@ -5024,16 +5156,16 @@ msgid "Al abrir Logros"
 msgstr "En ouvrant Succès"
 
 #: scripts/tutoriales.gd
-msgid "Aquí están los retos del juego, ordenados por temas."
-msgstr "Voici les défis du jeu, classés par thème."
+msgid "Aquí están los retos del juego. Al conseguir uno, vuelve aquí a cobrar su premio en dólares."
+msgstr "Ici, tu trouves les défis du jeu. Quand tu en réussis un, reviens ici encaisser sa récompense en dollars."
 
 #: scripts/tutoriales.gd
-msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
-msgstr "Quand tu en obtiens un, reviens ici pour l'encaisser : chaque succès rapporte une prime en dollars."
+msgid "Si el premio no cabe en el máximo de dólares (MAX), lo que sobra se pierde."
+msgstr "Si la récompense ne rentre pas dans le maximum de dollars (MAX), le surplus est perdu."
 
 #: scripts/tutoriales.gd
-msgid "Ojo: no se puede pasar del máximo de dólares (MAX). Si al cobrar un logro su premio no cabe, el logro cuenta como conseguido, pero lo que no cabe se pierde para siempre."
-msgstr "Attention : impossible de dépasser le maximum de dollars (MAX). Si la prime d'un succès ne rentre pas quand tu l'encaisses, le succès compte quand même, mais ce qui ne rentre pas est perdu pour toujours."
+msgid "Con una Ayuda encendida, esa partida no da logros."
+msgstr "Avec une Aide activée, cette partie ne donne pas de succès."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Dosier VD-7"
@@ -5044,24 +5176,24 @@ msgid "Al abrir el Dosier"
 msgstr "En ouvrant le Dossier"
 
 #: scripts/tutoriales.gd
-msgid "En cada planta hay un muerto de Velaria con una página del dosier. Cógela y se queda aquí para siempre."
-msgstr "À chaque étage, un mort de Velaria porte une page du dossier. Ramasse-la et elle reste ici pour toujours."
+msgid "Mientras te falten páginas, en alguna planta hay un muerto con una. Cógela y se queda aquí para siempre."
+msgstr "Tant qu'il te manque des pages, un mort en porte une quelque part dans l'un des étages. Ramasse-la et elle reste ici pour toujours."
 
 #: scripts/tutoriales.gd
-msgid "Cada edificio tiene su dosier. Completarlo es una de las tres cosas que pide el edificio siguiente para abrirse."
-msgstr "Chaque bâtiment a son dossier. Le compléter est l'une des trois conditions pour débloquer le bâtiment suivant."
+msgid "Completar el dosier es una de las tres cosas que pide el edificio siguiente para abrirse."
+msgstr "Compléter le dossier est l'une des trois conditions pour que l'immeuble suivant s'ouvre."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Sujetos"
+msgstr "Sujets"
 
 #: scripts/tutoriales.gd
-msgid "Al abrir Colecciones"
-msgstr "En ouvrant Collections"
+msgid "Al abrir Sujetos"
+msgstr "En ouvrant Sujets"
 
 #: scripts/tutoriales.gd
-msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen."
-msgstr "Ici sont notés les dormeurs et les boss que tu croises, avec ce qu'ils font et où ils apparaissent."
-
-#: scripts/tutoriales.gd
-msgid "Los que aún no has visto salen con «???»."
-msgstr "Ceux que tu n'as pas encore vus s'affichent avec « ??? »."
+msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen. Los que faltan, con «???»."
+msgstr "Ici s'inscrivent les dormeurs et les boss que tu croises, avec ce qu'ils font et où on les trouve. Ceux qui manquent apparaissent avec « ??? »."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Vídeos"
@@ -5072,12 +5204,12 @@ msgid "Al abrir Vídeos"
 msgstr "En ouvrant Vidéos"
 
 #: scripts/tutoriales.gd
-msgid "En las plantas hay teles con las noticias de Canal 8. Las que veas se guardan aquí para volver a verlas."
-msgstr "Dans les étages, des télés diffusent les infos de Canal 8. Celles que tu regardes sont gardées ici pour les revoir."
+msgid "Al coger la página del dosier de una planta, en algún apartamento se enciende una tele con las noticias de Canal 8: ponte delante y pulsa {usar}."
+msgstr "Quand tu ramasses la page du dossier d'un étage, une télé s'allume dans un appartement avec les infos de Canal 8 : place-toi devant et appuie sur {usar}."
 
 #: scripts/tutoriales.gd
-msgid "Ver todos los vídeos de un edificio también cuenta para abrir el siguiente."
-msgstr "Regarder toutes les vidéos d'un bâtiment compte aussi pour débloquer le suivant."
+msgid "Si la ves entera, se guarda aquí. Ver todos los de un edificio también cuenta para abrir el siguiente."
+msgstr "Si tu la regardes en entier, elle est enregistrée ici. Voir toutes celles d'un immeuble compte aussi pour ouvrir le suivant."
 
 #: scripts/tutoriales.gd
 msgid "Los trasteros"
@@ -5088,16 +5220,12 @@ msgid "Al entrar en los trasteros"
 msgstr "En entrant dans les caves"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
 msgstr "Ici vivent les survivants que tu sauves, chacun dans sa cave."
 
 #: scripts/tutoriales.gd
-msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
-msgstr "À chaque partie, l'un d'eux est enfermé à un étage : on l'entend appeler au secours et un «!» apparaît sur la mini-carte. Nettoie cet appartement, va le chercher et protège-le jusqu'à la sortie."
-
-#: scripts/tutoriales.gd
-msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
-msgstr "Si tu termines le bâtiment avec lui dans l'équipe, il s'installe ici. Approche-toi de l'un de ceux qui vivent ici et il t'accompagnera lors des parties suivantes (un seul à la fois)."
+msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
+msgstr "Approche-toi de l'un d'eux et il t'accompagnera dans les parties suivantes (un seul à la fois). Certains t'aident même sans venir avec toi."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5108,12 +5236,12 @@ msgid "Al llegar al centro comercial"
 msgstr "En arrivant au centre commercial"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda."
-msgstr "La salle du boss s'ouvre avec un badge d'accès : c'est le garde de sécurité qui fait sa ronde qui l'a."
+msgid "La sala del jefe se abre con una tarjeta: la lleva el guardia de seguridad que hace la ronda."
+msgstr "La salle du boss s'ouvre avec un badge : c'est le vigile qui fait sa ronde qui le porte."
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato, llegan refuerzos y él huye: ¡que no se escape!"
-msgstr "S'il te voit, il siffle, des renforts arrivent et il s'enfuit : ne le laisse pas filer !"
+msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
+msgstr "S'il te voit, il siffle et des renforts arrivent. Il court beaucoup mais se fatigue : attrape-le quand il s'arrête pour souffler."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -5124,44 +5252,52 @@ msgid "En la primera tienda con peligro"
 msgstr "Dans la première boutique avec un danger"
 
 #: scripts/tutoriales.gd
-msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda de electrónica da calambres (su cuadro eléctrico corta la corriente)."
-msgstr "La chambre froide gèle, la cuisine brûle et l'eau du magasin d'électronique électrocute (son tableau électrique coupe le courant)."
+msgid "La cámara frigorífica te frena y te hiela, la cocina quema y el agua de Electrónica da calambres (su cuadro eléctrico la apaga)."
+msgstr "La chambre froide te ralentit et te gèle, la cuisine brûle et l'eau de l'Électronique électrocute (son tableau électrique la coupe)."
 
 #: scripts/tutoriales.gd
-msgid "También hacen daño a los durmientes despiertos: ¡llévalos hasta ellos!"
-msgstr "Ils blessent aussi les dormeurs réveillés : attire-les dessus !"
-
-#: scripts/tutoriales.gd
-msgid "Esquivando los cruzas sin daño."
-msgstr "En esquivant, tu les traverses sans dégâts."
+msgid "También dañan a los durmientes: ¡llévalos hasta ellos! Esquivando los cruzas sin daño."
+msgstr "Ils blessent aussi les dormeurs : attire-les dessus ! En esquivant, tu les traverses sans dégâts."
 
 #: scripts/tutoriales.gd
 msgid "Al oír su primer grito"
 msgstr "Au premier cri entendu"
 
 #: scripts/tutoriales.gd
-msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». Su grito despierta a toda la tienda."
-msgstr "La vendeuse ne vient pas vers toi : elle recule et crie « AAAHHH !!! ». Son cri réveille toute la boutique."
+msgid "No te ataca: se escapa y grita. Su grito pone a todos los durmientes de la tienda una burbuja dorada que los protege de todo."
+msgstr "Elle ne t'attaque pas : elle s'enfuit et crie. Son cri entoure tous les dormeurs du magasin d'une bulle dorée qui les protège de tout."
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
-msgstr "Les dormeurs qui l'entendent s'entourent d'une bulle dorée : les balles rebondissent, et ni les coups, ni le feu, ni les flaques ne leur font de mal."
+msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta. Es flojita, pero corre: acorrálala o lánzale algo."
+msgstr "La bulle ne disparaît que quand elle tombe : occupe-toi d'abord de la vendeuse. Elle est faible, mais elle court : coince-la ou lance-lui quelque chose."
 
 #: scripts/tutoriales.gd
-msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
-msgstr "La bulle ne disparaît que quand elle tombe : occupe-toi d'abord de la vendeuse (s'il y en a plusieurs, de toutes). Elle est fragile, mais elle s'enfuit : coince-la ou lance-lui quelque chose."
+msgid "La joyería"
+msgstr "La bijouterie"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en la joyería"
+msgstr "En entrant dans la bijouterie"
+
+#: scripts/tutoriales.gd
+msgid "La cámara acorazada guarda un arma Épica. Se abre con la tarjeta dorada que lleva el guardia de seguridad."
+msgstr "La salle forte renferme une arme Épique. Elle s'ouvre avec la carte dorée que porte le garde."
+
+#: scripts/tutoriales.gd
+msgid "Sin la tarjeta, ponte delante del lector dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
+msgstr "Sans la carte, place-toi deux fois devant le lecteur : l'alarme se déclenche et tu dois tenir dans la bijouterie jusqu'à l'ouverture."
 
 #: scripts/tutoriales.gd
 msgid "Al llegar a Torre Velaria"
 msgstr "En arrivant à la Tour Velaria"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido de algún departamento: su pantalla brilla en verde."
-msgstr "La salle du boss s'ouvre avec un code à trois chiffres. Chaque chiffre est sur un ordinateur allumé d'un service : son écran brille en vert."
+msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido (brilla en verde) de algún departamento."
+msgstr "La salle du boss s'ouvre avec un code à trois chiffres. Chaque chiffre se trouve sur un ordinateur allumé (il brille en vert) dans un département."
 
 #: scripts/tutoriales.gd
-msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los durmientes."
-msgstr "Plante-toi devant pour le lire, mais le « contrôle de productivité » se déclenche et tous les dormeurs se réveillent."
+msgid "Ponte delante para leerla, pero salta el «control de productividad» y se despiertan los durmientes."
+msgstr "Place-toi devant pour le lire, mais le « contrôle de productivité » se déclenche et les dormeurs se réveillent."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de la torre"
@@ -5172,16 +5308,16 @@ msgid "En el primer departamento con peligro"
 msgstr "Dans le premier service avec un danger"
 
 #: scripts/tutoriales.gd
-msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los durmientes que llegan al borde salen volando."
-msgstr "La baie vitrée cassée du Marketing t'aspire dehors : traverse en longeant les bureaux. Les dormeurs qui arrivent au bord s'envolent."
+msgid "Los ventanales rotos te arrastran hacia fuera: crúzalos pegado a las mesas. Los durmientes que llegan al borde salen volando."
+msgstr "Les baies vitrées brisées t'aspirent vers l'extérieur : traverse-les en longeant les bureaux. Les dormeurs qui arrivent au bord sont projetés dans le vide."
 
 #: scripts/tutoriales.gd
-msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
-msgstr "Si une caméra de la Sécurité te voit, l'alarme sonne et des gardes du corps arrivent : casse-la d'un tir avant."
+msgid "Si una cámara te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
+msgstr "Si une caméra te voit, l'alarme se déclenche et des gardes du corps arrivent : brise-la d'un tir avant."
 
 #: scripts/tutoriales.gd
-msgid "El gas de Recursos Humanos duerme a los durmientes, pero despiertan frenéticos. La válvula del archivo lo corta."
-msgstr "Le gaz des Ressources humaines endort les dormeurs, mais ils se réveillent frénétiques. La vanne des archives le coupe."
+msgid "El gas duerme a los durmientes, pero despiertan frenéticos. A ti no te hace nada; una válvula lo corta."
+msgstr "Le gaz endort les dormeurs, mais ils se réveillent en furie. Il ne t'affecte pas ; une vanne le coupe."
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
@@ -5192,12 +5328,12 @@ msgid "Al completar el primer edificio"
 msgstr "En terminant le premier bâtiment"
 
 #: scripts/tutoriales.gd
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente."
-msgstr "Sous chaque bâtiment terminé, choisis l'alerte avec < et > : plus difficile, plus de dollars. La terminer au niveau le plus haut débloque la suivante."
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
+msgstr "Sous chaque immeuble terminé, tu choisis l'alerte avec < et > : plus difficile, plus de dollars. Termine-le à la plus haute pour ouvrir la suivante."
 
 #: scripts/tutoriales.gd
-msgid "El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."
-msgstr "Le Défi du jour, c'est le même bâtiment pour tout le monde ce jour-là, avec une règle bizarre. Le réussir la première fois chaque jour rapporte $10."
+msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
+msgstr "Le Défi du jour est un immeuble avec une règle étrange, le même pour tout le monde. On le joue une fois par jour et, si tu le termines, il rapporte $10."
 
 #: scripts/tutoriales.gd
 msgid "el botón de esquivar"
@@ -5220,20 +5356,24 @@ msgid "el botoncito de al lado de lanzar"
 msgstr "le petit bouton à côté de lancer"
 
 #: scripts/tutoriales.gd
-msgid "el botón de las vendas, bajo el minimapa"
-msgstr "le bouton des bandages, sous la mini-carte"
+msgid "el botón de las vendas, arriba a la derecha"
+msgstr "le bouton des bandages, en haut à droite"
 
 #: scripts/tutoriales.gd
-msgid "el botón del botiquín, bajo el minimapa"
-msgstr "le bouton du médikit, sous la mini-carte"
+msgid "el botón del botiquín, arriba a la derecha"
+msgstr "le bouton du médikit, en haut à droite"
 
 #: scripts/tutoriales.gd
-msgid "el botón de la mochila, bajo el minimapa"
-msgstr "le bouton du sac à dos, sous la mini-carte"
+msgid "el botón de la mochila, arriba a la derecha"
+msgstr "le bouton du sac à dos, en haut à droite"
 
 #: scripts/tutoriales.gd
-msgid "el botón de pausa, bajo el minimapa"
-msgstr "le bouton de pause, sous la mini-carte"
+msgid "el botón de pausa, arriba a la derecha"
+msgstr "le bouton de pause, en haut à droite"
+
+#: scripts/tutoriales.gd
+msgid "el botón «Abrir», que sale encima de los botones"
+msgstr "le bouton « Ouvrir », qui apparaît au-dessus des boutons"
 
 #: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear mutaciones"
@@ -7073,10 +7213,6 @@ msgstr "%s, avec %s. Choisis une vidéo pour la regarder."
 #: scripts/ui/ordenador.gd
 msgid "Aún no has visto ninguna noticia de este edificio: cuando limpies un piso, una tele del salón se encenderá."
 msgstr "Tu n'as encore vu aucune info de cet immeuble : quand tu auras nettoyé un appartement, une télé du salon s'allumera."
-
-#: scripts/ui/ordenador.gd
-msgid "Sujetos"
-msgstr "Sujets"
 
 #: scripts/ui/ordenador.gd
 msgid "Vistos"

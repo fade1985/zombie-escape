@@ -55,10 +55,12 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   **Créditos** (con qué se ha hecho el juego y las letras de otros; su botón *Licencias* enseña los textos legales enteros,
   que se bajan con la rueda, las flechas o la cruceta).
 - **Tutoriales:** la primera vez que se encuentra algo nuevo (empezar, el pasillo, la primera pelea, recargar, perder
-  un tercio, la primera cura, objeto, billete, pieza o arma, el primer jefe, la mutación, el ascensor, un
-  superviviente, cada evento sorpresa, el ordenador, la taquilla, el banco, el baúl, el centro comercial, sus peligros
-  y la alerta) sale una ventana con el juego parado: foto, qué pasa y con qué teclas (las del jugador, las del mando si
-  hay uno enchufado o los botones del móvil). **Entendido**, Esc o B la cierran. El botón **Tutorial** del menú
+  un tercio, la primera cura, objeto, billete, pieza o arma, el primer jefe, la mutación, el ascensor, la azotea, la
+  planta con un superviviente y el rescate de cada uno, cada evento sorpresa, el ordenador, la taquilla, el banco, el
+  baúl, el centro comercial, sus peligros, la joyería y la alerta) sale una ventana con el juego parado: qué pasa y con
+  qué teclas (las del jugador, las del mando si hay uno enchufado o los botones del móvil). **Entendido**, Esc o B la
+  cierran. Todo lo que el jugador tiene que saber va en estas ventanas (16 nov, lo pidió el dueño): los avisos blancos
+  de abajo (`partida.decir`) ya no se ven, así que no sirven para explicar nada. El botón **Tutorial** del menú
   principal y de la pausa las vuelve a enseñar; las que aún no han salido, con «???» (menos *Cómo se juega* y *Moverse y esquivar*).
   En la **primera partida**, al empezar sale *Moverse y esquivar* (las teclas de moverse y de la esquiva) y, después,
   la planta baja enseña lo demás justo cuando hace falta (`guia.gd`): en la primera pelea, las ventanas *Atacar*,

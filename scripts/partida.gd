@@ -637,6 +637,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 				tutorial("jefes")   # (cómo se esquivan sus ataques; también en la primera partida, la de la guía)
 			if sitio.has("helipuerto") and aqui == idx and jefa is Minijefe and jefa.esperando:
 				decir(Idioma.t("Te espera en el helipuerto, dentro de las líneas blancas"), 3.0)
+				tutorial("azotea")   # (lo mismo, y lo del helicóptero, en su ventana: el aviso de abajo no se ve)
 
 
 # Johnny sale del mapa: se quita de la escena y, si no se guarda, se tira. Se apunta lo que hará falta al volver
@@ -1834,8 +1835,14 @@ func mirar_tutoriales() -> void:
 	# salió en la tienda (ui/ordenador.gd, comprar_lanzable)
 	if lanzables.montones().any(func(m): return m[1] > 0):
 		tutorial("lanzables")
+	# lo primero que entra en la mochila: su ventana (las curas, los materiales) y, detrás, la del inventario (16 nov:
+	# antes solo con los demás objetos, y los durmientes ya no sueltan objetos)
 	for id in mochila:
-		tutorial("curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")
+		if id in Objetos.USABLES:
+			tutorial("curas")
+		elif id in Objetos.PIEZAS:
+			tutorial("piezas")
+		tutorial("inventario")
 
 
 # En la sala de pruebas no salen, ni en la partida de prueba (salvo en la suya, --tutorial)

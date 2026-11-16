@@ -376,6 +376,8 @@
 #   --tutorial          los tutoriales: la ventana, la cola, el de las curas al coger un botiquín, la lista desde la pausa, el del
 #                       baúl antes del baúl y el botón «Tutoriales: No»                         [prueba_varias.gd]
 #   --tutorial-mutageno el primer mutágeno que coge Johnny trae su tutorial (15 nov)     [prueba_varias.gd]
+#   --tutorial-rescate  al entrar donde está el superviviente, la ventana de su rescate, y en el pasillo de su planta,
+#                       la de los supervivientes (con --edificio centro o torre, los de allí; 16 nov) [prueba_varias.gd]
 #   --tutoriales-alto   la ventana de cada tutorial, una a una: que la más alta quepa en la pantalla (con --lang, en
 #                       otro idioma)                                                    [prueba_varias.gd]
 #   --tutoriales-torre  (con --edificio torre) los dos tutoriales de la torre: «Torre Velaria» (el código) y
@@ -1240,6 +1242,9 @@ func empezar_prueba() -> void:
 	elif "--tutorial-mutageno" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial_mutageno()
+	elif "--tutorial-rescate" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tutorial_rescate()
 	elif "--tutoriales-alto" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutoriales_alto()

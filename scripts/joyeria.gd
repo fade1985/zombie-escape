@@ -83,6 +83,7 @@ func al_montar(idx: int, _sitio: Dictionary, nuevo: bool) -> void:
 		return
 	listo = false   # (por si se monta con Johnny ya delante de la puerta)
 	if idx == d.sitio and not d.abierta:
+		partida.tutorial("joyeria")   # (16 nov: cómo se abre la cámara, en su ventana; los avisos de abajo no se ven)
 		puerta = PUERTA.new()
 		puerta.acero = true
 		puerta.montar(d.puerta)

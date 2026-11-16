@@ -1292,6 +1292,46 @@ func probar_tutoriales_alto() -> void:
 	get_tree().quit()
 
 
+# Con --tutorial-rescate: al entrar donde está el superviviente encerrado sale la ventana de su rescate
+# (rescate_<el suyo>: en los Apartamentos, rescate_horda) y, al salir al pasillo de su planta, la de los supervivientes
+# (16 nov; con --edificio centro o torre, las de allí; captura-tutorial-rescate.png)
+func probar_tutorial_rescate() -> void:
+	Tutoriales.olvidar()
+	tutoriales_prueba = true
+	guia.activa = false
+	Guardado.cambiar(func(g): g.ajustes.tutoriales = true)
+	for id in Tutoriales.LISTA:   # (que no se cuelen las de siempre: Cómo se juega, la del edificio, la pistola...)
+		if not id.begins_with("rescate_") and id != "supervivientes":
+			Tutoriales.apuntar(id)
+	var ventana := func() -> Tutorial:
+		for h in get_children():
+			if h is Tutorial and not h.is_queued_for_deletion():
+				return h
+		return null
+	await get_tree().create_timer(0.5).timeout
+	if ventana.call():
+		ventana.call().cerrar()
+	await supervivientes.probar_aqui(false)
+	await get_tree().create_timer(1.2).timeout
+	var t: Tutorial = ventana.call()
+	var tipo: String = supervivientes.rescate.def.get("rescate", "horda")
+	print("Tutorial del rescate · %s · ventana %s (esperado: rescate_%s)" % [supervivientes.rescate.def.id, t.id if t else "ninguna", tipo])
+	Captura.foto("captura-tutorial-rescate.png")
+	if t:
+		t.cerrar()
+	await get_tree().create_timer(0.5).timeout
+	await montar(0, 0, false)
+	await get_tree().create_timer(1.2).timeout
+	t = ventana.call()
+	print("Tutorial del rescate · en el pasillo: %s (esperado: supervivientes)" % (t.id if t else "ninguna"))
+	Captura.foto("captura-tutorial-supervivientes.png")
+	var escena := get_tree()
+	if t:
+		t.cerrar()
+	await escena.create_timer(0.5).timeout
+	escena.quit()
+
+
 # Con --tutorial-mutageno: el primer mutágeno que coge Johnny trae su tutorial (la parte 3 del mutágeno, 15 nov;
 # captura-tutorial-mutageno.png)
 func probar_tutorial_mutageno() -> void:
@@ -1317,6 +1357,8 @@ func probar_tutorial_mutageno() -> void:
 
 func probar_tutorial() -> void:
 	Tutoriales.olvidar()
+	Tutoriales.apuntar("cambiar_arma")   # (Johnny lleva la pistola y lanzables: si no, sus ventanas se cuelan las
+	Tutoriales.apuntar("lanzables")      # primeras, M97; para la cola, la de la horda)
 	tutoriales_prueba = true
 	guia.activa = false   # (la guía de la primera partida tapa «Cómo se juega» y otros: tiene su prueba, --guiado)
 	Guardado.cambiar(func(g): g.ajustes.tutoriales = true)   # (por si el guardado de prueba los tiene apagados)
@@ -1330,18 +1372,18 @@ func probar_tutorial() -> void:
 	await get_tree().create_timer(0.8).timeout
 	print("Tutorial · «Cómo se juega» abierta: %s · juego parado: %s (esperado: true, true)" % [ventana.call() != null, get_tree().paused])
 	Captura.foto("captura-tutorial-ventana.png")
-	tutorial("lanzables")
+	tutorial("horda")
 	tutorial("jugar")   # (repetido: no se pone dos veces en la cola)
-	print("Tutorial · en la cola: %s (esperado: jugar y lanzables)" % [cola_tutoriales])
+	print("Tutorial · en la cola: %s (esperado: jugar y horda)" % [cola_tutoriales])
 	ventana.call().cerrar()
 	await get_tree().create_timer(1.2).timeout
 	var t: Tutorial = ventana.call()
-	print("Tutorial · al cerrar, la siguiente: %s (esperado: lanzables)" % (t.id if t else "ninguna"))
+	print("Tutorial · al cerrar, la siguiente: %s (esperado: horda)" % (t.id if t else "ninguna"))
 	Captura.foto("captura-tutorial-cola.png")
 	t.cerrar()
 	await get_tree().create_timer(0.5).timeout
-	print("Tutorial · cerrados: juego parado %s, cola %s · vistos jugar %s, lanzables %s (esperado: false, [], true, true)" % [
-		get_tree().paused, cola_tutoriales, Tutoriales.visto("jugar"), Tutoriales.visto("lanzables")])
+	print("Tutorial · cerrados: juego parado %s, cola %s · vistos jugar %s, horda %s (esperado: false, [], true, true)" % [
+		get_tree().paused, cola_tutoriales, Tutoriales.visto("jugar"), Tutoriales.visto("horda")])
 	tutorial("jugar")
 	await get_tree().create_timer(0.5).timeout
 	print("Tutorial · «Cómo se juega» otra vez: %s (esperado: no sale)" % ("sale" if ventana.call() else "no sale"))
@@ -1351,6 +1393,12 @@ func probar_tutorial() -> void:
 	t = ventana.call()
 	print("Tutorial · al coger un botiquín: %s (esperado: curas)" % (t.id if t else "ninguna"))
 	Captura.foto("captura-tutorial-curas.png")
+	if t:
+		t.cerrar()
+	# y detrás, la del inventario: con lo primero que entra en la mochila, sea lo que sea (16 nov)
+	await get_tree().create_timer(1.2).timeout
+	t = ventana.call()
+	print("Tutorial · después, la del inventario: %s (esperado: inventario)" % (t.id if t else "ninguna"))
 	if t:
 		t.cerrar()
 	mochila.erase("botiquin")
@@ -1377,7 +1425,7 @@ func probar_tutorial() -> void:
 			lista = h
 	print("Tutorial · lista abierta desde la pausa: %s · pausa escondida: %s · ??? : %d de %d (esperado: true, true, %d)" % [
 		lista != null, not menus.fondo.visible, lista.botones.values().filter(func(b): return b.disabled).size(),
-		Tutoriales.LISTA.size(), Tutoriales.LISTA.size() - 5])   # (a la vista: jugar y moverse, siempre; atacar, que lo apunta jugar; lanzables y curas)
+		Tutoriales.LISTA.size(), Tutoriales.LISTA.size() - 8])   # (a la vista: jugar y moverse, siempre; atacar, que lo apunta jugar; cambiar_arma, lanzables, horda, curas e inventario)
 	lista.ver("lanzables")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tutorial-lista.png")
@@ -3889,9 +3937,12 @@ func probar_guiado() -> void:
 	print("Guía · flecha en la sala de mantenimiento: con %d «!» %s · sin ellos %s (esperado: >0, false, true)" % [
 		marcas, con_marcas, guia.flecha.visible])
 	Captura.foto("captura-guiado-flecha.png")
-	# el pasillo: el aviso y la flecha hacia el apartamento fácil
+	# el pasillo: la ventana «Limpia los apartamentos» y la flecha hacia el apartamento fácil
 	await montar(0, planta.sitios[aqui].salidas[0].vuelta)
-	await get_tree().create_timer(0.8).timeout
+	# (16 nov: en su ventana, como en las demás partidas, que la guía ya no tapa; antes, un aviso de abajo. La pide
+	# partida.gd al cruzar la puerta del pasillo: montar a secas, como aquí, no)
+	tutorial("apartamentos")
+	await ventana_de.call("apartamentos")
 	var facil: Dictionary = planta.sitios[guia.facil]
 	var puerta_facil := -1
 	for i in planta.sitios[0].salidas.size():
@@ -3944,6 +3995,7 @@ func probar_guiado() -> void:
 	johnny.vida = johnny.stats.vida_max - 30
 	mochila.append("vendas")
 	await ventana_de.call("curas")
+	await ventana_de.call("inventario")   # (detrás, la del inventario: con lo primero que entra en la mochila, 16 nov)
 	for i in zombis.size():
 		zombis[i].position = johnny.position + hacia * 150.0 + lado * (-120.0 + 120.0 * i)
 	await get_tree().create_timer(1.5).timeout

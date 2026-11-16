@@ -361,6 +361,9 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		a.idx = i
 		mapa.cosas.add_child(a)
 		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
+	# al llegar al pasillo de la planta en la que hay uno encerrado, la ventana de los supervivientes (16 nov)
+	if idx == 0 and hay_sos():
+		partida.tutorial("supervivientes")
 	if hay_sos() and idx == partida.planta.superviviente.sitio:
 		var sup: Dictionary = partida.planta.superviviente
 		if sup.has("mostrador"):
@@ -380,6 +383,8 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		sala_socorro = -1
 		if Valvulas.es_suyo(rescate.def) and sup.puerta.cerrada:
 			valvulas.montar()   # la limpiadora: su cuarto lleno de gas y las tres válvulas (valvulas.gd)
+		# su ventana: qué hay que hacer para sacarlo (16 nov: antes lo decían los avisos de abajo, que ya no se ven)
+		partida.tutorial("rescate_" + rescate.def.get("rescate", "horda"))
 	if sitio.tipo == "viviendas":
 		colocar_vecinos()
 	# en el pasillo, un «!» encima de la puerta de su apartamento (sin gritos ni ruidos): invita a entrar. Uno solo: el
@@ -589,7 +594,7 @@ func unir(a: Aliado) -> void:
 	rescate.sitio = partida.aqui
 	npc = null
 	partida.decir(Idioma.t("¡%s se une al equipo! %s") % [nombre_de(a.def), desc_de(a.def)], 3.5)
-	# (sin el tutorial: ya se explica todo en los trasteros, al empezar)
+	# (las ventanas, al llegar a su planta y al entrar donde está: al_montar)
 	a.callar()   # (se quita el «¡NO ME DEJES AQUÍ!») y, al segundo, dice lo que es
 	get_tree().create_timer(1.0, false).timeout.connect(func():
 		if is_instance_valid(a) and a.is_inside_tree() and a.def.has("soy"):

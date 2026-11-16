@@ -1199,10 +1199,6 @@ msgid "¡TENGO HAMBRE!"
 msgstr "ХОЧУ ЖРАТЬ!"
 
 #: scripts/guia.gd
-msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un durmiente"
-msgstr "Зачисти квартиры: когда войдёшь, дверь закроется, пока не останется ни одного спящего"
-
-#: scripts/guia.gd
 msgid "¡Ese durmiente lleva la llave del %s!"
 msgstr "У этого спящего ключ от кв. %s!"
 
@@ -2531,7 +2527,7 @@ msgstr "Выжившие"
 msgid "Sorpresas y retos"
 msgstr "Сюрпризы и испытания"
 
-#: scripts/logros.gd scripts/tutoriales.gd
+#: scripts/logros.gd
 msgid "Colecciones"
 msgstr "Коллекции"
 
@@ -4530,16 +4526,16 @@ msgid "Al empezar"
 msgstr "В начале"
 
 #: scripts/tutoriales.gd
-msgid "Muévete con {moverse}."
-msgstr "Движение: {moverse}."
+msgid "Muévete con {moverse} y esquiva con {esquivar}: mientras esquivas, no te hacen daño."
+msgstr "Движение: {moverse}, уклонение: {esquivar}. Во время уклонения тебя не ранить."
 
 #: scripts/tutoriales.gd
 msgid "{atacar_modo}"
 msgstr "{atacar_modo}"
 
 #: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
-msgstr "Уклонение: {esquivar} — короткий рывок, во время которого тебя не ранить."
+msgid "Abre y cierra muebles y puertas con {usar}, cuando estés delante y se marquen en amarillo."
+msgstr "Открывай и закрывай мебель и двери ({usar}), когда стоишь перед ними и они подсвечены желтым."
 
 #: scripts/tutoriales.gd
 msgid "Pausa el juego con {pausa}."
@@ -4554,12 +4550,12 @@ msgid "Al empezar la primera partida"
 msgstr "В начале первого забега"
 
 #: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño."
-msgstr "Уклонение: {esquivar} — Джонни делает короткий рывок туда, куда идёт, и пока рывок длится, его не ранить."
+msgid "Muévete con {moverse}."
+msgstr "Движение: {moverse}."
 
 #: scripts/tutoriales.gd
-msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
-msgstr "Так можно выбраться из передряги или проскочить между спящими. Перезаряжается быстро, меньше чем за секунду."
+msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño. Se recarga en menos de un segundo."
+msgstr "Уклонение: {esquivar} — короткий рывок, во время которого тебя не ранить. Перезаряжается меньше чем за секунду."
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Atacar"
@@ -4578,12 +4574,12 @@ msgid "Al salir al pasillo"
 msgstr "Когда выходишь в коридор"
 
 #: scripts/tutoriales.gd
-msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un durmiente."
-msgstr "Когда входишь в квартиру, дверь за тобой захлопывается и не откроется, пока не останется ни одного спящего."
+msgid "Al entrar en un apartamento, la puerta se cierra hasta que no quede ni un durmiente."
+msgstr "Когда входишь в квартиру, дверь закрывается, пока не останется ни одного спящего."
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe de la planta está cerrada con llave: la lleva un durmiente de otro apartamento y la suelta al caer."
-msgstr "Комната босса этажа заперта: ключ у спящего из другой квартиры, он выронит его, когда упадет."
+msgid "La sala del jefe está cerrada con llave: la lleva un durmiente de algún apartamento. Al caer la suelta: pasa por encima para cogerla."
+msgstr "Комната босса заперта: ключ у спящего в одной из квартир. Упав, он роняет его: пройди по нему, чтобы подобрать."
 
 #: scripts/tutoriales.gd
 msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
@@ -4598,20 +4594,20 @@ msgid "Al perder un tercio de vida"
 msgstr "Когда теряешь треть здоровья"
 
 #: scripts/tutoriales.gd
-msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
-msgstr "Полоска здоровья разделена двумя чертами на три трети. Когда здоровье опускается ниже черты, эта треть теряется: она темнеет, и бинты её уже не заполнят."
+msgid "Tu vida va en tres tercios. El que pierdes se oscurece y las vendas ya no lo llenan."
+msgstr "Твое здоровье делится на три трети. Потерянная треть темнеет, и бинты её уже не заполнят."
 
 #: scripts/tutoriales.gd
-msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los durmientes rápidos."
-msgstr "С каждой потерянной третью ты ходишь медленнее: потеряв две, от быстрых спящих уже не убежать."
+msgid "Por cada tercio perdido andas más lento, y no se recupera al subir de planta."
+msgstr "С каждой потерянной третью ты ходишь медленнее, и они не восстанавливаются при подъеме на следующий этаж."
 
 #: scripts/tutoriales.gd
-msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y la mutación Segundo aliento, una vez por planta)."
-msgstr "Потерянные трети не возвращаются и на следующем этаже. Вернуть одну может только аптечка (и мутация «Второе дыхание», раз за этаж)."
+msgid "Solo el botiquín te devuelve uno (y la mutación Segundo aliento, una vez por planta)."
+msgstr "Вернуть одну может только аптечка (и мутация «Второе дыхание», раз за этаж)."
 
 #: scripts/tutoriales.gd
-msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
-msgstr "Если тяжело, в «Настройки → Упрощения» есть «Здоровье целиком»."
+msgid "¿Se te hace cuesta arriba? En Opciones → Ayudas está «Vida entera»."
+msgstr "Тяжело? В «Настройки → Упрощения» есть «Здоровье целиком»."
 
 #: scripts/tutoriales.gd
 msgid "Vendas y botiquines"
@@ -4622,24 +4618,20 @@ msgid "Al abrir el primer armarito o coger la primera cura"
 msgstr "Когда открываешь первый шкафчик или подбираешь первое лечение"
 
 #: scripts/tutoriales.gd
-msgid "Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan unas vendas o un botiquín."
-msgstr "Шкафчики в ванных открываются спереди, как компьютер, и вываливают бинты или аптечку."
+msgid "Abre los armaritos de los baños con {usar}: dan unas vendas o un botiquín."
+msgstr "Открывай шкафчики в ванных ({usar}): в них бинты или аптечка."
 
 #: scripts/tutoriales.gd
-msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
+msgid "Vendas, con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
 msgstr "Бинты: {usar_vendas}. Лечат на 25, но не выше текущей трети."
 
 #: scripts/tutoriales.gd
-msgid "El botiquín se usa con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
-msgstr "Аптечка: {usar_botiquin}. Лечит на 40 и возвращает потерянную треть здоровья."
+msgid "Botiquín, con {usar_botiquin}: cura 40 y te devuelve un tercio perdido. Guárdalo para entonces."
+msgstr "Аптечка: {usar_botiquin}. Лечит на 40 и возвращает потерянную треть. Береги её для такого случая."
 
 #: scripts/tutoriales.gd
-msgid "Es lo único que recupera los tercios perdidos, aparte de la mutación Segundo aliento. Guárdalo para cuando pierdas uno."
-msgstr "Только она возвращает потерянные трети, не считая мутации «Второе дыхание». Береги её до тех пор, пока не потеряешь треть."
-
-#: scripts/tutoriales.gd
-msgid "En la mochila caben 3 vendas y 2 botiquines; los que sobran se quedan en el suelo o van al baúl."
-msgstr "В рюкзак влезает 3 бинта и 2 аптечки; лишние остаются на полу или отправляются в сундук."
+msgid "Llevas como mucho 3 vendas y 2 botiquines."
+msgstr "Можно носить не больше 3 бинтов и 2 аптечек."
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
@@ -4650,16 +4642,16 @@ msgid "Al coger el primer objeto"
 msgstr "Когда подбираешь первый предмет"
 
 #: scripts/tutoriales.gd
-msgid "Lo que recoges va a la mochila. El inventario se abre con {inventario}: tus armas, la munición, los lanzables y la mochila."
-msgstr "Все подобранное идет в рюкзак. Инвентарь открывается так: {inventario}. Там твое оружие, патроны, метательное и рюкзак."
+msgid "Abre el inventario con {inventario}: tus armas, la munición, los lanzables y la mochila."
+msgstr "Инвентарь открывается так: {inventario}. Там твое оружие, патроны, метательное и рюкзак."
 
 #: scripts/tutoriales.gd
-msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...)."
-msgstr "Выбери ячейку, чтобы увидеть ее карточку и кнопки (применить, взять, выбросить...)."
+msgid "Elige una casilla para ver qué es y qué puedes hacer con ella."
+msgstr "Выбери ячейку, чтобы увидеть, что это и что с ней можно сделать."
 
 #: scripts/tutoriales.gd
-msgid "Si caes, lo de la mochila se pierde; si completas el edificio, pasa al baúl. Las armas y los lanzables vuelven al baúl siempre, si les quedan partidas."
-msgstr "Если падёшь, всё из рюкзака пропадёт; если зачистишь здание, оно уйдёт в сундук. Оружие и метательное всегда возвращается в сундук, если у него остались забеги."
+msgid "Si caes o abandonas, pierdes lo de la mochila; si completas el edificio, pasa al baúl."
+msgstr "Если падешь или сдашься, всё из рюкзака пропадет; если пройдешь здание, оно уйдет в сундук."
 
 #: scripts/tutoriales.gd
 msgid "Dólares"
@@ -4670,16 +4662,16 @@ msgid "Al coger el primer billete"
 msgstr "Когда подбираешь первую купюру"
 
 #: scripts/tutoriales.gd
-msgid "Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos."
-msgstr "Почти каждый спящий, падая, роняет купюру (остальные — патроны), а боссы — много: пройди по ним, чтобы подобрать."
+msgid "Los durmientes sueltan billetes al caer, y los jefes, muchos: pasa por encima para cogerlos."
+msgstr "Падая, спящие роняют купюры, а боссы — много: пройди по ним, чтобы подобрать."
 
 #: scripts/tutoriales.gd
-msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
-msgstr "Они сохраняются в конце забега: все, если пройдешь здание, и половина, если падешь или сдашься."
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
+msgstr "Если пройдешь здание, оставишь себе все; если падешь или сдашься — половину."
 
 #: scripts/tutoriales.gd
-msgid "Se gastan en el ordenador de la sala de mantenimiento."
-msgstr "Тратятся на компьютере в дворницкой."
+msgid "Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."
+msgstr "Тратятся в магазине оружия на компьютере в дворницкой."
 
 #: scripts/tutoriales.gd
 msgid "Mutágeno"
@@ -4690,16 +4682,16 @@ msgid "Al coger el primer mutágeno"
 msgstr "Когда подбираешь первый мутаген"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "В спящих — мутировавшая ДНК: падая, они роняют немного мутагена. Пройди по нему, чтобы подобрать."
+msgid "Al caer, los durmientes sueltan mutágeno: pasa por encima para cogerlo."
+msgstr "Падая, спящие роняют мутаген: пройди по нему, чтобы подобрать."
 
 #: scripts/tutoriales.gd
-msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
-msgstr "Он сохраняется, если пройдёшь здание. Если падёшь или сдашься, потеряешь то, что собрал за этот забег."
+msgid "Solo te lo quedas si completas el edificio: si caes o abandonas, pierdes el de esa partida."
+msgstr "Он остается у тебя, только если пройдешь здание: если падешь или сдашься, потеряешь то, что собрал за этот забег."
 
 #: scripts/tutoriales.gd
-msgid "Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."
-msgstr "Его тратят в «Мутациях», на компьютере в дворницкой: улучшения для Джонни, которые остаются навсегда."
+msgid "Se gasta en Mutaciones, en el ordenador: mejoras para Johnny que duran para siempre."
+msgstr "Его тратят в «Мутациях» на компьютере: улучшения для Джонни, которые остаются навсегда."
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Cambiar de arma"
@@ -4726,16 +4718,16 @@ msgid "Al llevar otra arma"
 msgstr "Когда берешь другое оружие"
 
 #: scripts/tutoriales.gd
-msgid "Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}."
-msgstr "В руках у тебя два оружия: ближнего боя и дальнего. Переключение: {cambiar_arma}."
+msgid "Llevas dos armas en la mano (cuerpo a cuerpo y a distancia: cambias con {cambiar_arma}) y una de repuesto de cada tipo."
+msgstr "В руках у тебя два оружия (ближнего и дальнего боя, переключение: {cambiar_arma}) и по одному запасному каждого типа."
 
 #: scripts/tutoriales.gd
-msgid "Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario})."
-msgstr "Остальное — запасное, по одному каждого типа, его меняют в инвентаре ({inventario})."
+msgid "Las de repuesto se cambian en el inventario ({inventario})."
+msgstr "Запасное меняется в инвентаре ({inventario})."
 
 #: scripts/tutoriales.gd
-msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica."
-msgstr "Цвет рамки — это качество: серый — Обычное, зеленый — Необычное, синий — Редкое, фиолетовый — Эпическое."
+msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica. Cuanto mejor, más partidas dura."
+msgstr "Цвет рамки — качество: серый — Обычное, зеленый — Необычное, синий — Редкое, фиолетовый — Эпическое. Чем выше, тем больше забегов оно служит."
 
 #: scripts/tutoriales.gd
 msgid "Munición y recarga"
@@ -4750,12 +4742,16 @@ msgid "Recarga con {recargar}; al vaciarse el cargador, recarga solo."
 msgstr "Перезарядка: {recargar}; пустой магазин перезаряжается сам."
 
 #: scripts/tutoriales.gd
-msgid "Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador."
-msgstr "Каждое оружие тратит свои патроны (пули, дробь...). Ящик патронов на полу дает один магазин."
+msgid "Cada arma gasta su munición. Una caja de munición del suelo te da un cargador."
+msgstr "Каждое оружие тратит свои патроны. Ящик патронов на полу дает один магазин."
 
 #: scripts/tutoriales.gd
 msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
 msgstr "Без патронов Джонни достает оружие ближнего боя."
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! Disparar dentro de un apartamento despierta a todos los durmientes."
+msgstr "Осторожно! Выстрелы в квартире будят всех спящих."
 
 #: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Lanzables"
@@ -4766,16 +4762,20 @@ msgid "Al conseguir el primer lanzable"
 msgstr "Когда получаешь первое метательное"
 
 #: scripts/tutoriales.gd
-msgid "Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
-msgstr "Метательное покупается в магазине оружия на компьютере и попадает в сундук: достань его оттуда, чтобы взять с собой."
+msgid "Se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
+msgstr "Их покупают в магазине оружия на компьютере, и они попадают в сундук: достань их оттуда, чтобы взять с собой."
 
 #: scripts/tutoriales.gd
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis."
-msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить. Сменить метательное: {cambiar_lanzable}. Молотов поджигает, граната взрывается, а приманка зовёт зомби."
+msgid "Mantén {lanzar} para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}."
+msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить. Сменить метательное: {cambiar_lanzable}."
 
 #: scripts/tutoriales.gd
-msgid "¡Ojo! La explosión también te hace daño a ti."
-msgstr "Осторожно! Взрыв ранит и тебя."
+msgid "Molotov: fuego. Granada: explota. Atraedora: llama a los durmientes y explota. Congeladora: los congela."
+msgstr "Молотов: огонь. Граната: взрыв. Приманка: зовет спящих и взрывается. Криобомба: замораживает их."
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! El fuego y las explosiones también te hacen daño a ti."
+msgstr "Осторожно! Огонь и взрывы ранят и тебя."
 
 #: scripts/tutoriales.gd
 msgid "Materiales de fabricación"
@@ -4786,32 +4786,36 @@ msgid "Al coger el primer material"
 msgstr "Когда подбираешь первый материал"
 
 #: scripts/tutoriales.gd
-msgid "Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
-msgstr "Материалы для изготовления повышают качество оружия и метательного на верстаке в дворницкой."
+msgid "Sirven para mejorar armas y lanzables en el banco de trabajo de la sala de mantenimiento."
+msgstr "Нужны, чтобы улучшать оружие и метательное на верстаке в дворницкой."
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Están dentro de los muebles que se abren (armarios, mesillas, escritorios, cajas registradoras, archivadores...): búscalos por su contorno amarillo y ábrelos desde delante, como el ordenador."
-msgstr "Их четыре вида: ближний бой, дальний бой, особые и метательные. Они лежат в мебели, которую можно открыть (шкафы, тумбочки, столы, кассы, картотеки...): ищи желтый контур и открывай спереди, как компьютер."
+msgid "Están en armarios, mesillas, escritorios, cajas registradoras, archivadores... Ponte delante y ábrelos con {usar}. No todos tienen."
+msgstr "Лежат в шкафах, тумбочках, столах, кассах, картотеках... Встань перед ними и открой ({usar}). Не во всех что-то есть."
 
 #: scripts/tutoriales.gd
-msgid "Van en la mochila: si completas el edificio, pasan al baúl."
-msgstr "Лежат в рюкзаке: если пройдешь здание, отправятся в сундук."
+msgid "Van en la mochila: si completas el edificio, pasan al baúl; si caes, se pierden."
+msgstr "Лежат в рюкзаке: если пройдешь здание, отправятся в сундук; если падешь, пропадут."
 
 #: scripts/tutoriales.gd
 msgid "Al llegar al primer jefe"
 msgstr "Когда доходишь до первого босса"
 
 #: scripts/tutoriales.gd
-msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso."
-msgstr "На каждом этаже свой босс, его полоска здоровья — вверху. На половине здоровья он звереет и становится опаснее."
+msgid "Cada planta tiene su jefe. A media vida se enfada y se vuelve más peligroso."
+msgstr "На каждом этаже свой босс. На половине здоровья он звереет и становится опаснее."
 
 #: scripts/tutoriales.gd
-msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!"
-msgstr "Перед каждой атакой он размечает пол: уйди с метки или уклонись ({esquivar})!"
+msgid "Avisa antes de atacar, casi siempre con una marca en el suelo: ¡sal de ella o esquiva con {esquivar}!"
+msgstr "Перед атакой он предупреждает, почти всегда меткой на полу: уйди с неё или уклонись ({esquivar})!"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
-msgstr "Падая, он роняет доллары и патроны (в торговом центре и в башне ещё и материалы), и открывается лестница."
+msgid "Algunos tienen cerca cosas para usar contra ellos con {usar}, como los bidones."
+msgstr "Рядом с некоторыми есть то, что можно пустить против них ({usar}), например бочки."
+
+#: scripts/tutoriales.gd
+msgid "Al caer suelta muchos dólares y se abren las escaleras."
+msgstr "Падая, он роняет много долларов, и открывается лестница."
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"
@@ -4822,16 +4826,12 @@ msgid "Antes del primer efecto secundario"
 msgstr "Перед первым побочным эффектом"
 
 #: scripts/tutoriales.gd
-msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
-msgstr "Когда побеждаешь босса, вирус меняет тебя: выбери одну из двух карт (можно и клавишами 1 и 2)."
+msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas."
+msgstr "Когда побеждаешь босса, вирус меняет тебя: выбери одну из двух карт."
 
 #: scripts/tutoriales.gd
-msgid "Cada efecto secundario te da algo bueno y, a veces, algo malo."
-msgstr "Каждый побочный эффект дает что-то хорошее, а иногда и что-то плохое."
-
-#: scripts/tutoriales.gd
-msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
-msgstr "Они действуют до конца забега, и их может быть не больше 4."
+msgid "Cada una te da un poder hasta que acaba la partida. Llevas como mucho 4."
+msgstr "Каждая дает силу до конца забега. Можно носить не больше 4."
 
 #: scripts/tutoriales.gd
 msgid "El ascensor"
@@ -4842,28 +4842,160 @@ msgid "Al arreglar el ascensor"
 msgstr "Когда чинишь лифт"
 
 #: scripts/tutoriales.gd
-msgid "Johnny ha arreglado el ascensor del pasillo: baja a la sala de mantenimiento y vuelve a esta misma planta."
-msgstr "Джонни починил лифт в коридоре: он спускается в дворницкую и возвращается на этот же этаж."
+msgid "Al vencer al jefe, Johnny arregla el ascensor del pasillo: baja a la sala de mantenimiento y te devuelve a esta planta."
+msgstr "Победив босса, Джонни чинит лифт в коридоре: он спускается в дворницкую и возвращает тебя на этот этаж."
 
 #: scripts/tutoriales.gd
-msgid "Úsalo para ir al ordenador, al banco de trabajo o al baúl en mitad de la partida."
-msgstr "На нем можно посреди забега съездить к компьютеру, верстаку или сундуку."
+msgid "Úsalo para comprar, mejorar o sacar cosas del baúl a mitad de partida."
+msgstr "Используй его, чтобы покупать, улучшать и доставать вещи из сундука посреди забега."
 
 #: scripts/tutoriales.gd
-msgid "Al rescatar al primero"
-msgstr "Когда спасаешь первого"
+msgid "En cada planta nueva vuelve a estar averiado hasta que cae su jefe."
+msgstr "На каждом новом этаже он снова ломается, пока не падет его босс."
 
 #: scripts/tutoriales.gd
-msgid "Se une al equipo: te acompaña y te ayuda a su manera."
-msgstr "Выживший вступает в команду: идет с тобой и помогает по-своему."
+msgid "La azotea"
+msgstr "Крыша"
 
 #: scripts/tutoriales.gd
-msgid "Cada uno tiene su rescate. No te alejes de él y, si cae, quédate a su lado para levantarlo."
-msgstr "У каждого свое спасение. Не отходи от него далеко, а если упадет — побудь рядом, чтобы поднять."
+msgid "Al llegar a la azotea"
+msgstr "Когда выходишь на крышу"
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio con él, se muda a las viviendas (la puerta de la derecha de la sala de mantenimiento) y podrá acompañarte."
-msgstr "Если пройдешь здание вместе с ним, он переедет в общежитие (правая дверь в дворницкой) и сможет ходить с тобой."
+msgid "El último jefe del edificio te espera en el helipuerto: entra en las líneas blancas para empezar la pelea."
+msgstr "Последний босс здания ждет тебя на вертолетной площадке: войди в белые линии, чтобы начать бой."
+
+#: scripts/tutoriales.gd
+msgid "Al vencerlo llega un helicóptero: arrímate a su escalera para escapar."
+msgstr "Когда он повержен, прилетает вертолет: подойди к его лестнице, чтобы сбежать."
+
+#: scripts/tutoriales.gd
+msgid "Al oír al primero pedir socorro"
+msgstr "Когда слышишь первый призыв о помощи"
+
+#: scripts/tutoriales.gd
+msgid "Si en la planta hay un superviviente encerrado, se le oye pedir socorro y sale un «!» en el minimapa."
+msgstr "Если на этаже заперт выживший, слышны его крики о помощи, а на миникарте появляется «!»."
+
+#: scripts/tutoriales.gd
+msgid "Ve a por él y protégelo mientras hace lo suyo para salir. Si cae, quédate a su lado para levantarlo."
+msgstr "Иди к нему и защищай, пока он выбирается. Если он упал, встань рядом, чтобы поднять."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él, se muda a los trasteros y podrá acompañarte."
+msgstr "Если пройдешь здание вместе с ним, он переедет в кладовки и сможет ходить с тобой."
+
+#: scripts/tutoriales.gd
+msgid "Rescate en los apartamentos"
+msgstr "Спасение в квартирах"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al primero de los apartamentos"
+msgstr "Когда находишь первого выжившего в квартирах"
+
+#: scripts/tutoriales.gd
+msgid "Al salir del piso con él, la puerta se cierra de golpe: se pone a forzar la cerradura y entran durmientes por las habitaciones."
+msgstr "Когда выходишь из квартиры с ним, дверь захлопывается: он начинает взламывать замок, а спящие лезут из комнат."
+
+#: scripts/tutoriales.gd
+msgid "Quédate cerca y protégelo. Si lo tumban, la cerradura no avanza: ponte a su lado para levantarlo."
+msgstr "Держись рядом и защищай его. Если его свалят, замок не поддается: встань рядом, чтобы поднять."
+
+#: scripts/tutoriales.gd
+msgid "El ferretero"
+msgstr "Мастер"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al ferretero"
+msgstr "Когда находишь Мастера"
+
+#: scripts/tutoriales.gd
+msgid "Se ha atrincherado en el almacén: al limpiar la tienda, se pone a quitar las tablas y entran durmientes."
+msgstr "Он заперся на складе: когда ты зачистишь магазин, он начнет отдирать доски, и полезут спящие."
+
+#: scripts/tutoriales.gd
+msgid "Defiende su puerta: mientras haya un durmiente pegado a ella, no avanza."
+msgstr "Защищай его дверь: пока к ней прижат хоть один спящий, дело не движется."
+
+#: scripts/tutoriales.gd
+msgid "La farmacéutica"
+msgstr "Фармацевт"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la farmacéutica"
+msgstr "Когда находишь Фармацевта"
+
+#: scripts/tutoriales.gd
+msgid "Está herida y va cojeando: llévala hasta la puerta de las escaleras de la planta."
+msgstr "Она ранена и хромает: проводи её до двери на лестницу этажа."
+
+#: scripts/tutoriales.gd
+msgid "Por el camino salen durmientes. No te alejes de ella: si se queda sola, van a por ella."
+msgstr "По дороге появляются спящие. Не отходи от неё: если она останется одна, они бросятся на неё."
+
+#: scripts/tutoriales.gd
+msgid "El técnico"
+msgstr "Техник"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al técnico"
+msgstr "Когда находишь Техника"
+
+#: scripts/tutoriales.gd
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
+msgstr "Он не уйдет, пока не починит оголенный провод, но под напряжением не может: встань перед электрощитком магазина и опусти рубильник."
+
+#: scripts/tutoriales.gd
+msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
+msgstr "Всё погружается во тьму, и входят спящие: защищай его, пока он не закончит."
+
+#: scripts/tutoriales.gd
+msgid "El informático joven"
+msgstr "Юный айтишник"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al informático joven"
+msgstr "Когда находишь Юного айтишника"
+
+#: scripts/tutoriales.gd
+msgid "No se va sin copiar los archivos de Velaria: la puerta se cierra y entran durmientes. Protégelo hasta que acabe."
+msgstr "Он не уйдет, пока не скопирует файлы Velaria: дверь закрывается, и входят спящие. Защищай его, пока он не закончит."
+
+#: scripts/tutoriales.gd
+msgid "Mientras copia, saltan las cámaras de la sala: rómpelas antes de un tiro y te ahorras escoltas."
+msgstr "Пока он копирует, в комнате срабатывают камеры: разбей их выстрелом заранее — и телохранителей будет меньше."
+
+#: scripts/tutoriales.gd
+msgid "La limpiadora de noche"
+msgstr "Ночная уборщица"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la limpiadora de noche"
+msgstr "Когда находишь Ночную уборщицу"
+
+#: scripts/tutoriales.gd
+msgid "Está encerrada en el cuarto de la limpieza, lleno de gas. Para abrirlo, cierra las tres válvulas del departamento: ponte delante de cada una."
+msgstr "Она заперта в подсобке, полной газа. Чтобы открыть её, закрой три вентиля отдела: встань перед каждым."
+
+#: scripts/tutoriales.gd
+msgid "Cada válvula silba al cerrarse y despierta frenéticos a los durmientes de cerca."
+msgstr "Каждый вентиль при закрытии свистит и будит поблизости спящих, которые приходят в неистовство."
+
+#: scripts/tutoriales.gd
+msgid "La recepcionista"
+msgstr "Администратор"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la recepcionista"
+msgstr "Когда находишь Администратора"
+
+#: scripts/tutoriales.gd
+msgid "Quiere abrir los tornos de la entrada con su tarjeta: mientras tanto, entran durmientes por las puertas del vestíbulo."
+msgstr "Она хочет открыть турникеты на входе своей картой: пока она возится, спящие лезут в двери вестибюля."
+
+#: scripts/tutoriales.gd
+msgid "Protégela hasta que acabe. Si la tumban, ponte a su lado para levantarla."
+msgstr "Защищай её, пока она не закончит. Если её свалят, встань рядом, чтобы поднять."
 
 #: scripts/tutoriales.gd
 msgid "En el primer apagón"
@@ -4878,8 +5010,8 @@ msgid "En la sala del jefe todo sigue como siempre."
 msgstr "В комнате босса все как обычно."
 
 #: scripts/tutoriales.gd
-msgid "Al subir a la planta siguiente, te llevas un premio en dólares."
-msgstr "Поднимешься на следующий этаж — получишь премию в долларах."
+msgid "Al subir a la planta siguiente, te llevas un premio en dólares y munición."
+msgstr "Поднявшись на следующий этаж, ты получаешь награду в долларах и патронах."
 
 #: scripts/tutoriales.gd
 msgid "En la primera alarma de incendios"
@@ -4890,8 +5022,8 @@ msgid "Los aspersores llenan el suelo de charcos que resbalan."
 msgstr "Спринклеры покрывают пол скользкими лужами."
 
 #: scripts/tutoriales.gd
-msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los durmientes: ¡llévalos hasta él! Esquivando cruzas sin daño."
-msgstr "В некоторые падает оголенный провод, который бьет током Джонни и спящих: заманивай их туда! В уклонении проскочишь без урона."
+msgid "En algunos cae un cable pelado que da calambrazos a ti y a los durmientes: ¡llévalos hasta él! Esquivando lo cruzas sin daño."
+msgstr "В некоторых падает оголенный провод, который бьет током и тебя, и спящих: веди их к нему! Если уклоняешься, пересечешь его без урона."
 
 #: scripts/tutoriales.gd
 msgid "En la primera horda"
@@ -4906,8 +5038,8 @@ msgid "Si te metes en un piso, los que queden te esperan fuera. Aquí los lanzab
 msgstr "Если спрячешься в квартире, оставшиеся будут ждать снаружи. Тут метательное как нельзя кстати."
 
 #: scripts/tutoriales.gd
-msgid "Al acabar con todos, te deja dólares y una caja de munición."
-msgstr "Когда перебьешь всех, получишь доллары и ящик патронов."
+msgid "Al acabar con todos, te deja dólares y munición."
+msgstr "Когда ты расправляешься со всеми, тебе достаются доллары и патроны."
 
 #: scripts/tutoriales.gd
 msgid "El ordenador"
@@ -4918,12 +5050,12 @@ msgid "Al encender el ordenador"
 msgstr "Когда включаешь компьютер"
 
 #: scripts/tutoriales.gd
-msgid "Gasta el mutágeno en mutaciones (mejoras para siempre) y los dólares ahorrados en armas y lanzables para la partida."
-msgstr "Трать мутаген на мутации (улучшения навсегда), а накопленные доллары — на оружие и метательное на забег."
+msgid "Gasta el mutágeno en Mutaciones (mejoras para siempre) y los dólares en la Tienda de armas."
+msgstr "Мутаген трать в «Мутациях» (улучшения навсегда), а доллары — в магазине оружия."
 
 #: scripts/tutoriales.gd
-msgid "También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."
-msgstr "Еще там достижения, которые дают награду, Досье, Видео и Коллекции."
+msgid "También están los Logros, que dan premio, el Dosier, los Vídeos y Sujetos."
+msgstr "Есть еще «Достижения» с наградами, «Досье», «Видео» и «Объекты»."
 
 #: scripts/tutoriales.gd
 msgid "La taquilla"
@@ -4934,12 +5066,12 @@ msgid "Al abrir la taquilla"
 msgstr "Когда открываешь шкафчик"
 
 #: scripts/tutoriales.gd
-msgid "Aquí eliges la ropa de Johnny. Cada una tiene su ventaja."
-msgstr "Здесь ты выбираешь одежду Джонни. У каждой свое преимущество."
+msgid "Aquí eliges la ropa de Johnny. Cada traje nuevo tiene su ventaja."
+msgstr "Здесь ты выбираешь одежду Джонни. У каждого нового костюма своё преимущество."
 
 #: scripts/tutoriales.gd
-msgid "Se consiguen venciendo a ciertos jefes: las que te faltan salen con «???» y cómo conseguirlas."
-msgstr "Ее получают за победу над определенными боссами: недостающая показана как «???» вместе с тем, как ее получить."
+msgid "Se consiguen venciendo a cada jefe por primera vez: los que te faltan salen con «???»."
+msgstr "Они открываются за первую победу над каждым боссом: недостающие помечены «???»."
 
 #: scripts/tutoriales.gd
 msgid "El banco de trabajo"
@@ -4950,12 +5082,12 @@ msgid "Al usar el banco de trabajo"
 msgstr "Когда пользуешься верстаком"
 
 #: scripts/tutoriales.gd
-msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con los materiales de su familia (los de la mochila y los del baúl)."
-msgstr "Повышай качество оружия и метательного, уровень за уровнем, материалами того же вида (из рюкзака и из сундука)."
+msgid "Mejora tus armas y lanzables con los materiales de su familia (los de la mochila y los del baúl)."
+msgstr "Улучшай оружие и метательное материалами их семейства (из рюкзака и из сундука)."
 
 #: scripts/tutoriales.gd
-msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
-msgstr "Обычное, Необычное, Редкое и Эпическое: у Эпического ещё и есть приём. Каждое улучшение также добавляет один забег жизни."
+msgid "Normal, Poco común, Rara y Épica: cada mejora dura una partida más, y la Épica trae un truco."
+msgstr "Обычное, Необычное, Редкое и Эпическое: каждое улучшение служит на один забег дольше, а Эпическое дает фишку."
 
 #: scripts/tutoriales.gd
 msgid "Elige la casilla y pulsa «Mejorar»."
@@ -4970,16 +5102,16 @@ msgid "Al abrir el baúl"
 msgstr "Когда открываешь сундук"
 
 #: scripts/tutoriales.gd
-msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres. Esas que les quedan son su durabilidad, de 0 a 3."
-msgstr "Оружие и метательное служат текущий забег и ещё столько, какое у них качество: Обычное — ни одного; Необычное — один; Редкое — два; Эпическое — три. Оставшиеся забеги — это их прочность, от 0 до 3."
+msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
+msgstr "Всё, что лежит в сундуке, не пропадает никогда: оружие, метательное, патроны и предметы."
 
 #: scripts/tutoriales.gd
-msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."
-msgstr "Взять из сундука — значит потратить забег; если забегов не оставалось, вещь сломается в конце, даже если положишь её обратно."
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
+msgstr "Каждый раз, когда достаешь оружие или метательное, оно тратит один забег прочности. При 0 оно уничтожается в конце этого забега."
 
 #: scripts/tutoriales.gd
-msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
-msgstr "В конце забега, зачистил ты здание или пал, всё, у чего остались забеги, само вернётся в сундук. Выбери ячейку или перетащи её, чтобы переложить."
+msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
+msgstr "В конце забега всё, что еще служит, само возвращается в сундук. Выбери ячейку или перетащи её, чтобы переложить."
 
 #: scripts/tutoriales.gd
 msgid "La tienda de armas"
@@ -4990,16 +5122,16 @@ msgid "Al abrir la tienda de armas"
 msgstr "Когда открываешь магазин оружия"
 
 #: scripts/tutoriales.gd
-msgid "Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar."
-msgstr "Купленное попадает в сундук нетронутым: доставай его, когда захочешь взять с собой. Если сундук полон, освободи место перед покупкой."
+msgid "Lo que compras va al baúl: sácalo de allí para llevarlo. Si el baúl está lleno, haz sitio antes."
+msgstr "Купленное попадает в сундук: достань его оттуда, чтобы взять с собой. Если сундук полон, освободи место."
 
 #: scripts/tutoriales.gd
-msgid "Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno."
-msgstr "Всё продаётся в качестве Обычное: служит тот забег, в котором ты достаёшь это из сундука. Дальнобойное оружие продаётся заряженным и с запасом патронов; особое — полным. Метательное покупается по одному."
+msgid "Todo es Normal: dura solo la partida en la que lo sacas. Las armas a distancia traen munición."
+msgstr "Всё Обычное: служит только тот забег, в котором ты это достал. У оружия дальнего боя есть патроны."
 
 #: scripts/tutoriales.gd
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."
-msgstr "Джонни начинает только со шваброй: первый пистолет — наш подарок, а ещё молотов, граната и приманка."
+msgid "Johnny empieza solo con la fregona: la primera pistola es un regalo, y también un molotov, una granada y una atraedora."
+msgstr "Джонни начинает только со шваброй: первый пистолет — подарок, а еще молотов, граната и приманка."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Mutaciones"
@@ -5010,16 +5142,16 @@ msgid "Al abrir Mutaciones"
 msgstr "Когда открываешь «Мутации»"
 
 #: scripts/tutoriales.gd
-msgid "Gasta aquí el mutágeno en mutaciones: mejoras para Johnny que duran para siempre, en todas las partidas."
-msgstr "Трать здесь мутаген на мутации: улучшения для Джонни, которые остаются навсегда, в каждом забеге."
+msgid "Gasta el mutágeno en mejoras para siempre, en tres ramas: Militar, Superviviente y Químico."
+msgstr "Трать мутаген на улучшения навсегда в трех ветках: Военный, Выживальщик и Химик."
 
 #: scripts/tutoriales.gd
-msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada mutación sube punto a punto, y para abrir las de abajo hay que llenar antes la de encima."
-msgstr "Есть три ветки: Военный, Выживальщик и Химик. Каждая мутация растёт по очку, а чтобы открыть нижние, сначала нужно прокачать до конца верхнюю."
+msgid "Para abrir una mutación hay que llenar antes la que tiene encima."
+msgstr "Чтобы открыть мутацию, нужно сначала заполнить ту, что над ней."
 
 #: scripts/tutoriales.gd
-msgid "«Resetear mutaciones» las quita todas para repartirlas de nuevo, pero el mutágeno gastado se pierde."
-msgstr "«Сбросить мутации» убирает их все, чтобы распределить заново, но потраченный мутаген пропадает."
+msgid "«Resetear mutaciones» las quita para repartirlas otra vez, pero el mutágeno gastado se pierde."
+msgstr "«Сбросить мутации» убирает их, чтобы раздать заново, но потраченный мутаген пропадает."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Logros"
@@ -5030,16 +5162,16 @@ msgid "Al abrir Logros"
 msgstr "Когда открываешь «Достижения»"
 
 #: scripts/tutoriales.gd
-msgid "Aquí están los retos del juego, ordenados por temas."
-msgstr "Здесь испытания игры, разложенные по темам."
+msgid "Aquí están los retos del juego. Al conseguir uno, vuelve aquí a cobrar su premio en dólares."
+msgstr "Здесь все испытания игры. Выполнив одно, вернись сюда, чтобы забрать награду в долларах."
 
 #: scripts/tutoriales.gd
-msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
-msgstr "Получив достижение, возвращайся сюда за наградой: каждое даёт приз в долларах."
+msgid "Si el premio no cabe en el máximo de dólares (MAX), lo que sobra se pierde."
+msgstr "Если награда не влезает в максимум долларов (МАКС), излишек пропадает."
 
 #: scripts/tutoriales.gd
-msgid "Ojo: no se puede pasar del máximo de dólares (MAX). Si al cobrar un logro su premio no cabe, el logro cuenta como conseguido, pero lo que no cabe se pierde para siempre."
-msgstr "Внимание: больше максимума долларов (MAX) не накопить. Если при получении награда не влезает, достижение всё равно засчитывается, но то, что не влезло, пропадает навсегда."
+msgid "Con una Ayuda encendida, esa partida no da logros."
+msgstr "С включенным упрощением этот забег не дает достижений."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Dosier VD-7"
@@ -5050,24 +5182,24 @@ msgid "Al abrir el Dosier"
 msgstr "Когда открываешь «Досье»"
 
 #: scripts/tutoriales.gd
-msgid "En cada planta hay un muerto de Velaria con una página del dosier. Cógela y se queda aquí para siempre."
-msgstr "На каждом этаже лежит мёртвый сотрудник Velaria со страницей досье. Подбери её, и она останется здесь навсегда."
+msgid "Mientras te falten páginas, en alguna planta hay un muerto con una. Cógela y se queda aquí para siempre."
+msgstr "Пока тебе не хватает страниц, на каком-то этаже лежит мертвец с одной из них. Подбери её, и она останется здесь навсегда."
 
 #: scripts/tutoriales.gd
-msgid "Cada edificio tiene su dosier. Completarlo es una de las tres cosas que pide el edificio siguiente para abrirse."
-msgstr "У каждого здания своё досье. Собрать его — одно из трёх условий, чтобы открылось следующее здание."
+msgid "Completar el dosier es una de las tres cosas que pide el edificio siguiente para abrirse."
+msgstr "Собрать досье — одно из трех условий, чтобы открылось следующее здание."
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Sujetos"
+msgstr "Объекты"
 
 #: scripts/tutoriales.gd
-msgid "Al abrir Colecciones"
-msgstr "Когда открываешь «Коллекции»"
+msgid "Al abrir Sujetos"
+msgstr "Когда открываешь «Объекты»"
 
 #: scripts/tutoriales.gd
-msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen."
-msgstr "Здесь записаны все спящие и боссы, которых ты встретил: что они делают и где появляются."
-
-#: scripts/tutoriales.gd
-msgid "Los que aún no has visto salen con «???»."
-msgstr "Те, кого ты ещё не видел, показаны как «???»."
+msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen. Los que faltan, con «???»."
+msgstr "Здесь записаны спящие и боссы, которых ты встретил, с их повадками и местами появления. Недостающие помечены «???»."
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Vídeos"
@@ -5078,12 +5210,12 @@ msgid "Al abrir Vídeos"
 msgstr "Когда открываешь «Видео»"
 
 #: scripts/tutoriales.gd
-msgid "En las plantas hay teles con las noticias de Canal 8. Las que veas se guardan aquí para volver a verlas."
-msgstr "На этажах стоят телевизоры с новостями Канала 8. Те, что ты посмотрел, сохраняются здесь, чтобы пересмотреть их."
+msgid "Al coger la página del dosier de una planta, en algún apartamento se enciende una tele con las noticias de Canal 8: ponte delante y pulsa {usar}."
+msgstr "Когда подбираешь страницу досье этажа, в какой-то квартире включается телевизор с новостями Канала 8: встань перед ним и жми: {usar}."
 
 #: scripts/tutoriales.gd
-msgid "Ver todos los vídeos de un edificio también cuenta para abrir el siguiente."
-msgstr "Просмотр всех видео здания тоже засчитывается для открытия следующего."
+msgid "Si la ves entera, se guarda aquí. Ver todos los de un edificio también cuenta para abrir el siguiente."
+msgstr "Если посмотришь выпуск целиком, он сохранится здесь. Просмотр всех выпусков здания тоже идет в зачет для открытия следующего."
 
 #: scripts/tutoriales.gd
 msgid "Los trasteros"
@@ -5094,16 +5226,12 @@ msgid "Al entrar en los trasteros"
 msgstr "Когда заходишь в кладовки"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
-msgstr "Здесь живут спасённые тобой выжившие, каждый в своей кладовке."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
+msgstr "Здесь живут спасенные тобой выжившие, каждый в своей кладовке."
 
 #: scripts/tutoriales.gd
-msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
-msgstr "В каждом забеге кто-то заперт на одном из этажей: слышно, как он зовёт на помощь, а на миникарте появляется «!». Зачисти эту квартиру, доберись до него и защищай, пока не выведешь."
-
-#: scripts/tutoriales.gd
-msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
-msgstr "Если пройдёшь здание вместе с ним, он переедет сюда. Подойди к одному из живущих здесь, и он пойдёт с тобой в следующих забегах (только один за раз)."
+msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
+msgstr "Подойди к одному, и он будет ходить с тобой в следующих забегах (только один за раз). Некоторые помогают, даже если не идут с тобой."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5114,12 +5242,12 @@ msgid "Al llegar al centro comercial"
 msgstr "Когда попадаешь в торговый центр"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda."
-msgstr "Комната босса открывается ключ-картой: она у охранника, который делает обход."
+msgid "La sala del jefe se abre con una tarjeta: la lleva el guardia de seguridad que hace la ronda."
+msgstr "Комната босса открывается картой: она у охранника, который обходит этаж."
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato, llegan refuerzos y él huye: ¡que no se escape!"
-msgstr "Если он тебя заметит, засвистит, придет подкрепление, а он сбежит: не упусти его!"
+msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
+msgstr "Если он тебя заметит, свистнет в свисток, и придет подмога. Бегает быстро, но устает: лови его, когда он остановится отдышаться."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -5130,44 +5258,52 @@ msgid "En la primera tienda con peligro"
 msgstr "В первом опасном магазине"
 
 #: scripts/tutoriales.gd
-msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda de electrónica da calambres (su cuadro eléctrico corta la corriente)."
-msgstr "Холодильная камера замораживает, кухня обжигает, а вода в магазине электроники бьет током (рубильник на ее щитке отключает ток)."
+msgid "La cámara frigorífica te frena y te hiela, la cocina quema y el agua de Electrónica da calambres (su cuadro eléctrico la apaga)."
+msgstr "Холодильная камера замедляет и замораживает тебя, кухня обжигает, а вода в Электронике бьет током (электрощиток её отключает)."
 
 #: scripts/tutoriales.gd
-msgid "También hacen daño a los durmientes despiertos: ¡llévalos hasta ellos!"
-msgstr "Они ранят и проснувшихся спящих: заманивай их туда!"
-
-#: scripts/tutoriales.gd
-msgid "Esquivando los cruzas sin daño."
-msgstr "В уклонении проскочишь без урона."
+msgid "También dañan a los durmientes: ¡llévalos hasta ellos! Esquivando los cruzas sin daño."
+msgstr "Они ранят и спящих: веди их туда! Если уклоняешься, пересечешь их без урона."
 
 #: scripts/tutoriales.gd
 msgid "Al oír su primer grito"
 msgstr "Когда впервые услышишь её крик"
 
 #: scripts/tutoriales.gd
-msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». Su grito despierta a toda la tienda."
-msgstr "Продавщица не идёт к тебе: она отходит и кричит «АААААА!!!». Её крик будит весь магазин."
+msgid "No te ataca: se escapa y grita. Su grito pone a todos los durmientes de la tienda una burbuja dorada que los protege de todo."
+msgstr "Она не нападает: убегает и кричит. От её крика у всех спящих в магазине появляется золотой пузырь, защищающий от всего."
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
-msgstr "Спящие, которые её слышат, покрываются золотым пузырём: пули отскакивают, а удары, огонь и лужи им не вредят."
+msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta. Es flojita, pero corre: acorrálala o lánzale algo."
+msgstr "Пузырь не исчезнет, пока она не упадет: сначала лови продавщицу. Она слабенькая, но бегает: загони её в угол или брось в неё что-нибудь."
 
 #: scripts/tutoriales.gd
-msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
-msgstr "Пузырь не исчезнет, пока она не упадёт: сначала займись продавщицей (если их несколько — всеми). Она слабая, но убегает: загони её в угол или брось в неё что-нибудь."
+msgid "La joyería"
+msgstr "Ювелирный"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en la joyería"
+msgstr "Когда входишь в ювелирный"
+
+#: scripts/tutoriales.gd
+msgid "La cámara acorazada guarda un arma Épica. Se abre con la tarjeta dorada que lleva el guardia de seguridad."
+msgstr "В хранилище лежит Эпическое оружие. Оно открывается золотой картой, которая есть у охранника."
+
+#: scripts/tutoriales.gd
+msgid "Sin la tarjeta, ponte delante del lector dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
+msgstr "Без карты встань перед считывателем два раза: сработает сигнализация, и придется держаться в ювелирном, пока оно не откроется."
 
 #: scripts/tutoriales.gd
 msgid "Al llegar a Torre Velaria"
 msgstr "Когда попадаешь в Башню Velaria"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido de algún departamento: su pantalla brilla en verde."
-msgstr "Комната босса открывается кодом из трёх цифр. Каждая цифра — на включённом компьютере в каком-то отделе: его экран светится зелёным."
+msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido (brilla en verde) de algún departamento."
+msgstr "Комната босса открывается трехзначным кодом. Каждая цифра — на включенном компьютере (светится зеленым) в каком-то отделе."
 
 #: scripts/tutoriales.gd
-msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los durmientes."
-msgstr "Встань перед ним, чтобы прочитать, но сработает «проверка продуктивности», и проснутся все спящие."
+msgid "Ponte delante para leerla, pero salta el «control de productividad» y se despiertan los durmientes."
+msgstr "Встань перед компьютером, чтобы прочитать цифру, но сработает «проверка продуктивности», и проснутся спящие."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de la torre"
@@ -5178,16 +5314,16 @@ msgid "En el primer departamento con peligro"
 msgstr "В первом опасном отделе"
 
 #: scripts/tutoriales.gd
-msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los durmientes que llegan al borde salen volando."
-msgstr "Разбитое окно в Маркетинге вытягивает наружу: проходи вплотную к столам. Спящие, дошедшие до края, вылетают."
+msgid "Los ventanales rotos te arrastran hacia fuera: crúzalos pegado a las mesas. Los durmientes que llegan al borde salen volando."
+msgstr "Разбитые окна затягивают тебя наружу: проходи вплотную к столам. Спящие, дошедшие до края, вылетают вниз."
 
 #: scripts/tutoriales.gd
-msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
-msgstr "Если тебя заметит камера Службы безопасности, сработает тревога и придут телохранители: разбей её выстрелом заранее."
+msgid "Si una cámara te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
+msgstr "Если тебя заметит камера, сработает сигнализация и придут телохранители: разбей её выстрелом заранее."
 
 #: scripts/tutoriales.gd
-msgid "El gas de Recursos Humanos duerme a los durmientes, pero despiertan frenéticos. La válvula del archivo lo corta."
-msgstr "Газ в Отделе кадров усыпляет спящих, но просыпаются они в бешенстве. Вентиль в архиве перекрывает газ."
+msgid "El gas duerme a los durmientes, pero despiertan frenéticos. A ti no te hace nada; una válvula lo corta."
+msgstr "Газ усыпляет спящих, но они просыпаются в ярости. Тебе он не вредит; вентиль его перекрывает."
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
@@ -5198,12 +5334,12 @@ msgid "Al completar el primer edificio"
 msgstr "Когда проходишь первое здание"
 
 #: scripts/tutoriales.gd
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente."
-msgstr "Под каждым пройденным зданием выбирай тревогу кнопками < и >: сложнее — больше долларов. Пройди на самой высокой — откроется следующая."
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
+msgstr "Под каждым пройденным зданием выбирай тревогу клавишами < и >: сложнее, но больше долларов. Пройди его на самой высокой, чтобы открыть следующую."
 
 #: scripts/tutoriales.gd
-msgid "El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."
-msgstr "Испытание дня — одно и то же здание для всех в этот день, со странным правилом. Первое прохождение за день дает $10."
+msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
+msgstr "Испытание дня — здание с необычным правилом, одно и то же для всех. Играется раз в день, а если пройдешь, дает $10."
 
 #: scripts/tutoriales.gd
 msgid "el botón de esquivar"
@@ -5226,20 +5362,24 @@ msgid "el botoncito de al lado de lanzar"
 msgstr "маленькая кнопка рядом с броском"
 
 #: scripts/tutoriales.gd
-msgid "el botón de las vendas, bajo el minimapa"
-msgstr "кнопка бинтов под миникартой"
+msgid "el botón de las vendas, arriba a la derecha"
+msgstr "кнопка бинтов, вверху справа"
 
 #: scripts/tutoriales.gd
-msgid "el botón del botiquín, bajo el minimapa"
-msgstr "кнопка аптечки под миникартой"
+msgid "el botón del botiquín, arriba a la derecha"
+msgstr "кнопка аптечки, вверху справа"
 
 #: scripts/tutoriales.gd
-msgid "el botón de la mochila, bajo el minimapa"
-msgstr "кнопка рюкзака под миникартой"
+msgid "el botón de la mochila, arriba a la derecha"
+msgstr "кнопка рюкзака, вверху справа"
 
 #: scripts/tutoriales.gd
-msgid "el botón de pausa, bajo el minimapa"
-msgstr "кнопка паузы под миникартой"
+msgid "el botón de pausa, arriba a la derecha"
+msgstr "кнопка паузы, вверху справа"
+
+#: scripts/tutoriales.gd
+msgid "el botón «Abrir», que sale encima de los botones"
+msgstr "кнопка «Открыть», которая появляется над кнопками"
 
 #: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear mutaciones"
@@ -7092,10 +7232,6 @@ msgstr "%s, ведущая — %s. Выбери видео, чтобы посм�
 #: scripts/ui/ordenador.gd
 msgid "Aún no has visto ninguna noticia de este edificio: cuando limpies un piso, una tele del salón se encenderá."
 msgstr "Ты ещё не смотрел новостей из этого здания: когда зачистишь квартиру, в гостиной включится телевизор."
-
-#: scripts/ui/ordenador.gd
-msgid "Sujetos"
-msgstr "Объекты"
 
 #: scripts/ui/ordenador.gd
 msgid "Vistos"

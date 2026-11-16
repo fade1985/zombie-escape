@@ -1197,10 +1197,6 @@ msgid "¡TENGO HAMBRE!"
 msgstr "饿死我了！"
 
 #: scripts/guia.gd
-msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un durmiente"
-msgstr "清理公寓：一进去门就会关上，直到一个沉睡者都不剩"
-
-#: scripts/guia.gd
 msgid "¡Ese durmiente lleva la llave del %s!"
 msgstr "那个沉睡者拿着%s的钥匙！"
 
@@ -2527,7 +2523,7 @@ msgstr "幸存者"
 msgid "Sorpresas y retos"
 msgstr "意外与挑战"
 
-#: scripts/logros.gd scripts/tutoriales.gd
+#: scripts/logros.gd
 msgid "Colecciones"
 msgstr "收藏品"
 
@@ -4518,16 +4514,16 @@ msgid "Al empezar"
 msgstr "开始时"
 
 #: scripts/tutoriales.gd
-msgid "Muévete con {moverse}."
-msgstr "用{moverse}移动。"
+msgid "Muévete con {moverse} y esquiva con {esquivar}: mientras esquivas, no te hacen daño."
+msgstr "用{moverse}移动，用{esquivar}闪避：闪避期间不会受到伤害。"
 
 #: scripts/tutoriales.gd
 msgid "{atacar_modo}"
 msgstr "{atacar_modo}"
 
 #: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
-msgstr "用{esquivar}闪避：短距离冲刺，期间不会受到伤害。"
+msgid "Abre y cierra muebles y puertas con {usar}, cuando estés delante y se marquen en amarillo."
+msgstr "站在家具或门前、它们被标成黄色时，用{usar}开关。"
 
 #: scripts/tutoriales.gd
 msgid "Pausa el juego con {pausa}."
@@ -4542,12 +4538,12 @@ msgid "Al empezar la primera partida"
 msgstr "第一局开始时"
 
 #: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: Johnny da un acelerón corto hacia donde va y, mientras dura, no le hacen daño."
-msgstr "用{esquivar}闪避：Johnny会朝前进方向短距离冲刺，冲刺期间不会受到伤害。"
+msgid "Muévete con {moverse}."
+msgstr "用{moverse}移动。"
 
 #: scripts/tutoriales.gd
-msgid "Úsala para salir de un apuro o pasar entre los durmientes. Se recarga enseguida, en menos de un segundo."
-msgstr "用它躲开危险，或从沉睡者之间穿过去。冷却很快，不到一秒。"
+msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño. Se recarga en menos de un segundo."
+msgstr "用{esquivar}闪避：短促的一次冲刺，冲刺时不会受到伤害。冷却不到一秒。"
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Atacar"
@@ -4566,12 +4562,12 @@ msgid "Al salir al pasillo"
 msgstr "走进走廊时"
 
 #: scripts/tutoriales.gd
-msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un durmiente."
-msgstr "一进公寓，门就会在你身后关上，直到一个沉睡者都不剩才会打开。"
+msgid "Al entrar en un apartamento, la puerta se cierra hasta que no quede ni un durmiente."
+msgstr "进入公寓后，门会关上，直到一个沉睡者都不剩。"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe de la planta está cerrada con llave: la lleva un durmiente de otro apartamento y la suelta al caer."
-msgstr "这层楼首领的房间锁着：钥匙在另一套公寓的某个沉睡者身上，它倒下时会掉落。"
+msgid "La sala del jefe está cerrada con llave: la lleva un durmiente de algún apartamento. Al caer la suelta: pasa por encima para cogerla."
+msgstr "首领房间用钥匙锁着：钥匙在某间公寓的一个沉睡者身上。它倒下时会掉落钥匙：走过去捡起来。"
 
 #: scripts/tutoriales.gd
 msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
@@ -4586,20 +4582,20 @@ msgid "Al perder un tercio de vida"
 msgstr "失去三分之一生命时"
 
 #: scripts/tutoriales.gd
-msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
-msgstr "你的生命条被两条线分成三段。生命降到一条线以下时，那一段就失去了：它会变暗，绷带也无法再补满。"
+msgid "Tu vida va en tres tercios. El que pierdes se oscurece y las vendas ya no lo llenan."
+msgstr "你的生命分为三段。失去的那一段会变暗，绷带无法再把它补满。"
 
 #: scripts/tutoriales.gd
-msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los durmientes rápidos."
-msgstr "每失去一段，你都会走得更慢：失去两段后，就跑不过快速沉睡者了。"
+msgid "Por cada tercio perdido andas más lento, y no se recupera al subir de planta."
+msgstr "每失去一段，移动就会变慢，上楼也不会恢复。"
 
 #: scripts/tutoriales.gd
-msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y la mutación Segundo aliento, una vez por planta)."
-msgstr "失去的段数上楼后也不会恢复。只有急救包能恢复一段（还有“绝处逢生”变异，每层一次）。"
+msgid "Solo el botiquín te devuelve uno (y la mutación Segundo aliento, una vez por planta)."
+msgstr "只有急救包能找回一段（还有变异“绝处逢生”，每层楼一次）。"
 
 #: scripts/tutoriales.gd
-msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
-msgstr "如果觉得太难，可以在“选项 → 辅助”里开启“完整生命”。"
+msgid "¿Se te hace cuesta arriba? En Opciones → Ayudas está «Vida entera»."
+msgstr "觉得太难？在“选项 → 辅助”里有“完整生命”。"
 
 #: scripts/tutoriales.gd
 msgid "Vendas y botiquines"
@@ -4610,24 +4606,20 @@ msgid "Al abrir el primer armarito o coger la primera cura"
 msgstr "第一次打开小柜子或捡到治疗物品时"
 
 #: scripts/tutoriales.gd
-msgid "Los armaritos de los baños se abren desde delante, como el ordenador, y sueltan unas vendas o un botiquín."
-msgstr "浴室的小柜子要站在前面打开，和电脑一样，会掉出绷带或急救包。"
+msgid "Abre los armaritos de los baños con {usar}: dan unas vendas o un botiquín."
+msgstr "用{usar}打开浴室的小柜子：里面有绷带或急救包。"
 
 #: scripts/tutoriales.gd
-msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
-msgstr "用{usar_vendas}使用绷带：恢复25点，但不会超过当前这一段。"
+msgid "Vendas, con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
+msgstr "绷带，用{usar_vendas}：恢复25点生命，但不会超出你当前所在的那一段。"
 
 #: scripts/tutoriales.gd
-msgid "El botiquín se usa con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
-msgstr "用{usar_botiquin}使用急救包：恢复40点，并恢复失去的一段生命。"
+msgid "Botiquín, con {usar_botiquin}: cura 40 y te devuelve un tercio perdido. Guárdalo para entonces."
+msgstr "急救包，用{usar_botiquin}：恢复40点生命，并找回一段失去的生命。留到那时再用。"
 
 #: scripts/tutoriales.gd
-msgid "Es lo único que recupera los tercios perdidos, aparte de la mutación Segundo aliento. Guárdalo para cuando pierdas uno."
-msgstr "除了“绝处逢生”变异，只有它能恢复失去的段数。留到失去一段时再用。"
-
-#: scripts/tutoriales.gd
-msgid "En la mochila caben 3 vendas y 2 botiquines; los que sobran se quedan en el suelo o van al baúl."
-msgstr "背包里最多放3卷绷带和2个急救包；多出来的留在地上或放进储物箱。"
+msgid "Llevas como mucho 3 vendas y 2 botiquines."
+msgstr "你最多带3个绷带和2个急救包。"
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
@@ -4638,16 +4630,16 @@ msgid "Al coger el primer objeto"
 msgstr "第一次捡到物品时"
 
 #: scripts/tutoriales.gd
-msgid "Lo que recoges va a la mochila. El inventario se abre con {inventario}: tus armas, la munición, los lanzables y la mochila."
-msgstr "捡到的东西会放进背包。用{inventario}打开物品栏：里面有你的武器、弹药、投掷物和背包。"
+msgid "Abre el inventario con {inventario}: tus armas, la munición, los lanzables y la mochila."
+msgstr "用{inventario}打开物品栏：你的武器、弹药、投掷物和背包。"
 
 #: scripts/tutoriales.gd
-msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...)."
-msgstr "选中一个格子，查看它的说明和按钮（使用、装备、丢弃……）。"
+msgid "Elige una casilla para ver qué es y qué puedes hacer con ella."
+msgstr "选择一个格子，看看它是什么、能拿它做什么。"
 
 #: scripts/tutoriales.gd
-msgid "Si caes, lo de la mochila se pierde; si completas el edificio, pasa al baúl. Las armas y los lanzables vuelven al baúl siempre, si les quedan partidas."
-msgstr "倒下的话，背包里的东西会丢失；通关大楼则会放进储物箱。武器和投掷物只要还有剩余局数，总会回到储物箱。"
+msgid "Si caes o abandonas, pierdes lo de la mochila; si completas el edificio, pasa al baúl."
+msgstr "如果倒下或放弃，背包里的东西会丢失；如果通关整栋楼，就会转入储物箱。"
 
 #: scripts/tutoriales.gd
 msgid "Dólares"
@@ -4658,16 +4650,16 @@ msgid "Al coger el primer billete"
 msgstr "第一次捡到钞票时"
 
 #: scripts/tutoriales.gd
-msgid "Casi todos los durmientes sueltan un billete al caer (los demás, munición), y los jefes muchos: pasa por encima para cogerlos."
-msgstr "几乎每个沉睡者倒下时都会掉一张钞票（其余的掉弹药），首领会掉很多：走过去就能捡起来。"
+msgid "Los durmientes sueltan billetes al caer, y los jefes, muchos: pasa por encima para cogerlos."
+msgstr "沉睡者倒下时会掉钞票，首领掉得更多：走过去捡起来。"
 
 #: scripts/tutoriales.gd
-msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
-msgstr "钱在一局结束时存下：通关大楼全部保留，倒下或放弃则保留一半。"
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
+msgstr "通关整栋楼，钞票全部归你；倒下或放弃，只保留一半。"
 
 #: scripts/tutoriales.gd
-msgid "Se gastan en el ordenador de la sala de mantenimiento."
-msgstr "可以在维修间的电脑上花掉。"
+msgid "Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."
+msgstr "它们可以在维修间电脑的武器商店里花掉。"
 
 #: scripts/tutoriales.gd
 msgid "Mutágeno"
@@ -4678,16 +4670,16 @@ msgid "Al coger el primer mutágeno"
 msgstr "第一次捡到诱变剂时"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes llevan dentro ADN mutado: al caer, sueltan un poco de mutágeno. Pasa por encima para cogerlo."
-msgstr "沉睡者体内带着变异的DNA：倒下时会掉落一点诱变剂。走过去就能捡起来。"
+msgid "Al caer, los durmientes sueltan mutágeno: pasa por encima para cogerlo."
+msgstr "沉睡者倒下时会掉落诱变剂：走过去捡起来。"
 
 #: scripts/tutoriales.gd
-msgid "Se guarda si completas el edificio. Si caes o abandonas, pierdes el que hayas cogido en esa partida."
-msgstr "通关大楼就会保留。倒下或放弃的话，会失去这一局捡到的诱变剂。"
+msgid "Solo te lo quedas si completas el edificio: si caes o abandonas, pierdes el de esa partida."
+msgstr "只有通关整栋楼才能留住：倒下或放弃，这一局的诱变剂就丢了。"
 
 #: scripts/tutoriales.gd
-msgid "Se gasta en Mutaciones, en el ordenador de la sala de mantenimiento: mejoras para Johnny que duran para siempre."
-msgstr "在维修间电脑的“变异”里使用：给Johnny的永久强化。"
+msgid "Se gasta en Mutaciones, en el ordenador: mejoras para Johnny que duran para siempre."
+msgstr "在电脑的“变异”里花掉：给Johnny的永久强化。"
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Cambiar de arma"
@@ -4714,16 +4706,16 @@ msgid "Al llevar otra arma"
 msgstr "拿到另一件武器时"
 
 #: scripts/tutoriales.gd
-msgid "Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}."
-msgstr "你手上拿着两件武器：一件近战，一件远程。用{cambiar_arma}切换。"
+msgid "Llevas dos armas en la mano (cuerpo a cuerpo y a distancia: cambias con {cambiar_arma}) y una de repuesto de cada tipo."
+msgstr "你手上拿两件武器（近战和远程：用{cambiar_arma}切换），每种类型还有一件备用的。"
 
 #: scripts/tutoriales.gd
-msgid "Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario})."
-msgstr "其余的作为备用，每种一件，可以在物品栏（{inventario}）里更换。"
+msgid "Las de repuesto se cambian en el inventario ({inventario})."
+msgstr "备用武器在物品栏（{inventario}）里更换。"
 
 #: scripts/tutoriales.gd
-msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica."
-msgstr "边框颜色代表品质：灰色普通，绿色优秀，蓝色稀有，紫色史诗。"
+msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica. Cuanto mejor, más partidas dura."
+msgstr "边框颜色就是品质：灰色普通、绿色优秀、蓝色稀有、紫色史诗。品质越高，能用的局数越多。"
 
 #: scripts/tutoriales.gd
 msgid "Munición y recarga"
@@ -4738,12 +4730,16 @@ msgid "Recarga con {recargar}; al vaciarse el cargador, recarga solo."
 msgstr "用{recargar}换弹；弹匣打空后会自动换弹。"
 
 #: scripts/tutoriales.gd
-msgid "Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador."
-msgstr "每种武器用各自的弹药（子弹、散弹……）。地上的弹药箱能补充一个弹匣。"
+msgid "Cada arma gasta su munición. Una caja de munición del suelo te da un cargador."
+msgstr "每件武器消耗各自的弹药。捡起地上的一盒弹药，就能得到一个弹匣。"
 
 #: scripts/tutoriales.gd
 msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
 msgstr "没有弹药时，Johnny会换上近战武器。"
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! Disparar dentro de un apartamento despierta a todos los durmientes."
+msgstr "小心！在公寓里开枪会吵醒所有沉睡者。"
 
 #: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Lanzables"
@@ -4754,16 +4750,20 @@ msgid "Al conseguir el primer lanzable"
 msgstr "第一次得到投掷物时"
 
 #: scripts/tutoriales.gd
-msgid "Los lanzables se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
-msgstr "投掷物在电脑上的武器商店购买，会放进储物箱：从那里取出来才能带上。"
+msgid "Se compran en la tienda de armas del ordenador y van al baúl: sácalos de allí para llevarlos."
+msgstr "它们在电脑的武器商店购买，会进入储物箱：从里面取出才能带上。"
 
 #: scripts/tutoriales.gd
-msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}: el molotov prende fuego, la granada explota y la atraedora llama a los zombis."
-msgstr "用{lanzar}投掷：按住瞄准，松开扔出。用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸，诱饵弹会把僵尸引过去。"
+msgid "Mantén {lanzar} para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}."
+msgstr "按住{lanzar}瞄准，松开投出。用{cambiar_lanzable}切换投掷物。"
 
 #: scripts/tutoriales.gd
-msgid "¡Ojo! La explosión también te hace daño a ti."
-msgstr "小心！爆炸也会伤到你自己。"
+msgid "Molotov: fuego. Granada: explota. Atraedora: llama a los durmientes y explota. Congeladora: los congela."
+msgstr "燃烧瓶：放火。手雷：爆炸。诱饵弹：吸引沉睡者并爆炸。冰冻弹：把它们冻住。"
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! El fuego y las explosiones también te hacen daño a ti."
+msgstr "小心！火焰和爆炸也会伤到你自己。"
 
 #: scripts/tutoriales.gd
 msgid "Materiales de fabricación"
@@ -4774,32 +4774,36 @@ msgid "Al coger el primer material"
 msgstr "第一次捡到材料时"
 
 #: scripts/tutoriales.gd
-msgid "Con los materiales de fabricación se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
-msgstr "在维修间的工作台用制作材料提升武器和投掷物的品质。"
+msgid "Sirven para mejorar armas y lanzables en el banco de trabajo de la sala de mantenimiento."
+msgstr "用来在维修间的工作台上强化武器和投掷物。"
 
 #: scripts/tutoriales.gd
-msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y lanzables. Están dentro de los muebles que se abren (armarios, mesillas, escritorios, cajas registradoras, archivadores...): búscalos por su contorno amarillo y ábrelos desde delante, como el ordenador."
-msgstr "材料分为四类：近战、远程、特殊和投掷。它们藏在可以打开的家具里（衣柜、床头柜、书桌、收银台、文件柜……）：找带黄色轮廓的家具，像电脑一样站在前面打开。"
+msgid "Están en armarios, mesillas, escritorios, cajas registradoras, archivadores... Ponte delante y ábrelos con {usar}. No todos tienen."
+msgstr "它们藏在衣柜、床头柜、书桌、收银机、文件柜里……站到跟前，用{usar}打开。不是每个都有东西。"
 
 #: scripts/tutoriales.gd
-msgid "Van en la mochila: si completas el edificio, pasan al baúl."
-msgstr "零件放在背包里：通关大楼后会存进储物箱。"
+msgid "Van en la mochila: si completas el edificio, pasan al baúl; si caes, se pierden."
+msgstr "它们放在背包里：通关整栋楼就转入储物箱；倒下就丢失。"
 
 #: scripts/tutoriales.gd
 msgid "Al llegar al primer jefe"
 msgstr "遇到第一个首领时"
 
 #: scripts/tutoriales.gd
-msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso."
-msgstr "每层楼都有一个首领，生命条显示在上方。生命掉到一半时它会暴怒，变得更加危险。"
+msgid "Cada planta tiene su jefe. A media vida se enfada y se vuelve más peligroso."
+msgstr "每一层都有一个首领。血量降到一半时它会发怒，变得更危险。"
 
 #: scripts/tutoriales.gd
-msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala con {esquivar}!"
-msgstr "每次攻击前它会在地上做标记：离开标记，或者用{esquivar}闪避开！"
+msgid "Avisa antes de atacar, casi siempre con una marca en el suelo: ¡sal de ella o esquiva con {esquivar}!"
+msgstr "它攻击前会预警，通常是地上的标记：快离开标记，或用{esquivar}闪避！"
 
 #: scripts/tutoriales.gd
-msgid "Al caer suelta dólares y munición (en el centro comercial y en la torre, también materiales), y se abren las escaleras."
-msgstr "它倒下时会掉落美元和弹药（在购物中心和大厦里还会掉材料），楼梯也会打开。"
+msgid "Algunos tienen cerca cosas para usar contra ellos con {usar}, como los bidones."
+msgstr "有些首领附近有可以用来对付它们的东西，用{usar}操作，比如油桶。"
+
+#: scripts/tutoriales.gd
+msgid "Al caer suelta muchos dólares y se abren las escaleras."
+msgstr "它倒下时会掉大量美元，通往上层的楼梯也会打开。"
 
 #: scripts/tutoriales.gd scripts/ui/menus.gd
 msgid "Efectos secundarios"
@@ -4810,16 +4814,12 @@ msgid "Antes del primer efecto secundario"
 msgstr "第一次副作用前"
 
 #: scripts/tutoriales.gd
-msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
-msgstr "打败首领后，病毒会改变你：从两张卡中选一张（也可以按1和2）。"
+msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas."
+msgstr "打败首领后，病毒会改变你：从两张卡牌里选一张。"
 
 #: scripts/tutoriales.gd
-msgid "Cada efecto secundario te da algo bueno y, a veces, algo malo."
-msgstr "每种副作用都会带来好处，有时也会带来坏处。"
-
-#: scripts/tutoriales.gd
-msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
-msgstr "变异会持续到本局结束，最多同时拥有4种。"
+msgid "Cada una te da un poder hasta que acaba la partida. Llevas como mucho 4."
+msgstr "每张卡牌给你一种能力，持续到本局结束。最多带4张。"
 
 #: scripts/tutoriales.gd
 msgid "El ascensor"
@@ -4830,28 +4830,160 @@ msgid "Al arreglar el ascensor"
 msgstr "修好电梯时"
 
 #: scripts/tutoriales.gd
-msgid "Johnny ha arreglado el ascensor del pasillo: baja a la sala de mantenimiento y vuelve a esta misma planta."
-msgstr "Johnny修好了走廊里的电梯：它能下到维修间，再回到这一层。"
+msgid "Al vencer al jefe, Johnny arregla el ascensor del pasillo: baja a la sala de mantenimiento y te devuelve a esta planta."
+msgstr "打败首领后，Johnny会修好走廊里的电梯：它通向维修间，还能把你送回这一层。"
 
 #: scripts/tutoriales.gd
-msgid "Úsalo para ir al ordenador, al banco de trabajo o al baúl en mitad de la partida."
-msgstr "用它可以在一局中途去电脑、工作台或储物箱。"
+msgid "Úsalo para comprar, mejorar o sacar cosas del baúl a mitad de partida."
+msgstr "用它来购物、强化，或在一局中途从储物箱里取东西。"
 
 #: scripts/tutoriales.gd
-msgid "Al rescatar al primero"
-msgstr "救出第一位幸存者时"
+msgid "En cada planta nueva vuelve a estar averiado hasta que cae su jefe."
+msgstr "每到新的一层，它又会坏掉，直到那层的首领倒下。"
 
 #: scripts/tutoriales.gd
-msgid "Se une al equipo: te acompaña y te ayuda a su manera."
-msgstr "幸存者会加入队伍：跟着你，用自己的方式帮你。"
+msgid "La azotea"
+msgstr "天台"
 
 #: scripts/tutoriales.gd
-msgid "Cada uno tiene su rescate. No te alejes de él y, si cae, quédate a su lado para levantarlo."
-msgstr "每个人的救援方式都不一样。别离他太远；如果他倒下了，待在他身边把他扶起来。"
+msgid "Al llegar a la azotea"
+msgstr "到达天台时"
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio con él, se muda a las viviendas (la puerta de la derecha de la sala de mantenimiento) y podrá acompañarte."
-msgstr "如果你带着他通关大楼，他会搬进生活区（维修间右边那扇门），之后可以陪你一起出发。"
+msgid "El último jefe del edificio te espera en el helipuerto: entra en las líneas blancas para empezar la pelea."
+msgstr "这栋楼的最后一个首领在停机坪等你：踏进白线就开战。"
+
+#: scripts/tutoriales.gd
+msgid "Al vencerlo llega un helicóptero: arrímate a su escalera para escapar."
+msgstr "打败它后会来一架直升机：靠近绳梯逃走。"
+
+#: scripts/tutoriales.gd
+msgid "Al oír al primero pedir socorro"
+msgstr "听到第一个人呼救时"
+
+#: scripts/tutoriales.gd
+msgid "Si en la planta hay un superviviente encerrado, se le oye pedir socorro y sale un «!» en el minimapa."
+msgstr "如果这一层有被困的幸存者，你会听到他呼救，小地图上会出现一个“!”。"
+
+#: scripts/tutoriales.gd
+msgid "Ve a por él y protégelo mientras hace lo suyo para salir. Si cae, quédate a su lado para levantarlo."
+msgstr "去找他，在他想办法脱身时保护他。如果他倒下，就待在他身旁把他扶起来。"
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él, se muda a los trasteros y podrá acompañarte."
+msgstr "如果带着他通关整栋楼，他会搬进储藏室，之后还能和你同行。"
+
+#: scripts/tutoriales.gd
+msgid "Rescate en los apartamentos"
+msgstr "公寓里的救援"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al primero de los apartamentos"
+msgstr "找到公寓里的第一个人时"
+
+#: scripts/tutoriales.gd
+msgid "Al salir del piso con él, la puerta se cierra de golpe: se pone a forzar la cerradura y entran durmientes por las habitaciones."
+msgstr "带他离开房间时，门会猛地关上：他开始撬锁，沉睡者从各个房间涌进来。"
+
+#: scripts/tutoriales.gd
+msgid "Quédate cerca y protégelo. Si lo tumban, la cerradura no avanza: ponte a su lado para levantarlo."
+msgstr "待在附近保护他。如果他被打倒，撬锁就会停下：站到他身边把他扶起来。"
+
+#: scripts/tutoriales.gd
+msgid "El ferretero"
+msgstr "五金店老板"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al ferretero"
+msgstr "找到五金店老板时"
+
+#: scripts/tutoriales.gd
+msgid "Se ha atrincherado en el almacén: al limpiar la tienda, se pone a quitar las tablas y entran durmientes."
+msgstr "他躲在仓库里：清理完商店后，他开始拆木板，沉睡者就会涌进来。"
+
+#: scripts/tutoriales.gd
+msgid "Defiende su puerta: mientras haya un durmiente pegado a ella, no avanza."
+msgstr "守住他的门：只要有沉睡者贴在门上，进度就不会前进。"
+
+#: scripts/tutoriales.gd
+msgid "La farmacéutica"
+msgstr "药剂师"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la farmacéutica"
+msgstr "找到药剂师时"
+
+#: scripts/tutoriales.gd
+msgid "Está herida y va cojeando: llévala hasta la puerta de las escaleras de la planta."
+msgstr "她受伤了，一瘸一拐：带她走到这一层的楼梯门。"
+
+#: scripts/tutoriales.gd
+msgid "Por el camino salen durmientes. No te alejes de ella: si se queda sola, van a por ella."
+msgstr "路上会冒出沉睡者。别离她太远：她一落单，它们就会扑向她。"
+
+#: scripts/tutoriales.gd
+msgid "El técnico"
+msgstr "电工"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al técnico"
+msgstr "找到电工时"
+
+#: scripts/tutoriales.gd
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
+msgstr "他不修好裸露的电线就不肯走，可通着电没法修：站到商店的配电箱前，拉下电闸。"
+
+#: scripts/tutoriales.gd
+msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
+msgstr "四周一片漆黑，沉睡者涌入：保护他直到修完。"
+
+#: scripts/tutoriales.gd
+msgid "El informático joven"
+msgstr "年轻网管"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar al informático joven"
+msgstr "找到年轻网管时"
+
+#: scripts/tutoriales.gd
+msgid "No se va sin copiar los archivos de Velaria: la puerta se cierra y entran durmientes. Protégelo hasta que acabe."
+msgstr "他要复制完Velaria的文件才肯走：门会关上，沉睡者涌入。保护他直到完成。"
+
+#: scripts/tutoriales.gd
+msgid "Mientras copia, saltan las cámaras de la sala: rómpelas antes de un tiro y te ahorras escoltas."
+msgstr "复制时，房间里的摄像头会触发：趁早一枪打掉，就能少来些保镖。"
+
+#: scripts/tutoriales.gd
+msgid "La limpiadora de noche"
+msgstr "夜班保洁员"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la limpiadora de noche"
+msgstr "找到夜班保洁员时"
+
+#: scripts/tutoriales.gd
+msgid "Está encerrada en el cuarto de la limpieza, lleno de gas. Para abrirlo, cierra las tres válvulas del departamento: ponte delante de cada una."
+msgstr "她被关在充满毒气的保洁间里。要打开它，得关上部门里的三个阀门：站到每个阀门前。"
+
+#: scripts/tutoriales.gd
+msgid "Cada válvula silba al cerrarse y despierta frenéticos a los durmientes de cerca."
+msgstr "每个阀门关上时都会发出哨声，让附近的沉睡者狂暴地醒来。"
+
+#: scripts/tutoriales.gd
+msgid "La recepcionista"
+msgstr "前台接待"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar a la recepcionista"
+msgstr "找到前台接待时"
+
+#: scripts/tutoriales.gd
+msgid "Quiere abrir los tornos de la entrada con su tarjeta: mientras tanto, entran durmientes por las puertas del vestíbulo."
+msgstr "她想用门卡打开入口的闸机：这期间，沉睡者会从大厅的门涌进来。"
+
+#: scripts/tutoriales.gd
+msgid "Protégela hasta que acabe. Si la tumban, ponte a su lado para levantarla."
+msgstr "保护她直到完成。如果她被打倒，站到她身边把她扶起来。"
 
 #: scripts/tutoriales.gd
 msgid "En el primer apagón"
@@ -4866,8 +4998,8 @@ msgid "En la sala del jefe todo sigue como siempre."
 msgstr "首领房间里一切照旧。"
 
 #: scripts/tutoriales.gd
-msgid "Al subir a la planta siguiente, te llevas un premio en dólares."
-msgstr "上到下一层时，你会拿到一笔美元奖励。"
+msgid "Al subir a la planta siguiente, te llevas un premio en dólares y munición."
+msgstr "升到下一层时，你会得到一笔美元和弹药作为奖励。"
 
 #: scripts/tutoriales.gd
 msgid "En la primera alarma de incendios"
@@ -4878,8 +5010,8 @@ msgid "Los aspersores llenan el suelo de charcos que resbalan."
 msgstr "喷淋头会让地面积满水洼，非常滑。"
 
 #: scripts/tutoriales.gd
-msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los durmientes: ¡llévalos hasta él! Esquivando cruzas sin daño."
-msgstr "有些水洼里会掉进裸露的电线，Johnny和沉睡者碰到都会触电：把它们引过去！闪避着就能毫发无伤地穿过。"
+msgid "En algunos cae un cable pelado que da calambrazos a ti y a los durmientes: ¡llévalos hasta él! Esquivando lo cruzas sin daño."
+msgstr "有些会落下一根裸露的电线，电你也电沉睡者：把它们引过去！闪避着就能毫发无伤地穿过。"
 
 #: scripts/tutoriales.gd
 msgid "En la primera horda"
@@ -4894,8 +5026,8 @@ msgid "Si te metes en un piso, los que queden te esperan fuera. Aquí los lanzab
 msgstr "如果你躲进一套公寓，剩下的会在外面等你。这时候投掷物就派上大用场了。"
 
 #: scripts/tutoriales.gd
-msgid "Al acabar con todos, te deja dólares y una caja de munición."
-msgstr "全部消灭后，会掉落美元和一箱弹药。"
+msgid "Al acabar con todos, te deja dólares y munición."
+msgstr "全部消灭后，它会留下美元和弹药。"
 
 #: scripts/tutoriales.gd
 msgid "El ordenador"
@@ -4906,12 +5038,12 @@ msgid "Al encender el ordenador"
 msgstr "打开电脑时"
 
 #: scripts/tutoriales.gd
-msgid "Gasta el mutágeno en mutaciones (mejoras para siempre) y los dólares ahorrados en armas y lanzables para la partida."
-msgstr "用诱变剂买变异（永久强化），用存下的美元买本局用的武器和投掷物。"
+msgid "Gasta el mutágeno en Mutaciones (mejoras para siempre) y los dólares en la Tienda de armas."
+msgstr "把诱变剂花在“变异”上（永久强化），把美元花在武器商店里。"
 
 #: scripts/tutoriales.gd
-msgid "También están los logros, que dan premio, el Dosier, los Vídeos y las Colecciones."
-msgstr "这里还有能领奖励的成就，以及档案、视频和收藏品。"
+msgid "También están los Logros, que dan premio, el Dosier, los Vídeos y Sujetos."
+msgstr "还有“成就”（有奖励）、“档案”、“视频”和“实验对象”。"
 
 #: scripts/tutoriales.gd
 msgid "La taquilla"
@@ -4922,12 +5054,12 @@ msgid "Al abrir la taquilla"
 msgstr "打开储物柜时"
 
 #: scripts/tutoriales.gd
-msgid "Aquí eliges la ropa de Johnny. Cada una tiene su ventaja."
-msgstr "在这里为Johnny挑选衣服。每套都有自己的优势。"
+msgid "Aquí eliges la ropa de Johnny. Cada traje nuevo tiene su ventaja."
+msgstr "在这里挑选Johnny的衣服。每套新衣服各有优势。"
 
 #: scripts/tutoriales.gd
-msgid "Se consiguen venciendo a ciertos jefes: las que te faltan salen con «???» y cómo conseguirlas."
-msgstr "打败特定首领就能获得：还没拿到的显示为“???”，并写明获得方法。"
+msgid "Se consiguen venciendo a cada jefe por primera vez: los que te faltan salen con «???»."
+msgstr "第一次打败每个首领就能获得：还没得到的显示为“???”。"
 
 #: scripts/tutoriales.gd
 msgid "El banco de trabajo"
@@ -4938,12 +5070,12 @@ msgid "Al usar el banco de trabajo"
 msgstr "使用工作台时"
 
 #: scripts/tutoriales.gd
-msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con los materiales de su familia (los de la mochila y los del baúl)."
-msgstr "用同类材料（背包里的和储物箱里的）一级一级提升武器和投掷物的品质。"
+msgid "Mejora tus armas y lanzables con los materiales de su familia (los de la mochila y los del baúl)."
+msgstr "用同类的材料（背包里的和储物箱里的）强化你的武器和投掷物。"
 
 #: scripts/tutoriales.gd
-msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco. Cada mejora le da también una partida más de vida."
-msgstr "普通、优秀、稀有和史诗：史诗还带一个绝招。每次强化也会多加一局寿命。"
+msgid "Normal, Poco común, Rara y Épica: cada mejora dura una partida más, y la Épica trae un truco."
+msgstr "普通、优秀、稀有和史诗：每次强化多撑一局，史诗还带一个绝活。"
 
 #: scripts/tutoriales.gd
 msgid "Elige la casilla y pulsa «Mejorar»."
@@ -4958,16 +5090,16 @@ msgid "Al abrir el baúl"
 msgstr "打开储物箱时"
 
 #: scripts/tutoriales.gd
-msgid "Las armas y los lanzables duran la partida en la que estás y tantas más como su calidad: Normal, ninguna; Poco común, una; Rara, dos; Épica, tres. Esas que les quedan son su durabilidad, de 0 a 3."
-msgstr "武器和投掷物能用本局，再加上与品质相同的局数：普通，0 局；优秀，1 局；稀有，2 局；史诗，3 局。剩下的局数就是耐久，0 到 3。"
+msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
+msgstr "存进储物箱的东西永远不会丢：武器、投掷物、弹药和物品。"
 
 #: scripts/tutoriales.gd
-msgid "Sacarlos del baúl gasta una partida; si ya no les quedaba ninguna, se destruyen al acabar, aunque los vuelvas a guardar."
-msgstr "从储物箱取出会消耗一局；如果已经没有剩余局数，本局结束时会损坏，即使你再放回去。"
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
+msgstr "每次取出一件武器或投掷物，都会消耗一局耐久。耐久为0时，那一局结束后就会销毁。"
 
 #: scripts/tutoriales.gd
-msgid "Al acabar la partida, completes el edificio o caigas, lo que llevas con partidas por delante vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
-msgstr "本局结束时，无论通关还是倒下，你身上还有剩余局数的东西都会自动回到储物箱。选择一格或拖动它来移动。"
+msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
+msgstr "一局结束后，还能用的会自动回到储物箱。选一个格子或拖动它来移动。"
 
 #: scripts/tutoriales.gd
 msgid "La tienda de armas"
@@ -4978,16 +5110,16 @@ msgid "Al abrir la tienda de armas"
 msgstr "打开武器商店时"
 
 #: scripts/tutoriales.gd
-msgid "Lo que compras va al baúl, sin estrenar: sácalo de allí cuando quieras llevarlo. Si el baúl está lleno, haz sitio antes de comprar."
-msgstr "买到的东西会全新放进储物箱：想带上时再从里面取出。储物箱满了的话，购买前先腾出位置。"
+msgid "Lo que compras va al baúl: sácalo de allí para llevarlo. Si el baúl está lleno, haz sitio antes."
+msgstr "买到的东西进储物箱：从里面取出才能带上。储物箱满了，要先腾出位置。"
 
 #: scripts/tutoriales.gd
-msgid "Todo se vende en calidad Normal: dura la partida en la que lo sacas del baúl. Las armas de A distancia vienen llenas y con munición de reserva; las especiales, llenas. Los lanzables se compran de uno en uno."
-msgstr "所有东西都以普通品质出售：从储物箱取出的那一局可以使用。远程武器装满弹药出售，并附带备弹；特殊武器装满出售。投掷物一个一个买。"
+msgid "Todo es Normal: dura solo la partida en la que lo sacas. Las armas a distancia traen munición."
+msgstr "全都是普通品质：只在你取出的那一局有效。远程武器自带弹药。"
 
 #: scripts/tutoriales.gd
-msgid "Johnny solo empieza con la fregona: la primera pistola te la regalamos, y también un molotov, una granada y una atraedora."
-msgstr "Johnny 开局只有拖把：第一把手枪送给你，还有一个燃烧瓶、一颗手雷和一个诱饵弹。"
+msgid "Johnny empieza solo con la fregona: la primera pistola es un regalo, y también un molotov, una granada y una atraedora."
+msgstr "Johnny一开始只有拖把：第一把手枪是赠品，还有一个燃烧瓶、一颗手雷和一个诱饵弹。"
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Mutaciones"
@@ -4998,16 +5130,16 @@ msgid "Al abrir Mutaciones"
 msgstr "打开变异时"
 
 #: scripts/tutoriales.gd
-msgid "Gasta aquí el mutágeno en mutaciones: mejoras para Johnny que duran para siempre, en todas las partidas."
-msgstr "在这里用诱变剂购买变异：给Johnny的永久强化，每局都有效。"
+msgid "Gasta el mutágeno en mejoras para siempre, en tres ramas: Militar, Superviviente y Químico."
+msgstr "把诱变剂花在永久强化上，分三个分支：军人、幸存者和化学家。"
 
 #: scripts/tutoriales.gd
-msgid "Hay tres ramas: Militar, Superviviente y Químico. Cada mutación sube punto a punto, y para abrir las de abajo hay que llenar antes la de encima."
-msgstr "共有三条分支：士兵、幸存者和化学家。每个变异一点一点升级，要解锁下面的变异，得先把上面的点满。"
+msgid "Para abrir una mutación hay que llenar antes la que tiene encima."
+msgstr "要解锁一个变异，必须先把它上面那个点满。"
 
 #: scripts/tutoriales.gd
-msgid "«Resetear mutaciones» las quita todas para repartirlas de nuevo, pero el mutágeno gastado se pierde."
-msgstr "「重置变异」会清空所有变异以便重新分配，但花掉的诱变剂拿不回来。"
+msgid "«Resetear mutaciones» las quita para repartirlas otra vez, pero el mutágeno gastado se pierde."
+msgstr "“重置变异”会把它们收回去以便重新分配，但已花掉的诱变剂不会返还。"
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Logros"
@@ -5018,16 +5150,16 @@ msgid "Al abrir Logros"
 msgstr "打开成就时"
 
 #: scripts/tutoriales.gd
-msgid "Aquí están los retos del juego, ordenados por temas."
-msgstr "这里是游戏的各项挑战，按主题分类。"
+msgid "Aquí están los retos del juego. Al conseguir uno, vuelve aquí a cobrar su premio en dólares."
+msgstr "这里是游戏的挑战。完成一个后，回到这里领取美元奖励。"
 
 #: scripts/tutoriales.gd
-msgid "Al conseguir uno, vuelve aquí a cobrarlo: cada logro da un premio en dólares."
-msgstr "达成后回到这里领取：每个成就都有美元奖励。"
+msgid "Si el premio no cabe en el máximo de dólares (MAX), lo que sobra se pierde."
+msgstr "如果奖励超过美元上限（MAX），多出来的部分会丢失。"
 
 #: scripts/tutoriales.gd
-msgid "Ojo: no se puede pasar del máximo de dólares (MAX). Si al cobrar un logro su premio no cabe, el logro cuenta como conseguido, pero lo que no cabe se pierde para siempre."
-msgstr "注意：美元不能超过上限（MAX）。领取成就时如果奖励放不下，成就仍算达成，但放不下的部分会永久失去。"
+msgid "Con una Ayuda encendida, esa partida no da logros."
+msgstr "开着任何一项辅助时，这一局不会获得成就。"
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Dosier VD-7"
@@ -5038,24 +5170,24 @@ msgid "Al abrir el Dosier"
 msgstr "打开档案时"
 
 #: scripts/tutoriales.gd
-msgid "En cada planta hay un muerto de Velaria con una página del dosier. Cógela y se queda aquí para siempre."
-msgstr "每层楼都有一具Velaria的尸体，身上带着一页档案。捡起来，它就会永远留在这里。"
+msgid "Mientras te falten páginas, en alguna planta hay un muerto con una. Cógela y se queda aquí para siempre."
+msgstr "只要还缺页，某一层就有个死人带着一页。捡起来，它就永远留在这里。"
 
 #: scripts/tutoriales.gd
-msgid "Cada edificio tiene su dosier. Completarlo es una de las tres cosas que pide el edificio siguiente para abrirse."
-msgstr "每栋楼都有自己的档案。集齐它是解锁下一栋楼的三个条件之一。"
+msgid "Completar el dosier es una de las tres cosas que pide el edificio siguiente para abrirse."
+msgstr "补全档案是下一栋楼开放所需的三件事之一。"
+
+#: scripts/tutoriales.gd scripts/ui/ordenador.gd
+msgid "Sujetos"
+msgstr "实验对象"
 
 #: scripts/tutoriales.gd
-msgid "Al abrir Colecciones"
-msgstr "打开收藏品时"
+msgid "Al abrir Sujetos"
+msgstr "打开实验对象时"
 
 #: scripts/tutoriales.gd
-msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen."
-msgstr "你遇到的沉睡者和首领都会记录在这里，包括它们的能力和出没地点。"
-
-#: scripts/tutoriales.gd
-msgid "Los que aún no has visto salen con «???»."
-msgstr "还没见过的会显示为「???」。"
+msgid "Aquí se apuntan los durmientes y los jefes que te encuentras, con lo que hacen y dónde salen. Los que faltan, con «???»."
+msgstr "这里记录你遇到的沉睡者和首领，包括它们的能力和出没地点。没见过的显示为“???”。"
 
 #: scripts/tutoriales.gd scripts/ui/ordenador.gd
 msgid "Vídeos"
@@ -5066,12 +5198,12 @@ msgid "Al abrir Vídeos"
 msgstr "打开视频时"
 
 #: scripts/tutoriales.gd
-msgid "En las plantas hay teles con las noticias de Canal 8. Las que veas se guardan aquí para volver a verlas."
-msgstr "楼层里有播放8频道新闻的电视。看过的新闻会保存在这里，可以再看。"
+msgid "Al coger la página del dosier de una planta, en algún apartamento se enciende una tele con las noticias de Canal 8: ponte delante y pulsa {usar}."
+msgstr "捡到一层的档案页后，某间公寓里会亮起一台电视，播放8频道的新闻：站到前面，按{usar}。"
 
 #: scripts/tutoriales.gd
-msgid "Ver todos los vídeos de un edificio también cuenta para abrir el siguiente."
-msgstr "看完一栋楼的所有视频，也算作解锁下一栋楼的条件。"
+msgid "Si la ves entera, se guarda aquí. Ver todos los de un edificio también cuenta para abrir el siguiente."
+msgstr "完整看完后，它会存在这里。看完一栋楼的全部新闻，也算作开放下一栋楼的条件。"
 
 #: scripts/tutoriales.gd
 msgid "Los trasteros"
@@ -5082,16 +5214,12 @@ msgid "Al entrar en los trasteros"
 msgstr "进入储藏室时"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescates, cada uno en su trastero."
-msgstr "你救出的幸存者住在这里，每人一间储藏室。"
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
+msgstr "这里住着你救出的幸存者，每人一间储藏室。"
 
 #: scripts/tutoriales.gd
-msgid "En cada partida hay uno encerrado en alguna planta: se le oye pedir socorro y sale un «!» en el minimapa. Limpia ese piso, ve a por él y protégelo hasta sacarlo."
-msgstr "每一局都有一个人被困在某层楼里：能听到他喊救命，小地图上也会出现“!”。清理那间公寓，去找到他，保护他直到把他带出去。"
-
-#: scripts/tutoriales.gd
-msgid "Si completas el edificio con él en el equipo, se muda aquí. Arrímate a uno de los que viven aquí y te acompañará en las partidas siguientes (solo uno a la vez)."
-msgstr "如果你带着他通关大楼，他就会搬到这里。走到住在这里的某个人身边，他就会在之后几局陪你一起出发（一次只能带一个）。"
+msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
+msgstr "走近一个，他就会在之后的几局里陪你（一次只能一个）。有些幸存者即使不同行也会帮你。"
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5102,12 +5230,12 @@ msgid "Al llegar al centro comercial"
 msgstr "来到购物中心时"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda."
-msgstr "首领房间要用门禁卡打开：门禁卡在巡逻的保安身上。"
+msgid "La sala del jefe se abre con una tarjeta: la lleva el guardia de seguridad que hace la ronda."
+msgstr "首领房间要用门卡打开：卡在巡逻的保安身上。"
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato, llegan refuerzos y él huye: ¡que no se escape!"
-msgstr "他一看见你就会吹哨，援兵赶来，他自己开溜：别让他跑了！"
+msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
+msgstr "他发现你就会吹哨子，增援就会赶来。他跑得很快，但会累：趁他停下喘气时抓住他。"
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -5118,44 +5246,52 @@ msgid "En la primera tienda con peligro"
 msgstr "第一次进入有危险的商店时"
 
 #: scripts/tutoriales.gd
-msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda de electrónica da calambres (su cuadro eléctrico corta la corriente)."
-msgstr "冷库会冻人，厨房会烧人，电器店的水会电人（店里的配电箱可以断电）。"
+msgid "La cámara frigorífica te frena y te hiela, la cocina quema y el agua de Electrónica da calambres (su cuadro eléctrico la apaga)."
+msgstr "冷库会让你减速并冻伤你，厨房会烧伤你，电器店的水会电你（关掉它的配电箱就能断电）。"
 
 #: scripts/tutoriales.gd
-msgid "También hacen daño a los durmientes despiertos: ¡llévalos hasta ellos!"
-msgstr "它们对醒着的沉睡者也有伤害：把沉睡者引过去！"
-
-#: scripts/tutoriales.gd
-msgid "Esquivando los cruzas sin daño."
-msgstr "闪避着就能毫发无伤地穿过。"
+msgid "También dañan a los durmientes: ¡llévalos hasta ellos! Esquivando los cruzas sin daño."
+msgstr "它们也会伤到沉睡者：把它们引过去！闪避着就能毫发无伤地穿过。"
 
 #: scripts/tutoriales.gd
 msgid "Al oír su primer grito"
 msgstr "第一次听到她尖叫时"
 
 #: scripts/tutoriales.gd
-msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». Su grito despierta a toda la tienda."
-msgstr "店员不会冲向你：她会躲开，然后尖叫“啊啊啊！！！”。她的尖叫会吵醒整个商店。"
+msgid "No te ataca: se escapa y grita. Su grito pone a todos los durmientes de la tienda una burbuja dorada que los protege de todo."
+msgstr "它不攻击你：它会逃跑并尖叫。尖叫会给商店里所有沉睡者罩上一个金色气泡，保护它们免受一切伤害。"
 
 #: scripts/tutoriales.gd
-msgid "Los durmientes que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
-msgstr "听到尖叫的沉睡者会被金色泡泡罩住：子弹会被弹开，攻击、火焰和水坑都伤不到它们。"
+msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta. Es flojita, pero corre: acorrálala o lánzale algo."
+msgstr "它倒下之前气泡不会消失：先去追店员。她很弱，但跑得快：把她逼进角落，或朝她扔东西。"
 
 #: scripts/tutoriales.gd
-msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
-msgstr "泡泡要等她倒下才会消失：先去对付店员（如果有好几个，就全部解决）。她很脆弱，但会逃跑：把她逼到角落，或者朝她扔点东西。"
+msgid "La joyería"
+msgstr "珠宝店"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en la joyería"
+msgstr "进入珠宝店时"
+
+#: scripts/tutoriales.gd
+msgid "La cámara acorazada guarda un arma Épica. Se abre con la tarjeta dorada que lleva el guardia de seguridad."
+msgstr "金库里存着一件史诗武器。要用保安身上的金卡才能打开。"
+
+#: scripts/tutoriales.gd
+msgid "Sin la tarjeta, ponte delante del lector dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
+msgstr "没有卡的话，站到读卡器前两次：警报响起，你得在珠宝店里撑到金库打开。"
 
 #: scripts/tutoriales.gd
 msgid "Al llegar a Torre Velaria"
 msgstr "来到Velaria大厦时"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido de algún departamento: su pantalla brilla en verde."
-msgstr "头目的房间要用三位数密码打开。每位数字都在某个部门一台开着的电脑上：屏幕会发出绿光。"
+msgid "La sala del jefe se abre con un código de tres cifras. Cada cifra está en un ordenador encendido (brilla en verde) de algún departamento."
+msgstr "首领房间用三位数的密码打开。每个数字在某个部门里一台亮着的电脑上（发绿光）。"
 
 #: scripts/tutoriales.gd
-msgid "Plántate delante para leerla, pero salta el «control de productividad» y se despiertan todos los durmientes."
-msgstr "站到电脑前就能读出数字，但会触发“效率检查”，所有沉睡者都会醒来。"
+msgid "Ponte delante para leerla, pero salta el «control de productividad» y se despiertan los durmientes."
+msgstr "站到前面读取，但“效率检查”会触发，沉睡者也会醒来。"
 
 #: scripts/tutoriales.gd
 msgid "Peligros de la torre"
@@ -5166,16 +5302,16 @@ msgid "En el primer departamento con peligro"
 msgstr "第一次进入有危险的部门时"
 
 #: scripts/tutoriales.gd
-msgid "El ventanal roto de Marketing te arrastra hacia fuera: crúzalo pegado a las mesas. Los durmientes que llegan al borde salen volando."
-msgstr "市场部破碎的落地窗会把你往外吸：贴着办公桌走过去。被吹到窗边的沉睡者会飞出去。"
+msgid "Los ventanales rotos te arrastran hacia fuera: crúzalos pegado a las mesas. Los durmientes que llegan al borde salen volando."
+msgstr "破碎的落地窗会把你往外拽：贴着桌子穿过。到达边缘的沉睡者会被甩出去。"
 
 #: scripts/tutoriales.gd
-msgid "Si una cámara de Seguridad te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
-msgstr "被安保部的摄像头看见就会拉响警报，保镖随即赶到：先一枪把它打坏。"
+msgid "Si una cámara te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes."
+msgstr "如果摄像头发现你，警报响起，保镖赶来：先一枪把它打掉。"
 
 #: scripts/tutoriales.gd
-msgid "El gas de Recursos Humanos duerme a los durmientes, pero despiertan frenéticos. La válvula del archivo lo corta."
-msgstr "人力资源部的毒气会让沉睡者睡着，但它们醒来时会发狂。档案室的阀门可以关掉毒气。"
+msgid "El gas duerme a los durmientes, pero despiertan frenéticos. A ti no te hace nada; una válvula lo corta."
+msgstr "毒气会让沉睡者睡着，但它们醒来会狂暴。对你没有效果；关上阀门就能切断。"
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
@@ -5186,12 +5322,12 @@ msgid "Al completar el primer edificio"
 msgstr "第一次通关大楼时"
 
 #: scripts/tutoriales.gd
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente."
-msgstr "在每栋已通关的大楼下方，可以用 < 和 > 选择警戒等级：越难，美元越多。在最高等级通关就会解锁下一级。"
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
+msgstr "每栋已通关的大楼下面，用 < 和 > 选择警戒：越难，美元越多。在最高警戒下通关，就能解锁下一个。"
 
 #: scripts/tutoriales.gd
-msgid "El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."
-msgstr "每日挑战当天对所有人都是同一栋楼，外加一条奇怪的规则。每天第一次完成可得$10。"
+msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
+msgstr "“每日挑战”是一栋带怪规则的大楼，所有人都一样。每天只能玩一次，通关可得 $10。"
 
 #: scripts/tutoriales.gd
 msgid "el botón de esquivar"
@@ -5214,20 +5350,24 @@ msgid "el botoncito de al lado de lanzar"
 msgstr "投掷旁边的小按钮"
 
 #: scripts/tutoriales.gd
-msgid "el botón de las vendas, bajo el minimapa"
-msgstr "小地图下方的绷带按钮"
+msgid "el botón de las vendas, arriba a la derecha"
+msgstr "右上角的绷带按钮"
 
 #: scripts/tutoriales.gd
-msgid "el botón del botiquín, bajo el minimapa"
-msgstr "小地图下方的急救包按钮"
+msgid "el botón del botiquín, arriba a la derecha"
+msgstr "右上角的急救包按钮"
 
 #: scripts/tutoriales.gd
-msgid "el botón de la mochila, bajo el minimapa"
-msgstr "小地图下方的背包按钮"
+msgid "el botón de la mochila, arriba a la derecha"
+msgstr "右上角的背包按钮"
 
 #: scripts/tutoriales.gd
-msgid "el botón de pausa, bajo el minimapa"
-msgstr "小地图下方的暂停按钮"
+msgid "el botón de pausa, arriba a la derecha"
+msgstr "右上角的暂停按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón «Abrir», que sale encima de los botones"
+msgstr "出现在按钮上方的“打开”按钮"
 
 #: scripts/ui/arbol_talentos.gd scripts/ui/ordenador.gd
 msgid "Resetear mutaciones"
@@ -7054,10 +7194,6 @@ msgstr "%s，主播是%s。选一个视频观看。"
 #: scripts/ui/ordenador.gd
 msgid "Aún no has visto ninguna noticia de este edificio: cuando limpies un piso, una tele del salón se encenderá."
 msgstr "你还没看过这栋楼的任何新闻：清理完一套公寓后，客厅里的一台电视会亮起。"
-
-#: scripts/ui/ordenador.gd
-msgid "Sujetos"
-msgstr "实验对象"
 
 #: scripts/ui/ordenador.gd
 msgid "Vistos"

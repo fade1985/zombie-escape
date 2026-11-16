@@ -31,8 +31,9 @@ const FACIL := 3            # los zombis del primer apartamento
 const LEJOS_FLECHA := 150.0 # más cerca de la puerta que esto, la flecha se va
 
 # Las ventanas que no salen mientras la guía está activa: «Cómo se juega» (la cuentan «Moverse y esquivar» y las de
-# PASOS) y «Limpia los apartamentos» (lo dice la línea de abajo al salir al pasillo, al_montar)
-const CUBRE := ["jugar", "apartamentos"]
+# PASOS). «Limpia los apartamentos» sí sale, al salir al pasillo (partida.gd), como en las demás partidas: hasta el
+# 16 nov lo tapaba una línea de abajo, y esas ya no se ven
+const CUBRE := ["jugar"]
 
 # Cada paso: la ventana que sale y la casilla del HUD que late después, hasta que se hace (hecho())
 const PASOS := {
@@ -48,7 +49,7 @@ var hechos: Array = []        # los pasos ya enseñados
 var paso := ""                # el último enseñado, mientras late su casilla
 var desde := 0.0              # cuánto lleva latiendo
 var facil := -1               # el apartamento fácil (su número de sitio)
-var dicho: Array = []         # los avisos de la línea de abajo ya dichos ("pasillo", "llave")
+var dicho: Array = []         # los avisos de la línea de abajo ya dichos ("llave")
 var flecha := Flecha.new()
 
 
@@ -115,10 +116,6 @@ func al_montar() -> void:
 	if not activa:
 		return
 	partida.mapa.cosas.add_child(flecha)
-	if partida.planta.sitios[partida.aqui].tipo == "pasillo" and not "pasillo" in dicho:
-		dicho.append("pasillo")
-		Tutoriales.apuntar("apartamentos")
-		partida.decir(Idioma.t("Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un durmiente"), 5.0)
 
 
 # El zombi de la llave lleva una llavecita encima, que sube y baja
