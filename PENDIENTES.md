@@ -14,7 +14,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M92** Teles de noticias en el Centro comercial y la Torre: no tienen salones con tele, así que sus 5 noticias (y los vídeos de VIDEOS.EXE) no salen. El dueño decidirá dónde van más adelante (propuesta: una tienda del Centro y un departamento de la Torre, con la misma mecánica).
 - **M114** HUD del móvil: darle una vuelta (el minimapa, las curas, las armas y los botones). Para más adelante: ahora importa la versión de PC.
 
 ## Por limar

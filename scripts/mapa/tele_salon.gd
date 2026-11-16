@@ -12,8 +12,14 @@ const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")
 const POLIGONO := preload("res://scripts/poligono.gd")   # (no un Polygon2D: ver poligono.gd)
 
-# La pantalla del dibujo (mueble-tv.png, 32 × 42 píxeles, a escala 2 y con el pie abajo en medio), en unidades locales
-const PANTALLA := Rect2(-16, -64, 32, 22)
+# La pantalla de cada mueble que hace de tele (Planta.TELE_EN), en unidades locales (el dibujo, a escala 2 y con el pie abajo
+# en medio): [la pantalla, lo que se le recortan las esquinas, lo alto que es el dibujo (el «!», encima)]. La tele de un
+# salón (mueble-tv.png, 32 × 42 píxeles), también la del Office de la torre; y en la estantería de teles de Electrónica del
+# centro comercial (mueble-tvshelf.png, 58 × 59), la tele de arriba en medio, la apagada (M92)
+const PANTALLAS := {
+	"tv": [Rect2(-16, -64, 32, 22), 4.0, 84.0],
+	"tvshelf": [Rect2(-10, -68, 16, 8), 1.0, 118.0],
+}
 
 var datos: Dictionary          # sitio.tele: {"estado"}
 var pantalla: Node2D
@@ -23,18 +29,21 @@ var zona: Area2D
 var t := 0.0
 
 
-# "mueble": el mueble "tv" (mueble.gd), donde se cuelga la zona de uso (así el contorno sale de su dibujo); "ancho": lo que
+# "mueble": el mueble "tv" o "tvshelf" (mueble.gd), donde se cuelga la zona de uso (así el contorno sale de su dibujo); "ancho": lo que
 # ocupa en el suelo
 func montar(d: Dictionary, mueble: Node2D, ancho: float) -> void:
 	datos = d
 	name = "TeleSalon"   # no-tr
 	var luz := CanvasItemMaterial.new()
 	luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	var cual: Array = PANTALLAS.get(mueble.datos.tipo, PANTALLAS.tv)
+	var r: Rect2 = cual[0]
+	var e: float = cual[1]
 	pantalla = POLIGONO.new()
-	pantalla.polygon = PackedVector2Array([PANTALLA.position + Vector2(4, 0), Vector2(PANTALLA.end.x - 4, PANTALLA.position.y),
-		Vector2(PANTALLA.end.x, PANTALLA.position.y + 4), Vector2(PANTALLA.end.x, PANTALLA.end.y - 4),
-		Vector2(PANTALLA.end.x - 4, PANTALLA.end.y), Vector2(PANTALLA.position.x + 4, PANTALLA.end.y),
-		Vector2(PANTALLA.position.x, PANTALLA.end.y - 4), Vector2(PANTALLA.position.x, PANTALLA.position.y + 4)])
+	pantalla.polygon = PackedVector2Array([r.position + Vector2(e, 0), Vector2(r.end.x - e, r.position.y),
+		Vector2(r.end.x, r.position.y + e), Vector2(r.end.x, r.end.y - e),
+		Vector2(r.end.x - e, r.end.y), Vector2(r.position.x + e, r.end.y),
+		Vector2(r.position.x, r.end.y - e), Vector2(r.position.x, r.position.y + e)])
 	pantalla.color = Color("#f1f4f7")
 	pantalla.material = luz   # (sin luz: una pantalla encendida se ve también a oscuras)
 	add_child(pantalla)
@@ -42,13 +51,13 @@ func montar(d: Dictionary, mueble: Node2D, ancho: float) -> void:
 	brillo.texture = load("res://escenas/luces/luz_suave.tres")
 	brillo.texture_scale = 0.4
 	brillo.color = Color("#dbe8ff")
-	brillo.position = Vector2(0, -52)
+	brillo.position = r.get_center()
 	add_child(brillo)
 	# el «!» que bota encima mientras está encendida y sin ver
 	marca = EXCLAMACION.new()
 	marca.name = "Exclamacion"   # no-tr
 	marca.condicion = func() -> bool: return datos.estado == "encendida"
-	marca.position = Vector2(0, -84.0 - 30.0)
+	marca.position = Vector2(0, -cual[2] - 30.0)
 	add_child(marca)
 	# la zona de alrededor (delante, detrás y a los lados: una tele contra la pared de abajo se ve de espaldas y Johnny
 	# llega por detrás), donde se para Johnny: se usa con el clic, como los botiquines (zona_usar.gd). Solo desde la

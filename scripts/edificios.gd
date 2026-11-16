@@ -123,9 +123,10 @@ static func abierto(s: Dictionary, id: String) -> bool:
 
 
 # Lo que pide un edificio para abrirse, todo del edificio de antes ("abre"): completarlo, conseguir todas las páginas de
-# su dosier y ver todos sus vídeos (las noticias de la tele de los salones, VIDEOS.EXE). Salen en su tarjeta de «Elige
-# edificio», uno por renglón. Cada uno: {"texto" (ya traducido), "hecho", "cuenta" ("3/5"; "" en el de completarlo)}.
-# (Torre Velaria pide los vídeos del Centro comercial, que aún no tiene teles: M92. Hasta entonces no se puede abrir)
+# su dosier y ver todos sus vídeos (las noticias de la tele de cada planta, VIDEOS.EXE: en los salones de los
+# Apartamentos, en Electrónica del centro comercial y en el Office de Atención al cliente de la torre, Planta.TELE_EN).
+# Salen en su tarjeta de «Elige edificio», uno por renglón. Cada uno: {"texto" (ya traducido), "hecho", "cuenta" ("3/5";
+# "" en el de completarlo)}
 static func requisitos(s: Dictionary, id: String) -> Array:
 	var antes: String = LISTA[id].abre
 	if antes == "":
@@ -153,7 +154,7 @@ static func cuentas(s: Dictionary, id: String) -> Dictionary:
 
 # El tanto por ciento de un edificio (al lado de «Completado» en su tarjeta): un tercio por completarlo, otro por las
 # páginas de su dosier y otro por sus vídeos, cada página y cada vídeo con su parte de su tercio. Con 5 y 5, cada uno
-# vale 6,7 %; completarlo, 33,3 %. (El centro comercial no pasa del 67 % hasta que tenga teles: M92)
+# vale 6,7 %; completarlo, 33,3 %
 static func porcentaje(s: Dictionary, id: String) -> int:
 	var c := cuentas(s, id)
 	var partes := (1.0 if c.completado else 0.0) + float(c.halladas) / maxi(c.paginas, 1) \

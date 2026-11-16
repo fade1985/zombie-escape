@@ -708,9 +708,10 @@ const SALAS := {
 		"abajo": [["copier", 1.75], ["printer", 6.0], ["copier", 10.25], ["plant", 4.5, "derecha"]],
 		"arriba": [["copier", 1.75], ["printer", 9.25], ["plant", 5.0, "derecha"], ["plant", 6.0, "abajo"]],
 	}},
+	# (con la tele de las noticias de la torre: Planta.TELE_EN, M92)
 	"office-atencion": {"colocados": {
-		"abajo": [["officekitchen", 1.5], ["filecabinet", 4.0], ["drinkfridge", 8.0], ["watercooler", 6.0, "izquierda"]],
-		"arriba": [["officekitchen", 1.5], ["drinkfridge", 8.5], ["watercooler", 7.0, "izquierda"], ["watercooler", 3.0, "abajo"]],
+		"abajo": [["officekitchen", 1.5], ["filecabinet", 4.0], ["tv", 6.0], ["drinkfridge", 8.0], ["watercooler", 6.0, "izquierda"]],
+		"arriba": [["officekitchen", 1.5], ["tv", 7.25], ["drinkfridge", 9.375], ["watercooler", 7.0, "izquierda"], ["watercooler", 3.0, "abajo"]],
 	}},
 	"bano-atencion": {"colocados": {
 		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],

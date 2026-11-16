@@ -9,7 +9,8 @@
 # añadir edificios nuevos (una entrada más en DOSIERES). Lo único que no hay que tocar es el "id" de una página
 # ya publicada: el guardado de los jugadores apunta las encontradas por su id.
 #
-# Las NOTICIAS: emisiones de Canal 8 que se ven en la tele de un salón (mapa/tele_salon.gd): cada planta tiene una tele
+# Las NOTICIAS: emisiones de Canal 8 que se ven en la tele de un salón (en el centro, una de Electrónica; en la torre, la
+# del Office de Atención al cliente: Planta.TELE_EN; mapa/tele_salon.gd): cada planta tiene una tele
 # que, al limpiar su apartamento, se enciende y enseña la primera noticia de ese edificio que aún no has visto. Las
 # páginas que encuentra Johnny le llegan a la reportera como de «una fuente de dentro», y en cada una Velaria cambia un
 # poco su versión para tapar el experimento. Las vistas quedan en el guardado ("videos_vistos") y se repiten en el

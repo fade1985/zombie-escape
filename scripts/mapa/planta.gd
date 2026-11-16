@@ -75,6 +75,16 @@ static var rescate_planta := 0
 # ninguna). Va en la segunda puerta normal de su planta, nunca en la del jefe ni en la del superviviente
 static var joyeria_planta := 0
 
+# Dónde va la tele de las noticias de cada planta (M91; en el centro y la torre, M92), según el edificio: en qué tienda
+# ("" en los apartamentos), qué mueble y en qué habitación. En los apartamentos, una tele de un salón; en el centro
+# comercial, una estantería de teles de la sala de venta de Electrónica; en la torre, la tele del Office de Atención al
+# cliente. Esa tienda sale siempre en todas las plantas (generar) para que ninguna se quede sin tele
+const TELE_EN := {
+	"apartamentos": {"tienda": "", "mueble": "tv", "sala": "salon"},
+	"centro": {"tienda": "electronica", "mueble": "tvshelf", "sala": "tienda"},
+	"torre": {"tienda": "atencion", "mueble": "tv", "sala": "office"},
+}
+
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
 const COSTE := {"lento": 0.5, "normal": 1.0, "vecina": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0,
 	"vigilante": 1.5, "dependienta": 1.5, "oficinista": 1.5, "escolta": 2.0}
@@ -275,9 +285,13 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var tipo_de := {}
 	var fija: Dictionary = tienda_fija if tiendas and tienda_fija.get("planta", -1) == num else {}
 	var primera: String = fija.tienda if not fija.is_empty() else tipos[0]
+	# la tienda de la tele de las noticias (TELE_EN, M92), en todas las plantas: si no es la primera, la segunda puerta normal
+	var de_la_tele: String = TELE_EN.get(edificio, {}).get("tienda", "") if tiendas else ""
 	for h in libres.filter(func(h): return h != de_jefa) + [de_jefa]:
 		if tipo_de.is_empty():
 			tipo_de[h.letra] = primera
+		elif de_la_tele in tipos and h != de_jefa and not de_la_tele in tipo_de.values():
+			tipo_de[h.letra] = de_la_tele
 		elif tiendas and joyeria_planta == num and h != de_jefa and not "joyeria" in tipo_de.values():
 			tipo_de[h.letra] = "joyeria"   # la joyería de la partida: la segunda puerta normal de su planta
 		else:
@@ -504,9 +518,11 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
 		sitio.armaritos = armaritos(sitio)
 		sitio.colgados_bano = colgados_bano(sitio)
-	# Un evento por apartamento como mucho (superviviente, tele o científico): la tele, en uno sin el superviviente
+	# Un evento por apartamento como mucho (superviviente, tele o científico): la tele, en uno sin el superviviente. En
+	# las tiendas, la tele puede estar en la del superviviente (él, escondido al fondo; la tele, en la sala de venta o
+	# en el Office): la tele solo va en su tienda (TELE_EN), y así esa planta no se queda sin ella
 	var de_sos: int = planta.superviviente.sitio if rescate_planta == num and not planta.superviviente.is_empty() else -1
-	var de_tele := tele_de_la_planta(planta, normales.filter(func(i): return i != de_sos), rng)
+	var de_tele := tele_de_la_planta(planta, normales.filter(func(i): return i != de_sos or tiendas), rng)
 
 	# Con tarjeta, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
 	if ed.cerrojo == "tarjeta":
@@ -912,15 +928,18 @@ static func cuarto_limpieza(sitio: Dictionary, sala: Dictionary, rng: RandomNumb
 	sitio.peligros = otros + ([gas] if not gas.is_empty() else [])
 
 
-# M91: la tele de la planta que enseña las noticias (mapa/tele_salon.gd): un mueble "tv" de un salón de un apartamento normal,
-# elegido al azar: el mueble lleva "tele": true y su sitio, sitio.tele = {"estado": "apagada"} (hasta limpiar ese apartamento)
-# Devuelve el sitio de la tele, o -1 si no hay ninguna
+# M91: la tele de la planta que enseña las noticias (mapa/tele_salon.gd): un mueble "tv" de un salón de un apartamento normal
+# (en el centro y la torre, el de su tienda: TELE_EN, M92), elegido al azar: el mueble lleva "tele": true y su sitio,
+# sitio.tele = {"estado": "apagada"} (hasta limpiar ese apartamento). Devuelve el sitio de la tele, o -1 si no hay ninguna
 static func tele_de_la_planta(planta: Dictionary, normales: Array, rng: RandomNumberGenerator) -> int:
+	var donde: Dictionary = TELE_EN.get(planta.edificio, TELE_EN.apartamentos)
 	var teles := []   # [sitio, mueble]
 	for i in normales:
 		var sitio: Dictionary = planta.sitios[i]
+		if sitio.get("tienda", "") != donde.tienda:
+			continue
 		for m in sitio.muebles:
-			if m.tipo == "tv" and sitio.apt.salas.any(func(s): return s.id == m.zona and s.uso == "salon"):
+			if m.tipo == donde.mueble and sitio.apt.salas.any(func(s): return s.id == m.zona and s.uso == donde.sala):
 				teles.append([i, m])
 	if teles.is_empty():
 		return -1
