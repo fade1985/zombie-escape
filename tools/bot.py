@@ -3,6 +3,7 @@
     py tools/bot.py                          # los tres edificios, 8 peleas por jefe y nivel (~1 hora)
     py tools/bot.py --peleas 3 --edificios apartamentos --jefes portera,gloton
     py tools/bot.py --resumen 1234           # solo el resumen de lo ya jugado con la semilla 1234
+    py tools/bot.py --misma-planta           # todos los minijefes en la planta 2, para compararlos entre ellos
     py tools/bot.py --partidas 10 --edificios apartamentos   # fase 2: 10 partidas enteras por nivel
 
 Cada edificio es una partida de prueba aparte (--captura --bot-jefes, scripts/pruebas/prueba_bot.gd), una detrás de
@@ -24,6 +25,9 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GODOTS = [r"C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe",
           r"C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe"]
 EDIFICIOS = ["apartamentos", "centro", "torre"]
+MINIJEFES = {"apartamentos": ["portera", "gloton", "gymbro", "bombero"],
+             "centro": ["antidisturbios", "cocinero", "modista", "mascota"],
+             "torre": ["directora", "informatico", "presentador", "becario"]}
 NIVELES = ["novato", "normal", "bueno"]
 # Cómo se llama a cada jefe en el resumen
 NOMBRES = {"portera": "Portera", "gloton": "Glotón", "gymbro": "Gymbro", "bombero": "Jefe de bomberos",
@@ -40,10 +44,12 @@ def godot():
     sys.exit("No encuentro Godot 4.7.2 (mira GODOTS en tools/bot.py)")
 
 
-def jugar(edificio, args, semilla):
+def jugar(edificio, args, semilla, jefe=""):
     orden = [godot(), "--path", RAIZ, "--fixed-fps", "60", "--", "--captura", "--edificio", edificio, "--bot-jefes",
              "--peleas", str(args.peleas), "--niveles", args.niveles, "--semilla", str(semilla), "--limite", "20000"]
-    if args.jefes:
+    if jefe:
+        orden += ["--jefe", jefe, "--jefes", jefe]   # (--jefe lo pone en la planta 2: prueba_comun.gd, ordenar_jefes_prueba)
+    elif args.jefes:
         orden += ["--jefes", args.jefes]
     inicio = time.time()
     print(f"== {edificio} ==", flush=True)
@@ -141,6 +147,8 @@ def resumen_partidas(edificios, niveles, semillas):
             plantas = Counter(p["planta_max"] for p in partidas)
             tiempos = [pl["jefe_muerto"] - pl["entra"] for p in partidas for pl in p["plantas"] if "jefe_muerto" in pl]
             vidas = [pl["vida_al_jefe"] for p in partidas for pl in p["plantas"] if "vida_al_jefe" in pl]
+            balas = [pl["balas_al_jefe"] for p in partidas for pl in p["plantas"] if "balas_al_jefe" in pl]
+            fregona = [pl["cuerpo_a_cuerpo"] for p in partidas for pl in p["plantas"] if "cuerpo_a_cuerpo" in pl]
             muertes = Counter(f"{p['muere']['de']} ({p['muere']['sitio']}, planta {p['muere']['planta']})"
                               for p in partidas if p.get("muere"))
             atascos = sum(len(p.get("atascos", [])) for p in partidas)
@@ -150,6 +158,8 @@ def resumen_partidas(edificios, niveles, semillas):
                        f"- Cada planta, de entrar a matar al jefe: {round(media(tiempos))} s de media" if tiempos else
                        "- Ninguna planta pasada",
                        f"- Llega al jefe con {round(media(vidas))} de vida de media" if vidas else "- No llega a ningún jefe",
+                       (f"- Llega al jefe con {round(media(balas))} balas; con la fregona, sin balas, "
+                        f"{round(media(fregona))} s de la pelea de media") if balas else "- (sin datos de balas)",
                        f"- Muere por: " + "; ".join(f"{k} ×{v}" for k, v in muertes.most_common(5)) if muertes else "- No muere",
                        f"- Atascos: {atascos}", ""]
     texto = "\n".join(lineas)
@@ -166,6 +176,8 @@ def main():
     a.add_argument("--niveles", default=",".join(NIVELES))
     a.add_argument("--edificios", default=",".join(EDIFICIOS))
     a.add_argument("--jefes", default="")
+    a.add_argument("--misma-planta", action="store_true",
+                   help="cada minijefe en la planta 2, para compararlos entre ellos (sin los finales)")
     a.add_argument("--semilla", type=int, default=None)
     a.add_argument("--resumen", type=int, default=None, help="solo el resumen de esa semilla")
     args = a.parse_args()
@@ -184,7 +196,11 @@ def main():
         resumen_partidas(args.edificios.split(","), args.niveles.split(","), semillas)
         return
     for ed in args.edificios.split(","):
-        jugar(ed, args, semilla)
+        if args.misma_planta:
+            for jefe in MINIJEFES[ed]:
+                jugar(ed, args, semilla, jefe)
+        else:
+            jugar(ed, args, semilla)
     resumen(semilla)
 
 

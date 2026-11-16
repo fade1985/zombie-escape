@@ -112,4 +112,89 @@ Lo que todavía no hace:
 
 ## Resultados
 
-(Se rellena con cada tanda.)
+### Primera tanda (16 nov 2026)
+
+Los números exactos están en `capturas/bot/resumen-1611.md` (fase 1) y `resumen-partidas-500.md` / `-600.md`
+(fase 2). Esa carpeta no va en git, así que lo importante se copia aquí.
+
+Cómo leerlo: el bot es **un jugador que empieza de cero**, sin talentos, sin la tienda y sin mutaciones. No dice si
+el juego está bien de dificultad para quien ya ha jugado varias partidas; dice **qué se encuentra alguien la primera
+vez** y **qué jefes se salen de lo normal**.
+
+#### 1. La portera es un muro para quien empieza (lo más importante)
+
+En las partidas enteras (fase 2), **las 31 partidas acaban en la planta 1**, contra la portera, con los tres niveles.
+No pasa ninguna.
+
+- **Johnny llega bien de vida** (74–97 de 100). La planta no le cuesta.
+- **Llega con pocas balas para ella:** 72–104 de media. La portera tiene 600 de vida y la pistola quita 10, así que
+  hacen falta **60 balas acertando todas**, y además salen sus rápidos.
+- **Se queda sin balas a mitad de pelea** y acaba con la fregona, de 19 a 52 s de media, hasta que muere.
+- **Con munición de sobra (fase 1), el mismo bot la gana 8 de 8** (normal y bueno) en unos 30 s.
+
+Qué quiere decir: **lo que decide la pelea es la munición, no la habilidad.** Ideas para que lo decidas tú (no he
+tocado nada):
+
+- más balas en la planta 1, o unas cuantas en el cuarto del jefe;
+- la portera con menos vida (por ejemplo, 400);
+- que la fregona sea más útil contra ella.
+
+Ojo: un jugador de verdad puede que apunte mejor o pegue mejor con la fregona que el bot. Merece la pena que lo pruebes
+tú con un guardado nuevo y cuentes las balas.
+
+#### 2. Los jefes, uno a uno (fase 1, con munición de sobra)
+
+Cada jefe salió en la planta que le tocó en el sorteo, y **cada planta lo hace un 35 % más duro** (y el Centro un 30 % y
+la Torre un 60 % más que los Apartamentos). Por eso los de las plantas 1 y 2 se ganan y los demás no: es lo esperado
+para un Johnny sin mutaciones.
+
+Gana el bot **bueno** (de 8 peleas):
+
+| Apartamentos | | Centro | | Torre | |
+|---|---|---|---|---|---|
+| Portera (p1) | 8 | Modista (p1) | 8 | Becario (p1) | 8 |
+| Gymbro (p2) | 8 | Antidisturbios (p2) | 3 | Informático (p2) | 0 |
+| Glotón (p3) | 0 | Mascota (p3) | 0 | Presentador (p3) | 1 |
+| Bombero (p4) | 0 | Cocinero (p4) | 8 | Directora (p4) | 0 |
+| Doctor Salas (final) | 0 | Gerente (final) | 0 | Sujeto 1 (final) | 0 |
+
+Lo que se sale de lo normal:
+
+- **Cocinero, demasiado fácil:** en la planta 4 lo gana 8 de 8, y el bot normal 5 de 8.
+- **Informático, muy difícil para su planta:** en la planta 2, 0 de 8. Todo el daño es suyo, no de sus vecinos.
+- **Mascota:** el 70–80 % del daño se lo hacen sus crías (los rápidos), no ella.
+- **Antidisturbios:** el 70–95 % del daño es de los vigilantes que llama.
+- **Bombero:** el 55–73 % es del fuego del suelo.
+- **Glotón:** la porquería hace un 20–36 %. Las veces que pierde, el Glotón se queda con un 30 % de vida.
+- **Directora:** la mitad del daño es de los oficinistas.
+- **Los tres finales:** no los gana nunca, ni el bueno. Les deja un 58–70 % de vida.
+
+#### 3. Atascos (fallos del bot o del mapa, por revisar)
+
+En la fase 2 el bot se quedó atascado 15 veces, sobre todo el bueno, porque es el que más va a por todos los zombis.
+Las fotos están en `capturas/bot/atasco-*.png`. Se repiten sitios con semillas distintas:
+
+- **Bajo C, la puerta de arriba del pasillo interior,** con Johnny en (1216–1225, 381–385) y queriendo ir unos 90 px
+  hacia arriba. Pasó con las semillas 12 y 603.
+- **Un pasillo con un armario marcado en amarillo debajo,** con Johnny en (526–570, 546) y queriendo ir unos 100 px
+  hacia abajo (semillas 500 y 600). En la foto Johnny está pegado a la pared, encima del armario.
+
+Lo más probable es que **el camino del bot pase por donde Johnny no cabe** (una puerta o un mueble); es decir, que el
+fallo sea del bot. Pero si un zombi se queda en un sitio al que no se puede llegar, el apartamento no se limpia y
+también le pasaría a una persona. Merece la pena mirarlo.
+
+#### 4. Fallos del bot que hay que tener en cuenta
+
+- **Sus propias granadas** le hacen hasta un 23 % del daño (Becario). Una persona lanzaría mejor.
+- **Con la fregona pelea mal:** quiere acercarse para pegar, pero a la vez huye de estar pegado al jefe, así que pega
+  poco. Eso empeora lo de la portera (punto 1).
+- No usa los bidones, no cambia de arma a propósito, no compra en la tienda.
+
+### Siguientes pasos
+
+1. **Probar la portera tú** con un guardado nuevo, contando las balas, para ver si el muro es del juego o del bot.
+2. **Fase 3:** que el bot compre talentos entre partidas y medir **cuántas partidas hacen falta** para pasarse cada
+   edificio, que es lo que de verdad dice si el juego es largo o corto.
+3. **Torre Velaria:** enseñar al bot a leer los terminales del código.
+4. **Calibrar el bot contigo:** juegas tú un par de peleas, se comparan los números, y se ajusta qué nivel de bot se
+   parece a ti.

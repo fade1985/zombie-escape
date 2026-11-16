@@ -75,7 +75,13 @@ func probar_bot_jefes() -> void:
 		jefes = jefes.filter(func(j): return j in pedidos.split(","))
 	DirAccess.make_dir_recursive_absolute(Captura.CARPETA + "bot")
 	var ruta := Captura.CARPETA + "bot/jefes-%s-%d.jsonl" % [edificio, semilla]
-	var archivo := FileAccess.open(ruta, FileAccess.WRITE)
+	# (si ya existe, se añade al final: tools/bot.py --misma-planta lanza un jefe cada vez con la misma semilla)
+	var archivo: FileAccess
+	if FileAccess.file_exists(ruta):
+		archivo = FileAccess.open(ruta, FileAccess.READ_WRITE)
+		archivo.seek_end()
+	else:
+		archivo = FileAccess.open(ruta, FileAccess.WRITE)
 	print("BOT: %s, jefes %s, niveles %s, %d peleas de cada, semilla %d → %s" % [edificio, jefes, niveles, peleas, semilla, ruta])
 	await get_tree().create_timer(0.3).timeout
 	for tipo in jefes:
@@ -268,7 +274,7 @@ func probar_bot_partida() -> void:
 	supervivientes.equipo.clear()
 	await get_tree().create_timer(0.5).timeout
 	bot.empezar(nivel)
-	var r := {"edificio": edificio, "nivel": nivel, "semilla": semilla, "plantas": [], "atascos": []}
+	var r := {"edificio": edificio, "nivel": nivel, "semilla": semilla, "plantas": [], "atascos": [], "pausas": {}}
 	var cuenta := {"antes": johnny.vida}
 	var al_cambiar := func(v: int, _m: int) -> void:
 		var quitado: int = cuenta.antes - v
@@ -281,6 +287,7 @@ func probar_bot_partida() -> void:
 	var tiempo := 0.0
 	var pensar := 0.0
 	var quieto_t := 0.0
+	var parado := 0.0
 	var donde: Vector2 = johnny.global_position
 	var planta_num := -1
 	while true:
@@ -296,11 +303,23 @@ func probar_bot_partida() -> void:
 		if get_tree().paused:
 			if menus.abierto == "mutacion":
 				continue
-			# (una página, la tele, un tutorial: se cierra como lo haría una persona)
-			Input.action_press("pausa")
-			await get_tree().process_frame
-			Input.action_release("pausa")
+			# (el ordenador al arrimarse a su mesa, una página, la tele, un tutorial: al medio segundo se cierra, como lo
+			# haría una persona, y se apunta qué era)
+			parado += delta
+			if parado > 0.5:
+				parado = 0.0
+				var que: String = menus.abierto
+				if ordenador.fondo != null:
+					que = "ordenador"
+					ordenador.apagar()
+				if inventario.abierto != "":
+					que = inventario.abierto
+					inventario.cerrar()
+				r.pausas[que if que != "" else "?"] = r.pausas.get(que if que != "" else "?", 0) + 1
+				menus.cerrar()
+				get_tree().paused = false
 			continue
+		parado = 0.0
 		tiempo += delta
 		if tiempo > PARTIDA_MAX:
 			r.final = "no acaba"
@@ -312,6 +331,11 @@ func probar_bot_partida() -> void:
 		if planta.sitios[aqui].tipo == "jefe" and not esta.has("vida_al_jefe"):
 			esta.vida_al_jefe = johnny.vida
 			esta.llega_jefe = snappedf(tiempo, 0.1)
+			esta.balas_al_jefe = johnny.balas + int(johnny.municion.get(johnny.base("pistola").municion, 0))
+			esta.cuerpo_a_cuerpo = 0.0
+		# (cuánto rato pelea con el jefe solo con la fregona: se ha quedado sin balas)
+		if esta.has("cuerpo_a_cuerpo") and not planta.jefa_muerta and johnny.arma().tipo == "cuerpo":
+			esta.cuerpo_a_cuerpo += delta
 		if planta.jefa_muerta and not esta.has("jefe_muerto"):
 			esta.jefe_muerto = snappedf(tiempo, 0.1)
 		pensar -= delta
@@ -369,12 +393,16 @@ func decidir_bot() -> void:
 	var puerta: Node2D = null
 	if sitio.tipo != "pasillo":
 		if not sitio.get("limpio", false) and not sitio.tipo in ["mantenimiento", "viviendas"]:
+			# (el más cercano al que se puede llegar: el camino acaba junto a él; uno detrás de una puerta con llave, no)
 			var cerca := INF
+			var mapa_nav: RID = johnny.get_world_2d().navigation_map
 			for z in get_tree().get_nodes_in_group("zombis"):
 				var d: float = johnny.global_position.distance_to(z.global_position)
 				if bot.vale(z) and d < cerca:
-					cerca = d
-					bot.meta = z.global_position
+					var camino := NavigationServer2D.map_get_path(mapa_nav, johnny.global_position, z.global_position, true)
+					if not camino.is_empty() and camino[-1].distance_to(z.global_position) < 48.0:
+						cerca = d
+						bot.meta = z.global_position
 			if bot.meta == Vector2.INF and sitio.tipo == "jefe" and not jefa_salio:
 				bot.meta = mapa.to_global(Vector2(sitio.get("ancho", 600), sitio.get("alto", 400)) / 2.0)   # (que salga el jefe)
 			if bot.meta != Vector2.INF:
