@@ -392,7 +392,8 @@ func terminar(gano: bool, abandona: bool) -> void:
 		rotas.append_array(Objetos.cerrar_baul(g, equipo))
 		if gano:
 			for id in partida.mochila:
-				g.baul[id] = g.baul.get(id, 0) + 1
+				if not id in Armas.MUNICION:   # (la munición se pierde al acabar: Objetos.cerrar_baul)
+					g.baul[id] = g.baul.get(id, 0) + 1
 		g.dolares = mini(g.dolares + dolares, partida.TOPE)
 		g.dolares_total += dolares)
 	partida.logros.garaje_jugado(condicion, gano)

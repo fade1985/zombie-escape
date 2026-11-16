@@ -5204,8 +5204,8 @@ msgid "Al abrir el baúl"
 msgstr "On opening the stash"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
-msgstr "What you keep in the stash is never lost: weapons, throwables, ammo and items."
+msgid "En el baúl guardas armas, lanzables y objetos para otras partidas. La munición no: al acabar la partida se pierde toda, también la del baúl."
+msgstr "In the stash you keep weapons, throwables and items for later runs. Not ammo: when the run ends, all of it is lost, the ammo in the stash too."
 
 #: scripts/tutoriales.gd
 msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
@@ -6051,12 +6051,16 @@ msgid "Sacar %d"
 msgstr "Take %d"
 
 #: scripts/ui/inventario.gd
-msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
-msgstr "Up to %d come out at once into your ammo; outside the stash, they are lost if you die."
+msgid "Salen hasta %d de una vez a tu munición."
+msgstr "Up to %d come out at once into your ammo."
 
 #: scripts/ui/inventario.gd
-msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
-msgstr "Comes out one at a time into your ammo; outside the stash, it is lost if you die."
+msgid "Al acabar la partida se pierde toda la munición, también la del baúl."
+msgstr "When the run ends, all ammo is lost, the ammo in the stash too."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición."
+msgstr "Comes out one at a time into your ammo."
 
 #: scripts/ui/inventario.gd
 msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
@@ -6109,6 +6113,14 @@ msgstr "In its place, in hand, the usual %s."
 #: scripts/ui/inventario.gd
 msgid "Se guarda en el baúl, con las partidas que le quedan."
 msgstr "It goes into the stash with the runs it has left."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco."
+msgstr "All %d in this slot go in."
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda en el baúl."
+msgstr "It goes into the stash."
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."

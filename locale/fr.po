@@ -5204,8 +5204,8 @@ msgid "Al abrir el baúl"
 msgstr "En ouvrant le coffre"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
-msgstr "Ce que tu ranges dans le coffre ne se perd jamais : armes, lançables, munitions et objets."
+msgid "En el baúl guardas armas, lanzables y objetos para otras partidas. La munición no: al acabar la partida se pierde toda, también la del baúl."
+msgstr "Dans le coffre, tu ranges armes, lançables et objets pour les parties suivantes. Pas les munitions : à la fin de la partie, elles sont toutes perdues, même celles du coffre."
 
 #: scripts/tutoriales.gd
 msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
@@ -6051,12 +6051,16 @@ msgid "Sacar %d"
 msgstr "En sortir %d"
 
 #: scripts/ui/inventario.gd
-msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
-msgstr "Jusqu'à %d sortent d'un coup vers tes munitions ; hors du coffre, ils sont perdus si tu tombes."
+msgid "Salen hasta %d de una vez a tu munición."
+msgstr "Jusqu'à %d sortent d'un coup vers tes munitions."
 
 #: scripts/ui/inventario.gd
-msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
-msgstr "Sort un par un vers tes munitions ; hors du coffre, il est perdu si tu tombes."
+msgid "Al acabar la partida se pierde toda la munición, también la del baúl."
+msgstr "À la fin de la partie, toutes les munitions sont perdues, même celles du coffre."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición."
+msgstr "Sort un par un vers tes munitions."
 
 #: scripts/ui/inventario.gd
 msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
@@ -6109,6 +6113,14 @@ msgstr "À sa place, en main : ton arme habituelle (%s)."
 #: scripts/ui/inventario.gd
 msgid "Se guarda en el baúl, con las partidas que le quedan."
 msgstr "Elle va au coffre avec les parties qu'il lui reste."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco."
+msgstr "Les %d de cet emplacement sont rangés."
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda en el baúl."
+msgstr "Il est rangé dans le coffre."
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."

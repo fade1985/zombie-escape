@@ -59,7 +59,8 @@ en una línea.
   0, Poco común 1, Rara 2, Épica 3); `johnny.quedan`, `lanzables.quedan` y "quedan" en el baúl. Sacarlo del baúl gasta
   una (`estrenar()`, marca "usada"); mejorarlo suma una. Al acabar la partida (ganes, caigas o abandones),
   `Objetos.cerrar_baul` devuelve al baúl lo que lleva con partidas y destruye lo que no tiene (también lo "usado" del
-  baúl); el cartel lo dice (`partida.filas_rotas`). La **fregona mejorada** (15 nov) no se queda en el baúl: se aparta
+  baúl); el cartel lo dice (`partida.filas_rotas`). También borra **toda la munición del baúl** (`Armas.MUNICION`: balas,
+  cartuchos, gasolina…) y la de la mochila no entra al ganar: la munición no pasa de una partida a otra (16 nov). La **fregona mejorada** (15 nov) no se queda en el baúl: se aparta
   en "fregona" del guardado (`Objetos.apartar_fregona`, también la de un guardado de antes que estaba en el baúl) y
   Johnny empieza cada partida con ella, gastando una (`partida.dar_fregona`, con `estrenar`); al quedarse sin partidas se
   rompe (el cartel lo dice) y vuelve la Normal. Si se deja en el suelo, al acabar vuelve igual (`Objetos.cerrar_baul`,

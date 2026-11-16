@@ -5204,8 +5204,8 @@ msgid "Al abrir el baúl"
 msgstr "An der Truhe"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
-msgstr "Was du in der Truhe verstaust, geht nie verloren: Waffen, Wurfwaffen, Munition und Gegenstände."
+msgid "En el baúl guardas armas, lanzables y objetos para otras partidas. La munición no: al acabar la partida se pierde toda, también la del baúl."
+msgstr "In der Truhe verstaust du Waffen, Wurfwaffen und Gegenstände für spätere Runden. Munition nicht: Am Ende der Runde geht sie ganz verloren, auch die in der Truhe."
 
 #: scripts/tutoriales.gd
 msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
@@ -6051,12 +6051,16 @@ msgid "Sacar %d"
 msgstr "%d nehmen"
 
 #: scripts/ui/inventario.gd
-msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
-msgstr "Bis zu %d auf einmal zu deiner Munition; außerhalb der Truhe sind sie weg, wenn du fällst."
+msgid "Salen hasta %d de una vez a tu munición."
+msgstr "Bis zu %d auf einmal zu deiner Munition."
 
 #: scripts/ui/inventario.gd
-msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
-msgstr "Einzeln zu deiner Munition; außerhalb der Truhe ist es weg, wenn du fällst."
+msgid "Al acabar la partida se pierde toda la munición, también la del baúl."
+msgstr "Am Ende der Runde geht alle Munition verloren, auch die in der Truhe."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición."
+msgstr "Kommt einzeln zu deiner Munition."
 
 #: scripts/ui/inventario.gd
 msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
@@ -6109,6 +6113,14 @@ msgstr "In die Hand kommt wieder das Übliche: %s."
 #: scripts/ui/inventario.gd
 msgid "Se guarda en el baúl, con las partidas que le quedan."
 msgstr "Kommt in die Truhe, mit den Runden, die ihr bleiben."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco."
+msgstr "Alle %d von diesem Platz kommen hinein."
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda en el baúl."
+msgstr "Kommt in die Truhe."
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."

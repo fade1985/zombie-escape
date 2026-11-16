@@ -2040,9 +2040,11 @@ func terminar(gano: bool, abandona := false) -> void:
 		# si les quedan partidas; los que no, se destruyen, también los del baúl que han salido en esta (la durabilidad)
 		rotas.append_array(Objetos.cerrar_baul(g, equipo))
 		if gano:
-			# los objetos de la mochila pasan al baúl (si caes, se pierden), también las vendas y el botiquín
+			# los objetos de la mochila pasan al baúl (si caes, se pierden), también las vendas y el botiquín; la munición
+			# (la gasolina, el bidón de ácido...), no: se pierde siempre al acabar (Objetos.cerrar_baul, 16 nov)
 			for id in mochila:
-				g.baul[id] = g.baul.get(id, 0) + 1
+				if not id in Armas.MUNICION:
+					g.baul[id] = g.baul.get(id, 0) + 1
 			g.victorias += 1
 		g.dolares = mini(g.dolares + salvados, TOPE)
 		g.dolares_total += salvados

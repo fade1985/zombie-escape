@@ -5196,8 +5196,8 @@ msgid "Al abrir el baúl"
 msgstr "打开储物箱时"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
-msgstr "存进储物箱的东西永远不会丢：武器、投掷物、弹药和物品。"
+msgid "En el baúl guardas armas, lanzables y objetos para otras partidas. La munición no: al acabar la partida se pierde toda, también la del baúl."
+msgstr "储物箱可以为之后的对局保存武器、投掷物和物品。弹药不行：一局结束时，所有弹药都会丢失，储物箱里的也一样。"
 
 #: scripts/tutoriales.gd
 msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
@@ -6042,12 +6042,16 @@ msgid "Sacar %d"
 msgstr "取出 %d"
 
 #: scripts/ui/inventario.gd
-msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
-msgstr "一次最多取出 %d 个到你的弹药里；离开储物箱后，倒下就会丢失。"
+msgid "Salen hasta %d de una vez a tu munición."
+msgstr "一次最多取出 %d 个到你的弹药里。"
 
 #: scripts/ui/inventario.gd
-msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
-msgstr "一次取出一个到你的弹药里；离开储物箱后，倒下就会丢失。"
+msgid "Al acabar la partida se pierde toda la munición, también la del baúl."
+msgstr "一局结束时，所有弹药都会丢失，储物箱里的也一样。"
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición."
+msgstr "一次取出一个到你的弹药里。"
 
 #: scripts/ui/inventario.gd
 msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
@@ -6100,6 +6104,14 @@ msgstr "你手上会换回那把老%s。"
 #: scripts/ui/inventario.gd
 msgid "Se guarda en el baúl, con las partidas que le quedan."
 msgstr "放进储物箱，带着剩余的局数。"
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco."
+msgstr "存入此格的全部 %d 个。"
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda en el baúl."
+msgstr "存入储物箱。"
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."

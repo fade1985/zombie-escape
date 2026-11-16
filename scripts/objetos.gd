@@ -286,8 +286,12 @@ static func arrojables_al_baul(g: Dictionary, id: String, calidad: int, n: int, 
 # estar "usado". Luego entra lo que lleva encima ("equipo": partida.equipo_encima), si le quedan partidas. Devuelve lo
 # destruido que merece decirse en el cartel del final ([{"id", "calidad"}]: sin la fregona ni la pistola Normales ni los
 # arrojables Normales, que se rompen en todas las partidas). La fregona mejorada no se queda en el baúl: se aparta
-# (apartar_fregona), también si se ha dejado en el suelo, y si se ha quedado sin partidas se rompe y el cartel lo dice
+# (apartar_fregona), también si se ha dejado en el suelo, y si se ha quedado sin partidas se rompe y el cartel lo dice.
+# Y toda la munición del baúl (Armas.MUNICION: balas, cartuchos, gasolina...) se destruye: no pasa de una partida a otra
+# (16 nov, lo pidió el dueño; la que lleva Johnny tampoco vuelve: partida.gd y garaje.gd no meten la de la mochila)
 static func cerrar_baul(g: Dictionary, equipo: Array) -> Array:
+	for id in Armas.MUNICION:
+		g.baul.erase(id)
 	var rotas := []
 	var quedan := []
 	for e in g.baul_equipo:

@@ -492,12 +492,12 @@ func probar_baul_directo() -> void:
 # gasta su partida y avisa de que es la última (captura-durabilidad-sacar.png); que guardarla y sacarla otra vez en la
 # misma partida no gasta otra; la ficha del inventario (captura-durabilidad-inventario.png: «Durabilidad: 0» en rojo, el
 # mismo número que en el baúl después de sacarla: 16 nov); que mejorar el bate en el
-# baúl le suma una; y, al caer, lo que vuelve al baúl y lo que se rompe, con el cartel del final
+# baúl le suma una; y, al caer, lo que vuelve al baúl y lo que se rompe (y que la munición del baúl se pierde: 16 nov), con el cartel del final
 # (captura-durabilidad-fin.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_durabilidad() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):
-		g2.baul = {}
+		g2.baul = {"balas": 30, "gasolina": 2, "vendas": 1}   # (la munición se pierde al acabar; las vendas no: 16 nov)
 		g2.baul_equipo = [{"id": "escopeta", "calidad": 1, "quedan": 1}, {"id": "bate", "calidad": 2},
 			{"id": "molotov", "calidad": 2, "n": 2, "quedan": 1}])
 	var dice := func() -> String:    # el texto de la ficha
@@ -587,6 +587,7 @@ func probar_durabilidad() -> void:
 	var g := Guardado.cargar()
 	print("Al caer, el baúl: %s (esperado: el bate Épico con 4 y la katana Rara con 2; ni la escopeta, ni los molotovs, ni la fregona ni la pistola)" % [
 		g.baul_equipo.map(func(e): return "%s %d (%d)" % [e.id, e.calidad, Armas.quedan_de(e)])])
+	print("Al caer, los objetos del baúl: %s (esperado: solo las vendas: las balas y la gasolina, munición, se pierden)" % g.baul)
 	Guardado.escribir(antes)
 	get_tree().quit()
 

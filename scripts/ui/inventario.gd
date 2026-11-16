@@ -1460,9 +1460,9 @@ func ficha_baul() -> Dictionary:
 			d.que = (Idioma.t("Llena %s.") if id in Objetos.NOMBRES else Idioma.t("Es para %s.")) % Armas.municion_para(id) + " " \
 				if municion else que_pieza(id)
 			if cabe and tanda > 1:
-				d.que += Idioma.t("Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes.") % tanda
+				d.que += Idioma.t("Salen hasta %d de una vez a tu munición.") % tanda + " " + Idioma.t("Al acabar la partida se pierde toda la munición, también la del baúl.")
 			elif cabe:
-				d.que += Idioma.t("Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes.") if municion \
+				d.que += (Idioma.t("Sale de uno en uno a tu munición.") + " " + Idioma.t("Al acabar la partida se pierde toda la munición, también la del baúl.")) if municion \
 					else Idioma.t("Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes.")
 			else:
 				d.que += Idioma.t("No te cabe: tienes llenos los huecos de munición.") if municion \
@@ -1544,6 +1544,9 @@ func que_guardar(s: Dictionary, id: String, n: int, donde: String) -> String:   
 		return Idioma.t("El baúl está lleno: haz sitio sacando algo.")
 	if n > caben:
 		return Idioma.t("Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo.") % [caben, Objetos.monton(id)]
+	if id in Armas.MUNICION:   # (la munición no pasa a la partida siguiente, tampoco la del baúl: Objetos.cerrar_baul, 16 nov)
+		return (Idioma.t("Se guardan los %d de este hueco.") % n if n > 1 else Idioma.t("Se guarda en el baúl.")) + " " \
+			+ Idioma.t("Al acabar la partida se pierde toda la munición, también la del baúl.")
 	if n > 1:
 		if donde == "hueco":
 			return Idioma.t("Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas.") % n

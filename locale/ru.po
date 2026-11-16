@@ -5212,8 +5212,8 @@ msgid "Al abrir el baúl"
 msgstr "Когда открываешь сундук"
 
 #: scripts/tutoriales.gd
-msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos."
-msgstr "Всё, что лежит в сундуке, не пропадает никогда: оружие, метательное, патроны и предметы."
+msgid "En el baúl guardas armas, lanzables y objetos para otras partidas. La munición no: al acabar la partida se pierde toda, también la del baúl."
+msgstr "В сундуке хранятся оружие, метательное и предметы для следующих забегов. Патроны — нет: в конце забега они пропадают все, даже те, что в сундуке."
 
 #: scripts/tutoriales.gd
 msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
@@ -6060,12 +6060,16 @@ msgid "Sacar %d"
 msgstr "Достать %d"
 
 #: scripts/ui/inventario.gd
-msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
-msgstr "За раз выходит до %d в твои патроны; вне сундука пропадут, если падешь."
+msgid "Salen hasta %d de una vez a tu munición."
+msgstr "За раз выходит до %d в твои патроны."
 
 #: scripts/ui/inventario.gd
-msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
-msgstr "Выходит по одному в твои патроны; вне сундука пропадет, если падешь."
+msgid "Al acabar la partida se pierde toda la munición, también la del baúl."
+msgstr "В конце забега пропадают все патроны, даже те, что в сундуке."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición."
+msgstr "Выходит по одному в твои патроны."
 
 #: scripts/ui/inventario.gd
 msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
@@ -6118,6 +6122,14 @@ msgstr "Взамен в руке — то, что всегда при тебе: 
 #: scripts/ui/inventario.gd
 msgid "Se guarda en el baúl, con las partidas que le quedan."
 msgstr "Уходит в сундук с оставшимися забегами."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco."
+msgstr "Убирается все из этой ячейки (%d)."
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda en el baúl."
+msgstr "Убирается в сундук."
 
 #: scripts/ui/inventario.gd
 msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
