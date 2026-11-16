@@ -1074,8 +1074,6 @@ func empezar_prueba() -> void:
 	elif "--muebles-materiales" in args:
 		set_process(false)   # sin la prueba larga
 		probar_muebles_materiales()
-	elif "--contorno-mueble" in args:
-		set_process(false)   # sin la prueba larga
 	elif "--comida" in args:
 		set_process(false)   # sin la prueba larga
 		probar_comida()
@@ -1085,6 +1083,8 @@ func empezar_prueba() -> void:
 	elif "--mueble-puerta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_mueble_puerta()
+	elif "--contorno-mueble" in args:
+		set_process(false)   # sin la prueba larga
 		probar_contorno_mueble()
 	elif "--clic-mueble" in args:
 		set_process(false)   # sin la prueba larga

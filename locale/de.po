@@ -7779,6 +7779,18 @@ msgid "No en este reto"
 msgstr "Nicht bei dieser Herausforderung"
 
 #, sin-usar
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "%d in der Truhe: Verbessert wird ein Stapel mit %d"
+
+#, sin-usar
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "Du hast schon einen Stapel der Stufe %s in der Hand, und zusammen passen sie nicht (höchstens %d)."
+
+#, sin-usar
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "Die Truhe ist voll: Mach Platz für den verbesserten Stapel."
+
+#, sin-usar
 msgid "Alerta %d"
 msgstr "Alarm %d"
 
@@ -7865,18 +7877,6 @@ msgstr "Alarm und Tagesaufgabe"
 #, sin-usar
 msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
 msgstr "Unter jedem abgeschlossenen Gebäude wählst du den Alarm mit < und >: schwerer, mehr Dollar. Schließ es auf der höchsten Stufe ab, um die nächste zu öffnen."
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "%d in der Truhe: Verbessert wird ein Stapel mit %d"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "Du hast schon einen Stapel der Stufe %s in der Hand, und zusammen passen sie nicht (höchstens %d)."
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "Die Truhe ist voll: Mach Platz für den verbesserten Stapel."
 
 #, sin-usar
 msgid "Complétalo para abrir la Alerta 1"

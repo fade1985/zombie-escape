@@ -7779,6 +7779,18 @@ msgid "No en este reto"
 msgstr "Not in this challenge"
 
 #, sin-usar
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "%d in the stash: upgrading one stack of %d"
+
+#, sin-usar
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "You already carry another %s stack in hand and together they won't fit (max %d)."
+
+#, sin-usar
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "The stash is full: make room for the upgraded stack."
+
+#, sin-usar
 msgid "Alerta %d"
 msgstr "Alert %d"
 
@@ -7865,18 +7877,6 @@ msgstr "Alert and Daily Challenge"
 #, sin-usar
 msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
 msgstr "Under each completed building you pick the alert with < and >: harder, more dollars. Complete it on the highest to unlock the next."
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "%d in the stash: upgrading one stack of %d"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "You already carry another %s stack in hand and together they won't fit (max %d)."
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "The stash is full: make room for the upgraded stack."
 
 #, sin-usar
 msgid "Complétalo para abrir la Alerta 1"

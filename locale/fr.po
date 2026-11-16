@@ -7779,6 +7779,18 @@ msgid "No en este reto"
 msgstr "Pas dans ce défi"
 
 #, sin-usar
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "%d dans le coffre : on améliore une pile de %d"
+
+#, sin-usar
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "Tu as déjà en main une autre pile %s et ensemble elles ne rentrent pas (au maximum, %d)."
+
+#, sin-usar
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "Le coffre est plein : fais de la place pour la pile améliorée."
+
+#, sin-usar
 msgid "Alerta %d"
 msgstr "Alerte %d"
 
@@ -7865,18 +7877,6 @@ msgstr "Alerte et Défi du jour"
 #, sin-usar
 msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
 msgstr "Sous chaque immeuble terminé, tu choisis l'alerte avec < et > : plus difficile, plus de dollars. Termine-le à la plus haute pour ouvrir la suivante."
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "%d dans le coffre : on améliore une pile de %d"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "Tu as déjà en main une autre pile %s et ensemble elles ne rentrent pas (au maximum, %d)."
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "Le coffre est plein : fais de la place pour la pile améliorée."
 
 #, sin-usar
 msgid "Complétalo para abrir la Alerta 1"

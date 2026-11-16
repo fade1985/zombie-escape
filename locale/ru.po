@@ -7800,6 +7800,18 @@ msgid "No en este reto"
 msgstr "Не в этом испытании"
 
 #, sin-usar
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "В сундуке %d: улучшается одна стопка, %d"
+
+#, sin-usar
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "В руке уже другая стопка (%s), и вместе они не влезут (максимум %d)."
+
+#, sin-usar
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "Сундук полон: освободи место для улучшенной стопки."
+
+#, sin-usar
 msgid "Alerta %d"
 msgstr "Тревога %d"
 
@@ -7886,18 +7898,6 @@ msgstr "Тревога и Испытание дня"
 #, sin-usar
 msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
 msgstr "Под каждым пройденным зданием выбирай тревогу клавишами < и >: сложнее, но больше долларов. Пройди его на самой высокой, чтобы открыть следующую."
-
-#, sin-usar
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "В сундуке %d: улучшается одна стопка, %d"
-
-#, sin-usar
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "В руке уже другая стопка (%s), и вместе они не влезут (максимум %d)."
-
-#, sin-usar
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "Сундук полон: освободи место для улучшенной стопки."
 
 #, sin-usar
 msgid "Complétalo para abrir la Alerta 1"
