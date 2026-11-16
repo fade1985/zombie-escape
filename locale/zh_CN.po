@@ -6644,16 +6644,16 @@ msgid "Vendas y botiquín"
 msgstr "绷带和急救包"
 
 #: scripts/ui/opciones.gd
-msgid "Los botones de debajo del minimapa (solo salen si llevas)"
-msgstr "小地图下方的按钮（身上有才会出现）"
+msgid "Los botones de arriba a la derecha (solo salen si llevas)"
+msgstr "右上角的按钮（身上有才会出现）"
 
 #: scripts/ui/opciones.gd
 msgid "Inventario y pausa"
 msgstr "物品栏和暂停"
 
 #: scripts/ui/opciones.gd
-msgid "Los botones de debajo del minimapa"
-msgstr "小地图下方的按钮"
+msgid "Los botones de arriba a la derecha"
+msgstr "右上角的按钮"
 
 #: scripts/ui/opciones.gd
 msgid "Pequeño"

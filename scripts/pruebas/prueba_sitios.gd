@@ -472,7 +472,8 @@ func nodos_ahora() -> String:
 
 # Con "--captura --minimapa": el minimapa (minimapa.gd) en cada sitio: la sala de mantenimiento (captura-minimapa-mant.png),
 # el pasillo con todos los pisos del mismo tamaño (-pasillo), un piso al entrar (-piso) y tras pasar a otra habitación
-# (-piso2), con las cámaras del técnico (-camaras) y la habitación del jefe (-jefe). Luego se cierra
+# (-piso2), con las cámaras del técnico (-camaras) y la habitación del jefe, con su barra y sin el nombre del sitio (-jefe) y,
+# al quitarse la barra, con él (-jefe-sin-barra). Luego se cierra
 func probar_minimapa() -> void:
 	johnny.vida = 9999
 	var mini = $Pantalla/Minimapa
@@ -506,7 +507,57 @@ func probar_minimapa() -> void:
 			await montar(i, 0, false)
 			await get_tree().create_timer(1.0).timeout
 			Captura.foto("captura-minimapa-jefe.png")
+			var con_barra := [$Pantalla/Jefa.visible, lugar.visible]
+			$Pantalla/Jefa.hide()   # (como al morir el jefe)
+			print("Minimapa · jefe: con su barra %s, el nombre del sitio %s; sin ella, el nombre %s (esperado: true, false; true)" % [
+				con_barra[0], con_barra[1], lugar.visible])
+			await get_tree().create_timer(0.2).timeout
+			Captura.foto("captura-minimapa-jefe-sin-barra.png")
 			break
+	get_tree().quit()
+
+
+# Con "--captura --minimapa-hud": dónde va el minimapa (M104): abajo en el medio, con su borde de abajo a la altura del de
+# la barra de vida, con dos curas y tres lanzables (captura-minimapa-hud.png); en una pantalla de 960 de ancho, donde no
+# cabe en el medio y tiene que correrse o subir (-960); y en el móvil, entre la barra y los lanzables (-movil). En cada
+# una dice si pisa la parte de la vida o la de las armas. Luego se cierra
+func probar_minimapa_hud() -> void:
+	johnny.vida = 9999
+	mochila.append_array(["vendas", "botiquin"])
+	for k in ["molotov", "granada", "atraedora"]:
+		lanzables.meter(k, 2)
+	var hud: Control = $Pantalla/HUD
+	var mini: Control = $Pantalla/Minimapa
+	var ver := func(que: String) -> void:
+		var mapa := mini.get_global_rect()
+		var vida: Rect2 = hud.fila.get_global_rect()
+		var armas: Rect2 = hud.derecha.get_global_rect()
+		var barra_abajo: float = hud.barra.get_global_rect().end.y
+		poner_lugar()
+		print("Minimapa HUD · %s: pantalla %s, mapa %s · abajo %d, el de la barra %d · pisa la vida %s, pisa las armas %s (esperado: false, false) · arriba «%s» a %d" % [
+			que, get_viewport().get_visible_rect().size, mapa, mapa.end.y, barra_abajo, mapa.intersects(vida), mapa.intersects(armas),
+			lugar.text, lugar.get_theme_font_size("font_size")])
+	await get_tree().create_timer(0.8).timeout
+	ver.call("ancha")
+	Captura.foto("captura-minimapa-hud.png")
+	var ventana := get_window()   # (la pantalla de 960 × 640, con bandas a los lados)
+	var antes := [ventana.content_scale_size, ventana.content_scale_aspect, ventana.content_scale_mode]
+	ventana.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	ventana.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	ventana.content_scale_size = Vector2i(960, 640)
+	await get_tree().create_timer(0.5).timeout
+	ver.call("960")
+	Captura.foto("captura-minimapa-hud-960.png")
+	ventana.content_scale_size = antes[0]
+	ventana.content_scale_aspect = antes[1]
+	ventana.content_scale_mode = antes[2]
+	await get_tree().create_timer(0.5).timeout
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	await get_tree().create_timer(0.3).timeout
+	ver.call("móvil")
+	Captura.foto("captura-minimapa-hud-movil.png")
+	Tactil.activo = false
 	get_tree().quit()
 
 

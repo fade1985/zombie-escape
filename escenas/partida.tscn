@@ -37,18 +37,19 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="Lugar" type="Label" parent="Pantalla"]
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-offset_left = -416.0
-offset_top = 124.0
-offset_right = -16.0
-offset_bottom = 172.0
+offset_left = 12.0
+offset_top = 4.0
+offset_right = -12.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.11, 0.1, 0.17, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 16
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
 text = "Planta baja"
-horizontal_alignment = 2
+horizontal_alignment = 1
 
 [node name="Mensaje" type="Label" parent="Pantalla"]
 modulate = Color(1, 1, 1, 0)

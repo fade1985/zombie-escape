@@ -1,4 +1,6 @@
-# El minimapa, arriba a la derecha. En el pasillo de la planta (y en la exposición y la sala de pruebas), el plano de la
+# El minimapa, abajo: en el medio de la pantalla y, en el móvil, entre la barra de vida y los lanzables, con su borde
+# de abajo a la altura del de la barra (lo coloca ui/hud.gd). Sin título: el nombre del sitio va arriba del todo
+# (partida.gd, poner_lugar). En el pasillo de la planta (y en la exposición y la sala de pruebas), el plano de la
 # planta, como el de una mazmorra; dentro de un sitio (un piso, la habitación de un jefe, una tienda, la sala de
 # mantenimiento, las viviendas...), el plano de ese sitio (ver "El plano del sitio", abajo).
 # El plano de la planta: el pasillo en medio y, pegada a él (con el muro compartido y el hueco de la puerta), una sala
@@ -13,9 +15,9 @@
 extends Control
 
 const ANCHO := 170.0
-const ALTO := 106.0
+const ALTO := 84.0
 const MARGEN := 14.0
-const CABEZA := 22.0
+const CABEZA := 22.0         # lo que medía el título que tenía encima: el plano se dibuja subido eso
 const PUNTA := 18.0         # ancho de las casillas de los extremos
 const GRIS := Color("#4a4552")
 const CLARO := Color("#bdb59c")
@@ -70,11 +72,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST   # (el plano del sitio, ampliado, con sus píxeles enteros)
 	camaras = "tecnico" in Guardado.cargar().rescatados
-	set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	offset_left = -ANCHO - 12
-	offset_right = -12
-	offset_top = 10
-	offset_bottom = 10 + ALTO
+	size = Vector2(ANCHO, ALTO)   # (dónde va lo decide el HUD en cada fotograma: ui/hud.gd)
 
 
 func _process(delta: float) -> void:
@@ -165,13 +163,10 @@ func _draw() -> void:
 	if partida == null or partida.planta.is_empty():
 		return
 	draw_style_box(marco, Rect2(Vector2.ZERO, size))
-	var letra := get_theme_default_font()
-	# arriba, el nombre de la planta o, dentro de un sitio, el del sitio (ya traducidos)
-	var titulo: String = Planta.nombre_de_sitio(partida.planta.sitios[partida.aqui]) if dentro() else Planta.nombre_de(partida.planta)
-	draw_string_outline(letra, Vector2(4, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO - 8, 16, 4, BORDE)
-	draw_string(letra, Vector2(4, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO - 8, 16, Color("#e6c34a"))
+	# (todo lo de dentro se pensó con un título encima, que ya no está: se dibuja subido lo que medía)
+	draw_set_transform(Vector2(0, -CABEZA))
 	# el fondo: papel oscuro cuadriculado, como el plano de una mazmorra, con su filo hundido
-	var fondo := Rect2(8, 30, ANCHO - 16, ALTO - 38)
+	var fondo := Rect2(8, CABEZA + 8, ANCHO - 16, ALTO - 16)
 	draw_rect(fondo.grow(2), BORDE)
 	draw_rect(fondo, FONDO)
 	for gx in range(int(fondo.position.x) + 4, int(fondo.end.x), 8):

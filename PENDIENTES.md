@@ -18,7 +18,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M93** Noticias de la tele: mientras salen los subtítulos, que se oiga a la reportera «hablando» con sonidos de 8 bits (sin palabras, como un balbuceo de videojuego antiguo), solo mientras dura cada subtítulo.
 - **M101** Inventario: Johnny más dinámico, que no se vea tan estático (en la referencia del M100 sale en pose, agarrando la fregona). Para más adelante.
 - **M103** Usar muebles y puertas con la tecla E en vez del clic izquierdo del ratón. Para más adelante.
-- **M104** Minimapa: ponerlo abajo, en el medio de la pantalla (ahora está arriba a la derecha). Para más adelante.
+- **M114** HUD del móvil: darle una vuelta (el minimapa, las curas, las armas y los botones). Para más adelante: ahora importa la versión de PC.
 
 ## Por limar
 

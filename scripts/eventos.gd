@@ -26,7 +26,7 @@ const CHARCO := preload("res://escenas/armas/charco.tscn")
 const LAMPARA := "res://escenas/luces/lampara.tscn"
 const RAYO := Color("#9fe8ff")
 
-# El cartel de cada uno: "nombre" (arriba a la derecha), "titulo" y "texto" (el cartel grande). Los textos, en español
+# El cartel de cada uno: "nombre" (arriba del todo, tras el del sitio), "titulo" y "texto" (el cartel grande). Los textos, en español
 # (las líneas marcadas); para enseñarlos, pasan por Idioma.t (empezar() y etiqueta())
 const DATOS := {
 	"apagon": {"color": Color("#9fb4ff"), "sonido": "apagon",
@@ -202,7 +202,7 @@ func mostrar_cartel(titulo: String, texto: String, color: Color) -> void:
 	t.tween_property(cartel, "modulate:a", 0.0, 0.6)
 
 
-# Lo que se añade al nombre del sitio, arriba a la derecha, mientras dura (partida.gd, poner_lugar)
+# Lo que se añade al nombre del sitio, arriba del todo, mientras dura (partida.gd, poner_lugar)
 func etiqueta() -> String:
 	if not activo or (evento == "horda" and horda.get("hecha", false)):
 		return ""
@@ -221,7 +221,7 @@ func _physics_process(delta: float) -> void:
 	if evento == "horda" and not empezado and en_el_medio():
 		empezar()   # Johnny ha llegado al medio del pasillo: ahora sí
 		activo = true
-		partida.poner_lugar()   # (arriba a la derecha pone «· Horda»)
+		partida.poner_lugar()   # (arriba del todo pone «· Horda»)
 	if not activo or partida.cambiando or partida.mapa == null or partida.terminada:
 		return
 	if evento == "incendio":

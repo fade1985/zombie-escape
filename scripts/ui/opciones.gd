@@ -67,12 +67,12 @@ const TACTIL := [
 	["Armas", "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"],
 	["Lanzar", "Arrastra desde el botón para apuntar y suelta para tirar"],
 	["Molotov o granada", "El botoncito de al lado de lanzar"],
-	["Vendas y botiquín", "Los botones de debajo del minimapa (solo salen si llevas)"],
-	["Inventario y pausa", "Los botones de debajo del minimapa"],
+	["Vendas y botiquín", "Los botones de arriba a la derecha (solo salen si llevas)"],
+	["Inventario y pausa", "Los botones de arriba a la derecha"],
 ]
 
 # Los ajustes del móvil (tactil.gd): los valores por los que va pasando cada botón, con su nombre.
-# Más de 1,4 no cabe: los botones del arco chocarían con los de debajo del minimapa
+# Más de 1,4 no cabe: los botones del arco chocarían con los de arriba a la derecha
 const TAMANOS := [[0.8, "Pequeño"], [1.0, "Normal"], [1.2, "Grande"], [1.4, "Muy grande"]]
 const OPACIDADES := [[1.0, "100 %"], [0.75, "75 %"], [0.5, "50 %"], [0.3, "30 %"]]
 const SI_NO := [[true, "Sí"], [false, "No"]]

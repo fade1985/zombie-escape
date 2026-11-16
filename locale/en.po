@@ -6663,16 +6663,16 @@ msgid "Vendas y botiquín"
 msgstr "Bandages and medkit"
 
 #: scripts/ui/opciones.gd
-msgid "Los botones de debajo del minimapa (solo salen si llevas)"
-msgstr "The buttons below the minimap (they only show if you're carrying any)"
+msgid "Los botones de arriba a la derecha (solo salen si llevas)"
+msgstr "The buttons in the top right (they only show if you're carrying any)"
 
 #: scripts/ui/opciones.gd
 msgid "Inventario y pausa"
 msgstr "Inventory and pause"
 
 #: scripts/ui/opciones.gd
-msgid "Los botones de debajo del minimapa"
-msgstr "The buttons below the minimap"
+msgid "Los botones de arriba a la derecha"
+msgstr "The buttons in the top right"
 
 #: scripts/ui/opciones.gd
 msgid "Pequeño"

@@ -10,7 +10,7 @@
 #   - Después de la última planta, el edificio está limpio: cartel de victoria.
 # La partida empieza en la sala de mantenimiento de la planta baja (por su puerta de la derecha se va a las viviendas
 # de los supervivientes rescatados, mapa/viviendas.gd). Abajo, en la franja del muro, va el HUD (hud.gd)
-# y arriba a la derecha, el minimapa. Esc o Start abren la pausa (menus.gd).
+# con el minimapa en el medio y, arriba del todo, el nombre del sitio (lugar). Esc o Start abren la pausa (menus.gd).
 #
 # Dinero y guardado (como game.js y game-combate.js del JS): los zombis sueltan billetes a veces (la portera,
 # varios). Los dólares de la partida se guardan al acabarla: todos si completas el edificio; si caes (o abandonas),
@@ -213,6 +213,9 @@ func _ready() -> void:
 	# las explicaciones blancas de abajo en el centro (decir) ya no se ven: el dueño las quitó todas. Se siguen
 	# escribiendo en la etiqueta, escondida, porque las pruebas las leen
 	aviso.visible = false
+	# el nombre del sitio, arriba del todo, se quita mientras está la barra de vida del jefe con su nombre (van en el mismo
+	# sitio) y vuelve cuando se va
+	$Pantalla/Jefa.visibility_changed.connect(func(): lugar.visible = not $Pantalla/Jefa.visible)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -782,6 +785,12 @@ func poner_lugar() -> void:
 	if zona != "" and zona != nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
 	lugar.text = texto + eventos.etiqueta() + Reto.etiqueta()
+	# arriba del todo, grande como el grito de la llave; si en esta pantalla no cabe entero (un evento, el reto, otro
+	# idioma...), con la letra pequeña (la fuente solo se ve nítida a 16 o 32)
+	var cabe := lugar.get_theme_font("font").get_string_size(lugar.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 16 <= lugar.size.x
+	if lugar.get_theme_font_size("font_size") != (32 if cabe else 16):   # (solo si cambia: se mira a menudo)
+		lugar.add_theme_font_size_override("font_size", 32 if cabe else 16)
+		lugar.add_theme_constant_override("outline_size", 8 if cabe else 4)
 
 
 # Johnny ha empujado la salida "i" del sitio en el que está

@@ -122,7 +122,7 @@ static func aviso() -> String:
 	return Idioma.t("Reto del día · %s: %s") % [nombre(), desc()]
 
 
-# Lo que se añade al nombre del sitio, arriba a la derecha (partida.gd, poner_lugar)
+# Lo que se añade al nombre del sitio, arriba del todo (partida.gd, poner_lugar)
 static func etiqueta() -> String:
 	return " · " + Idioma.t("Reto: %s") % nombre() if activo else ""
 

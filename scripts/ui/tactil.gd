@@ -6,7 +6,7 @@
 #   - Alrededor, en arco: esquivar, las dos armas (tocar la otra la saca; tocar la de fuego que ya está en la
 #     mano, recarga) y lanzar (se arrastra desde él para apuntar y se suelta para tirar), con el ⇄ al lado
 #     para cambiar lo que se lanza.
-#   - Bajo el minimapa: el inventario y la pausa; y, a su izquierda, las vendas y el
+#   - Arriba a la derecha: el inventario y la pausa; y, a su izquierda, las vendas y el
 #     botiquín si lleva (tocar uno lo usa: partida.usar_cura).
 # Los botones "pulsan" las mismas acciones que el teclado y el mando (eventos de acción), así que Johnny y
 # los lanzables no saben si es un dedo o una tecla.
@@ -158,15 +158,16 @@ func botones() -> Dictionary:
 	var s := tamano()
 	var k := escala
 	var en_arco := func(grados: float, r: float) -> Vector2: return c + Vector2.from_angle(deg_to_rad(grados)) * r * k
-	# los de debajo del minimapa: pegados a la derecha y con el borde de arriba siempre a la misma altura
-	var bajo_mapa := func(desde_derecha: float) -> Vector2: return Vector2(s.x - desde_derecha * k, 128.0 + 22.0 * k)
+	# los de arriba a la derecha (donde antes estaba el minimapa): pegados a la derecha y con el borde de arriba siempre a
+	# la misma altura
+	var arriba := func(desde_derecha: float) -> Vector2: return Vector2(s.x - desde_derecha * k, 14.0 + 22.0 * k)
 	var b := {
 		"esquivar": [en_arco.call(180.0, 140.0), 44.0 * k],
 		"cuerpo": [en_arco.call(218.0, 145.0), 34.0 * k],
 		"fuego": [en_arco.call(252.0, 145.0), 34.0 * k],
 		"lanzar": [en_arco.call(288.0, 145.0), 38.0 * k],
-		"inventario": [bajo_mapa.call(97.0), 22.0 * k],
-		"pausa": [bajo_mapa.call(44.0), 22.0 * k],
+		"inventario": [arriba.call(97.0), 22.0 * k],
+		"pausa": [arriba.call(44.0), 22.0 * k],
 	}
 	if johnny.modo == "asistido":
 		# Sin botón grande (ataca solo): esquivar, el que más se usa, va a la esquina, donde descansa el
@@ -179,11 +180,11 @@ func botones() -> Dictionary:
 	# delante de un mueble de la sala de mantenimiento, el botón «Abrir», encima del arco (zona_usar.gd)
 	if johnny.ante_mueble and johnny.ante_mueble.activa():
 		b["abrir"] = [en_arco.call(250.0, 250.0), 38.0 * k]
-	# las curas que lleva, a la izquierda de los de debajo del minimapa (si no lleva ninguna, no salen)
+	# las curas que lleva, a la izquierda de los de arriba a la derecha (si no lleva ninguna, no salen)
 	var sitio := 0
 	for id in Objetos.USABLES:
 		if partida.mochila.has(id):
-			b[id] = [bajo_mapa.call(150.0 + sitio * 53.0), 22.0 * k]
+			b[id] = [arriba.call(150.0 + sitio * 53.0), 22.0 * k]
 			sitio += 1
 	return b
 

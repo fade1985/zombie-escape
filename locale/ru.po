@@ -6682,16 +6682,16 @@ msgid "Vendas y botiquín"
 msgstr "Бинты и аптечка"
 
 #: scripts/ui/opciones.gd
-msgid "Los botones de debajo del minimapa (solo salen si llevas)"
-msgstr "Кнопки под миникартой (появляются, только если есть что применить)"
+msgid "Los botones de arriba a la derecha (solo salen si llevas)"
+msgstr "Кнопки в правом верхнем углу (появляются, только если есть что применить)"
 
 #: scripts/ui/opciones.gd
 msgid "Inventario y pausa"
 msgstr "Инвентарь и пауза"
 
 #: scripts/ui/opciones.gd
-msgid "Los botones de debajo del minimapa"
-msgstr "Кнопки под миникартой"
+msgid "Los botones de arriba a la derecha"
+msgstr "Кнопки в правом верхнем углу"
 
 #: scripts/ui/opciones.gd
 msgid "Pequeño"
