@@ -5767,6 +5767,10 @@ msgstr "выбросить"
 msgid "elegir"
 msgstr "выбрать"
 
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Отмена"
+
 #: scripts/ui/inventario.gd
 msgid "cerrar"
 msgstr "закрыть"
@@ -6322,10 +6326,6 @@ msgstr "останется у твоих ног"
 #: scripts/ui/inventario.gd
 msgid "y la de repuesto pasa a la mano"
 msgstr "а запасное перейдет в руку"
-
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
-msgid "Cancelar"
-msgstr "Отмена"
 
 #: scripts/ui/inventario.gd
 msgid "Mover"

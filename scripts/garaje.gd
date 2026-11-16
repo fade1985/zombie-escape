@@ -56,6 +56,7 @@ const CONDICIONES := {
 static var activo := false
 static var fecha := ""
 static var condicion := ""
+static var prueba := false       # el de prueba (panel de F9): con el guardado de mentira, no cuenta para nada
 static var avisado := -10000     # cuándo salió el último «hoy no vale» (en milisegundos: uno por segundo, como mucho)
 
 var partida: Node
@@ -90,8 +91,21 @@ static func empezar(dia := hoy()) -> void:
 		condicion = Captura.dato("--condicion")
 
 
-# ...o esto, para una partida normal
+# El reto de prueba (el panel de F9, pestaña «Ir a»), con la condición que se elige: se juega con una copia del guardado
+# en la memoria (Guardado.en_memoria), así que no gasta el de hoy, ni apunta récords, ni da dólares, ni toca el baúl
+static func empezar_prueba(cond: String) -> void:
+	Guardado.baul_prueba = {}   # (el de la sala de pruebas, fuera: la copia lleva el baúl de verdad)
+	Guardado.en_memoria = Guardado.cargar_archivo()
+	empezar()
+	condicion = cond
+	prueba = true
+
+
+# ...o esto, para una partida normal (y al volver al menú: fuera el guardado de mentira del reto de prueba)
 static func quitar() -> void:
+	if prueba:
+		Guardado.en_memoria = {}
+		prueba = false
 	activo = false
 	fecha = ""
 	condicion = ""

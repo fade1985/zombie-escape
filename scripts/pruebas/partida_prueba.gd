@@ -90,6 +90,8 @@
 #   --armas             la sala de pruebas (F9): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
 #                       apagar y encender ayudas y volver con F9                          [prueba_armas.gd]
+#   --reto-f9           el Reto del día de prueba desde el panel de F9 («Ir a»): el garaje con la condición elegida,
+#                       sin gastar el de hoy ni tocar el guardado                         [prueba_armas.gd]
 #   --lanzallamas, --desintegrador, --pistola-electrica   cada arma de efecto: comprarla, su daño, su depósito o su
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #                       (con --rafaga, además, fotos seguidas del chorro: -rayo-01.png... para un GIF)
@@ -705,6 +707,9 @@ func empezar_prueba() -> void:
 	elif "--sala-pruebas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_sala_pruebas()
+	elif "--reto-f9" in args:
+		set_process(false)   # sin la prueba larga
+		probar_reto_f9()
 	elif "--ir-jefe" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ir_jefe()

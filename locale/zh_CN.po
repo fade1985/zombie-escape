@@ -5749,6 +5749,10 @@ msgstr "丢弃"
 msgid "elegir"
 msgstr "选择"
 
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "取消"
+
 #: scripts/ui/inventario.gd
 msgid "cerrar"
 msgstr "关闭"
@@ -6280,10 +6284,6 @@ msgstr "会落在你脚边"
 #: scripts/ui/inventario.gd
 msgid "y la de repuesto pasa a la mano"
 msgstr "备用的会换到手上"
-
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
-msgid "Cancelar"
-msgstr "取消"
 
 #: scripts/ui/inventario.gd
 msgid "Mover"

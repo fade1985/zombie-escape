@@ -22,6 +22,9 @@ const HUECOS := 3
 # El baúl de pruebas (la sala de pruebas, sala_armas.gd): mientras tiene algo, el baúl que se lee y se cambia es este,
 # {baul, baul_equipo}, que solo vive en la memoria; al archivo se sigue escribiendo el baúl de verdad, sin tocarlo
 static var baul_prueba := {}
+# El guardado de mentira (el Reto del día de prueba, desde el panel de F9: garaje.gd, empezar): mientras tiene algo, todo
+# se lee de esta copia y se escribe en ella, en la memoria; el archivo no se toca. Garaje.quitar lo vacía (16 nov)
+static var en_memoria := {}
 
 # Lo que tiene un guardado nuevo. Al cargar uno viejo, lo que le falte se rellena con esto
 const NUEVO := {
@@ -108,6 +111,8 @@ const GARAJE := {"fecha": "", "records": {}}
 
 
 static func cargar() -> Dictionary:
+	if not en_memoria.is_empty():
+		return en_memoria.duplicate(true)
 	var s := cargar_archivo()
 	if not baul_prueba.is_empty():
 		s.baul = baul_prueba.baul.duplicate(true)
@@ -257,6 +262,10 @@ static var ajustes_comunes := {}   # los últimos ajustes escritos en guardado-a
 # guardado.json.tmp; solo cuando está entero, el guardado de antes pasa a ser la copia (guardado.json.bak) y el
 # nuevo ocupa su sitio. Pase lo que pase, siempre queda uno entero: el bueno o la copia (cargar mira los dos)
 static func escribir(s: Dictionary) -> void:
+	if not en_memoria.is_empty():   # (el guardado de mentira: no va al archivo)
+		en_memoria = s.duplicate(true)
+		escrituras += 1
+		return
 	# con el baúl de pruebas puesto, lo que cambia en el baúl se queda en él y al archivo va el de verdad
 	if not baul_prueba.is_empty():
 		baul_prueba = {"baul": s.baul.duplicate(true), "baul_equipo": s.baul_equipo.duplicate(true)}

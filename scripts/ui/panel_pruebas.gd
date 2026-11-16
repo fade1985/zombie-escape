@@ -6,7 +6,8 @@
 #   Ayudas    cada una se enciende y se apaga: las líneas de la sala, el panel de daño, los avisos de los jefes en el
 #             suelo (aviso.gd) y la penumbra
 #   Johnny    invencible, munición sin fin, la diana y la siguiente skin
-#   Ir a      la exposición, la azotea, el superviviente y la habitación de cada minijefe del edificio
+#   Ir a      la exposición, la azotea, el superviviente, la habitación de cada minijefe del edificio y el Reto del día
+#             (el garaje) con cada condición, de prueba
 #   Varios    mutaciones, un objeto, piezas al baúl de verdad, Colecciones completas y un científico muerto
 # Lo que saca algo o lleva a otro sitio cierra el panel. Va con el ratón o el dedo, con el teclado (flechas e Intro) o
 # con el mando. P, Esc o B lo cierran.
@@ -22,6 +23,9 @@ const ZOMBIS := {"normal": "Normal", "lento": "Lento", "rapido": "Rápido", "exp
 	"oficinista": "Oficinista", "escolta": "Escolta de Velaria",
 	"vecina": "Vecina"}   # (sin atajo: es la 11)
 const CUANTOS := [1, 3, 5, 10]
+# Los botones del Reto del día (pestaña «Ir a»): lo que no vale con cada condición (Garaje.CONDICIONES)
+const RETOS := {"cuerpo": "sin cuerpo a cuerpo", "distancia": "sin distancia", "especial": "sin especiales",
+	"lanzables": "sin lanzables", "curas": "sin curas"}
 # Los atajos de la sala de pruebas (también con el panel cerrado): 1 a 8, los zombis; Mayús + 1 a 0, los jefes (en
 # el orden de JEFES y ZOMBIS)
 const NUMEROS := [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
@@ -156,7 +160,12 @@ func elegir(nombre: String) -> void:
 			for tipo in partida.orden_jefes:
 				if partida.ZOMBIS.has(tipo):
 					boton("Sala: " + JEFES.get(tipo, tipo), cerrar_y.bind(partida.ir_al_jefe.bind(tipo)))
-			pie.text = "F9 vuelve de la exposición. Lejos de esta planta, F9 lleva a su sala de pruebas  ·  P: cerrar"
+			# el Reto del día (el garaje) de este edificio, con cada condición; la de hoy, marcada. Es de prueba: deja
+			# esta partida (la guardada sigue, al principio de la planta) y no cuenta (garaje.gd, empezar_prueba)
+			var hoy := Garaje.condicion_de(Garaje.hoy())
+			for cond in Garaje.CONDICIONES:
+				boton("Reto: " + RETOS[cond] + (" (hoy)" if cond == hoy else ""), cerrar_y.bind(ir_al_reto.bind(cond)))
+			pie.text = "F9 vuelve de la exposición. «Reto»: el garaje de prueba (no gasta el de hoy ni guarda nada)  ·  P: cerrar"
 		"Varios":
 			boton("Efectos secundarios", cerrar_y.bind(partida.abrir_mutacion))
 			boton("Soltar un objeto", cerrar_y.bind(func():
@@ -207,6 +216,14 @@ func sala() -> SalaArmas:
 func cerrar_y(accion: Callable) -> void:
 	cerrar()
 	accion.call()
+
+
+# El reto de prueba: el garaje de este edificio con esa condición, sin alerta, como desde «Elige edificio»
+func ir_al_reto(cond: String) -> void:
+	Alerta.nivel = 0
+	Garaje.empezar_prueba(cond)
+	partida.get_tree().paused = false
+	Captura.ir_a_la_partida()
 
 
 func sacar_jefe(tipo: String) -> void:

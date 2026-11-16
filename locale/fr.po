@@ -5758,6 +5758,10 @@ msgstr "jeter"
 msgid "elegir"
 msgstr "choisir"
 
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Annuler"
+
 #: scripts/ui/inventario.gd
 msgid "cerrar"
 msgstr "fermer"
@@ -6301,10 +6305,6 @@ msgstr "reste à tes pieds"
 #: scripts/ui/inventario.gd
 msgid "y la de repuesto pasa a la mano"
 msgstr "et celle de rechange passe en main"
-
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
-msgid "Cancelar"
-msgstr "Annuler"
 
 #: scripts/ui/inventario.gd
 msgid "Mover"

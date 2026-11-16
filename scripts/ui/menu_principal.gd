@@ -30,6 +30,8 @@ var foto_requisitos := ""
 
 
 func _ready() -> void:
+	if Garaje.prueba:   # (vuelve del reto de prueba del panel de F9: fuera su guardado de mentira)
+		Garaje.quitar()
 	Tactil.preparar()   # en el móvil, la pantalla sin redondear
 	Controles.aplicar()   # las teclas cambiadas en Opciones
 	theme = Tema.crear()

@@ -2904,6 +2904,41 @@ func probar_sala_pruebas() -> void:
 
 
 # Pulsa el botón del panel de pruebas que empieza por "texto"
+# Con "--captura --reto-f9": el Reto del día de prueba desde el panel de F9 (ui/panel_pruebas.gd, garaje.gd:
+# empezar_prueba). Primero, en la sala de pruebas, la pestaña «Ir a» con un botón por condición (foto
+# captura-reto-f9-panel.png) y se pulsa «Reto: sin curas». La partida vuelve a empezar en el garaje: que la condición es
+# la elegida, que el intento de hoy se ha gastado solo en el guardado de mentira (no en el archivo) y que este lleva una
+# partida más que el archivo (foto captura-reto-f9-garaje.png). Y lo que hace el menú al volver: el guardado de
+# mentira, fuera. Se cierra
+func probar_reto_f9() -> void:
+	if not Garaje.prueba:   # 1.ª parte: la partida normal, hasta pulsar el botón
+		await pulsar_y_esperar(KEY_F9)
+		await get_tree().create_timer(0.3).timeout
+		await pulsar_y_esperar(KEY_P)
+		panel_pruebas.elegir("Ir a")
+		await get_tree().create_timer(0.2).timeout
+		var retos: Array = panel_pruebas.hoja.get_children().filter(func(b): return b.text.begins_with("Reto"))
+		print("Reto F9 · botones del reto en «Ir a»: %d (esperado: %d) · el de hoy: %s" % [retos.size(),
+			Garaje.CONDICIONES.size(), retos.filter(func(b): return b.text.ends_with("(hoy)")).map(func(b): return b.text)])
+		Captura.foto("captura-reto-f9-panel.png")
+		pulsar_en_panel("Reto: sin curas")
+		return
+	# 2.ª parte: ya en el garaje de prueba
+	await get_tree().create_timer(0.6).timeout
+	var archivo := Guardado.cargar_archivo()
+	var memoria := Guardado.cargar()
+	print("Reto F9 · garaje: sitio «%s» (esperado: garaje) · condición %s (esperado: curas) · gastado hoy en la memoria %s (esperado: true) y en el archivo %s (esperado: false, si no se jugó hoy el de verdad) · partidas: memoria %d, archivo %d (esperado: una más en la memoria)" % [
+		planta.sitios[aqui].tipo, Garaje.condicion, Garaje.jugado(memoria, edificio), Garaje.jugado(archivo, edificio),
+		memoria.partidas, archivo.partidas])
+	Captura.foto("captura-reto-f9-garaje.png")
+	# lo que hace el menú al volver (menu_principal.gd, _ready). No se va de verdad: en las pruebas, el menú empezaría
+	# otra partida, y esta prueba otra vez
+	Garaje.quitar()
+	print("Reto F9 · al volver al menú: reto de prueba %s, guardado de mentira vacío %s, partidas %d = archivo %d (esperado: false, true, iguales)" % [
+		Garaje.prueba, Guardado.en_memoria.is_empty(), Guardado.cargar().partidas, archivo.partidas])
+	get_tree().quit()
+
+
 func pulsar_en_panel(texto: String) -> void:
 	for b in panel_pruebas.hoja.get_children():
 		if b.text.begins_with(texto) or b.text.ends_with("· " + texto):
