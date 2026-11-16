@@ -1,5 +1,5 @@
 # Los logros del ordenador (LOGROS.EXE, en ordenador.gd), como un archivador: la misma chapa oscura que el árbol de
-# talentos y la tienda de armas (chapa.gd), con lo ahorrado arriba a la izquierda y, a la derecha, cuántos logros
+# talentos y la tienda de armas (chapa.gd), con el dinero que puedes gastar arriba a la izquierda y, a la derecha, cuántos logros
 # llevas y cuánto tienes por cobrar.
 #
 # A la izquierda, un botón por página: «Resumen» y un apartado por tema (Logros.TEMAS), cada uno con su barrita de
@@ -196,7 +196,9 @@ func poner_vecinos() -> void:
 func _draw() -> void:
 	var fuente := get_theme_default_font()
 	PLACA.dibujar(self, size)
-	PLACA.dibujar_ahorrado(self, fuente, s.dolares, true)   # (el marcador de 4 casillas, como en la tienda de armas y el inventario; L44, 16 nov)
+	# lo que puedes gastar: lo ahorrado más lo de esta partida, la misma cifra que en la tienda de armas y el inventario
+	# (partida.cartera(); hasta el 16 nov salía solo lo ahorrado). Con el marcador de 4 casillas, como ellos (L44)
+	PLACA.dibujar_ahorrado(self, fuente, ordenador.partida.cartera(), true)
 	if cajas_temas.is_empty():
 		return
 	# arriba a la derecha: cuántos logros llevas (lo que falta por cobrar lo avisa el «!» de cada apartado)

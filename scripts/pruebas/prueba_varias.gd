@@ -4818,6 +4818,8 @@ func probar_archivador_logros() -> void:
 	logros.con_ayudas = false
 	logros.mejor_racha = 18
 	logros.fregonazos = 0
+	ahorrados = 60   # (lo de poner, que la partida leyó al empezar)
+	dolares = 25   # (con dólares de esta partida: el marcador enseña lo que se puede gastar, 60 + 25 = 85, como la tienda)
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
 	ordenador.abrir("logros")
