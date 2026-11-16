@@ -240,7 +240,10 @@ func _physics_process(delta: float) -> void:
 				andar(0.4)
 
 	mover()
-	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso)
+	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso). Atontada
+	# (con estrellitas), no: es el momento de pegarle
+	if estado == "atontado":
+		contacto = 0
 	if contacto > 0 and d < radio + johnny.RADIO + 4.0:
 		johnny.recibir_dano(contacto, self)
 	animar()

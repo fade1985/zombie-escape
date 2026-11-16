@@ -134,7 +134,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		pensar(delta if estado == "andar" else delta * ritmo, johnny)
 	mover()
-	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso)
+	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso). Atontado
+	# (con estrellitas), no: es el momento de pegarle
+	if estado == "atontado":
+		contacto = 0
 	if contacto > 0 and global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + 4.0:
 		johnny.recibir_dano(contacto, self)
 	animar()

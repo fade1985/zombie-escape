@@ -93,6 +93,8 @@ func mirar_paredes() -> void:
 
 
 func caer(datos: Dictionary) -> void:
+	if not is_instance_valid(dueno):
+		dueno = null   # (quien lo tiró ya no está: ha muerto o se ha ido mientras volaba)
 	var charco: Node2D = load(CHARCO).instantiate()
 	charco.tipo = datos.charco
 	# el centro, en píxel entero del dibujo, para que cuadre con el resto del suelo
