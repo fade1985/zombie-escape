@@ -179,7 +179,7 @@ var mirilla_mando: Sprite2D = null   # la mirilla que se mueve con el stick dere
 const DISTANCIA_MIRILLA := 170.0     # a cuánto de Johnny sale esa mirilla, en la dirección que se apunta
 var ultimo_apunte := Vector2.DOWN   # modo libre, con el mando: hacia donde se empujó el stick derecho por última vez (RT ataca hacia ahí)
 var clic_gastado := false   # el clic izquierdo (o J) pulsado ya ha servido para usar algo (zona_usar.gd): no dispara hasta soltarlo
-var ante_mueble: Area2D = null  # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): el clic encima lo abre, no dispara (en las puertas, sí)
+var ante_mueble: Area2D = null  # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): se usa con la E ("usar"); atacar (J, el clic) solo ataca
 
 const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
 # Los estados de charco que le corroen: con ellos se le ven encima las manchas de ácido, como a los zombis (M65): el
