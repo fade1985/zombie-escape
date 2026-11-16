@@ -5734,6 +5734,10 @@ msgid "Curas"
 msgstr "Healing"
 
 #: scripts/ui/inventario.gd
+msgid "Ordenar"
+msgstr "Sort"
+
+#: scripts/ui/inventario.gd
 msgctxt "inventario"
 msgid "Seguir"
 msgstr "Resume"
@@ -6297,6 +6301,18 @@ msgstr "stays at your feet"
 #: scripts/ui/inventario.gd
 msgid "y la de repuesto pasa a la mano"
 msgstr "and your spare moves to hand"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: scripts/ui/inventario.gd
+msgid "Mover"
+msgstr "Move"
+
+#: scripts/ui/inventario.gd
+msgid "Elige su casilla nueva con las flechas o la cruceta y pulsa A o Intro. Si tiene algo, se cambian."
+msgstr "Pick its new slot with the arrow keys or the D-pad and press A or Enter. If something's there, they swap."
 
 #: scripts/ui/inventario.gd
 msgid "Barre un abanico muy ancho y echa lejos a los durmientes."
@@ -7161,10 +7177,6 @@ msgstr "Sure? You'll lose all the mutagen you've put into mutations. They'll be 
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
 msgstr "Yes, reset"
-
-#: scripts/ui/ordenador.gd
-msgid "Cancelar"
-msgstr "Cancel"
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que gastaste en las mutaciones no se devuelve."

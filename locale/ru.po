@@ -5743,6 +5743,10 @@ msgid "Curas"
 msgstr "Лечение"
 
 #: scripts/ui/inventario.gd
+msgid "Ordenar"
+msgstr "Разложить"
+
+#: scripts/ui/inventario.gd
 msgctxt "inventario"
 msgid "Seguir"
 msgstr "В игру"
@@ -6318,6 +6322,18 @@ msgstr "останется у твоих ног"
 #: scripts/ui/inventario.gd
 msgid "y la de repuesto pasa a la mano"
 msgstr "а запасное перейдет в руку"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Отмена"
+
+#: scripts/ui/inventario.gd
+msgid "Mover"
+msgstr "Переложить"
+
+#: scripts/ui/inventario.gd
+msgid "Elige su casilla nueva con las flechas o la cruceta y pulsa A o Intro. Si tiene algo, se cambian."
+msgstr "Выбери новую ячейку стрелками или крестовиной и нажми A или Enter. Если там что-то есть, они поменяются местами."
 
 #: scripts/ui/inventario.gd
 msgid "Barre un abanico muy ancho y echa lejos a los durmientes."
@@ -7182,10 +7198,6 @@ msgstr "Точно? Ты потеряешь весь мутаген, вложе�
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
 msgstr "Да, сбросить"
-
-#: scripts/ui/ordenador.gd
-msgid "Cancelar"
-msgstr "Отмена"
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que gastaste en las mutaciones no se devuelve."

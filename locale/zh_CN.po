@@ -5725,6 +5725,10 @@ msgid "Curas"
 msgstr "治疗"
 
 #: scripts/ui/inventario.gd
+msgid "Ordenar"
+msgstr "整理"
+
+#: scripts/ui/inventario.gd
 msgctxt "inventario"
 msgid "Seguir"
 msgstr "继续"
@@ -6276,6 +6280,18 @@ msgstr "会落在你脚边"
 #: scripts/ui/inventario.gd
 msgid "y la de repuesto pasa a la mano"
 msgstr "备用的会换到手上"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "取消"
+
+#: scripts/ui/inventario.gd
+msgid "Mover"
+msgstr "移动"
+
+#: scripts/ui/inventario.gd
+msgid "Elige su casilla nueva con las flechas o la cruceta y pulsa A o Intro. Si tiene algo, se cambian."
+msgstr "用方向键或十字键选择新的格子，然后按 A 或回车。如果那里有东西，两者会交换位置。"
 
 #: scripts/ui/inventario.gd
 msgid "Barre un abanico muy ancho y echa lejos a los durmientes."
@@ -7140,10 +7156,6 @@ msgstr "确定吗？你会失去投入变异的所有诱变剂。变异会清空
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
 msgstr "是，重置"
-
-#: scripts/ui/ordenador.gd
-msgid "Cancelar"
-msgstr "取消"
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que gastaste en las mutaciones no se devuelve."

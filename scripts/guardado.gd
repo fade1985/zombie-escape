@@ -43,6 +43,8 @@ const NUEVO := {
 	"matados": {},        # zombis matados de cada tipo desde el 8 nov ({"normal": 120, ...}, claves de Bestiario.LISTA): Colecciones
 	"muertos_con_ayudas": 0, # los de "muertos" que se mataron en partidas con ayudas: no cuentan para el logro Exterminador (logros.gd)
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...}
+	"orden_baul": [],     # en qué casilla del baúl va cada cosa, si el jugador las ha movido u ordenado (16 nov): el nombre
+	                      # de lo de cada casilla ("o:balas#24", "e:bate:2#3:0:false"; ui/inventario.gd, colocar)
 	"baul_equipo": [],    # las armas y los arrojables del baúl, cada uno en su casilla y con su calidad (y su
 	                      # durabilidad: "quedan", las partidas que aún puede salir, y "usada" si ya ha salido en esta: Armas.nuevas)
 	                      # (Armas.CALIDADES; parte 4 de la tienda y las piezas): [{"id": "bate", "calidad": 2},

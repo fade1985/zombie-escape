@@ -101,10 +101,16 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
     tira; B, Esc o Tab cierran.
   - Ratón o dedo: se toca, o se **arrastra** (se encienden los sitios donde vale soltar; encima de Johnny, se pone el
     arma o se usa la cura; en la zona roja de la ficha, se tira la casilla entera; donde no vale, vuelve y tiembla).
+  - **Colocar a mano** (16 nov): lo de Objetos, Munición y Curas (y en el baúl, sus casillas) se arrastra a otra casilla
+    de su grupo: si está vacía va allí y si tiene algo, se cambian. Con el mando o el teclado, **Mover** en la ficha: la
+    marca lleva lo levantado (medio transparente) por las casillas, las vacías incluidas, y A o Intro lo suelta; Cancelar,
+    B o Esc lo dejan donde estaba. Lo nuevo va al primer hueco libre y lo demás no se mueve. **Ordenar** (al lado de
+    Seguir; en el baúl, arriba a la derecha) lo coloca todo agrupado por tipo: armas cuerpo a cuerpo, a distancia y
+    especiales, lanzables, munición, curas, materiales y comida.
 - **Elige edificio:** **<** y **>** cambian la mejora del compuesto VD-7 (completar el edificio abre la siguiente, hasta la 5: cada una, enemigos un 20 % más fuertes en vida, daño, velocidad y ataque). El Reto del día no sale hasta completar algún edificio. Cada edificio cerrado dice debajo lo que pide para abrirse: completar el de antes, conseguir sus dosieres y ver todos sus vídeos.
   El botón **Reto del día**: el garaje subterráneo, 25 oleadas de durmientes con un jefe cada 5, una vez al día en cada
   edificio. Cada día tiene una condición, la misma para todo el mundo (algo que no vale: cuerpo a cuerpo, a distancia,
-  especiales, lanzables o curas); se ve al pasar por el botón y, debajo, tu récord de oleadas con ella en ese edificio.
+  especiales, lanzables o curas); se ve al pasar por el botón (solo la condición y tu récord: 16 nov) y, debajo, tu récord de oleadas con ella en ese edificio.
 
 ## La sala de pruebas
 

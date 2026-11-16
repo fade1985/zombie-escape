@@ -5734,6 +5734,10 @@ msgid "Curas"
 msgstr "Heilung"
 
 #: scripts/ui/inventario.gd
+msgid "Ordenar"
+msgstr "Sortieren"
+
+#: scripts/ui/inventario.gd
 msgctxt "inventario"
 msgid "Seguir"
 msgstr "Weiter"
@@ -6297,6 +6301,18 @@ msgstr "bleibt vor deinen Füßen liegen"
 #: scripts/ui/inventario.gd
 msgid "y la de repuesto pasa a la mano"
 msgstr "und die Ersatzwaffe kommt in die Hand"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cancelar"
+msgstr "Abbrechen"
+
+#: scripts/ui/inventario.gd
+msgid "Mover"
+msgstr "Bewegen"
+
+#: scripts/ui/inventario.gd
+msgid "Elige su casilla nueva con las flechas o la cruceta y pulsa A o Intro. Si tiene algo, se cambian."
+msgstr "Wähle mit den Pfeiltasten oder dem D-Pad seinen neuen Platz und drücke A oder Enter. Liegt dort etwas, wird getauscht."
 
 #: scripts/ui/inventario.gd
 msgid "Barre un abanico muy ancho y echa lejos a los durmientes."
@@ -7161,10 +7177,6 @@ msgstr "Sicher? Du verlierst das ganze Mutagen, das du in Mutationen gesteckt ha
 #: scripts/ui/ordenador.gd
 msgid "Sí, resetear"
 msgstr "Ja, zurücksetzen"
-
-#: scripts/ui/ordenador.gd
-msgid "Cancelar"
-msgstr "Abbrechen"
 
 #: scripts/ui/ordenador.gd
 msgid "Lo que gastaste en las mutaciones no se devuelve."

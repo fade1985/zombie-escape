@@ -1761,7 +1761,7 @@ func probar_arrastrar() -> void:
 		Objetos.nombre(johnny.huecos.fuego), armas_guardadas])
 	# las dos piezas cuerpo a cuerpo (m0) a la zona roja, de verdad: se tira la casilla entera
 	await arrastrar("m0", Vector2(737, 363), "captura-arrastrar-tirar.png")
-	print("Las piezas cuerpo a cuerpo a la zona roja: encendidos %s · bajo el ratón «%s» · mochila %s (esperado: [\"luz_tirar\"] · tirar · [[\"botiquin\", 1]])" % [
+	print("Las piezas cuerpo a cuerpo a la zona roja: encendidos %s · bajo el ratón «%s» · mochila %s (esperado: [\"luz_M1\", \"luz_M2\", \"luz_M3\", \"luz_M4\", \"luz_M5\", \"luz_M6\", \"luz_M7\", \"luz_tirar\"] · tirar · [[\"botiquin\", 1]]: también las otras casillas de Objetos, 16 nov)" % [
 		en_el_aire.luces, en_el_aire.encima, Objetos.casillas(mochila)])
 	# el botiquín (ahora m0) en Johnny: se cura y el inventario sigue abierto
 	var vida_antes = johnny.vida
@@ -1796,9 +1796,9 @@ func probar_arrastrar() -> void:
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.4).timeout
 	await arrastrar("m0", Vector2(680, 240), "captura-arrastrar-baul.png")
-	print("La pieza a distancia al baúl, de verdad: encendidos %s · en el baúl %d · en la mochila %d (esperado: [\"luz_baul\"] · 2 · 0)" % [
+	print("La pieza a distancia al baúl, de verdad: encendidos %s · en el baúl %d · en la mochila %d (esperado: [\"luz_M1\", \"luz_M2\", \"luz_M3\", \"luz_M4\", \"luz_M5\", \"luz_M6\", \"luz_M7\", \"luz_baul\"] · 2 · 0)" % [
 		en_el_aire.luces, Guardado.cargar().baul.get("pieza_distancia", 0), mochila.count("pieza_distancia")])
-	print("Las vendas se pueden soltar en %s (esperado: [\"baul\"])" % [inv.destinos("m0").keys()])
+	print("Las vendas se pueden soltar en %s (esperado: [\"baul\", \"M1\", \"M2\", \"M3\", \"M4\", \"M5\", \"M6\", \"M7\"])" % [inv.destinos("m0").keys()])
 	await soltar.call("m0", "baul")
 	print("Las vendas al baúl: en la mochila %d, en el baúl %d (esperado: 0, 1)" % [mochila.count("vendas"),
 		Guardado.cargar().baul.get("vendas", 0)])
@@ -2425,4 +2425,119 @@ func probar_fregona_mejorada() -> void:
 	print("Al caer en su última partida: apartada %s (esperado: {}: se ha roto y vuelve la Normal)" % Guardado.cargar().fregona)
 	Guardado.escribir(antes)
 	Guardado.cambiar(func(g2): g2.fregona = {})
+	get_tree().quit()
+
+
+# --ordenar (16 nov): el inventario y el baúl, ordenables a mano. En el inventario: arrastrar una cosa a una casilla vacía
+# (va allí), a una con otra cosa (se cambian), «Mover» con el mando (la marca la lleva y A la suelta en un hueco), coger
+# algo nuevo (al primer hueco, sin mover lo demás), cerrar y abrir (sigue igual) y «Ordenar». En el baúl, lo mismo con
+# sus casillas y su «Ordenar». Fotos: captura-ordenar-*.png
+func probar_ordenar() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g):
+		g.baul = {"balas": 30, "pieza_especial": 5, "vendas": 2, "donut": 1}
+		g.baul_equipo = [{"id": "molotov", "calidad": 0, "n": 2}, {"id": "pistola", "calidad": 1}, {"id": "bate", "calidad": 2}]
+		g.orden_baul = [])
+	mochila.clear()
+	for id in ["manzana", "pieza_especial", "donut", "pieza_cuerpo", "vendas"]:
+		mochila.append(id)
+	johnny.municion = {"balas": 30, "cartuchos": 6}
+	orden_casillas = {}
+	await get_tree().create_timer(0.5).timeout
+	var clave_de := func(id: String) -> String:   # la casilla de los datos de un objeto de la mochila ("m2")
+		return "m%d" % Objetos.casillas(mochila).map(func(c): return c[0]).find(id)
+	var por_casilla := func(grupo: String) -> Array:   # lo que hay en cada casilla de un grupo, en pantalla
+		var s := Guardado.cargar() if grupo == "baul" else {}
+		var donde: Dictionary = inventario.colocar(grupo, s)
+		var lista := []
+		lista.resize(inventario.casillas_de(grupo, s))
+		lista.fill("-")
+		for c in inventario.cosas_grupo(grupo, s):
+			lista[donde[c[0]]] = c[3]
+		while not lista.is_empty() and lista[-1] == "-":
+			lista.pop_back()
+		return lista
+	inventario.abrir("inventario", self)
+	await get_tree().create_timer(0.4).timeout
+	print("Ordenar · al abrir: objetos %s · munición %s (esperado: [manzana, pieza_especial, donut, pieza_cuerpo] · [balas, balas, cartuchos])" % [
+		por_casilla.call("objetos"), por_casilla.call("municion")])
+	# arrastrar la manzana a la última casilla (vacía) y el dónut encima de la pieza especial (se cambian)
+	inventario.soltar_en(clave_de.call("manzana"), "M7")
+	await get_tree().process_frame
+	inventario.soltar_en(clave_de.call("donut"), inventario.sitio_de(clave_de.call("pieza_especial")))
+	await get_tree().process_frame
+	print("Ordenar · arrastrando: objetos %s (esperado: [-, donut, pieza_especial, pieza_cuerpo, -, -, -, manzana])" % [
+		por_casilla.call("objetos")])
+	# la munición: los cartuchos a la primera casilla (se cambian con las balas)
+	inventario.soltar_en("u%d" % johnny.huecos_municion().map(func(h): return h[0]).find("cartuchos"), "U0")
+	await get_tree().process_frame
+	print("Ordenar · la munición: %s (esperado: [cartuchos, balas, balas])" % [por_casilla.call("municion")])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-ordenar-arrastrar.png")
+	# con el mando: «Mover» con la pieza de cuerpo a cuerpo elegida, y A en el primer hueco
+	inventario.elegir(clave_de.call("pieza_cuerpo"))
+	var mover: Button = inventario.fondo.find_child("mover", true, false)
+	print("Ordenar · el botón: «%s» (esperado: Mover)" % [mover.text if mover else "no está"])
+	if mover:
+		mover.pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	var cancelar: Button = inventario.fondo.find_child("mover", true, false)
+	var hueco: Button = inventario.lienzo.find_child("M0", false, false)
+	print("Ordenar · llevando: «%s», botón «%s», el hueco M0 se puede elegir %s (esperado: %s, Cancelar, true)" % [
+		inventario.llevando, cancelar.text if cancelar else "no está", hueco != null, clave_de.call("pieza_cuerpo")])
+	if hueco:
+		hueco.grab_focus()
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-ordenar-mando.png")
+	if hueco:
+		hueco.pressed.emit()
+	await get_tree().process_frame
+	print("Ordenar · con el mando: objetos %s · llevando «%s» (esperado: [pieza_cuerpo, donut, pieza_especial, -, -, -, -, manzana], «»)" % [
+		por_casilla.call("objetos"), inventario.llevando])
+	# algo nuevo va al primer hueco, sin mover lo demás; cerrar y abrir no cambia nada
+	inventario.cerrar()
+	mochila.append("ensalada")
+	inventario.abrir("inventario", self)
+	await get_tree().create_timer(0.3).timeout
+	print("Ordenar · coge una ensalada y vuelve a abrir: objetos %s (esperado: [pieza_cuerpo, donut, pieza_especial, ensalada, -, -, -, manzana])" % [
+		por_casilla.call("objetos")])
+	# «Ordenar»: por tipos (los materiales y luego la comida; las balas y luego los cartuchos)
+	var ordenar: Button = inventario.fondo.find_child("ordenar", true, false)
+	if ordenar:
+		ordenar.pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	print("Ordenar · «Ordenar» en el inventario: objetos %s · munición %s (esperado: [pieza_cuerpo, pieza_especial, donut, manzana, ensalada] · [balas, balas, cartuchos])" % [
+		por_casilla.call("objetos"), por_casilla.call("municion")])
+	Captura.foto("captura-ordenar-inventario.png")
+	inventario.cerrar()
+	# el baúl: el bate a la casilla 12, las balas encima de la pistola (se cambian) y luego «Ordenar»
+	inventario.abrir("baul", self)
+	await get_tree().create_timer(0.4).timeout
+	var en_baul := func(id: String) -> String:
+		return "b%d" % inventario.cosas_baul(Guardado.cargar()).map(func(o): return o.id).find(id)
+	print("Ordenar · el baúl al abrir: %s (esperado: [vendas, pieza_especial, donut, balas, balas, molotov, pistola, bate])" % [
+		por_casilla.call("baul")])
+	inventario.soltar_en(en_baul.call("bate"), "B12")
+	await get_tree().process_frame
+	inventario.soltar_en(en_baul.call("donut"), inventario.sitio_de(en_baul.call("pistola")))
+	await get_tree().process_frame
+	print("Ordenar · el baúl arrastrando: %s (esperado: [vendas, pieza_especial, pistola, balas, balas, molotov, donut, -, -, -, -, -, bate])" % [
+		por_casilla.call("baul")])
+	# arrastrar del baúl a lo que lleva sigue sacando, y de lo que lleva al baúl sigue guardando
+	var vendas_baul: int = Guardado.cargar().baul.get("vendas", 0)
+	inventario.soltar_en(en_baul.call("vendas"), "llevas")
+	await get_tree().process_frame
+	print("Ordenar · soltar unas vendas del baúl en lo que llevas: en el baúl %d (esperado: %d)" % [
+		Guardado.cargar().baul.get("vendas", 0), vendas_baul - 1])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-ordenar-baul-arrastrar.png")
+	ordenar = inventario.fondo.find_child("ordenar", true, false)
+	if ordenar:
+		ordenar.pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	print("Ordenar · «Ordenar» en el baúl: %s (esperado: [bate, pistola, molotov, balas, balas, vendas, pieza_especial, donut])" % [
+		por_casilla.call("baul")])
+	Captura.foto("captura-ordenar-baul.png")
+	inventario.cerrar()
+	Guardado.escribir(antes)
 	get_tree().quit()

@@ -64,7 +64,7 @@ static func apuntar(p: Node, num: int) -> void:
 		"mutaciones": p.mutaciones.tengo, "eventos": p.eventos.usados,
 		"logros": {"con_ayudas": p.logros.con_ayudas, "fregonazos": p.logros.fregonazos, "curado": p.logros.curado,
 			"racha": p.logros.racha, "mejor_racha": p.logros.mejor_racha},
-		"mochila": p.mochila, "armas_guardadas": p.armas_guardadas,
+		"mochila": p.mochila, "orden_casillas": p.orden_casillas, "armas_guardadas": p.armas_guardadas,
 		"dolares": p.dolares, "mutageno": p.mutageno, "muertos": p.muertos, "matados": p.matados, "duracion": p.duracion, "al_empezar": p.al_empezar,
 		"johnny": {"vida": j.vida, "tercios": j.tercios, "resucitado": j.resucitado, "copia_usada": j.copia_usada, "huecos": j.huecos,
 			"calidades": j.calidades, "quedan": j.quedan, "mano": j.mano, "balas": j.balas, "municion": j.municion,
@@ -107,6 +107,7 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	for clave in foto.logros:
 		p.logros.set(clave, foto.logros[clave])
 	p.mochila = foto.mochila.duplicate()
+	p.orden_casillas = foto.get("orden_casillas", {}).duplicate(true)   # (una foto de antes del 16 nov no lo trae)
 	p.armas_guardadas = foto.armas_guardadas.duplicate()
 	p.dolares = foto.dolares
 	p.mutageno = foto.get("mutageno", 0)   # (una foto de antes del 15 nov no lo trae)

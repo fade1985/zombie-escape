@@ -171,6 +171,8 @@ var garaje := Garaje.new()         # las oleadas del garaje del reto del día (g
 var joyeria := Joyeria.new()       # la cámara acorazada de la joyería del centro comercial (joyeria.gd)
 var guia := Guia.new()             # el tutorial disimulado de la primera partida (guia.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
+var orden_casillas := {}   # en qué casilla del inventario va cada cosa, si el jugador las ha movido u ordenado: {"objetos",
+                           # "municion", "curas": [nombre de lo de cada casilla, ...]} (ui/inventario.gd, colocar; 16 nov)
 var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a cuerpo y una a distancia (llevar_arma)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida

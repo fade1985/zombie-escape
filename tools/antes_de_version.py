@@ -37,6 +37,7 @@ PRUEBAS = [
     ("rescate", ["--rescate"], 250),
     ("derrota", ["--derrota"], 200),
     ("baul", ["--baul"], 200),
+    ("ordenar", ["--ordenar"], 200),
     ("tienda-armas", ["--tienda-armas"], 200),
     ("regalo", ["--regalo"], 200),
     ("logros", ["--logros"], 250),

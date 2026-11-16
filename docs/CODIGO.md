@@ -782,7 +782,12 @@ en una línea.
   en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
   banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
   del nombre; el banco solo dice lo que cuesta, sin lo que tienes ni lo que falta
-  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). Los lanzables se tiran al suelo como las armas,
+  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). Desde el 16 nov, cada cosa de Objetos, Munición, Curas y el
+  baúl va en la casilla que le da el jugador: los datos no guardan casillas, así que encima va una lista de qué va en cada una
+  (`partida.orden_casillas` y, el baúl, «orden_baul» del guardado; `colocar`, `pintar_grupo`, sitios «M3», «U0», «C1», «B12»);
+  las claves «m3», «b12» siguen siendo las de los datos. Se mueve arrastrando a otra casilla del grupo (`colocar_en`: va o se
+  cambian) o con «Mover» de la ficha (`llevando`, `mover_marca`: mando y teclado), y «Ordenar» lo agrupa por tipo (`ordenar`,
+  `tipo_orden`). Prueba: `--ordenar`. Los lanzables se tiran al suelo como las armas,
   de uno en uno o el montón en la zona roja, y vuelven con su calidad y sus partidas (`partida.soltar_lanzable` con
   "tirado"; 15 nov, prueba `--tirar-lanzables`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista y en su carta; la frase de cada carta, con la letra lisa; la lista mide justo las cartas enteras que caben y la rueda, la barra y la cruceta la mueven de carta en carta, sin cortar ninguna: `igualar` y `rueda`, M112).
 - `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la

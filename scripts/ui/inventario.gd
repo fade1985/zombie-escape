@@ -60,6 +60,7 @@ var tapa: Control          # y lo que recibe lo que se suelta (encima de todo)
 var encima := ""           # el sitio encendido que está bajo el dedo (crece un poco)
 var salta: Array = []      # las casillas que dan un saltito al volver a pintar (lo que acaba de llegar)
 var salta_johnny := false  # y Johnny, al ponerse un arma o curarse
+var encendidos := {}       # mientras se arrastra: los sitios donde se puede soltar (destinos)
 var con_dedo := false      # lo que se hace ahora viene de soltar algo arrastrado (suena «soltar» en vez de «cambiar»)
 
 
@@ -76,6 +77,7 @@ func abrir(que: String, p: Node) -> void:
 	sel = ""
 	foco = ""
 	aviso = ""
+	llevando = ""
 	salta = []
 	salta_johnny = false
 	pintar(true)
@@ -87,6 +89,7 @@ func cerrar() -> void:
 	if get_viewport().gui_is_dragging():   # (si se cierra con algo levantado, se suelta sin más)
 		get_viewport().gui_cancel_drag()
 	arrastre = {}
+	llevando = ""
 	abierto = ""
 	if fondo:
 		fondo.queue_free()
@@ -258,34 +261,23 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	# en medio, los dos grupos de 8: los objetos de la mochila y la munición y, abajo, las 2 casillas de las curas, en
 	# medio (13 nov: antes, 4, y a su izquierda 4 de arrojables de repuesto)
 	raya(Rect2(380, 148, 2, 430))
-	var llenas := Objetos.casillas(partida.mochila)
-	var objetos := Objetos.ocupadas(partida.mochila)   # las curas van al final de "llenas"
+	# (cada cosa en su casilla, la que le ha dado el jugador o la primera libre: pintar_grupo, 16 nov)
 	cinta(Idioma.t("Objetos"), 392, 146)   # (sin «0 / 8» desde el M100; igual los demás)
-	for i in Objetos.MOCHILA:
-		if i < objetos:
-			var n: int = llenas[i][1]
-			casilla_inv(rejilla(i, 170), "m%d" % i, Objetos.icono(llenas[i][0]), "×%d" % n if n > 1 else "", GRIS, 10.0)
-		else:
-			casilla_inv(rejilla(i, 170))
-	var balas: Array = johnny.huecos_municion()
+	pintar_grupo("objetos", rejilla.bind(170), 10.0)
 	# (los tres grupos, repartidos a lo alto hasta «Seguir», con el mismo hueco entre ellos: 13 nov)
 	cinta(Idioma.t("Munición"), 392, 296)
-	for i in Armas.HUECOS_MUNICION:
-		if i < balas.size():
-			casilla_inv(rejilla(i, 320), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 10.0)
-		else:
-			casilla_inv(rejilla(i, 320))
+	pintar_grupo("municion", rejilla.bind(320), 10.0)
 	cinta(Idioma.t("Curas"), (cuadro(0).position.x + cuadro(Objetos.CURAS - 1).end.x) / 2.0, 446, HORIZONTAL_ALIGNMENT_CENTER)
-	for i in Objetos.CURAS:
-		var j := objetos + i
-		if j < llenas.size():
-			var n: int = llenas[j][1]
-			casilla_inv(cuadro(i), "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "", GRIS, 10.0)
-		else:
-			casilla_inv(cuadro(i))
-	var seguir := boton(lienzo, "cerrar", Idioma.t("Seguir", "inventario"), cerrar)   # vuelve a la partida: «Resume»
-	seguir.position = Vector2(392, 544) - ORIGEN
-	seguir.size = Vector2(216, 36)
+	pintar_grupo("curas", cuadro, 10.0)
+	# abajo, «Ordenar» (lo coloca todo agrupado por tipo: 16 nov) y «Seguir», que vuelve a la partida («Resume»)
+	var orden := boton(lienzo, "ordenar", Idioma.t("Ordenar"), ordenar)
+	orden.position = Vector2(392, 544) - ORIGEN
+	orden.size = Vector2(106, 36)
+	var seguir := boton(lienzo, "cerrar", Idioma.t("Seguir", "inventario"), cerrar)
+	seguir.position = Vector2(502, 544) - ORIGEN
+	seguir.size = Vector2(106, 36)
+	for b in [orden, seguir]:
+		encoger(b)
 	sitio("tirar", FICHA)   # la ficha: al arrastrar algo que se puede tirar, se vuelve la zona roja
 	pintar_ficha()
 	return lienzo.find_child(sel, false, false)
@@ -612,6 +604,7 @@ func pintar_ficha() -> void:
 		"m": d = ficha_objeto(caja, Objetos.casillas(partida.mochila)[i])
 		"u": d = ficha_municion(caja, partida.johnny.huecos_municion()[i])
 		_: d = ficha_lanzable(caja, sel)   # ("l" a mano y "e" de repuesto)
+	poner_mover(d)
 	espacio(caja, 8)
 	var texto := nota_de(d.que)
 	var nota := renglon(caja, texto[0], texto[1], HORIZONTAL_ALIGNMENT_LEFT)
@@ -630,7 +623,7 @@ func pintar_ficha() -> void:
 		if b[0] in PRINCIPALES:
 			for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color"]:
 				pulsar.add_theme_color_override(c, Tema.AMARILLO)
-		if not b[3] and b[0] != "destruir":   # (sin atajo: no se destruye nada sin querer)
+		if not b[3] and (b[0] in PRINCIPALES or b[0] == "tirar"):   # (sin atajo: «Destruir», para no destruir nada sin querer, y «Mover»)
 			atajos["X" if b[0] == "tirar" else "Y"] = Idioma.t("tirar") if b[0] == "tirar" else Idioma.minusculas(b[1], true)
 	botones.position = Vector2(634, 572 - botones.get_combined_minimum_size().y) - ORIGEN
 	# Si en este idioma lo que hace (más largo que en español: ruso, alemán) llegaría a los botones, se achica la letra
@@ -678,7 +671,7 @@ func pintar_ayuda(atajos: Dictionary) -> void:
 	for k in ["X", "Y"]:
 		if k in atajos:
 			partes.append([k, atajos[k]])
-	partes.append(["B", Idioma.t("cerrar")])
+	partes.append(["B", Idioma.minusculas(Idioma.t("Cancelar"), true) if llevando != "" else Idioma.t("cerrar")])   # (llevando algo con «Mover», B lo deja)
 	for p in partes:
 		ayuda.add_child(tecla(p[0]))
 		var t := Label.new()
@@ -963,7 +956,7 @@ func elegir(clave: String) -> void:
 # Con las flechas o el mando, la ficha enseña lo de la casilla que tiene la marca, sin pulsar nada (con el ratón, al
 # tocarla). Cuando la marca la pone el juego (dar_foco), no
 func seguir_marca(clave: String, b: Control) -> void:
-	if abierto in ["inventario", "baul", "banco"] and sel != clave and not moviendo_marca and is_instance_valid(lienzo) \
+	if abierto in ["inventario", "baul", "banco"] and sel != clave and not moviendo_marca and llevando == "" and is_instance_valid(lienzo) \
 			and lienzo.is_ancestor_of(b):
 		elegir(clave)
 
@@ -1232,35 +1225,14 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	var llenas := Objetos.casillas(partida.mochila)
 	var objetos := Objetos.ocupadas(partida.mochila)   # las curas van al final de "llenas"
 	rotulo(lienzo, Idioma.t("Objetos  %d / %d") % [objetos, Objetos.MOCHILA], 64, 182, Tema.AMARILLO)
-	for i in Objetos.MOCHILA:
-		if i < objetos:
-			var n: int = llenas[i][1]
-			casilla_inv(en_fila(i, 204), "m%d" % i, Objetos.icono(llenas[i][0]), "×%d" % n if n > 1 else "", GRIS, 8.0)
-		else:
-			casilla_inv(en_fila(i, 204))
+	pintar_grupo("objetos", en_fila.bind(204), 8.0)   # (cada cosa en su casilla, como en el inventario: 16 nov)
 	var balas: Array = johnny.huecos_municion()
 	rotulo(lienzo, Idioma.t("Munición  %d / %d") % [balas.size(), Armas.HUECOS_MUNICION], 64, 254, Tema.AMARILLO)
-	for i in Armas.HUECOS_MUNICION:
-		if i < balas.size():
-			casilla_inv(en_fila(i, 276), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 8.0)
-		else:
-			casilla_inv(en_fila(i, 276))
+	pintar_grupo("municion", en_fila.bind(276), 8.0)
 	# y en la última fila, las curas (13 nov: antes, a la derecha de 4 arrojables de repuesto)
-	var curas := en_fila(0, 348).position.x
-	rotulo(lienzo, Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], curas, 326, Tema.AMARILLO)
-	for i in Objetos.CURAS:
-		var r := en_fila(i, 348)
-		r.position.x = curas + i * 46
-		var j := objetos + i
-		if j < llenas.size():
-			var n: int = llenas[j][1]
-			casilla_inv(r, "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "", GRIS, 8.0)
-		else:
-			casilla_inv(r)
+	rotulo(lienzo, Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], en_fila(0, 348).position.x, 326, Tema.AMARILLO)
+	pintar_grupo("curas", en_fila.bind(348), 8.0)
 	raya(Rect2(452, 92, 2, 298))
-	# las dos mitades, para arrastrar de una a otra (guardar y sacar)
-	sitio("llevas", Rect2(52, 80, 394, 316))
-	sitio("baul", Rect2(MITAD - 8, 80, 428, 316))
 	# a la derecha, el baúl: los objetos, con cuántos hay, y las armas y los paquetes de arrojables, con el color de su
 	# calidad. Si pasa de 32 (al completar el edificio, lo que lleva entra aunque no quepa), las casillas se hacen más
 	# pequeñas para que quepan todas
@@ -1269,14 +1241,19 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	var paso := mini(52, floori(264.0 / filas))
 	rotulo(lienzo, Idioma.t("Baúl  %d / %d") % [Objetos.casillas_baul(s), Objetos.BAUL], MITAD, 86, Color("#e6dec8"))
 	rotulo(lienzo, Idioma.t("Objetos, armas y lanzables"), MITAD, 110, Tema.GRIS)
-	for i in filas * 8:
-		var r := Rect2(MITAD + (i % 8) * paso, 132 + floori(i / 8.0) * paso, paso - 6, paso - 6)
-		if i < cosas.size():
-			var o: Dictionary = cosas[i]
-			casilla_inv(r, "b%d" % i, Objetos.icono(o.id), str(o.n) if o.n > 0 else "",
-				GRIS if o.equipo < 0 else Armas.color(o.calidad), 8.0)
-		else:
-			casilla_inv(r)
+	# (cada cosa en su casilla: pintar_grupo, 16 nov; con «Ordenar» arriba a la derecha, que lo coloca todo por tipos, lo
+	# del baúl y lo que lleva)
+	pintar_grupo("baul", func(i: int) -> Rect2: return Rect2(MITAD + (i % 8) * paso, 132 + floori(i / 8.0) * paso, paso - 6, paso - 6),
+		8.0, s)
+	for i in range(casillas_de("baul", s), filas * 8):   # (las de la última fila que sobran, vacías)
+		casilla_inv(Rect2(MITAD + (i % 8) * paso, 132 + floori(i / 8.0) * paso, paso - 6, paso - 6))
+	var orden := boton(lienzo, "ordenar", Idioma.t("Ordenar"), ordenar)
+	orden.position = Vector2(MITAD + 8 * 52 - 6 - 130, 78) - ORIGEN
+	orden.size = Vector2(130, 30)
+	encoger(orden)
+	# las dos mitades, para arrastrar de una a otra (guardar y sacar), detrás de las casillas (sitio_en mira primero ellas)
+	sitio("llevas", Rect2(52, 80, 394, 316))
+	sitio("baul", Rect2(MITAD - 8, 80, 428, 316))
 	# (los dos renglones de debajo, lo de la durabilidad y Ctrl + clic, ya no salen: 11 nov)
 	# abajo, el marco de la ficha y los botones que no cambian con lo elegido (el principal va con la ficha)
 	marco_ficha(lienzo, Rect2(64, 402, 832, 182))
@@ -1348,6 +1325,7 @@ func pintar_ficha_baul() -> void:
 	lienzo.add_child(viva)
 	asegurar_sel()
 	var d := ficha_baul()
+	poner_mover(d)
 	var grande := Panel.new()
 	grande.add_theme_stylebox_override("panel", estilo(Tema.AMARILLO, false, false))
 	grande.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1370,17 +1348,25 @@ func pintar_ficha_baul() -> void:
 	var nota := renglon(caja, texto[0], texto[1], HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	nota.name = "nota"   # (las pruebas la leen)
 	aviso = ""
-	if not d.boton.is_empty():
+	if not d.boton.is_empty() and llevando == "":
 		var b := boton(viva, d.boton[0], d.boton[1], d.boton[2])
 		b.disabled = d.boton[3]
 		for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color"]:
 			b.add_theme_color_override(c, Tema.AMARILLO)
 		b.position = Vector2(600, 410) - ORIGEN
 		b.size = Vector2(280, 36)
-	if que_se_destruye() != "":   # lo de la mochila, la munición y el baúl (no las armas que lleva)
+	# «Mover» (16 nov) y «Destruir», en la misma fila: a la izquierda, «Mover», si lo elegido se puede cambiar de casilla
+	var mover: Array = d.get("mover", [])
+	if not mover.is_empty():
+		var m := boton(viva, mover[0], mover[1], mover[2])
+		m.position = Vector2(600, 450) - ORIGEN
+		m.size = Vector2(138, 36)
+		encoger(m)
+	if que_se_destruye() != "" and llevando == "":   # lo de la mochila, la munición y el baúl (no las armas que lleva)
 		var x := boton(viva, "destruir", Idioma.t("Destruir"), destruir, "BotonRojo")   # no-tr
-		x.position = Vector2(600, 450) - ORIGEN
-		x.size = Vector2(280, 36)
+		x.position = Vector2(600 + (142 if not mover.is_empty() else 0), 450) - ORIGEN
+		x.size = Vector2(138 if not mover.is_empty() else 280, 36)
+		encoger(x)
 	# (sin la línea de las teclas de abajo: 11 nov)
 
 
@@ -2327,6 +2313,7 @@ func destinos(clave: String) -> Dictionary:
 			"b":
 				if se_saca(cosas_baul(s)[i]):
 					d["llevas"] = "sacar"
+		otras_casillas(clave, d)
 		return d
 	match clave[0]:
 		"g":
@@ -2355,7 +2342,20 @@ func destinos(clave: String) -> Dictionary:
 			for j in Lanzables.REPUESTO:
 				if partida.lanzables.se_juntan(clave, "e%d" % j):
 					d["e%d" % j] = "mover"
+	otras_casillas(clave, d)
 	return d
+
+
+# Las otras casillas de su grupo (16 nov): soltarlo en una lo lleva allí o lo cambia por lo que haya (colocar_en)
+func otras_casillas(clave: String, d: Dictionary) -> void:
+	var grupo := grupo_de(clave)
+	if grupo == "":
+		return
+	var propia := sitio_de(clave)
+	var s := Guardado.cargar() if grupo == "baul" else {}
+	for j in casillas_de(grupo, s):
+		if LETRA[grupo] + str(j) != propia:
+			d[LETRA[grupo] + str(j)] = "colocar"
 
 
 # La mano de un arma: 0 la de cuerpo a cuerpo y 1 la de distancia ("p0", "r1"...)
@@ -2363,14 +2363,15 @@ func mano_de(id: String) -> int:
 	return 0 if Armas.datos(id).tipo == "cuerpo" else 1
 
 
-# El sitio de donde sale lo de esa casilla: soltarlo ahí no es un error, solo vuelve
-func propio(clave: String) -> String:
+# Los sitios de donde sale lo de esa casilla: soltarlo ahí no es un error, solo vuelve (su casilla y, en el baúl, su mitad)
+func propios(clave: String) -> Array:
+	var lista := [sitio_de(clave)]
 	if abierto == "baul":
-		return "baul" if clave[0] == "b" else "llevas"
+		lista.append("baul" if clave[0] == "b" else "llevas")
 	match clave[0]:
-		"g": return "r%d" % mano_de(partida.armas_guardadas[clave.substr(1).to_int()])
-		"p", "l", "e": return clave
-	return ""
+		"g": lista.append("r%d" % mano_de(partida.armas_guardadas[clave.substr(1).to_int()]))
+		"p", "l", "e": lista.append(clave)
+	return lista
 
 
 # Enciende los sitios donde se puede soltar lo que se acaba de levantar y pone encima de todo la tapa: es la que
@@ -2380,6 +2381,7 @@ func encender(clave: String) -> void:
 	capa.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lienzo.add_child(capa)
 	var hay := destinos(clave)
+	encendidos = hay
 	for s in sitios:
 		if s[0] in hay:
 			luz(s[0], s[1], hay[s[0]], clave)
@@ -2397,7 +2399,7 @@ func luz(nombre: String, r: Rect2, que: String, clave: String) -> void:
 	if nombre == "johnny" and que == "poner":
 		return
 	var rojo := que == "tirar"
-	var es_casilla := nombre.length() == 2
+	var es_casilla := nombre.length() <= 3   # ("p0", "M3", "B12"; las zonas tienen nombres largos: "johnny", "baul")
 	if es_casilla:
 		r = r.grow(3)
 	var p := Panel.new()
@@ -2499,7 +2501,7 @@ func cartel(padre: Control, lineas: Array, y: float) -> void:
 # Mientras se arrastra (la tapa lo pregunta cada vez que se mueve el dedo): el sitio encendido que hay debajo crece un
 # poco y el de antes vuelve a su tamaño. Se puede soltar en cualquier sitio: si ahí no vale, vuelve a su casilla
 func mirar(donde: Vector2, _datos: Variant) -> bool:
-	var nuevo := sitio_en(en_lienzo(donde))
+	var nuevo := sitio_en(en_lienzo(donde), encendidos)
 	if not is_instance_valid(capa) or capa.get_node_or_null(NodePath("luz_" + nuevo)) == null:
 		nuevo = ""
 	if nuevo != encima:
@@ -2514,12 +2516,17 @@ func en_lienzo(donde: Vector2) -> Vector2:
 	return lienzo.get_global_transform().affine_inverse() * (tapa.get_global_transform() * donde)
 
 
-# El sitio que hay en ese punto del lienzo ("" ninguno)
-func sitio_en(punto: Vector2) -> String:
+# El sitio que hay en ese punto del lienzo ("" ninguno). Si hay varios (una casilla del baúl, dentro de su mitad), el
+# primero de "validos" (donde se puede soltar) o, si no, el primero
+func sitio_en(punto: Vector2, validos := {}) -> String:
+	var primero := ""
 	for s in sitios:
 		if s[1].has_point(punto):
-			return s[0]
-	return ""
+			if s[0] in validos:
+				return s[0]
+			if primero == "":
+				primero = s[0]
+	return primero
 
 
 # Con el dedo encima, un sitio encendido se ilumina más y, si es una casilla, crece un poco (y al irse, vuelve)
@@ -2530,7 +2537,7 @@ func crecer(nombre: String, si: bool) -> void:
 	if marco == null:
 		return
 	marco.add_theme_stylebox_override("panel", marco.get_meta("encima" if si else "normal"))
-	if nombre.length() != 2:
+	if nombre.length() > 3:
 		return
 	for s in sitios:
 		if s[0] == nombre and is_instance_valid(s[2]):
@@ -2547,7 +2554,7 @@ func crecer(nombre: String, si: bool) -> void:
 func soltar(donde: Vector2, _datos: Variant) -> void:
 	var clave: String = arrastre.get("clave", "")
 	arrastre = {}
-	soltar_en.call_deferred(clave, sitio_en(en_lienzo(donde)), tapa.get_global_transform() * donde)
+	soltar_en.call_deferred(clave, sitio_en(en_lienzo(donde), encendidos), tapa.get_global_transform() * donde)
 
 
 # Suelta lo de la casilla "clave" en el sitio "a_donde": si se puede, se hace lo mismo que con el botón de la ficha
@@ -2558,7 +2565,7 @@ func soltar_en(clave: String, a_donde: String, punto := Vector2.INF) -> void:
 		apagar()
 		return
 	var que: String = destinos(clave).get(a_donde, "")
-	var mal := a_donde != "" and a_donde != propio(clave)
+	var mal := a_donde != "" and not a_donde in propios(clave)
 	apagar()
 	if que == "":
 		volver(clave, mal, punto)
@@ -2575,6 +2582,7 @@ func soltar_en(clave: String, a_donde: String, punto := Vector2.INF) -> void:
 		"mover": mover_lanzable(otro_lanzable(a_donde))
 		"guardar": guardar()
 		"sacar": sacar()
+		"colocar": colocar_en(clave, a_donde)
 	con_dedo = false
 
 
@@ -2586,6 +2594,7 @@ func otro_lanzable(a_donde: String) -> String:
 # Apaga los sitios encendidos y quita la tapa (al soltar, o si se corta el arrastre)
 func apagar() -> void:
 	arrastre = {}
+	encendidos = {}
 	crecer(encima, false)
 	encima = ""
 	for n in [capa, tapa]:
@@ -2649,6 +2658,309 @@ func _process(_delta: float) -> void:
 		volver(clave, false)
 
 
+# ── Colocar y ordenar (16 nov) ──
+# Lo que se lleva y lo del baúl no apuntan en qué casilla va cada cosa (la mochila es una lista de ids; la munición y el
+# baúl, cuántos hay de cada): el orden sale de los datos. Para que el jugador lo coloque a su gusto, encima va una lista
+# de qué va en cada casilla, por su nombre («balas#24»: el tipo y, detrás de «#», lo exacto; los iguales se pueden
+# cambiar entre sí): la de la mochila, la munición y las curas en la partida (partida.orden_casillas) y la del baúl en el
+# guardado («orden_baul»). Al pintar, cada cosa va a la casilla que tiene apuntada (primero la de su nombre exacto y, si
+# no, una de su tipo) y lo nuevo, al primer hueco libre; luego se apunta cómo ha quedado, para que no se mueva nada al
+# coger otra cosa. Las claves de las casillas («m3», «b12») siguen siendo las de los datos: lo demás (la ficha, tirar,
+# guardar, sacar) no se entera. Se mueve arrastrando a otra casilla del mismo grupo (vacía: va allí; con algo: se
+# cambian) o con «Mover» de la ficha (mando y teclado: la marca lleva lo levantado y A lo suelta); «Ordenar» lo coloca
+# todo agrupado por tipo. Prueba: --ordenar
+
+# La letra de los sitios de las casillas de cada grupo ("M3": la 4.ª casilla de Objetos, esté vacía o no)
+const LETRA := {"objetos": "M", "curas": "C", "municion": "U", "baul": "B"}
+var llevando := ""         # mando y teclado: lo levantado con «Mover», que espera su casilla nueva ("" nada)
+
+
+# El grupo de casillas de lo de esa clave: "objetos", "curas", "municion", "baul" o "" (las armas y los arrojables a
+# mano tienen sus casillas fijas)
+func grupo_de(clave: String) -> String:
+	if not existe(clave):
+		return ""
+	match clave[0]:
+		"m": return "curas" if Objetos.casillas(partida.mochila)[clave.substr(1).to_int()][0] in Objetos.USABLES else "objetos"
+		"u": return "municion"
+		"b": return "baul" if abierto == "baul" else ""
+	return ""
+
+
+# Cuántas casillas tiene un grupo (el baúl, más si pasa de las suyas: al acabar la partida entra todo)
+func casillas_de(grupo: String, s := {}) -> int:
+	match grupo:
+		"objetos": return Objetos.MOCHILA
+		"curas": return Objetos.CURAS
+		"municion": return Armas.HUECOS_MUNICION
+	return maxi(Objetos.BAUL, cosas_baul(s).size())
+
+
+# Lo de un grupo, en el orden de los datos: [[clave, tipo, nombre exacto, id], ...]
+func cosas_grupo(grupo: String, s := {}) -> Array:
+	var lista := []
+	match grupo:
+		"objetos", "curas":
+			var llenas := Objetos.casillas(partida.mochila)
+			for i in llenas.size():
+				if (llenas[i][0] in Objetos.USABLES) == (grupo == "curas"):
+					lista.append(["m%d" % i, llenas[i][0], "%s#%d" % llenas[i], llenas[i][0]])
+		"municion":
+			var h: Array = partida.johnny.huecos_municion()
+			for i in h.size():
+				lista.append(["u%d" % i, h[i][0], "%s#%d" % h[i], h[i][0]])
+		"baul":
+			var cosas := cosas_baul(s)
+			for i in cosas.size():
+				var o: Dictionary = cosas[i]
+				if o.equipo < 0:
+					lista.append(["b%d" % i, "o:" + o.id, "o:%s#%d" % [o.id, o.n], o.id])
+				else:
+					var e: Dictionary = s.baul_equipo[o.equipo]
+					var tipo := "e:%s:%d" % [o.id, o.calidad]
+					lista.append(["b%d" % i, tipo, "%s#%d:%d:%s" % [tipo, Armas.quedan_de(e), o.n, e.get("usada", false)], o.id])
+	return lista
+
+
+# La lista apuntada de un grupo (qué va en cada casilla)
+func orden_de(grupo: String, s := {}) -> Array:
+	return s.get("orden_baul", []) if grupo == "baul" else partida.orden_casillas.get(grupo, [])
+
+
+# Apunta qué va en cada casilla de un grupo (en el baúl, solo si ha cambiado: se escribe el guardado)
+func apuntar_orden(grupo: String, lista: Array, s := {}) -> void:
+	if grupo != "baul":
+		partida.orden_casillas[grupo] = lista
+	elif s.get("orden_baul", []) != lista:
+		s["orden_baul"] = lista
+		Guardado.cambiar(func(g): g.orden_baul = lista)
+
+
+# Dónde va cada cosa de un grupo: {clave: casilla}. Primero, lo que tiene apuntada una casilla con su nombre exacto;
+# luego, con su tipo; lo demás, en los huecos libres, en el orden de los datos
+func colocar(grupo: String, s := {}) -> Dictionary:
+	var cosas := cosas_grupo(grupo, s)
+	var orden := orden_de(grupo, s)
+	var total := casillas_de(grupo, s)
+	var donde := {}
+	var llenas := {}
+	for exacto in [true, false]:
+		for j in mini(orden.size(), total):
+			var buscado: String = orden[j] if exacto else String(orden[j]).get_slice("#", 0)
+			if buscado == "" or llenas.has(j):
+				continue
+			for c in cosas:
+				if not donde.has(c[0]) and (c[2] if exacto else c[1]) == buscado:
+					donde[c[0]] = j
+					llenas[j] = true
+					break
+	var j := 0
+	for c in cosas:
+		if donde.has(c[0]):
+			continue
+		while llenas.has(j):
+			j += 1
+		donde[c[0]] = j
+		llenas[j] = true
+	return donde
+
+
+# Lo que hay en cada casilla de un grupo, como se apunta: [nombre exacto o "", ...]
+func lista_de(grupo: String, donde: Dictionary, s := {}) -> Array:
+	var lista := []
+	lista.resize(casillas_de(grupo, s))
+	lista.fill("")
+	for c in cosas_grupo(grupo, s):
+		lista[donde[c[0]]] = c[2]
+	return lista
+
+
+# Pinta las casillas de un grupo, cada cosa en la suya (colocar), con su sitio para soltar ("M3"...) y, mientras se
+# lleva algo de ese grupo con «Mover», las vacías también se pueden elegir. "rect" da el sitio de la casilla j. Apunta
+# cómo ha quedado
+func pintar_grupo(grupo: String, rect: Callable, margen: float, s := {}) -> void:
+	var donde := colocar(grupo, s)
+	var en := {}
+	for c in donde:
+		en[donde[c]] = c
+	var con_marca := llevando != "" and grupo_de(llevando) == grupo
+	for j in casillas_de(grupo, s):
+		var r: Rect2 = rect.call(j)
+		var nombre: String = LETRA[grupo] + str(j)
+		var c: Control
+		if en.has(j):
+			var d := dibujo_de(en[j], s)
+			c = casilla_inv(r, en[j], d[0], d[1], d[2], margen)
+			if en[j] == llevando:
+				c.modulate.a = 0.5
+		elif con_marca:
+			c = hueco_libre(r, nombre)
+		else:
+			c = casilla_inv(r)
+		if con_marca and c is Button:   # (la casilla a la que iría: con el borde amarillo)
+			for estado in ["focus", "hover"]:
+				c.add_theme_stylebox_override(estado, estilo(Tema.AMARILLO, c.name == llevando, true))
+		sitio(nombre, r, c)
+	apuntar_orden(grupo, lista_de(grupo, donde, s), s)
+
+
+# El dibujo, la cuenta y el borde de lo de una casilla: [icono, cuenta, color]
+func dibujo_de(clave: String, s := {}) -> Array:
+	var i := clave.substr(1).to_int()
+	match clave[0]:
+		"m":
+			var c: Array = Objetos.casillas(partida.mochila)[i]
+			return [Objetos.icono(c[0]), "×%d" % c[1] if c[1] > 1 else "", GRIS]
+		"u":
+			var h: Array = partida.johnny.huecos_municion()[i]
+			return [Armas.MUNICION[h[0]].icono, str(h[1]), GRIS]
+	var o: Dictionary = cosas_baul(s)[i]
+	return [Objetos.icono(o.id), str(o.n) if o.n > 0 else "", GRIS if o.equipo < 0 else Armas.color(o.calidad)]
+
+
+# Una casilla vacía que se puede elegir mientras se lleva algo con «Mover»: al pulsarla, lo levantado va allí
+func hueco_libre(r: Rect2, nombre: String) -> Button:
+	var b := Button.new()
+	b.name = nombre
+	for estado in ["normal", "pressed", "disabled"]:
+		b.add_theme_stylebox_override(estado, estilo(Color("#2a2631"), false, false))
+	b.pressed.connect(func(): colocar_en(llevando, nombre))
+	lienzo.add_child(b)
+	b.position = r.position - ORIGEN
+	b.size = r.size
+	return b
+
+
+# El sitio de la casilla en la que está lo de esa clave ("M3"), o ""
+func sitio_de(clave: String) -> String:
+	var grupo := grupo_de(clave)
+	if grupo == "":
+		return ""
+	var s := Guardado.cargar() if grupo == "baul" else {}
+	return LETRA[grupo] + str(colocar(grupo, s).get(clave, 0))
+
+
+# Lleva lo de "clave" a la casilla "a_donde" ("M3") de su grupo: si está vacía, va allí; si hay otra cosa, se cambian.
+# Lo que se mueve da un saltito
+func colocar_en(clave: String, a_donde: String) -> void:
+	llevando = ""
+	var grupo := grupo_de(clave)
+	if grupo == "" or a_donde.length() < 2 or a_donde[0] != LETRA[grupo]:
+		repintar()
+		return
+	var s := Guardado.cargar() if grupo == "baul" else {}
+	var donde := colocar(grupo, s)
+	var lista := lista_de(grupo, donde, s)
+	var desde: int = donde[clave]
+	var hasta := a_donde.substr(1).to_int()
+	sel = clave
+	foco = clave
+	if hasta >= lista.size() or hasta == desde:
+		pintar()
+		return
+	var otro: String = lista[hasta]
+	lista[hasta] = lista[desde]
+	lista[desde] = otro
+	apuntar_orden(grupo, lista, s)
+	salta = [clave]
+	for c in donde:
+		if donde[c] == hasta:
+			salta.append(c)
+	Sonido.tocar("soltar" if con_dedo else "cambiar")
+	pintar()
+
+
+# Pone «Mover» en lo que dice la ficha "d" (sus botones: "botones" en el inventario, delante de «Tirar al suelo»;
+# "mover" en el baúl, que lo pone al lado de «Destruir»), si lo elegido se puede cambiar de casilla. Mientras se lleva
+# algo, el botón dice «Cancelar», es el único y la ficha cuenta cómo se suelta
+func poner_mover(d: Dictionary) -> void:
+	if grupo_de(sel) == "":
+		return
+	var b := ["mover", Idioma.t("Cancelar") if llevando != "" else Idioma.t("Mover"), mover_marca, false]
+	if llevando != "":
+		d.que = Idioma.t("Elige su casilla nueva con las flechas o la cruceta y pulsa A o Intro. Si tiene algo, se cambian.")
+	if abierto == "baul":
+		d["mover"] = b
+		return
+	if llevando != "":
+		d.botones = [b]
+		return
+	var i: int = d.botones.map(func(x): return x[0]).find("tirar")
+	d.botones.insert(i if i >= 0 else d.botones.size(), b)
+
+
+# «Mover» de la ficha (con el mando o el teclado): levanta lo elegido y la marca se queda en su casilla; con las flechas
+# o la cruceta se va a otra y A (o Intro) lo suelta allí. Pulsado otra vez («Cancelar»), lo deja donde estaba
+func mover_marca() -> void:
+	if llevando != "":
+		dejar_de_llevar()
+		return
+	if grupo_de(sel) == "":
+		return
+	llevando = sel
+	foco = sel
+	Sonido.tocar("coger")
+	pintar()
+
+
+func dejar_de_llevar() -> void:
+	foco = llevando
+	llevando = ""
+	pintar()
+
+
+# «Ordenar»: lo coloca todo agrupado por tipo (tipo_orden): lo que lleva y, en el baúl, también lo del baúl
+func ordenar() -> void:
+	llevando = ""
+	var s := Guardado.cargar() if abierto == "baul" else {}
+	var grupos := ["objetos", "municion", "curas"] + (["baul"] if abierto == "baul" else [])
+	for grupo in grupos:
+		var cosas := cosas_grupo(grupo, s)
+		cosas.sort_custom(func(a, b): return rango(a, grupo) < rango(b, grupo))
+		var lista := []
+		lista.resize(casillas_de(grupo, s))
+		lista.fill("")
+		for j in cosas.size():
+			lista[j] = cosas[j][2]
+		apuntar_orden(grupo, lista, s)
+	Sonido.tocar("cambiar")
+	repintar()
+
+
+# Para ordenar: el tipo (tipo_orden), su sitio en la lista de su clase y, dentro de lo mismo, primero lo mejor y lo más
+# lleno (y si no, como estaban)
+func rango(c: Array, grupo: String) -> Array:
+	var id: String = c[3]
+	var de_lista := Objetos.todos().find(id)
+	if Armas.DATOS.has(id):
+		de_lista = Armas.DATOS.keys().find(id)
+	elif Lanzables.DATOS.has(Lanzables.tipo_de(id)):
+		de_lista = Lanzables.DATOS.keys().find(Lanzables.tipo_de(id))
+	var equipo := grupo == "baul" and String(c[1]).begins_with("e:")
+	var calidad := String(c[1]).get_slice(":", 2).to_int() if equipo else 0
+	var detras := String(c[2]).get_slice("#", 1)
+	var cuantos := detras.get_slice(":", 1).to_int() if equipo else detras.to_int()
+	return [tipo_orden(id), de_lista, -calidad, -cuantos, String(c[0]).substr(1).to_int()]
+
+
+# El orden de los tipos al ordenar: armas cuerpo a cuerpo, a distancia y especiales, lanzables, munición, curas,
+# materiales, comida y lo demás
+static func tipo_orden(id: String) -> int:
+	if Armas.DATOS.has(id):
+		return {"cuerpo": 0, "distancia": 1, "especial": 2}.get(Armas.familia(id), 2)
+	if Lanzables.DATOS.has(Lanzables.tipo_de(id)):
+		return 3
+	if id in Armas.MUNICION:
+		return 4
+	if id in Objetos.USABLES:
+		return 5
+	if id in Objetos.PIEZAS:
+		return 6
+	if id in Objetos.COMIDAS:
+		return 7
+	return 8
+
+
 # ── Piezas ──
 
 func boton(caja: Control, nombre: String, texto: String, al_pulsar: Callable, variacion := "") -> Button:
@@ -2659,6 +2971,16 @@ func boton(caja: Control, nombre: String, texto: String, al_pulsar: Callable, va
 	b.pressed.connect(al_pulsar)
 	caja.add_child(b)
 	return b
+
+
+# Si el texto de un botón no cabe en su ancho (en otros idiomas), su letra se achica hasta que quepa (hasta 12)
+func encoger(b: Button) -> void:
+	var fuente: Font = b.get_theme_font("font")
+	var tam := b.get_theme_font_size("font_size")
+	while tam > 12 and fuente.get_string_size(b.text, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > b.size.x - 12.0:
+		tam -= 1
+	if tam != b.get_theme_font_size("font_size"):
+		b.add_theme_font_size_override("font_size", tam)
 
 
 func estilo(borde: Color, elegida: bool, encima: bool) -> StyleBoxFlat:
@@ -2674,6 +2996,11 @@ func estilo(borde: Color, elegida: bool, encima: bool) -> StyleBoxFlat:
 # («Ponérmela», «Usar», «A la mano», «Al repuesto», «Guardar en el baúl», «Sacar» o «Mejorar»), la marca salta a él (con
 # el mando o las flechas, A dos veces y hecho)
 func tocar(clave: String) -> void:
+	if llevando != "":   # (con algo levantado con «Mover»: si es de su grupo, va ahí; si no, se deja donde estaba)
+		if grupo_de(clave) == grupo_de(llevando):
+			colocar_en(llevando, sitio_de(clave))
+			return
+		llevando = ""
 	if abierto == "baul" and (Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META)):
 		elegir(clave)
 		pasar_al_momento()
@@ -2690,6 +3017,10 @@ func tocar(clave: String) -> void:
 # elegido
 func _input(evento: InputEvent) -> void:
 	if abierto == "" or Confirmar.abierta:   # (con «¿Estás seguro?» delante, sus atajos esperan)
+		return
+	if llevando != "" and (evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa")):   # (lo deja donde estaba)
+		get_viewport().set_input_as_handled()
+		dejar_de_llevar()
 		return
 	if evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa") \
 			or (abierto == "inventario" and evento.is_action_pressed("inventario")):
