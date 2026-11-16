@@ -199,7 +199,7 @@ const LISTA := {
 			"Elige la casilla y pulsa «Mejorar»."]},
 	"baul": {"grupo": "Sala de mantenimiento", "titulo": "El baúl", "icono": "mochila", "cuando": "Al abrir el baúl",
 		"lineas": ["Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos.",
-			"Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla.",
+			"Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla.",
 			"Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."]},
 	"tienda": {"grupo": "Sala de mantenimiento", "titulo": "La tienda de armas", "icono": "pistola",
 		"cuando": "Al abrir la tienda de armas",

@@ -5208,8 +5208,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "Ce que tu ranges dans le coffre ne se perd jamais : armes, lançables, munitions et objets."
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
-msgstr "Chaque fois que tu sors une arme ou un lançable, il use une partie de sa durabilité. À 1, c'est sa dernière partie : il se casse à la fin."
+msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
+msgstr "Quand tu sors une arme ou un lançable du coffre, sa durabilité baisse de 1. À 0, c'est sa dernière partie : il se casse à la fin."
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."

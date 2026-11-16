@@ -490,7 +490,8 @@ func probar_baul_directo() -> void:
 # En el baúl, una escopeta Poco común con 1 partida, un bate Raro de antes (sin "quedan": sin estrenar, 3) y 2 molotovs
 # Raros con 1. Saca el tutorial del baúl (captura-durabilidad-tutorial.png). Cuenta en la terminal: la ficha de la escopeta en el baúl (captura-durabilidad-baul.png); que al sacarla
 # gasta su partida y avisa de que es la última (captura-durabilidad-sacar.png); que guardarla y sacarla otra vez en la
-# misma partida no gasta otra; la ficha del inventario (captura-durabilidad-inventario.png); que mejorar el bate en el
+# misma partida no gasta otra; la ficha del inventario (captura-durabilidad-inventario.png: «Durabilidad: 0» en rojo, el
+# mismo número que en el baúl después de sacarla: 16 nov); que mejorar el bate en el
 # baúl le suma una; y, al caer, lo que vuelve al baúl y lo que se rompe, con el cartel del final
 # (captura-durabilidad-fin.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_durabilidad() -> void:
@@ -548,7 +549,7 @@ func probar_durabilidad() -> void:
 	print("Guardada otra vez: en el baúl %s (esperado: quedan 0, usada true)" % en_baul.call("escopeta"))
 	inventario.tocar(casilla.call("escopeta"))
 	await get_tree().process_frame
-	print("Su ficha: «%s» (esperado: Durabilidad: 1, la de esta partida)" % lineas.call())
+	print("Su ficha: «%s» (esperado: Durabilidad: 0: bajó al sacarla y no vuelve a subir)" % lineas.call())
 	inventario.sacar()
 	await get_tree().process_frame
 	print("Sacada otra vez: le quedan %d (esperado: 0: no gasta otra)" % johnny.quedan_de("escopeta"))
@@ -573,6 +574,7 @@ func probar_durabilidad() -> void:
 	inventario.tocar("p1" if johnny.huecos.fuego == "escopeta" else "g%d" % armas_guardadas.find("escopeta"))
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-durabilidad-inventario.png")
+	print("La escopeta en el inventario: «%s» (esperado: Durabilidad: 0, la misma que en el baúl)" % lineas.call())
 	inventario.cerrar()
 	await get_tree().process_frame
 	# una katana Rara cogida en esta partida: 2 por delante

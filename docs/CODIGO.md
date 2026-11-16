@@ -63,7 +63,7 @@ en una línea.
   en "fregona" del guardado (`Objetos.apartar_fregona`, también la de un guardado de antes que estaba en el baúl) y
   Johnny empieza cada partida con ella, gastando una (`partida.dar_fregona`, con `estrenar`); al quedarse sin partidas se
   rompe (el cartel lo dice) y vuelve la Normal. Si se deja en el suelo, al acabar vuelve igual (`Objetos.cerrar_baul`,
-  F22). Prueba: `--fregona-mejorada`. La ficha lo enseña como «Durabilidad: N», de 1 a 4: las partidas que le quedan contando la que está en uso (`texto_partidas()`, `durabilidad()`; 13 nov, y de 1 a 4 desde el M115, 16 nov). Prueba: `--durabilidad`. La **Épica**
+  F22). Prueba: `--fregona-mejorada`. La ficha lo enseña como «Durabilidad: N», el mismo número en el baúl y encima: las partidas que le quedan (`texto_partidas()`, `durabilidad()`). Sin estrenar, de 1 (Normal) a 4 (Épica); al sacarla del baúl baja 1 al momento y con 0, en rojo, es su última partida (16 nov; con el M115 lo que llevabas contaba la partida en curso y decía uno más). Prueba: `--durabilidad`. La **Épica**
   (`EPICA`) trae además un truco de su familia (`TRUCO`, `truco()`): golpe de gracia (cada 4 golpes, uno crítico:
   `johnny.golpear`), balas que atraviesan (`bala.gd`, `atraviesa`, estela morada), estallido (el zombi que mata
   revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños

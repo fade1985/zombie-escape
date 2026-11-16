@@ -5208,8 +5208,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "Was du in der Truhe verstaust, geht nie verloren: Waffen, Wurfwaffen, Munition und Gegenstände."
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
-msgstr "Jedes Mal, wenn du eine Waffe oder Wurfwaffe herausnimmst, kostet sie eine Runde Haltbarkeit. Bei 1 ist es ihre letzte Runde: Danach geht sie kaputt."
+msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
+msgstr "Wenn du eine Waffe oder Wurfwaffe aus der Truhe nimmst, sinkt ihre Haltbarkeit um 1. Bei 0 ist es ihre letzte Runde: Danach geht sie kaputt."
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."

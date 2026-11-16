@@ -725,7 +725,7 @@ func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 			"botones": []}
 	var w: Dictionary = johnny.arma_de(id)
 	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), familia_nombre(id))
-	renglon(caja, Armas.texto_partidas(johnny.quedan_de(id), true), Tema.ROJO if johnny.quedan_de(id) <= 0 else Tema.AMARILLO)
+	renglon(caja, Armas.texto_partidas(johnny.quedan_de(id)), Tema.ROJO if johnny.quedan_de(id) <= 0 else Tema.AMARILLO)
 	if w.tipo == "fuego":
 		var tipo := Armas.municion(id)
 		espacio(caja, 4)
@@ -862,7 +862,7 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 	else:
 		quedan = Idioma.t("Te quedan %d de %d") % [lz.cuantos_en(sitio), lz.maximo(k)]
 	renglon(caja, quedan, Tema.TINTA)
-	renglon(caja, Armas.texto_partidas(lz.quedan_de(k), true), Tema.ROJO if lz.quedan_de(k) <= 0 else Tema.AMARILLO)
+	renglon(caja, Armas.texto_partidas(lz.quedan_de(k)), Tema.ROJO if lz.quedan_de(k) <= 0 else Tema.AMARILLO)
 	var que: String = que_hace(k)
 	if a_mano:
 		que += " " + (Idioma.t("Es lo que lanzas ahora.") if k == lz.tipo else Idioma.t("Con F lo eliges para lanzarlo."))
@@ -1393,7 +1393,7 @@ func ficha_baul() -> Dictionary:
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
 				"que_es": "%s · %s · %s" % [Armas.tipo_nombre(w.tipo), Armas.calidad_nombre(calidad),
 					Idioma.t("En la mano") if sel[0] == "p" else Idioma.t("De repuesto")],
-				"que": que_hace(id) + " ", "partidas": Armas.texto_partidas(johnny.quedan_de(id), true),
+				"que": que_hace(id) + " ", "partidas": Armas.texto_partidas(johnny.quedan_de(id)),
 				"ultima": johnny.quedan_de(id) <= 0}, true)
 			if Armas.al_baul(id, calidad) and not fregona_sola(sel, id):
 				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo)
@@ -1412,7 +1412,7 @@ func ficha_baul() -> Dictionary:
 				"que_es": Idioma.t("Lanzable · %s · %s") % [Armas.calidad_nombre(Lanzables.calidad_de(k)),
 					Idioma.t("A mano") if sel[0] == "l" else Idioma.t("De repuesto")],
 				"cuanto": Idioma.t("Te quedan %d de %d") % [n, lz.maximo(k)],
-				"partidas": Armas.texto_partidas(lz.quedan_de(k), true), "ultima": lz.quedan_de(k) <= 0,
+				"partidas": Armas.texto_partidas(lz.quedan_de(k)), "ultima": lz.quedan_de(k) <= 0,
 				"que": que_hace(k) + " "}, true)
 			if caben <= 0:
 				d.que += Idioma.t("El baúl está lleno: haz sitio sacando algo.")
@@ -1479,11 +1479,10 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 	var cabe := se_saca(o)
 	var d := {"icono": Objetos.icono(o.id), "nombre": Armas.nombre(o.id, o.calidad), "cuanto": "",
 		"boton": ["sacar", Idioma.t("Sacar"), sacar, not cabe]}
-	# la durabilidad (Armas.nuevas): las partidas que le quedan; si ya ha salido en esta, las de después
+	# la durabilidad (Armas.nuevas): las partidas que le quedan (si ya ha salido en esta, ya ha bajado: 16 nov)
 	var casilla: Dictionary = Guardado.cargar().baul_equipo[o.equipo]
-	var usada: bool = casilla.get("usada", false)
-	d.partidas = Armas.texto_partidas(Armas.quedan_de(casilla), usada)
-	d.ultima = usada and Armas.quedan_de(casilla) <= 0
+	d.partidas = Armas.texto_partidas(Armas.quedan_de(casilla))
+	d.ultima = Armas.quedan_de(casilla) <= 0   # (en rojo solo con 0: la última partida)
 	if arma:
 		var tipo: String = Armas.datos(o.id).tipo
 		d.que_es = Idioma.t("%s · %s · En el baúl") % [Armas.tipo_nombre(tipo), Armas.calidad_nombre(o.calidad)]

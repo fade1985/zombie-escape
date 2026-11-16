@@ -5216,8 +5216,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "Всё, что лежит в сундуке, не пропадает никогда: оружие, метательное, патроны и предметы."
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
-msgstr "Каждый раз, когда достаёшь оружие или метательное, оно тратит один забег прочности. При 1 это его последний забег: после него оно сломается."
+msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
+msgstr "Когда достаёшь оружие или метательное из сундука, его прочность падает на 1. При 0 это его последний забег: после него оно сломается."
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."

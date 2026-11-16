@@ -5200,8 +5200,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "存进储物箱的东西永远不会丢：武器、投掷物、弹药和物品。"
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
-msgstr "每次取出一把武器或一个投掷物，都会消耗一局耐久。耐久为1时就是最后一局：这局结束后就会损坏。"
+msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
+msgstr "从储物箱取出武器或投掷物时，它的耐久会减1。耐久为0时就是最后一局：这局结束后就会损坏。"
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."

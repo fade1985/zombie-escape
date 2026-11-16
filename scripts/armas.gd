@@ -143,18 +143,18 @@ static func estrenar(e: Dictionary) -> int:
 	return quedan_de(e)
 
 
-# La línea de la ficha con la durabilidad (inventario.gd): desde el 13 nov, solo un número; desde el 16 nov (M115), de 1 a
-# 4 (durabilidad)
-static func texto_partidas(quedan: int, en_uso: bool) -> String:
-	return Idioma.t("Durabilidad: %d") % durabilidad(quedan, en_uso)
+# La línea de la ficha con la durabilidad (inventario.gd): desde el 13 nov, solo un número (durabilidad)
+static func texto_partidas(quedan: int) -> String:
+	return Idioma.t("Durabilidad: %d") % durabilidad(quedan)
 
 
-# La durabilidad que se enseña: las partidas que le quedan contando la que se juega con ella (M115, 16 nov; antes, sin
-# contarla: de 0 a 3). Recién estrenada, la de su calidad más una (nuevas: Normal 1, Poco común 2, Rara 3, Épica 4), y baja
-# una con cada partida. "en_uso": la lleva o ya ha salido del baúl en esta partida ("quedan" ya es después de esta, y esta
-# cuenta); si no, en el baúl, "quedan" son las veces que aún puede salir
-static func durabilidad(quedan: int, en_uso: bool) -> int:
-	return maxi(0, quedan + 1 if en_uso else quedan)
+# La durabilidad que se enseña: las partidas que le quedan, el mismo número en el baúl y encima (16 nov, lo decidió el
+# dueño; antes, con el M115, se contaba también la partida en curso y lo que llevabas decía uno más). En el baúl, sin
+# estrenar, la de su calidad más una (nuevas: Normal 1, Poco común 2, Rara 3, Épica 4); al sacarla baja una al momento
+# (estrenar), y con 0 es su última partida: sale en rojo y se rompe al acabarla. Solo baja la primera vez que sale en
+# cada partida ("usada")
+static func durabilidad(quedan: int) -> int:
+	return maxi(0, quedan)
 
 
 # ¿Va al baúl? Las armas, todas (la pistola Normal deja a Johnny sin arma a distancia: SIN_FUEGO; la fregona Normal de la

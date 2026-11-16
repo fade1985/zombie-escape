@@ -5208,8 +5208,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "What you keep in the stash is never lost: weapons, throwables, ammo and items."
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
-msgstr "Each time you take out a weapon or a throwable, it uses one run of its durability. At 1, it's its last run: it breaks when that run ends."
+msgid "Al sacar un arma o un lanzable del baúl, su durabilidad baja 1. Con 0, es su última partida: se destruye al acabarla."
+msgstr "When you take a weapon or a throwable out of the stash, its durability drops by 1. At 0, it's its last run: it breaks when that run ends."
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
