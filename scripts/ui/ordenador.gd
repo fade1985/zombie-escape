@@ -842,23 +842,11 @@ func pagar(s: Dictionary, precio: int) -> void:
 	PartidaGuardada.gastar_dolares(s, de_partida)
 
 
-# ¿Le cabe a Johnny encima el arma recién comprada sin tener que dejar ninguna? Sí si tiene libre el hueco de la mano
-# de su tipo (cuerpo a cuerpo o a distancia) o el de repuesto, y no lleva ya esa misma (16 nov, lo pidió el dueño: lo
-# comprado va directo encima si hay hueco; si no, al baúl)
-func cabe_encima(id: String) -> bool:
-	var tipo: String = Armas.datos(id).tipo
-	if id == partida.johnny.huecos[tipo] or id in partida.armas_guardadas:
-		return false
-	return partida.johnny.huecos[tipo] == "" or partida.repuesto(tipo) == ""
-
-
-# Compra un arma: si le cabe encima (cabe_encima), a la mano (la que llevaba pasa al repuesto); si no, al baúl
 func comprar_arma(id: String) -> void:
 	var s := Guardado.cargar()
 	var regalo: bool = TIENDA.es_regalo(s, id)   # (la pistola de bienvenida: gratis, una sola vez)
 	var precio: int = 0 if regalo else Supervivientes.precio(Armas.PRECIOS[id])
-	var encima := cabe_encima(id)
-	if not encima and not Objetos.hueco_baul(s):
+	if not Objetos.hueco_baul(s):
 		info.text = Idioma.t("El baúl está lleno: haz sitio en él para poder comprar.")
 		Sonido.tocar("no")
 		return
@@ -872,35 +860,25 @@ func comprar_arma(id: String) -> void:
 		s.regalo_cogido = true
 	if not id in s.armas:
 		s.armas.append(id)
-	# en Normal (las mejoradas salen del banco y de la joyería). Encima, como si se acabara de sacar del baúl (con las
-	# partidas que le quedan después de esta: Armas.nuevas); en el baúl, sin estrenar
-	if encima:
-		partida.llevar_arma(id, 0, true, false, Armas.nuevas(0))
-	else:
-		s.baul_equipo.append({"id": id, "calidad": 0, "quedan": Armas.nuevas(0) + 1})
-		s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
+	# al baúl, en Normal y sin estrenar (las mejoradas salen del banco y de la joyería): desde el 15 nov ya no va a la mano
+	s.baul_equipo.append({"id": id, "calidad": 0, "quedan": Armas.nuevas(0) + 1})
+	s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
 	Guardado.escribir(s)
 	refrescar_avisos()   # (con el regalo, se quita el «!» de ARMAS.EXE)
 	abrir("armas", "b_" + id)
-	var texto := ""
-	if encima:
-		texto = Idioma.t("¡Regalo! %s, a la mano.") if regalo else Idioma.t("¡Compra hecha! %s, a la mano.")
-	else:
-		texto = Idioma.t("¡Regalo! %s va al baúl: sácala de allí para llevarla.") if regalo \
-			else Idioma.t("¡Compra hecha! %s va al baúl.")
+	var texto := Idioma.t("¡Regalo! %s va al baúl: sácala de allí para llevarla.") if regalo \
+		else Idioma.t("¡Compra hecha! %s va al baúl.")
 	info.set_deferred("text", texto % Armas.nombre(id))   # después de marcar el botón (que pone su explicación)
 
 
-# Un arrojable más, si le llega: encima si le cabe (16 nov, lo pidió el dueño) y si no, al baúl, si cabe allí. La
-# primera vez, el molotov, la granada y la atraedora son gratis (el regalo de bienvenida: TIENDA.REGALO_LANZABLES). Con
-# el primero, su tutorial (si no ha salido ya al llevar uno)
+# Un arrojable más, al baúl (15 nov; antes iba a la mano), si cabe y le llega. La primera vez, el molotov, la granada y
+# la atraedora son gratis (el regalo de bienvenida: TIENDA.REGALO_LANZABLES). Con el primero, su tutorial (si no ha
+# salido ya al llevar uno)
 func comprar_lanzable(k: String) -> void:
 	var no := ""
 	var s := Guardado.cargar()
 	var regalo: bool = TIENDA.es_regalo(s, k)
-	var clave := Lanzables.clave(k, 0)
-	var encima: bool = partida.lanzables.cabe(clave)
-	if not encima and Objetos.caben_arrojables(s, k, 0) <= 0:
+	if Objetos.caben_arrojables(s, k, 0) <= 0:
 		no = Idioma.t("El baúl está lleno: haz sitio en él para poder comprar.")
 	var precio: int = 0 if regalo else Supervivientes.precio(Lanzables.PRECIOS[k])
 	if no == "" and partida.cartera() < precio:
@@ -913,26 +891,17 @@ func comprar_lanzable(k: String) -> void:
 	pagar(s, precio)
 	if regalo:
 		s.regalos_lanzables.append(k)
-	if encima:   # (como si se acabara de sacar del baúl: con las partidas que le quedan después de esta)
-		partida.lanzables.meter_de_baul(clave, 1, Armas.nuevas(0))
-	else:
-		Objetos.arrojables_al_baul(s, k, 0, 1)
-		s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
+	Objetos.arrojables_al_baul(s, k, 0, 1)
+	s.baul_nuevo = true   # (el «!» del baúl, hasta abrirlo)
 	Guardado.escribir(s)
 	refrescar_avisos()
 	abrir("armas", "b_" + k)
-	var n := 0   # los que lleva encima de esos o los que hay ya en el baúl (Normales y sin estrenar, como los de la tienda)
-	var texto := ""
-	if encima:
-		n = partida.lanzables.cuantas(clave) + partida.lanzables.total_clave(clave)
-		texto = Idioma.t("¡Regalo! %s, encima (llevas %d).") if regalo \
-			else Idioma.t("¡Compra hecha! %s, encima (llevas %d).")
-	else:
-		for e in s.baul_equipo:
-			if Objetos.es_arrojable(e, k, 0):
-				n += int(e.n)
-		texto = Idioma.t("¡Regalo! %s va al baúl (tienes %d allí).") if regalo \
-			else Idioma.t("¡Compra hecha! %s va al baúl (tienes %d allí).")
+	var n := 0   # los que hay ya en el baúl (Normales y sin estrenar, como los de la tienda)
+	for e in s.baul_equipo:
+		if Objetos.es_arrojable(e, k, 0):
+			n += int(e.n)
+	var texto := Idioma.t("¡Regalo! %s va al baúl (tienes %d allí).") if regalo \
+		else Idioma.t("¡Compra hecha! %s va al baúl (tienes %d allí).")
 	info.set_deferred("text", texto % [Lanzables.uno(k), n])
 	if partida.puede_tutorial("lanzables"):
 		await partida.ver_tutorial("lanzables")

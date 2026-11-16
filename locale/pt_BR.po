@@ -7247,28 +7247,12 @@ msgid "No te llega: te faltan $%d."
 msgstr "Não dá: faltam $%d."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Regalo! %s, a la mano."
-msgstr "Presente! %s, na mão."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s, a la mano."
-msgstr "Comprado! %s, na mão."
-
-#: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl: sácala de allí para llevarla."
 msgstr "Presente! %s vai para o baú: tire-a de lá para levá-la."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s va al baúl."
 msgstr "Comprado! %s vai para o baú."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Regalo! %s, encima (llevas %d)."
-msgstr "Presente! %s, com você (você leva %d)."
-
-#: scripts/ui/ordenador.gd
-msgid "¡Compra hecha! %s, encima (llevas %d)."
-msgstr "Comprado! %s, com você (você leva %d)."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl (tienes %d allí)."
