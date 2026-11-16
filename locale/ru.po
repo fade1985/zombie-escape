@@ -5752,6 +5752,10 @@ msgid "Seguir"
 msgstr "В игру"
 
 #: scripts/ui/inventario.gd
+msgid "Mutación"
+msgstr "Мутация"
+
+#: scripts/ui/inventario.gd
 msgid "Tarjeta"
 msgstr "Карта"
 

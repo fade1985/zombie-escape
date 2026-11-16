@@ -202,6 +202,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	var mochila := estampa(MOCHILA, MOCHILA.get_size() * 2.0)
 	lienzo.add_child(mochila)
 	mochila.position = MOCHILA_EN - ORIGEN
+	fila_mutaciones()   # arriba, encima de la cremallera: las mutaciones que lleva
 	# Johnny, grande, entre sus armas: a la izquierda las de cuerpo a cuerpo y a la derecha las de distancia (arriba
 	# la de la mano y abajo la de repuesto)
 	muneco(johnny)
@@ -281,6 +282,111 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	sitio("tirar", FICHA)   # la ficha: al arrastrar algo que se puede tirar, se vuelve la zona roja
 	pintar_ficha()
 	return lienzo.find_child(sel, false, false)
+
+
+# Las mutaciones que lleva Johnny (17 nov): cuatro casillas (Mutaciones.MAXIMO) en medio de la pantalla, un poco por
+# encima de la cremallera de la mochila, con el dibujo de cada una (el de las cartas al elegirla, a la mitad:
+# assets/ui/mutaciones/mini, de tools/muebles_gpt.py); las que aún no tiene, vacías. Al pasar por una (ratón, mando o
+# dedo) se despliega debajo su recuadro (globo_mutacion): en una vacía, «Mutación»; en una llena, su nombre con la letra
+# del juego y lo que hace con la letra lisa
+const MUT_LADO := 58      # lo que mide cada casilla
+const MUT_PASO := 68      # de una a la siguiente
+const MUT_ARRIBA := 64    # dónde empiezan, en la pantalla (la cremallera va por y = 130)
+const MUT_BORDE := Color("#a04fb0")   # el borde de las que tiene: morado, como «¡¡¡DIFERENTE!!!»
+const MUT_ANCHO := 260.0  # lo ancho que es el recuadro
+
+
+func fila_mutaciones() -> void:
+	var tengo: Array = partida.mutaciones.tengo
+	var x0 := 480.0 - (MUT_PASO * (Mutaciones.MAXIMO - 1) + MUT_LADO) / 2.0
+	for i in Mutaciones.MAXIMO:
+		var id: String = tengo[i] if i < tengo.size() else ""
+		var r := Rect2(x0 + i * MUT_PASO, MUT_ARRIBA, MUT_LADO, MUT_LADO)
+		var b := Button.new()
+		b.name = "mut%d" % i
+		var borde := MUT_BORDE if id != "" else Color("#4a4452")
+		b.add_theme_stylebox_override("normal", estilo(borde, false, false))
+		for estado in ["hover", "focus", "pressed"]:
+			b.add_theme_stylebox_override(estado, estilo(Tema.AMARILLO, false, true))
+		lienzo.add_child(b)
+		b.position = r.position - ORIGEN
+		b.size = r.size
+		if id != "":
+			var tex: Texture2D = load("res://assets/ui/mutaciones/mini/%s.png" % id)
+			var d := estampa(tex, tex.get_size())
+			b.add_child(d)
+			d.position = ((r.size - d.size) / 2.0).floor()
+		b.pressed.connect(func(): Sonido.tocar("click"))
+		for senal in [b.mouse_entered, b.focus_entered]:
+			senal.connect(globo_mutacion.bind(b, id))
+		b.mouse_exited.connect(quitar_globo_mutacion.bind(b, true))
+		b.focus_exited.connect(quitar_globo_mutacion.bind(b, false))
+
+
+# El recuadro de una casilla de las mutaciones, debajo de ella, que se despliega de arriba abajo (como la ficha de los
+# talentos: el fondo oscuro con el borde de color)
+func globo_mutacion(b: Button, id: String) -> void:
+	if not is_instance_valid(lienzo):
+		return
+	var viejo := lienzo.get_node_or_null("globo_mutacion")
+	if viejo:
+		viejo.free()
+	var globo := PanelContainer.new()
+	globo.name = "globo_mutacion"
+	globo.set_meta("de", b.name)
+	globo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	globo.z_index = 10
+	var e := StyleBoxFlat.new()
+	e.bg_color = Color("#101215")
+	e.border_color = MUT_BORDE
+	e.set_border_width_all(2)
+	e.set_content_margin_all(8)
+	e.content_margin_left = 10
+	e.content_margin_right = 10
+	globo.add_theme_stylebox_override("panel", e)
+	var caja := VBoxContainer.new()
+	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja.add_theme_constant_override("separation", 6)
+	globo.add_child(caja)
+	var texto := func(s: String, lisa: bool, color: Color, tam: int, partir: bool) -> void:
+		var l := Label.new()
+		l.text = s
+		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		l.add_theme_color_override("font_color", color)
+		l.add_theme_font_size_override("font_size", tam)
+		if lisa:
+			l.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA_TITULO if not partir else Tema.PESO_LISA))
+			l.add_theme_constant_override("outline_size", 0)
+		if partir:
+			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			l.custom_minimum_size.x = MUT_ANCHO - 20
+		caja.add_child(l)
+	if id == "":
+		texto.call(Idioma.t("Mutación"), true, Tema.TINTA, 17, false)
+	else:
+		var m := Mutaciones.mutacion(id)
+		texto.call(m.nombre, false, Tema.AMARILLO, 16, false)
+		texto.call(m.desc, true, Tema.TINTA, 17, true)
+	lienzo.add_child(globo)
+	globo.reset_size()
+	# debajo de la casilla, centrado con ella y sin salirse de la pantalla
+	var centro := b.position.x + b.size.x / 2.0
+	globo.position = Vector2(clampf(centro - globo.size.x / 2.0, 8.0 - ORIGEN.x, 952.0 - ORIGEN.x - globo.size.x),
+		b.position.y + b.size.y + 6)
+	# se despliega de arriba abajo
+	globo.pivot_offset = Vector2(globo.size.x / 2.0, 0)
+	globo.scale = Vector2(1, 0.1)
+	globo.create_tween().tween_property(globo, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+# Se quita al salir el ratón de su casilla, o al irse la marca si el ratón no sigue encima (si aún es el de esa casilla)
+func quitar_globo_mutacion(b: Button, raton: bool) -> void:
+	if not is_instance_valid(lienzo) or (not raton and b.is_hovered()):
+		return
+	var globo := lienzo.get_node_or_null("globo_mutacion")
+	if globo and globo.get_meta("de") == b.name:
+		globo.queue_free()
 
 
 # El hueco de la llave de la jefa (o de la tarjeta de acceso, en el centro comercial), al lado del dinero: una etiqueta

@@ -164,6 +164,16 @@ MUEBLES = {
     "mutacion_endurecimiento": ("assets/sources/mutacion-endurecimiento-gpt.webp", "assets/ui/mutaciones/endurecimiento.png", 94, 100, False),
     "mutacion_locura": ("assets/sources/mutacion-locura-gpt.webp", "assets/ui/mutaciones/locura.png", 100, 99, False),
     "mutacion_flatulento": ("assets/sources/mutacion-flatulento-gpt.webp", "assets/ui/mutaciones/flatulento.png", 95, 100, False),
+    # y a la mitad, para las cuatro casillas de las mutaciones que lleva Johnny, encima de la mochila (inventario.gd,
+    # fila_mutaciones; 17 nov): centradas en un lienzo de 50x50
+    "mini_mutacion_tentacular": ("assets/sources/mutacion-tentacular-gpt.webp", "assets/ui/mutaciones/mini/tentacular.png", 48, 50, False),
+    "mini_mutacion_gastro": ("assets/sources/mutacion-gastro-gpt.webp", "assets/ui/mutaciones/mini/gastro.png", 48, 50, False),
+    "mini_mutacion_insensible": ("assets/sources/mutacion-insensible-gpt.webp", "assets/ui/mutaciones/mini/insensible.png", 50, 49, False),
+    "mini_mutacion_canibal": ("assets/sources/mutacion-canibal-gpt.webp", "assets/ui/mutaciones/mini/canibal.png", 42, 50, False),
+    "mini_mutacion_ansiedad": ("assets/sources/mutacion-ansiedad-gpt.webp", "assets/ui/mutaciones/mini/ansiedad.png", 50, 47, False),
+    "mini_mutacion_endurecimiento": ("assets/sources/mutacion-endurecimiento-gpt.webp", "assets/ui/mutaciones/mini/endurecimiento.png", 47, 50, False),
+    "mini_mutacion_locura": ("assets/sources/mutacion-locura-gpt.webp", "assets/ui/mutaciones/mini/locura.png", 50, 49, False),
+    "mini_mutacion_flatulento": ("assets/sources/mutacion-flatulento-gpt.webp", "assets/ui/mutaciones/mini/flatulento.png", 48, 50, False),
     "rama_militar": ("assets/sources/rama-militar-gpt.webp", "assets/ui/iconos/rama-militar.png", 24, 23, False, (), [(620, 950)]),
     "rama_superviviente": ("assets/sources/rama-superviviente-gpt.webp", "assets/ui/iconos/rama-superviviente.png", 22, 24, False),
     "rama_quimico": ("assets/sources/rama-quimico-gpt.webp", "assets/ui/iconos/rama-quimico.png", 24, 24, False),
@@ -359,4 +369,12 @@ for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith("mutac
     pequena = Image.open(ruta).convert("RGBA")
     lienzo = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
     lienzo.paste(pequena, ((100 - pequena.width) // 2, (100 - pequena.height) // 2))
+    lienzo.save(ruta)
+
+# los efectos secundarios a la mitad, centrados en un lienzo de 50x50 (las casillas de las mutaciones del inventario)
+for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith("mini_mutacion_")]:
+    ruta = MUEBLES[nombre][1]
+    pequena = Image.open(ruta).convert("RGBA")
+    lienzo = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
+    lienzo.paste(pequena, ((50 - pequena.width) // 2, (50 - pequena.height) // 2))
     lienzo.save(ruta)

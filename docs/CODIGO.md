@@ -777,7 +777,11 @@ en una línea.
   etiqueta de cartón (`hueco_llave`) con el dinero a su derecha en la pantallita de la tienda de armas
   (`chapa.gd`). Sin números «x/y»: ni en los títulos ni en las casillas de armas y arrojables; sin «F cambia». Los
   cuadraditos de las barras de la ficha, por colores (`color_barra`: rojos hasta 3, amarillos de 4 a 7, verdes de 8
-  a 10). Los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Dentro:
+  a 10). Los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Arriba, en medio y encima de la
+  cremallera, las 4 casillas de las mutaciones de los jefes que lleva (`fila_mutaciones`, 17 nov; en el juego,
+  «efectos secundarios»), con sus dibujos a la mitad (`assets/ui/mutaciones/mini`, de `tools/muebles_gpt.py`): al pasar
+  por una se despliega debajo su recuadro (`globo_mutacion`: nombre con la letra del juego y lo que hace con la lisa; en
+  las vacías, «Mutación»). Prueba: `--inventario-mutaciones`. Dentro:
   (en medio, la mochila y la munición, 8 y 8, y abajo, centradas, las 2 casillas
   de las curas, `cuadro`; desde el 13 nov no hay arrojables de repuesto, `Lanzables.REPUESTO` es 0; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; desde el M105, 15 nov, la ficha va dentro del tablero claro, justo debajo de las casillas, y las del baúl caben en el alto de 2 filas; `en_banco`, `no_mejora`,

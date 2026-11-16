@@ -5743,6 +5743,10 @@ msgid "Seguir"
 msgstr "Reprendre"
 
 #: scripts/ui/inventario.gd
+msgid "Mutación"
+msgstr "Mutation"
+
+#: scripts/ui/inventario.gd
 msgid "Tarjeta"
 msgstr "Badge"
 

@@ -176,6 +176,7 @@
 #   --taquilla-scroll   la lista de la taquilla sin cartas cortadas (M112): rueda, barra y cruceta, en
 #                       todos los idiomas                                                   [prueba_skins.gd]
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
+#   --inventario-mutaciones  las 4 casillas de las mutaciones encima de la mochila y su recuadro (ratón y mando) [prueba_inventario.gd]
 #   --mochila           el inventario en la mochila (M100): cintas, papel y etiqueta de la llave, sin ella y con ella,
 #                       en español, portugués y ruso                                     [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
@@ -899,6 +900,9 @@ func empezar_prueba() -> void:
 	elif "--inventario" in args:
 		set_process(false)   # sin la prueba larga
 		probar_inventario()
+	elif "--inventario-mutaciones" in args:
+		set_process(false)   # sin la prueba larga
+		probar_inventario_mutaciones()
 	elif "--mochila" in args:
 		set_process(false)   # sin la prueba larga
 		probar_mochila()

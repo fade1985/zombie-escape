@@ -2575,3 +2575,51 @@ func probar_ordenar() -> void:
 	inventario.cerrar()
 	Guardado.escribir(antes)
 	get_tree().quit()
+
+
+# --inventario-mutaciones: las cuatro casillas de las mutaciones encima de la cremallera de la mochila (inventario.gd,
+# fila_mutaciones; 17 nov), con tres puestas. El recuadro de una llena (nombre y lo que hace) y el de la vacía
+# («Mutación»); con el mando, de la casilla del arma de la mano, arriba, a una mutación, y su recuadro; y una en ruso.
+# Fotos: captura-mutaciones-llena.png, -vacia.png, -mando.png y -ru.png
+func probar_inventario_mutaciones() -> void:
+	mutaciones.tengo = ["insensible", "tentacular", "canibal"]
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	var lz: Control = inventario.lienzo
+	var globo := func() -> String:
+		var g: Control = lz.get_node_or_null("globo_mutacion")
+		if g == null or g.is_queued_for_deletion():
+			return "ninguno"
+		var textos := []
+		for l in g.find_children("*", "Label", true, false):
+			textos.append(l.text.left(30))
+		return "%s %s" % [g.get_meta("de"), textos]
+	var casilla := func(i: int) -> Button: return lz.get_node("mut%d" % i)
+	casilla.call(1).mouse_entered.emit()
+	await get_tree().create_timer(0.3).timeout
+	print("Mutaciones · ratón en la 2.ª: %s (esperado: mut1, Tentacular y lo que hace)" % globo.call())
+	Captura.foto("captura-mutaciones-llena.png")
+	casilla.call(1).mouse_exited.emit()
+	casilla.call(3).mouse_entered.emit()
+	await get_tree().create_timer(0.3).timeout
+	print("Mutaciones · ratón en la 4.ª (vacía): %s (esperado: mut3, Mutación)" % globo.call())
+	Captura.foto("captura-mutaciones-vacia.png")
+	casilla.call(3).mouse_exited.emit()
+	await get_tree().create_timer(0.1).timeout
+	print("Mutaciones · al salir el ratón: %s (esperado: ninguno)" % globo.call())
+	# con el mando: de la casilla del arma de la mano (cuerpo a cuerpo), arriba
+	inventario.dar_foco(lz.get_node("p0"))
+	await get_tree().create_timer(0.1).timeout
+	await pulsar_evento(accion("ui_up"))
+	await get_tree().create_timer(0.3).timeout
+	print("Mutaciones · mando arriba desde el arma: marca en %s, recuadro %s (esperado: una mutN y el suyo)" % [
+		get_viewport().gui_get_focus_owner().name, globo.call()])
+	Captura.foto("captura-mutaciones-mando.png")
+	Idioma.poner("ru", false)
+	inventario.pintar()
+	await get_tree().create_timer(0.3).timeout
+	inventario.lienzo.get_node("mut0").mouse_entered.emit()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-mutaciones-ru.png")
+	Idioma.poner(Idioma.ORIGEN, false)
+	get_tree().quit()

@@ -5734,6 +5734,10 @@ msgid "Seguir"
 msgstr "继续"
 
 #: scripts/ui/inventario.gd
+msgid "Mutación"
+msgstr "变异"
+
+#: scripts/ui/inventario.gd
 msgid "Tarjeta"
 msgstr "门禁卡"
 
