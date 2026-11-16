@@ -10,7 +10,7 @@
 # enchufado o, en el móvil, los de la pantalla (tecla()). {moverse}, {apuntar} y {atacar_modo} son de aquí.
 #
 # Quién los llama: partida.gd (tutorial(id), y la mayoría en mirar_tutoriales), eventos.gd, supervivientes.gd y
-# menu_principal.gd (el de la alerta).
+# menu_principal.gd (el de la mejora del compuesto VD-7 y el reto del día).
 #
 # Idiomas: los textos de las tablas están en español, entre # [traducir] y # [/traducir], y salen ya traducidos por
 # nombre_grupo(), titulo_de(), cuando_de() y texto() (que traduce cada línea ANTES de poner las teclas): la
@@ -69,7 +69,7 @@ const LISTA := {
 			"Si caes o abandonas, pierdes lo de la mochila; si completas el edificio, pasa al baúl."]},
 	"dolares": {"grupo": "Lo básico", "titulo": "Dólares", "icono": "billete", "cuando": "Al coger el primer billete",
 		"lineas": ["Los durmientes sueltan billetes al caer, y los jefes, muchos: pasa por encima para cogerlos.",
-			"Si completas el edificio te los quedas todos; si caes o abandonas, la mitad.",
+			"Si completas el edificio te los quedas todos; si caes o abandonas, los pierdes.",
 			"Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."]},
 	# (15 nov: el mutágeno, que paga las mutaciones; sale como el de los dólares, desde partida.mirar_tutoriales)
 	"mutageno": {"grupo": "Lo básico", "titulo": "Mutágeno", "icono": "mutageno", "cuando": "Al coger el primer mutágeno",
@@ -98,6 +98,10 @@ const LISTA := {
 			"Mantén {lanzar} para apuntar y suelta para lanzar. Cambia de lanzable con {cambiar_lanzable}.",
 			"Molotov: fuego. Granada: explota. Atraedora: llama a los durmientes y explota. Congeladora: los congela.",
 			"¡Ojo! El fuego y las explosiones también te hacen daño a ti."]},
+	# (16 nov, M123: al salir de la sala de mantenimiento sin ningún lanzable encima; partida.cruzar)
+	"lanzables_siempre": {"grupo": "Armas", "titulo": "Lleva lanzables", "icono": "molotov", "cuando": "Al salir sin lanzables",
+		"lineas": ["No llevas ningún lanzable. Sácalos del baúl o cómpralos en la tienda de armas del ordenador.",
+			"Llévalos siempre: algunas hordas son imposibles sin un molotov o una granada."]},
 	"piezas": {"grupo": "Armas", "titulo": "Materiales de fabricación", "icono": "obj-pieza_cuerpo",
 		"cuando": "Al coger el primer material",
 		"lineas": ["Sirven para mejorar armas y lanzables en el banco de trabajo de la sala de mantenimiento.",
@@ -117,6 +121,16 @@ const LISTA := {
 		"lineas": ["Al vencer al jefe, Johnny arregla el ascensor del pasillo: baja a la sala de mantenimiento y te devuelve a esta planta.",
 			"Úsalo para comprar, mejorar o sacar cosas del baúl a mitad de partida.",
 			"En cada planta nueva vuelve a estar averiado hasta que cae su jefe."]},
+	# (16 nov, M123: detrás de «Jefes», en la primera pelea; partida.gd)
+	"balas_jefes": {"grupo": "Plantas y jefes", "titulo": "Guarda las balas", "icono": "pistola", "cuando": "Al llegar al primer jefe",
+		"lineas": ["Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos.",
+			"Guarda las balas de tus armas a distancia para ellos y limpia los apartamentos con la fregona o tu arma cuerpo a cuerpo."]},
+	# (16 nov, M123: la primera vez que sale al pasillo de la planta baja con la llave del jefe; partida.cruzar)
+	"antes_jefe": {"grupo": "Plantas y jefes", "titulo": "Antes del jefe", "icono": "herramientas",
+		"cuando": "Al salir con la llave del jefe",
+		"lineas": ["Ya puedes abrir la puerta del jefe. Antes de la pelea, pasa por la sala de mantenimiento: está aquí, en la planta baja.",
+			"En el ordenador, gasta los dólares en la tienda de armas y el mutágeno en Mutaciones: si caes, se pierden.",
+			"Deja a salvo en el baúl lo que no quieras perder."]},
 	# (16 nov: el jefe final, que espera en el helipuerto de la azotea; partida.gd, al montar su sala)
 	"azotea": {"grupo": "Plantas y jefes", "titulo": "La azotea", "icono": "jefe", "cuando": "Al llegar a la azotea",
 		"lineas": ["El último jefe del edificio te espera en el helipuerto: entra en las líneas blancas para empezar la pelea.",
@@ -185,7 +199,7 @@ const LISTA := {
 			"Elige la casilla y pulsa «Mejorar»."]},
 	"baul": {"grupo": "Sala de mantenimiento", "titulo": "El baúl", "icono": "mochila", "cuando": "Al abrir el baúl",
 		"lineas": ["Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munición y objetos.",
-			"Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida.",
+			"Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla.",
 			"Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."]},
 	"tienda": {"grupo": "Sala de mantenimiento", "titulo": "La tienda de armas", "icono": "pistola",
 		"cuando": "Al abrir la tienda de armas",
@@ -250,9 +264,11 @@ const LISTA := {
 		"lineas": ["Los ventanales rotos te arrastran hacia fuera: crúzalos pegado a las mesas. Los durmientes que llegan al borde salen volando.",
 			"Si una cámara te ve, salta la alarma y llegan escoltas: rómpela de un tiro antes.",
 			"El gas duerme a los durmientes, pero despiertan frenéticos. A ti no te hace nada; una válvula lo corta."]},
-	"alerta": {"grupo": "Más edificios", "titulo": "Alerta y Reto del día", "icono": "trofeo",
+	# (16 nov, M121: la alerta pasa a ser la mejora del compuesto VD-7, sin premios)
+	"alerta": {"grupo": "Más edificios", "titulo": "Compuesto VD-7 y Reto del día", "icono": "trofeo",
 		"cuando": "Al completar el primer edificio",
-		"lineas": ["Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente.",
+		"lineas": ["Debajo de cada edificio completado eliges la mejora del compuesto VD-7 con < y >: cada nivel, los enemigos tienen un 20 % más de vida, daño, velocidad y ataque.",
+			"No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente.",
 			"El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."]},
 }
 # [/traducir]

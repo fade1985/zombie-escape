@@ -379,8 +379,8 @@
 #                       minijefe                                                           [prueba_sitios.gd]
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
-#   --alerta N          las reglas de esa alerta (1 a 5); con --edificio torre, la Alerta 5 de la torre: los escoltas
-#                       que llegan al leer un ordenador del código (captura-alerta-codigo.png)  [prueba_varias.gd]
+#   --alerta N          la mejora N del compuesto VD-7 (1 a 5, M121): la vida, la velocidad, el ataque y el daño de
+#                       un durmiente y dos jefes, con ella y sin ella; y el cartel del final  [prueba_varias.gd]
 #   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella, y al lado una página del
 #                       dosier con el mismo resplandor                                      [prueba_varias.gd]
 #   --curas             las vendas y el botiquín: casillas del HUD, teclas 1 y 2, el tercio que devuelve el botiquín, la
@@ -474,6 +474,8 @@
 #   --puerta-cierra     nada más entrar en un apartamento, la puerta se cierra detrás de Johnny [prueba_varias.gd]
 #   --disparo-alerta    en un apartamento, un disparo de Johnny despierta a todos los zombis de todas las habitaciones [prueba_varias.gd]
 #   --arrojable-alerta  en un apartamento, el molotov y la granada de Johnny despiertan a todos los zombis (M107) [prueba_varias.gd]
+#   --reglas-t2         la Tanda 2 (16 nov): los que llama un jefe no sueltan nada (M119), el dinamitero despierta a todo
+#                       el apartamento (M118) y las ventanas nuevas con su disparador (M123)  [prueba_varias.gd]
 #   --atontado-pared    los jefes que cargan (también la portera), al estrellarse, se quedan atontados 5 s (en la azotea,
 #                       lo de siempre); la portera embistiendo de verdad contra una pared y el antidisturbios cargando
 #                       contra ella de frente y rozándola de lado (también se atonta) [prueba_varias.gd]
@@ -1238,6 +1240,9 @@ func empezar_prueba() -> void:
 	elif "--disparo-alerta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_disparo_alerta()
+	elif "--reglas-t2" in args:
+		set_process(false)   # sin la prueba larga
+		probar_reglas_t2()
 	elif "--arrojable-alerta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_arrojable_alerta()

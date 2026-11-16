@@ -120,7 +120,7 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 		sprite.frame = IMPACTO + mini(int(t_ataque / LATIGAZO * resto), resto - 1)
 		if t_ataque >= LATIGAZO:
 			estado = "andar"
-			espera = ESPERA
+			espera = ESPERA / ritmo   # (con la mejora del VD-7, menos)
 
 
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:

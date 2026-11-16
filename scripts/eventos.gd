@@ -52,7 +52,7 @@ const INCENDIO := {
 }
 const HORDA := {
 	"zombis": 22,            # los zombis de la horda en la planta baja (hasta el 28 oct, 18; el dueño quería más peligro)...
-	"por_planta": 0.15,      # ...y un 15 % más por cada planta (y con la Alerta 1, más: Alerta.mas_zombis)
+	"por_planta": 0.15,      # ...y un 15 % más por cada planta
 	"nivel": 1,              # lo peor que sale: el nivel de cada planta (num) más este (tipos_horda)
 	"medio": 200.0,          # a cuánto del medio del pasillo tiene que llegar Johnny para que empiece la horda
 	"primera": 2.0,          # segundos desde que empieza (el cartel, al llegar al medio) hasta que sale la horda, toda de golpe (hasta el 28 oct, 4)
@@ -300,7 +300,7 @@ func avanzar_horda(delta: float) -> void:
 	h.t -= delta
 	if h.t <= 0.0 and not h.salio:
 		var num: int = partida.planta.num
-		var n := roundi(HORDA.zombis * (1.0 + HORDA.por_planta * (num - 1)) * Alerta.mas_zombis() * Reto.mas_zombis())
+		var n := roundi(HORDA.zombis * (1.0 + HORDA.por_planta * (num - 1)) * Reto.mas_zombis())
 		var tipos := tipos_horda(num)
 		h.salio = true
 		for i in n:
@@ -570,7 +570,7 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 	var a_la_izquierda := z.filter(func(zz): return zz.global_position.x < johnny.global_position.x).size()
 	var cerca := z.filter(func(zz): return zz.global_position.distance_to(johnny.global_position) < HORDA.lejos).size()
 	print("Horda · salió %s · en el pasillo %d (esperado %d) · a la izquierda de Johnny %d y a la derecha %d (esperado: mitad y mitad) · ya cerca de Johnny %d" % [
-		horda.salio, z.size(), roundi(HORDA.zombis * Alerta.mas_zombis() * Reto.mas_zombis()),
+		horda.salio, z.size(), roundi(HORDA.zombis * Reto.mas_zombis()),
 		a_la_izquierda, z.size() - a_la_izquierda, cerca])
 	await esperar.call(2.5)   # (salen fuera de pantalla: que lleguen a verse para la foto)
 	foto.call("horda")

@@ -64,7 +64,7 @@ func estado_propio(_delta: float, johnny: Node2D) -> void:
 	pedir_velocidad(Vector2.ZERO)
 	if not tirado and avance_animacion() >= momento_zarpazo:
 		tirado = true
-		espera = ESPERA
+		espera = ESPERA / ritmo   # (con la mejora del VD-7, menos)
 		if johnny:
 			tirar(johnny)
 	# se queda plantado hasta acabar el lanzamiento

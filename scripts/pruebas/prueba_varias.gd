@@ -1,20 +1,19 @@
-# Pruebas sueltas: los niveles de alerta (--alerta N), el reto del día (--reto), la caza del acompañante (--caza),
+# Pruebas sueltas: la mejora del compuesto VD-7 (--alerta N), el reto del día (--reto), la caza del acompañante (--caza),
 # el vómito de la Gastroenteritis (--gastro), la llave en el suelo (--llave), los números del equilibrio (--equilibrio) y
 # la rama Químico de los talentos (--quimico) y el ratón en la partida (--raton).
 # Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_sitios.gd"
 
 
-# Con "--captura --alerta N" (en vez de la prueba larga): comprueba las reglas de esa alerta (alerta.gd) con sus
-# números en la terminal y saca captura-alerta.png (el aviso del principio), captura-alerta-llave.png (en los
-# Apartamentos, el zombi que lleva la llave (con la Alerta 5, con el doble de vida; al caer suelta la llave, y al
+# Con "--captura --alerta N" (en vez de la prueba larga): comprueba la mejora N del compuesto VD-7 (alerta.gd, M121: más
+# vida, velocidad, ataque y daño en los enemigos) con sus números en la terminal y saca captura-alerta.png (el aviso
+# del principio), captura-alerta-llave.png (en los Apartamentos, el zombi que lleva la llave (al caer suelta la llave, y al
 # salir y volver a entrar no la lleva otra vez; al cogerla, el grito ¡¡¡LA LLAVE!!! encima de Johnny, en
 # captura-alerta-llave-cogida.png, y su hueco encendido en el inventario, en captura-alerta-llave-inventario.png; la
 # llave en el suelo, con su resplandor, en captura-alerta-llave-suelo.png y, con la penumbra, en
 # captura-alerta-llave-suelo-oscuro.png);
-# en el centro comercial, el guardia; en la torre, los escoltas que llegan al leer un ordenador del código:
-# captura-alerta-codigo.png) y
-# captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
+# en el centro comercial, el guardia) y captura-alerta-fin.png (el cartel del final con la mejora que se abre). Luego se
+# cierra
 # Con "--captura --frases": los avisos de Johnny encima de su cabeza (amarillos, como el de la llave). En el pasillo de la
 # planta 2, la puerta del jefe sin llave, el ascensor y la salida de incendios: la primera vez, su frase
 # (captura-frase-jefe.png, -ascensor.png, -escaleras.png); la segunda, nada. En un apartamento con zombis, «¡SE HA
@@ -233,60 +232,43 @@ func probar_minimapa_cosas() -> void:
 
 func probar_alerta() -> void:
 	var n := Alerta.nivel
-	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.regla(n, edificio)])
+	print("Prueba de la %s en %s: %s" % [Alerta.nombre_largo(), ed.el_nombre, Alerta.regla(n, edificio)])
 	decir("%s: %s
-%s: %s" % [planta.nombre, ed.objetivo, Alerta.nombre(), Alerta.regla(n, edificio)], 4.0)
+%s: %s" % [planta.nombre, ed.objetivo, Alerta.nombre_largo(), Alerta.regla(n, edificio)], 4.0)
 	await get_tree().create_timer(0.5, false).timeout
 	Captura.foto("captura-alerta.png")
-	# A1: los zombis de cinco plantas, sin alerta y con ella (las mismas: con las mismas semillas)
-	var contar := func() -> String:
-		var total := 0
-		var coste := 0.0   # lo que "cuestan" (planta.gd, COSTE): los caros son los duros
-		for i in 5:
-			Planta.semilla = 1000 + i
-			for s in Planta.generar(2, edificio, jefe_de(2)).sitios:
-				for z in s.get("zombis", []):
-					total += 1
-					coste += Planta.COSTE[z.tipo]
-		Planta.semilla = 0
-		return "%d (coste %.0f)" % [total, coste]
-	Alerta.nivel = 0
-	var sin: String = contar.call()
-	Alerta.nivel = n
-	print("A1 · zombis en cinco plantas: %s sin alerta, %s con ella (x%.2f)" % [sin, contar.call(), Alerta.mas_zombis()])
-	# A2 y A3: un zombi normal y el jefe de la planta, recién sacados
-	var normal := meter_zombi("normal", Vector2(200, 200))
-	var jefe := meter_zombi("portera", Vector2(300, 200))
-	print("A2 · velocidad del zombi normal: %.0f (sin alerta, %.0f)" % [normal.velocidad, ZOMBIS.normal.instantiate().velocidad])
-	print("A3 · vida de la portera en la planta baja: %d · se enfada a %d %% de la vida" % [jefe.vida_max, roundi(jefe.enfado * 100)])
-	normal.queue_free()
-	jefe.queue_free()
+	# la mejora del compuesto VD-7 (M121): +20 % por nivel a la vida, la velocidad, el ataque y el daño de todos los
+	# enemigos. Un zombi normal, la portera y el antidisturbios, recién sacados, con ella y sin ella
+	var esperado := 1.0 + 0.2 * n
+	for tipo in ["normal", "portera", "antidisturbios"]:
+		Alerta.nivel = 0
+		var sin: Node2D = meter_zombi(tipo, Vector2(200, 200))
+		Alerta.nivel = n
+		var con: Node2D = meter_zombi(tipo, Vector2(300, 200))
+		var anda := "velocidad %.0f -> %.0f" % [sin.velocidad, con.velocidad] if "velocidad" in con else "anda x%.2f" % con.rapido
+		print("VD-7 · %s: vida %d -> %d (x%.2f) · %s · ataca x%.2f (esperado: todo x%.2f)" % [tipo, sin.vida_max, con.vida_max,
+			float(con.vida_max) / sin.vida_max, anda, con.ritmo, esperado])
+		# el daño que le hace a Johnny un golpe de 10 de este enemigo
+		if tipo == "normal":
+			var v0: int = johnny.vida
+			johnny.invulnerable = 0.0
+			johnny.recibir_dano(10, con)
+			print("VD-7 · un golpe de 10 de un durmiente le quita %d a Johnny (esperado: %d, si no tiene armadura ni Durito)" % [
+				v0 - johnny.vida, roundi(10 * esperado)])
+			johnny.vida = v0
+			johnny.invulnerable = 0.0
+		sin.queue_free()
+		con.queue_free()
 	$Pantalla/Jefa.hide()
-	# A4 y A5
-	print("A4 · un botiquín cura %d (sin alerta, %d)" % [cura_de("botiquin"), Objetos.USABLES.botiquin.cura + johnny.stats.botiquin_extra])
-	print("A5 · los disparos se oyen a %.0f (sin alerta, %.0f)" % [Zombi.OIDO * Alerta.oido(), Zombi.OIDO])
+	print("VD-7 · un botiquín cura %d (esperado: %d, como siempre) · los disparos se oyen a %.0f (esperado: %.0f)" % [
+		cura_de("botiquin"), Objetos.USABLES.botiquin.cura + johnny.stats.botiquin_extra, Zombi.OIDO, Zombi.OIDO])
 	# el guardia (centro) o el zombi de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
 	if ed.cerrojo == "tarjeta":
 		await montar(0, 0, false)
 		print("A5 · el guardia: vida %d" % guardia.vida_max)
 		johnny.position = guardia.position + Vector2(-160, 40)   # (que no se quede en la puerta, que la cruzaría)
 	elif ed.cerrojo == "codigo":
-		# Torre Velaria: al leer un ordenador del código llegan escoltas por la puerta del departamento (solo con la A5)
-		var d: Dictionary = planta.codigo.terminales[0]
-		await montar(d.sitio, 0, false)
-		var escoltas := func() -> int:
-			return get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get_meta("tipo", "") == "escolta").size()
-		var antes: int = escoltas.call()
-		johnny.position = d.pos + Vector2(0, 50)
-		johnny.get_node("Camara").reset_smoothing()
-		for t in mapa.cosas.get_children():
-			if t.name == "Terminal" and t.datos == d:
-				d.leido = true
-				t.leido.emit()
-		await get_tree().create_timer(1.5, false).timeout
-		print("A5 · torre: escoltas en %s antes de leer el ordenador %d, después %d (esperado: %d más; sin la A5, 0)" % [
-			planta.sitios[d.sitio].nombre, antes, escoltas.call(), Alerta.escoltas_codigo()])
-		Captura.foto("captura-alerta-codigo.png")
+		pass   # (la torre no tiene llave: el código. Desde M121 ya no llegan escoltas al leer sus ordenadores)
 	else:
 		var vecino := -1
 		var con_llave := 0
@@ -301,7 +283,7 @@ func probar_alerta() -> void:
 			await montar(vecino, 0, false)
 			for z in get_tree().get_nodes_in_group("zombis"):
 				if z.has_meta("llave"):
-					print("Llave · el zombi (%s): vida %d (el doble solo con la Alerta 5)" % [
+					print("Llave · el zombi (%s): vida %d" % [
 						z.scene_file_path.get_file().get_basename(), z.vida_max])
 					johnny.position = z.position + Vector2(0, 90)
 					for k in 16:   # Johnny, cerca de él y en su misma habitación
@@ -350,7 +332,7 @@ func probar_alerta() -> void:
 		johnny.get_node("Camara").reset_smoothing()
 		await get_tree().create_timer(0.4, false).timeout
 		Captura.foto("captura-alerta-llave.png")
-	# el final: con 50 dólares recogidos, y la alerta de la partida como la más alta abierta
+	# el final: con 50 dólares recogidos (sin premio de más: M121), y la mejora de la partida como la más alta abierta
 	Guardado.cambiar(func(g): Guardado.edificio(g, edificio).alerta_max = n)
 	dolares = 50
 	planta.num = Planta.PLANTAS
@@ -358,7 +340,7 @@ func probar_alerta() -> void:
 	await get_tree().create_timer(0.5).timeout
 	Captura.foto("captura-alerta-fin.png")
 	var e: Dictionary = Guardado.cargar().edificios[edificio]
-	print("Final · dólares: 50 + %d · alerta más alta abierta: %d" % [Alerta.dolares_extra(50), e.alerta_max])
+	print("Final · dólares: 50, sin nada de más · mejora más alta abierta: %d (esperado: %d)" % [e.alerta_max, mini(n + 1, Alerta.MAX)])
 	get_tree().quit()
 
 
@@ -889,7 +871,7 @@ func probar_gastro() -> void:
 # Con "--captura --equilibrio": los números del equilibrio del 27 oct, contados en la terminal con lo esperado. En el
 # apartamento más grande, sin zombis: los talentos y la skin se suman (Ataque 5 y Camorrista 5 con el gymbro y con el
 # portero); el daño mínimo de un golpe (Durito 3 con Insensible); Ninja (mata al zombi de al lado, pero como mucho una
-# vez cada 5 s; lo que le quitaría a un jefe); Ajolote (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
+# vez cada 5 s; lo que le quitaría a un jefe); Ajolote (1 cada 5 s); la fregona, el
 # cuchillo, la MP5 y la cura de la médica; su propia granada a los pies (como mucho 25); los premios del reto
 # del día y los billetes de los jefes. La segunda parte (27 oct, tarde): el tope de curas (2 botiquines y 3 vendas; un
 # armarito abierto con la mochila llena deja el botiquín en el suelo y Johnny grita «¡NO PUEDO LLEVAR MÁS!», captura-equilibrio-tope.png) y
@@ -971,16 +953,7 @@ func probar_equilibrio() -> void:
 	johnny.regenera_t = 0.0
 	v0 = johnny.vida
 	await get_tree().create_timer(5.3, false).timeout
-	var sin_alerta: int = johnny.vida - v0
-	Alerta.nivel = 4
-	johnny.regenera_t = 0.0
-	v0 = johnny.vida
-	await get_tree().create_timer(5.3, false).timeout
-	var a_medias: int = johnny.vida - v0
-	await get_tree().create_timer(5.0, false).timeout
-	print("Ajolote 1: en 5,3 s cura %d (esperado: 1) · con la Alerta 4, en 5,3 s %d y en 10,3 s %d (esperado: 0 y 1)" % [
-		sin_alerta, a_medias, johnny.vida - v0])
-	Alerta.nivel = 0
+	print("Ajolote 1: en 5,3 s cura %d (esperado: 1)" % (johnny.vida - v0))
 	johnny.stats = antes
 
 	# ── Las armas, la médica y la granada propia ──
@@ -1564,7 +1537,7 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 	for l in Logros.LISTA:
 		if l.has("mira"):
 			metas[l.id] = Logros.meta(l)
-	print("Logros nuevos · %d en total · metas %s (esperado: 42; comunidad 3, plantilla 3, horas_extra 3, reestructuracion 1, vestuario 4, naturalista 22, investigador 10, chatarrero 8, especialista 36, conserje_total 108, arsenal 9, todas_reglas 7, cazajefes 25, empleado_mes 10, liquidacion 1, cambio_look 1)" % [
+	print("Logros nuevos · %d en total · metas %s (esperado: 84, 42 y los 42 de las armas; comunidad 3, plantilla 3, horas_extra 3, reestructuracion 1, vestuario 4, naturalista 22, investigador 10, chatarrero 8, especialista 36, conserje_total 108, arsenal 9, todas_reglas 7, cazajefes 25, empleado_mes 10, liquidacion 1, cambio_look 1)" % [
 		Logros.LISTA.size(), metas])
 	# 2) el repaso: con todo eso en el guardado, conseguidos de golpe y en un solo aviso
 	Guardado.cambiar(func(g):
@@ -1634,6 +1607,32 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 	logros.zombi_muerto("mp5", false)
 	logros.revisar()
 	print("Logros nuevos · arsenal: tras el rifle %s, tras el MP5 %s (esperado: pendiente, conseguido)" % [con_rifle, estados.call(["arsenal"])])
+	# los de cada arma (M122): 3 niveles por arma (10, 50 y 200 durmientes con ella en la mano, sumando partidas); quemados
+	# no cuentan, salvo con el lanzallamas. Con 9 guardados de la katana y uno más en esta partida, el primer nivel
+	Guardado.cambiar(func(g):
+		g.logros_cuentas.con_arma = {"katana": 9}
+		for id in ["arma_katana_1", "arma_katana_2", "arma_bate_1", "arma_lanzallamas_1"]:
+			g.logros.erase(id))
+	logros.con_arma = {"katana": 9}
+	logros.por_arma = {}
+	logros.armas_avisadas = []
+	var katana_9 := estados.call(["arma_katana_1"]) as String
+	logros.zombi_muerto("katana", true)   # (quemado: no cuenta)
+	var katana_quemado := estados.call(["arma_katana_1"]) as String
+	logros.zombi_muerto("katana", false)
+	print("Logros por arma · katana con 9: %s, con uno quemado: %s, con uno más: %s · progreso del nivel 2: %d/%d (esperado: pendiente, pendiente, conseguido · 10/50)" % [
+		katana_9, katana_quemado, estados.call(["arma_katana_1"]), logros.progreso("arma_katana_2"), Logros.datos("arma_katana_2").meta])
+	for i in 10:
+		logros.zombi_muerto("lanzallamas", true)   # (con el lanzallamas, los quemados sí)
+	print("Logros por arma · 10 quemados con el lanzallamas: %s · nombre «%s» · «%s» · apartado %s (esperado: conseguido · Lanzallamas: novato · Mata 10 durmientes con esta arma, sumando todas tus partidas. · arsenal_especial)" % [
+		estados.call(["arma_lanzallamas_1"]), Logros.nombre_de("arma_lanzallamas_1"), Logros.desc_de("arma_lanzallamas_1"), Logros.datos("arma_lanzallamas_1").tema])
+	logros.guardar_armas()
+	print("Logros por arma · al guardarlos: %s (esperado: katana 10, lanzallamas 10) · en el ordenador se ve el de la katana: nivel 1 %s, nivel 2 %s (esperado: true, false: el 1 está sin cobrar)" % [
+		Guardado.cargar().logros_cuentas.con_arma, Logros.toca_ver(Logros.datos("arma_katana_1"), Guardado.cargar()),
+		Logros.toca_ver(Logros.datos("arma_katana_2"), Guardado.cargar())])
+	Guardado.cambiar(func(g): g.logros["arma_katana_1"] = "cobrado")
+	print("Logros por arma · cobrado el 1: nivel 1 %s, nivel 2 %s (esperado: false, true)" % [
+		Logros.toca_ver(Logros.datos("arma_katana_1"), Guardado.cargar()), Logros.toca_ver(Logros.datos("arma_katana_2"), Guardado.cargar())])
 	# 6) ganar: con la Alerta 5, en 100 s, sin curarse, con un vecino y con 9 ganadas antes
 	var ganar := ["fin_jornada", "jornada_expres", "sin_tiritas", "alerta_naranja", "alerta_maxima", "buena_compania",
 		"empleado_mes", "reto_aceptado", "todas_reglas"]
@@ -1695,7 +1694,7 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 		sc.scroll_vertical = 0
 	await get_tree().process_frame
 	Captura.foto("captura-logros-temas.png")
-	print("Logros nuevos · ordenador: apartados %s (esperado: resumen, edificios, jefes, combate, armas, supervivientes, sorpresas, colecciones)" % [
+	print("Logros nuevos · ordenador: apartados %s (esperado: resumen, edificios, jefes, combate, armas, arsenal_cuerpo, arsenal_distancia, arsenal_especial, supervivientes, sorpresas, colecciones)" % [
 		ordenador.ventana.find_child("archivador", true, false).temas.keys()])
 	for sc in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
 		sc.scroll_vertical = 100000
@@ -2760,6 +2759,122 @@ func probar_disparo_alerta() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --reglas-t2" (16 nov, la Tanda 2): cada línea dice lo esperado.
+#   M119: un durmiente que llama la portera no suelta nada al caer; uno normal, sí (su mutágeno y una cosa más).
+#   M118: en un apartamento con todos dormidos, el dinamitero revienta (lo mata Johnny) y despierta a todos.
+#   M123: las ventanas nuevas, con su disparador de verdad: «Lleva lanzables» al salir de la sala de mantenimiento sin
+#   ninguno (captura-t2-lanzables.png), «Antes del jefe» al salir de un apartamento al pasillo de la planta baja con la
+#   llave (captura-t2-antes-jefe.png) y «Guarda las balas», detrás de «Jefes» (captura-t2-balas.png).
+# Deja el guardado como estaba y se cierra
+func probar_reglas_t2() -> void:
+	var antes := Guardado.cargar()
+	await get_tree().create_timer(0.5).timeout
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	var cosas := func() -> int:   # lo que hay para coger en el suelo (billetes, mutágeno, munición)
+		return mapa.cosas.get_children().filter(func(c): return c.has_signal("cogido")).size()
+	# ── M119: los que llama un jefe no sueltan nada ──
+	var jefe: Node2D = meter_zombi("portera", johnny.position + Vector2(400, 0))
+	jefe.quieto = true
+	var llamado := [null]
+	jefe.pide_zombi.emit("normal", johnny.position + Vector2(150, 60))
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.has_meta("llamado"):
+			llamado[0] = z
+	await get_tree().create_timer(0.3).timeout
+	var n0: int = cosas.call()
+	if llamado[0]:
+		llamado[0].recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.5).timeout
+	print("M119 · el llamado por la portera: marcado %s · al caer suelta %d cosas (esperado: true · 0)" % [llamado[0] != null, cosas.call() - n0])
+	var normal: Node2D = meter_zombi("normal", johnny.position + Vector2(-150, 60))
+	await get_tree().create_timer(0.3).timeout
+	n0 = cosas.call()
+	normal.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.5).timeout
+	print("M119 · un durmiente normal: al caer suelta %d cosas (esperado: 2 o más: su mutágeno y otra)" % (cosas.call() - n0))
+	jefe.queue_free()
+	$Pantalla/Jefa.hide()
+	# ── M118: el dinamitero despierta a todo el apartamento ──
+	var destino := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and not planta.sitios[i].limpio:
+			destino = i
+			break
+	await montar(destino, 0, false)
+	johnny.modo = "quieto"
+	await get_tree().create_timer(0.3).timeout
+	var zombis := get_tree().get_nodes_in_group("zombis")
+	var dormidos_antes := zombis.filter(func(z): return z.get("dormido")).size()
+	var bum: Node2D = meter_zombi("explosivo", johnny.position + Vector2(0, 40))
+	await get_tree().physics_frame
+	bum.dormido = false
+	bum.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	print("M118 · el dinamitero revienta: dormidos antes %d, después %d (esperado: alguno y 0)" % [dormidos_antes,
+		zombis.filter(func(z): return is_instance_valid(z) and z.get("dormido")).size()])
+	# ── M123: las ventanas nuevas, con su disparador ──
+	tutoriales_prueba = true
+	Guardado.cambiar(func(g):
+		g.ajustes.tutoriales = true
+		g.tutoriales = Tutoriales.LISTA.keys().filter(func(id): return not id in ["antes_jefe", "lanzables_siempre", "balas_jefes"]))
+	Tutoriales.vistos_de = ""
+	var ventana := func() -> String:   # la ventana de tutorial abierta ("" si no hay)
+		for h in get_children():
+			if h is Tutorial:
+				return h.id
+		return ""
+	var cerrar := func():
+		for h in get_children():
+			if h is Tutorial:
+				h.cerrar()
+	var salida_a := func(a: int) -> int:   # la salida del sitio de ahora que lleva a "a"
+		var salidas: Array = planta.sitios[aqui].salidas
+		for i in salidas.size():
+			if salidas[i].get("a", -1) == a:
+				return i
+		return 0
+	# sin lanzables, de la sala de mantenimiento al pasillo
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	lanzables.vaciar()
+	await montar(planta.mantenimiento, 0, false)
+	await get_tree().create_timer(0.3).timeout
+	cruzar(salida_a.call(0))
+	await get_tree().create_timer(1.2, true).timeout
+	Captura.foto("captura-t2-lanzables.png")
+	print("M123 · al salir de la sala sin lanzables: ventana «%s» (esperado: lanzables_siempre)" % ventana.call())
+	cerrar.call()
+	await get_tree().create_timer(0.5, true).timeout
+	# con la llave, de un apartamento al pasillo de la planta baja
+	planta.tiene_llave = true
+	await montar(destino, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	await get_tree().create_timer(0.3).timeout
+	cruzar(salida_a.call(0))
+	await get_tree().create_timer(1.2, true).timeout
+	Captura.foto("captura-t2-antes-jefe.png")
+	print("M123 · al salir al pasillo con la llave: ventana «%s» (esperado: antes_jefe)" % ventana.call())
+	cerrar.call()
+	await get_tree().create_timer(0.5, true).timeout
+	# «Guarda las balas», detrás de «Jefes» (como en la presentación del jefe)
+	Guardado.cambiar(func(g): g.tutoriales.erase("jefes"))
+	Tutoriales.vistos_de = ""
+	tutorial("jefes")
+	tutorial("balas_jefes")
+	await get_tree().create_timer(1.0, true).timeout
+	var primera: String = ventana.call()
+	cerrar.call()
+	await get_tree().create_timer(1.0, true).timeout
+	Captura.foto("captura-t2-balas.png")
+	print("M123 · al llegar al jefe: primero «%s», luego «%s» (esperado: jefes, balas_jefes)" % [primera, ventana.call()])
+	cerrar.call()
+	Guardado.escribir(antes)
+	get_tree().quit()
+
+
 # Con "--captura --arrojable-alerta" (M107): en el primer apartamento, Johnny quieto en la entrada lanza de verdad un
 # molotov y, con todos dormidos otra vez, una granada, cerca y sin dar a nadie. Tras cada uno, cuántos siguen dormidos
 # (esperado: ninguno). Foto captura-arrojable-alerta.png
@@ -3713,10 +3828,6 @@ func probar_derrota() -> void:
 	menus.reintentar.connect(func(): otra_vez[0] += 1)
 	var los_botones: Array = menus.fondo.find_children("*", "Button", true, false)
 	var boton: Button = los_botones[0]
-		if caso[2]:   # (L43: con el edificio completado, solo «Menú principal», y marcado)
-			var al_ganar: Array = menus.fondo.find_children("*", "Button", true, false)
-			print("Gana · botones: %d, «%s», marcado %s (esperado: 1, Menú principal, true)" % [al_ganar.size(),
-				al_ganar[0].text if al_ganar.size() > 0 else "", al_ganar.size() > 0 and al_ganar[0].has_focus()])
 	var al_principal: Button = los_botones[1]
 	boton.pressed.emit()
 	al_principal.pressed.emit()
@@ -3744,6 +3855,10 @@ func probar_derrota() -> void:
 		terminar(caso[2])
 		await get_tree().create_timer(0.5).timeout
 		Captura.foto("captura-derrota-%s.png" % ("gana" if caso[2] else "jefe" if caso[1] else caso[0]))
+		if caso[2]:   # (L43: con el edificio completado, solo «Menú principal», y marcado)
+			var al_ganar: Array = menus.fondo.find_children("*", "Button", true, false)
+			print("Gana · botones: %d, «%s», marcado %s (esperado: 1, Menú principal, true)" % [al_ganar.size(),
+				al_ganar[0].text if al_ganar.size() > 0 else "", al_ganar.size() > 0 and al_ganar[0].has_focus()])
 	get_tree().quit()
 
 
@@ -4734,7 +4849,7 @@ func probar_archivador_logros() -> void:
 	print("Archivador · Edificios: %d filas, todas dentro: %s (esperado: 9, true)" % [archivador.filas.size(), dentro])
 	Captura.foto("captura-archivador-edificios.png")
 	# el resto de apartados, una foto de cada uno (captura-archivador-<apartado>.png), para ver todos los iconos
-	for tema in ["combate", "armas", "supervivientes", "sorpresas", "colecciones"]:
+	for tema in ["combate", "armas", "arsenal_cuerpo", "arsenal_distancia", "arsenal_especial", "supervivientes", "sorpresas", "colecciones"]:
 		archivador.temas[tema].pressed.emit()
 		await get_tree().create_timer(0.4).timeout
 		archivador = ordenador.ventana.find_child("archivador", true, false)

@@ -63,7 +63,7 @@ en una línea.
   en "fregona" del guardado (`Objetos.apartar_fregona`, también la de un guardado de antes que estaba en el baúl) y
   Johnny empieza cada partida con ella, gastando una (`partida.dar_fregona`, con `estrenar`); al quedarse sin partidas se
   rompe (el cartel lo dice) y vuelve la Normal. Si se deja en el suelo, al acabar vuelve igual (`Objetos.cerrar_baul`,
-  F22). Prueba: `--fregona-mejorada`. La ficha lo enseña como «Durabilidad: N», de 0 a 3 (`texto_partidas()`, `durabilidad()`; 13 nov). Prueba: `--durabilidad`. La **Épica**
+  F22). Prueba: `--fregona-mejorada`. La ficha lo enseña como «Durabilidad: N», de 1 a 4: las partidas que le quedan contando la que está en uso (`texto_partidas()`, `durabilidad()`; 13 nov, y de 1 a 4 desde el M115, 16 nov). Prueba: `--durabilidad`. La **Épica**
   (`EPICA`) trae además un truco de su familia (`TRUCO`, `truco()`): golpe de gracia (cada 4 golpes, uno crítico:
   `johnny.golpear`), balas que atraviesan (`bala.gd`, `atraviesa`, estela morada), estallido (el zombi que mata
   revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños
@@ -402,7 +402,7 @@ en una línea.
   la tarjeta cerrada de «Elige edificio», uno por renglón y en verde los cumplidos (`--edificios`: fotos
   `captura-edificios-nada/medias/todo.png`). La Torre pide los vídeos del Centro, que aún no tiene teles (M92). `porcentaje()`: el tanto por ciento de
   un edificio al lado de «Completado» (un tercio por completarlo, otro por su dosier y otro por sus vídeos; `cuentas()`).
-- `alerta.gd` (niveles de alerta), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `reto.gd` (el reto del
+- `alerta.gd` (la «mejora del compuesto VD-7», M121, 16 nov: niveles 1 a 5, cada uno +20 % de vida, daño, velocidad y ataque a todos los enemigos, `Alerta.vida()`/`dano()`/`velocidad()`/`ataque()`; se aplica en `partida.mejora_vd7()` y en `johnny.recibir_dano`; el ataque, con `ritmo` en zombis y minijefes y `rapido` en los minijefes; prueba `--alerta N`), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `reto.gd` (el reto del
   día; su tarjeta en «Elige edificio» dice la regla, tu marca y el premio de hoy, `texto_tarjeta`; se juega una vez al día: el intento se gasta al empezar y el botón sale apagado hasta mañana, `jugado`) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`): el portero, el
   glotón, el gymbro, el bombero, el doctor Salas (M36: `doble()`; desde el 15 nov, la mitad de las veces el durmiente
@@ -434,8 +434,7 @@ en una línea.
   al azar ni de los zombis (Fase 4, 15 nov): en los Apartamentos, de los muebles que se abren (`MUEBLES_CON_PIEZA`: el
   armario, la mesilla, el escritorio y la librería; `mueble.gd` les pone la zona de `zona_usar.gd` y `partida.abrir_mueble`
   los abre una vez, `datos.abierto`, con un 35 % de material, `pieza_de_mueble()`, cada familia al 25 %); en el centro
-  comercial y en la torre, cada jefe (`piezas_de_jefe()`, 4, en `partida.meter_zombi`). Con la alerta salen más
-  (`Alerta.mas_piezas()`: más muebles con material y más piezas de jefe). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
+  comercial y en la torre, cada jefe (`piezas_de_jefe()`, 4, en `partida.meter_zombi`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
   de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (32×32; desde el 15 nov, de GPT con `tools/muebles_gpt.py`: engranaje de bronce, de plata y de oro y matraz verde; los de antes eran de PixelLab).
   `talentos.gd` (**el jugador los ve como «mutaciones»** desde el 15 nov, lo pidió el dueño: el programa es MUTACIONES.EXE,
   el botón «Resetear mutaciones» y el árbol ya no tiene nombre en la barra de tareas; por dentro siguen siendo talentos, y
@@ -524,7 +523,7 @@ en una línea.
   ajustes de Opciones, de los tres, en `guardado-ajustes.json` con el hueco en uso. `base` es el nombre sin `.json`
   (la prueba usa `usar("user://guardado-prueba")`), `elegir_hueco`, `hueco_usado`, `borrar_hueco`), `huecos.gd`
   (`Huecos`, la pantalla «Elige partida» del menú: una tarjeta por hueco con su resumen o «Vacía», y «Borrar partida»
-  con confirmación; elegir uno monta el menú otra vez; se prueba con `--huecos`), `logros.gd` (40 desde el M17, 28 oct, y 42 con los dos de la torre, 5 nov; uno =
+  con confirmación; elegir uno monta el menú otra vez; se prueba con `--huecos`), `logros.gd` (40 desde el M17, 28 oct, y 42 con los dos de la torre, 5 nov; 84 desde el M122, 16 nov: los de cada arma, tres por arma (10, 50 y 200 durmientes con ella, sumando partidas, en "logros_cuentas" → "con_arma"), hechos solos con `de_armas()` en los apartados Cuerpo a cuerpo, A distancia y Especiales, y en el ordenador solo se ve el nivel que toca, `toca_ver()`; prueba `--logros`; uno =
   una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
   —skins, bestiario, páginas, objetos, rescatados, talentos, edificio completado— y los da por conseguidos el repaso,
   `revisar()`: al empezar, cada vez que se escribe el guardado (`Guardado.escrituras`), al acabar y al abrir el
@@ -645,7 +644,7 @@ en una línea.
   quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
   peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; sus botones
   no hacen caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al abrir el juego, encima, el aviso de fotosensibilidad, `aviso_luces.gd`
-  (`AvisoLuces`, una vez por cada vez que se abre el juego; cualquier tecla, clic, toque o botón lo quita; prueba `--aviso`); desde el 11 nov, la tarjeta de un edificio completado solo dice «Récord: m:ss», el reto del día es un botón grande con «Premio $10» debajo y su cuadro al pasar el ratón (`boton_reto`, `cuadro_reto`; prueba `--edificios`), y la Alerta 1 solo da dólares (las piezas, desde la 2); en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
+  (`AvisoLuces`, una vez por cada vez que se abre el juego; cualquier tecla, clic, toque o botón lo quita; prueba `--aviso`); desde el 11 nov, la tarjeta de un edificio completado solo dice «Récord: m:ss», el reto del día es un botón grande con «Premio $10» debajo y su cuadro al pasar el ratón (`boton_reto`, `cuadro_reto`; prueba `--edificios`); desde el 16 nov (M120), el reto del día solo sale tras completar algún edificio (si no, un letrero gris) y encima del selector de mejora pone «Compuesto VD-7»; en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
   monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; la lista de idiomas, con botones que llenan el sitio hasta «Volver»; Contáctanos, también para avisar de un texto mal
   traducido (desde el 12 nov, en vez del botón aparte con un formulario de Google); el temblor de
   pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y

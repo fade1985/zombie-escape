@@ -58,7 +58,8 @@ static func coste(id: String, calidad: int) -> int:
 #   a distancia       cargador más grande ("cargador") y recarga más rápida ("recarga": lo que tarda)
 #   especiales        depósito más grande (el lanzallamas, el lanza ácido y el lanza rayos, "deposito") y la descarga
 #                     del lanza rayos salta a más zombis ("saltos")
-#   arrojables        radio más grande ("radio") y caben más ("unidades"; lanzables.gd)
+#   arrojables        radio más grande ("radio"); en su montón caben los mismos sea cual sea su calidad (F26, 16 nov:
+#                     antes, uno más por cada calidad)
 # Y "piezas": lo que cuesta subir a esa calidad en el banco de trabajo (parte 5), en piezas de su familia (pieza); de
 # una en una: las armas, de Normal a Poco común 3, luego 6 a Rara y 10 a Épica (19 en total); los arrojables,
 # "piezas_arrojable", más baratos porque el paquete se gasta al lanzarlo: 1, 2 y 4 (7 en total). Provisional (parte 6)
@@ -67,16 +68,16 @@ static func coste(id: String, calidad: int) -> int:
 const CALIDADES := [
 	{"nombre": "Normal",   # [traducir]
 		"color": Color("#8a8494"), "dano": 1.0, "golpe": 1.0, "cargador": 1.0, "recarga": 1.0,
-		"deposito": 1.0, "saltos": 0, "radio": 1.0, "unidades": 0, "piezas": 0, "piezas_arrojable": 0},
+		"deposito": 1.0, "saltos": 0, "radio": 1.0, "piezas": 0, "piezas_arrojable": 0},
 	{"nombre": "Poco común",   # [traducir]
 		"color": Color("#5fd35f"), "dano": 1.2, "golpe": 1.1, "cargador": 1.25, "recarga": 0.85,
-		"deposito": 1.25, "saltos": 1, "radio": 1.1, "unidades": 1, "piezas": 3, "piezas_arrojable": 1},
+		"deposito": 1.25, "saltos": 1, "radio": 1.1, "piezas": 3, "piezas_arrojable": 1},
 	{"nombre": "Rara",   # [traducir]
 		"color": Color("#4aa3ff"), "dano": 1.45, "golpe": 1.2, "cargador": 1.5, "recarga": 0.7,
-		"deposito": 1.5, "saltos": 2, "radio": 1.2, "unidades": 2, "piezas": 6, "piezas_arrojable": 2},
+		"deposito": 1.5, "saltos": 2, "radio": 1.2, "piezas": 6, "piezas_arrojable": 2},
 	{"nombre": "Épica",   # [traducir]
 		"color": Color("#c06bff"), "dano": 1.75, "golpe": 1.3, "cargador": 1.75, "recarga": 0.55,
-		"deposito": 1.75, "saltos": 3, "radio": 1.3, "unidades": 3, "piezas": 10, "piezas_arrojable": 4},
+		"deposito": 1.75, "saltos": 3, "radio": 1.3, "piezas": 10, "piezas_arrojable": 4},
 ]
 const EPICA := 3   # la calidad más alta, la que trae el truco
 # El truco de la Épica (parte 6), además de lo de su calidad; uno por familia:
@@ -142,17 +143,18 @@ static func estrenar(e: Dictionary) -> int:
 	return quedan_de(e)
 
 
-# La línea de la ficha con la durabilidad (inventario.gd): desde el 13 nov, solo un número de 0 a 3 (durabilidad)
+# La línea de la ficha con la durabilidad (inventario.gd): desde el 13 nov, solo un número; desde el 16 nov (M115), de 1 a
+# 4 (durabilidad)
 static func texto_partidas(quedan: int, en_uso: bool) -> String:
 	return Idioma.t("Durabilidad: %d") % durabilidad(quedan, en_uso)
 
 
-# La durabilidad que se enseña: las partidas que le quedan después de la que se juega con ella. Recién estrenada, la de su
-# calidad (nuevas: Normal 0, Poco común 1, Rara 2, Épica 3), y baja una con cada partida. "en_uso": la lleva o ya ha
-# salido del baúl en esta partida ("quedan" ya es después de esta); si no, en el baúl, "quedan" son las veces que aún
-# puede salir, y la partida en que salga no cuenta
+# La durabilidad que se enseña: las partidas que le quedan contando la que se juega con ella (M115, 16 nov; antes, sin
+# contarla: de 0 a 3). Recién estrenada, la de su calidad más una (nuevas: Normal 1, Poco común 2, Rara 3, Épica 4), y baja
+# una con cada partida. "en_uso": la lleva o ya ha salido del baúl en esta partida ("quedan" ya es después de esta, y esta
+# cuenta); si no, en el baúl, "quedan" son las veces que aún puede salir
 static func durabilidad(quedan: int, en_uso: bool) -> int:
-	return maxi(0, quedan if en_uso else quedan - 1)
+	return maxi(0, quedan + 1 if en_uso else quedan)
 
 
 # ¿Va al baúl? Las armas, todas (la pistola Normal deja a Johnny sin arma a distancia: SIN_FUEGO; la fregona Normal de la
@@ -205,7 +207,7 @@ static func que_da(id: String, calidad: int) -> String:
 			else:
 				extra = Idioma.t("depósito un %d %% más grande") % deposito
 		"arrojable":
-			extra = Idioma.t("radio un %d %% más grande y caben %d más") % [roundi((c.radio - 1.0) * 100), c.unidades]
+			extra = Idioma.t("radio un %d %% más grande") % roundi((c.radio - 1.0) * 100)
 	var da := Idioma.t("%s: daño +%d %%, %s.") % [calidad_nombre(calidad), roundi((c.dano - 1.0) * 100), extra]
 	return da if calidad < EPICA else "%s %s" % [da, truco(id)]
 

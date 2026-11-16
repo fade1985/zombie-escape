@@ -58,6 +58,8 @@ var con_quemaduras := false   # si su shader lleva fuego, ácido o vómito (sufr
 var rumbo := Vector2.ZERO  # hacia dónde anda ahora (gira poco a poco hacia donde quiere ir)
 var zarpazo_dado := false  # si ya ha dado el golpe en este zarpazo (solo uno por animación)
 var momento_zarpazo := 0.429   # en qué punto de la animación de ataque llega la mano (lo pone su hoja)
+var ritmo := 1.0          # lo deprisa que ataca (la mejora del compuesto VD-7: alerta.gd, partida.mejora_vd7): su animación
+                          # de ataque va más rápida, y los que tiran cosas esperan menos entre tiro y tiro
 # Los zombis de los apartamentos esperan dormidos en su habitación ("zona") hasta que notan a Johnny
 var dormido := false
 # El público del plató del presentador (presentador.gd): dormido en su butaca, sin despertarse por ver a Johnny ni por
@@ -442,8 +444,7 @@ func onda_en(_p: Vector2) -> void:
 # y el militar (aliado.gd, M43)
 # Con "todos" (un disparo de Johnny dentro de un apartamento), lo oye esté donde esté
 func oir_disparo(donde: Vector2, todos := false) -> void:
-	# (con la Alerta 5, más lejos)
-	if dormido and not sentado and (todos or global_position.distance_to(donde) < OIDO * Alerta.oido()):
+	if dormido and not sentado and (todos or global_position.distance_to(donde) < OIDO):
 		despertar()
 
 
@@ -1086,7 +1087,7 @@ func poner_animacion(estado_anim: String, otra_vez := false) -> void:
 	var mismo_estado := sprite.animation.get_slice("_", 0) == nombre.get_slice("_", 0)
 	var fotograma := sprite.frame
 	var avance := sprite.frame_progress
-	sprite.play(nombre)
+	sprite.play(nombre, ritmo if estado_anim == "ataque" else 1.0)   # (el ataque, a su ritmo)
 	if otra_vez:
 		sprite.frame = 0
 	elif mismo_estado:

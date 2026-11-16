@@ -262,8 +262,8 @@ func pintar_lucecitas(l: Node2D, armario: Node2D) -> void:
 		for col in 4:
 			var s := sin(semilla * 0.37 + fila * 12.9898 + col * 78.233) * 43758.5453
 			s -= floorf(s)
-			var ritmo := 1.5 + s * 4.0
-			var encendida := sin(ahora * ritmo + s * 20.0) > -0.3
+			var parpadeo := 1.5 + s * 4.0
+			var encendida := sin(ahora * parpadeo + s * 20.0) > -0.3
 			var color := Color("#6dff8a") if s < 0.6 else Color("#ffc94a")
 			if alerta:
 				encendida = sin(ahora * 18.0 + fila) > 0.0

@@ -12,60 +12,24 @@ msgstr ""
 
 
 #: scripts/alerta.gd
-msgid "Alerta %d"
-msgstr "Alert %d"
+msgid "Mejora %d"
+msgstr "Upgrade %d"
 
 #: scripts/alerta.gd
-msgid "Sin alerta"
-msgstr "No alert"
+msgid "Sin mejora"
+msgstr "No upgrade"
+
+#: scripts/alerta.gd
+msgid "Mejora %d del compuesto VD-7"
+msgstr "VD-7 compound upgrade %d"
+
+#: scripts/alerta.gd
+msgid "Enemigos +%d %%: vida, daño, velocidad y ataque"
+msgstr "Enemies +%d %%: health, damage, speed and attack"
 
 #: scripts/alerta.gd
 msgid "Como siempre"
 msgstr "As usual"
-
-#: scripts/alerta.gd
-msgid ""
-"%s\n"
-"+%d %% de dólares"
-msgstr ""
-"%s\n"
-"+%d %% dollars"
-
-#: scripts/alerta.gd
-msgid ""
-"%s%s\n"
-"+%d %% de dólares y de materiales"
-msgstr ""
-"%s%s\n"
-"+%d %% dollars and materials"
-
-#: scripts/alerta.gd
-msgid " (y lo de antes)"
-msgstr " (and the previous ones)"
-
-#: scripts/alerta.gd
-msgid "+25 % de durmientes"
-msgstr "+25 % sleepers"
-
-#: scripts/alerta.gd
-msgid "Durmientes un 10 % más rápidos"
-msgstr "Sleepers 10 % faster"
-
-#: scripts/alerta.gd
-msgid "Jefes con +25 % de vida, y se enfadan antes"
-msgstr "Bosses with +25 % health, and they get angry sooner"
-
-#: scripts/alerta.gd
-msgid "Botiquines, vendas y Ajolote curan la mitad"
-msgstr "Medkits, bandages and Axolotl heal half as much"
-
-#: scripts/alerta.gd
-msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
-msgstr "The guard (or the key sleeper) takes twice the damage and sleepers hear you from farther away"
-
-#: scripts/alerta.gd
-msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-msgstr "Each code computer calls two bodyguards and sleepers hear you from farther away"
 
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
@@ -118,8 +82,8 @@ msgid "depósito un %d %% más grande"
 msgstr "tank %d %% bigger"
 
 #: scripts/armas.gd
-msgid "radio un %d %% más grande y caben %d más"
-msgstr "radius %d %% bigger and %d more fit per stack"
+msgid "radio un %d %% más grande"
+msgstr "radius %d %% bigger"
 
 #: scripts/armas.gd
 msgid "%s: daño +%d %%, %s."
@@ -225,11 +189,11 @@ msgstr "Ice launcher"
 msgid "Lanza rayos"
 msgstr "Lightning gun"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/armas.gd scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Cuerpo a cuerpo"
 msgstr "Melee"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/armas.gd scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "A distancia"
 msgstr "Ranged"
 
@@ -1176,6 +1140,38 @@ msgstr "HORDE IN THE HALLWAY!"
 #: scripts/eventos.gd
 msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
 msgstr "A huge horde is coming down the hallway... get ready!"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "WAVE %d"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "GARAGE CLEARED!"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "Next wave in %d"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "First wave in %d"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "Wave %d / %d"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "Garage cleared!"
+
+#: scripts/garaje.gd scripts/partida.gd
+msgid "¡Derrota!"
+msgstr "Defeat!"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "You fell on wave %d of the garage"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -2146,6 +2142,24 @@ msgid "Con ayudas encendidas, en esta partida ya no se consiguen logros"
 msgstr "With assists on, this run can no longer earn achievements"
 
 #: scripts/logros.gd
+msgid "%s: novato"
+msgstr "%s: rookie"
+
+#: scripts/logros.gd
+msgid "%s: veterano"
+msgstr "%s: veteran"
+
+#: scripts/logros.gd
+msgid "%s: maestro"
+msgstr "%s: master"
+
+#: scripts/logros.gd
+msgid "Mata %d durmiente con esta arma, sumando todas tus partidas."
+msgid_plural "Mata %d durmientes con esta arma, sumando todas tus partidas."
+msgstr[0] "Kill %d sleeper with this weapon, across all your runs."
+msgstr[1] "Kill %d sleepers with this weapon, across all your runs."
+
+#: scripts/logros.gd
 msgid "¡LOGRO CONSEGUIDO!"
 msgstr "ACHIEVEMENT UNLOCKED!"
 
@@ -2206,20 +2220,20 @@ msgid "Completa Torre Velaria: derrota al Sujeto 1."
 msgstr "Complete Velaria Tower: defeat Subject 1."
 
 #: scripts/logros.gd
-msgid "Alerta naranja"
-msgstr "Orange Alert"
+msgid "VD-7 reforzado"
+msgstr "VD-7 Reinforced"
 
 #: scripts/logros.gd
-msgid "Completa un edificio con la Alerta 3 o más."
-msgstr "Complete a building on Alert 3 or higher."
+msgid "Completa un edificio con la mejora 3 del compuesto VD-7 o más."
+msgstr "Complete a building with VD-7 compound upgrade 3 or higher."
 
 #: scripts/logros.gd
-msgid "Alerta máxima"
-msgstr "Red Alert"
+msgid "VD-7 al máximo"
+msgstr "VD-7 Maxed Out"
 
 #: scripts/logros.gd
-msgid "Completa un edificio con la Alerta 5."
-msgstr "Complete a building on Alert 5."
+msgid "Completa un edificio con la mejora 5 del compuesto VD-7."
+msgstr "Complete a building with VD-7 compound upgrade 5."
 
 #: scripts/logros.gd
 msgid "Jornada exprés"
@@ -2517,6 +2531,10 @@ msgstr "Combat"
 msgid "Armas y mutaciones"
 msgstr "Weapons and Mutations"
 
+#: scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+msgid "Especiales"
+msgstr "Special"
+
 #: scripts/logros.gd scripts/tutoriales.gd
 msgid "Supervivientes"
 msgstr "Survivors"
@@ -2581,9 +2599,13 @@ msgstr "Floor %d"
 msgid "Vestíbulo"
 msgstr "Lobby"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd scripts/partida.gd
 msgid "Planta %d"
 msgstr "Floor %d"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "Garage"
 
 #: scripts/mapa/planta.gd
 msgid "Azotea"
@@ -2853,7 +2875,7 @@ msgstr "Boardroom"
 msgid "Tienda destrozada"
 msgstr "Wrecked store"
 
-#: scripts/mapa/viviendas.gd
+#: scripts/mapa/viviendas.gd scripts/partida.gd
 msgid "Trasteros"
 msgstr "Storage rooms"
 
@@ -3073,6 +3095,14 @@ msgstr "%s!  %s"
 msgid "Te espera en el helipuerto, dentro de las líneas blancas"
 msgstr "They're waiting on the helipad, inside the white lines"
 
+#: scripts/partida.gd scripts/tutoriales.gd
+msgid "Sala de mantenimiento"
+msgstr "Maintenance room"
+
+#: scripts/partida.gd
+msgid "Apartamento %s"
+msgstr "Apartment %s"
+
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "I'D BETTER LOOK AROUND A BIT MORE!"
@@ -3256,10 +3286,6 @@ msgstr "Challenge complete!"
 #: scripts/partida.gd
 msgid "¡Edificio completado!"
 msgstr "Building complete!"
-
-#: scripts/partida.gd
-msgid "¡Derrota!"
-msgstr "Defeat!"
 
 #: scripts/partida.gd
 msgid "Has limpiado %s de arriba abajo"
@@ -4556,14 +4582,6 @@ msgid "Eventos sorpresa"
 msgstr "Surprise events"
 
 #: scripts/tutoriales.gd
-msgid "Sala de mantenimiento"
-msgstr "Maintenance room"
-
-#: scripts/partida.gd
-msgid "Apartamento %s"
-msgstr "Apartment %s"
-
-#: scripts/tutoriales.gd
 msgid "Más edificios"
 msgstr "More buildings"
 
@@ -4716,8 +4734,8 @@ msgid "Los durmientes sueltan billetes al caer, y los jefes, muchos: pasa por en
 msgstr "Sleepers drop bills when they fall, and bosses drop a lot: walk over them to pick them up."
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
-msgstr "If you complete the building you keep them all; if you fall or abandon, half."
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, los pierdes."
+msgstr "Complete the building and you keep them all; if you fall or quit, you lose them."
 
 #: scripts/tutoriales.gd
 msgid "Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."
@@ -4828,6 +4846,22 @@ msgid "¡Ojo! El fuego y las explosiones también te hacen daño a ti."
 msgstr "Careful! Fire and explosions hurt you too."
 
 #: scripts/tutoriales.gd
+msgid "Lleva lanzables"
+msgstr "Carry throwables"
+
+#: scripts/tutoriales.gd
+msgid "Al salir sin lanzables"
+msgstr "On leaving without throwables"
+
+#: scripts/tutoriales.gd
+msgid "No llevas ningún lanzable. Sácalos del baúl o cómpralos en la tienda de armas del ordenador."
+msgstr "You're not carrying any throwables. Take some from the stash or buy them in the computer's Weapon Shop."
+
+#: scripts/tutoriales.gd
+msgid "Llévalos siempre: algunas hordas son imposibles sin un molotov o una granada."
+msgstr "Always carry some: some hordes are impossible without a molotov or a grenade."
+
+#: scripts/tutoriales.gd
 msgid "Materiales de fabricación"
 msgstr "Crafting materials"
 
@@ -4902,6 +4936,38 @@ msgstr "Use it to buy, upgrade or take things out of the stash in the middle of 
 #: scripts/tutoriales.gd
 msgid "En cada planta nueva vuelve a estar averiado hasta que cae su jefe."
 msgstr "On every new floor it's broken again until its boss falls."
+
+#: scripts/tutoriales.gd
+msgid "Guarda las balas"
+msgstr "Save your bullets"
+
+#: scripts/tutoriales.gd
+msgid "Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos."
+msgstr "Bosses are extremely tough: beating them in melee is very hard."
+
+#: scripts/tutoriales.gd
+msgid "Guarda las balas de tus armas a distancia para ellos y limpia los apartamentos con la fregona o tu arma cuerpo a cuerpo."
+msgstr "Save the bullets of your ranged weapons for them, and clear the apartments with the mop or your melee weapon."
+
+#: scripts/tutoriales.gd
+msgid "Antes del jefe"
+msgstr "Before the boss"
+
+#: scripts/tutoriales.gd
+msgid "Al salir con la llave del jefe"
+msgstr "On leaving with the boss key"
+
+#: scripts/tutoriales.gd
+msgid "Ya puedes abrir la puerta del jefe. Antes de la pelea, pasa por la sala de mantenimiento: está aquí, en la planta baja."
+msgstr "You can now open the boss's door. Before the fight, stop by the maintenance room: it's right here, on the 1st floor."
+
+#: scripts/tutoriales.gd
+msgid "En el ordenador, gasta los dólares en la tienda de armas y el mutágeno en Mutaciones: si caes, se pierden."
+msgstr "At the computer, spend your dollars in the Weapon Shop and your mutagen in Mutations: if you fall, you lose them."
+
+#: scripts/tutoriales.gd
+msgid "Deja a salvo en el baúl lo que no quieras perder."
+msgstr "Leave anything you don't want to lose safe in the stash."
 
 #: scripts/tutoriales.gd
 msgid "La azotea"
@@ -5156,8 +5222,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "What you keep in the stash is never lost: weapons, throwables, ammo and items."
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
-msgstr "Every time you take out a weapon or a throwable, it uses up one run of its durability. At 0, it's destroyed when that run ends."
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
+msgstr "Each time you take out a weapon or a throwable, it uses one run of its durability. At 1, it's its last run: it breaks when that run ends."
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
@@ -5392,16 +5458,20 @@ msgid "El gas duerme a los durmientes, pero despiertan frenéticos. A ti no te h
 msgstr "The gas puts sleepers to sleep, but they wake up in a frenzy. It does nothing to you; a valve shuts it off."
 
 #: scripts/tutoriales.gd
-msgid "Alerta y Reto del día"
-msgstr "Alert and Daily Challenge"
+msgid "Compuesto VD-7 y Reto del día"
+msgstr "VD-7 compound and Daily Challenge"
 
 #: scripts/tutoriales.gd
 msgid "Al completar el primer edificio"
 msgstr "On completing your first building"
 
 #: scripts/tutoriales.gd
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
-msgstr "Under each completed building you pick the alert with < and >: harder, more dollars. Complete it on the highest to unlock the next."
+msgid "Debajo de cada edificio completado eliges la mejora del compuesto VD-7 con < y >: cada nivel, los enemigos tienen un 20 % más de vida, daño, velocidad y ataque."
+msgstr "Under each completed building, pick the VD-7 compound upgrade with < and >: each level gives enemies 20% more health, damage, speed and attack."
+
+#: scripts/tutoriales.gd
+msgid "No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente."
+msgstr "It gives no rewards: it's for those who want more challenge. Complete the building with the highest upgrade to unlock the next one."
 
 #: scripts/tutoriales.gd
 msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
@@ -6075,8 +6145,12 @@ msgid "Tienes %d"
 msgstr "You have %d"
 
 #: scripts/ui/inventario.gd
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "%d in the stash: upgrading one stack of %d"
+msgid "Te quedan %d de %d: se mejora uno y va al baúl"
+msgstr "You have %d of %d left: one is upgraded and goes to the stash"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl: se mejora uno"
+msgstr "There are %d in the stash: one is upgraded"
 
 #: scripts/ui/inventario.gd
 msgid "Sube a %s"
@@ -6103,12 +6177,8 @@ msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Already Epic: it can't be upgraded further."
 
 #: scripts/ui/inventario.gd
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "You already carry another %s stack in hand and together they won't fit (max %d)."
-
-#: scripts/ui/inventario.gd
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "The stash is full: make room for the upgraded stack."
+msgid "El baúl está lleno: haz sitio para poder mejorarlo."
+msgstr "The stash is full: make room to upgrade it."
 
 #: scripts/ui/inventario.gd
 msgid "%d material cuerpo a cuerpo"
@@ -6286,10 +6356,6 @@ msgstr "Makes noise, lures sleepers for 3 s, then explodes."
 msgid "Explota y deja a los durmientes congelados 3 s."
 msgstr "Explodes and freezes sleepers for 3 s."
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
-msgid "Especiales"
-msgstr "Special"
-
 #: scripts/ui/menu_principal.gd
 msgid "Continuar partida"
 msgstr "Continue run"
@@ -6327,8 +6393,16 @@ msgid "Elige edificio"
 msgstr "Choose a building"
 
 #: scripts/ui/menu_principal.gd
-msgid "Complétalo para abrir la Alerta 1"
-msgstr "Complete it to unlock Alert 1"
+msgid "El Reto del día se abre al completar un edificio"
+msgstr "The Daily Challenge unlocks when you complete a building"
+
+#: scripts/ui/menu_principal.gd
+msgid "Complétalo para abrir la mejora del compuesto VD-7"
+msgstr "Complete it to unlock the VD-7 compound upgrade"
+
+#: scripts/ui/menu_principal.gd
+msgid "Compuesto VD-7"
+msgstr "VD-7 compound"
 
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
@@ -6419,8 +6493,12 @@ msgid "Abandonar partida"
 msgstr "Abandon run"
 
 #: scripts/ui/menus.gd
-msgid "Tiempo"
-msgstr "Time"
+msgid "Oleadas superadas"
+msgstr "Waves cleared"
+
+#: scripts/ui/menus.gd
+msgid "Enemigos derrotados"
+msgstr "Enemies defeated"
 
 #: scripts/ui/menus.gd
 msgid "Dólares conseguidos"
@@ -6431,8 +6509,8 @@ msgid "+$%d  (tienes $%d)"
 msgstr "+$%d  (you have $%d)"
 
 #: scripts/ui/menus.gd
-msgid "Enemigos derrotados"
-msgstr "Enemies defeated"
+msgid "Tiempo"
+msgstr "Time"
 
 #: scripts/ui/menus.gd
 msgid "Plantas superadas"
@@ -6455,12 +6533,12 @@ msgid "Tu mejor marca de hoy: %s"
 msgstr "Your best today: %s"
 
 #: scripts/ui/menus.gd
-msgid "Dólares salvados (la mitad)"
-msgstr "Dollars saved (half)"
-
-#: scripts/ui/menus.gd
 msgid "Dólares perdidos"
 msgstr "Dollars lost"
+
+#: scripts/ui/menus.gd
+msgid "-$%d  (tienes $%d)"
+msgstr "-$%d  (you have $%d)"
 
 #: scripts/ui/menus.gd
 msgid "Conseguido en esta partida"
@@ -7303,10 +7381,6 @@ msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apu
 msgstr "An enemy you haven't run into yet. The ones you see in a run get logged here."
 
 #: scripts/ui/ordenador.gd
-msgid "Elige un sujeto de la cuadrícula para ver su ficha."
-msgstr "Pick a subject from the grid to see its file."
-
-#: scripts/ui/ordenador.gd
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha."
 msgstr "Every enemy you run into stays here forever. Pick a square to see their file."
 
@@ -7594,38 +7668,114 @@ msgstr "phew"
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
 
-#: scripts/mapa/planta.gd
-msgid "Garaje"
-msgstr "Garage"
+#, sin-usar
+msgid "Alerta %d"
+msgstr "Alert %d"
 
-#: scripts/garaje.gd
-msgid "OLEADA %d"
-msgstr "WAVE %d"
+#, sin-usar
+msgid "Sin alerta"
+msgstr "No alert"
 
-#: scripts/garaje.gd
-msgid "¡GARAJE SUPERADO!"
-msgstr "GARAGE CLEARED!"
+#, sin-usar
+msgid ""
+"%s\n"
+"+%d %% de dólares"
+msgstr ""
+"%s\n"
+"+%d %% dollars"
 
-#: scripts/garaje.gd
-msgid "Siguiente oleada en %d"
-msgstr "Next wave in %d"
+#, sin-usar
+msgid ""
+"%s%s\n"
+"+%d %% de dólares y de materiales"
+msgstr ""
+"%s%s\n"
+"+%d %% dollars and materials"
 
-#: scripts/garaje.gd
-msgid "La primera oleada llega en %d"
-msgstr "First wave in %d"
+#, sin-usar
+msgid " (y lo de antes)"
+msgstr " (and the previous ones)"
 
-#: scripts/garaje.gd
-msgid "Oleada %d / %d"
-msgstr "Wave %d / %d"
+#, sin-usar
+msgid "+25 % de durmientes"
+msgstr "+25 % sleepers"
 
-#: scripts/garaje.gd
-msgid "¡Garaje superado!"
-msgstr "Garage cleared!"
+#, sin-usar
+msgid "Durmientes un 10 % más rápidos"
+msgstr "Sleepers 10 % faster"
 
-#: scripts/garaje.gd
-msgid "Caíste en la oleada %d del garaje"
-msgstr "You fell on wave %d of the garage"
+#, sin-usar
+msgid "Jefes con +25 % de vida, y se enfadan antes"
+msgstr "Bosses with +25 % health, and they get angry sooner"
 
-#: scripts/ui/menus.gd
-msgid "Oleadas superadas"
-msgstr "Waves cleared"
+#, sin-usar
+msgid "Botiquines, vendas y Ajolote curan la mitad"
+msgstr "Medkits, bandages and Axolotl heal half as much"
+
+#, sin-usar
+msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
+msgstr "The guard (or the key sleeper) takes twice the damage and sleepers hear you from farther away"
+
+#, sin-usar
+msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
+msgstr "Each code computer calls two bodyguards and sleepers hear you from farther away"
+
+#, sin-usar
+msgid "radio un %d %% más grande y caben %d más"
+msgstr "radius %d %% bigger and %d more fit per stack"
+
+#, sin-usar
+msgid "Alerta naranja"
+msgstr "Orange Alert"
+
+#, sin-usar
+msgid "Completa un edificio con la Alerta 3 o más."
+msgstr "Complete a building on Alert 3 or higher."
+
+#, sin-usar
+msgid "Alerta máxima"
+msgstr "Red Alert"
+
+#, sin-usar
+msgid "Completa un edificio con la Alerta 5."
+msgstr "Complete a building on Alert 5."
+
+#, sin-usar
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
+msgstr "If you complete the building you keep them all; if you fall or abandon, half."
+
+#, sin-usar
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
+msgstr "Every time you take out a weapon or a throwable, it uses up one run of its durability. At 0, it's destroyed when that run ends."
+
+#, sin-usar
+msgid "Alerta y Reto del día"
+msgstr "Alert and Daily Challenge"
+
+#, sin-usar
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
+msgstr "Under each completed building you pick the alert with < and >: harder, more dollars. Complete it on the highest to unlock the next."
+
+#, sin-usar
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "%d in the stash: upgrading one stack of %d"
+
+#, sin-usar
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "You already carry another %s stack in hand and together they won't fit (max %d)."
+
+#, sin-usar
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "The stash is full: make room for the upgraded stack."
+
+#, sin-usar
+msgid "Complétalo para abrir la Alerta 1"
+msgstr "Complete it to unlock Alert 1"
+
+#, sin-usar
+msgid "Dólares salvados (la mitad)"
+msgstr "Dollars saved (half)"
+
+#, sin-usar
+msgid "Elige un sujeto de la cuadrícula para ver su ficha."
+msgstr "Pick a subject from the grid to see its file."

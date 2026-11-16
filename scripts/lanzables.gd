@@ -28,7 +28,7 @@
 #     una atraedora (tienda_armas.gd, REGALO_LANZABLES).
 #   - Los cuatro se compran de uno en uno en la tienda de armas del ordenador (PRECIOS; ordenador.gd, comprar_lanzable).
 #   - Cada paquete tiene su calidad (Armas.CALIDADES; parte 4 de la tienda y las piezas): la que no es Normal hace más
-#     daño, con más radio, y caben más en su montón. Los de un tipo con dos calidades van en montones distintos: su
+#     daño y con más radio (en su montón caben los mismos: F26). Los de un tipo con dos calidades van en montones distintos: su
 #     "clave" es el tipo y, si no es Normal, su calidad detrás («molotov:2», unos molotovs Raros; clave, tipo_de y
 #     calidad_de). Lo de la tienda es Normal.
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
@@ -418,15 +418,15 @@ func color(k: String) -> Color:
 	return COLORES.get(tipo_de(k), Color(0.67, 0.67, 0.67))   # ("": sin nada a mano, en gris)
 
 
-# Los que caben en un montón: MONTON, más los del Artificiero (o Criogenia) y los de su calidad
+# Los que caben en un montón: MONTON, más los del Artificiero (la calidad no cambia cuántos caben: F26, 16 nov)
 func maximo(k: String) -> int:
 	return cabe_en_monton(tipo_de(k), calidad_de(k), johnny.stats)
 
 
 # Los que caben en un montón de ese tipo y esa calidad con esos atributos (también en una casilla del baúl:
 # Objetos.monton_arrojables, con los talentos del guardado)
-static func cabe_en_monton(t: String, calidad: int, stats: Dictionary) -> int:
-	return MONTON + extra_talentos(t, stats) + Armas.CALIDADES[calidad].unidades
+static func cabe_en_monton(t: String, _calidad: int, stats: Dictionary) -> int:
+	return MONTON + extra_talentos(t, stats)
 
 
 # Las unidades de más de un tipo por los talentos: el Artificiero, en todos (desde el 15 nov; antes solo molotovs y
@@ -448,35 +448,6 @@ func quitar(sitio: String, n := 1000) -> int:
 		en_repuesto[i] -= fuera
 	repasar()
 	return fuera
-
-
-# Sube el montón de ese sitio a esa calidad (en el banco de trabajo): pasa a su clave nueva en el mismo hueco. Si es de
-# la mano y ya llevaba a mano otro de esa calidad, se junta con él (el banco mira antes que quepan) y su hueco lo ocupa
-# otro de repuesto. Devuelve el sitio donde queda
-func mejorar(sitio: String, calidad: int) -> String:
-	var k := clave_en(sitio)
-	var nueva := clave(tipo_de(k), calidad)
-	# la durabilidad: las partidas que le quedaban y una más por la subida (Armas.nuevas); si se junta con otros, las de
-	# los que más tengan
-	var q := quedan_de(k) + calidad - calidad_de(k)
-	if cuantas(nueva) + total_clave(nueva) > 0:
-		q = maxi(q, quedan_de(nueva))
-	quedan[nueva] = q
-	var i := sitio.substr(1).to_int()
-	if sitio.begins_with("e"):
-		repuesto[i] = nueva
-		return sitio
-	var n := cuantas(k)
-	cantidades[k] = 0
-	if nueva in mano:
-		cantidades[nueva] += n
-	else:
-		mano[i] = nueva
-		cantidades[nueva] = n
-	if tipo == k:
-		tipo = nueva
-	repasar()   # (la clave vieja, si era de un mejorado, fuera)
-	return sitio_de(nueva)
 
 
 # Cuántos lleva de un tipo, sumando todos sus montones (el menú de pausa y la tienda)

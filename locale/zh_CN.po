@@ -12,60 +12,24 @@ msgstr ""
 
 
 #: scripts/alerta.gd
-msgid "Alerta %d"
-msgstr "警戒 %d"
+msgid "Mejora %d"
+msgstr "强化 %d"
 
 #: scripts/alerta.gd
-msgid "Sin alerta"
-msgstr "无警戒"
+msgid "Sin mejora"
+msgstr "无强化"
+
+#: scripts/alerta.gd
+msgid "Mejora %d del compuesto VD-7"
+msgstr "VD-7化合物强化 %d"
+
+#: scripts/alerta.gd
+msgid "Enemigos +%d %%: vida, daño, velocidad y ataque"
+msgstr "敌人 +%d %%：生命、伤害、速度和攻击"
 
 #: scripts/alerta.gd
 msgid "Como siempre"
 msgstr "一切照旧"
-
-#: scripts/alerta.gd
-msgid ""
-"%s\n"
-"+%d %% de dólares"
-msgstr ""
-"%s\n"
-"美元 +%d%%"
-
-#: scripts/alerta.gd
-msgid ""
-"%s%s\n"
-"+%d %% de dólares y de materiales"
-msgstr ""
-"%s%s\n"
-"美元和材料 +%d%%"
-
-#: scripts/alerta.gd
-msgid " (y lo de antes)"
-msgstr " （外加之前的）"
-
-#: scripts/alerta.gd
-msgid "+25 % de durmientes"
-msgstr "沉睡者数量 +25%"
-
-#: scripts/alerta.gd
-msgid "Durmientes un 10 % más rápidos"
-msgstr "沉睡者速度加快10%"
-
-#: scripts/alerta.gd
-msgid "Jefes con +25 % de vida, y se enfadan antes"
-msgstr "首领生命 +25%，而且更快暴怒"
-
-#: scripts/alerta.gd
-msgid "Botiquines, vendas y Ajolote curan la mitad"
-msgstr "急救包、绷带和美西螈的治疗量减半"
-
-#: scripts/alerta.gd
-msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
-msgstr "保安（或拿钥匙的沉睡者）血量翻倍，沉睡者也能从更远处听见你"
-
-#: scripts/alerta.gd
-msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-msgstr "每台存有密码的电脑都会叫来两名保镖，沉睡者也能从更远处听见你"
 
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
@@ -117,8 +81,8 @@ msgid "depósito un %d %% más grande"
 msgstr "储罐扩容 %d%%"
 
 #: scripts/armas.gd
-msgid "radio un %d %% más grande y caben %d más"
-msgstr "范围扩大 %d%%，每组可多带 %d 个"
+msgid "radio un %d %% más grande"
+msgstr "半径增大 %d %%"
 
 #: scripts/armas.gd
 msgid "%s: daño +%d %%, %s."
@@ -224,11 +188,11 @@ msgstr "冰冻枪"
 msgid "Lanza rayos"
 msgstr "闪电枪"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/armas.gd scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Cuerpo a cuerpo"
 msgstr "近战"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/armas.gd scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "A distancia"
 msgstr "远程"
 
@@ -1175,6 +1139,38 @@ msgstr "走廊里有尸潮！"
 #: scripts/eventos.gd
 msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
 msgstr "一大波沉睡者正沿着走廊涌来……做好准备！"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "第 %d 波"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "车库通关！"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "下一波：%d 秒后"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "第一波：%d 秒后到来"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "第 %d / %d 波"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "车库通关！"
+
+#: scripts/garaje.gd scripts/partida.gd
+msgid "¡Derrota!"
+msgstr "失败！"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "你倒在了车库的第 %d 波"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -2144,6 +2140,23 @@ msgid "Con ayudas encendidas, en esta partida ya no se consiguen logros"
 msgstr "开启了辅助功能，本局无法再获得成就"
 
 #: scripts/logros.gd
+msgid "%s: novato"
+msgstr "%s：新手"
+
+#: scripts/logros.gd
+msgid "%s: veterano"
+msgstr "%s：老手"
+
+#: scripts/logros.gd
+msgid "%s: maestro"
+msgstr "%s：大师"
+
+#: scripts/logros.gd
+msgid "Mata %d durmiente con esta arma, sumando todas tus partidas."
+msgid_plural "Mata %d durmientes con esta arma, sumando todas tus partidas."
+msgstr[0] "用这把武器累计杀死%d个沉睡者。"
+
+#: scripts/logros.gd
 msgid "¡LOGRO CONSEGUIDO!"
 msgstr "成就达成！"
 
@@ -2204,20 +2217,20 @@ msgid "Completa Torre Velaria: derrota al Sujeto 1."
 msgstr "通关Velaria大厦：打败1号实验体。"
 
 #: scripts/logros.gd
-msgid "Alerta naranja"
-msgstr "橙色警戒"
+msgid "VD-7 reforzado"
+msgstr "VD-7加强"
 
 #: scripts/logros.gd
-msgid "Completa un edificio con la Alerta 3 o más."
-msgstr "在警戒3或以上通关一栋楼。"
+msgid "Completa un edificio con la mejora 3 del compuesto VD-7 o más."
+msgstr "在VD-7化合物强化3或更高时完成一栋建筑。"
 
 #: scripts/logros.gd
-msgid "Alerta máxima"
-msgstr "红色警戒"
+msgid "VD-7 al máximo"
+msgstr "VD-7满级"
 
 #: scripts/logros.gd
-msgid "Completa un edificio con la Alerta 5."
-msgstr "在警戒5下通关一栋楼。"
+msgid "Completa un edificio con la mejora 5 del compuesto VD-7."
+msgstr "在VD-7化合物强化5时完成一栋建筑。"
 
 #: scripts/logros.gd
 msgid "Jornada exprés"
@@ -2515,6 +2528,10 @@ msgstr "战斗"
 msgid "Armas y mutaciones"
 msgstr "武器与变异"
 
+#: scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+msgid "Especiales"
+msgstr "特殊"
+
 #: scripts/logros.gd scripts/tutoriales.gd
 msgid "Supervivientes"
 msgstr "幸存者"
@@ -2579,9 +2596,13 @@ msgstr "%d楼"
 msgid "Vestíbulo"
 msgstr "大堂"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd scripts/partida.gd
 msgid "Planta %d"
 msgstr "%d楼"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "地下车库"
 
 #: scripts/mapa/planta.gd
 msgid "Azotea"
@@ -2851,7 +2872,7 @@ msgstr "会议室"
 msgid "Tienda destrozada"
 msgstr "被砸烂的商店"
 
-#: scripts/mapa/viviendas.gd
+#: scripts/mapa/viviendas.gd scripts/partida.gd
 msgid "Trasteros"
 msgstr "储藏室"
 
@@ -3071,6 +3092,14 @@ msgstr "%s！  %s"
 msgid "Te espera en el helipuerto, dentro de las líneas blancas"
 msgstr "首领在停机坪的白线里面等着你"
 
+#: scripts/partida.gd scripts/tutoriales.gd
+msgid "Sala de mantenimiento"
+msgstr "维修间"
+
+#: scripts/partida.gd
+msgid "Apartamento %s"
+msgstr "%s 室"
+
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "还是再四处看看吧！"
@@ -3254,10 +3283,6 @@ msgstr "挑战完成！"
 #: scripts/partida.gd
 msgid "¡Edificio completado!"
 msgstr "大楼通关！"
-
-#: scripts/partida.gd
-msgid "¡Derrota!"
-msgstr "失败！"
 
 #: scripts/partida.gd
 msgid "Has limpiado %s de arriba abajo"
@@ -4550,14 +4575,6 @@ msgid "Eventos sorpresa"
 msgstr "突发事件"
 
 #: scripts/tutoriales.gd
-msgid "Sala de mantenimiento"
-msgstr "维修间"
-
-#: scripts/partida.gd
-msgid "Apartamento %s"
-msgstr "%s 室"
-
-#: scripts/tutoriales.gd
 msgid "Más edificios"
 msgstr "更多大楼"
 
@@ -4710,8 +4727,8 @@ msgid "Los durmientes sueltan billetes al caer, y los jefes, muchos: pasa por en
 msgstr "沉睡者倒下时会掉钞票，首领掉得更多：走过去捡起来。"
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
-msgstr "通关整栋楼，钞票全部归你；倒下或放弃，只保留一半。"
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, los pierdes."
+msgstr "完成建筑就能全部留下；倒下或放弃，就全部失去。"
 
 #: scripts/tutoriales.gd
 msgid "Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."
@@ -4822,6 +4839,22 @@ msgid "¡Ojo! El fuego y las explosiones también te hacen daño a ti."
 msgstr "小心！火焰和爆炸也会伤到你自己。"
 
 #: scripts/tutoriales.gd
+msgid "Lleva lanzables"
+msgstr "带上投掷物"
+
+#: scripts/tutoriales.gd
+msgid "Al salir sin lanzables"
+msgstr "没带投掷物出门时"
+
+#: scripts/tutoriales.gd
+msgid "No llevas ningún lanzable. Sácalos del baúl o cómpralos en la tienda de armas del ordenador."
+msgstr "你没带任何投掷物。去储物箱里拿，或者在电脑的武器商店里买。"
+
+#: scripts/tutoriales.gd
+msgid "Llévalos siempre: algunas hordas son imposibles sin un molotov o una granada."
+msgstr "一定要带上：有些尸潮没有燃烧瓶或手雷根本过不去。"
+
+#: scripts/tutoriales.gd
 msgid "Materiales de fabricación"
 msgstr "制作材料"
 
@@ -4896,6 +4929,38 @@ msgstr "用它来购物、强化，或在一局中途从储物箱里取东西。
 #: scripts/tutoriales.gd
 msgid "En cada planta nueva vuelve a estar averiado hasta que cae su jefe."
 msgstr "每到新的一层，它又会坏掉，直到那层的首领倒下。"
+
+#: scripts/tutoriales.gd
+msgid "Guarda las balas"
+msgstr "留着子弹"
+
+#: scripts/tutoriales.gd
+msgid "Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos."
+msgstr "首领非常耐打：近战很难打赢。"
+
+#: scripts/tutoriales.gd
+msgid "Guarda las balas de tus armas a distancia para ellos y limpia los apartamentos con la fregona o tu arma cuerpo a cuerpo."
+msgstr "把远程武器的子弹留给首领，用拖把或近战武器清理公寓。"
+
+#: scripts/tutoriales.gd
+msgid "Antes del jefe"
+msgstr "首领之前"
+
+#: scripts/tutoriales.gd
+msgid "Al salir con la llave del jefe"
+msgstr "带着首领的钥匙出来时"
+
+#: scripts/tutoriales.gd
+msgid "Ya puedes abrir la puerta del jefe. Antes de la pelea, pasa por la sala de mantenimiento: está aquí, en la planta baja."
+msgstr "现在你能打开首领的门了。开打之前，先去一趟维修间：就在这里，1楼。"
+
+#: scripts/tutoriales.gd
+msgid "En el ordenador, gasta los dólares en la tienda de armas y el mutágeno en Mutaciones: si caes, se pierden."
+msgstr "在电脑上，把美元花在武器商店，把诱变剂花在变异上：倒下的话就没了。"
+
+#: scripts/tutoriales.gd
+msgid "Deja a salvo en el baúl lo que no quieras perder."
+msgstr "不想失去的东西就放进储物箱里保管。"
 
 #: scripts/tutoriales.gd
 msgid "La azotea"
@@ -5150,8 +5215,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "存进储物箱的东西永远不会丢：武器、投掷物、弹药和物品。"
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
-msgstr "每次取出一件武器或投掷物，都会消耗一局耐久。耐久为0时，那一局结束后就会销毁。"
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
+msgstr "每次取出一把武器或一个投掷物，都会消耗一局耐久。耐久为1时就是最后一局：这局结束后就会损坏。"
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
@@ -5386,16 +5451,20 @@ msgid "El gas duerme a los durmientes, pero despiertan frenéticos. A ti no te h
 msgstr "毒气会让沉睡者睡着，但它们醒来会狂暴。对你没有效果；关上阀门就能切断。"
 
 #: scripts/tutoriales.gd
-msgid "Alerta y Reto del día"
-msgstr "警戒与每日挑战"
+msgid "Compuesto VD-7 y Reto del día"
+msgstr "VD-7化合物与每日挑战"
 
 #: scripts/tutoriales.gd
 msgid "Al completar el primer edificio"
 msgstr "第一次通关大楼时"
 
 #: scripts/tutoriales.gd
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
-msgstr "每栋已通关的大楼下面，用 < 和 > 选择警戒：越难，美元越多。在最高警戒下通关，就能解锁下一个。"
+msgid "Debajo de cada edificio completado eliges la mejora del compuesto VD-7 con < y >: cada nivel, los enemigos tienen un 20 % más de vida, daño, velocidad y ataque."
+msgstr "在每栋已完成的建筑下方，用 < 和 > 选择VD-7化合物强化：每升一级，敌人的生命、伤害、速度和攻击提高20%。"
+
+#: scripts/tutoriales.gd
+msgid "No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente."
+msgstr "没有奖励：留给想要更多挑战的人。用最高强化完成建筑，就能解锁下一级。"
 
 #: scripts/tutoriales.gd
 msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
@@ -6068,8 +6137,12 @@ msgid "Tienes %d"
 msgstr "你有 %d 个"
 
 #: scripts/ui/inventario.gd
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "储物箱里有 %d 个：升级其中一组，共 %d 个"
+msgid "Te quedan %d de %d: se mejora uno y va al baúl"
+msgstr "还剩 %d / %d：强化一个，放进储物箱"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl: se mejora uno"
+msgstr "储物箱里有 %d 个：强化一个"
 
 #: scripts/ui/inventario.gd
 msgid "Sube a %s"
@@ -6096,12 +6169,8 @@ msgid "Ya es Épica: no se puede mejorar más."
 msgstr "已是史诗：无法再升级。"
 
 #: scripts/ui/inventario.gd
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "你手上已经有另一组%s，合在一起放不下（最多 %d 个）。"
-
-#: scripts/ui/inventario.gd
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "储物箱满了：给升级后的那组腾个地方。"
+msgid "El baúl está lleno: haz sitio para poder mejorarlo."
+msgstr "储物箱满了：腾出空间才能强化。"
 
 #: scripts/ui/inventario.gd
 msgid "%d material cuerpo a cuerpo"
@@ -6267,10 +6336,6 @@ msgstr "发出响声，吸引沉睡者3秒后爆炸。"
 msgid "Explota y deja a los durmientes congelados 3 s."
 msgstr "爆炸后将沉睡者冰冻3秒。"
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
-msgid "Especiales"
-msgstr "特殊"
-
 #: scripts/ui/menu_principal.gd
 msgid "Continuar partida"
 msgstr "继续本局"
@@ -6308,8 +6373,16 @@ msgid "Elige edificio"
 msgstr "选择大楼"
 
 #: scripts/ui/menu_principal.gd
-msgid "Complétalo para abrir la Alerta 1"
-msgstr "通关后解锁警戒1"
+msgid "El Reto del día se abre al completar un edificio"
+msgstr "完成一栋建筑后解锁每日挑战"
+
+#: scripts/ui/menu_principal.gd
+msgid "Complétalo para abrir la mejora del compuesto VD-7"
+msgstr "完成它即可解锁VD-7化合物强化"
+
+#: scripts/ui/menu_principal.gd
+msgid "Compuesto VD-7"
+msgstr "VD-7化合物"
 
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
@@ -6400,8 +6473,12 @@ msgid "Abandonar partida"
 msgstr "放弃本局"
 
 #: scripts/ui/menus.gd
-msgid "Tiempo"
-msgstr "用时"
+msgid "Oleadas superadas"
+msgstr "已通过波数"
+
+#: scripts/ui/menus.gd
+msgid "Enemigos derrotados"
+msgstr "击败敌人"
 
 #: scripts/ui/menus.gd
 msgid "Dólares conseguidos"
@@ -6412,8 +6489,8 @@ msgid "+$%d  (tienes $%d)"
 msgstr "+$%d  （共有 $%d）"
 
 #: scripts/ui/menus.gd
-msgid "Enemigos derrotados"
-msgstr "击败敌人"
+msgid "Tiempo"
+msgstr "用时"
 
 #: scripts/ui/menus.gd
 msgid "Plantas superadas"
@@ -6436,12 +6513,12 @@ msgid "Tu mejor marca de hoy: %s"
 msgstr "你今天的最佳成绩：%s"
 
 #: scripts/ui/menus.gd
-msgid "Dólares salvados (la mitad)"
-msgstr "保住的美元（一半）"
-
-#: scripts/ui/menus.gd
 msgid "Dólares perdidos"
 msgstr "损失的美元"
+
+#: scripts/ui/menus.gd
+msgid "-$%d  (tienes $%d)"
+msgstr "-$%d  （共有 $%d）"
 
 #: scripts/ui/menus.gd
 msgid "Conseguido en esta partida"
@@ -7284,10 +7361,6 @@ msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apu
 msgstr "一个你还没遇到过的敌人。在游戏中见到的敌人都会记录在这里。"
 
 #: scripts/ui/ordenador.gd
-msgid "Elige un sujeto de la cuadrícula para ver su ficha."
-msgstr "在网格中选择一个实验对象，查看其档案。"
-
-#: scripts/ui/ordenador.gd
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha."
 msgstr "你遇到过的每个敌人都会永远留在这里。选择一个格子查看它的档案。"
 
@@ -7575,38 +7648,114 @@ msgstr "呼"
 msgid "¡PRIIII!"
 msgstr "嘘——！"
 
-#: scripts/mapa/planta.gd
-msgid "Garaje"
-msgstr "地下车库"
+#, sin-usar
+msgid "Alerta %d"
+msgstr "警戒 %d"
 
-#: scripts/garaje.gd
-msgid "OLEADA %d"
-msgstr "第 %d 波"
+#, sin-usar
+msgid "Sin alerta"
+msgstr "无警戒"
 
-#: scripts/garaje.gd
-msgid "¡GARAJE SUPERADO!"
-msgstr "车库通关！"
+#, sin-usar
+msgid ""
+"%s\n"
+"+%d %% de dólares"
+msgstr ""
+"%s\n"
+"美元 +%d%%"
 
-#: scripts/garaje.gd
-msgid "Siguiente oleada en %d"
-msgstr "下一波：%d 秒后"
+#, sin-usar
+msgid ""
+"%s%s\n"
+"+%d %% de dólares y de materiales"
+msgstr ""
+"%s%s\n"
+"美元和材料 +%d%%"
 
-#: scripts/garaje.gd
-msgid "La primera oleada llega en %d"
-msgstr "第一波：%d 秒后到来"
+#, sin-usar
+msgid " (y lo de antes)"
+msgstr " （外加之前的）"
 
-#: scripts/garaje.gd
-msgid "Oleada %d / %d"
-msgstr "第 %d / %d 波"
+#, sin-usar
+msgid "+25 % de durmientes"
+msgstr "沉睡者数量 +25%"
 
-#: scripts/garaje.gd
-msgid "¡Garaje superado!"
-msgstr "车库通关！"
+#, sin-usar
+msgid "Durmientes un 10 % más rápidos"
+msgstr "沉睡者速度加快10%"
 
-#: scripts/garaje.gd
-msgid "Caíste en la oleada %d del garaje"
-msgstr "你倒在了车库的第 %d 波"
+#, sin-usar
+msgid "Jefes con +25 % de vida, y se enfadan antes"
+msgstr "首领生命 +25%，而且更快暴怒"
 
-#: scripts/ui/menus.gd
-msgid "Oleadas superadas"
-msgstr "已通过波数"
+#, sin-usar
+msgid "Botiquines, vendas y Ajolote curan la mitad"
+msgstr "急救包、绷带和美西螈的治疗量减半"
+
+#, sin-usar
+msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
+msgstr "保安（或拿钥匙的沉睡者）血量翻倍，沉睡者也能从更远处听见你"
+
+#, sin-usar
+msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
+msgstr "每台存有密码的电脑都会叫来两名保镖，沉睡者也能从更远处听见你"
+
+#, sin-usar
+msgid "radio un %d %% más grande y caben %d más"
+msgstr "范围扩大 %d%%，每组可多带 %d 个"
+
+#, sin-usar
+msgid "Alerta naranja"
+msgstr "橙色警戒"
+
+#, sin-usar
+msgid "Completa un edificio con la Alerta 3 o más."
+msgstr "在警戒3或以上通关一栋楼。"
+
+#, sin-usar
+msgid "Alerta máxima"
+msgstr "红色警戒"
+
+#, sin-usar
+msgid "Completa un edificio con la Alerta 5."
+msgstr "在警戒5下通关一栋楼。"
+
+#, sin-usar
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
+msgstr "通关整栋楼，钞票全部归你；倒下或放弃，只保留一半。"
+
+#, sin-usar
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
+msgstr "每次取出一件武器或投掷物，都会消耗一局耐久。耐久为0时，那一局结束后就会销毁。"
+
+#, sin-usar
+msgid "Alerta y Reto del día"
+msgstr "警戒与每日挑战"
+
+#, sin-usar
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
+msgstr "每栋已通关的大楼下面，用 < 和 > 选择警戒：越难，美元越多。在最高警戒下通关，就能解锁下一个。"
+
+#, sin-usar
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "储物箱里有 %d 个：升级其中一组，共 %d 个"
+
+#, sin-usar
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "你手上已经有另一组%s，合在一起放不下（最多 %d 个）。"
+
+#, sin-usar
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "储物箱满了：给升级后的那组腾个地方。"
+
+#, sin-usar
+msgid "Complétalo para abrir la Alerta 1"
+msgstr "通关后解锁警戒1"
+
+#, sin-usar
+msgid "Dólares salvados (la mitad)"
+msgstr "保住的美元（一半）"
+
+#, sin-usar
+msgid "Elige un sujeto de la cuadrícula para ver su ficha."
+msgstr "在网格中选择一个实验对象，查看其档案。"

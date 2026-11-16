@@ -1,104 +1,60 @@
-# Los niveles de alerta (parte 8 del centro comercial; como las ascensiones de The Binding of Isaac): de la
-# Alerta 1 a la 5, por edificio. Cada nivel pone una regla fija y se suman: en la Alerta 3 valen la 1, la 2 y la 3.
-# A cambio, un 20 % más de dólares y de piezas de mejora (Objetos.PIEZAS) por nivel (hasta el 25 oct, también armas de
-# mejor rareza en el banco de trabajo, que ya no las crea).
+# La mejora del compuesto VD-7 (M121, 16 nov; hasta entonces, «los niveles de alerta», como las ascensiones de The
+# Binding of Isaac): de la mejora 1 a la 5, por edificio. Cada nivel hace a todos los enemigos (durmientes y jefes) un
+# 20 % más fuertes en cuatro cosas: vida, daño, velocidad al andar y velocidad de ataque. En la mejora 5, el doble
+# (+100 %). Nada más: sin premios de ningún tipo (antes daba más dólares y materiales) y sin las reglas de antes (más
+# durmientes, jefes que se enfadan antes, botiquines a la mitad, el guardia el doble, escoltas en la torre...).
 #
-# Se desbloquean de una en una: completar un edificio abre su Alerta 1; completarlo con la 1, la 2, y así. La más
-# alta abierta y la elegida van en el progreso de cada edificio del guardado (alerta_max y alerta).
+# Se desbloquean de una en una: completar un edificio abre su mejora 1; completarlo con la 1, la 2, y así. La más alta
+# abierta y la elegida van en el progreso de cada edificio del guardado (alerta_max y alerta: los nombres de siempre).
 # Se eligen en "Elige edificio" (menu_principal.gd), que pone aquí el nivel de la partida antes de empezarla.
 #
-# Para cambiar los números, se cambian las constantes de abajo; la partida solo pregunta a estas funciones.
+# Quién pregunta: partida.gd (meter_zombi: la vida, la velocidad y el ritmo de cada enemigo al salir), johnny.gd
+# (recibir_dano: el daño que le hacen) y los enemigos con su "ritmo" (zombi.gd, minijefe.gd y portera.gd: lo deprisa que
+# atacan). Para cambiar los números, las constantes de abajo.
 class_name Alerta
 
 const MAX := 5
-# Lo que añade cada nivel (sale en "Elige edificio" y al empezar la partida); para enseñarlo, regla(n), que lo traduce
-# [traducir]
-const REGLAS := [
-	"",
-	"+25 % de durmientes",
-	"Durmientes un 10 % más rápidos",
-	"Jefes con +25 % de vida, y se enfadan antes",
-	"Botiquines, vendas y Ajolote curan la mitad",
-	"El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos",
-]
-# En Torre Velaria no hay guardia ni llave (la sala del jefe se abre con el código): su Alerta 5 cambia esa mitad
-const REGLA_5_TORRE := "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-# [/traducir]
-const MAS_ZOMBIS := 1.25     # A1: el presupuesto de zombis de cada sitio (planta.gd, horda)
-const MAS_RAPIDOS := 1.1     # A2: la velocidad de los zombis (no la de los jefes)
-const JEFE_VIDA := 1.25      # A3: la vida de los jefes de planta...
-const JEFE_ENFADO := 0.7     # ...y a qué parte de su vida se enfadan (sin alerta, a la mitad: 0,5)
-const BOTIQUIN := 0.5        # A4: lo que curan los botiquines (y Ajolote: tarda el doble; johnny.gd)
-const GUARDIA_VIDA := 2.0    # A5: la vida del guardia de la tarjeta (o del zombi que lleva la llave)...
-const OIDO := 1.5            # ...y la distancia a la que se oyen los disparos
-const ESCOLTAS_CODIGO := 2   # A5 en la torre: los escoltas que llegan al leer cada ordenador del código (partida.gd)
-const DOLARES := 0.2         # recompensa: dólares de más por cada nivel (al completar el edificio)
-const PIEZAS := 0.2          # recompensa: piezas de más por cada nivel (más muebles con material; fuera de los Apartamentos, las de los jefes)
+const VIDA := 0.2        # la vida de más de los enemigos por cada nivel
+const DANO := 0.2        # el daño de más que hacen a Johnny por cada nivel
+const VELOCIDAD := 0.2   # lo que andan más deprisa por cada nivel
+const ATAQUE := 0.2      # lo que atacan más deprisa por cada nivel (avisan antes, dan el golpe antes, esperan menos)
 
-# El nivel de la partida que se juega (0 = sin alerta)
+# El nivel de la partida que se juega (0 = sin mejora)
 static var nivel := 0
 
 
-static func mas_zombis() -> float:
-	return MAS_ZOMBIS if nivel >= 1 else 1.0
+# Por cuánto se multiplica cada cosa con el nivel de ahora (1 sin mejora; con la mejora 5, 2)
+static func vida() -> float:
+	return 1.0 + VIDA * nivel
+
+
+static func dano() -> float:
+	return 1.0 + DANO * nivel
 
 
 static func velocidad() -> float:
-	return MAS_RAPIDOS if nivel >= 2 else 1.0
+	return 1.0 + VELOCIDAD * nivel
 
 
-static func jefe_vida() -> float:
-	return JEFE_VIDA if nivel >= 3 else 1.0
+static func ataque() -> float:
+	return 1.0 + ATAQUE * nivel
 
 
-static func jefe_enfado() -> float:
-	return JEFE_ENFADO if nivel >= 3 else 0.5
-
-
-static func botiquin() -> float:
-	return BOTIQUIN if nivel >= 4 else 1.0
-
-
-static func guardia() -> float:
-	return GUARDIA_VIDA if nivel >= 5 else 1.0
-
-
-static func oido() -> float:
-	return OIDO if nivel >= 5 else 1.0
-
-
-static func escoltas_codigo() -> int:
-	return ESCOLTAS_CODIGO if nivel >= 5 else 0
-
-
-# Los dólares de más al completar el edificio
-static func dolares_extra(dolares: int) -> int:
-	return roundi(dolares * DOLARES * nivel)
-
-
-# Por cuánto se multiplica la probabilidad de que un mueble tenga material (y las piezas de los jefes del centro y de la
-# torre): 1 + 0,2 por nivel (con la Alerta 5, el doble: del 35 % al 70 %, y de 4 a 8 por jefe). La Alerta 1 solo da
-# dólares (11 nov): las piezas, desde la 2
-static func mas_piezas() -> float:
-	return 1.0 + PIEZAS * nivel if nivel >= 2 else 1.0
-
-
-# El nombre corto ("Alerta 3") y lo que trae ese nivel, para los textos
+# El nombre corto («Mejora 3», en el selector de "Elige edificio") y el largo («Mejora 3 del compuesto VD-7», al empezar
+# la partida y en los logros)
 static func nombre(n := nivel) -> String:
-	return Idioma.t("Alerta %d") % n if n > 0 else Idioma.t("Sin alerta")
+	return Idioma.t("Mejora %d") % n if n > 0 else Idioma.t("Sin mejora")
 
 
-# Lo que añade un nivel (REGLAS), en el idioma del jugador; en la torre, la Alerta 5 es la suya (REGLA_5_TORRE)
-static func regla(n := nivel, edificio := "") -> String:
-	if n == 5 and edificio == "torre":
-		return Idioma.t(REGLA_5_TORRE)
-	return Idioma.t(REGLAS[n])
+static func nombre_largo(n := nivel) -> String:
+	return Idioma.t("Mejora %d del compuesto VD-7") % n if n > 0 else Idioma.t("Sin mejora")
+
+
+# Lo que trae un nivel, en el idioma del jugador («Enemigos +40 %: vida, daño, velocidad y ataque»). "_edificio": no
+# cambia de un edificio a otro (antes, la torre tenía su Alerta 5)
+static func regla(n := nivel, _edificio := "") -> String:
+	return Idioma.t("Enemigos +%d %%: vida, daño, velocidad y ataque") % roundi(VIDA * n * 100)
 
 
 static func resumen(n := nivel, edificio := "") -> String:
-	if n <= 0:
-		return Idioma.t("Como siempre")
-	if n == 1:   # (la Alerta 1 solo da dólares)
-		return Idioma.t("%s\n+%d %% de dólares") % [regla(n, edificio), roundi(DOLARES * n * 100)]
-	return Idioma.t("%s%s\n+%d %% de dólares y de materiales") % [regla(n, edificio), Idioma.t(" (y lo de antes)") if n > 1 else "",
-		roundi(DOLARES * n * 100)]
+	return Idioma.t("Como siempre") if n <= 0 else regla(n, edificio)

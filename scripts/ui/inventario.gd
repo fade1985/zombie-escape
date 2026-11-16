@@ -2059,12 +2059,12 @@ func pintar_ficha_banco() -> void:
 	caja.position = Vector2(198, 310) - ORIGEN
 	renglon(caja, Armas.nombre(o.id), Color("#e6dec8"), HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA).theme_type_variation = "Titulo"
 	# (la línea de debajo del nombre, «Cuerpo a cuerpo · Normal · En la mano», ya no sale: 11 nov)
+	# los lanzables se mejoran de uno en uno, y el mejorado va al baúl con los de su calidad nueva (M117, 16 nov)
 	if o.has("k"):
-		renglon(caja, Idioma.t("Te quedan %d de %d") % [o.n, partida.lanzables.maximo(o.k)], Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT,
-			ANCHO_NOTA)
+		renglon(caja, Idioma.t("Te quedan %d de %d: se mejora uno y va al baúl") % [o.n, partida.lanzables.maximo(o.k)], Tema.TINTA,
+			HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	elif o.n > 0:
-		var hay_baul: String = Idioma.t("Hay %d en el baúl: se mejora un montón, %d") % [o.n, o.tanda] if o.get("tanda", o.n) < o.n \
-			else Idioma.t("Hay %d en el baúl") % o.n
+		var hay_baul: String = Idioma.t("Hay %d en el baúl: se mejora uno") % o.n if o.n > 1 else Idioma.t("Hay %d en el baúl") % o.n
 		renglon(caja, hay_baul, Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	espacio(caja, 6)
 	# lo que gana con el nivel de arriba (la Épica, lo que ya tiene) y lo que cuesta, o por qué no se puede
@@ -2094,8 +2094,8 @@ func pintar_ficha_banco() -> void:
 
 # Lo que hay en la casilla elegida del banco: {id (el del arma o el tipo del arrojable), calidad, donde («En la mano»,
 # «De repuesto», «A mano», «En el baúl»), n (cuántos hay en el montón; las armas, 0) y, si es un montón que lleva,
-# k (su clave) y sitio ("l1", "e3"), o, si está en el baúl, equipo (su sitio en "baul_equipo") y, si son arrojables,
-# tanda (los que se mejoran: un montón de los que haya)}
+# k (su clave) y sitio ("l1", "e3"), o, si está en el baúl, equipo (su sitio en "baul_equipo"). De los arrojables se
+# mejora uno (M117)}
 func en_banco(s: Dictionary) -> Dictionary:
 	var i := sel.substr(1).to_int()
 	var johnny: Node2D = partida.johnny
@@ -2109,14 +2109,11 @@ func en_banco(s: Dictionary) -> Dictionary:
 			return {"id": Lanzables.tipo_de(k), "calidad": Lanzables.calidad_de(k), "k": k, "sitio": sel,
 				"n": lz.cuantos_en(sel), "donde": Idioma.t("A mano") if sel[0] == "l" else Idioma.t("De repuesto")}
 	var e: Dictionary = s.baul_equipo[i]
-	var o := {"id": e.id, "calidad": int(e.calidad), "equipo": i, "n": int(e.get("n", 0)), "donde": Idioma.t("En el baúl")}
-	if e.has("n"):
-		o.tanda = mini(o.n, lz.maximo(Lanzables.clave(e.id, int(e.calidad))))
-	return o
+	return {"id": e.id, "calidad": int(e.calidad), "equipo": i, "n": int(e.get("n", 0)), "donde": Idioma.t("En el baúl")}
 
 
-# Por qué no se puede mejorar eso ("" si se puede): ya es Épica, le faltan piezas, (un montón que lleva a mano) ya lleva
-# a mano otro de la calidad de arriba y juntos no caben o (un montón del baúl) no queda sitio para el mejorado
+# Por qué no se puede mejorar eso ("" si se puede): ya es Épica, le faltan piezas o (un lanzable) no hay sitio en el baúl
+# para el mejorado, que va allí con los de su calidad nueva (M117; si es el último de su casilla del baúl, deja su sitio)
 func no_mejora(o: Dictionary, s: Dictionary) -> String:
 	if o.id == "":
 		return Idioma.t("No llevas arma a distancia que mejorar.")
@@ -2127,15 +2124,12 @@ func no_mejora(o: Dictionary, s: Dictionary) -> String:
 	var hay := piezas(pieza, s)
 	if hay < cuesta:
 		return Idioma.t("Cuesta %s.") % cuantas_piezas(cuesta, pieza)   # (solo lo que cuesta, 11 nov)
-	var arriba := Lanzables.clave(o.id, o.calidad + 1)
-	if o.has("k") and o.sitio.begins_with("l"):
-		var lz: Lanzables = partida.lanzables
-		if arriba in lz.mano and lz.cuantas(arriba) + o.n > lz.maximo(arriba):
-			return Idioma.t("Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d).") % [
-				Armas.calidad_nombre(o.calidad + 1), lz.maximo(arriba)]
-	if o.has("tanda") and o.tanda < o.n and Objetos.caben_arrojables(s, o.id, o.calidad + 1,
-			Armas.quedan_de(s.baul_equipo[o.equipo]) + 1, s.baul_equipo[o.equipo].get("usada", false)) < o.tanda:
-		return Idioma.t("El baúl está lleno: haz sitio para el montón mejorado.")
+	var lleno := Idioma.t("El baúl está lleno: haz sitio para poder mejorarlo.")
+	if o.has("k") and Objetos.caben_arrojables(s, o.id, o.calidad + 1, partida.lanzables.quedan_de(o.k) + 1, true) < 1:
+		return lleno
+	if o.has("equipo") and o.n > 1 and Objetos.caben_arrojables(s, o.id, o.calidad + 1,
+			Armas.quedan_de(s.baul_equipo[o.equipo]) + 1, s.baul_equipo[o.equipo].get("usada", false)) < 1:
+		return lleno
 	return ""
 
 
@@ -2168,9 +2162,8 @@ func cuenta_municion(tipo: String, n: int) -> String:
 
 
 # Mejora lo elegido: gasta sus piezas (primero las de la mochila) y sube su calidad un nivel. Un arma que lleva cambia
-# al momento (johnny.calidades); un montón que lleva cambia de clave en su mismo hueco (lanzables.mejorar; si a mano ya
-# llevaba otro de esa calidad, se juntan); lo del baúl, en su casilla, salvo los arrojables que son más de un montón: se
-# mejora uno y va con los de su calidad nueva (Objetos.arrojables_al_baul). Suena, da un saltito y, la primera vez, el logro Manitas
+# al momento (johnny.calidades); un arma del baúl, en su casilla. Los lanzables, de uno en uno (M117, 16 nov): el mejorado
+# sale de su montón (el que lleva o el del baúl) y va al baúl, con los de su calidad nueva (Objetos.arrojables_al_baul). Suena, da un saltito y, la primera vez, el logro Manitas
 func mejorar() -> void:
 	var s := Guardado.cargar()
 	var o := en_banco(s)
@@ -2189,15 +2182,26 @@ func mejorar() -> void:
 			if g.baul[pieza] <= 0:
 				g.baul.erase(pieza)
 		# la durabilidad (Armas.nuevas): con la subida, una partida más que las que le quedaban
-		if o.has("tanda") and o.tanda < o.n:
+		if o.has("k"):   # uno del montón que lleva, al baúl (ha salido en esta partida: "usada")
+			Objetos.arrojables_al_baul(g, o.id, calidad, 1, partida.lanzables.quedan_de(o.k) + 1, true)
+		elif o.has("equipo") and o.n > 0:   # uno de la casilla del baúl, a la de su calidad nueva (si era el último, la deja)
 			var e: Dictionary = g.baul_equipo[o.equipo]
-			e.n = o.n - o.tanda
-			Objetos.arrojables_al_baul(g, o.id, calidad, o.tanda, Armas.quedan_de(e) + 1, e.get("usada", false))
+			var q := Armas.quedan_de(e) + 1
+			var usada: bool = e.get("usada", false)
+			e.n = o.n - 1
+			if e.n <= 0:
+				g.baul_equipo.remove_at(o.equipo)
+			Objetos.arrojables_al_baul(g, o.id, calidad, 1, q, usada)
 		elif o.has("equipo"):
 			g.baul_equipo[o.equipo].quedan = Armas.quedan_de(g.baul_equipo[o.equipo]) + 1
 			g.baul_equipo[o.equipo].calidad = calidad)
 	if o.has("k"):
-		sel = partida.lanzables.mejorar(o.sitio, calidad)
+		partida.lanzables.quitar(o.sitio, 1)
+	if o.n > 0:   # (un lanzable: en el banco, la casilla del baúl donde ha entrado, la última de su clase: "q" y su sitio)
+		var equipo: Array = Guardado.cargar().baul_equipo
+		for j in equipo.size():
+			if equipo[j].id == o.id and int(equipo[j].calidad) == calidad and int(equipo[j].get("n", 0)) > 0:
+				sel = "q%d" % j
 	elif not o.has("equipo"):
 		partida.johnny.quedan[o.id] = partida.johnny.quedan_de(o.id) + 1
 		partida.johnny.calidades[o.id] = calidad

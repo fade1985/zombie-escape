@@ -12,60 +12,24 @@ msgstr ""
 
 
 #: scripts/alerta.gd
-msgid "Alerta %d"
-msgstr "Alerte %d"
+msgid "Mejora %d"
+msgstr "Amélioration %d"
 
 #: scripts/alerta.gd
-msgid "Sin alerta"
-msgstr "Sans alerte"
+msgid "Sin mejora"
+msgstr "Sans amélioration"
+
+#: scripts/alerta.gd
+msgid "Mejora %d del compuesto VD-7"
+msgstr "Amélioration %d du composé VD-7"
+
+#: scripts/alerta.gd
+msgid "Enemigos +%d %%: vida, daño, velocidad y ataque"
+msgstr "Ennemis +%d %% : vie, dégâts, vitesse et attaque"
 
 #: scripts/alerta.gd
 msgid "Como siempre"
 msgstr "Comme d'habitude"
-
-#: scripts/alerta.gd
-msgid ""
-"%s\n"
-"+%d %% de dólares"
-msgstr ""
-"%s\n"
-"+%d %% de dollars"
-
-#: scripts/alerta.gd
-msgid ""
-"%s%s\n"
-"+%d %% de dólares y de materiales"
-msgstr ""
-"%s%s\n"
-"+%d %% de dollars et de matériaux"
-
-#: scripts/alerta.gd
-msgid " (y lo de antes)"
-msgstr " (et les précédentes)"
-
-#: scripts/alerta.gd
-msgid "+25 % de durmientes"
-msgstr "+25 % de dormeurs"
-
-#: scripts/alerta.gd
-msgid "Durmientes un 10 % más rápidos"
-msgstr "Dormeurs 10 % plus rapides"
-
-#: scripts/alerta.gd
-msgid "Jefes con +25 % de vida, y se enfadan antes"
-msgstr "Boss avec +25 % de vie, et ils s'énervent plus tôt"
-
-#: scripts/alerta.gd
-msgid "Botiquines, vendas y Ajolote curan la mitad"
-msgstr "Médikits, bandages et Axolotl soignent moitié moins"
-
-#: scripts/alerta.gd
-msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
-msgstr "Le garde (ou le dormeur à la clé) encaisse deux fois plus et les dormeurs t'entendent de plus loin"
-
-#: scripts/alerta.gd
-msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
-msgstr "Chaque ordinateur du code appelle deux gardes du corps et les dormeurs t'entendent de plus loin"
 
 #: scripts/aliado.gd scripts/tornos.gd
 msgid "¡Detrás!"
@@ -118,8 +82,8 @@ msgid "depósito un %d %% más grande"
 msgstr "réservoir %d %% plus grand"
 
 #: scripts/armas.gd
-msgid "radio un %d %% más grande y caben %d más"
-msgstr "rayon %d %% plus grand et %d de plus par pile"
+msgid "radio un %d %% más grande"
+msgstr "rayon %d %% plus grand"
 
 #: scripts/armas.gd
 msgid "%s: daño +%d %%, %s."
@@ -225,11 +189,11 @@ msgstr "Lance-glace"
 msgid "Lanza rayos"
 msgstr "Lance-éclairs"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/armas.gd scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "Cuerpo a cuerpo"
 msgstr "Corps à corps"
 
-#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+#: scripts/armas.gd scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
 msgid "A distancia"
 msgstr "À distance"
 
@@ -1176,6 +1140,38 @@ msgstr "HORDE DANS LE COULOIR !"
 #: scripts/eventos.gd
 msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
 msgstr "Une horde énorme avance dans le couloir... prépare-toi !"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "VAGUE %d"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "PARKING NETTOYÉ !"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "Prochaine vague dans %d"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "La première vague arrive dans %d"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "Vague %d / %d"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "Parking nettoyé !"
+
+#: scripts/garaje.gd scripts/partida.gd
+msgid "¡Derrota!"
+msgstr "Défaite !"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "Tombé au combat à la vague %d du parking"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -2146,6 +2142,24 @@ msgid "Con ayudas encendidas, en esta partida ya no se consiguen logros"
 msgstr "Avec des aides activées, cette partie ne peut plus débloquer de succès"
 
 #: scripts/logros.gd
+msgid "%s: novato"
+msgstr "%s : novice"
+
+#: scripts/logros.gd
+msgid "%s: veterano"
+msgstr "%s : vétéran"
+
+#: scripts/logros.gd
+msgid "%s: maestro"
+msgstr "%s : maître"
+
+#: scripts/logros.gd
+msgid "Mata %d durmiente con esta arma, sumando todas tus partidas."
+msgid_plural "Mata %d durmientes con esta arma, sumando todas tus partidas."
+msgstr[0] "Tue %d dormeur avec cette arme, toutes parties confondues."
+msgstr[1] "Tue %d dormeurs avec cette arme, toutes parties confondues."
+
+#: scripts/logros.gd
 msgid "¡LOGRO CONSEGUIDO!"
 msgstr "SUCCÈS DÉBLOQUÉ !"
 
@@ -2206,20 +2220,20 @@ msgid "Completa Torre Velaria: derrota al Sujeto 1."
 msgstr "Termine la Tour Velaria : bats le Sujet 1."
 
 #: scripts/logros.gd
-msgid "Alerta naranja"
-msgstr "Alerte orange"
+msgid "VD-7 reforzado"
+msgstr "VD-7 renforcé"
 
 #: scripts/logros.gd
-msgid "Completa un edificio con la Alerta 3 o más."
-msgstr "Termine un bâtiment en Alerte 3 ou plus."
+msgid "Completa un edificio con la mejora 3 del compuesto VD-7 o más."
+msgstr "Termine un bâtiment avec l'amélioration 3 du composé VD-7 ou plus."
 
 #: scripts/logros.gd
-msgid "Alerta máxima"
-msgstr "Alerte maximale"
+msgid "VD-7 al máximo"
+msgstr "VD-7 au maximum"
 
 #: scripts/logros.gd
-msgid "Completa un edificio con la Alerta 5."
-msgstr "Termine un bâtiment en Alerte 5."
+msgid "Completa un edificio con la mejora 5 del compuesto VD-7."
+msgstr "Termine un bâtiment avec l'amélioration 5 du composé VD-7."
 
 #: scripts/logros.gd
 msgid "Jornada exprés"
@@ -2517,6 +2531,10 @@ msgstr "Combat"
 msgid "Armas y mutaciones"
 msgstr "Armes et mutations"
 
+#: scripts/logros.gd scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
+msgid "Especiales"
+msgstr "Spéciales"
+
 #: scripts/logros.gd scripts/tutoriales.gd
 msgid "Supervivientes"
 msgstr "Survivants"
@@ -2581,9 +2599,13 @@ msgstr "Étage %d"
 msgid "Vestíbulo"
 msgstr "Hall"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd scripts/mapa/puerta.gd scripts/partida.gd
 msgid "Planta %d"
 msgstr "Étage %d"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "Parking"
 
 #: scripts/mapa/planta.gd
 msgid "Azotea"
@@ -2853,7 +2875,7 @@ msgstr "Salle du conseil"
 msgid "Tienda destrozada"
 msgstr "Boutique saccagée"
 
-#: scripts/mapa/viviendas.gd
+#: scripts/mapa/viviendas.gd scripts/partida.gd
 msgid "Trasteros"
 msgstr "Caves"
 
@@ -3073,6 +3095,14 @@ msgstr "%s !  %s"
 msgid "Te espera en el helipuerto, dentro de las líneas blancas"
 msgstr "Il t'attend sur l'héliport, à l'intérieur des lignes blanches"
 
+#: scripts/partida.gd scripts/tutoriales.gd
+msgid "Sala de mantenimiento"
+msgstr "Salle de maintenance"
+
+#: scripts/partida.gd
+msgid "Apartamento %s"
+msgstr "Appartement %s"
+
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "JE FERAIS MIEUX DE FOUILLER UN PEU PLUS !"
@@ -3256,10 +3286,6 @@ msgstr "Défi réussi !"
 #: scripts/partida.gd
 msgid "¡Edificio completado!"
 msgstr "Bâtiment terminé !"
-
-#: scripts/partida.gd
-msgid "¡Derrota!"
-msgstr "Défaite !"
 
 #: scripts/partida.gd
 msgid "Has limpiado %s de arriba abajo"
@@ -4556,14 +4582,6 @@ msgid "Eventos sorpresa"
 msgstr "Événements surprise"
 
 #: scripts/tutoriales.gd
-msgid "Sala de mantenimiento"
-msgstr "Salle de maintenance"
-
-#: scripts/partida.gd
-msgid "Apartamento %s"
-msgstr "Appartement %s"
-
-#: scripts/tutoriales.gd
 msgid "Más edificios"
 msgstr "Plus de bâtiments"
 
@@ -4716,8 +4734,8 @@ msgid "Los durmientes sueltan billetes al caer, y los jefes, muchos: pasa por en
 msgstr "Les dormeurs lâchent des billets en tombant, et les boss en lâchent beaucoup : passe dessus pour les ramasser."
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
-msgstr "Si tu termines l'immeuble, tu les gardes tous ; si tu tombes ou abandonnes, la moitié."
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, los pierdes."
+msgstr "Si tu termines le bâtiment, tu les gardes tous ; si tu tombes ou abandonnes, tu les perds."
 
 #: scripts/tutoriales.gd
 msgid "Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."
@@ -4828,6 +4846,22 @@ msgid "¡Ojo! El fuego y las explosiones también te hacen daño a ti."
 msgstr "Attention ! Le feu et les explosions te font aussi des dégâts."
 
 #: scripts/tutoriales.gd
+msgid "Lleva lanzables"
+msgstr "Emporte des lançables"
+
+#: scripts/tutoriales.gd
+msgid "Al salir sin lanzables"
+msgstr "En sortant sans lançables"
+
+#: scripts/tutoriales.gd
+msgid "No llevas ningún lanzable. Sácalos del baúl o cómpralos en la tienda de armas del ordenador."
+msgstr "Tu n'as aucun lançable. Prends-en dans le coffre ou achète-en à la boutique d'armes de l'ordinateur."
+
+#: scripts/tutoriales.gd
+msgid "Llévalos siempre: algunas hordas son imposibles sin un molotov o una granada."
+msgstr "Emporte-en toujours : certaines hordes sont impossibles sans un molotov ou une grenade."
+
+#: scripts/tutoriales.gd
 msgid "Materiales de fabricación"
 msgstr "Matériaux de fabrication"
 
@@ -4902,6 +4936,38 @@ msgstr "Utilise-le pour acheter, améliorer ou sortir des objets du coffre en pl
 #: scripts/tutoriales.gd
 msgid "En cada planta nueva vuelve a estar averiado hasta que cae su jefe."
 msgstr "À chaque nouvel étage, il retombe en panne jusqu'à ce que son boss tombe."
+
+#: scripts/tutoriales.gd
+msgid "Guarda las balas"
+msgstr "Garde tes balles"
+
+#: scripts/tutoriales.gd
+msgid "Los jefes aguantan muchísimo: cuerpo a cuerpo es muy difícil vencerlos."
+msgstr "Les boss sont extrêmement résistants : au corps à corps, c'est très dur de les battre."
+
+#: scripts/tutoriales.gd
+msgid "Guarda las balas de tus armas a distancia para ellos y limpia los apartamentos con la fregona o tu arma cuerpo a cuerpo."
+msgstr "Garde les balles de tes armes à distance pour eux et nettoie les appartements avec la serpillière ou ton arme de corps à corps."
+
+#: scripts/tutoriales.gd
+msgid "Antes del jefe"
+msgstr "Avant le boss"
+
+#: scripts/tutoriales.gd
+msgid "Al salir con la llave del jefe"
+msgstr "En sortant avec la clé du boss"
+
+#: scripts/tutoriales.gd
+msgid "Ya puedes abrir la puerta del jefe. Antes de la pelea, pasa por la sala de mantenimiento: está aquí, en la planta baja."
+msgstr "Tu peux maintenant ouvrir la porte du boss. Avant le combat, passe par la salle de maintenance : elle est ici, au rez-de-chaussée."
+
+#: scripts/tutoriales.gd
+msgid "En el ordenador, gasta los dólares en la tienda de armas y el mutágeno en Mutaciones: si caes, se pierden."
+msgstr "À l'ordinateur, dépense tes dollars à la boutique d'armes et ton mutagène dans Mutations : si tu tombes, tu les perds."
+
+#: scripts/tutoriales.gd
+msgid "Deja a salvo en el baúl lo que no quieras perder."
+msgstr "Mets à l'abri dans le coffre ce que tu ne veux pas perdre."
 
 #: scripts/tutoriales.gd
 msgid "La azotea"
@@ -5156,8 +5222,8 @@ msgid "Lo que guardas en el baúl no se pierde nunca: armas, lanzables, munició
 msgstr "Ce que tu ranges dans le coffre ne se perd jamais : armes, lançables, munitions et objets."
 
 #: scripts/tutoriales.gd
-msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
-msgstr "Chaque fois que tu sors une arme ou un lançable, il perd une partie de durabilité. À 0, il est détruit à la fin de cette partie."
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 1, es su última partida: se destruye al acabarla."
+msgstr "Chaque fois que tu sors une arme ou un lançable, il use une partie de sa durabilité. À 1, c'est sa dernière partie : il se casse à la fin."
 
 #: scripts/tutoriales.gd
 msgid "Al acabar la partida, lo que aún dura vuelve solo al baúl. Elige una casilla o arrástrala para pasarla."
@@ -5392,16 +5458,20 @@ msgid "El gas duerme a los durmientes, pero despiertan frenéticos. A ti no te h
 msgstr "Le gaz endort les dormeurs, mais ils se réveillent en furie. Il ne t'affecte pas ; une vanne le coupe."
 
 #: scripts/tutoriales.gd
-msgid "Alerta y Reto del día"
-msgstr "Alerte et Défi du jour"
+msgid "Compuesto VD-7 y Reto del día"
+msgstr "Composé VD-7 et Défi du jour"
 
 #: scripts/tutoriales.gd
 msgid "Al completar el primer edificio"
 msgstr "En terminant le premier bâtiment"
 
 #: scripts/tutoriales.gd
-msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
-msgstr "Sous chaque immeuble terminé, tu choisis l'alerte avec < et > : plus difficile, plus de dollars. Termine-le à la plus haute pour ouvrir la suivante."
+msgid "Debajo de cada edificio completado eliges la mejora del compuesto VD-7 con < y >: cada nivel, los enemigos tienen un 20 % más de vida, daño, velocidad y ataque."
+msgstr "Sous chaque bâtiment terminé, tu choisis l'amélioration du composé VD-7 avec < et > : à chaque niveau, les ennemis ont 20 % de vie, de dégâts, de vitesse et d'attaque en plus."
+
+#: scripts/tutoriales.gd
+msgid "No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente."
+msgstr "Pas de récompense : c'est pour ceux qui veulent plus de défi. Termine le bâtiment avec l'amélioration la plus haute pour débloquer la suivante."
 
 #: scripts/tutoriales.gd
 msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
@@ -6075,8 +6145,12 @@ msgid "Tienes %d"
 msgstr "Tu en as %d"
 
 #: scripts/ui/inventario.gd
-msgid "Hay %d en el baúl: se mejora un montón, %d"
-msgstr "%d dans le coffre : on améliore une pile de %d"
+msgid "Te quedan %d de %d: se mejora uno y va al baúl"
+msgstr "Il t'en reste %d sur %d : un est amélioré et va au coffre"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl: se mejora uno"
+msgstr "Il y en a %d dans le coffre : un est amélioré"
 
 #: scripts/ui/inventario.gd
 msgid "Sube a %s"
@@ -6103,12 +6177,8 @@ msgid "Ya es Épica: no se puede mejorar más."
 msgstr "Déjà Épique : impossible d'aller plus loin."
 
 #: scripts/ui/inventario.gd
-msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
-msgstr "Tu as déjà en main une autre pile %s et ensemble elles ne rentrent pas (au maximum, %d)."
-
-#: scripts/ui/inventario.gd
-msgid "El baúl está lleno: haz sitio para el montón mejorado."
-msgstr "Le coffre est plein : fais de la place pour la pile améliorée."
+msgid "El baúl está lleno: haz sitio para poder mejorarlo."
+msgstr "Le coffre est plein : fais de la place pour pouvoir l'améliorer."
 
 #: scripts/ui/inventario.gd
 msgid "%d material cuerpo a cuerpo"
@@ -6286,10 +6356,6 @@ msgstr "Sonne, attire les dormeurs 3 s et explose."
 msgid "Explota y deja a los durmientes congelados 3 s."
 msgstr "Explose et laisse les dormeurs gelés 3 s."
 
-#: scripts/ui/inventario.gd scripts/ui/tienda_armas.gd
-msgid "Especiales"
-msgstr "Spéciales"
-
 #: scripts/ui/menu_principal.gd
 msgid "Continuar partida"
 msgstr "Continuer la partie"
@@ -6327,8 +6393,16 @@ msgid "Elige edificio"
 msgstr "Choisis un bâtiment"
 
 #: scripts/ui/menu_principal.gd
-msgid "Complétalo para abrir la Alerta 1"
-msgstr "Termine-le pour débloquer l'Alerte 1"
+msgid "El Reto del día se abre al completar un edificio"
+msgstr "Le Défi du jour se débloque en terminant un bâtiment"
+
+#: scripts/ui/menu_principal.gd
+msgid "Complétalo para abrir la mejora del compuesto VD-7"
+msgstr "Termine-le pour débloquer l'amélioration du composé VD-7"
+
+#: scripts/ui/menu_principal.gd
+msgid "Compuesto VD-7"
+msgstr "Composé VD-7"
 
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
@@ -6419,8 +6493,12 @@ msgid "Abandonar partida"
 msgstr "Abandonner"
 
 #: scripts/ui/menus.gd
-msgid "Tiempo"
-msgstr "Temps"
+msgid "Oleadas superadas"
+msgstr "Vagues passées"
+
+#: scripts/ui/menus.gd
+msgid "Enemigos derrotados"
+msgstr "Ennemis vaincus"
 
 #: scripts/ui/menus.gd
 msgid "Dólares conseguidos"
@@ -6431,8 +6509,8 @@ msgid "+$%d  (tienes $%d)"
 msgstr "+$%d  (tu as $%d)"
 
 #: scripts/ui/menus.gd
-msgid "Enemigos derrotados"
-msgstr "Ennemis vaincus"
+msgid "Tiempo"
+msgstr "Temps"
 
 #: scripts/ui/menus.gd
 msgid "Plantas superadas"
@@ -6455,12 +6533,12 @@ msgid "Tu mejor marca de hoy: %s"
 msgstr "Ton meilleur score du jour : %s"
 
 #: scripts/ui/menus.gd
-msgid "Dólares salvados (la mitad)"
-msgstr "Dollars sauvés (la moitié)"
-
-#: scripts/ui/menus.gd
 msgid "Dólares perdidos"
 msgstr "Dollars perdus"
+
+#: scripts/ui/menus.gd
+msgid "-$%d  (tienes $%d)"
+msgstr "-$%d  (tu as $%d)"
 
 #: scripts/ui/menus.gd
 msgid "Conseguido en esta partida"
@@ -7303,10 +7381,6 @@ msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apu
 msgstr "Un ennemi que tu n'as pas encore croisé. Ceux que tu vois en partie sont notés ici."
 
 #: scripts/ui/ordenador.gd
-msgid "Elige un sujeto de la cuadrícula para ver su ficha."
-msgstr "Choisis un sujet dans la grille pour voir sa fiche."
-
-#: scripts/ui/ordenador.gd
 msgid "Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha."
 msgstr "Chaque ennemi que tu croises reste ici pour toujours. Choisis une case pour voir sa fiche."
 
@@ -7594,38 +7668,114 @@ msgstr "pff"
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
 
-#: scripts/mapa/planta.gd
-msgid "Garaje"
-msgstr "Parking"
+#, sin-usar
+msgid "Alerta %d"
+msgstr "Alerte %d"
 
-#: scripts/garaje.gd
-msgid "OLEADA %d"
-msgstr "VAGUE %d"
+#, sin-usar
+msgid "Sin alerta"
+msgstr "Sans alerte"
 
-#: scripts/garaje.gd
-msgid "¡GARAJE SUPERADO!"
-msgstr "PARKING NETTOYÉ !"
+#, sin-usar
+msgid ""
+"%s\n"
+"+%d %% de dólares"
+msgstr ""
+"%s\n"
+"+%d %% de dollars"
 
-#: scripts/garaje.gd
-msgid "Siguiente oleada en %d"
-msgstr "Prochaine vague dans %d"
+#, sin-usar
+msgid ""
+"%s%s\n"
+"+%d %% de dólares y de materiales"
+msgstr ""
+"%s%s\n"
+"+%d %% de dollars et de matériaux"
 
-#: scripts/garaje.gd
-msgid "La primera oleada llega en %d"
-msgstr "La première vague arrive dans %d"
+#, sin-usar
+msgid " (y lo de antes)"
+msgstr " (et les précédentes)"
 
-#: scripts/garaje.gd
-msgid "Oleada %d / %d"
-msgstr "Vague %d / %d"
+#, sin-usar
+msgid "+25 % de durmientes"
+msgstr "+25 % de dormeurs"
 
-#: scripts/garaje.gd
-msgid "¡Garaje superado!"
-msgstr "Parking nettoyé !"
+#, sin-usar
+msgid "Durmientes un 10 % más rápidos"
+msgstr "Dormeurs 10 % plus rapides"
 
-#: scripts/garaje.gd
-msgid "Caíste en la oleada %d del garaje"
-msgstr "Tombé au combat à la vague %d du parking"
+#, sin-usar
+msgid "Jefes con +25 % de vida, y se enfadan antes"
+msgstr "Boss avec +25 % de vie, et ils s'énervent plus tôt"
 
-#: scripts/ui/menus.gd
-msgid "Oleadas superadas"
-msgstr "Vagues passées"
+#, sin-usar
+msgid "Botiquines, vendas y Ajolote curan la mitad"
+msgstr "Médikits, bandages et Axolotl soignent moitié moins"
+
+#, sin-usar
+msgid "El guardia (o el durmiente de la llave) aguanta el doble y los durmientes te oyen más lejos"
+msgstr "Le garde (ou le dormeur à la clé) encaisse deux fois plus et les dormeurs t'entendent de plus loin"
+
+#, sin-usar
+msgid "Cada ordenador del código llama a dos escoltas y los durmientes te oyen más lejos"
+msgstr "Chaque ordinateur du code appelle deux gardes du corps et les dormeurs t'entendent de plus loin"
+
+#, sin-usar
+msgid "radio un %d %% más grande y caben %d más"
+msgstr "rayon %d %% plus grand et %d de plus par pile"
+
+#, sin-usar
+msgid "Alerta naranja"
+msgstr "Alerte orange"
+
+#, sin-usar
+msgid "Completa un edificio con la Alerta 3 o más."
+msgstr "Termine un bâtiment en Alerte 3 ou plus."
+
+#, sin-usar
+msgid "Alerta máxima"
+msgstr "Alerte maximale"
+
+#, sin-usar
+msgid "Completa un edificio con la Alerta 5."
+msgstr "Termine un bâtiment en Alerte 5."
+
+#, sin-usar
+msgid "Si completas el edificio te los quedas todos; si caes o abandonas, la mitad."
+msgstr "Si tu termines l'immeuble, tu les gardes tous ; si tu tombes ou abandonnes, la moitié."
+
+#, sin-usar
+msgid "Cada vez que sacas un arma o un lanzable, gasta una partida de su durabilidad. Con 0, se destruye al acabar esa partida."
+msgstr "Chaque fois que tu sors une arme ou un lançable, il perd une partie de durabilité. À 0, il est détruit à la fin de cette partie."
+
+#, sin-usar
+msgid "Alerta y Reto del día"
+msgstr "Alerte et Défi du jour"
+
+#, sin-usar
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Complétalo en la más alta para abrir la siguiente."
+msgstr "Sous chaque immeuble terminé, tu choisis l'alerte avec < et > : plus difficile, plus de dollars. Termine-le à la plus haute pour ouvrir la suivante."
+
+#, sin-usar
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "%d dans le coffre : on améliore une pile de %d"
+
+#, sin-usar
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d)."
+msgstr "Tu as déjà en main une autre pile %s et ensemble elles ne rentrent pas (au maximum, %d)."
+
+#, sin-usar
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "Le coffre est plein : fais de la place pour la pile améliorée."
+
+#, sin-usar
+msgid "Complétalo para abrir la Alerta 1"
+msgstr "Termine-le pour débloquer l'Alerte 1"
+
+#, sin-usar
+msgid "Dólares salvados (la mitad)"
+msgstr "Dollars sauvés (la moitié)"
+
+#, sin-usar
+msgid "Elige un sujeto de la cuadrícula para ver su ficha."
+msgstr "Choisis un sujet dans la grille pour voir sa fiche."

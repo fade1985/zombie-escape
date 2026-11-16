@@ -17,7 +17,7 @@ func andar(delta: float, johnny: Node2D) -> void:
 	if distancia_a(johnny) < DISPARADOR + johnny.RADIO and se_ve(johnny):
 		# ¡Se enciende la mecha! Abre la gabardina y se queda así (la animación no se repite: acaba abierta)
 		estado = "mecha"
-		mecha = MECHA
+		mecha = MECHA / ritmo   # (con la mejora del VD-7, más corta)
 		mirar_hacia(johnny.global_position - global_position)
 		poner_animacion("ataque")
 		return
@@ -72,6 +72,13 @@ func morir() -> void:
 	bum.de = "explosivo"   # (para el cartel de derrota: le ha pillado el dinamitero)
 	bum.position = position
 	get_parent().add_child.call_deferred(bum)
+	# el estruendo despierta a todos los durmientes del apartamento, en todas sus habitaciones, como un disparo de
+	# Johnny (M118, 16 nov): revienta igual si se le acaba la mecha o si lo matas. Fuera de los apartamentos, nada
+	var johnny = get_tree().get_first_node_in_group("jugador")   # (sin tipo: en_apartamento es de johnny.gd)
+	if johnny != null and johnny.has_method("en_apartamento") and johnny.en_apartamento():
+		for zombi in get_tree().get_nodes_in_group("zombis"):
+			if zombi != self and zombi.has_method("oir_disparo"):
+				zombi.oir_disparo(global_position, true)
 
 
 # El aviso en el suelo: un círculo rojo que se va llenando mientras corre la mecha

@@ -30,7 +30,12 @@ const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 
 var vida := 500
 var fase := 1                 # 2 = enfadado
-var enfado := 0.5             # a qué parte de la vida se enfada (con la Alerta 3, antes: alerta.gd)
+var enfado := 0.5             # a qué parte de la vida se enfada
+# La mejora del compuesto VD-7 (alerta.gd; la pone partida.mejora_vd7): "rapido", por cuánto se multiplica lo que anda,
+# y "ritmo", lo deprisa que ataca (todo lo que no es andar pasa más deprisa: avisos, golpes y esperas; y anda menos rato
+# antes de atacar)
+var rapido := 1.0
+var ritmo := 1.0
 var estado := "andar"
 var t := 0.0                  # tiempo que lleva en el estado
 var dur := 1.2                # cuánto anda antes de atacar
@@ -84,7 +89,7 @@ func cambiar(nuevo: String, nuevos_datos := {}) -> void:
 
 func andar(cuanto: float) -> void:
 	cambiar("andar")
-	dur = cuanto
+	dur = cuanto / ritmo
 
 
 func _physics_process(delta: float) -> void:
@@ -93,7 +98,7 @@ func _physics_process(delta: float) -> void:
 	if frio().paso(delta):
 		return   # (congelado)
 	tiempo += delta
-	t += delta
+	t += delta if estado == "andar" else delta * ritmo   # (ritmo: la mejora del VD-7)
 	Estados.quemar_acido_jefe(self, en_acido, delta)
 	if estado == "muerto":
 		return
@@ -127,7 +132,7 @@ func _physics_process(delta: float) -> void:
 		mirada = global_position.direction_to(johnny.global_position)
 		frenar(delta)
 	else:
-		pensar(delta, johnny)
+		pensar(delta if estado == "andar" else delta * ritmo, johnny)
 	mover()
 	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso)
 	if contacto > 0 and global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + 4.0:
@@ -209,7 +214,7 @@ func frenar(delta: float, cuanto := 10.0) -> void:
 
 func mover() -> void:
 	var antes := global_position
-	velocity = marcha
+	velocity = marcha * rapido   # (rapido: la mejora del VD-7)
 	move_and_slide()
 	if quieto:
 		global_position = antes   # (se mueve y se le devuelve: así cree que corre y no que se ha chocado)
@@ -403,7 +408,7 @@ func avance(nombre: String, k: float) -> int:
 func poner(nombre: String, velocidad := 1.0) -> void:
 	if sprite.animation != nombre or not sprite.is_playing():
 		sprite.play(nombre)
-	sprite.speed_scale = velocidad
+	sprite.speed_scale = velocidad * (rapido if estado == "andar" else ritmo)
 
 
 # Lo que va por encima de él (en el nodo "Vapor"): enfadado, el vapor de la cabeza, y atontado, estrellitas

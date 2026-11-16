@@ -194,8 +194,8 @@ func pausa(partida: Node, foco := "") -> void:
 	(opciones if foco == "opciones" else seguir).grab_focus.call_deferred()
 
 
-# r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, salvados, cartera y, con los niveles de alerta
-# (alerta.gd), alerta (la de la partida), extra (los dólares de más por ella) y abierta (la que se abre, o 0);
+# r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, salvados, cartera y, con la mejora del compuesto
+# VD-7 (alerta.gd), alerta (la de la partida) y abierta (la que se abre, o 0);
 # con el reto del día (reto.gd), reto (el nombre de su regla), marca (la mejor de hoy), mejor (si se acaba de mejorar)
 # y premio_reto (sus dólares de más, la primera vez que se completa hoy; si no, 0); asesino (al caer, quién te ha
 # pillado: johnny.gd, golpe_de) y conseguido (lo nuevo de esta partida: partida.gd, conseguido)
@@ -223,7 +223,7 @@ func fin(r: Dictionary) -> void:
 	elif r.gano:
 		# al ganar (11 nov): solo el tiempo, los dólares, los enemigos derrotados y, si la hay, la nueva mejor marca
 		dato(lista, "trofeo", Idioma.t("Tiempo"), r.tiempo)
-		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares + r.extra + r.get("premio_reto", 0), r.cartera], Tema.VERDE)
+		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares + r.get("premio_reto", 0), r.cartera], Tema.VERDE)
 		dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
 		if r.get("nueva_marca", false):
 			dato(lista, "trofeo", Idioma.t("¡Nueva mejor marca!"), "", Color("#f7c440"))
@@ -234,9 +234,8 @@ func fin(r: Dictionary) -> void:
 		if r.get("reto", "") != "":
 			dato(lista, "trofeo", Idioma.t("Reto del día · %s") % r.reto, Idioma.t("%s · ¡mejor marca de hoy!") % r.marca if r.mejor
 				else Idioma.t("Tu mejor marca de hoy: %s") % r.marca, Color("#f7c440") if r.mejor else Tema.TINTA)
-		# si caes, te quedas la mitad de lo recogido (partida.gd, DOLARES_AL_CAER) y la otra mitad se pierde
-		dato(lista, "billete", Idioma.t("Dólares salvados (la mitad)"), Idioma.t("+$%d  (tienes $%d)") % [r.salvados, r.cartera], Tema.VERDE)
-		dato(lista, "billete", Idioma.t("Dólares perdidos"), "$%d" % (r.dolares - r.salvados), Tema.ROJO)
+		# si caes o abandonas, se pierden todos los dólares recogidos (M116, 16 nov: antes te quedabas la mitad)
+		dato(lista, "billete", Idioma.t("Dólares perdidos"), Idioma.t("-$%d  (tienes $%d)") % [r.dolares - r.salvados, r.cartera], Tema.ROJO)
 	# lo conseguido en esta partida, solo si hay algo nuevo
 	var conseguido: Array = [] if r.gano else r.get("conseguido", [])
 	if not conseguido.is_empty():

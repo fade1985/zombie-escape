@@ -4,7 +4,7 @@
 # partida» con su edificio y su planta. Es la escena con la que arranca el juego. Elegida una partida sin nada a medias, se abre "Elige edificio" (showBuildings
 # de src/ui.js): una tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida
 # (escenas/partida.tscn).
-# Debajo de cada tarjeta, el nivel de alerta con el que se juega (alerta.gd): se cambia con las flechas, entre los
+# Debajo de cada tarjeta, la mejora del compuesto VD-7 con la que se juega (alerta.gd; hasta el 16 nov, «la alerta»): se cambia con las flechas, entre los
 # que estén abiertos, y se apunta en el guardado para la próxima vez.
 # Con "-- --captura" saca fotos (captura-menu.png y captura-edificios.png) y pasa sola a la partida, para seguir
 # con su prueba; con "--edificio centro" además, entra en el centro comercial aunque esté cerrado. Con
@@ -311,7 +311,18 @@ func poner_tarjetas() -> void:
 		caja.add_child(tarjeta(id, s))
 		if Edificios.abierto(s, id):
 			selector_alerta(caja, id, s.edificios.get(id, Guardado.EDIFICIO))
-			boton_reto(caja, id, s)
+			# el reto del día, cerrado hasta completar el primer edificio (M120, 16 nov): en su sitio, cómo se abre
+			if s.edificios.values().any(func(p): return p.get("completado", false)):
+				boton_reto(caja, id, s)
+			else:
+				var cerrado := Label.new()
+				cerrado.theme_type_variation = "Sub"
+				cerrado.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				cerrado.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				cerrado.custom_minimum_size = Vector2(300, 0)
+				cerrado.text = Idioma.t("El Reto del día se abre al completar un edificio")
+				cerrado.modulate = Color(1, 1, 1, 0.6)
+				caja.add_child(cerrado)
 		tarjetas.add_child(caja)
 
 
@@ -324,7 +335,8 @@ func alto_lineas(n: int) -> float:
 	return n * (get_theme_default_font().get_height(get_theme_default_font_size()) + 3.0)
 
 
-# Debajo de la tarjeta: "< Alerta 2 >" y lo que trae. Sin ninguna abierta, solo cómo se abre la primera
+# Debajo de la tarjeta: "Compuesto VD-7", "< Mejora 2 (de 3) >" y lo que trae (alerta.gd, M121). Sin ninguna abierta, solo
+# cómo se abre la primera
 func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	var maximo: int = p.alerta_max
 	alertas[id] = clampi(p.alerta, 0, maximo)
@@ -334,13 +346,19 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	explica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explica.custom_minimum_size = Vector2(300, 0)
 	if maximo == 0:
-		explica.text = Idioma.t("Complétalo para abrir la Alerta 1")
+		explica.text = Idioma.t("Complétalo para abrir la mejora del compuesto VD-7")
 		explica.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(explica)
 		return
 	# lo que trae cada alerta ocupa de una a tres líneas: siempre el alto de tres, para que el botón del reto de cada
 	# edificio quede a la misma altura que el de los demás
 	explica.custom_minimum_size.y = alto_lineas(3)
+	# encima de las flechas, de qué es (M121: la mejora del compuesto VD-7)
+	var titulo := Label.new()
+	titulo.theme_type_variation = "Sub"
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.text = Idioma.t("Compuesto VD-7")
+	caja.add_child(titulo)
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	fila.add_theme_constant_override("separation", 8)

@@ -20,9 +20,10 @@ extends Node
 #   completado (el edificio "edificio" completado), rescatados (los de "edificio" que viven en las viviendas), skin
 #   (una puesta), skins, bestiario, paginas (del dosier), objetos (de las Colecciones), rama (la más llena del árbol de
 #   talentos), arbol (el árbol entero) y las cuentas de los logros (jefes, victorias, armas, reglas)
-# Los textos de LISTA (nombre y desc) y de TEMAS se traducen al enseñarlos, con nombre_de(), desc_de() y nombre_tema()
+# Los textos de BASE (nombre y desc) y de TEMAS se traducen al enseñarlos, con nombre_de(), desc_de() y nombre_tema()
+# LISTA, la de todos, es BASE más los de cada arma (de_armas: M122), que se hacen solos
 # [traducir]
-const LISTA := [
+const BASE := [
 	# ── Edificios
 	{"id": "primer_turno", "tema": "edificios", "nombre": "Primer turno", "icono": "logro-primer_turno", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Limpia tu primer apartamento."},
@@ -34,10 +35,10 @@ const LISTA := [
 		"mira": "completado", "edificio": "centro", "desc": "Completa el Centro comercial: derrota al gerente."},
 	{"id": "reestructuracion", "tema": "edificios", "nombre": "Reestructuración", "icono": "logro-reestructuracion", "premio": 25, "cuenta": "",
 		"mira": "completado", "edificio": "torre", "desc": "Completa Torre Velaria: derrota al Sujeto 1."},
-	{"id": "alerta_naranja", "tema": "edificios", "nombre": "Alerta naranja", "icono": "logro-alerta_naranja", "premio": 20, "meta": 1, "cuenta": "",
-		"desc": "Completa un edificio con la Alerta 3 o más."},
-	{"id": "alerta_maxima", "tema": "edificios", "nombre": "Alerta máxima", "icono": "logro-alerta_maxima", "premio": 35, "meta": 1, "cuenta": "",
-		"desc": "Completa un edificio con la Alerta 5."},
+	{"id": "alerta_naranja", "tema": "edificios", "nombre": "VD-7 reforzado", "icono": "logro-alerta_naranja", "premio": 20, "meta": 1, "cuenta": "",
+		"desc": "Completa un edificio con la mejora 3 del compuesto VD-7 o más."},
+	{"id": "alerta_maxima", "tema": "edificios", "nombre": "VD-7 al máximo", "icono": "logro-alerta_maxima", "premio": 35, "meta": 1, "cuenta": "",
+		"desc": "Completa un edificio con la mejora 5 del compuesto VD-7."},
 	{"id": "jornada_expres", "tema": "edificios", "nombre": "Jornada exprés", "icono": "logro-jornada_expres", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida en menos de 15 minutos."},
 	{"id": "empleado_mes", "tema": "edificios", "nombre": "Empleado del mes", "icono": "logro-empleado_mes", "premio": 20, "meta": 10, "cuenta": "total",
@@ -119,8 +120,17 @@ const LISTA := [
 # Los apartados del programa Logros del ordenador, en orden
 # [traducir]
 const TEMAS := {"edificios": "Edificios", "jefes": "Jefes", "combate": "Combate", "armas": "Armas y mutaciones",
+	"arsenal_cuerpo": "Cuerpo a cuerpo", "arsenal_distancia": "A distancia", "arsenal_especial": "Especiales",
 	"supervivientes": "Supervivientes", "sorpresas": "Sorpresas y retos", "colecciones": "Colecciones"}
 # [/traducir]
+# Los logros de cada arma (M122, 16 nov: para que el 100 % obligue a usarlas todas): tres por cada una de las del arsenal
+# (la fregona y las de la tienda), por los durmientes que se matan con ella en la mano, sumando todas las partidas
+# (como Fregona de oro: los que mueren quemados no cuentan, salvo con el lanzallamas, que mata así). Cada arma, en el
+# apartado de su familia (Armas.familia): Cuerpo a cuerpo, A distancia y Especiales; en el ordenador se ve uno por arma,
+# el nivel que toca (ui/archivador_logros.gd). Se cuentan en la partida (por_arma) y se guardan al subir de planta y al
+# acabar (guardar_armas), en "logros_cuentas" → "con_arma" ({arma: cuántos})
+const NIVELES_ARMA := [{"meta": 10, "premio": 5}, {"meta": 50, "premio": 10}, {"meta": 200, "premio": 20}]
+static var LISTA: Array = BASE + de_armas()
 
 const TOPE: int = preload("res://scripts/ui/chapa.gd").MAXIMO   # el tope de los dólares («MAX»; partida.TOPE)
 const AL_PRENDER := 5.0   # segundos tras lanzar un molotov en los que sus llamas cuentan para "Pirómano"
@@ -146,6 +156,9 @@ var jefe: Node2D          # el jefe con el que se pelea (partida.gd lo da al sal
 var pelea_t := 0.0        # ...los segundos que lleva la pelea (sin su presentación ni la espera en el helipuerto)...
 var tocado_jefe := false  # ...y si Johnny ha perdido vida en ella
 var armas_usadas: Array = []   # las armas con las que ya se ha matado alguna vez ("Arsenal completo"; del guardado)
+var por_arma := {}             # los durmientes matados con cada arma en esta partida, aún sin guardar (los de cada arma)...
+var con_arma := {}             # ...los que ya están en el guardado (se leen al empezar: así no se lee el guardado a cada muerto)...
+var armas_avisadas: Array = [] # ...y los de cada arma que ya se han dado por cumplidos en esta partida
 var por_avisar: Array = []     # los nombres de los recién conseguidos que aún no se han avisado (avisar)
 var repasar := true       # si se hace el repaso del guardado, revisar (la partida de prueba lo apaga: prueba_comun.gd)
 var repasado_en := -1     # con cuántas escrituras iba el guardado en el último repaso (Guardado.escrituras)
@@ -157,6 +170,7 @@ func preparar(p: Node) -> void:
 	var s := Guardado.cargar()
 	muertos_antes = s.muertos - s.muertos_con_ayudas
 	armas_usadas = s.logros_cuentas.get("armas", []).duplicate()
+	con_arma = s.logros_cuentas.get("con_arma", {}).duplicate()
 	con_ayudas = ayudas_encendidas()
 	p.johnny.vida_cambiada.connect(func(vida, _maxima):
 		if vida < vida_antes:
@@ -198,6 +212,27 @@ func sin_logros() -> bool:
 	return con_ayudas or ayudas_encendidas()
 
 
+# Los logros de cada arma (M122): «arma_katana_2» es el segundo nivel de la katana
+static func de_armas() -> Array:
+	var lista := []
+	for arma in arsenal():
+		for i in NIVELES_ARMA.size():
+			lista.append({"id": "arma_%s_%d" % [arma, i + 1], "tema": "arsenal_" + Armas.familia(arma), "icono": arma,
+				"premio": NIVELES_ARMA[i].premio, "meta": NIVELES_ARMA[i].meta, "cuenta": "total", "arma": arma, "nivel": i + 1})
+	return lista
+
+
+# De los de un arma, el que se ve en el ordenador: el primer nivel que aún no está cobrado (o, con todos, el último)
+static func toca_ver(l: Dictionary, s: Dictionary) -> bool:
+	if not l.has("arma"):
+		return true
+	for i in NIVELES_ARMA.size():
+		var id := "arma_%s_%d" % [l.arma, i + 1]
+		if estado(s, id) != "cobrado" or i == NIVELES_ARMA.size() - 1:
+			return id == l.id
+	return false
+
+
 static func datos(id: String) -> Dictionary:
 	for l in LISTA:
 		if l.id == id:
@@ -207,11 +242,20 @@ static func datos(id: String) -> Dictionary:
 
 # El nombre y la descripción de un logro, y el nombre de un apartado (TEMAS), ya en el idioma del jugador
 static func nombre_de(id: String) -> String:
-	return Idioma.t(datos(id).get("nombre", ""))
+	var l := datos(id)
+	if l.has("arma"):
+		# (su nombre, según el nivel, con el del arma delante: «Katana: veterano»)
+		var nombre: String = [Idioma.t("%s: novato"), Idioma.t("%s: veterano"), Idioma.t("%s: maestro")][l.nivel - 1]
+		return nombre % Armas.nombre(l.arma)
+	return Idioma.t(l.get("nombre", ""))
 
 
 static func desc_de(id: String) -> String:
-	return Idioma.t(datos(id).get("desc", ""))
+	var l := datos(id)
+	if l.has("arma"):
+		return Idioma.n("Mata %d durmiente con esta arma, sumando todas tus partidas.",
+			"Mata %d durmientes con esta arma, sumando todas tus partidas.", l.meta) % l.meta
+	return Idioma.t(l.get("desc", ""))
 
 
 static func nombre_tema(tema: String) -> String:
@@ -305,6 +349,9 @@ func progreso(id: String, s := {}) -> int:
 	var l := datos(id)
 	if l.has("mira"):
 		return hecho(l, s if not s.is_empty() else Guardado.cargar())
+	if l.has("arma"):   # los de cada arma: los guardados y los de esta partida
+		var guardados: Dictionary = s.logros_cuentas.get("con_arma", {}) if not s.is_empty() else con_arma
+		return int(guardados.get(l.arma, 0)) + (int(por_arma.get(l.arma, 0)) if not sin_logros() else 0)
 	return 0
 
 
@@ -402,6 +449,31 @@ func zombi_muerto(arma: String, ardia: bool) -> void:
 	if arma in arsenal() and not arma in armas_usadas:
 		armas_usadas.append(arma)
 		apuntar("armas", arma)
+	# los de cada arma (M122): uno más con la de la mano y, si llega a un nivel, conseguido
+	if arma in arsenal() and (not ardia or arma == "lanzallamas") and partida != null and not sin_logros():
+		por_arma[arma] = int(por_arma.get(arma, 0)) + 1
+		for i in NIVELES_ARMA.size():
+			var id := "arma_%s_%d" % [arma, i + 1]
+			if not id in armas_avisadas and progreso(id) >= NIVELES_ARMA[i].meta:
+				armas_avisadas.append(id)
+				cumplir(id)   # (si ya lo tenía, no pasa nada)
+
+
+# Los durmientes de cada arma de esta partida, al guardado (al subir de planta y al acabar la partida: partida.gd)
+func guardar_armas() -> void:
+	if por_arma.is_empty():
+		return
+	var cuantos := por_arma.duplicate()
+	por_arma.clear()
+	if partida == null or sin_logros():
+		return
+	for arma in cuantos:
+		con_arma[arma] = int(con_arma.get(arma, 0)) + cuantos[arma]
+	Guardado.cambiar(func(g):
+		var con: Dictionary = g.logros_cuentas.get("con_arma", {})
+		for arma in cuantos:
+			con[arma] = int(con.get(arma, 0)) + cuantos[arma]
+		g.logros_cuentas["con_arma"] = con)
 
 
 # Sale el jefe de la planta (partida.gd): empieza su pelea
@@ -437,7 +509,7 @@ func partida_ganada() -> void:
 	if Reto.activo:
 		cumplir("reto_aceptado")
 		apuntar("reglas", Reto.regla)
-	else:   # (el reto va sin alerta)
+	else:   # (el reto va sin la mejora del VD-7)
 		if Alerta.nivel >= 3:
 			cumplir("alerta_naranja")
 		if Alerta.nivel >= Alerta.MAX:
@@ -469,5 +541,6 @@ func planta_nueva() -> void:
 
 # Al dejar una planta por las escaleras
 func planta_pasada() -> void:
+	guardar_armas()   # (los durmientes de cada arma, al guardado: M122)
 	if not tocado:
 		cumplir("intocable")

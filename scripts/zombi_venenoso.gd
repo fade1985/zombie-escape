@@ -64,7 +64,7 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 	t_escupir += delta
 	if not escupido and t_escupir >= PREPARAR:
 		escupido = true
-		espera = ESPERA
+		espera = ESPERA / ritmo   # (con la mejora del VD-7, menos)
 		if johnny:
 			var moco := PROYECTIL.instantiate()
 			moco.dueno = self

@@ -488,12 +488,11 @@ func _physics_process(delta: float) -> void:
 		if recargando <= 0.0:
 			terminar_recarga()
 
-	# Ajolote: recupera vida poco a poco, hasta la mitad de la vida (REGENERA_TOPE: lo demás, con botiquines y vendas). Con
-	# la Alerta 4, como las curas, la mitad: tarda el doble
+	# Ajolote: recupera vida poco a poco, hasta la mitad de la vida (REGENERA_TOPE: lo demás, con botiquines y vendas)
 	var tope_lobezno := mini(vida_tope(), roundi(stats.vida_max * REGENERA_TOPE))
 	if stats.regenera > 0 and vida < tope_lobezno:
 		regenera_t += delta
-		var cada: float = REGENERA_CADA / Alerta.botiquin()
+		var cada: float = REGENERA_CADA
 		if regenera_t >= cada:
 			regenera_t -= cada
 			curar(mini(stats.regenera, tope_lobezno - vida))
@@ -1586,6 +1585,9 @@ func recibir_dano(cantidad: int, quien = null, peligro := "") -> void:
 	invulnerable = maxf(INVULNERABLE, Skins.aguante(skin))   # (el antidisturbios, skins.gd: más rato)
 	# Durito quita un poco a cada golpe (sin bajar de GOLPE_MINIMO de lo que era); lo que queda se lo lleva el escudo,
 	# si le queda (quitar_vida())
+	# la mejora del compuesto VD-7 (alerta.gd): lo que hace un enemigo (y la explosión del dinamitero), más fuerte
+	if quien != null or peligro == "explosivo":
+		cantidad = roundi(cantidad * Alerta.dano())
 	var minimo := maxi(1, roundi(cantidad * GOLPE_MINIMO))
 	var dano := maxi(minimo, roundi(cantidad * stats.dano_recibido) - stats.armadura)
 	Sonido.tocar("dano")
@@ -1695,7 +1697,7 @@ func quitar_vida(cantidad: int, de := "") -> void:
 	if stats.aliento > 0 and not aliento_usado and vida > 0 and vida < stats.vida_max / 3.0:
 		aliento_usado = true
 		devolver_tercio()
-		curar(roundi(stats.aliento * Alerta.botiquin()))
+		curar(stats.aliento)
 		Zombi.texto_flotante(get_parent(), global_position + Vector2(-70, -70), Idioma.t("¡Segundo aliento!"), VERDE, 18)
 		Sonido.tocar("curar")
 	if vida > 0:

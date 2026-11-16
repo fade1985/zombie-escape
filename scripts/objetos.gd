@@ -9,7 +9,7 @@
 # Las piezas (PIEZAS, «materiales» en el juego) son de 4 familias, las de las armas: cuerpo a cuerpo, a distancia,
 # especiales y arrojables. Desde el 15 nov (Fase 4) salen de los muebles de los Apartamentos que se abren
 # (MUEBLES_CON_PIEZA: pieza_de_mueble); los zombis ya no las sueltan. En el centro comercial y en la torre, que no tienen
-# esos muebles, las sueltan los jefes (PIEZAS_JEFE). Con la alerta, más (Alerta.mas_piezas). No salen al azar (al_azar)
+# esos muebles, las sueltan los jefes (PIEZAS_JEFE). No salen al azar (al_azar)
 # ni en las tiendas del centro, y no se compran.
 #
 # Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/historial/CENTRO_COMERCIAL.md): en los Apartamentos,
@@ -61,7 +61,7 @@ const PIEZA_PARA := {
 const MUEBLES_CON_PIEZA := ["wardrobe", "nightstand", "desk", "bookshelf",
 	"checkout", "clothesrack", "tvshelf", "lockers", "pharmacycounter",
 	"filecabinet", "execdesk", "bookcase", "armory", "serverrack"]
-const PIEZA_MUEBLE := 0.35   # probabilidad de que un mueble tenga un material (con la alerta, más: Alerta.mas_piezas)
+const PIEZA_MUEBLE := 0.35   # probabilidad de que un mueble tenga un material
 const PIEZAS_JEFE := 4       # las que soltaba cada jefe al caer en el centro comercial y en la torre (desde el 16 nov ya no: los muebles)
 
 # Los nombres de los objetos que son chatarra, las vendas y las piezas; para enseñarlos, nombre(), que los traduce
@@ -429,13 +429,11 @@ static func al_azar(edificio := "apartamentos", tienda := "", municion: Variant 
 	return lista.pick_random() if not lista.is_empty() else ""
 
 
-# Lo que hay dentro de un mueble al abrirlo ("" = vacío): PIEZA_MUEBLE de las veces, una de las cuatro al azar. Con la
-# alerta, más veces (Alerta.mas_piezas)
+# Lo que hay dentro de un mueble al abrirlo ("" = vacío): PIEZA_MUEBLE de las veces, una de las cuatro al azar
 static func pieza_de_mueble() -> String:
-	return PIEZAS.keys().pick_random() if randf() < PIEZA_MUEBLE * Alerta.mas_piezas() else ""
+	return PIEZAS.keys().pick_random() if randf() < PIEZA_MUEBLE else ""
 
 
-# Cuántas piezas suelta un jefe al caer en el centro comercial o en la torre (PIEZAS_JEFE, y más con la alerta); cada
 # Si la nevera y la encimera se abren: solo cuando ya vive alguien en los trasteros (si no, su comida no serviría)
 static func hay_comida() -> bool:
 	return not Guardado.cargar().rescatados.is_empty()
@@ -452,10 +450,11 @@ static func comida_de_mueble() -> String:
 	return suyas.pick_random() if not suyas.is_empty() and randf() < COMIDA_MUEBLE else ""
 
 
+# Cuántas piezas suelta un jefe al caer en el centro comercial o en la torre (PIEZAS_JEFE); cada
 # una, de una familia al azar
 static func piezas_de_jefe() -> Array:
 	var lista := []
-	for i in roundi(PIEZAS_JEFE * Alerta.mas_piezas()):
+	for i in PIEZAS_JEFE:
 		lista.append(PIEZAS.keys().pick_random())
 	return lista
 

@@ -88,7 +88,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   lo suyo (se recoge pasando por encima): uno solo por apartamento, en un baño al azar, con un botiquín o unas vendas a medias. La Farmacéutica te prepara un botiquín cada partida, y las vendas
   también salen en el centro comercial.
 - **Dólares:** se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.
-  El talento Sanitario y la alerta 4 siguen cambiando lo que curan. En la sala de pruebas el 1 y el 2 sacan zombis.
+  El talento Sanitario sigue cambiando lo que curan. En la sala de pruebas el 1 y el 2 sacan zombis.
 - **Inventario «todo a la vista»:** Johnny en medio con sus armas (dos de cada tipo: la de la mano y la de repuesto) y
   sus 3 arrojables; la mochila y la munición (8 de cada) y, debajo, las 2 casillas de las curas (M67: las vendas y el
   botiquín no ocupan sitio en «Objetos»); a la derecha, la ficha de lo elegido (debajo del nombre, solo su familia:
@@ -101,7 +101,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
     tira; B, Esc o Tab cierran.
   - Ratón o dedo: se toca, o se **arrastra** (se encienden los sitios donde vale soltar; encima de Johnny, se pone el
     arma o se usa la cura; en la zona roja de la ficha, se tira la casilla entera; donde no vale, vuelve y tiembla).
-- **Elige edificio:** **<** y **>** cambian el nivel de alerta (completar el edificio abre el siguiente, hasta el 5). Cada edificio cerrado dice debajo lo que pide para abrirse: completar el de antes, conseguir sus dosieres y ver todos sus vídeos.
+- **Elige edificio:** **<** y **>** cambian la mejora del compuesto VD-7 (completar el edificio abre la siguiente, hasta la 5: cada una, enemigos un 20 % más fuertes en vida, daño, velocidad y ataque). El Reto del día no sale hasta completar algún edificio. Cada edificio cerrado dice debajo lo que pide para abrirse: completar el de antes, conseguir sus dosieres y ver todos sus vídeos.
   El botón **Reto del día**: el edificio igual para todo el mundo ese día, con la regla rara de hoy (completarlo
   por primera vez cada día, $10 de más en cada edificio).
 

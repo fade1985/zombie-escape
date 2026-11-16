@@ -14,7 +14,7 @@
 #
 # Dinero y guardado (como game.js y game-combate.js del JS): los zombis sueltan billetes a veces (la portera,
 # varios). Los dólares de la partida se guardan al acabarla: todos si completas el edificio; si caes (o abandonas),
-# la mitad (DOLARES_AL_CAER). Al acabar
+# ninguno (M116, 16 nov: antes, la mitad). Al acabar
 # (ganes, caigas o abandones) se guardan los récords y los zombis matados (guardado.gd).
 #
 # El ordenador de la sala de mantenimiento (ui/ordenador.gd): al arrimarse a su mesa, el juego se pausa y sale
@@ -110,7 +110,6 @@ const MUNICION_ZOMBI := 0.1        # ...y el 10 %, munición de un arma de fuego
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const BILLETES_JEFA := 10          # lo único que suelta cada jefe al caer, también el de la azotea (16 nov: antes 8, más
                                    # munición, dos objetos y, fuera de los Apartamentos, cuatro materiales; hasta el 27 oct, 3)
-const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
 const MUTAGENO := preload("res://assets/ui/iconos/mutageno.png")   # el mutágeno del suelo (soltar_mutageno)
 const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su verde, el del mutágeno)
 # El tope de los dólares (lo ahorrado más lo de la partida: cartera) y del mutágeno: lo que cabe en el marcador del
@@ -370,7 +369,7 @@ func _ready() -> void:
 		# (sin la frase del objetivo, que ya lo explica el ordenador: solo la alerta, el reto y el botiquín, si los hay)
 		var al_empezar: Array = []
 		if Alerta.nivel > 0:
-			al_empezar.append("%s: %s" % [Alerta.nombre(), Alerta.regla(Alerta.nivel, edificio)])
+			al_empezar.append("%s: %s" % [Alerta.nombre_largo(), Alerta.regla(Alerta.nivel, edificio)])
 		if Reto.activo:
 			al_empezar.append(Reto.aviso())
 		if botiquin:
@@ -659,6 +658,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
 				tutorial("jefes")   # (cómo se esquivan sus ataques; también en la primera partida, la de la guía)
+				tutorial("balas_jefes")   # (y detrás, que guarde las balas para ellos: M123)
 			if sitio.has("helipuerto") and aqui == idx and jefa is Minijefe and jefa.esperando:
 				decir(Idioma.t("Te espera en el helipuerto, dentro de las líneas blancas"), 3.0)
 				tutorial("azotea")   # (lo mismo, y lo del helicóptero, en su ventana: el aviso de abajo no se ve)
@@ -921,6 +921,12 @@ func cruzar(i: int) -> void:
 	if planta.sitios[aqui].tipo != "pasillo":
 		return
 	tutorial({"tarjeta": "centro", "codigo": "torre"}.get(ed.cerrojo, "apartamentos"))
+	# (M123, 16 nov) al salir con la llave del jefe a la planta baja, donde está la sala de mantenimiento: que pase por ella
+	# antes de la pelea; y al salir de la sala sin ningún lanzable encima, que los lleve
+	if planta.tiene_llave and planta.num == 1:
+		tutorial("antes_jefe")
+	if sitio.get("tipo", "") == "mantenimiento" and lanzables.tipos().is_empty():
+		tutorial("lanzables_siempre")
 	if salida.tipo == "ascensor":
 		decir(Planta.nombre_de(planta), 2.5)   # de vuelta de la sala de mantenimiento: en qué planta se está
 	elif planta.get("ascensor_nuevo", false):
@@ -1095,13 +1101,6 @@ func _al_leer_terminal() -> void:
 	for z in get_tree().get_nodes_in_group("zombis"):
 		if z.get("dormido"):
 			z.despertar()
-	# con la Alerta 5, además llegan escoltas por la puerta del departamento (como las cámaras de Seguridad)
-	if Alerta.escoltas_codigo() > 0 and not mapa.puertas.is_empty():
-		var puerta: Node2D = mapa.puertas[0]
-		for k in Alerta.escoltas_codigo():
-			var zombi: Node2D = meter_zombi("escolta", puerta.llegada() + Vector2(randf_range(-24, 24), randf_range(-24, 24)))
-			if zombi and zombi.get("dormido"):
-				zombi.despertar()
 	if leidos.size() < planta.codigo.terminales.size():
 		decir(Idioma.t("Cifra %d de %d. ¡Control de productividad: despiertan todos!") % [leidos.size(),
 			planta.codigo.terminales.size()], 3.0)
@@ -1271,7 +1270,7 @@ func poner_guardia() -> void:
 	var puntas := [Vector2(Planta.MURO + 70, sitio.alto / 2.0), Vector2(sitio.ancho - Planta.MURO - 70, sitio.alto / 2.0)]
 	guardia = meter_zombi("guardia", mapa.punto_libre(johnny.position, 500.0))
 	guardia.importante = true
-	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())   # cada planta, algo más duro
+	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)))   # cada planta, algo más duro
 	guardia.vida = guardia.vida_max if g.vida < 0 else g.vida
 	guardia.puntas = puntas
 	guardia.alerta = g.alerta
@@ -1298,9 +1297,9 @@ func _al_silbar() -> void:
 		if donde.distance_to(johnny.position) < 250.0:
 			donde.x = sitio.ancho - donde.x   # no encima de Johnny: por la otra punta
 		var refuerzo: Node2D = meter_zombi("vigilante", donde)
-		refuerzo.velocidad = REFUERZOS_VELOCIDAD
+		refuerzo.velocidad = REFUERZOS_VELOCIDAD * Alerta.velocidad()   # (con la mejora del VD-7, también: alerta.gd)
 		if refuerzo.get("agente") != null:
-			refuerzo.agente.max_speed = REFUERZOS_VELOCIDAD
+			refuerzo.agente.max_speed = refuerzo.velocidad
 
 
 # Ha caído: suelta la tarjeta donde estaba (se queda en el suelo del pasillo hasta que Johnny la coja)
@@ -1315,13 +1314,9 @@ func _al_caer_guardia(zombi: Node2D) -> void:
 
 
 # En los Apartamentos, el zombi que lleva la llave del apartamento de la jefa (planta.gd lo elige al azar entre los de
-# la planta): es un zombi como los demás (no se le ve nada) y, al caer, suelta la llave donde estaba. Con la Alerta 5
-# aguanta el doble, como el guardia. "dato" es su apunte en la lista de zombis del sitio: al caer se le quita la llave,
+# la planta): es un zombi como los demás (no se le ve nada) y, al caer, suelta la llave donde estaba. "dato" es su apunte en la lista de zombis del sitio: al caer se le quita la llave,
 # para que no vuelva a llevarla si Johnny sale del sitio sin limpiar y vuelve a entrar
 func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
-	if Alerta.guardia() > 1.0:
-		zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
-		zombi.vida = zombi.vida_max
 	zombi.set_meta("llave", true)
 	guia.marcar_llave(zombi)   # (en la primera partida, con su llavecita encima)
 	zombi.importante = true
@@ -1825,11 +1820,10 @@ func usar_cura(id: String) -> void:
 		numero(johnny.position + Vector2(0, -50), Idioma.t("Tienes la vida al máximo"), Tema.TINTA)
 
 
-# Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 40), más el talento Sanitario y, con la
-# Alerta 4, la mitad
+# Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 40), más el talento Sanitario
 func cura_de(id: String) -> int:
 	# (con la skin del cocinero, un 50 % más: Skins.cura)
-	return roundi((Objetos.USABLES[id].cura + johnny.stats.botiquin_extra) * Alerta.botiquin() * Skins.cura(johnny.skin))
+	return roundi((Objetos.USABLES[id].cura + johnny.stats.botiquin_extra) * Skins.cura(johnny.skin))
 
 
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
@@ -1979,7 +1973,6 @@ func pausar_por_foco() -> void:
 func pausar() -> void:
 	if terminada or not johnny.vivo or menus.abierto != "" or presentacion.activa:
 		return
-	var habia_reto := [false]   # (si el reto de hoy ya estaba completado: si no, completarlo no es «nueva mejor marca»)
 	get_tree().paused = true
 	menus.pausa(self)
 
@@ -2007,14 +2000,15 @@ func terminar(gano: bool, abandona := false) -> void:
 	else:
 		Sonido.jingle(gano)
 	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
-	var abierta := [0]      # la alerta que se abre al ganar (0: ninguna)
+	var habia_reto := [false]   # (si el reto de hoy ya estaba completado: si no, completarlo no es «nueva mejor marca»)
+	var abierta := [0]      # la mejora del VD-7 que se abre al ganar (alerta.gd; 0: ninguna)
 	var mejor := [false]    # el reto del día: se ha mejorado la marca de hoy
 	var rotas := []         # las armas y los arrojables que se han quedado sin partidas (Objetos.cerrar_baul), para el cartel
-	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
 	# y los del reto del día, la primera vez que se completa hoy en este edificio (reto.gd)
 	var premio_reto := Reto.premio(Guardado.cargar(), edificio) if gano and Reto.activo else 0
-	var salvados := dolares + extra + premio_reto if gano else roundi(dolares * DOLARES_AL_CAER)   # los que pasan a la cartera
+	var salvados := dolares + premio_reto if gano else 0   # los que pasan a la cartera (si caes o abandonas, ninguno: M116)
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
+	logros.guardar_armas()   # (los durmientes de cada arma de esta partida, para sus logros: M122)
 	var equipo := equipo_encima()   # (vuelve al baúl ganes o no, si le quedan partidas: Objetos.cerrar_baul)
 	var s := Guardado.cambiar(func(g):
 		# el superviviente rescatado en esta partida se viene a vivir a las viviendas (su puerta ya estará abierta)
@@ -2025,13 +2019,13 @@ func terminar(gano: bool, abandona := false) -> void:
 		g.acompanante = ""
 		g.muertos += muertos
 		for id in matados:   # los de cada tipo, para las fichas de Colecciones
-			habia_reto[0] = Reto.ficha(g, edificio).completado
 			g.matados[id] = int(g.matados.get(id, 0)) + matados[id]
 		if logros.sin_logros():
 			g.muertos_con_ayudas += muertos   # con ayudas no suman para el logro Exterminador
 		var e := Guardado.edificio(g, edificio)
 		# el reto del día (reto.gd) lleva su marca aparte: no toca las plantas ni los tiempos del edificio
 		if Reto.activo:
+			habia_reto[0] = Reto.ficha(g, edificio).completado
 			mejor[0] = Reto.apuntar(g, edificio, planta.num, gano, duracion)
 		else:
 			g.mejor_planta = maxi(g.mejor_planta, planta.num)
@@ -2044,7 +2038,7 @@ func terminar(gano: bool, abandona := false) -> void:
 			for id in mochila:
 				g.baul[id] = g.baul.get(id, 0) + 1
 			g.victorias += 1
-		g.dolares = mini(g.dolares + salvados, TOPE)   # (los de la alerta o el reto no pasan del tope)
+		g.dolares = mini(g.dolares + salvados, TOPE)   # (los del reto no pasan del tope)
 		g.dolares_total += salvados
 		if gano:   # el mutágeno de esta partida se guarda solo si completas el edificio (si caes o abandonas, se pierde)
 			g.mutageno = mini(g.mutageno + mutageno, TOPE)
@@ -2095,7 +2089,6 @@ func terminar(gano: bool, abandona := false) -> void:
 		"salvados": salvados,
 		"cartera": s.dolares,
 		"alerta": Alerta.nivel,
-		"extra": extra,
 		"premio_reto": premio_reto,
 		"abierta": abierta[0],
 		"asesino": "" if gano else johnny.golpe_de,
@@ -2267,7 +2260,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		var tienda: String = planta.sitios[aqui].get("tienda", "")
 		# (la munición que sale, solo la de las armas que lleva Johnny: la de la mano y la de repuesto)
 		var queda := municion_que_lleva()
-		if tipo in JEFES:
+		if zombi.has_meta("llamado"):
+			pass   # los que llama un jefe no sueltan nada: ni billetes, ni mutágeno, ni munición (M119, 16 nov)
+		elif tipo in JEFES:
 			soltar_billetes(BILLETES_JEFA, zombi.position)
 		elif tipo == "guardia":
 			soltar_billetes(BILLETES_GUARDIA, zombi.position)
@@ -2297,12 +2292,11 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			await get_tree().create_timer(2.0, false).timeout
 			abrir_mutacion())
 	if tipo in JEFES:
-		# Cada planta, un 35 % más dura (JEFE_POR_PLANTA), y con la Alerta 3, más aún y se enfada antes.
+		# Cada planta, un 35 % más dura (JEFE_POR_PLANTA)
 		# El jefe final (el gerente), con su vida justa: ya está en la última planta
 		var de_final := final_de(tipo)
 		var por_planta := pow(JEFE_POR_PLANTA, planta.num - 1) if de_final.is_empty() else 1.0
-		zombi.vida_max = int(zombi.vida_max * por_planta * Alerta.jefe_vida() * (VIDA_EDIFICIO_JEFE.get(edificio, 1.0) if de_final.is_empty() else 1.0))
-		zombi.enfado = Alerta.jefe_enfado()
+		zombi.vida_max = int(zombi.vida_max * por_planta * (VIDA_EDIFICIO_JEFE.get(edificio, 1.0) if de_final.is_empty() else 1.0))
 		# Su barra de vida grande, arriba (ui/barra_jefe.gd), y los vecinos que llama
 		var barra_jefa: BarraJefe = $Pantalla/Jefa
 		var el: String = Idioma.t(de_final.get("el_final", Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera")))
@@ -2320,10 +2314,11 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 				barra_armadura.max_value = maxima
 				barra_armadura.value = armadura
 				barra_armadura.visible = armadura > 0)
-		zombi.pide_zombi.connect(meter_zombi)
+		# los vecinos que llama: no sueltan nada al caer (M119; ver arriba, "llamado")
+		zombi.pide_zombi.connect(func(t: String, donde_t: Vector2): meter_zombi(t, donde_t).set_meta("llamado", true))
 	elif "velocidad" in zombi:
-		# con la Alerta 2, todos un poco más rápidos; con el reto del día "Zombis rápidos", bastante más
-		zombi.velocidad *= Alerta.velocidad() * Reto.velocidad()
+		# con el reto del día "Zombis rápidos", bastante más rápidos
+		zombi.velocidad *= Reto.velocidad()
 		# Cada planta, más duros: ZOMBI_POR_PLANTA más de vida y de zarpazo por planta (M72: antes, iguales en todas). El
 		# guardia, solo el zarpazo: su vida ya sube en poner_guardia(). En la sala de pruebas, como en la planta baja
 		var mas: float = 1.0 + ZOMBI_POR_PLANTA * (planta.num - 1) if not de_mentira else 1.0
@@ -2332,9 +2327,25 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			zombi.vida_max = roundi(zombi.vida_max * mas * del_edificio)
 		if "dano" in zombi:
 			zombi.dano = roundi(zombi.dano * mas)
+	mejora_vd7(zombi)
 	garaje.endurecer(zombi, tipo)   # (en el garaje, cada oleada más duros: garaje.gd)
 	mapa.cosas.add_child(zombi)
 	return zombi
+
+
+# La mejora del compuesto VD-7 (alerta.gd, M121): cada enemigo que sale, jefes incluidos, con un 20 % más por nivel de
+# vida, de velocidad al andar y de velocidad de ataque ("ritmo": zombi.gd, minijefe.gd y portera.gd; el daño que hacen,
+# en johnny.recibir_dano). En la sala de pruebas, también (para probarlo)
+func mejora_vd7(zombi: Node2D) -> void:
+	if Alerta.nivel <= 0:
+		return
+	zombi.vida_max = roundi(zombi.vida_max * Alerta.vida())
+	if "velocidad" in zombi:
+		zombi.velocidad *= Alerta.velocidad()
+	if "rapido" in zombi:
+		zombi.rapido = Alerta.velocidad()
+	if "ritmo" in zombi:
+		zombi.ritmo = Alerta.ataque()
 
 
 # La barra de armadura de los jefes (la del Gymbro): se hace la primera vez que hace falta, pegada debajo de la

@@ -65,7 +65,11 @@ const GOLPE_FREGONA := {"s": 4, "se": 4, "e": 4, "ne": 4, "n": 4, "no": 5, "o": 
 
 var vida := 600
 var fase := 1                 # 2 = enfadada
-var enfado := 0.5             # a qué parte de la vida se enfada (con la Alerta 3, antes: alerta.gd)
+var enfado := 0.5             # a qué parte de la vida se enfada
+# La mejora del compuesto VD-7 (alerta.gd; la pone partida.mejora_vd7), como en los demás jefes (minijefe.gd): "rapido",
+# lo que anda de más, y "ritmo", lo deprisa que ataca (lo que no es andar pasa más deprisa, y anda menos antes de atacar)
+var rapido := 1.0
+var ritmo := 1.0
 var quieto := false           # la sala de pruebas: ataca y avisa como siempre, pero no se mueve de su sitio
 var hielo: HieloJefe = null   # el frío del lanza hielo, como los demás jefes (hielo_jefe.gd)
 var congelado: float:
@@ -112,13 +116,13 @@ func _physics_process(delta: float) -> void:
 	if frio().paso(delta):
 		return   # (congelada)
 	tiempo += delta
-	t += delta
+	t += delta if estado == "andar" else delta * ritmo   # (ritmo: la mejora del VD-7)
 	Estados.quemar_acido_jefe(self, en_acido, delta)
 	if estado == "muerto":
 		return
 	vapor.actualizar(delta, enfadada() and estado != "muerto", estado not in ["andar", "recuperar", "atontado"])
-	espera_fregonazo -= delta
-	espera_llamar -= delta
+	espera_fregonazo -= delta * ritmo
+	espera_llamar -= delta * ritmo
 	invulnerable = false
 	contacto = DANO_CONTACTO
 	var johnny := get_tree().get_first_node_in_group("jugador")
@@ -137,77 +141,79 @@ func _physics_process(delta: float) -> void:
 		cambiar("grito")
 		enfadarse(johnny)
 
+	# lo de cada estado, con su paso: andando, el de siempre; atacando, más deprisa con la mejora del VD-7 (ritmo)
+	var dt := delta if estado == "andar" else delta * ritmo
 	match estado:
 		"andar":
-			perseguir(delta, johnny, 105.0 if enfadada() else 75.0)
-			mirar(delta, hacia)
+			perseguir(dt, johnny, 105.0 if enfadada() else 75.0)
+			mirar(dt, hacia)
 			if t >= dur:
 				elegir(d)
 		"aviso_abanico":
-			frenar(delta)
-			mirar(delta, hacia)
+			frenar(dt)
+			mirar(dt, hacia)
 			if t >= AVISO_ABANICO:
 				cambiar("abanico", {"tandas": 3 if enfadada() else 2, "siguiente": 0.0, "i": 0})
 		"abanico":
-			abanico(delta, hacia, apunta)
+			abanico(dt, hacia, apunta)
 		"aviso_fregonazo":
-			frenar(delta)
+			frenar(dt)
 			mirada = Vector2.from_angle(datos.angulo)
 			if t >= AVISO_FREGONAZO:
 				cambiar("fregonazo", {"angulo": datos.angulo})
 				fregonazo(johnny)
 		"fregonazo":
-			frenar(delta)
+			frenar(dt)
 			if t >= 0.35:
 				andar(0.4 if enfadada() else 0.8)
 		"lejia":
-			lejia(delta, johnny, hacia)
+			lejia(dt, johnny, hacia)
 		"aviso_giro":
-			frenar(delta)
-			giro += delta * 6.0 * (t / 0.6)
+			frenar(dt)
+			giro += dt * 6.0 * (t / 0.6)
 			if t >= 0.6:
 				cambiar("giro", {"siguiente": 0.0})
 		"giro":
-			girar(delta, johnny)
+			girar(dt, johnny)
 		"aviso_acido":
 			# levanta la fregona chorreando ácido
-			frenar(delta)
-			mirar(delta, hacia)
-			if randf() < delta * 12.0:
+			frenar(dt)
+			mirar(dt, hacia)
+			if randf() < dt * 12.0:
 				Particulas.soltar(self, global_position + Vector2(randf_range(-30, 30), -randf_range(60, 140)),
 					Vector2(0, 60), Color("#9be33b"), 3, 0.5)
 			if t >= AVISO_ACIDO:
 				cambiar("acido", {"lanzadas": 0})
 		"acido":
-			acido(delta, johnny, hacia, apunta)
+			acido(dt, johnny, hacia, apunta)
 		"aviso_embestida":
 			# se agacha mirando a Johnny (la franja roja marca por dónde va a venir)
-			frenar(delta)
-			mirar(delta, hacia)
+			frenar(dt)
+			mirar(dt, hacia)
 			datos.angulo = apunta
 			if t >= datos.aviso:
 				cambiar("embestida", {"angulo": apunta, "quedan": datos.quedan - 1})
 				Sonido.tocar("rugido")
 		"embestida":
-			embestir(delta, d)
+			embestir(dt, d)
 		"atontado":
-			frenar(delta, 4.0)
+			frenar(dt, 4.0)
 			if t >= tiempo_atontado():
 				andar(0.4)
 		"aviso_circulo":
-			frenar(delta, 6.0)
+			frenar(dt, 6.0)
 			if t >= AVISO_CIRCULO:
 				cambiar("circulo", {"quedan": datos.quedan})
 				fregonazo_circulo(johnny)
 		"circulo":
-			frenar(delta)
+			frenar(dt)
 			if t >= 0.4:
 				if datos.quedan > 0:
 					cambiar("aviso_embestida", {"quedan": datos.quedan, "aviso": AVISO_EMBESTIDA * 0.6, "angulo": apunta})
 				else:
 					andar(0.5 if enfadada() else 0.9)
 		"llamar":
-			frenar(delta)
+			frenar(dt)
 			if t >= 0.8 and not datos.get("hecho", false):
 				datos.hecho = true
 				# repartidos a su alrededor, uno normal y otro rápido
@@ -225,11 +231,11 @@ func _physics_process(delta: float) -> void:
 			# Al enfadarse: un momento sin que le hagan daño, gritando
 			invulnerable = true
 			contacto = 0
-			frenar(delta)
+			frenar(dt)
 			if t >= 1.6:
 				andar(0.3)
 		"recuperar":
-			frenar(delta, 4.0)
+			frenar(dt, 4.0)
 			if t >= datos.dur:
 				andar(0.4)
 
@@ -242,7 +248,7 @@ func _physics_process(delta: float) -> void:
 
 func andar(cuanto: float) -> void:
 	cambiar("andar")
-	dur = cuanto
+	dur = cuanto / ritmo
 
 
 # ── Cada ataque, paso a paso ──
@@ -467,7 +473,7 @@ func mirar(delta: float, hacia: Vector2) -> void:
 
 func mover() -> void:
 	var antes := global_position
-	velocity = marcha
+	velocity = marcha * rapido   # (rapido: la mejora del VD-7)
 	move_and_slide()
 	if quieto:
 		global_position = antes   # (se mueve y se le devuelve: así cree que corre y no que se ha chocado)

@@ -115,12 +115,12 @@ func por_cobrar(lista: Array) -> Array:
 # Los logros de la página: los de su tema o, en el Resumen, los que hay por cobrar (o, si no hay, los que van más
 # avanzados de los que se hacen varias veces: «Casi lo tienes»)
 func logros_de_la_pagina() -> Array:
-	if pagina != "resumen":
-		return de_tema(pagina).map(func(l): return l.id)
+	if pagina != "resumen":   # (de cada arma, solo el nivel que toca: Logros.toca_ver, M122)
+		return de_tema(pagina).filter(func(l): return Logros.toca_ver(l, s)).map(func(l): return l.id)
 	var lista := por_cobrar(Logros.LISTA)
 	casi = lista.is_empty()
 	if casi:
-		lista = Logros.LISTA.filter(func(l): return estado(l.id) == "pendiente" and meta(l) > 1 and hecho(l) > 0 and hecho(l) < meta(l))
+		lista = Logros.LISTA.filter(func(l): return estado(l.id) == "pendiente" and meta(l) > 1 and hecho(l) > 0 and hecho(l) < meta(l) 			and Logros.toca_ver(l, s))
 		lista.sort_custom(func(a, b): return float(hecho(a)) / meta(a) > float(hecho(b)) / meta(b))
 	return lista.map(func(l): return l.id)
 
