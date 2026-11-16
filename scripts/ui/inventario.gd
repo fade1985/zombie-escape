@@ -451,6 +451,7 @@ func muneco(johnny: Node2D) -> void:
 	vista.material.set_shader_parameter("parte", 0)
 	lienzo.add_child(vista)
 	vista.play("reposo_s")
+	vista.speed_scale = 2.0   # respira el doble de rápido que en el juego (una vez cada 1,5 s), para que no parezca muerto (M101)
 	if salta_johnny:
 		saltar(vista, 12.0)
 

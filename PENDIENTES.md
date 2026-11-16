@@ -16,7 +16,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 - **M92** Teles de noticias en el Centro comercial y la Torre: no tienen salones con tele, así que sus 5 noticias (y los vídeos de VIDEOS.EXE) no salen. El dueño decidirá dónde van más adelante (propuesta: una tienda del Centro y un departamento de la Torre, con la misma mecánica).
 - **M93** Noticias de la tele: mientras salen los subtítulos, que se oiga a la reportera «hablando» con sonidos de 8 bits (sin palabras, como un balbuceo de videojuego antiguo), solo mientras dura cada subtítulo.
-- **M101** Inventario: Johnny más dinámico, que no se vea tan estático (en la referencia del M100 sale en pose, agarrando la fregona). Para más adelante.
 - **M114** HUD del móvil: darle una vuelta (el minimapa, las curas, las armas y los botones). Para más adelante: ahora importa la versión de PC.
 
 ## Por limar
