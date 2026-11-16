@@ -625,11 +625,18 @@ func dibujo(padre: Control, icono: String, lado: Vector2, margen: float) -> Text
 # La casilla de un montón de arrojables ("" la deja vacía): su dibujo y cuántos quedan en él, de los que caben (con
 # "con_cuenta" en falso, sin eso: así va en el inventario desde el M100; el baúl y el banco lo siguen diciendo)
 func arrojable(r: Rect2, clave: String, k: String, margen := 12.0, con_cuenta := true) -> Control:
+	var con_marca := llevando.begins_with("l") and clave.begins_with("l")   # (llevando un lanzable con «Mover»)
 	if k == "":
-		return casilla_inv(r)
+		return hueco_libre(r, clave, mover_llevado.bind(clave)) if con_marca else casilla_inv(r)
 	var lz: Lanzables = partida.lanzables
-	return casilla_inv(r, clave, icono_lanzable(k), "%d/%d" % [lz.cuantos_en(clave), lz.maximo(k)] if con_cuenta else "",
+	var c := casilla_inv(r, clave, icono_lanzable(k), "%d/%d" % [lz.cuantos_en(clave), lz.maximo(k)] if con_cuenta else "",
 		Armas.color(Lanzables.calidad_de(k)), margen)
+	if con_marca:
+		if clave == llevando:
+			c.modulate.a = 0.5
+		for estado in ["focus", "hover"]:   # (el hueco al que iría: con el borde amarillo, como en pintar_grupo)
+			c.add_theme_stylebox_override(estado, estilo(Tema.AMARILLO, clave == llevando, true))
+	return c
 
 
 # Cuántos de un montón de arrojables (por su clave) caben en el baúl, con los de su clase que ya haya
@@ -2944,13 +2951,17 @@ func dibujo_de(clave: String, s := {}) -> Array:
 	return [Objetos.icono(o.id), str(o.n) if o.n > 0 else "", GRIS if o.equipo < 0 else Armas.color(o.calidad)]
 
 
-# Una casilla vacía que se puede elegir mientras se lleva algo con «Mover»: al pulsarla, lo levantado va allí
-func hueco_libre(r: Rect2, nombre: String) -> Button:
+# Una casilla vacía que se puede elegir mientras se lleva algo con «Mover»: al pulsarla, lo levantado va allí (o hace
+# "al_pulsar": un hueco de lanzables, mover_llevado)
+func hueco_libre(r: Rect2, nombre: String, al_pulsar := Callable()) -> Button:
 	var b := Button.new()
 	b.name = nombre
 	for estado in ["normal", "pressed", "disabled"]:
 		b.add_theme_stylebox_override(estado, estilo(Color("#2a2631"), false, false))
-	b.pressed.connect(func(): colocar_en(llevando, nombre))
+	if al_pulsar.is_valid():
+		b.pressed.connect(al_pulsar)
+	else:
+		b.pressed.connect(func(): colocar_en(llevando, nombre))
 	lienzo.add_child(b)
 	b.position = r.position - ORIGEN
 	b.size = r.size
@@ -3000,7 +3011,7 @@ func colocar_en(clave: String, a_donde: String) -> void:
 # "mover" en el baúl, que lo pone al lado de «Destruir»), si lo elegido se puede cambiar de casilla. Mientras se lleva
 # algo, el botón dice «Cancelar», es el único y la ficha cuenta cómo se suelta
 func poner_mover(d: Dictionary) -> void:
-	if grupo_de(sel) == "":
+	if not se_mueve(sel):
 		return
 	var b := ["mover", Idioma.t("Cancelar") if llevando != "" else Idioma.t("Mover"), mover_marca, false]
 	if llevando != "":
@@ -3021,12 +3032,35 @@ func mover_marca() -> void:
 	if llevando != "":
 		dejar_de_llevar()
 		return
-	if grupo_de(sel) == "":
+	if not se_mueve(sel):
 		return
 	llevando = sel
 	foco = sel
 	Sonido.tocar("coger")
 	pintar()
+
+
+# ¿Se puede cambiar de casilla con «Mover»? Lo de un grupo (los objetos, la munición, las curas, el baúl) y, desde el 16
+# nov, un montón de lanzables de la mano si lleva más de uno (va a otro hueco de la mano: mover_llevado)
+func se_mueve(clave: String) -> bool:
+	if clave == "":
+		return false
+	if clave[0] == "l":
+		return abierto in ["inventario", "baul"] and partida.lanzables.clave_en(clave) != "" \
+			and partida.lanzables.mano.size() > 1
+	return grupo_de(clave) != ""
+
+
+# Suelta el montón de lanzables levantado con «Mover» en el hueco "a_donde" de la mano ("l2"): se cambian de sitio o, si
+# son iguales y no están llenos, se juntan (mover_lanzable, como al arrastrarlo). En su propio hueco, se deja como estaba
+func mover_llevado(a_donde: String) -> void:
+	var de := llevando
+	if a_donde == de:
+		dejar_de_llevar()
+		return
+	llevando = ""
+	sel = de
+	mover_lanzable(a_donde)
 
 
 func dejar_de_llevar() -> void:
@@ -3122,6 +3156,9 @@ func estilo(borde: Color, elegida: bool, encima: bool) -> StyleBoxFlat:
 # («Ponérmela», «Usar», «A la mano», «Al repuesto», «Guardar en el baúl», «Sacar» o «Mejorar»), la marca salta a él (con
 # el mando o las flechas, A dos veces y hecho)
 func tocar(clave: String) -> void:
+	if llevando.begins_with("l") and clave.begins_with("l"):   # (un montón de lanzables, a otro hueco de la mano)
+		mover_llevado(clave)
+		return
 	if llevando != "":   # (con algo levantado con «Mover»: si es de su grupo, va ahí; si no, se deja donde estaba)
 		if grupo_de(clave) == grupo_de(llevando):
 			colocar_en(llevando, sitio_de(clave))

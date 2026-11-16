@@ -1404,6 +1404,24 @@ func probar_montones() -> void:
 	await get_tree().process_frame
 	print("Arrastra el 2.º de molotovs (l2) al hueco de las granadas (l1): %s · lanza l%d (esperado: a mano [molotov 2, molotov 2, granada 2] · lanza l1: el mismo montón)" % [
 		como.call(), lz.elegido])
+	# con el mando o el teclado (16 nov): «Mover» en la ficha, la marca a otro hueco de la mano y A
+	inventario.tocar("l2")
+	await get_tree().process_frame
+	var mover: Button = inventario.fondo.find_child("mover", true, false)
+	print("La ficha de las granadas (l2): botón «%s» (esperado: Mover)" % (mover.text if mover else "no está"))
+	inventario.mover_marca()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-montones-mover.png")
+	inventario.tocar("l0")
+	await get_tree().process_frame
+	print("Con «Mover», las granadas al primer hueco: %s · lanza l%d (esperado: a mano [granada 2, molotov 2, molotov 2] · lanza l1)" % [
+		como.call(), lz.elegido])
+	inventario.tocar("l0")
+	await get_tree().process_frame
+	inventario.mover_marca()
+	inventario.tocar("l2")
+	await get_tree().process_frame
+	print("Y de vuelta al tercero: %s (esperado: a mano [molotov 2, molotov 2, granada 2])" % como.call())
 	inventario.cerrar()
 	await get_tree().process_frame
 	lz.elegido = 0
