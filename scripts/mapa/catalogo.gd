@@ -110,6 +110,12 @@ const MUEBLES := {
 	"watertank":       {"len": 96,  "dep": 64, "paredes": "todas", "archivo": "azotea/deposito-agua"},
 	"antennas":        {"len": 72,  "dep": 40, "paredes": "todas", "archivo": "azotea/antenas"},
 	"clothesline":     {"len": 160, "dep": 24, "paredes": "todas", "archivo": "azotea/tendedero"},   # (ya no sale en la azotea)
+	# el garaje del reto del día (planta.gd, GARAJE_COLUMNAS y GARAJE_COCHES; de GPT, tools/garaje_gpt.py, 16 nov): la
+	# columna de hormigón con su chevron amarillo y negro, y tres coches aparcados, todos de frente
+	"garagecolumn":    {"len": 64,  "dep": 40, "paredes": "todas", "archivo": "garaje/columna"},
+	"carsilver":       {"len": 112, "dep": 116, "paredes": "todas", "archivo": "garaje/coche-plata"},
+	"carblue":         {"len": 112, "dep": 116, "paredes": "todas", "archivo": "garaje/coche-azul"},
+	"carred":          {"len": 104, "dep": 108, "paredes": "todas", "archivo": "garaje/coche-rojo"},
 	# las máquinas del gimnasio del Gymbro (su habitación; PixelLab, con las guías de tools/guias_gimnasio.py): la
 	# cinta de correr y el banco de press salen de la pared hacia la habitación; la máquina de poleas, alta, solo en
 	# la del fondo; la pila de discos se ve igual desde cualquier lado

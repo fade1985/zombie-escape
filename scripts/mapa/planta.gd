@@ -661,12 +661,23 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 
 
 # El garaje subterráneo del reto del día (M125, garaje.gd): un solo sitio grande, como la azotea, con el baúl en el
-# centro (mapa.gd) y las columnas por medio. No se sale por ningún sitio: la rampa de la derecha está cerrada. Va
-# "limpio" para la partida desde el principio (las oleadas las lleva garaje.gd, no el cerrojo de la puerta).
-# PROVISIONAL (16 nov): suelo de taller y palés en lugar de columnas y coches, hasta tener las imágenes de GPT
-const GARAJE_COLS := 44
-const GARAJE_FILAS := 30
-const GARAJE_COLUMNAS := [[288, 256], [576, 256], [832, 256], [1120, 256], [288, 648], [576, 648], [832, 648], [1120, 648]]   # [x, y de arriba]
+# centro (mapa.gd) y las columnas y los coches por medio. Todo él, la imagen de GPT (garaje-gpt.png, de
+# tools/garaje_gpt.py; mapa.gd, al_aire): el suelo de resina con sus plazas, el carril con las flechas, la pared de
+# arriba con sus tuberías y la rampa cerrada de la derecha. La imagen mide justo lo que el garaje (1536 × 1024 unidades):
+# un punto de la imagen es el mismo punto del juego. No se sale por ningún sitio: la rampa está cerrada con su barrera.
+# Va "limpio" para la partida desde el principio (las oleadas las lleva garaje.gd, no el cerrojo de la puerta)
+const GARAJE_COLS := 48
+const GARAJE_FILAS := 32
+const GARAJE_MURO_ARRIBA := 6          # la pared de arriba, hasta la banda amarilla y negra (los muros de los lados y de
+                                       # abajo, los de siempre: 2 casillas)
+const GARAJE_RAMPA := Rect2i(43, 10, 5, 12)   # las casillas de la rampa cerrada de la derecha (columna, fila, ancho, alto)
+const GARAJE_ENTRADA := 500.0          # la "y" de la puerta de llegada (la rampa), en la pared de la derecha
+# Las columnas, al final de las líneas de las plazas, a los dos lados del carril: [x del centro, y de arriba de lo que ocupa]
+const GARAJE_COLUMNAS := [[383, 362], [845, 362], [1313, 362], [375, 690], [850, 690], [1323, 690]]
+# Los coches, en algunas plazas y todos de frente (los de arriba, aparcados marcha atrás; los de abajo, de morro):
+# [tipo, x del centro, y de arriba de lo que ocupa]. El centro (el baúl) se queda libre
+const GARAJE_COCHES := [["carsilver", 148, 248], ["carred", 459, 256], ["carblue", 922, 248], ["carsilver", 1233, 248],
+	["carblue", 296, 836], ["carsilver", 612, 836], ["carred", 1087, 844], ["carblue", 1401, 836]]
 
 
 static func garaje(edificio: String) -> Dictionary:
@@ -676,13 +687,22 @@ static func garaje(edificio: String) -> Dictionary:
 		"jefe": ed.jefe, "el_jefe": ed.el_jefe, "superviviente": {}, "cientifico": {}}
 	var ancho := GARAJE_COLS * CASILLA
 	var alto := GARAJE_FILAS * CASILLA
+	var dueno := Muebles.plano_rectangular(GARAJE_COLS, GARAJE_FILAS)
+	for f in GARAJE_MURO_ARRIBA:
+		for c in GARAJE_COLS:
+			dueno[f * GARAJE_COLS + c] = -1
+	for f in range(GARAJE_RAMPA.position.y, GARAJE_RAMPA.end.y):
+		for c in range(GARAJE_RAMPA.position.x, GARAJE_RAMPA.end.x):
+			dueno[f * GARAJE_COLS + c] = -1
 	var sitio := {"tipo": "garaje", "nombre": "Garaje", "ancho": ancho, "alto": alto, "estilo": "garaje",   # [traducir]
-		"dueno": Muebles.plano_rectangular(GARAJE_COLS, GARAJE_FILAS), "zombis": [], "limpio": true, "visitado": true,
+		"dueno": dueno, "zombis": [], "limpio": true, "visitado": true,
 		"surtido": rng.randi(), "manchas": [], "muebles": []}
 	for c in GARAJE_COLUMNAS:
-		sitio.muebles.append(Muebles.nuevo("pallet", {"lado": "arriba", "base": float(c[1])}, float(c[0]), 0))
+		sitio.muebles.append(Muebles.nuevo("garagecolumn", {"lado": "arriba", "base": float(c[1])}, float(c[0]), 0))
+	for c in GARAJE_COCHES:
+		sitio.muebles.append(Muebles.nuevo(c[0], {"lado": "arriba", "base": float(c[2])}, float(c[1]), 0))
 	sitio.salidas = [   # (la rampa por la que se ha bajado, cerrada: de aquí no se sale andando)
-		{"dir": "derecha", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
+		{"dir": "derecha", "en": GARAJE_ENTRADA, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca", "sin_dibujo": true,
 			"aviso": "Ya no hay vuelta atrás"},   # [traducir]
 	]
 	planta.sitios.append(sitio)

@@ -58,6 +58,7 @@ const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const AZOTEA := preload("res://assets/sprites/azotea-gpt.png")   # la azotea entera, de GPT (tools/azotea_gpt.py)
+const GARAJE := preload("res://assets/sprites/garaje-gpt.png")   # el garaje del reto del día entero, de GPT (tools/garaje_gpt.py)
 # El suelo y la pared de las habitaciones de un piso que no dependen de dónde caen (que cambia al voltear el piso):
 # "<uso>-<tipo>" -> [sufijo del suelo, sufijo de la pared] (suelo-<estilo><sufijo>, pared-<estilo><sufijo>; con "" en uno, ese
 # se sigue eligiendo según dónde cae). El dormitorio de matrimonio, siempre con el suelo gris azulado y el papel beige, con la
@@ -179,7 +180,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	sitio = datos
 	add_to_group("mapa")
 	cajas = sitio.get("cajas", false)
-	al_aire = sitio.get("estilo", "") == "azotea"
+	al_aire = sitio.get("estilo", "") in ["azotea", "garaje"]   # (el garaje, igual: toda su imagen de GPT)
 	cols = int(sitio.ancho / CASILLA)
 	filas = int(sitio.alto / CASILLA)
 	if sitio.has("dueno"):
@@ -518,7 +519,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
 	if al_aire:
 		# la azotea entera, la imagen de GPT: el helipuerto, la barandilla, la caseta y la pasarela (planta.gd, azotea)
-		lienzo.draw_texture(AZOTEA, Vector2.ZERO)
+		lienzo.draw_texture(GARAJE if sitio.get("estilo", "") == "garaje" else AZOTEA, Vector2.ZERO)
 	for f in (0 if al_aire else filas):   # (la azotea ya tiene su suelo: la imagen)
 		var c := 0
 		while c < cols:

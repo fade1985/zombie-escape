@@ -5273,6 +5273,14 @@ func probar_garaje() -> void:
 	print("Garaje: sitio %s, lugar «%s» (esperado: garaje, «Garaje») | baúl en %s (esperado: el centro, %s)" % [
 		s.tipo, lugar.text, mapa.baul.position if mapa.baul else "ninguno", Vector2(s.ancho / 2.0, s.alto / 2.0)])
 	Captura.foto("captura-garaje.png")
+	# y entero, con la cámara lejos (captura-garaje-entero.png): las columnas y los coches sobre el dibujo de GPT
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(0.62, 0.62)
+	Temblor.desplazamiento = Vector2(s.ancho / 2.0, s.alto / 2.0) - johnny.position
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-garaje-entero.png")
+	camara.zoom = Vector2.ONE
+	Temblor.desplazamiento = Vector2.ZERO
 	abrir_cosas("baul")
 	await get_tree().process_frame
 	print("Garaje: al abrir el baúl, el juego parado: %s (esperado: true)" % get_tree().paused)

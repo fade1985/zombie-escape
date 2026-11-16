@@ -136,6 +136,8 @@ func llegada() -> Vector2:
 
 
 func _draw() -> void:
+	if salida.get("sin_dibujo", false):   # (la rampa del garaje: ya se ve, cerrada, en su imagen de GPT; planta.gd, garaje)
+		return
 	match salida.dir:
 		"arriba":
 			# De frente, sobre la cara del muro (que sube 96 desde aquí)
