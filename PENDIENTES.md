@@ -15,22 +15,9 @@ Dictados el 16 nov, repartidos en cuatro tandas (cada una, su sesión): **T1** a
 
 ## Fallos
 
-- **F23** (T1) Bajo D, dormitorio de matrimonio: un muro invisible junto a la cama no deja rodearla ni acercarse.
-- **F24** (T1) Apartamentos: a veces los durmientes se quedan dando vueltas sobre sí mismos al entrar en una estancia.
-- **F25** (T1) Al registrar un mueble a veces se cierra también la puerta. Acordado: si hay un mueble al alcance, la E
-  es siempre para el mueble; la puerta solo cuando no hay ninguno cerca o Johnny la está tocando.
-
 ## Mejoras
 
 ## Por limar
 
-- **L39** (T1) Ordenador, sujetos: en vez de «Elige un sujeto…», el fondo de la ficha vacío.
-- **L40** (T1) Al coger un material salen dos textos: quitar el blanco pequeño y dejar el amarillo sobre Johnny.
-- **L41** (T1) El cartel de arriba: «Sala de mantenimiento», «Apartamento 3ºB», «Azotea» y, en el pasillo, «Planta 2».
-- **L42** (T1) Las balas de la gatling, en dos filas en zigzag sobre la vida, ajustadas al marco por los dos lados.
-- **L43** (T1) Al completar un edificio, fuera «Jugar otra vez»: se vuelve al menú principal (para cambiar la alerta).
-- **L44** (T1) Logros: el recuadro del dinero, igual que en la tienda de armas y el inventario.
-- **L45** (T1) Cartel de edificio completado: sin la última frase si no se ha hecho mejor marca.
-- **L46** (T1) Elige edificio: «Récord» debajo de Apartamentos, en el amarillo del juego.
 
 
