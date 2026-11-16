@@ -178,7 +178,6 @@ var con_raton := false     # modo libre: si se está apuntando con el ratón (se
 var mirilla_mando: Sprite2D = null   # la mirilla que se mueve con el stick derecho del mando (modo libre): ver poner_mirilla_mando()
 const DISTANCIA_MIRILLA := 170.0     # a cuánto de Johnny sale esa mirilla, en la dirección que se apunta
 var ultimo_apunte := Vector2.DOWN   # modo libre, con el mando: hacia donde se empujó el stick derecho por última vez (RT ataca hacia ahí)
-var clic_gastado := false   # el clic izquierdo (o J) pulsado ya ha servido para usar algo (zona_usar.gd): no dispara hasta soltarlo
 var ante_mueble: Area2D = null  # la zona del mueble de la sala de mantenimiento en la que está (zona_usar.gd): se usa con la E ("usar"); atacar (J, el clic) solo ataca
 
 const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
@@ -652,11 +651,6 @@ func apuntar_libre() -> void:
 	var stick := Input.get_vector("apuntar_izquierda", "apuntar_derecha", "apuntar_arriba", "apuntar_abajo")
 	var apunte := Vector2.ZERO
 	var ataca := Input.is_action_pressed("atacar")
-	# el clic con el que se acaba de usar algo (zona_usar.gd) no dispara: hasta que se suelta
-	if not ataca:
-		clic_gastado = false
-	elif clic_gastado:
-		ataca = false
 	# mientras se apunta un lanzable (con el gatillo o desde el botón del móvil), el stick es para él
 	var lanzando := Input.is_action_pressed("lanzar") or Input.is_action_just_released("lanzar")
 	if stick.length() > 0.5 and not lanzando:
