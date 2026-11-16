@@ -22,14 +22,6 @@ Dictados el 16 nov, repartidos en cuatro tandas (cada una, su sesión): **T1** a
 
 ## Mejoras
 
-- **M125** (T4) Nuevo reto del día: un garaje subterráneo (columnas y coches, como la azotea) con 25 oleadas de
-  durmientes cada vez más duras y, cada 5, también un jefe del edificio. El baúl en el centro (pausa al abrirlo). Los
-  durmientes sueltan balas un 10 % y no dan dólares; la oleada N da N dólares, y te los llevas aunque caigas o
-  abandones. 5 s de descanso entre oleadas (10 s si hubo sonámbulo). Una vez al día. Cada día prohíbe una cosa
-  (cuerpo a cuerpo, a distancia, especiales, lanzables o vendas y botiquines): se ve al pasar el cursor. Bajo el
-  botón, en vez del premio, «Récord: N oleada/oleadas» de la condición de ese día. Arte con prompts para GPT y
-  fotos de referencia del dueño (pedirlas antes de empezar). Con su tutorial.
-
 ## Por limar
 
 - **L39** (T1) Ordenador, sujetos: en vez de «Elige un sujeto…», el fondo de la ficha vacío.
