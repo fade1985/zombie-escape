@@ -69,6 +69,8 @@
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --azotea            la azotea (la imagen de GPT entera): los muros por la barandilla, el jefe esperando en el aro y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
+#   --garaje            el garaje del reto del día (M125): el baúl en el centro (y para el juego), los jefes de cada 5
+#                       oleadas, la 1ª y la 5ª con su jefe, sus dólares y su descanso, y el cartel al caer [prueba_varias.gd]
 #   --cupula            la cúpula de cristal del científico jefe con balas de verdad: rebotan en su borde con su onda,
 #                       el daño se lo lleva ella y, rota, ya le dan a él                      [prueba_jefes.gd]
 #   --criatura          la criatura del científico, con Johnny quieto cerca 10 s: cuántos ataques hace (M69) [prueba_jefes.gd]
@@ -691,6 +693,9 @@ func empezar_prueba() -> void:
 	elif "--azotea" in args:
 		set_process(false)   # sin la prueba larga
 		probar_azotea_sola()
+	elif "--garaje" in args:
+		set_process(false)   # sin la prueba larga
+		probar_garaje()
 	elif "--cupula" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cupula()

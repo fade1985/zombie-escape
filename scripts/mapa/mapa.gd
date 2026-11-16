@@ -875,6 +875,11 @@ func poner_muebles() -> void:
 		baul = ARRIMABLE.new()
 		baul.montar("Baul", "res://assets/sprites/baul.png", MURO + 4 * Planta.CASILLA, MURO, 78.0, 36.0)
 		cosas.add_child(baul)
+	if sitio.tipo == "garaje":
+		# el baúl del garaje del reto del día (garaje.gd), en el centro: lo que tengas guardado, por si te quedas sin nada
+		baul = ARRIMABLE.new()
+		baul.montar("Baul", "res://assets/sprites/baul.png", sitio.ancho / 2.0, sitio.alto / 2.0 - 36.0, 78.0, 36.0)
+		cosas.add_child(baul)
 	if sitio.tipo == "mantenimiento":
 		ordenador = ORDENADOR.new()
 		ordenador.montar(ORDENADOR_X, MURO)

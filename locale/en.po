@@ -7521,3 +7521,39 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "Garage"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "WAVE %d"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "GARAGE CLEARED!"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "Next wave in %d"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "First wave in %d"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "Wave %d / %d"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "Garage cleared!"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "You fell on wave %d of the garage"
+
+#: scripts/ui/menus.gd
+msgid "Oleadas superadas"
+msgstr "Waves cleared"

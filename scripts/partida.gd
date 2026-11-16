@@ -168,6 +168,7 @@ var inventario := INVENTARIO.new() # las pantallas del inventario y el baúl
 var supervivientes := Supervivientes.new()   # el superviviente de la partida, la horda y los vecinos
 var logros := Logros.new()         # los retos del ordenador (logros.gd)
 var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (eventos.gd)
+var garaje := Garaje.new()         # las oleadas del garaje del reto del día (garaje.gd), si se juega
 var joyeria := Joyeria.new()       # la cámara acorazada de la joyería del centro comercial (joyeria.gd)
 var guia := Guia.new()             # el tutorial disimulado de la primera partida (guia.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
@@ -271,6 +272,8 @@ func _ready() -> void:
 	logros.preparar(self)
 	add_child(eventos)
 	eventos.preparar(self)
+	add_child(garaje)
+	garaje.preparar(self)
 	add_child(joyeria)
 	joyeria.preparar(self)
 	add_child(guia)
@@ -334,6 +337,9 @@ func _ready() -> void:
 		johnny.balas = 0
 		johnny.municion.clear()
 		lanzables.vaciar()
+	if Garaje.activo:   # el garaje del reto del día (garaje.gd): ni sala de mantenimiento, ni plantas
+		empezar_garaje()
+		return
 	supervivientes.elegir()
 	# la joyería del centro comercial (parte 9): una por partida, en una planta al azar de la 1ª a la 3ª
 	Planta.joyeria_planta = randi_range(2, Planta.PLANTAS - 1) if ed.generador == "tienda" else 0
@@ -373,6 +379,24 @@ func _ready() -> void:
 			decir("\n".join(al_empezar), 4.0)
 		supervivientes.avisar_pista(4.8)   # (la recepcionista rescatada: dónde está la llave o el código)
 		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind(tutorial_al_empezar()))
+
+
+# El garaje del reto del día (garaje.gd): un solo sitio (Planta.garaje), con Johnny junto al baúl del centro, y las
+# oleadas, al rato. No se apunta a medias (no se continúa) ni lleva la guía de la primera partida
+func empezar_garaje() -> void:
+	guarda_partida = false
+	guarda_mapas = false
+	guia.activa = false
+	planta = Planta.garaje(edificio)
+	await montar(0, 0, false)
+	johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0 + 70.0)
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.escudo = johnny.stats.escudo + johnny.escudo_mut   # (Acero, como al empezar cada planta)
+	johnny.escudo_tope = johnny.escudo
+	if captura:
+		empezar_prueba()
+		return
+	garaje.arrancar()
 
 
 # La ventana del principio de la partida: en la primera (con la guía, guia.gd), «Moverse y esquivar», y lo demás de
@@ -781,11 +805,11 @@ func poner_lugar() -> void:
 	# (los nombres, ya traducidos: Planta.nombre_de y Planta.nombre_de_sitio, y lo mismo mapa.nombre_zona)
 	var de_planta: String = Planta.nombre_planta(1) if sitio.tipo in ["mantenimiento", "viviendas"] else Planta.nombre_de(planta)
 	var nombre := Planta.nombre_de_sitio(sitio)
-	var texto: String = de_planta if sitio.tipo == "pasillo" or sitio.get("azotea", false) else "%s · %s" % [de_planta, nombre]
+	var texto: String = de_planta if sitio.tipo in ["pasillo", "garaje"] or sitio.get("azotea", false) else "%s · %s" % [de_planta, nombre]
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "" and zona != nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
-	lugar.text = texto + eventos.etiqueta() + Reto.etiqueta()
+	lugar.text = texto + eventos.etiqueta() + Reto.etiqueta() + garaje.etiqueta()
 	# arriba del todo, grande como el grito de la llave; si en esta pantalla no cabe entero (un evento, el reto, otro
 	# idioma...), con la letra pequeña (la fuente solo se ve nítida a 16 o 32)
 	var cabe := lugar.get_theme_font("font").get_string_size(lugar.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 16 <= lugar.size.x
@@ -1938,6 +1962,9 @@ func terminar(gano: bool, abandona := false) -> void:
 	if terminada:
 		return
 	terminada = true
+	if Garaje.activo:   # el garaje del reto del día lleva su final (garaje.gd)
+		garaje.terminar(gano, abandona)
+		return
 	if guarda_partida:
 		PartidaGuardada.borrar()
 	if gano:
@@ -2185,6 +2212,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# tirado por el ventanal roto de la torre (peligros/viento.gd): cuenta, pero ni sangre ni suelta nada
 		if zombi.has_meta("ventana"):
 			return
+		if Garaje.activo:   # en el garaje, solo su sangre y a veces munición (garaje.gd)
+			garaje.al_caer(zombi, tipo)
+			return
 		if tipo in JEFES:
 			logros.jefe_muerto(tipo, zombi)
 		sangre(tipo, zombi)
@@ -2264,6 +2294,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			zombi.vida_max = roundi(zombi.vida_max * mas * del_edificio)
 		if "dano" in zombi:
 			zombi.dano = roundi(zombi.dano * mas)
+	garaje.endurecer(zombi, tipo)   # (en el garaje, cada oleada más duros: garaje.gd)
 	mapa.cosas.add_child(zombi)
 	return zombi
 

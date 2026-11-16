@@ -162,6 +162,8 @@ static func nombre_torre_es(num: int) -> String:
 # El nombre de la planta de la partida (la que devuelve generar o azotea), ya traducido: la azotea o su número (en la
 # torre, a su manera: nombre_torre)
 static func nombre_de(planta: Dictionary) -> String:
+	if planta.get("garaje", false):   # (el garaje del reto del día: garaje.gd)
+		return Idioma.t("Garaje")
 	if planta.get("edificio", "") == "torre":
 		return nombre_torre(planta.num)
 	return Idioma.t("Azotea") if planta.get("azotea", false) else nombre_planta(planta.num)
@@ -654,6 +656,35 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 			rng.randf_range(AZOTEA_MURO_ARRIBA * CASILLA + 30, alto - AZOTEA_MURO_ABAJO * CASILLA - 30))
 		if pos.distance_to(AZOTEA_ARO) > AZOTEA_ARO_LIBRE and lejos_de_muebles(sitio, pos, 20.0):
 			sitio.manchas.append({"pos": pos, "dibujo": rng.randi() % 10, "giro": rng.randi() % 4, "espejo": rng.randf() < 0.5})
+	planta.sitios.append(sitio)
+	return planta
+
+
+# El garaje subterráneo del reto del día (M125, garaje.gd): un solo sitio grande, como la azotea, con el baúl en el
+# centro (mapa.gd) y las columnas por medio. No se sale por ningún sitio: la rampa de la derecha está cerrada. Va
+# "limpio" para la partida desde el principio (las oleadas las lleva garaje.gd, no el cerrojo de la puerta).
+# PROVISIONAL (16 nov): suelo de taller y palés en lugar de columnas y coches, hasta tener las imágenes de GPT
+const GARAJE_COLS := 44
+const GARAJE_FILAS := 30
+const GARAJE_COLUMNAS := [[288, 256], [576, 256], [832, 256], [1120, 256], [288, 648], [576, 648], [832, 648], [1120, 648]]   # [x, y de arriba]
+
+
+static func garaje(edificio: String) -> Dictionary:
+	var ed: Dictionary = Edificios.datos(edificio)
+	var planta := {"num": 1, "nombre": "Garaje", "garaje": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},   # [traducir]
+		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "armas": -1, "edificio": edificio,
+		"jefe": ed.jefe, "el_jefe": ed.el_jefe, "superviviente": {}, "cientifico": {}}
+	var ancho := GARAJE_COLS * CASILLA
+	var alto := GARAJE_FILAS * CASILLA
+	var sitio := {"tipo": "garaje", "nombre": "Garaje", "ancho": ancho, "alto": alto, "estilo": "garaje",   # [traducir]
+		"dueno": Muebles.plano_rectangular(GARAJE_COLS, GARAJE_FILAS), "zombis": [], "limpio": true, "visitado": true,
+		"surtido": rng.randi(), "manchas": [], "muebles": []}
+	for c in GARAJE_COLUMNAS:
+		sitio.muebles.append(Muebles.nuevo("pallet", {"lado": "arriba", "base": float(c[1])}, float(c[0]), 0))
+	sitio.salidas = [   # (la rampa por la que se ha bajado, cerrada: de aquí no se sale andando)
+		{"dir": "derecha", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
+			"aviso": "Ya no hay vuelta atrás"},   # [traducir]
+	]
 	planta.sitios.append(sitio)
 	return planta
 

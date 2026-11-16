@@ -215,7 +215,12 @@ func fin(r: Dictionary) -> void:
 		columna.add_child(fila)
 	else:
 		columna.add_child(lista)
-	if r.gano:
+	if r.get("garaje", false):
+		# el garaje del reto del día (garaje.gd): las oleadas superadas y los dólares, que se llevan siempre (ganes o caigas)
+		dato(lista, "trofeo", Idioma.t("Oleadas superadas"), r.oleadas)
+		dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
+		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares, r.cartera], Tema.VERDE)
+	elif r.gano:
 		# al ganar (11 nov): solo el tiempo, los dólares, los enemigos derrotados y, si la hay, la nueva mejor marca
 		dato(lista, "trofeo", Idioma.t("Tiempo"), r.tiempo)
 		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares + r.extra + r.get("premio_reto", 0), r.cartera], Tema.VERDE)
@@ -248,11 +253,13 @@ func fin(r: Dictionary) -> void:
 	columna.add_child(botones)
 	# «Jugar otra vez» (14 nov) vuelve a empezar el mismo edificio, que arranca en la sala de mantenimiento (tras caer, con
 	# Johnny despertándose); debajo, «Menú principal». Al ganar y al caer. Sin la R (M102 la quitó con el «Otra vez» de antes)
-	var otra := boton(botones, Idioma.t("Jugar otra vez"), al_final.bind(reintentar), "BotonGrande")
-	boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
+	var otra: Button = null
+	if not r.get("garaje", false):   # (el garaje, una vez al día)
+		otra = boton(botones, Idioma.t("Jugar otra vez"), al_final.bind(reintentar), "BotonGrande")
+	var al_menu := boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
 	for b in botones.get_children():
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	otra.grab_focus.call_deferred()
+	(otra if otra else al_menu).grab_focus.call_deferred()
 
 
 # Los botones del cartel del final: no hacen caso hasta pasado ESPERA_FIN desde que se abrió

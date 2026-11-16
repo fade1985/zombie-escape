@@ -5247,3 +5247,76 @@ func probar_horda_grande() -> void:
 				z.queue_free()
 		await get_tree().create_timer(0.5).timeout
 	get_tree().quit()
+
+
+# --garaje: el garaje del reto del día (M125, garaje.gd). Preparar: se juega el garaje en lugar de la partida normal
+func preparar_prueba() -> void:
+	super()
+	if "--garaje" in OS.get_cmdline_user_args():
+		Garaje.empezar()
+
+
+# Johnny junto al baúl del centro (captura-garaje.png); el baúl para el juego; lo que trae cada oleada (jefes en la
+# 5, 10, 15, 20 y 25); la oleada 1 sale, se mata entera y da $1 con 5 s de descanso (captura-garaje-oleada.png); la 5
+# trae su jefe (captura-garaje-jefe.png), da $5 y 10 s de descanso; y al caer, el cartel del final con las oleadas y los
+# dólares, que se quedan en la cartera (captura-garaje-fin.png). Cada línea dice lo esperado
+func probar_garaje() -> void:
+	johnny.stats.vida_max = 99999   # (que no le maten en la prueba)
+	johnny.vida = 99999
+	await get_tree().create_timer(0.5).timeout
+	var s: Dictionary = planta.sitios[aqui]
+	print("Garaje: sitio %s, lugar «%s» (esperado: garaje, «Garaje») | baúl en %s (esperado: el centro, %s)" % [
+		s.tipo, lugar.text, mapa.baul.position if mapa.baul else "ninguno", Vector2(s.ancho / 2.0, s.alto / 2.0)])
+	Captura.foto("captura-garaje.png")
+	abrir_cosas("baul")
+	await get_tree().process_frame
+	print("Garaje: al abrir el baúl, el juego parado: %s (esperado: true)" % get_tree().paused)
+	inventario.cerrar()
+	await get_tree().process_frame
+	print("Garaje: al cerrarlo, sigue: %s (esperado: true)" % (not get_tree().paused))
+	var jefes := []
+	for n in range(1, Garaje.OLEADAS + 1):
+		if garaje.jefe_de(n) != "":
+			jefes.append("%d: %s" % [n, garaje.jefe_de(n)])
+	print("Garaje: jefes %s (esperado: los 4 minijefes en la 5, 10, 15 y 20 y el final en la 25) | durmientes 1ª %d, 25ª %d (esperado: 4, 52)" % [
+		jefes, Garaje.durmientes(1), Garaje.durmientes(Garaje.OLEADAS)])
+	var antes := dolares
+	garaje.arrancar()
+	await get_tree().create_timer(Garaje.ESPERA + 1.0, false).timeout
+	print("Garaje: oleada %d, %d vivos (esperado: 1, 4)" % [garaje.oleada, garaje.vivos_ahora()])
+	Captura.foto("captura-garaje-oleada.png")
+	await matar_garaje()
+	print("Garaje: tras matarlos, superadas %d, +$%d, descanso %.1f s (esperado: 1, +$1, 5 s) | cartel «%s»" % [
+		garaje.superadas, dolares - antes, garaje.descanso, lugar.text])
+	# derecho a la 5: su jefe
+	garaje.oleada = 4
+	garaje.descanso = 0.01
+	await get_tree().create_timer(1.5, false).timeout
+	print("Garaje: oleada %d, jefe %s (esperado: 5, %s)" % [garaje.oleada, Bestiario.de(jefa) if is_instance_valid(jefa) else "ninguno",
+		ed.minijefes[0]])
+	if is_instance_valid(jefa):
+		Temblor.desplazamiento = jefa.position - johnny.position
+	await get_tree().process_frame
+	Captura.foto("captura-garaje-jefe.png")
+	Temblor.desplazamiento = Vector2.ZERO
+	antes = dolares
+	await matar_garaje()
+	print("Garaje: tras el jefe, superadas %d, +$%d, descanso %.1f s (esperado: 5, +$5, 10 s)" % [
+		garaje.superadas, dolares - antes, garaje.descanso])
+	var cartera_antes: int = Guardado.cargar().dolares
+	terminar(false)
+	await get_tree().create_timer(0.6, true).timeout
+	print("Garaje: al caer, cartera +$%d (esperado: +$%d, todos los de las oleadas)" % [Guardado.cargar().dolares - cartera_antes, dolares])
+	Captura.foto("captura-garaje-fin.png")
+	get_tree().quit()
+
+
+# Mata a todos los de la oleada (también a los que esperan su turno) y espera a que se acabe
+func matar_garaje() -> void:
+	for i in 80:
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z.estado != "muerto":
+				z.recibir_golpe(99999, Vector2.UP * 100.0)
+		await get_tree().create_timer(0.25, false).timeout
+		if garaje.descanso >= 0.0:
+			return

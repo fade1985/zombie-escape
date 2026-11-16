@@ -7521,3 +7521,39 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "Parking"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "VAGUE %d"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "PARKING NETTOYÉ !"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "Prochaine vague dans %d"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "La première vague arrive dans %d"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "Vague %d / %d"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "Parking nettoyé !"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "Tombé au combat à la vague %d du parking"
+
+#: scripts/ui/menus.gd
+msgid "Oleadas superadas"
+msgstr "Vagues passées"

@@ -7521,3 +7521,39 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "Tiefgarage"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "WELLE %d"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "TIEFGARAGE GESCHAFFT!"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "Nächste Welle in %d"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "Die erste Welle kommt in %d"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "Welle %d / %d"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "Tiefgarage geschafft!"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "Endstation: Welle %d der Tiefgarage"
+
+#: scripts/ui/menus.gd
+msgid "Oleadas superadas"
+msgstr "Geschaffte Wellen"

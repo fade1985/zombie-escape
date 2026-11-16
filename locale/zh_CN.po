@@ -7502,3 +7502,39 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "地下车库"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "第 %d 波"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "车库通关！"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "下一波：%d 秒后"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "第一波：%d 秒后到来"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "第 %d / %d 波"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "车库通关！"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "你倒在了车库的第 %d 波"
+
+#: scripts/ui/menus.gd
+msgid "Oleadas superadas"
+msgstr "已通过波数"

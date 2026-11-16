@@ -7540,3 +7540,39 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "Паркинг"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "ВОЛНА %d"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "ПАРКИНГ ЗАЧИЩЕН!"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "Следующая волна через %d"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "Первая волна через %d"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "Волна %d / %d"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "Паркинг зачищен!"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "Ты пал на волне %d в паркинге"
+
+#: scripts/ui/menus.gd
+msgid "Oleadas superadas"
+msgstr "Пройдено волн"

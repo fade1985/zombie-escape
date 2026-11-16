@@ -7521,3 +7521,39 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
+
+#: scripts/mapa/planta.gd
+msgid "Garaje"
+msgstr "Garagem"
+
+#: scripts/garaje.gd
+msgid "OLEADA %d"
+msgstr "ONDA %d"
+
+#: scripts/garaje.gd
+msgid "¡GARAJE SUPERADO!"
+msgstr "GARAGEM SUPERADA!"
+
+#: scripts/garaje.gd
+msgid "Siguiente oleada en %d"
+msgstr "Próxima onda em %d"
+
+#: scripts/garaje.gd
+msgid "La primera oleada llega en %d"
+msgstr "A primeira onda chega em %d"
+
+#: scripts/garaje.gd
+msgid "Oleada %d / %d"
+msgstr "Onda %d / %d"
+
+#: scripts/garaje.gd
+msgid "¡Garaje superado!"
+msgstr "Garagem superada!"
+
+#: scripts/garaje.gd
+msgid "Caíste en la oleada %d del garaje"
+msgstr "Você caiu na onda %d da garagem"
+
+#: scripts/ui/menus.gd
+msgid "Oleadas superadas"
+msgstr "Ondas superadas"
