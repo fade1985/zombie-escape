@@ -6,7 +6,7 @@
 # el bestiario...), basta con su "mira": el repaso (revisar) lo da por conseguido en cuanto llegue.
 # En el guardado (Guardado: "logros") solo se apunta el estado de cada uno: {"id": "conseguido" | "cobrado"}.
 # Lo que no está, sigue pendiente. Lo que se cuenta solo para los logros (jefes derrotados, partidas ganadas, armas
-# con las que se ha matado, reglas del reto completadas) va aparte, en "logros_cuentas".
+# con las que se ha matado, condiciones del garaje jugadas) va aparte, en "logros_cuentas".
 # Con alguna de las ayudas de Opciones → Ayudas encendida (AYUDAS) no se consigue ningún logro, y vale para toda la
 # partida: si se enciende y se apaga, esa partida ya no da logros (ni suma en las cuentas). Los que ya se tenían se
 # conservan y se cobran igual.
@@ -19,7 +19,7 @@ extends Node
 # "mira": sale de lo que hay en el guardado (hecho() dice cuánto lleva y, si no tiene "meta", meta() cuánto pide):
 #   completado (el edificio "edificio" completado), rescatados (los de "edificio" que viven en las viviendas), skin
 #   (una puesta), skins, bestiario, paginas (del dosier), objetos (de las Colecciones), rama (la más llena del árbol de
-#   talentos), arbol (el árbol entero) y las cuentas de los logros (jefes, victorias, armas, reglas)
+#   talentos), arbol (el árbol entero) y las cuentas de los logros (jefes, victorias, armas, condiciones)
 # Los textos de BASE (nombre y desc) y de TEMAS se traducen al enseñarlos, con nombre_de(), desc_de() y nombre_tema()
 # LISTA, la de todos, es BASE más los de cada arma (de_armas: M122), que se hacen solos
 # [traducir]
@@ -101,9 +101,9 @@ const BASE := [
 	{"id": "contra_marea", "tema": "sorpresas", "nombre": "Contra la marea", "icono": "logro-contra_marea", "premio": 5, "meta": 1, "cuenta": "",
 		"desc": "Vence a una horda del pasillo."},
 	{"id": "reto_aceptado", "tema": "sorpresas", "nombre": "Reto aceptado", "icono": "logro-reto_aceptado", "premio": 10, "meta": 1, "cuenta": "",
-		"desc": "Completa un reto del día."},
+		"desc": "Supera las 25 oleadas del garaje del reto del día."},
 	{"id": "todas_reglas", "tema": "sorpresas", "nombre": "Ninguna regla me para", "icono": "logro-todas_reglas", "premio": 25, "cuenta": "total",
-		"mira": "reglas", "desc": "Completa el reto del día con cada una de sus 7 reglas."},
+		"mira": "condiciones", "desc": "Juega el garaje del reto del día con cada una de sus 5 condiciones."},
 	# ── Colecciones
 	{"id": "cambio_look", "tema": "colecciones", "nombre": "Cambio de look", "icono": "logro-cambio_look", "premio": 5, "cuenta": "",
 		"mira": "skin", "desc": "Ponte una skin en la taquilla del vestuario."},
@@ -284,7 +284,7 @@ static func meta(l: Dictionary) -> int:
 		"rama": return Talentos.RAMAS.map(func(r): return puntos_rama(r.id)[1]).min()
 		"arbol": return Talentos.LISTA.reduce(func(n, t): return n + t.max, 0)
 		"armas": return arsenal().size()
-		"reglas": return Reto.REGLAS.size()
+		"condiciones": return Garaje.CONDICIONES.size()
 	return l.get("meta", 1)
 
 
@@ -311,7 +311,8 @@ static func hecho(l: Dictionary, s: Dictionary) -> int:
 		"arbol": return Talentos.RAMAS.reduce(func(n, r): return n + puntos_rama(r.id, s)[0], 0)
 		"jefes", "victorias": return int(cuentas.get(l.mira, 0))
 		"armas": return cuentas.get("armas", []).filter(func(id): return id in arsenal()).size()
-		"reglas": return cuentas.get("reglas", []).filter(func(id): return id in Reto.REGLAS).size()
+		# (las del garaje, en su lista: las 7 reglas del reto viejo, "reglas", ya no cuentan)
+		"condiciones": return cuentas.get("condiciones", []).filter(func(id): return id in Garaje.CONDICIONES).size()
 	return 0
 
 
@@ -420,7 +421,7 @@ func sumar(clave: String) -> void:
 	Guardado.cambiar(func(g): g.logros_cuentas[clave] = int(g.logros_cuentas.get(clave, 0)) + 1)
 
 
-# Uno más en una lista de los logros del guardado ("logros_cuentas": armas, reglas), si no estaba
+# Uno más en una lista de los logros del guardado ("logros_cuentas": armas, condiciones), si no estaba
 func apuntar(clave: String, id: String) -> void:
 	if partida == null or sin_logros():
 		return
@@ -506,17 +507,22 @@ func partida_ganada() -> void:
 		cumplir("jornada_expres")
 	if not curado:
 		cumplir("sin_tiritas")
-	if Reto.activo:
-		cumplir("reto_aceptado")
-		apuntar("reglas", Reto.regla)
-	else:   # (el reto va sin la mejora del VD-7)
-		if Alerta.nivel >= 3:
-			cumplir("alerta_naranja")
-		if Alerta.nivel >= Alerta.MAX:
-			cumplir("alerta_maxima")
+	if Alerta.nivel >= 3:
+		cumplir("alerta_naranja")
+	if Alerta.nivel >= Alerta.MAX:
+		cumplir("alerta_maxima")
 	if partida.supervivientes.equipo.any(func(a): return is_instance_valid(a) and a.es_vecino):
 		cumplir("buena_compania")
 	sumar("victorias")
+
+
+# El garaje del reto del día, acabado (garaje.gd, terminar; ganes, caigas o abandones): su condición, a la lista de
+# «Ninguna regla me para»; y superadas las 25 oleadas, «Reto aceptado»
+func garaje_jugado(condicion: String, gano: bool) -> void:
+	if condicion != "":
+		apuntar("condiciones", condicion)
+	if gano:
+		cumplir("reto_aceptado")
 
 
 func molotov_lanzado() -> void:

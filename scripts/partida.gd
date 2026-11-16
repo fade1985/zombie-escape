@@ -304,23 +304,17 @@ func _ready() -> void:
 		# una partida normal también lleva su semilla: así su planta sale igual si se cierra el juego y se continúa
 		Planta.semilla = randi_range(1, 2000000000)
 		semilla_propia = true
-	if Reto.activo:
-		# el reto del día (reto.gd): también el dado de siempre con la semilla de hoy, para que el orden de los
-		# minijefes, la planta del superviviente y los eventos sorpresa salgan iguales para todo el mundo
-		seed(Planta.semilla)
 	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados. Si la de antes acabó en derrota, Johnny se
 	# despierta en la sala de mantenimiento (despertar)
 	var despierta: bool = Guardado.cargar().pesadilla
 	var s := Guardado.cambiar(func(g):
 		g.pesadilla = false
 		g.partidas += 1
-		Guardado.edificio(g, edificio).partidas += 1
-		if Reto.activo:
-			Reto.ficha(g, edificio).intentos += 1)
+		Guardado.edificio(g, edificio).partidas += 1)
 	ahorrados = s.dolares
 	mutageno_ahorrado = s.mutageno
 	# la primera partida enseña a jugar en la planta baja de los Apartamentos (guia.gd)
-	guia.activa = (s.partidas == 1 or s.guia_otra_vez) and edificio == "apartamentos" and not Reto.activo \
+	guia.activa = (s.partidas == 1 or s.guia_otra_vez) and edificio == "apartamentos" and not Garaje.activo \
 		and Guardado.ajuste("tutoriales") and (not captura or guiado_prueba)
 	if guia.activa and s.guia_otra_vez:
 		Guardado.cambiar(func(g): g.guia_otra_vez = false)   # (repetida una vez: vale solo para esta partida)
@@ -332,10 +326,6 @@ func _ready() -> void:
 	johnny.vida = johnny.stats.vida_max
 	lanzables.reiniciar(johnny.stats)
 	dar_fregona()
-	if Reto.sin_municion():   # el reto "Solo cuerpo a cuerpo": la pistola vacía y sin lanzables
-		johnny.balas = 0
-		johnny.municion.clear()
-		lanzables.vaciar()
 	if Garaje.activo:   # el garaje del reto del día (garaje.gd): ni sala de mantenimiento, ni plantas
 		empezar_garaje()
 		return
@@ -366,12 +356,10 @@ func _ready() -> void:
 		empezar_prueba()
 	else:
 		await mutacion_al_empezar()
-		# (sin la frase del objetivo, que ya lo explica el ordenador: solo la alerta, el reto y el botiquín, si los hay)
+		# (sin la frase del objetivo, que ya lo explica el ordenador: solo la alerta y el botiquín, si los hay)
 		var al_empezar: Array = []
 		if Alerta.nivel > 0:
 			al_empezar.append("%s: %s" % [Alerta.nombre_largo(), Alerta.regla(Alerta.nivel, edificio)])
-		if Reto.activo:
-			al_empezar.append(Reto.aviso())
 		if botiquin:
 			al_empezar.append(Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila"))
 		if not al_empezar.is_empty():
@@ -381,8 +369,10 @@ func _ready() -> void:
 
 
 # El garaje del reto del día (garaje.gd): un solo sitio (Planta.garaje), con Johnny junto al baúl del centro, y las
-# oleadas, al rato. No se apunta a medias (no se continúa) ni lleva la guía de la primera partida
+# oleadas, al rato (con su tutorial, la primera vez). El intento de hoy se gasta al entrar (garaje.gastar). No se apunta
+# a medias (no se continúa) ni lleva la guía de la primera partida
 func empezar_garaje() -> void:
+	garaje.gastar()
 	guarda_partida = false
 	guarda_mapas = false
 	guia.activa = false
@@ -396,6 +386,7 @@ func empezar_garaje() -> void:
 		empezar_prueba()
 		return
 	garaje.arrancar()
+	tutorial("garaje")   # (con la ventana abierta el juego para: las oleadas esperan a que se cierre)
 
 
 # La ventana del principio de la partida: en la primera (con la guía, guia.gd), «Moverse y esquivar», y lo demás de
@@ -409,7 +400,7 @@ func tutorial_al_empezar() -> String:
 
 
 # Empieza con una partida guardada (partida_guardada.gd): todo como estaba al llegar a su planta, sin volver a contar
-# la partida ni el intento del reto, y Johnny entra por las escaleras (en la planta baja, en la sala de mantenimiento)
+# la partida, y Johnny entra por las escaleras (en la planta baja, en la sala de mantenimiento)
 func continuar_partida(foto: Dictionary) -> void:
 	PartidaGuardada.poner(self, foto)
 	ahorrados = Guardado.cargar().dolares
@@ -490,7 +481,6 @@ func jefe_de(num: int) -> String:
 # un talento en el ordenador y al elegir una mutación)
 func aplicar_talentos(talentos: Dictionary) -> void:
 	var st := Mutaciones.aplicar(Talentos.aplicar(Mejoras.base(), talentos), mutaciones.tengo)
-	st.vida_max = maxi(3, roundi(st.vida_max * Reto.vida()))   # el reto del día "De cristal": la mitad
 	johnny.poner_stats(st)
 
 
@@ -710,8 +700,6 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(abrir_armarito.bind(armarito))
-		if Reto.sin_curas():   # el reto del día "Sin curas": todos vacíos
-			armarito.vaciar()
 	poner_cientifico(idx)
 	poner_terminales(idx)
 	for puerta in mapa.puertas:
@@ -804,7 +792,7 @@ func poner_lugar() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var texto := cartel_sencillo(sitio)
 	if texto == "":
-		# (el centro comercial y la torre, de momento como antes: la planta, el sitio y la habitación)
+		# (el garaje y los demás que no tienen cartel_sencillo, como antes: la planta, el sitio y la habitación)
 		# (la sala de mantenimiento y las viviendas siempre están en la planta baja, aunque se haya bajado en el ascensor)
 		# (los nombres, ya traducidos: Planta.nombre_de y Planta.nombre_de_sitio, y lo mismo mapa.nombre_zona)
 		var de_planta: String = Planta.nombre_planta(1) if sitio.tipo in ["mantenimiento", "viviendas"] else Planta.nombre_de(planta)
@@ -813,7 +801,7 @@ func poner_lugar() -> void:
 		var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 		if zona != "" and zona != nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 			texto += " · " + zona
-	lugar.text = texto + eventos.etiqueta() + Reto.etiqueta() + garaje.etiqueta()
+	lugar.text = texto + eventos.etiqueta() + garaje.etiqueta()
 	# arriba del todo, grande como el grito de la llave; si en esta pantalla no cabe entero (un evento, el reto, otro
 	# idioma...), con la letra pequeña (la fuente solo se ve nítida a 16 o 32)
 	var cabe := lugar.get_theme_font("font").get_string_size(lugar.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 16 <= lugar.size.x
@@ -823,9 +811,10 @@ func poner_lugar() -> void:
 
 
 # El cartel de arriba, solo con dónde estás (L41, 16 nov): «Sala de mantenimiento», «Trasteros» (las viviendas de los
-# rescatados), «Azotea» y, en los Apartamentos, «Planta 2» en el pasillo («Planta baja» en la de la calle) y «Apartamento
-# 3ºB» en cada piso (también en el del jefe), sin la habitación. Ya traducido. "" si es de los que van como antes (el
-# centro comercial y la torre)
+# rescatados), «Azotea» y, en el pasillo, la planta: «Planta 2» («Planta baja» en la de la calle; en la torre, «Vestíbulo» y
+# «Planta 10»). Dentro, sin la habitación: en los Apartamentos, «Apartamento 3ºB» (también en el del jefe); en el centro
+# comercial, el nombre de la tienda («Ferretería», «Tienda de ropa», también la del minijefe); y en la torre, «Oficina 2»
+# (numero_oficina). Ya traducido. "" si es de los que van como antes (el garaje, la exposición, la sala de pruebas)
 func cartel_sencillo(sitio: Dictionary) -> String:
 	match sitio.tipo:
 		"mantenimiento":
@@ -834,13 +823,41 @@ func cartel_sencillo(sitio: Dictionary) -> String:
 			return Idioma.t("Trasteros")
 	if sitio.get("azotea", false):
 		return Planta.nombre_de_sitio(sitio)   # (la azotea; en la torre, el laboratorio)
-	if planta.get("edificio", "apartamentos") != "apartamentos":
+	if planta.get("garaje", false):
 		return ""
+	var edificio: String = planta.get("edificio", "apartamentos")
 	if sitio.tipo == "pasillo":
+		if edificio == "torre":
+			return Planta.nombre_torre(planta.num)
 		return Planta.nombre_planta(1) if planta.num == 1 else Idioma.t("Planta %d") % Planta.numero_visible(planta.num)
 	if sitio.tipo in ["apartamento", "jefe"] and sitio.has("apt"):
-		return Idioma.t("Apartamento %s") % Planta.nombre_de_sitio(sitio)
+		match edificio:
+			"apartamentos":
+				return Idioma.t("Apartamento %s") % Planta.nombre_de_sitio(sitio)
+			"torre":
+				return Idioma.t("Oficina %d") % numero_oficina(sitio)
+			_:
+				return Planta.nombre_de_sitio(sitio)   # (la tienda del centro comercial, como en su ficha)
 	return ""
+
+
+# El número de una oficina de la torre en el cartel (L41): las puertas de su planta, de izquierda a derecha (y, a la misma
+# altura, primero la de arriba), contando desde 1. También cuenta la del minijefe
+func numero_oficina(sitio: Dictionary) -> int:
+	var puertas := []
+	for s in planta.sitios:
+		if s.tipo != "pasillo":
+			continue
+		for salida in s.salidas:
+			var a: int = salida.get("a", -1)
+			if salida.tipo == "puerta" and a >= 0 and planta.sitios[a].tipo in ["apartamento", "jefe"]:
+				puertas.append({"en": salida.en, "arriba": salida.dir == "arriba", "sitio": planta.sitios[a]})
+		break
+	puertas.sort_custom(func(x, y): return x.en < y.en or (x.en == y.en and x.arriba and not y.arriba))
+	for i in puertas.size():
+		if is_same(puertas[i].sitio, sitio):
+			return i + 1
+	return 1
 
 
 # Johnny ha empujado la salida "i" del sitio en el que está
@@ -1438,14 +1455,11 @@ func valor_billete() -> int:
 	return 2 if randf() < Skins.comision(johnny.skin) else 1
 
 
-# Un molotov o una granada en el suelo: se coge pasando por encima, si cabe en la mochila (en el reto "Solo
-# cuerpo a cuerpo", no caen)
+# Un molotov o una granada en el suelo: se coge pasando por encima, si cabe en la mochila
 # Un lanzable en el suelo, de la clave "k" (el tipo y, si no es Normal, su calidad: Lanzables.clave). "tirado": lo ha
 # tirado Johnny desde el inventario (no vuelve hasta que se aparte), con las partidas que le quedaban ("quedan",
 # Armas.nuevas; -1, las de uno nuevo)
 func soltar_lanzable(k: String, donde: Vector2, tirado := false, quedan := -1) -> void:
-	if Reto.sin_municion() and not tirado:
-		return
 	var tipo := Lanzables.tipo_de(k)
 	var calidad := Lanzables.calidad_de(k)
 	var cosa := BILLETE.new()
@@ -1480,12 +1494,10 @@ func soltar_lanzable(k: String, donde: Vector2, tirado := false, quedan := -1) -
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Una caja de munición: un cargador más para el arma de fuego (johnny.sumar_municion). Va hacia Johnny solo si le cabe
-# (en el reto "Solo cuerpo a cuerpo", no caen). Con "tipo", la que ha tirado Johnny desde el inventario: vuelve entera
+# Una caja de munición: un cargador más para el arma de fuego (johnny.sumar_municion). Va hacia Johnny solo si le cabe.
+# Con "tipo", la que ha tirado Johnny desde el inventario: vuelve entera
 # ("cuanta" de ese tipo), si le cabe
 func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
-	if Reto.sin_municion() and tipo == "":
-		return
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	if tipo == "":
@@ -1526,7 +1538,7 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 # a cuerpo, nada (15 nov, M113)
 func soltar_municion_zombi(donde: Vector2) -> bool:
 	var armas := [johnny.huecos.fuego, repuesto("fuego")].filter(func(id): return id != "")
-	if armas.is_empty() or Reto.sin_municion():
+	if armas.is_empty():
 		return false
 	var id: String = armas.pick_random()
 	if Armas.datos(id).has("relleno"):
@@ -1537,8 +1549,7 @@ func soltar_municion_zombi(donde: Vector2) -> bool:
 
 
 # Lo que suelta un durmiente además del mutágeno (16 nov): un billete el 90 % de las veces y munición de
-# un arma de fuego que lleve el 10 % (MUNICION_ZOMBI: soltar_municion_zombi, una u otra si lleva dos). Sin arma de fuego
-# (o en el reto sin munición), también el billete
+# un arma de fuego que lleve el 10 % (MUNICION_ZOMBI: soltar_municion_zombi, una u otra si lleva dos). Sin arma de fuego, también el billete
 func soltar_premio_durmiente(donde: Vector2) -> void:
 	if randf() < MUNICION_ZOMBI and soltar_municion_zombi(donde):
 		return
@@ -1548,8 +1559,6 @@ func soltar_premio_durmiente(donde: Vector2) -> void:
 # El premio de munición de los eventos (eventos.gd; 16 nov): una de cada arma de fuego que lleve Johnny, la de la mano y
 # la de repuesto (una caja, o lo que llena una especial: soltar_municion_zombi). Sin ninguna, nada
 func soltar_municion_armas(donde: Vector2) -> void:
-	if Reto.sin_municion():
-		return
 	for id in [johnny.huecos.fuego, repuesto("fuego")]:
 		if id == "":
 			continue
@@ -1794,6 +1803,8 @@ func curar_con(cura: int, sobre: Node2D) -> void:
 func usar_objeto(id: String) -> String:
 	if not id in mochila or not id in Objetos.USABLES:
 		return Idioma.t("No se puede usar")
+	if Garaje.prohibido(id):   # (el garaje del reto del día, «Sin curas»: garaje.gd)
+		return Garaje.no_vale()
 	if not puede_curar(id):
 		return Idioma.t("Tienes la vida al máximo: guárdalo para luego")
 	mochila.remove_at(mochila.rfind(id))
@@ -1815,9 +1826,11 @@ func puede_curar(id: String) -> bool:
 func usar_cura(id: String) -> void:
 	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa or not id in mochila:
 		return
-	if usar_objeto(id) != "":
+	var no := usar_objeto(id)
+	if no != "":
 		Sonido.tocar("no")
-		numero(johnny.position + Vector2(0, -50), Idioma.t("Tienes la vida al máximo"), Tema.TINTA)
+		numero(johnny.position + Vector2(0, -50), Idioma.t("¡Hoy no vale!") if Garaje.prohibido(id)
+			else Idioma.t("Tienes la vida al máximo"), Tema.TINTA)
 
 
 # Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 40), más el talento Sanitario
@@ -1912,11 +1925,11 @@ func ver_tutorial(id: String) -> void:
 	get_tree().paused = parado
 
 
-# Un texto de la historia (historia.gd, RELATOS), una sola vez: no sale en el reto del día, ni en la sala de pruebas, ni
+# Un texto de la historia (historia.gd, RELATOS), una sola vez: no sale en el garaje del reto del día, ni en la sala de pruebas, ni
 # en la partida de prueba (salvo en la suya, --relato). Una partida continuada no pasa por la introducción, pero el final
 # del edificio sí le sale
 func puede_relato(id: String) -> bool:
-	return not id in Guardado.cargar().relatos and not Reto.activo and not en_pruebas() and (not captura or relatos_prueba)
+	return not id in Guardado.cargar().relatos and not Garaje.activo and not en_pruebas() and (not captura or relatos_prueba)
 
 
 # Lo enseña, si toca, con el juego parado, y espera a que se cierre. Se apunta al cerrarlo: si se cierra el juego a
@@ -2000,13 +2013,9 @@ func terminar(gano: bool, abandona := false) -> void:
 	else:
 		Sonido.jingle(gano)
 	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
-	var habia_reto := [false]   # (si el reto de hoy ya estaba completado: si no, completarlo no es «nueva mejor marca»)
 	var abierta := [0]      # la mejora del VD-7 que se abre al ganar (alerta.gd; 0: ninguna)
-	var mejor := [false]    # el reto del día: se ha mejorado la marca de hoy
 	var rotas := []         # las armas y los arrojables que se han quedado sin partidas (Objetos.cerrar_baul), para el cartel
-	# y los del reto del día, la primera vez que se completa hoy en este edificio (reto.gd)
-	var premio_reto := Reto.premio(Guardado.cargar(), edificio) if gano and Reto.activo else 0
-	var salvados := dolares + premio_reto if gano else 0   # los que pasan a la cartera (si caes o abandonas, ninguno: M116)
+	var salvados := dolares if gano else 0   # los que pasan a la cartera (si caes o abandonas, ninguno: M116)
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	logros.guardar_armas()   # (los durmientes de cada arma de esta partida, para sus logros: M122)
 	var equipo := equipo_encima()   # (vuelve al baúl ganes o no, si le quedan partidas: Objetos.cerrar_baul)
@@ -2023,13 +2032,8 @@ func terminar(gano: bool, abandona := false) -> void:
 		if logros.sin_logros():
 			g.muertos_con_ayudas += muertos   # con ayudas no suman para el logro Exterminador
 		var e := Guardado.edificio(g, edificio)
-		# el reto del día (reto.gd) lleva su marca aparte: no toca las plantas ni los tiempos del edificio
-		if Reto.activo:
-			habia_reto[0] = Reto.ficha(g, edificio).completado
-			mejor[0] = Reto.apuntar(g, edificio, planta.num, gano, duracion)
-		else:
-			g.mejor_planta = maxi(g.mejor_planta, planta.num)
-			e.mejor_planta = maxi(e.mejor_planta, planta.num)
+		g.mejor_planta = maxi(g.mejor_planta, planta.num)
+		e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		# las armas y los arrojables que lleva vuelven al baúl (equipo_encima) ganes, caigas o abandones, aunque no quepan,
 		# si les quedan partidas; los que no, se destruyen, también los del baúl que han salido en esta (la durabilidad)
 		rotas.append_array(Objetos.cerrar_baul(g, equipo))
@@ -2038,13 +2042,13 @@ func terminar(gano: bool, abandona := false) -> void:
 			for id in mochila:
 				g.baul[id] = g.baul.get(id, 0) + 1
 			g.victorias += 1
-		g.dolares = mini(g.dolares + salvados, TOPE)   # (los del reto no pasan del tope)
+		g.dolares = mini(g.dolares + salvados, TOPE)
 		g.dolares_total += salvados
 		if gano:   # el mutágeno de esta partida se guarda solo si completas el edificio (si caes o abandonas, se pierde)
 			g.mutageno = mini(g.mutageno + mutageno, TOPE)
 		if not gano and not abandona:
 			g.pesadilla = true   # la próxima partida empieza con Johnny despertándose (despertar)
-		if gano and not Reto.activo:   # (el reto no cuenta como edificio completado ni abre alertas)
+		if gano:
 			e.victorias += 1
 			e.completado = true
 			# completarlo con una alerta abre la siguiente (alerta.gd)
@@ -2072,10 +2076,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		tiempo = "%d:%02d" % [int(duracion) / 60, int(duracion) % 60]   # no-tr
 	menus.fin({
 		"gano": gano,
-		"titulo": (Idioma.t("¡Reto completado!") if Reto.activo else Idioma.t("¡Edificio completado!")) if gano else Idioma.t("¡Derrota!"),
-		"reto": Reto.nombre() if Reto.activo else "",
-		"mejor": mejor[0],
-		"marca": Reto.marca(Reto.ficha(s, edificio), true) if Reto.activo else "",
+		"titulo": Idioma.t("¡Edificio completado!") if gano else Idioma.t("¡Derrota!"),
 		"sub": ((Idioma.t("Has limpiado %s de arriba abajo") % Idioma.t(ed.el_nombre)) if nuevo.is_empty()
 			else (Idioma.t("Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento")
 				% [Idioma.t(ed.el_nombre), Supervivientes.nombre_de(nuevo)])) if gano
@@ -2084,12 +2085,11 @@ func terminar(gano: bool, abandona := false) -> void:
 		"muertos": muertos,
 		"visitados": "%d / %d" % [visitados, apartamentos],
 		"tiempo": tiempo,
-		"nueva_marca": gano and (record[0] or (mejor[0] and habia_reto[0])),   # (el récord del edificio o la mejor marca del reto, si ya había una: L45)
+		"nueva_marca": gano and record[0],   # (el récord del edificio, si ya había uno: L45)
 		"dolares": dolares,
 		"salvados": salvados,
 		"cartera": s.dolares,
 		"alerta": Alerta.nivel,
-		"premio_reto": premio_reto,
 		"abierta": abierta[0],
 		"asesino": "" if gano else johnny.golpe_de,
 		"conseguido": conseguido(Guardado.cargar()) + filas_rotas(rotas),   # (con los logros que acaba de dar el repaso)
@@ -2135,8 +2135,8 @@ func conseguido(s: Dictionary) -> Array:
 	if not vistos.is_empty():
 		filas.append(["zombi", Idioma.n("Nuevo en el bestiario", "Nuevos en el bestiario", vistos.size()),
 			", ".join(vistos.map(func(id): return Bestiario.nombre(id))) if vistos.size() <= 2 else "+%d" % vistos.size()])
-	# la planta más alta a la que se ha llegado en este edificio (el reto del día lleva su marca aparte)
-	if not Reto.activo and planta.num > maxi(al_empezar.mejor_planta, 1):
+	# la planta más alta a la que se ha llegado en este edificio
+	if planta.num > maxi(al_empezar.mejor_planta, 1):
 		filas.append(["escalera", Idioma.t("¡Nueva mejor marca!"), Planta.nombre_de(planta)])
 	return filas
 
@@ -2317,8 +2317,6 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# los vecinos que llama: no sueltan nada al caer (M119; ver arriba, "llamado")
 		zombi.pide_zombi.connect(func(t: String, donde_t: Vector2): meter_zombi(t, donde_t).set_meta("llamado", true))
 	elif "velocidad" in zombi:
-		# con el reto del día "Zombis rápidos", bastante más rápidos
-		zombi.velocidad *= Reto.velocidad()
 		# Cada planta, más duros: ZOMBI_POR_PLANTA más de vida y de zarpazo por planta (M72: antes, iguales en todas). El
 		# guardia, solo el zarpazo: su vida ya sube en poner_guardia(). En la sala de pruebas, como en la planta baja
 		var mas: float = 1.0 + ZOMBI_POR_PLANTA * (planta.num - 1) if not de_mentira else 1.0

@@ -1141,6 +1141,19 @@ msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
 msgstr "一大波沉睡者正沿着走廊涌来……做好准备！"
 
 #: scripts/garaje.gd
+msgid "Hoy no vale en el garaje: %s."
+msgstr "今天车库里不许用：%s。"
+
+#: scripts/garaje.gd scripts/partida.gd
+msgid "¡Hoy no vale!"
+msgstr "今天不许用！"
+
+#: scripts/garaje.gd
+msgid "Récord: %d oleada"
+msgid_plural "Récord: %d oleadas"
+msgstr[0] "纪录：%d 波"
+
+#: scripts/garaje.gd
 msgid "OLEADA %d"
 msgstr "第 %d 波"
 
@@ -1171,6 +1184,46 @@ msgstr "失败！"
 #: scripts/garaje.gd
 msgid "Caíste en la oleada %d del garaje"
 msgstr "你倒在了车库的第 %d 波"
+
+#: scripts/garaje.gd
+msgid "Sin cuerpo a cuerpo"
+msgstr "不许近战"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."
+msgstr "今天不许用任何近战武器，连拖把也不行。"
+
+#: scripts/garaje.gd
+msgid "Sin armas a distancia"
+msgstr "不许远程武器"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."
+msgstr "今天不许用任何远程武器：手枪、散弹枪和其他都不行。"
+
+#: scripts/garaje.gd
+msgid "Sin armas especiales"
+msgstr "不许特殊武器"
+
+#: scripts/garaje.gd
+msgid "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."
+msgstr "今天不许用特殊武器：喷火、酸液、冰冻或闪电的那些。"
+
+#: scripts/garaje.gd
+msgid "Sin lanzables"
+msgstr "不许投掷物"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."
+msgstr "今天不许扔任何东西：燃烧瓶、手雷和其他都不行。"
+
+#: scripts/garaje.gd
+msgid "Sin curas"
+msgstr "不许治疗"
+
+#: scripts/garaje.gd
+msgid "Hoy no valen las vendas ni los botiquines."
+msgstr "今天不许用绷带和急救包。"
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -2461,16 +2514,16 @@ msgid "Reto aceptado"
 msgstr "接受挑战"
 
 #: scripts/logros.gd
-msgid "Completa un reto del día."
-msgstr "完成一次每日挑战。"
+msgid "Supera las 25 oleadas del garaje del reto del día."
+msgstr "通过每日挑战地下车库的全部 25 波。"
 
 #: scripts/logros.gd
 msgid "Ninguna regla me para"
 msgstr "规则拦不住我"
 
 #: scripts/logros.gd
-msgid "Completa el reto del día con cada una de sus 7 reglas."
-msgstr "在全部7种规则下各完成一次每日挑战。"
+msgid "Juega el garaje del reto del día con cada una de sus 5 condiciones."
+msgstr "用全部 5 种条件各玩一次每日挑战的地下车库。"
 
 #: scripts/logros.gd
 msgid "Cambio de look"
@@ -3101,6 +3154,10 @@ msgid "Apartamento %s"
 msgstr "%s 室"
 
 #: scripts/partida.gd
+msgid "Oficina %d"
+msgstr ""
+
+#: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "还是再四处看看吧！"
 
@@ -3275,10 +3332,6 @@ msgstr "生命已满：留着以后用吧"
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
 msgstr "生命已满"
-
-#: scripts/partida.gd
-msgid "¡Reto completado!"
-msgstr "挑战完成！"
 
 #: scripts/partida.gd
 msgid "¡Edificio completado!"
@@ -3471,90 +3524,6 @@ msgstr "被晃瞎了！"
 #: scripts/presentador.gd
 msgid "¡EN PIE, PÚBLICO!"
 msgstr "观众们，起立！"
-
-#: scripts/reto.gd
-msgid "Reto del día · %s: %s"
-msgstr "每日挑战 · %s：%s"
-
-#: scripts/reto.gd
-msgid "Reto: %s"
-msgstr "挑战：%s"
-
-#: scripts/reto.gd
-msgid "Completado en %d:%02d"
-msgstr "用时 %d:%02d 完成"
-
-#: scripts/reto.gd
-msgid "sin marca"
-msgstr "无纪录"
-
-#: scripts/reto.gd
-msgid "Sin marca"
-msgstr "无纪录"
-
-#: scripts/reto.gd
-msgid "planta %d"
-msgstr "第%d层"
-
-#: scripts/reto.gd
-msgid "Has llegado a la planta %d"
-msgstr "到达了第%d层"
-
-#: scripts/reto.gd
-msgid "Solo cuerpo a cuerpo"
-msgstr "只许近战"
-
-#: scripts/reto.gd
-msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
-msgstr "手枪是空的，也不会掉落弹药、燃烧瓶和手雷"
-
-#: scripts/reto.gd
-msgid "Todo a oscuras"
-msgstr "一片漆黑"
-
-#: scripts/reto.gd
-msgid "todas las plantas como en un apagón: solo se ve con la linterna"
-msgstr "每层楼都像停电一样：只能靠手电筒看路"
-
-#: scripts/reto.gd
-msgid "Sin curas"
-msgstr "不许治疗"
-
-#: scripts/reto.gd
-msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
-msgstr "小柜子都是空的，治疗物品不会掉落、不卖，也没人给你配"
-
-#: scripts/reto.gd
-msgid "Durmientes rápidos"
-msgstr "快速沉睡者"
-
-#: scripts/reto.gd
-msgid "todos un 35 % más rápidos (los jefes, no)"
-msgstr "全部加快35%（首领除外）"
-
-#: scripts/reto.gd
-msgid "De cristal"
-msgstr "玻璃人"
-
-#: scripts/reto.gd
-msgid "Johnny con la mitad de vida"
-msgstr "Johnny只有一半生命"
-
-#: scripts/reto.gd
-msgid "Casa llena"
-msgstr "人满为患"
-
-#: scripts/reto.gd
-msgid "el doble de durmientes en cada sitio"
-msgstr "每个地方的沉睡者数量翻倍"
-
-#: scripts/reto.gd
-msgid "Oído fino"
-msgstr "顺风耳"
-
-#: scripts/reto.gd
-msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
-msgstr "连近战攻击都会吵醒整间公寓"
 
 #: scripts/skins.gd
 msgid "Conserje"
@@ -5467,8 +5436,36 @@ msgid "No da premios: es para quien busque más reto. Completa el edificio con l
 msgstr "没有奖励：留给想要更多挑战的人。用最高强化完成建筑，就能解锁下一级。"
 
 #: scripts/tutoriales.gd
-msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
-msgstr "“每日挑战”是一栋带怪规则的大楼，所有人都一样。每天只能玩一次，通关可得 $10。"
+msgid "El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."
+msgstr "每日挑战是一座地下车库，有 25 波沉睡者，每天的条件都不同。每栋楼每天可以玩一次。"
+
+#: scripts/tutoriales.gd
+msgid "El garaje del reto del día"
+msgstr "每日挑战的地下车库"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en el garaje"
+msgstr "进入地下车库时"
+
+#: scripts/tutoriales.gd
+msgid "Aguanta 25 oleadas de durmientes, cada una más dura que la anterior. Cada 5 oleadas llega también un jefe del edificio."
+msgstr "撑过 25 波沉睡者，一波比一波难。每 5 波还会来一个这栋楼的首领。"
+
+#: scripts/tutoriales.gd
+msgid "En el centro está el baúl, con lo que tengas guardado: si te quedas sin nada, ve a por más."
+msgstr "中间是储物箱，里面是你存的东西：用完了就去拿。"
+
+#: scripts/tutoriales.gd
+msgid "Cada oleada superada da tantos dólares como su número: la 5, $5. Te los llevas siempre, ganes, caigas o abandones."
+msgstr "每通过一波，就给和波数一样多的美元：第 5 波给 $5。不管赢了、倒下还是放弃，钱都归你。"
+
+#: scripts/tutoriales.gd
+msgid "Cada día hay una condición, la misma para todos: algo que no vale, ni sacarlo del baúl ni usarlo. Sale arriba del todo."
+msgstr "每天有一个条件，所有人都一样：某样东西不许用，既不能从储物箱拿出来，也不能使用。它显示在最上面。"
+
+#: scripts/tutoriales.gd
+msgid "Se juega una vez al día en cada edificio, y se guarda tu récord de oleadas con cada condición."
+msgstr "每栋楼每天可以玩一次，每种条件都会记下你的波数纪录。"
 
 #: scripts/tutoriales.gd
 msgid "el botón de esquivar"
@@ -6341,10 +6338,6 @@ msgid "Continuar partida"
 msgstr "继续本局"
 
 #: scripts/ui/menu_principal.gd
-msgid "Reto del día"
-msgstr "每日挑战"
-
-#: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "开始"
 
@@ -6389,20 +6382,20 @@ msgid "%s (de %d)"
 msgstr "%s（共 %d）"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio $%d cobrado"
-msgstr "奖励 $%d 已领取"
+msgid "Reto del día"
+msgstr "每日挑战"
 
 #: scripts/ui/menu_principal.gd
-msgid "Vuelve mañana"
-msgstr "明天再来"
+msgid "Garaje · %d oleadas"
+msgstr "地下车库 · %d 波"
 
 #: scripts/ui/menu_principal.gd
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "今天已经玩过了：明天再来"
+msgid "Condición de hoy: %s"
+msgstr "今天的条件：%s"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio"
-msgstr "奖励"
+msgid "Ya lo has jugado hoy en este edificio: vuelve mañana"
+msgstr "今天这栋楼已经玩过了：明天再来"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
@@ -6477,6 +6470,10 @@ msgid "Oleadas superadas"
 msgstr "已通过波数"
 
 #: scripts/ui/menus.gd
+msgid "%s · ¡nuevo récord!"
+msgstr "%s · 新纪录！"
+
+#: scripts/ui/menus.gd
 msgid "Enemigos derrotados"
 msgstr "击败敌人"
 
@@ -6499,18 +6496,6 @@ msgstr "通过楼层"
 #: scripts/ui/menus.gd
 msgid "Apartamentos visitados (última planta)"
 msgstr "探索公寓（最后一层）"
-
-#: scripts/ui/menus.gd
-msgid "Reto del día · %s"
-msgstr "每日挑战 · %s"
-
-#: scripts/ui/menus.gd
-msgid "%s · ¡mejor marca de hoy!"
-msgstr "%s · 今日最佳！"
-
-#: scripts/ui/menus.gd
-msgid "Tu mejor marca de hoy: %s"
-msgstr "你今天的最佳成绩：%s"
 
 #: scripts/ui/menus.gd
 msgid "Dólares perdidos"
@@ -7233,10 +7218,6 @@ msgid "¡Compra hecha! %s va al baúl."
 msgstr "购买成功！%s放进了储物箱。"
 
 #: scripts/ui/ordenador.gd
-msgid "En el reto «%s» no se lleva nada que lanzar."
-msgstr "“%s”挑战中不能携带投掷物。"
-
-#: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl (tienes %d allí)."
 msgstr "礼物！%s放进了储物箱（里面有%d个）。"
 
@@ -7545,10 +7526,6 @@ msgid "Baúl lleno"
 msgstr "储物箱已满"
 
 #: scripts/ui/tienda_armas.gd
-msgid "No en este reto"
-msgstr "本挑战不可用"
-
-#: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "见面礼"
 
@@ -7647,6 +7624,138 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Completa un reto del día."
+msgstr "完成一次每日挑战。"
+
+#, sin-usar
+msgid "Completa el reto del día con cada una de sus 7 reglas."
+msgstr "在全部7种规则下各完成一次每日挑战。"
+
+#, sin-usar
+msgid "¡Reto completado!"
+msgstr "挑战完成！"
+
+#, sin-usar
+msgid "Reto del día · %s: %s"
+msgstr "每日挑战 · %s：%s"
+
+#, sin-usar
+msgid "Reto: %s"
+msgstr "挑战：%s"
+
+#, sin-usar
+msgid "Completado en %d:%02d"
+msgstr "用时 %d:%02d 完成"
+
+#, sin-usar
+msgid "sin marca"
+msgstr "无纪录"
+
+#, sin-usar
+msgid "Sin marca"
+msgstr "无纪录"
+
+#, sin-usar
+msgid "planta %d"
+msgstr "第%d层"
+
+#, sin-usar
+msgid "Has llegado a la planta %d"
+msgstr "到达了第%d层"
+
+#, sin-usar
+msgid "Solo cuerpo a cuerpo"
+msgstr "只许近战"
+
+#, sin-usar
+msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
+msgstr "手枪是空的，也不会掉落弹药、燃烧瓶和手雷"
+
+#, sin-usar
+msgid "Todo a oscuras"
+msgstr "一片漆黑"
+
+#, sin-usar
+msgid "todas las plantas como en un apagón: solo se ve con la linterna"
+msgstr "每层楼都像停电一样：只能靠手电筒看路"
+
+#, sin-usar
+msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
+msgstr "小柜子都是空的，治疗物品不会掉落、不卖，也没人给你配"
+
+#, sin-usar
+msgid "Durmientes rápidos"
+msgstr "快速沉睡者"
+
+#, sin-usar
+msgid "todos un 35 % más rápidos (los jefes, no)"
+msgstr "全部加快35%（首领除外）"
+
+#, sin-usar
+msgid "De cristal"
+msgstr "玻璃人"
+
+#, sin-usar
+msgid "Johnny con la mitad de vida"
+msgstr "Johnny只有一半生命"
+
+#, sin-usar
+msgid "Casa llena"
+msgstr "人满为患"
+
+#, sin-usar
+msgid "el doble de durmientes en cada sitio"
+msgstr "每个地方的沉睡者数量翻倍"
+
+#, sin-usar
+msgid "Oído fino"
+msgstr "顺风耳"
+
+#, sin-usar
+msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
+msgstr "连近战攻击都会吵醒整间公寓"
+
+#, sin-usar
+msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
+msgstr "“每日挑战”是一栋带怪规则的大楼，所有人都一样。每天只能玩一次，通关可得 $10。"
+
+#, sin-usar
+msgid "Premio $%d cobrado"
+msgstr "奖励 $%d 已领取"
+
+#, sin-usar
+msgid "Vuelve mañana"
+msgstr "明天再来"
+
+#, sin-usar
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "今天已经玩过了：明天再来"
+
+#, sin-usar
+msgid "Premio"
+msgstr "奖励"
+
+#, sin-usar
+msgid "Reto del día · %s"
+msgstr "每日挑战 · %s"
+
+#, sin-usar
+msgid "%s · ¡mejor marca de hoy!"
+msgstr "%s · 今日最佳！"
+
+#, sin-usar
+msgid "Tu mejor marca de hoy: %s"
+msgstr "你今天的最佳成绩：%s"
+
+#, sin-usar
+msgid "En el reto «%s» no se lleva nada que lanzar."
+msgstr "“%s”挑战中不能携带投掷物。"
+
+#, sin-usar
+msgid "No en este reto"
+msgstr "本挑战不可用"
 
 #, sin-usar
 msgid "Alerta %d"

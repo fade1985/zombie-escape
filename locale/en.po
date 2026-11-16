@@ -1142,6 +1142,20 @@ msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
 msgstr "A huge horde is coming down the hallway... get ready!"
 
 #: scripts/garaje.gd
+msgid "Hoy no vale en el garaje: %s."
+msgstr "Not allowed in the garage today: %s."
+
+#: scripts/garaje.gd scripts/partida.gd
+msgid "¡Hoy no vale!"
+msgstr "Not allowed today!"
+
+#: scripts/garaje.gd
+msgid "Récord: %d oleada"
+msgid_plural "Récord: %d oleadas"
+msgstr[0] "Record: %d wave"
+msgstr[1] "Record: %d waves"
+
+#: scripts/garaje.gd
 msgid "OLEADA %d"
 msgstr "WAVE %d"
 
@@ -1172,6 +1186,46 @@ msgstr "Defeat!"
 #: scripts/garaje.gd
 msgid "Caíste en la oleada %d del garaje"
 msgstr "You fell on wave %d of the garage"
+
+#: scripts/garaje.gd
+msgid "Sin cuerpo a cuerpo"
+msgstr "No melee"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."
+msgstr "No melee weapons today, not even the mop."
+
+#: scripts/garaje.gd
+msgid "Sin armas a distancia"
+msgstr "No ranged weapons"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."
+msgstr "No ranged weapons today: no pistol, no shotgun, none of them."
+
+#: scripts/garaje.gd
+msgid "Sin armas especiales"
+msgstr "No special weapons"
+
+#: scripts/garaje.gd
+msgid "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."
+msgstr "No special weapons today: the ones that spray fire, acid, ice or lightning."
+
+#: scripts/garaje.gd
+msgid "Sin lanzables"
+msgstr "No throwables"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."
+msgstr "Nothing you throw today: no molotovs, no grenades, nothing else."
+
+#: scripts/garaje.gd
+msgid "Sin curas"
+msgstr "No healing"
+
+#: scripts/garaje.gd
+msgid "Hoy no valen las vendas ni los botiquines."
+msgstr "No bandages or medkits today."
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -2464,16 +2518,16 @@ msgid "Reto aceptado"
 msgstr "Challenge Accepted"
 
 #: scripts/logros.gd
-msgid "Completa un reto del día."
-msgstr "Complete a Daily Challenge."
+msgid "Supera las 25 oleadas del garaje del reto del día."
+msgstr "Clear all 25 waves of the Daily Challenge garage."
 
 #: scripts/logros.gd
 msgid "Ninguna regla me para"
 msgstr "No Rule Stops Me"
 
 #: scripts/logros.gd
-msgid "Completa el reto del día con cada una de sus 7 reglas."
-msgstr "Complete the Daily Challenge with each of its 7 rules."
+msgid "Juega el garaje del reto del día con cada una de sus 5 condiciones."
+msgstr "Play the Daily Challenge garage with each of its 5 conditions."
 
 #: scripts/logros.gd
 msgid "Cambio de look"
@@ -3104,6 +3158,10 @@ msgid "Apartamento %s"
 msgstr "Apartment %s"
 
 #: scripts/partida.gd
+msgid "Oficina %d"
+msgstr ""
+
+#: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "I'D BETTER LOOK AROUND A BIT MORE!"
 
@@ -3278,10 +3336,6 @@ msgstr "You're at full health: save it for later"
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
 msgstr "You're at full health"
-
-#: scripts/partida.gd
-msgid "¡Reto completado!"
-msgstr "Challenge complete!"
 
 #: scripts/partida.gd
 msgid "¡Edificio completado!"
@@ -3478,90 +3532,6 @@ msgstr "Blinded!"
 #: scripts/presentador.gd
 msgid "¡EN PIE, PÚBLICO!"
 msgstr "EVERYBODY ON YOUR FEET!"
-
-#: scripts/reto.gd
-msgid "Reto del día · %s: %s"
-msgstr "Daily Challenge · %s: %s"
-
-#: scripts/reto.gd
-msgid "Reto: %s"
-msgstr "Challenge: %s"
-
-#: scripts/reto.gd
-msgid "Completado en %d:%02d"
-msgstr "Completed in %d:%02d"
-
-#: scripts/reto.gd
-msgid "sin marca"
-msgstr "no record"
-
-#: scripts/reto.gd
-msgid "Sin marca"
-msgstr "No record"
-
-#: scripts/reto.gd
-msgid "planta %d"
-msgstr "floor %d"
-
-#: scripts/reto.gd
-msgid "Has llegado a la planta %d"
-msgstr "You reached floor %d"
-
-#: scripts/reto.gd
-msgid "Solo cuerpo a cuerpo"
-msgstr "Melee only"
-
-#: scripts/reto.gd
-msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
-msgstr "the pistol starts empty and no ammo, Molotovs or grenades drop"
-
-#: scripts/reto.gd
-msgid "Todo a oscuras"
-msgstr "Lights out"
-
-#: scripts/reto.gd
-msgid "todas las plantas como en un apagón: solo se ve con la linterna"
-msgstr "every floor as in a blackout: you can only see with the flashlight"
-
-#: scripts/reto.gd
-msgid "Sin curas"
-msgstr "No healing"
-
-#: scripts/reto.gd
-msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
-msgstr "the cabinets are empty and nothing that heals drops, is sold or gets prepared for you"
-
-#: scripts/reto.gd
-msgid "Durmientes rápidos"
-msgstr "Fast sleepers"
-
-#: scripts/reto.gd
-msgid "todos un 35 % más rápidos (los jefes, no)"
-msgstr "all 35 % faster (bosses excluded)"
-
-#: scripts/reto.gd
-msgid "De cristal"
-msgstr "Fragile"
-
-#: scripts/reto.gd
-msgid "Johnny con la mitad de vida"
-msgstr "Johnny with half his health"
-
-#: scripts/reto.gd
-msgid "Casa llena"
-msgstr "Packed house"
-
-#: scripts/reto.gd
-msgid "el doble de durmientes en cada sitio"
-msgstr "twice as many sleepers in every place"
-
-#: scripts/reto.gd
-msgid "Oído fino"
-msgstr "Sharp ears"
-
-#: scripts/reto.gd
-msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
-msgstr "even melee hits wake up the whole apartment"
 
 #: scripts/skins.gd
 msgid "Conserje"
@@ -5474,8 +5444,36 @@ msgid "No da premios: es para quien busque más reto. Completa el edificio con l
 msgstr "It gives no rewards: it's for those who want more challenge. Complete the building with the highest upgrade to unlock the next one."
 
 #: scripts/tutoriales.gd
-msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
-msgstr "The Daily Challenge is a building with a weird rule, the same for everyone. You can play it once a day and, if you complete it, it gives $10."
+msgid "El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."
+msgstr "The Daily Challenge is a garage with 25 waves of sleepers and a different condition every day. You can play it once a day in each building."
+
+#: scripts/tutoriales.gd
+msgid "El garaje del reto del día"
+msgstr "The Daily Challenge garage"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en el garaje"
+msgstr "On entering the garage"
+
+#: scripts/tutoriales.gd
+msgid "Aguanta 25 oleadas de durmientes, cada una más dura que la anterior. Cada 5 oleadas llega también un jefe del edificio."
+msgstr "Survive 25 waves of sleepers, each one tougher than the last. Every 5 waves, a boss from the building shows up too."
+
+#: scripts/tutoriales.gd
+msgid "En el centro está el baúl, con lo que tengas guardado: si te quedas sin nada, ve a por más."
+msgstr "The stash is in the middle, with everything you have stored: if you run out, go get more."
+
+#: scripts/tutoriales.gd
+msgid "Cada oleada superada da tantos dólares como su número: la 5, $5. Te los llevas siempre, ganes, caigas o abandones."
+msgstr "Each wave you clear pays as many dollars as its number: wave 5, $5. You always keep them, whether you win, fall or quit."
+
+#: scripts/tutoriales.gd
+msgid "Cada día hay una condición, la misma para todos: algo que no vale, ni sacarlo del baúl ni usarlo. Sale arriba del todo."
+msgstr "Every day has a condition, the same for everyone: something that isn't allowed, neither taken from the stash nor used. It shows at the top."
+
+#: scripts/tutoriales.gd
+msgid "Se juega una vez al día en cada edificio, y se guarda tu récord de oleadas con cada condición."
+msgstr "You can play it once a day in each building, and your wave record is saved for each condition."
 
 #: scripts/tutoriales.gd
 msgid "el botón de esquivar"
@@ -6361,10 +6359,6 @@ msgid "Continuar partida"
 msgstr "Continue run"
 
 #: scripts/ui/menu_principal.gd
-msgid "Reto del día"
-msgstr "Daily Challenge"
-
-#: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "PLAY"
 
@@ -6409,20 +6403,20 @@ msgid "%s (de %d)"
 msgstr "%s (of %d)"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio $%d cobrado"
-msgstr "Reward $%d claimed"
+msgid "Reto del día"
+msgstr "Daily Challenge"
 
 #: scripts/ui/menu_principal.gd
-msgid "Vuelve mañana"
-msgstr "Come back tomorrow"
+msgid "Garaje · %d oleadas"
+msgstr "Garage · %d waves"
 
 #: scripts/ui/menu_principal.gd
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "Already played today: come back tomorrow"
+msgid "Condición de hoy: %s"
+msgstr "Today's condition: %s"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio"
-msgstr "Reward"
+msgid "Ya lo has jugado hoy en este edificio: vuelve mañana"
+msgstr "You already played it today in this building: come back tomorrow"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
@@ -6497,6 +6491,10 @@ msgid "Oleadas superadas"
 msgstr "Waves cleared"
 
 #: scripts/ui/menus.gd
+msgid "%s · ¡nuevo récord!"
+msgstr "%s · new record!"
+
+#: scripts/ui/menus.gd
 msgid "Enemigos derrotados"
 msgstr "Enemies defeated"
 
@@ -6519,18 +6517,6 @@ msgstr "Floors cleared"
 #: scripts/ui/menus.gd
 msgid "Apartamentos visitados (última planta)"
 msgstr "Apartments visited (last floor)"
-
-#: scripts/ui/menus.gd
-msgid "Reto del día · %s"
-msgstr "Daily Challenge · %s"
-
-#: scripts/ui/menus.gd
-msgid "%s · ¡mejor marca de hoy!"
-msgstr "%s · today's best!"
-
-#: scripts/ui/menus.gd
-msgid "Tu mejor marca de hoy: %s"
-msgstr "Your best today: %s"
 
 #: scripts/ui/menus.gd
 msgid "Dólares perdidos"
@@ -7253,10 +7239,6 @@ msgid "¡Compra hecha! %s va al baúl."
 msgstr "Bought! %s goes to the stash."
 
 #: scripts/ui/ordenador.gd
-msgid "En el reto «%s» no se lleva nada que lanzar."
-msgstr "In the \"%s\" challenge you don't carry anything to throw."
-
-#: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl (tienes %d allí)."
 msgstr "Gift! %s goes to the stash (you have %d there)."
 
@@ -7565,10 +7547,6 @@ msgid "Baúl lleno"
 msgstr "Stash full"
 
 #: scripts/ui/tienda_armas.gd
-msgid "No en este reto"
-msgstr "Not in this challenge"
-
-#: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "Welcome gift"
 
@@ -7667,6 +7645,138 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
+
+#, sin-usar
+msgid "Completa un reto del día."
+msgstr "Complete a Daily Challenge."
+
+#, sin-usar
+msgid "Completa el reto del día con cada una de sus 7 reglas."
+msgstr "Complete the Daily Challenge with each of its 7 rules."
+
+#, sin-usar
+msgid "¡Reto completado!"
+msgstr "Challenge complete!"
+
+#, sin-usar
+msgid "Reto del día · %s: %s"
+msgstr "Daily Challenge · %s: %s"
+
+#, sin-usar
+msgid "Reto: %s"
+msgstr "Challenge: %s"
+
+#, sin-usar
+msgid "Completado en %d:%02d"
+msgstr "Completed in %d:%02d"
+
+#, sin-usar
+msgid "sin marca"
+msgstr "no record"
+
+#, sin-usar
+msgid "Sin marca"
+msgstr "No record"
+
+#, sin-usar
+msgid "planta %d"
+msgstr "floor %d"
+
+#, sin-usar
+msgid "Has llegado a la planta %d"
+msgstr "You reached floor %d"
+
+#, sin-usar
+msgid "Solo cuerpo a cuerpo"
+msgstr "Melee only"
+
+#, sin-usar
+msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
+msgstr "the pistol starts empty and no ammo, Molotovs or grenades drop"
+
+#, sin-usar
+msgid "Todo a oscuras"
+msgstr "Lights out"
+
+#, sin-usar
+msgid "todas las plantas como en un apagón: solo se ve con la linterna"
+msgstr "every floor as in a blackout: you can only see with the flashlight"
+
+#, sin-usar
+msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
+msgstr "the cabinets are empty and nothing that heals drops, is sold or gets prepared for you"
+
+#, sin-usar
+msgid "Durmientes rápidos"
+msgstr "Fast sleepers"
+
+#, sin-usar
+msgid "todos un 35 % más rápidos (los jefes, no)"
+msgstr "all 35 % faster (bosses excluded)"
+
+#, sin-usar
+msgid "De cristal"
+msgstr "Fragile"
+
+#, sin-usar
+msgid "Johnny con la mitad de vida"
+msgstr "Johnny with half his health"
+
+#, sin-usar
+msgid "Casa llena"
+msgstr "Packed house"
+
+#, sin-usar
+msgid "el doble de durmientes en cada sitio"
+msgstr "twice as many sleepers in every place"
+
+#, sin-usar
+msgid "Oído fino"
+msgstr "Sharp ears"
+
+#, sin-usar
+msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
+msgstr "even melee hits wake up the whole apartment"
+
+#, sin-usar
+msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
+msgstr "The Daily Challenge is a building with a weird rule, the same for everyone. You can play it once a day and, if you complete it, it gives $10."
+
+#, sin-usar
+msgid "Premio $%d cobrado"
+msgstr "Reward $%d claimed"
+
+#, sin-usar
+msgid "Vuelve mañana"
+msgstr "Come back tomorrow"
+
+#, sin-usar
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "Already played today: come back tomorrow"
+
+#, sin-usar
+msgid "Premio"
+msgstr "Reward"
+
+#, sin-usar
+msgid "Reto del día · %s"
+msgstr "Daily Challenge · %s"
+
+#, sin-usar
+msgid "%s · ¡mejor marca de hoy!"
+msgstr "%s · today's best!"
+
+#, sin-usar
+msgid "Tu mejor marca de hoy: %s"
+msgstr "Your best today: %s"
+
+#, sin-usar
+msgid "En el reto «%s» no se lleva nada que lanzar."
+msgstr "In the \"%s\" challenge you don't carry anything to throw."
+
+#, sin-usar
+msgid "No en este reto"
+msgstr "Not in this challenge"
 
 #, sin-usar
 msgid "Alerta %d"

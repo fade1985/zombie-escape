@@ -228,7 +228,7 @@ variaciones y con el espaciado del propio `FontFile` y no se mueve.
 ## Estado
 
 Pasados (lista `PASADOS` de `tools/traducciones.py`):
-- **Fase 1:** `idioma.gd`, `ui/menu_principal.gd`, `ui/opciones.gd`, `alerta.gd`, `edificios.gd`, `reto.gd` y el nombre de
+- **Fase 1:** `idioma.gd`, `ui/menu_principal.gd`, `ui/opciones.gd`, `alerta.gd`, `edificios.gd`, `reto.gd` (quitado el 16 nov: ahora `garaje.gd`) y el nombre de
   los modos de atacar (`johnny.gd`, `MODOS`).
 - **Fase 2 (la interfaz):** `partida.gd` (avisos, carteles y fin de partida), `ui/menus.gd` (pausa y resumen),
   `ui/hud.gd`, `ui/tactil.gd`, `ui/tutorial.gd` (la ventana, no el texto de cada tutorial), `ui/inventario.gd` (mochila,

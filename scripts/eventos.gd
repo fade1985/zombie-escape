@@ -131,8 +131,7 @@ func nueva_planta() -> void:
 	if Planta.semilla != 0:
 		rng.seed = Planta.semilla * 13 + num
 	if rng.randf() < PROBABILIDAD:
-		# (con el reto "Todo a oscuras" ya está todo apagado: el apagón no se sortea)
-		var quedan: Array = LISTA.filter(func(e): return e not in usados and not (e == "apagon" and Reto.oscuras()))
+		var quedan: Array = LISTA.filter(func(e): return e not in usados)
 		if not quedan.is_empty():
 			evento = quedan[rng.randi() % quedan.size()]
 			usados.append(evento)
@@ -155,9 +154,8 @@ func al_montar(idx: int, sitio: Dictionary, nuevo: bool) -> void:
 	if evento != "" and evento != "horda" and not empezado and sitio.tipo == "pasillo":
 		empezar()   # (la horda, no: espera a que Johnny llegue al medio del pasillo, en _physics_process)
 	activo = empezado and sitio.tipo in ["pasillo", "apartamento"]   # (las tiendas también son "apartamento")
-	# A oscuras y con las luces apagadas: con el apagón o, con el reto del día "Todo a oscuras" (reto.gd), en
-	# todos los sitios menos la sala de mantenimiento y las viviendas de los rescatados
-	var oscuras: bool = (activo and evento == "apagon") or (Reto.oscuras() and sitio.tipo not in ["mantenimiento", "viviendas"])
+	# A oscuras y con las luces apagadas: con el apagón
+	var oscuras: bool = activo and evento == "apagon"
 	Luz.evento = APAGON if oscuras else 0.0
 	if oscuras:
 		apagar_luces()
@@ -300,7 +298,7 @@ func avanzar_horda(delta: float) -> void:
 	h.t -= delta
 	if h.t <= 0.0 and not h.salio:
 		var num: int = partida.planta.num
-		var n := roundi(HORDA.zombis * (1.0 + HORDA.por_planta * (num - 1)) * Reto.mas_zombis())
+		var n := roundi(HORDA.zombis * (1.0 + HORDA.por_planta * (num - 1)))
 		var tipos := tipos_horda(num)
 		h.salio = true
 		for i in n:
@@ -570,7 +568,7 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 	var a_la_izquierda := z.filter(func(zz): return zz.global_position.x < johnny.global_position.x).size()
 	var cerca := z.filter(func(zz): return zz.global_position.distance_to(johnny.global_position) < HORDA.lejos).size()
 	print("Horda · salió %s · en el pasillo %d (esperado %d) · a la izquierda de Johnny %d y a la derecha %d (esperado: mitad y mitad) · ya cerca de Johnny %d" % [
-		horda.salio, z.size(), roundi(HORDA.zombis * Reto.mas_zombis()),
+		horda.salio, z.size(), roundi(HORDA.zombis),
 		a_la_izquierda, z.size() - a_la_izquierda, cerca])
 	await esperar.call(2.5)   # (salen fuera de pantalla: que lleguen a verse para la foto)
 	foto.call("horda")

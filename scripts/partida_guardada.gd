@@ -3,7 +3,7 @@
 # el menú principal enseña «Continuar partida» y se vuelve al principio de esa planta, con lo que se llevaba al llegar
 # a ella. Lo hecho dentro de la planta se pierde, como en Isaac. La planta sale igual (la semilla de la partida va en la
 # foto: Planta.semilla), para que cerrar el juego no sirva para cambiar una planta que no gusta.
-# Al acabar la partida (ganes, caigas o abandones) la foto se borra. En el reto del día, con sus mismas reglas.
+# Al acabar la partida (ganes, caigas o abandones) la foto se borra.
 #
 # La foto va en "en_curso" del guardado como texto de Godot (var_to_str): así los números enteros siguen siendo
 # enteros al leerla (en JSON todos salen con decimales).
@@ -27,16 +27,12 @@ static func guardada(s := {}) -> Dictionary:
 	return foto
 
 
-# El menú, al pulsar «Continuar partida»: pone el edificio, la alerta y el reto de la foto y abre la partida
+# El menú, al pulsar «Continuar partida»: pone el edificio y la alerta de la foto y abre la partida
 static func seguir(foto: Dictionary) -> void:
 	continuar = foto
 	Edificios.elegido = foto.edificio
 	Alerta.nivel = foto.alerta
-	if foto.reto.activo:
-		Reto.empezar(foto.edificio, foto.reto.fecha)
-		Reto.regla = foto.reto.regla
-	else:
-		Reto.quitar()
+	Garaje.quitar()   # (el garaje del reto del día no se apunta a medias: siempre es una partida normal)
 	Captura.ir_a_la_partida()
 
 
@@ -62,7 +58,6 @@ static func apuntar(p: Node, num: int) -> void:
 	var foto := {
 		"version": VERSION,
 		"edificio": p.edificio, "alerta": Alerta.nivel,
-		"reto": {"activo": Reto.activo, "fecha": Reto.fecha, "regla": Reto.regla},
 		"semilla": Planta.semilla, "planta": num,
 		"orden_jefes": p.orden_jefes, "joyeria": Planta.joyeria_planta,
 		"rescate": rescate, "equipo": equipo,

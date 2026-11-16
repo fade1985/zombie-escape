@@ -103,7 +103,7 @@ var vida := 100
 var tercios := 3          # los tercios de vida que le quedan (el que se pierde ya no se cura)
 var vivo := true
 var golpe_de := ""         # quién o qué le ha quitado vida la última vez: un enemigo (su clave del Bestiario) o un
-                           # peligro (Menus.PELIGROS); "" si no se sabe. El cartel de derrota dice quién le ha pillado
+						   # peligro (Menus.PELIGROS); "" si no se sabe. El cartel de derrota dice quién le ha pillado
 var invulnerable := 0.0    # tiempo que le queda sin poder recibir daño
 var estados := {}          # lo que le han puesto los charcos (estados.gd): fuego, veneno, lejía...
 var pisando := {}          # los estados de los charcos que pisa en este paso
@@ -113,7 +113,7 @@ var llamas: Llamas         # las llamas que le salen si arde
 var a_la_vista := 0        # Ansiedad: los zombis despiertos que se ven en pantalla
 var escudo := 0.0          # Acero y Endurecimiento: lo que le queda de escudo en esta planta (se gasta antes que la vida)
 var escudo_mut := 0.0      # lo que queda del escudo de Endurecimiento: se da una vez por partida y lo gastado no vuelve
-                           # (16 nov). Va dentro de "escudo": cada golpe gasta antes lo de Acero (el de cada planta)
+						   # (16 nov). Va dentro de "escudo": cada golpe gasta antes lo de Acero (el de cada planta)
 var escudo_tope := 0.0     # lo que tenía de escudo al empezar la planta (o al ganarlo): lo lleno de su barra (hud.gd)
 var despedido_t := 0.0     # sin poder usar el arma de fuego (el sello de la directora: despedir())
 var esquiva_t := 0.0       # lo que le queda al acelerón de la esquiva (0 = no está esquivando)
@@ -139,22 +139,22 @@ var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuan
 
 var huecos := Armas.SIEMPRE.duplicate()   # las dos armas que lleva (al empezar, solo la fregona: el hueco de fuego, "")
 var calidades := {}        # la calidad de las armas que lleva, en la mano o de repuesto (Armas.CALIDADES): {id: 2};
-                           # la que no está, Normal. Lleva una de cada arma, así que basta con su id (partida.llevar_arma)
+						   # la que no está, Normal. Lleva una de cada arma, así que basta con su id (partida.llevar_arma)
 var quedan := {}           # las partidas que les quedan después de esta (Armas.nuevas: la durabilidad): {id: 1}; la que
-                           # no está, las de una nueva de su calidad (la que se encuentra o se compra en esta partida)
+						   # no está, las de una nueva de su calidad (la que se encuentra o se compra en esta partida)
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
 var balas := 0             # balas que quedan en el cargador del arma de fuego
 var municion := {}         # la munición de reserva, por tipos (Armas.MUNICION): {"balas": 24, ...}. La gasolina, los
-                           # bidones de ácido y las baterías no están aquí: son objetos de la mochila de la partida (cuanta)
+						   # bidones de ácido y las baterías no están aquí: son objetos de la mochila de la partida (cuanta)
 var sin_balas_sola := false   # se ha pasado sola a la de cuerpo a cuerpo al quedarse sin balas
 var cargadores := {}       # lo que quedaba en el cargador de las armas de fuego que ha dejado: {id: balas} (las de
-                           # depósito, los segundos que les quedaban)
+						   # depósito, los segundos que les quedaban)
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
 var deposito := 0.0        # el lanzallamas, el lanza ácido y el lanza rayos: los segundos de chorro que le quedan en el depósito
 var municion_sin_fin := false   # la sala de pruebas: se recarga sin gastar munición (ni gasolina, ni bidones, ni baterías)
 var invencible := false    # la sala de pruebas: no pierde vida
 var gracia := 0            # el golpe de gracia de las Épicas cuerpo a cuerpo: los golpes que han dado desde el último
-                           # crítico seguro (Armas.TRUCO; golpear)
+						   # crítico seguro (Armas.TRUCO; golpear)
 var mirando_chorro := ""   # hacia dónde miraba echando el chorro en el paso de antes (mirar_con_chorro)
 const CAMBIA_CHORRO := 0.105   # lo que tiene que ganar otra dirección para cambiar a ella echando el chorro (6°)
 const MARGEN_CHORRO := 0.052   # lo que el zombi queda por dentro del borde del cono cuando se le gira el chorro (3°)
@@ -279,9 +279,9 @@ func tercios_vivos() -> int:
 	return 3 if Guardado.ajuste("vida_entera") else tercios
 
 
-# Ayuda "Pistola sin fin": la pistola no gasta balas ni se recarga (en el reto "Solo cuerpo a cuerpo", no vale)
+# Ayuda "Pistola sin fin": la pistola no gasta balas ni se recarga
 func pistola_sin_fin() -> bool:
-	return huecos.fuego == "pistola" and Guardado.ajuste("pistola_sin_fin") and not Reto.sin_municion()
+	return huecos.fuego == "pistola" and Guardado.ajuste("pistola_sin_fin")
 
 
 # El botiquín, además de curar, devuelve un tercio perdido (si le falta alguno): sube el tope antes de curar
@@ -585,9 +585,10 @@ func soltar_estela() -> void:
 # al momento; a un jefe le quita un 2 % de su vida máxima (NINJA_JEFE). Como mucho uno cada NINJA_ESPERA segundos,
 # aunque esquive más (hasta el 27 oct, uno en cada esquiva y un 10 % a los jefes: 10 esquivas tumbaban a cualquiera)
 func golpe_ninja() -> void:
+	if Garaje.prohibido(huecos.cuerpo):   # (el garaje del reto del día, «Sin cuerpo a cuerpo»: tampoco este)
+		return
 	var w: Dictionary = base(huecos.cuerpo)
 	var alcance: float = w.alcance * stats.alcance * stats.alcance_cuerpo + RADIO
-	golpe_ruidoso()
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() > alcance + zombi.radio or ArmasCreadas.tapado(self, global_position, zombi.global_position):
@@ -693,8 +694,12 @@ func ayuda_apunte(angulo: float) -> float:
 
 
 # Ataca hacia ese ángulo si ya puede (ha pasado el hueco entre ataques y, si es de fuego, tiene bala). El lanzallamas,
-# en cada paso en que se ataca con él, echa fuego
+# en cada paso en que se ataca con él, echa fuego. En el garaje del reto del día, el arma que hoy no vale no ataca
+# (garaje.gd, la condición del día): solo el aviso
 func intentar_atacar(angulo: float) -> void:
+	if Garaje.prohibido(huecos[mano]):
+		Garaje.avisar(self)
+		return
 	var w := arma()
 	if w.has("arranque"):
 		# la gatling: sus cañones tienen que girar "arranque" segundos seguidos antes de que salga la primera bala
@@ -857,7 +862,6 @@ func golpear(angulo: float) -> void:
 	var fuerte := false   # algún golpe crítico o que mata (el parón dura más)
 	var de_gracia: bool = w.calidad >= Armas.EPICA and gracia >= Armas.TRUCO.gracia - 1
 	Tajo.lanzar(self, angulo, w)   # (el golpe de un arma mejorada deja su estela del color de la calidad)
-	golpe_ruidoso()
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		var distancia := hacia.length()
@@ -1032,13 +1036,6 @@ func oir_disparo() -> void:
 func en_apartamento() -> bool:
 	var mapa := get_tree().get_first_node_in_group("mapa")
 	return mapa != null and mapa.sitio.get("tipo", "") == "apartamento"
-
-
-# Con el reto del día «Oído fino» (reto.gd, 12 nov), un golpe cuerpo a cuerpo dentro de un apartamento (o de una tienda)
-# se oye como un disparo: despierta a todos los dormidos. Fuera, sigue sin hacer ruido
-func golpe_ruidoso() -> void:
-	if Reto.es("oido") and en_apartamento():
-		oir_disparo()
 
 
 # Antes de disparar: ¿hay bala en el cargador (o fuego en el depósito)? Si no, recarga. La escopeta puede disparar

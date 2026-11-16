@@ -8,9 +8,16 @@
 # salió un jefe). Los durmientes no sueltan dólares ni mutágeno: solo munición, a veces (MUNICION), para que no se
 # acabe nunca. Los dólares se los lleva Johnny siempre: ganando, cayendo o abandonando (terminar).
 #
-# Lo monta partida.gd: si Garaje.activo, en lugar de la sala de mantenimiento se genera el garaje (Planta.garaje) y se
-# llama a arrancar(). La partida le pregunta a este nodo en tres sitios: al meter un zombi (endurecer), al caer uno
-# (al_caer) y al acabar (terminar). Para cambiar los números, se cambian las constantes de aquí abajo.
+# Cada día, además, una condición (CONDICIONES): una familia de cosas que ese día no vale (no se puede equipar ni sacar
+# del baúl, y si ya la llevas, no se puede usar: prohibido()). Sale de la fecha, así que es la misma para todo el mundo y
+# en los tres edificios. Se juega una vez al día en cada edificio (el intento se gasta al entrar, gastar()), y se apunta
+# el récord de oleadas de cada edificio con cada condición, aparte (en el guardado, "garajes": Guardado.GARAJE).
+#
+# Se entra por el botón «Reto del día» de cada tarjeta de «Elige edificio» (menu_principal.gd: empezar() antes de abrir
+# la partida, quitar() para una normal). Lo monta partida.gd: si Garaje.activo, en lugar de la sala de mantenimiento se
+# genera el garaje (Planta.garaje) y se llama a arrancar(). La partida le pregunta a este nodo en tres sitios: al meter un
+# zombi (endurecer), al caer uno (al_caer) y al acabar (terminar). Para cambiar los números, se cambian las constantes de
+# aquí abajo. (Hasta el 16 nov el reto del día era otro: un edificio entero con una regla rara, reto.gd, ya quitado)
 class_name Garaje
 extends Node
 
@@ -29,8 +36,24 @@ const ESPERA := 3.0              # lo que tarda en salir la primera, al entrar
 const MUNICION := 0.10           # lo que tiene cada durmiente de soltar munición al caer
 const LEJOS := 380.0             # a cuánto de Johnny salen, como poco
 
-# El reto que se juega (lo pone el menú antes de abrir la partida, como Reto.empezar; quitar(), para una normal)
+# Las condiciones del día: cada día toca una (condicion_de). "nombre" sale en el cuadro del botón, arriba en la partida y
+# en el cartel del final; "desc", en el cuadro del botón. La clave es la familia que no vale (familia())
+# [traducir]
+const CONDICIONES := {
+	"cuerpo": {"nombre": "Sin cuerpo a cuerpo", "desc": "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."},
+	"distancia": {"nombre": "Sin armas a distancia", "desc": "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."},
+	"especial": {"nombre": "Sin armas especiales", "desc": "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."},
+	"lanzables": {"nombre": "Sin lanzables", "desc": "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."},
+	"curas": {"nombre": "Sin curas", "desc": "Hoy no valen las vendas ni los botiquines."},
+}
+# [/traducir]
+
+# El reto que se juega (lo pone el menú antes de abrir la partida: empezar; quitar(), para una normal), de qué día
+# ("2026-11-16") y su condición (una clave de CONDICIONES)
 static var activo := false
+static var fecha := ""
+static var condicion := ""
+static var avisado := -10000     # cuándo salió el último «hoy no vale» (en milisegundos: uno por segundo, como mucho)
 
 var partida: Node
 var oleada := 0                  # la que está en marcha (0: aún ninguna)
@@ -42,17 +65,112 @@ var descanso := -1.0             # lo que falta para la siguiente (-1: en plena 
 var en_marcha := false
 
 
-static func empezar() -> void:
+# El día de hoy, como se escribe en el guardado
+static func hoy() -> String:
+	var d := Time.get_date_dict_from_system()
+	return "%04d-%02d-%02d" % [d.year, d.month, d.day]
+
+
+# La condición que toca un día: sale de la fecha, así que es la misma para todo el mundo (y en los tres edificios)
+static func condicion_de(dia: String) -> String:
+	var claves := CONDICIONES.keys()
+	return claves[("garaje-" + dia).hash() % claves.size()]
+
+
+# «Elige edificio» lo llama antes de abrir la partida del garaje de hoy. En las pruebas, "--condicion X" fuerza esa
+static func empezar(dia := hoy()) -> void:
 	activo = true
+	fecha = dia
+	condicion = condicion_de(dia)
+	if Captura.activa() and Captura.dato("--condicion") in CONDICIONES:
+		condicion = Captura.dato("--condicion")
 
 
+# ...o esto, para una partida normal
 static func quitar() -> void:
 	activo = false
+	fecha = ""
+	condicion = ""
+
+
+static func nombre(c := condicion) -> String:
+	return Idioma.t(CONDICIONES[c].nombre) if c in CONDICIONES else ""
+
+
+static func desc(c := condicion) -> String:
+	return Idioma.t(CONDICIONES[c].desc) if c in CONDICIONES else ""
+
+
+# ── Lo prohibido ──
+
+# La familia de algo, para las condiciones: un arma, la suya (Armas.familia: "cuerpo", "distancia" o "especial"); un
+# lanzable (su id o su clave con la calidad, "molotov:2"), "lanzables"; las vendas y el botiquín, "curas"; lo demás, ""
+static func familia(id: String) -> String:
+	if Armas.DATOS.has(id):
+		return Armas.familia(id)
+	if Lanzables.DATOS.has(Lanzables.tipo_de(id)):
+		return "lanzables"
+	if id in Objetos.USABLES:
+		return "curas"
+	return ""
+
+
+# ¿Hoy no vale? Lo miran el baúl y el inventario (no se saca ni se pone en la mano), Johnny al atacar, los lanzables al
+# lanzar y la partida al curar (partida.usar_objeto)
+static func prohibido(id: String) -> bool:
+	return activo and condicion != "" and familia(id) == condicion
+
+
+# Lo que se dice al intentar sacar, poner o usar algo prohibido
+static func no_vale() -> String:
+	return Idioma.t("Hoy no vale en el garaje: %s.") % nombre()
+
+
+# Al intentar usar algo prohibido en plena pelea: «¡Hoy no vale!» encima de Johnny (uno por segundo, como mucho)
+static func avisar(johnny: Node2D) -> void:
+	var ahora := Time.get_ticks_msec()
+	if ahora - avisado < 1000:
+		return
+	avisado = ahora
+	Sonido.tocar("no")
+	Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-60, -80), Idioma.t("¡Hoy no vale!"),
+		Tema.ROJO, 18)
+
+
+# ── El guardado: una vez al día en cada edificio, y el récord de cada condición ──
+
+# La ficha del garaje de un edificio (Guardado.GARAJE), creada si aún no la hay
+static func ficha(s: Dictionary, edificio: String) -> Dictionary:
+	if not edificio in s.garajes:
+		s.garajes[edificio] = Guardado.GARAJE.duplicate(true)
+	return s.garajes[edificio]
+
+
+# Si ese edificio ya ha jugado el garaje ese día (el intento se gasta al entrar: gastar)
+static func jugado(s: Dictionary, edificio: String, dia := hoy()) -> bool:
+	return s.garajes.has(edificio) and s.garajes[edificio].fecha == dia
+
+
+# El récord de un edificio con una condición: las oleadas superadas (0, ninguna)
+static func record(s: Dictionary, edificio: String, c: String) -> int:
+	return int(s.garajes[edificio].records.get(c, 0)) if s.garajes.has(edificio) else 0
+
+
+# Lo de debajo del botón: «Récord: 3 oleadas»
+static func texto_record(n: int) -> String:
+	return Idioma.n("Récord: %d oleada", "Récord: %d oleadas", n) % n
 
 
 func preparar(p: Node) -> void:
 	partida = p
 	name = "Garaje"   # no-tr (nombre de nodo)
+
+
+# Al entrar en el garaje (partida.empezar_garaje): el intento de hoy de este edificio, gastado, aunque se caiga en la
+# primera oleada o se salga al menú
+func gastar() -> void:
+	var edificio: String = partida.edificio
+	Guardado.cambiar(func(g): ficha(g, edificio).fecha = fecha)
 
 
 # Johnny ya está en el garaje: la primera oleada, al rato
@@ -124,14 +242,15 @@ func oleada_superada() -> void:
 
 
 # Lo que se añade al nombre del sitio, arriba del todo (partida.gd, poner_lugar): la oleada en la que va o lo que falta
-# para la siguiente. Mientras está el jefe, ahí va su barra (y esto no se ve)
+# para la siguiente, y la condición del día. Mientras está el jefe, ahí va su barra (y esto no se ve)
 func etiqueta() -> String:
 	if not activo or not en_marcha:
 		return ""
+	var cond := " · " + nombre() if condicion != "" else ""
 	if descanso >= 0.0:
 		return " · " + (Idioma.t("Siguiente oleada en %d") % ceili(descanso) if oleada > 0
-			else Idioma.t("La primera oleada llega en %d") % ceili(descanso))
-	return " · " + Idioma.t("Oleada %d / %d") % [oleada, OLEADAS]
+			else Idioma.t("La primera oleada llega en %d") % ceili(descanso)) + cond
+	return " · " + Idioma.t("Oleada %d / %d") % [oleada, OLEADAS] + cond
 
 
 # ── Lo que trae cada oleada ──
@@ -208,7 +327,8 @@ func al_caer(zombi: Node2D, tipo: String) -> void:
 
 
 # Al acabar (partida.terminar, en lugar de lo suyo): los dólares de las oleadas, a la cartera ganes, caigas o abandones;
-# las armas que lleva, al baúl, como siempre; la mochila, solo si gana. Y el cartel del final con las oleadas superadas
+# las armas que lleva, al baúl, como siempre; la mochila, solo si gana; el récord de este edificio con la condición de
+# hoy, si lo mejora. Y el cartel del final con las oleadas superadas
 func terminar(gano: bool, abandona: bool) -> void:
 	en_marcha = false
 	if abandona:
@@ -218,7 +338,13 @@ func terminar(gano: bool, abandona: bool) -> void:
 	var equipo: Array = partida.equipo_encima()
 	var rotas := []
 	var dolares: int = partida.dolares
+	var edificio: String = partida.edificio
+	var nuevo := [false]   # (en una lista, para que la función de dentro pueda cambiarlo)
 	var s := Guardado.cambiar(func(g):
+		var f := ficha(g, edificio)
+		if condicion != "" and superadas > int(f.records.get(condicion, 0)):
+			nuevo[0] = true
+			f.records[condicion] = superadas
 		g.muertos += partida.muertos
 		for id in partida.matados:
 			g.matados[id] = int(g.matados.get(id, 0)) + partida.matados[id]
@@ -228,6 +354,7 @@ func terminar(gano: bool, abandona: bool) -> void:
 				g.baul[id] = g.baul.get(id, 0) + 1
 		g.dolares = mini(g.dolares + dolares, partida.TOPE)
 		g.dolares_total += dolares)
+	partida.logros.garaje_jugado(condicion, gano)
 	partida.logros.revisar()
 	if abandona:
 		partida.ir_al_menu()
@@ -239,6 +366,9 @@ func terminar(gano: bool, abandona: bool) -> void:
 		"titulo": Idioma.t("¡Garaje superado!") if gano else Idioma.t("¡Derrota!"),
 		"sub": Idioma.t("Caíste en la oleada %d del garaje") % maxi(oleada, 1),
 		"oleadas": "%d / %d" % [superadas, OLEADAS],
+		"condicion": nombre(),
+		"record": texto_record(int(s.garajes[edificio].records.get(condicion, 0))),
+		"nuevo_record": nuevo[0],
 		"muertos": partida.muertos,
 		"tiempo": "%d:%02d" % [int(partida.duracion) / 60, int(partida.duracion) % 60],   # no-tr
 		"dolares": dolares,

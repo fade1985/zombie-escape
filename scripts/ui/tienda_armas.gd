@@ -187,13 +187,11 @@ static func regalo_pendiente(guardado: Dictionary) -> bool:
 
 
 # "lleno" (no cabe en el baúl, adonde va lo comprado desde el 15 nov: un arma necesita una casilla libre; un arrojable,
-# sitio en su casilla o una libre), "reto" (el reto sin munición no deja llevar arrojables), "caro" (no te llega) o ""
+# sitio en su casilla o una libre), "caro" (no te llega) o ""
 # (se puede comprar). Hasta el 15 nov, lo comprado iba a la mano: "lleva" era el arma que ya llevabas y "lleno", el
 # arrojable que ya no te cabía encima
 func estado(id: String) -> String:
 	if Lanzables.PRECIOS.has(id):
-		if Reto.sin_municion():
-			return "reto"
 		if Objetos.caben_arrojables(s, id, 0) <= 0:
 			return "lleno"
 	elif not Objetos.hueco_baul(s):
@@ -294,7 +292,7 @@ func dibujar_casilla(id: String, _fuente: Font) -> void:
 	var e := estado(id)
 	var borde := PLACA.REMACHE
 	var relleno := Color("#1c1f24")
-	var apagada := e in ["caro", "reto", "lleno"]
+	var apagada := e in ["caro", "lleno"]
 	if apagada:
 		borde = PLACA.APAGADO
 		relleno = PLACA.NEGRO
@@ -465,7 +463,6 @@ func texto_comprar(id: String) -> String:
 	var p := precio(id)
 	match estado(id):
 		"lleno": return Idioma.t("Baúl lleno")   # (lo comprado va al baúl: 15 nov; antes, «LLENO», lo que no te cabía encima)
-		"reto": return Idioma.t("No en este reto")
 		"caro": return "$%d" % p   # (dibujado en rojo, como un marcador: dibujar_comprar)
 	if es_regalo(s, id):
 		return Idioma.t("Regalo de bienvenida")

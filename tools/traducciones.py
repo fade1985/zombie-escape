@@ -60,7 +60,7 @@ PASADOS = [
     "scripts/ui/opciones.gd",
     "scripts/alerta.gd",
     "scripts/edificios.gd",
-    "scripts/reto.gd",
+    "scripts/garaje.gd",
     # fase 2: la interfaz
     "scripts/partida.gd",
     "scripts/ui/menus.gd",

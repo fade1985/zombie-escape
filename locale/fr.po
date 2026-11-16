@@ -1142,6 +1142,20 @@ msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
 msgstr "Une horde énorme avance dans le couloir... prépare-toi !"
 
 #: scripts/garaje.gd
+msgid "Hoy no vale en el garaje: %s."
+msgstr "Interdit dans le parking aujourd'hui : %s."
+
+#: scripts/garaje.gd scripts/partida.gd
+msgid "¡Hoy no vale!"
+msgstr "Interdit aujourd'hui !"
+
+#: scripts/garaje.gd
+msgid "Récord: %d oleada"
+msgid_plural "Récord: %d oleadas"
+msgstr[0] "Record : %d vague"
+msgstr[1] "Record : %d vagues"
+
+#: scripts/garaje.gd
 msgid "OLEADA %d"
 msgstr "VAGUE %d"
 
@@ -1172,6 +1186,46 @@ msgstr "Défaite !"
 #: scripts/garaje.gd
 msgid "Caíste en la oleada %d del garaje"
 msgstr "Tombé au combat à la vague %d du parking"
+
+#: scripts/garaje.gd
+msgid "Sin cuerpo a cuerpo"
+msgstr "Sans corps à corps"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale ningún arma cuerpo a cuerpo, ni siquiera la fregona."
+msgstr "Aucune arme de corps à corps aujourd'hui, pas même la serpillière."
+
+#: scripts/garaje.gd
+msgid "Sin armas a distancia"
+msgstr "Sans armes à distance"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale ningún arma a distancia: ni la pistola, ni la escopeta, ni las demás."
+msgstr "Aucune arme à distance aujourd'hui : ni le pistolet, ni le fusil à pompe, ni les autres."
+
+#: scripts/garaje.gd
+msgid "Sin armas especiales"
+msgstr "Sans armes spéciales"
+
+#: scripts/garaje.gd
+msgid "Hoy no valen las armas especiales: las que echan fuego, ácido, hielo o rayos."
+msgstr "Pas d'armes spéciales aujourd'hui : celles qui crachent du feu, de l'acide, de la glace ou des éclairs."
+
+#: scripts/garaje.gd
+msgid "Sin lanzables"
+msgstr "Sans lançables"
+
+#: scripts/garaje.gd
+msgid "Hoy no vale nada que se lance: ni molotovs, ni granadas, ni los demás."
+msgstr "Rien à lancer aujourd'hui : ni molotovs, ni grenades, ni le reste."
+
+#: scripts/garaje.gd
+msgid "Sin curas"
+msgstr "Sans soins"
+
+#: scripts/garaje.gd
+msgid "Hoy no valen las vendas ni los botiquines."
+msgstr "Ni bandages ni médikits aujourd'hui."
 
 #: scripts/gerente.gd
 msgid "¡A TRABAJAR!"
@@ -2464,16 +2518,16 @@ msgid "Reto aceptado"
 msgstr "Défi accepté"
 
 #: scripts/logros.gd
-msgid "Completa un reto del día."
-msgstr "Termine un défi du jour."
+msgid "Supera las 25 oleadas del garaje del reto del día."
+msgstr "Passe les 25 vagues du parking du défi du jour."
 
 #: scripts/logros.gd
 msgid "Ninguna regla me para"
 msgstr "Rien ne m'arrête"
 
 #: scripts/logros.gd
-msgid "Completa el reto del día con cada una de sus 7 reglas."
-msgstr "Termine le défi du jour avec chacune de ses 7 règles."
+msgid "Juega el garaje del reto del día con cada una de sus 5 condiciones."
+msgstr "Joue le parking du défi du jour avec chacune de ses 5 conditions."
 
 #: scripts/logros.gd
 msgid "Cambio de look"
@@ -3104,6 +3158,10 @@ msgid "Apartamento %s"
 msgstr "Appartement %s"
 
 #: scripts/partida.gd
+msgid "Oficina %d"
+msgstr ""
+
+#: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "JE FERAIS MIEUX DE FOUILLER UN PEU PLUS !"
 
@@ -3278,10 +3336,6 @@ msgstr "Ta vie est au maximum : garde-le pour plus tard"
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
 msgstr "Ta vie est au maximum"
-
-#: scripts/partida.gd
-msgid "¡Reto completado!"
-msgstr "Défi réussi !"
 
 #: scripts/partida.gd
 msgid "¡Edificio completado!"
@@ -3478,90 +3532,6 @@ msgstr "Ébloui !"
 #: scripts/presentador.gd
 msgid "¡EN PIE, PÚBLICO!"
 msgstr "DEBOUT, LE PUBLIC !"
-
-#: scripts/reto.gd
-msgid "Reto del día · %s: %s"
-msgstr "Défi du jour · %s : %s"
-
-#: scripts/reto.gd
-msgid "Reto: %s"
-msgstr "Défi : %s"
-
-#: scripts/reto.gd
-msgid "Completado en %d:%02d"
-msgstr "Terminé en %d:%02d"
-
-#: scripts/reto.gd
-msgid "sin marca"
-msgstr "aucun record"
-
-#: scripts/reto.gd
-msgid "Sin marca"
-msgstr "Aucun record"
-
-#: scripts/reto.gd
-msgid "planta %d"
-msgstr "étage %d"
-
-#: scripts/reto.gd
-msgid "Has llegado a la planta %d"
-msgstr "Tu as atteint l'étage %d"
-
-#: scripts/reto.gd
-msgid "Solo cuerpo a cuerpo"
-msgstr "Corps à corps uniquement"
-
-#: scripts/reto.gd
-msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
-msgstr "le pistolet est vide au départ et il ne tombe ni munitions, ni molotovs, ni grenades"
-
-#: scripts/reto.gd
-msgid "Todo a oscuras"
-msgstr "Tout dans le noir"
-
-#: scripts/reto.gd
-msgid "todas las plantas como en un apagón: solo se ve con la linterna"
-msgstr "tous les étages comme pendant un black-out : on ne voit qu'à la lampe torche"
-
-#: scripts/reto.gd
-msgid "Sin curas"
-msgstr "Sans soins"
-
-#: scripts/reto.gd
-msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
-msgstr "les armoires à pharmacie sont vides et rien de ce qui soigne ne tombe, ne se vend ni ne t'est préparé"
-
-#: scripts/reto.gd
-msgid "Durmientes rápidos"
-msgstr "Dormeurs rapides"
-
-#: scripts/reto.gd
-msgid "todos un 35 % más rápidos (los jefes, no)"
-msgstr "tous 35 % plus rapides (sauf les boss)"
-
-#: scripts/reto.gd
-msgid "De cristal"
-msgstr "En verre"
-
-#: scripts/reto.gd
-msgid "Johnny con la mitad de vida"
-msgstr "Johnny avec la moitié de sa vie"
-
-#: scripts/reto.gd
-msgid "Casa llena"
-msgstr "Salle comble"
-
-#: scripts/reto.gd
-msgid "el doble de durmientes en cada sitio"
-msgstr "deux fois plus de dormeurs partout"
-
-#: scripts/reto.gd
-msgid "Oído fino"
-msgstr "Oreille fine"
-
-#: scripts/reto.gd
-msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
-msgstr "même les coups au corps à corps réveillent tout l'appartement"
 
 #: scripts/skins.gd
 msgid "Conserje"
@@ -5474,8 +5444,36 @@ msgid "No da premios: es para quien busque más reto. Completa el edificio con l
 msgstr "Pas de récompense : c'est pour ceux qui veulent plus de défi. Termine le bâtiment avec l'amélioration la plus haute pour débloquer la suivante."
 
 #: scripts/tutoriales.gd
-msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
-msgstr "Le Défi du jour est un immeuble avec une règle étrange, le même pour tout le monde. On le joue une fois par jour et, si tu le termines, il rapporte $10."
+msgid "El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."
+msgstr "Le Défi du jour est un parking avec 25 vagues de dormeurs et une condition différente chaque jour. On peut le jouer une fois par jour dans chaque bâtiment."
+
+#: scripts/tutoriales.gd
+msgid "El garaje del reto del día"
+msgstr "Le parking du défi du jour"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en el garaje"
+msgstr "En entrant dans le parking"
+
+#: scripts/tutoriales.gd
+msgid "Aguanta 25 oleadas de durmientes, cada una más dura que la anterior. Cada 5 oleadas llega también un jefe del edificio."
+msgstr "Tiens bon pendant 25 vagues de dormeurs, chacune plus dure que la précédente. Toutes les 5 vagues, un boss du bâtiment arrive aussi."
+
+#: scripts/tutoriales.gd
+msgid "En el centro está el baúl, con lo que tengas guardado: si te quedas sin nada, ve a por más."
+msgstr "Au centre se trouve le coffre, avec ce que tu as rangé : si tu n'as plus rien, va en chercher."
+
+#: scripts/tutoriales.gd
+msgid "Cada oleada superada da tantos dólares como su número: la 5, $5. Te los llevas siempre, ganes, caigas o abandones."
+msgstr "Chaque vague passée rapporte autant de dollars que son numéro : la 5, $5. Tu les gardes toujours, que tu gagnes, tombes ou abandonnes."
+
+#: scripts/tutoriales.gd
+msgid "Cada día hay una condición, la misma para todos: algo que no vale, ni sacarlo del baúl ni usarlo. Sale arriba del todo."
+msgstr "Chaque jour a une condition, la même pour tout le monde : quelque chose d'interdit, ni à sortir du coffre ni à utiliser. Elle s'affiche tout en haut."
+
+#: scripts/tutoriales.gd
+msgid "Se juega una vez al día en cada edificio, y se guarda tu récord de oleadas con cada condición."
+msgstr "On peut le jouer une fois par jour dans chaque bâtiment, et ton record de vagues est gardé pour chaque condition."
 
 #: scripts/tutoriales.gd
 msgid "el botón de esquivar"
@@ -6361,10 +6359,6 @@ msgid "Continuar partida"
 msgstr "Continuer la partie"
 
 #: scripts/ui/menu_principal.gd
-msgid "Reto del día"
-msgstr "Défi du jour"
-
-#: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "JOUER"
 
@@ -6409,20 +6403,20 @@ msgid "%s (de %d)"
 msgstr "%s (sur %d)"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio $%d cobrado"
-msgstr "Récompense $%d encaissée"
+msgid "Reto del día"
+msgstr "Défi du jour"
 
 #: scripts/ui/menu_principal.gd
-msgid "Vuelve mañana"
-msgstr "Reviens demain"
+msgid "Garaje · %d oleadas"
+msgstr "Parking · %d vagues"
 
 #: scripts/ui/menu_principal.gd
-msgid "Ya lo has jugado hoy: vuelve mañana"
-msgstr "Déjà joué aujourd'hui : reviens demain"
+msgid "Condición de hoy: %s"
+msgstr "Condition du jour : %s"
 
 #: scripts/ui/menu_principal.gd
-msgid "Premio"
-msgstr "Récompense"
+msgid "Ya lo has jugado hoy en este edificio: vuelve mañana"
+msgstr "Déjà joué aujourd'hui dans ce bâtiment : reviens demain"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
@@ -6497,6 +6491,10 @@ msgid "Oleadas superadas"
 msgstr "Vagues passées"
 
 #: scripts/ui/menus.gd
+msgid "%s · ¡nuevo récord!"
+msgstr "%s · nouveau record !"
+
+#: scripts/ui/menus.gd
 msgid "Enemigos derrotados"
 msgstr "Ennemis vaincus"
 
@@ -6519,18 +6517,6 @@ msgstr "Étages passés"
 #: scripts/ui/menus.gd
 msgid "Apartamentos visitados (última planta)"
 msgstr "Appartements visités (dernier étage)"
-
-#: scripts/ui/menus.gd
-msgid "Reto del día · %s"
-msgstr "Défi du jour · %s"
-
-#: scripts/ui/menus.gd
-msgid "%s · ¡mejor marca de hoy!"
-msgstr "%s · meilleur score du jour !"
-
-#: scripts/ui/menus.gd
-msgid "Tu mejor marca de hoy: %s"
-msgstr "Ton meilleur score du jour : %s"
 
 #: scripts/ui/menus.gd
 msgid "Dólares perdidos"
@@ -7253,10 +7239,6 @@ msgid "¡Compra hecha! %s va al baúl."
 msgstr "Acheté ! Au coffre : %s."
 
 #: scripts/ui/ordenador.gd
-msgid "En el reto «%s» no se lleva nada que lanzar."
-msgstr "Avec le défi « %s », tu n'as rien à lancer."
-
-#: scripts/ui/ordenador.gd
 msgid "¡Regalo! %s va al baúl (tienes %d allí)."
 msgstr "Cadeau ! Au coffre : %s (tu en as %d là-bas)."
 
@@ -7565,10 +7547,6 @@ msgid "Baúl lleno"
 msgstr "Coffre plein"
 
 #: scripts/ui/tienda_armas.gd
-msgid "No en este reto"
-msgstr "Pas dans ce défi"
-
-#: scripts/ui/tienda_armas.gd
 msgid "Regalo de bienvenida"
 msgstr "Cadeau de bienvenue"
 
@@ -7667,6 +7645,138 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#, sin-usar
+msgid "Completa un reto del día."
+msgstr "Termine un défi du jour."
+
+#, sin-usar
+msgid "Completa el reto del día con cada una de sus 7 reglas."
+msgstr "Termine le défi du jour avec chacune de ses 7 règles."
+
+#, sin-usar
+msgid "¡Reto completado!"
+msgstr "Défi réussi !"
+
+#, sin-usar
+msgid "Reto del día · %s: %s"
+msgstr "Défi du jour · %s : %s"
+
+#, sin-usar
+msgid "Reto: %s"
+msgstr "Défi : %s"
+
+#, sin-usar
+msgid "Completado en %d:%02d"
+msgstr "Terminé en %d:%02d"
+
+#, sin-usar
+msgid "sin marca"
+msgstr "aucun record"
+
+#, sin-usar
+msgid "Sin marca"
+msgstr "Aucun record"
+
+#, sin-usar
+msgid "planta %d"
+msgstr "étage %d"
+
+#, sin-usar
+msgid "Has llegado a la planta %d"
+msgstr "Tu as atteint l'étage %d"
+
+#, sin-usar
+msgid "Solo cuerpo a cuerpo"
+msgstr "Corps à corps uniquement"
+
+#, sin-usar
+msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
+msgstr "le pistolet est vide au départ et il ne tombe ni munitions, ni molotovs, ni grenades"
+
+#, sin-usar
+msgid "Todo a oscuras"
+msgstr "Tout dans le noir"
+
+#, sin-usar
+msgid "todas las plantas como en un apagón: solo se ve con la linterna"
+msgstr "tous les étages comme pendant un black-out : on ne voit qu'à la lampe torche"
+
+#, sin-usar
+msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
+msgstr "les armoires à pharmacie sont vides et rien de ce qui soigne ne tombe, ne se vend ni ne t'est préparé"
+
+#, sin-usar
+msgid "Durmientes rápidos"
+msgstr "Dormeurs rapides"
+
+#, sin-usar
+msgid "todos un 35 % más rápidos (los jefes, no)"
+msgstr "tous 35 % plus rapides (sauf les boss)"
+
+#, sin-usar
+msgid "De cristal"
+msgstr "En verre"
+
+#, sin-usar
+msgid "Johnny con la mitad de vida"
+msgstr "Johnny avec la moitié de sa vie"
+
+#, sin-usar
+msgid "Casa llena"
+msgstr "Salle comble"
+
+#, sin-usar
+msgid "el doble de durmientes en cada sitio"
+msgstr "deux fois plus de dormeurs partout"
+
+#, sin-usar
+msgid "Oído fino"
+msgstr "Oreille fine"
+
+#, sin-usar
+msgid "hasta los golpes cuerpo a cuerpo despiertan a todo el apartamento"
+msgstr "même les coups au corps à corps réveillent tout l'appartement"
+
+#, sin-usar
+msgid "El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."
+msgstr "Le Défi du jour est un immeuble avec une règle étrange, le même pour tout le monde. On le joue une fois par jour et, si tu le termines, il rapporte $10."
+
+#, sin-usar
+msgid "Premio $%d cobrado"
+msgstr "Récompense $%d encaissée"
+
+#, sin-usar
+msgid "Vuelve mañana"
+msgstr "Reviens demain"
+
+#, sin-usar
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "Déjà joué aujourd'hui : reviens demain"
+
+#, sin-usar
+msgid "Premio"
+msgstr "Récompense"
+
+#, sin-usar
+msgid "Reto del día · %s"
+msgstr "Défi du jour · %s"
+
+#, sin-usar
+msgid "%s · ¡mejor marca de hoy!"
+msgstr "%s · meilleur score du jour !"
+
+#, sin-usar
+msgid "Tu mejor marca de hoy: %s"
+msgstr "Ton meilleur score du jour : %s"
+
+#, sin-usar
+msgid "En el reto «%s» no se lleva nada que lanzar."
+msgstr "Avec le défi « %s », tu n'as rien à lancer."
+
+#, sin-usar
+msgid "No en este reto"
+msgstr "Pas dans ce défi"
 
 #, sin-usar
 msgid "Alerta %d"

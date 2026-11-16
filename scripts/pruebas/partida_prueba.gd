@@ -489,13 +489,14 @@
 #   --tres-zombis       la vecina, el vecino y el crío (los tres de GPT) juntos, por tríos en sus 8 direcciones (mismas fotos) [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
-#   --reto si           el reto del día (--reto <regla> fuerza esa regla); vale con --edificio X  [prueba_varias.gd]
-#                       (y un golpe cuerpo a cuerpo con «Oído fino»: despierta a todos los dormidos del apartamento)
+#   --reto si           el reto del día, el garaje (M125), entrando por su botón de «Elige edificio» (las tarjetas con su
+#                       récord y el cuadro de la condición): el tutorial, lo que no vale con cada condición, el récord
+#                       al caer y el logro de las 5 condiciones (--condicion X fuerza esa); vale con --edificio X [prueba_varias.gd]
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Ajolote, los
-#                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
+#                       premios (jefes, apagón e incendio), el tope de curas y los armaritos, y los
 #                       números de jefes, mutaciones y aliados                             [prueba_varias.gd]
 #   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador; y los
-#                       42 logros (M17; los dos de la torre, del 5 nov): el repaso del guardado, los de jefes, racha, arsenal, ganar, reto y horda, y
+#                       42 logros (M17; los dos de la torre, del 5 nov): el repaso del guardado, los de jefes, racha, arsenal, ganar, garaje y horda, y
 #                       el ordenador por apartados                                          [prueba_varias.gd]
 #   --archivador-logros el programa Logros del ordenador (el archivador): el Resumen, las páginas, cobrar con el
 #                       teclado, «Casi lo tienes», muchos por cobrar y el aviso de las ayudas [prueba_varias.gd]
@@ -1371,7 +1372,7 @@ func empezar_prueba() -> void:
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)
-	elif Reto.activo:
+	elif Garaje.activo:   # (--reto: el botón «Reto del día» de «Elige edificio» abre el garaje)
 		set_process(false)   # sin la prueba larga
 		probar_reto()
 	elif Alerta.nivel > 0:

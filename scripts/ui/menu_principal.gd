@@ -78,7 +78,7 @@ func _ready() -> void:
 		donde.theme_type_variation = "Sub"
 		donde.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		donde.text = "%s · %s" % [Idioma.t(Edificios.datos(foto.edificio).nombre),
-			Planta.nombre_de({"num": foto.planta, "azotea": azotea, "edificio": foto.edificio})] + (" · " + Idioma.t("Reto del día") if foto.reto.activo else "")
+			Planta.nombre_de({"num": foto.planta, "azotea": azotea, "edificio": foto.edificio})]
 		columna.add_child(donde)
 	# JUGAR abre «Elige partida» (huecos.gd, desde el 8 nov): la que esté a medias se sigue y las demás pasan a «Elige edificio»
 	var jugar := boton(columna, Idioma.t("JUGAR"), abrir_huecos, "BotonGrande")
@@ -152,8 +152,9 @@ func _ready() -> void:
 		elegir_edificio()
 		await get_tree().create_timer(0.3).timeout
 		var edificio := Captura.dato("--edificio", "apartamentos")
-		if "--reto" in OS.get_cmdline_user_args():   # la prueba del reto del día: la tarjeta con su botón y su marca
+		if "--reto" in OS.get_cmdline_user_args():   # la prueba del reto del día: las tarjetas con su botón y su récord
 			Captura.foto("captura-reto-tarjeta.png")
+			await foto_cuadro_reto()
 			jugar_reto(edificio)
 		else:
 			Captura.foto("captura-edificios.png")
@@ -301,10 +302,14 @@ func poner_tarjetas() -> void:
 			Guardado.edificio(s, id).alerta_max = Alerta.MAX
 			s.edificios[id].alerta = int(Captura.dato("--alerta"))
 	if Captura.activa() and "--reto" in OS.get_cmdline_user_args():
-		for id in Edificios.LISTA:   # para la foto: una marca de hoy inventada (no se guarda)
-			var f := Reto.ficha(s, id, Reto.hoy())
-			f.intentos = 2
-			f.planta = 3
+		# para la foto (no se guarda): todos con un edificio completado, récords inventados con la condición de hoy (1
+		# oleada en el primero, en singular; 7 en los demás) y los demás, ya jugados hoy
+		var cond := Garaje.condicion_de(Garaje.hoy())
+		for id in Edificios.LISTA:
+			Guardado.edificio(s, id).completado = true
+			Garaje.ficha(s, id).records[cond] = 1 if id == Edificios.LISTA.keys()[0] else 7
+			if id != Edificios.LISTA.keys()[0]:
+				Garaje.ficha(s, id).fecha = Garaje.hoy()
 	for id in Edificios.LISTA:
 		var caja := VBoxContainer.new()
 		caja.add_theme_constant_override("separation", 6)
@@ -396,32 +401,28 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	mas.pressed.connect(cambiar.bind(1))
 
 
-# Debajo del selector de alerta: el botón del reto del día (reto.gd; apagado si ya se ha jugado hoy, M71), grande, con el
-# premio debajo como el dinero de la tienda de armas («$» y la cifra en su pantallita: premio_reto, 12 nov) y, al pasar
-# el ratón o marcarlo, su cuadro (11 nov)
+# Debajo del selector de alerta: el botón del reto del día, el garaje (garaje.gd; apagado si ya se ha jugado hoy en este
+# edificio, M71), grande, con el récord de este edificio con la condición de hoy debajo («Récord: 3 oleadas», M125) y, al
+# pasar el ratón o marcarlo, su cuadro con la condición (11 nov)
 func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
-	var f := Reto.ficha(s, id, Reto.hoy())
+	var cond := Garaje.condicion_de(Garaje.hoy())
 	var b := Button.new()
 	b.text = Idioma.t("Reto del día")
 	b.theme_type_variation = "BotonGrande"   # no-tr
 	b.custom_minimum_size = Vector2(280, 52)
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	b.pressed.connect(jugar_reto.bind(id))
-	var jugado := Reto.jugado(f)
+	var jugado := Garaje.jugado(s, id)
 	if jugado:   # una vez al día (M71): apagado hasta mañana
 		b.disabled = true
 		b.focus_mode = Control.FOCUS_NONE
 	caja.add_child(b)
-	var premio: Control
-	if not jugado:
-		premio = premio_reto()
-	else:
-		var texto := etiqueta_reto(Idioma.t("Premio $%d cobrado") % Reto.PREMIO if f.completado else Idioma.t("Vuelve mañana"),
-			PLACA.TEXTO_SUAVE)
-		texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		premio = texto
-	caja.add_child(premio)
-	var cuadro := cuadro_reto(f)
+	# (ya jugado hoy, en gris: el cuadro dice que vuelvas mañana)
+	var debajo := etiqueta_reto(Garaje.texto_record(Garaje.record(s, id, cond)), PLACA.AMARILLO if not jugado else PLACA.TEXTO_SUAVE,
+		false, Tema.PESO_LISA_TITULO)
+	debajo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caja.add_child(debajo)
+	var cuadro := cuadro_reto(s, id, cond)
 	cuadro.visible = false
 	b.add_child(cuadro)
 	# encima del botón, pegado a él (así su última línea queda por debajo del marco de la tarjeta del edificio y no parece
@@ -445,16 +446,17 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	b.focus_entered.connect(enseñar.bind(true))
 	b.focus_exited.connect(enseñar.bind(false))
 	b.set_meta("cuadro", cuadro)   # (las pruebas lo leen)
-	# apagado el botón no recibe el ratón: el cuadro sale también al pasar por encima del premio
+	b.set_meta("ensenar", enseñar)   # (sin ñ: los nombres de las metas, solo letras inglesas)
+	# apagado el botón no recibe el ratón: el cuadro sale también al pasar por encima de lo de debajo
 	if jugado:
-		premio.mouse_filter = Control.MOUSE_FILTER_STOP
-		premio.mouse_entered.connect(enseñar.bind(true))
-		premio.mouse_exited.connect(enseñar.bind(false))
+		debajo.mouse_filter = Control.MOUSE_FILTER_STOP
+		debajo.mouse_entered.connect(enseñar.bind(true))
+		debajo.mouse_exited.connect(enseñar.bind(false))
 
 
-# El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): la regla de hoy en la cabecera,
-# qué hace (con mayúscula, 12 nov) y, debajo, tu marca
-func cuadro_reto(f: Dictionary) -> PanelContainer:
+# El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): «Garaje · 25 oleadas» en la
+# cabecera; la condición de hoy, qué no vale y, debajo, tu récord con ella en este edificio
+func cuadro_reto(s: Dictionary, id: String, cond: String) -> PanelContainer:
 	var cuadro := PanelContainer.new()
 	cuadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cuadro.top_level = true
@@ -478,7 +480,7 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	cabecera.add_theme_stylebox_override("panel", fondo)
 	cabecera.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	columna.add_child(cabecera)
-	cabecera.add_child(etiqueta_reto(Reto.nombre(f.regla), Color.WHITE, false, Tema.PESO_LISA_TITULO))
+	cabecera.add_child(etiqueta_reto(Idioma.t("Garaje · %d oleadas") % Garaje.OLEADAS, Color.WHITE, false, Tema.PESO_LISA_TITULO))
 	var margen := MarginContainer.new()
 	margen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for lado in ["left", "right"]:
@@ -488,14 +490,13 @@ func cuadro_reto(f: Dictionary) -> PanelContainer:
 	textos.add_theme_constant_override("separation", 4)
 	textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margen.add_child(textos)
-	var que_hace := Reto.desc(f.regla)   # (empieza en minúscula, para el aviso del principio: «Reto del día · X: ...»)
-	textos.add_child(etiqueta_reto(que_hace.left(1).to_upper() + que_hace.substr(1), PLACA.TEXTO, true))
-	textos.add_child(etiqueta_reto(Reto.marca(f), Color("#ff9a5c"), true))
-	if Reto.jugado(f):
-		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
-	# (el premio ya no va aquí: sale debajo del botón, y dos veces quedaba feo, 12 nov)
+	textos.add_child(etiqueta_reto(Idioma.t("Condición de hoy: %s") % Garaje.nombre(cond), PLACA.AMARILLO, true, Tema.PESO_LISA_TITULO))
+	textos.add_child(etiqueta_reto(Garaje.desc(cond), PLACA.TEXTO, true))
+	textos.add_child(etiqueta_reto(Garaje.texto_record(Garaje.record(s, id, cond)), Color("#ff9a5c"), true))
+	if Garaje.jugado(s, id):
+		textos.add_child(etiqueta_reto(Idioma.t("Ya lo has jugado hoy en este edificio: vuelve mañana"), PLACA.TEXTO_SUAVE, true))
 	var abajo := Control.new()
-	abajo.custom_minimum_size.y = 8   # (aire bajo la marca: con 4 se pegaba al borde, 12 nov)
+	abajo.custom_minimum_size.y = 8   # (aire bajo el récord: con 4 se pegaba al borde, 12 nov)
 	abajo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	columna.add_child(abajo)
 	return cuadro
@@ -515,34 +516,28 @@ func etiqueta_reto(texto: String, color: Color, partir := false, peso := Tema.PE
 	return l
 
 
-# El premio del reto que aún se puede cobrar, como el dinero de la tienda de armas: «Premio» y, a su lado, la pantallita
-# hundida con el «$» y la cifra en amarillo (chapa.gd, dibujar_marcador; sin los «8» apagados de fondo) (12 nov)
-func premio_reto() -> HBoxContainer:
-	var fila := HBoxContainer.new()
-	fila.alignment = BoxContainer.ALIGNMENT_CENTER
-	fila.add_theme_constant_override("separation", 8)
-	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var palabra := etiqueta_reto(Idioma.t("Premio"), PLACA.AMARILLO, false, Tema.PESO_LISA_TITULO)
-	palabra.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	fila.add_child(palabra)
-	var fuente := get_theme_default_font()   # (la pixelada, la del marcador de la tienda)
-	var pantallita := Control.new()
-	pantallita.custom_minimum_size = PLACA.medida_marcador(fuente, Reto.PREMIO)
-	pantallita.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pantallita.draw.connect(func():
-		PLACA.dibujar_marcador(pantallita, fuente, Rect2(Vector2.ZERO, pantallita.size), Reto.PREMIO, PLACA.AMARILLO))
-	fila.add_child(pantallita)
-	return fila
-
-
-# El reto del día de un edificio (reto.gd): el de hoy, sin alerta. En la prueba, "--reto <regla>" fuerza esa regla
+# El reto del día de un edificio: su garaje (garaje.gd), el de hoy, sin la mejora del VD-7. En la prueba,
+# "--condicion X" fuerza esa condición (Garaje.empezar)
 func jugar_reto(id: String) -> void:
 	Edificios.elegido = id
 	Alerta.nivel = 0
-	Reto.empezar(id)
-	if Captura.activa() and Captura.dato("--reto") in Reto.REGLAS:
-		Reto.regla = Captura.dato("--reto")
+	Garaje.empezar()
 	Captura.ir_a_la_partida()
+
+
+# La prueba del reto (--reto): el cuadro del botón del primer edificio, como al pasar el ratón (captura-reto-cuadro.png),
+# y el del último, ya jugado hoy (captura-reto-jugado.png)
+func foto_cuadro_reto() -> void:
+	var botones := find_children("*", "Button", true, false).filter(func(n): return n.has_meta("cuadro"))
+	for k in [0, botones.size() - 1]:
+		var b: Button = botones[k]
+		b.get_meta("ensenar").call(true)
+		await get_tree().create_timer(0.3).timeout
+		var c: Control = b.get_meta("cuadro")
+		print("Reto del día · botón %d de %d: apagado %s · cuadro «%s»" % [k + 1, botones.size(), b.disabled,
+			" | ".join(c.find_children("*", "Label", true, false).map(func(l): return l.text))])
+		Captura.foto("captura-reto-cuadro.png" if k == 0 else "captura-reto-jugado.png")
+		b.get_meta("ensenar").call(false)
 
 
 # Con el primer edificio completado (ya hay alguna alerta abierta), la primera vez: el tutorial de la alerta y el reto
@@ -693,7 +688,7 @@ func medir_tarjetas(s: Dictionary) -> float:
 func jugar_partida(id := "apartamentos") -> void:
 	Edificios.elegido = id
 	Alerta.nivel = alertas.get(id, 0)
-	Reto.quitar()   # (por si la partida anterior fue el reto del día)
+	Garaje.quitar()   # (por si la partida anterior fue el reto del día)
 	# con --captura, la partida de prueba: la misma, con las fotos (pruebas/partida_prueba.gd)
 	Captura.ir_a_la_partida()
 

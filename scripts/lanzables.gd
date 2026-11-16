@@ -560,6 +560,9 @@ func mas_cercano() -> Node2D:
 
 
 func lanzar(donde: Vector2) -> void:
+	if tipo != "" and Garaje.prohibido(tipo):   # (el garaje del reto del día, «Sin lanzables»: garaje.gd)
+		Garaje.avisar(johnny)
+		return
 	if tipo == "" or cuantas(tipo) <= 0:
 		var aviso := Idioma.t("¡Sin %s!") % nombre(tipo) if tipo != "" else Idioma.t("¡Nada que lanzar!")
 		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-50, -80), aviso, color(tipo), 18)

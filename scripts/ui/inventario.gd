@@ -1072,6 +1072,17 @@ func usar(en_johnny := false) -> void:
 	pintar()
 
 
+# El garaje del reto del día: lo que hoy no vale (garaje.gd, la condición del día) no sale del baúl ni se pone en la
+# mano. Si es eso, lo dice abajo y devuelve true
+func no_vale(id: String) -> bool:
+	if not Garaje.prohibido(id):
+		return false
+	Sonido.tocar("no")
+	aviso = Garaje.no_vale()
+	pintar()
+	return true
+
+
 # Se pone en la mano el arma de repuesto elegida; la que llevaba (de su mismo tipo) pasa al repuesto. La ficha enseña
 # la que se acaba de poner; las dos dan un saltito, y Johnny también
 func poner_guardada() -> void:
@@ -1081,6 +1092,8 @@ func poner_guardada() -> void:
 		return
 	var johnny: Node2D = partida.johnny
 	var id: String = guardadas[i]
+	if no_vale(id):
+		return
 	var tipo: String = Armas.datos(id).tipo
 	guardadas[i] = johnny.huecos[tipo]
 	johnny.coger(id)
@@ -1312,6 +1325,8 @@ func cosas_baul(s: Dictionary) -> Array:
 # ¿Se puede sacar esa casilla del baúl? Un objeto, si le cabe en la mochila o en la munición; un arma, siempre (la que
 # sobre entra en el baúl en su lugar); unos arrojables, si le cabe al menos uno (en un montón suyo o en uno nuevo)
 func se_saca(o: Dictionary) -> bool:
+	if Garaje.prohibido(o.id):   # (el garaje del reto del día: lo que hoy no vale se queda en el baúl)
+		return false
 	var johnny: Node2D = partida.johnny
 	if o.equipo < 0:
 		return johnny.sitio(o.id) > 0 if o.id in Armas.MUNICION else Objetos.cabe(partida.mochila, o.id)
@@ -1444,6 +1459,8 @@ func ficha_baul() -> Dictionary:
 			var id: String = o.id
 			if o.equipo >= 0:
 				d.merge(ficha_equipo(o), true)
+				if Garaje.prohibido(id):
+					d.que = Garaje.no_vale()   # (y su botón, apagado: se_saca)
 				return d
 			var municion: bool = id in Armas.MUNICION
 			var cabe := se_saca(o)
@@ -1464,6 +1481,8 @@ func ficha_baul() -> Dictionary:
 			else:
 				d.que += Idioma.t("No te cabe: tienes llenos los huecos de munición.") if municion \
 					else Idioma.t("No te cabe: tienes la mochila llena.")
+			if Garaje.prohibido(id):
+				d.que = Garaje.no_vale()   # (y su botón, apagado: se_saca)
 	return d
 
 
@@ -1561,6 +1580,8 @@ func pasar_al_momento() -> void:
 	if i >= cosas.size():
 		return
 	var o: Dictionary = cosas[i]
+	if no_vale(o.id):
+		return
 	if o.equipo >= 0:
 		sacar_equipo(o)
 		return
@@ -1594,6 +1615,8 @@ func sacar() -> void:
 # fregona o la pistola Normales (que no se pueden guardar a mano). De los arrojables sale un montón, los que quepan
 # (lanzables.meter); los demás se quedan en el baúl
 func sacar_equipo(o: Dictionary) -> void:
+	if no_vale(o.id):
+		return
 	if not se_saca(o):
 		Sonido.tocar("no")
 		return
@@ -1642,6 +1665,8 @@ func sacar_equipo(o: Dictionary) -> void:
 # si el arma que la gasta está vacía, se carga). Si no cabe, no sale. La marca se queda en «Sacar uno» mientras queden:
 # con el mando, A, A, A... y salen de uno en uno
 func sacar_objeto(id: String, de_la_casilla := 0) -> void:   # de_la_casilla: los que hay en la elegida (0: no importa)
+	if no_vale(id):
+		return
 	var johnny: Node2D = partida.johnny
 	var municion: bool = id in Armas.MUNICION
 	if not (johnny.sitio(id) > 0 if municion else Objetos.cabe(partida.mochila, id)):

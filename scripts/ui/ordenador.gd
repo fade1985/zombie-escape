@@ -878,9 +878,7 @@ func comprar_lanzable(k: String) -> void:
 	var no := ""
 	var s := Guardado.cargar()
 	var regalo: bool = TIENDA.es_regalo(s, k)
-	if Reto.sin_municion():
-		no = Idioma.t("En el reto «%s» no se lleva nada que lanzar.") % Reto.nombre("cuerpo")
-	elif Objetos.caben_arrojables(s, k, 0) <= 0:
+	if Objetos.caben_arrojables(s, k, 0) <= 0:
 		no = Idioma.t("El baúl está lleno: haz sitio en él para poder comprar.")
 	var precio: int = 0 if regalo else Supervivientes.precio(Lanzables.PRECIOS[k])
 	if no == "" and partida.cartera() < precio:

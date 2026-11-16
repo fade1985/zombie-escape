@@ -1,4 +1,4 @@
-# Pruebas sueltas: la mejora del compuesto VD-7 (--alerta N), el reto del día (--reto), la caza del acompañante (--caza),
+# Pruebas sueltas: la mejora del compuesto VD-7 (--alerta N), el reto del día, el garaje (--reto), la caza del acompañante (--caza),
 # el vómito de la Gastroenteritis (--gastro), la llave en el suelo (--llave), los números del equilibrio (--equilibrio) y
 # la rama Químico de los talentos (--quimico) y el ratón en la partida (--raton).
 # Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
@@ -344,91 +344,130 @@ func probar_alerta() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --reto" (y "--reto oscuras", "--reto cuerpo"..., con esa regla en vez de la de hoy): la prueba
-# del reto del día (reto.gd). Saca el aviso del principio (captura-reto.png); comprueba que la 1ª planta sale
-# igual dos veces con la semilla de hoy y distinta con la de otro día; dice en la terminal lo que cambia cada
-# regla y, con la que se juega, cómo queda el primer piso (armaritos, balas, lanzables, lo oscuro que está:
-# captura-reto-piso.png); y acaba dos veces, cayendo en la 3ª planta (captura-reto-derrota.png) y completando
-# el edificio (captura-reto-fin.png, con la marca mejorada). Al final mira el guardado: la marca de hoy, y que
-# el edificio sigue sin contar como completado y sin abrir alertas
+# Con "--captura --reto" (y "--condicion cuerpo", "--condicion curas"..., con esa condición en vez de la de hoy): el reto
+# del día, que desde el 16 nov es el garaje (garaje.gd, M125). Lo lanza el botón de «Elige edificio» (menu_principal.gd,
+# jugar_reto: antes, sus fotos captura-reto-tarjeta.png, captura-reto-cuadro.png y captura-reto-jugado.png). Aquí: que
+# entra en el garaje sin la mejora del VD-7 y con la condición de hoy, y que el intento ya se ha gastado; el tutorial
+# (captura-reto-tutorial.png); lo que no vale con cada una de las cinco condiciones (sacarlo del baúl, ponerlo en la
+# mano, atacar, lanzar y curarse); con la que se juega, el baúl (captura-reto-baul.png) y arriba la condición
+# (captura-reto.png); y al caer con 3 oleadas superadas, el récord nuevo (captura-reto-fin.png) y el logro de las
+# condiciones. Cada línea dice lo esperado
 func probar_reto() -> void:
-	print("Reto del día (%s) en %s: %s · %s · semilla %d" % [Reto.fecha, ed.el_nombre, Reto.nombre(), Reto.desc(), Planta.semilla])
-	decir("%s: %s
-%s" % [planta.nombre, ed.objetivo, Reto.aviso()], 4.0)
-	await get_tree().create_timer(0.5, false).timeout
-	Captura.foto("captura-reto.png")
-	# la 1ª planta, dos veces con la semilla de hoy y una con la de otro día
-	var una := var_to_str(Planta.generar(2, edificio, jefe_de(2)).sitios)
-	var otra := var_to_str(Planta.generar(2, edificio, jefe_de(2)).sitios)
-	var semilla := Planta.semilla
-	Planta.semilla = Reto.semilla_de("2000-01-01", edificio)
-	var de_otro_dia := var_to_str(Planta.generar(2, edificio, jefe_de(2)).sitios)
-	Planta.semilla = semilla
-	print("Semilla · la 1ª planta sale igual dos veces: %s · con la de otro día, distinta: %s" % [una == otra, una != de_otro_dia])
-	# lo que cambia cada regla (la vida de Johnny y la velocidad de un zombi normal, recién puestos)
-	var regla := Reto.regla
-	var talentos: Dictionary = Guardado.cargar().talentos
-	for r in Reto.REGLAS:
-		Reto.regla = r
-		aplicar_talentos(talentos)
-		var z := meter_zombi("normal", Vector2(200, 200))
-		print("%s · munición: %s · oscuras: %s · curas: %s · velocidad %.0f · vida %d · zombis x%.1f" % [
-			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_curas(),
-			z.velocidad, johnny.stats.vida_max, Reto.mas_zombis()])
-		z.queue_free()
-	Reto.regla = regla
-	aplicar_talentos(talentos)
-	# con la regla que se juega, el primer piso: los armaritos, las balas y los lanzables, y lo oscuro que está
-	var piso := 1
-	for i in planta.sitios.size():
-		if planta.sitios[i].tipo == "apartamento":
-			piso = i
-			break
-	await montar(piso, 0, false)
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.4, false).timeout
-	var lamparas := mapa.find_children("*", "", true, false).filter(func(n): return n.scene_file_path == Eventos.LAMPARA)
-	print("Con «%s», en %s · armaritos vacíos: %d de %d · balas %d (+%d) · molotovs %d, granadas %d · oscuridad %.2f (Luz.evento %.2f) · lámparas apagadas: %d de %d · arriba: «%s»" % [
-		Reto.nombre(), planta.sitios[piso].nombre, mapa.armaritos.filter(func(a): return a.datos.cogido).size(), mapa.armaritos.size(),
-		johnny.balas, johnny.reserva(), lanzables.cantidades.molotov, lanzables.cantidades.granada, Luz.nivel, Luz.evento,
-		lamparas.filter(func(n): return n.fuerza == 0.0).size(), lamparas.size(), lugar.text])
-	Captura.foto("captura-reto-piso.png")
-	# «Oído fino» (12 nov): un golpe cuerpo a cuerpo dentro del apartamento despierta a todos los dormidos (con otra
-	# regla, no despierta a nadie)
-	var regla_hoy := Reto.regla
-	for r in ["cuerpo", "oido"]:
-		Reto.regla = r
-		var dormidos := func() -> int:
-			return get_tree().get_nodes_in_group("zombis").filter(func(z): return z is Zombi and z.dormido and not z.sentado).size()
-		var antes_golpe: int = dormidos.call()
-		johnny.golpe_ruidoso()
-		print("Reto «%s», golpe cuerpo a cuerpo en el apartamento: dormidos %d -> %d (esperado: con Oído fino, 0; con otra, los mismos)" % [
-			Reto.nombre(), antes_golpe, dormidos.call()])
-	Reto.regla = regla_hoy
-	# el final, dos veces: cayendo en la 3ª planta y luego completando el edificio (las dos mejoran la marca de hoy)
-	var antes: Dictionary = Guardado.cargar().edificios[edificio].duplicate()
-	planta.num = 3
-	planta.nombre = Planta.nombre_planta(3)
-	terminar(false)
-	await get_tree().create_timer(0.5).timeout
-	Captura.foto("captura-reto-derrota.png")
-	var f: Dictionary = Guardado.cargar().retos[edificio]
-	print("Caída en la %s · marca de hoy: %s · intentos: %d" % [planta.nombre.to_lower(), Reto.marca(f), f.intentos])
-	terminada = false
-	planta.num = Planta.PLANTAS
-	planta.nombre = Planta.nombre_planta(Planta.PLANTAS)
-	dolares = 50
-	terminar(true)
-	await get_tree().create_timer(0.5).timeout
-	Captura.foto("captura-reto-fin.png")
+	johnny.stats.vida_max = 99999   # (que no le maten en la prueba)
+	johnny.vida = 99999
 	var s := Guardado.cargar()
-	f = s.retos[edificio]
-	var e: Dictionary = s.edificios[edificio]
-	print("Completado · marca de hoy: %s (regla %s, intentos %d) · dólares ahorrados: %d" % [Reto.marca(f), f.regla, f.intentos, s.dolares])
-	print("El edificio sigue igual (completado %s, victorias %d, alerta más alta %d, mejor planta %d, mejor tiempo %.0f): %s" % [
-		e.completado, e.victorias, e.alerta_max, e.mejor_planta, e.mejor_tiempo,
-		e.completado == antes.completado and e.victorias == antes.victorias and e.alerta_max == antes.alerta_max
-		and e.mejor_planta == antes.mejor_planta and e.mejor_tiempo == antes.mejor_tiempo])
+	print("Reto del día (%s) en %s: garaje %s · mejora del VD-7 %d · condición «%s» (%s) · jugado hoy %s (esperado: true, 0, la de hoy o la pedida, true)" % [
+		Garaje.fecha, ed.el_nombre, Garaje.activo, Alerta.nivel, Garaje.nombre(), Garaje.condicion,
+		Garaje.jugado(s, edificio)])
+	var dias := {}
+	for k in 60:
+		var c := Garaje.condicion_de("2026-%02d-%02d" % [11 + k / 30, 1 + k % 30])
+		dias[c] = dias.get(c, 0) + 1
+	print("Reto del día · condiciones en 60 días: %s (esperado: salen las 5) · la de hoy, dos veces igual: %s" % [
+		dias, Garaje.condicion_de(Garaje.hoy()) == Garaje.condicion_de(Garaje.hoy())])
+	# el tutorial del garaje, como al entrar
+	tutoriales_prueba = true
+	Guardado.cambiar(func(g): g.tutoriales.erase("garaje"))
+	tutorial("garaje")
+	await get_tree().create_timer(0.6, true).timeout
+	Captura.foto("captura-reto-tutorial.png")
+	var ventana := find_children("*", "", true, false).filter(func(n): return n is Tutorial)
+	print("Reto del día · tutorial abierto: %s · juego parado: %s (esperado: true, true)" % [not ventana.is_empty(), get_tree().paused])
+	for v in ventana:
+		v.cerrar()
+	await get_tree().create_timer(0.3, true).timeout
+	tutoriales_prueba = false
+	# lo que no vale con cada condición: en el baúl, un arma de cada familia, un lanzable y unas vendas
+	var hoy := Garaje.condicion
+	Guardado.cambiar(func(g):
+		g.baul_equipo = [{"id": "bate", "calidad": 0, "quedan": 3}, {"id": "escopeta", "calidad": 0, "quedan": 3},
+			{"id": "lanzallamas", "calidad": 0, "quedan": 3}, {"id": "granada", "calidad": 0, "n": 3, "quedan": 3}]
+		g.baul["vendas"] = 2)
+	mochila.append("vendas")
+	for c in Garaje.CONDICIONES:
+		Garaje.condicion = c
+		lanzables.cantidades["molotov"] = 2
+		lanzables.tipo = "molotov"
+		johnny.vida = 50
+		abrir_cosas("baul")
+		await get_tree().process_frame
+		var sale := []
+		for o in inventario.cosas_baul(Guardado.cargar()):
+			if o.id in ["bate", "escopeta", "lanzallamas", "granada", "vendas"]:
+				Garaje.condicion = ""   # (sin condición, ¿cabría? Si no, no sale por eso: «no cabe»)
+				var cabria := inventario.se_saca(o)
+				Garaje.condicion = c
+				sale.append("%s %s" % [o.id, "no cabe" if not cabria else "sí" if inventario.se_saca(o) else "no"])
+		inventario.cerrar()
+		await get_tree().process_frame
+		# atacar con cada mano: la fregona y la pistola (la que lleva al entrar)
+		var ataques := []
+		for mano_ in ["cuerpo", "fuego"]:
+			johnny.mano = mano_
+			johnny.espera = 0.0
+			johnny.balas = maxi(johnny.balas, 1)
+			johnny.recargando = 0.0   # (sin recargas a medias de la vuelta de antes)
+			var antes_espera: float = johnny.espera
+			johnny.intentar_atacar(0.0)
+			ataques.append("%s %s" % [johnny.huecos[mano_], "sí" if johnny.espera != antes_espera else "no"])
+			johnny.golpe_pendiente = false   # (el golpe a medias, fuera: si no, al cambiar de mano lo daría la pistola)
+			johnny.ataque_t = -1.0
+			johnny.recargando = 0.0
+		var molotovs: int = lanzables.cuantas("molotov")
+		lanzables.lanzar(johnny.position + Vector2(120, 0))
+		var lanza := lanzables.cuantas("molotov") < molotovs
+		var cura := usar_objeto("vendas")
+		if cura == "":
+			mochila.append("vendas")
+		print("Condición «%s»: del baúl sale %s · ataca %s · lanza %s · se cura «%s» (esperado: solo lo de su familia no, %s; lo que no cabe, da igual)" % [
+			Garaje.nombre(), sale, ataques, lanza, cura if cura != "" else "sí", c])
+		await get_tree().create_timer(0.3, false).timeout
+	Garaje.condicion = hoy
+	johnny.recargando = 0.0
+	johnny.mano = "cuerpo"
+	# con la de hoy: el baúl abierto, con lo que no vale elegido (su ficha lo dice y su botón, apagado) y, arriba, la condición
+	abrir_cosas("baul")
+	await get_tree().process_frame
+	var cosas := inventario.cosas_baul(Guardado.cargar())
+	for k in cosas.size():
+		if Garaje.prohibido(cosas[k].id):
+			inventario.sel = "b%d" % k
+			inventario.pintar()
+			break
+	await get_tree().create_timer(0.3, true).timeout
+	Captura.foto("captura-reto-baul.png")
+	inventario.cerrar()
+	garaje.arrancar()
+	await get_tree().create_timer(Garaje.ESPERA + 0.6, false).timeout
+	poner_lugar()
+	print("Reto del día · arriba: «%s» (esperado: con «%s»)" % [lugar.text, Garaje.nombre()])
+	Captura.foto("captura-reto.png")
+	# al caer, tras superar 3 oleadas: el récord de este edificio con esta condición, y el logro de las condiciones
+	Guardado.cambiar(func(g):
+		Garaje.ficha(g, edificio).records.erase(hoy)
+		g.logros_cuentas.condiciones = Garaje.CONDICIONES.keys().filter(func(c): return c != hoy)
+		g.logros.erase("todas_reglas"))
+	logros.repasar = true   # (la partida de prueba no repasa los logros: aquí, sí; y sin ayudas, que los apagan)
+	var ayudas_antes := {}
+	Guardado.cambiar(func(g):
+		for a in Logros.AYUDAS:
+			ayudas_antes[a] = g.ajustes.get(a, false)
+			g.ajustes[a] = false)
+	logros.con_ayudas = false
+	garaje.superadas = 3
+	garaje.oleada = 4
+	terminar(false)
+	await get_tree().create_timer(0.6, true).timeout
+	Captura.foto("captura-reto-fin.png")
+	s = Guardado.cargar()
+	print("Reto del día · al caer: récord %s · otras condiciones sin tocar: %s · jugado hoy %s · Ninguna regla me para %s (esperado: 3, true, true, conseguido)" % [
+		Garaje.record(s, edificio, hoy), Garaje.CONDICIONES.keys().all(func(c): return c == hoy or Garaje.record(s, edificio, c) == 0),
+		Garaje.jugado(s, edificio), "conseguido" if s.logros.has("todas_reglas") else "no"])
+	print("Reto del día · guardado: %s · sin «retos» viejos: %s · condiciones jugadas %s (esperado: las 5) · sin logros %s (esperado: false)" % [s.garajes, not s.has("retos"),
+		s.logros_cuentas.get("condiciones"), logros.sin_logros()])
+	Guardado.cambiar(func(g):
+		for a in ayudas_antes:
+			g.ajustes[a] = ayudas_antes[a])
 	get_tree().quit()
 
 
@@ -1037,20 +1076,9 @@ func probar_equilibrio() -> void:
 	var tec: Dictionary = Supervivientes.DATOS.tecnico.habilidad
 	print("Policía dispara cada %.1f s (esperado: 0.8) · el técnico aturde %.1f s cada %.1f s (esperado: 1.5 cada 3.0)" % [
 		poli.cada, tec.segundos, tec.cada])
-	Reto.activo = true
-	Reto.regla = "curas"
-	var de_farmacia := []
-	for k in 6:
-		de_farmacia.append(Objetos.al_azar("centro", "farmacia"))
-	Reto.activo = false
-	print("Reto «Sin curas» en la farmacia: %s (esperado: objetos, sin vendas ni vacíos)" % [de_farmacia])
 
 	# ── El dinero ──
-	var s := {"retos": {}}
-	var primera := Reto.premio(s, "apartamentos")
-	s.retos.apartamentos.completado = true
-	print("Premio del reto: la primera vez de hoy $%d, ya completado $%d (esperado: 10 y 0) · billetes de un jefe %d (esperado: 10)" % [
-		primera, Reto.premio(s, "apartamentos"), BILLETES_JEFA])
+	print("Billetes de un jefe %d (esperado: 10)" % BILLETES_JEFA)
 	eventos.evento = "incendio"
 	eventos.empezado = true
 	var d0: int = dolares
@@ -1171,14 +1199,14 @@ func probar_relato() -> void:
 	await pulsar.call(tecla.call(KEY_ENTER))
 	var repetir := puede_relato("centro")
 	Guardado.cambiar(func(g): g.relatos.erase("centro"))
-	Reto.activo = true
+	Garaje.activo = true
 	var en_el_reto := puede_relato("centro")
-	Reto.activo = false
+	Garaje.activo = false
 	ver_relato("centro")
 	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
 	await pulsar.call(mando.call(JOY_BUTTON_B))
 	await get_tree().create_timer(Relato.FUNDIDO).timeout
-	print("Relato · ya salido, otra vez: %s · en el reto: %s · saltado con B: abierta %s (esperado: false, false, false)" % [
+	print("Relato · ya salido, otra vez: %s · en el garaje del reto: %s · saltado con B: abierta %s (esperado: false, false, false)" % [
 		repetir, en_el_reto, abierto.call() != null])
 	print("Relato · apuntados: %s · guardado de prueba: %s · el de verdad sin tocar: %s" % [Guardado.cargar().relatos, Guardado.archivo,
 		FileAccess.get_modified_time("user://guardado.json") == guardado_real])
@@ -1518,7 +1546,7 @@ func probar_logros() -> void:
 # por conseguidos (revisar), con un solo aviso para todos (captura-logros-varios.png); los de los jefes (Desahucio solo
 # con la portera, Sin un rasguño, Por los pelos, Visto y no visto y Cazajefes); Racha imparable (y que un golpe la
 # corta); Arsenal completo; los de ganar (Jornada exprés, Sin tiritas, las alertas, Buena compañía, Empleado del mes y,
-# en el reto del día, Reto aceptado y Ninguna regla me para); Contra la marea, y el programa Logros del ordenador por
+# en el garaje del reto del día, Reto aceptado y Ninguna regla me para); Contra la marea, y el programa Logros del ordenador por
 # apartados (captura-logros-temas.png, arriba, y captura-logros-temas-abajo.png). Deja el guardado como estaba
 func probar_logros_nuevos(limpiar: Callable) -> void:
 	var copia := Guardado.cargar()
@@ -1651,23 +1679,19 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 	print("Logros nuevos · ganar con la Alerta 5: %s (esperado: los 7 primeros conseguidos, reto_aceptado y todas_reglas pendientes)" % estados.call(ganar))
 	supervivientes.equipo.erase(vecino)
 	vecino.free()
-	# y el reto del día: en 2000 s, curándose y sin vecino; con las 7 reglas, Ninguna regla me para
+	# y el garaje del reto del día (M125): superadas sus 25 oleadas con «Sin cuerpo a cuerpo», Reto aceptado; jugado con
+	# las 5 condiciones, Ninguna regla me para
 	Guardado.cambiar(func(g):
 		g.logros = {}
-		g.logros_cuentas.victorias = 0)
+		g.logros_cuentas.victorias = 0
+		g.logros_cuentas.erase("condiciones"))
 	Alerta.nivel = 0
-	duracion = 2000.0
-	logros.curado = true
-	Reto.activo = true
-	Reto.regla = "cuerpo"
-	logros.partida_ganada()
-	var reglas: Array = Guardado.cargar().logros_cuentas.get("reglas", [])
-	Guardado.cambiar(func(g): g.logros_cuentas.reglas = Reto.REGLAS.keys())
+	logros.garaje_jugado("cuerpo", true)
+	var condiciones: Array = Guardado.cargar().logros_cuentas.get("condiciones", [])
+	Guardado.cambiar(func(g): g.logros_cuentas.condiciones = Garaje.CONDICIONES.keys())
 	logros.revisar()
-	print("Logros nuevos · ganar el reto «cuerpo»: reglas %s · %s (esperado: [cuerpo]; fin_jornada y reto_aceptado conseguidos y, con las 7 reglas, todas_reglas; los demás pendientes, salvo buena_compania si la prueba lleva acompañante)" % [
-		reglas, estados.call(ganar)])
-	Reto.activo = false
-	Reto.regla = ""
+	print("Logros nuevos · el garaje con «cuerpo», superado: condiciones %s · %s (esperado: [cuerpo]; reto_aceptado y, con las 5 condiciones, todas_reglas conseguidos; los demás pendientes)" % [
+		condiciones, estados.call(ganar)])
 	duracion = duracion_antes
 	logros.curado = false
 	# 7) la horda del pasillo: el logro, cuando ya se ha leído lo del premio

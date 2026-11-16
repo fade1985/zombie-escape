@@ -880,7 +880,7 @@ static func informatico_cerca(arbol: SceneTree, p: Vector2, radio: float) -> boo
 # con la tecla 2 o desde el inventario (Objetos.USABLES); si no se usa, pasa al baúl como los demás objetos. Devuelve si lo ha
 # puesto (para decirlo al empezar)
 func botiquin_al_empezar() -> bool:
-	if "farmaceutica" not in Guardado.cargar().rescatados or Reto.sin_curas():   # (en ese reto, nadie te lo prepara)
+	if "farmaceutica" not in Guardado.cargar().rescatados:
 		return false
 	partida.mochila.append("botiquin")
 	return true

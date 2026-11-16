@@ -80,7 +80,9 @@ const NUEVO := {
 	"tutoriales": [],     # tutoriales ya vistos (ids de Tutoriales.LISTA): cada uno sale una sola vez
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"en_curso": "",       # la partida a medias, al empezar la planta en la que va (partida_guardada.gd; "" = ninguna)
-	"retos": {},          # el reto del día (reto.gd): la marca de hoy en cada edificio: {"apartamentos": {...}} (ver RETO)
+	"garajes": {},        # el garaje del reto del día (garaje.gd): en cada edificio, el día en que se jugó y los récords
+	                      # de cada condición: {"apartamentos": {...}} (ver GARAJE). (Hasta el 16 nov, "retos": el reto
+	                      # viejo, reto.gd; al no estar aquí, no se lee y desaparece al volver a escribir el guardado)
 	# teclas: los controles cambiados en Opciones (controles.gd)
 	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)
 	# vida_entera, pistola_sin_fin, lanzar_solo y disparo_asistido: las ayudas de la pestaña Ayudas de Opciones (johnny.gd y
@@ -98,10 +100,9 @@ const NUEVO := {
 const EDIFICIO := {"completado": false, "partidas": 0, "victorias": 0, "mejor_planta": 0, "mejor_tiempo": 0.0,
 	"alerta_max": 0, "alerta": 0}
 
-# El reto del día de un edificio (reto.gd): fecha (el día del reto, "2026-10-22"; si es de otro día, se empieza de
-# cero), regla (la de ese día), intentos, planta (la más alta a la que se ha llegado hoy), completado y tiempo
-# (el mejor de hoy, si se ha completado)
-const RETO := {"fecha": "", "regla": "", "intentos": 0, "planta": 0, "completado": false, "tiempo": 0.0}
+# El garaje del reto del día de un edificio (garaje.gd): fecha (el último día en que se jugó, "2026-11-16": se juega una
+# vez al día) y records (las oleadas superadas con cada condición, aparte: {"cuerpo": 7, "curas": 3})
+const GARAJE := {"fecha": "", "records": {}}
 
 
 static func cargar() -> Dictionary:
@@ -217,10 +218,12 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 		s.edificios[id] = EDIFICIO.merged(s.edificios[id], true)
 		for clave in ["partidas", "victorias", "mejor_planta", "alerta_max", "alerta"]:
 			s.edificios[id][clave] = int(s.edificios[id][clave])
-	for id in s.retos:
-		s.retos[id] = RETO.merged(s.retos[id], true)
-		for clave in ["intentos", "planta"]:
-			s.retos[id][clave] = int(s.retos[id][clave])
+	for id in s.garajes:
+		s.garajes[id] = GARAJE.duplicate(true).merged(s.garajes[id], true)   # (copia: las constantes no se pueden cambiar)
+		if not s.garajes[id].records is Dictionary:
+			s.garajes[id].records = {}
+		for c in s.garajes[id].records:
+			s.garajes[id].records[c] = int(s.garajes[id].records[c])
 	# Un guardado de antes de las Colecciones (sin "encontrados"): lo encontrado se saca del baúl, una sola vez (en
 	# cuanto se escriba, el archivo ya lleva la clave)
 	if not leido.has("encontrados"):

@@ -269,7 +269,15 @@ const LISTA := {
 		"cuando": "Al completar el primer edificio",
 		"lineas": ["Debajo de cada edificio completado eliges la mejora del compuesto VD-7 con < y >: cada nivel, los enemigos tienen un 20 % más de vida, daño, velocidad y ataque.",
 			"No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente.",
-			"El Reto del día es un edificio con una regla rara, el mismo para todos. Se juega una vez al día y, si lo completas, da $10."]},
+			"El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."]},
+	# (16 nov, M125: el reto del día pasa a ser el garaje; sale al entrar en él, partida.empezar_garaje)
+	"garaje": {"grupo": "Más edificios", "titulo": "El garaje del reto del día", "icono": "trofeo",
+		"cuando": "Al entrar en el garaje",
+		"lineas": ["Aguanta 25 oleadas de durmientes, cada una más dura que la anterior. Cada 5 oleadas llega también un jefe del edificio.",
+			"En el centro está el baúl, con lo que tengas guardado: si te quedas sin nada, ve a por más.",
+			"Cada oleada superada da tantos dólares como su número: la 5, $5. Te los llevas siempre, ganes, caigas o abandones.",
+			"Cada día hay una condición, la misma para todos: algo que no vale, ni sacarlo del baúl ni usarlo. Sale arriba del todo.",
+			"Se juega una vez al día en cada edificio, y se guarda tu récord de oleadas con cada condición."]},
 }
 # [/traducir]
 

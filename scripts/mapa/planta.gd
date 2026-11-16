@@ -888,8 +888,7 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 	for s in apt.salas:
 		area += s.casillas
 	# en los pisos grandes hay más, pero no en proporción: si no, los de 3 dormitorios serían eternos
-	# (con el reto del día "Casa llena", el doble)
-	var presupuesto := (BASE + nivel * POR_NIVEL) * clampf(area / 700.0, 0.8, 1.4) * Reto.mas_zombis()
+	var presupuesto := (BASE + nivel * POR_NIVEL) * clampf(area / 700.0, 0.8, 1.4)
 	var peso := func(s: Dictionary) -> float:
 		return s.casillas * (0.5 if s.uso == "bano" else 1.0)   # en los baños, pocos
 	var total := 0.0

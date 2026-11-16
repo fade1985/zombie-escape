@@ -102,8 +102,9 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   - Ratón o dedo: se toca, o se **arrastra** (se encienden los sitios donde vale soltar; encima de Johnny, se pone el
     arma o se usa la cura; en la zona roja de la ficha, se tira la casilla entera; donde no vale, vuelve y tiembla).
 - **Elige edificio:** **<** y **>** cambian la mejora del compuesto VD-7 (completar el edificio abre la siguiente, hasta la 5: cada una, enemigos un 20 % más fuertes en vida, daño, velocidad y ataque). El Reto del día no sale hasta completar algún edificio. Cada edificio cerrado dice debajo lo que pide para abrirse: completar el de antes, conseguir sus dosieres y ver todos sus vídeos.
-  El botón **Reto del día**: el edificio igual para todo el mundo ese día, con la regla rara de hoy (completarlo
-  por primera vez cada día, $10 de más en cada edificio).
+  El botón **Reto del día**: el garaje subterráneo, 25 oleadas de durmientes con un jefe cada 5, una vez al día en cada
+  edificio. Cada día tiene una condición, la misma para todo el mundo (algo que no vale: cuerpo a cuerpo, a distancia,
+  especiales, lanzables o curas); se ve al pasar por el botón y, debajo, tu récord de oleadas con ella en ese edificio.
 
 ## La sala de pruebas
 
@@ -234,4 +235,4 @@ Esc abre la pausa sin quitarla en Chrome y Edge, y para salir se mantiene pulsad
 La partida a medias se guarda al llegar a cada planta: si se cierra el juego, el menú enseña **Continuar partida**
 (con el edificio y la planta) y se vuelve al principio de esa planta, igual y con lo que se llevaba al llegar. Lo
 hecho dentro de la planta se pierde. JUGAR, con una partida guardada, pide pulsarlo dos veces: la nueva la pisa.
-Vale también en el reto del día, con sus mismas reglas.
+El garaje del reto del día no se guarda a medias.

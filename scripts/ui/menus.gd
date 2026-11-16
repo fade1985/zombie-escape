@@ -196,9 +196,9 @@ func pausa(partida: Node, foco := "") -> void:
 
 # r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, salvados, cartera y, con la mejora del compuesto
 # VD-7 (alerta.gd), alerta (la de la partida) y abierta (la que se abre, o 0);
-# con el reto del día (reto.gd), reto (el nombre de su regla), marca (la mejor de hoy), mejor (si se acaba de mejorar)
-# y premio_reto (sus dólares de más, la primera vez que se completa hoy; si no, 0); asesino (al caer, quién te ha
-# pillado: johnny.gd, golpe_de) y conseguido (lo nuevo de esta partida: partida.gd, conseguido)
+# con el garaje del reto del día (garaje.gd, terminar), garaje, oleadas, condicion (su nombre), record («Récord: N
+# oleadas») y nuevo_record; asesino (al caer, quién te ha pillado: johnny.gd, golpe_de) y conseguido (lo nuevo de esta
+# partida: partida.gd, conseguido)
 func fin(r: Dictionary) -> void:
 	var columna := abrir("fin")
 	fin_desde = Time.get_ticks_msec()
@@ -216,14 +216,17 @@ func fin(r: Dictionary) -> void:
 	else:
 		columna.add_child(lista)
 	if r.get("garaje", false):
-		# el garaje del reto del día (garaje.gd): las oleadas superadas y los dólares, que se llevan siempre (ganes o caigas)
+		# el garaje del reto del día (garaje.gd): las oleadas superadas, la condición del día con tu récord (en amarillo,
+		# si es nuevo) y los dólares, que se llevan siempre (ganes o caigas)
 		dato(lista, "trofeo", Idioma.t("Oleadas superadas"), r.oleadas)
+		dato(lista, "alerta", r.condicion, Idioma.t("%s · ¡nuevo récord!") % r.record if r.nuevo_record else r.record,
+			Color("#f7c440") if r.nuevo_record else Tema.TINTA)
 		dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
 		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares, r.cartera], Tema.VERDE)
 	elif r.gano:
 		# al ganar (11 nov): solo el tiempo, los dólares, los enemigos derrotados y, si la hay, la nueva mejor marca
 		dato(lista, "trofeo", Idioma.t("Tiempo"), r.tiempo)
-		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares + r.get("premio_reto", 0), r.cartera], Tema.VERDE)
+		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares, r.cartera], Tema.VERDE)
 		dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
 		if r.get("nueva_marca", false):
 			dato(lista, "trofeo", Idioma.t("¡Nueva mejor marca!"), "", Color("#f7c440"))
@@ -231,9 +234,6 @@ func fin(r: Dictionary) -> void:
 		dato(lista, "apartamentos", Idioma.t("Plantas superadas"), r.plantas)
 		dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
 		dato(lista, "puerta", Idioma.t("Apartamentos visitados (última planta)"), r.visitados)
-		if r.get("reto", "") != "":
-			dato(lista, "trofeo", Idioma.t("Reto del día · %s") % r.reto, Idioma.t("%s · ¡mejor marca de hoy!") % r.marca if r.mejor
-				else Idioma.t("Tu mejor marca de hoy: %s") % r.marca, Color("#f7c440") if r.mejor else Tema.TINTA)
 		# si caes o abandonas, se pierden todos los dólares recogidos (M116, 16 nov: antes te quedabas la mitad)
 		dato(lista, "billete", Idioma.t("Dólares perdidos"), Idioma.t("-$%d  (tienes $%d)") % [r.dolares - r.salvados, r.cartera], Tema.ROJO)
 	# lo conseguido en esta partida, solo si hay algo nuevo

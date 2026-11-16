@@ -406,7 +406,7 @@ static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "", m
 
 # Un objeto cualquiera de los que salen ahí, menos los de un solo zombi (DE_UN_ZOMBI; el jefe suelta dos seguros) y
 # las piezas (PIEZAS). En los Apartamentos, la gasolina o la batería; en el centro comercial, uno de la lista de su
-# tienda (en el pasillo, de una tienda cualquiera). Con el reto del día "Sin curas" (reto.gd), sin los de curar
+# tienda (en el pasillo, de una tienda cualquiera).
 # "municion": con la lista de la que gastan las armas que lleva Johnny (partida.municion_que_lleva: la de la mano y la de
 # repuesto), solo sale la munición que le sirve (la gasolina, la batería y el bidón de ácido, los que llenan el
 # lanzallamas, el lanza rayos y el lanza ácido) y, si no hay otra cosa que soltar, nada; "*" = sin mirar (las pruebas)
@@ -419,11 +419,6 @@ static func al_azar(edificio := "apartamentos", tienda := "", municion: Variant 
 		if tienda not in TIENDAS:
 			tienda = TIENDAS.keys().pick_random()
 		lista = TIENDAS[tienda]
-	if Reto.sin_curas():
-		lista = lista.filter(func(id): return not id in USABLES)
-		if lista.is_empty():   # la farmacia solo tiene vendas: entonces, lo de una tienda cualquiera
-			for t in TIENDAS:
-				lista += TIENDAS[t].filter(func(id): return not id in USABLES and not id in lista)
 	if municion is Array:
 		lista = lista.filter(func(id): return not id in MUNICION_DE_OBJETO or id in municion)
 	return lista.pick_random() if not lista.is_empty() else ""
