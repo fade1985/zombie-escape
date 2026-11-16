@@ -109,8 +109,54 @@ Lo apunta todo en `capturas/bot/partida-<edificio>-<nivel>-<semilla>.jsonl`, pla
 
 Lo que todavía no hace:
 - **Torre Velaria:** no lee los terminales del código, así que se queda sin abrir la puerta del jefe.
-- No usa los muebles, la tienda ni el ordenador.
-- No compra talentos entre partida y partida. Eso es la fase 3: cuántas partidas hacen falta para pasarse un edificio.
+- No usa los muebles ni el banco de trabajo.
+
+Desde el 16 nov, cuando no tiene con quién pelear, **va a por lo que han soltado los zombis**: billetes, mutágeno,
+munición y objetos. Antes solo cogía lo que le pillaba de paso. Y **con un arma cuerpo a cuerpo en la mano se arrima
+al jefe para pegarle**; antes se quedaba lejos, como con la pistola. Y **si lleva 6 s atascado, pulsa «usar»** (abre
+la puerta o el mueble que tenga delante), y a los 10 s se olvida del zombi o de la cosa a la que no llega hasta que cambia
+de sitio. Así ya no se quedaba clavado en el sitio de los atascos de abajo (el de la puerta con el contorno amarillo).
+
+## Fase 3: carreras (partidas seguidas)
+
+```bash
+py tools/bot.py --carrera 30 --edificios apartamentos --niveles normal,bueno
+```
+
+Lo que de verdad dice si el juego es largo o corto: **cuántas partidas hacen falta para pasarse un edificio** empezando
+de cero. Lo hace `scripts/pruebas/prueba_bot.gd` (`--bot-carrera`). Cada carrera es una tanda de partidas seguidas con
+**su propio guardado** (`user://carrera-<nombre>`). La primera empieza con un guardado nuevo, como alguien que acaba de
+instalar el juego (con los tutoriales apagados y el regalo de bienvenida de la tienda cogido). Sigue hasta completar
+el edificio o hasta el tope de partidas.
+
+Lo que hace el bot, como una persona:
+
+1. **Al empezar cada partida**, en la sala de mantenimiento:
+   - anda hasta el ordenador;
+   - gasta el mutágeno en las mutaciones del árbol;
+   - en la tienda, compra molotovs y granadas hasta tener 2 de cada, y el mejor arma cuerpo a cuerpo que le llegue (si es mejor que la que lleva);
+   - anda hasta el baúl y saca lo comprado y las curas.
+2. **Gasta el mutágeno a tiempo**, porque si cae lo pierde. Hay dos tipos de jugador:
+   - **el listo** vuelve al ordenador a gastarlo:
+     - en la planta 1, con la llave y antes de ir a por el jefe (andando);
+     - en las demás, en cuanto cae el jefe (en el ascensor);
+   - **el despistado** solo compra al empezar la partida.
+
+Las mutaciones las compra en el orden de `PRIORIDAD` (al principio de la fase 3, en `prueba_bot.gd`): primero vida y
+aguante, luego daño y luego lo demás. De todas, primero el 1.er punto, luego el 2.º, y así.
+
+Simplificaciones:
+- Empieza siempre con la pistola en la mano (la de bienvenida, que en el juego cuesta $10 cuando se rompe).
+- No cobra los logros (que dan dólares) ni usa las atraedoras.
+
+Cada partida queda en `capturas/bot/carrera-<nombre>.jsonl`:
+- hasta qué planta llega y cómo acaba;
+- el mutágeno que coge;
+- lo que compra;
+- las mutaciones que tiene;
+- lo que le queda ahorrado.
+
+El resumen sale en `capturas/bot/resumen-carreras-<semilla>.md` (también con `--resumen-carrera <semilla>`).
 
 ## Resultados
 
@@ -225,11 +271,55 @@ también le pasaría a una persona. Merece la pena mirarlo.
   poco. Eso empeora lo de la portera (punto 1).
 - No usa los bidones, no cambia de arma a propósito, no compra en la tienda.
 
+### Fase 3: carreras de 30 partidas (16 nov 2026)
+
+Cuatro carreras en los Apartamentos (normal y bueno, listo y despistado), 30 partidas cada una desde un guardado nuevo:
+120 partidas, sin ningún atasco (`capturas/bot/resumen-carreras-78.md`).
+
+| Carrera | Pasa la planta 1 | Puntos de mutaciones al final | Lo más lejos |
+|---|---|---|---|
+| normal, listo | 2 de 30 (partidas 1 y 15) | 8 | planta 2 |
+| bueno, listo | 2 de 30 (partidas 8 y 27) | 8 | planta 2 |
+| normal, despistado | 0 de 30 | 0 | planta 1 |
+| bueno, despistado | 0 de 30 | 0 | planta 1 |
+
+En cada partida, de media:
+- coge **unos 50 de mutágeno** en la planta 1 (25–60);
+- **ahorra unos 25 $** (25–55; se queda la mitad de lo que coge);
+- llega a la portera con **85–89 balas** y casi toda la vida (87–103). Aun recogiendo todo lo del suelo, se queda sin
+  balas y pelea 30–40 s con el arma cuerpo a cuerpo.
+
+#### 5. Las mutaciones tienen un techo para quien no pasa del primer jefe (lo más importante de la fase 3)
+
+- **El mutágeno se pierde al caer**, y en una partida que acaba en la portera se cogen unos 50.
+- **Lo que no se gasta en esa misma partida se pierde.** Así que solo se pueden comprar puntos que cuesten **50 o
+  menos**: el 1.º y el 2.º de cada mutación de abajo (25 y 50).
+- **El 3.º punto cuesta 75 y ya no llega nunca.** Las de la segunda fila piden la de abajo al máximo (5 puntos, el último
+  a 125), así que tampoco.
+- **El listo llegó a 8 puntos en la partida 17 y ya no subió más** en las 13 partidas siguientes. Con las seis
+  mutaciones de abajo serían 12 puntos como mucho.
+- **Esos 8 puntos no cambian nada** (+10 % de vida, +10 % de daño, algo de curación): sigue pasando la planta 1 solo
+  2 de cada 30 veces, igual que en la partida 1.
+
+Es decir: **quien se atasca en el primer jefe no puede mejorar con las mutaciones; tiene que mejorar jugando.** Y
+quien no sabe que el mutágeno se pierde (el despistado) **no compra ninguna mutación nunca**.
+
+Ideas para que lo decidas tú:
+- guardar una parte del mutágeno al caer, como los dólares (la mitad);
+- abaratar el 3.er punto, o que una partida dé más mutágeno;
+- que un tutorial diga claro que el mutágeno se pierde al caer y que hay que gastarlo en el ordenador antes.
+
+#### 6. Los dólares tampoco dan para mucho
+
+- Con 25 $ ahorrados por partida, el bot compra molotovs y granadas y, de vez en cuando, un cuchillo o un bate.
+- **Las armas Normales duran una sola partida**, así que nunca junta para una katana ni una motosierra, ni le compensa.
+- El despistado acaba con 25–49 $ ahorrados porque gasta menos.
+
 ### Siguientes pasos
 
 1. **Probar la portera tú** con un guardado nuevo, contando las balas, para ver si el muro es del juego o del bot.
-2. **Fase 3:** que el bot compre talentos entre partidas y medir **cuántas partidas hacen falta** para pasarse cada
-   edificio, que es lo que de verdad dice si el juego es largo o corto.
+2. **Decidir lo de la portera y el mutágeno** (puntos 1 y 5). Después, volver a lanzar las carreras para ver cuántas
+   partidas hacen falta para pasarse el edificio: con el juego como está, el bot no pasa de la planta 2.
 3. **Torre Velaria:** enseñar al bot a leer los terminales del código.
 4. **Calibrar el bot contigo:** juegas tú un par de peleas, se comparan los números, y se ajusta qué nivel de bot se
    parece a ti.

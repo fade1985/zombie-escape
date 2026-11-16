@@ -275,10 +275,12 @@ func peligro(p: Vector2) -> float:
 		if c.get("dueno") != johnny and c.dentro(p, johnny.RADIO):
 			total += 25.0
 	total += suelo(p)
+	# (del jefe se aparta más, salvo con un arma cuerpo a cuerpo en la mano: si no, nunca se arrima a pegarle)
+	var al_jefe := 25.0 if johnny.arma().tipo == "cuerpo" else 90.0
 	for z in get_tree().get_nodes_in_group("zombis"):
 		if not vale(z):
 			continue
-		var lim: float = numero(z.get("radio"), 16.0) + johnny.RADIO + (90.0 if z == partida.jefa else 35.0)
+		var lim: float = numero(z.get("radio"), 16.0) + johnny.RADIO + (al_jefe if z == partida.jefa else 35.0)
 		var d := p.distance_to(z.global_position)
 		if d < lim:
 			total += (1.0 - d / lim) * (60.0 if z == partida.jefa else 25.0)

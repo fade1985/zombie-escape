@@ -5,6 +5,8 @@
     py tools/bot.py --resumen 1234           # solo el resumen de lo ya jugado con la semilla 1234
     py tools/bot.py --misma-planta           # todos los minijefes en la planta 2, para compararlos entre ellos
     py tools/bot.py --partidas 10 --edificios apartamentos   # fase 2: 10 partidas enteras por nivel
+    py tools/bot.py --carrera 30 --edificios apartamentos --niveles normal   # fase 3: partidas seguidas hasta pasárselo
+    py tools/bot.py --resumen-carrera 1234   # solo el resumen de las carreras de esa semilla
 
 Cada edificio es una partida de prueba aparte (--captura --bot-jefes, scripts/pruebas/prueba_bot.gd), una detrás de
 otra (comparten el guardado de prueba: a la vez se pisarían). Va con --fixed-fps 60: cada fotograma es 1/60 s de juego
@@ -168,10 +170,87 @@ def resumen_partidas(edificios, niveles, semillas):
         f.write(texto + "\n")
 
 
+# ── Fase 3: la carrera (--bot-carrera) ──
+# Partidas seguidas con el mismo guardado (user://carrera-<nombre>), hasta completar el edificio o llegar al tope. El
+# «listo» vuelve al ordenador a gastar el mutágeno antes de perderlo; el «despistado», no.
+
+def nombre_carrera(edificio, nivel, tipo, semilla):
+    return f"{edificio}-{nivel}-{tipo}-{semilla}"
+
+
+def jugar_carrera(edificio, nivel, tipo, semilla, tope):
+    nombre = nombre_carrera(edificio, nivel, tipo, semilla)
+    for i in range(1, tope + 1):
+        orden = [godot(), "--path", RAIZ, "--fixed-fps", "60", "--", "--captura", "--edificio", edificio,
+                 "--bot-partida", "--bot-carrera", nombre, "--nivel", nivel, "--semilla", str(semilla * 100 + i),
+                 "--limite", "3000"]
+        if i == 1:
+            orden.append("--nueva")
+        if tipo == "despistado":
+            orden.append("--despistado")
+        salida = subprocess.run(orden, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8",
+                                errors="replace").stdout
+        final = ""
+        for linea in salida.splitlines():
+            if linea.startswith("BOT: PARTIDA") or "ERROR DE LA PRUEBA" in linea or "SCRIPT ERROR" in linea:
+                print(f"  [{nombre} #{i}] " + linea.rstrip(), flush=True)
+                if linea.startswith("BOT: PARTIDA"):
+                    final = linea
+        if " GANA " in final:
+            break
+
+
+def leer_carrera(nombre):
+    ruta = os.path.join(RAIZ, "capturas", "bot", f"carrera-{nombre}.jsonl")
+    if not os.path.exists(ruta):
+        return []
+    with open(ruta, encoding="utf-8") as f:
+        return [json.loads(l) for l in f if l.strip()]
+
+
+def resumen_carreras(semilla):
+    lineas = ["# Carreras del bot (partidas seguidas con el mismo guardado)", "",
+              "Desde un guardado nuevo, partida tras partida, comprando en el ordenador lo que le llega. «Listo»: vuelve "
+              "al ordenador a gastar el mutágeno antes de perderlo. «Despistado»: solo compra al empezar cada partida. "
+              "Cada línea, una partida: hasta qué planta llega, cómo acaba, el mutágeno que coge, los puntos de "
+              "mutaciones que tiene al acabar, los dólares ahorrados y lo que ha comprado.", ""]
+    for ruta in sorted(glob.glob(os.path.join(RAIZ, "capturas", "bot", f"carrera-*-{semilla}.jsonl"))):
+        nombre = os.path.basename(ruta)[len("carrera-"):-len(".jsonl")]
+        partidas = leer_carrera(nombre)
+        if not partidas:
+            continue
+        lineas += [f"## {nombre}", "", "| # | Llega a | Final | Muere por | Mutágeno cogido | Puntos | Dólares ahorrados | Compras |",
+                   "|---|---|---|---|---|---|---|---|"]
+        mejor = 0
+        primera = {}
+        for i, p in enumerate(partidas, 1):
+            mejor = max(mejor, p["planta_max"])
+            for n in range(1, p["planta_max"] + (1 if p["final"] == "gana" else 0)):
+                primera.setdefault(n, i)
+            compras = Counter(c for c in p.get("compras", []) if not c.startswith("baul:"))
+            muere = p.get("muere", {})
+            lineas.append(f"| {i} | {p['planta_max']} | {p['final']} | {muere.get('de', '')} ({muere.get('sitio', '')}) | "
+                          f"{p.get('mutageno_cogido', 0)} | {p.get('puntos', 0)} | "
+                          f"{p.get('ahorro_al_acabar', {}).get('dolares', 0)} | "
+                          + ", ".join(f"{k} ×{v}" if v > 1 else k for k, v in compras.items()) + " |")
+        pasadas = ", ".join(f"planta {n} en la partida {i}" for n, i in sorted(primera.items()))
+        lineas += ["", f"- Pasa por primera vez: {pasadas or 'ninguna planta'}",
+                   f"- Mutaciones al final: " + ", ".join(f"{k} {v}" for k, v in partidas[-1].get("talentos", {}).items()),
+                   ""]
+    texto = "\n".join(lineas)
+    print(texto)
+    with open(os.path.join(RAIZ, "capturas", "bot", f"resumen-carreras-{semilla}.md"), "w", encoding="utf-8") as f:
+        f.write(texto + "\n")
+
+
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--partidas", type=int, default=0,
                    help="fase 2: tantas partidas enteras por edificio y nivel (en vez de las peleas contra los jefes)")
+    a.add_argument("--carrera", type=int, default=0,
+                   help="fase 3: partidas seguidas con el mismo guardado (como mucho tantas) por edificio, nivel y tipo")
+    a.add_argument("--tipos", default="listo,despistado", help="con --carrera: listo, despistado o los dos")
+    a.add_argument("--resumen-carrera", type=int, default=None, help="solo el resumen de las carreras de esa semilla")
     a.add_argument("--peleas", type=int, default=8)
     a.add_argument("--niveles", default=",".join(NIVELES))
     a.add_argument("--edificios", default=",".join(EDIFICIOS))
@@ -184,8 +263,24 @@ def main():
     if args.resumen is not None:
         resumen(args.resumen)
         return
+    if args.resumen_carrera is not None:
+        resumen_carreras(args.resumen_carrera)
+        return
     semilla = args.semilla if args.semilla is not None else random.randint(1000, 99999)
     print(f"Semilla {semilla}", flush=True)
+    if args.carrera:
+        # (cada carrera, con su guardado: las de un edificio van a la vez, una por nivel y tipo)
+        import threading
+        for ed in args.edificios.split(","):
+            hilos = [threading.Thread(target=jugar_carrera, args=(ed, nivel, tipo, semilla, args.carrera))
+                     for nivel in args.niveles.split(",") for tipo in args.tipos.split(",")]
+            for h in hilos:
+                h.start()
+                time.sleep(5)
+            for h in hilos:
+                h.join()
+        resumen_carreras(semilla)
+        return
     if args.partidas:
         semillas = [semilla + i for i in range(args.partidas)]
         for ed in args.edificios.split(","):

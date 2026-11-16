@@ -231,12 +231,53 @@ var con_bot_partida := false
 var bot_gana := false
 var cruzar_t := 0.0
 
+# ── Fase 3: la carrera (tools/bot.py --carrera) ──
+# Partidas seguidas con el mismo guardado, como alguien que juega hasta pasarse el edificio. En la sala de
+# mantenimiento, al empezar, compra en el ordenador (las mutaciones del árbol con el mutágeno; en la tienda, molotovs,
+# granadas y el mejor arma cuerpo a cuerpo que le llegue) y saca del baúl lo comprado. El mutágeno que se coge en una
+# partida se pierde al caer, así que el listo vuelve al ordenador a gastarlo: en la planta 1, antes del jefe (andando),
+# y en las demás, en cuanto cae el jefe (en el ascensor). El despistado solo compra al empezar.
+# Las mutaciones, por este orden: de cada una, primero el 1.er punto de todas, luego el 2.º... (lo barato primero)
+const PRIORIDAD := ["durito", "corpulento", "ataque", "tirador", "reflejos", "camorrista", "acero", "mirilla", "lobezno",
+	"sanitario", "larguirucho", "blindaje", "gatillo", "frenesi", "desfibrilador", "aliento", "ninja", "veterano",
+	"adrenalina", "artificiero", "punteria", "fabricante", "sombra", "racimo"]
+const CUERPO_MEJORES := ["motosierra", "katana", "bate", "cuchillo"]   # de mejor a peor (la fregona, la peor)
+const LANZABLES_BOT := 2   # los molotovs y las granadas que quiere llevar de cada
+var carrera := ""          # el nombre de la carrera (--bot-carrera X); vacío, una partida suelta
+var listo := true
+var en_sala := ""          # lo que hace en la sala de mantenimiento: "ordenador", "baul" o "" (ya ha acabado o no está)
+var visita := ""           # el momento (bot_momento()) en el que ha ido a la sala por última vez
+var compras := []          # lo que ha comprado en esta partida, para el informe
+var recoger_t := 0.0       # (s) lo que lleva yendo a por lo que hay en el suelo de este sitio: con 15, lo deja
+# Lo que no consigue alcanzar (un zombi o una cosa del suelo detrás de un mueble o de una puerta): tras 10 s atascado
+# yendo hacia ello, lo olvida hasta que cambia de sitio. Antes, a los 6 s, pulsa «usar», como haría una persona
+var olvidadas := []
+var sitio_antes := -1
+var meta_cosa := false     # la meta es un zombi o una cosa del suelo (no una puerta ni un mueble)
+
 
 # La partida del bot, con su propio guardado (una copia del de prueba): así se puede jugar a la vez que otra prueba y lo
 # que gane o pierda no toca el guardado de prueba de las demás
 func preparar_prueba() -> void:
 	super()
-	if "--bot-partida" in OS.get_cmdline_user_args():
+	var args := OS.get_cmdline_user_args()
+	if "--bot-carrera" in args:
+		# la carrera (fase 3): su propio guardado, que pasa de una partida a la siguiente. La primera («--nueva»)
+		# empieza de cero, como alguien que acaba de instalar el juego, con el regalo de bienvenida de la tienda ya
+		# cogido: la pistola (en la mano: la de prueba_comun) y un lanzable de cada, al baúl (sin él no sale de la sala)
+		carrera = Captura.dato("--bot-carrera", "bot")
+		listo = not "--despistado" in args
+		Guardado.usar("user://carrera-" + carrera)
+		if "--nueva" in args:
+			var g: Dictionary = Guardado.NUEVO.duplicate(true)
+			for k in preload("res://scripts/ui/tienda_armas.gd").REGALO_LANZABLES:
+				Objetos.arrojables_al_baul(g, k, 0, 1)
+			g.regalos_lanzables = preload("res://scripts/ui/tienda_armas.gd").REGALO_LANZABLES.duplicate()
+			Guardado.escribir(g)
+		Guardado.cambiar(func(g):
+			g.ajustes.tutoriales = false
+			g.regalo_cogido = true)
+	elif "--bot-partida" in args:
 		var g := Guardado.cargar()
 		Guardado.usar("user://guardado-bot-%s" % Captura.dato("--semilla", "0"))
 		Guardado.escribir(g)
@@ -275,6 +316,13 @@ func probar_bot_partida() -> void:
 	await get_tree().create_timer(0.5).timeout
 	bot.empezar(nivel)
 	var r := {"edificio": edificio, "nivel": nivel, "semilla": semilla, "plantas": [], "atascos": [], "pausas": {}}
+	var al_empezar_s := Guardado.cargar()
+	if carrera != "":
+		r.carrera = carrera
+		r.listo = listo
+		r.partida = int(al_empezar_s.partidas)
+		r.ahorro_al_empezar = {"dolares": int(al_empezar_s.dolares), "mutageno": int(al_empezar_s.mutageno)}
+	var cogido := {"mutageno": 0, "antes": mutageno}   # el mutágeno que coge en la partida (lo gaste o no)
 	var cuenta := {"antes": johnny.vida}
 	var al_cambiar := func(v: int, _m: int) -> void:
 		var quitado: int = cuenta.antes - v
@@ -321,6 +369,9 @@ func probar_bot_partida() -> void:
 			continue
 		parado = 0.0
 		tiempo += delta
+		if mutageno > cogido.antes:
+			cogido.mutageno += mutageno - cogido.antes
+		cogido.antes = mutageno
 		if tiempo > PARTIDA_MAX:
 			r.final = "no acaba"
 			break
@@ -349,6 +400,15 @@ func probar_bot_partida() -> void:
 			quieto_t = 0.0
 		else:
 			quieto_t += delta
+		if Input.is_action_pressed("usar"):
+			Input.action_release("usar")
+		if quieto_t > 6.0 and quieto_t - delta <= 6.0:
+			Input.action_press("usar")
+		if quieto_t > 10.0 and meta_cosa and bot.meta != Vector2.INF:
+			olvidadas.append(bot.meta)
+			r.olvidadas = r.get("olvidadas", 0) + 1
+			meta_cosa = false
+			quieto_t = 0.0
 		if quieto_t > 20.0:
 			quieto_t = 0.0
 			var foto := "bot/atasco-%s-%d-%d.png" % [edificio, semilla, r.atascos.size() + 1]
@@ -364,8 +424,31 @@ func probar_bot_partida() -> void:
 	r.segundos = snappedf(tiempo, 0.1)
 	r.dolares = cartera()
 	r.planta_max = planta.num
+	var ruta := Captura.CARPETA + "bot/partida-%s-%s-%d.jsonl" % [edificio, nivel, semilla]
+	if carrera != "":
+		# la partida se cierra como en el juego (lo que se guarda al caer o al ganar: partida.terminar), y se apunta en
+		# la carrera lo que se ha cogido, comprado y guardado
+		if not terminada:
+			terminar(false)
+		var espera := 0.0
+		while not terminada and espera < 5.0:
+			await get_tree().create_timer(0.1, true).timeout
+			espera += 0.1
+		var s := Guardado.cargar()
+		r.mutageno_cogido = cogido.mutageno
+		r.compras = compras
+		r.talentos = s.talentos.duplicate()
+		r.puntos = Talentos.puestos(s)
+		r.mutaciones = mutaciones.tengo.duplicate()
+		r.ahorro_al_acabar = {"dolares": int(s.dolares), "mutageno": int(s.mutageno)}
+		ruta = Captura.CARPETA + "bot/carrera-%s.jsonl" % carrera
 	DirAccess.make_dir_recursive_absolute(Captura.CARPETA + "bot")
-	var archivo := FileAccess.open(Captura.CARPETA + "bot/partida-%s-%s-%d.jsonl" % [edificio, nivel, semilla], FileAccess.WRITE)
+	var archivo: FileAccess
+	if carrera != "" and FileAccess.file_exists(ruta) and not "--nueva" in OS.get_cmdline_user_args():
+		archivo = FileAccess.open(ruta, FileAccess.READ_WRITE)
+		archivo.seek_end()
+	else:
+		archivo = FileAccess.open(ruta, FileAccess.WRITE)
 	archivo.store_line(JSON.stringify(r))
 	archivo.close()
 	print("BOT: PARTIDA %s %s: %s en la planta %d tras %d s%s" % [edificio, nivel, r.final.to_upper(), planta.num,
@@ -387,6 +470,12 @@ func decidir_bot() -> void:
 				usar_cura(id)
 				break
 	var sitio: Dictionary = planta.sitios[aqui]
+	meta_cosa = false
+	if aqui != sitio_antes:
+		sitio_antes = aqui
+		olvidadas.clear()
+	if carrera != "" and decidir_carrera(sitio):
+		return
 	if not planta.tiene_llave and not planta.get("llave_usada", false) and planta.llave.get("sitio", -1) == aqui:
 		bot.meta = mapa.to_global(planta.llave.pos)
 		return
@@ -398,27 +487,204 @@ func decidir_bot() -> void:
 			var mapa_nav: RID = johnny.get_world_2d().navigation_map
 			for z in get_tree().get_nodes_in_group("zombis"):
 				var d: float = johnny.global_position.distance_to(z.global_position)
-				if bot.vale(z) and d < cerca:
+				if bot.vale(z) and d < cerca and not olvidada(z.global_position):
 					var camino := NavigationServer2D.map_get_path(mapa_nav, johnny.global_position, z.global_position, true)
 					if not camino.is_empty() and camino[-1].distance_to(z.global_position) < 48.0:
 						cerca = d
 						bot.meta = z.global_position
+						meta_cosa = true
 			if bot.meta == Vector2.INF and sitio.tipo == "jefe" and not jefa_salio:
 				bot.meta = mapa.to_global(Vector2(sitio.get("ancho", 600), sitio.get("alto", 400)) / 2.0)   # (que salga el jefe)
 			if bot.meta != Vector2.INF:
 				return
+		if bot_recoger():
+			return
 		for p in mapa.puertas:
 			var a: int = p.salida.get("a", -1)
 			if p.salida.tipo == "puerta" and a >= 0 and planta.sitios[a].tipo == "pasillo":
 				puerta = p
 	else:
+		if bot_recoger():
+			return
 		puerta = puerta_del_pasillo()
+	bot_a_la_puerta(puerta)
+
+
+# Va a esa puerta y, al llegar, la cruza
+func bot_a_la_puerta(puerta: Node2D) -> void:
 	if puerta == null:
 		return
 	bot.meta = puerta.global_position
 	if johnny.global_position.distance_to(puerta.global_position) < 56.0 and cruzar_t <= 0.0:
 		cruzar_t = 1.5
+		recoger_t = 0.0
 		cruzar(puerta.indice)
+
+
+func olvidada(p: Vector2) -> bool:
+	return olvidadas.any(func(o): return o.distance_to(p) < 60.0)
+
+
+# Lo que han soltado los zombis (billetes, mutágeno, munición, objetos): sin nadie con quien pelear, va a por lo más
+# cercano que le quepa, como haría una persona. Lo que no puede alcanzar o tras 15 s en el mismo sitio, lo deja
+func bot_recoger() -> bool:
+	if bot.en_pelea() or recoger_t > 15.0 or mapa.get("cosas") == null:
+		return false
+	var cerca := INF
+	var mapa_nav: RID = johnny.get_world_2d().navigation_map
+	for c in mapa.cosas.get_children():
+		if c.get_script() != BILLETE or c.tirado or not c.puede.call():
+			continue
+		var d: float = johnny.global_position.distance_to(c.global_position)
+		if d < cerca and d > 8.0 and not olvidada(c.global_position):
+			var camino := NavigationServer2D.map_get_path(mapa_nav, johnny.global_position, c.global_position, true)
+			if not camino.is_empty() and camino[-1].distance_to(c.global_position) < johnny.stats.iman * 0.8:
+				cerca = d
+				bot.meta = c.global_position
+				meta_cosa = true
+	if bot.meta == Vector2.INF:
+		return false
+	recoger_t += 0.25
+	return true
+
+
+# La carrera: en la sala de mantenimiento, al ordenador y al baúl; y el listo, de vuelta a la sala a gastar el mutágeno
+# (en la planta 1, con la llave y antes del jefe; en las demás, con el jefe muerto y el ascensor arreglado)
+func decidir_carrera(sitio: Dictionary) -> bool:
+	var sala: int = planta.get("mantenimiento", -1)
+	if aqui == sala and sala >= 0:
+		if visita != bot_momento():
+			visita = bot_momento()
+			en_sala = "ordenador"
+		if en_sala != "":
+			var mueble: Node2D = mapa.ordenador if en_sala == "ordenador" else mapa.baul
+			if mueble == null:
+				en_sala = ""
+				return false
+			var mapa_nav: RID = johnny.get_world_2d().navigation_map
+			var junto := NavigationServer2D.map_get_closest_point(mapa_nav, mueble.global_position)
+			bot.meta = junto
+			if johnny.global_position.distance_to(junto) < 56.0:
+				if en_sala == "ordenador":
+					compras.append_array(bot_mutaciones())
+					compras.append_array(bot_tienda())
+					en_sala = "baul"
+				else:
+					compras.append_array(bot_baul())
+					en_sala = ""
+			return true
+		# hecho: sale por su puerta de siempre (al pasillo o, en las plantas de arriba, al ascensor)
+		for p in mapa.puertas:
+			if p.indice == 0:
+				bot_a_la_puerta(p)
+				return true
+		return false
+	if not listo or visita == bot_momento() or sala < 0 or mutageno <= 0 or sitio.tipo != "pasillo":
+		return false
+	if not bot_momento().ends_with("jefe"):
+		return false
+	for p in mapa.puertas:
+		if p.salida.get("a", -1) == sala and p.salida.get("cerrojo", "") == "":
+			bot_a_la_puerta(p)
+			return true
+	return false
+
+
+# En qué momento de la partida está, para ir a la sala una sola vez en cada uno: "1" al empezar; "1-jefe" en la
+# planta 1 con la llave y el jefe vivo (antes de entrar a por él); "N-jefe" en las demás, con el jefe muerto
+func bot_momento() -> String:
+	if planta.num == 1:
+		return "1-jefe" if planta.tiene_llave and not planta.jefa_muerta else "1"
+	return "%d-jefe" % planta.num if planta.jefa_muerta else str(planta.num)
+
+
+# Gasta todo el mutágeno que puede en las mutaciones del árbol (PRIORIDAD): primero el 1.er punto de las que pueda,
+# luego el 2.º... Devuelve las compradas
+func bot_mutaciones() -> Array:
+	var compradas := []
+	for nivel in range(1, 6):
+		var otra := true
+		while otra:
+			otra = false
+			for id in PRIORIDAD:
+				var s := Guardado.cargar()
+				if Talentos.nivel_de(s, id) < nivel and Talentos.motivo(s, id, mutageno_total()) == "":
+					if not Talentos.subir(id, self).is_empty():
+						compradas.append(id)
+						otra = true
+	if not compradas.is_empty():
+		aplicar_talentos(Guardado.cargar().talentos)
+	return compradas
+
+
+# En la tienda: hasta LANZABLES_BOT molotovs y granadas, y el mejor arma cuerpo a cuerpo que le llegue si es mejor que
+# la que lleva (todo va al baúl, como en el juego). Se paga como en ordenador.pagar: primero lo de esta partida
+func bot_tienda() -> Array:
+	var compradas := []
+	for k in ["molotov", "granada"]:
+		var tiene: int = lanzables.cuantas(k)
+		for e in Guardado.cargar().baul_equipo:
+			if e.id == k:
+				tiene += int(e.get("n", 0))
+		for i in maxi(LANZABLES_BOT - tiene, 0):
+			var s := Guardado.cargar()
+			var precio: int = Supervivientes.precio(Lanzables.PRECIOS[k])
+			if cartera() < precio or Objetos.caben_arrojables(s, k, 0) <= 0:
+				break
+			bot_pagar(s, precio)
+			Objetos.arrojables_al_baul(s, k, 0, 1)
+			Guardado.escribir(s)
+			compradas.append(k)
+	var lleva: int = CUERPO_MEJORES.find(johnny.huecos.get("cuerpo", "fregona"))
+	for i in CUERPO_MEJORES.size():
+		var id: String = CUERPO_MEJORES[i]
+		if lleva >= 0 and i >= lleva:
+			break
+		var s := Guardado.cargar()
+		var precio: int = Supervivientes.precio(Armas.PRECIOS[id])
+		if cartera() >= precio and Objetos.hueco_baul(s):
+			bot_pagar(s, precio)
+			if not id in s.armas:
+				s.armas.append(id)
+			s.baul_equipo.append({"id": id, "calidad": 0, "quedan": Armas.nuevas(0) + 1})
+			Guardado.escribir(s)
+			compradas.append(id)
+			break
+	return compradas
+
+
+func bot_pagar(s: Dictionary, precio: int) -> void:
+	var de_partida := mini(precio, dolares)
+	dolares -= de_partida
+	s.dolares = maxi(s.dolares - (precio - de_partida), 0)
+	ahorrados = s.dolares
+
+
+# Del baúl: los lanzables, las curas y el arma cuerpo a cuerpo si es mejor que la que lleva (como con el inventario)
+func bot_baul() -> Array:
+	var sacadas := []
+	inventario.abrir("baul", self)   # (abre el baúl como una persona: así el inventario sabe de qué partida es)
+	var cosas: Array = inventario.cosas_baul(Guardado.cargar())
+	for i in range(cosas.size() - 1, -1, -1):   # (de atrás adelante: al sacar, una casilla puede desaparecer)
+		var o: Dictionary = cosas[i]
+		if o.equipo < 0:
+			if o.id in ["vendas", "botiquin"] and inventario.se_saca(o):
+				inventario.sacar_objeto(o.id)
+				sacadas.append("baul:" + o.id)
+			continue
+		if Armas.DATOS.has(o.id):
+			var lleva: int = CUERPO_MEJORES.find(johnny.huecos.get("cuerpo", "fregona"))
+			var esta: int = CUERPO_MEJORES.find(o.id)
+			if esta < 0 or (lleva >= 0 and esta >= lleva):
+				continue
+		elif not o.id in ["molotov", "granada"]:
+			continue
+		if inventario.se_saca(o):
+			inventario.sacar_equipo(o)
+			sacadas.append("baul:" + o.id)
+	inventario.cerrar()
+	get_tree().paused = false
+	return sacadas
 
 
 func puerta_del_pasillo() -> Node2D:

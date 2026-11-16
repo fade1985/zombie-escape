@@ -64,6 +64,8 @@
 #                       cada pelea en capturas/bot/ (--peleas, --niveles, --jefes, --semilla; docs/BOT.md)  [prueba_bot.gd]
 #   --bot-partida       el bot juega una partida entera, de la sala de mantenimiento hasta morir o acabar el edificio
 #                       (--nivel, --semilla; docs/BOT.md)                                   [prueba_bot.gd]
+#                       Con --bot-carrera X, una partida de una carrera (partidas seguidas con el guardado
+#                       user://carrera-X; --nueva lo empieza de cero, --despistado no vuelve al ordenador)
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --azotea            la azotea (la imagen de GPT entera): los muros por la barandilla, el jefe esperando en el aro y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
@@ -522,7 +524,7 @@ extends "res://scripts/pruebas/prueba_bot.gd"
 
 # Ya en la sala de mantenimiento: la prueba que se haya pedido (si no, la larga, que sigue en _process)
 # Las pruebas que miran cómo empieza Johnny de verdad, sin lanzables (15 nov: se compran en la tienda y van al baúl)
-const SIN_LANZABLES := ["--regalo", "--tienda", "--guiado", "--marcas-sala", "--botin", "--fregona-mejorada"]
+const SIN_LANZABLES := ["--regalo", "--tienda", "--guiado", "--marcas-sala", "--botin", "--fregona-mejorada", "--bot-carrera"]
 
 
 func empezar_prueba() -> void:

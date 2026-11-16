@@ -924,8 +924,9 @@ en una línea.
 - **El jugador automático (el bot, `docs/BOT.md`):** `bot.gd` es su cerebro (un nodo que pulsa los botones de andar
   y apunta y ataca con Johnny en el modo `"quieto"`; ve los avisos de los jefes, `aviso.gd`, las balas, lo que lanzan, los
   charcos y los peligros del suelo, y juega a tres niveles: `NIVELES`); `prueba_bot.gd` (en la cadena) lo pone a pelear
-  con cada jefe (`--bot-jefes`) y apunta cada pelea en `capturas/bot/`; `py tools/bot.py` lo lanza en los tres edificios y
-  hace el resumen. Sin pantalla (`--headless`), `Captura.foto` no hace nada.
+  con cada jefe (`--bot-jefes`), a jugar partidas enteras (`--bot-partida`) o carreras de partidas seguidas con su propio
+  guardado, comprando en el ordenador y sacando del baúl (`--bot-carrera`), y lo apunta todo en `capturas/bot/`;
+  `py tools/bot.py` lo lanza y hace los resúmenes. Sin pantalla (`--headless`), `Captura.foto` no hace nada.
 - `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
   edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
 - `prueba_aviso.gd` (`PruebaAviso`, fuera de la cadena: la lanza el menú con `--aviso`): el aviso de fotosensibilidad sale,
@@ -968,7 +969,7 @@ en una línea.
 
 - **Los mensajes de los jugadores:** `mensajes.py` lista los de «Contáctanos» (nuevos y analizados) y los marca (`docs/MENSAJES.md`).
 - **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
-- **El bot:** `bot.py` lanza al jugador automático contra los jefes de los tres edificios y hace la tabla del resumen
+- **El bot:** `bot.py` lanza al jugador automático (contra los jefes, partidas enteras o carreras) y hace los resúmenes
   (ver `docs/BOT.md`).
 - **Lo dibujado en otro idioma:** `cartel_planta_idiomas.py` hace los carteles de planta con la palabra de cada idioma («FLOOR»,
   «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`).
