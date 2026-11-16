@@ -2579,7 +2579,7 @@ func probar_ordenar() -> void:
 
 # --inventario-mutaciones: las cuatro casillas de las mutaciones encima de la cremallera de la mochila (inventario.gd,
 # fila_mutaciones; 17 nov), con tres puestas. El recuadro de una llena (nombre y lo que hace) y el de la vacía
-# («Mutación»); con el mando, de la casilla del arma de la mano, arriba, a una mutación, y su recuadro; y una en ruso.
+# («Efecto secundario»); con el mando, de la casilla del arma de la mano, arriba, a una mutación, y su recuadro; y una en ruso.
 # Fotos: captura-mutaciones-llena.png, -vacia.png, -mando.png y -ru.png
 func probar_inventario_mutaciones() -> void:
 	mutaciones.tengo = ["insensible", "tentacular", "canibal"]
@@ -2602,7 +2602,7 @@ func probar_inventario_mutaciones() -> void:
 	casilla.call(1).mouse_exited.emit()
 	casilla.call(3).mouse_entered.emit()
 	await get_tree().create_timer(0.3).timeout
-	print("Mutaciones · ratón en la 4.ª (vacía): %s (esperado: mut3, Mutación)" % globo.call())
+	print("Mutaciones · ratón en la 4.ª (vacía): %s (esperado: mut3, Efecto secundario)" % globo.call())
 	Captura.foto("captura-mutaciones-vacia.png")
 	casilla.call(3).mouse_exited.emit()
 	await get_tree().create_timer(0.1).timeout

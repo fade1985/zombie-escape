@@ -5734,8 +5734,8 @@ msgid "Seguir"
 msgstr "继续"
 
 #: scripts/ui/inventario.gd
-msgid "Mutación"
-msgstr "变异"
+msgid "Efecto secundario"
+msgstr "副作用"
 
 #: scripts/ui/inventario.gd
 msgid "Tarjeta"
@@ -7656,3 +7656,7 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Mutación"
+msgstr "变异"

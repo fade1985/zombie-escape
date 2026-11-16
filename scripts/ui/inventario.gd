@@ -287,11 +287,11 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 # Las mutaciones que lleva Johnny (17 nov): cuatro casillas (Mutaciones.MAXIMO) en medio de la pantalla, un poco por
 # encima de la cremallera de la mochila, con el dibujo de cada una (el de las cartas al elegirla, a la mitad:
 # assets/ui/mutaciones/mini, de tools/muebles_gpt.py); las que aún no tiene, vacías. Al pasar por una (ratón, mando o
-# dedo) se despliega debajo su recuadro (globo_mutacion): en una vacía, «Mutación»; en una llena, su nombre con la letra
-# del juego y lo que hace con la letra lisa
+# dedo) se despliega debajo su recuadro (globo_mutacion): en una vacía, «Efecto secundario»; en una llena, su nombre con la letra
+# del juego y lo que hace con la letra lisa. En el juego se llaman «efectos secundarios»
 const MUT_LADO := 58      # lo que mide cada casilla
 const MUT_PASO := 68      # de una a la siguiente
-const MUT_ARRIBA := 64    # dónde empiezan, en la pantalla (la cremallera va por y = 130)
+const MUT_ARRIBA := 40    # dónde empiezan, en la pantalla: por encima de la sombra de la cremallera (y = 104 a 130)
 const MUT_BORDE := Color("#a04fb0")   # el borde de las que tiene: morado, como «¡¡¡DIFERENTE!!!»
 const MUT_ANCHO := 260.0  # lo ancho que es el recuadro
 
@@ -363,7 +363,7 @@ func globo_mutacion(b: Button, id: String) -> void:
 			l.custom_minimum_size.x = MUT_ANCHO - 20
 		caja.add_child(l)
 	if id == "":
-		texto.call(Idioma.t("Mutación"), true, Tema.TINTA, 17, false)
+		texto.call(Idioma.t("Efecto secundario"), true, Tema.TINTA, 17, false)
 	else:
 		var m := Mutaciones.mutacion(id)
 		texto.call(m.nombre, false, Tema.AMARILLO, 16, false)

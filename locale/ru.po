@@ -5752,8 +5752,8 @@ msgid "Seguir"
 msgstr "В игру"
 
 #: scripts/ui/inventario.gd
-msgid "Mutación"
-msgstr "Мутация"
+msgid "Efecto secundario"
+msgstr "Побочный эффект"
 
 #: scripts/ui/inventario.gd
 msgid "Tarjeta"
@@ -7698,3 +7698,7 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Mutación"
+msgstr "Мутация"

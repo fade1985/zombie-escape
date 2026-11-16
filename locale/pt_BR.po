@@ -5743,8 +5743,8 @@ msgid "Seguir"
 msgstr "Continuar"
 
 #: scripts/ui/inventario.gd
-msgid "Mutación"
-msgstr "Mutação"
+msgid "Efecto secundario"
+msgstr "Efeito colateral"
 
 #: scripts/ui/inventario.gd
 msgid "Tarjeta"
@@ -7677,3 +7677,7 @@ msgstr "ufa"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIII!"
+
+#, sin-usar
+msgid "Mutación"
+msgstr "Mutação"
