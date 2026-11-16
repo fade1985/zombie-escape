@@ -593,8 +593,8 @@ msgid "La dependienta"
 msgstr "店员"
 
 #: scripts/bestiario.gd
-msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡OFERTAS!», la tienda entera se despierta."
-msgstr "已经站了31个小时，还在微笑。她一喊“大促销！”，整个店都醒了。"
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta."
+msgstr "已经站了31个小时，还在微笑。她一喊“啊啊啊！！！”，整个店都醒了。"
 
 #: scripts/bestiario.gd
 msgid "El vigilante"

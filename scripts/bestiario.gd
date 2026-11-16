@@ -56,7 +56,7 @@ const LISTA := {
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-portera.tres",
 		"recorte": Rect2i(32, 36, 59, 70), "retrato": "quieto_s", "escala": 2, "jefe": true},
 	"dependienta": {"nombre": "La dependienta",
-		"frase": "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡OFERTAS!», la tienda entera se despierta.",
+		"frase": "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-dependienta.tres",
 		"recorte": Rect2i(39, 33, 19, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"vigilante": {"nombre": "El vigilante",

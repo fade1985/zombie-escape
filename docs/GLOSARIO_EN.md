@@ -121,7 +121,7 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | Antidisturbios: ¡ATRÁS! · ¡QUEDAS DETENIDO! | GET BACK! · YOU'RE UNDER ARREST! |
 | Glotón: ¡HAMBRE! · ¡ÑAM! | HUNGRY! · CHOMP! |
 | Dr. Salas: ¡MÁS SUJETOS! · ¡NO ME TOCARÁS! | MORE TEST SUBJECTS! · HANDS OFF, JANITOR! |
-| Durmientes: ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! (en el bestiario sigue «¡OFERTAS!»: *SALE!*) |
+| Durmientes: ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! |
 | durmiente · noctámbulo | sleeper · nightwalker |
 | Sujeto 0 · «Asunto:» | Subject 0 · «Subject:» |
 | Torre Velaria · Turno infinito · Dirección · SOLO DIRECCIÓN · Velaria Noche | Velaria Tower · Endless Shift · Head Office · DIRECTOR ONLY · Velaria Night |

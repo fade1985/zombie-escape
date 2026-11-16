@@ -595,8 +595,8 @@ msgid "La dependienta"
 msgstr "Продавщица"
 
 #: scripts/bestiario.gd
-msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡OFERTAS!», la tienda entera se despierta."
-msgstr "31 час на ногах — и все еще улыбается. Когда она кричит «СКИДКИ!», просыпается весь магазин."
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta."
+msgstr "31 час на ногах — и все еще улыбается. Когда она кричит «АААААА!!!», просыпается весь магазин."
 
 #: scripts/bestiario.gd
 msgid "El vigilante"

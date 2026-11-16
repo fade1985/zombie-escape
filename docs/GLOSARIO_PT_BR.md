@@ -55,7 +55,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 |---|---|
 | el vecino · la vecina · el arrastrado · el crío · el dinamitero · el de los tentáculos · el gordo | o vizinho · a vizinha · o rastejante · o moleque · o dinamiteiro · o dos tentáculos · o gordo |
 | la dependienta · el vigilante · el guardia de la tarjeta · el maniquí | a vendedora · o segurança · o guarda do cartão · o manequim |
-| ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! (en el bestiario sigue «¡OFERTAS!»: PROMOÇÃO!) |
+| ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! |
 
 ## Supervivientes (sin artículo, con mayúscula)
 
