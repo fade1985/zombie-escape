@@ -158,6 +158,32 @@ Cada partida queda en `capturas/bot/carrera-<nombre>.jsonl`:
 
 El resumen sale en `capturas/bot/resumen-carreras-<semilla>.md` (también con `--resumen-carrera <semilla>`).
 
+## Fase 4: el garaje del reto del día
+
+```bash
+py tools/bot.py --garaje 4 --edificios apartamentos --niveles normal,bueno
+```
+
+Mide lo difícil que es el garaje (M125, `scripts/garaje.gd`): **hasta qué oleada llega** Johnny según lo mejorado que
+esté. Lo hace `prueba_bot.gd` (`--bot-garaje`): Johnny entra en el garaje con el equipo de un **perfil de mejoras** y
+pelea oleada tras oleada hasta caer o superar las 25. Los perfiles (`PERFILES_GARAJE`):
+
+| Perfil | Talentos | Armas | Lanzables | Curas |
+|---|---|---|---|---|
+| `nuevo` | ninguno | fregona y pistola, Normales | un montón de molotovs | 1 venda |
+| `medio` | la mitad de los puntos de cada uno | bate y escopeta, Raras | molotovs y granadas | 2 vendas y 1 botiquín |
+| `maximo` | todos | katana y gatling, Épicas | molotovs y granadas, con otro montón de cada de repuesto | 3 botiquines y 3 vendas |
+
+- La munición es la de siempre: la que trae el arma (el cargador y dos más) y la que sueltan los durmientes.
+- Se cura por debajo del 40 % de vida y, entre oleadas, recoge lo que hay en el suelo.
+- La condición del día, por defecto `especial` (el bot no usa armas especiales, así que no le quita nada); con
+  `--condicion cuerpo`, por ejemplo, se ve qué pasa sin cuerpo a cuerpo.
+- Cada partida tiene su propio guardado, así que `tools/bot.py` juega cuatro a la vez (`A_LA_VEZ`).
+
+Cada partida queda en `capturas/bot/garaje-<edificio>-<nivel>-<perfil>-<semilla>.jsonl`: las oleadas que supera, de
+qué muere y, de cada oleada, cuánto tarda, la vida que le queda y las curas que gasta. El resumen sale en
+`capturas/bot/resumen-garaje-<semilla>.md` (también con `--resumen-garaje <semilla>`).
+
 ## Resultados
 
 ### Primera tanda (16 nov 2026)
@@ -314,6 +340,49 @@ Ideas para que lo decidas tú:
 - Con 25 $ ahorrados por partida, el bot compra molotovs y granadas y, de vez en cuando, un cuchillo o un bate.
 - **Las armas Normales duran una sola partida**, así que nunca junta para una katana ni una motosierra, ni le compensa.
 - El despistado acaba con 25–49 $ ahorrados porque gasta menos.
+
+### Fase 4: el garaje del reto del día (16 nov 2026)
+
+`py tools/bot.py --garaje 2 --edificios apartamentos --niveles normal,bueno --semilla 100` (12 partidas, 10 minutos,
+con la condición «sin armas especiales»). Lo pedido: **una curva brutal, y pasárselo entero solo con casi todo mejorado
+al máximo.**
+
+Primero, con los números de la fase 2 (durmientes un 6 % más duros por oleada, sumado en línea recta), una partida de
+cada perfil: nuevo cae en la 5, medio en la 14 y **máximo gana sin despeinarse**: ni un rasguño hasta la oleada 19, y acaba
+con media vida y las 6 curas sin tocar. Demasiado fácil arriba.
+
+Cambio (`garaje.gd`): el endurecimiento **se va sumando**, un 8 % más que la oleada anterior (`MAS_VIDA` 0,08, con `pow`),
+y la velocidad, un 2,5 % por oleada (`MAS_VELOCIDAD`). Al principio casi no cambia y al final se dispara:
+
+| Oleada | 10 | 15 | 20 | 25 |
+|---|---|---|---|---|
+| Vida y zarpazo, antes | ×1,30 | ×1,60 | ×1,90 | ×2,20 |
+| Vida y zarpazo, ahora | ×1,47 | ×2,16 | ×3,17 | ×4,66 |
+
+Con eso:
+
+| Perfil | Bot normal | Bot bueno |
+|---|---|---|
+| nuevo | cae en la 5 (la portera) las 2 veces | cae en la 5 las 2 veces |
+| medio | cae en la 14 y en la 15 | cae en la 15 las 2 veces |
+| máximo | gana 1 de 2 (la otra cae en la 25, el jefe final) | gana 2 de 2 |
+
+- **Nuevo:** se queda siempre en el primer jefe (la portera, en la 5), como en el edificio (punto 1).
+- **Medio:** llega a la mitad larga. Las oleadas 10 a 14 ya le quitan media vida cada una, y cae entre la 14 y la 15 (el
+  Gymbro), por los explosivos y los tentáculos.
+- **Máximo:** las últimas cinco oleadas le cuestan de verdad. El normal gasta las 6 curas y aun así cae una de cada dos
+  veces. El bueno gana, pero una de las dos veces también gastando las 6.
+
+Es lo pedido: **el garaje entero solo con todo mejorado, y aun así justo.**
+
+Dos fallos del garaje que salieron con el bot, ya arreglados:
+- Un durmiente se metía en la rendija entre un coche de abajo y el muro (8 px). No había forma de llegar a él y la
+  oleada no se acababa nunca. Los coches de abajo ahora tocan el muro (`Planta.GARAJE_COCHES`).
+- Lo mismo pasaba entre el coche de abajo a la derecha y el muro de la derecha. Para cualquier rendija, el garaje saca
+  al suelo al durmiente que lleva 3 s fuera del mapa de navegación (`Garaje.sacar_de_rendijas`, `RENDIJA`).
+
+Pendiente: los otros dos edificios (sus durmientes y jefes son otros) y las otras condiciones (sin cuerpo a cuerpo, sin
+armas a distancia...). Con `--condicion` se puede medir cada una.
 
 ### Siguientes pasos
 

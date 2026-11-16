@@ -675,9 +675,11 @@ const GARAJE_ENTRADA := 500.0          # la "y" de la puerta de llegada (la ramp
 # Las columnas, al final de las líneas de las plazas, a los dos lados del carril: [x del centro, y de arriba de lo que ocupa]
 const GARAJE_COLUMNAS := [[383, 362], [845, 362], [1313, 362], [375, 690], [850, 690], [1323, 690]]
 # Los coches, en algunas plazas y todos de frente (los de arriba, aparcados marcha atrás; los de abajo, de morro):
-# [tipo, x del centro, y de arriba de lo que ocupa]. El centro (el baúl) se queda libre
+# [tipo, x del centro, y de arriba de lo que ocupa]. El centro (el baúl) se queda libre. Los de abajo, pegados al muro
+# de abajo (acaban en la y 960): con 8 px de rendija detrás, un durmiente se metía en ella, no había forma de llegar a
+# él y la oleada no se acababa nunca (16 nov, el bot del garaje)
 const GARAJE_COCHES := [["carsilver", 148, 248], ["carred", 459, 256], ["carblue", 922, 248], ["carsilver", 1233, 248],
-	["carblue", 296, 836], ["carsilver", 612, 836], ["carred", 1087, 844], ["carblue", 1401, 836]]
+	["carblue", 296, 844], ["carsilver", 612, 844], ["carred", 1087, 852], ["carblue", 1401, 844]]
 
 
 static func garaje(edificio: String) -> Dictionary:

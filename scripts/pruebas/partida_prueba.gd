@@ -66,6 +66,8 @@
 #                       (--nivel, --semilla; docs/BOT.md)                                   [prueba_bot.gd]
 #                       Con --bot-carrera X, una partida de una carrera (partidas seguidas con el guardado
 #                       user://carrera-X; --nueva lo empieza de cero, --despistado no vuelve al ordenador)
+#   --bot-garaje        el bot juega el garaje del reto del día hasta caer o superar las 25 oleadas, con el equipo y los
+#                       talentos de --mejoras nuevo|medio|maximo (--nivel, --semilla, --condicion; docs/BOT.md) [prueba_bot.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --azotea            la azotea (la imagen de GPT entera): los muros por la barandilla, el jefe esperando en el aro y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
@@ -539,7 +541,8 @@ extends "res://scripts/pruebas/prueba_bot.gd"
 
 # Ya en la sala de mantenimiento: la prueba que se haya pedido (si no, la larga, que sigue en _process)
 # Las pruebas que miran cómo empieza Johnny de verdad, sin lanzables (15 nov: se compran en la tienda y van al baúl)
-const SIN_LANZABLES := ["--regalo", "--tienda", "--guiado", "--marcas-sala", "--botin", "--fregona-mejorada", "--bot-carrera"]
+const SIN_LANZABLES := ["--regalo", "--tienda", "--guiado", "--marcas-sala", "--botin", "--fregona-mejorada", "--bot-carrera",
+	"--bot-garaje"]
 
 
 func empezar_prueba() -> void:
@@ -559,6 +562,9 @@ func empezar_prueba() -> void:
 	elif "--bot-partida" in args:
 		set_process(false)
 		probar_bot_partida()
+	elif "--bot-garaje" in args:
+		set_process(false)
+		probar_bot_garaje()
 	elif "--volver" in args:
 		set_process(false)   # sin la prueba larga
 		probar_volver()

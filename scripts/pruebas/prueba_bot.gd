@@ -281,6 +281,21 @@ func preparar_prueba() -> void:
 		var g := Guardado.cargar()
 		Guardado.usar("user://guardado-bot-%s" % Captura.dato("--semilla", "0"))
 		Guardado.escribir(g)
+	elif "--bot-garaje" in args:
+		# el garaje del reto del día (fase 4 de M125): su propio guardado, con los talentos del perfil (--mejoras) y sin
+		# tutoriales. El equipo se le da al entrar (probar_bot_garaje)
+		var g := Guardado.cargar()
+		Guardado.usar("user://guardado-bot-garaje-%s-%s-%s" % [Captura.dato("--mejoras", "medio"), Captura.dato("--nivel", "normal"),
+			Captura.dato("--semilla", "0")])
+		var perfil: Dictionary = PERFILES_GARAJE[Captura.dato("--mejoras", "medio")]
+		g.talentos = {}
+		for t in Talentos.LISTA:
+			var n := ceili(t.max * perfil.talentos)
+			if n > 0:
+				g.talentos[t.id] = n
+		g.ajustes.tutoriales = false
+		Guardado.escribir(g)
+		Garaje.empezar()
 
 
 # Johnny elige una de las dos mutaciones al azar, sin abrir el recuadro (que pararía el juego)
@@ -707,3 +722,170 @@ func puerta_del_pasillo() -> Node2D:
 				cerca = d
 				mejor = p
 	return mejor
+
+
+# ── Fase 4: el garaje del reto del día (tools/bot.py --garaje; M125) ──
+# Johnny entra en el garaje con el equipo de un perfil de mejoras (--mejoras) y pelea oleada tras oleada hasta caer o
+# superar las 25. Lo que dice si la curva está bien: con «nuevo» y «medio» tiene que caer bastante antes del final, y
+# solo con «maximo» (casi todo mejorado al máximo) llegar a la 25. Cada partida, una línea de
+# capturas/bot/garaje-<edificio>-<nivel>-<mejoras>-<semilla>.jsonl. Por defecto, con la condición «especial» (ningún
+# arma especial: el bot no las usa, así que no le quita nada); con --condicion X, otra.
+# Los perfiles: la parte de cada talento que tiene puesta (0, la mitad o todos sus puntos), las dos armas con su calidad
+# (Armas.CALIDADES: 0 Normal... 3 Épica), los lanzables a mano (montones llenos, y con «repuesto», otro de cada de
+# repuesto) y las curas de la mochila. La munición, la de siempre al coger un arma (el cargador y dos más) y la que
+# sueltan los durmientes (Garaje.MUNICION)
+const PERFILES_GARAJE := {
+	"nuevo": {"talentos": 0.0, "cuerpo": ["fregona", 0], "fuego": ["pistola", 0], "lanzables": ["molotov"],
+		"repuesto": false, "curas": ["vendas"]},
+	"medio": {"talentos": 0.5, "cuerpo": ["bate", 2], "fuego": ["escopeta", 2], "lanzables": ["molotov", "granada"],
+		"repuesto": false, "curas": ["vendas", "vendas", "botiquin"]},
+	"maximo": {"talentos": 1.0, "cuerpo": ["katana", 3], "fuego": ["gatling", 3], "lanzables": ["molotov", "granada"],
+		"repuesto": true, "curas": ["botiquin", "botiquin", "botiquin", "vendas", "vendas", "vendas"]},
+}
+const GARAJE_MAX := 3600.0   # (s de juego) un garaje que dura más se da por atascado
+const ATASCO_GARAJE := 120.0  # (s de juego) una oleada que dura más, atasco
+
+
+func probar_bot_garaje() -> void:
+	con_bot_partida = true
+	Engine.max_fps = 0
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	Guardado.cambiar(func(g):
+		g.ajustes.temblor = 0
+		g.ajustes.disparo_asistido = false
+		g.acompanante = "")
+	var nivel := Captura.dato("--nivel", "normal")
+	var mejoras := Captura.dato("--mejoras", "medio")
+	var semilla := int(Captura.dato("--semilla", str(randi() % 100000)))
+	seed(semilla)
+	var perfil: Dictionary = PERFILES_GARAJE[mejoras]
+	for a in supervivientes.equipo:
+		if is_instance_valid(a):
+			a.queue_free()
+	supervivientes.equipo.clear()
+	# el equipo del perfil: primero la de fuego y luego la cuerpo a cuerpo, sin soltar nada al suelo; en la mano, la de
+	# fuego (al quedarse sin balas se pasa sola a la otra, y al coger munición vuelve)
+	llevar_arma(perfil.cuerpo[0], perfil.cuerpo[1], false, false)
+	llevar_arma(perfil.fuego[0], perfil.fuego[1], true, false)
+	if johnny.mano != "fuego":
+		johnny.cambiar_mano()
+	lanzables.mano.clear()
+	lanzables.repuesto.clear()
+	lanzables.en_repuesto.clear()
+	for k in lanzables.cantidades:
+		lanzables.cantidades[k] = 0
+	for k in perfil.lanzables:
+		lanzables.mano.append(k)
+		lanzables.cantidades[k] = lanzables.maximo(k)
+		if perfil.repuesto:
+			lanzables.repuesto.append(k)
+			lanzables.en_repuesto.append(lanzables.maximo(k))
+	lanzables.tipo = perfil.lanzables[0]
+	mochila.append_array(perfil.curas)
+	bot = BOT.new()
+	bot.partida = self
+	bot.johnny = johnny
+	add_child(bot)
+	await get_tree().create_timer(0.5).timeout
+	garaje.arrancar()
+	bot.empezar(nivel)
+	var r := {"edificio": edificio, "nivel": nivel, "mejoras": mejoras, "condicion": Garaje.condicion, "semilla": semilla,
+		"vida_max": johnny.stats.vida_max, "oleadas": [], "pausas": {}}
+	var tiempo := 0.0
+	var pensar := 0.0
+	var parado := 0.0
+	var oleada := 0
+	var curas := mochila.size()
+	var en_oleada := 0.0   # (s) lo que lleva en la oleada de ahora: con ATASCO_GARAJE, se apunta como atasco (con foto)
+	r.atascos = []
+	while true:
+		await get_tree().physics_frame
+		var delta := get_physics_process_delta_time()
+		if not johnny.vivo:
+			r.final = "muere"
+			r.de = johnny.golpe_de
+			break
+		if garaje.superadas >= Garaje.OLEADAS:
+			r.final = "gana"
+			break
+		if get_tree().paused:
+			parado += delta
+			if parado > 0.5:   # (un recuadro que se haya abierto: se cierra, como lo haría una persona)
+				parado = 0.0
+				var que: String = menus.abierto if menus.abierto != "" else inventario.abierto
+				r.pausas[que if que != "" else "?"] = r.pausas.get(que if que != "" else "?", 0) + 1
+				if inventario.abierto != "":
+					inventario.cerrar()
+				menus.cerrar()
+				get_tree().paused = false
+			continue
+		parado = 0.0
+		tiempo += delta
+		if tiempo > GARAJE_MAX:
+			r.final = "no acaba"
+			break
+		# lo de cada oleada al acabarla: cuánto ha durado, la vida que le queda y las curas que ha gastado
+		if garaje.superadas > oleada:
+			oleada = garaje.superadas
+			r.oleadas.append({"n": oleada, "t": snappedf(tiempo, 0.1), "vida": johnny.vida, "curas": curas - mochila.size()})
+			curas = mochila.size()
+			en_oleada = 0.0
+		en_oleada += delta
+		if en_oleada > ATASCO_GARAJE:
+			en_oleada = 0.0
+			var foto := "bot/atasco-garaje-%s-%s-%d-%d.png" % [edificio, mejoras, semilla, r.atascos.size() + 1]
+			Captura.foto(foto)
+			var zombis := get_tree().get_nodes_in_group("zombis").map(func(z): return "%s %s en %s (%s)" % [
+				Bestiario.de(z), z.get("estado"), z.global_position.round(), "vale" if bot.vale(z) else "no vale"])
+			r.atascos.append({"oleada": garaje.oleada, "quedan": garaje.quedan, "jefe": garaje.jefe_pendiente,
+				"johnny": johnny.global_position.round(), "meta": str(bot.meta), "zombis": zombis, "foto": foto})
+			print("BOT: ATASCO en la oleada %d: %s" % [garaje.oleada, r.atascos[-1]])
+			if r.atascos.size() >= 3:
+				r.final = "atasco"
+				break
+		pensar -= delta
+		if pensar <= 0.0:
+			pensar = 0.25
+			decidir_garaje()
+	bot.parar()
+	r.superadas = garaje.superadas
+	r.oleada = garaje.oleada
+	r.segundos = snappedf(tiempo, 0.1)
+	r.curas_quedan = mochila.size()
+	var ruta := Captura.CARPETA + "bot/garaje-%s-%s-%s-%d.jsonl" % [edificio, nivel, mejoras, semilla]
+	DirAccess.make_dir_recursive_absolute(Captura.CARPETA + "bot")
+	var archivo := FileAccess.open(ruta, FileAccess.WRITE)
+	archivo.store_line(JSON.stringify(r))
+	archivo.close()
+	print("BOT: GARAJE %s %s %s: %s con %d oleadas superadas tras %d s%s" % [edificio, nivel, mejoras, r.final.to_upper(),
+		garaje.superadas, roundi(tiempo), " (%s)" % r.de if r.has("de") else ""])
+	print("BOT: TERMINADO")
+	get_tree().quit()
+
+
+# En el garaje: se cura con poca vida; con durmientes, a por el más cercano al que se puede llegar; sin ellos, a por lo
+# que han soltado y, si no hay nada, al centro (junto al baúl), a esperar la siguiente
+func decidir_garaje() -> void:
+	bot.meta = Vector2.INF
+	meta_cosa = false
+	if johnny.vida < johnny.stats.vida_max * 0.4:
+		for id in ["botiquin", "vendas"]:
+			if id in mochila:
+				usar_cura(id)
+				break
+	var cerca := INF
+	var mapa_nav: RID = johnny.get_world_2d().navigation_map
+	for z in get_tree().get_nodes_in_group("zombis"):
+		var d: float = johnny.global_position.distance_to(z.global_position)
+		if bot.vale(z) and d < cerca:
+			var camino := NavigationServer2D.map_get_path(mapa_nav, johnny.global_position, z.global_position, true)
+			if not camino.is_empty() and camino[-1].distance_to(z.global_position) < 48.0:
+				cerca = d
+				bot.meta = z.global_position
+	if bot.meta != Vector2.INF:
+		return
+	recoger_t = 0.0
+	if bot_recoger():
+		return
+	var s: Dictionary = planta.sitios[aqui]
+	bot.meta = mapa.to_global(Vector2(s.ancho / 2.0, s.alto / 2.0 + 70.0))

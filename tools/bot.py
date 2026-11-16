@@ -7,6 +7,8 @@
     py tools/bot.py --partidas 10 --edificios apartamentos   # fase 2: 10 partidas enteras por nivel
     py tools/bot.py --carrera 30 --edificios apartamentos --niveles normal   # fase 3: partidas seguidas hasta pasárselo
     py tools/bot.py --resumen-carrera 1234   # solo el resumen de las carreras de esa semilla
+    py tools/bot.py --garaje 4 --edificios apartamentos      # fase 4: el garaje del reto del día, 4 por perfil y nivel
+    py tools/bot.py --resumen-garaje 1234    # solo el resumen de los garajes de esa semilla
 
 Cada edificio es una partida de prueba aparte (--captura --bot-jefes, scripts/pruebas/prueba_bot.gd), una detrás de
 otra (comparten el guardado de prueba: a la vez se pisarían). Va con --fixed-fps 60: cada fotograma es 1/60 s de juego
@@ -170,6 +172,52 @@ def resumen_partidas(edificios, niveles, semillas):
         f.write(texto + "\n")
 
 
+# ── Fase 4: el garaje del reto del día (--bot-garaje, M125) ──
+# Johnny con el equipo y los talentos de un perfil (nuevo, medio o maximo: PERFILES_GARAJE en prueba_bot.gd) pelea
+# oleada tras oleada hasta caer o superar las 25. Cada partida tiene su guardado, así que van varias a la vez (A_LA_VEZ)
+MEJORAS = ["nuevo", "medio", "maximo"]
+A_LA_VEZ = 4
+
+
+def jugar_garaje(edificio, nivel, mejoras, semilla, condicion):
+    orden = [godot(), "--path", RAIZ, "--fixed-fps", "60", "--", "--captura", "--edificio", edificio, "--bot-garaje",
+             "--mejoras", mejoras, "--nivel", nivel, "--semilla", str(semilla), "--condicion", condicion,
+             "--limite", "4000"]
+    salida = subprocess.run(orden, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8",
+                            errors="replace").stdout
+    for linea in salida.splitlines():
+        if linea.startswith("BOT: GARAJE") or "ERROR DE LA PRUEBA" in linea:
+            print("  " + linea.rstrip(), flush=True)
+
+
+def resumen_garajes(semilla):
+    lineas = ["# El garaje del reto del día con el bot", "",
+              "Cada fila: un perfil de mejoras y un nivel de jugador; cuántas oleadas supera en cada partida, la media, "
+              "cuántas veces gana (las 25), en qué oleada cae la mitad de las veces y de qué muere.", ""]
+    datos = defaultdict(list)
+    for ruta in glob.glob(os.path.join(RAIZ, "capturas", "bot", "garaje-*.jsonl")):
+        with open(ruta, encoding="utf-8") as f:
+            for l in f:
+                if l.strip():
+                    p = json.loads(l)
+                    if semilla <= p["semilla"] < semilla + 1000:
+                        datos[(p["edificio"], p["mejoras"], p["nivel"], p["condicion"])].append(p)
+    orden_m = {m: i for i, m in enumerate(MEJORAS)}
+    orden_n = {n: i for i, n in enumerate(NIVELES)}
+    for clave in sorted(datos, key=lambda k: (k[0], orden_m.get(k[1], 9), orden_n.get(k[2], 9), k[3])):
+        ps = sorted(datos[clave], key=lambda p: p["superadas"])
+        ed, mejoras, nivel, cond = clave
+        oleadas = [p["superadas"] for p in ps]
+        muertes = Counter(p.get("de", "?") for p in ps if p["final"] == "muere")
+        lineas.append(f"- {ed} · {mejoras} · {nivel} · sin {cond}: oleadas {oleadas}, media {media(oleadas):.1f}, "
+                      f"mediana {oleadas[len(oleadas) // 2]}, gana {sum(p['final'] == 'gana' for p in ps)}/{len(ps)}"
+                      + (f"; muere por " + ", ".join(f"{k} ×{v}" for k, v in muertes.most_common(4)) if muertes else ""))
+    texto = "\n".join(lineas)
+    print(texto)
+    with open(os.path.join(RAIZ, "capturas", "bot", f"resumen-garaje-{semilla}.md"), "w", encoding="utf-8") as f:
+        f.write(texto + "\n")
+
+
 # ── Fase 3: la carrera (--bot-carrera) ──
 # Partidas seguidas con el mismo guardado (user://carrera-<nombre>), hasta completar el edificio o llegar al tope. El
 # «listo» vuelve al ordenador a gastar el mutágeno antes de perderlo; el «despistado», no.
@@ -251,6 +299,12 @@ def main():
                    help="fase 3: partidas seguidas con el mismo guardado (como mucho tantas) por edificio, nivel y tipo")
     a.add_argument("--tipos", default="listo,despistado", help="con --carrera: listo, despistado o los dos")
     a.add_argument("--resumen-carrera", type=int, default=None, help="solo el resumen de las carreras de esa semilla")
+    a.add_argument("--garaje", type=int, default=0,
+                   help="fase 4: tantos garajes del reto del día por edificio, perfil de mejoras y nivel")
+    a.add_argument("--mejoras", default=",".join(MEJORAS), help="con --garaje: nuevo, medio, maximo")
+    a.add_argument("--condicion", default="especial",
+                   help="con --garaje: lo que no vale (especial por defecto: el bot no usa armas especiales)")
+    a.add_argument("--resumen-garaje", type=int, default=None, help="solo el resumen de los garajes de esa semilla")
     a.add_argument("--peleas", type=int, default=8)
     a.add_argument("--niveles", default=",".join(NIVELES))
     a.add_argument("--edificios", default=",".join(EDIFICIOS))
@@ -266,6 +320,9 @@ def main():
     if args.resumen_carrera is not None:
         resumen_carreras(args.resumen_carrera)
         return
+    if args.resumen_garaje is not None:
+        resumen_garajes(args.resumen_garaje)
+        return
     semilla = args.semilla if args.semilla is not None else random.randint(1000, 99999)
     print(f"Semilla {semilla}", flush=True)
     if args.carrera:
@@ -280,6 +337,16 @@ def main():
             for h in hilos:
                 h.join()
         resumen_carreras(semilla)
+        return
+    if args.garaje:
+        from concurrent.futures import ThreadPoolExecutor
+        trabajos = [(ed, nivel, m, semilla + i, args.condicion) for ed in args.edificios.split(",")
+                    for m in args.mejoras.split(",") for nivel in args.niveles.split(",") for i in range(args.garaje)]
+        with ThreadPoolExecutor(A_LA_VEZ) as hilos:
+            for tr in trabajos:
+                hilos.submit(jugar_garaje, *tr)
+                time.sleep(2)
+        resumen_garajes(semilla)
         return
     if args.partidas:
         semillas = [semilla + i for i in range(args.partidas)]

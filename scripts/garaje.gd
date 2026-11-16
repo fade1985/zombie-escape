@@ -27,14 +27,16 @@ const PRIMERA := 4               # los durmientes de la oleada 1...
 const MAS_POR_OLEADA := 2        # ...y cuántos más en cada una (la 25, 52)
 const A_LA_VEZ := 18             # como mucho, tantos vivos a la vez (la web no aguanta más; los demás esperan su turno)
 const DESDE := 6                 # desde esta oleada, los durmientes se endurecen...
-const MAS_VIDA := 0.06           # ...un 6 % más de vida y de zarpazo por oleada (la 25, el doble)...
-const MAS_VELOCIDAD := 0.02      # ...y un 2 % más rápidos
+const MAS_VIDA := 0.08           # ...un 8 % más de vida y de zarpazo que en la oleada anterior, sumándose (la 10, ×1,5; la
+                                 # 15, ×2,2; la 20, ×3,2; la 25, ×4,7: la curva brutal que pidió el dueño, M125)...
+const MAS_VELOCIDAD := 0.025     # ...y un 2,5 % más rápidos que en la primera, por oleada (la 25, ×1,5)
 const JEFE_MAS := 1.25           # cada jefe, un 25 % más de vida que el anterior
 const DESCANSO := 5.0            # segundos entre una oleada y la siguiente...
 const DESCANSO_JEFE := 10.0      # ...o estos, si en ella salió un jefe
 const ESPERA := 3.0              # lo que tarda en salir la primera, al entrar
 const MUNICION := 0.10           # lo que tiene cada durmiente de soltar munición al caer
 const LEJOS := 380.0             # a cuánto de Johnny salen, como poco
+const RENDIJA := 3.0             # (s) un durmiente fuera del suelo por el que se anda tanto rato, al suelo más cercano
 
 # Las condiciones del día: cada día toca una (condicion_de). "nombre" sale en el cuadro del botón, arriba en la partida y
 # en el cartel del final; "desc", en el cuadro del botón. La clave es la familia que no vale (familia())
@@ -63,6 +65,7 @@ var jefe_pendiente := ""         # el jefe de la oleada, si aún no ha salido
 var hubo_jefe := false           # si en la oleada de ahora salió un jefe (el descanso, más largo)
 var descanso := -1.0             # lo que falta para la siguiente (-1: en plena oleada)
 var en_marcha := false
+var rendijas_t := 0.0            # (s) para mirar las rendijas dos veces por segundo, no en cada fotograma
 
 
 # El día de hoy, como se escribe en el guardado
@@ -183,6 +186,10 @@ func _physics_process(delta: float) -> void:
 	if not en_marcha or partida.terminada or partida.cambiando or not partida.johnny.vivo:
 		return
 	partida.rescatar_atascados(delta)   # (el garaje va como «limpio» para la partida: esto lo hace aquí)
+	rendijas_t -= delta
+	if rendijas_t <= 0.0:
+		rendijas_t = 0.5
+		sacar_de_rendijas(0.5)
 	if descanso >= 0.0:
 		descanso -= delta
 		if descanso < 0.0:
@@ -196,6 +203,28 @@ func _physics_process(delta: float) -> void:
 		vivos += 1
 	if quedan == 0 and jefe_pendiente == "" and vivos == 0:
 		oleada_superada()
+
+
+# Un durmiente metido en una rendija (entre un coche y el muro, adonde le ha llevado un empujón o ha salido) no está en el
+# mapa de navegación: ni él sale ni Johnny llega a él, y la oleada no se acaba nunca (16 nov, el bot del garaje). Tras
+# RENDIJA segundos así, al punto del mapa de navegación más cercano
+func sacar_de_rendijas(paso: float) -> void:
+	var mapa_nav: RID = partida.mapa.get_world_2d().navigation_map
+	for z in partida.get_tree().get_nodes_in_group("zombis"):
+		if z.get("estado") == "muerto":
+			continue
+		var cerca := NavigationServer2D.map_get_closest_point(mapa_nav, z.global_position)
+		if cerca.distance_to(z.global_position) < 24.0:
+			z.remove_meta("rendija")
+			continue
+		var t: float = z.get_meta("rendija", 0.0) + paso
+		z.set_meta("rendija", t)
+		if t < RENDIJA:
+			continue
+		z.remove_meta("rendija")
+		z.global_position = cerca
+		if "velocity" in z:
+			z.velocity = Vector2.ZERO
 
 
 func vivos_ahora() -> int:
@@ -307,10 +336,11 @@ func endurecer(zombi: Node2D, tipo: String) -> void:
 	var pasos := maxi(0, oleada - DESDE + 1)
 	if pasos == 0:
 		return
+	var mas := pow(1.0 + MAS_VIDA, pasos)
 	if "vida_max" in zombi:
-		zombi.vida_max = roundi(zombi.vida_max * (1.0 + MAS_VIDA * pasos))
+		zombi.vida_max = roundi(zombi.vida_max * mas)
 	if "dano" in zombi:
-		zombi.dano = roundi(zombi.dano * (1.0 + MAS_VIDA * pasos))
+		zombi.dano = roundi(zombi.dano * mas)
 	if "velocidad" in zombi:
 		zombi.velocidad *= 1.0 + MAS_VELOCIDAD * pasos
 
