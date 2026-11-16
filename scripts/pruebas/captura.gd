@@ -20,6 +20,8 @@ static func dato(nombre: String, si_no := "") -> String:
 const CARPETA := "res://capturas/"
 
 static func foto(archivo: String) -> void:
+	if DisplayServer.get_name() == "headless":
+		return   # sin pantalla (--headless: el bot, docs/BOT.md) no hay nada que fotografiar
 	DirAccess.make_dir_recursive_absolute(CARPETA)
 	var raiz: Window = (Engine.get_main_loop() as SceneTree).root
 	raiz.get_texture().get_image().save_png(CARPETA + archivo)

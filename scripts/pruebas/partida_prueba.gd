@@ -6,7 +6,7 @@
 # tiene todos. Así, para tocar una prueba basta con abrir su archivo:
 #   prueba_comun.gd (hereda de partida.gd) → prueba_jefes_salas.gd → prueba_jefes.gd → prueba_armas.gd →
 #   prueba_skins.gd → prueba_inventario.gd → prueba_fotos.gd → prueba_sitios.gd → prueba_varias.gd →
-#   prueba_larga.gd → trailer.gd → partida_prueba.gd
+#   prueba_larga.gd → trailer.gd → prueba_bot.gd → partida_prueba.gd
 # Una función solo puede llamar a las de su archivo o a las de los de antes en la cadena (si no, Godot no compila y
 # arranca la partida normal): lo que usen varios archivos va en el primero de ellos. Prueba nueva: su función en el
 # archivo de su tema, su opción en empezar_prueba() (abajo) y su línea en esta lista.
@@ -60,6 +60,10 @@
 #   --marcas            las marcas en el suelo de lo que lanzan los jefes (molotov, sartén, probeta, café y cubo),
 #                       en pleno vuelo y a punto de caer                                    [prueba_jefes_salas.gd]
 #   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
+#   --bot-jefes         el jugador automático (bot.gd) pelea solo con cada jefe del edificio, a tres niveles, y apunta
+#                       cada pelea en capturas/bot/ (--peleas, --niveles, --jefes, --semilla; docs/BOT.md)  [prueba_bot.gd]
+#   --bot-partida       el bot juega una partida entera, de la sala de mantenimiento hasta morir o acabar el edificio
+#                       (--nivel, --semilla; docs/BOT.md)                                   [prueba_bot.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --azotea            la azotea (la imagen de GPT entera): los muros por la barandilla, el jefe esperando en el aro y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
@@ -513,7 +517,7 @@
 #                       --edificio torre, también la ficha del oficinista: captura-bestiario-torre.png)
 #                                                                                            [prueba_larga.gd]
 #   --trailer           el trailer: Johnny juega solo unas escenas con textos y el título (docs/TRAILER.md) [trailer.gd]
-extends "res://scripts/pruebas/trailer.gd"
+extends "res://scripts/pruebas/prueba_bot.gd"
 
 
 # Ya en la sala de mantenimiento: la prueba que se haya pedido (si no, la larga, que sigue en _process)
@@ -532,6 +536,12 @@ func empezar_prueba() -> void:
 		lanzables.tipo = "molotov"
 	if "--trailer" in args:
 		grabar_trailer()
+	elif "--bot-jefes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_bot_jefes()
+	elif "--bot-partida" in args:
+		set_process(false)
+		probar_bot_partida()
 	elif "--volver" in args:
 		set_process(false)   # sin la prueba larga
 		probar_volver()
