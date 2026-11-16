@@ -3,7 +3,8 @@
 #
 # A la izquierda, una fila por grupo (Cuerpo a cuerpo, A distancia, Especiales y Lanzables) y en cada una sus casillas:
 # el icono (el precio sale en la ficha). Lo que llevas y los lanzables que ya no te caben, con el borde verde (sin
-# letrero: el «LLENO» lo dice el botón de la ficha, 15 nov), y lo que no puedes pagar sale apagado.
+# letrero: el «LLENO» lo dice el botón de la ficha, 15 nov), lo que puedes pagar con el borde amarillo y lo que no, muy
+# oscuro (16 nov).
 #
 # A la derecha, una ficha fija con lo elegido: su nombre y su grupo, el dibujo en grande, unos medidores de 10
 # cuadraditos (cada uno comparado con el arma que más tiene de eso), qué hace y el botón «Comprar» con el precio. Sin nada
@@ -285,22 +286,24 @@ func _draw() -> void:
 	dibujar_ficha(fuente)
 
 
-# Una casilla: oscura con borde gris y el icono (el precio sale en la ficha, al pasar por encima). Lo que no se puede
-# comprar (tampoco con el baúl lleno, desde el 15 nov), apagado. La elegida, con el borde claro
+# Una casilla: oscura con el icono (el precio sale en la ficha, al pasar por encima). Lo que te llega, con el borde
+# amarillo (el del dinero y el del botón de comprar); lo que no se puede comprar (tampoco con el baúl lleno, desde el
+# 15 nov), con el dibujo muy oscuro, para que se vea de un vistazo qué puedes pagar (16 nov). La elegida, además, con
+# un marco claro por fuera
 func dibujar_casilla(id: String, _fuente: Font) -> void:
 	var r: Rect2 = casillas[id]
 	var e := estado(id)
-	var borde := PLACA.REMACHE
+	var borde := PLACA.AMARILLO
 	var relleno := Color("#1c1f24")
 	var apagada := e in ["caro", "lleno"]
 	if apagada:
 		borde = PLACA.APAGADO
 		relleno = PLACA.NEGRO
 	if id == ficha_id:
-		borde = PLACA.TEXTO
+		draw_rect(r.grow(2), PLACA.TEXTO)
 	draw_rect(r, borde)
 	draw_rect(r.grow(-2), relleno)
-	var color := Color(0.55, 0.55, 0.55, 0.75) if apagada else Color.WHITE
+	var color := Color(0.3, 0.3, 0.3, 0.6) if apagada else Color.WHITE
 	var dibujo := dibujo_tienda(id)
 	if dibujo:
 		# el de la tienda (48), a su tamaño y en el centro
