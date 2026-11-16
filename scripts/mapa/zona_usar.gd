@@ -1,15 +1,12 @@
 # La zona invisible de delante de un mueble de la sala de mantenimiento (la mesa del ordenador, ordenador.gd; el
 # baúl, el banco de trabajo y la taquilla, arrimable.gd; el armarito de los baños, armarito.gd; y el armario, la mesilla,
 # el escritorio y la librería de los Apartamentos, mueble.gd). Antes el mueble se abría solo al arrimarse; ahora, mientras
-# Johnny está en la zona, se abre al pulsar la acción de atacar: el clic izquierdo o J (las que tenga puestas en
-# Opciones), el botón B del mando ("usar"; RT ataca siempre) y, en el móvil, el botón «Abrir»
-# que sale entonces (tactil.gd). Con el ratón, el clic tiene que caer encima del mueble: si cae en otra parte, no se abre y
-# Johnny ataca como siempre (clic_fuera). Con J no hay puntero, así que lo abre esté donde esté y no dispara (johnny.gd,
-# "ante_mueble"). Sin letrero encima (lo pidió el dueño).
+# Johnny está en la zona, se abre con la acción "usar": la E (la que tenga puesta en Opciones, fila «Interactuar»), el
+# botón B del mando y, en el móvil, el botón «Abrir» que sale entonces (tactil.gd). Desde el 13 nov (M103, lo pidió el
+# dueño) atacar (J, el clic, RT) solo ataca, también delante de un mueble o una puerta. Sin letrero encima.
 # Las puertas de dentro (puerta_bano.gd) usan la misma zona para cerrarse y volver a abrirse: la ponen con montar_rect
 # (la zona de delante y detrás del hueco), dicen con "puede" cuándo se pueden usar y, con "cierra", que el botón del
-# móvil diga «Cerrar». Con ellas Johnny no deja de atacar (lo pidió el dueño; "corta_ataque"): J o el clic encima la
-# abren o cierran y a la vez atacan, y en el móvil atacar solo ataca (la puerta, con su botón).
+# móvil diga «Cerrar».
 extends Area2D
 
 signal usar
