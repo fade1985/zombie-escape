@@ -2410,8 +2410,8 @@ msgid "Buena compañía"
 msgstr "Gut begleitet"
 
 #: scripts/logros.gd
-msgid "Gana una partida con un vecino de las viviendas acompañándote."
-msgstr "Gewinne eine Runde mit einem Nachbarn aus den Unterkünften an deiner Seite."
+msgid "Gana una partida con un superviviente de los trasteros acompañándote."
+msgstr "Gewinne eine Runde mit einem Überlebenden aus den Kellern an deiner Seite."
 
 #: scripts/logros.gd
 msgid "Caja fuerte"
@@ -2854,8 +2854,8 @@ msgid "Tienda destrozada"
 msgstr "Verwüsteter Laden"
 
 #: scripts/mapa/viviendas.gd
-msgid "Viviendas"
-msgstr "Unterkünfte"
+msgid "Trasteros"
+msgstr "Keller"
 
 #: scripts/mapa/viviendas.gd
 msgid "Trastero"

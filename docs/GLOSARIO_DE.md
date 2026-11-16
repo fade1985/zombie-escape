@@ -77,7 +77,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | apagón · alarma de incendios · horda | Stromausfall · Feueralarm · Horde |
 | cuadro eléctrico · palanca · cable pelado | Sicherungskasten · Hebel · blankes Kabel |
 | tarjeta de acceso · tarjeta dorada · cámara acorazada · apertura de emergencia | Zugangskarte · goldene Karte · Tresorraum · Notöffnung |
-| viviendas | Unterkünfte |
+| viviendas (el sitio de los rescatados: en el juego se llama Trasteros desde el 16 nov) | Keller |
 
 ## Armas y munición
 

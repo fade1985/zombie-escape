@@ -74,7 +74,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | pasillo · escaleras · ascensor · helipuerto · valla | couloir · escalier · ascenseur · héliport · grille | |
 | Salón · Cocina · Baño (principal) · Dormitorio (de matrimonio, individual) | Salon · Cuisine · Salle de bain (principale) · Chambre (parentale, Petite chambre) | |
 | Vestuario · Despacho · Taller · Gimnasio · Cuarto de la limpieza | Vestiaire · Bureau · Atelier · Salle de sport · Placard à balais | |
-| Mantenimiento · sala de mantenimiento · Viviendas | Maintenance · salle de maintenance · Logements | |
+| Mantenimiento · sala de mantenimiento · Trasteros (antes Viviendas) | Maintenance · salle de maintenance · Caves | |
 | Apartamento/Tienda destrozado/a · Apartamento en llamas | Appartement saccagé · Boutique saccagée · Appartement en feu | |
 | Tiendas: Supermercado · Ferretería · Electrónica · Restaurante · Tienda de ropa · Farmacia · Joyería | Supermarché · Quincaillerie · Électronique · Restaurant · Boutique de mode · Pharmacie · Bijouterie | |
 | Neones: SUPER · FERRETERIA · ELECTRO · BURGER · MODA · FARMACIA · JOYAS | SUPER · BRICO · ELECTRO · BURGER · MODE · PHARMACIE · BIJOUX | sin tildes en los neones |

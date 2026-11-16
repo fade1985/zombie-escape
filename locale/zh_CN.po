@@ -2408,8 +2408,8 @@ msgid "Buena compañía"
 msgstr "结伴同行"
 
 #: scripts/logros.gd
-msgid "Gana una partida con un vecino de las viviendas acompañándote."
-msgstr "带着一位生活区的邻居赢下一局。"
+msgid "Gana una partida con un superviviente de los trasteros acompañándote."
+msgstr "带着一位储藏室里的幸存者赢下一局。"
 
 #: scripts/logros.gd
 msgid "Caja fuerte"
@@ -2852,8 +2852,8 @@ msgid "Tienda destrozada"
 msgstr "被砸烂的商店"
 
 #: scripts/mapa/viviendas.gd
-msgid "Viviendas"
-msgstr "生活区"
+msgid "Trasteros"
+msgstr "储藏室"
 
 #: scripts/mapa/viviendas.gd
 msgid "Trastero"

@@ -71,7 +71,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | mutación | мутация |
 | mutágeno (lo que suelta cada durmiente y paga los talentos (15 nov); en el marcador, una hélice de ADN en vez del «$») | мутаген |
 | dólares · materiales (de fabricación; antes «piezas», 11 nov) | доллары · материалы (материалы для изготовления) |
-| sala de mantenimiento (Mantenimiento) · viviendas | дворницкая · общежитие |
+| sala de mantenimiento (Mantenimiento) · Trasteros (antes viviendas) | дворницкая · кладовки |
 | ordenador · taquilla · baúl · banco de trabajo · taller | компьютер · шкафчик · сундук · верстак · мастерская |
 | inventario · mochila | инвентарь · рюкзак |
 | Objetos · Munición · Arrojables | Предметы · Патроны · Метательное |

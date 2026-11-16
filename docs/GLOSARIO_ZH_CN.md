@@ -78,7 +78,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Salón · Cocina · Baño · Dormitorio · Pasillo | 客厅 · 厨房 · 浴室 · 卧室 · 走廊 |
 | Dormitorio de matrimonio · Baño principal · Dormitorio individual | 主卧 · 主卫 · 次卧 |
 | Vestuario · Despacho · Taller · Gimnasio · Cuarto de la limpieza | 更衣室 · 办公室 · 工作间 · 健身房 · 保洁间 |
-| sala de Mantenimiento · Viviendas · TRASTEROS | 维修间 · 生活区 · 储藏室 |
+| sala de Mantenimiento · Trasteros (antes Viviendas) · TRASTEROS | 维修间 · 储藏室 · 储藏室 |
 | Tiendas: Supermercado · Ferretería · Electrónica · Restaurante · Tienda de ropa · Farmacia · Joyería | 超市 · 五金店 · 电器店 · 餐厅 · 服装店 · 药店 · 珠宝店 |
 | Neones: SUPER · FERRETERIA · ELECTRO · BURGER · MODA · FARMACIA · JOYAS | 超市 · 五金 · 电器 · 汉堡 · 时装 · 大药房 · 珠宝 |
 | Almacén · Cámara frigorífica · Taquillas · Probadores · Rebotica · Aseo · Trastienda · Cámara acorazada | 仓库 · 冷库 · 储物间 · 试衣间 · 配药间 · 厕所 · 库房 · 金库 |

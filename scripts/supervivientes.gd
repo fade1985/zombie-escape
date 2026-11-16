@@ -1088,7 +1088,7 @@ func probar_viviendas() -> void:
 	await get_tree().create_timer(1.0, false).timeout   # (el fundido a negro, de ida y de vuelta)
 	var mapa: Node2D = partida.mapa
 	var casas: Dictionary = partida.planta.sitios[partida.aqui]
-	print("Por la puerta de la derecha: en «%s» · arriba pone «%s» · Johnny a %d de la puerta (esperado: viviendas, Planta baja · Viviendas, 0)" % [
+	print("Por la puerta de la derecha: en «%s» · arriba pone «%s» · Johnny a %d de la puerta (esperado: viviendas, Planta baja · Trasteros, 0)" % [
 		casas.tipo, partida.lugar.text, roundi(johnny.position.distance_to(mapa.puertas[0].llegada()))])
 	var cerradas := []
 	var abiertas := []
@@ -1135,7 +1135,7 @@ func probar_viviendas() -> void:
 	Input.action_press("arriba")
 	await get_tree().create_timer(1.0, false).timeout
 	Input.action_release("arriba")
-	print("Hacia la puerta cerrada de la médica: Johnny en «%s» (esperado: Viviendas)" % mapa.nombre_zona(mapa.zona_en(johnny.position)))
+	print("Hacia la puerta cerrada de la médica: Johnny en «%s» (esperado: Trasteros)" % mapa.nombre_zona(mapa.zona_en(johnny.position)))
 	# y una abierta sí: hacia la del militar, hasta dentro
 	var del_militar: Dictionary = casas.apt.puertas.filter(func(d): return d.vecino == "militar")[0]
 	johnny.position = Vector2((del_militar.c + 1) * Planta.CASILLA, (Viviendas.PASILLO_F + 1) * Planta.CASILLA)
@@ -1169,7 +1169,7 @@ func probar_viviendas() -> void:
 		abajo.salidas[1].a, partida.planta.viviendas, suyas.salidas[0].a, partida.planta.viviendas, partida.planta.mantenimiento])
 	await partida.montar(partida.planta.viviendas, 0, false)
 	var minimapa: Node = partida.get_node("Pantalla/Minimapa")
-	print("1ª planta, en las viviendas: arriba pone «%s» · el minimapa, abajo %s (esperado: Planta baja · Viviendas, true)" % [
+	print("1ª planta, en las viviendas: arriba pone «%s» · el minimapa, abajo %s (esperado: Planta baja · Trasteros, true)" % [
 		partida.lugar.text, minimapa.abajo()])
 	for a in equipo:
 		a.queue_free()

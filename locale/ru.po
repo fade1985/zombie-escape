@@ -2412,8 +2412,8 @@ msgid "Buena compañía"
 msgstr "Хорошая компания"
 
 #: scripts/logros.gd
-msgid "Gana una partida con un vecino de las viviendas acompañándote."
-msgstr "Выиграй забег вместе с соседом из общежития."
+msgid "Gana una partida con un superviviente de los trasteros acompañándote."
+msgstr "Выиграй забег вместе с выжившим из кладовок."
 
 #: scripts/logros.gd
 msgid "Caja fuerte"
@@ -2856,8 +2856,8 @@ msgid "Tienda destrozada"
 msgstr "Разгромленный магазин"
 
 #: scripts/mapa/viviendas.gd
-msgid "Viviendas"
-msgstr "Общежитие"
+msgid "Trasteros"
+msgstr "Кладовки"
 
 #: scripts/mapa/viviendas.gd
 msgid "Trastero"

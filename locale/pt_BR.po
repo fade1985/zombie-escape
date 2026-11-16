@@ -2410,8 +2410,8 @@ msgid "Buena compañía"
 msgstr "Boa companhia"
 
 #: scripts/logros.gd
-msgid "Gana una partida con un vecino de las viviendas acompañándote."
-msgstr "Vença uma partida com um vizinho das moradias te acompanhando."
+msgid "Gana una partida con un superviviente de los trasteros acompañándote."
+msgstr "Vença uma partida com um sobrevivente dos depósitos te acompanhando."
 
 #: scripts/logros.gd
 msgid "Caja fuerte"
@@ -2854,8 +2854,8 @@ msgid "Tienda destrozada"
 msgstr "Loja destruída"
 
 #: scripts/mapa/viviendas.gd
-msgid "Viviendas"
-msgstr "Moradias"
+msgid "Trasteros"
+msgstr "Depósitos"
 
 #: scripts/mapa/viviendas.gd
 msgid "Trastero"

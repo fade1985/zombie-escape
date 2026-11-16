@@ -102,7 +102,7 @@ son **adaptaciones**, no traducciones literales.
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | Janitor · The Super · The Glutton · The Gymbro · The Fireman |
 | pasillo · cámara acorazada · tarjeta dorada | hallway · vault · gold card |
 | apertura de emergencia · cuadro eléctrico · palanca · cable (pelado) · horda | emergency override · electrical panel · lever · wire · horde |
-| las viviendas | living quarters |
+| las viviendas (en el juego, Trasteros desde el 16 nov) | storage rooms |
 
 ## Elegidos en la fase 4 (por confirmar)
 

@@ -170,7 +170,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 |---|---|
 | Planta baja · 1ª, 2ª, 3ª planta · %dª planta · Azotea | Térreo · 1º, 2º, 3º andar · %dº andar · Terraço (todas masculinas: «no %s») |
 | planta %d (número del juego) | andar %d |
-| Vestuario · Despacho · Taller · Gimnasio · Cuarto de la limpieza · Mantenimiento · Viviendas | Vestiário · Escritório · Oficina · Academia · Quartinho da limpeza · Manutenção · Moradias |
+| Vestuario · Despacho · Taller · Gimnasio · Cuarto de la limpieza · Mantenimiento · Trasteros (antes Viviendas) | Vestiário · Escritório · Oficina · Academia · Quartinho da limpeza · Manutenção · Depósitos |
 | Salón · Cocina · Baño · Dormitorio (de matrimonio, individual) · Pasillo | Sala · Cozinha · Banheiro · Quarto (de casal, de solteiro) · Corredor |
 | Tiendas: Supermercado · Ferretería · Electrónica · Restaurante · Tienda de ropa · Farmacia · Joyería | Supermercado · Loja de ferragens · Eletrônicos · Restaurante · Loja de roupas · Farmácia · Joalheria |
 | Neones: SUPER · FERRETERIA · ELECTRO · BURGER · MODA · FARMACIA · JOYAS | SUPER · FERRAGENS · ELETRO · BURGER · MODA · FARMACIA (sin tilde, como el español) · JOIAS |

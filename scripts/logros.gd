@@ -89,7 +89,7 @@ const LISTA := [
 	{"id": "horas_extra", "tema": "supervivientes", "nombre": "Horas extra", "icono": "logro-horas_extra", "premio": 10, "cuenta": "",
 		"mira": "rescatados", "edificio": "torre", "desc": "Rescata a los 3 supervivientes de Torre Velaria."},
 	{"id": "buena_compania", "tema": "supervivientes", "nombre": "Buena compañía", "icono": "logro-buena_compania", "premio": 5, "meta": 1, "cuenta": "",
-		"desc": "Gana una partida con un vecino de las viviendas acompañándote."},
+		"desc": "Gana una partida con un superviviente de los trasteros acompañándote."},
 	# ── Sorpresas y retos
 	{"id": "caja_fuerte", "tema": "sorpresas", "nombre": "Caja fuerte", "icono": "logro-caja_fuerte", "premio": 20, "meta": 1, "cuenta": "",
 		"desc": "Abre la cámara acorazada de la Joyería del centro comercial."},
