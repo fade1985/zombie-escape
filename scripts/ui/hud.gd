@@ -809,16 +809,27 @@ func pintar_balas() -> void:
 		hueco = 1.0
 	var x := HUECO.position.x
 	var abajo := -4.0 - (ALTO_ESCUDO if con_escudo() else 0.0)   # (con escudo, encima de su barra)
+	# Si en una fila no caben (la gatling, con su cinta de 100 o más), van en dos filas en zigzag: una abajo y otra
+	# encima, alternando, de borde a borde del marco de la vida (la primera, en su borde izquierdo y la última, en el
+	# derecho; L42, 16 nov). Antes, en una sola fila, se salían muy lejos por la derecha
+	var en_zigzag: bool = w.cargador * (tam.x + hueco) - hueco > ANCHO
+	var paso := 0.0   # (en zigzag, lo que va de una bala a la siguiente, que está en la otra fila)
+	if en_zigzag:
+		x = 0.0
+		paso = (ANCHO - tam.x) / maxf(w.cargador - 1, 1)
 	var dibujo: Texture2D = CARTUCHO if w.cartucho else BALA
-	var sitios := []   # dónde va cada bala, para las que salen volando
+	var sitios := []   # dónde va cada bala (la esquina de abajo a la izquierda), para las que salen volando
 	for i in w.cargador:
-		sitios.append(x)
+		var sitio := Vector2(x, abajo)
+		if en_zigzag:
+			sitio = Vector2(roundf(i * paso), abajo - (tam.y + 1.0 if i % 2 == 1 else 0.0))
+		sitios.append(sitio)
 		var color := Color.WHITE
 		if i >= johnny.balas:
 			color = Color(0.5, 0.5, 0.5, 0.6 if parpadeo else 0.22)   # gastada
 		if lejos:
 			color.a *= 0.5
-		var r := Rect2(x, abajo - tam.y, tam.x, tam.y)
+		var r := Rect2(sitio.x, sitio.y - tam.y, tam.x, tam.y)
 		if nuevas.has(i):
 			# recién metida: aparece desde arriba y más grande, y se asienta
 			var k := clampf(nuevas[i] / 0.2, 0.0, 1.0)
@@ -828,6 +839,8 @@ func pintar_balas() -> void:
 			r.position.y -= roundf((1.0 - k) * 6.0)
 		barra.draw_texture_rect(dibujo, r, false, color)
 		x += tam.x + hueco
+	if en_zigzag:
+		x = ANCHO + hueco   # (la reserva, a la derecha del marco)
 	# las que se acaban de disparar: saltan hacia arriba, caen girando un poco y se apagan
 	for g in gastadas:
 		var i: int = g[0]
@@ -836,7 +849,7 @@ func pintar_balas() -> void:
 		var t: float = g[1]
 		var salto := Vector2(t * 40.0, -60.0 * t + 260.0 * t * t)
 		var c := Color(1, 0.9, 0.6, 1.0 - t / 0.35)
-		barra.draw_set_transform(Vector2(sitios[i], abajo - tam.y) + tam / 2.0 + salto, t * 9.0)
+		barra.draw_set_transform(sitios[i] - Vector2(0, tam.y) + tam / 2.0 + salto, t * 9.0)
 		barra.draw_texture_rect(dibujo, Rect2(-tam / 2.0, tam), false, c)
 		barra.draw_set_transform(Vector2.ZERO)
 	# La reserva: la munición de su tipo que lleva, la que comparte con las otras armas que la gastan (en naranja si ya

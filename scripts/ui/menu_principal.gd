@@ -612,8 +612,8 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 	return b
 
 
-# Los textos de una tarjeta, cada uno con el estilo de su etiqueta: [texto, estilo] del nombre y de cómo te ha ido (o, cerrado,
-# [texto, estilo, cumplido] de cada requisito para abrirlo). (Hasta el 9 nov llevaba también la descripción del edificio y las plantas y los intentos)
+# Los textos de una tarjeta, cada uno con el estilo de su etiqueta: [texto, estilo] del nombre y [texto, estilo, false,
+# en amarillo] de cómo te ha ido (o, cerrado, [texto, estilo, cumplido] de cada requisito para abrirlo). (Hasta el 9 nov llevaba también la descripción del edificio y las plantas y los intentos)
 func textos_tarjeta(id: String, s: Dictionary) -> Array:
 	var datos: Dictionary = Edificios.LISTA[id]
 	var p: Dictionary = s.edificios.get(id, Guardado.EDIFICIO)
@@ -624,13 +624,15 @@ func textos_tarjeta(id: String, s: Dictionary) -> Array:
 		# el tanto por ciento del edificio (completarlo, sus dosieres y sus vídeos: Edificios.porcentaje), si ya hay algo
 		var por_ciento := Edificios.porcentaje(s, id)
 		var con_por_ciento := " · %d%%" % por_ciento if por_ciento > 0 else ""   # no-tr
+		elif t.size() > 3 and t[3]:   # el récord del edificio completado, en el amarillo del juego (L46, 16 nov)
+			l.add_theme_color_override("font_color", Tema.AMARILLO)
 		if p.completado:
 			# completado: solo «Récord: 3:12» (11 nov; sin las veces ni el tanto por ciento)
 			var t: float = p.mejor_tiempo
 			progreso = Idioma.t("Récord: %d:%02d") % [int(t) / 60, int(t) % 60] if t > 0.0 else Idioma.t("Completado ×%d") % p.victorias
 		elif veces > 0 or por_ciento > 0:
 			progreso = Idioma.t("Has llegado a la planta %d de %d") % [p.mejor_planta, Planta.PLANTAS] + con_por_ciento
-		textos.append([progreso, ""])
+		textos.append([progreso, "", false, p.completado])
 	else:
 		# cerrado: lo que pide para abrirse (Edificios.requisitos), un renglón cada uno; los cumplidos, en verde
 		for r: Dictionary in Edificios.requisitos(s, id):

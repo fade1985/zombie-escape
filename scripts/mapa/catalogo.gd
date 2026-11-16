@@ -22,6 +22,8 @@ class_name Catalogo
 #            "todas" -> en cualquiera, también en la de abajo: se ve igual desde cualquier sitio
 #            (sin nada, solo en la del fondo: en las demás se vería de lado o de espaldas)
 #   archivo  nombre del original en assets/sources/salas/<carpeta>/
+#   choque_lado  (opcional) en las paredes de los lados, lo alto de su choque si es menos que "len" (lo que mide su dibujo
+#            de lado), pegado a su pie: así no queda un muro invisible por encima del dibujo (mueble.gd)
 const MUEBLES := {
 	"sofa":       {"len": 132, "dep": 60,  "paredes": "lados", "archivo": "salon/sofa"},
 	# el sofá visto por detrás (girado 180° por PixelLab a partir del de frente), para ponerlo de cara a la tele, en medio del salón
@@ -38,7 +40,9 @@ const MUEBLES := {
 	# el dormitorio rehecho de frente (PixelLab, con las guías de tools/guias_dormitorio.py): la cama de matrimonio y la
 	# individual, con el cabecero contra la pared y los pies abajo. La cama de matrimonio y la mesilla (con su lamparita)
 	# tienen también dibujo de lado (cama-matrimonio-lado y mesilla-lado: PixelLab los giró a partir de los de frente)
-	"doublebed":  {"len": 114, "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama-matrimonio"},
+	# (de lado, su dibujo mide 96 de alto y no 114: con todo "len", chocaba 18 por encima de la cama, junto a la mesilla de
+	# arriba, y no dejaba arrimarse ni rodearla; F23, 16 nov, en el Bajo D)
+	"doublebed":  {"len": 114, "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama-matrimonio", "choque_lado": 96},
 	"bed":        {"len": 62,  "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama"},
 	# lo de las habitaciones de los supervivientes (viviendas.gd), que son trasteros: un colchón en el suelo, con la almohada
 	# descolocada y la colcha del color de cada uno (de GPT, tools/muebles_gpt.py; los colores, de

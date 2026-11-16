@@ -49,6 +49,10 @@ var boton := ""                 # si se da, lo que dice el botón del móvil (ya
 var corta_ataque := true        # delante de él, J o el clic encima lo usan y no atacan, y el clic que lo usa no dispara hasta
                                 # soltarlo. Las puertas lo ponen a false: las usan y Johnny sigue atacando
 var al_pie := false            # la distancia, al pie del mueble y no al medio de su dibujo (el armarito, colgado alto en la pared)
+static var usado_en := -1      # el paso de física en el que la E ya ha usado algo (para que no use dos cosas a la vez)
+var tocada := Callable()       # las puertas (puerta_bano.gd): si Johnny la está tocando. Mientras no, cualquier mueble que
+                               # esté al alcance le gana, aunque la puerta esté más cerca (F25, 16 nov: la E registraba
+                               # el mueble y a veces cerraba la puerta)
 
 
 # "ancho": lo que ocupa el mueble en el suelo
@@ -139,12 +143,15 @@ func _physics_process(_delta: float) -> void:
 		return
 	# se usa con la acción "usar": E en el teclado, B en el mando y, en el móvil, el botón «Abrir» / «Cerrar». Atacar (J, el
 	# clic, RT) solo ataca, también delante de un mueble o una puerta (13 nov, lo pidió el dueño)
-	if Input.is_action_just_pressed("usar"):
+	# Una pulsación usa una sola cosa (F25, 16 nov): al abrirse el mueble deja de poderse usar y, en ese mismo paso, la
+	# puerta de al lado pasaba a ser la de delante y también se cerraba o abría con la misma E
+	if Input.is_action_just_pressed("usar") and usado_en != Engine.get_physics_frames():
+		usado_en = Engine.get_physics_frames()
 		abrir()
 
 
-# Si este mueble le toca a Johnny antes que "otra" zona (en la que también está): si la otra no se puede usar ahora
-# o este está más cerca (del medio de su dibujo)
+# Si este mueble le toca a Johnny antes que "otra" zona (en la que también está): si la otra no se puede usar ahora,
+# si la otra es una puerta que Johnny no toca y esta no (cede) o si este está más cerca (del medio de su dibujo)
 func mas_cerca_que(otra: Variant) -> bool:
 	if otra == null or not is_instance_valid(otra) or otra == self:
 		return true
@@ -152,7 +159,15 @@ func mas_cerca_que(otra: Variant) -> bool:
 		return false
 	if not otra.activa():
 		return true
+	# una puerta que Johnny no toca cede ante un mueble (F25): la E es para el mueble
+	if cede() != otra.cede():
+		return otra.cede()
 	return distancia() < otra.distancia() - 1.0
+
+
+# Si esta zona deja pasar delante a los muebles: una puerta que Johnny no está tocando (ver "tocada")
+func cede() -> bool:
+	return tocada.is_valid() and not tocada.call()
 
 
 # De Johnny al medio del dibujo del mueble

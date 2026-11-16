@@ -801,14 +801,17 @@ func actualizar_puertas() -> void:
 
 func poner_lugar() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
-	# (la sala de mantenimiento y las viviendas siempre están en la planta baja, aunque se haya bajado en el ascensor)
-	# (los nombres, ya traducidos: Planta.nombre_de y Planta.nombre_de_sitio, y lo mismo mapa.nombre_zona)
-	var de_planta: String = Planta.nombre_planta(1) if sitio.tipo in ["mantenimiento", "viviendas"] else Planta.nombre_de(planta)
-	var nombre := Planta.nombre_de_sitio(sitio)
-	var texto: String = de_planta if sitio.tipo in ["pasillo", "garaje"] or sitio.get("azotea", false) else "%s · %s" % [de_planta, nombre]
-	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
-	if zona != "" and zona != nombre:   # (la tienda de un minijefe y su sala se llaman igual)
-		texto += " · " + zona
+	var texto := cartel_sencillo(sitio)
+	if texto == "":
+		# (el centro comercial y la torre, de momento como antes: la planta, el sitio y la habitación)
+		# (la sala de mantenimiento y las viviendas siempre están en la planta baja, aunque se haya bajado en el ascensor)
+		# (los nombres, ya traducidos: Planta.nombre_de y Planta.nombre_de_sitio, y lo mismo mapa.nombre_zona)
+		var de_planta: String = Planta.nombre_planta(1) if sitio.tipo in ["mantenimiento", "viviendas"] else Planta.nombre_de(planta)
+		var nombre := Planta.nombre_de_sitio(sitio)
+		texto = de_planta if sitio.tipo in ["pasillo", "garaje"] or sitio.get("azotea", false) else "%s · %s" % [de_planta, nombre]
+		var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
+		if zona != "" and zona != nombre:   # (la tienda de un minijefe y su sala se llaman igual)
+			texto += " · " + zona
 	lugar.text = texto + eventos.etiqueta() + Reto.etiqueta() + garaje.etiqueta()
 	# arriba del todo, grande como el grito de la llave; si en esta pantalla no cabe entero (un evento, el reto, otro
 	# idioma...), con la letra pequeña (la fuente solo se ve nítida a 16 o 32)
@@ -816,6 +819,27 @@ func poner_lugar() -> void:
 	if lugar.get_theme_font_size("font_size") != (32 if cabe else 16):   # (solo si cambia: se mira a menudo)
 		lugar.add_theme_font_size_override("font_size", 32 if cabe else 16)
 		lugar.add_theme_constant_override("outline_size", 8 if cabe else 4)
+
+
+# El cartel de arriba, solo con dónde estás (L41, 16 nov): «Sala de mantenimiento», «Trasteros» (las viviendas de los
+# rescatados), «Azotea» y, en los Apartamentos, «Planta 2» en el pasillo («Planta baja» en la de la calle) y «Apartamento
+# 3ºB» en cada piso (también en el del jefe), sin la habitación. Ya traducido. "" si es de los que van como antes (el
+# centro comercial y la torre)
+func cartel_sencillo(sitio: Dictionary) -> String:
+	match sitio.tipo:
+		"mantenimiento":
+			return Idioma.t("Sala de mantenimiento")
+		"viviendas":
+			return Idioma.t("Trasteros")
+	if sitio.get("azotea", false):
+		return Planta.nombre_de_sitio(sitio)   # (la azotea; en la torre, el laboratorio)
+	if planta.get("edificio", "apartamentos") != "apartamentos":
+		return ""
+	if sitio.tipo == "pasillo":
+		return Planta.nombre_planta(1) if planta.num == 1 else Idioma.t("Planta %d") % Planta.numero_visible(planta.num)
+	if sitio.tipo in ["apartamento", "jefe"] and sitio.has("apt"):
+		return Idioma.t("Apartamento %s") % Planta.nombre_de_sitio(sitio)
+	return ""
 
 
 # Johnny ha empujado la salida "i" del sitio en el que está
@@ -1583,8 +1607,10 @@ func no_puedo_mas() -> void:
 
 # Un objeto en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el
 # bidón de ácido y la batería, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
-# a la mochila hasta que se aparte). "salida": hacia dónde sale despedido, en vez de a un lado al azar (el armarito del baño)
-func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector2.ZERO) -> void:
+# a la mochila hasta que se aparte). "salida": hacia dónde sale despedido, en vez de a un lado al azar (el armarito del baño).
+# "anunciado": su nombre ya salió en amarillo sobre Johnny al abrir el mueble o el armarito, así que al cogerlo no sale
+# también el «+1» blanco pequeño (eran dos textos para lo mismo; L40, 16 nov)
+func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector2.ZERO, anunciado := false) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	cosa.salida = salida
@@ -1599,7 +1625,8 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector
 		mochila.append(id)
 		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
 		Sonido.tocar("compra")
-		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA)
+		if not anunciado:
+			numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA)
 		johnny.coger_municion(id))   # si es una gasolina, el lanzallamas vacío se llena con ella (el lanza ácido, con un bidón, y el lanza rayos, con una batería)
 	mapa.cosas.add_child.call_deferred(cosa)
 
@@ -1728,7 +1755,7 @@ func abrir_armarito(armarito: Node2D) -> void:
 	tutorial("curas")   # (la primera vez que se abre uno: cómo se usan las vendas y los botiquines, M110)
 	var dentro: String = armarito.datos.get("dentro", "botiquin")
 	gran_aviso(Objetos.nombre(dentro).to_upper())   # (lo que da, encima de Johnny)
-	soltar_objeto(dentro, armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
+	soltar_objeto(dentro, armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)), true)
 
 
 # Delante de un mueble que se abre (el armario, la mesilla, el escritorio o la librería; Fase 4): se abre una vez y, a
@@ -1748,7 +1775,7 @@ func abrir_mueble(mueble: Node2D) -> void:
 	var hacia: Vector2 = (johnny.position - medio).normalized()
 	var borde := Vector2(mueble.datos.w, mueble.datos.h) / 2.0 + Vector2(10, 10)
 	var donde := medio + hacia * minf(borde.x / maxf(absf(hacia.x), 0.01), borde.y / maxf(absf(hacia.y), 0.01))
-	soltar_objeto(pieza, donde, false, hacia * randf_range(110.0, 160.0))
+	soltar_objeto(pieza, donde, false, hacia * randf_range(110.0, 160.0), true)
 
 
 # Cura "cura" de vida, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)
@@ -1947,6 +1974,7 @@ func pausar_por_foco() -> void:
 func pausar() -> void:
 	if terminada or not johnny.vivo or menus.abierto != "" or presentacion.activa:
 		return
+	var habia_reto := [false]   # (si el reto de hoy ya estaba completado: si no, completarlo no es «nueva mejor marca»)
 	get_tree().paused = true
 	menus.pausa(self)
 
@@ -1989,6 +2017,7 @@ func terminar(gano: bool, abandona := false) -> void:
 			g.rescatados.append(nuevo.id)
 		g.muertos += muertos
 		for id in matados:   # los de cada tipo, para las fichas de Colecciones
+			habia_reto[0] = Reto.ficha(g, edificio).completado
 			g.matados[id] = int(g.matados.get(id, 0)) + matados[id]
 		if logros.sin_logros():
 			g.muertos_con_ayudas += muertos   # con ayudas no suman para el logro Exterminador
@@ -2021,8 +2050,9 @@ func terminar(gano: bool, abandona := false) -> void:
 				e.alerta_max = Alerta.nivel + 1
 				abierta[0] = e.alerta_max
 			if e.mejor_tiempo == 0.0 or duracion < e.mejor_tiempo:
-				e.mejor_tiempo = duracion
-				record[0] = true)
+				# (la primera vez no es «nueva mejor marca»: no había otra que mejorar; L45, 16 nov)
+				record[0] = e.mejor_tiempo > 0.0
+				e.mejor_tiempo = duracion)
 	logros.revisar()   # (lo que acaba de guardarse: el superviviente rescatado, el edificio completado...)
 	if abandona:
 		ir_al_menu()
@@ -2052,7 +2082,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"muertos": muertos,
 		"visitados": "%d / %d" % [visitados, apartamentos],
 		"tiempo": tiempo,
-		"nueva_marca": gano and (record[0] or mejor[0]),   # (el récord del edificio o la mejor marca del reto)
+		"nueva_marca": gano and (record[0] or (mejor[0] and habia_reto[0])),   # (el récord del edificio o la mejor marca del reto, si ya había una: L45)
 		"dolares": dolares,
 		"salvados": salvados,
 		"cartera": s.dolares,

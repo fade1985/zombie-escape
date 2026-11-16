@@ -4507,6 +4507,10 @@ msgstr "Zwischenfälle"
 msgid "Sala de mantenimiento"
 msgstr "Wartungsraum"
 
+#: scripts/partida.gd
+msgid "Apartamento %s"
+msgstr "Wohnung %s"
+
 #: scripts/tutoriales.gd
 msgid "Más edificios"
 msgstr "Weitere Gebäude"

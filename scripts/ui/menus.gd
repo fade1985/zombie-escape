@@ -251,15 +251,16 @@ func fin(r: Dictionary) -> void:
 	var botones := VBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)
-	# «Jugar otra vez» (14 nov) vuelve a empezar el mismo edificio, que arranca en la sala de mantenimiento (tras caer, con
-	# Johnny despertándose); debajo, «Menú principal». Al ganar y al caer. Sin la R (M102 la quitó con el «Otra vez» de antes)
-	var otra: Button = null
-	if not r.get("garaje", false):   # (el garaje, una vez al día)
-		otra = boton(botones, Idioma.t("Jugar otra vez"), al_final.bind(reintentar), "BotonGrande")
-	var al_menu := boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
+	# Al caer, «Jugar otra vez» (14 nov) vuelve a empezar el mismo edificio, que arranca en la sala de mantenimiento (con
+	# Johnny despertándose); debajo, «Menú principal». Sin la R (M102 la quitó con el «Otra vez» de antes).
+	# Con el edificio completado, solo «Menú principal» (L43, 16 nov): allí el jugador elige su partida y puede subir la alerta
+	var marcado: Button
+	if not r.gano and not r.get("garaje", false):   # (el garaje, una vez al día)
+		marcado = boton(botones, Idioma.t("Jugar otra vez"), al_final.bind(reintentar), "BotonGrande")
+	var al_menu := boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal), "BotonGrande" if r.gano else "")
 	for b in botones.get_children():
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	(otra if otra else al_menu).grab_focus.call_deferred()
+	(marcado if marcado else al_menu).grab_focus.call_deferred()
 
 
 # Los botones del cartel del final: no hacen caso hasta pasado ESPERA_FIN desde que se abrió

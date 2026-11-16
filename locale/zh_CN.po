@@ -4501,6 +4501,10 @@ msgstr "突发事件"
 msgid "Sala de mantenimiento"
 msgstr "维修间"
 
+#: scripts/partida.gd
+msgid "Apartamento %s"
+msgstr "%s 室"
+
 #: scripts/tutoriales.gd
 msgid "Más edificios"
 msgstr "更多大楼"

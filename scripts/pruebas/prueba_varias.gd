@@ -3653,7 +3653,8 @@ func probar_morir() -> void:
 # un crío, con un logro, una skin, una página, un enemigo y un objeto nuevos y su mejor marca (captura-derrota.png);
 # sus dos botones, «Jugar otra vez» (marcado) y «Menú principal», no hacen caso el primer medio segundo y luego sí (la R,
 # nada). Y el cartel otra vez: por el fuego y sin nada
-# nuevo (captura-derrota-fuego.png), por un jefe grande (captura-derrota-jefe.png) y ganando (captura-derrota-gana.png)
+# nuevo (captura-derrota-fuego.png), por un jefe grande (captura-derrota-jefe.png) y ganando (captura-derrota-gana.png,
+# solo con «Menú principal»: L43)
 func probar_derrota() -> void:
 	await get_tree().create_timer(0.5).timeout
 	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no se meta)
@@ -3712,6 +3713,10 @@ func probar_derrota() -> void:
 	menus.reintentar.connect(func(): otra_vez[0] += 1)
 	var los_botones: Array = menus.fondo.find_children("*", "Button", true, false)
 	var boton: Button = los_botones[0]
+		if caso[2]:   # (L43: con el edificio completado, solo «Menú principal», y marcado)
+			var al_ganar: Array = menus.fondo.find_children("*", "Button", true, false)
+			print("Gana · botones: %d, «%s», marcado %s (esperado: 1, Menú principal, true)" % [al_ganar.size(),
+				al_ganar[0].text if al_ganar.size() > 0 else "", al_ganar.size() > 0 and al_ganar[0].has_focus()])
 	var al_principal: Button = los_botones[1]
 	boton.pressed.emit()
 	al_principal.pressed.emit()

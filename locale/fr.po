@@ -4507,6 +4507,10 @@ msgstr "Événements surprise"
 msgid "Sala de mantenimiento"
 msgstr "Salle de maintenance"
 
+#: scripts/partida.gd
+msgid "Apartamento %s"
+msgstr "Appartement %s"
+
 #: scripts/tutoriales.gd
 msgid "Más edificios"
 msgstr "Plus de bâtiments"

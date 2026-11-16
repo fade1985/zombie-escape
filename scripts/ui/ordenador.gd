@@ -1266,16 +1266,16 @@ func programa_colecciones(c: VBoxContainer, foco: String) -> String:
 		mostrar(lado, foco, ficha_bestiario.bind(s, foco.substr(2), Bestiario.visto(s, foco.substr(2))))
 		senalar_casilla(cuadricula, foco)
 	else:
+		# (sin texto: solo el fondo de la ficha, la sala con su lámpara y nadie bajo la luz; L39, 16 nov)
 		mostrar(lado, "vacia", func():
-			var hueco := Control.new()
-			hueco.custom_minimum_size = Vector2(FICHA_ANCHO, ESCENARIO.y)
-			var l := texto_tarjeta(Idioma.t("Elige un sujeto de la cuadrícula para ver su ficha."), TINTA_SUAVE)
-			l.set_anchors_preset(Control.PRESET_FULL_RECT)
-			l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			hueco.add_child(l)
-			return hueco)
+			var escenario := Control.new()
+			escenario.name = "escenario"
+			escenario.custom_minimum_size = ESCENARIO
+			escenario.clip_contents = true
+			escenario.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			escenario.draw.connect(pintar_escenario.bind(escenario))
+			polvo_y_parpadeo(escenario)
+			return escenario)
 		senalar_casilla(cuadricula, "")
 	info.text = Idioma.t("Cada enemigo que te cruzas queda aquí para siempre. Elige una casilla para ver su ficha.")
 	if foco.begins_with("pes_") or foco.begins_with("pag_"):

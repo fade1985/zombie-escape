@@ -265,6 +265,10 @@
 #                       y el tutorial de las curas sale la primera vez que se abre            [prueba_sitios.gd]
 #   --muebles-materiales  el armario, la mesilla, el escritorio y la librería se abren con E y sueltan un material (o
 #                       «Vacío»), una sola vez, y el tutorial de los materiales al cogerlo  [prueba_sitios.gd]
+#   --cama              (F23) el dormitorio de matrimonio, con la puerta del piso abajo y arriba: el choque de la cama y
+#                       de las mesillas, del tamaño de su dibujo (mejor con --debug-collisions)  [prueba_sitios.gd]
+#   --mueble-puerta     (F25) delante de un mueble y de una puerta a la vez, la E es para el mueble; tocando la puerta,
+#                       para la puerta                                                    [prueba_sitios.gd]
 #   --contorno-mueble   el contorno amarillo de los muebles de la sala: solo con Johnny delante (ya no con el ratón
 #                       encima)                                        [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
@@ -1057,6 +1061,15 @@ func empezar_prueba() -> void:
 		probar_muebles_materiales()
 	elif "--contorno-mueble" in args:
 		set_process(false)   # sin la prueba larga
+	elif "--comida" in args:
+		set_process(false)   # sin la prueba larga
+		probar_comida()
+	elif "--cama" in args:
+		set_process(false)   # sin la prueba larga
+		probar_cama()
+	elif "--mueble-puerta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_mueble_puerta()
 		probar_contorno_mueble()
 	elif "--clic-mueble" in args:
 		set_process(false)   # sin la prueba larga

@@ -196,7 +196,7 @@ func poner_vecinos() -> void:
 func _draw() -> void:
 	var fuente := get_theme_default_font()
 	PLACA.dibujar(self, size)
-	PLACA.dibujar_ahorrado(self, fuente, s.dolares)
+	PLACA.dibujar_ahorrado(self, fuente, s.dolares, true)   # (el marcador de 4 casillas, como en la tienda de armas y el inventario; L44, 16 nov)
 	if cajas_temas.is_empty():
 		return
 	# arriba a la derecha: cuántos logros llevas (lo que falta por cobrar lo avisa el «!» de cada apartado)

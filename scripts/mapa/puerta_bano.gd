@@ -193,6 +193,13 @@ func se_puede_usar() -> bool:
 	return johnny == null or not caja.grow(HOLGURA).has_point(johnny.global_position)
 
 
+# Si Johnny está pegado al hueco (a lo que hay que arrimarse para abrirla: ARRIMADO). Lejos de él, delante de un
+# mueble, la E es para el mueble (zona_usar.gd, cede; F25)
+func johnny_la_toca() -> bool:
+	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
+	return johnny != null and caja.grow(ARRIMADO).has_point(johnny.global_position)
+
+
 func usar_a_mano() -> void:
 	if abriendo:
 		cerrar()
@@ -244,6 +251,7 @@ func poner_uso() -> void:
 	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, ALTO + ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
 	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
+	zona.tocada = johnny_la_toca   # (sin tocarla, si hay un mueble al alcance, la E es para el mueble: F25)
 	zona.corta_ataque = false   # (con las puertas Johnny sigue atacando: J o el clic la usan y atacan a la vez)
 	zona.cierra = abierta >= 1.0
 	zona.usar.connect(usar_a_mano)

@@ -71,9 +71,12 @@ func montar(m: Dictionary, surtido: int) -> void:
 
 	var forma := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = Vector2(m.w, m.h)
+	var alto: float = m.h
+	if m.lado in ["izquierda", "derecha"] and Catalogo.MUEBLES.has(m.tipo):
+		alto = minf(alto, Catalogo.MUEBLES[m.tipo].get("choque_lado", alto))   # (lo que mide su dibujo de lado: F23)
+	rect.size = Vector2(m.w, alto)
 	forma.shape = rect
-	forma.position = Vector2(0, -m.h / 2.0)
+	forma.position = Vector2(0, -alto / 2.0)
 	add_child(forma)
 
 	var sombra := LightOccluder2D.new()

@@ -4513,6 +4513,10 @@ msgstr "Внезапные события"
 msgid "Sala de mantenimiento"
 msgstr "Дворницкая"
 
+#: scripts/partida.gd
+msgid "Apartamento %s"
+msgstr "Квартира %s"
+
 #: scripts/tutoriales.gd
 msgid "Más edificios"
 msgstr "Другие здания"

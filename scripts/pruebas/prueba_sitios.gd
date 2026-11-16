@@ -3051,6 +3051,124 @@ func probar_congelados() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --cama" (F23, 16 nov): el dormitorio de matrimonio de un piso con la puerta abajo y de otro con ella
+# arriba (el de la cama en la pared de la izquierda). De la cama y de las mesillas, en la terminal, su choque y su dibujo
+# (rectángulos en el mundo), y una foto de cada dormitorio (captura-cama-abajo.png y -arriba.png; con
+# --debug-collisions se ven los choques). Luego se cierra
+func probar_cama() -> void:
+	nueva_planta(1)
+	for lado in ["abajo", "arriba"]:
+		var idx := -1
+		for i in planta.sitios.size():
+			if planta.sitios[i].tipo == "apartamento" and planta.sitios[i].apt.entrada.lado == lado:
+				idx = i
+				break
+		if idx < 0:
+			print("Cama: en la planta baja no hay ningún piso con la puerta %s" % lado)
+			continue
+		var sitio: Dictionary = planta.sitios[idx]
+		sitio.limpio = true
+		await montar(idx, 0, false)
+		var sala: Dictionary = sitio.apt.salas.filter(func(s): return s.get("tipo", "") == "matrimonio")[0]
+		for s in sitio.apt.salas:
+			mapa.vistas[s.id] = true
+			mapa.niebla[s.id] = 0.0
+		mapa.actualizar_niebla(0.0)
+		johnny.position = sala.centro
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.8).timeout
+		for m in get_tree().get_nodes_in_group("muebles"):
+			if m.datos.zona != sala.id or not m.datos.tipo in ["doublebed", "nightstand"]:
+				continue
+			var sprite: Sprite2D = m.get_node("Sprite")
+			var dib := Rect2(sprite.global_position + sprite.offset * 2.0, sprite.texture.get_size() * 2.0)
+			var choque := Rect2(m.position + Vector2(-m.datos.w / 2.0, -m.datos.h), Vector2(m.datos.w, m.datos.h))
+			print("Cama (puerta %s, %s): %s en la pared %s · choque %s · dibujo %s" % [lado, sitio.nombre, m.datos.tipo, m.datos.lado, choque, dib])
+		# todos los choques (no las zonas) que caen en el dormitorio
+		var cuarto := Rect2(sala.c0 * 32.0, sala.f0 * 32.0, sala.ancho * 32.0, sala.fondo * 32.0)
+		print("Cama (puerta %s): el dormitorio %s" % [lado, cuarto])
+		for f in get_tree().root.find_children("*", "CollisionShape2D", true, false):
+			if f.disabled or not f.get_parent() is PhysicsBody2D or not f.shape is RectangleShape2D:
+				continue
+			var tam: Vector2 = (f.shape as RectangleShape2D).size * f.global_scale
+			var r := Rect2(f.global_position - tam / 2.0, tam)
+			if r.intersects(cuarto) and not r.encloses(cuarto) and r.size.x < 600 and r.size.y < 600:
+				print("   choque de %s (%s): %s" % [f.get_parent().name, f.get_parent().get_class(), r])
+		Captura.foto("captura-cama-%s.png" % lado)
+	get_tree().quit()
+
+
+# Con "--captura --mueble-puerta" (F25, 16 nov): un mueble que se abre (Objetos.MUEBLES_CON_PIEZA) cuya zona se pisa con
+# la de una puerta de dentro. Johnny donde llegan las dos, más cerca de la puerta pero sin tocarla: la E abre el mueble y
+# la puerta se queda como estaba (captura-mueble-puerta.png). Tocando la puerta, la puerta ya no cede. Luego se cierra
+func probar_mueble_puerta() -> void:
+	var rect_de := func(zona: Area2D) -> Rect2:
+		var forma: CollisionShape2D = zona.get_children().filter(func(c): return c is CollisionShape2D)[0]
+		var tam: Vector2 = (forma.shape as RectangleShape2D).size
+		return Rect2(forma.global_position - tam / 2.0, tam)
+	for num in [2, 3, 4]:
+		nueva_planta(num)
+		for idx in planta.sitios.size():
+			var sitio: Dictionary = planta.sitios[idx]
+			if not sitio.has("apt") or not sitio.get("muebles", []).any(func(m): return m.tipo in Objetos.MUEBLES_CON_PIEZA):
+				continue
+			sitio.limpio = true
+			await montar(idx, 0, false)
+			await get_tree().create_timer(0.2).timeout
+			for m in mapa.muebles:
+				if not m.datos.tipo in Objetos.MUEBLES_CON_PIEZA or not m.has_node("Zona"):
+					continue
+				var zm: Area2D = m.get_node("Zona")
+				for h in mapa.hojas:
+					if h.uso == null:
+						continue
+					var zp: Area2D = h.uso.get_node("Zona")
+					var juntas: Rect2 = rect_de.call(zm).intersection(rect_de.call(zp))
+					if juntas.size.x < 8 or juntas.size.y < 8:
+						continue
+					# el punto de las dos zonas más cerca de la puerta, sin tocarla
+					var mejor := Vector2.INF
+					for i in 9:
+						for j in 9:
+							var p := juntas.position + juntas.size * Vector2(0.05 + 0.1125 * i, 0.05 + 0.1125 * j)
+							if h.caja.grow(h.ARRIMADO + 4).has_point(p):
+								continue
+							var ventaja := func(q: Vector2) -> float: return q.distance_to(m.global_position) - q.distance_to(h.caja.get_center())
+							if mejor == Vector2.INF or ventaja.call(p) > ventaja.call(mejor):
+								mejor = p
+					if mejor == Vector2.INF:
+						continue
+					for z in get_tree().get_nodes_in_group("zombis"):
+						z.queue_free()
+					johnny.position = mejor
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(1.2).timeout   # (que la puerta acabe lo que estuviera haciendo)
+					var abierta_antes: float = h.abierta
+					var cerca_puerta: bool = zp.distancia() < zm.distancia()
+					pulsar_accion("usar", true)
+					await get_tree().physics_frame
+					pulsar_accion("usar", false)
+					await get_tree().create_timer(0.6).timeout
+					print("Mueble y puerta (%s, %s): Johnny en las dos zonas, más cerca de la puerta %s · E: mueble abierto %s, puerta igual %s (%.2f → %.2f) (esperado: true, true)" % [
+						sitio.nombre, m.datos.tipo, cerca_puerta, m.datos.get("abierto", false), h.abierta == abierta_antes, abierta_antes, h.abierta])
+					Captura.foto("captura-mueble-puerta.png")
+					# tocando la puerta (pegado al hueco, por fuera), la puerta no cede
+					var fuera := Vector2(0, 1) if h.de_frente else Vector2(1, 0)
+					var medio: float = (h.caja.size.y if h.de_frente else h.caja.size.x) / 2.0
+					johnny.position = h.caja.get_center() + fuera * (medio + h.HOLGURA + 6.0)
+					# (arrimado, se abre sola; mientras, no tiene zona: se hace de nuevo cada vez que acaba de abrirse o cerrarse)
+					for espera in 40:
+						await get_tree().create_timer(0.1).timeout
+						if h.uso != null:
+							break
+					zp = h.uso.get_node("Zona")
+					print("Mueble y puerta: tocando la puerta, cede %s (esperado: false)" % zp.cede())
+					get_tree().quit()
+					return
+	print("Mueble y puerta: no se ha encontrado ningún mueble junto a una puerta")
+	get_tree().quit()
+
+
 # Con "--captura --muebles-materiales" (Fase 4): los muebles que se abren (el armario, la mesilla, el escritorio y la
 # librería, Objetos.MUEBLES_CON_PIEZA). Johnny delante de uno de la pared de arriba: el contorno amarillo
 # (captura-mueble-contorno.png); se abre con E y suelta un material (si sale vacío, «Vacío», se cierra a mano y se vuelve
