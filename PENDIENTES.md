@@ -19,25 +19,9 @@ Dictados el 16 nov, repartidos en cuatro tandas (cada una, su sesión): **T1** a
 - **F24** (T1) Apartamentos: a veces los durmientes se quedan dando vueltas sobre sí mismos al entrar en una estancia.
 - **F25** (T1) Al registrar un mueble a veces se cierra también la puerta. Acordado: si hay un mueble al alcance, la E
   es siempre para el mueble; la puerta solo cuando no hay ninguno cerca o Johnny la está tocando.
-- **F26** (T2) Al mejorar la rareza de un lanzable sube también cuántos se pueden llevar: no debe cambiar.
 
 ## Mejoras
 
-- **M115** (T2) Durabilidad de 1 a 4 (ahora la ficha enseña de 0 a 3). Gasta una solo la primera vez que sale del
-  baúl en cada partida (ya funciona así).
-- **M116** (T2) Al caer o abandonar se pierden todos los dólares; cambiarlo también en el tutorial.
-- **M117** (T2) Banco de trabajo: los lanzables se mejoran de uno en uno; el mejorado sale de su montón y se junta con
-  los de su nueva rareza. Con el baúl lleno, aviso de que no se puede mejorar hasta liberar sitio.
-- **M118** (T2) Si el durmiente explosivo llega a explotar, despierta a todos los durmientes del apartamento.
-- **M119** (T2) Los zombis que invocan los jefes no dan nada (ni mutágeno, ni dólares, ni munición).
-- **M120** (T2) El reto del día y la alerta, bloqueados hasta completar el primer edificio.
-- **M121** (T2) La alerta pasa a llamarse «mejora del compuesto VD-7»: sin premios de ningún tipo y solo esto (fuera
-  las reglas de ahora): +20 % por nivel a la vida, el daño, la velocidad de movimiento y la de ataque de los
-  enemigos (+100 % en el nivel 5).
-- **M122** (T2) Logros por matar durmientes o hacer daño con cada arma, para que el 100 % obligue a usarlas todas.
-- **M123** (T2) Ventanas de tutorial nuevas: antes del primer jefe, que pase por la sala de mantenimiento a gastar
-  dólares y mutágeno o a dejar cosas a salvo en el baúl; guardar las balas para los jefes (muy duros cuerpo a
-  cuerpo); llevar siempre lanzables (las hordas pueden ser imposibles).
 - **M125** (T4) Nuevo reto del día: un garaje subterráneo (columnas y coches, como la azotea) con 25 oleadas de
   durmientes cada vez más duras y, cada 5, también un jefe del edificio. El baúl en el centro (pausa al abrirlo). Los
   durmientes sueltan balas un 10 % y no dan dólares; la oleada N da N dólares, y te los llevas aunque caigas o
