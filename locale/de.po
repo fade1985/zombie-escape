@@ -3159,7 +3159,7 @@ msgstr "Wohnung %s"
 
 #: scripts/partida.gd
 msgid "Oficina %d"
-msgstr ""
+msgstr "Büro %d"
 
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"

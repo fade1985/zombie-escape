@@ -372,6 +372,10 @@
 #                       ver a Johnny y viéndole: que pasen todos y sin parones              [prueba_sitios.gd]
 #   --congelados        los zombis de los apartamentos de varias plantas (--plantas N, 4), despiertos, con Johnny
 #                       cambiando de habitación: que ninguno se quede quieto lejos de él     [prueba_sitios.gd]
+#   --vueltas           F24: Johnny entra en cada habitación con durmientes de varias plantas (--plantas N, 4):
+#                       que ninguno se quede dando vueltas sobre sí mismo sin ir a por él    [prueba_sitios.gd]
+#   --cartel            L41: lo que pone arriba en el pasillo y en cada puerta de las plantas 1 y 2 (con --edificio centro:
+#                       el nombre de la tienda; torre: «Oficina N», de izquierda a derecha)   [prueba_sitios.gd]
 #   --guardia           (con --edificio centro) M83: el guardia de la tarjeta a la vista de Johnny: cuenta silbatos, refuerzos
 #                       y las velocidades de la huida y de los refuerzos          [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
@@ -1178,6 +1182,12 @@ func empezar_prueba() -> void:
 	elif "--congelados" in args:
 		set_process(false)   # sin la prueba larga
 		probar_congelados()
+	elif "--vueltas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_vueltas()
+	elif "--cartel" in args:
+		set_process(false)   # sin la prueba larga
+		probar_cartel()
 	elif "--tiendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tiendas()

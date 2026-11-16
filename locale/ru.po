@@ -3163,7 +3163,7 @@ msgstr "Квартира %s"
 
 #: scripts/partida.gd
 msgid "Oficina %d"
-msgstr ""
+msgstr "Офис %d"
 
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"

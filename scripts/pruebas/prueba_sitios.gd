@@ -3051,6 +3051,164 @@ func probar_congelados() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --vueltas" (F24, 16 nov): los durmientes de los apartamentos de varias plantas (--plantas N, 4, desde la
+# --desde N, 1; con --semilla N, siempre las mismas). Johnny (quieto e invencible) entra andando en cada habitación que
+# tiene durmientes, por una de sus puertas, hasta el centro, y se queda VUELTAS_TIEMPO s: los despierta y van a por él.
+# En cada paso de física mira cuánto gira cada zombi (hacia dónde mira su dibujo): el que en VUELTAS_VENTANA s da más de
+# una vuelta entera sin moverse VUELTAS_SITIO del sitio, estando lejos de Johnny, «da vueltas». Dice qué le pasa (su camino, si ve a
+# Johnny, si está fuera del mapa de caminos) y saca una foto de los cuatro primeros (captura-vueltas-N.png). Va a toda
+# prisa (ATASCO_RITMO). Esperado: ninguno. Luego se cierra
+const VUELTAS_TIEMPO := 6.0
+const VUELTAS_VENTANA := 2.0
+const VUELTAS_SITIO := 40.0
+
+func probar_vueltas() -> void:
+	johnny.invencible = true
+	johnny.set_physics_process(false)   # (quieto: lo movemos a mano)
+	Engine.time_scale = ATASCO_RITMO
+	var total := 0
+	var dan := 0
+	var fotos := 0
+	var maximo := {}   # (de cada zombi, lo que más ha girado sin moverse del sitio)
+	var paso := 1.0 / Engine.physics_ticks_per_second
+	var ventana := int(VUELTAS_VENTANA / paso)
+	Planta.semilla = int(Captura.dato("--semilla", "0"))
+	var desde := int(Captura.dato("--desde", "1"))
+	for num in range(desde, desde + int(Captura.dato("--plantas", "4"))):
+		nueva_planta(num)
+		for idx in planta.sitios.size():
+			var sitio: Dictionary = planta.sitios[idx]
+			if sitio.tipo != "apartamento" or sitio.get("tienda", "") != "" or sitio.zombis.is_empty():
+				continue
+			await montar(idx, 0, false)
+			await get_tree().create_timer(1.0, true, true).timeout   # (a que esté listo el mapa de caminos)
+			johnny.invulnerable = 999.0
+			var red := get_world_2d().navigation_map
+			var zombis: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z is Zombi)
+			total += zombis.size()
+			var avisado := {}
+			for sala in sitio.apt.salas:
+				var dentro: Array = zombis.filter(func(z): return is_instance_valid(z) and z.dormido and z.zona == sala.id)
+				var abiertas: Array = sala.puertas.filter(func(d): return not d.get("cerrada", false))
+				if dentro.is_empty() or abiertas.is_empty():
+					continue
+				# Johnny entra por la puerta (desde un poco fuera) hasta el centro, a su paso, y se queda allí
+				var d: Dictionary = abiertas[0]
+				var hueco := Vector2((d.c + d.ancho / 2.0) * Apartamento.CASILLA, (d.f + d.fondo / 2.0) * Apartamento.CASILLA)
+				var meta := NavigationServer2D.map_get_closest_point(red, sala.centro)
+				var desde_p := hueco + hueco.direction_to(meta) * -40.0
+				var giros := {}   # de cada zombi: [ángulo girado en cada paso], [dónde estaba]
+				var t := 0.0
+				while t < VUELTAS_TIEMPO:
+					var p := desde_p.move_toward(meta, t * 160.0)   # (más o menos a lo que anda Johnny)
+					johnny.global_position = p
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().physics_frame
+					t += paso
+					for z in zombis:
+						if not is_instance_valid(z) or z.estado == "muerto" or z.dormido or avisado.has(z):
+							continue
+						# (lo que se ve: hacia dónde mira su dibujo, una de las 8 direcciones)
+						var mira: float = Zombi.DIRS.find(z.direccion) * PI / 4.0
+						var g: Array = giros.get(z, [[], [], mira])
+						g[0].append(wrapf(mira - g[2], -PI, PI))
+						g[1].append(z.global_position)
+						g[2] = mira
+						if g[0].size() > ventana:
+							g[0].pop_front()
+							g[1].pop_front()
+						giros[z] = g
+						if g[0].size() < ventana or z.estado != "andar" or z.espabilando > 0.0:
+							continue
+						var girado := 0.0
+						for a in g[0]:
+							girado += a
+						var movido := 0.0
+						for q in g[1]:
+							movido = maxf(movido, q.distance_to(z.global_position))
+						var lejos: float = z.global_position.distance_to(johnny.global_position)
+						if movido <= VUELTAS_SITIO and absf(girado) > maximo.get(z, [0.0])[0]:
+							maximo[z] = [absf(girado), "%s planta %d sitio %d en %s, a %d de Johnny, movido %d, estado %s" % [
+								z.get_meta("tipo"), num, idx, z.global_position.round(), lejos, movido, z.estado]]
+						if absf(girado) < TAU or movido > VUELTAS_SITIO or lejos < z.radio + johnny.RADIO + z.alcance + 4.0:
+							continue
+						avisado[z] = true
+						dan += 1
+						var ag: NavigationAgent2D = z.agente
+						var camino := ag.get_current_navigation_path()
+						print("Vueltas: planta %d, sitio %d, %s en %s (sala %d, Johnny en la %d, a %d): girado %.1f vueltas, movido %d, " % [
+							num, idx, z.get_meta("tipo"), z.global_position.round(), mapa.zona_en(z.global_position),
+							mapa.zona_en(johnny.global_position), lejos, girado / TAU, movido] +
+							"ve a Johnny %s, fuera del mapa de caminos %d, siguiente %s, acabado %s, punto %d de %d, " % [
+							z.se_ve(johnny), z.global_position.distance_to(NavigationServer2D.map_get_closest_point(red, z.global_position)),
+							(ag.get_next_path_position() - z.global_position).round(), ag.is_navigation_finished(),
+							ag.get_current_navigation_path_index(), camino.size()] +
+							"velocidad %s, pedida %s, rumbo %s, apretado %s, sin esquivar %.1f" % [
+							z.velocity.round(), ag.velocity.round(), z.rumbo, z.apretado, z.sin_esquivar])
+						var choques := []
+						for k in z.get_slide_collision_count():
+							var c: KinematicCollision2D = z.get_slide_collision(k)
+							choques.append("%s %s" % [c.get_collider().name if c.get_collider() else "?", c.get_normal().round()])
+						var pegados := []
+						for o in zombis:
+							if is_instance_valid(o) and o != z and o.estado != "muerto" and o.global_position.distance_to(z.global_position) < 48.0:
+								pegados.append("%s %s" % [o.get_meta("tipo"), (o.global_position - z.global_position).round()])
+						print("   camino %s, choca con %s, pegados %s" % [
+							Array(camino).map(func(v): return (v - z.global_position).round()), choques, pegados])
+						if fotos < 4:
+							fotos += 1
+							for s in sitio.apt.salas:
+								mapa.vistas[s.id] = true
+								mapa.niebla[s.id] = 0.0
+							mapa.actualizar_niebla(0.0)
+							var cam: Camera2D = johnny.get_node("Camara")
+							var antes := cam.offset
+							cam.offset = z.global_position - johnny.global_position
+							cam.reset_smoothing()
+							await get_tree().process_frame
+							Captura.foto("captura-vueltas-%d.png" % fotos)
+							cam.offset = antes
+							cam.reset_smoothing()
+	var peores := maximo.values()
+	peores.sort_custom(func(x, y): return x[0] > y[0])
+	for w in peores.slice(0, 8):
+		print("   lo que más gira sin moverse: %.2f vueltas · %s" % [w[0] / TAU, w[1]])
+	print("Vueltas: %d de %d zombis dan vueltas (esperado: 0)" % [dan, total])
+	Planta.semilla = 0
+	Engine.time_scale = 1.0
+	get_tree().quit()
+
+
+# Con "--captura --cartel" (L41, 16 nov; con --edificio centro o torre): lo que pone el cartel de arriba en el pasillo y en
+# cada puerta de las plantas 1 y 2 (en los Apartamentos, «Apartamento 1ºB»; en el centro, el nombre de la tienda; en la
+# torre, «Oficina N», de izquierda a derecha). Foto de la primera tienda u oficina de la planta 2
+# (captura-cartel-<edificio>.png). Luego se cierra
+func probar_cartel() -> void:
+	johnny.invencible = true
+	var edificio: String = Captura.dato("--edificio", "apartamentos")
+	for num in [1, 2]:
+		nueva_planta(num)
+		var pasillo: int = planta.sitios.find(planta.sitios.filter(func(s): return s.tipo == "pasillo")[0])
+		await montar(pasillo, 0, false)
+		var puertas := []
+		for salida in planta.sitios[pasillo].salidas:
+			if salida.tipo == "puerta" and planta.sitios[salida.a].tipo in ["apartamento", "jefe"]:
+				puertas.append(salida)
+		puertas.sort_custom(func(x, y): return x.en < y.en or (x.en == y.en and x.dir == "arriba"))
+		var textos := ["pasillo «%s»" % lugar.text]
+		var foto := false
+		for salida in puertas:
+			var sitio: Dictionary = planta.sitios[salida.a]
+			await montar(salida.a, 0, false)
+			textos.append("%s %d %s (%s) «%s»" % [salida.dir, salida.en, sitio.tipo, sitio.nombre, lugar.text])
+			if num == 2 and not foto:
+				foto = true
+				await get_tree().create_timer(0.5).timeout
+				Captura.foto("captura-cartel-%s.png" % edificio)
+		print("Cartel · %s, planta %d: %s" % [edificio, num, " · ".join(textos)])
+	get_tree().quit()
+
+
 # Con "--captura --cama" (F23, 16 nov): el dormitorio de matrimonio de un piso con la puerta abajo y de otro con ella
 # arriba (el de la cama en la pared de la izquierda). De la cama y de las mesillas, en la terminal, su choque y su dibujo
 # (rectángulos en el mundo), y una foto de cada dormitorio (captura-cama-abajo.png y -arriba.png; con

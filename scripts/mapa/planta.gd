@@ -905,11 +905,12 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 		# lo que le toca a esta habitación; el pico que sobra se echa a suertes
 		var parte: float = presupuesto * peso.call(s) / total
 		var queda := floorf(parte * 2.0) / 2.0 + (0.5 if rng.randf() < fmod(parte * 2.0, 1.0) else 0.0)
+		var sale := salida_de(sitio, s)   # (por dónde se sale de la habitación: una vez para todos sus zombis)
 		while queda > 0.0:
 			var caben := tipos.filter(func(t): return COSTE[t] <= queda)
 			if caben.is_empty():
 				break
-			var pos := sitio_libre(sitio, s, puerta, zombis)
+			var pos := sitio_libre(sitio, s, puerta, zombis, 26.0, sale)
 			if pos == Vector2.INF:
 				break
 			var tipo: String = caben[rng.randi() % caben.size()]
@@ -928,7 +929,7 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 			extra = EXTRA_TIENDA.get(s.uso, EXTRA_TIENDA.otra)
 		var baratos := tipos.filter(func(t): return COSTE[t] <= 1.0)
 		for _i in extra:
-			var pos := sitio_libre(sitio, s, puerta, zombis)
+			var pos := sitio_libre(sitio, s, puerta, zombis, 26.0, sale)
 			if pos == Vector2.INF:
 				break
 			zombis.append({"tipo": baratos[rng.randi() % baratos.size()], "pos": pos})
@@ -1121,7 +1122,9 @@ static func huecos_pared(ocupado: Array, izq: float, der: float) -> Array:
 
 
 # Un punto de la habitación con sitio alrededor, lejos de la entrada, de los muebles y de los otros zombis
-static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, otros: Array, hueco := 26.0) -> Vector2:
+# ("salida": lo de salida_de para esta habitación, si ya se tiene; si no, se calcula aquí)
+static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, otros: Array, hueco := 26.0,
+		salida := {}) -> Vector2:
 	var apt: Dictionary = sitio.apt
 	for i in 200:
 		var pos := Vector2(sala.c0 * CASILLA + rng.randf() * sala.ancho * CASILLA,
@@ -1138,8 +1141,124 @@ static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, ot
 		if [Vector2.ZERO, Vector2(-hueco, 0), Vector2(hueco, 0), Vector2(0, -hueco), Vector2(0, hueco)].any(
 				func(d): return Peligros.encima(sitio, pos + d)):
 			continue
+		# ni en un rincón encerrado entre muebles (F24: detrás del sofá, sin salida, se ponía a dar vueltas)
+		if salida.is_empty():
+			salida = salida_de(sitio, sala)
+		if not se_sale(salida, pos):
+			continue
 		return pos
 	return Vector2.INF
+
+
+# Por dónde se puede salir andando de la habitación hasta una de sus puertas (F24, 16 nov). Un zombi que espera en un
+# hueco cerrado entre muebles (por ejemplo, entre el sofá y el mueble de la tele) no tiene camino: al despertarse se
+# quedaba dando vueltas en su sitio. Se mira el suelo de la habitación a cuadritos de SALE_PASO: se puede pisar lo que
+# queda a más de SALE_RADIO (lo que deja libre el mapa de caminos, mapa.hornear) de las paredes y de los muebles, y
+# valen los cuadritos a los que se llega pisando desde una puerta. Si la habitación no tiene puertas (una tienda de una
+# sola sala), el trozo de suelo más grande. Se calcula una vez por habitación (se_sale lo mira): {caja, cols, sale}
+const SALE_PASO := 10.0
+const SALE_RADIO := 18.0
+const SALE_LADOS := [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(0, 1),
+	Vector2(-0.7, -0.7), Vector2(0.7, -0.7), Vector2(-0.7, 0.7), Vector2(0.7, 0.7)]
+
+static func salida_de(sitio: Dictionary, sala: Dictionary) -> Dictionary:
+	var apt: Dictionary = sitio.apt
+	var caja := Rect2(sala.c0 * CASILLA, sala.f0 * CASILLA, sala.ancho * CASILLA, sala.fondo * CASILLA)
+	var de_puerta := {}   # las casillas de sus puertas (también se pisan)
+	for p in sala.get("puertas", []):
+		caja = caja.merge(Rect2(p.c * CASILLA, p.f * CASILLA, p.ancho * CASILLA, p.fondo * CASILLA))
+		for f in range(p.f, p.f + p.fondo):
+			for c in range(p.c, p.c + p.ancho):
+				de_puerta[Vector2i(c, f)] = true
+	# los muebles que tocan la habitación, engordados lo que no se puede pisar a su alrededor
+	var muebles := []
+	for m in sitio.get("muebles", []):
+		var r := Muebles.hueco(m).grow(SALE_RADIO)
+		if r.intersects(caja):
+			muebles.append(r)
+	var cols := ceili(caja.size.x / SALE_PASO)
+	var filas := ceili(caja.size.y / SALE_PASO)
+	# 1. qué cuadritos se pueden pisar (y cuáles están en una puerta)
+	var pisable := PackedByteArray()
+	pisable.resize(cols * filas)
+	var semillas := []
+	var alrededor := [Vector2.ZERO]   # (el punto y los ocho de alrededor, a SALE_RADIO)
+	for d in SALE_LADOS:
+		alrededor.append(d * SALE_RADIO)
+	var id: int = sala.id
+	var dueno: PackedInt32Array = apt.dueno
+	var ancho_apt: int = apt.cols
+	var alto_apt: int = apt.filas
+	for y in filas:
+		for x in cols:
+			var q := caja.position + Vector2(x + 0.5, y + 0.5) * SALE_PASO
+			var bien := true
+			for r in muebles:
+				if r.has_point(q):
+					bien = false
+					break
+			if bien:
+				for d in alrededor:
+					var punto: Vector2 = q + d
+					var casilla := Vector2i(floori(punto.x / CASILLA), floori(punto.y / CASILLA))
+					var fuera := casilla.x < 0 or casilla.y < 0 or casilla.x >= ancho_apt or casilla.y >= alto_apt
+					if fuera or dueno[casilla.y * ancho_apt + casilla.x] != id:
+						if de_puerta.has(casilla):
+							continue
+						bien = false
+						break
+			if bien:
+				pisable[y * cols + x] = 1
+				if de_puerta.has(Vector2i(floori(q.x / CASILLA), floori(q.y / CASILLA))):
+					semillas.append(y * cols + x)
+	# 2. a cuáles se llega desde las puertas (sin puertas: el trozo más grande)
+	var sale := PackedByteArray()
+	sale.resize(cols * filas)
+	if not semillas.is_empty():
+		_llenar(pisable, sale, cols, filas, semillas, 1)
+	else:
+		var marca := 0
+		var mejor := [0, 0]   # [marca, cuántos]
+		for k in cols * filas:
+			if pisable[k] == 1 and sale[k] == 0:
+				marca += 1
+				var n := _llenar(pisable, sale, cols, filas, [k], marca)
+				if n > mejor[1]:
+					mejor = [marca, n]
+		for k in cols * filas:
+			sale[k] = 1 if sale[k] == mejor[0] and mejor[1] > 0 else 0
+	return {"caja": caja, "cols": cols, "filas": filas, "sale": sale}
+
+
+# Marca con "marca" en "sale" los cuadritos pisables a los que se llega desde "desde" (de lado a lado, no en diagonal).
+# Devuelve cuántos
+static func _llenar(pisable: PackedByteArray, sale: PackedByteArray, cols: int, filas: int, desde: Array, marca: int) -> int:
+	var cola := []
+	for k in desde:
+		if sale[k] == 0:
+			sale[k] = marca
+			cola.append(k)
+	var i := 0
+	while i < cola.size():
+		var k: int = cola[i]
+		i += 1
+		var x := k % cols
+		var y := k / cols
+		for n in [k - 1 if x > 0 else -1, k + 1 if x < cols - 1 else -1, k - cols if y > 0 else -1, k + cols if y < filas - 1 else -1]:
+			if n >= 0 and pisable[n] == 1 and sale[n] == 0:
+				sale[n] = marca
+				cola.append(n)
+	return cola.size()
+
+
+# ¿Se sale andando de la habitación desde "pos"? (salida: lo de salida_de)
+static func se_sale(salida: Dictionary, pos: Vector2) -> bool:
+	var caja: Rect2 = salida.caja
+	var x := floori((pos.x - caja.position.x) / SALE_PASO)
+	var y := floori((pos.y - caja.position.y) / SALE_PASO)
+	if x < 0 or y < 0 or x >= salida.cols or y >= salida.filas:
+		return false
+	return salida.sale[y * salida.cols + x] == 1
 
 
 # ¿Queda el punto a más de "radio" de todos los muebles del sitio?

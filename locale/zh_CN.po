@@ -3155,7 +3155,7 @@ msgstr "%s 室"
 
 #: scripts/partida.gd
 msgid "Oficina %d"
-msgstr ""
+msgstr "%d号办公室"
 
 #: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"

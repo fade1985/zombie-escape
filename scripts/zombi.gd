@@ -307,7 +307,12 @@ func estado_propio(_delta: float, _johnny: Node2D) -> void:
 # (el camino rodea paredes y muebles: lo saca de la región de navegación de la sala)
 func camino_hacia(destino: Vector2) -> Vector2:
 	agente.target_position = destino
-	return global_position.direction_to(agente.get_next_path_position())
+	var siguiente := agente.get_next_path_position()
+	# Al final del camino, derecho al destino (F24, 16 nov): si no se llega hasta él (está fuera del mapa de caminos o en
+	# un trozo sin paso), el camino acaba antes y el zombi se quedaba dando vueltas alrededor de ese último punto
+	if agente.is_navigation_finished():
+		siguiente = destino
+	return global_position.direction_to(siguiente)
 
 
 # Anda en esa dirección, girando poco a poco (según "giro") y con su bamboleo
