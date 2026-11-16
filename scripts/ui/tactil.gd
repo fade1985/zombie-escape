@@ -390,6 +390,11 @@ func dibujar() -> void:
 					Formas.disco(lienzo, donde, r, Color(0, 0, 0, 0.45))
 			"cuerpo", "fuego":
 				icono(donde, Objetos.icono(johnny.huecos[nombre]), 40 * esc)
+				# las balas que quedan en el cargador, en la esquina como los lanzables (el lanzallamas y los demás de
+				# depósito, no: su barra está arriba, encima de la vida); en naranja con el cargador vacío
+				if nombre == "fuego" and johnny.huecos.fuego != "" and not johnny.base(johnny.huecos.fuego).has("deposito"):
+					texto(lienzo, donde + Vector2(r * 0.6, r * 0.75), str(johnny.balas), roundi(16 * esc),
+						Tema.TINTA if johnny.balas > 0 else Color("#ff9f1c"))
 				# recargando: un aro blanco que se va llenando (como en el JS)
 				if nombre == "fuego" and johnny.recargando > 0.0:
 					var w: Dictionary = johnny.base(johnny.huecos.fuego)

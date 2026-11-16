@@ -14,7 +14,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M114** HUD del móvil: darle una vuelta (el minimapa, las curas, las armas y los botones). Para más adelante: ahora importa la versión de PC.
 
 ## Por limar
 

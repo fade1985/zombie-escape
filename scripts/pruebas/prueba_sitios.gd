@@ -519,7 +519,7 @@ func probar_minimapa() -> void:
 
 # Con "--captura --minimapa-hud": dónde va el minimapa (M104): abajo en el medio, con su borde de abajo a la altura del de
 # la barra de vida, con dos curas y tres lanzables (captura-minimapa-hud.png); en una pantalla de 960 de ancho, donde no
-# cabe en el medio y tiene que correrse o subir (-960); y en el móvil, entre la barra y los lanzables (-movil). En cada
+# cabe en el medio y tiene que correrse o subir (-960); y en el móvil, arriba bajo la vida (-movil, M114). En cada
 # una dice si pisa la parte de la vida o la de las armas. Luego se cierra
 func probar_minimapa_hud() -> void:
 	johnny.vida = 9999
@@ -558,6 +558,92 @@ func probar_minimapa_hud() -> void:
 	ver.call("móvil")
 	Captura.foto("captura-minimapa-hud-movil.png")
 	Tactil.activo = false
+	get_tree().quit()
+
+
+# Con "--captura --hud-movil" (M114): el HUD del móvil, con los dos modos de atacar (con Disparo asistido y con el joystick
+# derecho), en la pantalla de la ventana y en una de 960 × 640, y con la barra de un jefe. Dice dónde quedan la vida (con
+# sus balas encima), el minimapa, el nombre del sitio y la barra del jefe, si alguno pisa a otro o a un botón, y que las
+# casillas de las armas, los lanzables y las curas no salen (están en los botones). Fotos: captura-hud-movil-<modo>.png,
+# captura-hud-movil-960.png y captura-hud-movil-jefe.png. Luego se cierra
+func probar_hud_movil() -> void:
+	johnny.vida = 9999
+	mochila.append_array(["vendas", "botiquin"])
+	for k in ["molotov", "granada", "atraedora"]:
+		lanzables.meter(k, 2)
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	var hud: Control = $Pantalla/HUD
+	var mini: Control = $Pantalla/Minimapa
+	var tactil: Tactil = find_children("*", "Tactil", true, false)[0]
+	var ver := func(que: String) -> void:
+		var vida: Rect2 = hud.barra.get_global_rect()
+		vida = vida.grow_side(SIDE_TOP, (24.0 + hud.ALTO_ESCUDO + 6.0) * hud.ESCALA)   # (con las balas encima)
+		vida.size.x = hud.ANCHO * hud.ESCALA
+		var mapa := mini.get_global_rect()
+		var nombre: Label = lugar
+		var ancho_nombre: float = nombre.get_theme_font("font").get_string_size(nombre.text, HORIZONTAL_ALIGNMENT_LEFT, -1,
+			nombre.get_theme_font_size("font_size")).x
+		var texto := Rect2(nombre.global_position + Vector2((nombre.size.x - ancho_nombre) / 2.0, 0), Vector2(ancho_nombre, nombre.size.y))
+		var jefa: Control = $Pantalla/Jefa
+		var barra_jefe := Rect2(jefa.global_position - Vector2(0, 32), Vector2(BarraJefe.ANCHO, BarraJefe.ALTO + 32))
+		var partes := {"vida": vida, "minimapa": mapa}
+		if jefa.visible:
+			partes["jefe"] = barra_jefe
+		else:
+			partes["nombre"] = texto
+		var pisan := []
+		var nombres := partes.keys()
+		for i in nombres.size():
+			for j in range(i + 1, nombres.size()):
+				if partes[nombres[i]].intersects(partes[nombres[j]]):
+					pisan.append("%s-%s" % [nombres[i], nombres[j]])
+			for b in tactil.botones():
+				var c: Vector2 = tactil.botones()[b][0]
+				var r: float = tactil.botones()[b][1]
+				if partes[nombres[i]].intersects(Rect2(c - Vector2(r, r), Vector2(r, r) * 2.0)):
+					pisan.append("%s-botón %s" % [nombres[i], b])
+		var fuera := Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size)
+		var salen := nombres.filter(func(n): return not fuera.encloses(partes[n]))
+		print("HUD móvil · %s: pantalla %s · vida %s · minimapa %s · %s · letra del nombre %d" % [que, fuera.size, vida, mapa,
+			("jefe %s" % barra_jefe) if jefa.visible else ("nombre «%s» %s" % [nombre.text, texto]), nombre.get_theme_font_size("font_size")])
+		print("HUD móvil · %s: se pisan %s, se salen %s · casillas de armas %s, de curas %s (esperado: [], [], false, false)" % [
+			que, pisan, salen, hud.derecha.visible, hud.curas.visible])
+	for modo in ["asistido", "libre"]:
+		johnny.poner_modo(modo)
+		await get_tree().create_timer(0.5).timeout
+		ver.call(modo)
+		Captura.foto("captura-hud-movil-%s.png" % modo)
+	# disparando: el número de balas del botón baja
+	var antes: int = johnny.balas
+	johnny.balas = maxi(0, antes - 3)
+	await get_tree().create_timer(0.2).timeout
+	print("HUD móvil · balas en el botón: %d (esperado: %d)" % [johnny.balas, maxi(0, antes - 3)])
+	Captura.foto("captura-hud-movil-balas.png")
+	johnny.balas = antes
+	# la barra de un jefe (en su sitio, sin jefe de verdad)
+	var jefa: Control = $Pantalla/Jefa
+	$Pantalla/Jefa/Nombre.text = "La portera"
+	jefa.show()
+	await get_tree().create_timer(0.3).timeout
+	ver.call("jefe")
+	Captura.foto("captura-hud-movil-jefe.png")
+	# en una pantalla de 960 × 640 (una tableta 3:2), también con la barra del jefe
+	var ventana := get_window()
+	ventana.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	ventana.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	ventana.content_scale_size = Vector2i(960, 640)
+	await get_tree().create_timer(0.5).timeout
+	ver.call("960 jefe")
+	Captura.foto("captura-hud-movil-960-jefe.png")
+	jefa.hide()
+	await get_tree().create_timer(0.3).timeout
+	ver.call("960")
+	Captura.foto("captura-hud-movil-960.png")
+	Tactil.activo = false
+	await get_tree().create_timer(0.3).timeout
+	print("HUD ordenador otra vez: casillas de armas %s, nombre en x %d de %d de ancho, jefe en x %d (esperado: true, 12, %d, %d)" % [
+		hud.derecha.visible, lugar.position.x, lugar.size.x, jefa.position.x, 960 - 24, (960 - BarraJefe.ANCHO) / 2])
 	get_tree().quit()
 
 

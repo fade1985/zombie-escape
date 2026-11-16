@@ -342,7 +342,9 @@
 #   --minimapa          el minimapa: dentro de la sala de mantenimiento, en el pasillo (todos los pisos iguales), en un
 #                       piso al entrar y tras pasar a otra habitación, con las cámaras del técnico y en el jefe [prueba_sitios.gd]
 #   --minimapa-hud      el minimapa abajo en el medio (M104): alineado con la barra de vida, a 960 de ancho con curas y
-#                       lanzables, y en el móvil entre la barra y los lanzables; dice si pisa algo  [prueba_sitios.gd]
+#                       lanzables, y en el móvil arriba, bajo la vida (M114); dice si pisa algo  [prueba_sitios.gd]
+#   --hud-movil         el HUD del móvil (M114): la vida y el minimapa arriba a la izquierda, sin casillas repetidas, en
+#                       los dos modos de atacar, a 960 de ancho y con la barra de un jefe; dice si algo pisa algo [prueba_sitios.gd]
 #   --volver            salir de un sitio y volver lo deja como estaba: un piso a medias, ya limpio, el pasillo, el jefe,
 #                       el superviviente, los eventos, la sala de pruebas y lo que ocupa una planta entera; con
 #                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]
@@ -534,6 +536,9 @@ func empezar_prueba() -> void:
 	elif "--minimapa" in args:
 		set_process(false)
 		probar_minimapa()
+	elif "--hud-movil" in args:
+		set_process(false)
+		probar_hud_movil()
 	elif "--minimapa-hud" in args:
 		set_process(false)
 		probar_minimapa_hud()

@@ -204,7 +204,10 @@ vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado
 `scripts/ui/tactil.gd`, solo mientras se juega. Joystick izquierdo (mitad izquierda de la pantalla); abajo a la
 derecha, según el modo: joystick derecho (libre, el de siempre) o esquivar grande (con *Disparo asistido*).
 En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de a distancia en la mano recarga) y lanzar (arrastrar y
-soltar), con el botoncito de cambiar lanzable; delante de un mueble de la sala de mantenimiento, encima, **Abrir**. Arriba a la derecha: inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). En los menús el dedo hace
+soltar), con el botoncito de cambiar lanzable; delante de un mueble de la sala de mantenimiento, encima, **Abrir**. Arriba a la derecha: inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). El botón del arma de fuego lleva las balas que le quedan en el cargador.
+El HUD (M114): abajo solo van los botones (las casillas de armas, lanzables y curas no salen: ya están en los botones); la
+vida con sus balas, arriba a la izquierda, con el minimapa debajo, y el nombre del sitio y la barra del jefe en el hueco de
+arriba (si la del jefe no cabe, debajo de la vida). Prueba: `--hud-movil`. En los menús el dedo hace
 de ratón. En táctil la pantalla se agranda sin redondear.
 Con un ratón (un móvil Android con ratón y teclado, o un ordenador con pantalla táctil), al moverlo o hacer clic se
 esconden los botones y se apunta con él como en el ordenador; al tocar la pantalla vuelven (`Tactil.con_dedo`).

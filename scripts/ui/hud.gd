@@ -19,7 +19,8 @@
 #     cuántos le quedan: el que se lanza ahora, en una casilla grande como la del arma, encendido y con las esquinas
 #     amarillas, que la F pasa al siguiente.
 #   - En el medio de abajo, el minimapa (minimapa.gd), que coloca este HUD: su borde de abajo, a la altura del de la barra.
-#   - En el móvil, el minimapa, las armas y los lanzables van al lado de la barra: la esquina de la derecha es de los botones.
+#   - En el móvil (M114), abajo van los pulgares: la vida y las balas, arriba a la izquierda, con el minimapa debajo, y
+#     las armas, los lanzables y las curas solo en los botones del móvil (tactil.gd), sin casillas (colocar_movil).
 #   - Ni la llave de la portera, ni la mochila, ni los dólares están aquí: se ven en el inventario.
 #   - En la primera partida, la guía (guia.gd) puede pedir que una parte lata ("latido": "balas", "curas", "lanzar" o
 #     "armas"): un marco amarillo alrededor que se abre y se cierra, para que se vea qué hay que usar.
@@ -39,6 +40,8 @@ const MARCO_ESCUDO := preload("res://assets/ui/barra-escudo.png")
 const ALTO_ESCUDO := 13.0
 const HUECO_ESCUDO := Rect2(0.046 * ANCHO, 3.0, 0.908 * ANCHO, 7.0)
 const ABAJO := 8.0        # lo que queda entre el borde de abajo de la pantalla y la barra o las casillas
+const ARRIBA_MOVIL := 8.0 # en el móvil, lo que queda entre el borde de arriba y las balas
+const BOTONES_ARRIBA := 230.0   # en el móvil, lo que ocupan los botones de arriba a la derecha (a tamaño 1: tactil.gd)
 # Las cifras de la vida: la letra del juego solo se ve bien a 16 o 32 (más pequeña se deforma), así que estas van dibujadas
 # aquí, cada una de 4 × 6 píxeles (fila a fila), con píxeles de 2 de pantalla (1,33 × ESCALA)
 const CIFRAS := {"0": "0110 1001 1001 1001 1001 0110", "1": "0010 0110 0010 0010 0010 0111", "2": "0110 1001 0001 0010 0100 1111",
@@ -156,31 +159,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	tiempo += delta
 	var pantalla := get_viewport_rect().size
-	# en la franja de abajo, con la barra de vida pegada abajo (las balas se pintan por encima de ella); las medidas
-	# de dentro, agrandadas (ESCALA)
-	fila.position = Vector2(14, roundf(pantalla.y - ABAJO - fila.size.y * ESCALA))
-	# las casillas, en la esquina de abajo a la derecha, con su borde de abajo a la altura del de la barra (sus
-	# dibujos dejan 2 de aire debajo); en el móvil, al lado de la barra
-	var x := fila.position.x + (fila.size.x + 14) * ESCALA if Tactil.activo else pantalla.x - 14 - derecha.size.x * ESCALA
-	# el minimapa (minimapa.gd), con su borde de abajo a la altura del de la barra de vida: en el medio de la pantalla y,
-	# en el móvil, entre la barra y los lanzables (que se corren a su derecha)
-	var mapa: Control = partida.get_node_or_null("Pantalla/Minimapa") if partida else null
-	if mapa:
-		var mx := x if Tactil.activo else (pantalla.x - mapa.size.x) / 2.0
-		var my := pantalla.y - ABAJO - mapa.size.y
-		if Tactil.activo:
-			x += mapa.size.x + 14
-		else:
-			# en una pantalla estrecha (4:3) y con muchos lanzables, el medio puede pisar algo: se corre hacia el
-			# hueco que quede entre la vida y las armas y, si ni así cabe, sube justo encima de la franja del HUD
-			var desde := fila.position.x + fila.size.x * ESCALA + 14
-			var hasta := x - 14
-			if hasta - desde >= mapa.size.x:
-				mx = clampf(mx, desde, hasta - mapa.size.x)
-			else:
-				my = pantalla.y - ABAJO - (derecha.size.y - 2) * ESCALA - 8 - mapa.size.y
-		mapa.position = Vector2(roundf(mx), roundf(my))
-	derecha.position = Vector2(roundf(x), roundf(pantalla.y - ABAJO - (derecha.size.y - 2) * ESCALA))
+	if Tactil.activo:
+		colocar_movil(pantalla)
+	else:
+		colocar(pantalla)
 	if johnny == null:
 		return
 	mirar_armas(delta)
@@ -194,6 +176,70 @@ func _process(delta: float) -> void:
 	armas.queue_redraw()
 	lanzar.queue_redraw()
 	encima.queue_redraw()
+
+
+# En el ordenador: todo en la franja de abajo
+func colocar(pantalla: Vector2) -> void:
+	derecha.visible = true
+	# con la barra de vida pegada abajo (las balas se pintan por encima de ella); las medidas de dentro, agrandadas (ESCALA)
+	fila.position = Vector2(14, roundf(pantalla.y - ABAJO - fila.size.y * ESCALA))
+	# las casillas, en la esquina de abajo a la derecha, con su borde de abajo a la altura del de la barra (sus
+	# dibujos dejan 2 de aire debajo)
+	var x := pantalla.x - 14 - derecha.size.x * ESCALA
+	# el minimapa (minimapa.gd), con su borde de abajo a la altura del de la barra de vida, en el medio de la pantalla
+	var mapa: Control = partida.get_node_or_null("Pantalla/Minimapa") if partida else null
+	if mapa:
+		var mx := (pantalla.x - mapa.size.x) / 2.0
+		var my := pantalla.y - ABAJO - mapa.size.y
+		# en una pantalla estrecha (4:3) y con muchos lanzables, el medio puede pisar algo: se corre hacia el
+		# hueco que quede entre la vida y las armas y, si ni así cabe, sube justo encima de la franja del HUD
+		var desde := fila.position.x + fila.size.x * ESCALA + 14
+		var hasta := x - 14
+		if hasta - desde >= mapa.size.x:
+			mx = clampf(mx, desde, hasta - mapa.size.x)
+		else:
+			my = pantalla.y - ABAJO - (derecha.size.y - 2) * ESCALA - 8 - mapa.size.y
+		mapa.position = Vector2(roundf(mx), roundf(my))
+	derecha.position = Vector2(roundf(x), roundf(pantalla.y - ABAJO - (derecha.size.y - 2) * ESCALA))
+	# el nombre del sitio y la barra del jefe, arriba y a todo lo ancho (como en la escena)
+	poner_arriba(Vector2(12, pantalla.x - 24), (pantalla.x - BarraJefe.ANCHO) / 2.0, 44.0)
+
+
+# En el móvil (M114), abajo están los pulgares: el joystick a la izquierda y los botones a la derecha. Allí solo quedan
+# los botones (tactil.gd), que ya llevan las armas, los lanzables y las curas: las casillas de la derecha y las de las
+# curas no salen (estaban repetidas, y debajo del pulgar). La vida, con sus balas encima, va arriba a la izquierda, y el
+# minimapa justo debajo; el nombre del sitio, en el hueco de arriba entre la vida y los botones de arriba a la derecha
+# (las curas, el inventario y la pausa), y la barra del jefe también, o, si no cabe, debajo de la vida, en el medio
+func colocar_movil(pantalla: Vector2) -> void:
+	derecha.visible = false
+	# (el sitio de las balas encima de la barra, con el del escudo aunque no lo haya: así la barra no se mueve al tenerlo)
+	fila.position = Vector2(14, roundf(ARRIBA_MOVIL + (24.0 + ALTO_ESCUDO + 6.0) * ESCALA))
+	var bajo_vida := fila.position.y + fila.size.y * ESCALA + 10.0
+	var mapa: Control = partida.get_node_or_null("Pantalla/Minimapa") if partida else null
+	if mapa:
+		mapa.position = Vector2(fila.position.x, roundf(bajo_vida))
+	var desde := fila.position.x + ANCHO * ESCALA + 14.0
+	var hasta := pantalla.x - BOTONES_ARRIBA * Tactil.escala - 14.0
+	var jefe_x := (desde + hasta - BarraJefe.ANCHO) / 2.0
+	var jefe_y := 44.0
+	if hasta - desde < BarraJefe.ANCHO:
+		jefe_x = maxf((pantalla.x - BarraJefe.ANCHO) / 2.0, (mapa.position.x + mapa.size.x + 14.0) if mapa else 0.0)
+		jefe_y = bajo_vida + 32.0   # (con su nombre encima, que mide 30)
+	poner_arriba(Vector2(desde, hasta - desde), jefe_x, jefe_y)
+
+
+# El nombre del sitio (de "desde.x", "desde.y" de ancho: si no le cabe, partida.poner_lugar le pone la letra pequeña) y
+# la barra del jefe (en el lugar del nombre, que se esconde mientras está)
+func poner_arriba(lugar: Vector2, jefe_x: float, jefe_y: float) -> void:
+	if partida == null:
+		return
+	var etiqueta: Control = partida.get_node_or_null("Pantalla/Lugar")
+	if etiqueta and (etiqueta.position.x != lugar.x or etiqueta.size.x != lugar.y):   # (solo si cambia)
+		etiqueta.position.x = lugar.x
+		etiqueta.size.x = lugar.y
+	var jefe: Control = partida.get_node_or_null("Pantalla/Jefa")
+	if jefe:
+		jefe.position = Vector2(roundf(jefe_x), jefe_y)
 
 
 # El marco amarillo del latido, alrededor de la parte que pide la guía (las balas, encima de la barra de vida)
@@ -555,7 +601,7 @@ func mirar_curas(delta: float) -> void:
 		salto_curas[id] = move_toward(salto_curas.get(id, 0.0), 0.0, delta * 5.0)
 		destello_curas[id] = move_toward(destello_curas.get(id, 0.0), 0.0, delta * 4.0)
 	var llevadas := curas_llevadas().size()
-	curas.visible = llevadas > 0
+	curas.visible = llevadas > 0 and not Tactil.activo   # (en el móvil, en los botones de arriba a la derecha)
 	curas.size.x = maxi(1, llevadas) * (MEDIANA + 10) - 4
 	# encima de las balas (y de la barra del escudo, si la hay), con el borde izquierdo de la primera casilla en el del
 	# marco de la barra de vida (sin seguir su temblor)
@@ -578,8 +624,7 @@ func pintar_curas() -> void:
 		curas.draw_set_transform(Vector2.ZERO)
 		var s := "x%d" % lista[i][1]
 		texto(curas, Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1), s, 16, Tema.TINTA)
-		if not Tactil.activo:   # (en el móvil, los botones de arriba a la derecha)
-			tecla(curas, r.position + Vector2(MEDIANA - 6, -10), Objetos.USABLES[id].accion)
+		tecla(curas, r.position + Vector2(MEDIANA - 6, -10), Objetos.USABLES[id].accion)
 
 
 func mover_barra(delta: float) -> void:
