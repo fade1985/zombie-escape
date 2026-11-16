@@ -4330,3 +4330,30 @@ func probar_lanzagranadas() -> void:
 		g2.skin = antes.skin)
 	get_tree().quit()
 
+
+# Con "--captura --luz-verde": en la sala de mantenimiento, el halo de un arma Poco común (verde) se va al guardarla. Johnny lleva
+# la pistola Poco común en la mano, anda por el despacho y vuelve a la fregona (con Q): la foto (captura-luz-verde.png) no
+# debe tener ninguna mancha verde quieta donde estaba (antes, aura_arma.gd no repintaba al pasar a la Normal y el halo se quedaba
+# en el suelo, 16 nov). Dice también si queda alguna luz verde encendida. Se cierra
+func probar_luz_verde() -> void:
+	var verdes := func() -> Array:
+		var lista := []
+		for l in get_tree().root.find_children("*", "PointLight2D", true, false):
+			var c: Color = l.color
+			if l.is_visible_in_tree() and c.g > c.r * 1.15 and c.g > c.b * 1.15:
+				lista.append("%s a %s" % [l.name, l.global_position.round()])
+		return lista
+	await get_tree().create_timer(0.6).timeout
+	llevar_arma("pistola", 1, true, false)
+	await get_tree().create_timer(0.5).timeout
+	print("Luz verde · pistola Poco común en la mano: luces verdes %s (esperado: 1) · halo calidad %d" % [verdes.call().size(), johnny.get_node("Aura").calidad])
+	johnny.global_position += Vector2(-120, 70)
+	await get_tree().create_timer(0.5).timeout
+	johnny.cambiar_mano()
+	await get_tree().create_timer(0.8).timeout
+	johnny.global_position += Vector2(130, -60)
+	await get_tree().create_timer(0.5).timeout
+	print("Luz verde · de vuelta a la fregona: luces verdes %s (esperado: 0) · halo calidad %d (esperado: 0) · foto sin mancha verde" % [
+		verdes.call().size(), johnny.get_node("Aura").calidad])
+	Captura.foto("captura-luz-verde.png")
+	get_tree().quit()

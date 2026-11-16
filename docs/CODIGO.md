@@ -71,7 +71,7 @@ en una línea.
   al romperse o explotar: `soltar_racimo` de `proyectil.gd` y `granada.gd`). `bala.gd`. Lo que **se ve de la calidad**
   del arma en la mano (`AURA`, `traza()`; la Normal, nada): `aura_arma.gd` (hija de Johnny: la luz del color, el halo y
   las chispas de la punta del arma, que sale de `boca` o, en cuerpo a cuerpo, de `punta`), `tajo.gd` (el haz del
-  golpe, que suelta `johnny.golpear` y sigue el `gesto` del dibujo de cada arma: de lado, de arriba abajo, de abajo arriba o recto) y la trazadora de la bala (`bala.calidad`). Se prueba con `--aura` y `--tajos`.
+  golpe, que suelta `johnny.golpear` y sigue el `gesto` del dibujo de cada arma: de lado, de arriba abajo, de abajo arriba o recto) y la trazadora de la bala (`bala.calidad`). Se prueba con `--aura` y `--tajos`. Al pasar a un arma Normal, `AuraArma.cambiar` repinta una vez más (`queue_redraw`) para borrar el halo: si no, se quedaba una mancha verde quieta en el suelo (`--luz-verde`).
 - `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
   ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas (ya no las echa ningún arma).
 - `llamarada.gd`: la llama continua del lanzallamas, el chorro del lanza ácido, el rayo del lanza rayos y la niebla del
@@ -135,7 +135,7 @@ en una línea.
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
-  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
+  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye). Los guardas que trae su silbato (`partida._al_silbar`) llevan la marca `llamado`, como los vecinos que llama un jefe: al caer no sueltan nada (ni dólares, ni mutágeno, ni munición); solo suelta él (`--captura --edificio centro --guardia`).
   Los de Torre Velaria: `zombi_oficinista.gd` (guarda las distancias y tira tazas y grapadoras, `bala_zombi.gd`) y
   `zombi_escolta.gd` (el chaleco para media bala de frente, con `Zombi.de_bala`, que pone `bala.gd`; el táser deja a Johnny
   tieso con el `"calambre"` de `estados.gd`, desde `dar_zarpazo`, que cualquier tipo puede cambiar). Salen en los
@@ -440,7 +440,8 @@ en una línea.
   de mejora de las armas (`PIEZAS`, «materiales» en el juego: cuerpo a cuerpo, a distancia, especial y arrojable): no salen
   al azar ni de los zombis (Fase 4, 15 nov): en los Apartamentos, de los muebles que se abren (`MUEBLES_CON_PIEZA`: el
   armario, la mesilla, el escritorio y la librería; `mueble.gd` les pone la zona de `zona_usar.gd` y `partida.abrir_mueble`
-  los abre una vez, `datos.abierto`, con un 35 % de material, `pieza_de_mueble()`, cada familia al 25 %); en el centro
+  los abre una vez, `datos.abierto`, con un 35 % de material, `pieza_de_mueble()`; desde el 16 nov solo de las familias de las
+  armas que lleva Johnny en ese momento, `partida.familias_que_lleva()`: la de la mano, las de repuesto y los lanzables); en el centro
   comercial y en la torre, cada jefe (`piezas_de_jefe()`, 4, en `partida.meter_zombi`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
   de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (32×32; desde el 15 nov, de GPT con `tools/muebles_gpt.py`: engranaje de bronce, de plata y de oro y matraz verde; los de antes eran de PixelLab).
   `talentos.gd` (**el jugador los ve como «mutaciones»** desde el 15 nov, lo pidió el dueño: el programa es MUTACIONES.EXE,
@@ -804,7 +805,8 @@ en una línea.
   uno una sola vez (`relatos` en el guardado; no salen en el reto, y una partida continuada no pasa por la introducción
   pero sí saca el final). Las líneas salen solas,
   cualquier pulsación saca la siguiente y cierra al final; Esc o B la saltan. La abre `partida.ver_relato`: la
-  introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final.
+  introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final (menos el de
+  los Apartamentos: desde el 16 nov sale al elegir el centro comercial por primera vez, también en `_ready`).
 - `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos), zombis, las ayudas
   que se encienden y se apagan, Johnny invencible, la diana, ir a la exposición o a la sala de un jefe y lo de las
   antiguas teclas de prueba (mutaciones, objeto, piezas al baúl, Colecciones, científico).

@@ -1169,14 +1169,18 @@ func probar_relato() -> void:
 	# (con --guiado, la guía de la primera partida espera a que se cierre y entonces empieza)
 	print("Relato · guía activa %s: paso durante la intro «%s», al cerrarla «%s» (con --guiado: «», «»)" % [guia.activa, paso_antes, guia.paso])
 	Captura.foto("captura-relato-sala.png")   # (la sala de siempre)
-	# el final de los Apartamentos, agarrando la escalera. Lo que se pulsa al salir no cuenta (ESPERA)
+	# el final de los Apartamentos, agarrando la escalera: desde el 16 nov ya no sale su relato (sale al empezar en el centro
+	# comercial por primera vez), solo el cartel del final
 	planta.num = Planta.PLANTAS
 	subir_al_helicoptero()
-	await pulsar.call(tecla.call(KEY_SPACE))
+	await get_tree().create_timer(Relato.FUNDIDO + 0.5).timeout
+	print("Relato · al agarrar la escalera de los Apartamentos: abierta %s · acabada %s · abierto «%s» · apuntado %s (esperado: false, true, fin, false)" % [
+		abierto.call() != null, terminada, menus.abierto, "apartamentos" in Guardado.cargar().relatos])
+	Captura.foto("captura-relato-cartel-%s.png" % Idioma.actual)
+	# y su relato, como sale al elegir el centro comercial por primera vez (partida._ready: ver_relato("apartamentos"))
+	ver_relato("apartamentos")
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
 	r = abierto.call()
-	print("Relato · al agarrar la escalera: abierta %s · cambiando %s · juego parado %s · acabada %s · líneas con un Espacio al salir %d (esperado: true, true, true, false, 0)" % [
-		r != null, cambiando, get_tree().paused, terminada, r.vistas])
-	await get_tree().create_timer(Relato.ESPERA).timeout
 	while r.vistas < r.lineas.size():
 		await pulsar.call(tecla.call(KEY_SPACE))
 	await get_tree().create_timer(Relato.FUNDIDO).timeout
@@ -1184,9 +1188,8 @@ func probar_relato() -> void:
 	Captura.foto("captura-relato-apartamentos-%s.png" % Idioma.actual)
 	await pulsar.call(tecla.call(KEY_SPACE))
 	await get_tree().create_timer(Relato.FUNDIDO + 0.5).timeout
-	print("Relato · al cerrarlo, el cartel: acabada %s · abierto «%s» · apuntado %s (esperado: true, fin, true)" % [
-		terminada, menus.abierto, "apartamentos" in Guardado.cargar().relatos])
-	Captura.foto("captura-relato-cartel-%s.png" % Idioma.actual)
+	print("Relato · apartamentos cerrado: abierta %s · apuntado %s · otra vez: %s (esperado: false, true, false)" % [
+		abierto.call() != null, "apartamentos" in Guardado.cargar().relatos, puede_relato("apartamentos")])
 	# el del centro comercial; luego, otra vez, saltándolo con B a la primera
 	ver_relato("centro")
 	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout

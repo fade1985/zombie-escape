@@ -2497,6 +2497,19 @@ func probar_guardia() -> void:
 	var vel: float = refuerzos[0].velocidad if not refuerzos.is_empty() else 0.0
 	print("Guardia en ~14 s: silbatos %d (esperado 3: al verte y cada 6 s) · refuerzos vivos %d (Johnny va matando) · velocidad de un refuerzo %.0f (esperado 165)" % [
 		silbatos[0], refuerzos.size(), vel])
+	# lo que sueltan (16 nov): los guardas que llama el guardia, nada; él, su mutágeno y billetes (y la tarjeta)
+	var cosas := func() -> int:
+		return mapa.cosas.get_children().filter(func(c): return c.has_signal("cogido") and not c.is_queued_for_deletion()).size()
+	var n0: int = cosas.call()
+	var marcados: int = refuerzos.filter(func(r): return r.has_meta("llamado")).size()
+	for r in refuerzos:
+		r.recibir_golpe(99999, Vector2.ZERO)
+	await get_tree().create_timer(0.6, false).timeout
+	print("Guardia · %d refuerzos marcados «llamado» de %d · al caer sueltan %d cosas (esperado: todos · 0)" % [marcados, refuerzos.size(), cosas.call() - n0])
+	n0 = cosas.call()
+	guardia.recibir_golpe(99999, Vector2.ZERO)
+	await get_tree().create_timer(0.8, false).timeout
+	print("Guardia · el de la tarjeta, al caer, suelta %d cosas (billetes y mutágeno; la tarjeta aparte)" % (cosas.call() - n0))
 	get_tree().quit()
 
 
@@ -3324,6 +3337,34 @@ func probar_mueble_puerta() -> void:
 					get_tree().quit()
 					return
 	print("Mueble y puerta: no se ha encontrado ningún mueble junto a una puerta")
+	get_tree().quit()
+
+
+# Con "--captura --muebles-familias" (16 nov): los muebles solo dan materiales de las familias de las armas que lleva Johnny
+# (partida.familias_que_lleva: la de la mano, las de repuesto y los lanzables si lleva alguno). Para cada equipo cuenta, en
+# 4000 aperturas, de qué familias salen materiales (cada línea dice lo esperado). Se cierra
+func probar_muebles_familias() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var cuenta := func() -> Dictionary:
+		var c := {}
+		for i in 4000:
+			var p := Objetos.pieza_de_mueble(familias_que_lleva())
+			c[p] = c.get(p, 0) + 1
+		c.erase("")
+		return c
+	lanzables.vaciar()
+	armas_guardadas.clear()
+	johnny.huecos = Armas.SIEMPRE.duplicate()
+	print("Muebles familias · solo la fregona: lleva %s, salen %s (esperado: [cuerpo], solo pieza_cuerpo)" % [familias_que_lleva(), cuenta.call().keys()])
+	llevar_arma("pistola", 0, true, false)
+	print("Muebles familias · fregona y pistola: lleva %s, salen %s (esperado: cuerpo y distancia)" % [familias_que_lleva(), cuenta.call().keys()])
+	llevar_arma("lanzallamas", 0, true, false)
+	print("Muebles familias · y el lanzallamas (la pistola, de repuesto): lleva %s, salen %s (esperado: cuerpo, distancia y especial)" % [familias_que_lleva(), cuenta.call().keys()])
+	lanzables.sumar("molotov")
+	print("Muebles familias · y un molotov: lleva %s, salen %s (esperado: las cuatro)" % [familias_que_lleva(), cuenta.call().keys()])
+	armas_guardadas.clear()
+	johnny.huecos = Armas.SIEMPRE.duplicate()
+	print("Muebles familias · fregona y un molotov: lleva %s, salen %s (esperado: cuerpo y arrojable)" % [familias_que_lleva(), cuenta.call().keys()])
 	get_tree().quit()
 
 

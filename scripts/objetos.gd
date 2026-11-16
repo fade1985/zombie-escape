@@ -8,7 +8,7 @@
 #
 # Las piezas (PIEZAS, «materiales» en el juego) son de 4 familias, las de las armas: cuerpo a cuerpo, a distancia,
 # especiales y arrojables. Desde el 15 nov (Fase 4) salen de los muebles de los Apartamentos que se abren
-# (MUEBLES_CON_PIEZA: pieza_de_mueble); los zombis ya no las sueltan. En el centro comercial y en la torre, que no tienen
+# (MUEBLES_CON_PIEZA: pieza_de_mueble; desde el 16 nov, solo de las familias de las armas que lleva Johnny); los zombis ya no las sueltan. En el centro comercial y en la torre, que no tienen
 # esos muebles, las sueltan los jefes (PIEZAS_JEFE). No salen al azar (al_azar)
 # ni en las tiendas del centro, y no se compran.
 #
@@ -428,9 +428,13 @@ static func al_azar(edificio := "apartamentos", tienda := "", municion: Variant 
 	return lista.pick_random() if not lista.is_empty() else ""
 
 
-# Lo que hay dentro de un mueble al abrirlo ("" = vacío): PIEZA_MUEBLE de las veces, una de las cuatro al azar
-static func pieza_de_mueble() -> String:
-	return PIEZAS.keys().pick_random() if randf() < PIEZA_MUEBLE else ""
+# Lo que hay dentro de un mueble al abrirlo ("" = vacío): PIEZA_MUEBLE de las veces, un material al azar. Con "familias"
+# (las armas que lleva Johnny: partida.familias_que_lleva), solo salen los de esas familias; si no lleva ninguna, nada.
+# Sin lista, de las cuatro (las pruebas)
+static func pieza_de_mueble(familias: Variant = null) -> String:
+	var lista: Array = PIEZAS.keys() if familias == null \
+		else PIEZAS.keys().filter(func(id): return PIEZAS[id] in familias)
+	return lista.pick_random() if not lista.is_empty() and randf() < PIEZA_MUEBLE else ""
 
 
 # Si la nevera y la encimera se abren: solo cuando ya vive alguien en los trasteros (si no, su comida no serviría)

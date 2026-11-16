@@ -352,6 +352,10 @@ func _ready() -> void:
 	# nada; la guía, el aviso de abajo y las ventanas empiezan al cerrarla
 	if edificio == "apartamentos":
 		await ver_relato("intro")
+	elif edificio == "centro":
+		# el final de los Apartamentos: antes salía al irse en su helicóptero; desde el 16 nov, al elegir el centro comercial
+		# por primera vez
+		await ver_relato("apartamentos")
 	if despierta and not captura:
 		await despertar()
 	if captura:
@@ -1165,7 +1169,8 @@ func subir_al_helicoptero() -> void:
 	if cambiando or terminada or not johnny.vivo:
 		return
 	cambiando = true   # (que no pase nada detrás del final del edificio)
-	await ver_relato(edificio)
+	if edificio != "apartamentos":   # (el de los Apartamentos sale al elegir el centro comercial por primera vez)
+		await ver_relato(edificio)
 	subir()
 
 
@@ -1315,6 +1320,7 @@ func _al_silbar() -> void:
 		if donde.distance_to(johnny.position) < 250.0:
 			donde.x = sitio.ancho - donde.x   # no encima de Johnny: por la otra punta
 		var refuerzo: Node2D = meter_zombi("vigilante", donde)
+		refuerzo.set_meta("llamado", true)   # (los guardas que llama el de la tarjeta no sueltan nada: lo mismo que los vecinos de un jefe)
 		refuerzo.velocidad = REFUERZOS_VELOCIDAD * Alerta.velocidad()   # (con la mejora del VD-7, también: alerta.gd)
 		if refuerzo.get("agente") != null:
 			refuerzo.agente.max_speed = refuerzo.velocidad
@@ -1580,6 +1586,19 @@ func municion_que_lleva() -> Array:
 	return lista
 
 
+# Las familias de las armas que lleva Johnny ahora (la de la mano, las de repuesto y los lanzables, si lleva alguno):
+# "cuerpo", "distancia", "especial" y "arrojable". Los muebles solo dan materiales de estas (Objetos.pieza_de_mueble)
+func familias_que_lleva() -> Array:
+	var lista := []
+	for id in johnny.huecos.values() + armas_guardadas:
+		if id != "" and not Armas.familia(id) in lista:
+			lista.append(Armas.familia(id))
+	for m in lanzables.montones():
+		if m[1] > 0 and not "arrojable" in lista:
+			lista.append("arrojable")
+	return lista
+
+
 # El dibujo de la munición de un tipo (Armas.MUNICION)
 func icono_municion(tipo: String) -> Texture2D:
 	return load("res://assets/ui/iconos/%s.png" % Armas.MUNICION[tipo].icono)
@@ -1766,7 +1785,8 @@ func abrir_armarito(armarito: Node2D) -> void:
 
 
 # Delante de un mueble que se abre (el armario, la mesilla, el escritorio o la librería; Fase 4): se abre una vez y, a
-# veces, suelta un material (Objetos.pieza_de_mueble) hacia Johnny, que lo coge pasando por encima; si no, «Vacío»
+# veces, suelta un material (Objetos.pieza_de_mueble) hacia Johnny, que lo coge pasando por encima; si no, «Vacío».
+# Solo de las familias de las armas que lleva (familias_que_lleva)
 func abrir_mueble(mueble: Node2D) -> void:
 	if mueble.datos.get("abierto", false):
 		return
@@ -1775,7 +1795,7 @@ func abrir_mueble(mueble: Node2D) -> void:
 	var medio: Vector2 = mueble.position + Vector2(0, -mueble.datos.h / 2.0)
 	# (la nevera y la encimera, la comida favorita de un superviviente de los trasteros: M124)
 	var comida: bool = mueble.datos.tipo in Objetos.MUEBLES_CON_COMIDA
-	var pieza := Objetos.comida_de_mueble() if comida else Objetos.pieza_de_mueble()
+	var pieza := Objetos.comida_de_mueble() if comida else Objetos.pieza_de_mueble(familias_que_lleva())
 	if pieza == "":
 		gran_aviso(Idioma.t("Vacío").to_upper())
 		return

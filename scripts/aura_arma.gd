@@ -61,6 +61,7 @@ func _physics_process(delta: float) -> void:
 # Pasa a otra calidad: la luz, de su color y su tamaño (la crea la primera vez); con la Normal, se apaga
 func cambiar(q: int) -> void:
 	calidad = q
+	queue_redraw()   # (al pasar a la Normal hay que repintar una vez más para que se borre el halo: si no, se quedaba en el suelo, quieto, donde estaba)
 	if q <= 0:
 		if luz:
 			luz.hide()

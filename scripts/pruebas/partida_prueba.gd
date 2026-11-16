@@ -133,6 +133,8 @@
 #                       racimo                                                             [prueba_armas.gd]
 #   --aura              lo que se ve de la calidad del arma en la mano: la luz, las chispas y la estela del golpe y de la
 #                       bala, con luz y a oscuras                                           [prueba_armas.gd]
+#   --luz-verde         el halo de un arma Poco común se va al guardarla (antes se quedaba una mancha verde quieta en
+#                       el suelo): foto en la sala de mantenimiento                         [prueba_armas.gd]
 #   --tajos             el haz de color del golpe de cada arma cuerpo a cuerpo mejorada, que sigue el gesto de su
 #                       dibujo, en 8 direcciones                                            [prueba_armas.gd]
 #   --disuelto          los zombis que mueren con ácido se deshacen (disuelto.gd): uno normal, uno de tentáculos
@@ -271,6 +273,8 @@
 #                       y el tutorial de las curas sale la primera vez que se abre            [prueba_sitios.gd]
 #   --muebles-materiales  el armario, la mesilla, el escritorio y la librería se abren con E y sueltan un material (o
 #                       «Vacío»), una sola vez, y el tutorial de los materiales al cogerlo  [prueba_sitios.gd]
+#   --muebles-familias  los muebles solo dan materiales de las familias de las armas que lleva Johnny (cuerpo a cuerpo, a
+#                       distancia, especial y lanzables: partida.familias_que_lleva)       [prueba_sitios.gd]
 #   --cama              (F23) el dormitorio de matrimonio, con la puerta del piso abajo y arriba: el choque de la cama y
 #                       de las mesillas, del tamaño de su dibujo (mejor con --debug-collisions)  [prueba_sitios.gd]
 #   --mueble-puerta     (F25) delante de un mueble y de una puerta a la vez, la E es para el mueble; tocando la puerta,
@@ -1039,6 +1043,9 @@ func empezar_prueba() -> void:
 	elif "--aura" in args:
 		set_process(false)   # sin la prueba larga
 		probar_aura()
+	elif "--luz-verde" in args:
+		set_process(false)   # sin la prueba larga
+		probar_luz_verde()
 	elif "--despertar" in args:
 		set_process(false)   # sin la prueba larga
 		probar_despertar()
@@ -1085,6 +1092,9 @@ func empezar_prueba() -> void:
 	elif "--muebles-materiales" in args:
 		set_process(false)   # sin la prueba larga
 		probar_muebles_materiales()
+	elif "--muebles-familias" in args:
+		set_process(false)   # sin la prueba larga
+		probar_muebles_familias()
 	elif "--comida" in args:
 		set_process(false)   # sin la prueba larga
 		probar_comida()
