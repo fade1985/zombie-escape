@@ -17,8 +17,10 @@
 # viviendas (mapa/viviendas.gd) son un pasillo detrás de la puerta de la derecha de la sala de mantenimiento, con una
 # habitación para cada uno: los rescatados esperan cada uno en la suya ("casa", Viviendas.casa), con lo suyo (las
 # cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno), y las de los que faltan siguen
-# cerradas. Al arrimarse a uno, te acompaña (Guardado: acompanante) y empieza las partidas siguientes en el equipo.
-# Solo uno a la vez.
+# cerradas. Desde el 16 nov (M124), para que uno te acompañe hay que ponerse delante y pulsar la E con su comida favorita
+# ("comida", en Objetos.COMIDAS) en la mochila o en el baúl: se la come y empieza la partida siguiente en el equipo
+# (Guardado: acompanante; al acabarla, ganes o caigas, vuelve a su trastero: partida.gd). Sin ella dice «ESTOY MUY
+# DÉBIL» en blanco. Solo uno a la vez. Antes bastaba con arrimarse y se quedaba para siempre.
 #
 # Los del centro comercial se esconden igual, pero cada uno tiene su propio rescate en vez de la horda de siempre
 # (docs/historial/CENTRO_COMERCIAL.md, «Supervivientes»): la farmacéutica ("rescate": "escolta"), sin horda, hay que llevarla
@@ -38,24 +40,25 @@ const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
 # y "sala" (dónde se esconde), "gritos" (los suyos) y "mejora" (lo que hace ya rescatado; el ferretero no tiene: el
 # dueño quitó su puesto, porque todo sale ya de los zombis). "rescate": si no es la horda de siempre, cuál
 # ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo que dice al abrirse su puerta.
+# "comida": su comida favorita (Objetos.COMIDAS), la que hay que darle en los trasteros para que te acompañe (M124).
 # Los textos (nombre, desc, gritos, al_abrir y mejora) están en español, en líneas con la marca de traducir al final
 # (docs/IDIOMAS.md): el nombre se enseña con nombre_de() y la desc con desc_de(), que los devuelven ya traducidos; el
 # nombre, sin artículo («Técnico»; las frases ponen «el %s», y en inglés "the %s")
 const DATOS := {
-	"policia": {"id": "policia", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
+	"policia": {"id": "policia", "comida": "donut", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b"), "shirt": Color("#3d63c9"), "pants": Color("#22336b"),
 			"shoes": Color("#1d1b2c"), "hat": {"kind": "cap", "color": Color("#22336b")}},
 		"soy": "¡SOY POLICÍA!",   # [traducir]
 		"nombre": "Policía", "desc": "Dispara con su pistola cada 0,8 s",   # [traducir]
 		"habilidad": {"tipo": "disparar", "cada": 0.8, "dano": 5, "rafaga": 1}},   # (hasta el 27 oct, cada 1,2 s)
-	"medico": {"id": "medico", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
+	"medico": {"id": "medico", "comida": "manzana", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
 		"look": {"skin": Color("#ffd2a8"), "hair": Color("#c0392b"), "shirt": Color("#ffffff"), "pants": Color("#7fd1c7"),
 			"shoes": Color("#3b3550"), "cross": true},
 		"soy": "¡SOY MÉDICA!",   # [traducir]
 		"nombre": "Médica", "desc": "Te cura 5 cada 6 s y 10 al limpiar cada piso",   # [traducir]
 		# (hasta el 27 oct, 3 cada 8 s: 22 de vida por minuto, casi lo mismo que Ajolote con un punto; ahora, 50)
 		"habilidad": {"tipo": "curar", "cada": 6.0, "cura": 5, "al_limpiar": 10}},
-	"militar": {"id": "militar", "edificio": "apartamentos", "color": Color("#c9e265"), "arma": "rifle",
+	"militar": {"id": "militar", "comida": "judias", "edificio": "apartamentos", "color": Color("#c9e265"), "arma": "rifle",
 		"look": {"skin": Color("#c68642"), "hair": Color("#3b2a1a"), "shirt": Color("#6b8e23"), "pants": Color("#4b5320"),
 			"shoes": Color("#2e2a1f"), "hat": {"kind": "helmet", "color": Color("#556b2f")}},
 		"soy": "¡SOY MILITAR!",   # [traducir]
@@ -63,7 +66,7 @@ const DATOS := {
 		"desc": "Lanza ráfagas de 3 balas cada 2,5 s",   # [traducir]
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
 	# los del centro comercial (parte 5 del plan; tres por edificio: el dueño quitó a la camarera)
-	"ferretero": {"id": "ferretero", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
+	"ferretero": {"id": "ferretero", "comida": "bocadillo", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
 		"tienda": "ferreteria", "sala": "almacen",
 		"look": {"skin": Color("#d39b6a"), "hair": Color("#6e6e6e"), "shirt": Color("#4a6fa5"), "pants": Color("#3e4a5c"),
 			"shoes": Color("#4a3426"), "chaleco": Color("#ff8a1f"), "bigote": true,
@@ -74,7 +77,7 @@ const DATOS := {
 		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",   # [traducir]
 		"desc": "Va a por los durmientes que ve y les da martillazos (8 de daño)",   # [traducir]
 		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0}},   # (alcance: lo cerca que tiene que estar para pegar)
-	"farmaceutica": {"id": "farmaceutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
+	"farmaceutica": {"id": "farmaceutica", "comida": "yogur", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
 		"tienda": "farmacia", "sala": "rebotica",
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#2b1d14"), "shirt": Color("#f4f6f8"), "pants": Color("#55606e"),
 			"shoes": Color("#3b3550"), "bata": Color("#8fd3e8"), "cross": true, "cross_color": Color("#2fbf5b"),
@@ -86,7 +89,7 @@ const DATOS := {
 		"desc": "Los charcos de veneno y ácido te hacen la mitad",   # [traducir]
 		"habilidad": {"tipo": "charcos", "cada": 1.0, "parte": 0.5},
 		"mejora": "Cada partida empiezas con un botiquín en la mochila"},   # [traducir]
-	"tecnico": {"id": "tecnico", "edificio": "centro", "color": Color("#4fe3ff"), "arma": "",
+	"tecnico": {"id": "tecnico", "comida": "energetica", "edificio": "centro", "color": Color("#4fe3ff"), "arma": "",
 		"tienda": "electronica", "sala": "almacen",
 		"look": {"skin": Color("#8d5524"), "hair": Color("#1a1a1a"), "shirt": Color("#2a3f6b"), "pants": Color("#3a3f4b"),
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
@@ -102,7 +105,7 @@ const DATOS := {
 	# con el becario: en la sala de servidores de Informática, protegerle mientras copia los archivos (copia.gd). Con él
 	# cerca, las cámaras no ven a Johnny (camaras.gd) y el teclado de la sala del jefe se abre sin código (partida.gd);
 	# ya rescatado, la tienda del ordenador es un 15 % más barata (precio)
-	"programador": {"id": "programador", "edificio": "torre", "color": Color("#b48cff"), "arma": "",
+	"programador": {"id": "programador", "comida": "pizza", "edificio": "torre", "color": Color("#b48cff"), "arma": "",
 		"tienda": "informatica", "sala": "servidores",
 		"look": {"skin": Color("#e0b48a"), "hair": Color("#3a2618"), "shirt": Color("#8a8f99"), "pants": Color("#33405c"),
 			"shoes": Color("#e8e8e8"), "tarjeta": true},
@@ -116,7 +119,7 @@ const DATOS := {
 	# la limpiadora de noche (otra como Johnny): encerrada en el cuarto de la limpieza de Recursos Humanos, lleno de gas;
 	# hay que cerrar las tres válvulas del departamento para que pueda salir (valvulas.gd). Ya rescatada, le arregla la
 	# fregona a Johnny (barre más ancho: FREGONA_ANCHA); si te acompaña, friega los charcos que tiene cerca
-	"limpiadora": {"id": "limpiadora", "edificio": "torre", "color": Color("#7fb8ff"), "arma": "",
+	"limpiadora": {"id": "limpiadora", "comida": "cafe", "edificio": "torre", "color": Color("#7fb8ff"), "arma": "",
 		"tienda": "rrhh", "sala": "bano", "cuarto": "limpieza",
 		"look": {"skin": Color("#c99a72"), "hair": Color("#2b211c"), "shirt": Color("#8fb8e0"), "pants": Color("#5a5f6a"),
 			"shoes": Color("#22222a"), "peinado": "moño"},   # no-tr (un id: el peinado, persona.gd)
@@ -130,7 +133,7 @@ const DATOS := {
 	# la recepcionista: escondida detrás del mostrador del vestíbulo (planta 1) con la persiana bajada; al unirse, abre
 	# los tornos con su tarjeta mientras llegan zombis, que los tornos frenan (tornos.gd). Ya rescatada, al llegar a cada
 	# planta dice dónde está lo que abre la sala del jefe (pista); si te acompaña, grita «¡Detrás!» (aliado.gd, avisar)
-	"recepcionista": {"id": "recepcionista", "edificio": "torre", "color": Color("#ff8ac8"), "arma": "",
+	"recepcionista": {"id": "recepcionista", "comida": "ensalada", "edificio": "torre", "color": Color("#ff8ac8"), "arma": "",
 		"mostrador": true,
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#1a1a1a"), "shirt": Color("#24305e"), "pants": Color("#24305e"),
 			"shoes": Color("#1d1b2c"), "tarjeta": true},
@@ -148,6 +151,9 @@ const MAX_EQUIPO := 4
 
 # (lo que dice al entrar Johnny en su baño, ya abierto)
 const NO_ME_DEJES := "¡NO ME DEJES AQUÍ!"   # [traducir]
+# lo que dice el vecino de los trasteros si le pides que venga sin su comida favorita (M124)
+const DEBIL := "Estoy muy débil"   # [traducir]
+const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")   # el «!» encima de su puerta, en el pasillo
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
 const GRITOS := ["¡Socorro!", "¡Aquí dentro!", "¡Ayuda, por favor!", "¡Que alguien me saque!", "¡Estoy en el baño!"]   # [traducir]
@@ -201,6 +207,14 @@ static func nombre_de(def: Dictionary) -> String:
 	if def.get("id", "") == "militar":
 		return Idioma.t("Militar", "superviviente")
 	return Idioma.t(def.get("nombre", ""))
+
+
+# De quién es la comida favorita "comida" (Objetos.COMIDAS): su nombre, ya traducido
+static func de_comida(comida: String) -> String:
+	for def in DATOS.values():
+		if def.get("comida", "") == comida:
+			return nombre_de(def)
+	return ""
 
 
 # Lo que hace en el equipo, ya traducido
@@ -421,8 +435,6 @@ func _physics_process(delta: float) -> void:
 			npc.decir(Idioma.t(NO_ME_DEJES))
 		if not encerrado() and johnny.vivo and johnny.position.distance_to(npc.position) < 60.0:
 			unir(npc)
-	for v in vecinos:
-		hablar_vecino(v)
 	actualizar_horda(delta)
 
 
@@ -777,9 +789,17 @@ func colocar_vecinos() -> void:
 		v.es_vecino = true
 		v.casa = Viviendas.casa(id)
 		v.position = v.casa
-		v.armado = true
 		partida.mapa.cosas.add_child(v)
 		vecinos.append(v)
+		v.poner_comida()   # (debajo de su nombre, su comida favorita)
+		# delante de él se usa con la E, como un mueble (M124): le das su comida y te acompaña (pedir_vecino)
+		var zona := ZONA_USAR.new()
+		zona.montar_rect(Rect2(-70, -90, 140, 170))
+		zona.al_pie = true
+		zona.boton = Idioma.t("Hablar")
+		zona.puede = func() -> bool: return v.modo == "vecino"
+		v.add_child(zona)
+		zona.usar.connect(pedir_vecino.bind(v))
 
 
 # El vecino más cerca de Johnny (si está a menos de 260), o null
@@ -794,25 +814,32 @@ func vecino_cerca() -> Aliado:
 	return mejor
 
 
-# Arrimarse a un vecino: se viene contigo (y el que te acompañaba vuelve a su habitación). Como el ordenador, hay que
-# apartarse un poco antes de que vuelva a contar
-func hablar_vecino(v: Aliado) -> void:
+# La E delante de un vecino (M124): si llevas su comida favorita (en la mochila o, si no, en el baúl), se la das, se la
+# come y se viene contigo (y el que te acompañaba vuelve a su habitación); si no, dice «ESTOY MUY DÉBIL» en blanco
+func pedir_vecino(v: Aliado) -> void:
 	if v.modo != "vecino":
 		return
-	var d := johnny.position.distance_to(v.position)
-	if d > 90.0:
-		v.armado = true
-	elif v.armado and d < 40.0:
-		v.armado = false
-		llevar_vecino(v)
+	var comida: String = v.def.get("comida", "")
+	if comida in partida.mochila:
+		partida.mochila.remove_at(partida.mochila.rfind(comida))
+	elif int(Guardado.cargar().baul.get(comida, 0)) > 0:
+		Guardado.cambiar(func(g):
+			g.baul[comida] -= 1
+			if g.baul[comida] <= 0:
+				g.baul.erase(comida))
+	else:
+		v.decir(Idioma.t(DEBIL), Color.WHITE)
+		Sonido.tocar("no")
+		return
+	partida.decir(Idioma.t("Le das: %s · %s te acompaña esta partida") % [Objetos.nombre(comida), nombre_de(v.def)], 3.0)
+	llevar_vecino(v, false)
 
 
-func llevar_vecino(v: Aliado) -> void:
+func llevar_vecino(v: Aliado, avisar := true) -> void:
 	for otro in equipo.duplicate():
 		if otro.es_vecino:
 			equipo.erase(otro)
 			otro.modo = "vecino"
-			otro.armado = false
 			otro.position = otro.casa
 			vecinos.append(otro)
 	vecinos.erase(v)
@@ -821,7 +848,8 @@ func llevar_vecino(v: Aliado) -> void:
 	for i in equipo.size():
 		equipo[i].idx = i
 	Guardado.cambiar(func(g): g.acompanante = v.def.id)
-	partida.decir(Idioma.t("%s te acompaña · %s") % [nombre_de(v.def), desc_de(v.def)], 3.0)
+	if avisar:
+		partida.decir(Idioma.t("%s te acompaña · %s") % [nombre_de(v.def), desc_de(v.def)], 3.0)
 	Sonido.tocar("limpio")
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
@@ -1144,13 +1172,17 @@ func probar_viviendas() -> void:
 	Input.action_release("arriba")
 	print("Hacia la puerta abierta del militar: Johnny en «%s» (esperado: Militar)" % mapa.nombre_zona(mapa.zona_en(johnny.position)))
 	Captura.foto("captura-viviendas-habitacion.png")
-	# acompañar: el policía; luego el militar (el policía vuelve a su habitación)
+	# acompañar: el policía; luego el militar (el policía vuelve a su habitación). Con su comida favorita en la mochila y
+	# la E delante (M124; sin comida, en --comida)
+	partida.mochila.append_array(["donut", "judias"])
 	var policia: Aliado = vecinos.filter(func(v): return v.def.id == "policia")[0]
 	await arrimarse(policia)
+	await usar_delante()
 	print("Acompaña: '%s' | equipo %s (esperado: policia, [Policía])" % [Guardado.cargar().acompanante,
 		equipo.map(func(x): return x.def.nombre)])
 	var militar: Aliado = vecinos.filter(func(v): return v.def.id == "militar")[0]
 	await arrimarse(militar)
+	await usar_delante()
 	print("Acompaña: '%s' | equipo %s | el policía, de vuelta en «%s» (esperado: militar, [Militar], Policía)" % [
 		Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre),
 		mapa.nombre_zona(mapa.zona_en(policia.position))])
@@ -1193,6 +1225,15 @@ func arrimarse(v: Aliado) -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.2, false).timeout
 	johnny.position = v.position + hacia * 20.0
+	await get_tree().create_timer(0.3, false).timeout
+
+
+# Pulsa la E (la acción "usar") delante de quien esté, como el jugador (M124: darle la comida a un vecino)
+func usar_delante() -> void:
+	Input.action_press("usar")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("usar")
 	await get_tree().create_timer(0.3, false).timeout
 
 

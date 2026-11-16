@@ -2964,6 +2964,10 @@ msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas 
 msgstr "лежит в мебели, которую можно открыть: шкафах, тумбочках, столах, кассах, картотеках..."
 
 #: scripts/objetos.gd
+msgid "sale de las neveras y las encimeras de las cocinas. Es la comida favorita de: %s"
+msgstr "лежит в холодильниках и на столешницах кухонь. Любимая еда: %s"
+
+#: scripts/objetos.gd
 msgid "lo suelta el gordo"
 msgstr "выпадает из толстяка"
 
@@ -3010,6 +3014,42 @@ msgstr "Особый материал"
 #: scripts/objetos.gd
 msgid "Material lanzable"
 msgstr "Метательный материал"
+
+#: scripts/objetos.gd
+msgid "Dónut"
+msgstr "Пончик"
+
+#: scripts/objetos.gd
+msgid "Manzana"
+msgstr "Яблоко"
+
+#: scripts/objetos.gd
+msgid "Lata de judías"
+msgstr "Банка фасоли"
+
+#: scripts/objetos.gd
+msgid "Yogur de fresa"
+msgstr "Клубничный йогурт"
+
+#: scripts/objetos.gd
+msgid "Bocadillo de chorizo"
+msgstr "Бутерброд с чоризо"
+
+#: scripts/objetos.gd
+msgid "Bebida energética"
+msgstr "Энергетик"
+
+#: scripts/objetos.gd
+msgid "Porción de pizza"
+msgstr "Кусок пиццы"
+
+#: scripts/objetos.gd
+msgid "Termo de café"
+msgstr "Термос с кофе"
+
+#: scripts/objetos.gd
+msgid "Ensalada"
+msgstr "Салат"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -3685,6 +3725,14 @@ msgid "¡Puerta abierta! Salid de aquí"
 msgstr "Дверь открыта! Уходите отсюда"
 
 #: scripts/supervivientes.gd
+msgid "Hablar"
+msgstr "Говорить"
+
+#: scripts/supervivientes.gd
+msgid "Le das: %s · %s te acompaña esta partida"
+msgstr "Ты отдаешь: %s · %s с тобой на этот забег"
+
+#: scripts/supervivientes.gd
 msgid "%s te acompaña · %s"
 msgstr "%s с тобой · %s"
 
@@ -3928,6 +3976,10 @@ msgstr "На каждом этаже подсказывает, где то, чт
 #: scripts/supervivientes.gd
 msgid "¡NO ME DEJES AQUÍ!"
 msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
+
+#: scripts/supervivientes.gd
+msgid "Estoy muy débil"
+msgstr "Совсем нет сил"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5230,12 +5282,28 @@ msgid "Al entrar en los trasteros"
 msgstr "Когда заходишь в кладовки"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
-msgstr "Здесь живут спасенные тобой выжившие, каждый в своей кладовке."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
+msgstr "Здесь живут спасенные тобой выжившие, каждый в своей кладовке. Некоторые помогают, даже если не идут с тобой."
 
 #: scripts/tutoriales.gd
-msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
-msgstr "Подойди к одному, и он будет ходить с тобой в следующих забегах (только один за раз). Некоторые помогают, даже если не идут с тобой."
+msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
+msgstr "Чтобы кто-то пошел с тобой, встань перед ним и нажми {usar}: только если у тебя есть его любимая еда, она показана под именем. Он идет на один забег, а потом возвращается в свою кладовку."
+
+#: scripts/tutoriales.gd
+msgid "Comida favorita"
+msgstr "Любимая еда"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar la primera comida"
+msgstr "Когда найдешь первую еду"
+
+#: scripts/tutoriales.gd
+msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favorita de alguno de los supervivientes de los trasteros."
+msgstr "В холодильниках и на столешницах кухонь иногда лежит любимая еда кого-то из выживших в кладовках."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
+msgstr "Если пройдешь здание, она уйдет в сундук. Отдай ее в кладовке ({usar}), и выживший пойдет с тобой в следующий забег."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

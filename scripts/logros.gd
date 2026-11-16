@@ -235,7 +235,7 @@ static func meta(l: Dictionary) -> int:
 			return Supervivientes.DATOS.values().filter(func(d): return d.edificio == l.edificio).size()
 		"skins": return Skins.LISTA.size()
 		"bestiario": return Bestiario.LISTA.size()
-		"objetos": return Objetos.NOMBRES.size()
+		"objetos": return Objetos.NOMBRES.size() - Objetos.COMIDAS.size()   # (la comida no cuenta: M124)
 		"paginas": return paginas(Guardado.NUEVO)[1]
 		"rama": return Talentos.RAMAS.map(func(r): return puntos_rama(r.id)[1]).min()
 		"arbol": return Talentos.LISTA.reduce(func(n, t): return n + t.max, 0)
@@ -256,7 +256,7 @@ static func hecho(l: Dictionary, s: Dictionary) -> int:
 		"skin": return 1 if s.skin != "" else 0
 		"skins": return s.skins.filter(func(id): return id in Skins.LISTA).size()
 		"bestiario": return s.bestiario.filter(func(id): return id in Bestiario.LISTA).size()
-		"objetos": return s.encontrados.filter(func(id): return id in Objetos.NOMBRES).size()
+		"objetos": return s.encontrados.filter(func(id): return id in Objetos.NOMBRES and not id in Objetos.COMIDAS).size()
 		"paginas": return paginas(s)[0]
 		"rama":
 			# la rama más llena, en la escala de la más pequeña: solo llega a la meta con una rama entera

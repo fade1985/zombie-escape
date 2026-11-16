@@ -3272,3 +3272,126 @@ func probar_muebles_materiales() -> void:
 	print("Muebles materiales · en la mochila %s · tutorial: %s (esperado: una pieza_* y piezas)" % [mochila, ventana.id if ventana else "ninguno"])
 	Captura.foto("captura-mueble-tutorial.png")
 	get_tree().quit()
+
+
+# Con "--captura --comida" (M124, 16 nov): la comida favorita de los supervivientes. Con la médica y el policía viviendo
+# en los trasteros: cuántas neveras y encimeras se abren en la planta; delante de una, su contorno, y con E suelta una
+# comida (la manzana o el dónut; si sale vacía, se cierra a mano y otra vez: captura-comida-nevera.png) y su tutorial
+# (captura-comida-tutorial.png). Luego en los trasteros: delante de la médica, sin su manzana, «ESTOY MUY DÉBIL» en blanco
+# (captura-comida-debil.png); con el dónut en la mochila, el policía se lo come y te acompaña
+# (captura-comida-acompana.png); y con la manzana en el baúl, la médica (y el policía vuelve a su trastero). Al final, el
+# guardado como estaba
+func probar_comida() -> void:
+	var g := Guardado.cargar()
+	var antes := [g.rescatados.duplicate(), g.acompanante, g.baul.duplicate()]
+	Guardado.cambiar(func(x):
+		x.rescatados = ["policia", "medico"]
+		x.acompanante = ""
+		x.baul.erase("manzana")
+		x.baul.erase("donut"))
+	var cuantos := 0
+	var sitio := -1
+	for j in planta.sitios.size():
+		for m in planta.sitios[j].get("muebles", []):
+			if m.tipo in Objetos.MUEBLES_CON_COMIDA:
+				cuantos += 1
+				if sitio < 0 and m.lado == "arriba":
+					sitio = j
+	print("Comida · en esta planta, neveras y encimeras %d (con un 35 %% de comida, unas %d)" % [cuantos, roundi(cuantos * Objetos.COMIDA_MUEBLE)])
+	var salidas := []
+	for i in 400:
+		var c := Objetos.comida_de_mueble()
+		if c != "":
+			salidas.append(c)
+	print("Comida · de 400 aperturas, con comida %d (esperado: unas 140) · solo dónut y manzana %s (esperado: true)" % [
+		salidas.size(), salidas.all(func(c): return c in ["donut", "manzana"])])
+	if sitio < 0:
+		print("Comida · no hay ninguna nevera ni encimera en la pared de arriba")
+		get_tree().quit()
+		return
+	await montar(sitio, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var mueble: Node2D = null
+	for m in mapa.muebles:
+		if m.datos.tipo in Objetos.MUEBLES_CON_COMIDA and m.datos.lado == "arriba":
+			mueble = m
+			break
+	for s in planta.sitios[sitio].apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	johnny.position = mueble.position + Vector2(0, 20)
+	johnny.get_node("Camara").reset_smoothing()
+	mochila.clear()
+	await get_tree().create_timer(0.6, false).timeout
+	var zona: Area2D = mueble.get_node_or_null("Zona")
+	print("Comida · %s: zona %s, contorno con Johnny delante %s (esperado: true, true)" % [mueble.datos.tipo, zona != null,
+		zona.contorno.visible if zona and zona.contorno else false])
+	var iman: float = johnny.stats.iman
+	johnny.stats.iman = 0.0
+	var vacios := 0
+	var comidas: Array = []
+	for intento in 30:
+		mueble.datos.abierto = false
+		pulsar_accion("usar", true)
+		await get_tree().physics_frame
+		pulsar_accion("usar", false)
+		johnny.position = mueble.position + Vector2(140, 60)   # apartado, para que la comida se quede en el suelo
+		await get_tree().create_timer(0.15, false).timeout
+		comidas = mapa.cosas.get_children().filter(func(c): return c.get("icono") is Texture2D \
+			and Objetos.COMIDAS.any(func(id): return c.icono.resource_path.ends_with("obj-%s.png" % id)) and not c.is_queued_for_deletion())
+		if not comidas.is_empty():
+			break
+		vacios += 1
+		johnny.position = mueble.position + Vector2(0, 20)
+		await get_tree().create_timer(0.3, false).timeout
+	await get_tree().create_timer(0.5, false).timeout
+	print("Comida · vacías antes de la primera %d · en el suelo %s (esperado: obj-donut u obj-manzana)" % [vacios,
+		comidas.map(func(c): return c.icono.resource_path.get_file())])
+	Captura.foto("captura-comida-nevera.png")
+	# su tutorial (sale al abrir la primera que la tiene: partida.abrir_mueble)
+	Tutoriales.olvidar()
+	for id in Tutoriales.LISTA:
+		if id != "comida":
+			Tutoriales.apuntar(id)
+	tutoriales_prueba = true
+	tutorial("comida")
+	await get_tree().create_timer(1.0, true).timeout
+	var ventana: Tutorial = null
+	for h in get_children():
+		if h is Tutorial and not h.is_queued_for_deletion():
+			ventana = h
+	print("Comida · tutorial: %s (esperado: comida)" % [ventana.id if ventana else "ninguno"])
+	Captura.foto("captura-comida-tutorial.png")
+	if ventana:
+		ventana.cerrar()
+	await get_tree().create_timer(0.5, true).timeout
+	johnny.stats.iman = iman
+	# en los trasteros
+	mochila.clear()
+	await montar(planta.viviendas, 0, false)
+	var sup: Supervivientes = supervivientes
+	var medica: Aliado = sup.vecinos.filter(func(v): return v.def.id == "medico")[0]
+	var policia: Aliado = sup.vecinos.filter(func(v): return v.def.id == "policia")[0]
+	await sup.arrimarse(medica)
+	await sup.usar_delante()
+	print("Comida · la médica sin su manzana: dice «%s» · acompaña '%s' (esperado: Estoy muy débil, '')" % [medica.dicho, Guardado.cargar().acompanante])
+	Captura.foto("captura-comida-debil.png")
+	mochila.append("donut")
+	await sup.arrimarse(policia)
+	await sup.usar_delante()
+	await get_tree().create_timer(0.4, false).timeout
+	print("Comida · el policía con el dónut en la mochila: acompaña '%s' · equipo %s · mochila %s (esperado: policia, [Policía], [])" % [
+		Guardado.cargar().acompanante, sup.equipo.map(func(a): return a.def.nombre), mochila])
+	Captura.foto("captura-comida-acompana.png")
+	Guardado.cambiar(func(x): x.baul["manzana"] = 1)
+	await sup.arrimarse(medica)
+	await sup.usar_delante()
+	print("Comida · la médica con la manzana en el baúl: acompaña '%s' · manzanas en el baúl %d · el policía, en «%s» (esperado: medico, 0, Policía)" % [
+		Guardado.cargar().acompanante, int(Guardado.cargar().baul.get("manzana", 0)), mapa.nombre_zona(mapa.zona_en(policia.position))])
+	Guardado.cambiar(func(x):
+		x.rescatados = antes[0]
+		x.acompanante = antes[1]
+		x.baul = antes[2])
+	get_tree().quit()

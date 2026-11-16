@@ -2962,6 +2962,10 @@ msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas 
 msgstr "se trouve dans les meubles qui s'ouvrent : armoires, tables de chevet, bureaux, caisses enregistreuses, classeurs..."
 
 #: scripts/objetos.gd
+msgid "sale de las neveras y las encimeras de las cocinas. Es la comida favorita de: %s"
+msgstr "se trouve dans les frigos et sur les plans de travail des cuisines. C'est le plat préféré de : %s"
+
+#: scripts/objetos.gd
 msgid "lo suelta el gordo"
 msgstr "lâché par le gros"
 
@@ -3008,6 +3012,42 @@ msgstr "Matériau spécial"
 #: scripts/objetos.gd
 msgid "Material lanzable"
 msgstr "Matériau lançable"
+
+#: scripts/objetos.gd
+msgid "Dónut"
+msgstr "Donut"
+
+#: scripts/objetos.gd
+msgid "Manzana"
+msgstr "Pomme"
+
+#: scripts/objetos.gd
+msgid "Lata de judías"
+msgstr "Boîte de haricots"
+
+#: scripts/objetos.gd
+msgid "Yogur de fresa"
+msgstr "Yaourt à la fraise"
+
+#: scripts/objetos.gd
+msgid "Bocadillo de chorizo"
+msgstr "Sandwich au chorizo"
+
+#: scripts/objetos.gd
+msgid "Bebida energética"
+msgstr "Boisson énergisante"
+
+#: scripts/objetos.gd
+msgid "Porción de pizza"
+msgstr "Part de pizza"
+
+#: scripts/objetos.gd
+msgid "Termo de café"
+msgstr "Thermos de café"
+
+#: scripts/objetos.gd
+msgid "Ensalada"
+msgstr "Salade"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -3679,6 +3719,14 @@ msgid "¡Puerta abierta! Salid de aquí"
 msgstr "Porte ouverte ! Sortez d'ici"
 
 #: scripts/supervivientes.gd
+msgid "Hablar"
+msgstr "Parler"
+
+#: scripts/supervivientes.gd
+msgid "Le das: %s · %s te acompaña esta partida"
+msgstr "Tu donnes : %s · Avec toi pour cette partie : %s"
+
+#: scripts/supervivientes.gd
 msgid "%s te acompaña · %s"
 msgstr "Avec toi : %s · %s"
 
@@ -3922,6 +3970,10 @@ msgstr "À chaque étage, te dit où se trouve ce qui ouvre la salle du boss"
 #: scripts/supervivientes.gd
 msgid "¡NO ME DEJES AQUÍ!"
 msgstr "NE ME LAISSE PAS LÀ !"
+
+#: scripts/supervivientes.gd
+msgid "Estoy muy débil"
+msgstr "Je suis trop faible"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5224,12 +5276,28 @@ msgid "Al entrar en los trasteros"
 msgstr "En entrant dans les caves"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
-msgstr "Ici vivent les survivants que tu sauves, chacun dans sa cave."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
+msgstr "Ici vivent les survivants que tu sauves, chacun dans sa cave. Certains t'aident même s'ils ne viennent pas avec toi."
 
 #: scripts/tutoriales.gd
-msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
-msgstr "Approche-toi de l'un d'eux et il t'accompagnera dans les parties suivantes (un seul à la fois). Certains t'aident même sans venir avec toi."
+msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
+msgstr "Pour qu'un survivant t'accompagne, mets-toi devant et appuie sur {usar} : seulement si tu as son plat préféré, affiché sous son nom. Il vient pour une partie, puis retourne dans sa cave."
+
+#: scripts/tutoriales.gd
+msgid "Comida favorita"
+msgstr "Plat préféré"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar la primera comida"
+msgstr "En trouvant la première nourriture"
+
+#: scripts/tutoriales.gd
+msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favorita de alguno de los supervivientes de los trasteros."
+msgstr "Les frigos et les plans de travail des cuisines cachent parfois le plat préféré d'un des survivants des caves."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
+msgstr "Si tu termines l'immeuble, il passe dans le coffre. Donne-le-lui dans sa cave avec {usar} et il t'accompagnera la partie suivante."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

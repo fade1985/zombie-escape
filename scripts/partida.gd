@@ -703,8 +703,9 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 	if mapa.tele_salon:   # (la tele del salón que enseña las noticias, M91)
 		mapa.tele_salon.usar.connect(abrir_tele)
-	for mueble in mapa.muebles:   # (el armario, la mesilla, el escritorio y la librería: Objetos.MUEBLES_CON_PIEZA)
-		if mueble.datos.tipo in Objetos.MUEBLES_CON_PIEZA:
+	for mueble in mapa.muebles:   # (el armario, la mesilla, el escritorio y la librería: Objetos.MUEBLES_CON_PIEZA; y la
+		# nevera y la encimera, con la comida de los supervivientes: Objetos.MUEBLES_CON_COMIDA)
+		if mueble.datos.tipo in Objetos.MUEBLES_CON_PIEZA or mueble.datos.tipo in Objetos.MUEBLES_CON_COMIDA:
 			mueble.usar.connect(abrir_mueble.bind(mueble))
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
@@ -1766,7 +1767,9 @@ func abrir_mueble(mueble: Node2D) -> void:
 	mueble.abrir()
 	Sonido.tocar("puerta")
 	var medio: Vector2 = mueble.position + Vector2(0, -mueble.datos.h / 2.0)
-	var pieza := Objetos.pieza_de_mueble()
+	# (la nevera y la encimera, la comida favorita de un superviviente de los trasteros: M124)
+	var comida: bool = mueble.datos.tipo in Objetos.MUEBLES_CON_COMIDA
+	var pieza := Objetos.comida_de_mueble() if comida else Objetos.pieza_de_mueble()
 	if pieza == "":
 		gran_aviso(Idioma.t("Vacío").to_upper())
 		return
@@ -1776,6 +1779,8 @@ func abrir_mueble(mueble: Node2D) -> void:
 	var borde := Vector2(mueble.datos.w, mueble.datos.h) / 2.0 + Vector2(10, 10)
 	var donde := medio + hacia * minf(borde.x / maxf(absf(hacia.x), 0.01), borde.y / maxf(absf(hacia.y), 0.01))
 	soltar_objeto(pieza, donde, false, hacia * randf_range(110.0, 160.0), true)
+	if comida:
+		tutorial("comida")   # (para qué sirve: dársela en los trasteros)
 
 
 # Cura "cura" de vida, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)
@@ -2015,6 +2020,9 @@ func terminar(gano: bool, abandona := false) -> void:
 		# el superviviente rescatado en esta partida se viene a vivir a las viviendas (su puerta ya estará abierta)
 		if not nuevo.is_empty() and not nuevo.id in g.rescatados:
 			g.rescatados.append(nuevo.id)
+		# el que te acompañaba desde los trasteros vuelve al suyo, ganes, caigas o abandones: para que vuelva a venir,
+		# otra vez su comida favorita (M124, supervivientes.gd: pedir_vecino)
+		g.acompanante = ""
 		g.muertos += muertos
 		for id in matados:   # los de cada tipo, para las fichas de Colecciones
 			habia_reto[0] = Reto.ficha(g, edificio).completado

@@ -38,10 +38,6 @@ Dictados el 16 nov, repartidos en cuatro tandas (cada una, su sesión): **T1** a
 - **M123** (T2) Ventanas de tutorial nuevas: antes del primer jefe, que pase por la sala de mantenimiento a gastar
   dólares y mutágeno o a dejar cosas a salvo en el baúl; guardar las balas para los jefes (muy duros cuerpo a
   cuerpo); llevar siempre lanzables (las hordas pueden ser imposibles).
-- **M124** (T3) Supervivientes: en los trasteros hay que darles a la E para que te acompañen, y solo si llevas su
-  comida favorita (una por superviviente); sin ella dicen en la cabeza «Estoy muy débil» (como el texto de la llave,
-  en blanco). La comida sale en la nevera y la encimera, con una probabilidad parecida a la de los materiales.
-  Arte: prompt para GPT con imagen de referencia del dueño. Con su tutorial.
 - **M125** (T4) Nuevo reto del día: un garaje subterráneo (columnas y coches, como la azotea) con 25 oleadas de
   durmientes cada vez más duras y, cada 5, también un jefe del edificio. El baúl en el centro (pausa al abrirlo). Los
   durmientes sueltan balas un 10 % y no dan dólares; la oleada N da N dólares, y te los llevas aunque caigas o

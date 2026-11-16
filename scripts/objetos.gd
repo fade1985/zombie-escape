@@ -79,8 +79,20 @@ const NOMBRES := {
 	# las piezas para mejorar las armas (PIEZAS): salen de los muebles (y de los jefes del centro y la torre)
 	"pieza_cuerpo": "Material cuerpo a cuerpo", "pieza_distancia": "Material a distancia", "pieza_especial": "Material especial",
 	"pieza_arrojable": "Material lanzable",
+	# la comida favorita de cada superviviente (COMIDAS; M124, 16 nov): sale de la nevera y la encimera de las cocinas
+	"donut": "Dónut", "manzana": "Manzana", "judias": "Lata de judías", "yogur": "Yogur de fresa",
+	"bocadillo": "Bocadillo de chorizo", "energetica": "Bebida energética", "pizza": "Porción de pizza",
+	"cafe": "Termo de café", "ensalada": "Ensalada",
 }
 # [/traducir]
+# La comida favorita de cada superviviente (M124, 16 nov; la de cada uno, "comida" en Supervivientes.DATOS): para que uno
+# de los trasteros te acompañe una partida, hay que dársela (supervivientes.gd, pedir_vecino). Sale solo de la nevera y
+# la encimera de las cocinas de los Apartamentos (MUEBLES_CON_COMIDA: comida_de_mueble), y solo la de los que ya viven en
+# los trasteros. Son objetos como los demás (van en la mochila, pasan al baúl al completar el edificio y se pierden si
+# caes), pero no salen al azar ni cuentan para el logro de los objetos
+const COMIDAS := ["donut", "manzana", "judias", "yogur", "bocadillo", "energetica", "pizza", "cafe", "ensalada"]
+const MUEBLES_CON_COMIDA := ["fridge", "counter"]
+const COMIDA_MUEBLE := 0.35   # probabilidad de que la nevera o la encimera tengan comida (como los materiales: PIEZA_MUEBLE)
 # Los de curar: no son chatarra, se usan (partida.usar_objeto) desde el inventario («Usar») o con su tecla sin abrirlo
 # ("accion": 1 las vendas y 2 el botiquín; sus casillas junto a la barra de vida, ui/hud.gd), y van al baúl como los
 # demás. Las vendas (de las tiendas del centro comercial) curan 25 y el botiquín, 40 (el que suelta el armarito de los
@@ -401,7 +413,8 @@ static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "", m
 static func al_azar(edificio := "apartamentos", tienda := "", municion: Variant = "*") -> String:
 	var lista: Array
 	if edificio == "apartamentos":
-		lista = NOMBRES.keys().filter(func(id): return id not in DE_UN_ZOMBI and id not in SOLO_CENTRO and id not in PIEZAS)
+		lista = NOMBRES.keys().filter(func(id): return id not in DE_UN_ZOMBI and id not in SOLO_CENTRO and id not in PIEZAS \
+			and id not in COMIDAS)
 	else:
 		if tienda not in TIENDAS:
 			tienda = TIENDAS.keys().pick_random()
@@ -423,6 +436,22 @@ static func pieza_de_mueble() -> String:
 
 
 # Cuántas piezas suelta un jefe al caer en el centro comercial o en la torre (PIEZAS_JEFE, y más con la alerta); cada
+# Si la nevera y la encimera se abren: solo cuando ya vive alguien en los trasteros (si no, su comida no serviría)
+static func hay_comida() -> bool:
+	return not Guardado.cargar().rescatados.is_empty()
+
+
+# Lo que hay en la nevera o la encimera al abrirlas ("" = vacía): COMIDA_MUEBLE de las veces, la comida favorita de uno
+# de los que viven en los trasteros, al azar
+static func comida_de_mueble() -> String:
+	var suyas := []
+	for id in Guardado.cargar().rescatados:
+		var c: String = Supervivientes.DATOS.get(id, {}).get("comida", "")
+		if c != "":
+			suyas.append(c)
+	return suyas.pick_random() if not suyas.is_empty() and randf() < COMIDA_MUEBLE else ""
+
+
 # una, de una familia al azar
 static func piezas_de_jefe() -> Array:
 	var lista := []
@@ -438,8 +467,8 @@ static func piezas_de_jefe() -> Array:
 # comercial, todos. Otro valor: todos
 static func de_edificio(edificio: String) -> Array:
 	if edificio == "apartamentos":
-		return NOMBRES.keys().filter(func(id): return not id in SOLO_CENTRO)
-	return NOMBRES.keys()
+		return NOMBRES.keys().filter(func(id): return not id in SOLO_CENTRO and not id in COMIDAS)
+	return NOMBRES.keys().filter(func(id): return not id in COMIDAS)   # (la comida, aparte: COMIDAS)
 
 
 # Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier durmiente (el bidón
@@ -448,6 +477,8 @@ static func de_edificio(edificio: String) -> Array:
 static func donde(id: String, edificio: String) -> String:
 	if id in PIEZAS:
 		return Idioma.t("sale de los muebles que se abren: armarios, mesillas, escritorios, cajas registradoras, archivadores...")
+	if id in COMIDAS:
+		return Idioma.t("sale de las neveras y las encimeras de las cocinas. Es la comida favorita de: %s") % Supervivientes.de_comida(id)
 	if id == "bidon_acido":
 		return Idioma.t("lo suelta el gordo")
 	if edificio != "centro":
@@ -468,7 +499,7 @@ static func donde(id: String, edificio: String) -> String:
 # Apunta un objeto como encontrado alguna vez (al cogerlo del suelo). El botiquín de la
 # farmacéutica no cuenta (no está en NOMBRES); las vendas, sí
 static func apuntar_encontrado(id: String) -> void:
-	if not id in NOMBRES:
+	if not id in NOMBRES or id in COMIDAS:   # (la comida no cuenta para el logro)
 		return
 	Guardado.cambiar(func(g):
 		if not id in g.encontrados:   # (solo para el logro: Colecciones ya no enseña los objetos)

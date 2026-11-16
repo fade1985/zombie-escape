@@ -9,7 +9,8 @@
 # Los que se abren (Objetos.MUEBLES_CON_PIEZA: el armario, la mesilla... y en el centro y la torre los suyos; 15 y 16 nov) llevan
 # además la zona de delante (zona_usar.gd, con su contorno amarillo), como el armarito del baño: avisan con "usar" y la
 # partida los abre (abrir_mueble), que a veces sueltan un material. Ya abierto ("abierto" en sus datos, que se quedan en
-# la planta) no se vuelve a abrir. Su dibujo no cambia, de momento.
+# la planta) no se vuelve a abrir. Su dibujo no cambia, de momento. La nevera y la encimera de las cocinas
+# (Objetos.MUEBLES_CON_COMIDA, M124) se abren igual, pero solo si ya vive alguien en los trasteros: dan su comida favorita.
 extends StaticBody2D
 
 signal usar
@@ -86,7 +87,7 @@ func montar(m: Dictionary, surtido: int) -> void:
 		Vector2(-m.w / 2.0, 0)])
 	sombra.occluder = huella
 	add_child(sombra)
-	if m.tipo in Objetos.MUEBLES_CON_PIEZA:
+	if m.tipo in Objetos.MUEBLES_CON_PIEZA or (m.tipo in Objetos.MUEBLES_CON_COMIDA and Objetos.hay_comida()):
 		poner_zona()
 
 

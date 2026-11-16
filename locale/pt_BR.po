@@ -2962,6 +2962,10 @@ msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas 
 msgstr "sai dos móveis que se abrem: guarda-roupas, criados-mudos, escrivaninhas, caixas registradoras, arquivos..."
 
 #: scripts/objetos.gd
+msgid "sale de las neveras y las encimeras de las cocinas. Es la comida favorita de: %s"
+msgstr "sai das geladeiras e das bancadas das cozinhas. É a comida favorita de: %s"
+
+#: scripts/objetos.gd
 msgid "lo suelta el gordo"
 msgstr "o gordo deixa cair"
 
@@ -3008,6 +3012,42 @@ msgstr "Material especial"
 #: scripts/objetos.gd
 msgid "Material lanzable"
 msgstr "Material arremessável"
+
+#: scripts/objetos.gd
+msgid "Dónut"
+msgstr "Rosquinha"
+
+#: scripts/objetos.gd
+msgid "Manzana"
+msgstr "Maçã"
+
+#: scripts/objetos.gd
+msgid "Lata de judías"
+msgstr "Lata de feijão"
+
+#: scripts/objetos.gd
+msgid "Yogur de fresa"
+msgstr "Iogurte de morango"
+
+#: scripts/objetos.gd
+msgid "Bocadillo de chorizo"
+msgstr "Sanduíche de chouriço"
+
+#: scripts/objetos.gd
+msgid "Bebida energética"
+msgstr "Energético"
+
+#: scripts/objetos.gd
+msgid "Porción de pizza"
+msgstr "Fatia de pizza"
+
+#: scripts/objetos.gd
+msgid "Termo de café"
+msgstr "Garrafa térmica de café"
+
+#: scripts/objetos.gd
+msgid "Ensalada"
+msgstr "Salada"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -3679,6 +3719,14 @@ msgid "¡Puerta abierta! Salid de aquí"
 msgstr "Porta aberta! Vamos embora daqui"
 
 #: scripts/supervivientes.gd
+msgid "Hablar"
+msgstr "Falar"
+
+#: scripts/supervivientes.gd
+msgid "Le das: %s · %s te acompaña esta partida"
+msgstr "Você dá: %s · Com você nesta partida: %s"
+
+#: scripts/supervivientes.gd
 msgid "%s te acompaña · %s"
 msgstr "Com você: %s · %s"
 
@@ -3922,6 +3970,10 @@ msgstr "Ao chegar em cada andar, diz onde está o que abre a sala do chefe"
 #: scripts/supervivientes.gd
 msgid "¡NO ME DEJES AQUÍ!"
 msgstr "NÃO ME DEIXA AQUI!"
+
+#: scripts/supervivientes.gd
+msgid "Estoy muy débil"
+msgstr "Tô sem forças"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5224,12 +5276,28 @@ msgid "Al entrar en los trasteros"
 msgstr "Ao entrar nos depósitos"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
-msgstr "Aqui moram os sobreviventes que você resgata, cada um no seu depósito."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
+msgstr "Aqui moram os sobreviventes que você resgata, cada um no seu depósito. Alguns te ajudam mesmo sem ir com você."
 
 #: scripts/tutoriales.gd
-msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
-msgstr "Chegue perto de um e ele vai te acompanhar nas partidas seguintes (só um por vez). Alguns te ajudam mesmo sem ir com você."
+msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
+msgstr "Para alguém ir com você, fique na frente e aperte {usar}: só se você levar a comida favorita dele, a que aparece embaixo do nome. Vai por uma partida; depois, volta para o depósito."
+
+#: scripts/tutoriales.gd
+msgid "Comida favorita"
+msgstr "Comida favorita"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar la primera comida"
+msgstr "Ao encontrar a primeira comida"
+
+#: scripts/tutoriales.gd
+msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favorita de alguno de los supervivientes de los trasteros."
+msgstr "As geladeiras e as bancadas das cozinhas às vezes guardam a comida favorita de algum dos sobreviventes dos depósitos."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
+msgstr "Se você completar o prédio, ela vai para o baú. Entregue no depósito dele com {usar} e ele vai com você na próxima partida."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

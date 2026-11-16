@@ -2962,6 +2962,10 @@ msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas 
 msgstr "steckt in Möbeln, die man öffnen kann: Kleiderschränke, Nachttische, Schreibtische, Kassen, Aktenschränke..."
 
 #: scripts/objetos.gd
+msgid "sale de las neveras y las encimeras de las cocinas. Es la comida favorita de: %s"
+msgstr "steckt in Kühlschränken und Arbeitsplatten der Küchen. Lieblingsessen von: %s"
+
+#: scripts/objetos.gd
 msgid "lo suelta el gordo"
 msgstr "vom Dicken"
 
@@ -3008,6 +3012,42 @@ msgstr "Spezialmaterial"
 #: scripts/objetos.gd
 msgid "Material lanzable"
 msgstr "Wurfwaffenmaterial"
+
+#: scripts/objetos.gd
+msgid "Dónut"
+msgstr "Donut"
+
+#: scripts/objetos.gd
+msgid "Manzana"
+msgstr "Apfel"
+
+#: scripts/objetos.gd
+msgid "Lata de judías"
+msgstr "Dose Bohnen"
+
+#: scripts/objetos.gd
+msgid "Yogur de fresa"
+msgstr "Erdbeerjoghurt"
+
+#: scripts/objetos.gd
+msgid "Bocadillo de chorizo"
+msgstr "Chorizo-Brötchen"
+
+#: scripts/objetos.gd
+msgid "Bebida energética"
+msgstr "Energydrink"
+
+#: scripts/objetos.gd
+msgid "Porción de pizza"
+msgstr "Stück Pizza"
+
+#: scripts/objetos.gd
+msgid "Termo de café"
+msgstr "Thermoskanne Kaffee"
+
+#: scripts/objetos.gd
+msgid "Ensalada"
+msgstr "Salat"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -3679,6 +3719,14 @@ msgid "¡Puerta abierta! Salid de aquí"
 msgstr "Tür offen! Raus hier"
 
 #: scripts/supervivientes.gd
+msgid "Hablar"
+msgstr "Reden"
+
+#: scripts/supervivientes.gd
+msgid "Le das: %s · %s te acompaña esta partida"
+msgstr "Du gibst: %s · Begleitet dich diese Runde: %s"
+
+#: scripts/supervivientes.gd
 msgid "%s te acompaña · %s"
 msgstr "Begleitet dich: %s · %s"
 
@@ -3922,6 +3970,10 @@ msgstr "Sagt dir auf jedem Stockwerk, wo das ist, was den Bossraum öffnet"
 #: scripts/supervivientes.gd
 msgid "¡NO ME DEJES AQUÍ!"
 msgstr "LASS MICH NICHT HIER!"
+
+#: scripts/supervivientes.gd
+msgid "Estoy muy débil"
+msgstr "Ich bin zu schwach"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5224,12 +5276,28 @@ msgid "Al entrar en los trasteros"
 msgstr "Beim Betreten der Keller"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
-msgstr "Hier wohnen die Überlebenden, die du rettest, jeder in seinem Keller."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
+msgstr "Hier wohnen die Überlebenden, die du rettest, jeder in seinem Kellerabteil. Manche helfen dir, auch wenn sie nicht mitkommen."
 
 #: scripts/tutoriales.gd
-msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
-msgstr "Geh zu einem, und er begleitet dich in den nächsten Runden (immer nur einer). Manche helfen dir auch, wenn sie nicht mitkommen."
+msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
+msgstr "Damit dich jemand begleitet, stell dich davor und drück {usar}: nur, wenn du sein Lieblingsessen dabeihast, das unter dem Namen steht. Er kommt eine Runde mit und geht danach in sein Kellerabteil zurück."
+
+#: scripts/tutoriales.gd
+msgid "Comida favorita"
+msgstr "Lieblingsessen"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar la primera comida"
+msgstr "Wenn du das erste Essen findest"
+
+#: scripts/tutoriales.gd
+msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favorita de alguno de los supervivientes de los trasteros."
+msgstr "In Kühlschränken und auf Arbeitsplatten der Küchen liegt manchmal das Lieblingsessen eines Überlebenden aus dem Keller."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
+msgstr "Schließt du das Gebäude ab, wandert es in die Truhe. Gib es ihm in seinem Kellerabteil mit {usar}, dann begleitet er dich in der nächsten Runde."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"

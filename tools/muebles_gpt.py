@@ -141,6 +141,19 @@ MUEBLES = {
     "pieza_distancia": ("assets/sources/pieza-distancia-gpt.webp", "assets/ui/iconos/obj-pieza_distancia.png", 30, 30, False),
     "pieza_especial": ("assets/sources/pieza-especial-gpt.webp", "assets/ui/iconos/obj-pieza_especial.png", 30, 30, False),
     "pieza_arrojable": ("assets/sources/pieza-arrojable-gpt.webp", "assets/ui/iconos/obj-pieza_arrojable.png", 20, 30, False),
+    # la comida favorita de cada superviviente (Objetos.COMIDAS; M124, 16 nov): dónut (policía), manzana (médica), lata de
+    # judías (militar), yogur de fresa (farmacéutica), bocadillo de chorizo (ferretero), bebida energética (técnico), porción
+    # de pizza (informático joven), termo de café (limpiadora de noche) y ensalada (recepcionista). Como los materiales:
+    # a 30 de lado lo más largo, centrados en un lienzo de 32x32 al final de este archivo
+    "comida_donut": ("assets/sources/comida-donut-gpt.webp", "assets/ui/iconos/obj-donut.png", 30, 29, False),
+    "comida_manzana": ("assets/sources/comida-manzana-gpt.webp", "assets/ui/iconos/obj-manzana.png", 27, 30, False),
+    "comida_judias": ("assets/sources/comida-judias-gpt.webp", "assets/ui/iconos/obj-judias.png", 18, 30, False),
+    "comida_yogur": ("assets/sources/comida-yogur-gpt.webp", "assets/ui/iconos/obj-yogur.png", 26, 30, False),
+    "comida_bocadillo": ("assets/sources/comida-bocadillo-gpt.webp", "assets/ui/iconos/obj-bocadillo.png", 30, 15, False),
+    "comida_energetica": ("assets/sources/comida-energetica-gpt.webp", "assets/ui/iconos/obj-energetica.png", 12, 30, False),
+    "comida_pizza": ("assets/sources/comida-pizza-gpt.webp", "assets/ui/iconos/obj-pizza.png", 30, 26, False),
+    "comida_cafe": ("assets/sources/comida-cafe-gpt.webp", "assets/ui/iconos/obj-cafe.png", 19, 30, False),
+    "comida_ensalada": ("assets/sources/comida-ensalada-gpt.webp", "assets/ui/iconos/obj-ensalada.png", 30, 23, False),
     # los dibujos grandes de los efectos secundarios (ui/menus.gd, mutacion; 16 nov): uno por mutación, en un cuadrado de
     # 100 (se centran en un lienzo de 100x100 al final de este archivo); a 2 unidades por píxel, 200 en la pantalla
     "mutacion_tentacular": ("assets/sources/mutacion-tentacular-gpt.webp", "assets/ui/mutaciones/tentacular.png", 96, 100, False),
@@ -332,8 +345,8 @@ if "fregona" in (sys.argv[1:] or ["fregona"]):
     lienzo.paste(pequena, (2, 2))
     lienzo.save("assets/ui/tienda/fregona.png")
 
-# los materiales, centrados en un lienzo de 32x32 (los iconos de los objetos son todos de 32x32: partida.soltar_objeto)
-for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith("pieza_")]:
+# los materiales y la comida, centrados en un lienzo de 32x32 (los iconos de los objetos son todos de 32x32: partida.soltar_objeto)
+for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith(("pieza_", "comida_"))]:
     ruta = MUEBLES[nombre][1]
     pequena = Image.open(ruta).convert("RGBA")
     lienzo = Image.new("RGBA", (32, 32), (0, 0, 0, 0))

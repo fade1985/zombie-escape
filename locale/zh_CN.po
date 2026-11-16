@@ -2960,6 +2960,10 @@ msgid "sale de los muebles que se abren: armarios, mesillas, escritorios, cajas 
 msgstr "藏在可以打开的家具里：衣柜、床头柜、书桌、收银台、文件柜……"
 
 #: scripts/objetos.gd
+msgid "sale de las neveras y las encimeras de las cocinas. Es la comida favorita de: %s"
+msgstr "出自厨房的冰箱和料理台。这是这位最爱的食物：%s"
+
+#: scripts/objetos.gd
 msgid "lo suelta el gordo"
 msgstr "胖子会掉落"
 
@@ -3006,6 +3010,42 @@ msgstr "特殊材料"
 #: scripts/objetos.gd
 msgid "Material lanzable"
 msgstr "投掷材料"
+
+#: scripts/objetos.gd
+msgid "Dónut"
+msgstr "甜甜圈"
+
+#: scripts/objetos.gd
+msgid "Manzana"
+msgstr "苹果"
+
+#: scripts/objetos.gd
+msgid "Lata de judías"
+msgstr "豆子罐头"
+
+#: scripts/objetos.gd
+msgid "Yogur de fresa"
+msgstr "草莓酸奶"
+
+#: scripts/objetos.gd
+msgid "Bocadillo de chorizo"
+msgstr "香肠三明治"
+
+#: scripts/objetos.gd
+msgid "Bebida energética"
+msgstr "能量饮料"
+
+#: scripts/objetos.gd
+msgid "Porción de pizza"
+msgstr "一块披萨"
+
+#: scripts/objetos.gd
+msgid "Termo de café"
+msgstr "保温壶咖啡"
+
+#: scripts/objetos.gd
+msgid "Ensalada"
+msgstr "沙拉"
 
 #: scripts/objetos.gd
 msgid "Botiquín"
@@ -3673,6 +3713,14 @@ msgid "¡Puerta abierta! Salid de aquí"
 msgstr "门开了！快离开这儿"
 
 #: scripts/supervivientes.gd
+msgid "Hablar"
+msgstr "交谈"
+
+#: scripts/supervivientes.gd
+msgid "Le das: %s · %s te acompaña esta partida"
+msgstr "你给了：%s · %s这一局跟着你"
+
+#: scripts/supervivientes.gd
 msgid "%s te acompaña · %s"
 msgstr "%s跟着你 · %s"
 
@@ -3916,6 +3964,10 @@ msgstr "每到一层，告诉你打开头目房间的东西在哪里"
 #: scripts/supervivientes.gd
 msgid "¡NO ME DEJES AQUÍ!"
 msgstr "别把我丢在这儿！"
+
+#: scripts/supervivientes.gd
+msgid "Estoy muy débil"
+msgstr "我太虚弱了"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5218,12 +5270,28 @@ msgid "Al entrar en los trasteros"
 msgstr "进入储藏室时"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
-msgstr "这里住着你救出的幸存者，每人一间储藏室。"
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
+msgstr "你救出的幸存者住在这里，每人一间储藏室。有些人即使不跟着你也会帮你。"
 
 #: scripts/tutoriales.gd
-msgid "Arrímate a uno y te acompañará en las partidas siguientes (solo uno a la vez). Algunos te ayudan aunque no vengan contigo."
-msgstr "走近一个，他就会在之后的几局里陪你（一次只能一个）。有些幸存者即使不同行也会帮你。"
+msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
+msgstr "想让某人跟着你，就站到他面前按{usar}：前提是你带着他最爱的食物，就显示在他名字下面。他会跟你一局，之后回到自己的储藏室。"
+
+#: scripts/tutoriales.gd
+msgid "Comida favorita"
+msgstr "最爱的食物"
+
+#: scripts/tutoriales.gd
+msgid "Al encontrar la primera comida"
+msgstr "第一次找到食物时"
+
+#: scripts/tutoriales.gd
+msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favorita de alguno de los supervivientes de los trasteros."
+msgstr "厨房的冰箱和料理台里有时会有储藏室里某位幸存者最爱的食物。"
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
+msgstr "通关整栋楼后，它会转入储物箱。到他的储藏室用{usar}交给他，下一局他就会跟着你。"
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
