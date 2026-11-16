@@ -18,10 +18,12 @@ Opciones útiles:
 ```bash
 py tools/bot.py --peleas 3 --edificios apartamentos --jefes portera,gloton
 py tools/bot.py --niveles novato
+py tools/bot.py --misma-planta --peleas 6 --niveles normal,bueno
 py tools/bot.py --resumen 1611
 ```
 
-La última vuelve a hacer el resumen de una tanda ya jugada, sin jugar.
+`--misma-planta` pone a cada minijefe en la planta 2, para compararlos entre ellos sin la suerte del sorteo. La última
+vuelve a hacer el resumen de una tanda ya jugada, sin jugar.
 
 Para ver cómo juega, una pelea con fotos cada 3 segundos (salen en `capturas/bot-<jefe>-<nivel>-<s>.png`):
 
@@ -168,6 +170,39 @@ Lo que se sale de lo normal:
 - **Glotón:** la porquería hace un 20–36 %. Las veces que pierde, el Glotón se queda con un 30 % de vida.
 - **Directora:** la mitad del daño es de los oficinistas.
 - **Los tres finales:** no los gana nunca, ni el bueno. Les deja un 58–70 % de vida.
+
+#### 2 bis. Todos los minijefes en la planta 2 (comparación justa)
+
+Para quitar la suerte del sorteo, cada minijefe se ha peleado en la planta 2: 6 peleas por jefe y nivel, semilla 1622
+(`capturas/bot/resumen-1622.md`). Así sí se pueden comparar los jefes de un mismo edificio.
+
+| Edificio | Jefe | Gana normal | Gana bueno | Si pierde, al jefe le queda |
+|---|---|---|---|---|
+| Apartamentos | Gymbro | 4/6 | 6/6 | 24 % |
+| | Portera | 5/6 | 4/6 | 9–17 % |
+| | Glotón | 0/6 | 0/6 | 15–20 % |
+| | Bombero | 0/6 | 0/6 | 23–42 % |
+| Centro | Cocinero | 6/6 | 6/6 | - |
+| | Modista | 6/6 | 6/6 | - |
+| | Antidisturbios | 2/6 | 6/6 | 25 % |
+| | Mascota | 0/6 | 2/6 | 10–18 % |
+| Torre | Becario | 6/6 | 6/6 | - |
+| | Presentador | 0/6 | 2/6 | 8–18 % |
+| | Informático | 0/6 | 0/6 | 29–35 % |
+| | Directora | 0/6 | 0/6 | 62–73 % |
+
+Lo que sale:
+
+- **En cada edificio hay dos jefes fáciles y dos difíciles.** Como la planta de cada uno sale a sorteo, una partida
+  puede tocar los fáciles abajo y los difíciles arriba, o al revés. Así que **la dificultad de una partida depende
+  mucho del sorteo**.
+- **La directora es, con diferencia, la más dura:** el bot bueno le deja el 62–73 % de la vida y la mitad del daño es
+  de sus oficinistas. El siguiente más duro es el bombero (le deja el 23–42 %).
+- **El Glotón y la mascota se quedan cerca:** les deja un 10–20 %. Con una mutación o un arma mejor probablemente se
+  ganan.
+- **Cocinero, modista y becario** no le hacen sudar ni al bot normal. Puede que les falte algo.
+- En las peleas del becario, un 10–14 % del daño viene de algo que el bot no sabe nombrar («?»). Puede ser una trampa del
+  suelo o algo que no se apunta bien. Está por mirar.
 
 #### 3. Atascos (fallos del bot o del mapa, por revisar)
 
