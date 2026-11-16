@@ -180,6 +180,8 @@
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
 #   --tele-detras       la tele del salón se usa por delante, por detrás y por los lados, pero no desde el otro lado de la pared [prueba_larga.gd]
 #   --noticias          la tele del salón con la noticia (se enciende al limpiar, se usa con el clic) y VIDEOS.EXE con su reproductor [prueba_larga.gd]
+#   --voz-reportera     la voz de 8 bits de la reportera (M93): saca capturas/voz-reportera.wav para escucharla y cuenta
+#                       cuándo empieza y se calla (al acabar cada subtítulo, con el clic y en la pausa)  [prueba_larga.gd]
 #   --dosier-plantas    en qué plantas sale cada página del dosier (la 5, tras completar el edificio) y la tele que pone
 #                       seguidas las noticias que faltan                                [prueba_larga.gd]
 #   --coleccion         el programa Colecciones del ordenador (los sujetos): las pestañas, las páginas, la ficha
@@ -729,6 +731,10 @@ func empezar_prueba() -> void:
 	elif "--noticias" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_noticias()
+		get_tree().quit()
+	elif "--voz-reportera" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_voz_reportera()
 		get_tree().quit()
 	elif "--dosier-plantas" in args:
 		set_process(false)   # sin la prueba larga

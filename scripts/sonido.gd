@@ -36,7 +36,6 @@ const VERSIONES := 3
 # Cada efecto: sus notas [frecuencia, duración, onda, volumen, deslizar (Hz al final), retraso] y,
 # si no debe repetirse muy seguido, "hueco" (milisegundos mínimos entre dos). Los números, los del JS.
 # "fijo": suena siempre igual (los de los menús y los avisos y melodías: el jefe, la alarma, el latido...).
-# "varia": cuánto cambia el tono, si no es lo de siempre (TONO): la voz de la reportera, más, para que parezca que habla
 const EFECTOS := {
 	"disparo": {"hueco": 60, "notas": [[620, 0.05, "cuadrada", 0.012, -250]]},        # shoot
 	"golpe": {"hueco": 40, "notas": [[240, 0.06, "cuadrada", 0.025, -120]]},          # hit (zombi herido)
@@ -134,7 +133,6 @@ const EFECTOS := {
 	# el superviviente forzando la cerradura en la horda (aliado.trastear): dos clics metálicos cortos
 	"ganzua": {"hueco": 300, "notas": [[2300, 0.02, "cuadrada", 0.008], [1800, 0.025, "cuadrada", 0.007, 0, 0.07]]},
 	"click": {"fijo": true, "hueco": 200, "notas": [[1600, 0.03, "cuadrada", 0.025]]},
-	"voz": {"varia": 0.12, "hueco": 70, "notas": [[480, 0.035, "triangulo", 0.012, -60]]},              # la reportera de las noticias
 	"recargar": {"notas": [[520, 0.05, "cuadrada", 0.025, -200], [260, 0.06, "triangulo", 0.04, -80, 0.06]]},
 	"recargado": {"notas": [[300, 0.05, "cuadrada", 0.035, 200], [1400, 0.04, "cuadrada", 0.025, 0, 0.07]]},
 	"cartucho": {"notas": [[700, 0.04, "cuadrada", 0.025, -300], [1200, 0.03, "cuadrada", 0.02, 0, 0.05]]},
@@ -275,7 +273,7 @@ func tocar(nombre: String) -> void:
 		versiones.append(grabado)
 	else:
 		grabado = versiones.pick_random()
-	var varia: float = 0.0 if e.get("fijo", false) else e.get("varia", TONO)
+	var varia: float = 0.0 if e.get("fijo", false) else TONO
 	var v := voces[siguiente]
 	siguiente = (siguiente + 1) % VOCES
 	v.stream = grabado

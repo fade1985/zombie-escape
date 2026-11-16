@@ -2917,7 +2917,7 @@ func pulsar_en_panel(texto: String) -> void:
 # acierta con cada arma de cuerpo a cuerpo (su "parada"), uno que mata, el golpe de gracia, uno que no acierta (ninguno),
 # que dos golpes seguidos no se suman, el respiro tras un parón, que la pausa lo corta, el de una explosión que pilla a
 # alguien (y el de una que no, ninguno) y el de cuando le hacen daño a Johnny; y, como va sin sonido, el tono y el
-# volumen de cada efecto al sonar varias veces: los que cambian (golpe, porrazo, la voz de la reportera, que más),
+# volumen de cada efecto al sonar varias veces: los que cambian (golpe, porrazo),
 # los fijos (el clic y comprar) y las versiones grabadas (3 de la pistola, que lleva ruido; 1 del golpe). Foto:
 # captura-sensacion.png (el golpe del bate en pleno parón). Se cierra
 func probar_sensacion() -> void:
@@ -3027,8 +3027,6 @@ func probar_sensacion() -> void:
 	for nombre in ["golpe", "porrazo"]:
 		var lista: Array = tonos.call(nombre)
 		print("Tono y volumen de «%s»: %s · cambian, entre 0.94 y 1.06 y ±1.5 dB: %s (esperado: true)" % [nombre, lista, dentro.call(lista, Sonido.TONO)])
-	var voz: Array = tonos.call("voz")
-	print("Tono de la voz de la reportera: %s · cambia, entre 0.88 y 1.12: %s (esperado: true)" % [voz.map(func(t): return t[0]), dentro.call(voz, 0.12)])
 	for nombre in ["click", "compra"]:
 		var lista: Array = tonos.call(nombre)
 		print("Tono y volumen de «%s»: %s · siempre igual: %s (esperado: true)" % [nombre, lista[0],

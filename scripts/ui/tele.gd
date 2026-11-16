@@ -3,8 +3,9 @@
 # del edificio de la noticia (el número 14, el centro comercial o la torre, de PixelLab, tools/tele.py), con la policía, y la
 # reportera de Canal 8 (Marta Ruiz) con su micro, que mueve la boca al hablar y parpadea. Por código: "EN DIRECTO"
 # parpadeando, el logo, el rótulo con su nombre (solo al empezar, como en la tele de verdad), el del titular y la cinta de
-# abajo que corre. Debajo de la pantalla, los subtítulos: lo que dice la reportera, saliendo letra a letra (con un "bip"
-# de voz), por trozos de dos líneas.
+# abajo que corre. Debajo de la pantalla, los subtítulos: lo que dice la reportera, saliendo letra a letra,
+# por trozos de dos líneas. Mientras sale cada uno, la reportera «habla» con pitidos de 8 bits, sin palabras
+# (VozReportera, M93).
 # Se usa así:  var tele := Tele.new()  ·  tele.poner(noticia)   (una de Historia.NOTICIAS)
 # "escala" (antes de añadirla): lo que se agranda la pantalla de 288 × 164 (2 en la tele del salón, 1,5 en el reproductor).
 # Con tele.continuo = true no hace falta pulsar para seguir: pasa sola de un trozo al siguiente, como un vídeo.
@@ -52,6 +53,7 @@ var duracion := 0.0       # lo que dura la emisión entera, sin la nieve: las le
 var andado := 0.0         # lo que lleva de ella (la barra de avance: así va seguida, también en las esperas, 11 nov)
 var fines: Array[float] = []   # a qué altura de la emisión acaba cada trozo, con su espera (para la barra, al adelantar)
 var nieve := 0.0        # el ruido de cambiar de canal, al poner una noticia
+var voz := VozReportera.new()   # la voz de la reportera: solo suena mientras sale un subtítulo
 
 
 func _init() -> void:
@@ -69,6 +71,7 @@ func _ready() -> void:
 	pantalla.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pantalla.draw.connect(pintar_pantalla)
 	add_child(pantalla)
+	add_child(voz)
 	directo = rotulo(Idioma.t("EN DIRECTO"), Color.WHITE, Vector2(24, 4))
 	canal = rotulo(Idioma.t("CANAL 8"), AZUL, Vector2(PANTALLA.size.x - 76, 6))
 	nombre = rotulo("%s · %s" % [Historia.REPORTERA.to_upper(), Historia.canal().to_upper()], Color("#e8e8d0"),
@@ -139,6 +142,7 @@ func saltar() -> void:
 	if hablando():
 		letras = texto.get_total_character_count()
 		texto.visible_characters = -1
+		voz.callar()
 	elif trozo + 1 < trozos.size():
 		empezar_trozo(trozo + 1)
 	elif not noticia.is_empty():
@@ -156,6 +160,7 @@ func adelantar() -> void:
 	elif hablando():
 		letras = texto.get_total_character_count()
 		texto.visible_characters = -1
+		voz.callar()
 		espera = 0.0
 		andado = fines[trozo] - ENTRE_TROZOS
 	else:
@@ -168,6 +173,7 @@ func empezar_trozo(i: int) -> void:
 	texto.text = trozos[i] if i < trozos.size() else ""
 	texto.visible_characters = 0
 	letras = 0.0
+	voz.callar()
 
 
 # Lo que mide de alto una línea de los subtítulos: se mide con letras puestas (latinas, rusas y chinas, para que el
@@ -239,6 +245,7 @@ func reproducir() -> void:
 # La pausa de VIDEOS.EXE: se queda quieta donde estaba (play sigue)
 func pausar() -> void:
 	parada = true
+	voz.callar()
 
 
 # El botón de en medio del reproductor: pausa si está sonando y, si no, sigue (o empieza de nuevo si había acabado)
@@ -274,12 +281,13 @@ func _process(delta: float) -> void:
 			andado += delta
 		if hablando():
 			letras += delta * LETRAS_POR_SEGUNDO
+			voz.avanzar(delta)
 			var antes := texto.visible_characters
 			texto.visible_characters = mini(int(letras), texto.get_total_character_count())
 			if texto.visible_characters > antes:
-				var letra := texto.text[texto.visible_characters - 1]
-				if letra != " ":
-					Sonido.tocar("voz")
+				var n := texto.visible_characters
+				var letra := texto.text[n - 1]
+				voz.letra(letra, texto.text[n] if n < texto.text.length() else "")
 				boca = boca_de(letra)
 		else:
 			boca = 0

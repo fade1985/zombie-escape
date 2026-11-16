@@ -1406,6 +1406,121 @@ func probar_noticias() -> void:
 		g.paginas = antes.paginas)
 
 
+# Con "--captura --voz-reportera" (M93): la voz de 8 bits de la reportera de las noticias. Primero saca una muestra para
+# escucharla, capturas/voz-reportera.wav: la primera noticia de los Apartamentos entera, como sale en la tele, hecha con
+# las mismas sílabas y el mismo reparto que en el juego. Luego pone una tele de verdad y cuenta, fotograma a fotograma: cuándo
+# empieza a sonar la voz (con el primer subtítulo), cuánto tarda en callarse al acabar cada subtítulo (como mucho, lo que
+# dura una sílaba), que entre subtítulo y subtítulo no suena, cuántas sílabas dice por segundo, que se calla de golpe al
+# pasar la frase con el clic y en la pausa del reproductor (y que en pausa no vuelve a sonar) y que vuelve al seguir
+func probar_voz_reportera() -> void:
+	var n: Dictionary = Historia.noticias_de("apartamentos")[0]
+	var capa := CanvasLayer.new()
+	add_child(capa)
+	var tele := Tele.new()
+	tele.continuo = true
+	capa.add_child(tele)
+	tele.poner(n)
+	# 1) la muestra: cada letra a su ritmo (LETRAS_POR_SEGUNDO), a 60 fotogramas por segundo como el juego, y la espera
+	# entre trozos
+	var hz := VozReportera.MEZCLA
+	var mezcla := PackedFloat32Array()
+	var voz := VozReportera.new()   # (fuera del árbol: no suena, solo dice qué sílaba tocaría)
+	var t := 0.3
+	var silabas := 0
+	for trozo in tele.trozos:
+		var letras := 0.0
+		var dichas := 0
+		while dichas < trozo.length():
+			t += 1.0 / 60.0
+			letras += Tele.LETRAS_POR_SEGUNDO / 60.0
+			voz.avanzar(1.0 / 60.0)
+			var nuevas := mini(int(letras), trozo.length())
+			if nuevas > dichas:
+				dichas = nuevas
+				var clave := voz.letra(trozo[dichas - 1], trozo[dichas] if dichas < trozo.length() else "")
+				if clave != "":
+					silabas += 1
+					var m := VozReportera.muestras_de(clave)
+					var desde := int(t * hz)
+					if mezcla.size() < desde + m.size():
+						mezcla.resize(desde + m.size())
+					for i in m.size():
+						mezcla[desde + i] += m[i]
+		t += Tele.ENTRE_TROZOS
+	mezcla.resize(int(t * hz))
+	var datos := PackedByteArray()
+	datos.resize(mezcla.size() * 2)
+	for i in mezcla.size():
+		datos.encode_s16(i * 2, int(clampf(mezcla[i], -1.0, 1.0) * 32767.0))
+	var wav := AudioStreamWAV.new()
+	wav.format = AudioStreamWAV.FORMAT_16_BITS
+	wav.mix_rate = hz
+	wav.data = datos
+	DirAccess.make_dir_recursive_absolute(Captura.CARPETA)
+	wav.save_to_wav(Captura.CARPETA + "voz-reportera.wav")
+	print("Voz · muestra: capturas/voz-reportera.wav, %.1f s, %d trozos, %d sílabas" % [t, tele.trozos.size(), silabas])
+	# 2) en la tele de verdad
+	var reloj := 0.0
+	var empieza := -1.0          # cuándo suena por primera vez
+	var acaba_trozo := -1.0      # cuándo dejó de salir texto (el subtítulo entero en pantalla)
+	var tardanzas: Array = []    # lo que tarda en callarse tras cada subtítulo (s)
+	var en_silencio := 0         # fotogramas con sonido entre subtítulos, pasado lo que dura una sílaba
+	var arranques := 0           # sílabas que empiezan mientras habla
+	var hablado := 0.0           # los segundos con subtítulo saliendo
+	var sonaba := false
+	var hablaba := false
+	while reloj < 12.0 and tele.trozo < 2:
+		await get_tree().process_frame
+		var dt := get_process_delta_time()
+		reloj += dt
+		var habla := tele.hablando() and tele.nieve <= 0.0
+		var suena: bool = tele.voz.playing
+		if habla:
+			hablado += dt
+			if suena and empieza < 0.0:
+				empieza = reloj
+		if suena and (not sonaba or tele.voz.get_playback_position() < dt):
+			arranques += 1
+		if hablaba and not habla:
+			acaba_trozo = reloj
+		if acaba_trozo >= 0.0 and not suena:
+			tardanzas.append(snappedf(reloj - acaba_trozo, 0.01))
+			acaba_trozo = -1.0
+		if not habla and suena and acaba_trozo >= 0.0 and reloj - acaba_trozo > 0.12:
+			en_silencio += 1
+		sonaba = suena
+		hablaba = habla
+	print("Voz · empieza a sonar con el primer subtítulo: %s (a los %.2f s; esperado: true)" % [empieza > 0.0, empieza])
+	print("Voz · se calla al acabar cada subtítulo, en %s s (esperado: cada uno, 0,10 s como mucho)" % [tardanzas])
+	print("Voz · fotogramas con sonido entre subtítulos: %d (esperado: 0)" % en_silencio)
+	print("Voz · sílabas por segundo mientras habla: %.1f (esperado: entre 6 y 12)" % (arranques / maxf(hablado, 0.01)))
+	# 3) el clic de pasar la frase: se calla en ese mismo momento
+	while not (tele.hablando() and tele.voz.playing):
+		await get_tree().process_frame
+	tele.adelantar()
+	var tras_clic: bool = tele.voz.playing
+	await get_tree().create_timer(0.3).timeout
+	print("Voz · al pasar la frase con el clic: suena %s y luego %s (esperado: false, false)" % [tras_clic, tele.voz.playing])
+	# 4) la pausa del reproductor: se calla y no vuelve a sonar hasta seguir
+	while not (tele.hablando() and tele.voz.playing):
+		await get_tree().process_frame
+	tele.pausar()
+	var tras_pausa: bool = tele.voz.playing
+	var en_pausa := 0
+	for i in 40:
+		await get_tree().process_frame
+		if tele.voz.playing:
+			en_pausa += 1
+	tele.reproducir()
+	var vuelve := false
+	for i in 60:
+		await get_tree().process_frame
+		vuelve = vuelve or tele.voz.playing
+	print("Voz · en la pausa: suena %s, fotogramas con sonido %d; al seguir, vuelve %s (esperado: false, 0, true)" % [
+		tras_pausa, en_pausa, vuelve])
+	capa.queue_free()
+
+
 # Con "--captura --dosier-plantas" (bloque I): en qué plantas puede salir cada página del dosier en los tres edificios (la
 # 2 desde la primera, la 3 desde la segunda, la 4 en la tercera; la 5 solo con el edificio completado y en la planta
 # sorteada), la tele que se enciende en una planta sin científico y la tele que pone seguidas todas las noticias que
