@@ -329,6 +329,10 @@ MUEBLES = {
     # cristales, los dos de los lados fijos y los dos del medio correderos. Entera; la parte en marco y hojas
     # tools/puerta_super.py
     "puerta_super": ("assets/sources/puerta-super-gpt.webp", "assets/sprites/puerta-super.png", 64, 40, False),
+    # los dos escaparates del supermercado, a los lados de su puerta automática (mapa.poner_escaparates; 17 nov): a la
+    # izquierda, el de bebidas; a la derecha, el de comida (el "-derecha"). Del mismo ancho que el de antes
+    "escaparate_super": ("assets/sources/escaparate-super-bebidas-gpt.webp", "assets/sprites/escaparate-supermercado.png", 53, 36, False),
+    "escaparate_super_derecha": ("assets/sources/escaparate-super-comida-gpt.webp", "assets/sprites/escaparate-supermercado-derecha.png", 53, 37, False),
 }
 
 

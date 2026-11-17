@@ -1144,7 +1144,14 @@ func poner_escaparates() -> void:
 		var nodo := Node2D.new()
 		nodo.position = Vector2(e.x, MURO + 1)
 		var dibujo := Sprite2D.new()
-		dibujo.texture = load("res://assets/sprites/escaparate-%s.png" % e.tienda)
+		# (la tienda que tiene un escaparate distinto a cada lado, como el súper, bebidas y comida: el de la derecha de su
+		# puerta es escaparate-<tipo>-derecha)
+		var ruta := "res://assets/sprites/escaparate-%s.png" % e.tienda
+		var derecha := "res://assets/sprites/escaparate-%s-derecha.png" % e.tienda
+		var su_puerta: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.get("neon", "") == e.tienda)
+		if ResourceLoader.exists(derecha) and not su_puerta.is_empty() and e.x > su_puerta[0].en:
+			ruta = derecha
+		dibujo.texture = load(ruta)
 		dibujo.centered = false
 		dibujo.scale = Vector2(2, 2)
 		var t := dibujo.texture.get_size()

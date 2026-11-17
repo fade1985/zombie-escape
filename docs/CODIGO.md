@@ -1013,7 +1013,9 @@ en una línea.
   marco (caja del motor, cristales fijos, carril) y las dos hojas del medio. `puerta.gd` (`es_super`, `puerta_super`) pinta el
   oscuro de dentro, las hojas corridas y el marco encima: al acercarse Johnny (su sensor, una zona grande delante) se abren si
   la tienda no está cerrada con llave (con llave, la lucecita del sensor en rojo). Sus escaparates van más separados
-  (`Planta.escaparate_a`). Prueba: `--captura --edificio centro --puerta-super`.
+  (`Planta.escaparate_a`) y son distintos, también de GPT (`muebles_gpt.py escaparate_super escaparate_super_derecha`):
+  bebidas a la izquierda y comida a la derecha (una tienda con `escaparate-<tipo>-derecha.png` lo usa a la derecha de su
+  puerta: `mapa.poner_escaparates`). Prueba: `--captura --edificio centro --puerta-super`.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
