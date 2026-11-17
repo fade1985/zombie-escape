@@ -54,6 +54,10 @@ ZOMBIS = {
     # el jefe de seguridad (el guardia de la llave maestra del centro comercial, 17 nov): ropa gris marengo muy oscura,
     # que con 5 se queda entera; su referencia de estilo fue el personaje.webp del vecino (2000 de ancho)
     "guardia": ("assets/sources/zombi-guardia-gpt", "assets/sources/zombi-guardia-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
+    # el personal de seguridad del centro comercial (17 nov: un hombre y una mujer, como los de la foto del dueño, en vez
+    # del vigilante de PixelLab): como el jefe, la ropa gris marengo muy oscura y la referencia de estilo, el vecino
+    "vigilante": ("assets/sources/zombi-vigilante-gpt", "assets/sources/zombi-vigilante-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
+    "vigilante-mujer": ("assets/sources/zombi-vigilante-mujer-gpt", "assets/sources/zombi-vigilante-mujer-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
 FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
 # Los que corren (el crío): al andar, la cabeza va a la altura que la pone GPT (casi siempre la misma) y los pies se
@@ -65,9 +69,11 @@ CORRE = False
 LIENZO_ANDAR = {"rapido": 64, "lento": 64}
 # El tamaño, si no es el de la referencia: el arrastrado, al 80 % (9 nov: tendido en el suelo medía casi lo que el vecino
 # de pie y, a su lado, se veía demasiado grande). Las animaciones se miden por el dibujo quieto, así que lo siguen solas
-TAMANO = {"lento": 0.8, "policia": 1.07, "guardia": 0.87}
+TAMANO = {"lento": 0.8, "policia": 1.07, "guardia": 0.87, "vigilante": 0.93, "vigilante-mujer": 0.79}
 # El jefe de seguridad, al 87 % (17 nov): GPT lo dibujó más grande que al vecino y, a escala normal, medía 53 de alto y no
 # cabía en el lienzo de 48 (se le cortaba la gorra); así mide 46, como el vecino, pero más ancho de hombros
+# Y el personal de seguridad (17 nov), por lo mismo: él, a escala normal, mediría 48 (tocaba el borde) y ella 56; así,
+# él 45, como el vecino, y ella 44, algo más baja
 # Y el ensanchado (10 nov): el policía de GPT salía más estrecho que Johnny (24 de ancho contra 28 y 12 de perfil contra 16) y
 # se veía enclenque; se le ensancha un 20 % al reducir (todo, también la gorra y los brazos), y de alto, un 7 %
 ESTIRO = {"policia": 1.2}
