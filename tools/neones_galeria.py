@@ -17,10 +17,10 @@ from PIL import Image, ImageDraw
 NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
           'radiocasete': (32, 'galeria/neon-radiocasete-gpt.webp', False),
           'tocadiscos': (28, 'galeria/neon-tocadiscos-gpt.webp', False),
-          'farmacia-cruz': (40, 'centro/neon-farmacia-cruz-gpt.webp', True),
-          'farmacia-botella': (38, 'centro/neon-farmacia-botella-gpt.webp', False)}
+          'farmacia-cruz': (28, 'centro/neon-farmacia-cruz-gpt.webp', True),
+          'farmacia-botella': (27, 'centro/neon-farmacia-botella-gpt.webp', False)}
 # de dónde saltan sus chispas, en píxeles de la imagen de GPT (se dicen ya en los del dibujo, para neon_galeria.gd)
-CHISPAS = {'farmacia-cruz': (40, 448),        # la esquina de dentro de arriba a la izquierda, donde se juntan los brazos
+CHISPAS = {'farmacia-cruz': (448, 448),        # la esquina de dentro de arriba a la izquierda, donde se juntan los brazos
            'farmacia-botella': (628, 1078)}    # el hueco entre las dos puntas del tubo, abajo
 TUBO = np.array([77, 71, 84], float)   # el tubo apagado (el mismo que las letras fundidas de neon.gd)
 LED_MUERTO = np.array([44, 62, 50], float)   # un LED apagado de la cruz: gris verdoso

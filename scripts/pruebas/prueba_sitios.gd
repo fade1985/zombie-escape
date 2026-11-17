@@ -1003,7 +1003,7 @@ func probar_puerta_super() -> void:
 	Captura.foto("captura-puerta-super-medio.png")
 	# los neones que van en vez de los escaparates (la farmacia): chispazo a mano en los dos, fotos seguidas, y luego los dos con
 	# la luz ida
-	var neones: Array = mapa.cosas.get_children().filter(func(n): return n.get("chispas_en") != null and n.chispas != null)
+	var neones: Array = mapa.cosas.find_children("*", "Node2D", true, false).filter(func(n): return n.get("chispas_en") != null and n.chispas != null)
 	if not neones.is_empty():
 		var vista := puerta.position + Vector2(0, -40)
 		johnny.position = puerta.position + Vector2(0, 200)

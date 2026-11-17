@@ -1132,11 +1132,13 @@ func poner_peligros() -> void:
 		peligros.append(nodo)
 
 
-# Las tiendas que, en vez de escaparates, tienen un neón a cada lado de su puerta (neon_galeria.gd; 17 nov, el dueño): el de
-# la izquierda y el de la derecha, cada uno con su dibujo (neon-<nombre>.png: tools/neones_galeria.py), el color de su luz,
-# el píxel de donde saltan sus chispas y la altura de su medio (con el pie donde iba el del escaparate)
-const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), Vector2(12, 12), 48.0],
-	["farmacia-botella", Color("#4dff6a"), Vector2(13, 37), 47.0]]}
+# Las tiendas que tienen un neón dentro de cada escaparate, por detrás del cristal (neon_galeria.gd; 17 nov, el dueño): el
+# escaparate vacío, partido en el fondo (debajo del neón) y los reflejos del cristal (encima): escaparate-<tipo>-fondo.png y
+# escaparate-<tipo>-cristal.png, de tools/escaparate_farmacia.py. El neón de la izquierda y el de la derecha, cada uno con su
+# dibujo (neon-<nombre>.png: tools/neones_galeria.py), el color de su luz, el píxel de donde saltan sus chispas y la altura
+# de su medio (para que quede en medio del cristal, a píxel justo con el escaparate)
+const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), Vector2(9, 9), 51.0],
+	["farmacia-botella", Color("#4dff6a"), Vector2(9, 26), 49.0]]}
 # Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del
 # rodapié y, a veces, un salpicón o unas huellas de sangre en el cristal. Van en el pie de la cara del muro, como
 # los apliques, para ordenarse con ella.
@@ -1150,17 +1152,31 @@ func poner_escaparates() -> void:
 		var su_puerta: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.get("neon", "") == e.tienda)
 		var a_la_derecha: bool = not su_puerta.is_empty() and e.x > su_puerta[0].en
 		if ESCAPARATES_NEON.has(e.tienda):
-			# (la farmacia: en vez de escaparates, un neón a cada lado de la puerta)
+			# (la farmacia: el escaparate vacío con un neón dentro: el fondo, el neón y, encima, los reflejos del cristal)
 			var cual: Array = ESCAPARATES_NEON[e.tienda][1 if a_la_derecha else 0]
+			var vitrina := Node2D.new()
+			vitrina.position = Vector2(e.x, MURO + 1)
+			var capas := []
+			for parte in ["fondo", "cristal"]:   # no-tr (nombres de archivo)
+				var capa := Sprite2D.new()
+				capa.texture = load("res://assets/sprites/escaparate-%s-%s.png" % [e.tienda, parte])
+				capa.centered = false
+				capa.scale = Vector2(2, 2)
+				var tam := capa.texture.get_size()
+				capa.position = Vector2(-tam.x, -9 - tam.y * 2)   # el pie, 4 píxeles por encima del suelo (el rodapié)
+				capas.append(capa)
 			var neon := NEON_GALERIA.new()
 			neon.nombre = cual[0]
 			neon.color = cual[1]
 			neon.chispas_en = cual[2]
 			neon.medio = cual[3]
+			neon.halo = false
 			neon.tramo = 7.0   # (fallan menos que los de la pared: de vez en cuando, como el letrero del súper)
 			neon.semilla = fposmod(float(sitio.get("surtido", 0)) * 0.001 + e.x * 0.0137, 1.0)
-			neon.position = Vector2(e.x, MURO + 1)
-			cosas.add_child(neon)
+			vitrina.add_child(capas[0])
+			vitrina.add_child(neon)
+			vitrina.add_child(capas[1])
+			cosas.add_child(vitrina)
 			continue
 		var nodo := Node2D.new()
 		nodo.position = Vector2(e.x, MURO + 1)

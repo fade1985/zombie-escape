@@ -339,6 +339,9 @@ MUEBLES = {
     "letrero_super": ("assets/sources/letrero-super-arreglado.png", "assets/sprites/letrero-supermercado.png", 100, 17, False,
                       (), [(1238, 482)]),
     "escaparate_super_derecha":("assets/sources/escaparate-super-comida-gpt.webp", "assets/sprites/escaparate-supermercado-derecha.png", 53, 37, False),
+    # el escaparate de la farmacia, vacío, como el del súper pero más estrecho (17 nov, el dueño): dentro, por detrás del
+    # cristal, va uno de sus neones (la cruz o la botella). Lo parte en fondo y reflejos tools/escaparate_farmacia.py
+    "escaparate_farmacia": ("assets/sources/centro/escaparate-farmacia-vacio-gpt.webp", "assets/sprites/escaparate-farmacia-vacio.png", 44, 38, False),
 }
 
 

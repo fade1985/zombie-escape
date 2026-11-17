@@ -3,9 +3,9 @@
 # los Apartamentos, parpadea y falla de vez en cuando (la misma cuenta, lampara.gd). Cuando falla se ve el tubo apagado.
 # Se ve aunque el pasillo esté a oscuras (no le afecta la penumbra). Lo pone mapa.gd (poner_neones_galeria); el nodo va en
 # el pie del muro, para ordenarse con la cara de la pared.
-# También los dos de la farmacia, que van en vez de sus escaparates (17 nov, el dueño: la cruz de LEDs y la botella; los pone
-# mapa.poner_escaparates): esos fallan menos, de vez en cuando, y al fallar (y sueltos, cada pocos segundos) sueltan
-# chispas (chispas_neon.gd), como el letrero del súper.
+# También los dos de la farmacia, dentro de sus escaparates, por detrás del cristal (17 nov, el dueño: la cruz de LEDs y la
+# botella; los pone mapa.poner_escaparates): esos fallan menos, de vez en cuando, y al fallar (y sueltos, cada pocos
+# segundos) sueltan chispas (chispas_neon.gd), como el letrero del súper.
 extends Node2D
 
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
@@ -20,6 +20,7 @@ var semilla := 0.5
 var medio := MEDIO              # a qué altura va su centro (los de la farmacia, más bajos: donde iba el escaparate)
 var tramo := 0.0                # el de su lámpara (lampara.gd): 0, el de siempre; más largo, falla menos
 var chispas_en := Vector2(-1, -1)   # el píxel del dibujo de donde saltan sus chispas (-1: sin chispas)
+var halo := true                # sin él, los de dentro de un escaparate (no se sale del cristal)
 var encendido: Texture2D
 var apagado: Texture2D
 var luz: Node2D
@@ -99,7 +100,7 @@ func _draw() -> void:
 	draw_texture_rect(apagado, rect, false)
 	if b > 0.02:
 		# el halo: el mismo dibujo, transparente y corrido un poco a cada lado
-		for d in [Vector2(-2, 0), Vector2(2, 0), Vector2(0, -2), Vector2(0, 2)]:
+		for d in ([Vector2(-2, 0), Vector2(2, 0), Vector2(0, -2), Vector2(0, 2)] if halo else []):
 			draw_texture_rect(encendido, Rect2(rect.position + d, tam), false, Color(1, 1, 1, 0.22 * b))
 		draw_texture_rect(encendido, rect, false, Color(1, 1, 1, b))
 	if destello > 0.0:
