@@ -66,7 +66,7 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
   arañazos y manchas granate pequeñas. Sin alfombra (`PASILLOS` en `mapa.gd`). Originales en `assets/sources/suelos/pasillo-suelo-gpt.webp`
   y `pasillo-pared-gpt.webp`; se pasan con `py tools/portal_gpt.py`. Prompts: vista cenital pura o pared de frente, cuadrícula exacta
   de baldosas, sin costuras, y «manchas granate como óxido seco» (GPT rechaza la palabra sangre). Se mira con `--captura --pasillo`.
-- **Galería del centro comercial, desde el 17 nov (pendiente de visto bueno):** un centro comercial de los 80 abandonado, hecho
+- **Galería del centro comercial, desde el 17 nov (con visto bueno):** un centro comercial de los 80 abandonado, hecho
   con GPT a partir de una foto del dueño: baldosa pequeña en tonos pastel (gris, crema, lila, malva, rosa y morado) puesta en
   mosaico de escocés en diagonal, como la foto (GPT las repartió al azar; la herramienta recolorea cada baldosa según
   `TIRAS` y `MOSAICO`, que se repite cada 10, y solo se queda con su dibujo: grietas, rayas, motas) (20 × 20 baldosas de 8,
