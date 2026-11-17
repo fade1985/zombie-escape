@@ -354,6 +354,8 @@ MUEBLES = {
     "cartel_open_pequeno": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open-pequeno.png", 17, 15, False),
     # la puerta doble de cristal sin marco del restaurante (17 nov, el dueño): dos hojas con pinzas de acero y barras largas
     "puerta_restaurante": ("assets/sources/centro/puerta-restaurante-gpt.webp", "assets/sprites/puerta-restaurante.png", 36, 43, False),
+    # la puerta doble de acero pulido de la joyería (17 nov, el dueño): ventanas altas de cristal, barras largas y cerradura en el medio
+    "puerta_joyeria": ("assets/sources/centro/puerta-joyeria-gpt.webp", "assets/sprites/puerta-joyeria.png", 34, 43, False),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 

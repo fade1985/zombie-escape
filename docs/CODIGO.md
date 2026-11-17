@@ -1076,6 +1076,9 @@ en una línea.
 - **El letrero de la tienda de ropa** (17 nov, el dueño): «Fashion» (F mayúscula) en tubos de neón azul-cian de un solo trazo, con una línea rosa debajo (de GPT,
   `assets/sources/centro/letrero-ropa-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-ropa` (66x21, y el apagado) y
   `py tools/letrero_halo.py ropa`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea rosa).
+- **La puerta de la joyería** (17 nov, el dueño): doble, de acero inoxidable pulido, con una ventana alta de cristal en cada hoja, dos barras largas en el medio, el
+  cilindro de la cerradura y la caja del cierrapuertas arriba (de GPT, `assets/sources/centro/puerta-joyeria-gpt.webp`; `muebles_gpt.py puerta_joyeria`, 34x43;
+  `puerta.gd`, `JOYERIA`). Fija. Para probarla, `--puerta-super joyeria` le pone la joyería a la planta (no la sortea nadie: `Planta.joyeria_planta`).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

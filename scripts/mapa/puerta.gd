@@ -19,6 +19,8 @@ const FERRETERIA := preload("res://assets/sprites/puerta-ferreteria.png")
 const ELECTRONICA := preload("res://assets/sprites/puerta-electronica.png")
 # La puerta doble de cristal sin marco del restaurante (17 nov, el dueño; de GPT, muebles_gpt.py puerta_restaurante): 36 × 43 píxeles
 const RESTAURANTE := preload("res://assets/sprites/puerta-restaurante.png")
+# La puerta doble de acero pulido de la joyería (17 nov, el dueño; de GPT, muebles_gpt.py puerta_joyeria): 34 × 43 píxeles
+const JOYERIA := preload("res://assets/sprites/puerta-joyeria.png")
 const NEON_MARCO := preload("res://scripts/mapa/neon_galeria.gd")
 const DIBUJO := {"tienda": preload("res://assets/sprites/puerta-tienda.png"),
 	"servicio": preload("res://assets/sprites/puerta-servicio.png")}
@@ -267,6 +269,9 @@ func _draw() -> void:
 				return
 			if centro and salida.get("neon", "") in ["restaurante", "ropa"]:   # (la de la ropa, la misma: el dueño, 17 nov)
 				draw_texture_rect(RESTAURANTE, Rect2(-36, -86, 72, 86), false)
+				return
+			if centro and salida.get("neon", "") == "joyeria":
+				draw_texture_rect(JOYERIA, Rect2(-34, -86, 68, 86), false)
 				return
 			if centro and salida.get("neon", "") == "electronica":
 				draw_texture_rect(ELECTRONICA, Rect2(-28, -80, 56, 80), false)

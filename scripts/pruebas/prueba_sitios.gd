@@ -958,6 +958,8 @@ func probar_puerta_super() -> void:
 		var num := 1 + intento % 4
 		if intento >= 4:   # (las 4 primeras plantas, con la semilla de siempre; si no sale, otras semillas)
 			Planta.semilla = 1000 + intento
+		if tienda == "joyeria":   # (a la joyería no la sortea nadie: se la pone en esta planta)
+			Planta.joyeria_planta = num
 		nueva_planta(num)
 		if not planta.sitios[0].salidas.any(func(s): return s.dir == "arriba" and s.get("neon", "") == tienda):
 			continue
