@@ -1034,7 +1034,7 @@ func probar_puerta_super() -> void:
 			n.queue_redraw()
 		await get_tree().create_timer(0.1).timeout
 		Captura.foto("captura-puerta-super-neones-apagados.png")
-	if not preload("res://scripts/mapa/neon.gd").CHISPAS_EN.has(tienda):   # (sin letrero con chispas, como la farmacia aún: acaba aquí)
+	if not preload("res://scripts/mapa/neon.gd").CHISPAS_EN.has(tienda):   # (sin letrero con chispas: acaba aquí)
 		Luz.apagada = not Luz.apagada
 		$Pantalla.show()
 		camara.zoom = Vector2.ONE
@@ -1047,7 +1047,7 @@ func probar_puerta_super() -> void:
 		if n.get("tipo") == tienda and n.get("chispas") != null:
 			letrero = n
 	if letrero == null:
-		print("ERROR DE LA PRUEBA: el letrero del súper no tiene chispas")
+		print("ERROR DE LA PRUEBA: el letrero de «%s» no tiene chispas" % tienda)
 		get_tree().quit(1)
 		return
 	letrero.chispazo()
@@ -1063,14 +1063,15 @@ func probar_puerta_super() -> void:
 			apagones += 1
 			ultimo = i * 0.01
 		antes = b
-	print("Letrero del súper: chispas %d · se le va la luz %d veces en un minuto (esperado: unas 3-6)" % [
-		letrero.chispas.amount, apagones])
+	print("Letrero de «%s»: chispas %d · se le va la luz %d veces en un minuto (esperado: unas 3-6)" % [
+		tienda, letrero.chispas.amount, apagones])
 	# y con la luz ida: el letrero y su lámpara, llevados a un momento de apagón
+	var mas_oscuro := 0.0   # (el momento del minuto en que luce menos)
 	for i in 6000:
-		if letrero.luz.brillo(i * 0.01) < 0.1:
-			letrero.tiempo = i * 0.01
-			letrero.luz.tiempo = i * 0.01
-			break
+		if letrero.luz.brillo(i * 0.01) < letrero.luz.brillo(mas_oscuro):
+			mas_oscuro = i * 0.01
+	letrero.tiempo = mas_oscuro
+	letrero.luz.tiempo = mas_oscuro
 	letrero.set_process(false)
 	letrero.luz.set_process(false)
 	letrero.queue_redraw()

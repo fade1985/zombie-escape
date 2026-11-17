@@ -12,14 +12,17 @@ const TUBO := Color(0.3, 0.28, 0.33)   # una letra fundida: el tubo de cristal a
 
 # Las tiendas que, en vez del neón de letras, tienen un letrero dibujado de letras corpóreas iluminadas por detrás (de GPT:
 # assets/sprites/letrero-<tipo>.png, con su resplandor, letrero-<tipo>-halo.png de tools/letrero_halo.py), con el color de
-# su luz. Van en inglés, iguales en todos los idiomas, como una marca (17 nov, el dueño)
-const LETREROS := {"supermercado": Color("#3d9bff")}
+# su luz. Van en inglés, iguales en todos los idiomas, como una marca (17 nov, el dueño). El de la farmacia, PHARMACY, es de
+# tubos de neón (tools/neones_galeria.py letrero-farmacia): si tiene letrero-<tipo>-apagado.png, al fallar se ven los tubos
+# de cristal sin luz en vez de las letras
+const LETREROS := {"supermercado": Color("#3d9bff"), "farmacia": Color("#4dff6a")}
 const LETRERO_PIE := 98.0    # el letrero dibujado: a qué altura va su pie, por encima del pie del muro
 const HALO_MARGEN := 8       # los píxeles de más del resplandor por cada lado (tools/letrero_halo.py)
 # De dónde saltan las chispas (17 nov, el dueño): el píxel del letrero donde está suelta la letra caída (en el del súper,
-# la esquina de abajo de la primera E, que cuelga de sus tornillos). Saltan cada vez que se va la luz del letrero (un
-# cortocircuito) y, sueltas, cada CHISPAS_CADA segundos más o menos
-const CHISPAS_EN := {"supermercado": Vector2(33, 15)}
+# la esquina de abajo de la primera E, que cuelga de sus tornillos; en el de la farmacia, la punta rota del tubo de la Y,
+# que cuelga torcida). Saltan cada vez que se va la luz del letrero (un cortocircuito) y, sueltas, cada CHISPAS_CADA
+# segundos más o menos
+const CHISPAS_EN := {"supermercado": Vector2(33, 15), "farmacia": Vector2(81, 18)}
 const CHISPAS_CADA := Vector2(1.5, 4.5)
 const CHISPAS_OIDO := 360.0  # hasta qué distancia de Johnny suenan
 var chispas: CPUParticles2D
@@ -33,6 +36,7 @@ var texto := "TIENDA"   # no-tr (lo cambia siempre mapa.gd, ya traducido: Tienda
 var tipo := ""          # el tipo de tienda (lo pone mapa.gd): si está en LETREROS, su letrero dibujado
 var letrero: Texture2D
 var halo: Texture2D
+var tubos_apagados: Texture2D   # el letrero de tubos de neón (la farmacia): los tubos sin luz, para cuando falla
 var color := Color("#ff4fa0")
 var semilla := 0.5
 var iluminado := false       # en Torre Velaria: un rótulo de departamento iluminado por detrás (placa blanca y fría), no un neón
@@ -48,6 +52,9 @@ func _ready() -> void:
 	if LETREROS.has(tipo):
 		letrero = load("res://assets/sprites/letrero-%s.png" % tipo)
 		halo = load("res://assets/sprites/letrero-%s-halo.png" % tipo)
+		var ruta_apagado := "res://assets/sprites/letrero-%s-apagado.png" % tipo
+		if ResourceLoader.exists(ruta_apagado):
+			tubos_apagados = load(ruta_apagado)
 		color = LETREROS[tipo]
 		if CHISPAS_EN.has(tipo):
 			poner_chispas()
@@ -154,9 +161,14 @@ func dibujar_letrero(b: float) -> void:
 	var luz_halo := 1.0 if b > 0.6 else 0.3 * clampf(b, 0.0, 1.0)
 	draw_texture_rect(halo, Rect2(x - HALO_MARGEN * 2, y - HALO_MARGEN * 2, (t.x + HALO_MARGEN * 2) * 2,
 		(t.y + HALO_MARGEN * 2) * 2), false, Color(color.r, color.g, color.b, 0.75 * luz_halo))
-	# (las letras, algo más oscuras con la luz ida: su canto azul claro brilla con la luz de detrás)
-	var sombra := lerpf(0.55, 1.0, luz_halo)
-	draw_texture_rect(letrero, Rect2(x, y, t.x * 2, t.y * 2), false, Color(sombra, sombra, sombra))
+	if tubos_apagados:
+		# (de tubos de neón: los tubos de cristal sin luz y, encima, la luz verde, que se va con la de su lámpara)
+		draw_texture_rect(tubos_apagados, Rect2(x, y, t.x * 2, t.y * 2), false)
+		draw_texture_rect(letrero, Rect2(x, y, t.x * 2, t.y * 2), false, Color(1, 1, 1, luz_halo))
+	else:
+		# (las letras, algo más oscuras con la luz ida: su canto azul claro brilla con la luz de detrás)
+		var sombra := lerpf(0.55, 1.0, luz_halo)
+		draw_texture_rect(letrero, Rect2(x, y, t.x * 2, t.y * 2), false, Color(sombra, sombra, sombra))
 	if destello > 0.0:
 		# el fogonazo en la letra suelta
 		var a := destello / 0.1
