@@ -1048,6 +1048,10 @@ en una línea.
   izquierda de la puerta, un panel de herramientas colgadas (dibujo fijo, `panel-herramientas.png`, `muebles_gpt.py panel_herramientas`);
   a la derecha, un neón de llave, destornillador y martillo (`neones_galeria.py ferreteria-herramientas`), sin verja (no se apreciaba). Capas, de abajo arriba: fondo,
   herramientas, reflejos del cristal y verja (`mapa.ESCAPARATES_NEON`; un color transparente = dibujo fijo, sin parpadeo).
+- **El letrero de la ferretería** (17 nov, el dueño): «HARDWARE» en tubos de neón azul claro, de GPT
+  (`assets/sources/centro/letrero-ferreteria-gpt.webp`, solo las letras), en inglés como los demás. `py tools/neones_galeria.py letrero-ferreteria`
+  (sale `letrero-ferreteria.png`, 91x18, y el apagado) y `py tools/letrero_halo.py ferreteria`; en `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas
+  saltan de la esquina de abajo de la última E). Prueba: `--puerta-super ferreteria`.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
