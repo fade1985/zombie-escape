@@ -1141,6 +1141,8 @@ const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), 51.0
 	["farmacia-botella", Color("#4dff6a"), 49.0]],
 	# la ferretería (17 nov, el dueño): a la izquierda, un panel de herramientas (dibujo fijo: panel-herramientas.png, sin color
 	# ni parpadeo) y, a la derecha, un neón de herramientas; los dos con la verja por delante (escaparate-verja: verja-escaparate.png)
+	# la tienda de electrónica (17 nov, el dueño): el ordenador rosa a la izquierda y el mando de consola de colores a la derecha
+	"electronica": [["electronica-ordenador", Color("#ff4fd0"), 50.0], ["electronica-mando", Color("#a9b8ff"), 50.0]],
 	"ferreteria": [["panel-herramientas", Color.TRANSPARENT, 50.0],
 	["ferreteria-herramientas", Color("#9fd8ff"), 50.0]]}
 # Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del

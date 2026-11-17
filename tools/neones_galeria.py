@@ -24,6 +24,8 @@ NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
           'ferreteria-herramientas': (25, 'centro/neon-ferreteria-herramientas-gpt.webp', False),
           'letrero-ferreteria': (18, 'centro/letrero-ferreteria-gpt.webp', False),
           'electronica-marco': (47, 'centro/marco-electronica-gpt.webp', False),
+          'electronica-ordenador': (22, 'centro/neon-electronica-ordenador-gpt.webp', False),
+          'electronica-mando': (22, 'centro/neon-electronica-mando-gpt.webp', False),
           'letrero-farmacia': (19, 'centro/letrero-farmacia-gpt.webp', False)}
 ANCHOS = {'electronica-marco': 44}   # (un ancho fijo, más ancho que su proporción: el marco rodea una puerta de 28)
 TUBO = np.array([77, 71, 84], float)   # el tubo apagado (el mismo que las letras fundidas de neon.gd)

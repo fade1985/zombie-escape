@@ -1056,6 +1056,9 @@ en una línea.
   su cartel «OPEN» pequeño: `muebles_gpt.py puerta_electronica cartel_open_pequeno` y `puerta_ferreteria.py electronica`), dentro de un marco de
   neón rosa y cian abierto por abajo (de GPT, `assets/sources/centro/marco-electronica-gpt.webp`; `neones_galeria.py electronica-marco`, 44x47, con
   un ancho fijo `ANCHOS`). `puerta.gd` lo pone de hijo (`NEON_MARCO`, `neon_galeria.gd`): falla de vez en cuando, sin halo. Fija, no se abre sola.
+- **Los escaparates de la tienda de electrónica** (17 nov, el dueño): como los de la farmacia (`escaparate_farmacia.py electronica`, el mismo marco
+  vacío), con un neón de GPT dentro, detrás del cristal: el ordenador rosa a la izquierda y el mando de consola (azul lavanda, con el anillo verde, la
+  barra amarilla y la cruceta rosa) a la derecha. `neones_galeria.py electronica-ordenador electronica-mando`; `mapa.ESCAPARATES_NEON`.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
