@@ -138,7 +138,8 @@ var dueno := PackedInt32Array()   # de quién es cada casilla: su habitación (0
 var estilos := {}                 # habitación -> {suelo, pared, techo} (texturas)
 var tapa: Texture2D
 var alfombra: Texture2D
-var cosas: Node2D                 # personajes, muebles y caras de muro, ordenados por su "y"
+var marco: Texture2D              # el borde de baldosa clara de la galería del centro comercial (dibujar_fondo)
+var cosas: Node2D                # personajes, muebles y caras de muro, ordenados por su "y"
 var puertas: Array = []           # una por salida, en el mismo orden
 var hojas: Array = []             # las puertas de dentro (puerta_bano.gd), una por hueco entre habitaciones
 var muebles: Array = []
@@ -192,6 +193,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			tapa = load("res://assets/sprites/tapa-%s.png" % PASILLOS[estilo].tapa)
 			if sitio.get("alfombra", false):   # M95: la del pasillo de la planta baja de los Apartamentos (planta.gd)
 				alfombra = load("res://assets/sprites/alfombra-baja.png")
+			if estilo == "galeria":   # el mosaico de la galería, con su marco de baldosa clara (tools/galeria_gpt.py)
+				marco = load("res://assets/sprites/suelo-galeria-marco.png")
 		elif al_aire:
 			pass   # la azotea: su suelo, sus muros y su barandilla son la imagen de GPT (dibujar_fondo)
 		elif sitio.get("estilo", "") == "laboratorio":
@@ -550,6 +553,28 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 				lienzo.draw_texture_rect_region(estilos[derecha].suelo, mitad, mitad)
 				for i in PLETINA.size():
 					lienzo.draw_rect(Rect2(c * 16 + 6 + i, f * 16, 1, 16), PLETINA[i])
+	if marco:
+		# la galería del centro comercial: el mosaico en diagonal va enmarcado por baldosa clara lisa, 4 filas de baldosas
+		# (32 píxeles) arriba, pegadas a la pared, y 1 (8) abajo. Las filas de suelo son las que están casi enteras sin
+		# muro (así no cuentan los huecos de las puertas)
+		var primera := -1
+		var ultima := -1
+		for f in filas:
+			var libres := 0
+			for c in cols:
+				if not es_muro(c, f):
+					libres += 1
+			if libres > cols / 2.0:
+				if primera < 0:
+					primera = f
+				ultima = f
+		if primera >= 0:
+			for franja in [Rect2(0, primera * 16, cols * 16, 32), Rect2(0, ultima * 16 + 8, cols * 16, 8)]:
+				var f_franja := int(franja.position.y / 16)
+				for c in cols:
+					if not es_muro(c, f_franja):
+						var trozo := Rect2(c * 16, franja.position.y, 16, franja.size.y)
+						lienzo.draw_texture_rect_region(marco, trozo, trozo)
 	if alfombra:
 		# la alfombra larga del pasillo, por el centro y de punta a punta (de GPT, ya del largo del pasillo:
 		# tools/pasillo_gpt.py), entre los felpudos de arriba y los de abajo
