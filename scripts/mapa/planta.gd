@@ -291,6 +291,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var primera: String = fija.tienda if not fija.is_empty() else tipos[0]
 	# la tienda de la tele de las noticias (TELE_EN, M92), en todas las plantas: si no es la primera, la segunda puerta normal
 	var de_la_tele: String = TELE_EN.get(edificio, {}).get("tienda", "") if tiendas else ""
+	# (la joyería y la tienda de la tele no caben las dos en una planta con solo dos tiendas normales, la baja: ahí, la
+	# joyería. En la partida nunca le toca la baja; solo en la prueba --joyeria, que la pone ahí: prueba_comun.gd)
+	if tiendas and joyeria_planta == num and libres.size() < 4:
+		de_la_tele = ""
 	for h in libres.filter(func(h): return h != de_jefa) + [de_jefa]:
 		if tipo_de.is_empty():
 			tipo_de[h.letra] = primera
