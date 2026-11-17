@@ -998,11 +998,9 @@ const SALAS := {
 		# abajo, y el ascensor en la 28 (26), con su cartel a la izquierda; los escaparates, a cada lado de las puertas de
 		# arriba, solo salen en algunas plantas (no junto a la sala de mantenimiento ni en la tienda de un minijefe), pero
 		# su sitio se deja libre siempre. En el centro, nada: por ahí se va de una punta a la otra
-		"colocados": {"abajo": [
-			["plant", 1.0], ["bench", 4.5], ["bench", 19.5], ["bench", 30.0], ["mannequin", 33.5], ["bench", 47.5], ["plant", 51.0],
-			["plant", 1.0, "abajo"], ["plant", 19.0, "abajo"], ["mannequin", 26.0, "abajo"], ["plant", 33.0, "abajo"],
-			["plant", 51.0, "abajo"],
-		]},
+		# (17 nov: el dueño la está rehaciendo y la ha dejado vacía, solo con las entradas de las tiendas; antes llevaba
+		# plantas, bancos y maniquíes)
+		"colocados": {"abajo": []},
 	},
 	# Los pasillos de Torre Velaria (tercer edificio), puestos a mano como la galería (mismas casillas: las puertas de los
 	# departamentos, en la 12 y la 40; el ascensor, en la 26, con su cartel a la izquierda, en la 22-24): el distribuidor de

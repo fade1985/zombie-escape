@@ -112,7 +112,7 @@ const COLGADOS := [preload("res://assets/sprites/colgado-fregona.png"), preload(
 	preload("res://assets/sprites/colgado-cubo.png")]
 const COLGADOS_HUECO := [6.0, 30.0]
 # Los restos sueltos del centro comercial (sprites resto-<nombre>, tools/centro_sprites.py): el juego los reparte al
-# azar por el suelo y las paredes de cada tienda y de la galería, para que haya sangre y destrozo por todas partes
+# azar por el suelo y las paredes de cada tienda (en la galería ya no, desde el 17 nov), para que haya sangre y destrozo por todas partes
 # sin que se note que la textura se repite. Los repetidos en la lista salen más a menudo.
 const RESTOS_SUELO := ["sangre", "sangre", "cristales", "cristales", "latas", "ropa", "cascotes", "papeles", "papeles"]
 const RESTOS_AZOTEA := ["sangre", "latas", "cascotes", "cascotes", "papeles"]   # en la azotea, menos y sin ropa
@@ -164,6 +164,7 @@ var textura_niebla: ImageTexture
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
+var galeria := false              # si es la galería del centro comercial: limpia, sin restos en el suelo ni en las paredes (17 nov)
 var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con oscuro alrededor (viviendas.gd)
 var al_aire := false              # la azotea: toda ella, la imagen de GPT (AZOTEA), con la barandilla; ni caras ni tapas
 var alzados := {}                 # con cajas, las casillas de la pantalla con tabique que sube (poner_tabiques): Vector2i -> true
@@ -265,9 +266,11 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 					fijo[1] if not fijo.is_empty() and fijo[1] != "" else pared_h)
 
 	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea", "torre", "vestibulo", "laboratorio"]
+	galeria = sitio.get("estilo", "") == "galeria"
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
-		preparar_restos()
+		if not galeria:
+			preparar_restos()
 	elif sitio.has("apt"):
 		manchas_del_pasillo()
 
@@ -704,7 +707,7 @@ func poner_caras() -> void:
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
-			if centro:
+			if centro and not galeria:
 				cara.adornos = restos_de_pared(cara.ancho)
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
@@ -1093,7 +1096,7 @@ func poner_escaparates() -> void:
 		var t := dibujo.texture.get_size()
 		dibujo.position = Vector2(-t.x, -9 - t.y * 2)   # el pie, 4 píxeles por encima del suelo (el rodapié)
 		nodo.add_child(dibujo)
-		if dado_restos.randf() < 0.6:
+		if not galeria and dado_restos.randf() < 0.6:
 			var mancha := Sprite2D.new()
 			mancha.texture = load("res://assets/sprites/resto-%s.png" % ["salpicon", "huellas"][dado_restos.randi() % 2])
 			mancha.scale = Vector2(2, 2)

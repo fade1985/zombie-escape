@@ -851,7 +851,9 @@ en una línea.
   puerta abajo), y la habitación de cada jefe; `tienda.gd` da cada tienda: desde la M77, todas fijas, dibujadas con letras en `Tienda.PLANOS` (la electrónica, con su
   charco: `~`; todas con su aseo de empleados y su botiquín, M81), leídas con `Apartamento.del_plano` y con sus muebles puestos a mano
   (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); la galería, igual
-  (`colocados` de `"galeria"`, se mira con `--galeria`). Los departamentos de Torre Velaria (el tercer edificio,
+  (`colocados` de `"galeria"`, se mira con `--galeria`; desde el 17 nov vacía mientras el dueño la rehace: sin muebles ni restos
+  sueltos de sangre y pintadas, `mapa.galeria`; solo las puertas de las tiendas, sus escaparates y letreros, el ascensor, las
+  salidas y los apliques). Los departamentos de Torre Velaria (el tercer edificio,
   `docs/PLAN_TERCER_EDIFICIO.md`) también son tipos de `Tienda.TIPOS`, con `"edificio": "torre"`: toman el plano de una
   tienda del centro (`"presta"`, `Tienda.plano_de`), pero con muebles propios (`colocados` de `<sala>-<tipo>`, puestos con
   `py tools/muebles_torre.py` a partir de los de esa tienda), suelos y paredes propios (`Mapa.ESTILO_TIENDA`) y su rótulo
