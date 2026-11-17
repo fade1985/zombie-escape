@@ -566,16 +566,16 @@ msgid "El vigilante"
 msgstr "Der Wachmann"
 
 #: scripts/bestiario.gd
-msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
-msgstr "Dreht immer noch seine Runden. Hört er eine Pfeife, kommt er angerannt, den Schlagstock voraus."
+msgid "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante."
+msgstr "Er dreht immer noch seine Runde. Hört er seinen Chef brüllen, kommt er mit dem Schlagstock voran angerannt."
 
 #: scripts/bestiario.gd
 msgid "El guardia de la llave maestra"
 msgstr "Der Wächter mit dem Generalschlüssel"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "Er hat den Generalschlüssel für den Stock und weiß es. Er pfeift, haut ab und kommt aus der Puste: Das ist deine Chance."
+msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
+msgstr "Er hat den Generalschlüssel für den Stock und weiß es. Sobald er dich sieht, brüllt er und ruft seine Wachleute."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -3270,10 +3270,6 @@ msgid "Has cogido la llave del %s"
 msgstr "Du hast den Schlüssel für Wohnung %s"
 
 #: scripts/partida.gd
-msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
-msgstr "Der Wächter hat gepfiffen: Verstärkung kommt!"
-
-#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "Der Schlüsselschläfer ist erledigt! Er hat den Schlüssel für Wohnung %s fallen lassen"
 
@@ -5368,8 +5364,8 @@ msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva
 msgstr "Alle Türen des Stocks sind verschlossen: Den Generalschlüssel trägt der Wachmann, der seine Runde dreht."
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
-msgstr "Wenn er dich sieht, pfeift er, und Verstärkung kommt. Er rennt schnell, wird aber müde: Schnapp ihn dir, wenn er zum Verschnaufen stehen bleibt."
+msgid "Si te ve, ruge y llama a sus guardias: vienen todos a por ti. Acaba con él y su llave es tuya."
+msgstr "Sieht er dich, brüllt er und ruft seine Wachleute: Alle kommen auf dich los. Erledige ihn, und sein Schlüssel gehört dir."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -7675,9 +7671,5 @@ msgid "¡TOC!"
 msgstr "TOCK!"
 
 #: scripts/zombi_guardia.gd
-msgid "uf"
-msgstr "puh"
-
-#: scripts/zombi_guardia.gd
-msgid "¡PRIIII!"
-msgstr "PFIIII!"
+msgid "¡¡¡GRRR!!!"
+msgstr "GRRR!!!"

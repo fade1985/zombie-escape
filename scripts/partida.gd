@@ -81,10 +81,11 @@ const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const TERMINAL := preload("res://scripts/mapa/terminal.gd")   # los ordenadores del código de Torre Velaria
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
-const REFUERZOS := 4               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas). M83: antes 2
+const REFUERZOS := 4               # los guardias que llegan al rugido del guardia en la planta baja... (M83: antes 2)
+const REFUERZOS_POR_PLANTA := 2    # ...y 2 más en cada planta de arriba (17 nov: 4, 6, 8...; lo pidió el dueño)
 const REFUERZOS_VELOCIDAD := 165.0 # y lo deprisa que corren (M83: antes 85, la de un vigilante normal)
-const BILLETES_GUARDIA := 5        # lo que suelta el guardia además de la llave maestra (17 nov): 5 dólares...
-const MUTAGENOS_GUARDIA := 5       # ...y 5 mutágenos (nada más: ya no el objeto suelto)
+# Lo que suelta el guardia además de la llave maestra (17 nov): un dólar y un mutágeno por cada guardia que ha llamado y
+# uno más (en la planta baja, 5 de cada; en la primera, 7...): guardias_del_rugido() + 1
 # Los zombis aguantan más según el edificio (12 nov: con la pistola y la fregona se pasaba el juego entero), además de lo
 # de cada planta (ZOMBI_POR_PLANTA): los Apartamentos son los de siempre. Los jefes de planta, algo menos por edificio
 # (ya suben JEFE_POR_PLANTA); el jefe final y el guardia, con su vida de siempre (el guardia ya sube por planta)
@@ -1323,8 +1324,7 @@ func poner_guardia() -> void:
 	guardia.vida = guardia.vida_max if g.vida < 0 else g.vida
 	guardia.puntas = puntas
 	guardia.alerta = g.alerta
-	guardia.silbidos = g.silbidos
-	guardia.silbato.connect(_al_silbar)
+	guardia.rugido.connect(_al_rugir)
 
 
 # Al salir del pasillo, se apunta cómo estaba (si vuelves, sigue igual de herido y de alerta)
@@ -1332,15 +1332,18 @@ func guardar_guardia() -> void:
 	if guardia and is_instance_valid(guardia) and guardia.estado != "muerto":
 		planta.guardia.vida = guardia.vida
 		planta.guardia.alerta = guardia.alerta
-		planta.guardia.silbidos = guardia.silbidos
 	guardia = null
 
 
-# El silbato: llegan refuerzos corriendo por las dos puntas del pasillo
-func _al_silbar() -> void:
-	decir(Idioma.t("¡El guardia ha tocado el silbato: vienen refuerzos!"), 2.5)
+# Los guardias que llama con el rugido: 4 en la planta baja y 2 más en cada planta de arriba
+func guardias_del_rugido() -> int:
+	return REFUERZOS + REFUERZOS_POR_PLANTA * maxi(planta.num - 1, 0)
+
+
+# El rugido: llegan sus guardias corriendo por las dos puntas del pasillo (sin más aviso: el «¡¡¡GRRR!!!» lo dice todo)
+func _al_rugir() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
-	for i in REFUERZOS + planta.num / 2:
+	for i in guardias_del_rugido():
 		var x: float = Planta.MURO + 50 if i % 2 == 0 else sitio.ancho - Planta.MURO - 50
 		var donde := Vector2(x, sitio.alto / 2.0 + randf_range(-60, 60))
 		if donde.distance_to(johnny.position) < 250.0:
@@ -2314,8 +2317,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		elif tipo in JEFES:
 			soltar_billetes(BILLETES_JEFA, zombi.position)
 		elif tipo == "guardia":
-			soltar_billetes(BILLETES_GUARDIA, zombi.position)
-			for i in MUTAGENOS_GUARDIA:
+			soltar_billetes(guardias_del_rugido() + 1, zombi.position)
+			for i in guardias_del_rugido() + 1:
 				soltar_mutageno(zombi.position)
 		else:
 			soltar_mutageno(zombi.position)

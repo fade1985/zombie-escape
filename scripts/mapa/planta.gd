@@ -221,7 +221,7 @@ static func aviso_de(salida: Dictionary) -> String:
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (sitio -1 mientras la lleva alguien: con
 #                    llave maestra, el guardia; con llave, un zombi al azar de los apartamentos, {"llave": true} en zombis; en
 #                    los dos casos la suelta al caer)
-#   guardia          solo con llave maestra: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
+#   guardia          solo con llave maestra: {vivo, vida (-1: entera), alerta (si ya ha rugido)} el guardia de seguridad del
 #                    pasillo, que la lleva (zombi_guardia.gd)
 #   edificio         el id del edificio (edificios.gd)
 #   tiene_llave, jefa_muerta
@@ -542,7 +542,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	# Con llave maestra, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
 	if ed.cerrojo == "maestra":
 		planta.llave = {"sitio": -1, "pos": Vector2.ZERO}
-		planta.guardia = {"vivo": true, "vida": -1, "alerta": false, "silbidos": 0}
+		planta.guardia = {"vivo": true, "vida": -1, "alerta": false}
 	# La llave de la jefa, en una habitación (que no sea el salón ni un baño) de un apartamento normal
 	var donde: int = normales[rng.randi() % normales.size()]
 	var salas: Array = planta.sitios[donde].apt.salas.filter(func(s): return s.uso != "salon" and s.uso != "tienda" and s.uso != "bano")

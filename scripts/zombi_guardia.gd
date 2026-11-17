@@ -1,86 +1,50 @@
-# El guardia de seguridad del centro comercial: lleva la llave maestra de la planta (abre todas sus puertas) y ronda por el
-# pasillo de la planta. Hay que cazarlo, y no se deja:
+# El guardia de seguridad del centro comercial, el jefe de seguridad: lleva la llave maestra de la planta (abre todas sus
+# puertas) y ronda por el pasillo de la planta (17 nov, lo pidió el dueño; antes pitaba, huía y se cansaba):
 #   - Mientras no te ha visto, hace su ronda despacio, de una punta del pasillo a la otra.
-#   - Cuando te ve, toca el silbato (los refuerzos los saca la partida: señal "silbato") y huye hacia la punta
-#     del pasillo que le queda más lejos de Johnny.
-#   - Correr le cansa: cada poco se para a recuperar el aliento. Ese es el momento de pillarle.
-#   - Si le acorralas (o le alcanzas mientras descansa), se defiende a zarpazos.
-#   - A media vida, vuelve a tocar el silbato.
-# Lleva su propio dibujo, el del jefe de seguridad (17 nov, hecho con GPT: assets/sources/zombi-guardia-gpt/), distinto del
-# de los vigilantes que llegan al silbato.
+#   - Cuando te ve (o le das sin que te haya visto), se para y ruge: «¡¡¡GRRR!!!» en rojo encima de la cabeza, con las
+#     letras de los gritos de Johnny. Solo una vez. Con el rugido llegan sus guardias (los saca la partida: señal
+#     "rugido"; 4 en la planta baja y 2 más en cada planta de arriba).
+#   - Después, va a por Johnny con ellos y le ataca a zarpazos hasta que caigan todos.
+# Lleva su propio dibujo (hecho con GPT: assets/sources/zombi-guardia-gpt/), distinto del de los vigilantes que llama.
 extends Zombi
 
-signal silbato   # ha tocado el silbato: la partida trae refuerzos
+signal rugido   # ha rugido: la partida trae a sus guardias
 
 const RONDA := 55.0          # su velocidad haciendo la ronda
-const HUIDA := 200.0         # y huyendo (Johnny anda a 210: casi no se le alcanza). M83: antes 165
-const ALIENTO := 4.0         # segundos que aguanta corriendo... (M83: antes 3.2)
-const SILBIDO_CADA := 6.0    # M83: mientras te ve, vuelve a silbar cada tanto (antes, solo al verte y a media vida)
-const RESPIRO := 1.8         # ...y lo que tarda en recuperarse
-const DEFENDERSE := 70.0     # más cerca que esto (además de los radios), se gira y pega
-const PASO_HUYENDO := 2.4    # lo rápido que pasa su andar al huir: su dibujo anda despacio (12 pasos a 8 por segundo,
-                             # para la ronda) y, huyendo a 200, parecía que patinaba
+const PERSECUCION := 165.0   # y persiguiendo a Johnny: la de sus guardias (Johnny anda a 210)
+const RUGIDO_DURA := 1.4     # lo que se queda parado rugiendo
+const PASO_CORRIENDO := 2.0  # lo rápido que pasa su andar al perseguir: su dibujo anda despacio (12 pasos a 8 por
+                             # segundo, para la ronda) y, a 165, parecía que patinaba
 
-var alerta := false          # si ya ha visto a Johnny (entonces ya no hace la ronda)
-var silbidos := 0            # cuántas veces ha tocado el silbato
-var espera_silbato := SILBIDO_CADA   # lo que falta para el próximo silbido
-var media_vida_tocada := false       # si ya ha silbado por estar a media vida
-var aliento := ALIENTO
-var cansado := 0.0           # tiempo que le queda parado recuperándose
-var meta := Vector2.INF      # adónde va (en la ronda, una punta; huyendo, la punta lejos de Johnny)
+var alerta := false          # si ya ha rugido (entonces ya no hace la ronda: va a por Johnny)
+var rugir_ya := false        # le han dado sin que hubiera visto a Johnny: ruge en cuanto pueda
+var rugiendo := 0.0          # lo que le queda de rugido
+var meta := Vector2.INF      # la punta del pasillo a la que va en la ronda
 var puntas: Array = []       # los dos extremos del pasillo, los pone la partida
 
 
-# M83: el agente de navegación limita la velocidad a la del zombi (85 en la escena): sin esto el guardia nunca pasaba de
-# ~80 aunque HUIDA dijera 165. Ahora el límite es la HUIDA
+# El agente de navegación limita la velocidad a la del zombi (85 en la escena): sin esto no pasaría de ~80
 func _ready() -> void:
 	super()
-	velocidad = HUIDA
-	agente.max_speed = HUIDA
+	velocidad = PERSECUCION
+	agente.max_speed = PERSECUCION
 
 
 func andar(delta: float, johnny: Node2D) -> void:
 	if not alerta:
-		if distancia_a(johnny) < VISTA * Skins.camuflaje(johnny.get("skin") if johnny.get("skin") != null else "") 				and se_ve(johnny):   # (con la skin de la modista, le ve a la mitad de distancia)
-			alerta = true
-			tocar_silbato()
+		var lo_ve: bool = distancia_a(johnny) < VISTA * Skins.camuflaje(johnny.get("skin") if johnny.get("skin") != null else "") \
+				and se_ve(johnny)   # (con la skin de la modista, le ve a la mitad de distancia)
+		if lo_ve or rugir_ya:
+			rugir(johnny)
 		else:
+			if helor == 0.0:   # (con frío del lanza hielo, lo despacio que se mueve lo lleva zombi.gd)
+				sprite.speed_scale = 1.0
 			rondar(delta)
-			return
-	if not media_vida_tocada and vida <= vida_max / 2:
-		media_vida_tocada = true
-		tocar_silbato()
-	elif se_ve(johnny):
-		espera_silbato -= delta
-		if espera_silbato <= 0.0:
-			tocar_silbato()
-	if helor == 0.0:   # (con frío del lanza hielo, lo despacio que se mueve lo lleva zombi.gd)
-		sprite.speed_scale = 1.0
-	var cerca: bool = distancia_a(johnny) < radio + johnny.RADIO + DEFENDERSE
-	# Cansado: se queda quieto resoplando, salvo que le tengas encima
-	if cansado > 0.0:
-		cansado -= delta
-		if cerca and se_ve(johnny):
-			empezar_zarpazo(johnny)
-			return
-		pedir_velocidad(Vector2.ZERO)
-		mirar_hacia(johnny.global_position - global_position)
-		poner_animacion("reposo")
-		if cansado <= 0.0:
-			aliento = ALIENTO
 		return
-	# Acorralado en una punta del pasillo: pega
-	if cerca and se_ve(johnny) and puntas.any(func(p): return global_position.distance_to(p) < 130.0):
-		empezar_zarpazo(johnny)
-		return
-	aliento -= delta
-	if aliento <= 0.0:
-		cansado = RESPIRO
-		Zombi.texto_flotante(get_parent(), global_position + Vector2(-10, -altura), Idioma.t("uf"), Color("#9fc4ff"), 18)
-		return
+	# a por Johnny, como cualquier zombi (y a zarpazos al llegar)
 	if helor == 0.0:
-		sprite.speed_scale = PASO_HUYENDO
-	ir_hacia(delta, camino_hacia(huida(johnny)), HUIDA)
+		sprite.speed_scale = PASO_CORRIENDO
+	super(delta, johnny)
 
 
 # La ronda: de una punta a la otra, despacio
@@ -94,27 +58,38 @@ func rondar(delta: float) -> void:
 	ir_hacia(delta, camino_hacia(meta), RONDA)
 
 
-# Adónde huir: la punta del pasillo más lejos de Johnny (si está en medio, la que tiene detrás)
-func huida(johnny: Node2D) -> Vector2:
-	if puntas.size() < 2:
-		return global_position + johnny.global_position.direction_to(global_position) * 200.0
-	var a: Vector2 = puntas[0]
-	var b: Vector2 = puntas[1]
-	return a if johnny.global_position.distance_to(a) > johnny.global_position.distance_to(b) else b
+# El rugido: se para mirando a Johnny, su animación, el «¡¡¡GRRR!!!» en rojo y el sonido; y llama a sus guardias
+func rugir(johnny: Node2D) -> void:
+	alerta = true
+	rugir_ya = false
+	estado = "rugido"
+	rugiendo = RUGIDO_DURA
+	pedir_velocidad(Vector2.ZERO)
+	mirar_hacia(johnny.global_position - global_position)
+	if helor == 0.0:
+		sprite.speed_scale = 1.0
+	poner_animacion("grito", true)
+	Sonido.tocar("rugido")
+	var grito := Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡GRRR!!!"), Tema.ROJO,
+		32, true, RUGIDO_DURA)
+	var sin_luz := CanvasItemMaterial.new()   # (como los gritos de Johnny: que no lo apague la penumbra)
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	grito.material = sin_luz
+	rugido.emit()
 
 
-func tocar_silbato() -> void:
-	silbidos += 1
-	espera_silbato = SILBIDO_CADA
-	Sonido.tocar("silbato")
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(-34, -altura), Idioma.t("¡PRIIII!"), Color("#ffd23f"), 22)
-	silbato.emit()
+func estado_propio(delta: float, johnny: Node2D) -> void:
+	if estado == "rugido":
+		pedir_velocidad(Vector2.ZERO)
+		rugiendo -= delta
+		if rugiendo <= 0.0:
+			estado = "andar"
+		return
+	super(delta, johnny)
 
 
-# Al recibir un golpe, se le pasa el cansancio del susto (y sale corriendo otra vez)
+# Si le dan antes de que haya visto a Johnny, ruge igual (en cuanto se recupere del golpe)
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	super(cantidad, fuerza)
-	alerta = true
-	if cansado > 0.0 and randf() < 0.5:
-		cansado = 0.0
-		aliento = ALIENTO * 0.6
+	if not alerta:
+		rugir_ya = true

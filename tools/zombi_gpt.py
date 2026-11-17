@@ -24,6 +24,7 @@ Uso (desde la carpeta del proyecto):
   py tools/zombi_gpt.py andar east     de perfil (andar-e.webp) → walk/east-<n>.png y, en espejo, walk/west-<n>.png
   py tools/zombi_gpt.py rellenar       las animaciones que aún no hay, con el dibujo quieto de su dirección
 """
+import colorsys
 import os
 import sys
 from collections import deque
@@ -70,6 +71,10 @@ TAMANO = {"lento": 0.8, "policia": 1.07, "guardia": 0.87}
 # Y el ensanchado (10 nov): el policía de GPT salía más estrecho que Johnny (24 de ancho contra 28 y 12 de perfil contra 16) y
 # se veía enclenque; se le ensancha un 20 % al reducir (todo, también la gorra y los brazos), y de alto, un 7 %
 ESTIRO = {"policia": 1.2}
+# Y la piel gris (17 nov): en el rugido del jefe de seguridad GPT le dio la piel casi gris, y al pasar del dibujo quieto
+# a rugir cambiaba de color; a esas hojas se les devuelve el verde (verdear)
+PIEL_GRIS = {"guardia": ["rugir"]}
+VERDEAR = []   # (las animaciones de este personaje que lo necesitan: PIEL_GRIS)
 # Y por vista: el arrastrado de perfil y en diagonal (se le ve el cuerpo a lo largo) salía mucho más grande que de frente
 # (de perfil, 32 de largo y de frente 26 de ancho; el vecino de pie mide 45): esas vistas, más pequeñas
 TAMANO_VISTA = {"lento": {"south-east": 0.8, "east": 0.82, "north-east": 0.82}}
@@ -233,10 +238,28 @@ def recta(puntos):
 
 # Una animación de una dirección (andar-s.webp: andar de frente): cada fotograma de la fila, a la misma escala que el
 # personaje y en su lienzo, en <animación>/<dirección>-<n>.png; el 0 es el dibujo quieto (así lo quiere tools/zombi.py)
+def verdear(im):
+    """La piel grisácea, al verde amarillento del dibujo quieto: lo de tono verde (60° a 160°), con algo de color y no muy
+    oscuro, con su brillo pero más color. La ropa gris marengo no tiene color y no se toca"""
+    im = im.convert("RGB")
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b = px[x, y]
+            h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            if 0.17 <= h <= 0.45 and s >= 0.06 and v >= 0.22:
+                r2, g2, b2 = colorsys.hsv_to_rgb(0.2, min(1.0, s * 2.4 + 0.06), v)
+                px[x, y] = (round(r2 * 255), round(g2 * 255), round(b2 * 255))
+    return im
+
+
 def animacion(anim, vista):
-    nombres = {"andar": "walk", "ataque": "ataque", "golpe": "golpe", "muerte": "muerte", "forzar": "forzar"}
+    nombres = {"andar": "walk", "ataque": "ataque", "golpe": "golpe", "muerte": "muerte", "forzar": "forzar", "rugir": "rugir"}
     corta = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne", "north": "n"}[vista]
-    im = sin_fondo(Image.open(os.path.join(FUENTE, "%s-%s.webp" % (anim, corta))))
+    im = Image.open(os.path.join(FUENTE, "%s-%s.webp" % (anim, corta)))
+    if anim in VERDEAR:
+        im = verdear(im)
+    im = sin_fondo(im)
     # Dónde va cada fotograma en el lienzo. GPT los pone en una rejilla de columnas iguales, pero no de 1/6 del ancho
     # justo (suele ser algo menos, y con márgenes): suponerlo hacía que la vecina se fuera corriendo de lado hasta 17
     # píxeles en cada fila y diera un salto al empezar la siguiente. Así que la rejilla se mide en cada fila, con un
@@ -335,6 +358,7 @@ if __name__ == "__main__":
         ALTURA_GPT = sys.argv[2] == "lento"
         ESCALA_ZOMBI = TAMANO.get(sys.argv[2], 1.0)
         ESTIRAR = ESTIRO.get(sys.argv[2], 1.0)
+        VERDEAR = PIEL_GRIS.get(sys.argv[2], [])
         ESCALA_VISTA = TAMANO_VISTA.get(sys.argv[2], {})
         if sys.argv[2] in ("medica", "policia", "militar"):
             ANCHO_REFERENCIA = 1920

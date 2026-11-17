@@ -566,16 +566,16 @@ msgid "El vigilante"
 msgstr "Le vigile"
 
 #: scripts/bestiario.gd
-msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
-msgstr "Il fait toujours sa ronde. S'il entend un sifflet, il accourt, matraque en avant."
+msgid "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante."
+msgstr "Il fait toujours sa ronde. S'il entend rugir son chef, il accourt, matraque en avant."
 
 #: scripts/bestiario.gd
 msgid "El guardia de la llave maestra"
 msgstr "Le garde au passe-partout"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "Il a le passe-partout de l'étage et il le sait. Il siffle, il fuit et il s'essouffle : c'est ton moment."
+msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
+msgstr "Il a le passe-partout de l'étage et il le sait. Dès qu'il te voit, il rugit et appelle ses gardes."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -3270,10 +3270,6 @@ msgid "Has cogido la llave del %s"
 msgstr "Tu as la clé de l'appart %s"
 
 #: scripts/partida.gd
-msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
-msgstr "Le garde a sifflé : des renforts arrivent !"
-
-#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "Le dormeur à la clé est à terre ! Il a lâché la clé de l'appart %s"
 
@@ -5368,8 +5364,8 @@ msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva
 msgstr "Toutes les portes de l'étage sont fermées à clé : c'est le vigile qui fait sa ronde qui porte le passe-partout."
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
-msgstr "S'il te voit, il siffle et des renforts arrivent. Il court beaucoup mais se fatigue : attrape-le quand il s'arrête pour souffler."
+msgid "Si te ve, ruge y llama a sus guardias: vienen todos a por ti. Acaba con él y su llave es tuya."
+msgstr "S'il te voit, il rugit et appelle ses gardes : ils foncent tous sur toi. Élimine-le et son passe-partout est à toi."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -7675,9 +7671,5 @@ msgid "¡TOC!"
 msgstr "TOC !"
 
 #: scripts/zombi_guardia.gd
-msgid "uf"
-msgstr "pff"
-
-#: scripts/zombi_guardia.gd
-msgid "¡PRIIII!"
-msgstr "PRIIIT !"
+msgid "¡¡¡GRRR!!!"
+msgstr "GRRR !!!"

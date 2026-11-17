@@ -567,16 +567,16 @@ msgid "El vigilante"
 msgstr "Охранник"
 
 #: scripts/bestiario.gd
-msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
-msgstr "Все еще делает обход. Услышит свисток — прибежит с дубинкой наперевес."
+msgid "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante."
+msgstr "Всё ещё делает обход. Если слышит рёв начальника, бежит с дубинкой наперевес."
 
 #: scripts/bestiario.gd
 msgid "El guardia de la llave maestra"
 msgstr "Охранник с мастер-ключом"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "У него мастер-ключ от этажа, и он это знает. Свистит, убегает и выдыхается: вот твой шанс."
+msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
+msgstr "У него мастер-ключ от этажа, и он это знает. Как только тебя увидит, ревёт и зовёт своих охранников."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -3274,10 +3274,6 @@ msgid "Has cogido la llave del %s"
 msgstr "Ты взял ключ от кв. %s"
 
 #: scripts/partida.gd
-msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
-msgstr "Охранник засвистел: идет подкрепление!"
-
-#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "Спящий с ключом повержен! Он выронил ключ от кв. %s"
 
@@ -5376,8 +5372,8 @@ msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva
 msgstr "Все двери на этаже заперты: мастер-ключ у охранника, который обходит этаж."
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
-msgstr "Если он тебя заметит, свистнет в свисток, и придет подмога. Бегает быстро, но устает: лови его, когда он остановится отдышаться."
+msgid "Si te ve, ruge y llama a sus guardias: vienen todos a por ti. Acaba con él y su llave es tuya."
+msgstr "Если он тебя увидит, то заревёт и позовёт охранников: все бросятся на тебя. Прикончи его, и ключ твой."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -7696,9 +7692,5 @@ msgid "¡TOC!"
 msgstr "ТУК!"
 
 #: scripts/zombi_guardia.gd
-msgid "uf"
-msgstr "уф"
-
-#: scripts/zombi_guardia.gd
-msgid "¡PRIIII!"
-msgstr "ФЬЮЮЮТЬ!"
+msgid "¡¡¡GRRR!!!"
+msgstr "ГРРР!!!"

@@ -566,16 +566,16 @@ msgid "El vigilante"
 msgstr "O segurança"
 
 #: scripts/bestiario.gd
-msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
-msgstr "Continua fazendo a ronda. Se ouve um apito, vem correndo com o cassetete na frente."
+msgid "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante."
+msgstr "Continua fazendo a ronda. Se ouve o chefe rugir, vem correndo com o cassetete na frente."
 
 #: scripts/bestiario.gd
 msgid "El guardia de la llave maestra"
 msgstr "O guarda da chave mestra"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "Leva a chave mestra do andar e sabe disso. Apita, foge e se cansa: essa é a sua chance."
+msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
+msgstr "Leva a chave mestra do andar e sabe disso. Assim que te vê, ruge e chama os guardas."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -3270,10 +3270,6 @@ msgid "Has cogido la llave del %s"
 msgstr "Você pegou a chave do apto. %s"
 
 #: scripts/partida.gd
-msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
-msgstr "O guarda tocou o apito: vem reforço!"
-
-#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "O adormecido da chave caiu! Ele soltou a chave do apto. %s"
 
@@ -5368,8 +5364,8 @@ msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva
 msgstr "Todas as portas do andar estão trancadas: a chave mestra está com o segurança que faz a ronda."
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
-msgstr "Se ele te vê, toca o apito e chegam reforços. Ele corre muito, mas se cansa: pegue-o quando parar para respirar."
+msgid "Si te ve, ruge y llama a sus guardias: vienen todos a por ti. Acaba con él y su llave es tuya."
+msgstr "Se ele te vir, ruge e chama os guardas: todos vêm atrás de você. Acabe com ele e a chave é sua."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -7675,9 +7671,5 @@ msgid "¡TOC!"
 msgstr "TOC!"
 
 #: scripts/zombi_guardia.gd
-msgid "uf"
-msgstr "ufa"
-
-#: scripts/zombi_guardia.gd
-msgid "¡PRIIII!"
-msgstr "PRIIII!"
+msgid "¡¡¡GRRR!!!"
+msgstr "GRRR!!!"

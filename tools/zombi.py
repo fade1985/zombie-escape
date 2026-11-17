@@ -4,6 +4,7 @@ Lo saca todo de assets/sources/<fuente>/:
   rotations/<dirección>.png     las 8 posturas quietas (48×48), ya con la piel corregida por tools/piel.py
   walk/<dirección>-<n>.png      andar (PixMiniMax; el lienzo cambia de tamaño según la dirección)
   ataque/, golpe/, muerte/      atacar, recibir un golpe y morir (lienzo de 96×96 con el dibujo quieto en 24, 32)
+  rugir/ (opcional)             el rugido, como el ataque (el jefe de seguridad): sale como «roar» («grito» en el juego)
   reposo/ (opcional)            reposo de PixMiniMax, con partida y final en el dibujo quieto (el de tentáculos)
   zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen", "fps_andar" y "suave"
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
@@ -301,9 +302,15 @@ death = block('muerte', 'muerte', (1, 12), gore)
 DUR = {'attack': cfg.get('ataque', {}).get('duracion', 0.55), 'hurt': cfg.get('golpe', {}).get('duracion', 0.35),
        'death': cfg.get('muerte', {}).get('duracion', 0.9)}
 HIT = cfg.get('ataque', {}).get('impacto', 3)   # en qué fotograma (de los elegidos) llega el zarpazo
+# Y, si tiene carpeta rugir/, el rugido (17 nov, el jefe de seguridad: «grito» en el juego), de 1,4 s si no dice otra cosa
+# "rugir" en zombi.json
+roar = block('rugir', 'rugir', (1, 12), gore) if os.path.isdir(f'{SRC}/rugir') else None
+DUR['roar'] = cfg.get('rugir', {}).get('duracion', 1.4)
 
 # ═════════════ Hoja y JSON ═════════════
 blocks = [('idle', idle), ('walk', walk), ('attack', attack), ('hurt', hurt), ('death', death)]
+if roar:
+    blocks.append(('roar', roar))
 cols = max(len(DIRS), *(len(fs) for _, b in blocks for fs in b.values()))
 sheet = Image.new('RGBA', (cols * CW, (1 + len(blocks) * len(DIRS)) * CH), (0, 0, 0, 0))
 for i, d in enumerate(DIRS):

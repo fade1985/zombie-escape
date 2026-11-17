@@ -565,16 +565,16 @@ msgid "El vigilante"
 msgstr "巡逻保安"
 
 #: scripts/bestiario.gd
-msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
-msgstr "还在照常巡逻。一听到哨声，就举着警棍冲过来。"
+msgid "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante."
+msgstr "还在巡逻。一听到上司的咆哮，就举着警棍冲过来。"
 
 #: scripts/bestiario.gd
 msgid "El guardia de la llave maestra"
 msgstr "持万能钥匙的保安"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "他拿着这层楼的万能钥匙，而且心里有数。吹哨、逃跑、跑到喘不上气：这就是你的机会。"
+msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
+msgstr "他拿着这层楼的万能钥匙，而且心里有数。一看到你，就会咆哮着叫来他的保安。"
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -3266,10 +3266,6 @@ msgid "Has cogido la llave del %s"
 msgstr "你拿到了%s的钥匙"
 
 #: scripts/partida.gd
-msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
-msgstr "保安吹响了哨子：援兵来了！"
-
-#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "拿钥匙的沉睡者倒下了！它掉落了%s的钥匙"
 
@@ -5360,8 +5356,8 @@ msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva
 msgstr "这层楼的门全都锁着：万能钥匙在巡逻的保安身上。"
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
-msgstr "他发现你就会吹哨子，增援就会赶来。他跑得很快，但会累：趁他停下喘气时抓住他。"
+msgid "Si te ve, ruge y llama a sus guardias: vienen todos a por ti. Acaba con él y su llave es tuya."
+msgstr "他一看到你，就会咆哮着叫来保安：所有人都会冲你而来。干掉他，钥匙就归你了。"
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -7654,9 +7650,5 @@ msgid "¡TOC!"
 msgstr "咚！"
 
 #: scripts/zombi_guardia.gd
-msgid "uf"
-msgstr "呼"
-
-#: scripts/zombi_guardia.gd
-msgid "¡PRIIII!"
-msgstr "嘘——！"
+msgid "¡¡¡GRRR!!!"
+msgstr "吼！！！"

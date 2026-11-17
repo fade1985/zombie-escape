@@ -566,16 +566,16 @@ msgid "El vigilante"
 msgstr "The Security Guard"
 
 #: scripts/bestiario.gd
-msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
-msgstr "Still making his rounds. If he hears a whistle, he comes running, baton first."
+msgid "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante."
+msgstr "Still making his rounds. If he hears his boss roar, he comes running, baton first."
 
 #: scripts/bestiario.gd
 msgid "El guardia de la llave maestra"
 msgstr "The Master Key Guard"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "He's got the floor's master key and he knows it. He whistles, runs off and gets winded: that's your moment."
+msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
+msgstr "He's got the floor's master key and he knows it. The moment he sees you, he roars and calls his guards."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -3270,10 +3270,6 @@ msgid "Has cogido la llave del %s"
 msgstr "You got the key to apt. %s"
 
 #: scripts/partida.gd
-msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
-msgstr "The guard blew his whistle: reinforcements are coming!"
-
-#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "The key sleeper is down! It dropped the key to apt. %s"
 
@@ -5368,8 +5364,8 @@ msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva
 msgstr "Every door on the floor is locked: the security guard making rounds carries the master key."
 
 #: scripts/tutoriales.gd
-msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
-msgstr "If he sees you, he blows his whistle and reinforcements arrive. He runs a lot, but he gets tired: catch him when he stops to catch his breath."
+msgid "Si te ve, ruge y llama a sus guardias: vienen todos a por ti. Acaba con él y su llave es tuya."
+msgstr "If he sees you, he roars and calls his guards: they all come for you. Take him down and his key is yours."
 
 #: scripts/tutoriales.gd
 msgid "Peligros de las tiendas"
@@ -7675,9 +7671,5 @@ msgid "¡TOC!"
 msgstr "TOK!"
 
 #: scripts/zombi_guardia.gd
-msgid "uf"
-msgstr "phew"
-
-#: scripts/zombi_guardia.gd
-msgid "¡PRIIII!"
-msgstr "FWEEET!"
+msgid "¡¡¡GRRR!!!"
+msgstr "GRRR!!!"

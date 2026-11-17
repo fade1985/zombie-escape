@@ -164,7 +164,7 @@ func _process(delta: float) -> void:
 		montar(0, puerta_de_tipo("escaleras"), false)
 	if antes < 4.7 and tiempo >= 4.7:
 		cruzar(puerta_de_tipo("escaleras"))
-	# en el centro comercial, el guardia: Johnny se le acerca (silbato y refuerzos), foto, y cae con su llave maestra
+	# en el centro comercial, el guardia: Johnny se le acerca (rugido y sus guardias), foto, y cae con su llave maestra
 	if antes < 5.35 and tiempo >= 5.35 and guardia:
 		johnny.position = mapa.punto_libre(guardia.position, 0.0)
 		for i in 60:
@@ -174,8 +174,8 @@ func _process(delta: float) -> void:
 				break
 		johnny.get_node("Camara").reset_smoothing()
 	if antes < 5.5 and tiempo >= 5.5 and guardia:
-		print("Guardia: vida %d/%d | alerta %s | silbidos %d | zombis en el pasillo %d" % [guardia.vida, guardia.vida_max,
-			guardia.alerta, guardia.silbidos, get_tree().get_nodes_in_group("zombis").size()])
+		print("Guardia: vida %d/%d | alerta %s | zombis en el pasillo %d" % [guardia.vida, guardia.vida_max,
+			guardia.alerta, get_tree().get_nodes_in_group("zombis").size()])
 		Captura.foto("captura-guardia.png")
 		guardia.recibir_golpe(99999, Vector2.ZERO)
 	if antes < 5.6 and tiempo >= 5.6:

@@ -242,7 +242,7 @@ const LISTA := {
 	"centro": {"grupo": "Más edificios", "titulo": "El centro comercial", "icono": "centro",
 		"cuando": "Al llegar al centro comercial",
 		"lineas": ["Todas las puertas de la planta están cerradas: la llave maestra la lleva el guardia de seguridad que hace la ronda.",
-			"Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."]},
+			"Si te ve, ruge y llama a sus guardias: vienen todos a por ti. Acaba con él y su llave es tuya."]},
 	"peligros": {"grupo": "Más edificios", "titulo": "Peligros de las tiendas", "icono": "alerta",
 		"cuando": "En la primera tienda con peligro",
 		"lineas": ["La cámara frigorífica te frena y te hiela, la cocina quema y el agua de Electrónica da calambres (su cuadro eléctrico la apaga).",

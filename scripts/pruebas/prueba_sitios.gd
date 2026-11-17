@@ -2490,8 +2490,10 @@ func probar_dificultad() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --edificio centro --guardia" (M83): el guardia de la llave maestra, con Johnny quieto a la vista: cuenta los
-# silbatos y los refuerzos que llegan en ~14 s, y a qué velocidad huye y corren los refuerzos
+# Con "--captura --edificio centro --guardia" (M83; 17 nov, el rugido): el guardia de la llave maestra. Primero, de cerca
+# junto a Johnny (captura-guardia-de-cerca.png); luego le ve: ruge una sola vez, con el «¡¡¡GRRR!!!» en rojo encima
+# (captura-guardia-ruge.png), llegan sus guardias (4 en la planta baja y 2 más por planta) y van todos a por Johnny
+# (captura-guardia-persigue.png); al caer, sus guardias no sueltan nada y él, un dólar y un mutágeno por guardia y uno más
 func probar_guardia() -> void:
 	await montar(0, 0, false)
 	if guardia == null:
@@ -2501,56 +2503,66 @@ func probar_guardia() -> void:
 	for z in get_tree().get_nodes_in_group("zombis"):
 		if z != guardia:
 			z.queue_free()
-	var silbatos := [0]
-	guardia.silbato.connect(func(): silbatos[0] += 1)
-	var fotos_guardia := {}
-	guardia.vida = guardia.vida_max * 10   # que no caiga a media vida por el camino
-	guardia.vida_max = guardia.vida
-	johnny.vida = 100000   # que no le maten los refuerzos
+	var rugidos := [0]
+	guardia.rugido.connect(func(): rugidos[0] += 1)
+	johnny.vida = 100000   # que no le maten entre todos
 	var sitio: Dictionary = planta.sitios[aqui]
-	guardia.global_position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
-	# 17 nov: su dibujo nuevo de cerca, junto a Johnny, antes de que salga corriendo (captura-guardia-de-cerca.png)
-	guardia.global_position += Vector2(0, 100)   # (fuera del banco de en medio)
+	guardia.global_position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0 + 100)   # (fuera del banco de en medio)
 	johnny.position = guardia.global_position + Vector2(-90, 0)
 	johnny.get_node("Camara").reset_smoothing()
 	guardia.set_physics_process(false)   # (quieto para la foto, mientras se aclara la pantalla)
 	await get_tree().create_timer(0.8, false).timeout
 	Captura.foto("captura-guardia-de-cerca.png")
+	print("Guardia · antes de verle: alerta %s · dibujo %s (esperado: false, zombi-guardia.tres)" % [guardia.alerta,
+		guardia.sprite.sprite_frames.resource_path.get_file()])
+	# le ve: ruge
+	johnny.position = guardia.global_position + Vector2(-230, 0)
+	johnny.get_node("Camara").reset_smoothing()
 	guardia.set_physics_process(true)
-	guardia.global_position -= Vector2(0, 100)
-	johnny.position = guardia.global_position + Vector2(-250, 0)
+	await get_tree().create_timer(0.35, false).timeout
+	var grito: Array = guardia.get_parent().get_children().filter(func(n): return n is Label and "GRRR" in n.text)
+	print("Guardia · al verle: estado %s · animación %s · rugidos %d · «%s» en %s (esperado: rugido, grito_o, 1, ¡¡¡GRRR!!! en rojo %s)" % [
+		guardia.estado, guardia.sprite.animation, rugidos[0], grito[0].text if grito else "nada",
+		grito[0].get_theme_color("font_color").to_html(false) if grito else "-", Tema.ROJO.to_html(false)])
+	Captura.foto("captura-guardia-ruge.png")
 	await get_tree().create_timer(0.3, false).timeout
-	for seg in 14:
-		var p0: Vector2 = guardia.global_position
-		await get_tree().create_timer(1.0, false).timeout
-		print("Guardia seg %d: avanza %.0f · silbatos %d · cansado %.1f · alerta %s" % [seg, p0.distance_to(guardia.global_position), silbatos[0], guardia.cansado, guardia.alerta])
-		# su dibujo nuevo (17 nov, el jefe de seguridad de GPT): huyendo, con el andar más rápido, y parado resoplando
-		if seg == 1:
-			print("Guardia · huyendo: dibujo %s · animación %s a x%.1f (esperado: zombi-guardia, andar, x2.4)" % [
-				guardia.sprite.sprite_frames.resource_path.get_file(), guardia.sprite.animation, guardia.sprite.speed_scale])
-		if guardia.cansado > 0.0 and not fotos_guardia.has("cansado"):
-			fotos_guardia["cansado"] = true
-			print("Guardia · cansado: animación %s a x%.1f (esperado: reposo, x1.0)" % [guardia.sprite.animation, guardia.sprite.speed_scale])
-		if seg == 0:
-			var llegados: int = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia).size()
-			print("Guardia: tras el primer silbato llegan %d refuerzos (esperado 4, +%d por la planta)" % [llegados, planta.num / 2])
-	var refuerzos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia and z.get_meta("tipo", "") == "vigilante")
-	var vel: float = refuerzos[0].velocidad if not refuerzos.is_empty() else 0.0
-	print("Guardia en ~14 s: silbatos %d (esperado 3: al verte y cada 6 s) · refuerzos vivos %d (Johnny va matando) · velocidad de un refuerzo %.0f (esperado 165)" % [
-		silbatos[0], refuerzos.size(), vel])
-	# lo que sueltan (16 nov): los guardas que llama el guardia, nada; él, su mutágeno y billetes (y la llave maestra)
+	var suyos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia)
+	print("Guardia · llegan %d guardias (esperado %d en la planta %d) · todos marcados «llamado»: %s" % [suyos.size(),
+		guardias_del_rugido(), planta.num, suyos.all(func(r): return r.has_meta("llamado"))])
+	print("Guardia · cuántos llama en cada planta (baja, 1ª, 2ª, 3ª): %s (esperado: 4, 6, 8, 10)" % [range(1, 5).map(func(n):
+		var antes: int = planta.num
+		planta.num = n
+		var cuantos := guardias_del_rugido()
+		planta.num = antes
+		return cuantos)])
+	# después del rugido, a por Johnny
+	await get_tree().create_timer(1.2, false).timeout
+	var d0: float = guardia.global_position.distance_to(johnny.position)
+	await get_tree().create_timer(0.5, false).timeout
+	print("Guardia · tras rugir: estado %s · animación %s a x%.1f · se acerca %.0f (esperado: andar o zarpazo, andar a x2.0, se acerca)" % [
+		guardia.estado, guardia.sprite.animation, guardia.sprite.speed_scale, d0 - guardia.global_position.distance_to(johnny.position)])
+	Captura.foto("captura-guardia-persigue.png")
+	await get_tree().create_timer(4.0, false).timeout
+	print("Guardia · en 6 s, rugidos %d (esperado 1: ruge una sola vez)" % rugidos[0])
+	# lo que sueltan: sus guardias, nada; él, la llave aparte y un dólar y un mutágeno por guardia y uno más
 	var cosas := func() -> int:
 		return mapa.cosas.get_children().filter(func(c): return c.has_signal("cogido") and not c.is_queued_for_deletion()).size()
+	# (lejos de Johnny, que si no lo recoge todo al momento)
+	johnny.position = Vector2(Planta.MURO + 80, sitio.alto / 2.0)
+	var lejos := Vector2(sitio.ancho - 300, sitio.alto / 2.0)
 	var n0: int = cosas.call()
-	var marcados: int = refuerzos.filter(func(r): return r.has_meta("llamado")).size()
-	for r in refuerzos:
+	suyos = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia and z.estado != "muerto")
+	for r in suyos:
+		r.global_position = lejos
 		r.recibir_golpe(99999, Vector2.ZERO)
 	await get_tree().create_timer(0.6, false).timeout
-	print("Guardia · %d refuerzos marcados «llamado» de %d · al caer sueltan %d cosas (esperado: todos · 0)" % [marcados, refuerzos.size(), cosas.call() - n0])
+	print("Guardia · sus %d guardias, al caer, sueltan %d cosas (esperado 0)" % [suyos.size(), cosas.call() - n0])
 	n0 = cosas.call()
+	guardia.global_position = lejos + Vector2(0, 80)
 	guardia.recibir_golpe(99999, Vector2.ZERO)
 	await get_tree().create_timer(0.8, false).timeout
-	print("Guardia · el de la llave maestra, al caer, suelta %d cosas (esperado: 10, 5 dólares y 5 mutágenos; la llave aparte)" % (cosas.call() - n0))
+	print("Guardia · él, al caer, suelta %d cosas (esperado %d: %d dólares y %d mutágenos; la llave aparte)" % [cosas.call() - n0,
+		2 * (guardias_del_rugido() + 1), guardias_del_rugido() + 1, guardias_del_rugido() + 1])
 	get_tree().quit()
 
 
