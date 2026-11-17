@@ -117,6 +117,8 @@ func _ready() -> void:
 	var caja := RectangleShape2D.new()
 	var vertical: bool = salida.dir == "izquierda" or salida.dir == "derecha"
 	caja.size = Vector2(28, 56) if vertical else Vector2(56, 28)
+	if doble():
+		caja.size.y *= 2.0
 	forma.shape = caja
 	forma.position = {"arriba": Vector2(0, 14), "abajo": Vector2(0, -14), "izquierda": Vector2(14, 0),
 		"derecha": Vector2(-14, 0)}[salida.dir]
@@ -127,6 +129,12 @@ func _ready() -> void:
 			empujada.emit(indice))
 	# (sin nada escrito encima: adónde lleva lo dicen el mapa de la esquina, las placas de los pisos, el cartel de la
 	# planta junto al ascensor y los letreros de neón de las tiendas)
+
+
+# La puerta de la calle del centro comercial (la de llegada de la planta baja, a la izquierda): el doble de larga y con
+# dos hojas, como una entrada de centro comercial (17 nov, idea del dueño)
+func doble() -> bool:
+	return centro and salida.get("tipo", "") == "llegada" and salida.dir == "izquierda"
 
 
 # Dónde aparece Johnny al llegar por esta puerta (un poco hacia dentro)
@@ -190,6 +198,16 @@ func _draw() -> void:
 				draw_set_transform(Vector2.ZERO)
 				return
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0
+			if doble():
+				# el doble de larga (144 en vez de 72), con las dos hojas que se juntan en el medio, una raya oscura entre
+				# ellas y un tirador en cada una, junto a la raya
+				draw_rect(Rect2(x0, -72, 64, 144), MARCO)
+				draw_rect(Rect2(x0, -68, 64, 136), HUECO)
+				draw_rect(Rect2(-8, -68, 8, 136), HOJA)
+				draw_rect(Rect2(-8, -1, 8, 2), MARCO)
+				draw_rect(Rect2(-2, -12, 2, 8), MARCO)
+				draw_rect(Rect2(-2, 4, 2, 8), MARCO)
+				return
 			draw_rect(Rect2(x0, -36, 64, 72), MARCO)
 			draw_rect(Rect2(x0, -32, 64, 64), HUECO)
 			var borde := -8.0 if salida.dir == "izquierda" else 0.0   # la hoja, en el borde de dentro
