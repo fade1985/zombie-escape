@@ -77,6 +77,8 @@ const MUEBLES := {
 	"plantapasillo": {"len": 48, "dep": 36, "paredes": "todas", "archivo": "planta-pasillo-gpt"},
 	# la de la galería del centro comercial, de GPT (tools/muebles_gpt.py): una palmera en su maceta alta de piedra blanca
 	"palmera":    {"len": 84,  "dep": 36,  "paredes": "todas", "archivo": "palmera-gpt"},
+	# y su banco, de GPT (tools/muebles_gpt.py): de acero inoxidable con listones de madera, en medio del pasillo (17 nov)
+	"bancogaleria": {"len": 96, "dep": 36,  "paredes": "",      "archivo": "banco-galeria-gpt"},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -1005,8 +1007,11 @@ const SALAS := {
 		# (17 nov: cuatro palmeras, todas en la pared de arriba: una en la 46,6, entre el escaparate y el cartel de salida, que
 		# está siempre arriba a la derecha, y otra en su espejo, la 5,4; y una a cada lado del ascensor, la 23 y la 29. La
 		# pared de abajo, sin nada. Los neones se apartan de ellas solos: mapa.poner_neones_galeria)
+		# (y un banco en medio del pasillo delante de cada tienda de la pared de abajo, mirando hacia ella: un obstáculo
+		# para despistar a los guardas dándole la vuelta. El suelo tiene 8 casillas de hondo: el 4, su mitad)
 		"colocados": {"abajo": [
 			["palmera", 5.4], ["palmera", 23.0], ["palmera", 29.0], ["palmera", 46.6],
+			["bancogaleria", 12.0, "libre", 4.0], ["bancogaleria", 40.0, "libre", 4.0],
 		]},
 	},
 	# Los pasillos de Torre Velaria (tercer edificio), puestos a mano como la galería (mismas casillas: las puertas de los

@@ -395,7 +395,8 @@
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
 #   --maestra           (con --edificio centro) la llave maestra del guardia: las puertas del pasillo cerradas (y su
 #                       frase), la llave en el suelo, al cogerla todas abiertas, el mapa antes y después (candados,
-#                       calavera y casco), «Maestra» en el inventario y, en la planta de arriba, sin ella  [prueba_sitios.gd]
+#                       calavera y casco), «Maestra» en el inventario y, en la planta de arriba, sin ella; y los
+#                       bancos de la galería: Johnny a su lado y que no se atraviesan          [prueba_sitios.gd]
 #   --tiendas           (con --edificio centro) cada tienda de las cuatro primeras plantas, entera, también la del
 #                       minijefe                                                           [prueba_sitios.gd]
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o

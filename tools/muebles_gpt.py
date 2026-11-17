@@ -316,6 +316,10 @@ MUEBLES = {
     # la palmera de la galería del centro comercial (17 nov, catalogo.gd: "palmera"): una areca en su maceta alta de piedra
     # blanca con motas; algo más alta que Johnny (48)
     "palmera": ("assets/sources/palmera-gpt.webp", "assets/sprites/mueble-palmera.png", 42, 65, True),
+    # el banco de la galería del centro comercial (17 nov, catalogo.gd: "bancogaleria"): acero inoxidable y listones de
+    # madera, en medio del pasillo delante de las dos tiendas de abajo. Los huecos entre los listones del respaldo y bajo
+    # el asiento, todo el negro puro (el contorno es casi negro)
+    "bancogaleria": ("assets/sources/banco-galeria-gpt.webp", "assets/sprites/mueble-bancogaleria.png", 48, 27, True, (), "negro"),
     # la placa de la sala de mantenimiento, junto a su puerta en el pasillo de los tres edificios (puerta.gd,
     # cartel_mantenimiento; 17 nov): chapa esmaltada azul con un casco de obra y dos llaves inglesas cruzadas, sin letras
     # (en vez del cartel «MANTENIMIENTO», que con la palabra no podía ser más corto). A 22, los cuadrados de GPT justos:
