@@ -43,7 +43,8 @@ def color_de(a, zona):
 # --- Suelo: 1254 × 1254, 16 × 16 baldosas de 78,375 con la junta (unos 4 píxeles) centrada en cada múltiplo, y media
 # junta en los bordes. Cada baldosa: 7 × 7 píxeles de dentro y la junta en el último (8 × 8).
 # GPT repartió los colores al azar; el dueño lo quiere en mosaico, como su foto: un escocés (tartán) EN DIAGONAL que se
-# repite cada 8 baldosas. Cada diagonal (las que bajan a la derecha y las que suben) es oscura (a), media (b) o clara (c),
+# repite cada 10 baldosas (así caben justas las 11 filas de mosaico de la galería: mapa.gd lo corre para que empiece y acabe
+# en una fila de cruces y los rombos queden enteros; MOSAICO_GALERIA = 80 píxeles). Cada diagonal (las que bajan a la derecha y las que suben) es oscura (a), media (b) o clara (c),
 # y el color de la baldosa sale de cruzar sus dos diagonales (MOSAICO). De la baldosa de GPT solo se queda su dibujo
 # (grietas, rayas, motas: lo que se aparta de su color medio).
 # Y aparte, suelo-galeria-marco: las mismas baldosas, todas del color claro (MARCO), para el marco que pinta mapa.gd
@@ -52,20 +53,20 @@ COLORES = {'O': (115, 82, 120), 'M': (167, 126, 163), 'L': (154, 137, 166), 'R':
            'C': (219, 187, 171)}   # morado oscuro, malva, lila, rosa, gris y crema (los de las baldosas de GPT)
 MARCO = (206, 201, 210)   # gris lila muy claro
 MOSAICO = {('a', 'a'): 'O', ('a', 'b'): 'M', ('a', 'c'): 'M', ('b', 'b'): 'R', ('b', 'c'): 'R', ('c', 'c'): 'C'}
-TIRAS = 'aabccccb'   # las 8 diagonales que se repiten: dos oscuras, una media, cuatro claras y otra media
+TIRAS = 'aabccccccb'   # las 10 diagonales que se repiten: dos oscuras, una media, seis claras y otra media
 img = Image.open('assets/sources/suelos/galeria-suelo-gpt.webp').convert('RGB')
 a = np.asarray(img)
 PASO, JUNTA, N = 1254 / 16, 3.0, 16
 junta = np.median(np.concatenate([a[:, int(PASO * k) - 1:int(PASO * k) + 2].reshape(-1, 3) for k in range(1, N)]), axis=0)
 
 
-def baldosas(color_de_baldosa, corrida=(0, 0)):
-    # las 16 × 16 baldosas de GPT con su dibujo y el color que diga color_de_baldosa(fx, fy); corrida cambia qué
+def baldosas(color_de_baldosa, corrida=(0, 0), n=N):
+    # n × n baldosas (las 16 × 16 de GPT, repetidas si hacen falta más) con su dibujo y el color que diga color_de_baldosa(fx, fy); corrida cambia qué
     # baldosa de GPT va en cada sitio (para que el marco no tenga las grietas en los mismos sitios que el mosaico)
-    suelo = np.zeros((128, 128, 3))
+    suelo = np.zeros((n * 8, n * 8, 3))
     suelo[:, :] = junta
-    for fy in range(N):
-        for fx in range(N):
+    for fy in range(n):
+        for fx in range(n):
             gx, gy = (fx + corrida[0]) % N, (fy + corrida[1]) % N
             caja = (gx * PASO + JUNTA, gy * PASO + JUNTA, (gx + 1) * PASO - JUNTA, (gy + 1) * PASO - JUNTA)
             baldosa = reducir(img, caja, 7, 7)
@@ -73,8 +74,8 @@ def baldosas(color_de_baldosa, corrida=(0, 0)):
     return Image.fromarray(np.clip(suelo * OSCURO, 0, 255).astype(np.uint8))
 
 
-guardar(baldosas(lambda fx, fy: COLORES[MOSAICO[tuple(sorted((TIRAS[(fx + fy) % 8], TIRAS[(fx - fy) % 8])))]]),
-        'suelo-galeria')
+guardar(baldosas(lambda fx, fy: COLORES[MOSAICO[tuple(sorted((TIRAS[(fx + fy) % 10], TIRAS[(fx - fy) % 10])))]], n=20),
+        'suelo-galeria')   # 160 × 160: dos veces el mosaico
 guardar(baldosas(lambda fx, fy: MARCO, (5, 3)), 'suelo-galeria-marco')
 
 # --- Pared: la franja va de y 263 a 759; 8 paneles de 191,5 de ancho con la junta (unos 5 píxeles) en cada múltiplo.

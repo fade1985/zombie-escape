@@ -69,8 +69,9 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
 - **Galería del centro comercial, desde el 17 nov (pendiente de visto bueno):** un centro comercial de los 80 abandonado, hecho
   con GPT a partir de una foto del dueño: baldosa pequeña en tonos pastel (gris, crema, lila, malva, rosa y morado) puesta en
   mosaico de escocés en diagonal, como la foto (GPT las repartió al azar; la herramienta recolorea cada baldosa según
-  `TIRAS` y `MOSAICO`, que se repite cada 8, y solo se queda con su dibujo: grietas, rayas, motas) (16 × 16 baldosas de 8,
-  `suelo-galeria`, 128 × 128, oscurecido un 20 %), enmarcado por baldosa clara lisa (`suelo-galeria-marco`): 4 filas de
+  `TIRAS` y `MOSAICO`, que se repite cada 10, y solo se queda con su dibujo: grietas, rayas, motas) (20 × 20 baldosas de 8,
+  `suelo-galeria`, 160 × 160, oscurecido un 20 %; `mapa.gd` lo corre, `desfase`, para que sus 11 filas empiecen y acaben en
+  una fila de cruces de las franjas y los rombos queden enteros, y centrado a lo ancho), enmarcado por baldosa clara lisa (`suelo-galeria-marco`): 4 filas de
   baldosas arriba, junto a la pared, y 1 abajo (`marco` en `mapa.gd`, `dibujar_fondo`), y pared lisa rosa malva en 8 paneles con
   moldura cromada arriba y rodapié morado (`pared-galeria`, 152 × 48: paneles de 18 + 1 de junta; `techo-galeria`, canto malva).
   Sin neones ni sangre en las texturas (irán sueltos). Originales en `assets/sources/suelos/galeria-suelo-gpt.webp` y

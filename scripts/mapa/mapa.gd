@@ -139,6 +139,7 @@ var estilos := {}                 # habitación -> {suelo, pared, techo} (textur
 var tapa: Texture2D
 var alfombra: Texture2D
 var marco: Texture2D              # el borde de baldosa clara de la galería del centro comercial (dibujar_fondo)
+const MOSAICO_GALERIA := 80       # cada cuántos píxeles se repite el mosaico de la galería (10 baldosas de 8)
 var cosas: Node2D                # personajes, muebles y caras de muro, ordenados por su "y"
 var puertas: Array = []           # una por salida, en el mismo orden
 var hojas: Array = []             # las puertas de dentro (puerta_bano.gd), una por hueco entre habitaciones
@@ -523,6 +524,25 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 	if al_aire:
 		# la azotea entera, la imagen de GPT: el helipuerto, la barandilla, la caseta y la pasarela (planta.gd, azotea)
 		lienzo.draw_texture(GARAJE if sitio.get("estilo", "") == "garaje" else AZOTEA, Vector2.ZERO)
+	# La galería del centro comercial: el mosaico en diagonal va enmarcado por baldosa clara lisa, 4 filas de baldosas
+	# (32 píxeles) arriba, pegadas a la pared, y 1 (8) abajo. Las filas de suelo son las que están casi enteras sin muro
+	# (así no cuentan los huecos de las puertas). El mosaico se corre (desfase) para que empiece arriba justo en una fila
+	# de cruces de las franjas y quede centrado a lo ancho: con sus 11 filas, acaba abajo igual que empieza, con los
+	# rombos enteros (se repite cada MOSAICO_GALERIA píxeles, tools/galeria_gpt.py)
+	var primera := -1
+	var ultima := -1
+	var desfase := Vector2.ZERO
+	if marco:
+		for f in filas:
+			var libres := 0
+			for c in cols:
+				if not es_muro(c, f):
+					libres += 1
+			if libres > cols / 2.0:
+				if primera < 0:
+					primera = f
+				ultima = f
+		desfase = Vector2(posmod(8 - cols * 8, MOSAICO_GALERIA), posmod(-(primera * 16 + 32), MOSAICO_GALERIA))
 	for f in (0 if al_aire else filas):   # (la azotea ya tiene su suelo: la imagen)
 		var c := 0
 		while c < cols:
@@ -533,7 +553,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 				fin += 1
 			var trozo := Rect2(c * 16, f * 16, (fin - c) * 16, 16)
 			if not muro:
-				lienzo.draw_texture_rect_region(estilos[sala].suelo, trozo, trozo)
+				lienzo.draw_texture_rect_region(estilos[sala].suelo, trozo, Rect2(trozo.position + desfase, trozo.size))
 			c = fin
 	# Los huecos de puerta entre dos habitaciones: cada suelo llega hasta la mitad del paso (arriba se ha
 	# pintado entero con el de una de ellas) y, donde se juntan, la pletina de latón
@@ -554,20 +574,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 				for i in PLETINA.size():
 					lienzo.draw_rect(Rect2(c * 16 + 6 + i, f * 16, 1, 16), PLETINA[i])
 	if marco:
-		# la galería del centro comercial: el mosaico en diagonal va enmarcado por baldosa clara lisa, 4 filas de baldosas
-		# (32 píxeles) arriba, pegadas a la pared, y 1 (8) abajo. Las filas de suelo son las que están casi enteras sin
-		# muro (así no cuentan los huecos de las puertas)
-		var primera := -1
-		var ultima := -1
-		for f in filas:
-			var libres := 0
-			for c in cols:
-				if not es_muro(c, f):
-					libres += 1
-			if libres > cols / 2.0:
-				if primera < 0:
-					primera = f
-				ultima = f
+		# el marco claro de la galería (ver arriba)
 		if primera >= 0:
 			for franja in [Rect2(0, primera * 16, cols * 16, 32), Rect2(0, ultima * 16 + 8, cols * 16, 8)]:
 				var f_franja := int(franja.position.y / 16)
