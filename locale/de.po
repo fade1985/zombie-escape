@@ -1160,8 +1160,8 @@ msgid "OLEADA %d"
 msgstr "WELLE %d"
 
 #: scripts/garaje.gd
-msgid "¡GARAJE SUPERADO!"
-msgstr "TIEFGARAGE GESCHAFFT!"
+msgid "¡¡¡GARAJE SUPERADO!!!"
+msgstr "TIEFGARAGE GESCHAFFT!!!"
 
 #: scripts/garaje.gd
 msgid "Siguiente oleada en %d"
@@ -2194,16 +2194,16 @@ msgstr[0] "Erledige %d Schläfer mit dieser Waffe, über alle Runden gezählt."
 msgstr[1] "Erledige %d Schläfer mit dieser Waffe, über alle Runden gezählt."
 
 #: scripts/logros.gd
-msgid "¡LOGRO CONSEGUIDO!"
-msgstr "ERFOLG ERZIELT!"
+msgid "¡¡¡LOGRO CONSEGUIDO!!!"
+msgstr "ERFOLG ERZIELT!!!"
 
 #: scripts/logros.gd
 msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
 msgstr "Erfolg erzielt: %s! Hol dir die Belohnung am Computer"
 
 #: scripts/logros.gd
-msgid "¡%d LOGROS CONSEGUIDOS!"
-msgstr "%d ERFOLGE ERZIELT!"
+msgid "¡¡¡%d LOGROS CONSEGUIDOS!!!"
+msgstr "%d ERFOLGE ERZIELT!!!"
 
 #: scripts/logros.gd
 msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
@@ -3170,20 +3170,20 @@ msgid "¡¡¡%s!!!"
 msgstr "%s!!!"
 
 #: scripts/partida.gd
-msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
-msgstr "ICH SEH MICH LIEBER NOCH ETWAS UM!"
+msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
+msgstr "ICH SEH MICH LIEBER NOCH ETWAS UM!!!"
 
 #: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Halte durch: Das Schloss ist noch nicht geknackt"
 
 #: scripts/partida.gd
-msgid "¡SE HA ATASCADO!"
-msgstr "KLEMMT!"
+msgid "¡¡¡SE HA ATASCADO!!!"
+msgstr "KLEMMT!!!"
 
 #: scripts/partida.gd
-msgid "¡TENGO QUE REPARARLO!"
-msgstr "ICH MUSS IHN REPARIEREN!"
+msgid "¡¡¡TENGO QUE REPARARLO!!!"
+msgstr "ICH MUSS IHN REPARIEREN!!!"
 
 #: scripts/partida.gd
 msgid "¡¡¡ESTÁ BLOQUEADO!!!"
@@ -3298,8 +3298,8 @@ msgid "+munición"
 msgstr "+Munition"
 
 #: scripts/partida.gd
-msgid "¡NO PUEDO LLEVAR MÁS!"
-msgstr "MEHR KANN ICH NICHT TRAGEN!"
+msgid "¡¡¡NO PUEDO LLEVAR MÁS!!!"
+msgstr "MEHR KANN ICH NICHT TRAGEN!!!"
 
 #: scripts/partida.gd scripts/ui/inventario.gd
 msgid "%s: es su última partida; al acabarla, se destruye."
@@ -3382,28 +3382,28 @@ msgid "¡Nueva mejor marca!"
 msgstr "Neue Bestmarke!"
 
 #: scripts/partida.gd
-msgid "¡SKIN NUEVA!"
-msgstr "NEUER SKIN!"
+msgid "¡¡¡SKIN NUEVA!!!"
+msgstr "NEUER SKIN!!!"
 
 #: scripts/partida.gd
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "Neuer Skin: %s. Zieh ihn am Spind im Wartungsraum an"
 
 #: scripts/partida.gd
-msgid "¡UF! ¡VAYA PESADILLA!"
-msgstr "PUH! WAS FÜR EIN ALBTRAUM!"
+msgid "¡¡¡UF!!! ¡¡¡VAYA PESADILLA!!!"
+msgstr "PUH!!! WAS FÜR EIN ALBTRAUM!!!"
 
 #: scripts/partida.gd
-msgid "¿ME HE VUELTO A DORMIR EN EL TRABAJO?"
-msgstr "BIN ICH WIEDER BEI DER ARBEIT EINGESCHLAFEN?"
+msgid "¿¿¿ME HE VUELTO A DORMIR EN EL TRABAJO???"
+msgstr "BIN ICH WIEDER BEI DER ARBEIT EINGESCHLAFEN???"
 
 #: scripts/partida.gd
-msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
-msgstr "ICH SCHWÖRE, DIE HABEN MICH GEBISSEN!"
+msgid "¡¡¡JURARÍA QUE ME ESTABAN MORDIENDO!!!"
+msgstr "ICH SCHWÖRE, DIE HABEN MICH GEBISSEN!!!"
 
 #: scripts/partida.gd
-msgid "¡OTRA VEZ ESE SUEÑO DE DURMIENTES!"
-msgstr "SCHON WIEDER DIESER SCHLÄFERTRAUM!"
+msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
+msgstr "SCHON WIEDER DIESER SCHLÄFERTRAUM!!!"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"

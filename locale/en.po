@@ -1160,8 +1160,8 @@ msgid "OLEADA %d"
 msgstr "WAVE %d"
 
 #: scripts/garaje.gd
-msgid "¡GARAJE SUPERADO!"
-msgstr "GARAGE CLEARED!"
+msgid "¡¡¡GARAJE SUPERADO!!!"
+msgstr "GARAGE CLEARED!!!"
 
 #: scripts/garaje.gd
 msgid "Siguiente oleada en %d"
@@ -2194,16 +2194,16 @@ msgstr[0] "Kill %d sleeper with this weapon, across all your runs."
 msgstr[1] "Kill %d sleepers with this weapon, across all your runs."
 
 #: scripts/logros.gd
-msgid "¡LOGRO CONSEGUIDO!"
-msgstr "ACHIEVEMENT UNLOCKED!"
+msgid "¡¡¡LOGRO CONSEGUIDO!!!"
+msgstr "ACHIEVEMENT UNLOCKED!!!"
 
 #: scripts/logros.gd
 msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
 msgstr "Achievement unlocked: %s! Claim the reward at the computer"
 
 #: scripts/logros.gd
-msgid "¡%d LOGROS CONSEGUIDOS!"
-msgstr "%d ACHIEVEMENTS UNLOCKED!"
+msgid "¡¡¡%d LOGROS CONSEGUIDOS!!!"
+msgstr "%d ACHIEVEMENTS UNLOCKED!!!"
 
 #: scripts/logros.gd
 msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
@@ -3170,20 +3170,20 @@ msgid "¡¡¡%s!!!"
 msgstr "%s!!!"
 
 #: scripts/partida.gd
-msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
-msgstr "I'D BETTER LOOK AROUND A BIT MORE!"
+msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
+msgstr "I'D BETTER LOOK AROUND A BIT MORE!!!"
 
 #: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Hold on: they're still working on the lock"
 
 #: scripts/partida.gd
-msgid "¡SE HA ATASCADO!"
-msgstr "IT'S JAMMED!"
+msgid "¡¡¡SE HA ATASCADO!!!"
+msgstr "IT'S JAMMED!!!"
 
 #: scripts/partida.gd
-msgid "¡TENGO QUE REPARARLO!"
-msgstr "I HAVE TO FIX IT!"
+msgid "¡¡¡TENGO QUE REPARARLO!!!"
+msgstr "I HAVE TO FIX IT!!!"
 
 #: scripts/partida.gd
 msgid "¡¡¡ESTÁ BLOQUEADO!!!"
@@ -3298,8 +3298,8 @@ msgid "+munición"
 msgstr "+ammo"
 
 #: scripts/partida.gd
-msgid "¡NO PUEDO LLEVAR MÁS!"
-msgstr "I CAN'T CARRY ANY MORE!"
+msgid "¡¡¡NO PUEDO LLEVAR MÁS!!!"
+msgstr "I CAN'T CARRY ANY MORE!!!"
 
 #: scripts/partida.gd scripts/ui/inventario.gd
 msgid "%s: es su última partida; al acabarla, se destruye."
@@ -3382,28 +3382,28 @@ msgid "¡Nueva mejor marca!"
 msgstr "New personal best!"
 
 #: scripts/partida.gd
-msgid "¡SKIN NUEVA!"
-msgstr "NEW SKIN!"
+msgid "¡¡¡SKIN NUEVA!!!"
+msgstr "NEW SKIN!!!"
 
 #: scripts/partida.gd
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "New skin: %s. Put it on in the maintenance room locker"
 
 #: scripts/partida.gd
-msgid "¡UF! ¡VAYA PESADILLA!"
-msgstr "PHEW! WHAT A NIGHTMARE!"
+msgid "¡¡¡UF!!! ¡¡¡VAYA PESADILLA!!!"
+msgstr "PHEW!!! WHAT A NIGHTMARE!!!"
 
 #: scripts/partida.gd
-msgid "¿ME HE VUELTO A DORMIR EN EL TRABAJO?"
-msgstr "DID I FALL ASLEEP AT WORK AGAIN?"
+msgid "¿¿¿ME HE VUELTO A DORMIR EN EL TRABAJO???"
+msgstr "DID I FALL ASLEEP AT WORK AGAIN???"
 
 #: scripts/partida.gd
-msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
-msgstr "I SWEAR THEY WERE BITING ME!"
+msgid "¡¡¡JURARÍA QUE ME ESTABAN MORDIENDO!!!"
+msgstr "I SWEAR THEY WERE BITING ME!!!"
 
 #: scripts/partida.gd
-msgid "¡OTRA VEZ ESE SUEÑO DE DURMIENTES!"
-msgstr "THAT SLEEPER DREAM AGAIN!"
+msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
+msgstr "THAT SLEEPER DREAM AGAIN!!!"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"

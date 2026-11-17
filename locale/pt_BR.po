@@ -1160,8 +1160,8 @@ msgid "OLEADA %d"
 msgstr "ONDA %d"
 
 #: scripts/garaje.gd
-msgid "¡GARAJE SUPERADO!"
-msgstr "GARAGEM SUPERADA!"
+msgid "¡¡¡GARAJE SUPERADO!!!"
+msgstr "GARAGEM SUPERADA!!!"
 
 #: scripts/garaje.gd
 msgid "Siguiente oleada en %d"
@@ -2194,16 +2194,16 @@ msgstr[0] "Mate %d adormecido com esta arma, somando todas as suas partidas."
 msgstr[1] "Mate %d adormecidos com esta arma, somando todas as suas partidas."
 
 #: scripts/logros.gd
-msgid "¡LOGRO CONSEGUIDO!"
-msgstr "CONQUISTA DESBLOQUEADA!"
+msgid "¡¡¡LOGRO CONSEGUIDO!!!"
+msgstr "CONQUISTA DESBLOQUEADA!!!"
 
 #: scripts/logros.gd
 msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
 msgstr "Conquista desbloqueada: %s! Resgate o prêmio no computador"
 
 #: scripts/logros.gd
-msgid "¡%d LOGROS CONSEGUIDOS!"
-msgstr "%d CONQUISTAS DESBLOQUEADAS!"
+msgid "¡¡¡%d LOGROS CONSEGUIDOS!!!"
+msgstr "%d CONQUISTAS DESBLOQUEADAS!!!"
 
 #: scripts/logros.gd
 msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
@@ -3170,20 +3170,20 @@ msgid "¡¡¡%s!!!"
 msgstr "%s!!!"
 
 #: scripts/partida.gd
-msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
-msgstr "MELHOR INVESTIGAR MAIS UM POUCO!"
+msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
+msgstr "MELHOR INVESTIGAR MAIS UM POUCO!!!"
 
 #: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Aguente: ainda estão forçando a fechadura"
 
 #: scripts/partida.gd
-msgid "¡SE HA ATASCADO!"
-msgstr "EMPERROU!"
+msgid "¡¡¡SE HA ATASCADO!!!"
+msgstr "EMPERROU!!!"
 
 #: scripts/partida.gd
-msgid "¡TENGO QUE REPARARLO!"
-msgstr "TENHO QUE CONSERTAR!"
+msgid "¡¡¡TENGO QUE REPARARLO!!!"
+msgstr "TENHO QUE CONSERTAR!!!"
 
 #: scripts/partida.gd
 msgid "¡¡¡ESTÁ BLOQUEADO!!!"
@@ -3298,8 +3298,8 @@ msgid "+munición"
 msgstr "+munição"
 
 #: scripts/partida.gd
-msgid "¡NO PUEDO LLEVAR MÁS!"
-msgstr "NÃO CONSIGO CARREGAR MAIS!"
+msgid "¡¡¡NO PUEDO LLEVAR MÁS!!!"
+msgstr "NÃO CONSIGO CARREGAR MAIS!!!"
 
 #: scripts/partida.gd scripts/ui/inventario.gd
 msgid "%s: es su última partida; al acabarla, se destruye."
@@ -3382,28 +3382,28 @@ msgid "¡Nueva mejor marca!"
 msgstr "Novo recorde!"
 
 #: scripts/partida.gd
-msgid "¡SKIN NUEVA!"
-msgstr "SKIN NOVA!"
+msgid "¡¡¡SKIN NUEVA!!!"
+msgstr "SKIN NOVA!!!"
 
 #: scripts/partida.gd
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "Skin nova: %s. Vista no armário da sala de manutenção"
 
 #: scripts/partida.gd
-msgid "¡UF! ¡VAYA PESADILLA!"
-msgstr "UFA! QUE PESADELO!"
+msgid "¡¡¡UF!!! ¡¡¡VAYA PESADILLA!!!"
+msgstr "UFA!!! QUE PESADELO!!!"
 
 #: scripts/partida.gd
-msgid "¿ME HE VUELTO A DORMIR EN EL TRABAJO?"
-msgstr "DORMI NO TRABALHO DE NOVO?"
+msgid "¿¿¿ME HE VUELTO A DORMIR EN EL TRABAJO???"
+msgstr "DORMI NO TRABALHO DE NOVO???"
 
 #: scripts/partida.gd
-msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
-msgstr "JURO QUE ESTAVAM ME MORDENDO!"
+msgid "¡¡¡JURARÍA QUE ME ESTABAN MORDIENDO!!!"
+msgstr "JURO QUE ESTAVAM ME MORDENDO!!!"
 
 #: scripts/partida.gd
-msgid "¡OTRA VEZ ESE SUEÑO DE DURMIENTES!"
-msgstr "DE NOVO ESSE SONHO DE ADORMECIDOS!"
+msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
+msgstr "DE NOVO ESSE SONHO DE ADORMECIDOS!!!"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"

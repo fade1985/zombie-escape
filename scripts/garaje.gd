@@ -274,7 +274,7 @@ func oleada_superada() -> void:
 		Sonido.musica("menu")
 	if oleada >= OLEADAS:
 		en_marcha = false
-		partida.gran_aviso(Idioma.t("¡GARAJE SUPERADO!"))
+		partida.gran_aviso(Idioma.t("¡¡¡GARAJE SUPERADO!!!"))
 		await partida.get_tree().create_timer(2.0, false).timeout
 		partida.terminar(true)
 		return

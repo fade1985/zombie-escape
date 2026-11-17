@@ -375,10 +375,10 @@ func avisar() -> void:
 		return
 	Sonido.tocar("limpio")
 	if por_avisar.size() == 1:
-		partida.gran_aviso(Idioma.t("¡LOGRO CONSEGUIDO!"))
+		partida.gran_aviso(Idioma.t("¡¡¡LOGRO CONSEGUIDO!!!"))
 		partida.decir(Idioma.t("¡Logro conseguido: %s! Cobra el premio en el ordenador") % por_avisar[0], 4.0)
 	else:
-		partida.gran_aviso(Idioma.t("¡%d LOGROS CONSEGUIDOS!") % por_avisar.size())
+		partida.gran_aviso(Idioma.t("¡¡¡%d LOGROS CONSEGUIDOS!!!") % por_avisar.size())
 		if por_avisar.size() == 2:
 			partida.decir(Idioma.t("¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador") % por_avisar, 5.0)
 		else:   # (con más, los nombres no caben en la pantalla)

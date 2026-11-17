@@ -1162,8 +1162,8 @@ msgid "OLEADA %d"
 msgstr "ВОЛНА %d"
 
 #: scripts/garaje.gd
-msgid "¡GARAJE SUPERADO!"
-msgstr "ПАРКИНГ ЗАЧИЩЕН!"
+msgid "¡¡¡GARAJE SUPERADO!!!"
+msgstr "ПАРКИНГ ЗАЧИЩЕН!!!"
 
 #: scripts/garaje.gd
 msgid "Siguiente oleada en %d"
@@ -2198,16 +2198,16 @@ msgstr[1] "Убей %d спящих этим оружием за все забе
 msgstr[2] "Убей %d спящих этим оружием за все забеги."
 
 #: scripts/logros.gd
-msgid "¡LOGRO CONSEGUIDO!"
-msgstr "ДОСТИЖЕНИЕ ПОЛУЧЕНО!"
+msgid "¡¡¡LOGRO CONSEGUIDO!!!"
+msgstr "ДОСТИЖЕНИЕ ПОЛУЧЕНО!!!"
 
 #: scripts/logros.gd
 msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
 msgstr "Достижение получено: %s! Забери награду на компьютере"
 
 #: scripts/logros.gd
-msgid "¡%d LOGROS CONSEGUIDOS!"
-msgstr "ДОСТИЖЕНИЙ ПОЛУЧЕНО: %d!"
+msgid "¡¡¡%d LOGROS CONSEGUIDOS!!!"
+msgstr "ДОСТИЖЕНИЙ ПОЛУЧЕНО: %d!!!"
 
 #: scripts/logros.gd
 msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
@@ -3174,20 +3174,20 @@ msgid "¡¡¡%s!!!"
 msgstr "%s!!!"
 
 #: scripts/partida.gd
-msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
-msgstr "ЛУЧШЕ ОСМОТРЮСЬ ЕЩЁ НЕМНОГО!"
+msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
+msgstr "ЛУЧШЕ ОСМОТРЮСЬ ЕЩЁ НЕМНОГО!!!"
 
 #: scripts/partida.gd
 msgid "Aguanta: aún está forzando la cerradura"
 msgstr "Держись: замок еще не взломан"
 
 #: scripts/partida.gd
-msgid "¡SE HA ATASCADO!"
-msgstr "ЗАКЛИНИЛО!"
+msgid "¡¡¡SE HA ATASCADO!!!"
+msgstr "ЗАКЛИНИЛО!!!"
 
 #: scripts/partida.gd
-msgid "¡TENGO QUE REPARARLO!"
-msgstr "НАДО ЕГО ПОЧИНИТЬ!"
+msgid "¡¡¡TENGO QUE REPARARLO!!!"
+msgstr "НАДО ЕГО ПОЧИНИТЬ!!!"
 
 #: scripts/partida.gd
 msgid "¡¡¡ESTÁ BLOQUEADO!!!"
@@ -3302,8 +3302,8 @@ msgid "+munición"
 msgstr "+патроны"
 
 #: scripts/partida.gd
-msgid "¡NO PUEDO LLEVAR MÁS!"
-msgstr "БОЛЬШЕ НЕ УНЕСУ!"
+msgid "¡¡¡NO PUEDO LLEVAR MÁS!!!"
+msgstr "БОЛЬШЕ НЕ УНЕСУ!!!"
 
 #: scripts/partida.gd scripts/ui/inventario.gd
 msgid "%s: es su última partida; al acabarla, se destruye."
@@ -3390,28 +3390,28 @@ msgid "¡Nueva mejor marca!"
 msgstr "Новый рекорд!"
 
 #: scripts/partida.gd
-msgid "¡SKIN NUEVA!"
-msgstr "НОВЫЙ СКИН!"
+msgid "¡¡¡SKIN NUEVA!!!"
+msgstr "НОВЫЙ СКИН!!!"
 
 #: scripts/partida.gd
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "Новый скин: %s. Надень его в шкафчике в дворницкой"
 
 #: scripts/partida.gd
-msgid "¡UF! ¡VAYA PESADILLA!"
-msgstr "ФУХ! НУ И КОШМАР!"
+msgid "¡¡¡UF!!! ¡¡¡VAYA PESADILLA!!!"
+msgstr "ФУХ!!! НУ И КОШМАР!!!"
 
 #: scripts/partida.gd
-msgid "¿ME HE VUELTO A DORMIR EN EL TRABAJO?"
-msgstr "Я ОПЯТЬ УСНУЛ НА РАБОТЕ?"
+msgid "¿¿¿ME HE VUELTO A DORMIR EN EL TRABAJO???"
+msgstr "Я ОПЯТЬ УСНУЛ НА РАБОТЕ???"
 
 #: scripts/partida.gd
-msgid "¡JURARÍA QUE ME ESTABAN MORDIENDO!"
-msgstr "КЛЯНУСЬ, МЕНЯ КУСАЛИ!"
+msgid "¡¡¡JURARÍA QUE ME ESTABAN MORDIENDO!!!"
+msgstr "КЛЯНУСЬ, МЕНЯ КУСАЛИ!!!"
 
 #: scripts/partida.gd
-msgid "¡OTRA VEZ ESE SUEÑO DE DURMIENTES!"
-msgstr "ОПЯТЬ ЭТОТ СОН ПРО СПЯЩИХ!"
+msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
+msgstr "ОПЯТЬ ЭТОТ СОН ПРО СПЯЩИХ!!!"
 
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"

@@ -44,8 +44,9 @@ Reglas:
 6. **Un texto que cabe justo en español** (botones, tarjetas): el inglés suele salir más corto, pero se mira en una
    captura (`--ingles`) antes de darlo por bueno.
 7. **Los gritos de Johnny** (las frases grandes encima de su cabeza, `partida.gran_aviso`), con tres signos a cada lado,
-   como «¡¡¡LA LLAVE!!!» (decidido por el dueño el 17 nov, para todas las frases nuevas). En los demás idiomas, con los
-   suyos: «THE KEY!!!», «LA CLÉ !!!», «钥匙！！！».
+   como «¡¡¡LA LLAVE!!!» (decidido por el dueño el 17 nov; ese día se pasaron también todas las viejas). Las preguntas,
+   igual: «¿¿¿ME HE VUELTO A DORMIR EN EL TRABAJO???». En los demás idiomas, con los suyos: «THE KEY!!!», «LA CLÉ !!!»,
+   «钥匙！！！».
 
 ### Tablas de datos (`const`)
 

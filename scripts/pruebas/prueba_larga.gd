@@ -1185,7 +1185,7 @@ func probar_novedades() -> void:
 	await get_tree().create_timer(0.35).timeout
 	Captura.foto("captura-novedades-logro.png")
 	await get_tree().create_timer(1.3).timeout
-	gran_aviso("¡SKIN NUEVA!")
+	gran_aviso("¡¡¡SKIN NUEVA!!!")
 	await get_tree().create_timer(0.35).timeout
 	Captura.foto("captura-novedades-skin.png")
 	# sin nada nuevo, los «!» se esconden (la taquilla al abrirla; la mesa, con lo visto y lo cobrado)

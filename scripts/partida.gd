@@ -124,10 +124,10 @@ const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
 const DESPERTAR := 2.4     # tras una derrota, lo que tarda Johnny en levantarse al empezar (despertar)
 # [traducir]
 const FRASES_DESPERTAR := [   # lo que dice al levantarse (una al azar), encima de su cabeza (gran_aviso)
-	"¡UF! ¡VAYA PESADILLA!",
-	"¿ME HE VUELTO A DORMIR EN EL TRABAJO?",
-	"¡JURARÍA QUE ME ESTABAN MORDIENDO!",
-	"¡OTRA VEZ ESE SUEÑO DE DURMIENTES!",
+	"¡¡¡UF!!! ¡¡¡VAYA PESADILLA!!!",
+	"¿¿¿ME HE VUELTO A DORMIR EN EL TRABAJO???",
+	"¡¡¡JURARÍA QUE ME ESTABAN MORDIENDO!!!",
+	"¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!",
 ]
 # [/traducir]
 const ARRIBA_EXTRA := 44   # lo que la cámara deja ver por encima del mapa (la cara del muro de arriba y su moldura)
@@ -897,7 +897,7 @@ func cruzar(i: int) -> void:
 				marca.refrescar()   # (por si se acaba de cerrar un tutorial: se miran cada segundo)
 		if falta_sala() or preload("res://scripts/ui/tienda_armas.gd").regalo_pendiente(Guardado.cargar()):
 			# (como el de «¡¡¡LA LLAVE!!!», pero por encima del letrero de la guía y más rato, que es más larga)
-			gran_aviso(Idioma.t("¡MEJOR INVESTIGO UN POCO MÁS!"), Tema.AMARILLO, 160.0, 2.2)
+			gran_aviso(Idioma.t("¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"), Tema.AMARILLO, 160.0, 2.2)
 			Sonido.tocar("no")
 			return
 	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable
@@ -913,7 +913,7 @@ func cruzar(i: int) -> void:
 		if supervivientes.en_horda():
 			decir(Idioma.t("Aguanta: aún está forzando la cerradura"))
 		else:
-			gran_aviso(Idioma.t("¡SE HA ATASCADO!"))   # (cada vez: la puerta se abre al no quedar zombis)
+			gran_aviso(Idioma.t("¡¡¡SE HA ATASCADO!!!"))   # (cada vez: la puerta se abre al no quedar zombis)
 		Sonido.tocar("no")
 		return
 	var espera := supervivientes.escolta.no_cruzar()   # la farmacéutica herida, lejos o en el suelo
@@ -924,7 +924,7 @@ func cruzar(i: int) -> void:
 	match salida.cerrojo:
 		"nunca":
 			if salida.tipo == "ascensor":
-				aviso_una_vez("ascensor_%d" % planta.num, Idioma.t("¡TENGO QUE REPARARLO!"))
+				aviso_una_vez("ascensor_%d" % planta.num, Idioma.t("¡¡¡TENGO QUE REPARARLO!!!"))
 			elif salida.tipo == "llegada" and not sitio.get("azotea", false):
 				aviso_una_vez("portal", Idioma.t("¡¡¡ESTÁ BLOQUEADO!!!"))   # (el portal de la planta baja)
 			else:
@@ -1652,7 +1652,7 @@ func no_puedo_mas() -> void:
 	if ahora < no_puedo_mas_hasta:
 		return
 	no_puedo_mas_hasta = ahora + 1500
-	gran_aviso(Idioma.t("¡NO PUEDO LLEVAR MÁS!"))
+	gran_aviso(Idioma.t("¡¡¡NO PUEDO LLEVAR MÁS!!!"))
 
 
 # Un objeto en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el
@@ -2328,7 +2328,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		var skin := Skins.de_jefe(tipo)
 		if skin != "" and Skins.desbloquear(skin):
 			Sonido.tocar("compra")
-			gran_aviso(Idioma.t("¡SKIN NUEVA!"))
+			gran_aviso(Idioma.t("¡¡¡SKIN NUEVA!!!"))
 			decir(Idioma.t("Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento") % Skins.nombre(skin), 4.0)
 		# el jefe final (el gerente mutado): su página del dosier y el helicóptero de Velaria
 		if tipo in JEFES and not final_de(tipo).is_empty():
