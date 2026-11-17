@@ -2565,7 +2565,7 @@ func probar_maestra() -> void:
 	print("Maestra · frase: «%s» (esperado: la de los Apartamentos con ¡¡¡ !!!)" % falta_llave())
 	# (y los bancos de en medio, delante de las tiendas de abajo: Johnny al lado de uno, y uno que choca)
 	var bancos: Array = mapa.muebles.filter(func(c): return c.datos.get("tipo", "") == "bancogaleria")
-	print("Maestra · bancos en la galería: %d (esperado: 2)" % bancos.size())
+	print("Maestra · bancos en la galería: %d (esperado: 3)" % bancos.size())
 	if not bancos.is_empty():
 		johnny.position = bancos[0].position + Vector2(70, 40)
 		johnny.get_node("Camara").reset_smoothing()

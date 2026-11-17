@@ -395,3 +395,13 @@ for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith("mini_
     lienzo = Image.new("RGBA", (50, 50), (0, 0, 0, 0))
     lienzo.paste(pequena, ((50 - pequena.width) // 2, (50 - pequena.height) // 2))
     lienzo.save(ruta)
+
+# el banco de la galería, algo más claro (17 nov: en medio del pasillo hay poca luz y la madera se veía casi negra)
+if "bancogaleria" in (sys.argv[1:] or ["bancogaleria"]):
+    from PIL import ImageEnhance
+    ruta = MUEBLES["bancogaleria"][1]
+    banco = Image.open(ruta).convert("RGBA")
+    alfa = banco.split()[3]
+    banco = ImageEnhance.Brightness(banco.convert("RGB")).enhance(1.35).convert("RGBA")
+    banco.putalpha(alfa)
+    banco.save(ruta)

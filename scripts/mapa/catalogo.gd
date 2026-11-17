@@ -1007,11 +1007,12 @@ const SALAS := {
 		# (17 nov: cuatro palmeras, todas en la pared de arriba: una en la 46,6, entre el escaparate y el cartel de salida, que
 		# está siempre arriba a la derecha, y otra en su espejo, la 5,4; y una a cada lado del ascensor, la 23 y la 29. La
 		# pared de abajo, sin nada. Los neones se apartan de ellas solos: mapa.poner_neones_galeria)
-		# (y un banco en medio del pasillo delante de cada tienda de la pared de abajo, mirando hacia ella: un obstáculo
-		# para despistar a los guardas dándole la vuelta. El suelo tiene 8 casillas de hondo: el 4, su mitad)
+		# (y tres bancos en medio del pasillo: uno delante de cada tienda de la pared de abajo, mirando hacia ella, y otro
+		# entre los dos, delante del ascensor. Obstáculos para despistar a los guardas dándoles la vuelta. El suelo tiene 8
+		# casillas de hondo: el 4, su mitad)
 		"colocados": {"abajo": [
 			["palmera", 5.4], ["palmera", 23.0], ["palmera", 29.0], ["palmera", 46.6],
-			["bancogaleria", 12.0, "libre", 4.0], ["bancogaleria", 40.0, "libre", 4.0],
+			["bancogaleria", 12.0, "libre", 4.0], ["bancogaleria", 26.0, "libre", 4.0], ["bancogaleria", 40.0, "libre", 4.0],
 		]},
 	},
 	# Los pasillos de Torre Velaria (tercer edificio), puestos a mano como la galería (mismas casillas: las puertas de los
