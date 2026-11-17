@@ -16,7 +16,8 @@ const TUBO := Color(0.3, 0.28, 0.33)   # una letra fundida: el tubo de cristal a
 # tubos de neón (tools/neones_galeria.py letrero-farmacia): si tiene letrero-<tipo>-apagado.png, al fallar se ven los tubos
 # de cristal sin luz en vez de las letras
 const LETREROS := {"supermercado": Color("#3d9bff"), "farmacia": Color("#4dff6a"),
-	"ferreteria": Color("#4dc8ff")}
+	"ferreteria": Color("#4dc8ff"),
+	"electronica": Color("#ff3df0")}
 const LETRERO_PIE := 98.0    # el letrero dibujado: a qué altura va su pie, por encima del pie del muro
 const HALO_MARGEN := 8       # los píxeles de más del resplandor por cada lado (tools/letrero_halo.py)
 # De dónde saltan las chispas (17 nov, el dueño): el píxel del letrero donde está suelta la letra caída (en el del súper,
@@ -24,7 +25,8 @@ const HALO_MARGEN := 8       # los píxeles de más del resplandor por cada lado
 # que cuelga torcida). Saltan cada vez que se va la luz del letrero (un cortocircuito) y, sueltas, cada CHISPAS_CADA
 # segundos más o menos
 const CHISPAS_EN := {"supermercado": Vector2(33, 15), "farmacia": Vector2(81, 18),
-	"ferreteria": Vector2(88, 16)}
+	"ferreteria": Vector2(88, 16),
+	"electronica": Vector2(95, 17)}
 const CHISPAS_CADA := Vector2(1.5, 4.5)
 const CHISPAS_OIDO := 360.0  # hasta qué distancia de Johnny suenan
 var chispas: CPUParticles2D
