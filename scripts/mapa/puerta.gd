@@ -192,9 +192,12 @@ func _draw() -> void:
 			# por donde se ha llegado
 			# (y la de llegada de la azotea, la misma: se sube por la salida de incendios; sola, sin nada detrás)
 			if salida.tipo == "escaleras" or salida.get("incendios", false):
-				if doble():   # (la del centro comercial: dos, una encima de la otra)
-					draw_texture_rect(SALIDA, Rect2(-8, -72, 72, 72), false)
-					draw_texture_rect(SALIDA, Rect2(-8, 0, 72, 72), false)
+				if doble():
+					# (la del centro comercial: casi el doble de larga, 132, de una pieza: la mitad de arriba del dibujo
+					# sin su marco rojo de abajo y la de abajo sin el de arriba, para que no haya raya roja en medio y las
+					# escaleras sigan seguidas)
+					draw_texture_rect_region(SALIDA, Rect2(-8, -66, 72, 66), Rect2(0, 0, 36, 33))
+					draw_texture_rect_region(SALIDA, Rect2(-8, 0, 72, 66), Rect2(0, 3, 36, 33))
 				else:
 					draw_texture_rect(SALIDA, Rect2(-8, -36, 72, 72), false)
 				return
