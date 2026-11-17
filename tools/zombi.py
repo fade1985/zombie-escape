@@ -4,7 +4,7 @@ Lo saca todo de assets/sources/<fuente>/:
   rotations/<dirección>.png     las 8 posturas quietas (48×48), ya con la piel corregida por tools/piel.py
   walk/<dirección>-<n>.png      andar (PixMiniMax; el lienzo cambia de tamaño según la dirección)
   ataque/, golpe/, muerte/      atacar, recibir un golpe y morir (lienzo de 96×96 con el dibujo quieto en 24, 32)
-  rugir/ (opcional)             el rugido, como el ataque (el jefe de seguridad): sale como «roar» («grito» en el juego)
+  rugir/ (opcional)             el rugido, como el ataque pero solo south (el jefe de seguridad): «roar» («grito» en el juego)
   reposo/ (opcional)            reposo de PixMiniMax, con partida y final en el dibujo quieto (el de tentáculos)
   zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen", "fps_andar" y "suave"
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
@@ -263,10 +263,10 @@ for d in DIRS:
     print(f'andar  {d:11s} lienzo {fs[0].size}, fotogramas {a} a {a + n - 1} ({how})')
 
 # ═════════════ Atacar, recibir golpe y morir ═════════════
-def block(folder, key, default, fix):
+def block(folder, key, default, fix, dirs=DIRS):
     pick = cfg.get(key, {}).get('fotogramas')
     out = {}
-    for d in DIRS:
+    for d in dirs:
         fs = load(folder, d)
         ox, oy = offset(fs, d, folder)
         ns = pick or list(range(default[0], min(default[1], len(fs) - 1) + 1))
@@ -303,8 +303,8 @@ DUR = {'attack': cfg.get('ataque', {}).get('duracion', 0.55), 'hurt': cfg.get('g
        'death': cfg.get('muerte', {}).get('duracion', 0.9)}
 HIT = cfg.get('ataque', {}).get('impacto', 3)   # en qué fotograma (de los elegidos) llega el zarpazo
 # Y, si tiene carpeta rugir/, el rugido (17 nov, el jefe de seguridad: «grito» en el juego), de 1,4 s si no dice otra cosa
-# "rugir" en zombi.json
-roar = block('rugir', 'rugir', (1, 12), gore) if os.path.isdir(f'{SRC}/rugir') else None
+# "rugir" en zombi.json. Solo de frente (south): siempre ruge mirando a la pantalla (lo pidió el dueño)
+roar = block('rugir', 'rugir', (1, 12), gore, ['south']) if os.path.isdir(f'{SRC}/rugir') else None
 DUR['roar'] = cfg.get('rugir', {}).get('duracion', 1.4)
 
 # ═════════════ Hoja y JSON ═════════════
@@ -312,20 +312,21 @@ blocks = [('idle', idle), ('walk', walk), ('attack', attack), ('hurt', hurt), ('
 if roar:
     blocks.append(('roar', roar))
 cols = max(len(DIRS), *(len(fs) for _, b in blocks for fs in b.values()))
-sheet = Image.new('RGBA', (cols * CW, (1 + len(blocks) * len(DIRS)) * CH), (0, 0, 0, 0))
+sheet = Image.new('RGBA', (cols * CW, (1 + sum(len(b) for _, b in blocks)) * CH), (0, 0, 0, 0))
 for i, d in enumerate(DIRS):
     sheet.alpha_composite(still[d], (i * CW, 0))
 anims = {'still': {'fps': 1, 'loop': True, 'dirs': {d: {'row': 0, 'col': i, 'frames': 1} for i, d in enumerate(DIRS)}}}
 row = 1
 for name, b in blocks:
-    for r, d in enumerate(DIRS):
+    ds = [d for d in DIRS if d in b]   # (el rugido, solo de frente)
+    for r, d in enumerate(ds):
         for i, f in enumerate(b[d]):
             sheet.alpha_composite(f, (i * CW, (row + r) * CH))
     # andar, a 10 fotogramas por segundo; otro ritmo con "fps_andar" (el vecino de GPT, a 7: lo eligió el dueño)
     fps = {'idle': cfg.get('reposo', {}).get('fps', 1.5), 'walk': cfg.get('fps_andar', 10)}.get(name) or round(len(b['south']) / DUR[name], 1)
     anims[name] = {'fps': fps, 'loop': name in ('idle', 'walk'),
-                   'dirs': {d: {'row': row + r, 'frames': len(b[d])} for r, d in enumerate(DIRS)}}
-    row += len(DIRS)
+                   'dirs': {d: {'row': row + r, 'frames': len(b[d])} for r, d in enumerate(ds)}}
+    row += len(ds)
 anims['attack']['hit'] = round(HIT / len(attack['south']), 3)
 # "sangre_en_todo": true en zombi.json, para cuando el dibujo quieto ya trae sangre roja viva (el vigilante): se
 # oscurece en toda la hoja, no solo en golpe y muerte, para que no cambie de color al andar
@@ -350,7 +351,7 @@ if '--gif' in sys.argv:
         gif = []
         for i in range(n):
             im = Image.new('RGBA', (4 * CW * G, 2 * CH * G), (70, 74, 82, 255))
-            for k, d in enumerate(DIRS):
+            for k, d in enumerate(d for d in DIRS if d in b):
                 f = b[d][i % len(b[d])]
                 im.alpha_composite(f.resize((CW * G, CH * G), Image.NEAREST), ((k % 4) * CW * G, (k // 4) * CH * G))
             gif.append(im.convert('RGB'))

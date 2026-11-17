@@ -136,6 +136,8 @@ Adjuntar: `personaje.webp` (la de las 5 vistas que salió de GPT)
 
 El guardia, al ver a Johnny, ruge para llamar a sus cuatro guardias: los mismos 12 fotogramas, con los pies clavados.
 
+**Solo hace falta `rugir-s.webp`** (17 nov): siempre ruge de frente a la pantalla. Las otras cuatro vistas no se usan.
+
 ## rugir-s.webp · Rugido de frente
 
 Adjuntar: `personaje.webp` (la de las 5 vistas que salió de GPT)

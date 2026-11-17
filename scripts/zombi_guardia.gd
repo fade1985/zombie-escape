@@ -1,8 +1,9 @@
 # El guardia de seguridad del centro comercial, el jefe de seguridad: lleva la llave maestra de la planta (abre todas sus
 # puertas) y ronda por el pasillo de la planta (17 nov, lo pidió el dueño; antes pitaba, huía y se cansaba):
 #   - Mientras no te ha visto, hace su ronda despacio, de una punta del pasillo a la otra.
-#   - Cuando te ve (o le das sin que te haya visto), se para y ruge: «¡¡¡GRRR!!!» en rojo encima de la cabeza, con las
-#     letras de los gritos de Johnny. Solo una vez. Con el rugido llegan sus guardias (los saca la partida: señal
+#   - Cuando te ve (o le das sin que te haya visto), se para mirando de frente a la pantalla y ruge: «¡¡¡GRRR!!!» en rojo
+#     encima de la cabeza, con las letras de los gritos de Johnny. Solo una vez. Mientras ruge, Johnny se queda
+#     petrificado por el sonido: no puede moverse ni atacar hasta que acaba (para que no saque ventaja). Con el rugido llegan sus guardias (los saca la partida: señal
 #     "rugido"; 4 en la planta baja y 2 más en cada planta de arriba).
 #   - Después, va a por Johnny con ellos y le ataca a zarpazos hasta que caigan todos.
 # Lleva su propio dibujo (hecho con GPT: assets/sources/zombi-guardia-gpt/), distinto del de los vigilantes que llama.
@@ -58,14 +59,15 @@ func rondar(delta: float) -> void:
 	ir_hacia(delta, camino_hacia(meta), RONDA)
 
 
-# El rugido: se para mirando a Johnny, su animación, el «¡¡¡GRRR!!!» en rojo y el sonido; y llama a sus guardias
+# El rugido: se para mirando de frente (su animación solo está de frente), el «¡¡¡GRRR!!!» en rojo y el sonido; Johnny,
+# petrificado mientras dura (sin_mandos, en johnny.gd); y llama a sus guardias
 func rugir(johnny: Node2D) -> void:
 	alerta = true
 	rugir_ya = false
 	estado = "rugido"
 	rugiendo = RUGIDO_DURA
 	pedir_velocidad(Vector2.ZERO)
-	mirar_hacia(johnny.global_position - global_position)
+	direccion = "s"
 	if helor == 0.0:
 		sprite.speed_scale = 1.0
 	poner_animacion("grito", true)
@@ -75,6 +77,8 @@ func rugir(johnny: Node2D) -> void:
 	var sin_luz := CanvasItemMaterial.new()   # (como los gritos de Johnny: que no lo apague la penumbra)
 	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	grito.material = sin_luz
+	if "sin_mandos" in johnny:
+		johnny.sin_mandos = maxf(johnny.sin_mandos, RUGIDO_DURA)
 	rugido.emit()
 
 

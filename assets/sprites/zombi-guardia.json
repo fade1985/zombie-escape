@@ -244,6 +244,16 @@
           "frames": 12
         }
       }
+    },
+    "roar": {
+      "fps": 8.6,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 41,
+          "frames": 12
+        }
+      }
     }
   },
   "source": "Hecha con tools/zombi.py a partir de assets/sources/zombi-guardia-gpt-48/"

@@ -2519,13 +2519,17 @@ func probar_guardia() -> void:
 	johnny.position = guardia.global_position + Vector2(-230, 0)
 	johnny.get_node("Camara").reset_smoothing()
 	guardia.set_physics_process(true)
+	Input.action_press("izquierda")   # (intenta irse: mientras ruge, petrificado)
 	await get_tree().create_timer(0.35, false).timeout
+	var quieto0: Vector2 = johnny.position
 	var grito: Array = guardia.get_parent().get_children().filter(func(n): return n is Label and "GRRR" in n.text)
-	print("Guardia · al verle: estado %s · animación %s · rugidos %d · «%s» en %s (esperado: rugido, grito_o, 1, ¡¡¡GRRR!!! en rojo %s)" % [
+	print("Guardia · al verle: estado %s · animación %s · rugidos %d · «%s» en %s (esperado: rugido, grito_s, 1, ¡¡¡GRRR!!! en rojo %s)" % [
 		guardia.estado, guardia.sprite.animation, rugidos[0], grito[0].text if grito else "nada",
 		grito[0].get_theme_color("font_color").to_html(false) if grito else "-", Tema.ROJO.to_html(false)])
 	Captura.foto("captura-guardia-ruge.png")
 	await get_tree().create_timer(0.3, false).timeout
+	print("Guardia · Johnny mientras ruge, pulsando a la izquierda: se mueve %.0f · sin mandos %.2f s más (esperado: 0, algo más de 0)" % [
+		johnny.position.distance_to(quieto0), johnny.sin_mandos])
 	var suyos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia)
 	print("Guardia · llegan %d guardias (esperado %d en la planta %d) · todos marcados «llamado»: %s" % [suyos.size(),
 		guardias_del_rugido(), planta.num, suyos.all(func(r): return r.has_meta("llamado"))])
@@ -2536,7 +2540,10 @@ func probar_guardia() -> void:
 		planta.num = antes
 		return cuantos)])
 	# después del rugido, a por Johnny
+	quieto0 = johnny.position
 	await get_tree().create_timer(1.2, false).timeout
+	print("Guardia · Johnny, acabado el rugido: se mueve %.0f (esperado: más de 0, ya anda)" % johnny.position.distance_to(quieto0))
+	Input.action_release("izquierda")
 	var d0: float = guardia.global_position.distance_to(johnny.position)
 	await get_tree().create_timer(0.5, false).timeout
 	print("Guardia · tras rugir: estado %s · animación %s a x%.1f · se acerca %.0f (esperado: andar o zarpazo, andar a x2.0, se acerca)" % [
