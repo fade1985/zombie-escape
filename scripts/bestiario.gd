@@ -36,7 +36,7 @@ const LISTA := {
 	"lento": {"nombre": "El arrastrado",
 		"frase": "Le falta la mitad de abajo y no se ha enterado. Se arrastra con las manos y lo deja todo perdido.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-lento-gpt.tres",
-		"recorte": Rect2i(32, 53, 33, 26), "retrato": "quieto_s", "escala": 2, "jefe": false},
+		"recorte": Rect2i(35, 58, 26, 21), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"rapido": {"nombre": "El crío",
 		"frase": "Un crío con gorra y chándal que corre como un demonio. Frena fatal: apártate y se pasa de largo.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-rapido-gpt.tres",
@@ -64,12 +64,12 @@ const LISTA := {
 	"vigilante": {"nombre": "El vigilante",
 		"frase": "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-vigilante.tres",
-		"recorte": Rect2i(36, 33, 23, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
+		"recorte": Rect2i(34, 32, 27, 47), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	# el guardia, el jefe de seguridad (17 nov: con su propio dibujo, hecho con GPT)
 	"guardia": {"nombre": "El guardia de la llave maestra",
 		"frase": "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-guardia.tres",
-		"recorte": Rect2i(35, 32, 26, 47), "retrato": "quieto_s", "escala": 2, "jefe": false},
+		"recorte": Rect2i(32, 32, 31, 47), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	# los de Torre Velaria (parte 4 del plan)
 	"oficinista": {"nombre": "El oficinista",
 		"frase": "Sigue atendiendo llamadas que nunca llegan. No se te acerca: te tira la grapadora y, si vas a por él, se aparta.",
