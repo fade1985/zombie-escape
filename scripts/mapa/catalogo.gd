@@ -1002,11 +1002,11 @@ const SALAS := {
 		# su sitio se deja libre siempre. En el centro, nada: por ahí se va de una punta a la otra
 		# (17 nov: el dueño la está rehaciendo y la ha dejado vacía, solo con las entradas de las tiendas; antes llevaba
 		# plantas, bancos y maniquíes)
-		# (17 nov: las palmeras: arriba, en la punta de la izquierda y en la 46,6, entre el escaparate y el cartel de salida, que
-		# está siempre arriba a la derecha; abajo, en cuatro sitios lejos de las puertas)
+		# (17 nov: cuatro palmeras, todas en la pared de arriba: una en la 46,6, entre el escaparate y el cartel de salida, que
+		# está siempre arriba a la derecha, y otra en su espejo, la 5,4; y una a cada lado del ascensor, la 23 y la 29. La
+		# pared de abajo, sin nada. Los neones se apartan de ellas solos: mapa.poner_neones_galeria)
 		"colocados": {"abajo": [
-			["palmera", 1.0], ["palmera", 46.6],
-			["palmera", 1.0, "abajo"], ["palmera", 19.0, "abajo"], ["palmera", 33.0, "abajo"], ["palmera", 51.0, "abajo"],
+			["palmera", 5.4], ["palmera", 23.0], ["palmera", 29.0], ["palmera", 46.6],
 		]},
 	},
 	# Los pasillos de Torre Velaria (tercer edificio), puestos a mano como la galería (mismas casillas: las puertas de los

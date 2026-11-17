@@ -1085,6 +1085,19 @@ func poner_neones_galeria() -> void:
 	var huecos := [[MURO, puertas[0] - esc, "casete", Color("#e070ff")],
 		[puertas[0] + esc, asc - ASCENSOR_MEDIO, "radiocasete", Color("#9c8cff")],
 		[asc + ASCENSOR_MEDIO, puertas[1] - esc, "tocadiscos", Color("#c878ff")]]
+	# las palmeras de la pared de arriba (catalogo.gd, "galeria"; su casilla cuenta desde la esquina del suelo, que está
+	# en MURO) también ocupan sitio: si una cae en un hueco, el neón va en el trozo más grande que le deja libre
+	for c in Catalogo.SALAS.galeria.colocados.abajo:
+		if c.size() > 2:   # (solo los de la pared de arriba)
+			continue
+		var medio: float = Catalogo.MUEBLES[c[0]].len / 2.0
+		var x: float = MURO + c[1] * CASILLA
+		for h in huecos:
+			if x + medio > h[0] and x - medio < h[1]:
+				if (x - medio) - h[0] >= h[1] - (x + medio):
+					h[1] = x - medio
+				else:
+					h[0] = x + medio
 	for i in huecos.size():
 		var h: Array = huecos[i]
 		var neon := NEON_GALERIA.new()
