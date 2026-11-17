@@ -1008,6 +1008,12 @@ en una línea.
   los saca amarillos: si se regeneran, hay que pasarlo otra vez (lo ya coloreado no lo vuelve a tocar: lo apunta dentro del PNG).
 - **La puerta de la pared de abajo:** `puerta_abajo.py` hace `puerta-abajo.png`, el hueco en el muro con su marco y la hoja vista desde arriba
   (esa pared se ve por detrás), en tres modelos: madera sucia, madera limpia y cristal del centro comercial; la pinta `puerta.gd`.
+- **La puerta automática del supermercado** (17 nov; la primera fachada propia de una tienda: se rehacen de una en una): de
+  GPT (`assets/sources/puerta-super-gpt.webp`, 64x40 con `muebles_gpt.py puerta_super`), partida por `puerta_super.py` en el
+  marco (caja del motor, cristales fijos, carril) y las dos hojas del medio. `puerta.gd` (`es_super`, `puerta_super`) pinta el
+  oscuro de dentro, las hojas corridas y el marco encima: al acercarse Johnny (su sensor, una zona grande delante) se abren si
+  la tienda no está cerrada con llave (con llave, la lucecita del sensor en rojo). Sus escaparates van más separados
+  (`Planta.escaparate_a`). Prueba: `--captura --edificio centro --puerta-super`.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

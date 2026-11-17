@@ -1084,16 +1084,18 @@ func poner_apliques() -> void:
 const NEON_GALERIA := preload("res://scripts/mapa/neon_galeria.gd")
 const ASCENSOR_MEDIO := 48.0   # la mitad del ancho del ascensor del centro comercial, con su marco
 func poner_neones_galeria() -> void:
-	var puertas: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.tipo == "puerta").map(func(s): return float(s.en))
+	var de_arriba: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.tipo == "puerta")
 	var ascensor: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.tipo == "ascensor")
-	if puertas.size() < 2 or ascensor.is_empty():
+	if de_arriba.size() < 2 or ascensor.is_empty():
 		return
-	puertas.sort()
-	var esc: float = Planta.ESCAPARATE_A + Planta.ESCAPARATE_MEDIO
+	de_arriba.sort_custom(func(p, q): return p.en < q.en)
+	var puertas: Array = de_arriba.map(func(s): return float(s.en))
+	# (cada tienda, con la distancia de sus escaparates: los del súper van más separados)
+	var esc: Array = de_arriba.map(func(s): return Planta.escaparate_a(s.get("neon", "")) + Planta.ESCAPARATE_MEDIO)
 	var asc := float(ascensor[0].en)
-	var huecos := [[MURO, puertas[0] - esc, "casete", Color("#e070ff")],
-		[puertas[0] + esc, asc - ASCENSOR_MEDIO, "radiocasete", Color("#9c8cff")],
-		[asc + ASCENSOR_MEDIO, puertas[1] - esc, "tocadiscos", Color("#c878ff")]]
+	var huecos := [[MURO, puertas[0] - esc[0], "casete", Color("#e070ff")],
+		[puertas[0] + esc[0], asc - ASCENSOR_MEDIO, "radiocasete", Color("#9c8cff")],
+		[asc + ASCENSOR_MEDIO, puertas[1] - esc[1], "tocadiscos", Color("#c878ff")]]
 	# las palmeras de la pared de arriba (catalogo.gd, "galeria"; su casilla cuenta desde la esquina del suelo, que está
 	# en MURO) también ocupan sitio: si una cae en un hueco, el neón va en el trozo más grande que le deja libre
 	for c in Catalogo.SALAS.galeria.colocados.abajo:

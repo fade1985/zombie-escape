@@ -16,6 +16,17 @@ const DIBUJO := {"tienda": preload("res://assets/sprites/puerta-tienda.png"),
 	"servicio": preload("res://assets/sprites/puerta-servicio.png")}
 # La de los pisos, sucia y con sangre (tools/puertas_sucias.py): tres dibujos, uno al lado de otro, para que no sean todas iguales
 const PISO := preload("res://assets/sprites/puerta-piso-sucia.png")
+# La puerta automática del supermercado (17 nov, el dueño; de GPT: tools/puerta_super.py): 64 × 40 píxeles, o sea
+# 128 × 80 unidades. El marco (la caja del motor, los cristales fijos y el carril) va encima de las dos hojas del medio,
+# que se corren hacia los lados al acercarse Johnny y se esconden detrás de los cristales fijos
+const SUPER_MARCO := preload("res://assets/sprites/puerta-super-marco.png")
+const SUPER_HOJAS := preload("res://assets/sprites/puerta-super-hojas.png")
+const SUPER_HOJA := Rect2(17, 4, 15, 34)   # la hoja de la izquierda en el dibujo (la de la derecha, 15 píxeles más allá)
+const SUPER_CORRE := 14                    # cuántos píxeles se corre cada hoja abierta del todo
+const SUPER_DENTRO := Color("0a0e10")      # lo que se ve por el hueco: la tienda a oscuras
+const SUPER_TIEMPO := 0.35                 # lo que tarda en abrirse o cerrarse del todo, en segundos
+var apertura := 0.0      # la puerta del súper: 0, cerrada; 1, abierta del todo
+var johnny_cerca := false
 const PISO_DIBUJO := Vector2(36, 43)
 # Las de la pared de abajo, que se ve por detrás: el hueco en el muro, con su marco, y la hoja desde arriba, un tablón con su pomo
 # (tools/puerta_abajo.py). 36 × 32 píxeles, 72 × 64 unidades. Cuatro, una al lado de otra: madera sucia, madera limpia (ver "limpia"),
@@ -150,6 +161,27 @@ func _ready() -> void:
 		cerca_zona.body_entered.connect(func(cuerpo):
 			if cuerpo.is_in_group("jugador"):
 				cerca.emit(indice))
+	# la puerta automática del súper: su sensor ve a Johnny en una zona grande delante y abre las hojas (si no está
+	# cerrada con llave)
+	if es_super():
+		var sensor := Area2D.new()
+		sensor.collision_layer = 0
+		sensor.collision_mask = 2
+		var sensor_forma := CollisionShape2D.new()
+		var sensor_caja := RectangleShape2D.new()
+		sensor_caja.size = Vector2(176, 120)
+		sensor_forma.shape = sensor_caja
+		sensor_forma.position = Vector2(0, 60)
+		sensor.add_child(sensor_forma)
+		add_child(sensor)
+		sensor.body_entered.connect(func(cuerpo):
+			if cuerpo.is_in_group("jugador"):
+				johnny_cerca = true)
+		sensor.body_exited.connect(func(cuerpo):
+			if cuerpo.is_in_group("jugador"):
+				johnny_cerca = false)
+	else:
+		set_process(false)
 	# (sin nada escrito encima: adónde lleva lo dicen el mapa de la esquina, las placas de los pisos, el cartel de la
 	# planta junto al ascensor y los letreros de neón de las tiendas)
 
@@ -161,6 +193,34 @@ func doble() -> bool:
 	if not galeria:
 		return false
 	return (salida.get("tipo", "") == "llegada" and salida.dir == "izquierda") or salida.get("tipo", "") == "escaleras"
+
+
+# Si es la puerta automática del supermercado: la de su fachada, en la pared de arriba de la galería
+func es_super() -> bool:
+	return centro and salida.dir == "arriba" and salida.get("neon", "") == "supermercado"
+
+
+# Las hojas de la puerta del súper se abren poco a poco mientras Johnny está delante y se cierran al irse
+func _process(delta: float) -> void:
+	var antes := apertura
+	apertura = move_toward(apertura, 1.0 if johnny_cerca and abierta else 0.0, delta / SUPER_TIEMPO)
+	if apertura != antes:
+		queue_redraw()
+
+
+# La puerta del súper: el oscuro de dentro, las dos hojas (cada una corrida hacia su lado, de píxel en píxel) y el
+# marco encima; y la lucecita del sensor, roja mientras la tienda siga cerrada con llave
+func puerta_super() -> void:
+	var corre := roundf(ease(apertura, -2.0) * SUPER_CORRE) * 2.0   # (arranca y frena suave)
+	var hueco := Rect2(-64 + SUPER_HOJA.position.x * 2, -80 + SUPER_HOJA.position.y * 2, SUPER_HOJA.size.x * 4,
+		SUPER_HOJA.size.y * 2)
+	draw_rect(hueco, SUPER_DENTRO)
+	draw_texture_rect_region(SUPER_HOJAS, Rect2(hueco.position - Vector2(corre, 0), SUPER_HOJA.size * 2), SUPER_HOJA)
+	draw_texture_rect_region(SUPER_HOJAS, Rect2(hueco.position + Vector2(SUPER_HOJA.size.x * 2 + corre, 0),
+		SUPER_HOJA.size * 2), Rect2(SUPER_HOJA.position + Vector2(SUPER_HOJA.size.x, 0), SUPER_HOJA.size))
+	draw_texture_rect(SUPER_MARCO, Rect2(-64, -80, 128, 80), false)
+	if not abierta:
+		draw_rect(Rect2(-2, -76, 4, 2), Color("d42a1e"))   # (la lucecita está en los píxeles 31 y 32 de la fila 2)
 
 
 # Dónde aparece Johnny al llegar por esta puerta (un poco hacia dentro)
@@ -177,6 +237,9 @@ func _draw() -> void:
 			# De frente, sobre la cara del muro (que sube 96 desde aquí)
 			if salida.tipo == "ascensor":
 				ascensor()
+				return
+			if es_super():
+				puerta_super()
 				return
 			# la de la sala de mantenimiento (la de la placa con la llave inglesa), de acero en los dos edificios; las
 			# demás, la del edificio

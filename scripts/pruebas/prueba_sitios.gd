@@ -942,6 +942,68 @@ func probar_galeria() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --edificio centro --puerta-super" (17 nov): la puerta automática del supermercado de la galería (en la
+# primera planta que la tenga en la pared de arriba), de cerca: cerrada con llave (lucecita roja), con Johnny delante
+# aún sin la llave maestra (no se abre), ya con la llave (se abre) y al irse (se cierra). Fotos
+# captura-puerta-super-<paso>.png. Luego se cierra
+func probar_puerta_super() -> void:
+	var puerta: Node2D = null
+	# (las tiendas salen al azar: se prueban plantas hasta dar con una)
+	for intento in 24:
+		var num := 1 + intento % 4
+		nueva_planta(num)
+		if not planta.sitios[0].salidas.any(func(s): return s.dir == "arriba" and s.get("neon", "") == "supermercado"):
+			continue
+		await montar(0, 0, false)
+		for p in mapa.puertas:
+			if p.es_super():
+				puerta = p
+		if puerta:
+			print("Puerta del súper: en la planta %d" % (num - 1))
+			break
+	if puerta == null:
+		print("ERROR DE LA PRUEBA: ninguna planta tiene el súper en la pared de arriba")
+		get_tree().quit(1)
+		return
+	# (sin zombis, sin penumbra y sin el HUD, para que se vea bien la puerta)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	$Pantalla.hide()
+	Luz.apagada = not Luz.apagada
+	var camara: Camera2D = johnny.get_node("Camara")
+	var lejos := puerta.position + Vector2(0, 200)
+	# la fachada entera con lo que tiene al lado (palmeras, neones de la pared), a tamaño normal
+	johnny.position = lejos
+	Temblor.desplazamiento = puerta.position + Vector2(0, 40) - johnny.position
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-puerta-super-fachada.png")
+	camara.zoom = Vector2(3, 3)
+	var delante := puerta.position + Vector2(0, 80)
+	var pasos := [["cerrada", lejos, false], ["sin-llave", delante, false], ["abierta", delante, true],
+		["se-cierra", lejos, true]]
+	for paso in pasos:
+		planta.tiene_llave = paso[2]
+		actualizar_puertas()
+		johnny.position = paso[1]
+		Temblor.desplazamiento = puerta.position + Vector2(0, -20) - johnny.position
+		camara.reset_smoothing()
+		await get_tree().create_timer(0.8).timeout
+		print("Puerta del súper · %s: abierta %s · apertura %.2f" % [paso[0], puerta.abierta, puerta.apertura])
+		Captura.foto("captura-puerta-super-%s.png" % paso[0])
+	# a medio abrir, para ver cómo se corren las hojas
+	johnny.position = delante
+	Temblor.desplazamiento = puerta.position + Vector2(0, -20) - johnny.position
+	await get_tree().create_timer(SUPER_MEDIO).timeout
+	Captura.foto("captura-puerta-super-medio.png")
+	Luz.apagada = not Luz.apagada
+	$Pantalla.show()
+	camara.zoom = Vector2.ONE
+	Temblor.desplazamiento = Vector2.ZERO
+	get_tree().quit()
+const SUPER_MEDIO := 0.17
+
+
 # Con "--captura --edificio centro --tienda-cerca" (17 nov): Johnny llega delante de cada puerta de tienda de la pared de
 # abajo de la galería de la planta baja y dice qué tienda es encima de la cabeza (partida.decir_tienda); una foto por puerta
 # (captura-tienda-cerca-<tipo>.png). Luego se cierra

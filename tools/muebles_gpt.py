@@ -325,6 +325,10 @@ MUEBLES = {
     # (en vez del cartel «MANTENIMIENTO», que con la palabra no podía ser más corto). A 22, los cuadrados de GPT justos:
     # a 18 o 20 las llaves se emborronaban
     "placa_mantenimiento": ("assets/sources/placa-mantenimiento-gpt.webp", "assets/sprites/placa-mantenimiento.png", 22, 22, False),
+    # la puerta automática del supermercado, de frente en la pared de arriba de la galería (puerta.gd; 17 nov): cuatro
+    # cristales, los dos de los lados fijos y los dos del medio correderos. Entera; la parte en marco y hojas
+    # tools/puerta_super.py
+    "puerta_super": ("assets/sources/puerta-super-gpt.webp", "assets/sprites/puerta-super.png", 64, 40, False),
 }
 
 

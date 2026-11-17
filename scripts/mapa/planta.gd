@@ -19,6 +19,9 @@ const PASILLO_FILAS := 12
 const PUERTA_A := 14 * CASILLA    # a qué distancia de cada punta del pasillo están las puertas
 const ESCAPARATE_A := 100         # en el centro comercial, a qué distancia de su puerta va cada escaparate
 const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho (escaparate-electronica, 57 píxeles)
+# (el supermercado, con su puerta automática más ancha, 128 unidades: sus escaparates, más separados; 17 nov)
+static func escaparate_a(tipo_tienda: String) -> float:
+	return 124.0 if tipo_tienda == "supermercado" else float(ESCAPARATE_A)
 const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
 # La sala de mantenimiento: tres estancias de 10 × 10 casillas, una al lado de otra (el vestuario, el despacho y el
 # taller), con un tabique de una casilla entre ellas y el muro de fuera alrededor (1152 × 448, algo más ancha que la
@@ -388,7 +391,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			puerta.neon = tipo_tienda
 			# (los departamentos de la torre, sin escaparates: solo su rótulo)
 			for lado_x in ([-1, 1] if Tienda.TIPOS[tipo_tienda].get("edificio", "centro") == "centro" else []):
-				pasillo.escaparates.append({"x": h.en + lado_x * ESCAPARATE_A, "tienda": tipo_tienda})
+				pasillo.escaparates.append({"x": h.en + lado_x * escaparate_a(tipo_tienda), "tienda": tipo_tienda})
 		if jefe:
 			puerta.cerrojo = "llave"   # la llave, la llave maestra o el código: se abren igual (ver partida.gd)
 			puerta.aviso = {"codigo": "Cerrada: hace falta el código de tres cifras"}.get(   # [traducir]

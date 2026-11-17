@@ -366,6 +366,8 @@
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
 #                       puestos a mano (M77)                                                  [prueba_sitios.gd]
+#   --puerta-super      (con --edificio centro) la puerta automática del súper de la galería, de cerca: cerrada con
+#                       llave, sin abrirse, abriéndose y cerrándose (17 nov)                  [prueba_sitios.gd]
 #   --tienda-cerca      (con --edificio centro) Johnny delante de cada puerta de tienda de la pared de abajo de la
 #                       galería: dice qué tienda es encima de la cabeza (Tienda.CON_ARTICULO)   [prueba_sitios.gd]
 #   --zombis-tienda     (con --edificio centro) cuántos zombis hay en cada tienda y en cada sala   [prueba_sitios.gd]
@@ -1185,6 +1187,9 @@ func empezar_prueba() -> void:
 	elif "--galeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_galeria()
+	elif "--puerta-super" in args:
+		set_process(false)   # sin la prueba larga
+		probar_puerta_super()
 	elif "--tienda-cerca" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tienda_cerca()
