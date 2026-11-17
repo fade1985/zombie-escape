@@ -996,6 +996,43 @@ func probar_puerta_super() -> void:
 	Temblor.desplazamiento = puerta.position + Vector2(0, -50) - johnny.position
 	await get_tree().create_timer(SUPER_MEDIO).timeout
 	Captura.foto("captura-puerta-super-medio.png")
+	# el letrero: chispas de la E caída (un chispazo a mano, para la foto) y cuántas veces se le va la luz en un minuto
+	var letrero: Node2D = null
+	for n in mapa.cosas.get_children():
+		if n.get("tipo") == "supermercado" and n.get("chispas") != null:
+			letrero = n
+	if letrero == null:
+		print("ERROR DE LA PRUEBA: el letrero del súper no tiene chispas")
+		get_tree().quit(1)
+		return
+	letrero.chispazo()
+	for i in 8:   # (seguidas, para ver cómo saltan y caen)
+		await get_tree().create_timer(0.07).timeout
+		Captura.foto("captura-puerta-super-chispas-%d.png" % i)
+	var apagones := 0
+	var antes := 1.0
+	var ultimo := -99.0
+	for i in 6000:
+		var b: float = letrero.luz.brillo(i * 0.01)
+		if antes >= 0.5 and b < 0.5 and i * 0.01 - ultimo > 1.0:   # (los guiños de un mismo fallo, uno solo)
+			apagones += 1
+			ultimo = i * 0.01
+		antes = b
+	print("Letrero del súper: chispas %d · se le va la luz %d veces en un minuto (esperado: unas 3-6)" % [
+		letrero.chispas.amount, apagones])
+	# y con la luz ida: el letrero y su lámpara, llevados a un momento de apagón
+	for i in 6000:
+		if letrero.luz.brillo(i * 0.01) < 0.1:
+			letrero.tiempo = i * 0.01
+			letrero.luz.tiempo = i * 0.01
+			break
+	letrero.set_process(false)
+	letrero.luz.set_process(false)
+	letrero.queue_redraw()
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-puerta-super-apagon.png")
+	letrero.set_process(true)
+	letrero.luz.set_process(true)
 	Luz.apagada = not Luz.apagada
 	$Pantalla.show()
 	camara.zoom = Vector2.ONE

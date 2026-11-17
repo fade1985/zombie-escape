@@ -16,6 +16,7 @@ extends Node2D
 @export var radio := 210.0         # hasta dónde llega la luz, en unidades
 @export var suelo := Vector2(0, -8)
 @export var alto := 72.0
+@export var tramo := 3.5           # cada cuánto puede fallar (en algo más de la mitad de los tramos falla), en segundos
 
 var mapa: Node = null              # para mirar la niebla de su habitación
 var zona := -1
@@ -95,13 +96,13 @@ func brillo(t: float) -> float:
 		return 0.97 + 0.03 * sin(t * 2.0 + semilla * 40.0)
 	# casi siempre, un temblor suave...
 	var base := 0.88 + 0.07 * sin(t * 6.3 + semilla * 20.0) + 0.05 * sin(t * 15.7 + semilla * 50.0)
-	# ...y de vez en cuando falla: el tiempo se parte en tramos de 3,5 s y en algunos hay un fallo
-	var tramo := floorf(t / 3.5 + semilla * 7.0)
-	var dentro := (t / 3.5 + semilla * 7.0 - tramo) * 3.5
-	var suerte := al_azar(tramo, semilla * 100.0)
+	# ...y de vez en cuando falla: el tiempo se parte en tramos (de 3,5 s, si no se dice otra cosa) y en algunos hay un fallo
+	var cual := floorf(t / tramo + semilla * 7.0)
+	var dentro := (t / tramo + semilla * 7.0 - cual) * tramo
+	var suerte := al_azar(cual, semilla * 100.0)
 	if suerte < 0.45:
 		return base                                    # este tramo, sin fallo
-	var dt := dentro - al_azar(tramo + 0.5, semilla) * 2.4   # tiempo desde que empieza el fallo
+	var dt := dentro - al_azar(cual + 0.5, semilla) * 2.4   # tiempo desde que empieza el fallo
 	if suerte > 0.85:
 		# apagón: se va medio segundo y vuelve con un par de chispazos
 		if dt >= 0.0 and dt < 0.5:
