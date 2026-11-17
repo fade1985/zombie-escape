@@ -1145,6 +1145,8 @@ const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), 51.0
 	"electronica": [["electronica-ordenador", Color("#ff4fd0"), 50.0], ["electronica-mando", Color("#a9b8ff"), 50.0]],
 	# el restaurante (17 nov, el dueño): la hamburguesa a la izquierda y el trozo de pizza a la derecha
 	"restaurante": [["restaurante-hamburguesa", Color("#ffb42e"), 50.0], ["restaurante-pizza", Color("#ffb42e"), 50.0]],
+	# la tienda de ropa (17 nov, el dueño): las compras (bolsa, caja, bolso y tacón) a la izquierda y la etiqueta SALE a la derecha
+	"ropa": [["ropa-compras", Color("#ff3df0"), 50.0], ["ropa-sale", Color("#3dc8ff"), 50.0]],
 	"ferreteria": [["panel-herramientas", Color.TRANSPARENT, 50.0],
 	["ferreteria-herramientas", Color("#9fd8ff"), 50.0]]}
 # Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del
