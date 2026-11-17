@@ -3318,8 +3318,16 @@ msgid "No se puede usar"
 msgstr "Nicht benutzbar"
 
 #: scripts/partida.gd
+msgid "Las vendas no curan un tercio perdido: para eso, el botiquín"
+msgstr "Verbände heilen kein verlorenes Drittel: dafür brauchst du ein Medikit"
+
+#: scripts/partida.gd
 msgid "Tienes la vida al máximo: guárdalo para luego"
 msgstr "Dein Leben ist voll: Heb es dir für später auf"
+
+#: scripts/partida.gd
+msgid "Tercio perdido: usa un botiquín"
+msgstr "Drittel verloren: nimm ein Medikit"
 
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
@@ -5344,6 +5352,22 @@ msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le lleva
 msgstr "Damit dich jemand begleitet, stell dich davor und drück {usar}: nur, wenn du sein Lieblingsessen dabeihast, das unter dem Namen steht. Er kommt eine Runde mit und geht danach in sein Kellerabteil zurück."
 
 #: scripts/tutoriales.gd
+msgid "Las cocinas"
+msgstr "Die Küchen"
+
+#: scripts/tutoriales.gd
+msgid "Al limpiar un piso con alguien en los trasteros"
+msgstr "Beim Säubern einer Wohnung, wenn jemand im Keller wohnt"
+
+#: scripts/tutoriales.gd
+msgid "Ya vive alguien en los trasteros: desde ahora, las neveras y las encimeras de las cocinas se pueden abrir con {usar}."
+msgstr "Jetzt wohnt jemand im Keller: ab sofort lassen sich Kühlschränke und Arbeitsplatten der Küchen mit {usar} öffnen."
+
+#: scripts/tutoriales.gd
+msgid "A veces guardan la comida favorita de un superviviente. Llévasela a su trastero y te acompañará."
+msgstr "Manchmal liegt dort das Lieblingsessen eines Überlebenden. Bring es ihm in sein Kellerabteil, dann begleitet er dich."
+
+#: scripts/tutoriales.gd
 msgid "Comida favorita"
 msgstr "Lieblingsessen"
 
@@ -6483,6 +6507,10 @@ msgid "Pausa"
 msgstr "Pause"
 
 #: scripts/ui/menus.gd
+msgid "Estadísticas"
+msgstr "Werte"
+
+#: scripts/ui/menus.gd
 msgid "Vida"
 msgstr "Leben"
 
@@ -6491,12 +6519,8 @@ msgid "Velocidad de ataque"
 msgstr "Angriffstempo"
 
 #: scripts/ui/menus.gd
-msgid "Velocidad"
-msgstr "Tempo"
-
-#: scripts/ui/menus.gd
-msgid "Daño recibido"
-msgstr "Erlittener Schaden"
+msgid "Velocidad de movimiento"
+msgstr "Lauftempo"
 
 #: scripts/ui/menus.gd
 msgid "Crítico"

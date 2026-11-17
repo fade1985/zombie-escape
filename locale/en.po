@@ -3318,8 +3318,16 @@ msgid "No se puede usar"
 msgstr "Can't use that"
 
 #: scripts/partida.gd
+msgid "Las vendas no curan un tercio perdido: para eso, el botiquín"
+msgstr "Bandages can't heal a lost third: you need a medkit for that"
+
+#: scripts/partida.gd
 msgid "Tienes la vida al máximo: guárdalo para luego"
 msgstr "You're at full health: save it for later"
+
+#: scripts/partida.gd
+msgid "Tercio perdido: usa un botiquín"
+msgstr "Lost third: use a medkit"
 
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
@@ -5344,6 +5352,22 @@ msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le lleva
 msgstr "To bring one along, stand in front of them and press {usar}: only if you have their favorite food, shown under their name. They come for one run; then they go back to their storage room."
 
 #: scripts/tutoriales.gd
+msgid "Las cocinas"
+msgstr "The kitchens"
+
+#: scripts/tutoriales.gd
+msgid "Al limpiar un piso con alguien en los trasteros"
+msgstr "On clearing an apartment with someone in the storage rooms"
+
+#: scripts/tutoriales.gd
+msgid "Ya vive alguien en los trasteros: desde ahora, las neveras y las encimeras de las cocinas se pueden abrir con {usar}."
+msgstr "Someone lives in the storage rooms now: from here on, kitchen fridges and counters can be opened with {usar}."
+
+#: scripts/tutoriales.gd
+msgid "A veces guardan la comida favorita de un superviviente. Llévasela a su trastero y te acompañará."
+msgstr "Sometimes they hold a survivor's favorite food. Take it to their storage room and they'll come with you."
+
+#: scripts/tutoriales.gd
 msgid "Comida favorita"
 msgstr "Favorite food"
 
@@ -6483,6 +6507,10 @@ msgid "Pausa"
 msgstr "Pause"
 
 #: scripts/ui/menus.gd
+msgid "Estadísticas"
+msgstr "Stats"
+
+#: scripts/ui/menus.gd
 msgid "Vida"
 msgstr "Health"
 
@@ -6491,12 +6519,8 @@ msgid "Velocidad de ataque"
 msgstr "Attack speed"
 
 #: scripts/ui/menus.gd
-msgid "Velocidad"
-msgstr "Speed"
-
-#: scripts/ui/menus.gd
-msgid "Daño recibido"
-msgstr "Damage taken"
+msgid "Velocidad de movimiento"
+msgstr "Movement speed"
 
 #: scripts/ui/menus.gd
 msgid "Crítico"

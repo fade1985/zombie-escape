@@ -3318,8 +3318,16 @@ msgid "No se puede usar"
 msgstr "Não dá para usar"
 
 #: scripts/partida.gd
+msgid "Las vendas no curan un tercio perdido: para eso, el botiquín"
+msgstr "As bandagens não curam um terço perdido: para isso, o kit médico"
+
+#: scripts/partida.gd
 msgid "Tienes la vida al máximo: guárdalo para luego"
 msgstr "Sua vida está cheia: guarde para depois"
+
+#: scripts/partida.gd
+msgid "Tercio perdido: usa un botiquín"
+msgstr "Terço perdido: use um kit médico"
 
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
@@ -5344,6 +5352,22 @@ msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le lleva
 msgstr "Para alguém ir com você, fique na frente e aperte {usar}: só se você levar a comida favorita dele, a que aparece embaixo do nome. Vai por uma partida; depois, volta para o depósito."
 
 #: scripts/tutoriales.gd
+msgid "Las cocinas"
+msgstr "As cozinhas"
+
+#: scripts/tutoriales.gd
+msgid "Al limpiar un piso con alguien en los trasteros"
+msgstr "Ao limpar um apartamento com alguém nos depósitos"
+
+#: scripts/tutoriales.gd
+msgid "Ya vive alguien en los trasteros: desde ahora, las neveras y las encimeras de las cocinas se pueden abrir con {usar}."
+msgstr "Já mora alguém nos depósitos: a partir de agora, as geladeiras e as bancadas das cozinhas podem ser abertas com {usar}."
+
+#: scripts/tutoriales.gd
+msgid "A veces guardan la comida favorita de un superviviente. Llévasela a su trastero y te acompañará."
+msgstr "Às vezes guardam a comida favorita de um sobrevivente. Leve até o depósito dele e ele vai com você."
+
+#: scripts/tutoriales.gd
 msgid "Comida favorita"
 msgstr "Comida favorita"
 
@@ -6483,6 +6507,10 @@ msgid "Pausa"
 msgstr "Pausa"
 
 #: scripts/ui/menus.gd
+msgid "Estadísticas"
+msgstr "Estatísticas"
+
+#: scripts/ui/menus.gd
 msgid "Vida"
 msgstr "Vida"
 
@@ -6491,12 +6519,8 @@ msgid "Velocidad de ataque"
 msgstr "Velocidade de ataque"
 
 #: scripts/ui/menus.gd
-msgid "Velocidad"
-msgstr "Velocidade"
-
-#: scripts/ui/menus.gd
-msgid "Daño recibido"
-msgstr "Dano recebido"
+msgid "Velocidad de movimiento"
+msgstr "Velocidade de movimento"
 
 #: scripts/ui/menus.gd
 msgid "Crítico"

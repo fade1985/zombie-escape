@@ -234,6 +234,11 @@ const LISTA := {
 		"cuando": "Al entrar en los trasteros",
 		"lineas": ["Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo.",
 			"Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."]},
+	# (17 nov, lo pidió el dueño: si no, no se sabe que las cocinas se han abierto; partida.gd, al limpiar un piso)
+	"cocinas": {"grupo": "Supervivientes", "titulo": "Las cocinas", "icono": "obj-donut",
+		"cuando": "Al limpiar un piso con alguien en los trasteros",
+		"lineas": ["Ya vive alguien en los trasteros: desde ahora, las neveras y las encimeras de las cocinas se pueden abrir con {usar}.",
+			"A veces guardan la comida favorita de un superviviente. Llévasela a su trastero y te acompañará."]},
 	# (16 nov, M124: la comida favorita de cada superviviente; sale al abrir la primera nevera o encimera que la tiene)
 	"comida": {"grupo": "Supervivientes", "titulo": "Comida favorita", "icono": "obj-donut",
 		"cuando": "Al encontrar la primera comida",

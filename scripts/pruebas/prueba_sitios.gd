@@ -3239,6 +3239,44 @@ func probar_congelados() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --cocinas" (17 nov): con alguien viviendo en los trasteros y la ventana de las cocinas sin ver, Johnny
+# limpia un apartamento: al acabar, sale la ventana «Las cocinas» (captura-cocinas.png). Luego deja el guardado como
+# estaba y se cierra
+func probar_cocinas() -> void:
+	var antes := Guardado.cargar().duplicate(true)
+	tutoriales_prueba = true
+	Guardado.cambiar(func(g):
+		g.ajustes.tutoriales = true
+		g.tutoriales.erase("cocinas")
+		if g.rescatados.is_empty():
+			g.rescatados.append(Supervivientes.DATOS.keys()[0]))
+	Tutoriales.vistos_de = ""   # (que lo vuelva a leer)
+	var donde := -1
+	for j in planta.sitios.size():
+		if planta.sitios[j].tipo == "apartamento" and not planta.sitios[j].limpio:
+			donde = j
+			break
+	if donde < 0:
+		Captura.fallar("esta planta no tiene apartamentos sin limpiar")
+		return
+	await montar(donde, 0, false)
+	johnny.invencible = true
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.recibir_golpe(9999, Vector2.ZERO)
+	var t := 0.0
+	while not "cocinas" in cola_tutoriales and not Tutoriales.visto("cocinas") and t < 8.0:
+		await get_tree().create_timer(0.2, true).timeout
+		t += 0.2
+	await get_tree().create_timer(1.0, true).timeout
+	print("Las cocinas: piso limpio %s · su ventana %s (esperado: true, sale)" % [planta.sitios[donde].limpio,
+		"sale" if "cocinas" in cola_tutoriales or Tutoriales.visto("cocinas") else "no sale"])
+	Captura.foto("captura-cocinas.png")
+	Guardado.cambiar(func(g):
+		g.rescatados = antes.rescatados
+		g.tutoriales = antes.tutoriales)
+	get_tree().quit()
+
+
 # Con "--captura --cientifico-durmientes" (17 nov): en 8 plantas de cada edificio, a qué distancia del medio de su
 # habitación queda el científico muerto (esperado: casi siempre 0; si hay un mueble en medio, poco más) y cuántos
 # durmientes salen sin mejora y con la mejora 2 del VD-7, con la misma semilla (esperado: un 40 % más). Luego se cierra

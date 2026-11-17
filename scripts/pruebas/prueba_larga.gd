@@ -1937,11 +1937,18 @@ func probar_mutaciones() -> void:
 	print("Mutaciones: %s | daño recibido x%.2f | pausa %s" % [mutaciones.tengo, johnny.stats.dano_recibido, get_tree().paused])
 
 
-# Con --pausa: solo la pausa (captura-pausa.png: sus números y las armas) y el cartel del final (captura-fin.png)
+# Con --pausa: solo la pausa (captura-pausa.png: sus números y las armas; con la mejora 2 del VD-7 arriba) y el cartel
+# del final (captura-fin.png). Y el color de la barra de vida justo en el borde de cada tercio (ui/hud.gd)
 func probar_pausa_y_fin() -> void:
+	print("Color de la vida (1 rojo, 2 amarillo, 3 verde): 115 de 115 → %d, 78 → %d, 77 (dos tercios) → %d, 39 → %d, 38 (un tercio) → %d (esperado: 3, 3, 2, 2, 1)" % [
+		HUD.tercio_de_color(115, 115), HUD.tercio_de_color(78, 115), HUD.tercio_de_color(77, 115),
+		HUD.tercio_de_color(39, 115), HUD.tercio_de_color(38, 115)])
+	var nivel_antes := Alerta.nivel
+	Alerta.nivel = 2
 	pausar()
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-pausa.png")
+	Alerta.nivel = nivel_antes
 	seguir()
 	terminar(true)
 	await get_tree().create_timer(0.4).timeout

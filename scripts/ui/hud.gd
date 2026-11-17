@@ -702,6 +702,16 @@ func mirar_balas(delta: float) -> void:
 	balas_antes = b
 
 
+# En qué tercio cae esa vida para su color (1 rojo, 2 amarillo, 3 verde): solo pasa al de arriba si tiene más que el
+# tope del de abajo (johnny.vida_tope, redondeado igual)
+static func tercio_de_color(vida: float, maxima: float) -> int:
+	if vida > roundi(maxima * 2.0 / 3.0):
+		return 3
+	if vida > roundi(maxima / 3.0):
+		return 2
+	return 1
+
+
 # Los colores de la vida, uno por tercio (con uno, con dos y con los tres): el de la barra y el que late con poca vida,
 # el brillo de arriba y el que late, y la sombra de abajo
 const TONOS_VIDA := [
@@ -726,8 +736,9 @@ func pintar_barra() -> void:
 	var luz := 0.0
 	if vida / maxima < 0.34 and johnny.vivo:
 		luz = 0.35 * pow(absf(sin(tiempo * PI * 1.6)), 4.0)
-	# el color va por tercios de la vida que tiene: con los tres, verde; con dos, amarillo; con uno, rojo (16 nov)
-	var tonos: Array = TONOS_VIDA[clampi(ceili(vida / maxima * 3.0 - 0.001), 1, 3) - 1]
+	# el color va por tercios de la vida que tiene: con los tres, verde; con dos, amarillo; con uno, rojo (16 nov). Justo
+	# en el borde de un tercio, el de abajo (17 nov: con 77 de 115, el tope de dos tercios redondeado, salía verde)
+	var tonos: Array = TONOS_VIDA[tercio_de_color(vida, maxima) - 1]
 	barra.draw_rect(lleno, tonos[0].lerp(tonos[1], luz))
 	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, lleno.size.y * 0.45)), tonos[2].lerp(tonos[3], luz))
 	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y * 0.8), Vector2(lleno.size.x, lleno.size.y * 0.2)), tonos[4])

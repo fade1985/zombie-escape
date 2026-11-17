@@ -3322,8 +3322,16 @@ msgid "No se puede usar"
 msgstr "Нельзя использовать"
 
 #: scripts/partida.gd
+msgid "Las vendas no curan un tercio perdido: para eso, el botiquín"
+msgstr "Бинты не лечат потерянную треть: для этого нужна аптечка"
+
+#: scripts/partida.gd
 msgid "Tienes la vida al máximo: guárdalo para luego"
 msgstr "Здоровье и так полное: прибереги на потом"
+
+#: scripts/partida.gd
+msgid "Tercio perdido: usa un botiquín"
+msgstr "Треть потеряна: нужна аптечка"
 
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
@@ -5352,6 +5360,22 @@ msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le lleva
 msgstr "Чтобы кто-то пошел с тобой, встань перед ним и нажми {usar}: только если у тебя есть его любимая еда, она показана под именем. Он идет на один забег, а потом возвращается в свою кладовку."
 
 #: scripts/tutoriales.gd
+msgid "Las cocinas"
+msgstr "Кухни"
+
+#: scripts/tutoriales.gd
+msgid "Al limpiar un piso con alguien en los trasteros"
+msgstr "При зачистке квартиры, когда в кладовках кто-то живет"
+
+#: scripts/tutoriales.gd
+msgid "Ya vive alguien en los trasteros: desde ahora, las neveras y las encimeras de las cocinas se pueden abrir con {usar}."
+msgstr "В кладовках теперь кто-то живет: отныне холодильники и столешницы на кухнях можно открывать ({usar})."
+
+#: scripts/tutoriales.gd
+msgid "A veces guardan la comida favorita de un superviviente. Llévasela a su trastero y te acompañará."
+msgstr "Иногда там лежит любимая еда кого-то из выживших. Отнеси ее в его кладовку, и он пойдет с тобой."
+
+#: scripts/tutoriales.gd
 msgid "Comida favorita"
 msgstr "Любимая еда"
 
@@ -6504,6 +6528,10 @@ msgid "Pausa"
 msgstr "Пауза"
 
 #: scripts/ui/menus.gd
+msgid "Estadísticas"
+msgstr "Характеристики"
+
+#: scripts/ui/menus.gd
 msgid "Vida"
 msgstr "Здоровье"
 
@@ -6512,12 +6540,8 @@ msgid "Velocidad de ataque"
 msgstr "Скорость атаки"
 
 #: scripts/ui/menus.gd
-msgid "Velocidad"
-msgstr "Скорость"
-
-#: scripts/ui/menus.gd
-msgid "Daño recibido"
-msgstr "Получаемый урон"
+msgid "Velocidad de movimiento"
+msgstr "Скорость передвижения"
 
 #: scripts/ui/menus.gd
 msgid "Crítico"

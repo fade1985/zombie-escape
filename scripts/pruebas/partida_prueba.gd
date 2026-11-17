@@ -390,6 +390,7 @@
 #                       cambiando de habitación: que ninguno se quede quieto lejos de él     [prueba_sitios.gd]
 #   --vueltas           F24: Johnny entra en cada habitación con durmientes de varias plantas (--plantas N, 4):
 #                       que ninguno se quede dando vueltas sobre sí mismo sin ir a por él    [prueba_sitios.gd]
+#   --cocinas           con alguien en los trasteros, al limpiar un piso sale la ventana «Las cocinas» [prueba_sitios.gd]
 #   --cientifico-durmientes  en 8 plantas de cada edificio: el científico muerto en el medio de su habitación y los
 #                       durmientes de más con la mejora 2 del VD-7 (+40 %)                [prueba_sitios.gd]
 #   --cartel            L41: lo que pone arriba en el pasillo y en cada puerta de las plantas 1 y 2 (con --edificio centro:
@@ -1235,6 +1236,9 @@ func empezar_prueba() -> void:
 	elif "--cientifico-durmientes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cientifico_durmientes()
+	elif "--cocinas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_cocinas()
 	elif "--cartel" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cartel()

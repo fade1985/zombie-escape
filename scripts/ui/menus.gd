@@ -110,6 +110,44 @@ func dato(lista: VBoxContainer, icono: String, nombre: String, valor: String, co
 	lista.add_child(fila)
 
 
+# Las dos columnas de la pausa, del mismo ancho (ANCHO_PAUSA) para que la raya de en medio quede centrada: su título
+# arriba («Estadísticas», «Armas»), en pequeño
+const ANCHO_PAUSA := 320
+
+func columna_pausa(lado: HBoxContainer, cabecera: String) -> VBoxContainer:
+	var caja := VBoxContainer.new()
+	caja.custom_minimum_size.x = ANCHO_PAUSA
+	lado.add_child(caja)
+	var t := Label.new()
+	t.text = cabecera
+	t.theme_type_variation = "Sub"
+	caja.add_child(t)
+	return caja
+
+
+# Una fila de estadística de la pausa, sin icono: el nombre a la izquierda y el valor a la derecha
+func dato_solo(lista: VBoxContainer, nombre: String, valor: String) -> void:
+	var fila := HBoxContainer.new()
+	var n := Label.new()
+	n.text = nombre
+	n.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fila.add_child(n)
+	var v := Label.new()
+	v.text = valor
+	v.add_theme_color_override("font_color", Tema.TINTA)
+	fila.add_child(v)
+	lista.add_child(fila)
+
+
+# Una línea de la columna de las armas, sin icono (si no cabe, en dos)
+func texto_pausa(lista: VBoxContainer, texto: String) -> void:
+	var l := Label.new()
+	l.text = texto
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.custom_minimum_size.x = ANCHO_PAUSA
+	lista.add_child(l)
+
+
 func boton(caja: Container, texto: String, al_pulsar: Callable, variacion := "") -> Button:
 	var b := Button.new()
 	b.text = texto
@@ -124,45 +162,43 @@ func pausa(partida: Node, foco := "") -> void:
 	var columna := abrir("pausa")
 	var johnny: Node2D = partida.johnny
 	var s: Dictionary = johnny.stats
-	titulo(columna, Idioma.t("Pausa"), partida.lugar.text.replace("\n", " · "))
+	# arriba, dónde está y, con la mejora del compuesto VD-7 (alerta.gd), cuál (17 nov)
+	var donde: String = partida.lugar.text.replace("
+", " · ")
+	if Alerta.nivel > 0 and not Garaje.activo:
+		donde += " · " + Alerta.nombre_largo()
+	titulo(columna, Idioma.t("Pausa"), donde)
+	# (17 nov, lo pidió el dueño: sin iconos, cada columna con su título y una raya en medio)
 	var lado := HBoxContainer.new()
-	lado.add_theme_constant_override("separation", 28)
+	lado.add_theme_constant_override("separation", 24)
 	columna.add_child(lado)
-	var izquierda := VBoxContainer.new()
-	izquierda.custom_minimum_size.x = 300
-	lado.add_child(izquierda)
+	var izquierda := columna_pausa(lado, Idioma.t("Estadísticas"))
+	var raya := VSeparator.new()
+	lado.add_child(raya)
+	var derecha := columna_pausa(lado, Idioma.t("Armas"))
 	var w: Dictionary = johnny.arma()
-	dato(izquierda, "corazon", Idioma.t("Vida"), "%d / %d" % [johnny.vida, s.vida_max])
-	dato(izquierda, "fuerza", Idioma.t("Daño"), "x" + Idioma.puntuar("%.2f" % s.dano))
-	dato(izquierda, "cafe", Idioma.t("Velocidad de ataque"), "x" + Idioma.puntuar("%.2f" % s.ritmo))
-	dato(izquierda, "guantes", Idioma.t("Alcance"), "x" + Idioma.puntuar("%.2f" % (s.alcance * (s.alcance_cuerpo if w.tipo == "cuerpo" else 1.0))))
-	dato(izquierda, "dash", Idioma.t("Velocidad"), str(roundi(s.velocidad)))
-	dato(izquierda, "casco", Idioma.t("Daño recibido"), "x" + Idioma.puntuar("%.2f" % s.dano_recibido))
-	dato(izquierda, "diana", Idioma.t("Crítico"), "%d%%" % roundi(s.critico * 100))
-	var derecha := VBoxContainer.new()
-	lado.add_child(derecha)
-	var armas := Label.new()
-	armas.text = Idioma.t("Armas")
-	armas.theme_type_variation = "Sub"
-	derecha.add_child(armas)
+	dato_solo(izquierda, Idioma.t("Vida"), "%d / %d" % [johnny.vida, s.vida_max])
+	dato_solo(izquierda, Idioma.t("Daño"), "x" + Idioma.puntuar("%.2f" % s.dano))
+	dato_solo(izquierda, Idioma.t("Velocidad de ataque"), "x" + Idioma.puntuar("%.2f" % s.ritmo))
+	dato_solo(izquierda, Idioma.t("Alcance"), "x" + Idioma.puntuar("%.2f" % (s.alcance * (s.alcance_cuerpo if w.tipo == "cuerpo" else 1.0))))
+	dato_solo(izquierda, Idioma.t("Velocidad de movimiento"), str(roundi(s.velocidad)))
+	dato_solo(izquierda, Idioma.t("Crítico"), "%d%%" % roundi(s.critico * 100))
 	for hueco in ["cuerpo", "fuego"]:
 		var id: String = johnny.huecos[hueco]
 		if id == "":
 			continue   # (sin arma a distancia)
 		var a: Dictionary = Armas.datos(id)
-		var resumen := Idioma.t("%s · daño %d · %s/s") % [Objetos.nombre(id), a.dano * (a.get("perdigones", 1)), Idioma.puntuar("%.1f" % a.ritmo)]
-		derecha.add_child(Tema.icono_y_texto(Objetos.icono(id), resumen, 20))
+		texto_pausa(derecha, Idioma.t("%s · daño %d · %s/s") % [Objetos.nombre(id), a.dano * (a.get("perdigones", 1)), Idioma.puntuar("%.1f" % a.ritmo)])
 	var lz: Lanzables = partida.lanzables
-	derecha.add_child(Tema.icono_y_texto("molotov", Idioma.t("Molotovs: %d") % lz.total("molotov"), 20))
-	derecha.add_child(Tema.icono_y_texto("granada", Idioma.t("Granadas: %d") % lz.total("granada"), 20))
+	texto_pausa(derecha, Idioma.t("Molotovs: %d") % lz.total("molotov"))
+	texto_pausa(derecha, Idioma.t("Granadas: %d") % lz.total("granada"))
 	if not partida.mutaciones.tengo.is_empty():
 		var muts := Label.new()
 		muts.text = Idioma.t("Efectos secundarios")
 		muts.theme_type_variation = "Sub"
 		derecha.add_child(muts)
 		for id in partida.mutaciones.tengo:
-			var m := Mutaciones.mutacion(id)
-			derecha.add_child(Tema.icono_y_texto(m.icono, m.nombre, 20))
+			texto_pausa(derecha, Mutaciones.mutacion(id).nombre)
 	var botones := HBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	botones.add_theme_constant_override("separation", 10)

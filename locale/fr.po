@@ -3318,8 +3318,16 @@ msgid "No se puede usar"
 msgstr "Impossible à utiliser"
 
 #: scripts/partida.gd
+msgid "Las vendas no curan un tercio perdido: para eso, el botiquín"
+msgstr "Les bandages ne soignent pas un tiers perdu : pour ça, il faut un médikit"
+
+#: scripts/partida.gd
 msgid "Tienes la vida al máximo: guárdalo para luego"
 msgstr "Ta vie est au maximum : garde-le pour plus tard"
+
+#: scripts/partida.gd
+msgid "Tercio perdido: usa un botiquín"
+msgstr "Tiers perdu : utilise un médikit"
 
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
@@ -5344,6 +5352,22 @@ msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le lleva
 msgstr "Pour qu'un survivant t'accompagne, mets-toi devant et appuie sur {usar} : seulement si tu as son plat préféré, affiché sous son nom. Il vient pour une partie, puis retourne dans sa cave."
 
 #: scripts/tutoriales.gd
+msgid "Las cocinas"
+msgstr "Les cuisines"
+
+#: scripts/tutoriales.gd
+msgid "Al limpiar un piso con alguien en los trasteros"
+msgstr "En nettoyant un appartement avec quelqu'un dans les caves"
+
+#: scripts/tutoriales.gd
+msgid "Ya vive alguien en los trasteros: desde ahora, las neveras y las encimeras de las cocinas se pueden abrir con {usar}."
+msgstr "Quelqu'un vit dans les caves : désormais, les frigos et les plans de travail des cuisines s'ouvrent avec {usar}."
+
+#: scripts/tutoriales.gd
+msgid "A veces guardan la comida favorita de un superviviente. Llévasela a su trastero y te acompañará."
+msgstr "Ils cachent parfois le plat préféré d'un survivant. Apporte-le dans sa cave et il t'accompagnera."
+
+#: scripts/tutoriales.gd
 msgid "Comida favorita"
 msgstr "Plat préféré"
 
@@ -6483,6 +6507,10 @@ msgid "Pausa"
 msgstr "Pause"
 
 #: scripts/ui/menus.gd
+msgid "Estadísticas"
+msgstr "Statistiques"
+
+#: scripts/ui/menus.gd
 msgid "Vida"
 msgstr "Vie"
 
@@ -6491,12 +6519,8 @@ msgid "Velocidad de ataque"
 msgstr "Vitesse d'attaque"
 
 #: scripts/ui/menus.gd
-msgid "Velocidad"
-msgstr "Vitesse"
-
-#: scripts/ui/menus.gd
-msgid "Daño recibido"
-msgstr "Dégâts reçus"
+msgid "Velocidad de movimiento"
+msgstr "Vitesse de déplacement"
 
 #: scripts/ui/menus.gd
 msgid "Crítico"

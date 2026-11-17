@@ -1079,6 +1079,9 @@ func _physics_process(delta: float) -> void:
 		else:
 			decir(Idioma.t("¡Piso limpio! La puerta se ha abierto"))
 			encender_tele(sitio)
+			# con alguien en los trasteros, las cocinas ya se abren: la primera vez, su ventana (17 nov)
+			if Objetos.hay_comida() and not Garaje.activo:
+				tutorial("cocinas")
 			logros.cumplir("primer_turno")
 		actualizar_puertas()
 		Sonido.tocar("limpio")
@@ -1859,6 +1862,8 @@ func usar_objeto(id: String) -> String:
 	if Garaje.prohibido(id):   # (el garaje del reto del día, «Sin curas»: garaje.gd)
 		return Garaje.no_vale()
 	if not puede_curar(id):
+		if johnny.tercios_vivos() < 3:   # (las vendas no devuelven el tercio perdido: lo dice, que si no parece un fallo)
+			return Idioma.t("Las vendas no curan un tercio perdido: para eso, el botiquín")
 		return Idioma.t("Tienes la vida al máximo: guárdalo para luego")
 	mochila.remove_at(mochila.rfind(id))
 	if Objetos.USABLES[id].get("tercio", false):
@@ -1883,6 +1888,7 @@ func usar_cura(id: String) -> void:
 	if no != "":
 		Sonido.tocar("no")
 		numero(johnny.position + Vector2(0, -50), Idioma.t("¡Hoy no vale!") if Garaje.prohibido(id)
+			else Idioma.t("Tercio perdido: usa un botiquín") if johnny.tercios_vivos() < 3
 			else Idioma.t("Tienes la vida al máximo"), Tema.TINTA)
 
 

@@ -3314,8 +3314,16 @@ msgid "No se puede usar"
 msgstr "无法使用"
 
 #: scripts/partida.gd
+msgid "Las vendas no curan un tercio perdido: para eso, el botiquín"
+msgstr "绷带无法恢复失去的三分之一：这需要急救包"
+
+#: scripts/partida.gd
 msgid "Tienes la vida al máximo: guárdalo para luego"
 msgstr "生命已满：留着以后用吧"
+
+#: scripts/partida.gd
+msgid "Tercio perdido: usa un botiquín"
+msgstr "失去三分之一：用急救包"
 
 #: scripts/partida.gd
 msgid "Tienes la vida al máximo"
@@ -5336,6 +5344,22 @@ msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le lleva
 msgstr "想让某人跟着你，就站到他面前按{usar}：前提是你带着他最爱的食物，就显示在他名字下面。他会跟你一局，之后回到自己的储藏室。"
 
 #: scripts/tutoriales.gd
+msgid "Las cocinas"
+msgstr "厨房"
+
+#: scripts/tutoriales.gd
+msgid "Al limpiar un piso con alguien en los trasteros"
+msgstr "储藏室里有人时清理一间公寓"
+
+#: scripts/tutoriales.gd
+msgid "Ya vive alguien en los trasteros: desde ahora, las neveras y las encimeras de las cocinas se pueden abrir con {usar}."
+msgstr "储藏室里已经有人住了：从现在起，厨房的冰箱和料理台可以用{usar}打开。"
+
+#: scripts/tutoriales.gd
+msgid "A veces guardan la comida favorita de un superviviente. Llévasela a su trastero y te acompañará."
+msgstr "有时里面会有某位幸存者最爱的食物。把它带到他的储藏室，他就会跟着你。"
+
+#: scripts/tutoriales.gd
 msgid "Comida favorita"
 msgstr "最爱的食物"
 
@@ -6462,6 +6486,10 @@ msgid "Pausa"
 msgstr "暂停"
 
 #: scripts/ui/menus.gd
+msgid "Estadísticas"
+msgstr "属性"
+
+#: scripts/ui/menus.gd
 msgid "Vida"
 msgstr "生命"
 
@@ -6470,12 +6498,8 @@ msgid "Velocidad de ataque"
 msgstr "攻击速度"
 
 #: scripts/ui/menus.gd
-msgid "Velocidad"
+msgid "Velocidad de movimiento"
 msgstr "移动速度"
-
-#: scripts/ui/menus.gd
-msgid "Daño recibido"
-msgstr "受到伤害"
 
 #: scripts/ui/menus.gd
 msgid "Crítico"
