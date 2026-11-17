@@ -1020,7 +1020,10 @@ en una línea.
   por detrás (`letrero_halo.py`), fijo salvo unos 6 apagones por minuto (su lámpara con `tramo` 7 s en vez de 3,5:
   `lampara.gd`), en los que las letras se oscurecen y saltan chispas de la E caída, que también chisporrotea sola cada pocos
   segundos (`neon.gd`, `LETREROS`, `CHISPAS_EN`, `chispazo`; suena «chispa» si Johnny está cerca). Prueba:
-  `--captura --edificio centro --puerta-super` (con fotos seguidas de las chispas y una del apagón).
+  `--captura --edificio centro --puerta-super` (con fotos seguidas de las chispas y una del apagón). Desde el 17 nov la
+  puerta automática no es solo del súper: `Planta.PUERTA_AUTOMATICA` (supermercado, farmacia) dice qué tiendas la llevan (la
+  misma imagen; `puerta.gd es_super` y `Planta.escaparate_a`, que separa sus escaparates); para pasar otra tienda, añadirla
+  ahí. Se prueba con `--puerta-super farmacia` (la tienda, detrás; sin letrero con chispas, esa parte se salta).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

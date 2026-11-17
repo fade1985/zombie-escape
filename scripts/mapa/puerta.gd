@@ -195,9 +195,10 @@ func doble() -> bool:
 	return (salida.get("tipo", "") == "llegada" and salida.dir == "izquierda") or salida.get("tipo", "") == "escaleras"
 
 
-# Si es la puerta automática del supermercado: la de su fachada, en la pared de arriba de la galería
+# Si es una puerta automática (la del supermercado y, desde el 17 nov, la de la farmacia: Planta.PUERTA_AUTOMATICA): la de
+# su fachada, en la pared de arriba de la galería
 func es_super() -> bool:
-	return centro and salida.dir == "arriba" and salida.get("neon", "") == "supermercado"
+	return centro and salida.dir == "arriba" and salida.get("neon", "") in Planta.PUERTA_AUTOMATICA
 
 
 # Las hojas de la puerta del súper se abren poco a poco mientras Johnny está delante y se cierran al irse

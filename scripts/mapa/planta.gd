@@ -19,9 +19,12 @@ const PASILLO_FILAS := 12
 const PUERTA_A := 14 * CASILLA    # a qué distancia de cada punta del pasillo están las puertas
 const ESCAPARATE_A := 100         # en el centro comercial, a qué distancia de su puerta va cada escaparate
 const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho (escaparate-electronica, 57 píxeles)
-# (el supermercado, con su puerta automática más ancha, 128 unidades: sus escaparates, más separados; 17 nov)
+# Las tiendas con la puerta automática de cristal (la del súper, de GPT; en la farmacia, desde el 17 nov: se van pasando
+# una a una a la puerta que se corre sola; ver puerta.gd, es_super)
+const PUERTA_AUTOMATICA := ["supermercado", "farmacia"]
+# (con la puerta automática, más ancha, 128 unidades: sus escaparates, más separados; 17 nov)
 static func escaparate_a(tipo_tienda: String) -> float:
-	return 124.0 if tipo_tienda == "supermercado" else float(ESCAPARATE_A)
+	return 124.0 if tipo_tienda in PUERTA_AUTOMATICA else float(ESCAPARATE_A)
 const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
 # La sala de mantenimiento: tres estancias de 10 × 10 casillas, una al lado de otra (el vestuario, el despacho y el
 # taller), con un tabique de una casilla entre ellas y el muro de fuera alrededor (1152 × 448, algo más ancha que la

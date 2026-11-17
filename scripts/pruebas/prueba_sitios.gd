@@ -942,27 +942,32 @@ func probar_galeria() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --edificio centro --puerta-super" (17 nov): la puerta automática del supermercado de la galería (en la
-# primera planta que la tenga en la pared de arriba), de cerca: cerrada con llave (lucecita roja), con Johnny delante
-# aún sin la llave maestra (no se abre), ya con la llave (se abre) y al irse (se cierra). Fotos
-# captura-puerta-super-<paso>.png. Luego se cierra
+# Con "--captura --edificio centro --puerta-super [tienda]" (17 nov): la puerta automática del supermercado (o de la tienda
+# que se diga detrás: "farmacia"...) de la galería (en la primera planta que la tenga en la pared de arriba), de cerca:
+# cerrada con llave (lucecita roja), con Johnny delante aún sin la llave maestra (no se abre), ya con la llave (se abre) y
+# al irse (se cierra). Fotos captura-puerta-super-<paso>.png. Luego se cierra
 func probar_puerta_super() -> void:
+	var tienda := "supermercado"
+	var args := OS.get_cmdline_user_args()
+	var i_arg: int = args.find("--puerta-super") + 1
+	if i_arg < args.size() and not args[i_arg].begins_with("--"):
+		tienda = args[i_arg]
 	var puerta: Node2D = null
 	# (las tiendas salen al azar: se prueban plantas hasta dar con una)
 	for intento in 24:
 		var num := 1 + intento % 4
 		nueva_planta(num)
-		if not planta.sitios[0].salidas.any(func(s): return s.dir == "arriba" and s.get("neon", "") == "supermercado"):
+		if not planta.sitios[0].salidas.any(func(s): return s.dir == "arriba" and s.get("neon", "") == tienda):
 			continue
 		await montar(0, 0, false)
 		for p in mapa.puertas:
-			if p.es_super():
+			if p.es_super() and p.salida.get("neon", "") == tienda:
 				puerta = p
 		if puerta:
-			print("Puerta del súper: en la planta %d" % (num - 1))
+			print("Puerta automática de «%s»: en la planta %d" % [tienda, num - 1])
 			break
 	if puerta == null:
-		print("ERROR DE LA PRUEBA: ninguna planta tiene el súper en la pared de arriba")
+		print("ERROR DE LA PRUEBA: ninguna planta tiene «%s» en la pared de arriba" % tienda)
 		get_tree().quit(1)
 		return
 	# (sin zombis, sin penumbra y sin el HUD, para que se vea bien la puerta)
@@ -996,10 +1001,17 @@ func probar_puerta_super() -> void:
 	Temblor.desplazamiento = puerta.position + Vector2(0, -50) - johnny.position
 	await get_tree().create_timer(SUPER_MEDIO).timeout
 	Captura.foto("captura-puerta-super-medio.png")
+	if not preload("res://scripts/mapa/neon.gd").CHISPAS_EN.has(tienda):   # (sin letrero con chispas, como la farmacia aún: acaba aquí)
+		Luz.apagada = not Luz.apagada
+		$Pantalla.show()
+		camara.zoom = Vector2.ONE
+		Temblor.desplazamiento = Vector2.ZERO
+		get_tree().quit()
+		return
 	# el letrero: chispas de la E caída (un chispazo a mano, para la foto) y cuántas veces se le va la luz en un minuto
 	var letrero: Node2D = null
 	for n in mapa.cosas.get_children():
-		if n.get("tipo") == "supermercado" and n.get("chispas") != null:
+		if n.get("tipo") == tienda and n.get("chispas") != null:
 			letrero = n
 	if letrero == null:
 		print("ERROR DE LA PRUEBA: el letrero del súper no tiene chispas")
