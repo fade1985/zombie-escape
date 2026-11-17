@@ -227,7 +227,7 @@ func ascensor() -> void:
 		# la cinta, a media altura de las hojas y sin llegar al cartel de la planta (que acaba 18 a la izquierda de ellas)
 		draw_rect(Rect2(x0 - 10, -34, w + 20, 2), CINTA_SOMBRA)
 		cinta(x0 - 10, -44, w + 20)
-	if salida.has("planta"):
+	if salida.has("planta") and not salida.get("sin_cartel", false):   # (la galería del centro comercial, sin él: planta.gd)
 		cartel_planta()
 
 

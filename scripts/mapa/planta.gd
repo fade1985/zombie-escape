@@ -390,6 +390,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
 		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": -1 if edificio == "torre" else num - 1})   # [traducir]
+	if estilo_pasillo == "galeria":
+		pasillo.salidas.back().sin_cartel = true   # (17 nov: sin el número de la planta en la pared, mientras el dueño la rehace)
 	if edificio == "torre":
 		pasillo.salidas.back().planta_torre = (num - 1) * 10   # su cartel (0, 10, 20...), pintado con código (puerta.gd)
 	# por donde se ha llegado: solo en la planta baja, el portal del edificio, a la izquierda. En las demás plantas no hay otra

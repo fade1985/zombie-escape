@@ -853,7 +853,7 @@ en una línea.
   (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); la galería, igual
   (`colocados` de `"galeria"`, se mira con `--galeria`; desde el 17 nov vacía mientras el dueño la rehace: sin muebles ni restos
   sueltos de sangre y pintadas, `mapa.galeria`; solo las puertas de las tiendas, sus escaparates y letreros, el ascensor, las
-  salidas; tampoco apliques: se sortean y se quitan en `planta.gd`). Los departamentos de Torre Velaria (el tercer edificio,
+  salidas; tampoco apliques: se sortean y se quitan en `planta.gd`; ni el número de la planta junto al ascensor, `sin_cartel`). Los departamentos de Torre Velaria (el tercer edificio,
   `docs/PLAN_TERCER_EDIFICIO.md`) también son tipos de `Tienda.TIPOS`, con `"edificio": "torre"`: toman el plano de una
   tienda del centro (`"presta"`, `Tienda.plano_de`), pero con muebles propios (`colocados` de `<sala>-<tipo>`, puestos con
   `py tools/muebles_torre.py` a partir de los de esa tienda), suelos y paredes propios (`Mapa.ESTILO_TIENDA`) y su rótulo
