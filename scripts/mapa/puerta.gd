@@ -74,6 +74,7 @@ const PLACA_SUELO := {"hoja": preload("res://assets/sprites/placa-rota-suelo.png
 # (tools/cartel_mantenimiento.py, 64 × 15 píxeles): se estira por en medio con lo que mida el texto, ya traducido
 # ("Mantenimiento", el nombre de la sala, en mayúsculas). MANT_PUNTA, lo que mide cada punta (con su tornillo), que no se estira
 const CARTEL_MANT_LISO := preload("res://assets/sprites/cartel-mantenimiento-liso.png")
+const PLACA_MANTENIMIENTO := preload("res://assets/sprites/placa-mantenimiento.png")   # (cartel_mantenimiento)
 const MANT_PUNTA := 9
 const MANT_ALTO := 30.0
 const PLACA_AZUL := 22.0   # lo alto de la placa azul pequeña con la letra de los pisos A y B
@@ -290,10 +291,15 @@ func ascensor_portal() -> void:
 
 # El cartel de la sala de mantenimiento: "en", el medio de su lado izquierdo. La placa, con las puntas a su tamaño y lo de
 # en medio estirado, y encima el texto, con su sombra
-# (en la galería del centro comercial, más bajo: del alto de las placas azules pequeñas de los pisos A y B, con los márgenes
-# y los tornillos a su escala; la letra no puede bajar de 16, que se emborrona. 17 nov, el dueño)
+# La placa de la sala de mantenimiento, a la derecha de su puerta en los tres edificios: chapa esmaltada azul con un casco
+# de obra y dos llaves inglesas cruzadas, sin letras (de GPT: tools/muebles_gpt.py, "placa_mantenimiento"; 17 nov, el
+# dueño). Antes, «MANTENIMIENTO» escrito en la placa azul alargada, que con la palabra no podía ser más corta. "en", el
+# medio de su lado izquierdo; con su sombra en la pared, como los demás carteles
 func cartel_mantenimiento(en: Vector2) -> void:
-	cartel_azul(Idioma.t("Mantenimiento").to_upper(), en, PLACA_AZUL if galeria else MANT_ALTO)
+	var tam := PLACA_MANTENIMIENTO.get_size() * 2.0
+	var r := Rect2(en.x, en.y - tam.y / 2.0, tam.x, tam.y)
+	draw_rect(Rect2(r.position + Vector2(2, 2), r.size), Color(0, 0, 0, 0.25))
+	draw_texture_rect(PLACA_MANTENIMIENTO, r, false)
 
 
 # La placa azul esmaltada (la de MANTENIMIENTO) con "texto", del largo que pida: "en", el medio de su lado izquierdo.

@@ -311,6 +311,11 @@ MUEBLES = {
     # la palmera de la galería del centro comercial (17 nov, catalogo.gd: "palmera"): una areca en su maceta alta de piedra
     # blanca con motas; algo más alta que Johnny (48)
     "palmera": ("assets/sources/palmera-gpt.webp", "assets/sprites/mueble-palmera.png", 42, 65, True),
+    # la placa de la sala de mantenimiento, junto a su puerta en el pasillo de los tres edificios (puerta.gd,
+    # cartel_mantenimiento; 17 nov): chapa esmaltada azul con un casco de obra y dos llaves inglesas cruzadas, sin letras
+    # (en vez del cartel «MANTENIMIENTO», que con la palabra no podía ser más corto). A 22, los cuadrados de GPT justos:
+    # a 18 o 20 las llaves se emborronaban
+    "placa_mantenimiento": ("assets/sources/placa-mantenimiento-gpt.webp", "assets/sprites/placa-mantenimiento.png", 22, 22, False),
 }
 
 
