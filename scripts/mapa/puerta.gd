@@ -53,6 +53,10 @@ const SALIDA := preload("res://assets/sprites/puerta-salida.png")
 const MARCO := Color("2b1d16")
 const HOJA := Color("6b4329")
 const HUECO := Color("1a1410")
+# la de la calle del centro comercial (doble()): la plancha de la puerta metálica de dentro, de lado (sin el pomo: solo las
+# columnas de la plancha), y el marco, del color de su contorno
+const HOJA_ACERO := preload("res://assets/sprites/puerta-metal-lado-cerrada.png")
+const MARCO_ACERO := Color("1d1b2c")
 # El ascensor (elevatorFront de src/render.js): acero, su marco y la cinta de peligro amarilla y negra
 const ACERO := {"luz": Color("76807c"), "medio": Color("566060"), "sombra": Color("3d4545"), "filo": Color("1e2324")}
 const OSCURO := Color("0c0a0e")
@@ -131,8 +135,8 @@ func _ready() -> void:
 	# planta junto al ascensor y los letreros de neón de las tiendas)
 
 
-# La puerta de la calle del centro comercial (la de llegada de la planta baja, a la izquierda): el doble de larga y con
-# dos hojas, como una entrada de centro comercial (17 nov, idea del dueño)
+# La puerta de la calle del centro comercial (la de llegada de la planta baja, a la izquierda): casi el doble de larga y
+# con dos hojas de acero, como una entrada de centro comercial (17 nov, idea del dueño)
 func doble() -> bool:
 	return centro and salida.get("tipo", "") == "llegada" and salida.dir == "izquierda"
 
@@ -199,14 +203,13 @@ func _draw() -> void:
 				return
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0
 			if doble():
-				# el doble de larga (144 en vez de 72), con las dos hojas que se juntan en el medio, una raya oscura entre
-				# ellas y un tirador en cada una, junto a la raya
-				draw_rect(Rect2(x0, -72, 64, 144), MARCO)
-				draw_rect(Rect2(x0, -68, 64, 136), HUECO)
-				draw_rect(Rect2(-8, -68, 8, 136), HOJA)
-				draw_rect(Rect2(-8, -1, 8, 2), MARCO)
-				draw_rect(Rect2(-2, -12, 2, 8), MARCO)
-				draw_rect(Rect2(-2, 4, 2, 8), MARCO)
+				# casi el doble de larga (136 en vez de 72), con dos hojas de acero que se juntan en el medio: la plancha de
+				# la puerta metálica de dentro vista de lado (la del taller, puerta_bano.gd), sin el pomo (17 nov, el dueño),
+				# pegadas al borde de dentro del hueco
+				draw_rect(Rect2(x0, -68, 64, 136), MARCO_ACERO)
+				draw_rect(Rect2(x0, -64, 64, 128), HUECO)
+				for y in [-62.0, 0.0]:
+					draw_texture_rect_region(HOJA_ACERO, Rect2(-12, y, 12, 62), Rect2(5, 0, 6, 31))
 				return
 			draw_rect(Rect2(x0, -36, 64, 72), MARCO)
 			draw_rect(Rect2(x0, -32, 64, 64), HUECO)
