@@ -5392,8 +5392,8 @@ msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favo
 msgstr "In Kühlschränken und auf Arbeitsplatten der Küchen liegt manchmal das Lieblingsessen eines Überlebenden aus dem Keller."
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
-msgstr "Schließt du das Gebäude ab, wandert es in die Truhe. Gib es ihm in seinem Kellerabteil mit {usar}, dann begleitet er dich in der nächsten Runde."
+msgid "Si completas el edificio, pasa al baúl. En su trastero, pulsa {usar} delante de él y dale de comer: te acompañará una partida."
+msgstr "Schließt du das Gebäude ab, wandert es in die Truhe. Stell dich in seinem Kellerabteil vor ihn, drück {usar} und gib ihm zu essen: Dann begleitet er dich eine Runde."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5500,8 +5500,8 @@ msgid "Debajo de cada edificio completado eliges la mejora del compuesto VD-7 co
 msgstr "Unter jedem abgeschlossenen Gebäude wählst du mit < und > die Stufe des VD-7-Wirkstoffs: Pro Stufe haben die Gegner 20 % mehr Leben, Schaden, Tempo und Angriff."
 
 #: scripts/tutoriales.gd
-msgid "No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente."
-msgstr "Es gibt keine Belohnung: Das ist für alle, die mehr Herausforderung wollen. Schließe das Gebäude mit der höchsten Stufe ab, um die nächste freizuschalten."
+msgid "No da premios: es para quien busque más reto. Cada mejora se abre al completar ese edificio con la anterior."
+msgstr "Es gibt keine Belohnung: Das ist für alle, die mehr Herausforderung wollen. Jede Stufe wird freigeschaltet, wenn du dieses Gebäude mit der vorherigen abschließt."
 
 #: scripts/tutoriales.gd
 msgid "El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."

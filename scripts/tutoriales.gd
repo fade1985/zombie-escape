@@ -243,7 +243,7 @@ const LISTA := {
 	"comida": {"grupo": "Supervivientes", "titulo": "Comida favorita", "icono": "obj-donut",
 		"cuando": "Al encontrar la primera comida",
 		"lineas": ["Las neveras y las encimeras de las cocinas guardan a veces la comida favorita de alguno de los supervivientes de los trasteros.",
-			"Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."]},
+			"Si completas el edificio, pasa al baúl. En su trastero, pulsa {usar} delante de él y dale de comer: te acompañará una partida."]},
 	"centro": {"grupo": "Más edificios", "titulo": "El centro comercial", "icono": "centro",
 		"cuando": "Al llegar al centro comercial",
 		"lineas": ["Todas las puertas de la planta están cerradas: la llave maestra la lleva el guardia de seguridad que hace la ronda.",
@@ -273,7 +273,7 @@ const LISTA := {
 	"alerta": {"grupo": "Más edificios", "titulo": "Compuesto VD-7 y Reto del día", "icono": "trofeo",
 		"cuando": "Al completar el primer edificio",
 		"lineas": ["Debajo de cada edificio completado eliges la mejora del compuesto VD-7 con < y >: cada nivel, los enemigos tienen un 20 % más de vida, daño, velocidad y ataque.",
-			"No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente.",
+			"No da premios: es para quien busque más reto. Cada mejora se abre al completar ese edificio con la anterior.",
 			"El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."]},
 	# (16 nov, M125: el reto del día pasa a ser el garaje; sale al entrar en él, partida.empezar_garaje)
 	"garaje": {"grupo": "Más edificios", "titulo": "El garaje del reto del día", "icono": "trofeo",

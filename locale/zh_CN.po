@@ -5384,8 +5384,8 @@ msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favo
 msgstr "厨房的冰箱和料理台里有时会有储藏室里某位幸存者最爱的食物。"
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
-msgstr "通关整栋楼后，它会转入储物箱。到他的储藏室用{usar}交给他，下一局他就会跟着你。"
+msgid "Si completas el edificio, pasa al baúl. En su trastero, pulsa {usar} delante de él y dale de comer: te acompañará una partida."
+msgstr "通关整栋楼后，它会转入储物箱。在他的储藏室里，站到他面前按{usar}并喂他吃：他会跟你一局。"
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5492,8 +5492,8 @@ msgid "Debajo de cada edificio completado eliges la mejora del compuesto VD-7 co
 msgstr "在每栋已完成的建筑下方，用 < 和 > 选择VD-7化合物强化：每升一级，敌人的生命、伤害、速度和攻击提高20%。"
 
 #: scripts/tutoriales.gd
-msgid "No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente."
-msgstr "没有奖励：留给想要更多挑战的人。用最高强化完成建筑，就能解锁下一级。"
+msgid "No da premios: es para quien busque más reto. Cada mejora se abre al completar ese edificio con la anterior."
+msgstr "没有奖励：留给想要更多挑战的人。用上一级强化完成这栋楼，就能解锁下一级。"
 
 #: scripts/tutoriales.gd
 msgid "El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."

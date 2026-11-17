@@ -5392,8 +5392,8 @@ msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favo
 msgstr "As geladeiras e as bancadas das cozinhas às vezes guardam a comida favorita de algum dos sobreviventes dos depósitos."
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
-msgstr "Se você completar o prédio, ela vai para o baú. Entregue no depósito dele com {usar} e ele vai com você na próxima partida."
+msgid "Si completas el edificio, pasa al baúl. En su trastero, pulsa {usar} delante de él y dale de comer: te acompañará una partida."
+msgstr "Se você completar o prédio, ela vai para o baú. No depósito dele, aperte {usar} na frente dele e dê a comida: ele vai com você por uma partida."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5500,8 +5500,8 @@ msgid "Debajo de cada edificio completado eliges la mejora del compuesto VD-7 co
 msgstr "Embaixo de cada prédio completado você escolhe a melhoria do composto VD-7 com < e >: a cada nível, os inimigos têm 20 % mais vida, dano, velocidade e ataque."
 
 #: scripts/tutoriales.gd
-msgid "No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente."
-msgstr "Não dá prêmios: é para quem busca mais desafio. Complete o prédio com a melhoria mais alta para liberar a seguinte."
+msgid "No da premios: es para quien busque más reto. Cada mejora se abre al completar ese edificio con la anterior."
+msgstr "Não dá prêmios: é para quem busca mais desafio. Cada melhoria é liberada ao completar esse prédio com a anterior."
 
 #: scripts/tutoriales.gd
 msgid "El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."

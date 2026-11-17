@@ -5400,8 +5400,8 @@ msgid "Las neveras y las encimeras de las cocinas guardan a veces la comida favo
 msgstr "В холодильниках и на столешницах кухонь иногда лежит любимая еда кого-то из выживших в кладовках."
 
 #: scripts/tutoriales.gd
-msgid "Si completas el edificio, pasa al baúl. Dásela en su trastero con {usar} y te acompañará la partida siguiente."
-msgstr "Если пройдешь здание, она уйдет в сундук. Отдай ее в кладовке ({usar}), и выживший пойдет с тобой в следующий забег."
+msgid "Si completas el edificio, pasa al baúl. En su trastero, pulsa {usar} delante de él y dale de comer: te acompañará una partida."
+msgstr "Если пройдешь здание, она уйдет в сундук. В его кладовке встань перед ним, нажми {usar} и накорми его: он пойдет с тобой на один забег."
 
 #: scripts/tutoriales.gd
 msgid "El centro comercial"
@@ -5508,8 +5508,8 @@ msgid "Debajo de cada edificio completado eliges la mejora del compuesto VD-7 co
 msgstr "Под каждым пройденным зданием выбирай улучшение препарата VD-7 кнопками < и >: на каждом уровне у врагов на 20 % больше здоровья, урона, скорости и атаки."
 
 #: scripts/tutoriales.gd
-msgid "No da premios: es para quien busque más reto. Completa el edificio con la mejora más alta para abrir la siguiente."
-msgstr "Наград нет: это для тех, кому мало. Пройди здание с самым высоким улучшением, чтобы открыть следующее."
+msgid "No da premios: es para quien busque más reto. Cada mejora se abre al completar ese edificio con la anterior."
+msgstr "Наград нет: это для тех, кому мало. Каждое улучшение открывается, когда проходишь это здание с предыдущим."
 
 #: scripts/tutoriales.gd
 msgid "El Reto del día es un garaje con 25 oleadas de durmientes y una condición distinta cada día. Se juega una vez al día en cada edificio."
