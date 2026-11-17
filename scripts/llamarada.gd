@@ -290,6 +290,7 @@ func quemar() -> void:
 			continue
 		# lo que hace el chorro al darle (M59), en el suelo debajo de él (el golpe, a la altura del cuerpo)
 		EfectoSuelo.soltar(sala, "chorro-" + cual, zombi.global_position)
+		salpica(zombi)
 		if variante == "hielo":
 			# sin daño (el arma no tiene; si algún día lo tiene, sin empujón ni encogerse y con el número azul) y lo enfría
 			# (los jefes, a su manera: minijefe.gd)
@@ -542,6 +543,13 @@ func mas_cercano(desde: Node2D, menos: Array) -> Node2D:
 
 # Un pellizco de electricidad: su parte del daño por segundo a los zombis que toca, y medio daño a los que salta la
 # descarga, y a todos los deja aturdidos. Sin empujón
+# El Glotón (gloton.gd): con las especiales también le salta la sangre ácida, como con los golpes y las balas (17 nov,
+# lo pidió el dueño; como mucho una vez cada ACIDO_CADA, aunque el chorro le dé en cada paso)
+static func salpica(zombi: Node2D) -> void:
+	if zombi.has_method("salpicar_acido") and zombi.get("estado") != "muerto":
+		zombi.salpicar_acido()
+
+
 func electrocutar(johnny: Node2D) -> void:
 	for zombi in blancos:
 		golpe_de_rayo(zombi, johnny, 1.0)
@@ -557,6 +565,7 @@ func golpe_de_rayo(zombi: Node2D, johnny: Node2D, parte: float) -> void:
 		zombi.recibir_golpe(d, Vector2.ZERO)   # (el herir() del jefe de bomberos es el del fuego: no le quita vida)
 	else:
 		zombi.herir(d, CELESTES[0])
+	salpica(zombi)
 	ArmasCreadas.aturdir(zombi, ATURDE)
 	# el chispazo de pixelfx (M50; EfectoSuelo): en el suelo, con el golpe a la altura del cuerpo
 	var pie: Vector2 = zombi.global_position + Vector2(0, ArmasCreadas.ALTURA_CHISPAZO - ALTURA_CUERPO)

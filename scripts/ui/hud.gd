@@ -685,7 +685,7 @@ func mirar_balas(delta: float) -> void:
 	gastadas = gastadas.filter(func(g): return g[1] < 0.35)
 	for i in nuevas.keys():
 		nuevas[i] += delta
-		if nuevas[i] > 0.2:
+		if nuevas[i] > johnny.METER_DURA:
 			nuevas.erase(i)
 	var b: int = johnny.balas
 	if johnny.huecos.fuego != arma_antes:
@@ -697,8 +697,8 @@ func mirar_balas(delta: float) -> void:
 			gastadas.append([i, 0.0])
 	elif b > balas_antes and balas_antes >= 0:
 		for i in range(balas_antes, b):
-			# entran una detrás de otra, como si las metiera a mano
-			nuevas[i] = -0.03 * (i - balas_antes)
+			# entran una detrás de otra, como si las metiera a mano (Johnny no dispara hasta que entran todas: johnny.meter)
+			nuevas[i] = -johnny.paso_meter(b - balas_antes) * (i - balas_antes)
 	balas_antes = b
 
 
@@ -845,7 +845,7 @@ func pintar_balas() -> void:
 		var r := Rect2(sitio.x, sitio.y - tam.y, tam.x, tam.y)
 		if nuevas.has(i):
 			# recién metida: aparece desde arriba y más grande, y se asienta
-			var k := clampf(nuevas[i] / 0.2, 0.0, 1.0)
+			var k := clampf(nuevas[i] / johnny.METER_DURA, 0.0, 1.0)
 			if k <= 0.0:
 				color.a = 0.22
 			r = r.grow(roundf((1.0 - k) * 2.0))

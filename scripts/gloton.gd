@@ -17,7 +17,8 @@
 #     estaba Johnny (como la de los zombis, pero mucha más) y, al caer allí, deja un charco pequeño de ácido (dos si
 #     está enfadado), que quema al pisarlo como el de la portera. Cuanto más lejos, más tarda en llegar (VUELO). Ya no quita vida directamente (hasta el 9 nov, un 1 %).
 #     Como mucho uno cada 0,25 s (los perdigones de la escopeta cuentan como un golpe). Si le pegan los supervivientes
-#     que acompañan a Johnny, le hacen daño igual pero no salpica.
+#     que acompañan a Johnny, le hacen daño igual pero no salpica. Con las armas especiales (el chorro y el rayo), también
+#     salpica mientras le dan (17 nov: llamarada.gd, salpica).
 #   - Una explosión (granada) le corta lo que esté haciendo (se tambalea): la manera de parar el aspirado.
 # Enfadado (a media vida, «¡TENGO HAMBRE!»): el doble de lenguas, aspira con el doble de fuerza (al máximo arrastra
 # desde 7 casillas, y de lejos Johnny va a 40) y cada golpe deja dos charcos de ácido.

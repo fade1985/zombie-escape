@@ -584,7 +584,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		return ((planta.superviviente.is_empty() or de_cientifico != planta.superviviente.sitio
 			or s.id != planta.superviviente.sala) and s.uso != "acorazada"))
 	var cuarto: Dictionary = cuartos[rng.randi() % cuartos.size()]
-	var en := sitio_libre(planta.sitios[de_cientifico], cuarto, Vector2.INF, [], 40.0)
+	# en medio de la habitación (17 nov, lo pidió el dueño) o, si allí hay un mueble, en lo más cerca libre
+	var en := sitio_centrado(planta.sitios[de_cientifico], cuarto, 40.0)
 	planta.cientifico = {"sitio": de_cientifico, "pos": cuarto.centro if en == Vector2.INF else en, "cogida": false}
 	# Con el código (la torre), sus tres cifras en tres ordenadores encendidos de los departamentos normales
 	if ed.cerrojo == "codigo":
@@ -948,6 +949,30 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 			if pos == Vector2.INF:
 				break
 			zombis.append({"tipo": baratos[rng.randi() % baratos.size()], "pos": pos})
+	# con la mejora del VD-7 (alerta.gd), un 20 % más por nivel: de los tipos de aquí, en habitaciones al azar (más en las
+	# grandes, como el reparto de arriba), donde quepan
+	var objetivo := roundi(zombis.size() * Alerta.durmientes())
+	var intentos := 0
+	while zombis.size() < objetivo and intentos < 50 and not salas.is_empty() and not tipos.is_empty():
+		intentos += 1
+		var tirada := rng.randf() * total
+		var en_sala: Dictionary = salas[-1]
+		for cada in salas:
+			tirada -= peso.call(cada)
+			if tirada <= 0.0:
+				en_sala = cada
+				break
+		var pos := sitio_libre(sitio, en_sala, puerta, zombis, 26.0)
+		if pos == Vector2.INF:
+			continue
+		var tipo: String = tipos[rng.randi() % tipos.size()]
+		zombis.append({"tipo": tipo, "pos": pos})
+		if tipo == "dependienta":
+			tipos.erase("dependienta")
+		if cupo.has(tipo):
+			cupo[tipo] -= 1
+			if cupo[tipo] <= 0:
+				tipos.erase(tipo)
 	# en la torre, que no falten: si a suertes no ha salido ningún oficinista (o ningún escolta en Seguridad), uno de los de
 	# siempre se cambia por él
 	for t in cupo:
@@ -1162,6 +1187,37 @@ static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, ot
 		if not se_sale(salida, pos):
 			continue
 		return pos
+	return Vector2.INF
+
+
+# El punto libre más cerca del medio de la habitación ("centro": su casilla más metida, lejos de las paredes), con
+# sitio alrededor, lejos de los muebles, sin peligros y desde el que se puede salir andando: se mira a cuadritos de
+# CENTRADO_PASO, de más cerca a más lejos. INF si no hay ninguno (el científico muerto: ahí se queda en el centro)
+const CENTRADO_PASO := 8.0
+
+static func sitio_centrado(sitio: Dictionary, sala: Dictionary, hueco := 26.0) -> Vector2:
+	var apt: Dictionary = sitio.apt
+	var centro: Vector2 = sala.centro
+	var salida := salida_de(sitio, sala)
+	var puntos: Array[Vector2] = []
+	var caja := Rect2(sala.c0 * CASILLA, sala.f0 * CASILLA, sala.ancho * CASILLA, sala.fondo * CASILLA)
+	var y := caja.position.y + CENTRADO_PASO / 2.0
+	while y < caja.end.y:
+		var x := caja.position.x + CENTRADO_PASO / 2.0
+		while x < caja.end.x:
+			puntos.append(Vector2(x, y))
+			x += CENTRADO_PASO
+		y += CENTRADO_PASO
+	puntos.append(centro)
+	puntos.sort_custom(func(a: Vector2, b: Vector2): return a.distance_squared_to(centro) < b.distance_squared_to(centro))
+	for pos in puntos:
+		if not despejado(apt, pos, hueco, sala.id) or not lejos_de_muebles(sitio, pos, hueco + 4.0):
+			continue
+		if [Vector2.ZERO, Vector2(-hueco, 0), Vector2(hueco, 0), Vector2(0, -hueco), Vector2(0, hueco)].any(
+				func(d): return Peligros.encima(sitio, pos + d)):
+			continue
+		if se_sale(salida, pos):
+			return pos
 	return Vector2.INF
 
 

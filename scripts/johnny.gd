@@ -151,6 +151,12 @@ var sin_balas_sola := false   # se ha pasado sola a la de cuerpo a cuerpo al que
 var cargadores := {}       # lo que quedaba en el cargador de las armas de fuego que ha dejado: {id: balas} (las de
 						   # depósito, los segundos que les quedaban)
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
+# Al acabar de recargar, las balas entran en el HUD una detrás de otra (ui/hud.gd, mirar_balas): hasta que no han
+# entrado todas, no dispara (17 nov, lo pidió el dueño: si no, la recarga no se notaba). "metiendo", lo que les falta
+var metiendo := 0.0
+const METER_PASO := 0.03   # lo que va de una bala a la siguiente al entrar
+const METER_TOPE := 0.4    # como mucho, lo que va de la primera a la última (la gatling, con su cinta de 100 o más)
+const METER_DURA := 0.2    # lo que tarda cada una en asentarse
 var deposito := 0.0        # el lanzallamas, el lanza ácido y el lanza rayos: los segundos de chorro que le quedan en el depósito
 var municion_sin_fin := false   # la sala de pruebas: se recarga sin gastar munición (ni gasolina, ni bidones, ni baterías)
 var invencible := false    # la sala de pruebas: no pierde vida
@@ -488,6 +494,7 @@ func _physics_process(delta: float) -> void:
 		recargando -= delta
 		if recargando <= 0.0:
 			terminar_recarga()
+	metiendo = maxf(0.0, metiendo - delta)
 
 	# Ajolote: recupera vida poco a poco, hasta la mitad de la vida (REGENERA_TOPE: lo demás, con botiquines y vendas)
 	var tope_lobezno := mini(vida_tope(), roundi(stats.vida_max * REGENERA_TOPE))
@@ -1047,6 +1054,8 @@ func girando() -> bool:
 
 
 func lista_para_disparar() -> bool:
+	if metiendo > 0.0:
+		return false   # (las balas aún están entrando en el HUD)
 	if recargando > 0.0:
 		if not arma().cartucho or balas <= 0:
 			return false
@@ -1172,12 +1181,15 @@ func terminar_recarga() -> void:
 		if w.has("deposito"):
 			deposito = w.deposito
 		else:
+			meter(w.cargador - balas)
 			balas = w.cargador
 		Sonido.tocar("recargado")
 		avisar_arma()
 		return
 	Sonido.tocar("cartucho" if w.cartucho else "recargado")
 	var mete: int = mini(1 if w.cartucho else w.cargador - balas, reserva())
+	if not w.cartucho:   # (la escopeta, cartucho a cartucho, puede disparar a mitad de recarga)
+		meter(mete)
 	balas += mete
 	if not municion_sin_fin:
 		municion[tipo] = municion.get(tipo, 0) - mete
@@ -1186,6 +1198,16 @@ func terminar_recarga() -> void:
 	if w.cartucho and balas < w.cargador and reserva() > 0:
 		recargando = w.recarga
 	avisar_arma()
+
+
+# Lo que tardan "n" balas en entrar en el HUD (ui/hud.gd usa paso_meter para que vayan a la vez)
+func meter(n: int) -> void:
+	if n > 0:
+		metiendo = paso_meter(n) * (n - 1) + METER_DURA
+
+
+static func paso_meter(n: int) -> float:
+	return minf(METER_PASO, METER_TOPE / maxf(n - 1, 1))
 
 
 # El arma de fuego para la que es una caja de munición: la que saca con Q o, si se llena con un objeto de la mochila

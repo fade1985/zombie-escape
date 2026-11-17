@@ -114,6 +114,8 @@
 #   --impacto           el impacto de bala de Sprite Fusion (impacto.gd) junto al de siempre, contra la pared
 #                                                                                          [prueba_armas.gd]
 #   --bala-pared        pegado a una pared, las balas no nacen al otro lado: dan en ella     [prueba_armas.gd]
+#   --recarga-hud       al acabar de recargar (pistola y gatling), no dispara hasta que las balas han entrado en el
+#                       HUD                                                                [prueba_armas.gd]
 #   --raton-movil       en una pantalla táctil, el ratón esconde los botones del móvil y apunta (el clic ataca con
 #                       el ratón quieto); tocar la pantalla los vuelve a sacar                [prueba_varias.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
@@ -388,6 +390,8 @@
 #                       cambiando de habitación: que ninguno se quede quieto lejos de él     [prueba_sitios.gd]
 #   --vueltas           F24: Johnny entra en cada habitación con durmientes de varias plantas (--plantas N, 4):
 #                       que ninguno se quede dando vueltas sobre sí mismo sin ir a por él    [prueba_sitios.gd]
+#   --cientifico-durmientes  en 8 plantas de cada edificio: el científico muerto en el medio de su habitación y los
+#                       durmientes de más con la mejora 2 del VD-7 (+40 %)                [prueba_sitios.gd]
 #   --cartel            L41: lo que pone arriba en el pasillo y en cada puerta de las plantas 1 y 2 (con --edificio centro:
 #                       el nombre de la tienda; torre: «Oficina N», de izquierda a derecha)   [prueba_sitios.gd]
 #   --guardia           (con --edificio centro) el guardia de la llave maestra: de cerca, su rugido (una vez, «¡¡¡GRRR!!!»
@@ -954,6 +958,9 @@ func empezar_prueba() -> void:
 	elif "--bala-pared" in args:
 		set_process(false)   # sin la prueba larga
 		probar_bala_pared()
+	elif "--recarga-hud" in args:
+		set_process(false)   # sin la prueba larga
+		probar_recarga_hud()
 	elif "--raton-movil" in args:
 		set_process(false)   # sin la prueba larga
 		probar_raton_movil()
@@ -1225,6 +1232,9 @@ func empezar_prueba() -> void:
 	elif "--vueltas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vueltas()
+	elif "--cientifico-durmientes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_cientifico_durmientes()
 	elif "--cartel" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cartel()

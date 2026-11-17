@@ -640,7 +640,7 @@ func probar_cocina() -> void:
 
 # Con "--captura --jefe gloton --sangre": la sangre ácida de Johnny. Johnny quieto a 3 y a 10 casillas: dos golpes
 # seguidos, solo el primero salpica, no le quita vida y el chorro tarda más cuanto más lejos; al caer, deja en su
-# sitio un charco (enfadado, dos). Fotos: el chorro volando (captura-gloton-chorro.png) y los charcos donde estaba
+# sitio un charco (enfadado, dos); y con un arma especial, también. Fotos: el chorro volando (captura-gloton-chorro.png) y los charcos donde estaba
 # Johnny (captura-gloton-charcos.png)
 func probar_sangre_gloton() -> void:
 	if not await ir_a_la_sala_del_jefe("gloton"):
@@ -674,6 +674,14 @@ func probar_sangre_gloton() -> void:
 			lejos = maxf(lejos, c.global_position.distance_to(sitio))
 		print("Sangre ácida (fase %d, Johnny a %d casillas, dos golpes de 10): Johnny -%d · charcos %d (esperado: %d), a %.0f de donde estaba Johnny como mucho · caen a los %.2f s (esperado: %.2f)" % [
 			f, prueba[1], antes_vida - johnny.vida, charcos.call().size(), f, lejos, t, vuelo])
+	# y con las armas especiales (17 nov): el chorro o el rayo que le da también le hace salpicar (Llamarada.salpica)
+	for c in charcos.call():
+		c.free()
+	jefa.fase = 1
+	jefa.acido_t = 0.0
+	Llamarada.salpica(jefa)
+	await get_tree().create_timer(jefa.vuelo_acido(johnny.global_position.distance_to(jefa.global_position)) + 0.2, false).timeout
+	print("Sangre ácida con un arma especial: charcos %d (esperado: 1)" % charcos.call().size())
 	await get_tree().create_timer(0.4, false).timeout
 	Captura.foto("captura-gloton-charcos.png")
 

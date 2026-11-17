@@ -3239,6 +3239,42 @@ func probar_congelados() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --cientifico-durmientes" (17 nov): en 8 plantas de cada edificio, a qué distancia del medio de su
+# habitación queda el científico muerto (esperado: casi siempre 0; si hay un mueble en medio, poco más) y cuántos
+# durmientes salen sin mejora y con la mejora 2 del VD-7, con la misma semilla (esperado: un 40 % más). Luego se cierra
+func probar_cientifico_durmientes() -> void:
+	var antes := Alerta.nivel
+	for ed in ["apartamentos", "centro", "torre"]:
+		var lejos: Array[int] = []
+		var sin := 0
+		var con := 0
+		for k in 8:
+			Alerta.nivel = 0
+			Planta.rng.seed = 1000 + k
+			var p: Dictionary = Planta.generar(1 + k % 4, ed)
+			var c: Dictionary = p.get("cientifico", {})
+			if not c.is_empty():
+				# (la habitación en la que está: de las que lo tienen dentro de su recuadro, la de su medio más cerca; el
+				# recuadro del pasillo, con forma de L, tapa los de las demás)
+				var cerca := INF
+				for s2 in p.sitios[c.sitio].apt.salas:
+					var caja := Rect2(s2.c0 * Planta.CASILLA, s2.f0 * Planta.CASILLA, s2.ancho * Planta.CASILLA, s2.fondo * Planta.CASILLA)
+					if caja.has_point(c.pos):
+						cerca = minf(cerca, c.pos.distance_to(s2.centro))
+				lejos.append(int(cerca) if cerca < INF else -1)
+			for sitio in p.sitios:
+				sin += sitio.zombis.size()
+			Alerta.nivel = 2
+			Planta.rng.seed = 1000 + k
+			p = Planta.generar(1 + k % 4, ed)
+			for sitio in p.sitios:
+				con += sitio.zombis.size()
+		print("Científico y durmientes (%s): el científico, a %s del medio de su habitación · durmientes sin mejora %d, con la mejora 2 %d (+%d %%; esperado: unos +40 %%)" % [
+			ed, lejos, sin, con, roundi((float(con) / maxf(sin, 1) - 1.0) * 100.0)])
+	Alerta.nivel = antes
+	get_tree().quit()
+
+
 # Con "--captura --vueltas" (F24, 16 nov): los durmientes de los apartamentos de varias plantas (--plantas N, 4, desde la
 # --desde N, 1; con --semilla N, siempre las mismas). Johnny (quieto e invencible) entra andando en cada habitación que
 # tiene durmientes, por una de sus puertas, hasta el centro, y se queda VUELTAS_TIEMPO s: los despierta y van a por él.

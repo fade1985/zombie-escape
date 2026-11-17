@@ -128,8 +128,8 @@ func probar_baul_fregona() -> void:
 # una casilla mete todos los de esa casilla (y la marca se queda en la siguiente), que las vendas también se guardan
 # (y se vuelven a poner), que la gasolina se guarda desde la munición y sale la casilla entera («Sacar 2»; Fase 3,
 # Objetos.tanda), que las balas y los cartuchos también se guardan (el hueco entero, y también arrastrando) y salen
-# hasta un hueco de una vez, o lo que quepa (captura-baul-municion.png), y que «Guardar todo» lo mete todo, la
-# munición también. Que «Destruir» pide confirmación (la primera pulsación lo deja a medias, elegir otra casilla o esperar
+# hasta un hueco de una vez, o lo que quepa (captura-baul-municion.png), y que «Guardar todo» lo mete todo menos la
+# munición (ni las balas ni la gasolina). Que «Destruir» pide confirmación (la primera pulsación lo deja a medias, elegir otra casilla o esperar
 # 3 s lo cancela) y la segunda quita para siempre la casilla entera: un objeto, un hueco de munición, un arma y un
 # paquete de arrojables del baúl, y un objeto de la mochila; las armas que lleva no tienen botón
 # (captura-baul-destruir.png). Que al sacar un arma que ya lleva (la fregona Épica, con la Normal de repuesto, y la
@@ -335,7 +335,7 @@ func probar_baul() -> void:
 	inventario.guardar_todo()
 	await get_tree().process_frame
 	g = Guardado.cargar()
-	print("«Guardar todo» con sitio: mochila %s, balas que lleva %d (esperado: [], 0) · baúl %s (esperado: pieza_especial 3, gasolina 5: las 3 y las 2 sacadas, vendas 1, pieza_cuerpo 1, pieza_distancia 3, balas 30) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, b0: ya no hay nada que guardar)" % [
+	print("«Guardar todo» con sitio: mochila %s, balas que lleva %d (esperado: [gasolina, gasolina], 30: la munición se queda) · baúl %s (esperado: pieza_especial 3, gasolina 3, vendas 1, pieza_cuerpo 1, pieza_distancia 3, sin balas) · «Guardar todo» %s, la marca en «%s» (esperado: apagado: ya no hay nada que guardar)" % [
 		mochila, johnny.cuanta("balas"), g.baul, boton.call("guardar_todo"), marca.call()])
 	# sacar un arma que ya lleva: se cambian y la suya entra en el baúl en su lugar, aunque sea la fregona o la pistola
 	# Normales (nada al suelo). Con el bate a la mano, para que la fregona quede de repuesto
@@ -396,10 +396,8 @@ func probar_baul() -> void:
 	print("Baúl con 31 armas y 10 balas: caben %d balas más (esperado: 14: hasta 24 en su casilla)" % Objetos.caben_baul(Guardado.cargar(), "balas"))
 	inventario.guardar_todo()
 	await get_tree().process_frame
-	print("«Guardar todo»: en el baúl %d balas, contigo %d (esperado: 24, 46) · dice «%s» (esperado: el baúl está lleno: contigo se quedan balas)" % [
-		Guardado.cargar().baul.get("balas", 0), johnny.cuanta("balas"), dice.call()])
-	print("Con la casilla de balas ya en 24 y el baúl lleno: caben %d (esperado: 0) · «Guardar todo» %s (esperado: apagado)" % [
-		Objetos.caben_baul(Guardado.cargar(), "balas"), boton.call("guardar_todo")])
+	print("«Guardar todo» solo con balas: en el baúl %d balas, contigo %d (esperado: 10, 60: la munición no la guarda) · «Guardar todo» %s (esperado: apagado)" % [
+		Guardado.cargar().baul.get("balas", 0), johnny.cuanta("balas"), boton.call("guardar_todo")])
 	johnny.municion.clear()
 	# el baúl lleno: una pieza y 31 armas, cada una en su casilla (de las cuatro calidades)
 	Guardado.cambiar(func(g2):

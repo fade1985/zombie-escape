@@ -19,7 +19,8 @@
 #     con su botón: «Guardar en el baúl» mete todo lo de esa casilla (también las vendas y el botiquín y todo el
 #     hueco de munición, balas y cartuchos incluidos; con el baúl lleno, solo caben más de lo que ya tiene) y
 #     «Sacar uno», un objeto de uno en uno (a la mochila o a la munición; la munición, la casilla entera de una vez:
-#     Objetos.tanda). «Guardar todo» mete todo lo que se pueda, la munición también. En cada casilla cabe lo de un
+#     Objetos.tanda). «Guardar todo» mete todo lo que se pueda menos la munición (17 nov, lo pidió el dueño: ni balas, ni
+#     cartuchos, ni gasolina...; esa, de casilla en casilla). En cada casilla cabe lo de un
 #     hueco de munición, un montón de curas o un montón de arrojables (Objetos.monton y monton_arrojables)
 #   - Banco de trabajo (al arrimarse a él en el taller): como el baúl, pero para
 #     subir de calidad las armas y los paquetes de arrojables, los que lleva y los del baúl, gastando piezas de su
@@ -1919,16 +1920,14 @@ func guardar_equipo() -> void:
 	pintar()
 
 
-# Los objetos distintos de la mochila (también la munición que es un objeto: la gasolina, el bidón de ácido...)
+# Los objetos distintos de la mochila que guarda «Guardar todo»: sin la munición (ni la que es un objeto: la gasolina, el
+# bidón de ácido...)
 func guardables() -> Array:
-	var lista: Array = Objetos.casillas(partida.mochila, true).map(func(c): return c[0])
-	for tipo in Armas.MUNICION:   # y las balas y los cartuchos, que van en los huecos de munición y no en la mochila
-		if not tipo in lista and partida.johnny.cuanta(tipo) > 0:
-			lista.append(tipo)
-	return lista
+	return Objetos.casillas(partida.mochila, true).map(func(c): return c[0]).filter(func(id): return not id in Armas.MUNICION)
 
 
-# Guarda en el baúl todo lo de la mochila que se pueda; lo que no cabe (con el baúl lleno) se queda, y se dice
+# Guarda en el baúl todo lo de la mochila que se pueda, menos la munición; lo que no cabe (con el baúl lleno) se queda,
+# y se dice
 func guardar_todo() -> void:
 	var guardados := 0
 	var no_caben := []

@@ -1083,6 +1083,36 @@ func probar_impacto() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --recarga-hud" (17 nov): con la pistola y con la gatling vacías, recarga y, al acabar, mira que no
+# dispara hasta que las balas han entrado en el HUD (johnny.metiendo) y que luego sí. Foto de las balas entrando:
+# captura-recarga-hud.png. Luego se cierra
+func probar_recarga_hud() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	await get_tree().create_timer(0.5).timeout
+	johnny.modo = "quieto"
+	for id in ["pistola", "gatling"]:
+		johnny.coger(id)
+		johnny.sostener("fuego")
+		var tipo := Armas.municion(id)
+		johnny.municion[tipo] = 999
+		johnny.balas = 0
+		johnny.empezar_recarga()
+		var recarga: float = johnny.recargando
+		while johnny.recargando > 0.0:
+			await get_tree().physics_frame
+		var espera: float = johnny.metiendo
+		var antes: bool = johnny.lista_para_disparar()
+		if id == "gatling":
+			await get_tree().create_timer(espera * 0.5, false).timeout
+			Captura.foto("captura-recarga-hud.png")
+			await get_tree().create_timer(espera * 0.5 + 0.05, false).timeout
+		else:
+			await get_tree().create_timer(espera + 0.05, false).timeout
+		print("Recarga del HUD (%s, %d balas): recarga %.2f s, luego entran en %.2f s · dispara nada más recargar %s (esperado: false) · cuando han entrado %s (esperado: true)" % [
+			id, johnny.balas, recarga, espera, antes, johnny.lista_para_disparar()])
+	get_tree().quit()
+
+
 # Con "--captura --bala-pared": Johnny pegado a la pared de la izquierda de la sala de pruebas dispara contra ella con la
 # pistola, la MP5 y la escopeta. La boca del arma queda al otro lado de la pared: las balas tienen que nacer delante y
 # dar en ella, ninguna puede verse pasada la pared (johnny.ante_pared). Foto: captura-bala-pared.png

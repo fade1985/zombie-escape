@@ -24,8 +24,8 @@ msgid "Mejora %d del compuesto VD-7"
 msgstr "VD-7-Wirkstoff Stufe %d"
 
 #: scripts/alerta.gd
-msgid "Enemigos +%d %%: vida, daño, velocidad y ataque"
-msgstr "Gegner +%d %%: Leben, Schaden, Tempo und Angriff"
+msgid "Enemigos +%d %%: cantidad, vida, daño, velocidad y ataque"
+msgstr "Gegner +%d %%: Anzahl, Leben, Schaden, Tempo und Angriff"
 
 #: scripts/alerta.gd
 msgid "Como siempre"
