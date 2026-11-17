@@ -1429,7 +1429,7 @@ func probar_tutorial() -> void:
 			lista = h
 	print("Tutorial · lista abierta desde la pausa: %s · pausa escondida: %s · ??? : %d de %d (esperado: true, true, %d)" % [
 		lista != null, not menus.fondo.visible, lista.botones.values().filter(func(b): return b.disabled).size(),
-		Tutoriales.LISTA.size(), Tutoriales.LISTA.size() - 8])   # (a la vista: jugar y moverse, siempre; atacar, que lo apunta jugar; cambiar_arma, lanzables, horda, curas e inventario)
+		Tutoriales.LISTA.size(), Tutoriales.LISTA.size() - 7])   # (a la vista: jugar, siempre; atacar, que lo apunta jugar; cambiar_arma, lanzables, horda, curas e inventario)
 	lista.ver("lanzables")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tutorial-lista.png")
@@ -4055,12 +4055,16 @@ func probar_guiado() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("Guía · activa (no es la primera partida, pero se pidió repetirla): %s · pedida aún: %s (esperado: true, false)" % [
 		guia.activa, Guardado.cargar().guia_otra_vez])
-	# al empezar, la ventana «Moverse y esquivar» (en la partida de prueba no sale sola: se abre aquí)
-	var al_empezar := tutorial_al_empezar()
-	print("Guía · ventana al empezar «%s» · «Cómo se juega» ya visto %s · «Atacar» aún no %s (esperado: moverse, true, true)" % [
-		al_empezar, Tutoriales.visto("jugar"), not Tutoriales.visto("atacar")])
-	ver_tutorial(al_empezar)
+	# al empezar, la ventana «Cómo se juega» sin la línea de atacar (17 nov: antes, «Moverse y esquivar»; en la partida de
+	# prueba no sale sola: se abre aquí)
+	ver_tutorial("jugar")
 	await get_tree().create_timer(0.9, true, false, true).timeout
+	var primera: Tutorial = null
+	for h in get_children():
+		if h is Tutorial:
+			primera = h
+	print("Guía · ventana al empezar «%s», sin atacar %s · «Atacar» aún no visto %s (esperado: jugar, true, true)" % [
+		primera.id if primera else "ninguna", primera.sin_atacar if primera else false, not Tutoriales.visto("atacar")])
 	Captura.foto("captura-guiado-ventana-%s.png" % Idioma.actual)
 	for h in get_children():
 		if h is Tutorial:
@@ -4216,7 +4220,7 @@ func probar_guia_sin_hacer() -> void:
 			if h is Tutorial:
 				h.cerrar()
 		await get_tree().create_timer(0.3).timeout
-	tutorial_al_empezar()   # (la ventana «Moverse y esquivar» apunta «Cómo se juega» como visto)
+	Tutoriales.apuntar("jugar")   # (como si ya hubiera salido «Cómo se juega», al empezar)
 	tutorial("jefes")
 	await get_tree().create_timer(0.5).timeout
 	print("Guía sin hacer · con la guía, la ventana «Jefes»: %d (esperado: 1)" % ventanas.call())
@@ -4232,13 +4236,15 @@ func probar_guia_sin_hacer() -> void:
 		get_node("Pantalla/HUD").latido])
 	print("Guía sin hacer · vistos jugar %s, jefes %s, municion %s · sin salir aún: lanzables %s (esperado: true, true, true, false)" % [
 		Tutoriales.visto("jugar"), Tutoriales.visto("jefes"), Tutoriales.visto("municion"), Tutoriales.visto("lanzables")])
-	# la partida siguiente, ya sin guía
+	# la partida siguiente, ya sin guía (lleva la pistola: sin guía saldría «Cambiar de arma», que aquí no se mira; M97)
+	Tutoriales.apuntar("cambiar_arma")
 	guia.apagar()
 	tutorial("jugar")
 	tutorial("jefes")
 	tutorial("municion")
 	await get_tree().create_timer(0.5).timeout
-	print("Guía sin hacer · ventanas de lo ya enseñado: %d (esperado: 0)" % ventanas.call())
+	print("Guía sin hacer · ventanas de lo ya enseñado: %d %s (esperado: 0)" % [ventanas.call(),
+		get_children().filter(func(h): return h is Tutorial and not h.is_queued_for_deletion()).map(func(h): return h.id)])
 	tutorial("lanzables")
 	await get_tree().create_timer(0.5).timeout
 	print("Guía sin hacer · ventanas de lo que nunca salió: %d (esperado: 1)" % ventanas.call())

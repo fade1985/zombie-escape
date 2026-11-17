@@ -23,18 +23,14 @@ const GRUPOS := ["Lo básico", "Armas", "Plantas y jefes", "Supervivientes", "Ev
 const LISTA := {
 	# (16 nov, revisión de todos: frases cortas, y todo lo que hay que saber va en estas ventanas, con «Entendido»; los
 	# avisos blancos de abajo, partida.decir, ya no se ven)
-	"jugar": {"grupo": "Lo básico", "titulo": "Cómo se juega", "icono": "skin-conserje", "cuando": "Al empezar",
+	# (17 nov, lo pidió el dueño: «Moverse y esquivar», la de la primera partida, que repetía sus frases, se ha unido a
+	# esta. Sale al empezar todas las partidas hasta verse; en la primera, la de la guía, sin la línea de atacar, que la
+	# cuenta «Atacar» en la primera pelea: texto(id, sin_atacar) y partida.ver_tutorial)
+	"jugar": {"grupo": "Lo básico", "titulo": "Cómo se juega", "icono": "skin-conserje", "cuando": "Al empezar la primera partida",
 		"lineas": ["Muévete con {moverse} y esquiva con {esquivar}: mientras esquivas, no te hacen daño.",
 			"{atacar_modo}",
 			"Abre y cierra muebles y puertas con {usar}, cuando estés delante y se marquen en amarillo.",
 			"Pausa el juego con {pausa}."]},   # (cambiar de arma ya no va aquí: en «Cambiar de arma», al coger la pistola, M97)
-	# (sale en la primera partida, la de la guía, nada más empezar: partida.tutorial_al_empezar; en las demás, «Cómo se
-	# juega», que ya lo cuenta)
-	"moverse": {"grupo": "Lo básico", "titulo": "Moverse y esquivar", "icono": "dash",
-		"cuando": "Al empezar la primera partida",
-		"lineas": ["Muévete con {moverse}.",
-			"Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño. Se recarga en menos de un segundo.",
-			"Abre y cierra muebles y puertas con {usar}, cuando estés delante y se marquen en amarillo."]},
 	# (solo en la primera partida, la de la guía, en la primera pelea: guia.gd; en las demás lo cuenta «Cómo se juega»,
 	# que al verse lo apunta también: partida.ver_tutorial)
 	"atacar": {"grupo": "Lo básico", "titulo": "Atacar", "icono": "fregona", "cuando": "En la primera pelea",
@@ -344,7 +340,7 @@ static func olvidar() -> void:
 
 # Si sale en la lista del apartado Tutorial (los demás, con «???»)
 static func se_ve(id: String) -> bool:
-	return id in ["jugar", "moverse"] or visto(id)
+	return id == "jugar" or visto(id)
 
 
 # El nombre de un grupo (de GRUPOS), ya traducido
@@ -362,10 +358,13 @@ static func cuando_de(id: String) -> String:
 	return Idioma.t(LISTA[id].cuando)
 
 
-# Las líneas de la ficha, cada una con su punto y las teclas en amarillo (BBCode, para un RichTextLabel)
-static func texto(id: String) -> String:
+# Las líneas de la ficha, cada una con su punto y las teclas en amarillo (BBCode, para un RichTextLabel). Con
+# "sin_atacar", sin la línea de cómo se ataca ({atacar_modo}: «Cómo se juega» en la primera partida, la de la guía)
+static func texto(id: String, sin_atacar := false) -> String:
 	var lineas: Array = []
 	for l: String in LISTA[id].lineas:
+		if sin_atacar and l == "{atacar_modo}":
+			continue
 		lineas.append("• " + con_teclas(Idioma.t(l)))
 	return "\n".join(lineas)
 

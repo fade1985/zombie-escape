@@ -560,8 +560,8 @@ en una línea.
   trasteros: `mapa.marcas_sala`); `marcas` los apaga en la partida de prueba (salvo `--marcas-sala`).
 - `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
   encendidos). Su flecha, con la tele de las noticias encendida (al coger la página del dosier), lleva antes a la tele
-  que al jefe (`tele_por_ver`, 15 nov). Al empezar, la ventana *Moverse y esquivar* (`partida.tutorial_al_empezar`; *Cómo se juega* y *Limpia
-  los apartamentos*, `CUBRE`, no salen con ella). En la primera pelea saca las ventanas de `PASOS`: *Atacar* (al
+  que al jefe (`tele_por_ver`, 15 nov). Al empezar, la ventana *Cómo se juega* sin la línea de atacar
+  (`partida.ver_tutorial`, `Tutoriales.texto(id, sin_atacar)`; hasta el 17 nov era *Moverse y esquivar*, que se unió a ella). En la primera pelea saca las ventanas de `PASOS`: *Atacar* (al
   despertarse el primer zombi o al cerrarse la puerta: `guia.mostrar("atacar")` en partida.gd; *Lanzables* sale con el primero que se consigue),
   *Cambiar de arma* (si no salió ya) y *Munición y recarga* con medio cargador; tras cada una, la casilla
   del HUD que toca late (`hud.latido`) hasta que se hace o pasan `DURA` segundos. Hasta el 15 nov (M109) eso eran

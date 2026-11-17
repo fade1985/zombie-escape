@@ -28,6 +28,7 @@ var listo := false         # (ventana) ya ha pasado la ESPERA
 var derecha: VBoxContainer # (lista) donde va la ficha del elegido
 var botones := {}          # (lista) el botón de cada tema
 var elegido := ""
+var sin_atacar := false    # (ventana) sin la línea de cómo se ataca (Tutoriales.texto)
 var titulo := ""           # (charla) lo de arriba
 var texto := ""            # (charla) lo que cuenta, en BBCode
 var opciones := []         # (charla) el texto de cada botón
@@ -36,9 +37,10 @@ var nota := ""             # (charla) la línea pequeña de debajo
 var eleccion := -1         # (charla) el botón pulsado al cerrarse
 
 
-static func ventana(dueno: Node, cual: String) -> Tutorial:
+static func ventana(dueno: Node, cual: String, sin_atacar := false) -> Tutorial:
 	var t := Tutorial.new()
 	t.id = cual
+	t.sin_atacar = sin_atacar
 	dueno.add_child(t)
 	return t
 
@@ -104,7 +106,7 @@ func montar_ventana(columna: VBoxContainer) -> void:
 	nuevo.add_theme_color_override("font_color", Tema.AMARILLO)
 	nuevo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(nuevo)
-	columna.add_child(ficha(id))
+	columna.add_child(ficha(id, sin_atacar))
 	var pie := Label.new()
 	pie.theme_type_variation = "Sub"
 	pie.text = Idioma.t("Puedes volver a verlo en Tutorial, en el menú principal y en la pausa")
@@ -285,7 +287,7 @@ func ver(cual: String) -> void:
 
 
 # La ficha de un tutorial: el título (sin icono) y las líneas, con las teclas en amarillo
-static func ficha(cual: String) -> VBoxContainer:
+static func ficha(cual: String, sin_atacar := false) -> VBoxContainer:
 	var caja := VBoxContainer.new()
 	caja.add_theme_constant_override("separation", 10)
 	var cabeza := Label.new()
@@ -293,7 +295,7 @@ static func ficha(cual: String) -> VBoxContainer:
 	cabeza.text = Tutoriales.titulo_de(cual)
 	cabeza.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja.add_child(cabeza)
-	caja.add_child(texto_rico(Tutoriales.texto(cual)))
+	caja.add_child(texto_rico(Tutoriales.texto(cual, sin_atacar)))
 	return caja
 
 

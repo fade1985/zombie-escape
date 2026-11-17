@@ -4600,8 +4600,8 @@ msgid "Cómo se juega"
 msgstr "How to play"
 
 #: scripts/tutoriales.gd
-msgid "Al empezar"
-msgstr "At the start"
+msgid "Al empezar la primera partida"
+msgstr "At the start of your first run"
 
 #: scripts/tutoriales.gd
 msgid "Muévete con {moverse} y esquiva con {esquivar}: mientras esquivas, no te hacen daño."
@@ -4618,22 +4618,6 @@ msgstr "Open and close furniture and doors with {usar} when you're standing in f
 #: scripts/tutoriales.gd
 msgid "Pausa el juego con {pausa}."
 msgstr "Pause the game with {pausa}."
-
-#: scripts/tutoriales.gd
-msgid "Moverse y esquivar"
-msgstr "Moving and dodging"
-
-#: scripts/tutoriales.gd
-msgid "Al empezar la primera partida"
-msgstr "At the start of your first run"
-
-#: scripts/tutoriales.gd
-msgid "Muévete con {moverse}."
-msgstr "Move with {moverse}."
-
-#: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño. Se recarga en menos de un segundo."
-msgstr "Dodge with {esquivar}: a short burst of speed where you can't be hurt. It recharges in under a second."
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Atacar"

@@ -4592,8 +4592,8 @@ msgid "Cómo se juega"
 msgstr "玩法"
 
 #: scripts/tutoriales.gd
-msgid "Al empezar"
-msgstr "开始时"
+msgid "Al empezar la primera partida"
+msgstr "第一局开始时"
 
 #: scripts/tutoriales.gd
 msgid "Muévete con {moverse} y esquiva con {esquivar}: mientras esquivas, no te hacen daño."
@@ -4610,22 +4610,6 @@ msgstr "站在家具或门前、它们被标成黄色时，用{usar}开关。"
 #: scripts/tutoriales.gd
 msgid "Pausa el juego con {pausa}."
 msgstr "用{pausa}暂停游戏。"
-
-#: scripts/tutoriales.gd
-msgid "Moverse y esquivar"
-msgstr "移动与闪避"
-
-#: scripts/tutoriales.gd
-msgid "Al empezar la primera partida"
-msgstr "第一局开始时"
-
-#: scripts/tutoriales.gd
-msgid "Muévete con {moverse}."
-msgstr "用{moverse}移动。"
-
-#: scripts/tutoriales.gd
-msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño. Se recarga en menos de un segundo."
-msgstr "用{esquivar}闪避：短促的一次冲刺，冲刺时不会受到伤害。冷却不到一秒。"
 
 #: scripts/tutoriales.gd scripts/ui/opciones.gd
 msgid "Atacar"

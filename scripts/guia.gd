@@ -10,14 +10,13 @@
 # Y el primer apartamento al que lleva la flecha es fácil a propósito: pocos zombis, sin la llave y con unas vendas en el
 # armarito del baño (preparar_planta).
 #
-# Las ventanas: al empezar, «Moverse y esquivar» (partida.tutorial_al_empezar, que apunta también «Cómo se juega» como
-# visto: lo demás va saliendo luego). Las que pide la guía (PASOS), en orden: «Atacar» en la primera pelea (al despertarse
+# Las ventanas: al empezar, «Cómo se juega» sin la línea de atacar (partida.ver_tutorial; hasta el 17 nov, «Moverse y
+# esquivar», que se unió a ella). Las que pide la guía (PASOS), en orden: «Atacar» en la primera pelea (al despertarse
 # el primer zombi o al cerrarse la puerta del primer apartamento: partida.gd; «Lanzables», desde el 15 nov, con el primero que se consigue); en una pelea con la
 # fregona en la mano y la pistola guardada, la casilla de las armas late hasta cambiar (con la ventana «Cambiar de arma»
 # delante si no salió ya; en la primera partida no sale al sacar la pistola del baúl: partida.mirar_tutoriales, M97), y «Munición y recarga» con la pistola en la
 # mano y medio cargador, antes de quedarse sin balas. «Vendas», «Jefes» y las
 # demás salen como en cualquier partida. Hasta el 15 nov (M109) esto eran letreros encima de la cabeza de Johnny.
-# Las ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial).
 #
 # Se enciende en partida.gd (_ready) si es la primera partida, en los Apartamentos y con los tutoriales encendidos
 # (Opciones → Ayudas); se apaga al subir a la planta siguiente. Lo engancha partida.gd: nueva_planta(), al_montar() y
@@ -29,11 +28,6 @@ const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const DURA := 12.0          # lo más que late una casilla del HUD sin hacerse lo que pide
 const FACIL := 3            # los zombis del primer apartamento
 const LEJOS_FLECHA := 150.0 # más cerca de la puerta que esto, la flecha se va
-
-# Las ventanas que no salen mientras la guía está activa: «Cómo se juega» (la cuentan «Moverse y esquivar» y las de
-# PASOS). «Limpia los apartamentos» sí sale, al salir al pasillo (partida.gd), como en las demás partidas: hasta el
-# 16 nov lo tapaba una línea de abajo, y esas ya no se ven
-const CUBRE := ["jugar"]
 
 # Cada paso: la ventana que sale y la casilla del HUD que late después, hasta que se hace (hecho())
 const PASOS := {

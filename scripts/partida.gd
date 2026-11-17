@@ -373,7 +373,7 @@ func _ready() -> void:
 		if not al_empezar.is_empty():
 			decir("\n".join(al_empezar), 4.0)
 		supervivientes.avisar_pista(4.8)   # (la recepcionista rescatada: dónde está la llave o el código)
-		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind(tutorial_al_empezar()))
+		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
 
 
 # El garaje del reto del día (garaje.gd): un solo sitio (Planta.garaje), con Johnny junto al baúl del centro, y las
@@ -395,16 +395,6 @@ func empezar_garaje() -> void:
 		return
 	garaje.arrancar()
 	tutorial("garaje")   # (con la ventana abierta el juego para: las oleadas esperan a que se cierre)
-
-
-# La ventana del principio de la partida: en la primera (con la guía, guia.gd), «Moverse y esquivar», y lo demás de
-# «Cómo se juega» lo enseña la guía en la primera pelea, con la ventana «Atacar» (por eso se apunta ya como visto);
-# en las demás, «Cómo se juega», que ya cuenta moverse y esquivar
-func tutorial_al_empezar() -> String:
-	if not guia.activa:
-		return "jugar"
-	Tutoriales.apuntar("jugar")
-	return "moverse"
 
 
 # Empieza con una partida guardada (partida_guardada.gd): todo como estaba al llegar a su planta, sin volver a contar
@@ -1921,7 +1911,7 @@ func abrir_taquilla() -> void:
 # La ventana del tutorial de algo nuevo (tutoriales.gd), si aún no se ha visto: en cuanto no haya otra pantalla abierta,
 # ni la presentación de un jefe, ni se esté cambiando de sitio. Si llegan varios, salen uno detrás de otro
 func tutorial(id: String) -> void:
-	if not puede_tutorial(id) or id in cola_tutoriales or (guia.activa and id in Guia.CUBRE):   # (esos, la guía a su manera)
+	if not puede_tutorial(id) or id in cola_tutoriales:
 		return
 	cola_tutoriales.append(id)
 	if cola_tutoriales.size() > 1:
@@ -1976,11 +1966,14 @@ func puede_tutorial(id: String) -> bool:
 # mutación la sacan con el juego ya parado, y se abren detrás)
 func ver_tutorial(id: String) -> void:
 	Tutoriales.apuntar(id)
-	if id == "jugar":
-		Tutoriales.apuntar("atacar")   # (ya lo cuenta: «Atacar» sale solo en la primera partida, con la guía)
+	# «Cómo se juega» (17 nov, con «Moverse y esquivar» dentro): en la primera partida, la de la guía, sin la línea de
+	# atacar, que la cuenta la ventana «Atacar» en la primera pelea; en las demás, entera, y «Atacar» ya no sale
+	var sin_atacar := id == "jugar" and guia.activa
+	if id == "jugar" and not guia.activa:
+		Tutoriales.apuntar("atacar")
 	var parado := get_tree().paused
 	get_tree().paused = true
-	await Tutorial.ventana(self, id).cerrado
+	await Tutorial.ventana(self, id, sin_atacar).cerrado
 	get_tree().paused = parado
 
 

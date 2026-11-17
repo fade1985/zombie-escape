@@ -459,7 +459,7 @@
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, se guarda, y Esc abre
 #                       y cierra la pausa sin quitarla (la web es cosa del navegador: ver pantalla.gd) [prueba_varias.gd]
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
-#   --guiado            el tutorial disimulado de la primera partida: la ventana «Moverse y esquivar» del principio
+#   --guiado            el tutorial disimulado de la primera partida: la ventana «Cómo se juega» (sin atacar) del principio
 #                       (foto captura-guiado-ventana-<idioma>; mirarla con --lang ru y --lang zh_CN), las de la primera
 #                       pelea en orden (Atacar, Lanzables, Cambiar de arma, Munición y recarga, Vendas: fotos
 #                       captura-guiado-ventana-<id>; sin letreros encima de Johnny, M109), el latido del HUD tras cada
