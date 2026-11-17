@@ -59,6 +59,6 @@ def reemplazo(m):
 
 
 nuevo = patron.sub(reemplazo, texto)
-GD.write_text(nuevo, encoding="utf-8")
+GD.write_text(nuevo, encoding="utf-8", newline="\n")   # (en LF, como está en git: en Windows saldría en CRLF)
 print("\n".join(cambios))
 print("%d recortes escritos en %s" % (len(cambios), GD.relative_to(RAIZ)))
