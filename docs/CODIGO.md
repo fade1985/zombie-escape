@@ -1067,6 +1067,9 @@ en una línea.
 - **Los escaparates del restaurante** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py restaurante`) con un neón de GPT dentro, detrás
   del cristal: una hamburguesa (pan amarillo, lechuga verde, carne roja) a la izquierda y un trozo de pizza a la derecha (`neones_galeria.py
   restaurante-hamburguesa restaurante-pizza`; `mapa.ESCAPARATES_NEON`).
+- **El letrero del restaurante** (17 nov, el dueño): «RESTAURANT» en tubos de neón rosa de un solo trazo, con una línea azul arriba y otra abajo (de GPT,
+  `assets/sources/centro/letrero-restaurante-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-restaurante` (86x20, y el apagado) y
+  `py tools/letrero_halo.py restaurante`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea de abajo).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
