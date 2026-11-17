@@ -302,6 +302,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	poner_muebles()
 	poner_apliques()
 	poner_escaparates()
+	if galeria:
+		poner_neones_galeria()
 	poner_colgados()
 	poner_peligros()
 	if sitio.has("laboratorio"):
@@ -1063,6 +1065,34 @@ func poner_apliques() -> void:
 		luz.add_child(dibujo)
 		luz.move_child(dibujo, 0)
 		cosas.add_child(luz)
+
+
+# Los tres neones de la galería del centro comercial (neon_galeria.gd), que hacen de lámparas: en medio de los tres huecos
+# de la pared de arriba que eligió el dueño (17 nov): de la pared de la izquierda al escaparate izquierdo de la primera
+# tienda (el casete), del escaparate derecho de esa tienda al ascensor (el radiocasete) y del ascensor al escaparate
+# izquierdo de la segunda tienda (el tocadiscos). Los escaparates no salen en todas las plantas, pero su sitio se deja
+# libre siempre (Planta.ESCAPARATE_A, ESCAPARATE_MEDIO)
+const NEON_GALERIA := preload("res://scripts/mapa/neon_galeria.gd")
+const ASCENSOR_MEDIO := 48.0   # la mitad del ancho del ascensor del centro comercial, con su marco
+func poner_neones_galeria() -> void:
+	var puertas: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.tipo == "puerta").map(func(s): return float(s.en))
+	var ascensor: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.tipo == "ascensor")
+	if puertas.size() < 2 or ascensor.is_empty():
+		return
+	puertas.sort()
+	var esc: float = Planta.ESCAPARATE_A + Planta.ESCAPARATE_MEDIO
+	var asc := float(ascensor[0].en)
+	var huecos := [[MURO, puertas[0] - esc, "casete", Color("#e070ff")],
+		[puertas[0] + esc, asc - ASCENSOR_MEDIO, "radiocasete", Color("#9c8cff")],
+		[asc + ASCENSOR_MEDIO, puertas[1] - esc, "tocadiscos", Color("#c878ff")]]
+	for i in huecos.size():
+		var h: Array = huecos[i]
+		var neon := NEON_GALERIA.new()
+		neon.nombre = h[2]
+		neon.color = h[3]
+		neon.semilla = fposmod(float(sitio.get("surtido", 0)) * 0.001 + i * 0.37, 1.0)
+		neon.position = Vector2(roundf((h[0] + h[1]) / 4.0) * 2.0, MURO + 1)
+		cosas.add_child(neon)
 
 
 # Los peligros de una tienda (peligros.gd): el frío de la cámara, el fuego de la cocina y el agua con corriente; y

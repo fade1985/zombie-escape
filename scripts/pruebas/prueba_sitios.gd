@@ -905,7 +905,8 @@ func probar_eventos_planta() -> void:
 
 # Con "--captura --edificio centro --galeria" (M77): la galería de las cuatro primeras plantas, entera y sin penumbra,
 # con sus muebles puestos a mano (Catalogo.SALAS["galeria"].colocados). De cada una dice cuántos muebles tiene (esperado:
-# los puestos a mano), qué hay en la pared de arriba (puertas, escaparates) y saca captura-galeria-<planta>.png
+# los puestos a mano), qué hay en la pared de arriba (puertas, escaparates) y saca captura-galeria-<planta>.png (y, con
+# la penumbra, para ver la luz de los neones, captura-galeria-<planta>-luz.png)
 func probar_galeria() -> void:
 	for num in [1, 2, 3, 4]:
 		nueva_planta(num)
@@ -927,6 +928,9 @@ func probar_galeria() -> void:
 		camara.limit_bottom = 100000
 		Temblor.desplazamiento = Vector2(pasillo.ancho / 2.0, (pasillo.alto - pasillo.arriba_extra) / 2.0) - johnny.position
 		camara.reset_smoothing()
+		# (17 nov) también con su luz, para ver la de los neones de la pared
+		await get_tree().create_timer(0.6).timeout
+		Captura.foto("captura-galeria-%d-luz.png" % (num - 1))
 		$Pantalla.hide()
 		Luz.apagada = not Luz.apagada   # sin penumbra
 		await get_tree().create_timer(0.6).timeout
