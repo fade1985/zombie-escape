@@ -406,7 +406,7 @@ func probar_mejora() -> void:
 	sup.escolta.matar_zombis()
 	partida.nueva_planta(1)   # las viviendas están en la planta baja
 	await partida.montar(partida.planta.viviendas, 0, false)
-	# en el pasillo, lejos del técnico, que no diga «¿Te acompaño?» encima de él
+	# en el pasillo, lejos del técnico
 	johnny.position = Vector2(Viviendas.casa("tecnico").x, (Viviendas.PASILLO_F + 2) * Planta.CASILLA)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4, false).timeout

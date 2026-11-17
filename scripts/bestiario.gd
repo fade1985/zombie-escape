@@ -13,7 +13,9 @@
 #   recorte    el trozo dibujado dentro de la celda del fotograma de frente (sin los márgenes vacíos). Lo escribe
 #              `py tools/recortes_bestiario.py` (repetir si cambia una hoja): así el juego no tiene que leer la imagen
 #   retrato    la animación de frente de la que se saca el dibujo ("quieto_s" si la tiene; si no, "reposo_s")
-#   escala     a cuánto se dibuja en la ficha (2, como en el juego; los tentáculos ya van a 1)
+#   escala     a cuánto se dibuja en el juego (la del sprite en su escena: 2 casi todos; los tentáculos, 1; el gerente
+#              y el doctor Salas antes de cambiar, 1,2; el Sujeto 1, 1,4). Con ella, el ordenador los enseña a todos en
+#              proporción: el grande, grande y el pequeño, pequeño (ver tamano)
 #   jefe       true en los jefes de planta y en el jefe final
 #
 # PARA CAMBIAR los nombres o las frases, aquí. Lo único que no hay que tocar es la clave de una entrada ya
@@ -117,7 +119,7 @@ const LISTA := {
 	"gerente": {"nombre": "El gerente",
 		"frase": "Arturo Salcedo, director del centro. Sus contratos cortan y su jeringuilla lleva VD-7.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/jefe-gerente.tres",
-		"recorte": Rect2i(40, 37, 77, 117), "retrato": "quieto_s", "escala": 2, "jefe": true},
+		"recorte": Rect2i(40, 37, 77, 117), "retrato": "quieto_s", "escala": 1.2, "jefe": true},
 	"gerente_mutado": {"nombre": "El gerente mutado",
 		"frase": "Ya no le hace falta dormir. Ni el traje. Cuatro tentáculos y el helicóptero esperando en la azotea.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/jefe-gerente-mutado.tres",
@@ -139,7 +141,7 @@ const LISTA := {
 	"cientifico_jefe": {"nombre": "El doctor Salas",
 		"frase": "Héctor Salas, director del estudio del VD-7. Tira probetas, mejora a sus sujetos y se esconde en una cúpula de cristal: rómpela.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-cientifico.tres",
-		"recorte": Rect2i(28, 33, 61, 119), "retrato": "quieto_s", "escala": 2, "jefe": true},
+		"recorte": Rect2i(28, 33, 61, 119), "retrato": "quieto_s", "escala": 1.2, "jefe": true},
 	"criatura": {"nombre": "La criatura",
 		"frase": "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-criatura.tres",
@@ -148,7 +150,7 @@ const LISTA := {
 	"sujeto_1": {"nombre": "El Sujeto 1",
 		"frase": "Una copia de Johnny hecha con su sangre: rueda para librarse de las balas, barre con la fregona y tira cubos de agua. A media vida se parte en dos.",
 		"edificios": ["torre"], "hoja": "res://assets/sprites/jefe-sujeto-1.tres",
-		"recorte": Rect2i(26, 40, 98, 126), "retrato": "quieto_s", "escala": 2, "jefe": true},
+		"recorte": Rect2i(26, 40, 98, 126), "retrato": "quieto_s", "escala": 1.4, "jefe": true},
 }
 # [/traducir]
 
@@ -252,6 +254,14 @@ static func todo_visto() -> void:
 		g.encontrados = Objetos.NOMBRES.keys()
 		g.bestiario = LISTA.keys()
 		g.sujetos_nuevos = LISTA.keys())
+
+
+# Lo que mide en el juego, en unidades del juego: el trozo dibujado por la escala de su sprite. Con esto el ordenador
+# los enseña a todos en la misma proporción (17 nov; antes, cada uno lo más grande que cabía en su hueco, y el
+# dinamitero salía más pequeño que el vecino y el gordo, enorme)
+static func tamano(id: String) -> Vector2:
+	var d: Dictionary = LISTA[id]
+	return Vector2(d.recorte.size) * float(d.escala)
 
 
 # ── El retrato ──

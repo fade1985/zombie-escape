@@ -39,10 +39,6 @@ msgstr "Hinter dir!"
 msgid "Quédate a su lado para levantarlo"
 msgstr "Bleib nah dran, um aufzuhelfen"
 
-#: scripts/aliado.gd
-msgid "¿Te acompaño?"
-msgstr "Darf ich mit?"
-
 #: scripts/antidisturbios.gd
 msgid "¡PRIIIII!"
 msgstr "PFIIIII!"

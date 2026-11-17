@@ -6,7 +6,7 @@
 # El plano de la planta: el pasillo en medio y, pegada a él (con el muro compartido y el hueco de la puerta), una sala
 # por cada puerta (arriba y abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar (con un «?»), rojo = con zombis dentro, claro = limpio; Johnny, un círculo
 # rojo (en el pasillo, donde está). En el centro comercial, mientras no se coge la llave maestra del guardia, todas las
-# salas llevan un candado y, con ella, la del jefe una calavera; la sala de mantenimiento, un casco. El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
+# salas llevan un candado y, con ella, la del jefe una calavera (en los demás edificios la lleva siempre); la sala de mantenimiento, un casco. El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, solo un "!" en medio
 # (supervivientes.gd). Y en medio de cada apartamento, lo que te has dejado en él: la llave, la página del dosier, la
 # noticia de la tele encendida o el superviviente sin rescatar (una carita).
@@ -45,8 +45,7 @@ const ICONOS := {
 	"candado": preload("res://assets/ui/iconos/candado.png"),
 	"llave": preload("res://assets/ui/iconos/llave.png"),
 	"escalera": preload("res://assets/ui/iconos/escalera.png"),
-	"jefe": preload("res://assets/ui/iconos/jefe.png"),
-	"calavera": preload("res://assets/ui/iconos/calavera.png"),   # la sala del jefe del centro comercial, con la llave maestra
+	"calavera": preload("res://assets/ui/iconos/calavera.png"),   # la sala del jefe, en todos los edificios (17 nov: antes, el gordo)
 	# lo que te has dejado en un apartamento: la página del dosier, la noticia de la tele y el superviviente sin rescatar
 	"dosier": preload("res://assets/ui/iconos/dosier.png"),
 	"tele": preload("res://assets/ui/iconos/noticias.png"),
@@ -120,14 +119,14 @@ func casillas() -> Array:
 				var color := GRIS if not sitio.visitado else CLARO if sitio.limpio else ROJO
 				var icono := ""
 				# (en el centro comercial, hasta coger la llave maestra del guardia, las cuatro salas con candado; con ella,
-				# la del jefe con una calavera)
+				# la del jefe con una calavera, como en los demás edificios)
 				var maestra: bool = partida.ed.cerrojo == "maestra"
 				if s.cerrojo in ["llave", "maestra"] and not (maestra and planta.tiene_llave):
 					icono = "candado"
 				elif sitio.tipo == "mantenimiento":
 					icono = "casco"
 				elif sitio.tipo == "jefe":
-					icono = "calavera" if maestra else "jefe"
+					icono = "calavera"
 				# lo que te has dejado en él (en medio de su cuadrado; si son dos, uno al lado del otro). Donde está encerrado el
 				# superviviente, solo su «!» (sin el «?»)
 				var dejado := []

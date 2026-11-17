@@ -39,10 +39,6 @@ msgstr "身后！"
 msgid "Quédate a su lado para levantarlo"
 msgstr "待在旁边把人扶起来"
 
-#: scripts/aliado.gd
-msgid "¿Te acompaño?"
-msgstr "我跟你一起走？"
-
 #: scripts/antidisturbios.gd
 msgid "¡PRIIIII!"
 msgstr "嘘——！"

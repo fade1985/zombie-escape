@@ -863,23 +863,6 @@ func dibujar_encima() -> void:
 			if levantar > 0.0:
 				Formas.arco(encima, Vector2.ZERO, 60.0, -PI / 2.0, -PI / 2.0 + levantar * TAU, 48, Tema.AMARILLO, 6.0)
 			texto(letra, Idioma.t("Quédate a su lado para levantarlo"), Vector2(0, 86), 16, Tema.AMARILLO)
-	# el bocadillo: solo el de los vecinos de las viviendas (lo que dicen los demás sale encima de su cabeza: decir)
-	var frase := ""
-	var alfa := 1.0
-	var color_frase := Color("#2b2233")
-	if modo == "vecino" and dicho_t >= 2.4 and partida.supervivientes.vecino_cerca() == self:
-		frase = Idioma.t("¿Te acompaño?")   # solo el que está más cerca de Johnny (si no, se pisan los bocadillos)
-		color_frase = Color("#2f9e44")
-	if frase != "":
-		var y := alto - absf(sin(tiempo * 3.0)) * 4.0 * float(modo != "equipo")
-		var ancho := letra.get_string_size(frase, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 22.0
-		var caja := Rect2(-ancho / 2.0, y - 14, ancho, 28)
-		encima.draw_rect(caja.grow(3), Color(LINEA, alfa))
-		encima.draw_rect(caja, Color(PAPEL, alfa))
-		Formas.poligono(encima, PackedVector2Array([Vector2(-6, y + 14), Vector2(0, y + 22), Vector2(6, y + 14)]),
-			Color(PAPEL, alfa))
-		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
-			Color(color_frase, alfa))
 	# el nombre (lo que es: «Médica»), solo en su habitación de los trasteros (las viviendas): en el edificio, ya no
 	if modo == "vecino":
 		texto(letra, Supervivientes.nombre_de(def), Vector2(0, 42), 16, Color.WHITE)   # (el nombre, ya traducido)

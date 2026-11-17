@@ -830,18 +830,6 @@ func colocar_vecinos() -> void:
 		zona.usar.connect(pedir_vecino.bind(v))
 
 
-# El vecino más cerca de Johnny (si está a menos de 260), o null
-func vecino_cerca() -> Aliado:
-	var mejor: Aliado = null
-	var cerca := 260.0
-	for v in vecinos:
-		var d := johnny.position.distance_to(v.position)
-		if v.modo == "vecino" and d < cerca:
-			cerca = d
-			mejor = v
-	return mejor
-
-
 # La E delante de un vecino (17 nov; antes, M124, le dabas la comida directamente): con el juego parado, una ventana
 # como las de tutorial en la que cuenta su vida (vida_de, con su comida favorita en amarillo) y dos botones: «Seguir» la
 # cierra y «Dar de comer» le da su comida (dar_de_comer). Si no la llevas (ni en la mochila ni en el baúl), «Dar de

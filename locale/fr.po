@@ -39,10 +39,6 @@ msgstr "Derrière toi !"
 msgid "Quédate a su lado para levantarlo"
 msgstr "Reste près de lui pour le relever"
 
-#: scripts/aliado.gd
-msgid "¿Te acompaño?"
-msgstr "Je viens avec toi ?"
-
 #: scripts/antidisturbios.gd
 msgid "¡PRIIIII!"
 msgstr "PRIIIIIT !"

@@ -1115,6 +1115,7 @@ const FONDO_ESCENARIO := preload("res://assets/ui/foco-sujetos.png")   # su fond
 const TAM_LISA_NOMBRE := 24   # la letra lisa (Rubik) de debajo del escenario: el nombre, en negrita...
 const TAM_LISA_FICHA := 17    # ...y lo demás (dónde sale, los matados y la frase; antes, la pixelada, 12 nov)
 const CASILLA_ZOMBI := 100     # cada casilla de la cuadrícula de la derecha (4 por fila)
+const CUADRICULA_K := 0.75     # en las casillas, a 3/4 de lo que miden en el juego (el escenario, a lo que miden)
 const POR_PAGINA := 12         # las casillas de cada página de la cuadrícula (4 × 3)
 var familia_vista := "durmientes"   # la pestaña abierta de Colecciones (Bestiario.familias)
 var pagina_vista := 0               # y su página
@@ -1357,11 +1358,13 @@ func casilla_zombi(padre: Container, id: String, visto: bool) -> Button:
 	var imagen := TextureRect.new()
 	# los que aún no se han visto, la interrogación grande (como la «!» de los avisos): sin pistas (12 nov; antes, su silueta)
 	imagen.texture = Bestiario.retrato(id) if visto else interrogacion()
-	# a escala entera, lo más grande que quepa (como mucho, a 2)
+	# todos en la misma proporción: a 3/4 de lo que miden en el juego (Bestiario.tamano), y los que no caben (el gordo,
+	# los jefes), lo justo para que quepan. La interrogación, a escala entera, lo más grande que quepa (como mucho, a 2)
 	var t := imagen.texture.get_size()
-	var escala := clampf(floorf((CASILLA_ZOMBI - 4) / maxf(t.x, t.y)), 1.0, 2.0)
-	if t.x * escala > CASILLA_ZOMBI - 8 or t.y * escala > CASILLA_ZOMBI - 8:
-		escala = minf((CASILLA_ZOMBI - 8) / t.x, (CASILLA_ZOMBI - 8) / t.y)   # los grandes, a menos de 1
+	var cabe := CASILLA_ZOMBI - 8.0
+	var escala := CUADRICULA_K * Bestiario.tamano(id).x / t.x if visto 		else clampf(floorf((CASILLA_ZOMBI - 4) / maxf(t.x, t.y)), 1.0, 2.0)
+	if t.x * escala > cabe or t.y * escala > cabe:
+		escala = minf(cabe / t.x, cabe / t.y)
 	imagen.custom_minimum_size = t * escala
 	imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -1399,9 +1402,14 @@ func ficha_bestiario(s: Dictionary, id: String, visto: bool) -> Control:
 	escenario.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	escenario.draw.connect(pintar_escenario.bind(escenario))
 	columna.add_child(escenario)
-	# el dibujo, con los pies en el centro del suelo: a escala entera, lo más grande que quepa (como mucho, a 3)
+	# el dibujo, con los pies en el centro del suelo: al tamaño que tiene en el juego (Bestiario.tamano), como en las
+	# casillas, y los que no caben (los jefes grandes), lo justo para que quepan (17 nov; antes, cada uno lo más grande
+	# que cabía, a escala entera)
 	var usado: Rect2i = d.recorte
-	var escala := clampi(int((PIES_ESCENARIO - TECHO_ESCENARIO) / usado.size.y), 1, 3)
+	var escala := float(d.escala)
+	var cabe := Vector2(ESCENARIO.x - 24.0, PIES_ESCENARIO - TECHO_ESCENARIO)
+	if usado.size.x * escala > cabe.x or usado.size.y * escala > cabe.y:
+		escala = minf(cabe.x / usado.size.x, cabe.y / usado.size.y)
 	var pies := Vector2(ESCENARIO.x / 2, PIES_ESCENARIO)
 	var recurso: Resource = load(d.hoja)
 	var dibujo: Node2D

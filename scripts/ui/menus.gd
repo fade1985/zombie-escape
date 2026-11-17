@@ -313,7 +313,7 @@ func quien_te_pilla(id: String) -> Control:
 	var frase := ""
 	if id in Bestiario.LISTA:
 		dibujo = Bestiario.retrato(id)
-		escala_max = Bestiario.LISTA[id].escala + 1   # (uno más que en el juego; los tentáculos ya van a 1)
+		escala_max = int(Bestiario.LISTA[id].escala) + 1   # (uno más que en el juego; los tentáculos ya van a 1)
 		nombre = Bestiario.nombre(id)
 		frase = Bestiario.frase(id)
 	elif id in PELIGROS:

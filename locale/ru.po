@@ -39,10 +39,6 @@ msgstr "Сзади!"
 msgid "Quédate a su lado para levantarlo"
 msgstr "Постой рядом, чтобы помочь подняться"
 
-#: scripts/aliado.gd
-msgid "¿Te acompaño?"
-msgstr "Можно с тобой?"
-
 #: scripts/antidisturbios.gd
 msgid "¡PRIIIII!"
 msgstr "ФЬЮЮЮЮТЬ!"
