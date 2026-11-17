@@ -428,6 +428,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 				and pasillo.escaparates.all(func(e): return absf(e.x - x) > ESCAPARATE_MEDIO + 20):
 			pasillo.apliques.append({"x": x, "semilla": rng.randf(), "parpadea": rng.randf() < 0.3})
 		x += 230
+	if estilo_pasillo == "galeria":
+		# (17 nov: la galería, sin apliques mientras el dueño la rehace. Se sortean igual y se quitan después, para no
+		# cambiar lo que sale al azar en el resto de la planta)
+		pasillo.apliques = []
 	# los muebles del pasillo, sin tapar ninguna puerta ni escaparate y dejando ir de una punta a la otra
 	var delante_escaparates: Array = pasillo.escaparates.map(func(e): return Rect2(e.x - ESCAPARATE_MEDIO, MURO,
 		ESCAPARATE_MEDIO * 2, 60))
