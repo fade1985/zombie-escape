@@ -1038,6 +1038,11 @@ en una línea.
   `py tools/neones_galeria.py letrero-farmacia` (sale `letrero-farmacia.png` y, apagado, `letrero-farmacia-apagado.png`, 90x19) y
   su resplandor con `py tools/letrero_halo.py farmacia`. `neon.gd` lo trata como los letreros dibujados (`LETREROS`), pero al
   fallar la luz se ven los tubos de cristal sin luz (`tubos_apagados`); las chispas saltan de la punta rota de la Y (`CHISPAS_EN`). Prueba: `--puerta-super farmacia` (fotos `captura-puerta-super-neones*`).
+- **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
+  cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
+  `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`
+  (`FERRETERIA`) en la pared de arriba de la galería para la tienda `ferreteria`. De momento fija (no se abre sola). Prueba: `--puerta-super ferreteria`
+  (si no sale en las 4 plantas de siempre, prueba otras semillas).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

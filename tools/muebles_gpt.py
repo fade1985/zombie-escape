@@ -342,6 +342,10 @@ MUEBLES = {
     # el escaparate de la farmacia, vacío, como el del súper pero más estrecho (17 nov, el dueño): dentro, por detrás del
     # cristal, va uno de sus neones (la cruz o la botella). Lo parte en fondo y reflejos tools/escaparate_farmacia.py
     "escaparate_farmacia": ("assets/sources/centro/escaparate-farmacia-vacio-gpt.webp", "assets/sprites/escaparate-farmacia-vacio.png", 44, 38, False),
+    # la puerta de la ferretería, de cristal con una sola hoja, y el cartel «OPEN» que cuelga por detrás del cristal (17 nov, el
+    # dueño). Los junta tools/puerta_ferreteria.py
+    "puerta_ferreteria": ("assets/sources/centro/puerta-ferreteria-gpt.webp", "assets/sprites/puerta-ferreteria-entera.png", 30, 43, False),
+    "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 
 

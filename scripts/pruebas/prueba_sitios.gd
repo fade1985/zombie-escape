@@ -956,12 +956,14 @@ func probar_puerta_super() -> void:
 	# (las tiendas salen al azar: se prueban plantas hasta dar con una)
 	for intento in 24:
 		var num := 1 + intento % 4
+		if intento >= 4:   # (las 4 primeras plantas, con la semilla de siempre; si no sale, otras semillas)
+			Planta.semilla = 1000 + intento
 		nueva_planta(num)
 		if not planta.sitios[0].salidas.any(func(s): return s.dir == "arriba" and s.get("neon", "") == tienda):
 			continue
 		await montar(0, 0, false)
 		for p in mapa.puertas:
-			if p.es_super() and p.salida.get("neon", "") == tienda:
+			if p.salida.get("neon", "") == tienda and p.salida.dir == "arriba":
 				puerta = p
 		if puerta:
 			print("Puerta automática de «%s»: en la planta %d" % [tienda, num - 1])

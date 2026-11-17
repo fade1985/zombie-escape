@@ -12,6 +12,9 @@ signal empujada(indice: int)
 signal cerca(indice: int)   # Johnny se acerca a una puerta de tienda de la pared de abajo de la galería (partida.decir_tienda)
 
 # Las puertas de frente: 36 × 43 píxeles, o sea 72 × 86 unidades
+# La puerta de la ferretería (17 nov, el dueño; de GPT, tools/puerta_ferreteria.py): de cristal, de una hoja, con un cartel «OPEN»
+# por detrás del cristal. 30 × 43 píxeles
+const FERRETERIA := preload("res://assets/sprites/puerta-ferreteria.png")
 const DIBUJO := {"tienda": preload("res://assets/sprites/puerta-tienda.png"),
 	"servicio": preload("res://assets/sprites/puerta-servicio.png")}
 # La de los pisos, sucia y con sangre (tools/puertas_sucias.py): tres dibujos, uno al lado de otro, para que no sean todas iguales
@@ -244,6 +247,9 @@ func _draw() -> void:
 				return
 			# la de la sala de mantenimiento (la de la placa con la llave inglesa), de acero en los dos edificios; las
 			# demás, la del edificio
+			if centro and salida.get("neon", "") == "ferreteria":
+				draw_texture_rect(FERRETERIA, Rect2(-30, -86, 60, 86), false)
+				return
 			var dibujo: String = "servicio" if salida.get("placa", "") == "llave" else ("tienda" if centro else "piso")
 			if dibujo == "piso":
 				var modelo: int = {"A": 0, "B": 1}.get(salida.get("placa", ""), 2)
