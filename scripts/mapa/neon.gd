@@ -9,7 +9,17 @@ const TAMANO := 32           # la fuente pixel art a 32: cada píxel de la letra
 const ALTO := 104.0          # a qué altura va, por encima del pie del muro (justo encima de la puerta)
 const TUBO := Color(0.3, 0.28, 0.33)   # una letra fundida: el tubo de cristal apagado
 
+# Las tiendas que, en vez del neón de letras, tienen un letrero dibujado de letras corpóreas iluminadas por detrás (de GPT:
+# assets/sprites/letrero-<tipo>.png, con su resplandor, letrero-<tipo>-halo.png de tools/letrero_halo.py), con el color de
+# su luz. Van en inglés, iguales en todos los idiomas, como una marca (17 nov, el dueño)
+const LETREROS := {"supermercado": Color("#3d9bff")}
+const LETRERO_PIE := 98.0    # el letrero dibujado: a qué altura va su pie, por encima del pie del muro
+const HALO_MARGEN := 8       # los píxeles de más del resplandor por cada lado (tools/letrero_halo.py)
+
 var texto := "TIENDA"   # no-tr (lo cambia siempre mapa.gd, ya traducido: Tienda.neon)
+var tipo := ""          # el tipo de tienda (lo pone mapa.gd): si está en LETREROS, su letrero dibujado
+var letrero: Texture2D
+var halo: Texture2D
 var color := Color("#ff4fa0")
 var semilla := 0.5
 var iluminado := false       # en Torre Velaria: un rótulo de departamento iluminado por detrás (placa blanca y fría), no un neón
@@ -22,6 +32,10 @@ var fuente: Font
 func _ready() -> void:
 	fuente = Tema.crear().default_font
 	tiempo = semilla * 10.0
+	if LETREROS.has(tipo):
+		letrero = load("res://assets/sprites/letrero-%s.png" % tipo)
+		halo = load("res://assets/sprites/letrero-%s-halo.png" % tipo)
+		color = LETREROS[tipo]
 	# una o dos letras fundidas (nunca un espacio), elegidas con la semilla para que no cambien al volver
 	var letras := []
 	for i in texto.length():
@@ -56,6 +70,9 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var b: float = luz.brillo(tiempo) if luz else 1.0
+	if letrero:
+		dibujar_letrero(b)
+		return
 	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, TAMANO).x
 	var x := -roundf(ancho / 2.0 / 2.0) * 2.0
 	var y := -ALTO
@@ -79,6 +96,18 @@ func _draw() -> void:
 				draw_string_outline(fuente, Vector2(x, y), letra, HORIZONTAL_ALIGNMENT_LEFT, -1, TAMANO, 6, halo)
 				draw_string(fuente, Vector2(x, y), letra, HORIZONTAL_ALIGNMENT_LEFT, -1, TAMANO, c)
 		x += w
+
+
+# El letrero dibujado (LETREROS): primero su resplandor de color en la pared, que parpadea y falla con el letrero, y
+# encima las letras, que se ven siempre (son de chapa: lo que se apaga es la luz de detrás)
+func dibujar_letrero(b: float) -> void:
+	var t := letrero.get_size()
+	var x := -t.x   # (centrado: el dibujo, a 2 unidades por píxel)
+	var y := -LETRERO_PIE - t.y * 2
+	var luz_halo := clampf(b, 0.0, 1.0) * (0.85 + 0.15 * sin(tiempo * 11.0))
+	draw_texture_rect(halo, Rect2(x - HALO_MARGEN * 2, y - HALO_MARGEN * 2, (t.x + HALO_MARGEN * 2) * 2,
+		(t.y + HALO_MARGEN * 2) * 2), false, Color(color.r, color.g, color.b, 0.75 * luz_halo))
+	draw_texture_rect(letrero, Rect2(x, y, t.x * 2, t.y * 2), false)
 
 
 # El rótulo de un departamento de la torre: una placa blanca y fría iluminada por detrás, con el nombre en gris azulado oscuro

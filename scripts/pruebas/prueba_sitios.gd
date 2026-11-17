@@ -986,14 +986,14 @@ func probar_puerta_super() -> void:
 		planta.tiene_llave = paso[2]
 		actualizar_puertas()
 		johnny.position = paso[1]
-		Temblor.desplazamiento = puerta.position + Vector2(0, -20) - johnny.position
+		Temblor.desplazamiento = puerta.position + Vector2(0, -50) - johnny.position
 		camara.reset_smoothing()
 		await get_tree().create_timer(0.8).timeout
 		print("Puerta del súper · %s: abierta %s · apertura %.2f" % [paso[0], puerta.abierta, puerta.apertura])
 		Captura.foto("captura-puerta-super-%s.png" % paso[0])
 	# a medio abrir, para ver cómo se corren las hojas
 	johnny.position = delante
-	Temblor.desplazamiento = puerta.position + Vector2(0, -20) - johnny.position
+	Temblor.desplazamiento = puerta.position + Vector2(0, -50) - johnny.position
 	await get_tree().create_timer(SUPER_MEDIO).timeout
 	Captura.foto("captura-puerta-super-medio.png")
 	Luz.apagada = not Luz.apagada

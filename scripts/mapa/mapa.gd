@@ -886,6 +886,7 @@ func poner_puertas() -> void:
 				# la fachada de una tienda del centro comercial: su letrero de neón encima de la puerta
 				var neon := NEON.new()
 				neon.texto = Tienda.neon(salida.neon)   # (ya traducido)
+				neon.tipo = salida.neon   # (el súper: su letrero dibujado, neon.LETREROS)
 				neon.color = Tienda.TIPOS[salida.neon].color
 				neon.iluminado = Tienda.TIPOS[salida.neon].get("edificio", "centro") == "torre"   # (en la torre, un rótulo iluminado)
 				neon.semilla = fposmod(sin(salida.en * 12.9898) * 43758.5453, 1.0)

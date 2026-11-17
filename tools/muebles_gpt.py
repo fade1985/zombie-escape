@@ -332,7 +332,10 @@ MUEBLES = {
     # los dos escaparates del supermercado, a los lados de su puerta automática (mapa.poner_escaparates; 17 nov): a la
     # izquierda, el de bebidas; a la derecha, el de comida (el "-derecha"). Del mismo ancho que el de antes
     "escaparate_super": ("assets/sources/escaparate-super-bebidas-gpt.webp", "assets/sprites/escaparate-supermercado.png", 53, 36, False),
-    "escaparate_super_derecha": ("assets/sources/escaparate-super-comida-gpt.webp", "assets/sprites/escaparate-supermercado-derecha.png", 53, 37, False),
+    # el letrero del supermercado, encima de su puerta (neon.gd, LETREROS; 17 nov): letras corpóreas azul marino, en
+    # inglés para todos los idiomas, como una marca. Su resplandor azul lo hace tools/letrero_halo.py
+    "letrero_super": ("assets/sources/letrero-super-gpt.webp", "assets/sprites/letrero-supermercado.png", 100, 17, False),
+    "escaparate_super_derecha":("assets/sources/escaparate-super-comida-gpt.webp", "assets/sprites/escaparate-supermercado-derecha.png", 53, 37, False),
 }
 
 
