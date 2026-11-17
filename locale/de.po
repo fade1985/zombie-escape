@@ -3270,6 +3270,10 @@ msgid "Has cogido la llave del %s"
 msgstr "Du hast den Schlüssel für Wohnung %s"
 
 #: scripts/partida.gd
+msgid "¡¡¡QUÉ SUSTO!!!"
+msgstr "WAS FÜR EIN SCHRECK!!!"
+
+#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "Der Schlüsselschläfer ist erledigt! Er hat den Schlüssel für Wohnung %s fallen lassen"
 

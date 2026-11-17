@@ -2530,6 +2530,8 @@ func probar_guardia() -> void:
 	await get_tree().create_timer(0.3, false).timeout
 	print("Guardia · Johnny mientras ruge, pulsando a la izquierda: se mueve %.0f · sin mandos %.2f s más (esperado: 0, algo más de 0)" % [
 		johnny.position.distance_to(quieto0), johnny.sin_mandos])
+	print("Guardia · encima de Johnny: %s (esperado: ¡¡¡QUÉ SUSTO!!!)" % [johnny.get_parent().get_children().filter(func(n):
+		return n is Label and "SUSTO" in n.text).map(func(n): return n.text)])
 	var suyos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia)
 	print("Guardia · llegan %d guardias (esperado %d en la planta %d) · todos marcados «llamado»: %s" % [suyos.size(),
 		guardias_del_rugido(), planta.num, suyos.all(func(r): return r.has_meta("llamado"))])

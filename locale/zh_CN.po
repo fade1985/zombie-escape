@@ -3266,6 +3266,10 @@ msgid "Has cogido la llave del %s"
 msgstr "你拿到了%s的钥匙"
 
 #: scripts/partida.gd
+msgid "¡¡¡QUÉ SUSTO!!!"
+msgstr "吓死我了！！！"
+
+#: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
 msgstr "拿钥匙的沉睡者倒下了！它掉落了%s的钥匙"
 

@@ -1342,6 +1342,9 @@ func guardias_del_rugido() -> int:
 
 # El rugido: llegan sus guardias corriendo por las dos puntas del pasillo (sin más aviso: el «¡¡¡GRRR!!!» lo dice todo)
 func _al_rugir() -> void:
+	# Johnny, petrificado por el rugido (zombi_guardia.gd): lo dice encima de la cabeza, para que se entienda por qué
+	# no se mueve (dura lo mismo que el rugido)
+	gran_aviso(Idioma.t("¡¡¡QUÉ SUSTO!!!"), Tema.AMARILLO, 110.0, preload("res://scripts/zombi_guardia.gd").RUGIDO_DURA)
 	var sitio: Dictionary = planta.sitios[aqui]
 	for i in guardias_del_rugido():
 		var x: float = Planta.MURO + 50 if i % 2 == 0 else sitio.ancho - Planta.MURO - 50
