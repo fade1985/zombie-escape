@@ -67,8 +67,10 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
   y `pasillo-pared-gpt.webp`; se pasan con `py tools/portal_gpt.py`. Prompts: vista cenital pura o pared de frente, cuadrícula exacta
   de baldosas, sin costuras, y «manchas granate como óxido seco» (GPT rechaza la palabra sangre). Se mira con `--captura --pasillo`.
 - **Galería del centro comercial, desde el 17 nov (pendiente de visto bueno):** un centro comercial de los 80 abandonado, hecho
-  con GPT a partir de una foto del dueño: baldosa pequeña en tonos pastel (gris, crema, lila, malva, rosa y morado) en franjas
-  diagonales (16 × 16 baldosas de 8, `suelo-galeria`, 128 × 128, oscurecido un 20 %) y pared lisa rosa malva en 8 paneles con
+  con GPT a partir de una foto del dueño: baldosa pequeña en tonos pastel (gris, crema, lila, malva, rosa y morado) puesta en
+  mosaico de escocés, como la foto (GPT las repartió al azar; la herramienta recolorea cada baldosa según `TIRAS` y `MOSAICO`,
+  que se repite cada 8, y solo se queda con su dibujo: grietas, rayas, motas) (16 × 16 baldosas de 8, `suelo-galeria`,
+  128 × 128, oscurecido un 20 %) y pared lisa rosa malva en 8 paneles con
   moldura cromada arriba y rodapié morado (`pared-galeria`, 152 × 48: paneles de 18 + 1 de junta; `techo-galeria`, canto malva).
   Sin neones ni sangre en las texturas (irán sueltos). Originales en `assets/sources/suelos/galeria-suelo-gpt.webp` y
   `galeria-pared-gpt.webp`; se pasan con `py tools/galeria_gpt.py`, que reduce cada baldosa y panel por dentro y pinta las juntas

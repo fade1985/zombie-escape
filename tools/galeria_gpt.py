@@ -41,7 +41,14 @@ def color_de(a, zona):
 
 
 # --- Suelo: 1254 × 1254, 16 × 16 baldosas de 78,375 con la junta (unos 4 píxeles) centrada en cada múltiplo, y media
-# junta en los bordes. Cada baldosa: 7 × 7 píxeles de dentro y la junta en el último (8 × 8)
+# junta en los bordes. Cada baldosa: 7 × 7 píxeles de dentro y la junta en el último (8 × 8).
+# GPT repartió los colores al azar; el dueño lo quiere en mosaico, como su foto: un escocés (tartán) que se repite cada
+# 8 baldosas. Cada fila y cada columna es oscura (a), media (b) o clara (c), y el color de la baldosa sale de cruzar las
+# dos (MOSAICO). De la baldosa de GPT solo se queda su dibujo (grietas, rayas, motas: lo que se aparta de su color medio)
+COLORES = {'O': (115, 82, 120), 'M': (167, 126, 163), 'L': (154, 137, 166), 'R': (201, 154, 171), 'G': (166, 162, 171),
+           'C': (219, 187, 171)}   # morado oscuro, malva, lila, rosa, gris y crema (los de las baldosas de GPT)
+MOSAICO = {('a', 'a'): 'O', ('a', 'b'): 'M', ('a', 'c'): 'L', ('b', 'b'): 'R', ('b', 'c'): 'G', ('c', 'c'): 'C'}
+TIRAS = 'aabccccb'   # las 8 filas (y columnas) que se repiten: dos oscuras, una media, cuatro claras y otra media
 img = Image.open('assets/sources/suelos/galeria-suelo-gpt.webp').convert('RGB')
 a = np.asarray(img)
 PASO, JUNTA, N = 1254 / 16, 3.0, 16
@@ -51,7 +58,9 @@ suelo[:, :] = junta
 for fy in range(N):
     for fx in range(N):
         caja = (fx * PASO + JUNTA, fy * PASO + JUNTA, (fx + 1) * PASO - JUNTA, (fy + 1) * PASO - JUNTA)
-        suelo[fy * 8:fy * 8 + 7, fx * 8:fx * 8 + 7] = reducir(img, caja, 7, 7)
+        baldosa = reducir(img, caja, 7, 7)
+        color = COLORES[MOSAICO[tuple(sorted((TIRAS[fy % 8], TIRAS[fx % 8])))]]
+        suelo[fy * 8:fy * 8 + 7, fx * 8:fx * 8 + 7] = baldosa - baldosa.mean(axis=(0, 1)) + color
 suelo = np.clip(suelo * OSCURO, 0, 255).astype(np.uint8)
 guardar(Image.fromarray(suelo), 'suelo-galeria')
 
