@@ -352,6 +352,8 @@ MUEBLES = {
     # la puerta de la tienda de electrónica: la misma de la ferretería, un poco más pequeña, con su cartel más pequeño, dentro de un marco de neón
     "puerta_electronica": ("assets/sources/centro/puerta-ferreteria-gpt.webp", "assets/sprites/puerta-electronica-entera.png", 28, 40, False),
     "cartel_open_pequeno": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open-pequeno.png", 17, 15, False),
+    # la puerta doble de cristal sin marco del restaurante (17 nov, el dueño): dos hojas con pinzas de acero y barras largas
+    "puerta_restaurante": ("assets/sources/centro/puerta-restaurante-gpt.webp", "assets/sprites/puerta-restaurante.png", 36, 43, False),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 

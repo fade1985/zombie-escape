@@ -1062,6 +1062,8 @@ en una línea.
 - **El letrero de la tienda de electrónica** (17 nov, el dueño): «ELECTRONICS» en tubos de neón rosa de un solo trazo, con una línea azul debajo (de GPT,
   `assets/sources/centro/letrero-electronica-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-electronica` (97x19, y el apagado) y
   `py tools/letrero_halo.py electronica`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea azul).
+- **La puerta del restaurante** (17 nov, el dueño): doble, de cristal sin marco, con pinzas de acero en las esquinas y dos barras largas en el medio (de GPT,
+  `assets/sources/centro/puerta-restaurante-gpt.webp`; `muebles_gpt.py puerta_restaurante`, 36x43; `puerta.gd`, `RESTAURANTE`). Fija, no se abre sola.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
