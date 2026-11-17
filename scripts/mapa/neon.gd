@@ -19,7 +19,8 @@ const LETREROS := {"supermercado": Color("#3d9bff"), "farmacia": Color("#4dff6a"
 	"ferreteria": Color("#4dc8ff"),
 	"electronica": Color("#ff3df0"),
 	"restaurante": Color("#ff3d7a"),
-	"ropa": Color("#3dc8ff")}
+	"ropa": Color("#3dc8ff"),
+	"joyeria": Color("#ffc21e")}
 const LETRERO_PIE := 98.0    # el letrero dibujado: a qué altura va su pie, por encima del pie del muro
 const HALO_MARGEN := 8       # los píxeles de más del resplandor por cada lado (tools/letrero_halo.py)
 # De dónde saltan las chispas (17 nov, el dueño): el píxel del letrero donde está suelta la letra caída (en el del súper,
@@ -30,7 +31,8 @@ const CHISPAS_EN := {"supermercado": Vector2(33, 15), "farmacia": Vector2(81, 18
 	"ferreteria": Vector2(88, 16),
 	"electronica": Vector2(95, 17),
 	"restaurante": Vector2(84, 18),
-	"ropa": Vector2(64, 19)}
+	"ropa": Vector2(64, 19),
+	"joyeria": Vector2(79, 17)}
 const CHISPAS_CADA := Vector2(1.5, 4.5)
 const CHISPAS_OIDO := 360.0  # hasta qué distancia de Johnny suenan
 var chispas: CPUParticles2D

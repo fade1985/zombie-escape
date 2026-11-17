@@ -35,6 +35,7 @@ NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
           'letrero-ropa': (21, 'centro/letrero-ropa-gpt.webp', False),
           'joyeria-diamante': (26, 'centro/neon-joyeria-diamante-gpt.webp', False),
           'joyeria-lingotes': (20, 'centro/neon-joyeria-lingotes-gpt.webp', False),
+          'letrero-joyeria': (19, 'centro/letrero-joyeria-gpt.webp', False),
           'letrero-farmacia': (19, 'centro/letrero-farmacia-gpt.webp', False)}
 ANCHOS = {'electronica-marco': 44}   # (un ancho fijo, más ancho que su proporción: el marco rodea una puerta de 28)
 # los que GPT hizo en blanco y hay que pintar de otro color (17 nov, el dueño: los lingotes de la joyería, amarillo dorado): el tubo, del

@@ -1083,6 +1083,9 @@ en una línea.
   cristal: el diamante en neón blanco a la izquierda y los lingotes en amarillo dorado a la derecha (`neones_galeria.py joyeria-diamante joyeria-lingotes`;
   `mapa.ESCAPARATES_NEON`). GPT hizo los lingotes en blanco: `neones_galeria.py` los pinta de dorado (`RECOLOREAR`: el color del borde del tubo y el de su
   centro), así que otro neón que salga del color equivocado se puede arreglar igual, sin pedirlo otra vez.
+- **El letrero de la joyería** (17 nov, el dueño): «JEWELRY» en tubos de neón amarillo dorado de un solo trazo (de GPT,
+  `assets/sources/centro/letrero-joyeria-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-joyeria` (94x19, y el apagado) y
+  `py tools/letrero_halo.py joyeria`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan del pie de la pata de la R).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
