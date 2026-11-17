@@ -2503,17 +2503,34 @@ func probar_guardia() -> void:
 			z.queue_free()
 	var silbatos := [0]
 	guardia.silbato.connect(func(): silbatos[0] += 1)
+	var fotos_guardia := {}
 	guardia.vida = guardia.vida_max * 10   # que no caiga a media vida por el camino
 	guardia.vida_max = guardia.vida
 	johnny.vida = 100000   # que no le maten los refuerzos
 	var sitio: Dictionary = planta.sitios[aqui]
 	guardia.global_position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+	# 17 nov: su dibujo nuevo de cerca, junto a Johnny, antes de que salga corriendo (captura-guardia-de-cerca.png)
+	guardia.global_position += Vector2(0, 100)   # (fuera del banco de en medio)
+	johnny.position = guardia.global_position + Vector2(-90, 0)
+	johnny.get_node("Camara").reset_smoothing()
+	guardia.set_physics_process(false)   # (quieto para la foto, mientras se aclara la pantalla)
+	await get_tree().create_timer(0.8, false).timeout
+	Captura.foto("captura-guardia-de-cerca.png")
+	guardia.set_physics_process(true)
+	guardia.global_position -= Vector2(0, 100)
 	johnny.position = guardia.global_position + Vector2(-250, 0)
 	await get_tree().create_timer(0.3, false).timeout
 	for seg in 14:
 		var p0: Vector2 = guardia.global_position
 		await get_tree().create_timer(1.0, false).timeout
 		print("Guardia seg %d: avanza %.0f · silbatos %d · cansado %.1f · alerta %s" % [seg, p0.distance_to(guardia.global_position), silbatos[0], guardia.cansado, guardia.alerta])
+		# su dibujo nuevo (17 nov, el jefe de seguridad de GPT): huyendo, con el andar más rápido, y parado resoplando
+		if seg == 1:
+			print("Guardia · huyendo: dibujo %s · animación %s a x%.1f (esperado: zombi-guardia, andar, x2.4)" % [
+				guardia.sprite.sprite_frames.resource_path.get_file(), guardia.sprite.animation, guardia.sprite.speed_scale])
+		if guardia.cansado > 0.0 and not fotos_guardia.has("cansado"):
+			fotos_guardia["cansado"] = true
+			print("Guardia · cansado: animación %s a x%.1f (esperado: reposo, x1.0)" % [guardia.sprite.animation, guardia.sprite.speed_scale])
 		if seg == 0:
 			var llegados: int = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia).size()
 			print("Guardia: tras el primer silbato llegan %d refuerzos (esperado 4, +%d por la planta)" % [llegados, planta.num / 2])

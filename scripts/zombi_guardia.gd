@@ -6,7 +6,8 @@
 #   - Correr le cansa: cada poco se para a recuperar el aliento. Ese es el momento de pillarle.
 #   - Si le acorralas (o le alcanzas mientras descansa), se defiende a zarpazos.
 #   - A media vida, vuelve a tocar el silbato.
-# Lleva el dibujo del vigilante (zombi_vigilante.tscn), el mismo que los refuerzos que llegan al silbato.
+# Lleva su propio dibujo, el del jefe de seguridad (17 nov, hecho con GPT: assets/sources/zombi-guardia-gpt/), distinto del
+# de los vigilantes que llegan al silbato.
 extends Zombi
 
 signal silbato   # ha tocado el silbato: la partida trae refuerzos
@@ -17,6 +18,8 @@ const ALIENTO := 4.0         # segundos que aguanta corriendo... (M83: antes 3.2
 const SILBIDO_CADA := 6.0    # M83: mientras te ve, vuelve a silbar cada tanto (antes, solo al verte y a media vida)
 const RESPIRO := 1.8         # ...y lo que tarda en recuperarse
 const DEFENDERSE := 70.0     # más cerca que esto (además de los radios), se gira y pega
+const PASO_HUYENDO := 2.4    # lo rápido que pasa su andar al huir: su dibujo anda despacio (12 pasos a 8 por segundo,
+                             # para la ronda) y, huyendo a 200, parecía que patinaba
 
 var alerta := false          # si ya ha visto a Johnny (entonces ya no hace la ronda)
 var silbidos := 0            # cuántas veces ha tocado el silbato
@@ -51,6 +54,8 @@ func andar(delta: float, johnny: Node2D) -> void:
 		espera_silbato -= delta
 		if espera_silbato <= 0.0:
 			tocar_silbato()
+	if helor == 0.0:   # (con frío del lanza hielo, lo despacio que se mueve lo lleva zombi.gd)
+		sprite.speed_scale = 1.0
 	var cerca: bool = distancia_a(johnny) < radio + johnny.RADIO + DEFENDERSE
 	# Cansado: se queda quieto resoplando, salvo que le tengas encima
 	if cansado > 0.0:
@@ -73,6 +78,8 @@ func andar(delta: float, johnny: Node2D) -> void:
 		cansado = RESPIRO
 		Zombi.texto_flotante(get_parent(), global_position + Vector2(-10, -altura), Idioma.t("uf"), Color("#9fc4ff"), 18)
 		return
+	if helor == 0.0:
+		sprite.speed_scale = PASO_HUYENDO
 	ir_hacia(delta, camino_hacia(huida(johnny)), HUIDA)
 
 

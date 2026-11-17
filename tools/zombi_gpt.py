@@ -50,6 +50,9 @@ ZOMBIS = {
     # el fondo a 2, como el policía (el pelo y el casco oscuros)
     "militar": ("assets/sources/superviviente-militar-gpt", "assets/sources/superviviente-militar-gpt-48", 2, 96, False, (1.2, 1.12, 1.1)),
     "lento": ("assets/sources/zombi-lento-gpt", "assets/sources/zombi-lento-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
+    # el jefe de seguridad (el guardia de la llave maestra del centro comercial, 17 nov): ropa gris marengo muy oscura,
+    # que con 5 se queda entera; su referencia de estilo fue el personaje.webp del vecino (2000 de ancho)
+    "guardia": ("assets/sources/zombi-guardia-gpt", "assets/sources/zombi-guardia-gpt-48", 5, 96, True, (1.2, 1.12, 1.1)),
 }
 FUENTE, DESTINO, FONDO, LIENZO_ANIM, GOLPE_CLAVADO, RETOQUE = ZOMBIS["vecina"]
 # Los que corren (el crío): al andar, la cabeza va a la altura que la pone GPT (casi siempre la misma) y los pies se
@@ -61,7 +64,9 @@ CORRE = False
 LIENZO_ANDAR = {"rapido": 64, "lento": 64}
 # El tamaño, si no es el de la referencia: el arrastrado, al 80 % (9 nov: tendido en el suelo medía casi lo que el vecino
 # de pie y, a su lado, se veía demasiado grande). Las animaciones se miden por el dibujo quieto, así que lo siguen solas
-TAMANO = {"lento": 0.8, "policia": 1.07}
+TAMANO = {"lento": 0.8, "policia": 1.07, "guardia": 0.87}
+# El jefe de seguridad, al 87 % (17 nov): GPT lo dibujó más grande que al vecino y, a escala normal, medía 53 de alto y no
+# cabía en el lienzo de 48 (se le cortaba la gorra); así mide 46, como el vecino, pero más ancho de hombros
 # Y el ensanchado (10 nov): el policía de GPT salía más estrecho que Johnny (24 de ancho contra 28 y 12 de perfil contra 16) y
 # se veía enclenque; se le ensancha un 20 % al reducir (todo, también la gorra y los brazos), y de alto, un 7 %
 ESTIRO = {"policia": 1.2}

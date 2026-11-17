@@ -1147,6 +1147,12 @@ en una línea.
   clavados al atacar y en el golpe, y en qué rodilla va el roto). Desde el 8 nov es **el vecino del juego**
   (`zombi_normal.tscn`, y su ficha de Sujetos), con una sola ropa, la camisa azul: las 6 de colores del de PixelLab
   (`zombi-normal-rojo`, `-bata`…) ya no se usan. `--captura --vecino-gpt` lo pone junto al de PixelLab para comparar.
+- **El jefe de seguridad con GPT (17 nov):** el guardia de la llave maestra (`zombi_guardia.tscn`) deja el dibujo del
+  vigilante y lleva el suyo: `--zombi guardia` (carpeta `zombi-guardia-gpt`, con el `personaje.webp` del vecino de
+  referencia de estilo y la foto recortada de un guardia; textos en su `textos-gpt.md`) → `zombi-guardia-gpt-48` →
+  `zombi.py zombi-guardia-gpt-48 zombi-guardia` y `hacer_frames.py assets/sprites/zombi-guardia`. Al 87 % (`TAMANO`:
+  GPT lo dibujó más grande y no cabía en 48), anda a 8 fotogramas por segundo y, huyendo, su andar va a ×2,4
+  (`PASO_HUYENDO`), para que no patine. La ropa, gris marengo y no negra, para que el fondo negro no se la coma.
 - **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
   casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
   mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus

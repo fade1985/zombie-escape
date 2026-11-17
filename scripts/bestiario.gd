@@ -63,11 +63,11 @@ const LISTA := {
 		"frase": "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-vigilante.tres",
 		"recorte": Rect2i(36, 33, 23, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
-	# el guardia comparte dibujo con el vigilante
+	# el guardia, el jefe de seguridad (17 nov: con su propio dibujo, hecho con GPT)
 	"guardia": {"nombre": "El guardia de la llave maestra",
 		"frase": "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento.",
-		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-vigilante.tres",
-		"recorte": Rect2i(36, 33, 23, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
+		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-guardia.tres",
+		"recorte": Rect2i(35, 32, 26, 47), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	# los de Torre Velaria (parte 4 del plan)
 	"oficinista": {"nombre": "El oficinista",
 		"frase": "Sigue atendiendo llamadas que nunca llegan. No se te acerca: te tira la grapadora y, si vas a por él, se aparta.",
