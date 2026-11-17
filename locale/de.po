@@ -5340,12 +5340,20 @@ msgid "Al entrar en los trasteros"
 msgstr "Beim Betreten der Keller"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
-msgstr "Hier wohnen die Überlebenden, die du rettest, jeder in seinem Kellerabteil. Manche helfen dir, auch wenn sie nicht mitkommen."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
+msgstr "Hier wohnen die Überlebenden, die du rettest, jeder in seinem Kellerabteil."
 
 #: scripts/tutoriales.gd
-msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
-msgstr "Stell dich vor einen von ihnen und drück {usar}: Er erzählt dir aus seinem Leben und was sein Lieblingsessen ist. Hast du es dabei, gib ihm zu essen, dann begleitet er dich eine Runde und geht danach in sein Kellerabteil zurück."
+msgid "Algunos te ayudan aunque no vengan contigo, cada uno a su manera: un botiquín al empezar, los durmientes en el minimapa, la tienda más barata, una fregona que barre más ancho y pistas de la sala del jefe."
+msgstr "Manche helfen dir, auch wenn sie nicht mitkommen, jeder auf seine Art: ein Medikit zu Beginn, die Schläfer auf der Minikarte, ein billigerer Laden, ein Mopp, der breiter fegt, und Hinweise zum Bossraum."
+
+#: scripts/tutoriales.gd
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita."
+msgstr "Stell dich vor einen von ihnen und drück {usar}: Er erzählt dir aus seinem Leben und was sein Lieblingsessen ist."
+
+#: scripts/tutoriales.gd
+msgid "Si le das de comer, te acompañará una partida y luego volverá a su trastero. Solo viene uno a la vez."
+msgstr "Gibst du ihm zu essen, begleitet er dich eine Runde und geht danach in sein Kellerabteil zurück. Es kommt immer nur einer mit."
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"

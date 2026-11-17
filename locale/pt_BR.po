@@ -5340,12 +5340,20 @@ msgid "Al entrar en los trasteros"
 msgstr "Ao entrar nos depósitos"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
-msgstr "Aqui moram os sobreviventes que você resgata, cada um no seu depósito. Alguns te ajudam mesmo sem ir com você."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
+msgstr "Aqui moram os sobreviventes que você resgata, cada um no seu depósito."
 
 #: scripts/tutoriales.gd
-msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
-msgstr "Fique na frente de um e aperte {usar}: ele vai contar a vida dele e qual é a comida favorita. Se você tiver, dê comida e ele vai com você por uma partida; depois, volta para o depósito."
+msgid "Algunos te ayudan aunque no vengan contigo, cada uno a su manera: un botiquín al empezar, los durmientes en el minimapa, la tienda más barata, una fregona que barre más ancho y pistas de la sala del jefe."
+msgstr "Alguns te ajudam mesmo sem ir com você, cada um do seu jeito: um kit médico no começo, os adormecidos no minimapa, a loja mais barata, um esfregão que varre mais largo e pistas da sala do chefe."
+
+#: scripts/tutoriales.gd
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita."
+msgstr "Fique na frente de um e aperte {usar}: ele vai contar a vida dele e qual é a comida favorita."
+
+#: scripts/tutoriales.gd
+msgid "Si le das de comer, te acompañará una partida y luego volverá a su trastero. Solo viene uno a la vez."
+msgstr "Se você der comida, ele vai com você por uma partida e depois volta para o depósito. Só vai um de cada vez."
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"

@@ -5348,12 +5348,20 @@ msgid "Al entrar en los trasteros"
 msgstr "Когда заходишь в кладовки"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
-msgstr "Здесь живут спасенные тобой выжившие, каждый в своей кладовке. Некоторые помогают, даже если не идут с тобой."
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
+msgstr "Здесь живут спасенные тобой выжившие, каждый в своей кладовке."
 
 #: scripts/tutoriales.gd
-msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
-msgstr "Встань перед кем-нибудь из них и нажми {usar}: он расскажет о своей жизни и о своей любимой еде. Если она у тебя есть, накорми его, и он пойдёт с тобой на один забег, а потом вернётся в свою кладовку."
+msgid "Algunos te ayudan aunque no vengan contigo, cada uno a su manera: un botiquín al empezar, los durmientes en el minimapa, la tienda más barata, una fregona que barre más ancho y pistas de la sala del jefe."
+msgstr "Некоторые помогают, даже если не идут с тобой, каждый по-своему: аптечка в начале, спящие на миникарте, магазин дешевле, швабра, которая бьёт шире, и подсказки про комнату босса."
+
+#: scripts/tutoriales.gd
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita."
+msgstr "Встань перед кем-нибудь из них и нажми {usar}: он расскажет о своей жизни и о своей любимой еде."
+
+#: scripts/tutoriales.gd
+msgid "Si le das de comer, te acompañará una partida y luego volverá a su trastero. Solo viene uno a la vez."
+msgstr "Если накормишь его, он пойдёт с тобой на один забег, а потом вернётся в свою кладовку. С тобой может идти только один."
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"

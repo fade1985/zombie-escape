@@ -5332,12 +5332,20 @@ msgid "Al entrar en los trasteros"
 msgstr "进入储藏室时"
 
 #: scripts/tutoriales.gd
-msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo."
-msgstr "你救出的幸存者住在这里，每人一间储藏室。有些人即使不跟着你也会帮你。"
+msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero."
+msgstr "你救出的幸存者住在这里，每人一间储藏室。"
 
 #: scripts/tutoriales.gd
-msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
-msgstr "站到其中一人面前按{usar}：他会讲讲自己的经历和最爱的食物。如果你带着，就喂他吃，他会跟你一局，之后回到自己的储藏室。"
+msgid "Algunos te ayudan aunque no vengan contigo, cada uno a su manera: un botiquín al empezar, los durmientes en el minimapa, la tienda más barata, una fregona que barre más ancho y pistas de la sala del jefe."
+msgstr "有些人即使不跟着你也会帮你，各有各的方式：开局一个急救包、小地图上显示沉睡者、商店更便宜、拖把横扫范围更大，还有头目房间的线索。"
+
+#: scripts/tutoriales.gd
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita."
+msgstr "站到其中一人面前按{usar}：他会讲讲自己的经历和最爱的食物。"
+
+#: scripts/tutoriales.gd
+msgid "Si le das de comer, te acompañará una partida y luego volverá a su trastero. Solo viene uno a la vez."
+msgstr "喂他吃东西，他就会跟你一局，之后回到自己的储藏室。一次只能带一个人。"
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"

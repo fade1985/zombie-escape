@@ -228,8 +228,12 @@ const LISTA := {
 			"Si la ves entera, se guarda aquí. Ver todos los de un edificio también cuenta para abrir el siguiente."]},
 	"trasteros": {"grupo": "Sala de mantenimiento", "titulo": "Los trasteros", "icono": "medico",
 		"cuando": "Al entrar en los trasteros",
-		"lineas": ["Aquí viven los supervivientes que rescatas, cada uno en su trastero. Algunos te ayudan aunque no vengan contigo.",
-			"Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."]},
+		# (17 nov, lo pidió el dueño: cómo ayudan sin venir, las «mejora» de Supervivientes.DATOS; que viene uno a la vez, y
+		# en líneas más cortas)
+		"lineas": ["Aquí viven los supervivientes que rescatas, cada uno en su trastero.",
+			"Algunos te ayudan aunque no vengan contigo, cada uno a su manera: un botiquín al empezar, los durmientes en el minimapa, la tienda más barata, una fregona que barre más ancho y pistas de la sala del jefe.",
+			"Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita.",
+			"Si le das de comer, te acompañará una partida y luego volverá a su trastero. Solo viene uno a la vez."]},
 	# (17 nov, lo pidió el dueño: si no, no se sabe que las cocinas se han abierto; partida.gd, al limpiar un piso)
 	"cocinas": {"grupo": "Supervivientes", "titulo": "Las cocinas", "icono": "obj-donut",
 		"cuando": "Al limpiar un piso con alguien en los trasteros",
