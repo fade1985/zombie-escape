@@ -290,8 +290,10 @@ func ascensor_portal() -> void:
 
 # El cartel de la sala de mantenimiento: "en", el medio de su lado izquierdo. La placa, con las puntas a su tamaño y lo de
 # en medio estirado, y encima el texto, con su sombra
+# (en la galería del centro comercial, más bajo: del alto de las placas azules pequeñas de los pisos A y B, con los márgenes
+# y los tornillos a su escala; la letra no puede bajar de 16, que se emborrona. 17 nov, el dueño)
 func cartel_mantenimiento(en: Vector2) -> void:
-	cartel_azul(Idioma.t("Mantenimiento").to_upper(), en)
+	cartel_azul(Idioma.t("Mantenimiento").to_upper(), en, PLACA_AZUL if galeria else MANT_ALTO)
 
 
 # La placa azul esmaltada (la de MANTENIMIENTO) con "texto", del largo que pida: "en", el medio de su lado izquierdo.
