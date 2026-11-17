@@ -43,6 +43,9 @@ Reglas:
 5. **Comillas y apóstrofos en inglés: rectos (`"` y `'`)**: a la letra normal le faltan los rizados (`tema.gd`).
 6. **Un texto que cabe justo en español** (botones, tarjetas): el inglés suele salir más corto, pero se mira en una
    captura (`--ingles`) antes de darlo por bueno.
+7. **Los gritos de Johnny** (las frases grandes encima de su cabeza, `partida.gran_aviso`), con tres signos a cada lado,
+   como «¡¡¡LA LLAVE!!!» (decidido por el dueño el 17 nov, para todas las frases nuevas). En los demás idiomas, con los
+   suyos: «THE KEY!!!», «LA CLÉ !!!», «钥匙！！！».
 
 ### Tablas de datos (`const`)
 

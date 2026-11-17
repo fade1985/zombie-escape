@@ -389,9 +389,10 @@ func quitar_globo_mutacion(b: Button, raton: bool) -> void:
 		globo.queue_free()
 
 
-# El hueco de la llave de la jefa (o de la tarjeta de acceso, en el centro comercial), al lado del dinero: una etiqueta
+# El hueco de la llave de la jefa (o de la llave maestra, en el centro comercial), al lado del dinero: una etiqueta
 # de cartón con su cordel (M100), apagada y con su nombre desvaído hasta que Johnny la coge; entonces se enciende, con
-# el nombre de la puerta que abre (hasta el M100, un recuadro con el borde amarillo)
+# el nombre de la puerta que abre ("Maestra", la del centro comercial; hasta el M100, un recuadro con el borde amarillo).
+# La maestra no se gasta: se apaga al cambiar de planta (tiene_llave es de cada planta)
 func hueco_llave() -> void:
 	var tiene: bool = partida.planta.tiene_llave
 	var caja := estampa(ETIQUETA, ETIQUETA.get_size() * 2.0)
@@ -400,8 +401,10 @@ func hueco_llave() -> void:
 	caja.position = Vector2(118, 504) - ORIGEN
 	var icono := dibujo(caja, "llave", Vector2(42, 40), 8.0)
 	icono.modulate.a = 1.0 if tiene else 0.35
-	var nombre: String = Idioma.t("Tarjeta") if partida.ed.cerrojo == "tarjeta" else Idioma.t("Llave")
-	var t := rotulo(lienzo, partida.nombre_jefa() if tiene else nombre, 160, 513, TINTA_BANCO, HORIZONTAL_ALIGNMENT_LEFT, 0.0)
+	var nombre: String = Idioma.t("Llave")
+	if tiene:
+		nombre = Idioma.t("Maestra") if partida.ed.cerrojo == "maestra" else partida.nombre_jefa()
+	var t := rotulo(lienzo, nombre, 160, 513, TINTA_BANCO, HORIZONTAL_ALIGNMENT_LEFT, 0.0)
 	if not tiene:
 		t.modulate.a = 0.45
 	# (lo que no cabe antes del ojal, con la letra más pequeña)

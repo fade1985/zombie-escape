@@ -570,12 +570,12 @@ msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra 
 msgstr "Still making his rounds. If he hears a whistle, he comes running, baton first."
 
 #: scripts/bestiario.gd
-msgid "El guardia de la tarjeta"
-msgstr "The Keycard Guard"
+msgid "El guardia de la llave maestra"
+msgstr "The Master Key Guard"
 
 #: scripts/bestiario.gd
-msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "He's got the floor's keycard and he knows it. He whistles, runs off and gets winded: that's your moment."
+msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
+msgstr "He's got the floor's master key and he knows it. He whistles, runs off and gets winded: that's your moment."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -894,16 +894,16 @@ msgid "el Centro comercial"
 msgstr "the Shopping Mall"
 
 #: scripts/edificios.gd
-msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta"
-msgstr "Looted stores, dark storerooms and a guard who won't let go of his keycard"
+msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su llave maestra"
+msgstr "Looted stores, dark storerooms and a guard who won't let go of his master key"
 
 #: scripts/edificios.gd
 msgid "el gerente"
 msgstr "the manager"
 
 #: scripts/edificios.gd
-msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
-msgstr "clear the stores and hunt down the security guard: he carries the access card"
+msgid "limpia las tiendas y caza al guardia de seguridad: lleva la llave maestra"
+msgstr "clear the stores and hunt down the security guard: he carries the master key"
 
 #: scripts/edificios.gd scripts/tutoriales.gd
 msgid "Torre Velaria"
@@ -2086,16 +2086,16 @@ msgid "Apuntar libre"
 msgstr "Free aim"
 
 #: scripts/joyeria.gd
-msgid "Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"
-msgstr "You got the gold card: it opens the Jewelry Store's vault"
+msgid "¡¡¡LA LLAVE DORADA!!!"
+msgstr "THE GOLD KEY!!!"
 
 #: scripts/joyeria.gd
 msgid "¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"
 msgstr "Clunk! Time's up: the vault is open"
 
 #: scripts/joyeria.gd
-msgid "Abres la cámara acorazada con la tarjeta dorada"
-msgstr "You open the vault with the gold card"
+msgid "Abres la cámara acorazada con la llave dorada"
+msgstr "You open the vault with the gold key"
 
 #: scripts/joyeria.gd
 msgid "Aguanta: la cámara se abre en %d segundo"
@@ -2104,8 +2104,8 @@ msgstr[0] "Hold out: the vault opens in %d second"
 msgstr[1] "Hold out: the vault opens in %d seconds"
 
 #: scripts/joyeria.gd
-msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
-msgstr "Card reader. Without the guard's gold card, the only option left is the emergency override: step up again to set off the alarm"
+msgid "Cerradura blindada. Sin la llave dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
+msgstr "Armored lock. Without the guard's gold key, the only option left is the emergency override: step up again to set off the alarm"
 
 #: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
@@ -2698,10 +2698,6 @@ msgid "Apartamento en llamas"
 msgstr "Burning apartment"
 
 #: scripts/mapa/planta.gd
-msgid "Cerrada: hace falta una tarjeta de acceso"
-msgstr "Locked: you need an access card"
-
-#: scripts/mapa/planta.gd
 msgid "Cerrada: hace falta el código de tres cifras"
 msgstr "Locked: you need the three-digit code"
 
@@ -3190,16 +3186,12 @@ msgid "¡TENGO QUE REPARARLO!"
 msgstr "I HAVE TO FIX IT!"
 
 #: scripts/partida.gd
-msgid "¡ESTÁ BLOQUEADO!"
-msgstr "IT'S BLOCKED!"
+msgid "¡¡¡ESTÁ BLOQUEADO!!!"
+msgstr "IT'S BLOCKED!!!"
 
 #: scripts/partida.gd
 msgid "El informático joven se salta el teclado: la puerta se abre"
 msgstr "The IT Kid bypasses the keypad: the door opens"
-
-#: scripts/partida.gd
-msgid "Abres con la tarjeta de acceso"
-msgstr "You open it with the access card"
 
 #: scripts/partida.gd
 msgid "Tecleas el código: la puerta se abre"
@@ -3262,44 +3254,24 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "A Velaria helicopter is coming for you!"
 
 #: scripts/partida.gd
-msgid "¡NECESITO UNA TARJETA!"
-msgstr "I NEED A CARD!"
+msgid "¡¡¡NECESITO EL CÓDIGO!!!"
+msgstr "I NEED THE CODE!!!"
 
 #: scripts/partida.gd
-msgid "¡NECESITO EL CÓDIGO!"
-msgstr "I NEED THE CODE!"
-
-#: scripts/partida.gd
-msgid "¡NECESITO UNA LLAVE!"
-msgstr "I NEED A KEY!"
-
-#: scripts/partida.gd
-msgid "la tienda de %s"
-msgstr "%s's store"
-
-#: scripts/partida.gd
-msgid "Has cogido la tarjeta de acceso: abre %s"
-msgstr "You got the access card: it opens %s"
-
-#: scripts/partida.gd
-msgid "Has cogido la llave del %s"
-msgstr "You got the key to apt. %s"
+msgid "¡¡¡NECESITO UNA LLAVE!!!"
+msgstr "I NEED A KEY!!!"
 
 #: scripts/partida.gd
 msgid "¡¡¡LA LLAVE!!!"
 msgstr "THE KEY!!!"
 
 #: scripts/partida.gd
+msgid "Has cogido la llave del %s"
+msgstr "You got the key to apt. %s"
+
+#: scripts/partida.gd
 msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
 msgstr "The guard blew his whistle: reinforcements are coming!"
-
-#: scripts/partida.gd
-msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería"
-msgstr "The guard is down! He dropped the access card and the Jewelry Store's gold card"
-
-#: scripts/partida.gd
-msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
-msgstr "The guard is down! He dropped the access card"
 
 #: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
@@ -3707,8 +3679,8 @@ msgid "La recepcionista: la llave la lleva un durmiente de %s"
 msgstr "The receptionist: a sleeper in %s has the key"
 
 #: scripts/supervivientes.gd
-msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
-msgstr "The receptionist: the Keycard Guard has the access card, he's patrolling the hallway"
+msgid "La recepcionista: la llave maestra la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "The receptionist: the security guard has the master key, he's patrolling the hallway"
 
 #: scripts/supervivientes.gd
 msgid "La recepcionista: las cifras del código están en %s"
@@ -5392,8 +5364,8 @@ msgid "Al llegar al centro comercial"
 msgstr "On reaching the shopping mall"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con una tarjeta: la lleva el guardia de seguridad que hace la ronda."
-msgstr "The boss room opens with a card: the security guard making rounds carries it."
+msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva el guardia de seguridad que hace la ronda."
+msgstr "Every door on the floor is locked: the security guard making rounds carries the master key."
 
 #: scripts/tutoriales.gd
 msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
@@ -5436,12 +5408,12 @@ msgid "Al entrar en la joyería"
 msgstr "On entering the jewelry store"
 
 #: scripts/tutoriales.gd
-msgid "La cámara acorazada guarda un arma Épica. Se abre con la tarjeta dorada que lleva el guardia de seguridad."
-msgstr "The vault holds an Epic weapon. It opens with the gold card carried by the security guard."
+msgid "La cámara acorazada guarda un arma Épica. Se abre con la llave dorada que lleva el guardia de seguridad."
+msgstr "The vault holds an Epic weapon. It opens with the gold key carried by the security guard."
 
 #: scripts/tutoriales.gd
-msgid "Sin la tarjeta, ponte delante del lector dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
-msgstr "Without the card, stand in front of the reader twice: the alarm goes off and you have to hold out inside the jewelry store until it opens."
+msgid "Sin la llave, ponte delante de la puerta dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
+msgstr "Without the key, stand in front of the door twice: the alarm goes off and you have to hold out inside the jewelry store until it opens."
 
 #: scripts/tutoriales.gd
 msgid "Al llegar a Torre Velaria"
@@ -5779,12 +5751,12 @@ msgid "Efecto secundario"
 msgstr "Side effect"
 
 #: scripts/ui/inventario.gd
-msgid "Tarjeta"
-msgstr "Keycard"
-
-#: scripts/ui/inventario.gd
 msgid "Llave"
 msgstr "Key"
+
+#: scripts/ui/inventario.gd
+msgid "Maestra"
+msgstr "Master"
 
 #: scripts/ui/inventario.gd
 msgid "tirar"
@@ -7709,7 +7681,3 @@ msgstr "phew"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "FWEEET!"
-
-#, sin-usar
-msgid "Mutación"
-msgstr "Mutation"

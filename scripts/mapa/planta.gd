@@ -2,7 +2,8 @@
 #
 # Cada planta es un pasillo largo con cuatro puertas, dos a cada lado (A y B arriba, C y D abajo). Detrás de
 # cada una hay un "sitio" aparte: un apartamento o el apartamento de la jefa (cerrado con llave); en el centro
-# comercial, una tienda (tienda.gd) o la del jefe, cerrada con la tarjeta que lleva el guardia. En la planta
+# comercial, una tienda (tienda.gd) o la del jefe. Allí, todas las puertas del pasillo están cerradas hasta coger la llave maestra que
+# lleva el guardia (cerrojo "maestra"). En la planta
 # baja, la puerta A es la sala de mantenimiento, donde empieza la partida, y por la puerta de su derecha se va a
 # las viviendas de los supervivientes rescatados (viviendas.gd). En el pasillo hay además un
 # ascensor averiado y, a la derecha, las escaleras, que no se abren hasta acabar con la jefa y por las que se llega a
@@ -218,10 +219,10 @@ static func aviso_de(salida: Dictionary) -> String:
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay), viviendas, el de las viviendas de los
 #                    rescatados (viviendas.gd), expo, el de la exposición, y armas, el de la sala de pruebas
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (sitio -1 mientras la lleva alguien: con
-#                    tarjeta, el guardia; con llave, un zombi al azar de los apartamentos, {"llave": true} en zombis; en
+#                    llave maestra, el guardia; con llave, un zombi al azar de los apartamentos, {"llave": true} en zombis; en
 #                    los dos casos la suelta al caer)
-#   guardia          solo con tarjeta: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
-#                    pasillo, que lleva la tarjeta (zombi_guardia.gd)
+#   guardia          solo con llave maestra: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
+#                    pasillo, que la lleva (zombi_guardia.gd)
 #   edificio         el id del edificio (edificios.gd)
 #   tiene_llave, jefa_muerta
 #   cientifico       {sitio, pos, cogida} dónde está el científico muerto con la página del dosier (historia.gd)
@@ -233,7 +234,8 @@ static func aviso_de(salida: Dictionary) -> String:
 #                    (el pie de cada torno)} (mostrador)
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
-# aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso (y, en las escaleras, aviso_jefe)}; las puertas de tienda de la pared de arriba
+# aparece allí), cerrojo ("", "llave", "jefa", "nunca" o, en el centro comercial, "maestra": las
+# tiendas y la sala de mantenimiento, cerradas hasta coger la llave maestra del guardia), aviso (y, en las escaleras, aviso_jefe)}; las puertas de tienda de la pared de arriba
 # llevan "neon" (el tipo de tienda): su letrero de neón encima (neon.gd). Las puertas de los pisos llevan "placa" (su
 # letra, o "llave" la de la sala de mantenimiento): una placa junto a la puerta; y el ascensor, "planta" (0 = la
 # baja): el número grande que se ve a su lado (puerta.gd)
@@ -308,7 +310,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			planta.mantenimiento = planta.sitios.size()
 			planta.sitios.append(mantenimiento(pasillo.salidas.size()))
 			pasillo.salidas.append({"dir": h.dir, "en": h.en, "tipo": "puerta", "a": planta.mantenimiento, "vuelta": 0,
-				"cerrojo": "", "aviso": "", "placa": "llave"})
+				"cerrojo": "maestra" if ed.cerrojo == "maestra" else "", "aviso": "", "placa": "llave"})
 			continue
 		var jefe: bool = h == de_jefa
 		# la puerta del apartamento está en el lado que da al pasillo
@@ -363,7 +365,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		planta.sitios.append(sitio)
 		if tipo_tienda == "joyeria":
 			# la cámara acorazada (joyeria.gd): su sala, la puerta que la separa de la sala de venta (cerrada hasta
-			# que se abra con la tarjeta dorada o con la alarma) y dónde anda la tarjeta dorada (la lleva el guardia)
+			# que se abra con la llave dorada o con la alarma) y dónde anda la llave dorada (la lleva el guardia)
 			var acorazada: Dictionary = apt.salas.filter(func(s): return s.uso == "acorazada")[0]
 			planta.joyeria = {"sitio": idx, "sala": acorazada.id, "abierta": false, "dorada": "guardia", "suelo": {},
 				"alarma": -1.0, "puerta": apt.puertas.filter(func(p): return p.a == acorazada.id or p.b == acorazada.id)[0]}
@@ -371,8 +373,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			planta.joyeria.puerta.merge({"cerrada": true, "acero": true})
 		sitio.salidas.append({"dir": apt.entrada.lado, "en": (apt.entrada.c + 1) * CASILLA, "tipo": "puerta",
 			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": ""})
-		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
-			"aviso": ""}
+		# (en el centro comercial, cerradas hasta coger la llave maestra del guardia: partida.gd)
+		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0,
+			"cerrojo": "maestra" if ed.cerrojo == "maestra" else "", "aviso": ""}
 		if tipo_tienda == "":
 			puerta.placa = h.letra   # los pisos, como en un edificio de verdad: su letra en una placa junto a la puerta
 		if tipo_tienda != "" and h.dir == "arriba" and not (jefe and not mini.is_empty()):
@@ -383,8 +386,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			for lado_x in ([-1, 1] if Tienda.TIPOS[tipo_tienda].get("edificio", "centro") == "centro" else []):
 				pasillo.escaparates.append({"x": h.en + lado_x * ESCAPARATE_A, "tienda": tipo_tienda})
 		if jefe:
-			puerta.cerrojo = "llave"   # la llave o la tarjeta: se abren igual (ver partida.gd)
-			puerta.aviso = {"tarjeta": "Cerrada: hace falta una tarjeta de acceso", "codigo": "Cerrada: hace falta el código de tres cifras"}.get(   # [traducir]
+			puerta.cerrojo = "llave"   # la llave, la llave maestra o el código: se abren igual (ver partida.gd)
+			puerta.aviso = {"codigo": "Cerrada: hace falta el código de tres cifras"}.get(   # [traducir]
 				ed.cerrojo, "Cerrada con llave")   # [traducir]
 		pasillo.salidas.append(puerta)
 
@@ -532,8 +535,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var de_sos: int = planta.superviviente.sitio if rescate_planta == num and not planta.superviviente.is_empty() else -1
 	var de_tele := tele_de_la_planta(planta, normales.filter(func(i): return i != de_sos or tiendas), rng)
 
-	# Con tarjeta, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
-	if ed.cerrojo == "tarjeta":
+	# Con llave maestra, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
+	if ed.cerrojo == "maestra":
 		planta.llave = {"sitio": -1, "pos": Vector2.ZERO}
 		planta.guardia = {"vivo": true, "vida": -1, "alerta": false, "silbidos": 0}
 	# La llave de la jefa, en una habitación (que no sea el salón ni un baño) de un apartamento normal

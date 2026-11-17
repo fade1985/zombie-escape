@@ -12,7 +12,7 @@
 extends Node2D
 
 signal llave_cogida
-signal dorada_cogida   # la tarjeta dorada de la cámara acorazada de la joyería (joyeria.gd)
+signal dorada_cogida   # la llave dorada de la cámara acorazada de la joyería (joyeria.gd)
 
 const CASILLA := 32
 const MURO := 64
@@ -56,6 +56,7 @@ const LINEA_TRASTERO := preload("res://assets/sprites/linea-trastero.png")   # l
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
+const LLAVE_DORADA := preload("res://assets/sprites/objeto-llave-dorada.png")   # (la misma, en oro: la de la joyería)
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const AZOTEA := preload("res://assets/sprites/azotea-gpt.png")   # la azotea entera, de GPT (tools/azotea_gpt.py)
 const GARAJE := preload("res://assets/sprites/garaje-gpt.png")   # el garaje del reto del día entero, de GPT (tools/garaje_gpt.py)
@@ -180,7 +181,7 @@ var jefe: Node2D = null           # el jefe, si se ha salido con él dentro
 var jefe_salio := false           # y si ya había aparecido
 
 
-func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
+func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	sitio = datos
 	add_to_group("mapa")
 	cajas = sitio.get("cajas", false)
@@ -320,7 +321,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		cosas.add_child(armarito)
 		armaritos.append(armarito)
 	if llave != Vector2.INF:
-		poner_llave(llave, tarjeta)
+		poner_llave(llave)
 	if sitio.tipo == "expo":
 		poner_exposicion()
 	hornear(navegacion)
@@ -1550,9 +1551,9 @@ func etiqueta(texto: String, pos: Vector2) -> void:
 
 
 # La llave del apartamento de la jefa: tiene una luz blanca alrededor y sube y baja hasta que Johnny la pisa. En el centro
-# comercial, la tarjeta de acceso (la suelta el guardia al caer) y, con "dorada", la tarjeta dorada de la cámara
-# acorazada de la joyería (joyeria.gd; al cogerla avisa con dorada_cogida)
-func poner_llave(pos: Vector2, tarjeta := false, dorada := false) -> void:
+# comercial, la llave maestra (la suelta el guardia al caer) y, con "dorada", la llave dorada de la cámara acorazada de
+# la joyería, con su luz dorada (joyeria.gd; al cogerla avisa con dorada_cogida)
+func poner_llave(pos: Vector2, dorada := false) -> void:
 	var zona := Area2D.new()
 	zona.name = "Dorada" if dorada else "Llave"
 	zona.position = pos
@@ -1563,23 +1564,21 @@ func poner_llave(pos: Vector2, tarjeta := false, dorada := false) -> void:
 	circulo.radius = 22.0
 	forma.shape = circulo
 	zona.add_child(forma)
-	if not tarjeta:
-		# la llave, con una luz blanca alrededor para distinguirla, como la de las armas de rareza (partida.gd,
-		# soltar_arma), pero blanca. Alumbra todas las capas (luz.gd): si no, en un apartamento, donde cada habitación
-		# tiene la suya, no alumbraría el suelo
-		var resplandor := PointLight2D.new()
-		resplandor.name = "Resplandor"
-		resplandor.texture = load("res://escenas/luces/luz_suave.tres")
-		resplandor.texture_scale = 0.3
-		resplandor.color = Color.WHITE
-		resplandor.range_item_cull_mask = Luz.TODAS
-		resplandor.position = Vector2(0, -16)
-		zona.add_child(resplandor)
+	# la llave, con una luz alrededor para distinguirla, como la de las armas de rareza (partida.gd, soltar_arma), pero
+	# blanca (la dorada, dorada). Alumbra todas las capas (luz.gd): si no, en un apartamento, donde cada habitación
+	# tiene la suya, no alumbraría el suelo
+	var resplandor := PointLight2D.new()
+	resplandor.name = "Resplandor"
+	resplandor.texture = load("res://escenas/luces/luz_suave.tres")
+	resplandor.texture_scale = 0.3
+	resplandor.color = Color("#ffc94a") if dorada else Color.WHITE
+	resplandor.range_item_cull_mask = Luz.TODAS
+	resplandor.position = Vector2(0, -16)
+	zona.add_child(resplandor)
 	var dibujo := Sprite2D.new()
-	dibujo.texture = dibujo_tarjeta(dorada) if tarjeta else LLAVE
-	# la llave (32×32), al tamaño de un bidón de ácido en el suelo; la tarjeta (12×8), al doble
-	dibujo.scale = Vector2(2, 2) if tarjeta else Vector2.ONE
-	dibujo.offset = Vector2(0, -8) if tarjeta else Vector2(0, -16)
+	dibujo.texture = LLAVE_DORADA if dorada else LLAVE
+	# la llave (32×32), al tamaño de un bidón de ácido en el suelo
+	dibujo.offset = Vector2(0, -16)
 	zona.add_child(dibujo)
 	cosas.add_child(zona)
 	var vaiven := dibujo.create_tween().set_loops()
@@ -1592,31 +1591,6 @@ func poner_llave(pos: Vector2, tarjeta := false, dorada := false) -> void:
 			else:
 				llave_cogida.emit()
 			zona.queue_free())
-
-
-# La tarjeta de acceso, dibujada con código hasta que tenga su sprite (parte 2 del centro comercial): una
-# tarjeta azul de 12 × 8 píxeles con su banda magnética, su chip dorado y el borde oscuro. La dorada (la de la
-# cámara acorazada de la joyería), igual pero de oro, con el chip azul
-static func dibujo_tarjeta(dorada := false) -> Texture2D:
-	var fondo := Color("#e0b030") if dorada else Color("#3d7be0")
-	var borde := Color("#6e4e10") if dorada else Color("#1b2f5c")
-	var brillo := Color("#fff0a0") if dorada else Color("#8fb8ff")
-	var chip := Color("#3d7be0") if dorada else Color("#ffd23f")
-	var img := Image.create(12, 8, false, Image.FORMAT_RGBA8)
-	img.fill(fondo)
-	for x in 12:
-		img.set_pixel(x, 0, borde)
-		img.set_pixel(x, 7, borde)
-		img.set_pixel(x, 2, Color("#14161f"))   # la banda
-		img.set_pixel(x, 1, brillo)             # el brillo de arriba
-	for y in 8:
-		img.set_pixel(0, y, borde)
-		img.set_pixel(11, y, borde)
-	for p in [Vector2i(2, 4), Vector2i(3, 4), Vector2i(2, 5), Vector2i(3, 5)]:
-		img.set_pixelv(p, chip)   # el chip
-	for x in range(6, 10):
-		img.set_pixel(x, 5, Color("#fff8e0") if dorada else Color("#dfe8ff"))   # el nombre
-	return ImageTexture.create_from_image(img)
 
 
 # "Hornear" la navegación: Godot mira los muros y los muebles (grupo "obstaculos") y recorta del suelo todo

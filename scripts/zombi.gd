@@ -50,7 +50,7 @@ const HIELO := Color("#9edef8")
 @export var ropas: Array[SpriteFrames] = []
 
 var vida := 30
-var importante := false    # el guardia de la tarjeta y el zombi de la llave: Ninja no los mata de un golpe (johnny.golpe_ninja)
+var importante := false    # el guardia de la llave maestra y el zombi de la llave: Ninja no los mata de un golpe (johnny.golpe_ninja)
 var estado := "andar"      # "andar", "zarpazo", "golpe" o "muerto" (y los suyos en cada tipo)
 var direccion := "s"
 var tiempo := 0.0          # para el bamboleo al andar

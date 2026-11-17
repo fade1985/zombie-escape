@@ -60,7 +60,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 |---|---|
 | el vecino · la vecina · el arrastrado · el crío · el dinamitero | le voisin · la voisine · le rampant · le gamin · le dynamiteur |
 | el de los tentáculos · el gordo · la dependienta | le gars aux tentacules · le gros · la vendeuse |
-| el vigilante · el guardia (de la tarjeta) · el maniquí | le vigile · le garde (au badge) · le mannequin |
+| el vigilante · el guardia (de la llave maestra) · el maniquí | le vigile · le garde (au passe-partout) · le mannequin |
 | ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH !!! |
 
 ## Plantas, pisos y salas
@@ -118,7 +118,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | ConserjeOS · CONSERJE OS 95 · C:\MANTENIMIENTO | ConciergeOS · CONCIERGE OS 95 · C:\MAINTENANCE |
 | PUNTOS.EXE · ARMAS.EXE · LOGROS.EXE · DOSIER.TXT · SUJETOS.EXE (antes COLECCION.EXE) | POINTS.EXE · ARMES.EXE · SUCCES.EXE · DOSSIER.TXT · SUJETS.EXE |
 | skin · ropa (de Johnny) | skin (masculino: *un skin*, *Nouveau skin !*) · tenue |
-| tarjeta de acceso · tarjeta dorada (Joyería) · llave | badge d'accès · carte dorée · clé |
+| llave maestra («Maestra» en la mochila) · llave dorada (Joyería) · llave | passe-partout («Passe-partout») · clé dorée · clé |
 | cámara acorazada · apertura de emergencia · cuadro eléctrico · palanca · cable pelado | salle forte · ouverture d'urgence · tableau électrique · levier · câble dénudé |
 | ¡NOTICIAS NUEVAS! · Última hora · EN DIRECTO | FLASH SPÉCIAL ! · Dernière minute · EN DIRECT |
 | jefe(s) | boss (invariable) |

@@ -569,12 +569,12 @@ msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra 
 msgstr "还在照常巡逻。一听到哨声，就举着警棍冲过来。"
 
 #: scripts/bestiario.gd
-msgid "El guardia de la tarjeta"
-msgstr "持卡保安"
+msgid "El guardia de la llave maestra"
+msgstr "持万能钥匙的保安"
 
 #: scripts/bestiario.gd
-msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "他拿着这层楼的门禁卡，而且心里有数。吹哨、逃跑、跑到喘不上气：这就是你的机会。"
+msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
+msgstr "他拿着这层楼的万能钥匙，而且心里有数。吹哨、逃跑、跑到喘不上气：这就是你的机会。"
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -893,16 +893,16 @@ msgid "el Centro comercial"
 msgstr "购物中心"
 
 #: scripts/edificios.gd
-msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta"
-msgstr "被洗劫的商店、漆黑的仓库，还有一个死抓着门禁卡不放的保安"
+msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su llave maestra"
+msgstr "被洗劫的商店、漆黑的仓库，还有一个死抓着万能钥匙不放的保安"
 
 #: scripts/edificios.gd
 msgid "el gerente"
 msgstr "经理"
 
 #: scripts/edificios.gd
-msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
-msgstr "清理各家商店，干掉保安：门禁卡在他身上"
+msgid "limpia las tiendas y caza al guardia de seguridad: lleva la llave maestra"
+msgstr "清理各家商店，干掉保安：万能钥匙在他身上"
 
 #: scripts/edificios.gd scripts/tutoriales.gd
 msgid "Torre Velaria"
@@ -2084,16 +2084,16 @@ msgid "Apuntar libre"
 msgstr "自由瞄准"
 
 #: scripts/joyeria.gd
-msgid "Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"
-msgstr "你拿到了金卡：可以打开珠宝店的金库"
+msgid "¡¡¡LA LLAVE DORADA!!!"
+msgstr "金钥匙！！！"
 
 #: scripts/joyeria.gd
 msgid "¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"
 msgstr "叮！倒计时结束：金库打开了"
 
 #: scripts/joyeria.gd
-msgid "Abres la cámara acorazada con la tarjeta dorada"
-msgstr "你用金卡打开了金库"
+msgid "Abres la cámara acorazada con la llave dorada"
+msgstr "你用金钥匙打开了金库"
 
 #: scripts/joyeria.gd
 msgid "Aguanta: la cámara se abre en %d segundo"
@@ -2101,8 +2101,8 @@ msgid_plural "Aguanta: la cámara se abre en %d segundos"
 msgstr[0] "撑住：金库将在 %d 秒后打开"
 
 #: scripts/joyeria.gd
-msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
-msgstr "读卡器。没有保安的金卡，就只能紧急开启：再靠近一次就会触发警报"
+msgid "Cerradura blindada. Sin la llave dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
+msgstr "防盗锁。没有保安的金钥匙，就只能紧急开启：再靠近一次就会触发警报"
 
 #: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
@@ -2694,10 +2694,6 @@ msgid "Apartamento en llamas"
 msgstr "着火的公寓"
 
 #: scripts/mapa/planta.gd
-msgid "Cerrada: hace falta una tarjeta de acceso"
-msgstr "锁着：需要门禁卡"
-
-#: scripts/mapa/planta.gd
 msgid "Cerrada: hace falta el código de tres cifras"
 msgstr "锁着：需要三位数密码"
 
@@ -3186,16 +3182,12 @@ msgid "¡TENGO QUE REPARARLO!"
 msgstr "我得把它修好！"
 
 #: scripts/partida.gd
-msgid "¡ESTÁ BLOQUEADO!"
-msgstr "被封住了！"
+msgid "¡¡¡ESTÁ BLOQUEADO!!!"
+msgstr "被封住了！！！"
 
 #: scripts/partida.gd
 msgid "El informático joven se salta el teclado: la puerta se abre"
 msgstr "年轻网管绕过了键盘：门开了"
-
-#: scripts/partida.gd
-msgid "Abres con la tarjeta de acceso"
-msgstr "你用门禁卡打开了门"
 
 #: scripts/partida.gd
 msgid "Tecleas el código: la puerta se abre"
@@ -3258,44 +3250,24 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "一架Velaria的直升机冲你来了！"
 
 #: scripts/partida.gd
-msgid "¡NECESITO UNA TARJETA!"
-msgstr "我需要门禁卡！"
+msgid "¡¡¡NECESITO EL CÓDIGO!!!"
+msgstr "我需要密码！！！"
 
 #: scripts/partida.gd
-msgid "¡NECESITO EL CÓDIGO!"
-msgstr "我需要密码！"
-
-#: scripts/partida.gd
-msgid "¡NECESITO UNA LLAVE!"
-msgstr "我需要钥匙！"
-
-#: scripts/partida.gd
-msgid "la tienda de %s"
-msgstr "%s的店"
-
-#: scripts/partida.gd
-msgid "Has cogido la tarjeta de acceso: abre %s"
-msgstr "你拿到了门禁卡：可以打开%s"
-
-#: scripts/partida.gd
-msgid "Has cogido la llave del %s"
-msgstr "你拿到了%s的钥匙"
+msgid "¡¡¡NECESITO UNA LLAVE!!!"
+msgstr "我需要钥匙！！！"
 
 #: scripts/partida.gd
 msgid "¡¡¡LA LLAVE!!!"
 msgstr "钥匙！！！"
 
 #: scripts/partida.gd
+msgid "Has cogido la llave del %s"
+msgstr "你拿到了%s的钥匙"
+
+#: scripts/partida.gd
 msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
 msgstr "保安吹响了哨子：援兵来了！"
-
-#: scripts/partida.gd
-msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería"
-msgstr "保安倒下了！他掉落了门禁卡和珠宝店的金卡"
-
-#: scripts/partida.gd
-msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
-msgstr "保安倒下了！他掉落了门禁卡"
 
 #: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
@@ -3699,8 +3671,8 @@ msgid "La recepcionista: la llave la lleva un durmiente de %s"
 msgstr "前台接待：钥匙在%s的某个沉睡者身上"
 
 #: scripts/supervivientes.gd
-msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
-msgstr "前台接待：门禁卡在持卡保安身上，他在走廊里巡逻"
+msgid "La recepcionista: la llave maestra la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "前台接待：万能钥匙在保安身上，他在走廊里巡逻"
 
 #: scripts/supervivientes.gd
 msgid "La recepcionista: las cifras del código están en %s"
@@ -5384,8 +5356,8 @@ msgid "Al llegar al centro comercial"
 msgstr "来到购物中心时"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con una tarjeta: la lleva el guardia de seguridad que hace la ronda."
-msgstr "首领房间要用门卡打开：卡在巡逻的保安身上。"
+msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva el guardia de seguridad que hace la ronda."
+msgstr "这层楼的门全都锁着：万能钥匙在巡逻的保安身上。"
 
 #: scripts/tutoriales.gd
 msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
@@ -5428,12 +5400,12 @@ msgid "Al entrar en la joyería"
 msgstr "进入珠宝店时"
 
 #: scripts/tutoriales.gd
-msgid "La cámara acorazada guarda un arma Épica. Se abre con la tarjeta dorada que lleva el guardia de seguridad."
-msgstr "金库里存着一件史诗武器。要用保安身上的金卡才能打开。"
+msgid "La cámara acorazada guarda un arma Épica. Se abre con la llave dorada que lleva el guardia de seguridad."
+msgstr "金库里存着一件史诗武器。要用保安身上的金钥匙才能打开。"
 
 #: scripts/tutoriales.gd
-msgid "Sin la tarjeta, ponte delante del lector dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
-msgstr "没有卡的话，站到读卡器前两次：警报响起，你得在珠宝店里撑到金库打开。"
+msgid "Sin la llave, ponte delante de la puerta dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
+msgstr "没有钥匙的话，站到门前两次：警报响起，你得在珠宝店里撑到金库打开。"
 
 #: scripts/tutoriales.gd
 msgid "Al llegar a Torre Velaria"
@@ -5770,12 +5742,12 @@ msgid "Efecto secundario"
 msgstr "副作用"
 
 #: scripts/ui/inventario.gd
-msgid "Tarjeta"
-msgstr "门禁卡"
-
-#: scripts/ui/inventario.gd
 msgid "Llave"
 msgstr "钥匙"
+
+#: scripts/ui/inventario.gd
+msgid "Maestra"
+msgstr "万能"
 
 #: scripts/ui/inventario.gd
 msgid "tirar"
@@ -7688,7 +7660,3 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
-
-#, sin-usar
-msgid "Mutación"
-msgstr "变异"

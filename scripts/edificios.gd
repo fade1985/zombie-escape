@@ -6,8 +6,9 @@
 #   generador         qué hay detrás de las puertas de cada planta: "apartamento" (apartamento.gd), "tienda" (tienda.gd) o
 #                     "departamento" (los de la torre: también en tienda.gd, los de su "edificio")
 #   sitios            cómo se llaman esos sitios en los avisos ("apartamentos", "tiendas")
-#   cerrojo           cómo se abre el sitio del jefe: "llave" (la lleva un zombi al azar de los otros sitios), "tarjeta" (la lleva
-#                     el guardia de seguridad, que ronda el pasillo: zombi_guardia.gd) o "codigo" (sus tres cifras, en tres
+#   cerrojo           cómo se abre el sitio del jefe: "llave" (la lleva un zombi al azar de los otros sitios), "maestra" (la llave
+#                     maestra, que lleva el guardia de seguridad que ronda el pasillo: zombi_guardia.gd; hasta cogerla, todas
+#                     las puertas del pasillo están cerradas y, con ella, todas abiertas) o "codigo" (sus tres cifras, en tres
 #                     ordenadores encendidos de los departamentos: terminal.gd)
 #   jefe, el_jefe     el zombi jefe de cada planta (una escena de partida.gd, ZOMBIS) y cómo se le nombra
 #   minijefes         los minijefes de las plantas (las de tiendas en el centro comercial), uno por planta desde la baja:
@@ -47,17 +48,17 @@ const LISTA := {
 	"centro": {
 		"nombre": "Centro comercial",
 		"el_nombre": "el Centro comercial",
-		"desc": "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta",
+		"desc": "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su llave maestra",
 		"generador": "tienda",
 		"sitios": "tiendas",
-		"cerrojo": "tarjeta",
+		"cerrojo": "maestra",
 		"jefe": "portera",          # donde le toque a un minijefe sin hacer (y en la azotea, mientras no esté el gerente)
 		"el_jefe": "la portera",
 		"minijefes": ["antidisturbios", "cocinero", "modista", "mascota"],
 		"azotea": true,
 		"final": "gerente",
 		"el_final": "el gerente",
-		"objetivo": "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso",
+		"objetivo": "limpia las tiendas y caza al guardia de seguridad: lleva la llave maestra",
 		"abre": "apartamentos",
 		"pasillo": "galeria",
 	},

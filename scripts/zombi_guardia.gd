@@ -1,4 +1,4 @@
-# El guardia de seguridad del centro comercial: lleva la tarjeta de acceso a la tienda del jefe y ronda por el
+# El guardia de seguridad del centro comercial: lleva la llave maestra de la planta (abre todas sus puertas) y ronda por el
 # pasillo de la planta. Hay que cazarlo, y no se deja:
 #   - Mientras no te ha visto, hace su ronda despacio, de una punta del pasillo a la otra.
 #   - Cuando te ve, toca el silbato (los refuerzos los saca la partida: señal "silbato") y huye hacia la punta

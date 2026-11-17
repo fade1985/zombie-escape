@@ -335,7 +335,7 @@ func probar_zombis_tienda() -> void:
 
 
 # Con "--captura --durmientes-planta": cuántos durmientes (zombis que no son jefes) trae cada planta de cada edificio al
-# generarse, con 8 semillas por planta (el guardia de la tarjeta, aparte). No cuenta los que llegan luego (la horda del
+# generarse, con 8 semillas por planta (el guardia de la llave maestra, aparte). No cuenta los que llegan luego (la horda del
 # rescate, los eventos, los que llama un jefe, los escoltas de la alarma). Para saber cuánto mutágeno da una partida
 func probar_durmientes_planta() -> void:
 	for ed in Edificios.LISTA:
@@ -745,7 +745,7 @@ func probar_volver_joyeria() -> void:
 	d.dorada = "guardia"
 	joyeria.soltar_dorada(mapa.punto_libre(johnny.position, 200.0))
 	await get_tree().process_frame
-	await ida_y_vuelta("Joyería, cerrada y con la tarjeta dorada en el suelo", 0)
+	await ida_y_vuelta("Joyería, cerrada y con la llave dorada en el suelo", 0)
 	joyeria.abrir("prueba")
 	await get_tree().create_timer(0.6).timeout
 	await ida_y_vuelta("Joyería, abierta y con su vitrina", 0)
@@ -2316,11 +2316,11 @@ func probar_ascensor() -> void:
 
 
 # Con "--captura --edificio centro --joyeria": la prueba de la cámara acorazada (joyeria.gd), con la joyería en la
-# planta baja. Johnny delante de la puerta blindada cerrada (captura-joyeria-camara.png); arrimarse al lector sin
-# tarjeta: el aviso y, a la segunda, la alarma con el cartel y los primeros zombis (captura-joyeria-alarma.png); la
+# planta baja. Johnny delante de la puerta blindada cerrada (captura-joyeria-camara.png); arrimarse a la cerradura sin
+# llave: el aviso y, a la segunda, la alarma con el cartel y los primeros zombis (captura-joyeria-alarma.png); la
 # cuenta adelantada hasta el final: la puerta se abre (captura-joyeria-abierta.png). Luego la otra manera: en el
-# pasillo cae el guardia y suelta las dos tarjetas (captura-joyeria-dorada.png), Johnny coge la dorada y, con la
-# cámara otra vez cerrada, el lector la abre sin alarma. Lo cuenta todo en la terminal
+# pasillo cae el guardia y suelta las dos llaves (captura-joyeria-dorada.png), Johnny coge la dorada y, con la
+# cámara otra vez cerrada, la cerradura la abre sin alarma. Lo cuenta todo en la terminal
 func probar_joyeria() -> void:
 	var d: Dictionary = planta.get("joyeria", {})
 	print("Joyería en la planta baja: %s · cámara: sala %d, puerta en (%d, %d) · dorada: %s" % [not d.is_empty(),
@@ -2382,19 +2382,19 @@ func probar_joyeria() -> void:
 		lanzables.cuantas("molotov"), aviso.text])
 	# la segunda apertura, más abajo, prepara otro premio
 	d.erase("premio")
-	# la otra manera: el guardia cae en el pasillo y suelta la tarjeta dorada junto a la suya
+	# la otra manera: el guardia cae en el pasillo y suelta la llave dorada junto a la maestra
 	await montar(0, 0, false)
 	print("Guardia en el pasillo: %s · dorada: %s" % [guardia != null, d.dorada])
 	johnny.position = guardia.position + Vector2(-120, 30)
 	guardia.recibir_golpe(9999, Vector2.ZERO)
 	await get_tree().create_timer(0.6, false).timeout
 	johnny.get_node("Camara").reset_smoothing()
-	print("Al caer: dorada %s en %s · en el suelo: tarjeta %s, dorada %s" % [d.dorada, d.suelo, mapa.cosas.has_node("Llave"), mapa.cosas.has_node("Dorada")])
+	print("Al caer: dorada %s en %s · en el suelo: llave %s, dorada %s" % [d.dorada, d.suelo, mapa.cosas.has_node("Llave"), mapa.cosas.has_node("Dorada")])
 	Captura.foto("captura-joyeria-dorada.png")
 	johnny.position = d.suelo.pos
 	await get_tree().create_timer(0.4, false).timeout
 	print("Cogida: dorada %s · dice «%s»" % [d.dorada, aviso.text])
-	# con la cámara otra vez cerrada, el lector la abre con la tarjeta y sin alarma
+	# con la cámara otra vez cerrada, la cerradura la abre con la llave dorada y sin alarma
 	d.abierta = false
 	d.puerta.merge({"cerrada": true, "abierta": false}, true)   # (su hueco también: mapa/puerta_bano.gd)
 	d.alarma = -1.0
@@ -2404,7 +2404,7 @@ func probar_joyeria() -> void:
 	johnny.position = centro + fuera * 52.0
 	joyeria.listo = true
 	joyeria.mirar_lector()
-	print("Con la tarjeta dorada: abierta %s · alarma %s · dorada %s · dice «%s»" % [d.abierta, joyeria.alarma(), d.dorada, aviso.text])
+	print("Con la llave dorada: abierta %s · alarma %s · dorada %s · dice «%s»" % [d.abierta, joyeria.alarma(), d.dorada, aviso.text])
 	print("Segundo premio: %s (esperado: un arma de la tienda que no llevas; manos %s, guardadas %s) · fajo $%d" % [d.premio.arma,
 		johnny.huecos, armas_guardadas, d.premio.fajo])
 	get_tree().quit()
@@ -2490,7 +2490,7 @@ func probar_dificultad() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --edificio centro --guardia" (M83): el guardia de la tarjeta, con Johnny quieto a la vista: cuenta los
+# Con "--captura --edificio centro --guardia" (M83): el guardia de la llave maestra, con Johnny quieto a la vista: cuenta los
 # silbatos y los refuerzos que llegan en ~14 s, y a qué velocidad huye y corren los refuerzos
 func probar_guardia() -> void:
 	await montar(0, 0, false)
@@ -2521,7 +2521,7 @@ func probar_guardia() -> void:
 	var vel: float = refuerzos[0].velocidad if not refuerzos.is_empty() else 0.0
 	print("Guardia en ~14 s: silbatos %d (esperado 3: al verte y cada 6 s) · refuerzos vivos %d (Johnny va matando) · velocidad de un refuerzo %.0f (esperado 165)" % [
 		silbatos[0], refuerzos.size(), vel])
-	# lo que sueltan (16 nov): los guardas que llama el guardia, nada; él, su mutágeno y billetes (y la tarjeta)
+	# lo que sueltan (16 nov): los guardas que llama el guardia, nada; él, su mutágeno y billetes (y la llave maestra)
 	var cosas := func() -> int:
 		return mapa.cosas.get_children().filter(func(c): return c.has_signal("cogido") and not c.is_queued_for_deletion()).size()
 	var n0: int = cosas.call()
@@ -2533,7 +2533,103 @@ func probar_guardia() -> void:
 	n0 = cosas.call()
 	guardia.recibir_golpe(99999, Vector2.ZERO)
 	await get_tree().create_timer(0.8, false).timeout
-	print("Guardia · el de la tarjeta, al caer, suelta %d cosas (esperado: 10, 5 dólares y 5 mutágenos; la tarjeta aparte)" % (cosas.call() - n0))
+	print("Guardia · el de la llave maestra, al caer, suelta %d cosas (esperado: 10, 5 dólares y 5 mutágenos; la llave aparte)" % (cosas.call() - n0))
+	get_tree().quit()
+
+
+# Con "--captura --edificio centro --maestra" (17 nov): la llave maestra del guardia. En el pasillo de la planta baja,
+# todas las puertas cerradas (tiendas, jefe y sala de mantenimiento): Johnny prueba cada una y no pasa, y el mapa con
+# sus candados (captura-maestra-antes.png); cae el guardia y suelta la llave (captura-maestra-suelo.png; y, solo para la
+# foto, la dorada de la joyería al lado: captura-maestra-dorada.png); Johnny la coge:
+# el grito y todas las puertas abiertas, con la calavera y el casco en el mapa (captura-maestra-cogida.png); el
+# inventario con «Maestra» (captura-maestra-inventario.png); entra en una tienda y en la sala del jefe, y la llave
+# sigue; el portal y la salida de incendios dicen lo de los Apartamentos; y en la planta de arriba ya no la tiene
+func probar_maestra() -> void:
+	await montar(0, 0, false)
+	johnny.vida = 100000
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != guardia:
+			z.queue_free()
+	var sitio: Dictionary = planta.sitios[0]
+	var cerradas := []
+	for i in sitio.salidas.size():
+		var s: Dictionary = sitio.salidas[i]
+		if s.tipo == "puerta":
+			cerradas.append("%s:%s(luz %s)" % [planta.sitios[s.a].tipo, s.cerrojo, "verde" if mapa.puertas[i].abierta else "roja"])
+	print("Maestra · antes: guardia vivo %s · puertas %s" % [planta.guardia.vivo, cerradas])
+	# Johnny prueba cada puerta: no pasa y dice la frase de los Apartamentos
+	for i in sitio.salidas.size():
+		if sitio.salidas[i].tipo == "puerta":
+			await cruzar(i)
+			print("Maestra · prueba la puerta %d: sigue en %s · lo dicho: %s" % [i, planta.sitios[aqui].nombre, avisos_dichos.keys()])
+	print("Maestra · frase: «%s» (esperado: la de los Apartamentos con ¡¡¡ !!!)" % falta_llave())
+	johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0 + 60)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5, false).timeout
+	Captura.foto("captura-maestra-antes.png")
+	# cae el guardia: la llave en el suelo, sin más aviso
+	guardia.global_position = johnny.position + Vector2(160, 0)
+	guardia.recibir_golpe(99999, Vector2.ZERO)
+	await get_tree().create_timer(0.8, false).timeout
+	johnny.get_node("Camara").reset_smoothing()
+	print("Maestra · al caer: llave en el suelo %s · tiene_llave %s · aviso «%s» (esperado: true, false y nada del guardia)" % [
+		mapa.cosas.has_node("Llave"), planta.tiene_llave, aviso.text if aviso.visible else ""])
+	Captura.foto("captura-maestra-suelo.png")
+	# (y la llave dorada de la joyería, al lado, con su luz dorada, solo para la foto: aquí no hay joyería)
+	mapa.poner_llave(planta.llave.pos + Vector2(44, 0), true)
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-maestra-dorada.png")
+	mapa.cosas.get_node("Dorada").free()
+	# la coge: el grito y todas las puertas abiertas
+	johnny.position = planta.llave.pos
+	await get_tree().create_timer(0.35, false).timeout
+	var abiertas := []
+	for i in sitio.salidas.size():
+		if sitio.salidas[i].tipo == "puerta":
+			abiertas.append(mapa.puertas[i].abierta)
+	print("Maestra · cogida: tiene_llave %s · luces verdes %s · aviso «%s» (esperado: true, todas, nada: solo el grito)" % [
+		planta.tiene_llave, abiertas, aviso.text if aviso.visible else ""])
+	Captura.foto("captura-maestra-cogida.png")
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-maestra-inventario.png")
+	inventario.cerrar()
+	# entra en una tienda y vuelve; luego en la sala del jefe: la llave no se gasta
+	for i in sitio.salidas.size():
+		var s: Dictionary = sitio.salidas[i]
+		if s.tipo == "puerta" and planta.sitios[s.a].tipo == "apartamento":
+			await cruzar(i)
+			print("Maestra · tienda: dentro de %s (esperado: la tienda)" % planta.sitios[aqui].nombre)
+			await montar(0, i, false)
+			break
+	for i in sitio.salidas.size():
+		var s: Dictionary = sitio.salidas[i]
+		if s.tipo == "puerta" and planta.sitios[s.a].tipo == "jefe":
+			await cruzar(i)
+			print("Maestra · jefe: dentro de %s · tiene_llave %s (esperado: la sala del jefe y true)" % [planta.sitios[aqui].nombre,
+				planta.tiene_llave])
+			for z in get_tree().get_nodes_in_group("zombis"):
+				z.queue_free()
+			await montar(0, i, false)
+			break
+	johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0 + 60)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4, false).timeout
+	Captura.foto("captura-maestra-despues.png")
+	# el portal y la salida de incendios
+	avisos_dichos.clear()
+	await cruzar(puerta_de_tipo("llegada"))
+	await cruzar(puerta_de_tipo("escaleras"))
+	print("Maestra · portal y salida de incendios: %s · frases «%s» y «%s»" % [avisos_dichos.keys(), Idioma.t("¡¡¡ESTÁ BLOQUEADO!!!"), falta_llave()])
+	# la planta de arriba: la llave se ha quedado abajo
+	planta.jefa_muerta = true
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	await cruzar(puerta_de_tipo("escaleras"))
+	await get_tree().create_timer(0.5, false).timeout
+	print("Maestra · planta %d: tiene_llave %s · guardia vivo %s · puertas %s (esperado: false, true y todas «maestra»/«llave»)" % [
+		planta.num, planta.tiene_llave, planta.guardia.vivo,
+		planta.sitios[0].salidas.filter(func(s): return s.tipo == "puerta").map(func(s): return s.cerrojo)])
 	get_tree().quit()
 
 

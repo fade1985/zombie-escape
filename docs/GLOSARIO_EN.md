@@ -100,7 +100,7 @@ son **adaptaciones**, no traducciones literales.
 | Mutaciones: Tentacular · Gastroenteritis · Insensible · Caníbal · Ansiedad · Endurecimiento · Locura · Flatulento | Tentacular · Gastroenteritis · Numb · Cannibal · Anxiety · Thick Skin · Madness · Flatulent |
 | Mutágeno (lo que suelta cada durmiente y paga los talentos (15 nov); en el marcador, una hélice de ADN en vez del «$») | Mutagen |
 | Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | Janitor · The Super · The Glutton · The Gymbro · The Fireman |
-| pasillo · cámara acorazada · tarjeta dorada | hallway · vault · gold card |
+| pasillo · cámara acorazada · llave dorada · llave maestra («Maestra» en la mochila) | hallway · vault · gold key · master key («Master») |
 | apertura de emergencia · cuadro eléctrico · palanca · cable (pelado) · horda | emergency override · electrical panel · lever · wire · horde |
 | las viviendas (en el juego, Trasteros desde el 16 nov) | storage rooms |
 
@@ -147,7 +147,7 @@ El mundo. Las plantas se nombran así para que valgan detrás de «the» y en mi
 | Neones: SUPER · FERRETERIA · ELECTRO · BURGER · MODA · FARMACIA · JOYAS | SUPER · HARDWARE · ELECTRO · BURGER · FASHION · PHARMACY · JEWELS |
 | Salas: Almacén · Cámara frigorífica · Taquillas · Probadores · Rebotica · Aseo · Trastienda · Cámara acorazada | Storeroom · Freezer · Lockers · Fitting rooms · Back room · Restroom · Stockroom · Vault |
 | TRASTEROS (cartel) | STORAGE |
-| Cerrada con llave · Cerrada: hace falta una tarjeta de acceso | Locked: you need the key · Locked: you need an access card |
+| Cerrada con llave | Locked: you need the key |
 
 ## Torre Velaria (repaso del 5 nov: los nombres como ya están en el juego)
 

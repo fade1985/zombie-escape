@@ -44,7 +44,7 @@ const ZOMBIS := {
 	"tentaculos": preload("res://escenas/personajes/zombi_tentaculos.tscn"),
 	"venenoso": preload("res://escenas/personajes/zombi_venenoso.tscn"),
 	"portera": preload("res://escenas/personajes/portera.tscn"),
-	"guardia": preload("res://escenas/personajes/zombi_guardia.tscn"),   # el de la tarjeta (centro comercial)
+	"guardia": preload("res://escenas/personajes/zombi_guardia.tscn"),   # el de la llave maestra (centro comercial)
 	"vigilante": preload("res://escenas/personajes/zombi_vigilante.tscn"),       # los del centro comercial
 	"dependienta": preload("res://escenas/personajes/zombi_dependienta.tscn"),
 	"oficinista": preload("res://escenas/personajes/zombi_oficinista.tscn"),   # los de Torre Velaria
@@ -83,7 +83,7 @@ const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
 const REFUERZOS := 4               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas). M83: antes 2
 const REFUERZOS_VELOCIDAD := 165.0 # y lo deprisa que corren (M83: antes 85, la de un vigilante normal)
-const BILLETES_GUARDIA := 5        # lo que suelta el guardia de la tarjeta además de la tarjeta (17 nov): 5 dólares...
+const BILLETES_GUARDIA := 5        # lo que suelta el guardia además de la llave maestra (17 nov): 5 dólares...
 const MUTAGENOS_GUARDIA := 5       # ...y 5 mutágenos (nada más: ya no el objeto suelto)
 # Los zombis aguantan más según el edificio (12 nov: con la pistola y la fregona se pasaba el juego entero), además de lo
 # de cada planta (ZOMBI_POR_PLANTA): los Apartamentos son los de siempre. Los jefes de planta, algo menos por edificio
@@ -603,7 +603,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		johnny.set_physics_process(false)
 		johnny.quedarse_quieto()
 	supervivientes.al_montar(idx, sitio)
-	joyeria.al_montar(idx, sitio, nuevo)   # la puerta blindada de la cámara acorazada, y la tarjeta dorada si está en el suelo
+	joyeria.al_montar(idx, sitio, nuevo)   # la puerta blindada de la cámara acorazada, y la llave dorada si está en el suelo
 	encuadrar(sitio)
 	johnny.get_node("Camara").reset_smoothing()
 	eventos.al_montar(idx, sitio, nuevo)   # (antes de la luz: el apagón la cambia)
@@ -688,7 +688,7 @@ func hacer_mapa(idx: int, sitio: Dictionary) -> void:
 	# primero en la escena (para hornear su navegación hace falta que esté dentro) y por debajo de la pantalla
 	add_child(mapa)
 	move_child(mapa, 0)
-	mapa.montar(sitio, llave, ed.cerrojo == "tarjeta")
+	mapa.montar(sitio, llave)
 	mapa.llave_cogida.connect(_al_coger_llave)
 	mapa.dorada_cogida.connect(joyeria.coger_dorada)
 	if mapa.ordenador:
@@ -786,7 +786,7 @@ func actualizar_puertas() -> void:
 	for i in mapa.puertas.size():
 		var salida: Dictionary = sitio.salidas[i]
 		var abierta: bool = salida.cerrojo == ""
-		if salida.cerrojo == "llave" and planta.tiene_llave:
+		if salida.cerrojo in ["llave", "maestra"] and planta.tiene_llave:
 			abierta = true
 		if salida.cerrojo == "jefa" and planta.jefa_muerta:
 			abierta = true
@@ -926,7 +926,7 @@ func cruzar(i: int) -> void:
 			if salida.tipo == "ascensor":
 				aviso_una_vez("ascensor_%d" % planta.num, Idioma.t("¡TENGO QUE REPARARLO!"))
 			elif salida.tipo == "llegada" and not sitio.get("azotea", false):
-				aviso_una_vez("portal", Idioma.t("¡ESTÁ BLOQUEADO!"))   # (el portal de la planta baja)
+				aviso_una_vez("portal", Idioma.t("¡¡¡ESTÁ BLOQUEADO!!!"))   # (el portal de la planta baja)
 			else:
 				decir(Planta.aviso_de(salida))   # (ya traducido)
 				Sonido.tocar("no")
@@ -939,14 +939,23 @@ func cruzar(i: int) -> void:
 			if not planta.tiene_llave:
 				aviso_una_vez("jefe_%d" % planta.num, falta_llave())
 				return
-			# La llave se gasta al abrir: la puerta queda abierta para siempre
-			planta.tiene_llave = false
-			planta.llave_usada = true
 			salida.cerrojo = ""
-			decir(Idioma.t("El informático joven se salta el teclado: la puerta se abre") if sin_codigo else
-				{"tarjeta": Idioma.t("Abres con la tarjeta de acceso"), "codigo": Idioma.t("Tecleas el código: la puerta se abre")}.get(
-				ed.cerrojo, Idioma.t("Abres con la llave")))
-			Sonido.tocar("compra")
+			# La llave maestra (centro comercial) no se gasta: abre todas las puertas de la planta, sin más avisos (al
+			# cambiar de planta se queda en la de antes: tiene_llave es de cada planta)
+			if ed.cerrojo != "maestra":
+				# La llave se gasta al abrir: la puerta queda abierta para siempre
+				planta.tiene_llave = false
+				planta.llave_usada = true
+				decir(Idioma.t("El informático joven se salta el teclado: la puerta se abre") if sin_codigo else
+					{"codigo": Idioma.t("Tecleas el código: la puerta se abre")}.get(
+					ed.cerrojo, Idioma.t("Abres con la llave")))
+				Sonido.tocar("compra")
+		"maestra":
+			# (centro comercial) las tiendas y la sala de mantenimiento, cerradas hasta coger la llave maestra del guardia:
+			# Johnny dice lo mismo que ante la puerta del jefe de los Apartamentos, una vez por puerta y planta
+			if not planta.tiene_llave:
+				aviso_una_vez("cerrada_%d_%d" % [planta.num, i], falta_llave())
+				return
 		"jefa":
 			if not planta.jefa_muerta:
 				aviso_una_vez("escaleras_%d" % planta.num, falta_llave())   # (la salida de incendios)
@@ -958,7 +967,7 @@ func cruzar(i: int) -> void:
 	await montar(salida.a, salida.vuelta)
 	if planta.sitios[aqui].tipo != "pasillo":
 		return
-	tutorial({"tarjeta": "centro", "codigo": "torre"}.get(ed.cerrojo, "apartamentos"))
+	tutorial({"maestra": "centro", "codigo": "torre"}.get(ed.cerrojo, "apartamentos"))
 	# (M123, 16 nov) al salir con la llave del jefe a la planta baja, donde está la sala de mantenimiento: que pase por ella
 	# antes de la pelea; y al salir de la sala sin ningún lanzable encima, que los lleve
 	if planta.tiene_llave and planta.num == 1:
@@ -1282,25 +1291,25 @@ func aviso_una_vez(clave: String, texto: String) -> void:
 	Sonido.tocar("no")
 
 
-# Lo que dice Johnny ante la puerta del jefe o la salida de incendios cerradas: le falta la llave (o la tarjeta, o el código)
+# Lo que dice Johnny ante la puerta del jefe o la salida de incendios cerradas: le falta la llave (o el código). En el
+# centro comercial, también ante las tiendas y la sala de mantenimiento, hasta coger la llave maestra
 func falta_llave() -> String:
-	return {"tarjeta": Idioma.t("¡NECESITO UNA TARJETA!"), "codigo": Idioma.t("¡NECESITO EL CÓDIGO!")}.get(
-		ed.cerrojo, Idioma.t("¡NECESITO UNA LLAVE!"))
+	return {"codigo": Idioma.t("¡¡¡NECESITO EL CÓDIGO!!!")}.get(ed.cerrojo, Idioma.t("¡¡¡NECESITO UNA LLAVE!!!"))
 
 
 func _al_coger_llave() -> void:
 	planta.tiene_llave = true
 	Sonido.tocar("compra")
-	if ed.cerrojo == "tarjeta":
-		var tienda: String = Edificios.MINIJEFES.get(planta.jefe, {}).get("la_tienda", "")
-		tienda = Idioma.t(tienda) if tienda != "" else Idioma.t("la tienda de %s") % Idioma.t(planta.el_jefe)
-		decir(Idioma.t("Has cogido la tarjeta de acceso: abre %s") % tienda, 3.0)
+	if ed.cerrojo == "maestra":
+		# la llave maestra: abre todas las puertas de la planta a la vez (sus luces se ponen verdes) y solo se grita
+		actualizar_puertas()
+		gran_aviso(Idioma.t("¡¡¡LA LLAVE!!!"))
 	else:
 		decir(Idioma.t("Has cogido la llave del %s") % nombre_jefa(), 3.0)
 		gran_aviso(Idioma.t("¡¡¡LA LLAVE!!!"))   # un grito grande encima de Johnny, para que se vea que la ha cogido
 
 
-# ── El guardia de seguridad (centro comercial): lleva la tarjeta y ronda el pasillo ──
+# ── El guardia de seguridad (centro comercial): lleva la llave maestra y ronda el pasillo ──
 
 # Lo saca en el pasillo, lejos de la puerta por la que llega Johnny, con la vida que le quedara
 func poner_guardia() -> void:
@@ -1336,21 +1345,20 @@ func _al_silbar() -> void:
 		if donde.distance_to(johnny.position) < 250.0:
 			donde.x = sitio.ancho - donde.x   # no encima de Johnny: por la otra punta
 		var refuerzo: Node2D = meter_zombi("vigilante", donde)
-		refuerzo.set_meta("llamado", true)   # (los guardas que llama el de la tarjeta no sueltan nada: lo mismo que los vecinos de un jefe)
+		refuerzo.set_meta("llamado", true)   # (los guardas que llama el guardia no sueltan nada: lo mismo que los vecinos de un jefe)
 		refuerzo.velocidad = REFUERZOS_VELOCIDAD * Alerta.velocidad()   # (con la mejora del VD-7, también: alerta.gd)
 		if refuerzo.get("agente") != null:
 			refuerzo.agente.max_speed = refuerzo.velocidad
 
 
-# Ha caído: suelta la tarjeta donde estaba (se queda en el suelo del pasillo hasta que Johnny la coja)
+# Ha caído: suelta la llave maestra donde estaba (se queda en el suelo del pasillo hasta que Johnny la coja), sin
+# más aviso: la llave brilla en el suelo
 func _al_caer_guardia(zombi: Node2D) -> void:
 	planta.guardia.vivo = false
 	planta.llave = {"sitio": aqui, "pos": zombi.position}
-	mapa.call_deferred("poner_llave", zombi.position, true)
-	# en la planta de la joyería lleva también la tarjeta dorada de su cámara acorazada (joyeria.gd)
-	var dorada := joyeria.soltar_dorada(zombi.position + Vector2(44, 0))
-	decir(Idioma.t("¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería") if dorada
-		else Idioma.t("¡El guardia ha caído! Ha soltado la tarjeta de acceso"), 3.0)
+	mapa.call_deferred("poner_llave", zombi.position)
+	# en la planta de la joyería lleva también la llave dorada de su cámara acorazada (joyeria.gd)
+	joyeria.soltar_dorada(zombi.position + Vector2(44, 0))
 
 
 # En los Apartamentos, el zombi que lleva la llave del apartamento de la jefa (planta.gd lo elige al azar entre los de

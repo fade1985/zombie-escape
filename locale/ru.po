@@ -571,12 +571,12 @@ msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra 
 msgstr "Все еще делает обход. Услышит свисток — прибежит с дубинкой наперевес."
 
 #: scripts/bestiario.gd
-msgid "El guardia de la tarjeta"
-msgstr "Охранник с картой"
+msgid "El guardia de la llave maestra"
+msgstr "Охранник с мастер-ключом"
 
 #: scripts/bestiario.gd
-msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
-msgstr "У него ключ-карта от этажа, и он это знает. Свистит, убегает и выдыхается: вот твой шанс."
+msgid "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
+msgstr "У него мастер-ключ от этажа, и он это знает. Свистит, убегает и выдыхается: вот твой шанс."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -895,16 +895,16 @@ msgid "el Centro comercial"
 msgstr "торговый центр"
 
 #: scripts/edificios.gd
-msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta"
-msgstr "Разграбленные магазины, темные склады и охранник, который не выпускает из рук свою карту"
+msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su llave maestra"
+msgstr "Разграбленные магазины, темные склады и охранник, который не выпускает из рук свой мастер-ключ"
 
 #: scripts/edificios.gd
 msgid "el gerente"
 msgstr "управляющий"
 
 #: scripts/edificios.gd
-msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
-msgstr "зачисти магазины и выследи охранника: у него ключ-карта"
+msgid "limpia las tiendas y caza al guardia de seguridad: lleva la llave maestra"
+msgstr "зачисти магазины и выследи охранника: у него мастер-ключ"
 
 #: scripts/edificios.gd scripts/tutoriales.gd
 msgid "Torre Velaria"
@@ -2088,16 +2088,16 @@ msgid "Apuntar libre"
 msgstr "Ручной прицел"
 
 #: scripts/joyeria.gd
-msgid "Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"
-msgstr "Ты взял золотую карту: она открывает хранилище ювелирного"
+msgid "¡¡¡LA LLAVE DORADA!!!"
+msgstr "ЗОЛОТОЙ КЛЮЧ!!!"
 
 #: scripts/joyeria.gd
 msgid "¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"
 msgstr "Щелк! Время вышло: хранилище открыто"
 
 #: scripts/joyeria.gd
-msgid "Abres la cámara acorazada con la tarjeta dorada"
-msgstr "Ты открываешь хранилище золотой картой"
+msgid "Abres la cámara acorazada con la llave dorada"
+msgstr "Ты открываешь хранилище золотым ключом"
 
 #: scripts/joyeria.gd
 msgid "Aguanta: la cámara se abre en %d segundo"
@@ -2107,8 +2107,8 @@ msgstr[1] "Держись: хранилище откроется через %d �
 msgstr[2] "Держись: хранилище откроется через %d секунд"
 
 #: scripts/joyeria.gd
-msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
-msgstr "Считыватель карт. Без золотой карты охранника остается только аварийное открытие: подойди еще раз, чтобы включить тревогу"
+msgid "Cerradura blindada. Sin la llave dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
+msgstr "Бронированный замок. Без золотого ключа охранника остается только аварийное открытие: подойди еще раз, чтобы включить тревогу"
 
 #: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
@@ -2702,10 +2702,6 @@ msgid "Apartamento en llamas"
 msgstr "Квартира в огне"
 
 #: scripts/mapa/planta.gd
-msgid "Cerrada: hace falta una tarjeta de acceso"
-msgstr "Заперто: нужна ключ-карта"
-
-#: scripts/mapa/planta.gd
 msgid "Cerrada: hace falta el código de tres cifras"
 msgstr "Заперто: нужен трёхзначный код"
 
@@ -3194,16 +3190,12 @@ msgid "¡TENGO QUE REPARARLO!"
 msgstr "НАДО ЕГО ПОЧИНИТЬ!"
 
 #: scripts/partida.gd
-msgid "¡ESTÁ BLOQUEADO!"
-msgstr "ЗАПЕРТО!"
+msgid "¡¡¡ESTÁ BLOQUEADO!!!"
+msgstr "ЗАПЕРТО!!!"
 
 #: scripts/partida.gd
 msgid "El informático joven se salta el teclado: la puerta se abre"
 msgstr "Юный айтишник обходит клавиатуру: дверь открывается"
-
-#: scripts/partida.gd
-msgid "Abres con la tarjeta de acceso"
-msgstr "Открываешь ключ-картой"
 
 #: scripts/partida.gd
 msgid "Tecleas el código: la puerta se abre"
@@ -3266,44 +3258,24 @@ msgid "¡Un helicóptero de Velaria viene a por ti!"
 msgstr "За тобой летит вертолет Velaria!"
 
 #: scripts/partida.gd
-msgid "¡NECESITO UNA TARJETA!"
-msgstr "НУЖНА КАРТА!"
+msgid "¡¡¡NECESITO EL CÓDIGO!!!"
+msgstr "НУЖЕН КОД!!!"
 
 #: scripts/partida.gd
-msgid "¡NECESITO EL CÓDIGO!"
-msgstr "НУЖЕН КОД!"
-
-#: scripts/partida.gd
-msgid "¡NECESITO UNA LLAVE!"
-msgstr "НУЖЕН КЛЮЧ!"
-
-#: scripts/partida.gd
-msgid "la tienda de %s"
-msgstr "магазин босса (%s)"
-
-#: scripts/partida.gd
-msgid "Has cogido la tarjeta de acceso: abre %s"
-msgstr "Ты взял ключ-карту: она открывает %s"
-
-#: scripts/partida.gd
-msgid "Has cogido la llave del %s"
-msgstr "Ты взял ключ от кв. %s"
+msgid "¡¡¡NECESITO UNA LLAVE!!!"
+msgstr "НУЖЕН КЛЮЧ!!!"
 
 #: scripts/partida.gd
 msgid "¡¡¡LA LLAVE!!!"
 msgstr "КЛЮЧ!!!"
 
 #: scripts/partida.gd
+msgid "Has cogido la llave del %s"
+msgstr "Ты взял ключ от кв. %s"
+
+#: scripts/partida.gd
 msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
 msgstr "Охранник засвистел: идет подкрепление!"
-
-#: scripts/partida.gd
-msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería"
-msgstr "Охранник повержен! Он выронил ключ-карту и золотую карту ювелирного"
-
-#: scripts/partida.gd
-msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
-msgstr "Охранник повержен! Он выронил ключ-карту"
 
 #: scripts/partida.gd
 msgid "¡Ha caído el durmiente de la llave! Ha soltado la llave del %s"
@@ -3715,8 +3687,8 @@ msgid "La recepcionista: la llave la lleva un durmiente de %s"
 msgstr "Администратор: ключ у спящего, %s"
 
 #: scripts/supervivientes.gd
-msgid "La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo"
-msgstr "Администратор: ключ-карта у охранника с картой, он ходит по коридору"
+msgid "La recepcionista: la llave maestra la lleva el guardia de seguridad, que ronda el pasillo"
+msgstr "Администратор: мастер-ключ у охранника, он ходит по коридору"
 
 #: scripts/supervivientes.gd
 msgid "La recepcionista: las cifras del código están en %s"
@@ -5400,8 +5372,8 @@ msgid "Al llegar al centro comercial"
 msgstr "Когда попадаешь в торговый центр"
 
 #: scripts/tutoriales.gd
-msgid "La sala del jefe se abre con una tarjeta: la lleva el guardia de seguridad que hace la ronda."
-msgstr "Комната босса открывается картой: она у охранника, который обходит этаж."
+msgid "Todas las puertas de la planta están cerradas: la llave maestra la lleva el guardia de seguridad que hace la ronda."
+msgstr "Все двери на этаже заперты: мастер-ключ у охранника, который обходит этаж."
 
 #: scripts/tutoriales.gd
 msgid "Si te ve, toca el silbato y llegan refuerzos. Corre mucho, pero se cansa: atrápalo cuando pare a respirar."
@@ -5444,12 +5416,12 @@ msgid "Al entrar en la joyería"
 msgstr "Когда входишь в ювелирный"
 
 #: scripts/tutoriales.gd
-msgid "La cámara acorazada guarda un arma Épica. Se abre con la tarjeta dorada que lleva el guardia de seguridad."
-msgstr "В хранилище лежит Эпическое оружие. Оно открывается золотой картой, которая есть у охранника."
+msgid "La cámara acorazada guarda un arma Épica. Se abre con la llave dorada que lleva el guardia de seguridad."
+msgstr "В хранилище лежит Эпическое оружие. Оно открывается золотым ключом, который есть у охранника."
 
 #: scripts/tutoriales.gd
-msgid "Sin la tarjeta, ponte delante del lector dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
-msgstr "Без карты встань перед считывателем два раза: сработает сигнализация, и придется держаться в ювелирном, пока оно не откроется."
+msgid "Sin la llave, ponte delante de la puerta dos veces: salta la alarma y tienes que aguantar dentro de la joyería hasta que se abra."
+msgstr "Без ключа встань перед дверью два раза: сработает сигнализация, и придется держаться в ювелирном, пока оно не откроется."
 
 #: scripts/tutoriales.gd
 msgid "Al llegar a Torre Velaria"
@@ -5788,12 +5760,12 @@ msgid "Efecto secundario"
 msgstr "Побочный эффект"
 
 #: scripts/ui/inventario.gd
-msgid "Tarjeta"
-msgstr "Карта"
-
-#: scripts/ui/inventario.gd
 msgid "Llave"
 msgstr "Ключ"
+
+#: scripts/ui/inventario.gd
+msgid "Maestra"
+msgstr "Мастер"
 
 #: scripts/ui/inventario.gd
 msgid "tirar"
@@ -7730,7 +7702,3 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
-
-#, sin-usar
-msgid "Mutación"
-msgstr "Мутация"

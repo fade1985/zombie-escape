@@ -61,7 +61,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 |---|---|
 | el vecino · la vecina · el arrastrado · el crío · el dinamitero | 邻居 · 女邻居 · 爬行者 · 熊孩子 · 自爆客 |
 | el de los tentáculos · el gordo | 触手怪 · 胖子 |
-| la dependienta · el vigilante · el guardia (de la tarjeta) · el maniquí | 店员 · 巡逻保安 · 持卡保安 · 假人模特 |
+| la dependienta · el vigilante · el guardia (de la llave maestra) · el maniquí | 店员 · 巡逻保安 · 持万能钥匙的保安 · 假人模特 |
 | durmiente · noctámbulo | 沉睡者 · 夜行者 |
 | sujeto(s) · Sujeto 0 | 受试者 · 0号受试者 (el Dr. Salas, en sus gritos: 实验品) |
 | horda | 尸潮 (y «一大波沉睡者») |
@@ -83,7 +83,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Neones: SUPER · FERRETERIA · ELECTRO · BURGER · MODA · FARMACIA · JOYAS | 超市 · 五金 · 电器 · 汉堡 · 时装 · 大药房 · 珠宝 |
 | Almacén · Cámara frigorífica · Taquillas · Probadores · Rebotica · Aseo · Trastienda · Cámara acorazada | 仓库 · 冷库 · 储物间 · 试衣间 · 配药间 · 厕所 · 库房 · 金库 |
 | cuadro eléctrico · palanca · barricada · valla | 配电箱 · 电闸 («Baja la palanca» = 拉下电闸) · 路障 · 围栏 |
-| tarjeta de acceso · tarjeta dorada · apertura de emergencia | 门禁卡 · 金卡 · 紧急开启 |
+| llave maestra («Maestra» en la mochila) · llave dorada · apertura de emergencia | 万能钥匙（「万能」） · 金钥匙 · 紧急开启 |
 
 ## Armas, munición, objetos
 

@@ -34,7 +34,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | Sicherheitsbüro · Großküche · Schneiderei · Spielwaren | |
 | los Apartamentos · el Centro comercial | das Mietshaus · das Einkaufszentrum | |
 | Durmientes: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Nachbar, Nachbarin, Kriecher, Bengel, Sprengmeister, Tentakeltyp, Dicke | |
-| dependienta · vigilante · guardia (de la tarjeta) · maniquí | Verkäuferin · Wachmann · Wächter (Kartenwächter) · Schaufensterpuppe | |
+| dependienta · vigilante · guardia (de la llave maestra) · maniquí | Verkäuferin · Wachmann · Wächter (Wächter mit dem Generalschlüssel) · Schaufensterpuppe | |
 | durmiente · noctámbulo · Sujeto 0 | Schläfer · Nachtschwärmer · Proband 0 | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Polizist · Soldat · Ärztin · Handwerker · Apothekerin · Techniker | |
 | Velaria Corp. · Torre Velaria · Velaria Noche · Turno infinito | Velaria Corp. · Velaria-Turm · Velaria Nacht · Endlosschicht | |
@@ -76,7 +76,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | vendas · botiquín | Verbände · Medikit |
 | apagón · alarma de incendios · horda | Stromausfall · Feueralarm · Horde |
 | cuadro eléctrico · palanca · cable pelado | Sicherungskasten · Hebel · blankes Kabel |
-| tarjeta de acceso · tarjeta dorada · cámara acorazada · apertura de emergencia | Zugangskarte · goldene Karte · Tresorraum · Notöffnung |
+| llave maestra («Maestra» en la mochila) · llave dorada · cámara acorazada · apertura de emergencia | Generalschlüssel («General») · goldener Schlüssel · Tresorraum · Notöffnung |
 | viviendas (el sitio de los rescatados: en el juego se llama Trasteros desde el 16 nov) | Keller |
 
 ## Armas y munición

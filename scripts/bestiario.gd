@@ -64,8 +64,8 @@ const LISTA := {
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-vigilante.tres",
 		"recorte": Rect2i(36, 33, 23, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	# el guardia comparte dibujo con el vigilante
-	"guardia": {"nombre": "El guardia de la tarjeta",
-		"frase": "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento.",
+	"guardia": {"nombre": "El guardia de la llave maestra",
+		"frase": "Lleva la llave maestra de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-vigilante.tres",
 		"recorte": Rect2i(36, 33, 23, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	# los de Torre Velaria (parte 4 del plan)

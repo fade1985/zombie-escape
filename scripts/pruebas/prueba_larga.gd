@@ -23,7 +23,7 @@ func contar_planta() -> void:
 			" ".join(salas), s.muebles.size(), tipos])
 	print("  pasillo: %d muebles | llave en %s" % [planta.sitios[0].muebles.size(),
 		planta.sitios[planta.llave.sitio].nombre if planta.llave.sitio >= 0
-		else "el guardia del pasillo" if ed.cerrojo == "tarjeta" else "un zombi al azar"])
+		else "el guardia del pasillo" if ed.cerrojo == "maestra" else "un zombi al azar"])
 
 
 func _process(delta: float) -> void:
@@ -164,7 +164,7 @@ func _process(delta: float) -> void:
 		montar(0, puerta_de_tipo("escaleras"), false)
 	if antes < 4.7 and tiempo >= 4.7:
 		cruzar(puerta_de_tipo("escaleras"))
-	# en el centro comercial, el guardia: Johnny se le acerca (silbato y refuerzos), foto, y cae con su tarjeta
+	# en el centro comercial, el guardia: Johnny se le acerca (silbato y refuerzos), foto, y cae con su llave maestra
 	if antes < 5.35 and tiempo >= 5.35 and guardia:
 		johnny.position = mapa.punto_libre(guardia.position, 0.0)
 		for i in 60:
@@ -180,10 +180,13 @@ func _process(delta: float) -> void:
 		guardia.recibir_golpe(99999, Vector2.ZERO)
 	if antes < 5.6 and tiempo >= 5.6:
 		if planta.has("guardia"):
-			print("Tarjeta: en el sitio %d, en %s | guardia vivo: %s" % [planta.llave.sitio, planta.llave.pos, planta.guardia.vivo])
+			print("Llave maestra: en el sitio %d, en %s | guardia vivo: %s" % [planta.llave.sitio, planta.llave.pos, planta.guardia.vivo])
 		print("Ahora en: ", planta.nombre, " (", planta.sitios.size() - 1, " puertas)")
 		Captura.foto("captura-pasillo.png")
-		# Johnny pisa la puerta A del pasillo, como si fuera andando
+		# Johnny pisa la puerta A del pasillo, como si fuera andando (en el centro comercial, con la llave maestra: si no,
+		# está cerrada)
+		if ed.cerrojo == "maestra":
+			planta.tiene_llave = true
 		johnny.position = mapa.puertas[0].position + Vector2(0, 20)
 	if antes < 6.6 and tiempo >= 6.6:
 		print("Tras pisar la puerta A: en %s (aviso: '%s')" % [planta.sitios[aqui].nombre, aviso.text])

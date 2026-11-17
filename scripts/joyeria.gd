@@ -1,9 +1,10 @@
 # La cámara acorazada de la joyería (parte 10 del centro comercial, trozo 2; docs/historial/CENTRO_COMERCIAL.md, «Decidido
 # con el dueño (22 oct 2026, para la parte 10)»). La joyería sale una vez por partida (planta.gd, joyeria_planta) y
-# su cámara, al fondo, tiene la puerta blindada cerrada (mapa/puerta_bano.gd con "acero") y un lector de tarjetas:
-# arrimarse a la puerta por el lado de la tienda. Se abre de dos maneras:
-#   - con la tarjeta dorada: la lleva el guardia de la planta junto a la suya y la suelta al caer (partida.gd,
-#     _al_caer_guardia → soltar_dorada); con ella, al arrimarse la puerta se abre sin ruido;
+# su cámara, al fondo, tiene la puerta blindada cerrada (mapa/puerta_bano.gd con "acero") y su cerradura: arrimarse
+# a la puerta por el lado de la tienda. Se abre de dos maneras:
+#   - con la llave dorada (hasta el 17 nov, una tarjeta dorada): la lleva el guardia de la planta junto a la llave
+#     maestra y la suelta al caer (partida.gd, _al_caer_guardia → soltar_dorada); con ella, al arrimarse la puerta se
+#     abre sin ruido;
 #   - sin ella, la apertura de emergencia: al arrimarse dos veces (la primera solo avisa), salta la alarma: sirena,
 #     una cuenta atrás de CUENTA segundos y zombis entrando por la entrada de la tienda y por las habitaciones, en
 #     grupos cada vez mayores. Hay que aguantar dentro de la joyería: si Johnny sale, la cuenta se para hasta que
@@ -40,7 +41,7 @@ var partida: Node
 var puerta: Node2D = null     # la puerta blindada montada (null si no estamos en la joyería o ya está abierta)
 var capa: Control             # la cuenta atrás, en la pantalla
 var listo := true             # hay que apartarse de la puerta antes de volver a usar el lector
-var avisado := false          # ya ha avisado de que sin tarjeta solo queda la apertura de emergencia
+var avisado := false          # ya ha avisado de que sin la llave dorada solo queda la apertura de emergencia
 var grupo_t := 0.0
 var sirena_t := 0.0
 var tiempo := 0.0
@@ -75,8 +76,8 @@ func alarma() -> bool:
 	return not d.is_empty() and d.alarma >= 0.0 and not d.abierta
 
 
-# Al montar un sitio: en la joyería, la puerta blindada (si sigue cerrada) y, si la tarjeta dorada se quedó en el
-# suelo de este sitio, la tarjeta
+# Al montar un sitio: en la joyería, la puerta blindada (si sigue cerrada) y, si la llave dorada se quedó en el
+# suelo de este sitio, la llave
 func al_montar(idx: int, _sitio: Dictionary, nuevo: bool) -> void:
 	var d := datos()
 	if d.is_empty():
@@ -90,11 +91,11 @@ func al_montar(idx: int, _sitio: Dictionary, nuevo: bool) -> void:
 		partida.mapa.cosas.add_child(puerta)
 		partida.mapa.rehornear()   # que los zombis no cuenten con pasar por ahí
 	if not nuevo:
-		return   # (la vitrina y la tarjeta del suelo ya están en el mapa guardado)
+		return   # (la vitrina y la llave del suelo ya están en el mapa guardado)
 	if idx == d.sitio and d.abierta and d.has("premio") and not d.premio.cogido:
 		poner_premio()   # la vitrina sigue dentro hasta que se coja
 	if d.dorada == "suelo" and d.suelo.sitio == idx:
-		partida.mapa.poner_llave(d.suelo.pos, true, true)
+		partida.mapa.poner_llave(d.suelo.pos, true)
 
 
 # Antes de cambiar de sitio: la puerta se queda en el mapa si ya está abierta y, si no, se quita, porque la vuelve a
@@ -105,14 +106,14 @@ func recoger() -> void:
 	puerta = null
 
 
-# El guardia ha caído en este sitio: suelta la tarjeta dorada al lado de la suya. Devuelve si la ha soltado
+# El guardia ha caído en este sitio: suelta la llave dorada al lado de la maestra. Devuelve si la ha soltado
 func soltar_dorada(pos: Vector2) -> bool:
 	var d := datos()
 	if d.is_empty() or d.dorada != "guardia":
 		return false
 	d.dorada = "suelo"
 	d.suelo = {"sitio": partida.aqui, "pos": pos}
-	partida.mapa.call_deferred("poner_llave", pos, true, true)
+	partida.mapa.call_deferred("poner_llave", pos, true)
 	return true
 
 
@@ -121,7 +122,7 @@ func coger_dorada() -> void:
 	d.dorada = "tengo"
 	d.suelo = {}
 	Sonido.tocar("compra")
-	partida.decir(Idioma.t("Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"), 3.0)
+	partida.gran_aviso(Idioma.t("¡¡¡LA LLAVE DORADA!!!"))   # (como «¡¡¡LA LLAVE!!!»: solo el grito)
 
 
 func _physics_process(delta: float) -> void:
@@ -154,7 +155,7 @@ func _physics_process(delta: float) -> void:
 		abrir(Idioma.t("¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"))
 
 
-# El lector de tarjetas: arrimarse a la puerta blindada por el lado de la tienda. Con la tarjeta dorada, abre; sin
+# La cerradura: arrimarse a la puerta blindada por el lado de la tienda. Con la llave dorada, abre; sin
 # ella, la primera vez avisa y la segunda (tras apartarse) dispara la apertura de emergencia
 func mirar_lector() -> void:
 	var d := datos()
@@ -169,13 +170,13 @@ func mirar_lector() -> void:
 	if d.dorada == "tengo":
 		d.dorada = "usada"
 		Sonido.tocar("compra")
-		abrir(Idioma.t("Abres la cámara acorazada con la tarjeta dorada"))
+		abrir(Idioma.t("Abres la cámara acorazada con la llave dorada"))
 	elif alarma():
 		partida.decir(Idioma.n("Aguanta: la cámara se abre en %d segundo", "Aguanta: la cámara se abre en %d segundos", ceili(d.alarma)) % ceili(d.alarma))
 	elif not avisado:
 		avisado = true
 		Sonido.tocar("no")
-		partida.decir(Idioma.t("Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"), 4.5)
+		partida.decir(Idioma.t("Cerradura blindada. Sin la llave dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"), 4.5)
 	else:
 		empezar_alarma()
 
@@ -191,7 +192,7 @@ func empezar_alarma() -> void:
 	partida.decir(Idioma.t("¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería") % roundi(CUENTA), 4.0)
 
 
-# La puerta blindada se abre (con la tarjeta o al acabar la cuenta): deja de chocar, los zombis ya pueden pasar,
+# La puerta blindada se abre (con la llave dorada o al acabar la cuenta): deja de chocar, los zombis ya pueden pasar,
 # dentro aparece el premio y cae el logro «Caja fuerte»
 func abrir(texto: String) -> void:
 	var d := datos()

@@ -578,7 +578,7 @@ func avisar_pista(espera: float) -> void:
 
 
 # Lo que abre la sala del jefe de esta planta y dónde está, ya traducido ("" si no hay nada que buscar): la llave (el
-# zombi que la lleva), el guardia de la tarjeta o los ordenadores con las cifras del código
+# zombi que la lleva), el guardia de la llave maestra o los ordenadores con las cifras del código
 func pista() -> String:
 	var planta: Dictionary = partida.planta
 	if planta.get("azotea", false) or planta.tiene_llave or planta.get("llave_usada", false):
@@ -590,9 +590,9 @@ func pista() -> String:
 			for sitio in planta.sitios:
 				if sitio.get("zombis", []).any(func(z): return z.get("llave", false)):
 					return Idioma.t("La recepcionista: la llave la lleva un durmiente de %s") % Planta.nombre_de_sitio(sitio)
-		"tarjeta":
+		"maestra":
 			if planta.get("guardia", {}).get("vivo", false):
-				return Idioma.t("La recepcionista: la tarjeta la lleva el guardia de seguridad, que ronda el pasillo")
+				return Idioma.t("La recepcionista: la llave maestra la lleva el guardia de seguridad, que ronda el pasillo")
 		"codigo":
 			var donde := []
 			for t in planta.get("codigo", {}).get("terminales", []):

@@ -712,7 +712,7 @@ func puerta_del_pasillo() -> Node2D:
 			sirve = s.tipo == "escaleras"
 		elif planta.tiene_llave and s.cerrojo == "llave":
 			sirve = true
-		elif s.tipo == "puerta" and s.cerrojo == "" and a >= 0:
+		elif s.tipo == "puerta" and (s.cerrojo == "" or (s.cerrojo == "maestra" and planta.tiene_llave)) and a >= 0:
 			var destino: Dictionary = planta.sitios[a]
 			sirve = not destino.get("limpio", false) and not destino.tipo in ["mantenimiento", "viviendas", "pasillo"]
 		if sirve:

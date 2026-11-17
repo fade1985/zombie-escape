@@ -46,6 +46,11 @@ MUEBLES = {
     # y el candado de los edificios cerrados, de acero gastado con óxido; el hueco del arco, que el fondo no alcanza
     # desde el borde, se vacía también (la semilla, en el medio del arco de la imagen de GPT)
     "icono_candado": ("assets/sources/candado-gpt.webp", "assets/ui/tarjeta-candado.png", 22, 32, False, (), [(640, 350)]),
+    # el mismo candado, para los iconos de 32x32 (17 nov: el único candado del juego; el minimapa, en las salas cerradas y
+    # la salida de incendios, y el árbol de talentos), y la calavera de la sala del jefe del centro comercial con la
+    # llave maestra cogida (minimapa.gd). Se centran en un lienzo de 32x32 al final de este archivo
+    "mapa_candado": ("assets/sources/candado-gpt.webp", "assets/ui/iconos/candado.png", 16, 23, False, (), [(640, 350)]),
+    "mapa_calavera": ("assets/sources/calavera-gpt.webp", "assets/ui/iconos/calavera.png", 18, 24, False),
     # el «!» de las novedades (M3, 9 nov): degradado de amarillo a naranja con contorno oscuro, sin globo. El grande,
     # encima de la mesa del ordenador y de la taquilla (mapa/exclamacion.gd); el pequeño, en los iconos del escritorio de
     # ConserjeOS y en los apartados de Logros (ui/ordenador.gd, ui/archivador_logros.gd)
@@ -363,8 +368,8 @@ if "fregona" in (sys.argv[1:] or ["fregona"]):
     lienzo.paste(pequena, (2, 2))
     lienzo.save("assets/ui/tienda/fregona.png")
 
-# los materiales y la comida, centrados en un lienzo de 32x32 (los iconos de los objetos son todos de 32x32: partida.soltar_objeto)
-for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith(("pieza_", "comida_"))]:
+# los materiales, la comida y los iconos del mapa, centrados en un lienzo de 32x32 (los iconos de los objetos son todos de 32x32: partida.soltar_objeto)
+for nombre in [n for n in (sys.argv[1:] or list(MUEBLES)) if n.startswith(("pieza_", "comida_", "mapa_"))]:
     ruta = MUEBLES[nombre][1]
     pequena = Image.open(ruta).convert("RGBA")
     lienzo = Image.new("RGBA", (32, 32), (0, 0, 0, 0))

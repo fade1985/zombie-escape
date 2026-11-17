@@ -54,7 +54,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Español | Portugués |
 |---|---|
 | el vecino · la vecina · el arrastrado · el crío · el dinamitero · el de los tentáculos · el gordo | o vizinho · a vizinha · o rastejante · o moleque · o dinamiteiro · o dos tentáculos · o gordo |
-| la dependienta · el vigilante · el guardia de la tarjeta · el maniquí | a vendedora · o segurança · o guarda do cartão · o manequim |
+| la dependienta · el vigilante · el guardia de la llave maestra · el maniquí | a vendedora · o segurança · o guarda da chave mestra · o manequim |
 | ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! |
 
 ## Supervivientes (sin artículo, con mayúscula)
@@ -98,7 +98,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | arrojables / lanzables | arremessáveis (los dos) · lanzar = arremessar |
 | materiales (cuerpo a cuerpo, a distancia, especial, arrojable) · materiales de fabricación (antes «piezas de mejora», 11 nov) | materiais (corpo a corpo, à distância, especial, arremessável) · materiais de fabricação |
 | perdigones · montón (de arrojables) · hueco / casilla | chumbinhos · pilha · espaço |
-| tarjeta de acceso · tarjeta dorada · llave · cámara acorazada · lector de tarjetas · apertura de emergencia | cartão de acesso · cartão dourado · chave · cofre · leitor de cartão · abertura de emergência |
+| llave maestra («Maestra» en la mochila) · llave dorada · llave · cámara acorazada · cerradura blindada · apertura de emergencia | chave mestra («Mestra») · chave dourada · chave · cofre · fechadura blindada · abertura de emergência |
 | desfibrilador · escudo | desfibrilador · escudo |
 
 ## Interfaz
@@ -176,7 +176,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Neones: SUPER · FERRETERIA · ELECTRO · BURGER · MODA · FARMACIA · JOYAS | SUPER · FERRAGENS · ELETRO · BURGER · MODA · FARMACIA (sin tilde, como el español) · JOIAS |
 | Salas: Almacén · Cámara frigorífica · Taquillas · Probadores · Rebotica · Aseo · Trastienda · Cámara acorazada | Estoque · Câmara fria · Armários · Provadores · Sala dos fundos · Banheiro · Depósito · Cofre |
 | TRASTEROS (cartel) | DEPÓSITOS |
-| Cerrada con llave · Cerrada: hace falta una tarjeta de acceso | Trancada: precisa da chave · Trancada: precisa de um cartão de acesso |
+| Cerrada con llave | Trancada: precisa da chave |
 | ¡Vienen por %s! (con «el salón», «la cocina»...) | Lá vêm eles! Olha %s! (así el artículo no choca con *por*) |
 
 ## Documentos (dosier)

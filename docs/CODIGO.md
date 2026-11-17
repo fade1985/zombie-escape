@@ -136,7 +136,7 @@ en una línea.
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
-  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye). Los guardas que trae su silbato (`partida._al_silbar`) llevan la marca `llamado`, como los vecinos que llama un jefe: al caer no sueltan nada (ni dólares, ni mutágeno, ni munición); solo suelta él, además de la tarjeta, 5 dólares y 5 mutágenos (`BILLETES_GUARDIA` y `MUTAGENOS_GUARDIA`; ya no un objeto suelto; `--captura --edificio centro --guardia`).
+  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la llave maestra: ronda, silbato, huye). Los guardas que trae su silbato (`partida._al_silbar`) llevan la marca `llamado`, como los vecinos que llama un jefe: al caer no sueltan nada (ni dólares, ni mutágeno, ni munición); solo suelta él, además de la llave maestra (y, en la planta de la Joyería, la llave dorada), 5 dólares y 5 mutágenos (`BILLETES_GUARDIA` y `MUTAGENOS_GUARDIA`; ya no un objeto suelto; `--captura --edificio centro --guardia`).
   Los de Torre Velaria: `zombi_oficinista.gd` (guarda las distancias y tira tazas y grapadoras, `bala_zombi.gd`) y
   `zombi_escolta.gd` (el chaleco para media bala de frente, con `Zombi.de_bala`, que pone `bala.gd`; el táser deja a Johnny
   tieso con el `"calambre"` de `estados.gd`, desde `dar_zarpazo`, que cualquier tipo puede cambiar). Salen en los
@@ -375,7 +375,7 @@ en una línea.
 - `persona.gd`: una persona dibujada con formas, para quien no tenga hoja de PixelLab.
 
 **Partida y progreso**
-- `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o tarjeta y su guardia, jefes, escaleras,
+- `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o llave maestra y su guardia, jefes, escaleras,
   ascensor, dinero, soltar objetos y munición, pausa, fin). Ningún zombi se queda donde no se le puede matar (10 nov):
   `meter_zombi` lleva al suelo más cercano (`mapa.suelo_cerca`) al que se pida dentro de un muro o fuera del mapa, y
   `rescatar_atascados` (la red de seguridad, en cada combate) devuelve al suelo al que lleve medio segundo con el centro

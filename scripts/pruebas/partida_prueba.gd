@@ -390,9 +390,12 @@
 #                       que ninguno se quede dando vueltas sobre sí mismo sin ir a por él    [prueba_sitios.gd]
 #   --cartel            L41: lo que pone arriba en el pasillo y en cada puerta de las plantas 1 y 2 (con --edificio centro:
 #                       el nombre de la tienda; torre: «Oficina N», de izquierda a derecha)   [prueba_sitios.gd]
-#   --guardia           (con --edificio centro) M83: el guardia de la tarjeta a la vista de Johnny: cuenta silbatos, refuerzos
+#   --guardia           (con --edificio centro) M83: el guardia de la llave maestra a la vista de Johnny: cuenta silbatos, refuerzos
 #                       y las velocidades de la huida y de los refuerzos          [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
+#   --maestra           (con --edificio centro) la llave maestra del guardia: las puertas del pasillo cerradas (y su
+#                       frase), la llave en el suelo, al cogerla todas abiertas, el mapa antes y después (candados,
+#                       calavera y casco), «Maestra» en el inventario y, en la planta de arriba, sin ella  [prueba_sitios.gd]
 #   --tiendas           (con --edificio centro) cada tienda de las cuatro primeras plantas, entera, también la del
 #                       minijefe                                                           [prueba_sitios.gd]
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o
@@ -1236,6 +1239,9 @@ func empezar_prueba() -> void:
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
+	elif "--maestra" in args:
+		set_process(false)   # sin la prueba larga
+		probar_maestra()
 	elif "--llave" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llave()

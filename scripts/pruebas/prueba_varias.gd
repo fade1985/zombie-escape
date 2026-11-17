@@ -263,7 +263,7 @@ func probar_alerta() -> void:
 	print("VD-7 · un botiquín cura %d (esperado: %d, como siempre) · los disparos se oyen a %.0f (esperado: %.0f)" % [
 		cura_de("botiquin"), Objetos.USABLES.botiquin.cura + johnny.stats.botiquin_extra, Zombi.OIDO, Zombi.OIDO])
 	# el guardia (centro) o el zombi de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
-	if ed.cerrojo == "tarjeta":
+	if ed.cerrojo == "maestra":
 		await montar(0, 0, false)
 		print("A5 · el guardia: vida %d" % guardia.vida_max)
 		johnny.position = guardia.position + Vector2(-160, 40)   # (que no se quede en la puerta, que la cruzaría)
@@ -328,7 +328,7 @@ func probar_alerta() -> void:
 					Captura.foto("captura-alerta-llave-inventario.png")
 					inventario.cerrar()
 					break
-	if ed.cerrojo == "tarjeta":
+	if ed.cerrojo == "maestra":
 		johnny.get_node("Camara").reset_smoothing()
 		await get_tree().create_timer(0.4, false).timeout
 		Captura.foto("captura-alerta-llave.png")

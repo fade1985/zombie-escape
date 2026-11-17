@@ -5,7 +5,8 @@
 # mantenimiento, las viviendas...), el plano de ese sitio (ver "El plano del sitio", abajo).
 # El plano de la planta: el pasillo en medio y, pegada a él (con el muro compartido y el hueco de la puerta), una sala
 # por cada puerta (arriba y abajo, todas del mismo tamaño), la llegada a la izquierda y las escaleras a la derecha. Gris = sin visitar (con un «?»), rojo = con zombis dentro, claro = limpio; Johnny, un círculo
-# rojo (en el pasillo, donde está). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
+# rojo (en el pasillo, donde está). En el centro comercial, mientras no se coge la llave maestra del guardia, todas las
+# salas llevan un candado y, con ella, la del jefe una calavera; la sala de mantenimiento, un casco. El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, solo un "!" en medio
 # (supervivientes.gd). Y en medio de cada apartamento, lo que te has dejado en él: la llave, la página del dosier, la
 # noticia de la tele encendida o el superviviente sin rescatar (una carita).
@@ -40,11 +41,12 @@ const PASILLO := Color("#9c9480")   # el suelo del pasillo de la planta
 const PASO := Color("#a39a84")      # los huecos de las puertas de dentro
 const ICONOS := {
 	"puerta": preload("res://assets/ui/iconos/puerta.png"),
-	"herramientas": preload("res://assets/ui/iconos/herramientas.png"),
+	"casco": preload("res://assets/ui/iconos/casco.png"),   # la sala de mantenimiento (17 nov: antes, la caja de herramientas)
 	"candado": preload("res://assets/ui/iconos/candado.png"),
 	"llave": preload("res://assets/ui/iconos/llave.png"),
 	"escalera": preload("res://assets/ui/iconos/escalera.png"),
 	"jefe": preload("res://assets/ui/iconos/jefe.png"),
+	"calavera": preload("res://assets/ui/iconos/calavera.png"),   # la sala del jefe del centro comercial, con la llave maestra
 	# lo que te has dejado en un apartamento: la página del dosier, la noticia de la tele y el superviviente sin rescatar
 	"dosier": preload("res://assets/ui/iconos/dosier.png"),
 	"tele": preload("res://assets/ui/iconos/noticias.png"),
@@ -117,12 +119,15 @@ func casillas() -> Array:
 				var sitio: Dictionary = planta.sitios[s.a]
 				var color := GRIS if not sitio.visitado else CLARO if sitio.limpio else ROJO
 				var icono := ""
-				if s.cerrojo == "llave":
+				# (en el centro comercial, hasta coger la llave maestra del guardia, las cuatro salas con candado; con ella,
+				# la del jefe con una calavera)
+				var maestra: bool = partida.ed.cerrojo == "maestra"
+				if s.cerrojo in ["llave", "maestra"] and not (maestra and planta.tiene_llave):
 					icono = "candado"
 				elif sitio.tipo == "mantenimiento":
-					icono = "herramientas"
+					icono = "casco"
 				elif sitio.tipo == "jefe":
-					icono = "jefe"
+					icono = "calavera" if maestra else "jefe"
 				# lo que te has dejado en él (en medio de su cuadrado; si son dos, uno al lado del otro). Donde está encerrado el
 				# superviviente, solo su «!» (sin el «?»)
 				var dejado := []
@@ -358,7 +363,7 @@ func dibujar_sitio(fondo: Rect2) -> void:
 # Lo que se marca dentro del sitio, cada cosa con su icono, su habitación ("zona") y el punto donde va el icono (en
 # unidades del mapa): el centro de su habitación, que solo se avisa de que ahí hay algo, no de dónde está. Solo si esa
 # habitación ya se ha visto y mientras no la hayas cogido o visto:
-#   llave   la llave (o la tarjeta dorada) en el suelo
+#   llave   la llave (o la llave dorada) en el suelo
 #   tele    la tele del salón encendida, con su noticia sin ver
 #   dosier  el científico muerto con la página del dosier sin coger
 #   !       el superviviente encerrado (este sale aunque no se haya visto su habitación: se le oye gritar)
@@ -376,7 +381,7 @@ func cosas_del_sitio(sitio: Dictionary, mapa: Node) -> Array:
 			if sala.id == zona:
 				pos = (Vector2(sala.c0, sala.f0) + Vector2(sala.ancho, sala.fondo) / 2.0) * CASILLA
 		lista.append({"nombre": nombre, "pos": pos, "zona": zona})
-	for nombre in ["Llave", "Dorada"]:
+	for nombre in ["Llave", "Dorada"]:   # no-tr (los nombres de sus nodos)
 		var llave: Node2D = mapa.cosas.get_node_or_null(nombre) if mapa.cosas else null
 		if llave:
 			poner.call("llave", llave.position)
