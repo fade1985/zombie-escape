@@ -69,14 +69,14 @@ CORRE = False
 LIENZO_ANDAR = {"rapido": 64, "lento": 64}
 # El tamaño, si no es el de la referencia: el arrastrado, al 80 % (9 nov: tendido en el suelo medía casi lo que el vecino
 # de pie y, a su lado, se veía demasiado grande). Las animaciones se miden por el dibujo quieto, así que lo siguen solas
-TAMANO = {"lento": 0.8, "policia": 1.07, "guardia": 0.87, "vigilante": 0.93, "vigilante-mujer": 0.79}
+TAMANO = {"lento": 0.8, "policia": 1.07, "guardia": 0.87, "vigilante": 0.97, "vigilante-mujer": 0.82}
 # El jefe de seguridad, al 87 % (17 nov): GPT lo dibujó más grande que al vecino y, a escala normal, medía 53 de alto y no
 # cabía en el lienzo de 48 (se le cortaba la gorra); así mide 46, como el vecino, pero más ancho de hombros
-# Y el personal de seguridad (17 nov), por lo mismo: él, a escala normal, mediría 48 (tocaba el borde) y ella 56; así,
-# él 45, como el vecino, y ella 44, algo más baja
+# Y el personal de seguridad (17 nov): tan corpulentos como el jefe, que si no parecían enanos al lado de Johnny (lo pidió
+# el dueño): de alto, 47 como el jefe (a escala normal él mediría 48 y ella 56), y de ancho, ensanchados (ESTIRO)
 # Y el ensanchado (10 nov): el policía de GPT salía más estrecho que Johnny (24 de ancho contra 28 y 12 de perfil contra 16) y
 # se veía enclenque; se le ensancha un 20 % al reducir (todo, también la gorra y los brazos), y de alto, un 7 %
-ESTIRO = {"policia": 1.2}
+ESTIRO = {"policia": 1.2, "vigilante": 1.2, "vigilante-mujer": 1.22}
 # Y la piel gris (17 nov): en el rugido del jefe de seguridad GPT le dio la piel casi gris, y al pasar del dibujo quieto
 # a rugir cambiaba de color; a esas hojas se les devuelve el verde (verdear)
 PIEL_GRIS = {"guardia": ["rugir"]}
