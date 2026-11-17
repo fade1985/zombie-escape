@@ -984,6 +984,7 @@ func probar_puerta_super() -> void:
 	Temblor.desplazamiento = puerta.position + Vector2(0, 40) - johnny.position
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.6).timeout
+	print("Puerta en pantalla (píxeles de la foto): ", puerta.get_global_transform_with_canvas().origin)
 	Captura.foto("captura-puerta-super-fachada.png")
 	camara.zoom = Vector2(3, 3)
 	var delante := puerta.position + Vector2(0, 80)
