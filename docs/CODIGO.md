@@ -1063,7 +1063,7 @@ en una línea.
   `assets/sources/centro/letrero-electronica-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-electronica` (97x19, y el apagado) y
   `py tools/letrero_halo.py electronica`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea azul).
 - **La puerta del restaurante** (17 nov, el dueño): doble, de cristal sin marco, con pinzas de acero en las esquinas y dos barras largas en el medio (de GPT,
-  `assets/sources/centro/puerta-restaurante-gpt.webp`; `muebles_gpt.py puerta_restaurante`, 36x43; `puerta.gd`, `RESTAURANTE`). Fija, no se abre sola.
+  `assets/sources/centro/puerta-restaurante-gpt.webp`; `muebles_gpt.py puerta_restaurante`, 36x43; `puerta.gd`, `RESTAURANTE`). Fija, no se abre sola. La tienda de ropa lleva la misma (17 nov, el dueño).
 - **Los escaparates del restaurante** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py restaurante`) con un neón de GPT dentro, detrás
   del cristal: una hamburguesa (pan amarillo, lechuga verde, carne roja) a la izquierda y un trozo de pizza a la derecha (`neones_galeria.py
   restaurante-hamburguesa restaurante-pizza`; `mapa.ESCAPARATES_NEON`).

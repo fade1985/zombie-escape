@@ -265,7 +265,7 @@ func _draw() -> void:
 			if centro and salida.get("neon", "") == "ferreteria":
 				draw_texture_rect(FERRETERIA, Rect2(-30, -86, 60, 86), false)
 				return
-			if centro and salida.get("neon", "") == "restaurante":
+			if centro and salida.get("neon", "") in ["restaurante", "ropa"]:   # (la de la ropa, la misma: el dueño, 17 nov)
 				draw_texture_rect(RESTAURANTE, Rect2(-36, -86, 72, 86), false)
 				return
 			if centro and salida.get("neon", "") == "electronica":
