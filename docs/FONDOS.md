@@ -66,6 +66,13 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
   arañazos y manchas granate pequeñas. Sin alfombra (`PASILLOS` en `mapa.gd`). Originales en `assets/sources/suelos/pasillo-suelo-gpt.webp`
   y `pasillo-pared-gpt.webp`; se pasan con `py tools/portal_gpt.py`. Prompts: vista cenital pura o pared de frente, cuadrícula exacta
   de baldosas, sin costuras, y «manchas granate como óxido seco» (GPT rechaza la palabra sangre). Se mira con `--captura --pasillo`.
+- **Galería del centro comercial, desde el 17 nov (pendiente de visto bueno):** un centro comercial de los 80 abandonado, hecho
+  con GPT a partir de una foto del dueño: baldosa pequeña en tonos pastel (gris, crema, lila, malva, rosa y morado) en franjas
+  diagonales (16 × 16 baldosas de 8, `suelo-galeria`, 128 × 128, oscurecido un 20 %) y pared lisa rosa malva en 8 paneles con
+  moldura cromada arriba y rodapié morado (`pared-galeria`, 152 × 48: paneles de 18 + 1 de junta; `techo-galeria`, canto malva).
+  Sin neones ni sangre en las texturas (irán sueltos). Originales en `assets/sources/suelos/galeria-suelo-gpt.webp` y
+  `galeria-pared-gpt.webp`; se pasan con `py tools/galeria_gpt.py`, que reduce cada baldosa y panel por dentro y pinta las juntas
+  de un píxel. Se mira con `--captura --edificio centro --galeria`.
 - Pasillo (17 oct, con visto bueno; **ya no se usa**, sustituido el 8 nov): **moqueta** burdeos y mostaza con octógonos y una **alfombra** roja de borde
   mostaza en medio. El dueño las genera realistas y las pixela con tezumie.github.io (tamaño de píxel 4, con su
   paleta). Originales en `assets/sources/suelos/pasillo-moqueta.png` y `pasillo-alfombra.png`.
