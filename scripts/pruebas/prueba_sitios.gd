@@ -2536,6 +2536,24 @@ func probar_guardia() -> void:
 	var suyos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia)
 	print("Guardia · llegan %d guardias (esperado %d en la planta %d) · todos marcados «llamado»: %s" % [suyos.size(),
 		guardias_del_rugido(), planta.num, suyos.all(func(r): return r.has_meta("llamado"))])
+	# (los vigilantes salen, al azar, de hombre o de mujer: los dos dibujos de GPT)
+	var dibujos := {}
+	for r in suyos:
+		var hoja: String = r.sprite.sprite_frames.resource_path.get_file()
+		dibujos[hoja] = dibujos.get(hoja, 0) + 1
+	print("Guardia · sus guardias, por dibujo: %s (esperado: zombi-vigilante.tres y zombi-vigilante-mujer.tres, más o menos mitad y mitad)" % dibujos)
+	# (foto con uno de cada, quietos a la derecha de Johnny, en la luz: captura-guardia-vigilantes.png)
+	var el: Array = suyos.filter(func(r): return r.sprite.sprite_frames.resource_path.get_file() == "zombi-vigilante.tres")
+	var ella: Array = suyos.filter(func(r): return r.sprite.sprite_frames.resource_path.get_file() == "zombi-vigilante-mujer.tres")
+	if el and ella:
+		for k in 2:
+			var r: Node2D = [el[0], ella[0]][k]
+			r.set_physics_process(false)
+			r.global_position = johnny.position + Vector2(70 + 60 * k, 0)
+		await get_tree().create_timer(0.1, false).timeout
+		Captura.foto("captura-guardia-vigilantes.png")
+		el[0].set_physics_process(true)
+		ella[0].set_physics_process(true)
 	print("Guardia · cuántos llama en cada planta (baja, 1ª, 2ª, 3ª): %s (esperado: 4, 6, 8, 10)" % [range(1, 5).map(func(n):
 		var antes: int = planta.num
 		planta.num = n

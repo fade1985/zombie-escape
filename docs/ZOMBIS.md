@@ -181,7 +181,8 @@ Hechos ya en Godot con la receta del JS (herramientas copiadas en `tools/`: `pie
 andar de 12 fotogramas, ataque y golpe de 8 (partida y final iguales), muerte de 12. Todo en `assets/pixellab.json`
 → `centro-comercial-parte4` (ids, grupos, textos y coste).
 
-- **Vigilante** (`zombi-vigilante`, fuente `vigilante-48`): gorra, uniforme azul marino, porra y radio. El ataque es
+- **Vigilante** (desde el 17 nov ya no se usa: los vigilantes son los de GPT, ver `docs/CODIGO.md`; la fuente
+  `vigilante-48` se queda) era: gorra, uniforme azul marino, porra y radio. El ataque es
   un porrazo: saca la porra de la cintura, la levanta y la baja de golpe. Su dibujo quieto ya traía sangre roja viva:
   se oscurece en toda la hoja (`"sangre_en_todo": true` en su `zombi.json`). También es el dibujo del guardia de la
   tarjeta.

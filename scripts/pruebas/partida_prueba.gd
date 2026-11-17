@@ -398,7 +398,8 @@
 #   --cartel            L41: lo que pone arriba en el pasillo y en cada puerta de las plantas 1 y 2 (con --edificio centro:
 #                       el nombre de la tienda; torre: «Oficina N», de izquierda a derecha)   [prueba_sitios.gd]
 #   --guardia           (con --edificio centro) el guardia de la llave maestra: de cerca, su rugido (una vez, «¡¡¡GRRR!!!»
-#                       en rojo), sus guardias (4 + 2 por planta), la persecución y lo que sueltan  [prueba_sitios.gd]
+#                       en rojo), sus guardias (4 + 2 por planta, hombre o mujer al azar), la persecución y lo que
+#                       sueltan  [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
 #   --maestra           (con --edificio centro) la llave maestra del guardia: las puertas del pasillo cerradas (y su
 #                       frase), la llave en el suelo, al cogerla todas abiertas, el mapa antes y después (candados,

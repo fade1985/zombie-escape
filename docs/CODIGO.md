@@ -1153,6 +1153,16 @@ en una línea.
   `zombi.py zombi-guardia-gpt-48 zombi-guardia` y `hacer_frames.py assets/sprites/zombi-guardia`. Al 87 % (`TAMANO`:
   GPT lo dibujó más grande y no cabía en 48), anda a 8 fotogramas por segundo y, huyendo, su andar va a ×2,4
   (`PASO_HUYENDO`), para que no patine. La ropa, gris marengo y no negra, para que el fondo negro no se la coma.
+- **Los vigilantes con GPT (17 nov):** un hombre y una mujer con chaleco amarillo fosforito, en vez del vigilante de
+  PixelLab: `--zombi vigilante` y `--zombi vigilante-mujer` (carpetas `zombi-vigilante-gpt` y `zombi-vigilante-mujer-gpt`,
+  cada una con su `personaje.webp` y sus textos en `textos-gpt.md`) → `zombi.py ... zombi-vigilante` y
+  `zombi-vigilante-mujer` (con el `zombi.json` del jefe de seguridad). Tan corpulentos como él (`TAMANO` 0,97 y 0,82,
+  `ESTIRO` 1,2 y 1,22) para no parecer enanos al lado de Johnny. `zombi_vigilante.tscn` lleva las dos hojas en `ropas`:
+  cada vigilante que sale (patrullas, joyería, el rugido del jefe, «¡A TRABAJAR!», refuerzos) es hombre o mujer al azar,
+  mitad y mitad, con los mismos números. Lo aprendido: la frase de la piel verde en cada texto (si no, GPT la pinta gris)
+  y, en las muertes, «cae hacia donde mira y la cabeza queda en ese lado» (una salió tumbada al revés en los últimos
+  fotogramas y se giró en espejo en su hoja). `--guardia` cuenta los dibujos de sus guardias y saca
+  `captura-guardia-vigilantes.png` con uno de cada.
 - **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
   casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
   mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus
