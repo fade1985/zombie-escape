@@ -75,6 +75,8 @@ const MUEBLES := {
 	"plant":      {"len": 40,  "dep": 36,  "paredes": "todas", "archivo": "comun/planta"},
 	# la del pasillo de los Apartamentos, de GPT (tools/muebles_gpt.py): un ficus mustio en su maceta de barro
 	"plantapasillo": {"len": 48, "dep": 36, "paredes": "todas", "archivo": "planta-pasillo-gpt"},
+	# la de la galería del centro comercial, de GPT (tools/muebles_gpt.py): una palmera en su maceta alta de piedra blanca
+	"palmera":    {"len": 84,  "dep": 36,  "paredes": "todas", "archivo": "palmera-gpt"},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -1000,7 +1002,12 @@ const SALAS := {
 		# su sitio se deja libre siempre. En el centro, nada: por ahí se va de una punta a la otra
 		# (17 nov: el dueño la está rehaciendo y la ha dejado vacía, solo con las entradas de las tiendas; antes llevaba
 		# plantas, bancos y maniquíes)
-		"colocados": {"abajo": []},
+		# (17 nov: las palmeras: arriba, en la punta de la izquierda y en la 46,6, entre el escaparate y el cartel de salida, que
+		# está siempre arriba a la derecha; abajo, en cuatro sitios lejos de las puertas)
+		"colocados": {"abajo": [
+			["palmera", 1.0], ["palmera", 46.6],
+			["palmera", 1.0, "abajo"], ["palmera", 19.0, "abajo"], ["palmera", 33.0, "abajo"], ["palmera", 51.0, "abajo"],
+		]},
 	},
 	# Los pasillos de Torre Velaria (tercer edificio), puestos a mano como la galería (mismas casillas: las puertas de los
 	# departamentos, en la 12 y la 40; el ascensor, en la 26, con su cartel a la izquierda, en la 22-24): el distribuidor de

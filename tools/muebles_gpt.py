@@ -308,6 +308,9 @@ MUEBLES = {
     "toallero": ("assets/sources/toallero-gpt.webp", "assets/sprites/toallero.png", 22, 24, False),
     "toalla_gancho": ("assets/sources/toalla-gancho-gpt.webp", "assets/sprites/toalla-gancho.png", 16, 28, False),
     "balda_bano": ("assets/sources/balda-bano-gpt.webp", "assets/sprites/balda-bano.png", 28, 24, False),
+    # la palmera de la galería del centro comercial (17 nov, catalogo.gd: "palmera"): una areca en su maceta alta de piedra
+    # blanca con motas; algo más alta que Johnny (48)
+    "palmera": ("assets/sources/palmera-gpt.webp", "assets/sprites/mueble-palmera.png", 42, 65, True),
 }
 
 
