@@ -2729,9 +2729,37 @@ msgstr "Jetzt gibt es kein Zurück mehr"
 msgid "Laboratorio"
 msgstr "Labor"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Wartung"
+
+#: scripts/mapa/tienda.gd
+msgid "Un supermercado"
+msgstr "Ein Supermarkt"
+
+#: scripts/mapa/tienda.gd
+msgid "Una ferretería"
+msgstr "Ein Baumarkt"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de electrónica"
+msgstr "Ein Elektronikladen"
+
+#: scripts/mapa/tienda.gd
+msgid "Un restaurante"
+msgstr "Ein Restaurant"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de ropa"
+msgstr "Eine Boutique"
+
+#: scripts/mapa/tienda.gd
+msgid "Una farmacia"
+msgstr "Eine Apotheke"
+
+#: scripts/mapa/tienda.gd
+msgid "Una joyería"
+msgstr "Ein Juwelier"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

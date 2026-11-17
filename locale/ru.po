@@ -2733,9 +2733,37 @@ msgstr "Пути назад нет"
 msgid "Laboratorio"
 msgstr "Лаборатория"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Дворницкая"
+
+#: scripts/mapa/tienda.gd
+msgid "Un supermercado"
+msgstr "Супермаркет"
+
+#: scripts/mapa/tienda.gd
+msgid "Una ferretería"
+msgstr "Хозтовары"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de electrónica"
+msgstr "Магазин электроники"
+
+#: scripts/mapa/tienda.gd
+msgid "Un restaurante"
+msgstr "Ресторан"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de ropa"
+msgstr "Магазин одежды"
+
+#: scripts/mapa/tienda.gd
+msgid "Una farmacia"
+msgstr "Аптека"
+
+#: scripts/mapa/tienda.gd
+msgid "Una joyería"
+msgstr "Ювелирный магазин"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

@@ -942,6 +942,26 @@ func probar_galeria() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --edificio centro --tienda-cerca" (17 nov): Johnny llega delante de cada puerta de tienda de la pared de
+# abajo de la galería de la planta baja y dice qué tienda es encima de la cabeza (partida.decir_tienda); una foto por puerta
+# (captura-tienda-cerca-<tipo>.png). Luego se cierra
+func probar_tienda_cerca() -> void:
+	await montar(0, 0, false)
+	var pasillo: Dictionary = planta.sitios[0]
+	for puerta in mapa.puertas:
+		if puerta.salida.dir != "abajo" or puerta.salida.get("tipo", "") != "puerta":
+			continue
+		johnny.position = Vector2(pasillo.ancho / 2.0, pasillo.alto / 2.0 - 40)   # lejos, en medio
+		await get_tree().create_timer(0.3).timeout
+		johnny.position = puerta.position + Vector2(0, -70)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.35).timeout   # (el grito sube y se apaga en 1,4 s: a medio subir)
+		var tipo: String = planta.sitios[puerta.salida.a].get("tienda", "")
+		print("Puerta de abajo en la casilla %d: %s · dice «%s»" % [puerta.salida.en / Planta.CASILLA, tipo, aviso.text])
+		Captura.foto("captura-tienda-cerca-%s.png" % tipo)
+	get_tree().quit()
+
+
 # Con "--captura --edificio centro --tiendas": cada tienda de las cuatro primeras plantas, entera, sin zombis, sin
 # penumbra y con todo descubierto (captura-tiendas-<tipo>-<lado de su puerta>.png; la del minijefe de la planta,
 # captura-tiendas-jefe-<minijefe>-<lado>.png), para ver sus habitaciones de dentro y lo que tapan sus paredes. La

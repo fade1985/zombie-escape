@@ -9,6 +9,7 @@
 extends Node2D
 
 signal empujada(indice: int)
+signal cerca(indice: int)   # Johnny se acerca a una puerta de tienda de la pared de abajo de la galería (partida.decir_tienda)
 
 # Las puertas de frente: 36 × 43 píxeles, o sea 72 × 86 unidades
 const DIBUJO := {"tienda": preload("res://assets/sprites/puerta-tienda.png"),
@@ -133,6 +134,22 @@ func _ready() -> void:
 	zona.body_entered.connect(func(cuerpo):
 		if cuerpo.is_in_group("jugador"):
 			empujada.emit(indice))
+	# en la pared de abajo de la galería, las tiendas no tienen letrero a la vista: al acercarse Johnny (una zona más
+	# grande, delante de la puerta), dice qué tienda es
+	if galeria and salida.dir == "abajo" and salida.get("tipo", "") == "puerta":
+		var cerca_zona := Area2D.new()
+		cerca_zona.collision_layer = 0
+		cerca_zona.collision_mask = 2
+		var cerca_forma := CollisionShape2D.new()
+		var cerca_caja := RectangleShape2D.new()
+		cerca_caja.size = Vector2(112, 96)
+		cerca_forma.shape = cerca_caja
+		cerca_forma.position = Vector2(0, -48)
+		cerca_zona.add_child(cerca_forma)
+		add_child(cerca_zona)
+		cerca_zona.body_entered.connect(func(cuerpo):
+			if cuerpo.is_in_group("jugador"):
+				cerca.emit(indice))
 	# (sin nada escrito encima: adónde lleva lo dicen el mapa de la esquina, las placas de los pisos, el cartel de la
 	# planta junto al ascensor y los letreros de neón de las tiendas)
 

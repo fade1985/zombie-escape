@@ -2729,9 +2729,37 @@ msgstr "There's no going back"
 msgid "Laboratorio"
 msgstr "Laboratory"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Maintenance"
+
+#: scripts/mapa/tienda.gd
+msgid "Un supermercado"
+msgstr "A supermarket"
+
+#: scripts/mapa/tienda.gd
+msgid "Una ferretería"
+msgstr "A hardware store"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de electrónica"
+msgstr "An electronics store"
+
+#: scripts/mapa/tienda.gd
+msgid "Un restaurante"
+msgstr "A restaurant"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de ropa"
+msgstr "A clothing store"
+
+#: scripts/mapa/tienda.gd
+msgid "Una farmacia"
+msgstr "A pharmacy"
+
+#: scripts/mapa/tienda.gd
+msgid "Una joyería"
+msgstr "A jewelry store"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

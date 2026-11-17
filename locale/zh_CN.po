@@ -2725,9 +2725,37 @@ msgstr "已经没有回头路了"
 msgid "Laboratorio"
 msgstr "实验室"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "维修间"
+
+#: scripts/mapa/tienda.gd
+msgid "Un supermercado"
+msgstr "一家超市"
+
+#: scripts/mapa/tienda.gd
+msgid "Una ferretería"
+msgstr "一家五金店"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de electrónica"
+msgstr "一家电器店"
+
+#: scripts/mapa/tienda.gd
+msgid "Un restaurante"
+msgstr "一家餐厅"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de ropa"
+msgstr "一家服装店"
+
+#: scripts/mapa/tienda.gd
+msgid "Una farmacia"
+msgstr "一家药店"
+
+#: scripts/mapa/tienda.gd
+msgid "Una joyería"
+msgstr "一家珠宝店"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

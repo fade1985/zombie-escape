@@ -15,6 +15,15 @@ const BORDE := 2           # grosor del muro de fuera, en casillas
 # saberlas: las de verdad, con el aseo de empleados de todas, salen de su plano).
 # "neon" es lo que pone el letrero de neón de encima de su puerta (neon.gd), con su color; su escaparate, el sprite
 # escaparate-<tipo>.
+# Lo que dice Johnny encima de la cabeza al acercarse a la puerta de una tienda de la pared de abajo de la galería, que no
+# tiene letrero a la vista (partida.decir_tienda; 17 nov, el dueño): la tienda con su artículo, una frase entera por tienda
+# para que cada idioma ponga el suyo
+# [traducir]
+const CON_ARTICULO := {"supermercado": "Un supermercado", "ferreteria": "Una ferretería",
+	"electronica": "Una tienda de electrónica", "restaurante": "Un restaurante", "ropa": "Una tienda de ropa",
+	"farmacia": "Una farmacia", "joyeria": "Una joyería"}
+# [/traducir]
+
 # Los textos (el nombre y el neón, y los de NOMBRES) están en español, en líneas con la marca de traducir al final
 # (docs/IDIOMAS.md): son datos (se guardan así en la planta) y se enseñan ya traducidos con nombre(), neon() y
 # Planta.nombre_de_sitio

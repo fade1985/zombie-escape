@@ -2729,9 +2729,37 @@ msgstr "Pas de retour en arrière"
 msgid "Laboratorio"
 msgstr "Laboratoire"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Maintenance"
+
+#: scripts/mapa/tienda.gd
+msgid "Un supermercado"
+msgstr "Un supermarché"
+
+#: scripts/mapa/tienda.gd
+msgid "Una ferretería"
+msgstr "Une quincaillerie"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de electrónica"
+msgstr "Un magasin d'électronique"
+
+#: scripts/mapa/tienda.gd
+msgid "Un restaurante"
+msgstr "Un restaurant"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de ropa"
+msgstr "Une boutique de mode"
+
+#: scripts/mapa/tienda.gd
+msgid "Una farmacia"
+msgstr "Une pharmacie"
+
+#: scripts/mapa/tienda.gd
+msgid "Una joyería"
+msgstr "Une bijouterie"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"

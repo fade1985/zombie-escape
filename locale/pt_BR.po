@@ -2729,9 +2729,37 @@ msgstr "Não tem mais volta"
 msgid "Laboratorio"
 msgstr "Laboratório"
 
-#: scripts/mapa/planta.gd scripts/mapa/puerta.gd
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Manutenção"
+
+#: scripts/mapa/tienda.gd
+msgid "Un supermercado"
+msgstr "Um supermercado"
+
+#: scripts/mapa/tienda.gd
+msgid "Una ferretería"
+msgstr "Uma loja de ferragens"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de electrónica"
+msgstr "Uma loja de eletrônicos"
+
+#: scripts/mapa/tienda.gd
+msgid "Un restaurante"
+msgstr "Um restaurante"
+
+#: scripts/mapa/tienda.gd
+msgid "Una tienda de ropa"
+msgstr "Uma loja de roupas"
+
+#: scripts/mapa/tienda.gd
+msgid "Una farmacia"
+msgstr "Uma farmácia"
+
+#: scripts/mapa/tienda.gd
+msgid "Una joyería"
+msgstr "Uma joalheria"
 
 #: scripts/mapa/tienda.gd
 msgid "Supermercado"
