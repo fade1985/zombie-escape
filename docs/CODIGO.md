@@ -1052,6 +1052,10 @@ en una línea.
   (`assets/sources/centro/letrero-ferreteria-gpt.webp`, solo las letras), en inglés como los demás. `py tools/neones_galeria.py letrero-ferreteria`
   (sale `letrero-ferreteria.png`, 91x18, y el apagado) y `py tools/letrero_halo.py ferreteria`; en `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas
   saltan de la esquina de abajo de la última E). Prueba: `--puerta-super ferreteria`.
+- **La puerta de la tienda de electrónica** (17 nov, el dueño): la misma puerta de cristal de la ferretería, algo más pequeña (28x43 → 28x40, con
+  su cartel «OPEN» pequeño: `muebles_gpt.py puerta_electronica cartel_open_pequeno` y `puerta_ferreteria.py electronica`), dentro de un marco de
+  neón rosa y cian abierto por abajo (de GPT, `assets/sources/centro/marco-electronica-gpt.webp`; `neones_galeria.py electronica-marco`, 44x47, con
+  un ancho fijo `ANCHOS`). `puerta.gd` lo pone de hijo (`NEON_MARCO`, `neon_galeria.gd`): falla de vez en cuando, sin halo. Fija, no se abre sola.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

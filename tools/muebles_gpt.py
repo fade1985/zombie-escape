@@ -349,6 +349,9 @@ MUEBLES = {
     # neón de herramientas (tools/neones_galeria.py); los dos con la verja por delante (todo el negro, también el de entre las barras)
     "panel_herramientas": ("assets/sources/centro/panel-herramientas-gpt.webp", "assets/sprites/panel-herramientas.png", 36, 27, False),
     "verja": ("assets/sources/centro/verja-gpt.webp", "assets/sprites/verja-escaparate.png", 44, 37, False, (), "negro"),
+    # la puerta de la tienda de electrónica: la misma de la ferretería, un poco más pequeña, con su cartel más pequeño, dentro de un marco de neón
+    "puerta_electronica": ("assets/sources/centro/puerta-ferreteria-gpt.webp", "assets/sprites/puerta-electronica-entera.png", 28, 40, False),
+    "cartel_open_pequeno": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open-pequeno.png", 17, 15, False),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 

@@ -15,6 +15,9 @@ signal cerca(indice: int)   # Johnny se acerca a una puerta de tienda de la pare
 # La puerta de la ferretería (17 nov, el dueño; de GPT, tools/puerta_ferreteria.py): de cristal, de una hoja, con un cartel «OPEN»
 # por detrás del cristal. 30 × 43 píxeles
 const FERRETERIA := preload("res://assets/sprites/puerta-ferreteria.png")
+# La misma, un poco más pequeña, de la tienda de electrónica, dentro de un marco de neón rosa y cian (neon_galeria.gd; 17 nov, el dueño)
+const ELECTRONICA := preload("res://assets/sprites/puerta-electronica.png")
+const NEON_MARCO := preload("res://scripts/mapa/neon_galeria.gd")
 const DIBUJO := {"tienda": preload("res://assets/sprites/puerta-tienda.png"),
 	"servicio": preload("res://assets/sprites/puerta-servicio.png")}
 # La de los pisos, sucia y con sangre (tools/puertas_sucias.py): tres dibujos, uno al lado de otro, para que no sean todas iguales
@@ -130,6 +133,16 @@ var abierta := true:     # si se puede pasar
 
 
 func _ready() -> void:
+	if centro and salida.dir == "arriba" and salida.get("neon", "") == "electronica":
+		# el marco de neón de la puerta de electrónica: rosa y cian, falla de vez en cuando (sin su halo, para no salirse)
+		var marco := NEON_MARCO.new()
+		marco.nombre = "electronica-marco"
+		marco.color = Color("#ff4fd0")
+		marco.medio = 47.0
+		marco.halo = false
+		marco.tramo = 7.0
+		marco.semilla = fposmod(float(salida.get("en", 0)) * 0.0137, 1.0)
+		add_child(marco)
 	# La zona que hay que pisar, pegada al muro por dentro
 	var zona := Area2D.new()
 	zona.collision_layer = 0
@@ -249,6 +262,9 @@ func _draw() -> void:
 			# demás, la del edificio
 			if centro and salida.get("neon", "") == "ferreteria":
 				draw_texture_rect(FERRETERIA, Rect2(-30, -86, 60, 86), false)
+				return
+			if centro and salida.get("neon", "") == "electronica":
+				draw_texture_rect(ELECTRONICA, Rect2(-28, -80, 56, 80), false)
 				return
 			var dibujo: String = "servicio" if salida.get("placa", "") == "llave" else ("tienda" if centro else "piso")
 			if dibujo == "piso":

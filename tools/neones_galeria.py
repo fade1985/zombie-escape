@@ -23,7 +23,9 @@ NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
           # letrero-farmacia.png y letrero-farmacia-apagado.png (su resplandor, tools/letrero_halo.py farmacia)
           'ferreteria-herramientas': (25, 'centro/neon-ferreteria-herramientas-gpt.webp', False),
           'letrero-ferreteria': (18, 'centro/letrero-ferreteria-gpt.webp', False),
+          'electronica-marco': (47, 'centro/marco-electronica-gpt.webp', False),
           'letrero-farmacia': (19, 'centro/letrero-farmacia-gpt.webp', False)}
+ANCHOS = {'electronica-marco': 44}   # (un ancho fijo, más ancho que su proporción: el marco rodea una puerta de 28)
 TUBO = np.array([77, 71, 84], float)   # el tubo apagado (el mismo que las letras fundidas de neon.gd)
 LED_MUERTO = np.array([44, 62, 50], float)   # un LED apagado de la cruz: gris verdoso
 
@@ -40,7 +42,7 @@ def pasar(nombre, alto, origen, chapa):
         alfa = (np.asarray(dentro) != 128).astype(float)
     ys, xs = np.nonzero(alfa > 0.5)
     caja = (xs.min() - 2, ys.min() - 2, xs.max() + 3, ys.max() + 3)
-    ancho = round(alto * (caja[2] - caja[0]) / (caja[3] - caja[1]))
+    ancho = ANCHOS.get(nombre) or round(alto * (caja[2] - caja[0]) / (caja[3] - caja[1]))
     # premultiplicado: así el negro de alrededor no ensucia el borde del tubo al mezclar
     pre = np.dstack([a * alfa[..., None], alfa * 255.0]).astype(np.uint8)
     peq = np.asarray(Image.fromarray(pre, 'RGBA').resize((ancho, alto), Image.LANCZOS, box=caja)).astype(float)
