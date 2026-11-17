@@ -1150,6 +1150,10 @@ msgid "¡Hoy no vale!"
 msgstr "Not allowed today!"
 
 #: scripts/garaje.gd
+msgid "Nuevo reto en %s"
+msgstr "New challenge in %s"
+
+#: scripts/garaje.gd
 msgid "Récord: %d oleada"
 msgid_plural "Récord: %d oleadas"
 msgstr[0] "Record: %d wave"

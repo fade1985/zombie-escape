@@ -1151,6 +1151,10 @@ msgid "¡Hoy no vale!"
 msgstr "Сегодня нельзя!"
 
 #: scripts/garaje.gd
+msgid "Nuevo reto en %s"
+msgstr "Испытание через %s"
+
+#: scripts/garaje.gd
 msgid "Récord: %d oleada"
 msgid_plural "Récord: %d oleadas"
 msgstr[0] "Рекорд: %d волна"

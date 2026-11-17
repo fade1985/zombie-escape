@@ -170,6 +170,18 @@ static func record(s: Dictionary, edificio: String, c: String) -> int:
 	return int(s.garajes[edificio].records.get(c, 0)) if s.garajes.has(edificio) else 0
 
 
+# Los segundos que faltan para el reto de mañana: a medianoche, con la hora de este ordenador (como hoy())
+static func falta() -> int:
+	var t := Time.get_time_dict_from_system()
+	return maxi(0, 86400 - (t.hour * 3600 + t.minute * 60 + t.second))
+
+
+# Lo que pone el botón ya jugado hoy (17 nov): «Nuevo reto en 05:23:10»
+static func texto_falta() -> String:
+	var f := falta()
+	return Idioma.t("Nuevo reto en %s") % ("%02d:%02d:%02d" % [f / 3600, f / 60 % 60, f % 60])
+
+
 # Lo de debajo del botón: «Récord: 3 oleadas»
 static func texto_record(n: int) -> String:
 	return Idioma.n("Récord: %d oleada", "Récord: %d oleadas", n) % n
@@ -363,8 +375,10 @@ func al_caer(zombi: Node2D, tipo: String) -> void:
 	if tipo in partida.JEFES:
 		partida.jefa = null
 		return
+	# la del arma de la mano o la de repuesto, también las especiales (su gasolina, bidón, batería o nitrógeno: 17 nov,
+	# lo pidió el dueño; antes, solo cajas de balas)
 	if randf() < MUNICION:
-		partida.soltar_municion(zombi.position)
+		partida.soltar_municion_zombi(zombi.position)
 
 
 # Al acabar (partida.terminar, en lugar de lo suyo): los dólares de las oleadas, a la cartera ganes, caigas o abandones;

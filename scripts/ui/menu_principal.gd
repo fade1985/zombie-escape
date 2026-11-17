@@ -24,6 +24,7 @@ var centro: CenterContainer       # el menú
 var edificios: CenterContainer    # la pantalla "Elige edificio" (se crea al pulsar JUGAR)
 var tarjetas: HBoxContainer
 var alertas := {}                  # la alerta elegida en cada edificio (alerta.gd)
+var hoy_tarjetas := ""            # el día con el que se han puesto las tarjetas (a medianoche, se rehacen: boton_reto)
 # solo para las fotos de "--edificios" (no se guarda): los requisitos de los Apartamentos para abrir el centro comercial,
 # "nada" (ninguno: sin completar, sin páginas y sin vídeos), "medias" (completado, 2 páginas y 1 vídeo) o "todo"
 var foto_requisitos := ""
@@ -290,6 +291,7 @@ func elegir_edificio() -> void:
 func poner_tarjetas() -> void:
 	for caja in tarjetas.get_children():
 		caja.free()
+	hoy_tarjetas = Garaje.hoy()
 	var s := Guardado.cargar()
 	if foto_requisitos != "":   # para las fotos de --edificios (no se guarda)
 		var paginas: Array = Historia.dosier("apartamentos").paginas.map(func(p): return p.id)
@@ -310,8 +312,8 @@ func poner_tarjetas() -> void:
 		for id in Edificios.LISTA:
 			Guardado.edificio(s, id).completado = true
 			Garaje.ficha(s, id).records[cond] = 1 if id == Edificios.LISTA.keys()[0] else 7
-			if id != Edificios.LISTA.keys()[0]:
-				Garaje.ficha(s, id).fecha = Garaje.hoy()
+			# (el primero, sin jugar hoy aunque otra prueba lo haya jugado antes)
+			Garaje.ficha(s, id).fecha = Garaje.hoy() if id != Edificios.LISTA.keys()[0] else ""
 	for id in Edificios.LISTA:
 		var caja := VBoxContainer.new()
 		caja.add_theme_constant_override("separation", 6)
@@ -403,9 +405,10 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	mas.pressed.connect(cambiar.bind(1))
 
 
-# Debajo del selector de alerta: el botón del reto del día, el garaje (garaje.gd; apagado si ya se ha jugado hoy en este
-# edificio, M71), grande, con el récord de este edificio con la condición de hoy debajo («Récord: 3 oleadas», M125) y, al
-# pasar el ratón o marcarlo, su cuadro con la condición (11 nov)
+# Debajo del selector de alerta: el botón del reto del día, el garaje (garaje.gd), grande, con el récord de este edificio
+# con la condición de hoy debajo («Récord: 3 oleadas», M125) y, al pasar el ratón o marcarlo, su cuadro con la condición
+# (11 nov). Ya jugado hoy en este edificio (M71), apagado, con lo que falta para el de mañana («Nuevo reto en 05:23:10»,
+# cada segundo) y sin cuadro (17 nov, lo pidió el dueño); a medianoche, las tarjetas se rehacen y vuelve a encenderse
 func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	var cond := Garaje.condicion_de(Garaje.hoy())
 	var b := Button.new()
@@ -415,11 +418,24 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	b.pressed.connect(jugar_reto.bind(id))
 	var jugado := Garaje.jugado(s, id)
-	if jugado:   # una vez al día (M71): apagado hasta mañana
+	if jugado:   # una vez al día (M71): apagado hasta mañana, con la cuenta atrás
 		b.disabled = true
 		b.focus_mode = Control.FOCUS_NONE
+		b.text = Garaje.texto_falta()
+		# (con la letra lisa y más pequeña, para que quepa también en los idiomas largos)
+		b.add_theme_font_override("font", Tema.lisa(Tema.PESO_LISA_TITULO))
+		b.add_theme_font_size_override("font_size", TAM_RETO + 3)
+		var reloj := Timer.new()
+		reloj.wait_time = 1.0
+		reloj.autostart = true
+		reloj.timeout.connect(func():
+			if Garaje.hoy() != hoy_tarjetas:
+				poner_tarjetas.call_deferred()   # (ya es mañana: el reto nuevo)
+			else:
+				b.text = Garaje.texto_falta())
+		b.add_child(reloj)
 	caja.add_child(b)
-	# (ya jugado hoy, en gris: el cuadro dice que vuelvas mañana)
+	# (ya jugado hoy, en gris)
 	var debajo := etiqueta_reto(Garaje.texto_record(Garaje.record(s, id, cond)), PLACA.AMARILLO if not jugado else PLACA.TEXTO_SUAVE,
 		false, Tema.PESO_LISA_TITULO)
 	debajo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -437,7 +453,7 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 		cuadro.global_position = Vector2(clampf(donde.x, 6.0, pantalla.x - cuadro.size.x - 6.0), maxf(6.0, donde.y))
 	cuadro.resized.connect(colocar)
 	var enseñar := func(si: bool):
-		if si:
+		if si and not jugado:   # (ya jugado, sin cuadro)
 			cuadro.visible = true
 			cuadro.reset_size()
 			colocar.call()
@@ -449,11 +465,6 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	b.focus_exited.connect(enseñar.bind(false))
 	b.set_meta("cuadro", cuadro)   # (las pruebas lo leen)
 	b.set_meta("ensenar", enseñar)   # (sin ñ: los nombres de las metas, solo letras inglesas)
-	# apagado el botón no recibe el ratón: el cuadro sale también al pasar por encima de lo de debajo
-	if jugado:
-		debajo.mouse_filter = Control.MOUSE_FILTER_STOP
-		debajo.mouse_entered.connect(enseñar.bind(true))
-		debajo.mouse_exited.connect(enseñar.bind(false))
 
 
 # El cuadro del reto de hoy, como la ficha de un talento (arbol_talentos.gd, llenar_ficha): la condición de hoy en la
@@ -525,7 +536,7 @@ func jugar_reto(id: String) -> void:
 
 
 # La prueba del reto (--reto): el cuadro del botón del primer edificio, como al pasar el ratón (captura-reto-cuadro.png),
-# y el del último, ya jugado hoy (captura-reto-jugado.png)
+# y el último, ya jugado hoy: con la cuenta atrás y sin cuadro (captura-reto-jugado.png)
 func foto_cuadro_reto() -> void:
 	var botones := find_children("*", "Button", true, false).filter(func(n): return n.has_meta("cuadro"))
 	for k in [0, botones.size() - 1]:
@@ -533,10 +544,21 @@ func foto_cuadro_reto() -> void:
 		b.get_meta("ensenar").call(true)
 		await get_tree().create_timer(0.3).timeout
 		var c: Control = b.get_meta("cuadro")
-		print("Reto del día · botón %d de %d: apagado %s · cuadro «%s»" % [k + 1, botones.size(), b.disabled,
+		print("Reto del día · botón %d de %d: «%s», apagado %s · cuadro a la vista %s «%s» (esperado: el primero, «Reto del día», encendido y con cuadro; el último, «Nuevo reto en …», apagado y sin cuadro)" % [
+			k + 1, botones.size(), b.text, b.disabled, c.visible,
 			" | ".join(c.find_children("*", "Label", true, false).map(func(l): return l.text))])
 		Captura.foto("captura-reto-cuadro.png" if k == 0 else "captura-reto-jugado.png")
 		b.get_meta("ensenar").call(false)
+	# lo ancho que queda el botón ya jugado en cada idioma (el de la tarjeta, 280 de base; la tarjeta mide unos 380)
+	var jugado: Button = botones[-1]
+	var anchos := []
+	for codigo in Idioma.codigos():
+		Idioma.poner(codigo, false)
+		jugado.text = Garaje.texto_falta()
+		anchos.append("%s %d" % [codigo, jugado.get_combined_minimum_size().x])
+	Idioma.poner("es", false)
+	jugado.text = Garaje.texto_falta()
+	print("Reto del día · ancho del botón jugado: %s (esperado: ninguno de más de 380)" % ", ".join(anchos))
 
 
 # Con el primer edificio completado (ya hay alguna alerta abierta), la primera vez: el tutorial de la alerta y el reto

@@ -444,7 +444,7 @@ func probar_reto() -> void:
 	Captura.foto("captura-reto.png")
 	# al caer, tras superar 3 oleadas: el récord de este edificio con esta condición, y el logro de las condiciones
 	Guardado.cambiar(func(g):
-		Garaje.ficha(g, edificio).records.erase(hoy)
+		Garaje.ficha(g, edificio).records.clear()   # (también los de otras pasadas de la prueba con otra condición)
 		g.logros_cuentas.condiciones = Garaje.CONDICIONES.keys().filter(func(c): return c != hoy)
 		g.logros.erase("todas_reglas"))
 	logros.repasar = true   # (la partida de prueba no repasa los logros: aquí, sí; y sin ayudas, que los apagan)
