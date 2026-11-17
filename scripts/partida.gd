@@ -808,7 +808,8 @@ func poner_lugar() -> void:
 		var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 		if zona != "" and zona != nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 			texto += " · " + zona
-	lugar.text = texto + eventos.etiqueta() + garaje.etiqueta()
+	# (siempre en mayúsculas, en todas las plantas y sitios: 17 nov)
+	lugar.text = (texto + eventos.etiqueta() + garaje.etiqueta()).to_upper()
 	# arriba del todo, grande como el grito de la llave; si en esta pantalla no cabe entero (un evento, el reto, otro
 	# idioma...), con la letra pequeña (la fuente solo se ve nítida a 16 o 32)
 	var cabe := lugar.get_theme_font("font").get_string_size(lugar.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 16 <= lugar.size.x
