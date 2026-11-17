@@ -1138,7 +1138,11 @@ func poner_peligros() -> void:
 # dibujo (neon-<nombre>.png: tools/neones_galeria.py), el color de su luz y la altura de su medio (para que quede en medio
 # del cristal, a píxel justo con el escaparate). Parpadean de vez en cuando, sin chispas (detrás del cristal no saldrían)
 const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), 51.0],
-	["farmacia-botella", Color("#4dff6a"), 49.0]]}
+	["farmacia-botella", Color("#4dff6a"), 49.0]],
+	# la ferretería (17 nov, el dueño): a la izquierda, un panel de herramientas (dibujo fijo: panel-herramientas.png, sin color
+	# ni parpadeo) y, a la derecha, un neón de herramientas; los dos con la verja por delante (escaparate-verja: verja-escaparate.png)
+	"ferreteria": [["panel-herramientas", Color.TRANSPARENT, 50.0],
+	["ferreteria-herramientas", Color("#9fd8ff"), 50.0]]}
 # Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del
 # rodapié y, a veces, un salpicón o unas huellas de sangre en el cristal. Van en el pie de la cara del muro, como
 # los apliques, para ordenarse con ella.
@@ -1165,16 +1169,31 @@ func poner_escaparates() -> void:
 				var tam := capa.texture.get_size()
 				capa.position = Vector2(-tam.x, -9 - tam.y * 2)   # el pie, 4 píxeles por encima del suelo (el rodapié)
 				capas.append(capa)
-			var neon := NEON_GALERIA.new()
-			neon.nombre = cual[0]
-			neon.color = cual[1]
-			neon.medio = cual[2]
-			neon.halo = false
-			neon.tramo = 7.0   # (fallan menos que los de la pared: de vez en cuando, como el letrero del súper)
-			neon.semilla = fposmod(float(sitio.get("surtido", 0)) * 0.001 + e.x * 0.0137, 1.0)
 			vitrina.add_child(capas[0])
-			vitrina.add_child(neon)
+			if cual[1].a == 0.0:
+				# (un dibujo fijo, sin luz: el panel de herramientas de la ferretería, centrado en el cristal)
+				var fijo := Sprite2D.new()
+				fijo.texture = load("res://assets/sprites/%s.png" % cual[0])
+				fijo.scale = Vector2(2, 2)
+				fijo.position = Vector2(0, -cual[2])
+				vitrina.add_child(fijo)
+			else:
+				var neon := NEON_GALERIA.new()
+				neon.nombre = cual[0]
+				neon.color = cual[1]
+				neon.medio = cual[2]
+				neon.halo = false
+				neon.tramo = 7.0   # (fallan menos que los de la pared: de vez en cuando, como el letrero del súper)
+				neon.semilla = fposmod(float(sitio.get("surtido", 0)) * 0.001 + e.x * 0.0137, 1.0)
+				vitrina.add_child(neon)
 			vitrina.add_child(capas[1])
+			if e.tienda == "ferreteria":   # (la verja, por delante de todo, del tamaño del escaparate)
+				var verja := Sprite2D.new()
+				verja.texture = load("res://assets/sprites/verja-escaparate.png")
+				verja.centered = false
+				verja.scale = Vector2(2, 2)
+				verja.position = Vector2(-44, -9 - 37 * 2)
+				vitrina.add_child(verja)
 			cosas.add_child(vitrina)
 			continue
 		var nodo := Node2D.new()

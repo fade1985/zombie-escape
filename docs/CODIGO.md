@@ -1043,6 +1043,11 @@ en una línea.
   `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`
   (`FERRETERIA`) en la pared de arriba de la galería para la tienda `ferreteria`. De momento fija (no se abre sola). Prueba: `--puerta-super ferreteria`
   (si no sale en las 4 plantas de siempre, prueba otras semillas).
+- **Los escaparates de la ferretería** (17 nov, el dueño): el escaparate vacío de la farmacia (`escaparate_farmacia.py ferreteria` saca
+  `escaparate-ferreteria-fondo/cristal.png`), con la verja por delante de todo (`verja-escaparate.png`, de GPT, `muebles_gpt.py verja`). A la
+  izquierda de la puerta, un panel de herramientas colgadas (dibujo fijo, `panel-herramientas.png`, `muebles_gpt.py panel_herramientas`);
+  a la derecha, un neón de llave, destornillador y martillo (`neones_galeria.py ferreteria-herramientas`). Capas, de abajo arriba: fondo,
+  herramientas, reflejos del cristal y verja (`mapa.ESCAPARATES_NEON`; un color transparente = dibujo fijo, sin parpadeo).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

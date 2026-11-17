@@ -345,6 +345,10 @@ MUEBLES = {
     # la puerta de la ferretería, de cristal con una sola hoja, y el cartel «OPEN» que cuelga por detrás del cristal (17 nov, el
     # dueño). Los junta tools/puerta_ferreteria.py
     "puerta_ferreteria": ("assets/sources/centro/puerta-ferreteria-gpt.webp", "assets/sprites/puerta-ferreteria-entera.png", 30, 43, False),
+    # los escaparates de la ferretería (17 nov, el dueño): a la izquierda, un panel de herramientas por detrás del cristal; a la derecha, un
+    # neón de herramientas (tools/neones_galeria.py); los dos con la verja por delante (todo el negro, también el de entre las barras)
+    "panel_herramientas": ("assets/sources/centro/panel-herramientas-gpt.webp", "assets/sprites/panel-herramientas.png", 36, 27, False),
+    "verja": ("assets/sources/centro/verja-gpt.webp", "assets/sprites/verja-escaparate.png", 44, 37, False, (), "negro"),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 

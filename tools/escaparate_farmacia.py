@@ -5,9 +5,11 @@
 # Sale de assets/sprites/escaparate-farmacia-vacio.png (de GPT, reducido con tools/muebles_gpt.py escaparate_farmacia).
 # Dice también dónde está el hueco del cristal, en píxeles del dibujo (para poner el neón en medio: mapa.gd).
 #   py tools/muebles_gpt.py escaparate_farmacia && py tools/escaparate_farmacia.py   (y luego Godot --headless --path . --import)
+import sys
 import numpy as np
 from PIL import Image
 
+TIENDA = sys.argv[1] if len(sys.argv) > 1 else 'farmacia'   # (la ferretería usa el mismo escaparate vacío: py tools/escaparate_farmacia.py ferreteria)
 BASE = np.array([0, 19, 24], float)       # el oscuro del cristal, sin reflejo
 BRILLO = np.array([70, 150, 160], float)  # el color de los reflejos, a tope (sobre el neón se ven como un velo azulado)
 
@@ -28,11 +30,11 @@ cuanto = np.where(dentro & (cuanto > 0.04), cuanto, 0.0)
 
 fondo = a.copy()
 fondo[dentro, :3] = BASE
-Image.fromarray(fondo.astype(np.uint8), 'RGBA').save('assets/sprites/escaparate-farmacia-fondo.png')
+Image.fromarray(fondo.astype(np.uint8), 'RGBA').save(f'assets/sprites/escaparate-{TIENDA}-fondo.png')
 
 # (el reflejo, algo más fuerte que en el dibujo: sobre lo oscuro apenas se notaba, y encima del neón es lo que lo pone detrás)
 cristal = np.zeros_like(a)
 cristal[..., :3] = BRILLO
 cristal[..., 3] = np.clip(cuanto * 1.3, 0.0, 1.0) * 255.0
-Image.fromarray(cristal.astype(np.uint8), 'RGBA').save('assets/sprites/escaparate-farmacia-cristal.png')
-print('escaparate-farmacia-fondo.png y escaparate-farmacia-cristal.png')
+Image.fromarray(cristal.astype(np.uint8), 'RGBA').save(f'assets/sprites/escaparate-{TIENDA}-cristal.png')
+print(f'escaparate-{TIENDA}-fondo.png y escaparate-{TIENDA}-cristal.png')

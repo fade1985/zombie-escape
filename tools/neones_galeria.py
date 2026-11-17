@@ -21,6 +21,7 @@ NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
           'farmacia-botella': (27, 'centro/neon-farmacia-botella-gpt.webp', False),
           # el letrero de la farmacia, PHARMACY en tubos de neón verdes, con la Y suelta (neon.gd, LETREROS): sale como
           # letrero-farmacia.png y letrero-farmacia-apagado.png (su resplandor, tools/letrero_halo.py farmacia)
+          'ferreteria-herramientas': (25, 'centro/neon-ferreteria-herramientas-gpt.webp', False),
           'letrero-farmacia': (19, 'centro/letrero-farmacia-gpt.webp', False)}
 TUBO = np.array([77, 71, 84], float)   # el tubo apagado (el mismo que las letras fundidas de neon.gd)
 LED_MUERTO = np.array([44, 62, 50], float)   # un LED apagado de la cruz: gris verdoso
