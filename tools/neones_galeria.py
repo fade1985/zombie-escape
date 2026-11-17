@@ -33,8 +33,13 @@ NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
           'ropa-compras': (27, 'centro/neon-ropa-compras-gpt.webp', False),
           'ropa-sale': (26, 'centro/neon-ropa-sale-gpt.webp', False),
           'letrero-ropa': (21, 'centro/letrero-ropa-gpt.webp', False),
+          'joyeria-diamante': (26, 'centro/neon-joyeria-diamante-gpt.webp', False),
+          'joyeria-lingotes': (20, 'centro/neon-joyeria-lingotes-gpt.webp', False),
           'letrero-farmacia': (19, 'centro/letrero-farmacia-gpt.webp', False)}
 ANCHOS = {'electronica-marco': 44}   # (un ancho fijo, más ancho que su proporción: el marco rodea una puerta de 28)
+# los que GPT hizo en blanco y hay que pintar de otro color (17 nov, el dueño: los lingotes de la joyería, amarillo dorado): el tubo, del
+# color de borde, y su centro, más claro
+RECOLOREAR = {'joyeria-lingotes': ([255, 176, 0], [255, 226, 90])}
 TUBO = np.array([77, 71, 84], float)   # el tubo apagado (el mismo que las letras fundidas de neon.gd)
 LED_MUERTO = np.array([44, 62, 50], float)   # un LED apagado de la cruz: gris verdoso
 
@@ -42,6 +47,10 @@ LED_MUERTO = np.array([44, 62, 50], float)   # un LED apagado de la cruz: gris v
 def pasar(nombre, alto, origen, chapa):
     salida = nombre if nombre.startswith('letrero-') else f'neon-{nombre}'
     a = np.asarray(Image.open(f'assets/sources/{origen}').convert('RGB')).astype(float)
+    if nombre in RECOLOREAR:
+        borde, centro = (np.array(c, float) for c in RECOLOREAR[nombre])
+        lum = a.max(axis=2, keepdims=True) / 255.0
+        a = (borde * (1 - lum ** 2) + centro * lum ** 2) * lum
     # transparencia: lo casi negro, nada; desde ahí sube deprisa
     alfa = np.clip((a.max(axis=2) - 24.0) / 70.0, 0.0, 1.0)
     if chapa:

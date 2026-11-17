@@ -1079,6 +1079,10 @@ en una línea.
 - **La puerta de la joyería** (17 nov, el dueño): doble, de acero inoxidable pulido, con una ventana alta de cristal en cada hoja, dos barras largas en el medio, el
   cilindro de la cerradura y la caja del cierrapuertas arriba (de GPT, `assets/sources/centro/puerta-joyeria-gpt.webp`; `muebles_gpt.py puerta_joyeria`, 34x43;
   `puerta.gd`, `JOYERIA`). Fija. Para probarla, `--puerta-super joyeria` le pone la joyería a la planta (no la sortea nadie: `Planta.joyeria_planta`).
+- **Los escaparates de la joyería** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py joyeria`) con un neón de GPT dentro, detrás del
+  cristal: el diamante en neón blanco a la izquierda y los lingotes en amarillo dorado a la derecha (`neones_galeria.py joyeria-diamante joyeria-lingotes`;
+  `mapa.ESCAPARATES_NEON`). GPT hizo los lingotes en blanco: `neones_galeria.py` los pinta de dorado (`RECOLOREAR`: el color del borde del tubo y el de su
+  centro), así que otro neón que salga del color equivocado se puede arreglar igual, sin pedirlo otra vez.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
