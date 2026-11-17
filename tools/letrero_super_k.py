@@ -10,17 +10,17 @@ CANTO = (58, 184, 251)
 
 im = Image.open("assets/sources/letrero-super-gpt.webp").convert("RGB")
 d = ImageDraw.Draw(im)
-# (y la tenía pegada a la R: el dueño la quiere con aire a los dos lados. GPT dejó las letras casi tocándose, así que la E
-# y la T se corren a la derecha CORRE píxeles para hacer sitio y la K va en medio del hueco, con HUECO a cada lado, que al
-# reducir sale como una columna vacía entre las letras)
-CORRE = 12
+# (y la tenía pegada a la R: el dueño la quiere con aire a la izquierda, HUECO, que al reducir sale como una columna vacía
+# entre la R y la K; y a la derecha, el canto azul claro de la K tocando la E, como las demás letras: la E y la T se corren
+# CORRE píxeles, hacia atrás, hasta tocarlo)
+CORRE = -7
 HUECO = 20
-et = im.crop((1264, 370, 1536 - CORRE, 625))
+et = im.crop((1264, 370, 1536, 625))
 d.rectangle((1126, 370, 1535, 625), fill=(0, 0, 0))   # la K vieja, la E y la T, a negro puro
 im.paste(et, (1264 + CORRE, 370))
 
 x0, y0, h = 1124 + HUECO, 392, 190   # (la R acaba en la 1124) la cara: de la 392 a la 582, como las demás letras
-w, palo = 1264 + CORRE - HUECO - 8 - x0, 42   # hasta el canto de la E, dejando su hueco (el canto de la K, 8 más)
+w, palo = 104, 42                    # (con su canto, 8 más, acaba en la 1256: donde empieza ahora la E)
 partes = [
     [(0, 0), (palo, 0), (palo, h), (0, h)],                     # el palo
     [(palo, 62), (palo + 18, 0), (w, 0), (palo, 118)],          # el brazo de arriba
