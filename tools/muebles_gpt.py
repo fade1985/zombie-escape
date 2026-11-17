@@ -335,7 +335,9 @@ MUEBLES = {
     # el letrero del supermercado, encima de su puerta (neon.gd, LETREROS; 17 nov): letras corpóreas azul marino, en
     # inglés para todos los idiomas, como una marca. Su resplandor azul lo hace tools/letrero_halo.py (con la K redibujada:
     # tools/letrero_super_k.py)
-    "letrero_super": ("assets/sources/letrero-super-arreglado.png", "assets/sprites/letrero-supermercado.png", 100, 17, False),
+    # (el hueco de la V de la K, que con la E tocándola queda cerrado: también es fondo, no negro de las letras)
+    "letrero_super": ("assets/sources/letrero-super-arreglado.png", "assets/sprites/letrero-supermercado.png", 100, 17, False,
+                      (), [(1238, 482)]),
     "escaparate_super_derecha":("assets/sources/escaparate-super-comida-gpt.webp", "assets/sprites/escaparate-supermercado-derecha.png", 53, 37, False),
 }
 
