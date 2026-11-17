@@ -3166,6 +3166,10 @@ msgid "Oficina %d"
 msgstr "%d号办公室"
 
 #: scripts/partida.gd
+msgid "¡¡¡%s!!!"
+msgstr "%s！！！"
+
+#: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "还是再四处看看吧！"
 

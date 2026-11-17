@@ -870,7 +870,7 @@ func numero_oficina(sitio: Dictionary) -> int:
 # Johnny ha empujado la salida "i" del sitio en el que está
 # Al acercarse a la puerta de una tienda de la pared de abajo de la galería (puerta.gd: cerca), que no tiene letrero a la
 # vista, Johnny dice qué tienda es encima de la cabeza, como el grito de «¡¡¡LA LLAVE!!!» (gran_aviso, en mayúsculas):
-# «UNA FERRETERÍA» (Tienda.CON_ARTICULO). (También en el aviso de abajo, escondido, que es el que leen las pruebas)
+# «¡¡¡UNA FERRETERÍA!!!» (Tienda.CON_ARTICULO). (También en el aviso de abajo, escondido, que es el que leen las pruebas)
 func decir_tienda(i: int) -> void:
 	if cambiando or not johnny.vivo:
 		return
@@ -879,7 +879,7 @@ func decir_tienda(i: int) -> void:
 	if tipo in Tienda.CON_ARTICULO:
 		var texto := Idioma.t(Tienda.CON_ARTICULO[tipo])
 		decir(texto)
-		gran_aviso(texto.to_upper())
+		gran_aviso(Idioma.t("¡¡¡%s!!!") % texto.to_upper())   # (con sus tres signos a cada lado, como «¡¡¡LA LLAVE!!!»)
 
 
 func cruzar(i: int) -> void:

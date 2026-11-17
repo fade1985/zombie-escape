@@ -3170,6 +3170,10 @@ msgid "Oficina %d"
 msgstr "Bureau %d"
 
 #: scripts/partida.gd
+msgid "¡¡¡%s!!!"
+msgstr "%s !!!"
+
+#: scripts/partida.gd
 msgid "¡MEJOR INVESTIGO UN POCO MÁS!"
 msgstr "JE FERAIS MIEUX DE FOUILLER UN PEU PLUS !"
 
