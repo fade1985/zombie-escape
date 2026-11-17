@@ -151,16 +151,21 @@ const MAX_EQUIPO := 4
 
 # (lo que dice al entrar Johnny en su baño, ya abierto)
 const NO_ME_DEJES := "¡NO ME DEJES AQUÍ!"   # [traducir]
-# lo que dice el vecino de los trasteros si le pides que venga sin su comida favorita (M124; 16 nov: antes, «Estoy muy
-# débil», y su comida salía dibujada debajo de él): la pide por su nombre. Una frase entera por comida, para que cada
-# idioma ponga su «un»/«una» (Objetos.COMIDAS)
+# Lo que cuenta de su vida cada vecino de los trasteros al hablar con él (17 nov, los escribió Claude y los aprobó el
+# dueño; antes, sin su comida, solo la pedía: «¿No tendrás por ahí un dónut?»). Siempre sale su comida favorita
+# ("comida" en DATOS) entre dos asteriscos: esa palabra sale en amarillo (vida_de), para que se vea qué le gusta. Cada
+# idioma pone los asteriscos alrededor de su palabra, como le toque decirla
 # [traducir]
-const PIDE := {
-	"donut": "¿No tendrás por ahí un dónut?", "manzana": "¿No tendrás por ahí una manzana?",
-	"judias": "¿No tendrás por ahí una lata de judías?", "yogur": "¿No tendrás por ahí un yogur de fresa?",
-	"bocadillo": "¿No tendrás por ahí un bocadillo de chorizo?", "energetica": "¿No tendrás por ahí una bebida energética?",
-	"pizza": "¿No tendrás por ahí una porción de pizza?", "cafe": "¿No tendrás por ahí un termo de café?",
-	"ensalada": "¿No tendrás por ahí una ensalada?",
+const VIDAS := {
+	"policia": "Veinte años patrullando este barrio, y cada noche paraba en la misma pastelería de la esquina. El dueño me guardaba el último *dónut* glaseado aunque fueran las tantas. La pastelería ya no está… pero las ganas de dónut, sí.",
+	"medico": "En el hospital comía de pie, entre guardia y guardia: una *manzana* en el bolsillo de la bata y a correr. Dicen que una manzana al día aleja al médico… y aquí me tienes.",
+	"militar": "En las maniobras nos daban *latas de judías* frías, y yo era el único que repetía. Mis compañeros se reían de mí. Ahora daría lo que fuera por volver a oírlos.",
+	"ferretero": "Treinta años abriendo la ferretería a las ocho, con mi *bocadillo de chorizo* envuelto en papel de plata para el almuerzo. Con eso aguanto hasta la hora de cerrar… y hasta clavar tablas contra zombis.",
+	"farmaceutica": "La farmacia era de mi abuela, y al salir del colegio siempre me daba un *yogur de fresa*. Todavía me sabe a las tardes en la rebotica, contando pastillas con ella.",
+	"tecnico": "En la tienda de electrónica hacía turnos de doce horas arreglando móviles. Sin una *bebida energética* no soy persona: se me cruzan los cables, y no precisamente los del trabajo.",
+	"programador": "Hacía las prácticas en Velaria con el becario. Las noches de entrega pedíamos pizza y nos la repartíamos encima del teclado. Él siempre me dejaba la mejor *porción de pizza*, la del medio.",
+	"limpiadora": "Llevo quince años limpiando esta torre de noche. Mi *termo de café* es lo único que no me ha fallado en ningún turno. Tú también eres de la limpieza, chico: ya sabes lo largas que se hacen las noches.",
+	"recepcionista": "Ocho horas sonriendo detrás del mostrador y veinte minutos para comerme la *ensalada* a escondidas. Mi jefe decía que la recepción tenía que oler a perfume, no a vinagreta.",
 }
 # [/traducir]
 const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
@@ -231,12 +236,23 @@ static func de_comida(comida: String) -> String:
 static func desc_de(def: Dictionary) -> String:
 	return Idioma.t(def.get("desc", ""))
 
+
+# Lo que cuenta de su vida en los trasteros (VIDAS), ya traducido y en BBCode: lo que va entre asteriscos, su comida
+# favorita, en amarillo
+static func vida_de(def: Dictionary) -> String:
+	var trozos := Idioma.t(VIDAS.get(def.get("id", ""), "")).split("*")
+	var t := ""
+	for i in trozos.size():
+		t += ("[color=#%s]%s[/color]" % [Tema.AMARILLO.to_html(false), trozos[i]]) if i % 2 == 1 else trozos[i]
+	return t
+
 var partida: Node
 var johnny: Node2D
 var rescate := {}          # {def, planta, rescatado, amigo, sitio, horda_hecha} o vacío si no queda a quién salvar
 var equipo: Array = []     # los Aliado que siguen a Johnny
 var npc: Aliado = null     # el superviviente en su baño (mientras se está en su apartamento)
 var puerta: Node2D = null  # y la puerta del baño
+var charla: Tutorial = null   # la ventana en la que cuenta su vida un vecino de los trasteros, mientras está abierta (pedir_vecino)
 var vecinos: Array = []    # los rescatados de otras partidas, cada uno en su habitación de las viviendas
 var barricada := Barricada.new()   # el rescate del ferretero
 var socorro_t := 1.0
@@ -801,13 +817,16 @@ func colocar_vecinos() -> void:
 		v.position = v.casa
 		partida.mapa.cosas.add_child(v)
 		vecinos.append(v)
-		# delante de él se usa con la E, como un mueble (M124): le das su comida y te acompaña (pedir_vecino)
+		# delante de él se usa con la E, como un mueble (M124): te cuenta su vida y, si le das su comida, te acompaña
+		# (pedir_vecino). Con Johnny delante, su silueta con el contorno amarillo de los muebles (17 nov)
 		var zona := ZONA_USAR.new()
 		zona.montar_rect(Rect2(-70, -90, 140, 170))
 		zona.al_pie = true
 		zona.boton = Idioma.t("Hablar")
 		zona.puede = func() -> bool: return v.modo == "vecino"
 		v.add_child(zona)
+		if v.sprite:
+			zona.montar_animado(v.sprite)
 		zona.usar.connect(pedir_vecino.bind(v))
 
 
@@ -823,11 +842,35 @@ func vecino_cerca() -> Aliado:
 	return mejor
 
 
-# La E delante de un vecino (M124): si llevas su comida favorita (en la mochila o, si no, en el baúl), se la das, se la
-# come y se viene contigo (y el que te acompañaba vuelve a su habitación); si no, te la pide en blanco («¿No tendrás por ahí una manzana?»: PIDE)
+# La E delante de un vecino (17 nov; antes, M124, le dabas la comida directamente): con el juego parado, una ventana
+# como las de tutorial en la que cuenta su vida (vida_de, con su comida favorita en amarillo) y dos botones: «Seguir» la
+# cierra y «Dar de comer» le da su comida (dar_de_comer). Si no la llevas (ni en la mochila ni en el baúl), «Dar de
+# comer» sale apagado y debajo pone dónde se encuentra
 func pedir_vecino(v: Aliado) -> void:
-	if v.modo != "vecino":
+	if v.modo != "vecino" or charla != null:
 		return
+	var tiene := tiene_comida(v.def.get("comida", ""))
+	var nota := "" if tiene else Idioma.t("No llevas su comida favorita: sale de las neveras y las encimeras de las cocinas")
+	var parado := get_tree().paused
+	get_tree().paused = true
+	charla = Tutorial.charla(partida, nombre_de(v.def), vida_de(v.def), [Idioma.t("Seguir"), Idioma.t("Dar de comer")],
+		[false, not tiene], nota)
+	await charla.cerrado
+	var eleccion := charla.eleccion
+	charla = null
+	get_tree().paused = parado
+	if eleccion == 1:
+		dar_de_comer(v)
+
+
+# Si llevas la comida "comida", en la mochila o en el baúl
+func tiene_comida(comida: String) -> bool:
+	return comida in partida.mochila or int(Guardado.cargar().baul.get(comida, 0)) > 0
+
+
+# «Dar de comer» (M124): su comida favorita, de la mochila o, si no, del baúl; se la come y se viene contigo (y el que te
+# acompañaba vuelve a su habitación)
+func dar_de_comer(v: Aliado) -> void:
 	var comida: String = v.def.get("comida", "")
 	if comida in partida.mochila:
 		partida.mochila.remove_at(partida.mochila.rfind(comida))
@@ -837,8 +880,6 @@ func pedir_vecino(v: Aliado) -> void:
 			if g.baul[comida] <= 0:
 				g.baul.erase(comida))
 	else:
-		v.decir(Idioma.t(PIDE.get(comida, "")), Color.WHITE)
-		Sonido.tocar("no")
 		return
 	partida.decir(Idioma.t("Le das: %s · %s te acompaña esta partida") % [Objetos.nombre(comida), nombre_de(v.def)], 3.0)
 	llevar_vecino(v, false)
@@ -1187,11 +1228,13 @@ func probar_viviendas() -> void:
 	var policia: Aliado = vecinos.filter(func(v): return v.def.id == "policia")[0]
 	await arrimarse(policia)
 	await usar_delante()
+	await responder(1)
 	print("Acompaña: '%s' | equipo %s (esperado: policia, [Policía])" % [Guardado.cargar().acompanante,
 		equipo.map(func(x): return x.def.nombre)])
 	var militar: Aliado = vecinos.filter(func(v): return v.def.id == "militar")[0]
 	await arrimarse(militar)
 	await usar_delante()
+	await responder(1)
 	print("Acompaña: '%s' | equipo %s | el policía, de vuelta en «%s» (esperado: militar, [Militar], Policía)" % [
 		Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre),
 		mapa.nombre_zona(mapa.zona_en(policia.position))])
@@ -1243,7 +1286,14 @@ func usar_delante() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	Input.action_release("usar")
-	await get_tree().create_timer(0.3, false).timeout
+	await get_tree().create_timer(0.3, true).timeout   # (corre también con la charla abierta, que para el juego)
+
+
+# En la charla abierta (pedir_vecino), pulsa el botón "i" (0: «Seguir», 1: «Dar de comer») y espera a que se cierre
+func responder(i: int) -> void:
+	if charla:
+		charla.elegir(i)
+	await get_tree().create_timer(0.2, true).timeout
 
 
 # Los seis rescatados a la vez en las viviendas, cada uno en su habitación (sin acompañante, para que se vean

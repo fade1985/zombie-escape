@@ -3707,6 +3707,18 @@ msgid "Hablar"
 msgstr "交谈"
 
 #: scripts/supervivientes.gd
+msgid "No llevas su comida favorita: sale de las neveras y las encimeras de las cocinas"
+msgstr "你没有他最爱的食物：可以在厨房的冰箱和料理台里找到"
+
+#: scripts/supervivientes.gd scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "继续"
+
+#: scripts/supervivientes.gd
+msgid "Dar de comer"
+msgstr "喂食"
+
+#: scripts/supervivientes.gd
 msgid "Le das: %s · %s te acompaña esta partida"
 msgstr "你给了：%s · %s这一局跟着你"
 
@@ -3956,40 +3968,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "别把我丢在这儿！"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un dónut?"
-msgstr "你身上有没有甜甜圈？"
+msgid "Veinte años patrullando este barrio, y cada noche paraba en la misma pastelería de la esquina. El dueño me guardaba el último *dónut* glaseado aunque fueran las tantas. La pastelería ya no está… pero las ganas de dónut, sí."
+msgstr "我在这片街区巡逻了二十年，每天晚上都会去街角那家糕点店。不管多晚，老板都会给我留最后一个糖霜*甜甜圈*。糕点店已经没了……可我对甜甜圈的念想还在。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una manzana?"
-msgstr "你身上有没有苹果？"
+msgid "En el hospital comía de pie, entre guardia y guardia: una *manzana* en el bolsillo de la bata y a correr. Dicen que una manzana al día aleja al médico… y aquí me tienes."
+msgstr "在医院时我都是站着吃饭，在两个班之间：白大褂口袋里揣个*苹果*就跑。都说一天一苹果，医生远离我……结果我还是在这儿。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una lata de judías?"
-msgstr "你身上有没有豆子罐头？"
+msgid "En las maniobras nos daban *latas de judías* frías, y yo era el único que repetía. Mis compañeros se reían de mí. Ahora daría lo que fuera por volver a oírlos."
+msgstr "演习的时候发给我们冰冷的*豆子罐头*，只有我会再要一份。战友们都笑话我。现在要是能再听到他们的笑声，我什么都愿意给。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un yogur de fresa?"
-msgstr "你身上有没有草莓酸奶？"
+msgid "Treinta años abriendo la ferretería a las ocho, con mi *bocadillo de chorizo* envuelto en papel de plata para el almuerzo. Con eso aguanto hasta la hora de cerrar… y hasta clavar tablas contra zombis."
+msgstr "三十年来，我每天八点开五金店的门，午饭是用锡纸包着的*香肠三明治*。靠它我能撑到关门……还能撑着钉木板挡丧尸。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un bocadillo de chorizo?"
-msgstr "你身上有没有香肠三明治？"
+msgid "La farmacia era de mi abuela, y al salir del colegio siempre me daba un *yogur de fresa*. Todavía me sabe a las tardes en la rebotica, contando pastillas con ella."
+msgstr "这家药店原本是我奶奶的，每次放学她都会给我一盒*草莓酸奶*。现在吃起来还是那些下午的味道：和她一起在药房后屋数药片。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una bebida energética?"
-msgstr "你身上有没有能量饮料？"
+msgid "En la tienda de electrónica hacía turnos de doce horas arreglando móviles. Sin una *bebida energética* no soy persona: se me cruzan los cables, y no precisamente los del trabajo."
+msgstr "我在电子产品店一干就是十二个小时，专修手机。没有*能量饮料*我就不是人了：脑子里的线会搭错，可不是工作上的那些线。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una porción de pizza?"
-msgstr "你身上有没有一块披萨？"
+msgid "Hacía las prácticas en Velaria con el becario. Las noches de entrega pedíamos pizza y nos la repartíamos encima del teclado. Él siempre me dejaba la mejor *porción de pizza*, la del medio."
+msgstr "我和那个实习生一起在维拉利亚实习。赶工的晚上我们会点披萨，在键盘上分着吃。他总把最好的*一块披萨*留给我，就是中间那块。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un termo de café?"
-msgstr "你身上有没有保温壶咖啡？"
+msgid "Llevo quince años limpiando esta torre de noche. Mi *termo de café* es lo único que no me ha fallado en ningún turno. Tú también eres de la limpieza, chico: ya sabes lo largas que se hacen las noches."
+msgstr "我在这座大楼做夜班保洁已经十五年了。我的*保温壶咖啡*是唯一一个从没让我失望过的伙伴。你也是干保洁的，小伙子：你知道夜有多长。"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una ensalada?"
-msgstr "你身上有没有沙拉？"
+msgid "Ocho horas sonriendo detrás del mostrador y veinte minutos para comerme la *ensalada* a escondidas. Mi jefe decía que la recepción tenía que oler a perfume, no a vinagreta."
+msgstr "在前台后面笑八个小时，只有二十分钟偷偷吃我的*沙拉*。我老板说前台应该是香水味，不是油醋汁的味道。"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5340,8 +5352,8 @@ msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Alg
 msgstr "你救出的幸存者住在这里，每人一间储藏室。有些人即使不跟着你也会帮你。"
 
 #: scripts/tutoriales.gd
-msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
-msgstr "想让某人跟着你，就站到他面前按{usar}：前提是你带着他最爱的食物，就显示在他名字下面。他会跟你一局，之后回到自己的储藏室。"
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
+msgstr "站到其中一人面前按{usar}：他会讲讲自己的经历和最爱的食物。如果你带着，就喂他吃，他会跟你一局，之后回到自己的储藏室。"
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"
@@ -6608,10 +6620,6 @@ msgstr "发现于尸体旁：%s"
 #: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "已保存到维修间电脑的“档案”里"
-
-#: scripts/ui/menus.gd
-msgid "Seguir"
-msgstr "继续"
 
 #: scripts/ui/menus.gd
 msgid "Clic: pasar la frase · Esc: apagar la tele"

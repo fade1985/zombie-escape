@@ -3,6 +3,10 @@
 #     parado; el menú principal, la de la alerta). La cierran «Entendido», Esc, B o Start. El botón no hace caso las
 #     primeras décimas (ESPERA): así, un Espacio de esquivar o un clic de atacar que pilla la ventana al salir no la
 #     cierra sin leerla.
+#   - Tutorial.charla(dueño, título, texto, botones, apagados, nota): lo que cuenta un superviviente de los trasteros
+#     (supervivientes.gd, pedir_vecino; 17 nov): con la misma pinta que la ventana, pero con el texto que se le da y
+#     varios botones en fila («Seguir», «Dar de comer»). Al cerrarse, "eleccion" dice cuál se ha pulsado (-1: Esc o B).
+#     Los "apagados" salen en gris y no se pueden pulsar; la "nota", en pequeño debajo del texto.
 #   - Tutorial.lista(dueño, lo_que_tapa): el apartado Tutorial del menú principal y de la pausa. A la izquierda los
 #     temas por grupos (los que aún no han salido, con «???») y a la derecha la ficha del elegido. Mientras está
 #     abierto esconde "lo_que_tapa" (el menú de detrás), como Opciones.
@@ -24,6 +28,12 @@ var listo := false         # (ventana) ya ha pasado la ESPERA
 var derecha: VBoxContainer # (lista) donde va la ficha del elegido
 var botones := {}          # (lista) el botón de cada tema
 var elegido := ""
+var titulo := ""           # (charla) lo de arriba
+var texto := ""            # (charla) lo que cuenta, en BBCode
+var opciones := []         # (charla) el texto de cada botón
+var apagados := []         # (charla) cuáles no se pueden pulsar
+var nota := ""             # (charla) la línea pequeña de debajo
+var eleccion := -1         # (charla) el botón pulsado al cerrarse
 
 
 static func ventana(dueno: Node, cual: String) -> Tutorial:
@@ -31,6 +41,22 @@ static func ventana(dueno: Node, cual: String) -> Tutorial:
 	t.id = cual
 	dueno.add_child(t)
 	return t
+
+
+static func charla(dueno: Node, cabeza: String, bbcode: String, botones: Array, apagar: Array = [], pie := "") -> Tutorial:
+	var t := Tutorial.new()
+	t.titulo = cabeza
+	t.texto = bbcode
+	t.opciones = botones
+	t.apagados = apagar
+	t.nota = pie
+	dueno.add_child(t)
+	return t
+
+
+# Si es de las que salen solas con el juego parado (la ventana o la charla) y no la lista
+func es_ventana() -> bool:
+	return id != "" or titulo != ""
 
 
 static func lista(dueno: Node, tapar: CanvasItem) -> Tutorial:
@@ -44,7 +70,7 @@ func _ready() -> void:
 	layer = 12   # encima de todo lo demás (la pausa, Opciones, el ordenador...)
 	process_mode = Node.PROCESS_MODE_ALWAYS   # sale con el juego parado
 	var fondo := ColorRect.new()
-	fondo.color = Color(0.04, 0.03, 0.06, 0.8 if id != "" else 0.85)
+	fondo.color = Color(0.04, 0.03, 0.06, 0.8 if es_ventana() else 0.85)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	fondo.theme = Tema.crear_liso()   # (la letra lisa, Rubik: se lee mejor)
 	add_child(fondo)
@@ -58,6 +84,8 @@ func _ready() -> void:
 	panel.add_child(columna)
 	if id != "":
 		montar_ventana(columna)
+	elif titulo != "":
+		montar_charla(columna)
 	else:
 		if tapado:
 			tapado.hide()
@@ -96,6 +124,60 @@ func montar_ventana(columna: VBoxContainer) -> void:
 	listo = true
 	vale.disabled = false
 	vale.grab_focus()
+
+
+func montar_charla(columna: VBoxContainer) -> void:
+	Sonido.tocar("click")
+	var cabeza := Label.new()
+	cabeza.theme_type_variation = "Titulo"
+	cabeza.text = titulo
+	cabeza.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(cabeza)
+	columna.add_child(texto_rico(texto))
+	if nota != "":
+		var pie := Label.new()
+		pie.theme_type_variation = "Sub"
+		pie.text = nota
+		pie.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		pie.custom_minimum_size.x = ANCHO
+		pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		columna.add_child(pie)
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_theme_constant_override("separation", 16)
+	columna.add_child(fila)
+	var lista_botones: Array[Button] = []
+	for i in opciones.size():
+		var b := Button.new()
+		b.text = opciones[i]
+		b.custom_minimum_size.x = 200
+		b.disabled = true
+		b.pressed.connect(elegir.bind(i))
+		fila.add_child(b)
+		lista_botones.append(b)
+	# el foco, en el último que se pueda pulsar («Dar de comer» si llevas su comida; si no, «Seguir»), y los botones,
+	# al rato (como «Entendido»)
+	var foco: Button = lista_botones[0]
+	for i in lista_botones.size():
+		if not apagado(i):
+			foco = lista_botones[i]
+	foco.grab_focus.call_deferred()
+	await get_tree().create_timer(ESPERA).timeout
+	listo = true
+	for i in lista_botones.size():
+		lista_botones[i].disabled = apagado(i)
+	foco.grab_focus()
+
+
+# (charla) Si el botón "i" sale apagado
+func apagado(i: int) -> bool:
+	return i < apagados.size() and apagados[i]
+
+
+# (charla) Cierra la ventana con el botón "i" pulsado (también lo usan las pruebas)
+func elegir(i: int) -> void:
+	eleccion = i
+	cerrar()
 
 
 func montar_lista(columna: VBoxContainer) -> void:
@@ -211,20 +293,25 @@ static func ficha(cual: String) -> VBoxContainer:
 	cabeza.text = Tutoriales.titulo_de(cual)
 	cabeza.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja.add_child(cabeza)
-	var texto := RichTextLabel.new()
-	texto.bbcode_enabled = true
-	texto.fit_content = true
-	texto.scroll_active = false
-	texto.focus_mode = Control.FOCUS_NONE
-	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	texto.custom_minimum_size.x = ANCHO
-	texto.add_theme_color_override("default_color", Tema.TINTA)
-	texto.add_theme_color_override("font_outline_color", Tema.LINEA)
-	texto.add_theme_constant_override("outline_size", 4)
-	texto.add_theme_constant_override("line_separation", 2)
-	texto.add_theme_constant_override("paragraph_separation", 6)
-	texto.text = Tutoriales.texto(cual)
-	caja.add_child(texto)
+	caja.add_child(texto_rico(Tutoriales.texto(cual)))
+	return caja
+
+
+# Las líneas de una ficha (o de una charla), en BBCode: la letra hueso con el contorno oscuro
+static func texto_rico(bbcode: String) -> RichTextLabel:
+	var caja := RichTextLabel.new()
+	caja.bbcode_enabled = true
+	caja.fit_content = true
+	caja.scroll_active = false
+	caja.focus_mode = Control.FOCUS_NONE
+	caja.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	caja.custom_minimum_size.x = ANCHO
+	caja.add_theme_color_override("default_color", Tema.TINTA)
+	caja.add_theme_color_override("font_outline_color", Tema.LINEA)
+	caja.add_theme_constant_override("outline_size", 4)
+	caja.add_theme_constant_override("line_separation", 2)
+	caja.add_theme_constant_override("paragraph_separation", 6)
+	caja.text = bbcode
 	return caja
 
 
@@ -239,7 +326,7 @@ func cerrar() -> void:
 
 # Esc o B cierran (la ventana, también Start; y no antes de la ESPERA)
 func _unhandled_input(evento: InputEvent) -> void:
-	if evento.is_action_pressed("ui_cancel") or (id != "" and evento.is_action_pressed("pausa")):
+	if evento.is_action_pressed("ui_cancel") or (es_ventana() and evento.is_action_pressed("pausa")):
 		get_viewport().set_input_as_handled()
-		if id == "" or listo:
+		if not es_ventana() or listo:
 			cerrar()

@@ -3715,6 +3715,18 @@ msgid "Hablar"
 msgstr "Talk"
 
 #: scripts/supervivientes.gd
+msgid "No llevas su comida favorita: sale de las neveras y las encimeras de las cocinas"
+msgstr "You don't have their favorite food: it turns up in kitchen fridges and counters"
+
+#: scripts/supervivientes.gd scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "Continue"
+
+#: scripts/supervivientes.gd
+msgid "Dar de comer"
+msgstr "Give food"
+
+#: scripts/supervivientes.gd
 msgid "Le das: %s · %s te acompaña esta partida"
 msgstr "You give: %s · The %s is coming with you this run"
 
@@ -3964,40 +3976,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "DON'T LEAVE ME HERE!"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un dónut?"
-msgstr "Any chance you've got a donut?"
+msgid "Veinte años patrullando este barrio, y cada noche paraba en la misma pastelería de la esquina. El dueño me guardaba el último *dónut* glaseado aunque fueran las tantas. La pastelería ya no está… pero las ganas de dónut, sí."
+msgstr "Twenty years patrolling this neighborhood, and every night I'd stop at the same bakery on the corner. The owner saved me the last glazed *donut*, no matter how late it was. The bakery's gone now… but the donut cravings aren't."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una manzana?"
-msgstr "Any chance you've got an apple?"
+msgid "En el hospital comía de pie, entre guardia y guardia: una *manzana* en el bolsillo de la bata y a correr. Dicen que una manzana al día aleja al médico… y aquí me tienes."
+msgstr "At the hospital I ate standing up, between shifts: an *apple* in my coat pocket and off I ran. They say an apple a day keeps the doctor away… and yet here I am."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una lata de judías?"
-msgstr "Any chance you've got a can of beans?"
+msgid "En las maniobras nos daban *latas de judías* frías, y yo era el único que repetía. Mis compañeros se reían de mí. Ahora daría lo que fuera por volver a oírlos."
+msgstr "On maneuvers they gave us cold *cans of beans*, and I was the only one who went back for seconds. My buddies used to laugh at me. I'd give anything to hear them laugh again."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un yogur de fresa?"
-msgstr "Any chance you've got a strawberry yogurt?"
+msgid "Treinta años abriendo la ferretería a las ocho, con mi *bocadillo de chorizo* envuelto en papel de plata para el almuerzo. Con eso aguanto hasta la hora de cerrar… y hasta clavar tablas contra zombis."
+msgstr "Thirty years opening the hardware store at eight, with my *chorizo sandwich* wrapped in foil for lunch. That keeps me going until closing time… and through nailing boards against zombies."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un bocadillo de chorizo?"
-msgstr "Any chance you've got a chorizo sandwich?"
+msgid "La farmacia era de mi abuela, y al salir del colegio siempre me daba un *yogur de fresa*. Todavía me sabe a las tardes en la rebotica, contando pastillas con ella."
+msgstr "The pharmacy was my grandmother's, and after school she always gave me a *strawberry yogurt*. It still tastes like those afternoons in the back room, counting pills with her."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una bebida energética?"
-msgstr "Any chance you've got an energy drink?"
+msgid "En la tienda de electrónica hacía turnos de doce horas arreglando móviles. Sin una *bebida energética* no soy persona: se me cruzan los cables, y no precisamente los del trabajo."
+msgstr "At the electronics store I worked twelve-hour shifts fixing phones. Without an *energy drink* I'm useless: my wires get crossed, and not the ones at work."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una porción de pizza?"
-msgstr "Any chance you've got a slice of pizza?"
+msgid "Hacía las prácticas en Velaria con el becario. Las noches de entrega pedíamos pizza y nos la repartíamos encima del teclado. Él siempre me dejaba la mejor *porción de pizza*, la del medio."
+msgstr "I was interning at Velaria with the intern. On deadline nights we'd order pizza and share it over the keyboard. He always left me the best *slice of pizza*, the one from the middle."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un termo de café?"
-msgstr "Any chance you've got a coffee flask?"
+msgid "Llevo quince años limpiando esta torre de noche. Mi *termo de café* es lo único que no me ha fallado en ningún turno. Tú también eres de la limpieza, chico: ya sabes lo largas que se hacen las noches."
+msgstr "I've been cleaning this tower at night for fifteen years. My *coffee flask* is the only thing that's never let me down on a shift. You're a cleaner too, kid: you know how long the nights get."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una ensalada?"
-msgstr "Any chance you've got a salad?"
+msgid "Ocho horas sonriendo detrás del mostrador y veinte minutos para comerme la *ensalada* a escondidas. Mi jefe decía que la recepción tenía que oler a perfume, no a vinagreta."
+msgstr "Eight hours smiling behind the front desk and twenty minutes to sneak my *salad*. My boss said reception should smell of perfume, not vinaigrette."
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5348,8 +5360,8 @@ msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Alg
 msgstr "The survivors you rescue live here, each in their own storage room. Some help you even if they don't come along."
 
 #: scripts/tutoriales.gd
-msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
-msgstr "To bring one along, stand in front of them and press {usar}: only if you have their favorite food, shown under their name. They come for one run; then they go back to their storage room."
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
+msgstr "Stand in front of one and press {usar}: they'll tell you their story and their favorite food. If you have it, feed them and they'll come with you for one run; then they go back to their storage room."
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"
@@ -6629,10 +6641,6 @@ msgstr "Next to the body of %s"
 #: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "Saved in the Dossier on the maintenance computer"
-
-#: scripts/ui/menus.gd
-msgid "Seguir"
-msgstr "Continue"
 
 #: scripts/ui/menus.gd
 msgid "Clic: pasar la frase · Esc: apagar la tele"

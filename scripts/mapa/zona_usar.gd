@@ -37,11 +37,28 @@ void fragment() {
 	COLOR = (opaco(TEXTURE, UV) < 0.5 && vecinos > 0.0) ? color : vec4(0.0);
 }
 """
+# El mismo contorno para un dibujo animado (los supervivientes de los trasteros, 17 nov: montar_animado): sus fotogramas
+# son trozos de una hoja grande, así que no crece ni mira los bordes de la imagen (el muñeco no llega al borde de su casilla)
+const SHADER_CONTORNO_ANIMADO := """
+shader_type canvas_item;
+render_mode unshaded;
+uniform vec4 color : source_color;
+float opaco(sampler2D t, vec2 uv) {
+	return step(0.5, texture(t, uv).a);
+}
+void fragment() {
+	vec2 p = TEXTURE_PIXEL_SIZE;
+	float vecinos = opaco(TEXTURE, UV + vec2(p.x, 0.0)) + opaco(TEXTURE, UV - vec2(p.x, 0.0))
+		+ opaco(TEXTURE, UV + vec2(0.0, p.y)) + opaco(TEXTURE, UV - vec2(0.0, p.y));
+	COLOR = (opaco(TEXTURE, UV) < 0.5 && vecinos > 0.0) ? color : vec4(0.0);
+}
+"""
 
 var johnny: Node2D = null   # Johnny, mientras está en la zona
 var clic_fuera := false     # si lo último con lo que se ha atacado es un clic lejos del mueble: ni se abre ni para el ataque
 var dibujo: Sprite2D = null     # el dibujo del mueble
-var contorno: Sprite2D = null   # su contorno amarillo, escondido mientras no toca
+var contorno: Node2D = null     # su contorno amarillo, escondido mientras no toca
+var animado: AnimatedSprite2D = null   # (montar_animado) el dibujo animado al que sigue el contorno
 var raton := Vector2(-1, -1)    # dónde está el ratón en la pantalla (el último movimiento); negativo si aún no se ha movido
 var puede := Callable()         # si se da, cuándo se puede usar (si no, siempre): mientras no, ni contorno ni se usa, y J ataca
 var cierra := false             # el botón del móvil dice «Cerrar» en vez de «Abrir» (una puerta abierta)
@@ -115,9 +132,37 @@ func _ready() -> void:
 	get_parent().add_child.call_deferred(contorno)
 
 
+# Para un dibujo animado (17 nov: los supervivientes de los trasteros, que respiran y se giran): el contorno es una copia
+# de su animación, a su lado, que va siempre por el mismo fotograma
+func montar_animado(s: AnimatedSprite2D) -> void:
+	animado = s
+	var copia := AnimatedSprite2D.new()
+	copia.name = "Contorno"   # no-tr
+	copia.sprite_frames = s.sprite_frames
+	copia.position = s.position
+	copia.scale = s.scale
+	copia.centered = s.centered
+	copia.offset = s.offset
+	var sombreador := Shader.new()
+	sombreador.code = SHADER_CONTORNO_ANIMADO
+	var material := ShaderMaterial.new()
+	material.shader = sombreador
+	material.set_shader_parameter("color", COLOR_CONTORNO)
+	copia.material = material
+	copia.visible = false
+	s.add_sibling(copia)
+	contorno = copia
+
+
 func _process(_delta: float) -> void:
 	if contorno:
 		contorno.visible = resaltado()
+	if animado and contorno.visible:
+		var copia := contorno as AnimatedSprite2D
+		if copia.animation != animado.animation:
+			copia.animation = animado.animation
+		copia.frame = animado.frame
+		copia.flip_h = animado.flip_h
 
 
 # Si toca enseñar el contorno: cuando Johnny está delante y ya se puede usar (con E ya no hay que apuntar con el ratón)

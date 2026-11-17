@@ -202,8 +202,10 @@ banco), manda la más cercana: solo esa sale con el contorno y solo esa se usa.
   otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (la fregona Normal de la mano, solo si lleva otra cuerpo a cuerpo de repuesto, que pasa a la mano, para que siempre tenga con qué pegar: `inventario.fregona_sola`, M61; cualquier arma a distancia sin otra de repuesto, también: Johnny se queda sin arma a distancia hasta que la saca, `Armas.SIN_FUEGO`, con el hueco de fuego en `""`; al completar el edificio la fregona y la pistola Normales no pasan al baúl) y arrojables (los del mismo
   tipo y calidad juntos, hasta 99, y salen de 5 en 5), cada arma en su casilla y todo con el borde del color de su
   **calidad** (gris Normal, verde Poco común, azul Rara, morado Épica). Lo que lleva encima se pierde si cae; al
-  completar el edificio, sus armas y todos sus arrojables pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, los **trasteros** de los rescatados (arriba pone «Trasteros»; en el código, «viviendas»): E delante de uno para que te acompañe una
-  partida (uno a la vez), solo con su comida favorita en la mochila o en el baúl (si no, te la pide: «¿No tendrás por ahí una manzana?»; M124).
+  completar el edificio, sus armas y todos sus arrojables pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, los **trasteros** de los rescatados (arriba pone «Trasteros»; en el código, «viviendas»): al acercarse a uno sale
+  con el contorno amarillo y la E abre una ventana con su vida (su comida favorita, en amarillo) y dos botones: «Seguir» y «Dar de
+  comer», que le da su comida (de la mochila o del baúl) y te acompaña una partida (uno a la vez); sin ella, ese botón sale apagado
+  (M124; la ventana, 17 nov).
 
 Al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el **ascensor** del pasillo: baja a esta sala y
 vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado y la azotea no tiene.

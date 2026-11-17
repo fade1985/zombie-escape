@@ -3715,6 +3715,18 @@ msgid "Hablar"
 msgstr "Reden"
 
 #: scripts/supervivientes.gd
+msgid "No llevas su comida favorita: sale de las neveras y las encimeras de las cocinas"
+msgstr "Du hast sein Lieblingsessen nicht dabei: Es liegt in den Kühlschränken und auf den Arbeitsplatten der Küchen"
+
+#: scripts/supervivientes.gd scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "Weiter"
+
+#: scripts/supervivientes.gd
+msgid "Dar de comer"
+msgstr "Füttern"
+
+#: scripts/supervivientes.gd
 msgid "Le das: %s · %s te acompaña esta partida"
 msgstr "Du gibst: %s · Begleitet dich diese Runde: %s"
 
@@ -3964,40 +3976,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "LASS MICH NICHT HIER!"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un dónut?"
-msgstr "Hast du zufällig einen Donut dabei?"
+msgid "Veinte años patrullando este barrio, y cada noche paraba en la misma pastelería de la esquina. El dueño me guardaba el último *dónut* glaseado aunque fueran las tantas. La pastelería ya no está… pero las ganas de dónut, sí."
+msgstr "Zwanzig Jahre Streife in diesem Viertel, und jede Nacht hielt ich bei derselben Bäckerei an der Ecke. Der Besitzer hob mir den letzten glasierten *Donut* auf, egal wie spät es war. Die Bäckerei gibt es nicht mehr … die Lust auf Donuts schon."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una manzana?"
-msgstr "Hast du zufällig einen Apfel dabei?"
+msgid "En el hospital comía de pie, entre guardia y guardia: una *manzana* en el bolsillo de la bata y a correr. Dicen que una manzana al día aleja al médico… y aquí me tienes."
+msgstr "Im Krankenhaus aß ich im Stehen, zwischen zwei Schichten: ein *Apfel* in der Kitteltasche und los. An apple a day keeps the doctor away, sagt man … und trotzdem bin ich hier."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una lata de judías?"
-msgstr "Hast du zufällig eine Dose Bohnen dabei?"
+msgid "En las maniobras nos daban *latas de judías* frías, y yo era el único que repetía. Mis compañeros se reían de mí. Ahora daría lo que fuera por volver a oírlos."
+msgstr "Im Manöver gab es kalte *Dosen Bohnen*, und ich war der Einzige, der Nachschlag wollte. Meine Kameraden haben mich ausgelacht. Heute gäbe ich alles, um sie noch einmal lachen zu hören."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un yogur de fresa?"
-msgstr "Hast du zufällig einen Erdbeerjoghurt dabei?"
+msgid "Treinta años abriendo la ferretería a las ocho, con mi *bocadillo de chorizo* envuelto en papel de plata para el almuerzo. Con eso aguanto hasta la hora de cerrar… y hasta clavar tablas contra zombis."
+msgstr "Dreißig Jahre habe ich den Eisenwarenladen um acht aufgeschlossen, mit meinem *Chorizo-Brötchen* in Alufolie für die Pause. Damit halte ich bis Ladenschluss durch … und auch beim Bretternageln gegen Zombies."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un bocadillo de chorizo?"
-msgstr "Hast du zufällig ein Chorizo-Brötchen dabei?"
+msgid "La farmacia era de mi abuela, y al salir del colegio siempre me daba un *yogur de fresa*. Todavía me sabe a las tardes en la rebotica, contando pastillas con ella."
+msgstr "Die Apotheke gehörte meiner Oma, und nach der Schule gab sie mir immer einen *Erdbeerjoghurt*. Er schmeckt noch heute nach den Nachmittagen im Hinterzimmer, wo wir zusammen Tabletten zählten."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una bebida energética?"
-msgstr "Hast du zufällig einen Energydrink dabei?"
+msgid "En la tienda de electrónica hacía turnos de doce horas arreglando móviles. Sin una *bebida energética* no soy persona: se me cruzan los cables, y no precisamente los del trabajo."
+msgstr "Im Elektronikladen habe ich zwölf Stunden am Stück Handys repariert. Ohne einen *Energydrink* bin ich kein Mensch: Dann kreuzen sich bei mir die Kabel, und zwar nicht die von der Arbeit."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una porción de pizza?"
-msgstr "Hast du zufällig ein Stück Pizza dabei?"
+msgid "Hacía las prácticas en Velaria con el becario. Las noches de entrega pedíamos pizza y nos la repartíamos encima del teclado. Él siempre me dejaba la mejor *porción de pizza*, la del medio."
+msgstr "Ich habe mit dem Praktikanten mein Praktikum bei Velaria gemacht. In den Nächten vor der Abgabe haben wir Pizza bestellt und sie uns über der Tastatur geteilt. Er hat mir immer das beste *Stück Pizza* gelassen, das aus der Mitte."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un termo de café?"
-msgstr "Hast du zufällig eine Thermoskanne Kaffee dabei?"
+msgid "Llevo quince años limpiando esta torre de noche. Mi *termo de café* es lo único que no me ha fallado en ningún turno. Tú también eres de la limpieza, chico: ya sabes lo largas que se hacen las noches."
+msgstr "Seit fünfzehn Jahren putze ich nachts in diesem Turm. Meine *Thermoskanne Kaffee* ist das Einzige, das mich in keiner Schicht im Stich gelassen hat. Du bist auch von der Putzkolonne, Junge: Du weißt, wie lang die Nächte werden."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una ensalada?"
-msgstr "Hast du zufällig einen Salat dabei?"
+msgid "Ocho horas sonriendo detrás del mostrador y veinte minutos para comerme la *ensalada* a escondidas. Mi jefe decía que la recepción tenía que oler a perfume, no a vinagreta."
+msgstr "Acht Stunden Lächeln hinter dem Empfangstresen und zwanzig Minuten, um heimlich meinen *Salat* zu essen. Mein Chef meinte, der Empfang solle nach Parfüm riechen, nicht nach Vinaigrette."
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5348,8 +5360,8 @@ msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Alg
 msgstr "Hier wohnen die Überlebenden, die du rettest, jeder in seinem Kellerabteil. Manche helfen dir, auch wenn sie nicht mitkommen."
 
 #: scripts/tutoriales.gd
-msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
-msgstr "Damit dich jemand begleitet, stell dich davor und drück {usar}: nur, wenn du sein Lieblingsessen dabeihast, das unter dem Namen steht. Er kommt eine Runde mit und geht danach in sein Kellerabteil zurück."
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
+msgstr "Stell dich vor einen von ihnen und drück {usar}: Er erzählt dir aus seinem Leben und was sein Lieblingsessen ist. Hast du es dabei, gib ihm zu essen, dann begleitet er dich eine Runde und geht danach in sein Kellerabteil zurück."
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"
@@ -6629,10 +6641,6 @@ msgstr "Neben der Leiche von %s"
 #: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "Wird in der Akte auf dem Computer im Wartungsraum gespeichert"
-
-#: scripts/ui/menus.gd
-msgid "Seguir"
-msgstr "Weiter"
 
 #: scripts/ui/menus.gd
 msgid "Clic: pasar la frase · Esc: apagar la tele"

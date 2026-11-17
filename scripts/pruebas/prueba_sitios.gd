@@ -3729,6 +3729,62 @@ func probar_muebles_materiales() -> void:
 # (captura-comida-debil.png); con el dónut en la mochila, el policía se lo come y te acompaña
 # (captura-comida-acompana.png); y con la manzana en el baúl, la médica (y el policía vuelve a su trastero). Al final, el
 # guardado como estaba
+# --charla (17 nov): en los trasteros, el contorno amarillo del vecino con Johnny delante y la ventana de su vida al pulsar
+# la E: con la comida en amarillo, «Seguir» y «Dar de comer» (apagado sin su comida; con ella, te acompaña)
+func probar_charla() -> void:
+	var g := Guardado.cargar()
+	var antes := [g.rescatados.duplicate(), g.acompanante, g.baul.duplicate()]
+	Guardado.cambiar(func(x):
+		x.rescatados = ["policia", "tecnico", "limpiadora"]
+		x.acompanante = ""
+		x.baul.erase("donut")
+		x.baul.erase("energetica"))
+	mochila.clear()
+	await montar(planta.viviendas, 0, false)
+	var sup: Supervivientes = supervivientes
+	var policia: Aliado = sup.vecinos.filter(func(v): return v.def.id == "policia")[0]
+	var tecnico: Aliado = sup.vecinos.filter(func(v): return v.def.id == "tecnico")[0]
+	var zona: Area2D = policia.get_node("Zona")
+	print("Charla · lejos del policía: contorno %s (esperado: false)" % zona.contorno.visible)
+	await sup.arrimarse(policia)
+	johnny.position = policia.position + (johnny.position - policia.position).normalized() * 60.0   # (que no le tape)
+	await get_tree().create_timer(0.2, false).timeout
+	print("Charla · delante del policía: contorno %s, mismo fotograma %s (esperado: true, true)" % [zona.contorno.visible,
+		zona.contorno.frame == policia.sprite.frame and zona.contorno.animation == policia.sprite.animation])
+	Captura.foto("captura-charla-contorno.png")
+	# sin su dónut: «Dar de comer», apagado, y la nota de dónde sale
+	await sup.usar_delante()
+	await get_tree().create_timer(0.7, true).timeout   # (los botones se encienden a las 0,6 s)
+	print("Charla · el policía sin dónut: ventana %s · título «%s» · el dónut en amarillo %s · apagado %s · nota «%s» · juego parado %s" % [
+		sup.charla != null, sup.charla.titulo if sup.charla else "", sup.charla.texto.contains("[color=") if sup.charla else false,
+		sup.charla.apagado(1) if sup.charla else false, sup.charla.nota if sup.charla else "", get_tree().paused])
+	print("        (esperado: true, Policía, true, true, No llevas su comida favorita..., true)")
+	Captura.foto("captura-charla-sin-comida.png")
+	await sup.responder(0)
+	print("Charla · tras «Seguir»: ventana %s · juego parado %s · acompaña '%s' (esperado: false, false, '')" % [
+		sup.charla != null, get_tree().paused, Guardado.cargar().acompanante])
+	# con su bebida energética en la mochila: «Dar de comer» encendido y te acompaña
+	mochila.append("energetica")
+	await sup.arrimarse(tecnico)
+	await sup.usar_delante()
+	await get_tree().create_timer(0.7, true).timeout
+	print("Charla · el técnico con su bebida: apagado %s · nota «%s» (esperado: false, '')" % [
+		sup.charla.apagado(1) if sup.charla else true, sup.charla.nota if sup.charla else "?"])
+	Captura.foto("captura-charla-con-comida.png")
+	await sup.responder(1)
+	await get_tree().create_timer(0.4, false).timeout
+	print("Charla · tras «Dar de comer»: acompaña '%s' · mochila %s · contorno del técnico %s (esperado: tecnico, [], false)" % [
+		Guardado.cargar().acompanante, mochila, tecnico.get_node("Zona").contorno.visible])
+	# los textos de todos, con su comida entre asteriscos (la que sale en amarillo)
+	var mal := Supervivientes.DATOS.keys().filter(func(id): return Supervivientes.VIDAS.get(id, "").count("*") != 2)
+	print("Charla · vidas sin su comida entre dos asteriscos: %s (esperado: [])" % [mal])
+	Guardado.cambiar(func(x):
+		x.rescatados = antes[0]
+		x.acompanante = antes[1]
+		x.baul = antes[2])
+	get_tree().quit()
+
+
 func probar_comida() -> void:
 	var g := Guardado.cargar()
 	var antes := [g.rescatados.duplicate(), g.acompanante, g.baul.duplicate()]
@@ -3824,11 +3880,15 @@ func probar_comida() -> void:
 	var policia: Aliado = sup.vecinos.filter(func(v): return v.def.id == "policia")[0]
 	await sup.arrimarse(medica)
 	await sup.usar_delante()
-	print("Comida · la médica sin su manzana: dice «%s» · acompaña '%s' (esperado: ¿No tendrás por ahí una manzana?, '')" % [medica.dicho, Guardado.cargar().acompanante])
+	print("Comida · la médica sin su manzana: charla %s · «Dar de comer» apagado %s (esperado: true, true)" % [
+		sup.charla != null, sup.charla.apagado(1) if sup.charla else false])
 	Captura.foto("captura-comida-debil.png")
+	await sup.responder(1)   # (apagado: no hace nada más que cerrarla)
+	print("Comida · la médica, tras «Dar de comer» sin manzana: acompaña '%s' (esperado: '')" % Guardado.cargar().acompanante)
 	mochila.append("donut")
 	await sup.arrimarse(policia)
 	await sup.usar_delante()
+	await sup.responder(1)
 	await get_tree().create_timer(0.4, false).timeout
 	print("Comida · el policía con el dónut en la mochila: acompaña '%s' · equipo %s · mochila %s (esperado: policia, [Policía], [])" % [
 		Guardado.cargar().acompanante, sup.equipo.map(func(a): return a.def.nombre), mochila])
@@ -3836,6 +3896,7 @@ func probar_comida() -> void:
 	Guardado.cambiar(func(x): x.baul["manzana"] = 1)
 	await sup.arrimarse(medica)
 	await sup.usar_delante()
+	await sup.responder(1)
 	print("Comida · la médica con la manzana en el baúl: acompaña '%s' · manzanas en el baúl %d · el policía, en «%s» (esperado: medico, 0, Policía)" % [
 		Guardado.cargar().acompanante, int(Guardado.cargar().baul.get("manzana", 0)), mapa.nombre_zona(mapa.zona_en(policia.position))])
 	Guardado.cambiar(func(x):

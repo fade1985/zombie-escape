@@ -3723,6 +3723,18 @@ msgid "Hablar"
 msgstr "Говорить"
 
 #: scripts/supervivientes.gd
+msgid "No llevas su comida favorita: sale de las neveras y las encimeras de las cocinas"
+msgstr "У тебя нет его любимой еды: её можно найти в холодильниках и на столешницах кухонь"
+
+#: scripts/supervivientes.gd scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "Дальше"
+
+#: scripts/supervivientes.gd
+msgid "Dar de comer"
+msgstr "Накормить"
+
+#: scripts/supervivientes.gd
 msgid "Le das: %s · %s te acompaña esta partida"
 msgstr "Ты отдаешь: %s · %s с тобой на этот забег"
 
@@ -3972,40 +3984,40 @@ msgid "¡NO ME DEJES AQUÍ!"
 msgstr "НЕ БРОСАЙ МЕНЯ ТУТ!"
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un dónut?"
-msgstr "Не найдется у тебя пончика?"
+msgid "Veinte años patrullando este barrio, y cada noche paraba en la misma pastelería de la esquina. El dueño me guardaba el último *dónut* glaseado aunque fueran las tantas. La pastelería ya no está… pero las ganas de dónut, sí."
+msgstr "Двадцать лет патрулировал этот район и каждую ночь заезжал в одну и ту же кондитерскую на углу. Хозяин оставлял мне последний глазированный *пончик*, как бы поздно ни было. Кондитерской больше нет… а вот тяга к пончикам осталась."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una manzana?"
-msgstr "Не найдется у тебя яблока?"
+msgid "En el hospital comía de pie, entre guardia y guardia: una *manzana* en el bolsillo de la bata y a correr. Dicen que una manzana al día aleja al médico… y aquí me tienes."
+msgstr "В больнице я ела стоя, между дежурствами: *яблоко* в кармане халата — и бегом. Говорят, кто ест яблоко в день, тому врач не нужен… а я вот здесь."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una lata de judías?"
-msgstr "Не найдется у тебя банки фасоли?"
+msgid "En las maniobras nos daban *latas de judías* frías, y yo era el único que repetía. Mis compañeros se reían de mí. Ahora daría lo que fuera por volver a oírlos."
+msgstr "На учениях нам давали холодные *банки фасоли*, и только я просил добавки. Сослуживцы надо мной смеялись. Сейчас я бы всё отдал, чтобы снова услышать их смех."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un yogur de fresa?"
-msgstr "Не найдется у тебя клубничного йогурта?"
+msgid "Treinta años abriendo la ferretería a las ocho, con mi *bocadillo de chorizo* envuelto en papel de plata para el almuerzo. Con eso aguanto hasta la hora de cerrar… y hasta clavar tablas contra zombis."
+msgstr "Тридцать лет я открывал хозяйственный магазин в восемь утра, а на обед у меня был *бутерброд с чоризо* в фольге. С ним я держусь до закрытия… и даже когда заколачиваю двери от зомби."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un bocadillo de chorizo?"
-msgstr "Не найдется у тебя бутерброда с чоризо?"
+msgid "La farmacia era de mi abuela, y al salir del colegio siempre me daba un *yogur de fresa*. Todavía me sabe a las tardes en la rebotica, contando pastillas con ella."
+msgstr "Аптека принадлежала моей бабушке, и после школы она всегда давала мне *клубничный йогурт*. Он до сих пор напоминает мне те вечера в подсобке, когда мы вместе считали таблетки."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una bebida energética?"
-msgstr "Не найдется у тебя энергетика?"
+msgid "En la tienda de electrónica hacía turnos de doce horas arreglando móviles. Sin una *bebida energética* no soy persona: se me cruzan los cables, y no precisamente los del trabajo."
+msgstr "В магазине электроники я по двенадцать часов чинил телефоны. Без *энергетика* я не человек: у меня путаются провода, и не те, что на работе."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una porción de pizza?"
-msgstr "Не найдется у тебя куска пиццы?"
+msgid "Hacía las prácticas en Velaria con el becario. Las noches de entrega pedíamos pizza y nos la repartíamos encima del teclado. Él siempre me dejaba la mejor *porción de pizza*, la del medio."
+msgstr "Я проходил практику в «Веларии» вместе со стажёром. В ночи перед сдачей мы заказывали пиццу и делили её прямо над клавиатурой. Он всегда оставлял мне лучший *кусок пиццы*, из середины."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí un termo de café?"
-msgstr "Не найдется у тебя термоса с кофе?"
+msgid "Llevo quince años limpiando esta torre de noche. Mi *termo de café* es lo único que no me ha fallado en ningún turno. Tú también eres de la limpieza, chico: ya sabes lo largas que se hacen las noches."
+msgstr "Пятнадцать лет я убираю эту башню по ночам. Мой *термос с кофе* — единственное, что не подвело меня ни в одну смену. Ты ведь тоже уборщик, парень: знаешь, какие длинные бывают ночи."
 
 #: scripts/supervivientes.gd
-msgid "¿No tendrás por ahí una ensalada?"
-msgstr "Не найдется у тебя салата?"
+msgid "Ocho horas sonriendo detrás del mostrador y veinte minutos para comerme la *ensalada* a escondidas. Mi jefe decía que la recepción tenía que oler a perfume, no a vinagreta."
+msgstr "Восемь часов улыбок за стойкой и двадцать минут, чтобы тайком съесть свой *салат*. Начальник говорил, что в приёмной должно пахнуть духами, а не заправкой."
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
@@ -5356,8 +5368,8 @@ msgid "Aquí viven los supervivientes que rescatas, cada uno en su trastero. Alg
 msgstr "Здесь живут спасенные тобой выжившие, каждый в своей кладовке. Некоторые помогают, даже если не идут с тобой."
 
 #: scripts/tutoriales.gd
-msgid "Para que uno te acompañe, ponte delante y pulsa {usar}: solo si le llevas su comida favorita, la que sale debajo de su nombre. Viene una partida; luego, vuelve a su trastero."
-msgstr "Чтобы кто-то пошел с тобой, встань перед ним и нажми {usar}: только если у тебя есть его любимая еда, она показана под именем. Он идет на один забег, а потом возвращается в свою кладовку."
+msgid "Ponte delante de uno y pulsa {usar}: te contará su vida y cuál es su comida favorita. Si la llevas, dale de comer y te acompañará una partida; luego, vuelve a su trastero."
+msgstr "Встань перед кем-нибудь из них и нажми {usar}: он расскажет о своей жизни и о своей любимой еде. Если она у тебя есть, накорми его, и он пойдёт с тобой на один забег, а потом вернётся в свою кладовку."
 
 #: scripts/tutoriales.gd
 msgid "Las cocinas"
@@ -6650,10 +6662,6 @@ msgstr "Рядом с телом: %s"
 #: scripts/ui/menus.gd
 msgid "Se guarda en el Dosier del ordenador de mantenimiento"
 msgstr "Сохраняется в Досье на компьютере в дворницкой"
-
-#: scripts/ui/menus.gd
-msgid "Seguir"
-msgstr "Дальше"
 
 #: scripts/ui/menus.gd
 msgid "Clic: pasar la frase · Esc: apagar la tele"
