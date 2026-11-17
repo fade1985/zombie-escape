@@ -100,6 +100,7 @@ const LETRAS := {
 var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
 var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
+var galeria := false     # si es del pasillo de las tiendas del centro comercial (lo pone mapa.gd; Torre Velaria, no): doble()
 var limpia := false      # si es de una zona segura (lo pone mapa.gd: ZONAS_SEGURAS): sin sangre
 var metal := false       # si es de chapa gris como la de fuera (lo pone mapa.gd): las de la sala de mantenimiento y la de las viviendas a ella
 var marengo := false     # con la hoja gris marengo (lo pone mapa.gd): la de la calle del portal de los Apartamentos
@@ -136,9 +137,12 @@ func _ready() -> void:
 
 
 # La puerta de la calle del centro comercial (la de llegada de la planta baja, a la izquierda): casi el doble de larga y
-# con dos hojas de acero, como una entrada de centro comercial (17 nov, idea del dueño)
+# con dos hojas de acero, como una entrada de centro comercial (17 nov, idea del dueño); y, a juego, la salida de incendios
+# de la derecha de la galería (las escaleras), en todas las plantas: dos puertas, una encima de la otra
 func doble() -> bool:
-	return centro and salida.get("tipo", "") == "llegada" and salida.dir == "izquierda"
+	if not galeria:
+		return false
+	return (salida.get("tipo", "") == "llegada" and salida.dir == "izquierda") or salida.get("tipo", "") == "escaleras"
 
 
 # Dónde aparece Johnny al llegar por esta puerta (un poco hacia dentro)
@@ -188,7 +192,11 @@ func _draw() -> void:
 			# por donde se ha llegado
 			# (y la de llegada de la azotea, la misma: se sube por la salida de incendios; sola, sin nada detrás)
 			if salida.tipo == "escaleras" or salida.get("incendios", false):
-				draw_texture_rect(SALIDA, Rect2(-8, -36, 72, 72), false)
+				if doble():   # (la del centro comercial: dos, una encima de la otra)
+					draw_texture_rect(SALIDA, Rect2(-8, -72, 72, 72), false)
+					draw_texture_rect(SALIDA, Rect2(-8, 0, 72, 72), false)
+				else:
+					draw_texture_rect(SALIDA, Rect2(-8, -36, 72, 72), false)
 				return
 			if metal:
 				# la de chapa gris de la pared de abajo, girada un cuarto de vuelta para que la hoja quede del lado de dentro

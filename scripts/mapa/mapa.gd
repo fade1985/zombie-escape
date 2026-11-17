@@ -864,6 +864,7 @@ func poner_puertas() -> void:
 		puerta.salida = salida
 		puerta.indice = i
 		puerta.centro = centro
+		puerta.galeria = sitio.get("estilo", "") == "galeria"
 		puerta.limpia = sitio.tipo in ZONAS_SEGURAS
 		# las de chapa gris: las de la sala de mantenimiento y la de las viviendas que vuelve a ella (la de la izquierda)
 		# y la de la calle del portal de los Apartamentos (la de llegada de la planta baja), igual pero gris marengo
