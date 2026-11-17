@@ -282,7 +282,8 @@ func tocar(nombre: String) -> void:
 	v.play()
 
 
-# El gruñido de zombi del botón JUGAR del menú principal (menu_principal.gd; solo ese, a petición del dueño): de PixelLab
+# El gruñido de zombi del botón JUGAR del menú principal (menu_principal.gd) y del rugido del jefe de seguridad del centro
+# comercial (zombi_guardia.gd, 17 nov); solo esos dos, a petición del dueño. De PixelLab
 # (11 nov: los hechos con código sonaban a perro, a pájaro y a helicóptero). De seis tomas, el dueño eligió la primera, al
 # doble de velocidad sin cambiarle el tono (ffmpeg atempo=2: 0,74 s), en mono, a -20 LUFS y con el final suave; el original,
 # en tools/efectos/pixellab/grunido-1.wav (fuera de git). Va por su propio reproductor: si se pulsa otra vez mientras

@@ -59,8 +59,8 @@ func rondar(delta: float) -> void:
 	ir_hacia(delta, camino_hacia(meta), RONDA)
 
 
-# El rugido: se para mirando de frente (su animación solo está de frente), el «¡¡¡GRRR!!!» en rojo y el sonido; Johnny,
-# petrificado mientras dura (sin_mandos, en johnny.gd); y llama a sus guardias
+# El rugido: se para mirando de frente (su animación solo está de frente), el «¡¡¡GRRR!!!» en rojo y el gruñido del
+# botón «JUGAR»; Johnny, petrificado mientras dura (sin_mandos, en johnny.gd); y llama a sus guardias
 func rugir(johnny: Node2D) -> void:
 	alerta = true
 	rugir_ya = false
@@ -71,7 +71,7 @@ func rugir(johnny: Node2D) -> void:
 	if helor == 0.0:
 		sprite.speed_scale = 1.0
 	poner_animacion("grito", true)
-	Sonido.tocar("rugido")
+	Sonido.grunir()   # (el gruñido del botón «JUGAR» de la pantalla de inicio: lo pidió el dueño, 17 nov)
 	var grito := Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡GRRR!!!"), Tema.ROJO,
 		32, true, RUGIDO_DURA)
 	var sin_luz := CanvasItemMaterial.new()   # (como los gritos de Johnny: que no lo apague la penumbra)

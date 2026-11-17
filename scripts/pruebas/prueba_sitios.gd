@@ -2526,6 +2526,7 @@ func probar_guardia() -> void:
 	print("Guardia · al verle: estado %s · animación %s · rugidos %d · «%s» en %s (esperado: rugido, grito_s, 1, ¡¡¡GRRR!!! en rojo %s)" % [
 		guardia.estado, guardia.sprite.animation, rugidos[0], grito[0].text if grito else "nada",
 		grito[0].get_theme_color("font_color").to_html(false) if grito else "-", Tema.ROJO.to_html(false)])
+	print("Guardia · su sonido: el gruñido del botón JUGAR hace %d ms (esperado: menos de 500)" % (Time.get_ticks_msec() - Sonido.ultimo_grunido))
 	Captura.foto("captura-guardia-ruge.png")
 	await get_tree().create_timer(0.3, false).timeout
 	print("Guardia · Johnny mientras ruge, pulsando a la izquierda: se mueve %.0f · sin mandos %.2f s más (esperado: 0, algo más de 0)" % [
