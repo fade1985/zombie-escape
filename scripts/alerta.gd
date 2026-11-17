@@ -18,26 +18,29 @@ const VIDA := 0.2        # la vida de más de los enemigos por cada nivel
 const DANO := 0.2        # el daño de más que hacen a Johnny por cada nivel
 const VELOCIDAD := 0.2   # lo que andan más deprisa por cada nivel
 const ATAQUE := 0.2      # lo que atacan más deprisa por cada nivel (avisan antes, dan el golpe antes, esperan menos)
+# La base de todo (17 nov, lo pidió el dueño: eran demasiado difíciles): sin mejora, todos los enemigos (jefes incluidos)
+# con un 20 % menos de vida, de daño, de velocidad al andar y de velocidad de ataque. Las mejoras suben desde aquí
+const BASE := 0.8
 
 # El nivel de la partida que se juega (0 = sin mejora)
 static var nivel := 0
 
 
-# Por cuánto se multiplica cada cosa con el nivel de ahora (1 sin mejora; con la mejora 5, 2)
+# Por cuánto se multiplica cada cosa con el nivel de ahora (sin mejora, BASE; con la mejora 5, el doble de BASE)
 static func vida() -> float:
-	return 1.0 + VIDA * nivel
+	return BASE * (1.0 + VIDA * nivel)
 
 
 static func dano() -> float:
-	return 1.0 + DANO * nivel
+	return BASE * (1.0 + DANO * nivel)
 
 
 static func velocidad() -> float:
-	return 1.0 + VELOCIDAD * nivel
+	return BASE * (1.0 + VELOCIDAD * nivel)
 
 
 static func ataque() -> float:
-	return 1.0 + ATAQUE * nivel
+	return BASE * (1.0 + ATAQUE * nivel)
 
 
 # El nombre corto («Mejora 3», en el selector de "Elige edificio") y el largo («Mejora 3 del compuesto VD-7», al empezar

@@ -2356,11 +2356,10 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 
 # La mejora del compuesto VD-7 (alerta.gd, M121): cada enemigo que sale, jefes incluidos, con un 20 % más por nivel de
 # vida, de velocidad al andar y de velocidad de ataque ("ritmo": zombi.gd, minijefe.gd y portera.gd; el daño que hacen,
-# en johnny.recibir_dano). En la sala de pruebas, también (para probarlo)
+# en johnny.recibir_dano). En la sala de pruebas, también (para probarlo). Sin mejora también pasa por aquí: la base
+# (Alerta.BASE) los deja a todos un 20 % más flojos
 func mejora_vd7(zombi: Node2D) -> void:
-	if Alerta.nivel <= 0:
-		return
-	zombi.vida_max = roundi(zombi.vida_max * Alerta.vida())
+	zombi.vida_max = maxi(1, roundi(zombi.vida_max * Alerta.vida()))
 	if "velocidad" in zombi:
 		zombi.velocidad *= Alerta.velocidad()
 	if "rapido" in zombi:
