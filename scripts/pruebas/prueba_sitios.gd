@@ -1001,9 +1001,9 @@ func probar_puerta_super() -> void:
 	Temblor.desplazamiento = puerta.position + Vector2(0, -50) - johnny.position
 	await get_tree().create_timer(SUPER_MEDIO).timeout
 	Captura.foto("captura-puerta-super-medio.png")
-	# los neones que van en vez de los escaparates (la farmacia): chispazo a mano en los dos, fotos seguidas, y luego los dos con
+	# los neones de dentro de los escaparates (la farmacia): encendidos, cuántas veces les falla la luz, y luego los dos con
 	# la luz ida
-	var neones: Array = mapa.cosas.find_children("*", "Node2D", true, false).filter(func(n): return n.get("chispas_en") != null and n.chispas != null)
+	var neones: Array = mapa.cosas.find_children("*", "Node2D", true, false).filter(func(n): return n.get_script() == preload("res://scripts/mapa/neon_galeria.gd") and not n.halo)
 	if not neones.is_empty():
 		var vista := puerta.position + Vector2(0, -40)
 		johnny.position = puerta.position + Vector2(0, 200)
@@ -1012,11 +1012,6 @@ func probar_puerta_super() -> void:
 		camara.reset_smoothing()
 		await get_tree().create_timer(0.3).timeout
 		Captura.foto("captura-puerta-super-neones.png")
-		for n in neones:
-			n.chispazo()
-		for i in 6:
-			await get_tree().create_timer(0.07).timeout
-			Captura.foto("captura-puerta-super-neones-chispas-%d.png" % i)
 		for n in neones:
 			var apagones := 0
 			var antes_n := 1.0

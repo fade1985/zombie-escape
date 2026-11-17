@@ -1031,9 +1031,8 @@ en una línea.
   cristal: la cruz, a 28, con los LEDs regulares; es una chapa entera y apagada enseña los LEDs muertos). `escaparate_farmacia.py`
   parte el escaparate en el fondo (marco y cristal oscuro liso, debajo del neón) y los reflejos (encima), para que el neón se vea
   detrás del cristal. Los neones los pinta `neon_galeria.gd` (sin su halo, para no salirse del cristal); fallan menos que los de la
-  pared (`tramo` 7) y sueltan chispas al fallar y sueltas cada pocos segundos: de la esquina de dentro de la cruz y del hueco entre
-  las puntas del tubo de la botella. Qué tienda lleva neones y cuáles: `mapa.ESCAPARATES_NEON` (`poner_escaparates`). Las chispas,
-  para el letrero del súper y estos neones, salen de `chispas_neon.gd`. Prueba: `--puerta-super farmacia` (fotos `captura-puerta-super-neones*`).
+  pared (`tramo` 7), sin chispas (detrás del cristal no saldrían, el dueño). Qué tienda lleva neones y cuáles:
+  `mapa.ESCAPARATES_NEON` (`poner_escaparates`). Las chispas del letrero del súper salen de `chispas_neon.gd`. Prueba: `--puerta-super farmacia` (fotos `captura-puerta-super-neones*`).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

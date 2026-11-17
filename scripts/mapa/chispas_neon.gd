@@ -1,6 +1,6 @@
 # Las chispas de un letrero o un neón roto del centro comercial (17 nov, el dueño): puntitos de un píxel, amarillos y
-# blancos, que saltan hacia los lados y caen, sumando su luz (se ven aunque el pasillo esté a oscuras). Las usan el
-# letrero del súper (neon.gd, de su E caída) y los neones de la farmacia (neon_galeria.gd). Quien las usa les pone el
+# blancos, que saltan hacia los lados y caen, sumando su luz (se ven aunque el pasillo esté a oscuras). Las usa el
+# letrero del súper (neon.gd, de su E caída); listas para otros letreros rotos. Quien las usa les pone el
 # sitio (position), las añade como hija y las lanza con restart()
 extends RefCounted
 

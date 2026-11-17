@@ -1135,10 +1135,10 @@ func poner_peligros() -> void:
 # Las tiendas que tienen un neón dentro de cada escaparate, por detrás del cristal (neon_galeria.gd; 17 nov, el dueño): el
 # escaparate vacío, partido en el fondo (debajo del neón) y los reflejos del cristal (encima): escaparate-<tipo>-fondo.png y
 # escaparate-<tipo>-cristal.png, de tools/escaparate_farmacia.py. El neón de la izquierda y el de la derecha, cada uno con su
-# dibujo (neon-<nombre>.png: tools/neones_galeria.py), el color de su luz, el píxel de donde saltan sus chispas y la altura
-# de su medio (para que quede en medio del cristal, a píxel justo con el escaparate)
-const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), Vector2(9, 9), 51.0],
-	["farmacia-botella", Color("#4dff6a"), Vector2(9, 26), 49.0]]}
+# dibujo (neon-<nombre>.png: tools/neones_galeria.py), el color de su luz y la altura de su medio (para que quede en medio
+# del cristal, a píxel justo con el escaparate). Parpadean de vez en cuando, sin chispas (detrás del cristal no saldrían)
+const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), 51.0],
+	["farmacia-botella", Color("#4dff6a"), 49.0]]}
 # Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del
 # rodapié y, a veces, un salpicón o unas huellas de sangre en el cristal. Van en el pie de la cara del muro, como
 # los apliques, para ordenarse con ella.
@@ -1168,8 +1168,7 @@ func poner_escaparates() -> void:
 			var neon := NEON_GALERIA.new()
 			neon.nombre = cual[0]
 			neon.color = cual[1]
-			neon.chispas_en = cual[2]
-			neon.medio = cual[3]
+			neon.medio = cual[2]
 			neon.halo = false
 			neon.tramo = 7.0   # (fallan menos que los de la pared: de vez en cuando, como el letrero del súper)
 			neon.semilla = fposmod(float(sitio.get("surtido", 0)) * 0.001 + e.x * 0.0137, 1.0)
