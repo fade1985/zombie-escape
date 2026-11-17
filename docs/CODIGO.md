@@ -1073,6 +1073,9 @@ en una línea.
 - **Los escaparates de la tienda de ropa** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py ropa`) con un neón de GPT dentro, detrás
   del cristal: las compras (bolsa, caja, bolso y zapato de tacón) a la izquierda y la etiqueta «SALE» inclinada a la derecha (`neones_galeria.py ropa-compras
   ropa-sale`; `mapa.ESCAPARATES_NEON`). Sustituyen al maniquí con sangre.
+- **El letrero de la tienda de ropa** (17 nov, el dueño): «Fashion» (F mayúscula) en tubos de neón azul-cian de un solo trazo, con una línea rosa debajo (de GPT,
+  `assets/sources/centro/letrero-ropa-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-ropa` (66x21, y el apagado) y
+  `py tools/letrero_halo.py ropa`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea rosa).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

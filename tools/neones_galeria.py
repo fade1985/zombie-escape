@@ -32,6 +32,7 @@ NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
           'letrero-restaurante': (20, 'centro/letrero-restaurante-gpt.webp', False),
           'ropa-compras': (27, 'centro/neon-ropa-compras-gpt.webp', False),
           'ropa-sale': (26, 'centro/neon-ropa-sale-gpt.webp', False),
+          'letrero-ropa': (21, 'centro/letrero-ropa-gpt.webp', False),
           'letrero-farmacia': (19, 'centro/letrero-farmacia-gpt.webp', False)}
 ANCHOS = {'electronica-marco': 44}   # (un ancho fijo, más ancho que su proporción: el marco rodea una puerta de 28)
 TUBO = np.array([77, 71, 84], float)   # el tubo apagado (el mismo que las letras fundidas de neon.gd)
