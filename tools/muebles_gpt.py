@@ -333,8 +333,9 @@ MUEBLES = {
     # izquierda, el de bebidas; a la derecha, el de comida (el "-derecha"). Del mismo ancho que el de antes
     "escaparate_super": ("assets/sources/escaparate-super-bebidas-gpt.webp", "assets/sprites/escaparate-supermercado.png", 53, 36, False),
     # el letrero del supermercado, encima de su puerta (neon.gd, LETREROS; 17 nov): letras corpóreas azul marino, en
-    # inglés para todos los idiomas, como una marca. Su resplandor azul lo hace tools/letrero_halo.py
-    "letrero_super": ("assets/sources/letrero-super-gpt.webp", "assets/sprites/letrero-supermercado.png", 100, 17, False),
+    # inglés para todos los idiomas, como una marca. Su resplandor azul lo hace tools/letrero_halo.py (con la K redibujada:
+    # tools/letrero_super_k.py)
+    "letrero_super": ("assets/sources/letrero-super-arreglado.png", "assets/sprites/letrero-supermercado.png", 100, 17, False),
     "escaparate_super_derecha":("assets/sources/escaparate-super-comida-gpt.webp", "assets/sprites/escaparate-supermercado-derecha.png", 53, 37, False),
 }
 
