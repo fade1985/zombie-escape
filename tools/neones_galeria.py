@@ -3,19 +3,38 @@
 # «como los muebles» (LANCZOS premultiplicado): el negro pasa a transparente (todo, también el de dentro, para que se vea
 # la pared) y se mezclan los colores. Sale cada uno encendido (neon-<nombre>.png) y apagado (neon-<nombre>-apagado.png:
 # el tubo de cristal sin luz, gris violáceo, para cuando falla). Los pinta neon_galeria.gd.
+# Y los dos de la farmacia, que van en vez de sus escaparates (17 nov, el dueño): la cruz verde de LEDs a la izquierda de la
+# puerta y la botella de tubo de neón con su cruz a la derecha (assets/sources/centro/neon-farmacia-<nombre>-gpt.webp). La
+# cruz es una chapa entera: lo de dentro (los huecos entre LEDs) no se vacía, y apagada se ven los LEDs muertos sobre la chapa.
 #   py tools/neones_galeria.py   (y luego Godot --headless --path . --import)
+#   py tools/neones_galeria.py farmacia-cruz farmacia-botella   (solo esos)
+import sys
+
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 
-# nombre -> alto en píxeles del dibujo (el ancho, según la proporción)
-NEONES = {'casete': 28, 'radiocasete': 32, 'tocadiscos': 28}
+# nombre -> (alto en píxeles del dibujo (el ancho, según la proporción), imagen de GPT, chapa entera)
+NEONES = {'casete': (28, 'galeria/neon-casete-gpt.webp', False),
+          'radiocasete': (32, 'galeria/neon-radiocasete-gpt.webp', False),
+          'tocadiscos': (28, 'galeria/neon-tocadiscos-gpt.webp', False),
+          'farmacia-cruz': (40, 'centro/neon-farmacia-cruz-gpt.webp', True),
+          'farmacia-botella': (38, 'centro/neon-farmacia-botella-gpt.webp', False)}
+# de dónde saltan sus chispas, en píxeles de la imagen de GPT (se dicen ya en los del dibujo, para neon_galeria.gd)
+CHISPAS = {'farmacia-cruz': (40, 448),        # la esquina de dentro de arriba a la izquierda, donde se juntan los brazos
+           'farmacia-botella': (628, 1078)}    # el hueco entre las dos puntas del tubo, abajo
 TUBO = np.array([77, 71, 84], float)   # el tubo apagado (el mismo que las letras fundidas de neon.gd)
+LED_MUERTO = np.array([44, 62, 50], float)   # un LED apagado de la cruz: gris verdoso
 
 
-def pasar(nombre, alto):
-    a = np.asarray(Image.open(f'assets/sources/galeria/neon-{nombre}-gpt.webp').convert('RGB')).astype(float)
+def pasar(nombre, alto, origen, chapa):
+    a = np.asarray(Image.open(f'assets/sources/{origen}').convert('RGB')).astype(float)
     # transparencia: lo casi negro, nada; desde ahí sube deprisa
     alfa = np.clip((a.max(axis=2) - 24.0) / 70.0, 0.0, 1.0)
+    if chapa:
+        # la silueta entera: todo lo que no es el negro de fuera (que se llena desde una esquina)
+        dentro = Image.fromarray(((a.max(axis=2) > 24) * 255).astype(np.uint8), 'L').copy()   # (copia: si no, no se deja pintar)
+        ImageDraw.floodfill(dentro, (0, 0), 128)
+        alfa = (np.asarray(dentro) != 128).astype(float)
     ys, xs = np.nonzero(alfa > 0.5)
     caja = (xs.min() - 2, ys.min() - 2, xs.max() + 3, ys.max() + 3)
     ancho = round(alto * (caja[2] - caja[0]) / (caja[3] - caja[1]))
@@ -25,17 +44,28 @@ def pasar(nombre, alto):
     al = peq[..., 3:4] / 255.0
     color = np.where(al > 0.004, peq[..., :3] / np.maximum(al, 0.004), 0.0)
     al = np.where(al < 0.12, 0.0, np.clip(al * 1.15, 0.0, 1.0))   # sin velos casi invisibles alrededor
+    if chapa:
+        al = (al > 0.5).astype(float)   # (la chapa, con el borde limpio: sin un filo a medias alrededor)
     encendido = np.dstack([np.clip(color, 0, 255), al * 255.0]).astype(np.uint8)
     Image.fromarray(encendido, 'RGBA').save(f'assets/sprites/neon-{nombre}.png')
     # apagado: el mismo tubo, sin color, con un poco del dibujo (lo claro del centro, algo más claro)
     luz = color.mean(axis=2, keepdims=True) / 255.0
-    apagado = np.dstack([np.clip(TUBO * (0.75 + 0.45 * luz), 0, 255), al * 255.0]).astype(np.uint8)
+    if chapa:
+        # (la cruz: la chapa se queda; donde había LED, uno muerto)
+        apagado = np.dstack([np.clip(color * (1 - luz) + LED_MUERTO * (0.6 + 0.6 * luz) * luz, 0, 255),
+                             al * 255.0]).astype(np.uint8)
+    else:
+        apagado = np.dstack([np.clip(TUBO * (0.75 + 0.45 * luz), 0, 255), al * 255.0]).astype(np.uint8)
     Image.fromarray(apagado, 'RGBA').save(f'assets/sprites/neon-{nombre}-apagado.png')
     # el color medio de la luz que da (para neon_galeria.gd)
     lleno = al[..., 0] > 0.5
     medio = color[lleno].mean(axis=0)
     print(f'neon-{nombre}: {ancho}x{alto}, luz media {"#%02x%02x%02x" % tuple(int(v) for v in medio)}')
+    if nombre in CHISPAS:
+        cx, cy = CHISPAS[nombre]
+        print(f'  chispas en el píxel ({(cx - caja[0]) * ancho / (caja[2] - caja[0]):.0f}, '
+              f'{(cy - caja[1]) * alto / (caja[3] - caja[1]):.0f})')
 
 
-for n, h in NEONES.items():
-    pasar(n, h)
+for n in sys.argv[1:] or NEONES:
+    pasar(n, *NEONES[n])

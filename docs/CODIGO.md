@@ -1024,6 +1024,13 @@ en una línea.
   puerta automática no es solo del súper: `Planta.PUERTA_AUTOMATICA` (supermercado, farmacia) dice qué tiendas la llevan (la
   misma imagen; `puerta.gd es_super` y `Planta.escaparate_a`, que separa sus escaparates); para pasar otra tienda, añadirla
   ahí. Se prueba con `--puerta-super farmacia` (la tienda, detrás; sin letrero con chispas, esa parte se salta).
+- **Los neones de la farmacia** (17 nov, el dueño): en vez de escaparates, un neón a cada lado de su puerta: la cruz verde de
+  LEDs a la izquierda y la botella de tubo con su cruz a la derecha (de GPT, `assets/sources/centro/neon-farmacia-<nombre>-gpt.webp`,
+  reducidas «como los muebles» por `py tools/neones_galeria.py farmacia-cruz farmacia-botella`: la cruz es una chapa entera y
+  apagada enseña los LEDs muertos). Los pinta `neon_galeria.gd`, como los de la pared, pero fallan menos (`tramo` 7) y sueltan
+  chispas al fallar y sueltas cada pocos segundos: de la esquina de dentro de la cruz y del hueco entre las puntas del tubo de
+  la botella. Qué tienda lleva neones y cuáles: `mapa.ESCAPARATES_NEON` (`poner_escaparates`). Las chispas, para el letrero del
+  súper y estos neones, salen de `chispas_neon.gd`. Prueba: `--puerta-super farmacia` (fotos `captura-puerta-super-neones*`).
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero

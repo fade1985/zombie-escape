@@ -1001,6 +1001,44 @@ func probar_puerta_super() -> void:
 	Temblor.desplazamiento = puerta.position + Vector2(0, -50) - johnny.position
 	await get_tree().create_timer(SUPER_MEDIO).timeout
 	Captura.foto("captura-puerta-super-medio.png")
+	# los neones que van en vez de los escaparates (la farmacia): chispazo a mano en los dos, fotos seguidas, y luego los dos con
+	# la luz ida
+	var neones: Array = mapa.cosas.get_children().filter(func(n): return n.get("chispas_en") != null and n.chispas != null)
+	if not neones.is_empty():
+		var vista := puerta.position + Vector2(0, -40)
+		johnny.position = puerta.position + Vector2(0, 200)
+		Temblor.desplazamiento = vista - johnny.position
+		camara.zoom = Vector2(2.5, 2.5)
+		camara.reset_smoothing()
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-puerta-super-neones.png")
+		for n in neones:
+			n.chispazo()
+		for i in 6:
+			await get_tree().create_timer(0.07).timeout
+			Captura.foto("captura-puerta-super-neones-chispas-%d.png" % i)
+		for n in neones:
+			var apagones := 0
+			var antes_n := 1.0
+			var ultimo_n := -99.0
+			for i in 6000:
+				var b: float = n.luz.brillo(i * 0.01)
+				if antes_n >= 0.5 and b < 0.5 and i * 0.01 - ultimo_n > 1.0:
+					apagones += 1
+					ultimo_n = i * 0.01
+				antes_n = b
+			print("Neón %s: se le va la luz %d veces en un minuto (esperado: unas 3-6)" % [n.nombre, apagones])
+			var mas_oscuro := 0.0   # (el momento del minuto en que luce menos)
+			for i in 6000:
+				if n.luz.brillo(i * 0.01) < n.luz.brillo(mas_oscuro):
+					mas_oscuro = i * 0.01
+			n.tiempo = mas_oscuro
+			n.luz.tiempo = mas_oscuro
+			n.set_process(false)
+			n.luz.set_process(false)
+			n.queue_redraw()
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-puerta-super-neones-apagados.png")
 	if not preload("res://scripts/mapa/neon.gd").CHISPAS_EN.has(tienda):   # (sin letrero con chispas, como la farmacia aún: acaba aquí)
 		Luz.apagada = not Luz.apagada
 		$Pantalla.show()

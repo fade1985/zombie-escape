@@ -5,6 +5,7 @@
 extends Node2D
 
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
+const CHISPAS := preload("res://scripts/mapa/chispas_neon.gd")
 const TAMANO := 32           # la fuente pixel art a 32: cada píxel de la letra, 2 unidades (como los dibujos)
 const ALTO := 104.0          # a qué altura va, por encima del pie del muro (justo encima de la puerta)
 const TUBO := Color(0.3, 0.28, 0.33)   # una letra fundida: el tubo de cristal apagado
@@ -93,37 +94,13 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
-# Las chispas de la letra caída: puntitos de un píxel, amarillos y blancos, que saltan hacia los lados y caen, sumando su
-# luz (se ven aunque el pasillo esté a oscuras)
+# Las chispas de la letra caída (chispas_neon.gd)
 func poner_chispas() -> void:
 	dado.seed = int(semilla * 100000.0)
 	proxima_chispa = dado.randf_range(CHISPAS_CADA.x, CHISPAS_CADA.y)
-	chispas = CPUParticles2D.new()
-	chispas.emitting = false
-	chispas.one_shot = true
-	chispas.amount = 14
-	chispas.lifetime = 0.7
-	chispas.explosiveness = 0.9
-	chispas.local_coords = false
+	chispas = CHISPAS.crear()
 	var t := letrero.get_size()
 	chispas.position = Vector2(-t.x + CHISPAS_EN[tipo].x * 2 + 1, -LETRERO_PIE - t.y * 2 + CHISPAS_EN[tipo].y * 2 + 1)
-	chispas.direction = Vector2(0, -1)
-	chispas.spread = 75.0
-	chispas.initial_velocity_min = 40.0
-	chispas.initial_velocity_max = 120.0
-	chispas.gravity = Vector2(0, 420)
-	chispas.scale_amount_min = 2.0   # un píxel del dibujo
-	chispas.scale_amount_max = 2.0
-	var apagarse := Gradient.new()
-	apagarse.set_color(0, Color(1, 1, 0.85, 1))
-	apagarse.set_color(1, Color(1, 0.45, 0.1, 0))
-	apagarse.add_point(0.35, Color(1, 0.85, 0.3, 1))
-	chispas.color_ramp = apagarse
-	var suma := CanvasItemMaterial.new()
-	suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	suma.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	chispas.material = suma
-	chispas.z_index = 5
 	add_child(chispas)
 
 

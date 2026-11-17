@@ -1132,6 +1132,11 @@ func poner_peligros() -> void:
 		peligros.append(nodo)
 
 
+# Las tiendas que, en vez de escaparates, tienen un neón a cada lado de su puerta (neon_galeria.gd; 17 nov, el dueño): el de
+# la izquierda y el de la derecha, cada uno con su dibujo (neon-<nombre>.png: tools/neones_galeria.py), el color de su luz,
+# el píxel de donde saltan sus chispas y la altura de su medio (con el pie donde iba el del escaparate)
+const ESCAPARATES_NEON := {"farmacia": [["farmacia-cruz", Color("#3dff7a"), Vector2(12, 12), 48.0],
+	["farmacia-botella", Color("#4dff6a"), Vector2(13, 37), 47.0]]}
 # Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del
 # rodapié y, a veces, un salpicón o unas huellas de sangre en el cristal. Van en el pie de la cara del muro, como
 # los apliques, para ordenarse con ella.
@@ -1142,6 +1147,21 @@ func poner_escaparates() -> void:
 		ventanal.position = Vector2(MURO + 120, MURO + 1)
 		cosas.add_child(ventanal)
 	for e in sitio.get("escaparates", []):
+		var su_puerta: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.get("neon", "") == e.tienda)
+		var a_la_derecha: bool = not su_puerta.is_empty() and e.x > su_puerta[0].en
+		if ESCAPARATES_NEON.has(e.tienda):
+			# (la farmacia: en vez de escaparates, un neón a cada lado de la puerta)
+			var cual: Array = ESCAPARATES_NEON[e.tienda][1 if a_la_derecha else 0]
+			var neon := NEON_GALERIA.new()
+			neon.nombre = cual[0]
+			neon.color = cual[1]
+			neon.chispas_en = cual[2]
+			neon.medio = cual[3]
+			neon.tramo = 7.0   # (fallan menos que los de la pared: de vez en cuando, como el letrero del súper)
+			neon.semilla = fposmod(float(sitio.get("surtido", 0)) * 0.001 + e.x * 0.0137, 1.0)
+			neon.position = Vector2(e.x, MURO + 1)
+			cosas.add_child(neon)
+			continue
 		var nodo := Node2D.new()
 		nodo.position = Vector2(e.x, MURO + 1)
 		var dibujo := Sprite2D.new()
@@ -1149,8 +1169,7 @@ func poner_escaparates() -> void:
 		# puerta es escaparate-<tipo>-derecha)
 		var ruta := "res://assets/sprites/escaparate-%s.png" % e.tienda
 		var derecha := "res://assets/sprites/escaparate-%s-derecha.png" % e.tienda
-		var su_puerta: Array = sitio.salidas.filter(func(s): return s.dir == "arriba" and s.get("neon", "") == e.tienda)
-		if ResourceLoader.exists(derecha) and not su_puerta.is_empty() and e.x > su_puerta[0].en:
+		if ResourceLoader.exists(derecha) and a_la_derecha:
 			ruta = derecha
 		dibujo.texture = load(ruta)
 		dibujo.centered = false
