@@ -1187,7 +1187,7 @@ func poner_escaparates() -> void:
 				neon.semilla = fposmod(float(sitio.get("surtido", 0)) * 0.001 + e.x * 0.0137, 1.0)
 				vitrina.add_child(neon)
 			vitrina.add_child(capas[1])
-			if e.tienda == "ferreteria":   # (la verja, por delante de todo, del tamaño del escaparate)
+			if e.tienda == "ferreteria" and not a_la_derecha:   # (la verja, por delante de todo, del tamaño del escaparate; solo en el del panel: en el del neón no se apreciaba)
 				var verja := Sprite2D.new()
 				verja.texture = load("res://assets/sprites/verja-escaparate.png")
 				verja.centered = false
