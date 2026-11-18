@@ -750,8 +750,11 @@ func poner_caras() -> void:
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
-			if centro and not limpio and destrozadas().is_empty():
-				cara.adornos = restos_de_pared(cara.ancho)
+			if centro and not limpio:
+				if destrozadas().is_empty():
+					cara.adornos = restos_de_pared(cara.ancho)
+				elif sala_destrozada(sala):
+					cara.adornos = sangre_de_pared(cara.ancho)
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
 				cara.adornos += colgados(cara)
@@ -1298,6 +1301,27 @@ func destrozadas() -> Array:
 
 func sala_destrozada(sala: int) -> bool:
 	return sala >= 0 and sala < sitio.apt.salas.size() and sitio.apt.salas[sala].uso in destrozadas()
+
+
+# La sangre de las paredes de las salas destrozadas (sangre-pared-N, de tools/sangre_pared.py: los charcos de los apartamentos, con
+# regueros): una cada poco, sin repetir dibujo seguido, a alturas distintas
+func sangre_de_pared(ancho: float) -> Array:
+	var lista := []
+	var tramos := floori(ancho / 100.0)
+	var anterior := -1
+	for i in tramos:
+		if dado_restos.randf() > 0.85:
+			continue
+		var n := 1 + dado_restos.randi() % 12
+		if n == anterior:
+			n = 1 + n % 12
+		anterior = n
+		var t: Texture2D = load("res://assets/sprites/sangre-pared-%d.png" % n)
+		var tramo := 50.0   # en píxeles del dibujo
+		var x := i * tramo + dado_restos.randf_range(0.0, maxf(0.0, tramo - t.get_width()))
+		var y := -dado_restos.randf_range(t.get_height() + 6.0, 50.0)   # sin pisar el rodapié ni la moldura
+		lista.append({"dibujo": t, "x": floorf(x), "y": floorf(y)})
+	return lista
 
 
 # Los restos sueltos del suelo de una tienda o de la galería: en casillas de suelo rodeadas de suelo (para que no
