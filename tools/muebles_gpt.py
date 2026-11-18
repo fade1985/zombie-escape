@@ -505,3 +505,15 @@ if "alfombra_probador" in (sys.argv[1:] or ["alfombra_probador"]):
             elif any(not (0 <= x + dx < w and 0 <= y + dy < h and mask[y + dy][x + dx]) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
                 px[x, y] = borde + (255,)
     alf.save(ruta)
+
+# el puf de los probadores, en beige como la alfombrilla y las cortinas (18 nov, el dueño): lo claro se tiñe (el contorno, no)
+if "pufprobador" in (sys.argv[1:] or ["pufprobador"]):
+    ruta = MUEBLES["pufprobador"][1]
+    puf = Image.open(ruta).convert("RGBA")
+    px = puf.load()
+    for y in range(puf.height):
+        for x in range(puf.width):
+            r, g, b, al = px[x, y]
+            if al and max(r, g, b) > 120:
+                px[x, y] = (r, int(g * 0.95), int(b * 0.86), al)
+    puf.save(ruta)
