@@ -80,7 +80,7 @@ const MUEBLES := {
 	# y su banco, de GPT (tools/muebles_gpt.py): de acero inoxidable con listones de madera, en medio del pasillo (17 nov)
 	"bancogaleria": {"len": 96, "dep": 36,  "paredes": "",      "archivo": "banco-galeria-gpt"},
 	# el espejo de arco de los probadores de la tienda de ropa, de GPT (tools/muebles_gpt.py; 18 nov, el dueño): en la pared de arriba
-	"espejoprobador": {"len": 80, "dep": 6,  "paredes": "todas", "archivo": "ropa/espejo-probador-gpt"},
+	"espejoprobador": {"len": 72, "dep": 6,  "paredes": "todas", "archivo": "ropa/espejo-probador-gpt"},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
