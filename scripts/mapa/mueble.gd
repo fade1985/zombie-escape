@@ -63,7 +63,8 @@ func montar(m: Dictionary, surtido: int) -> void:
 	var sprite := Sprite2D.new()
 	sprite.name = "Sprite"
 	sprite.texture = load(queda[0])
-	sprite.scale = Vector2(2, 2)   # cada píxel del dibujo, 2 unidades (como los personajes)
+	var escala: float = Catalogo.MUEBLES.get(m.tipo, {}).get("escala", 2.0)   # (los de la sala de venta de la tienda de ropa, a 1: el doble de detalle, como la dependienta)
+	sprite.scale = Vector2(escala, escala)   # cada píxel del dibujo, 2 unidades (como los personajes)
 	sprite.centered = false
 	sprite.flip_h = queda[1] != m.get("espejo", false)   # (con "espejo", el dibujo del revés: muebles.gd, colocados)
 	var t := sprite.texture.get_size()
