@@ -583,8 +583,8 @@ const SALAS := {
 	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
 	"almacen-ropa": {"colocados": {"abajo": [], "arriba": []}},
-	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 2.0, "izquierda"], ["stafftoilet", 5.4, "izquierda"], ["lockerbench", 5.85, "derecha"]],
-		"arriba": [["taquillaropa", 6.0], ["staffsink", 2.0, "izquierda"], ["stafftoilet", 5.4, "izquierda"], ["lockerbench", 9.2, "derecha"]]}},
+	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 2.7, "izquierda"], ["stafftoilet", 6.1, "izquierda"], ["lockerbench", 5.85, "derecha"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsink", 2.7, "izquierda"], ["stafftoilet", 6.1, "izquierda"], ["lockerbench", 9.2, "derecha"]]}},
 	"tienda-farmacia": {
 		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
 		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas
