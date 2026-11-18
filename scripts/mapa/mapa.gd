@@ -1307,17 +1307,21 @@ func sala_destrozada(sala: int) -> bool:
 # regueros): una cada poco, sin repetir dibujo seguido, a alturas distintas
 func sangre_de_pared(ancho: float) -> Array:
 	var lista := []
-	var tramos := floori(ancho / 100.0)
+	var tramos := maxi(1, floori(ancho / 100.0))   # (los tramos estrechos, como los de los lados de una puerta, uno)
 	var anterior := -1
 	for i in tramos:
 		if dado_restos.randf() > 0.85:
 			continue
-		var n := 1 + dado_restos.randi() % 12
-		if n == anterior:
-			n = 1 + n % 12
+		var tramo: float = minf(50.0, ancho / 2.0)   # en píxeles del dibujo
+		var cabe := []
+		for k in range(1, 13):
+			if load("res://assets/sprites/sangre-pared-%d.png" % k).get_width() <= tramo - 2.0 and k != anterior:
+				cabe.append(k)
+		if cabe.is_empty():
+			continue
+		var n: int = cabe[dado_restos.randi() % cabe.size()]
 		anterior = n
 		var t: Texture2D = load("res://assets/sprites/sangre-pared-%d.png" % n)
-		var tramo := 50.0   # en píxeles del dibujo
 		var x := i * tramo + dado_restos.randf_range(0.0, maxf(0.0, tramo - t.get_width()))
 		var y := -dado_restos.randf_range(t.get_height() + 6.0, 50.0)   # sin pisar el rodapié ni la moldura
 		lista.append({"dibujo": t, "x": floorf(x), "y": floorf(y)})
