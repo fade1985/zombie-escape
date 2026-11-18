@@ -97,6 +97,7 @@ const PASILLOS := {"pasillo": {"tapa": "pasillo"}, "galeria": {"tapa": "centro"}
 const NEON := preload("res://scripts/mapa/neon.gd")
 const FELPUDO := preload("res://assets/sprites/felpudo.png")   # el de las puertas del pasillo de los Apartamentos (dibujar_fondo)
 const FELPUDO_PORTAL := preload("res://assets/sprites/felpudo-portal.png")   # el de la puerta de la calle, en la planta baja
+const ALFOMBRA_PROBADOR := preload("res://assets/sprites/alfombra-probador.png")   # la de los probadores de la tienda de ropa (dibujar_fondo)
 const FELPUDO_CENTRO := preload("res://assets/sprites/felpudo-centro.png")   # el de la entrada del centro comercial (galería)
 const VENTANAL := preload("res://scripts/mapa/ventanal.gd")
 const LABORATORIO := preload("res://scripts/peligros/laboratorio.gd")   # la planta 40 de la torre (el Sujeto 1)   # el ventanal con la ciudad de noche del pasillo de la torre
@@ -622,6 +623,19 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		for salida in sitio.salidas:
 			if salida.get("tipo", "") == "llegada" and salida.dir == "izquierda":
 				lienzo.draw_texture(FELPUDO_CENTRO, Vector2(MURO / 2.0, roundf(salida.en / 2.0 - FELPUDO_CENTRO.get_height() / 2.0)))
+	# la alfombrilla blanca de cada probador de la tienda de ropa (18 nov, el dueño; de GPT, tools/muebles_gpt.py), en el suelo delante del
+	# espejo: a casilla y tres cuartos de la pared del fondo, que es la de arriba, o la de abajo si la tienda va a la inversa (la puerta, arriba)
+	if sitio.get("tienda", "") == "ropa" and sube > TABIQUE.SUBE:
+		for s in sitio.get("apt", {}).get("salas", []):
+			if s.uso != "probadores":
+				continue
+			var puerta_abajo := true
+			for p in sitio.apt.puertas:
+				if p.a == s.id or p.b == s.id:
+					puerta_abajo = p.f >= s.f0 + s.fondo / 2.0
+			var y_alfombra: float = s.f0 + 1.75 if puerta_abajo else s.f0 + s.fondo - 1.75
+			lienzo.draw_texture(ALFOMBRA_PROBADOR, Vector2(roundf((s.c0 + s.ancho / 2.0) * 16 - ALFOMBRA_PROBADOR.get_width() / 2.0),
+				roundf(y_alfombra * 16 - ALFOMBRA_PROBADOR.get_height() / 2.0)))
 	# la línea amarilla pintada a lo largo del pasillo de las viviendas (viviendas.gd: "linea"), de punta a punta
 	for s in sitio.get("apt", {}).get("salas", []):
 		if s.has("linea"):

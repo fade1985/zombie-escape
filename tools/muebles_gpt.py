@@ -364,6 +364,8 @@ MUEBLES = {
     # el gancho doble cromado de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "ganchoprobador"): de perfil, con la
     # placa a la izquierda (el dibujo de la pared izquierda; en la derecha, en espejo). Se levanta del suelo al final de este archivo
     "ganchoprobador": ("assets/sources/ropa/perchero-probador-gpt.webp", "assets/sprites/mueble-ganchoprobador-lado.png", 10, 16, True),
+    # la alfombrilla blanca de los probadores de la tienda de ropa (18 nov, el dueño): una pieza del suelo (mapa.gd, dibujar_fondo), sin .json
+    "alfombra_probador": ("assets/sources/ropa/alfombra-probador-gpt.webp", "assets/sprites/alfombra-probador.png", 48, 32, False),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 
