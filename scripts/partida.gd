@@ -354,10 +354,10 @@ func _ready() -> void:
 	# nada; la guía, el aviso de abajo y las ventanas empiezan al cerrarla
 	if edificio == "apartamentos":
 		await ver_relato("intro")
-	elif edificio == "centro":
-		# el final de los Apartamentos: antes salía al irse en su helicóptero; desde el 16 nov, al elegir el centro comercial
-		# por primera vez
-		await ver_relato("apartamentos")
+	elif RELATO_AL_EMPEZAR.has(edificio):
+		# el final del edificio de antes: antes salía al irse en su helicóptero; desde el 16 nov (el de los Apartamentos) y
+		# el 18 nov (el del centro comercial), al empezar el edificio siguiente por primera vez
+		await ver_relato(RELATO_AL_EMPEZAR[edificio])
 	if despierta and not captura:
 		await despertar()
 	if captura:
@@ -1190,12 +1190,17 @@ func fin_del_edificio() -> void:
 	decir(Idioma.t("¡Un helicóptero de Velaria viene a por ti!"), 4.0)
 
 
+# El final de un edificio que no sale al irse en el helicóptero sino al empezar el siguiente por primera vez (lo pidió el
+# dueño: el de los Apartamentos el 16 nov y el del centro comercial el 18 nov): {edificio que empieza: relato que sale}
+const RELATO_AL_EMPEZAR := {"centro": "apartamentos", "torre": "centro"}
+
+
 # Johnny ha llegado a la escalera de cuerda del helicóptero: se acaba el edificio, como al subir las últimas escaleras
 func subir_al_helicoptero() -> void:
 	if cambiando or terminada or not johnny.vivo:
 		return
 	cambiando = true   # (que no pase nada detrás del final del edificio)
-	if edificio != "apartamentos":   # (el de los Apartamentos sale al elegir el centro comercial por primera vez)
+	if not edificio in RELATO_AL_EMPEZAR.values():   # (esos salen al empezar el edificio siguiente: RELATO_AL_EMPEZAR)
 		await ver_relato(edificio)
 	subir()
 

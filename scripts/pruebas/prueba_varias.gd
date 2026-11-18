@@ -1177,6 +1177,9 @@ func probar_relato() -> void:
 	print("Relato · al agarrar la escalera de los Apartamentos: abierta %s · acabada %s · abierto «%s» · apuntado %s (esperado: false, true, fin, false)" % [
 		abierto.call() != null, terminada, menus.abierto, "apartamentos" in Guardado.cargar().relatos])
 	Captura.foto("captura-relato-cartel-%s.png" % Idioma.actual)
+	# (18 nov) el del centro comercial tampoco sale al irse en su helicóptero: sale al empezar la Torre por primera vez
+	print("Relato · el del centro comercial: sale al empezar «%s» · al irse del centro, nada: %s (esperado: «torre», true)" % [
+		RELATO_AL_EMPEZAR.find_key("centro"), "centro" in RELATO_AL_EMPEZAR.values()])
 	# y su relato, como sale al elegir el centro comercial por primera vez (partida._ready: ver_relato("apartamentos"))
 	ver_relato("apartamentos")
 	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout

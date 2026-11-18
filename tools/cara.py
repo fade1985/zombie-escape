@@ -105,7 +105,8 @@ def rojo_casco(c):
     h, s, v = tsv(c)
     # (18 nov) hasta 0,62 de luz: en algunos dibujos el pelo de siempre es de ese rojo oscuro (140, 58, 40) y asomaba
     # por encima del casco
-    return (h >= 345 or h <= 14) and s >= 0.6 and 0.12 <= v <= 0.62
+    # (y los rojos más claros del pañuelo de algunas hojas: 190, 60, 61 en el lanzagranadas)
+    return ((h >= 345 or h <= 14) and s >= 0.6 and 0.12 <= v <= 0.62) or ((h >= 345 or h <= 8) and s >= 0.55 and v <= 0.8)
 
 
 def vivo(c, johnny):
@@ -120,6 +121,31 @@ def pelo(c):
         return False
     h, s, v = tsv(c)
     return 15 <= h <= 40 and s >= 0.35 and 0.15 <= v <= 0.7
+
+
+def anaranjado(c):
+    """Los tonos del pelo y de la piel (naranjas y marrones), no los rojos vivos de las armas (motosierra, lanzallamas)."""
+    if c[3] == 0:
+        return False
+    h, s, v = tsv(c)
+    return 8 <= h <= 40 and s >= 0.3 and v >= 0.2
+
+
+def rosado(c):
+    """(18 nov) Los rojos apagados de la cara (labios, mejillas: 222, 112, 108 en la gatling), no los vivos de las armas."""
+    if c[3] == 0:
+        return False
+    h, s, v = tsv(c)
+    return (h <= 20 or h >= 345) and 0.3 <= s < 0.7
+
+
+def pelo_rojizo(c):
+    """(18 nov) Los castaños más rojizos del pelo y los rojos más claros del pañuelo de algunas hojas (la gatling: 132, 65,
+    44; el lanzagranadas: 190, 60, 61), que se quedan fuera de pelo() y de panuelo(); la camisa nunca es tan rojiza."""
+    if c[3] == 0:
+        return False
+    h, s, v = tsv(c)
+    return (h <= 20 or h >= 345) and s >= 0.5
 
 
 def de_cabeza(c):
@@ -401,8 +427,10 @@ def quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel, solo_pelo=False, casc
 
 
 def es_piel(c):
+    # (18 nov) sin el rojo del pañuelo, que también es «claro y rojizo»: si no, delante() lo tomaba por una mano que pasa
+    # por delante de la cabeza y quitar() lo tapaba con piel (la mancha en la frente del casco, de lado)
     h, s_, v = tsv(c)
-    return c[3] > 0 and h < 30 and s_ >= 0.3 and v >= 0.55
+    return c[3] > 0 and h < 30 and s_ >= 0.3 and v >= 0.55 and not rojo_casco(c)
 
 
 def delante(px, x0, y0, cw, ch, t, cabeza, po, johnny):
@@ -410,6 +438,10 @@ def delante(px, x0, y0, cw, ch, t, cabeza, po, johnny):
     y las manos suben por encima): la camisa y el peto (ningún color de la cabeza) y las manos (la piel que tapa el pelo
     o el pañuelo de siempre, en trozos gruesos: una raya fina en la frente es la cabeza un poco distinta del arma)."""
     cuerpo, manos = set(), set()
+
+    def mano(c):   # (18 nov) piel, pero no las luces del pelo de siempre, que también son claras y anaranjadas
+        return es_piel(c) and not johnny.es_pelo(c)
+
     for (x, y), n in cabeza.items():
         X, Y = x + t[0], y + t[1]
         if n[3] == 0 or not (y <= BARBILLA and po[x, y][3] > 0) or not (0 <= X < cw and 0 <= Y < ch):
@@ -417,13 +449,13 @@ def delante(px, x0, y0, cw, ch, t, cabeza, po, johnny):
         f = px[x0 + X, y0 + Y]
         # (18 nov) las sombras oscuras del pañuelo (rojo_casco) también son de la cabeza: si no, contaban como cuerpo y
         # quedaban motas de color piel en lo alto del casco
-        if f[3] > 0 and johnny.es_suyo(f) and not de_cabeza(f) and not rojo_casco(f):
+        if f[3] > 0 and johnny.es_suyo(f) and not de_cabeza(f) and not rojo_casco(f) and not pelo_rojizo(f):
             cuerpo.add((X, Y))
-        elif es_piel(f) and not es_piel(po[x, y]):
+        elif mano(f) and not es_piel(po[x, y]):
             manos.add((X, Y))
 
     def piel_en(p):
-        return 0 <= p[0] < cw and 0 <= p[1] < ch and es_piel(px[x0 + p[0], y0 + p[1]])
+        return 0 <= p[0] < cw and 0 <= p[1] < ch and mano(px[x0 + p[0], y0 + p[1]])
 
     for grupo in manchas(manos):
         gordo = any(all(piel_en((x + vx, y + vy)) for vx, vy in ((1, 0), (-1, 0), (0, 1), (0, -1))) for x, y in grupo)
@@ -455,12 +487,15 @@ def pegar(px, x0, y0, cw, ch, t, cabeza, quieto_o, johnny, claros, sobra, piel):
             elif not casco:
                 hechos.add((X, Y))
             continue
-        if casco and ((X, Y) in primero or (not dentro and f[3] > 0 and not (johnny.es_pelo(f) or rojo_casco(f)))):
+        if casco and ((X, Y) in primero or (not dentro and f[3] > 0 and not (johnny.es_pelo(f) or rojo_casco(f) or
+                                                                            anaranjado(f)))):
             luego[(X, Y)] = n
             continue
         hechos.add((X, Y))
         # (calvo, también los rojos que no son de su paleta: en algunos golpes PixelLab pintó el pañuelo más vivo)
-        if f[3] == 0 or johnny.es_suyo(f) or (sobra in QUITAN and panuelo(f)) or (casco and rojo_casco(f)):
+        # (18 nov, casco) y los tonos de pelo y piel aunque no sean de la paleta de Johnny quieto: en algunas hojas (la
+        # katana de lado, la gatling) el pelo es de otro marrón y se quedaba encima del casco
+        if f[3] == 0 or johnny.es_suyo(f) or (sobra in QUITAN and panuelo(f)) or (casco and rojo_casco(f)) or                 (casco and (anaranjado(f) or (dentro and rosado(f)))):
             px[x0 + X, y0 + Y] = n
     # lo que sobre alrededor del pelo de siempre (la cabeza de cada arma es un poco distinta)
     xs = [x for x, _ in cabeza]
