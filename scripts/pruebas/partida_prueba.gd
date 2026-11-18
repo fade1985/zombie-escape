@@ -314,6 +314,8 @@
 #   --durmientes-planta cuántos durmientes trae cada planta de cada edificio y la partida entera (el mutágeno que da) [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera [prueba_sitios.gd]
+#   --puerta-dependienta (con --edificio centro; --tipo X, otra tienda: ropa si no) la dependienta (112 px) delante de
+#                       cada puerta de frente de la tienda y dentro del hueco, con Johnny al lado: si cabe [prueba_sitios.gd]
 #   --torre             (con --edificio torre) Torre Velaria, el esqueleto (tercer edificio, parte 1): sus plantas, sus
 #                       departamentos, el código y sus ordenadores, con fotos (la del tutorial «Torre Velaria»:
 #                       captura-torre-terminal-cerca.png)                                     [prueba_sitios.gd]
@@ -1210,6 +1212,9 @@ func empezar_prueba() -> void:
 	elif "--tienda-cerca" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tienda_cerca()
+	elif "--puerta-dependienta" in args:
+		set_process(false)   # sin la prueba larga
+		probar_puerta_dependienta()
 	elif "--tiendas-fijas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tiendas_fijas()

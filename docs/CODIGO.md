@@ -850,7 +850,13 @@ en una línea.
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` da cada tienda: desde la M77, todas fijas, dibujadas con letras en `Tienda.PLANOS` (la electrónica, con su
   charco: `~`; todas con su aseo de empleados y su botiquín, M81), leídas con `Apartamento.del_plano` y con sus muebles puestos a mano
-  (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); la galería, igual
+  (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); **pared alta** (18 nov, el dueño; de momento solo la tienda de ropa, la primera que
+  se rehace por dentro): con `"sube": 4` en `Tienda.TIPOS`, su pared mide 4 casillas en vez de 3 (`sitio.sube`, puesto en
+  `Planta.generar`, que también sube `arriba_extra`; `mapa.sube` lo pasa a las caras, `cara_pared.gd alto`, a los tabiques
+  de arriba, `tabique.gd sube`, y al dintel) y sus puertas de dentro, de 86 a 118 de alto (`puerta_bano.gd alargar`): con la
+  de siempre, la dependienta (105 de alto) no cabía por ellas. Los dibujos de la pared y de las puertas no se estiran: se
+  alargan repitiendo su franja de en medio (`alargar.gd`). Se mira con `--puerta-dependienta` (la dependienta delante de
+  cada puerta y dentro del hueco, con lo alto de cada uno); la galería, igual
   (`colocados` de `"galeria"`, se mira con `--galeria`; desde el 17 nov vacía mientras el dueño la rehace: sin muebles ni restos
   sueltos de sangre y pintadas, `mapa.galeria`; solo las puertas de las tiendas, sus escaparates y letreros, el ascensor, las
   salidas; tampoco apliques: se sortean y se quitan en `planta.gd`; ni el número de la planta junto al ascensor, `sin_cartel`; la luz la dan tres neones dibujados de GPT en los huecos de

@@ -36,7 +36,9 @@ const LINEA := Color("#1d1b2c")
 const DIBUJO := preload("res://assets/sprites/puerta-bano.png")   # la hoja de frente: 28 × 43 píxeles (56 × 86 unidades)
 const FRENTE := Vector2(28, 43)
 const MARCO := 4.0          # de frente, el grueso del marco (2 píxeles): con la hoja, llena el hueco de lado a lado
-const DINTEL := ALTO + MARCO   # de frente, lo alto del marco; por encima va el dintel (mapa.gd: poner_caras)
+const DINTEL := ALTO + MARCO   # de frente, lo alto del marco; por encima va el dintel (mapa.gd: poner_caras). Los de siempre:
+# en las tiendas de pared alta (Tienda.TIPOS "sube"), "alto" y "dintel" (alargar)
+const ALARGAR := preload("res://scripts/mapa/alargar.gd")
 const ABIERTA := preload("res://assets/sprites/puerta-bano-abierta.png")   # la hoja abierta del todo, de frente: 14 × 67 píxeles (64 de hoja y 3 de sombra)
 const GIRO := 1.1071        # lo que gira de frente al abrirse del todo, 63 grados (cada píxel hacia un lado, dos hacia abajo)
 const ABIERTA_LADO := preload("res://assets/sprites/puerta-bano-abierta-lado.png")   # la de lado, abierta del todo: 14 × 67
@@ -68,6 +70,9 @@ const VUELTA := 2.5         # lo rápido que gira al abrirse o cerrarse (en 0,4 
 const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
 
 var hueco: Dictionary
+var alto := ALTO            # lo alto de esta hoja, de frente (alargar)
+var dintel := DINTEL        # y de su marco
+var frente := FRENTE        # el trozo de cada modelo del dibujo de frente, en píxeles
 var de_frente := false      # hueco en un tabique horizontal: la hoja se ve de frente, como los muros
 var caja := Rect2()         # el hueco, en unidades del mundo
 var arrimo := Rect2()       # dónde hay que estar para abrir una libre: delante o detrás del hueco
@@ -90,6 +95,19 @@ var espera := false         # cerrada a mano: Johnny y los suyos no la abren arr
 var uso: Node2D = null      # para cerrarla o volver a abrirla a mano: su zona (zona_usar.gd) y el dibujo del contorno
 var al_reves := false       # la de lado, que se abre hacia la habitación de la izquierda en vez de la de la derecha: la
                             # metálica del despacho al taller (mapa.gd), para que abierta no se quede de pie junto al banco
+
+
+# Para la pared alta (Tienda.TIPOS "sube"): la hoja, "mas" píxeles del dibujo más alta (16 por casilla más de pared),
+# con sus dibujos alargados por en medio (alargar.gd), no estirados. Antes de montar
+func alargar(mas: int) -> void:
+	if mas <= 0:
+		return
+	alto = ALTO + mas * 2.0
+	dintel = alto + MARCO
+	frente = FRENTE + Vector2(0, mas)
+	madera = {"frente": ALARGAR.dibujo(madera.frente, int(frente.y)),
+		"abierta": ALARGAR.dibujo(madera.abierta, madera.abierta.get_height() + mas),
+		"lado": ALARGAR.dibujo(madera.lado, madera.lado.get_height() + mas), "cerrada": madera.cerrada}
 
 
 func montar(datos: Dictionary) -> void:
@@ -221,7 +239,7 @@ func poner_uso() -> void:
 		var tex: Texture2D
 		if de_frente:
 			tex = madera.abierta
-			dibujo.position = Vector2(r.position.x + MARCO, r.end.y - ALTO)
+			dibujo.position = Vector2(r.position.x + MARCO, r.end.y - alto)
 		else:
 			tex = madera.lado
 			dibujo.position = Vector2(r.end.x - 2.0 - 4.0, r.position.y + 4.0 - tex.get_height() * 2.0 + SOMBRA_LADO * 2.0)
@@ -232,12 +250,12 @@ func poner_uso() -> void:
 		dibujo.texture = tex
 		dibujo.scale = Vector2(2, 2)
 	elif de_frente:
-		var modelo := posmod(roundi((caja.position.x + caja.position.y) / CASILLA), roundi(madera.frente.get_width() / FRENTE.x))
+		var modelo := posmod(roundi((caja.position.x + caja.position.y) / CASILLA), roundi(madera.frente.get_width() / frente.x))
 		# (su modelo, suelto: el contorno no puede salir de un trozo de la tira de modelos)
-		var trozo := Rect2i(Vector2i(modelo * int(FRENTE.x), 0), Vector2i(FRENTE))
+		var trozo := Rect2i(Vector2i(modelo * int(frente.x), 0), Vector2i(frente))
 		dibujo.texture = ImageTexture.create_from_image(madera.frente.get_image().get_region(trozo))
-		dibujo.position = Vector2(r.position.x + MARCO, r.end.y - ALTO)
-		dibujo.scale = Vector2(r.size.x - MARCO * 2, ALTO) / FRENTE
+		dibujo.position = Vector2(r.position.x + MARCO, r.end.y - alto)
+		dibujo.scale = Vector2(r.size.x - MARCO * 2, alto) / frente
 	else:
 		dibujo.texture = madera.cerrada
 		dibujo.position = r.position
@@ -248,7 +266,7 @@ func poner_uso() -> void:
 	var zona := ZONA_USAR.new()
 	# (la de lado, abierta, se queda de pie por encima del hueco, casi lo alto de la hoja: la zona sube con ella, para
 	# poder cerrarla también junto a la parte de arriba)
-	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, ALTO + ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
+	var alcance := caja.grow_individual(ALCANCE_LADO, ALCANCE, ALCANCE_LADO, ALCANCE) if de_frente 		else caja.grow_individual(ALCANCE, alto + ALCANCE_LADO, ALCANCE, ALCANCE_LADO)
 	zona.montar_rect(Rect2(alcance.position - position, alcance.size))
 	zona.puede = se_puede_usar
 	zona.tocada = johnny_la_toca   # (sin tocarla, si hay un mueble al alcance, la E es para el mueble: F25)
@@ -341,13 +359,13 @@ func _draw() -> void:
 		# el marco, que llena el hueco de lado a lado y hasta el dintel: oscuro por fuera y claro por dentro
 		var oscuro := Color("#2b3036") if acero else Color("#7d776a") if trastero else Color("#4a2e1e")
 		var claro := Color("#7a848c") if acero else Color("#d8d2c0") if trastero else Color("#a0704a")
-		var arriba := r.end.y - DINTEL
+		var arriba := r.end.y - dintel
 		draw_rect(Rect2(r.position.x, arriba, r.size.x, MARCO), claro)
-		draw_rect(Rect2(r.position.x, arriba, MARCO, DINTEL), claro)
-		draw_rect(Rect2(r.end.x - MARCO, arriba, MARCO, DINTEL), claro)
+		draw_rect(Rect2(r.position.x, arriba, MARCO, dintel), claro)
+		draw_rect(Rect2(r.end.x - MARCO, arriba, MARCO, dintel), claro)
 		draw_rect(Rect2(r.position.x, arriba, r.size.x, 2), oscuro)
-		draw_rect(Rect2(r.position.x, arriba, 2, DINTEL), oscuro)
-		draw_rect(Rect2(r.end.x - 2, arriba, 2, DINTEL), oscuro)
+		draw_rect(Rect2(r.position.x, arriba, 2, dintel), oscuro)
+		draw_rect(Rect2(r.end.x - 2, arriba, 2, dintel), oscuro)
 		# la hoja, del pie del hueco hasta el marco. Gira sobre las bisagras, a la izquierda, hacia la habitación de
 		# abajo: se estrecha, se tuerce hacia abajo y se oscurece, y se le va viendo el canto
 		var ancho := r.size.x - MARCO * 2
@@ -356,10 +374,10 @@ func _draw() -> void:
 		if abierta >= 1.0 and not acero:
 			# abierta del todo: su dibujo, con la esquina de arriba a la izquierda en la bisagra (con su canto y su sombra)
 			var dibujo: Texture2D = ABIERTA_TRASTERO if trastero else madera.abierta
-			draw_texture_rect(dibujo, Rect2(bisagra - Vector2(0, ALTO), dibujo.get_size() * 2.0), false)
+			draw_texture_rect(dibujo, Rect2(bisagra - Vector2(0, alto), dibujo.get_size() * 2.0), false)
 		else:
 			draw_set_transform_matrix(Transform2D(Vector2(cos(giro), sin(giro)), Vector2(0, 1), bisagra))
-			var hoja := Rect2(0, -ALTO, ancho, ALTO)
+			var hoja := Rect2(0, -alto, ancho, alto)
 			if acero:
 				acero_de_frente(hoja)
 			else:
@@ -368,12 +386,12 @@ func _draw() -> void:
 			if abierta > 0.0:
 				# el canto de fuera, que da a la luz
 				var punta := bisagra + Vector2(cos(giro), sin(giro)) * ancho
-				var canto := Rect2(punta.x, punta.y - ALTO, maxf(2.0, 6.0 * sin(giro)), ALTO)
+				var canto := Rect2(punta.x, punta.y - alto, maxf(2.0, 6.0 * sin(giro)), alto)
 				draw_rect(canto, Color("#9aa3aa") if acero else Color("#568abe") if trastero else Color("#b07a4e"))
 				draw_rect(canto, LINEA, false, 2.0)
 		# la barricada: tablas torcidas de lado a lado, más anchas que la puerta, con un clavo en cada punta
 		for i in tablas:
-			var y: float = r.end.y - ALTO + ALTO * [0.18, 0.4, 0.62, 0.84][i]
+			var y: float = r.end.y - alto + alto * [0.18, 0.4, 0.62, 0.84][i]
 			tabla(Vector2(r.position.x - 6 + temblor, y - [5, -6, 4, -5][i] / 2.0),
 				Vector2(r.end.x + 6 + temblor, y + [5, -6, 4, -5][i] / 2.0))
 	else:
@@ -437,7 +455,7 @@ func hoja_de_lado(r: Rect2, temblor: float) -> void:
 	var giro := abierta * GIRO_LADO
 	var vuelta := Transform2D(Vector2(-1, 0), Vector2(0, 1), Vector2(r.position.x + r.end.x, 0)) if al_reves else Transform2D.IDENTITY
 	draw_set_transform_matrix(vuelta * Transform2D(Vector2(sin(giro), cos(giro)), Vector2(0, 1), bisagra))
-	pintar_frente(Rect2(0, -ALTO, r.size.y - 8.0, ALTO), Color.WHITE.darkened(0.15 * abierta))
+	pintar_frente(Rect2(0, -alto, r.size.y - 8.0, alto), Color.WHITE.darkened(0.15 * abierta))
 	draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
@@ -445,8 +463,8 @@ func hoja_de_lado(r: Rect2, temblor: float) -> void:
 # coge el suyo según dónde esté, para que las de un piso no sean todas iguales
 func pintar_frente(hoja: Rect2, tinte: Color) -> void:
 	var dibujo: Texture2D = DIBUJO_TRASTERO if trastero else madera.frente
-	var modelo := posmod(roundi((caja.position.x + caja.position.y) / CASILLA), roundi(dibujo.get_width() / FRENTE.x))
-	draw_texture_rect_region(dibujo, hoja, Rect2(Vector2(modelo * FRENTE.x, 0), FRENTE), tinte)
+	var modelo := posmod(roundi((caja.position.x + caja.position.y) / CASILLA), roundi(dibujo.get_width() / frente.x))
+	draw_texture_rect_region(dibujo, hoja, Rect2(Vector2(modelo * frente.x, 0), frente), tinte)
 
 
 # La puerta blindada de la cámara acorazada de la joyería, de frente ("hoja" con el pie en 0): una plancha de acero con

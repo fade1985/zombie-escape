@@ -168,6 +168,7 @@ var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
 var galeria := false              # si es la galería del centro comercial: limpia, sin restos en el suelo ni en las paredes (17 nov)
 var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con oscuro alrededor (viviendas.gd)
+var sube := 3                     # lo que suben las paredes, en casillas: 3 o, en las tiendas de pared alta, 4 (Tienda.TIPOS "sube")
 var al_aire := false              # la azotea: toda ella, la imagen de GPT (AZOTEA), con la barandilla; ni caras ni tapas
 var alzados := {}                 # con cajas, las casillas de la pantalla con tabique que sube (poner_tabiques): Vector2i -> true
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
@@ -185,6 +186,7 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	sitio = datos
 	add_to_group("mapa")
 	cajas = sitio.get("cajas", false)
+	sube = int(sitio.get("sube", TABIQUE.SUBE))
 	al_aire = sitio.get("estilo", "") in ["azotea", "garaje"]   # (el garaje, igual: toda su imagen de GPT)
 	cols = int(sitio.ancho / CASILLA)
 	filas = int(sitio.alto / CASILLA)
@@ -713,6 +715,7 @@ func poner_caras() -> void:
 			var cara := CARA.new()
 			cara.position = Vector2(c * CASILLA, (f + 1) * CASILLA)
 			cara.ancho = (fin - c) * CASILLA
+			cara.alto = sube * CASILLA
 			cara.pared = estilos[sala].pared
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
@@ -744,7 +747,8 @@ func poner_caras() -> void:
 		var dintel := CARA.new()
 		dintel.position = Vector2(d.c * CASILLA, (d.f + 1) * CASILLA)
 		dintel.ancho = d.ancho * CASILLA
-		dintel.desde = PUERTA_BANO.DINTEL
+		dintel.alto = sube * CASILLA
+		dintel.desde = PUERTA_BANO.DINTEL + (sube - TABIQUE.SUBE) * CASILLA   # (con la pared alta, la puerta también: poner_hojas)
 		dintel.pared = estilos[sala].pared
 		dintel.techo = estilos[sala].techo
 		dintel.moldura = not cajas
@@ -812,9 +816,9 @@ func poner_tabiques() -> void:
 			if range(c, fin).any(func(k): return cara_de_caja(k, f)):
 				tramos.append([f, c, fin])
 				for k in range(c, fin):
-					alzados[Vector2i(k, f - TABIQUE.SUBE)] = true
+					alzados[Vector2i(k, f - sube)] = true
 					if not cara_de_caja(k, f) and dueno_en(k, f) != -2:   # (encima de una puerta, su dintel)
-						for y in range(f - TABIQUE.SUBE + 1, f):
+						for y in range(f - sube + 1, f):
 							alzados[Vector2i(k, y)] = true
 			c = fin
 	for t in tramos:
@@ -822,12 +826,13 @@ func poner_tabiques() -> void:
 		var tramo := TABIQUE.new()
 		tramo.position = Vector2(t[1] * CASILLA, (f + 1) * CASILLA)   # ordenado con la cara que cae de él
 		tramo.ancho = (t[2] - t[1]) * CASILLA
-		var y := f - TABIQUE.SUBE
+		tramo.sube = sube
+		var y := f - sube
 		for k in range(t[1], t[2]):
 			var baja := alzados.has(Vector2i(k, y + 1))
 			tramo.casillas.append({"baja": baja, "arriba": not borde_en(k, y - 1), "abajo": not baja,
-				"izq": [not borde_en(k - 1, y), not borde_en(k - 1, y + 1), not borde_en(k - 1, y + 2)],
-				"der": [not borde_en(k + 1, y), not borde_en(k + 1, y + 1), not borde_en(k + 1, y + 2)]})
+				"izq": range(sube).map(func(j): return not borde_en(k - 1, y + j)),
+				"der": range(sube).map(func(j): return not borde_en(k + 1, y + j))})
 		cosas.add_child(tramo)
 
 
@@ -1001,6 +1006,7 @@ func poner_hojas() -> void:
 		if sitio.tipo == "mantenimiento" and d.get("a", -1) == 2:
 			hoja.madera = PUERTA_BANO.METAL   # (la del despacho al taller: la metálica)
 			hoja.al_reves = true   # (y se abre hacia el despacho: abierta hacia el taller, se quedaba de pie junto al banco)
+		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
 		hoja.montar(d)
 		cosas.add_child(hoja)
 		hojas.append(hoja)

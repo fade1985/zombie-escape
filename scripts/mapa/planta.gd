@@ -349,6 +349,11 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# cerrada por sus tabiques, con oscuro alrededor)
 		sitio.cajas = true
 		sitio.arriba_extra = 68
+		# la pared alta de algunas tiendas (Tienda.TIPOS "sube": una casilla más de pared y puertas más altas), y la
+		# cámara deja ver lo que sube de más el tabique de arriba
+		if tipo_tienda != "" and not jefe:
+			sitio.sube = int(Tienda.TIPOS[tipo_tienda].get("sube", 3))
+			sitio.arriba_extra += (sitio.sube - 3) * CASILLA
 		# 18 nov: ningún mueble (tampoco los puestos a mano) tapa una puerta ni deja suelo sin salida (Muebles.repasar).
 		# Antes que los peligros, que se ponen mirando los muebles
 		Muebles.repasar(sitio)

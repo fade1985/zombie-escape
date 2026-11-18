@@ -7,10 +7,12 @@
 # tapa del muro, la misma que se ve en el resto del tabique, con su contorno.
 extends Node2D
 
-const ALTO := 96.0     # alto de la cara, en unidades (48 píxeles del dibujo)
+const ALTO := 96.0     # alto de la cara, en unidades (48 píxeles del dibujo): el de siempre
+const ALARGAR := preload("res://scripts/mapa/alargar.gd")   # (el papel, en las tiendas de pared alta)
 const TECHO := 12.0    # la moldura de arriba (6 píxeles)
 
 var ancho := 32.0          # en unidades
+var alto := ALTO           # su alto: el de siempre o, en las tiendas de pared alta (Tienda.TIPOS "sube"), una casilla más
 var pared: Texture2D
 var techo: Texture2D
 var puede_tapar := false   # solo los tabiques de dentro tienen a alguien detrás
@@ -41,30 +43,31 @@ func _draw() -> void:
 	if tapa:
 		dibujar_tabique(w, x0)
 		return
-	var alto := (ALTO - desde) / 2.0   # lo que se ve del papel, en píxeles (de arriba abajo)
-	draw_texture_rect_region(pared, Rect2(0, -ALTO / 2.0, w, alto), Rect2(x0, 0, w, pared.get_height() * alto * 2.0 / ALTO))
+	var visto := (alto - desde) / 2.0   # lo que se ve del papel, en píxeles (de arriba abajo)
+	var papel := pared if pared.get_height() * 2.0 >= alto else ALARGAR.dibujo(pared, int(alto / 2.0))
+	draw_texture_rect_region(papel, Rect2(0, -alto / 2.0, w, visto), Rect2(x0, 0, w, papel.get_height() * visto * 2.0 / alto))
 	if moldura:
-		draw_texture_rect_region(techo, Rect2(0, -(ALTO + TECHO) / 2.0, w, TECHO / 2.0), Rect2(x0, 0, w, techo.get_height()))
+		draw_texture_rect_region(techo, Rect2(0, -(alto + TECHO) / 2.0, w, TECHO / 2.0), Rect2(x0, 0, w, techo.get_height()))
 	for a in adornos:
 		draw_texture(a.dibujo, Vector2(a.x, a.y), a.get("color", Color.WHITE))   # (con "color", una sombra)
 	if niebla > 0.0:
-		var arriba := ALTO + (TECHO if moldura else 0.0)
+		var arriba := alto + (TECHO if moldura else 0.0)
 		draw_rect(Rect2(0, -arriba / 2.0, w, (arriba - desde) / 2.0), Color(0.07, 0.063, 0.11, 0.8 * niebla))
 
 
 # La tapa del muro de la altura de la cara (con su moldura), sin costura con la del tabique de debajo (que se dibuja
 # contando desde el borde del mapa, igual que ésta), y el filo de luz y el contorno oscuro de mapa.dibujar_tapas
 func dibujar_tabique(w: float, x0: float) -> void:
-	var alto := (ALTO + TECHO) / 2.0
-	draw_texture_rect_region(tapa, Rect2(0, -alto, w, alto), Rect2(x0, position.y / 2.0 - alto, w, alto), velo)
-	draw_rect(Rect2(0, -alto + 1, w, 1), filo)
-	draw_rect(Rect2(0, -alto - 1, w, 2), contorno)
+	var h := (alto + TECHO) / 2.0
+	draw_texture_rect_region(tapa, Rect2(0, -h, w, h), Rect2(x0, position.y / 2.0 - h, w, h), velo)
+	draw_rect(Rect2(0, -h + 1, w, 1), filo)
+	draw_rect(Rect2(0, -h - 1, w, 2), contorno)
 	if borde_izq:
-		draw_rect(Rect2(1, -alto, 1, alto), filo)
-		draw_rect(Rect2(-1, -alto, 2, alto), contorno)
+		draw_rect(Rect2(1, -h, 1, h), filo)
+		draw_rect(Rect2(-1, -h, 2, h), contorno)
 	if borde_der:
-		draw_rect(Rect2(w - 2, -alto, 1, alto), filo)
-		draw_rect(Rect2(w - 1, -alto, 2, alto), contorno)
+		draw_rect(Rect2(w - 2, -h, 1, h), filo)
+		draw_rect(Rect2(w - 1, -h, 2, h), contorno)
 
 
 func _process(delta: float) -> void:
@@ -72,5 +75,5 @@ func _process(delta: float) -> void:
 	if johnny == null:
 		return
 	var p := johnny.global_position - global_position
-	var detras := p.x > -20.0 and p.x < ancho + 20.0 and p.y < 0.0 and p.y > -ALTO - 40.0
+	var detras := p.x > -20.0 and p.x < ancho + 20.0 and p.y < 0.0 and p.y > -alto - 40.0
 	modulate.a = move_toward(modulate.a, 0.45 if detras else 1.0, delta * 4.0)

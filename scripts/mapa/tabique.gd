@@ -6,25 +6,26 @@
 # casilla, el de la cara): quien está detrás queda tapado, y entonces se vuelve medio transparente, como las caras.
 extends Node2D
 
-const SUBE := 3                       # lo que sube la pared (la cara, cara_pared.gd: ALTO), en casillas
+const SUBE := 3                       # lo que sube la pared (la cara, cara_pared.gd: ALTO), en casillas: lo de siempre
 const COLOR := Color("#34333b")       # el tabique: liso y de un gris muy oscuro, para que destaque lo de dentro
 const FILO := Color(1, 1, 1, 0.3)     # el filo de luz, junto al contorno
 const CONTORNO := Color("#1d1b2c")    # la raya oscura donde se acaba (mapa.gd: CONTORNO)
 
 var ancho := 32.0          # en unidades (casillas enteras)
+var sube := SUBE           # lo que sube este (en las tiendas de pared alta, Tienda.TIPOS "sube", una casilla más)
 # por cada casilla del tramo: si baja hasta la suya ("baja") y dónde lleva contorno: "arriba", "abajo" (si no baja) y
-# a cada lado, "izq" y "der", en sus tres filas (lo alto y, si baja, las dos de debajo)
+# a cada lado, "izq" y "der", en sus "sube" filas (lo alto y, si baja, las de debajo)
 var casillas: Array = []
 
 
 func _draw() -> void:
 	# En píxeles del dibujo, como las caras: una casilla son 16, y lo alto del tabique, SUBE casillas por encima de la suya
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
-	var y := -16.0 * (SUBE + 1)
+	var y := -16.0 * (sube + 1)
 	for i in casillas.size():
 		var cas: Dictionary = casillas[i]
 		var x := i * 16.0
-		var filas := SUBE if cas.baja else 1
+		var filas := sube if cas.baja else 1
 		draw_rect(Rect2(x, y, 16, 16 * filas), COLOR)
 		if cas.arriba:
 			draw_rect(Rect2(x, y + 1, 16, 1), FILO)
@@ -46,5 +47,5 @@ func _process(delta: float) -> void:
 	if johnny == null:
 		return
 	var p := johnny.global_position - global_position
-	var detras := p.x > -20.0 and p.x < ancho + 20.0 and p.y < 0.0 and p.y > -(SUBE + 1) * Planta.CASILLA - 8.0
+	var detras := p.x > -20.0 and p.x < ancho + 20.0 and p.y < 0.0 and p.y > -(sube + 1) * Planta.CASILLA - 8.0
 	modulate.a = move_toward(modulate.a, 0.45 if detras else 1.0, delta * 4.0)

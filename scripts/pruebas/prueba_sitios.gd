@@ -1322,6 +1322,93 @@ func probar_tiendas_fijas() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --edificio centro --puerta-dependienta" (--tipo X: otra tienda; si no, la de ropa): la dependienta, de
+# 112 px, junto a las puertas de dentro de la tienda, para ver si su altura y la de las puertas casan. En cada puerta de
+# frente, una dependienta delante (justo debajo del hueco) y Johnny a su lado, con la puerta cerrada
+# (captura-puerta-dependienta-<n>.png) y luego abierta, con ella de pie dentro del hueco (...-<n>-hueco.png)
+func probar_puerta_dependienta() -> void:
+	var args := OS.get_cmdline_user_args()
+	var tipo: String = args[args.find("--tipo") + 1] if "--tipo" in args else "ropa"
+	var hallada := {}
+	for i in 200:
+		Planta.semilla = 3000 + i
+		var num := 1 + i % 4
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		for idx in p.sitios.size():
+			if p.sitios[idx].get("tienda", "") == tipo and p.sitios[idx].tipo != "jefe" and p.sitios[idx].apt.entrada.lado == "abajo":
+				hallada = {"semilla": 3000 + i, "num": num, "idx": idx}
+				break
+		if not hallada.is_empty():
+			break
+	if hallada.is_empty():
+		Planta.semilla = 0
+		print("Puerta y dependienta: %s no sale en ninguna planta" % tipo)
+		get_tree().quit()
+		return
+	Planta.semilla = hallada.semilla
+	nueva_planta(hallada.num)
+	Planta.semilla = 0
+	planta.sitios[hallada.idx].limpio = true   # sin zombis: los pone la prueba
+	await montar(hallada.idx, 0, false)
+	await get_tree().create_timer(0.4).timeout
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.direccion = "s"
+	for sala in planta.sitios[hallada.idx].apt.salas:   # todo a la vista y sin penumbra, para ver bien las alturas
+		mapa.vistas[sala.id] = true
+		mapa.niebla[sala.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	$Pantalla.hide()
+	Luz.apagada = not Luz.apagada
+	var de_frente: Array = mapa.hojas.filter(func(h): return h.de_frente)
+	print("Puerta y dependienta (%s): %d puertas de frente" % [tipo, de_frente.size()])
+	for n in de_frente.size():
+		var h: Node2D = de_frente[n]
+		var pie := Vector2(h.caja.get_center().x, h.caja.end.y + 6)   # los pies, justo debajo del hueco
+		var z: Node2D = meter_zombi("dependienta", pie)
+		z.gritado = true
+		z.process_mode = Node.PROCESS_MODE_DISABLED   # quieta
+		z.global_position = pie
+		for hijo in z.get_children():
+			if hijo is CanvasItem and hijo != z.sprite and hijo.name != "Sombra":
+				hijo.visible = false
+		z.sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+		z.sprite.play("quieto_s")
+		z.visible = true
+		z.sprite.visible = true
+		if n == 0:   # lo alto de cada uno, en unidades, de los pies a lo más alto de su dibujo
+			print("Puerta y dependienta: la hoja %s de alto, hasta el marco %s; dependienta %s; Johnny %s" % [h.alto, h.dintel,
+				alto_dibujo(z.sprite), alto_dibujo(johnny.sprite)])
+		johnny.position = pie + Vector2(70, 0)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.4).timeout
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-puerta-dependienta-%d.png" % n)
+		# abierta, con ella de pie en medio del hueco
+		if h.abierta < 1.0:
+			h.usar_a_mano()
+		await get_tree().create_timer(0.7).timeout
+		z.global_position = Vector2(h.caja.get_center().x, h.caja.get_center().y + 4)
+		await get_tree().create_timer(0.2).timeout
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-puerta-dependienta-%d-hueco.png" % n)
+		z.queue_free()
+		await get_tree().create_timer(0.2).timeout
+	get_tree().quit()
+
+
+# Lo alto de un personaje (lo que se ve de su dibujo, de lo más alto a la última fila con algo pintado), en unidades del mundo
+func alto_dibujo(spr: AnimatedSprite2D) -> String:
+	var tex: Texture2D = spr.sprite_frames.get_frame_texture(spr.animation, spr.frame)
+	var img: Image = tex.get_image()
+	if img.is_compressed():
+		img.decompress()
+	var usado := img.get_used_rect()
+	var escala: float = spr.global_scale.y
+	return "%.0f (dibujo %dx%d, con algo %d filas, escala %.1f)" % [usado.size.y * escala, img.get_width(), img.get_height(),
+		usado.size.y, escala]
+
+
 # El sitio de esta planta con más puertas de dentro, si tiene al menos dos (las tiendas se sortean: unas tienen dos y otras más), o -1
 func piso_con_mas_puertas() -> int:
 	var idx := -1

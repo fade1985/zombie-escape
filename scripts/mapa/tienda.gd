@@ -36,8 +36,10 @@ const TIPOS := {
 		"color": Color("#4fe3ff")},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
 		"color": Color("#ff4f5e")},
+	# (18 nov, el dueño: la primera que se rehace por dentro. "sube": su pared, de 4 casillas en vez de 3, y sus puertas de
+	# dentro, más altas: con la de siempre, la dependienta, de 112 px, era más alta que las puertas; Planta.generar, mapa.gd)
 	"ropa": {"nombre": "Tienda de ropa", "neon": "MODA", "salas": ["probadores", "almacen"],   # [traducir]
-		"color": Color("#ff5fd0")},
+		"color": Color("#ff5fd0"), "sube": 4},
 	"farmacia": {"nombre": "Farmacia", "neon": "FARMACIA", "salas": ["rebotica", "bano"],   # [traducir]
 		"color": Color("#3dff6e")},
 	# la joyería (parte 9): no entra en el sorteo de cada planta, sale una por partida (Planta.joyeria_planta).
