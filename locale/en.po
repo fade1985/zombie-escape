@@ -5428,8 +5428,8 @@ msgid "Al oír su primer grito"
 msgstr "When you first hear her scream"
 
 #: scripts/tutoriales.gd
-msgid "Su grito despierta a toda la tienda y pone furiosos a todos los durmientes, a ella también: arden en rojo, andan y atacan más rápido y aguantan más."
-msgstr "Her scream wakes up the whole store and sends every sleeper into a rage, her included: they burn red, walk and attack faster and take more hits."
+msgid "Su grito despierta a toda la tienda y pone furiosos a todos los demás durmientes: arden en rojo, andan y atacan más rápido y aguantan más."
+msgstr "Her scream wakes up the whole store and sends every other sleeper into a rage: they burn red, walk and attack faster and take more hits."
 
 #: scripts/tutoriales.gd
 msgid "La furia no se va hasta que cae ella: ve primero a por la dependienta, que es flojita, o cárgate a todos furiosos."

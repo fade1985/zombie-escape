@@ -1,7 +1,7 @@
 # La dependienta del centro comercial (parte 4 del plan, docs/historial/CENTRO_COMERCIAL.md): flojita (vida 20) pero
 # rápida, y lo peor es su grito (18 nov, lo pidió el dueño; antes, M80, ponía a los demás una barrera y huía):
-#   - Al despertar grita «¡¡¡AAAHHH!!!», una sola vez: despierta a toda la tienda y enfurece a todos los zombis que hay
-#     en ese momento, ella también (zombi.gd, enfurecer): un 25 % más rápidos andando y atacando y un 25 % más de vida,
+#   - Al despertar grita «¡¡¡AAAHHH!!!», una sola vez: despierta a toda la tienda y enfurece a todos los demás zombis
+#     que hay en ese momento (zombi.gd, enfurecer; a ella no, 18 nov): un 25 % más rápidos andando y atacando y un 25 % más de vida,
 #     ardiendo en rojo. Los jefes no (el jefe de seguridad tampoco).
 #   - La furia les dura hasta que ella muere: o la matas primero, o te los cargas a todos furiosos.
 #   - Después pelea como un durmiente más: va a por Johnny y le da zarpazos.
@@ -12,6 +12,12 @@
 extends Zombi
 
 var gritado := false        # ya ha gritado (solo grita una vez)
+
+
+# (18 nov, lo pidió el dueño: la furia de su grito es para los demás; a ella no le afecta, ni la de otra dependienta)
+func _ready() -> void:
+	super()
+	se_enfurece = false
 
 
 # Al despertar no se queda pasmada como los demás ni suelta el "!": grita enseguida (en andar, que ya le toca)
@@ -30,7 +36,7 @@ func andar(delta: float, johnny: Node2D) -> void:
 	super(delta, johnny)
 
 
-# «¡¡¡AAAHHH!!!» (M79; antes, «¡OFERTAS!»): despierta a todos y los enfurece, a ella también
+# «¡¡¡AAAHHH!!!» (M79; antes, «¡OFERTAS!»): despierta a todos y enfurece a los demás (a ella no)
 func gritar(johnny: Node2D) -> void:
 	gritado = true
 	estado = "grito"

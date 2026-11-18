@@ -302,7 +302,7 @@ func probar_grito() -> void:
 
 
 # La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡¡¡AAAHHH!!!» una vez,
-# despierta a los vigilantes dormidos de al lado y los enfurece, a ella también (18 nov: un 25 % más de velocidad, de
+# despierta a los vigilantes dormidos de al lado y los enfurece, a ella no (18 nov: un 25 % más de velocidad, de
 # ritmo de ataque y de vida, ardiendo en rojo; captura-grito.png y, de cerca, captura-furia.png). Luego va a por Johnny
 # como un durmiente más. Muerta ella, a los demás se les pasa la furia (captura-sin-furia.png). Con el primer grito sale
 # su tutorial (captura-tutorial-dependienta.png; se cierra y sigue)
@@ -346,7 +346,7 @@ func foto_grito() -> void:
 	tutoriales_prueba = false
 	await get_tree().create_timer(0.5).timeout
 	var v0: Zombi = otros[0]
-	print("Grito: estado %s | despiertos %d/3 | furiosos %s (esperado: 3 true) | ella furiosa %s (esperado true)" % [
+	print("Grito: estado %s | despiertos %d/3 | furiosos %s (esperado: 3 true) | ella furiosa %s (esperado false)" % [
 		dep.estado, otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return o.furioso), dep.furioso])
 	print("Furia: velocidad %.0f → %.0f, vida máxima %d → %d, ritmo %.2f → %.2f (esperado: un 25 %% más)" % [v_antes,
 		v0.velocidad, vida_antes, v0.vida_max, ritmo_antes, v0.ritmo])

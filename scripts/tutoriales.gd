@@ -254,7 +254,7 @@ const LISTA := {
 			"También dañan a los durmientes: ¡llévalos hasta ellos! Esquivando los cruzas sin daño."]},
 	"dependienta": {"grupo": "Más edificios", "titulo": "La dependienta", "icono": "alerta",
 		"cuando": "Al oír su primer grito",
-		"lineas": ["Su grito despierta a toda la tienda y pone furiosos a todos los durmientes, a ella también: arden en rojo, andan y atacan más rápido y aguantan más.",
+		"lineas": ["Su grito despierta a toda la tienda y pone furiosos a todos los demás durmientes: arden en rojo, andan y atacan más rápido y aguantan más.",
 			"La furia no se va hasta que cae ella: ve primero a por la dependienta, que es flojita, o cárgate a todos furiosos."]},
 	# (16 nov: la cámara acorazada de la joyería, al entrar en ella la primera vez: joyeria.al_montar)
 	"joyeria": {"grupo": "Más edificios", "titulo": "La joyería", "icono": "centro", "cuando": "Al entrar en la joyería",

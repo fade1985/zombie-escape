@@ -5428,8 +5428,8 @@ msgid "Al oír su primer grito"
 msgstr "Au premier cri entendu"
 
 #: scripts/tutoriales.gd
-msgid "Su grito despierta a toda la tienda y pone furiosos a todos los durmientes, a ella también: arden en rojo, andan y atacan más rápido y aguantan más."
-msgstr "Son cri réveille tout le magasin et met tous les dormeurs en rage, elle aussi : ils brûlent en rouge, marchent et attaquent plus vite et encaissent plus."
+msgid "Su grito despierta a toda la tienda y pone furiosos a todos los demás durmientes: arden en rojo, andan y atacan más rápido y aguantan más."
+msgstr "Son cri réveille tout le magasin et met tous les autres dormeurs en rage : ils brûlent en rouge, marchent et attaquent plus vite et encaissent plus."
 
 #: scripts/tutoriales.gd
 msgid "La furia no se va hasta que cae ella: ve primero a por la dependienta, que es flojita, o cárgate a todos furiosos."

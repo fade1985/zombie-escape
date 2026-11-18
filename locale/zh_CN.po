@@ -5420,8 +5420,8 @@ msgid "Al oír su primer grito"
 msgstr "第一次听到她尖叫时"
 
 #: scripts/tutoriales.gd
-msgid "Su grito despierta a toda la tienda y pone furiosos a todos los durmientes, a ella también: arden en rojo, andan y atacan más rápido y aguantan más."
-msgstr "她的尖叫会吵醒整个商店，让所有沉睡者陷入狂怒，她自己也一样：它们燃起红光，走得更快、攻击更快，也更耐打。"
+msgid "Su grito despierta a toda la tienda y pone furiosos a todos los demás durmientes: arden en rojo, andan y atacan más rápido y aguantan más."
+msgstr "她的尖叫会吵醒整个商店，让其他所有沉睡者陷入狂怒：它们燃起红光，走得更快、攻击更快，也更耐打。"
 
 #: scripts/tutoriales.gd
 msgid "La furia no se va hasta que cae ella: ve primero a por la dependienta, que es flojita, o cárgate a todos furiosos."
