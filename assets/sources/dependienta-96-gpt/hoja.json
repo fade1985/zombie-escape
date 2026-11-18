@@ -1,6 +1,7 @@
 {
   "sprite": "zombi-dependienta",
   "reposo": {"cintura": 58, "baja": 2},
+  "piel": {"tono": 80, "sat": 1.0, "sube": 0.28},
   "animaciones": {
     "walk": {"de": "andar", "fps": 10},
     "attack": {"de": "zarpazo", "desde": 1, "duracion": 0.55, "impacto": 3},

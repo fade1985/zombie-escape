@@ -17,7 +17,16 @@ igual de alta que los demás, pero con el doble de detalle. Esta es la receta pa
   al montar la hoja, así que no se piden (ahorra casi la mitad).
 - **Animaciones** (de la dependienta: lo que costó cada dirección, `andar 3 + golpe 3 + muerte 1 + zarpazo 1`, 8
   generaciones):
-  - `andar` (8 fotogramas) y `golpe` (8), con el modo v3.
+  - `andar` (8 fotogramas) y `golpe` (8), con el modo v3. Comprobar que los dos pasos de la vuelta son iguales y que
+    el último enlaza con el primero: el primer andar de perfil y el de abajo a la derecha de la dependienta cojeaban
+    y pegaban un salto. Se rehicieron el 18 nov (15 generaciones con las pruebas) con el **modo esqueleto**, que es
+    lo que dio un andar fluido sin cambiar el dibujo: `mode: skeleton-v3`, plantilla `walking-8-frames`,
+    `motion_adjustments: {"stride": 1.15, "arm_swing": 0.6}`, una dirección por llamada, 3 generaciones cada una
+    («andar perfil esqueleto» y «andar abajo dcha esqueleto medio»). Lo que no valió: v3 con texto (de perfil la
+    cabeza seguía subiendo y bajando 5 píxeles al final de cada paso; en diagonal el paso seguía corto) y la zancada
+    a 1,5 (larguísima). Sale en un lienzo de 160: se coloca en la casilla de 152 con la cabeza a la altura de la del
+    dibujo quieto (a la dependienta, 6 píxeles a la izquierda y 5 arriba). Si otro zombi cojea o da saltitos al
+    andar, probar esto primero.
   - `muerte` (12) y `zarpazo` (8), con el modo barato (pixminimax): además del texto lleva la descripción del personaje
     y la pose de partida.
   - Las que son de cara, como el `grito`, solo en `south` (siempre se hace mirando a la pantalla).
@@ -34,6 +43,10 @@ El dueño elige cada animación. Lo elegido va a `assets/sources/<carpeta>/anima
 
 - **El andar, centrado** (sin balanceo de lado) y sin los fotogramas que giraban la cara (el `north-east` se quedó en 7).
   Si una dirección tiene menos fotogramas, la herramienta alarga cada uno para que dé el paso al mismo ritmo.
+- **La piel**, del mismo verde que los zombis de 48: la de la dependienta salió de PixelLab mucho más oscura y se
+  aclara al montar la hoja con `"piel": {"tono": 80, "sat": 1.0, "sube": 0.28}` en la ficha (los dibujos de
+  `animaciones/` no se tocan). Se comprueba en la foto de tamaño de `--captura --dependienta`: en el juego su piel
+  tiene que medir lo mismo que la del zombi normal (tono unos 83 grados, saturación unos 0,65, luz unos 0,5).
 - **La muerte**: sin la sangre suelta y con el fotograma 0 en la pose de pie limpia. La sangre pegada al cuerpo que
   quede se quita con `"sangre"` en la ficha (abajo).
 - El fotograma 0 de `zarpazo`, `golpe` y `muerte` es la pose de pie: no se usa (`"desde": 1`), ya está en el quieto.

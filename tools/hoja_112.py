@@ -24,6 +24,8 @@ La ficha (hoja.json), por ejemplo la de la dependienta:
   - "desde": el primer fotograma que se usa (el 0 de zarpazo, golpe y muerte es la pose de pie: ya está en el quieto).
   - "alinear": mueve la animación entera para que su fotograma 0 caiga encima del dibujo quieto (en la muerte de la
     dependienta la pose de pie quedaba 6 píxeles más arriba y al morir pegaba un salto).
+  - "piel": {"tono": 80, "sat": 1.0, "sube": 0.28}: aclara la piel verde en todos los dibujos (ver piel()). La de la
+    dependienta salió de PixelLab mucho más oscura que la de los zombis de 48; con esto se parece a la del zombi normal.
   - Si una dirección tiene menos fotogramas que south (el andar north-east de la dependienta, 7 y no 8), cada uno dura
     algo más para que vaya al mismo ritmo.
 
@@ -40,7 +42,7 @@ Uso (desde la carpeta del proyecto; necesita Python con Pillow):
   py tools/hoja_112.py dependienta-96-gpt                 rehace la hoja (y su .tres, con hacer_frames.py)
   py tools/hoja_112.py dependienta-96-gpt --gif carpeta   además guarda GIF de comprobación
 """
-import glob, json, os, subprocess, sys
+import colorsys, glob, json, os, subprocess, sys
 from collections import Counter
 from PIL import Image, ImageOps
 from png import guardar_png
@@ -59,8 +61,40 @@ AIRE_Y, AIRE_X = 10, 2     # aire alrededor de cada fotograma (lo que mira el sh
 ANCHO_HOJA = 2048
 
 
+PIEL = FICHA.get('piel')
+_colores = {}
+
+
+def piel(f):
+    """Aclara la piel verde (como la de los zombis de 48): los píxeles de tono verde (60-150 grados) suben "sube" de
+    luz y su saturación se multiplica por "sat", y van al tono "tono". Los muy oscuros (el contorno) apenas cambian,
+    así el sombreado y el borde quedan igual. El pelo, el polo, la sangre y los ojos no son verdes: no se tocan."""
+    if not PIEL:
+        return f
+    px = f.load()
+    for y in range(f.height):
+        for x in range(f.width):
+            c = px[x, y]
+            if not c[3]:
+                continue
+            if c not in _colores:
+                h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
+                h *= 360
+                if 60 <= h <= 150 and s >= 0.12 and v >= 0.12:
+                    peso = min(1, (v - 0.12) / 0.12)
+                    v = min(1, v + PIEL['sube'] * peso)
+                    s = min(1, s * (1 + (PIEL['sat'] - 1) * peso))
+                    h += (PIEL['tono'] - h) * peso
+                    r, g, b = colorsys.hsv_to_rgb(h / 360, s, v)
+                    _colores[c] = (round(r * 255), round(g * 255), round(b * 255), c[3])
+                else:
+                    _colores[c] = c
+            px[x, y] = _colores[c]
+    return f
+
+
 def cargar(anim, d):
-    fs = [Image.open(p).convert('RGBA') for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
+    fs = [piel(Image.open(p).convert('RGBA')) for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
     assert fs, f'faltan los fotogramas de {anim}/{d}'
     assert fs[0].size == (C, C), f'{anim}/{d}: el lienzo tiene que ser de {C}×{C} (es {fs[0].size})'
     return fs
@@ -124,7 +158,7 @@ def con_oeste(por_dir):
 
 # ═════════════ Quieto y reposo ═════════════
 m = (C - R) // 2   # (los pies de la pose de 112, de 56,110 a 76,130)
-quieto = con_oeste({d: [Image.open(f'{SRC}/rotaciones/{d}.png').convert('RGBA').crop((-m, -m, C - m, C - m))]
+quieto = con_oeste({d: [piel(Image.open(f'{SRC}/rotaciones/{d}.png').convert('RGBA').crop((-m, -m, C - m, C - m)))]
                     for d in PROPIAS})
 REPOSO = FICHA.get('reposo', {})
 cintura, baja = REPOSO.get('cintura', 58) + m, REPOSO.get('baja', 2)

@@ -4,1752 +4,1752 @@
 
 [sub_resource type="AtlasTexture" id="t0"]
 atlas = ExtResource("hoja")
-region = Rect2(840, 0, 40, 126)
+region = Rect2(1074, 0, 40, 126)
 margin = Rect2(55, 14, 112, 26)
 
 [sub_resource type="AtlasTexture" id="t1"]
 atlas = ExtResource("hoja")
-region = Rect2(132, 0, 40, 128)
+region = Rect2(564, 0, 40, 128)
 margin = Rect2(55, 12, 112, 24)
 
 [sub_resource type="AtlasTexture" id="t2"]
 atlas = ExtResource("hoja")
-region = Rect2(235, 0, 40, 127)
+region = Rect2(761, 0, 40, 127)
 margin = Rect2(56, 13, 112, 25)
 
 [sub_resource type="AtlasTexture" id="t3"]
 atlas = ExtResource("hoja")
-region = Rect2(890, 0, 42, 126)
+region = Rect2(1124, 0, 42, 126)
 margin = Rect2(55, 14, 110, 26)
 
 [sub_resource type="AtlasTexture" id="t4"]
 atlas = ExtResource("hoja")
-region = Rect2(942, 0, 42, 126)
+region = Rect2(1176, 0, 42, 126)
 margin = Rect2(55, 14, 110, 26)
 
 [sub_resource type="AtlasTexture" id="t5"]
 atlas = ExtResource("hoja")
-region = Rect2(285, 0, 42, 127)
+region = Rect2(811, 0, 42, 127)
 margin = Rect2(54, 13, 110, 25)
 
 [sub_resource type="AtlasTexture" id="t6"]
 atlas = ExtResource("hoja")
-region = Rect2(182, 0, 43, 128)
+region = Rect2(614, 0, 43, 128)
 margin = Rect2(53, 12, 109, 24)
 
 [sub_resource type="AtlasTexture" id="t7"]
 atlas = ExtResource("hoja")
-region = Rect2(337, 0, 43, 127)
+region = Rect2(863, 0, 43, 127)
 margin = Rect2(53, 13, 109, 25)
 
 [sub_resource type="AtlasTexture" id="t8"]
 atlas = ExtResource("hoja")
-region = Rect2(390, 0, 35, 127)
-margin = Rect2(58, 14, 117, 25)
+region = Rect2(667, 0, 37, 128)
+margin = Rect2(61, 15, 115, 24)
 
 [sub_resource type="AtlasTexture" id="t9"]
 atlas = ExtResource("hoja")
-region = Rect2(994, 0, 31, 126)
-margin = Rect2(60, 14, 121, 26)
+region = Rect2(1228, 0, 55, 126)
+margin = Rect2(57, 15, 97, 26)
 
 [sub_resource type="AtlasTexture" id="t10"]
 atlas = ExtResource("hoja")
-region = Rect2(340, 139, 28, 125)
-margin = Rect2(62, 15, 124, 27)
+region = Rect2(1293, 0, 60, 126)
+margin = Rect2(48, 16, 92, 26)
 
 [sub_resource type="AtlasTexture" id="t11"]
 atlas = ExtResource("hoja")
-region = Rect2(1726, 139, 28, 124)
-margin = Rect2(62, 16, 124, 28)
+region = Rect2(1363, 0, 45, 126)
+margin = Rect2(54, 15, 107, 26)
 
 [sub_resource type="AtlasTexture" id="t12"]
 atlas = ExtResource("hoja")
-region = Rect2(1035, 0, 31, 126)
-margin = Rect2(61, 15, 121, 26)
+region = Rect2(0, 0, 38, 131)
+margin = Rect2(59, 15, 114, 21)
 
 [sub_resource type="AtlasTexture" id="t13"]
 atlas = ExtResource("hoja")
-region = Rect2(435, 0, 37, 127)
-margin = Rect2(58, 14, 115, 25)
+region = Rect2(96, 0, 46, 129)
+margin = Rect2(57, 15, 106, 23)
 
 [sub_resource type="AtlasTexture" id="t14"]
 atlas = ExtResource("hoja")
-region = Rect2(482, 0, 44, 127)
-margin = Rect2(55, 14, 108, 25)
+region = Rect2(152, 0, 50, 129)
+margin = Rect2(54, 16, 102, 23)
 
 [sub_resource type="AtlasTexture" id="t15"]
 atlas = ExtResource("hoja")
-region = Rect2(1076, 0, 49, 126)
-margin = Rect2(53, 15, 103, 26)
+region = Rect2(212, 0, 42, 129)
+margin = Rect2(57, 15, 110, 23)
 
 [sub_resource type="AtlasTexture" id="t16"]
 atlas = ExtResource("hoja")
-region = Rect2(1135, 0, 46, 126)
-margin = Rect2(53, 14, 106, 26)
+region = Rect2(704, 141, 40, 125)
+margin = Rect2(56, 15, 112, 27)
 
 [sub_resource type="AtlasTexture" id="t17"]
 atlas = ExtResource("hoja")
-region = Rect2(1764, 139, 58, 124)
-margin = Rect2(51, 16, 94, 28)
+region = Rect2(1418, 0, 59, 126)
+margin = Rect2(55, 15, 93, 26)
 
 [sub_resource type="AtlasTexture" id="t18"]
 atlas = ExtResource("hoja")
-region = Rect2(1525, 274, 58, 122)
-margin = Rect2(48, 18, 94, 30)
+region = Rect2(754, 141, 68, 125)
+margin = Rect2(44, 16, 84, 27)
 
 [sub_resource type="AtlasTexture" id="t19"]
 atlas = ExtResource("hoja")
-region = Rect2(783, 274, 49, 123)
-margin = Rect2(49, 17, 103, 29)
+region = Rect2(832, 141, 41, 125)
+margin = Rect2(55, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t20"]
 atlas = ExtResource("hoja")
-region = Rect2(378, 139, 38, 125)
-margin = Rect2(54, 15, 114, 27)
+region = Rect2(883, 141, 42, 125)
+margin = Rect2(55, 14, 110, 27)
 
 [sub_resource type="AtlasTexture" id="t21"]
 atlas = ExtResource("hoja")
-region = Rect2(1191, 0, 38, 126)
-margin = Rect2(53, 14, 114, 26)
+region = Rect2(1105, 277, 61, 123)
+margin = Rect2(53, 15, 91, 29)
 
 [sub_resource type="AtlasTexture" id="t22"]
 atlas = ExtResource("hoja")
-region = Rect2(426, 139, 55, 125)
-margin = Rect2(51, 15, 97, 27)
+region = Rect2(1176, 277, 69, 123)
+margin = Rect2(43, 16, 83, 29)
 
 [sub_resource type="AtlasTexture" id="t23"]
 atlas = ExtResource("hoja")
-region = Rect2(842, 274, 55, 123)
-margin = Rect2(51, 17, 97, 29)
+region = Rect2(1487, 0, 41, 126)
+margin = Rect2(55, 14, 111, 26)
 
 [sub_resource type="AtlasTexture" id="t24"]
 atlas = ExtResource("hoja")
-region = Rect2(1832, 139, 50, 124)
+region = Rect2(206, 277, 50, 124)
 margin = Rect2(56, 17, 102, 28)
 
 [sub_resource type="AtlasTexture" id="t25"]
 atlas = ExtResource("hoja")
-region = Rect2(907, 274, 51, 123)
+region = Rect2(1255, 277, 51, 123)
 margin = Rect2(51, 18, 101, 29)
 
 [sub_resource type="AtlasTexture" id="t26"]
 atlas = ExtResource("hoja")
-region = Rect2(1892, 139, 40, 124)
+region = Rect2(266, 277, 40, 124)
 margin = Rect2(53, 16, 112, 28)
 
 [sub_resource type="AtlasTexture" id="t27"]
 atlas = ExtResource("hoja")
-region = Rect2(1239, 0, 35, 126)
+region = Rect2(1538, 0, 35, 126)
 margin = Rect2(60, 15, 117, 26)
 
 [sub_resource type="AtlasTexture" id="t28"]
 atlas = ExtResource("hoja")
-region = Rect2(1284, 0, 44, 126)
+region = Rect2(1583, 0, 44, 126)
 margin = Rect2(56, 16, 108, 26)
 
 [sub_resource type="AtlasTexture" id="t29"]
 atlas = ExtResource("hoja")
-region = Rect2(491, 139, 50, 125)
+region = Rect2(935, 141, 50, 125)
 margin = Rect2(54, 18, 102, 27)
 
 [sub_resource type="AtlasTexture" id="t30"]
 atlas = ExtResource("hoja")
-region = Rect2(551, 139, 44, 125)
+region = Rect2(995, 141, 44, 125)
 margin = Rect2(57, 16, 108, 27)
 
 [sub_resource type="AtlasTexture" id="t31"]
 atlas = ExtResource("hoja")
-region = Rect2(1942, 139, 42, 124)
+region = Rect2(316, 277, 42, 124)
 margin = Rect2(56, 16, 110, 28)
 
 [sub_resource type="AtlasTexture" id="t32"]
 atlas = ExtResource("hoja")
-region = Rect2(1338, 0, 42, 126)
+region = Rect2(1637, 0, 42, 126)
 margin = Rect2(56, 14, 110, 26)
 
 [sub_resource type="AtlasTexture" id="t33"]
 atlas = ExtResource("hoja")
-region = Rect2(536, 0, 42, 127)
+region = Rect2(916, 0, 42, 127)
 margin = Rect2(55, 13, 110, 25)
 
 [sub_resource type="AtlasTexture" id="t34"]
 atlas = ExtResource("hoja")
-region = Rect2(1390, 0, 42, 126)
+region = Rect2(1689, 0, 42, 126)
 margin = Rect2(54, 14, 110, 26)
 
 [sub_resource type="AtlasTexture" id="t35"]
 atlas = ExtResource("hoja")
-region = Rect2(605, 139, 42, 125)
+region = Rect2(1049, 141, 42, 125)
 margin = Rect2(54, 15, 110, 27)
 
 [sub_resource type="AtlasTexture" id="t36"]
 atlas = ExtResource("hoja")
-region = Rect2(657, 139, 44, 125)
+region = Rect2(1101, 141, 44, 125)
 margin = Rect2(53, 15, 108, 27)
 
 [sub_resource type="AtlasTexture" id="t37"]
 atlas = ExtResource("hoja")
-region = Rect2(588, 0, 44, 127)
+region = Rect2(968, 0, 44, 127)
 margin = Rect2(55, 13, 108, 25)
 
 [sub_resource type="AtlasTexture" id="t38"]
 atlas = ExtResource("hoja")
-region = Rect2(642, 0, 42, 127)
+region = Rect2(1022, 0, 42, 127)
 margin = Rect2(56, 13, 110, 25)
 
 [sub_resource type="AtlasTexture" id="t39"]
 atlas = ExtResource("hoja")
-region = Rect2(1994, 139, 50, 124)
+region = Rect2(368, 277, 50, 124)
 margin = Rect2(46, 17, 102, 28)
 
 [sub_resource type="AtlasTexture" id="t40"]
 atlas = ExtResource("hoja")
-region = Rect2(968, 274, 51, 123)
+region = Rect2(1316, 277, 51, 123)
 margin = Rect2(50, 18, 101, 29)
 
 [sub_resource type="AtlasTexture" id="t41"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 274, 40, 124)
+region = Rect2(428, 277, 40, 124)
 margin = Rect2(59, 16, 112, 28)
 
 [sub_resource type="AtlasTexture" id="t42"]
 atlas = ExtResource("hoja")
-region = Rect2(1442, 0, 35, 126)
+region = Rect2(1741, 0, 35, 126)
 margin = Rect2(57, 15, 117, 26)
 
 [sub_resource type="AtlasTexture" id="t43"]
 atlas = ExtResource("hoja")
-region = Rect2(1487, 0, 44, 126)
+region = Rect2(1786, 0, 44, 126)
 margin = Rect2(52, 16, 108, 26)
 
 [sub_resource type="AtlasTexture" id="t44"]
 atlas = ExtResource("hoja")
-region = Rect2(711, 139, 50, 125)
+region = Rect2(1155, 141, 50, 125)
 margin = Rect2(48, 18, 102, 27)
 
 [sub_resource type="AtlasTexture" id="t45"]
 atlas = ExtResource("hoja")
-region = Rect2(771, 139, 44, 125)
+region = Rect2(1215, 141, 44, 125)
 margin = Rect2(51, 16, 108, 27)
 
 [sub_resource type="AtlasTexture" id="t46"]
 atlas = ExtResource("hoja")
-region = Rect2(1541, 0, 46, 126)
-margin = Rect2(53, 14, 106, 26)
+region = Rect2(1269, 141, 40, 125)
+margin = Rect2(56, 15, 112, 27)
 
 [sub_resource type="AtlasTexture" id="t47"]
 atlas = ExtResource("hoja")
-region = Rect2(50, 274, 58, 124)
-margin = Rect2(43, 16, 94, 28)
+region = Rect2(1840, 0, 59, 126)
+margin = Rect2(38, 15, 93, 26)
 
 [sub_resource type="AtlasTexture" id="t48"]
 atlas = ExtResource("hoja")
-region = Rect2(1593, 274, 58, 122)
-margin = Rect2(46, 18, 94, 30)
+region = Rect2(1319, 141, 68, 125)
+margin = Rect2(40, 16, 84, 27)
 
 [sub_resource type="AtlasTexture" id="t49"]
 atlas = ExtResource("hoja")
-region = Rect2(1029, 274, 49, 123)
-margin = Rect2(54, 17, 103, 29)
+region = Rect2(1397, 141, 41, 125)
+margin = Rect2(56, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t50"]
 atlas = ExtResource("hoja")
-region = Rect2(825, 139, 38, 125)
-margin = Rect2(60, 15, 114, 27)
+region = Rect2(1448, 141, 42, 125)
+margin = Rect2(55, 14, 110, 27)
 
 [sub_resource type="AtlasTexture" id="t51"]
 atlas = ExtResource("hoja")
-region = Rect2(1597, 0, 38, 126)
-margin = Rect2(61, 14, 114, 26)
+region = Rect2(1377, 277, 61, 123)
+margin = Rect2(38, 15, 91, 29)
 
 [sub_resource type="AtlasTexture" id="t52"]
 atlas = ExtResource("hoja")
-region = Rect2(873, 139, 55, 125)
-margin = Rect2(46, 15, 97, 27)
+region = Rect2(1448, 277, 69, 123)
+margin = Rect2(40, 16, 83, 29)
 
 [sub_resource type="AtlasTexture" id="t53"]
 atlas = ExtResource("hoja")
-region = Rect2(1088, 274, 55, 123)
-margin = Rect2(46, 17, 97, 29)
+region = Rect2(1909, 0, 41, 126)
+margin = Rect2(56, 14, 111, 26)
 
 [sub_resource type="AtlasTexture" id="t54"]
 atlas = ExtResource("hoja")
-region = Rect2(694, 0, 35, 127)
-margin = Rect2(59, 14, 117, 25)
+region = Rect2(714, 0, 37, 128)
+margin = Rect2(54, 15, 115, 24)
 
 [sub_resource type="AtlasTexture" id="t55"]
 atlas = ExtResource("hoja")
-region = Rect2(1645, 0, 31, 126)
-margin = Rect2(61, 14, 121, 26)
+region = Rect2(1960, 0, 55, 126)
+margin = Rect2(40, 15, 97, 26)
 
 [sub_resource type="AtlasTexture" id="t56"]
 atlas = ExtResource("hoja")
-region = Rect2(938, 139, 28, 125)
-margin = Rect2(62, 15, 124, 27)
+region = Rect2(0, 141, 60, 126)
+margin = Rect2(44, 16, 92, 26)
 
 [sub_resource type="AtlasTexture" id="t57"]
 atlas = ExtResource("hoja")
-region = Rect2(118, 274, 28, 124)
-margin = Rect2(62, 16, 124, 28)
+region = Rect2(70, 141, 45, 126)
+margin = Rect2(53, 15, 107, 26)
 
 [sub_resource type="AtlasTexture" id="t58"]
 atlas = ExtResource("hoja")
-region = Rect2(1686, 0, 31, 126)
-margin = Rect2(60, 15, 121, 26)
+region = Rect2(48, 0, 38, 131)
+margin = Rect2(55, 15, 114, 21)
 
 [sub_resource type="AtlasTexture" id="t59"]
 atlas = ExtResource("hoja")
-region = Rect2(739, 0, 37, 127)
-margin = Rect2(57, 14, 115, 25)
+region = Rect2(264, 0, 46, 129)
+margin = Rect2(49, 15, 106, 23)
 
 [sub_resource type="AtlasTexture" id="t60"]
 atlas = ExtResource("hoja")
-region = Rect2(786, 0, 44, 127)
-margin = Rect2(53, 14, 108, 25)
+region = Rect2(320, 0, 50, 129)
+margin = Rect2(48, 16, 102, 23)
 
 [sub_resource type="AtlasTexture" id="t61"]
 atlas = ExtResource("hoja")
-region = Rect2(1727, 0, 49, 126)
-margin = Rect2(50, 15, 103, 26)
+region = Rect2(380, 0, 42, 129)
+margin = Rect2(53, 15, 110, 23)
 
 [sub_resource type="AtlasTexture" id="t62"]
 atlas = ExtResource("hoja")
-region = Rect2(1974, 0, 41, 125)
+region = Rect2(313, 141, 41, 125)
 margin = Rect2(55, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t63"]
 atlas = ExtResource("hoja")
-region = Rect2(392, 274, 41, 123)
+region = Rect2(714, 277, 41, 123)
 margin = Rect2(55, 17, 111, 29)
 
 [sub_resource type="AtlasTexture" id="t64"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 139, 38, 125)
+region = Rect2(364, 141, 38, 125)
 margin = Rect2(59, 15, 114, 27)
 
 [sub_resource type="AtlasTexture" id="t65"]
 atlas = ExtResource("hoja")
-region = Rect2(443, 274, 38, 123)
+region = Rect2(765, 277, 38, 123)
 margin = Rect2(59, 17, 114, 29)
 
 [sub_resource type="AtlasTexture" id="t66"]
 atlas = ExtResource("hoja")
-region = Rect2(48, 139, 35, 125)
+region = Rect2(412, 141, 35, 125)
 margin = Rect2(55, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t67"]
 atlas = ExtResource("hoja")
-region = Rect2(491, 274, 35, 123)
+region = Rect2(813, 277, 35, 123)
 margin = Rect2(55, 17, 117, 29)
 
 [sub_resource type="AtlasTexture" id="t68"]
 atlas = ExtResource("hoja")
-region = Rect2(93, 139, 41, 125)
+region = Rect2(457, 141, 41, 125)
 margin = Rect2(55, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t69"]
 atlas = ExtResource("hoja")
-region = Rect2(536, 274, 41, 123)
+region = Rect2(858, 277, 41, 123)
 margin = Rect2(55, 17, 111, 29)
 
 [sub_resource type="AtlasTexture" id="t70"]
 atlas = ExtResource("hoja")
-region = Rect2(144, 139, 42, 125)
+region = Rect2(508, 141, 42, 125)
 margin = Rect2(55, 15, 110, 27)
 
 [sub_resource type="AtlasTexture" id="t71"]
 atlas = ExtResource("hoja")
-region = Rect2(587, 274, 42, 123)
+region = Rect2(909, 277, 42, 123)
 margin = Rect2(55, 17, 110, 29)
 
 [sub_resource type="AtlasTexture" id="t72"]
 atlas = ExtResource("hoja")
-region = Rect2(196, 139, 41, 125)
+region = Rect2(560, 141, 41, 125)
 margin = Rect2(56, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t73"]
 atlas = ExtResource("hoja")
-region = Rect2(639, 274, 41, 123)
+region = Rect2(961, 277, 41, 123)
 margin = Rect2(56, 17, 111, 29)
 
 [sub_resource type="AtlasTexture" id="t74"]
 atlas = ExtResource("hoja")
-region = Rect2(247, 139, 35, 125)
+region = Rect2(611, 141, 35, 125)
 margin = Rect2(62, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t75"]
 atlas = ExtResource("hoja")
-region = Rect2(690, 274, 35, 123)
+region = Rect2(1012, 277, 35, 123)
 margin = Rect2(62, 17, 117, 29)
 
 [sub_resource type="AtlasTexture" id="t76"]
 atlas = ExtResource("hoja")
-region = Rect2(292, 139, 38, 125)
+region = Rect2(656, 141, 38, 125)
 margin = Rect2(55, 15, 114, 27)
 
 [sub_resource type="AtlasTexture" id="t77"]
 atlas = ExtResource("hoja")
-region = Rect2(735, 274, 38, 123)
+region = Rect2(1057, 277, 38, 123)
 margin = Rect2(55, 17, 114, 29)
 
 [sub_resource type="AtlasTexture" id="t78"]
 atlas = ExtResource("hoja")
-region = Rect2(341, 408, 53, 121)
+region = Rect2(600, 412, 53, 121)
 margin = Rect2(50, 19, 99, 31)
 
 [sub_resource type="AtlasTexture" id="t79"]
 atlas = ExtResource("hoja")
-region = Rect2(1694, 669, 69, 112)
+region = Rect2(1956, 673, 69, 112)
 margin = Rect2(43, 28, 83, 40)
 
 [sub_resource type="AtlasTexture" id="t80"]
 atlas = ExtResource("hoja")
-region = Rect2(314, 795, 75, 107)
+region = Rect2(546, 800, 75, 107)
 margin = Rect2(41, 33, 77, 45)
 
 [sub_resource type="AtlasTexture" id="t81"]
 atlas = ExtResource("hoja")
-region = Rect2(399, 795, 75, 107)
+region = Rect2(631, 800, 75, 107)
 margin = Rect2(41, 33, 77, 45)
 
 [sub_resource type="AtlasTexture" id="t82"]
 atlas = ExtResource("hoja")
-region = Rect2(484, 795, 75, 107)
+region = Rect2(716, 800, 75, 107)
 margin = Rect2(41, 33, 77, 45)
 
 [sub_resource type="AtlasTexture" id="t83"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 669, 61, 116)
+region = Rect2(262, 673, 61, 116)
 margin = Rect2(46, 24, 91, 36)
 
 [sub_resource type="AtlasTexture" id="t84"]
 atlas = ExtResource("hoja")
-region = Rect2(976, 139, 41, 125)
+region = Rect2(1500, 141, 41, 125)
 margin = Rect2(55, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t85"]
 atlas = ExtResource("hoja")
-region = Rect2(1228, 408, 71, 119)
+region = Rect2(1487, 412, 71, 119)
 margin = Rect2(60, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t86"]
 atlas = ExtResource("hoja")
-region = Rect2(1309, 408, 71, 119)
+region = Rect2(1568, 412, 71, 119)
 margin = Rect2(60, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t87"]
 atlas = ExtResource("hoja")
-region = Rect2(1390, 408, 71, 119)
+region = Rect2(1649, 412, 71, 119)
 margin = Rect2(60, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t88"]
 atlas = ExtResource("hoja")
-region = Rect2(1471, 408, 71, 119)
+region = Rect2(1730, 412, 71, 119)
 margin = Rect2(60, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t89"]
 atlas = ExtResource("hoja")
-region = Rect2(1552, 408, 71, 119)
+region = Rect2(1811, 412, 71, 119)
 margin = Rect2(60, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t90"]
 atlas = ExtResource("hoja")
-region = Rect2(1153, 274, 48, 123)
+region = Rect2(1527, 277, 48, 123)
 margin = Rect2(60, 17, 104, 29)
 
 [sub_resource type="AtlasTexture" id="t91"]
 atlas = ExtResource("hoja")
-region = Rect2(1027, 139, 38, 125)
+region = Rect2(1551, 141, 38, 125)
 margin = Rect2(59, 15, 114, 27)
 
 [sub_resource type="AtlasTexture" id="t92"]
 atlas = ExtResource("hoja")
-region = Rect2(1075, 139, 35, 125)
+region = Rect2(1599, 141, 35, 125)
 margin = Rect2(55, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t93"]
 atlas = ExtResource("hoja")
-region = Rect2(1120, 139, 35, 125)
+region = Rect2(1644, 141, 35, 125)
 margin = Rect2(53, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t94"]
 atlas = ExtResource("hoja")
-region = Rect2(1054, 669, 70, 113)
+region = Rect2(1316, 673, 70, 113)
 margin = Rect2(65, 27, 82, 39)
 
 [sub_resource type="AtlasTexture" id="t95"]
 atlas = ExtResource("hoja")
-region = Rect2(800, 669, 69, 114)
+region = Rect2(1062, 673, 69, 114)
 margin = Rect2(64, 26, 83, 38)
 
 [sub_resource type="AtlasTexture" id="t96"]
 atlas = ExtResource("hoja")
-region = Rect2(1134, 669, 70, 113)
+region = Rect2(1396, 673, 70, 113)
 margin = Rect2(65, 27, 82, 39)
 
 [sub_resource type="AtlasTexture" id="t97"]
 atlas = ExtResource("hoja")
-region = Rect2(684, 408, 44, 120)
+region = Rect2(943, 412, 44, 120)
 margin = Rect2(65, 20, 108, 32)
 
 [sub_resource type="AtlasTexture" id="t98"]
 atlas = ExtResource("hoja")
-region = Rect2(156, 274, 35, 124)
+region = Rect2(478, 277, 35, 124)
 margin = Rect2(58, 16, 117, 28)
 
 [sub_resource type="AtlasTexture" id="t99"]
 atlas = ExtResource("hoja")
-region = Rect2(1661, 274, 55, 122)
+region = Rect2(1899, 277, 55, 122)
 margin = Rect2(58, 18, 97, 30)
 
 [sub_resource type="AtlasTexture" id="t100"]
 atlas = ExtResource("hoja")
-region = Rect2(1181, 540, 76, 117)
+region = Rect2(1422, 544, 76, 117)
 margin = Rect2(62, 23, 76, 35)
 
 [sub_resource type="AtlasTexture" id="t101"]
 atlas = ExtResource("hoja")
-region = Rect2(1267, 540, 77, 117)
+region = Rect2(1508, 544, 77, 117)
 margin = Rect2(61, 23, 75, 35)
 
 [sub_resource type="AtlasTexture" id="t102"]
 atlas = ExtResource("hoja")
-region = Rect2(1354, 540, 76, 117)
+region = Rect2(1595, 544, 76, 117)
 margin = Rect2(61, 23, 76, 35)
 
 [sub_resource type="AtlasTexture" id="t103"]
 atlas = ExtResource("hoja")
-region = Rect2(1440, 540, 76, 117)
+region = Rect2(1681, 544, 76, 117)
 margin = Rect2(61, 23, 76, 35)
 
 [sub_resource type="AtlasTexture" id="t104"]
 atlas = ExtResource("hoja")
-region = Rect2(1633, 408, 69, 119)
+region = Rect2(1892, 412, 69, 119)
 margin = Rect2(61, 21, 83, 33)
 
 [sub_resource type="AtlasTexture" id="t105"]
 atlas = ExtResource("hoja")
-region = Rect2(1165, 139, 44, 125)
+region = Rect2(1689, 141, 44, 125)
 margin = Rect2(58, 15, 108, 27)
 
 [sub_resource type="AtlasTexture" id="t106"]
 atlas = ExtResource("hoja")
-region = Rect2(1726, 274, 49, 122)
+region = Rect2(1964, 277, 49, 122)
 margin = Rect2(52, 18, 103, 30)
 
 [sub_resource type="AtlasTexture" id="t107"]
 atlas = ExtResource("hoja")
-region = Rect2(1786, 0, 40, 126)
+region = Rect2(125, 141, 40, 126)
 margin = Rect2(56, 14, 112, 26)
 
 [sub_resource type="AtlasTexture" id="t108"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 0, 34, 129)
+region = Rect2(432, 0, 34, 129)
 margin = Rect2(59, 11, 118, 23)
 
 [sub_resource type="AtlasTexture" id="t109"]
 atlas = ExtResource("hoja")
-region = Rect2(44, 0, 34, 129)
+region = Rect2(476, 0, 34, 129)
 margin = Rect2(59, 11, 118, 23)
 
 [sub_resource type="AtlasTexture" id="t110"]
 atlas = ExtResource("hoja")
-region = Rect2(88, 0, 34, 129)
+region = Rect2(520, 0, 34, 129)
 margin = Rect2(59, 11, 118, 23)
 
 [sub_resource type="AtlasTexture" id="t111"]
 atlas = ExtResource("hoja")
-region = Rect2(1712, 408, 48, 119)
+region = Rect2(1971, 412, 48, 119)
 margin = Rect2(52, 21, 104, 33)
 
 [sub_resource type="AtlasTexture" id="t112"]
 atlas = ExtResource("hoja")
-region = Rect2(1219, 139, 48, 125)
+region = Rect2(1743, 141, 48, 125)
 margin = Rect2(52, 15, 104, 27)
 
 [sub_resource type="AtlasTexture" id="t113"]
 atlas = ExtResource("hoja")
-region = Rect2(1785, 274, 55, 122)
+region = Rect2(0, 412, 55, 122)
 margin = Rect2(39, 18, 97, 30)
 
 [sub_resource type="AtlasTexture" id="t114"]
 atlas = ExtResource("hoja")
-region = Rect2(1526, 540, 76, 117)
+region = Rect2(1767, 544, 76, 117)
 margin = Rect2(14, 23, 76, 35)
 
 [sub_resource type="AtlasTexture" id="t115"]
 atlas = ExtResource("hoja")
-region = Rect2(1612, 540, 77, 117)
+region = Rect2(1853, 544, 77, 117)
 margin = Rect2(14, 23, 75, 35)
 
 [sub_resource type="AtlasTexture" id="t116"]
 atlas = ExtResource("hoja")
-region = Rect2(1699, 540, 76, 117)
+region = Rect2(1940, 544, 76, 117)
 margin = Rect2(15, 23, 76, 35)
 
 [sub_resource type="AtlasTexture" id="t117"]
 atlas = ExtResource("hoja")
-region = Rect2(1785, 540, 76, 117)
+region = Rect2(0, 673, 76, 117)
 margin = Rect2(15, 23, 76, 35)
 
 [sub_resource type="AtlasTexture" id="t118"]
 atlas = ExtResource("hoja")
-region = Rect2(1770, 408, 69, 119)
+region = Rect2(0, 544, 69, 119)
 margin = Rect2(22, 21, 83, 33)
 
 [sub_resource type="AtlasTexture" id="t119"]
 atlas = ExtResource("hoja")
-region = Rect2(1277, 139, 44, 125)
+region = Rect2(1801, 141, 44, 125)
 margin = Rect2(50, 15, 108, 27)
 
 [sub_resource type="AtlasTexture" id="t120"]
 atlas = ExtResource("hoja")
-region = Rect2(1331, 139, 35, 125)
+region = Rect2(1855, 141, 35, 125)
 margin = Rect2(62, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t121"]
 atlas = ExtResource("hoja")
-region = Rect2(1376, 139, 35, 125)
+region = Rect2(1900, 141, 35, 125)
 margin = Rect2(64, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t122"]
 atlas = ExtResource("hoja")
-region = Rect2(1214, 669, 70, 113)
+region = Rect2(1476, 673, 70, 113)
 margin = Rect2(17, 27, 82, 39)
 
 [sub_resource type="AtlasTexture" id="t123"]
 atlas = ExtResource("hoja")
-region = Rect2(879, 669, 69, 114)
+region = Rect2(1141, 673, 69, 114)
 margin = Rect2(19, 26, 83, 38)
 
 [sub_resource type="AtlasTexture" id="t124"]
 atlas = ExtResource("hoja")
-region = Rect2(1294, 669, 70, 113)
+region = Rect2(1556, 673, 70, 113)
 margin = Rect2(17, 27, 82, 39)
 
 [sub_resource type="AtlasTexture" id="t125"]
 atlas = ExtResource("hoja")
-region = Rect2(738, 408, 44, 120)
+region = Rect2(997, 412, 44, 120)
 margin = Rect2(43, 20, 108, 32)
 
 [sub_resource type="AtlasTexture" id="t126"]
 atlas = ExtResource("hoja")
-region = Rect2(201, 274, 35, 124)
+region = Rect2(523, 277, 35, 124)
 margin = Rect2(59, 16, 117, 28)
 
 [sub_resource type="AtlasTexture" id="t127"]
 atlas = ExtResource("hoja")
-region = Rect2(1849, 408, 71, 119)
+region = Rect2(79, 544, 71, 119)
 margin = Rect2(21, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t128"]
 atlas = ExtResource("hoja")
-region = Rect2(1930, 408, 71, 119)
+region = Rect2(160, 544, 71, 119)
 margin = Rect2(21, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t129"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 540, 71, 119)
+region = Rect2(241, 544, 71, 119)
 margin = Rect2(21, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t130"]
 atlas = ExtResource("hoja")
-region = Rect2(81, 540, 71, 119)
+region = Rect2(322, 544, 71, 119)
 margin = Rect2(21, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t131"]
 atlas = ExtResource("hoja")
-region = Rect2(162, 540, 71, 119)
+region = Rect2(403, 544, 71, 119)
 margin = Rect2(21, 21, 81, 33)
 
 [sub_resource type="AtlasTexture" id="t132"]
 atlas = ExtResource("hoja")
-region = Rect2(1211, 274, 48, 123)
+region = Rect2(1585, 277, 48, 123)
 margin = Rect2(44, 17, 104, 29)
 
 [sub_resource type="AtlasTexture" id="t133"]
 atlas = ExtResource("hoja")
-region = Rect2(1421, 139, 38, 125)
+region = Rect2(1945, 141, 38, 125)
 margin = Rect2(55, 15, 114, 27)
 
 [sub_resource type="AtlasTexture" id="t134"]
 atlas = ExtResource("hoja")
-region = Rect2(1269, 274, 53, 123)
+region = Rect2(1643, 277, 53, 123)
 margin = Rect2(49, 17, 99, 29)
 
 [sub_resource type="AtlasTexture" id="t135"]
 atlas = ExtResource("hoja")
-region = Rect2(1332, 274, 65, 123)
+region = Rect2(1706, 277, 65, 123)
 margin = Rect2(43, 17, 87, 29)
 
 [sub_resource type="AtlasTexture" id="t136"]
 atlas = ExtResource("hoja")
-region = Rect2(297, 669, 79, 115)
+region = Rect2(559, 673, 79, 115)
 margin = Rect2(36, 25, 73, 37)
 
 [sub_resource type="AtlasTexture" id="t137"]
 atlas = ExtResource("hoja")
-region = Rect2(958, 669, 86, 114)
+region = Rect2(1220, 673, 86, 114)
 margin = Rect2(33, 26, 66, 38)
 
 [sub_resource type="AtlasTexture" id="t138"]
 atlas = ExtResource("hoja")
-region = Rect2(243, 540, 80, 119)
+region = Rect2(484, 544, 80, 119)
 margin = Rect2(36, 21, 72, 33)
 
 [sub_resource type="AtlasTexture" id="t139"]
 atlas = ExtResource("hoja")
-region = Rect2(1850, 274, 70, 122)
+region = Rect2(65, 412, 70, 122)
 margin = Rect2(41, 18, 82, 30)
 
 [sub_resource type="AtlasTexture" id="t140"]
 atlas = ExtResource("hoja")
-region = Rect2(246, 274, 62, 124)
+region = Rect2(568, 277, 62, 124)
 margin = Rect2(45, 16, 90, 28)
 
 [sub_resource type="AtlasTexture" id="t141"]
 atlas = ExtResource("hoja")
-region = Rect2(1469, 139, 41, 125)
+region = Rect2(1993, 141, 41, 125)
 margin = Rect2(56, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t142"]
 atlas = ExtResource("hoja")
-region = Rect2(1930, 274, 50, 122)
+region = Rect2(145, 412, 50, 122)
 margin = Rect2(50, 18, 102, 30)
 
 [sub_resource type="AtlasTexture" id="t143"]
 atlas = ExtResource("hoja")
-region = Rect2(71, 669, 72, 116)
+region = Rect2(333, 673, 72, 116)
 margin = Rect2(38, 24, 80, 36)
 
 [sub_resource type="AtlasTexture" id="t144"]
 atlas = ExtResource("hoja")
-region = Rect2(1871, 540, 78, 117)
+region = Rect2(86, 673, 78, 117)
 margin = Rect2(35, 23, 74, 35)
 
 [sub_resource type="AtlasTexture" id="t145"]
 atlas = ExtResource("hoja")
-region = Rect2(1773, 669, 78, 112)
+region = Rect2(0, 800, 78, 112)
 margin = Rect2(35, 28, 74, 40)
 
 [sub_resource type="AtlasTexture" id="t146"]
 atlas = ExtResource("hoja")
-region = Rect2(386, 669, 72, 115)
+region = Rect2(648, 673, 72, 115)
 margin = Rect2(40, 25, 80, 37)
 
 [sub_resource type="AtlasTexture" id="t147"]
 atlas = ExtResource("hoja")
-region = Rect2(333, 540, 58, 119)
+region = Rect2(574, 544, 58, 119)
 margin = Rect2(49, 21, 94, 33)
 
 [sub_resource type="AtlasTexture" id="t148"]
 atlas = ExtResource("hoja")
-region = Rect2(1990, 274, 44, 122)
+region = Rect2(205, 412, 44, 122)
 margin = Rect2(51, 18, 108, 30)
 
 [sub_resource type="AtlasTexture" id="t149"]
 atlas = ExtResource("hoja")
-region = Rect2(887, 540, 55, 118)
+region = Rect2(1128, 544, 55, 118)
 margin = Rect2(42, 22, 97, 34)
 
 [sub_resource type="AtlasTexture" id="t150"]
 atlas = ExtResource("hoja")
-region = Rect2(1861, 669, 62, 112)
+region = Rect2(88, 800, 62, 112)
 margin = Rect2(35, 28, 90, 40)
 
 [sub_resource type="AtlasTexture" id="t151"]
 atlas = ExtResource("hoja")
-region = Rect2(1374, 669, 65, 113)
+region = Rect2(1636, 673, 65, 113)
 margin = Rect2(36, 27, 87, 39)
 
 [sub_resource type="AtlasTexture" id="t152"]
 atlas = ExtResource("hoja")
-region = Rect2(468, 669, 57, 115)
+region = Rect2(730, 673, 57, 115)
 margin = Rect2(45, 25, 95, 37)
 
 [sub_resource type="AtlasTexture" id="t153"]
 atlas = ExtResource("hoja")
-region = Rect2(535, 669, 48, 115)
+region = Rect2(797, 673, 48, 115)
 margin = Rect2(54, 25, 104, 37)
 
 [sub_resource type="AtlasTexture" id="t154"]
 atlas = ExtResource("hoja")
-region = Rect2(401, 540, 38, 119)
+region = Rect2(642, 544, 38, 119)
 margin = Rect2(62, 21, 114, 33)
 
 [sub_resource type="AtlasTexture" id="t155"]
 atlas = ExtResource("hoja")
-region = Rect2(1407, 274, 49, 123)
+region = Rect2(1781, 277, 49, 123)
 margin = Rect2(49, 17, 103, 29)
 
 [sub_resource type="AtlasTexture" id="t156"]
 atlas = ExtResource("hoja")
-region = Rect2(404, 408, 64, 121)
+region = Rect2(663, 412, 64, 121)
 margin = Rect2(40, 19, 88, 31)
 
 [sub_resource type="AtlasTexture" id="t157"]
 atlas = ExtResource("hoja")
-region = Rect2(792, 408, 71, 120)
+region = Rect2(1051, 412, 71, 120)
 margin = Rect2(37, 20, 81, 32)
 
 [sub_resource type="AtlasTexture" id="t158"]
 atlas = ExtResource("hoja")
-region = Rect2(873, 408, 75, 120)
+region = Rect2(1132, 412, 75, 120)
 margin = Rect2(35, 20, 77, 32)
 
 [sub_resource type="AtlasTexture" id="t159"]
 atlas = ExtResource("hoja")
-region = Rect2(449, 540, 72, 119)
+region = Rect2(690, 544, 72, 119)
 margin = Rect2(38, 21, 80, 33)
 
 [sub_resource type="AtlasTexture" id="t160"]
 atlas = ExtResource("hoja")
-region = Rect2(531, 540, 69, 119)
+region = Rect2(772, 544, 69, 119)
 margin = Rect2(41, 21, 83, 33)
 
 [sub_resource type="AtlasTexture" id="t161"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 408, 63, 122)
+region = Rect2(259, 412, 63, 122)
 margin = Rect2(42, 18, 89, 30)
 
 [sub_resource type="AtlasTexture" id="t162"]
 atlas = ExtResource("hoja")
-region = Rect2(807, 795, 74, 99)
+region = Rect2(1039, 800, 74, 99)
 margin = Rect2(39, 41, 78, 53)
 
 [sub_resource type="AtlasTexture" id="t163"]
 atlas = ExtResource("hoja")
-region = Rect2(1280, 795, 76, 96)
+region = Rect2(1512, 800, 76, 96)
 margin = Rect2(38, 44, 76, 56)
 
 [sub_resource type="AtlasTexture" id="t164"]
 atlas = ExtResource("hoja")
-region = Rect2(891, 795, 72, 97)
+region = Rect2(1123, 800, 72, 97)
 margin = Rect2(40, 43, 80, 55)
 
 [sub_resource type="AtlasTexture" id="t165"]
 atlas = ExtResource("hoja")
-region = Rect2(731, 795, 66, 100)
+region = Rect2(963, 800, 66, 100)
 margin = Rect2(43, 40, 86, 52)
 
 [sub_resource type="AtlasTexture" id="t166"]
 atlas = ExtResource("hoja")
-region = Rect2(569, 795, 60, 104)
+region = Rect2(801, 800, 60, 104)
 margin = Rect2(46, 36, 92, 48)
 
 [sub_resource type="AtlasTexture" id="t167"]
 atlas = ExtResource("hoja")
-region = Rect2(248, 795, 56, 109)
+region = Rect2(480, 800, 56, 109)
 margin = Rect2(48, 31, 96, 43)
 
 [sub_resource type="AtlasTexture" id="t168"]
 atlas = ExtResource("hoja")
-region = Rect2(153, 669, 52, 116)
+region = Rect2(415, 673, 52, 116)
 margin = Rect2(50, 24, 100, 36)
 
 [sub_resource type="AtlasTexture" id="t169"]
 atlas = ExtResource("hoja")
-region = Rect2(1466, 274, 49, 123)
+region = Rect2(1840, 277, 49, 123)
 margin = Rect2(54, 17, 103, 29)
 
 [sub_resource type="AtlasTexture" id="t170"]
 atlas = ExtResource("hoja")
-region = Rect2(478, 408, 64, 121)
+region = Rect2(737, 412, 64, 121)
 margin = Rect2(48, 19, 88, 31)
 
 [sub_resource type="AtlasTexture" id="t171"]
 atlas = ExtResource("hoja")
-region = Rect2(958, 408, 71, 120)
+region = Rect2(1217, 412, 71, 120)
 margin = Rect2(44, 20, 81, 32)
 
 [sub_resource type="AtlasTexture" id="t172"]
 atlas = ExtResource("hoja")
-region = Rect2(1039, 408, 75, 120)
+region = Rect2(1298, 412, 75, 120)
 margin = Rect2(42, 20, 77, 32)
 
 [sub_resource type="AtlasTexture" id="t173"]
 atlas = ExtResource("hoja")
-region = Rect2(610, 540, 72, 119)
+region = Rect2(851, 544, 72, 119)
 margin = Rect2(42, 21, 80, 33)
 
 [sub_resource type="AtlasTexture" id="t174"]
 atlas = ExtResource("hoja")
-region = Rect2(692, 540, 69, 119)
+region = Rect2(933, 544, 69, 119)
 margin = Rect2(42, 21, 83, 33)
 
 [sub_resource type="AtlasTexture" id="t175"]
 atlas = ExtResource("hoja")
-region = Rect2(73, 408, 63, 122)
+region = Rect2(332, 412, 63, 122)
 margin = Rect2(47, 18, 89, 30)
 
 [sub_resource type="AtlasTexture" id="t176"]
 atlas = ExtResource("hoja")
-region = Rect2(146, 408, 44, 122)
+region = Rect2(405, 412, 44, 122)
 margin = Rect2(57, 18, 108, 30)
 
 [sub_resource type="AtlasTexture" id="t177"]
 atlas = ExtResource("hoja")
-region = Rect2(952, 540, 55, 118)
+region = Rect2(1193, 544, 55, 118)
 margin = Rect2(55, 22, 97, 34)
 
 [sub_resource type="AtlasTexture" id="t178"]
 atlas = ExtResource("hoja")
-region = Rect2(1933, 669, 62, 112)
+region = Rect2(160, 800, 62, 112)
 margin = Rect2(55, 28, 90, 40)
 
 [sub_resource type="AtlasTexture" id="t179"]
 atlas = ExtResource("hoja")
-region = Rect2(1449, 669, 65, 113)
+region = Rect2(1711, 673, 65, 113)
 margin = Rect2(51, 27, 87, 39)
 
 [sub_resource type="AtlasTexture" id="t180"]
 atlas = ExtResource("hoja")
-region = Rect2(593, 669, 57, 115)
+region = Rect2(855, 673, 57, 115)
 margin = Rect2(50, 25, 95, 37)
 
 [sub_resource type="AtlasTexture" id="t181"]
 atlas = ExtResource("hoja")
-region = Rect2(660, 669, 48, 115)
+region = Rect2(922, 673, 48, 115)
 margin = Rect2(50, 25, 104, 37)
 
 [sub_resource type="AtlasTexture" id="t182"]
 atlas = ExtResource("hoja")
-region = Rect2(771, 540, 38, 119)
+region = Rect2(1012, 544, 38, 119)
 margin = Rect2(52, 21, 114, 33)
 
 [sub_resource type="AtlasTexture" id="t183"]
 atlas = ExtResource("hoja")
-region = Rect2(1520, 139, 41, 125)
+region = Rect2(0, 277, 41, 125)
 margin = Rect2(55, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t184"]
 atlas = ExtResource("hoja")
-region = Rect2(200, 408, 50, 122)
+region = Rect2(459, 412, 50, 122)
 margin = Rect2(52, 18, 102, 30)
 
 [sub_resource type="AtlasTexture" id="t185"]
 atlas = ExtResource("hoja")
-region = Rect2(215, 669, 72, 116)
+region = Rect2(477, 673, 72, 116)
 margin = Rect2(42, 24, 80, 36)
 
 [sub_resource type="AtlasTexture" id="t186"]
 atlas = ExtResource("hoja")
-region = Rect2(1959, 540, 78, 117)
+region = Rect2(174, 673, 78, 117)
 margin = Rect2(39, 23, 74, 35)
 
 [sub_resource type="AtlasTexture" id="t187"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 795, 78, 112)
+region = Rect2(232, 800, 78, 112)
 margin = Rect2(39, 28, 74, 40)
 
 [sub_resource type="AtlasTexture" id="t188"]
 atlas = ExtResource("hoja")
-region = Rect2(718, 669, 72, 115)
+region = Rect2(980, 673, 72, 115)
 margin = Rect2(40, 25, 80, 37)
 
 [sub_resource type="AtlasTexture" id="t189"]
 atlas = ExtResource("hoja")
-region = Rect2(819, 540, 58, 119)
+region = Rect2(1060, 544, 58, 119)
 margin = Rect2(45, 21, 94, 33)
 
 [sub_resource type="AtlasTexture" id="t190"]
 atlas = ExtResource("hoja")
-region = Rect2(973, 795, 75, 97)
+region = Rect2(1205, 800, 75, 97)
 margin = Rect2(39, 34, 77, 55)
 
 [sub_resource type="AtlasTexture" id="t191"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 1168, 85, 53)
+region = Rect2(210, 1179, 85, 53)
 margin = Rect2(34, 51, 67, 99)
 
 [sub_resource type="AtlasTexture" id="t192"]
 atlas = ExtResource("hoja")
-region = Rect2(1253, 1092, 89, 61)
+region = Rect2(1477, 1103, 89, 61)
 margin = Rect2(32, 43, 63, 91)
 
 [sub_resource type="AtlasTexture" id="t193"]
 atlas = ExtResource("hoja")
-region = Rect2(1582, 1092, 97, 57)
+region = Rect2(1806, 1103, 97, 57)
 margin = Rect2(29, 55, 55, 95)
 
 [sub_resource type="AtlasTexture" id="t194"]
 atlas = ExtResource("hoja")
-region = Rect2(1689, 1092, 97, 54)
+region = Rect2(1913, 1103, 97, 54)
 margin = Rect2(29, 62, 55, 98)
 
 [sub_resource type="AtlasTexture" id="t195"]
 atlas = ExtResource("hoja")
-region = Rect2(408, 917, 97, 77)
+region = Rect2(599, 922, 97, 77)
 margin = Rect2(29, 62, 55, 75)
 
 [sub_resource type="AtlasTexture" id="t196"]
 atlas = ExtResource("hoja")
-region = Rect2(515, 917, 97, 77)
+region = Rect2(706, 922, 97, 77)
 margin = Rect2(29, 62, 55, 75)
 
 [sub_resource type="AtlasTexture" id="t197"]
 atlas = ExtResource("hoja")
-region = Rect2(622, 917, 98, 77)
+region = Rect2(813, 922, 98, 77)
 margin = Rect2(28, 62, 54, 75)
 
 [sub_resource type="AtlasTexture" id="t198"]
 atlas = ExtResource("hoja")
-region = Rect2(730, 917, 98, 77)
+region = Rect2(921, 922, 98, 77)
 margin = Rect2(28, 62, 54, 75)
 
 [sub_resource type="AtlasTexture" id="t199"]
 atlas = ExtResource("hoja")
-region = Rect2(838, 917, 98, 77)
+region = Rect2(1029, 922, 98, 77)
 margin = Rect2(28, 62, 54, 75)
 
 [sub_resource type="AtlasTexture" id="t200"]
 atlas = ExtResource("hoja")
-region = Rect2(946, 917, 97, 77)
+region = Rect2(1137, 922, 97, 77)
 margin = Rect2(29, 62, 55, 75)
 
 [sub_resource type="AtlasTexture" id="t201"]
 atlas = ExtResource("hoja")
-region = Rect2(1124, 408, 42, 120)
+region = Rect2(1383, 412, 42, 120)
 margin = Rect2(60, 20, 110, 32)
 
 [sub_resource type="AtlasTexture" id="t202"]
 atlas = ExtResource("hoja")
-region = Rect2(1017, 540, 72, 118)
+region = Rect2(1258, 544, 72, 118)
 margin = Rect2(41, 16, 80, 34)
 
 [sub_resource type="AtlasTexture" id="t203"]
 atlas = ExtResource("hoja")
-region = Rect2(1366, 795, 92, 96)
+region = Rect2(1598, 800, 92, 96)
 margin = Rect2(34, 21, 60, 56)
 
 [sub_resource type="AtlasTexture" id="t204"]
 atlas = ExtResource("hoja")
-region = Rect2(1472, 917, 95, 74)
+region = Rect2(1663, 922, 95, 74)
 margin = Rect2(31, 29, 57, 78)
 
 [sub_resource type="AtlasTexture" id="t205"]
 atlas = ExtResource("hoja")
-region = Rect2(540, 1011, 89, 70)
+region = Rect2(767, 1021, 89, 70)
 margin = Rect2(28, 40, 63, 82)
 
 [sub_resource type="AtlasTexture" id="t206"]
 atlas = ExtResource("hoja")
-region = Rect2(838, 1011, 88, 69)
+region = Rect2(1065, 1021, 88, 69)
 margin = Rect2(30, 49, 64, 83)
 
 [sub_resource type="AtlasTexture" id="t207"]
 atlas = ExtResource("hoja")
-region = Rect2(1796, 1092, 95, 54)
+region = Rect2(0, 1179, 95, 54)
 margin = Rect2(29, 63, 57, 98)
 
 [sub_resource type="AtlasTexture" id="t208"]
 atlas = ExtResource("hoja")
-region = Rect2(1920, 917, 98, 71)
+region = Rect2(119, 1021, 98, 71)
 margin = Rect2(29, 67, 54, 81)
 
 [sub_resource type="AtlasTexture" id="t209"]
 atlas = ExtResource("hoja")
-region = Rect2(936, 1011, 98, 69)
+region = Rect2(1163, 1021, 98, 69)
 margin = Rect2(29, 67, 54, 83)
 
 [sub_resource type="AtlasTexture" id="t210"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 1011, 98, 71)
+region = Rect2(227, 1021, 98, 71)
 margin = Rect2(29, 67, 54, 81)
 
 [sub_resource type="AtlasTexture" id="t211"]
 atlas = ExtResource("hoja")
-region = Rect2(108, 1011, 98, 71)
+region = Rect2(335, 1021, 98, 71)
 margin = Rect2(29, 67, 54, 81)
 
 [sub_resource type="AtlasTexture" id="t212"]
 atlas = ExtResource("hoja")
-region = Rect2(1524, 669, 75, 113)
+region = Rect2(1786, 673, 75, 113)
 margin = Rect2(23, 27, 77, 39)
 
 [sub_resource type="AtlasTexture" id="t213"]
 atlas = ExtResource("hoja")
-region = Rect2(1058, 795, 101, 97)
+region = Rect2(1290, 800, 101, 97)
 margin = Rect2(17, 37, 51, 55)
 
 [sub_resource type="AtlasTexture" id="t214"]
 atlas = ExtResource("hoja")
-region = Rect2(1682, 917, 109, 72)
+region = Rect2(1873, 922, 109, 72)
 margin = Rect2(23, 52, 43, 80)
 
 [sub_resource type="AtlasTexture" id="t215"]
 atlas = ExtResource("hoja")
-region = Rect2(1650, 1011, 113, 66)
+region = Rect2(1877, 1021, 113, 66)
 margin = Rect2(21, 69, 39, 86)
 
 [sub_resource type="AtlasTexture" id="t216"]
 atlas = ExtResource("hoja")
-region = Rect2(1019, 1092, 107, 63)
+region = Rect2(1243, 1103, 107, 63)
 margin = Rect2(23, 75, 45, 89)
 
 [sub_resource type="AtlasTexture" id="t217"]
 atlas = ExtResource("hoja")
-region = Rect2(95, 1168, 113, 53)
+region = Rect2(305, 1179, 113, 53)
 margin = Rect2(24, 88, 39, 99)
 
 [sub_resource type="AtlasTexture" id="t218"]
 atlas = ExtResource("hoja")
-region = Rect2(441, 1168, 112, 49)
+region = Rect2(651, 1179, 112, 49)
 margin = Rect2(25, 94, 40, 103)
 
 [sub_resource type="AtlasTexture" id="t219"]
 atlas = ExtResource("hoja")
-region = Rect2(685, 1168, 110, 47)
+region = Rect2(895, 1179, 110, 47)
 margin = Rect2(24, 97, 42, 105)
 
 [sub_resource type="AtlasTexture" id="t220"]
 atlas = ExtResource("hoja")
-region = Rect2(925, 1168, 110, 46)
+region = Rect2(1135, 1179, 110, 46)
 margin = Rect2(24, 98, 42, 106)
 
 [sub_resource type="AtlasTexture" id="t221"]
 atlas = ExtResource("hoja")
-region = Rect2(1045, 1168, 110, 46)
+region = Rect2(1255, 1179, 110, 46)
 margin = Rect2(24, 98, 42, 106)
 
 [sub_resource type="AtlasTexture" id="t222"]
 atlas = ExtResource("hoja")
-region = Rect2(1165, 1168, 110, 46)
+region = Rect2(1375, 1179, 110, 46)
 margin = Rect2(24, 98, 42, 106)
 
 [sub_resource type="AtlasTexture" id="t223"]
 atlas = ExtResource("hoja")
-region = Rect2(88, 795, 70, 112)
+region = Rect2(320, 800, 70, 112)
 margin = Rect2(30, 27, 82, 40)
 
 [sub_resource type="AtlasTexture" id="t224"]
 atlas = ExtResource("hoja")
-region = Rect2(1570, 795, 93, 91)
+region = Rect2(1802, 800, 93, 91)
 margin = Rect2(23, 37, 59, 61)
 
 [sub_resource type="AtlasTexture" id="t225"]
 atlas = ExtResource("hoja")
-region = Rect2(1352, 1092, 105, 60)
+region = Rect2(1576, 1103, 105, 60)
 margin = Rect2(29, 50, 47, 92)
 
 [sub_resource type="AtlasTexture" id="t226"]
 atlas = ExtResource("hoja")
-region = Rect2(1773, 1011, 102, 66)
+region = Rect2(0, 1103, 102, 66)
 margin = Rect2(31, 54, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t227"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 917, 90, 84)
+region = Rect2(191, 922, 90, 84)
 margin = Rect2(31, 55, 62, 68)
 
 [sub_resource type="AtlasTexture" id="t228"]
 atlas = ExtResource("hoja")
-region = Rect2(200, 917, 94, 82)
+region = Rect2(391, 922, 94, 82)
 margin = Rect2(32, 56, 58, 70)
 
 [sub_resource type="AtlasTexture" id="t229"]
 atlas = ExtResource("hoja")
-region = Rect2(1053, 917, 98, 77)
+region = Rect2(1244, 922, 98, 77)
 margin = Rect2(32, 62, 54, 75)
 
 [sub_resource type="AtlasTexture" id="t230"]
 atlas = ExtResource("hoja")
-region = Rect2(795, 1092, 102, 64)
+region = Rect2(1019, 1103, 102, 64)
 margin = Rect2(32, 74, 50, 88)
 
 [sub_resource type="AtlasTexture" id="t231"]
 atlas = ExtResource("hoja")
-region = Rect2(1885, 1011, 102, 66)
+region = Rect2(112, 1103, 102, 66)
 margin = Rect2(32, 75, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t232"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 1092, 102, 66)
+region = Rect2(224, 1103, 102, 66)
 margin = Rect2(31, 76, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t233"]
 atlas = ExtResource("hoja")
-region = Rect2(112, 1092, 102, 66)
+region = Rect2(336, 1103, 102, 66)
 margin = Rect2(31, 76, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t234"]
 atlas = ExtResource("hoja")
-region = Rect2(639, 795, 82, 102)
+region = Rect2(871, 800, 82, 102)
 margin = Rect2(35, 26, 70, 50)
 
 [sub_resource type="AtlasTexture" id="t235"]
 atlas = ExtResource("hoja")
-region = Rect2(1269, 917, 93, 75)
+region = Rect2(1460, 922, 93, 75)
 margin = Rect2(29, 38, 59, 77)
 
 [sub_resource type="AtlasTexture" id="t236"]
 atlas = ExtResource("hoja")
-region = Rect2(218, 1168, 90, 53)
+region = Rect2(428, 1179, 90, 53)
 margin = Rect2(31, 60, 62, 99)
 
 [sub_resource type="AtlasTexture" id="t237"]
 atlas = ExtResource("hoja")
-region = Rect2(1776, 795, 79, 89)
+region = Rect2(0, 922, 79, 89)
 margin = Rect2(36, 61, 73, 63)
 
 [sub_resource type="AtlasTexture" id="t238"]
 atlas = ExtResource("hoja")
-region = Rect2(1865, 795, 92, 86)
+region = Rect2(89, 922, 92, 86)
 margin = Rect2(30, 66, 60, 66)
 
 [sub_resource type="AtlasTexture" id="t239"]
 atlas = ExtResource("hoja")
-region = Rect2(1372, 917, 90, 75)
+region = Rect2(1563, 922, 90, 75)
 margin = Rect2(31, 77, 62, 77)
 
 [sub_resource type="AtlasTexture" id="t240"]
 atlas = ExtResource("hoja")
-region = Rect2(639, 1011, 90, 70)
+region = Rect2(866, 1021, 90, 70)
 margin = Rect2(31, 82, 62, 82)
 
 [sub_resource type="AtlasTexture" id="t241"]
 atlas = ExtResource("hoja")
-region = Rect2(1250, 1011, 90, 68)
+region = Rect2(1477, 1021, 90, 68)
 margin = Rect2(31, 84, 62, 84)
 
 [sub_resource type="AtlasTexture" id="t242"]
 atlas = ExtResource("hoja")
-region = Rect2(1350, 1011, 90, 68)
+region = Rect2(1577, 1021, 90, 68)
 margin = Rect2(31, 84, 62, 84)
 
 [sub_resource type="AtlasTexture" id="t243"]
 atlas = ExtResource("hoja")
-region = Rect2(1450, 1011, 90, 68)
+region = Rect2(1677, 1021, 90, 68)
 margin = Rect2(31, 84, 62, 84)
 
 [sub_resource type="AtlasTexture" id="t244"]
 atlas = ExtResource("hoja")
-region = Rect2(1550, 1011, 90, 68)
+region = Rect2(1777, 1021, 90, 68)
 margin = Rect2(31, 84, 62, 84)
 
 [sub_resource type="AtlasTexture" id="t245"]
 atlas = ExtResource("hoja")
-region = Rect2(168, 795, 70, 112)
+region = Rect2(400, 800, 70, 112)
 margin = Rect2(52, 27, 82, 40)
 
 [sub_resource type="AtlasTexture" id="t246"]
 atlas = ExtResource("hoja")
-region = Rect2(1673, 795, 93, 91)
+region = Rect2(1905, 800, 93, 91)
 margin = Rect2(36, 37, 59, 61)
 
 [sub_resource type="AtlasTexture" id="t247"]
 atlas = ExtResource("hoja")
-region = Rect2(1467, 1092, 105, 60)
+region = Rect2(1691, 1103, 105, 60)
 margin = Rect2(18, 50, 47, 92)
 
 [sub_resource type="AtlasTexture" id="t248"]
 atlas = ExtResource("hoja")
-region = Rect2(224, 1092, 102, 66)
+region = Rect2(448, 1103, 102, 66)
 margin = Rect2(19, 54, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t249"]
 atlas = ExtResource("hoja")
-region = Rect2(100, 917, 90, 84)
+region = Rect2(291, 922, 90, 84)
 margin = Rect2(31, 55, 62, 68)
 
 [sub_resource type="AtlasTexture" id="t250"]
 atlas = ExtResource("hoja")
-region = Rect2(304, 917, 94, 82)
+region = Rect2(495, 922, 94, 82)
 margin = Rect2(26, 56, 58, 70)
 
 [sub_resource type="AtlasTexture" id="t251"]
 atlas = ExtResource("hoja")
-region = Rect2(1161, 917, 98, 77)
+region = Rect2(1352, 922, 98, 77)
 margin = Rect2(22, 62, 54, 75)
 
 [sub_resource type="AtlasTexture" id="t252"]
 atlas = ExtResource("hoja")
-region = Rect2(907, 1092, 102, 64)
+region = Rect2(1131, 1103, 102, 64)
 margin = Rect2(18, 74, 50, 88)
 
 [sub_resource type="AtlasTexture" id="t253"]
 atlas = ExtResource("hoja")
-region = Rect2(336, 1092, 102, 66)
+region = Rect2(560, 1103, 102, 66)
 margin = Rect2(18, 75, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t254"]
 atlas = ExtResource("hoja")
-region = Rect2(448, 1092, 102, 66)
+region = Rect2(672, 1103, 102, 66)
 margin = Rect2(19, 76, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t255"]
 atlas = ExtResource("hoja")
-region = Rect2(560, 1092, 102, 66)
+region = Rect2(784, 1103, 102, 66)
 margin = Rect2(19, 76, 50, 86)
 
 [sub_resource type="AtlasTexture" id="t256"]
 atlas = ExtResource("hoja")
-region = Rect2(1609, 669, 75, 113)
+region = Rect2(1871, 673, 75, 113)
 margin = Rect2(54, 27, 77, 39)
 
 [sub_resource type="AtlasTexture" id="t257"]
 atlas = ExtResource("hoja")
-region = Rect2(1169, 795, 101, 97)
+region = Rect2(1401, 800, 101, 97)
 margin = Rect2(34, 37, 51, 55)
 
 [sub_resource type="AtlasTexture" id="t258"]
 atlas = ExtResource("hoja")
-region = Rect2(1801, 917, 109, 72)
+region = Rect2(0, 1021, 109, 72)
 margin = Rect2(20, 52, 43, 80)
 
 [sub_resource type="AtlasTexture" id="t259"]
 atlas = ExtResource("hoja")
-region = Rect2(672, 1092, 113, 66)
+region = Rect2(896, 1103, 113, 66)
 margin = Rect2(18, 69, 39, 86)
 
 [sub_resource type="AtlasTexture" id="t260"]
 atlas = ExtResource("hoja")
-region = Rect2(1136, 1092, 107, 63)
+region = Rect2(1360, 1103, 107, 63)
 margin = Rect2(22, 75, 45, 89)
 
 [sub_resource type="AtlasTexture" id="t261"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 1168, 113, 53)
+region = Rect2(528, 1179, 113, 53)
 margin = Rect2(15, 88, 39, 99)
 
 [sub_resource type="AtlasTexture" id="t262"]
 atlas = ExtResource("hoja")
-region = Rect2(563, 1168, 112, 49)
+region = Rect2(773, 1179, 112, 49)
 margin = Rect2(15, 94, 40, 103)
 
 [sub_resource type="AtlasTexture" id="t263"]
 atlas = ExtResource("hoja")
-region = Rect2(805, 1168, 110, 47)
+region = Rect2(1015, 1179, 110, 47)
 margin = Rect2(18, 97, 42, 105)
 
 [sub_resource type="AtlasTexture" id="t264"]
 atlas = ExtResource("hoja")
-region = Rect2(1285, 1168, 110, 46)
+region = Rect2(1495, 1179, 110, 46)
 margin = Rect2(18, 98, 42, 106)
 
 [sub_resource type="AtlasTexture" id="t265"]
 atlas = ExtResource("hoja")
-region = Rect2(1405, 1168, 110, 46)
+region = Rect2(1615, 1179, 110, 46)
 margin = Rect2(18, 98, 42, 106)
 
 [sub_resource type="AtlasTexture" id="t266"]
 atlas = ExtResource("hoja")
-region = Rect2(1525, 1168, 110, 46)
+region = Rect2(1735, 1179, 110, 46)
 margin = Rect2(18, 98, 42, 106)
 
 [sub_resource type="AtlasTexture" id="t267"]
 atlas = ExtResource("hoja")
-region = Rect2(1176, 408, 42, 120)
+region = Rect2(1435, 412, 42, 120)
 margin = Rect2(50, 20, 110, 32)
 
 [sub_resource type="AtlasTexture" id="t268"]
 atlas = ExtResource("hoja")
-region = Rect2(1099, 540, 72, 118)
+region = Rect2(1340, 544, 72, 118)
 margin = Rect2(39, 16, 80, 34)
 
 [sub_resource type="AtlasTexture" id="t269"]
 atlas = ExtResource("hoja")
-region = Rect2(1468, 795, 92, 96)
+region = Rect2(1700, 800, 92, 96)
 margin = Rect2(26, 21, 60, 56)
 
 [sub_resource type="AtlasTexture" id="t270"]
 atlas = ExtResource("hoja")
-region = Rect2(1577, 917, 95, 74)
+region = Rect2(1768, 922, 95, 74)
 margin = Rect2(26, 29, 57, 78)
 
 [sub_resource type="AtlasTexture" id="t271"]
 atlas = ExtResource("hoja")
-region = Rect2(739, 1011, 89, 70)
+region = Rect2(966, 1021, 89, 70)
 margin = Rect2(35, 40, 63, 82)
 
 [sub_resource type="AtlasTexture" id="t272"]
 atlas = ExtResource("hoja")
-region = Rect2(1044, 1011, 88, 69)
+region = Rect2(1271, 1021, 88, 69)
 margin = Rect2(34, 49, 64, 83)
 
 [sub_resource type="AtlasTexture" id="t273"]
 atlas = ExtResource("hoja")
-region = Rect2(1901, 1092, 95, 54)
+region = Rect2(105, 1179, 95, 54)
 margin = Rect2(28, 63, 57, 98)
 
 [sub_resource type="AtlasTexture" id="t274"]
 atlas = ExtResource("hoja")
-region = Rect2(216, 1011, 98, 71)
+region = Rect2(443, 1021, 98, 71)
 margin = Rect2(25, 67, 54, 81)
 
 [sub_resource type="AtlasTexture" id="t275"]
 atlas = ExtResource("hoja")
-region = Rect2(1142, 1011, 98, 69)
+region = Rect2(1369, 1021, 98, 69)
 margin = Rect2(25, 67, 54, 83)
 
 [sub_resource type="AtlasTexture" id="t276"]
 atlas = ExtResource("hoja")
-region = Rect2(324, 1011, 98, 71)
+region = Rect2(551, 1021, 98, 71)
 margin = Rect2(25, 67, 54, 81)
 
 [sub_resource type="AtlasTexture" id="t277"]
 atlas = ExtResource("hoja")
-region = Rect2(432, 1011, 98, 71)
+region = Rect2(659, 1021, 98, 71)
 margin = Rect2(25, 67, 54, 81)
 
 [sub_resource type="AtlasTexture" id="t278"]
 atlas = ExtResource("hoja")
-region = Rect2(1974, 0, 41, 125)
+region = Rect2(313, 141, 41, 125)
 margin = Rect2(55, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t279"]
 atlas = ExtResource("hoja")
-region = Rect2(0, 139, 38, 125)
+region = Rect2(364, 141, 38, 125)
 margin = Rect2(59, 15, 114, 27)
 
 [sub_resource type="AtlasTexture" id="t280"]
 atlas = ExtResource("hoja")
-region = Rect2(48, 139, 35, 125)
+region = Rect2(412, 141, 35, 125)
 margin = Rect2(55, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t281"]
 atlas = ExtResource("hoja")
-region = Rect2(93, 139, 41, 125)
+region = Rect2(457, 141, 41, 125)
 margin = Rect2(55, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t282"]
 atlas = ExtResource("hoja")
-region = Rect2(144, 139, 42, 125)
+region = Rect2(508, 141, 42, 125)
 margin = Rect2(55, 15, 110, 27)
 
 [sub_resource type="AtlasTexture" id="t283"]
 atlas = ExtResource("hoja")
-region = Rect2(196, 139, 41, 125)
+region = Rect2(560, 141, 41, 125)
 margin = Rect2(56, 15, 111, 27)
 
 [sub_resource type="AtlasTexture" id="t284"]
 atlas = ExtResource("hoja")
-region = Rect2(247, 139, 35, 125)
+region = Rect2(611, 141, 35, 125)
 margin = Rect2(62, 15, 117, 27)
 
 [sub_resource type="AtlasTexture" id="t285"]
 atlas = ExtResource("hoja")
-region = Rect2(292, 139, 38, 125)
+region = Rect2(656, 141, 38, 125)
 margin = Rect2(55, 15, 114, 27)
 
 [sub_resource type="AtlasTexture" id="t286"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t287"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t288"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t289"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t290"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t291"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t292"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t293"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [sub_resource type="AtlasTexture" id="t294"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t295"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t296"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t297"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t298"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t299"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t300"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t301"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [sub_resource type="AtlasTexture" id="t302"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t303"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t304"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t305"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t306"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t307"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t308"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t309"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [sub_resource type="AtlasTexture" id="t310"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t311"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t312"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t313"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t314"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t315"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t316"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t317"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [sub_resource type="AtlasTexture" id="t318"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t319"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t320"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t321"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t322"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t323"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t324"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t325"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [sub_resource type="AtlasTexture" id="t326"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t327"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t328"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t329"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t330"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t331"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t332"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t333"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [sub_resource type="AtlasTexture" id="t334"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t335"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t336"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t337"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t338"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t339"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t340"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t341"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [sub_resource type="AtlasTexture" id="t342"]
 atlas = ExtResource("hoja")
-region = Rect2(1571, 139, 61, 125)
+region = Rect2(51, 277, 61, 125)
 margin = Rect2(45, 15, 91, 27)
 
 [sub_resource type="AtlasTexture" id="t343"]
 atlas = ExtResource("hoja")
-region = Rect2(552, 408, 51, 121)
+region = Rect2(811, 412, 51, 121)
 margin = Rect2(50, 19, 101, 31)
 
 [sub_resource type="AtlasTexture" id="t344"]
 atlas = ExtResource("hoja")
-region = Rect2(1642, 139, 74, 125)
+region = Rect2(122, 277, 74, 125)
 margin = Rect2(39, 15, 78, 27)
 
 [sub_resource type="AtlasTexture" id="t345"]
 atlas = ExtResource("hoja")
-region = Rect2(1836, 0, 69, 126)
+region = Rect2(175, 141, 69, 126)
 margin = Rect2(42, 14, 83, 26)
 
 [sub_resource type="AtlasTexture" id="t346"]
 atlas = ExtResource("hoja")
-region = Rect2(318, 274, 64, 124)
+region = Rect2(640, 277, 64, 124)
 margin = Rect2(46, 16, 88, 28)
 
 [sub_resource type="AtlasTexture" id="t347"]
 atlas = ExtResource("hoja")
-region = Rect2(260, 408, 71, 122)
+region = Rect2(519, 412, 71, 122)
 margin = Rect2(40, 18, 81, 30)
 
 [sub_resource type="AtlasTexture" id="t348"]
 atlas = ExtResource("hoja")
-region = Rect2(613, 408, 61, 121)
+region = Rect2(872, 412, 61, 121)
 margin = Rect2(45, 19, 91, 31)
 
 [sub_resource type="AtlasTexture" id="t349"]
 atlas = ExtResource("hoja")
-region = Rect2(1915, 0, 49, 126)
+region = Rect2(254, 141, 49, 126)
 margin = Rect2(51, 14, 103, 26)
 
 [resource]
