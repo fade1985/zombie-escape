@@ -66,6 +66,10 @@ const CORTINA := preload("res://assets/sprites/cortina-probador.png")
 const CORTINA_ABIERTA := preload("res://assets/sprites/cortina-probador-abierta.png")
 const CORTINA_BORDE := 2     # píxeles del dibujo que ocupa cada montante de madera
 const CORTINA_RECOGIDA := 9  # y lo que ocupa recogida la cortina, a la izquierda (de los 28 de hueco)
+# La de los trasteros de las viviendas, pero metalizada (gris acero en vez de azul; tools/trastero_metal.py): la del almacén de la tienda de
+# ropa (mapa.gd, poner_hojas). Sin trastero = true: se abre y se cierra a mano como las demás
+const TRASTERO_METALIZADA := {"frente": preload("res://assets/sprites/puerta-trastero-metal.png"),
+	"abierta": preload("res://assets/sprites/puerta-trastero-metal-abierta.png"), "lado": METAL.lado, "cerrada": METAL.cerrada}
 const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
@@ -92,6 +96,7 @@ var tablas := 0:            # las tablas que le quedan clavadas (la barricada de
 		queue_redraw()
 var acero := false          # la puerta blindada de la cámara acorazada de la joyería (joyeria.gd): de acero, sin madera
 var cortina := false        # la de un probador de la tienda de ropa: una cortina que se desliza (ver arriba)
+var metalizada := false     # de las metálicas (METAL o TRASTERO_METALIZADA: mapa.gd lo pone; el diccionario se copia al alargarse, así que no se compara)
 var trastero := false       # la de un trastero de las viviendas (mapa.gd): azul lisa (ver arriba)
 var madera: Dictionary = MADERA_SUCIA
 var libre := false         # se abre empujando (ver arriba)
@@ -372,8 +377,9 @@ func _draw() -> void:
 		cortina_de_frente(r, temblor)
 	elif de_frente:
 		# el marco, que llena el hueco de lado a lado y hasta el dintel: oscuro por fuera y claro por dentro
-		var oscuro := Color("#2b3036") if acero else Color("#7d776a") if trastero else Color("#4a2e1e")
-		var claro := Color("#7a848c") if acero else Color("#d8d2c0") if trastero else Color("#a0704a")
+		var de_metal: bool = acero or metalizada
+		var oscuro := Color("#2b3036") if de_metal else Color("#7d776a") if trastero else Color("#4a2e1e")
+		var claro := Color("#7a848c") if de_metal else Color("#d8d2c0") if trastero else Color("#a0704a")
 		var arriba := r.end.y - dintel
 		draw_rect(Rect2(r.position.x, arriba, r.size.x, MARCO), claro)
 		draw_rect(Rect2(r.position.x, arriba, MARCO, dintel), claro)
@@ -402,7 +408,7 @@ func _draw() -> void:
 				# el canto de fuera, que da a la luz
 				var punta := bisagra + Vector2(cos(giro), sin(giro)) * ancho
 				var canto := Rect2(punta.x, punta.y - alto, maxf(2.0, 6.0 * sin(giro)), alto)
-				draw_rect(canto, Color("#9aa3aa") if acero else Color("#568abe") if trastero else Color("#b07a4e"))
+				draw_rect(canto, Color("#9aa3aa") if acero or metalizada else Color("#568abe") if trastero else Color("#b07a4e"))
 				draw_rect(canto, LINEA, false, 2.0)
 		# la barricada: tablas torcidas de lado a lado, más anchas que la puerta, con un clavo en cada punta
 		for i in tablas:

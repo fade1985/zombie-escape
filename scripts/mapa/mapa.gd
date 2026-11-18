@@ -1042,6 +1042,16 @@ func poner_hojas() -> void:
 		# los probadores de la tienda de ropa (pared alta): una cortina en vez de puerta (puerta_bano.gd)
 		if sube > TABIQUE.SUBE and d.fondo == 1 and "probadores" in [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]:
 			hoja.cortina = true
+		# la tienda de ropa (18 nov, el dueño): la puerta del aseo, de las metálicas del juego, y la del almacén (a la sala de venta), la de los
+		# trasteros pero metalizada
+		if sube > TABIQUE.SUBE and sitio.get("tienda", "") == "ropa" and not hoja.cortina:
+			var usos: Array = [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]
+			if "bano" in usos:
+				hoja.madera = PUERTA_BANO.METAL
+				hoja.metalizada = true
+			elif "almacen" in usos:
+				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
+				hoja.metalizada = true
 		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
 		hoja.montar(d)
 		cosas.add_child(hoja)
