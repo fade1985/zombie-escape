@@ -743,8 +743,8 @@ func poner_caras() -> void:
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
-			if centro and not limpio:
-				cara.adornos = restos_de_pared(cara.ancho)
+			if centro and not limpio and (destrozadas().is_empty() or sala_destrozada(sala)):
+				cara.adornos = restos_de_pared(cara.ancho, not destrozadas().is_empty())
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
 				cara.adornos += colgados(cara)
@@ -1284,6 +1284,15 @@ func poner_colgados() -> void:
 		cosas.add_child(nodo)
 
 
+# Las salas de la tienda que están destrozadas (Tienda.TIPOS "destrozada": las que ya se han rehecho; vacío = toda la tienda como siempre)
+func destrozadas() -> Array:
+	return Tienda.TIPOS.get(sitio.get("tienda", ""), {}).get("destrozada", [])
+
+
+func sala_destrozada(sala: int) -> bool:
+	return sala >= 0 and sala < sitio.apt.salas.size() and sitio.apt.salas[sala].uso in destrozadas()
+
+
 # Los restos sueltos del suelo de una tienda o de la galería: en casillas de suelo rodeadas de suelo (para que no
 # se monten en un muro), con giro y volteo al azar
 func preparar_restos() -> void:
@@ -1291,7 +1300,8 @@ func preparar_restos() -> void:
 	for f in range(1, filas - 1):
 		for c in range(1, cols - 1):
 			if dueno[f * cols + c] >= 0 and not (es_muro(c - 1, f) or es_muro(c + 1, f) or es_muro(c, f - 1) or es_muro(c, f + 1)):
-				libres.append(Vector2(c, f))
+				if destrozadas().is_empty() or sala_destrozada(dueno[f * cols + c]):
+					libres.append(Vector2(c, f))
 	if libres.is_empty():
 		return
 	var azotea: bool = sitio.get("estilo", "") == "azotea"
@@ -1301,6 +1311,8 @@ func preparar_restos() -> void:
 			return pos.distance_to(sitio.helipuerto) > Planta.AZOTEA_ARO_LIBRE and Planta.lejos_de_muebles(sitio, pos, 16.0)
 		libres = libres.filter(lejos)
 	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, RESTOS_AZOTEA_MAX if azotea else 24)
+	if not destrozadas().is_empty():
+		cuantos = clampi(roundi(libres.size() / 5.0), 6, 60)   # las salas destrozadas: uno de cada cinco casillas
 	var lista: Array = RESTOS_AZOTEA if azotea else RESTOS_SUELO
 	for i in cuantos:
 		var casilla: Vector2 = libres[dado_restos.randi() % libres.size()]
@@ -1389,14 +1401,14 @@ func salpicar_mancha(dado: RandomNumberGenerator, pos: Vector2, tam: Vector2, sa
 
 # Los restos de una cara de muro de "ancho" unidades: [{dibujo, x, y}] en píxeles del dibujo, contando desde la
 # esquina de abajo a la izquierda de la cara (cara_pared.gd los pinta encima del papel)
-func restos_de_pared(ancho: float) -> Array:
+func restos_de_pared(ancho: float, destrozada := false) -> Array:
 	var lista := []
-	var tramos := floori(ancho / RESTOS_PARED_CADA)
+	var tramos := floori(ancho / (RESTOS_PARED_CADA * (0.5 if destrozada else 1.0)))   # (destrozada: el doble de tramos y casi siempre)
 	for i in tramos:
-		if dado_restos.randf() > RESTOS_PARED_SUERTE:
+		if dado_restos.randf() > (0.9 if destrozada else RESTOS_PARED_SUERTE):
 			continue
 		var t: Texture2D = load("res://assets/sprites/resto-%s.png" % RESTOS_PARED[dado_restos.randi() % RESTOS_PARED.size()])
-		var tramo := RESTOS_PARED_CADA / 2.0   # en píxeles del dibujo
+		var tramo := RESTOS_PARED_CADA / (4.0 if destrozada else 2.0)   # en píxeles del dibujo
 		var x := i * tramo + dado_restos.randf_range(0.0, maxf(0.0, tramo - t.get_width()))
 		var y := -dado_restos.randf_range(t.get_height() + 6.0, 44.0)   # sin pisar el rodapié ni la moldura
 		lista.append({"dibujo": t, "x": floorf(x), "y": floorf(y)})
