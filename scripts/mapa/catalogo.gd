@@ -581,10 +581,10 @@ const SALAS := {
 	# (50 × 30, pared alta); antes llevaba maniquíes, percheros, cajas y bancos, y el almacén, estanterías y palés. El aseo
 	# sigue con su botiquín (no es un mueble de aquí: Planta, armaritos)
 	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
-	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7, "abajo"], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
+	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
 	"almacen-ropa": {"colocados": {"abajo": [], "arriba": []}},
-	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 2.6, "derecha"], ["stafftoilet", 4.2, "derecha"]],
-		"arriba": [["taquillaropa", 6.0, "abajo"], ["staffsink", 2.6, "derecha"], ["stafftoilet", 4.2, "derecha"]]}},
+	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 2.6, "izquierda"], ["stafftoilet", 4.2, "izquierda"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsink", 2.6, "izquierda"], ["stafftoilet", 4.2, "izquierda"]]}},
 	"tienda-farmacia": {
 		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
 		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas

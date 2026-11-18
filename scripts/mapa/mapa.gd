@@ -81,7 +81,9 @@ const ESTILO_TIENDA := {
 	# dorado acanalado, de 4 casillas (su pared alta), de GPT (tools/ropa_gpt.py)
 	"tienda-ropa": [["ropa"], "ropa"], "probadores-ropa": [["ropa"], "ropa"],
 	# y su aseo de empleados, como el vestuario de Johnny en la sala de mantenimiento (azulejo blanco y baldosa beis; el tercero, su techo)
-	"bano-ropa": [["vestuario"], "vestuario", "bano-b"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
+	"bano-ropa": [["vestuario"], "vestuario", "bano-b"],
+	# y su almacén, como el pasillo de los trasteros pero sin la línea amarilla (hormigón y chapa; el techo, el de los trasteros)
+	"almacen-ropa": [["trastero"], "trastero-pasillo", "trastero"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
 	# los departamentos de Torre Velaria (tercer edificio): la sala grande con moqueta gris de oficina (suelo-torre), su pared
 	# de tabique claro (pared-oficina) y, en cada departamento, lo suyo: el centro de datos de Informática, el parquet y la
 	# madera de Dirección (parte 2 del plan). Las habitaciones de dentro, con los suyos
