@@ -1,6 +1,6 @@
 # El oficinista de Torre Velaria (parte 4 del plan, docs/PLAN_TERCER_EDIFICIO.md, «Los zombis nuevos»): camisa blanca,
 # corbata torcida, acreditación y cascos de teleoperador. Es el primer zombi de a pie que ataca de lejos:
-#   - Guarda las distancias, como la dependienta: si Johnny se acerca, se aparta; si se va, le sigue; en medio, se planta.
+#   - Guarda las distancias, como hacía la dependienta antes del 18 nov: si Johnny se acerca, se aparta; si se va, le sigue; en medio, se planta.
 #   - Cada ESPERA segundos, si le ve, le tira una grapadora o una taza (bala_zombi.gd: va recta y despacio, DANO_TIRO).
 #   - Si lo acorralas, te da un manotazo flojo (el "dano" de su escena).
 # El tiro usa la animación de ataque (el lanzamiento), y llega en su "hit" (momento_zarpazo, de su hoja).

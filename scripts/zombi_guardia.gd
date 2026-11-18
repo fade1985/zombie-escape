@@ -31,6 +31,7 @@ func _ready() -> void:
 	super()
 	velocidad = PERSECUCION
 	agente.max_speed = PERSECUCION
+	se_enfurece = false   # (el grito de la dependienta no le enfurece: es el jefe de la planta)
 
 
 func andar(delta: float, johnny: Node2D) -> void:

@@ -2,13 +2,14 @@
 # el dibujo, también las llamas; así que encima del dibujo va una copia suya que solo pinta lo que luce (las llamas,
 # las chispas y, más flojo, el ácido) y a la que no le afecta la oscuridad (escenas/personajes/brillo.gdshader). Va
 # de hija del dibujo y cada paso copia su fotograma y lo que tiene puesto en el shader; sin fuego ni ácido, se
-# esconde. Lo pone Zombi.quemaduras (zombis, quemado.gd y jefes con ácido).
+# esconde. Lo pone Zombi.quemaduras (zombis, quemado.gd y jefes con ácido). También luce la furia roja del grito de
+# la dependienta (zombi.gd, enfurecer).
 # Y la luz verde del ácido, como la naranja del fuego (luz_acido).
 class_name Brillo
 extends AnimatedSprite2D
 
 const SHADER := preload("res://escenas/personajes/brillo.gdshader")
-const PARAMETROS := ["destello", "hielo", "fuego", "acido", "vomito", "t", "semilla", "alto", "comido", "deshecho"]
+const PARAMETROS := ["destello", "hielo", "fuego", "furia", "acido", "vomito", "t", "semilla", "alto", "comido", "deshecho"]
 const COLOR_ACIDO := Color("#7ddc3a")
 
 var dibujo: AnimatedSprite2D
@@ -50,7 +51,7 @@ static func valor(m: ShaderMaterial, k: String) -> float:
 
 func _process(_delta: float) -> void:
 	var m := dibujo.material as ShaderMaterial
-	visible = m != null and (Brillo.valor(m, "fuego") > 0.0 or Brillo.valor(m, "acido") > 0.0)
+	visible = m != null and (Brillo.valor(m, "fuego") > 0.0 or Brillo.valor(m, "furia") > 0.0 or Brillo.valor(m, "acido") > 0.0)
 	if not visible:
 		return
 	if sprite_frames != dibujo.sprite_frames:

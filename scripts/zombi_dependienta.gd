@@ -1,17 +1,16 @@
 # La dependienta del centro comercial (parte 4 del plan, docs/historial/CENTRO_COMERCIAL.md): flojita (vida 20) pero
-# rápida, y lo peor es su grito:
-#   - Al despertar grita «¡¡¡AAAHHH!!!»: despierta a toda la tienda y les pone a todos los zombis (a ella no) una
-#     barrera que no se les quita hasta que ella muere (M80, zombi.gd, meter_barrera; antes les metía prisa 5 s).
-#   - Luego no se acerca: se aparta de Johnny, guardando las distancias, y vuelve a gritar cada 8 s.
-#   - Si la acorralas, te chilla en la cara (un golpe flojo, 6).
-# El grito usa la animación de ataque (el chillido con las manos en la boca); no tiene zarpazo.
+# rápida, y lo peor es su grito (18 nov, lo pidió el dueño; antes, M80, ponía a los demás una barrera y huía):
+#   - Al despertar grita «¡¡¡AAAHHH!!!», una sola vez: despierta a toda la tienda y enfurece a todos los zombis que hay
+#     en ese momento, ella también (zombi.gd, enfurecer): un 25 % más rápidos andando y atacando y un 25 % más de vida,
+#     ardiendo en rojo. Los jefes no (el jefe de seguridad tampoco).
+#   - La furia les dura hasta que ella muere: o la matas primero, o te los cargas a todos furiosos.
+#   - Después pelea como un durmiente más: va a por Johnny y le da zarpazos.
+# Fuera del jefe (el gerente llama a dos), nunca hay más de una en la misma sala; con dos, la furia no se suma.
+# El grito usa la animación de ataque (el chillido con las manos en la boca), y sus zarpazos también, hasta que tenga
+# su dibujo nuevo.
 extends Zombi
 
-const GRITO_CADA := 8.0     # cada cuánto vuelve a gritar
-const CERCA := 200.0        # más cerca que esto, se aparta de Johnny
-const LEJOS := 300.0        # más lejos que esto, se acerca (para que no se pierda de vista)
-
-var grito_t := 0.0          # lo que le falta para el siguiente grito (empieza gritando)
+var gritado := false        # ya ha gritado (solo grita una vez)
 
 
 # Al despertar no se queda pasmada como los demás ni suelta el "!": grita enseguida (en andar, que ya le toca)
@@ -24,46 +23,32 @@ func despertar() -> void:
 
 
 func andar(delta: float, johnny: Node2D) -> void:
-	grito_t -= delta
-	if grito_t <= 0.0:
+	if not gritado:
 		gritar(johnny)
 		return
-	var hacia: Vector2 = global_position.direction_to(johnny.global_position)
-	var distancia := distancia_a(johnny)
-	var ve := se_ve(johnny)
-	# acorralada: le chilla en la cara
-	if distancia < radio + johnny.RADIO + alcance and ve:
-		empezar_zarpazo(johnny)
-		return
-	if not ve or distancia > LEJOS:
-		ir_hacia(delta, camino_hacia(johnny.global_position), velocidad)
-	elif distancia < CERCA:
-		# se aparta usando el mapa de navegación: con una pared detrás, se escapa por un lado
-		ir_hacia(delta, camino_hacia(global_position - hacia * 140.0), velocidad)
-	else:
-		pedir_velocidad(Vector2.ZERO)
-		poner_animacion("reposo")
-	mirar_hacia(hacia)
+	super(delta, johnny)
 
 
-# «¡¡¡AAAHHH!!!» (M79; antes, «¡OFERTAS!»): despierta a todos los de la tienda y les pone la barrera (M80: a ella no,
-# ni a las otras dependientas, que si no no habría manera de quitarla)
+# «¡¡¡AAAHHH!!!» (M79; antes, «¡OFERTAS!»): despierta a todos y los enfurece, a ella también
 func gritar(johnny: Node2D) -> void:
+	gritado = true
 	estado = "grito"
-	grito_t = GRITO_CADA
 	mirar_hacia(johnny.global_position - global_position)
 	poner_animacion("ataque", true)
 	Sonido.tocar("chillido")
-	# grande, amarillo y encima de ella, como el «¡¡¡LA LLAVE!!!» de los apartamentos (partida.gd, gran_aviso)
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Tema.AMARILLO, 32, true, 1.4)
-	# la primera vez que se la oye, su tutorial (tutoriales.gd), cuando la burbuja de los demás ya se ve
+	# grande, rojo como su furia y encima de ella, como el «¡¡¡GRRR!!!» del jefe de seguridad (zombi_guardia.gd)
+	var grito := Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Tema.ROJO,
+		32, true, 1.4)
+	var sin_luz := CanvasItemMaterial.new()   # (como los gritos de Johnny: que no lo apague la penumbra)
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	grito.material = sin_luz
+	# la primera vez que se la oye, su tutorial (tutoriales.gd), cuando ya se ve a los demás arder en rojo
 	var partida := get_tree().current_scene
 	if partida.has_method("tutorial"):
 		get_tree().create_timer(0.6, false).timeout.connect(partida.tutorial.bind("dependienta"))
 	for otro in get_tree().get_nodes_in_group("zombis"):
-		# (primero la barrera y luego despertarle: así, con la burbuja, no suelta el "!")
-		if otro.has_method("meter_barrera") and otro.get_script() != get_script():
-			otro.meter_barrera(self)
+		if otro.has_method("enfurecer"):
+			otro.enfurecer(self)
 		if otro.get("dormido"):
 			otro.despertar()
 

@@ -99,14 +99,13 @@ var gaseado := 0.0         # dormido por el gas de las rejillas de Recursos Huma
 var frenesi := 0.0         # ...y, al despertar, frenético (más rápido) este rato
 var electrico := 0.0       # le ha dado un rayo hace poco (ArmasCreadas.aturdir): para Mezcla explosiva
 var lio_angulo := 0.0
-# M80: la barrera del grito de la dependienta (zombi_dependienta.gd): mientras siga viva alguna de las que le han
-# gritado ("barrera"), no hay quien le haga daño: las balas rebotan en su burbuja y los golpes, el fuego y los charcos
-# no le quitan vida (antes, el grito les metía prisa)
-var barrera: Array = []
-var capas_barrera: Array[Sprite2D] = []   # las tres capas de la burbuja (detrás, delante y brillo), al ponérsela
-var barrera_k := 0.0       # lo subida que está la burbuja (0 = no hay, 1 = entera)
-var destello_barrera := 0.0   # lo que brilla porque le acaban de dar (de 1 a 0)
-var exclamacion_suelta: Label   # el "!" que soltó al despertar (M80: si luego le ponen la barrera, se quita)
+# La furia del grito de la dependienta (zombi_dependienta.gd; 18 nov, lo pidió el dueño: antes, M80, una barrera que
+# no dejaba hacerles daño): mientras siga viva alguna de las que le han gritado ("furia"), anda y ataca un 25 % más
+# deprisa y tiene un 25 % más de vida, y arde en rojo como un berserker (el fuego de su shader en rojos:
+# quemaduras.gdshaderinc, "furia"). Muertas ellas, se le pasa todo
+var furia: Array = []
+var furioso := false       # si lleva puesta la mejora (para quitársela una sola vez)
+var se_enfurece := true    # el jefe de seguridad no (zombi_guardia.gd)
 # La diana de la sala de pruebas (sala_armas.gd): no pierde vida (el daño se cuenta, pero se le devuelve en el
 # acto), no da zarpazos y no se va de su sitio, "casa" (si un golpe la echa para atrás, vuelve andando). Sus números
 # de daño los pone la sala, más grandes
@@ -122,15 +121,8 @@ const DESTELLO := preload("res://escenas/personajes/destello.gdshader")
 const BARRA := preload("res://scripts/barra_zombi.gd")
 const CHARCO := preload("res://escenas/armas/charco.tscn")
 const BOOM := preload("res://escenas/armas/explosion.tscn")   # la de Mezcla explosiva
-# M80: la burbuja de la barrera: la cúpula de cristal del científico jefe pintada en dorado
-# (tools/pixelfx/escudo-barrera.py), tres hojas de 8 × 6 fotogramas de 80 px a 20 por segundo
-const BARRERA := [preload("res://assets/sprites/escudo-barrera-detras.png"),
-	preload("res://assets/sprites/escudo-barrera-delante.png"), preload("res://assets/sprites/escudo-barrera-brillo.png")]
-const BARRERA_CENTRO := Vector2(40, 38)   # el centro de la esfera en cada fotograma (en píxeles del dibujo)
-const BARRERA_RADIO := 31.0               # lo que mide la esfera en el dibujo (de radio)
-const BARRERA_SUBE := 0.3                 # lo que tarda en subir (y en bajar)
-const BARRERA_CABEZA := 12.0              # lo alto de la cabeza, esto por debajo de sus números de daño ("altura")
-const BARRERA_MARGEN := 6.0               # lo que sobra de burbuja por encima de la cabeza y por debajo de los pies
+const FURIA := 1.25         # la furia: por cuánto se multiplican lo que anda, lo deprisa que ataca y la vida
+const FURIA_FUEGO := 1.0   # lo que arde en rojo (1: las llamas tan altas como las del fuego de verdad)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -192,13 +184,10 @@ func dejar_rastro(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if estado == "muerto":
-		# (18 nov: la burbuja de la barrera baja también al morir; antes se quedaba pintada encima del cadáver)
-		if barrera_k > 0.0 and not capas_barrera.is_empty():
-			animar_barrera(delta)
 		return
 	tiempo += delta
-	if not capas_barrera.is_empty():
-		animar_barrera(delta)
+	if furioso:
+		calmar_si_toca()
 	sufrir(delta)
 	if estado == "muerto":
 		return
@@ -368,40 +357,44 @@ func despertar() -> void:
 		agente.avoidance_enabled = true
 		set_collision_mask_value(CAPA_ZOMBIS, true)
 	espabilando = ESPABILAR
-	if exclamacion and not con_barrera():   # (M80: con la barrera puesta, sin el "!": ya se ve la burbuja)
-		exclamacion_suelta = Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Tema.TINTA, 18)   # (como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4; antes, amarillo y grande)
+	if exclamacion:
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Tema.TINTA, 18)   # (como el de los avisos de la línea de abajo («¡Ese zombi lleva la llave...!»): la letra del juego a 16, hueso (Tema.TINTA) con el contorno oscuro de 4; antes, amarillo y grande)
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro != self and otro.get("dormido") and not otro.get("sentado") and distancia_a(otro) < CORRILLO:
 			otro.despertar()
 
 
-# M80: el grito de la dependienta "de" le pone la barrera (la burbuja se prepara la primera vez: lo de detrás, por
-# debajo de su dibujo; lo de delante y el brillo, encima)
-func meter_barrera(de: Node) -> void:
-	if de not in barrera:
-		barrera.append(de)
-	# (si se acababa de despertar, fuera su "!": con la burbuja ya se ve que viene)
-	if is_instance_valid(exclamacion_suelta):
-		exclamacion_suelta.queue_free()
-	if not capas_barrera.is_empty():
+# El grito de la dependienta "de" le enfurece: un 25 % más de lo que anda, de lo deprisa que ataca y de vida (la que
+# le queda también, en proporción). Si ya estaba furioso (otra dependienta, con el gerente), no se suma
+func enfurecer(de: Node) -> void:
+	if not se_enfurece or estado == "muerto":
 		return
-	for i in 3:
-		var capa := Sprite2D.new()
-		capa.texture = BARRERA[i]
-		capa.hframes = 8
-		capa.vframes = 6
-		capa.offset = Vector2(40, 40) - BARRERA_CENTRO
-		capa.position = centro_burbuja() - global_position
-		capa.visible = false
-		if i > 0:
-			capa.z_index = 1
-		if i == 2:
-			var suma := CanvasItemMaterial.new()
-			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-			capa.material = suma
-		add_child(capa)
-		move_child(capa, sprite.get_index() + (0 if i == 0 else i))
-		capas_barrera.append(capa)
+	if de not in furia:
+		furia.append(de)
+	if furioso:
+		return
+	furioso = true
+	velocidad *= FURIA
+	agente.max_speed *= FURIA
+	ritmo *= FURIA
+	var nueva := roundi(vida_max * FURIA)
+	vida = maxi(1, roundi(float(vida) * nueva / vida_max))
+	vida_max = nueva
+
+
+# Muertas todas las que le gritaron, se le pasa la furia: vuelve a lo de antes (la vida, en proporción: si le quedaba
+# la mitad, sigue con la mitad)
+func calmar_si_toca() -> void:
+	furia = furia.filter(func(d): return is_instance_valid(d) and d.estado != "muerto")
+	if not furia.is_empty():
+		return
+	furioso = false
+	velocidad /= FURIA
+	agente.max_speed /= FURIA
+	ritmo /= FURIA
+	var nueva := roundi(vida_max / FURIA)
+	vida = maxi(1, roundi(float(vida) * nueva / vida_max))
+	vida_max = nueva
 
 
 # ¿Nada le quita vida ahora? (18 nov: el jefe de seguridad, hasta que ruge; zombi_guardia.gd lo cambia)
@@ -418,50 +411,6 @@ func avisar_inmune() -> void:
 	inmune_avisado = tiempo
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -altura), Idioma.t("¡INMUNE!"), Color("#c8c8c8"), 16,
 		true, 0.8)
-
-
-# M80: ¿tiene la barrera? Mientras quede viva alguna de las dependientas que le han gritado
-func con_barrera() -> bool:
-	barrera = barrera.filter(func(d): return is_instance_valid(d) and d.estado != "muerto")
-	return not barrera.is_empty() and estado != "muerto"
-
-
-# M80: la burbuja sube al ponérsela y baja al quitársela (al morir la última dependienta), y brilla al darle
-func animar_barrera(delta: float) -> void:
-	barrera_k = clampf(barrera_k + delta / BARRERA_SUBE * (1.0 if con_barrera() else -1.0), 0.0, 1.0)
-	destello_barrera = maxf(0.0, destello_barrera - delta * 4.0)
-	var cuadro := int(tiempo * 20.0) % 48
-	for capa in capas_barrera:
-		capa.visible = barrera_k > 0.0
-		capa.scale = Vector2.ONE * radio_burbuja() / BARRERA_RADIO
-		capa.frame = cuadro
-	capas_barrera[1].modulate = Color.WHITE.lerp(Color(1.5, 1.4, 1.1), destello_barrera)
-	capas_barrera[2].modulate = Color.WHITE * (1.0 + 2.0 * destello_barrera)
-
-
-# M80: la burbuja, tal como se ve (bala.gd la mira para que la bala rebote en su borde, como en la del bombero)
-# (centrada entre los pies, en el 0 de su dibujo, y lo alto de la cabeza, un poco por debajo de sus números de daño;
-# con un pelín de margen por arriba y por abajo)
-func centro_burbuja() -> Vector2:
-	return global_position + Vector2(0, (sprite.position.y - altura + BARRERA_CABEZA) / 2.0)
-
-
-func radio_burbuja() -> float:
-	return ((sprite.position.y + altura - BARRERA_CABEZA) / 2.0 + BARRERA_MARGEN) * barrera_k
-
-
-func escudo_toca(p: Vector2) -> bool:
-	return barrera_k > 0.5 and con_barrera() and p.distance_to(centro_burbuja()) < radio_burbuja()
-
-
-# Los colores del rebote de las balas en la burbuja (en dorado), de blanco a oscuro como pide impacto.gd
-func colores_escudo() -> Array:
-	return [Color.WHITE, Color("#fff8dc"), Color("#ffd23f"), Color("#e0aa2a"), Color("#a87818")]
-
-
-# Una bala ha rebotado en su burbuja (bala.gd, rebotar): la burbuja brilla
-func onda_en(_p: Vector2) -> void:
-	destello_barrera = 1.0
 
 
 # Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar, y también el policía
@@ -578,10 +527,6 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if inmune():   # (el jefe de seguridad antes de rugir, zombi_guardia.gd: le empuja un poco y nada más)
 		velocity = fuerza * empuje * 0.5
 		avisar_inmune()
-		return
-	if con_barrera():   # M80: con la barrera, el golpe le empuja un poco pero no le quita vida
-		velocity = fuerza * empuje * 0.5
-		destello_barrera = 1.0
 		return
 	cantidad = ArmasCreadas.con_acido(self, cantidad)
 	var al_hielo := congelado > 0.0 and not diana   # (añicos: congelado, de un golpe muere)
@@ -765,7 +710,7 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 		return
 	if dormido:
 		despertar()
-	if con_barrera() or inmune():   # M80: con la barrera (o inmune), ni el fuego ni los charcos le quitan vida
+	if inmune():   # (inmune: ni el fuego ni los charcos le quitan vida)
 		return
 	var n := ArmasCreadas.con_acido(self, maxi(1, roundi(cantidad)))
 	vida -= n
@@ -825,9 +770,10 @@ func sufrir(delta: float) -> void:
 	# no se le toca el shader: con una horda de 150, ponérselo a cero a todos en cada paso costaba casi medio ms
 	var fuego := 1.0 if arde else 0.0
 	var manchas := Zombi.cuanto_acido(acido_t)
-	if fuego > 0.0 or manchas > 0.0 or vomito > 0.0 or con_quemaduras:
-		Zombi.quemaduras(sprite, fuego, manchas, tiempo, vomito)
-		con_quemaduras = fuego > 0.0 or manchas > 0.0 or vomito > 0.0
+	var rojo := FURIA_FUEGO if furioso else 0.0   # la furia del grito de la dependienta (enfurecer)
+	if fuego > 0.0 or manchas > 0.0 or vomito > 0.0 or rojo > 0.0 or con_quemaduras:
+		Zombi.quemaduras(sprite, fuego, manchas, tiempo, vomito, rojo)
+		con_quemaduras = fuego > 0.0 or manchas > 0.0 or vomito > 0.0 or rojo > 0.0
 	if acido or has_node("LuzAcido"):
 		var luz := Brillo.luz_acido(self, altura * 0.8)
 		luz.visible = acido
@@ -846,13 +792,14 @@ func sufrir(delta: float) -> void:
 # (0-1, con menos las llamas se encogen) y "acido" (0-1, las manchas crecen), con "t" de reloj. Si hay algo, le pone
 # encima la copia que brilla a oscuras (Brillo). También lo usan quemado.gd y, con el ácido, los jefes
 # (armas_creadas.gd, la herida)
-static func quemaduras(s: CanvasItem, fuego: float, acido: float, t: float, vomito := 0.0) -> void:
+static func quemaduras(s: CanvasItem, fuego: float, acido: float, t: float, vomito := 0.0, furia_ := 0.0) -> void:
 	var m := s.material as ShaderMaterial
 	m.set_shader_parameter("fuego", fuego)
+	m.set_shader_parameter("furia", furia_)
 	m.set_shader_parameter("acido", acido)
 	m.set_shader_parameter("vomito", vomito)
 	m.set_shader_parameter("t", fmod(t, 100.0))   # (con números pequeños, el ruido del shader no se estropea)
-	if (fuego > 0.0 or acido > 0.0) and s is AnimatedSprite2D:
+	if (fuego > 0.0 or acido > 0.0 or furia_ > 0.0) and s is AnimatedSprite2D:
 		Brillo.de(s)
 	elif s.has_node("Brillo"):
 		s.get_node("Brillo").hide()   # (se esconde ya, sin esperar a su paso)

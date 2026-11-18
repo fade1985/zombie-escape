@@ -4,6 +4,8 @@
 //   - "fuego" (0-1): arde. Por dentro de la silueta le suben llamas desde los pies (amarillo, naranja y rojo, con
 //     un borde a cuadritos), por encima de la cabeza y los hombros le salen lenguas cortas, le saltan chispas
 //     sueltas y el resto del cuerpo se tiñe un poco de naranja. Con menos de 1, las llamas se encogen (quemado.gd)
+//   - "furia" (0-1): furioso por el grito de la dependienta (zombi.gd, enfurecer): el mismo fuego, pero en rojos
+//     (como un berserker). Si además arde de verdad, gana el fuego
 //   - "acido" (0-1): le roe el ácido. Manchas verdes que crecen con "acido", con un borde verde oscuro, el centro
 //     oscuro de lo que ya se ha comido, burbujas que se hinchan y revientan, y gotas que resbalan por el cuerpo
 //     "comido" (0-1, disuelto.gd): al morir con ácido, las manchas crecen hasta cubrirle entero. "deshecho" (0-1):
@@ -25,6 +27,7 @@
 uniform float destello = 0.0;
 uniform float hielo = 0.0;
 uniform float fuego = 0.0;
+uniform float furia = 0.0;
 uniform float acido = 0.0;
 uniform float t = 0.0;
 uniform float semilla = 0.0;
@@ -40,6 +43,11 @@ const vec3 FUEGO1 = vec3(1.0, 0.824, 0.247);    // #ffd23f
 const vec3 FUEGO2 = vec3(1.0, 0.624, 0.11);     // #ff9f1c
 const vec3 FUEGO3 = vec3(0.941, 0.329, 0.118);  // #f0541e
 const vec3 FUEGO4 = vec3(0.722, 0.149, 0.11);   // #b8261c, el borde
+const vec3 FURIA0 = vec3(1.0, 0.839, 0.816);    // #ffd6d0, el corazón de la llama roja (la furia)
+const vec3 FURIA1 = vec3(1.0, 0.478, 0.416);    // #ff7a6a
+const vec3 FURIA2 = vec3(1.0, 0.231, 0.231);    // #ff3b3b
+const vec3 FURIA3 = vec3(0.878, 0.118, 0.165);  // #e01e2a
+const vec3 FURIA4 = vec3(0.541, 0.047, 0.094);  // #8a0c18, el borde
 const vec3 VERDE = vec3(0.49, 0.863, 0.227);          // #7ddc3a, el ácido
 const vec3 VERDE_CLARO = vec3(0.659, 0.937, 0.29);    // #a8ef4a, burbujas y gotas
 const vec3 VERDE_PALIDO = vec3(0.847, 1.0, 0.604);    // #d8ff9a, la burbuja a punto de reventar
@@ -207,9 +215,17 @@ void fragment() {
 			}
 		}
 	}
-	if (fuego > 0.0) {
+	if (fuego > 0.0 || furia > 0.0) {
+		// la furia es el mismo fuego en rojos (si además arde de verdad, gana el fuego)
+		bool roja = furia > fuego;
+		float arde = roja ? furia : fuego;
+		vec3 f0 = roja ? FURIA0 : FUEGO0;
+		vec3 f1 = roja ? FURIA1 : FUEGO1;
+		vec3 f2 = roja ? FURIA2 : FUEGO2;
+		vec3 f3 = roja ? FURIA3 : FUEGO3;
+		vec3 f4 = roja ? FURIA4 : FUEGO4;
 		float alt = -p.y / alto;            // 0 en los pies, 1 en lo alto de la cabeza
-		float baja = (1.0 - fuego) * 0.9;   // con menos fuego, las llamas se encogen
+		float baja = (1.0 - arde) * 0.9;    // con menos fuego, las llamas se encogen
 		if (a > 0.5) {
 			// llamas que suben: un ruido que corre hacia arriba, más fuerte cuanto más cerca de los pies
 			float n = 0.7 * ruido(vec2(p.x * 0.8, (p.y + t * 30.0) * 0.22) + semilla)
@@ -217,21 +233,21 @@ void fragment() {
 			float v = n + 0.62 - alt - baja;
 			float l = 0.8 + 0.4 * claro;
 			if (azar(p + floor(t * 5.0) * 7.31 + semilla) > 0.985 + baja) {
-				r = FUEGO0;   // una chispa suelta
+				r = f0;   // una chispa suelta
 				brilla = 1.0;
 			} else if (v > 1.02) {
-				r = FUEGO1 * l;
+				r = f1 * l;
 				brilla = 1.0;
 			} else if (v > 0.9) {
-				r = FUEGO2 * l;
+				r = f2 * l;
 				brilla = 1.0;
 			} else if (v > 0.76) {
-				r = FUEGO3 * l;
+				r = f3 * l;
 				brilla = 1.0;
 			} else if (v > 0.64 && mod(p.x + p.y, 2.0) < 0.5) {
-				r = mix(r, FUEGO4, 0.75);   // el borde de la llama, a cuadritos
+				r = mix(r, f4, 0.75);   // el borde de la llama, a cuadritos
 			} else {
-				r = mix(r, FUEGO3 * (0.35 + 1.1 * claro), 0.3 * fuego);   // el resto, algo anaranjado
+				r = mix(r, f3 * (0.35 + 1.1 * claro), 0.3 * arde);   // el resto, algo anaranjado (o rojo)
 			}
 		} else if (alt > 0.35) {
 			// lenguas cortas (1 a 3 píxeles) por encima de lo que mira hacia arriba: cabeza, hombros, brazos
@@ -240,7 +256,7 @@ void fragment() {
 				float fk = float(k);
 				if (texture(TEXTURE, UV + vec2(0.0, fk * px.y)).a > 0.5) {
 					if (fk <= largo) {
-						r = azar(vec2(p.x, floor(t * 12.0))) <= 0.2 ? FUEGO1 : (k == 1 ? FUEGO2 : (k == 2 ? FUEGO3 : FUEGO4));
+						r = azar(vec2(p.x, floor(t * 12.0))) <= 0.2 ? f1 : (k == 1 ? f2 : (k == 2 ? f3 : f4));
 						a = COLOR.a;
 						brilla = 1.0;
 					}

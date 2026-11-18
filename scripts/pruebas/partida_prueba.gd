@@ -262,7 +262,7 @@
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar (--fotos-tiendas con
 #                       --edificio centro: el charco con corriente de Electrónica, también sin el destello: captura-peligro-agua-quieta.png)  [prueba_fotos.gd]
 #   --linterna          la linterna de pecho de Johnny a oscuras, mirando en 5 direcciones   [prueba_fotos.gd]
-#   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!», su barrera (M80) y su tutorial [prueba_fotos.gd]
+#   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!», su furia (18 nov) y su tutorial [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles (se abren con
 #                       E, no al arrimarse; en el móvil, con «Abrir»)               [prueba_sitios.gd]
 #   --regalo            Johnny empieza solo con la fregona y sin lanzables y no sale de la sala sin el regalo de

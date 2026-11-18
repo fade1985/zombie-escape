@@ -553,8 +553,8 @@ msgid "La dependienta"
 msgstr "店员"
 
 #: scripts/bestiario.gd
-msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta."
-msgstr "已经站了31个小时，还在微笑。她一喊“啊啊啊！！！”，整个店都醒了。"
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta hecha una furia."
+msgstr "已经站了31个小时，还在微笑。她一喊“啊啊啊！！！”，整个店都狂怒地醒了过来。"
 
 #: scripts/bestiario.gd
 msgid "El vigilante"
@@ -5420,12 +5420,12 @@ msgid "Al oír su primer grito"
 msgstr "第一次听到她尖叫时"
 
 #: scripts/tutoriales.gd
-msgid "No te ataca: se escapa y grita. Su grito pone a todos los durmientes de la tienda una burbuja dorada que los protege de todo."
-msgstr "它不攻击你：它会逃跑并尖叫。尖叫会给商店里所有沉睡者罩上一个金色气泡，保护它们免受一切伤害。"
+msgid "Su grito despierta a toda la tienda y pone furiosos a todos los durmientes, a ella también: arden en rojo, andan y atacan más rápido y aguantan más."
+msgstr "她的尖叫会吵醒整个商店，让所有沉睡者陷入狂怒，她自己也一样：它们燃起红光，走得更快、攻击更快，也更耐打。"
 
 #: scripts/tutoriales.gd
-msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta. Es flojita, pero corre: acorrálala o lánzale algo."
-msgstr "它倒下之前气泡不会消失：先去追店员。她很弱，但跑得快：把她逼进角落，或朝她扔东西。"
+msgid "La furia no se va hasta que cae ella: ve primero a por la dependienta, que es flojita, o cárgate a todos furiosos."
+msgstr "她倒下之前狂怒不会消失：先去追店员，她很弱；或者把狂怒的它们全部解决。"
 
 #: scripts/tutoriales.gd
 msgid "La joyería"

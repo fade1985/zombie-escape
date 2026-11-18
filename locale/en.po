@@ -554,8 +554,8 @@ msgid "La dependienta"
 msgstr "The Sales Clerk"
 
 #: scripts/bestiario.gd
-msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta."
-msgstr "She's been on her feet for 31 hours and she's still smiling. When she screams \"AAAHHH!!!\", the whole store wakes up."
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta hecha una furia."
+msgstr "She's been on her feet for 31 hours and she's still smiling. When she screams \"AAAHHH!!!\", the whole store wakes up in a rage."
 
 #: scripts/bestiario.gd
 msgid "El vigilante"
@@ -5428,12 +5428,12 @@ msgid "Al oír su primer grito"
 msgstr "When you first hear her scream"
 
 #: scripts/tutoriales.gd
-msgid "No te ataca: se escapa y grita. Su grito pone a todos los durmientes de la tienda una burbuja dorada que los protege de todo."
-msgstr "She doesn't attack you: she runs away and screams. Her scream puts a golden bubble on every sleeper in the store that protects them from everything."
+msgid "Su grito despierta a toda la tienda y pone furiosos a todos los durmientes, a ella también: arden en rojo, andan y atacan más rápido y aguantan más."
+msgstr "Her scream wakes up the whole store and sends every sleeper into a rage, her included: they burn red, walk and attack faster and take more hits."
 
 #: scripts/tutoriales.gd
-msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta. Es flojita, pero corre: acorrálala o lánzale algo."
-msgstr "The bubble stays until she falls: go after the sales clerk first. She's weak, but she runs: corner her or throw something at her."
+msgid "La furia no se va hasta que cae ella: ve primero a por la dependienta, que es flojita, o cárgate a todos furiosos."
+msgstr "The rage won't go away until she falls: go after the sales clerk first, she's weak, or take them all down enraged."
 
 #: scripts/tutoriales.gd
 msgid "La joyería"

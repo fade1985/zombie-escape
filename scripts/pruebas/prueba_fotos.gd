@@ -301,10 +301,11 @@ func probar_grito() -> void:
 	get_tree().quit()
 
 
-# La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡¡¡AAAHHH!!!», despierta a los
-# vigilantes dormidos de al lado y les pone la barrera (M80, captura-grito.png); luego, los nuevos de cerca
-# (captura-nuevos.png): los golpes y el fuego no les quitan vida. Muerta ella, la barrera se va (captura-sin-barrera.png)
-# y ya se les puede herir. Con el primer grito sale su tutorial (captura-tutorial-dependienta.png; se cierra y sigue)
+# La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡¡¡AAAHHH!!!» una vez,
+# despierta a los vigilantes dormidos de al lado y los enfurece, a ella también (18 nov: un 25 % más de velocidad, de
+# ritmo de ataque y de vida, ardiendo en rojo; captura-grito.png y, de cerca, captura-furia.png). Luego va a por Johnny
+# como un durmiente más. Muerta ella, a los demás se les pasa la furia (captura-sin-furia.png). Con el primer grito sale
+# su tutorial (captura-tutorial-dependienta.png; se cierra y sigue)
 func foto_grito() -> void:
 	# (su tutorial, como si no se hubiera visto nunca)
 	tutoriales_prueba = true
@@ -318,6 +319,9 @@ func foto_grito() -> void:
 		var v := meter_zombi("vigilante", johnny.position + Vector2(-140 + i * 90, 110))
 		v.dormido = true
 		otros.append(v)
+	var v_antes: float = otros[0].velocidad
+	var vida_antes: int = otros[0].vida_max
+	var ritmo_antes: float = otros[0].ritmo
 	# se despierta sola al ver a Johnny (en la misma sala) y grita enseguida; si un mueble se lo tapa, se la despierta
 	# a mano. Se espera a que grite (hasta 3 s)
 	await get_tree().create_timer(0.1).timeout
@@ -341,35 +345,25 @@ func foto_grito() -> void:
 		ventana.cerrar()
 	tutoriales_prueba = false
 	await get_tree().create_timer(0.5).timeout
-	print("Grito: estado %s | despiertos %d/3 | con barrera %s (esperado: 3 true) | ella con barrera %s (esperado false)" % [
-		dep.estado, otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return o.con_barrera()),
-		dep.con_barrera()])
-	await get_tree().create_timer(2.0).timeout
-	print("Dependienta a %d de Johnny (se aparta) | estado %s" % [dep.global_position.distance_to(johnny.global_position), dep.estado])
-	# M80: con la barrera, ni un golpe ni el fuego les quitan vida, y una bala rebota en su burbuja
 	var v0: Zombi = otros[0]
-	var antes: int = v0.vida
-	v0.recibir_golpe(15, Vector2(200, 0))
-	v0.herir(10.0)
-	print("Barrera: vida %d → %d tras un golpe de 15 y 10 de fuego (esperado: igual) | la burbuja para una bala: %s (esperado true)" % [
-		antes, v0.vida, v0.escudo_toca(v0.centro_burbuja() + Vector2(v0.radio_burbuja() - 4.0, 0))])
-	Captura.foto("captura-nuevos.png")
-	# (18 nov) uno de ellos muere con la barrera puesta (aquí, a mano): su burbuja baja igual y no se queda en el cadáver
-	var muerto: Zombi = otros[2]
-	muerto.meter_barrera(dep)   # (por si el grito no le ha llegado)
-	await get_tree().create_timer(0.6).timeout
-	var subida := muerto.barrera_k
-	muerto.morir()
+	print("Grito: estado %s | despiertos %d/3 | furiosos %s (esperado: 3 true) | ella furiosa %s (esperado true)" % [
+		dep.estado, otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return o.furioso), dep.furioso])
+	print("Furia: velocidad %.0f → %.0f, vida máxima %d → %d, ritmo %.2f → %.2f (esperado: un 25 %% más)" % [v_antes,
+		v0.velocidad, vida_antes, v0.vida_max, ritmo_antes, v0.ritmo])
+	# de cerca, para ver el fuego rojo: la cámara, entre los vigilantes y la dependienta
 	await get_tree().create_timer(1.0).timeout
-	print("Barrera de un muerto: subida antes de morir %.1f, a la vista 1 s después %s (esperado: 1.0, false)" % [subida,
-		muerto.capas_barrera.any(func(c): return c.visible)])
+	print("Dependienta a %d de Johnny (va a por él: menos que 120) | estado %s" % [
+		dep.global_position.distance_to(johnny.global_position), dep.estado])
+	Captura.foto("captura-furia.png")
+	# un golpe le quita vida como siempre (ya no hay barrera)
+	var antes: int = v0.vida
+	v0.recibir_golpe(5, Vector2.ZERO)
+	print("Golpe a un furioso: vida %d → %d (esperado: 5 menos)" % [antes, v0.vida])
 	dep.recibir_golpe(999, Vector2(100, 0))
 	await get_tree().create_timer(0.5).timeout
-	antes = v0.vida
-	v0.recibir_golpe(5, Vector2.ZERO)
-	print("Muerta la dependienta: con barrera %s (esperado: 3 false) | vida %d → %d tras un golpe de 5 (esperado: 5 menos)" % [
-		otros.map(func(o): return o.con_barrera()), antes, v0.vida])
-	Captura.foto("captura-sin-barrera.png")
+	print("Muerta la dependienta: furiosos %s (esperado: 3 false) | velocidad %.0f, vida máxima %d, ritmo %.2f (esperado: %.0f, %d, %.2f)" % [
+		otros.map(func(o): return o.furioso), v0.velocidad, v0.vida_max, v0.ritmo, v_antes, vida_antes, ritmo_antes])
+	Captura.foto("captura-sin-furia.png")
 	for z in get_tree().get_nodes_in_group("zombis"):
 		z.queue_free()
 	await get_tree().process_frame

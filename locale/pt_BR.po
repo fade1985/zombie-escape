@@ -554,8 +554,8 @@ msgid "La dependienta"
 msgstr "A vendedora"
 
 #: scripts/bestiario.gd
-msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta."
-msgstr "Está há 31 horas em pé e continua sorrindo. Quando ela grita \"AAAHHH!!!\", a loja inteira acorda."
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta hecha una furia."
+msgstr "Está há 31 horas em pé e continua sorrindo. Quando ela grita \"AAAHHH!!!\", a loja inteira acorda furiosa."
 
 #: scripts/bestiario.gd
 msgid "El vigilante"
@@ -5428,12 +5428,12 @@ msgid "Al oír su primer grito"
 msgstr "Ao ouvir o primeiro grito dela"
 
 #: scripts/tutoriales.gd
-msgid "No te ataca: se escapa y grita. Su grito pone a todos los durmientes de la tienda una burbuja dorada que los protege de todo."
-msgstr "Ela não ataca: foge e grita. O grito dela cria uma bolha dourada em todos os adormecidos da loja, que os protege de tudo."
+msgid "Su grito despierta a toda la tienda y pone furiosos a todos los durmientes, a ella también: arden en rojo, andan y atacan más rápido y aguantan más."
+msgstr "O grito dela acorda a loja inteira e deixa furiosos todos os adormecidos, ela também: ardem em vermelho, andam e atacam mais rápido e aguentam mais."
 
 #: scripts/tutoriales.gd
-msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta. Es flojita, pero corre: acorrálala o lánzale algo."
-msgstr "A bolha só some quando ela cai: vá primeiro atrás da vendedora. Ela é fraquinha, mas corre: encurrale-a ou jogue algo nela."
+msgid "La furia no se va hasta que cae ella: ve primero a por la dependienta, que es flojita, o cárgate a todos furiosos."
+msgstr "A fúria só some quando ela cai: vá primeiro atrás da vendedora, que é fraquinha, ou acabe com todos furiosos."
 
 #: scripts/tutoriales.gd
 msgid "La joyería"
