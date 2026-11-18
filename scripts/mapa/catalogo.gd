@@ -148,7 +148,7 @@ const MUEBLES := {
 	# respaldo (suelto, se ve igual desde cualquier lado), el váter y el lavabo con su espejo (estos dos, solo de lado: no
 	# tienen dibujo de frente); en el taller, la estantería metálica con cajas (tools/muebles_gpt.py); y en el despacho, la papelera
 	"showertray":      {"len": 72,  "dep": 44, "paredes": "",      "archivo": "vestuario/plato-ducha"},
-	"lockerbench":     {"len": 128, "dep": 28, "paredes": "todas", "archivo": "vestuario/banco-vestuario"},
+	"lockerbench":     {"len": 128, "dep": 28, "paredes": "todas", "archivo": "vestuario/banco-vestuario", "choque_lado": 88},
 	"stafftoilet":     {"len": 40,  "dep": 52, "paredes": "lados", "archivo": "vestuario/vater-vestuario"},
 	"staffsink":       {"len": 52,  "dep": 40, "paredes": "lados", "archivo": "vestuario/lavabo-espejo"},
 	"canshelf":        {"len": 80,  "dep": 36, "paredes": "",      "archivo": "mantenimiento/estanteria-botes"},
@@ -583,8 +583,8 @@ const SALAS := {
 	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
 	"almacen-ropa": {"colocados": {"abajo": [], "arriba": []}},
-	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 2.6, "izquierda"], ["stafftoilet", 4.2, "izquierda"]],
-		"arriba": [["taquillaropa", 6.0], ["staffsink", 2.6, "izquierda"], ["stafftoilet", 4.2, "izquierda"]]}},
+	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 2.0, "izquierda"], ["stafftoilet", 5.4, "izquierda"], ["lockerbench", 5.85, "derecha"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsink", 2.0, "izquierda"], ["stafftoilet", 5.4, "izquierda"], ["lockerbench", 9.2, "derecha"]]}},
 	"tienda-farmacia": {
 		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
 		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas

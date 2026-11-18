@@ -444,6 +444,17 @@ static func del_plano(tipo: String, lado: String) -> Dictionary:
 			if plano[f][c] == "~":
 				agua.append(Vector2i(c, f))
 		plano[f] = plano[f].replace("~", "V")
+	# la puerta del aseo de la tienda de ropa (18 nov, el dueño): en la tienda normal, subida dos filas para que quede en el medio de lo que se ve del aseo
+	# (con la pared alta, el aseo se ve más corto por arriba); en la inversa, donde está en el plano
+	if tipo == "ropa" and lado == "abajo":
+		var puerta: Array = []
+		for f in plano.size():
+			if plano[f].begins_with("##BBBBBBB "):
+				puerta.append(f)
+		for f in puerta:
+			plano[f] = plano[f].substr(0, 9) + "#" + plano[f].substr(10)
+		for f in puerta:
+			plano[f - 2] = plano[f - 2].substr(0, 9) + " " + plano[f - 2].substr(10)
 	var t := Apartamento.del_plano(plano, LETRAS)
 	t.tipo = tipo
 	t.fijo = true
