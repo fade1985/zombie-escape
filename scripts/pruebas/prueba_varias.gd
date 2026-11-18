@@ -3572,7 +3572,8 @@ func probar_cuerpo_pared() -> void:
 			print("Cuerpo (%s) %s: %d píxeles sobre el muro, movido %.0f (esperado: 0 píxeles)" % [e[0], z[0].sprite.animation, n,
 				z[0].position.distance_to(z[1])])
 		Captura.foto("captura-cuerpo-%s.png" % e[0])
-	# los maniquíes de la modista caen girando sobre sus pies, a un lado u otro: contra las dos paredes del salón
+	# los maniquíes de la modista se desmoronan en un montón a los lados de sus pies (M89: 74 × 16 píxeles del dibujo, el
+	# mismo rectángulo que mira maniqui_vivo.morir): contra las dos paredes del salón
 	var maniquies := []
 	for x in [27.0, 27.0, 27.0, 43.0, 43.0, 43.0]:
 		var m: Node2D = load("res://scripts/maniqui_vivo.gd").new()
@@ -3582,12 +3583,11 @@ func probar_cuerpo_pared() -> void:
 		m.move_and_collide(Vector2(signf(35.0 - x) * -400.0, 0.0))
 		m.morir()
 		maniquies.append(m)
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(load("res://scripts/maniqui_vivo.gd").ROMPER + 0.3).timeout
 	var pisan := 0
 	for m in maniquies:
-		var largo: float = m.DIBUJO.get_height() * 2.0
 		var pies: Vector2 = m.global_position + m.sprite.position
-		if mapa.pisa_muro(Rect2(pies + Vector2(minf(signf(m.sprite.rotation), 0.0) * largo, -2.0), Vector2(largo, 4.0))):
+		if mapa.pisa_muro(Rect2(pies + Vector2(-74, -30), Vector2(148, 32))):
 			pisan += 1
 	print("Cuerpo: %d de 6 maniquíes sobre el muro (esperado: 0)" % pisan)
 	# de control: en medio del pasillo, sin pared cerca, cae donde estaba
