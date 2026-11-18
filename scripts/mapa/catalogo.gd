@@ -607,14 +607,10 @@ const SALAS := {
 	# de la entrada (casillas 21,5 a 24,5) y el de delante de los probadores
 	"tienda-ropa": {"colocados": {
 		"abajo": [
-			["ropamodulo", 2.9, "libre", 4.5], ["ropabarra", 8.4, "libre", 4.4375],
-			["ropaoval", 20.9, "libre", 4.5], ["ropazapatos", 23.6, "libre", 4.5],
+			["ropamodulo", 2.9, "libre", 4.5], ["ropabarra", 8.4, "libre", 4.4375], ["ropaoval", 20.9, "libre", 4.5], ["ropazapatos", 23.6, "libre", 4.5],
 			["ropaperchero1", 3.0, "libre", 8.5], ["ropaperchero2", 8.5, "libre", 8.5], ["roparuedas", 12.8, "libre", 8.5], ["ropatarimas", 3.0, "libre", 12.0],
 			["ropamesa", 8.5, "libre", 12.0], ["ropamaniqui1", 12.3, "libre", 12.3], ["ropamaniqui2", 14.0, "libre", 12.3], ["ropamaniqui3", 15.7, "libre", 12.3],
-			["ropaperchero2", 3.5, "libre", 15.8], ["ropaperchero1", 9.0, "libre", 15.8], ["roparuedas", 13.5, "libre", 15.8], ["ropatarimas", 19.0, "libre", 9.5],
-			["roparuedas", 19.0, "libre", 14.5], ["ropaperchero1", 29.5, "libre", 8.5], ["ropaperchero2", 35.0, "libre", 8.5], ["ropaperchero1", 40.5, "libre", 8.5],
-			["roparuedas", 44.3, "libre", 8.5], ["ropamaniqui4", 36.0, "libre", 12.5], ["ropamaniqui1", 37.6, "libre", 12.5], ["ropamaniqui2", 39.2, "libre", 12.5],
-			["ropamesa", 43.0, "libre", 12.5], ["ropamostrador", 29.5, "libre", 15.0], ["ropatarimas", 36.5, "libre", 15.9], ["ropaperchero2", 42.5, "libre", 16.0]],
+			["ropamaniqui4", 36.0, "libre", 12.5], ["ropamostrador", 29.5, "libre", 15.0]],
 		"arriba": [
 			["ropamodulo", 2.6, "libre", 0.5], ["ropabarra", 8.1, "libre", 0.4375], ["ropazapatos", 12.7, "libre", 0.5], ["ropavitrina", 15.6, "libre", 0.5],
 			["ropaoval", 17.6, "libre", 0.5], ["ropazapatos", 20.1, "libre", 0.5], ["ropamodulo", 27.2, "libre", 0.5], ["ropabarra", 33.1, "libre", 0.4375],
