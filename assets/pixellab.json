@@ -2509,7 +2509,7 @@
    "dependienta-48": {
     "character_id": "cb6062dd-00cf-4018-be43-4bc0e065935d",
     "de": "baa9688f-1d49-4a16-b106-a8d3fd648505 (el modelo, con la piel beige) → py tools/piel.py dependienta-48 43 68 0.35 → create_character v3 con las 8 vistas (0,25)",
-    "sprite": "assets/sprites/zombi-dependienta (zombi.json: sangre quitar y sueltos, porque el polo es rojo)",
+    "sprite": "SUSTITUIDA el 18 nov de 2026 por la dependienta de 112 px (Dependienta verde 112, de59f7de-5243-4d15-a7b3-5b11f9115676; docs/ZOMBIS_112.md). Era assets/sprites/zombi-dependienta (zombi.json: sangre quitar y sueltos, porque el polo es rojo); su carpeta assets/sources/dependienta-48 se borró el 18 nov (queda en el historial de git)",
     "subject_description": "a female zombie shop assistant with grey-green skin, a dark brown ponytail, a bright red polo shirt, a blue lanyard with a white ID card and black trousers",
     "grupos": {
      "andar": "d6b4d192-150d-4916-a379-2b248fe450ec",

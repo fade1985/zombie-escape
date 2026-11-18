@@ -186,7 +186,8 @@ andar de 12 fotogramas, ataque y golpe de 8 (partida y final iguales), muerte de
   un porrazo: saca la porra de la cintura, la levanta y la baja de golpe. Su dibujo quieto ya traía sangre roja viva:
   se oscurece en toda la hoja (`"sangre_en_todo": true` en su `zombi.json`). También es el dibujo del guardia de la
   tarjeta.
-- **Dependienta** (`zombi-dependienta`, fuente `dependienta-48`): polo rojo, coleta y acreditación. La piel salió
+- **Dependienta** (`zombi-dependienta`, fuente `dependienta-48`; **sustituida el 18 nov** por la de 112 px, ver
+  `docs/ZOMBIS_112.md`: la carpeta `dependienta-48` se borró y queda en el historial de git): polo rojo, coleta y acreditación. La piel salió
   beige más amarilla que la de siempre: `py tools/piel.py dependienta-48 43 68 0.35` (tono de origen 43-68 y luz
   mínima 0,35) y se subió como personaje nuevo (`cb6062dd`, 0,25). El ataque es el grito «¡OFERTAS!» con las manos
   en la boca. Como el polo es rojo, la sangre no se puede buscar por el color: `"sangre": "quitar"` y `"sueltos":
