@@ -365,7 +365,7 @@ MUEBLES = {
     # placa a la izquierda (el dibujo de la pared izquierda; en la derecha, en espejo). Se levanta del suelo al final de este archivo
     "ganchoprobador": ("assets/sources/ropa/perchero-probador-gpt.webp", "assets/sprites/mueble-ganchoprobador-lado.png", 10, 16, True),
     # la alfombrilla blanca de los probadores de la tienda de ropa (18 nov, el dueño): una pieza del suelo (mapa.gd, dibujar_fondo), sin .json
-    "alfombra_probador": ("assets/sources/ropa/alfombra-probador-gpt.webp", "assets/sprites/alfombra-probador.png", 48, 32, False),
+    "alfombra_probador": ("assets/sources/ropa/alfombra-probador-gpt.webp", "assets/sprites/alfombra-probador.png", 66, 44, False),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 
@@ -471,3 +471,31 @@ if "ganchoprobador" in (sys.argv[1:] or ["ganchoprobador"]):
         json.dump({"cell": [lienzo.width, lienzo.height], "pivot": [lienzo.width // 2, lienzo.height], "scale": 1,
                    "anims": {"idle": {"fps": 1, "dirs": {"south": {"row": 0, "frames": 1}}}}}, f, indent=2)
         f.write("\n")
+
+# la alfombrilla de los probadores, con las esquinas redondeadas (18 nov, el dueño: que no parezca hecha con escuadra y cartabón):
+# se recorta cada esquina con un cuarto de círculo de 10 píxeles y el borde nuevo se pinta del color del contorno
+if "alfombra_probador" in (sys.argv[1:] or ["alfombra_probador"]):
+    ruta = MUEBLES["alfombra_probador"][1]
+    alf = Image.open(ruta).convert("RGBA")
+    w, h = alf.size
+    R = 10
+    px = alf.load()
+
+    def dentro(x, y):
+        if not (0 <= x < w and 0 <= y < h):
+            return False
+        cx = R - 0.5 - x if x < R else x - (w - R - 0.5) if x > w - R - 1 else None
+        cy = R - 0.5 - y if y < R else y - (h - R - 0.5) if y > h - R - 1 else None
+        if cx is None or cy is None:
+            return True
+        return cx * cx + cy * cy <= (R - 0.5) ** 2 + 1
+    # el color del contorno: el del borde de arriba, en medio
+    borde = px[w // 2, 0][:3]
+    mask = [[dentro(x, y) and px[x, y][3] > 0 for x in range(w)] for y in range(h)]
+    for y in range(h):
+        for x in range(w):
+            if not mask[y][x]:
+                px[x, y] = (0, 0, 0, 0)
+            elif any(not (0 <= x + dx < w and 0 <= y + dy < h and mask[y + dy][x + dx]) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                px[x, y] = borde + (255,)
+    alf.save(ruta)
