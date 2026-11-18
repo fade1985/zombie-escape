@@ -294,6 +294,8 @@ static func recortar(id: String) -> Texture2D:
 			if fotograma is AtlasTexture:
 				hoja = (fotograma as AtlasTexture).atlas
 				celda = Rect2i((fotograma as AtlasTexture).region)
+				# (hoja apretada, tools/hoja_112.py: el trozo va en su sitio de la casilla; el recorte cuenta desde la casilla)
+				celda.position -= Vector2i((fotograma as AtlasTexture).margin.position)
 			elif fotograma:
 				hoja = fotograma
 				celda = Rect2i(0, 0, fotograma.get_width(), fotograma.get_height())

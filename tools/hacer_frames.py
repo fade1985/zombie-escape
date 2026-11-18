@@ -36,10 +36,17 @@ for estado, es in ESTADOS.items():
         frames = []
         duraciones = info.get("durations", [1.0] * info["frames"])   # cuánto dura cada dibujo (1 = lo normal)
         for f in range(info["frames"]):
-            col = info.get("col", 0) + f
             sid = f"t{len(subs)}"
-            subs.append(f'[sub_resource type="AtlasTexture" id="{sid}"]\natlas = ExtResource("hoja")\n'
-                        f'region = Rect2({col * cw}, {info["row"] * ch}, {cw}, {ch})\n')
+            if "rects" in info:
+                # hoja apretada (tools/hoja_112.py): cada fotograma recortado, con su sitio dentro de la casilla
+                # ("margin"), para que en Godot siga midiendo la casilla entera y los pies sigan en su sitio
+                x, y, w, h, mx, my = info["rects"][f]
+                subs.append(f'[sub_resource type="AtlasTexture" id="{sid}"]\natlas = ExtResource("hoja")\n'
+                            f'region = Rect2({x}, {y}, {w}, {h})\nmargin = Rect2({mx}, {my}, {cw - w}, {ch - h})\n')
+            else:
+                col = info.get("col", 0) + f
+                subs.append(f'[sub_resource type="AtlasTexture" id="{sid}"]\natlas = ExtResource("hoja")\n'
+                            f'region = Rect2({col * cw}, {info["row"] * ch}, {cw}, {ch})\n')
             frames.append(f'{{"duration": {float(duraciones[f])}, "texture": SubResource("{sid}")}}')
         anims.append(f'{{"frames": [{", ".join(frames)}], "loop": {str(a.get("loop", True)).lower()}, '
                      f'"name": &"{es}_{dd}", "speed": {float(a.get("fps", 8))}}}')

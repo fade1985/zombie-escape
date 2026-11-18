@@ -7,8 +7,9 @@
 #   - Después pelea como un durmiente más: va a por Johnny y le da zarpazos.
 # Fuera del jefe (el gerente llama a dos), nunca hay más de una en la misma sala; con dos, la furia no se suma.
 # Su dibujo (18 nov) es el de 112 px de PixelLab, mucho más detallado que los zombis de 48, a escala 1
-# (tools/dependienta_hoja.py). El grito tiene su animación propia («grito», siempre de cara: es la misma en las 8
-# direcciones) y la de ataque queda para los zarpazos.
+# (tools/hoja_112.py, con su ficha assets/sources/dependienta-96-gpt/hoja.json; receta en docs/ZOMBIS_112.md). El
+# grito tiene su animación propia («grito», siempre de cara: la misma en las 8 direcciones) y la de ataque queda para
+# los zarpazos.
 extends Zombi
 
 var gritado := false        # ya ha gritado (solo grita una vez)

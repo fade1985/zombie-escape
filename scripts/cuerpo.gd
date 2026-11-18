@@ -43,7 +43,9 @@ static func medir(hoja: SpriteFrames) -> void:
 			if not leidas.has(dibujo.atlas):
 				# (si ya la tiene quemado.gd, no se vuelve a leer)
 				leidas[dibujo.atlas] = Quemado.hojas[dibujo.atlas] if Quemado.hojas.has(dibujo.atlas) else dibujo.atlas.get_image()
-			cajas[dibujo] = Rect2(leidas[dibujo.atlas].get_region(Rect2i(dibujo.region)).get_used_rect())
+			# (en las hojas apretadas, tools/hoja_112.py, el trozo va en su sitio de la casilla: "margin")
+			var caja := Rect2(leidas[dibujo.atlas].get_region(Rect2i(dibujo.region)).get_used_rect())
+			cajas[dibujo] = Rect2(caja.position + dibujo.margin.position, caja.size)
 
 
 # Lleva el cuerpo, en lo que tarda en caer, hasta que "caja" (lo que ocupará tendido, en unidades del mapa) quede sobre el

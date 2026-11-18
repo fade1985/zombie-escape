@@ -87,7 +87,7 @@
 #   --golpes-pared      ¿los golpes de los jefes (cuerpo a cuerpo, saltos, círculo y onda) atraviesan las paredes?
 #                       Cada uno con Johnny justo al otro lado de la pared y, de control, en campo abierto; y su
 #                       aviso, cortado en la pared                                        [prueba_varias.gd]
-#   --cuerpo-pared      el cuerpo de un enemigo que muere pegado a cada pared queda sobre el suelo, y sin pared cerca
+#   --cuerpo-pared      el cuerpo de un enemigo que muere pegado a cada pared (también la dependienta, de 112 px) queda sobre el suelo, y sin pared cerca
 #                       cae donde estaba                                                  [prueba_varias.gd]
 #   --armas             la sala de pruebas (F9): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,

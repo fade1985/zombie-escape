@@ -1,0 +1,57 @@
+TEXTOS PARA PIXELLAB: LAS 3 DIRECCIONES QUE FALTAN (arriba, abajo-derecha, arriba-derecha)
+Las de la izquierda saldrán en espejo. El grito sigue solo hacia abajo.
+Coste: andar 3 + golpe 3 + muerte 1 + zarpazo 1 = 8 por dirección, 24 en total.
+Andar y golpe, con el modo v3 (como los de abajo y derecha). Muerte y zarpazo, con el modo barato (pixminimax).
+En el modo barato van además dos datos: el personaje ("female zombie shop assistant in a red polo shirt and black
+trousers") y la pose de partida, que se pone debajo de cada texto.
+
+
+==================== ARRIBA (de espaldas) ====================
+
+ANDAR (8 fotogramas)
+zombie woman seen from behind, facing away from the viewer, walking slowly away toward the top of the image with short shuffling steps: first the left foot lifts and steps, then the right foot lifts and steps, looping back to the start; arms hang limp at her sides swaying slightly; she keeps her back to the viewer the whole time and never turns around
+
+GOLPE (8 fotogramas)
+zombie woman seen from behind, facing away from the viewer, is knocked back by a hard punch to the face: her head is thrown far back so her face points up at the ceiling, her back arches and her upper body leans far backward toward the viewer, her knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then she slowly straightens and returns to her upright starting pose; she keeps her back to the viewer the whole time
+
+MUERTE (12 fotogramas)
+killed by a headshot: she is seen from behind, facing away from the camera; the shot hits her face from the front, so her head snaps back and she falls BACKWARD toward the camera, like a plank tipping over toward the bottom of the image; her back and the back of her head hit the floor first; she ends lying flat on her back on the floor, face up looking at the ceiling, her head toward the bottom of the image and her feet toward the top; because she now lies flat on the floor seen from above, her whole body looks much shorter than when she stood, about half her standing height, arms spread limp, completely still; she never falls forward, never falls to the side and never lands face down; no blood splashes
+Pose de partida: standing straight seen from behind, arms hanging at her sides
+
+ZARPAZO (8 fotogramas)
+attacks straight ahead away from the camera: seen from behind, her body and head stay facing away from the camera, toward the top of the image, the whole time and never turn; legs stay still as in her standing pose, knees bend only a little; she bends forward at the waist and stretches both clawed arms straight ahead toward the top of the image, both arms together and parallel, reaching at whoever is right in front of her, then straightens back up to her standing pose
+Pose de partida: standing straight seen from behind, arms hanging at her sides, feet together
+
+
+==================== ABAJO-DERECHA (de tres cuartos, de cara) ====================
+
+ANDAR (8 fotogramas)
+zombie woman seen in three-quarter view, facing down and to the right, walking slowly toward the bottom right with short shuffling steps: first the left foot lifts and steps, then the right foot lifts and steps, looping back to the start; arms hang limp at her sides swaying slightly; she keeps facing down-right the whole time and never turns; her pale white eyes stay wide open staring ahead
+
+GOLPE (8 fotogramas)
+zombie woman seen in three-quarter view, facing down and to the right, is knocked back by a hard punch to the face: her head is thrown far back so her face points up at the ceiling, her back arches and her upper body leans far backward toward the top left, her knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then she slowly straightens and returns to her upright starting pose; she keeps facing down-right the whole time
+
+MUERTE (12 fotogramas)
+killed by a headshot: she is seen in three-quarter view facing down and to the right; the shot hits her face from the bottom right, so her head snaps back and she falls BACKWARD toward the top left, away from where she faces, like a plank tipping over; her back and the back of her head hit the floor first; she ends lying flat on her back, face up looking at the ceiling, her head toward the top left and her feet toward the bottom right, arms spread limp, completely still; she never falls forward and never lands face down; no blood splashes
+Pose de partida: standing straight in three-quarter view facing down and to the right, arms hanging at her sides
+
+ZARPAZO (8 fotogramas)
+attacks straight ahead toward the bottom right: seen in three-quarter view, her body and head stay facing down and to the right the whole time and never turn; legs stay still as in her standing pose, knees bend only a little; she bends forward at the waist and stretches both clawed arms straight ahead toward the bottom right, both arms together and parallel, reaching at whoever is right in front of her, then straightens back up to her standing pose
+Pose de partida: standing straight in three-quarter view facing down and to the right, arms hanging at her sides, feet together
+
+
+==================== ARRIBA-DERECHA (de tres cuartos, de espaldas) ====================
+
+ANDAR (8 fotogramas)
+zombie woman seen in three-quarter view from behind, facing up and to the right, walking slowly toward the top right with short shuffling steps: first the left foot lifts and steps, then the right foot lifts and steps, looping back to the start; arms hang limp at her sides swaying slightly; she keeps facing up-right the whole time and never turns toward the viewer
+
+GOLPE (8 fotogramas)
+zombie woman seen in three-quarter view from behind, facing up and to the right, is knocked back by a hard punch to the face: her head is thrown far back so her face points up at the ceiling, her back arches and her upper body leans far backward toward the bottom left, her knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then she slowly straightens and returns to her upright starting pose; she keeps facing up-right the whole time
+
+MUERTE (12 fotogramas)
+killed by a headshot: she is seen in three-quarter view from behind, facing up and to the right; the shot hits her face from the top right, so her head snaps back and she falls BACKWARD toward the bottom left, away from where she faces, like a plank tipping over; her back and the back of her head hit the floor first; she ends lying flat on her back, face up looking at the ceiling, her head toward the bottom left and her feet toward the top right, arms spread limp, completely still; she never falls forward and never lands face down; no blood splashes
+Pose de partida: standing straight in three-quarter view from behind, facing up and to the right, arms hanging at her sides
+
+ZARPAZO (8 fotogramas)
+attacks straight ahead toward the top right: seen in three-quarter view from behind, her body and head stay facing up and to the right the whole time and never turn toward the camera; legs stay still as in her standing pose, knees bend only a little; she bends forward at the waist and stretches both clawed arms straight ahead toward the top right, both arms together and parallel, reaching at whoever is right in front of her, then straightens back up to her standing pose
+Pose de partida: standing straight in three-quarter view from behind, facing up and to the right, arms hanging at her sides, feet together

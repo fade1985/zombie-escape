@@ -3552,7 +3552,10 @@ func probar_cuerpo_pared() -> void:
 		["pasillo", Vector2(9, 14), [["normal", Vector2(5, 17), Vector2.DOWN, 2], ["normal", Vector2(9, 17), Vector2.DOWN, 0],
 			["normal", Vector2(13, 17), Vector2.DOWN, 4]]],
 		["grandes", Vector2(35, 24), [["venenoso", Vector2(29, 24), Vector2.LEFT, 4], ["tentaculos", Vector2(35, 25), Vector2.DOWN, 2],
-			["portera", Vector2(41, 24), Vector2.RIGHT, 0], ["gloton", Vector2(32, 21.5), Vector2.UP, 6], ["gerente", Vector2(39, 21.5), Vector2.UP, 6]]]]
+			["portera", Vector2(41, 24), Vector2.RIGHT, 0], ["gloton", Vector2(32, 21.5), Vector2.UP, 6], ["gerente", Vector2(39, 21.5), Vector2.UP, 6]]],
+		# la dependienta, de 112 px y con la hoja apretada (tools/hoja_112.py: cada trozo en su sitio de la casilla)
+		["dependienta", Vector2(10, 23), [["dependienta", Vector2(6.25, 25), Vector2.DOWN, 2],
+			["dependienta", Vector2(8.75, 25), Vector2.DOWN, 3], ["dependienta", Vector2(11.25, 25), Vector2.DOWN, 4]]]]
 	for e in escenas:
 		johnny.position = e[1] * c
 		johnny.get_node("Camara").reset_smoothing()
@@ -5500,10 +5503,12 @@ func probar_vida_colores() -> void:
 	get_tree().quit()
 
 
-# Con "-- --captura --dependienta": la dependienta nueva (18 nov, el dibujo de 112 px a escala 1; tools/dependienta_hoja.py).
+# Con "-- --captura --dependienta": la dependienta nueva (18 nov, el dibujo de 112 px a escala 1; tools/hoja_112.py).
 # Primero, quieta de frente al lado de Johnny, el vecino, el vigilante y el guardia, para ver su tamaño
 # (captura-dependienta-tamano.png). Luego seis dependientas que van andando hacia Johnny desde seis lados (sin gritar,
-# para que no ardan en rojo): captura-dependienta-andar-NN.png, una foto cada 3 pasos de física (0,05 s), para el GIF
+# para que no ardan en rojo): captura-dependienta-andar-NN.png, una foto cada 3 pasos de física (0,05 s), para el GIF.
+# Y, como su hoja va apretada, una muerta ardiendo y otra a secas (captura-dependienta-muertas.png) y su retrato del
+# bestiario (captura-dependienta-retrato.png)
 func probar_dependienta_nueva() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
@@ -5562,4 +5567,16 @@ func probar_dependienta_nueva() -> void:
 	DirAccess.make_dir_recursive_absolute(Captura.CARPETA)
 	for i in fotos.size():
 		fotos[i].save_png(Captura.CARPETA + "captura-dependienta-andar-%02d.png" % i)
+	# ── su hoja va apretada (tools/hoja_112.py): lo que lee los dibujos tiene que contar con el sitio de cada trozo ──
+	# una muere ardiendo (quemado.gd: el carbón y la ceniza, sobre su cuerpo tendido) y otra a secas (cuerpo.gd)
+	ellas[0].prender()
+	await get_tree().create_timer(0.2).timeout
+	ellas[0].herir(999.0)
+	ellas[3].herir(999.0)
+	await get_tree().create_timer(2.5).timeout
+	Captura.foto("captura-dependienta-muertas.png")
+	# el retrato del bestiario (bestiario.gd, retrato): el trozo de frente, del tamaño de su recorte
+	var retrato := Bestiario.retrato("dependienta")
+	print("Retrato del bestiario: %s (esperado: (37.0, 105.0))" % retrato.get_size())
+	retrato.get_image().save_png(Captura.CARPETA + "captura-dependienta-retrato.png")
 	get_tree().quit()

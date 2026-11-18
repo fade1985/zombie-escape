@@ -97,7 +97,9 @@ static func solidos_de(dibujo: Texture2D) -> Array:
 	if tendidos.has(dibujo):
 		return tendidos[dibujo]
 	var imagen: Image
+	var donde := Vector2.ZERO   # dónde va el trozo dentro de la casilla (las hojas apretadas, tools/hoja_112.py)
 	if dibujo is AtlasTexture:
+		donde = dibujo.margin.position
 		if not hojas.has(dibujo.atlas):
 			hojas[dibujo.atlas] = dibujo.atlas.get_image()
 		imagen = hojas[dibujo.atlas].get_region(Rect2i(dibujo.region))
@@ -107,7 +109,7 @@ static func solidos_de(dibujo: Texture2D) -> Array:
 	for y in imagen.get_height():
 		for x in imagen.get_width():
 			if imagen.get_pixel(x, y).a > 0.78:
-				solidos.append(Vector2(x, y))
+				solidos.append(donde + Vector2(x, y))
 	tendidos[dibujo] = solidos
 	return solidos
 

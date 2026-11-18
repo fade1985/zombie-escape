@@ -1,0 +1,16 @@
+{
+  "sprite": "zombi-dependienta",
+  "reposo": {"cintura": 58, "baja": 2},
+  "animaciones": {
+    "walk": {"de": "andar", "fps": 10},
+    "attack": {"de": "zarpazo", "desde": 1, "duracion": 0.55, "impacto": 3},
+    "hurt": {"de": "golpe", "desde": 1, "duracion": 0.35},
+    "death": {"de": "muerte", "desde": 1, "duracion": 0.9, "alinear": true},
+    "roar": {"de": "grito", "duracion": 1.2, "solo_de_cara": true}
+  },
+  "sangre": {
+    "muerte/south/1": [60, 28, 102, 48],
+    "muerte/south-east/1": [89, 38, 112, 57],
+    "muerte/north/1": [50, 15, 100, 47]
+  }
+}

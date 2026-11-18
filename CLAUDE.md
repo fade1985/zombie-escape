@@ -13,6 +13,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | `docs/historial/` | Planes ya terminados (centro comercial, jefes de los Apartamentos): solo para saber por qué se decidió algo |
 | `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |
 | `docs/TRAILER.md` | El trailer: cómo se graba (`py tools/trailer.py`) y su guion de escenas y textos |
+| `docs/ZOMBIS_112.md` | Cómo se hace un zombi de 112 px (el dibujo detallado, como la dependienta): PixelLab, ficha, `py tools/hoja_112.py` y prueba |
 | `docs/BOT.md` | El jugador automático (bot) que prueba la dificultad: cómo se lanza (`py tools/bot.py`), cómo juega y sus resultados |
 | `PENDIENTES.md` (raíz) | Lista del dueño de fallos, mejoras y cosas por limar: solo se toca un punto cuando él lo pide |
 | `docs/PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md` | Del juego JS: ideas y números |
