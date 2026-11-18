@@ -356,7 +356,7 @@ MUEBLES = {
     "puerta_restaurante": ("assets/sources/centro/puerta-restaurante-gpt.webp", "assets/sprites/puerta-restaurante.png", 36, 43, False),
     # la puerta doble de acero pulido de la joyería (17 nov, el dueño): ventanas altas de cristal, barras largas y cerradura en el medio
     "puerta_joyeria": ("assets/sources/centro/puerta-joyeria-gpt.webp", "assets/sprites/puerta-joyeria.png", 34, 43, False),
-    # el espejo de arco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "espejoprobador"): marco dorado fino y
+    # el espejo de arco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "espejoprobador"; se levanta 6 píxeles al final de este archivo): marco dorado fino y
     # cristal vacío con dos brillos, en la pared de arriba de cada probador
     "espejoprobador": ("assets/sources/ropa/espejo-probador-gpt.webp", "assets/sprites/mueble-espejoprobador.png", 40, 56, True),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
@@ -440,3 +440,15 @@ if "bancogaleria" in (sys.argv[1:] or ["bancogaleria"]):
     banco = ImageEnhance.Brightness(banco.convert("RGB")).enhance(1.35).convert("RGBA")
     banco.putalpha(alfa)
     banco.save(ruta)
+
+# el espejo de los probadores, levantado del suelo (18 nov, el dueño): 6 píxeles transparentes debajo, para que no toque el suelo
+if "espejoprobador" in (sys.argv[1:] or ["espejoprobador"]):
+    ruta = MUEBLES["espejoprobador"][1]
+    esp = Image.open(ruta).convert("RGBA")
+    lienzo = Image.new("RGBA", (esp.width, esp.height + 6), (0, 0, 0, 0))
+    lienzo.paste(esp, (0, 0))
+    lienzo.save(ruta)
+    with open(ruta.replace(".png", ".json"), "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"cell": [lienzo.width, lienzo.height], "pivot": [lienzo.width // 2, lienzo.height], "scale": 1,
+                   "anims": {"idle": {"fps": 1, "dirs": {"south": {"row": 0, "frames": 1}}}}}, f, indent=2)
+        f.write("\n")
