@@ -1011,6 +1011,9 @@ func poner_hojas() -> void:
 		if sitio.tipo == "mantenimiento" and d.get("a", -1) == 2:
 			hoja.madera = PUERTA_BANO.METAL   # (la del despacho al taller: la metálica)
 			hoja.al_reves = true   # (y se abre hacia el despacho: abierta hacia el taller, se quedaba de pie junto al banco)
+		# los probadores de la tienda de ropa (pared alta): una cortina en vez de puerta (puerta_bano.gd)
+		if sube > TABIQUE.SUBE and d.fondo == 1 and "probadores" in [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]:
+			hoja.cortina = true
 		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
 		hoja.montar(d)
 		cosas.add_child(hoja)
