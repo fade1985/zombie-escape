@@ -192,6 +192,9 @@ func dejar_rastro(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if estado == "muerto":
+		# (18 nov: la burbuja de la barrera baja también al morir; antes se quedaba pintada encima del cadáver)
+		if barrera_k > 0.0 and not capas_barrera.is_empty():
+			animar_barrera(delta)
 		return
 	tiempo += delta
 	if not capas_barrera.is_empty():
@@ -401,6 +404,22 @@ func meter_barrera(de: Node) -> void:
 		capas_barrera.append(capa)
 
 
+# ¿Nada le quita vida ahora? (18 nov: el jefe de seguridad, hasta que ruge; zombi_guardia.gd lo cambia)
+func inmune() -> bool:
+	return false
+
+
+# Un golpe que no le hace nada (inmune): «¡INMUNE!» en gris encima, como mucho cada medio segundo (una ráfaga de balas
+# no lo llena de letreros)
+var inmune_avisado := -1.0
+func avisar_inmune() -> void:
+	if tiempo - inmune_avisado < 0.5 and inmune_avisado >= 0.0:
+		return
+	inmune_avisado = tiempo
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -altura), Idioma.t("¡INMUNE!"), Color("#c8c8c8"), 16,
+		true, 0.8)
+
+
 # M80: ¿tiene la barrera? Mientras quede viva alguna de las dependientas que le han gritado
 func con_barrera() -> bool:
 	barrera = barrera.filter(func(d): return is_instance_valid(d) and d.estado != "muerto")
@@ -556,6 +575,10 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 		cantidad = maxi(cantidad, vida)
 		Zombi.texto_flotante(get_parent(), global_position + Vector2(-60, -70), Idioma.t("¡DESPEDIDO!"),
 			Color("#ff5d73"), 20)
+	if inmune():   # (el jefe de seguridad antes de rugir, zombi_guardia.gd: le empuja un poco y nada más)
+		velocity = fuerza * empuje * 0.5
+		avisar_inmune()
+		return
 	if con_barrera():   # M80: con la barrera, el golpe le empuja un poco pero no le quita vida
 		velocity = fuerza * empuje * 0.5
 		destello_barrera = 1.0
@@ -742,7 +765,7 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 		return
 	if dormido:
 		despertar()
-	if con_barrera():   # M80: con la barrera, ni el fuego ni los charcos le quitan vida
+	if con_barrera() or inmune():   # M80: con la barrera (o inmune), ni el fuego ni los charcos le quitan vida
 		return
 	var n := ArmasCreadas.con_acido(self, maxi(1, roundi(cantidad)))
 	vida -= n

@@ -5,6 +5,8 @@
 #     encima de la cabeza, con las letras de los gritos de Johnny. Solo una vez. Mientras ruge, Johnny se queda
 #     petrificado por el sonido: no puede moverse ni atacar hasta que acaba (para que no saque ventaja). Con el rugido llegan sus guardias (los saca la partida: señal
 #     "rugido"; 4 en la planta baja y 2 más en cada planta de arriba).
+#   - Hasta que ruge, nada le hace daño (18 nov, lo pidió el dueño: inmune(); los golpes le empujan y sale «¡INMUNE!»), y
+#     el primero le hace rugir.
 #   - Después, va a por Johnny con ellos y le ataca a zarpazos hasta que caigan todos.
 # Lleva su propio dibujo (hecho con GPT: assets/sources/zombi-guardia-gpt/), distinto del de los vigilantes que llama.
 extends Zombi
@@ -90,6 +92,11 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 			estado = "andar"
 		return
 	super(delta, johnny)
+
+
+# Antes de rugir, nada le hace daño
+func inmune() -> bool:
+	return not alerta
 
 
 # Si le dan antes de que haya visto a Johnny, ruge igual (en cuanto se recupere del golpe)

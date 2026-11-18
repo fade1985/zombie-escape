@@ -58,7 +58,7 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 		if not fondo.is_empty():
 			lista += fondo
 		elif datos.has("fijos"):
-			lista += fijos(uso, geo, s.id)   # cada pared con sus muebles puestos a mano (el gimnasio)
+			lista += fijos(uso, geo, s.id, {"lado": apt.entrada.lado, "en": en})   # cada pared con sus muebles puestos a mano (el gimnasio)
 		else:
 			lista += sueltos(uso, rng, geo, cuantos[0] + extra, cuantos[1] + extra,
 				{"zona": s.id, "despejar": despejar, "paso": paso})
@@ -216,8 +216,12 @@ const MARGEN_FIJOS := 8.0
 # derecha, abajo), qué muebles van y en qué orden (de izquierda a derecha, o de arriba abajo). En cada pared se
 # reparten parejos, con el mismo hueco entre todos y el primero y el último pegados a los extremos del tramo. La
 # pared de arriba se pone primero y las laterales empiezan justo por debajo de lo que sobresale de ella en la
-# esquina (si no, se pisarían). Nada se aparta de las puertas ni se comprueba el paso: lo que se pide es lo que sale
-static func fijos(uso: String, geo: Dictionary, zona: int) -> Array:
+# esquina (si no, se pisarían). Nada más se aparta de las puertas: lo que se pide es lo que sale. Salvo la de la entrada
+# ("puerta": {lado, en}; 18 nov): las salas de los jefes se pensaron con la puerta abajo, pero las de los huecos de abajo
+# del pasillo se abren por arriba, y el mueble del medio de la fila del fondo quedaba delante de la puerta (Johnny se
+# quedó atrapado entre él y la pared en la Cocina central). Si la puerta está en esa pared, la fila se parte en dos,
+# la mitad a cada lado de la puerta, dejando delante de ella lo mismo que Muebles.delante_de
+static func fijos(uso: String, geo: Dictionary, zona: int, puerta := {}) -> Array:
 	var datos: Dictionary = Catalogo.SALAS[uso]
 	var todos := tramos(geo, zona)
 	var puestos := []
@@ -248,15 +252,41 @@ static func fijos(uso: String, geo: Dictionary, zona: int) -> Array:
 				var r := hueco(p)
 				if p.lado == "arriba" and r.position.x < x0 + fondo and r.end.x > x0:
 					a = maxf(a, r.end.y + MARGEN_FIJOS)
-		var entre: float = (tramo.b - a - suma) / maxf(tipos.size() - 1, 1)
-		if tipos.size() > 1 and entre < HUECO_FIJOS:
-			push_warning("Muebles.fijos: en la pared «%s» de «%s» los muebles no caben (hueco %.1f)" % [lado, uso, entre])
-		var en: float = a if tipos.size() > 1 else (a + tramo.b - suma) / 2.0
-		for tipo in tipos:
-			var largo: float = Catalogo.MUEBLES[tipo].len
-			puestos.append(nuevo(tipo, tramo, roundf((en + largo / 2.0) / 2.0) * 2.0, zona))
-			en += largo + entre
+		# los trozos de pared en los que van: toda, o a cada lado de la puerta
+		var trozos := [[a, tramo.b, tipos]]
+		var medio := PUERTA / 2.0 + 44.0   # (lo que deja libre Muebles.delante_de a cada lado del centro de la puerta)
+		if puerta.get("lado", "") == lado and puerta.en - medio > a and puerta.en + medio < tramo.b:
+			var mitad := tipos.size() / 2
+			var partes := [tipos.slice(0, mitad), tipos.slice(mitad)]
+			var libres := [Vector2(a, puerta.en - medio), Vector2(puerta.en + medio, tramo.b)]
+			if not cabe_fila(partes[0], libres[0]) or not cabe_fila(partes[1], libres[1]):
+				partes = repartir(tipos, libres)   # (si a medias no caben, los que quepan a la izquierda y el resto a la derecha)
+			if not partes.is_empty():
+				trozos = [[libres[0].x, libres[0].y, partes[0]], [libres[1].x, libres[1].y, partes[1]]]
+		for trozo in trozos:
+			var de: float = trozo[0]
+			var hasta: float = trozo[1]
+			var estos: Array = trozo[2]
+			var largos := 0.0
+			for tipo in estos:
+				largos += Catalogo.MUEBLES[tipo].len
+			var entre: float = (hasta - de - largos) / maxf(estos.size() - 1, 1)
+			if estos.size() > 1 and entre < HUECO_FIJOS:
+				push_warning("Muebles.fijos: en la pared «%s» de «%s» los muebles no caben (hueco %.1f)" % [lado, uso, entre])
+			var en: float = de if estos.size() > 1 else (de + hasta - largos) / 2.0
+			for tipo in estos:
+				var largo: float = Catalogo.MUEBLES[tipo].len
+				puestos.append(nuevo(tipo, tramo, roundf((en + largo / 2.0) / 2.0) * 2.0, zona))
+				en += largo + entre
 	return puestos
+
+
+# ¿Caben esos muebles en fila, con su hueco entre uno y otro, en el trozo de pared "libre" (de x a y)?
+static func cabe_fila(tipos: Array, libre: Vector2) -> bool:
+	var largo := HUECO_FIJOS * maxf(tipos.size() - 1, 0)
+	for t in tipos:
+		largo += Catalogo.MUEBLES[t].len
+	return largo <= libre.y - libre.x
 
 
 # ¿Cae el rectángulo entero en suelo de esa habitación?
@@ -533,6 +563,90 @@ static func repartir(tipos: Array, libres: Array) -> Array:
 	return grupos
 
 
+# ═════════════ El repaso final de un sitio ═════════════
+
+# 18 nov (lo pidió el dueño: un mueble le tapó la salida de una estancia y tuvo que empezar de nuevo): con todos los
+# muebles del sitio ya puestos, los del sorteo y los puestos a mano (las tiendas, los pisos, las salas de los jefes, la
+# galería...), se comprueba que delante de cada puerta queda sitio para Johnny y que desde cualquiera se llega andando
+# a todas las demás y a todo el suelo. El mueble que lo estropee se quita (en el orden en que se pusieron: el primero
+# que corta el paso). Devuelve lo quitado, como texto ("<tipo> en (x, y)"), para las pruebas. Con "quitar" a false
+# solo lo dice, sin tocar nada (la prueba --muebles-paso).
+const AISLADO_TOLERA := 4     # rincones sin salida que se aceptan en el repaso (en cuadritos de media casilla): detrás de un
+                              # sofá puesto a mano queda a veces uno en el que Johnny no llega a caber de lado a lado
+static var ultimo_paso: Paso   # (el del último repaso: la prueba --muebles-paso lo dibuja)
+static var apuntar := false   # la prueba --muebles-paso: cada repaso que quita algo se apunta en "apuntados"
+static var apuntados: Array = []   # [{sitio, muebles (los de antes), quitados}]
+
+static func repasar(sitio: Dictionary, quitar := true) -> Array:
+	var muebles: Array = sitio.get("muebles", [])
+	if muebles.is_empty():
+		return []
+	var geo: Dictionary
+	if sitio.has("apt"):
+		geo = {"cols": sitio.apt.cols, "filas": sitio.apt.filas, "dueno": sitio.apt.dueno}
+	elif sitio.has("dueno"):
+		geo = {"cols": int(sitio.ancho / CASILLA), "filas": int(sitio.alto / CASILLA), "dueno": sitio.dueno}
+	else:
+		return []
+	var ancho: float = geo.cols * CASILLA
+	var alto: float = geo.filas * CASILLA
+	# los puntos a los que hay que poder llegar: delante de cada salida y a los dos lados de cada puerta de dentro
+	var salidas: Array = sitio.get("salidas", []).duplicate()
+	var entrada: Dictionary = sitio.get("apt", {}).get("entrada", {})
+	if not entrada.is_empty():   # (la del pasillo: al repasarse un piso aún no tiene sus salidas)
+		salidas.append({"dir": entrada.lado, "en": (entrada.c + 1) * CASILLA})
+	var puntos := []
+	for s in salidas:
+		var hacia: Vector2 = {"arriba": Vector2.DOWN, "abajo": Vector2.UP, "izquierda": Vector2.RIGHT}.get(s.dir, Vector2.LEFT)
+		var en_pared: Vector2 = {"arriba": Vector2(s.en, MURO), "abajo": Vector2(s.en, alto - MURO),
+			"izquierda": Vector2(MURO, s.en)}.get(s.dir, Vector2(ancho - MURO, s.en))
+		puntos.append(punto_libre(geo, en_pared, hacia))
+	for d in sitio.get("apt", {}).get("puertas", []):
+		var medio := Vector2((d.c + d.ancho / 2.0) * CASILLA, (d.f + d.fondo / 2.0) * CASILLA)
+		var cruza := Vector2.DOWN if d.fondo == 1 else Vector2.RIGHT   # (hueco en un tabique horizontal: de arriba abajo)
+		puntos.append(punto_libre(geo, medio, cruza))
+		puntos.append(punto_libre(geo, medio, -cruza))
+	puntos = puntos.filter(func(p): return p != Vector2.INF)
+	if puntos.is_empty():
+		return []
+	var paso := Paso.new(geo, puntos)
+	paso.tolera = AISLADO_TOLERA
+	ultimo_paso = paso
+	if paso.siempre:
+		return []   # (el plano, sin muebles, ya no cumple: no es cosa de los muebles)
+	var quitados := []
+	var quedan := []
+	for m in muebles:
+		if paso.cabe(choque(m)):
+			quedan.append(m)
+		else:
+			quitados.append("%s en %s (%s)" % [m.tipo, Vector2(m.x, m.y).round(), paso.motivo])
+	if quitar and not quitados.is_empty():
+		if apuntar:
+			apuntados.append({"sitio": sitio, "muebles": muebles, "quitados": quitados})
+		sitio.muebles = quedan
+		print("Muebles · en «%s» se quitan por cortar el paso: %s" % [sitio.get("nombre", "?"), ", ".join(quitados)])
+	return quitados
+
+
+# Lo que choca de un mueble, en el suelo (como mueble.gd: los de las paredes de los lados, solo "choque_lado" desde su pie)
+static func choque(m: Dictionary) -> Rect2:
+	var r := hueco(m)
+	if m.lado in ["izquierda", "derecha"] and Catalogo.MUEBLES.has(m.tipo):
+		var alto: float = minf(r.size.y, Catalogo.MUEBLES[m.tipo].get("choque_lado", r.size.y))
+		r = Rect2(r.position.x, r.end.y - alto, r.size.x, alto)
+	return r
+
+
+# El primer sitio, desde "desde" hacia "hacia" (como mucho 160 unidades), donde cabe un personaje entero en el suelo
+static func punto_libre(geo: Dictionary, desde: Vector2, hacia: Vector2) -> Vector2:
+	for k in range(8, 168, 8):
+		var p := desde + hacia * k
+		if Muebles.en_suelo(geo, Rect2(p - Vector2(HOLGURA + 8, HOLGURA + 8), Vector2(HOLGURA + 8, HOLGURA + 8) * 2.0)):
+			return p
+	return Vector2.INF
+
+
 # ═════════════ ¿Se sigue pudiendo pasar? ═════════════
 
 # Para cada mueble nuevo dice si, después de ponerlo, se sigue pudiendo andar entre todos los "puntos" y no
@@ -546,6 +660,8 @@ class Paso:
 	var quedan := 0                  # cuántas casillas libres hay
 	var metas := []
 	var siempre := false             # si el plano ya venía raro: mejor muebles de más que ninguno
+	var tolera := 0                  # cuántos cuadritos de suelo sin salida se aceptan (el repaso final: AISLADO_TOLERA)
+	var motivo := ""                 # por qué no cabe el último mueble que se ha mirado (para las pruebas)
 
 	func _init(geo: Dictionary, puntos: Array) -> void:
 		cols = geo.cols * 2
@@ -590,7 +706,10 @@ class Paso:
 				if libre[i] == 1 and zona.has_point(centro):
 					libre[i] = 0
 					quitadas.append(i)
-		if metas.all(func(m): return libre[m] == 1) and alcanzables() == quedan - quitadas.size():
+		var tapa := not metas.all(func(m): return libre[m] == 1)
+		var llega := 0 if tapa else alcanzables()
+		motivo = "tapa una puerta" if tapa else "deja %d casillas de suelo sin salida" % (quedan - quitadas.size() - llega)
+		if not tapa and llega >= quedan - quitadas.size() - tolera:
 			quedan -= quitadas.size()
 			return true
 		for i in quitadas:

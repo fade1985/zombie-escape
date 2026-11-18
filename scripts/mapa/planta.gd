@@ -349,6 +349,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# cerrada por sus tabiques, con oscuro alrededor)
 		sitio.cajas = true
 		sitio.arriba_extra = 68
+		# 18 nov: ningún mueble (tampoco los puestos a mano) tapa una puerta ni deja suelo sin salida (Muebles.repasar).
+		# Antes que los peligros, que se ponen mirando los muebles
+		Muebles.repasar(sitio)
 		# los peligros de la tienda (el frío de la cámara, el fuego de la cocina, el agua con corriente)
 		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
 		if jefe and su_jefe == "gloton":
@@ -498,6 +501,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# 76 del fondo del pasillo: mapa.gd, CARTEL_SALIDA_A; más bajo que el de la manguera, para no tocar el cartel)
 		pasillo.colgados.append({"x": ancho - MURO - 76, "alto": 34, "dibujo": "extintor"})
 		pasillo.alfombra = true
+	Muebles.repasar(pasillo)   # (como los de los pisos: ninguno tapa una puerta ni deja suelo sin salida)
 	if baja:
 		planta.armas = planta.sitios.size()
 		planta.sitios.append(sala_armas(planta.mantenimiento))
@@ -993,7 +997,7 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 
 # Un armarito colgado en la pared de arriba de un baño (Armarito en src/props.js del JS): al abrirlo suelta lo que tiene
 # dentro ("dentro"). M12: uno solo por apartamento, en uno de sus baños elegido al azar (los demás, sin armarito), con un
-# botiquín o unas vendas a medias; fuera de los apartamentos (el aseo de empleados del supermercado, M81), siempre el botiquín. Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
+# botiquín o unas vendas a medias; fuera de los apartamentos (el aseo de empleados de las tiendas, M81), igual (hasta el 18 nov, siempre el botiquín). Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
 # lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido, dentro}
 # Torre Velaria: la recepcionista se esconde detrás del mostrador del vestíbulo (el pasillo de la planta baja), con la
 # persiana bajada (tornos.gd). Su sitio: el pie del mostrador y, delante, donde espera al subirla; y el de los tornos,
@@ -1020,6 +1024,7 @@ static func cuarto_limpieza(sitio: Dictionary, sala: Dictionary, rng: RandomNumb
 	var lado: String = sitio.apt.entrada.lado
 	sitio.muebles = sitio.muebles.filter(func(m): return m.zona != sala.id) + Muebles.colocados(
 		Catalogo.SALAS["limpieza-rrhh"].colocados[lado], sala)
+	Muebles.repasar(sitio)
 	var otros: Array = sitio.peligros.filter(func(p): return p.tipo != "gas")
 	var gas := Peligros.gas(sitio, rng, true)
 	sitio.peligros = otros + ([gas] if not gas.is_empty() else [])
@@ -1083,9 +1088,10 @@ static func armaritos(sitio: Dictionary) -> Array:
 	if lista.is_empty():
 		return lista
 	# M12: uno solo, en un baño al azar, y dentro un botiquín o unas vendas (con la semilla de la planta, así que la
-	# misma planta lo pone igual)
+	# misma planta lo pone igual). También en los aseos de empleados de las tiendas (18 nov, lo pidió el dueño: antes,
+	# siempre el botiquín)
 	var uno: Dictionary = lista[rng.randi() % lista.size()]
-	uno.dentro = "botiquin" if sitio.get("tienda", "") != "" or rng.randf() < 0.5 else "vendas"
+	uno.dentro = "botiquin" if rng.randf() < 0.5 else "vendas"
 	return [uno]
 
 

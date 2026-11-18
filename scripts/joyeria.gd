@@ -31,7 +31,8 @@ const CUENTA := 40.0          # segundos de la apertura de emergencia
 const CADA := [5.0, 3.0]      # segundos entre grupo y grupo, al principio y al final
 const GRUPO := [2, 4]         # zombis por grupo, al principio y al final (y uno más por cada dos plantas)
 const TOPE := 24              # zombis a la vez, como mucho
-const TIPOS := [["normal", "normal", "lento", "dependienta", "rapido"],
+# (18 nov: sin la dependienta, lo pidió el dueño: su barrera en plena oleada era demasiado)
+const TIPOS := [["normal", "normal", "lento", "rapido"],
 	["normal", "rapido", "rapido", "vigilante", "explosivo"]]
 const SIRENA := 6.0           # cada cuánto suena la sirena
 const DELANTE := 64.0         # a qué distancia de la puerta se usa el lector

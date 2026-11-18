@@ -4,6 +4,124 @@
 extends "res://scripts/pruebas/prueba_fotos.gd"
 
 
+# Con "--captura --muebles-paso" (18 nov): genera muchas plantas de los tres edificios (las cuatro de cada uno, con cada
+# minijefe y "--semillas N" semillas, 12 si no se dice) y, en cada sitio, repasa los muebles como al final de
+# Planta.generar (Muebles.repasar, sin quitar nada): ningún mueble puede tapar una puerta ni dejar suelo al que no se
+# llega. Dice cuántos sitios ha mirado y cada mueble que corta el paso (esperado: ninguno). Luego se cierra
+func probar_muebles_paso() -> void:
+	var n_semillas := int(Captura.dato("--semillas", "12"))
+	var antes := Planta.semilla
+	var sitios := 0
+	var malos := 0
+	var dibujados := {}   # una foto de cada sala con algún mueble mal puesto
+	var quitados_al_generar := 0   # los repasos de Planta.generar que han tenido que quitar algo
+	Muebles.apuntar = true
+	for ed_id in ["apartamentos", "centro", "torre"]:
+		var jefes: Array = Edificios.datos(ed_id).get("minijefes", [""])
+		for k in n_semillas:
+			for num in range(1, Planta.PLANTAS):
+				Planta.semilla = 1000 + k * 37
+				var su_jefe: String = jefes[(k + num) % jefes.size()]
+				Muebles.apuntados = []
+				var p := Planta.generar(num, ed_id, su_jefe)
+				for ap in Muebles.apuntados:
+					quitados_al_generar += 1
+					var clave_q := "q-%s-%s" % [ed_id, ap.sitio.get("nombre", "?")]
+					if not dibujados.has(clave_q):
+						dibujados[clave_q] = true
+						var ahora: Array = ap.sitio.muebles
+						ap.sitio.muebles = ap.muebles   # (el plano con los muebles de antes del repaso)
+						Muebles.repasar(ap.sitio, false)
+						dibujar_paso(Muebles.ultimo_paso, ap.sitio, "captura-muebles-paso-%d.png" % dibujados.size())
+						ap.sitio.muebles = ahora
+				for sitio in p.sitios:
+					sitios += 1
+					var mal := Muebles.repasar(sitio, false)
+					for q in mal:
+						malos += 1
+						print("Muebles-paso · %s planta %d (semilla %d, %s) «%s»: %s" % [ed_id, num, Planta.semilla, su_jefe,
+							sitio.get("nombre", "?"), q])
+					var clave := "%s-%s" % [ed_id, sitio.get("nombre", "?")]
+					if not mal.is_empty() and not dibujados.has(clave):
+						dibujados[clave] = true
+						dibujar_paso(Muebles.ultimo_paso, sitio, "captura-muebles-paso-%d.png" % dibujados.size())
+	Planta.semilla = antes
+	Muebles.apuntar = false
+	print("Muebles-paso · %d sitios mirados, %d muebles que cortan el paso (esperado: 0); %d sitios a los que el repaso ha tenido que quitar algún mueble al generarlos (mejor 0: que los puestos a mano no lo necesiten)" % [
+		sitios, malos, quitados_al_generar])
+	if malos > 0:
+		Captura.fallar("hay muebles que cortan el paso")
+
+
+# Con "--captura --atasco-johnny" (18 nov): la salida de emergencia de Johnny (johnny.gd, desatascar). En un piso:
+#   1. Johnny metido a la fuerza dentro de un mueble y queriendo andar 2 s: sale al hueco libre más cercano
+#   2. Johnny empujando la pared de arriba del pasillo 2 s: no se le mueve (contra una pared no está atascado)
+# Foto: captura-atasco-johnny.png (ya fuera del mueble). Luego se cierra
+func probar_atasco_johnny() -> void:
+	nueva_planta(2)
+	var piso := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and not planta.sitios[i].muebles.is_empty():
+			piso = i
+			break
+	await montar(piso, 0, false)
+	var mueble: Node2D = get_tree().get_nodes_in_group("muebles").reduce(func(a, m): return m if a == null or \
+		m.datos.w * m.datos.h > a.datos.w * a.datos.h else a, null)
+	var dentro: Vector2 = mueble.global_position + Vector2(0, -mueble.datos.h / 2.0)
+	johnny.global_position = dentro
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().physics_frame
+	var encerrado_antes: bool = johnny.encerrado()
+	Input.action_press("derecha")
+	await get_tree().create_timer(2.0).timeout
+	Input.action_release("derecha")
+	await get_tree().create_timer(0.3).timeout
+	print("Atasco (dentro de «%s»): encerrado al meterlo %s · ya fuera %s · se ha ido a %d unidades (esperado: true, true, menos de 120)" % [
+		mueble.datos.tipo, encerrado_antes, not johnny.encerrado(), roundi(johnny.global_position.distance_to(dentro))])
+	Captura.foto("captura-atasco-johnny.png")
+	await montar(0, puerta_de_llegada(), false)
+	johnny.global_position = Vector2(mapa.sitio.ancho / 2.0 + 200.0, Planta.MURO + 30.0)
+	await get_tree().create_timer(0.3).timeout
+	var antes: Vector2 = johnny.global_position
+	Input.action_press("arriba")
+	await get_tree().create_timer(2.0).timeout
+	Input.action_release("arriba")
+	print("Atasco (empujando la pared del pasillo): se ha movido %d unidades (esperado: menos de 20)" % roundi(
+		johnny.global_position.distance_to(antes)))
+	get_tree().quit()
+
+
+# El plano de un repaso, a 4 píxeles por cuadrito de media casilla: muro en negro, suelo al que se llega en gris, suelo
+# sin salida en rojo, los muebles en marrón (el que corta el paso, en amarillo) y los puntos de las puertas en verde
+func dibujar_paso(paso: Muebles.Paso, sitio: Dictionary, archivo: String) -> void:
+	var img := Image.create(paso.cols * 4, paso.filas * 4, false, Image.FORMAT_RGB8)
+	var visto := PackedByteArray()
+	visto.resize(paso.libre.size())
+	var pila: Array[int] = [paso.metas[0]]
+	visto[paso.metas[0]] = 1
+	while not pila.is_empty():
+		var i: int = pila.pop_back()
+		for j in [i - paso.cols, i + paso.cols, i - 1 if i % paso.cols > 0 else -1, i + 1 if i % paso.cols < paso.cols - 1 else -1]:
+			if j >= 0 and j < paso.libre.size() and paso.libre[j] == 1 and visto[j] == 0:
+				visto[j] = 1
+				pila.append(j)
+	for i in paso.libre.size():
+		var color := Color.BLACK
+		if paso.libre[i] == 1:
+			color = Color(0.45, 0.45, 0.45) if visto[i] == 1 else Color(0.9, 0.15, 0.15)
+		img.fill_rect(Rect2i((i % paso.cols) * 4, (i / paso.cols) * 4, 4, 4), color)
+	var malos := Muebles.repasar(sitio, false)
+	for m in sitio.muebles:
+		var r := Muebles.choque(m)
+		var mal := malos.any(func(q): return q.begins_with("%s en %s" % [m.tipo, Vector2(m.x, m.y).round()]))
+		img.fill_rect(Rect2i(Vector2i(r.position / 4.0), Vector2i((r.size / 4.0).ceil())),
+			Color(1, 0.85, 0.1) if mal else Color(0.55, 0.35, 0.2))
+	for meta in paso.metas:
+		img.fill_rect(Rect2i((meta % paso.cols) * 4, (meta / paso.cols) * 4, 4, 4), Color(0.1, 0.9, 0.2))
+	img.save_png("res://capturas/" + archivo)
+	print("Muebles-paso · %s: %s" % [archivo, sitio.get("nombre", "?")])
+
+
 # Con "--captura --pasillo": el pasillo de las cuatro plantas con ascensor (la baja y la 1ª a la 3ª), con su cartel
 # pintado junto al ascensor (el número de la planta, de suelo a moldura) y, de momento, sin muebles. De cada una dice
 # cuántos muebles tiene (esperado: 0) y cómo se llaman la planta y dos de sus puertas en el idioma de la prueba (en inglés,
@@ -2665,6 +2783,15 @@ func probar_guardia() -> void:
 	Captura.foto("captura-guardia-de-cerca.png")
 	print("Guardia · antes de verle: alerta %s · dibujo %s (esperado: false, zombi-guardia.tres)" % [guardia.alerta,
 		guardia.sprite.sprite_frames.resource_path.get_file()])
+	# (18 nov) antes de rugir, inmune: ni un golpe ni el fuego le quitan vida (el golpe sí le hace rugir luego)
+	var vida0: int = guardia.vida
+	guardia.recibir_golpe(50, Vector2(100, 0))
+	guardia.herir(20.0)
+	print("Guardia · inmune antes de rugir: vida %d → %d tras un golpe de 50 y 20 de fuego (esperado: igual) · rugirá %s (esperado: true)" % [
+		vida0, guardia.vida, guardia.rugir_ya])
+	guardia.rugir_ya = false   # (que ruja al verle, como siempre en esta prueba)
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-guardia-inmune.png")
 	# le ve: ruge
 	johnny.position = guardia.global_position + Vector2(-230, 0)
 	johnny.get_node("Camara").reset_smoothing()
@@ -2679,6 +2806,9 @@ func probar_guardia() -> void:
 	print("Guardia · su sonido: el gruñido del botón JUGAR hace %d ms (esperado: menos de 500)" % (Time.get_ticks_msec() - Sonido.ultimo_grunido))
 	Captura.foto("captura-guardia-ruge.png")
 	await get_tree().create_timer(0.3, false).timeout
+	var vida1: int = guardia.vida
+	guardia.recibir_golpe(10, Vector2.ZERO)
+	print("Guardia · ya ha rugido: vida %d → %d tras un golpe de 10 (esperado: 10 menos)" % [vida1, guardia.vida])
 	print("Guardia · Johnny mientras ruge, pulsando a la izquierda: se mueve %.0f · sin mandos %.2f s más (esperado: 0, algo más de 0)" % [
 		johnny.position.distance_to(quieto0), johnny.sin_mandos])
 	print("Guardia · encima de Johnny: %s (esperado: ¡¡¡QUÉ SUSTO!!!)" % [johnny.get_parent().get_children().filter(func(n):

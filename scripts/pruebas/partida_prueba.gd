@@ -46,6 +46,8 @@
 #                       y se rompen, con fotos (M89)                                       [prueba_jefes.gd]
 #   --cocina            (con --edificio centro --jefe cocinero) la Cocina central (M82): los fogones y las
 #                       freidoras que rebosan aceite hirviendo, con fotos; y cuántos, normal y enfadado [prueba_jefes.gd]
+#                       (con --puerta-arriba, solo la cocina detrás de una puerta que se abre por arriba: ningún mueble
+#                       delante de la puerta, captura-cocina-puerta-arriba.png)
 #   --crios             (con --edificio centro --jefe mascota) cuántos críos salen en 20 s, normal y enfadada, cuántos
 #                       a la vez como mucho y a qué distancia de Johnny (M85)              [prueba_jefes.gd]
 #   --metal             (con --jefe gymbro) el cuerpo de metal de sus suplementos: sube, se desconcha y revienta; y
@@ -291,6 +293,10 @@
 #                       los trasteros, con E y «Dar de comer»: sin ella, apagado; con ella (mochila o baúl), te acompaña [prueba_sitios.gd]
 #   --charla            (17 nov) en los trasteros: el contorno amarillo del vecino con Johnny delante y, con la E, la
 #                       ventana de su vida (su comida en amarillo, «Seguir» y «Dar de comer»; captura-charla-*.png) [prueba_sitios.gd]
+#   --atasco-johnny     la salida de emergencia de Johnny: metido en un mueble y queriendo andar, sale al hueco libre
+#                       más cercano; empujando una pared, no se mueve                    [prueba_sitios.gd]
+#   --muebles-paso      muchas plantas de los tres edificios: ningún mueble tapa una puerta ni deja suelo al que no se
+#                       llega (Muebles.repasar; --semillas N, 12 si no se dice)         [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel, sin muebles, y el nombre de la planta y de sus
 #                       puertas en el idioma de la prueba (con --lang en, un número más que en español)   [prueba_sitios.gd]
 #   --cartel-sala       la puerta de acero de la sala de mantenimiento en el pasillo de la planta baja y su cartel, en
@@ -809,6 +815,13 @@ func empezar_prueba() -> void:
 	elif "--voz-reportera" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_voz_reportera()
+		get_tree().quit()
+	elif "--atasco-johnny" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_atasco_johnny()
+	elif "--muebles-paso" in args:
+		set_process(false)   # sin la prueba larga
+		probar_muebles_paso()
 		get_tree().quit()
 	elif "--dosier-plantas" in args:
 		set_process(false)   # sin la prueba larga

@@ -570,8 +570,8 @@ msgid "El guardia de la llave maestra"
 msgstr "O guarda da chave mestra"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
-msgstr "Leva a chave mestra do andar e sabe disso. Assim que te vê, ruge e chama os guardas."
+msgid "Lleva la llave maestra de la planta y lo sabe. Hasta que ruge, nada le hace daño; en cuanto te ve, ruge y llama a sus guardias."
+msgstr "Leva a chave mestra do andar e sabe disso. Até rugir, nada o machuca; assim que te vê, ruge e chama os guardas."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -729,7 +729,7 @@ msgstr "Uma cópia de Johnny feita com o sangue dele: rola para escapar das bala
 msgid "¡A ARDER!"
 msgstr "VAI ARDER!"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "IMUNE!"
 
@@ -3170,6 +3170,10 @@ msgid "¡¡¡%s!!!"
 msgstr "%s!!!"
 
 #: scripts/partida.gd
+msgid "¡¡¡PRIMERO, LA HORDA!!!"
+msgstr "PRIMEIRO, A HORDA!!!"
+
+#: scripts/partida.gd
 msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
 msgstr "MELHOR INVESTIGAR MAIS UM POUCO!!!"
 
@@ -3440,6 +3444,10 @@ msgstr "Me viram! Lá vêm eles..."
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "O cômodo está em chamas! Longe das paredes"
+
+#: scripts/peligros/cuadro.gd scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "Usar"
 
 #: scripts/peligros/frio.gd
 msgid "¡Brrr! Qué frío hace en la cámara"
@@ -5052,8 +5060,8 @@ msgid "Al encontrar al técnico"
 msgstr "Ao encontrar o técnico"
 
 #: scripts/tutoriales.gd
-msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
-msgstr "Ele não sai sem consertar o fio desencapado, mas com energia ele não consegue: fique na frente do quadro elétrico da loja para abaixar a alavanca."
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda y baja la palanca con {usar}."
+msgstr "Ele não sai sem consertar o fio desencapado, mas com energia ele não consegue: fique na frente do quadro elétrico da loja e abaixe a alavanca com {usar}."
 
 #: scripts/tutoriales.gd
 msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
@@ -5885,10 +5893,6 @@ msgstr "Te cura %d de vida, sem passar do terço em que você está."
 #: scripts/ui/inventario.gd
 msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
 msgstr "Sem abrir o inventário, use com a tecla %s. Dá para levar no máximo %d. Se você cair, perde (no baú fica a salvo)."
-
-#: scripts/ui/inventario.gd
-msgid "Usar"
-msgstr "Usar"
 
 #: scripts/ui/inventario.gd
 msgid "Destruir"

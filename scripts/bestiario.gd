@@ -67,7 +67,7 @@ const LISTA := {
 		"recorte": Rect2i(34, 32, 27, 47), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	# el guardia, el jefe de seguridad (17 nov: con su propio dibujo, hecho con GPT)
 	"guardia": {"nombre": "El guardia de la llave maestra",
-		"frase": "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias.",
+		"frase": "Lleva la llave maestra de la planta y lo sabe. Hasta que ruge, nada le hace daño; en cuanto te ve, ruge y llama a sus guardias.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-guardia.tres",
 		"recorte": Rect2i(32, 32, 31, 47), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	# los de Torre Velaria (parte 4 del plan)

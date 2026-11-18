@@ -7,8 +7,9 @@
 #             "agua") y en algunos cae un cable pelado que da calambrazos a Johnny y a los zombis (Cable, abajo)
 #   horda     una horda grande llena el pasillo: no empieza hasta que Johnny llega al medio del pasillo (el dueño, 28
 #             oct); entonces salen todos de golpe (a los 2 s del cartel), por los dos extremos, justo fuera de pantalla (a su izquierda y a su
-#             derecha, alternando: lo cogen entre dos), y van a por él; si Johnny se mete en un piso, los que quedan le
-#             esperan en el pasillo. Al acabar con todos, un premio
+#             derecha, alternando: lo cogen entre dos), y van a por él. Mientras dura no se puede cruzar ninguna puerta del
+#             pasillo (18 nov, lo pidió el dueño: antes se metía en un piso y los que quedaban le esperaban fuera;
+#             horda_en_marcha, partida.cruzar). Al acabar con todos, un premio
 # El apagón y el incendio también dan premio (desde el 27 oct; antes solo ponían las cosas difíciles): al subir a la
 # siguiente planta, los mismos dólares que la horda, directos a la cartera de la partida (superado()). Los tres dan
 # además munición de las armas de fuego que lleva Johnny (partida.soltar_municion_armas; 16 nov)
@@ -205,6 +206,11 @@ func etiqueta() -> String:
 	if not activo or (evento == "horda" and horda.get("hecha", false)):
 		return ""
 	return " · " + Idioma.t(DATOS[evento].nombre)
+
+
+# ¿Hay una horda en el pasillo, desde su cartel hasta caer el último? Entonces no se cruza ninguna puerta (partida.cruzar)
+func horda_en_marcha() -> bool:
+	return activo and evento == "horda" and empezado and not horda.get("hecha", true) and partida.aqui == 0
 
 
 # ¿Está Johnny en el medio del pasillo (a HORDA.medio como mucho)? Lo que hace falta para que empiece la horda
@@ -572,6 +578,17 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 		a_la_izquierda, z.size() - a_la_izquierda, cerca])
 	await esperar.call(2.5)   # (salen fuera de pantalla: que lleguen a verse para la foto)
 	foto.call("horda")
+	# (18 nov) en plena horda no se cruza ninguna puerta: ni la de un piso ni ninguna otra
+	var cruzadas := 0
+	for i in partida.planta.sitios[0].salidas.size():
+		partida.cruzar(i)
+		await esperar.call(0.1)
+		if partida.aqui != 0 or partida.cambiando:
+			cruzadas += 1
+			break
+	print("Horda · puertas que se dejan cruzar en plena horda: %d (esperado: 0) · Johnny dice «%s»" % [cruzadas,
+		partida.aviso.text])
+	foto.call("horda-sin-salir")
 	# Johnny se mete en un piso: los que quedan le esperarán en el pasillo
 	await partida.montar(piso(false), 0, false)
 	print("Horda · al irse se apuntan %d" % horda.quedan.size())

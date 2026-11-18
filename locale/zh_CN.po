@@ -569,8 +569,8 @@ msgid "El guardia de la llave maestra"
 msgstr "持万能钥匙的保安"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
-msgstr "他拿着这层楼的万能钥匙，而且心里有数。一看到你，就会咆哮着叫来他的保安。"
+msgid "Lleva la llave maestra de la planta y lo sabe. Hasta que ruge, nada le hace daño; en cuanto te ve, ruge y llama a sus guardias."
+msgstr "他拿着这层楼的万能钥匙，而且心里有数。咆哮之前，什么都伤不了他；一看到你，就会咆哮着叫来他的保安。"
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -728,7 +728,7 @@ msgstr "用强尼的血造出来的复制品：会翻滚躲开子弹，抡起拖
 msgid "¡A ARDER!"
 msgstr "消防演习！"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "免疫！"
 
@@ -3166,6 +3166,10 @@ msgid "¡¡¡%s!!!"
 msgstr "%s！！！"
 
 #: scripts/partida.gd
+msgid "¡¡¡PRIMERO, LA HORDA!!!"
+msgstr "先解决尸潮！！！"
+
+#: scripts/partida.gd
 msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
 msgstr "还是再四处看看吧！！！"
 
@@ -3432,6 +3436,10 @@ msgstr "被发现了！它们来了……"
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "房间着火了！离墙远点"
+
+#: scripts/peligros/cuadro.gd scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "使用"
 
 #: scripts/peligros/frio.gd
 msgid "¡Brrr! Qué frío hace en la cámara"
@@ -5044,8 +5052,8 @@ msgid "Al encontrar al técnico"
 msgstr "找到电工时"
 
 #: scripts/tutoriales.gd
-msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
-msgstr "他不修好裸露的电线就不肯走，可通着电没法修：站到商店的配电箱前，拉下电闸。"
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda y baja la palanca con {usar}."
+msgstr "他不修好裸露的电线就不肯走，可通着电没法修：站到商店的配电箱前，用{usar}拉下电闸。"
 
 #: scripts/tutoriales.gd
 msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
@@ -5876,10 +5884,6 @@ msgstr "恢复 %d 点生命，但不会超过当前这一段。"
 #: scripts/ui/inventario.gd
 msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
 msgstr "不打开物品栏也能用%s键使用。最多携带 %d 个。倒下就会丢失（放在储物箱里则很安全）。"
-
-#: scripts/ui/inventario.gd
-msgid "Usar"
-msgstr "使用"
 
 #: scripts/ui/inventario.gd
 msgid "Destruir"

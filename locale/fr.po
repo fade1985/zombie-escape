@@ -570,8 +570,8 @@ msgid "El guardia de la llave maestra"
 msgstr "Le garde au passe-partout"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
-msgstr "Il a le passe-partout de l'étage et il le sait. Dès qu'il te voit, il rugit et appelle ses gardes."
+msgid "Lleva la llave maestra de la planta y lo sabe. Hasta que ruge, nada le hace daño; en cuanto te ve, ruge y llama a sus guardias."
+msgstr "Il a le passe-partout de l'étage et il le sait. Tant qu'il n'a pas rugi, rien ne lui fait mal ; dès qu'il te voit, il rugit et appelle ses gardes."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -729,7 +729,7 @@ msgstr "Une copie de Johnny faite avec son sang : il roule pour esquiver les bal
 msgid "¡A ARDER!"
 msgstr "AU FEU !"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "IMMUNISÉ !"
 
@@ -3170,6 +3170,10 @@ msgid "¡¡¡%s!!!"
 msgstr "%s !!!"
 
 #: scripts/partida.gd
+msgid "¡¡¡PRIMERO, LA HORDA!!!"
+msgstr "D'ABORD LA HORDE !!!"
+
+#: scripts/partida.gd
 msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
 msgstr "JE FERAIS MIEUX DE FOUILLER UN PEU PLUS !!!"
 
@@ -3440,6 +3444,10 @@ msgstr "Ils m'ont vu ! Ils arrivent..."
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "La pièce est en feu ! Éloigne-toi des murs"
+
+#: scripts/peligros/cuadro.gd scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "Utiliser"
 
 #: scripts/peligros/frio.gd
 msgid "¡Brrr! Qué frío hace en la cámara"
@@ -5052,8 +5060,8 @@ msgid "Al encontrar al técnico"
 msgstr "En trouvant le technicien"
 
 #: scripts/tutoriales.gd
-msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
-msgstr "Il ne part pas sans réparer le câble dénudé, mais il ne peut pas tant que le courant passe : place-toi devant le tableau électrique du magasin pour abaisser le levier."
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda y baja la palanca con {usar}."
+msgstr "Il ne part pas sans réparer le câble dénudé, mais il ne peut pas tant que le courant passe : place-toi devant le tableau électrique du magasin et abaisse le levier avec {usar}."
 
 #: scripts/tutoriales.gd
 msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
@@ -5885,10 +5893,6 @@ msgstr "Te soigne de %d, sans dépasser le tiers où tu es."
 #: scripts/ui/inventario.gd
 msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
 msgstr "Sans ouvrir l'inventaire, il s'utilise avec la touche %s. On en porte %d au maximum. Si tu tombes, il est perdu (dans le coffre, il est à l'abri)."
-
-#: scripts/ui/inventario.gd
-msgid "Usar"
-msgstr "Utiliser"
 
 #: scripts/ui/inventario.gd
 msgid "Destruir"

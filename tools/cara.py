@@ -103,7 +103,9 @@ def rojo_casco(c):
     if c[3] == 0:
         return False
     h, s, v = tsv(c)
-    return (h >= 345 or h <= 14) and s >= 0.6 and 0.12 <= v <= 0.42
+    # (18 nov) hasta 0,62 de luz: en algunos dibujos el pelo de siempre es de ese rojo oscuro (140, 58, 40) y asomaba
+    # por encima del casco
+    return (h >= 345 or h <= 14) and s >= 0.6 and 0.12 <= v <= 0.62
 
 
 def vivo(c, johnny):
@@ -413,7 +415,9 @@ def delante(px, x0, y0, cw, ch, t, cabeza, po, johnny):
         if n[3] == 0 or not (y <= BARBILLA and po[x, y][3] > 0) or not (0 <= X < cw and 0 <= Y < ch):
             continue
         f = px[x0 + X, y0 + Y]
-        if f[3] > 0 and johnny.es_suyo(f) and not de_cabeza(f):
+        # (18 nov) las sombras oscuras del pañuelo (rojo_casco) también son de la cabeza: si no, contaban como cuerpo y
+        # quedaban motas de color piel en lo alto del casco
+        if f[3] > 0 and johnny.es_suyo(f) and not de_cabeza(f) and not rojo_casco(f):
             cuerpo.add((X, Y))
         elif es_piel(f) and not es_piel(po[x, y]):
             manos.add((X, Y))

@@ -47,6 +47,8 @@ const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igua
 const PASO := {"e": 96.0, "o": 96.0, "se": 84.0, "so": 84.0, "ne": 84.0, "no": 84.0, "s": 84.0, "n": 84.0}
 const RADIO := 18.0        # su círculo de choque (los zombis lo usan para saber si está a tiro)
 
+const ATASCO := 1.0         # segundos queriendo andar sin moverse y sin poder moverse hacia ningún lado: entonces se le
+						   # saca al hueco libre más cercano (desatascar)
 const INVULNERABLE := 0.7  # segundos sin recibir daño después de un zarpazo (parpadea; M72: antes 0,9, como en el juego JS)
 # Lo que anda más lento por cada tercio de vida perdido: con 210 (mejoras.gd), 179 y 147. Con un tercio perdido aún
 # huye del zombi rápido (165); con dos, ya no. En el JS era 0,25 (aquí serían 210, 158 y 105)
@@ -117,6 +119,7 @@ var escudo_mut := 0.0      # lo que queda del escudo de Endurecimiento: se da un
 var escudo_tope := 0.0     # lo que tenía de escudo al empezar la planta (o al ganarlo): lo lleno de su barra (hud.gd)
 var despedido_t := 0.0     # sin poder usar el arma de fuego (el sello de la directora: despedir())
 var esquiva_t := 0.0       # lo que le queda al acelerón de la esquiva (0 = no está esquivando)
+var atascado_t := 0.0      # lo que lleva queriendo andar sin moverse (desatascar)
 var esquiva_espera := 0.0  # lo que falta para poder esquivar otra vez
 var esquiva_dir := Vector2.DOWN
 var estela_t := 0.0        # para soltar las copias transparentes de la estela
@@ -405,6 +408,63 @@ func _notification(que: int) -> void:
 			reset_physics_interpolation()
 		sitio_dibujo = global_position
 
+# La salida de emergencia (18 nov, lo pidió el dueño: Johnny se quedó atrapado entre un fogón y la pared de la Cocina
+# central, sin poder salir, y tuvo que abandonar la partida). Si lleva ATASCO segundos queriendo andar y no se mueve,
+# se mira si de verdad no puede moverse hacia ningún lado (empujar una pared no cuenta: hacia atrás sí puede); si es
+# así, aparece en el hueco libre más cercano, con una nubecita de polvo
+func desatascar(delta: float, pedido: Vector2) -> void:
+	if pedido.length() < 0.5 or esquiva_t > 0.0 or get_real_velocity().length() > 20.0:
+		atascado_t = 0.0
+		return
+	atascado_t += delta
+	if atascado_t < ATASCO:
+		return
+	atascado_t = 0.0
+	if not encerrado():
+		return
+	var salida := hueco_libre()
+	if salida == Vector2.INF:
+		return
+	print("Johnny atascado en %s: sale a %s" % [global_position.round(), salida.round()])
+	for i in 8:
+		Particulas.soltar(self, global_position + Vector2(0, 14), Vector2.from_angle(i * TAU / 8.0) * 60.0,
+			Color(0.75, 0.7, 0.62, 0.8), 3, 0.35)
+	global_position = salida
+	velocity = Vector2.ZERO
+	reset_physics_interpolation()
+
+
+# ¿No puede dar ni un paso hacia ningún lado? (dentro de un mueble o entre dos, sin hueco)
+func encerrado() -> bool:
+	for i in 8:
+		if not test_move(global_transform, Vector2.from_angle(i * TAU / 8.0) * 6.0):
+			return false
+	return true
+
+
+# El sitio libre más cercano donde cabe Johnny entero (sin muro ni mueble), en anillos de 8 en 8 unidades hasta 240,
+# dentro del suelo del mapa. Vector2.INF si no hay ninguno
+func hueco_libre() -> Vector2:
+	var espacio := get_world_2d().direct_space_state
+	var consulta := PhysicsShapeQueryParameters2D.new()
+	var circulo := CircleShape2D.new()
+	circulo.radius = 20.0   # (Johnny mide 18 de radio: con un poco de holgura)
+	consulta.shape = circulo
+	consulta.collision_mask = collision_mask
+	consulta.exclude = [get_rid()]
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	for r in range(8, 248, 8):
+		var vueltas := maxi(8, roundi(TAU * r / 12.0))
+		for i in vueltas:
+			var p := global_position + Vector2.from_angle(i * TAU / vueltas) * r
+			if mapa and mapa.has_method("zona_en") and mapa.zona_en(p) < 0:
+				continue
+			consulta.transform = Transform2D(0.0, p)
+			if espacio.intersect_shape(consulta, 1).is_empty():
+				return p
+	return Vector2.INF
+
+
 func _physics_process(delta: float) -> void:
 	espera -= delta
 	invulnerable -= delta
@@ -533,6 +593,7 @@ func _physics_process(delta: float) -> void:
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
 	move_and_slide()
+	desatascar(delta, pedido)
 	if pedido.length() > 0.1:
 		direccion = direccion_de(pedido)
 

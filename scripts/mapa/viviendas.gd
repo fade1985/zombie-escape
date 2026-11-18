@@ -115,6 +115,7 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	# cada sala en el catálogo ("habitacion-<id>" y "pasillo-viviendas")
 	for s in salas:
 		sitio.muebles += Muebles.colocados(Catalogo.SALAS.get(s.uso + "-" + s.tipo, {}).get("colocados", {}).get("izquierda", []), s)
+	Muebles.repasar(sitio)   # (ningún mueble tapa una puerta ni deja suelo sin salida)
 	return sitio
 
 

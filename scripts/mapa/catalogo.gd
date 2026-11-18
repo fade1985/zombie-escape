@@ -443,7 +443,9 @@ const SALAS := {
 	}},
 	"almacen-supermercado": {"colocados": {
 		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.0], ["lockers", 8.0], ["pallet", 6.0, "izquierda"]],
-		"arriba": [["metalshelf", 1.5], ["lockers", 8.5], ["pallet", 7.0, "izquierda"], ["pallet", 3.0, "abajo"]],
+		# (volteado, la sala es una L: arriba, un brazo estrecho hacia la derecha; las taquillas, al fondo de ese brazo, que no
+		# tapen su boca ni la puerta de arriba: Muebles.repasar, 18 nov)
+		"arriba": [["metalshelf", 1.5], ["lockers", 15.5], ["pallet", 7.0, "izquierda"], ["pallet", 3.0, "abajo"]],
 	}},
 	"bano-supermercado": {"colocados": {
 		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
@@ -641,7 +643,9 @@ const SALAS := {
 	"rebotica-farmacia": {"colocados": {
 		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.25], ["metalshelf", 7.0], ["pallet", 10.25], ["pallet", 4.5, "derecha"],
 			["pharmacycounter", 8.5, "libre", 5.0]],
-		"arriba": [["metalshelf", 1.25], ["metalshelf", 3.5], ["pallet", 10.5], ["pallet", 4.5, "derecha"], ["pallet", 6.0, "abajo"],
+		# (volteada, el palé de la pared de abajo, a la izquierda: en medio cerraba con el mostrador la esquina de abajo a la
+		# derecha, Muebles.repasar, 18 nov)
+		"arriba": [["metalshelf", 1.25], ["metalshelf", 3.5], ["pallet", 10.5], ["pallet", 4.5, "derecha"], ["pallet", 2.0, "abajo"],
 			["pharmacycounter", 8.5, "libre", 5.0]],
 	}},
 	"bano-farmacia": {"colocados": {
@@ -725,7 +729,9 @@ const SALAS := {
 	# (con la tele de las noticias de la torre: Planta.TELE_EN, M92)
 	"office-atencion": {"colocados": {
 		"abajo": [["officekitchen", 1.5], ["filecabinet", 4.0], ["tv", 6.0], ["drinkfridge", 8.0], ["watercooler", 6.0, "izquierda"]],
-		"arriba": [["officekitchen", 1.5], ["tv", 7.25], ["drinkfridge", 9.375], ["watercooler", 7.0, "izquierda"], ["watercooler", 3.0, "abajo"]],
+		# (volteada, la sala es una L, como el almacén del supermercado: la nevera, al fondo de su brazo estrecho, que no tape
+		# la boca: Muebles.repasar, 18 nov)
+		"arriba": [["officekitchen", 1.5], ["tv", 7.25], ["drinkfridge", 16.25], ["watercooler", 7.0, "izquierda"], ["watercooler", 3.0, "abajo"]],
 	}},
 	"bano-atencion": {"colocados": {
 		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],

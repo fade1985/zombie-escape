@@ -566,6 +566,15 @@ func probar_fotocopias() -> void:
 # Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los
 # muebles con su charco ya extendido (-llena-izquierda y -llena-derecha). Cuenta cuántos rebosan en 60 s, normal y enfadado, y cuántas veces dos a la vez
 func probar_cocina() -> void:
+	if "--puerta-arriba" in OS.get_cmdline_user_args():
+		# (18 nov) la Cocina central detrás de una puerta de abajo del pasillo, que se abre por arriba: antes el fogón del
+		# medio de la pared del fondo quedaba delante de la puerta y Johnny se quedó atrapado ahí; ahora los de esa pared,
+		# a cada lado (Muebles.fijos). Busca una semilla con la puerta así
+		for k in 60:
+			Planta.semilla = 5000 + k
+			var p := Planta.generar(2, edificio, "cocinero")
+			if p.sitios.any(func(s): return s.tipo == "jefe" and s.apt.entrada.lado == "arriba"):
+				break
 	if not await ir_a_la_sala_del_jefe("cocinero"):
 		return
 	jefa.set_physics_process(false)
@@ -574,6 +583,17 @@ func probar_cocina() -> void:
 	print("Cocina: %d muebles que rebosan (esperado: 9, tres arriba, tres a la izquierda y tres a la derecha): %s" % [fogones.size(), fogones.map(func(m): return "%s en %s" % [
 		m.datos.tipo, m.datos.lado])])
 	if fogones.is_empty():
+		return
+	if "--puerta-arriba" in OS.get_cmdline_user_args():
+		var sitio: Dictionary = mapa.sitio
+		var entrada: Rect2 = Muebles.delante_de({"cols": sitio.apt.cols, "filas": sitio.apt.filas}, sitio.apt.entrada.lado,
+			(sitio.apt.entrada.c + 1) * Peligros.CASILLA)
+		print("Cocina: la puerta, en la pared de %s (esperado: arriba) · muebles delante de ella %d (esperado: 0)" % [
+			sitio.apt.entrada.lado, sitio.muebles.filter(func(m): return Muebles.hueco(m).intersects(entrada)).size()])
+		johnny.global_position = entrada.get_center()
+		await get_tree().create_timer(1.0, false).timeout
+		Captura.foto("captura-cocina-puerta-arriba.png")
+		get_tree().quit()
 		return
 	# Johnny, en medio de la cocina (entre los muebles)
 	var medio := Vector2.ZERO

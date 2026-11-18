@@ -879,6 +879,12 @@ func cruzar(i: int) -> void:
 		return
 	if aqui == planta.armas:
 		return   # de la sala de pruebas no se sale por la puerta (para no salir sin querer): solo con F9
+	if eventos.horda_en_marcha():
+		# (18 nov, lo pidió el dueño) con la horda en el pasillo no se entra en ninguna parte: hay que acabar con ella
+		decir(Idioma.t("¡¡¡PRIMERO, LA HORDA!!!"))   # (el aviso de abajo, escondido: el que leen las pruebas)
+		gran_aviso(Idioma.t("¡¡¡PRIMERO, LA HORDA!!!"))
+		Sonido.tocar("no")
+		return
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
 	# (y nunca sin haber cogido el regalo de bienvenida, la pistola y los lanzables: Johnny empieza solo con la fregona,

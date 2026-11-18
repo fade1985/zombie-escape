@@ -19,8 +19,9 @@ const DURA := 60.0          # segundos de trabajo (no cuentan con corriente, ni 
 const TOPE := 60            # zombis a la vez, como mucho (contando los que queden de la tienda)
 const CADA := [3.0, 1.5]    # segundos entre grupo y grupo, al principio y al final
 const GRUPO := [4, 9]       # zombis por grupo, igual
-const TIPOS := [["lento", "normal", "normal", "dependienta"],
-	["normal", "rapido", "rapido", "vigilante", "dependienta", "explosivo"]]   # la primera mitad y la segunda
+# la primera mitad y la segunda (18 nov: sin la dependienta, lo pidió el dueño: su barrera en plena oleada era demasiado)
+const TIPOS := [["lento", "normal", "normal"],
+	["normal", "rapido", "rapido", "vigilante", "explosivo"]]
 # Lo que dice el técnico (en español; sale con Idioma.t)
 # [traducir]
 const FRASES := [

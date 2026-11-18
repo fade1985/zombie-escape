@@ -570,8 +570,8 @@ msgid "El guardia de la llave maestra"
 msgstr "The Master Key Guard"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
-msgstr "He's got the floor's master key and he knows it. The moment he sees you, he roars and calls his guards."
+msgid "Lleva la llave maestra de la planta y lo sabe. Hasta que ruge, nada le hace daño; en cuanto te ve, ruge y llama a sus guardias."
+msgstr "He's got the floor's master key and he knows it. Until he roars, nothing can hurt him; the moment he sees you, he roars and calls his guards."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -729,7 +729,7 @@ msgstr "A copy of Johnny made from his blood: rolls to dodge bullets, sweeps wit
 msgid "¡A ARDER!"
 msgstr "FIRE DRILL!"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "IMMUNE!"
 
@@ -3170,6 +3170,10 @@ msgid "¡¡¡%s!!!"
 msgstr "%s!!!"
 
 #: scripts/partida.gd
+msgid "¡¡¡PRIMERO, LA HORDA!!!"
+msgstr "THE HORDE FIRST!!!"
+
+#: scripts/partida.gd
 msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
 msgstr "I'D BETTER LOOK AROUND A BIT MORE!!!"
 
@@ -3440,6 +3444,10 @@ msgstr "They spotted me! Here they come..."
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "The room is on fire! Stay away from the walls"
+
+#: scripts/peligros/cuadro.gd scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "Use"
 
 #: scripts/peligros/frio.gd
 msgid "¡Brrr! Qué frío hace en la cámara"
@@ -5052,8 +5060,8 @@ msgid "Al encontrar al técnico"
 msgstr "On finding the Technician"
 
 #: scripts/tutoriales.gd
-msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
-msgstr "He won't leave without fixing the exposed wire, but he can't with the power on: stand in front of the store's electrical panel to pull the lever."
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda y baja la palanca con {usar}."
+msgstr "He won't leave without fixing the exposed wire, but he can't with the power on: stand in front of the store's electrical panel and pull the lever with {usar}."
 
 #: scripts/tutoriales.gd
 msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
@@ -5885,10 +5893,6 @@ msgstr "Heals %d health, without going past the third you're in."
 #: scripts/ui/inventario.gd
 msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
 msgstr "Use it without opening the inventory with the %s key. You can carry %d at most. If you die, it's lost (safe in the stash)."
-
-#: scripts/ui/inventario.gd
-msgid "Usar"
-msgstr "Use"
 
 #: scripts/ui/inventario.gd
 msgid "Destruir"

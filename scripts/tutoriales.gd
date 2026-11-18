@@ -153,7 +153,7 @@ const LISTA := {
 			"Por el camino salen durmientes. No te alejes de ella: si se queda sola, van a por ella."]},
 	"rescate_averia": {"grupo": "Supervivientes", "titulo": "El técnico", "icono": "medico",
 		"cuando": "Al encontrar al técnico",
-		"lineas": ["No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca.",
+		"lineas": ["No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda y baja la palanca con {usar}.",
 			"Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."]},
 	"rescate_copia": {"grupo": "Supervivientes", "titulo": "El informático joven", "icono": "medico",
 		"cuando": "Al encontrar al informático joven",

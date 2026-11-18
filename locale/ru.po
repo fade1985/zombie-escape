@@ -571,8 +571,8 @@ msgid "El guardia de la llave maestra"
 msgstr "Охранник с мастер-ключом"
 
 #: scripts/bestiario.gd
-msgid "Lleva la llave maestra de la planta y lo sabe. En cuanto te ve, ruge y llama a sus guardias."
-msgstr "У него мастер-ключ от этажа, и он это знает. Как только тебя увидит, ревёт и зовёт своих охранников."
+msgid "Lleva la llave maestra de la planta y lo sabe. Hasta que ruge, nada le hace daño; en cuanto te ve, ruge y llama a sus guardias."
+msgstr "У него мастер-ключ от этажа, и он это знает. Пока не заревёт, его ничто не берёт; как только тебя увидит, ревёт и зовёт своих охранников."
 
 #: scripts/bestiario.gd
 msgid "El oficinista"
@@ -730,7 +730,7 @@ msgstr "Копия Джонни, сделанная из его крови: пе
 msgid "¡A ARDER!"
 msgstr "ГОРИ ЯСНО!"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "НЕ БЕРЕТ!"
 
@@ -3174,6 +3174,10 @@ msgid "¡¡¡%s!!!"
 msgstr "%s!!!"
 
 #: scripts/partida.gd
+msgid "¡¡¡PRIMERO, LA HORDA!!!"
+msgstr "СНАЧАЛА ОРДА!!!"
+
+#: scripts/partida.gd
 msgid "¡¡¡MEJOR INVESTIGO UN POCO MÁS!!!"
 msgstr "ЛУЧШЕ ОСМОТРЮСЬ ЕЩЁ НЕМНОГО!!!"
 
@@ -3448,6 +3452,10 @@ msgstr "Меня заметили! Идут..."
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "Комната в огне! Держись подальше от стен"
+
+#: scripts/peligros/cuadro.gd scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "Применить"
 
 #: scripts/peligros/frio.gd
 msgid "¡Brrr! Qué frío hace en la cámara"
@@ -5060,8 +5068,8 @@ msgid "Al encontrar al técnico"
 msgstr "Когда находишь Техника"
 
 #: scripts/tutoriales.gd
-msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda para bajar la palanca."
-msgstr "Он не уйдет, пока не починит оголенный провод, но под напряжением не может: встань перед электрощитком магазина и опусти рубильник."
+msgid "No se va sin arreglar el cable pelado, pero con corriente no puede: ponte delante del cuadro eléctrico de la tienda y baja la palanca con {usar}."
+msgstr "Он не уйдет, пока не починит оголенный провод, но под напряжением не может: встань перед электрощитком магазина и опусти рубильник ({usar})."
 
 #: scripts/tutoriales.gd
 msgid "Se queda todo a oscuras y entran durmientes: protégelo hasta que acabe."
@@ -5894,10 +5902,6 @@ msgstr "Лечит на %d, но не выше текущей трети."
 #: scripts/ui/inventario.gd
 msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
 msgstr "Без инвентаря используется клавишей %s. Можно носить не больше %d. Если падешь, пропадет (в сундуке — в сохранности)."
-
-#: scripts/ui/inventario.gd
-msgid "Usar"
-msgstr "Применить"
 
 #: scripts/ui/inventario.gd
 msgid "Destruir"

@@ -354,6 +354,15 @@ func foto_grito() -> void:
 	print("Barrera: vida %d → %d tras un golpe de 15 y 10 de fuego (esperado: igual) | la burbuja para una bala: %s (esperado true)" % [
 		antes, v0.vida, v0.escudo_toca(v0.centro_burbuja() + Vector2(v0.radio_burbuja() - 4.0, 0))])
 	Captura.foto("captura-nuevos.png")
+	# (18 nov) uno de ellos muere con la barrera puesta (aquí, a mano): su burbuja baja igual y no se queda en el cadáver
+	var muerto: Zombi = otros[2]
+	muerto.meter_barrera(dep)   # (por si el grito no le ha llegado)
+	await get_tree().create_timer(0.6).timeout
+	var subida := muerto.barrera_k
+	muerto.morir()
+	await get_tree().create_timer(1.0).timeout
+	print("Barrera de un muerto: subida antes de morir %.1f, a la vista 1 s después %s (esperado: 1.0, false)" % [subida,
+		muerto.capas_barrera.any(func(c): return c.visible)])
 	dep.recibir_golpe(999, Vector2(100, 0))
 	await get_tree().create_timer(0.5).timeout
 	antes = v0.vida
@@ -371,7 +380,8 @@ func foto_grito() -> void:
 #   captura-peligro-fuego.png    desde la puerta de la cocina, con zombis ardiendo
 #   captura-peligro-agua.png     en pleno calambrazo, con zombis en el agua
 #   captura-peligro-sin-luz.png  después de bajar la palanca (la tienda a oscuras)
-#   captura-peligro-cuadro.png   delante del cuadro eléctrico (que la vuelve a subir)
+#   captura-peligro-cuadro-contorno.png  delante del cuadro eléctrico, con su contorno amarillo (aún sin usarlo)
+#   captura-peligro-cuadro.png   delante del cuadro eléctrico, después de usarlo con la E (vuelve la luz)
 func fotos_peligros(s: Dictionary) -> void:
 	for nodo in mapa.peligros:
 		var d: Dictionary = nodo.datos
@@ -436,8 +446,17 @@ func fotos_peligros(s: Dictionary) -> void:
 			johnny.position = Vector2(d.cuadro.x, d.cuadro.y + 40.0)
 			johnny.get_node("Camara").reset_smoothing()
 			await get_tree().create_timer(1.2).timeout
+			# (18 nov) plantado delante no pasa nada: la palanca se sube con la acción de usar (la E), con el contorno puesto
+			print("  delante del cuadro, sin usarlo: corriente %s · contorno %s (esperado: false, true)" % [d.corriente,
+				nodo.cuadro.contorno.visible])
+			Captura.foto("captura-peligro-cuadro-contorno.png")
+			Input.action_press("usar")
+			await get_tree().physics_frame
+			await get_tree().physics_frame
+			Input.action_release("usar")
+			await get_tree().create_timer(1.2).timeout
 			Captura.foto("captura-peligro-cuadro.png")
-			print("  delante del cuadro: corriente %s | oscuridad %.2f" % [d.corriente, Luz.nivel])
+			print("  delante del cuadro, con la E: corriente %s | oscuridad %.2f (esperado: true)" % [d.corriente, Luz.nivel])
 		for z in get_tree().get_nodes_in_group("zombis"):
 			z.queue_free()
 		johnny.vida = johnny.stats.vida_max
