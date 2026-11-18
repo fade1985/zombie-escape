@@ -607,7 +607,7 @@ const SALAS := {
 	# de la entrada (casillas 21,5 a 24,5) y el de delante de los probadores
 	"tienda-ropa": {"colocados": {
 		"abajo": [
-			["ropamodulo", 2.9, "libre", 4.5], ["ropabarra", 8.4, "libre", 4.4375], ["ropaoval", 20.9, "libre", 4.5], ["ropazapatos", 23.6, "libre", 4.5],
+			["ropabarra", 10.3, "libre", 4.4375], ["ropaoval", 14.1, "libre", 4.5], ["ropamodulo", 19.75, "libre", 4.5], ["ropazapatos", 36.0, "libre", 8.0],
 			["ropaperchero1", 3.0, "libre", 8.5], ["ropaperchero2", 8.5, "libre", 8.5], ["roparuedas", 12.8, "libre", 8.5], ["ropatarimas", 3.0, "libre", 12.0],
 			["ropamesa", 8.5, "libre", 12.0], ["ropamaniqui1", 12.3, "libre", 12.3], ["ropamaniqui2", 14.0, "libre", 12.3], ["ropamaniqui3", 15.7, "libre", 12.3],
 			["ropamaniqui4", 36.0, "libre", 12.5], ["ropamostrador", 29.5, "libre", 15.0]],
