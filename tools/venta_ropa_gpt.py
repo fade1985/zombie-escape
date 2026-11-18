@@ -2,7 +2,8 @@
 # (assets/sources/ropa/venta-<id>-gpt.webp) reducidas a sprite de doble detalle MEZCLANDO colores (LANCZOS, alfa premultiplicado, como tools/muebles_gpt.py):
 #   pared:  p1 ropamodulo, p2 ropabarra, p3 ropazapatos, p4 ropavitrina, p5 ropaoval
 #   suelo:  s1 ropaperchero1, s2 ropaperchero2, s3 roparuedas, s4 ropamesa, s5 ropatarimas
-#   maniquíes: m1..m4 ropamaniqui1..4 (48 de alto)
+#   caja: caja ropamostrador (el mostrador con la caja, visto desde el lado del comprador: la caja y el monitor, de espaldas)
+#   maniquíes: m1..m4 ropamaniqui1..4
 # -> assets/sprites/mueble-<tipo>.png (+ .json), a escala 1
 #   py tools/venta_ropa_gpt.py   (y luego Godot --headless --path . --import)
 import json
@@ -16,7 +17,7 @@ from PIL import Image
 MUEBLES = [("p1", "ropamodulo", 104), ("p2", "ropabarra", 108), ("p3", "ropazapatos", 112), ("p4", "ropavitrina", 108),
            ("p5", "ropaoval", 116), ("s1", "ropaperchero1", 96), ("s2", "ropaperchero2", 96), ("s3", "roparuedas", 92),
            ("s4", "ropamesa", 64), ("s5", "ropatarimas", 56),
-           ("m1", "ropamaniqui1", 106), ("m2", "ropamaniqui2", 106), ("m3", "ropamaniqui3", 106), ("m4", "ropamaniqui4", 106)]
+           ("caja", "ropamostrador", 92), ("m1", "ropamaniqui1", 106), ("m2", "ropamaniqui2", 106), ("m3", "ropamaniqui3", 106), ("m4", "ropamaniqui4", 106)]
 
 
 def quitar_fondo(im):
