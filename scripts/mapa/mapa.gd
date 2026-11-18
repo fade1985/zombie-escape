@@ -101,6 +101,7 @@ const PASILLOS := {"pasillo": {"tapa": "pasillo"}, "galeria": {"tapa": "centro"}
 const NEON := preload("res://scripts/mapa/neon.gd")
 const FELPUDO := preload("res://assets/sprites/felpudo.png")   # el de las puertas del pasillo de los Apartamentos (dibujar_fondo)
 const FELPUDO_PORTAL := preload("res://assets/sprites/felpudo-portal.png")   # el de la puerta de la calle, en la planta baja
+const SUCIEDAD_SUELO := preload("res://assets/sprites/suciedad-suelo.png")   # la capa de suciedad de las salas destrozadas de la tienda de ropa (dibujar_fondo)
 const ALFOMBRA_PROBADOR := preload("res://assets/sprites/alfombra-probador.png")   # la de los probadores de la tienda de ropa (dibujar_fondo)
 const FELPUDO_CENTRO := preload("res://assets/sprites/felpudo-centro.png")   # el de la entrada del centro comercial (galería)
 const VENTANAL := preload("res://scripts/mapa/ventanal.gd")
@@ -576,6 +577,9 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 			var trozo := Rect2(c * 16, f * 16, (fin - c) * 16, 16)
 			if not muro:
 				lienzo.draw_texture_rect_region(estilos[sala].suelo, trozo, Rect2(trozo.position + desfase, trozo.size))
+				if sala_destrozada(sala):
+					# la suciedad del suelo del pasillo del ascensor (grietas, huecos, arañazos y manchas), encima (tools/suciedad_suelo.py)
+					lienzo.draw_texture_rect_region(SUCIEDAD_SUELO, trozo, Rect2(trozo.position, trozo.size))
 			c = fin
 	# Los huecos de puerta entre dos habitaciones: cada suelo llega hasta la mitad del paso (arriba se ha
 	# pintado entero con el de una de ellas) y, donde se juntan, la pletina de latón
