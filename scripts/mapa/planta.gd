@@ -1110,6 +1110,8 @@ const BANO_COLGADOS := {"toallero": [44.0, 48.0, 42.0], "toalla-gancho": [32.0, 
 const BANO_MARGEN := 8.0   # lo que se separan de lo demás y de las esquinas
 
 static func colgados_bano(sitio: Dictionary) -> Array:
+	if sitio.get("tienda", "") == "ropa":
+		return []   # el aseo de la tienda de ropa, sin toalla ni balda (18 nov, el dueño: lleva taquilla, lavabo y váter)
 	var apt: Dictionary = sitio.apt
 	var dado := RandomNumberGenerator.new()
 	dado.seed = int(sitio.get("surtido", 0)) + 96

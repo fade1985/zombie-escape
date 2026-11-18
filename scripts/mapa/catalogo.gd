@@ -85,6 +85,9 @@ const MUEBLES := {
 	"pufprobador": {"len": 36, "dep": 30, "paredes": "todas", "archivo": "ropa/puf-probador-gpt"},
 	# y su gancho doble cromado, de GPT (tools/muebles_gpt.py): de perfil (solo tiene dibujo de lado), en la pared derecha de cada probador
 	"ganchoprobador": {"len": 16, "dep": 6, "paredes": "lados", "archivo": "ropa/perchero-probador-gpt"},
+	# la taquilla del aseo de la tienda de ropa: la misma de las skins de Johnny en la sala de mantenimiento (mueble-taquillaropa.png es una copia
+	# de taquilla.png, solo de adorno)
+	"taquillaropa": {"len": 56, "dep": 36, "paredes": "", "archivo": "ropa/taquilla-johnny"},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -580,7 +583,8 @@ const SALAS := {
 	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7, "abajo"], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
 	"almacen-ropa": {"colocados": {"abajo": [], "arriba": []}},
-	"bano-ropa": {"colocados": {"abajo": [], "arriba": []}},
+	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 2.6, "derecha"], ["stafftoilet", 4.2, "derecha"]],
+		"arriba": [["taquillaropa", 6.0, "abajo"], ["staffsink", 2.6, "derecha"], ["stafftoilet", 4.2, "derecha"]]}},
 	"tienda-farmacia": {
 		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
 		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas
