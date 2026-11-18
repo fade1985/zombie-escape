@@ -77,6 +77,13 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
   Sin neones ni sangre en las texturas (irán sueltos). Originales en `assets/sources/suelos/galeria-suelo-gpt.webp` y
   `galeria-pared-gpt.webp`; se pasan con `py tools/galeria_gpt.py`, que reduce cada baldosa y panel por dentro y pinta las juntas
   de un píxel. Se mira con `--captura --edificio centro --galeria`.
+- **Sala de venta de la tienda de ropa, desde el 18 nov:** la primera tienda que se rehace por dentro, con GPT a partir de
+  una foto del dueño de una boutique: tarima de roble claro en 16 filas de tablas de largos distintos (`suelo-ropa`, 128 × 128:
+  cada fila, 1 píxel de junta y 7 de madera) y pared lisa rosa empolvado con rodapié dorado acanalado (`pared-ropa`, 192 × 64,
+  ya del alto de la pared alta, 4 casillas; `techo-ropa`, que con "cajas" no se ve). Originales en
+  `assets/sources/suelos/ropa-suelo-gpt.webp` y `ropa-pared-gpt.webp`; se pasan con `py tools/ropa_gpt.py`, que reduce cada
+  tabla por dentro y pinta las juntas de un píxel, y pinta los listones del rodapié uno claro y uno oscuro (reducidos se
+  emborronaban). En `Mapa.ESTILO_TIENDA`, `"tienda-ropa"`. Se mira con `--captura --edificio centro --tiendas-fijas --tipo ropa`.
 - Pasillo (17 oct, con visto bueno; **ya no se usa**, sustituido el 8 nov): **moqueta** burdeos y mostaza con octógonos y una **alfombra** roja de borde
   mostaza en medio. El dueño las genera realistas y las pixela con tezumie.github.io (tamaño de píxel 4, con su
   paleta). Originales en `assets/sources/suelos/pasillo-moqueta.png` y `pasillo-alfombra.png`.
