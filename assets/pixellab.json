@@ -2136,6 +2136,7 @@
    },
    "dependienta-48": {
     "character_id": "baa9688f-1d49-4a16-b106-a8d3fd648505",
+    "borrado": "Borrado de PixelLab el 18 nov de 2026, con permiso del dueño (la dependienta de 112 px lo sustituyó; sus dibujos quedan en el historial de git, en assets/sources/dependienta-48)",
     "size": "48x48",
     "estilo": "south del zombi normal (assets/sources/zombi-normal-48 del juego JS): 'Match the pixel art style of this zombie: same outline thickness, same level of detail and shading, same body size and proportions, same rotting skin. Do not copy his clothes, hair or colors.'",
     "alto_px": 46,
@@ -2508,6 +2509,7 @@
    },
    "dependienta-48": {
     "character_id": "cb6062dd-00cf-4018-be43-4bc0e065935d",
+    "borrado": "Borrado de PixelLab el 18 nov de 2026, con permiso del dueño (la dependienta de 112 px lo sustituyó; sus dibujos quedan en el historial de git, en assets/sources/dependienta-48)",
     "de": "baa9688f-1d49-4a16-b106-a8d3fd648505 (el modelo, con la piel beige) → py tools/piel.py dependienta-48 43 68 0.35 → create_character v3 con las 8 vistas (0,25)",
     "sprite": "SUSTITUIDA el 18 nov de 2026 por la dependienta de 112 px (Dependienta verde 112, de59f7de-5243-4d15-a7b3-5b11f9115676; docs/ZOMBIS_112.md). Era assets/sprites/zombi-dependienta (zombi.json: sangre quitar y sueltos, porque el polo es rojo); su carpeta assets/sources/dependienta-48 se borró el 18 nov (queda en el historial de git)",
     "subject_description": "a female zombie shop assistant with grey-green skin, a dark brown ponytail, a bright red polo shirt, a blue lanyard with a white ID card and black trousers",

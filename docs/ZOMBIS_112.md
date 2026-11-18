@@ -7,7 +7,10 @@ igual de alta que los demás, pero con el doble de detalle. Esta es la receta pa
 ## 1. El personaje en PixelLab
 
 - Personaje de **112 px** (el de la dependienta: «Dependienta verde 112», id `de59f7de-5243-4d15-a7b3-5b11f9115676`).
-  En PixelLab **no se borra nada** sin permiso expreso del dueño.
+  En PixelLab **no se borra nada** sin permiso expreso del dueño. El 18 nov, con su permiso, se borró todo lo que no
+  se usa: las dependientas de 48 px, la «Dependienta dormida 112» (la prueba con los ojos cerrados) y las tomas que no
+  se eligieron. En «Dependienta verde 112» solo quedan sus 8 poses y las 21 animaciones del juego (copia de cómo
+  estaba antes, fuera de git: `capturas/pixellab-dependienta-verde-112-copia.zip` y `...-dormida-112-copia.zip`).
 - Las poses de pie (rotaciones) salen con el personaje: se bajan a `assets/sources/<carpeta>/animaciones/rotaciones/`
   (112×112, los pies en 56,110).
 - **Solo cinco direcciones**: `south`, `south-east`, `east`, `north-east` y `north`. Las tres del oeste salen en espejo
