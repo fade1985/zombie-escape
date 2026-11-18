@@ -3,6 +3,7 @@
 #   assets/sources/ropa/cortina-cerrada-gpt.webp → assets/sprites/cortina-probador.png         (32 × 61: marco, barra y cortina)
 #   assets/sources/ropa/cortina-abierta-gpt.webp → assets/sprites/cortina-probador-abierta.png (32 × 61: con la cortina recogida
 #                                                   a la izquierda y el hueco vacío)
+# (las cortinas salen en beige: a_beige)
 # 32 × 61 píxeles = el hueco de la puerta (64 unidades) y su pared alta (122 unidades: la hoja de 118 y el marco de 4).
 # Se quita el negro puro (lo de fuera y el hueco de la abierta) y se reduce MEZCLANDO colores con LANCZOS, con el alfa
 # premultiplicado, como los muebles (tools/muebles_gpt.py).
@@ -24,6 +25,24 @@ def guardar(im, nombre):
     print(f'{nombre}: {im.width}x{im.height}')
 
 
+def a_beige(im):
+    # 18 nov, el dueño: las cortinas, beige en vez de rojas. Solo se cambia lo rojo (la madera y el cromo se quedan): cada píxel rojo
+    # pasa a un beige con la misma luz y sombra
+    import colorsys
+    im = im.copy()
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, al = px[x, y]
+            if not al:
+                continue
+            h, sat, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            if (h < 0.04 or h > 0.96) and sat > 0.45:
+                f = 0.5 + 0.5 * min(1.0, v / 0.95)
+                px[x, y] = (int(230 * f), int(208 * f), int(176 * f), al)
+    return im
+
+
 for origen, nombre in SALEN:
     a = np.asarray(Image.open('assets/sources/' + origen).convert('RGB')).astype(float)
     vivo = a.max(axis=2) > 14          # lo que no es negro puro
@@ -37,4 +56,4 @@ for origen, nombre in SALEN:
     al = r[..., 3] / 255.0
     rgb = np.where(al[..., None] > 0.01, r[..., :3] / np.maximum(al[..., None], 0.01), 0)
     salida = np.dstack([np.clip(rgb, 0, 255), np.where(al > 0.5, 255, 0)]).astype(np.uint8)
-    guardar(Image.fromarray(salida, 'RGBA'), nombre)
+    guardar(a_beige(Image.fromarray(salida, 'RGBA')), nombre)

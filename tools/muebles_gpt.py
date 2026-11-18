@@ -491,6 +491,12 @@ if "alfombra_probador" in (sys.argv[1:] or ["alfombra_probador"]):
         return cx * cx + cy * cy <= (R - 0.5) ** 2 + 1
     # el color del contorno: el del borde de arriba, en medio
     borde = px[w // 2, 0][:3]
+    # beige en vez de blanco (18 nov, el dueño): lo claro se tiñe (el contorno, no)
+    for y in range(h):
+        for x in range(w):
+            r, g, b, al = px[x, y]
+            if al and max(r, g, b) > 150:
+                px[x, y] = (r, int(g * 0.95), int(b * 0.86), al)
     mask = [[dentro(x, y) and px[x, y][3] > 0 for x in range(w)] for y in range(h)]
     for y in range(h):
         for x in range(w):
