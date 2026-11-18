@@ -361,6 +361,9 @@ MUEBLES = {
     "espejoprobador": ("assets/sources/ropa/espejo-probador-gpt.webp", "assets/sprites/mueble-espejoprobador.png", 36, 50, True),
     # el puf redondo blanco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "pufprobador"): en la esquina de arriba a la izquierda
     "pufprobador": ("assets/sources/ropa/puf-probador-gpt.webp", "assets/sprites/mueble-pufprobador.png", 18, 20, True),
+    # el gancho doble cromado de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "ganchoprobador"): de perfil, con la
+    # placa a la izquierda (el dibujo de la pared izquierda; en la derecha, en espejo). Se levanta del suelo al final de este archivo
+    "ganchoprobador": ("assets/sources/ropa/perchero-probador-gpt.webp", "assets/sprites/mueble-ganchoprobador-lado.png", 10, 16, True),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 
@@ -449,6 +452,18 @@ if "espejoprobador" in (sys.argv[1:] or ["espejoprobador"]):
     esp = Image.open(ruta).convert("RGBA")
     lienzo = Image.new("RGBA", (esp.width, esp.height + 11), (0, 0, 0, 0))
     lienzo.paste(esp, (0, 0))
+    lienzo.save(ruta)
+    with open(ruta.replace(".png", ".json"), "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"cell": [lienzo.width, lienzo.height], "pivot": [lienzo.width // 2, lienzo.height], "scale": 1,
+                   "anims": {"idle": {"fps": 1, "dirs": {"south": {"row": 0, "frames": 1}}}}}, f, indent=2)
+        f.write("\n")
+
+# el gancho, colgado a media altura: 20 píxeles transparentes debajo (18 nov, el dueño)
+if "ganchoprobador" in (sys.argv[1:] or ["ganchoprobador"]):
+    ruta = MUEBLES["ganchoprobador"][1]
+    gancho = Image.open(ruta).convert("RGBA")
+    lienzo = Image.new("RGBA", (gancho.width, gancho.height + 20), (0, 0, 0, 0))
+    lienzo.paste(gancho, (0, 0))
     lienzo.save(ruta)
     with open(ruta.replace(".png", ".json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump({"cell": [lienzo.width, lienzo.height], "pivot": [lienzo.width // 2, lienzo.height], "scale": 1,
