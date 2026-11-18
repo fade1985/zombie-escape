@@ -38,11 +38,11 @@ const TIPOS := {
 		"color": Color("#ff4f5e")},
 	# (18 nov, el dueño: la primera que se rehace por dentro. "sube": su pared, de 4 casillas en vez de 3, y sus puertas de
 	# dentro, más altas: con la de siempre, la dependienta, de 112 px, era más alta que las puertas; Planta.generar, mapa.gd.
-	# "destrozada": las salas que ya están rehechas (el aseo, los probadores y el almacén) con el apocalipsis encima: muchos restos y pintadas
-	# (mapa.sala_destrozada); la sala de venta, sin nada hasta que se rehaga. "limpia": sin sangre ni pintadas, mapa.limpio)
+	# "destrozada": las salas que ya están rehechas (el aseo, los probadores, el almacén y, desde el 19 nov, la sala de venta, "tienda") con
+	# el apocalipsis encima: la sangre de los pisos y la suciedad del suelo (mapa.sala_destrozada). "limpia": sin sangre ni pintadas, mapa.limpio)
 	"ropa": {"nombre": "Tienda de ropa", "neon": "MODA", "salas": ["probadores", "almacen"],   # [traducir]
 		"color": Color("#ff5fd0"), "sube": 4,
-		"destrozada": ["bano", "probadores", "almacen"]},
+		"destrozada": ["bano", "probadores", "almacen", "tienda"]},
 	"farmacia": {"nombre": "Farmacia", "neon": "FARMACIA", "salas": ["rebotica", "bano"],   # [traducir]
 		"color": Color("#3dff6e")},
 	# la joyería (parte 9): no entra en el sorteo de cada planta, sale una por partida (Planta.joyeria_planta).
