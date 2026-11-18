@@ -356,6 +356,9 @@ MUEBLES = {
     "puerta_restaurante": ("assets/sources/centro/puerta-restaurante-gpt.webp", "assets/sprites/puerta-restaurante.png", 36, 43, False),
     # la puerta doble de acero pulido de la joyería (17 nov, el dueño): ventanas altas de cristal, barras largas y cerradura en el medio
     "puerta_joyeria": ("assets/sources/centro/puerta-joyeria-gpt.webp", "assets/sprites/puerta-joyeria.png", 34, 43, False),
+    # el espejo de arco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "espejoprobador"): marco dorado fino y
+    # cristal vacío con dos brillos, en la pared de arriba de cada probador
+    "espejoprobador": ("assets/sources/ropa/espejo-probador-gpt.webp", "assets/sprites/mueble-espejoprobador.png", 40, 56, True),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 
