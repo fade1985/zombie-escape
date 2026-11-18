@@ -6,8 +6,9 @@
 #   - La furia les dura hasta que ella muere: o la matas primero, o te los cargas a todos furiosos.
 #   - Después pelea como un durmiente más: va a por Johnny y le da zarpazos.
 # Fuera del jefe (el gerente llama a dos), nunca hay más de una en la misma sala; con dos, la furia no se suma.
-# El grito usa la animación de ataque (el chillido con las manos en la boca), y sus zarpazos también, hasta que tenga
-# su dibujo nuevo.
+# Su dibujo (18 nov) es el de 112 px de PixelLab, mucho más detallado que los zombis de 48, a escala 1
+# (tools/dependienta_hoja.py). El grito tiene su animación propia («grito», siempre de cara: es la misma en las 8
+# direcciones) y la de ataque queda para los zarpazos.
 extends Zombi
 
 var gritado := false        # ya ha gritado (solo grita una vez)
@@ -34,7 +35,7 @@ func gritar(johnny: Node2D) -> void:
 	gritado = true
 	estado = "grito"
 	mirar_hacia(johnny.global_position - global_position)
-	poner_animacion("ataque", true)
+	poner_animacion("grito", true)
 	Sonido.tocar("chillido")
 	# grande, rojo como su furia y encima de ella, como el «¡¡¡GRRR!!!» del jefe de seguridad (zombi_guardia.gd)
 	var grito := Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Tema.ROJO,

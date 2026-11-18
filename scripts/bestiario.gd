@@ -60,7 +60,7 @@ const LISTA := {
 	"dependienta": {"nombre": "La dependienta",
 		"frase": "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta hecha una furia.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-dependienta.tres",
-		"recorte": Rect2i(39, 33, 19, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
+		"recorte": Rect2i(57, 25, 37, 105), "retrato": "quieto_s", "escala": 1, "jefe": false},
 	"vigilante": {"nombre": "El vigilante",
 		"frase": "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-vigilante.tres",

@@ -5498,3 +5498,68 @@ func probar_vida_colores() -> void:
 		print("Vida %d/%d, tercios %d → barra %s" % [johnny.vida, maxima, johnny.tercios, paso[2]])
 		Captura.foto("captura-vida-%s.png" % paso[2])
 	get_tree().quit()
+
+
+# Con "-- --captura --dependienta": la dependienta nueva (18 nov, el dibujo de 112 px a escala 1; tools/dependienta_hoja.py).
+# Primero, quieta de frente al lado de Johnny, el vecino, el vigilante y el guardia, para ver su tamaño
+# (captura-dependienta-tamano.png). Luego seis dependientas que van andando hacia Johnny desde seis lados (sin gritar,
+# para que no ardan en rojo): captura-dependienta-andar-NN.png, una foto cada 3 pasos de física (0,05 s), para el GIF
+func probar_dependienta_nueva() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(0, 230)
+	johnny.direccion = "s"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	# ── el tamaño: en fila, todos de frente ──
+	var fila: Array = []
+	var tipos := ["normal", "vigilante", "guardia", "dependienta"]
+	for i in tipos.size():
+		var z: Node2D = meter_zombi(tipos[i], johnny.position + Vector2(70 + i * 75, 0))
+		if "gritado" in z:
+			z.gritado = true   # (que no grite: los pondría a todos rojos de furia)
+		z.process_mode = Node.PROCESS_MODE_DISABLED   # (quietos: ni andan ni atacan)
+		fila.append(z)
+	for z in fila:
+		for hijo in z.get_children():   # (parado así, su sombra y lo demás no se ponen en su sitio: solo el dibujo)
+			if hijo is CanvasItem and hijo != z.sprite:
+				hijo.visible = false
+		z.sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+		z.sprite.play("quieto_s")
+	await get_tree().create_timer(0.3).timeout
+	await RenderingServer.frame_post_draw
+	print("Johnny en pantalla: %s" % johnny.get_global_transform_with_canvas().origin)
+	Captura.foto("captura-dependienta-tamano.png")
+	for z in fila:
+		z.queue_free()
+	await get_tree().create_timer(0.2).timeout
+	# ── andando hacia Johnny desde seis lados ──
+	var lados := [Vector2(0, -1), Vector2(1, -1), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 0)]
+	var ellas: Array = []
+	for v in lados:
+		var z: Node2D = meter_zombi("dependienta", johnny.position + v.normalized() * 280.0)
+		z.gritado = true   # (sin el grito ni la furia: solo se mira el andar)
+		ellas.append(z)
+	var fotos: Array[Image] = []
+	for paso in 72:
+		await get_tree().physics_frame
+		if paso % 3 == 0:
+			await RenderingServer.frame_post_draw
+			fotos.append(get_tree().root.get_texture().get_image())
+	var que_hacen := ellas.map(func(z): return "%s/%d" % [z.sprite.animation, z.sprite.frame])
+	print("Dependientas: %s (esperado: andar_ en todas)" % [que_hacen])
+	DirAccess.make_dir_recursive_absolute(Captura.CARPETA)
+	for i in fotos.size():
+		fotos[i].save_png(Captura.CARPETA + "captura-dependienta-andar-%02d.png" % i)
+	get_tree().quit()
