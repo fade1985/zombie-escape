@@ -94,6 +94,23 @@ const MUEBLES := {
 	"ropashelf2": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
 	"ropashelf3": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
 	"ropashelf4": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
+	# los muebles de la sala de venta de la tienda de ropa (18 nov, el dueño; GPT, ropa de los años 90; tools/venta_ropa_gpt.py): a escala 1
+	# (el doble de detalle, como la dependienta), así que "len" y "dep" son los píxeles del dibujo
+	"ropamodulo": {"len": 156, "dep": 32, "paredes": "", "archivo": "ropa/venta-p1-gpt", "escala": 1.0},
+	"ropabarra": {"len": 190, "dep": 28, "paredes": "", "archivo": "ropa/venta-p2-gpt", "escala": 1.0},
+	"ropazapatos": {"len": 98, "dep": 32, "paredes": "", "archivo": "ropa/venta-p3-gpt", "escala": 1.0},
+	"ropavitrina": {"len": 73, "dep": 32, "paredes": "", "archivo": "ropa/venta-p4-gpt", "escala": 1.0},
+	"ropaoval": {"len": 38, "dep": 32, "paredes": "", "archivo": "ropa/venta-p5-gpt", "escala": 1.0},
+	"ropaperchero1": {"len": 126, "dep": 40, "paredes": "", "archivo": "ropa/venta-s1-gpt", "escala": 1.0},
+	"ropaperchero2": {"len": 137, "dep": 40, "paredes": "", "archivo": "ropa/venta-s2-gpt", "escala": 1.0},
+	"roparuedas": {"len": 82, "dep": 36, "paredes": "", "archivo": "ropa/venta-s3-gpt", "escala": 1.0},
+	"ropamesa": {"len": 149, "dep": 44, "paredes": "", "archivo": "ropa/venta-s4-gpt", "escala": 1.0},
+	"ropatarimas": {"len": 100, "dep": 56, "paredes": "", "archivo": "ropa/venta-s5-gpt", "escala": 1.0},
+	"ropamaniqui1": {"len": 33, "dep": 24, "paredes": "", "archivo": "ropa/venta-m1-gpt", "escala": 1.0},
+	"ropamaniqui2": {"len": 36, "dep": 24, "paredes": "", "archivo": "ropa/venta-m2-gpt", "escala": 1.0},
+	"ropamaniqui3": {"len": 33, "dep": 24, "paredes": "", "archivo": "ropa/venta-m3-gpt", "escala": 1.0},
+	"ropamaniqui4": {"len": 35, "dep": 24, "paredes": "", "archivo": "ropa/venta-m4-gpt", "escala": 1.0},
+	"ropamostrador": {"len": 209, "dep": 48, "paredes": "", "archivo": "ropa/venta-caja-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -583,10 +600,31 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 	}},
-	# La tienda de ropa (Tienda.PLANOS): desde el 18 nov, vacía mientras el dueño la rehace por dentro, con el plano nuevo
-	# (50 × 30, pared alta); antes llevaba maniquíes, percheros, cajas y bancos, y el almacén, estanterías y palés. El aseo
-	# sigue con su botiquín (no es un mueble de aquí: Planta, armaritos)
-	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
+	# La tienda de ropa (Tienda.PLANOS), la sala de venta (18 nov, el dueño; 46 × 17): los muebles de GPT de los años 90 (a escala 1),
+	# todos "libre". Los de pared, pegados a la pared de arriba (normal: la base, en la fila 4 a la izquierda y en la 0 en el entrante
+	# de los probadores, sin tapar las cortinas ni la puerta del almacén; inversa: en la 0, a los lados de la entrada); por el suelo,
+	# percheros, mesas, tarimas y maniquíes en filas con pasillo entre ellas, la caja (mostrador) junto a la entrada y libres el paso
+	# de la entrada (casillas 21,5 a 24,5) y el de delante de los probadores
+	"tienda-ropa": {"colocados": {
+		"abajo": [
+			["ropamodulo", 2.9, "libre", 4.5], ["ropabarra", 8.4, "libre", 4.4375], ["ropazapatos", 13.0, "libre", 4.5], ["ropavitrina", 18.9, "libre", 4.5],
+			["ropaoval", 20.9, "libre", 4.5], ["ropazapatos", 23.6, "libre", 4.5], ["ropaoval", 26.9, "libre", 0.5], ["ropazapatos", 31.7, "libre", 0.5],
+			["ropaoval", 34.0, "libre", 0.5], ["ropavitrina", 38.3, "libre", 0.5], ["ropaoval", 40.7, "libre", 0.5], ["ropaoval", 45.0, "libre", 0.5],
+			["ropaperchero1", 3.0, "libre", 8.5], ["ropaperchero2", 8.5, "libre", 8.5], ["roparuedas", 12.8, "libre", 8.5], ["ropatarimas", 3.0, "libre", 12.0],
+			["ropamesa", 8.5, "libre", 12.0], ["ropamaniqui1", 12.3, "libre", 12.3], ["ropamaniqui2", 14.0, "libre", 12.3], ["ropamaniqui3", 15.7, "libre", 12.3],
+			["ropaperchero2", 3.5, "libre", 15.8], ["ropaperchero1", 9.0, "libre", 15.8], ["roparuedas", 13.5, "libre", 15.8], ["ropatarimas", 19.0, "libre", 9.5],
+			["roparuedas", 19.0, "libre", 14.5], ["ropaperchero1", 29.5, "libre", 8.5], ["ropaperchero2", 35.0, "libre", 8.5], ["ropaperchero1", 40.5, "libre", 8.5],
+			["roparuedas", 44.3, "libre", 8.5], ["ropamaniqui4", 36.0, "libre", 12.5], ["ropamaniqui1", 37.6, "libre", 12.5], ["ropamaniqui2", 39.2, "libre", 12.5],
+			["ropamesa", 43.0, "libre", 12.5], ["ropamostrador", 29.5, "libre", 15.0], ["ropatarimas", 36.5, "libre", 15.9], ["ropaperchero2", 42.5, "libre", 16.0]],
+		"arriba": [
+			["ropamodulo", 2.6, "libre", 0.5], ["ropabarra", 8.1, "libre", 0.4375], ["ropazapatos", 12.7, "libre", 0.5], ["ropavitrina", 15.6, "libre", 0.5],
+			["ropaoval", 17.6, "libre", 0.5], ["ropazapatos", 20.1, "libre", 0.5], ["ropamodulo", 27.2, "libre", 0.5], ["ropabarra", 33.1, "libre", 0.4375],
+			["ropazapatos", 38.7, "libre", 0.5], ["ropavitrina", 42.2, "libre", 0.5], ["ropaoval", 44.8, "libre", 0.5], ["ropatarimas", 3.0, "libre", 4.5],
+			["ropamesa", 8.5, "libre", 4.5], ["ropamaniqui1", 12.3, "libre", 4.8], ["ropamaniqui2", 14.0, "libre", 4.8], ["ropamaniqui3", 15.7, "libre", 4.8],
+			["ropaperchero1", 3.0, "libre", 8.0], ["ropaperchero2", 8.5, "libre", 8.0], ["roparuedas", 12.8, "libre", 8.0], ["roparuedas", 19.2, "libre", 6.0],
+			["ropamostrador", 29.5, "libre", 3.5], ["ropatarimas", 36.5, "libre", 3.8], ["ropamesa", 43.0, "libre", 3.8], ["ropamaniqui4", 36.0, "libre", 7.0],
+			["ropamaniqui1", 37.6, "libre", 7.0], ["ropamaniqui2", 39.2, "libre", 7.0], ["ropaperchero2", 43.0, "libre", 7.0], ["ropaperchero1", 29.5, "libre", 10.0],
+			["ropaperchero2", 35.0, "libre", 10.0], ["ropaperchero1", 40.5, "libre", 10.0], ["roparuedas", 44.3, "libre", 10.0]]}},
 	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
 	# el almacén de la tienda de ropa (18 nov, el dueño; 17 × 12; la puerta, en las casillas 7 y 8): estanterías de las habitaciones de los
 	# supervivientes en la pared de arriba (normal: cinco, con la misma separación; inversa: dos a cada lado de la puerta), montones de cajas de
