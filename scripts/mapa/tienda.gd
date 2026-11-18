@@ -444,9 +444,11 @@ static func del_plano(tipo: String, lado: String) -> Dictionary:
 			if plano[f][c] == "~":
 				agua.append(Vector2i(c, f))
 		plano[f] = plano[f].replace("~", "V")
-	# la puerta del aseo de la tienda de ropa (18 nov, el dueño): en la tienda normal, subida tres filas para que quede en el medio de lo que se ve del aseo
-	# (con la pared alta, el aseo se ve más corto por arriba); en la inversa, donde está en el plano
-	if tipo == "ropa" and lado == "abajo":
+	# la puerta del aseo de la tienda de ropa (18 nov, el dueño): movida para que quede en el medio de lo que se ve del aseo. En la tienda
+	# normal, 3 filas más arriba que en el plano (con la pared alta, el aseo se ve más corto por arriba); en la inversa, una fila más
+	# arriba (en el plano va una más abajo: al voltearse, sube)
+	if tipo == "ropa":
+		var sube_puerta: int = -3 if lado == "abajo" else 1
 		var puerta: Array = []
 		for f in plano.size():
 			if plano[f].begins_with("##BBBBBBB "):
@@ -454,7 +456,7 @@ static func del_plano(tipo: String, lado: String) -> Dictionary:
 		for f in puerta:
 			plano[f] = plano[f].substr(0, 9) + "#" + plano[f].substr(10)
 		for f in puerta:
-			plano[f - 3] = plano[f - 3].substr(0, 9) + " " + plano[f - 3].substr(10)
+			plano[f + sube_puerta] = plano[f + sube_puerta].substr(0, 9) + " " + plano[f + sube_puerta].substr(10)
 	var t := Apartamento.del_plano(plano, LETRAS)
 	t.tipo = tipo
 	t.fijo = true

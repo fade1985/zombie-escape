@@ -1317,6 +1317,11 @@ func probar_tiendas_fijas() -> void:
 					johnny.get_node("Camara").reset_smoothing()
 					await get_tree().create_timer(0.8).timeout
 					Captura.foto("captura-fija-%s-%s-aseo.png" % [tipo, lado])
+				if s.uso == "almacen":
+					johnny.position = s.centro
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(0.8).timeout
+					Captura.foto("captura-fija-%s-%s-almacen.png" % [tipo, lado])
 			johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
 			await foto_entera(sitio, "captura-fija-%s-%s.png" % [tipo, lado])
 			# y con todas las puertas de dentro abiertas (captura-fija-<tipo>-<lado>-abiertas.png)

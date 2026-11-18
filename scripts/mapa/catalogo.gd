@@ -582,7 +582,17 @@ const SALAS := {
 	# sigue con su botiquín (no es un mueble de aquí: Planta, armaritos)
 	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
-	"almacen-ropa": {"colocados": {"abajo": [], "arriba": []}},
+	# el almacén de la tienda de ropa (18 nov, el dueño; 17 × 12): tres estanterías de las habitaciones de los supervivientes en la pared del fondo
+	# (en la inversa, dos, una a cada lado de la puerta), grupos de cajas de los trasteros en la pared de la puerta (tres en la inversa, una a
+	# cada lado de la puerta en la normal), y la carretilla de los trasteros, de frente, en la pared de la derecha. En la normal, la pared de
+	# abajo y las 4 últimas filas quedan detrás de la pared alta de la tienda de venta: lo de abajo se pone a 8 filas ("libre", y 7,4) y la
+	# carretilla en el medio de esas 8 (la fila 4). La puerta va en las
+	# casillas 7 y 8 (el medio, 8,0)
+	"almacen-ropa": {"colocados": {
+		"abajo": [["storageshelf", 3.5], ["storageshelf", 8.5], ["storageshelf", 13.5], ["boxstack", 3.5, "libre", 7.4], ["boxstack", 13.0, "libre", 7.4],
+			["handtruck", 4.0, "derecha"]],
+		"arriba": [["storageshelf", 3.5], ["storageshelf", 13.0], ["boxstack", 3.5, "abajo"], ["boxstack", 8.5, "abajo"], ["boxstack", 13.5, "abajo"],
+			["handtruck", 6.0, "derecha"]]}},
 	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 3.3, "izquierda"], ["stafftoilet", 6.7, "izquierda"], ["lockerbench", 5.85, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsink", 3.3, "izquierda"], ["stafftoilet", 6.7, "izquierda"], ["lockerbench", 9.2, "derecha"]]}},
 	"tienda-farmacia": {
