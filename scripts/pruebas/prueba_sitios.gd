@@ -1319,6 +1319,11 @@ func probar_tiendas_fijas() -> void:
 					Captura.foto("captura-fija-%s-%s-aseo.png" % [tipo, lado])
 			johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
 			await foto_entera(sitio, "captura-fija-%s-%s.png" % [tipo, lado])
+			# y con todas las puertas de dentro abiertas (captura-fija-<tipo>-<lado>-abiertas.png)
+			for hoja in mapa.hojas:
+				hoja.abrir()
+			await get_tree().create_timer(1.0).timeout
+			await foto_entera(sitio, "captura-fija-%s-%s-abiertas.png" % [tipo, lado])
 	get_tree().quit()
 
 
