@@ -1310,6 +1310,8 @@ func destrozadas() -> Array:
 
 
 func sala_destrozada(sala: int) -> bool:
+	if not sitio.has("apt"):
+		return false   # (los sitios que no son apartamentos, como la sala de pruebas, no tienen salas)
 	return sala >= 0 and sala < sitio.apt.salas.size() and sitio.apt.salas[sala].uso in destrozadas()
 
 
