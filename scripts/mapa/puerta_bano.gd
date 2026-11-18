@@ -118,6 +118,14 @@ func alargar(mas: int) -> void:
 	alto = ALTO + mas * 2.0
 	dintel = alto + MARCO
 	frente = FRENTE + Vector2(0, mas)
+	if metalizada:
+		# las metálicas, con su pomo (que repetido por en medio salía dos veces): el pomo solo, en el medio de la hoja más alta
+		var de_trastero: bool = madera.frente == TRASTERO_METALIZADA.frente
+		madera = {"frente": ALARGAR.dibujo_con_pomo(madera.frente, int(frente.y), 17 if de_trastero else 19, 26 if de_trastero else 24),
+			"abierta": ALARGAR.dibujo(madera.abierta, madera.abierta.get_height() + mas),
+			"lado": madera.lado if de_trastero else ALARGAR.dibujo_con_pomo(madera.lado, madera.lado.get_height() + mas, 20, 31),
+			"cerrada": madera.cerrada}
+		return
 	madera = {"frente": ALARGAR.dibujo(madera.frente, int(frente.y)),
 		"abierta": ALARGAR.dibujo(madera.abierta, madera.abierta.get_height() + mas),
 		"lado": ALARGAR.dibujo(madera.lado, madera.lado.get_height() + mas), "cerrada": madera.cerrada}

@@ -40,3 +40,38 @@ static func dibujo(tex: Texture2D, alto: int) -> Texture2D:
 	var hecho := ImageTexture.create_from_image(nueva)
 	hechos[clave] = hecho
 	return hecho
+
+
+# Como "dibujo", pero para las hojas con un pomo (las metálicas): el pomo (las filas k0 a k1, incluida) no se repite, y lo que se añade se
+# reparte a mitades por encima y por debajo de él, repitiendo 4 filas de justo al lado: así sale uno solo y queda en el medio
+static func dibujo_con_pomo(tex: Texture2D, alto: int, k0: int, k1: int) -> Texture2D:
+	var h := tex.get_height()
+	if h >= alto:
+		return tex
+	var clave := "%d-%d-pomo" % [tex.get_rid().get_id(), alto]
+	if hechos.has(clave):
+		return hechos[clave]
+	var img: Image = tex.get_image()
+	if img.is_compressed():
+		img.decompress()
+	img.convert(Image.FORMAT_RGBA8)
+	var w := img.get_width()
+	var mas := alto - h
+	var arriba := mas / 2
+	var abajo := mas - arriba
+	var nueva := Image.create(w, alto, false, Image.FORMAT_RGBA8)
+	var y := 0
+	nueva.blit_rect(img, Rect2i(0, 0, w, k0), Vector2i(0, y))
+	y += k0
+	for i in arriba:   # las filas k0-4 a k0-1, una y otra vez
+		nueva.blit_rect(img, Rect2i(0, k0 - 4 + i % 4, w, 1), Vector2i(0, y))
+		y += 1
+	nueva.blit_rect(img, Rect2i(0, k0, w, k1 - k0 + 1), Vector2i(0, y))
+	y += k1 - k0 + 1
+	for i in abajo:   # las filas k1+1 a k1+4
+		nueva.blit_rect(img, Rect2i(0, k1 + 1 + i % 4, w, 1), Vector2i(0, y))
+		y += 1
+	nueva.blit_rect(img, Rect2i(0, k1 + 1, w, h - k1 - 1), Vector2i(0, y))
+	var hecho := ImageTexture.create_from_image(nueva)
+	hechos[clave] = hecho
+	return hecho
