@@ -608,7 +608,7 @@ const SALAS := {
 	"tienda-ropa": {"colocados": {
 		"abajo": [
 			["ropabarra", 6.79, "libre", 4.4375], ["ropaoval", 10.58, "libre", 4.5], ["ropamodulo", 21.5, "libre", 4.5], ["ropazapatos", 5.35, "libre", 9.25],
-			["ropaperchero1", 36.0, "libre", 4.375], ["ropaperchero2", 36.0, "libre", 9.125], ["roparuedas", 36.0, "libre", 13.4375], ["ropatarimas", 5.38, "libre", 13.125],
+			["ropaperchero1", 38.0, "libre", 4.375], ["ropaperchero2", 38.0, "libre", 9.125], ["roparuedas", 38.0, "libre", 13.4375], ["ropatarimas", 5.38, "libre", 13.125],
 			["ropamesa", 15.12, "libre", 13.3125], ["ropamaniqui1", 28.4, "libre", 9.375], ["ropamaniqui2", 30.0, "libre", 9.375], ["ropamaniqui3", 28.4, "libre", 13.625],
 			["ropamaniqui4", 30.0, "libre", 13.625], ["ropamostrador", 15.12, "libre", 9.0]],
 		"arriba": [
