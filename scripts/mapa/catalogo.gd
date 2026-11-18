@@ -578,7 +578,7 @@ const SALAS := {
 	# (50 × 30, pared alta); antes llevaba maniquíes, percheros, cajas y bancos, y el almacén, estanterías y palés. El aseo
 	# sigue con su botiquín (no es un mueble de aquí: Planta, armaritos)
 	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
-	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 3.5, "derecha"]], "arriba": [["pufprobador", 0.7, "abajo"], ["ganchoprobador", 4.5, "derecha"]]}},
+	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 3.0, "derecha"], ["ganchoprobador", 5.0, "derecha"]], "arriba": [["pufprobador", 0.7, "abajo"], ["ganchoprobador", 3.0, "derecha"], ["ganchoprobador", 5.0, "derecha"]]}},
 	"almacen-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"bano-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"tienda-farmacia": {

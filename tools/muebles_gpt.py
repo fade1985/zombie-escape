@@ -462,8 +462,8 @@ if "espejoprobador" in (sys.argv[1:] or ["espejoprobador"]):
 if "ganchoprobador" in (sys.argv[1:] or ["ganchoprobador"]):
     ruta = MUEBLES["ganchoprobador"][1]
     gancho = Image.open(ruta).convert("RGBA")
-    lienzo = Image.new("RGBA", (gancho.width, gancho.height + 20), (0, 0, 0, 0))
-    lienzo.paste(gancho, (0, 0))
+    lienzo = Image.new("RGBA", (gancho.width + 7, gancho.height + 20), (0, 0, 0, 0))
+    lienzo.paste(gancho, (7, 0))   # (y 7 píxeles transparentes a la izquierda: con el hueco de 6 unidades, la placa queda justo en la pared y no se mete en el tabique)
     lienzo.save(ruta)
     with open(ruta.replace(".png", ".json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump({"cell": [lienzo.width, lienzo.height], "pivot": [lienzo.width // 2, lienzo.height], "scale": 1,
