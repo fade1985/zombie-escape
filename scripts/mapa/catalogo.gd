@@ -601,15 +601,14 @@ const SALAS := {
 		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 	}},
 	# La tienda de ropa (Tienda.PLANOS), la sala de venta (18 nov, el dueño; 46 × 17): los muebles de GPT de los años 90 (a escala 1),
-	# todos "libre". Los de pared, pegados a la pared de arriba (normal: la base, en la fila 4 a la izquierda y en la 0 en el entrante
-	# de los probadores, sin tapar las cortinas ni la puerta del almacén; inversa: en la 0, a los lados de la entrada); por el suelo,
+	# todos "libre". Los de pared, pegados a la pared de arriba (normal: solo a la izquierda, con la base en la fila 4, sin tapar la
+	# puerta del almacén; la pared de las cortinas de los probadores, sin nada; inversa: en la 0, a los lados de la entrada); por el suelo,
 	# percheros, mesas, tarimas y maniquíes en filas con pasillo entre ellas, la caja (mostrador) junto a la entrada y libres el paso
 	# de la entrada (casillas 21,5 a 24,5) y el de delante de los probadores
 	"tienda-ropa": {"colocados": {
 		"abajo": [
 			["ropamodulo", 2.9, "libre", 4.5], ["ropabarra", 8.4, "libre", 4.4375], ["ropazapatos", 13.0, "libre", 4.5], ["ropavitrina", 18.9, "libre", 4.5],
-			["ropaoval", 20.9, "libre", 4.5], ["ropazapatos", 23.6, "libre", 4.5], ["ropaoval", 26.9, "libre", 0.5], ["ropazapatos", 31.7, "libre", 0.5],
-			["ropaoval", 34.0, "libre", 0.5], ["ropavitrina", 38.3, "libre", 0.5], ["ropaoval", 40.7, "libre", 0.5], ["ropaoval", 45.0, "libre", 0.5],
+			["ropaoval", 20.9, "libre", 4.5], ["ropazapatos", 23.6, "libre", 4.5],
 			["ropaperchero1", 3.0, "libre", 8.5], ["ropaperchero2", 8.5, "libre", 8.5], ["roparuedas", 12.8, "libre", 8.5], ["ropatarimas", 3.0, "libre", 12.0],
 			["ropamesa", 8.5, "libre", 12.0], ["ropamaniqui1", 12.3, "libre", 12.3], ["ropamaniqui2", 14.0, "libre", 12.3], ["ropamaniqui3", 15.7, "libre", 12.3],
 			["ropaperchero2", 3.5, "libre", 15.8], ["ropaperchero1", 9.0, "libre", 15.8], ["roparuedas", 13.5, "libre", 15.8], ["ropatarimas", 19.0, "libre", 9.5],
