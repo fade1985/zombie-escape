@@ -88,6 +88,12 @@ const MUEBLES := {
 	# la taquilla del aseo de la tienda de ropa: la misma de las skins de Johnny en la sala de mantenimiento (mueble-taquillaropa.png es una copia
 	# de taquilla.png, solo de adorno)
 	"taquillaropa": {"len": 56, "dep": 36, "paredes": "", "archivo": "ropa/taquilla-johnny"},
+	# las estanterías del almacén de la tienda de ropa, llenas de ropa doblada (la de los trasteros con montones de GPT, cuatro distintas:
+	# tools/ropa_estanterias.py)
+	"ropashelf":  {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
+	"ropashelf2": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
+	"ropashelf3": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
+	"ropashelf4": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -588,10 +594,10 @@ const SALAS := {
 	# trasteros, de frente y algo separada de la pared de la derecha ("libre"). En la normal, la pared de abajo y las 4 últimas filas quedan
 	# detrás de la pared alta de la sala de venta: lo de abajo se pone a 8 filas ("libre", y 7,4) y la carretilla en el medio de esas 8 (la fila 4)
 	"almacen-ropa": {"colocados": {
-		"abajo": [["storageshelf", 1.9], ["storageshelf", 5.2], ["storageshelf", 8.5], ["storageshelf", 11.8], ["storageshelf", 15.1],
+		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
 			["boxstack", 2.0, "libre", 7.4], ["boxstack", 5.0, "libre", 7.4], ["boxstack", 11.33, "libre", 7.4], ["boxstack", 14.67, "libre", 7.4],
 			["handtruck", 15.8, "libre", 4.0]],
-		"arriba": [["storageshelf", 1.88], ["storageshelf", 5.12], ["storageshelf", 11.21], ["storageshelf", 14.79],
+		"arriba": [["ropashelf3", 1.88], ["ropashelf", 5.12], ["ropashelf4", 11.21], ["ropashelf2", 14.79],
 			["boxstack", 2.17, "abajo"], ["boxstack", 5.33, "abajo"], ["boxstack", 8.5, "abajo"], ["boxstack", 11.67, "abajo"], ["boxstack", 14.83, "abajo"],
 			["handtruck", 15.8, "libre", 6.0]]}},
 	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 3.3, "izquierda"], ["stafftoilet", 6.7, "izquierda"], ["lockerbench", 5.85, "derecha"]],
