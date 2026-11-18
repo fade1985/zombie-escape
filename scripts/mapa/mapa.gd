@@ -79,7 +79,9 @@ const ESTILO_TIENDA := {
 	"tienda-joyeria": [["marmol"], "venta"],
 	# la tienda de ropa, rehecha por dentro (18 nov, el dueño): tarima de roble claro y pared rosa empolvado con rodapié
 	# dorado acanalado, de 4 casillas (su pared alta), de GPT (tools/ropa_gpt.py)
-	"tienda-ropa": [["ropa"], "ropa"], "probadores-ropa": [["ropa"], "ropa"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
+	"tienda-ropa": [["ropa"], "ropa"], "probadores-ropa": [["ropa"], "ropa"],
+	# y su aseo de empleados, como el vestuario de Johnny en la sala de mantenimiento (azulejo blanco y baldosa beis; el tercero, su techo)
+	"bano-ropa": [["vestuario"], "vestuario", "bano-b"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
 	# los departamentos de Torre Velaria (tercer edificio): la sala grande con moqueta gris de oficina (suelo-torre), su pared
 	# de tabique claro (pared-oficina) y, en cada departamento, lo suyo: el centro de datos de Informática, el parquet y la
 	# madera de Dirección (parte 2 del plan). Las habitaciones de dentro, con los suyos
@@ -256,7 +258,7 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 				var pared: String = ESTILO_TIENDA[clave][1]
 				estilos[s.id] = {"suelo": load("res://assets/sprites/suelo-%s.png" % suelos[h % suelos.size()]),
 					"pared": load("res://assets/sprites/pared-%s.png" % pared),
-					"techo": load("res://assets/sprites/techo-%s.png" % pared)}
+					"techo": load("res://assets/sprites/techo-%s.png" % (ESTILO_TIENDA[clave][2] if ESTILO_TIENDA[clave].size() > 2 else pared))}
 				continue
 			var estilo: String = ESTILO_DE[s.uso]
 			if estilo == "bano":
