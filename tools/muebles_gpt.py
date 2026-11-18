@@ -359,6 +359,8 @@ MUEBLES = {
     # el espejo de arco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "espejoprobador"; se levanta 11 píxeles al final de este archivo): marco dorado fino y
     # cristal vacío con dos brillos, en la pared de arriba de cada probador
     "espejoprobador": ("assets/sources/ropa/espejo-probador-gpt.webp", "assets/sprites/mueble-espejoprobador.png", 36, 50, True),
+    # el puf redondo blanco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "pufprobador"): en la esquina de arriba a la izquierda
+    "pufprobador": ("assets/sources/ropa/puf-probador-gpt.webp", "assets/sprites/mueble-pufprobador.png", 18, 20, True),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 

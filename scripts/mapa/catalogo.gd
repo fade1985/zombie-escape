@@ -81,6 +81,8 @@ const MUEBLES := {
 	"bancogaleria": {"len": 96, "dep": 36,  "paredes": "",      "archivo": "banco-galeria-gpt"},
 	# el espejo de arco de los probadores de la tienda de ropa, de GPT (tools/muebles_gpt.py; 18 nov, el dueño): en la pared de arriba
 	"espejoprobador": {"len": 72, "dep": 6,  "paredes": "todas", "archivo": "ropa/espejo-probador-gpt"},
+	# y su puf redondo blanco, de GPT (tools/muebles_gpt.py): en la esquina de arriba a la izquierda de cada probador
+	"pufprobador": {"len": 36, "dep": 30, "paredes": "todas", "archivo": "ropa/puf-probador-gpt"},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -574,7 +576,7 @@ const SALAS := {
 	# (50 × 30, pared alta); antes llevaba maniquíes, percheros, cajas y bancos, y el almacén, estanterías y palés. El aseo
 	# sigue con su botiquín (no es un mueble de aquí: Planta, armaritos)
 	"tienda-ropa": {"colocados": {"abajo": [], "arriba": []}},
-	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0]], "arriba": []}},
+	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7]], "arriba": [["pufprobador", 0.7, "abajo"]]}},
 	"almacen-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"bano-ropa": {"colocados": {"abajo": [], "arriba": []}},
 	"tienda-farmacia": {
