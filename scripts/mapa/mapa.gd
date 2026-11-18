@@ -284,7 +284,10 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
 		if not limpio:
-			preparar_restos()
+			if destrozadas().is_empty():
+				preparar_restos()
+			else:
+				manchas_de_las_salas()   # (la tienda de ropa: solo la sangre de los apartamentos, en las salas ya rehechas)
 	elif sitio.has("apt"):
 		manchas_del_pasillo()
 
@@ -743,8 +746,8 @@ func poner_caras() -> void:
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
-			if centro and not limpio and (destrozadas().is_empty() or sala_destrozada(sala)):
-				cara.adornos = restos_de_pared(cara.ancho, not destrozadas().is_empty())
+			if centro and not limpio and destrozadas().is_empty():
+				cara.adornos = restos_de_pared(cara.ancho)
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
 				cara.adornos += colgados(cara)
@@ -1300,8 +1303,7 @@ func preparar_restos() -> void:
 	for f in range(1, filas - 1):
 		for c in range(1, cols - 1):
 			if dueno[f * cols + c] >= 0 and not (es_muro(c - 1, f) or es_muro(c + 1, f) or es_muro(c, f - 1) or es_muro(c, f + 1)):
-				if destrozadas().is_empty() or sala_destrozada(dueno[f * cols + c]):
-					libres.append(Vector2(c, f))
+				libres.append(Vector2(c, f))
 	if libres.is_empty():
 		return
 	var azotea: bool = sitio.get("estilo", "") == "azotea"
@@ -1311,8 +1313,6 @@ func preparar_restos() -> void:
 			return pos.distance_to(sitio.helipuerto) > Planta.AZOTEA_ARO_LIBRE and Planta.lejos_de_muebles(sitio, pos, 16.0)
 		libres = libres.filter(lejos)
 	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, RESTOS_AZOTEA_MAX if azotea else 24)
-	if not destrozadas().is_empty():
-		cuantos = clampi(roundi(libres.size() / 5.0), 6, 60)   # las salas destrozadas: uno de cada cinco casillas
 	var lista: Array = RESTOS_AZOTEA if azotea else RESTOS_SUELO
 	for i in cuantos:
 		var casilla: Vector2 = libres[dado_restos.randi() % libres.size()]
@@ -1334,43 +1334,61 @@ func manchas_del_pasillo() -> void:
 	for s in sitio.apt.salas:
 		if s.uso != "pasillo" or s.get("tipo", "") != "piso":
 			continue
-		var dado := RandomNumberGenerator.new()
-		dado.seed = int(sitio.get("surtido", 0)) + 41 + s.id
-		var casillas := []
-		for f in range(s.f0, s.f0 + s.fondo):
-			for c in range(s.c0, s.c0 + s.ancho):
-				if dueno[f * cols + c] == s.id:
-					casillas.append(Vector2(c, f))
-		var dibujos := range(1, MANCHAS_PASILLO + 1)
-		var puestas := []
-		var cuantas := dado.randi_range(6, 8)
-		for intento in 300:
-			if puestas.size() >= cuantas or casillas.is_empty() or dibujos.is_empty():
-				break
-			var casilla: Vector2 = casillas[dado.randi() % casillas.size()]
-			var i_dibujo := dado.randi() % dibujos.size()
-			var textura: Texture2D = load("res://assets/sprites/sangre-suelo-%d.png" % dibujos[i_dibujo])
-			var giro := dado.randi() % 4
-			var espejo := dado.randf() < 0.5
-			if puestas.any(func(p): return p.distance_to(casilla) < 5.0):
-				continue
-			# entera sobre el suelo del pasillo: ni encima de un tabique ni asomando a otra habitación
-			var tam := textura.get_size() * 2.0
-			if giro % 2 == 1:
-				tam = Vector2(tam.y, tam.x)
-			var pos := (casilla + Vector2(0.5, 0.5)) * CASILLA
-			var hueco := Rect2(pos - tam / 2.0, tam)
-			var cabe := true
-			for f in range(floori(hueco.position.y / CASILLA), floori((hueco.end.y - 1.0) / CASILLA) + 1):
-				for c in range(floori(hueco.position.x / CASILLA), floori((hueco.end.x - 1.0) / CASILLA) + 1):
-					if c < 0 or f < 0 or c >= cols or f >= filas or dueno[f * cols + c] != s.id:
-						cabe = false
-			if not cabe:
-				continue
-			puestas.append(casilla)
-			dibujos.remove_at(i_dibujo)
-			restos.append({"dibujo": textura, "pos": pos, "giro": giro, "espejo": espejo})
-			salpicar_mancha(dado, pos, tam, s.id)
+		manchas_en_sala(s, 41, -1)
+
+
+# La sangre de las salas de una tienda que están destrozadas (Tienda.TIPOS "destrozada": el aseo, los probadores y el almacén de la
+# tienda de ropa), la misma de los pasillos de los pisos (sangre-suelo-N, con sus salpicones), y nada más: más charcos cuantas más
+# casillas tiene la sala
+func manchas_de_las_salas() -> void:
+	for s in sitio.apt.salas:
+		if sala_destrozada(s.id):
+			manchas_en_sala(s, 53, -2)
+
+
+# Las manchas de sangre de una sala (cuantas = -1: de 6 a 8, como el pasillo de un piso; -2: según lo grande que sea la sala)
+func manchas_en_sala(s: Dictionary, semilla: int, cuantas: int) -> void:
+	var dado := RandomNumberGenerator.new()
+	dado.seed = int(sitio.get("surtido", 0)) + semilla + s.id
+	var casillas := []
+	for f in range(s.f0, s.f0 + s.fondo):
+		for c in range(s.c0, s.c0 + s.ancho):
+			if dueno[f * cols + c] == s.id:
+				casillas.append(Vector2(c, f))
+	var dibujos := range(1, MANCHAS_PASILLO + 1)
+	var puestas := []
+	if cuantas == -1:
+		cuantas = dado.randi_range(6, 8)
+	elif cuantas == -2:
+		cuantas = clampi(roundi(casillas.size() / 20.0) + dado.randi_range(0, 1), 2, 7)
+	var lejos := 5.0 if s.uso == "pasillo" else 3.5   # (las salas de las tiendas, más pequeñas: los charcos, más juntos)
+	for intento in 300:
+		if puestas.size() >= cuantas or casillas.is_empty() or dibujos.is_empty():
+			break
+		var casilla: Vector2 = casillas[dado.randi() % casillas.size()]
+		var i_dibujo := dado.randi() % dibujos.size()
+		var textura: Texture2D = load("res://assets/sprites/sangre-suelo-%d.png" % dibujos[i_dibujo])
+		var giro := dado.randi() % 4
+		var espejo := dado.randf() < 0.5
+		if puestas.any(func(p): return p.distance_to(casilla) < lejos):
+			continue
+		# entera sobre el suelo de la sala: ni encima de un tabique ni asomando a otra habitación
+		var tam := textura.get_size() * 2.0
+		if giro % 2 == 1:
+			tam = Vector2(tam.y, tam.x)
+		var pos := (casilla + Vector2(0.5, 0.5)) * CASILLA
+		var hueco := Rect2(pos - tam / 2.0, tam)
+		var cabe := true
+		for f in range(floori(hueco.position.y / CASILLA), floori((hueco.end.y - 1.0) / CASILLA) + 1):
+			for c in range(floori(hueco.position.x / CASILLA), floori((hueco.end.x - 1.0) / CASILLA) + 1):
+				if c < 0 or f < 0 or c >= cols or f >= filas or dueno[f * cols + c] != s.id:
+					cabe = false
+		if not cabe:
+			continue
+		puestas.append(casilla)
+		dibujos.remove_at(i_dibujo)
+		restos.append({"dibujo": textura, "pos": pos, "giro": giro, "espejo": espejo})
+		salpicar_mancha(dado, pos, tam, s.id)
 
 
 # Los salpicones de alrededor de una mancha del pasillo (manchas_del_pasillo): gotas que salen del borde hacia fuera, en
@@ -1401,14 +1419,14 @@ func salpicar_mancha(dado: RandomNumberGenerator, pos: Vector2, tam: Vector2, sa
 
 # Los restos de una cara de muro de "ancho" unidades: [{dibujo, x, y}] en píxeles del dibujo, contando desde la
 # esquina de abajo a la izquierda de la cara (cara_pared.gd los pinta encima del papel)
-func restos_de_pared(ancho: float, destrozada := false) -> Array:
+func restos_de_pared(ancho: float) -> Array:
 	var lista := []
-	var tramos := floori(ancho / (RESTOS_PARED_CADA * (0.5 if destrozada else 1.0)))   # (destrozada: el doble de tramos y casi siempre)
+	var tramos := floori(ancho / RESTOS_PARED_CADA)
 	for i in tramos:
-		if dado_restos.randf() > (0.9 if destrozada else RESTOS_PARED_SUERTE):
+		if dado_restos.randf() > RESTOS_PARED_SUERTE:
 			continue
 		var t: Texture2D = load("res://assets/sprites/resto-%s.png" % RESTOS_PARED[dado_restos.randi() % RESTOS_PARED.size()])
-		var tramo := RESTOS_PARED_CADA / (4.0 if destrozada else 2.0)   # en píxeles del dibujo
+		var tramo := RESTOS_PARED_CADA / 2.0   # en píxeles del dibujo
 		var x := i * tramo + dado_restos.randf_range(0.0, maxf(0.0, tramo - t.get_width()))
 		var y := -dado_restos.randf_range(t.get_height() + 6.0, 44.0)   # sin pisar el rodapié ni la moldura
 		lista.append({"dibujo": t, "x": floorf(x), "y": floorf(y)})
