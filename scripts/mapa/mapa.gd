@@ -167,6 +167,7 @@ var expo_sprites: Array = []      # los zombis de la exposición, que van girand
 var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
 var galeria := false              # si es la galería del centro comercial: limpia, sin restos en el suelo ni en las paredes (17 nov)
+var limpio := false               # sin restos en el suelo ni en las paredes: la galería y las tiendas que se rehacen (Tienda.TIPOS "limpia")
 var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con oscuro alrededor (viviendas.gd)
 var sube := 3                     # lo que suben las paredes, en casillas: 3 o, en las tiendas de pared alta, 4 (Tienda.TIPOS "sube")
 var al_aire := false              # la azotea: toda ella, la imagen de GPT (AZOTEA), con la barandilla; ni caras ni tapas
@@ -271,9 +272,10 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 
 	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea", "torre", "vestibulo", "laboratorio"]
 	galeria = sitio.get("estilo", "") == "galeria"
+	limpio = galeria or Tienda.TIPOS.get(sitio.get("tienda", ""), {}).get("limpia", false)
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
-		if not galeria:
+		if not limpio:
 			preparar_restos()
 	elif sitio.has("apt"):
 		manchas_del_pasillo()
@@ -720,7 +722,7 @@ func poner_caras() -> void:
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
-			if centro and not galeria:
+			if centro and not limpio:
 				cara.adornos = restos_de_pared(cara.ancho)
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
@@ -1225,7 +1227,7 @@ func poner_escaparates() -> void:
 		var t := dibujo.texture.get_size()
 		dibujo.position = Vector2(-t.x, -9 - t.y * 2)   # el pie, 4 píxeles por encima del suelo (el rodapié)
 		nodo.add_child(dibujo)
-		if not galeria and dado_restos.randf() < 0.6:
+		if not limpio and dado_restos.randf() < 0.6:
 			var mancha := Sprite2D.new()
 			mancha.texture = load("res://assets/sprites/resto-%s.png" % ["salpicon", "huellas"][dado_restos.randi() % 2])
 			mancha.scale = Vector2(2, 2)

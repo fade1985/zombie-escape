@@ -856,7 +856,11 @@ en una línea.
   de arriba, `tabique.gd sube`, y al dintel) y sus puertas de dentro, de 86 a 118 de alto (`puerta_bano.gd alargar`): con la
   de siempre, la dependienta (105 de alto) no cabía por ellas. Los dibujos de la pared y de las puertas no se estiran: se
   alargan repitiendo su franja de en medio (`alargar.gd`). Se mira con `--puerta-dependienta` (la dependienta delante de
-  cada puerta y dentro del hueco, con lo alto de cada uno); la galería, igual
+  cada puerta y dentro del hueco, con lo alto de cada uno); desde el 18 nov la tienda de ropa tiene **plano nuevo** (50 × 30: el aseo de
+  7 × 12, el almacén de 17 × 12 y tres probadores de 6 × 8 en la pared de arriba; sin el pasillo del medio) y está
+  **vacía** mientras el dueño la rehace (sin muebles: los `colocados` de `*-ropa`, vacíos; y sin restos de sangre y
+  pintadas, `"limpia"` en `Tienda.TIPOS` y `mapa.limpio`, como la galería; el botiquín del aseo sigue). Su plano de
+  antes, `"ropa-antigua"`, solo lo usan Recursos Humanos y Dirección de la torre (`"plano"` en su `"presta"`); la galería, igual
   (`colocados` de `"galeria"`, se mira con `--galeria`; desde el 17 nov vacía mientras el dueño la rehace: sin muebles ni restos
   sueltos de sangre y pintadas, `mapa.galeria`; solo las puertas de las tiendas, sus escaparates y letreros, el ascensor, las
   salidas; tampoco apliques: se sortean y se quitan en `planta.gd`; ni el número de la planta junto al ascensor, `sin_cartel`; la luz la dan tres neones dibujados de GPT en los huecos de

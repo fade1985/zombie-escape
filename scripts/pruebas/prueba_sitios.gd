@@ -1265,7 +1265,7 @@ func probar_tiendas_fijas() -> void:
 	for l in Tienda.LETRAS:
 		letra[Tienda.LETRAS[l].uso] = l
 	for tipo in Tienda.PLANOS:
-		if solo != "" and tipo != solo:
+		if solo != "" and tipo != solo or not Tienda.TIPOS.has(tipo):   # (ropa-antigua: el plano viejo, solo para la torre)
 			continue
 		for lado in ["abajo", "arriba"]:
 			var t := Tienda.generar(0, tipo, false, lado)

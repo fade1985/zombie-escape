@@ -37,9 +37,10 @@ const TIPOS := {
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
 		"color": Color("#ff4f5e")},
 	# (18 nov, el dueño: la primera que se rehace por dentro. "sube": su pared, de 4 casillas en vez de 3, y sus puertas de
-	# dentro, más altas: con la de siempre, la dependienta, de 112 px, era más alta que las puertas; Planta.generar, mapa.gd)
+	# dentro, más altas: con la de siempre, la dependienta, de 112 px, era más alta que las puertas; Planta.generar, mapa.gd.
+	# "limpia": sin sangre ni pintadas sueltas, mientras se rehace, como la galería: mapa.limpio)
 	"ropa": {"nombre": "Tienda de ropa", "neon": "MODA", "salas": ["probadores", "almacen"],   # [traducir]
-		"color": Color("#ff5fd0"), "sube": 4},
+		"color": Color("#ff5fd0"), "sube": 4, "limpia": true},
 	"farmacia": {"nombre": "Farmacia", "neon": "FARMACIA", "salas": ["rebotica", "bano"],   # [traducir]
 		"color": Color("#3dff6e")},
 	# la joyería (parte 9): no entra en el sorteo de cada planta, sale una por partida (Planta.joyeria_planta).
@@ -59,7 +60,7 @@ const TIPOS := {
 		"presta": {"tipo": "electronica", "usos": {"servidores": "taquillas"}}},
 	"rrhh": {"nombre": "Recursos Humanos", "neon": "RR.HH.", "salas": ["archivo", "entrevistas", "bano"],   # [traducir]
 		"color": Color("#ffe9c9"), "edificio": "torre",
-		"presta": {"tipo": "ropa", "usos": {"archivo": "almacen", "entrevistas": "probadores"}}},
+		"presta": {"tipo": "ropa", "plano": "ropa-antigua", "usos": {"archivo": "almacen", "entrevistas": "probadores"}}},
 	"marketing": {"nombre": "Marketing", "neon": "MARKETING", "salas": ["almacen", "estudio", "bano"],   # [traducir]
 		"color": Color("#ffc6ef"), "edificio": "torre",
 		"presta": {"tipo": "ferreteria", "usos": {"estudio": "taller"}}},
@@ -68,7 +69,7 @@ const TIPOS := {
 		"presta": {"tipo": "restaurante", "usos": {"camaras": "cocina", "armero": "camara"}}},
 	"direccion": {"nombre": "Dirección", "neon": "DIRECCION", "salas": ["despacho", "juntas", "bano"],   # [traducir]
 		"color": Color("#fff3b0"), "edificio": "torre", "desde": 3,
-		"presta": {"tipo": "ropa", "usos": {"despacho": "almacen", "juntas": "probadores"}}},
+		"presta": {"tipo": "ropa", "plano": "ropa-antigua", "usos": {"despacho": "almacen", "juntas": "probadores"}}},
 }
 # [traducir]
 const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "taller": "Taller", "taquillas": "Taquillas",
@@ -239,7 +240,43 @@ const PLANOS := {
 	],
 	# la tienda de ropa: a la izquierda, el aseo de empleados y el almacén (el aseo se abre a él); a la derecha, los
 	# probadores; entre los dos, un trozo de tienda hasta el fondo, con el escaparate de maniquíes
+	# la tienda de ropa (18 nov, el dueño: la primera que se rehace por dentro): 50 × 30, con la pared alta (TIPOS "sube").
+	# Arriba, de izquierda a derecha: el aseo (7 × 12, se entra por el almacén), el almacén (17 × 12, hasta los
+	# probadores) y tres probadores de 6 × 8, cada uno con su puerta a la sala de venta; lo demás, sala de venta
 	"ropa": [
+		"##################################################",
+		"##################################################",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",   # no-tr
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",   # no-tr
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#PPPPPP#PPPPPP#PPPPPP##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA###  #####  #####  ####",   # no-tr
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVVVVVVVVVVVVVVVVV##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVVVVVVVVVVVVVVVVV##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVVVVVVVVVVVVVVVVV##",
+		"#################  #########VVVVVVVVVVVVVVVVVVVV##",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"########################EE########################",
+		"########################EE########################",
+	],
+	# la tienda de ropa de antes (M77, hasta el 18 nov): ahora solo la usan Recursos Humanos y Dirección (TIPOS "presta")
+	"ropa-antigua": [
 		"########################################",
 		"########################################",
 		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
@@ -348,7 +385,8 @@ static func de_edificio(edificio: String) -> Array:
 
 
 # El plano de un local: el suyo o, en un departamento de la torre que aún no lo tiene, el de la tienda que le presta el
-# suyo, con las letras de sus habitaciones cambiadas por las de las suyas
+# suyo ("plano", si no es el de ahora de esa tienda: Recursos Humanos y Dirección siguen con el de antes de la ropa), con
+# las letras de sus habitaciones cambiadas por las de las suyas
 static func plano_de(tipo: String) -> Array:
 	if PLANOS.has(tipo):
 		return PLANOS[tipo]
@@ -357,7 +395,7 @@ static func plano_de(tipo: String) -> Array:
 	for uso in presta.usos:
 		cambio[letra_de(presta.usos[uso])] = letra_de(uso)
 	var plano := []
-	for fila in PLANOS[presta.tipo]:
+	for fila in PLANOS[presta.get("plano", presta.tipo)]:
 		var nueva := ""
 		for c in fila:
 			nueva += cambio.get(c, "V" if c == "~" else c)   # (sin el charco con corriente de la electrónica)
