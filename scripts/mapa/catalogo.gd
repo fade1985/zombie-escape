@@ -610,7 +610,7 @@ const SALAS := {
 			["ropabarra", 6.79, "libre", 4.4375], ["ropaoval", 10.58, "libre", 4.5], ["ropamodulo", 21.5, "libre", 4.5], ["ropazapatos", 36.0, "libre", 8.0],
 			["ropaperchero1", 31.5, "libre", 12.0], ["ropaperchero2", 37.0, "libre", 12.0], ["roparuedas", 41.3, "libre", 12.0], ["ropatarimas", 31.5, "libre", 15.5],
 			["ropamesa", 37.0, "libre", 15.5], ["ropamaniqui1", 40.8, "libre", 15.8], ["ropamaniqui2", 42.5, "libre", 15.8], ["ropamaniqui3", 44.2, "libre", 15.8],
-			["ropamaniqui4", 28.0, "libre", 12.5], ["ropamostrador", 13.88, "libre", 9.0]],
+			["ropamaniqui4", 28.0, "libre", 12.5], ["ropamostrador", 15.12, "libre", 9.0]],
 		"arriba": [
 			["ropamodulo", 2.6, "libre", 0.5], ["ropabarra", 8.1, "libre", 0.4375], ["ropazapatos", 12.7, "libre", 0.5], ["ropavitrina", 15.6, "libre", 0.5],
 			["ropaoval", 17.6, "libre", 0.5], ["ropazapatos", 20.1, "libre", 0.5], ["ropamodulo", 27.2, "libre", 0.5], ["ropabarra", 33.1, "libre", 0.4375],
