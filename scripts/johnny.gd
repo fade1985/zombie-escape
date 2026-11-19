@@ -1357,8 +1357,8 @@ func preparar_fogonazo() -> void:
 		Chispa.precalentar(get_parent())
 		if stats.resucitar and not resucitado:   # el desfibrilador (M55), para que no pare el juego al caer
 			EfectoSuelo.precalentar(get_parent(), "desfibrilador")
-		if Skins.copia(skin) > 0 and not copia_usada:   # (y la «Copia de seguridad» del becario, igual)
-			EfectoSuelo.precalentar(get_parent(), "mutar")
+		# (y el de las mutaciones, que también sale al llenar la barra del mutágeno: partida.llenar_mutageno)
+		EfectoSuelo.precalentar(get_parent(), "mutar")
 
 
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta

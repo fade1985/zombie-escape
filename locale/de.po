@@ -4740,12 +4740,12 @@ msgid "Mutágeno"
 msgstr "Mutagen"
 
 #: scripts/tutoriales.gd
-msgid "Al coger el primer mutágeno"
+msgid "Al conseguir el primer mutágeno"
 msgstr "Beim ersten Mutagen"
 
 #: scripts/tutoriales.gd
-msgid "Al caer, los durmientes sueltan mutágeno: pasa por encima para cogerlo."
-msgstr "Beim Fallen lassen Schläfer Mutagen fallen: Lauf drüber, um es aufzuheben."
+msgid "Cada zombi que cae llena la barra verde de encima de la vida: al llegar al 100 %, consigues un mutágeno."
+msgstr "Jeder Zombie, der fällt, füllt den grünen Balken über deiner Lebensleiste: Bei 100 % bekommst du ein Mutagen."
 
 #: scripts/tutoriales.gd
 msgid "Solo te lo quedas si completas el edificio: si caes o abandonas, pierdes el de esa partida."
@@ -7701,7 +7701,3 @@ msgstr "TOCK!"
 #: scripts/zombi_guardia.gd
 msgid "¡¡¡GRRR!!!"
 msgstr "GRRR!!!"
-
-#, sin-usar
-msgid "¡ÁCIDO!"
-msgstr "SÄURE!"

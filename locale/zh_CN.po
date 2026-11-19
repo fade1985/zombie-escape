@@ -4732,12 +4732,12 @@ msgid "Mutágeno"
 msgstr "诱变剂"
 
 #: scripts/tutoriales.gd
-msgid "Al coger el primer mutágeno"
-msgstr "第一次捡到诱变剂时"
+msgid "Al conseguir el primer mutágeno"
+msgstr "第一次获得诱变剂时"
 
 #: scripts/tutoriales.gd
-msgid "Al caer, los durmientes sueltan mutágeno: pasa por encima para cogerlo."
-msgstr "沉睡者倒下时会掉落诱变剂：走过去捡起来。"
+msgid "Cada zombi que cae llena la barra verde de encima de la vida: al llegar al 100 %, consigues un mutágeno."
+msgstr "每倒下一只僵尸，生命条上方的绿色条就会增加：满 100% 时，你获得一份诱变剂。"
 
 #: scripts/tutoriales.gd
 msgid "Solo te lo quedas si completas el edificio: si caes o abandonas, pierdes el de esa partida."
@@ -7680,7 +7680,3 @@ msgstr "咚！"
 #: scripts/zombi_guardia.gd
 msgid "¡¡¡GRRR!!!"
 msgstr "吼！！！"
-
-#, sin-usar
-msgid "¡ÁCIDO!"
-msgstr "酸液！"

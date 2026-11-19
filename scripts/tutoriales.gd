@@ -68,8 +68,8 @@ const LISTA := {
 			"Si completas el edificio te los quedas todos; si caes o abandonas, los pierdes.",
 			"Se gastan en la tienda de armas del ordenador de la sala de mantenimiento."]},
 	# (15 nov: el mutágeno, que paga las mutaciones; sale como el de los dólares, desde partida.mirar_tutoriales)
-	"mutageno": {"grupo": "Lo básico", "titulo": "Mutágeno", "icono": "mutageno", "cuando": "Al coger el primer mutágeno",
-		"lineas": ["Al caer, los durmientes sueltan mutágeno: pasa por encima para cogerlo.",
+	"mutageno": {"grupo": "Lo básico", "titulo": "Mutágeno", "icono": "mutageno", "cuando": "Al conseguir el primer mutágeno",
+		"lineas": ["Cada zombi que cae llena la barra verde de encima de la vida: al llegar al 100 %, consigues un mutágeno.",
 			"Solo te lo quedas si completas el edificio: si caes o abandonas, pierdes el de esa partida.",
 			"Se gasta en Mutaciones, en el ordenador: mejoras para Johnny que duran para siempre."]},
 	# (sale al llevar la primera arma a distancia, sacada del baúl o cogida del suelo: partida.mirar_tutoriales; M97.

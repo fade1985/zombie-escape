@@ -84,8 +84,8 @@ const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
 const REFUERZOS := 4               # los guardias que llegan al rugido del guardia en la planta baja... (M83: antes 2)
 const REFUERZOS_POR_PLANTA := 2    # ...y 2 más en cada planta de arriba (17 nov: 4, 6, 8...; lo pidió el dueño)
 const REFUERZOS_VELOCIDAD := 165.0 # y lo deprisa que corren (M83: antes 85, la de un vigilante normal)
-# Lo que suelta el guardia además de la llave maestra (17 nov): un dólar y un mutágeno por cada guardia que ha llamado y
-# uno más (en la planta baja, 5 de cada; en la primera, 7...): guardias_del_rugido() + 1
+# Lo que suelta el guardia además de la llave maestra (17 nov): un dólar por cada guardia que ha llamado y uno más (en la
+# planta baja, 5; en la primera, 7...): guardias_del_rugido() + 1. Y llena la barra del mutágeno (MUTAGENO_ZOMBI)
 # Los zombis aguantan más según el edificio (12 nov: con la pistola y la fregona se pasaba el juego entero), además de lo
 # de cada planta (ZOMBI_POR_PLANTA): los Apartamentos son los de siempre. Los jefes de planta, algo menos por edificio
 # (ya suben JEFE_POR_PLANTA); el jefe final y el guardia, con su vida de siempre (el guardia ya sube por planta)
@@ -112,7 +112,14 @@ const MUNICION_ZOMBI := 0.1        # ...y el 10 %, munición de un arma de fuego
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const BILLETES_JEFA := 10          # lo único que suelta cada jefe al caer, también el de la azotea (16 nov: antes 8, más
                                    # munición, dos objetos y, fuera de los Apartamentos, cuatro materiales; hasta el 27 oct, 3)
-const MUTAGENO := preload("res://assets/ui/iconos/mutageno.png")   # el mutágeno del suelo (soltar_mutageno)
+# El mutágeno ya no cae al suelo (19 nov, lo pidió el dueño): cada zombi que matas llena una barra, encima de la de vida
+# (hud.gd), y cada vez que llega al 100 % da un mutágeno y vuelve a empezar (llenar_mutageno). Lo que llena cada uno, en
+# puntos de la barra (el que no está, como el vecino: dependienta, vigilante, oficinista, escolta, maniquí...). Los jefes
+# y los zombis que llama un jefe, nada
+const MUTAGENO_ZOMBI := {"lento": 1, "normal": 2, "vecina": 2, "rapido": 3, "venenoso": 4, "tentaculos": 5,
+	"explosivo": 5, "guardia": 5}
+const MUTAGENO_OTRO := 2
+const MUTAGENO_BARRA := 100   # lo que hay que llenar para un mutágeno
 const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su verde, el del mutágeno)
 # El tope de los dólares (lo ahorrado más lo de la partida: cartera) y del mutágeno: lo que cabe en el marcador del
 # inventario, «MAX» (15 nov, lo pidió el dueño). Al llegar, los enemigos dejan de soltarlos y lo que hay en el suelo no
@@ -178,9 +185,10 @@ var orden_casillas := {}   # en qué casilla del inventario va cada cosa, si el 
 var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a cuerpo y una a distancia (llevar_arma)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
-var mutageno := 0          # el mutágeno cogido en esta partida (15 nov): lo suelta cada durmiente y se gasta en los
+var mutageno := 0          # el mutágeno cogido en esta partida (15 nov): lo da la barra (llenar_mutageno) y se gasta en los
                            # talentos del ordenador. Al completar el edificio, el que quede pasa al guardado; si caes
                            # o abandonas, se pierde (terminar)
+var mutageno_barra := 0    # lo que lleva llena la barra del mutágeno, de 0 a 99 (llenar_mutageno)
 var mutageno_ahorrado := 0 # el mutágeno guardado de otras partidas ("mutageno" del guardado): se ve sumado al de esta
                            # (mutageno_total) y al comprar talentos se gasta después del de esta (Talentos.subir)
 var muertos := 0           # zombis matados en esta partida
@@ -1441,24 +1449,30 @@ func mutageno_total() -> int:
 	return mutageno_ahorrado + mutageno
 
 
-# Un mutágeno en el suelo, donde ha caído un durmiente (todos menos los jefes, que dan su mutación): se coge como un
-# billete y se ve, verde, en el inventario (inventario.gd, junto a los dólares)
-func soltar_mutageno(donde: Vector2) -> void:
-	if mutageno_total() >= TOPE:   # (en el tope, MAX, ya no sueltan)
+# Un zombi caído llena la barra del mutágeno (MUTAGENO_ZOMBI): cada vez que llega al 100 %, un mutágeno más, y la barra
+# sigue con lo que sobra. El HUD (hud.gd) ve el cambio y lo anima; aquí, el sonido, el efecto de la mutación en Johnny
+# (el ADN que sube, "mutar") y el «+1» verde. En el tope (TOPE, «MAX») ya no se llena
+func llenar_mutageno(puntos: int) -> void:
+	if puntos <= 0 or mutageno_total() >= TOPE:
 		return
-	var cosa := BILLETE.new()
-	cosa.johnny = johnny
-	cosa.icono = MUTAGENO
-	cosa.tamano = 0.75
-	cosa.a_oscuras = true   # (se ve un poco aunque el piso esté a oscuras: los durmientes caen en cualquier rincón)
-	cosa.add_to_group("mutagenos")
-	cosa.position = donde
-	cosa.puede = func() -> bool: return mutageno_total() < TOPE
-	cosa.cogido.connect(func():
+	mutageno_barra += puntos
+	var ganados := 0
+	while mutageno_barra >= MUTAGENO_BARRA and mutageno_total() < TOPE:
+		mutageno_barra -= MUTAGENO_BARRA
 		mutageno += 1
+		ganados += 1
+	if mutageno_total() >= TOPE:
+		mutageno_barra = 0
+	if ganados > 0:
 		Sonido.tocar("mutageno")
-		numero(cosa.position, "+1", CHAPA_UI.VERDE))
-	mapa.cosas.add_child.call_deferred(cosa)
+		if johnny and johnny.vivo:
+			EfectoSuelo.soltar(johnny, "mutar", Vector2.ZERO)
+			numero(johnny.position, "+%d" % ganados, CHAPA_UI.VERDE)
+
+
+# Lo que llena la barra un zombi de este tipo
+func mutageno_de(tipo: String) -> int:
+	return MUTAGENO_ZOMBI.get(tipo, MUTAGENO_OTRO)
 
 
 # Los dólares que aún caben hasta el tope (TOPE, contando lo ahorrado)
@@ -2317,11 +2331,11 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		if tipo == "guardia":
 			_al_caer_guardia(zombi)
 		# Lo que suelta (15 nov, lo pidió el dueño). Ya nadie suelta lanzables (antes, a veces un molotov o una granada:
-		# se compran en la tienda). Cada durmiente, siempre su mutágeno (soltar_mutageno, hasta el tope) y siempre una
+		# se compran en la tienda). Cada durmiente llena la barra del mutágeno (llenar_mutageno, 19 nov) y suelta una
 		# cosa más (soltar_premio_durmiente: un billete o munición), y con la skin del doctor Salas, la mitad de las
 		# veces otra (Skins.doble); ya no sueltan objetos (las vendas, la gasolina, la batería, el bidón de ácido del
 		# gordo: Objetos.que_suelta). El guardia, sus billetes, su mutágeno y a veces un objeto, como antes. Los jefes,
-		# solo sus billetes (16 nov: ni munición, ni objetos, ni materiales; no dan mutágeno: dan su mutación)
+		# solo sus billetes (16 nov: ni munición, ni objetos, ni materiales; no llenan la barra: dan su mutación)
 		var tienda: String = planta.sitios[aqui].get("tienda", "")
 		# (la munición que sale, solo la de las armas que lleva Johnny: la de la mano y la de repuesto)
 		var queda := municion_que_lleva()
@@ -2331,10 +2345,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			soltar_billetes(BILLETES_JEFA, zombi.position)
 		elif tipo == "guardia":
 			soltar_billetes(guardias_del_rugido() + 1, zombi.position)
-			for i in guardias_del_rugido() + 1:
-				soltar_mutageno(zombi.position)
+			llenar_mutageno(mutageno_de(tipo))
 		else:
-			soltar_mutageno(zombi.position)
+			llenar_mutageno(mutageno_de(tipo))
 			for i in (2 if randf() < Skins.doble(johnny.skin) else 1):
 				soltar_premio_durmiente(zombi.position)
 		# Caníbal: cada zombi que matas te cura

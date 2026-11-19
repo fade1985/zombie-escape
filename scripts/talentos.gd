@@ -3,10 +3,10 @@
 # (M16, 28 oct: el 4, con un talento debajo de cada uno del 3, y el 5, la «corona» de la rama, que pide los tres del 4
 # al máximo).
 #
-# Cada punto de un talento se compra directamente en él, con mutágeno (lo suelta cada durmiente; parte 2 del mutágeno,
-# 15 nov), en el ordenador de la sala de mantenimiento (ui/ordenador.gd, TALENTOS.EXE): cada punto sube un nivel y
-# cuesta más que el anterior del mismo talento (PRECIOS: 25, 50, 75, 100 y 125; los de un solo punto, 125). Llenar el
-# árbol entero sale por 7.800. Se puede gastar el guardado más el de la partida en curso (partida.mutageno_total): se
+# Cada punto de un talento se compra directamente en él, con mutágeno (lo da la barra que llenan los zombis al caer,
+# partida.llenar_mutageno, 19 nov; antes lo soltaba cada durmiente), en el ordenador de la sala de mantenimiento (ui/ordenador.gd, TALENTOS.EXE): cada punto sube un nivel y
+# cuesta más que el anterior del mismo talento (PRECIOS: 1, 1, 2, 2 y 3; los de un solo punto, 3). Llenar el
+# árbol entero sale por unos 190. Se puede gastar el guardado más el de la partida en curso (partida.mutageno_total): se
 # gasta primero el de la partida (el que se perdería al caer) y luego el guardado. Lo comprado es para siempre (se
 # guarda en "talentos" del guardado). Resetear es gratis y no
 # devuelve nada. Hasta el 15 nov se pagaban con los dólares ahorrados, y antes del 6 nov con «puntos de talento»: los
@@ -18,9 +18,10 @@
 class_name Talentos
 
 # Lo que cuesta, en mutágeno, cada punto dentro de un talento: el 1.º, el 2.º... Los talentos de un solo punto cuestan
-# PRECIO_UNICO. Llenar el árbol entero sale por 7.800 (2.600 cada rama); una partida da unos 300-340
-const PRECIOS := [25, 50, 75, 100, 125]
-const PRECIO_UNICO := 125
+# PRECIO_UNICO. Hasta el 19 nov, 25, 50, 75, 100 y 125 (y 125), cuando cada durmiente soltaba uno: con la barra
+# (partida.llenar_mutageno) se consigue unas 40 veces menos, y los precios se dividieron entre 40
+const PRECIOS := [1, 1, 2, 2, 3]
+const PRECIO_UNICO := 3
 
 # Los textos de RAMAS y de LISTA (nombre y desc) se traducen al enseñarlos, con nombre_rama(), nombre_de() y desc_de().
 # Ojo: las desc no acaban en punto, porque ordenador.gd les pega detrás «. Te hace falta 1 punto.» y similares

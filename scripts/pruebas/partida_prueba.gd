@@ -253,13 +253,13 @@
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
 #   --municion-zombi    la munición que suelta un durmiente: solo la de las armas que lleva (la mano y el repuesto;
 #                       las especiales, su gasolina, bidón o batería; solo cuerpo a cuerpo, nada) [prueba_inventario.gd]
-#   --botin             lo que suelta un durmiente (15 nov): siempre el mutágeno y un billete (80 %) o munición (20 %;
+#   --botin             lo que suelta un durmiente (15 nov): un billete (80 %) o munición (20 %; y llena la barra del mutágeno;
 #                       sin arma de fuego, el billete); con la skin del doctor Salas, a veces otra cosa; nunca
 #                       lanzables ni objetos                                                 [prueba_inventario.gd]
 #   --fregona-mejorada  la fregona mejorada (15 nov): empieza con ella, gasta una por partida, no se queda en el baúl
 #                       y, al romperse, el cartel del final lo dice y vuelve la Normal       [prueba_inventario.gd]
-#   --mutageno          el mutágeno que suelta cada durmiente: cae, se coge, va en la partida guardada y sale en el
-#                       inventario, debajo de los dólares                                   [prueba_inventario.gd]
+#   --mutageno          la barra del mutágeno (19 nov): lo que llena cada zombi, al 100 % da uno (y su destello), va en
+#                       la partida guardada y sale en el inventario, debajo de los dólares  [prueba_inventario.gd]
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
 #                       en el HUD y en el inventario                                       [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar (--fotos-tiendas con

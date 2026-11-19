@@ -458,9 +458,9 @@ en una línea.
   charco `residuo`, `charco.gd`), y Pararrayos, al recibir un golpe (`johnny.pararrayos`, con `Talentos.PARARRAYOS`).
   En el ordenador, las tres ramas a la vez (`arbol_talentos.gd`, ver más abajo). Se prueba con `--quimico`. Cada punto
   se compra en su talento. Desde el 15 nov, con **mutágeno** (el guardado más el de la partida, `partida.mutageno_total`; antes, desde el 6 nov,
-  con los dólares ahorrados, y antes, con puntos de talento): dentro de cada talento el 1.º punto cuesta 25, el 2.º 50,
-  el 3.º 75, el 4.º 100 y el 5.º 125 (`Talentos.PRECIOS`); los de un solo punto, 125 (`PRECIO_UNICO`); el árbol entero,
-  7.800. `Talentos.precio(s, id)` es lo del punto siguiente, `motivo(s, id, mutageno)` dice si se puede («sin_mutageno»
+  con los dólares ahorrados, y antes, con puntos de talento): dentro de cada talento el 1.º punto cuesta 1, el 2.º 1,
+  el 3.º 2, el 4.º 2 y el 5.º 3 (`Talentos.PRECIOS`); los de un solo punto, 3 (`PRECIO_UNICO`); el árbol entero,
+  192 (hasta el 19 nov, 40 veces más: 25 a 125, cuando cada durmiente soltaba un mutágeno). `Talentos.precio(s, id)` es lo del punto siguiente, `motivo(s, id, mutageno)` dice si se puede («sin_mutageno»
   si no llega) y `subir(id, partida)` lo cobra: primero del cogido en esta partida (`partida.mutageno`, el que se
   perdería al caer) y lo que falte, del guardado ("mutageno"); lo de la partida se quita también de la partida guardada
   a medias (`PartidaGuardada.gastar_mutageno`: si no, cerrar el juego y seguirla lo devolvería). Se prueba en
@@ -488,14 +488,20 @@ en una línea.
   la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
   `--talentos-altos`). Desde el 11 nov (bloque J) todos los talentos hacen la mitad (el precio no cambia): lo que daba +10 % da +5 %; lo que daba un objeto entero por punto (Artificiero, Durito, Criogenia, Racimo, Alto voltaje) da 1 cada 2 puntos (`int(n / 2.0)`); el Ajolote cura cada 10 s (`REGENERA_CADA`); Larguirucho ×1,5, Mirilla 1 de cada 6, Veterano ×2,5 y +5 %, Fabricante ×1,15 y ×1,25, Pararrayos 10 de daño y 0,5 s, Mezcla explosiva radio 45 y 15 de daño, Adrenalina +15 % y +10 %), y desde el 15 nov (lo pidió el dueño): Artificiero +1 de cada lanzable por punto (en cada montón, `Lanzables.extra_talentos`; al empezar, solo molotovs y granadas, los que se tienen de salida), Racimo 1 por punto y en todos los lanzables, Durito 2 menos por punto, Reflejos cada 10 s con un punto (10,5 − 0,5 por punto), Desfibrilador con la mitad de la vida (y el tercio del medio), Blindaje 5 por punto, Criogenia sin congeladoras, Alto voltaje 1 durmiente más por punto, y el charco de Residuo tóxico y la explosión de Mezcla explosiva (15) también le hacen daño a Johnny,
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
-- **Lo que suelta un durmiente** (15 nov, lo pidió el dueño; `partida.gd`, `zombi.murio`): siempre su mutágeno y una cosa
-  más, un billete el 80 % de las veces y munición de un arma de fuego que lleve el 20 % (`soltar_premio_durmiente`,
+- **Lo que suelta un durmiente** (15 nov, lo pidió el dueño; `partida.gd`, `zombi.murio`): una cosa (y llena la barra
+  del mutágeno), un billete el 80 % de las veces y munición de un arma de fuego que lleve el 20 % (`soltar_premio_durmiente`,
   `BILLETE_ZOMBI`, `MUNICION_ZOMBI`; sin arma de fuego, el billete). Ya no sueltan objetos (`Objetos.que_suelta` solo lo
   mira el guardia) ni lanzables. Los jefes y el guardia, como antes, sin lanzables. Prueba: `--botin`.
-- **El mutágeno** (15 nov): cada durmiente que muere (todos menos los jefes, que dan su mutación; ni en la sala de pruebas
-  ni los que caen por el ventanal) suelta uno (`partida.soltar_mutageno`, un billete con el dibujo `assets/ui/iconos/mutageno.png`,
-  de GPT, `tools/muebles_gpt.py mutageno`, y el sonido `"mutageno"`). Se cuenta en `partida.mutageno` y va en la partida
-  guardada a medias (`PartidaGuardada`). Al completar el edificio, el que quede pasa al guardado ("mutageno",
+- **El mutágeno** (15 nov; con barra desde el 19 nov, lo pidió el dueño): ya no cae al suelo. Cada zombi que muere llena
+  una barra (`partida.llenar_mutageno`, puntos de `MUTAGENO_ZOMBI`: arrastrado 1, vecino y vecina 2, crío 3, gordo 4,
+  tentáculos y dinamitero 5, el guardia 5, los demás 2, `MUTAGENO_OTRO`; los jefes y los que llama un jefe, nada; ni en
+  el garaje) y, cada vez que llega a 100 (`MUTAGENO_BARRA`), da un mutágeno y sigue con lo que sobra: el sonido
+  `"mutageno"`, el efecto de las mutaciones en Johnny (`EfectoSuelo` "mutar") y un «+1» verde. La barra, en el HUD justo
+  encima de la de vida (`hud.gd`, `pintar_mutageno`/`mover_mutageno`: verde menta, con el tanto por ciento, burbujas, un
+  brillo que la recorre y, al completarse, destello blanco y salto de la hélice; marco `assets/ui/barra-mutageno.png`, el
+  del escudo con el filo verde; el escudo va encima de ella, `alto_encima`). Lo lleno va en `partida.mutageno_barra`. Se
+  cuenta en `partida.mutageno` y los dos van en la partida guardada a medias (`PartidaGuardada`). Los guardados de antes
+  del 19 nov dividen su mutágeno entre 40 una vez (marca `mutageno_barra` de `guardado.gd`). Prueba: `--mutageno`. Al completar el edificio, el que quede pasa al guardado ("mutageno",
   `partida.terminar`; lo pidió el dueño el 15 nov); si caes o abandonas, el de esa partida se pierde, y el guardado no
   (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. La primera vez que se coge, su tutorial («mutageno», en `mirar_tutoriales`; prueba `--tutorial-mutageno`). Se ve, el guardado más el de la partida
   (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los

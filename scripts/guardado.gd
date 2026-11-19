@@ -36,6 +36,8 @@ const NUEVO := {
 	                      # se cae o se abandona, se pierde (partida.terminar). Se gasta en los talentos (talentos.gd)
 	"talentos_mutageno": true, # los talentos ya se pagan con mutágeno (15 nov). Un guardado de antes no lo trae: al
 	                           # cargarlo, su árbol se vacía una vez, sin devolver nada (cargar_archivo)
+	"mutageno_barra": true, # el mutágeno ya sale de la barra (19 nov) y los talentos cuestan 40 veces menos. Un guardado
+	                        # de antes no lo trae: al cargarlo, su mutágeno se divide entre 40 una vez (cargar_archivo)
 	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
 	"armas": [],          # armas desbloqueadas (encontradas o compradas). La fregona siempre está
 	"partidas": 0,
@@ -155,6 +157,16 @@ static func cargar_archivo(de := archivo) -> Dictionary:
 		s.talentos_mutageno = true
 	s.dolares += s.puntos * 10
 	s.puntos = 0
+	# El mutágeno sale de la barra desde el 19 nov (partida.llenar_mutageno): se consigue unas 40 veces menos y los
+	# talentos cuestan 40 veces menos (talentos.gd, PRECIOS). El guardado de antes, y el de su partida a medias, se
+	# dividen entre 40 una sola vez (redondeando hacia arriba), para que valga lo mismo que antes
+	if not leido.has("mutageno_barra"):
+		s.mutageno = ceili(int(s.mutageno) / 40.0)
+		s.mutageno_barra = true
+		var foto := PartidaGuardada.guardada(s)
+		if not foto.is_empty():
+			foto.mutageno = ceili(int(foto.get("mutageno", 0)) / 40.0)
+			s.en_curso = var_to_str(foto)
 	# los objetos que ya no existen desaparecen del baúl y de los encontrados (Colecciones): el mechero, la llave
 	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco, el
 	# cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona de gas, la

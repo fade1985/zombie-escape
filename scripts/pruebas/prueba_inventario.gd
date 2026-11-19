@@ -2045,43 +2045,66 @@ func probar_municion_zombi() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --mutageno" (15 nov): el mutágeno que suelta cada durmiente (soltar_mutageno). Mata a 3 durmientes al
-# lado de Johnny y cuenta los que caen (foto: captura-mutageno-suelo.png); Johnny pasa por encima y los coge; la partida
-# guardada a medias lo apunta y lo devuelve (PartidaGuardada); y el inventario lo enseña debajo de los dólares, en verde
-# y con la hélice en vez del «$» (captura-mutageno-inventario.png), con 7 (captura-mutageno-pocos.png) y con 10.000 o
-# más, «8MAX» (captura-mutageno-max.png). Y el tope (TOPE, «MAX»): con él no caen billetes ni mutágeno, lo del suelo no
-# se coge y los fajos no suman más. Se cierra
+# Con "--captura --mutageno" (19 nov): la barra del mutágeno (partida.llenar_mutageno, hud.gd). Mata a un zombi de cada
+# tipo al lado de Johnny y mira lo que llena cada uno (arrastrado 1, vecino y vecina 2, crío 3, gordo 4, tentáculos y
+# dinamitero 5; un jefe y uno llamado, nada) y que ya no cae mutágeno al suelo; la barra a medias, en el HUD
+# (captura-mutageno-barra.png); al pasar del 100 %, un mutágeno más, lo que sobra en la barra, y su destello
+# (captura-mutageno-lleno.png). La partida guardada a medias apunta el mutágeno y la barra y los devuelve
+# (PartidaGuardada); y el inventario lo enseña debajo de los dólares, en verde y con la hélice en vez del «$»
+# (captura-mutageno-inventario.png), con 7 (captura-mutageno-pocos.png) y con 10.000 o más, «8MAX»
+# (captura-mutageno-max.png). Y el tope (TOPE, «MAX»): con él no caen billetes, la barra no se llena y los fajos no
+# suman más. Se cierra
 func probar_mutageno() -> void:
 	johnny.direccion = "o"   # (que la linterna no alumbre lo que cae)
 	await get_tree().create_timer(0.3).timeout
 	mutageno = 0
+	mutageno_barra = 0
 	mutageno_ahorrado = 0   # (el tope cuenta también el guardado: aquí, solo el de la partida)
-	var durmientes := []
-	for i in 3:
-		durmientes.append(meter_zombi("normal", johnny.position + Vector2(-200 - i * 60, 40)))
-	await get_tree().process_frame
-	for z in durmientes:
+	var cosas_antes: Array = mapa.cosas.get_children()
+	var dan := []
+	for tipo in ["lento", "normal", "vecina", "rapido", "venenoso", "tentaculos", "explosivo", "vigilante"]:
+		var antes := mutageno_barra
+		var z: Node2D = meter_zombi(tipo, johnny.position + Vector2(-260, 60))
+		await get_tree().process_frame
 		z.set_physics_process(false)
 		z.recibir_golpe(9999, Vector2.ZERO)
-	await get_tree().create_timer(0.8).timeout
-	var en_suelo: Array = get_tree().get_nodes_in_group("mutagenos")
-	print("Mutágeno: 3 durmientes muertos dejan %d en el suelo (esperado: 3)" % en_suelo.size())
-	Captura.foto("captura-mutageno-suelo.png")
-	for m in en_suelo:
-		if not is_instance_valid(m):   # (ya cogido: el imán lo ha llevado hasta Johnny al pasar por el de al lado)
-			continue
-		johnny.position = m.global_position
-		for k in 30:
-			await get_tree().physics_frame
-	await get_tree().create_timer(0.3).timeout
-	print("Mutágeno: Johnny lleva %d (esperado: 3) y en el suelo quedan %d (esperado: 0)" % [mutageno,
-		get_tree().get_nodes_in_group("mutagenos").size()])
+		await get_tree().create_timer(0.15).timeout
+		dan.append("%s %d" % [tipo, mutageno_barra - antes])
+	print("Mutágeno: lo que llena cada uno: %s (esperado: lento 1, normal 2, vecina 2, rapido 3, venenoso 4, tentaculos 5, explosivo 5, vigilante 2)" % ", ".join(dan))
+	var en_suelo: int = mapa.cosas.get_children().filter(func(c): return not c in cosas_antes and "icono" in c and c.icono != null and c.icono.resource_path.get_file() == "mutageno.png").size()
+	print("Mutágeno: barra %d · mutágeno %d · en el suelo %d (esperado: 24 · 0 · 0)" % [mutageno_barra, mutageno, en_suelo])
+	# los llamados por un jefe no llenan nada
+	var llamado: Node2D = meter_zombi("normal", johnny.position + Vector2(-260, 60))
+	llamado.set_meta("llamado", true)
+	await get_tree().process_frame
+	llamado.set_physics_process(false)
+	llamado.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.15).timeout
+	print("Mutágeno: un llamado deja la barra en %d (esperado: 24)" % mutageno_barra)
+	await get_tree().create_timer(1.0).timeout
+	Captura.foto("captura-mutageno-barra.png")
+	# pasar del 100 %: un mutágeno y lo que sobra
+	mutageno_barra = 97
+	await get_tree().create_timer(1.0).timeout
+	llenar_mutageno(5)
+	print("Mutágeno: de 97 con 5 más · mutágeno %d · barra %d (esperado: 1 · 2)" % [mutageno, mutageno_barra])
+	llenar_mutageno(250)
+	print("Mutágeno: con 250 más de golpe · mutágeno %d · barra %d (esperado: 3 · 52)" % [mutageno, mutageno_barra])
+	mutageno = 1
+	mutageno_barra = 2
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-mutageno-lleno.png")
+	await get_tree().create_timer(1.2).timeout
+	mutageno = 3
+	mutageno_barra = 3
 	# la partida guardada a medias (al llegar a una planta): lo apunta y, al seguir, lo devuelve
 	PartidaGuardada.apuntar(self, planta.num)
 	var foto: Dictionary = str_to_var(Guardado.cargar().get("en_curso", ""))
 	mutageno = 0
+	mutageno_barra = 0
 	PartidaGuardada.poner(self, foto)
-	print("Mutágeno: en la partida guardada %s y al seguirla lleva %d (esperado: 3 y 3)" % [foto.get("mutageno"), mutageno])
+	print("Mutágeno: en la partida guardada %s y %s y al seguirla lleva %d y %d (esperado: 3 y 3, 3 y 3)" % [foto.get("mutageno"),
+		foto.get("mutageno_barra"), mutageno, mutageno_barra])
 	PartidaGuardada.borrar()
 	# el inventario: debajo de los dólares, en verde y con la hélice
 	mutageno = 128
@@ -2111,23 +2134,19 @@ func probar_mutageno() -> void:
 	var billetes := func() -> int:
 		return mapa.cosas.get_children().filter(func(c): return c is BILLETE and c.icono == BILLETE.ICONO).size()
 	var b0: int = billetes.call()
-	var m0: int = get_tree().get_nodes_in_group("mutagenos").size()
+	mutageno_barra = 40
 	soltar_billetes(3, johnny.position + Vector2(-200, 40))
-	soltar_mutageno(johnny.position + Vector2(-200, 40))
+	llenar_mutageno(30)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	print("Tope: con MAX caen %d billetes y %d mutágenos (esperado: 0 y 0) · un fajo de 50 suma %d (esperado: 0)" % [
-		billetes.call() - b0, get_tree().get_nodes_in_group("mutagenos").size() - m0, sumar_dolares(50)])
+	print("Tope: con MAX caen %d billetes y la barra sigue en %d (esperado: 0 y 40) · un fajo de 50 suma %d (esperado: 0)" % [
+		billetes.call() - b0, mutageno_barra, sumar_dolares(50)])
 	mutageno = TOPE - 1
+	mutageno_barra = 90
 	dolares = TOPE - ahorrados - 10
-	soltar_mutageno(johnny.position + Vector2(-200, 40))
-	soltar_mutageno(johnny.position + Vector2(-230, 40))
-	await get_tree().create_timer(0.8).timeout
-	johnny.position += Vector2(-215, 40)
-	for k in 60:
-		await get_tree().physics_frame
-	print("Tope: con %d (uno menos que MAX) y dos en el suelo, coge %d y deja %d (esperado: 1 y 1) · un fajo de 50 suma %d (esperado: 10)" % [
-		TOPE - 1, mutageno - (TOPE - 1), get_tree().get_nodes_in_group("mutagenos").size() - m0, sumar_dolares(50)])
+	llenar_mutageno(250)
+	print("Tope: con %d (uno menos que MAX) y la barra en 90, con 250 más gana %d y la barra queda en %d (esperado: 1 y 0) · un fajo de 50 suma %d (esperado: 10)" % [
+		TOPE - 1, mutageno - (TOPE - 1), mutageno_barra, sumar_dolares(50)])
 	# los logros: con MAX, cobrar uno lo deja cobrado sin premio; si cabe una parte, cobra esa parte (y el resto se pierde)
 	dolares = 0
 	var premio: int = Logros.datos("desahucio").premio
@@ -2373,12 +2392,13 @@ func probar_botin() -> void:
 	ahorrados = 0
 	await get_tree().create_timer(0.3).timeout
 	var casos := [
-		["pistola", "", "mutágeno 40 · billetes ~32 · munición ~8 · ningún lanzable ni objeto (las piezas, sí: la Fase 4)"],
-		["", "", "mutágeno 40 · billetes 40 · nada más que piezas (sin arma de fuego)"],
-		["pistola", "salas", "mutágeno 40 · entre billetes y munición ~60 · nada más que piezas"],
+		["pistola", "", "barra 80 · billetes ~32 · munición ~8 · ningún mutágeno, lanzable ni objeto (las piezas, sí: la Fase 4)"],
+		["", "", "barra 80 · billetes 40 · nada más que piezas (sin arma de fuego)"],
+		["pistola", "salas", "barra 80 · entre billetes y munición ~60 · nada más que piezas"],
 	]
 	for caso in casos:
 		mutageno = 0
+		mutageno_barra = 0
 		mutageno_ahorrado = 0
 		dolares = 0
 		johnny.skin = caso[1] if caso[1] != "" else skin_antes
@@ -2403,8 +2423,8 @@ func probar_botin() -> void:
 				continue
 			var k: String = "billete" if c.icono == null else c.icono.resource_path.get_file().get_basename()
 			cuenta[k] = cuenta.get(k, 0) + 1
-		print("Botín de 40 durmientes con «%s» en la mano y la skin «%s»: %s · mutágeno cogido %d · dólares cogidos %d (esperado: %s)" % [
-			caso[0], johnny.skin, cuenta, mutageno, dolares, caso[2]])
+		print("Botín de 40 durmientes con «%s» en la mano y la skin «%s»: %s · barra del mutágeno %d · dólares cogidos %d (esperado: %s)" % [
+			caso[0], johnny.skin, cuenta, mutageno_barra, dolares, caso[2]])
 		if caso[0] == "pistola" and caso[1] == "":
 			Captura.foto("captura-botin.png")
 		for c in mapa.cosas.get_children():

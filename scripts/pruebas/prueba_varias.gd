@@ -1339,15 +1339,17 @@ func probar_tutorial_rescate() -> void:
 	escena.quit()
 
 
-# Con --tutorial-mutageno: el primer mutágeno que coge Johnny trae su tutorial (la parte 3 del mutágeno, 15 nov;
-# captura-tutorial-mutageno.png)
+# Con --tutorial-mutageno: el primer mutágeno que consigue Johnny (al llenar la barra: llenar_mutageno, 19 nov) trae su
+# tutorial (la parte 3 del mutágeno, 15 nov; captura-tutorial-mutageno.png)
 func probar_tutorial_mutageno() -> void:
 	Tutoriales.olvidar()
+	for otro in ["cambiar_arma", "lanzables", "armas"]:   # (lleva pistola y lanzables: que no salgan antes los suyos)
+		Tutoriales.apuntar(otro)
 	tutoriales_prueba = true
 	guia.activa = false
 	Guardado.cambiar(func(g): g.ajustes.tutoriales = true)
 	await get_tree().create_timer(0.5).timeout
-	soltar_mutageno(johnny.position)   # (a sus pies: lo coge en seguida)
+	llenar_mutageno(MUTAGENO_BARRA)
 	await get_tree().create_timer(1.5).timeout
 	var t: Tutorial = null
 	for h in get_children():
@@ -2129,9 +2131,9 @@ func probar_equilibrio_talentos() -> void:
 
 # Con "--captura --comprar-talentos": los talentos se compran con el mutágeno de la partida, punto a punto, en el
 # ordenador (15 nov; antes, con dólares), y el botón «Resetear mutaciones» (M32) no devuelve lo gastado. Primero, los
-# precios: 25, 50, 75, 100 y 125 dentro de cada talento, 125 los de un solo punto, 7.800 el árbol entero. Con 600:
-# Ataque 5 (375), Camorrista 2 (25 + 50) y Corpulento 1 (25); los dólares ahorrados no se tocan. Lo gastado se le quita
-# también a la partida a medias (si no, cerrar el juego lo devolvería). Luego, con 2, Puntería no se puede. El reseteo
+# precios (19 nov, entre 40): 1, 1, 2, 2 y 3 dentro de cada talento, 3 los de un solo punto, 192 el árbol entero. Con 15:
+# Ataque 5 (9), Camorrista 2 (1 + 1) y Corpulento 1 (1); los dólares ahorrados no se tocan. Lo gastado se le quita
+# también a la partida a medias (si no, cerrar el juego lo devolvería). Luego, con 0, Puntería no se puede. El reseteo
 # saca una ventanita que pregunta («¿Seguro? Perderás todo el mutágeno…»); Esc la cierra y «Sí, resetear» quita los
 # puntos sin devolver nada, y Johnny vuelve a su vida de siempre. Al final, un guardado de antes del mutágeno (con
 # Ataque 3 y 7 puntos de los de antes del 6 nov) empieza el árbol de cero, una sola vez. Cada línea dice lo esperado.
@@ -2148,7 +2150,7 @@ func probar_comprar_talentos() -> void:
 	for t in Talentos.LISTA:
 		for n in t.max:
 			arbol_entero += Talentos.precio({"talentos": {t.id: n}}, t.id)
-	print("Precios: Ataque punto a punto %s · Artificiero (3) %d · Larguirucho (1) %d · Veterano (1) %d · el árbol entero %d (esperado: [25, 50, 75, 100, 125] · 25 · 125 · 125 · 7800)" % [
+	print("Precios: Ataque punto a punto %s · Artificiero (3) %d · Larguirucho (1) %d · Veterano (1) %d · el árbol entero %d (esperado: [1, 1, 2, 2, 3] · 1 · 3 · 3 · 192)" % [
 		por_puntos, Talentos.precio(vacio, "artificiero"), Talentos.precio(vacio, "larguirucho"),
 		Talentos.precio(vacio, "veterano"), arbol_entero])
 	Guardado.cambiar(func(g):
@@ -2156,10 +2158,10 @@ func probar_comprar_talentos() -> void:
 		g.mutageno = 0
 		g.talentos = {})
 	ahorrados = 100
-	mutageno = 600
+	mutageno = 15
 	mutageno_ahorrado = 0
 	aplicar_talentos({})
-	PartidaGuardada.apuntar(self, 1)   # una partida a medias, con los 600 (la prueba no la apunta sola)
+	PartidaGuardada.apuntar(self, 1)   # una partida a medias, con los 15 (la prueba no la apunta sola)
 	await get_tree().create_timer(0.3).timeout
 	abrir_ordenador()
 	ordenador.abrir("puntos", "b_ataque")
@@ -2170,7 +2172,7 @@ func probar_comprar_talentos() -> void:
 		var b: Button = ordenador.ventana.find_child(nombre, true, false)
 		return " | ".join(b.get_parent().find_children("*", "Label", true, false).map(func(l): return l.text)) if b else "no está"
 	await ensenar_ficha("ataque")
-	print("Fichas: Ataque «%s» · Camorrista «%s» · arriba, %d de mutágeno (esperado: ... | 25 · Necesitas Ataque al máximo ... Bloqueado · 600)" % [
+	print("Fichas: Ataque «%s» · Camorrista «%s» · arriba, %d de mutágeno (esperado: ... | 1 · Necesitas Ataque al máximo ... Bloqueado · 15)" % [
 		tarjeta.call("b_ataque"), tarjeta.call("b_camorrista"), ordenador.ventana.find_child("arbol", true, false).mutageno])
 	Captura.foto("captura-talentos-precios.png")
 	for i in 5:
@@ -2180,28 +2182,28 @@ func probar_comprar_talentos() -> void:
 	ordenador.subir("corpulento")
 	await get_tree().create_timer(0.4).timeout
 	var s := Guardado.cargar()
-	print("Comprados: talentos %s · mutágeno %d · dólares %d · en la partida a medias %d (esperado: ataque 5, camorrista 2, corpulento 1 · 600 - 375 - 75 - 25 = 125 · 100 · 125)" % [
+	print("Comprados: talentos %s · mutágeno %d · dólares %d · en la partida a medias %d (esperado: ataque 5, camorrista 2, corpulento 1 · 15 - 9 - 2 - 1 = 3 · 100 · 3)" % [
 		s.talentos, mutageno, s.dolares, PartidaGuardada.guardada().get("mutageno", -1)])
-	mutageno = 2
+	mutageno = 0
 	ordenador.subir("punteria")
 	ordenador.abrir("puntos", "b_punteria")
 	await get_tree().create_timer(0.4).timeout
 	ordenador.ventana.find_child("b_punteria", true, false).grab_focus()   # (por si el ratón de la ventana está encima de otra tarjeta)
 	await get_tree().create_timer(0.1).timeout
 	s = Guardado.cargar()
-	print("Con 2: Puntería %d · mutágeno %d · motivo «%s» · info «%s» · ficha «%s» (esperado: 0 · 2 · sin_mutageno · ... Cuesta 25 de mutágeno. · ... 25)" % [
+	print("Con 0: Puntería %d · mutágeno %d · motivo «%s» · info «%s» · ficha «%s» (esperado: 0 · 0 · sin_mutageno · ... Cuesta 1 de mutágeno. · ... 1)" % [
 		Talentos.nivel_de(s, "punteria"), mutageno, Talentos.motivo(s, "punteria", mutageno), ordenador.info.text, ficha_de("punteria")])
 	Captura.foto("captura-talentos-sin-dinero.png")
-	# primero se gasta el de la partida y, si no llega, el guardado: con 100 guardados y 80 de la partida, Puntería
-	# 1, 2 y 3 (25 + 50 + 75 = 150) gastan los 80 de la partida y 70 del guardado
-	Guardado.cambiar(func(g): g.mutageno = 100)
-	mutageno_ahorrado = 100
-	mutageno = 80
+	# primero se gasta el de la partida y, si no llega, el guardado: con 3 guardados y 2 de la partida, Puntería
+	# 1, 2 y 3 (1 + 1 + 2 = 4) gastan los 2 de la partida y 2 del guardado
+	Guardado.cambiar(func(g): g.mutageno = 3)
+	mutageno_ahorrado = 3
+	mutageno = 2
 	for i in 3:
 		ordenador.subir("punteria")
 	await get_tree().create_timer(0.3).timeout
 	s = Guardado.cargar()
-	print("Gastar 150 con 100 guardados y 80 de la partida: Puntería %d · de la partida %d · guardado %d (en la partida %d) · total %d · arriba %d (esperado: 3 · 0 · 30 · 30 · 30 · 30)" % [
+	print("Gastar 4 con 3 guardados y 2 de la partida: Puntería %d · de la partida %d · guardado %d (en la partida %d) · total %d · arriba %d (esperado: 3 · 0 · 1 · 1 · 1 · 1)" % [
 		Talentos.nivel_de(s, "punteria"), mutageno, s.mutageno, mutageno_ahorrado, mutageno_total(),
 		ordenador.ventana.find_child("arbol", true, false).mutageno])
 	Captura.foto("captura-talentos-guardado.png")
