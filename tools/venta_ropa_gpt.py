@@ -4,8 +4,9 @@
 #   suelo:  s1 ropaperchero1, s2 ropaperchero2, s3 roparuedas, s4 ropamesa, s5 ropatarimas
 #   caja: caja ropamostrador (el mostrador con la caja, visto desde el lado del comprador: la caja y el monitor, de espaldas)
 #   maniquíes: m1..m4 ropamaniqui1..4
-# Desde el 19 nov, el módulo (p1), el zapatero (p3) y la caja salen de sus imágenes destrozadas (venta-<id>-destrozado-gpt.webp, también
-# de GPT, a partir de las limpias; el dueño): la tienda ya es del apocalipsis
+# Desde el 19 nov, todos salen de sus imágenes destrozadas (venta-<id>-destrozado-gpt.webp, también de GPT, a partir de las limpias; el
+# dueño): la tienda ya es del apocalipsis. Las limpias se quedan por si acaso. GPT ya las hizo en dorado salvo el zapatero y la vitrina.
+# Los altos de los destrozados, para que midan de ancho (barra, percheros, mesa, tarimas) o de alto (los demás) lo mismo que los limpios
 # -> assets/sprites/mueble-<tipo>.png (+ .json), a escala 1
 #   py tools/venta_ropa_gpt.py   (y luego Godot --headless --path . --import)
 import json
@@ -16,10 +17,11 @@ from PIL import Image
 # dibujo tiene el doble de detalle que los muebles a escala 2, "escala": 1 en catalogo.gd); el ancho sale de la proporción de la imagen
 # recortada. Las alturas, pensadas para la dependienta: los maniquíes un poco más altos que ella, los muebles de pared casi hasta lo
 # alto de la pared (128), los percheros del suelo algo más bajos que ella
-MUEBLES = [("p1-destrozado", "ropamodulo", 104), ("p2", "ropabarra", 108), ("p3-destrozado", "ropazapatos", 112), ("p4", "ropavitrina", 108),
-           ("p5", "ropaoval", 116), ("s1", "ropaperchero1", 96), ("s2", "ropaperchero2", 96), ("s3", "roparuedas", 92),
-           ("s4", "ropamesa", 64), ("s5", "ropatarimas", 56),
-           ("caja-destrozado", "ropamostrador", 92), ("m1", "ropamaniqui1", 106), ("m2", "ropamaniqui2", 106), ("m3", "ropamaniqui3", 106), ("m4", "ropamaniqui4", 106)]
+MUEBLES = [("p1-destrozado", "ropamodulo", 104), ("p2-destrozado", "ropabarra", 108), ("p3-destrozado", "ropazapatos", 112),
+           ("p4-destrozado", "ropavitrina", 108), ("p5-destrozado", "ropaoval", 116), ("s1-destrozado", "ropaperchero1", 96),
+           ("s2-destrozado", "ropaperchero2", 94), ("s3-destrozado", "roparuedas", 92), ("s4-destrozado", "ropamesa", 63),
+           ("s5-destrozado", "ropatarimas", 56), ("caja-destrozado", "ropamostrador", 92), ("m1-destrozado", "ropamaniqui1", 106),
+           ("m2-destrozado", "ropamaniqui2", 106), ("m3-destrozado", "ropamaniqui3", 106), ("m4-destrozado", "ropamaniqui4", 106)]
 
 
 def quitar_fondo(im):
@@ -80,6 +82,21 @@ def a_dorado_zapatero_roto(im):
     return im
 
 
+# La vitrina destrozada (p4-destrozado, 19 nov, el dueño: «el escaparate de complementos metalizado ponlo dorado»): su marco plateado
+# (los dos lados, la tira de debajo del techo de madera, el mueble de abajo con su puerta rota y las patas) se pasa a dorado; dentro del
+# cristal no se toca nada (el cristal verdoso también es casi gris). En píxeles de la imagen de GPT
+def a_dorado_vitrina(im):
+    px = im.load()
+    for y in range(130, 1460):
+        for x in range(55, 992):
+            if 100 <= x < 950 and 165 <= y < 1185:
+                continue
+            q = px[x, y]
+            if q[3] > 0 and max(q[:3]) >= 12 and gris(q):
+                px[x, y] = dorado(max(q[:3])) + (q[3],)
+    return im
+
+
 # 19 nov, el dueño: el perchero de ruedas (s3), dorado también. Su armazón (postes, barra de arriba con sus curvas y bandeja de abajo)
 # no va en columnas y filas enteras: se pinta todo el metal gris claro unido a los dos postes (rellenando desde un punto de cada poste, a
 # media altura), sin pasar por los contornos oscuros, así que la ropa blanca no se toca
@@ -130,10 +147,8 @@ for id_, tipo, alto in MUEBLES:
     im = quitar_fondo(Image.open(f"assets/sources/ropa/venta-{id_}-gpt.webp").convert("RGBA"))
     if id_ == "p3-destrozado":
         im = a_dorado_zapatero_roto(im)
-    if id_ == "s3":
-        im = a_dorado_unido(im)
-    if id_ == "s4":
-        im = a_dorado_patas(im)
+    if id_ == "p4-destrozado":
+        im = a_dorado_vitrina(im)
     im = im.crop(im.getbbox())
     ancho = max(1, round(alto * im.width / im.height))
     s = im.convert("RGBa").resize((ancho, alto), Image.LANCZOS).convert("RGBA")
