@@ -73,6 +73,7 @@
 #   --bot-garaje        el bot juega el garaje del reto del día hasta caer o superar las 25 oleadas, con el equipo y los
 #                       talentos de --mejoras nuevo|medio|maximo (--nivel, --semilla, --condicion; docs/BOT.md) [prueba_bot.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
+#   --direcciones       (con --jefe X) el jefe quieto en su sala mirando a las 8 direcciones  [prueba_jefes.gd]
 #   --azotea            la azotea (la imagen de GPT entera): los muros por la barandilla, el jefe esperando en el aro y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
 #   --garaje            el garaje del reto del día (M125): el baúl en el centro (y para el juego), los jefes de cada 5
@@ -761,6 +762,9 @@ func empezar_prueba() -> void:
 	elif "--presentacion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_presentacion()
+	elif "--direcciones" in args:
+		set_process(false)   # sin la prueba larga
+		probar_direcciones()
 	elif "--azotea" in args:
 		set_process(false)   # sin la prueba larga
 		probar_azotea_sola()

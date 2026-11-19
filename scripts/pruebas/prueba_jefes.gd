@@ -745,6 +745,34 @@ func probar_crios() -> void:
 
 
 # Va a la habitación del jefe de la 1ª planta (el de --jefe X) y espera a que salga, sin la prueba larga. Dice si está
+# Con "--captura --edificio centro --jefe cocinero --direcciones" (vale con cualquier --jefe): el jefe quieto en su
+# sala mirando hacia cada una de las 8 direcciones, para revisar su dibujo dentro del juego (19 nov: el gorro del
+# cocinero salía cortado mirando hacia arriba). Fotos: captura-direcciones-<dirección>.png (s, se, e, ne, n, no, o, so)
+func probar_direcciones() -> void:
+	var args := OS.get_cmdline_user_args()
+	var i := args.find("--jefe")
+	if i < 0 or i + 1 >= args.size():
+		print("Falta --jefe X")
+		get_tree().quit()
+		return
+	if not await ir_a_la_sala_del_jefe(args[i + 1]):
+		get_tree().quit()
+		return
+	jefa.set_physics_process(false)
+	jefa.set_process(false)
+	johnny.set_physics_process(false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != jefa:
+			z.process_mode = Node.PROCESS_MODE_DISABLED
+	johnny.global_position = jefa.global_position + Vector2(-140, 60)
+	var sprite: AnimatedSprite2D = jefa.get_node("Sprite")
+	for d in ["s", "se", "e", "ne", "n", "no", "o", "so"]:
+		sprite.play("quieto_" + d)
+		await get_tree().create_timer(0.4).timeout
+		Captura.foto("captura-direcciones-%s.png" % d)
+	get_tree().quit()
+
+
 func ir_a_la_sala_del_jefe(tipo: String) -> bool:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe X, la suya
