@@ -67,6 +67,8 @@ JEFES = {
             "muerte": ("muerte", 10, False, False),
         },
         "sangre": True,
+        # PixelLab dejó el gorro cortado por arriba en las vistas de espaldas (se salía del lienzo de 72)
+        "copa": ["ne", "n", "no"],
     },
     # la modista: los alfileres y el brillo de los ojos, con código
     "modista-72": {
@@ -357,6 +359,50 @@ def limpiar(im: Image.Image, mota: int = MOTA) -> Image.Image:
     return im
 
 
+def copa(hoja: Image.Image, caja: tuple, ancho_min: int = 8) -> None:
+    """Redondea un gorro cortado en plano: busca, de arriba abajo, el primer tramo de al menos ancho_min píxeles
+    seguidos casi sin nada encima (en las animaciones PixelLab le deja unos piquitos sueltos en las esquinas) y le
+    pinta encima 3 filas de copa (con su contorno, tapando los piquitos), copiando los colores del borde."""
+    cx0, cy0, cx1, cy1 = caja
+    px = hoja.load()
+    for y in range(cy0 + 3, cy1):
+        x = cx0
+        while x < cx1:
+            if px[x, y][3] == 0:
+                x += 1
+                continue
+            l = x
+            while x < cx1 and px[x, y][3]:
+                x += 1
+            r = x - 1
+            if r - l + 1 < ancho_min:
+                continue
+            # casi vacío por encima (como mucho los piquitos)
+            libres = [sum(1 for i in range(l, r + 1) if px[i, fy][3] == 0) for fy in (y - 1, y - 2)]
+            if libres[0] < 0.6 * (r - l + 1) or libres[1] < 0.8 * (r - l + 1):
+                continue
+            # un borde bien dibujado es oscuro; uno cortado deja a la vista la tela clara del gorro
+            claros = sum(1 for i in range(l + 1, r) if sum(px[i, y][:3]) > 450)
+            if claros < 0.6 * (r - l - 1):
+                continue
+            # el contorno: lo más oscuro del gorro en sus primeras filas
+            borde = min((px[i, fy] for fy in (y, y + 1, y + 2) for i in range(l, r + 1) if px[i, fy][3]),
+                        key=lambda c: sum(c[:3]))
+            relleno = [px[i, y] for i in range(l + 1, r)]
+            def pon(fy, a, b, solo_borde=False):
+                for i in range(a, b + 1):
+                    dentro = a < i < b and not solo_borde
+                    px[i, fy] = relleno[(i - l - 1) % len(relleno)] if dentro else borde
+            pon(y - 1, l, r)                      # la fila de abajo: del mismo ancho
+            pon(y - 2, l + 1, r - 1)              # se estrecha un poco
+            for i in (l + 1, r - 1):
+                px[i, y - 2] = borde
+            pon(y - 3, l + 3, r - 3, solo_borde=True)   # el contorno de arriba
+            for i in (l + 2, r - 2):
+                px[i, y - 2] = borde
+            return
+
+
 def quieta(d: str) -> Image.Image:
     return Image.open(f"{src}/rotations/{d}.png").convert("RGBA")
 
@@ -407,11 +453,13 @@ total = sum(len(f[3]) for f in filas)
 hoja = Image.new("RGBA", (por_fila * cw, -(-total // por_fila) * ch))
 regiones = []   # por fila de animación, la casilla de cada fotograma
 n = 0
-for _, _, _, imgs in filas:
+for nombre_fila, _, _, imgs in filas:
     casillas = []
     for im, s in imgs:
         cx, cy = (n % por_fila) * cw, (n // por_fila) * ch
         hoja.alpha_composite(im, (cx + s[0] - x0, cy + s[1] - y0))
+        if nombre_fila.rsplit("_", 1)[1] in JEFE.get("copa", []):
+            copa(hoja, (cx, cy, cx + cw, cy + ch))
         casillas.append((cx, cy))
         n += 1
     regiones.append(casillas)
