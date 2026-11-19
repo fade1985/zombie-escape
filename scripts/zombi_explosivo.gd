@@ -1,5 +1,6 @@
 # El zombi explosivo (el hombretón de la gabardina): no da zarpazos. Cuando llega cerca de Johnny se planta,
-# abre la gabardina (enseña la dinamita), parpadea en rojo con un círculo de aviso en el suelo y revienta.
+# abre la gabardina (enseña la dinamita), parpadea en rojo con un círculo de aviso en el suelo y revienta en cachos de
+# carne que salen volando (cachos.gd), sin dejar cuerpo.
 # Si lo matas antes, revienta igual. Números de src/zombies.js (EXPLOSION).
 extends Zombi
 
@@ -62,6 +63,10 @@ func morir() -> void:
 	if reventado:
 		return
 	reventado = true
+	# Revienta en cachos de carne que salen volando hacia todos los lados y caen con su sangre (cachos.gd; 19 nov, lo
+	# pidió el dueño). Congelado no: revienta en añicos de hielo (zombi.reventar_hielo)
+	if not en_anicos:
+		Cachos.lanzar(get_parent(), position + Vector2(0, 10))
 	# La explosión se añade "en diferido" (al acabar este paso): si revienta a otro explosivo, ese reventará
 	# en el paso siguiente, en cadena, sin liarse
 	var bum := EXPLOSION.instantiate()
@@ -78,6 +83,16 @@ func morir() -> void:
 		for zombi in get_tree().get_nodes_in_group("zombis"):
 			if zombi != self and zombi.has_method("oir_disparo"):
 				zombi.oir_disparo(global_position, true)
+
+
+# Al reventar no queda cuerpo (19 nov): solo sus cachos (Cachos, en morir). Ni su dibujo ni su fuego
+func caer_muerto() -> void:
+	Sonido.tocar("chof")
+	sprite.visible = false
+	if has_node("LuzAcido"):
+		get_node("LuzAcido").queue_free()
+	if llamas:
+		llamas.visible = false
 
 
 # El aviso en el suelo, el mismo de los jefes (aviso.gd): un círculo de pixel art que se va llenando desde él hacia

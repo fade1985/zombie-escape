@@ -133,7 +133,7 @@ en una línea.
 **Zombis, jefes y lo que hacen daño**
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
   `enfurecer`, la furia del grito de la dependienta (18 nov: +25 % de velocidad, de ritmo de ataque y de vida mientras ella viva, ardiendo en rojo con el fuego del shader en rojos, `furia` en `quemaduras.gdshaderinc`; antes, M80, una burbuja dorada), la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
-  números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
+  números en su `.tscn`. Heredan: `zombi_explosivo.gd` (desde el 19 nov, lo pidió el dueño, revienta sin dejar cuerpo: `caer_muerto` lo esconde y `cachos.gd` lanza 12 cachos de carne de PixelLab, `assets/sprites/cachos-carne.png`, hecha con `assets/sources/zombi-explosivo-gpt/carne.py`, que vuelan hacia todos los lados, sueltan gotas y al caer dejan su mancha y salpicaduras; no atraviesan paredes; se prueba con `--cachos`), `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`; desde el 19 nov, lo pidió el dueño, reducido
   a la altura de Johnny y con su borde negro: `"reducir"` en su `zombi.json`, casilla 80×88 con los pies en 40,58,
@@ -378,7 +378,7 @@ en una línea.
   le cubre el ácido, se deshace a agujeros con los valores `comido` y `deshecho` del shader de quemaduras y deja un charco
   verdoso sin daño y sus huesos; si además arde, gana el fuego; se prueba con `--disuelto`), `cuerpo.gd` (el cuerpo de un enemigo al caer: si tendido se metería en una
   pared, resbala hasta quedar sobre el suelo; se prueba con `--cuerpo-pared`), `brillo.gd`
-  (lo que luce a oscuras), `particulas.gd`, `impacto.gd` (la bala que da en una pared: el efecto Impact de la librería
+  (lo que luce a oscuras), `particulas.gd`, `cachos.gd` (los cachos de carne del zombi explosivo), `impacto.gd` (la bala que da en una pared: el efecto Impact de la librería
   de efectos de Sprite Fusion, pasado a GDScript, más pequeño y del color de la estela; se prueba con `--impacto`),
   `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
   cuerpo a cuerpo dura la `parada` de cada arma en `armas.gd`, más si mata o es crítico y más aún el golpe de gracia; hay

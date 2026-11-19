@@ -2491,6 +2491,54 @@ func probar_mecha() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --cachos": el zombi explosivo revienta en cachos de carne (cachos.gd) en la sala de pruebas, con Johnny
+# lejos y sin daño. Una ráfaga de fotos desde que revienta (captura-cachos-00.png a -15, cada 0,06 s; con ellas se hace el
+# GIF) y otra con todos ya en el suelo (captura-cachos-suelo.png). Lo que comprueba, en la terminal
+func probar_cachos() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	var sitio: Vector2 = sala.diana.global_position + Vector2(0, 40)
+	johnny.global_position = sitio + Vector2(0, 170)
+	johnny.get_node("Camara").reset_smoothing()
+	var bum: Node2D = meter_zombi("explosivo", sitio)
+	bum.position = sitio
+	await get_tree().physics_frame
+	bum.dormido = false
+	bum.estado = "mecha"
+	bum.mecha = bum.MECHA
+	bum.poner_animacion("ataque")
+	while is_instance_valid(bum) and not bum.reventado:
+		await get_tree().physics_frame
+	var cachos: Cachos = null
+	for n in bum.get_parent().get_children():
+		if n is Cachos:
+			cachos = n
+	for i in 16:
+		Captura.foto("captura-cachos-%02d.png" % i)
+		await get_tree().create_timer(0.06).timeout
+	await get_tree().create_timer(1.5).timeout
+	Captura.foto("captura-cachos-suelo.png")
+	var lejos := 0.0
+	for q in cachos.lista:
+		lejos = maxf(lejos, q.p.distance_to(sitio))
+	print("Cachos: %d (esperado: 12) · en el suelo %d (esperado: 12) · el más lejos a %d (esperado: más de 80) · cuerpo visible %s (esperado: false)" % [
+		cachos.lista.size(), cachos.lista.filter(func(q): return q.quieto).size(), lejos, bum.sprite.visible])
+	get_tree().quit()
+
+
 # Con "--captura --vomito": los zombis bañados en vómito (la Gastroenteritis: "vomito" en su shader), en la sala de
 # pruebas, con tres zombis quietos (Johnny, escondido): al de la izquierda le roe el ácido del lanza ácido (para comparar), al del medio le
 # cae un vómito de Johnny (el proyectil de verdad) y al de la derecha, nada. Fotos: recién bañado
