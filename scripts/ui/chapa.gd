@@ -13,9 +13,10 @@ const TEXTO_SUAVE := Color("#8a8f98")
 const AMARILLO := Color("#ffe066")   # lo ahorrado y los cuadraditos llenos
 const MORADO := Color("#b77ce8")     # el mutágeno (19 nov; antes, verde): el morado de su barra (hud.gd), más claro para que se lea
 # El símbolo del mutágeno en su marcador, en lugar del «$»: una doble hélice de ADN, a cuadraditos de PIXEL_ADN (cada
-# fila, de arriba abajo; «#», lleno). Las dos tiras se cruzan en medio y entre ellas van los peldaños
-# (19 nov: de 13 filas a 9, para que mida lo que las cifras, CIFRA_TAM, y vaya a su altura)
-const ADN := ["#.###.#", "#.....#", ".#...#.", "..#.#..", "...#...", "..#.#..", ".#...#.", "#.....#", "#.###.#"]
+# fila, de arriba abajo). Las dos hebras se cruzan dos veces, como una onda: «#», la de delante (del color del
+# marcador); «%», la de detrás (más oscura); «=», los peldaños entre ellas (más oscuros aún). Mide lo que las cifras
+# (CIFRA_TAM). (19 nov: antes, una sola cruz con peldaños arriba y abajo, que parecía un reloj de arena)
+const ADN := ["...#...", ".%...#.", "%=====#", ".%...#.", "...#...", ".#...%.", "#=====%", ".#...%.", "...%..."]
 const PIXEL_ADN := 2.0
 const CIFRAS := 4        # las casillas de los marcadores fijos (los del inventario): hasta 9999...
 const MAXIMO := 10000    # ...y de aquí en adelante, «MAX»
@@ -123,14 +124,16 @@ static func dibujar_cifra(lienzo: CanvasItem, pos: Vector2, cifra: int, color: C
 			lienzo.draw_rect(Rect2(pos + Vector2(r[0], r[1]), Vector2(r[2], r[3])), color if k in luz else apagado)
 
 
-# La doble hélice del mutágeno, con su esquina de arriba a la izquierda en "pos": primero la sombra, como las cifras.
+# La doble hélice del mutágeno, con su esquina de arriba a la izquierda en "pos" ("sombra" ya no se usa: 19 nov).
 # "pixel": lo que mide cada cuadradito (la pequeña del pie de la ficha de un talento, arbol_talentos.gd, va a 1)
 static func dibujar_adn(lienzo: CanvasItem, pos: Vector2, color: Color, sombra: Color, pixel := PIXEL_ADN) -> void:
-	for capa in [[Vector2(0, pixel), sombra], [Vector2.ZERO, color]]:
-		for f in ADN.size():
-			for c in ADN[f].length():
-				if ADN[f][c] == "#":
-					lienzo.draw_rect(Rect2(pos + capa[0] + Vector2(c, f) * pixel, Vector2.ONE * pixel), capa[1])
+	var tonos := {"#": color, "%": color.darkened(0.3), "=": color.darkened(0.55)}
+	# (sin sombra, como las cifras: con ella se rellenaban los huecos entre las hebras y se veía una mancha)
+	for f in ADN.size():
+		for c in ADN[f].length():
+			var letra: String = ADN[f][c]
+			if tonos.has(letra):
+				lienzo.draw_rect(Rect2(pos + Vector2(c, f) * pixel, Vector2.ONE * pixel), tonos[letra])
 
 
 # Lo que ocupa el símbolo de delante de la cifra (el «$» o la hélice), con su aire hasta ella
