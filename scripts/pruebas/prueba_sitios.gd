@@ -4516,7 +4516,8 @@ func probar_rodear_muebles() -> void:
 
 # Con "--captura --edificio centro --dependientas" (19 nov, el dueño: «en todas las tiendas de ropa habrá una dependienta»): en 200
 # plantas sorteadas, cuántas dependientas tiene cada tienda de ropa (esperado: siempre una) y, para comparar, las demás tiendas
-# (como mucho una, a suertes). Falla (código 1) si alguna tienda de ropa no tiene justo una. Luego se cierra
+# (como mucho una, a suertes). Falla (código 1) si alguna tienda de ropa no tiene justo una. Y fotos de una tienda de ropa con sus
+# zombis y la dependienta rodeada (captura-dependienta-tienda.png y -cerca.png). Luego se cierra
 func probar_dependientas() -> void:
 	var ropa := {}
 	var otras := {}
@@ -4536,5 +4537,51 @@ func probar_dependientas() -> void:
 	if ropa.is_empty() or ropa.keys() != [1]:
 		Captura.fallar("alguna tienda de ropa no tiene justo una dependienta: %s" % ropa)
 		return
+	# y una tienda de ropa entera con sus zombis dormidos y la dependienta rodeada en amarillo (captura-dependienta-tienda.png; el
+	# recorte de cerca, captura-dependienta-cerca.png)
+	for i in 200:
+		Planta.semilla = 7000 + i
+		var num := 1 + i % 4
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		var idx := -1
+		for k in p.sitios.size():
+			if p.sitios[k].get("tienda", "") == "ropa" and p.sitios[k].tipo != "jefe" and p.sitios[k].apt.entrada.lado == "abajo":
+				idx = k
+		if idx < 0:
+			continue
+		nueva_planta(num)
+		Planta.semilla = 0
+		await montar(idx, 0, false)
+		await get_tree().create_timer(0.4).timeout
+		var sitio: Dictionary = planta.sitios[idx]
+		var ella: Node2D = null
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z.get_script().resource_path.ends_with("zombi_dependienta.gd"):
+				ella = z
+		if ella == null:
+			Captura.fallar("la tienda de ropa montada no tiene dependienta")
+			return
+		var aro := Node2D.new()
+		aro.z_index = 100
+		aro.draw.connect(func(): aro.draw_arc(ella.global_position + Vector2(0, -50), 75.0, 0.0, TAU, 48, Color(1, 0.85, 0.1), 4.0))
+		mapa.add_child(aro)
+		for p2 in mapa.puertas:
+			johnny.position = p2.position + Vector2(0, -90)
+		await foto_entera(sitio, "captura-dependienta-tienda.png")
+		aro.queue_free()
+		# de cerca: la cámara encima de ella (Johnny lejos, en la entrada: sigue dormida)
+		var camara: Camera2D = johnny.get_node("Camara")
+		$Pantalla.hide()
+		Temblor.desplazamiento = ella.global_position + Vector2(0, -40) - johnny.position
+		camara.reset_smoothing()
+		Luz.apagada = not Luz.apagada
+		await get_tree().create_timer(0.6).timeout
+		Captura.foto("captura-dependienta-cerca.png")
+		Luz.apagada = not Luz.apagada
+		Temblor.desplazamiento = Vector2.ZERO
+		$Pantalla.show()
+		print("Dependientas: foto de la tienda %d de la planta %d (semilla %d), ella en (%d, %d)" % [idx, num, 7000 + i,
+			ella.global_position.x, ella.global_position.y])
+		break
 	print("Dependientas: TODO BIEN")
 	get_tree().quit()
