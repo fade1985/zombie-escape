@@ -154,7 +154,10 @@ en una línea.
   `lengua.gd` (`Lengua`, hereda de `Tentaculo`): las lenguas del latigazo del Glotón y de la criatura del
   científico (19 nov, para que el golpe no se vea plano: `sombra()` en el suelo por debajo del jefe, `estela()` clara
   mientras salen disparadas y `chasquido()` en cada punta al pegar, el "latigazo" de `efecto_suelo.gd`, hecho con
-  pixelfx en `tools/pixelfx/latigazo.js`; las del Glotón, más gruesas). Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
+  pixelfx en `tools/pixelfx/latigazo.js`; las del Glotón, más gruesas). Encima de las capas, la carne: dos venas
+  moradas que culebrean, bultos y ampollas amarillas como los granos del Glotón (`con_detalles`; cada lengua, los suyos).
+  En los fotogramas del golpe del Glotón (5 a 8) se borraron las lenguas de PixelLab, que chocaban con estas
+  (`tools/gloton_sin_lengua.py`). Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
   y con el contorno de un píxel, `borde`), pero con otra forma: en el aviso no se pintan (las enrosca su dibujo) y
   en el golpe salen disparadas de la boca (`BOCAS`, medida en el fotograma del golpe en cada dirección), caen
   sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`.

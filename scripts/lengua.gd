@@ -12,8 +12,101 @@ const RECOGE := 0.2        # lo que tardan en recogerse (lo último antes de aca
 var culebrea := 7.0        # lo que culebrea a cada lado
 
 
+# Lo que le da carne (19 nov): venas que la recorren, bultos y ampollas amarillas como los granos del Glotón. Cada
+# lengua los tiene en su sitio (de la base a la punta, "s" de 0 a 1, y de un lado al otro, "lado" de -1 a 1)
+const VENA := Color("#5a1838")          # morado oscuro (poco: que se vea carne, no rayas)
+const VENA_CLARA := Color("#7a2a4a")
+const BULTO := Color("#e07a66")
+const BULTO_SOMBRA := Color("#8a2e28")
+const AMPOLLA := Color("#c9c63c")
+const AMPOLLA_SOMBRA := Color("#6c7a1c")
+const AMPOLLA_BRILLO := Color("#f6f39a")
+
+var con_detalles := true
+var bultos := []     # [s, lado, tamaño]
+var ampollas := []   # [s, lado, tamaño]
+
+
 func _init(paleta: Dictionary) -> void:
 	super(paleta)
+	var azar := RandomNumberGenerator.new()
+	azar.seed = hash(paleta.get("contorno", Color.BLACK)) + Lengua.cuantas
+	Lengua.cuantas += 1
+	for i in 6:
+		bultos.append([azar.randf_range(0.08, 0.85), azar.randf_range(-0.6, 0.6), azar.randf_range(1.0, 2.0)])
+	for i in 4:
+		ampollas.append([azar.randf_range(0.12, 0.75), azar.randf_range(-0.35, 0.35), azar.randf_range(1.7, 2.4)])
+
+static var cuantas := 0
+
+
+# Un círculo de cuadraditos del dibujo, de "radio" píxeles del dibujo, en la cuadrícula
+static func bola(lienzo: CanvasItem, centro: Vector2, radio: float, color: Color) -> void:
+	var c := (centro / 2.0).floor()
+	var n := int(floor(radio - 0.4))
+	for y in range(-n, n + 1):
+		var ancho := int(round(sqrt(maxf(0.0, radio * radio - y * y)) - 0.25))
+		if ancho < 0:
+			continue
+		lienzo.draw_rect(Rect2((c + Vector2(-ancho, y)) * 2.0, Vector2(ancho * 2 + 1, 1) * 2.0), color)
+
+
+# Un cuadradito del dibujo (2 × 2), en su sitio de la cuadrícula
+static func pixel(lienzo: CanvasItem, p: Vector2, color: Color, tam := 1) -> void:
+	lienzo.draw_rect(Rect2((p / 2.0).floor() * 2.0, Vector2(2, 2) * tam), color)
+
+
+func pintar(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: int) -> void:
+	super(lienzo, puntos, desde, hasta)
+	if not con_detalles:
+		return
+	# el medio ancho y hacia un lado, en cada punto
+	var r := PackedFloat32Array()
+	var n := PackedVector2Array()
+	for i in PUNTOS + 1:
+		r.append((fino + (grueso - fino) * pow(1.0 - float(i) / PUNTOS, 0.8)) * gordo)
+		n.append((puntos[mini(i + 1, PUNTOS)] - puntos[maxi(i - 1, 0)]).orthogonal().normalized())
+	var donde := func(s: float, lado: float) -> Vector2:
+		var f := s * PUNTOS
+		var i := mini(int(f), PUNTOS - 1)
+		var k := f - i
+		var c := puntos[i].lerp(puntos[i + 1], k)
+		return c + n[i].lerp(n[i + 1], k) * lado * lerpf(r[i], r[i + 1], k)
+	# dos venas que van culebreando a lo largo, de la base hasta cerca de la punta
+	for v in 2:
+		var linea := PackedVector2Array()
+		for j in range(maxi(desde, 1), mini(hasta, PUNTOS - 3) + 1):
+			var s := float(j) / PUNTOS
+			linea.append(donde.call(s, (0.35 if v == 0 else -0.45) + 0.25 * sin(s * 23.0 + v * 2.0)))
+		if linea.size() > 1:
+			lienzo.draw_polyline(linea, VENA, 2.0)
+			# una rama que sale de cada vena
+			var s0 := 0.3 + v * 0.2
+			if s0 * PUNTOS >= desde and s0 * PUNTOS + 2 <= hasta:
+				var a: Vector2 = donde.call(s0, (0.35 if v == 0 else -0.45))
+				var b: Vector2 = donde.call(s0 + 0.06, (0.8 if v == 0 else -0.85))
+				lienzo.draw_line(a, b, VENA_CLARA, 2.0)
+	# bultos: carne más clara con su sombra debajo
+	for b in bultos:
+		if b[0] * PUNTOS < desde or b[0] * PUNTOS > hasta:
+			continue
+		var p: Vector2 = donde.call(b[0], b[1])
+		var t := int(b[2] * gordo + 0.5)
+		pixel(lienzo, p + Vector2(0, 2), BULTO_SOMBRA, maxi(1, t))
+		pixel(lienzo, p, BULTO, maxi(1, t))
+		pixel(lienzo, p - Vector2(0, 0), Color(1, 0.8, 0.72), 1)
+	# ampollas: amarillas, con contorno oscuro, sombra abajo y un brillo
+	for a in ampollas:
+		if a[0] * PUNTOS < desde or a[0] * PUNTOS > hasta:
+			continue
+		var p: Vector2 = donde.call(a[0], a[1])
+		var rr: float = a[2] * gordo   # (en píxeles del dibujo)
+		if rr < 1.0:
+			continue
+		bola(lienzo, p, rr + 1.0, contorno)
+		bola(lienzo, p, rr, AMPOLLA_SOMBRA)
+		bola(lienzo, p - Vector2(0, 2), rr - 0.6, AMPOLLA)
+		pixel(lienzo, p - Vector2(2, 4), AMPOLLA_BRILLO)
 
 
 # Disparada de la boca ("raiz") hasta donde llega (si da con una pared, hasta ella): sale hacia delante, baja hasta
