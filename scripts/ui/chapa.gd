@@ -14,8 +14,8 @@ const AMARILLO := Color("#ffe066")   # lo ahorrado y los cuadraditos llenos
 const MORADO := Color("#b77ce8")     # el mutágeno (19 nov; antes, verde): el morado de su barra (hud.gd), más claro para que se lea
 # El símbolo del mutágeno en su marcador, en lugar del «$»: una doble hélice de ADN, a cuadraditos de PIXEL_ADN (cada
 # fila, de arriba abajo; «#», lleno). Las dos tiras se cruzan en medio y entre ellas van los peldaños
-const ADN := ["#.....#", "#.###.#", "#.....#", "#.###.#", ".#...#.", "..#.#..", "...#...", "..#.#..", ".#...#.", "#.###.#",
-	"#.....#", "#.###.#", "#.....#"]
+# (19 nov: de 13 filas a 9, para que mida lo que las cifras, CIFRA_TAM, y vaya a su altura)
+const ADN := ["#.###.#", "#.....#", ".#...#.", "..#.#..", "...#...", "..#.#..", ".#...#.", "#.....#", "#.###.#"]
 const PIXEL_ADN := 2.0
 const CIFRAS := 4        # las casillas de los marcadores fijos (los del inventario): hasta 9999...
 const MAXIMO := 10000    # ...y de aquí en adelante, «MAX»
@@ -88,7 +88,9 @@ static func dibujar_marcador(lienzo: CanvasItem, fuente: Font, caja: Rect2, valo
 	var base := Vector2(caja.position.x + 9, caja.end.y - 8)
 	var sombra := color.darkened(0.65)
 	if adn:
-		dibujar_adn(lienzo, Vector2(base.x, base.y - ADN.size() * PIXEL_ADN + 2), color, sombra)
+		# del alto de las cifras y a su altura (antes, más alta y pegada arriba: se salía del cristal)
+		var arriba_cifras := base.y - CIFRA_TAM.y + 1
+		dibujar_adn(lienzo, Vector2(base.x, arriba_cifras + floorf((CIFRA_TAM.y - ADN.size() * PIXEL_ADN) / 2.0)), color, sombra)
 	else:
 		lienzo.draw_string(fuente, base, "$", HORIZONTAL_ALIGNMENT_LEFT, -1, 32, color)   # no-tr
 	var apagado := Color.TRANSPARENT if solo_luz else color.darkened(0.82)   # las rayas sin encender
