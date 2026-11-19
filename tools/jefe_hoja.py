@@ -376,38 +376,119 @@ def seta() -> Image.Image:
     return im
 
 
-def copa(hoja: Image.Image, caja: tuple, ancho_min: int = 8) -> None:
-    """Rehace un gorro cortado en plano: busca, de arriba abajo, el primer tramo de al menos ancho_min píxeles
-    seguidos casi sin nada encima (en las animaciones PixelLab le deja unos piquitos sueltos en las esquinas) y le
-    pone encima la seta del gorro de la vista de frente (tapando los piquitos), centrada sobre el corte."""
-    cx0, cy0, cx1, cy1 = caja
-    px = hoja.load()
-    for y in range(cy0 + 3, cy1):
-        x = cx0
-        while x < cx1:
-            if px[x, y][3] == 0:
-                x += 1
-                continue
+def tramos(px, y: int, x0: int, x1: int) -> list:
+    """Los tramos de píxeles seguidos con algo dibujado en la fila y, entre x0 y x1: [(izquierda, derecha)]."""
+    lista, x = [], x0
+    while x < x1:
+        if px[x, y][3]:
             l = x
-            while x < cx1 and px[x, y][3]:
+            while x < x1 and px[x, y][3]:
                 x += 1
-            r = x - 1
+            lista.append((l, x - 1))
+        x += 1
+    return lista
+
+
+def corte(px, caja: tuple, ancho_min: int = 8, piquitos: bool = False):
+    """Dónde está el gorro cortado en plano (fila del corte, columna izquierda, columna derecha): el primer tramo,
+    de arriba abajo, de al menos ancho_min píxeles seguidos y claros, sin nada encima (con piquitos=True, se le
+    perdonan los piquitos sueltos que PixelLab deja encima en las animaciones). Si el corte está algo inclinado, el
+    ancho es el de las tres primeras filas juntas. None si no lo hay."""
+    cx0, cy0, cx1, cy1 = caja
+    for y in range(cy0 + 3, cy1):
+        for l, r in tramos(px, y, cx0, cx1):
             if r - l + 1 < ancho_min:
                 continue
-            # casi vacío por encima (como mucho los piquitos)
             libres = [sum(1 for i in range(l, r + 1) if px[i, fy][3] == 0) for fy in (y - 1, y - 2)]
-            if libres[0] < 0.4 * (r - l + 1) or libres[1] < 0.8 * (r - l + 1):
+            if libres[0] < (0.4 if piquitos else 1) * (r - l + 1) or libres[1] < (0.8 if piquitos else 1) * (r - l + 1):
                 continue
             # un borde bien dibujado es oscuro; uno cortado deja a la vista la tela clara del gorro
             claros = sum(1 for i in range(l + 1, r) if sum(px[i, y][:3]) > 450)
             if claros < 0.6 * (r - l - 1):
                 continue
-            for fy in (y - 2, y - 1):             # fuera los piquitos
-                for i in range(l, r + 1):
-                    px[i, fy] = (0, 0, 0, 0)
-            # la seta, con su fila de abajo justo encima del corte y centrada en él
-            hoja.alpha_composite(SETA, ((l + r + 1) // 2 - SETA.width // 2, y - SETA.height))
-            return
+            for fy in (y + 1, y + 2):
+                for a, b in tramos(px, fy, cx0, cx1):
+                    if a <= r + 1 and b >= l - 1:
+                        l, r = min(l, a), max(r, b)
+            return y, l, r
+    return None
+
+
+def copas(hoja: Image.Image, filas: list, regiones: list) -> None:
+    """Pone la seta al gorro cortado en las direcciones de "copa". El corte se busca en la vista quieta; en cada
+    fotograma de las animaciones se busca dónde ha ido a parar la cabeza (comparando la parte de arriba del gorro con
+    la de la vista quieta, movida hasta 26 píxeles) y la seta va al mismo sitio, movida igual: así sigue a la cabeza y
+    no salta de un fotograma a otro. Si la cabeza no se parece, se busca el corte en el propio fotograma; y si está
+    cortado en diagonal (al recibir un golpe echa la cabeza a un lado) o caído al morir, no se toca."""
+    original = hoja.copy().load()   # para comparar con lo dibujado por PixelLab, sin setas puestas
+    px = hoja.load()
+    casillas = {nombre: c for (nombre, _, _, _), c in zip(filas, regiones)}
+    for d in JEFE["copa"]:
+        qx, qy = casillas[f"quieto_{d}"][0]
+        c = corte(px, (qx, qy, qx + cw, qy + ch))
+        if c is None:
+            print(f"  ojo: quieto_{d}: no encuentro el corte del gorro")
+            continue
+        y, l, r = c
+        # la muestra: las 8 primeras filas del gorro en la vista quieta
+        muestra = [(u, v, original[u, v]) for v in range(y, y + 8) for u in range(l, r + 1) if original[u, v][3]]
+        for nombre, lista in casillas.items():
+            if not nombre.endswith("_" + d):
+                continue
+            for cx, cy in lista:
+                mejor, donde = 1e9, (0, 0)
+                for dy in range(-26, 27):
+                    for dx in range(-26, 27):
+                        coste = 0
+                        for u, v, col in muestra:
+                            p = original[u - qx + cx + dx, v - qy + cy + dy]
+                            coste += 120 if p[3] == 0 else (abs(p[0] - col[0]) + abs(p[1] - col[1]) + abs(p[2] - col[2])) / 3
+                            if coste >= mejor * len(muestra):
+                                break
+                        coste /= len(muestra)
+                        if coste < mejor:
+                            mejor, donde = coste, (dx, dy)
+                if mejor <= PARECIDO:
+                    fy = y - qy + cy + donde[1]
+                    xc = (l + r + 1) // 2 - qx + cx + donde[0]
+                else:
+                    # la cabeza está girada o agachada: se busca el corte en el propio fotograma, cerca de donde
+                    # está el gorro en la vista quieta (si está cortado en diagonal, no se encuentra y se deja)
+                    c2 = corte(original, (l - qx + cx - 22, cy, r - qx + cx + 23, y - qy + cy + 30), piquitos=True)
+                    if c2 is None:
+                        print(f"  {nombre} {lista.index((cx, cy))}: sin seta (no encuentro el gorro)")
+                        continue
+                    fy, xc = c2[0], (c2[1] + c2[2] + 1) // 2
+                # (la seta tapa los piquitos que deja PixelLab encima del corte; borrarlos aparte dejaba huecos)
+                pon_seta(px, xc, fy)
+
+
+def pon_seta(px, xc: int, fy: int) -> None:
+    """Pinta la seta con su fila de abajo justo encima de la fila fy, centrada en la columna xc. Después tapa con tela del gorro las
+    rendijas que queden entre la seta y lo que dibujó PixelLab (con algo encima y debajo, y por lo menos a un lado)."""
+    x0 = xc - SETA.width // 2
+    sp = SETA.load()
+    for i in range(SETA.width):
+        for j in range(SETA.height):
+            if sp[i, j][3]:
+                px[x0 + i, fy - SETA.height + j] = sp[i, j]
+    alto = SETA.height + 3
+    for _ in range(6):   # varias pasadas: una rendija larga se va tapando desde donde toca la tela
+        huecos = []
+        for x in range(x0 - 2, x0 + SETA.width + 2):
+            for yy in range(fy - alto, fy + 4):
+                if px[x, yy][3]:
+                    continue
+                cerca = lambda dx, dy: any(px[x + dx * k, yy + dy * k][3] for k in (1, 2))
+                if cerca(0, -1) and cerca(0, 1) and (cerca(-1, 0) or cerca(1, 0)):
+                    huecos.append((x, yy))
+        if not huecos:
+            break
+        for x, yy in huecos:
+            px[x, yy] = (224, 206, 178, 255)
+
+
+PARECIDO = 40   # lo que puede diferir de media la cabeza de un fotograma de la de la vista quieta para ponerle la seta
 
 
 def quieta(d: str) -> Image.Image:
@@ -461,16 +542,16 @@ total = sum(len(f[3]) for f in filas)
 hoja = Image.new("RGBA", (por_fila * cw, -(-total // por_fila) * ch))
 regiones = []   # por fila de animación, la casilla de cada fotograma
 n = 0
-for nombre_fila, _, _, imgs in filas:
+for _, _, _, imgs in filas:
     casillas = []
     for im, s in imgs:
         cx, cy = (n % por_fila) * cw, (n // por_fila) * ch
         hoja.alpha_composite(im, (cx + s[0] - x0, cy + s[1] - y0))
-        if nombre_fila.rsplit("_", 1)[1] in JEFE.get("copa", []):
-            copa(hoja, (cx, cy, cx + cw, cy + ch))
         casillas.append((cx, cy))
         n += 1
     regiones.append(casillas)
+if JEFE.get("copa"):
+    copas(hoja, filas, regiones)
 if JEFE.get("sangre"):
     hoja = oscurecer(hoja, 110 if JEFE["sangre"] is True else JEFE["sangre"])
 hoja.save(f"assets/sprites/{salida}.png")
