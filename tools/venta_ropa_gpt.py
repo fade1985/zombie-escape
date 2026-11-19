@@ -117,12 +117,28 @@ def a_dorado_unido(im):
     return im
 
 
+# 19 nov, el dueño: las patas de la mesa de los accesorios (s4), doradas (los soportes de encima, de metal como estaban): todo lo gris
+# por debajo del canto de madera del tablero (la última fila con más de la mitad de color que no es gris)
+def a_dorado_patas(im):
+    px = im.load()
+    w, h = im.size
+    canto = max(y for y in range(h) if sum(1 for x in range(w) if px[x, y][3] > 0 and not gris(px[x, y])) > w / 2)
+    for y in range(canto + 1, h):
+        for x in range(w):
+            p = px[x, y]
+            if p[3] > 0 and max(p[:3]) >= 12 and gris(p):
+                px[x, y] = dorado(max(p[:3])) + (p[3],)
+    return im
+
+
 for id_, tipo, alto in MUEBLES:
     im = quitar_fondo(Image.open(f"assets/sources/ropa/venta-{id_}-gpt.webp").convert("RGBA"))
     if id_ == "p3":
         im = a_dorado(im)
     if id_ == "s3":
         im = a_dorado_unido(im)
+    if id_ == "s4":
+        im = a_dorado_patas(im)
     im = im.crop(im.getbbox())
     ancho = max(1, round(alto * im.width / im.height))
     s = im.convert("RGBa").resize((ancho, alto), Image.LANCZOS).convert("RGBA")
