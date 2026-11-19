@@ -543,6 +543,8 @@
 #   --lento-gpt         lo mismo con el arrastrado de GPT, al lado del vecino (para ver su tamaño) [prueba_varias.gd]
 #   --gordo-real        el gordo (venenoso) más real (contorno suave, como el crío), quieto en sus 8 direcciones: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --tres-zombis       la vecina, el vecino y el crío (los tres de GPT) juntos, por tríos en sus 8 direcciones (mismas fotos) [prueba_varias.gd]
+#   --vigilantes        el vigilante y la vigilante, juntos en sus 8 direcciones: andar, atacar, golpe y muerte (con su
+#                       contorno negro cerrado desde el 19 nov; fotos captura-vigilante-gpt-*.png) [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día, el garaje (M125), entrando por su botón de «Elige edificio» (las tarjetas con su
@@ -1405,6 +1407,9 @@ func empezar_prueba() -> void:
 	elif "--tres-zombis" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecino_gpt("normal", "tres", ["zombi-vecina", "zombi-normal-gpt", "zombi-rapido-gpt"])
+	elif "--vigilantes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_vecino_gpt("vigilante", "vigilante", ["zombi-vigilante", "zombi-vigilante-mujer"])
 	elif "--dependienta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_dependienta_nueva()

@@ -9,6 +9,7 @@ Lo saca todo de assets/sources/<fuente>/:
   zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen", "fps_andar", "suave"
                                 y "reducir" (un zombi dibujado con el doble de detalle, al tamaño y con el borde negro de los de 48:
                                 tools/reducir.py; el de tentáculos, desde el 19 nov)
+                                y "cerrar_borde" (el contorno de la figura, todo del color que se le da: el vigilante, desde el 19 nov)
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
@@ -351,6 +352,24 @@ if cfg.get('reducir'):
                 pequena.alpha_composite(reducir.reducida(c, (PX, PY), cfg['reducir']), (fx * nw, fy * nh))
     sheet, CW, CH = pequena, nw, nh
     PX, PY = cfg['reducir']['pies']
+# "cerrar_borde": "#050202" en zombi.json (el vigilante): el contorno de la figura, entero de ese color (el del de
+# Johnny). PixelLab lo deja casi siempre negro, pero con huecos del color de al lado (el chaleco, la piel); el dueño lo
+# quiso cerrado el 19 nov. Se pintan los píxeles de la figura que tocan el vacío, sin hacerla más grande.
+if cfg.get('cerrar_borde'):
+    color = tuple(int(cfg['cerrar_borde'][i:i + 2], 16) for i in (1, 3, 5)) + (255,)
+    for fy in range(sheet.height // CH):
+        for fx in range(sheet.width // CW):
+            caja = (fx * CW, fy * CH, (fx + 1) * CW, (fy + 1) * CH)
+            c = sheet.crop(caja)
+            if not c.getbbox():
+                continue
+            cp = c.load()
+            pintar = [(x, y) for y in range(CH) for x in range(CW) if cp[x, y][3] and max(cp[x, y][:3]) >= 40 and any(
+                not (0 <= x + i < CW and 0 <= y + j < CH) or cp[x + i, y + j][3] == 0
+                for i, j in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
+            for q in pintar:
+                cp[q] = color
+            sheet.paste(c, caja[:2])
 guardar_png(sheet, f'assets/sprites/{SPRITE}.png')
 json.dump({'cell': [CW, CH], 'pivot': [PX, PY], 'anims': anims,
            'source': f'Hecha con tools/zombi.py a partir de {SRC}/'},

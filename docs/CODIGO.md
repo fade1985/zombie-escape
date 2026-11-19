@@ -1297,7 +1297,9 @@ en una línea.
   cada vigilante que sale (patrullas, joyería, el rugido del jefe, «¡A TRABAJAR!», refuerzos) es hombre o mujer al azar,
   mitad y mitad, con los mismos números. Lo aprendido: la frase de la piel verde en cada texto (si no, GPT la pinta gris)
   y, en las muertes, «cae hacia donde mira y la cabeza queda en ese lado» (una salió tumbada al revés en los últimos
-  fotogramas y se giró en espejo en su hoja). `--guardia` cuenta los dibujos de sus guardias y saca
+  fotogramas y se giró en espejo en su hoja). Desde el 19 nov (lo pidió el dueño), con el contorno negro cerrado como el de
+  Johnny: `"cerrar_borde": "#050202"` en sus dos `zombi.json` pinta de ese color los píxeles del borde que PixelLab
+  dejaba del color de al lado (chaleco, piel), sin hacerlos más grandes; `--captura --vigilantes` los enseña. `--guardia` cuenta los dibujos de sus guardias y saca
   `captura-guardia-vigilantes.png` con uno de cada.
 - **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
   casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
