@@ -3,6 +3,8 @@
 #   assets/sources/suelos/ropa-suelo-gpt.webp → assets/sprites/suelo-ropa.png  (16 filas de tablas de 8 píxeles, 128 × 128)
 #   assets/sources/suelos/ropa-pared-gpt.webp → assets/sprites/pared-ropa.png  (192 × 64: la pared alta, de 4 casillas)
 #                                                y techo-ropa.png (el remate de arriba, que con "cajas" no se ve)
+# y, desde el 19 nov, sus tres destrozados (ropa-suelo-destrozado<N>-gpt → suelo-ropa-d<N>, ropa-pared-destrozada<N>-gpt → pared-ropa-d<N>),
+# que en la tienda se mezclan a trozos (mapa.gd, MEZCLA_TIENDA)
 # Como tools/galeria_gpt.py: cada trozo de tabla se reduce por dentro MEZCLANDO colores con LANCZOS («como los muebles») y
 # las juntas se pintan aparte, de un píxel y con su color de la imagen, así salen rectas y la textura empalma consigo
 # misma. Los listones del rodapié, tan finos que al reducirlos se emborronan, se pintan uno claro y uno oscuro sobre el
@@ -32,8 +34,17 @@ def reducir(im, caja, ancho, alto):
     return np.asarray(im.resize((ancho, alto), Image.LANCZOS, box=caja)).astype(float)
 
 
-def suelo():
-    im = Image.open('assets/sources/suelos/ropa-suelo-gpt.webp').convert('RGB')
+def juntas_cortas(col, local):
+    # las columnas de una fila mucho más oscuras que la madera: con «local» (los suelos destrozados), más oscuras que la madera de
+    # a su lado (a 6 píxeles), para que una quemadura o una mancha grande no se tomen por juntas
+    if not local:
+        return [x for x in range(len(col)) if col[x] < np.median(col) - 25]
+    n = len(col)
+    return [x for x in range(n) if col[x] < min(col[(x - 6) % n], col[(x + 6) % n]) - 20]
+
+
+def suelo(origen='ropa-suelo-gpt', nombre='suelo-ropa', local=False):
+    im = Image.open(f'assets/sources/suelos/{origen}.webp').convert('RGB')
     a = np.asarray(im).astype(float)
     W, H = im.size
     alto = H / FILAS
@@ -48,7 +59,7 @@ def suelo():
         # las juntas cortas de esta fila: las columnas mucho más oscuras que la madera de su fila
         dentro = luz[int(y0) + 6:int(y1) - 4]
         col = dentro.mean(axis=0)
-        cortes = [x for x in range(W) if col[x] < np.median(col) - 25]
+        cortes = juntas_cortas(col, local)
         # (cada junta son 2 o 3 columnas seguidas: su medio)
         grupos = []
         for x in cortes:
@@ -78,31 +89,43 @@ def suelo():
     for f in range(FILAS):
         y0, y1 = f * alto, (f + 1) * alto
         col = luz[int(y0) + 6:int(y1) - 4].mean(axis=0)
-        xs = [x for x in range(W) if col[x] < np.median(col) - 25]
+        xs = juntas_cortas(col, local)
         for x in xs:
             out[1 + f * 8:8 + f * 8, round(x * TAM / W) % TAM] = color_junta
-    guardar(Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)), 'suelo-ropa')
+    guardar(Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)), nombre)
 
 
-def pared():
-    im = Image.open('assets/sources/suelos/ropa-pared-gpt.webp').convert('RGB')
+def pared(origen='ropa-pared-gpt', nombre='pared-ropa', destrozada=False):
+    im = Image.open(f'assets/sources/suelos/{origen}.webp').convert('RGB')
     W, H = im.size
     ancho, alto = PARED
-    corte = round(RODAPIE * alto)            # la primera fila del rodapié en la pequeña
-    y_rod = RODAPIE * H
+    rodapie = RODAPIE
+    if destrozada:   # en las destrozadas el rodapié no empieza justo a la misma altura: la primera fila dorada (azul muy bajo)
+        m = np.asarray(im).astype(float).mean(axis=1)
+        rodapie = next(i for i in range(H // 2, H) if m[i, 0] - m[i, 2] > 90) / H
+    corte = round(RODAPIE * alto)            # la primera fila del rodapié en la pequeña (en todas, la misma)
+    y_rod = rodapie * H
     out = np.zeros((alto, ancho, 3))
     # el yeso rosa: reducido entero
     out[:corte] = reducir(im, (0, 0, W, y_rod - 3), ancho, corte)
     # el rodapié: el color de cada fila reducido (con su canto de arriba) y los listones, uno claro y uno oscuro
     rod = reducir(im, (0, y_rod, W, H), 1, alto - corte)[:, 0]
+    # en las destrozadas, el rodapié reducido entero: sus listones salen igual, pero con sus golpes, su suciedad y sus trozos arrancados
+    entero = reducir(im, (0, y_rod, W, H), ancho, alto - corte)
     for i in range(alto - corte):
         y = corte + i
-        if i == 0:
-            out[y] = rod[i] * 1.15   # el canto de arriba, que brilla
-            continue
         for x in range(ancho):
-            out[y, x] = rod[i] * (1.18 if x % 2 == 0 else 0.78)
-    guardar(Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)), 'pared-ropa')
+            base = rod[i]
+            if destrozada:
+                c = entero[i, x]
+                if c[0] - c[2] < 70:   # no es dorado (un trozo arrancado): tal cual
+                    out[y, x] = c
+                    continue
+                base = c
+            out[y, x] = base * (1.15 if i == 0 else 1.18 if x % 2 == 0 else 0.78)   # el canto de arriba brilla
+    guardar(Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)), nombre)
+    if destrozada:
+        return
     # el remate de arriba (con "cajas" no se ve, pero cada estilo lo lleva): el rosa, un poco más oscuro
     techo = np.tile(out[2:3] * 0.85, (6, 1, 1))
     guardar(Image.fromarray(np.clip(techo, 0, 255).astype(np.uint8)), 'techo-ropa')
@@ -110,3 +133,13 @@ def pared():
 
 suelo()
 pared()
+# los destrozados (19 nov, el dueño: «se ven demasiado bien»), tres de cada, de GPT a partir de los de arriba
+for i in (1, 2, 3):
+    suelo(f'ropa-suelo-destrozado{i}-gpt', f'suelo-ropa-d{i}', local=True)
+    pared(f'ropa-pared-destrozada{i}-gpt', f'pared-ropa-d{i}', destrozada=True)
+# los tres suelos, del mismo color de media (GPT los dejó cada uno un poco distinto): en la tienda se mezclan a trozos (mapa.gd,
+# MEZCLA_TIENDA) y si no, se verían los cuadros
+suelos = [np.asarray(Image.open(f'assets/sprites/suelo-ropa-d{i}.png').convert('RGB')).astype(float) for i in (1, 2, 3)]
+media = np.mean([s.reshape(-1, 3).mean(axis=0) for s in suelos], axis=0)
+for i, s in zip((1, 2, 3), suelos):
+    guardar(Image.fromarray(np.clip(s * media / s.reshape(-1, 3).mean(axis=0), 0, 255).astype(np.uint8)), f'suelo-ropa-d{i}')

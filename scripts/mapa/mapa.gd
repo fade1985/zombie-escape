@@ -93,6 +93,14 @@ const ESTILO_TIENDA := {
 	"archivo": [["torre"], "oficina"], "entrevistas": [["torre"], "oficina"], "estudio": [["datos"], "oficina"],
 	"camaras": [["datos"], "datos"], "armero": [["almacen"], "almacen"], "despacho": [["direccion"], "direccion"],
 	"juntas": [["direccion"], "direccion"]}
+# Los suelos y paredes destrozados que se mezclan a trozos en las salas destrozadas de una tienda (19 nov, el dueño: «se ven
+# demasiado bien», y «se quedarán fijos»): cada trozo de suelo de 128 píxeles y cada tramo de pared del ancho de su dibujo sale
+# de uno de ellos, siempre el mismo en el mismo sitio (CARA.elegir), con su peso (cuántas veces sale más que los otros).
+# Los de la tienda de ropa, de GPT (tools/ropa_gpt.py): el suelo quemado (d3), el que menos; la pared del boquete (d2), igual
+const MEZCLA_TIENDA := {
+	"tienda-ropa": {"suelos": [["ropa-d1", 3], ["ropa-d2", 2], ["ropa-d3", 1]], "paredes": [["ropa-d1", 2], ["ropa-d2", 1], ["ropa-d3", 2]]},
+	"probadores-ropa": {"suelos": [["ropa-d1", 3], ["ropa-d2", 2], ["ropa-d3", 1]], "paredes": [["ropa-d1", 2], ["ropa-d2", 1], ["ropa-d3", 2]]}}
+const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
 # los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)
 const PASILLOS := {"pasillo": {"tapa": "pasillo"}, "galeria": {"tapa": "centro"},
@@ -262,6 +270,10 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 				estilos[s.id] = {"suelo": load("res://assets/sprites/suelo-%s.png" % suelos[h % suelos.size()]),
 					"pared": load("res://assets/sprites/pared-%s.png" % pared),
 					"techo": load("res://assets/sprites/techo-%s.png" % (ESTILO_TIENDA[clave][2] if ESTILO_TIENDA[clave].size() > 2 else pared))}
+				if MEZCLA_TIENDA.has(clave) and s.uso in Tienda.TIPOS.get(sitio.tienda, {}).get("destrozada", []):
+					var mezcla: Dictionary = MEZCLA_TIENDA[clave]
+					estilos[s.id].suelos = mezcla.suelos.map(func(m): return [load("res://assets/sprites/suelo-%s.png" % m[0]), m[1]])
+					estilos[s.id].paredes = mezcla.paredes.map(func(m): return [load("res://assets/sprites/pared-%s.png" % m[0]), m[1]])
 				continue
 			var estilo: String = ESTILO_DE[s.uso]
 			if estilo == "bano":
@@ -576,7 +588,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 				fin += 1
 			var trozo := Rect2(c * 16, f * 16, (fin - c) * 16, 16)
 			if not muro:
-				lienzo.draw_texture_rect_region(estilos[sala].suelo, trozo, Rect2(trozo.position + desfase, trozo.size))
+				pintar_suelo(lienzo, sala, trozo, desfase)
 				if sala_destrozada(sala):
 					# la suciedad del suelo del pasillo del ascensor (grietas, huecos, arañazos y manchas), encima (tools/suciedad_suelo.py)
 					lienzo.draw_texture_rect_region(SUCIEDAD_SUELO, trozo, Rect2(trozo.position, trozo.size))
@@ -591,12 +603,12 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 			var derecha := dueno_en(c + 1, f)
 			if dueno_en(c, f - 1) >= 0 and abajo >= 0:   # habitaciones arriba y abajo: pletina tumbada
 				var mitad := Rect2(c * 16, f * 16 + 8, 16, 8)
-				lienzo.draw_texture_rect_region(estilos[abajo].suelo, mitad, mitad)
+				pintar_suelo(lienzo, abajo, mitad, Vector2.ZERO)
 				for i in PLETINA.size():
 					lienzo.draw_rect(Rect2(c * 16, f * 16 + 6 + i, 16, 1), PLETINA[i])
 			elif dueno_en(c - 1, f) >= 0 and derecha >= 0:   # a izquierda y derecha: pletina de pie
 				var mitad := Rect2(c * 16 + 8, f * 16, 8, 16)
-				lienzo.draw_texture_rect_region(estilos[derecha].suelo, mitad, mitad)
+				pintar_suelo(lienzo, derecha, mitad, Vector2.ZERO)
 				for i in PLETINA.size():
 					lienzo.draw_rect(Rect2(c * 16 + 6 + i, f * 16, 1, 16), PLETINA[i])
 	if marco:
@@ -747,6 +759,7 @@ func poner_caras() -> void:
 			cara.ancho = (fin - c) * CASILLA
 			cara.alto = sube * CASILLA
 			cara.pared = estilos[sala].pared
+			cara.paredes = estilos[sala].get("paredes", [])
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
@@ -783,6 +796,7 @@ func poner_caras() -> void:
 		dintel.alto = sube * CASILLA
 		dintel.desde = PUERTA_BANO.DINTEL + (sube - TABIQUE.SUBE) * CASILLA   # (con la pared alta, la puerta también: poner_hojas)
 		dintel.pared = estilos[sala].pared
+		dintel.paredes = estilos[sala].get("paredes", [])
 		dintel.techo = estilos[sala].techo
 		dintel.moldura = not cajas
 		dintel.puede_tapar = true
@@ -1306,6 +1320,21 @@ func poner_colgados() -> void:
 
 
 # Las salas de la tienda que están destrozadas (Tienda.TIPOS "destrozada": las que ya se han rehecho; vacío = toda la tienda como siempre)
+# Un trozo del suelo de una sala (en píxeles del dibujo, como el lienzo): su dibujo repetido o, si lleva varios para mezclar
+# (MEZCLA_TIENDA), a cuadros de TROZO_SUELO, cada uno del que le toque, siempre el mismo
+func pintar_suelo(lienzo: CanvasItem, sala: int, trozo: Rect2, desfase: Vector2) -> void:
+	var suelos: Array = estilos[sala].get("suelos", [])
+	if suelos.is_empty():
+		lienzo.draw_texture_rect_region(estilos[sala].suelo, trozo, Rect2(trozo.position + desfase, trozo.size))
+		return
+	var t := float(TROZO_SUELO)
+	for by in range(floori(trozo.position.y / t), ceili(trozo.end.y / t)):
+		for bx in range(floori(trozo.position.x / t), ceili(trozo.end.x / t)):
+			var parte := trozo.intersection(Rect2(bx * t, by * t, t, t))
+			if parte.has_area():
+				lienzo.draw_texture_rect_region(CARA.elegir(suelos, bx, by), parte, Rect2(parte.position + desfase, parte.size))
+
+
 func destrozadas() -> Array:
 	return Tienda.TIPOS.get(sitio.get("tienda", ""), {}).get("destrozada", [])
 

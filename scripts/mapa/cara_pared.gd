@@ -14,6 +14,7 @@ const TECHO := 12.0    # la moldura de arriba (6 píxeles)
 var ancho := 32.0          # en unidades
 var alto := ALTO           # su alto: el de siempre o, en las tiendas de pared alta (Tienda.TIPOS "sube"), una casilla más
 var pared: Texture2D
+var paredes := []          # si lleva varios dibujos que mezclar a tramos (mapa.gd, MEZCLA_TIENDA): [dibujo, peso]
 var techo: Texture2D
 var puede_tapar := false   # solo los tabiques de dentro tienen a alguien detrás
 var niebla := 0.0          # la oscuridad de su habitación, si aún no se ha pisado (la pone mapa.gd)
@@ -44,8 +45,16 @@ func _draw() -> void:
 		dibujar_tabique(w, x0)
 		return
 	var visto := (alto - desde) / 2.0   # lo que se ve del papel, en píxeles (de arriba abajo)
-	var papel := pared if pared.get_height() * 2.0 >= alto else ALARGAR.dibujo(pared, int(alto / 2.0))
-	draw_texture_rect_region(papel, Rect2(0, -alto / 2.0, w, visto), Rect2(x0, 0, w, papel.get_height() * visto * 2.0 / alto))
+	if paredes.is_empty():
+		pintar_papel(pared, 0.0, w, x0, visto)
+	else:
+		# a tramos del ancho del dibujo, contando desde el borde del mapa: cada uno, el que le toque (siempre el mismo)
+		var t := float((paredes[0][0] as Texture2D).get_width())
+		for k in range(floori(x0 / t), ceili((x0 + w) / t)):
+			var a := maxf(x0, k * t)
+			var b := minf(x0 + w, (k + 1) * t)
+			if b > a:
+				pintar_papel(elegir(paredes, k, int(position.y)), a - x0, b - a, a, visto)
 	if moldura:
 		draw_texture_rect_region(techo, Rect2(0, -(alto + TECHO) / 2.0, w, TECHO / 2.0), Rect2(x0, 0, w, techo.get_height()))
 	for a in adornos:
@@ -53,6 +62,24 @@ func _draw() -> void:
 	if niebla > 0.0:
 		var arriba := alto + (TECHO if moldura else 0.0)
 		draw_rect(Rect2(0, -arriba / 2.0, w, (arriba - desde) / 2.0), Color(0.07, 0.063, 0.11, 0.8 * niebla))
+
+
+func pintar_papel(dibujo: Texture2D, x: float, w: float, x_mapa: float, visto: float) -> void:
+	var papel := dibujo if dibujo.get_height() * 2.0 >= alto else ALARGAR.dibujo(dibujo, int(alto / 2.0))
+	draw_texture_rect_region(papel, Rect2(x, -alto / 2.0, w, visto), Rect2(x_mapa, 0, w, papel.get_height() * visto * 2.0 / alto))
+
+
+# Uno de varios dibujos ([dibujo, peso]) para el sitio (a, b), siempre el mismo para el mismo sitio: los de más peso salen más
+static func elegir(lista: Array, a: int, b: int) -> Texture2D:
+	var total := 0
+	for m in lista:
+		total += int(m[1])
+	var h := absi((a * 73856093) ^ (b * 19349663) ^ 1540483477) % total
+	for m in lista:
+		h -= int(m[1])
+		if h < 0:
+			return m[0]
+	return lista[0][0]
 
 
 # La tapa del muro de la altura de la cara (con su moldura), sin costura con la del tabique de debajo (que se dibuja
