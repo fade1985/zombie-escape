@@ -36,7 +36,7 @@ const LISTA := {
 	"lento": {"nombre": "El arrastrado",
 		"frase": "Le falta la mitad de abajo y no se ha enterado. Se arrastra con las manos y lo deja todo perdido.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-lento-gpt.tres",
-		"recorte": Rect2i(35, 58, 26, 21), "retrato": "quieto_s", "escala": 2, "jefe": false},
+		"recorte": Rect2i(34, 55, 29, 24), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"rapido": {"nombre": "El crío",
 		"frase": "Un crío con gorra y chándal que corre como un demonio. Frena fatal: apártate y se pasa de largo.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-rapido-gpt.tres",

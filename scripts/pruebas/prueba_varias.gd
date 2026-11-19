@@ -2669,7 +2669,7 @@ func probar_vecina() -> void:
 # y sin el mechón de la nuca (8 nov), y a su lado el de GPT cuando esté su hoja (zombi-rapido-gpt). Fotos captura-crio-gpt-*.png
 #
 # Con "--captura --lento-gpt" lo mismo con el arrastrado de GPT (zombi lento, el del juego) y, a su izquierda, el
-# vecino: para ver su tamaño (9 nov: al 80 %, tendido medía casi lo que el vecino de pie). Fotos captura-lento-gpt-*.png
+# vecino: para ver su tamaño (9 nov: al 80 %, tendido medía casi lo que el vecino de pie; 19 nov: al 90 % y todas las vistas igualadas). Fotos captura-lento-gpt-*.png
 #
 # Con "--captura --gordo-real" lo mismo con el gordo (venenoso), solo él: el de PixelLab más real ("suave" en su zombi.json,
 # como el crío; lo eligió el dueño el 8 nov). Fotos captura-gordo-gpt-*.png

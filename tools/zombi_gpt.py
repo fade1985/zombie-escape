@@ -69,7 +69,8 @@ CORRE = False
 LIENZO_ANDAR = {"rapido": 64, "lento": 64}
 # El tamaño, si no es el de la referencia: el arrastrado, al 80 % (9 nov: tendido en el suelo medía casi lo que el vecino
 # de pie y, a su lado, se veía demasiado grande). Las animaciones se miden por el dibujo quieto, así que lo siguen solas
-TAMANO = {"lento": 0.8, "policia": 1.07, "guardia": 0.87, "vigilante": 0.97, "vigilante-mujer": 0.82}
+# (19 nov: al 90 %, que al 80 % se veía más pequeño que los demás zombis, con la cabeza menor que la del vecino)
+TAMANO = {"lento": 0.9, "policia": 1.07, "guardia": 0.87, "vigilante": 0.97, "vigilante-mujer": 0.82}
 # El jefe de seguridad, al 87 % (17 nov): GPT lo dibujó más grande que al vecino y, a escala normal, medía 53 de alto y no
 # cabía en el lienzo de 48 (se le cortaba la gorra); así mide 46, como el vecino, pero más ancho de hombros
 # Y el personal de seguridad (17 nov): tan corpulentos como el jefe, que si no parecían enanos al lado de Johnny (lo pidió
@@ -84,7 +85,9 @@ PIEL_GRIS = {"guardia": ["rugir"]}
 VERDEAR = []   # (las animaciones de este personaje que lo necesitan: PIEL_GRIS)
 # Y por vista: el arrastrado de perfil y en diagonal (se le ve el cuerpo a lo largo) salía mucho más grande que de frente
 # (de perfil, 32 de largo y de frente 26 de ancho; el vecino de pie mide 45): esas vistas, más pequeñas
-TAMANO_VISTA = {"lento": {"south-east": 0.8, "east": 0.82, "north-east": 0.92}}
+# Y (19 nov) cada vista con el mismo peso: al girar parecía que encogía (de diagonal de frente tenía un 38 % menos de dibujo
+# que de espaldas); así todas tienen unos 410 píxeles pintados
+TAMANO_VISTA = {"lento": {"south-east": 0.94, "east": 0.9, "north-east": 0.92, "north": 0.92}}
 # Los que van por el suelo (el arrastrado): en el ataque, el golpe y la muerte, cada fotograma a la altura a la que lo
 # dibuja GPT, no con lo más bajo en el suelo. Al dar el zarpazo levanta las dos manos y, con lo más bajo abajo, todo
 # el cuerpo se hundía 5 píxeles justo al atacar
