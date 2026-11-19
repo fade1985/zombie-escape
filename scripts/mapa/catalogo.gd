@@ -98,9 +98,9 @@ const MUEBLES := {
 	"ropashelf4": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
 	# los muebles de la sala de venta de la tienda de ropa (18 nov, el dueño; GPT, ropa de los años 90; tools/venta_ropa_gpt.py): a escala 1
 	# (el doble de detalle, como la dependienta), así que "len" y "dep" son los píxeles del dibujo
-	"ropamodulo": {"len": 156, "dep": 32, "paredes": "", "archivo": "ropa/venta-p1-gpt", "escala": 1.0},
+	"ropamodulo": {"len": 155, "dep": 32, "paredes": "", "archivo": "ropa/venta-p1-destrozado-gpt", "escala": 1.0},
 	"ropabarra": {"len": 190, "dep": 28, "paredes": "", "archivo": "ropa/venta-p2-gpt", "escala": 1.0},
-	"ropazapatos": {"len": 98, "dep": 32, "paredes": "", "archivo": "ropa/venta-p3-gpt", "escala": 1.0},
+	"ropazapatos": {"len": 103, "dep": 32, "paredes": "", "archivo": "ropa/venta-p3-destrozado-gpt", "escala": 1.0},
 	"ropavitrina": {"len": 73, "dep": 32, "paredes": "", "archivo": "ropa/venta-p4-gpt", "escala": 1.0},
 	"ropaoval": {"len": 38, "dep": 32, "paredes": "", "archivo": "ropa/venta-p5-gpt", "escala": 1.0},
 	"ropaperchero1": {"len": 126, "dep": 40, "paredes": "", "archivo": "ropa/venta-s1-gpt", "escala": 1.0},
@@ -112,7 +112,7 @@ const MUEBLES := {
 	"ropamaniqui2": {"len": 36, "dep": 24, "paredes": "", "archivo": "ropa/venta-m2-gpt", "escala": 1.0},
 	"ropamaniqui3": {"len": 33, "dep": 24, "paredes": "", "archivo": "ropa/venta-m3-gpt", "escala": 1.0},
 	"ropamaniqui4": {"len": 35, "dep": 24, "paredes": "", "archivo": "ropa/venta-m4-gpt", "escala": 1.0},
-	"ropamostrador": {"len": 209, "dep": 48, "paredes": "", "archivo": "ropa/venta-caja-gpt", "escala": 1.0},
+	"ropamostrador": {"len": 229, "dep": 48, "paredes": "", "archivo": "ropa/venta-caja-destrozado-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -609,7 +609,7 @@ const SALAS := {
 	# de la entrada (casillas 21,5 a 24,5) y el de delante de los probadores
 	"tienda-ropa": {"colocados": {
 		"abajo": [
-			["ropabarra", 6.79, "libre", 4.4375], ["ropaoval", 10.58, "libre", 4.5], ["ropamodulo", 21.5, "libre", 4.5], ["ropazapatos", 5.35, "libre", 9.25],
+			["ropabarra", 6.79, "libre", 4.4375], ["ropaoval", 10.58, "libre", 4.5], ["ropamodulo", 21.5, "libre", 4.5], ["ropazapatos", 5.43, "libre", 9.25],
 			["ropaperchero1", 38.0, "libre", 4.375], ["ropaperchero2", 38.0, "libre", 9.125], ["roparuedas", 38.0, "libre", 13.4375], ["ropatarimas", 5.38, "libre", 13.125],
 			["ropamesa", 15.12, "libre", 13.3125], ["ropamaniqui1", 28.4, "libre", 9.375], ["ropamaniqui2", 30.0, "libre", 9.375], ["ropamaniqui3", 28.4, "libre", 13.625],
 			["ropamaniqui4", 30.0, "libre", 13.625], ["ropamostrador", 15.12, "libre", 9.0]],
