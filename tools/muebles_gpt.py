@@ -360,14 +360,21 @@ MUEBLES = {
     # cristal vacío con dos brillos, en la pared de arriba de cada probador
     "espejoprobador": ("assets/sources/ropa/espejo-probador-gpt.webp", "assets/sprites/mueble-espejoprobador.png", 36, 50, True),
     # el puf redondo blanco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "pufprobador"): en la esquina de arriba a la izquierda
-    "pufprobador": ("assets/sources/ropa/puf-probador-gpt.webp", "assets/sprites/mueble-pufprobador.png", 18, 20, True),
+    # desde el 19 nov, destrozado (el dueño; GPT, ya en beige: no se tiñe)
+    "pufprobador": ("assets/sources/ropa/puf-probador-destrozado-gpt.webp", "assets/sprites/mueble-pufprobador.png", 18, 20, True),
     # el gancho doble cromado de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "ganchoprobador"): de perfil, con la
     # placa a la izquierda (el dibujo de la pared izquierda; en la derecha, en espejo). Se levanta del suelo al final de este archivo
     "ganchoprobador": ("assets/sources/ropa/perchero-probador-gpt.webp", "assets/sprites/mueble-ganchoprobador-lado.png", 10, 16, True),
     # la alfombrilla blanca de los probadores de la tienda de ropa (18 nov, el dueño): una pieza del suelo (mapa.gd, dibujar_fondo), sin .json
-    "alfombra_probador": ("assets/sources/ropa/alfombra-probador-gpt.webp", "assets/sprites/alfombra-probador.png", 66, 44, False),
+    # desde el 19 nov, destrozada (el dueño; GPT, ya redondeada y en beige: ni se recorta ni se tiñe), por su contorno (RECORTE)
+    "alfombra_probador": ("assets/sources/ropa/alfombra-probador-destrozada-gpt.webp", "assets/sprites/alfombra-probador.png", 66, 44, False),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
+
+
+# los que no se recortan por todo lo que no es fondo sino por una caja (en píxeles de la imagen de GPT): la alfombrilla destrozada, por
+# su contorno, sin los flecos que le salen por fuera (así mide lo mismo que la limpia y va en su sitio)
+RECORTE = {"assets/sources/ropa/alfombra-probador-destrozada-gpt.webp": (40, 42, 1572, 919)}
 
 
 def pasar(origen, sprite, ancho, alto, con_json, quitar=(), semillas=()):
@@ -389,7 +396,7 @@ def pasar(origen, sprite, ancho, alto, con_json, quitar=(), semillas=()):
         for x in range(W):
             if fondo[y * W + x]:
                 px[x, y] = (0, 0, 0, 0)
-    im = im.crop(im.getbbox())
+    im = im.crop(RECORTE.get(origen, im.getbbox()))
     # mezclando colores (premultiplicado: el fondo transparente no tiñe los bordes), y el borde, sin medias tintas
     salida = im.convert("RGBa").resize((ancho, alto), Image.LANCZOS).convert("RGBA")
     salida.putalpha(salida.split()[3].point(lambda v: 255 if v > 110 else 0))
@@ -474,7 +481,7 @@ if "ganchoprobador" in (sys.argv[1:] or ["ganchoprobador"]):
 
 # la alfombrilla de los probadores, con las esquinas redondeadas (18 nov, el dueño: que no parezca hecha con escuadra y cartabón):
 # se recorta cada esquina con un cuarto de círculo de 10 píxeles y el borde nuevo se pinta del color del contorno
-if "alfombra_probador" in (sys.argv[1:] or ["alfombra_probador"]):
+if "alfombra_probador" in (sys.argv[1:] or ["alfombra_probador"]) and "destrozada" not in MUEBLES["alfombra_probador"][0]:
     ruta = MUEBLES["alfombra_probador"][1]
     alf = Image.open(ruta).convert("RGBA")
     w, h = alf.size
@@ -507,7 +514,7 @@ if "alfombra_probador" in (sys.argv[1:] or ["alfombra_probador"]):
     alf.save(ruta)
 
 # el puf de los probadores, en beige como la alfombrilla y las cortinas (18 nov, el dueño): lo claro se tiñe (el contorno, no)
-if "pufprobador" in (sys.argv[1:] or ["pufprobador"]):
+if "pufprobador" in (sys.argv[1:] or ["pufprobador"]) and "destrozado" not in MUEBLES["pufprobador"][0]:
     ruta = MUEBLES["pufprobador"][1]
     puf = Image.open(ruta).convert("RGBA")
     px = puf.load()
