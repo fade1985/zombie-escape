@@ -139,8 +139,17 @@ func _process(delta: float) -> void:
 
 # Sube, cae y, al tocar el suelo, rebota (perdiendo fuerza) o se queda y deja su marca
 func volando(q: Dictionary, delta: float) -> void:
+	if not q.has("techo"):
+		# (la primera vez, desde donde sale: hasta dónde puede subir sin verse al otro lado de la pared de detrás y,
+		# si sale detrás de un tabique, desde dónde la tapa su cara; recorte.gd, 20 nov)
+		q.techo = Recorte.techo(q.p)
+		q.tapa = Recorte.tapa(q.p)
 	q.vz -= PESO * delta
 	q.z += q.vz * delta
+	if q.p.y - q.z < q.techo:   # (da con lo alto de la pared y cae)
+		q.z = q.p.y - q.techo
+		if q.vz > 0.0:
+			q.vz = -q.vz * 0.2
 	if q.z > 0.0:
 		return
 	q.z = 0.0
@@ -170,6 +179,8 @@ func _draw() -> void:
 			continue
 		var s: float = maxf(2.0, round(q.s / 2.0) * 2.0)
 		var donde: Vector2 = q.p - Vector2(0, q.get("z", 0.0))
+		if donde.y >= q.get("tapa", INF):
+			continue   # (detrás de un tabique: la cara del muro la tapa)
 		var p: Vector2 = (donde / 2.0).round() * 2.0   # en píxeles enteros del dibujo
 		var alfa := 1.0 if q.has("z") else minf(1.0, k * 2.0)
 		# redondas: las que lo piden y todas las sueltas que no sean diminutas (ácido, veneno, vómito, destellos);

@@ -22,7 +22,7 @@ var volando := 0             # cuántos siguen en el aire (mientras, se pintan p
 # Un reventón: "n" cachos que salen de "donde" (el suelo bajo el zombi) hacia todos los lados
 static func lanzar(sala: Node, donde: Vector2, n := 14) -> Cachos:
 	var c := Cachos.new()
-	c.material = Recorte.material("punto")   # (ni encima de un muro ni al otro lado: recorte.gd)
+	c.material = Recorte.material("vuela")   # (ni encima de un muro ni al otro lado, ni por encima de una pared: recorte.gd)
 	var cuantos := DIBUJOS.get_width() / CELDA
 	var orden := range(cuantos)
 	orden.shuffle()
@@ -41,11 +41,18 @@ static func lanzar(sala: Node, donde: Vector2, n := 14) -> Cachos:
 	# roja en medio y salpicaduras alrededor, hacia todos los lados (19 nov: el dueño quería más sangre)
 	EfectoSuelo.soltar(sala, "sangre", donde, 1.4)
 	Mancha.sangre(sala, donde, randf_range(20.0, 26.0), SANGRE)
+	var espacio := c.get_world_2d().direct_space_state
+	var rayo := PhysicsRayQueryParameters2D.create(donde, donde, 1)
 	for i in 18:
 		var hacia := Vector2.from_angle(TAU * (i + randf()) / 18.0)
 		var lejos := randf_range(10.0, 56.0)
-		Mancha.salpicon(sala, donde + Vector2(hacia.x, hacia.y * 0.6) * lejos, SANGRE, hacia * randf_range(150.0, 400.0),
-			8.0 if randf() < 0.3 else 2.0)
+		# (si de camino hay una pared o un mueble, se queda junto a él: no pasa al otro lado; 20 nov)
+		var cae := donde + Vector2(hacia.x, hacia.y * 0.6) * lejos
+		rayo.to = cae
+		var choque := espacio.intersect_ray(rayo)
+		if choque:
+			cae = choque.position + choque.normal * 4.0
+		Mancha.salpicon(sala, cae, SANGRE, hacia * randf_range(150.0, 400.0), 8.0 if randf() < 0.3 else 2.0)
 	return c
 
 
@@ -84,6 +91,13 @@ func _process(delta: float) -> void:
 		# sube y cae; al tocar el suelo deja su salpicón, rebota (cada vez con menos fuerza) y al final se queda
 		q.vz -= PESO * delta
 		q.z += q.vz * delta
+		# no sube más que lo alto de la pared de detrás: ahí da con ella y cae (si no, se vería en la habitación de al
+		# lado; 20 nov)
+		var techo := Recorte.techo(global_position + q.p) - global_position.y
+		if q.p.y - q.z < techo + CELDA:
+			q.z = q.p.y - techo - CELDA
+			if q.vz > 0.0:
+				q.vz = -q.vz * 0.2
 		if q.z > 0.0:
 			continue
 		q.z = 0.0
@@ -109,6 +123,7 @@ func _draw() -> void:
 		var donde: Vector2 = q.p - Vector2(0, q.z)
 		var p: Vector2 = (donde / 2.0).round() * 2.0   # en píxeles enteros del dibujo
 		draw_set_transform(p, q.giro * PI / 2.0, Vector2(2, 2))
+		# (la altura, en el rojo: recorte_vuela.gdshader mira el suelo de debajo de cada píxel)
 		draw_texture_rect_region(DIBUJOS, Rect2(-CELDA / 2.0, -CELDA / 2.0, CELDA, CELDA),
-			Rect2(q.cual * CELDA, 0, CELDA, CELDA))
+			Rect2(q.cual * CELDA, 0, CELDA, CELDA), Color(clampf(q.z / 256.0, 0.0, 1.0), 1.0, 1.0))
 	draw_set_transform(Vector2.ZERO)

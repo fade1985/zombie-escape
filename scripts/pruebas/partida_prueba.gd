@@ -164,6 +164,7 @@
 #   --explosion         la explosión de pixelfx (granada, zombi explosivo): normal y pequeña   [prueba_armas.gd]
 #   --mecha             el aviso del zombi explosivo (el de los jefes), en medio y cortado por una pared [prueba_armas.gd]
 #   --cachos            el zombi explosivo revienta en cachos de carne que salen volando (cachos.gd)   [prueba_armas.gd]
+#   --explosivo-pared   el zombi explosivo revienta pegado a un tabique: ni sus cachos ni su sangre ni su marca pasan al otro lado [prueba_armas.gd]
 #   --explosivos-carga  cuánto tarda cada fotograma cuando revientan muchos explosivos a la vez; con --zombis N, cuántos (12) [prueba_armas.gd]
 #   --gastro-objetivo   el vómito de Gastroenteritis no va a por el Glotón, Salas ni el gordo (no les quema) [prueba_armas.gd]
 #   --vomito            los zombis bañados en vómito (Gastroenteritis), junto a uno con ácido   [prueba_armas.gd]
@@ -1101,6 +1102,9 @@ func empezar_prueba() -> void:
 	elif "--cachos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cachos()
+	elif "--explosivo-pared" in args:
+		set_process(false)   # sin la prueba larga
+		probar_explosivo_pared()
 	elif "--explosivos-carga" in args:
 		set_process(false)   # sin la prueba larga
 		probar_explosivos_carga()

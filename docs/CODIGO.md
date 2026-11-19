@@ -133,7 +133,7 @@ en una línea.
 **Zombis, jefes y lo que hacen daño**
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
   `enfurecer`, la furia del grito de la dependienta (18 nov: +25 % de velocidad, de ritmo de ataque y de vida mientras ella viva, ardiendo en rojo con el fuego del shader en rojos, `furia` en `quemaduras.gdshaderinc`; antes, M80, una burbuja dorada), la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
-  números en su `.tscn`. Heredan: `zombi_explosivo.gd` (desde el 19 nov, lo pidió el dueño, revienta sin dejar cuerpo: `caer_muerto` lo esconde y `cachos.gd` lanza 12 cachos de carne de PixelLab, `assets/sprites/cachos-carne.png`, hecha con `assets/sources/zombi-explosivo-gpt/carne.py`, que vuelan hacia todos los lados, sueltan gotas y al caer dejan su mancha y salpicaduras; no atraviesan paredes; en el sitio deja la marca negra de la explosión, `Mancha.quemado`, y encima un reventón de sangre con salpicaduras alrededor; se prueba con `--cachos`; 20 nov: con muchos reventando a la vez daba tirones, sobre todo por la sangre: `Mancha` quita las gotas de más una vez por fotograma y no en cada una, la marca negra sale de una plantilla por radio con las celdas seguidas de una fila en un rectángulo, y las gotas en el aire comparten su consulta de choque; se mide con `--explosivos-carga`), `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
+  números en su `.tscn`. Heredan: `zombi_explosivo.gd` (desde el 19 nov, lo pidió el dueño, revienta sin dejar cuerpo: `caer_muerto` lo esconde y `cachos.gd` lanza 12 cachos de carne de PixelLab, `assets/sprites/cachos-carne.png`, hecha con `assets/sources/zombi-explosivo-gpt/carne.py`, que vuelan hacia todos los lados, sueltan gotas y al caer dejan su mancha y salpicaduras; no atraviesan paredes; en el sitio deja la marca negra de la explosión, `Mancha.quemado`, y encima un reventón de sangre con salpicaduras alrededor; se prueba con `--cachos`; 20 nov: con muchos reventando a la vez daba tirones, sobre todo por la sangre: `Mancha` quita las gotas de más una vez por fotograma y no en cada una, la marca negra sale de una plantilla por radio con las celdas seguidas de una fila en un rectángulo, y las gotas en el aire comparten su consulta de choque; se mide con `--explosivos-carga`; ni los cachos, ni su sangre, ni la marca pasan las paredes: `recorte.gd`, prueba `--explosivo-pared`), `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`; desde el 19 nov, lo pidió el dueño, reducido
   a la altura de Johnny y con su borde negro: `"reducir"` en su `zombi.json`, casilla 80×88 con los pies en 40,58,
@@ -233,7 +233,12 @@ en una línea.
   montarse, le pasa sus muros como una máscara de un punto por casilla, y cada píxel solo se pinta si entre el centro
   del efecto y él no hay muro (por las puertas abiertas, sí pasa). Lo que sube (explosión, llamas) se mira a la altura
   del suelo: se corta en las paredes de los lados y la de abajo, pero por delante de la de arriba se sigue viendo, como
-  un personaje. Prueba: `--captura --efectos-pared`.
+  un personaje. Prueba: `--captura --efectos-pared`. Desde el 20 nov, también lo que vuela con su altura (modo
+  "vuela", `recorte_vuela.gdshader`: los cachos del zombi explosivo llevan su altura en el rojo del color): cada píxel mira
+  el suelo de debajo, lo tapa la cara del tabique de delante (`cara_pared.gd`, 96 de alto) y no se ve por encima de la de
+  detrás. Para lo que no usa ese shader, lo mismo en `Recorte.muro_en`, `techo` y `tapa` (las gotas en el aire de
+  `particulas.gd` chocan con el techo y las tapa la cara; las de `Mancha` no se pintan en una casilla de muro).
+  `Mancha.sangre` lleva el recorte "suelo". Prueba: `--captura --explosivo-pared`.
 - `poligono.gd` (11 nov): un polígono de color pintado con `draw_polygon`. **No usar `Polygon2D` para nada que cambie
   cada fotograma** (el rayo de la linterna, la pantalla de la tele): en la web de Godot 4.7.2, al redibujarse con los
   mismos puntos actualiza su malla atando los índices al búfer equivocado y Chrome llena la consola de avisos de WebGL

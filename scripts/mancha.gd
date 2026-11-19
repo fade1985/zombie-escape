@@ -76,10 +76,18 @@ static func ahora() -> float:
 # "maximo" últimas: así no hace falta un nodo por gota. "tam", en unidades (de 2 en 2)
 static func gota(sala: Node, donde: Vector2, color: Color, tam := Vector2(CELDA, CELDA), nombre := "Gotas",
 		maximo := 700) -> void:
+	if en_muro(donde, tam):
+		return   # (encima de una pared, no: 20 nov)
 	var m := de_gotas(sala, nombre, maximo)
 	var p: Vector2 = (((m.to_local(donde) - tam / 2.0) / 2.0).round() * 2.0)
 	m.celdas.append([p, color, tam])
 	m.recortar()
+
+
+# Si un cuadradito de "tam" con centro en "donde" pisa una casilla de muro (recorte.gd: sus cuatro esquinas)
+static func en_muro(donde: Vector2, tam: Vector2) -> bool:
+	var m := tam / 2.0 - Vector2(0.01, 0.01)
+	return Recorte.muro_en(donde - m) or Recorte.muro_en(donde + m) or Recorte.muro_en(donde + Vector2(m.x, -m.y)) 		or Recorte.muro_en(donde + Vector2(-m.x, m.y))
 
 
 # La mancha de pequeñas marcas "nombre" de ese sitio (se crea la primera vez)
@@ -127,6 +135,8 @@ static func salpicon(sala: Node, donde: Vector2, color: Color, hacia: Vector2, g
 		if not espacio.intersect_point(punto, 1).is_empty():
 			return   # (el trozo que caería dentro de una pared o de un mueble, no)
 		var l := maxf(2.0, roundf(lado / 2.0) * 2.0)
+		if en_muro(centro, Vector2(l, l)):
+			return   # (ni el que asomaría a una casilla de muro, aunque su choque sea más fino: 20 nov)
 		m.celdas.append([((m.to_local(centro) - Vector2(l, l) / 2.0) / 2.0).round() * 2.0, color, Vector2(l, l), t, seco])
 	if grueso > 3.0:
 		# la gorda: un cuerpo redondeado (una cruz de celdas) y una cola corta y fina hacia donde iba
@@ -262,6 +272,7 @@ static func plantilla_quemado(radio: float) -> Array:
 static func sangre(sala: Node, donde: Vector2, radio: float, color: Color) -> void:
 	var m := Mancha.new()
 	m.position = (donde / CELDA).round() * CELDA
+	m.material = Recorte.material("suelo")   # (como la quemadura: no pasa a las paredes ni al otro lado; 20 nov)
 	var semilla := randf() * TAU
 	var tono := Color(color, 0.35)
 	var gotas := []

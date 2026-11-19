@@ -3986,6 +3986,123 @@ func probar_efectos_apartamento() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --explosivo-pared": el zombi explosivo revienta pegado a los tabiques de un apartamento (con la pared a
+# un lado, debajo y encima; los mismos sitios que --efectos-apartamento) y nada suyo pasa al otro lado (20 nov, lo pidió
+# el dueño): ni los cachos de carne, ni la sangre (las salpicaduras, las gotas y la mancha), ni la marca negra. Cuenta
+# lo que queda tras un muro visto desde donde revienta (andando por las casillas como el recorte, recorte.gdshaderinc)
+# y hace una foto de cada uno al reventar y otra con todo ya en el suelo. Se cierra
+func probar_explosivo_pared() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var destino := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and not planta.sitios[i].limpio:
+			destino = i
+			break
+	await montar(destino, 0, false)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	zombis_de_prueba([])
+	for sala in mapa.niebla:   # (todas las habitaciones a la vista, para ver si algo pasa a la de al lado)
+		mapa.vistas[sala] = true
+	var C: float = mapa.CASILLA
+	var suelo := func(c: int, f: int) -> bool: return not mapa.es_muro(c, f) and mapa.dueno_en(c, f) >= 0
+	# los sitios: un tabique de 1 o 2 casillas con habitaciones distintas a cada lado (como en probar_efectos_apartamento)
+	var sitios := []
+	var hay := {}
+	for f in range(2, mapa.filas - 2):
+		for c in range(2, mapa.cols - 2):
+			if not mapa.es_muro(c, f):
+				continue
+			for grueso in [1, 2]:
+				if not hay.has("de-pie") and suelo.call(c - 1, f) and suelo.call(c + grueso, f) \
+						and mapa.dueno_en(c - 1, f) != mapa.dueno_en(c + grueso, f) \
+						and mapa.es_muro(c, f - 1) and mapa.es_muro(c, f + 1) and suelo.call(c - 1, f - 1) and suelo.call(c - 1, f + 1):
+					hay["de-pie"] = true
+					sitios.append(["de-pie", Vector2(c * C - 24.0, (f + 0.5) * C)])
+				if not hay.has("abajo") and suelo.call(c, f - 1) and suelo.call(c, f + grueso) \
+						and mapa.dueno_en(c, f - 1) != mapa.dueno_en(c, f + grueso) \
+						and mapa.es_muro(c - 1, f) and mapa.es_muro(c + 1, f) and suelo.call(c - 1, f - 1) and suelo.call(c + 1, f - 1) \
+						and suelo.call(c - 1, f + grueso) and suelo.call(c + 1, f + grueso):
+					hay.abajo = true
+					sitios.append(["abajo", Vector2((c + 0.5) * C, f * C - 24.0)])
+					sitios.append(["arriba", Vector2((c + 0.5) * C, (f + grueso) * C + 34.0)])
+	print("Explosivo en la pared · apartamento %d · sitios: %s" % [destino, sitios.map(func(s): return s[0])])
+	# si entre "desde" y "hasta" hay un muro (a pasos de 12, como el recorte); "dentro": si "hasta" cae en uno
+	var muro_en := func(q: Vector2) -> bool: return mapa.es_muro(floori(q.x / C), floori(q.y / C))
+	var tapado := func(desde: Vector2, hasta: Vector2) -> bool:
+		var pasos := clampi(ceili(desde.distance_to(hasta) / 12.0), 1, 40)
+		for i in range(1, pasos + 1):
+			if muro_en.call(desde.lerp(hasta, float(i) / pasos)):
+				return true
+		return false
+	var sitio_de := johnny.get_parent()
+	johnny.visible = false
+	for s in sitios:
+		for n in sitio_de.get_children():   # (lo del anterior, fuera)
+			if n is Mancha or n is Cachos:
+				n.queue_free()
+		johnny.position = s[1] + Vector2(0, 150)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(1.2).timeout   # (que se vaya la niebla)
+		var bum: Node2D = meter_zombi("explosivo", s[1])
+		bum.position = s[1]
+		await get_tree().physics_frame
+		bum.dormido = false
+		bum.estado = "mecha"
+		bum.mecha = 0.05
+		bum.poner_animacion("ataque")
+		while is_instance_valid(bum) and not bum.reventado:
+			await get_tree().physics_frame
+		var centro: Vector2 = s[1] + Vector2(0, 10)   # (donde salen los cachos y la sangre)
+		var al_aire := 0   # cachos y gotas que, por el aire, se ven por encima de la pared de detrás (en la habitación de al lado)
+		var t := 0.0
+		var foto := false
+		while t < 3.0:
+			await get_tree().process_frame
+			t += get_process_delta_time()
+			for n in sitio_de.get_children():
+				if n is Cachos:
+					for q in n.lista:
+						if q.p.y - q.z - Cachos.CELDA < Recorte.techo(n.global_position + q.p) - 0.5:
+							al_aire += 1
+			var capa := get_tree().get_first_node_in_group("particulas")
+			if capa:
+				for q in capa.lista:
+					if q.has("z") and q.p.y - q.z < Recorte.techo(q.p) - 0.5:
+						al_aire += 1
+			if not foto and t > 0.25:
+				foto = true
+				Captura.foto("captura-explosivo-pared-%s.png" % s[0])
+				var en_pantalla: Vector2 = get_viewport().get_canvas_transform() * (sitio_de as Node2D).to_global(s[1])
+				print("Explosivo en la pared «%s»: en la foto, en (%d, %d)" % [s[0], en_pantalla.x, en_pantalla.y])
+		Captura.foto("captura-explosivo-pared-%s-suelo.png" % s[0])
+		# lo que ha quedado en el suelo, al otro lado (o en un muro: la sangre y los cachos)
+		var cachos := 0
+		var sangre := 0
+		var total := 0
+		for n in sitio_de.get_children():
+			if n is Cachos:
+				for q in n.lista:
+					total += 1
+					if muro_en.call(q.p) or tapado.call(centro, q.p):
+						cachos += 1
+			elif n is Mancha:
+				if n.material != null:
+					continue   # (la que lleva el recorte, la marca negra, solo se ve hasta la pared: se mira en la foto)
+				for c in n.celdas:   # (las gotas y salpicaduras: si pisan una casilla de muro o quedan tras una pared)
+					var tam: Vector2 = c[2] if c.size() > 2 else Vector2(Mancha.CELDA, Mancha.CELDA)
+					var q: Vector2 = n.global_position + c[0] + tam / 2.0
+					if Mancha.en_muro(q, tam) or tapado.call(centro, q):
+						sangre += 1
+		print("Explosivo en la pared «%s»: al otro lado o en el muro: cachos %d de %d · celdas de sangre %d · por el aire, cachos o gotas por encima de la pared %d veces (esperado: 0, 0 y 0)" % [
+			s[0], cachos, total, sangre, al_aire])
+		zombis_de_prueba([])
+	get_tree().quit()
+
+
 # Para probar_granada_pared: un zombi lento quieto, de 500 de vida, en ese sitio. Tras la pared de la derecha de la sala
 # de pruebas ya es fuera del mapa, y meter_zombi lleva al suelo más cercano (a este lado) a quien se pide ahí (10 nov):
 # se le vuelve a poner donde se pedía
