@@ -62,6 +62,11 @@ const MUEBLES := {
 	"boxstack":  {"len": 64, "dep": 36, "paredes": "", "archivo": "viviendas/cajas-pila"},
 	# (19 nov) los mismos montones de cajas, en el almacén de la tienda de ropa: estos se abren (Objetos.MUEBLES_CON_PIEZA) y los de los trasteros, no
 	"cajasropa": {"len": 64, "dep": 36, "paredes": "", "archivo": "ropa/cajas-destrozadas-gpt"},
+	# (19 nov, el dueño: «todas igual queda raro») y cuatro montones más, cada uno destrozado de otra forma: uno distinto en cada sitio
+	"cajasropa2": {"len": 64, "dep": 36, "paredes": "", "archivo": "ropa/cajas-destrozadas2-gpt"},
+	"cajasropa3": {"len": 64, "dep": 36, "paredes": "", "archivo": "ropa/cajas-destrozadas3-gpt"},
+	"cajasropa4": {"len": 64, "dep": 36, "paredes": "", "archivo": "ropa/cajas-destrozadas4-gpt"},
+	"cajasropa5": {"len": 64, "dep": 36, "paredes": "", "archivo": "ropa/cajas-destrozadas5-gpt"},
 	"boxpile":   {"len": 56, "dep": 32, "paredes": "", "archivo": "viviendas/cajas-bajas"},
 	"handtruck": {"len": 40, "dep": 28, "paredes": "", "archivo": "viviendas/carretilla"},
 	"wardrobe":   {"len": 78,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
@@ -633,10 +638,10 @@ const SALAS := {
 	# detrás de la pared alta de la sala de venta: lo de abajo se pone a 8 filas ("libre", y 7,4) y la carretilla en el medio de esas 8 (la fila 4)
 	"almacen-ropa": {"colocados": {
 		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
-			["cajasropa", 2.0, "libre", 7.4], ["cajasropa", 5.0, "libre", 7.4], ["cajasropa", 11.33, "libre", 7.4], ["cajasropa", 14.67, "libre", 7.4],
+			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
 			["handtruck", 15.8, "libre", 4.0]],
 		"arriba": [["ropashelf3", 1.88], ["ropashelf", 5.12], ["ropashelf4", 11.21], ["ropashelf2", 14.79],
-			["cajasropa", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa", 8.5, "abajo"], ["cajasropa", 11.67, "abajo"], ["cajasropa", 14.83, "abajo"],
+			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
 			["handtruck", 15.8, "libre", 6.0]]}},
 	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 5.85, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]]}},

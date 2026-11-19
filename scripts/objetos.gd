@@ -64,7 +64,8 @@ const MUEBLES_CON_PIEZA := ["wardrobe", "nightstand", "desk", "bookshelf",
 	# (19 nov, el dueño) la tienda de ropa: todos los de la sala de venta menos los maniquíes, la taquilla del aseo y las estanterías y cajas del almacén
 	"ropamodulo", "ropabarra", "ropazapatos", "ropavitrina", "ropaoval", "ropaperchero1", "ropaperchero2", "roparuedas",
 	"ropamesa", "ropatarimas", "ropamostrador",
-	"taquillaropa", "ropashelf", "ropashelf2", "ropashelf3", "ropashelf4", "cajasropa"]
+	"taquillaropa", "ropashelf", "ropashelf2", "ropashelf3", "ropashelf4", "cajasropa",
+	"cajasropa2", "cajasropa3", "cajasropa4", "cajasropa5"]
 const PIEZA_MUEBLE := 0.35   # probabilidad de que un mueble tenga un material
 const PIEZAS_JEFE := 4       # las que soltaba cada jefe al caer en el centro comercial y en la torre (desde el 16 nov ya no: los muebles)
 

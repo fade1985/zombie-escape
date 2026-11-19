@@ -375,6 +375,11 @@ MUEBLES = {
     "ropashelf3": ("assets/sources/ropa/estanteria3-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf3.png", 44, 63, True, (), "negro"),
     "ropashelf4": ("assets/sources/ropa/estanteria4-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf4.png", 44, 63, True, (), "negro"),
     "cajasropa": ("assets/sources/ropa/cajas-destrozadas-gpt.webp", "assets/sprites/mueble-cajasropa.png", 32, 39, True),
+    # (19 nov, el dueño: «todas igual queda raro») cuatro montones más, cada uno destrozado de otra forma: uno distinto en cada sitio del almacén
+    "cajasropa2": ("assets/sources/ropa/cajas-destrozadas2-gpt.webp", "assets/sprites/mueble-cajasropa2.png", 32, 36, True),
+    "cajasropa3": ("assets/sources/ropa/cajas-destrozadas3-gpt.webp", "assets/sprites/mueble-cajasropa3.png", 32, 38, True),
+    "cajasropa4": ("assets/sources/ropa/cajas-destrozadas4-gpt.webp", "assets/sprites/mueble-cajasropa4.png", 32, 39, True),
+    "cajasropa5": ("assets/sources/ropa/cajas-destrozadas5-gpt.webp", "assets/sprites/mueble-cajasropa5.png", 32, 38, True),
     # (19 nov) el aseo de la tienda de ropa, destrozado como el almacén (GPT, a partir del lavabo, el váter, la taquilla y el banco del
     # vestuario de Johnny): tipos propios (catalogo.gd) para que el vestuario de la sala de mantenimiento y los baños de los pisos sigan igual
     "lavabo_ropa": ("assets/sources/ropa/lavabo-destrozado-gpt.webp", "assets/sprites/mueble-staffsinkropa-lado.png", 20, 66, True),
