@@ -45,6 +45,7 @@ PRUEBAS = [
     ("idioma", ["--idioma"], 200),
     ("mando", ["--mando"], 200),
     ("rodear-muebles", ["--edificio", "centro", "--rodear-muebles"], 200),   # (los muebles sueltos de la tienda de ropa se rodean)
+    ("dependientas", ["--edificio", "centro", "--dependientas"], 200),   # (cada tienda de ropa, con su dependienta)
 ]
 
 
