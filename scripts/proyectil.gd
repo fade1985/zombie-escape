@@ -18,7 +18,7 @@ const MOLOTOV := preload("res://assets/ui/iconos/molotov.png")   # el mismo dibu
 const TIPOS := {
 	"veneno": {"vuelo": 0.8, "altura": 90.0, "golpe": 8, "charco": "veneno"},
 	"lejia": {"vuelo": 0.9, "altura": 130.0, "golpe": 10, "charco": "lejia"},
-	"acido": {"vuelo": 0.75, "altura": 110.0, "golpe": 8, "charco": "acido"},   # lo que salpica la portera con la fregona
+	"acido": {"vuelo": 0.75, "altura": 110.0, "golpe": 8, "charco": "acido"},   # una salpicadura de ácido (la portera ya no la usa: 19 nov)
 	"molotov": {"vuelo": 0.55, "altura": 110.0, "golpe": 0, "charco": "fuego"},
 	"vomito": {"vuelo": 0.45, "altura": 70.0, "golpe": 0, "charco": "vomito"},
 	# la sartén del cocinero ("marca": el radio de la marca en el suelo, el del charco "hirviendo" en charco.gd)

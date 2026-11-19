@@ -6,7 +6,6 @@
 #   - abanico: levanta la fregona (el aviso, solo eso) y lanza agua sucia en abanico, 2 tandas
 #   - fregonazo: si Johnny está cerca, marca un trozo de suelo en rojo y da un golpe que quita 20 y empuja
 #   - lejía: tira botellas alrededor de Johnny (la primera, justo donde va a estar) que dejan charco
-#   - ácido (20 oct): levanta la fregona y salpica charcos de ácido (el primero, justo donde va a estar Johnny)
 #   - embestida (20 oct): marca una franja roja, corre en línea recta y remata con un fregonazo en círculo; si se
 #     estrella contra una pared o un mueble, se queda atontada 5 s (9 nov, lo pidió el dueño), como los demás jefes
 #   - llamar: grita "¡VECINOS!" y aparecen vecinos (normales y rápidos): 2, o 4 enfadada
@@ -35,9 +34,6 @@ const MEDIO_FREGONAZO := 1.05    # medio ángulo del trozo que barre
 const DANO_FREGONAZO := 20
 const DISTANCIA_FREGONAZO := 150.0   # si Johnny está más cerca que esto, prefiere el fregonazo
 const BOTELLAS := 3
-# Charcos de ácido (números provisionales, los de PORTERA en el juego; el charco, en charco.gd)
-const AVISO_ACIDO := 0.5
-const ACIDOS := [3, 6]           # cuántos en cada fase
 # Embestida: aviso, velocidad y tiempo máximo corriendo; luego el fregonazo en círculo
 const AVISO_EMBESTIDA := 0.55
 const VELOCIDAD_EMBESTIDA := 470.0
@@ -188,17 +184,6 @@ func _physics_process(delta: float) -> void:
 				cambiar("giro", {"siguiente": 0.0})
 		"giro":
 			girar(dt, johnny)
-		"aviso_acido":
-			# levanta la fregona chorreando ácido
-			frenar(dt)
-			mirar(dt, hacia)
-			if randf() < dt * 12.0:
-				Particulas.soltar(self, global_position + Vector2(randf_range(-30, 30), -randf_range(60, 140)),
-					Vector2(0, 60), Color("#9be33b"), 3, 0.5)
-			if t >= AVISO_ACIDO:
-				cambiar("acido", {"lanzadas": 0})
-		"acido":
-			acido(dt, johnny, hacia, apunta)
 		"aviso_embestida":
 			# se agacha mirando a Johnny (la franja roja marca por dónde va a venir)
 			frenar(dt)
@@ -282,7 +267,7 @@ func elegir(d: float) -> void:
 		gritar(Idioma.t("¡VECINOS!"), Color("#ffd23f"), 26)
 		Sonido.tocar("rugido")
 		return
-	var opciones := ["abanico", "lejia", "giro", "acido", "embestida"] if enfadada() else ["abanico", "lejia", "acido", "embestida"]
+	var opciones := ["abanico", "lejia", "giro", "embestida"] if enfadada() else ["abanico", "lejia", "embestida"]
 	opciones.erase(ultimo)
 	ultimo = opciones.pick_random()
 	match ultimo:
@@ -291,9 +276,6 @@ func elegir(d: float) -> void:
 		"lejia":
 			cambiar("lejia", {"lanzadas": 0})
 			gritar(Idioma.t("¡LEJÍA!"), Color("#bfe9ff"))
-		"acido":
-			cambiar("aviso_acido")
-			gritar(Idioma.t("¡ÁCIDO!"), Color("#9be33b"))
 		"embestida":
 			var johnny := get_tree().get_first_node_in_group("jugador")
 			cambiar("aviso_embestida", {"quedan": EMBESTIDAS[fase - 1], "aviso": AVISO_EMBESTIDA,
@@ -352,28 +334,6 @@ func lejia(delta: float, johnny: Node2D, hacia: Vector2) -> void:
 		Sonido.tocar("escupitajo")
 	if t >= 0.3 + n * 0.18 + 0.4:
 		andar(0.5 if enfadada() else 1.0)
-
-
-# Charcos de ácido: sacude la fregona y los salpica en parábola (el primero, justo donde va a estar Johnny)
-func acido(delta: float, johnny: Node2D, hacia: Vector2, apunta: float) -> void:
-	frenar(delta)
-	mirar(delta, hacia)
-	var n: int = ACIDOS[fase - 1]
-	var hueco := 0.1 if enfadada() else 0.16
-	while datos.lanzadas < n and t >= datos.lanzadas * hueco:
-		var lejos := 0.0 if datos.lanzadas == 0 else randf_range(70.0, 190.0 if enfadada() else 140.0)
-		var gota := PROYECTIL.instantiate()
-		gota.dueno = self
-		gota.tipo = "acido"
-		gota.desde = global_position + Vector2.from_angle(apunta) * 40.0   # sale de la punta de la fregona
-		gota.alto_salida = 40.0
-		gota.hasta = johnny.global_position + johnny.velocity * 0.3 + Vector2.from_angle(randf() * TAU) * lejos
-		get_parent().add_child(gota)
-		if datos.lanzadas % 2 == 0:
-			Sonido.tocar("escobazo")
-		datos.lanzadas += 1
-	if t >= n * hueco + 0.45:
-		andar(0.5 if enfadada() else 0.9)
 
 
 # Embestida: corre en línea recta muy deprisa; al llegar a Johnny (o al cansarse) frena y prepara el fregonazo
@@ -591,10 +551,6 @@ func animar() -> void:
 			fijar("ataque", dir, alzar(t / AVISO_FREGONAZO, dir))
 		"fregonazo":
 			fijar("ataque", dir, bajar(t / 0.35, dir))
-		"aviso_acido":
-			fijar("ataque", dir, alzar(t / AVISO_ACIDO, dir))
-		"acido":
-			fijar("ataque", dir, bajar(t / (ACIDOS[fase - 1] * (0.1 if enfadada() else 0.16) + 0.45), dir))
 		"aviso_embestida":
 			fijar("ataque", dir, alzar(t / datos.aviso, dir))
 		"aviso_circulo":

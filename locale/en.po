@@ -3502,10 +3502,6 @@ msgid "¡LEJÍA!"
 msgstr "BLEACH!"
 
 #: scripts/portera.gd
-msgid "¡ÁCIDO!"
-msgstr "ACID!"
-
-#: scripts/portera.gd
 msgid "¡A BARRER!"
 msgstr "CLEAN SWEEP!"
 
@@ -7705,3 +7701,7 @@ msgstr "TOK!"
 #: scripts/zombi_guardia.gd
 msgid "¡¡¡GRRR!!!"
 msgstr "GRRR!!!"
+
+#, sin-usar
+msgid "¡ÁCIDO!"
+msgstr "ACID!"

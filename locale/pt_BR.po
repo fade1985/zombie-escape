@@ -3502,10 +3502,6 @@ msgid "¡LEJÍA!"
 msgstr "CLORO!"
 
 #: scripts/portera.gd
-msgid "¡ÁCIDO!"
-msgstr "ÁCIDO!"
-
-#: scripts/portera.gd
 msgid "¡A BARRER!"
 msgstr "FAXINA!"
 
@@ -7705,3 +7701,7 @@ msgstr "TOC!"
 #: scripts/zombi_guardia.gd
 msgid "¡¡¡GRRR!!!"
 msgstr "GRRR!!!"
+
+#, sin-usar
+msgid "¡ÁCIDO!"
+msgstr "ÁCIDO!"

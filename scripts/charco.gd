@@ -30,7 +30,7 @@ const TIPOS := {
 	# burbujas gordas (las de "toxic-puddle" de pixelfx, ver pintar_burbujas_gordas)
 	"reventon": {"burbujas": "veneno", "radio": 96.0, "vida": 6.0, "estados": {"veneno": {}}, "gordas": 6},
 	"lejia": {"burbujas": "lejia", "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
-	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
+	# el charco de ácido (las probetas, los bidones...): quema al pisarlo y deja veneno al salir (ACIDO en el JS)
 	"acido": {"burbujas": "acido", "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}}},
 	"sangre_gloton": {"burbujas": "acido", "radio": 30.0, "vida": 5.0, "estados": {"acido": {}, "veneno": {}}},   # los pequeños que salpica el Glotón
 	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}, "vomito": {}}, "solo_zombis": true},

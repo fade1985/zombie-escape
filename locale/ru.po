@@ -3510,10 +3510,6 @@ msgid "¡LEJÍA!"
 msgstr "ХЛОРКА!"
 
 #: scripts/portera.gd
-msgid "¡ÁCIDO!"
-msgstr "КИСЛОТА!"
-
-#: scripts/portera.gd
 msgid "¡A BARRER!"
 msgstr "ПОД МЕТЕЛКУ!"
 
@@ -7726,3 +7722,7 @@ msgstr "ТУК!"
 #: scripts/zombi_guardia.gd
 msgid "¡¡¡GRRR!!!"
 msgstr "ГРРР!!!"
+
+#, sin-usar
+msgid "¡ÁCIDO!"
+msgstr "КИСЛОТА!"

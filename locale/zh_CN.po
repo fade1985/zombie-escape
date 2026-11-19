@@ -3494,10 +3494,6 @@ msgid "¡LEJÍA!"
 msgstr "消毒液！"
 
 #: scripts/portera.gd
-msgid "¡ÁCIDO!"
-msgstr "酸液！"
-
-#: scripts/portera.gd
 msgid "¡A BARRER!"
 msgstr "统统扫走！"
 
@@ -7684,3 +7680,7 @@ msgstr "咚！"
 #: scripts/zombi_guardia.gd
 msgid "¡¡¡GRRR!!!"
 msgstr "吼！！！"
+
+#, sin-usar
+msgid "¡ÁCIDO!"
+msgstr "酸液！"

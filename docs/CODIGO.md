@@ -26,7 +26,7 @@ en una línea.
   de ella se pintan las piernas de andar y con ella se le quitan las suyas al golpe; prueba: `--captura --ataque-andando`;
   incluye `quemaduras.gdshaderinc` para arder
   como los zombis, `johnny.arder`, y de `Llamas` solo le queda la luz; prueba: `--captura --johnny-ardiendo`; y las manchas de ácido
-  de los zombis cuando lleva algo que corroe, `Johnny.CORROEN`: el veneno del gordo, el ácido de la portera y la porquería del Glotón,
+  de los zombis cuando lleva algo que corroe, `Johnny.CORROEN`: el veneno del gordo, el charco de ácido y la porquería del Glotón,
   M65; prueba: `--captura --reventon`), `destello` + `quemaduras.gdshaderinc` (destello,
   hielo, fuego y ácido de los enemigos; el "vomito" de los bañados por la Gastroenteritis, el estado `vomito` que pone
   su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
