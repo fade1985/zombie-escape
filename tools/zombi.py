@@ -6,7 +6,9 @@ Lo saca todo de assets/sources/<fuente>/:
   ataque/, golpe/, muerte/      atacar, recibir un golpe y morir (lienzo de 96×96 con el dibujo quieto en 24, 32)
   rugir/ (opcional)             el rugido, como el ataque pero solo south (el jefe de seguridad): «roar» («grito» en el juego)
   reposo/ (opcional)            reposo de PixMiniMax, con partida y final en el dibujo quieto (el de tentáculos)
-  zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen", "fps_andar" y "suave"
+  zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla", "origen", "fps_andar", "suave"
+                                y "reducir" (un zombi dibujado con el doble de detalle, al tamaño y con el borde negro de los de 48:
+                                tools/reducir.py; el de tentáculos, desde el 19 nov)
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
@@ -30,6 +32,7 @@ import json, os, sys
 from collections import Counter
 from PIL import Image, ImageChops
 from png import guardar_png  # guarda la hoja comprimida sin perder nada
+import reducir  # el dibujo detallado, al tamaño de los de 48 ("reducir" en zombi.json)
 
 SOURCE, SPRITE = sys.argv[1], sys.argv[2]
 DIRS = ['south', 'south-east', 'east', 'north-east', 'north', 'north-west', 'west', 'south-west']
@@ -337,6 +340,17 @@ if cfg.get('sangre_en_todo') and SANGRE == 'oscura':
 # (lo eligió el dueño el 8 nov: el crío, a 0,8, más oscuro que el vecino de GPT)
 if cfg.get('suave'):
     sheet = suavizar(sheet, cfg['suave'])
+# "reducir" en zombi.json: cada casilla, más pequeña y con su borde negro (tools/reducir.py); en su escena, a escala 2
+if cfg.get('reducir'):
+    nw, nh = reducir.casilla(cfg['reducir'])
+    pequena = Image.new('RGBA', (sheet.width // CW * nw, sheet.height // CH * nh), (0, 0, 0, 0))
+    for fy in range(sheet.height // CH):
+        for fx in range(sheet.width // CW):
+            c = sheet.crop((fx * CW, fy * CH, (fx + 1) * CW, (fy + 1) * CH))
+            if c.getbbox():
+                pequena.alpha_composite(reducir.reducida(c, (PX, PY), cfg['reducir']), (fx * nw, fy * nh))
+    sheet, CW, CH = pequena, nw, nh
+    PX, PY = cfg['reducir']['pies']
 guardar_png(sheet, f'assets/sprites/{SPRITE}.png')
 json.dump({'cell': [CW, CH], 'pivot': [PX, PY], 'anims': anims,
            'source': f'Hecha con tools/zombi.py a partir de {SRC}/'},

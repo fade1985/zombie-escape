@@ -46,6 +46,7 @@ import colorsys, glob, json, os, subprocess, sys
 from collections import Counter
 from PIL import Image, ImageOps
 from png import guardar_png
+import reducir
 
 CARPETA = sys.argv[1]
 SRC = f'assets/sources/{CARPETA}/animaciones'
@@ -196,31 +197,9 @@ for nombre, a in FICHA['animaciones'].items():
 
 # ═════════════ Reducida (si la ficha lo pide) ═════════════
 # "reducir": {"casilla": 64, "pies": [32, 55], "borde": "#050202"}: cada dibujo, del lienzo de 152 a uno de "casilla" con los
-# pies en "pies" (mezclando colores, como los muebles: LANCZOS premultiplicado y el borde sin medias tintas), y con un borde
-# de 1 píxel por fuera de ese color. Así sale del tamaño y con el acabado de los de 48 (y en el juego, a escala 2). La
-# dependienta, desde el 19 nov (lo pidió el dueño): de la altura de Johnny, con su borde negro.
+# pies en "pies" y un borde de 1 píxel de ese color (tools/reducir.py). Así sale del tamaño y con el acabado de los de 48
+# (y en el juego, a escala 2). La dependienta, desde el 19 nov (lo pidió el dueño): de la altura de Johnny, con su borde negro.
 REDUCIR = FICHA.get('reducir')
-
-
-def reducida(f):
-    lado = REDUCIR['casilla']
-    k = lado / C                                   # lo que se reduce
-    px_, py_ = REDUCIR['pies']
-    # el trozo del lienzo grande que cae en el pequeño, con los pies en su sitio (puede empezar en medio píxel)
-    x0, y0 = PIES[0] - px_ / k, PIES[1] - py_ / k
-    hueco = 4                                      # (aire alrededor, por si el trozo se sale un poco del lienzo)
-    grande = Image.new('RGBA', (C + 2 * hueco, C + 2 * hueco), (0, 0, 0, 0))
-    grande.paste(f, (hueco, hueco))
-    caja = (x0 + hueco, y0 + hueco, x0 + hueco + lado / k, y0 + hueco + lado / k)
-    out = grande.convert('RGBa').resize((lado, lado), Image.LANCZOS, box=caja).convert('RGBA')
-    out.putalpha(out.split()[3].point(lambda v: 255 if v > 110 else 0))
-    borde = tuple(int(REDUCIR['borde'][i:i + 2], 16) for i in (1, 3, 5)) + (255,)
-    px = out.load()
-    poner = [(x, y) for y in range(lado) for x in range(lado) if px[x, y][3] == 0 and any(
-        0 <= x + a < lado and 0 <= y + b < lado and px[x + a, y + b][3] for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
-    for q in poner:
-        px[q] = borde
-    return out
 
 
 if REDUCIR:
@@ -231,10 +210,10 @@ if REDUCIR:
             for f in b[d]:
                 k = f.tobytes()
                 if k not in hechas:
-                    hechas[k] = reducida(f)
+                    hechas[k] = reducir.reducida(f, PIES, REDUCIR)
                 nuevos.append(hechas[k])
             b[d] = nuevos
-    C, PIES = REDUCIR['casilla'], tuple(REDUCIR['pies'])
+    C, PIES = reducir.casilla(REDUCIR)[0], tuple(REDUCIR['pies'])
 
 # ═════════════ Hoja apretada ═════════════
 # cada fotograma distinto, recortado con su aire; los repetidos (el grito en las 8 direcciones...), una sola vez

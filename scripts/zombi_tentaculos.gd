@@ -39,17 +39,18 @@ const PALETA := {
 }
 const DESDE := Vector2(0, 6)   # de dónde sale el aviso en el suelo, como en los jefes (minijefe.gd, franja)
 # De dónde sale: su hombro en cada dirección, medido en su hoja (con los fotogramas 0, 2 y 3 del ataque, que
-# se encoge al echar los tentáculos atrás y se agacha al lanzarlos). De espaldas sale de la espalda, por delante
+# se encoge al echar los tentáculos atrás y se agacha al lanzarlos; desde el 19 nov, con el dibujo reducido al alto de
+# Johnny, ×0,91 desde los pies, que están 28 más abajo, y a números pares). De espaldas sale de la espalda, por delante
 # del cuerpo; si no, por detrás del hombro: los primeros trozos (DETRAS) van detrás del dibujo
 const HOMBRO := {
-	"s": [Vector2(10, -42), Vector2(12, -38), Vector2(12, -36)],
-	"se": [Vector2(-6, -42), Vector2(2, -38), Vector2(6, -36)],
-	"e": [Vector2(-6, -42), Vector2(-8, -42), Vector2(6, -42)],
-	"ne": [Vector2(-4, -44), Vector2(-2, -44), Vector2(-2, -40)],
-	"n": [Vector2(10, -42), Vector2(10, -36), Vector2(10, -34)],
-	"no": [Vector2(2, -44), Vector2(0, -42), Vector2(-2, -38)],
-	"o": [Vector2(4, -44), Vector2(4, -44), Vector2(-2, -42)],
-	"so": [Vector2(8, -42), Vector2(8, -42), Vector2(10, -36)],
+	"s": [Vector2(10, -36), Vector2(10, -32), Vector2(10, -30)],
+	"se": [Vector2(-6, -36), Vector2(2, -32), Vector2(6, -30)],
+	"e": [Vector2(-6, -36), Vector2(-8, -36), Vector2(6, -36)],
+	"ne": [Vector2(-4, -38), Vector2(-2, -38), Vector2(-2, -34)],
+	"n": [Vector2(10, -36), Vector2(10, -30), Vector2(10, -28)],
+	"no": [Vector2(2, -38), Vector2(0, -36), Vector2(-2, -32)],
+	"o": [Vector2(4, -38), Vector2(4, -38), Vector2(-2, -36)],
+	"so": [Vector2(8, -36), Vector2(8, -36), Vector2(10, -30)],
 }
 const DE_ESPALDAS := ["n", "ne", "no"]
 const DETRAS := 3

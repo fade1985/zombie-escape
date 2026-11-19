@@ -17,7 +17,7 @@ velocidad = 30.0
 dano = 0
 radio = 18.0
 empuje = 0.47
-altura = 96.0
+altura = 90.0
 
 [node name="Sombra" type="Node2D" parent="."]
 position = Vector2(0, 30)
@@ -30,12 +30,12 @@ shape = SubResource("cuerpo")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, 28)
-scale = Vector2(1, 1)
+scale = Vector2(2, 2)
 sprite_frames = ExtResource("frames")
 animation = &"reposo_s"
 autoplay = "reposo_s"
 centered = false
-offset = Vector2(-88, -128)
+offset = Vector2(-40, -58)
 
 [node name="Agente" type="NavigationAgent2D" parent="."]
 path_desired_distance = 12.0
