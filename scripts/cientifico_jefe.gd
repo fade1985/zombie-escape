@@ -153,6 +153,7 @@ var lenguas: Array[Lengua] = []          # las de la criatura
 func _ready() -> void:
 	aguanta_acido = true   # (no se quema en los charcos de ácido: minijefe.gd, pisar)
 	super()
+	EfectoSuelo.precalentar(get_parent(), "latigazo")   # (que el primer chasquido no pare el juego)
 	# la cúpula: lo de detrás, por debajo de su dibujo; lo de delante y el brillo, encima (y debajo de $Vapor)
 	for i in 3:
 		var capa := Sprite2D.new()
@@ -616,6 +617,8 @@ func angulos_lenguas() -> Array:
 func latigazo_lenguas(johnny: Node2D) -> void:
 	Temblor.temblar(5.0)
 	for lengua in lenguas:
+		lengua.chasquido(self, Vector2(0, 6))
+	for lengua in lenguas:
 		if lengua.golpea(self, johnny):
 			johnny.recibir_dano(DANO_LENGUA, self)
 			johnny.empujar(Vector2.from_angle(lengua.angulo) * 500.0)
@@ -878,6 +881,10 @@ func _draw() -> void:
 			# una X (o una estrella, si se paran en una pared o un mueble)
 			for i in LENGUAS:
 				lenguas[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LENGUAS), tiempo, i)
+		"lenguas":
+			# su sombra en el suelo, por debajo de él (lengua.gd)
+			for lengua in lenguas:
+				lengua.sombra(self, lengua.lanzada(BOCAS[direccion()], Vector2(0, 6), t, DESPUES), Vector2(0, 6))
 		"aviso_punetazo":
 			# el círculo de la onda, que se llena de él hacia fuera (aviso.gd)
 			Aviso.golpe(self, Vector2(0, 6), 0.0, PI, RADIO_ONDA, minf(1.0, t / AVISO_PUNETAZO), tiempo, 0.7)
@@ -915,6 +922,7 @@ func pintar_encima(lienzo: Node2D) -> void:
 			# salen disparadas de la boca, caen sobre el aviso culebreando y se recogen (lengua.gd), enteras por
 			# delante de su dibujo
 			for lengua in lenguas:
+				lengua.estela(lienzo, BOCAS[direccion()], Vector2(0, 6), t, DESPUES)
 				var puntos := lengua.lanzada(BOCAS[direccion()], Vector2(0, 6), t, DESPUES)
 				lengua.pintar(lienzo, puntos, 0, Tentaculo.PUNTOS)
 		"escupir":

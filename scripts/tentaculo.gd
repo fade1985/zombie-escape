@@ -161,6 +161,17 @@ static func trozos(lienzo: CanvasItem, centros: PackedVector2Array, normales: Pa
 			colores, sin_uv)
 
 
+# Su silueta de un solo color, del grueso de cada punto más "extra" (la sombra en el suelo y la estela del golpe, en
+# lengua.gd)
+func silueta(lienzo: CanvasItem, puntos: PackedVector2Array, color: Color, extra := 0.0) -> void:
+	var normales := PackedVector2Array()
+	var mitades := PackedFloat32Array()
+	for i in PUNTOS + 1:
+		normales.append((puntos[mini(i + 1, PUNTOS)] - puntos[maxi(i - 1, 0)]).orthogonal().normalized())
+		mitades.append((fino + (grueso - fino) * pow(1.0 - float(i) / PUNTOS, 0.8)) * gordo + extra)
+	trozos(lienzo, puntos, normales, mitades, 0, PUNTOS, color)
+
+
 func pintar(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: int) -> void:
 	var r := PackedFloat32Array()
 	var normales := PackedVector2Array()

@@ -45,6 +45,9 @@
 #    corta el chorro (M60), más anchos y, el ácido, chorreando hasta el suelo (chorro-pared.js y -acido.js).
 #    "chorro-hielo" y "pared-hielo", los del lanza hielo (15 nov): niebla helada que se abre y cae, esquirlas que saltan
 #    y escarchan el suelo y cristalitos (tools/pixelfx/chorro-golpe-hielo.js y chorro-pared-hielo.js).
+#  - "latigazo": la punta de una lengua al pegar en el suelo (19 nov; Lengua.chasquido): una estrella blanca de cuatro
+#    puntas (el restallido), una onda pequeña de polvo, grietas cortas y babas que saltan y dejan manchitas
+#    (tools/pixelfx/latigazo.js).
 #  - "recoger": el destello al coger algo del suelo (M53; billete.gd: billetes, lanzables, objetos, armas y munición): una
 #    estrellita dorada, un anillito y chispitas (tools/pixelfx/recoger.js).
 #  - "curacion": la médica cura a Johnny (M56, rehecha en la M66; aliado.curar): un círculo de luz verde a sus pies con
@@ -127,6 +130,9 @@ const TIPOS := {
 	"pared-hielo": {"hojas": [preload("res://assets/sprites/chorro-pared-hielo-detras.png"),
 		preload("res://assets/sprites/chorro-pared-hielo-delante.png"), preload("res://assets/sprites/chorro-pared-hielo-brillo.png")],
 		"origen": Vector2(72, 82), "fotogramas": 10},
+	"latigazo": {"hojas": [preload("res://assets/sprites/latigazo-detras.png"),
+		preload("res://assets/sprites/latigazo-delante.png"), preload("res://assets/sprites/latigazo-brillo.png")],
+		"origen": Vector2(55, 38), "fotogramas": 13},
 	"recoger": {"hojas": [preload("res://assets/sprites/recoger-detras.png"),
 		preload("res://assets/sprites/recoger-delante.png"), preload("res://assets/sprites/recoger-brillo.png")],
 		"origen": Vector2(24, 32), "fotogramas": 8},

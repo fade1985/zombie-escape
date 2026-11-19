@@ -37,3 +37,32 @@ func lanzada(raiz: Vector2, suelo: Vector2, t: float, dura: float) -> PackedVect
 		var p := raiz * u * u * u + sale * 3.0 * u * u * s + codo * 3.0 * u * s * s + punta * s * s * s
 		puntos.append(p + lado * sin(s * 9.0 - (t + desfase) * 35.0) * culebrea * sin(s * PI))
 	return puntos
+
+
+# Lo que le da cuerpo al golpe (19 nov: se veía plano). Por debajo del que la lanza: su sombra en el suelo, cada punto
+# llevado a la línea del aviso (donde acaba cayendo), oscura y translúcida; así se ve que va por el aire hasta que cae
+func sombra(lienzo: CanvasItem, puntos: PackedVector2Array, suelo: Vector2) -> void:
+	var hacia := Vector2.from_angle(angulo)
+	var lado := hacia.orthogonal()
+	var en_suelo := PackedVector2Array()
+	for p in puntos:
+		var d := p - suelo
+		en_suelo.append(suelo + hacia * maxf(0.0, d.dot(hacia)) + lado * d.dot(lado) * 0.5)
+	silueta(lienzo, en_suelo, Color(0.05, 0.02, 0.02, 0.3), 1.0)
+
+
+# Por encima, antes de pintarla: la estela del latigazo mientras sale disparada, dos siluetas claras de por dónde
+# acaba de pasar, cada vez más flojas
+func estela(lienzo: CanvasItem, raiz: Vector2, suelo: Vector2, t: float, dura: float) -> void:
+	if t > SALE + 0.06:
+		return
+	var apaga := 1.0 - t / (SALE + 0.06)
+	for atras in [0.035, 0.018]:
+		if t - atras <= 0.0:
+			continue
+		silueta(lienzo, lanzada(raiz, suelo, t - atras, dura), Color(1.0, 0.86, 0.8, (0.18 if atras > 0.02 else 0.32) * apaga), 1.5)
+
+
+# El chasquido donde la punta da en el suelo (efecto_suelo.gd, "latigazo"); "cuerpo", el que la lanza
+func chasquido(cuerpo: Node2D, suelo: Vector2) -> void:
+	EfectoSuelo.soltar(cuerpo.get_parent(), "latigazo", cuerpo.global_position + suelo + Vector2.from_angle(angulo) * llega)

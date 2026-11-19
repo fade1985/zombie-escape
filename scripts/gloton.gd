@@ -94,10 +94,11 @@ var apuntadas := 0                     # cuántas lleva este latigazo
 func _ready() -> void:
 	aguanta_acido = true   # (no se quema en los charcos de ácido: minijefe.gd, pisar)
 	super()
+	EfectoSuelo.precalentar(get_parent(), "latigazo")   # (que el primer chasquido no pare el juego)
 	for i in LENGUAS[1]:
 		var lengua := Lengua.new(PALETA)
-		lengua.grueso = 5.0
-		lengua.fino = 2.0
+		lengua.grueso = 7.0   # (eran 5 y 2: se veían como rayas planas)
+		lengua.fino = 2.5
 		lengua.borde = 2.0
 		lengua.culebrea = 7.0
 		lengua.largo = LARGO_LENGUA
@@ -211,6 +212,8 @@ func angulos_lenguas() -> Array:
 # ¿Está Johnny dentro de alguna lengua, hasta donde llega? (como los latigazos del gerente mutado)
 func latigazos(johnny: Node2D) -> void:
 	Temblor.temblar(4.0)
+	for i in apuntadas:
+		lenguas[i].chasquido(self, Vector2(0, 6))
 	for i in apuntadas:
 		if lenguas[i].golpea(self, johnny):
 			johnny.recibir_dano(DANO_LATIGAZO, self)
@@ -408,6 +411,10 @@ func _draw() -> void:
 			# (o una estrella, si se paran en una pared o un mueble)
 			for i in apuntadas:
 				lenguas[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LATIGAZO), tiempo, i)
+		"latigazo":
+			# su sombra en el suelo, por debajo de él (lengua.gd)
+			for i in apuntadas:
+				lenguas[i].sombra(self, lenguas[i].lanzada(BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO), Vector2(0, 6))
 		"aviso_aspirar", "aspirar":
 			# el cono por donde aspira (verde, hasta las paredes), que se llena en el aviso; aspirando, lleno y con
 			# ondas que se le meten en la boca, más deprisa cuanto más fuerte aspira (aviso.gd)
@@ -430,6 +437,8 @@ func _draw() -> void:
 func pintar_encima(lienzo: Node2D) -> void:
 	if estado != "latigazo":
 		return
+	for i in apuntadas:
+		lenguas[i].estela(lienzo, BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO)
 	for i in apuntadas:
 		var puntos := lenguas[i].lanzada(BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO)
 		lenguas[i].pintar(lienzo, puntos, 0, Tentaculo.PUNTOS)
