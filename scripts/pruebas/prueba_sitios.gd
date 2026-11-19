@@ -1331,7 +1331,9 @@ func probar_tiendas_fijas() -> void:
 				hoja.abrir()
 			await get_tree().create_timer(1.0).timeout
 			await foto_entera(sitio, "captura-fija-%s-%s-abiertas.png" % [tipo, lado])
-			# y la misma con la luz del juego (captura-fija-<tipo>-<lado>-luz.png; 19 nov, el dueño)
+			# y la misma con la luz del juego y Johnny delante de la puerta de entrada (captura-fija-<tipo>-<lado>-luz.png; 19 nov, el dueño)
+			for p in mapa.puertas:
+				johnny.position = p.position + Vector2(0, -90 if p.salida.dir == "abajo" else 150)
 			await foto_entera(sitio, "captura-fija-%s-%s-luz.png" % [tipo, lado], true)
 			# los muebles que se abren (Objetos.MUEBLES_CON_PIEZA; 19 nov: en la de ropa, todos los de la sala de venta, la taquilla
 			# del aseo y las estanterías y cajas del almacén) y Johnny delante de la caja, con su contorno amarillo, y luego abriéndola
