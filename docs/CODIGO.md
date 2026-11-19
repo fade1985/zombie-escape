@@ -1292,6 +1292,8 @@ en una línea.
   `zombi.py zombi-guardia-gpt-48 zombi-guardia` y `hacer_frames.py assets/sprites/zombi-guardia`. Al 87 % (`TAMANO`:
   GPT lo dibujó más grande y no cabía en 48), anda a 8 fotogramas por segundo y, huyendo, su andar va a ×2,4
   (`PASO_HUYENDO`), para que no patine. La ropa, gris marengo y no negra, para que el fondo negro no se la coma.
+  Desde el 19 nov, con el contorno negro cerrado como los vigilantes (`"cerrar_borde"` en su `zombi.json`; foto de
+  cerca al lado de Johnny en `--captura --guardia-f9`).
 - **Los vigilantes con GPT (17 nov):** un hombre y una mujer con chaleco amarillo fosforito, en vez del vigilante de
   PixelLab: `--zombi vigilante` y `--zombi vigilante-mujer` (carpetas `zombi-vigilante-gpt` y `zombi-vigilante-mujer-gpt`,
   cada una con su `personaje.webp` y sus textos en `textos-gpt.md`) → `zombi.py ... zombi-vigilante` y

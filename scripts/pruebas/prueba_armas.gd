@@ -3026,7 +3026,8 @@ func probar_reto_f9() -> void:
 
 
 # Con "--captura --guardia-f9": el jefe de seguridad desde el panel de F9 (pestaña Jefes; el dueño lo echó de menos el
-# 19 nov): sale con su ronda y, al ver a Johnny, ruge y llama a sus guardias, como en el pasillo (captura-guardia-f9.png)
+# 19 nov): sale con su ronda y, al ver a Johnny, ruge y llama a sus guardias, como en el pasillo (captura-guardia-f9.png;
+# antes, de cerca al lado de Johnny: captura-guardia-f9-cerca.png)
 func probar_guardia_f9() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout
@@ -3045,6 +3046,12 @@ func probar_guardia_f9() -> void:
 		guardia != null, guardia.puntas.size() if guardia else 0])
 	if guardia == null:
 		return
+	# de cerca, al lado de Johnny y sin las líneas de ayuda: su dibujo con el contorno negro cerrado (19 nov)
+	if not SalaArmas.escondido:
+		await pulsar_y_esperar(KEY_MINUS)
+	guardia.global_position = johnny.global_position + Vector2(-110, 0)
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-guardia-f9-cerca.png")
 	guardia.rugir_ya = true   # (que ruja ya, como si le hubieran dado)
 	await get_tree().create_timer(2.0).timeout
 	var vigilantes := 0
