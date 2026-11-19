@@ -55,6 +55,7 @@
 #   --gotas             (con --jefe portera) el abanico de agua sucia y sus salpicaduras    [prueba_jefes_salas.gd]
 #   --vapor             el vapor de la cabeza de cada minijefe al enfadarse                [prueba_jefes_salas.gd]
 #   --destello-jefe     el destello blanco y la sangre de un golpe a varios jefes (portera y minijefes) [prueba_jefes_salas.gd]
+#   --contacto-jefe     pegarse a un jefe (portera y minijefes) sin que ataque no quita vida [prueba_jefes_salas.gd]
 #   --franja            el aviso de las cargas (antidisturbios y mascota), a medio llenar   [prueba_jefes_salas.gd]
 #   --rebote            (con --edificio centro --jefe mascota) la mascota enfadada rebota en la pared y avisa con su
 #                       franja antes de volver a salir                                     [prueba_jefes_salas.gd]
@@ -721,6 +722,9 @@ func empezar_prueba() -> void:
 	elif "--destello-jefe" in args:
 		set_process(false)   # sin la prueba larga
 		probar_destello_jefe()
+	elif "--contacto-jefe" in args:
+		set_process(false)   # sin la prueba larga
+		probar_contacto_jefe()
 	elif "--franja" in args:
 		set_process(false)   # sin la prueba larga
 		probar_franja()

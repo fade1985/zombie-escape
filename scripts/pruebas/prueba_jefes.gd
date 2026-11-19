@@ -538,15 +538,14 @@ func probar_fotocopias() -> void:
 	await espera.call(0.8)
 	print("Café: charcos %d (esperado: 4)" % jefa.get_parent().get_children().filter(func(ch): return ch.get("tipo") == "cafe").size())
 	Captura.foto("captura-becario-cafe.png")
-	# enfadado: saca cinco copias, que pegan
+	# enfadado: saca cinco copias (no pegan: desde el 19 nov, pegarse a un jefe o a sus copias no hace daño)
 	jefa.vida = int(jefa.vida_max * 0.45)
 	await espera.call(1.8)
 	limpiar.call()
 	jefa.fotocopiar(null)
 	print("Enfadado: al copiar salen %d (esperado: 5)" % jefa.copias_vivas().size())
 	await espera.call(0.3)
-	print("Enfadado: fase %d (esperado: 2), copias %d (esperado: 5), pegan %d (esperado: 5)" % [jefa.fase,
-		jefa.copias_vivas().size(), jefa.copias_vivas()[0].CONTACTO if jefa.enfadado() else 0])
+	print("Enfadado: fase %d (esperado: 2), copias %d (esperado: 5)" % [jefa.fase, jefa.copias_vivas().size()])
 	for x in jefa.copias_vivas():
 		x.quieto = true
 	johnny.global_position = jefa.global_position + Vector2(0, 230)

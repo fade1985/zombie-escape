@@ -110,7 +110,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"salto":
 			# por el aire, de donde estaba a donde cae (sin chocar con nada)
 			invulnerable = true
-			contacto = 0
 			marcha = Vector2.ZERO
 			global_position = datos.desde.lerp(datos.hasta, minf(1.0, t / datos.vuelo))
 			if t >= datos.vuelo:
@@ -165,7 +164,6 @@ func apuntar(johnny: Node2D, quedan: int, aviso: float) -> void:
 # Como embestir() de minijefe.gd, pero le pilla con los brazos abiertos (llega más lejos a los lados)
 func girar(delta: float, johnny: Node2D) -> String:
 	marcha = mirada * VELOCIDAD_TORBELLINO
-	contacto = 0   # el golpe ya lo da el torbellino
 	if randf() < delta * 30.0:
 		Particulas.soltar(self, global_position + Vector2(randf_range(-40, 40), PIE), Vector2(randf_range(-60, 60), -20),
 			Color("#8a7a66"), 3, 0.4)

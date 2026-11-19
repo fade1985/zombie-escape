@@ -89,7 +89,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"salto":
 			# por el aire, de donde estaba a donde cae (sin chocar con nada)
 			invulnerable = true
-			contacto = 0
 			marcha = Vector2.ZERO
 			global_position = datos.desde.lerp(datos.hasta, minf(1.0, t / VUELO))
 			if t >= VUELO:

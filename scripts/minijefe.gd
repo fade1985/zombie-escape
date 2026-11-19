@@ -26,7 +26,7 @@ const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 # separadas que tiene las orejas
 @export var coronilla := 0.0
 @export var orejas := 18.0
-@export var dano_contacto := 8     # si Johnny se le pega, también hace daño
+# (Pegarse a un jefe no hace daño: solo sus ataques. Hasta el 19 nov sí lo hacía, "dano_contacto"; lo quitó el dueño)
 
 var vida := 500
 var fase := 1                 # 2 = enfadado
@@ -43,7 +43,6 @@ var datos := {}               # lo que necesita cada ataque
 var marcha := Vector2.ZERO    # su velocidad (sin contar los empujones)
 var mirada := Vector2.DOWN    # hacia dónde mira
 var invulnerable := false
-var contacto := 0
 var tiempo := 0.0
 var vapor := true              # el vapor de la cabeza al enfadarse (el gerente mutado no echa)
 var rabia: VaporRabia          # las nubecitas de ese vapor
@@ -66,7 +65,6 @@ var congelado: float:
 
 func _ready() -> void:
 	vida = vida_max
-	contacto = dano_contacto
 	rabia = VaporRabia.new(coronilla if coronilla > 0.0 else arriba - 20.0, orejas)
 	$Vapor.draw.connect(_pintar_encima)
 	vida_cambiada.emit.call_deferred(vida, vida_max)
@@ -110,7 +108,6 @@ func _physics_process(delta: float) -> void:
 		return
 	rabia.actualizar(delta, enfadado() and vapor, estado not in ["andar", "recuperar", "atontado"])
 	invulnerable = false
-	contacto = dano_contacto
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny == null or not johnny.vivo:
 		frenar(delta)
@@ -127,25 +124,17 @@ func _physics_process(delta: float) -> void:
 	if estado == "grito":
 		# un momento gritando, sin que le hagan daño
 		invulnerable = true
-		contacto = 0
 		frenar(delta)
 		if t >= 1.4:
 			andar(0.3)
 	elif esperando:
 		invulnerable = true
-		contacto = 0
 		aviso_espera -= delta
 		mirada = global_position.direction_to(johnny.global_position)
 		frenar(delta)
 	else:
 		pensar(delta if estado == "andar" else delta * ritmo, johnny)
 	mover()
-	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso). Atontado
-	# (con estrellitas), no: es el momento de pegarle
-	if estado == "atontado":
-		contacto = 0
-	if contacto > 0 and global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + 4.0:
-		johnny.recibir_dano(contacto, self)
 	animar()
 	queue_redraw()
 	$Vapor.queue_redraw()
@@ -236,7 +225,6 @@ func mover() -> void:
 # comido una pared o un mueble), "fin" (ha corrido "cuanto" segundos sin chocar) o "" (sigue corriendo)
 func embestir(delta: float, johnny: Node2D, rapidez: float, dano: int, cuanto: float, pie: float) -> String:
 	marcha = mirada * rapidez
-	contacto = 0   # el golpe ya lo da la embestida
 	if randf() < delta * 25.0:
 		Particulas.soltar(self, global_position + Vector2(randf_range(-20, 20), pie), Vector2(randf_range(-30, 30), -20),
 			Color("#8a7a66"), 3, 0.4)

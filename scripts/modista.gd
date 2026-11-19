@@ -137,7 +137,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				cambiarse(johnny)
 		"escondida":
 			marcha = Vector2.ZERO
-			contacto = 0
 			mirada = Vector2.DOWN
 			if datos.get("pillada", false) or d < DESPIERTA:
 				pillada(johnny, hacia, d)

@@ -1,13 +1,13 @@
 # Una fotocopia del becario (becario.gd, su ataque «¡A COPIAR!»): el mismo dibujo, pero sin sombra y un pelín más clara,
 # como recién salida de la máquina. Va a por Johnny como él, muere de un golpe (se deshace en hojas de papel) y no hace
-# daño; con el becario enfadado, sí: CONTACTO al tocarle. Lo que le pega no le quita vida al de verdad. Si el becario
+# daño (hasta el 19 nov, con el becario enfadado, sí, al tocarle: se quitó con el daño por contacto de los jefes). Lo que
+# le pega no le quita vida al de verdad. Si el becario
 # muere, se deshacen todas con él.
 # Es un minijefe más (minijefe.gd: moverse, recibir golpes, estar en el grupo "zombis"), pero sin barra, sin premio y
 # sin contar como zombi muerto: la saca el becario directamente, no la partida.
 extends Minijefe
 
 const VELOCIDAD := 115.0
-const CONTACTO := 5
 const TINTE := Color(1.15, 1.15, 1.2)
 
 var jefe: Node2D
@@ -25,7 +25,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 	if not is_instance_valid(jefe) or jefe.estado == "muerto":
 		deshacer()
 		return
-	contacto = CONTACTO if jefe.enfadado() else 0
 	if t < dur:
 		frenar(delta)
 		return

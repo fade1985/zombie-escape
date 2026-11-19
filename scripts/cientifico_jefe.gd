@@ -241,7 +241,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			# dentro: quieto, mirando a Johnny y tirando probetas más seguidas (dos cada vez)
 			frenar(delta)
 			dentro += delta
-			contacto = 0
 			mirada = hacia.normalized()
 			datos.tira -= delta
 			if datos.tira <= 0.0 and d < ALCANCE_PROBETAS:
@@ -255,7 +254,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				bajar_cupula()
 		"cupula_baja":
 			frenar(delta)
-			contacto = 0
 			if t >= CUPULA_SUBE:
 				andar(0.3)
 		"tambaleo":
@@ -275,7 +273,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 # Quieto y sin que le hagan daño (pinchándose y mutando)
 func sin_tocar(delta: float) -> void:
 	invulnerable = true
-	contacto = 0
 	frenar(delta)
 
 
@@ -489,7 +486,6 @@ func mutar() -> void:
 	sprite.play("reposo_s")
 	radio = RADIO_CRIATURA
 	arriba = ARRIBA_CRIATURA
-	dano_contacto = 14
 	inmune_fuego = true
 	$Choque.shape = $Choque.shape.duplicate()
 	$Choque.shape.radius = radio

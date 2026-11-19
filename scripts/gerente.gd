@@ -220,7 +220,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 # Quieto y sin que le hagan daño (pinchándose y mutando)
 func sin_tocar(delta: float) -> void:
 	invulnerable = true
-	contacto = 0
 	frenar(delta)
 
 
@@ -334,7 +333,6 @@ func mutar() -> void:
 	sprite.play("reposo_s")
 	radio = RADIO_MUTADO
 	arriba = ARRIBA_MUTADO
-	dano_contacto = 14
 	$Choque.shape = $Choque.shape.duplicate()
 	$Choque.shape.radius = radio
 	$Sombra.ancho = 124.0

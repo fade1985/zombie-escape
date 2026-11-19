@@ -1365,6 +1365,46 @@ func probar_bidon() -> void:
 	get_tree().quit()
 
 
+# --contacto-jefe: pegarse a un jefe no hace daño (19 nov, lo pidió el dueño: solo sus ataques). Uno a uno, cada jefe
+# andando sin atacar (dur muy largo) y Johnny pegado a él un segundo: la vida de Johnny no baja. Foto captura-contacto-<jefe>.png
+func probar_contacto_jefe() -> void:
+	set_process(false)
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca su jefe: se meten a mano
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(2.0, 2.0)
+	for tipo in ["portera", "antidisturbios", "gloton", "gymbro", "gerente"]:
+		var jefe: Node2D = meter_zombi(tipo, centro)
+		await get_tree().create_timer(0.3, false).timeout
+		jefe.quieto = true
+		jefe.andar(999.0)   # andando sin llegar a atacar
+		johnny.invulnerable = 0.0
+		johnny.position = jefe.position + Vector2(jefe.radio + johnny.RADIO - 2.0, 0)
+		johnny.velocity = Vector2.ZERO
+		camara.reset_smoothing()
+		var antes: int = johnny.vida
+		await get_tree().create_timer(1.0, false).timeout
+		print("Contacto (%s): vida de Johnny %d -> %d, estado %s (esperado: igual)" % [tipo, antes, johnny.vida, jefe.estado])
+		Captura.foto("captura-contacto-%s.png" % tipo)
+		for cosa in get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("balas_zombi"):
+			cosa.queue_free()
+		await get_tree().create_timer(0.1, false).timeout
+	get_tree().quit()
+
+
 # --destello-jefe: el destello blanco y la sangre de un golpe a cada jefe (como a los zombis). Uno a uno junto a
 # Johnny, se le da un golpe (como el del bate) y se saca captura-destello-<jefe>.png en pleno destello, y se cierra
 func probar_destello_jefe() -> void:

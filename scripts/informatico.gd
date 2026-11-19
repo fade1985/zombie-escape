@@ -214,7 +214,6 @@ func armarios() -> Array:
 
 func reiniciar(_johnny: Node2D) -> void:
 	invulnerable = true
-	contacto = 0
 	if t >= SE_VA and not datos.ido:
 		datos.ido = true
 		visible = false

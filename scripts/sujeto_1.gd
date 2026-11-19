@@ -107,7 +107,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"rodar":
 			# rueda de lado, a toda prisa, y frena al final
 			marcha = datos.hacia * RODAR_VELOCIDAD * (1.0 - smoothstep(0.6, 1.0, t / RODAR_DURA))
-			contacto = 0
 			if t >= RODAR_DURA:
 				andar(0.3)
 		"aviso_fregonazo":
@@ -156,7 +155,6 @@ func empezar(nuevo: String, angulo: float) -> void:
 
 func sin_tocar(delta: float) -> void:
 	invulnerable = true
-	contacto = 0
 	frenar(delta)
 
 
@@ -268,7 +266,6 @@ func partir(johnny: Node2D) -> void:
 	partido = true
 	cambiar("partido")
 	marcha = Vector2.ZERO
-	dano_contacto = 0
 	remove_from_group("zombis")
 	$Choque.set_deferred("disabled", true)
 	sprite.hide()
@@ -347,7 +344,6 @@ func enfadar() -> void:
 # El mando va entre las dos mitades (por si alguien mira dónde está el jefe)
 func seguir_mitades() -> void:
 	invulnerable = true
-	contacto = 0
 	marcha = Vector2.ZERO
 	var vivas := mitades.filter(func(m): return is_instance_valid(m) and m.estado != "muerto")
 	if vivas.is_empty():

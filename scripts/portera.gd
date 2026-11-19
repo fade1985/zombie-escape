@@ -45,7 +45,6 @@ const EMBESTIDAS := [1, 2]       # cuántas seguidas en cada fase
 const ATONTADA := 1.5            # lo que se queda atontada al estrellarse en la azotea (fuera, 5 s: Minijefe.ATONTADO_PARED)
 const VECINOS := [2, 4]          # cuántos vecinos llama al gritar en cada fase
 const TIEMPO_GIRO := 2.6
-const DANO_CONTACTO := 10        # si Johnny se le pega, también hace daño
 const ARRIBA := 118.0            # a qué altura tiene la cabeza (para los textos y el vapor)
 const PASO := 60.0               # lo que avanza en un ciclo de andar (así los pies no patinan)
 const PIE := 30.0                # a qué altura dibuja los pies respecto a su centro
@@ -81,7 +80,6 @@ var giro := 0.0               # ángulo al que mira mientras da vueltas
 var marcha := Vector2.ZERO    # su velocidad (sin contar los empujones)
 var mirada := Vector2.DOWN    # hacia dónde mira (gira suave)
 var invulnerable := false
-var contacto := DANO_CONTACTO
 var tiempo := 0.0
 var vapor := VaporRabia.new(98.0)   # el vapor de la cabeza, enfadada (vapor_rabia.gd)
 var en_acido := {"dps": 0.0, "acc": 0.0, "tick": 0.0}   # el charco de ácido que pisa (Estados.quemar_acido_jefe; el suyo no)
@@ -133,7 +131,6 @@ func _physics_process(delta: float) -> void:
 	espera_fregonazo -= delta * ritmo
 	espera_llamar -= delta * ritmo
 	invulnerable = false
-	contacto = DANO_CONTACTO
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny == null or not johnny.vivo:
 		frenar(delta)
@@ -228,7 +225,6 @@ func _physics_process(delta: float) -> void:
 		"grito":
 			# Al enfadarse: un momento sin que le hagan daño, gritando
 			invulnerable = true
-			contacto = 0
 			frenar(dt)
 			if t >= 1.6:
 				andar(0.3)
@@ -238,12 +234,6 @@ func _physics_process(delta: float) -> void:
 				andar(0.4)
 
 	mover()
-	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso). Atontada
-	# (con estrellitas), no: es el momento de pegarle
-	if estado == "atontado":
-		contacto = 0
-	if contacto > 0 and d < radio + johnny.RADIO + 4.0:
-		johnny.recibir_dano(contacto, self)
 	animar()
 
 

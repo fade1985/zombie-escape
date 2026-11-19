@@ -11,7 +11,6 @@ collision_layer = 4
 motion_mode = 1
 script = ExtResource("script")
 vida_max = 1
-dano_contacto = 0
 radio = 24.0
 arriba = 124.0
 orejas = 14.0

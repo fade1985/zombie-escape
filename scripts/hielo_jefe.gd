@@ -1,8 +1,7 @@
 # El frío del lanza hielo en los jefes (15 nov, lo pidió el dueño): lo llevan Minijefe y la portera (cada uno tiene uno,
 # "hielo"). A diferencia de los zombis (que congelados mueren de un golpe), a los jefes:
 #   - les cuesta el doble enfriarse (HELOR: el chorro les enfría a la mitad) y se quedan congelados solo CONGELA
-#     segundos, quietos, azules y en su bloque de hielo (el de los zombis, más grande), sin pensar, atacar ni hacer daño
-#     al tocarles;
+#     segundos, quietos, azules y en su bloque de hielo (el de los zombis, más grande), sin pensar ni atacar;
 #   - mientras están congelados, todo golpe o bala les hace crítico (el de Johnny: stats.critico_x, con su número
 #     amarillo), pero no los mata de una vez;
 #   - al deshelarse, el hielo revienta y siguen con lo suyo; durante SIN_FRIO segundos el frío no les hace nada (para

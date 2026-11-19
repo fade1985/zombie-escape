@@ -152,7 +152,6 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"aspirar":
 			frenar(delta)
 			girar_hacia(delta, hacia.normalized())
-			contacto = 0   # el bocado ya lo da comer()
 			aspirar(delta, johnny, hacia, d)
 			if t >= DURA_ASPIRAR:
 				andar(0.6)
