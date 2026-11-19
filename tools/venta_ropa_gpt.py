@@ -49,6 +49,14 @@ def gris(p):
     return max(p[:3]) - min(p[:3]) < 45
 
 
+def dorado(v):
+    for (a, ca), (b, cb) in zip(DORADO, DORADO[1:]):
+        if v <= b:
+            t = (v - a) / (b - a)
+            return tuple(round(ca[i] + (cb[i] - ca[i]) * t) for i in range(3))
+    return DORADO[-1][1]
+
+
 def a_dorado(im):
     px = im.load()
     w, h = im.size
@@ -65,12 +73,6 @@ def a_dorado(im):
     postes = tramos([sum(claro(px[x, y]) for y in range(h)) / h for x in range(w)], w, 6)
     baldas = tramos([sum(claro(px[x, y]) for x in range(w)) / w for y in range(h)], h, 15)
     x0, x1 = postes[0][0], postes[-1][1]
-    def dorado(v):
-        for (a, ca), (b, cb) in zip(DORADO, DORADO[1:]):
-            if v <= b:
-                t = (v - a) / (b - a)
-                return tuple(round(ca[i] + (cb[i] - ca[i]) * t) for i in range(3))
-        return DORADO[-1][1]
     for y in range(h):
         en_balda = any(a <= y <= b for a, b in baldas)
         for x in range(w):
@@ -83,10 +85,44 @@ def a_dorado(im):
     return im
 
 
+# 19 nov, el dueño: el perchero de ruedas (s3), dorado también. Su armazón (postes, barra de arriba con sus curvas y bandeja de abajo)
+# no va en columnas y filas enteras: se pinta todo el metal gris claro unido a los dos postes (rellenando desde un punto de cada poste, a
+# media altura), sin pasar por los contornos oscuros, así que la ropa blanca no se toca
+def a_dorado_unido(im):
+    px = im.load()
+    w, h = im.size
+    claro = lambda p: p[3] > 0 and max(p[:3]) > 90 and gris(p)
+    y = h // 2
+    fila = [x for x in range(w) if claro(px[x, y])]
+    hecho = bytearray(w * h)
+    cola = deque([(fila[0], y), (fila[-1], y)])
+    while cola:
+        x, y = cola.popleft()
+        if x < 0 or y < 0 or x >= w or y >= h or hecho[y * w + x] or not claro(px[x, y]):
+            continue
+        hecho[y * w + x] = 1
+        cola.extend(((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)))
+    # y lo gris oscuro pegado (las sombras del metal), una vuelta de 3 píxeles
+    for _ in range(3):
+        nuevos = [(x, y) for y in range(1, h - 1) for x in range(1, w - 1) if not hecho[y * w + x] and px[x, y][3] > 0
+                  and max(px[x, y][:3]) >= 12 and gris(px[x, y]) and (hecho[y * w + x - 1] or hecho[y * w + x + 1]
+                  or hecho[(y - 1) * w + x] or hecho[(y + 1) * w + x])]
+        for x, y in nuevos:
+            hecho[y * w + x] = 2
+    for y in range(h):
+        for x in range(w):
+            if hecho[y * w + x]:
+                p = px[x, y]
+                px[x, y] = dorado(max(p[:3])) + (p[3],)
+    return im
+
+
 for id_, tipo, alto in MUEBLES:
     im = quitar_fondo(Image.open(f"assets/sources/ropa/venta-{id_}-gpt.webp").convert("RGBA"))
     if id_ == "p3":
         im = a_dorado(im)
+    if id_ == "s3":
+        im = a_dorado_unido(im)
     im = im.crop(im.getbbox())
     ancho = max(1, round(alto * im.width / im.height))
     s = im.convert("RGBa").resize((ancho, alto), Image.LANCZOS).convert("RGBA")
