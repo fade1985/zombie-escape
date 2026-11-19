@@ -4,6 +4,11 @@ La dependienta (18 nov) fue la primera: un personaje de PixelLab de 112 px, much
 48, que en el juego se dibuja a escala 1 (cada píxel del dibujo, 1 unidad; los de 48 van a escala 2). Así queda casi
 igual de alta que los demás, pero con el doble de detalle. Esta es la receta para hacer otro.
 
+**Reducido a la altura de Johnny (19 nov):** con `"reducir": {"casilla": 64, "pies": [32, 55], "borde": "#050202"}` en la
+ficha, `tools/hoja_112.py` reduce cada dibujo a una casilla de 64 (mezclando colores, como los muebles) y le pone un borde
+de 1 píxel del color del de Johnny; en su escena, `scale = Vector2(2, 2)` y `offset = Vector2(-32, -55)`, como los de 48.
+Así va la dependienta desde el 19 nov (lo pidió el dueño): mide lo mismo que Johnny y tiene su acabado, a costa del detalle.
+
 ## 1. El personaje en PixelLab
 
 - Personaje de **112 px** (el de la dependienta: «Dependienta verde 112», id `de59f7de-5243-4d15-a7b3-5b11f9115676`).

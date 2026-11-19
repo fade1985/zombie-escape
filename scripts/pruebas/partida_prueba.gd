@@ -518,7 +518,7 @@
 #   --continuar         la partida a medias: se guarda al subir a la 1ª planta, el menú enseña «Continuar partida» y,
 #                       al continuarla, la planta y lo que se llevaba son iguales             [prueba_varias.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
-#   --dependienta       la dependienta nueva (112 px, a escala 1) al lado de Johnny y de otros zombis, y seis andando
+#   --dependienta       la dependienta (del alto de Johnny desde el 19 nov) al lado de Johnny y de otros zombis, y seis andando
 #                       hacia Johnny desde seis lados (fotos para un GIF) [prueba_varias.gd]
 #   --vecina            la vecina hecha con GPT (en todas las vistas) junto al vecino: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --vecino-gpt        el vecino rehecho con GPT junto al de PixelLab, quietos en dos filas en sus 8 direcciones:
