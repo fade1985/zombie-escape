@@ -12,16 +12,16 @@ const TEXTO := Color("#d8d0b8")
 const TEXTO_SUAVE := Color("#8a8f98")
 const AMARILLO := Color("#ffe066")   # lo ahorrado y los cuadraditos llenos
 const MORADO := Color("#b77ce8")     # el mutágeno (19 nov; antes, verde): el morado de su barra (hud.gd), más claro para que se lea
-# El símbolo del mutágeno en su marcador, en lugar del «$»: una doble hélice de ADN inclinada (como el emoji 🧬), a
-# cuadraditos de PIXEL_ADN (cada fila, de arriba abajo): «#», la hebra de delante en cada tramo (del color del
-# marcador); «%», la de detrás (más oscura); «=», los peldaños entre ellas (más oscuros aún). Mide lo que las cifras
-# (CIFRA_TAM: 19 de alto) y va con cuadraditos de 1, como sus rayas. (19 nov: antes, a cuadraditos de 2, no cabía más
-# que una cruz y parecía un reloj de arena)
+# El símbolo del mutágeno en su marcador, en lugar del «$»: la doble hélice de ADN de los iconos (19 nov, el dueño pasó
+# uno de ejemplo): las dos hebras se cruzan una vez en medio (la que baja de derecha a izquierda pasa por delante y la
+# otra se corta) y, arriba y abajo, dos peldaños sueltos que no tocan las hebras. Todo del color del marcador, a
+# cuadraditos de PIXEL_ADN (cada fila, de arriba abajo; «#», lleno). Mide lo que las cifras (CIFRA_TAM: 19 de alto) y va
+# con cuadraditos de 1, como sus rayas. (Antes, a cuadraditos de 2, solo cabía una cruz y parecía un reloj de arena)
 const ADN := [
-	".......%%##...", ".....%%====##.", "....%%.....##.", "....##.....%%.", "....##=====%%.",
-	".....##..%%...", ".......##.....", ".....%%=##....", "...%%.....##..", "..%%......##..",
-	"..##=====%%...", "...##...%%....", "....##%%......", "....%%##......", "..%%...##.....",
-	".%%.....##....", "##======%%....", ".##....%%.....", "..##..%%......"]
+	".##......##.", "##........##", "##..####..##", "##........##", "##..####..##",
+	".##......##.", "..##....##..", "...#...##...", "......##....", ".....##.....",
+	"....##......", "...##...#...", "..##....##..", ".##......##.", "##..####..##",
+	"##........##", "##..####..##", "##........##", ".##......##."]
 const PIXEL_ADN := 1.0
 const CIFRAS := 4        # las casillas de los marcadores fijos (los del inventario): hasta 9999...
 const MAXIMO := 10000    # ...y de aquí en adelante, «MAX»
