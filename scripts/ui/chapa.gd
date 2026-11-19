@@ -12,12 +12,17 @@ const TEXTO := Color("#d8d0b8")
 const TEXTO_SUAVE := Color("#8a8f98")
 const AMARILLO := Color("#ffe066")   # lo ahorrado y los cuadraditos llenos
 const MORADO := Color("#b77ce8")     # el mutágeno (19 nov; antes, verde): el morado de su barra (hud.gd), más claro para que se lea
-# El símbolo del mutágeno en su marcador, en lugar del «$»: una doble hélice de ADN, a cuadraditos de PIXEL_ADN (cada
-# fila, de arriba abajo). Las dos hebras se cruzan dos veces, como una onda: «#», la de delante (del color del
+# El símbolo del mutágeno en su marcador, en lugar del «$»: una doble hélice de ADN inclinada (como el emoji 🧬), a
+# cuadraditos de PIXEL_ADN (cada fila, de arriba abajo): «#», la hebra de delante en cada tramo (del color del
 # marcador); «%», la de detrás (más oscura); «=», los peldaños entre ellas (más oscuros aún). Mide lo que las cifras
-# (CIFRA_TAM). (19 nov: antes, una sola cruz con peldaños arriba y abajo, que parecía un reloj de arena)
-const ADN := ["...#...", ".%...#.", "%=====#", ".%...#.", "...#...", ".#...%.", "#=====%", ".#...%.", "...%..."]
-const PIXEL_ADN := 2.0
+# (CIFRA_TAM: 19 de alto) y va con cuadraditos de 1, como sus rayas. (19 nov: antes, a cuadraditos de 2, no cabía más
+# que una cruz y parecía un reloj de arena)
+const ADN := [
+	".......%%##...", ".....%%====##.", "....%%.....##.", "....##.....%%.", "....##=====%%.",
+	".....##..%%...", ".......##.....", ".....%%=##....", "...%%.....##..", "..%%......##..",
+	"..##=====%%...", "...##...%%....", "....##%%......", "....%%##......", "..%%...##.....",
+	".%%.....##....", "##======%%....", ".##....%%.....", "..##..%%......"]
+const PIXEL_ADN := 1.0
 const CIFRAS := 4        # las casillas de los marcadores fijos (los del inventario): hasta 9999...
 const MAXIMO := 10000    # ...y de aquí en adelante, «MAX»
 const ARRIBA := 44                   # lo alto de la franja de lo ahorrado
