@@ -1464,7 +1464,7 @@ func llenar_mutageno(puntos: int) -> void:
 	if mutageno_total() >= TOPE:
 		mutageno_barra = 0
 	if ganados > 0:
-		Sonido.tocar("mutageno")
+		Sonido.tocar("mutageno_punto")
 		if johnny and johnny.vivo:
 			EfectoSuelo.soltar(johnny, "mutar", Vector2.ZERO)
 			numero(johnny.position, "+%d" % ganados, CHAPA_UI.VERDE)

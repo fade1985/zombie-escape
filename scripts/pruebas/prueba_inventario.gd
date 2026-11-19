@@ -2049,7 +2049,7 @@ func probar_municion_zombi() -> void:
 # tipo al lado de Johnny y mira lo que llena cada uno (arrastrado 1, vecino y vecina 2, crío 3, gordo 4, tentáculos y
 # dinamitero 5; un jefe y uno llamado, nada) y que ya no cae mutágeno al suelo; la barra a medias, en el HUD
 # (captura-mutageno-barra.png); al pasar del 100 %, un mutágeno más, lo que sobra en la barra, y su destello
-# (captura-mutageno-lleno.png). La partida guardada a medias apunta el mutágeno y la barra y los devuelve
+# (captura-mutageno-lleno.png), con su sonido (capturas/mutageno-punto.wav). La partida guardada a medias apunta el mutágeno y la barra y los devuelve
 # (PartidaGuardada); y el inventario lo enseña debajo de los dólares, en verde y con la hélice en vez del «$»
 # (captura-mutageno-inventario.png), con 7 (captura-mutageno-pocos.png) y con 10.000 o más, «8MAX»
 # (captura-mutageno-max.png). Y el tope (TOPE, «MAX»): con él no caen billetes, la barra no se llena y los fajos no
@@ -2088,6 +2088,8 @@ func probar_mutageno() -> void:
 	await get_tree().create_timer(1.0).timeout
 	llenar_mutageno(5)
 	print("Mutágeno: de 97 con 5 más · mutágeno %d · barra %d (esperado: 1 · 2)" % [mutageno, mutageno_barra])
+	# el sonido de ganar un punto, para escucharlo (capturas/mutageno-punto.wav)
+	Sonido.sintetizar(Sonido.EFECTOS["mutageno_punto"].notas).save_to_wav(Captura.CARPETA + "mutageno-punto.wav")
 	llenar_mutageno(250)
 	print("Mutágeno: con 250 más de golpe · mutágeno %d · barra %d (esperado: 3 · 52)" % [mutageno, mutageno_barra])
 	mutageno = 1
