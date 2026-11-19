@@ -314,6 +314,8 @@
 #   --durmientes-planta cuántos durmientes trae cada planta de cada edificio y la partida entera (el mutágeno que da) [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera (también con la luz del juego, -luz) [prueba_sitios.gd]
+#   --rodear-muebles    (con --edificio centro; --tipo X, otra tienda: ropa si no) que los muebles sueltos de la sala de venta,
+#                       normal e inversa, se rodean y no hay rincones encerrados entre ellos (con el cuerpo de Johnny) [prueba_sitios.gd]
 #   --puerta-dependienta (con --edificio centro; --tipo X, otra tienda: ropa si no) la dependienta (112 px) delante de
 #                       cada puerta de frente de la tienda y dentro del hueco, con Johnny al lado: si cabe [prueba_sitios.gd]
 #   --torre             (con --edificio torre) Torre Velaria, el esqueleto (tercer edificio, parte 1): sus plantas, sus
@@ -1215,6 +1217,9 @@ func empezar_prueba() -> void:
 	elif "--puerta-dependienta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_puerta_dependienta()
+	elif "--rodear-muebles" in args:
+		set_process(false)   # sin la prueba larga
+		probar_rodear_muebles()
 	elif "--tiendas-fijas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tiendas_fijas()

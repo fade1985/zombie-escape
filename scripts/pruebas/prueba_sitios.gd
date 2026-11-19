@@ -4329,3 +4329,181 @@ func probar_comida() -> void:
 		x.acompanante = antes[1]
 		x.baul = antes[2])
 	get_tree().quit()
+
+
+# Con "--captura --edificio centro --rodear-muebles" (19 nov, el dueño): en la sala de venta de la tienda de ropa (--tipo X, otra
+# tienda), normal e inversa, que a cada mueble suelto (el que no está pegado a una pared) se llega por sus cuatro lados, para
+# rodearlo, y que no hay rincones encerrados entre muebles donde quedarse atascado. Se mira con el cuerpo de Johnny (un círculo de
+# 18 de radio) en una rejilla de 8 en 8 unidades: los puntos donde cabe, y cuáles se alcanzan andando desde la entrada. Al final,
+# «Rodear: TODO BIEN» o los fallos, y una foto de cada una con los rincones encerrados en rojo (captura-rodear-<tipo>-<lado>.png)
+const RODEAR_PASO := 8.0
+const RODEAR_RADIO := 18.0
+
+func probar_rodear_muebles() -> void:
+	var args := OS.get_cmdline_user_args()
+	var tipo: String = args[args.find("--tipo") + 1] if "--tipo" in args else "ropa"
+	var fallos := 0
+	for lado in ["abajo", "arriba"]:
+		var hallada := {}
+		for i in 200:
+			Planta.semilla = 3000 + i
+			var num := 1 + i % 4
+			var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+			for idx in p.sitios.size():
+				if p.sitios[idx].get("tienda", "") == tipo and p.sitios[idx].tipo != "jefe" and p.sitios[idx].apt.entrada.lado == lado:
+					hallada = {"semilla": 3000 + i, "num": num, "idx": idx}
+					break
+			if not hallada.is_empty():
+				break
+		if hallada.is_empty():
+			print("Rodear %s (puerta %s): no sale en ninguna planta" % [tipo, lado])
+			fallos += 1
+			continue
+		Planta.semilla = hallada.semilla
+		nueva_planta(hallada.num)
+		Planta.semilla = 0
+		var sitio: Dictionary = planta.sitios[hallada.idx]
+		sitio.limpio = true
+		await montar(hallada.idx, 0, false)
+		await get_tree().create_timer(0.4).timeout
+		var sala: Dictionary = {}
+		for s in sitio.apt.salas:
+			if s.uso == "tienda":
+				sala = s
+		# los puntos de la sala de venta donde cabe Johnny
+		var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+		var consulta := PhysicsShapeQueryParameters2D.new()
+		var circulo := CircleShape2D.new()
+		circulo.radius = RODEAR_RADIO
+		consulta.shape = circulo
+		consulta.collision_mask = johnny.collision_mask
+		consulta.exclude = [johnny.get_rid()]
+		var cabe := {}
+		var ancho := int(sitio.ancho / RODEAR_PASO)
+		var alto := int(sitio.alto / RODEAR_PASO)
+		for gy in alto:
+			for gx in ancho:
+				var q := Vector2((gx + 0.5) * RODEAR_PASO, (gy + 0.5) * RODEAR_PASO)
+				if mapa.zona_en(q) != sala.id:
+					continue
+				consulta.transform = Transform2D(0.0, q)
+				if espacio.intersect_shape(consulta, 1).is_empty():
+					cabe[Vector2i(gx, gy)] = true
+		# los que se alcanzan andando desde la entrada (el punto donde cabe más cerca de Johnny, que entra por ella)
+		var inicio := Vector2i(-1, -1)
+		var mejor := INF
+		for k in cabe:
+			var d: float = ((Vector2(k) + Vector2(0.5, 0.5)) * RODEAR_PASO).distance_to(johnny.global_position)
+			if d < mejor:
+				mejor = d
+				inicio = k
+		var llega := {inicio: true}
+		var cola: Array = [inicio]
+		while not cola.is_empty():
+			var k: Vector2i = cola.pop_back()
+			for d in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+				var n: Vector2i = k + d
+				if cabe.has(n) and not llega.has(n):
+					llega[n] = true
+					cola.append(n)
+		# los muebles sueltos de la sala de venta: los que tienen sala por sus cuatro lados (a 24 de cada borde)
+		var sueltos := []
+		for m in mapa.muebles:
+			var forma: CollisionShape2D = null
+			for h in m.get_children():
+				if h is CollisionShape2D:
+					forma = h
+			if forma == null:
+				continue
+			var tam: Vector2 = (forma.shape as RectangleShape2D).size
+			var caja := Rect2(m.global_position + forma.position - tam / 2.0, tam)
+			if mapa.zona_en(caja.get_center()) != sala.id:
+				continue
+			var suelto := true
+			for q in [Vector2(caja.get_center().x, caja.position.y - 24), Vector2(caja.get_center().x, caja.end.y + 24),
+					Vector2(caja.position.x - 24, caja.get_center().y), Vector2(caja.end.x + 24, caja.get_center().y)]:
+				if mapa.zona_en(q) != sala.id:
+					suelto = false
+			if suelto:
+				sueltos.append({"tipo": m.datos.tipo, "caja": caja})
+		# los que están tan juntos que Johnny no pasa entre ellos (menos de su ancho, 36), un solo bloque: se rodean juntos
+		var bloques := []
+		for s in sueltos:
+			var junto: Array = bloques.filter(func(b): return b.any(func(o): return o.caja.grow(RODEAR_RADIO).intersects(s.caja.grow(RODEAR_RADIO))))
+			var nuevo := [s]
+			for b in junto:
+				nuevo += b
+				bloques.erase(b)
+			bloques.append(nuevo)
+		for b in bloques:
+			var caja: Rect2 = b[0].caja
+			for o in b:
+				caja = caja.merge(o.caja)
+			var nombre: String = " + ".join(b.map(func(o): return o.tipo))
+			# por cada lado, algún punto alcanzable pegado a él (a menos de 34 del borde, a lo largo de todo el lado)
+			var sin_llegar := []
+			for l in ["arriba", "abajo", "izquierda", "derecha"]:
+				var hay := false
+				for k in llega:
+					var q := (Vector2(k) + Vector2(0.5, 0.5)) * RODEAR_PASO
+					var dentro: bool
+					match l:
+						"arriba":
+							dentro = q.x > caja.position.x and q.x < caja.end.x and q.y < caja.position.y and q.y > caja.position.y - RODEAR_RADIO - 16
+						"abajo":
+							dentro = q.x > caja.position.x and q.x < caja.end.x and q.y > caja.end.y and q.y < caja.end.y + RODEAR_RADIO + 16
+						"izquierda":
+							dentro = q.y > caja.position.y and q.y < caja.end.y and q.x < caja.position.x and q.x > caja.position.x - RODEAR_RADIO - 16
+						_:
+							dentro = q.y > caja.position.y and q.y < caja.end.y and q.x > caja.end.x and q.x < caja.end.x + RODEAR_RADIO + 16
+					if dentro:
+						hay = true
+						break
+				if not hay:
+					sin_llegar.append(l)
+			var juntos := " (juntos: Johnny no pasa entre ellos)" if b.size() > 1 else ""
+			if sin_llegar.is_empty():
+				print("Rodear %s (puerta %s): %s se rodea%s" % [tipo, lado, nombre, juntos])
+			else:
+				fallos += 1
+				print("Rodear %s (puerta %s): FALLO %s en (%d, %d)%s: no se llega por %s" % [tipo, lado, nombre, caja.get_center().x,
+					caja.get_center().y, juntos, ", ".join(sin_llegar)])
+		# los rincones encerrados: grupos de puntos donde cabe Johnny pero a los que no se llega
+		var vistos := {}
+		var rincones := []
+		for k in cabe:
+			if llega.has(k) or vistos.has(k):
+				continue
+			var grupo := [k]
+			vistos[k] = true
+			var i := 0
+			while i < grupo.size():
+				for d in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+					var n: Vector2i = grupo[i] + d
+					if cabe.has(n) and not llega.has(n) and not vistos.has(n):
+						vistos[n] = true
+						grupo.append(n)
+				i += 1
+			rincones.append(grupo)
+		for g in rincones:
+			fallos += 1
+			var centro := Vector2.ZERO
+			for k in g:
+				centro += (Vector2(k) + Vector2(0.5, 0.5)) * RODEAR_PASO
+			centro /= g.size()
+			print("Rodear %s (puerta %s): FALLO rincón encerrado de %d puntos en (%d, %d)" % [tipo, lado, g.size(), centro.x, centro.y])
+		print("Rodear %s (puerta %s): %d muebles sueltos (%d bloques), %d puntos donde cabe Johnny, %d alcanzables, %d rincones encerrados" % [
+			tipo, lado, sueltos.size(), bloques.size(), cabe.size(), llega.size(), rincones.size()])
+		# la foto, con los rincones encerrados en rojo
+		var marcas := Node2D.new()
+		marcas.z_index = 100
+		marcas.draw.connect(func():
+			for g in rincones:
+				for k in g:
+					marcas.draw_rect(Rect2(Vector2(k) * RODEAR_PASO, Vector2(RODEAR_PASO, RODEAR_PASO)), Color(1, 0, 0, 0.6)))
+		mapa.add_child(marcas)
+		johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+		await foto_entera(sitio, "captura-rodear-%s-%s.png" % [tipo, lado])
+		marcas.queue_free()
+	print("Rodear: TODO BIEN" if fallos == 0 else "Rodear: %d FALLOS" % fallos)
+	get_tree().quit()
