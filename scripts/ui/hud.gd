@@ -4,10 +4,10 @@
 #   - La barra de vida en su marco (barra-vida.png), partida en tres tercios. Los tercios perdidos se tapan
 #     con rayas oscuras, porque ya no se curan. Encima, la vida en números. Al recibir un golpe, la barra
 #     tiembla y lo perdido se queda en claro un momento antes de bajar; con poca vida, la sangre late.
-#   - Justo encima de la barra, la del mutágeno (19 nov; partida.llenar_mutageno): verde, con el tanto por ciento que
-#     lleva; la llenan los zombis al caer y, al llegar al 100 %, da un mutágeno y vuelve a empezar. Sube poco a poco con
-#     burbujas dentro y un brillo que la recorre; al completarse, destella en blanco, la hélice de al lado da un salto y
-#     baja a cero. Encima de ella, el escudo, si lo hay.
+#   - Justo encima de la barra, la del mutágeno (19 nov; partida.llenar_mutageno): igual que la de vida, con un líquido
+#     morado oscuro y el tanto por ciento que lleva; la llenan los zombis al caer y, al llegar al 100 %, da un mutágeno y
+#     vuelve a empezar. Sube poco a poco con burbujas dentro y un brillo que la recorre; al completarse, destella en
+#     blanco y baja a cero. Encima de ella, el escudo, si lo hay.
 #   - Sobre la barra, las balas del cargador: una por cada bala que cabe (las gastadas, apagadas) y la
 #     reserva (la munición de su tipo, compartida con las armas que la gastan). Al recargar, las gastadas parpadean.
 #     Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
@@ -43,11 +43,10 @@ const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
 const MARCO_ESCUDO := preload("res://assets/ui/barra-escudo.png")
 const ALTO_ESCUDO := 13.0
 const HUECO_ESCUDO := Rect2(0.046 * ANCHO, 3.0, 0.908 * ANCHO, 7.0)
-# La barra del mutágeno: el mismo marco que el del escudo, con el filo de dentro en verde (barra-mutageno.png)
-const MARCO_MUTAGENO := preload("res://assets/ui/barra-mutageno.png")
-const ICONO_MUTAGENO := preload("res://assets/ui/iconos/mutageno.png")
-const ALTO_MUTAGENO := 13.0
-const VERDES_MUTAGENO := [Color("#34c48c"), Color("#a6f5cf"), Color("#1f7f5c")]   # el relleno, su brillo y su sombra
+# La barra del mutágeno: como la de vida (su marco, barra-vida.png, y su tamaño), con el líquido morado oscuro
+const ALTO_MUTAGENO := ALTO
+# el relleno, su parte de arriba (más clara), su sombra de abajo y las burbujas
+const MORADOS_MUTAGENO := [Color("#3e1a5c"), Color("#52267a"), Color("#2a0f40"), Color("#9a6cc8")]
 const ABAJO := 8.0        # lo que queda entre el borde de abajo de la pantalla y la barra o las casillas
 const ARRIBA_MOVIL := 8.0 # en el móvil, lo que queda entre el borde de arriba y las balas
 const BOTONES_ARRIBA := 230.0   # en el móvil, lo que ocupan los botones de arriba a la derecha (a tamaño 1: tactil.gd)
@@ -56,7 +55,10 @@ const BOTONES_ARRIBA := 230.0   # en el móvil, lo que ocupan los botones de arr
 const CIFRAS := {"0": "0110 1001 1001 1001 1001 0110", "1": "0010 0110 0010 0010 0010 0111", "2": "0110 1001 0001 0010 0100 1111",
 	"3": "1110 0001 0110 0001 0001 1110", "4": "1001 1001 1001 1111 0001 0001", "5": "1111 1000 1110 0001 0001 1110",
 	"6": "0110 1000 1110 1001 1001 0110", "7": "1111 0001 0010 0010 0100 0100", "8": "0110 1001 0110 1001 1001 0110",
-	"9": "0110 1001 1001 0111 0001 0110", "/": "0001 0010 0010 0100 0100 1000"}
+	"9": "0110 1001 1001 0111 0001 0110", "/": "0001 0010 0010 0100 0100 1000",
+	# (para la barra del mutágeno: el tanto por ciento y «MAX»)
+	"%": "1101 1101 0010 0100 1011 1011", "M": "1001 1111 1111 1001 1001 1001", "A": "0110 1001 1001 1111 1001 1001",
+	"X": "1001 1001 0110 0110 1001 1001"}
 const PIXEL_CIFRA := 4.0 / 3.0
 # Todo el HUD, una vez y media más grande que sus medidas (cada píxel del dibujo, 3 de pantalla en vez de 2: se sigue
 # viendo nítido). Más no cabe: al doble, la parte de la izquierda y la de la derecha se pisarían en una pantalla de 960
@@ -740,47 +742,38 @@ func mover_mutageno(delta: float) -> void:
 	mut_pulso = move_toward(mut_pulso, 0.0, delta * 3.0)
 
 
-# La barra del mutágeno, justo encima de la de vida: el relleno verde con sus burbujas y su brillo, el marco, el tanto
-# por ciento y, a la derecha, la hélice del mutágeno. Al completarse (mut_destello), todo destella en blanco y la hélice
-# da un salto. En el tope (partida.TOPE), «MAX»
+# La barra del mutágeno, justo encima de la de vida y como ella (su marco, su tamaño y sus cifras dibujadas a
+# cuadraditos, pintar_cifras): dentro, el líquido morado oscuro con sus burbujas y su brillo, y el tanto por ciento. Al
+# completarse (mut_destello), todo destella en blanco. En el tope (partida.TOPE), «MAX»
 func pintar_mutageno() -> void:
 	barra.draw_set_transform(Vector2(0, -ALTO_MUTAGENO))
-	var hueco := HUECO_ESCUDO
+	var hueco := HUECO
 	barra.draw_rect(hueco, Color("#1a1620"))
 	var lleno := hueco
 	lleno.size.x = roundf(hueco.size.x * clampf(mut_vista, 0.0, 1.0))
 	var blanco := mut_destello * mut_destello
 	if lleno.size.x > 0.0:
-		barra.draw_rect(lleno, VERDES_MUTAGENO[0].lerp(Color.WHITE, blanco))
-		barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, 2)), VERDES_MUTAGENO[1].lerp(Color.WHITE, blanco))
-		barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y - 2), Vector2(lleno.size.x, 2)), VERDES_MUTAGENO[2].lerp(Color.WHITE, blanco))
-		# las burbujas: puntitos claros que avanzan por dentro, cada uno a su paso
-		for i in 7:
+		barra.draw_rect(lleno, MORADOS_MUTAGENO[0].lerp(Color.WHITE, blanco))
+		barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, lleno.size.y * 0.45)), MORADOS_MUTAGENO[1].lerp(Color.WHITE, blanco))
+		barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y * 0.8), Vector2(lleno.size.x, lleno.size.y * 0.2)), MORADOS_MUTAGENO[2].lerp(Color.WHITE, blanco))
+		# las burbujas: puntitos claros que avanzan por dentro, cada uno a su paso y a su altura
+		for i in 9:
 			var x := fmod(i * 41.0 + tiempo * (14.0 + (i % 3) * 7.0), hueco.size.x)
 			if x < lleno.size.x - 2.0:
-				var y := 2.0 + float(i % 3)
-				barra.draw_rect(Rect2(roundf(lleno.position.x + x), lleno.position.y + y, 2, 2), Color(VERDES_MUTAGENO[1], 0.8))
+				var y := roundf(1.0 + (i % 4) * (lleno.size.y - 4.0) / 3.0)
+				barra.draw_rect(Rect2(roundf(lleno.position.x + x), lleno.position.y + y, 2, 2), Color(MORADOS_MUTAGENO[3], 0.75))
 		# el brillo que la recorre de izquierda a derecha cada 2,5 segundos
 		var bx := fmod(tiempo, 2.5) / 2.5 * (hueco.size.x + 40.0) - 20.0
 		var brillo := Rect2(roundf(lleno.position.x + bx), lleno.position.y, 6, lleno.size.y).intersection(lleno)
 		if brillo.size.x > 0.0:
-			barra.draw_rect(brillo, Color(1, 1, 1, 0.35))
+			barra.draw_rect(brillo, Color(1, 1, 1, 0.18))
 		# el borde de lo lleno, encendido un momento al recibir puntos
-		barra.draw_rect(Rect2(lleno.end.x - 2, lleno.position.y, 2, lleno.size.y), Color(VERDES_MUTAGENO[1].lerp(Color.WHITE, 0.6), 0.4 + 0.6 * mut_pulso))
-	barra.draw_texture_rect(MARCO_MUTAGENO, Rect2(0, 0, ANCHO, ALTO_MUTAGENO), false, Color.WHITE.lerp(Color(1.6, 1.6, 1.6), blanco))
-	var fuente := Tema.FUENTE
+		barra.draw_rect(Rect2(lleno.end.x - 2, lleno.position.y, 2, lleno.size.y), Color(MORADOS_MUTAGENO[3], 0.35 + 0.65 * mut_pulso))
+	barra.draw_texture_rect(MARCO, Rect2(0, 0, ANCHO, ALTO_MUTAGENO), false, Color.WHITE.lerp(Color(1.6, 1.6, 1.6), blanco))
 	var cifra := "%d%%" % roundi(clampf(mut_vista, 0.0, 1.0) * 100.0)
 	if partida.mutageno_total() >= partida.TOPE:
 		cifra = "MAX"   # no-tr (como en el inventario)
-	var ancho := fuente.get_string_size(cifra, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
-	var donde := Vector2(roundf((ANCHO - ancho) / 2.0), ALTO_MUTAGENO / 2.0 + 5)
-	barra.draw_string_outline(fuente, donde, cifra, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)
-	barra.draw_string(fuente, donde, cifra, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e4fff2").lerp(Color.WHITE, blanco))
-	# la hélice, a la derecha de la barra: al completarse, salta y crece un momento
-	var k := sin(mut_destello * PI)
-	var tam := (Vector2(13, 14) * (1.0 + 0.4 * k)).round()
-	var centro := Vector2(ANCHO + 9.0, ALTO_MUTAGENO / 2.0 - 6.0 * k)
-	barra.draw_texture_rect(ICONO_MUTAGENO, Rect2((centro - tam / 2.0).round(), tam), false)
+	pintar_cifras(cifra)
 	barra.draw_set_transform(Vector2.ZERO)
 
 

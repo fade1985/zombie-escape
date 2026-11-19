@@ -497,9 +497,9 @@ en una línea.
   tentáculos y dinamitero 5, el guardia 5, los demás 2, `MUTAGENO_OTRO`; los jefes y los que llama un jefe, nada; ni en
   el garaje) y, cada vez que llega a 100 (`MUTAGENO_BARRA`), da un mutágeno y sigue con lo que sobra: el sonido
   `"mutageno"`, el efecto de las mutaciones en Johnny (`EfectoSuelo` "mutar") y un «+1» verde. La barra, en el HUD justo
-  encima de la de vida (`hud.gd`, `pintar_mutageno`/`mover_mutageno`: verde menta, con el tanto por ciento, burbujas, un
-  brillo que la recorre y, al completarse, destello blanco y salto de la hélice; marco `assets/ui/barra-mutageno.png`, el
-  del escudo con el filo verde; el escudo va encima de ella, `alto_encima`). Lo lleno va en `partida.mutageno_barra`. Se
+  encima de la de vida (`hud.gd`, `pintar_mutageno`/`mover_mutageno`: del tamaño y con el marco de la de vida, líquido morado
+  oscuro, el tanto por ciento con las cifras a cuadraditos de la vida, `pintar_cifras`, burbujas, un brillo que la
+  recorre y, al completarse, destello blanco; el escudo va encima de ella, `alto_encima`). Lo lleno va en `partida.mutageno_barra`. Se
   cuenta en `partida.mutageno` y los dos van en la partida guardada a medias (`PartidaGuardada`). Los guardados de antes
   del 19 nov dividen su mutágeno entre 40 una vez (marca `mutageno_barra` de `guardado.gd`). Prueba: `--mutageno`. Al completar el edificio, el que quede pasa al guardado ("mutageno",
   `partida.terminar`; lo pidió el dueño el 15 nov); si caes o abandonas, el de esa partida se pierde, y el guardado no
