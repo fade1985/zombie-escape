@@ -11,6 +11,7 @@ ORIGEN = "assets/sources/ropa/puerta-entrada-arriba-gpt.webp"
 SALIDA = "assets/sprites/puerta-abajo-ropa.png"
 PASO = (70, 72, 88, 255)   # el suelo del paso, el de debajo de la hoja vieja
 HOJA_ANCHO = 68            # en píxeles del dibujo nuevo (al doble de detalle)
+GROSOR = 1.5              # 19 nov, el dueño: «un poco más gruesa» que la imagen de GPT (solo de alto)
 HOJA_CENTRO_Y = 11         # la altura de su centro (la hoja vieja iba en las filas 3 a 8 del de 36 × 32)
 
 
@@ -43,7 +44,7 @@ base = base.resize((72, 64), Image.NEAREST)
 
 hoja = quitar_fondo(Image.open(ORIGEN).convert("RGBA"))
 hoja = hoja.crop(hoja.getbbox())
-alto = max(1, round(HOJA_ANCHO * hoja.height / hoja.width))
+alto = max(1, round(HOJA_ANCHO * hoja.height / hoja.width * GROSOR))
 s = hoja.convert("RGBa").resize((HOJA_ANCHO, alto), Image.LANCZOS).convert("RGBA")
 s.putalpha(s.split()[3].point(lambda v: 255 if v > 110 else 0))
 arriba = HOJA_CENTRO_Y - alto // 2
