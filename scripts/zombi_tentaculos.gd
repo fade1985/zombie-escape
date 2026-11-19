@@ -7,6 +7,8 @@
 # levanta por encima de la cabeza, se enrosca y tiembla, mientras en el suelo sale el mismo aviso que en las cargas
 # de los jefes (Aviso.franja: flechas que se encienden hacia donde va y, al final, una X, o una estrella si da con
 # una pared); con el golpe se estira como un látigo, cae sobre el aviso y se recoge.
+# Desde el 19 nov (lo pidió el dueño) el tentáculo va con los píxeles del tamaño de los de Johnny y su borde negro, como
+# el dibujo del zombi: se pinta en un lienzo pequeño, a la mitad (_capa), y ese lienzo se ve al doble, sin suavizar.
 extends Zombi
 
 const LARGO := 220.0        # hasta dónde llega el latigazo (si no da antes con una pared)
@@ -17,6 +19,8 @@ const ESPERA := 2.5         # entre un latigazo y el siguiente
 const DANO_LATIGAZO := 15
 const PARARSE := 140.0      # a esta distancia ya no se acerca más: ataca desde ahí
 const IMPACTO := 3          # el fotograma del ataque en que lanza los tentáculos (antes, los echa atrás)
+const PIXEL := 2.0          # el tamaño de cada píxel del tentáculo: el de los de Johnny
+const LIENZO := 256         # el lado del lienzo pequeño, en esos píxeles (llega a 256 por cada lado del zombi)
 
 # El tentáculo pintado con código, igual que los de su espalda cuando ataca (colores sacados píxel a píxel de su
 # latigazo de PixelLab; al pintarlos se oscurecen como su dibujo en el juego): borde casi negro y granate oscuro,
@@ -58,7 +62,7 @@ const DETRAS := 3
 var espera := 0.0
 var t_ataque := 0.0
 var tentaculo := Tentaculo.new(PALETA, true)   # (su dibujo pasa por el shader de los zombis)
-var delante: Node2D         # pinta la parte del tentáculo que va por delante del cuerpo
+var capas: Array[SubViewport] = []   # los dos lienzos del tentáculo: la base, detrás del dibujo, y el resto, delante
 
 
 func _ready() -> void:
@@ -66,18 +70,54 @@ func _ready() -> void:
 	espera = randf_range(1.0, 2.2)
 	tentaculo.largo = LARGO
 	tentaculo.ancho = ANCHO
-	# El tentáculo se pinta en dos capas: la base, en el propio zombi (que pinta siempre por detrás de su dibujo), y el
-	# resto en "delante", que va después del dibujo y por eso queda encima
-	delante = Node2D.new()
-	delante.draw.connect(_pintar_delante)
-	add_child(delante)
+	# Del grueso de los tentáculos de su espalda en su dibujo (reducido al alto de Johnny) y con el borde de un píxel
+	tentaculo.grueso = 5.0
+	tentaculo.enroscado = 100.0
+	tentaculo.borde = PIXEL
+	# El tentáculo se pinta en dos capas: la base, por detrás del dibujo, y el resto, por delante
+	capas.append(_capa(_pintar_detras, sprite.get_index()))
+	capas.append(_capa(_pintar_delante, -1))
+
+
+# Un lienzo pequeño (a la mitad: un píxel suyo es un píxel de los dibujos) donde se pinta una parte del tentáculo, y
+# su dibujo en el zombi, al doble y sin suavizar, en el sitio "indice" (-1, el último: por encima de todo). El lienzo
+# tiene su propio mundo, sin luces: la luz se la pone el dibujo, como a los demás
+func _capa(pintar: Callable, indice: int) -> SubViewport:
+	var vista := SubViewport.new()
+	vista.size = Vector2i(LIENZO, LIENZO)
+	vista.transparent_bg = true
+	vista.disable_3d = true
+	vista.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	var lienzo := Node2D.new()
+	lienzo.position = Vector2(LIENZO, LIENZO) / 2.0
+	lienzo.scale = Vector2.ONE / PIXEL
+	lienzo.draw.connect(pintar.bind(lienzo))
+	vista.add_child(lienzo)
+	add_child(vista)
+	var dibujo := Sprite2D.new()
+	dibujo.texture = vista.get_texture()
+	dibujo.scale = Vector2(PIXEL, PIXEL)
+	dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	dibujo.visible = false
+	add_child(dibujo)
+	if indice >= 0:
+		move_child(dibujo, indice)
+	vista.set_meta("dibujo", dibujo)
+	vista.set_meta("lienzo", lienzo)
+	return vista
 
 
 func _physics_process(delta: float) -> void:
 	espera -= delta
 	super(delta)
 	queue_redraw()
-	delante.queue_redraw()
+	# Los lienzos del tentáculo solo se pintan mientras ataca
+	var atacando := estado in ["aviso", "latigazo"]
+	for vista in capas:
+		vista.render_target_update_mode = SubViewport.UPDATE_ALWAYS if atacando else SubViewport.UPDATE_DISABLED
+		vista.get_meta("dibujo").visible = atacando
+		if atacando:
+			vista.get_meta("lienzo").queue_redraw()
 
 
 func andar(delta: float, johnny: Node2D) -> void:
@@ -129,22 +169,25 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	super(cantidad, fuerza)
 
 
-# El aviso en el suelo, el de las cargas de los jefes (va por detrás de todo el zombi). Y la base del tentáculo, por
-# detrás del dibujo: así parece que sale de detrás del hombro (de espaldas no, que le sale de la espalda, de cara a
-# nosotros)
+# El aviso en el suelo, el de las cargas de los jefes (va por detrás de todo el zombi)
 func _draw() -> void:
 	if estado == "aviso":
 		tentaculo.avisar(self, DESDE, t_ataque / AVISO, tiempo)
+
+
+# La base del tentáculo, por detrás del dibujo: así parece que sale de detrás del hombro (de espaldas no, que le sale
+# de la espalda, de cara a nosotros)
+func _pintar_detras(lienzo: Node2D) -> void:
 	var puntos := _tentaculo()
 	if not puntos.is_empty() and direccion not in DE_ESPALDAS:
-		tentaculo.pintar(self, puntos, 0, DETRAS)
+		tentaculo.pintar(lienzo, puntos, 0, DETRAS)
 
 
 # El resto, por delante del dibujo
-func _pintar_delante() -> void:
+func _pintar_delante(lienzo: Node2D) -> void:
 	var puntos := _tentaculo()
 	if not puntos.is_empty():
-		tentaculo.pintar(delante, puntos, 0 if direccion in DE_ESPALDAS else DETRAS, Tentaculo.PUNTOS)
+		tentaculo.pintar(lienzo, puntos, 0 if direccion in DE_ESPALDAS else DETRAS, Tentaculo.PUNTOS)
 
 
 # Los puntos del tentáculo en este momento, de la base a la punta (ninguno si no está atacando). Si Johnny queda
