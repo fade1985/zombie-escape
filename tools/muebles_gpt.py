@@ -354,6 +354,8 @@ MUEBLES = {
     "cartel_open_pequeno": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open-pequeno.png", 17, 15, False),
     # la puerta doble de cristal sin marco del restaurante (17 nov, el dueño): dos hojas con pinzas de acero y barras largas
     "puerta_restaurante": ("assets/sources/centro/puerta-restaurante-gpt.webp", "assets/sprites/puerta-restaurante.png", 36, 43, False),
+    # la misma, destrozada (19 nov, el dueño): la de la tienda de ropa inversa vista desde dentro (puerta.gd, RESTAURANTE_ROPA); la de fuera, limpia
+    "puerta_ropa_destrozada": ("assets/sources/ropa/puerta-entrada-destrozada-gpt.webp", "assets/sprites/puerta-ropa-destrozada.png", 36, 43, False),
     # la puerta doble de acero pulido de la joyería (17 nov, el dueño): ventanas altas de cristal, barras largas y cerradura en el medio
     "puerta_joyeria": ("assets/sources/centro/puerta-joyeria-gpt.webp", "assets/sprites/puerta-joyeria.png", 34, 43, False),
     # el espejo de arco de los probadores de la tienda de ropa (18 nov, el dueño, catalogo.gd: "espejoprobador"; se levanta 11 píxeles al final de este archivo): marco dorado fino y

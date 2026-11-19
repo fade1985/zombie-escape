@@ -19,6 +19,8 @@ const FERRETERIA := preload("res://assets/sprites/puerta-ferreteria.png")
 const ELECTRONICA := preload("res://assets/sprites/puerta-electronica.png")
 # La puerta doble de cristal sin marco del restaurante (17 nov, el dueño; de GPT, muebles_gpt.py puerta_restaurante): 36 × 43 píxeles
 const RESTAURANTE := preload("res://assets/sprites/puerta-restaurante.png")
+# y la misma destrozada (19 nov, el dueño; muebles_gpt.py puerta_ropa_destrozada): la de la tienda de ropa inversa, vista desde dentro
+const RESTAURANTE_ROPA := preload("res://assets/sprites/puerta-ropa-destrozada.png")
 # La puerta doble de acero pulido de la joyería (17 nov, el dueño; de GPT, muebles_gpt.py puerta_joyeria): 34 × 43 píxeles
 const JOYERIA := preload("res://assets/sprites/puerta-joyeria.png")
 const NEON_MARCO := preload("res://scripts/mapa/neon_galeria.gd")
@@ -271,9 +273,9 @@ func _draw() -> void:
 			if centro and salida.get("neon", "") == "ferreteria":
 				draw_texture_rect(FERRETERIA, Rect2(-30, -86, 60, 86), false)
 				return
-			# (y la de la tienda de ropa vista desde dentro, en la inversa: la misma de la fachada, 19 nov, el dueño)
+			# (y la de la tienda de ropa vista desde dentro, en la inversa: la misma de la fachada, pero destrozada; 19 nov, el dueño)
 			if centro and (salida.get("neon", "") in ["restaurante", "ropa"] or tienda == "ropa"):   # (la de la ropa, la misma: el dueño, 17 nov)
-				draw_texture_rect(RESTAURANTE, Rect2(-36, -86, 72, 86), false)
+				draw_texture_rect(RESTAURANTE_ROPA if tienda == "ropa" else RESTAURANTE, Rect2(-36, -86, 72, 86), false)
 				return
 			if centro and salida.get("neon", "") == "joyeria":
 				draw_texture_rect(JOYERIA, Rect2(-34, -86, 68, 86), false)
