@@ -38,8 +38,55 @@ def quitar_fondo(im):
     return im
 
 
+# 19 nov, el dueño: el zapatero (p3), dorado como los muebles de pared en vez de metal blanco. El armazón (los dos postes y las cinco
+# baldas: columnas y filas casi enteras de gris) se pasa a la rampa de dorado de ropamodulo (p1) según lo claro de cada píxel; los
+# zapatos, aunque sean blancos, no se tocan (solo se mira dentro de postes y baldas)
+DORADO = [(0, (10, 7, 2)), (30, (44, 31, 11)), (70, (92, 58, 16)), (110, (142, 89, 25)), (150, (191, 115, 26)),
+          (180, (219, 145, 36)), (235, (248, 192, 36)), (255, (255, 215, 70))]
+
+
+def gris(p):
+    return max(p[:3]) - min(p[:3]) < 45
+
+
+def a_dorado(im):
+    px = im.load()
+    w, h = im.size
+    def tramos(cuenta, largo, minimo):
+        si = [i for i in range(largo) if cuenta[i] > 0.6]
+        grupos = []
+        for i in si:
+            if grupos and i - grupos[-1][1] <= 6:
+                grupos[-1][1] = i
+            else:
+                grupos.append([i, i])
+        return [(a - 6, b + 6) for a, b in grupos if b - a + 1 >= minimo]
+    claro = lambda p: max(p[:3]) > 110 and gris(p)
+    postes = tramos([sum(claro(px[x, y]) for y in range(h)) / h for x in range(w)], w, 6)
+    baldas = tramos([sum(claro(px[x, y]) for x in range(w)) / w for y in range(h)], h, 15)
+    x0, x1 = postes[0][0], postes[-1][1]
+    def dorado(v):
+        for (a, ca), (b, cb) in zip(DORADO, DORADO[1:]):
+            if v <= b:
+                t = (v - a) / (b - a)
+                return tuple(round(ca[i] + (cb[i] - ca[i]) * t) for i in range(3))
+        return DORADO[-1][1]
+    for y in range(h):
+        en_balda = any(a <= y <= b for a, b in baldas)
+        for x in range(w):
+            if not (any(a <= x <= b for a, b in postes) or (en_balda and x0 <= x <= x1)):
+                continue
+            p = px[x, y]
+            if p[3] == 0 or max(p[:3]) < 12 or not gris(p):
+                continue
+            px[x, y] = dorado(max(p[:3])) + (p[3],)
+    return im
+
+
 for id_, tipo, alto in MUEBLES:
     im = quitar_fondo(Image.open(f"assets/sources/ropa/venta-{id_}-gpt.webp").convert("RGBA"))
+    if id_ == "p3":
+        im = a_dorado(im)
     im = im.crop(im.getbbox())
     ancho = max(1, round(alto * im.width / im.height))
     s = im.convert("RGBa").resize((ancho, alto), Image.LANCZOS).convert("RGBA")
