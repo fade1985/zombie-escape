@@ -2,6 +2,7 @@
   "casilla": [176, 192],
   "origen": [24, 12],
   "pies": 128,
+  "reducir": {"casilla": [80, 88], "pies": [40, 58], "borde": "#050202", "realce": true},
   "cintura": 72,
   "andar": {
     "south": [0, 8], "south-east": [0, 8], "east": [0, 5], "north-east": [0, 8],

@@ -8,6 +8,9 @@ igual de alta que los demás, pero con el doble de detalle. Esta es la receta pa
 ficha, `tools/hoja_112.py` reduce cada dibujo a una casilla de 64 (mezclando colores, como los muebles) y le pone un borde
 de 1 píxel del color del de Johnny; en su escena, `scale = Vector2(2, 2)` y `offset = Vector2(-32, -55)`, como los de 48.
 Así va la dependienta desde el 19 nov (lo pidió el dueño): mide lo mismo que Johnny y tiene su acabado, a costa del detalle.
+Lo hace `tools/reducir.py`, que también usa `tools/zombi.py` para los de hoja en cuadrícula (el de tentáculos, con
+`"casilla": [80, 88]`). Si el dibujo tiene muchas rayas negras finas y reducido sale casi negro, `"realce": true` lo deja
+más nítido y algo más claro.
 
 ## 1. El personaje en PixelLab
 
