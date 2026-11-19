@@ -1329,6 +1329,21 @@ func probar_tiendas_fijas() -> void:
 				hoja.abrir()
 			await get_tree().create_timer(1.0).timeout
 			await foto_entera(sitio, "captura-fija-%s-%s-abiertas.png" % [tipo, lado])
+			# los muebles que se abren (Objetos.MUEBLES_CON_PIEZA; 19 nov: en la de ropa, todos los de la sala de venta, la taquilla
+			# del aseo y las estanterías y cajas del almacén) y Johnny delante de la caja, con su contorno amarillo, y luego abriéndola
+			# (captura-fija-<tipo>-<lado>-abrir.png y ...-abierto.png)
+			var se_abren: Array = mapa.muebles.filter(func(m): return m.has_node("Zona"))
+			print("Fija %s (puerta %s): se abren %d muebles: %s" % [tipo, lado, se_abren.size(),
+				", ".join(se_abren.map(func(m): return m.datos.tipo))])
+			for m in se_abren:
+				if m.datos.tipo == "ropamostrador":
+					johnny.position = m.position + Vector2(0, 30)
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(0.8).timeout
+					Captura.foto("captura-fija-%s-%s-abrir.png" % [tipo, lado])
+					m.usar.emit()
+					await get_tree().create_timer(0.5).timeout
+					Captura.foto("captura-fija-%s-%s-abierto.png" % [tipo, lado])
 	get_tree().quit()
 
 
