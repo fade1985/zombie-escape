@@ -20,7 +20,7 @@ var volando := 0             # cuántos siguen en el aire (mientras, se pintan p
 
 
 # Un reventón: "n" cachos que salen de "donde" (el suelo bajo el zombi) hacia todos los lados
-static func lanzar(sala: Node, donde: Vector2, n := 12) -> Cachos:
+static func lanzar(sala: Node, donde: Vector2, n := 14) -> Cachos:
 	var c := Cachos.new()
 	c.material = Recorte.material("punto")   # (ni encima de un muro ni al otro lado: recorte.gd)
 	var cuantos := DIBUJOS.get_width() / CELDA
@@ -37,6 +37,15 @@ static func lanzar(sala: Node, donde: Vector2, n := 12) -> Cachos:
 	c.volando = n
 	c.z_index = 20
 	sala.add_child(c)
+	# la sangre del reventón, en el sitio: el reventón de sangre (el de los golpes fuertes, EfectoSuelo), una mancha
+	# roja en medio y salpicaduras alrededor, hacia todos los lados (19 nov: el dueño quería más sangre)
+	EfectoSuelo.soltar(sala, "sangre", donde, 1.4)
+	Mancha.sangre(sala, donde, randf_range(20.0, 26.0), SANGRE)
+	for i in 18:
+		var hacia := Vector2.from_angle(TAU * (i + randf()) / 18.0)
+		var lejos := randf_range(10.0, 56.0)
+		Mancha.salpicon(sala, donde + Vector2(hacia.x, hacia.y * 0.6) * lejos, SANGRE, hacia * randf_range(150.0, 400.0),
+			8.0 if randf() < 0.3 else 2.0)
 	return c
 
 
@@ -66,7 +75,7 @@ func _process(delta: float) -> void:
 		# gotas de sangre por el camino, mientras va alto
 		q.gota -= delta
 		if q.gota <= 0.0 and q.z > 4.0:
-			q.gota = randf_range(0.04, 0.09)
+			q.gota = randf_range(0.02, 0.05)
 			Particulas.volar(self, q.p, q.z, q.v * 0.3, randf_range(0.0, 60.0), SANGRE, 2.0, get_parent(),
 				Color(SANGRE, randf_range(0.6, 0.85)), Vector2.ONE * 4.0)
 		# sube y cae; al tocar el suelo deja su salpicón, rebota (cada vez con menos fuerza) y al final se queda
@@ -78,7 +87,7 @@ func _process(delta: float) -> void:
 		if q.v.length() > 20.0 or q.vz < -120.0:
 			# el golpe: una mancha gorda y salpicaduras finas hacia todos los lados, alrededor del cacho
 			Mancha.salpicon(get_parent(), q.p, SANGRE, q.v + Vector2(0, 1), 10.0)
-			for k in randi_range(3, 5):
+			for k in randi_range(5, 8):
 				var hacia := Vector2.from_angle(randf() * TAU)
 				Mancha.salpicon(get_parent(), q.p + hacia * randf_range(8.0, 16.0), SANGRE, hacia * randf_range(120.0, 320.0), 2.0)
 		if q.rebotes > 0:

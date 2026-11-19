@@ -2534,7 +2534,7 @@ func probar_cachos() -> void:
 	var lejos := 0.0
 	for q in cachos.lista:
 		lejos = maxf(lejos, q.p.distance_to(sitio))
-	print("Cachos: %d (esperado: 12) · en el suelo %d (esperado: 12) · el más lejos a %d (esperado: más de 80) · cuerpo visible %s (esperado: false)" % [
+	print("Cachos: %d (esperado: 14) · en el suelo %d (esperado: 14) · el más lejos a %d (esperado: más de 80) · cuerpo visible %s (esperado: false)" % [
 		cachos.lista.size(), cachos.lista.filter(func(q): return q.quieto).size(), lejos, bum.sprite.visible])
 	get_tree().quit()
 
