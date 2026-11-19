@@ -88,6 +88,10 @@ VERDEAR = []   # (las animaciones de este personaje que lo necesitan: PIEL_GRIS)
 # Y (19 nov) cada vista con el mismo peso: al girar parecía que encogía (de diagonal de frente tenía un 38 % menos de dibujo
 # que de espaldas); así todas tienen unos 410 píxeles pintados
 TAMANO_VISTA = {"lento": {"south-east": 0.94, "east": 0.9, "north-east": 0.92, "north": 0.92}}
+# Y por animación y vista (19 nov): el arrastrado, al arrastrarse de lado y en diagonal de frente, salía un 20 % más grande
+# que quieto (unos 510 píxeles pintados contra 410): la escala se mide por su primer fotograma y GPT lo dibujó ahí más
+# pequeño que en el resto del ciclo. Al pararse daba un salto de tamaño y de lado se veía mayor que en las demás vistas
+TAMANO_ANIM = {"lento": {("andar", "south-east"): 0.89, ("andar", "east"): 0.9}}
 # Los que van por el suelo (el arrastrado): en el ataque, el golpe y la muerte, cada fotograma a la altura a la que lo
 # dibuja GPT, no con lo más bajo en el suelo. Al dar el zarpazo levanta las dos manos y, con lo más bajo abajo, todo
 # el cuerpo se hundía 5 píxeles justo al atacar
@@ -95,6 +99,7 @@ ALTURA_GPT = False
 ANDAR = 48
 ESCALA_ZOMBI = 1.0
 ESCALA_VISTA = {}
+ESCALA_ANIM = {}   # (el de este personaje: TAMANO_ANIM)
 ESTIRAR = 1.0   # (el ensanchado de este personaje: ESTIRO)
 ANCHO_REFERENCIA = 2016   # lo que mide de ancho la referencia que se le da a GPT (la de la médica, 1920)
 LIENZO = 48
@@ -309,6 +314,7 @@ def animacion(anim, vista):
         # (el arrastrado: al empezar a caer GPT le alza la cabeza y, midiendo por el alto, encogía 6 píxeles de golpe;
         # por el ancho, que no cambia, se queda de su tamaño)
         escala = trozos[0][0].width / (caja[2] - caja[0])
+    escala /= ESCALA_ANIM.get((anim, vista), 1.0)
     # el punto fijo del dibujo quieto: ahí cae la columna de cada fotograma (así no salta al pasar de quieta a andar)
     sitio = caja[0] if por_detras else fijo(quieto.crop(caja), (caja[0] + caja[2]) / 2, por_la_cabeza)
     carpeta = os.path.join(DESTINO, nombres[anim])
@@ -370,6 +376,7 @@ if __name__ == "__main__":
         ESTIRAR = ESTIRO.get(sys.argv[2], 1.0)
         VERDEAR = PIEL_GRIS.get(sys.argv[2], [])
         ESCALA_VISTA = TAMANO_VISTA.get(sys.argv[2], {})
+        ESCALA_ANIM = TAMANO_ANIM.get(sys.argv[2], {})
         if sys.argv[2] in ("medica", "policia", "militar"):
             ANCHO_REFERENCIA = 1920
         del sys.argv[1:3]
