@@ -143,3 +143,14 @@ suelos = [np.asarray(Image.open(f'assets/sprites/suelo-ropa-d{i}.png').convert('
 media = np.mean([s.reshape(-1, 3).mean(axis=0) for s in suelos], axis=0)
 for i, s in zip((1, 2, 3), suelos):
     guardar(Image.fromarray(np.clip(s * media / s.reshape(-1, 3).mean(axis=0), 0, 255).astype(np.uint8)), f'suelo-ropa-d{i}')
+
+# y el almacén de la tienda, destrozado (19 nov, el dueño; GPT, a partir del hormigón y las tablas del pasillo de los trasteros), tres
+# suelos y tres paredes que se mezclan como los de la sala de venta: reducidos como los de los trasteros (tools/dormitorios.py), el
+# suelo entero a 128 × 128 y la pared entera a un trozo de 48 × 48 (sin espejo: cada trozo sale de uno), con la última fila más oscura
+for i in (1, 2, 3):
+    s = Image.open(f'assets/sources/suelos/almacen-ropa-suelo-destrozado{i}-gpt.webp').convert('RGB')
+    guardar(s.resize((128, 128), Image.LANCZOS), f'suelo-almacen-ropa-d{i}')
+    p = Image.open(f'assets/sources/suelos/almacen-ropa-pared-destrozada{i}-gpt.webp').convert('RGB').resize((48, 48), Image.LANCZOS)
+    for x in range(48):
+        p.putpixel((x, 47), tuple(int(v * 0.72) for v in p.getpixel((x, 47))))
+    guardar(p, f'pared-almacen-ropa-d{i}')

@@ -4,6 +4,7 @@
 # estantería de los trasteros (mueble-storageshelf.png), dos montones por balda como mucho, y salen cuatro estanterías distintas:
 #   mueble-ropashelf.png, mueble-ropashelf2.png, mueble-ropashelf3.png, mueble-ropashelf4.png   (44 × 63, tipos "ropashelf"...)
 #   py tools/ropa_estanterias.py   (y luego Godot --headless --path . --import)
+# OJO: desde el 19 nov las del juego son las destrozadas de GPT (tools/muebles_gpt.py ropashelf...): esto ya no se pasa, que las pisaría
 import json
 import random
 from PIL import Image

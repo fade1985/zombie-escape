@@ -99,7 +99,10 @@ const ESTILO_TIENDA := {
 # Los de la tienda de ropa, de GPT (tools/ropa_gpt.py): el suelo quemado (d3), el que menos; la pared del boquete (d2), igual
 const MEZCLA_TIENDA := {
 	"tienda-ropa": {"suelos": [["ropa-d1", 3], ["ropa-d2", 2], ["ropa-d3", 1]], "paredes": [["ropa-d1", 2], ["ropa-d2", 1], ["ropa-d3", 2]]},
-	"probadores-ropa": {"suelos": [["ropa-d1", 3], ["ropa-d2", 2], ["ropa-d3", 1]], "paredes": [["ropa-d1", 2], ["ropa-d2", 1], ["ropa-d3", 2]]}}
+	"probadores-ropa": {"suelos": [["ropa-d1", 3], ["ropa-d2", 2], ["ropa-d3", 1]], "paredes": [["ropa-d1", 2], ["ropa-d2", 1], ["ropa-d3", 2]]},
+	# y su almacén (el hormigón y las tablas de los trasteros, destrozados): el suelo quemado, el que menos
+	"almacen-ropa": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
+		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
 # los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)

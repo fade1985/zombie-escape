@@ -368,6 +368,13 @@ MUEBLES = {
     # la alfombrilla blanca de los probadores de la tienda de ropa (18 nov, el dueño): una pieza del suelo (mapa.gd, dibujar_fondo), sin .json
     # desde el 19 nov, destrozada (el dueño; GPT, ya redondeada y en beige: ni se recorta ni se tiñe), por su contorno (RECORTE)
     "alfombra_probador": ("assets/sources/ropa/alfombra-probador-destrozada-gpt.webp", "assets/sprites/alfombra-probador.png", 66, 44, False),
+    # el almacén de la tienda de ropa, destrozado (19 nov, el dueño; GPT, a partir de las de antes): las cuatro estanterías con ropa (las
+    # de antes salían de tools/ropa_estanterias.py; los huecos entre baldas, todo el negro puro, se vacían) y los montones de cajas
+    "ropashelf": ("assets/sources/ropa/estanteria1-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf.png", 44, 62, True, (), "negro"),
+    "ropashelf2": ("assets/sources/ropa/estanteria2-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf2.png", 44, 63, True, (), "negro"),
+    "ropashelf3": ("assets/sources/ropa/estanteria3-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf3.png", 44, 63, True, (), "negro"),
+    "ropashelf4": ("assets/sources/ropa/estanteria4-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf4.png", 44, 63, True, (), "negro"),
+    "cajasropa": ("assets/sources/ropa/cajas-destrozadas-gpt.webp", "assets/sprites/mueble-cajasropa.png", 32, 39, True),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 

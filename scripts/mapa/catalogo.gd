@@ -61,7 +61,7 @@ const MUEBLES := {
 	# de mano cargada con dos cajas (de GPT, tools/muebles_gpt.py)
 	"boxstack":  {"len": 64, "dep": 36, "paredes": "", "archivo": "viviendas/cajas-pila"},
 	# (19 nov) los mismos montones de cajas, en el almacén de la tienda de ropa: estos se abren (Objetos.MUEBLES_CON_PIEZA) y los de los trasteros, no
-	"cajasropa": {"len": 64, "dep": 36, "paredes": "", "archivo": "viviendas/cajas-pila"},
+	"cajasropa": {"len": 64, "dep": 36, "paredes": "", "archivo": "ropa/cajas-destrozadas-gpt"},
 	"boxpile":   {"len": 56, "dep": 32, "paredes": "", "archivo": "viviendas/cajas-bajas"},
 	"handtruck": {"len": 40, "dep": 28, "paredes": "", "archivo": "viviendas/carretilla"},
 	"wardrobe":   {"len": 78,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
@@ -91,11 +91,11 @@ const MUEBLES := {
 	# de taquilla.png, solo de adorno)
 	"taquillaropa": {"len": 56, "dep": 36, "paredes": "", "archivo": "ropa/taquilla-johnny"},
 	# las estanterías del almacén de la tienda de ropa, llenas de ropa doblada (la de los trasteros con montones de GPT, cuatro distintas:
-	# tools/ropa_estanterias.py)
-	"ropashelf":  {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
-	"ropashelf2": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
-	"ropashelf3": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
-	"ropashelf4": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/montones-ropa-gpt"},
+	# tools/ropa_estanterias.py); desde el 19 nov, destrozadas (GPT, tools/muebles_gpt.py), como las cajas
+	"ropashelf":  {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/estanteria1-destrozada-gpt"},
+	"ropashelf2": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/estanteria2-destrozada-gpt"},
+	"ropashelf3": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/estanteria3-destrozada-gpt"},
+	"ropashelf4": {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/estanteria4-destrozada-gpt"},
 	# los muebles de la sala de venta de la tienda de ropa (18 nov, el dueño; GPT, ropa de los años 90; tools/venta_ropa_gpt.py): a escala 1
 	# (el doble de detalle, como la dependienta), así que "len" y "dep" son los píxeles del dibujo
 	"ropamodulo": {"len": 155, "dep": 32, "paredes": "", "archivo": "ropa/venta-p1-destrozado-gpt", "escala": 1.0},
