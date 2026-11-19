@@ -87,9 +87,12 @@ const MUEBLES := {
 	"pufprobador": {"len": 36, "dep": 30, "paredes": "todas", "archivo": "ropa/puf-probador-gpt"},
 	# y su gancho doble cromado, de GPT (tools/muebles_gpt.py): de perfil (solo tiene dibujo de lado), en la pared derecha de cada probador
 	"ganchoprobador": {"len": 16, "dep": 6, "paredes": "lados", "archivo": "ropa/perchero-probador-gpt"},
-	# la taquilla del aseo de la tienda de ropa: la misma de las skins de Johnny en la sala de mantenimiento (mueble-taquillaropa.png es una copia
-	# de taquilla.png, solo de adorno)
-	"taquillaropa": {"len": 56, "dep": 36, "paredes": "", "archivo": "ropa/taquilla-johnny"},
+	# el aseo de la tienda de ropa: la taquilla, el lavabo, el váter y el banco del vestuario de Johnny, destrozados como el almacén
+	# (19 nov, GPT, tools/muebles_gpt.py); tipos propios, para que el vestuario de la sala de mantenimiento y los baños de los pisos sigan igual
+	"taquillaropa": {"len": 56, "dep": 36, "paredes": "", "archivo": "ropa/taquilla-destrozada-gpt"},
+	"staffsinkropa": {"len": 52, "dep": 40, "paredes": "lados", "archivo": "ropa/lavabo-destrozado-gpt"},
+	"stafftoiletropa": {"len": 40, "dep": 52, "paredes": "lados", "archivo": "ropa/vater-destrozado-gpt"},
+	"lockerbenchropa": {"len": 128, "dep": 28, "paredes": "todas", "archivo": "ropa/banco-vestuario-destrozado-gpt", "choque_lado": 88},
 	# las estanterías del almacén de la tienda de ropa, llenas de ropa doblada (la de los trasteros con montones de GPT, cuatro distintas:
 	# tools/ropa_estanterias.py); desde el 19 nov, destrozadas (GPT, tools/muebles_gpt.py), como las cajas
 	"ropashelf":  {"len": 88, "dep": 36, "paredes": "", "archivo": "ropa/estanteria1-destrozada-gpt"},
@@ -635,8 +638,8 @@ const SALAS := {
 		"arriba": [["ropashelf3", 1.88], ["ropashelf", 5.12], ["ropashelf4", 11.21], ["ropashelf2", 14.79],
 			["cajasropa", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa", 8.5, "abajo"], ["cajasropa", 11.67, "abajo"], ["cajasropa", 14.83, "abajo"],
 			["handtruck", 15.8, "libre", 6.0]]}},
-	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsink", 3.3, "izquierda"], ["stafftoilet", 6.7, "izquierda"], ["lockerbench", 5.85, "derecha"]],
-		"arriba": [["taquillaropa", 6.0], ["staffsink", 3.3, "izquierda"], ["stafftoilet", 6.7, "izquierda"], ["lockerbench", 9.2, "derecha"]]}},
+	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 5.85, "derecha"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]]}},
 	"tienda-farmacia": {
 		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
 		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas

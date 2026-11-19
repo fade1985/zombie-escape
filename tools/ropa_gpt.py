@@ -154,3 +154,36 @@ for i in (1, 2, 3):
     for x in range(48):
         p.putpixel((x, 47), tuple(int(v * 0.72) for v in p.getpixel((x, 47))))
     guardar(p, f'pared-almacen-ropa-d{i}')
+
+
+# y su aseo, destrozado (19 nov, el dueño; GPT, a partir del azulejo blanco y la baldosa beis del vestuario de Johnny): tres suelos
+# (128 × 128, 8 × 8 baldosas) y tres paredes (48 × 48, 6 × 6 azulejos) que se mezclan igual. Para que los trozos no se vean como
+# cuadrados de suelos distintos, a cada uno se le quita su mancha de color «de fondo» (lo borroso, no los detalles) y se le pone la de
+# los tres: del todo en los bordes y solo un poco en el centro. En la pared, fila a fila (así empalman izquierda con derecha).
+def _borroso(im, r):
+    from PIL import ImageFilter
+    w, h = im.size
+    m = Image.new('RGB', (w * 3, h * 3))   # rodeado de copias de sí mismo, para que los bordes no salgan raros
+    for i in range(3):
+        for j in range(3):
+            m.paste(im, (i * w, j * h))
+    return m.filter(ImageFilter.GaussianBlur(r)).crop((w, h, 2 * w, 2 * h))
+
+
+def _igualar(ims, r, k, centro, solo_lados):
+    bs = [np.asarray(_borroso(im, r)).astype(float) for im in ims]
+    h, w = bs[0].shape[:2]
+    fondo = np.mean(bs, axis=0).mean(axis=1, keepdims=True) if solo_lados else np.mean(bs, axis=(0, 1, 2))
+    x = np.arange(w)[None, :]; y = np.arange(h)[:, None]
+    d = np.minimum(x, w - 1 - x) + 0 * y if solo_lados else np.minimum(np.minimum(x, w - 1 - x), np.minimum(y, h - 1 - y))
+    a = np.where(d <= 1, 1.0, np.maximum(centro, 1.0 - (1.0 - centro) * (d - 1) / k))[..., None]
+    return [Image.fromarray(np.clip(np.round(np.asarray(im).astype(float) - a * (b - fondo)), 0, 255).astype(np.uint8)) for im, b in zip(ims, bs)]
+
+
+suelos = [Image.open(f'assets/sources/suelos/aseo-ropa-suelo-destrozado{i}-gpt.webp').convert('RGB').resize((128, 128), Image.LANCZOS) for i in (1, 2, 3)]
+paredes = [Image.open(f'assets/sources/suelos/aseo-ropa-pared-destrozada{i}-gpt.webp').convert('RGB').resize((48, 48), Image.LANCZOS) for i in (1, 2, 3)]
+for i, s, p in zip((1, 2, 3), _igualar(suelos, 10, 28, 0.45, False), _igualar(paredes, 5, 12, 0.45, True)):
+    guardar(s, f'suelo-aseo-ropa-d{i}')
+    for x in range(48):   # la última fila, más oscura, como la del vestuario
+        p.putpixel((x, 47), tuple(int(v * 0.68) for v in p.getpixel((x, 47))))
+    guardar(p, f'pared-aseo-ropa-d{i}')

@@ -375,6 +375,14 @@ MUEBLES = {
     "ropashelf3": ("assets/sources/ropa/estanteria3-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf3.png", 44, 63, True, (), "negro"),
     "ropashelf4": ("assets/sources/ropa/estanteria4-destrozada-gpt.webp", "assets/sprites/mueble-ropashelf4.png", 44, 63, True, (), "negro"),
     "cajasropa": ("assets/sources/ropa/cajas-destrozadas-gpt.webp", "assets/sprites/mueble-cajasropa.png", 32, 39, True),
+    # (19 nov) el aseo de la tienda de ropa, destrozado como el almacén (GPT, a partir del lavabo, el váter, la taquilla y el banco del
+    # vestuario de Johnny): tipos propios (catalogo.gd) para que el vestuario de la sala de mantenimiento y los baños de los pisos sigan igual
+    "lavabo_ropa": ("assets/sources/ropa/lavabo-destrozado-gpt.webp", "assets/sprites/mueble-staffsinkropa-lado.png", 20, 66, True),
+    "vater_ropa": ("assets/sources/ropa/vater-destrozado-gpt.webp", "assets/sprites/mueble-stafftoiletropa-lado.png", 26, 37, True),
+    "taquilla_ropa": ("assets/sources/ropa/taquilla-destrozada-gpt.webp", "assets/sprites/mueble-taquillaropa.png", 28, 56, True),
+    "banco_ropa": ("assets/sources/ropa/banco-vestuario-destrozado-gpt.webp", "assets/sprites/mueble-lockerbenchropa.png", 64, 28, True),
+    # y el mismo banco «en vertical», pegado a la pared de la derecha (como el de tools/banco_vestuario_lado.py)
+    "banco_ropa_lado": ("assets/sources/ropa/banco-vestuario-vertical-destrozado-gpt.webp", "assets/sprites/mueble-lockerbenchropa-lado.png", 14, 44, True, (), "negro"),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
 }
 
