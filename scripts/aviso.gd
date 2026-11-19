@@ -40,6 +40,7 @@ var hasta_rayos := PackedFloat32Array()   # el abanico: hasta dónde llega cada 
 var flechas := 0.0      # el abanico: el sentido del giro, dentro del cono (1, como las agujas del reloj; -1, al revés; 0, sin)
 var sutil := false      # el estilo flojo (el cono del giro, las marcas de lo que se lanza)
 var destella := true    # el destello del final (no, en lo que ya está pasando: aspirando, girando)
+var oculto := false     # no se pinta, pero sigue ahí (el bot lo ve): el aspirado del Glotón, que ya se ve por su aire
 var pedido := 0         # el último fotograma en que se pidió (si deja de pedirse, se esconde)
 static var apagados := false   # el panel de la sala de pruebas los apaga, para ver a los jefes sin ellos
 
@@ -170,6 +171,7 @@ static func pedir(jefe: Node2D, forma_: int, desde_: Vector2, angulo_: float, k:
 	aviso.destella = true
 	aviso.flechas = 0.0
 	aviso.sutil = false
+	aviso.oculto = false
 	aviso.pedido = Engine.get_process_frames()
 	aviso.visible = not apagados
 	var m: ShaderMaterial = aviso.material
@@ -190,6 +192,8 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
+	if oculto:
+		return
 	var m: ShaderMaterial = material
 	m.set_shader_parameter("forma", forma)
 	m.set_shader_parameter("origen", to_global(desde))

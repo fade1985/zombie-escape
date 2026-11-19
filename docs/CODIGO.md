@@ -167,8 +167,8 @@ en una línea.
   (también el de la portera) es `vapor_rabia.gd`; todos los avisos en el suelo de los jefes son `aviso.gd` (los
   pinta el shader `escenas/personajes/aviso.gdshader`, en cuadraditos de pixel art): las cargas (flechas que se
   encienden hasta la pared; también los latigazos de tentáculos y lenguas), los golpes, saltos y círculos (se
-  llenan hacia fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas, como el aspirado del
-  glotón; los golpes cuerpo a cuerpo, los saltos de la mascota y del Gymbro, el círculo de la portera y la onda de
+  llenan hacia fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas; con `oculto`, no se pintan
+  pero siguen ahí para el bot, como el del aspirado del Glotón mientras aspira; los golpes cuerpo a cuerpo, los saltos de la mascota y del Gymbro, el círculo de la portera y la onda de
   la criatura, `Aviso.golpe`, se cortan donde chocarían con una pared o un mueble, porque no los atraviesan: solo
   dan a Johnny si no está `Aviso.tapado`, un rayo de la capa 1), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
   criatura; se cortan donde el disparo se pararía en una pared o un mueble y ahí acaban en la estrella de las
@@ -181,7 +181,11 @@ en una línea.
   fogonazo blanco justo antes de pegar (`relleno()` y, en las rayas finas, `hilo()`, con contorno oscuro). Se prueban con
   `--golpes`, `--franja`, `--avisos`, `--marcas`, `--disparos` (las barras junto a la pared y en campo abierto) y
   `--golpes-pared` (cada golpe, salto y onda con Johnny tras la pared, y su aviso cortado). Heredan:
-  - Apartamentos: `gloton.gd` (+ `lengua.gd`), `gymbro.gd` (+ `pesa.gd`; con los suplementos se vuelve de metal, que se desconcha según pierde armadura y revienta
+  - Apartamentos: `gloton.gd` (+ `lengua.gd`; su aspirado avisa con el abanico rojo de siempre, cortado en el borde de
+    la elipse o en la pared, `puntas_aspirado`, y al aspirar el aviso se oculta y se ve el aire, pintado con código en la
+    cuadrícula de los píxeles, `pintar_aire`: polvo y arcos de succión por el suelo, corrientes que se juntan y se
+    retuercen al entrarle en la boca y un remolino en ella, más cuanto más fuerte aspira; prueba: `--captura --jefe
+    gloton --aire`), `gymbro.gd` (+ `pesa.gd`; con los suplementos se vuelve de metal, que se desconcha según pierde armadura y revienta
   en esquirlas al acabarse, con los sonidos "acero", "metalizar" y "chatarra"; prueba: `--captura --jefe gymbro --metal`), `bombero.gd` (+ `bola_fuego.gd` y `chorro_fuego.gd`, el fuego de los conos del giro: bocanadas de pixelfx que vuelan hasta la pared, se aplastan contra ella y acaban en humo; las balas rebotan en el borde de su burbuja, `bala.rebotar`, con un fogonazo y una onda, `bombero.onda_en`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`; su Cocina central, `jefe-cocinero` en el catálogo, tiene tres fogones o freidoras en cada pared (arriba, izquierda y derecha) que en el combate rebosan aceite hirviendo, un charco "hirviendo" con `crece` que se va extendiendo: M82, prueba `--captura --edificio centro --jefe cocinero --cocina`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.

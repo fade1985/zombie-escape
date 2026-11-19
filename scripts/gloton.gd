@@ -61,6 +61,13 @@ const TAMBALEO := 0.6                  # lo que le corta una explosión
 const PIE := 30.0                      # a qué altura dibuja los pies respecto a su centro
 const BOCA := 0.5                      # a qué altura tiene la boca (parte de "arriba"): adonde va el aire que aspira
 const VERDE := Color("#c7e04a")
+# El aire que aspira (pintar_aire)
+const AIRE_RAYAS := 40                 # las corrientes de viento, con toda su fuerza (al empezar, el 40 %)
+const AIRE_POLVO := 60                 # el polvo del suelo que arrastra
+const AIRE_ARCOS := 4                  # los arcos de la succión, en el suelo
+const AIRE_SUBE := 0.3                 # en qué último trozo del camino sube del suelo a la boca
+const AIRE_GIRO := 1.4                 # lo que se retuerce el aire al entrarle en la boca (radianes)
+const POLVO := [Color("#f2e6c9"), Color("#4a3a2c"), Color("#d8cdb4"), Color("#6b5a48"), Color("#ffffff")]
 # Las lenguas del latigazo, pintadas con código (lengua.gd), iguales que las de su dibujo (colores sacados píxel a
 # píxel de su hoja): contorno casi negro y capas de granate a rojo, cada una más clara, más estrecha y más arrimada al
 # lado de la luz, con un brillo rosado cerca del borde. Las capas, de la más oscura (todo el ancho) a la más clara:
@@ -85,6 +92,8 @@ const BOCAS := {
 
 var espera_latigazo := 1.5
 var espera_aspirar := 6.0
+var puntas := []                       # hasta dónde llega cada rayo del cono (puntas_aspirado())
+var puntas_f := -1                     # (el fotograma en que se midió)
 var acido_t := 0.0                     # para no salpicar ácido con cada perdigón
 var elipse = null                      # la elipse limpia de su habitación, en unidades (la_elipse(); null, sin buscar)
 var lenguas: Array[Lengua] = []        # las del latigazo (enfadado, todas; si no, las primeras)
@@ -225,15 +234,7 @@ func latigazos(johnny: Node2D) -> void:
 
 # Tira de Johnny hacia la boca mientras esté en el cono, le vea y no esté esquivando. Si llega, se lo come
 func aspirar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
-	var fuerza := fuerza_aspirado()
-	# el aire que entra: motas que vuelan hacia la boca (más, más deprisa y más blancas cuanto más fuerte aspira)
-	if randf() < delta * 60.0 * fuerza:
-		var a := mirada.angle() + randf_range(-MEDIO_ASPIRAR, MEDIO_ASPIRAR)
-		var largo := largo_aspirado(a, global_position)
-		var desde := global_position + Vector2.from_angle(a) * randf_range(minf(100.0, largo), largo)
-		var boca := global_position + Vector2(0, -arriba * BOCA)
-		Particulas.soltar(self, desde, (boca - desde).normalized() * (200.0 + 350.0 * fuerza),
-			Color(1, 1, 1, 0.25 + 0.35 * fuerza), 2, 0.4)
+	# (el aire que entra lo pinta pintar_aire)
 	if d > largo_aspirado(hacia.angle(), global_position) or absf(angle_difference(mirada.angle(), hacia.angle())) > MEDIO_ASPIRAR:
 		return
 	if not se_ve(johnny) or johnny.esquiva_t > 0.0:
@@ -276,6 +277,145 @@ func largo_aspirado(angulo: float, desde: Vector2) -> float:
 	if disc <= 0.0:
 		return 0.0
 	return maxf(0.0, (-b + sqrt(disc)) / a)
+
+
+# Hasta dónde llega cada rayo del cono (21, de un borde al otro): hasta el borde de la elipse (largo_aspirado) y, si
+# antes hay una pared o un mueble, hasta él; como poco 30, para que siempre se vea algo. Una vez por fotograma
+func puntas_aspirado() -> Array:
+	if puntas_f == Engine.get_process_frames() and not puntas.is_empty():
+		return puntas
+	puntas_f = Engine.get_process_frames()
+	puntas = []
+	var origen := global_position + Vector2(0, 6)
+	var espacio := get_world_2d().direct_space_state
+	for i in 21:
+		var b: float = mirada.angle() - MEDIO_ASPIRAR + i / 20.0 * MEDIO_ASPIRAR * 2.0
+		var largo := largo_aspirado(b, origen)
+		var rayo := PhysicsRayQueryParameters2D.create(origen, origen + Vector2.from_angle(b) * largo, 1)
+		rayo.exclude = [get_rid()]
+		var choque := espacio.intersect_ray(rayo)
+		if not choque.is_empty():
+			largo = origen.distance_to(choque.position)
+		puntas.append(maxf(30.0, largo))
+	return puntas
+
+
+# ── El aire que aspira ──
+# Todo pintado con código, en cuadraditos de 2 (los píxeles de los dibujos) y dentro del cono de verdad (puntas_aspirado:
+# hasta el borde de la elipse o la pared), así que nunca se sale ni pisa una pared. Cada cosa da vueltas sin fin: tiene
+# su sitio fijo en el cono (un número al azar que no cambia) y avanza hacia la boca con el tiempo; al llegar vuelve a
+# salir del borde. Va de menos a más con fuerza_aspirado(): más rayas, más deprisa, más largas y más blancas.
+#   - En el suelo (por debajo): polvo, piedrecitas y papelillos que se arrastran hacia él dando saltitos.
+#   - En el aire (por encima, salvo si mira hacia arriba: entonces la boca queda detrás): corrientes de viento, rayas que
+#     salen del borde del cono, se juntan y se curvan en remolino al entrarle en la boca; y el remolino de la boca.
+
+# Un número al azar fijo, de 0 a 1, para la cosa "i" ("k": cuál de sus números)
+static func azar(i: int, k: int) -> float:
+	var x := sin(i * 12.9898 + k * 78.233) * 43758.5453
+	return x - floorf(x)
+
+
+# Hasta dónde llega el cono en "u" (de -1, un borde, a 1, el otro), entre los rayos de puntas_aspirado()
+func largo_en(u: float) -> float:
+	var p := puntas_aspirado()
+	var x := (u + 1.0) * 0.5 * (p.size() - 1)
+	var i := clampi(floori(x), 0, p.size() - 2)
+	return lerpf(p[i], p[i + 1], x - i)
+
+
+# Adónde va el aire: su boca (más o menos, la del dibujo de la boca abierta), en su sitio
+func boca_aire() -> Vector2:
+	return Vector2(0, -arriba * BOCA) + mirada * radio * 0.5
+
+
+# Un cuadradito de 2 en la cuadrícula del suelo (como los píxeles de los dibujos), en el sitio "p" del lienzo
+func pixel(lienzo: Node2D, p: Vector2, color: Color, lado := 2.0) -> void:
+	var g := ((global_position + p) / 2.0).floor() * 2.0
+	lienzo.draw_rect(Rect2(g - global_position, Vector2(lado, lado)), color)
+
+
+# Una raya de 2 (o de "lado") de ancho de "a" a "b", con las puntas en la cuadrícula de los píxeles. Una sola línea, no
+# un cuadradito por píxel: con cientos de rayas por fotograma, en la web se notaría
+func raya_pixeles(lienzo: Node2D, a: Vector2, b: Vector2, color: Color, lado := 2.0) -> void:
+	var medio := Vector2(lado, lado) * 0.5
+	var ga := ((global_position + a) / 2.0).floor() * 2.0 + medio - global_position
+	var gb := ((global_position + b) / 2.0).floor() * 2.0 + medio - global_position
+	if ga.is_equal_approx(gb):
+		lienzo.draw_rect(Rect2(ga - medio, medio * 2.0), color)
+	else:
+		lienzo.draw_line(ga, gb, color, lado)
+
+
+# El punto del camino del aire: "u" de un borde del cono al otro, "s" de 1 (el borde de fuera) a 0 (la boca). Va por el
+# suelo hacia él y, en el último trozo, sube a la boca girando en remolino
+func camino_aire(u: float, s: float) -> Vector2:
+	var a := mirada.angle() + u * MEDIO_ASPIRAR
+	var largo := largo_en(u)
+	var suelo := Vector2(0, 6) + Vector2.from_angle(a) * lerpf(radio * 0.6, largo, s)
+	var w := clampf(1.0 - s / AIRE_SUBE, 0.0, 1.0)
+	var boca := boca_aire()
+	var p := suelo.lerp(boca, w * w)
+	return boca + (p - boca).rotated(-AIRE_GIRO * w * w * w)
+
+
+func pintar_aire(lienzo: Node2D, arriba_: bool) -> void:
+	var fuerza := fuerza_aspirado()
+	var vel := 0.3 + 0.7 * fuerza   # (vueltas por segundo: de fuera a la boca)
+	if not arriba_:
+		# los arcos de la succión: rayas de puntos de lado a lado del cono que se cierran hacia él, como ondas al revés
+		for k in AIRE_ARCOS:
+			var s := fposmod(k / float(AIRE_ARCOS) - tiempo * vel * 0.8, 1.0)
+			var luz := minf(1.0, (1.0 - s) * 4.0) * minf(1.0, s * 6.0) * (0.35 + 0.35 * fuerza)
+			var antes := Vector2.ZERO
+			for j in 25:
+				var u := j / 12.0 - 1.0
+				var a := mirada.angle() + u * MEDIO_ASPIRAR
+				var p := Vector2(0, 6) + Vector2.from_angle(a) * lerpf(radio * 0.8, largo_en(u), s)
+				if j % 3 != 0:   # (a trozos: dos de cada tres)
+					raya_pixeles(lienzo, antes, p, Color(1, 1, 1, luz))
+				antes = p
+		# el polvo del suelo: va dando saltitos de lado y desaparece al llegarle debajo
+		for i in AIRE_POLVO:
+			var u := azar(i, 1) * 2.0 - 1.0
+			var q := fposmod(azar(i, 2) - tiempo * vel * (0.6 + 0.5 * azar(i, 3)), 1.0)
+			var s := pow(q, 0.75)
+			var a := mirada.angle() + u * MEDIO_ASPIRAR
+			var r := lerpf(radio * 0.7, largo_en(u), s)
+			var lado := Vector2.from_angle(a).orthogonal() * sin(tiempo * 23.0 + i * 1.7) * 2.0 * fuerza
+			var p := Vector2(0, 6) + Vector2.from_angle(a) * r + lado
+			var c: Color = POLVO[i % POLVO.size()]
+			c.a = minf(1.0, (1.0 - s) * 6.0) * minf(1.0, s * 5.0) * (0.6 + 0.4 * fuerza)
+			if i % 5 == 0:   # una piedrecita o un papelillo (4×4)
+				pixel(lienzo, p, c, 4.0)
+			else:
+				pixel(lienzo, p, c)
+				c.a *= 0.5   # y su rastro
+				pixel(lienzo, p + Vector2.from_angle(a) * (2.0 + 4.0 * fuerza), c)
+		return
+	# las corrientes de viento: más cuanto más fuerte. Cada una va del borde a la boca a la misma marcha, así que
+	# siempre hay tantas cerca de la boca como lejos (y allí se juntan y se ven más)
+	var n := roundi(lerpf(AIRE_RAYAS * 0.4, AIRE_RAYAS, fuerza))
+	var tramo := 0.1 + 0.12 * fuerza   # lo larga que es cada raya (en "s")
+	for i in n:
+		var u := (azar(i, 4) * 2.0 - 1.0) * 0.95
+		var s := fposmod(azar(i, 5) - tiempo * vel * (0.8 + 0.4 * azar(i, 6)), 1.0)
+		var luz := minf(1.0, (1.0 - s) * 4.0) * minf(1.0, s * 15.0) * (0.6 + 0.4 * fuerza)
+		var gruesa := azar(i, 7) < 0.3 + 0.4 * fuerza
+		var antes := camino_aire(u, s)
+		for j in range(1, 5):   # de la cabeza (blanca y gruesa) a la cola (verdosa, se apaga)
+			var ahora := camino_aire(u, minf(1.0, s + tramo * j / 4.0))
+			var c := Color(1, 1, 1, luz * (1.0 - j / 5.0)) if j < 3 else Color(0.78, 0.88, 0.7, luz * (1.0 - j / 5.0))
+			raya_pixeles(lienzo, antes, ahora, c, 4.0 if gruesa and j == 1 else 2.0)
+			antes = ahora
+	# el remolino de la boca: cuatro arcos que giran, aplastados, más deprisa cuanto más fuerte
+	var boca := boca_aire()
+	for k in 4:
+		var radio_k := 8.0 + k * 7.0 + sin(tiempo * 9.0 + k) * 2.0
+		var giro := tiempo * (6.0 + 10.0 * fuerza) * (1.0 - k * 0.12) + k * 1.7
+		for j in 9:
+			var b := giro + j * 0.22
+			var c := Color(1, 1, 1, (0.4 + 0.5 * fuerza) * (1.0 - j / 9.0) * (1.0 - k * 0.15))
+			pixel(lienzo, boca + Vector2(cos(b) * radio_k, sin(b) * radio_k * 0.55), c, 4.0 if j < 3 else 2.0)
 
 
 # La elipse limpia de su habitación ({centro, rx, ry} en unidades; la guarda su porquería, de Peligros.franja_y_ovalo);
@@ -416,25 +556,27 @@ func _draw() -> void:
 			for i in apuntadas:
 				lenguas[i].sombra(self, lenguas[i].lanzada(BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO), Vector2(0, 6))
 		"aviso_aspirar", "aspirar":
-			# el cono por donde aspira (verde, hasta las paredes), que se llena en el aviso; aspirando, lleno y con
-			# ondas que se le meten en la boca, más deprisa cuanto más fuerte aspira (aviso.gd)
-			var k := minf(1.0, t / AVISO_ASPIRAR) if estado == "aviso_aspirar" else 1.0
-			var puntas := []   # (cada rayo hasta donde llega, como poco 30 para que siempre se vea algo)
-			for i in 21:
-				var b: float = mirada.angle() - MEDIO_ASPIRAR + i / 20.0 * MEDIO_ASPIRAR * 2.0
-				puntas.append(maxf(30.0, largo_aspirado(b, global_position + Vector2(0, 6))))
-			var cono := Aviso.abanico(self, Vector2(0, 6), mirada.angle(), MEDIO_ASPIRAR, 0.0, k, tiempo)
-			cono.rayos(puntas)
-			cono.tinte = VERDE
+			# el aviso de la zona que aspira, rojo como el de los demás ataques de los jefes (aviso.gd): se llena hacia
+			# fuera y destella. Al aspirar se oculta (lo que se ve entonces es el aire, pintar_aire), pero sigue pedido
+			# para que el bot (docs/BOT.md) sepa por dónde aspira
+			var cono := Aviso.abanico(self, Vector2(0, 6), mirada.angle(), MEDIO_ASPIRAR, 0.0,
+				minf(1.0, t / AVISO_ASPIRAR), tiempo)
+			cono.rayos(puntas_aspirado())
+			cono.oculto = estado == "aspirar"
+			# aspirando: el polvo del suelo, arrastrado hacia él; y, mirando hacia arriba (con la boca al otro lado),
+			# también las corrientes de aire, que se le meten por detrás
 			if estado == "aspirar":
-				cono.ondas = 60.0 + 160.0 * fuerza_aspirado()
-				cono.destella = false
+				pintar_aire(self, false)
+				if direccion().begins_with("n"):
+					pintar_aire(self, true)
 	draw_set_transform(Vector2.ZERO)
 
 
 # Las lenguas del latigazo, enteras por encima de él (en el nodo "Vapor"): salen disparadas de la boca, caen sobre el
 # aviso culebreando y se recogen (lengua.gd)
 func pintar_encima(lienzo: Node2D) -> void:
+	if estado == "aspirar" and not direccion().begins_with("n"):
+		pintar_aire(lienzo, true)
 	if estado != "latigazo":
 		return
 	for i in apuntadas:

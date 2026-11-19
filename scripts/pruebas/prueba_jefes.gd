@@ -712,6 +712,42 @@ func probar_aspirar() -> void:
 		await probar_gloton()
 
 
+# Con "--captura --jefe gloton --aire": cómo se ve su aspirado, con Johnny quieto a 7 casillas, a un lado (no le arrastra). El aviso
+# rojo a medio llenar (captura-aire-aviso.png); aspirando al empezar, flojo (captura-aire-flojo.png) y con toda su
+# fuerza (captura-aire-fuerte.png, y 8 fotos seguidas para un GIF: captura-aire-0..7.png); y mirando hacia arriba, con
+# la boca detrás (captura-aire-arriba.png)
+func probar_aire() -> void:
+	if not await ir_a_la_sala_del_jefe("gloton"):
+		return
+	johnny.set_physics_process(false)   # quieto: no le arrastra
+	for arriba in [false, true]:
+		johnny.global_position = jefa.global_position + (Vector2(60, -200) if arriba else Vector2(230, 60))
+		jefa.mirada = (johnny.global_position - jefa.global_position).normalized()
+		jefa.cambiar("aviso_aspirar")
+		jefa.espera_aspirar = 99.0
+		if not arriba:
+			await get_tree().create_timer(jefa.AVISO_ASPIRAR * 0.55, false).timeout
+			Captura.foto("captura-aire-aviso.png")
+		while jefa.estado == "aviso_aspirar":
+			await get_tree().physics_frame
+		print("Aire: %s · aspirando %s · aviso oculto %s (esperado: true)" % [jefa.estado, jefa.estado == "aspirar", jefa.get_node("Aviso").oculto])
+		if arriba:
+			jefa.t = jefa.CRECE_ASPIRAR
+			await get_tree().create_timer(0.2, false).timeout
+			Captura.foto("captura-aire-arriba.png")
+			break
+		await get_tree().create_timer(0.2, false).timeout
+		Captura.foto("captura-aire-flojo.png")
+		jefa.t = jefa.CRECE_ASPIRAR
+		await get_tree().create_timer(0.2, false).timeout
+		Captura.foto("captura-aire-fuerte.png")
+		for i in 8:
+			await get_tree().create_timer(0.06, false).timeout
+			Captura.foto("captura-aire-%d.png" % i)
+		jefa.cambiar("andar")
+		await get_tree().create_timer(0.3, false).timeout
+
+
 # Con "--captura --edificio centro --jefe mascota --crios": los críos que salen sin parar en el combate de la mascota
 # (M85). 20 s normal y 20 s enfadada, con Johnny quieto y sin que pueda caer (los críos se le echan encima y se quedan:
 # así se ve que no pasan del máximo). Cuenta los que salen, los que hay a la vez como mucho y a qué distancia de Johnny
