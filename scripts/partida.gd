@@ -1451,7 +1451,7 @@ func mutageno_total() -> int:
 
 # Un zombi caído llena la barra del mutágeno (MUTAGENO_ZOMBI): cada vez que llega al 100 %, un mutágeno más, y la barra
 # sigue con lo que sobra. El HUD (hud.gd) ve el cambio y lo anima; aquí, el sonido, el efecto de la mutación en Johnny
-# (el ADN que sube, "mutar") y el «+1» verde. En el tope (TOPE, «MAX») ya no se llena
+# (el ADN que sube, "mutar") y un «+1» encima de su cabeza (gran_aviso). En el tope (TOPE, «MAX») ya no se llena
 func llenar_mutageno(puntos: int) -> void:
 	if puntos <= 0 or mutageno_total() >= TOPE:
 		return
@@ -1467,7 +1467,7 @@ func llenar_mutageno(puntos: int) -> void:
 		Sonido.tocar("mutageno_punto")
 		if johnny and johnny.vivo:
 			EfectoSuelo.soltar(johnny, "mutar", Vector2.ZERO)
-			numero(johnny.position, "+%d" % ganados, CHAPA_UI.VERDE)
+			gran_aviso("+%d" % ganados)   # (encima de su cabeza, con la letra de sus gritos, como «¡¡¡LA LLAVE!!!»)
 
 
 # Lo que llena la barra un zombi de este tipo

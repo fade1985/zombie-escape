@@ -496,7 +496,7 @@ en una línea.
   una barra (`partida.llenar_mutageno`, puntos de `MUTAGENO_ZOMBI`: arrastrado 1, vecino y vecina 2, crío 3, gordo 4,
   tentáculos y dinamitero 5, el guardia 5, los demás 2, `MUTAGENO_OTRO`; los jefes y los que llama un jefe, nada; ni en
   el garaje) y, cada vez que llega a 100 (`MUTAGENO_BARRA`), da un mutágeno y sigue con lo que sobra: el sonido
-  `"mutageno"`, el efecto de las mutaciones en Johnny (`EfectoSuelo` "mutar") y un «+1» verde. La barra, en el HUD justo
+  `"mutageno_punto"`, el efecto de las mutaciones en Johnny (`EfectoSuelo` "mutar") y un «+1» grande encima de su cabeza (`gran_aviso`). La barra, en el HUD justo
   encima de la de vida (`hud.gd`, `pintar_mutageno`/`mover_mutageno`: del tamaño y con el marco de la de vida, líquido morado
   oscuro, el tanto por ciento con las cifras a cuadraditos de la vida, `pintar_cifras`, burbujas, un brillo que la
   recorre y, al completarse, destello blanco; el escudo va encima de ella, `alto_encima`). Lo lleno va en `partida.mutageno_barra`. Se
