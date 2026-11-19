@@ -1344,6 +1344,17 @@ func probar_tiendas_fijas() -> void:
 					m.usar.emit()
 					await get_tree().create_timer(0.5).timeout
 					Captura.foto("captura-fija-%s-%s-abierto.png" % [tipo, lado])
+			# la puerta de entrada vista desde dentro, de cerca, con Johnny delante (captura-fija-<tipo>-<lado>-entrada.png; 19 nov: la
+			# de ropa, la de cristal negro desde arriba, puerta.gd ABAJO_ROPA)
+			$Pantalla/HUD.hide()   # (sin el marcador ni el minimapa, que tapan la puerta de abajo)
+			$Pantalla/Minimapa.hide()
+			for p in mapa.puertas:
+				johnny.position = p.position + Vector2(0, -90 if p.salida.dir == "abajo" else 150)
+				johnny.get_node("Camara").reset_smoothing()
+				await get_tree().create_timer(0.8).timeout
+				Captura.foto("captura-fija-%s-%s-entrada.png" % [tipo, lado])
+			$Pantalla/HUD.show()
+			$Pantalla/Minimapa.show()
 	get_tree().quit()
 
 

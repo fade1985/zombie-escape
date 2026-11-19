@@ -43,6 +43,9 @@ const PISO_DIBUJO := Vector2(36, 43)
 # cristal y aluminio (el centro comercial) y chapa gris (la de la sala de mantenimiento, ver "metal")
 const ABAJO := preload("res://assets/sprites/puerta-abajo.png")
 const ABAJO_DIBUJO := Vector2(36, 32)
+# la de la tienda de ropa (19 nov, el dueño; de GPT, tools/puerta_abajo_ropa.py): el mismo hueco, con la puerta doble de cristal negro de su
+# fachada vista desde arriba, al doble de detalle (72 × 64 píxeles para 72 × 64 unidades)
+const ABAJO_ROPA := preload("res://assets/sprites/puerta-abajo-ropa.png")
 # la de chapa gris, con la hoja de la puerta metálica del despacho al taller (tools/puerta_abajo_metal.py): la que se usa de verdad
 const ABAJO_METAL := preload("res://assets/sprites/puerta-abajo-metal.png")
 # la misma con la hoja en gris marengo metalizado (tools/puerta_abajo_metal.py): la puerta de la calle del portal de los Apartamentos
@@ -123,6 +126,7 @@ const LETRAS := {
 var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
 var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
+var tienda := ""         # el tipo de tienda del sitio donde está (lo pone mapa.gd): la de ropa tiene su puerta de abajo
 var galeria := false     # si es del pasillo de las tiendas del centro comercial (lo pone mapa.gd; Torre Velaria, no): doble()
 var limpia := false      # si es de una zona segura (lo pone mapa.gd: ZONAS_SEGURAS): sin sangre
 var metal := false       # si es de chapa gris como la de fuera (lo pone mapa.gd): las de la sala de mantenimiento y la de las viviendas a ella
@@ -294,6 +298,8 @@ func _draw() -> void:
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
 			if metal:
 				draw_texture_rect(ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
+			elif centro and tienda == "ropa":
+				draw_texture_rect(ABAJO_ROPA, Rect2(-36, 0, 72, 64), false)
 			else:
 				var modelo := 2 if centro else (1 if limpia else 0)
 				draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(modelo * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
