@@ -2539,6 +2539,84 @@ func probar_cachos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --explosivos-carga" (y "--zombis N": 12 si no se dice): lo que tarda cada fotograma cuando revientan N
+# zombis explosivos a la vez (20 nov: el juego daba tirones), en la sala de pruebas, dos veces (la primera lleva lo que
+# se prepara al usarlo por primera vez). Desde que encienden la mecha hasta 9 s después (lo que tarda en secarse la
+# sangre): el fotograma de siempre, la media y el peor, los que pasan de 25 ms y, de esos, cuánto se va en scripts y
+# física (lo que falte hasta el total es dibujar), y las celdas de sangre que quedan en el suelo. Se cierra sola
+func probar_explosivos_carga() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	johnny.global_position = sala.diana.global_position + Vector2(0, 220)
+	johnny.get_node("Camara").reset_smoothing()
+	var cuantos := int(Captura.dato("--zombis", "12"))
+	for ronda in 2:
+		var centro: Vector2 = johnny.global_position + Vector2(0, -190)
+		var lado := ceili(sqrt(cuantos))
+		var bums: Array[Node2D] = []
+		for i in cuantos:
+			var z: Node2D = meter_zombi("explosivo", centro + Vector2((i % lado - lado / 2.0) * 36.0, (floori(float(i) / lado) - lado / 2.0) * 26.0))
+			z.dormido = false
+			z.espabilando = 0.0
+			bums.append(z)
+		await get_tree().create_timer(0.8).timeout
+		var base := []
+		for _i in 30:
+			var a := Time.get_ticks_usec()
+			await get_tree().process_frame
+			base.append((Time.get_ticks_usec() - a) / 1000.0)
+		base.sort()
+		# todos encienden la mecha a la vez (el peor caso: revientan juntos y se rematan unos a otros)
+		for z in bums:
+			if is_instance_valid(z):
+				z.estado = "mecha"
+				z.mecha = z.MECHA
+				z.poner_animacion("ataque")
+		var peor := 0.0
+		var total := 0.0
+		var suma := 0.0
+		var cuenta := 0
+		var lentos := []
+		var empezo := Time.get_ticks_usec()
+		var foto := false
+		while Time.get_ticks_usec() - empezo < 9000000:
+			var a := Time.get_ticks_usec()
+			await get_tree().process_frame
+			var ms := (Time.get_ticks_usec() - a) / 1000.0
+			peor = maxf(peor, ms)
+			suma += ms
+			cuenta += 1
+			if ms >= 25.0:
+				total += ms
+				lentos.append("%.0f@%.2fs(sc%.0f fis%.0f dib%d)" % [ms, (Time.get_ticks_usec() - empezo) / 1000000.0,
+					Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0,
+					Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
+					RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
+			if not foto and Time.get_ticks_usec() - empezo > 1150000:
+				foto = true
+				Captura.foto("captura-explosivos-carga-%d.png" % (ronda + 1))
+		var gotas: Node = johnny.get_parent().get_node_or_null("Gotas")
+		print("Explosivos carga · ronda %d · %d explosivos · normal %.1f ms · media %.1f ms · peor %.0f ms · %d lentos, %.2f s en total · celdas de sangre %d · página %s" % [
+			ronda + 1, cuantos, base[15], suma / maxf(1, cuenta), peor, lentos.size(), total / 1000.0,
+			gotas.celdas.size() if gotas else 0, Lentos.visibilidad()])
+		print("Explosivos carga · lentos: ", " ".join(lentos.slice(0, 24)))
+		Captura.foto("captura-explosivos-carga-%d-suelo.png" % (ronda + 1))
+	get_tree().quit()
+
+
 # Con "--captura --vomito": los zombis bañados en vómito (la Gastroenteritis: "vomito" en su shader), en la sala de
 # pruebas, con tres zombis quietos (Johnny, escondido): al de la izquierda le roe el ácido del lanza ácido (para comparar), al del medio le
 # cae un vómito de Johnny (el proyectil de verdad) y al de la derecha, nada. Fotos: recién bañado

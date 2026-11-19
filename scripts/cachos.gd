@@ -56,12 +56,15 @@ func _process(delta: float) -> void:
 		queue_redraw()
 		return
 	var espacio := get_world_2d().direct_space_state
+	var rayo := PhysicsRayQueryParameters2D.create(Vector2.ZERO, Vector2.ZERO, 1)   # (una consulta para todos los cachos)
 	for q in lista:
 		if q.quieto:
 			continue
 		# por el suelo: si da con una pared o un mueble, se para junto a ella y cae ahí mismo
 		var despues: Vector2 = q.p + q.v * delta
-		var choque := espacio.intersect_ray(PhysicsRayQueryParameters2D.create(q.p, despues, 1))
+		rayo.from = q.p
+		rayo.to = despues
+		var choque := espacio.intersect_ray(rayo)
 		if choque:
 			q.p = choque.position + choque.normal * 8.0
 			q.v = Vector2.ZERO

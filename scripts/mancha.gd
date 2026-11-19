@@ -19,6 +19,8 @@ const SECADO := 8.0
 const MAXIMO_SANGRE := 3000   # las celdas de "Gotas" que se quedan, si hay sangre de golpes (cada gota deja varias)
 var secando_hasta := 0.0
 var repintar := 0.0
+static var plantillas := {}   # las de la marca negra de las explosiones, por radio (plantilla_quemado)
+static var punto: PhysicsPointQueryParameters2D   # la consulta de "¿hay pared aquí?" de salpicon, la misma siempre
 
 
 func _ready() -> void:
@@ -51,15 +53,17 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
+	quitar_sobrantes()
 	var t := ahora()
+	var hay_aparece := not aparece.is_empty()
 	for i in celdas.size():
-		if i < aparece.size() and aparece[i] > crecido:
+		if hay_aparece and i < aparece.size() and aparece[i] > crecido:
 			continue
 		var c: Array = celdas[i]
 		var color: Color = c[1]
-		if c.size() > 3:   # sangre que se seca: de su color a uno más oscuro y algo más apagado
-			var k := clampf((t - c[3]) / SECADO, 0.0, 1.0)
-			color = color.lerp(Color(color.darkened(0.5), color.a * 0.8), k)
+		if c.size() > 4:   # sangre que se seca: de su color a uno más oscuro y algo más apagado (c[4], ya calculado)
+			var k: float = (t - c[3]) / SECADO
+			color = c[4] if k >= 1.0 else color.lerp(c[4], maxf(k, 0.0))
 		draw_rect(Rect2(c[0], c[2] if c.size() > 2 else Vector2(CELDA, CELDA)), color)
 
 
@@ -92,10 +96,16 @@ static func de_gotas(sala: Node, nombre: String, maximo: int) -> Mancha:
 	return m
 
 
+# Las celdas de más se quitan una sola vez por fotograma, justo antes de pintar (_draw): con miles de celdas, quitarlas
+# en cada gota que cae era copiar la lista entera cientos de veces seguidas (los tirones al reventar muchos zombis
+# explosivos, 20 nov). Se ve igual: lo que se pinta nunca pasa del máximo
 func recortar() -> void:
-	if celdas.size() > maximo_celdas:
-		celdas = celdas.slice(celdas.size() - maximo_celdas)
 	queue_redraw()
+
+
+func quitar_sobrantes() -> void:
+	if maximo_celdas > 0 and celdas.size() > maximo_celdas:
+		celdas = celdas.slice(celdas.size() - maximo_celdas)
 
 
 # La marca de una gota de sangre de un golpe (Particulas.salpicar) al caer: alargada hacia donde iba ("hacia", su
@@ -108,14 +118,16 @@ static func salpicon(sala: Node, donde: Vector2, color: Color, hacia: Vector2, g
 	var dir := hacia.normalized() if hacia.length() > 1.0 else Vector2.RIGHT
 	var largo := clampf(hacia.length() * 0.035, 2.0, 14.0)   # en unidades: de 1 a 7 píxeles del dibujo
 	var espacio := m.get_world_2d().direct_space_state
-	var punto := PhysicsPointQueryParameters2D.new()
-	punto.collision_mask = 1   # paredes y muebles
+	if punto == null:   # (una sola consulta para todas las gotas: crear una en cada una pesaba con cientos a la vez)
+		punto = PhysicsPointQueryParameters2D.new()
+		punto.collision_mask = 1   # paredes y muebles
+	var seco := Color(color.darkened(0.5), color.a * 0.8)   # el color al secarse del todo (ver _draw)
 	var celda := func(centro: Vector2, lado: float) -> void:
 		punto.position = centro
 		if not espacio.intersect_point(punto, 1).is_empty():
 			return   # (el trozo que caería dentro de una pared o de un mueble, no)
 		var l := maxf(2.0, roundf(lado / 2.0) * 2.0)
-		m.celdas.append([((m.to_local(centro) - Vector2(l, l) / 2.0) / 2.0).round() * 2.0, color, Vector2(l, l), t])
+		m.celdas.append([((m.to_local(centro) - Vector2(l, l) / 2.0) / 2.0).round() * 2.0, color, Vector2(l, l), t, seco])
 	if grueso > 3.0:
 		# la gorda: un cuerpo redondeado (una cruz de celdas) y una cola corta y fina hacia donde iba
 		var g := roundf(grueso / 2.0) * 2.0
@@ -178,26 +190,71 @@ static func quemado(sala: Node, donde: Vector2, radio: float) -> void:
 	var m := Mancha.new()
 	m.position = (donde / CELDA).round() * CELDA
 	m.material = Recorte.material("suelo")   # (la quemadura no pasa a las paredes ni al otro lado: recorte.gd)
-	var ondas := []
-	for k in [3, 5, 8]:
-		ondas.append([k, randf() * TAU, randf_range(0.06, 0.14)])
+	var o0 := randf() * TAU   # el borde, ondulado: tres ondas (de 3, 5 y 8 bultos) de lado y fuerza al azar
+	var f0 := randf_range(0.06, 0.14)
+	var o1 := randf() * TAU
+	var f1 := randf_range(0.06, 0.14)
+	var o2 := randf() * TAU
+	var f2 := randf_range(0.06, 0.14)
+	var negro := Color("#000000", 0.75)
+	var tizne := Color("#120d0b", 0.55)
+	# (20 nov: lo que no depende del azar, de la plantilla; y las celdas seguidas de una fila con el mismo color, en un
+	# solo rectángulo. Sale la misma mancha, pero con muchos zombis explosivos reventando a la vez ya no da tirones)
+	var pl := plantilla_quemado(radio)
+	var ps: PackedVector2Array = pl[0]
+	var ds: PackedFloat64Array = pl[1]
+	var angulos: PackedFloat64Array = pl[2]
+	var ruidos: PackedFloat64Array = pl[3]
+	var fila := INF
+	var fin := INF                 # dónde acaba (en x) el último rectángulo de esta fila
+	var ultimo: Array = []
+	for i in ps.size():
+		var a := angulos[i]
+		var borde := 1.0 + sin(a * 3 + o0) * f0
+		borde += sin(a * 5 + o1) * f1
+		borde += sin(a * 8 + o2) * f2
+		var d := ds[i]
+		if d > borde + ruidos[i]:
+			continue
+		var color := negro if d < 0.55 * borde else tizne
+		var p := ps[i]
+		if p.y == fila and p.x == fin and ultimo[1] == color:
+			ultimo[2] = Vector2(ultimo[2].x + CELDA, CELDA)   # (la de al lado, del mismo color: se alarga la de antes)
+		else:
+			ultimo = [p, color, Vector2(CELDA, CELDA)]
+			m.celdas.append(ultimo)
+			fila = p.y
+		fin = p.x + CELDA
+	sala.add_child(m)
+
+
+# Las celdas que puede tener la marca negra de "radio" (sin los huecos sueltos, que no cambian), con lo que no depende
+# del azar: su sitio, lo lejos que está del centro (de 0 a 1 en el borde), su ángulo y su ruido. Se calcula una vez
+# por radio (la del zombi explosivo mira unas 2.600 celdas)
+static func plantilla_quemado(radio: float) -> Array:
+	if plantillas.has(radio):
+		return plantillas[radio]
+	var ps := PackedVector2Array()
+	var ds := PackedFloat64Array()
+	var angulos := PackedFloat64Array()
+	var ruidos := PackedFloat64Array()
+	var lejisimo := 1.0 + 0.14 * 3 + 0.075   # el borde más lejano que puede salir (las ondas y el ruido, al máximo)
 	var n := ceili(radio / CELDA)
 	for y in range(-n, n + 1):
 		for x in range(-n, n + 1):
 			var p := Vector2(x, y) * CELDA
 			var d := Vector2(p.x, p.y / 0.6).length() / radio
-			var a := atan2(p.y / 0.6, p.x)
-			var borde := 1.0
-			for o in ondas:
-				borde += sin(a * o[0] + o[1]) * o[2]
 			var ruido := fmod(absf(sin(x * 12.9898 + y * 78.233) * 43758.5453), 1.0)
-			if d > borde + (ruido - 0.5) * 0.15:
-				continue
-			var color := Color("#000000", 0.75) if d < 0.55 * borde else Color("#120d0b", 0.55)
-			if ruido < 0.12:
-				continue   # algún hueco suelto, para que no sea una mancha lisa
-			m.celdas.append([p, color])
-	sala.add_child(m)
+			if d > lejisimo or ruido < 0.12:
+				continue   # (ruido < 0.12: algún hueco suelto, para que no sea una mancha lisa)
+			ps.append(p)
+			ds.append(d)
+			angulos.append(atan2(p.y / 0.6, p.x))
+			ruidos.append((ruido - 0.5) * 0.15)
+	if plantillas.size() > 16:
+		plantillas.clear()
+	plantillas[radio] = [ps, ds, angulos, ruidos]
+	return plantillas[radio]
 
 
 # La mancha de un zombi derrotado (addDecal en src/game-efectos.js): un borrón ondulado, aplastado como el
