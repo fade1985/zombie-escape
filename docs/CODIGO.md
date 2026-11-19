@@ -225,7 +225,7 @@ en una línea.
   alfileres de la modista y las tazas y grapadoras del oficinista, que dan vueltas), `salpicadura.gd`
   (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
   `explosion.gd` (lo que se ve es la explosión de pixelfx: `tools/pixelfx/explosion.js`, una copia de "small-explosion" más
-  grande y sin las piedras ni la tierra, que caían en raya vista desde arriba; la exporta `exportar_explosion.mjs` en
+  grande y sin las piedras ni la tierra, que caían en raya vista desde arriba, ni la raya del suelo que brillaba y se quedaba sola al final, opción "marca", 20 nov; la exporta `exportar_explosion.mjs` en
   `explosion.png` y `explosion-brillo.png`, con sus dos capas; las pequeñas, a la mitad. Prueba: `--captura --explosion`).
 - `recorte.gd` (10 nov): ningún efecto se pinta encima de las paredes ni al otro lado. La explosión, los de pixelfx
   (`efecto_suelo.gd`, salvo los golpes contra la pared), los charcos, las quemaduras, la ceniza y las partículas llevan

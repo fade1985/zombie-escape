@@ -5,7 +5,9 @@
 // Mezcla explosiva), con dos cambios: el lienzo, más grande (a "size" 1.6 los anillos y el humo se salían del de
 // 300x240), y la opción "escombros" (false en el juego): sin las piedras ni la tierra que saltan y caen al suelo. El
 // efecto está pensado visto de lado, y en el juego (visto desde arriba) caían todas en una raya; y dentro de un piso no
-// hay tierra. Lo demás, tal cual. Lo exporta exportar_explosion.mjs.
+// hay tierra. Y la opción "marca" (false en el juego, 20 nov: lo pidió el dueño): sin la raya del suelo que brilla y se
+// queda sola al apagarse el fuego (la de scorch; el juego ya deja su mancha negra, Mancha.quemado). Lo demás, tal cual.
+// Lo exporta exportar_explosion.mjs.
 import { Particles, Bits, Lights, Blazes, P, PF, B, Rng, fit, band, clamp, smooth, ease, rand, TAU, WHITE, hex, mix, scale, rgb } from "../../core/index.js";
 
 export const meta = {
@@ -18,7 +20,7 @@ export const meta = {
   loop: false,
   fps: 30,
   bg: "ground",
-  options: { palette: ["#4a1712", "#c9281f", "#f2561d", "#ff8a2a", "#ffc23d", "#ffe26b", "#fff3a6", "#ffffff"], stone: "#4a3f69", size: 1.6, seed: 7, escombros: false },
+  options: { palette: ["#4a1712", "#c9281f", "#f2561d", "#ff8a2a", "#ffc23d", "#ffe26b", "#fff3a6", "#ffffff"], stone: "#4a3f69", size: 1.6, seed: 7, escombros: false, marca: false },
 };
 
 const SOOT = hex("#0d0a12"), SOOT2 = hex("#17121d"), OUTLINE = hex("#1a1422"), WARM = rgb(255, 176, 96);
@@ -128,7 +130,7 @@ export function create(o) {
       lights.update(dt);
     },
     drawBack(p) {
-      scorch(p, F, t, 22 * S, 1.2 + RAD / 14, 1 - smooth(meta.duration - 1.2, meta.duration - 0.2, t));
+      if (o.marca) scorch(p, F, t, 22 * S, 1.2 + RAD / 14, 1 - smooth(meta.duration - 1.2, meta.duration - 0.2, t));
       ps.draw(p, "back");
       blazes.drawBack(p);
       const k = t / 0.5;
