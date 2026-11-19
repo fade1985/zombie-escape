@@ -1049,6 +1049,7 @@ func marca_encima(mueble: Node2D, dibujo: String, condicion: Callable) -> Node2D
 
 
 func poner_hojas() -> void:
+	var probadores := 0   # (cada probador, una de las tres cortinas, por orden: siempre la misma en el mismo sitio)
 	for d in sitio.apt.puertas:
 		if d.get("cerrada", false):
 			continue
@@ -1062,6 +1063,8 @@ func poner_hojas() -> void:
 		# los probadores de la tienda de ropa (pared alta): una cortina en vez de puerta (puerta_bano.gd)
 		if sube > TABIQUE.SUBE and d.fondo == 1 and "probadores" in [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]:
 			hoja.cortina = true
+			hoja.cortina_n = probadores % PUERTA_BANO.CORTINAS.size()
+			probadores += 1
 		# la tienda de ropa (18 nov, el dueño): la puerta del aseo, de las metálicas del juego, y la del almacén (a la sala de venta), la de los
 		# trasteros pero metalizada
 		if sube > TABIQUE.SUBE and sitio.get("tienda", "") == "ropa" and not hoja.cortina:

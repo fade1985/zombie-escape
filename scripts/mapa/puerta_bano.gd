@@ -66,11 +66,14 @@ const METAL_ROPA := {"frente": METAL.frente, "abierta": ABIERTA,
 	"cerrada": preload("res://assets/sprites/puerta-aseo-ropa-lado-cerrada.png")}
 # La cortina de los probadores de la tienda de ropa (18 nov, de GPT, tools/cortina_gpt.py): en vez de una hoja que gira, un
 # dibujo entero (marco, barra y cortina) de 32 × 61 píxeles que llena el hueco hasta el dintel; al abrirse, la cortina se
-# recoge deslizándose hacia la izquierda hasta quedarse como en el dibujo de abierta
-const CORTINA := preload("res://assets/sprites/cortina-probador.png")
-const CORTINA_ABIERTA := preload("res://assets/sprites/cortina-probador-abierta.png")
+# recoge deslizándose hacia la izquierda hasta quedarse como en el dibujo de abierta. Tres, destrozadas cada una de otra forma (19 nov,
+# el dueño), para que los probadores no tengan todos la misma: cada uno lleva siempre la suya (cortina_n, que pone mapa.gd)
+const CORTINAS := [preload("res://assets/sprites/cortina-probador.png"), preload("res://assets/sprites/cortina-probador2.png"),
+	preload("res://assets/sprites/cortina-probador3.png")]
+const CORTINAS_ABIERTAS := [preload("res://assets/sprites/cortina-probador-abierta.png"),
+	preload("res://assets/sprites/cortina-probador2-abierta.png"), preload("res://assets/sprites/cortina-probador3-abierta.png")]
 const CORTINA_BORDE := 2     # píxeles del dibujo que ocupa cada montante de madera
-const CORTINA_RECOGIDA := 9  # y lo que ocupa recogida la cortina, a la izquierda (de los 28 de hueco)
+const CORTINA_RECOGIDA := [8, 10, 10]  # y lo que ocupa recogida cada cortina, a la izquierda (de los 28 de hueco)
 # La de los trasteros de las viviendas, pero metalizada: la del almacén de la tienda de ropa (mapa.gd, poner_hojas). Sin trastero = true:
 # se abre y se cierra a mano como las demás. Destrozada desde el 19 nov (de GPT, tools/puertas_ropa_destrozadas.py, con la forma de la
 # gris acero de antes, puerta-trastero-metal y su abierta, de tools/trastero_metal.py); de lado, la del aseo destrozada
@@ -102,6 +105,7 @@ var tablas := 0:            # las tablas que le quedan clavadas (la barricada de
 		queue_redraw()
 var acero := false          # la puerta blindada de la cámara acorazada de la joyería (joyeria.gd): de acero, sin madera
 var cortina := false        # la de un probador de la tienda de ropa: una cortina que se desliza (ver arriba)
+var cortina_n := 0          # y cuál de las tres (CORTINAS)
 var metalizada := false     # de las metálicas (METAL_ROPA o TRASTERO_METALIZADA: mapa.gd lo pone; el diccionario se copia al alargarse, así que no se compara)
 
 var trastero := false       # la de un trastero de las viviendas (mapa.gd): azul lisa (ver arriba)
@@ -265,7 +269,7 @@ func poner_uso() -> void:
 	r.position -= position
 	if cortina:
 		# la cortina: el contorno es su dibujo entero (cerrada o recogida), llenando el hueco hasta el dintel
-		dibujo.texture = CORTINA_ABIERTA if abierta >= 1.0 else CORTINA
+		dibujo.texture = CORTINAS_ABIERTAS[cortina_n] if abierta >= 1.0 else CORTINAS[cortina_n]
 		dibujo.position = Vector2(r.position.x, r.end.y - dintel)
 		dibujo.scale = Vector2(r.size.x, dintel) / Vector2(dibujo.texture.get_size())
 	elif abierta >= 1.0:
@@ -475,18 +479,20 @@ func cortina_de_frente(r: Rect2, temblor: float) -> void:
 	var arriba := r.end.y - dintel
 	var tam := Vector2(r.size.x, dintel)
 	var pos := Vector2(r.position.x + temblor, arriba)
+	var cerrada: Texture2D = CORTINAS[cortina_n]
+	var recogida: Texture2D = CORTINAS_ABIERTAS[cortina_n]
 	if abierta >= 1.0:
-		draw_texture_rect(CORTINA_ABIERTA, Rect2(pos, tam), false)
+		draw_texture_rect(recogida, Rect2(pos, tam), false)
 		return
 	if abierta <= 0.0:
-		draw_texture_rect(CORTINA, Rect2(pos, tam), false)
+		draw_texture_rect(cerrada, Rect2(pos, tam), false)
 		return
-	draw_texture_rect(CORTINA_ABIERTA, Rect2(pos, tam), false)
-	var px := tam.x / CORTINA.get_width()
-	var hueco_px := CORTINA.get_width() - CORTINA_BORDE * 2
-	var ancho := lerpf(hueco_px, CORTINA_RECOGIDA, abierta)
-	draw_texture_rect_region(CORTINA, Rect2(pos + Vector2(CORTINA_BORDE * px, 0), Vector2(ancho * px, tam.y)),
-		Rect2(CORTINA_BORDE, 0, hueco_px, CORTINA.get_height()))
+	draw_texture_rect(recogida, Rect2(pos, tam), false)
+	var px := tam.x / cerrada.get_width()
+	var hueco_px := cerrada.get_width() - CORTINA_BORDE * 2
+	var ancho := lerpf(hueco_px, CORTINA_RECOGIDA[cortina_n], abierta)
+	draw_texture_rect_region(cerrada, Rect2(pos + Vector2(CORTINA_BORDE * px, 0), Vector2(ancho * px, tam.y)),
+		Rect2(CORTINA_BORDE, 0, hueco_px, cerrada.get_height()))
 
 
 # La hoja de madera de un tabique de lado, con la bisagra arriba del hueco: cerrada, su dibujo (puerta-bano-lado-cerrada:

@@ -15,7 +15,14 @@ from PIL import Image
 
 TAM = (32, 61)
 SALEN = [("ropa/cortina-cerrada-destrozada-gpt.webp", "cortina-probador"),
-         ("ropa/cortina-abierta-destrozada-gpt.webp", "cortina-probador-abierta")]
+         ("ropa/cortina-abierta-destrozada-gpt.webp", "cortina-probador-abierta"),
+         # y dos más, rotas de otra forma, para que los probadores no tengan todos la misma (19 nov, el dueño; puerta_bano.gd, CORTINAS):
+         # la 2, con la parte de abajo en jirones y un trozo arrancado arriba a la derecha; la 3, soltada de las presillas de la
+         # derecha, con dos agujeros y un gran chorreón de sangre
+         ("ropa/cortina2-cerrada-destrozada-gpt.webp", "cortina-probador2"),
+         ("ropa/cortina2-abierta-destrozada-gpt.webp", "cortina-probador2-abierta"),
+         ("ropa/cortina3-cerrada-destrozada-gpt.webp", "cortina-probador3"),
+         ("ropa/cortina3-abierta-destrozada-gpt.webp", "cortina-probador3-abierta")]
 
 
 def guardar(im, nombre):
@@ -47,7 +54,7 @@ def a_beige(im):
 
 for origen, nombre in SALEN:
     a = np.asarray(Image.open('assets/sources/' + origen).convert('RGB')).astype(float)
-    vivo = a.max(axis=2) > 14          # lo que no es negro puro
+    vivo = a.max(axis=2) > 24          # lo que no es negro (los agujeros de la 3, GPT los pinta casi negros: 18-21)
     ys, xs = np.where(vivo)
     a, vivo = a[ys.min():ys.max() + 1, xs.min():xs.max() + 1], vivo[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
     alfa = vivo.astype(float)
