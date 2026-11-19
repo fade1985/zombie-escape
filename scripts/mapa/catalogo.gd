@@ -69,6 +69,8 @@ const MUEBLES := {
 	"cajasropa5": {"len": 64, "dep": 36, "paredes": "", "archivo": "ropa/cajas-destrozadas5-gpt"},
 	"boxpile":   {"len": 56, "dep": 32, "paredes": "", "archivo": "viviendas/cajas-bajas"},
 	"handtruck": {"len": 40, "dep": 28, "paredes": "", "archivo": "viviendas/carretilla"},
+	# (19 nov, el dueño) la misma carretilla, destrozada, en el almacén de la tienda de ropa
+	"carretillaropa": {"len": 40, "dep": 28, "paredes": "", "archivo": "ropa/carretilla-destrozada-gpt"},
 	"wardrobe":   {"len": 78,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
 	"nightstand": {"len": 34,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
 	"desk":       {"len": 92,  "dep": 50,  "paredes": "",      "archivo": "dormitorio/escritorio"},
@@ -639,10 +641,10 @@ const SALAS := {
 	"almacen-ropa": {"colocados": {
 		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
 			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
-			["handtruck", 15.8, "libre", 4.0]],
+			["carretillaropa", 15.8, "libre", 4.0]],
 		"arriba": [["ropashelf3", 1.88], ["ropashelf", 5.12], ["ropashelf4", 11.21], ["ropashelf2", 14.79],
 			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
-			["handtruck", 15.8, "libre", 6.0]]}},
+			["carretillaropa", 15.8, "libre", 6.0]]}},
 	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 5.85, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]]}},
 	"tienda-farmacia": {

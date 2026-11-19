@@ -380,6 +380,10 @@ MUEBLES = {
     "cajasropa3": ("assets/sources/ropa/cajas-destrozadas3-gpt.webp", "assets/sprites/mueble-cajasropa3.png", 32, 38, True),
     "cajasropa4": ("assets/sources/ropa/cajas-destrozadas4-gpt.webp", "assets/sprites/mueble-cajasropa4.png", 32, 39, True),
     "cajasropa5": ("assets/sources/ropa/cajas-destrozadas5-gpt.webp", "assets/sprites/mueble-cajasropa5.png", 32, 38, True),
+    # (19 nov, el dueño) y la carretilla del almacén, destrozada (GPT, a partir de la carretilla): tipo propio, la de los trasteros de las
+    # viviendas sigue igual; del mismo tamaño, y sus dos huecos del armazón, vaciados igual (las semillas)
+    "carretillaropa": ("assets/sources/ropa/carretilla-destrozada-gpt.webp", "assets/sprites/mueble-carretillaropa.png", 20, 40, True,
+                       (), [(512, 250), (512, 510)]),
     # (19 nov) el aseo de la tienda de ropa, destrozado como el almacén (GPT, a partir del lavabo, el váter, la taquilla y el banco del
     # vestuario de Johnny): tipos propios (catalogo.gd) para que el vestuario de la sala de mantenimiento y los baños de los pisos sigan igual
     "lavabo_ropa": ("assets/sources/ropa/lavabo-destrozado-gpt.webp", "assets/sprites/mueble-staffsinkropa-lado.png", 20, 66, True),
