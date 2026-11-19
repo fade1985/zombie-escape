@@ -359,10 +359,27 @@ def limpiar(im: Image.Image, mota: int = MOTA) -> Image.Image:
     return im
 
 
+FILAS_SETA = 4   # cuántas filas de la seta del gorro (la parte abombada de arriba) se copian de la vista de frente
+
+
+def seta() -> Image.Image:
+    """La seta del gorro tal como está dibujada de frente (sus primeras filas), sin las manchas de sangre."""
+    im = Image.open(f"{src}/rotations/south.png").convert("RGBA")
+    im = im.crop((0, 0, im.width, FILAS_SETA))
+    im = im.crop(im.getbbox())
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, a = px[x, y]
+            if a and r > 80 and r - b > 50:   # sangre o mancha: tela del gorro (clara o en sombra)
+                px[x, y] = (224, 206, 178, a) if r + g + b > 450 else (186, 165, 143, a)
+    return im
+
+
 def copa(hoja: Image.Image, caja: tuple, ancho_min: int = 8) -> None:
-    """Redondea un gorro cortado en plano: busca, de arriba abajo, el primer tramo de al menos ancho_min píxeles
+    """Rehace un gorro cortado en plano: busca, de arriba abajo, el primer tramo de al menos ancho_min píxeles
     seguidos casi sin nada encima (en las animaciones PixelLab le deja unos piquitos sueltos en las esquinas) y le
-    pinta encima 3 filas de copa (con su contorno, tapando los piquitos), copiando los colores del borde."""
+    pone encima la seta del gorro de la vista de frente (tapando los piquitos), centrada sobre el corte."""
     cx0, cy0, cx1, cy1 = caja
     px = hoja.load()
     for y in range(cy0 + 3, cy1):
@@ -379,27 +396,17 @@ def copa(hoja: Image.Image, caja: tuple, ancho_min: int = 8) -> None:
                 continue
             # casi vacío por encima (como mucho los piquitos)
             libres = [sum(1 for i in range(l, r + 1) if px[i, fy][3] == 0) for fy in (y - 1, y - 2)]
-            if libres[0] < 0.6 * (r - l + 1) or libres[1] < 0.8 * (r - l + 1):
+            if libres[0] < 0.4 * (r - l + 1) or libres[1] < 0.8 * (r - l + 1):
                 continue
             # un borde bien dibujado es oscuro; uno cortado deja a la vista la tela clara del gorro
             claros = sum(1 for i in range(l + 1, r) if sum(px[i, y][:3]) > 450)
             if claros < 0.6 * (r - l - 1):
                 continue
-            # el contorno: lo más oscuro del gorro en sus primeras filas
-            borde = min((px[i, fy] for fy in (y, y + 1, y + 2) for i in range(l, r + 1) if px[i, fy][3]),
-                        key=lambda c: sum(c[:3]))
-            relleno = [px[i, y] for i in range(l + 1, r)]
-            def pon(fy, a, b, solo_borde=False):
-                for i in range(a, b + 1):
-                    dentro = a < i < b and not solo_borde
-                    px[i, fy] = relleno[(i - l - 1) % len(relleno)] if dentro else borde
-            pon(y - 1, l, r)                      # la fila de abajo: del mismo ancho
-            pon(y - 2, l + 1, r - 1)              # se estrecha un poco
-            for i in (l + 1, r - 1):
-                px[i, y - 2] = borde
-            pon(y - 3, l + 3, r - 3, solo_borde=True)   # el contorno de arriba
-            for i in (l + 2, r - 2):
-                px[i, y - 2] = borde
+            for fy in (y - 2, y - 1):             # fuera los piquitos
+                for i in range(l, r + 1):
+                    px[i, fy] = (0, 0, 0, 0)
+            # la seta, con su fila de abajo justo encima del corte y centrada en él
+            hoja.alpha_composite(SETA, ((l + r + 1) // 2 - SETA.width // 2, y - SETA.height))
             return
 
 
@@ -431,6 +438,7 @@ def fotogramas(carpeta: str, d: str, quitar_ultimo: bool, quitar_primero: bool =
     return [(limpiar(im, mota), sitio) for im in lista]
 
 
+SETA = seta() if JEFE.get("copa") else None
 filas = []   # (nombre, fps, bucle, [(imagen, sitio)])
 for nombre, (carpeta, fps, bucle, *quitar) in ANIMS.items():
     for d, dd in DIRS.items():
