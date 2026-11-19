@@ -1067,7 +1067,7 @@ func poner_hojas() -> void:
 		if sube > TABIQUE.SUBE and sitio.get("tienda", "") == "ropa" and not hoja.cortina:
 			var usos: Array = [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]
 			if "bano" in usos:
-				hoja.madera = PUERTA_BANO.METAL
+				hoja.madera = PUERTA_BANO.METAL_ROPA   # (destrozada; la de mantenimiento, METAL, sigue igual)
 				hoja.metalizada = true
 			elif "almacen" in usos:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA

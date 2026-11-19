@@ -2,12 +2,13 @@
 # la puerta doble de cristal negro de la fachada, puerta-restaurante, vista desde el techo): la que se ve dentro de la tienda normal, en el
 # muro de abajo. Sobre el hueco de siempre del centro comercial (puerta-abajo.png, el tercero: el marco y el suelo del paso), sin su hoja
 # vieja, la hoja de GPT reducida MEZCLANDO colores (LANCZOS, alfa premultiplicado, como tools/muebles_gpt.py) al doble de detalle:
-# 72 × 64 píxeles, que en el juego son 72 × 64 unidades (puerta.gd, ABAJO_ROPA)
+# 72 × 64 píxeles, que en el juego son 72 × 64 unidades (puerta.gd, ABAJO_ROPA). Desde el 19 nov, destrozada (el dueño, otra de
+# GPT: el cristal de la izquierda roto, el de la derecha rajado y un tirador torcido), con la hoja del mismo tamaño que la de antes
 #   py tools/puerta_abajo_ropa.py   (y luego Godot --headless --path . --import)
 from collections import deque
 from PIL import Image
 
-ORIGEN = "assets/sources/ropa/puerta-entrada-arriba-gpt.webp"
+ORIGEN = "assets/sources/ropa/puerta-entrada-arriba-destrozada-gpt.webp"   # (la de antes, puerta-entrada-arriba-gpt.webp)
 SALIDA = "assets/sprites/puerta-abajo-ropa.png"
 PASO = (70, 72, 88, 255)   # el suelo del paso, el de debajo de la hoja vieja
 HOJA_ANCHO = 68            # en píxeles del dibujo nuevo (al doble de detalle)
@@ -44,7 +45,7 @@ base = base.resize((72, 64), Image.NEAREST)
 
 hoja = quitar_fondo(Image.open(ORIGEN).convert("RGBA"))
 hoja = hoja.crop(hoja.getbbox())
-alto = max(1, round(HOJA_ANCHO * hoja.height / hoja.width * GROSOR))
+alto = 11   # (lo que salía con la de antes: la nueva es algo más alta y saldría de 12)
 s = hoja.convert("RGBa").resize((HOJA_ANCHO, alto), Image.LANCZOS).convert("RGBA")
 s.putalpha(s.split()[3].point(lambda v: 255 if v > 110 else 0))
 arriba = HOJA_CENTRO_Y - alto // 2

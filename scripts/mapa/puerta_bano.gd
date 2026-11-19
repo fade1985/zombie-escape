@@ -59,6 +59,11 @@ const MADERA_SUCIA := {"frente": preload("res://assets/sprites/puerta-bano-sucia
 const METAL := {"frente": preload("res://assets/sprites/puerta-metal.png"), "abierta": ABIERTA,
 	"lado": preload("res://assets/sprites/puerta-metal-abierta-lado.png"),
 	"cerrada": preload("res://assets/sprites/puerta-metal-lado-cerrada.png")}
+# y la misma, destrozada (19 nov, de GPT, tools/puertas_ropa_destrozadas.py, con la forma de la de arriba): la del aseo de la tienda de
+# ropa (mapa.gd, poner_hojas). La sala de mantenimiento sigue con la de arriba
+const METAL_ROPA := {"frente": METAL.frente, "abierta": ABIERTA,
+	"lado": preload("res://assets/sprites/puerta-aseo-ropa-abierta-lado.png"),
+	"cerrada": preload("res://assets/sprites/puerta-aseo-ropa-lado-cerrada.png")}
 # La cortina de los probadores de la tienda de ropa (18 nov, de GPT, tools/cortina_gpt.py): en vez de una hoja que gira, un
 # dibujo entero (marco, barra y cortina) de 32 × 61 píxeles que llena el hueco hasta el dintel; al abrirse, la cortina se
 # recoge deslizándose hacia la izquierda hasta quedarse como en el dibujo de abierta
@@ -66,10 +71,11 @@ const CORTINA := preload("res://assets/sprites/cortina-probador.png")
 const CORTINA_ABIERTA := preload("res://assets/sprites/cortina-probador-abierta.png")
 const CORTINA_BORDE := 2     # píxeles del dibujo que ocupa cada montante de madera
 const CORTINA_RECOGIDA := 9  # y lo que ocupa recogida la cortina, a la izquierda (de los 28 de hueco)
-# La de los trasteros de las viviendas, pero metalizada (gris acero en vez de azul; tools/trastero_metal.py): la del almacén de la tienda de
-# ropa (mapa.gd, poner_hojas). Sin trastero = true: se abre y se cierra a mano como las demás
-const TRASTERO_METALIZADA := {"frente": preload("res://assets/sprites/puerta-trastero-metal.png"),
-	"abierta": preload("res://assets/sprites/puerta-trastero-metal-abierta.png"), "lado": METAL.lado, "cerrada": METAL.cerrada}
+# La de los trasteros de las viviendas, pero metalizada: la del almacén de la tienda de ropa (mapa.gd, poner_hojas). Sin trastero = true:
+# se abre y se cierra a mano como las demás. Destrozada desde el 19 nov (de GPT, tools/puertas_ropa_destrozadas.py, con la forma de la
+# gris acero de antes, puerta-trastero-metal y su abierta, de tools/trastero_metal.py); de lado, la del aseo destrozada
+const TRASTERO_METALIZADA := {"frente": preload("res://assets/sprites/puerta-almacen-ropa.png"),
+	"abierta": preload("res://assets/sprites/puerta-almacen-ropa-abierta.png"), "lado": METAL_ROPA.lado, "cerrada": METAL_ROPA.cerrada}
 const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
@@ -96,7 +102,8 @@ var tablas := 0:            # las tablas que le quedan clavadas (la barricada de
 		queue_redraw()
 var acero := false          # la puerta blindada de la cámara acorazada de la joyería (joyeria.gd): de acero, sin madera
 var cortina := false        # la de un probador de la tienda de ropa: una cortina que se desliza (ver arriba)
-var metalizada := false     # de las metálicas (METAL o TRASTERO_METALIZADA: mapa.gd lo pone; el diccionario se copia al alargarse, así que no se compara)
+var metalizada := false     # de las metálicas (METAL_ROPA o TRASTERO_METALIZADA: mapa.gd lo pone; el diccionario se copia al alargarse, así que no se compara)
+
 var trastero := false       # la de un trastero de las viviendas (mapa.gd): azul lisa (ver arriba)
 var madera: Dictionary = MADERA_SUCIA
 var libre := false         # se abre empujando (ver arriba)
