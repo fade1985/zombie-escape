@@ -4505,5 +4505,8 @@ func probar_rodear_muebles() -> void:
 		johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
 		await foto_entera(sitio, "captura-rodear-%s-%s.png" % [tipo, lado])
 		marcas.queue_free()
-	print("Rodear: TODO BIEN" if fallos == 0 else "Rodear: %d FALLOS" % fallos)
+	if fallos > 0:   # (así tools/antes_de_version.py la da por mala)
+		Captura.fallar("Rodear: %d FALLOS (mira las líneas de «FALLO» de más arriba)" % fallos)
+		return
+	print("Rodear: TODO BIEN")
 	get_tree().quit()

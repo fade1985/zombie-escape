@@ -44,6 +44,7 @@ PRUEBAS = [
     ("reto", ["--reto", "si"], 200),
     ("idioma", ["--idioma"], 200),
     ("mando", ["--mando"], 200),
+    ("rodear-muebles", ["--edificio", "centro", "--rodear-muebles"], 200),   # (los muebles sueltos de la tienda de ropa se rodean)
 ]
 
 
