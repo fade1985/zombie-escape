@@ -934,7 +934,7 @@ func probar_volver_planta() -> void:
 
 
 # Una foto del sitio montado entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
-func foto_entera(sitio: Dictionary, nombre: String) -> void:
+func foto_entera(sitio: Dictionary, nombre: String, con_luz := false) -> void:
 	for s in sitio.apt.salas:
 		mapa.vistas[s.id] = true
 		mapa.niebla[s.id] = 0.0
@@ -951,10 +951,12 @@ func foto_entera(sitio: Dictionary, nombre: String) -> void:
 	Temblor.desplazamiento = Vector2(sitio.ancho / 2.0, (sitio.alto - arriba) / 2.0) - johnny.position
 	camara.reset_smoothing()
 	$Pantalla.hide()
-	Luz.apagada = not Luz.apagada   # sin penumbra, para que se vea todo
+	if not con_luz:
+		Luz.apagada = not Luz.apagada   # sin penumbra, para que se vea todo (con_luz: con la luz y la penumbra del juego)
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto(nombre)
-	Luz.apagada = not Luz.apagada
+	if not con_luz:
+		Luz.apagada = not Luz.apagada
 	$Pantalla.show()
 	camara.zoom = Vector2.ONE
 	Temblor.desplazamiento = Vector2.ZERO
@@ -1329,6 +1331,8 @@ func probar_tiendas_fijas() -> void:
 				hoja.abrir()
 			await get_tree().create_timer(1.0).timeout
 			await foto_entera(sitio, "captura-fija-%s-%s-abiertas.png" % [tipo, lado])
+			# y la misma con la luz del juego (captura-fija-<tipo>-<lado>-luz.png; 19 nov, el dueño)
+			await foto_entera(sitio, "captura-fija-%s-%s-luz.png" % [tipo, lado], true)
 			# los muebles que se abren (Objetos.MUEBLES_CON_PIEZA; 19 nov: en la de ropa, todos los de la sala de venta, la taquilla
 			# del aseo y las estanterías y cajas del almacén) y Johnny delante de la caja, con su contorno amarillo, y luego abriéndola
 			# (captura-fija-<tipo>-<lado>-abrir.png y ...-abierto.png)
