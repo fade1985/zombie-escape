@@ -2419,7 +2419,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 # (Alerta.BASE) los deja a todos un 20 % más flojos
 func mejora_vd7(zombi: Node2D) -> void:
 	zombi.vida_max = maxi(1, roundi(zombi.vida_max * Alerta.vida()))
-	if "velocidad" in zombi:
+	# (solo si es un número: el Sujeto 1 tiene una función velocidad(), y "in" también la encuentra; a él, como a los
+	# demás minijefes, lo acelera "rapido")
+	if "velocidad" in zombi and zombi.velocidad is float:
 		zombi.velocidad *= Alerta.velocidad()
 	if "rapido" in zombi:
 		zombi.rapido = Alerta.velocidad()
