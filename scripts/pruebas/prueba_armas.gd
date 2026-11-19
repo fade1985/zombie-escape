@@ -2435,6 +2435,62 @@ func probar_explosion() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --mecha": el aviso del zombi explosivo (el de los jefes, aviso.gd) en la sala de pruebas. Uno en medio,
+# con fotos al empezar la mecha y justo antes de reventar (captura-mecha-medio-0,3.png y -0,9), y otro pegado a la
+# pared de la derecha, con el círculo cortado en ella (captura-mecha-pared.png). Lo que comprueba, en la terminal
+func probar_mecha() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var y: float = sala.diana.global_position.y + 40.0
+	var x0: float = sala.diana.global_position.x
+	var pared: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 300, y), Vector2(x0 + 900, y), 1)).position.x
+	for sitio in [["medio", Vector2(x0, y)], ["pared", Vector2(pared - 40.0, y)]]:
+		johnny.global_position = sitio[1] + Vector2(0, 160)
+		johnny.get_node("Camara").reset_smoothing()
+		var bum: Node2D = meter_zombi("explosivo", sitio[1])
+		bum.position = sitio[1]
+		await get_tree().physics_frame
+		bum.dormido = false
+		bum.estado = "mecha"
+		bum.mecha = bum.MECHA
+		bum.poner_animacion("ataque")
+		for k in [0.3, 0.9]:
+			while is_instance_valid(bum) and bum.mecha > bum.MECHA * (1.0 - k):
+				await get_tree().physics_frame
+			await get_tree().process_frame
+			if sitio[0] == "medio":
+				Captura.foto("captura-mecha-medio-%s.png" % str(k).replace(".", ","))
+			elif k == 0.9:
+				Captura.foto("captura-mecha-pared.png")
+		var aviso: Aviso = bum.get_node_or_null("Aviso")
+		var corto := 0
+		for r in aviso.hasta_rayos:
+			if r < bum.RADIO_EXPLOSION - 1.0:
+				corto += 1
+		print("Mecha (%s): aviso visible %s (esperado: true) · forma %d (esperado: 1) · rayos cortados por la pared %d de %d (esperado: %s)" % [
+			sitio[0], aviso.visible, aviso.forma, corto, aviso.hasta_rayos.size(), "0" if sitio[0] == "medio" else "alguno"])
+		while is_instance_valid(bum) and bum.estado == "mecha":
+			await get_tree().physics_frame
+		await get_tree().create_timer(0.1).timeout
+		print("  al reventar: aviso escondido %s (esperado: true)" % (not is_instance_valid(aviso) or not aviso.visible))
+		await get_tree().create_timer(1.5).timeout
+	get_tree().quit()
+
+
 # Con "--captura --vomito": los zombis bañados en vómito (la Gastroenteritis: "vomito" en su shader), en la sala de
 # pruebas, con tres zombis quietos (Johnny, escondido): al de la izquierda le roe el ácido del lanza ácido (para comparar), al del medio le
 # cae un vómito de Johnny (el proyectil de verdad) y al de la derecha, nada. Fotos: recién bañado

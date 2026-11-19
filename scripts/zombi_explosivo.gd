@@ -37,7 +37,7 @@ func estado_propio(delta: float, _johnny: Node2D) -> void:
 	var rojo := int(tiempo * (8.0 + k * 16.0)) % 2 == 0
 	sprite.modulate = Color(1.0, 0.55, 0.5) if rojo else Color.WHITE
 	sprite.position.x = randf_range(-1.5, 1.5)
-	queue_redraw()
+	avisar(k)
 	if mecha <= 0.0:
 		vida = 0
 		morir()
@@ -59,7 +59,6 @@ func morir() -> void:
 	super()
 	sprite.modulate = Color.WHITE
 	sprite.position.x = 0.0
-	queue_redraw()
 	if reventado:
 		return
 	reventado = true
@@ -81,11 +80,19 @@ func morir() -> void:
 				zombi.oir_disparo(global_position, true)
 
 
-# El aviso en el suelo: un círculo rojo que se va llenando mientras corre la mecha
-func _draw() -> void:
-	if estado != "mecha":
+# El aviso en el suelo, el mismo de los jefes (aviso.gd): un círculo de pixel art que se va llenando desde él hacia
+# fuera mientras corre la mecha, con su destello justo antes de reventar. Como la explosión, lo paran las paredes, las
+# puertas y las barricadas, pero no los muebles (explosion.gd, tapado()): cada rayo llega hasta donde da con ellas.
+# Se pide en cada fotograma de la mecha; cuando deja de pedirse (al reventar), se esconde solo
+func avisar(k: float) -> void:
+	var aviso := Aviso.abanico(self, Vector2(0, 4), 0.0, PI, RADIO_EXPLOSION, k, tiempo)
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	if mapa == null:
 		return
-	var k := 1.0 - mecha / MECHA
-	var centro := Vector2(0, 4)
-	Formas.disco(self, centro, RADIO_EXPLOSION, Color(1, 0.31, 0.24, 0.12 + k * 0.25))
-	Formas.arco(self, centro, RADIO_EXPLOSION, 0, TAU, 48, Color(1, 0.36, 0.24), 3.0)
+	var puntas := []
+	for i in Aviso.MAX_RAYOS:
+		var a := PI * (2.0 * i / (Aviso.MAX_RAYOS - 1) - 1.0)
+		var fin := global_position + Vector2.from_angle(a) * RADIO_EXPLOSION
+		var choque: Dictionary = mapa.muro_entre(global_position, fin)
+		puntas.append(global_position.distance_to(choque.position) if not choque.is_empty() else RADIO_EXPLOSION)
+	aviso.rayos(puntas)

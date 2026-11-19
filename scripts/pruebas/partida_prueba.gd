@@ -36,6 +36,8 @@
 #                       que el combate se termina                                          [prueba_jefes.gd]
 #   --aspirar           (con --jefe gloton) su sangre ácida y lo que tira al aspirar a 3, 5, 8 y 12 casillas, normal y
 #                       enfadado                                                           [prueba_jefes.gd]
+#   --aire              (con --jefe gloton) cómo se ve su aspirado: el aviso rojo y el aire que se le mete en la
+#                       boca, flojo, fuerte y mirando hacia arriba                         [prueba_jefes.gd]
 #   --sangre            (con --jefe gloton) su sangre ácida: el chorro llega hasta donde estaba Johnny y deja allí
 #                       su charco (dos, enfadado)                                          [prueba_jefes.gd]
 #   --pesas             (con --jefe gymbro) sus suplementos, su salto y las pesas que lanza, en el aire y en el suelo
@@ -159,6 +161,7 @@
 #   --chispazos         la descarga salta de un zombi a otro: relámpagos y chispazos (M50)      [prueba_armas.gd]
 #   --molotov           el molotov al romperse (el efecto de pixelfx, M48)                     [prueba_armas.gd]
 #   --explosion         la explosión de pixelfx (granada, zombi explosivo): normal y pequeña   [prueba_armas.gd]
+#   --mecha             el aviso del zombi explosivo (el de los jefes), en medio y cortado por una pared [prueba_armas.gd]
 #   --gastro-objetivo   el vómito de Gastroenteritis no va a por el Glotón, Salas ni el gordo (no les quema) [prueba_armas.gd]
 #   --vomito            los zombis bañados en vómito (Gastroenteritis), junto a uno con ácido   [prueba_armas.gd]
 #   --johnny-ardiendo   Johnny ardiendo con el fuego de los zombis (su shader), con luz y a oscuras [prueba_armas.gd]
@@ -661,6 +664,10 @@ func empezar_prueba() -> void:
 		set_process(false)   # sin la prueba larga
 		await probar_aspirar()
 		get_tree().quit()
+	elif "--aire" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_aire()
+		get_tree().quit()
 	elif "--sangre" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_sangre_gloton()
@@ -1079,6 +1086,9 @@ func empezar_prueba() -> void:
 	elif "--explosion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_explosion()
+	elif "--mecha" in args:
+		set_process(false)   # sin la prueba larga
+		probar_mecha()
 	elif "--gastro-objetivo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gastro_objetivo()
