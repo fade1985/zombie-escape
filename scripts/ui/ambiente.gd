@@ -70,7 +70,7 @@ func _vida_cambiada(vida: int, _maxima: int) -> void:
 
 func _process(delta: float) -> void:
 	position = Vector2.ZERO
-	size = get_viewport_rect().size
+	size = get_viewport_rect().size - Vector2(0, Pantalla.franja_hud)   # (solo el juego, sin la franja del HUD)
 	material.set_shader_parameter("tam", size)
 	golpe = move_toward(golpe, 0.0, delta * 3.5)
 	var rojo := 0.0

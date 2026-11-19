@@ -960,7 +960,7 @@ func dibujar_capa() -> void:
 # apagón, F19) la puerta no se distingue aunque esté en pantalla: la flecha no se va, se queda encima de ella, con la
 # punta hacia abajo. "sube": cuánto por encima de "hacia" queda la puerta (sube según entra, para no dar un salto)
 func flecha(hacia: Vector2, color: Color, grande: bool, sube := 0.0) -> void:
-	var tam := capa.size
+	var tam := capa.size - Vector2(0, Pantalla.franja_hud)   # (lo que se ve del juego, sin la franja del HUD)
 	var en := partida.get_viewport().get_canvas_transform() * hacia
 	var borde := Rect2(Vector2.ZERO, tam).grow(-34)
 	var a_la_vista := borde.has_point(en)

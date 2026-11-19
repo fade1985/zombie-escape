@@ -679,6 +679,55 @@ func probar_minimapa_hud() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --franja-hud" (19 nov): la franja del HUD del ordenador. En un apartamento con zombis y a 960 de ancho:
+# Johnny en medio de lo que se ve del juego (encima de la franja), la franja con su fondo, y con el escudo de Acero lo
+# de encima de la barra de vida (las balas) sin salirse de ella; en el móvil, sin franja y la cámara en Johnny
+func probar_franja_hud() -> void:
+	johnny.vida = 9999
+	mochila.append_array(["vendas", "botiquin"])
+	for k in ["molotov", "granada", "atraedora"]:
+		lanzables.meter(k, 2)
+	var hud: Control = $Pantalla/HUD
+	nueva_planta(1)
+	var idx := 0
+	for k in planta.sitios.size():
+		if planta.sitios[k].has("apt") and planta.sitios[k].get("zombis", []).size() > 0:
+			idx = k
+	await montar(idx, 0, false)
+	var ventana := get_window()   # (la pantalla de 960 × 640)
+	ventana.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	ventana.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	ventana.content_scale_size = Vector2i(960, 640)
+	var camara: Camera2D = johnny.get_node("Camara")
+	var ver := func(que: String) -> void:
+		var pantalla := get_viewport().get_visible_rect().size
+		var en: Vector2 = get_viewport().get_canvas_transform() * johnny.global_position
+		var arriba: float = pantalla.y - Pantalla.franja_hud
+		var balas: float = hud.fila.position.y + (hud.fila.size.y - hud.ALTO - 24.0 - hud.alto_encima()) * hud.escala
+		print("Franja HUD · %s: franja %d (esperado: %s), la cámara mira %d más abajo y baja %d más allá del mapa (esperado: la mitad de la franja y la franja), Johnny a %d de alto (lo que se ve del juego: hasta %d, su medio %d, si la cámara no está en un borde), las balas empiezan a %d (la franja, a %d; esperado: más abajo)" % [
+			que, Pantalla.franja_hud, "0" if Tactil.activo else "100", roundi(camara.position.y), camara.limit_bottom - roundi(planta.sitios[aqui].alto),
+			roundi(en.y), roundi(arriba), roundi(arriba / 2.0), roundi(balas), roundi(arriba)])
+	await get_tree().create_timer(1.0).timeout
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	ver.call("960")
+	Captura.foto("captura-franja-hud.png")
+	johnny.escudo = 0.0
+	aplicar_talentos({"acero": 1})
+	await get_tree().create_timer(1.2).timeout
+	ver.call("960 con escudo")
+	Captura.foto("captura-franja-hud-escudo.png")
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	await get_tree().create_timer(0.3).timeout
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	ver.call("móvil")
+	Captura.foto("captura-franja-hud-movil.png")
+	Tactil.activo = false
+	get_tree().quit()
+
+
 # Con "--captura --hud-movil" (M114): el HUD del móvil, con los dos modos de atacar (con Disparo asistido y con el joystick
 # derecho), en la pantalla de la ventana y en una de 960 × 640, y con la barra de un jefe. Dice dónde quedan la vida (con
 # sus balas encima), el minimapa, el nombre del sitio y la barra del jefe, si alguno pisa a otro o a un botón, y que las
@@ -760,8 +809,10 @@ func probar_hud_movil() -> void:
 	Captura.foto("captura-hud-movil-960.png")
 	Tactil.activo = false
 	await get_tree().create_timer(0.3).timeout
-	print("HUD ordenador otra vez: casillas de armas %s, nombre en x %d de %d de ancho, jefe en x %d (esperado: true, 12, %d, %d)" % [
-		hud.derecha.visible, lugar.position.x, lugar.size.x, jefa.position.x, 960 - 24, (960 - BarraJefe.ANCHO) / 2])
+	# (en el ordenador, el nombre del sitio va en medio de la franja del HUD, 19 nov: entre las curas y las armas)
+	print("HUD ordenador otra vez: casillas de armas %s, franja %d, nombre a %d de alto (la franja empieza a %d), de x %d a %d (las curas acaban a %d y las armas empiezan a %d), jefe en x %d (esperado: true, 100, el nombre dentro de la franja y entre las dos, %d)" % [
+		hud.derecha.visible, Pantalla.franja_hud, lugar.position.y, 640 - hud.FRANJA, lugar.position.x, lugar.position.x + lugar.size.x,
+		hud.curas.position.x + (2 * (hud.MEDIANA + 10) - 4) * hud.escala, hud.derecha.position.x, jefa.position.x, (960 - BarraJefe.ANCHO) / 2])
 	get_tree().quit()
 
 

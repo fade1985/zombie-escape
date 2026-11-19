@@ -393,6 +393,9 @@
 #                       piso al entrar y tras pasar a otra habitación, con las cámaras del técnico y en el jefe [prueba_sitios.gd]
 #   --minimapa-hud      el minimapa abajo en el medio (M104): alineado con la barra de vida, a 960 de ancho con curas y
 #                       lanzables, y en el móvil arriba, bajo la vida (M114); dice si pisa algo  [prueba_sitios.gd]
+#   --franja-hud        la franja del HUD del ordenador (19 nov): en un apartamento con zombis, a 960 de ancho, Johnny en
+#                       medio de lo que se ve del juego, y con escudo todo dentro de la franja; y en el móvil, sin franja
+#                       [prueba_sitios.gd]
 #   --hud-movil         el HUD del móvil (M114): la vida y el minimapa arriba a la izquierda, sin casillas repetidas, en
 #                       los dos modos de atacar, a 960 de ancho y con la barra de un jefe; dice si algo pisa algo [prueba_sitios.gd]
 #   --volver            salir de un sitio y volver lo deja como estaba: un piso a medias, ya limpio, el pasillo, el jefe,
@@ -621,6 +624,9 @@ func empezar_prueba() -> void:
 	elif "--minimapa-hud" in args:
 		set_process(false)
 		probar_minimapa_hud()
+	elif "--franja-hud" in args:
+		set_process(false)
+		probar_franja_hud()
 	elif "--fotos-tiendas" in args:
 		fotos_tiendas()
 	elif "--grito" in args:

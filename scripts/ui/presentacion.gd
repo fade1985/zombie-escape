@@ -142,11 +142,14 @@ func presentar(partida: Node, jefa: Node2D, texto_nombre: String) -> void:
 	show()
 	# la cámara: de donde descansará ya acercada (Johnny, recortado a los límites del mapa; no de donde está ahora,
 	# que puede venir deslizándose desde la puerta) hasta el jefe, recortado igual
+	# (en el ordenador la cámara mira algo más abajo que Johnny y su límite de abajo pasa del mapa lo que tapa la franja del
+	# HUD: partida.encuadrar. Aquí el HUD no se ve, así que el jefe va en medio de la pantalla entera y sin pasar del mapa)
 	var medio := camara.get_viewport_rect().size / (2.0 * ZOOM)   # (lo que ve la cámara ya acercada, a cada lado)
+	var fondo_mapa := camara.limit_bottom - Pantalla.franja_hud
 	var meta := Vector2(clampf(jefa.global_position.x, camara.limit_left + medio.x, camara.limit_right - medio.x),
-		clampf(jefa.global_position.y - CUERPO, camara.limit_top + medio.y, camara.limit_bottom - medio.y))
+		clampf(jefa.global_position.y - CUERPO, camara.limit_top + medio.y, maxf(camara.limit_top + medio.y, fondo_mapa - medio.y)))
 	var desde := Vector2(clampf(johnny.global_position.x, camara.limit_left + medio.x, camara.limit_right - medio.x),
-		clampf(johnny.global_position.y, camara.limit_top + medio.y, camara.limit_bottom - medio.y))
+		clampf(johnny.global_position.y + camara.position.y, camara.limit_top + medio.y, camara.limit_bottom - medio.y))
 	var ida := create_tween().set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	if normal:
 		ida.tween_property(camara, "zoom", Vector2(ZOOM, ZOOM), ACERCAR)

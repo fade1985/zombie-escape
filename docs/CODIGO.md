@@ -646,7 +646,14 @@ en una línea.
   navegador no reconoce, para que su L2 no sea Start, M73, ver `docs/CONTROLES.md`).
 
 **ui/**
-- `hud.gd` (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,
+- `hud.gd`: desde el 19 nov, en el ordenador, la pantalla va **partida en HUD y juego**: el HUD en su franja de abajo
+  (`FRANJA`, 100 de alto, con fondo liso y una raya arriba: `pintar_fondo`), en una fila y a su tamaño (`ESCALA_FRANJA`, 1;
+  en el móvil sigue `ESCALA`, 1,5, encima del juego y sin franja): la vida con las balas, el mutágeno y el escudo encima; las
+  curas; el nombre del sitio con el minimapa debajo (a 2/3, `MAPA_FRANJA`), y las armas. `Pantalla.franja_hud` dice lo que
+  tapa la franja (0 en el móvil y fuera de la partida): con ella `partida.encuadrar` corre la cámara (mira la mitad de la
+  franja más abajo que Johnny, `Camara.position`, y su límite de abajo pasa del mapa lo que tapa la franja), el viñeteado
+  (`ambiente.gd`) y las flechas del borde (`supervivientes.flecha`) se quedan en el juego y la presentación del jefe no baja
+  del mapa. Prueba: `--franja-hud`. El HUD (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,
   sacado de `barra-vida.png` cogiendo solo algunas de sus filas para que no se deformen los remaches; mientras se ve,
   las balas y el depósito suben encima de ella; `mover_escudo`, `pintar_escudo`, `con_escudo`; se prueba con
   `--escudo`). El escudo (Acero, Blindaje, Endurecimiento: `johnny.escudo`, M23) se gasta antes que la vida: en

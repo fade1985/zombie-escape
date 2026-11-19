@@ -21,6 +21,9 @@
 extends Node
 
 const BASE := Vector2(960, 640)   # la pantalla base: siempre se ve por lo menos esto
+# Lo que tapa abajo la franja del HUD en el ordenador (ui/hud.gd, FRANJA; 0 en el móvil y fuera de la partida): el juego
+# se ve solo encima. La miran la cámara (partida.encuadrar), el viñeteado (ambiente.gd) y las flechas del borde
+var franja_hud := 0.0
 const ALTO_MAXIMO := 800.0        # lo más alto que se deja ver antes de agrandar lo justo
 const CRECER_DESDE_X1 := 1.1      # a ×1, si lo justo es por lo menos esto, se agranda (la letra, legible en la Steam Deck)
 # Imágenes por segundo. Normalmente las frena el vsync (las que dé la pantalla: 60, 144, 165...), pero si falla

@@ -209,6 +209,7 @@ var semilla_propia := false       # si la semilla de las plantas (Planta.semilla
 
 @onready var johnny := $Johnny
 @onready var lugar: Label = $Pantalla/Lugar
+var lugar_grande := true   # el nombre del sitio puede ir con la letra grande (no en la franja del HUD del ordenador: hud.gd)
 @onready var aviso: Label = $Pantalla/Mensaje
 var aviso_tween: Tween     # el que va borrando el aviso (decir)
 var de_prueba := 0         # «Científico muerto» del panel de pruebas: la página del siguiente (probar_cientifico)
@@ -247,6 +248,7 @@ func _ready() -> void:
 	hud.partida = self
 	$Pantalla.add_child(hud)
 	$Pantalla.move_child(hud, minimapa.get_index())
+	$Pantalla.move_child(lugar, hud.get_index())   # (el nombre del sitio, encima del fondo de la franja del HUD)
 	# El viñeteado y la pantalla roja, por debajo de todo lo demás de la pantalla
 	var ambiente := AMBIENTE.new()
 	ambiente.johnny = johnny
@@ -758,10 +760,13 @@ func reencuadrar() -> void:
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,
-# se centra.
+# se centra. En el ordenador, la franja del HUD tapa el trozo de abajo (Pantalla.franja_hud): el juego se ve solo encima,
+# así que la cámara mira la mitad de la franja más abajo (Johnny queda en medio de lo que se ve) y puede bajar eso más
+# allá del mapa (lo que queda debajo del mapa lo tapa la franja)
 func encuadrar(sitio: Dictionary) -> void:
 	var camara: Camera2D = johnny.get_node("Camara")
-	var pantalla := get_viewport_rect().size
+	var franja := Pantalla.franja_hud
+	var pantalla := get_viewport_rect().size - Vector2(0, franja)
 	var x0 := 0.0
 	var x1: float = sitio.ancho
 	var y0 := -float(sitio.get("arriba_extra", ARRIBA_EXTRA))
@@ -776,7 +781,8 @@ func encuadrar(sitio: Dictionary) -> void:
 	camara.limit_left = int(x0)
 	camara.limit_right = int(x1)
 	camara.limit_top = int(y0)
-	camara.limit_bottom = int(y1)
+	camara.limit_bottom = int(y1 + franja)
+	camara.position.y = roundf(franja / 2.0)
 
 
 # La luz de cada puerta: roja si no se puede pasar
@@ -811,7 +817,7 @@ func poner_lugar() -> void:
 	lugar.text = (texto + eventos.etiqueta() + garaje.etiqueta()).to_upper()
 	# arriba del todo, grande como el grito de la llave; si en esta pantalla no cabe entero (un evento, el reto, otro
 	# idioma...), con la letra pequeña (la fuente solo se ve nítida a 16 o 32)
-	var cabe := lugar.get_theme_font("font").get_string_size(lugar.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 16 <= lugar.size.x
+	var cabe := lugar_grande and lugar.get_theme_font("font").get_string_size(lugar.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x + 16 <= lugar.size.x
 	if lugar.get_theme_font_size("font_size") != (32 if cabe else 16):   # (solo si cambia: se mira a menudo)
 		lugar.add_theme_font_size_override("font_size", 32 if cabe else 16)
 		lugar.add_theme_constant_override("outline_size", 8 if cabe else 4)
