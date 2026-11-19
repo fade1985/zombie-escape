@@ -997,6 +997,12 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 				if z.tipo in ["normal", "lento", "rapido"]:
 					z.tipo = t
 					break
+	# y en la tienda de ropa, siempre una dependienta (19 nov, el dueño): si a suertes no ha salido, uno de los de siempre se cambia por ella
+	if sitio.get("tienda", "") == "ropa" and not zombis.any(func(z): return z.tipo == "dependienta"):
+		for z in zombis:
+			if z.tipo in ["normal", "lento", "rapido"]:
+				z.tipo = "dependienta"
+				break
 	return zombis
 
 

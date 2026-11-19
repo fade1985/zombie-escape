@@ -4512,3 +4512,29 @@ func probar_rodear_muebles() -> void:
 		return
 	print("Rodear: TODO BIEN")
 	get_tree().quit()
+
+
+# Con "--captura --edificio centro --dependientas" (19 nov, el dueño: «en todas las tiendas de ropa habrá una dependienta»): en 200
+# plantas sorteadas, cuántas dependientas tiene cada tienda de ropa (esperado: siempre una) y, para comparar, las demás tiendas
+# (como mucho una, a suertes). Falla (código 1) si alguna tienda de ropa no tiene justo una. Luego se cierra
+func probar_dependientas() -> void:
+	var ropa := {}
+	var otras := {}
+	for i in 200:
+		Planta.semilla = 7000 + i
+		var num := 1 + i % 4
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		for s in p.sitios:
+			if s.get("tienda", "") == "" or not s.has("zombis") or s.tipo == "jefe":   # (la del jefe, sin zombis de los de siempre)
+				continue
+			var n: int = s.zombis.filter(func(z): return z.tipo == "dependienta").size()
+			var cuenta: Dictionary = ropa if s.tienda == "ropa" else otras
+			cuenta[n] = cuenta.get(n, 0) + 1
+	Planta.semilla = 0
+	print("Dependientas en las tiendas de ropa (cuántas tiendas con 0, 1, 2...): %s (esperado: todas con 1)" % ropa)
+	print("Dependientas en las demás tiendas: %s (como mucho 1, a suertes)" % otras)
+	if ropa.is_empty() or ropa.keys() != [1]:
+		Captura.fallar("alguna tienda de ropa no tiene justo una dependienta: %s" % ropa)
+		return
+	print("Dependientas: TODO BIEN")
+	get_tree().quit()
