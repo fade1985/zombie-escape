@@ -84,7 +84,7 @@ PIEL_GRIS = {"guardia": ["rugir"]}
 VERDEAR = []   # (las animaciones de este personaje que lo necesitan: PIEL_GRIS)
 # Y por vista: el arrastrado de perfil y en diagonal (se le ve el cuerpo a lo largo) salía mucho más grande que de frente
 # (de perfil, 32 de largo y de frente 26 de ancho; el vecino de pie mide 45): esas vistas, más pequeñas
-TAMANO_VISTA = {"lento": {"south-east": 0.8, "east": 0.82, "north-east": 0.82}}
+TAMANO_VISTA = {"lento": {"south-east": 0.8, "east": 0.82, "north-east": 0.92}}
 # Los que van por el suelo (el arrastrado): en el ataque, el golpe y la muerte, cada fotograma a la altura a la que lo
 # dibuja GPT, no con lo más bajo en el suelo. Al dar el zarpazo levanta las dos manos y, con lo más bajo abajo, todo
 # el cuerpo se hundía 5 píxeles justo al atacar
