@@ -623,15 +623,17 @@ const SALAS := {
 			["ropaperchero1", 38.0, "libre", 4.375], ["ropaperchero2", 38.0, "libre", 9.125], ["roparuedas", 38.0, "libre", 13.4375], ["ropatarimas", 5.38, "libre", 13.125],
 			["ropamesa", 15.12, "libre", 13.3125], ["ropamaniqui1", 28.4, "libre", 9.375], ["ropamaniqui2", 30.0, "libre", 9.375], ["ropamaniqui3", 28.4, "libre", 13.625],
 			["ropamaniqui4", 30.0, "libre", 13.625], ["ropamostrador", 15.12, "libre", 9.0]],
-		# (19 nov, el dueño: «ordena la tienda inversa como la normal») los mismos 14, uno de cada y sin la vitrina: los de suelo, en espejo
-		# de arriba abajo (la fila, 17 menos la de la normal); los de pared, contra la pared de arriba (la de la entrada: la de abajo se vería
-		# de espaldas), a los lados de la entrada, el módulo a la izquierda de su paso (en la normal, a 21,5, la taparía). El perchero de
-		# delante de los probadores, algo más arriba (a 12,6 se pegaba a lo alto de su pared, que tapa las filas 13 a 17)
+		# (19 nov, el dueño: «ordena la tienda inversa como la normal») los mismos 14, uno de cada y sin la vitrina, y luego colocados uno a
+		# uno: en la pared de arriba, a la derecha de la entrada (de 24,5 a 46), la barra, el expositor redondeado y el módulo, con la misma
+		# separación entre ellos y a los bordes; a la izquierda, el zapatero (encima de las tarimas) y dos maniquíes, en el medio entre el
+		# zapatero y la entrada (21,5). Por el suelo, la mesa y la caja a la izquierda; en el medio, un maniquí y debajo el perchero pequeño
+		# (el de ruedas); a la derecha, otro maniquí y debajo los dos percheros. El perchero de delante de los probadores, algo más arriba
+		# (a 12,6 se pegaba a lo alto de su pared, que tapa las filas 13 a 17)
 		"arriba": [
-			["ropabarra", 6.79, "libre", 0.4375], ["ropaoval", 10.58, "libre", 0.5], ["ropamodulo", 18.5, "libre", 0.5], ["ropazapatos", 5.43, "libre", 7.75],
-			["ropaperchero1", 38.0, "libre", 11.5], ["ropaperchero2", 38.0, "libre", 7.875], ["roparuedas", 38.0, "libre", 3.5625], ["ropatarimas", 5.38, "libre", 3.875],
-			["ropamesa", 15.12, "libre", 3.6875], ["ropamaniqui1", 28.4, "libre", 7.625], ["ropamaniqui2", 30.0, "libre", 7.625], ["ropamaniqui3", 28.4, "libre", 3.375],
-			["ropamaniqui4", 30.0, "libre", 3.375], ["ropamostrador", 15.12, "libre", 8.0]]}},
+			["ropabarra", 29.82, "libre", 0.4375], ["ropaoval", 35.8, "libre", 0.5], ["ropamodulo", 41.23, "libre", 0.5], ["ropazapatos", 5.38, "libre", 0.5],
+			["ropaperchero1", 38.0, "libre", 11.5], ["ropaperchero2", 38.0, "libre", 7.875], ["roparuedas", 29.2, "libre", 7.625], ["ropatarimas", 5.38, "libre", 3.875],
+			["ropamesa", 15.12, "libre", 3.6875], ["ropamaniqui1", 29.2, "libre", 3.5625], ["ropamaniqui2", 38.0, "libre", 3.5625], ["ropamaniqui3", 13.44, "libre", 0.375],
+			["ropamaniqui4", 15.04, "libre", 0.375], ["ropamostrador", 15.12, "libre", 8.0]]}},
 	"probadores-ropa": {"colocados": {"abajo": [["espejoprobador", 3.0], ["pufprobador", 0.7], ["ganchoprobador", 2.5, "derecha"], ["ganchoprobador", 4.5, "derecha"]], "arriba": [["pufprobador", 0.7], ["ganchoprobador", 3.5, "derecha"], ["ganchoprobador", 5.5, "derecha"]]}},
 	# el almacén de la tienda de ropa (18 nov, el dueño; 17 × 12; la puerta, en las casillas 7 y 8): estanterías de las habitaciones de los
 	# supervivientes en la pared de arriba (normal: cinco, con la misma separación; inversa: dos a cada lado de la puerta), montones de cajas de
