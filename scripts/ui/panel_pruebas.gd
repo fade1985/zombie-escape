@@ -17,7 +17,7 @@ const PESTANAS := ["Jefes", "Zombis", "Ayudas", "Johnny", "Ir a", "Varios"]
 const JEFES := {"portera": "Portera", "antidisturbios": "Antidisturbios", "cocinero": "Cocinero", "modista": "Modista",
 	"mascota": "Mascota", "gerente": "Gerente", "gloton": "Glotón", "gymbro": "Gymbro", "bombero": "Jefe de bomberos",
 	"cientifico_jefe": "Científico jefe", "directora": "Directora de RR. HH.", "informatico": "Informático", "presentador": "Presentador", "becario": "Becario",
-	"sujeto_1": "Sujeto 1"}
+	"sujeto_1": "Sujeto 1", "guardia": "Jefe de seguridad"}
 const ZOMBIS := {"normal": "Normal", "lento": "Lento", "rapido": "Rápido", "explosivo": "Explosivo",
 	"tentaculos": "Tentáculos", "venenoso": "Venenoso", "vigilante": "Vigilante", "dependienta": "Dependienta",
 	"oficinista": "Oficinista", "escolta": "Escolta de Velaria",
@@ -229,6 +229,13 @@ func ir_al_reto(cond: String) -> void:
 func sacar_jefe(tipo: String) -> void:
 	cerrar()
 	var jefe: Node2D = partida.meter_zombi(tipo, partida.mapa.punto_libre(partida.johnny.position, 300.0))
+	if tipo == "guardia":
+		# El jefe de seguridad (zombi_guardia.gd) no es un minijefe (ni media vida ni quieto): hace la ronda de punta a
+		# punta de la sala y, al ver a Johnny, ruge y llama a sus guardias, como en el pasillo (partida.poner_guardia)
+		var sitio: Dictionary = partida.planta.sitios[partida.aqui]
+		jefe.puntas = [Vector2(Planta.MURO + 70, sitio.alto / 2.0), Vector2(sitio.ancho - Planta.MURO - 70, sitio.alto / 2.0)]
+		jefe.rugido.connect(partida._al_rugir)
+		return
 	if media_vida:
 		jefe.vida = floori(jefe.vida_max * jefe.enfado)   # (al siguiente paso se enfada, con su grito)
 		if jefe.has_signal("vida_cambiada"):

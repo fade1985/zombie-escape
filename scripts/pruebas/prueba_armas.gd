@@ -3025,6 +3025,37 @@ func probar_reto_f9() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --guardia-f9": el jefe de seguridad desde el panel de F9 (pestaña Jefes; el dueño lo echó de menos el
+# 19 nov): sale con su ronda y, al ver a Johnny, ruge y llama a sus guardias, como en el pasillo (captura-guardia-f9.png)
+func probar_guardia_f9() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	await get_tree().create_timer(0.3).timeout
+	await pulsar_y_esperar(KEY_P)
+	await get_tree().create_timer(0.3).timeout
+	panel_pruebas.elegir("Johnny")
+	pulsar_en_panel("Invencible")
+	panel_pruebas.elegir("Jefes")
+	pulsar_en_panel("Jefe de seguridad")
+	await get_tree().create_timer(0.3).timeout
+	var guardia: Node2D = null
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.scene_file_path.get_file() == "zombi_guardia.tscn":
+			guardia = z
+	print("Jefe de seguridad desde F9: sale %s · puntas de su ronda %d (esperado: true, 2)" % [
+		guardia != null, guardia.puntas.size() if guardia else 0])
+	if guardia == null:
+		return
+	guardia.rugir_ya = true   # (que ruja ya, como si le hubieran dado)
+	await get_tree().create_timer(2.0).timeout
+	var vigilantes := 0
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.scene_file_path.get_file() == "zombi_vigilante.tscn":
+			vigilantes += 1
+	print("Jefe de seguridad desde F9: ha rugido %s · guardias que llama %d (esperado: true, %d)" % [
+		guardia.alerta, vigilantes, guardias_del_rugido()])
+	Captura.foto("captura-guardia-f9.png")
+
+
 func pulsar_en_panel(texto: String) -> void:
 	for b in panel_pruebas.hoja.get_children():
 		if b.text.begins_with(texto) or b.text.ends_with("· " + texto):

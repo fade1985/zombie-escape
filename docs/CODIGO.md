@@ -839,7 +839,8 @@ en una línea.
   cualquier pulsación saca la siguiente y cierra al final; Esc o B la saltan. La abre `partida.ver_relato`: la
   introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final (menos el de
   los Apartamentos: desde el 16 nov sale al elegir el centro comercial por primera vez, también en `_ready`).
-- `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos), zombis, las ayudas
+- `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos; y el jefe de seguridad,
+  con su ronda y su rugido conectado a `partida._al_rugir`, 19 nov), zombis, las ayudas
   que se encienden y se apagan, Johnny invencible, la diana, ir a la exposición o a la sala de un jefe y lo de las
   antiguas teclas de prueba (mutaciones, objeto, piezas al baúl, Colecciones, científico).
 
