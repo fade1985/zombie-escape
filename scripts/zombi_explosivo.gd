@@ -67,7 +67,7 @@ func morir() -> void:
 	# pidió el dueño). Congelado no: revienta en añicos de hielo (zombi.reventar_hielo)
 	if not en_anicos:
 		# y deja en el suelo la marca negra de la explosión (la de las granadas), debajo de toda la sangre (19 nov)
-		Mancha.quemado(get_parent(), position + Vector2(0, 10), RADIO_EXPLOSION * 0.75)
+		Mancha.quemado(get_parent(), position + Vector2(0, 10), RADIO_EXPLOSION * 1.1)   # (del tamaño de la explosión: 19 nov, el dueño la quería más grande)
 		Cachos.lanzar(get_parent(), position + Vector2(0, 10))
 	# La explosión se añade "en diferido" (al acabar este paso): si revienta a otro explosivo, ese reventará
 	# en el paso siguiente, en cadena, sin liarse
