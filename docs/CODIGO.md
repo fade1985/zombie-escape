@@ -504,7 +504,7 @@ en una línea.
   del 19 nov dividen su mutágeno entre 40 una vez (marca `mutageno_barra` de `guardado.gd`). Prueba: `--mutageno`. Al completar el edificio, el que quede pasa al guardado ("mutageno",
   `partida.terminar`; lo pidió el dueño el 15 nov); si caes o abandonas, el de esa partida se pierde, y el guardado no
   (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. La primera vez que se coge, su tutorial («mutageno», en `mirar_tutoriales`; prueba `--tutorial-mutageno`). Se ve, el guardado más el de la partida
-  (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en verde (`CHAPA.VERDE`, la piel de los
+  (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en morado (`CHAPA.MORADO`, el de su barra; hasta el 19 nov, verde, la piel de los
   durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
   marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una vacía (las cifras de todos los marcadores son de reloj
   digital desde el 15 nov: siete rayas con las puntas en pico, dibujadas a cuadraditos, cada cifra con las suyas encendidas
@@ -684,7 +684,7 @@ en una línea.
   `CHAPA`, `REMACHE`, `TEXTO`, `AMARILLO`...), `dibujar` (el marco con sus remaches), `dibujar_ahorrado` (el billete y
   la pantallita de caja registradora, con el «$» pegado a la cifra; `caja_ahorrado` dice dónde acaba; con `fijo`, la
   de 4 casillas del inventario, sin el billete: la de la tienda de armas desde el 15 nov) y
-  `dibujar_mutageno` (el marcador fijo del inventario, con la hélice en verde, en el árbol de talentos).
+  `dibujar_mutageno` (el marcador fijo del inventario, con la hélice en morado, en el árbol de talentos).
 - `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
   izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
   de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas y lo lleno, con el borde verde, sin letrero (el botón de la ficha dice «LLENO» desde el 15 nov); desde el 16 nov, lo que te llega con el borde amarillo y lo que no, con el dibujo muy oscuro:

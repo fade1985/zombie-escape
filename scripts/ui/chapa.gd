@@ -11,7 +11,7 @@ const NEGRO := Color("#1a1c20")      # el relleno de lo bloqueado
 const TEXTO := Color("#d8d0b8")
 const TEXTO_SUAVE := Color("#8a8f98")
 const AMARILLO := Color("#ffe066")   # lo ahorrado y los cuadraditos llenos
-const VERDE := Color("#b0d98c")      # el mutágeno: el verde de la piel de los durmientes, un poco más vivo para que se lea
+const MORADO := Color("#b77ce8")     # el mutágeno (19 nov; antes, verde): el morado de su barra (hud.gd), más claro para que se lea
 # El símbolo del mutágeno en su marcador, en lugar del «$»: una doble hélice de ADN, a cuadraditos de PIXEL_ADN (cada
 # fila, de arriba abajo; «#», lleno). Las dos tiras se cruzan en medio y entre ellas van los peldaños
 const ADN := ["#.....#", "#.###.#", "#.....#", "#.###.#", ".#...#.", "..#.#..", "...#...", "..#.#..", ".#...#.", "#.###.#",
@@ -59,9 +59,9 @@ static func dibujar_ahorrado(lienzo: CanvasItem, fuente: Font, dolares: int, fij
 
 # El mutágeno (el guardado y el de la partida, lo mismo que en el inventario), arriba a la izquierda del árbol de
 # talentos, que se paga con él (15 nov): sin dibujo al lado, el marcador fijo del inventario, con la hélice y la
-# cifra en verde
+# cifra en morado
 static func dibujar_mutageno(lienzo: CanvasItem, fuente: Font, mutageno: int) -> void:
-	dibujar_marcador(lienzo, fuente, Rect2(Vector2(14, 5), medida_fija(fuente)), mutageno, VERDE, true, true)
+	dibujar_marcador(lienzo, fuente, Rect2(Vector2(14, 5), medida_fija(fuente)), mutageno, MORADO, true, true)
 
 
 # La pantallita de un marcador (la de lo ahorrado o la del precio que no llega en la tienda: tienda_armas.gd) en "caja":

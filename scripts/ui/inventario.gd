@@ -248,11 +248,11 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			ahora.size = Vector2(80, 80)
 	# y abajo, la etiqueta de la llave y, a su derecha, el dinero en la pantallita de la tienda de armas (chapa.gd: el «$»
 	# y la cifra en amarillo, sin los «8» apagados) y, debajo, el mutágeno, el guardado más el de esta partida (15 nov: la hélice y
-	# la cifra en verde; lo mismo que en el árbol de talentos). Los dos, del mismo tamaño (4 cifras, con un «8» apagado en cada casilla; desde 10.000, «8MAX»: CHAPA, fijo).
+	# la cifra en morado; lo mismo que en el árbol de talentos). Los dos, del mismo tamaño (4 cifras, con un «8» apagado en cada casilla; desde 10.000, «8MAX»: CHAPA, fijo).
 	# En el HUD no se ven
 	hueco_llave()
 	var fuente: Font = Tema.FUENTE
-	for m in [["dinero", partida.cartera(), CHAPA.AMARILLO, false, 488], ["mutageno", partida.mutageno_total(), CHAPA.VERDE, true, 526]]:
+	for m in [["dinero", partida.cartera(), CHAPA.AMARILLO, false, 488], ["mutageno", partida.mutageno_total(), CHAPA.MORADO, true, 526]]:
 		var marcador := Control.new()
 		marcador.name = m[0]
 		marcador.mouse_filter = Control.MOUSE_FILTER_IGNORE

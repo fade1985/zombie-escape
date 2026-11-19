@@ -120,7 +120,7 @@ const MUTAGENO_ZOMBI := {"lento": 1, "normal": 2, "vecina": 2, "rapido": 3, "ven
 	"explosivo": 5, "guardia": 5}
 const MUTAGENO_OTRO := 2
 const MUTAGENO_BARRA := 100   # lo que hay que llenar para un mutágeno
-const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su verde, el del mutágeno)
+const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su MAXIMO, el tope)
 # El tope de los dólares (lo ahorrado más lo de la partida: cartera) y del mutágeno: lo que cabe en el marcador del
 # inventario, «MAX» (15 nov, lo pidió el dueño). Al llegar, los enemigos dejan de soltarlos y lo que hay en el suelo no
 # se coge, hasta que se gaste algo
@@ -1467,7 +1467,7 @@ func llenar_mutageno(puntos: int) -> void:
 		Sonido.tocar("mutageno_punto")
 		if johnny and johnny.vivo:
 			EfectoSuelo.soltar(johnny, "mutar", Vector2.ZERO)
-			gran_aviso("+%d" % ganados, Color("#b77ce8"))   # (encima de su cabeza, con la letra de sus gritos, como «¡¡¡LA LLAVE!!!», en morado: el de la barra, más claro para que se lea)
+			gran_aviso("+%d" % ganados, CHAPA_UI.MORADO)   # (encima de su cabeza, con la letra de sus gritos, como «¡¡¡LA LLAVE!!!», en el morado del mutágeno)
 
 
 # Lo que llena la barra un zombi de este tipo

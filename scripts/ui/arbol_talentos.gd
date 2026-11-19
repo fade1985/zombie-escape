@@ -465,12 +465,12 @@ func llenar_ficha(id: String) -> void:
 	margen.add_child(textos)
 	for linea in lineas:
 		textos.add_child(etiqueta(linea[0], linea[1], true, Tema.PESO_LISA))
-	# el pie: el precio en un marcador con la hélice (en verde si te llega el mutágeno; si no, apagado), o, al máximo o
+	# el pie: el precio en un marcador con la hélice (en morado si te llega el mutágeno; si no, apagado), o, al máximo o
 	# bloqueado, una franja gris que lo dice
 	var motivo := Talentos.motivo(s, id, mutageno)
 	var pie: Control
 	if motivo in ["", "sin_mutageno"]:
-		pie = marcador_precio(Talentos.precio(s, id), PLACA.VERDE if motivo == "" else TEXTO_SUAVE)
+		pie = marcador_precio(Talentos.precio(s, id), PLACA.MORADO if motivo == "" else TEXTO_SUAVE)
 	else:
 		var letrero := etiqueta(pie_ficha(id), TEXTO_SUAVE)
 		letrero.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
