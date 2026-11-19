@@ -70,6 +70,12 @@ func _ready() -> void:
 	rabia = VaporRabia.new(coronilla if coronilla > 0.0 else arriba - 20.0, orejas)
 	$Vapor.draw.connect(_pintar_encima)
 	vida_cambiada.emit.call_deferred(vida, vida_max)
+	# el shader de los zombis en su dibujo: para el destello blanco de los golpes (y el azul del hielo, el ácido...).
+	# Si un jefe pone el suyo (el Gymbro, con su metal), lo cambia después
+	if sprite.material == null:
+		sprite.material = ShaderMaterial.new()
+		sprite.material.shader = Zombi.DESTELLO
+		sprite.material.set_shader_parameter("semilla", randf() * 100.0)
 	# (los golpes de pixelfx, M58: preparados antes para que el primero no pare el juego)
 	get_tree().create_timer(0.5).timeout.connect(func():
 		if is_inside_tree():
@@ -349,13 +355,25 @@ func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-20, 0), -arriba), cantidad)
 	Zombi.critico = era
 	Sonido.tocar(sonido_golpe)
-	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre (congelado, hielo)
+	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): se pone blanco y salta su sangre (congelado, hielo)
+		destellar()
 		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, fuerza,
-			Zombi.HIELO if helado_golpe else Color("#7a1f1a"), 5)
+			Zombi.HIELO if helado_golpe else Color("#7a1f1a"), 12)
 	vida_cambiada.emit(vida, vida_max)
 	if vida <= 0:
 		frio().deshelar()
 		morir()
+
+
+# Se pone blanco de golpe y vuelve a su color enseguida, como los zombis (Zombi.destellar). El Gymbro lo cambia
+func destellar() -> void:
+	var m := sprite.material as ShaderMaterial
+	if m == null or m.shader != Zombi.DESTELLO:
+		return
+	m.set_shader_parameter("destello", 0.9)
+	var tw := create_tween()
+	tw.tween_interval(0.05)
+	tw.tween_property(m, "shader_parameter/destello", 0.0, 0.1)
 
 
 # Lo llaman los charcos en cada paso mientras lo pisa: de los charcos, solo le quema el ácido (al doctor Salas y al

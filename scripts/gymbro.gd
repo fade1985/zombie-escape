@@ -264,6 +264,11 @@ func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 			Vector2(randf_range(-80, 80), randf_range(-120, -40)), ACERO, 3, 0.6)
 
 
+# El destello blanco de un golpe: en él lo pone cada paso pintar_metal (con brillo_golpe)
+func destellar() -> void:
+	brillo_golpe = maxf(brillo_golpe, 0.9)
+
+
 # Con armadura, a la vida solo le llega la mitad; la otra mitad se la come la armadura
 func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	if armadura <= 0:

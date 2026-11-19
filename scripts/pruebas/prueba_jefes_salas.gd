@@ -1363,3 +1363,51 @@ func probar_bidon() -> void:
 		print("Bidón: contra la burbuja del giro, revienta %s (esperado: true) · sigue girando %s (esperado: true) · le quita %d (esperado: 0)" % [
 			not is_instance_valid(bidon), jefe.estado == "giro", vida1 - jefe.vida])
 	get_tree().quit()
+
+
+# --destello-jefe: el destello blanco y la sangre de un golpe a cada jefe (como a los zombis). Uno a uno junto a
+# Johnny, se le da un golpe (como el del bate) y se saca captura-destello-<jefe>.png en pleno destello, y se cierra
+func probar_destello_jefe() -> void:
+	set_process(false)
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca su jefe: se meten a mano
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	johnny.invulnerable = 999.0
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(2.0, 2.0)
+	for tipo in ["portera", "antidisturbios", "gloton", "gymbro", "bombero"]:
+		var jefe: Node2D = meter_zombi(tipo, centro)
+		await get_tree().create_timer(0.3, false).timeout
+		jefe.invulnerable = false
+		johnny.position = jefe.position + Vector2(90, -60)
+		johnny.velocity = Vector2.ZERO
+		camara.reset_smoothing()
+		# un primer golpe de calentamiento (el primero carga cosas, como el ácido del Glotón, y ese fotograma tarda)
+		jefe.recibir_golpe(1, Vector2(-300, 0))
+		await get_tree().create_timer(0.3, false).timeout
+		var antes: int = jefe.vida
+		# por la espalda (empujando hacia donde mira): que no le pare el escudo del antidisturbios
+		jefe.recibir_golpe(10, jefe.mirada * 300.0)
+		await get_tree().process_frame
+		var m := (jefe.sprite as CanvasItem).material as ShaderMaterial
+		var brillo: float = m.get_shader_parameter("destello") if m else -1.0
+		if tipo == "gymbro":
+			brillo = jefe.brillo_golpe
+		print("Destello (%s): vida %d -> %d, destello %.2f (esperado: más de 0.5)" % [tipo, antes, jefe.vida, brillo])
+		Captura.foto("captura-destello-%s.png" % tipo)
+		for cosa in get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("balas_zombi"):
+			cosa.queue_free()
+		await get_tree().create_timer(0.1, false).timeout
+	get_tree().quit()

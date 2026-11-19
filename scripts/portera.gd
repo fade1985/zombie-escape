@@ -98,6 +98,19 @@ func _ready() -> void:
 	vida = vida_max
 	$Vapor.draw.connect(_pintar_vapor)
 	vida_cambiada.emit.call_deferred(vida, vida_max)
+	# el shader de los zombis en su dibujo: para el destello blanco de los golpes (y el azul del hielo, el ácido...)
+	sprite.material = ShaderMaterial.new()
+	sprite.material.shader = Zombi.DESTELLO
+	sprite.material.set_shader_parameter("semilla", randf() * 100.0)
+
+
+# Se pone blanca de golpe y vuelve a su color enseguida, como los zombis (Zombi.destellar)
+func destellar() -> void:
+	var m := sprite.material as ShaderMaterial
+	m.set_shader_parameter("destello", 0.9)
+	var tw := create_tween()
+	tw.tween_interval(0.05)
+	tw.tween_property(m, "shader_parameter/destello", 0.0, 0.1)
 
 
 func enfadada() -> bool:
@@ -520,9 +533,10 @@ func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-20, 0), -ARRIBA), cantidad)
 	Zombi.critico = era
 	Sonido.tocar("golpe")
-	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre (congelada, hielo)
+	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): se pone blanca y salta su sangre (congelada, hielo)
+		destellar()
 		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), ARRIBA * 0.5, fuerza,
-			Zombi.HIELO if helado_golpe else Color("#7a1f1a"), 5)
+			Zombi.HIELO if helado_golpe else Color("#7a1f1a"), 12)
 	vida_cambiada.emit(vida, vida_max)
 	if vida <= 0:
 		frio().deshelar()
