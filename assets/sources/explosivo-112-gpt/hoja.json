@@ -5,10 +5,10 @@
     "baja": 2
   },
   "reducir": {
-    "casilla": 64,
+    "casilla": 80,
     "pies": [
-      32,
-      55
+      40,
+      69
     ],
     "borde": "#050202",
     "realce": true
@@ -34,5 +34,9 @@
     "sat": 3.0,
     "sube": 0.3,
     "sat_max": 0.35
+  },
+  "cabeza": {
+    "cuello": 20,
+    "agranda": 1.15
   }
 }

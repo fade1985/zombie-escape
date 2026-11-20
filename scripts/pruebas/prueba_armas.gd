@@ -4726,7 +4726,7 @@ func probar_luz_verde() -> void:
 	get_tree().quit()
 
 
-# --explosivo-nuevo: el explosivo rehecho el 20 nov (112 px de PixelLab, reducido al alto de Johnny y con su borde negro).
+# --explosivo-nuevo: el explosivo rehecho el 20 nov (112 px de PixelLab, reducido con su borde negro; un cuarto más alto que Johnny y con la cabeza agrandada).
 # Una foto de tamaño (al lado de Johnny, un zombi normal y la dependienta), otra con sus animaciones quietas en las 8
 # direcciones (filas: andar, golpe y abrir la gabardina; las del oeste salen en espejo) y una de verdad: cuatro que
 # vienen hacia Johnny y abren la gabardina
@@ -4778,7 +4778,7 @@ func probar_explosivo_nuevo() -> void:
 	var y := 0
 	for anim in anims:
 		for i in dirs.size():
-			var z: Node2D = meter_zombi("explosivo", johnny.position + Vector2(-260 + i * 60, -200 + y * 110))
+			var z: Node2D = meter_zombi("explosivo", johnny.position + Vector2(-300 + i * 75, -120 + y * 130))
 			todos.append(z)
 			z.sprite.play(anim + "_" + dirs[i])
 			z.sprite.pause()
@@ -4790,7 +4790,7 @@ func probar_explosivo_nuevo() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await RenderingServer.frame_post_draw
 	Captura.foto("captura-explosivo-nuevo-animaciones.png")
-	print("Explosivo nuevo · hoja: casilla %s (esperado: 64x64) · ataque_s %d fotogramas (esperado: 8)" % [
+	print("Explosivo nuevo · hoja: casilla %s (esperado: 80x80) · ataque_s %d fotogramas (esperado: 8)" % [
 		todos[0].sprite.sprite_frames.get_frame_texture("quieto_s", 0).get_size(),
 		todos[0].sprite.sprite_frames.get_frame_count("ataque_s")])
 	for z in todos:
@@ -4808,5 +4808,5 @@ func probar_explosivo_nuevo() -> void:
 	print("Explosivo nuevo · %s (esperado: ataque_ en alguno)" % [ellos.map(func(z): return "%s/%d" % [z.sprite.animation, z.sprite.frame])])
 	Captura.foto("captura-explosivo-nuevo-gabardina.png")
 	# el retrato del bestiario, del tamaño de su recorte
-	print("Retrato del bestiario: %s (esperado: (22.0, 47.0))" % Bestiario.retrato("explosivo").get_size())
+	print("Retrato del bestiario: %s (esperado: (27.0, 60.0))" % Bestiario.retrato("explosivo").get_size())
 	get_tree().quit()

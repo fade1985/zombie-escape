@@ -17,7 +17,10 @@ más nítido y algo más claro.
 `bdee687d-8c1c-4375-8a37-4e256db3fea0`; los textos, en `assets/sources/explosivo-112-gpt/textos-pixellab.txt`). Solo
 lleva andar, golpe y abrir la gabardina (`attack`): no tiene muerte, revienta. Reducido salía casi negro (gabardina negra
 y cara gris verdosa): lleva `"realce": true` y `"piel"` con `"sat_max": 0.35`, para aclarar solo la piel y no la cinta
-de la dinamita. Se prueba con `--captura --explosivo-nuevo`.
+de la dinamita. Del alto de Johnny se veía flaco y con la cabeza diminuta (proporciones de persona de verdad): va en
+una casilla de 80 (`"pies": [40, 69]`, `offset = Vector2(-40, -69)`), un cuarto más grande, y con
+`"cabeza": {"cuello": 20, "agranda": 1.15}` la cabeza (lo que hay por encima de la fila 20 de la pose de 112) sale
+otro 15 % más grande, desde el cuello. Se prueba con `--captura --explosivo-nuevo`.
 
 ## 1. El personaje en PixelLab
 

@@ -96,8 +96,37 @@ def piel(f):
     return f
 
 
+CABEZA = FICHA.get('cabeza')
+
+
+def cabeza(f):
+    """Agranda la cabeza (lo que queda por encima del cuello) "agranda" veces, desde el centro de su cuello: el cuello
+    no se mueve y la cabeza crece hacia arriba y a los lados. "cuello" es la fila de la pose de pie de 112 (en la
+    casilla de 152, 20 más abajo). El explosivo (20 nov): un dibujo de proporciones de persona de verdad, con la cabeza
+    pequeña; el dueño lo quería con el cuerpo de un tamaño y la cabeza de uno mayor."""
+    if not CABEZA:
+        return f
+    k, ny = CABEZA['agranda'], CABEZA['cuello'] + (C - R) // 2
+    a = f.split()[3]
+    xs = [x for y in range(ny - 8, ny) for x in range(f.width) if a.getpixel((x, y))]
+    if not xs:
+        return f
+    cx = (min(xs) + max(xs) + 1) / 2
+    arriba = f.crop((0, 0, f.width, ny))
+    w, h = round(f.width * k), round(ny * k)
+    grande = arriba.convert('RGBa').resize((w, h), Image.LANCZOS).convert('RGBA')
+    grande.putalpha(grande.split()[3].point(lambda v: 255 if v > 110 else 0))
+    out = f.copy()
+    out.paste((0, 0, 0, 0), (0, 0, f.width, ny))
+    capa = Image.new('RGBA', f.size, (0, 0, 0, 0))
+    capa.paste(grande, (round(cx - cx * k), ny - h))
+    capa.paste((0, 0, 0, 0), (0, ny, f.width, f.height))
+    out.alpha_composite(capa)
+    return out
+
+
 def cargar(anim, d):
-    fs = [piel(Image.open(p).convert('RGBA')) for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
+    fs = [cabeza(piel(Image.open(p).convert('RGBA'))) for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
     assert fs, f'faltan los fotogramas de {anim}/{d}'
     assert fs[0].size == (C, C), f'{anim}/{d}: el lienzo tiene que ser de {C}×{C} (es {fs[0].size})'
     return fs
@@ -161,7 +190,7 @@ def con_oeste(por_dir):
 
 # ═════════════ Quieto y reposo ═════════════
 m = (C - R) // 2   # (los pies de la pose de 112, de 56,110 a 76,130)
-quieto = con_oeste({d: [piel(Image.open(f'{SRC}/rotaciones/{d}.png').convert('RGBA').crop((-m, -m, C - m, C - m)))]
+quieto = con_oeste({d: [cabeza(piel(Image.open(f'{SRC}/rotaciones/{d}.png').convert('RGBA').crop((-m, -m, C - m, C - m))))]
                     for d in PROPIAS})
 REPOSO = FICHA.get('reposo', {})
 cintura, baja = REPOSO.get('cintura', 58) + m, REPOSO.get('baja', 2)
