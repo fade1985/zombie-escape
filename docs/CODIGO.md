@@ -1327,7 +1327,7 @@ en una línea.
   `--captura --edificio centro --guardia`.
 - **La piel de los durmientes, del verde del vecino (20 nov):** lo pidió el dueño: los once durmientes normales con la
   piel del mismo verde que el vecino (`zombi-normal-gpt`, la referencia, que no se toca): la vecina, el arrastrado (era
-  marrón), el crío, el dinamitero, el de tentáculos (era casi blanco), la dependienta, los dos vigilantes, el guardia, el
+  marrón: solo cara, brazos y manos), el crío, el dinamitero, el de tentáculos (era casi blanco), la dependienta, los dos vigilantes, el guardia, el
   oficinista y el escolta. El gordo y los jefes, no (decidido por él). Va en su ficha, `"piel_verde": {...}` (en
   `zombi.json` para `zombi.py` y en `hoja.json` para `hoja_112.py`), y lo hace `tools/piel_verde.py` sobre cada dibujo ya
   terminado (al final, después del chaleco neón, que no se toca). **Receta:**
@@ -1342,8 +1342,8 @@ en una línea.
   4. Rehacer la hoja (sin `--mascara`) y probar con `--captura --durmientes` (los doce juntos, el vecino primero).
   Lo que lleva cada uno: la mayoría, `{}` (lo de siempre: tono 55-110°); el oficinista y el escolta, viveza desde 0,02-0,03
   (su piel es casi gris); el crío, viveza hasta 0,45 (si no, entra su pelo rubio) y sus sombras marrones; los vigilantes y el
-  guardia, `"grueso"`; el arrastrado, tono desde 21° (por debajo es su pelo) y sus sombras, solo las claras (las oscuras son
-  como el pelo); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
+  guardia, `"grueso"`; el arrastrado, tono desde 35°: solo la cara, los brazos y las manos (su cuerpo marrón es como su ropa; todo
+  verde no le pegaba, lo eligió el dueño el 20 nov); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
   opción, todas las hojas salen idénticas a las de antes. Lo que no se ha podido: en el ataque de frente del vigilante, la
   cara se ve amarilla en algunos fotogramas (el paso del chaleco neón la toma por chaleco, y lo que pinta de amarillo no se
   toca), y en el de tentáculos quedan grises algunos píxeles claros de pies y brazos (iguales que los del pantalón).
