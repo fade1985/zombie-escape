@@ -86,6 +86,8 @@ const ESTILO_TIENDA := {
 	"bano-ropa": [["vestuario"], "vestuario", "bano-b"],
 	# (20 nov, el dueño) y el aseo y el almacén de la ferretería, igual que esos
 	"bano-ferreteria": [["vestuario"], "vestuario", "bano-b"], "almacen-ferreteria": [["trastero"], "trastero-pasillo", "trastero"],
+	# y su taller, destrozado (baldosa de barro roja y pared de hormigón blanca, de GPT: tools/taller_ferreteria_gpt.py)
+	"taller-ferreteria": [["taller-ferreteria-d1"], "taller-ferreteria-d1", "almacen"],
 	# y su almacén, como el pasillo de los trasteros pero sin la línea amarilla (hormigón y chapa; el techo, el de los trasteros)
 	"almacen-ropa": [["trastero"], "trastero-pasillo", "trastero"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
 	# los departamentos de Torre Velaria (tercer edificio): la sala grande con moqueta gris de oficina (suelo-torre), su pared
@@ -111,6 +113,8 @@ const MEZCLA_TIENDA := {
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
 	"almacen-ferreteria": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
 		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
+	"taller-ferreteria": {"suelos": [["taller-ferreteria-d1", 1], ["taller-ferreteria-d2", 1], ["taller-ferreteria-d3", 1]],
+		"paredes": [["taller-ferreteria-d1", 1], ["taller-ferreteria-d2", 1], ["taller-ferreteria-d3", 1]]},
 	"bano-ferreteria": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
@@ -602,7 +606,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 			var trozo := Rect2(c * 16, f * 16, (fin - c) * 16, 16)
 			if not muro:
 				pintar_suelo(lienzo, sala, trozo, desfase)
-				if sala_destrozada(sala):
+				if sala_destrozada(sala) and not despejada(sala, "suelo"):
 					# la suciedad del suelo del pasillo del ascensor (grietas, huecos, arañazos y manchas), encima (tools/suciedad_suelo.py)
 					lienzo.draw_texture_rect_region(SUCIEDAD_SUELO, trozo, Rect2(trozo.position, trozo.size))
 			c = fin
@@ -777,7 +781,9 @@ func poner_caras() -> void:
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
 			if centro and not limpio:
-				if sala_destrozada(sala):
+				if despejada(sala, "pared"):
+					pass   # (nada colgado ni pintado: Tienda.TIPOS "despejadas")
+				elif sala_destrozada(sala):
 					cara.adornos = sangre_de_pared(cara.ancho)
 				else:
 					cara.adornos = restos_de_pared(cara.ancho)
@@ -1364,6 +1370,14 @@ func destrozadas() -> Array:
 	return Tienda.TIPOS.get(sitio.get("tienda", ""), {}).get("destrozada", [])
 
 
+# Las salas de la tienda sin nada encima (Tienda.TIPOS "despejadas": "suelo", sin restos, charcos de sangre ni la capa de suciedad; "pared", sin
+# restos ni sangre en la pared), mientras se rehacen (la ferretería, 20 nov, el dueño)
+func despejada(sala: int, donde: String) -> bool:
+	if not sitio.has("apt") or sala < 0 or sala >= sitio.apt.salas.size():
+		return false
+	return sitio.apt.salas[sala].uso in Tienda.TIPOS.get(sitio.get("tienda", ""), {}).get("despejadas", {}).get(donde, [])
+
+
 func sala_destrozada(sala: int) -> bool:
 	if not sitio.has("apt"):
 		return false   # (los sitios que no son apartamentos, como la sala de pruebas, no tienen salas)
@@ -1401,7 +1415,7 @@ func preparar_restos() -> void:
 	var libres := []
 	for f in range(1, filas - 1):
 		for c in range(1, cols - 1):
-			if dueno[f * cols + c] >= 0 and not (es_muro(c - 1, f) or es_muro(c + 1, f) or es_muro(c, f - 1) or es_muro(c, f + 1)) 					and not sala_destrozada(dueno[f * cols + c]):   # (las salas rehechas llevan su sangre: manchas_de_las_salas)
+			if dueno[f * cols + c] >= 0 and not (es_muro(c - 1, f) or es_muro(c + 1, f) or es_muro(c, f - 1) or es_muro(c, f + 1)) 					and not sala_destrozada(dueno[f * cols + c]) and not despejada(dueno[f * cols + c], "suelo"):   # (las salas rehechas llevan su sangre: manchas_de_las_salas)
 				libres.append(Vector2(c, f))
 	if libres.is_empty():
 		return
@@ -1441,7 +1455,7 @@ func manchas_del_pasillo() -> void:
 # casillas tiene la sala
 func manchas_de_las_salas() -> void:
 	for s in sitio.apt.salas:
-		if sala_destrozada(s.id):
+		if sala_destrozada(s.id) and not despejada(s.id, "suelo"):
 			manchas_en_sala(s, 53, -2)
 
 
