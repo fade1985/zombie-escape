@@ -1124,9 +1124,9 @@ en una línea.
   (`assets/sources/centro/letrero-ferreteria-gpt.webp`, solo las letras), en inglés como los demás. `py tools/neones_galeria.py letrero-ferreteria`
   (sale `letrero-ferreteria.png`, 91x18, y el apagado) y `py tools/letrero_halo.py ferreteria`; en `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas
   saltan de la esquina de abajo de la última E). Prueba: `--puerta-super ferreteria`.
-- **El aseo y el almacén de la ferretería** (20 nov, el dueño): iguales que los de la tienda de ropa. La tienda, de 42 × 30: arriba,
-  el aseo (7 × 12), el almacén (17 × 12, con sus puertas en los mismos sitios que en la ropa) y el taller (12 × 12), pared con pared
-  (sin el trozo de sala de venta que subía entre el almacén y el taller); abajo, la sala de venta (38 × 13). La sala de venta y el
+- **El aseo y el almacén de la ferretería** (20 nov, el dueño): iguales que los de la tienda de ropa. La tienda, de 50 × 30 como la de ropa: arriba,
+  el aseo (7 × 12), el almacén (17 × 12, con sus puertas en los mismos sitios que en la ropa) y el taller (20 × 12, con su puerta en medio), pared con pared
+  (sin el trozo de sala de venta que subía entre el almacén y el taller); abajo, la sala de venta (46 × 13). La sala de venta y el
   taller, sin muebles de momento (`tienda-ferreteria` y `taller-ferreteria` vacíos). Su suelo y pared destrozados
   (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-ferreteria" y "almacen-ferreteria"), la suciedad y la sangre (`Tienda.TIPOS`
   "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo gris), sus muebles (los de
