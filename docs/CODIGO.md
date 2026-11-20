@@ -1280,7 +1280,7 @@ en una línea.
   10 edades, para el chorro del lanzallamas del bombero (`node tools/pixelfx/bocanadas.mjs <pixelfx> assets/sprites`).
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
   animaciones), `jefe_hoja.py` (jefes: `py tools/jefe_hoja.py gloton-72 jefe-gloton`; cada jefe en su ficha `JEFES`),
-  `superviviente.py`, `zombi.py` + `png.py`, `piel.py`, `espejo_oeste.py`, `hoja.py` (hoja de revisión); `hoja_112.py` (los zombis de 112 px, como la dependienta: hoja apretada, cada fotograma recortado con su `margin`; receta en `docs/ZOMBIS_112.md`). `reducir.py`: reduce un zombi detallado a la altura de Johnny con su borde negro; lo usan `hoja_112.py` y `zombi.py` si la ficha trae `"reducir"` (cómo, al principio del archivo).
+  `superviviente.py`, `zombi.py` + `png.py`, `piel.py`, `piel_verde.py` (la piel del verde del vecino, ver abajo), `espejo_oeste.py`, `hoja.py` (hoja de revisión); `hoja_112.py` (los zombis de 112 px, como la dependienta: hoja apretada, cada fotograma recortado con su `margin`; receta en `docs/ZOMBIS_112.md`). `reducir.py`: reduce un zombi detallado a la altura de Johnny con su borde negro; lo usan `hoja_112.py` y `zombi.py` si la ficha trae `"reducir"` (cómo, al principio del archivo).
 - **Un zombi hecho con GPT (la vecina, 8 nov):** `zombi_gpt.py` pasa las imágenes de GPT (`assets/sources/zombi-vecina-gpt/`:
   `personaje.webp` con las 5 vistas en fila y una por animación y vista, `andar-s.webp`, `ataque-e.webp`…, con los fotogramas
   en una o dos filas sobre negro puro) a los dibujos que monta `zombi.py`: quita el fondo, reduce mezclando colores como los
@@ -1325,6 +1325,28 @@ en una línea.
   0,3: el borde de la franja del jefe) solo pegado a una zona con 3 píxeles seguros o más; lo casi negro, nunca (el
   contorno de las manos). El tono va en `"tono"` ([50, 60] grados). Se comprueba con `--captura --vigilantes` y
   `--captura --edificio centro --guardia`.
+- **La piel de los durmientes, del verde del vecino (20 nov):** lo pidió el dueño: los once durmientes normales con la
+  piel del mismo verde que el vecino (`zombi-normal-gpt`, la referencia, que no se toca): la vecina, el arrastrado (era
+  marrón), el crío, el dinamitero, el de tentáculos (era casi blanco), la dependienta, los dos vigilantes, el guardia, el
+  oficinista y el escolta. El gordo y los jefes, no (decidido por él). Va en su ficha, `"piel_verde": {...}` (en
+  `zombi.json` para `zombi.py` y en `hoja.json` para `hoja_112.py`), y lo hace `tools/piel_verde.py` sobre cada dibujo ya
+  terminado (al final, después del chaleco neón, que no se toca). **Receta:**
+  1. Medir su piel: tono, claridad y viveza (la del vecino: tono ~78-80°, viveza 0,28 en las sombras y subiendo en las
+     luces). Con eso, en la ficha, `"tono"`, `"viveza"` y `"claridad"` de su piel (lo que no cumpla, no cambia).
+  2. Mirar lo elegido antes de tocar la hoja: `py tools/zombi.py <fuente> <hoja> --mascara <carpeta>` (o `py
+     tools/hoja_112.py <carpeta> --mascara <carpeta>`) deja en esa carpeta la hoja con lo elegido pintado de rosa, sin
+     tocar `assets/sprites`. Mirarla en las 8 vistas y en fotogramas de cada animación.
+  3. Si se cuela algo: `"fuera"` (colores que no son piel aunque lo parezcan), `"mancha"` (tamaño mínimo), `"grueso":
+     true` (fuera las rayas finas: la franja reflectante de los vigilantes) o `"luz"` (más oscura: el de tentáculos, tan
+     pálido, salía verde lima). Si falta algo: `"sombra"` (las sombras de otro color pegadas a la piel: las del arrastrado).
+  4. Rehacer la hoja (sin `--mascara`) y probar con `--captura --durmientes` (los doce juntos, el vecino primero).
+  Lo que lleva cada uno: la mayoría, `{}` (lo de siempre: tono 55-110°); el oficinista y el escolta, viveza desde 0,02-0,03
+  (su piel es casi gris); el crío, viveza hasta 0,45 (si no, entra su pelo rubio) y sus sombras marrones; los vigilantes y el
+  guardia, `"grueso"`; el arrastrado, tono desde 21° (por debajo es su pelo) y sus sombras, solo las claras (las oscuras son
+  como el pelo); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
+  opción, todas las hojas salen idénticas a las de antes. Lo que no se ha podido: en el ataque de frente del vigilante, la
+  cara se ve amarilla en algunos fotogramas (el paso del chaleco neón la toma por chaleco, y lo que pinta de amarillo no se
+  toca), y en el de tentáculos quedan grises algunos píxeles claros de pies y brazos (iguales que los del pantalón).
 - **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
   casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
   mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus

@@ -1,0 +1,139 @@
+"""La piel de un zombi, del mismo verde que la del vecino (el durmiente normal, zombi-normal-gpt).
+
+La usan tools/zombi.py ("piel_verde" en zombi.json) y tools/hoja_112.py ("piel_verde" en hoja.json), sobre cada
+dibujo ya terminado (la casilla de la hoja), para que todos los durmientes normales tengan la piel del mismo color
+(lo pidió el dueño el 20 nov).
+
+Qué es piel: los colores de un tono, una viveza y una claridad (lo que diga la ficha de cada zombi), y de eso solo
+las manchas de bastante tamaño. Lo que no cumple, no se toca: ni la ropa, ni el pelo, ni la boca, ni la sangre.
+
+Cómo queda: el tono del vecino (78 grados) y su viveza, que es poca en las sombras (0,28) y sube en las luces
+(como en su dibujo: 0,28 + (claridad - 0,5) × 1,5). La claridad es la de antes, salvo que la ficha diga otra cosa
+("luz"), para que un zombi muy pálido no salga verde chillón.
+
+En la ficha, "piel_verde": {...} con:
+  "tono": [h0, h1]        tono de la piel de ese zombi, en grados (si h0 > h1, da la vuelta: [340, 30] es rojo)
+  "viveza": [s0, s1]      viveza (saturación) de su piel
+  "claridad": [l0, l1]    claridad de su piel (lo más oscuro, el contorno, no se toca)
+  "mancha": 6             tamaño mínimo de una mancha de piel en píxeles (las sueltas más pequeñas no cambian)
+  "grueso": true          y solo las manchas con grosor: por lo menos un píxel con sus cuatro vecinos también de piel
+                          (así no se cuelan las rayas finas del color de la piel, como la franja reflectante de los
+                          vigilantes; no vale para los de brazos finos, de 2 píxeles, como el oficinista)
+  "sombra": {...}         las sombras de la piel, de otro color (las del arrastrado, marrón oscuro como su pelo): los
+                          colores que cumplen eso ("tono", "viveza", "claridad") y están pegados a la piel elegida, hasta
+                          "pasos" píxeles de distancia (2 si no dice), también son piel
+  "luz": [k, suma]        la claridad nueva es la de antes × k + suma (lo normal, [1, 0])
+  "fuera": [[...], ...]   otros colores que no son piel, cada uno como {"tono": [...], "viveza": [...], "claridad": [...]}
+                          (por ejemplo, el pelo rubio del crío, que tiene el mismo tono que su piel)
+  "a_tono": 78, "a_viveza": 0.28, "a_sube": 1.5   el verde al que va (el del vecino; no hace falta ponerlos)
+"""
+import colorsys
+
+
+def _en(v, r):
+    a, b = r
+    return a <= v <= b if a <= b else (v >= a or v <= b)
+
+
+class PielVerde:
+    def __init__(self, opc, no_tocar=()):
+        self.o = opc
+        self.no_tocar = set(no_tocar)   # colores que ya ha puesto otro paso (el chaleco neón) y no se tocan
+        self.cache = {}
+        self.cache_f = {}
+
+    def es_piel(self, c):
+        if c in self.no_tocar:
+            return False
+        h, l, s = colorsys.rgb_to_hls(*[v / 255 for v in c])
+        h *= 360
+        o = self.o
+        if not (_en(h, o.get('tono', [55, 110])) and _en(s, o.get('viveza', [0.08, 1]))
+                and _en(l, o.get('claridad', [0.1, 0.9]))):
+            return False
+        for f in o.get('fuera', []):
+            if (_en(h, f.get('tono', [0, 360])) and _en(s, f.get('viveza', [0, 1]))
+                    and _en(l, f.get('claridad', [0, 1]))):
+                return False
+        return True
+
+    def verde(self, c):
+        o = self.o
+        h, l, s = colorsys.rgb_to_hls(*[v / 255 for v in c])
+        k, suma = o.get('luz', [1, 0])
+        l2 = max(0.0, min(0.76, l * k + suma))
+        s2 = min(0.7, o.get('a_viveza', 0.28) + max(0, l2 - 0.5) * o.get('a_sube', 1.5))
+        return tuple(round(v * 255) for v in colorsys.hls_to_rgb(o.get('a_tono', 78) / 360, l2, s2))
+
+    def elegir(self, im):
+        """Los píxeles de piel de un dibujo (una casilla), como conjunto de (x, y)."""
+        px = im.load()
+        w, h = im.size
+        cand = set()
+        for y in range(h):
+            for x in range(w):
+                p = px[x, y]
+                if p[3] >= 128:
+                    c = p[:3]
+                    if c not in self.cache:
+                        self.cache[c] = self.verde(c) if self.es_piel(c) else None
+                    if self.cache[c]:
+                        cand.add((x, y))
+        minimo, grueso = self.o.get('mancha', 6), self.o.get('grueso', False)
+        piel, vistos = set(), set()
+        for q in cand:
+            if q in vistos:
+                continue
+            zona, i = [q], 0
+            vistos.add(q)
+            while i < len(zona):
+                x, y = zona[i]
+                i += 1
+                for r in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if r in cand and r not in vistos:
+                        vistos.add(r)
+                        zona.append(r)
+            if len(zona) >= minimo and (not grueso or any(
+                    all(r in cand for r in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))) for x, y in zona)):
+                piel.update(zona)
+        sombra = self.o.get('sombra')
+        if sombra:
+            borde = set(piel)
+            for _ in range(sombra.get('pasos', 2)):
+                nuevo = set()
+                for x, y in borde:
+                    for r in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                        if (r not in piel and 0 <= r[0] < w and 0 <= r[1] < h and px[r][3] >= 128
+                                and self._cumple(px[r][:3], sombra)):
+                            nuevo.add(r)
+                piel |= nuevo
+                borde = nuevo
+        return piel
+
+    def _cumple(self, c, f):
+        k = (c, id(f))
+        if k not in self.cache_f:
+            h, l, s = colorsys.rgb_to_hls(*[v / 255 for v in c])
+            self.cache_f[k] = (c not in self.no_tocar and _en(h * 360, f.get('tono', [0, 360]))
+                               and _en(s, f.get('viveza', [0, 1])) and _en(l, f.get('claridad', [0, 1])))
+        return self.cache_f[k]
+
+    def pintar(self, im, mascara=None):
+        """Pasa la piel al verde del vecino (o, con `mascara`, la pinta de ese color para comprobar lo elegido)."""
+        px = im.load()
+        for q in self.elegir(im):
+            c = px[q][:3]
+            px[q] = (mascara or self.cache.get(c) or self.verde(c)) + (px[q][3],)
+        return im
+
+
+def en_hoja(sheet, cw, ch, opc, no_tocar=(), mascara=None):
+    """Lo mismo, casilla a casilla en una hoja de casillas iguales (la de tools/zombi.py)."""
+    pv = PielVerde(opc, no_tocar)
+    for fy in range(sheet.height // ch):
+        for fx in range(sheet.width // cw):
+            caja = (fx * cw, fy * ch, (fx + 1) * cw, (fy + 1) * ch)
+            c = sheet.crop(caja)
+            if c.getbbox():
+                sheet.paste(pv.pintar(c, mascara), caja[:2])
+    return sheet

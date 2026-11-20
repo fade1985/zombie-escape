@@ -2730,6 +2730,58 @@ func probar_vecino_gpt(tipo := "normal", nombre := "vecino", otras: Array = []) 
 	get_tree().quit()
 
 
+# Con "--captura --durmientes": los doce durmientes normales en fila, con la piel del mismo verde (20 nov, "piel_verde"
+# en su ficha: tools/piel_verde.py): el vecino (la referencia), la vecina, el arrastrado, el crío, el dinamitero, el de
+# tentáculos, la dependienta, el vigilante, la vigilante, el guardia, el oficinista y el escolta. Quietos (solo se mueve
+# el dibujo), de frente: reposo, andar, atacar, golpe y muerte, y andando de lado. Fotos captura-durmientes-*.png
+func probar_durmientes() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(260, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.2).timeout
+	johnny.get_node("Sprite").visible = false   # (la cámara va con él: los zombis, alrededor)
+	var tipos := ["normal", "vecina", "lento", "rapido", "explosivo", "tentaculos", "dependienta", "vigilante", "vigilante",
+		"guardia", "oficinista", "escolta"]
+	var todos: Array = []
+	for i in tipos.size():
+		# (en dos filas de seis: en una no caben en la sala)
+		var z: Node2D = meter_zombi(tipos[i], johnny.position + Vector2(-475 + (i % 6) * 90, -70 + (i / 6) * 150))
+		z.process_mode = Node.PROCESS_MODE_DISABLED   # (quieto: ni anda ni ataca)
+		for hijo in z.get_children():   # (parado así, su sombra y lo demás no se ponen en su sitio: solo el dibujo)
+			if hijo is CanvasItem and hijo != z.sprite:
+				hijo.visible = false
+		if i == 7:   # (los vigilantes salen de hombre o de mujer al azar: uno de cada)
+			z.sprite.sprite_frames = load("res://assets/sprites/zombi-vigilante.tres")
+		elif i == 8:
+			z.sprite.sprite_frames = load("res://assets/sprites/zombi-vigilante-mujer.tres")
+		todos.append(z)
+	for foto in [["reposo", "s"], ["andar", "s"], ["ataque", "s"], ["golpe", "s"], ["muerte", "s"], ["andar", "e"]]:
+		for z in todos:
+			z.sprite.process_mode = Node.PROCESS_MODE_ALWAYS   # (el dibujo sí se mueve)
+			if z.sprite.sprite_frames.has_animation(foto[0] + "_" + foto[1]):   # (el dinamitero no muere: revienta)
+				z.sprite.play(foto[0] + "_" + foto[1])
+		await get_tree().create_timer(1.6 if foto[0] == "muerte" else 0.3 if foto[0] == "golpe" else 0.45).timeout
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-durmientes-%s-%s.png" % foto)
+		var t: Array = []
+		for z in todos:
+			t.append("%s:%s/%d" % [z.sprite.sprite_frames.resource_path.get_file().get_basename(), z.sprite.animation, z.sprite.frame])
+		print("Durmientes (%s): %s" % [foto[0] + "_" + foto[1], " · ".join(t)])
+		await get_tree().create_timer(0.3).timeout
+	get_tree().quit()
+
 # Con "--captura --puerta-cierra": Johnny entra del pasillo en el primer apartamento y, nada más entrar (sin moverse
 # de donde aparece), la puerta se cierra detrás de él. Foto captura-puerta-cierra.png
 func probar_puerta_cierra() -> void:

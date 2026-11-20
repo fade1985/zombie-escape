@@ -1,4 +1,5 @@
 {
+  "piel_verde": {},
   "sprite": "zombi-dependienta",
   "reposo": {"cintura": 58, "baja": 2},
   "piel": {"tono": 80, "sat": 1.0, "sube": 0.28},

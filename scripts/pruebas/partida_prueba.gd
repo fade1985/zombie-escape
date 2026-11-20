@@ -551,6 +551,9 @@
 #   --tres-zombis       la vecina, el vecino y el crío (los tres de GPT) juntos, por tríos en sus 8 direcciones (mismas fotos) [prueba_varias.gd]
 #   --vigilantes        el vigilante y la vigilante, juntos en sus 8 direcciones: andar, atacar, golpe y muerte (con su
 #                       contorno negro cerrado desde el 19 nov; fotos captura-vigilante-gpt-*.png) [prueba_varias.gd]
+#   --durmientes        los doce durmientes normales en fila (el vecino, la vecina, el arrastrado, el crío, el dinamitero,
+#                       el de tentáculos, la dependienta, los dos vigilantes, el guardia, el oficinista y el escolta), con
+#                       la piel del mismo verde: reposo, andar, atacar, golpe y muerte (captura-durmientes-*.png) [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día, el garaje (M125), entrando por su botón de «Elige edificio» (las tarjetas con su
@@ -1432,6 +1435,9 @@ func empezar_prueba() -> void:
 	elif "--tres-zombis" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecino_gpt("normal", "tres", ["zombi-vecina", "zombi-normal-gpt", "zombi-rapido-gpt"])
+	elif "--durmientes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_durmientes()
 	elif "--vigilantes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecino_gpt("vigilante", "vigilante", ["zombi-vigilante", "zombi-vigilante-mujer"])

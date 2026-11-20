@@ -28,6 +28,8 @@ La ficha (hoja.json), por ejemplo la de la dependienta:
     dependienta salió de PixelLab mucho más oscura que la de los zombis de 48; con esto se parece a la del zombi normal.
     Con "sat_max" solo se tocan los verdes más apagados que eso (el explosivo, 20 nov: su piel es gris verdosa y la
     cinta de la dinamita, verde oliva más vivo, se quedaba verde chillón).
+  - "piel_verde": {...}: la piel, del verde de la del vecino (tools/piel_verde.py; desde el 20 nov, como los demás
+    durmientes normales); --mascara carpeta la deja de rosa en esa carpeta para ver lo que elige.
   - Si una dirección tiene menos fotogramas que south (el andar north-east de la dependienta, 7 y no 8), cada uno dura
     algo más para que vaya al mismo ritmo.
 
@@ -385,6 +387,25 @@ if REDUCIR:
             b[d] = nuevos
     C, PIES = reducir.casilla(REDUCIR)[0], tuple(REDUCIR['pies'])
 
+# ═════════════ Piel verde (si la ficha lo pide) ═════════════
+# "piel_verde": {...} (los durmientes normales, desde el 20 nov): la piel, del mismo verde que la del vecino, sobre cada
+# dibujo ya terminado (tools/piel_verde.py, que explica las opciones). Para ver qué elige antes de cambiar la hoja:
+# --mascara carpeta (lo elegido, de rosa, y la hoja y su .json van a esa carpeta, no a assets/sprites)
+MASCARA = sys.argv[sys.argv.index('--mascara') + 1] if '--mascara' in sys.argv else None
+if 'piel_verde' in FICHA:
+    import piel_verde
+    pv = piel_verde.PielVerde(FICHA['piel_verde'])
+    verdes = {}   # (los dibujos repetidos, una vez: así la hoja los sigue juntando)
+    for _, b, _ in bloques:
+        for d in b:
+            nuevos = []
+            for f in b[d]:
+                k = f.tobytes()
+                if k not in verdes:
+                    verdes[k] = pv.pintar(f.copy(), (255, 0, 255) if MASCARA else None)
+                nuevos.append(verdes[k])
+            b[d] = nuevos
+
 # ═════════════ Hoja apretada ═════════════
 # cada fotograma distinto, recortado con su aire; los repetidos (el grito en las 8 direcciones...), una sola vez
 unicos, trozos = {}, []
@@ -427,12 +448,14 @@ for nombre, b, info in bloques:
         anims[nombre]['dirs'][d] = dd
     print(f'{nombre:7s} {n_sur} fotogramas, {info["fps"]} por segundo')
 
-guardar_png(hoja, f'assets/sprites/{SPRITE}.png')
+DESTINO = MASCARA or 'assets/sprites'
+guardar_png(hoja, f'{DESTINO}/{SPRITE}.png')
 json.dump({'cell': [C, C], 'pivot': list(PIES), 'anims': anims,
            'source': f'Hecha con tools/hoja_112.py a partir de {SRC}/ (ficha: assets/sources/{CARPETA}/hoja.json)'},
-          open(f'assets/sprites/{SPRITE}.json', 'w', encoding='utf-8', newline='\n'), indent=1, ensure_ascii=False)
+          open(f'{DESTINO}/{SPRITE}.json', 'w', encoding='utf-8', newline='\n'), indent=1, ensure_ascii=False)
 print(f'hoja: {hoja.size}, {len(trozos)} fotogramas distintos, {hoja.width * hoja.height * 4 / 1e6:.1f} MB en memoria')
-subprocess.run([sys.executable, 'tools/hacer_frames.py', f'assets/sprites/{SPRITE}'], check=True)
+if not MASCARA:
+    subprocess.run([sys.executable, 'tools/hacer_frames.py', f'assets/sprites/{SPRITE}'], check=True)
 
 if '--gif' in sys.argv:
     carpeta = sys.argv[sys.argv.index('--gif') + 1]

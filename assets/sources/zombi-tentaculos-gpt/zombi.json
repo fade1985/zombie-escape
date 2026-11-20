@@ -1,4 +1,5 @@
 {
+  "piel_verde": {"tono": [30, 120], "claridad": [0.55, 0.95], "viveza": [0.05, 0.5], "mancha": 2, "luz": [1, -0.2]},
   "casilla": [176, 192],
   "origen": [24, 12],
   "pies": 128,

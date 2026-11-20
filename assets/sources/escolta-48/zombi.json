@@ -1,1 +1,3 @@
-{"ataque": {"impacto": 2}}
+{
+  "piel_verde": {"tono": [65, 110], "viveza": [0.03, 0.35], "claridad": [0.25, 0.85]},
+  "ataque": {"impacto": 2}}

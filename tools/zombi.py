@@ -14,6 +14,8 @@ Lo saca todo de assets/sources/<fuente>/:
                                 el jefe de seguridad, desde el 20 nov)
                                 y "heridas_verdes" (las heridas rojas, del verde de la piel del vecino, sin tocar boca ni
                                 contorno: el gordo, desde el 20 nov)
+                                y "piel_verde" (la piel, del verde de la del vecino: los durmientes normales, desde el 20 nov;
+                                tools/piel_verde.py; --mascara carpeta para ver antes de rosa lo que elige)
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
@@ -477,6 +479,7 @@ def neon(sheet, opc):
         t = min(1, max(0, (l - 0.25) / 0.4))
         return tuple(round(v * 255) for v in colorsys.hls_to_rgb((t0 + (t1 - t0) * t) / 360, min(0.68, l * 1.12), min(1, s * 1.25 + 0.1)))
     vivo = {}
+    hechos = set()   # (los colores del chaleco ya amarillo: "piel_verde" no los toca)
     for fy in range(sheet.height // CH):
         for fx in range(sheet.width // CW):
             caja = (fx * CW, fy * CH, (fx + 1) * CW, (fy + 1) * CH)
@@ -510,10 +513,19 @@ def neon(sheet, opc):
                 if sum(1 for r in zona if vivo[cp[r][:3]] >= alto) >= 3:
                     for r in zona:
                         cp[r] = amarillo(cp[r][:3]) + (cp[r][3],)
+                        hechos.add(cp[r][:3])
             sheet.paste(c, caja[:2])
-    return sheet
+    return sheet, hechos
+NEON = set()
 if 'neon' in cfg:
-    sheet = neon(sheet, cfg['neon'])
+    sheet, NEON = neon(sheet, cfg['neon'])
+# "piel_verde" en zombi.json (los durmientes normales, desde el 20 nov): la piel, del mismo verde que la del vecino
+# (tools/piel_verde.py, que explica las opciones). El chaleco neón no se toca. Para ver qué elige antes de cambiar la
+# hoja: --mascara carpeta (lo elegido, de rosa, y la hoja y su .json van a esa carpeta, no a assets/sprites)
+MASCARA = sys.argv[sys.argv.index('--mascara') + 1] if '--mascara' in sys.argv else None
+if 'piel_verde' in cfg:
+    import piel_verde
+    sheet = piel_verde.en_hoja(sheet, CW, CH, cfg['piel_verde'], NEON, (255, 0, 255) if MASCARA else None)
 # "cerrar_borde": "#050202" en zombi.json (el vigilante): el contorno de la figura, entero de ese color (el del de
 # Johnny). PixelLab lo deja casi siempre negro, pero con huecos del color de al lado (el chaleco, la piel); el dueño lo
 # quiso cerrado el 19 nov. Se pintan los píxeles de la figura que tocan el vacío, sin hacerla más grande.
@@ -532,10 +544,11 @@ if cfg.get('cerrar_borde'):
             for q in pintar:
                 cp[q] = color
             sheet.paste(c, caja[:2])
-guardar_png(sheet, f'assets/sprites/{SPRITE}.png')
+DESTINO = MASCARA or 'assets/sprites'
+guardar_png(sheet, f'{DESTINO}/{SPRITE}.png')
 json.dump({'cell': [CW, CH], 'pivot': [PX, PY], 'anims': anims,
            'source': f'Hecha con tools/zombi.py a partir de {SRC}/'},
-          open(f'assets/sprites/{SPRITE}.json', 'w', encoding='utf-8', newline='\n'), indent=2, ensure_ascii=False)
+          open(f'{DESTINO}/{SPRITE}.json', 'w', encoding='utf-8', newline='\n'), indent=2, ensure_ascii=False)
 print('hoja:', sheet.size)
 
 if '--gif' in sys.argv:
