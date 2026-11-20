@@ -34,9 +34,9 @@ const TIPOS := {
 		"color": Color("#ff9a3c"),
 		# (20 nov, el dueño) su aseo y su almacén, rehechos como los de la tienda de ropa, su taller y su sala de venta: destrozados (ver "ropa",
 		# abajo). Y, mientras se rehace, sin nada por el suelo de la sala de venta y del taller ni en las paredes de la sala de
-		# venta y del almacén ("despejadas", mapa.despejada)
+		# venta, del almacén y del taller ("despejadas", mapa.despejada)
 		"destrozada": ["bano", "almacen", "taller", "tienda"],
-		"despejadas": {"suelo": ["tienda", "taller"], "pared": ["tienda", "almacen"]}},
+		"despejadas": {"suelo": ["tienda", "taller"], "pared": ["tienda", "almacen", "taller"]}},
 	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"],   # [traducir]
 		"color": Color("#4fe3ff")},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]

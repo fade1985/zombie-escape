@@ -1138,7 +1138,7 @@ en una línea.
   (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
   misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen).
   Mientras se rehace, `Tienda.TIPOS` "despejadas" (`mapa.despejada`): sin nada por el
-  suelo (restos, charcos ni la capa de suciedad) de la sala de venta y del taller, ni en las paredes de la sala de venta y del almacén.
+  suelo (restos, charcos ni la capa de suciedad) de la sala de venta y del taller, ni en las paredes de la sala de venta, del almacén y del taller.
 - **La puerta de la tienda de electrónica** (17 nov, el dueño): la misma puerta de cristal de la ferretería, algo más pequeña (28x43 → 28x40, con
   su cartel «OPEN» pequeño: `muebles_gpt.py puerta_electronica cartel_open_pequeno` y `puerta_ferreteria.py electronica`), dentro de un marco de
   neón rosa y cian abierto por abajo (de GPT, `assets/sources/centro/marco-electronica-gpt.webp`; `neones_galeria.py electronica-marco`, 44x47, con
