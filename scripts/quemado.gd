@@ -38,6 +38,7 @@ static func empezar(z: Node2D, s: AnimatedSprite2D, talla_restos: String) -> voi
 	q.sprite = s
 	q.talla = talla_restos
 	q.z_index = 1   # las brasas y el humo, encima del cuerpo
+	q.material = Recorte.material("aire")   # (ni las brasas ni el humo encima de las paredes, como el cuerpo; 20 nov)
 	var anim := s.animation
 	q.caida = s.sprite_frames.get_frame_count(anim) / s.sprite_frames.get_animation_speed(anim)
 	z.add_child(q)
@@ -51,6 +52,7 @@ func _ready() -> void:
 		puntos.append([sprite.position + (sprite.offset + solidos.pick_random()) * sprite.scale, randf() * 10.0])
 	restos = Node2D.new()
 	restos.z_index = -1   # por debajo del cuerpo
+	restos.material = Recorte.material("suelo")   # (ni la quemadura ni los huesos encima de las paredes; 20 nov)
 	restos.modulate.a = 0.0
 	restos.draw.connect(dibujar_restos)
 	zombi.add_child.call_deferred(restos)

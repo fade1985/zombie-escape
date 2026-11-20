@@ -164,6 +164,7 @@ static func salpicon(sala: Node, donde: Vector2, color: Color, hacia: Vector2, g
 static func charco(sala: Node, donde: Vector2, radio: float, color: Color) -> void:
 	var m := Mancha.new()
 	m.position = (donde / CELDA).round() * CELDA
+	m.material = Recorte.material("suelo")   # (no pasa a las paredes ni al otro lado, como la mancha; 20 nov)
 	m.crece = 1.6
 	m.crecido = 0.0
 	var semilla := randf() * TAU

@@ -1211,6 +1211,44 @@ func probar_reventon() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --muerto-pared": un gordo y un vecino mueren pegados a una pared de la sala de pruebas (el gordo a la
+# izquierda, empujado hacia ella; el vecino a la derecha): nada de lo suyo (el cuerpo, el reventón, el charco, la
+# sangre) tiene que pintarse encima de la pared (lo pidió el dueño el 20 nov). Fotos captura-muerto-pared-*.png
+func probar_muerto_pared() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var y: float = johnny.global_position.y
+	var x0: float = johnny.global_position.x
+	var izq: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0, y), Vector2(x0 - 3000, y), 1)).position.x
+	var der: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0, y), Vector2(x0 + 3000, y), 1)).position.x
+	print("Paredes en x %d y %d" % [izq, der])
+	for caso in [["izquierda", "venenoso", Vector2(izq + 34, y), Vector2.LEFT], ["derecha", "normal", Vector2(der - 22, y), Vector2.RIGHT]]:
+		zombis_de_prueba([])
+		for c in get_tree().get_nodes_in_group("charcos"):
+			c.queue_free()
+		johnny.global_position = caso[2] - caso[3] * 200.0 + Vector2(0, 60)
+		johnny.get_node("Camara").reset_smoothing()
+		var z: Node2D = meter_zombi(caso[1], caso[2])
+		await get_tree().physics_frame
+		z.process_mode = Node.PROCESS_MODE_DISABLED   # (que no se mueva antes de tiempo)
+		await get_tree().create_timer(0.3).timeout
+		z.process_mode = Node.PROCESS_MODE_INHERIT
+		z.recibir_golpe(99999, caso[3] * 300.0)
+		await get_tree().create_timer(0.15).timeout
+		Captura.foto("captura-muerto-pared-%s-1.png" % caso[0])
+		await get_tree().create_timer(1.6).timeout
+		Captura.foto("captura-muerto-pared-%s-2.png" % caso[0])
+	get_tree().quit()
+
+
 func probar_charcos() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout

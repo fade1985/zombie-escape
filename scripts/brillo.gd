@@ -9,7 +9,8 @@ class_name Brillo
 extends AnimatedSprite2D
 
 const SHADER := preload("res://escenas/personajes/brillo.gdshader")
-const PARAMETROS := ["destello", "hielo", "fuego", "furia", "acido", "vomito", "t", "semilla", "alto", "comido", "deshecho"]
+const PARAMETROS := ["destello", "hielo", "fuego", "furia", "acido", "vomito", "t", "semilla", "alto", "comido", "deshecho",
+	"recortar", "modo"]   # (los dos últimos: el cuerpo de un muerto, recortado en las paredes como el dibujo)
 const COLOR_ACIDO := Color("#7ddc3a")
 
 var dibujo: AnimatedSprite2D
@@ -64,3 +65,6 @@ func _process(_delta: float) -> void:
 	flip_v = dibujo.flip_v
 	for k in PARAMETROS:
 		material.set_shader_parameter(k, m.get_shader_parameter(k))
+	if Brillo.valor(m, "recortar") > 0.0 and not has_meta("recorte"):
+		Recorte.poner(material)   # (la máscara de las paredes, una vez)
+		set_meta("recorte", true)

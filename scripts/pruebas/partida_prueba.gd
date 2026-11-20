@@ -139,6 +139,7 @@
 #   --charcos           los líquidos (veneno, ácido, vómito, lejía, agua de cubo, aceite que luego arde y café) junto al fuego  [prueba_armas.gd]
 #   --reventon          el gordo revienta al morir (M38): la corona y las gotas, y el charco grande con sus burbujas
 #                       gordas, hasta que se seca; y Johnny dentro, con las manchas de ácido (M65) [prueba_armas.gd]
+#   --muerto-pared      un gordo y un vecino mueren pegados a una pared: ni el cuerpo ni lo que sueltan se pintan encima [prueba_armas.gd]
 #   --epicas            el truco de la Épica de cada familia: golpe de gracia, balas que atraviesan, estallido y
 #                       racimo                                                             [prueba_armas.gd]
 #   --aura              lo que se ve de la calidad del arma en la mano: la luz, las chispas y la estela del golpe y de la
@@ -1037,6 +1038,9 @@ func empezar_prueba() -> void:
 	elif "--reventon" in args:
 		set_process(false)   # sin la prueba larga
 		probar_reventon()
+	elif "--muerto-pared" in args:
+		set_process(false)   # sin la prueba larga
+		probar_muerto_pared()
 	elif "--fuego-acido" in args:
 		set_process(false)   # sin la prueba larga
 		probar_fuego_acido()

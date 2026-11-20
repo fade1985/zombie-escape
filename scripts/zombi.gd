@@ -570,6 +570,7 @@ func morir() -> void:
 	estado = "muerto"
 	Sonido.tocar("muerte")
 	$Sombra.apagar()
+	recortar_cuerpo()
 	if congelado > 0.0:
 		reventar_hielo()   # (muere congelado: revienta en añicos, sin cuerpo)
 	else:
@@ -581,6 +582,17 @@ func morir() -> void:
 	z_index = -1
 	quimica_al_morir()
 	murio.emit()
+
+
+# El cuerpo, desde que muere, no se pinta encima de las paredes ni al otro lado (20 nov; lo pidió el dueño): el recorte de
+# los charcos (recorte.gd), metido en su shader (recorte_cuerpo.gdshaderinc). En vida no hace falta: choca con ellas
+func recortar_cuerpo() -> void:
+	var m := sprite.material as ShaderMaterial
+	if m == null or m.shader != DESTELLO:
+		return
+	Recorte.poner(m)
+	m.set_shader_parameter("modo", Recorte.MODOS["aire"])
+	m.set_shader_parameter("recortar", 1.0)
 
 
 # Muere congelado (añicos): el bloque de hielo y el zombi revientan en trozos que saltan y se funden (el efecto

@@ -239,6 +239,12 @@ en una línea.
   detrás. Para lo que no usa ese shader, lo mismo en `Recorte.muro_en`, `techo` y `tapa` (las gotas en el aire de
   `particulas.gd` chocan con el techo y las tapa la cara; las de `Mancha` no se pintan en una casilla de muro).
   `Mancha.sangre` lleva el recorte "suelo". Prueba: `--captura --explosivo-pared`.
+  Desde el 20 nov (lo pidió el dueño: que nada atraviese las paredes), también el cuerpo de un zombi muerto: el shader
+  de los zombis (`destello.gdshader`) y su copia que brilla (`brillo.gdshader`) incluyen `recorte_cuerpo.gdshaderinc`,
+  que mete el recorte en los huecos `VERTICE` y `RECORTE` de `quemaduras.gdshaderinc`. Va apagado y `zombi.recortar_cuerpo`
+  lo enciende al morir, en el modo "aire" (en vida no hace falta: choca con las paredes, y así no cuesta nada). Y el
+  charco de sangre del que muere a tiros o golpes (`Mancha.charco`), las brasas y el humo de los quemados y sus restos
+  (`quemado.gd`, también los del ácido). Prueba: `--captura --muerto-pared` (un gordo y un vecino muertos contra la pared).
 - `poligono.gd` (11 nov): un polígono de color pintado con `draw_polygon`. **No usar `Polygon2D` para nada que cambie
   cada fotograma** (el rayo de la linterna, la pantalla de la tele): en la web de Godot 4.7.2, al redibujarse con los
   mismos puntos actualiza su malla atando los índices al búfer equivocado y Chrome llena la consola de avisos de WebGL

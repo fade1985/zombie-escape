@@ -4,4 +4,5 @@ shader_type canvas_item;
 render_mode unshaded;
 
 #define SOLO_BRILLO
+#include "res://escenas/personajes/recorte_cuerpo.gdshaderinc"
 #include "res://escenas/personajes/quemaduras.gdshaderinc"

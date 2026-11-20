@@ -71,6 +71,9 @@ varying vec4 tinte;   // el color que le pone el nodo (modulate), sin el dibujo
 
 void vertex() {
 	lugar = VERTEX;
+#ifdef VERTICE
+	VERTICE   // lo que añade quien lo incluye (el recorte del cuerpo de un muerto: recorte_cuerpo.gdshaderinc)
+#endif
 #ifdef DIBUJO
 	tinte = COLOR;
 #endif
