@@ -79,7 +79,8 @@ const ESTILO_TIENDA := {
 	"tienda-joyeria": [["marmol"], "venta"],
 	# la ferretería (20 nov, el dueño): hormigón pulido gris y pared blanca con rodapié de chapa, destrozados (de GPT:
 	# tools/taller_ferreteria_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
-	"tienda-ferreteria": [["venta-ferreteria-d1"], "venta-ferreteria-d1", "venta"],
+	# (la pared, desde el 20 nov, toda de paneles perforados de chapa gris oscura: pared-paneles-ferreteria-d<N>)
+	"tienda-ferreteria": [["venta-ferreteria-d1"], "paneles-ferreteria-d1", "venta"],
 	# la tienda de ropa, rehecha por dentro (18 nov, el dueño): tarima de roble claro y pared rosa empolvado con rodapié
 	# dorado acanalado, de 4 casillas (su pared alta), de GPT (tools/ropa_gpt.py)
 	"tienda-ropa": [["ropa"], "ropa"], "probadores-ropa": [["ropa"], "ropa"],
@@ -114,9 +115,10 @@ const MEZCLA_TIENDA := {
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
 	"almacen-ferreteria": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
 		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
-	# (la de la ferretería: los de la pintura amarilla, d3, los que menos, que se ven mucho)
+	# (la de la ferretería: los suelos de la pintura amarilla, d3, los que menos, que se ven mucho; la pared, de paneles perforados, y los
+	# del abollón y del hollín, los que menos)
 	"tienda-ferreteria": {"suelos": [["venta-ferreteria-d1", 2], ["venta-ferreteria-d2", 2], ["venta-ferreteria-d3", 1]],
-		"paredes": [["venta-ferreteria-d1", 2], ["venta-ferreteria-d2", 2], ["venta-ferreteria-d3", 1]]},
+		"paredes": [["paneles-ferreteria-d1", 2], ["paneles-ferreteria-d2", 1], ["paneles-ferreteria-d3", 1]]},
 	"taller-ferreteria": {"suelos": [["taller-ferreteria-d1", 1], ["taller-ferreteria-d2", 1], ["taller-ferreteria-d3", 1]],
 		"paredes": [["taller-ferreteria-d1", 1], ["taller-ferreteria-d2", 1], ["taller-ferreteria-d3", 1]]},
 	"bano-ferreteria": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],

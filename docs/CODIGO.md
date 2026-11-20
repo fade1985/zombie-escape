@@ -1136,7 +1136,8 @@ en una línea.
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
   (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
-  misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen).
+  misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen). La pared, desde el mismo día, toda de paneles perforados de chapa gris
+  oscura, destrozados (`pared-paneles-ferreteria-d<N>`); la blanca se queda hecha, sin usar.
   Mientras se rehace, `Tienda.TIPOS` "despejadas" (`mapa.despejada`): sin nada por el
   suelo (restos, charcos ni la capa de suciedad) de la sala de venta y del taller, ni en las paredes de la sala de venta, del almacén y del taller.
 - **La puerta de la tienda de electrónica** (17 nov, el dueño): la misma puerta de cristal de la ferretería, algo más pequeña (28x43 → 28x40, con
