@@ -1124,13 +1124,15 @@ en una línea.
   (`assets/sources/centro/letrero-ferreteria-gpt.webp`, solo las letras), en inglés como los demás. `py tools/neones_galeria.py letrero-ferreteria`
   (sale `letrero-ferreteria.png`, 91x18, y el apagado) y `py tools/letrero_halo.py ferreteria`; en `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas
   saltan de la esquina de abajo de la última E). Prueba: `--puerta-super ferreteria`.
-- **El aseo y el almacén de la ferretería** (20 nov, el dueño): iguales que los de la tienda de ropa. La tienda, de 48 × 30 (antes
-  40 × 30): las habitaciones de arriba, de 12 de alto; el aseo, 7 × 12, y el almacén, 17 × 12, con sus puertas en los mismos sitios
-  que en la ropa (la sala de venta, más corta y más ancha: sus muebles, más abajo y corridos para que la entrada siga en medio).
-  Su suelo y pared destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-ferreteria" y "almacen-ferreteria"), la suciedad y la
-  sangre (`Tienda.TIPOS` "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo
-  gris), sus muebles (los de `bano-ropa` y `almacen-ropa`), sus puertas metálicas y sin toalla ni balda. El plano de antes,
-  `ferreteria-antigua`, para Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`.
+- **El aseo y el almacén de la ferretería** (20 nov, el dueño): iguales que los de la tienda de ropa. La tienda, de 42 × 30: arriba,
+  el aseo (7 × 12), el almacén (17 × 12, con sus puertas en los mismos sitios que en la ropa) y el taller (12 × 12), pared con pared
+  (sin el trozo de sala de venta que subía entre el almacén y el taller); abajo, la sala de venta (38 × 13). La sala de venta y el
+  taller, sin muebles de momento (`tienda-ferreteria` y `taller-ferreteria` vacíos). Su suelo y pared destrozados
+  (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-ferreteria" y "almacen-ferreteria"), la suciedad y la sangre (`Tienda.TIPOS`
+  "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo gris), sus muebles (los de
+  `bano-ropa` y `almacen-ropa`), sus puertas metálicas y sin toalla ni balda. El plano de antes, `ferreteria-antigua`, para
+  Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. El panel de llaves vandalizado
+  para sus paredes, `panel-llaves.png` (136x86, a escala 1; `muebles_gpt.py panel_llaves`), aún sin poner.
 - **La puerta de la tienda de electrónica** (17 nov, el dueño): la misma puerta de cristal de la ferretería, algo más pequeña (28x43 → 28x40, con
   su cartel «OPEN» pequeño: `muebles_gpt.py puerta_electronica cartel_open_pequeno` y `puerta_ferreteria.py electronica`), dentro de un marco de
   neón rosa y cian abierto por abajo (de GPT, `assets/sources/centro/marco-electronica-gpt.webp`; `neones_galeria.py electronica-marco`, 44x47, con

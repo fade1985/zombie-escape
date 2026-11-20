@@ -495,33 +495,9 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
 		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
 	}},
-	# M77: la ferretería fija (Tienda.PLANOS; casillas desde la esquina de la sala de venta, la 2,2 del plano). Con la puerta
-	# abajo: una estantería al fondo del trozo que llega hasta atrás, un banco de trabajo, estanterías y palés delante
-	# del almacén y del taller (sueltos), palés a la izquierda, dos cajas a la derecha y dos filas de cuatro estanterías
-	# a cada lado del pasillo de la entrada. Volteada, las cajas y las estanterías de pared, en la de la entrada.
-	# (20 nov, el dueño) con el aseo y el almacén como los de la tienda de ropa, la tienda es 3 casillas más honda por arriba y 8 más
-	# ancha (48): todo lo de delante, 3 más abajo, y las filas de estanterías, corridas para que la entrada siga en medio
-	"tienda-ferreteria": {
-		"colocados": {
-			"abajo": [
-				["metalshelf", 28.5],
-				["workbench", 3.0, "libre", 13.75], ["metalshelf", 11.0, "libre", 13.625], ["pallet", 24.0, "libre", 13.875],
-				["metalshelf", 33.0, "libre", 13.625], ["pallet", 41.5, "libre", 13.875],
-				["pallet", 18.0, "izquierda"], ["pallet", 21.0, "izquierda"],
-				["checkout", 18.0, "derecha"], ["checkout", 21.0, "derecha"],
-				["pallet", 3.0, "abajo"], ["pallet", 41.0, "abajo"],
-				["metalshelf", 8.75, "libre", 17.0], ["metalshelf", 11.25, "libre", 17.0], ["metalshelf", 13.75, "libre", 17.0], ["metalshelf", 16.25, "libre", 17.0], ["metalshelf", 27.75, "libre", 17.0], ["metalshelf", 30.25, "libre", 17.0], ["metalshelf", 32.75, "libre", 17.0], ["metalshelf", 35.25, "libre", 17.0],
-				["metalshelf", 8.75, "libre", 21.5], ["metalshelf", 11.25, "libre", 21.5], ["metalshelf", 13.75, "libre", 21.5], ["metalshelf", 16.25, "libre", 21.5], ["metalshelf", 27.75, "libre", 21.5], ["metalshelf", 30.25, "libre", 21.5], ["metalshelf", 32.75, "libre", 21.5], ["metalshelf", 35.25, "libre", 21.5],
-			],
-			"arriba": [
-				["metalshelf", 2.0], ["metalshelf", 4.5], ["checkout", 16.0], ["checkout", 27.5], ["metalshelf", 36.0],
-				["metalshelf", 38.5], ["pallet", 42.0],
-				["pallet", 6.0, "izquierda"], ["pallet", 7.0, "derecha"], ["pallet", 27.25, "abajo"], ["pallet", 29.75, "abajo"],
-				["metalshelf", 8.75, "libre", 4.0], ["metalshelf", 11.25, "libre", 4.0], ["metalshelf", 13.75, "libre", 4.0], ["metalshelf", 16.25, "libre", 4.0], ["metalshelf", 27.75, "libre", 4.0], ["metalshelf", 30.25, "libre", 4.0], ["metalshelf", 32.75, "libre", 4.0], ["metalshelf", 35.25, "libre", 4.0],
-				["metalshelf", 8.75, "libre", 8.5], ["metalshelf", 11.25, "libre", 8.5], ["metalshelf", 13.75, "libre", 8.5], ["metalshelf", 16.25, "libre", 8.5], ["metalshelf", 27.75, "libre", 8.5], ["metalshelf", 30.25, "libre", 8.5], ["metalshelf", 32.75, "libre", 8.5], ["metalshelf", 35.25, "libre", 8.5],
-			],
-		},
-	},
+	# M77: la ferretería fija (Tienda.PLANOS). (20 nov, el dueño) la sala de venta, sin muebles de momento: se rehará, como la de la
+	# tienda de ropa (antes llevaba bancos de trabajo, palés, cajas y dos filas de estanterías: está en git)
+	"tienda-ferreteria": {"colocados": {"abajo": [], "arriba": []}},
 	# el almacén (20 nov, el dueño: el mismo que el de la tienda de ropa, almacen-ropa) y el taller de la ferretería fija (M77)
 	"almacen-ferreteria": {"colocados": {
 		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
@@ -536,10 +512,8 @@ const SALAS := {
 		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],
 	}},
-	"taller-ferreteria": {"colocados": {
-		"abajo": [["workbench", 2.0], ["metalshelf", 6.0], ["workbench", 10.0], ["pallet", 4.5, "derecha"]],
-		"arriba": [["workbench", 2.0], ["metalshelf", 8.5], ["pallet", 5.0, "derecha"], ["pallet", 9.5, "abajo"]],
-	}},
+	# (20 nov, el dueño) el taller, también vacío de momento (antes, dos bancos de trabajo, una estantería y palés: está en git)
+	"taller-ferreteria": {"colocados": {"abajo": [], "arriba": []}},
 	# M77: la electrónica fija (Tienda.PLANOS, con el charco con corriente dibujado a la izquierda). Con la puerta abajo:
 	# una estantería de teles al fondo del trozo que llega hasta atrás, teles, estanterías y palés delante de las
 	# taquillas y del almacén, dos cajas a la derecha y dos filas de tres estanterías de teles a la derecha (a la izquierda,
