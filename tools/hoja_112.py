@@ -181,13 +181,18 @@ def luz(f):
     px = f.load()
     tinte = LUZ.get('tinte')
     desde = LUZ.get('desde', -(C - R) // 2) + (C - R) // 2
+    cara = {}   # la cara no se toca: en cada fila hasta un poco por debajo del cuello, de la primera piel a la última
+    for y in range(min(desde + 8, f.height)):
+        xs = [x for x in range(f.width) if px[x, y][3] and es_piel(px[x, y])]
+        if xs:
+            cara[y] = (xs[0], xs[-1])
     for y in range(f.height):
         arriba = y < desde
         if arriba and 'arriba_v' not in LUZ:
             continue
         for x in range(f.width):
             c = px[x, y]
-            if not c[3]:
+            if not c[3] or (y in cara and cara[y][0] <= x <= cara[y][1]):
                 continue
             if (c, arriba) not in _luces:
                 h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
@@ -208,6 +213,12 @@ def luz(f):
 
 
 _luces = {}
+
+
+def es_piel(c):
+    """La piel ya aclarada por piel(): verde y con color."""
+    h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
+    return 50 <= h * 360 <= 150 and s >= 0.3 and v >= 0.3
 
 
 def preparar(f):
@@ -320,6 +331,45 @@ for nombre, a in FICHA['animaciones'].items():
 # pies en "pies" y un borde de 1 píxel de ese color (tools/reducir.py). Así sale del tamaño y con el acabado de los de 48
 # (y en el juego, a escala 2). La dependienta, desde el 19 nov (lo pidió el dueño): de la altura de Johnny, con su borde negro.
 REDUCIR = FICHA.get('reducir')
+CARA = FICHA.get('cara')
+
+
+def cara_limpia(f):
+    """La cara, ya reducida (unos 6 píxeles), limpia: al mezclar colores, los ojos, la boca y la sangre de la cara
+    grande salían como puntos sueltos de colores raros (el explosivo al andar, 20 nov; el dueño la veía extraña).
+    Por encima de la fila "hasta" (de la casilla reducida), la piel (lo verde) pasa a tres verdes según su luz
+    ("tonos", de claro a oscuro, los de la dependienta) y lo que queda en medio de la piel en su fila (los ojos, la
+    boca, la sangre y las sombras de la barbilla, que "luz" tiñe de azul), a "hueco" si es oscuro y al de en medio si
+    no."""
+    if not CARA:
+        return f
+    claro, medio, oscuro = [tuple(c) for c in CARA['tonos']]
+    hueco = tuple(CARA.get('hueco', oscuro))
+    px = f.load()
+    alto = min(CARA['hasta'], f.height)
+    hsv = {}
+    piel = set()
+    for y in range(alto):
+        for x in range(f.width):
+            c = px[x, y]
+            if c[3]:
+                h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
+                hsv[(x, y)] = (h * 360, s, v)
+                if 50 <= h * 360 <= 150 and s >= 0.2 and v >= 0.3:
+                    piel.add((x, y))
+    # dentro: en cada fila, lo que queda entre el primer y el último píxel de piel (menos el negro del contorno)
+    dentro = set()
+    for y in range(alto):
+        xs = [x for x in range(f.width) if (x, y) in piel]
+        if len(xs) >= 2:   # (y uno más a cada lado: el borde de la cara, sombreado, salía morado)
+            dentro |= {(x, y) for x in range(xs[0] - 1, xs[-1] + 2) if (x, y) in hsv and (x, y) not in piel
+                       and hsv[(x, y)][2] >= 0.12}
+    for (x, y) in piel:
+        v = hsv[(x, y)][2]
+        px[x, y] = (claro if v >= 0.75 else medio if v >= 0.5 else oscuro) + (255,)
+    for (x, y) in dentro:
+        px[x, y] = (hueco if hsv[(x, y)][2] < 0.35 else medio) + (255,)
+    return f
 
 
 if REDUCIR:
@@ -330,7 +380,7 @@ if REDUCIR:
             for f in b[d]:
                 k = f.tobytes()
                 if k not in hechas:
-                    hechas[k] = reducir.reducida(f, PIES, REDUCIR)
+                    hechas[k] = cara_limpia(reducir.reducida(f, PIES, REDUCIR))
                 nuevos.append(hechas[k])
             b[d] = nuevos
     C, PIES = reducir.casilla(REDUCIR)[0], tuple(REDUCIR['pies'])

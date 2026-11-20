@@ -23,7 +23,9 @@ una casilla de 80 (`"pies": [40, 69]`, `offset = Vector2(-40, -69)`), un cuarto 
 otro 15 % más grande, desde el cuello. Aun así era una masa negra: `"luz"` aclara la ropa con una curva (los pliegues se
 ven) y la tiñe de azul marino (que se separe del suelo, que es pardo), del cuello para abajo (y por encima, con `"arriba_v"`, solo
 lo oscuro que no tira a verde: el sombrero sí, la cara no); y `"parche"` quita de debajo del cuello todo lo verde y el caqui (los galones de la manga y la
-cinta de la dinamita). Se prueba con `--captura --explosivo-nuevo`.
+cinta de la dinamita). La cara, reducida a unos 6 píxeles, salía con puntos sueltos de colores (los ojos, la boca y la
+sangre mezclados, y sombras moradas): `"cara"` la deja ya reducida en tres verdes (los de la dependienta) con los ojos y
+la boca en un verde muy oscuro. Se prueba con `--captura --explosivo-nuevo`.
 
 ## 1. El personaje en PixelLab
 
