@@ -1354,7 +1354,8 @@ en una línea.
   verde no le pegaba, lo eligió el dueño el 20 nov), `"huecos"` para las sombras marrones de la boca y `"barbilla"` para
   su mandíbula, que en su dibujo es del marrón del cuerpo (salía marrón al abrir la boca); la barbilla no se pone de
   espaldas (`"sin"`: ahí la mancha más alta es un trozo de mejilla y debajo está la espalda), ni con la cara de más de 10
-  filas (la cabeza echada atrás: debajo está la camisa); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
+  filas (la cabeza echada atrás: debajo está la camisa), y con `"lado"` coge también el borde oliva y marrón de la mitad
+  de abajo de la cara (de perfil, la barbilla y la boca por delante); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
   opción, todas las hojas salen idénticas a las de antes. Lo que no se ha podido: en el ataque de frente del vigilante, la
   cara se ve amarilla en algunos fotogramas (el paso del chaleco neón la toma por chaleco, y lo que pinta de amarillo no se
   toca), y en el de tentáculos quedan grises algunos píxeles claros de pies y brazos (iguales que los del pantalón).

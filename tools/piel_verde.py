@@ -29,10 +29,12 @@ En la ficha, "piel_verde": {...} con:
                           entra: queda lejos de los brazos. Lo muy oscuro (el hueco de la boca) se deja fuera con "claridad"
   "barbilla": {...}       la parte de abajo de la cara aunque sea de otro color (la mandíbula del arrastrado, marrón como
                           su cuerpo, que al abrir la boca se veía marrón): debajo de la cara (la mancha de piel más alta,
-                          si empieza a "arriba" píxeles o menos de lo alto del dibujo, 8, y tiene "ancho" píxeles o más
-                          en sus 4 primeras filas, 4, y "alto" filas o menos, 10), hasta "filas" filas más abajo (5) y solo tan ancha como la cara en
-                          sus últimas filas, los colores que cumplen eso ("tono", "viveza", "claridad"); "sin": [...]
-                          las direcciones en las que no (de espaldas, donde la mancha más alta es un trozo de mejilla y
+                          si empieza a "arriba" píxeles o menos de lo alto del dibujo, 8, tiene "ancho" píxeles o más en
+                          sus 4 primeras filas, si lo dice, y "alto" filas o menos, 10), hasta "filas" filas más abajo (5) y solo
+                          tan ancha como la cara en sus últimas filas, los colores que cumplen eso ("tono", "viveza",
+                          "claridad"). Con "lado": {...}, también los colores así pegados a la mitad de abajo de la cara
+                          (de perfil, la barbilla y la boca por delante), hasta "pasos" píxeles (2). "sin": [...] las
+                          direcciones en las que no (de espaldas, donde la mancha más alta es un trozo de mejilla y
                           debajo está la espalda: solo lo sabe tools/zombi.py)
   "luz": [k, suma]        la claridad nueva es la de antes × k + suma (lo normal, [1, 0])
   "fuera": [[...], ...]   otros colores que no son piel, cada uno como {"tono": [...], "viveza": [...], "claridad": [...]}
@@ -168,8 +170,9 @@ class PielVerde:
         y0 = min(y for _, y in cara)
         if y0 - arriba > b.get('arriba', 8):
             return set()
-        # y ancha por arriba (de tres cuartos por detrás asoma una tira de mejilla de 2 píxeles)
-        if max(sum(1 for _, y in cara if y == yy) for yy in range(y0, y0 + 4)) < b.get('ancho', 4):
+        # y, si la ficha lo pide, ancha por arriba (de tres cuartos por detrás asoma una tira de mejilla de 2 píxeles;
+        # el arrastrado no lo usa: de perfil, andando, su cara es de 3 y la espalda la quita "sin")
+        if max(sum(1 for _, y in cara if y == yy) for yy in range(y0, y0 + 4)) < b.get('ancho', 0):
             return set()
         fondo = max(y for _, y in cara)
         # y no muy alta: más de "alto" filas (10) es que enseña el cuello (la cabeza echada atrás) o que va pegada a
@@ -184,6 +187,22 @@ class PielVerde:
                 if ((x, y) not in piel and px[x, y][3] >= 128 and self._cumple(px[x, y][:3], b)
                         and any((x, yy) in piel for yy in range(y - 1, y - 8, -1))):
                     nuevo.add((x, y))
+        # y el borde de la cara (de perfil, la barbilla y la boca por delante son de un oliva y un marrón oscuros):
+        # los colores de "lado" pegados a la cara, hasta "pasos" píxeles (2); solo desde la cara, no desde los brazos
+        lado = b.get('lado')
+        if lado:
+            mitad = y0 + (fondo - y0) * lado.get('desde', 0.5)   # solo la mitad de abajo (arriba está el pelo)
+            hecho, borde = set(cara) | nuevo, set(cara)
+            for _ in range(lado.get('pasos', 2)):
+                sig = set()
+                for x, y in borde:
+                    for r in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                        if (r not in hecho and r not in piel and r[1] >= mitad and 0 <= r[0] < w and r[1] < h
+                                and px[r][3] >= 128 and self._cumple(px[r][:3], lado)):
+                            sig.add(r)
+                hecho |= sig
+                nuevo |= sig
+                borde = sig
         return nuevo
 
     def _cumple(self, c, f):
