@@ -38,5 +38,19 @@
   "cabeza": {
     "cuello": 20,
     "agranda": 1.15
+  },
+  "parche": {
+    "desde": 24
+  },
+  "luz": {
+    "gamma": 0.5,
+    "sat_max": 0.3,
+    "tinte": [
+      60,
+      90,
+      160
+    ],
+    "cuanto": 0.6,
+    "desde": 20
   }
 }

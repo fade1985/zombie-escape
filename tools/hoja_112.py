@@ -125,8 +125,89 @@ def cabeza(f):
     return out
 
 
+PARCHE = FICHA.get('parche')
+
+
+def sin_parche(f):
+    """Quita lo verde y el caqui de debajo de la fila "desde" (de la pose de 112): los galones de la manga del explosivo
+    (20 nov, el dueño no los quería; con "piel" salían verde chillón) y la cinta verde de su dinamita. Se rellenan con el color de al lado,
+    como la sangre de sin_sangre()."""
+    if not PARCHE:
+        return f
+    y0 = PARCHE['desde'] + (C - R) // 2
+    px = f.load()
+    fx = set()
+    for y in range(y0, f.height):
+        for x in range(f.width):
+            c = px[x, y]
+            if c[3]:
+                h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
+                h *= 360   # (por debajo del cuello no hay piel: todo lo verde sobra, y el caqui de los galones)
+                if (60 <= h <= 160 and s >= 0.1 and v >= 0.15) or (40 <= h < 60 and 0.1 <= s <= 0.45 and 0.2 <= v <= 0.75):
+                    fx.add((x, y))
+    return rellenar(f, fx)
+
+
+def rellenar(f, fx):
+    """Pinta los píxeles de `fx` con el color que más se repite a su alrededor, de fuera hacia dentro."""
+    px = f.load()
+    for _ in range(12):
+        hecho = {}
+        for (x, y) in fx:
+            solidos = [px[x + i, y + j] for i in (-1, 0, 1) for j in (-1, 0, 1)
+                       if (i or j) and (x + i, y + j) not in fx and px[x + i, y + j][3]]
+            if len(solidos) >= 3:
+                hecho[(x, y)] = Counter(solidos).most_common(1)[0][0]
+        for q, c in hecho.items():
+            px[q] = c
+        fx -= set(hecho)
+        if not fx:
+            break
+    return f
+
+
+LUZ = FICHA.get('luz')
+
+
+def luz(f):
+    """Aclara lo oscuro y poco saturado (la ropa) con una curva: el valor v pasa a v ** "gamma", así los pliegues de
+    una gabardina negra se ven en vez de una mancha negra (el explosivo, 20 nov). Lo de color vivo (la piel ya aclarada,
+    la dinamita, la sangre) no se toca. Con "tinte" [r, g, b], la ropa toma ese color ("cuanto": 0 nada, 1 del todo), y
+    con "desde" solo desde esa fila (de la pose de 112) para abajo: en el explosivo, del cuello, para que la cara no se
+    tiña (sus sombras grises salían azules) y el sombrero se quede negro."""
+    if not LUZ:
+        return f
+    px = f.load()
+    tinte = LUZ.get('tinte')
+    for y in range(LUZ.get('desde', -(C - R) // 2) + (C - R) // 2, f.height):   # ("desde": la fila de la pose de 112)
+        for x in range(f.width):
+            c = px[x, y]
+            if not c[3]:
+                continue
+            if c not in _luces:
+                h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
+                if s <= LUZ.get('sat_max', 0.3):
+                    v2 = v ** LUZ['gamma']
+                    r, g, b = colorsys.hsv_to_rgb(h, s, v2)
+                    if tinte:   # (hacia el tinte con la misma luz: su canal más alto, v2)
+                        k, tope = LUZ.get('cuanto', 0.15), max(tinte)
+                        r, g, b = (q * (1 - k) + t / tope * v2 * k for q, t in zip((r, g, b), tinte))
+                    _luces[c] = (round(r * 255), round(g * 255), round(b * 255), c[3])
+                else:
+                    _luces[c] = c
+            px[x, y] = _luces[c]
+    return f
+
+
+_luces = {}
+
+
+def preparar(f):
+    return cabeza(luz(piel(sin_parche(f))))
+
+
 def cargar(anim, d):
-    fs = [cabeza(piel(Image.open(p).convert('RGBA'))) for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
+    fs = [preparar(Image.open(p).convert('RGBA')) for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
     assert fs, f'faltan los fotogramas de {anim}/{d}'
     assert fs[0].size == (C, C), f'{anim}/{d}: el lienzo tiene que ser de {C}×{C} (es {fs[0].size})'
     return fs
@@ -190,7 +271,7 @@ def con_oeste(por_dir):
 
 # ═════════════ Quieto y reposo ═════════════
 m = (C - R) // 2   # (los pies de la pose de 112, de 56,110 a 76,130)
-quieto = con_oeste({d: [cabeza(piel(Image.open(f'{SRC}/rotaciones/{d}.png').convert('RGBA').crop((-m, -m, C - m, C - m))))]
+quieto = con_oeste({d: [preparar(Image.open(f'{SRC}/rotaciones/{d}.png').convert('RGBA').crop((-m, -m, C - m, C - m)))]
                     for d in PROPIAS})
 REPOSO = FICHA.get('reposo', {})
 cintura, baja = REPOSO.get('cintura', 58) + m, REPOSO.get('baja', 2)
