@@ -77,11 +77,15 @@ const ESTILO_TIENDA := {
 	# la joyería (parte 9): su sala de venta con mármol ("<uso>-<tipo de tienda>" manda sobre "<uso>"), la trastienda
 	# como un almacén y la cámara acorazada con suelo de chapa de acero
 	"tienda-joyeria": [["marmol"], "venta"],
+	# la ferretería, siempre con el gris (el que le tocaba según dónde cae; desde el 20 nov su sala de venta es más corta y le tocaba el otro)
+	"tienda-ferreteria": [["venta-a"], "venta"],
 	# la tienda de ropa, rehecha por dentro (18 nov, el dueño): tarima de roble claro y pared rosa empolvado con rodapié
 	# dorado acanalado, de 4 casillas (su pared alta), de GPT (tools/ropa_gpt.py)
 	"tienda-ropa": [["ropa"], "ropa"], "probadores-ropa": [["ropa"], "ropa"],
 	# y su aseo de empleados, como el vestuario de Johnny en la sala de mantenimiento (azulejo blanco y baldosa beis; el tercero, su techo)
 	"bano-ropa": [["vestuario"], "vestuario", "bano-b"],
+	# (20 nov, el dueño) y el de la ferretería, igual que ese
+	"bano-ferreteria": [["vestuario"], "vestuario", "bano-b"],
 	# y su almacén, como el pasillo de los trasteros pero sin la línea amarilla (hormigón y chapa; el techo, el de los trasteros)
 	"almacen-ropa": [["trastero"], "trastero-pasillo", "trastero"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
 	# los departamentos de Torre Velaria (tercer edificio): la sala grande con moqueta gris de oficina (suelo-torre), su pared
@@ -104,6 +108,8 @@ const MEZCLA_TIENDA := {
 	"almacen-ropa": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
 		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
 	"bano-ropa": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
+		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
+	"bano-ferreteria": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
@@ -302,10 +308,10 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
 		if not limpio:
-			if destrozadas().is_empty():
-				preparar_restos()
-			else:
-				manchas_de_las_salas()   # (la tienda de ropa: solo la sangre de los apartamentos, en las salas ya rehechas)
+			# los restos de siempre en las salas que no están rehechas y, en las rehechas (destrozadas), solo la sangre de los
+			# apartamentos (la tienda de ropa, entera; la ferretería, su aseo)
+			preparar_restos()
+			manchas_de_las_salas()
 	elif sitio.has("apt"):
 		manchas_del_pasillo()
 
@@ -769,10 +775,10 @@ func poner_caras() -> void:
 			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
 			if centro and not limpio:
-				if destrozadas().is_empty():
-					cara.adornos = restos_de_pared(cara.ancho)
-				elif sala_destrozada(sala):
+				if sala_destrozada(sala):
 					cara.adornos = sangre_de_pared(cara.ancho)
+				else:
+					cara.adornos = restos_de_pared(cara.ancho)
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
 				cara.adornos += colgados(cara)
@@ -1075,6 +1081,10 @@ func poner_hojas() -> void:
 			elif "almacen" in usos:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
 				hoja.metalizada = true
+		# (20 nov, el dueño) el aseo de la ferretería, igual que el de la ropa: su puerta, la misma
+		if sitio.get("tienda", "") == "ferreteria" and "bano" in [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]:
+			hoja.madera = PUERTA_BANO.METAL_ROPA
+			hoja.metalizada = true
 		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
 		hoja.montar(d)
 		cosas.add_child(hoja)
@@ -1384,7 +1394,7 @@ func preparar_restos() -> void:
 	var libres := []
 	for f in range(1, filas - 1):
 		for c in range(1, cols - 1):
-			if dueno[f * cols + c] >= 0 and not (es_muro(c - 1, f) or es_muro(c + 1, f) or es_muro(c, f - 1) or es_muro(c, f + 1)):
+			if dueno[f * cols + c] >= 0 and not (es_muro(c - 1, f) or es_muro(c + 1, f) or es_muro(c, f - 1) or es_muro(c, f + 1)) 					and not sala_destrozada(dueno[f * cols + c]):   # (las salas rehechas llevan su sangre: manchas_de_las_salas)
 				libres.append(Vector2(c, f))
 	if libres.is_empty():
 		return

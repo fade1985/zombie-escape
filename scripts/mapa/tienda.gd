@@ -31,7 +31,9 @@ const TIPOS := {
 	"supermercado": {"nombre": "Supermercado", "neon": "SUPER", "salas": ["almacen", "camara", "bano"],   # [traducir]
 		"color": Color("#5dff8a")},
 	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"],   # [traducir]
-		"color": Color("#ff9a3c")},
+		"color": Color("#ff9a3c"),
+		# (20 nov, el dueño) su aseo, rehecho como el de la tienda de ropa: destrozado (ver "ropa", abajo)
+		"destrozada": ["bano"]},
 	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"],   # [traducir]
 		"color": Color("#4fe3ff")},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
@@ -65,7 +67,7 @@ const TIPOS := {
 		"presta": {"tipo": "ropa", "plano": "ropa-antigua", "usos": {"archivo": "almacen", "entrevistas": "probadores"}}},
 	"marketing": {"nombre": "Marketing", "neon": "MARKETING", "salas": ["almacen", "estudio", "bano"],   # [traducir]
 		"color": Color("#ffc6ef"), "edificio": "torre",
-		"presta": {"tipo": "ferreteria", "usos": {"estudio": "taller"}}},
+		"presta": {"tipo": "ferreteria", "plano": "ferreteria-antigua", "usos": {"estudio": "taller"}}},
 	"seguridad": {"nombre": "Seguridad corporativa", "neon": "SEGURIDAD", "salas": ["camaras", "armero", "bano"],   # [traducir]
 		"color": Color("#c9ffd8"), "edificio": "torre",
 		"presta": {"tipo": "restaurante", "usos": {"camaras": "cocina", "armero": "camara"}}},
@@ -138,8 +140,42 @@ const PLANOS := {
 		"#####################EE#####################",
 	],
 	# la ferretería: a la izquierda, el aseo de empleados y el almacén (el aseo se abre a él); a la derecha, el taller;
-	# entre los dos, un trozo de sala de venta que llega hasta el fondo
+	# entre los dos, un trozo de sala de venta que llega hasta el fondo. Desde el 20 nov (el dueño), las habitaciones de
+	# arriba, de 12 de alto como las de la tienda de ropa: su aseo, 7 × 12 con la puerta en el mismo sitio, igual que el de ella
 	"ferreteria": [
+		"########################################",
+		"########################################",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
+		"##BBBBBBB AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##############  ####VVVVV#####  ########",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"###################EE###################",
+		"###################EE###################",
+	],
+	# la ferretería de antes (M77, hasta el 20 nov): ahora solo la usa Marketing (TIPOS "presta")
+	"ferreteria-antigua": [
 		"########################################",
 		"########################################",
 		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",

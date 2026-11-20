@@ -495,7 +495,8 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
 		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
 	}},
-	# M77: la ferretería fija (Tienda.PLANOS; casillas desde la esquina de la sala de venta, la 2,2 del plano). Con la puerta
+	# M77: la ferretería fija (Tienda.PLANOS; casillas desde la esquina de la sala de venta, la 2,2 del plano; desde el 20 nov, con
+	# las habitaciones de arriba 3 casillas más hondas, la sala de venta más corta: todo lo de delante, 3 más abajo). Con la puerta
 	# abajo: una estantería al fondo del trozo que llega hasta atrás, un banco de trabajo, estanterías y palés delante
 	# del almacén y del taller (sueltos), palés a la izquierda, dos cajas a la derecha y dos filas de cuatro estanterías
 	# a cada lado del pasillo de la entrada. Volteada, las cajas y las estanterías de pared, en la de la entrada
@@ -503,20 +504,20 @@ const SALAS := {
 		"colocados": {
 			"abajo": [
 				["metalshelf", 20.5],
-				["workbench", 3.0, "libre", 10.75], ["metalshelf", 7.5, "libre", 10.625], ["pallet", 16.0, "libre", 10.875],
-				["metalshelf", 25.0, "libre", 10.625], ["pallet", 33.5, "libre", 10.875],
-				["pallet", 16.0, "izquierda"], ["pallet", 20.0, "izquierda"],
-				["checkout", 16.0, "derecha"], ["checkout", 20.0, "derecha"],
+				["workbench", 3.0, "libre", 13.75], ["metalshelf", 7.5, "libre", 13.625], ["pallet", 16.0, "libre", 13.875],
+				["metalshelf", 25.0, "libre", 13.625], ["pallet", 33.5, "libre", 13.875],
+				["pallet", 18.0, "izquierda"], ["pallet", 21.0, "izquierda"],
+				["checkout", 18.0, "derecha"], ["checkout", 21.0, "derecha"],
 				["pallet", 3.0, "abajo"], ["pallet", 33.0, "abajo"],
-				["metalshelf", 4.75, "libre", 14.0], ["metalshelf", 7.25, "libre", 14.0], ["metalshelf", 9.75, "libre", 14.0], ["metalshelf", 12.25, "libre", 14.0], ["metalshelf", 23.75, "libre", 14.0], ["metalshelf", 26.25, "libre", 14.0], ["metalshelf", 28.75, "libre", 14.0], ["metalshelf", 31.25, "libre", 14.0],
-				["metalshelf", 4.75, "libre", 19.5], ["metalshelf", 7.25, "libre", 19.5], ["metalshelf", 9.75, "libre", 19.5], ["metalshelf", 12.25, "libre", 19.5], ["metalshelf", 23.75, "libre", 19.5], ["metalshelf", 26.25, "libre", 19.5], ["metalshelf", 28.75, "libre", 19.5], ["metalshelf", 31.25, "libre", 19.5],
+				["metalshelf", 4.75, "libre", 17.0], ["metalshelf", 7.25, "libre", 17.0], ["metalshelf", 9.75, "libre", 17.0], ["metalshelf", 12.25, "libre", 17.0], ["metalshelf", 23.75, "libre", 17.0], ["metalshelf", 26.25, "libre", 17.0], ["metalshelf", 28.75, "libre", 17.0], ["metalshelf", 31.25, "libre", 17.0],
+				["metalshelf", 4.75, "libre", 21.5], ["metalshelf", 7.25, "libre", 21.5], ["metalshelf", 9.75, "libre", 21.5], ["metalshelf", 12.25, "libre", 21.5], ["metalshelf", 23.75, "libre", 21.5], ["metalshelf", 26.25, "libre", 21.5], ["metalshelf", 28.75, "libre", 21.5], ["metalshelf", 31.25, "libre", 21.5],
 			],
 			"arriba": [
 				["metalshelf", 2.0], ["metalshelf", 4.5], ["checkout", 12.0], ["checkout", 23.5], ["metalshelf", 28.0],
 				["metalshelf", 30.5], ["pallet", 34.0],
 				["pallet", 6.0, "izquierda"], ["pallet", 7.0, "derecha"], ["pallet", 19.25, "abajo"], ["pallet", 21.75, "abajo"],
-				["metalshelf", 4.75, "libre", 4.5], ["metalshelf", 7.25, "libre", 4.5], ["metalshelf", 9.75, "libre", 4.5], ["metalshelf", 12.25, "libre", 4.5], ["metalshelf", 23.75, "libre", 4.5], ["metalshelf", 26.25, "libre", 4.5], ["metalshelf", 28.75, "libre", 4.5], ["metalshelf", 31.25, "libre", 4.5],
-				["metalshelf", 4.75, "libre", 9.5], ["metalshelf", 7.25, "libre", 9.5], ["metalshelf", 9.75, "libre", 9.5], ["metalshelf", 12.25, "libre", 9.5], ["metalshelf", 23.75, "libre", 9.5], ["metalshelf", 26.25, "libre", 9.5], ["metalshelf", 28.75, "libre", 9.5], ["metalshelf", 31.25, "libre", 9.5],
+				["metalshelf", 4.75, "libre", 4.0], ["metalshelf", 7.25, "libre", 4.0], ["metalshelf", 9.75, "libre", 4.0], ["metalshelf", 12.25, "libre", 4.0], ["metalshelf", 23.75, "libre", 4.0], ["metalshelf", 26.25, "libre", 4.0], ["metalshelf", 28.75, "libre", 4.0], ["metalshelf", 31.25, "libre", 4.0],
+				["metalshelf", 4.75, "libre", 8.5], ["metalshelf", 7.25, "libre", 8.5], ["metalshelf", 9.75, "libre", 8.5], ["metalshelf", 12.25, "libre", 8.5], ["metalshelf", 23.75, "libre", 8.5], ["metalshelf", 26.25, "libre", 8.5], ["metalshelf", 28.75, "libre", 8.5], ["metalshelf", 31.25, "libre", 8.5],
 			],
 		},
 	},
@@ -525,9 +526,11 @@ const SALAS := {
 		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.0], ["pallet", 7.5]],
 		"arriba": [["metalshelf", 1.5], ["pallet", 7.75], ["pallet", 4.5, "abajo"]],
 	}},
+	# (20 nov, el dueño) el aseo, el mismo que el de la tienda de ropa (bano-ropa: sus muebles destrozados, en los mismos sitios; el
+	# banco, debajo de la puerta, como se ve en la ropa: a 5.85 tapaba la puerta y Muebles.repasar lo quitaba)
 	"bano-ferreteria": {"colocados": {
-		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
-		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],
 	}},
 	"taller-ferreteria": {"colocados": {
 		"abajo": [["workbench", 2.0], ["metalshelf", 6.0], ["workbench", 10.0], ["pallet", 4.5, "derecha"]],
