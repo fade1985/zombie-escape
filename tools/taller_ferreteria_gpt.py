@@ -1,4 +1,4 @@
-# El suelo y la pared del taller de la ferretería, destrozados (20 nov, el dueño, a partir de una foto suya de un taller: baldosa
+# El suelo y la pared del taller de la ferretería (y, al final, los de su sala de venta), destrozados (20 nov, el dueño, a partir de una foto suya de un taller: baldosa
 # de barro rojo con junta gris y pared de hormigón pintada de blanco con rodapié gris oscuro), sacados de seis imágenes de GPT, tres
 # suelos y tres paredes que en la tienda se mezclan a trozos (mapa.gd, MEZCLA_TIENDA), como el aseo y el almacén de la ropa:
 #   assets/sources/suelos/taller-ferreteria-suelo-destrozado<N>-gpt.webp → assets/sprites/suelo-taller-ferreteria-d<N>.png (128 × 128)
@@ -35,14 +35,17 @@ def _borroso(im, r):
     return m.filter(ImageFilter.GaussianBlur(r)).crop((w, h, 2 * w, 2 * h))
 
 
-def _igualar(ims, r, k, centro, solo_lados):
+def _igualar(ims, r, k, centro, solo_lados, solo_luz=False):
     bs = [np.asarray(_borroso(im, r)).astype(float) for im in ims]
     h, w = bs[0].shape[:2]
     fondo = np.mean(bs, axis=0).mean(axis=1, keepdims=True) if solo_lados else np.mean(bs, axis=(0, 1, 2))
     x = np.arange(w)[None, :]; y = np.arange(h)[:, None]
     d = np.minimum(x, w - 1 - x) + 0 * y if solo_lados else np.minimum(np.minimum(x, w - 1 - x), np.minimum(y, h - 1 - y))
     a = np.where(d <= 1, 1.0, np.maximum(centro, 1.0 - (1.0 - centro) * (d - 1) / k))[..., None]
-    return [Image.fromarray(np.clip(np.round(np.asarray(im).astype(float) - a * (b - fondo)), 0, 255).astype(np.uint8)) for im, b in zip(ims, bs)]
+    # (con solo_luz, solo se iguala lo claro u oscuro, no el color: en la sala de venta, las manchas grandes de pintura amarilla
+    # dejaban un halo azulado)
+    dif = [(b - fondo).mean(axis=-1, keepdims=True) if solo_luz else b - fondo for b in bs]
+    return [Image.fromarray(np.clip(np.round(np.asarray(im).astype(float) - a * d), 0, 255).astype(np.uint8)) for im, d in zip(ims, dif)]
 
 
 def suelo(origen):
@@ -79,3 +82,17 @@ for i, s, p in zip((1, 2, 3), _igualar(suelos, 10, 28, 0.45, False), _igualar(pa
     for x in range(48):   # la última fila, más oscura, como las de las otras paredes
         p.putpixel((x, 47), tuple(int(v * 0.68) for v in p.getpixel((x, 47))))
     guardar(p, f'pared-taller-ferreteria-d{i}')
+
+
+# y la sala de venta de la ferretería, destrozada (20 nov, el dueño, a partir de una foto suya de una ferretería: hormigón pulido gris
+# y pared lisa pintada de blanco con un rodapié de chapa gris), también tres suelos y tres paredes que se mezclan a trozos. El suelo,
+# sin baldosas: entero a 128 × 128
+suelos = [Image.open(f'assets/sources/suelos/venta-ferreteria-suelo-destrozado{i}-gpt.webp').convert('RGB').resize((128, 128), Image.LANCZOS)
+          for i in (1, 2, 3)]
+paredes = [Image.open(f'assets/sources/suelos/venta-ferreteria-pared-destrozada{i}-gpt.webp').convert('RGB').resize((48, 48), Image.LANCZOS)
+           for i in (1, 2, 3)]
+for i, s, p in zip((1, 2, 3), _igualar(suelos, 10, 28, 0.45, False, True), _igualar(paredes, 5, 12, 0.45, True, True)):
+    guardar(s, f'suelo-venta-ferreteria-d{i}')
+    for x in range(48):
+        p.putpixel((x, 47), tuple(int(v * 0.68) for v in p.getpixel((x, 47))))
+    guardar(p, f'pared-venta-ferreteria-d{i}')

@@ -32,10 +32,10 @@ const TIPOS := {
 		"color": Color("#5dff8a")},
 	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"],   # [traducir]
 		"color": Color("#ff9a3c"),
-		# (20 nov, el dueño) su aseo y su almacén, rehechos como los de la tienda de ropa, y su taller: destrozados (ver "ropa",
+		# (20 nov, el dueño) su aseo y su almacén, rehechos como los de la tienda de ropa, su taller y su sala de venta: destrozados (ver "ropa",
 		# abajo). Y, mientras se rehace, sin nada por el suelo de la sala de venta y del taller ni en las paredes de la sala de
 		# venta y del almacén ("despejadas", mapa.despejada)
-		"destrozada": ["bano", "almacen", "taller"],
+		"destrozada": ["bano", "almacen", "taller", "tienda"],
 		"despejadas": {"suelo": ["tienda", "taller"], "pared": ["tienda", "almacen"]}},
 	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"],   # [traducir]
 		"color": Color("#4fe3ff")},
