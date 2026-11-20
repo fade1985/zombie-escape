@@ -1311,6 +1311,14 @@ en una línea.
   Johnny: `"cerrar_borde": "#050202"` en sus dos `zombi.json` pinta de ese color los píxeles del borde que PixelLab
   dejaba del color de al lado (chaleco, piel), sin hacerlos más grandes; `--captura --vigilantes` los enseña. `--guardia` cuenta los dibujos de sus guardias y saca
   `captura-guardia-vigilantes.png` con uno de cada.
+- **Chaleco amarillo neón (20 nov):** los vigilantes y el jefe de seguridad, con `"neon": {}` en sus tres `zombi.json`
+  (lo pidió el dueño: GPT dejó el chaleco y las franjas reflectantes amarillo verdoso y en el juego parecían verdes).
+  `zombi.py` busca en cada fotograma el chaleco y lo pasa a amarillo (sombras hacia el naranja, luces a amarillo puro,
+  más vivo). La piel verde tiene el mismo tono, así que se separan por lo vivo que es el color: chaleco seguro si es
+  bastante vivo para su claridad (`"alto"`, 0,5; a más claro, más vivo tiene que ser), y lo algo menos vivo (`"bajo"`,
+  0,3: el borde de la franja del jefe) solo pegado a una zona con 3 píxeles seguros o más; lo casi negro, nunca (el
+  contorno de las manos). El tono va en `"tono"` ([50, 60] grados). Se comprueba con `--captura --vigilantes` y
+  `--captura --edificio centro --guardia`.
 - **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
   casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
   mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus

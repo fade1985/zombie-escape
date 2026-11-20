@@ -10,6 +10,8 @@ Lo saca todo de assets/sources/<fuente>/:
                                 y "reducir" (un zombi dibujado con el doble de detalle, al tamaño y con el borde negro de los de 48:
                                 tools/reducir.py; el de tentáculos, desde el 19 nov)
                                 y "cerrar_borde" (el contorno de la figura, todo del color que se le da: el vigilante, desde el 19 nov)
+                                y "neon" (el chaleco y las franjas reflectantes, a amarillo neón sin tocar la piel: los vigilantes y
+                                el jefe de seguridad, desde el 20 nov)
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
@@ -352,6 +354,65 @@ if cfg.get('reducir'):
                 pequena.alpha_composite(reducir.reducida(c, (PX, PY), cfg['reducir']), (fx * nw, fy * nh))
     sheet, CW, CH = pequena, nw, nh
     PX, PY = cfg['reducir']['pies']
+# "neon" en zombi.json (los vigilantes y el jefe de seguridad, desde el 20 nov): el chaleco y las franjas reflectantes,
+# de un amarillo neón de verdad (GPT los dejó amarillo verdoso y en el juego parecían verdes). La piel del zombi tiene
+# el mismo tono, así que se separan por lo vivo que es el color: es chaleco lo bastante vivo para su claridad ("alto";
+# a más claro, más vivo tiene que ser, porque los brillos de la piel son claros y algo vivos) y, pegado a eso, lo un
+# poco menos vivo ("bajo": el borde de la franja del jefe), pero solo si la zona tiene por lo menos 3 píxeles seguros
+# (así no se cuelan los bordes de las manos y los brazos). Lo elegido pasa a amarillo: las sombras, hacia el naranja
+# ("tono" de la sombra) y las luces, a amarillo puro ("tono" de la luz), más vivo y un poco más claro.
+#   "neon": {}  con lo de siempre, o con alguno de: "alto": 0.5, "bajo": 0.3, "tono": [50, 60]
+def neon(sheet, opc):
+    import colorsys
+    alto, bajo = opc.get('alto', 0.5), opc.get('bajo', 0.3)
+    t0, t1 = opc.get('tono', [50, 60])
+    def viveza(c):   # cuánto más vivo es el color de lo que hace falta para ser chaleco (o None si no es de su tono)
+        h, l, s = colorsys.rgb_to_hls(*[v / 255 for v in c])
+        if not (50 <= h * 360 <= 82) or l < 0.18:   # (lo casi negro, el contorno, no)
+            return None
+        return s - max(0, l - 0.5) * 1.5
+    def amarillo(c):
+        h, l, s = colorsys.rgb_to_hls(*[v / 255 for v in c])
+        t = min(1, max(0, (l - 0.25) / 0.4))
+        return tuple(round(v * 255) for v in colorsys.hls_to_rgb((t0 + (t1 - t0) * t) / 360, min(0.68, l * 1.12), min(1, s * 1.25 + 0.1)))
+    vivo = {}
+    for fy in range(sheet.height // CH):
+        for fx in range(sheet.width // CW):
+            caja = (fx * CW, fy * CH, (fx + 1) * CW, (fy + 1) * CH)
+            c = sheet.crop(caja)
+            if not c.getbbox():
+                continue
+            cp = c.load()
+            cand = set()
+            for y in range(CH):
+                for x in range(CW):
+                    p = cp[x, y]
+                    if p[3]:
+                        if p[:3] not in vivo:
+                            vivo[p[:3]] = viveza(p[:3])
+                        v = vivo[p[:3]]
+                        if v is not None and v >= bajo:
+                            cand.add((x, y))
+            vistos = set()
+            for q in cand:
+                if q in vistos:
+                    continue
+                zona, i = [q], 0
+                vistos.add(q)
+                while i < len(zona):
+                    x, y = zona[i]
+                    i += 1
+                    for r in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                        if r in cand and r not in vistos:
+                            vistos.add(r)
+                            zona.append(r)
+                if sum(1 for r in zona if vivo[cp[r][:3]] >= alto) >= 3:
+                    for r in zona:
+                        cp[r] = amarillo(cp[r][:3]) + (cp[r][3],)
+            sheet.paste(c, caja[:2])
+    return sheet
+if 'neon' in cfg:
+    sheet = neon(sheet, cfg['neon'])
 # "cerrar_borde": "#050202" en zombi.json (el vigilante): el contorno de la figura, entero de ese color (el del de
 # Johnny). PixelLab lo deja casi siempre negro, pero con huecos del color de al lado (el chaleco, la piel); el dueño lo
 # quiso cerrado el 19 nov. Se pintan los píxeles de la figura que tocan el vacío, sin hacerla más grande.
