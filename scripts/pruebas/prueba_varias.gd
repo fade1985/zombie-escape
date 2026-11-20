@@ -5579,6 +5579,6 @@ func probar_dependienta_nueva() -> void:
 	Captura.foto("captura-dependienta-muertas.png")
 	# el retrato del bestiario (bestiario.gd, retrato): el trozo de frente, del tamaño de su recorte
 	var retrato := Bestiario.retrato("dependienta")
-	print("Retrato del bestiario: %s (esperado: (37.0, 105.0))" % retrato.get_size())
+	print("Retrato del bestiario: %s (esperado: (18.0, 46.0))" % retrato.get_size())
 	retrato.get_image().save_png(Captura.CARPETA + "captura-dependienta-retrato.png")
 	get_tree().quit()

@@ -373,7 +373,7 @@ func probar_colecciones() -> void:
 	# lo que la prueba ha ido apuntando sola (meter_zombi avisa al bestiario con cada enemigo que nace)
 	print("Bestiario apuntado por la prueba hasta aquí: %s" % [Guardado.cargar().get("bestiario", [])])
 	var vistos: Array = ["normal", "lento", "rapido", "explosivo", "venenoso", "portera", "criatura", "dependienta",
-		"guardia", "antidisturbios", "maniqui", "gerente_mutado", "oficinista", "escolta"]
+		"tentaculos", "guardia", "antidisturbios", "maniqui", "gerente_mutado", "oficinista", "escolta"]
 	Guardado.cambiar(func(g):
 		g.bestiario = vistos
 		g.matados = {"normal": 128, "lento": 41, "rapido": 37, "portera": 3, "dependienta": 12}
@@ -416,6 +416,11 @@ func probar_colecciones() -> void:
 	ordenador.abrir("colecciones", "z_criatura")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-bestiario-grande.png")
+	# los reducidos al alto de Johnny (19 y 20 nov): su ficha, a su tamaño y entera (no un trozo)
+	for z in ["dependienta", "tentaculos", "explosivo"]:
+		ordenador.abrir("colecciones", "z_" + z)
+		await get_tree().create_timer(0.4).timeout
+		Captura.foto("captura-bestiario-%s.png" % z)
 	ordenador.abrir("colecciones", "z_sujeto_1")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-bestiario-pagina.png")

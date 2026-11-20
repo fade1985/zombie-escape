@@ -13,8 +13,9 @@
 #   recorte    el trozo dibujado dentro de la celda del fotograma de frente (sin los márgenes vacíos). Lo escribe
 #              `py tools/recortes_bestiario.py` (repetir si cambia una hoja): así el juego no tiene que leer la imagen
 #   retrato    la animación de frente de la que se saca el dibujo ("quieto_s" si la tiene; si no, "reposo_s")
-#   escala     a cuánto se dibuja en el juego (la del sprite en su escena: 2 casi todos; los tentáculos, 1; el gerente
-#              y el doctor Salas antes de cambiar, 1,2; el Sujeto 1, 1,4). Con ella, el ordenador los enseña a todos en
+#   escala     a cuánto se dibuja en el juego (la del sprite en su escena: 2 casi todos, también la dependienta y el de
+#              tentáculos desde que van reducidos, 19 nov; el gerente y el doctor Salas antes de cambiar, 1,2; el
+#              Sujeto 1, 1,4). Con ella, el ordenador los enseña a todos en
 #              proporción: el grande, grande y el pequeño, pequeño (ver tamano)
 #   jefe       true en los jefes de planta y en el jefe final
 #
@@ -48,7 +49,7 @@ const LISTA := {
 	"tentaculos": {"nombre": "El de los tentáculos",
 		"frase": "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-tentaculos-gpt.tres",
-		"recorte": Rect2i(59, 31, 57, 97), "retrato": "quieto_s", "escala": 1, "jefe": false},
+		"recorte": Rect2i(26, 13, 28, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"venenoso": {"nombre": "El gordo",
 		"frase": "Guarda las distancias y escupe un moco que deja el suelo envenenado.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-venenoso.tres",
@@ -60,7 +61,7 @@ const LISTA := {
 	"dependienta": {"nombre": "La dependienta",
 		"frase": "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡¡¡AAAHHH!!!», la tienda entera se despierta hecha una furia.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-dependienta.tres",
-		"recorte": Rect2i(57, 25, 37, 105), "retrato": "quieto_s", "escala": 1, "jefe": false},
+		"recorte": Rect2i(23, 10, 18, 46), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"vigilante": {"nombre": "El vigilante",
 		"frase": "Sigue haciendo la ronda. Si oye rugir a su jefe, viene corriendo con la porra por delante.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/zombi-vigilante.tres",
