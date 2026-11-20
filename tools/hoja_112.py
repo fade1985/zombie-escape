@@ -172,30 +172,38 @@ LUZ = FICHA.get('luz')
 def luz(f):
     """Aclara lo oscuro y poco saturado (la ropa) con una curva: el valor v pasa a v ** "gamma", así los pliegues de
     una gabardina negra se ven en vez de una mancha negra (el explosivo, 20 nov). Lo de color vivo (la piel ya aclarada,
-    la dinamita, la sangre) no se toca. Con "tinte" [r, g, b], la ropa toma ese color ("cuanto": 0 nada, 1 del todo), y
-    con "desde" solo desde esa fila (de la pose de 112) para abajo: en el explosivo, del cuello, para que la cara no se
-    tiña (sus sombras grises salían azules) y el sombrero se quede negro."""
+    la dinamita, la sangre) no se toca. Con "tinte" [r, g, b], la ropa toma ese color ("cuanto": 0 nada, 1 del todo).
+    Con "desde" (una fila de la pose de 112: en el explosivo, el cuello), por encima solo se toca lo oscuro (hasta
+    "arriba_v" de luz) que no tira a verde ni a amarillo: el sombrero sí, la cara no (sus sombras grises salían azules,
+    y los ojos y los dientes no se tocan)."""
     if not LUZ:
         return f
     px = f.load()
     tinte = LUZ.get('tinte')
-    for y in range(LUZ.get('desde', -(C - R) // 2) + (C - R) // 2, f.height):   # ("desde": la fila de la pose de 112)
+    desde = LUZ.get('desde', -(C - R) // 2) + (C - R) // 2
+    for y in range(f.height):
+        arriba = y < desde
+        if arriba and 'arriba_v' not in LUZ:
+            continue
         for x in range(f.width):
             c = px[x, y]
             if not c[3]:
                 continue
-            if c not in _luces:
+            if (c, arriba) not in _luces:
                 h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
-                if s <= LUZ.get('sat_max', 0.3):
+                vale = s <= LUZ.get('sat_max', 0.3)
+                if arriba:
+                    vale = vale and v <= LUZ['arriba_v'] and (s < 0.08 or not 40 <= h * 360 <= 170)
+                if vale:
                     v2 = v ** LUZ['gamma']
                     r, g, b = colorsys.hsv_to_rgb(h, s, v2)
                     if tinte:   # (hacia el tinte con la misma luz: su canal más alto, v2)
                         k, tope = LUZ.get('cuanto', 0.15), max(tinte)
                         r, g, b = (q * (1 - k) + t / tope * v2 * k for q, t in zip((r, g, b), tinte))
-                    _luces[c] = (round(r * 255), round(g * 255), round(b * 255), c[3])
+                    _luces[(c, arriba)] = (round(r * 255), round(g * 255), round(b * 255), c[3])
                 else:
-                    _luces[c] = c
-            px[x, y] = _luces[c]
+                    _luces[(c, arriba)] = c
+            px[x, y] = _luces[(c, arriba)]
     return f
 
 

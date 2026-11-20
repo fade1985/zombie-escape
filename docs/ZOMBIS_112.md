@@ -21,8 +21,8 @@ de la dinamita. Del alto de Johnny se veía flaco y con la cabeza diminuta (prop
 una casilla de 80 (`"pies": [40, 69]`, `offset = Vector2(-40, -69)`), un cuarto más grande, y con
 `"cabeza": {"cuello": 20, "agranda": 1.15}` la cabeza (lo que hay por encima de la fila 20 de la pose de 112) sale
 otro 15 % más grande, desde el cuello. Aun así era una masa negra: `"luz"` aclara la ropa con una curva (los pliegues se
-ven) y la tiñe de azul marino (que se separe del suelo, que es pardo), del cuello para abajo para que la cara y el
-sombrero no cambien; y `"parche"` quita de debajo del cuello todo lo verde y el caqui (los galones de la manga y la
+ven) y la tiñe de azul marino (que se separe del suelo, que es pardo), del cuello para abajo (y por encima, con `"arriba_v"`, solo
+lo oscuro que no tira a verde: el sombrero sí, la cara no); y `"parche"` quita de debajo del cuello todo lo verde y el caqui (los galones de la manga y la
 cinta de la dinamita). Se prueba con `--captura --explosivo-nuevo`.
 
 ## 1. El personaje en PixelLab
