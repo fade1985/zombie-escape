@@ -44,7 +44,7 @@ const LISTA := {
 	"explosivo": {"nombre": "El dinamitero",
 		"frase": "Un hombretón con gabardina. Cuando la abre no es para enseñarte nada bueno: corre.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-explosivo.tres",
-		"recorte": Rect2i(29, 31, 33, 51), "retrato": "quieto_s", "escala": 2, "jefe": false},
+		"recorte": Rect2i(21, 9, 22, 47), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"tentaculos": {"nombre": "El de los tentáculos",
 		"frase": "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-tentaculos-gpt.tres",

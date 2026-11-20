@@ -26,6 +26,8 @@ La ficha (hoja.json), por ejemplo la de la dependienta:
     dependienta la pose de pie quedaba 6 píxeles más arriba y al morir pegaba un salto).
   - "piel": {"tono": 80, "sat": 1.0, "sube": 0.28}: aclara la piel verde en todos los dibujos (ver piel()). La de la
     dependienta salió de PixelLab mucho más oscura que la de los zombis de 48; con esto se parece a la del zombi normal.
+    Con "sat_max" solo se tocan los verdes más apagados que eso (el explosivo, 20 nov: su piel es gris verdosa y la
+    cinta de la dinamita, verde oliva más vivo, se quedaba verde chillón).
   - Si una dirección tiene menos fotogramas que south (el andar north-east de la dependienta, 7 y no 8), cada uno dura
     algo más para que vaya al mismo ritmo.
 
@@ -81,7 +83,7 @@ def piel(f):
             if c not in _colores:
                 h, s, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
                 h *= 360
-                if 60 <= h <= 150 and s >= 0.12 and v >= 0.12:
+                if 60 <= h <= 150 and 0.12 <= s <= PIEL.get('sat_max', 1) and v >= 0.12:
                     peso = min(1, (v - 0.12) / 0.12)
                     v = min(1, v + PIEL['sube'] * peso)
                     s = min(1, s * (1 + (PIEL['sat'] - 1) * peso))

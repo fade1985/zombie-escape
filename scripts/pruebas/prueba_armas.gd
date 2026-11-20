@@ -4724,3 +4724,89 @@ func probar_luz_verde() -> void:
 		verdes.call().size(), johnny.get_node("Aura").calidad])
 	Captura.foto("captura-luz-verde.png")
 	get_tree().quit()
+
+
+# --explosivo-nuevo: el explosivo rehecho el 20 nov (112 px de PixelLab, reducido al alto de Johnny y con su borde negro).
+# Una foto de tamaño (al lado de Johnny, un zombi normal y la dependienta), otra con sus animaciones quietas en las 8
+# direcciones (filas: andar, golpe y abrir la gabardina; las del oeste salen en espejo) y una de verdad: cuatro que
+# vienen hacia Johnny y abren la gabardina
+func probar_explosivo_nuevo() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(-200, 230)
+	johnny.direccion = "s"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	var quietos := func(zs: Array) -> void:
+		for z in zs:
+			z.process_mode = Node.PROCESS_MODE_DISABLED
+			for hijo in z.get_children():
+				if hijo is CanvasItem and hijo != z.sprite:
+					hijo.visible = false
+			z.sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+	# ── el tamaño ──
+	var fila: Array = []
+	var tipos := ["normal", "explosivo", "dependienta"]
+	for i in tipos.size():
+		var z: Node2D = meter_zombi(tipos[i], johnny.position + Vector2(70 + i * 75, 0))
+		if "gritado" in z:
+			z.gritado = true
+		fila.append(z)
+	quietos.call(fila)
+	for z in fila:
+		z.sprite.play("quieto_s")
+	await get_tree().create_timer(0.3).timeout
+	await RenderingServer.frame_post_draw
+	Captura.foto("captura-explosivo-nuevo-tamano.png")
+	for z in fila:
+		z.queue_free()
+	# ── sus animaciones, quietas en un fotograma de en medio ──
+	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
+	var anims := {"andar": 2, "golpe": 3, "ataque": 7}
+	var todos: Array = []
+	var y := 0
+	for anim in anims:
+		for i in dirs.size():
+			var z: Node2D = meter_zombi("explosivo", johnny.position + Vector2(-260 + i * 60, -200 + y * 110))
+			todos.append(z)
+			z.sprite.play(anim + "_" + dirs[i])
+			z.sprite.pause()
+			z.sprite.frame = anims[anim]
+		y += 1
+	quietos.call(todos)
+	for z in todos:
+		z.sprite.pause()
+	await get_tree().create_timer(0.3).timeout
+	await RenderingServer.frame_post_draw
+	Captura.foto("captura-explosivo-nuevo-animaciones.png")
+	print("Explosivo nuevo · hoja: casilla %s (esperado: 64x64) · ataque_s %d fotogramas (esperado: 8)" % [
+		todos[0].sprite.sprite_frames.get_frame_texture("quieto_s", 0).get_size(),
+		todos[0].sprite.sprite_frames.get_frame_count("ataque_s")])
+	for z in todos:
+		z.queue_free()
+	# ── de verdad: cuatro vienen hacia Johnny y abren la gabardina ──
+	var lados := [Vector2(0, -1), Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0)]
+	var ellos: Array = []
+	for v in lados:
+		ellos.append(meter_zombi("explosivo", johnny.position + v * 200.0))
+	for paso in 600:
+		await get_tree().physics_frame
+		if ellos.any(func(z): return z.estado == "mecha" and z.mecha < 0.35):
+			break
+	await RenderingServer.frame_post_draw
+	print("Explosivo nuevo · %s (esperado: ataque_ en alguno)" % [ellos.map(func(z): return "%s/%d" % [z.sprite.animation, z.sprite.frame])])
+	Captura.foto("captura-explosivo-nuevo-gabardina.png")
+	# el retrato del bestiario, del tamaño de su recorte
+	print("Retrato del bestiario: %s (esperado: (22.0, 47.0))" % Bestiario.retrato("explosivo").get_size())
+	get_tree().quit()

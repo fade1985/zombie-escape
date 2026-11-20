@@ -1,0 +1,62 @@
+TEXTOS PARA PIXELLAB: EL ZOMBI EXPLOSIVO NUEVO (112 px, 20 nov)
+Referencia: referencia-112.png (sale de frente.webp, de GPT, con tools/explosivo_112.py).
+Cinco direcciones: abajo (south), abajo-derecha (south-east), derecha (east), arriba-derecha (north-east) y arriba (north).
+Las tres de la izquierda salen en espejo. Sin muerte: al morir revienta en cachos (cachos.gd) y no queda cuerpo.
+
+Coste: personaje 2 + andar 3 × 5 + golpe 3 × 5 + ataque 1 × 5 = 37 generaciones.
+
+
+==================== 1. EL PERSONAJE ====================
+
+create_character, modo v3, con la referencia (112 × 112) · 2 generaciones
+Nombre: Explosivo gabardina 112
+Descripción:
+hulking heavyset zombie man in a long worn black double-breasted trench coat with wide lapels, a belt and brass buttons, torn at the hem and stained with dried blood, black fedora hat, black turtleneck sweater, black leather gloves, black trousers and black boots, grey-green rotting face with blank white eyes, open mouth with yellow teeth and blood on the chin
+
+
+==================== 2. ANDAR (8 fotogramas, las 5 direcciones) ====================
+
+Modo esqueleto (el que dio el andar fluido a la dependienta): skeleton-v3, plantilla walking-8-frames,
+motion_adjustments {"stride": 1.15, "arm_swing": 0.6}, una dirección por llamada · 3 por dirección
+(sin texto: la plantilla lleva el movimiento)
+
+
+==================== 3. GOLPE (8 fotogramas, modo v3) · 3 por dirección ====================
+
+ABAJO
+hulking zombie man in a long black trench coat and a fedora hat, facing the viewer, is knocked back by a hard punch to the face: his head is thrown back so his face points up at the ceiling, his back arches and his upper body leans backward away from the viewer, his knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then he slowly straightens and returns to his upright starting pose; his hat stays on his head and he keeps facing the viewer the whole time
+
+ABAJO-DERECHA
+hulking zombie man in a long black trench coat and a fedora hat, seen in three-quarter view, facing down and to the right, is knocked back by a hard punch to the face: his head is thrown back so his face points up at the ceiling, his back arches and his upper body leans backward toward the top left, his knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then he slowly straightens and returns to his upright starting pose; his hat stays on his head and he keeps facing down-right the whole time
+
+DERECHA
+hulking zombie man in a long black trench coat and a fedora hat, seen from the side in profile, facing right, is knocked back by a hard punch to the face: his head is thrown back so his face points up at the ceiling, his back arches and his upper body leans backward toward the left, his knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then he slowly straightens and returns to his upright starting pose; his hat stays on his head and he keeps facing right in profile the whole time
+
+ARRIBA-DERECHA
+hulking zombie man in a long black trench coat and a fedora hat, seen in three-quarter view from behind, facing up and to the right, is knocked back by a hard punch to the face: his head is thrown back so his face points up at the ceiling, his back arches and his upper body leans backward toward the bottom left, his knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then he slowly straightens and returns to his upright starting pose; his hat stays on his head and he keeps facing up-right the whole time
+
+ARRIBA
+hulking zombie man in a long black trench coat and a fedora hat, seen from behind, facing away from the viewer, is knocked back by a hard punch to the face: his head is thrown back so his face points up at the ceiling, his back arches and his upper body leans backward toward the viewer, his knees bend to absorb the blow while both feet stay planted in place without stepping, arms flung out, then he slowly straightens and returns to his upright starting pose; his hat stays on his head and he keeps his back to the viewer the whole time
+
+
+==================== 4. ATAQUE: ABRE LA GABARDINA (8 fotogramas, modo barato pixminimax) · 1 por dirección ====================
+
+En el juego: se planta cerca de Johnny, abre la gabardina y se queda así (no se repite) hasta que revienta.
+Con el modo barato van además:
+  personaje: hulking zombie man in a long black trench coat and a black fedora hat
+  pose de partida: standing upright with the trench coat closed and both arms hanging at his sides
+
+ABAJO
+hulking zombie man facing the viewer stops and plants both feet, grabs both lapels of his long black trench coat and throws it wide open with his arms spread out to the sides, revealing a vest packed with red dynamite sticks taped together across his chest and belly, then he holds the coat wide open, leaning slightly forward, and stays still in that final pose; he keeps facing the viewer the whole time
+
+ABAJO-DERECHA
+hulking zombie man seen in three-quarter view, facing down and to the right, stops and plants both feet, grabs both lapels of his long black trench coat and throws it wide open with his arms spread out to the sides, revealing a vest packed with red dynamite sticks taped together across his chest and belly, then he holds the coat wide open, leaning slightly forward, and stays still in that final pose; he keeps facing down-right the whole time
+
+DERECHA
+hulking zombie man seen from the side in profile, facing right, stops and plants both feet, grabs both lapels of his long black trench coat and throws it wide open, the front flap swinging out toward the right, revealing red dynamite sticks taped together across his chest and belly, then he holds the coat wide open, leaning slightly forward, and stays still in that final pose; he keeps facing right in profile the whole time
+
+ARRIBA-DERECHA
+hulking zombie man seen in three-quarter view from behind, facing up and to the right, stops and plants both feet, grabs both lapels of his long black trench coat and throws it wide open with his arms spread out to the sides, the coat tails flaring out behind him, then he holds the coat wide open, leaning slightly forward, and stays still in that final pose; he keeps facing up-right the whole time and never turns toward the viewer
+
+ARRIBA
+hulking zombie man seen from behind, facing away from the viewer, stops and plants both feet, grabs both lapels of his long black trench coat and throws it wide open with his arms spread out to the sides, the coat tails flaring out at his sides, then he holds the coat wide open, leaning slightly forward, and stays still in that final pose; he keeps his back to the viewer the whole time and never turns around

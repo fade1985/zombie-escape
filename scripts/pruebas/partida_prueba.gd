@@ -166,6 +166,7 @@
 #   --cachos            el zombi explosivo revienta en cachos de carne que salen volando (cachos.gd)   [prueba_armas.gd]
 #   --explosivo-pared   el zombi explosivo revienta pegado a un tabique: ni sus cachos ni su sangre ni su marca pasan al otro lado [prueba_armas.gd]
 #   --explosivos-carga  cuánto tarda cada fotograma cuando revientan muchos explosivos a la vez; con --zombis N, cuántos (12) [prueba_armas.gd]
+#   --explosivo-nuevo   el explosivo rehecho (20 nov, del alto de Johnny): su tamaño, sus animaciones en 8 direcciones y abriendo la gabardina [prueba_armas.gd]
 #   --gastro-objetivo   el vómito de Gastroenteritis no va a por el Glotón, Salas ni el gordo (no les quema) [prueba_armas.gd]
 #   --vomito            los zombis bañados en vómito (Gastroenteritis), junto a uno con ácido   [prueba_armas.gd]
 #   --johnny-ardiendo   Johnny ardiendo con el fuego de los zombis (su shader), con luz y a oscuras [prueba_armas.gd]
@@ -1105,6 +1106,9 @@ func empezar_prueba() -> void:
 	elif "--explosivo-pared" in args:
 		set_process(false)   # sin la prueba larga
 		probar_explosivo_pared()
+	elif "--explosivo-nuevo" in args:
+		set_process(false)   # sin la prueba larga
+		probar_explosivo_nuevo()
 	elif "--explosivos-carga" in args:
 		set_process(false)   # sin la prueba larga
 		probar_explosivos_carga()

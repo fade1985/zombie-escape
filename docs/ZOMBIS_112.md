@@ -12,6 +12,13 @@ Lo hace `tools/reducir.py`, que también usa `tools/zombi.py` para los de hoja e
 `"casilla": [80, 88]`). Si el dibujo tiene muchas rayas negras finas y reducido sale casi negro, `"realce": true` lo deja
 más nítido y algo más claro.
 
+**El explosivo (20 nov)** se hizo igual: el dibujo de frente lo hizo GPT (fondo magenta, porque va de negro), y
+`tools/explosivo_112.py` lo deja en la referencia de 112 para PixelLab («Explosivo gabardina 112», id
+`bdee687d-8c1c-4375-8a37-4e256db3fea0`; los textos, en `assets/sources/explosivo-112-gpt/textos-pixellab.txt`). Solo
+lleva andar, golpe y abrir la gabardina (`attack`): no tiene muerte, revienta. Reducido salía casi negro (gabardina negra
+y cara gris verdosa): lleva `"realce": true` y `"piel"` con `"sat_max": 0.35`, para aclarar solo la piel y no la cinta
+de la dinamita. Se prueba con `--captura --explosivo-nuevo`.
+
 ## 1. El personaje en PixelLab
 
 - Personaje de **112 px** (el de la dependienta: «Dependienta verde 112», id `de59f7de-5243-4d15-a7b3-5b11f9115676`).

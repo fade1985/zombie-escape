@@ -1,0 +1,38 @@
+{
+  "sprite": "zombi-explosivo",
+  "reposo": {
+    "cintura": 58,
+    "baja": 2
+  },
+  "reducir": {
+    "casilla": 64,
+    "pies": [
+      32,
+      55
+    ],
+    "borde": "#050202",
+    "realce": true
+  },
+  "animaciones": {
+    "walk": {
+      "de": "andar",
+      "fps": 10
+    },
+    "attack": {
+      "de": "ataque",
+      "desde": 1,
+      "duracion": 0.5
+    },
+    "hurt": {
+      "de": "golpe",
+      "desde": 1,
+      "duracion": 0.35
+    }
+  },
+  "piel": {
+    "tono": 80,
+    "sat": 3.0,
+    "sube": 0.3,
+    "sat_max": 0.35
+  }
+}
