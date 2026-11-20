@@ -1,5 +1,5 @@
 {
-  "piel_verde": {"tono": [35, 85], "claridad": [0.28, 0.9], "viveza": [0.12, 0.9]},
+  "piel_verde": {"tono": [35, 85], "claridad": [0.28, 0.9], "viveza": [0.12, 0.9], "huecos": {"tono": [12, 60], "claridad": [0.15, 0.45], "viveza": [0.05, 0.9]}},
   "cintura": 40,
   "pies": 72,
   "sangre": "viva",

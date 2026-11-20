@@ -22,6 +22,11 @@ En la ficha, "piel_verde": {...} con:
   "sombra": {...}         las sombras de la piel, de otro color (las del arrastrado, marrón oscuro como su pelo): los
                           colores que cumplen eso ("tono", "viveza", "claridad") y están pegados a la piel elegida, hasta
                           "pasos" píxeles de distancia (2 si no dice), también son piel
+  "huecos": {...}         los huecos de otro color dentro de la piel (las sombras marrones de la cara del arrastrado,
+                          alrededor de la boca, del mismo marrón que su cuerpo): los colores que cumplen eso ("tono",
+                          "viveza", "claridad") con piel a los dos lados, a "ancho" píxeles o menos (4 si no dice), en su
+                          fila o en su columna, también son piel; se repite "pasos" veces (2 si no dice). El cuerpo no
+                          entra: queda lejos de los brazos. Lo muy oscuro (el hueco de la boca) se deja fuera con "claridad"
   "luz": [k, suma]        la claridad nueva es la de antes × k + suma (lo normal, [1, 0])
   "fuera": [[...], ...]   otros colores que no son piel, cada uno como {"tono": [...], "viveza": [...], "claridad": [...]}
                           (por ejemplo, el pelo rubio del crío, que tiene el mismo tono que su piel)
@@ -108,6 +113,22 @@ class PielVerde:
                             nuevo.add(r)
                 piel |= nuevo
                 borde = nuevo
+        huecos = self.o.get('huecos')
+        if huecos:
+            ancho = huecos.get('ancho', 4)
+            for _ in range(huecos.get('pasos', 2)):
+                nuevo = set()
+                for y in range(h):
+                    for x in range(w):
+                        if (x, y) in piel or px[x, y][3] < 128 or not self._cumple(px[x, y][:3], huecos):
+                            continue
+                        lados = [any((x + i * dx, y + i * dy) in piel for i in range(1, ancho + 1))
+                                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+                        if (lados[0] and lados[1]) or (lados[2] and lados[3]):
+                            nuevo.add((x, y))
+                if not nuevo:
+                    break
+                piel |= nuevo
         return piel
 
     def _cumple(self, c, f):
