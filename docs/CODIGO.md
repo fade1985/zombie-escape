@@ -1332,6 +1332,11 @@ en una línea.
 - **El gordo más real (8 nov):** el de PixelLab con `"suave": 0.8` en su `zombi.json`, como el crío (lo eligió el dueño
   en vez de rehacerlo con GPT). Ojo: la mejora solo cambia la capa de fuera del contorno; vale para los de contorno de
   un píxel (el crío, el gordo), no para el arrastrado de PixelLab, que lo tenía de dos. `--captura --gordo-real`.
+  Desde el 20 nov (lo pidió el dueño), las fístulas y lo que le cuelga de la barriga, del verde de la piel del vecino en
+  vez de rojo: `"heridas_verdes": {}` en su `zombi.json` (`zombi.py`, antes del `"suave"`). Es herida lo rojo salvo lo
+  que está a 5 píxeles o menos de los dientes y los ojos (la boca se queda roja) y el rojo oscuro del borde de la figura
+  (el contorno); lo rojo casi negro de dentro de la herida, rodeado de verde, pasa a verde oscuro. El tono, con `"tono"`
+  (78 grados). También cambia la sangre que salta en el golpe (es del mismo rojo).
 - **El arrastrado con GPT (8 nov):** `--zombi lento` → `assets/sources/zombi-lento-gpt-48` → `zombi.py zombi-lento-gpt-48
   zombi-lento-gpt` (textos en `assets/sources/zombi-lento-gpt/textos-gpt.md`, referencia `capturas/referencia-lento.png`).
   Va por el suelo: arrastrarse en lienzo de 64, y en el ataque, el golpe y la muerte cada fotograma a la altura que lo

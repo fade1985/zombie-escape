@@ -12,6 +12,8 @@ Lo saca todo de assets/sources/<fuente>/:
                                 y "cerrar_borde" (el contorno de la figura, todo del color que se le da: el vigilante, desde el 19 nov)
                                 y "neon" (el chaleco y las franjas reflectantes, a amarillo neón sin tocar la piel: los vigilantes y
                                 el jefe de seguridad, desde el 20 nov)
+                                y "heridas_verdes" (las heridas rojas, del verde de la piel del vecino, sin tocar boca ni
+                                contorno: el gordo, desde el 20 nov)
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
@@ -334,6 +336,67 @@ for name, b in blocks:
                    'dirs': {d: {'row': row + r, 'frames': len(b[d])} for r, d in enumerate(ds)}}
     row += len(ds)
 anims['attack']['hit'] = round(HIT / len(attack['south']), 3)
+# "heridas_verdes" en zombi.json (el gordo, desde el 20 nov): las fístulas del cuerpo y lo que le cuelga de la barriga,
+# del verde de la piel del vecino (el durmiente normal) en vez de rojo. Es herida lo rojo (lo casi negro no) salvo:
+#   - cerca de los dientes y los ojos (lo blanco puro, a 5 píxeles o menos): la boca y los labios se quedan rojos;
+#   - en el borde de la figura, el rojo oscuro: es el contorno (las tiras que cuelgan, más claras, sí cambian).
+# Y lo rojo casi negro de dentro de la herida, si tiene al lado 3 o más píxeles ya verdes, pasa a verde oscuro.
+# El verde lleva la claridad de lo que había (un poco más claro) y, como la piel del vecino, es más vivo en las luces.
+#   "heridas_verdes": {}  o con "tono": 78 (grados)
+def heridas_verdes(sheet, opc):
+    import colorsys
+    tono = opc.get('tono', 78) / 360
+    hls = {}
+    def col(c):
+        if c not in hls:
+            h, l, s = colorsys.rgb_to_hls(*[v / 255 for v in c])
+            hls[c] = (h * 360, l, s)
+        return hls[c]
+    def rojo(c):   # 0: no es herida, 1: herida, 2: rojo casi negro (solo si está rodeado de herida)
+        h, l, s = col(c)
+        if not (h >= 340 or h <= 14) or s < 0.3:
+            return 0
+        if l < 0.18:
+            return 2 if l >= 0.08 and (h >= 340 or h <= 12) else 0
+        return 1 if (h >= 340 or h <= 9 or s >= 0.45) else 0
+    def verde(c):
+        h, l, s = col(c)
+        l2 = min(0.72, l * 1.15 + 0.03)
+        return tuple(round(v * 255) for v in colorsys.hls_to_rgb(tono, l2, min(0.65, 0.30 + max(0, l2 - 0.5) * 1.4)))
+    for fy in range(sheet.height // CH):
+        for fx in range(sheet.width // CW):
+            caja = (fx * CW, fy * CH, (fx + 1) * CW, (fy + 1) * CH)
+            c = sheet.crop(caja)
+            if not c.getbbox():
+                continue
+            cp = c.load()
+            def borde(x, y):
+                return any(not (0 <= x + i < CW and 0 <= y + j < CH) or cp[x + i, y + j][3] == 0
+                           for i, j in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            cerca = set()   # lo de alrededor de dientes y ojos
+            for y in range(CH):
+                for x in range(CW):
+                    if cp[x, y][3] and col(cp[x, y][:3])[1] > 0.85 and col(cp[x, y][:3])[2] < 0.35:
+                        cerca.update((x + i, y + j) for i in range(-5, 6) for j in range(-5, 6))
+            herida, oscuro = set(), []
+            for y in range(CH):
+                for x in range(CW):
+                    p = cp[x, y]
+                    if not p[3] or (x, y) in cerca:
+                        continue
+                    r = rojo(p[:3])
+                    if r == 1 and not (borde(x, y) and col(p[:3])[1] < 0.26):
+                        herida.add((x, y))
+                    elif r == 2 and not borde(x, y):
+                        oscuro.append((x, y))
+            herida.update(q for q in oscuro
+                          if sum((q[0] + i, q[1] + j) in herida for i in (-1, 0, 1) for j in (-1, 0, 1)) >= 3)
+            for q in herida:
+                cp[q] = verde(cp[q][:3]) + (cp[q][3],)
+            sheet.paste(c, caja[:2])
+    return sheet
+if 'heridas_verdes' in cfg:
+    sheet = heridas_verdes(sheet, cfg['heridas_verdes'])
 # "sangre_en_todo": true en zombi.json, para cuando el dibujo quieto ya trae sangre roja viva (el vigilante): se
 # oscurece en toda la hoja, no solo en golpe y muerte, para que no cambie de color al andar
 if cfg.get('sangre_en_todo') and SANGRE == 'oscura':
