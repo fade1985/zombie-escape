@@ -525,7 +525,12 @@ if 'neon' in cfg:
 MASCARA = sys.argv[sys.argv.index('--mascara') + 1] if '--mascara' in sys.argv else None
 if 'piel_verde' in cfg:
     import piel_verde
-    sheet = piel_verde.en_hoja(sheet, CW, CH, cfg['piel_verde'], NEON, (255, 0, 255) if MASCARA else None)
+    miran = {(i, 0): d for i, d in enumerate(DIRS)}   # hacia dónde mira cada casilla (para su "barbilla")
+    for a in anims.values():
+        for d, x in a['dirs'].items():
+            if x['row']:
+                miran.update({(i, x['row']): d for i in range(cols)})
+    sheet = piel_verde.en_hoja(sheet, CW, CH, cfg['piel_verde'], NEON, (255, 0, 255) if MASCARA else None, miran)
 # "cerrar_borde": "#050202" en zombi.json (el vigilante): el contorno de la figura, entero de ese color (el del de
 # Johnny). PixelLab lo deja casi siempre negro, pero con huecos del color de al lado (el chaleco, la piel); el dueño lo
 # quiso cerrado el 19 nov. Se pintan los píxeles de la figura que tocan el vacío, sin hacerla más grande.

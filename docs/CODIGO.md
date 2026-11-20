@@ -1339,13 +1339,17 @@ en una línea.
   3. Si se cuela algo: `"fuera"` (colores que no son piel aunque lo parezcan), `"mancha"` (tamaño mínimo), `"grueso":
      true` (fuera las rayas finas: la franja reflectante de los vigilantes) o `"luz"` (más oscura: el de tentáculos, tan
      pálido, salía verde lima). Si falta algo: `"sombra"` (las sombras de otro color pegadas a la piel) o `"huecos"` (lo de
-     otro color encerrado entre piel, a 4 píxeles o menos por los dos lados: las sombras marrones alrededor de la boca).
+     otro color encerrado entre piel, a 4 píxeles o menos por los dos lados: las sombras marrones alrededor de la boca) o
+     `"barbilla"` (lo de debajo de la cara, tan ancho como ella: la mandíbula de otro color; `tools/zombi.py` le dice hacia
+     dónde mira cada dibujo, para quitarla de espaldas con `"sin"`).
   4. Rehacer la hoja (sin `--mascara`) y probar con `--captura --durmientes` (los doce juntos, el vecino primero).
   Lo que lleva cada uno: la mayoría, `{}` (lo de siempre: tono 55-110°); el oficinista y el escolta, viveza desde 0,02-0,03
   (su piel es casi gris); el crío, viveza hasta 0,45 (si no, entra su pelo rubio) y sus sombras marrones; los vigilantes y el
   guardia, `"grueso"`; el arrastrado, tono desde 35°: solo la cara, los brazos y las manos (su cuerpo marrón es como su ropa; todo
-  verde no le pegaba, lo eligió el dueño el 20 nov) y `"huecos"` para las sombras marrones de la boca (salía marrón al
-  abrirla); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
+  verde no le pegaba, lo eligió el dueño el 20 nov), `"huecos"` para las sombras marrones de la boca y `"barbilla"` para
+  su mandíbula, que en su dibujo es del marrón del cuerpo (salía marrón al abrir la boca); la barbilla no se pone de
+  espaldas (`"sin"`: ahí la mancha más alta es un trozo de mejilla y debajo está la espalda), ni con la cara de más de 10
+  filas (la cabeza echada atrás: debajo está la camisa); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
   opción, todas las hojas salen idénticas a las de antes. Lo que no se ha podido: en el ataque de frente del vigilante, la
   cara se ve amarilla en algunos fotogramas (el paso del chaleco neón la toma por chaleco, y lo que pinta de amarillo no se
   toca), y en el de tentáculos quedan grises algunos píxeles claros de pies y brazos (iguales que los del pantalón).

@@ -27,6 +27,13 @@ En la ficha, "piel_verde": {...} con:
                           "viveza", "claridad") con piel a los dos lados, a "ancho" píxeles o menos (4 si no dice), en su
                           fila o en su columna, también son piel; se repite "pasos" veces (2 si no dice). El cuerpo no
                           entra: queda lejos de los brazos. Lo muy oscuro (el hueco de la boca) se deja fuera con "claridad"
+  "barbilla": {...}       la parte de abajo de la cara aunque sea de otro color (la mandíbula del arrastrado, marrón como
+                          su cuerpo, que al abrir la boca se veía marrón): debajo de la cara (la mancha de piel más alta,
+                          si empieza a "arriba" píxeles o menos de lo alto del dibujo, 8, y tiene "ancho" píxeles o más
+                          en sus 4 primeras filas, 4, y "alto" filas o menos, 10), hasta "filas" filas más abajo (5) y solo tan ancha como la cara en
+                          sus últimas filas, los colores que cumplen eso ("tono", "viveza", "claridad"); "sin": [...]
+                          las direcciones en las que no (de espaldas, donde la mancha más alta es un trozo de mejilla y
+                          debajo está la espalda: solo lo sabe tools/zombi.py)
   "luz": [k, suma]        la claridad nueva es la de antes × k + suma (lo normal, [1, 0])
   "fuera": [[...], ...]   otros colores que no son piel, cada uno como {"tono": [...], "viveza": [...], "claridad": [...]}
                           (por ejemplo, el pelo rubio del crío, que tiene el mismo tono que su piel)
@@ -70,8 +77,9 @@ class PielVerde:
         s2 = min(0.7, o.get('a_viveza', 0.28) + max(0, l2 - 0.5) * o.get('a_sube', 1.5))
         return tuple(round(v * 255) for v in colorsys.hls_to_rgb(o.get('a_tono', 78) / 360, l2, s2))
 
-    def elegir(self, im):
-        """Los píxeles de piel de un dibujo (una casilla), como conjunto de (x, y)."""
+    def elegir(self, im, mira=None):
+        """Los píxeles de piel de un dibujo (una casilla), como conjunto de (x, y). `mira`: hacia dónde mira ese
+        dibujo ('south', 'north-east'...), si se sabe (para "barbilla" y su "sin")."""
         px = im.load()
         w, h = im.size
         cand = set()
@@ -129,7 +137,54 @@ class PielVerde:
                 if not nuevo:
                     break
                 piel |= nuevo
+        barbilla = self.o.get('barbilla')
+        if barbilla and piel and mira not in barbilla.get('sin', []):
+            piel |= self._barbilla(px, w, h, piel, barbilla)
         return piel
+
+    def _barbilla(self, px, w, h, piel, b):
+        """La parte de abajo de la cara (la mandíbula, alrededor de la boca), aunque sea de otro color: debajo de la
+        mancha de piel más alta (la cara), hasta "filas" filas más abajo y solo tan ancho como la cara en sus últimas
+        filas; los colores que cumplen la regla, también son piel."""
+        # la cara: la mancha de piel (con 4 vecinos) que empieza más arriba
+        resto, cara = set(piel), None
+        while resto:
+            q = resto.pop()
+            zona, i = [q], 0
+            while i < len(zona):
+                x, y = zona[i]
+                i += 1
+                for r in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if r in resto:
+                        resto.discard(r)
+                        zona.append(r)
+            if len(zona) >= b.get('minimo', 12) and (cara is None or min(y for _, y in zona) < min(y for _, y in cara)):
+                cara = zona
+        if not cara:
+            return set()
+        # y solo si es la cara de verdad: empieza arriba del todo (de espaldas, la mancha más alta es un brazo o un
+        # trozo de mejilla, mucho más abajo, y debajo está la espalda)
+        arriba = next(y for y in range(h) if any(px[x, y][3] >= 128 for x in range(w)))
+        y0 = min(y for _, y in cara)
+        if y0 - arriba > b.get('arriba', 8):
+            return set()
+        # y ancha por arriba (de tres cuartos por detrás asoma una tira de mejilla de 2 píxeles)
+        if max(sum(1 for _, y in cara if y == yy) for yy in range(y0, y0 + 4)) < b.get('ancho', 4):
+            return set()
+        fondo = max(y for _, y in cara)
+        # y no muy alta: más de "alto" filas (10) es que enseña el cuello (la cabeza echada atrás) o que va pegada a
+        # un brazo, y debajo ya no está la mandíbula sino la camisa
+        if fondo - y0 + 1 > b.get('alto', 10):
+            return set()
+        bajos = [x for x, y in cara if y >= fondo - 2]
+        xa, xb = min(bajos) + b.get('margen', 0), max(bajos) - b.get('margen', 0)
+        nuevo = set()
+        for y in range(fondo - 3, min(h, fondo + 1 + b.get('filas', 5))):
+            for x in range(max(0, xa), min(w, xb + 1)):
+                if ((x, y) not in piel and px[x, y][3] >= 128 and self._cumple(px[x, y][:3], b)
+                        and any((x, yy) in piel for yy in range(y - 1, y - 8, -1))):
+                    nuevo.add((x, y))
+        return nuevo
 
     def _cumple(self, c, f):
         k = (c, id(f))
@@ -139,22 +194,23 @@ class PielVerde:
                                and _en(s, f.get('viveza', [0, 1])) and _en(l, f.get('claridad', [0, 1])))
         return self.cache_f[k]
 
-    def pintar(self, im, mascara=None):
+    def pintar(self, im, mascara=None, mira=None):
         """Pasa la piel al verde del vecino (o, con `mascara`, la pinta de ese color para comprobar lo elegido)."""
         px = im.load()
-        for q in self.elegir(im):
+        for q in self.elegir(im, mira):
             c = px[q][:3]
             px[q] = (mascara or self.cache.get(c) or self.verde(c)) + (px[q][3],)
         return im
 
 
-def en_hoja(sheet, cw, ch, opc, no_tocar=(), mascara=None):
-    """Lo mismo, casilla a casilla en una hoja de casillas iguales (la de tools/zombi.py)."""
+def en_hoja(sheet, cw, ch, opc, no_tocar=(), mascara=None, miran=None):
+    """Lo mismo, casilla a casilla en una hoja de casillas iguales (la de tools/zombi.py). `miran`: {(columna, fila):
+    hacia dónde mira}, para "barbilla"."""
     pv = PielVerde(opc, no_tocar)
     for fy in range(sheet.height // ch):
         for fx in range(sheet.width // cw):
             caja = (fx * cw, fy * ch, (fx + 1) * cw, (fy + 1) * ch)
             c = sheet.crop(caja)
             if c.getbbox():
-                sheet.paste(pv.pintar(c, mascara), caja[:2])
+                sheet.paste(pv.pintar(c, mascara, (miran or {}).get((fx, fy))), caja[:2])
     return sheet
