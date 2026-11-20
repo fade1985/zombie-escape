@@ -84,8 +84,8 @@ const ESTILO_TIENDA := {
 	"tienda-ropa": [["ropa"], "ropa"], "probadores-ropa": [["ropa"], "ropa"],
 	# y su aseo de empleados, como el vestuario de Johnny en la sala de mantenimiento (azulejo blanco y baldosa beis; el tercero, su techo)
 	"bano-ropa": [["vestuario"], "vestuario", "bano-b"],
-	# (20 nov, el dueño) y el de la ferretería, igual que ese
-	"bano-ferreteria": [["vestuario"], "vestuario", "bano-b"],
+	# (20 nov, el dueño) y el aseo y el almacén de la ferretería, igual que esos
+	"bano-ferreteria": [["vestuario"], "vestuario", "bano-b"], "almacen-ferreteria": [["trastero"], "trastero-pasillo", "trastero"],
 	# y su almacén, como el pasillo de los trasteros pero sin la línea amarilla (hormigón y chapa; el techo, el de los trasteros)
 	"almacen-ropa": [["trastero"], "trastero-pasillo", "trastero"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
 	# los departamentos de Torre Velaria (tercer edificio): la sala grande con moqueta gris de oficina (suelo-torre), su pared
@@ -109,6 +109,8 @@ const MEZCLA_TIENDA := {
 		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
 	"bano-ropa": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
+	"almacen-ferreteria": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
+		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
 	"bano-ferreteria": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
@@ -1081,10 +1083,15 @@ func poner_hojas() -> void:
 			elif "almacen" in usos:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
 				hoja.metalizada = true
-		# (20 nov, el dueño) el aseo de la ferretería, igual que el de la ropa: su puerta, la misma
-		if sitio.get("tienda", "") == "ferreteria" and "bano" in [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]:
-			hoja.madera = PUERTA_BANO.METAL_ROPA
-			hoja.metalizada = true
+		# (20 nov, el dueño) el aseo y el almacén de la ferretería, iguales que los de la ropa: sus puertas, las mismas
+		if sitio.get("tienda", "") == "ferreteria":
+			var usos_f: Array = [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]
+			if "bano" in usos_f:
+				hoja.madera = PUERTA_BANO.METAL_ROPA
+				hoja.metalizada = true
+			elif "almacen" in usos_f and "tienda" in usos_f:
+				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
+				hoja.metalizada = true
 		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
 		hoja.montar(d)
 		cosas.add_child(hoja)

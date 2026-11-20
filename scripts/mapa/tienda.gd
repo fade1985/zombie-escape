@@ -32,8 +32,8 @@ const TIPOS := {
 		"color": Color("#5dff8a")},
 	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"],   # [traducir]
 		"color": Color("#ff9a3c"),
-		# (20 nov, el dueño) su aseo, rehecho como el de la tienda de ropa: destrozado (ver "ropa", abajo)
-		"destrozada": ["bano"]},
+		# (20 nov, el dueño) su aseo y su almacén, rehechos como los de la tienda de ropa: destrozados (ver "ropa", abajo)
+		"destrozada": ["bano", "almacen"]},
 	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"],   # [traducir]
 		"color": Color("#4fe3ff")},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
@@ -140,39 +140,40 @@ const PLANOS := {
 		"#####################EE#####################",
 	],
 	# la ferretería: a la izquierda, el aseo de empleados y el almacén (el aseo se abre a él); a la derecha, el taller;
-	# entre los dos, un trozo de sala de venta que llega hasta el fondo. Desde el 20 nov (el dueño), las habitaciones de
-	# arriba, de 12 de alto como las de la tienda de ropa: su aseo, 7 × 12 con la puerta en el mismo sitio, igual que el de ella
+	# entre los dos, un trozo de sala de venta que llega hasta el fondo. Desde el 20 nov (el dueño), el aseo y el almacén, como
+	# los de la tienda de ropa: las habitaciones de arriba, de 12 de alto; el aseo, 7 × 12, y el almacén, 17 × 12 (la tienda, de
+	# 40 a 48 de ancho), con sus puertas en los mismos sitios
 	"ferreteria": [
-		"########################################",
-		"########################################",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
-		"##BBBBBBB AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
-		"##############  ####VVVVV#####  ########",   # no-tr
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"###################EE###################",
-		"###################EE###################",
+		"################################################",
+		"################################################",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"#################  #########VVVVV######  #######",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"#######################EE#######################",
+		"#######################EE#######################",
 	],
 	# la ferretería de antes (M77, hasta el 20 nov): ahora solo la usa Marketing (TIPOS "presta")
 	"ferreteria-antigua": [
