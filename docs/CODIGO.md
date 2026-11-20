@@ -1336,7 +1336,11 @@ en una línea.
   vez de rojo: `"heridas_verdes": {}` en su `zombi.json` (`zombi.py`, antes del `"suave"`). Es herida lo rojo salvo lo
   que está a 5 píxeles o menos de los dientes y los ojos (la boca se queda roja) y el rojo oscuro del borde de la figura
   (el contorno); lo rojo casi negro de dentro de la herida, rodeado de verde, pasa a verde oscuro. El tono, con `"tono"`
-  (78 grados). También cambia la sangre que salta en el golpe (es del mismo rojo).
+  (78 grados). También cambia la sangre que salta en el golpe (es del mismo rojo). La pierna de detrás, que PixelLab
+  pinta en sombra de un rojo oscuro casi liso, no pasa a verde sino a carne en sombra: en lo bajo de la figura, las
+  manchas grandes de casi un solo color, y de ellas solo lo oscuro. Y escupiendo hacia abajo ya no pinta el chorro hasta
+  el suelo (acababa en una raya recta): `"cambiar": {"south": {"5": 6}}` en su `"ataque"` usa ahí el fotograma 6 de
+  PixelLab (la boca llena de moco) en vez del 5. `"cambiar"` vale para cualquier animación de `zombi.py`.
 - **El arrastrado con GPT (8 nov):** `--zombi lento` → `assets/sources/zombi-lento-gpt-48` → `zombi.py zombi-lento-gpt-48
   zombi-lento-gpt` (textos en `assets/sources/zombi-lento-gpt/textos-gpt.md`, referencia `capturas/referencia-lento.png`).
   Va por el suelo: arrastrarse en lienzo de 64, y en el ataque, el golpe y la muerte cada fotograma a la altura que lo

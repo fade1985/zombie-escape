@@ -278,6 +278,11 @@ def block(folder, key, default, fix, dirs=DIRS):
         fs = load(folder, d)
         ox, oy = offset(fs, d, folder)
         ns = pick or list(range(default[0], min(default[1], len(fs) - 1) + 1))
+        # "cambiar": {"south": {"5": 6}} (en "ataque", "golpe"...): en esa dirección, el fotograma 5 de PixelLab se
+        # cambia por el 6. El gordo, desde el 20 nov: escupiendo hacia abajo, el 5 pintaba un chorro hasta el suelo
+        # que acababa en una raya recta (en las otras direcciones solo sale de la boca); el moco lo lanza el juego
+        cambio = cfg.get(key, {}).get('cambiar', {}).get(d, {})
+        ns = [cambio.get(str(n), n) for n in ns]
         out[d] = [placed(fix(fs[n]), ox, oy, d, n, folder) for n in ns]
     n = len(out['south'])
     assert all(len(v) == n for v in out.values()), f'{folder}: todas las direcciones deben tener los mismos fotogramas'
@@ -342,6 +347,11 @@ anims['attack']['hit'] = round(HIT / len(attack['south']), 3)
 #   - en el borde de la figura, el rojo oscuro: es el contorno (las tiras que cuelgan, más claras, sí cambian).
 # Y lo rojo casi negro de dentro de la herida, si tiene al lado 3 o más píxeles ya verdes, pasa a verde oscuro.
 # El verde lleva la claridad de lo que había (un poco más claro) y, como la piel del vecino, es más vivo en las luces.
+# Ojo, la pierna de detrás: al andar (y en otras animaciones) PixelLab la pinta en sombra de un rojo oscuro casi liso,
+# del mismo rojo que las heridas, y salía verde. Se pasa a carne en sombra (lo pidió el dueño): en el último 38 % de
+# la figura (las piernas), las manchas de herida de 12 píxeles o más con un color que es el 40 % o más de la mancha
+# (las heridas tienen muchos tonos; la pierna, uno), y de ellas solo lo oscuro (las tiras de la barriga que caen
+# delante son más claras y siguen verdes).
 #   "heridas_verdes": {}  o con "tono": 78 (grados)
 def heridas_verdes(sheet, opc):
     import colorsys
@@ -363,6 +373,9 @@ def heridas_verdes(sheet, opc):
         h, l, s = col(c)
         l2 = min(0.72, l * 1.15 + 0.03)
         return tuple(round(v * 255) for v in colorsys.hls_to_rgb(tono, l2, min(0.65, 0.30 + max(0, l2 - 0.5) * 1.4)))
+    def carne(c):   # la piel en sombra (como la de sus muslos: tono 19, viveza 0,45)
+        h, l, s = col(c)
+        return tuple(round(v * 255) for v in colorsys.hls_to_rgb(19 / 360, min(0.45, l * 1.1 + 0.04), 0.45))
     for fy in range(sheet.height // CH):
         for fx in range(sheet.width // CW):
             caja = (fx * CW, fy * CH, (fx + 1) * CW, (fy + 1) * CH)
@@ -389,10 +402,35 @@ def heridas_verdes(sheet, opc):
                         herida.add((x, y))
                     elif r == 2 and not borde(x, y):
                         oscuro.append((x, y))
-            herida.update(q for q in oscuro
-                          if sum((q[0] + i, q[1] + j) in herida for i in (-1, 0, 1) for j in (-1, 0, 1)) >= 3)
+            arriba, abajo = c.getbbox()[1], c.getbbox()[3]
+            linea = arriba + 0.62 * (abajo - arriba)
+            piernas = {q for q in herida if q[1] >= linea}
+            pierna, vistos = set(), set()
+            for q in piernas:
+                if q in vistos:
+                    continue
+                mancha, i = [q], 0
+                vistos.add(q)
+                while i < len(mancha):
+                    x, y = mancha[i]
+                    i += 1
+                    for r in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                        if r in piernas and r not in vistos:
+                            vistos.add(r)
+                            mancha.append(r)
+                if len(mancha) >= 12 and Counter(cp[r][:3] for r in mancha).most_common(1)[0][1] >= 0.4 * len(mancha):
+                    pierna.update(r for r in mancha if col(cp[r][:3])[1] < 0.34)
+            herida -= pierna
+            for q in oscuro:
+                cerca_de = lambda zona: sum((q[0] + i, q[1] + j) in zona for i in (-1, 0, 1) for j in (-1, 0, 1)) >= 3
+                if cerca_de(herida):
+                    herida.add(q)
+                elif cerca_de(pierna):
+                    pierna.add(q)
             for q in herida:
                 cp[q] = verde(cp[q][:3]) + (cp[q][3],)
+            for q in pierna:
+                cp[q] = carne(cp[q][:3]) + (cp[q][3],)
             sheet.paste(c, caja[:2])
     return sheet
 if 'heridas_verdes' in cfg:
