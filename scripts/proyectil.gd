@@ -225,15 +225,37 @@ func _draw() -> void:
 			draw_texture(LEJIA, -Vector2(LEJIA.get_size()) / 2.0)
 
 
-# El bote de gas lacrimógeno del antidisturbios: un cilindro gris con su franja amarilla, echando humo por la punta
+# El bote de gas lacrimógeno del antidisturbios, en pixel art (BOTE_GAS: 14×6 píxeles del dibujo, de 2 unidades): un
+# cilindro de metal con luz arriba y sombra abajo, su franja amarilla y el tapón oscuro, soltando bocanaditas de humo
+# por la punta. Gira a saltos de un cuarto de vuelta, para que los píxeles no se tuerzan
 static func bote_gas(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
-	lienzo.draw_set_transform(donde, giro)
-	lienzo.draw_rect(Rect2(-10, -6, 20, 12), Color("#1d1b2c"))   # el borde
-	lienzo.draw_rect(Rect2(-8, -4, 16, 8), Color("#7a8088"))     # el metal
-	lienzo.draw_rect(Rect2(-2, -4, 4, 8), Color("#ffd23f"))      # la franja
-	lienzo.draw_rect(Rect2(-8, -4, 16, 2), Color("#a8aeb6"))     # el brillo
-	lienzo.draw_rect(Rect2(10, -2, 4, 4), Color("#ecebc4"))      # el humo que sale
+	lienzo.draw_set_transform((donde / 2.0).round() * 2.0, roundf(giro / (PI / 2.0)) * (PI / 2.0))
+	for y in BOTE_GAS.size():
+		var fila: String = BOTE_GAS[y]
+		for x in fila.length():
+			if BOTE_COLORES.has(fila[x]):
+				lienzo.draw_rect(Rect2(Vector2(x * 2 - 14, y * 2 - 6), Vector2(2, 2)), BOTE_COLORES[fila[x]])
+	# el humo que se escapa por la punta: dos bocanaditas que salen y se apagan
+	var f := fmod(giro * 0.6, 1.0)
+	for i in 2:
+		var u := fmod(f + i * 0.5, 1.0)
+		var lado := 2.0 + floorf(u * 3.0) * 2.0
+		lienzo.draw_rect(Rect2(Vector2(14 + floorf(u * 5.0) * 2.0, -lado / 2.0), Vector2(lado, lado)), Color("#ecebc4", 0.8 * (1.0 - u)))
 	lienzo.draw_set_transform(Vector2.ZERO)
+
+
+# El dibujo del bote de gas: o, el borde; l, la luz del metal; m, el metal; s, su sombra; y e Y, la franja amarilla
+# (clara y oscura); c, el tapón
+const BOTE_GAS := [
+	".oooooooooooo.",
+	"ollllyylllloco",
+	"ommmmyymmmocco",
+	"ommmmYYmmmocco",
+	"ossssYYsssocco",
+	".oooooooooooo.",
+]
+const BOTE_COLORES := {"o": Color("#1d1b2c"), "l": Color("#c4cad2"), "m": Color("#7a8088"), "s": Color("#4a4f58"),
+	"y": Color("#ffd23f"), "Y": Color("#c8941c"), "c": Color("#3a3e46")}
 
 
 # La sartén del cocinero, con su aceite dentro

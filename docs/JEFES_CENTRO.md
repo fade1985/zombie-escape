@@ -98,6 +98,10 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
   agachado en PixelLab); las pelotas, a 300 y rebotando en el dibujo entero de los muebles (antes, solo en su huella
   del suelo, y parecía que atravesaban los armarios); el gas, una nube de humo (`nube_gas.gd`) y no un charco; las
   olas, una cada 1,4 s, y el hueco marcado con dos bolas eléctricas en vez de postes amarillos.
+- Cuarto ajuste: el humo del gas, de pixelfx (el "smoke-bomb" visto desde arriba, `tools/pixelfx/gas-lacrimogeno.js`,
+  `efecto_suelo.gd` "gas"), y el bote que vuela, en pixel art; las estrellitas de atontado (de todos los jefes y de
+  Johnny en el suelo), el "stunned" de pixelfx (`tools/pixelfx/estrellitas.js`); el barrido, 5 olas, y ya no se pasa
+  esquivando: solo por el hueco.
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las

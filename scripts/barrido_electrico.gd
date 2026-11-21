@@ -1,8 +1,8 @@
 # El barrido eléctrico del antidisturbios (fase 2, sin escudo; docs/JEFES_CENTRO.md): golpea el suelo con la porra y
 # salen varias olas de chispas, una tras otra, que cruzan la sala de pared a pared. Cada ola es una raya recta (de lado
 # a lado de la sala, a lo ancho o a lo alto) que avanza desde él hacia la pared de enfrente, con un hueco por donde
-# pasar (marcado con dos postes amarillos), cada ola en otro sitio. También se puede atravesar esquivando (el
-# instante de la esquiva no hace daño). Si toca a Johnny, le quita lo suyo (una vez por ola).
+# pasar (marcado con dos bolas eléctricas), cada ola en otro sitio. Solo se pasa por el hueco: esquivando, también da
+# (21 nov, lo pidió el dueño). Si toca a Johnny, le quita lo suyo (una vez por ola).
 # Va recta, a lo ancho o a lo alto (la dirección hacia Johnny, redondeada): así cruza la sala de pared a pared.
 # Las paredes la paran (los muebles, no: va por el suelo). Se dibuja con código, a cuadraditos de 2.
 # Se crea con BarridoElectrico.new(); se le ponen "dir", "olas" y "dueno" y se mete en la escena donde está el jefe.
@@ -80,8 +80,10 @@ func _physics_process(delta: float) -> void:
 		var s := rel.dot(lado)
 		# ¿la raya ha pasado por encima de él en este paso? (fuera del hueco y de la sala, no)
 		if p >= d0 - GROSOR and p <= d1 + GROSOR and d1 <= fondo + GROSOR and absf(s - ola.hueco) > HUECO \
-				and s >= desde and s <= hasta and johnny.esquiva_t <= 0.0:
+				and s >= desde and s <= hasta:
 			ola.dio = true
+			if johnny.esquiva_t > 0.0:
+				johnny.invulnerable = 0.0   # (lo que protege la esquiva no vale aquí: solo el hueco)
 			johnny.recibir_dano(DANO, dueno)
 			johnny.empujar(dir * 350.0)
 			Sonido.tocar("rayo")

@@ -63,7 +63,7 @@ const BOTES := [1, 2]
 const ESPERA_GAS := [7.0, 5.5]
 # El barrido eléctrico (fase 2)
 const AVISO_BARRIDO := 0.7
-const OLAS := 3
+const OLAS := 5
 const ENTRE_OLAS := 1.4            # lo que tarda en salir cada ola tras la anterior
 const ESPERA_BARRIDO := 7.0
 # El combo de porrazos (fase 2)

@@ -139,7 +139,7 @@ var dormido := false       # tirado en el suelo al despertarse tras una derrota 
 var caido_max := 0.0       # lo que dura ese tropezón
 var levantado_t := 0.0     # lo que le queda sin poder volver a tropezar
 var sombra_ancho := 0.0    # lo ancha que es su sombra de pie (tumbado, se alarga)
-var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuando está en el suelo
+var estrellas: EfectoSuelo   # las estrellitas que le dan vueltas a la cabeza cuando está en el suelo
 
 var huecos := Armas.SIEMPRE.duplicate()   # las dos armas que lleva (al empezar, solo la fregona: el hueco de fuego, "")
 var calidades := {}        # la calidad de las armas que lleva, en la mano o de repuesto (Armas.CALIDADES): {id: 2};
@@ -234,9 +234,11 @@ func _ready() -> void:
 	var aura := AuraArma.new()   # la luz y las chispas del color de la calidad del arma que lleva
 	aura.name = "Aura"
 	add_child(aura)
-	estrellas = Node2D.new()
+	estrellas = EfectoSuelo.new()   # (las de pixelfx, "estrellitas": se enseñan en actualizar_estrellas)
+	estrellas.tipo = "estrellitas"
+	estrellas.escala = 0.75
 	estrellas.name = "Estrellas"
-	estrellas.draw.connect(pintar_estrellas)
+	estrellas.visible = false
 	add_child(estrellas)
 	sombra_ancho = $Sombra.ancho
 	vida = stats.vida_max
@@ -1549,14 +1551,14 @@ func seguir_caido(delta: float) -> void:
 	tumbar(clampf(minf(caido_max - caido_t, caido_t) / CAIDA, 0.0, 1.0))
 	if caido_t <= LEVANTARSE and sprite.animation != "levantarse_" + direccion:
 		sprite.play("levantarse_" + direccion)
-	estrellas.queue_redraw()
+	actualizar_estrellas()
 	if caido_t <= 0.0:
 		caido_t = 0.0
 		dormido = false
 		levantado_t = LEVANTADO
 		tumbar(0.0)
 		volver_a_su_hoja()
-		estrellas.queue_redraw()
+		actualizar_estrellas()
 
 
 # Tras el tropezón, la hoja del arma que lleva (y su skin), de pie
@@ -1573,21 +1575,12 @@ func tumbar(k: float) -> void:
 	$Sombra.queue_redraw()
 
 
-# Tres estrellitas que dan vueltas sobre la cabeza mientras está en el suelo: cruces de 5 píxeles del dibujo (de 2
-# unidades), amarillas o blancas, con su borde oscuro
-func pintar_estrellas() -> void:
-	if dormido or caido_t <= LEVANTARSE or caido_max - caido_t < CAIDA * 2.0:
-		return
-	var cabeza: Vector2 = CABEZA_TUMBADO[direccion] + Vector2(0, -12)
-	var t := Time.get_ticks_msec() / 1000.0
-	for i in 3:
-		var a := t * 5.0 + i * TAU / 3.0
-		var p := ((cabeza + Vector2(cos(a) * 22.0, sin(a) * 8.0)) / 2.0).round() * 2.0
-		var color := Color("#ffd23f") if i != 1 else Color.WHITE
-		for capa in [[Color("#1d1b2c"), 2.0], [color, 0.0]]:
-			var b: float = capa[1]
-			estrellas.draw_rect(Rect2(p + Vector2(-5 - b, -1 - b), Vector2(10 + b * 2, 2 + b * 2)), capa[0])
-			estrellas.draw_rect(Rect2(p + Vector2(-1 - b, -5 - b), Vector2(2 + b * 2, 10 + b * 2)), capa[0])
+# Las estrellitas (y los pajaritos) que dan vueltas sobre la cabeza mientras está en el suelo: el efecto
+# "estrellitas" de pixelfx (efecto_suelo.gd), que se enseña encima de la cabeza o se esconde
+func actualizar_estrellas() -> void:
+	estrellas.visible = vivo and not dormido and caido_t > LEVANTARSE and caido_max - caido_t >= CAIDA * 2.0
+	if estrellas.visible:
+		estrellas.position = ((CABEZA_TUMBADO[direccion] + Vector2(0, -12)) / 2.0).round() * 2.0
 
 
 # Parte a Johnny por la cintura (golpe arriba, piernas de andar abajo) o lo deja entero
@@ -1812,7 +1805,7 @@ func quitar_vida(cantidad: int, de := "") -> void:
 		velocity = Vector2.ZERO
 		var tumbado := caido_t > 0.0
 		caido_t = 0.0   # (si estaba tirado por un tropezón, se queda en el suelo, pero sin estrellitas)
-		estrellas.queue_redraw()
+		actualizar_estrellas()
 		efectos.hide()
 		partir_cintura(false)
 		# Se muere cayéndose de espaldas (los dibujos del tropezón, que se queda en el último: tumbado) y en rojo. Si

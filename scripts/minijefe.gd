@@ -44,6 +44,7 @@ var marcha := Vector2.ZERO    # su velocidad (sin contar los empujones)
 var mirada := Vector2.DOWN    # hacia dónde mira
 var invulnerable := false
 var tiempo := 0.0
+var estrellas: EfectoSuelo = null   # las estrellitas de cuando está atontado (actualizar_estrellas)
 var vapor := true              # el vapor de la cabeza al enfadarse (el gerente mutado no echa)
 var rabia: VaporRabia          # las nubecitas de ese vapor
 var quieto := false            # la sala de pruebas: ataca y avisa como siempre, pero no se mueve de su sitio
@@ -102,6 +103,7 @@ func _physics_process(delta: float) -> void:
 	if frio().paso(delta):
 		return   # (congelado)
 	tiempo += delta
+	actualizar_estrellas()
 	t += delta if estado == "andar" else delta * ritmo   # (ritmo: la mejora del VD-7)
 	Estados.quemar_acido_jefe(self, en_acido, delta)
 	if estado == "muerto":
@@ -420,21 +422,24 @@ func poner(nombre: String, velocidad := 1.0) -> void:
 	sprite.speed_scale = velocidad * (rapido if estado == "andar" else ritmo)
 
 
-# Lo que va por encima de él (en el nodo "Vapor"): enfadado, el vapor de la cabeza, y atontado, estrellitas
-# dando vueltas. Cada jefe puede añadir más en pintar_encima()
+# Lo que va por encima de él (en el nodo "Vapor"): enfadado, el vapor de la cabeza. Cada jefe puede añadir más en pintar_encima()
 func _pintar_encima() -> void:
 	if estado == "muerto":
 		return
 	rabia.pintar($Vapor)
-	if estado == "atontado":
-		for i in 3:
-			var b := tiempo * 5.0 + i * TAU / 3.0
-			var p := Vector2(cos(b) * 26.0, -arriba - 8.0 + sin(b) * 8.0)
-			var estrella := PackedVector2Array()
-			for j in 10:
-				estrella.append(p + Vector2.from_angle(j * TAU / 10.0 - PI / 2.0) * (6.0 if j % 2 == 0 else 2.5))
-			Formas.poligono($Vapor, estrella, Color("#ffd23f"))
 	pintar_encima($Vapor)
+
+
+# Atontado, las estrellitas de pixelfx (efecto_suelo.gd, "estrellitas") le dan vueltas a la cabeza; si no, fuera
+func actualizar_estrellas() -> void:
+	if estado == "atontado" and estrellas == null:
+		estrellas = EfectoSuelo.new()
+		estrellas.tipo = "estrellitas"
+		estrellas.position = Vector2(0, -arriba - 6.0)
+		add_child(estrellas)
+	elif estado != "atontado" and estrellas != null:
+		estrellas.queue_free()
+		estrellas = null
 
 
 func pintar_encima(_lienzo: Node2D) -> void:

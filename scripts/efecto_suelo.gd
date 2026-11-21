@@ -60,6 +60,11 @@
 #    enroscadas, ondas blandas por el suelo y burbujitas (tools/pixelfx/mutar.js). De hijo de Johnny.
 #  - "rugido": el grito de un jefe en su presentación (M57; ui/presentacion.gd): ondas de sonido que salen de la cabeza,
 #    un destello rojizo y una onda de polvo a sus pies que levanta piedrecitas (tools/pixelfx/rugido.js).
+#  - "estrellitas": las de quien se queda atontado (21 nov; un jefe, minijefe.gd, y Johnny en el suelo, johnny.gd): el
+#    "stunned" de pixelfx sin el muñeco, tres estrellas y dos pajaritos dando vueltas a la cabeza (tools/pixelfx/
+#    estrellitas.js). En bucle, de hijo de quien las lleva, que lo enseña o lo esconde.
+#  - "gas": la nube de gas lacrimógeno del antidisturbios (21 nov; nube_gas.gd), el humo del "smoke-bomb" visto desde
+#    arriba (tools/pixelfx/gas-lacrimogeno.js): bolas de humo que llenan la elipse que pica, 7 s.
 #  - "tentaculos": la mutación Tentacular empuja (M29; mutaciones.actuar): seis tentáculos morados le salen a Johnny de la
 #    cintura, restallan hasta donde llega el empujón, dan en el suelo y se recogen (tools/pixelfx/tentaculos.js). La escala
 #    va con el radio de la mutación (RADIO_TENTACULOS a escala 1). De hijo de Johnny.
@@ -151,6 +156,12 @@ const TIPOS := {
 	"tentaculos": {"hojas": [preload("res://assets/sprites/tentaculos-detras.png"),
 		preload("res://assets/sprites/tentaculos-delante.png"), preload("res://assets/sprites/tentaculos-brillo.png")],
 		"origen": Vector2(64, 70), "fotogramas": 14},
+	"estrellitas": {"hojas": [preload("res://assets/sprites/estrellitas-detras.png"),
+		preload("res://assets/sprites/estrellitas-delante.png"), preload("res://assets/sprites/estrellitas-brillo.png")],
+		"origen": Vector2(32, 26), "fotogramas": 40, "bucle": 0},
+	"gas": {"hojas": [preload("res://assets/sprites/gas-lacrimogeno-detras.png"),
+		preload("res://assets/sprites/gas-lacrimogeno-delante.png"), preload("res://assets/sprites/gas-lacrimogeno-brillo.png")],
+		"origen": Vector2(58, 62), "fotogramas": 140},
 }
 const RADIO_TENTACULOS := 90.0   # hasta dónde llegan los "tentaculos" a escala 1 (45 píxeles del dibujo)
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
