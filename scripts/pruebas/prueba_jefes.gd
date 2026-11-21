@@ -1969,12 +1969,12 @@ func probar_muro() -> void:
 	jefe.recibir_golpe(99999, Vector2.DOWN * 10.0)
 	print("Muro: tras un golpe enorme por la espalda, vida %d de %d (esperado: la mitad) · escudo %s (esperado: true)" % [
 		jefe.vida, jefe.vida_max, jefe.escudo])
-	# las pelotas: tres tandas
-	for i in 3:
+	# las pelotas: cuatro tandas (el límite, 12)
+	for i in 4:
 		jefe.mirada = jefe.global_position.direction_to(johnny.global_position).rotated(i * 0.9 - 0.9)
 		jefe.cambiar("aviso_pelotas")
 		await get_tree().create_timer(0.9, false).timeout
-	print("Muro: pelotas rebotando %d (esperado: 9)" % jefe.pelotas().size())
+	print("Muro: pelotas rebotando %d (esperado: 12 o algo menos: el aliado rompe alguna a tiros)" % jefe.pelotas().size())
 	await get_tree().create_timer(0.6, false).timeout
 	Captura.foto("captura-muro-pelotas.png")
 	# el gas

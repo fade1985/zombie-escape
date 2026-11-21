@@ -55,7 +55,7 @@ const AVISO_PELOTAS := 0.6
 const PELOTAS := 3                 # las de cada tanda, en abanico
 const ABRE_PELOTAS := 0.35         # lo que se separan entre sí, en radianes
 const VELOCIDAD_PELOTA := 300.0   # (21 nov: 240 iba algo lenta)
-const MAX_PELOTAS := 9             # con estas por la sala, no dispara más
+const MAX_PELOTAS := 12            # con estas por la sala, no dispara más
 const ESPERA_PELOTAS := 4.5
 # El gas
 const AVISO_GAS := 0.45
@@ -65,7 +65,7 @@ const ESPERA_GAS := [5.0, 4.0]
 const AVISO_BARRIDO := 0.7
 const OLAS := 5
 const ENTRE_OLAS := 1.4            # lo que tarda en salir cada ola tras la anterior
-const ESPERA_BARRIDO := 7.0
+const ESPERA_BARRIDO := 11.0   # entre un barrido y el siguiente (antes 7: el dueño lo subió el 21 nov)
 # El combo de porrazos (fase 2)
 const AVISO_COMBO := [0.5, 0.32, 0.32]   # el aviso de cada golpe
 const DANO_COMBO := 16
