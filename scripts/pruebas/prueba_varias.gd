@@ -3392,6 +3392,57 @@ func probar_latigazos() -> void:
 # estrella); el Glotón, también enfadado (seis lenguas). La cámara, algo más lejos, sin los límites de la sala y
 # centrada entre el jefe y sus lenguas; y, de cerca (a 2, -cerca), la boca y el principio de las lenguas abajo y de
 # lado. En la terminal, la animación y hasta dónde llega cada lengua (y si choca)
+# --lenguas-bocas: el Glotón de cerca dando el latigazo en las 8 direcciones, para ver que las lenguas salen de su
+# boca (BOCAS, una por fotograma del golpe) y que se ven a la medida de sus píxeles (lienzo_pixelado.gd). Dos fotos
+# por dirección: saliendo (captura-bocas-<dir>-sale.png) y ya tendidas, con la cabeza en otro fotograma (-tendidas)
+func probar_lenguas_bocas() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(2, 2)
+	camara.limit_left = -100000
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	var centro: Vector2 = sala.diana.global_position + Vector2(200, 40)
+	var gloton: Node2D = meter_zombi("gloton", centro)
+	await get_tree().create_timer(0.2).timeout
+	for i in 8:
+		var angulo := i * PI / 4.0
+		var dir: String = gloton.DIRS[i]
+		gloton.global_position = centro
+		gloton.velocity = Vector2.ZERO
+		gloton.marcha = Vector2.ZERO
+		johnny.global_position = centro + Vector2.from_angle(angulo) * 260.0
+		gloton.espera_latigazo = 99.0
+		gloton.espera_aspirar = 99.0
+		gloton.mirada = Vector2.from_angle(angulo)
+		gloton.cambiar("aviso_latigazo", {"angulo": angulo})
+		Temblor.desplazamiento = centro - johnny.global_position + Vector2.from_angle(angulo) * 40.0 + Vector2(0, -40)
+		camara.reset_smoothing()
+		for momento in [["sale", 0.035], ["tendidas", 0.25]]:
+			while not (gloton.estado == "latigazo" and gloton.t >= momento[1]):
+				await get_tree().physics_frame
+			await RenderingServer.frame_post_draw
+			Captura.foto("captura-bocas-%s-%s.png" % [dir, momento[0]])
+			print("Bocas del Glotón: %s %s, fotograma %d, sale de %s" % [dir, momento[0], gloton.sprite.frame, gloton.boca()])
+		while gloton.estado == "latigazo":
+			await get_tree().physics_frame
+	Temblor.desplazamiento = Vector2.ZERO
+	get_tree().quit()
+
+
 func probar_lenguas() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null

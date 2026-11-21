@@ -85,9 +85,17 @@ const PALETA := {
 }
 # De dónde salen: su boca en cada dirección, medida en el fotograma del golpe de su latigazo (de espaldas, por
 # donde asoman las de su dibujo: por encima de la cabeza o por un lado). Van enteras por delante de su dibujo
+# Una por fotograma del golpe (del 5 al 8), porque la cabeza se mueve y la lengua la sigue (21 nov: antes era una
+# sola por dirección y en varias salían por debajo de la boca, casi de la rodilla mirando al suroeste)
 const BOCAS := {
-	"s": Vector2(0, -28), "se": Vector2(36, -16), "e": Vector2(58, -32), "ne": Vector2(54, -20),
-	"n": Vector2(0, -86), "no": Vector2(-60, -38), "o": Vector2(-62, -36), "so": Vector2(-46, -14),
+	"s": [Vector2(0, -28), Vector2(0, -28), Vector2(0, -28), Vector2(0, -28)],
+	"se": [Vector2(31, -43), Vector2(34, -36), Vector2(28, -46), Vector2(24, -52)],
+	"e": [Vector2(55, -39), Vector2(51, -33), Vector2(48, -53), Vector2(48, -60)],
+	"ne": [Vector2(54, -56), Vector2(54, -56), Vector2(48, -56), Vector2(48, -63)],
+	"n": [Vector2(0, -86), Vector2(0, -86), Vector2(0, -86), Vector2(0, -86)],
+	"no": [Vector2(-62, -56), Vector2(-59, -56), Vector2(-52, -66), Vector2(-48, -70)],
+	"o": [Vector2(-62, -40), Vector2(-59, -39), Vector2(-59, -59), Vector2(-56, -63)],
+	"so": [Vector2(-49, -36), Vector2(-49, -49), Vector2(-42, -56), Vector2(-39, -63)],
 }
 
 var espera_latigazo := 1.5
@@ -98,6 +106,8 @@ var acido_t := 0.0                     # para no salpicar ácido con cada perdig
 var elipse = null                      # la elipse limpia de su habitación, en unidades (la_elipse(); null, sin buscar)
 var lenguas: Array[Lengua] = []        # las del latigazo (enfadado, todas; si no, las primeras)
 var apuntadas := 0                     # cuántas lleva este latigazo
+var lienzo_lenguas: LienzoPixelado     # donde se pintan las lenguas del latigazo...
+var lienzo_sombra: LienzoPixelado      # ...y su sombra
 
 
 func _ready() -> void:
@@ -114,6 +124,14 @@ func _ready() -> void:
 		lengua.ancho = ANCHO_LENGUA
 		lengua.desfase = i * 0.37
 		lenguas.append(lengua)
+	# Las lenguas y su sombra, a la medida de los píxeles de su dibujo (lienzo_pixelado.gd): las lenguas por encima de
+	# todo (en "Vapor") y la sombra detrás de su dibujo. Llegan hasta su largo, más la boca y lo que culebrean
+	var medio := int(LARGO_LENGUA) + 130
+	lienzo_lenguas = LienzoPixelado.new(medio, pintar_lenguas)
+	$Vapor.add_child(lienzo_lenguas)
+	lienzo_sombra = LienzoPixelado.new(medio, pintar_sombra_lenguas)
+	add_child(lienzo_sombra)
+	move_child(lienzo_sombra, 0)
 
 
 # Al empezar el latigazo, cada lengua apunta a su franja y mide hasta dónde llega (por si hay una pared o un mueble
@@ -507,6 +525,8 @@ static func vuelo_acido(lejos: float) -> float:
 func animar() -> void:
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
+	lienzo_lenguas.refrescar(estado == "latigazo")
+	lienzo_sombra.refrescar(estado == "latigazo")
 	match estado:
 		"aviso_latigazo":
 			fijar("latigazo", dir, mini(GOLPE_LATIGAZO - 1, int(t / AVISO_LATIGAZO * GOLPE_LATIGAZO)))
@@ -536,6 +556,8 @@ func animar() -> void:
 
 func morir() -> void:
 	super()
+	lienzo_lenguas.refrescar(false)   # (si muere a mitad del latigazo)
+	lienzo_sombra.refrescar(false)
 	# mientras no tenga su animación de muerte (solo la vista quieta), cae de lado
 	if sprite.sprite_frames.get_frame_count(sprite.animation) == 1:
 		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
@@ -551,10 +573,6 @@ func _draw() -> void:
 			# (o una estrella, si se paran en una pared o un mueble)
 			for i in apuntadas:
 				lenguas[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LATIGAZO), tiempo, i)
-		"latigazo":
-			# su sombra en el suelo, por debajo de él (lengua.gd)
-			for i in apuntadas:
-				lenguas[i].sombra(self, lenguas[i].lanzada(BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO), Vector2(0, 6))
 		"aviso_aspirar", "aspirar":
 			# el aviso de la zona que aspira, rojo como el de los demás ataques de los jefes (aviso.gd): se llena hacia
 			# fuera y destella. Al aspirar se oculta (lo que se ve entonces es el aire, pintar_aire), pero sigue pedido
@@ -572,15 +590,27 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-# Las lenguas del latigazo, enteras por encima de él (en el nodo "Vapor"): salen disparadas de la boca, caen sobre el
-# aviso culebreando y se recogen (lengua.gd)
 func pintar_encima(lienzo: Node2D) -> void:
 	if estado == "aspirar" and not direccion().begins_with("n"):
 		pintar_aire(lienzo, true)
-	if estado != "latigazo":
-		return
+
+
+# De dónde salen ahora las lenguas: su boca en este fotograma del golpe (BOCAS)
+func boca() -> Vector2:
+	var bocas: Array = BOCAS[direccion()]
+	return bocas[clampi(sprite.frame - GOLPE_LATIGAZO, 0, bocas.size() - 1)]
+
+
+# Las lenguas del latigazo, enteras por encima de él (en su lienzo pixelado, hijo del nodo "Vapor"): salen disparadas
+# de la boca, caen sobre el aviso culebreando y se recogen (lengua.gd)
+func pintar_lenguas(lienzo: Node2D) -> void:
 	for i in apuntadas:
-		lenguas[i].estela(lienzo, BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO)
+		lenguas[i].estela(lienzo, boca(), Vector2(0, 6), t, DURA_LATIGAZO)
 	for i in apuntadas:
-		var puntos := lenguas[i].lanzada(BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO)
-		lenguas[i].pintar(lienzo, puntos, 0, Tentaculo.PUNTOS)
+		lenguas[i].pintar(lienzo, lenguas[i].lanzada(boca(), Vector2(0, 6), t, DURA_LATIGAZO), 0, Tentaculo.PUNTOS)
+
+
+# Su sombra en el suelo, por debajo de él (en su lienzo pixelado, detrás de su dibujo; lengua.gd)
+func pintar_sombra_lenguas(lienzo: Node2D) -> void:
+	for i in apuntadas:
+		lenguas[i].sombra(lienzo, lenguas[i].lanzada(boca(), Vector2(0, 6), t, DURA_LATIGAZO), Vector2(0, 6))

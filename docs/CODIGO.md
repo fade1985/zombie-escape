@@ -162,10 +162,15 @@ en una línea.
   pixelfx en `tools/pixelfx/latigazo.js`; las del Glotón, más gruesas). Encima de las capas, la carne: dos venas
   moradas que culebrean, bultos y ampollas amarillas como los granos del Glotón (`con_detalles`; cada lengua, los suyos).
   En los fotogramas del golpe del Glotón (5 a 8) se borraron las lenguas de PixelLab, que chocaban con estas
-  (`tools/gloton_sin_lengua.py`). Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
+  (`tools/gloton_sin_lengua.py`), y lo que eso dejó (agujeros en la boca, hilos oscuros colgando, trocitos sueltos) se limpió
+  el 21 nov con `tools/gloton_restos.py`. Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
   y con el contorno de un píxel, `borde`), pero con otra forma: en el aviso no se pintan (las enrosca su dibujo) y
-  en el golpe salen disparadas de la boca (`BOCAS`, medida en el fotograma del golpe en cada dirección), caen
-  sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`.
+  en el golpe salen disparadas de la boca (`BOCAS`, medida en cada fotograma del golpe, del 5 al 8, en cada dirección: la lengua sigue a la cabeza;
+  `boca()`), caen
+  sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`. Las del Glotón y su sombra se pintan en un `LienzoPixelado`
+  (`lienzo_pixelado.gd`, 21 nov): un visor a mitad de tamaño que se enseña al doble sin suavizar, para que cada píxel
+  de la lengua mida lo mismo que uno de su dibujo y caiga en su cuadrícula (pintadas a 1 × 1 se veían más finas que él).
+  Las 8 direcciones de cerca, con `--lenguas-bocas`.
 - `portera.gd`: la jefa por defecto, por estados.
 - `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
   `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
