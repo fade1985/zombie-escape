@@ -161,12 +161,22 @@ func trazar(puntos: PackedVector2Array, grueso: float, color: Color) -> void:
 			draw_rect(Rect2(p - medio, Vector2(grueso, grueso)), color)
 
 
+# Los bordes del hueco: donde se corta el rayo, una bola de electricidad que chisporrotea (brillo azul, centro blanco y
+# unas chispitas que saltan hacia fuera, distintas cada poco). Hasta el 21 nov, dos postes amarillos
 func postes(base: Vector2, hueco: float) -> void:
-	# los postes del hueco
+	var cuadro := int(t * 14.0)
 	for borde in [hueco - HUECO, hueco + HUECO]:
 		if borde < desde or borde > hasta:
 			continue
 		var p: Vector2 = ((base + lado * borde) / 2.0).floor() * 2.0
-		draw_rect(Rect2(p + Vector2(-4, -22), Vector2(8, 26)), Color("#1d1b2c"))
-		draw_rect(Rect2(p + Vector2(-2, -20), Vector2(4, 22)), Color("#ffd23f"))
-		draw_rect(Rect2(p + Vector2(-2, -20), Vector2(4, 4)), Color("#fff3a8"))
+		var late := 1.0 + sin(t * 20.0 + borde) * 0.15
+		Formas.disco(self, p, 13.0 * late, Color("#2a6cff", 0.35))
+		Formas.disco(self, p, 8.0 * late, Color("#5fd3ff"))
+		Formas.disco(self, p, 4.0, Color("#ffffff"))
+		# las chispitas: tres rayitos cortos que salen de la bola
+		for j in 3:
+			var h := absi(hash(Vector2i(int(borde), cuadro * 3 + j)))
+			var a := float(h % 360) * PI / 180.0
+			var q := p + Vector2.from_angle(a) * 10.0
+			var r := q + Vector2.from_angle(a + float(h % 5 - 2) * 0.4) * 8.0
+			trazar(PackedVector2Array([q, r]), 2.0, Color("#bff3ff"))

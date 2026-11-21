@@ -35,7 +35,7 @@ const TIPOS := {
 	# los cubos de agua del Sujeto 1 (sujeto_1.gd): en curva alta, con su marca; dejan un charco de agua que resbala
 	"cubo": {"vuelo": 0.9, "altura": 180.0, "golpe": 8, "charco": "agua_cubo", "marca": 56.0, "liquido": Color("#8fd3ff")},
 	# los botes de gas lacrimógeno del antidisturbios (antidisturbios.gd): en curva, con su marca; dejan la nube de gas
-	"gas": {"vuelo": 0.85, "altura": 150.0, "golpe": 0, "charco": "gas", "marca": 70.0},
+	"gas": {"vuelo": 0.85, "altura": 150.0, "golpe": 0, "charco": "nube", "marca": 70.0},   # ("nube": nube_gas.gd, no un charco)
 }
 
 var tipo := "veneno"
@@ -97,6 +97,15 @@ func mirar_paredes() -> void:
 func caer(datos: Dictionary) -> void:
 	if not is_instance_valid(dueno):
 		dueno = null   # (quien lo tiró ya no está: ha muerto o se ha ido mientras volaba)
+	if datos.charco == "nube":
+		# el gas del antidisturbios: una nube (nube_gas.gd), no un charco
+		var nube := NubeGas.new()
+		nube.position = (hasta / 2.0).round() * 2.0
+		nube.dueno = dueno
+		get_parent().add_child(nube)
+		Sonido.tocar("chof")
+		queue_free()
+		return
 	var charco: Node2D = load(CHARCO).instantiate()
 	charco.tipo = datos.charco
 	# el centro, en píxel entero del dibujo, para que cuadre con el resto del suelo

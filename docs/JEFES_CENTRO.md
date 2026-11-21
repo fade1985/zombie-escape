@@ -93,6 +93,11 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
 - Segundo ajuste: la carga no se estrella hasta haber corrido **la mitad** (antes, si choca, frena sin atontarse ni
   agrietar; si roza, sigue), y no empieza una carga con algo a menos de media carga delante. El centro de la oficina
   (donde sale él) queda sin taquillas, y delante de la puerta también.
+- Tercer ajuste: fuera el arco blanco de los pies y las grietas pintadas (se veían como una raya blanca suelta); al
+  correr usa la animación de andar deprisa (la de "carga" es solo agacharse: parecía que flotaba; falta una de correr
+  agachado en PixelLab); las pelotas, a 300 y rebotando en el dibujo entero de los muebles (antes, solo en su huella
+  del suelo, y parecía que atravesaban los armarios); el gas, una nube de humo (`nube_gas.gd`) y no un charco; las
+  olas, una cada 1,4 s, y el hueco marcado con dos bolas eléctricas en vez de postes amarillos.
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las

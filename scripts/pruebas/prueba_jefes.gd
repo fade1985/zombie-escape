@@ -1980,7 +1980,7 @@ func probar_muro() -> void:
 	# el gas
 	jefe.cambiar("aviso_gas")
 	await get_tree().create_timer(1.8, false).timeout
-	var gas := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "gas")
+	var gas := get_tree().get_nodes_in_group("nubes_gas")
 	print("Muro: nubes de gas %d (esperado: 1)" % gas.size())
 	Captura.foto("captura-muro-gas.png")
 	# una carga que choca nada más empezar (la taquilla a 170): frena, sin atontarse ni agrietar (21 nov)

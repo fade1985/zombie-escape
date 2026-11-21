@@ -48,8 +48,6 @@ const TIPOS := {
 	# el hielo de un zombi que muere congelado, derretido (zombi.reventar_hielo): solo se ve (ni resbala ni daña) y se seca
 	"deshielo": {"burbujas": "agua", "radio": 36.0, "vida": 5.0, "estados": {}},
 	"agua": {"burbujas": "agua", "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}},
-	# el gas lacrimógeno del antidisturbios (antidisturbios.gd): una nube baja, grande y larga, que pica (a él no: es su "dueno")
-	"gas": {"burbujas": "gas", "radio": 70.0, "vida": 7.0, "estados": {"toxico": {"dps": 7.0}}},
 }
 # Los colores de los charcos que burbujean: del borde al centro, los brillos, la burbuja (y su brillo), el vapor y
 # la mancha que dejan al secarse
@@ -77,10 +75,6 @@ const BURBUJEO := {
 	# el café de los vasos del becario: marrón, y al secarse deja su mancha
 	"cafe": {"borde": Color("#2a160a"), "oscuro": Color("#4a2a14"), "medio": Color("#6e4222"), "centro": Color("#8a5a30"),
 		"brillo": Color("#d8b48a"), "sin_burbujas": true, "mancha": Color("#2a1a10", 0.4)},
-	# el gas lacrimógeno del antidisturbios: blanco amarillento, con mucho vapor (es una nube a ras de suelo)
-	"gas": {"borde": Color("#8f8f6a", 0.7), "oscuro": Color("#b8b88c", 0.75), "medio": Color("#d6d6aa", 0.75),
-		"centro": Color("#ecebc4", 0.8), "brillo": Color("#ffffe6", 0.85), "burbuja": Color("#f4f2cf", 0.8),
-		"luz": Color("#ffffff"), "vapor": Color(0.95, 0.95, 0.8, 0.55), "mancha": Color("#3a3a2a", 0.25)},
 	# el aceite hirviendo del cocinero (no burbujea como los demás: tiene sus burbujas propias, pintar_hirviendo)
 	"hirviendo": {"borde": Color("#5e3510"), "oscuro": Color("#9a5a16"), "medio": Color("#c07a22"), "centro": Color("#dc9a34"),
 		"brillo": Color("#f8d27a"), "burbuja": Color("#f0c060"), "luz": Color("#fff1c4")},

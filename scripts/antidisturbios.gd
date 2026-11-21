@@ -12,7 +12,7 @@
 #     no hay taquillas, la sala de pruebas, vale cualquier pared o mueble.)
 #   - Pelotas de goma: levanta el escudo y dispara 3 en abanico (pelota_goma.gd). Rebotan por la sala sin pararse
 #     y se van sumando (como mucho, MAX_PELOTAS); se rompen de un disparo.
-#   - Gas lacrimógeno: tira un bote (proyectil.gd, "gas") que deja una nube que pica un rato (charco.gd, "gas").
+#   - Gas lacrimógeno: tira un bote (proyectil.gd, "gas") que deja una nube que pica un rato (nube_gas.gd).
 #   - Porrazo: si Johnny está cerca y delante, marca en rojo un trozo de suelo (medio segundo) y golpea: 18 y empuja.
 #   - Silbato: llegan 2 refuerzos.
 # Al reventar el escudo (romper_escudo): revientan todas las pelotas de goma a la vez, grita y empieza la
@@ -54,7 +54,7 @@ const GOLPE_PORRAZO := 4           # fotograma del porrazo en el que la porra ba
 const AVISO_PELOTAS := 0.6
 const PELOTAS := 3                 # las de cada tanda, en abanico
 const ABRE_PELOTAS := 0.35         # lo que se separan entre sí, en radianes
-const VELOCIDAD_PELOTA := 240.0
+const VELOCIDAD_PELOTA := 300.0   # (21 nov: 240 iba algo lenta)
 const MAX_PELOTAS := 9             # con estas por la sala, no dispara más
 const ESPERA_PELOTAS := 4.5
 # El gas
@@ -64,7 +64,7 @@ const ESPERA_GAS := [7.0, 5.5]
 # El barrido eléctrico (fase 2)
 const AVISO_BARRIDO := 0.7
 const OLAS := 3
-const ENTRE_OLAS := 0.9            # lo que tarda en salir cada ola tras la anterior
+const ENTRE_OLAS := 1.4            # lo que tarda en salir cada ola tras la anterior
 const ESPERA_BARRIDO := 7.0
 # El combo de porrazos (fase 2)
 const AVISO_COMBO := [0.5, 0.32, 0.32]   # el aviso de cada golpe
@@ -476,9 +476,10 @@ func animar() -> void:
 			var dura := AVISO_CARGA if estado == "aviso_carga" else AVISO_PELOTAS
 			fijar("carga", dir, avance("carga_" + dir, t / dura))
 		"carga":
-			# agachado tras el escudo, dando zancadas (un pequeño bote)
-			fijar("carga", dir, sprite.sprite_frames.get_frame_count("carga_" + dir) - 1)
-			sprite.position.y = PIE - absf(sin(tiempo * 18.0)) * 3.0
+			# corriendo: su animación de andar, muy deprisa, con zancadas (un pequeño bote). La de "carga" es solo
+			# agacharse tras el escudo (el aviso): quieta en su último fotograma parecía que iba flotando (21 nov)
+			poner("andar_" + dir, 3.0)
+			sprite.position.y = PIE - absf(sin(tiempo * 16.0)) * 3.0
 		"atontado":
 			fijar("golpe", dir, avance("golpe_" + dir, t / 0.5))
 			sprite.position.x = sin(tiempo * 9.0) * 2.0
@@ -503,17 +504,13 @@ func morir() -> void:
 		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
 
 
-# Los avisos, en el suelo (por debajo de él), y por dónde le tapa el escudo
+# Los avisos, en el suelo (por debajo de él)
 func _draw() -> void:
 	if estado == "muerto":
 		return
 	var a := mirada.angle()
-	if escudo:
-		# el escudo: un arco azulado a sus pies, por delante (más apagado cuanto más agrietado)
-		draw_set_transform(Vector2(0, PIE - 6), 0.0, Vector2(1, 0.7))
-		Formas.arco(self, Vector2.ZERO, radio + 14.0, a - FRENTE, a + FRENTE, 16,
-			Color("#bfe9ff", 0.35 - grietas * 0.08), 3.0)
-		draw_set_transform(Vector2.ZERO)
+	# (hasta el 21 nov, un arco azulado a sus pies marcaba lo que tapa el escudo, y unas rayas blancas encima, sus
+	# grietas: el dueño no los quería. Las grietas se ven en el «¡CRAC!» y las chispas al chocar)
 	match estado:
 		"aviso_porrazo":
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_PORRAZO, ALCANCE_PORRAZO,
@@ -530,19 +527,3 @@ func _draw() -> void:
 		"aviso_barrido":
 			# un corro de chispas a sus pies que crece: de ahí salen las olas
 			Aviso.golpe(self, Vector2(0, 6), a, PI, 90.0, minf(1.0, t / AVISO_BARRIDO), tiempo)
-
-
-# Encima del dibujo: las grietas del escudo (rayas blancas en zigzag, una más con cada choque)
-func pintar_encima(lienzo: Node2D) -> void:
-	if not escudo or grietas == 0 or estado == "muerto":
-		return
-	var centro := mirada * (radio + 4.0) + Vector2(0, -arriba * 0.45)
-	centro = (centro / 2.0).floor() * 2.0
-	for g in grietas:
-		var p := centro
-		var ang := -PI / 2.0 + (g - 1) * 1.9
-		for paso in 7:
-			ang += (1.0 if paso % 2 == 0 else -1.0) * 0.7
-			var q := p + Vector2.from_angle(ang) * 6.0
-			lienzo.draw_line(p, (q / 2.0).floor() * 2.0, Color("#ffffff", 0.9), 2.0)
-			p = (q / 2.0).floor() * 2.0

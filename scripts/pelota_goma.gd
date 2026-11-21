@@ -42,6 +42,10 @@ func _physics_process(delta: float) -> void:
 		if randf() < 0.5:
 			Sonido.tocar("boing")
 		return
+	# y en los muebles tal como se ven (su dibujo es más alto que la huella del suelo, que es lo que choca: si no,
+	# por detrás de un armario parecía que lo atravesaba)
+	if rebotar_en_muebles(antes, despues):
+		return
 	global_position = despues
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny == null or not johnny.vivo or espera > 0.0 or johnny.esquiva_t > 0.0:
@@ -52,6 +56,29 @@ func _physics_process(delta: float) -> void:
 		espera = ESPERA_GOLPE
 		velocidad = velocidad.bounce(hacia.normalized())   # rebota en él
 		Sonido.tocar("boing")
+
+
+# Si al pasar de "antes" a "despues" entra en el dibujo de un mueble (donde se vería la pelota, que va a ALTURA del
+# suelo, encima de él), rebota por el lado por el que ha entrado. Devuelve si ha rebotado
+func rebotar_en_muebles(antes: Vector2, despues: Vector2) -> bool:
+	for m in get_tree().get_nodes_in_group("muebles"):
+		var dibujo: Sprite2D = m.get_node_or_null("Sprite")
+		if dibujo == null or dibujo.texture == null:
+			continue
+		var alto: float = dibujo.texture.get_height() * dibujo.scale.y
+		var ancho: float = m.datos.w
+		var pie: Vector2 = m.global_position
+		var r := Rect2(pie.x - ancho / 2.0, pie.y - alto + ALTURA, ancho, alto).grow(RADIO * 0.6)
+		if not r.has_point(despues) or r.has_point(antes):
+			continue
+		if antes.x < r.position.x or antes.x > r.end.x:
+			velocidad.x = -velocidad.x
+		else:
+			velocidad.y = -velocidad.y
+		if randf() < 0.5:
+			Sonido.tocar("boing")
+		return true
+	return false
 
 
 # Una bala de Johnny en "p": si la toca, la pelota se rompe (bala.gd). Devuelve si la ha roto
