@@ -228,14 +228,16 @@ func elegir_con_escudo(_johnny: Node2D, d: float, desvio: float) -> void:
 
 
 func elegir_sin_escudo(_johnny: Node2D, d: float, desvio: float) -> void:
-	if d < DISTANCIA_PORRAZO + 20.0 and espera_combo <= 0.0:
-		espera_combo = ESPERA_COMBO
-		cambiar("aviso_combo", {"golpe": 0})
-		return
+	# el barrido, antes que el combo (21 nov, lo pidió el dueño: el combo dura más que su espera y, de cerca, no
+	# dejaba salir nunca el barrido)
 	if espera_barrido <= 0.0:
 		espera_barrido = ESPERA_BARRIDO
 		cambiar("aviso_barrido")
 		gritar(Idioma.t("¡ATRÁS!"), Color("#5fd3ff"))
+		return
+	if d < DISTANCIA_PORRAZO + 20.0 and espera_combo <= 0.0:
+		espera_combo = ESPERA_COMBO
+		cambiar("aviso_combo", {"golpe": 0})
 		return
 	if d > 170.0 and desvio < 0.7 and espera_carga <= 0.0 and carga_libre(_johnny):
 		espera_carga = 2.5
