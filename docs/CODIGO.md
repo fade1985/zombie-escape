@@ -167,10 +167,10 @@ en una línea.
   y con el contorno de un píxel, `borde`), pero con otra forma: en el aviso no se pintan (las enrosca su dibujo) y
   en el golpe salen disparadas de la boca (`BOCAS`, medida en cada fotograma del golpe, del 5 al 8, en cada dirección: la lengua sigue a la cabeza;
   `boca()`), caen
-  sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`. Las del Glotón y su sombra se pintan en un `LienzoPixelado`
+  sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`. Las del Glotón y las de la criatura, y su sombra, se pintan en un `LienzoPixelado`
   (`lienzo_pixelado.gd`, 21 nov): un visor a mitad de tamaño que se enseña al doble sin suavizar, para que cada píxel
   de la lengua mida lo mismo que uno de su dibujo y caiga en su cuadrícula (pintadas a 1 × 1 se veían más finas que él).
-  Las 8 direcciones de cerca, con `--lenguas-bocas`.
+  Las 8 direcciones de cerca, con `--lenguas-bocas` (y `--lenguas-bocas --de-criatura`).
 - `portera.gd`: la jefa por defecto, por estados.
 - `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
   `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse

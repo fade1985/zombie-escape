@@ -128,10 +128,11 @@ const PALETA_LENGUA := {
 	],
 }
 # De dónde salen: su boca en cada dirección, medida en el fotograma del golpe de sus lenguas (de espaldas, por encima
-# de la cabeza, por donde asoman las de su dibujo). Van enteras por delante de su dibujo
+# de la cabeza, por donde asoman las de su dibujo). Van enteras por delante de su dibujo. Mirando al suroeste, del
+# centro de la boca del pecho (21 nov: salían del hombro, por donde asoman las de su dibujo)
 const BOCAS := {
 	"s": Vector2(0, -100), "se": Vector2(36, -110), "e": Vector2(52, -120), "ne": Vector2(-18, -176),
-	"n": Vector2(0, -164), "no": Vector2(16, -176), "o": Vector2(-64, -110), "so": Vector2(-70, -104),
+	"n": Vector2(0, -164), "no": Vector2(16, -176), "o": Vector2(-64, -110), "so": Vector2(-30, -114),
 }
 const FUEGO := [Color("#ff9f1c"), Color("#ffd23f"), Color("#ff5a1f"), Color("#fff1a8")]
 
@@ -148,6 +149,8 @@ var inmune_fuego := false                # la criatura (M41): lleva el fuego del
                                          # proyectil.gd, armas_creadas.gd y llamarada.gd, como en el bombero; y herir)
 var aviso_inmune := 0.0                  # para no decir «¡INMUNE!» a cada llama
 var lenguas: Array[Lengua] = []          # las de la criatura
+var lienzo_lenguas: LienzoPixelado       # donde se pintan sus lenguas...
+var lienzo_sombra: LienzoPixelado        # ...y su sombra
 
 
 func _ready() -> void:
@@ -182,6 +185,14 @@ func _ready() -> void:
 		lengua.ancho = ANCHO_LENGUA
 		lengua.desfase = i * 0.37
 		lenguas.append(lengua)
+	# Las lenguas y su sombra, a la medida de los píxeles de su dibujo (lienzo_pixelado.gd, como las del Glotón): las
+	# lenguas por encima de todo (en "Vapor") y la sombra detrás de su dibujo
+	var medio := int(LARGO_LENGUA) + 200
+	lienzo_lenguas = LienzoPixelado.new(medio, pintar_lenguas)
+	$Vapor.add_child(lienzo_lenguas)
+	lienzo_sombra = LienzoPixelado.new(medio, pintar_sombra_lenguas)
+	add_child(lienzo_sombra)
+	move_child(lienzo_sombra, 0)
 
 
 # Al empezar las lenguas de la criatura, cada una apunta a su franja y mide hasta dónde llega (por si hay una pared o
@@ -682,6 +693,8 @@ func animar() -> void:
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
 	animar_cupula()
+	lienzo_lenguas.refrescar(estado == "lenguas")
+	lienzo_sombra.refrescar(estado == "lenguas")
 	if mutado:
 		animar_criatura(dir)
 		return
@@ -812,9 +825,25 @@ func soltar(anim: String, dir: String, golpe: int, desde := -1.0) -> void:
 
 func morir() -> void:
 	super()
+	lienzo_lenguas.refrescar(false)   # (si muere a mitad de las lenguas)
+	lienzo_sombra.refrescar(false)
 	# (el científico sin mutar no tiene animación de muerte: si cayera así, de lado; la criatura cae con la suya)
 	if sprite.sprite_frames.get_frame_count(sprite.animation) == 1:
 		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
+
+
+# Las lenguas de la criatura, enteras por delante de su dibujo (en su lienzo pixelado, hijo de "Vapor"): salen
+# disparadas de la boca, caen sobre el aviso culebreando y se recogen (lengua.gd)
+func pintar_lenguas(lienzo: Node2D) -> void:
+	for lengua in lenguas:
+		lengua.estela(lienzo, BOCAS[direccion()], Vector2(0, 6), t, DESPUES)
+		lengua.pintar(lienzo, lengua.lanzada(BOCAS[direccion()], Vector2(0, 6), t, DESPUES), 0, Tentaculo.PUNTOS)
+
+
+# Su sombra en el suelo, por debajo de él (en su lienzo pixelado, detrás de su dibujo; lengua.gd)
+func pintar_sombra_lenguas(lienzo: Node2D) -> void:
+	for lengua in lenguas:
+		lengua.sombra(lienzo, lengua.lanzada(BOCAS[direccion()], Vector2(0, 6), t, DESPUES), Vector2(0, 6))
 
 
 # Sobre la cúpula (que son los sprites): las grietas, según lo que le han dado, y las ondas de las balas que rebotan
@@ -881,10 +910,6 @@ func _draw() -> void:
 			# una X (o una estrella, si se paran en una pared o un mueble)
 			for i in LENGUAS:
 				lenguas[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LENGUAS), tiempo, i)
-		"lenguas":
-			# su sombra en el suelo, por debajo de él (lengua.gd)
-			for lengua in lenguas:
-				lengua.sombra(self, lengua.lanzada(BOCAS[direccion()], Vector2(0, 6), t, DESPUES), Vector2(0, 6))
 		"aviso_punetazo":
 			# el círculo de la onda, que se llena de él hacia fuera (aviso.gd)
 			Aviso.golpe(self, Vector2(0, 6), 0.0, PI, RADIO_ONDA, minf(1.0, t / AVISO_PUNETAZO), tiempo, 0.7)
@@ -918,13 +943,6 @@ func pintar_encima(lienzo: Node2D) -> void:
 				var hasta: Vector2 = p - global_position + Vector2(0, -40)
 				lienzo.draw_line(punta, hasta, Color(VERDE, brillo * 0.5), 9.0)
 				lienzo.draw_line(punta, hasta, Color(Color.WHITE, brillo), 3.0)
-		"lenguas":
-			# salen disparadas de la boca, caen sobre el aviso culebreando y se recogen (lengua.gd), enteras por
-			# delante de su dibujo
-			for lengua in lenguas:
-				lengua.estela(lienzo, BOCAS[direccion()], Vector2(0, 6), t, DESPUES)
-				var puntos := lengua.lanzada(BOCAS[direccion()], Vector2(0, 6), t, DESPUES)
-				lengua.pintar(lienzo, puntos, 0, Tentaculo.PUNTOS)
 		"escupir":
 			# el fogonazo en la boca
 			if t < 0.25:

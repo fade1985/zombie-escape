@@ -3394,8 +3394,10 @@ func probar_latigazos() -> void:
 # lado. En la terminal, la animación y hasta dónde llega cada lengua (y si choca)
 # --lenguas-bocas: el Glotón de cerca dando el latigazo en las 8 direcciones, para ver que las lenguas salen de su
 # boca (BOCAS, una por fotograma del golpe) y que se ven a la medida de sus píxeles (lienzo_pixelado.gd). Dos fotos
-# por dirección: saliendo (captura-bocas-<dir>-sale.png) y ya tendidas, con la cabeza en otro fotograma (-tendidas)
+# por dirección: saliendo (captura-bocas-<dir>-sale.png) y ya tendidas, con la cabeza en otro fotograma (-tendidas).
+# Con --de-criatura, lo mismo con la criatura del científico (captura-bocas-criatura-<dir>-...)
 func probar_lenguas_bocas() -> void:
+	var criatura := "--de-criatura" in OS.get_cmdline_user_args()
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
@@ -3416,8 +3418,15 @@ func probar_lenguas_bocas() -> void:
 	camara.limit_right = 100000
 	camara.limit_bottom = 100000
 	var centro: Vector2 = sala.diana.global_position + Vector2(200, 40)
-	var gloton: Node2D = meter_zombi("gloton", centro)
+	var gloton: Node2D = meter_zombi("cientifico_jefe" if criatura else "gloton", centro)
 	await get_tree().create_timer(0.2).timeout
+	if criatura:
+		gloton.mutar()
+		await get_tree().create_timer(1.6).timeout
+		camara.zoom = Vector2(1.5, 1.5)
+	var aviso := "aviso_lenguas" if criatura else "aviso_latigazo"
+	var golpe := "lenguas" if criatura else "latigazo"
+	var nombre := "criatura-" if criatura else ""
 	for i in 8:
 		var angulo := i * PI / 4.0
 		var dir: String = gloton.DIRS[i]
@@ -3425,19 +3434,25 @@ func probar_lenguas_bocas() -> void:
 		gloton.velocity = Vector2.ZERO
 		gloton.marcha = Vector2.ZERO
 		johnny.global_position = centro + Vector2.from_angle(angulo) * 260.0
-		gloton.espera_latigazo = 99.0
-		gloton.espera_aspirar = 99.0
 		gloton.mirada = Vector2.from_angle(angulo)
-		gloton.cambiar("aviso_latigazo", {"angulo": angulo})
-		Temblor.desplazamiento = centro - johnny.global_position + Vector2.from_angle(angulo) * 40.0 + Vector2(0, -40)
+		if criatura:
+			for k in gloton.espera_criatura:
+				gloton.espera_criatura[k] = 99.0
+			gloton.empezar(aviso, angulo)
+		else:
+			gloton.espera_latigazo = 99.0
+			gloton.espera_aspirar = 99.0
+			gloton.cambiar(aviso, {"angulo": angulo})
+		Temblor.desplazamiento = centro - johnny.global_position + Vector2.from_angle(angulo) * 40.0 + Vector2(0,
+			-110 if criatura else -40)
 		camara.reset_smoothing()
 		for momento in [["sale", 0.035], ["tendidas", 0.25]]:
-			while not (gloton.estado == "latigazo" and gloton.t >= momento[1]):
+			while not (gloton.estado == golpe and gloton.t >= momento[1]):
 				await get_tree().physics_frame
 			await RenderingServer.frame_post_draw
-			Captura.foto("captura-bocas-%s-%s.png" % [dir, momento[0]])
-			print("Bocas del Glotón: %s %s, fotograma %d, sale de %s" % [dir, momento[0], gloton.sprite.frame, gloton.boca()])
-		while gloton.estado == "latigazo":
+			Captura.foto("captura-bocas-%s%s-%s.png" % [nombre, dir, momento[0]])
+			print("Bocas: %s%s %s, fotograma %d" % [nombre, dir, momento[0], gloton.sprite.frame])
+		while gloton.estado == golpe:
 			await get_tree().physics_frame
 	Temblor.desplazamiento = Vector2.ZERO
 	get_tree().quit()
@@ -3514,7 +3529,7 @@ func probar_lenguas() -> void:
 			for k in jefe.espera_criatura:
 				jefe.espera_criatura[k] = 99.0
 			jefe.empezar(aviso, angulo)
-		while not (jefe.estado == aviso and jefe.t >= 0.55):
+		while not (jefe.estado == aviso and jefe.t >= 0.42):   # (el aviso de la criatura dura 0,5 desde M69)
 			await get_tree().physics_frame
 		await RenderingServer.frame_post_draw
 		Captura.foto("captura-lenguas-%s-aviso-%s.png" % [caso[0], caso[1]])

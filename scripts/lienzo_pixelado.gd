@@ -2,7 +2,7 @@
 # pintado no se vea con más detalle que el dibujo de al lado. Se pinta en un visor (SubViewport) a la mitad de
 # tamaño y se enseña agrandado al doble, sin suavizar: cada píxel del visor es un píxel del dibujo, y caen justo en
 # la cuadrícula de quien lo usa (la de su dibujo, si sus bordes caen en unidades pares, como los de escala 2).
-# Lo usan las lenguas del latigazo del Glotón y su sombra (21 nov: pintadas a 1 × 1 se veían más finas que él).
+# Lo usan las lenguas del latigazo del Glotón y las de la criatura del científico, y su sombra (21 nov: pintadas a 1 × 1 se veían más finas que él).
 # Quien lo usa le pasa con qué pintar ("al_pintar", que recibe el lienzo donde pintar, en unidades, con el centro en
 # el del nodo) y lo refresca en cada fotograma mientras haga falta (refrescar).
 class_name LienzoPixelado

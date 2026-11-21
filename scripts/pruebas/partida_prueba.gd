@@ -88,7 +88,8 @@
 #   --lenguas           las lenguas del Glotón (también enfadado) y de la criatura del científico, en la sala de
 #                       pruebas: avisando y dando el golpe en varias direcciones y junto a una pared [prueba_varias.gd]
 #   --lenguas-bocas     el Glotón de cerca dando el latigazo en las 8 direcciones: que las lenguas salgan de su
-#                       boca (una por fotograma del golpe) y se vean a la medida de sus píxeles [prueba_varias.gd]
+#                       boca (una por fotograma del golpe) y se vean a la medida de sus píxeles; con --de-criatura,
+#                       las de la criatura del científico                                  [prueba_varias.gd]
 #   --disparos          las barras de aviso de los disparos de los jefes (contratos, alfileres, cuchillos y bolas de
 #                       fuego) en la sala de pruebas: junto a la pared (que las corta) y en campo abierto [prueba_varias.gd]
 #   --golpes-pared      ¿los golpes de los jefes (cuerpo a cuerpo, saltos, círculo y onda) atraviesan las paredes?
