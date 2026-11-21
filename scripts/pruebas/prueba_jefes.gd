@@ -1994,6 +1994,7 @@ func probar_muro() -> void:
 		jefe.cambiar("carga", {"desde": jefe.global_position})
 		await get_tree().create_timer(0.15, false).timeout
 		print("Muro: cargando, animación «%s» (esperado: correr_..., salvo hacia el noreste)" % jefe.sprite.animation)
+		Captura.foto("captura-muro-carga.png")
 		await get_tree().create_timer(0.8, false).timeout
 		print("Muro: choque nada más empezar la carga: estado %s, grietas %d (esperado: andar o recuperar, 0)" % [jefe.estado, jefe.grietas])
 	# tres cargas contra una taquilla, desde más lejos que media carga: una taquilla y un lado (arriba, abajo, izquierda o

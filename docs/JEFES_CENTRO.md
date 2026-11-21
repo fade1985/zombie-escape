@@ -106,6 +106,8 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
 - Animaciones nuevas de PixelLab (21 nov): correr con el escudo delante (la carga) y el empujón con el escudo (al
   disparar las pelotas). Hacia el noreste las dos salieron mal y allí se usa lo de antes (`descartes/`). La de lanzar
   el bote (plantilla "throw-object") perdía el escudo: descartada, el gas sigue con el principio del porrazo.
+  La carga, además, con zancadas más rápidas, sombras azuladas que deja detrás, polvo y un temblor en cada zancada
+  (`estela_carga`): con la animación sola parecía que andaba deprisa.
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las

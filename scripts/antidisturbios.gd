@@ -85,6 +85,7 @@ var clonc_t := 0.0                 # para no llenar la pantalla de «¡CLONC!» 
 var aguanta_t := 0.0               # para no repetir mucho «¡EL ESCUDO AGUANTA!»
 var escudo := true
 var grietas := 0
+var estela_t := 0.0                # cuándo dejó la última sombra de la carga (estela_carga)
 
 
 func _ready() -> void:
@@ -488,11 +489,12 @@ func animar() -> void:
 			fijar("carga", dir, avance("carga_" + dir, t / dura))
 		"carga":
 			if dibujada("correr", dir):
-				poner("correr_" + dir)   # corriendo agachado tras el escudo (21 nov)
+				poner("correr_" + dir, 1.9)   # corriendo agachado tras el escudo (21 nov), a zancadas rápidas
 			else:
-				# (hacia el noreste no salió bien: su animación de andar, muy deprisa, con zancadas, un pequeño bote)
+				# (hacia el noreste no salió bien: su animación de andar, muy deprisa)
 				poner("andar_" + dir, 3.0)
-				sprite.position.y = PIE - absf(sin(tiempo * 16.0)) * 3.0
+			sprite.position.y = PIE - absf(sin(tiempo * 16.0)) * 3.0   # (los botes de las zancadas)
+			estela_carga()
 		"atontado":
 			fijar("golpe", dir, avance("golpe_" + dir, t / 0.5))
 			sprite.position.x = sin(tiempo * 9.0) * 2.0
@@ -506,6 +508,33 @@ func animar() -> void:
 				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD[fase - 1], 0.4, 1.5))
 			else:
 				poner("reposo_" + dir)
+
+
+# Lo que hace que la carga se vea como una embestida y no como andar deprisa (21 nov, lo pidió el dueño): cada poco
+# deja detrás una sombra de sí mismo que se apaga (el dibujo de ese momento, azulado), levanta polvo con los pies y
+# cada zancada hace temblar un poco la pantalla
+func estela_carga() -> void:
+	if tiempo - estela_t < 0.06:
+		return
+	estela_t = tiempo
+	var sombra := Sprite2D.new()
+	sombra.texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	sombra.centered = sprite.centered
+	sombra.offset = sprite.offset
+	sombra.flip_h = sprite.flip_h
+	sombra.scale = sprite.scale * scale
+	sombra.global_position = sprite.global_position
+	sombra.modulate = Color(0.55, 0.7, 1.0, 0.45)
+	sombra.z_index = z_index - 1
+	get_parent().add_child(sombra)
+	var apagar := sombra.create_tween()
+	apagar.tween_property(sombra, "modulate:a", 0.0, 0.25)
+	apagar.tween_callback(sombra.queue_free)
+	for i in 2:
+		Particulas.soltar(get_parent(), global_position + Vector2(randf_range(-20, 20), PIE - 4.0),
+			-mirada * randf_range(40, 90) + Vector2(randf_range(-30, 30), -randf_range(10, 40)), Color("#9a9184"), 4, 0.4)
+	if int(tiempo * 6.0) != int((tiempo - 0.06) * 6.0):
+		Temblor.temblar(2.0)
 
 
 # Si esa animación está dibujada hacia ahí (la hoja rellena las que faltan con la vista quieta, un solo fotograma)
