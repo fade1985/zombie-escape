@@ -60,6 +60,11 @@ func _physics_process(delta: float) -> void:
 		if camaras.romper_en(global_position):
 			chocar(true)
 			return
+	# ¿Ha dado a una pelota de goma del antidisturbios (pelota_goma.gd)? La rompe
+	for pelota in get_tree().get_nodes_in_group("pelotas_goma"):
+		if pelota.romper_en(global_position):
+			chocar(true)
+			return
 
 	# ¿Ha dado a algún zombi?
 	for zombi in get_tree().get_nodes_in_group("zombis"):

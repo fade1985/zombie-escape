@@ -5,7 +5,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 
 | Jefe | Estado |
 |---|---|
-| Antidisturbios | en diseño |
+| Antidisturbios | hecho (21 nov), falta el visto bueno del dueño |
 | Cocinero | pendiente |
 | Modista | pendiente |
 | Mascota | pendiente |
@@ -68,15 +68,26 @@ Lo que hay (aviso rojo, embestida, llamar zombis) se queda, pero como secundario
 ### Transición
 El escudo revienta en pedazos, se tambalea, tira el escudo roto y saca la porra eléctrica (con su grito).
 
-### Fase 2: sin escudo (por decidir con el dueño)
+### Fase 2: sin escudo
 Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agresivo.
 - **Se quedan** el gas (más botes, nubes más grandes) y la carga (más rápida; al chocar se atonta menos rato,
   ya no hay escudo que romper).
-- **Se van** las pelotas de goma (explotaron con el escudo) y el silbato (ya no llama a nadie: es él solo).
+- **Se van** las pelotas de goma (explotaron con el escudo), el silbato (ya no llama a nadie: es él solo) y el porrazo
+  suelto (el golpe de cerca es solo el combo).
 - **Nuevo, barrido eléctrico**: golpea el suelo y sale una franja de chispas que cruza la sala de lado a lado;
   2-3 seguidas, cada una con el hueco en otro sitio (o se atraviesan esquivando).
 - **Nuevo, combo de porrazos**: 3 golpes encadenados avanzando; el último se le queda clavado en el suelo y es la
   ventana para pegarle.
+
+### Cómo quedó (21 nov)
+- `antidisturbios.gd`, `pelota_goma.gd`, `barrido_electrico.gd`; el gas es un proyectil y un charco nuevos ("gas").
+- En vez de enfadarse a media vida, con el escudo entero **no baja de la mitad** («¡EL ESCUDO AGUANTA!»): romperlo
+  es obligatorio. La fase 2 empieza al reventar el escudo.
+- Las taquillas: 6-9 sueltas por la oficina. Solo ellas agrietan el escudo; las paredes atontan como siempre. Donde
+  no hay taquillas (la sala de pruebas), vale cualquier choque.
+- Las pelotas se rompen de un disparo (no a golpes, de momento); como mucho 9 a la vez.
+- Con la porra clavada (1,8 s) le entra un 50 % más.
+- Prueba: `--captura --edificio centro --jefe antidisturbios --muro`.
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las

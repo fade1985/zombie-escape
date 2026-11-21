@@ -172,6 +172,7 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 	y0 += isla.get("arriba", 0.0)   # (el plató del presentador: el escenario, libre)
 	var y1 := (f1 + 1) * CASILLA - MARGEN_ISLA
 	var puestas := []
+	var pasillo: float = isla.get("pasillo", PASILLO_ISLA)   # (la Oficina de seguridad: taquillas sueltas, muy separadas)
 	var y := y0 + rng.randf() * 32.0
 	while true:
 		# los tipos de cada fila, al azar, y cuánto mide
@@ -187,8 +188,8 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 		for t in tipos:
 			largo += Catalogo.MUEBLES[t].len + isla.entre
 		# cuántos tramos caben a lo ancho (con su pasillo entre uno y otro), centrados
-		var tramos := floori((x1 - x0 + PASILLO_ISLA) / (largo + PASILLO_ISLA))
-		var x := (x0 + x1) / 2.0 - (tramos * largo + (tramos - 1) * PASILLO_ISLA) / 2.0
+		var tramos := floori((x1 - x0 + pasillo) / (largo + pasillo))
+		var x := (x0 + x1) / 2.0 - (tramos * largo + (tramos - 1) * pasillo) / 2.0
 		for k in tramos:
 			for t in tipos:
 				var l: float = Catalogo.MUEBLES[t].len
@@ -199,7 +200,7 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 						and not (puestos + puestas).any(func(p): return hueco(p).grow(10).intersects(r)) and paso.cabe(r):
 					puestas.append(m)
 				x += l + isla.entre
-			x += PASILLO_ISLA - isla.entre
+			x += pasillo - isla.entre
 		y += isla.cada
 	return puestas
 

@@ -1944,3 +1944,89 @@ func probar_sujeto() -> void:
 		t0 += 0.2
 	print("Caen las dos: el jefe muerto %s, vida %d, puerta del helipuerto abierta %s (esperado: true, 0, true)" % [
 		planta.jefa_muerta, suj.vida, lab.salida_abierta])
+
+
+# Con "--captura --edificio centro --jefe antidisturbios --muro": el antidisturbios rehecho (21 nov, docs/JEFES_CENTRO.md),
+# en su Oficina de seguridad, con Johnny sin que le hagan daño. Cada línea dice lo esperado. Fotos (captura-muro-*.png):
+#   sala (las taquillas), pelotas (3 tandas rebotando), gas (la nube), grieta (tras el 1er choque contra una taquilla),
+#   roto (el escudo reventado: ya sin pelotas), barrido (las olas de chispas), combo (el aviso del 1er porrazo),
+#   clavado (la porra en el suelo)
+func probar_muro() -> void:
+	if not await ir_a_la_sala_del_jefe("antidisturbios"):
+		return
+	johnny.invulnerable = 99999.0
+	johnny.set_physics_process(false)
+	var jefe: Node2D = jefa
+	var taquillas := get_tree().get_nodes_in_group("muebles").filter(func(m): return m.datos.get("tipo", "") == "lockers")
+	print("Muro: taquillas en la sala %d (esperado: unas cuantas, 4 o más)" % taquillas.size())
+	var centro: Vector2 = mapa.sitio.apt.salas[0].centro
+	johnny.global_position = centro + Vector2(0, 120)
+	jefe.global_position = centro + Vector2(0, -60)
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-muro-sala.png")
+	# con escudo, de un golpe enorme por la espalda no baja de la mitad
+	jefe.mirada = Vector2.DOWN
+	jefe.recibir_golpe(99999, Vector2.DOWN * 10.0)
+	print("Muro: tras un golpe enorme por la espalda, vida %d de %d (esperado: la mitad) · escudo %s (esperado: true)" % [
+		jefe.vida, jefe.vida_max, jefe.escudo])
+	# las pelotas: tres tandas
+	for i in 3:
+		jefe.mirada = jefe.global_position.direction_to(johnny.global_position).rotated(i * 0.9 - 0.9)
+		jefe.cambiar("aviso_pelotas")
+		await get_tree().create_timer(0.9, false).timeout
+	print("Muro: pelotas rebotando %d (esperado: 9)" % jefe.pelotas().size())
+	await get_tree().create_timer(0.6, false).timeout
+	Captura.foto("captura-muro-pelotas.png")
+	# el gas
+	jefe.cambiar("aviso_gas")
+	await get_tree().create_timer(1.8, false).timeout
+	var gas := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "gas")
+	print("Muro: nubes de gas %d (esperado: 1)" % gas.size())
+	Captura.foto("captura-muro-gas.png")
+	# tres cargas contra una taquilla (la más cercana)
+	var taquilla: Node2D = null
+	for m in taquillas:
+		if taquilla == null or m.global_position.distance_to(centro) < taquilla.global_position.distance_to(centro):
+			taquilla = m
+	for i in 3:
+		if taquilla == null:
+			break
+		jefe.global_position = taquilla.global_position + Vector2(0, 170)
+		jefe.mirada = Vector2.UP
+		jefe.cambiar("carga")
+		await get_tree().create_timer(0.8, false).timeout
+		print("Muro: carga %d contra la taquilla: estado %s, grietas %d, escudo %s" % [i + 1, jefe.estado, jefe.grietas, jefe.escudo])
+		if i == 0:
+			johnny.global_position = jefe.global_position + Vector2(90, 40)
+			await get_tree().create_timer(0.1, false).timeout
+			Captura.foto("captura-muro-grieta.png")
+	print("Muro: escudo roto %s, fase %d, pelotas %d (esperado: true, 2, 0)" % [not jefe.escudo, jefe.fase, jefe.pelotas().size()])
+	Captura.foto("captura-muro-roto.png")
+	await get_tree().create_timer(1.6, false).timeout
+	# el barrido eléctrico
+	jefe.global_position = centro + Vector2(-200, 0)
+	johnny.global_position = centro + Vector2(200, 0)
+	jefe.cambiar("aviso_barrido")
+	await get_tree().create_timer(1.5, false).timeout
+	var barridos := 0
+	for n in jefe.get_parent().get_children():
+		if n is BarridoElectrico:
+			barridos += 1
+	print("Muro: barridos en marcha %d (esperado: 1)" % barridos)
+	Captura.foto("captura-muro-barrido.png")
+	await get_tree().create_timer(3.0, false).timeout
+	# el combo de porrazos y la porra clavada
+	jefe.global_position = johnny.global_position + Vector2(-110, 0)
+	jefe.mirada = Vector2.RIGHT
+	jefe.cambiar("aviso_combo", {"golpe": 0})
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-muro-combo.png")
+	var hasta := 0.0
+	while jefe.estado != "clavado" and hasta < 3.0:
+		await get_tree().physics_frame
+		hasta += 1.0 / 60.0
+	print("Muro: tras el combo, %s (esperado: clavado)" % jefe.estado)
+	var antes: int = jefe.vida
+	jefe.recibir_golpe(10, Vector2.RIGHT * 10.0)
+	print("Muro: un golpe de 10 con la porra clavada le quita %d (esperado: 15)" % (antes - jefe.vida))
+	Captura.foto("captura-muro-clavado.png")

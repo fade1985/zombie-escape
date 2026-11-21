@@ -1075,7 +1075,7 @@ func probar_franja() -> void:
 			jefe.queue_redraw()
 			await RenderingServer.frame_post_draw
 		print("Franja (%s): contra la pared, largo %d (esperado: menos de %d)" % [par[0], jefe.get_node("Aviso").largo,
-			jefe.VELOCIDAD_CARGA * jefe.TIEMPO_CARGA if "VELOCIDAD_CARGA" in jefe else jefe.VELOCIDAD_EMBESTIDA * jefe.TIEMPO_EMBESTIDA])
+			jefe.VELOCIDAD_CARGA[0] * jefe.TIEMPO_CARGA if "VELOCIDAD_CARGA" in jefe else jefe.VELOCIDAD_EMBESTIDA * jefe.TIEMPO_EMBESTIDA])
 		Captura.foto("captura-franja-%s-pared.png" % par[0])
 		print("Franja (%s): aviso %s (esperado: sí)" % [par[0], "sí" if jefe.has_node("Aviso") else "no"])
 		jefe.queue_free()

@@ -48,8 +48,16 @@ msgid "¡ATRÁS!"
 msgstr "НАЗАД!"
 
 #: scripts/antidisturbios.gd
+msgid "¡CRAC!"
+msgstr "ХРУСЬ!"
+
+#: scripts/antidisturbios.gd
 msgid "¡QUEDAS DETENIDO!"
 msgstr "ЛИЦОМ В ПОЛ!"
+
+#: scripts/antidisturbios.gd
+msgid "¡EL ESCUDO AGUANTA!"
+msgstr "ЩИТ ДЕРЖИТ!"
 
 #: scripts/antidisturbios.gd
 msgid "¡CLONC!"

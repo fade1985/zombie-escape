@@ -34,6 +34,8 @@ const TIPOS := {
 	"cafe": {"vuelo": 0.8, "altura": 150.0, "golpe": 6, "charco": "cafe", "marca": 46.0, "liquido": Color("#6b3f22")},
 	# los cubos de agua del Sujeto 1 (sujeto_1.gd): en curva alta, con su marca; dejan un charco de agua que resbala
 	"cubo": {"vuelo": 0.9, "altura": 180.0, "golpe": 8, "charco": "agua_cubo", "marca": 56.0, "liquido": Color("#8fd3ff")},
+	# los botes de gas lacrimógeno del antidisturbios (antidisturbios.gd): en curva, con su marca; dejan la nube de gas
+	"gas": {"vuelo": 0.85, "altura": 150.0, "golpe": 0, "charco": "gas", "marca": 70.0},
 }
 
 var tipo := "veneno"
@@ -206,10 +208,23 @@ func _draw() -> void:
 			vaso(self, donde, t * 9.0)
 		"cubo":
 			cubo(self, donde, t * 8.0)
+		"gas":
+			bote_gas(self, donde, t * 10.0)
 		_:
 			# La garrafa de lejía, dando vueltas
 			draw_set_transform(donde, t * 10.0, Vector2(2, 2))
 			draw_texture(LEJIA, -Vector2(LEJIA.get_size()) / 2.0)
+
+
+# El bote de gas lacrimógeno del antidisturbios: un cilindro gris con su franja amarilla, echando humo por la punta
+static func bote_gas(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
+	lienzo.draw_set_transform(donde, giro)
+	lienzo.draw_rect(Rect2(-10, -6, 20, 12), Color("#1d1b2c"))   # el borde
+	lienzo.draw_rect(Rect2(-8, -4, 16, 8), Color("#7a8088"))     # el metal
+	lienzo.draw_rect(Rect2(-2, -4, 4, 8), Color("#ffd23f"))      # la franja
+	lienzo.draw_rect(Rect2(-8, -4, 16, 2), Color("#a8aeb6"))     # el brillo
+	lienzo.draw_rect(Rect2(10, -2, 4, 4), Color("#ecebc4"))      # el humo que sale
+	lienzo.draw_set_transform(Vector2.ZERO)
 
 
 # La sartén del cocinero, con su aceite dentro

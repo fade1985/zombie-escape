@@ -48,8 +48,16 @@ msgid "¡ATRÁS!"
 msgstr "PRA TRÁS!"
 
 #: scripts/antidisturbios.gd
+msgid "¡CRAC!"
+msgstr "CRAC!"
+
+#: scripts/antidisturbios.gd
 msgid "¡QUEDAS DETENIDO!"
 msgstr "VOCÊ TÁ PRESO!"
+
+#: scripts/antidisturbios.gd
+msgid "¡EL ESCUDO AGUANTA!"
+msgstr "O ESCUDO AGUENTA!"
 
 #: scripts/antidisturbios.gd
 msgid "¡CLONC!"

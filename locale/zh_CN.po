@@ -48,8 +48,16 @@ msgid "¡ATRÁS!"
 msgstr "退后！"
 
 #: scripts/antidisturbios.gd
+msgid "¡CRAC!"
+msgstr "咔嚓！"
+
+#: scripts/antidisturbios.gd
 msgid "¡QUEDAS DETENIDO!"
 msgstr "你被捕了！"
+
+#: scripts/antidisturbios.gd
+msgid "¡EL ESCUDO AGUANTA!"
+msgstr "盾牌还撑得住！"
 
 #: scripts/antidisturbios.gd
 msgid "¡CLONC!"

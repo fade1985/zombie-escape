@@ -1012,6 +1012,14 @@ const SALAS := {
 		},
 		"islas": {"muebles": ["officedesk"], "fila": 2, "entre": 120, "cada": 230, "arriba": 150.0},
 	},
+	# la Oficina de seguridad del antidisturbios (minijefe; planta.gd pone apt.tipo = "antidisturbios"): taquillas
+	# metálicas sueltas, muy separadas (muebles.gd, islas con su "pasillo"). Contra ellas se le agrieta el escudo al
+	# estrellarse cargando (antidisturbios.gd: a la 3ª, revienta); el resto, libre para la pelea
+	"jefe-antidisturbios": {
+		"muebles": [],
+		"cuantos": [0, 0],
+		"islas": {"muebles": ["lockers"], "fila": 1, "entre": 0, "cada": 260, "pasillo": 300},
+	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {
 		"muebles": ["tallmannequin", "clothesrack", "tallmannequin", "checkout"],
