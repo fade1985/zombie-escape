@@ -436,6 +436,11 @@ func continuar_partida(foto: Dictionary) -> void:
 		johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
 	else:
 		await montar(0, puerta_de_llegada(), false)
+	# un fotograma con el juego en marcha, aún en negro: el HUD se coloca solo en su _process (con el juego parado no
+	# corre) y, al ponerse su franja de abajo, la cámara se reencuadra. Si no, salía al acabar la entrada, de golpe.
+	# (dos esperas: la señal llega al empezar el fotograma, antes de los _process; la segunda, con ellos ya hechos)
+	await get_tree().process_frame
+	await get_tree().process_frame
 	johnny.get_node("Camara").reset_smoothing()
 	# La entrada: con el juego parado se va el negro y, un momento después, los zombis empiezan a moverse (antes salía
 	# todo de golpe y ya andando)
