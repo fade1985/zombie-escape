@@ -209,14 +209,15 @@ func elegir_con_escudo(_johnny: Node2D, d: float, desvio: float) -> void:
 		Sonido.tocar("silbato")
 		gritar(Idioma.t("¡PRIIIII!"), Color("#bfe9ff"))
 		return
+	# las pelotas, antes que la carga (21 nov, lo pidió el dueño: si no, la carga se colaba casi siempre)
+	if espera_pelotas <= 0.0 and desvio < 1.2 and pelotas().size() + PELOTAS <= MAX_PELOTAS:
+		espera_pelotas = ESPERA_PELOTAS
+		cambiar("aviso_pelotas")
+		return
 	if d > 170.0 and desvio < 0.7 and espera_carga <= 0.0 and carga_libre(_johnny):
 		espera_carga = 3.5
 		cambiar("aviso_carga")
 		gritar(Idioma.t("¡ATRÁS!"), Color("#ff5d73"))
-		return
-	if espera_pelotas <= 0.0 and desvio < 1.2 and pelotas().size() + PELOTAS <= MAX_PELOTAS:
-		espera_pelotas = ESPERA_PELOTAS
-		cambiar("aviso_pelotas")
 		return
 	if espera_gas <= 0.0 and d > 120.0:
 		espera_gas = ESPERA_GAS[0]
