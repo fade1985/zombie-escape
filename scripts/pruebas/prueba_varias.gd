@@ -4034,7 +4034,10 @@ func probar_continuar() -> void:
 		return {"planta": planta.num, "firma": firma.call(), "vida": johnny.vida, "huecos": johnny.huecos.duplicate(),
 			"calidades": johnny.calidades.duplicate(), "mochila": mochila.duplicate(), "dolares": dolares,
 			"mutaciones": mutaciones.tengo.duplicate(), "molotov": lanzables.cuantas("molotov"),
-			"jefes": orden_jefes.duplicate(), "partidas": Guardado.cargar().partidas}
+			"jefes": orden_jefes.duplicate(), "partidas": Guardado.cargar().partidas,
+			# la sala de mantenimiento y las viviendas de la planta baja (las del ascensor): al continuar se hacen solas
+			"baja": [sala_mantenimiento.surtido, sala_mantenimiento.apt.dueno, sala_mantenimiento.muebles.size(),
+				sala_viviendas.surtido, sala_viviendas.apt.dueno, str(sala_viviendas.muebles)]}
 	await get_tree().create_timer(0.5).timeout
 	if continuar_antes.is_empty():
 		johnny.vida = 40

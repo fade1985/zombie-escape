@@ -3417,6 +3417,10 @@ msgstr "I SWEAR THEY WERE BITING ME!!!"
 msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
 msgstr "THAT SLEEPER DREAM AGAIN!!!"
 
+#: scripts/partida_guardada.gd
+msgid "Cargando…"
+msgstr "Loading…"
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "The power's back!"

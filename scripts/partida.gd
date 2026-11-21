@@ -410,27 +410,49 @@ func empezar_garaje() -> void:
 # Empieza con una partida guardada (partida_guardada.gd): todo como estaba al llegar a su planta, sin volver a contar
 # la partida, y Johnny entra por las escaleras (en la planta baja, en la sala de mantenimiento)
 func continuar_partida(foto: Dictionary) -> void:
+	# viene de la pantalla de carga del menú (partida_guardada.gd): empieza en negro y se aclara cuando todo está puesto
+	negro.modulate.a = 1.0
 	PartidaGuardada.poner(self, foto)
 	ahorrados = Guardado.cargar().dolares
 	mutageno_ahorrado = Guardado.cargar().mutageno
 	var num: int = foto.planta
-	if num > 1:
-		# la sala de mantenimiento y las viviendas son las de la planta baja (nueva_planta(1) las apunta): se sacan de ella
-		var baja := Planta.generar(1, edificio, jefe_de(1))
-		sala_mantenimiento = baja.sitios[baja.mantenimiento]
-		if baja.viviendas >= 0:
-			sala_viviendas = baja.sitios[baja.viviendas]
+	var baja: Array = foto.get("baja", [-1, -1])
+	if num > 1 and baja[0] >= 0:
+		# la sala de mantenimiento y las viviendas de la planta baja (para el ascensor: arreglar_ascensor), hechas solas
+		# con lo sorteado que apunta la foto. Las puertas que no son las suyas las cambia arreglar_ascensor
+		sala_mantenimiento = Planta.mantenimiento(0)
+		sala_mantenimiento.surtido = baja[0]
+		if baja[1] >= 0:
+			sala_viviendas = Viviendas.generar(baja[1], -1, 1)
+	elif num > 1:
+		# (una foto de antes del 21 nov, sin eso: se sacan de la planta baja entera, que se genera otra vez)
+		var entera := Planta.generar(1, edificio, jefe_de(1))
+		sala_mantenimiento = entera.sitios[entera.mantenimiento]
+		if entera.viviendas >= 0:
+			sala_viviendas = entera.sitios[entera.viviendas]
 	nueva_planta(num)
 	if num == 1:
-		montar(planta.mantenimiento, 0, false)
+		await montar(planta.mantenimiento, 0, false)
 		johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
 	else:
-		montar(0, puerta_de_llegada(), false)
+		await montar(0, puerta_de_llegada(), false)
 	johnny.get_node("Camara").reset_smoothing()
+	# La entrada: con el juego parado se va el negro y, un momento después, los zombis empiezan a moverse (antes salía
+	# todo de golpe y ya andando)
+	get_tree().paused = true
+	var aclarar := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	aclarar.tween_property(negro, "modulate:a", 0.0, 0.6)
+	if captura:   # (la prueba --continuar: una foto a media entrada)
+		await get_tree().create_timer(0.3, true).timeout
+		Captura.foto("captura-continuar-entrada.png")
+	await aclarar.finished
+	await get_tree().create_timer(0.4, true).timeout
+	get_tree().paused = false
+	johnny.sin_mandos = 0.2
 	if captura:
 		empezar_prueba()
-	else:
-		decir("%s · %s" % [Idioma.t("Partida recuperada"), Planta.nombre_de(planta)], 3.0)
+		return
+	decir("%s · %s" % [Idioma.t("Partida recuperada"), Planta.nombre_de(planta)], 3.0)
 
 
 func _exit_tree() -> void:

@@ -529,7 +529,8 @@
 #                       se levanta y dice su frase                                            [prueba_varias.gd]
 #   --morir             Johnny se muere y se cae de espaldas, antes del cartel de derrota       [prueba_varias.gd]
 #   --continuar         la partida a medias: se guarda al subir a la 1ª planta, el menú enseña «Continuar partida» y,
-#                       al continuarla, la planta y lo que se llevaba son iguales             [prueba_varias.gd]
+#                       al continuarla, la planta y lo que se llevaba son iguales (y la sala de mantenimiento y las
+#                       viviendas de la baja); fotos de la pantalla de carga y de la entrada  [prueba_varias.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --dependienta       la dependienta (del alto de Johnny desde el 19 nov) al lado de Johnny y de otros zombis, y seis andando
 #                       hacia Johnny desde seis lados (fotos para un GIF) [prueba_varias.gd]

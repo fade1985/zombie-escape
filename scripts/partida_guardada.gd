@@ -29,11 +29,49 @@ static func guardada(s := {}) -> Dictionary:
 
 # El menú, al pulsar «Continuar partida»: pone el edificio y la alerta de la foto y abre la partida
 static func seguir(foto: Dictionary) -> void:
+	if cargando:
+		return   # (otra pulsación mientras sale la pantalla de carga)
+	cargando = true
 	continuar = foto
 	Edificios.elegido = foto.edificio
 	Alerta.nivel = foto.alerta
 	Garaje.quitar()   # (el garaje del reto del día no se apunta a medias: siempre es una partida normal)
+	await pantalla_de_carga()
+	cargando = false
 	Captura.ir_a_la_partida()
+
+
+static var cargando := false   # mientras sale la pantalla de carga (no se sigue dos veces)
+
+
+# Encima del menú, la pantalla se va a negro con «Cargando…»: generar la planta tarda un poco y, sin esto, el menú se
+# quedaba quieto con el botón pulsado y parecía que el juego se había colgado. La partida empieza también en negro
+# (partida.gd, continuar_partida) y se aclara al estar lista
+static func pantalla_de_carga() -> void:
+	var arbol := Engine.get_main_loop() as SceneTree
+	var capa := CanvasLayer.new()
+	capa.layer = 100
+	var fondo := ColorRect.new()
+	fondo.color = Color.BLACK
+	fondo.theme = Tema.crear()
+	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)   # (y tapa el ratón: ya no se pulsa nada del menú)
+	fondo.modulate.a = 0.0
+	var texto := Label.new()
+	texto.text = Idioma.t("Cargando…")
+	texto.add_theme_font_size_override("font_size", 32)   # (la letra pixel art, nítida a 16 o a 32)
+	texto.set_anchors_preset(Control.PRESET_FULL_RECT)
+	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	fondo.add_child(texto)
+	capa.add_child(fondo)
+	arbol.current_scene.add_child(capa)
+	await fondo.create_tween().tween_property(fondo, "modulate:a", 1.0, 0.2).finished
+	if Captura.activa():   # (la prueba --continuar)
+		await arbol.process_frame
+		Captura.foto("captura-cargando.png")
+	# dos fotogramas, para que el negro y el texto lleguen a la pantalla antes del parón de cargar
+	await arbol.process_frame
+	await arbol.process_frame
 
 
 static func borrar() -> void:
@@ -59,6 +97,9 @@ static func apuntar(p: Node, num: int) -> void:
 		"version": VERSION,
 		"edificio": p.edificio, "alerta": Alerta.nivel,
 		"semilla": Planta.semilla, "planta": num,
+		# lo sorteado de la sala de mantenimiento y de las viviendas de la planta baja: al continuar más arriba se hacen
+		# solo ellas con esto, sin generar otra vez la planta baja entera (tardaba casi medio segundo: partida.gd)
+		"baja": [int(p.sala_mantenimiento.get("surtido", -1)), int(p.sala_viviendas.get("surtido", -1))],
 		"orden_jefes": p.orden_jefes, "joyeria": Planta.joyeria_planta,
 		"rescate": rescate, "equipo": equipo,
 		"mutaciones": p.mutaciones.tengo, "eventos": p.eventos.usados,

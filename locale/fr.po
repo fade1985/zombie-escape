@@ -3417,6 +3417,10 @@ msgstr "JE JURERAIS QU'ON ME MORDAIT !!!"
 msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
 msgstr "ENCORE CE RÊVE DE DORMEURS !!!"
 
+#: scripts/partida_guardada.gd
+msgid "Cargando…"
+msgstr "Chargement…"
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "Le courant est revenu !"

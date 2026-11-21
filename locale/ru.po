@@ -3425,6 +3425,10 @@ msgstr "КЛЯНУСЬ, МЕНЯ КУСАЛИ!!!"
 msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
 msgstr "ОПЯТЬ ЭТОТ СОН ПРО СПЯЩИХ!!!"
 
+#: scripts/partida_guardada.gd
+msgid "Cargando…"
+msgstr "Загрузка…"
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "Ток снова есть!"

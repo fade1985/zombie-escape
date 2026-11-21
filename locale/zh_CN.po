@@ -3409,6 +3409,10 @@ msgstr "我发誓刚才有东西在咬我！！！"
 msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
 msgstr "又是那个沉睡者的梦！！！"
 
+#: scripts/partida_guardada.gd
+msgid "Cargando…"
+msgstr "加载中…"
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "来电了！"

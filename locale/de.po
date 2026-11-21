@@ -3417,6 +3417,10 @@ msgstr "ICH SCHWÖRE, DIE HABEN MICH GEBISSEN!!!"
 msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
 msgstr "SCHON WIEDER DIESER SCHLÄFERTRAUM!!!"
 
+#: scripts/partida_guardada.gd
+msgid "Cargando…"
+msgstr "Wird geladen…"
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "Der Strom ist wieder da!"

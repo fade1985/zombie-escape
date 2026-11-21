@@ -3417,6 +3417,10 @@ msgstr "JURO QUE ESTAVAM ME MORDENDO!!!"
 msgid "¡¡¡OTRA VEZ ESE SUEÑO DE DURMIENTES!!!"
 msgstr "DE NOVO ESSE SONHO DE ADORMECIDOS!!!"
 
+#: scripts/partida_guardada.gd
+msgid "Cargando…"
+msgstr "Carregando…"
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "A energia voltou!"
