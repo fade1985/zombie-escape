@@ -91,6 +91,15 @@ var estela_t := 0.0                # cuándo dejó la última sombra de la carga
 func _ready() -> void:
 	super()
 	enfado = -1.0   # (no se enfada a media vida: «se enfada» al romperle el escudo, romper_escudo)
+	# la pista para el jugador (21 nov): Johnny lo dice al entrar (si está la presentación, al acabar). Las grietas que
+	# lleva el escudo se ven también junto a su barra de vida (ui/barra_jefe.gd)
+	pista.call_deferred()
+
+
+func pista() -> void:
+	var partida := get_tree().current_scene
+	if partida and partida.has_method("decir"):
+		partida.decir(Idioma.t("Ese escudo lo aguanta todo... A ver si consigo que se lo estampe contra las taquillas"), 4.0)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:

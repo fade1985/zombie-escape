@@ -1959,6 +1959,7 @@ func probar_muro() -> void:
 	var jefe: Node2D = jefa
 	var taquillas := get_tree().get_nodes_in_group("muebles").filter(func(m): return m.datos.get("tipo", "") == "lockers")
 	print("Muro: taquillas en la sala %d (esperado: unas cuantas, 4 o más)" % taquillas.size())
+	print("Muro: Johnny dice «%s» (esperado: la pista de estampar el escudo contra las taquillas)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
 	var centro: Vector2 = mapa.sitio.apt.salas[0].centro
 	johnny.global_position = centro + Vector2(0, 120)
 	jefe.global_position = centro + Vector2(0, -60)

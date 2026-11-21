@@ -40,6 +40,10 @@ msgid "Quédate a su lado para levantarlo"
 msgstr "待在旁边把人扶起来"
 
 #: scripts/antidisturbios.gd
+msgid "Ese escudo lo aguanta todo... A ver si consigo que se lo estampe contra las taquillas"
+msgstr "那面盾牌什么都挡得住……看看能不能让他把盾撞到储物柜上"
+
+#: scripts/antidisturbios.gd
 msgid "¡PRIIIII!"
 msgstr "嘘——！"
 

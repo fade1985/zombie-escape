@@ -108,6 +108,9 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
   el bote (plantilla "throw-object") perdía el escudo: descartada, el gas sigue con el principio del porrazo.
   La carga, además, con zancadas más rápidas, sombras azuladas que deja detrás, polvo y un temblor en cada zancada
   (`estela_carga`): con la animación sola parecía que andaba deprisa.
+- Pistas para saber que hay que romper el escudo (21 nov): Johnny lo dice al entrar («Ese escudo lo aguanta todo...
+  A ver si consigo que se lo estampe contra las taquillas») y junto a la barra de vida hay tres escuditos que se
+  agrietan con cada choque (`barra_jefe.gd`, `pintar_escudo`).
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las

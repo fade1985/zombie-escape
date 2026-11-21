@@ -40,6 +40,10 @@ msgid "Quédate a su lado para levantarlo"
 msgstr "Stay close to help them up"
 
 #: scripts/antidisturbios.gd
+msgid "Ese escudo lo aguanta todo... A ver si consigo que se lo estampe contra las taquillas"
+msgstr "That shield takes everything... Let's see if I can make him slam it into the lockers"
+
+#: scripts/antidisturbios.gd
 msgid "¡PRIIIII!"
 msgstr "FWEEEET!"
 

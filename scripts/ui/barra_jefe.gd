@@ -111,6 +111,7 @@ func _draw() -> void:
 		draw_texture_rect_region(MARCO, Rect2(x, 0, trozo, ALTO), Rect2(PUNTA, 0, trozo, ALTO))
 		x += trozo
 	draw_texture_rect_region(MARCO, Rect2(ANCHO - PUNTA, 0, PUNTA, ALTO), Rect2(MARCO.get_width() - PUNTA, 0, PUNTA, ALTO))
+	pintar_escudo()
 	# La vida en números
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(value), roundi(max_value)]
@@ -118,6 +119,51 @@ func _draw() -> void:
 	var donde := Vector2(roundf((ANCHO - ancho) / 2.0), ALTO / 2.0 + 5)
 	draw_string_outline(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)
 	draw_string(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#f0e8d4"))
+
+
+# Los jefes con escudo que se agrieta (el antidisturbios: "escudo", "grietas" y GRIETAS): a la derecha de la barra,
+# un escudito de pixel art por cada choque que aguanta, que se rompe (agrietado y apagado) con cada uno. Así se ve
+# que hay que estamparlo y cuántas veces faltan. Roto el escudo, desaparecen
+func pintar_escudo() -> void:
+	if not is_instance_valid(jefe) or jefe.get("grietas") == null or not jefe.get("escudo"):
+		return
+	for i in jefe.GRIETAS:
+		var roto: bool = i < jefe.grietas
+		var esquina := Vector2(ANCHO + 6.0 + i * 20.0, -1.0)
+		for y in ESCUDITO.size():
+			var fila: String = ESCUDITO[y]
+			for x in fila.length():
+				var c := fila[x]
+				if c == ".":
+					continue
+				var col: Color = {"o": Tema.LINEA, "#": Color("#9ec9e8"), "b": Color("#e4f4ff"), "s": Color("#5f86a8")}[c]
+				if roto:
+					col = col.darkened(0.55) if c != "o" else col
+					if GRIETA_ESCUDITO.has(Vector2i(x, y)):
+						col = Tema.LINEA
+				draw_rect(Rect2(esquina + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+
+
+# El escudito (8×14 píxeles del dibujo): o, el borde; #, el plástico; b, su brillo; s, la sombra. Y la grieta que
+# se le pinta al romperse
+const ESCUDITO := [
+	"oooooooo",
+	"o#bb###o",
+	"o#b####o",
+	"o#b####o",
+	"o######o",
+	"o######o",
+	"o######o",
+	"o######o",
+	"o#####so",
+	"o#####so",
+	"o####sso",
+	".o###so.",
+	"..o#so..",
+	"...oo...",
+]
+const GRIETA_ESCUDITO := [Vector2i(4, 1), Vector2i(4, 2), Vector2i(3, 3), Vector2i(3, 4), Vector2i(4, 5),
+	Vector2i(5, 6), Vector2i(5, 7), Vector2i(4, 8), Vector2i(3, 9), Vector2i(2, 6), Vector2i(6, 4)]
 
 
 # La barra fina de la armadura (la del Gymbro, "Armadura": la hace partida.gd), con el mismo estilo que la de vida:
