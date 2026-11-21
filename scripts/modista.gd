@@ -28,6 +28,7 @@ const AVISO_ALFILERES := [0.7, 0.5]
 const FIJA := 0.2                  # la raya deja de seguir a Johnny este rato antes de tirar
 const GIRO_RAYA := 2.5             # lo deprisa que la raya sigue a Johnny (radianes por segundo)
 const ALCANCE_ALFILERES := 700.0   # más lejos que esto no tira
+const ANCHO_AVISO := 10.0         # medio ancho de la franja que avisa de los alfileres (aviso.gd, disparo())
 const AVISO_TIJERETAZO := 0.5
 const ALCANCE_TIJERETAZO := 110.0
 const MEDIO_TIJERETAZO := 0.8      # medio ángulo del trozo que corta
@@ -384,9 +385,9 @@ func _draw() -> void:
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_TIJERETAZO, ALCANCE_TIJERETAZO,
 				minf(1.0, t / AVISO_TIJERETAZO), tiempo)
 		"aviso_alfileres":
-			# una barra fina por donde irán los alfileres, que se llena hacia fuera (aviso.gd)
-			Aviso.barra(self, Vector2(0, 6), datos.angulo, radio, radio + ALCANCE_ALFILERES, 5.0,
-				minf(1.0, t / datos.aviso), tiempo)
+			# por donde irán los alfileres, como las cargas: flechas que se encienden hacia fuera (aviso.gd)
+			Aviso.disparo(self, Vector2(0, 6), datos.angulo, radio + ALCANCE_ALFILERES, ANCHO_AVISO,
+				minf(1.0, t / datos.aviso), tiempo, 0, 5.0)
 
 
 # El brillo de los ojos: antes de cambiarse de sitio (cada vez más fuerte) y al llegar al sitio nuevo (se apaga)

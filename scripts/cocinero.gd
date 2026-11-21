@@ -31,6 +31,7 @@ const ABRE := [0.28, 0.22]         # lo que se separan entre sí, en radianes
 const VELOCIDAD_CUCHILLO := [340.0, 430.0]
 const DANO_CUCHILLO := 12
 const LARGO_RAYAS := 280.0         # lo largas que se ven en el suelo las rayas del aviso del abanico
+const ANCHO_AVISO := 10.0               # medio ancho de la franja que avisa de cada disparo (aviso.gd, disparo())
 const AVISO_LLUVIA := 0.5          # lo que tarda en tirarlos hacia arriba
 const LLUVIA := [5, 7]             # los que caen alrededor de Johnny
 const MARCA_LLUVIA := [0.8, 0.6]   # lo que está cada marca en el suelo antes de caer su cuchillo
@@ -370,12 +371,12 @@ func _draw() -> void:
 		return
 	match estado:
 		"aviso_abanico":
-			# una barra fina por donde irá cada cuchillo, que se llena hacia fuera (aviso.gd)
+			# por donde irá cada cuchillo, como las cargas: flechas que se encienden hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_ABANICO)
 			var n: int = CUCHILLOS[fase - 1]
 			for i in n:
 				var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
-				Aviso.barra(self, Vector2(0, 6), a, radio, radio + LARGO_RAYAS, 3.0, k, tiempo, i)
+				Aviso.disparo(self, Vector2(0, 6), a, radio + LARGO_RAYAS, ANCHO_AVISO, k, tiempo, i)
 		"aviso_cuchillazo":
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_CUCHILLAZO, ALCANCE_CUCHILLAZO,
 				minf(1.0, t / AVISO_CUCHILLAZO), tiempo)

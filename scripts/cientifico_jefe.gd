@@ -927,10 +927,7 @@ func _draw() -> void:
 			var k := minf(1.0, t / AVISO_FUEGO)
 			for i in BOLAS:
 				var a: float = datos.angulo + (i - (BOLAS - 1) / 2.0) * ABRE_BOLAS
-				var aviso := Aviso.pedir(self, 0, Vector2(0, 6), a, k, tiempo, i)
-				aviso.largo = Aviso.alcance(self, Vector2(0, 6), a, radio + 320.0, BolaFuego.RADIO)
-				aviso.choca = aviso.largo < radio + 320.0
-				aviso.medio = ANCHO_AVISO_BOLA
+				Aviso.disparo(self, Vector2(0, 6), a, radio + 320.0, ANCHO_AVISO_BOLA, k, tiempo, i, BolaFuego.RADIO)
 	draw_set_transform(Vector2.ZERO)
 
 

@@ -10,10 +10,9 @@
 #     con dos bordes (el de dentro late cada vez más deprisa: el borrador A, tools/pixelfx/aviso-a.js). Puede llegar
 #     hasta las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas). El de los golpes
 #     cuerpo a cuerpo es golpe(): cortado donde el golpe chocaría con una pared o un mueble (que no atraviesa, tapado()).
-#   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos;
-#     las bolas de fuego de la criatura, más gordas, van con franjas). Se corta donde el disparo se pararía contra una
-#     pared o un mueble (alcance()) y ahí acaba en la
-#     estrella de las cargas.
+#   - disparo(): por donde irá un disparo (contratos, cuchillos, alfileres, bolas de fuego): la franja de las cargas,
+#     cortada donde el disparo se pararía contra una pared o un mueble (alcance()). (barra(), una franja recta fina
+#     que se llenaba hacia fuera, era la de antes: el 21 nov el dueño no la quería y ya no la usa nadie.)
 #   El cono del giro del bombero se llena de lado, hacia donde girará, con flechas dentro (flechas) y, como las marcas de lo que se
 #   lanza (proyectil.gd: molotovs, sartenes, probetas...), un estilo más flojo (sutil).
 # Lo pinta un shader (aviso.gdshader): así no cuesta nada aunque tenga miles de cuadraditos. Cada aviso va en un nodo
@@ -115,6 +114,18 @@ static func barra(jefe: Node2D, desde_: Vector2, angulo_: float, inicio_: float,
 	aviso.inicio = inicio_
 	aviso.largo = alcance(jefe, desde_, angulo_, largo_, medio_)
 	aviso.choca = aviso.largo < largo_ and aviso.largo > inicio_   # (si ya empieza en la pared, no hay nada que marcar)
+	aviso.medio = medio_
+	return aviso
+
+
+# Por donde irá un disparo, como las cargas (21 nov: el dueño no quería la barra fina; empezó con las bolas de fuego de
+# la criatura): flechas que se encienden hacia fuera, de "medio_" de ancho a cada lado, y al final una X, o la estrella
+# si el disparo se para en una pared o un mueble (alcance(), con "ancho_disparo", lo gordo que es lo que se dispara)
+static func disparo(jefe: Node2D, desde_: Vector2, angulo_: float, largo_: float, medio_: float, k: float,
+		tiempo: float, cual := 0, ancho_disparo := 3.0) -> Aviso:
+	var aviso := pedir(jefe, 0, desde_, angulo_, k, tiempo, cual)
+	aviso.largo = alcance(jefe, desde_, angulo_, largo_, ancho_disparo)
+	aviso.choca = aviso.largo < largo_
 	aviso.medio = medio_
 	return aviso
 

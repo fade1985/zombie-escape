@@ -34,6 +34,7 @@ const ABRE := [0.24, 0.2]                # lo que se separan entre sí, en radia
 const VELOCIDAD_CONTRATO := [330.0, 410.0]
 const DANO_CONTRATO := 10
 const LARGO_RAYAS := 300.0               # lo largas que se ven en el suelo las rayas del aviso
+const ANCHO_AVISO := 10.0               # medio ancho de la franja que avisa de cada disparo (aviso.gd, disparo())
 const AVISO_MALETINAZO := 0.5
 const ALCANCE_MALETINAZO := 135.0
 const MEDIO_MALETINAZO := 0.9            # medio ángulo del trozo que barre
@@ -535,12 +536,12 @@ func _draw() -> void:
 		return
 	match estado:
 		"aviso_contratos":
-			# una barra fina por donde irá cada contrato, que se llena hacia fuera (aviso.gd)
+			# por donde irá cada contrato, como las cargas: flechas que se encienden hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_CONTRATOS[fase - 1])
 			var n: int = CONTRATOS[fase - 1]
 			for i in n:
 				var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
-				Aviso.barra(self, Vector2(0, 6), a, radio, radio + LARGO_RAYAS, 3.0, k, tiempo, i)
+				Aviso.disparo(self, Vector2(0, 6), a, radio + LARGO_RAYAS, ANCHO_AVISO, k, tiempo, i)
 		"aviso_maletinazo":
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_MALETINAZO, ALCANCE_MALETINAZO,
 				minf(1.0, t / AVISO_MALETINAZO), tiempo)
