@@ -1973,7 +1973,10 @@ func probar_muro() -> void:
 	for i in 4:
 		jefe.mirada = jefe.global_position.direction_to(johnny.global_position).rotated(i * 0.9 - 0.9)
 		jefe.cambiar("aviso_pelotas")
-		await get_tree().create_timer(0.9, false).timeout
+		await get_tree().create_timer(0.3, false).timeout
+		if i == 0:
+			print("Muro: al preparar las pelotas, animación «%s» (esperado: empujon_..., salvo hacia el noreste)" % jefe.sprite.animation)
+		await get_tree().create_timer(0.6, false).timeout
 	print("Muro: pelotas rebotando %d (esperado: 12 o algo menos: el aliado rompe alguna a tiros)" % jefe.pelotas().size())
 	await get_tree().create_timer(0.6, false).timeout
 	Captura.foto("captura-muro-pelotas.png")
@@ -1989,6 +1992,8 @@ func probar_muro() -> void:
 		jefe.global_position = taquilla.global_position + Vector2(0, 170)
 		jefe.mirada = Vector2.UP
 		jefe.cambiar("carga", {"desde": jefe.global_position})
+		await get_tree().create_timer(0.15, false).timeout
+		print("Muro: cargando, animación «%s» (esperado: correr_..., salvo hacia el noreste)" % jefe.sprite.animation)
 		await get_tree().create_timer(0.8, false).timeout
 		print("Muro: choque nada más empezar la carga: estado %s, grietas %d (esperado: andar o recuperar, 0)" % [jefe.estado, jefe.grietas])
 	# tres cargas contra una taquilla, desde más lejos que media carga: una taquilla y un lado (arriba, abajo, izquierda o
