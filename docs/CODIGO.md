@@ -163,7 +163,7 @@ en una línea.
   moradas que culebrean, bultos y ampollas amarillas como los granos del Glotón (`con_detalles`; cada lengua, los suyos).
   En los fotogramas del golpe del Glotón (5 a 8) se borraron las lenguas de PixelLab, que chocaban con estas
   (`tools/gloton_sin_lengua.py`), y lo que eso dejó (agujeros en la boca, hilos oscuros colgando, trocitos sueltos) se limpió
-  el 21 nov con `tools/gloton_restos.py`. Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
+  el 21 nov con `tools/gloton_restos.py`. En los de la criatura (3 a 8), lo que sobresalía del cuerpo de las suyas se borró con `tools/criatura_sin_lengua.py` (21 nov; las que cuelgan por delante del pecho se quedan). Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
   y con el contorno de un píxel, `borde`), pero con otra forma: en el aviso no se pintan (las enrosca su dibujo) y
   en el golpe salen disparadas de la boca (`BOCAS`, medida en cada fotograma del golpe, del 5 al 8, en cada dirección: la lengua sigue a la cabeza;
   `boca()`), caen
