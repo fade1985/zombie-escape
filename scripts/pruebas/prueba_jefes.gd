@@ -1983,23 +1983,50 @@ func probar_muro() -> void:
 	var gas := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "gas")
 	print("Muro: nubes de gas %d (esperado: 1)" % gas.size())
 	Captura.foto("captura-muro-gas.png")
-	# tres cargas contra una taquilla (la más cercana)
-	var taquilla: Node2D = null
-	for m in taquillas:
-		if taquilla == null or m.global_position.distance_to(centro) < taquilla.global_position.distance_to(centro):
-			taquilla = m
-	for i in 3:
-		if taquilla == null:
-			break
+	# una carga que choca nada más empezar (la taquilla a 170): frena, sin atontarse ni agrietar (21 nov)
+	var taquilla: Node2D = taquillas[0] if not taquillas.is_empty() else null
+	if taquilla:
 		jefe.global_position = taquilla.global_position + Vector2(0, 170)
 		jefe.mirada = Vector2.UP
-		jefe.cambiar("carga")
+		jefe.cambiar("carga", {"desde": jefe.global_position})
 		await get_tree().create_timer(0.8, false).timeout
+		print("Muro: choque nada más empezar la carga: estado %s, grietas %d (esperado: andar o recuperar, 0)" % [jefe.estado, jefe.grietas])
+	# tres cargas contra una taquilla, desde más lejos que media carga: una taquilla y un lado (arriba, abajo, izquierda o
+	# derecha) desde el que llegar a ella corriendo más de media carga sin nada en medio
+	var salida := Vector2.ZERO
+	var hacia := Vector2.ZERO
+	for m in taquillas:
+		var choque: CollisionShape2D = m.get_node("CollisionShape2D") if m.has_node("CollisionShape2D") else null
+		for n in m.get_children():
+			if n is CollisionShape2D:
+				choque = n
+		var caja: Vector2 = (choque.shape as RectangleShape2D).size / 2.0
+		var medio: Vector2 = choque.global_position
+		for d in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]:
+			var lejos: float = absf(d.dot(caja)) + jefe.radio + jefe.media_carga() + 40.0
+			var p: Vector2 = medio - d * lejos
+			var tr := Transform2D(0.0, p)
+			if not jefe.test_move(tr, Vector2.ZERO) and not jefe.test_move(tr, d * (lejos - absf(d.dot(caja)) - jefe.radio - 6.0)):
+				salida = p
+				hacia = d
+				taquilla = m
+				break
+		if hacia != Vector2.ZERO:
+			break
+	print("Muro: sitio para cargar contra una taquilla %s (esperado: true)" % (hacia != Vector2.ZERO))
+	for i in 3:
+		if hacia == Vector2.ZERO:
+			break
+		jefe.global_position = salida
+		jefe.mirada = hacia
+		jefe.cambiar("carga", {"desde": salida})
+		await get_tree().create_timer(1.2, false).timeout
 		print("Muro: carga %d contra la taquilla: estado %s, grietas %d, escudo %s" % [i + 1, jefe.estado, jefe.grietas, jefe.escudo])
 		if i == 0:
 			johnny.global_position = jefe.global_position + Vector2(90, 40)
 			await get_tree().create_timer(0.1, false).timeout
 			Captura.foto("captura-muro-grieta.png")
+			johnny.global_position = centro + Vector2(0, 2000)   # (fuera del camino de las cargas siguientes)
 	print("Muro: escudo roto %s, fase %d, pelotas %d (esperado: true, 2, 0)" % [not jefe.escudo, jefe.fase, jefe.pelotas().size()])
 	Captura.foto("captura-muro-roto.png")
 	await get_tree().create_timer(1.6, false).timeout

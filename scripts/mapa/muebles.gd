@@ -174,6 +174,13 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 	var puestas := []
 	var pasillo: float = isla.get("pasillo", PASILLO_ISLA)   # (la Oficina de seguridad: taquillas sueltas, muy separadas)
 	var libre: float = isla.get("puerta", 0.0)   # lo que se deja de más libre delante de las puertas (la Oficina de seguridad)
+	# el centro de la sala, libre: ahí sale el jefe (mapa.centro_libre); un rectángulo más alto por arriba, que es por donde
+	# sube su dibujo (la Oficina de seguridad: que no salga tapado por una taquilla)
+	var centro := Rect2()
+	if isla.has("centro"):
+		var c := Vector2((c0 + c1 + 1) / 2.0, (f0 + f1 + 1) / 2.0) * CASILLA
+		var m: Vector2 = isla.centro
+		centro = Rect2(c.x - m.x, c.y - m.y * 2.0, m.x * 2.0, m.y * 3.0)
 	var y := y0 + rng.randf() * 32.0
 	while true:
 		# los tipos de cada fila, al azar, y cuánto mide
@@ -198,6 +205,7 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 				var m := nuevo(t, {"lado": "arriba", "base": y + fondo - Catalogo.MUEBLES[t].dep}, en, zona)
 				var r := hueco(m)
 				if en_sala(geo, r.grow(24.0), zona) and not despejar.any(func(d): return d.grow(libre).intersects(r)) \
+						and not centro.intersects(r) \
 						and not (puestos + puestas).any(func(p): return hueco(p).grow(10).intersects(r)) and paso.cabe(r):
 					puestas.append(m)
 				x += l + isla.entre

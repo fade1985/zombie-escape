@@ -122,7 +122,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta, 6.0)
 			girar_hacia(delta, hacia.normalized())
 			if t >= AVISO_CARGA:
-				cambiar("carga")
+				cambiar("carga", {"desde": global_position})
 				Sonido.tocar("rugido")
 		"carga":
 			cargar(delta, johnny)
@@ -209,7 +209,7 @@ func elegir_con_escudo(_johnny: Node2D, d: float, desvio: float) -> void:
 		Sonido.tocar("silbato")
 		gritar(Idioma.t("¡PRIIIII!"), Color("#bfe9ff"))
 		return
-	if d > 170.0 and desvio < 0.7 and espera_carga <= 0.0:
+	if d > 170.0 and desvio < 0.7 and espera_carga <= 0.0 and carga_libre(_johnny):
 		espera_carga = 3.5
 		cambiar("aviso_carga")
 		gritar(Idioma.t("¡ATRÁS!"), Color("#ff5d73"))
@@ -236,7 +236,7 @@ func elegir_sin_escudo(_johnny: Node2D, d: float, desvio: float) -> void:
 		cambiar("aviso_barrido")
 		gritar(Idioma.t("¡ATRÁS!"), Color("#5fd3ff"))
 		return
-	if d > 170.0 and desvio < 0.7 and espera_carga <= 0.0:
+	if d > 170.0 and desvio < 0.7 and espera_carga <= 0.0 and carga_libre(_johnny):
 		espera_carga = 2.5
 		cambiar("aviso_carga")
 		Sonido.tocar("rugido")
@@ -262,10 +262,16 @@ func porrazo(johnny: Node2D, angulo: float, dano: int, empuje: float) -> void:
 # La carga: corre en línea recta con el escudo por delante (lo común, en minijefe.gd). Si pilla a Johnny, le
 # tira; si se estrella, se atonta (y, contra una taquilla, se le agrieta el escudo)
 func cargar(delta: float, johnny: Node2D) -> void:
+	if not datos.has("desde"):
+		datos.desde = global_position   # (de dónde sale, para saber cuánto lleva corrido)
 	var como := embestir(delta, johnny, VELOCIDAD_CARGA[fase - 1], DANO_CARGA, TIEMPO_CARGA, PIE)
 	# una taquilla, aunque sea rozándola de lado, también le para (como los muros): si no, resbalaba por su lado
 	if como == "" and t > 0.05 and toca_taquilla():
 		como = "pared"
+	# hasta haber corrido la mitad, no se estrella (21 nov, el dueño: se golpeaba nada más empezar): si roza algo, sigue;
+	# si se ha comido algo de frente y no puede seguir, frena sin más (ni atontado ni grieta)
+	if como == "pared" and global_position.distance_to(datos.get("desde", global_position)) < media_carga():
+		como = "fin" if get_real_velocity().length() < VELOCIDAD_CARGA[fase - 1] * 0.4 else ""
 	match como:
 		"pillado":
 			cambiar("recuperar", {"dur": 0.6})
@@ -277,6 +283,17 @@ func cargar(delta: float, johnny: Node2D) -> void:
 		"fin":
 			marcha *= 0.3
 			cambiar("recuperar", {"dur": 0.5})
+
+
+# La mitad de lo que corre en una carga: antes de eso no se estrella, y no empieza una carga con algo más cerca
+func media_carga() -> float:
+	return VELOCIDAD_CARGA[fase - 1] * TIEMPO_CARGA / 2.0
+
+
+# Si puede cargar hacia Johnny: sin nada en medio (pared o mueble) en la primera mitad de la carga
+func carga_libre(johnny: Node2D) -> bool:
+	var hacia := global_position.direction_to(johnny.global_position)
+	return not test_move(global_transform, hacia * media_carga())
 
 
 # ¿Se ha estrellado contra una taquilla? Donde no hay ninguna (la sala de pruebas), vale cualquier choque

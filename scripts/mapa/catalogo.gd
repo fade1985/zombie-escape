@@ -1018,7 +1018,8 @@ const SALAS := {
 	"jefe-antidisturbios": {
 		"muebles": [],
 		"cuantos": [0, 0],
-		"islas": {"muebles": ["lockers"], "fila": 1, "entre": 0, "cada": 260, "pasillo": 300, "puerta": 120.0},
+		"islas": {"muebles": ["lockers"], "fila": 1, "entre": 0, "cada": 260, "pasillo": 300, "puerta": 120.0,
+			"centro": Vector2(170, 110)},
 	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {

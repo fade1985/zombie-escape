@@ -3079,7 +3079,8 @@ func probar_atontado_pared() -> void:
 			dir = Vector2(x, 0).rotated(deg_to_rad(12) * x)
 			poli.global_position = suelo
 		else:
-			poli.global_position = pared.position - Vector2(0, 96 + poli.radio)
+			# (más lejos que media carga: antes de correr la mitad no se estrella, 21 nov)
+			poli.global_position = pared.position - Vector2(0, 300 + poli.radio)
 		johnny.global_position = poli.global_position + Vector2(0, -260)
 		johnny.get_node("Camara").reset_smoothing()
 		await get_tree().physics_frame
