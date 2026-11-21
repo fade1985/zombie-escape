@@ -3624,7 +3624,7 @@ func probar_disparos() -> void:
 		Captura.foto("captura-disparos-%s-%s.png" % [caso[0], caso[1]])
 		var barras := []
 		for hijo in jefe.get_children():
-			if hijo is Aviso and hijo.forma == 2 and hijo.visible:
+			if hijo is Aviso and hijo.forma in [0, 2] and hijo.visible:   # (las bolas de la criatura, franjas)
 				var origen: Vector2 = jefe.to_global(hijo.desde)
 				var rayo := PhysicsRayQueryParameters2D.create(origen, origen + Vector2.from_angle(hijo.angulo) * 3000.0, 1)
 				var choque := jefe.get_world_2d().direct_space_state.intersect_ray(rayo)

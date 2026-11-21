@@ -102,6 +102,7 @@ const AVISO_FUEGO := 0.5
 const LEJOS_FUEGO := 230.0               # si Johnny está más lejos que esto, prefiere escupir
 const BOLAS := 3
 const ABRE_BOLAS := 0.24
+const ANCHO_AVISO_BOLA := 14.0         # medio ancho de la franja que avisa de cada bola (como las de las lenguas)
 const VELOCIDAD_BOLA := 360.0
 const DANO_BOLA := 12
 const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}
@@ -920,11 +921,16 @@ func _draw() -> void:
 			Formas.arco(self, Vector2.ZERO, RADIO_ONDA * k, 0.0, TAU, 48, Color(1, 0.9, 0.7, 0.9 * (1.0 - k)), 10.0 * (1.0 - k) + 3.0)
 			Formas.arco(self, Vector2.ZERO, RADIO_ONDA * k * 0.85, 0.0, TAU, 48, Color(1, 0.6, 0.3, 0.5 * (1.0 - k)), 4.0)
 		"aviso_fuego":
-			# una barra fina por donde irá cada bola, que se llena hacia fuera (aviso.gd)
+			# por donde irá cada bola, como las cargas de los jefes y sus lenguas (21 nov: la barra fina se veía
+			# pobre para unas bolas tan gordas): flechas que se encienden hacia fuera, del ancho de la bola, y al
+			# final una X, o la estrella si la bola se para en una pared o un mueble (aviso.gd)
 			var k := minf(1.0, t / AVISO_FUEGO)
 			for i in BOLAS:
 				var a: float = datos.angulo + (i - (BOLAS - 1) / 2.0) * ABRE_BOLAS
-				Aviso.barra(self, Vector2(0, 6), a, radio, radio + 320.0, 3.0, k, tiempo, i)
+				var aviso := Aviso.pedir(self, 0, Vector2(0, 6), a, k, tiempo, i)
+				aviso.largo = Aviso.alcance(self, Vector2(0, 6), a, radio + 320.0, BolaFuego.RADIO)
+				aviso.choca = aviso.largo < radio + 320.0
+				aviso.medio = ANCHO_AVISO_BOLA
 	draw_set_transform(Vector2.ZERO)
 
 

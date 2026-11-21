@@ -10,8 +10,9 @@
 #     con dos bordes (el de dentro late cada vez más deprisa: el borrador A, tools/pixelfx/aviso-a.js). Puede llegar
 #     hasta las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas). El de los golpes
 #     cuerpo a cuerpo es golpe(): cortado donde el golpe chocaría con una pared o un mueble (que no atraviesa, tapado()).
-#   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos,
-#     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()) y ahí acaba en la
+#   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos;
+#     las bolas de fuego de la criatura, más gordas, van con franjas). Se corta donde el disparo se pararía contra una
+#     pared o un mueble (alcance()) y ahí acaba en la
 #     estrella de las cargas.
 #   El cono del giro del bombero se llena de lado, hacia donde girará, con flechas dentro (flechas) y, como las marcas de lo que se
 #   lanza (proyectil.gd: molotovs, sartenes, probetas...), un estilo más flojo (sutil).
