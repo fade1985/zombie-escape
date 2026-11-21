@@ -10,6 +10,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | `docs/ESCRITORIO.md` | La versión de Windows: exportar el `.exe`, probarlo, la pantalla completa (F11) y lo que falta |
 | `docs/MENSAJES.md` | «Contáctanos»: adónde llegan los mensajes de los jugadores y cómo se analizan (avisar al dueño si hay nuevos) |
 | `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica al subir main a la rama `production`) |
+| `docs/JEFES_CENTRO.md` | El rediseño de los jefes del centro comercial, que se van rehaciendo uno a uno: se lee al tocar cualquiera de ellos |
 | `docs/historial/` | Planes ya terminados (centro comercial, jefes de los Apartamentos): solo para saber por qué se decidió algo |
 | `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |
 | `docs/TRAILER.md` | El trailer: cómo se graba (`py tools/trailer.py`) y su guion de escenas y textos |
