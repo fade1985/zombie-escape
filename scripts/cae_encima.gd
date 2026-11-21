@@ -111,10 +111,10 @@ func _pintar_marca() -> void:
 			tinta(marca, r)
 		return
 	var k := minf(1.0, t / aviso)
-	var rojo := Color(1, 0.24, 0.35)
+	# la marca, un aviso de los jefes (aviso.gd) con el estilo flojo de lo que se lanza (proyectil.gd), a cuadraditos
+	# (21 nov: era un círculo liso, sin pixelar)
+	Aviso.abanico(marca, Vector2.ZERO, 0.0, PI, r, k, t, 0.6).sutil = true
 	marca.draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.6))
-	Formas.disco(marca, Vector2.ZERO, r * k, Color(rojo, 0.22 + 0.25 * k))
-	Formas.arco(marca, Vector2.ZERO, r, 0.0, TAU, 28, Color(rojo, 0.7 + 0.3 * k), 4.0)
 	Formas.disco(marca, Vector2.ZERO, r * (0.25 + 0.6 * k), Color(0, 0, 0, 0.25 + 0.25 * k))
 
 

@@ -72,11 +72,10 @@ func dentro(punto: Vector2, margen: float) -> bool:
 func _draw() -> void:
 	if tirada < 0.0:
 		# la marca en el suelo (donde va a caer), que se llena según se acerca; y la sombra de la pesa
+		# (la marca, un aviso de los jefes con el estilo flojo de lo que se lanza, como en proyectil.gd: 21 nov, era un
+		# círculo liso, sin pixelar)
 		var k := minf(1.0, t / vuelo)
-		var rojo := Color(1, 0.24, 0.35)
-		draw_set_transform(hasta - global_position, 0.0, Vector2(1, 0.6))
-		Formas.disco(self, Vector2.ZERO, RADIO * k, Color(rojo, 0.15 + 0.2 * k))
-		Formas.arco(self, Vector2.ZERO, RADIO, 0.0, TAU, 24, Color(rojo, 0.5 + 0.4 * k), 3.0)
+		Aviso.abanico(self, hasta - global_position, 0.0, PI, RADIO, k, t, 0.6).sutil = true
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.6))
 		Formas.disco(self, Vector2.ZERO, 8.0 + 6.0 * (1.0 - alto / ALTURA), Color(0, 0, 0, 0.3))
 	dibujar(self, Vector2(0, -alto - 6.0), giro)
