@@ -5,7 +5,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 
 | Jefe | Estado |
 |---|---|
-| Antidisturbios | hecho (21 nov), falta el visto bueno del dueño |
+| Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
 | Cocinero | pendiente |
 | Modista | pendiente |
 | Mascota | pendiente |
