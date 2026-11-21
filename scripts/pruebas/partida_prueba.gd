@@ -548,7 +548,7 @@
 #   --arrojable-alerta  en un apartamento, el molotov y la granada de Johnny despiertan a todos los zombis (M107) [prueba_varias.gd]
 #   --reglas-t2         la Tanda 2 (16 nov): los que llama un jefe no sueltan nada (M119), el dinamitero despierta a todo
 #                       el apartamento (M118) y las ventanas nuevas con su disparador (M123)  [prueba_varias.gd]
-#   --atontado-pared    los jefes que cargan (también la portera), al estrellarse, se quedan atontados 5 s (en la azotea,
+#   --atontado-pared    los jefes que cargan (también la portera), al estrellarse, se quedan atontados 3 s (en la azotea,
 #                       lo de siempre); la portera embistiendo de verdad contra una pared y el antidisturbios cargando
 #                       contra ella de frente y rozándola de lado (también se atonta) [prueba_varias.gd]
 #   --ritmo-bombero     cuántos ataques empieza el jefe de bomberos en 30 s, normal y enfadado [prueba_varias.gd]

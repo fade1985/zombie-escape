@@ -2986,7 +2986,7 @@ func probar_arrojable_alerta() -> void:
 
 
 # Con "--captura --atontado-pared": los jefes que cargan (antidisturbios, Gymbro, mascota, becario y gerente), en la
-# sala de pruebas, se estrellan (estrellarse, a mano) y se mide cuánto se quedan atontados: 5 s. Luego lo mismo
+# sala de pruebas, se estrellan (estrellarse, a mano) y se mide cuánto se quedan atontados: 3 s. Luego lo mismo
 # haciendo como que la sala es la azotea: lo suyo de siempre (entre 1,4 y 2,2 s). Foto captura-atontado-pared.png
 func probar_atontado_pared() -> void:
 	await pulsar_y_esperar(KEY_F9)
@@ -3027,7 +3027,7 @@ func probar_atontado_pared() -> void:
 		for i in jefes.size():
 			lineas.append("%s %.1f s" % [tipos[i], cuanto.get(i, -1.0)])
 		print("Atontado contra la pared%s: %s (esperado: %s)" % [" en la azotea" if azotea else "", ", ".join(lineas),
-			"lo de siempre, entre 1,4 y 2,2" if azotea else "5,0 todos"])
+			"lo de siempre, entre 1,4 y 2,2" if azotea else "3,0 todos"])
 		for j in jefes:
 			j.queue_free()
 		await get_tree().process_frame

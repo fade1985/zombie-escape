@@ -42,7 +42,7 @@ const AVISO_CIRCULO := 0.35
 const RADIO_CIRCULO := 125.0
 const DANO_CIRCULO := 20
 const EMBESTIDAS := [1, 2]       # cuántas seguidas en cada fase
-const ATONTADA := 1.5            # lo que se queda atontada al estrellarse en la azotea (fuera, 5 s: Minijefe.ATONTADO_PARED)
+const ATONTADA := 1.5            # lo que se queda atontada al estrellarse en la azotea (fuera, 3 s: Minijefe.ATONTADO_PARED)
 const VECINOS := [2, 4]          # cuántos vecinos llama al gritar en cada fase
 const TIEMPO_GIRO := 2.6
 const ARRIBA := 118.0            # a qué altura tiene la cabeza (para los textos y el vapor)
@@ -350,7 +350,7 @@ func estrellarse() -> void:
 	EfectoSuelo.soltar(get_parent(), "golpe-pared", global_position + mirada * radio + Vector2(0, 20))
 
 
-# 5 s (Minijefe.ATONTADO_PARED), menos en la azotea, que se queda ATONTADA
+# 3 s (Minijefe.ATONTADO_PARED), menos en la azotea, que se queda ATONTADA
 func tiempo_atontado() -> float:
 	var mapa := get_tree().get_first_node_in_group("mapa")
 	return ATONTADA if mapa and mapa.sitio.get("azotea", false) else Minijefe.ATONTADO_PARED
