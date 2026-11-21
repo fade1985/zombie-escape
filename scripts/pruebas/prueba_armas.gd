@@ -4848,3 +4848,35 @@ func probar_explosivo_nuevo() -> void:
 	# el retrato del bestiario, del tamaño de su recorte
 	print("Retrato del bestiario: %s (esperado: (27.0, 60.0))" % Bestiario.retrato("explosivo").get_size())
 	get_tree().quit()
+
+
+# --apunte: lo que se ve en el suelo al apuntar un lanzable (la zona, su borde a trozos, el alcance y la trayectoria),
+# a cuadraditos del dibujo como los avisos de los jefes (21 nov: la zona era un círculo liso). Fotos del molotov y la
+# granada, con el apunte puesto a mano (sin pulsar nada)
+func probar_apunte() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	sala.diana.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 160)
+	johnny.get_node("Camara").reset_smoothing()
+	lanzables.set_physics_process(false)   # (si no, borra el apunte en cada fotograma)
+	for tipo in ["molotov:2", "granada:2"]:
+		lanzables.meter(tipo, 2)
+		lanzables.tipo = tipo
+		lanzables.apunte = johnny.global_position + Vector2(90, 150)
+		for i in 4:
+			lanzables.queue_redraw()
+			await RenderingServer.frame_post_draw
+		Captura.foto("captura-apunte-%s.png" % tipo.get_slice(":", 0))
+		print("Apunte de %s: radio %d" % [tipo, roundi(lanzables.radio_zona())])
+	get_tree().quit()

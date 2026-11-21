@@ -687,11 +687,9 @@ func _draw() -> void:
 	elipse_a_trozos(desde, alcance(), Color(0.11, 0.1, 0.17, 0.45), 4.0, 0.0)
 	# la zona que arderá o explotará, latiendo, con su borde a trozos que gira
 	var r := radio_zona()
-	draw_set_transform(apunte, 0.0, Vector2(1.0, 0.6))
 	var molotov := tipo_de(tipo) == "molotov"
-	Formas.disco(self, Vector2.ZERO, r, Color(tono, (0.35 if molotov else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
-	Formas.arco(self, Vector2.ZERO, r, 0.0, TAU, 64, Color(0.11, 0.1, 0.17, 0.6), 6.0)
-	draw_set_transform(Vector2.ZERO)
+	elipse_pixelada(apunte, r, Color(tono, (0.35 if molotov else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
+	elipse_pixelada(apunte, r + 2.0, Color(0.11, 0.1, 0.17, 0.6), 6.0)
 	elipse_a_trozos(apunte, r, tono, 2.0, t * 0.6)
 	if molotov:
 		# la cruz del centro: donde se rompe la botella
@@ -715,4 +713,31 @@ func elipse_a_trozos(centro: Vector2, r: float, tono: Color, grueso: float, giro
 		var b := a + TAU / trozos * 0.45
 		var pa := centro + Vector2(cos(a) * r, sin(a) * r * 0.6)
 		var pb := centro + Vector2(cos(b) * r, sin(b) * r * 0.6)
-		draw_line(pa, pb, tono, grueso)
+		# a cuadraditos del dibujo (21 nov: eran rayas lisas)
+		var pasos := maxi(1, int(pa.distance_to(pb) / 2.0))
+		for j in pasos + 1:
+			var p := (pa.lerp(pb, float(j) / pasos) / 2.0).floor() * 2.0
+			draw_rect(Rect2(p - Vector2(grueso, grueso) / 2.0, Vector2(grueso, grueso)), tono)
+
+
+# Una elipse de suelo (de alto, el 60 %) a cuadraditos del dibujo (2 × 2), en la cuadrícula: llena o, con "grosor", solo
+# su borde (21 nov: el apunte se veía liso, sin pixelar, al lado de los avisos de los jefes)
+func elipse_pixelada(centro: Vector2, r: float, color_: Color, grosor := 0.0) -> void:
+	var c := (centro / 2.0).round() * 2.0
+	var ry := r * 0.6
+	var medio := func(rx: float, alto: float, y: float) -> float:
+		return -1.0 if absf(y) >= alto else rx * sqrt(1.0 - (y / alto) ** 2)
+	for j in range(-int(ry / 2.0) - 1, int(ry / 2.0) + 1):
+		var fuera: float = medio.call(r, ry, j * 2.0 + 1.0)
+		if fuera < 1.0:
+			continue
+		var x0 := roundf(fuera / 2.0) * 2.0
+		var x1 := 0.0
+		if grosor > 0.0:
+			var dentro: float = medio.call(r - grosor, ry - grosor * 0.6, j * 2.0 + 1.0)
+			x1 = minf(x0, roundf(dentro / 2.0) * 2.0) if dentro > 0.0 else 0.0
+		if x1 <= 0.0:
+			draw_rect(Rect2(c + Vector2(-x0, j * 2.0), Vector2(x0 * 2.0, 2.0)), color_)
+		elif x1 < x0:
+			draw_rect(Rect2(c + Vector2(-x0, j * 2.0), Vector2(x0 - x1, 2.0)), color_)
+			draw_rect(Rect2(c + Vector2(x1, j * 2.0), Vector2(x0 - x1, 2.0)), color_)

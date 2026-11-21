@@ -132,6 +132,7 @@
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
 #   --molotov-carga     cuánto tarda cada fotograma al caer un molotov entre muchos zombis; con --zombis N, cuántos (12) [prueba_armas.gd]
+#   --apunte            lo que se ve en el suelo al apuntar el molotov y la granada, a cuadraditos  [prueba_armas.gd]
 #   --granada-pared     las granadas chocan con las paredes (y vuelan por encima de los muebles) y su explosión no las
 #                       pasa: dónde explotan, a quién le dan y a quién apunta lanzar de un toque; y el rebote
 #                       cuando el rayo no dice hacia dónde mira la pared (cara_de_la_pared) [prueba_armas.gd]
@@ -1056,6 +1057,9 @@ func empezar_prueba() -> void:
 	elif "--cuerpo-pared" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cuerpo_pared()
+	elif "--apunte" in args:
+		set_process(false)   # sin la prueba larga
+		probar_apunte()
 	elif "--granada-pared" in args:
 		set_process(false)   # sin la prueba larga
 		probar_granada_pared()
