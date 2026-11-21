@@ -59,8 +59,8 @@ const MAX_PELOTAS := 9             # con estas por la sala, no dispara más
 const ESPERA_PELOTAS := 4.5
 # El gas
 const AVISO_GAS := 0.45
-const BOTES := [1, 2]
-const ESPERA_GAS := [7.0, 5.5]
+const BOTES := [3, 4]   # botes de gas de cada vez (fase 1, fase 2): más desde el 21 nov, lo pidió el dueño
+const ESPERA_GAS := [5.0, 4.0]
 # El barrido eléctrico (fase 2)
 const AVISO_BARRIDO := 0.7
 const OLAS := 5
@@ -362,15 +362,17 @@ func disparar_pelotas() -> void:
 		get_parent().add_child(p)
 
 
-# El gas: uno o dos botes hacia Johnny (el segundo, a un lado de él)
+# El gas: varios botes, el primero hacia Johnny y los demás repartidos a su alrededor, para cerrarle el paso
 func tirar_gas(johnny: Node2D) -> void:
 	Sonido.tocar("lanzar")
-	for i in BOTES[fase - 1]:
+	var n: int = BOTES[fase - 1]
+	var giro := randf() * TAU
+	for i in n:
 		var p := PROYECTIL.instantiate()
 		p.tipo = "gas"
 		p.desde = global_position + mirada * 30.0
 		p.alto_salida = arriba * 0.6
-		var lado := Vector2.ZERO if i == 0 else Vector2.from_angle(randf() * TAU) * 140.0
+		var lado := Vector2.ZERO if i == 0 else Vector2.from_angle(giro + i * TAU / (n - 1)) * randf_range(140.0, 180.0)
 		p.hasta = NavigationServer2D.map_get_closest_point(agente.get_navigation_map(),
 			johnny.global_position + johnny.velocity * 0.4 + lado)
 		p.dueno = self

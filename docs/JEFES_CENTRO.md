@@ -101,7 +101,8 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
 - Cuarto ajuste: el humo del gas, de pixelfx (el "smoke-bomb" visto desde arriba, `tools/pixelfx/gas-lacrimogeno.js`,
   `efecto_suelo.gd` "gas"), y el bote que vuela, en pixel art; las estrellitas de atontado (de todos los jefes y de
   Johnny en el suelo), el "stunned" de pixelfx (`tools/pixelfx/estrellitas.js`); el barrido, 5 olas, y ya no se pasa
-  esquivando: solo por el hueco.
+  esquivando: solo por el hueco. Más gas: 3 botes de cada vez (4 en la fase 2), repartidos alrededor de Johnny, cada
+  5 s (4 en la fase 2).
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las
