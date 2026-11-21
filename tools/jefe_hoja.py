@@ -52,6 +52,11 @@ JEFES = {
             "golpe": ("golpe", 16, False, False),
             "muerte": ("muerte", 10, False, False),
             "silbato": ("silbato", 9, False, False),
+            # 21 nov: correr con el escudo delante (la carga) y el empujón con el escudo (disparar las pelotas). Las
+            # dos salieron mal hacia el noreste (sin escudo o con otro): esa dirección está en descartes/ y el juego
+            # usa allí lo de antes (antidisturbios.gd)
+            "correr": ("correr_escudo", 14, True, True),
+            "empujon": ("empujon_escudo", 14, False, False),
         },
         "de_frente": ["silbato"],
     },

@@ -147,7 +147,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			girar_hacia(delta, hacia.normalized())
 			if t >= AVISO_PELOTAS:
 				disparar_pelotas()
-				cambiar("recuperar", {"dur": 0.4})
+				cambiar("recuperar", {"dur": 0.4, "empujon": true})
 		"aviso_gas":
 			frenar(delta)
 			if t >= AVISO_GAS:
@@ -477,14 +477,22 @@ func animar() -> void:
 		"clavado":
 			fijar("porrazo", dir, sprite.sprite_frames.get_frame_count("porrazo_" + dir) - 1)
 			sprite.position.x = sin(tiempo * 30.0) * 1.0
+		"aviso_pelotas" when dibujada("empujon", dir):
+			# el empujón con el escudo (21 nov): durante el aviso se prepara, hasta el golpe (la mitad), y las pelotas
+			# salen justo ahí; la otra mitad, en "recuperar"
+			fijar("empujon", dir, int(t / AVISO_PELOTAS * mitad("empujon", dir)))
+		"recuperar" when datos.get("empujon", false) and dibujada("empujon", dir):
+			fijar("empujon", dir, mitad("empujon", dir) + avance("empujon_" + dir, t / datos.dur) / 2)
 		"aviso_carga", "aviso_pelotas":
 			var dura := AVISO_CARGA if estado == "aviso_carga" else AVISO_PELOTAS
 			fijar("carga", dir, avance("carga_" + dir, t / dura))
 		"carga":
-			# corriendo: su animación de andar, muy deprisa, con zancadas (un pequeño bote). La de "carga" es solo
-			# agacharse tras el escudo (el aviso): quieta en su último fotograma parecía que iba flotando (21 nov)
-			poner("andar_" + dir, 3.0)
-			sprite.position.y = PIE - absf(sin(tiempo * 16.0)) * 3.0
+			if dibujada("correr", dir):
+				poner("correr_" + dir)   # corriendo agachado tras el escudo (21 nov)
+			else:
+				# (hacia el noreste no salió bien: su animación de andar, muy deprisa, con zancadas, un pequeño bote)
+				poner("andar_" + dir, 3.0)
+				sprite.position.y = PIE - absf(sin(tiempo * 16.0)) * 3.0
 		"atontado":
 			fijar("golpe", dir, avance("golpe_" + dir, t / 0.5))
 			sprite.position.x = sin(tiempo * 9.0) * 2.0
@@ -498,6 +506,15 @@ func animar() -> void:
 				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD[fase - 1], 0.4, 1.5))
 			else:
 				poner("reposo_" + dir)
+
+
+# Si esa animación está dibujada hacia ahí (la hoja rellena las que faltan con la vista quieta, un solo fotograma)
+func dibujada(anim: String, dir: String) -> bool:
+	return sprite.sprite_frames.has_animation(anim + "_" + dir) and sprite.sprite_frames.get_frame_count(anim + "_" + dir) > 1
+
+
+func mitad(anim: String, dir: String) -> int:
+	return sprite.sprite_frames.get_frame_count(anim + "_" + dir) / 2
 
 
 func morir() -> void:
