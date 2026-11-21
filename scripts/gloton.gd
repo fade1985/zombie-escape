@@ -86,16 +86,17 @@ const PALETA := {
 # De dónde salen: su boca en cada dirección, medida en el fotograma del golpe de su latigazo (de espaldas, por
 # donde asoman las de su dibujo: por encima de la cabeza o por un lado). Van enteras por delante de su dibujo
 # Una por fotograma del golpe (del 5 al 8), porque la cabeza se mueve y la lengua la sigue (21 nov: antes era una
-# sola por dirección y en varias salían por debajo de la boca, casi de la rodilla mirando al suroeste)
+# sola por dirección y en varias salían por debajo de la boca, casi de la rodilla mirando al suroeste; en las
+# diagonales de abajo, en el centro del hueco de la boca y no en el labio de arriba)
 const BOCAS := {
 	"s": [Vector2(0, -28), Vector2(0, -28), Vector2(0, -28), Vector2(0, -28)],
-	"se": [Vector2(31, -43), Vector2(34, -36), Vector2(28, -46), Vector2(24, -52)],
+	"se": [Vector2(30, -29), Vector2(27, -26), Vector2(28, -31), Vector2(24, -38)],
 	"e": [Vector2(55, -39), Vector2(51, -33), Vector2(48, -53), Vector2(48, -60)],
 	"ne": [Vector2(54, -56), Vector2(54, -56), Vector2(48, -56), Vector2(48, -63)],
 	"n": [Vector2(0, -86), Vector2(0, -86), Vector2(0, -86), Vector2(0, -86)],
 	"no": [Vector2(-62, -56), Vector2(-59, -56), Vector2(-52, -66), Vector2(-48, -70)],
 	"o": [Vector2(-62, -40), Vector2(-59, -39), Vector2(-59, -59), Vector2(-56, -63)],
-	"so": [Vector2(-49, -36), Vector2(-49, -49), Vector2(-42, -56), Vector2(-39, -63)],
+	"so": [Vector2(-42, -37), Vector2(-47, -36), Vector2(-37, -36), Vector2(-36, -46)],
 }
 
 var espera_latigazo := 1.5
