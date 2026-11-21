@@ -173,6 +173,7 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 	var y1 := (f1 + 1) * CASILLA - MARGEN_ISLA
 	var puestas := []
 	var pasillo: float = isla.get("pasillo", PASILLO_ISLA)   # (la Oficina de seguridad: taquillas sueltas, muy separadas)
+	var libre: float = isla.get("puerta", 0.0)   # lo que se deja de más libre delante de las puertas (la Oficina de seguridad)
 	var y := y0 + rng.randf() * 32.0
 	while true:
 		# los tipos de cada fila, al azar, y cuánto mide
@@ -196,7 +197,7 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 				var en := roundf((x + l / 2.0) / 2.0) * 2.0
 				var m := nuevo(t, {"lado": "arriba", "base": y + fondo - Catalogo.MUEBLES[t].dep}, en, zona)
 				var r := hueco(m)
-				if en_sala(geo, r.grow(24.0), zona) and not despejar.any(func(d): return d.intersects(r)) \
+				if en_sala(geo, r.grow(24.0), zona) and not despejar.any(func(d): return d.grow(libre).intersects(r)) \
 						and not (puestos + puestas).any(func(p): return hueco(p).grow(10).intersects(r)) and paso.cabe(r):
 					puestas.append(m)
 				x += l + isla.entre

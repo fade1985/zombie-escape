@@ -2592,6 +2592,18 @@ func ir_a_azotea() -> void:
 # habitación, sin jugar hasta ella. Rehace la planta que le tocó en el sorteo de esta partida (como recién llegado) y
 # Johnny entra por la puerta: el jefe sale como siempre, con su presentación (acaba cuando ya ha salido)
 func ir_al_jefe(tipo: String) -> void:
+	# (el panel de pruebas: un minijefe de otro edificio) la partida se cambia a ese edificio y deja de guardarse,
+	# para no pisar la guardada de verdad con una de prueba
+	if not orden_jefes.has(tipo):
+		for otro in Edificios.LISTA:
+			if Edificios.LISTA[otro].get("minijefes", []).has(tipo):
+				edificio = otro
+				ed = Edificios.datos(edificio)
+				Sonido.edificio = edificio
+				orden_jefes = ed.get("minijefes", []).duplicate()
+				guarda_partida = false
+				decir("Ahora en %s (de prueba: esta partida ya no se guarda)" % ed.nombre)   # no-tr
+				break
 	var num := orden_jefes.find(tipo) + 1
 	if num <= 0 or jefe_de(num) != tipo:
 		decir("Ese jefe no está en este edificio")   # no-tr

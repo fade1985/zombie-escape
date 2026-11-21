@@ -2030,3 +2030,16 @@ func probar_muro() -> void:
 	jefe.recibir_golpe(10, Vector2.RIGHT * 10.0)
 	print("Muro: un golpe de 10 con la porra clavada le quita %d (esperado: 15)" % (antes - jefe.vida))
 	Captura.foto("captura-muro-clavado.png")
+
+
+# Con "--captura --ir-sala-otro": el panel de pruebas lleva a la sala de un minijefe de otro edificio (21 nov). Desde
+# los Apartamentos, a la del antidisturbios (del centro comercial): la partida se cambia de edificio, deja de guardarse
+# y aparece en su Oficina de seguridad, con él. Foto: captura-ir-sala-otro.png
+func probar_ir_sala_otro() -> void:
+	nueva_planta(1)
+	var antes: String = edificio
+	await ir_al_jefe("antidisturbios")
+	await get_tree().create_timer(0.8, false).timeout
+	print("Ir a otra sala: de %s a %s · planta del jefe %s · en su sala %s · se guarda %s (esperado: apartamentos, centro, antidisturbios, true, false)" % [
+		antes, edificio, planta.jefe, planta.sitios[aqui].tipo == "jefe", guarda_partida])
+	Captura.foto("captura-ir-sala-otro.png")

@@ -49,6 +49,8 @@
 #   --muro              (con --edificio centro --jefe antidisturbios) el antidisturbios rehecho (21 nov): las taquillas,
 #                       el tope de media vida con escudo, pelotas, gas, las grietas hasta romperlo, el barrido y el
 #                       combo con la porra clavada, con fotos                               [prueba_jefes.gd]
+#   --ir-sala-otro      el panel de pruebas lleva a la sala de un minijefe de otro edificio: desde los Apartamentos, a la
+#                       del antidisturbios (cambia de edificio y deja de guardarse)        [prueba_jefes.gd]
 #   --cocina            (con --edificio centro --jefe cocinero) la Cocina central (M82): los fogones y las
 #                       freidoras que rebosan aceite hirviendo, con fotos; y cuántos, normal y enfadado [prueba_jefes.gd]
 #                       (con --puerta-arriba, solo la cocina detrás de una puerta que se abre por arriba: ningún mueble
@@ -726,6 +728,10 @@ func empezar_prueba() -> void:
 	elif "--cocina" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_cocina()
+		get_tree().quit()
+	elif "--ir-sala-otro" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_ir_sala_otro()
 		get_tree().quit()
 	elif "--muro" in args:
 		set_process(false)   # sin la prueba larga

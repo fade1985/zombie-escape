@@ -157,9 +157,14 @@ func elegir(nombre: String) -> void:
 				boton("Azotea", cerrar_y.bind(partida.ir_a_azotea))
 			if not partida.planta.get("superviviente", {}).is_empty():
 				boton("Superviviente (H)", cerrar_y.bind(partida.supervivientes.probar_aqui))
-			for tipo in partida.orden_jefes:
-				if partida.ZOMBIS.has(tipo):
-					boton("Sala: " + JEFES.get(tipo, tipo), cerrar_y.bind(partida.ir_al_jefe.bind(tipo)))
+			# la sala de verdad de cada minijefe: los de este edificio y, detrás, los de los otros (al ir, la partida se
+			# cambia a ese edificio y deja de guardarse: partida.ir_al_jefe)
+			for otro in Edificios.LISTA:
+				for tipo in Edificios.LISTA[otro].get("minijefes", []):
+					if not partida.ZOMBIS.has(tipo) or (otro == partida.edificio) != (tipo in partida.orden_jefes):
+						continue
+					var fuera := "" if otro == partida.edificio else "  (%s)" % Edificios.LISTA[otro].nombre
+					boton("Sala: " + JEFES.get(tipo, tipo) + fuera, cerrar_y.bind(partida.ir_al_jefe.bind(tipo)))
 			# el Reto del día (el garaje) de este edificio, con cada condición; la de hoy, marcada. Es de prueba: deja
 			# esta partida (la guardada sigue, al principio de la planta) y no cuenta (garaje.gd, empezar_prueba)
 			var hoy := Garaje.condicion_de(Garaje.hoy())
@@ -236,7 +241,9 @@ func sacar_jefe(tipo: String) -> void:
 		jefe.puntas = [Vector2(Planta.MURO + 70, sitio.alto / 2.0), Vector2(sitio.ancho - Planta.MURO - 70, sitio.alto / 2.0)]
 		jefe.rugido.connect(partida._al_rugir)
 		return
-	if media_vida:
+	if media_vida and jefe.has_method("romper_escudo"):
+		jefe.romper_escudo()   # (el antidisturbios no se enfada a media vida: sale ya sin escudo, en su fase 2)
+	elif media_vida:
 		jefe.vida = floori(jefe.vida_max * jefe.enfado)   # (al siguiente paso se enfada, con su grito)
 		if jefe.has_signal("vida_cambiada"):
 			jefe.vida_cambiada.emit(jefe.vida, jefe.vida_max)

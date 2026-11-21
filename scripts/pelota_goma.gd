@@ -83,13 +83,32 @@ func _draw() -> void:
 	draw_set_transform(Vector2(0, 2), 0.0, Vector2(1, 0.45))
 	Formas.disco(self, Vector2.ZERO, RADIO, Color(0, 0, 0, 0.35))
 	draw_set_transform(Vector2.ZERO)
-	var c := Vector2(0, -ALTURA - bote)
-	# a cuadraditos de 2 (los píxeles de los dibujos)
-	for y in range(-8, 9, 2):
-		for x in range(-8, 9, 2):
-			if x * x + y * y > 68:
-				continue
-			var col: Color = color.darkened(0.35) if x + y > 6 else color
-			if x <= -2 and y <= -2 and x * x + y * y < 34:
-				col = color.lightened(0.5)
-			draw_rect(Rect2(c + Vector2(x - 1, y - 1), Vector2(2, 2)), col)
+	# la pelota: un círculo de pixel art de 10×10 píxeles del dibujo (cada uno, 2 unidades), con su borde oscuro, la
+	# sombra abajo a la derecha y el brillo arriba a la izquierda
+	var c := (Vector2(-10, -ALTURA - bote - 10) / 2.0).floor() * 2.0
+	for y in FORMA.size():
+		var fila: String = FORMA[y]
+		for x in fila.length():
+			var col: Color
+			match fila[x]:
+				"o": col = Color("#1d1b2c")
+				"#": col = color
+				"s": col = color.darkened(0.35)
+				"b": col = color.lightened(0.6)
+				_: continue
+			draw_rect(Rect2(c + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+
+
+# El dibujo de la pelota: o, el borde; #, su color; s, la sombra; b, el brillo
+const FORMA := [
+	"...oooo...",
+	".oo####oo.",
+	".o#bb###o.",
+	"o##bb####o",
+	"o########o",
+	"o#######so",
+	"o######sso",
+	".o####sso.",
+	".oossssoo.",
+	"...oooo...",
+]

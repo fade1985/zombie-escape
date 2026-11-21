@@ -1004,7 +1004,10 @@ func probar_vapor() -> void:
 	for tipo in ["antidisturbios", "cocinero", "modista", "mascota", "gloton", "gymbro", "bombero"]:
 		var jefe: Node2D = meter_zombi(tipo, centro)
 		await get_tree().create_timer(0.1, false).timeout
-		jefe.vida = int(jefe.vida_max * jefe.enfado)   # en el siguiente paso, se enfada
+		if jefe.has_method("romper_escudo"):
+			jefe.romper_escudo()   # (el antidisturbios: se «enfada» al romperle el escudo)
+		else:
+			jefe.vida = int(jefe.vida_max * jefe.enfado)   # en el siguiente paso, se enfada
 		await get_tree().create_timer(0.05, false).timeout
 		johnny.invulnerable = 999.0
 		johnny.position = jefe.position + Vector2(90, -100)   # (más arriba: así la cabeza sale en medio de la foto)
