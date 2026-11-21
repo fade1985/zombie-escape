@@ -64,8 +64,8 @@ const ESPERA_GAS := [7.0, 5.5]
 # El barrido eléctrico (fase 2)
 const AVISO_BARRIDO := 0.7
 const OLAS := 3
-const ENTRE_OLAS := 0.55           # lo que tarda en salir cada ola tras la anterior
-const ESPERA_BARRIDO := 6.0
+const ENTRE_OLAS := 0.9            # lo que tarda en salir cada ola tras la anterior
+const ESPERA_BARRIDO := 7.0
 # El combo de porrazos (fase 2)
 const AVISO_COMBO := [0.5, 0.32, 0.32]   # el aviso de cada golpe
 const DANO_COMBO := 16
@@ -262,7 +262,11 @@ func porrazo(johnny: Node2D, angulo: float, dano: int, empuje: float) -> void:
 # La carga: corre en línea recta con el escudo por delante (lo común, en minijefe.gd). Si pilla a Johnny, le
 # tira; si se estrella, se atonta (y, contra una taquilla, se le agrieta el escudo)
 func cargar(delta: float, johnny: Node2D) -> void:
-	match embestir(delta, johnny, VELOCIDAD_CARGA[fase - 1], DANO_CARGA, TIEMPO_CARGA, PIE):
+	var como := embestir(delta, johnny, VELOCIDAD_CARGA[fase - 1], DANO_CARGA, TIEMPO_CARGA, PIE)
+	# una taquilla, aunque sea rozándola de lado, también le para (como los muros): si no, resbalaba por su lado
+	if como == "" and t > 0.05 and toca_taquilla():
+		como = "pared"
+	match como:
 		"pillado":
 			cambiar("recuperar", {"dur": 0.6})
 		"pared":
@@ -278,8 +282,11 @@ func cargar(delta: float, johnny: Node2D) -> void:
 # ¿Se ha estrellado contra una taquilla? Donde no hay ninguna (la sala de pruebas), vale cualquier choque
 func contra_taquilla() -> bool:
 	var hay := get_tree().get_nodes_in_group("muebles").any(func(m): return m.datos.get("tipo", "") == "lockers")
-	if not hay:
-		return true
+	return toca_taquilla() if hay else true
+
+
+# Si en este paso ha tocado una taquilla
+func toca_taquilla() -> bool:
 	for i in get_slide_collision_count():
 		var otro := get_slide_collision(i).get_collider()
 		if otro is Node and (otro as Node).is_in_group("muebles") and otro.datos.get("tipo", "") == "lockers":

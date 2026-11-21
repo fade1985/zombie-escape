@@ -88,6 +88,8 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
 - Las pelotas se rompen de un disparo (no a golpes, de momento); como mucho 9 a la vez.
 - Con la porra clavada (1,8 s) le entra un 50 % más.
 - Prueba: `--captura --edificio centro --jefe antidisturbios --muro`.
+- Ajustes tras la primera mirada del dueño: rozar una taquilla cargando también le para (antes resbalaba por su
+  lado); las olas, más lentas (170 en vez de 300, una cada 0,9 s) y dibujadas como un rayo en zigzag que parpadea.
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las

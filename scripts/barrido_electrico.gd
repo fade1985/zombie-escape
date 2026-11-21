@@ -9,7 +9,7 @@
 class_name BarridoElectrico
 extends Node2D
 
-const VELOCIDAD := 300.0   # lo deprisa que avanza cada ola
+const VELOCIDAD := 170.0   # lo deprisa que avanza cada ola (21 nov: 300 era muy deprisa)
 const HUECO := 64.0        # medio ancho del hueco de cada ola
 const GROSOR := 14.0       # lo que tiene que estar Johnny de cerca de la raya para que le dé
 const DANO := 14
@@ -95,27 +95,73 @@ func _draw() -> void:
 		if d < 0.0 or d > fondo:
 			continue
 		pintar_ola(d, ola.hueco)
+		postes(dir * d, ola.hueco)
 
 
-# Una ola: una raya de chispas que tiembla, de pared a pared, con su hueco entre dos postes amarillos
+# Una ola: un rayo en zigzag que parpadea, de pared a pared, con su hueco entre dos postes amarillos. Por capas: el
+# brillo azul en el suelo (una franja ancha y flojita), un rayo fino de acompañante, el rayo gordo (azul claro con el
+# centro blanco), ramitas que salen hacia delante y chispas que saltan
 func pintar_ola(d: float, hueco: float) -> void:
 	var base := dir * d
-	var s := desde
-	while s <= hasta:
-		if absf(s - hueco) > HUECO:
-			# tiembla de un lado a otro (como un rayo), con el centro blanco y el borde azul
-			var temblor := roundf(sin(s * 0.21 + t * 47.0) * 1.6 + sin(s * 0.07 - t * 31.0) * 1.4) * 2.0
-			var p := base + lado * s + dir * temblor
-			p = (p / 2.0).floor() * 2.0
-			# (gruesa: una franja de 16 de brillo azul, 8 de azul claro y 4 de blanco, para verla venir)
-			var a := lado.abs() * 4.0
-			draw_rect(Rect2(p - dir.abs() * 8.0 - lado.abs() * 2.0, dir.abs() * 16.0 + a), Color("#2a6cff", 0.45))
-			draw_rect(Rect2(p - dir.abs() * 4.0 - lado.abs() * 2.0, dir.abs() * 8.0 + a), Color("#5fd3ff"))
-			draw_rect(Rect2(p - dir.abs() * 2.0 - lado.abs() * 2.0, dir.abs() * 4.0 + a), Color("#ffffff"))
-			# alguna chispa suelta que salta
-			if hash(int(s) + int(t * 20.0) * 7919) % 23 == 0:
-				draw_rect(Rect2(p + dir * 6.0 + Vector2(-1, -5), Vector2(2, 2)), Color("#fff3a8"))
-		s += 4.0
+	var cuadro := int(t * 18.0)   # (el zigzag cambia 18 veces por segundo: parpadea)
+	for tramo in [[desde, hueco - HUECO], [hueco + HUECO, hasta]]:
+		var a: float = maxf(tramo[0], desde)
+		var b: float = minf(tramo[1], hasta)
+		if b - a < 4.0:
+			continue
+		# el brillo en el suelo
+		var r := Rect2(base + lado * a - dir * 14.0, Vector2.ZERO).expand(base + lado * b + dir * 14.0)
+		draw_rect(r.abs(), Color("#2a6cff", 0.18))
+		draw_rect(Rect2(base + lado * a - dir * 6.0, Vector2.ZERO).expand(base + lado * b + dir * 6.0).abs(),
+			Color("#5fd3ff", 0.16))
+		# el rayo fino y el gordo
+		var fino := zigzag(base, a, b, cuadro * 31 + 7, 9.0)
+		var gordo := zigzag(base, a, b, cuadro * 17 + 1, 6.0)
+		trazar(fino, 2.0, Color("#9fe8ff", 0.7))
+		trazar(gordo, 6.0, Color("#5fd3ff"))
+		trazar(gordo, 2.0, Color("#ffffff"))
+		# ramitas: cada pocos puntos, un trocito de rayo hacia delante (o hacia atrás), cortito
+		for k in gordo.size():
+			var h := absi(hash(Vector2i(k, cuadro)))
+			if h % 6 != 0:
+				continue
+			var p: Vector2 = gordo[k]
+			var hacia := dir * (1.0 if h % 4 < 2 else -1.0)
+			var q := p + hacia * 10.0 + lado * float(h % 9 - 4) * 2.0
+			trazar(PackedVector2Array([p, q, q + hacia * 8.0 + lado * float(h % 5 - 2) * 3.0]), 2.0, Color("#bff3ff"))
+			# y una chispa que salta
+			if h % 12 == 0:
+				draw_rect(Rect2(((q + Vector2(0, -8 - h % 7)) / 2.0).floor() * 2.0, Vector2(2, 2)), Color("#fff3a8"))
+
+
+# Los puntos de un rayo de "a" a "b" (a lo largo de la raya), cada 14, movidos al azar a un lado y a otro (hasta "tiembla")
+func zigzag(base: Vector2, a: float, b: float, semilla: int, tiembla: float) -> PackedVector2Array:
+	var puntos := PackedVector2Array()
+	var s := a
+	var i := 0
+	while true:
+		var fuera := 0.0 if s == a or s >= b else float(absi(hash(Vector2i(i, semilla))) % 100) / 50.0 - 1.0
+		puntos.append(base + lado * minf(s, b) + dir * fuera * tiembla)
+		if s >= b:
+			break
+		s += 14.0
+		i += 1
+	return puntos
+
+
+# Una línea de pixel art: cuadraditos de "grueso" cada 2 unidades, en la cuadrícula de los píxeles del dibujo
+func trazar(puntos: PackedVector2Array, grueso: float, color: Color) -> void:
+	var medio := Vector2(grueso, grueso) / 2.0
+	for k in puntos.size() - 1:
+		var p0 := puntos[k]
+		var p1 := puntos[k + 1]
+		var pasos := maxi(1, ceili(p0.distance_to(p1) / 2.0))
+		for j in pasos:
+			var p := (p0.lerp(p1, float(j) / pasos) / 2.0).floor() * 2.0
+			draw_rect(Rect2(p - medio, Vector2(grueso, grueso)), color)
+
+
+func postes(base: Vector2, hueco: float) -> void:
 	# los postes del hueco
 	for borde in [hueco - HUECO, hueco + HUECO]:
 		if borde < desde or borde > hasta:
