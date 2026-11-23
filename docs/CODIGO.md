@@ -1146,7 +1146,7 @@ en una línea.
   para sus paredes, `panel-llaves.png` (136x86, a escala 1; `muebles_gpt.py panel_llaves`), aún sin poner. Y el de martillos
   (23 nov, el dueño), `panel-martillos.png`, del mismo tamaño y también sin poner: el panel vacío de GPT (`panel-vacio-gpt.webp`)
   y el martillo de GPT (`martillo-gpt.webp`) colgado once veces con sus ganchos, su sombra y su etiqueta, con dos huecos vacíos y
-  uno torcido; se monta a tamaño de GPT y se reduce mezclando colores (`py tools/panel_martillos.py`, la lista `HUECOS`). El panel
+  uno torcido, la cabeza oscurecida (para que destaque sobre la chapa) y sangre por encima (la lista `SANGRE`); se monta a tamaño de GPT y se reduce mezclando colores (`py tools/panel_martillos.py`, la lista `HUECOS`). El panel
   vacío sirve para llenarlo con otras herramientas igual.
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos

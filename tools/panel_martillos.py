@@ -7,6 +7,7 @@
 #   py tools/panel_martillos.py           → assets/sprites/panel-martillos.png (136x86, a escala 1, como panel-llaves.png)
 #   (y luego Godot --headless --path . --import)
 import os
+import random
 from collections import deque
 from PIL import Image, ImageDraw
 
@@ -71,10 +72,46 @@ def etiqueta(d, x, y):
     d.rectangle((x - 3 * B, y + B, x + 3 * B - 1, y + B + 4), fill=(255, 175, 80, 255))
 
 
+def sangre(d, x, y, tam, semilla, gotas=2):
+    """Una salpicadura de sangre a cuadrados de GPT: una mancha, gotitas alrededor y unos chorretones que caen."""
+    r = random.Random(semilla)
+    rojos = [(115, 12, 12, 255), (150, 22, 20, 255), (85, 8, 8, 255), (175, 32, 26, 255)]
+    for _ in range(tam * 7):          # la mancha
+        dx, dy = r.gauss(0, tam * B / 2.2), r.gauss(0, tam * B / 2.6)
+        px, py = x + int(dx) // B * B, y + int(dy) // B * B
+        d.rectangle((px, py, px + B - 1, py + B - 1), fill=r.choice(rojos))
+    for _ in range(tam * 2):          # las gotitas
+        px = x + int(r.uniform(-tam * B * 1.4, tam * B * 1.4)) // B * B
+        py = y + int(r.uniform(-tam * B, tam * B)) // B * B
+        d.rectangle((px, py, px + B - 1, py + B - 1), fill=rojos[2])
+    for _ in range(gotas):            # los chorretones, hacia abajo, con su gota al final
+        px = x + int(r.uniform(-tam * B / 2, tam * B / 2)) // B * B
+        largo = r.randint(2, 2 + tam) * B
+        d.rectangle((px, y, px + B - 1, y + largo), fill=rojos[0])
+        d.rectangle((px - B // 2, y + largo, px + B + B // 2 - 1, y + largo + B + B // 2), fill=rojos[2])
+
+
+# Las manchas de sangre: (x, y, tamaño, chorretones), encima de todo (también de los martillos)
+SANGRE = [
+    (190, 165, 4, 3),      # en la cabeza del primero
+    (630, 330, 3, 2),      # en el mango del de en medio
+    (470, 450, 5, 3),      # en la chapa, entre las dos filas
+    (870, 230, 3, 2),      # en el torcido
+    (745, 590, 4, 3),      # en la cabeza de uno de abajo
+    (1150, 640, 3, 2),     # en el pequeño de la derecha
+]
+
 panel = sin_fondo(PANEL)
 martillo = sin_fondo(MARTILLO)
 mw, mh = martillo.size
 CABEZA = 0.17      # dónde acaba la cabeza del martillo (en tanto por uno de su alto)
+# la cabeza, más oscura (23 nov, el dueño: gris claro sobre la chapa gris no destacaba): los grises de arriba, más negros
+pm = martillo.load()
+for y in range(int(mh * 0.3)):
+    for x in range(mw):
+        r_, g_, b_, a_ = pm[x, y]
+        if a_ and max(r_, g_, b_) - min(r_, g_, b_) < 40 and max(r_, g_, b_) > 45:
+            pm[x, y] = (int(r_ * 0.5), int(g_ * 0.5), int(b_ * 0.55), a_)
 
 capa = Image.new("RGBA", panel.size, (0, 0, 0, 0))     # los ganchos y las etiquetas
 sombras = Image.new("RGBA", panel.size, (0, 0, 0, 0))
@@ -114,6 +151,14 @@ junto = panel.copy()
 junto.alpha_composite(sombras)
 junto.alpha_composite(capa)
 junto.alpha_composite(martillos)
+manchas = Image.new("RGBA", panel.size, (0, 0, 0, 0))
+dm = ImageDraw.Draw(manchas)
+for i, (x, y, tam, gotas) in enumerate(SANGRE):
+    sangre(dm, x, y, tam, i, gotas)
+# la sangre, solo dentro del panel (no por fuera del marco)
+alfa = Image.composite(manchas.split()[3], Image.new("L", panel.size, 0), panel.split()[3].point(lambda v: 255 if v > 0 else 0))
+manchas.putalpha(alfa)
+junto.alpha_composite(manchas)
 os.makedirs("capturas", exist_ok=True)
 junto.save("capturas/panel-martillos-grande.png")     # el montaje a tamaño de GPT, para mirarlo (capturas/ no va en git)
 # reducido mezclando colores (premultiplicado) y el borde sin medias tintas, como muebles_gpt.pasar
