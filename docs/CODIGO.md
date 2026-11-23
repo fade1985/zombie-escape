@@ -1146,11 +1146,13 @@ en una línea.
   pared de la sala de venta (23 nov, el dueño): uno distinto en cada hueco, a escala 1 (136x86), del rodapié a la moldura; los huecos,
   en `mapa.gd` (`PANELES_TIENDA`: 9 con la puerta abajo, 3 + 4 + 2 entre las puertas del almacén y del taller, y 10 con la puerta
   arriba, 5 + 5 a los lados de la entrada; "" es un hueco aún sin panel) y se pintan en la cara del muro (`paneles_de_pared`, con
-  "mitad" en `cara_pared.gd`). De momento, solo el de martillos, `panel-martillos.png`: el panel vacío de GPT (`panel-vacio-gpt.webp`)
-  y el martillo de GPT (`martillo-gpt.webp`) colgado once veces con sus ganchos, su sombra y su etiqueta, con dos huecos vacíos y
-  uno torcido, la cabeza oscurecida (para que destaque sobre la chapa) y sangre por encima (la lista `SANGRE`); se monta a tamaño de
-  GPT y se reduce mezclando colores (`py tools/panel_martillos.py`, la lista `HUECOS`). El panel vacío sirve para llenarlo con otras
-  herramientas igual. (El de llaves inglesas, de GPT entero, se borró: está en git.)
+  "mitad" en `cara_pared.gd`). Cada panel, un panel
+  perforado vacío de GPT con una herramienta de GPT colgada varias veces (ganchos, sombra, etiqueta naranja, huecos vacíos, alguna
+  torcida y sangre por encima), montado a tamaño de GPT y reducido mezclando colores: `py tools/paneles_ferreteria.py [nombre]` (en su
+  lista `PANELES`, cada uno con sus `huecos` y su `sangre`) saca `panel-<nombre>.png`. Hechos: `martillos` (panel gris,
+  `panel-vacio-gpt.webp`, y `martillo-gpt.webp`, con la cabeza oscurecida para que destaque) y `alicates` (panel azul con tres tiros,
+  `panel-vacio-azul-gpt.webp`, recortado por el marco, y `alicates-gpt.webp`, de un gancho entre los mangos), juntos en medio de la
+  pared. (El de llaves inglesas, de GPT entero, se borró: está en git.)
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
   (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la

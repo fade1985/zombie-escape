@@ -764,16 +764,16 @@ func poner_muros() -> void:
 
 
 # (23 nov, el dueño) Los paneles colgados en la pared de arriba de la sala de venta de una tienda, cada uno distinto: su dibujo
-# (assets/sprites/<dibujo>.png, a escala 1: 136x86, tools/panel_martillos.py) y su centro, en casillas desde la esquina de
+# (assets/sprites/<dibujo>.png, a escala 1: 136x86, tools/paneles_ferreteria.py) y su centro, en casillas desde la esquina de
 # arriba a la izquierda de la sala, según el lado de la puerta. Están todos los huecos; "" es uno aún sin panel. Con la
 # puerta abajo, la pared tiene tres trozos (las puertas del almacén y del taller): 3 + 4 + 2; con la puerta arriba, dos
 # (la entrada en medio): 5 + 5. Los paneles, casi pegados, del rodapié a la moldura
 const PANELES_TIENDA := {"ferreteria": {
 	"abajo": [["", 2.6875], ["", 7.5], ["", 12.3125],
-		["", 19.325], ["panel-martillos", 23.775], ["", 28.225], ["", 32.675],
+		["", 19.325], ["panel-martillos", 23.775], ["panel-alicates", 28.225], ["", 32.675],
 		["", 39.29], ["", 43.58]],
 	"arriba": [["", 2.25], ["", 6.625], ["", 11.0], ["", 15.375], ["", 19.75],
-		["panel-martillos", 26.25], ["", 30.625], ["", 35.0], ["", 39.375], ["", 43.75]],
+		["panel-martillos", 26.25], ["panel-alicates", 30.625], ["", 35.0], ["", 39.375], ["", 43.75]],
 }}
 
 
