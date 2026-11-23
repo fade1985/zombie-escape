@@ -1142,7 +1142,11 @@ en una línea.
   (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-ferreteria" y "almacen-ferreteria"), la suciedad y la sangre (`Tienda.TIPOS`
   "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo gris), sus muebles (los de
   `bano-ropa` y `almacen-ropa`), sus puertas metálicas y sin toalla ni balda. El plano de antes, `ferreteria-antigua`, para
-  Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. Los paneles de la
+  Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. El mostrador de cobro (24 nov, el
+  dueño; GPT, desde una foto suya, a escala 1 y pixelado como los muebles de la ropa): el mismo por los dos lados, `ferremostrador`
+  desde el del cliente (la tienda normal) y `ferremostrador2` desde el del dependiente (la inversa, que se entra por arriba), de
+  `mostrador-ferreteria-gpt.webp` y `mostrador-ferreteria-dentro-gpt.webp` con `py tools/mostrador_ferreteria_gpt.py`; a la
+  izquierda de la entrada (`tienda-ferreteria` en `catalogo.gd`). Los paneles de la
   pared de la sala de venta (23 nov, el dueño): ocho, todos distintos, a escala 1 (136x86), del rodapié a la moldura; dónde va cada uno,
   en `mapa.gd` (`PANELES_TIENDA`: con la puerta abajo, 3 + 3 + 2 entre las puertas del almacén y del taller, y con la puerta
   arriba, 4 + 4 a los lados de la entrada; desde el 24 nov, en cada trozo, el mismo espacio entre los paneles que entre ellos y las
