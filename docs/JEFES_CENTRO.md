@@ -147,7 +147,9 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
   `en_medio` de `Catalogo.SALAS` (`muebles.gd`, `en_medio`): choca y los zombis la rodean.
 - Los sacos: 3 (patatas, tomates, harina; PixelLab), caen cada vez que cocina, aguantan 40 y son del grupo "zombis" (se
   rompen a golpes, a tiros y con explosiones). Cocina cada 17 s (12 en la fase 2); remueve 4,5 s (3,5); se cura un 4 %
-  de su vida por saco que quede (5 %). Sin sacos: enfermo 4,5 s y le entra el doble. Si se rompen todos antes, va a
+  de su vida por saco que quede (5 %). Sin sacos: enfermo 4,5 s y le entra el doble; se da la
+  vuelta, vomita tres veces (un chorro y un charco «vomito», que a Johnny no le hace nada) y lleva estrellitas (24 nov, el dueño:
+  que se note). Si se rompen todos antes, va a
   cocinar enseguida («¿Y MIS INGREDIENTES?»). Junto a la barra, tres saquitos que se tachan (`barra_jefe.gd`, `pintar_sacos`).
 - El damero: cuadros de 4×4 casillas en toda la sala (24 nov: de 2×2 casi no cabía Johnny), aviso 1,1 s (0,8 en la fase 2) y quema 0,7 s, 12 de daño; esquivando
   también quema: hay que salir del cuadro. Cada 9 s (7,5). Al quemar, cada cuadro saca el efecto de pixelfx

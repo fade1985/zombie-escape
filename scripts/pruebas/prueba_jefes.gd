@@ -2111,6 +2111,8 @@ func probar_banquete() -> void:
 	jefe.recibir_golpe(10, Vector2.RIGHT * 10.0)
 	print("Banquete: sin sacos, estado %s · un golpe de 10 le quita %d (esperado: enfermo, 20) · animación «%s»" % [jefe.estado,
 		antes - jefe.vida, jefe.sprite.animation])
+	print("Banquete: enfermo, con estrellitas %s · charcos de vómito %d (esperado: true, 1)" % [jefe.estrellas != null,
+		jefe.get_parent().get_children().filter(func(n): return str(n.get("tipo")) == "vomito").size()])
 	Captura.foto("captura-banquete-enfermo.png")
 	# a media vida: «servicio de urgencia»
 	jefe.cambiar("andar")

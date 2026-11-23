@@ -40,6 +40,8 @@ const CURA_SACO := [0.04, 0.05]    # lo que se cura por cada saco que quede (par
 const SACOS := 3
 const ENFERMO := 4.5               # lo que se queda doblado con el guiso malo
 const DOBLE := 2.0                 # lo que le entra enfermo
+const ARCADAS := [0.15, 1.7, 3.2]  # cuándo vomita estando enfermo (además, estrellitas: con_estrellas)
+const CHARCO := "res://escenas/armas/charco.tscn"
 const CLAVADO := 1.6               # con los cuchillos clavados en el suelo
 const MAS_CLAVADO := 1.5           # lo que le entra así
 # los ataques
@@ -126,7 +128,11 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				comer()
 		"enfermo":
 			frenar(delta)
-			if randf() < delta * 6.0:
+			# vomita a arcadas: un chorro y un charco delante de él en cada una, y entre medias, babas
+			for arcada in ARCADAS:
+				if t - delta < arcada and t >= arcada:
+					vomitar()
+			if randf() < delta * 4.0:
 				Particulas.volar(self, global_position + mirada * 30.0, 40.0, mirada * randf_range(40, 90),
 					randf_range(20, 60), Color("#8ab83a"), randf_range(3, 5))
 			if t >= ENFERMO:
@@ -336,6 +342,8 @@ func comer() -> void:
 	cocina = CADA_COCINA[fase - 1]
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if vivos == 0:
+		if olla:
+			mirada = centro_olla().direction_to(global_position)   # (se da la vuelta: vomita fuera de la olla, a la vista)
 		cambiar("enfermo")
 		gritar(Idioma.t("¡PUAJ!"), Color("#8ab83a"), 26)
 		Sonido.tocar("chof")
@@ -354,6 +362,28 @@ func comer() -> void:
 	sacos.clear()
 	if johnny:
 		reponer(johnny)
+
+
+# Enfermo, con estrellitas de mareo encima de la cabeza (minijefe.actualizar_estrellas)
+func con_estrellas() -> bool:
+	return estado == "enfermo" or super()
+
+
+# Una arcada: un chorro de vómito que sale de la boca hacia delante y un charco donde cae (el "vomito" de charco.gd: a
+# Johnny no le hace nada)
+func vomitar() -> void:
+	var boca := global_position + mirada * 26.0
+	for i in 18:
+		var v := mirada.rotated(randf_range(-0.35, 0.35)) * randf_range(90, 220)
+		Particulas.volar(self, boca, 50.0, v, randf_range(30, 90),
+			Color("#b89a34") if i % 3 else Color("#8ab83a"), randf_range(4, 7))
+	var charco: Node2D = load(CHARCO).instantiate()
+	charco.tipo = "vomito"
+	charco.dueno = self
+	charco.escala = 0.7
+	charco.position = ((global_position + mirada * 70.0) / 2.0).round() * 2.0
+	get_parent().add_child(charco)
+	Sonido.tocar("chof")
 
 
 # Caen tres sacos nuevos por la cocina: lejos de la olla, de Johnny y entre sí

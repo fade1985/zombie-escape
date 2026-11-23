@@ -431,13 +431,18 @@ func _pintar_encima() -> void:
 
 
 # Atontado, las estrellitas de pixelfx (efecto_suelo.gd, "estrellitas") le dan vueltas a la cabeza; si no, fuera
+# Si ahora lleva estrellitas (atontado; cada jefe puede añadir los suyos, como el cocinero enfermo)
+func con_estrellas() -> bool:
+	return estado == "atontado"
+
+
 func actualizar_estrellas() -> void:
-	if estado == "atontado" and estrellas == null:
+	if con_estrellas() and estrellas == null:
 		estrellas = EfectoSuelo.new()
 		estrellas.tipo = "estrellitas"
 		estrellas.position = Vector2(0, -arriba - 6.0)
 		add_child(estrellas)
-	elif estado != "atontado" and estrellas != null:
+	elif not con_estrellas() and estrellas != null:
 		estrellas.queue_free()
 		estrellas = null
 
