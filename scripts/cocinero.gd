@@ -18,7 +18,7 @@
 # cuchillo en cada mano) y recoge las sartenes. Fase 2:
 #   - Corte en cruz: avisa con cuatro franjas desde él hasta las paredes, en + o en X (a veces una detrás de la otra),
 #     con cuatro cuchillos apuntando por ellas; luego salen volando hasta la pared y dan al que pillan al pasar.
-#   - La olla se vuelca: tiembla y sale una ola de aceite (ola_aceite.gd, el barrido del antidisturbios con otro
+#   - La olla se vuelca (su animación de PixelLab: volcar_olla) y sale una ola de aceite (ola_aceite.gd, el barrido del antidisturbios con otro
 #     dibujo) que cruza la sala hacia Johnny; dos olas, cada una con su hueco. Detrás de la olla no llega.
 #   - Combo: dos cuchillazos seguidos y en el segundo se le clavan los cuchillos en el suelo (le entra un 50 % más).
 #   - Lluvia de cuchillos: los tira hacia arriba y caen 6 alrededor de Johnny, cada uno con su marca.
@@ -47,6 +47,13 @@ const ESCUDO := [preload("res://assets/sprites/escudo-cristal-detras.png"),   # 
 	preload("res://assets/sprites/escudo-cristal-delante.png"), preload("res://assets/sprites/escudo-cristal-brillo.png")]
 const ESCUDO_ESCALA := 3.0         # el escudo de remover (la cúpula del científico, a su medida: 2), a la del cocinero
 const ESCUDO_SUBE := 0.25
+# La olla volcándose (fase 2, la ola): una animación de PixelLab (assets/sources/salas/centro/olla-vuelca), en un lienzo
+# de 112×96 con la olla donde la del mueble; tiembla, se vuelca hacia delante (el guiso llega al suelo hacia el
+# fotograma 9, cuando sale la ola) y vuelve a ponerse derecha
+const HOJA_VUELCA := preload("res://assets/sprites/olla-vuelca.png")
+const VUELCA_CUADROS := 17
+const VUELCA_CUADRO := 0.1         # lo que dura cada fotograma
+const VUELCA_OFFSET := Vector2(-56, -90)
 const CLAVADO := 1.6               # con los cuchillos clavados en el suelo
 const MAS_CLAVADO := 1.5           # lo que le entra así
 # los ataques
@@ -94,6 +101,8 @@ var golpe_escudo := -9.0           # cuándo le dieron en el escudo (para que se
 var escudo: Array[Sprite2D] = []   # las tres capas del escudo (detrás, delante y brillo)
 var escudo_k := 0.0                # lo subido que está (0 = no hay, 1 = entero)
 var aviso_inmune := 0.0            # para no gritar «¡INMUNE!» a cada golpe
+var vuelca: Sprite2D = null        # la olla volcándose (la animación, en lugar de su dibujo quieto)
+var vuelca_t := 0.0
 
 
 func _ready() -> void:
@@ -127,6 +136,7 @@ func pista() -> void:
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
+	animar_vuelca(delta)
 	for k in espera:
 		espera[k] -= delta
 	if olla == null:
@@ -223,8 +233,8 @@ func pensar(delta: float, johnny: Node2D) -> void:
 					andar(0.5)
 		"aviso_ola":
 			frenar(delta)
-			if olla:
-				temblar_olla(t / AVISO_OLA)
+			if olla and vuelca == null and t < 0.5:
+				volcar_olla()
 			if t >= AVISO_OLA:
 				ola(johnny)
 				andar(0.6)
@@ -452,16 +462,39 @@ func sacos_rotos() -> int:
 
 
 # El aviso de la ola: la olla tiembla y se pone al rojo ("k", de 0 a 1)
-func temblar_olla(k: float) -> void:
+# Empieza a volcarse la olla: su dibujo quieto se esconde y sale el de la animación
+func volcar_olla() -> void:
 	var dibujo: Sprite2D = olla.get_node_or_null("Sprite")   # no-tr
 	if dibujo == null:
 		return
-	if k >= 1.0:
-		dibujo.position.x = 0.0
-		dibujo.modulate = Color.WHITE
+	vuelca = Sprite2D.new()
+	vuelca.texture = HOJA_VUELCA
+	vuelca.hframes = VUELCA_CUADROS
+	vuelca.centered = false
+	vuelca.offset = VUELCA_OFFSET
+	vuelca.scale = Vector2(2, 2)
+	olla.add_child(vuelca)
+	dibujo.visible = false
+	vuelca_t = 0.0
+
+
+func animar_vuelca(delta: float) -> void:
+	if vuelca == null:
 		return
-	dibujo.position.x = roundf(sin(tiempo * 50.0) * 2.0 * k / 2.0) * 2.0
-	dibujo.modulate = Color.WHITE.lerp(Color(1.0, 0.55, 0.35), k * (0.5 + 0.5 * sin(tiempo * 20.0)))
+	vuelca_t += delta
+	var cuadro := int(vuelca_t / VUELCA_CUADRO)
+	if cuadro >= VUELCA_CUADROS or not is_instance_valid(olla):
+		quitar_vuelca()
+		return
+	vuelca.frame = cuadro
+
+
+func quitar_vuelca() -> void:
+	if is_instance_valid(vuelca):
+		vuelca.queue_free()
+	vuelca = null
+	if is_instance_valid(olla) and olla.get_node_or_null("Sprite"):   # no-tr
+		olla.get_node("Sprite").visible = true   # no-tr
 
 
 # ── Los ataques ──
@@ -656,7 +689,7 @@ func morir() -> void:
 		if n is FogonesDamero or n is OlaAceite:
 			n.queue_free()
 	if olla:
-		temblar_olla(1.0)
+		quitar_vuelca()
 
 
 # ── Dibujo ──

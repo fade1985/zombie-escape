@@ -140,6 +140,8 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
   «¡CORTE EN CRUZ!», en el aviso tiene cuatro cuchillos grandes apuntando por las franjas y luego salen volando hasta la
   pared dejando un tajo rojo: solo da el cuchillo que pilla a Johnny al pasar.
 - **La olla se vuelca**: una ola de aceite cruza la sala y deja libres un par de mesas o huecos.
+  Desde el 24 nov, la olla se vuelca de verdad: una animación de PixelLab (`assets/sources/salas/centro/olla-vuelca`,
+  hoja `olla-vuelca`) que sustituye un momento a su dibujo quieto; la ola sale cuando el guiso llega al suelo.
 - La olla le cura más a menudo: hay que vigilar los ingredientes.
 
 ### Cómo quedó (23 nov)
