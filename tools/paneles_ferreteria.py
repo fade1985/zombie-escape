@@ -8,6 +8,7 @@
 #   py tools/paneles_ferreteria.py alicates     → solo ese (assets/sprites/panel-alicates.png)
 #   (y luego Godot --headless --path . --import)
 # Para mirar el montaje grande: capturas/panel-<nombre>-grande.png (capturas/ no va en git)
+import math
 import os
 import random
 import sys
@@ -22,8 +23,9 @@ B = 11                            # el tamaño de un «píxel» de GPT en sus im
 #   panel, herramienta: las imágenes de GPT; recorte: la caja del panel en su imagen (si algo se sale del marco, como el
 #     chorretón de sangre del azul), o None para recortar por todo lo que no es fondo
 #   colgar: "cabeza", de dos ganchos debajo de la cabeza, a los lados del mango (el martillo); "medio", de un gancho
-#     entre los dos mangos, justo debajo de donde se juntan (los alicates)
-#   oscurecer: la parte de arriba (en tanto por uno del alto) cuyos grises se oscurecen, o 0
+#     entre los dos mangos, justo debajo de donde se juntan (los alicates); "agujero", boca abajo, de un gancho metido
+#     en el agujero del final del mango (la llave inglesa)
+#   oscurecer: la parte de arriba (en tanto por uno del alto) cuyos grises se oscurecen, o 0; oscuro: cuánto (por defecto, a la mitad)
 #   huecos: (centro x, alto de arriba y, alto de la herramienta, giro en grados, qué hay), en píxeles del panel ya
 #     recortado (unos 1396x885): "colgada", "vacio" (solo ganchos y etiqueta) o "torcido" (girada)
 #   sangre: (x, y, tamaño, chorretones), encima de todo
@@ -69,6 +71,30 @@ PANELES = {
             (560, 440, 5, 3),      # en la chapa, entre las dos filas
             (370, 680, 3, 2),      # en los mangos de uno de abajo
             (1210, 600, 4, 2),     # en el de la derecha de abajo
+        ],
+    },
+    # el panel gris con remaches (sin nada delante de la abolladura de la izquierda, del tornillo arrancado de arriba
+    # ni de los zarpazos de abajo a la derecha) con las llaves inglesas, boca abajo
+    "llaves": {
+        "panel": "assets/sources/centro/panel-vacio-remaches-gpt.webp",
+        "herramienta": "assets/sources/centro/llave-inglesa-gpt.webp",
+        "recorte": None,
+        "colgar": "agujero",
+        # toda la llave, algo más oscura: cromada sobre la chapa gris no destacaba
+        "oscurecer": 1.0,
+        "oscuro": 0.68,
+        "huecos": [
+            (170, 125, 300, 0, "colgada"), (370, 125, 260, 0, "colgada"), (560, 125, 300, 0, "colgada"),
+            (850, 125, 260, 0, "vacio"), (1050, 125, 300, 8, "torcido"), (1250, 125, 260, 0, "colgada"),
+            (175, 510, 270, 0, "colgada"), (380, 510, 235, 0, "colgada"), (585, 510, 270, 0, "vacio"),
+            (790, 510, 235, 0, "colgada"), (990, 510, 270, 0, "colgada"),
+        ],
+        "sangre": [
+            (380, 300, 4, 3),      # en el mango del segundo
+            (1060, 380, 3, 2),     # en la cabeza del torcido
+            (700, 450, 5, 3),      # en la chapa, entre las dos filas
+            (175, 700, 3, 2),      # en el de abajo a la izquierda
+            (990, 640, 4, 2),      # en el de abajo a la derecha
         ],
     },
 }
@@ -138,12 +164,14 @@ def montar(nombre, p):
             for x in range(hw):
                 r_, g_, b_, a_ = ph[x, y]
                 if a_ and max(r_, g_, b_) - min(r_, g_, b_) < 40 and max(r_, g_, b_) > 45:
-                    ph[x, y] = (int(r_ * 0.5), int(g_ * 0.5), int(b_ * 0.55), a_)
+                    k = p.get("oscuro", 0.5)
+                    ph[x, y] = (int(r_ * k), int(g_ * k), int(b_ * min(1.0, k * 1.1)), a_)
 
     capa = Image.new("RGBA", panel.size, (0, 0, 0, 0))     # los ganchos y las etiquetas
     sombras = Image.new("RGBA", panel.size, (0, 0, 0, 0))
     colgadas = Image.new("RGBA", panel.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(capa)
+    puntas = []       # los ganchos que se ven por delante de la herramienta (los del agujero de la llave)
 
     for cx, y, alto, giro, que in p["huecos"]:
         ancho = round(hw * alto / hh)
@@ -159,6 +187,19 @@ def montar(nombre, p):
             gancho(d, cx - mango_w // 2 - 3 * B // 2, gy)
             gancho(d, cx + mango_w // 2 + 3 * B // 2, gy)
             eje = (centro, round(alto * 0.17))
+        elif p["colgar"] == "agujero":
+            # boca abajo: el agujero del mango, arriba; el gancho sale del panel por él (se ve dentro del agujero)
+            m = m.rotate(180)
+            a = m.split()[3].load()
+            pm = m.load()
+            hueco = [(xx, yy) for yy in range(int(alto * 0.15)) for xx in range(ancho) if a[xx, yy] > 0 and max(pm[xx, yy][:3]) < 20]
+            centro = sum(q[0] for q in hueco) // len(hueco)
+            eje = (centro, sum(q[1] for q in hueco) // len(hueco))
+            gy = y + eje[1] - 3 * B // 2
+            if que == "vacio":
+                gancho(d, cx, gy)
+            else:
+                puntas.append((cx, gy, giro))
         else:
             # un gancho entre los dos mangos, donde empiezan a separarse (los alicates se apoyan en él por la unión)
             centro = ancho // 2
@@ -166,7 +207,16 @@ def montar(nombre, p):
             gy = y + abre - B
             gancho(d, cx, gy)
             eje = (centro, abre)
-        if que == "torcido":
+        if que == "torcido" and p["colgar"] == "agujero":
+            # girada alrededor del agujero, que se queda en su gancho
+            w0, h0 = m.size
+            m = m.rotate(-giro, resample=Image.BICUBIC, expand=True)
+            t = math.radians(-giro)
+            dx, dy = eje[0] - w0 / 2, eje[1] - h0 / 2
+            ex = dx * math.cos(t) + dy * math.sin(t) + m.width / 2
+            ey = -dx * math.sin(t) + dy * math.cos(t) + m.height / 2
+            x0, y0 = round(cx - ex), round(y + eje[1] - ey)
+        elif que == "torcido":
             m = m.rotate(-giro, resample=Image.BICUBIC, expand=True, center=eje)
             # (al girar con expand, el eje se mueve: se vuelve a poner en su sitio)
             x0, y0 = cx - m.width // 2 + (2 * B if giro > 0 else -2 * B), y - B
@@ -184,6 +234,12 @@ def montar(nombre, p):
     junto.alpha_composite(sombras)
     junto.alpha_composite(capa)
     junto.alpha_composite(colgadas)
+    if puntas:
+        delante = Image.new("RGBA", panel.size, (0, 0, 0, 0))
+        dd = ImageDraw.Draw(delante)
+        for cx, gy, _giro in puntas:
+            gancho(dd, cx, gy)
+        junto.alpha_composite(delante)
     manchas = Image.new("RGBA", panel.size, (0, 0, 0, 0))
     dm = ImageDraw.Draw(manchas)
     for i, (x, y, tam, gotas) in enumerate(p["sangre"]):

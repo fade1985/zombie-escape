@@ -774,10 +774,10 @@ func poner_muros() -> void:
 # puerta abajo, la pared tiene tres trozos (las puertas del almacén y del taller): 3 + 4 + 2; con la puerta arriba, dos
 # (la entrada en medio): 5 + 5. Los paneles, casi pegados, del rodapié a la moldura
 const PANELES_TIENDA := {"ferreteria": {
-	"abajo": [["", 2.6875], ["", 7.5], ["", 12.3125],
+	"abajo": [["", 2.6875], ["panel-llaves", 7.5], ["", 12.3125],
 		["", 19.325], ["panel-martillos", 23.775], ["panel-alicates", 28.225], ["", 32.675],
 		["", 39.29], ["", 43.58]],
-	"arriba": [["", 2.25], ["", 6.625], ["", 11.0], ["", 15.375], ["", 19.75],
+	"arriba": [["", 2.25], ["", 6.625], ["panel-llaves", 11.0], ["", 15.375], ["", 19.75],
 		["panel-martillos", 26.25], ["panel-alicates", 30.625], ["", 35.0], ["", 39.375], ["", 43.75]],
 }}
 
