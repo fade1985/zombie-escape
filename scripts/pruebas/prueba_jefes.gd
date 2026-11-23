@@ -2090,6 +2090,11 @@ func probar_banquete() -> void:
 	jefe.cambiar("ir_olla")
 	await get_tree().create_timer(3.0, false).timeout
 	print("Banquete: yendo a la olla, estado %s (esperado: remover)" % jefe.estado)
+	# removiendo, con su escudo: no le entra nada
+	var sin_escudo: int = jefe.vida
+	jefe.recibir_golpe(50, Vector2.RIGHT * 10.0)
+	print("Banquete: removiendo, un golpe de 50 le quita %d (esperado: 0, el escudo)" % (sin_escudo - jefe.vida))
+	await get_tree().create_timer(0.05, false).timeout
 	Captura.foto("captura-banquete-remover.png")
 	print("Banquete: al remover, animación «%s» (esperado: remover_...)" % jefe.sprite.animation)
 	while jefe.estado == "remover":

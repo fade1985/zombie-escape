@@ -53,7 +53,7 @@ const DISTANCIA_CUCHILLAZO := 140.0   # si Johnny está más cerca que esto, pre
 const AVISO_COMBO := [0.5, 0.35]   # el de cada golpe del combo
 const AVISO_SARTEN := 0.6
 const VELOCIDAD_SARTEN := 260.0
-const MAX_SARTENES := 4
+const MAX_SARTENES := 5   # (24 nov, el dueño: que tire algo más: eran 4, cada 5 s)
 const AVISO_FREGAR := 0.8
 const AVISO_DAMERO := [1.1, 0.8]   # lo que avisa cada tanda de fogones
 const AVISO_CRUZ := 0.8
@@ -67,7 +67,7 @@ const MARCA_LLUVIA := 0.6          # lo que está cada marca en el suelo antes d
 const HUECO_LLUVIA := 0.15         # entre una marca y la siguiente
 const DANO_LLUVIA := 12
 # lo que espera a repetir cada ataque (normal y enfadado; 0: en esa fase no lo hace)
-const ESPERAS := {"cuchillazo": [1.4, 1.0], "damero": [9.0, 7.5], "sarten": [5.0, 0.0], "fregar": [12.0, 0.0],
+const ESPERAS := {"cuchillazo": [1.4, 1.0], "damero": [9.0, 7.5], "sarten": [3.5, 0.0], "fregar": [12.0, 0.0],
 	"cruz": [0.0, 5.0], "ola": [0.0, 13.0], "lluvia": [0.0, 8.0]}
 const PIE := 30.0                  # a qué altura dibuja los pies respecto a su centro
 # El fotograma de "lanzar" con el brazo del todo adelante y el del tajo del cuchillazo, según hacia dónde mire
@@ -83,6 +83,8 @@ var cocina := 12.0                 # lo que falta para ir a cocinar
 var sacos: Array = []              # los sacos de ingredientes de esta vez (los rotos, ya no válidos)
 var olla: Node2D = null            # el mueble de la olla gigante (si lo hay)
 var cocinadas := 0                 # las veces que ha terminado de cocinar (para la prueba)
+var golpe_escudo := -9.0           # cuándo le dieron en el escudo (para que se encienda)
+var aviso_inmune := 0.0            # para no gritar «¡INMUNE!» a cada golpe
 
 
 func _ready() -> void:
@@ -552,6 +554,18 @@ func fogones() -> Array:
 # ── Recibir golpes, enfadarse y morir ──
 
 # Enfermo, le entra el doble; con los cuchillos clavados, un 50 % más
+# Removiendo la olla, con su escudo, no le entra nada (24 nov, el dueño): ni golpes, ni balas, ni fuego, ni ácido. El
+# escudo se enciende y lo dice de vez en cuando
+func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
+	if estado == "remover":
+		golpe_escudo = tiempo
+		if tiempo - aviso_inmune > 1.2:
+			aviso_inmune = tiempo
+			gritar(Idioma.t("¡INMUNE!"), Color("#9fe3ff"), 18)
+		return
+	super(cantidad, fuerza)
+
+
 func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	match estado:
 		"enfermo":
@@ -559,6 +573,30 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 		"clavado":
 			return roundi(cantidad * MAS_CLAVADO)
 	return cantidad
+
+
+# El escudo mientras remueve: una burbuja azul clarito alrededor de él que aparece de golpe, palpita y, si le dan, se
+# enciende; a cuadraditos de 2, como todo
+func pintar_escudo(lienzo: Node2D) -> void:
+	var sale := minf(1.0, t / 0.15)
+	var golpe := maxf(0.0, 1.0 - (tiempo - golpe_escudo) / 0.25)
+	var centro := Vector2(0, -arriba * 0.45)
+	var r := Vector2(78.0, 92.0) * (0.6 + 0.4 * sale) * (1.0 + 0.03 * sin(tiempo * 6.0))
+	lienzo.draw_set_transform(centro, 0.0, r / r.y)
+	lienzo.draw_circle(Vector2.ZERO, r.y, Color(0.55, 0.85, 1.0, (0.10 + 0.15 * golpe) * sale))
+	lienzo.draw_set_transform(Vector2.ZERO)
+	# el borde: puntos que dan vueltas, más claros por arriba
+	var n := 44
+	for i in n:
+		var a := TAU * i / n + tiempo * 0.8
+		var p := ((centro + Vector2(cos(a) * r.x, sin(a) * r.y)) / 2.0).floor() * 2.0
+		var luz := 0.5 + 0.5 * maxf(0.0, -sin(a))
+		var c := Color(0.6 + 0.4 * luz, 0.9, 1.0, (0.45 + 0.35 * luz + 0.4 * golpe) * sale)
+		lienzo.draw_rect(Rect2(p - Vector2(2, 2), Vector2(4, 4)), c)
+	# y un brillo en la parte de arriba a la izquierda
+	var brillo := ((centro + Vector2(-r.x * 0.45, -r.y * 0.6)) / 2.0).floor() * 2.0
+	lienzo.draw_rect(Rect2(brillo, Vector2(10, 4)), Color(1, 1, 1, 0.5 * sale))
+	lienzo.draw_rect(Rect2(brillo + Vector2(-4, 4), Vector2(4, 6)), Color(1, 1, 1, 0.4 * sale))
 
 
 # «¡SERVICIO DE URGENCIA!»: recoge las sartenes y se le cae el gorro (la hoja cambia a mitad del grito: animar)
@@ -686,6 +724,7 @@ func pintar_encima(lienzo: Node2D) -> void:
 			var x := (i - (LLUVIA - 1) / 2.0) * 12.0 * (1.0 + k)
 			Cuchillo.dibujar(lienzo, Vector2(x, -arriba * 0.7 - k * k * 420.0 - i * 6.0), -PI / 2.0 + tiempo * 14.0 + i)
 	if estado == "remover":
+		pintar_escudo(lienzo)
 		# encima de la olla (o de él, sin olla)
 		var arriba_olla := (olla.global_position - Vector2(0, 160)) if olla else global_position - Vector2(0, arriba + 30)
 		var c: Vector2 = ((arriba_olla - global_position) / 2.0).floor() * 2.0

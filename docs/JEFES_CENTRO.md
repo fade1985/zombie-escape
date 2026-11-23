@@ -146,7 +146,8 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
 - La olla es un mueble de verdad (`bigpot`, dibujo de PixelLab), puesto en medio de la cocina con la opción nueva
   `en_medio` de `Catalogo.SALAS` (`muebles.gd`, `en_medio`): choca y los zombis la rodean.
 - Los sacos: 3 (patatas, tomates, harina; PixelLab), caen cada vez que cocina, aguantan 40 y son del grupo "zombis" (se
-  rompen a golpes, a tiros y con explosiones). Cocina cada 17 s (12 en la fase 2); remueve 4,5 s (3,5); se cura un 4 %
+  rompen a golpes, a tiros y con explosiones). Cocina cada 17 s (12 en la fase 2); remueve 4,5 s (3,5), con un escudo de burbuja azul que no deja entrar nada («¡INMUNE!»; 24 nov, el
+  dueño); se cura un 4 %
   de su vida por saco que quede (5 %). Sin sacos: enfermo 4,5 s y le entra el doble; se da la
   vuelta, vomita tres veces (un chorro y un charco «vomito», que a Johnny no le hace nada) y lleva estrellitas (24 nov, el dueño:
   que se note). Si se rompen todos antes, va a
@@ -156,7 +157,7 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
   `fogon-llamas` (`tools/pixelfx/fogon-llamas.js`): plancha al rojo, lenguas de fuego, chispas y brasas. El suelo de la
   cocina es de rejillas de acero (24 nov, el dueño: con baldosas no cuadraba el fuego de repente; `tools/suelo_rejilla.py`,
   `ESTILO_TIENDA` "jefe-cocinero" en `mapa.gd`): cada panel es justo un cuadro del damero, y el fuego sale de debajo.
-- Sartenes: hasta 4, rebotan y sueltan gotitas de aceite de 3 s; con 3 o más, «¡A FREGAR!» (cada 12 s): tiemblan 0,6 s y
+- Sartenes: hasta 5, una cada 3,5 s (24 nov, el dueño: eran 4, cada 5 s), rebotan y sueltan gotitas de aceite de 3 s; con 3 o más, «¡A FREGAR!» (cada 12 s): tiemblan 0,6 s y
   vuelven a su mano dando a quien pillen. Solo en la fase 1.
 - Se fueron el abanico de cuchillos, la sartén de antes y el aceite que rebosaban los fogones solos (M82).
 - Fase 2: otra hoja (`jefe-cocinero-sin`, PixelLab: calvo y con un cuchillo en cada mano), el gorro sale volando
