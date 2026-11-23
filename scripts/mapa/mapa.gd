@@ -77,6 +77,9 @@ const ESTILO_TIENDA := {
 	# la joyería (parte 9): su sala de venta con mármol ("<uso>-<tipo de tienda>" manda sobre "<uso>"), la trastienda
 	# como un almacén y la cámara acorazada con suelo de chapa de acero
 	"tienda-joyeria": [["marmol"], "venta"],
+	# la Cocina central del cocinero ("jefe-<apt.tipo>", 24 nov, el dueño): suelo de rejillas de acero, para que el fuego de
+	# los fogones en damero salga de debajo; cada panel es un cuadro del damero (tools/suelo_rejilla.py)
+	"jefe-cocinero": [["rejilla"], "venta"],
 	# la ferretería (20 nov, el dueño): hormigón pulido gris y pared blanca con rodapié de chapa, destrozados (de GPT:
 	# tools/taller_ferreteria_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
 	# (del 20 al 23 nov, la pared fue toda de paneles perforados de chapa gris oscura; el 23 nov el dueño la devolvió a la blanca,
@@ -286,6 +289,8 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 				estilos[s.id] = textura("trastero", "")
 				continue
 			var propio: String = s.uso + "-" + sitio.get("tienda", "")   # el estilo de ese tipo de tienda, si lo tiene
+			if s.uso == "jefe" and ESTILO_TIENDA.has("jefe-" + str(sitio.apt.get("tipo", ""))):
+				propio = "jefe-" + str(sitio.apt.tipo)   # (o el de la sala de ese minijefe: la cocina del cocinero)
 			if tienda and (ESTILO_TIENDA.has(propio) or ESTILO_TIENDA.has(s.uso)):
 				var clave: String = propio if ESTILO_TIENDA.has(propio) else s.uso
 				var suelos: Array = ESTILO_TIENDA[clave][0]

@@ -151,7 +151,9 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
   cocinar enseguida («¿Y MIS INGREDIENTES?»). Junto a la barra, tres saquitos que se tachan (`barra_jefe.gd`, `pintar_sacos`).
 - El damero: cuadros de 4×4 casillas en toda la sala (24 nov: de 2×2 casi no cabía Johnny), aviso 1,1 s (0,8 en la fase 2) y quema 0,7 s, 12 de daño; esquivando
   también quema: hay que salir del cuadro. Cada 9 s (7,5). Al quemar, cada cuadro saca el efecto de pixelfx
-  `fogon-llamas` (`tools/pixelfx/fogon-llamas.js`): plancha al rojo, lenguas de fuego, chispas y brasas.
+  `fogon-llamas` (`tools/pixelfx/fogon-llamas.js`): plancha al rojo, lenguas de fuego, chispas y brasas. El suelo de la
+  cocina es de rejillas de acero (24 nov, el dueño: con baldosas no cuadraba el fuego de repente; `tools/suelo_rejilla.py`,
+  `ESTILO_TIENDA` "jefe-cocinero" en `mapa.gd`): cada panel es justo un cuadro del damero, y el fuego sale de debajo.
 - Sartenes: hasta 4, rebotan y sueltan gotitas de aceite de 3 s; con 3 o más, «¡A FREGAR!» (cada 12 s): tiemblan 0,6 s y
   vuelven a su mano dando a quien pillen. Solo en la fase 1.
 - Se fueron el abanico de cuchillos, la sartén de antes y el aceite que rebosaban los fogones solos (M82).
