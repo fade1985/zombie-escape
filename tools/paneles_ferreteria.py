@@ -188,6 +188,29 @@ PANELES = {
             (980, 600, 3, 2),      # en la de abajo
         ],
     },
+    # el cuarto panel azul, el del marco metalizado (sin nada delante de las abolladuras de arriba a la izquierda, la
+    # sangre de arriba a la derecha, la flecha naranja ni los clavos doblados de abajo) con destornilladores, de pie: del
+    # agujero del remate del mango, la punta hacia abajo; de dos largos, como en la tienda
+    "destornilladores": {
+        "panel": "assets/sources/centro/panel-vacio-azul4-gpt.webp",
+        "herramienta": "assets/sources/centro/destornillador-gpt.webp",
+        "recorte": None,
+        "colgar": "hueco",
+        "oscurecer": 0,
+        "huecos": [
+            (250, 70, 330, 0, "colgada"), (360, 70, 290, 0, "colgada"), (470, 70, 330, 0, "colgada"),
+            (580, 70, 290, 0, "vacio"), (690, 70, 330, 0, "colgada"), (800, 70, 290, 8, "torcido"),
+            (910, 70, 330, 0, "colgada"), (1020, 70, 290, 0, "colgada"),
+            (340, 480, 240, 0, "colgada"), (450, 480, 215, 0, "colgada"), (560, 480, 240, 0, "colgada"),
+            (670, 480, 215, 0, "colgada"), (780, 480, 240, 0, "colgada"), (890, 480, 215, 0, "vacio"),
+            (1000, 480, 240, 0, "colgada"), (1110, 480, 215, 0, "colgada"), (1220, 480, 240, 0, "colgada"),
+        ],
+        "sangre": [
+            (470, 200, 3, 2),      # en el mango del tercero
+            (640, 330, 4, 3),      # en la chapa, al lado del hueco vacío
+            (1000, 600, 3, 2),     # en uno de abajo
+        ],
+    },
 }
 
 

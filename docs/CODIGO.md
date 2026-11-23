@@ -1160,7 +1160,9 @@ en una línea.
   `panel-vacio-azul3-gpt.webp`, y `serrucho-gpt.webp`, que viene en horizontal y se pone de pie, `girar`; de un gancho metido por el
   hueco del mango, `colgar` "hueco"), junto al de taladros. Y `radiales` (el gris del marco de aluminio,
   `panel-vacio-aluminio-gpt.webp`, y `radial-gpt.webp`, vista desde arriba, tumbada, con el cuerpo en dos ganchos: `colgar` "cuerpo" y
-  `apoyos`), en el último hueco de la derecha. (El de llaves inglesas, de GPT entero, se borró: está en git.)
+  `apoyos`), en el último hueco de la derecha. Y `destornilladores` (el cuarto azul, el del marco metalizado,
+  `panel-vacio-azul4-gpt.webp`, y `destornillador-gpt.webp`, de pie, de dos largos, del agujero del remate del mango: `colgar`
+  "hueco"), en el primer hueco de la izquierda (con la puerta arriba, el segundo). (El de llaves inglesas, de GPT entero, se borró: está en git.)
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
   (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
