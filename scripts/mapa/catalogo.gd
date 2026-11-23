@@ -503,7 +503,7 @@ const SALAS := {
 	}},
 	# M77: la ferretería fija (Tienda.PLANOS). (20 nov, el dueño) la sala de venta, sin muebles de momento: se rehará, como la de la
 	# tienda de ropa (antes llevaba bancos de trabajo, palés, cajas y dos filas de estanterías: está en git)
-	"tienda-ferreteria": {"colocados": {"abajo": [["ferremostrador", 15.12, "libre", 9.0]], "arriba": [["ferremostrador2", 15.12, "libre", 4.0]]}},
+	"tienda-ferreteria": {"colocados": {"abajo": [["ferremostrador", 16.0, "libre", 2.75]], "arriba": [["ferremostrador2", 16.0, "libre", 8.25]]}},
 	# el almacén (20 nov, el dueño: el mismo que el de la tienda de ropa, almacen-ropa) y el taller de la ferretería fija (M77)
 	"almacen-ferreteria": {"colocados": {
 		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
