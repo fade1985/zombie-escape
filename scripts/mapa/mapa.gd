@@ -772,14 +772,15 @@ func poner_muros() -> void:
 # (assets/sprites/<dibujo>.png, a escala 1: 136x86, tools/paneles_ferreteria.py) y su centro, en casillas desde la esquina de
 # arriba a la izquierda de la sala, según el lado de la puerta. Con la puerta abajo, la pared tiene tres trozos (las puertas
 # del almacén y del taller: de 0 a 15, de 17 a 35 y de 37 a 46): 3 + 3 + 2; con la puerta arriba, dos (la entrada en medio:
-# de 0 a 22 y de 24 a 46): 4 + 4. (24 nov) Todos a la misma distancia unos de otros (3/8 de casilla, 6 píxeles) y cada grupo,
-# centrado en su trozo; un azul y un gris, alternos. Del rodapié a la moldura
+# de 0 a 22 y de 24 a 46): 4 + 4. (24 nov) En cada trozo, el mismo espacio entre los paneles que entre ellos y las puertas o
+# las esquinas (9 píxeles, 21, 2 o 3 en el último, tan estrecho, y 16 con la puerta arriba); un azul y un gris, alternos. Del
+# rodapié a la moldura
 const PANELES_TIENDA := {"ferreteria": {
-	"abajo": [["panel-destornilladores", 2.875], ["panel-taladros", 7.5], ["panel-serruchos", 12.125],
-		["panel-martillos", 21.375], ["panel-alicates", 26.0], ["panel-cinta", 30.625],
-		["panel-llaves", 39.1875], ["panel-radiales", 43.8125]],
-	"arriba": [["panel-destornilladores", 4.0625], ["panel-taladros", 8.6875], ["panel-serruchos", 13.3125], ["panel-martillos", 17.9375],
-		["panel-alicates", 28.0625], ["panel-cinta", 32.6875], ["panel-llaves", 37.3125], ["panel-radiales", 41.9375]],
+	"abajo": [["panel-destornilladores", 2.6875], ["panel-taladros", 7.5], ["panel-serruchos", 12.3125],
+		["panel-martillos", 20.4375], ["panel-alicates", 26.0], ["panel-cinta", 31.5625],
+		["panel-llaves", 39.3125], ["panel-radiales", 43.6875]],
+	"arriba": [["panel-destornilladores", 3.125], ["panel-taladros", 8.375], ["panel-serruchos", 13.625], ["panel-martillos", 18.875],
+		["panel-alicates", 27.125], ["panel-cinta", 32.375], ["panel-llaves", 37.625], ["panel-radiales", 42.875]],
 }}
 
 

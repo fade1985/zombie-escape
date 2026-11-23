@@ -1145,8 +1145,8 @@ en una línea.
   Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. Los paneles de la
   pared de la sala de venta (23 nov, el dueño): ocho, todos distintos, a escala 1 (136x86), del rodapié a la moldura; dónde va cada uno,
   en `mapa.gd` (`PANELES_TIENDA`: con la puerta abajo, 3 + 3 + 2 entre las puertas del almacén y del taller, y con la puerta
-  arriba, 4 + 4 a los lados de la entrada; desde el 24 nov, todos a la misma distancia, 6 píxeles, cada grupo centrado en su trozo
-  de pared y un azul y un gris alternos; no se harán más) y se pintan en la cara del muro (`paneles_de_pared`, con
+  arriba, 4 + 4 a los lados de la entrada; desde el 24 nov, en cada trozo, el mismo espacio entre los paneles que entre ellos y las
+  puertas o las esquinas, y un azul y un gris alternos; no se harán más) y se pintan en la cara del muro (`paneles_de_pared`, con
   "mitad" en `cara_pared.gd`). Cada panel, un panel
   perforado vacío de GPT con una herramienta de GPT colgada varias veces (ganchos, sombra, etiqueta naranja, huecos vacíos, alguna
   torcida y sangre por encima), montado a tamaño de GPT y reducido mezclando colores: `py tools/paneles_ferreteria.py [nombre]` (en su
