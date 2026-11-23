@@ -25,6 +25,7 @@ B = 11                            # el tamaño de un «píxel» de GPT en sus im
 #   colgar: "cabeza", de dos ganchos debajo de la cabeza, a los lados del mango (el martillo); "medio", de un gancho
 #     entre los dos mangos, justo debajo de donde se juntan (los alicates); "agujero", boca abajo, de un gancho metido
 #     en el agujero del final del mango (la llave inglesa)
+#   apoyo: con "cabeza", a qué alto (en tanto por uno) van los ganchos; por defecto, 0.15 (debajo de la cabeza del martillo)
 #   oscurecer: la parte de arriba (en tanto por uno del alto) cuyos grises se oscurecen, o 0; oscuro: cuánto (por defecto, a la mitad)
 #   huecos: (centro x, alto de arriba y, alto de la herramienta, giro en grados, qué hay), en píxeles del panel ya
 #     recortado (unos 1396x885): "colgada", "vacio" (solo ganchos y etiqueta) o "torcido" (girada)
@@ -73,28 +74,49 @@ PANELES = {
             (1210, 600, 4, 2),     # en el de la derecha de abajo
         ],
     },
-    # el panel gris con remaches (sin nada delante de la abolladura de la izquierda, del tornillo arrancado de arriba
-    # ni de los zarpazos de abajo a la derecha) con las llaves inglesas, boca abajo
+    # el segundo panel azul (con el marco doblado arriba a la izquierda, sangre y tornillos oxidados arriba a la derecha,
+    # pintura amarilla abajo a la derecha y un desgarro abajo en medio: ahí no va nada) con las llaves inglesas, boca abajo y
+    # con su cromado de siempre (23 nov, el dueño: oscurecidas, en el panel gris, le gustaban menos)
     "llaves": {
-        "panel": "assets/sources/centro/panel-vacio-remaches-gpt.webp",
+        "panel": "assets/sources/centro/panel-vacio-azul2-gpt.webp",
         "herramienta": "assets/sources/centro/llave-inglesa-gpt.webp",
-        "recorte": None,
+        "recorte": (70, 79, 1468, 954),
         "colgar": "agujero",
-        # toda la llave, algo más oscura: cromada sobre la chapa gris no destacaba
-        "oscurecer": 1.0,
-        "oscuro": 0.68,
+        "oscurecer": 0,
         "huecos": [
-            (170, 125, 300, 0, "colgada"), (370, 125, 260, 0, "colgada"), (560, 125, 300, 0, "colgada"),
-            (850, 125, 260, 0, "vacio"), (1050, 125, 300, 8, "torcido"), (1250, 125, 260, 0, "colgada"),
-            (175, 510, 270, 0, "colgada"), (380, 510, 235, 0, "colgada"), (585, 510, 270, 0, "vacio"),
-            (790, 510, 235, 0, "colgada"), (990, 510, 270, 0, "colgada"),
+            (170, 125, 300, 0, "colgada"), (390, 125, 260, 0, "colgada"), (610, 125, 300, 0, "vacio"),
+            (830, 125, 260, 0, "colgada"), (1050, 125, 300, 8, "torcido"),
+            (175, 510, 270, 0, "colgada"), (380, 510, 235, 0, "colgada"), (560, 510, 270, 0, "colgada"),
+            (830, 510, 235, 0, "vacio"), (1010, 510, 270, 0, "colgada"),
         ],
         "sangre": [
-            (380, 300, 4, 3),      # en el mango del segundo
+            (390, 300, 4, 3),      # en el mango del segundo
             (1060, 380, 3, 2),     # en la cabeza del torcido
             (700, 450, 5, 3),      # en la chapa, entre las dos filas
             (175, 700, 3, 2),      # en el de abajo a la izquierda
-            (990, 640, 4, 2),      # en el de abajo a la derecha
+            (1010, 640, 4, 2),     # en el de abajo a la derecha
+        ],
+    },
+    # el panel gris con remaches (sin nada delante de la abolladura de la izquierda, del tornillo arrancado de arriba
+    # ni de los zarpazos de abajo a la derecha) con los taladros, de lado, con el cuerpo apoyado en dos ganchos
+    "taladros": {
+        "panel": "assets/sources/centro/panel-vacio-remaches-gpt.webp",
+        "herramienta": "assets/sources/centro/taladro-gpt.webp",
+        "recorte": None,
+        "colgar": "cabeza",
+        "apoyo": 0.43,        # (los ganchos, debajo del cuerpo, a los lados de la empuñadura)
+        "oscurecer": 0,
+        "huecos": [
+            (290, 115, 280, 0, "colgada"), (590, 115, 250, 0, "colgada"), (890, 115, 280, 0, "vacio"),
+            (1190, 115, 250, 6, "torcido"),
+            (290, 500, 270, 0, "colgada"), (590, 500, 240, 0, "colgada"), (890, 500, 270, 0, "colgada"),
+        ],
+        "sangre": [
+            (300, 200, 4, 3),      # en el cuerpo del primero
+            (1190, 250, 3, 2),     # en el torcido
+            (760, 455, 5, 3),      # en la chapa, entre las dos filas
+            (600, 600, 3, 2),      # en el pequeño de abajo
+            (890, 560, 4, 2),      # en el de abajo a la derecha
         ],
     },
 }
@@ -183,10 +205,11 @@ def montar(nombre, p):
             centro = (xs[0] + xs[-1]) // 2
             mango_w = xs[-1] - xs[0]
             # los dos ganchos, a los lados del mango, justo debajo de la cabeza (la cabeza se apoya en ellos)
-            gy = y + round(alto * 0.15)
+            apoyo = p.get("apoyo", 0.15)
+            gy = y + round(alto * apoyo)
             gancho(d, cx - mango_w // 2 - 3 * B // 2, gy)
             gancho(d, cx + mango_w // 2 + 3 * B // 2, gy)
-            eje = (centro, round(alto * 0.17))
+            eje = (centro, round(alto * (apoyo + 0.02)))
         elif p["colgar"] == "agujero":
             # boca abajo: el agujero del mango, arriba; el gancho sale del panel por él (se ve dentro del agujero)
             m = m.rotate(180)

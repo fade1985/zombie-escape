@@ -1152,8 +1152,9 @@ en una línea.
   lista `PANELES`, cada uno con sus `huecos` y su `sangre`) saca `panel-<nombre>.png`. Hechos: `martillos` (panel gris,
   `panel-vacio-gpt.webp`, y `martillo-gpt.webp`, con la cabeza oscurecida para que destaque) y `alicates` (panel azul con tres tiros,
   `panel-vacio-azul-gpt.webp`, recortado por el marco, y `alicates-gpt.webp`, de un gancho entre los mangos), juntos en medio de la
-  pared, y `llaves` (panel gris con remaches, `panel-vacio-remaches-gpt.webp`, y `llave-inglesa-gpt.webp`, algo oscurecida y
-  boca abajo, de un gancho metido en el agujero del mango), en el trozo de la izquierda. (El de llaves inglesas, de GPT entero, se borró: está en git.)
+  pared, `llaves` (el segundo panel azul, `panel-vacio-azul2-gpt.webp`, recortado por el marco, y `llave-inglesa-gpt.webp`, con su cromado,
+  boca abajo, de un gancho metido en el agujero del mango), en el trozo de la derecha, y `taladros` (panel gris con remaches,
+  `panel-vacio-remaches-gpt.webp`, y `taladro-gpt.webp`, de lado, con el cuerpo en dos ganchos: `apoyo`), en el de la izquierda. (El de llaves inglesas, de GPT entero, se borró: está en git.)
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
   (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
