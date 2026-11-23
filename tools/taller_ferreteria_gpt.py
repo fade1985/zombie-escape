@@ -97,12 +97,3 @@ for i, s, p in zip((1, 2, 3), _igualar(suelos, 10, 28, 0.45, False, True), _igua
         p.putpixel((x, 47), tuple(int(v * 0.68) for v in p.getpixel((x, 47))))
     guardar(p, f'pared-venta-ferreteria-d{i}')
 
-
-# y la pared de la sala de venta, cubierta de paneles perforados de chapa gris oscura (20 nov, el dueño, a partir de una foto de un
-# panel): tres, destrozados, que se mezclan a trozos en toda la pared (en vez de la pared blanca de arriba, que se queda por si acaso)
-paredes = [Image.open(f'assets/sources/suelos/venta-ferreteria-paneles-destrozados{i}-gpt.webp').convert('RGB').resize((48, 48), Image.LANCZOS)
-           for i in (1, 2, 3)]
-for i, p in zip((1, 2, 3), _igualar(paredes, 5, 12, 0.45, True, True)):
-    for x in range(48):
-        p.putpixel((x, 47), tuple(int(v * 0.68) for v in p.getpixel((x, 47))))
-    guardar(p, f'pared-paneles-ferreteria-d{i}')
