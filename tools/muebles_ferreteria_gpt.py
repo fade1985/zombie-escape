@@ -1,17 +1,18 @@
-# El mostrador de cobro de la ferretería (24 nov, el dueño; de GPT, desde una foto suya): dos imágenes sobre negro puro, el mismo
-# mostrador por los dos lados, reducidas a sprite de doble detalle (escala 1) MEZCLANDO colores, como la caja de la tienda de ropa
-# (tools/venta_ropa_gpt.py):
-#   mostrador-ferreteria-gpt.webp         -> ferremostrador, visto desde el lado del cliente (la tienda normal: se entra por abajo)
-#   mostrador-ferreteria-dentro-gpt.webp  -> ferremostrador2, visto desde el lado del dependiente (la inversa: se entra por arriba)
-# Los dos con el mismo largo de encimera, para que sean el mismo mueble.
-#   py tools/mostrador_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
+# Los muebles de la sala de venta de la ferretería (24 nov, el dueño; de GPT, desde fotos suyas): imágenes sobre negro puro
+# (assets/sources/centro/<imagen>.webp) reducidas a sprite de doble detalle (escala 1) MEZCLANDO colores, como los de la tienda de
+# ropa (tools/venta_ropa_gpt.py):
+#   mostrador-ferreteria-gpt         -> ferremostrador, el mostrador de cobro desde el lado del cliente (la tienda normal: se entra por abajo)
+#   mostrador-ferreteria-dentro-gpt  -> ferremostrador2, el mismo desde el lado del dependiente (la inversa: se entra por arriba)
+#   pale-cemento-gpt, -cemento2-, -cemento3-  -> ferrepale1..3, palés de sacos de cemento: lleno, a medio gastar y con el plástico roto
+#   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
 from PIL import Image
 
-# (imagen, tipo); el largo del mostrador en el juego, en unidades (escala 1: un píxel por unidad)
-MOSTRADORES = [("mostrador-ferreteria-gpt", "ferremostrador"), ("mostrador-ferreteria-dentro-gpt", "ferremostrador2")]
-LARGO = 164
+# (imagen, tipo, largo): el largo en el juego, en unidades (escala 1: un píxel por unidad); el alto sale de la proporción. Los dos
+# mostradores, con el mismo largo de encimera, para que sean el mismo mueble; los tres palés, del mismo ancho
+MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferreteria-dentro-gpt", "ferremostrador2", 164),
+           ("pale-cemento-gpt", "ferrepale1", 80), ("pale-cemento2-gpt", "ferrepale2", 80), ("pale-cemento3-gpt", "ferrepale3", 80)]
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 
@@ -35,11 +36,11 @@ def quitar_fondo(im):
     return im
 
 
-for origen, tipo in MOSTRADORES:
+for origen, tipo, largo in MUEBLES:
     im = quitar_fondo(Image.open(f"assets/sources/centro/{origen}.webp").convert("RGBA"))
     im = im.crop(im.getbbox())
-    alto = round(LARGO * im.height / im.width)
-    peq = (round(LARGO / PIXEL), round(alto / PIXEL))
+    alto = round(largo * im.height / im.width)
+    peq = (round(largo / PIXEL), round(alto / PIXEL))
     s = im.convert("RGBa").resize(peq, Image.LANCZOS).convert("RGBA")
     s.putalpha(s.split()[3].point(lambda v: 255 if v > 110 else 0))
     s = s.resize((peq[0] * PIXEL, peq[1] * PIXEL), Image.NEAREST)

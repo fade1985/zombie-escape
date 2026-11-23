@@ -1145,9 +1145,11 @@ en una línea.
   Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. El mostrador de cobro (24 nov, el
   dueño; GPT, desde una foto suya, a escala 1 y pixelado como los muebles de la ropa): el mismo por los dos lados, `ferremostrador`
   desde el del cliente (la tienda normal) y `ferremostrador2` desde el del dependiente (la inversa, que se entra por arriba), de
-  `mostrador-ferreteria-gpt.webp` y `mostrador-ferreteria-dentro-gpt.webp` con `py tools/mostrador_ferreteria_gpt.py`; centrado
+  `mostrador-ferreteria-gpt.webp` y `mostrador-ferreteria-dentro-gpt.webp` con `py tools/muebles_ferreteria_gpt.py`; centrado
   delante de la puerta del almacén, lo más cerca que deja pasar a Johnny entre los dos (`tienda-ferreteria` en `catalogo.gd`; en la
-  inversa, la pared de abajo tapa sus últimas filas: el paso, el que se ve por encima de ella). Los paneles de la
+  inversa, la pared de abajo tapa sus últimas filas: el paso, el que se ve por encima de ella). Y tres palés de sacos de cemento (24 nov, el dueño; GPT, la misma herramienta):
+  `ferrepale1` lleno, `ferrepale2` a medio gastar y `ferrepale3` con el plástico roto (`pale-cemento-gpt.webp`, `-cemento2-`,
+  `-cemento3-`), seguidos en la mitad derecha de la sala de venta. Los paneles de la
   pared de la sala de venta (23 nov, el dueño): ocho, todos distintos, a escala 1 (136x86), del rodapié a la moldura; dónde va cada uno,
   en `mapa.gd` (`PANELES_TIENDA`: con la puerta abajo, 3 + 3 + 2 entre las puertas del almacén y del taller, y con la puerta
   arriba, 4 + 4 a los lados de la entrada; desde el 24 nov, en cada trozo, el mismo espacio entre los paneles que entre ellos y las
