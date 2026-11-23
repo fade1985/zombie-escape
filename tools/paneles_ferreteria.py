@@ -25,7 +25,8 @@ B = 11                            # el tamaño de un «píxel» de GPT en sus im
 #   colgar: "cabeza", de dos ganchos debajo de la cabeza, a los lados del mango (el martillo); "medio", de un gancho
 #     entre los dos mangos, justo debajo de donde se juntan (los alicates); "agujero", boca abajo, de un gancho metido
 #     en el agujero del final del mango (la llave inglesa); "rollo", de un gancho metido por el agujero del centro (la cinta);
-#     "hueco", de un gancho metido por un hueco cerrado de arriba (el del mango del serrucho)
+#     "hueco", de un gancho metido por un hueco cerrado de arriba (el del mango del serrucho); "cuerpo", tumbada, con el
+#     cuerpo apoyado en dos ganchos ("apoyos": dónde, en tanto por uno del ancho; la radial)
 #   girar: (si hace falta) los grados que se gira la herramienta de GPT antes de colgarla, al revés que las agujas del reloj
 #   apoyo: con "cabeza", a qué alto (en tanto por uno) van los ganchos; por defecto, 0.15 (debajo de la cabeza del martillo)
 #   oscurecer: la parte de arriba (en tanto por uno del alto) cuyos grises se oscurecen, o 0; oscuro: cuánto (por defecto, a la mitad)
@@ -165,6 +166,26 @@ PANELES = {
             (880, 250, 3, 2),      # en el torcido
             (560, 470, 5, 3),      # en la chapa, entre las dos filas
             (450, 660, 3, 2),      # en uno de abajo
+        ],
+    },
+    # el cuarto panel gris, el del marco de aluminio (sin nada delante de la cinta de precaución, el corte de hacha, la
+    # quemadura ni la sangre de abajo a la derecha) con radiales, tumbadas, con el cuerpo en dos ganchos
+    "radiales": {
+        "panel": "assets/sources/centro/panel-vacio-aluminio-gpt.webp",
+        "herramienta": "assets/sources/centro/radial-gpt.webp",
+        "recorte": None,
+        "colgar": "cuerpo",
+        "apoyos": [0.48, 0.78],
+        "oscurecer": 0,
+        "huecos": [
+            (250, 200, 210, 0, "colgada"), (705, 200, 190, 0, "colgada"), (1160, 200, 210, 0, "colgada"),
+            (560, 505, 210, -10, "torcido"), (1000, 505, 190, 0, "colgada"),
+        ],
+        "sangre": [
+            (300, 330, 4, 3),      # en el disco de la primera
+            (1150, 310, 3, 2),     # en el cuerpo de la de la derecha
+            (800, 470, 4, 3),      # en la chapa, entre las dos filas
+            (980, 600, 3, 2),      # en la de abajo
         ],
     },
 }
@@ -308,6 +329,19 @@ def montar(nombre, p):
             arriba = next(yy for yy in range(alto // 2, 0, -1) if a[centro, yy] > 0)
             gancho(d, cx, y + arriba + 1)
             eje = (centro, alto // 2)
+        elif p["colgar"] == "cuerpo":
+            # tumbada, con el cuerpo apoyado en dos ganchos (en "apoyos", en tanto por uno del ancho), justo debajo de él
+            centro = ancho // 2
+            puntos = []
+            for fx in p["apoyos"]:
+                col = int(fx * ancho)
+                abajo = max(yy for yy in range(alto) if a[col, yy] > 0)
+                puntos.append((col, abajo))
+                if que != "torcido" or fx == p["apoyos"][0]:
+                    gancho(d, cx - centro + col, y + abajo - B)
+            if que == "torcido":   # (colgada solo del primero: el otro gancho, vacío)
+                gancho(d, cx - centro + puntos[1][0], y + puntos[1][1] - B)
+            eje = puntos[0]
         elif p["colgar"] == "hueco":
             # de un gancho metido por un hueco cerrado de la parte de arriba (el del mango del serrucho), apoyado en él por
             # arriba; el gancho se ve por el hueco
@@ -336,7 +370,7 @@ def montar(nombre, p):
             gy = y + abre - B
             gancho(d, cx, gy)
             eje = (centro, abre)
-        if que == "torcido" and p["colgar"] in ("agujero", "hueco"):
+        if que == "torcido" and p["colgar"] in ("agujero", "hueco", "cuerpo"):
             # girada alrededor del agujero, que se queda en su gancho
             w0, h0 = m.size
             m = m.rotate(-giro, resample=Image.BICUBIC, expand=True)

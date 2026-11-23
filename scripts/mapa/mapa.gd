@@ -776,9 +776,9 @@ func poner_muros() -> void:
 const PANELES_TIENDA := {"ferreteria": {
 	"abajo": [["", 2.6875], ["panel-taladros", 7.5], ["panel-serruchos", 12.3125],
 		["", 19.325], ["panel-martillos", 23.775], ["panel-alicates", 28.225], ["panel-cinta", 32.675],
-		["panel-llaves", 39.29], ["", 43.58]],
+		["panel-llaves", 39.29], ["panel-radiales", 43.58]],
 	"arriba": [["", 2.25], ["", 6.625], ["panel-taladros", 11.0], ["panel-serruchos", 15.375], ["", 19.75],
-		["panel-martillos", 26.25], ["panel-alicates", 30.625], ["panel-cinta", 35.0], ["panel-llaves", 39.375], ["", 43.75]],
+		["panel-martillos", 26.25], ["panel-alicates", 30.625], ["panel-cinta", 35.0], ["panel-llaves", 39.375], ["panel-radiales", 43.75]],
 }}
 
 
