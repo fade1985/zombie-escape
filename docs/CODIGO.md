@@ -1,1495 +1,1495 @@
-# Mapa del código
-
-Una línea o dos por archivo, para saber dónde mirar. Lo fino (números, por qué se hizo así) está en los comentarios
-de cada script; lo que se hizo y cuándo, en git. Si algo cambia de sitio o aparece un archivo nuevo, se apunta aquí
-en una línea.
-
-## Raíz
-
-- `project.godot`: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque.
-- `default_bus_layout.tres`: buses de audio. `export_presets.cfg` y `vercel.json`: ver `WEB.md`.
-- `api/contacto.js`: el programita de Vercel que recibe los mensajes de «Contáctanos» y abre con cada uno un aviso en
-  GitHub (`docs/MENSAJES.md`). Se publica con la web.
-- `locale/<idioma>.po` (`en`, `pt_BR`, `de`, `fr`, `ru`, `zh_CN`): las traducciones (el español es el idioma de origen: cada texto del código es su clave). La
-  carga `project.godot` (`[internationalization]`) y la pone al día `tools/traducciones.py`. Todo en `docs/IDIOMAS.md`.
-
-## escenas/
-
-- `menu_principal.tscn`: la escena de inicio. `partida.tscn`: Johnny y la pantalla (el mapa lo monta `partida.gd`).
-- `partida_prueba.tscn`: la misma con el script de prueba; el menú la abre en vez de la otra con `--captura`.
-- `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y uno por jefe. Los
-  shaders: `cintura` (Johnny partido por la cintura al golpear andando, solo para un arma de golpe que no traiga ese
-  golpe dibujado entero: las cinco de ahora lo traen, `ataqueandando_<dirección>`, de `tools/golpe_andando.py`, y
-  `johnny.atacar` usa ese; `johnny.acompasar_golpe` cambia entre el de pie y el de andando si se para o echa a andar a
-  mitad. Si no lo trae, qué es pierna lo dice la imagen
-  `assets/sprites/<hoja>-piernas.png` de cada arma de golpe, que saca `tools/piernas.py` y pone `johnny.poner_mascara_piernas`;
-  de ella se pintan las piernas de andar y con ella se le quitan las suyas al golpe; prueba: `--captura --ataque-andando`;
-  incluye `quemaduras.gdshaderinc` para arder
-  como los zombis, `johnny.arder`, y de `Llamas` solo le queda la luz; prueba: `--captura --johnny-ardiendo`; y las manchas de ácido
-  de los zombis cuando lleva algo que corroe, `Johnny.CORROEN`: el veneno del gordo, el charco de ácido y la porquería del Glotón,
-  M65; prueba: `--captura --reventon`), `destello` + `quemaduras.gdshaderinc` (destello,
-  hielo, fuego y ácido de los enemigos; el "vomito" de los bañados por la Gastroenteritis, el estado `vomito` que pone
-  su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
-  con "pelado") y `brillo`.
-- `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas: chorro a presión al estilo del "flamethrower" de pixelfx, con piloto azul, lenguas que suben y algo de humo en la punta) y
-  `chorro_acido` (lanza ácido) y `chorro_hielo` (lanza hielo: una nube de congelación, bocanadas de niebla que salen sin prisa,
-  se hinchan, se juntan y bajan, con cristalitos; el lanza hielo no hace daño, solo congela); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
-- `luces/`: `lampara.tscn`, `fuego.tscn`, `luz_suave.tres` y los shaders `niebla` y `suelo_a_oscuras`.
-
-## scripts/
-
-**Johnny y sus armas**
-- `johnny.gd`: moverse (18 nov: si se queda encajado más de 1 s, `desatascar` lo saca al hueco libre más cercano; `--atasco-johnny`), vida, apuntar y atacar (`tiro`, `blanco_en_linea`), recibir daño (`recibir_dano(cantidad,
-  quien, peligro)`; quién le ha quitado vida la última vez queda en `golpe_de`: un enemigo, por su meta `"tipo"`, que
-  lee `Bestiario.de` y le ponen al nacer `partida.meter_zombi`, la modista a sus maniquíes y los jefes al mutar; o un
-  peligro de `Menus.PELIGROS`: el charco que más quema, `charco_que_quema`, el agua con corriente, el cable pelado o su
-  granada, `explosion.de`), tropezar (`caer`) y despertarse tumbado tras una derrota (`despertar`), las skins (`vestir`, y sus ventajas en `arma()`, `ignifugo()`, `devolver()`), la
-  munición (`municion`, `reserva()`, `meter_municion()`, `arma_de_caja()`) y el depósito del lanzallamas y el lanza
-  ácido (`echar_fuego`, `rellenos()`, `coger_relleno`). `mejoras.gd`: sus atributos.
-- `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
-  llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. El lanza hielo
-  (`lanza_hielo`) se llena con la bombona de nitrógeno (`nitrogeno`); su hoja, `tools/hoja_lanza_hielo.py` (la del lanza
-  ácido con otros colores), y sus iconos, `tools/icono_lanza_hielo.py` e `icono_nitrogeno.py`. `familia()`:
-  cuerpo a cuerpo, A distancia o especial (por dentro, las dos últimas son de tipo `"fuego"`). Las **calidades**
-  (`CALIDADES`: Normal, Poco común, Rara y Épica, con su color, su daño, lo de su familia y las piezas que cuesta
-  subir a ella en el banco, `coste()`: los arrojables, más baratos; `con_calidad()`, `que_da()`, `al_baul()`,
-  `pieza()`): cada arma que lleva Johnny tiene la suya (`johnny.calidades`, `johnny.base()`; lleva una
-  de cada arma: `partida.llevar_arma`) y el baúl guarda armas y paquetes de arrojables con la suya. **Durabilidad**
-  (9 nov, `nuevas()`): un arma o un montón de arrojables dura la partida en curso y tantas más como su calidad (Normal
-  0, Poco común 1, Rara 2, Épica 3); `johnny.quedan`, `lanzables.quedan` y "quedan" en el baúl. Sacarlo del baúl gasta
-  una (`estrenar()`, marca "usada"); mejorarlo suma una. Al acabar la partida (ganes, caigas o abandones),
-  `Objetos.cerrar_baul` devuelve al baúl lo que lleva con partidas y destruye lo que no tiene (también lo "usado" del
-  baúl); el cartel lo dice (`partida.filas_rotas`). También borra **toda la munición del baúl** (`Armas.MUNICION`: balas,
-  cartuchos, gasolina…) y la de la mochila no entra al ganar: la munición no pasa de una partida a otra (16 nov). La **fregona mejorada** (15 nov) no se queda en el baúl: se aparta
-  en "fregona" del guardado (`Objetos.apartar_fregona`, también la de un guardado de antes que estaba en el baúl) y
-  Johnny empieza cada partida con ella, gastando una (`partida.dar_fregona`, con `estrenar`); al quedarse sin partidas se
-  rompe (el cartel lo dice) y vuelve la Normal. Si se deja en el suelo, al acabar vuelve igual (`Objetos.cerrar_baul`,
-  F22). Prueba: `--fregona-mejorada`. La ficha lo enseña como «Durabilidad: N», el mismo número en el baúl y encima: las partidas que le quedan (`texto_partidas()`, `durabilidad()`). Sin estrenar, de 1 (Normal) a 4 (Épica); al sacarla del baúl baja 1 al momento y con 0, en rojo, es su última partida (16 nov; con el M115 lo que llevabas contaba la partida en curso y decía uno más). Prueba: `--durabilidad`. La **Épica**
-  (`EPICA`) trae además un truco de su familia (`TRUCO`, `truco()`): golpe de gracia (cada 4 golpes, uno crítico:
-  `johnny.golpear`), balas que atraviesan (`bala.gd`, `atraviesa`, estela morada), estallido (el zombi que mata
-  revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños
-  al romperse o explotar: `soltar_racimo` de `proyectil.gd` y `granada.gd`). `bala.gd`. Lo que **se ve de la calidad**
-  del arma en la mano (`AURA`, `traza()`; la Normal, nada): `aura_arma.gd` (hija de Johnny: la luz del color, el halo y
-  las chispas de la punta del arma, que sale de `boca` o, en cuerpo a cuerpo, de `punta`), `tajo.gd` (el haz del
-  golpe, que suelta `johnny.golpear` y sigue el `gesto` del dibujo de cada arma: de lado, de arriba abajo, de abajo arriba o recto) y la trazadora de la bala (`bala.calidad`). Se prueba con `--aura` y `--tajos`. Al pasar a un arma Normal, `AuraArma.cambiar` repinta una vez más (`queue_redraw`) para borrar el halo: si no, se quedaba una mancha verde quieta en el suelo (`--luz-verde`).
-- `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
-  ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas (ya no las echa ningún arma).
-- `llamarada.gd`: la llama continua del lanzallamas, el chorro del lanza ácido, el rayo del lanza rayos y la niebla del
-  lanza hielo (cono, daño cada 0,25 s, empuje, luz; `variante`: "llama", "acido", "rayo" o "hielo". El hielo enfría a los
-  zombis, `zombi.enfriar`: azules y lentos (`helor`, `HELOR_*`) y, con "congela" segundos de chorro, congelados "congelado"
-  segundos; los copos que caen, `copos`. El rayo se dibuja a código —zigzag, ramitas y
-  arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
-  `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido, y la de sangre de la punta de la
-  motosierra (`sangra` en `armas.gd`). La **motosierra** (6 nov): golpe lento y fuerte por encima de la cabeza
-  (`golpe_dura`: su golpe dura 0,7 s y no 0,5), casilla de 112×112; su hoja sale de PixelLab y la sangre de la espada
-  la pinta `tools/sangre_motosierra.py` (receta en `assets/pixellab.json` → `conserje-48-motosierra`); prueba `--motosierra`. La **katana**
-  (6 nov): envainada a la cadera; el golpe es desenvainar con un corte de abajo arriba que deja una media luna de luz
-  (casilla de 96×96 con los pies en 48,84; receta en `assets/pixellab.json` → `conserje-48-katana`); prueba `--katana`.
-  La **gatling** (6 nov): arma a distancia con su propia munición, la cinta de balas (`"cinta"` en `Armas.MUNICION`);
-  los cañones giran medio segundo antes de la primera bala (`arranque`; `johnny.gd`: `giro_t`, `girando()`), Johnny
-  anda más despacio mientras dispara (`lenta`) y sin el empujón del dibujo (`sin_patada`); usa el fogonazo de la MP5
-  (`fogonazo`). Receta en `assets/pixellab.json` → `conserje-48-gatling`; prueba `--gatling`.
-  El **lanzagranadas** (6 nov): arma a distancia con su propia munición, las granadas de 40 mm (`"granadas_40"` en
-  `Armas.MUNICION`); con `"granada": true` no dispara balas sino `granada_40.gd`, que vuela despacio y revienta al
-  tocar a un zombi, una pared o al llegar a su alcance con la explosión de la granada de mano (también a Johnny, como
-  mucho `Lanzables.DANO_JOHNNY`). Tambor de 6 que se recarga de una en una (`cartucho`); usa el fogonazo de la escopeta
-  y su sonido `"lanzagranadas"`. Receta en `assets/pixellab.json` → `conserje-48-lanzagranadas`; prueba `--lanzagranadas`.
-- `lanzables.gd`: molotov, granada, atraedora y congeladora. Desde el 15 nov Johnny no empieza con ninguno (`reiniciar`,
-  `inicio` 0) ni los suelta ningún zombi, ni la barricada ni los supervivientes: se compran en la tienda (van al baúl) y
-  se sacan del baúl (las pruebas sí empiezan con 2 molotovs y 2 granadas, como antes: `partida_prueba.empezar_prueba`,
-  salvo las de `SIN_LANZABLES`). Su tutorial sale con el primero que se consigue (`partida.mirar_tutoriales` y
-  `ordenador.comprar_lanzable`). Dentro de un apartamento, al explotar o romperse se oyen como
-  un disparo y despiertan a todo el piso, que va a por Johnny (`ruido`, M107, 15 nov: lo llaman `granada.explotar` y
-  `proyectil.caer`; prueba `--arrojable-alerta`). Van en **montones** (M18, 28 oct): cada hueco lleva un montón
-  de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, sus cuentas en
-  `en_mano`; desde el 16 nov también dos o tres de la misma clave; F cambia el que se lanza, `elegido`, y `tipo` es su
-  clave; `poner` los prepara en las pruebas; en el inventario se arrastran de un hueco a otro de la mano: `mover_en_mano`)
-  y de repuesto (`REPUESTO`, ninguno desde el 13 nov; `repuesto` y sus cuentas en `en_repuesto`). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
-  sin llenar, luego en uno nuevo). Al acabarse el de la mano entra otro de repuesto (`repasar`, `relevo`: el de su
-  clave, uno de su tipo o el primero). Un montón se señala por su sitio, el nombre de su casilla en el inventario
-  (`"l1"`, `"e3"`: `clave_en`, `cuantos_en`, `sitio_de`, `quitar`, `mejorar`); `a_la_mano` y `al_repuesto`, por su
-  número. Lo que cuesta uno en la tienda (`PRECIOS`). La clave de un montón es el tipo y, si no es Normal, la calidad
-  detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con `mejorar`). Al acabar la partida
-  vuelven al baúl los que tienen partidas por delante (la durabilidad: `Armas.nuevas`; los Normales se rompen); allí se
-  juntan los del mismo tipo, calidad y partidas en casillas de un montón como el de la mano, con los talentos del guardado
-  (`Objetos.monton_arrojables`, `cabe_en_monton`; `Objetos.arrojables_al_baul`, `caben_arrojables`; si sube el Artificiero, los
-  llenos no cambian) y salen de montón en montón («Sacar 2»). Se prueba con `--montones` y `--casillas-baul`. A los jefes, el fuego y las explosiones les hacen la mitad (`A_JEFES`,
-  `a_jefe`: lo miran `explosion.gd`, `charco.gd` y `proyectil.gd`).
-  `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
-  Rebota en las paredes también en el aire (`choque_hasta`, con `mapa.muro_entre`) y en los muebles solo a ras de suelo;
-  por eso lanzar de un toque (`mas_cercano`) no le apunta a un zombi tras una pared. Todo lo que vuela en parábola
-  (`proyectil.gd`: el molotov de Johnny y lo que lanzan los zombis y los jefes) pasa por encima de los muebles pero no de
-  las paredes (hay techo): se rompe contra ellas, de este lado (`mirar_paredes`, y la marca de los jefes ya sale ahí).
-  Su explosión (y el congelado de la congeladora) tampoco pasa las paredes (`explosion.paredes`; desde el 10 nov, todas
-  las explosiones, también la del zombi explosivo y la de Mezcla explosiva). Ningún daño de Johnny pasa una pared, puerta
-  cerrada o barricada (los muebles, sí): el golpe cuerpo a cuerpo, el barrido de Ninja, Pararrayos, la descarga, el
-  estallido de las Épicas, el fuego del molotov al romperse y los charcos (de todos, para Johnny y para los zombis) lo
-  miran con `ArmasCreadas.tapado`. Se prueba con
-  `--granada-pared` (lo demás, con un tabique fino).
-- `sala_armas.gd`: la sala de pruebas (F9 desde cualquier sitio; F9 otra vez, de vuelta): la diana, todas las armas,
-  las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al
-  salir, Johnny vuelve a llevar lo que llevaba. Su panel de pruebas (tecla P) es `ui/panel_pruebas.gd`.
-
-**Zombis, jefes y lo que hacen daño**
-- `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
-  `enfurecer`, la furia del grito de la dependienta (18 nov: +25 % de velocidad, de ritmo de ataque y de vida mientras ella viva, ardiendo en rojo con el fuego del shader en rojos, `furia` en `quemaduras.gdshaderinc`; antes, M80, una burbuja dorada), la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
-  números en su `.tscn`. Heredan: `zombi_explosivo.gd` (su dibujo, desde el 20 nov: el hombretón de la gabardina rehecho en PixelLab a 112 px y reducido (un cuarto más alto que Johnny, con la cabeza agrandada y la gabardina azul marino), `assets/sources/explosivo-112-gpt/`, ver `docs/ZOMBIS_112.md`; prueba `--explosivo-nuevo`; desde el 19 nov, lo pidió el dueño, revienta sin dejar cuerpo: `caer_muerto` lo esconde y `cachos.gd` lanza 12 cachos de carne de PixelLab, `assets/sprites/cachos-carne.png`, hecha con `assets/sources/zombi-explosivo-gpt/carne.py`, que vuelan hacia todos los lados, sueltan gotas y al caer dejan su mancha y salpicaduras; no atraviesan paredes; en el sitio deja la marca negra de la explosión, `Mancha.quemado`, y encima un reventón de sangre con salpicaduras alrededor; se prueba con `--cachos`; 20 nov: con muchos reventando a la vez daba tirones, sobre todo por la sangre: `Mancha` quita las gotas de más una vez por fotograma y no en cada una, la marca negra sale de una plantilla por radio con las celdas seguidas de una fila en un rectángulo, y las gotas en el aire comparten su consulta de choque; se mide con `--explosivos-carga`; ni los cachos, ni su sangre, ni la marca pasan las paredes: `recorte.gd`, prueba `--explosivo-pared`), `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
-  va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
-  dirección; de espaldas va por delante del dibujo, en el nodo `delante`; desde el 19 nov, lo pidió el dueño, reducido
-  a la altura de Johnny y con su borde negro: `"reducir"` en su `zombi.json`, casilla 80×88 con los pies en 40,58,
-  `"realce"` para que no salga casi negro, y a escala 2 en su `.tscn`; `HOMBRO` se midió otra vez a esa escala; y su
-  tentáculo, con píxeles como los de Johnny y borde negro: se pinta en dos lienzos pequeños a la mitad, `_capa`, que
-  solo se pintan mientras ataca, y se ven al doble sin suavizar),
-  `zombi_venenoso.gd`,
-  `zombi_dependienta.gd` (grita «¡¡¡AAAHHH!!!» una sola vez al despertar y enfurece a todos los demás zombis que hay (a ella no, `se_enfurece`), hasta que muere; luego pelea como un durmiente más; los jefes y el jefe de seguridad no se enfurecen, `se_enfurece`; `--captura --edificio centro --grito`; su dibujo, desde el 18 nov, el de 112 px de PixelLab; desde el 19 nov (lo pidió el dueño), reducido a la altura de Johnny y con su borde negro (`"reducir"` en su ficha: casilla de 64 con los pies en 32,55, a escala 2 como los zombis de 48), que monta `tools/hoja_112.py` (receta en `docs/ZOMBIS_112.md`) con su animación `grito` en las 8 direcciones, siempre de cara; sale en las tiendas del centro comercial a suertes, una como mucho, y en la de ropa siempre una: si no le toca, `Planta.horda` cambia por ella uno de los de siempre, 19 nov; `--captura --edificio centro --dependientas` lo mira en 200 plantas; `--captura --dependienta` la pone al lado de Johnny y de otros zombis y saca fotos de seis andando hacia él) y `zombi_guardia.gd` (el guardia de la llave maestra, el jefe de seguridad: hasta que ruge no le hace daño nada, `inmune()`, y encima sale «¡INMUNE!» en gris, `zombi.avisar_inmune`; hace la ronda y, al ver a Johnny, ruge una sola vez, siempre de frente a la pantalla, con «¡¡¡GRRR!!!» en rojo encima y su animación `grito` (solo `grito_s`); mientras ruge, Johnny se queda petrificado (`johnny.sin_mandos`, lo mismo que tras un relato: ni anda ni ataca) y dice encima «¡¡¡QUÉ SUSTO!!!» (`partida._al_rugir`, con `gran_aviso`); suena el gruñido del botón JUGAR (`Sonido.grunir`); y va a por él con sus guardias; 17 nov: antes pitaba, huía y se cansaba). Los guardias que trae su rugido (`partida._al_rugir`: `guardias_del_rugido()`, 4 en la planta baja y 2 más por planta) llevan la marca `llamado`, como los vecinos que llama un jefe: al caer no sueltan nada (ni dólares, ni mutágeno, ni munición); solo suelta él, además de la llave maestra (y, en la planta de la Joyería, la llave dorada), un dólar y un mutágeno por cada guardia que llama y uno más (5 y 5 en la planta baja, 7 y 7 en la primera...; `--captura --edificio centro --guardia`). El rugido de GPT (`rugir-<vista>.webp`) lo pasa `zombi_gpt.py` devolviéndole el verde a la piel (`PIEL_GRIS`: GPT se la dio gris) y `zombi.py` lo monta si hay carpeta `rugir/` (solo la vista `south`: solo hace falta `rugir-s.webp`).
-  Los de Torre Velaria: `zombi_oficinista.gd` (guarda las distancias y tira tazas y grapadoras, `bala_zombi.gd`) y
-  `zombi_escolta.gd` (el chaleco para media bala de frente, con `Zombi.de_bala`, que pone `bala.gd`; el táser deja a Johnny
-  tieso con el `"calambre"` de `estados.gd`, desde `dar_zarpazo`, que cualquier tipo puede cambiar). Salen en los
-  departamentos (`planta.gd`, `horda`: `OFICINISTAS` y `ESCOLTAS_SEGURIDAD`) y los escoltas, con la alarma de las cámaras.
-  Pruebas: `--captura --edificio torre --oficinista` y `--escolta`.
-  `zombi_unas.gd`, el de las uñas (23 nov; su dibujo, en `docs/ZOMBIS_112.md`): copiado del oficinista, guarda las
-  distancias y cada 2,5-3 s, si ve a Johnny y hay paso libre, se planta y dispara 3 uñas en abanico (12° entre una y
-  otra; `bala_zombi.gd`, forma `"una"`, a la altura de su mano, `alto`). Sin zarpazo: acorralado, dispara a quemarropa.
-  Sale en todos los edificios desde el nivel 3 (`planta.gd`, `horda`, con el dinamitero) y en el garaje desde la
-  oleada 7 (`garaje.gd`, `tipos`). Prueba: `--captura --unas`.
-  El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
-  no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
-  `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos (una imagen por tamaño, compartida, y por debajo de los personajes, `z_index` -1, para que se dibujen juntas: con hordas grandes, en la web, ahorra mucho).
-  `tentaculo.gd` (`Tentaculo`; se pinta con `trozos`, no con `draw_circle`: en la web se atascaba, ver `docs/WEB.md`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
-  latigazos del gerente mutado: levantado y enroscado durante el aviso, estirado como un látigo en el golpe; avisa
-  con lo mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes
-  y los muebles (`apuntar`). Cada uno le da sus colores, sacados de su hoja (`PALETA`: contorno, capas y
-  ventosas, de aro o de puntitos), y sus medidas; los del zombi, oscurecidos como su dibujo en el juego (el
-  shader de los zombis multiplica el dibujo por sí mismo y salen más oscuros que en la hoja).
-  `lengua.gd` (`Lengua`, hereda de `Tentaculo`): las lenguas del latigazo del Glotón y de la criatura del
-  científico (19 nov, para que el golpe no se vea plano: `sombra()` en el suelo por debajo del jefe, `estela()` clara
-  mientras salen disparadas y `chasquido()` en cada punta al pegar, el "latigazo" de `efecto_suelo.gd`, hecho con
-  pixelfx en `tools/pixelfx/latigazo.js`; las del Glotón, más gruesas). Encima de las capas, la carne: dos venas
-  moradas que culebrean, bultos y ampollas amarillas como los granos del Glotón (`con_detalles`; cada lengua, los suyos).
-  En los fotogramas del golpe del Glotón (5 a 8) se borraron las lenguas de PixelLab, que chocaban con estas
-  (`tools/gloton_sin_lengua.py`), y lo que eso dejó (agujeros en la boca, hilos oscuros colgando, trocitos sueltos) se limpió
-  el 21 nov con `tools/gloton_restos.py`. En los de la criatura (3 a 8), lo que sobresalía del cuerpo de las suyas se borró con `tools/criatura_sin_lengua.py` (21 nov; las que cuelgan por delante del pecho se quedan). Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
-  y con el contorno de un píxel, `borde`), pero con otra forma: en el aviso no se pintan (las enrosca su dibujo) y
-  en el golpe salen disparadas de la boca (`BOCAS`, medida en cada fotograma del golpe, del 5 al 8, en cada dirección: la lengua sigue a la cabeza;
-  `boca()`), caen
-  sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`. Las del Glotón y las de la criatura, y su sombra, se pintan en un `LienzoPixelado`
-  (`lienzo_pixelado.gd`, 21 nov): un visor a mitad de tamaño que se enseña al doble sin suavizar, para que cada píxel
-  de la lengua mida lo mismo que uno de su dibujo y caiga en su cuadrícula (pintadas a 1 × 1 se veían más finas que él).
-  Las 8 direcciones de cerca, con `--lenguas-bocas` (y `--lenguas-bocas --de-criatura`).
-- `portera.gd`: la jefa por defecto, por estados.
-- `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
-  `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
-  (también el de la portera) es `vapor_rabia.gd`; todos los avisos en el suelo de los jefes son `aviso.gd` (los
-  pinta el shader `escenas/personajes/aviso.gdshader`, en cuadraditos de pixel art): las cargas (flechas que se
-  encienden hasta la pared; también los latigazos de tentáculos y lenguas), los golpes, saltos y círculos (se
-  llenan hacia fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas; con `oculto`, no se pintan
-  pero siguen ahí para el bot, como el del aspirado del Glotón mientras aspira; los golpes cuerpo a cuerpo, los saltos de la mascota y del Gymbro, el círculo de la portera y la onda de
-  la criatura, `Aviso.golpe`, se cortan donde chocarían con una pared o un mueble, porque no los atraviesan: solo
-  dan a Johnny si no está `Aviso.tapado`, un rayo de la capa 1), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
-  criatura; se cortan donde el disparo se pararía en una pared o un mueble y ahí acaban en la estrella de las
-  cargas; `Aviso.alcance`, medido en cada fotograma con un círculo del ancho de la barra y la capa 1). El cono del
-  giro del bombero se llena de lado, hacia donde girará, con flechas dentro que corren hacia ahí (`flechas`) y, como las marcas en el suelo de lo que
-  lanzan los jefes (`proyectil.gd`: molotovs, sartenes, probetas, cafés y cubos, que son un `Aviso.abanico` aplastado),
-  un estilo más flojo (`sutil`; el borrador, en `tools/pixelfx/_giro.js`). Los golpes, círculos y barras van con el estilo del borrador A de pixelfx
-  (`tools/pixelfx/aviso-a.js` y `_aviso.js`, que no se exportan: solo para probar ideas): toda la zona oscura desde el
-  principio, con dos bordes (el de dentro late cada vez más deprisa), el relleno de color con su frente claro y un
-  fogonazo blanco justo antes de pegar (`relleno()` y, en las rayas finas, `hilo()`, con contorno oscuro). Se prueban con
-  `--golpes`, `--franja`, `--avisos`, `--marcas`, `--disparos` (las barras junto a la pared y en campo abierto) y
-  `--golpes-pared` (cada golpe, salto y onda con Johnny tras la pared, y su aviso cortado). Heredan:
-  - Apartamentos: `gloton.gd` (+ `lengua.gd`; su aspirado avisa con el abanico rojo de siempre, cortado en el borde de
-    la elipse o en la pared, `puntas_aspirado`, y al aspirar el aviso se oculta y se ve el aire, pintado con código en la
-    cuadrícula de los píxeles, `pintar_aire`: polvo y arcos de succión por el suelo, corrientes que se juntan y se
-    retuercen al entrarle en la boca y un remolino en ella, más cuanto más fuerte aspira; prueba: `--captura --jefe
-    gloton --aire`), `gymbro.gd` (+ `pesa.gd`; con los suplementos se vuelve de metal, que se desconcha según pierde armadura y revienta
-  en esquirlas al acabarse, con los sonidos "acero", "metalizar" y "chatarra"; prueba: `--captura --jefe gymbro --metal`), `bombero.gd` (+ `bola_fuego.gd` y `chorro_fuego.gd`, el fuego de los conos del giro: bocanadas de pixelfx que vuelan hasta la pared, se aplastan contra ella y acaban en humo; las balas rebotan en el borde de su burbuja, `bala.rebotar`, con un fogonazo y una onda, `bombero.onda_en`).
-  - Centro comercial: `antidisturbios.gd` (rehecho el 21 nov, `docs/JEFES_CENTRO.md`: dos fases; con escudo no baja de media vida y se le agrieta al estrellarse cargando contra las taquillas de su oficina, `jefe-antidisturbios` en el catálogo, con islas de `pasillo` propio; a la 3ª revienta y pasa a la fase 2. Lanza `pelota_goma.gd`, que rebotan y se acumulan y se rompen de un disparo, `bala.gd`, y botes de gas, el proyectil `gas`, que deja una nube, `nube_gas.gd`, con el humo de pixelfx `efecto_suelo` "gas"; sin escudo, `barrido_electrico.gd`, olas de chispas de pared a pared que solo se pasan por el hueco (esquivando, también dan), y el combo de 3 porrazos con la porra clavada; al reventar el escudo cambia a la hoja `jefe-antidisturbios-sin`, otro offset; `--captura --edificio centro --jefe antidisturbios --muro`), `cocinero.gd` (rehecho el 23 nov, `docs/JEFES_CENTRO.md`: su Cocina central, `jefe-cocinero` en el catálogo, tiene tres fogones o freidoras en cada pared y la olla gigante en medio, el mueble `bigpot` puesto con `en_medio`; va a removerla y se cura por cada saco de ingredientes que quede, `saco_ingredientes.gd`, y sin ninguno se pone enfermo; el suelo de rejillas, `suelo-rejilla`, `ESTILO_TIENDA` "jefe-cocinero" en `mapa.gd`; el damero, `fogones_damero.gd`, cuadros de 4×4 casillas con las llamas de pixelfx `efecto_suelo` "fogon-llamas"; sartenes que rebotan, `sarten_rebota.gd`; a media vida, la hoja `jefe-cocinero-sin`, la cruz, la ola de aceite, `ola_aceite.gd`, el combo y la lluvia, `cuchillo.gd`; `--captura --edificio centro --jefe cocinero --banquete`; la sala, `--cocina`), `modista.gd` (+ `maniqui_vivo.gd`),
-    `mascota.gd`.
-  - Torre Velaria: `directora.gd` (la directora de Recursos Humanos, + `cae_encima.gd`: su sello gigante y las cajas de cartón,
-    que caen del techo con su marca en el suelo; el sello «despide» a Johnny, `johnny.despedir()`: unos segundos sin el arma de
-    fuego. Su Despacho de Recursos Humanos, `jefe-directora` en el catálogo, con muebles fijos de la torre; prueba
-    `--captura --edificio torre --jefe directora --despacho`). `informatico.gd` (el informático: tira teclados en abanico,
-    `teclado.gd`; el cortocircuito, `cortocircuito.gd`: franjas del suelo que dan corriente por turnos, con chispitas antes; el
-    apagón de su sala unos segundos, `Luz.evento`; enfadado se «reinicia» junto a otro armario. Pinta las lucecitas de los armarios
-    de servidores, que lucen a oscuras. Su Centro de datos, `jefe-informatico` en el catálogo: pared de armarios y filas sueltas,
-    `islas`; prueba `--captura --edificio torre --jefe informatico --datos`). `presentador.gd` (el presentador: el grito al
-    micrófono, un cono en el suelo y una onda que empuja; los focos de su sala, cuyo haz sigue a Johnny y, si los mira, ponen la
-    pantalla blanca; los cañones de confeti, `confeti.gd`, que revientan donde estaba Johnny. Sienta a su público de oficinistas
-    en las butacas, `sentado` en `zombi.gd`: no se despiertan solos, el apuntado automático no los elige y, enfadado, los levanta a
-    todos; si muere, se desploman con él. Su Plató de presentaciones, `jefe-presentador` en el catálogo: escenario con pantalla,
-    atril y focos en la pared de arriba y filas de butacas, `islas` con `arriba`; prueba
-    `--captura --edificio torre --jefe presentador --plato`). `becario.gd` (el becario: corre a la fotocopiadora más cercana y,
-    con un destello, salen sus copias, `copia_becario.gd`, iguales pero sin sombra y más claras, que mueren de un golpe y no
-    pegan hasta que se enfada; él se cambia de sitio con una y es el único que se refleja en el frontal de las fotocopiadoras
-    cercanas. El carrito del correo, dibujado con código, embiste por una franja roja, `embestir` de `minijefe.gd`. Los vasos de
-    café, `"cafe"` en `proyectil.gd`, dejan el charco `"cafe"` de `charco.gd`, que resbala. Si muere, las copias se deshacen en
-    papeles. Su Sala de fotocopias, `jefe-becario` en el catálogo: tres fotocopiadoras, impresoras, archivadores y lámparas arriba,
-    fuentes y plantas a los lados y dos filas de escritorios, `islas` con `arriba`; prueba
-    `--captura --edificio torre --jefe becario --fotocopias`).
-  - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
-    `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
-    espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`
-    (el doctor Salas; las lenguas de la criatura, `lengua.gd`; lo seguido que ataca la criatura se mide con `--criatura`). `helicoptero.gd`: el que llega al final (su cuerpo,
-    `helicoptero.png`, de GPT con `tools/helicoptero_gpt.py`, que le quita las aspas; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
-    el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
-- `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; los
-  alfileres de la modista; las tazas y grapadoras del oficinista, que dan vueltas; las uñas de hueso del de las uñas,
-  `dibujar_una`), `salpicadura.gd`
-  (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
-  `explosion.gd` (lo que se ve es la explosión de pixelfx: `tools/pixelfx/explosion.js`, una copia de "small-explosion" más
-  grande y sin las piedras ni la tierra, que caían en raya vista desde arriba, ni la raya del suelo que brillaba y se quedaba sola al final, opción "marca", 20 nov; la exporta `exportar_explosion.mjs` en
-  `explosion.png` y `explosion-brillo.png`, con sus dos capas; las pequeñas, a la mitad. Prueba: `--captura --explosion`).
-- `recorte.gd` (10 nov): ningún efecto se pinta encima de las paredes ni al otro lado. La explosión, los de pixelfx
-  (`efecto_suelo.gd`, salvo los golpes contra la pared), los charcos, las quemaduras, la ceniza y las partículas llevan
-  uno de sus materiales (`escenas/armas/recorte.gdshader`, y `recorte_suma` para las capas de brillo). El mapa, al
-  montarse, le pasa sus muros como una máscara de un punto por casilla, y cada píxel solo se pinta si entre el centro
-  del efecto y él no hay muro (por las puertas abiertas, sí pasa). Lo que sube (explosión, llamas) se mira a la altura
-  del suelo: se corta en las paredes de los lados y la de abajo, pero por delante de la de arriba se sigue viendo, como
-  un personaje. Prueba: `--captura --efectos-pared`. Desde el 20 nov, también lo que vuela con su altura (modo
-  "vuela", `recorte_vuela.gdshader`: los cachos del zombi explosivo llevan su altura en el rojo del color): cada píxel mira
-  el suelo de debajo, lo tapa la cara del tabique de delante (`cara_pared.gd`, 96 de alto) y no se ve por encima de la de
-  detrás. Para lo que no usa ese shader, lo mismo en `Recorte.muro_en`, `techo` y `tapa` (las gotas en el aire de
-  `particulas.gd` chocan con el techo y las tapa la cara; las de `Mancha` no se pintan en una casilla de muro).
-  `Mancha.sangre` lleva el recorte "suelo". Prueba: `--captura --explosivo-pared`.
-  Desde el 20 nov (lo pidió el dueño: que nada atraviese las paredes), también el cuerpo de un zombi muerto: el shader
-  de los zombis (`destello.gdshader`) y su copia que brilla (`brillo.gdshader`) incluyen `recorte_cuerpo.gdshaderinc`,
-  que mete el recorte en los huecos `VERTICE` y `RECORTE` de `quemaduras.gdshaderinc`. Va apagado y `zombi.recortar_cuerpo`
-  lo enciende al morir, en el modo "aire" (en vida no hace falta: choca con las paredes, y así no cuesta nada). Y el
-  charco de sangre del que muere a tiros o golpes (`Mancha.charco`), las brasas y el humo de los quemados y sus restos
-  (`quemado.gd`, también los del ácido). Prueba: `--captura --muerto-pared` (un gordo y un vecino muertos contra la pared).
-- `poligono.gd` (11 nov): un polígono de color pintado con `draw_polygon`. **No usar `Polygon2D` para nada que cambie
-  cada fotograma** (el rayo de la linterna, la pantalla de la tele): en la web de Godot 4.7.2, al redibujarse con los
-  mismos puntos actualiza su malla atando los índices al búfer equivocado y Chrome llena la consola de avisos de WebGL
-  («element array buffers can not be bound to a different target», «bufferSubData: no buffer»). Es un fallo de Godot
-  (godotengine/godot#124726), arreglado para la 4.8; con ella se podría volver a `Polygon2D`.
-- `charco.gd` (todos los charcos) y `estados.gd` (lo que hacen: veneno, frío, calambrazo, tirado, `frenado`...).
-  Los líquidos (veneno, ácido, vómito, lejía, agua, aceite y café; también el agua con corriente de Electrónica, `peligros/agua.gd`) se pintan
-  igual, con `Charco.preparar_liquido` y `pintar_liquido`: cuadraditos de un píxel del dibujo (`GOTA`), contorno oscuro, bandas
-  que se mecen, luz de arriba a la izquierda y un brillo en vetas; el agua, con anillos de ondas (`pintar_ondas`).
-  Los cuadraditos los pinta la tarjeta gráfica (11 nov): `Charco.hacer_dibujo` los guarda una vez en una textura (un texel por
-  cuadradito) que lleva un hijo `Sprite2D` del charco, y `escenas/armas/liquido.gdshader` hace con ella lo mismo que hacía el
-  código; cada vez solo se le pasan el tiempo (`t`) y lo que lleva hecho (`e`). El fuego del molotov y del aceite, igual, con
-  `fuego_suelo.gdshader` (sus llamas y ascuas las sigue pintando el charco). Los dos llevan el recorte de las paredes del
-  charco (`recorte.gdshaderinc`) y precisión alta (`highp`, para los móviles), y están en `calentador.gd`. Antes costaban
-  0,7 ms cada charco y 1,1 ms cada fuego cada vez que se pintaban; ahora, casi nada (`--charcos` lo mide: «Pintar charcos»).
-  El fuego (molotov, el del aceite al arder y el de la cocina del restaurante, `peligros/fuego.gd`), el aceite hirviendo del cocinero y la porquería del Glotón (`peligros/porqueria.gd`,
-  quieta: se pinta una vez) van con el mismo cuadradito y el mismo dibujo.
-  El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
-  el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
-  `efecto_suelo.gd` hace los efectos de pixelfx que salen una vez en el suelo (sus tres hojas y el precalentado para que
-  el primero no pare el juego); los otros tipos son `gases`, la nube del Flatulento (`mutaciones.gd`), del tamaño de su radio,
-  y `molotov`, la botella al romperse (`proyectil.llamarada`: el chasquido, la gasolina que prende, llamas, chispas y
-  cristales que saltan y resbalan; un efecto hecho para el juego, `tools/pixelfx/molotov.js`, exportado con
-  `exportar.mjs`; se precalienta al lanzarla). Prueba: `--captura --molotov`.
-  Y `sangre` (roja), `sangre-verde` (el venenoso) y `sangre-morada` (el de tentáculos): el zombi que muere de un golpe fuerte
-  (un crítico, uno que empuja como una explosión, `Zombi.MUERTE_FUERTE`, o uno que le sobra media vida: `zombi.muerte_fuerte`)
-  revienta en sangre (`partida.sangre`): un efecto hecho para el juego, `tools/pixelfx/reventon-sangre.js` y sus colores
-  `-verde.js` y `-morada.js`; se precalienta al aparecer el primer zombi de cada color. Prueba: `--captura --reventon-sangre`.
-  Y `chispazo`: la electricidad al dar a un zombi (M50), el `zap-hit` de pixelfx desde arriba (`tools/pixelfx/chispazo.js`):
-  un nudo de rayitos a la altura del cuerpo, chispas que hacen eses y una quemadura de helecho en el suelo. Lo sueltan el
-  lanza rayos en cada zombi que toca (`llamarada.golpe_de_rayo`; se precalienta al sacarlo) y `ArmasCreadas.rayo`.
-- `relampago.gd` (`Relampago`): el rayo que salta de un sitio a otro (la descarga de un zombi a otro, el estallido de las
-  Épicas de rayo y Pararrayos; lo suelta `ArmasCreadas.rayo`, con el chispazo donde da). Dibujado a código como los rayos de
-  pixelfx: zigzag partido por la mitad con ramas, borde, cuerpo celeste y centro blanco, rehecho 20 veces por segundo y fuera
-  en 0,22 s. Prueba: `--captura --chispazos`. El rayo continuo del lanza rayos (`llamarada.trazar_rayo`, en cada paso, y
-  `dibujar_rayo`) se traza y se entinta con lo mismo (`Relampago.trazar`, `pintar_con` y `disco`): es la "tormenta" del
-  borrador A de pixelfx (`tools/pixelfx/rayo-tormenta.js`, con `_rayo.js`): tronco con fogonazo blanco de vez en cuando,
-  dos hebras finas que cambian a otro ritmo, nudos de luz que corren hacia los zombis, latigazos a los lados y un nudo que
-  chisporrotea en la boca y en cada zombi, con un halo que suma luz (`llamarada.halo`). Prueba: `--captura
-  --pistola-electrica` (con `--rafaga`, fotos seguidas del rayo para hacer un GIF).
-- Escarcha (M51; `efecto_suelo.gd`, `escarcha` y `escarcha-zombi`): la congeladora ya no explota en fuego. Su explosión
-  (`explosion.gd`, `helada`) hace el mismo daño pero suelta el estallido de escarcha de pixelfx (`tools/pixelfx/escarcha.js`,
-  a la escala de su radio), con luz fría y sin quemadura en el suelo. Cada zombi que se congela (la congeladora y la cámara
-  frigorífica, `zombi.congelar`) suelta la pequeña (`escarcha-zombi.js`). La congeladora usa el congelado de verdad
-  (`zombi.congelar`: azul hielo con el shader, el dibujo parado, copos; cuenta para Mezcla explosiva). Prueba: `--captura --escarcha`.
-  Y `deshielo`: cuando se le acaba el congelado (`zombi.deshelar`), el hielo revienta en trozos
-  (`tools/pixelfx/deshielo.js`, la idea del `ice-shatter` de pixelfx), con su sonido (`deshielo`).
-  Mientras está congelado le envuelve el `bloque-hielo` (15 nov; `tools/pixelfx/bloque-hielo.js`, el bloque facetado del
-  `ice/freeze`): un `EfectoSuelo` hijo del zombi con `bucle` (tras formarse, repite sus últimos fotogramas hasta que se
-  quita). Añicos: un golpe o una bala a un congelado lo mata de una vez (número azul hielo y esquirlas en vez
-  de sangre): `zombi.reventar_hielo`: sin cuerpo ni sangre, el efecto `anicos` (`tools/pixelfx/anicos.js`)
-  y un charco de agua que solo se ve y se seca (`charco.gd`, `deshielo`). Prueba: `--anicos`.
-  Los jefes (`Minijefe` y la portera) llevan su frío aparte (`hielo_jefe.gd`, `HieloJefe`): se enfrían a la mitad,
-  se congelan solo 2 s (con el mismo bloque, más grande), congelados todo golpe es crítico y, al deshelarse, 3 s sin
-  frío. Prueba: `--lanza-hielo` (el Gymbro) y `--anicos` (la portera).
-- Golpes de los jefes (M58; `efecto_suelo.gd`, `pisoton` y `golpe-pared`, con la idea del `dirt-explosion` de pixelfx):
-  el pisotón (`tools/pixelfx/golpe-suelo.js`: polvo, grietas, una onda por el suelo y cascotes) al aterrizar el Gymbro y
-  la mascota y en el puñetazo del científico, a la escala de su zona (`EfectoSuelo.ONDA_PISOTON`); y el golpe contra la
-  pared (`golpe-pared.js`: nube de yeso y cascotes) en `minijefe.estrellarse`. Se precalientan en `minijefe._ready`.
-  Prueba: `--captura --impactos` (`--golpes` es otra: el aviso de los golpes cuerpo a cuerpo).
-- La llamada de la atraedora (M52; `efecto_suelo.gd`, `llamada`): en cada pitido (`granada.gd`), dos ondas amarillas que
-  se abren por el suelo y el ring-ring del despertador (`tools/pixelfx/llamada.js`); va de hija de la granada. Como pita
-  cada vez más deprisa, las ondas también. Prueba: `--captura --llamada`.
-- El lanzallamas y el lanza ácido al dar (M59 y M60; `efecto_suelo.gd`): en cada pellizco (`llamarada.quemar`), en cada
-  zombi tocado, `chorro-fuego` (una bocanada que lo lame y sube) o `chorro-acido` (gotas, burbujas y vapor), y, si el chorro
-  se corta en una pared, `pared-fuego` o `pared-acido` (más anchos; el ácido chorrea). Un efecto con cuatro versiones:
-  `tools/pixelfx/chorro-golpe.js`, `-acido.js`, `chorro-pared.js` y `-acido.js`. Se precalientan al sacar el arma.
-  El lanza hielo, `chorro-hielo` y `pared-hielo` (niebla que cae, esquirlas que escarchan el suelo y cristalitos:
-  `chorro-golpe-hielo.js` y `chorro-pared-hielo.js`, el tipo "hielo" de `chorro-golpe.js`).
-  Pruebas: `--captura --lanzallamas`, `--desintegrador` y `--lanza-hielo`.
-- Recoger y curar (M53 y M56; `efecto_suelo.gd`): `recoger`, el destello dorado al coger algo del suelo (`billete.gd`:
-  billetes, lanzables, objetos, armas y munición; `tools/pixelfx/recoger.js`), y `curacion`, la médica cura a Johnny
-  (`aliado.curar`; `curacion.js`, rehecha en la M66: un círculo de luz verde con un anillo a sus pies, una columna de luz que
-  le sube alrededor, cruces con borde y chispitas, de hijo de Johnny; ya no hay raya de la médica a Johnny). Prueba: `--captura --recoger-curar`.
-- El desfibrilador (M55; `efecto_suelo.gd`, `desfibrilador`): cuando Johnny cae con el talento y vuelve con toda la vida
-  (`johnny.recibir_dano`), dos descargas en el pecho (rayitos, chispas y un anillo eléctrico) y luego un latido verde de
-  electrocardiograma sobre la cabeza (`tools/pixelfx/desfibrilador.js`, de hijo de Johnny). Se precalienta en
-  `johnny.preparar_fogonazo` si tiene el talento. Prueba: `--captura --desfibrilador`.
-- Elegir una mutación (M54; `efecto_suelo.gd`, `mutar`, en vez del anillo morado de antes): en `partida.elegir_mutacion`,
-  Johnny se enciende de morado, dos hebras de ADN le suben enroscadas, ondas blandas por el suelo y burbujitas
-  (`tools/pixelfx/mutar.js`, de hijo de Johnny). Se precalienta al abrir el recuadro. Prueba: `--captura --mutaciones`.
-- El recuadro de elegir mutación (`menus.mutacion`, desde el 16 nov): arriba la frase del virus como el grito de la llave
-  (letra pixelada a 32 con contorno, en blanco) y «¡¡¡DIFERENTE!!!»; dos tarjetas-botón con el dibujo grande del efecto
-  (`assets/ui/mutaciones/<id>.png`, 100×100 a escala 2, de GPT con `tools/muebles_gpt.py`) y, debajo y fuera, el nombre y
-  lo que hace con la letra lisa. Se elige con el ratón, 1 y 2 o el mando. La prueba `--mutaciones` saca también
-  `captura-mutacion-larga.png` con las dos explicaciones más largas, para ver que no se sale en ningún idioma.
-- El rugido de los jefes (M57; `efecto_suelo.gd`, `rugido`): en su presentación (`ui/presentacion.gd`), al gritar, ondas
-  de sonido que salen de la cabeza (con borde oscuro, para que se lean en cualquier suelo), un destello rojizo y una onda
-  de polvo a sus pies con piedrecitas (`tools/pixelfx/rugido.js`). Va junto al jefe, no de hijo (hay jefes que crecen);
-  los que entran escondidos (la Modista) no lo llevan. Prueba: `--captura --presentacion` (`captura-presentacion-rugido.png`).
-- Los tentáculos de Tentacular (M29; `efecto_suelo.gd`, `tentaculos`, en vez del anillo morado): cuando la mutación
-  empuja (`mutaciones.actuar`), seis tentáculos le salen a Johnny de la cintura, restallan ondulando hasta donde llega el
-  empujón (escala: su radio / `EfectoSuelo.RADIO_TENTACULOS`), dan en el suelo (onda y baba) y se recogen enroscándose; los
-  que van hacia arriba de la pantalla, detrás de él (`tools/pixelfx/tentaculos.js`, de hijo de Johnny). Se precalienta en
-  `mutaciones._physics_process`. Prueba: `--captura --tentacular` (`--tentaculos` es la del zombi de tentáculos).
-- `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
-  Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
-  con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
-  y se precalienta al coger el arma (`johnny.preparar_fogonazo`). El fogonazo dibujado en las hojas de Johnny sigue
-  debajo. Prueba: `--captura --fogonazos`. También los supervivientes que disparan (`aliado.disparar`, con
-  `Aliado.FOGONAZO_ARMA`): el policía, el de la pistola, y el militar, el de la MP5; se precalienta al aparecer
-  (`aliado.preparar_fogonazo`). Prueba: `--captura --fogonazos-aliados`.
-- `chispa.gd`: la chispa de pixelfx ("hit-spark") de las balas al dar a un zombi (la suelta `bala.chocar`): del color de
-  la estela (normal, crítica, cada calidad; la Épica que atraviesa, morada), más pequeña con los perdigones, en 5
-  direcciones (hacia la izquierda, dada la vuelta) y con las chispas cayendo al suelo. Por encima de los personajes.
-  Contra las paredes sigue `impacto.gd`. Se precalienta con el fogonazo. Prueba: `--captura --chispas`.
-- La trazadora de las balas (`bala.gd`, `_draw`), en código y no con hojas para que valga para cualquier ángulo y color:
-  el cuerpo gordo de siempre y, como el "bullet-tracer" de pixelfx, una cola fina que se enfría, parpadea y acaba a
-  trozos, y chispitas que suelta y caen (`mover_chispitas`). Prueba: `--captura --trazadora`.
-- `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
-  `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd` (18 nov: la palanca se baja con {usar}, con `zona_usar.gd` y su contorno amarillo, no al acercarse). De las habitaciones de los jefes de los Apartamentos:
-  `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`; al tropezar, Johnny se cae de espaldas, se queda tumbado y se levanta con sus dibujos de PixelLab, sin el arma: `johnny.caer`, hoja `conserje-48-caida`, que monta `tools/caida.py`, y la de cada skin, `tools/caida_skins.py`; se prueba con una skin con `--skin X`), `cerco.gd` (bombero) y
-  `luz_jefe.gd` (la luz fija de esas habitaciones) y `bidones.gd` (M16: tres bidones de pie en la elipse limpia, de fuego en la
-  del Glotón y de ácido en la del bombero, `Peligros.bidones`; se empujan como los muebles, con `zona_usar.gd` y su contorno,
-  ruedan en línea recta hacia el jefe y, si le dan, lo atontan 5 s, `Minijefe.atontar`, y revientan en su charco; si no,
-  contra la pared. De un solo uso. Contra la burbuja del giro del bombero no le hacen nada. Dibujos `bidon-<fuego|acido>[-tumbado].png`,
-  de `tools/bidones.py`: de GPT si está `assets/sources/bidon-…-gpt.webp`, si no, provisionales. Prueba:
-  `--captura --jefe gloton --bidon` o `--jefe bombero --bidon`).
-  De los departamentos de Torre Velaria: `viento.gd` (el ventanal roto de Marketing y Dirección: arrastra a Johnny y tira a
-  los zombis por la ventana, que cuentan sin cuerpo ni botín: `partida.gd`, meta `"ventana"`), `camaras.gd` (Informática y
-  Seguridad: la alarma y los refuerzos, dos escoltas de Velaria; se rompen de un tiro desde `bala.gd`, `romper_en`), `gas.gd` y `valvula.gd`
-  (Recursos Humanos: duerme a los zombis y los despierta frenéticos, `zombi.gd` `gasear`; a Johnny no le hace nada).
-  Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
-  Y `laboratorio.gd`, la planta 40 de la torre (`planta.gd`, `laboratorio`, en lugar de la azotea; suelo y pared
-  `laboratorio`): la cabina blindada de la presidenta (dibujada con código, con `presidenta.png` dentro, de
-  `py tools/presidenta_hoja.py`), las 6 cápsulas (muebles `capsule`/`capsuleopen`), las mesas (`labbench`), los láseres, el gas
-  (a los zombis los pone frenéticos al momento) y la puerta del helipuerto, que se abre al caer el jefe (`partida.gd`,
-  `fin_del_edificio`: no baja el helicóptero). La partida le pasa el jefe (`mapa.laboratorio.jefe`); a media vida, o con
-  `romper_cabina()`, la cabina se rompe y queda en automático. Prueba: `--captura --edificio torre --laboratorio`.
-  El jefe de la planta 40 es `sujeto_1.gd` (el Sujeto 1, extends `Minijefe`; números en sus `const`): anda hacia Johnny,
-  rueda de lado cuando le van a dar (la bala le pregunta, `esquivar_bala()` en `bala.gd`: 1 de cada 3, como mucho cada 2,5 s),
-  fregonazo en abanico (`Aviso.golpe`) y cubos de agua en curva (`proyectil.gd` "cubo", con su anillo; dejan el charco
-  "agua_cubo" de `charco.gd`, que resbala 6 s). A media vida se parte (`partir()`): llama a `romper_cabina()`, saca dos mitades
-  (la misma escena con `mitad = true`, más pequeñas y rápidas) y él se queda de **mando** invisible, fuera del grupo
-  "zombis": su vida es la suma de las dos (la barra) y cae cuando caen las dos, así `partida.gd` y `laboratorio.gd` lo tratan
-  como a cualquier jefe. Al caer una, la otra se enfada (`enfadar()`). Prueba: `--captura --edificio torre --jefe sujeto_1
-  --sujeto`.
-- `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
-  primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
-- `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la
-  tarjeta gráfica una sola vez, `solidos_de`), `disuelto.gd` (el que muere con ácido encima: hereda de `quemado.gd`;
-  le cubre el ácido, se deshace a agujeros con los valores `comido` y `deshecho` del shader de quemaduras y deja un charco
-  verdoso sin daño y sus huesos; si además arde, gana el fuego; se prueba con `--disuelto`), `cuerpo.gd` (el cuerpo de un enemigo al caer: si tendido se metería en una
-  pared, resbala hasta quedar sobre el suelo; se prueba con `--cuerpo-pared`), `brillo.gd`
-  (lo que luce a oscuras), `particulas.gd`, `cachos.gd` (los cachos de carne del zombi explosivo), `impacto.gd` (la bala que da en una pared: el efecto Impact de la librería
-  de efectos de Sprite Fusion, pasado a GDScript, más pequeño y del color de la estela; se prueba con `--impacto`),
-  `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
-  cuerpo a cuerpo dura la `parada` de cada arma en `armas.gd`, más si mata o es crítico y más aún el golpe de gracia; hay
-  también al matar a un jefe, en las explosiones que pillan a alguien y cuando le hacen daño a Johnny. No se suman, tras
-  uno hay un respiro sin otro corto y la pausa lo corta; la música y el fundido a negro no se frenan. El ajuste
-  «Temblor de pantalla» de Opciones (`ajustes.temblor`: 1, 0,5 o 0; `intensidad()`) multiplica el temblor y lo que dura
-  cada parón: con 0 no hay ninguno de los dos. Se prueba con `--sensacion` y `--temblor`).
-- `persona.gd`: una persona dibujada con formas, para quien no tenga hoja de PixelLab.
-
-**Partida y progreso**
-- `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o llave maestra y su guardia, jefes, escaleras,
-  ascensor, dinero, soltar objetos y munición, pausa, fin). Ningún zombi se queda donde no se le puede matar (10 nov):
-  `meter_zombi` lleva al suelo más cercano (`mapa.suelo_cerca`) al que se pida dentro de un muro o fuera del mapa, y
-  `rescatar_atascados` (la red de seguridad, en cada combate) devuelve al suelo al que lleve medio segundo con el centro
-  en un muro, o lo quita sin contarlo; prueba `--jefe portera --atascado`. Cada planta, más dura (M72, en `meter_zombi`): los jefes de
-  planta, `JEFE_POR_PLANTA` (×1,35) de vida por planta, y los demás zombis, `ZOMBI_POR_PLANTA` (+10 %) de vida y de
-  zarpazo por planta, y de vida además `VIDA_EDIFICIO` (×1 Apartamentos, ×1,5 centro, ×2 torre; los jefes de planta, `VIDA_EDIFICIO_JEFE` ×1,3 y ×1,6: con la pistola y la fregona ya no se pasa el juego) (el guardia, solo el zarpazo: su vida ya sube en `poner_guardia`); prueba `--dificultad`, que da
-  los números de cada planta y los de antes. Desde la planta baja, además, zarpazos más fuertes (el `dano` de cada
-  escena de zombi: normal y lento 12, rápido 10, dependienta 8, vigilante y guardia 15) y menos respiro tras un golpe
-  (`johnny.INVULNERABLE`, 0,7 s). Tras una derrota (M31: `pesadilla` en el guardado), la
-  partida siguiente empieza con `despertar`: sale de negro, Johnny tumbado en la sala de mantenimiento se levanta
-  (`johnny.despertar`, con los dibujos del tropezón) y dice una de `FRASES_DESPERTAR`; prueba `--despertar`. Salir de un sitio no lo reinicia: `montar` hace su mapa solo
-  la primera vez (`hacer_mapa`) y al salir lo guarda entero en `mapas`, fuera de la escena, donde nada se mueve; al
-  volver lo saca tal cual (`sacar_mapa`; lo que no hay que repetir va con `nuevo`, y `supervivientes.recoger` y
-  `joyeria.recoger` quitan lo que ellos vuelven a poner). Lo que esté fuera del mapa y apunte a algo de dentro tiene que
-  soltarlo al salir (la caza de los aliados) o mirar `is_inside_tree()` (las gotas de `particulas.gd`), porque los
-  zombis guardados siguen existiendo. Al dejar la planta se tiran (`tirar_mapas`). En la partida de prueba no se guardan
-  (`guarda_mapas`), salvo con `--volver`: las demás pruebas cambian la ficha de un sitio y cuentan con que se rehaga. La
-  sala de pruebas y la exposición empiezan siempre de cero. La llave de los Apartamentos no está en el suelo: la lleva
-  un zombi al azar de los apartamentos normales (`planta.gd` lo elige con `llave: true`; `zombi_de_la_llave`) y la
-  suelta al caer. Y la entrada a la sala de pruebas (`pruebas`,
-  `sitio_pruebas`, `en_pruebas`: allí los zombis no cuentan ni sueltan nada). Avisa a la prueba en
-  `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
-- `edificios.gd`: la ficha de cada edificio (apartamentos, centro y torre), `MINIJEFES` y el sorteo de qué jefe va en cada planta
-  (`orden_jefes`, `jefe_de()`). Cuándo se abre cada uno, `abierto()`: con los tres `requisitos()` del edificio de antes
-  (su ficha `abre`) cumplidos (completarlo, todas las páginas de su dosier y todos sus vídeos, desde el 10 nov); salen en
-  la tarjeta cerrada de «Elige edificio», uno por renglón y en verde los cumplidos (`--edificios`: fotos
-  `captura-edificios-nada/medias/todo.png`). La Torre pide los vídeos del Centro, que aún no tiene teles (M92). `porcentaje()`: el tanto por ciento de
-  un edificio al lado de «Completado» (un tercio por completarlo, otro por su dosier y otro por sus vídeos; `cuentas()`).
-- `alerta.gd` (la «mejora del compuesto VD-7», M121, 16 nov: niveles 1 a 5, cada uno +20 % de vida, daño, velocidad y ataque a todos los enemigos, `Alerta.vida()`/`dano()`/`velocidad()`/`ataque()`; se aplica en `partida.mejora_vd7()` y en `johnny.recibir_dano`; el ataque, con `ritmo` en zombis y minijefes y `rapido` en los minijefes; prueba `--alerta N`), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `garaje.gd` (el reto del
-  día desde el 16 nov, M125: un garaje subterráneo con 25 oleadas de durmientes, un jefe del edificio cada 5 y $N por
-  la oleada N, que te llevas siempre; las constantes del principio son la dificultad. Cada día, una condición sacada de
-  la fecha, `CONDICIONES`: una familia de cosas que no vale, `prohibido()`, que miran el baúl y el inventario, `johnny.intentar_atacar`,
-  `lanzables.lanzar` y `partida.usar_objeto`. Se juega una vez al día en cada edificio (`gastar()`, al entrar) y guarda el
-  récord de oleadas de cada condición, `Guardado.GARAJE` en «garajes»; el botón de «Elige edificio» lo enseña debajo y su
-  cuadro, solo la condición («Sin armas a distancia») y el récord con ella (16 nov). Pruebas `--reto si` (desde el botón) y `--garaje` (las oleadas). Hasta el 16 nov el reto era
-  `reto.gd`, un edificio con una regla rara: quitado) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
-- `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`): el portero, el
-  glotón, el gymbro, el bombero, el doctor Salas (M36: `doble()`; desde el 15 nov, la mitad de las veces el durmiente
-  suelta otra cosa más, otro billete o munición, en `partida.gd`; se consigue matando al doctor Salas), el cocinero (M90: `cura()`, las vendas y los
-  botiquines curan un 50 % más, en `partida.cura_de`), el antidisturbios (M90: `aguante()`, tras un golpe 1,2 s sin
-  recibir otro en vez de 0,7, y `firme()`, nada le tira al suelo; en `johnny.gd`: `recibir_dano`, `pisar` y `caer`) y
-  la modista (M90: `camuflaje()`, los zombis dormidos no se despiertan porque Johnny entre en su habitación y le ven a
-  la mitad de distancia; en `zombi.vigilar` y en `zombi_guardia.gd`), la mascota (M90: `rapidez()`, anda un 15 % más
-  rápido; en `johnny.gd`, al andar) y el gerente (M90: `comision()`, la mitad de los billetes valen $2; en
-  `partida.valor_billete`). Y las cinco de Torre Velaria (parte 9): la directora (`despido()`, «Despido»: el primer golpe
-  a un zombi dormido, o dormido por el gas, lo mata; en `zombi.recibir_golpe`, que mira la skin con `puesta_en()`), el
-  informático (`invisible()`, las cámaras no le ven, en `peligros/camaras.ve`; y `linterna()`, la linterna llega un 50 %
-  más lejos, en `luz/luz.gd`, `_process`), el presentador (`municion()`, las cajas de munición dan un 30 % más, en
-  `johnny.sumar_municion`), el becario (`copia()`, «Copia de seguridad»: una vez por partida, al caer, se levanta con
-  25 de vida; en `johnny.recibir_dano`, después del desfibrilador, con `copia_usada`, que va en la partida guardada) y el
-  Sujeto 1 (`mutacion()`, empieza cada partida eligiendo una mutación: `partida.mutacion_al_empezar`). En la taquilla
-  (`ui/taquilla.gd`) ya no caben todas: la lista se desliza (`ALTO_LISTA`).
-- `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
-  botiquín, 40 (M72: antes 50), que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
-  la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3, pero en su grupo «Curas» (`CURAS`, 4 casillas, M67: `casillas` las
-  pone al final y `ocupadas` cuenta solo las de «Objetos»); se usan con la tecla 1 y la 2,
-  `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín y las
-  vendas los sueltan los armaritos de los baños, uno por apartamento con botiquín o vendas a medias (`Planta.armaritos`, M12; se abren con el clic como el ordenador, `zona_usar.gd`, M11), `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
-  cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (lo que cabe en cada una, `monton`: la munición, un hueco de munición, `Armas.MUNICION.hueco`;
-  las curas, su `TOPE`; las piezas, `MONTON`, 99. El baúl guarda cuántos hay y `objetos_baul` los reparte, `caben_baul` dice
-  cuántos más entran y `tanda`, cuántos salen: la munición, la casilla entera. Puede pasar de 32: no deja guardar más;
-  prueba `--casillas-baul`). Y las **piezas**
-  de mejora de las armas (`PIEZAS`, «materiales» en el juego: cuerpo a cuerpo, a distancia, especial y arrojable): no salen
-  al azar ni de los zombis (Fase 4, 15 nov): en los Apartamentos, de los muebles que se abren (`MUEBLES_CON_PIEZA`: el
-  armario, la mesilla, el escritorio y la librería; `mueble.gd` les pone la zona de `zona_usar.gd` y `partida.abrir_mueble`
-  los abre una vez, `datos.abierto`, con un 35 % de material, `pieza_de_mueble()`; desde el 16 nov solo de las familias de las
-  armas que lleva Johnny en ese momento, `partida.familias_que_lleva()`: la de la mano, las de repuesto y los lanzables); en el centro
-  comercial y en la torre, cada jefe (`piezas_de_jefe()`, 4, en `partida.meter_zombi`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
-  de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (32×32; desde el 15 nov, de GPT con `tools/muebles_gpt.py`: engranaje de bronce, de plata y de oro y matraz verde; los de antes eran de PixelLab).
-  `talentos.gd` (**el jugador los ve como «mutaciones»** desde el 15 nov, lo pidió el dueño: el programa es MUTACIONES.EXE,
-  el botón «Resetear mutaciones» y el árbol ya no tiene nombre en la barra de tareas; por dentro siguen siendo talentos, y
-  las mutaciones de los jefes, `mutaciones.gd`, se llaman para el jugador «efectos secundarios»). Tres ramas, `RAMAS`:
-  Militar, Superviviente y Químico, cada talento una línea en `LISTA` y lo que hace
-  en `aplicar_uno`, sobre los atributos de `mejoras.gd`; para lo que no es un número, `Mejoras.de_johnny` se los da a
-  quien no tiene a Johnny a mano. Químico (M14): Catalizador suma daño al lanzallamas, al lanza ácido, al lanza rayos, al
-  molotov y a la congeladora (`johnny.arma_de`, `lanzables.lanzar`); Guantes de goma quita daño de los estados
-  (`johnny.gd`); Incendiario alarga lo que arden (`zombi.prender` y `contagiar`); Desatascador sube lo que come el ácido
-  (`ArmasCreadas.con_acido`); Criogenia las hace durar más congeladas (`granada.gd`; desde el 15 nov ya no da congeladoras);
-  Reacción en cadena y Residuo tóxico, al morir el zombi (`zombi.quimica_al_morir`: el estallido de las Épicas y un
-  charco `residuo`, `charco.gd`), y Pararrayos, al recibir un golpe (`johnny.pararrayos`, con `Talentos.PARARRAYOS`).
-  En el ordenador, las tres ramas a la vez (`arbol_talentos.gd`, ver más abajo). Se prueba con `--quimico`. Cada punto
-  se compra en su talento. Desde el 15 nov, con **mutágeno** (el guardado más el de la partida, `partida.mutageno_total`; antes, desde el 6 nov,
-  con los dólares ahorrados, y antes, con puntos de talento): dentro de cada talento el 1.º punto cuesta 1, el 2.º 1,
-  el 3.º 2, el 4.º 2 y el 5.º 3 (`Talentos.PRECIOS`); los de un solo punto, 3 (`PRECIO_UNICO`); el árbol entero,
-  192 (hasta el 19 nov, 40 veces más: 25 a 125, cuando cada durmiente soltaba un mutágeno). `Talentos.precio(s, id)` es lo del punto siguiente, `motivo(s, id, mutageno)` dice si se puede («sin_mutageno»
-  si no llega) y `subir(id, partida)` lo cobra: primero del cogido en esta partida (`partida.mutageno`, el que se
-  perdería al caer) y lo que falte, del guardado ("mutageno"); lo de la partida se quita también de la partida guardada
-  a medias (`PartidaGuardada.gastar_mutageno`: si no, cerrar el juego y seguirla lo devolvería). Se prueba en
-  `--comprar-talentos`. Lo comprado es para siempre
-  (en "talentos" del guardado). Un guardado de antes del cambio empieza el árbol de cero, una sola vez y sin devolver
-  nada (`guardado.gd`, la marca `talentos_mutageno`); `dolares_talentos` ya no existe.
-  «Resetear mutaciones» (M32; antes «Resetear talentos»): quita todos los puntos, gratis pero sin devolver lo gastado (desde el 6 nov; antes devolvía
-  todo menos 20 $), con una ventanita que pregunta «¿Seguro?» (`Talentos.resetear`, `ordenador.resetear_talentos`, `preguntar_reseteo`, `aviso`); se prueba con
-  `--comprar-talentos` (también los precios, la partida a medias y el guardado viejo). Revisión de
-  Militar y Superviviente (M15): Durito llega a 3 (`guardado.gd` devuelve en dólares los puntos que sobren si un talento
-  admite menos; desde el 15 nov ya no, porque el árbol de esos guardados empieza de cero), Ajolote cura solo hasta la mitad (`johnny.REGENERA_TOPE`), Ninja cada 5 s (`NINJA_ESPERA`), Puntería
-  también lanza más lejos (`alcance_lanzar`, `lanzables.alcance()`) y Mirilla da un crítico de cada 3 disparos. Cada
-  tarjeta con puntos dice lo que da ahora y con otro (`Talentos.efecto`), y los críticos salen en amarillo, grandes y con
-  «!» (`Zombi.numero_golpe`, con `Zombi.critico`, que ponen `johnny.golpear` y `bala.gd`). Se prueba con
-  `--equilibrio-talentos`. Niveles 4 y 5 (M16): cada rama llega a 36 puntos, con un talento de 3 puntos debajo de cada
-  uno del nivel 3 y una «corona» de 1 punto que pide los tres del 4 al máximo (`"pide"` admite una lista:
-  `Talentos.requisitos`, `faltan` y `nombres`, que usa la tarjeta bloqueada del ordenador). Militar: Frenesí y Gatillo
-  fácil (`ritmo_cuerpo`, `ritmo_fuego` y `recarga`, en `johnny.arma_de`), Racimo (se suma al racimo de las Épicas en
-  `lanzables.lanzar`) y Veterano (`critico` y `critico_x`, en `johnny.con_critico`). Superviviente: Blindaje (más
-  `escudo`), Sombra (`esquiva_espera`), Segundo aliento (`johnny.quitar_vida`, una vez por planta: `aliento_usado`, que
-  quita `partida.nueva_planta`) y Adrenalina (`johnny.adrenalina()`, con `Talentos.ADRENALINA`: el daño en `arma_de` y
-  `lanzables.adrenalina()`, la velocidad al andar y el aviso en `avisar_adrenalina`). Químico: Napalm (`charco.extra`,
-  desde `proyectil.caer`), Pegajoso (`zombi.ir_hacia`), Alto voltaje (`saltos`: el rayo del lanza rayos y el de
-  Pararrayos) y Mezcla explosiva (`zombi.quimica_al_morir` con `efectos_puestos`; la marca del rayo, `zombi.electrico`,
-  la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
-  `--talentos-altos`). Desde el 11 nov (bloque J) todos los talentos hacen la mitad (el precio no cambia): lo que daba +10 % da +5 %; lo que daba un objeto entero por punto (Artificiero, Durito, Criogenia, Racimo, Alto voltaje) da 1 cada 2 puntos (`int(n / 2.0)`); el Ajolote cura cada 10 s (`REGENERA_CADA`); Larguirucho ×1,5, Mirilla 1 de cada 6, Veterano ×2,5 y +5 %, Fabricante ×1,15 y ×1,25, Pararrayos 10 de daño y 0,5 s, Mezcla explosiva radio 45 y 15 de daño, Adrenalina +15 % y +10 %), y desde el 15 nov (lo pidió el dueño): Artificiero +1 de cada lanzable por punto (en cada montón, `Lanzables.extra_talentos`; al empezar, solo molotovs y granadas, los que se tienen de salida), Racimo 1 por punto y en todos los lanzables, Durito 2 menos por punto, Reflejos cada 10 s con un punto (10,5 − 0,5 por punto), Desfibrilador con la mitad de la vida (y el tercio del medio), Blindaje 5 por punto, Criogenia sin congeladoras, Alto voltaje 1 durmiente más por punto, y el charco de Residuo tóxico y la explosión de Mezcla explosiva (15) también le hacen daño a Johnny,
-  `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
-- **Lo que suelta un durmiente** (15 nov, lo pidió el dueño; `partida.gd`, `zombi.murio`): una cosa (y llena la barra
-  del mutágeno), un billete el 80 % de las veces y munición de un arma de fuego que lleve el 20 % (`soltar_premio_durmiente`,
-  `BILLETE_ZOMBI`, `MUNICION_ZOMBI`; sin arma de fuego, el billete). Ya no sueltan objetos (`Objetos.que_suelta` solo lo
-  mira el guardia) ni lanzables. Los jefes y el guardia, como antes, sin lanzables. Prueba: `--botin`.
-- **El mutágeno** (15 nov; con barra desde el 19 nov, lo pidió el dueño): ya no cae al suelo. Cada zombi que muere llena
-  una barra (`partida.llenar_mutageno`, puntos de `MUTAGENO_ZOMBI`: arrastrado 1, vecino y vecina 2, crío 3, gordo 4,
-  tentáculos y dinamitero 5, el guardia 5, los demás 2, `MUTAGENO_OTRO`; los jefes y los que llama un jefe, nada; ni en
-  el garaje) y, cada vez que llega a 100 (`MUTAGENO_BARRA`), da un mutágeno y sigue con lo que sobra: el sonido
-  `"mutageno_punto"`, el efecto de las mutaciones en Johnny (`EfectoSuelo` "mutar") y un «+1» grande y morado encima de su cabeza (`gran_aviso`). La barra, en el HUD justo
-  encima de la de vida (`hud.gd`, `pintar_mutageno`/`mover_mutageno`: del tamaño y con el marco de la de vida, líquido morado
-  oscuro, el tanto por ciento con las cifras a cuadraditos de la vida, `pintar_cifras`, burbujas, un brillo que la
-  recorre y, al completarse, destello blanco; el escudo va encima de ella, `alto_encima`). Lo lleno va en `partida.mutageno_barra`. Se
-  cuenta en `partida.mutageno` y los dos van en la partida guardada a medias (`PartidaGuardada`). Los guardados de antes
-  del 19 nov dividen su mutágeno entre 40 una vez (marca `mutageno_barra` de `guardado.gd`). Prueba: `--mutageno`. Al completar el edificio, el que quede pasa al guardado ("mutageno",
-  `partida.terminar`; lo pidió el dueño el 15 nov); si caes o abandonas, el de esa partida se pierde, y el guardado no
-  (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. La primera vez que se coge, su tutorial («mutageno», en `mirar_tutoriales`; prueba `--tutorial-mutageno`). Se ve, el guardado más el de la partida
-  (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en morado (`CHAPA.MORADO`, el de su barra; hasta el 19 nov, verde, la piel de los
-  durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
-  marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una vacía (las cifras de todos los marcadores son de reloj
-  digital desde el 15 nov: siete rayas con las puntas en pico, dibujadas a cuadraditos, cada cifra con las suyas encendidas
-  y las demás apagadas: `RAYAS`, `ENCENDIDAS`, `dibujar_cifra`)
-  debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Y 10.000
-  es el tope de verdad (`partida.TOPE`, 15 nov): con la cartera (lo ahorrado más lo de la partida) o el mutágeno en MAX,
-  los enemigos dejan de soltarlos, lo que hay en el suelo no se coge (`puede`), los fajos (eventos, joyería) suman solo
-  lo que cabe (`sumar_dolares`, `cabe_dolares`), lo ahorrado al acabar no pasa de ahí y, al cobrar un logro, se suma
-  solo lo que cabe: el logro queda cobrado igual y lo demás se pierde para siempre (`Logros.cobrar`, `Logros.TOPE`; lo
-  avisa el tutorial de Logros y el mensaje del archivador). Lo prueba `--mutageno`. Cuánto
-  da una partida: `--durmientes-planta` (unos 300 en los Apartamentos y 340 en el centro y la torre, más las hordas).
-  Prueba: `--mutageno`. Se gasta en los talentos del ordenador (ver `talentos.gd`, arriba), que lo enseñan arriba a la
-  izquierda, igual que el inventario, en vez de lo ahorrado (`CHAPA.dibujar_mutageno`).
-- `idioma.gd` (autoload `Idioma`: el idioma del juego y `Idioma.t("texto")` / `Idioma.n("uno", "varios", n)` para traducir,
-  también desde los `static`; se elige en Opciones, se guarda en `ajustes.idioma` y avisa con la señal `cambiado`; con
-  `--captura` es español salvo con `--ingles`, y al cerrar cuenta los textos sin traducir. Cómo se escribe un texto,
-  las tablas `# [traducir]` y la herramienta: `docs/IDIOMAS.md`; nombres fijos del inglés: `docs/GLOSARIO_EN.md`).
-- Los datos con texto (`armas.gd`, `objetos.gd`, `lanzables.gd`, `talentos.gd`, `logros.gd`, `mutaciones.gd`, `skins.gd`,
-  `eventos.gd`, `averia.gd`, `joyeria.gd`, `barricada.gd`) guardan los textos en español en tablas `# [traducir]` y
-  **sus funciones los devuelven ya traducidos** (`Armas.nombre`, `Objetos.nombre`, `Lanzables.uno/varios`,
-  `Talentos.nombre_de/desc_de/nombre_rama`, `Logros.nombre_de/desc_de/nombre_tema`, `Skins.nombre/como/efecto`...): quien
-  los enseña usa esas funciones, no la tabla directa (`docs/IDIOMAS.md`).
-- `partida_guardada.gd` (la partida a medias: al empezar cada planta, una foto de lo que lleva la partida en `en_curso`
-  del guardado; «Continuar partida» del menú vuelve al principio de esa planta, que sale igual porque la semilla de
-  la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida. Una foto de antes del 13 nov con
-  arrojables de repuesto (ya no hay): pasan al baúl al continuar, `sobrantes_al_baul`)
-- `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
-  `baul_equipo`, las armas y los arrojables con su calidad; aparte, `fregona`, la fregona mejorada (15 nov); los arrojables, juntos hasta lo que cabe en un montón (`Objetos.monton_arrojables`); un guardado de antes de eso
-  (sin `montones_baul`) reparte al cargar sus montones de 99, una vez y sin perder nada aunque pase de 32 casillas. Tres huecos
-  (M45): el progreso de cada uno en `guardado.json` (el 1, el de siempre), `guardado-2.json` y `guardado-3.json`; los
-  ajustes de Opciones, de los tres, en `guardado-ajustes.json` con el hueco en uso. `base` es el nombre sin `.json`
-  (la prueba usa `usar("user://guardado-prueba")`), `elegir_hueco`, `hueco_usado`, `borrar_hueco`), `huecos.gd`
-  (`Huecos`, la pantalla «Elige partida» del menú: una tarjeta por hueco con su resumen o «Vacía», y «Borrar partida»
-  con confirmación; elegir uno monta el menú otra vez; se prueba con `--huecos`), `logros.gd` (40 desde el M17, 28 oct, y 42 con los dos de la torre, 5 nov; 84 desde el M122, 16 nov: los de cada arma, tres por arma (10, 50 y 200 durmientes con ella, sumando partidas, en "logros_cuentas" → "con_arma"), hechos solos con `de_armas()` en los apartados Cuerpo a cuerpo, A distancia y Especiales, y en el ordenador solo se ve el nivel que toca, `toca_ver()`; prueba `--logros`; uno =
-  una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
-  —skins, bestiario, páginas, objetos, rescatados, talentos, edificio completado— y los da por conseguidos el repaso,
-  `revisar()`: al empezar, cada vez que se escribe el guardado (`Guardado.escrituras`), al acabar y al abrir el
-  programa Logros; `meta()` y `hecho()` dicen cuánto piden y cuánto llevan. Lo que solo cuentan los logros —jefes,
-  victorias, armas con las que se ha matado, reglas del reto— va en `logros_cuentas` del guardado. Los de jefes, en
-  `jefe_sale` y `jefe_muerto`; los de ganar, en `partida_ganada`; varios a la vez salen en un solo aviso, `avisar`. En
-  la partida de prueba el repaso va apagado, `repasar`, salvo en `--logros`. Con una de las ayudas de `AYUDAS`
-  encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta nada; los zombis de esas partidas van
-  aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
-  `historia.gd` (dosier, noticias y relatos, con la historia resumida arriba; se edita sin tocar los `id` y todos los
-  textos se ven con `--historia`, y los relatos con `--relato`; los de Torre Velaria, solos, con `--historia-torre`. En la
-  torre las páginas dicen su planta como «vestíbulo» o «planta 10» (`donde(p, edificio)`) y la última la suelta el Sujeto 1
-  en el «laboratorio») y `bestiario.gd` (sus fichas;
-  `recorte` lo calcula `tools/recortes_bestiario.py`). Un enemigo visto por primera vez va a `sujetos_nuevos` del
-  guardado: su casilla, su pestaña y el icono de Sujetos llevan el «!» hasta que se hace clic en él (`es_nuevo`,
-  `mirado`; 15 nov). Prueba: `--sujetos-nuevos`.
-- `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
-  llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
-  (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste «Tutoriales: Sí/No» (abajo en la lista de Tutorial, con «Que vuelvan a salir todos»). Cada uno sale una sola vez: los
-  pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
-  mutación sacan el suyo antes de abrirse; las vendas y el botiquín sacan los dos «curas», uno solo para las dos curas (M110)
-  y fuera de la guía, que solo enseña las vendas: M62; el de los trasteros, al entrar en las viviendas), `eventos.gd`,
-  `supervivientes.gd` y el menú (el de la alerta). Se prueba con `--tutorial`. `marca(id)` dice si va un «!» encima del
-  mueble de la sala de mantenimiento que enseña ese tutorial (taquilla, ordenador, banco, baúl y la puerta de los
-  trasteros: `mapa.marcas_sala`); `marcas` los apaga en la partida de prueba (salvo `--marcas-sala`).
-- `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
-  encendidos). Su flecha, con la tele de las noticias encendida (al coger la página del dosier), lleva antes a la tele
-  que al jefe (`tele_por_ver`, 15 nov). Al empezar, la ventana *Cómo se juega* sin la línea de atacar
-  (`partida.ver_tutorial`, `Tutoriales.texto(id, sin_atacar)`; hasta el 17 nov era *Moverse y esquivar*, que se unió a ella). En la primera pelea saca las ventanas de `PASOS`: *Atacar* (al
-  despertarse el primer zombi o al cerrarse la puerta: `guia.mostrar("atacar")` en partida.gd; *Lanzables* sale con el primero que se consigue),
-  *Cambiar de arma* (si no salió ya) y *Munición y recarga* con medio cargador; tras cada una, la casilla
-  del HUD que toca late (`hud.latido`) hasta que se hace o pasan `DURA` segundos. Hasta el 15 nov (M109) eso eran
-  letreros encima de Johnny. *Atacar* solo sale con la guía: al ver *Cómo se juega* se apunta también
-  (`partida.ver_tutorial`). Además, una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la
-  llave y un primer apartamento fácil (3 zombis, sin la llave, vendas en el armarito). Lo demás (*Vendas*, *Jefes*,
-  *La vida en tercios*...), con sus ventanas de siempre. Con la guía, no se sale de la sala de mantenimiento al pasillo mientras quede algún «!»
-  en ella (`partida.falta_sala`: Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» y no sale la flecha; el del ordenador
-  cuenta solo por sus tutoriales y el regalo, `ordenador.falta_ver`: un enemigo nuevo en Sujetos o un logro sin cobrar
-  no encierran a nadie, L37; se prueba con `--marcas-sala`). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
-  apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`. La
-  ventana de los tercios sí sale con la guía, al perder el primero (M35; `--guiado --tercios`).
-- `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos; la horda dura 1 minuto de cerradura con unos 150 zombis en grupos cada vez más seguidos y por tramos de 20 s, `HORDA` y `TIPOS`, M40) y `aliado.gd` (cada superviviente que te
-  acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`; en la horda, delante de la puerta, trastea en la cerradura: echado hacia ella, a empujones, con chispitas que lucen a oscuras y un clic, `trastear`, M63). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico),
-  `barricada.gd` (ferretero) y `copia.gd` (el informático joven de la torre, id `programador`: protegerle 60 s mientras
-  copia los archivos, con las cámaras saltando; su precio de empleado, `Supervivientes.precio`, y lo de acompañar:
-  `abre_codigo` y `informatico_cerca`, que ciega las cámaras; `--edificio torre --programador`) y `valvulas.gd` (la
-  limpiadora de noche, id `limpiadora`: encerrada en el aseo de Recursos Humanos, que en su planta es el cuarto de la
-  limpieza, `Planta.cuarto_limpieza`, con el gas dentro; hay que cerrar las tres válvulas del departamento, una por rejilla
-  y para siempre (`Peligros.gas` con `tres`), con los zombis dormidos por el gas que despiertan frenéticos al cerrar una cerca
-  o con un golpe, `Zombi.espabilar_gas`; ya rescatada, la fregona barre 200° en vez de 140°, `Supervivientes.FREGONA_ANCHA`;
-  acompañando, friega los charcos de `Charco.FREGABLES` con su gesto, `Aliado.fregar`; `--edificio torre --limpiadora`) y
-  `tornos.gd` (la recepcionista, id `recepcionista`: siempre en el vestíbulo, la planta 1, detrás del mostrador con la
-  persiana bajada, `Planta.mostrador`, `Planta.mostrador_fijo` y `Tornos.Persiana`; sube al llegar Johnny; al unirse, abre
-  los tornos con su tarjeta 60 s mientras entran zombis por las puertas del vestíbulo, y los tornos los frenan a 0,45,
-  `Tornos.freno` desde `Zombi.ir_hacia`, con la zona amarilla en el suelo; ya rescatada, al llegar a cada planta dice dónde
-  está lo que abre la sala del jefe, `Supervivientes.pista` y `avisar_pista`; acompañando, grita «¡Detrás!» si un zombi va
-  a pegar a Johnny por la espalda en medio segundo, `Aliado.avisar`; `--edificio torre --recepcionista`).
-- **Interpolación de física** (`project.godot`): para que en pantallas de 120 o 144 Hz no vaya a saltitos, Godot dibuja en
-  sitios intermedios entre paso y paso de física. `pantalla.gd` la apaga para todo el juego y solo la lleva Johnny
-  (`johnny.tscn`, con todo lo que le cuelga y su cámara, que va al ritmo de la física): lo que se mueve en cada fotograma en
-  vez de en cada paso temblaría con ella. Si a Johnny le llevan de golpe más de `SALTO` (otra habitación, un evento), él
-  mismo se lo dice a Godot (`_notification`). Lo que cuelgue de Johnny y se mueva solo, en `_physics_process` (como
-  `aura_arma.gd`). Se mide con `--suavidad` (con `--disable-vsync --max-fps 144` delante, como en una pantalla de 144 Hz).
-- `registro.gd` (autoload `Registro`, el primero de todos): el registro de errores para que el jugador lo mande. Godot ya
-  escribe la consola en `user://logs/godot.log` (en Windows, `%APPDATA%\Johnny Rush\logs`, los 5 últimos); esto le pone
-  al arrancar una cabecera (versión del juego, `application/config/version`, sistema, procesador, tarjeta, memoria,
-  pantalla e idioma), las migas `Registro.apuntar("...")` (la planta a la que llega, en `partida.gd`), y los errores y
-  avisos con su archivo, línea y trazas del script, contados en `errores` y `avisos`. Guarda las últimas 400 líneas en
-  memoria para la web, que no tiene archivo (hasta el 10 nov hubo un botón en Opciones para abrirlo o copiarlo; ahora está
-  «Contáctanos», que no lo manda). Al cerrar el juego escribe el resumen, «Registro al cerrar: N
-  errores y M avisos» con cada uno distinto y cuántas veces salió: así se ve de un vistazo si una prueba `--captura` (o
-  la partida de un jugador) ha ido limpia. Detrás, Godot suelta al apagarse unas líneas de «leaked at exit» y «resources
-  still in use»: son los dibujos y letras que guardan las `static var` de los scripts, no afectan y se dejan (9 nov).
-  Se prueba con `--registro`.
-- `contacto.gd` (`Contacto`): «Contáctanos» de Opciones → General (la página, `contacto()` de `opciones.gd`). Manda el
-  mensaje del jugador (solo el texto, sin datos técnicos) a `api/contacto.js`,
-  en Vercel, que abre un aviso en el repositorio privado de mensajes. En las pruebas no sale nada del ordenador. Todo en
-  `docs/MENSAJES.md`; se prueba con `--contacto`.
-- `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
-  la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
-  (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Y el **brillo** de Opciones → Pantalla
-  (`poner_brillo`, ajuste «brillo» de 0 a 100, 50 = sin tocar): una capa por encima de todo que vuelve a pintar la pantalla
-  más clara o más oscura (`escenas/luces/brillo_pantalla.gdshader`); en 50 no está. Se prueba con `--brillo`. Ver `docs/ESCRITORIO.md`. También pone
-  el tope de imágenes por segundo: 240 siempre (`TOPE`, por si el vsync falla y la gráfica se pone a tope) y 30 con el juego en
-  segundo plano (`FUERA`: otra ventana delante o minimizado; las pruebas `--captura` no se frenan). En la web, pide
-  al navegador que deje Esc para el juego mientras dura la pantalla completa (`QUEDARSE_ESC`, ver `docs/WEB.md`), y a cada
-  mando que se enchufa le pasa `Controles.ordenar_mando` (M73).
-- `formas.gd` (`Formas`): `disco`, `arco`, `poligono` y `polilinea`, lo mismo que `draw_circle`, `draw_arc`, `draw_colored_polygon` y
-  `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
-  Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
-- `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar JUGAR en el menú principal (solo ahí), `grunir`:
-  `assets/sonidos/grunido.ogg` (`GRUNIDO`, de PixelLab, al doble de velocidad: los hechos con código sonaban a perro y a
-  helicóptero), por su propio reproductor (si se pulsa otra vez, empieza de nuevo); cada efecto cambia un poco al azar de tono y de volumen cada
-  vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
-  prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
-  sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y
-  los zombis despiertos, que cuenta cada medio segundo: explorando, el ritmo entra con uno; en la horda, la melodía,
-  con `MUCHOS` (6); con el jefe, la capa intensa, cuando sale. Suben en 1 s y bajan tras 5 s sin hacer falta. En la
-  partida, `"menu"` pone la canción de explorar de ese edificio (`EXPLORAR`, por `Sonido.edificio`, que pone la partida
-  y el menú principal deja en `""`; fuera, la del menú, de una sola capa); `liberar` suelta las canciones que ya no
-  tocan, para que en la web no haya más de dos guardadas (tres en la sala del jefe). Se prueba con `--musica`), `controles.gd` (las teclas cambiadas en Opciones; y `con_mando`, si se juega con el mando: lo último que se ha tocado,
-  que mira `pantalla.gd` con `fijarse`, M44; y `ordenar_mando`, que en la web da el orden estándar a los mandos que el
-  navegador no reconoce, para que su L2 no sea Start, M73, ver `docs/CONTROLES.md`).
-
-**ui/**
-- `hud.gd`: desde el 19 nov, en el ordenador, la pantalla va **partida en HUD y juego**: el HUD en su franja de abajo
-  (`FRANJA`, 100 de alto, con fondo liso y una raya arriba: `pintar_fondo`), en una fila y a su tamaño (`ESCALA_FRANJA`, 1;
-  en el móvil sigue `ESCALA`, 1,5, encima del juego y sin franja): la vida con las balas, el mutágeno y el escudo encima; las
-  curas; el nombre del sitio con el minimapa debajo (a 2/3, `MAPA_FRANJA`), y las armas. `Pantalla.franja_hud` dice lo que
-  tapa la franja (0 en el móvil y fuera de la partida): con ella `partida.encuadrar` corre la cámara (mira la mitad de la
-  franja más abajo que Johnny, `Camara.position`, y su límite de abajo pasa del mapa lo que tapa la franja), el viñeteado
-  (`ambiente.gd`) y las flechas del borde (`supervivientes.flecha`) se quedan en el juego y la presentación del jefe no baja
-  del mapa. Prueba: `--franja-hud`. El HUD (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,
-  sacado de `barra-vida.png` cogiendo solo algunas de sus filas para que no se deformen los remaches; mientras se ve,
-  las balas y el depósito suben encima de ella; `mover_escudo`, `pintar_escudo`, `con_escudo`; se prueba con
-  `--escudo`). El escudo (Acero, Blindaje, Endurecimiento: `johnny.escudo`, M23) se gasta antes que la vida: en
-  `johnny.quitar_vida`, todo lo que le quitan (golpes, charcos, el ácido del Glotón) sale del escudo, ya rebajado por
-  Durito, y lo que sobra del golpe que lo rompe, de la vida.
-- `cuenta_atras.gd` (`CuentaAtras.dibujar`, M64): la cuenta atrás de arriba, la misma para la horda del rescate, la
-  barricada, la avería y la joyería: la barra en el marco de la barra de vida (`barra-vida.png`, ×1,5), llena como la
-  sangre (brillo arriba, sombra abajo) y el texto encima con contorno, sin caja; los últimos diez segundos, el número
-  en grande. Cada uno le pasa su texto, sus colores y lo hecho.
-- `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
-  jefe), `menus.gd` (pausa y fin; desde el 11 nov, al ganar el cartel solo trae tiempo, dólares, enemigos derrotados y la nueva mejor marca, sin frase de debajo; desde el 14 nov, al ganar y al caer, dos botones: «Jugar otra vez» (señal `reintentar`: `partida` recarga la escena, el mismo edificio desde la sala de mantenimiento; sin la tecla R, que quitó el M102) y «Menú principal»; el cartel del final dice al caer
-  quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
-  peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; sus botones
-  no hacen caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al abrir el juego, encima, el aviso de fotosensibilidad, `aviso_luces.gd`
-  (`AvisoLuces`, una vez por cada vez que se abre el juego; cualquier tecla, clic, toque o botón lo quita; prueba `--aviso`); desde el 11 nov, la tarjeta de un edificio completado solo dice «Récord: m:ss», el reto del día es un botón grande con «Premio $10» debajo y su cuadro al pasar el ratón (`boton_reto`, `cuadro_reto`; prueba `--edificios`); desde el 16 nov (M120), el reto del día solo sale tras completar algún edificio (si no, un letrero gris) y encima del selector de mejora pone «Compuesto VD-7»; en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
-  monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; la lista de idiomas, con botones que llenan el sitio hasta «Volver»; Contáctanos, también para avisar de un texto mal
-  traducido (desde el 12 nov, en vez del botón aparte con un formulario de Google); el temblor de
-  pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
-  `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
-  (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
-  respaldo; `crear_liso()`, el mismo tema con la letra lisa Rubik, para los tutoriales y el aviso de fotosensibilidad), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
-  (autoload: el saltito de los botones), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; mientras sale cada subtítulo, la reportera «habla» con pitidos de 8 bits sin palabras, `voz_reportera.gd` (M93: sílabas de onda cuadrada con la nota y el largo al azar, por el bus de Efectos y su propio altavoz, que se calla al saltar la frase, en la pausa y al cerrar; prueba `--voz-reportera`, que deja una muestra en `capturas/voz-reportera.wav`); `adelantar()` es el clic izquierdo del que tiene prisa, en la tele del salón y en el reproductor (también A del mando, Intro o Espacio en la del salón): acaba la frase de golpe y, ya acabada, pasa a la siguiente; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
-  `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
-  trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
-- `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (MUTACIONES.EXE desde el 15 nov; antes TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
-  ramas a la vez, cada una de su color (`COLORES`: Militar rojo, Superviviente verde, Químico amarillo), dibujada con
-  código (`_draw`): cada talento es un hexágono con su icono y sus cuadraditos, y las rayas al que pide se encienden al
-  llenarlo. Encima de cada hexágono, un botón transparente `b_<id>`. La ficha (qué hace, ahora y con otro, qué abre y
-  el pie: desde el 15 nov solo el precio, en un marcador con la hélice y sin las rayas apagadas de las cifras, verde si
-  llega y gris si no: `marcador_precio`, `CHAPA.dibujar_marcador` con `solo_luz`) sale al lado del que está bajo el ratón o, con el teclado, el mando o el dedo, del marcado
-  (`quien`, `modo`); con el dedo, el primer toque solo la enseña y el segundo compra (`al_pulsar`, `listo`). Las flechas
-  van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Arriba a la izquierda, el mutágeno (`mutageno`,
-  el guardado más el de la partida, en el mismo marcador fijo que el inventario, sin dibujo al lado: `CHAPA.dibujar_mutageno`). Prueba: `--arbol-talentos`
-  (también mide el pie más largo en cada idioma). La chapa y sus colores los comparte con la tienda de armas: están en
-  `chapa.gd`.
-- `chapa.gd`: lo que comparten el árbol de talentos y la tienda de armas: los colores de la chapa oscura (`BORDE`,
-  `CHAPA`, `REMACHE`, `TEXTO`, `AMARILLO`...), `dibujar` (el marco con sus remaches), `dibujar_ahorrado` (el billete y
-  la pantallita de caja registradora, con el «$» pegado a la cifra; `caja_ahorrado` dice dónde acaba; con `fijo`, la
-  de 4 casillas del inventario, sin el billete: la de la tienda de armas desde el 15 nov) y
-  `dibujar_mutageno` (el marcador fijo del inventario, con la hélice en morado, en el árbol de talentos).
-- `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
-  izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
-  de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas y lo lleno, con el borde verde, sin letrero (el botón de la ficha dice «LLENO» desde el 15 nov); desde el 16 nov, lo que te llega con el borde amarillo y lo que no, con el dibujo muy oscuro:
-  `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
-  `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`; los llenos, con los colores de las barras
-  del inventario, `INVENTARIO.color_barra`, desde el 15 nov), qué hace (`INVENTARIO.QUE_HACE`; sus
-  números y cuántos llevas ya no, desde el 11 nov) y el botón de comprar (`b_comprar`, sin foco: compra lo de la ficha). Desde el 15 nov solo enseña el precio, en un
-  marcador como el de lo ahorrado pero sin rayas apagadas (`CHAPA.dibujar_marcador` con `solo_luz`): amarillo si llega y
-  gris si no (`dibujar_comprar`); con el baúl lleno (lo comprado va allí desde el 15 nov), «Baúl lleno» y no se compra
-  (`estado` "lleno"). Sin nada
-  elegido (al abrir con el ratón), la ficha dice que se pase por un arma y lo de esta partida (`nota`); cómo va la
-  tienda lo cuenta su tutorial («tienda», la primera vez que se abre: `ordenador.abrir`). El regalo de bienvenida
-  (desde el 10 nov Johnny empieza solo con la fregona: `Armas.SIEMPRE`): la primera pistola, gratis una sola vez
-  (Guardado `regalo_cogido`, `es_regalo`), y desde el 15 nov también un molotov, una granada y una atraedora
-  (`REGALO_LANZABLES`, Guardado `regalos_lanzables`), con un «!» en cada casilla (`regalos_a_la_vista`), «¡COMPRA UN
-  ARMA!» en la ficha vacía y «Regalo de bienvenida» en su botón. Va al baúl, como todo lo comprado. Mientras quede algo
-  sin coger (`regalo_pendiente`), ARMAS.EXE y la mesa del ordenador llevan su «!» (`novedades`) y no se sale de la sala
-  de mantenimiento (`partida.cruzar`). Se prueba con `--regalo`. Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
-  el teclado, el mando o el dedo, la marcada (`quien`); tras comprar se rehace con lo comprado elegido. Con el dedo, el
-  primer toque enseña y el segundo compra (`al_pulsar`, `listo`). Los textos largos se parten a mano (`partir`; en
-  chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino). Las armas que tienen sus
-  dibujos de la tienda (`assets/ui/tienda/<id>.png`, 48 en diagonal, para la casilla, y `<id>-grande.png`, 96x48 en
-  horizontal, para la ficha a ×2; `dibujo_tienda`, de PixelLab: `assets/pixellab.json` → `tienda-dibujos`) los usan; las
-  demás, el icono de siempre. Desde el 16 nov el dibujo de 48 sale en **todos** los sitios donde hay un arma (también la
-  fregona): `Objetos.textura(nombre)` da el de la tienda si lo hay y, si no, el icono de 32 (`Objetos.de_tienda` dice
-  cuál es). Lo usan el HUD, los botones del móvil, la pausa (`Tema.icono_y_texto`), el inventario, el baúl y el banco
-  (`inventario.dibujo`: en las casillas pequeñas, en el cuadro de 32 del icono viejo), las armas del suelo
-  (`partida.soltar_arma`, a ×1) y el premio de la joyería (64 de lado). Cada sitio lo pone en el cuadro que ocupaba el
-  icono viejo. Prueba: `--dibujos-armas` (y `--edificio centro --joyeria`).
-- `archivador_logros.gd`: los logros de ConserjeOS (LOGROS.EXE), desde el 7 nov. La misma chapa oscura, como un
-  archivador: arriba, lo ahorrado y, a la derecha, «Logros 10/42» y «Por cobrar $X». A la izquierda, un botón por página
-  (`b_tema_<tema>`): «Resumen» y uno por apartado de `Logros.TEMAS`, con su barrita, su cuenta y un «!» si tiene algo por
-  cobrar; las barras, en amarillo mientras falta y en verde al completarlas. A la derecha, la página (`pagina`, que se queda al rehacer la ventana):
-  el Resumen enseña lo que hay por cobrar (los que no caben, «Y N más»; si no hay nada, «Casi lo tienes»: los que se
-  hacen varias veces y van más avanzados) y «Cómo vas», una barra con todos y una por apartado; un apartado, sus logros
-  en filas (`b_<id>`: icono, nombre, su barra si `meta` > 1, lo que pide cortado con «...» y la placa del premio: apagada,
-  amarilla «Cobrar $X» o verde «Hecho»). Pulsar una fila cobra (`ordenador.cobrar_logro`); lo que pide, entero, sale en la
-  línea de abajo. `programa_logros` lo monta, le pone a cada botón su línea de abajo y decide qué se marca. Prueba:
-  `--archivador-logros`.
-- `carpeta_dosier.gd`: el Dosier de ConserjeOS (DOSIER.TXT), desde el 7 nov. La ventana va maximizada (tapa los iconos)
-  y, encima de la chapa oscura, una carpeta de archivo marrón con una pestaña por edificio (`b_edificio_<id>`, «Apartamentos
-  2/5»). A la izquierda, las páginas del edificio como fichas (`b_<id>`: en papel las
-  encontradas, con «Página N» y su título; arrancadas las que faltan, solo con «Página N»); a la derecha, la hoja de la que se mira,
-  con un clip (cambia al pasar por una ficha, `ver`). El edificio y la página se quedan al rehacer la ventana
-  (`recordado`, `recordada`). Sin desplazarse. `programa_dosier` lo monta y le pone a cada botón su línea de abajo (quién
-  la llevaba o dónde buscarla). Prueba: `--dosier-carpeta` (también si cabe cada hoja, en alemán, ruso y chino).
-- `hoja_dosier.gd`: una página del dosier dibujada como expediente de Velaria Corp. (`Historia.hoja()` y
-  `hoja_arrancada()`; la usan la ventanita de página encontrada, `menus.pagina`, y la carpeta). Papel viejo con motitas y
-  un cerco de café; el logo de Velaria (`assets/ui/velaria-logo.png`, 24x24, de `tools/logo_velaria.py`, sacado de la imagen de GPT: una luna creciente
-  morada en un círculo azul marino; lo eligió el dueño el 7 nov y es el logo de Velaria para todo), «Investigación del sueño», código de
-  barras y referencia (`VD7-AP-01`: edificio y número); la franja con el edificio, «HALLADO EN» y n / total; el tipo, el
-  título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
-  pósit (amarillo, con la esquina doblada, pequeño y casi cuadrado: las notas son cortas; la nota, letra a letra como escrita a mano con boli, `a_mano_en`, siempre a 16), pegado abajo a la derecha; las últimas líneas del texto se estrechan para dejarle sitio. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
-  cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
-- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Vídeos, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (desde el 11 nov también su icono y su ventana, SUJETOS.EXE; por dentro sigue siendo "colecciones"). Desde el 11 nov todas las ventanas van maximizadas y sin la barra de explicación de abajo (`info` se sigue montando escondida: las pruebas leen su texto) (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
-  maximizado: arriba lo visto con su barra, dos pestañas (`Bestiario.familias()`: los durmientes, zombis de siempre, y los
-  sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose bajo la lámpara de `assets/ui/foco-sujetos.png` (de GPT, `tools/foco_sujetos.py`), con polvo y algún parpadeo; si falta, una interrogación casi negra
-  grande, `assets/ui/interrogacion.png`, la de GPT con el dibujo de la «!»; debajo, con la letra lisa, su nombre, dónde sale, su frase y cuántos se han matado, `matados` del guardado, que suma `partida.contar_matado` al acabar) y a la
-  derecha la cuadrícula (`casilla_zombi`; jefes con marco dorado; los que faltan, con la interrogación). Se prueba con `--coleccion`. Al comprar o subir algo
-  el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
-  prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se
-  vea: `encadenar` le dice a cada botón de una lista con desplazamiento cuál tiene encima y debajo (`--ordenador-teclado`). La tienda es
-  `tienda_armas.gd` (`programa_armas` la monta y le pone a cada casilla su línea de abajo). Desde el 15 nov lo comprado
-  va al baúl, sin estrenar (`comprar_arma`; los arrojables, de uno en uno, `comprar_lanzable`, a su casilla con
-  `Objetos.arrojables_al_baul`), y el baúl lleva un «!» hasta abrirlo (Guardado `baul_nuevo`, `mapa.marcas_sala`). Con el
-  baúl lleno no se compra. Antes iba a la mano (y con dos armas de ese tipo, la de repuesto al baúl: `repuesto_al_baul`,
-  quitado). Las pruebas que compran un arma para usarla la sacan con `comprar_y_llevar` (`prueba_comun.gd`); la tienda
-  se prueba con `--tienda` y `--tienda-armas`. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: cada programa con su tutorial sin ver, que sale al abrirlo la primera vez, `MESA.TUTORIAL_DE`; Colecciones y Logros por cobrar; la tienda sin el regalo cogido. El rótulo amarillo, solo con lo de verdad nuevo, no por el tutorial; se prueba con `--marcas-sala`)
-  llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`); se ponen y se quitan con `poner_aviso`, y
-  `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones o cobrar un logro, sin tener
-  que apagar (y al apagar también se pone al día el «!» de la mesa). Y los avisos de sucesos, además de la
-  línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`:
-  nuevas, logro y skin nueva); la skin sin ver se apunta en `skins_nuevo` del guardado hasta que se abre la taquilla.
-  Se prueba con `--novedades` y `--avisos-ordenador` (que se quitan al mirar o cobrar).
-- **Las noticias (M91):** ya no están en el ordenador. Cada planta generada tiene **una tele** que enseña las noticias de
-  Canal 8: `Planta.tele_de_la_planta` marca un mueble `tv` de un salón de un apartamento normal, al azar (`tele: true` en el
-  mueble y `sitio.tele = {"estado": "apagada"}`; `mapa.gd` le cuelga `tele_salon.gd` y su zona de uso). Al limpiar ese
-  apartamento (`partida.encender_tele`) y si queda alguna noticia sin ver de ese edificio, se enciende («encendida»: pantalla
-  en blanco, luz, «!» encima). Con el clic delante (`partida.abrir_tele`) sale `menus.noticia` con el juego parado: la primera
-  todas las noticias del edificio que no están en `videos_vistos` y cuya página ya se tiene, **seguidas** (`Historia.noticias_pendientes`,
-  `partida.poner_noticia`; así se pone al día quien cogió páginas sin ver su tele), cada una vista seguida (`Tele.continuo`), solo la pantalla de la tele grande con los subtítulos debajo. Cada una vista entera queda en `videos_vistos`; al acabar la última, la tele se apaga para siempre («vista»);
-  si se cierra antes (Apagar o Esc), sigue encendida con las que falten. Cada ranura de guardado lleva sus vistas. **VIDEOS.EXE**
-  (`programa_videos`, en el ordenador): pestañas por edificio como el Dosier y «Vídeo 1, 2…» (los no vistos, apagados), y el vídeo en
-  un reproductor multimedia de los 90 (`reproductor.gd`: pausa, parar, anterior, siguiente y contador; barra y volumen de adorno). Se prueba con `--noticias`.
-  **Ligado al dosier:** ya no suelta páginas ningún jefe. Cada planta tiene su muerto con una página (`planta.cientifico`) y
-  lleva la **primera que te falte** del edificio (`Historia.pendiente`; si no la coges, la lleva el de la planta siguiente),
-  pero cada página tiene su planta mínima (`Historia.pagina_de_planta`, `partida.pagina_aqui`): la 1 en cualquiera, la 2 desde la
-  primera, la 3 desde la segunda, la 4 en la tercera; si la que toca aún no sale en esa planta, allí no hay muerto. La 5 solo
-  sale con el edificio completado, y en una sola planta por partida (`partida.planta_pagina5`, sorteada al empezar). La noticia N
-  se hace con la página N: la tele solo se enciende si has cogido la página de esa planta (`partida.tele_con_pagina`; o si en esa
-  planta no hay página que coger) y queda alguna noticia cuya página ya tienes. Se prueba con `--dosier-plantas`. Al coger la página con el apartamento de la tele ya limpio, se enciende al momento.
-- `inventario.gd`: el inventario «todo a la vista», desde el M100 (13 nov) dentro de una mochila abierta de GPT (la
-  referencia vaciada, `assets/ui/inventario-mochila.png`; sin el marco gris ni el título), más pequeño que antes para que
-  se vea la mochila entera (casillas de 48, armas de 64, Johnny a ×3; la letra, igual), con la ficha en un papel
-  cuadriculado con clip (`FICHA`, letra oscura), los títulos de grupo en tiras de cinta (`cinta`) y la llave en una
-  etiqueta de cartón (`hueco_llave`) con el dinero a su derecha en la pantallita de la tienda de armas
-  (`chapa.gd`). Sin números «x/y»: ni en los títulos ni en las casillas de armas y arrojables; sin «F cambia». Los
-  cuadraditos de las barras de la ficha, por colores (`color_barra`: rojos hasta 3, amarillos de 4 a 7, verdes de 8
-  a 10). Los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Arriba, en medio y encima de la
-  cremallera, las 4 casillas de las mutaciones de los jefes que lleva (`fila_mutaciones`, 17 nov; en el juego,
-  «efectos secundarios»), con sus dibujos a la mitad (`assets/ui/mutaciones/mini`, de `tools/muebles_gpt.py`): al pasar
-  por una se despliega debajo su recuadro (`globo_mutacion`: nombre con la letra del juego y lo que hace con la lisa; en
-  las vacías, «Efecto secundario»). Prueba: `--inventario-mutaciones`. Dentro:
-  (en medio, la mochila y la munición, 8 y 8, y abajo, centradas, las 2 casillas
-  de las curas, `cuadro`; desde el 13 nov no hay arrojables de repuesto, `Lanzables.REPUESTO` es 0; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
-  arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; desde el M105, 15 nov, la ficha va dentro del tablero claro, justo debajo de las casillas, y las del baúl caben en el alto de 2 filas; `en_banco`, `no_mejora`,
-  `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl;
-  en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
-  banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
-  del nombre; el banco solo dice lo que cuesta, sin lo que tienes ni lo que falta
-  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). Desde el 16 nov, cada cosa de Objetos, Munición, Curas y el
-  baúl va en la casilla que le da el jugador: los datos no guardan casillas, así que encima va una lista de qué va en cada una
-  (`partida.orden_casillas` y, el baúl, «orden_baul» del guardado; `colocar`, `pintar_grupo`, sitios «M3», «U0», «C1», «B12»);
-  las claves «m3», «b12» siguen siendo las de los datos. Se mueve arrastrando a otra casilla del grupo (`colocar_en`: va o se
-  cambian) o con «Mover» de la ficha (`llevando`, `mover_marca`: mando y teclado), y «Ordenar» lo agrupa por tipo (`ordenar`,
-  `tipo_orden`). Prueba: `--ordenar`. Los lanzables se tiran al suelo como las armas,
-  de uno en uno o el montón en la zona roja, y vuelven con su calidad y sus partidas (`partida.soltar_lanzable` con
-  "tirado"; 15 nov, prueba `--tirar-lanzables`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista y en su carta; la frase de cada carta, con la letra lisa; la lista mide justo las cartas enteras que caben y la rueda, la barra y la cruceta la mueven de carta en carta, sin cortar ninguna: `igualar` y `rueda`, M112).
-- `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la
-  mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.
-- `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas); con la misma pinta, `charla` (lo que cuenta un vecino de los trasteros, con varios botones: `eleccion`)
-  y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
-  y la ficha del elegido). La ficha (`ficha()`): el icono, el título y las líneas (sin fotos desde el 8 nov).
-- `confirmar.gd` (`Confirmar`): la ventanita «¿Estás seguro?» en el centro de la pantalla, con lo que se perdería y
-  Sí / No (el foco empieza en No; el elegido, sea cual sea, se ve en rojo, y el ratón encima también lo elige; Esc o B
-  dicen que no). La usan «Borrar partida» (`huecos.gd`) y «Destruir» del
-  inventario y del baúl. `Confirmar.preguntar(dueño, detalle).respondido` dice si se ha dicho que sí.
-- `relato.gd`: los textos de la historia sobre negro (`Historia.RELATOS`): la introducción y un final por edificio, cada
-  uno una sola vez (`relatos` en el guardado; no salen en el reto, y una partida continuada no pasa por la introducción
-  pero sí saca el final). Las líneas salen solas,
-  cualquier pulsación saca la siguiente y cierra al final; Esc o B la saltan. La abre `partida.ver_relato`: la
-  introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final (menos el de
-  los Apartamentos: desde el 16 nov sale al elegir el centro comercial por primera vez, también en `_ready`).
-- `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos; y el jefe de seguridad,
-  con su ronda y su rugido conectado a `partida._al_rugir`, 19 nov), zombis, las ayudas
-  que se encienden y se apagan, Johnny invencible, la diana, ir a la exposición o a la sala de un jefe y lo de las
-  antiguas teclas de prueba (mutaciones, objeto, piezas al baúl, Colecciones, científico).
-
-**mapa/**
-- `mapa.gd`: monta un sitio (suelos, paredes, choques, muebles, peligros, niebla, navegación; escaparates y neones del
-  centro, la azotea, las viviendas). Estilos de cada sala: `ESTILO_DE`, `ESTILO_TIENDA`, `PASILLOS`.
-  `acustica_en(pos)`: cómo suena ahí la pistola, "seca", "eco" o "duro", según el sitio y el uso de la habitación.
-  `poner_caras` pone la cara (el papel, de 3 casillas) a cada pared con suelo debajo, y a los tabiques que cuelgan de una
-  pared con suelo encima (`tabique_colgado`) les sube la tapa del muro hasta lo alto de la pared de al lado (`tapa` de
-  `cara_pared.gd`), para que cada habitación quede cerrada a su altura y no se vea el suelo de arriba en un hueco.
-- `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
-  Los zombis de un piso (`horda`): un presupuesto (`BASE`, `POR_NIVEL`, el coste de cada tipo en `COSTE`) repartido por
-  el tamaño de las habitaciones y, aparte, `EXTRA_POR_SALA` (2) zombis baratos (lentos, normales o rápidos) en cada
-  habitación de los pisos de los Apartamentos: los que quepan, lejos de la
-  puerta (`LEJOS_PUERTA`), de los muebles y de los otros. Sin esos 2 había unos 13 por piso; con ellos, unos 27. La prueba
-  `--zombis-sala` los cuenta por habitación. En las tiendas del centro comercial, `EXTRA_TIENDA` (M84): 14 de más en la
-  sala de venta, 1 en los baños y 3 en las demás salas; de unos 9 por tienda a unos 27. Los cuenta `--zombis-tienda`.
-  La sala de mantenimiento se ve como las viviendas ("cajas": vestuario, despacho y taller, cada uno en su caja de
-  tabiques con oscuro alrededor), y también los dos edificios enteros: el pasillo de los Apartamentos, sus pisos, las
-  habitaciones de sus jefes, y la galería del centro comercial, sus tiendas y las de sus minijefes. Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
-  (`mapa.cara_de_caja`): encima de una puerta de lado entre dos estancias no sale cara, el tabique se ve plano.
-  Por dónde se llega: solo la planta baja (el portal del edificio) tiene una puerta de llegada a la izquierda; en las
-  demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo no
-  tiene puerta a la izquierda; y la azotea (desde el 28 oct) tiene su puerta de llegada a la derecha, como la salida de
-  incendios (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
-  La azotea (la misma en el centro comercial y en los Apartamentos; desde el 11 nov) es entera una imagen de GPT
-  (`azotea-gpt.png`, de `tools/azotea_gpt.py`; `mapa.al_aire`: sin caras ni tapas, la imagen hace de suelo, muros y
-  barandilla): el helipuerto de hormigón verde a ras de suelo, con su aro amarillo y su H, las líneas blancas, la
-  barandilla de los cuatro lados, la caseta de arriba a la izquierda y la pasarela de la derecha, donde está la puerta de
-  llegada (`AZOTEA_ENTRADA`). Los muros siguen la barandilla (`AZOTEA_MURO_ARRIBA` 4 filas, `AZOTEA_MURO_ABAJO` 3, a los
-  lados 2). Sin aparatos. Lo de dentro de las líneas blancas (`PLATAFORMA`, `plataforma()`) es el ring del jefe final:
-  espera en el aro (`AZOTEA_ARO`; `esperando` en `minijefe.gd`) y, al entrar Johnny en las líneas, empieza la pelea
-  (`partida.mirar_ring`). No choca nada: se entra y se sale andando. No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
-  `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
-  puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
-  puerta abajo), y la habitación de cada jefe; `tienda.gd` da cada tienda: desde la M77, todas fijas, dibujadas con letras en `Tienda.PLANOS` (la electrónica, con su
-  charco: `~`; todas con su aseo de empleados y su botiquín, M81), leídas con `Apartamento.del_plano` y con sus muebles puestos a mano
-  (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); **pared alta** (18 nov, el dueño; de momento solo la tienda de ropa, la primera que
-  se rehace por dentro): con `"sube": 4` en `Tienda.TIPOS`, su pared mide 4 casillas en vez de 3 (`sitio.sube`, puesto en
-  `Planta.generar`, que también sube `arriba_extra`; `mapa.sube` lo pasa a las caras, `cara_pared.gd alto`, a los tabiques
-  de arriba, `tabique.gd sube`, y al dintel) y sus puertas de dentro, de 86 a 118 de alto (`puerta_bano.gd alargar`): con la
-  de siempre, la dependienta (105 de alto) no cabía por ellas. Los dibujos de la pared y de las puertas no se estiran: se
-  alargan repitiendo su franja de en medio (`alargar.gd`). Se mira con `--puerta-dependienta` (la dependienta delante de
-  cada puerta y dentro del hueco, con lo alto de cada uno); desde el 18 nov la tienda de ropa tiene **plano nuevo** (50 × 30: el aseo de
-  7 × 12, el almacén de 17 × 12 y tres probadores de 6 × 8 en la pared de arriba; sin el pasillo del medio) y está
-  **vacía** mientras el dueño la rehace (sin muebles: los `colocados` de `*-ropa`, vacíos; y sin restos de sangre y
-  pintadas, `"limpia"` en `Tienda.TIPOS` y `mapa.limpio`, como la galería; el botiquín del aseo sigue). Su plano de
-  antes, `"ropa-antigua"`, solo lo usan Recursos Humanos y Dirección de la torre (`"plano"` en su `"presta"`); la galería, igual
-  (`colocados` de `"galeria"`, se mira con `--galeria`; desde el 17 nov vacía mientras el dueño la rehace: sin muebles ni restos
-  sueltos de sangre y pintadas, `mapa.galeria`; solo las puertas de las tiendas, sus escaparates y letreros, el ascensor, las
-  salidas; tampoco apliques: se sortean y se quitan en `planta.gd`; ni el número de la planta junto al ascensor, `sin_cartel`; la luz la dan tres neones dibujados de GPT en los huecos de
-  la pared de arriba, un casete, un radiocasete y un tocadiscos, que parpadean como los apliques: `neon_galeria.gd`, puestos
-  por `mapa.poner_neones_galeria`, de `tools/neones_galeria.py`, encendidos y apagados; `--galeria` saca también
-  `captura-galeria-<planta>-luz.png`, con la penumbra). Los departamentos de Torre Velaria (el tercer edificio,
-  `docs/PLAN_TERCER_EDIFICIO.md`) también son tipos de `Tienda.TIPOS`, con `"edificio": "torre"`: toman el plano de una
-  tienda del centro (`"presta"`, `Tienda.plano_de`), pero con muebles propios (`colocados` de `<sala>-<tipo>`, puestos con
-  `py tools/muebles_torre.py` a partir de los de esa tienda), suelos y paredes propios (`Mapa.ESTILO_TIENDA`) y su rótulo
-  iluminado en vez del neón (`neon.gd`, `iluminado`); su pasillo es el de `Catalogo.SALAS["torre"]` y el vestíbulo, el de
-  `"vestibulo"` (`Planta.generar`, `estilo_pasillo`), con el ventanal de la ciudad de noche (`ventanal.gd`) en vez de
-  escaparates y el cartel de la planta (0, 10...40) dibujado en `puerta.gd` (`cartel_torre`); se miran con
-  `--edificio torre --torre` y `--edificio torre --departamentos` (`--tipo X`);
-  `viviendas.gd`, el pasillo de los rescatados (nueve habitaciones: las de la torre, `TORRE`, la cuarta de arriba, la
-  cuarta de abajo y la del fondo, con su puerta de lado; las de quien aún no está en `Supervivientes.DATOS`, cerradas). Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
-  habitación y el pasillo, cerrados por sus tabiques de una casilla de grueso, lisos y de un gris muy oscuro (`tabique.gd` y
-  `mapa.poner_tabiques`); solo la pared de arriba de cada uno tiene altura (su cara y, encima, su tabique, con los de los
-  lados subiendo hasta él), los demás tabiques se ven planos y el muro que sobra alrededor se ve oscuro,
-  como fuera del mapa (`mapa.FUERA`). Las de arriba tapan sus tres últimas filas (la pared del pasillo) y el pasillo, las suyas (la de las
-  de abajo): `Viviendas.TAPADAS`. Sus habitaciones son los trasteros del edificio: todas iguales, de chapa
-  crema acanalada con el suelo de hormigón gris azulado y la puerta azul lisa con pomo de metal (`suelo-`, `pared-`,
-  `techo-` y `puerta-trastero`, de `tools/trastero.py`; la puerta, `trastero` en `puerta_bano.gd`). Cada una lleva un colchón en el suelo en la esquina de arriba a la derecha, con la
-  almohada descolocada y la colcha del color del superviviente, y una estantería metálica vacía en la esquina de arriba a
-  la izquierda (algo separada de ella): `colocados` de `habitacion-<id>` en `catalogo.gd`. Los dos, y la puerta azul de
-  frente, de GPT desde el 10 nov (M8), reducidos con `tools/muebles_gpt.py` (`colchon_trastero`, `estanteria_trastero`,
-  `puerta_trastero`); los colores de la colcha, con `tools/camas_viviendas.py` (a partir de
-  `assets/sources/viviendas/colchon-gpt.png`), y las puertas abiertas y de lado, con `tools/trastero.py`. Los de PixelLab
-  de antes, en `assets/sources/salas/descartes/`.
-  El pasillo es el de una zona de trasteros: el mismo suelo de hormigón con una línea amarilla pintada a lo largo
-  (`linea-trastero`, la pinta `mapa.dibujar_fondo` a la altura que dice `"linea"` en la sala del pasillo) y la misma
-  chapa con una franja de chapa lagrimada abajo (`pared-trastero-pasillo`), las dos de `tools/trastero.py`; contra la
-  pared de arriba, cajas de cartón apiladas (`boxstack`, `boxpile`) y carretillas cargadas (`handtruck`), de imágenes
-  de GPT reducidas con `tools/muebles_gpt.py` (`colocados` de `pasillo-viviendas` en `catalogo.gd`, lejos de las puertas), y
-  en la pared de arriba, a la izquierda de la primera puerta, el cartel de «TRASTEROS» (`cartel_trasteros.gd`: la placa
-  azul vieja de una imagen de GPT sin letras, `cartel-trasteros.png` de `tools/cartel_trasteros.py`, estirada por en medio, y
-  encima «TRASTEROS» traducido con `Tema.FUENTE` a 16). El pasillo empieza y acaba donde las habitaciones (`ENTRADA` y `FINAL`, 0).
-- `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano; `fijos` parte la fila de la pared en dos si la puerta está en esa pared; 18 nov: `repasar(sitio)`, al final de generar cada sala, quita el mueble que tape una puerta o deje un trozo de suelo sin salida y lo dice con «Muebles · en «X» se quitan por cortar el paso»; `--captura --muebles-paso [--semillas N]` lo mira en muchos edificios y dibuja los planos), `mueble.gd` (el armario, la mesilla, el escritorio y la librería se abren y a veces dan un material: `Objetos.MUEBLES_CON_PIEZA`; la nevera y la encimera de las cocinas, si ya vive alguien en los trasteros, la comida favorita de uno de ellos: `Objetos.MUEBLES_CON_COMIDA`, M124).
-- **La comida favorita** (M124, 16 nov): cada superviviente tiene la suya (`"comida"` en `Supervivientes.DATOS`; los objetos, `Objetos.COMIDAS`: dónut, manzana, lata de judías, yogur, bocadillo, bebida energética, pizza, termo de café y ensalada). Sale de la nevera y la encimera (35 %, `COMIDA_MUEBLE`, solo la de los que ya viven en los trasteros: `comida_de_mueble`), va en la mochila y pasa al baúl como lo demás, pero no sale al azar ni cuenta para el logro de los objetos. En los trasteros (desde el 16 nov, sin el icono de su comida debajo del nombre), delante de él sale con el contorno amarillo de los muebles (`zona_usar.montar_animado`: una copia de su animación que solo pinta el borde) y se usa la E (`zona_usar.gd`; en el móvil, «Hablar»): desde el 17 nov abre con el juego parado una ventana como las de tutorial (`Tutorial.charla`) con lo que cuenta de su vida (`Supervivientes.VIDAS`, su comida entre asteriscos, que `vida_de` pinta en amarillo) y dos botones: «Seguir» y «Dar de comer» (`dar_de_comer`: su comida de la mochila o, si no, del baúl, y te acompaña), apagado si no la llevas, con una nota de dónde sale (`pedir_vecino`). Antes, sin ella, la pedía en blanco (`PIDE`, quitado). Acompaña **una partida**: al acabarla (`partida.terminar`) `acompanante` vuelve a `""`. Su tutorial, `comida` (al abrir la primera nevera con comida). Pruebas: `--captura --comida` y `--captura --charla` (el contorno y la ventana).
-- **Cortinas de los probadores** (18 nov, el dueño; de GPT): en la tienda de ropa (pared alta), las puertas de los probadores son una cortina roja (`cortina` en `puerta_bano.gd`, la pone `mapa.poner_hojas`): dibujo entero de 32 × 61 (`cortina-probador`, cerrada, y `cortina-probador-abierta`, recogida a la izquierda; `tools/cortina_gpt.py`, de `assets/sources/ropa/cortina-*-gpt.webp`); al abrirse se desliza (`cortina_de_frente`). Se mira con `--puerta-dependienta`.
-- **Espejos de los probadores** (18 nov, el dueño; de GPT): `espejoprobador` en `catalogo.gd` (36 × 50, `tools/muebles_gpt.py`, `assets/sources/ropa/espejo-probador-gpt.webp`), uno en la pared del fondo de cada probador, apoyado en el rodapié (11 píxeles del suelo) (`probadores-ropa`; con la entrada por arriba, la tienda inversa, sin espejos).
-- **Puf de los probadores** (18 nov, el dueño; de GPT): `pufprobador` en `catalogo.gd` (18 × 20, `tools/muebles_gpt.py`, `assets/sources/ropa/puf-probador-gpt.webp`), blanco, en la esquina de arriba a la izquierda de cada probador (en la tienda inversa, la de abajo a la izquierda), aunque tape un poco el espejo.
-- **Gancho de los probadores** (18 nov, el dueño; de GPT): `ganchoprobador` en `catalogo.gd` (10 × 16 de perfil, solo tiene dibujo de lado `mueble-ganchoprobador-lado`, con la placa a la izquierda: en la pared derecha sale en espejo; `tools/muebles_gpt.py`, `assets/sources/ropa/perchero-probador-gpt.webp`), colgado a media altura (20 píxeles transparentes debajo), dos en la pared derecha de cada probador (con 7 píxeles de aire a la izquierda del dibujo para que no se meta en el tabique).
-- **Alfombrilla de los probadores** (18 nov, el dueño; de GPT): `alfombra-probador` (66 × 44, con las esquinas redondeadas, `tools/muebles_gpt.py`, `assets/sources/ropa/alfombra-probador-gpt.webp`), blanca; no es un mueble sino una pieza del suelo, pintada en `mapa.dibujar_fondo` delante del espejo de cada probador (a casilla y tres cuartos de la pared del fondo; en la tienda inversa, abajo).
-- **Aseo de la tienda de ropa** (18 nov, el dueño): suelo y pared del vestuario de Johnny de la sala de mantenimiento (`"bano-ropa"` en `Mapa.ESTILO_TIENDA`, con un tercer dato opcional: el techo, `bano-b`).
-- **Aseo de la tienda de ropa, muebles** (18 nov, el dueño): sin toalla ni balda (`Planta.colgados_bano` no pone nada en la tienda de ropa), con el armarito del botiquín, una taquilla azul arriba a la derecha (`taquillaropa`, copia de adorno de `taquilla.png`, la de las skins de Johnny: `mueble-taquillaropa.png`) y el lavabo y el váter en la pared de la derecha, encima de la puerta al almacén (`bano-ropa` en `catalogo.gd`; en la tienda inversa, la taquilla abajo).
-- **Cambios del 18 nov (tienda de ropa):** el aseo lleva el lavabo y el váter en la pared de la izquierda y la taquilla arriba a la derecha, también en la tienda inversa; el puf de los probadores, arriba a la izquierda en las dos; y el almacén (`"almacen-ropa"` en `Mapa.ESTILO_TIENDA`) con el suelo de hormigón de los trasteros (`suelo-trastero`, sin su línea amarilla, que se pinta aparte) y la pared de chapa de su pasillo (`pared-trastero-pasillo`, techo `trastero`).
-- **Más cambios al aseo de la tienda de ropa** (18 nov, el dueño): lavabo y váter más separados; el banco del vestuario de Johnny en vertical abajo a la derecha (`lockerbench` con su dibujo de lado, `mueble-lockerbench-lado.png`, de `tools/banco_vestuario_lado.py`: 14 × 44, choque de 88); y la puerta del aseo, en la tienda normal subida dos filas para quedar en el medio de lo que se ve (`Tienda.del_plano`; en la inversa, donde está en el plano). Ojo: en la tienda normal el aseo se ve con las 4 primeras filas ocupadas por la pared alta, así que las posiciones de los muebles de sus paredes laterales se cuentan desde el suelo y llegan hasta la fila 8.
-- **Almacén de la tienda de ropa** (18 nov, el dueño): suelo de los trasteros sin la línea amarilla y pared de su pasillo; muebles de los trasteros (`almacen-ropa` en `catalogo.gd`): `storageshelf` en la pared de arriba (normal: cinco con la misma separación; inversa: dos a cada lado de la puerta), montones de `boxstack` abajo (normal: dos a cada lado de la puerta; inversa: cinco con la misma separación) y el `handtruck` de frente, algo separado de la pared derecha. **Ojo con la tienda normal:** la pared alta de la sala de venta tapa las 4 últimas filas de las salas de arriba (el aseo y el almacén se ven con 8 de sus 12 filas), así que lo que iría en su pared de abajo se pone a 8 filas (`"libre"`). `--tiendas-fijas` saca además `captura-fija-<tipo>-<lado>-almacen.png` y `...-abiertas.png`. La puerta del aseo va 3 filas más arriba que en el plano en la normal y 1 en la inversa (`Tienda.del_plano`).
-- **Estanterías del almacén de la tienda de ropa, con ropa doblada** (18 nov, el dueño; de GPT): `ropashelf`, `ropashelf2`, `ropashelf3` y `ropashelf4` en `catalogo.gd` (la `storageshelf` de los trasteros con montones de ropa en las tres baldas de abajo, cuatro repartos distintos: `tools/ropa_estanterias.py`, de `assets/sources/ropa/montones-ropa-gpt.webp`, seis montones reducidos a 15 × 9).
-- **Apocalipsis en la tienda de ropa** (18 nov, el dueño): ya no es `"limpia"`; `Tienda.TIPOS["ropa"]."destrozada"` (aseo, probadores y almacén) pone en esas salas solo la sangre de los pasillos de los pisos (`sangre-suelo-N` con sus salpicones: `mapa.manchas_de_las_salas`, `manchas_en_sala`, más charcos cuanto más grande la sala), sin papeles, cristales ni pintadas, y nada en las paredes; desde el 19 nov, también la sala de venta (`"tienda"`), con su suciedad del suelo y la sangre de las paredes.
-- **Suciedad del suelo de la tienda de ropa** (18 nov, el dueño): sobre el suelo de las salas destrozadas, una capa transparente con las grietas, huecos, arañazos y manchas del suelo del pasillo del ascensor (`suciedad-suelo.png`, de `tools/suciedad_suelo.py`, sacada de `suelo-pasillo.png`; se pinta en `mapa.dibujar_fondo`).
-- **Sangre en las paredes de la tienda de ropa** (18 nov, el dueño; GPT no dejó pedirla): `sangre-pared-1..12.png`, los charcos de `sangre-suelo-N` (los de los pasillos de los pisos) con regueros que chorrean (`tools/sangre_pared.py`), puestos en las caras de las paredes de las salas destrozadas (`mapa.sangre_de_pared`, desde `poner_caras`).
-- **Puertas metálicas de la tienda de ropa** (18 nov, el dueño): la del aseo, la metálica de la sala de mantenimiento (`METAL`); la del almacén (a la sala de venta), la de los trasteros de las viviendas pero en gris acero (`TRASTERO_METALIZADA`: `puerta-trastero-metal.png` y `-abierta`, de `tools/trastero_metal.py`). `puerta_bano.metalizada` las marca (marco de acero); las pone `mapa.poner_hojas`.
-- **Sala de venta de la tienda de ropa** (18 nov, el dueño; GPT, ropa de los años 90): 15 muebles a **escala 1** (`"escala": 1.0` en `catalogo.gd`, que lee `mueble.gd`: el doble de detalle, como la dependienta; `tools/venta_ropa_gpt.py`, de `assets/sources/ropa/venta-*-gpt.webp`): de pared `ropamodulo`, `ropabarra`, `ropazapatos`, `ropavitrina`, `ropaoval`; de suelo `ropaperchero1`/`2`, `roparuedas`, `ropamesa`, `ropatarimas`, los maniquíes `ropamaniqui1..4` y la caja `ropamostrador` (vista desde el lado del cliente). Puestos todos con `"libre"` (`tienda-ropa` en `catalogo.gd`). **Ojo con las filas:** en la normal la fila 0 es el suelo del entrante de los probadores y la pared de la izquierda tiene la base en la fila 4 (la pared alta tapa las salas de arriba, no la sala de venta); en la inversa, la fila 0 es la base de la pared de arriba. Desde el 19 nov la inversa lleva los mismos 14 que la normal, uno de cada y sin la vitrina: los de suelo en espejo (la fila, 17 menos la de la normal) y los de pared contra la pared de la entrada, a sus lados. **Destrozados** (19 nov, el dueño, GPT): los 15 salen rotos, de `venta-<id>-destrozado-gpt` (las limpias se guardan); los altos de `tools/venta_ropa_gpt.py`, para que midan lo mismo que los limpios. GPT ya los hizo en dorado menos el zapatero (`a_dorado_zapatero_roto`, una máscara a mano de postes y baldas) y el marco plateado de la vitrina (`a_dorado_vitrina`: todo menos lo de dentro del cristal).
-- **Suelo y pared destrozados de la tienda de ropa** (19 nov, el dueño; GPT): tres suelos y tres paredes (`tools/ropa_gpt.py`, de `assets/sources/suelos/ropa-suelo-destrozado<N>-gpt.webp` y `ropa-pared-destrozada<N>-gpt.webp` → `suelo-ropa-d<N>`, `pared-ropa-d<N>`; los suelos, igualados de color) que en la sala de venta y los probadores destrozados se **mezclan a trozos** (`MEZCLA_TIENDA` en `mapa.gd`, con su peso: el suelo quemado y la pared del boquete, menos): cada trozo de suelo de 128 píxeles (`mapa.pintar_suelo`) y cada tramo de pared del ancho de su dibujo (`cara_pared.gd`, `paredes`) sale de uno, **siempre el mismo en el mismo sitio** (`CARA.elegir`, sin azar). El suelo y la pared limpios (`suelo-ropa`, `pared-ropa`) se quedan para las salas sin destrozar.
-- **Puf y alfombrilla de los probadores, destrozados** (19 nov, el dueño; GPT, ya en beige y la alfombrilla ya redondeada): `puf-probador-destrozado-gpt.webp` y `alfombra-probador-destrozada-gpt.webp` (`tools/muebles_gpt.py`, que con ellos no tiñe ni redondea; la alfombrilla se recorta por su contorno, `RECORTE`, sin los flecos de fuera, para que mida lo mismo, 66 × 44). Las limpias se guardan.
-- **Almacén de la tienda de ropa, destrozado** (19 nov, el dueño; GPT): las cuatro estanterías con ropa (`estanteria<N>-destrozada-gpt.webp`) y los montones de cajas (`cajas-destrozadas-gpt.webp` y `cajas-destrozadas<N>-gpt.webp`: cinco, cada uno destrozado de otra forma, `cajasropa` a `cajasropa5`, uno distinto en cada sitio) salen de `tools/muebles_gpt.py` (`ropashelf`…, `cajasropa`; `tools/ropa_estanterias.py` ya no se pasa); y tres suelos de hormigón y tres paredes de tablas (`assets/sources/suelos/almacen-ropa-*-destrozad*-gpt.webp` → `suelo-almacen-ropa-d<N>` de 128 y `pared-almacen-ropa-d<N>` de 48 × 48, en `tools/ropa_gpt.py`) mezclados como los de la sala de venta (`"almacen-ropa"` en `MEZCLA_TIENDA`). Los trasteros de los Apartamentos siguen con lo suyo. La carretilla, también destrozada (`carretilla-destrozada-gpt.webp` → `carretillaropa`, del tamaño de la `handtruck`, que sigue en el pasillo de los trasteros de las viviendas).
-- **Aseo de la tienda de ropa, destrozado** (19 nov, el dueño; GPT): la taquilla, el lavabo, el váter y el banco (de frente y «en vertical») del vestuario de Johnny, destrozados, en `tools/muebles_gpt.py` (`taquilla_ropa`, `lavabo_ropa`, `vater_ropa`, `banco_ropa`, `banco_ropa_lado`), con tipos propios en `catalogo.gd` (`taquillaropa`, `staffsinkropa`, `stafftoiletropa`, `lockerbenchropa`) para que el vestuario de la sala de mantenimiento y los baños de los pisos sigan igual; y tres suelos de baldosa y tres paredes de azulejo (`assets/sources/suelos/aseo-ropa-*-gpt.webp` → `suelo-aseo-ropa-d<N>` y `pared-aseo-ropa-d<N>`, en `tools/ropa_gpt.py`) mezclados igual (`"bano-ropa"` en `MEZCLA_TIENDA`). A estos se les iguala el color de fondo, del todo en los bordes, para que los trozos no se vean como cuadrados distintos.
-- **Puertas y cortinas de la tienda de ropa, destrozadas** (19 nov, el dueño; GPT), con la misma forma y tamaño que las de antes: las cortinas de los probadores (`tools/cortina_gpt.py`, de `cortina-*-destrozada-gpt.webp`, ya en beige: sin `a_beige`; tres, rotas cada una de otra forma, `cortina-probador`, `-probador2` y `-probador3` con su `-abierta`: `CORTINAS` y `CORTINAS_ABIERTAS` en `puerta_bano.gd`, y cada probador lleva siempre la suya por orden, `cortina_n`, que pone `mapa.poner_hojas`; lo recogido de cada una, `CORTINA_RECOGIDA`), la entrada vista desde dentro (`tools/puerta_abajo_ropa.py`, de `puerta-entrada-arriba-destrozada-gpt.webp`, la hoja de 11 de alto como la de antes); en la inversa, la entrada de la pared de arriba es la de la fachada destrozada, de frente (`puerta-ropa-destrozada.png`, `tools/muebles_gpt.py` `puerta_ropa_destrozada`; `puerta.gd` `RESTAURANTE_ROPA`, con `puerta.tienda`); desde la galería sigue limpia y las metálicas (`tools/puertas_ropa_destrozadas.py`: cada columna del dibujo viejo toma su columna de la imagen de GPT y se reduce mezclando colores, con el contorno, la línea oscura y la sombra del suelo de antes): la del aseo, `METAL_ROPA` (`puerta-aseo-ropa-lado-cerrada` y `-abierta-lado`), y la del almacén, `TRASTERO_METALIZADA` (`puerta-almacen-ropa` y `-abierta`; de lado, las del aseo). La metálica de la sala de mantenimiento (`METAL`) sigue igual.
-- **Muebles que se abren en la tienda de ropa** (19 nov, el dueño): todos los de la sala de venta menos los maniquíes, la taquilla del aseo y las estanterías y cajas del almacén van en `Objetos.MUEBLES_CON_PIEZA` (se abren una vez, con su contorno amarillo, y a veces sueltan un material). Las cajas del almacén son `cajasropa` (el mismo dibujo que `boxstack`, `mueble-cajasropa.png`), para que las de los trasteros de las viviendas sigan sin abrirse. `--tiendas-fijas` dice cuántos se abren y saca `captura-fija-<tipo>-<lado>-abrir.png` y `...-abierto.png` (Johnny abriendo la caja).
-- **Puerta de entrada de la tienda de ropa, desde dentro** (19 nov, el dueño; de GPT): en la tienda normal, la del muro de abajo es la puerta doble de cristal negro de su fachada vista desde arriba (`puerta-abajo-ropa.png`, 72 × 64 al doble de detalle, de `tools/puerta_abajo_ropa.py` y `assets/sources/ropa/puerta-entrada-arriba-gpt.webp`; `puerta.gd` `ABAJO_ROPA`, con `puerta.tienda`, que pone `mapa.gd`). `--tiendas-fijas` saca `captura-fija-<tipo>-<lado>-entrada.png` (Johnny delante, sin marcador ni minimapa).
-- `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
-  mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
-  los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Johnny las cierra a mano
-  como se usa el baúl (`zona_usar.gd`, con «Cerrar» en el móvil; `cerrar`, `poner_uso`): no si hay alguien en el hueco
-  (tiembla), y cerrada a mano no se reabre sola hasta que Johnny y los suyos se van de delante (`espera`), salvo para un acompañante que se ha quedado pegado a ella por el lado contrario al de Johnny, que la abre él (`atrancado`, `lado_de`; `--puerta-aliado`, 11 nov); usándola
-  otra vez se abre (`-- --captura --puertas`). Cerradas paran la luz,
-  las balas, la vista de los zombis y la niebla. Y las cerradas con llave (su hueco lleva `cerrada`): el baño del
-  superviviente, las viviendas sin rescatar y la cámara acorazada de la joyería (`acero`). Las viviendas de los ya
-  rescatados llevan la suya abierta del todo (`libre` y `abierta` desde el principio: no choca ni tapa la luz; la
-  pone `mapa.poner_viviendas`). Llenan el hueco: de frente,
-  con su marco y, encima, el dintel (un trozo de `cara_pared.gd` con `desde`, que pone `mapa.poner_caras`); de lado,
-  sobre su umbral. De frente, abierta del todo es un dibujo de PixelLab (`puerta-bano-abierta.png`, la puerta casi de
-  canto con su canto, su pomo y su sombra; la hace `tools/puerta_abierta.py`: guía con nuestra puerta, PixelLab,
-  recolor al marrón de la cerrada); mientras gira, se tuerce por código a 63 grados (`GIRO`). La de lado (tabiques
-  verticales; `hoja_de_lado`) cerrada es `puerta-bano-lado-cerrada.png`, un tablón de madera fino con su pomo de latón
-  que sobresale por los dos lados (16 × 32, dibujado en `py tools/puerta_lado_cerrada.py` con la madera y el pomo de la
-  puerta de frente: a 5 píxeles de ancho PixelLab no puede dibujar nada); al abrirse gira la puerta de verdad hacia la habitación de
-  la derecha y abierta del todo (153 grados, `GIRO_LADO`) es `puerta-bano-abierta-lado.png`: de pie junto a la pared, con
-  la bisagra arriba del hueco (`py tools/puerta_abierta.py guia lado`). La blindada de acero y la del almacén con
-  tablas siguen con la hoja vista desde arriba. Dentro de una abierta (`zombi.en_puerta`, en su `arrimo`) los zombis pasan
-  apretados: sin esquivarse ni chocar entre ellos (`zombi.pedir_velocidad`), y el venenoso y el de tentáculos no se
-  plantan ahí a atacar, para no taponarla. Se prueba con `--puertas` y, con un grupo de cada tipo, `--atasco-puertas`.
-- `puerta.gd` (las salidas) y `cartel_salida.gd`: las de la pared de arriba se ven de frente; las de la de abajo, que se ve por detrás,
-  son el hueco en el muro con la hoja vista desde arriba (`puerta-abajo.png`). La salida de incendios es la puerta de las escaleras, al fondo del
-  pasillo, en el muro de la derecha. Se abre cuando cae el jefe de la planta (`jefa_muerta` en `partida.gd`, que llama a
-  `actualizar_puertas`). Vista desde arriba, es una hoja de chapa roja fina metida en el hueco, con su barra antipánico
-  de aluminio sobresaliendo hacia el pasillo y las escaleras detrás (`puerta-salida.png`, 36 × 36). Encima, en la pared de
-  arriba, un cartel EXIT (`cartel-salida-apagado.png` / `-encendido.png`, 36 × 13) que `mapa.gd` crea junto a la puerta y
-  que la puerta enciende (`abierta`): apagado es verde oscuro y sin luz; al caer el jefe arranca con unos parpadeos y se
-  queda verde vivo, sin que le afecte la penumbra, con halo y una luz verde de verdad (la de `lampara.gd`); si Johnny
-  vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
-  no dibuja). Se prueba con `--salida`.
-- `cara_pared.gd`, `neon.gd` (el letrero de neón de las tiendas y el rótulo iluminado de los departamentos de la torre), `ventanal.gd` (el ventanal con la ciudad de noche del pasillo de la torre); `tele_salon.gd` (M91: la tele de un salón que enseña las noticias, ver abajo), `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`, `zona_usar.gd` (la zona de delante de esos muebles: con Johnny en ella, se abren con la acción `usar` (E, B en el mando, el botón del móvil; desde el 13 nov atacar solo ataca, también delante de ellos); `johnny.ante_mueble` dice delante de cuál está; `--armarito-clic`),
-  `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo, y encima
-  del banco, el baúl y la puerta de los trasteros mientras no se haya visto su tutorial; se
-  pone con una `condicion` y se mira cada segundo; su dibujo, de GPT, `assets/sprites/exclamacion.png`, y el pequeño de los
-  iconos del escritorio y de Logros, `assets/ui/exclamacion-pequena.png`, los dos de `tools/muebles_gpt.py`)
-  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `terminal.gd` (los ordenadores con
-  las tres cifras del código de la sala del jefe en Torre Velaria: `Planta.codigo` y `partida.poner_terminales`).
-
-**luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny y su linterna de pecho: el cono del suelo, el foco en el pecho y el rayo tenue entre los dos; fogonazos; prueba `--captura --linterna`), `lampara.gd`, `fuego.gd`.
-
-**pruebas/**: lo que solo se usa con `--captura`.
-- `captura.gd` (clase `Captura`): `activa()`, `dato("--jefe", "antidisturbios")` y `foto("captura-x.png")` (la guarda en `capturas/`, que lleva un `.gdignore` para que Godot no la importe).
-  Y el seguro de las pruebas: el menú pasa a la partida con `Captura.ir_a_la_partida()`, que antes de abrir la de prueba
-  mira que compile (si no, `diagnosticar()` carga uno a uno los archivos de `scripts/pruebas/` para que cada uno cuente su
-  error y su línea) y, si no, cierra con el código 2; y `vigilar()` (puesto por el menú con `--captura`, salvo en el trailer)
-  cierra con el código 1 al primer error de script a mitad de una prueba, y con su reloj, si la prueba se cuelga sin error
-  (150 s; la larga, 900; `--limite N` lo cambia), diciendo si el juego estaba en pausa (una página del dosier o el relato
-  paran los `create_timer(s, false)`: en la prueba, esperar ahí con `create_timer(s, true)`). En los dos casos dice
-  `ERROR DE LA PRUEBA: …` en la terminal: nunca más una prueba en negro que no acaba.
-- La partida de prueba va en una cadena de archivos por tema, cada uno hereda del anterior: `prueba_comun.gd` (hereda
-  de `partida.gd`) → `prueba_jefes_salas.gd` → `prueba_jefes.gd` → `prueba_armas.gd` → `prueba_skins.gd` →
-  `prueba_inventario.gd` → `prueba_fotos.gd` → `prueba_sitios.gd` → `prueba_reglas.gd` → `prueba_larga.gd` →
-  `trailer.gd` → `prueba_bot.gd` → `partida_prueba.gd`, el último, que los tiene todos. Al principio de `partida_prueba.gd` está la lista de opciones
-  (`--jefe`, `--armas`, `--inventario`...) con el archivo de cada una.
-- **El jugador automático (el bot, `docs/BOT.md`):** `bot.gd` es su cerebro (un nodo que pulsa los botones de andar
-  y apunta y ataca con Johnny en el modo `"quieto"`; ve los avisos de los jefes, `aviso.gd`, las balas, lo que lanzan, los
-  charcos y los peligros del suelo, y juega a tres niveles: `NIVELES`); `prueba_bot.gd` (en la cadena) lo pone a pelear
-  con cada jefe (`--bot-jefes`), a jugar partidas enteras (`--bot-partida`) o carreras de partidas seguidas con su propio
-  guardado, comprando en el ordenador y sacando del baúl (`--bot-carrera`), y lo apunta todo en `capturas/bot/`;
-  `py tools/bot.py` lo lanza y hace los resúmenes. Sin pantalla (`--headless`), `Captura.foto` no hace nada.
-- `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
-  edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
-- `prueba_aviso.gd` (`PruebaAviso`, fuera de la cadena: la lanza el menú con `--aviso`): el aviso de fotosensibilidad sale,
-  no se quita sin querer ni pulsa el botón de detrás, se quita pasado el rato y no vuelve a salir.
-- `prueba_grunido.gd` (`PruebaGrunido`, fuera de la cadena: la lanza el menú con `--grunido`): el gruñido suena al pulsar
-  JUGAR y no con otro botón, no se amontona y no va en bucle.
-- `prueba_huecos.gd` (`PruebaHuecos`, fuera de la cadena: la lanza el menú con `--huecos`): con sus propios archivos,
-  el guardado viejo pasa al hueco 1, cambiar de hueco no cambia los ajustes, la pantalla «Elige partida» y borrar un hueco.
-- `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú
-  principal (JUGAR, «Elige edificio», Opciones, Tutorial) y los botones de mando de mentira que usa también
-  `probar_mando()` de `prueba_varias.gd` (la pausa, Opciones, un tutorial, el inventario, la taquilla, el ordenador, una
-  página, el panel de pruebas y el cartel del final). También `mando_web` (`--mandoweb`, la lanza `partida_prueba.gd`, solo
-  en la web): enchufa desde el navegador un mando de mentira sin orden estándar y otro con él, y mira que el L2 lance sin
-  abrir la pausa (M73).
-
-## assets/
-
-- `sprites/`: las hojas (`.png` + `.json`) y sus animaciones (`.tres`). Hoja nueva →
-  `py tools/hacer_frames.py assets/sprites/<nombre>`.
-- `musica/`: «Sin luz» (el menú principal, de terror desde el 11 nov: solo `sin-luz-base.ogg`), «Turno de noche» (las hordas:
-  `turno-de-noche-base.ogg` y `-melodia.ogg`), «Jefe de planta» (los jefes: `-base.ogg` y `-intensa.ogg`) y las de
-  explorar cada edificio: «Planta por planta» (Apartamentos), «Últimas rebajas» (Centro comercial) y «Junta de
-  accionistas» (Torre Velaria), con `-base.ogg` y `-ritmo.ogg`. Épicas menos la de las hordas y la del menú; las capas
-  que suenan a la vez (`CANCIONES`, `MOMENTOS` y `EXPLORAR` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
-  (ver `docs/WEB.md`).
-- `sonidos/`: el gruñido de zombi del botón JUGAR (`grunido.ogg`, de PixelLab, ver
-  `pixellab.json` «grunidos-botones»; los demás efectos se sintetizan en `sonido.gd`).
-- `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
-  25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`; y `rubik.ttf`, la letra lisa que eligió el dueño el 11 nov 2026,
-  la de los tutoriales y el aviso de fotosensibilidad, con su chino `noto-sans-sc-recortada.woff2` (`tools/recortar_noto_sc.py`); ver
-  `docs/IDIOMAS.md`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
-- `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab (no va en el juego exportado: solo lo
-  usan las herramientas).
-- Los dibujos se importan **sin relleno en lo transparente** (`fix_alpha_border=false`, también por defecto para los nuevos, en
-  `[importer_defaults]` de `project.godot`) y con la compresión WebP sin pérdida al máximo (`rendering/textures/webp_compression`):
-  se ven idénticos y pesan un tercio menos (M47, ver «Lo que pesa la web» en `docs/WEB.md`).
-- `web/carga.html`: la página de la web, con su pantalla de carga (ver `docs/WEB.md`).
-
-## tools/
-
-- **Los mensajes de los jugadores:** `mensajes.py` lista los de «Contáctanos» (nuevos y analizados) y los marca (`docs/MENSAJES.md`).
-- **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
-- **El bot:** `bot.py` lanza al jugador automático (contra los jefes, partidas enteras o carreras) y hace los resúmenes
-  (ver `docs/BOT.md`).
-- **Lo dibujado en otro idioma:** `cartel_planta_idiomas.py` hace los carteles de planta con la palabra de cada idioma («FLOOR»,
-  «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`).
-- **El número de la planta, gastado:** los carteles limpios están en `assets/sources/cartel/limpios/` (ahí escriben `guias_cartel.py sprites`
-  y `cartel_planta_idiomas.py`) y `cartel_roto.py` saca de ellos los del juego (`assets/sprites/cartel-planta-*.png`), con la pintura
-  pelada, un desconchón y grietas. Si se toca un cartel, hay que pasarlo otra vez; la palabra se protege para que se lea.
-- **Las puertas sucias:** `puertas_sucias.py` saca de cada puerta de madera limpia su copia `-sucia.png`, con mugre, arañazos, huellas de
-  manos y sangre (lo que lleva cada una, a mano en `RECETAS`). Las de piso y las de dentro de frente son tres dibujos, para que no sean todas
-  iguales. Las limpias se quedan para las zonas seguras (`ZONAS_SEGURAS` en `mapa.gd`). Si se regenera una puerta, hay que pasarlo otra vez.
-- **Los iconos del escritorio de otro color:** `colorear_iconos.py` pone cada flecha de `escritorio-talentos.png` del color de su
-  rama (Militar, Superviviente y Químico, de izquierda a derecha), la mirilla de `escritorio-armas.png` de metal (gris acero), la copa de `escritorio-logros.png` dorada, la carpeta de `escritorio-dosier.png` en marrón, el «play» de `escritorio-videos.png` en azul, el rojo de `escritorio-apagar.png` más oscuro y el cuaderno de `escritorio-colecciones.png` (Sujetos) y la interrogación de los sujetos sin ver (`assets/ui/interrogacion.png`) casi negros. `muebles_gpt.py`
-  los saca amarillos: si se regeneran, hay que pasarlo otra vez (lo ya coloreado no lo vuelve a tocar: lo apunta dentro del PNG).
-- **La puerta de la pared de abajo:** `puerta_abajo.py` hace `puerta-abajo.png`, el hueco en el muro con su marco y la hoja vista desde arriba
-  (esa pared se ve por detrás), en tres modelos: madera sucia, madera limpia y cristal del centro comercial; la pinta `puerta.gd`.
-- **La puerta automática del supermercado** (17 nov; la primera fachada propia de una tienda: se rehacen de una en una): de
-  GPT (`assets/sources/puerta-super-gpt.webp`, 64x40 con `muebles_gpt.py puerta_super`), partida por `puerta_super.py` en el
-  marco (caja del motor, cristales fijos, carril) y las dos hojas del medio. `puerta.gd` (`es_super`, `puerta_super`) pinta el
-  oscuro de dentro, las hojas corridas y el marco encima: al acercarse Johnny (su sensor, una zona grande delante) se abren si
-  la tienda no está cerrada con llave (con llave, la lucecita del sensor en rojo). Sus escaparates van más separados
-  (`Planta.escaparate_a`) y son distintos, también de GPT (`muebles_gpt.py escaparate_super escaparate_super_derecha`):
-  bebidas a la izquierda y comida a la derecha (una tienda con `escaparate-<tipo>-derecha.png` lo usa a la derecha de su
-  puerta: `mapa.poner_escaparates`). Y su letrero, en vez del neón: «SUPERMARKET» en letras corpóreas azul marino (de GPT,
-  `muebles_gpt.py letrero_super`), en inglés para todos los idiomas, como una marca (el dueño, 17 nov), con su resplandor azul
-  por detrás (`letrero_halo.py`), fijo salvo unos 6 apagones por minuto (su lámpara con `tramo` 7 s en vez de 3,5:
-  `lampara.gd`), en los que las letras se oscurecen y saltan chispas de la E caída, que también chisporrotea sola cada pocos
-  segundos (`neon.gd`, `LETREROS`, `CHISPAS_EN`, `chispazo`; suena «chispa» si Johnny está cerca). Prueba:
-  `--captura --edificio centro --puerta-super` (con fotos seguidas de las chispas y una del apagón). Desde el 17 nov la
-  puerta automática no es solo del súper: `Planta.PUERTA_AUTOMATICA` (supermercado, farmacia) dice qué tiendas la llevan (la
-  misma imagen; `puerta.gd es_super` y `Planta.escaparate_a`, que separa sus escaparates); para pasar otra tienda, añadirla
-  ahí. Se prueba con `--puerta-super farmacia` (la tienda, detrás; sin letrero con chispas, esa parte se salta).
-- **Los escaparates de la farmacia, con neones dentro** (17 nov, el dueño): a cada lado de su puerta, un escaparate vacío como el
-  del súper pero más estrecho (de GPT, `muebles_gpt.py escaparate_farmacia`), con un neón colgado dentro, por detrás del cristal:
-  la cruz verde de LEDs a la izquierda y la botella de tubo con su cruz a la derecha (de GPT, `assets/sources/centro/neon-farmacia-<nombre>-gpt.webp`,
-  reducidas «como los muebles» por `py tools/neones_galeria.py farmacia-cruz farmacia-botella`, a 28 y 27 de alto para caber en el
-  cristal: la cruz, a 28, con los LEDs regulares; es una chapa entera y apagada enseña los LEDs muertos). `escaparate_farmacia.py`
-  parte el escaparate en el fondo (marco y cristal oscuro liso, debajo del neón) y los reflejos (encima), para que el neón se vea
-  detrás del cristal. Los neones los pinta `neon_galeria.gd` (sin su halo, para no salirse del cristal); fallan menos que los de la
-  pared (`tramo` 7), sin chispas (detrás del cristal no saldrían, el dueño). Qué tienda lleva neones y cuáles:
-  `mapa.ESCAPARATES_NEON` (`poner_escaparates`). Las chispas de los letreros salen de `chispas_neon.gd`.
-- **El letrero de la farmacia** (17 nov, el dueño): «PHARMACY» en tubos de neón verdes, de GPT
-  (`assets/sources/centro/letrero-farmacia-gpt.webp`), en inglés como el del súper, con la Y suelta y torcida. Se reduce con
-  `py tools/neones_galeria.py letrero-farmacia` (sale `letrero-farmacia.png` y, apagado, `letrero-farmacia-apagado.png`, 90x19) y
-  su resplandor con `py tools/letrero_halo.py farmacia`. `neon.gd` lo trata como los letreros dibujados (`LETREROS`), pero al
-  fallar la luz se ven los tubos de cristal sin luz (`tubos_apagados`); las chispas saltan de la punta rota de la Y (`CHISPAS_EN`). Prueba: `--puerta-super farmacia` (fotos `captura-puerta-super-neones*`).
-- **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
-  cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
-  `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`
-  (`FERRETERIA`) en la pared de arriba de la galería para la tienda `ferreteria`. De momento fija (no se abre sola). Prueba: `--puerta-super ferreteria`
-  (si no sale en las 4 plantas de siempre, prueba otras semillas).
-- **Los escaparates de la ferretería** (17 nov, el dueño): el escaparate vacío de la farmacia (`escaparate_farmacia.py ferreteria` saca
-  `escaparate-ferreteria-fondo/cristal.png`), con la verja por delante de todo (`verja-escaparate.png`, de GPT, `muebles_gpt.py verja`). A la
-  izquierda de la puerta, un panel de herramientas colgadas (dibujo fijo, `panel-herramientas.png`, `muebles_gpt.py panel_herramientas`);
-  a la derecha, un neón de llave, destornillador y martillo (`neones_galeria.py ferreteria-herramientas`), sin verja (no se apreciaba). Capas, de abajo arriba: fondo,
-  herramientas, reflejos del cristal y verja (`mapa.ESCAPARATES_NEON`; un color transparente = dibujo fijo, sin parpadeo).
-- **El letrero de la ferretería** (17 nov, el dueño): «HARDWARE» en tubos de neón azul claro, de GPT
-  (`assets/sources/centro/letrero-ferreteria-gpt.webp`, solo las letras), en inglés como los demás. `py tools/neones_galeria.py letrero-ferreteria`
-  (sale `letrero-ferreteria.png`, 91x18, y el apagado) y `py tools/letrero_halo.py ferreteria`; en `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas
-  saltan de la esquina de abajo de la última E). Prueba: `--puerta-super ferreteria`.
-- **El aseo y el almacén de la ferretería** (20 nov, el dueño): iguales que los de la tienda de ropa. La tienda, de 50 × 30 como la de ropa: arriba,
-  el aseo (7 × 12), el almacén (17 × 12, con sus puertas en los mismos sitios que en la ropa) y el taller (20 × 12, con su puerta en medio), pared con pared
-  (sin el trozo de sala de venta que subía entre el almacén y el taller); abajo, la sala de venta (46 × 13). La sala de venta y el
-  taller, sin muebles de momento (`tienda-ferreteria` y `taller-ferreteria` vacíos). Su suelo y pared destrozados
-  (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-ferreteria" y "almacen-ferreteria"), la suciedad y la sangre (`Tienda.TIPOS`
-  "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo gris), sus muebles (los de
-  `bano-ropa` y `almacen-ropa`), sus puertas metálicas y sin toalla ni balda. El plano de antes, `ferreteria-antigua`, para
-  Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. Los paneles de la
-  pared de la sala de venta (23 nov, el dueño): uno distinto en cada hueco, a escala 1 (136x86), del rodapié a la moldura; los huecos,
-  en `mapa.gd` (`PANELES_TIENDA`: 9 con la puerta abajo, 3 + 4 + 2 entre las puertas del almacén y del taller, y 10 con la puerta
-  arriba, 5 + 5 a los lados de la entrada; "" es un hueco aún sin panel) y se pintan en la cara del muro (`paneles_de_pared`, con
-  "mitad" en `cara_pared.gd`). Cada panel, un panel
-  perforado vacío de GPT con una herramienta de GPT colgada varias veces (ganchos, sombra, etiqueta naranja, huecos vacíos, alguna
-  torcida y sangre por encima), montado a tamaño de GPT y reducido mezclando colores: `py tools/paneles_ferreteria.py [nombre]` (en su
-  lista `PANELES`, cada uno con sus `huecos` y su `sangre`) saca `panel-<nombre>.png`. Hechos: `martillos` (panel gris,
-  `panel-vacio-gpt.webp`, y `martillo-gpt.webp`, con la cabeza oscurecida para que destaque) y `alicates` (panel azul con tres tiros,
-  `panel-vacio-azul-gpt.webp`, recortado por el marco, y `alicates-gpt.webp`, de un gancho entre los mangos), juntos en medio de la
-  pared, y \`llaves\` (panel gris con remaches, \`panel-vacio-remaches-gpt.webp\`, y \`llave-inglesa-gpt.webp\`, algo oscurecida y
-  boca abajo, de un gancho metido en el agujero del mango), en el trozo de la izquierda. (El de llaves inglesas, de GPT entero, se borró: está en git.)
-  El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
-  `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
-  (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
-  misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen). Del 20 al 23 nov la pared fue toda de paneles perforados de chapa gris oscura;
-  ahora vuelve a ser la blanca, con un panel de herramientas en cada hueco (abajo).
-  Mientras se rehace, `Tienda.TIPOS` "despejadas" (`mapa.despejada`): sin nada por el
-  suelo (restos, charcos ni la capa de suciedad) de la sala de venta y del taller, ni en las paredes de la sala de venta, del almacén y del taller.
-- **La puerta de la tienda de electrónica** (17 nov, el dueño): la misma puerta de cristal de la ferretería, algo más pequeña (28x43 → 28x40, con
-  su cartel «OPEN» pequeño: `muebles_gpt.py puerta_electronica cartel_open_pequeno` y `puerta_ferreteria.py electronica`), dentro de un marco de
-  neón rosa y cian abierto por abajo (de GPT, `assets/sources/centro/marco-electronica-gpt.webp`; `neones_galeria.py electronica-marco`, 44x47, con
-  un ancho fijo `ANCHOS`). `puerta.gd` lo pone de hijo (`NEON_MARCO`, `neon_galeria.gd`): falla de vez en cuando, sin halo. Fija, no se abre sola.
-- **Los escaparates de la tienda de electrónica** (17 nov, el dueño): como los de la farmacia (`escaparate_farmacia.py electronica`, el mismo marco
-  vacío), con un neón de GPT dentro, detrás del cristal: el ordenador rosa a la izquierda y el mando de consola (azul lavanda, con el anillo verde, la
-  barra amarilla y la cruceta rosa) a la derecha. `neones_galeria.py electronica-ordenador electronica-mando`; `mapa.ESCAPARATES_NEON`.
-- **El letrero de la tienda de electrónica** (17 nov, el dueño): «ELECTRONICS» en tubos de neón rosa de un solo trazo, con una línea azul debajo (de GPT,
-  `assets/sources/centro/letrero-electronica-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-electronica` (97x19, y el apagado) y
-  `py tools/letrero_halo.py electronica`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea azul).
-- **La puerta del restaurante** (17 nov, el dueño): doble, de cristal sin marco, con pinzas de acero en las esquinas y dos barras largas en el medio (de GPT,
-  `assets/sources/centro/puerta-restaurante-gpt.webp`; `muebles_gpt.py puerta_restaurante`, 36x43; `puerta.gd`, `RESTAURANTE`). Fija, no se abre sola. La tienda de ropa lleva la misma (17 nov, el dueño).
-- **Los escaparates del restaurante** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py restaurante`) con un neón de GPT dentro, detrás
-  del cristal: una hamburguesa (pan amarillo, lechuga verde, carne roja) a la izquierda y un trozo de pizza a la derecha (`neones_galeria.py
-  restaurante-hamburguesa restaurante-pizza`; `mapa.ESCAPARATES_NEON`).
-- **El letrero del restaurante** (17 nov, el dueño): «RESTAURANT» en tubos de neón rosa de un solo trazo, con una línea azul arriba y otra abajo (de GPT,
-  `assets/sources/centro/letrero-restaurante-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-restaurante` (86x20, y el apagado) y
-  `py tools/letrero_halo.py restaurante`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea de abajo).
-- **Los escaparates de la tienda de ropa** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py ropa`) con un neón de GPT dentro, detrás
-  del cristal: las compras (bolsa, caja, bolso y zapato de tacón) a la izquierda y la etiqueta «SALE» inclinada a la derecha (`neones_galeria.py ropa-compras
-  ropa-sale`; `mapa.ESCAPARATES_NEON`). Sustituyen al maniquí con sangre.
-- **El letrero de la tienda de ropa** (17 nov, el dueño): «Fashion» (F mayúscula) en tubos de neón azul-cian de un solo trazo, con una línea rosa debajo (de GPT,
-  `assets/sources/centro/letrero-ropa-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-ropa` (66x21, y el apagado) y
-  `py tools/letrero_halo.py ropa`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea rosa).
-- **La puerta de la joyería** (17 nov, el dueño): doble, de acero inoxidable pulido, con una ventana alta de cristal en cada hoja, dos barras largas en el medio, el
-  cilindro de la cerradura y la caja del cierrapuertas arriba (de GPT, `assets/sources/centro/puerta-joyeria-gpt.webp`; `muebles_gpt.py puerta_joyeria`, 34x43;
-  `puerta.gd`, `JOYERIA`). Fija. Para probarla, `--puerta-super joyeria` le pone la joyería a la planta (no la sortea nadie: `Planta.joyeria_planta`).
-- **Los escaparates de la joyería** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py joyeria`) con un neón de GPT dentro, detrás del
-  cristal: el diamante en neón blanco a la izquierda y los lingotes en amarillo dorado a la derecha (`neones_galeria.py joyeria-diamante joyeria-lingotes`;
-  `mapa.ESCAPARATES_NEON`). GPT hizo los lingotes en blanco: `neones_galeria.py` los pinta de dorado (`RECOLOREAR`: el color del borde del tubo y el de su
-  centro), así que otro neón que salga del color equivocado se puede arreglar igual, sin pedirlo otra vez.
-- **El letrero de la joyería** (17 nov, el dueño): «JEWELRY» en tubos de neón amarillo dorado de un solo trazo (de GPT,
-  `assets/sources/centro/letrero-joyeria-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-joyeria` (94x19, y el apagado) y
-  `py tools/letrero_halo.py joyeria`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan del pie de la pata de la R).
-- **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
-  arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
-- **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
-  (`puerta-servicio.png`, 36 × 43; antes, la de PixelLab, gris claro y lisa): acero apagado con grano, mugre que sube del suelo, la chapa
-  de las patadas arañada, la mancha de las manos en la manilla, polvo en la rejilla y algo de óxido. `cartel_mantenimiento.py` reduce la
-  imagen de GPT del cartel «SALA DE MANTENIMIENTO» (`assets/sources/cartel-mantenimiento-gpt.webp`, chapa esmaltada azul como el de
-  TRASTEROS) mezclando colores (`pasar` de `muebles_gpt.py`): la placa sin letras (`cartel-mantenimiento-liso.png`, 64 × 15) y, aparte, la
-  de GPT con sus letras (`cartel-mantenimiento.png`, ya sin usar). `puerta.gd` (`cartel_mantenimiento`) la pone a la derecha de la puerta
-  (donde iba la placa de la llave inglesa, que ya no está), del tamaño del de TRASTEROS: estirada por en medio con lo que mida
-  «MANTENIMIENTO» ya traducido, en una línea y con la letra a 16. Los apliques del pasillo no se ponen encima (`planta.gd`). Prueba:
-  `--captura --cartel-sala`.
-- **El pasillo de los Apartamentos, decorado (M95, 13 nov):** `pasillo_gpt.py` reduce «como los muebles» las imágenes de GPT de
-  `assets/sources/pasillo/` (la manguera de incendios, el extintor y ocho cuadros: `manguera.png`, `extintor.png`, `cuadro-*.png`)
-  y alarga la alfombra hasta lo que mide el pasillo (sus dos puntas y, en medio, un medallón repetido, antes de reducir:
-  776 × 36) y luego la ensucia (M108, `ensuciar`, con semilla fija: sale siempre igual): camino pisado más gris y oscuro por
-  el centro, manchones desteñidos, cercos de mugre, manchas de café, grasa y sangre vieja, calvas, polvo y migas (más por los
-  bordes largos), algún mordisco en los bordes y las puntas deshilachadas, con flecos de 1 a 3 píxeles (por eso
-  `alfombra-baja.png` mide 782 × 36). Lo sucio va tramado a puntitos, como en pixel art. Solo la alfombra:
-  `py tools/pasillo_gpt.py alfombra`. `planta.gd` (`colgados`, `CUADROS`) cuelga en la pared de arriba cuadros distintos en cada
-  planta (cinco; en la baja, cuatro), en los huecos entre puertas, apliques, macetas y carteles (a la derecha del todo no, por el
-  cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; en todas, otro extintor justo debajo del
-  cartel EXIT de la salida de incendios (M94); y en todas las plantas (M99), la alfombra
-  larga por el centro del suelo (`alfombra`). Los pinta `mapa.gd` (`poner_colgados`, con su sombra en la pared, y `dibujar_fondo`). Prueba: `--captura --pasillo-baja`.
-- **Los baños de los pisos, con toallas (M96, 13 nov):** tres imágenes de GPT reducidas con `muebles_gpt.py` (`toallero.png`,
-  la toalla gris en su barra negra; `toalla-gancho.png`, la blanca colgada de un gancho; `balda-bano.png`, la balda blanca con
-  toallas). `planta.gd` (`colgados_bano`, con su propio dado) pone en la pared de arriba de cada baño una de las dos toallas al
-  lado de la ducha y la balda en medio del hueco más ancho que quede, sin tapar el armarito, las puertas ni los muebles. Las
-  pinta `mapa.gd` (`poner_caras`) como adornos de la cara del muro, con su sombra, así que se oscurecen con la niebla de
-  la habitación. Prueba: `--captura --piso`.
-- **Las manchas de sangre del pasillo de dentro de los pisos (L36, 13 nov):** el suelo de ese pasillo traía dos manchas pintadas
-  que, al repetirse el trozo, salían iguales por todas partes; `dormitorios.py` las tapa (`tapar`: un rectángulo de tablas de las
-  mismas filas, corrido a un lado) antes de reducir. Ahora van sueltas: `manchas_gpt.py` saca doce distintas, rojas y líquidas, de
-  dos imágenes de GPT con fondo blanco (`assets/sources/pasillo/manchas-sangre-a-gpt.webp` y `-b-gpt.webp`: el blanco pasa a
-  transparencia, para que los bordes finos dejen ver el suelo) y las reduce «como los muebles» (`sangre-suelo-1.png` ... `-12.png`).
-  `mapa.gd` (`manchas_del_pasillo`) pone de 6 a 8 distintas en cada pasillo de piso, en casillas al azar separadas, giradas y
-  volteadas, y solo donde caben enteras sobre su suelo (no encima de un tabique); se pintan con los restos. Cada una lleva
-  alrededor salpicones de gotas lanzadas hacia fuera, en cuadraditos como los de los tiros (`salpicar_mancha`, `salpicones`).
-  Prueba: `--captura --piso` (`captura-piso-<lado>-pasillo.png`).
-- **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta
-  o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
-- **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de
-  `assets/fuentes/zombie-scape-ui.ttf` (ver `docs/IDIOMAS.md`, «Las tildes de la letra del juego»); después, `--headless --path . --import`.
-- **La sala de mantenimiento, sin sangre:** `sala_sin_sangre.py` ya solo limpia la mancha del marco de las puertas de dentro
-  (`puerta-bano`). Los suelos, las paredes y los muebles de la sala ya no salen de ahí: son nuevos y limpios (de GPT o dibujados).
-- **El vestuario de la sala de mantenimiento:** `vestuario_azulejo.py` dibuja su pared de azulejo blanco (`pared-vestuario`, 480x48,
-  azulejos de 8) y su suelo de baldosa beis (`suelo-vestuario`, 128x128, baldosas de 16), como la foto del dueño: una cuadrícula
-  limpia con algo de diferencia entre piezas y grano dentro de cada una.
-- **El despacho de la sala de mantenimiento:** `despacho_ladrillo.py` saca su pared de ladrillo rojo visto (`pared-despacho`, 468x48) y
-  su suelo de tarima envejecida (`suelo-despacho`, 128x128) de dos imágenes de GPT (`assets/sources/despacho-*-gpt.webp`). La pared no
-  se reduce sin más: mide cada ladrillo de la imagen y lo vuelve a dibujar limpio (3 píxeles de ladrillo y 1 de junta).
-- **El taller de la sala de mantenimiento:** `taller_vinilo.py` saca su suelo de vinilo gris con motitas (`suelo-taller`, 128x128) y
-  su pared blanca con el zócalo del mismo vinilo (`pared-taller`) de dos imágenes de GPT (`assets/sources/taller-*-gpt.webp`).
-  El baúl (`baul.png`, 42x23, también el de la sala de pruebas), un arcón de plástico negro: `baul_plastico.py` lo pasa a mano píxel a
-  píxel copiando el dibujo de GPT (`assets/sources/baul-plastico-gpt.webp`; reducido sin más se emborronaba). Ocupa 78x36 en el suelo.
-  El banco de trabajo (`banco-trabajo.png`, 48x58, acero gris con el tablero perforado naranja) y la estantería de entre los
-  dos (`mueble-canshelf.png`, 40x68, acero galvanizado con cajas): `muebles_gpt.py` los saca de sus imágenes de GPT
-  (`assets/sources/banco-trabajo-gpt.webp` y `estanteria-metal-gpt.webp`, en pixel art sobre negro puro) reduciéndolas
-  mezclando colores, como las tuberías, para que conserven las sombras y el volumen. La estantería no pasa por
-  `importar.py` (si se reimporta `mantenimiento/estanteria-botes.png`, la pisa). Para otro mueble de GPT, se añade a su lista.
-  También sale así la mesa del ordenador del despacho (`mesa-ordenador.png`, 48x49, de nogal con el monitor y la torre beige de
-  los 90; de `assets/sources/mesa-ordenador-gpt.webp`): el resplandor azul de la pantalla lo sigue poniendo `ordenador.gd`.
-  `ordenador_mantenimiento.py` (la de PixelLab de antes) ya no se usa: si se pasa, la pisa.
-  Y el corcho colgado en la pared del despacho, a la izquierda de la mesa (`corcho.png`, 44x29, sin marco, con papeles crema y
-  chinchetas doradas; de `assets/sources/corcho-gpt.webp`): `mapa.gd` lo cuelga por su borde de abajo. `guias_mantenimiento.py
-  corcho` (el de antes) ya no se usa: si se pasa, lo pisa.
-  Y la papelera del despacho, a la derecha de la mesa (el `wastebasket` del catálogo, `mueble-wastebasket.png`, 14x21, de
-  rejilla gris oscura con papeles blancos; de `assets/sources/papelera-gpt.webp`): ocupa 28x22 en el suelo. No pasa por
-  `importar.py` (si se reimporta `despacho/papelera.png`, la pisa).
-  Y la ducha del vestuario, que también sale en los dos baños de los pisos (el `showertray` del catálogo,
-  `mueble-showertray.png`, 36x66, mampara de cristal azulado de frente con perfiles de aluminio sobre su plato blanco; de
-  `assets/sources/ducha-gpt.webp`): ocupa 72x44 en el suelo (antes 72x64, para que el plato quede pegado a la pared), lo de más sube por la pared. No pasa por
-  `importar.py` (si se reimporta `vestuario/plato-ducha.png`, la pisa).
-  Y el lavabo de pie con su espejo, de lado (el `staffsink` del catálogo, `mueble-staffsink-lado.png`, 20x66, para la pared
-  de la izquierda; en la de la derecha el juego le da la vuelta; de `assets/sources/lavabo-gpt.webp`): sale en el vestuario y
-  en los baños de los pisos. No pasa por `importar.py` (si se reimporta `vestuario/lavabo-espejo-lado.png`, lo pisa).
-  Y el váter, de lado (el `stafftoilet` del catálogo, `mueble-stafftoilet-lado.png`, 26x37, la cisterna en la pared de la
-  izquierda y la tapa levantada; de `assets/sources/vater-gpt.webp`): igual que el lavabo, en el vestuario y en los baños de
-  los pisos. No pasa por `importar.py` (si se reimporta `vestuario/vater-vestuario-lado.png`, lo pisa).
-  Y el banco largo del vestuario, suelto en medio (el `lockerbench` del catálogo, `mueble-lockerbench.png`, 64x28, listones de
-  haya sobre tubo gris con su zapatero; de `assets/sources/banco-vestuario-gpt.webp`). No pasa por `importar.py` (si se
-  reimporta `vestuario/banco-vestuario.png`, lo pisa).
-  Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
-  `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
-  (la de antes, dibujada a mano) ya no se usa: si se pasa, la pisa.
-  En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
-  `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
-  imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
-  La puerta del despacho al taller, metálica (`PUERTA_BANO.METAL`, la elige `mapa.poner_hojas`): `puerta_metal.py` saca las tres de las
-  imágenes de GPT tal cual (`puerta-metal-gpt-2.webp`: la cerrada y la abierta; `puerta-metal-gpt-frente.webp`: la de frente, la que
-  gira): les quita el fondo y las reduce; la abierta, metida en la forma de la de madera para que gire igual. Se abre hacia el
-  despacho (`al_reves` en `puerta_bano.gd`: todo dado la vuelta alrededor del medio del hueco), no hacia el taller: abierta
-  hacia allí se quedaba de pie junto al banco de trabajo y no dejaba usarlo.
-  Las salidas de la sala (la de la pared de abajo y, girada, la de la derecha, que da a los trasteros; y la de los trasteros que
-  vuelve a ella) llevan esa misma hoja, cerrada: `puerta_abajo_metal.py` la pone tumbada en el hueco de chapa gris de
-  `puerta-abajo.png` (`puerta-abajo-metal.png`, que usa `puerta.gd`; el cuarto dibujo de `puerta-abajo.png` ya no se usa).
-- **Efectos de pixelfx** (el plugin de efectos pixel art, MIT, `git clone https://github.com/patch-gg/pixelfx`):
-  `pixelfx/exportar.mjs` saca un efecto en tres hojas para Godot (detrás del personaje, delante y el brillo, que se suma)
-  y `pixelfx/escudo-fuego.js` es la burbuja de fuego del jefe de bomberos (`escudo-fuego-*.png`, en `bombero.gd`):
-  `node tools/pixelfx/exportar.mjs <pixelfx> tools/pixelfx/escudo-fuego.js assets/sprites`.
-  `pixelfx/reventon-veneno.js` es el reventón del gordo ("acid-splash" pasado a vista desde arriba, `reventon-veneno-*.png`):
-  `node tools/pixelfx/exportar.mjs <pixelfx> tools/pixelfx/reventon-veneno.js assets/sprites`.
-  `pixelfx/nube-gases.js` es la nube del Flatulento ("poison-cloud" desde arriba, `nube-gases-*.png`), igual.
-  `pixelfx/escudo-cristal.js` es lo mismo en azul y más pequeño: la cúpula del científico jefe (`escudo-cristal-*.png`,
-  en `cientifico_jefe.gd`; las balas rebotan en su borde igual que en la burbuja del bombero, con `colores_escudo()`).
-  `pixelfx/explosion.js` y `exportar_explosion.mjs`: la explosión (`node tools/pixelfx/exportar_explosion.mjs <pixelfx>
-  assets/sprites`, y copiar el origen que escribe en `ORIGEN` de `explosion.gd`). `hojas.mjs` pinta las capas que se le
-  pidan ("front", y "back" para la explosión).
-  `caida.py` monta la hoja del tropiezo de Johnny (`conserje-48-caida`: caer y levantarse de PixelLab, colocados para que
-  no den saltos y quede tumbado en el suelo): `py tools/caida.py`. Luego `py tools/caida_skins.py` saca la de cada skin:
-  busca en cada dibujo la cabeza de siempre y cuánto está girada, la borra y pega encima la de la skin girada igual
-  (`cara.py` no sirve aquí: busca la cabeza derecha). Con `muestra`, `capturas/captura-caida-<skin>.png` para revisarla.
-  `pixelfx/fogonazo.js` son los fogonazos ("muzzle-pistol", "muzzle-smg" y "muzzle-shotgun" partidos en llama y humo,
-  sin casquillo) y `pixelfx/exportar_fogonazo.mjs` los saca girados y recortados (`fogonazo-<arma>-<parte>*.png`) y
-  escribe las medidas para `TIPOS` de `fogonazo.gd`: `node tools/pixelfx/exportar_fogonazo.mjs <pixelfx> assets/sprites`.
-  `pixelfx/chispa.js` es la chispa de las balas ("hit-spark" con tallas, colores y apuntando a cualquier lado) y
-  `pixelfx/exportar_chispa.mjs` la saca (`chispa-bala*.png` y `chispa-perdigon*.png`) con las medidas para `chispa.gd`:
-  `node tools/pixelfx/exportar_chispa.mjs <pixelfx> assets/sprites`. Los dos exportadores con variantes comparten
-  `pixelfx/hojas.mjs` (dibujar cada variante, recortar y pegar en las hojas).
-  `pixelfx/bocanadas.mjs` hace `bocanadas-fuego.png`, las bocanadas de fuego y de humo de "fire-breath" en 10 tamaños y
-  10 edades, para el chorro del lanzallamas del bombero (`node tools/pixelfx/bocanadas.mjs <pixelfx> assets/sprites`).
-- **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
-  animaciones), `jefe_hoja.py` (jefes: `py tools/jefe_hoja.py gloton-72 jefe-gloton`; cada jefe en su ficha `JEFES`),
-  `superviviente.py`, `zombi.py` + `png.py`, `piel.py`, `piel_verde.py` (la piel del verde del vecino, ver abajo), `espejo_oeste.py`, `hoja.py` (hoja de revisión); `hoja_112.py` (los zombis de 112 px, como la dependienta: hoja apretada, cada fotograma recortado con su `margin`; receta en `docs/ZOMBIS_112.md`). `reducir.py`: reduce un zombi detallado a la altura de Johnny con su borde negro; lo usan `hoja_112.py` y `zombi.py` si la ficha trae `"reducir"` (cómo, al principio del archivo).
-- **Un zombi hecho con GPT (la vecina, 8 nov):** `zombi_gpt.py` pasa las imágenes de GPT (`assets/sources/zombi-vecina-gpt/`:
-  `personaje.webp` con las 5 vistas en fila y una por animación y vista, `andar-s.webp`, `ataque-e.webp`…, con los fotogramas
-  en una o dos filas sobre negro puro) a los dibujos que monta `zombi.py`: quita el fondo, reduce mezclando colores como los
-  muebles, con un contorno suave, y coloca cada fotograma midiendo la rejilla de GPT con un punto que no se mueve (la cabeza
-  al andar, los pies en lo demás). Las 3 vistas del oeste salen en espejo. `py tools/zombi_gpt.py personaje`, luego
-  `py tools/zombi_gpt.py <andar|ataque|golpe|muerte> <south|south-east|east|north-east|north>`, y después `zombi.py
-  zombi-vecina-48 zombi-vecina` y `hacer_frames.py`. Sale en los apartamentos (`planta.gd`, `horda`), con el coste del vecino.
-  **La médica con GPT (10 nov, M17):** `--zombi medica` (referencia `capturas/referencia-medica.png`, 1920 de ancho) con `personaje`, `andar`, `ataque` (el pinchazo), `muerte` (la caída) y `forzar` (solo `south` y `north`: agachada con la ganzúa; el fotograma 1 es ella de pie, solo para medir). Luego `py tools/medica_gpt_montar.py`, `py tools/superviviente.py medicagpt` y `hacer_frames.py assets/sprites/superviviente-medicagpt`. `aliado.gd` usa esa hoja para `medico` y, si la hoja tiene `forzar_<dir>`, `trastear()` no menea el cuerpo (`forzar_con_dibujo`): lo hace el dibujo. El policía, igual (`--zombi policia`, referencia `capturas/referencia-policia.png`; `py tools/medica_gpt_montar.py policia`, `py tools/superviviente.py policiagpt`): sus bocas de disparo salen del fogonazo que dibuja GPT en el fotograma 4. El militar, igual (`--zombi militar`, referencia `capturas/referencia-militar.png`; `py tools/medica_gpt_montar.py militar`, `py tools/superviviente.py militargpt`).
-  Sirve para otros zombis con `--zombi <nombre>` delante (cada uno en su ficha `ZOMBIS`: carpetas, hasta qué gris es fondo,
-  lienzo del ataque, golpe y muerte, y si el golpe va con los pies clavados). El **vecino rehecho con GPT** (8 nov):
-  `--zombi normal` → `assets/sources/zombi-normal-gpt-48` → `zombi.py zombi-normal-gpt-48 zombi-normal-gpt` (anda a 7
-  fotogramas por segundo: `"fps_andar"` en su `zombi.json`). Los textos que se le pidieron a GPT, enteros, en
-  `assets/sources/zombi-normal-gpt/textos-gpt.md` (con lo aprendido: el paso descrito fotograma a fotograma, los pies
-  clavados al atacar y en el golpe, y en qué rodilla va el roto). Desde el 8 nov es **el vecino del juego**
-  (`zombi_normal.tscn`, y su ficha de Sujetos), con una sola ropa, la camisa azul: las 6 de colores del de PixelLab
-  (`zombi-normal-rojo`, `-bata`…) ya no se usan. `--captura --vecino-gpt` lo pone junto al de PixelLab para comparar.
-- **El jefe de seguridad con GPT (17 nov):** el guardia de la llave maestra (`zombi_guardia.tscn`) deja el dibujo del
-  vigilante y lleva el suyo: `--zombi guardia` (carpeta `zombi-guardia-gpt`, con el `personaje.webp` del vecino de
-  referencia de estilo y la foto recortada de un guardia; textos en su `textos-gpt.md`) → `zombi-guardia-gpt-48` →
-  `zombi.py zombi-guardia-gpt-48 zombi-guardia` y `hacer_frames.py assets/sprites/zombi-guardia`. Al 87 % (`TAMANO`:
-  GPT lo dibujó más grande y no cabía en 48), anda a 8 fotogramas por segundo y, huyendo, su andar va a ×2,4
-  (`PASO_HUYENDO`), para que no patine. La ropa, gris marengo y no negra, para que el fondo negro no se la coma.
-  Desde el 19 nov, con el contorno negro cerrado como los vigilantes (`"cerrar_borde"` en su `zombi.json`; foto de
-  cerca al lado de Johnny en `--captura --guardia-f9`).
-- **Los vigilantes con GPT (17 nov):** un hombre y una mujer con chaleco amarillo fosforito, en vez del vigilante de
-  PixelLab: `--zombi vigilante` y `--zombi vigilante-mujer` (carpetas `zombi-vigilante-gpt` y `zombi-vigilante-mujer-gpt`,
-  cada una con su `personaje.webp` y sus textos en `textos-gpt.md`) → `zombi.py ... zombi-vigilante` y
-  `zombi-vigilante-mujer` (con el `zombi.json` del jefe de seguridad). Tan corpulentos como él (`TAMANO` 0,97 y 0,82,
-  `ESTIRO` 1,2 y 1,22) para no parecer enanos al lado de Johnny. `zombi_vigilante.tscn` lleva las dos hojas en `ropas`:
-  cada vigilante que sale (patrullas, joyería, el rugido del jefe, «¡A TRABAJAR!», refuerzos) es hombre o mujer al azar,
-  mitad y mitad, con los mismos números. Lo aprendido: la frase de la piel verde en cada texto (si no, GPT la pinta gris)
-  y, en las muertes, «cae hacia donde mira y la cabeza queda en ese lado» (una salió tumbada al revés en los últimos
-  fotogramas y se giró en espejo en su hoja). Desde el 19 nov (lo pidió el dueño), con el contorno negro cerrado como el de
-  Johnny: `"cerrar_borde": "#050202"` en sus dos `zombi.json` pinta de ese color los píxeles del borde que PixelLab
-  dejaba del color de al lado (chaleco, piel), sin hacerlos más grandes; `--captura --vigilantes` los enseña. `--guardia` cuenta los dibujos de sus guardias y saca
-  `captura-guardia-vigilantes.png` con uno de cada.
-- **Chaleco amarillo neón (20 nov):** los vigilantes y el jefe de seguridad, con `"neon": {}` en sus tres `zombi.json`
-  (lo pidió el dueño: GPT dejó el chaleco y las franjas reflectantes amarillo verdoso y en el juego parecían verdes).
-  `zombi.py` busca en cada fotograma el chaleco y lo pasa a amarillo (sombras hacia el naranja, luces a amarillo puro,
-  más vivo). La piel verde tiene el mismo tono, así que se separan por lo vivo que es el color: chaleco seguro si es
-  bastante vivo para su claridad (`"alto"`, 0,5; a más claro, más vivo tiene que ser), y lo algo menos vivo (`"bajo"`,
-  0,3: el borde de la franja del jefe) solo pegado a una zona con 3 píxeles seguros o más; lo casi negro, nunca (el
-  contorno de las manos). El tono va en `"tono"` ([50, 60] grados). Se comprueba con `--captura --vigilantes` y
-  `--captura --edificio centro --guardia`.
-- **La piel de los durmientes, del verde del vecino (20 nov):** lo pidió el dueño: los once durmientes normales con la
-  piel del mismo verde que el vecino (`zombi-normal-gpt`, la referencia, que no se toca): la vecina, el arrastrado (era
-  marrón: solo cara, brazos y manos), el crío, el dinamitero, el de tentáculos (era casi blanco), la dependienta, los dos vigilantes, el guardia, el
-  oficinista y el escolta. El gordo y los jefes, no (decidido por él). Va en su ficha, `"piel_verde": {...}` (en
-  `zombi.json` para `zombi.py` y en `hoja.json` para `hoja_112.py`), y lo hace `tools/piel_verde.py` sobre cada dibujo ya
-  terminado (al final, después del chaleco neón, que no se toca). **Receta:**
-  1. Medir su piel: tono, claridad y viveza (la del vecino: tono ~78-80°, viveza 0,28 en las sombras y subiendo en las
-     luces). Con eso, en la ficha, `"tono"`, `"viveza"` y `"claridad"` de su piel (lo que no cumpla, no cambia).
-  2. Mirar lo elegido antes de tocar la hoja: `py tools/zombi.py <fuente> <hoja> --mascara <carpeta>` (o `py
-     tools/hoja_112.py <carpeta> --mascara <carpeta>`) deja en esa carpeta la hoja con lo elegido pintado de rosa, sin
-     tocar `assets/sprites`. Mirarla en las 8 vistas y en fotogramas de cada animación.
-  3. Si se cuela algo: `"fuera"` (colores que no son piel aunque lo parezcan), `"mancha"` (tamaño mínimo), `"grueso":
-     true` (fuera las rayas finas: la franja reflectante de los vigilantes) o `"luz"` (más oscura: el de tentáculos, tan
-     pálido, salía verde lima). Si falta algo: `"sombra"` (las sombras de otro color pegadas a la piel) o `"huecos"` (lo de
-     otro color encerrado entre piel, a 4 píxeles o menos por los dos lados: las sombras marrones alrededor de la boca) o
-     `"barbilla"` (lo de debajo de la cara, tan ancho como ella: la mandíbula de otro color; `tools/zombi.py` le dice hacia
-     dónde mira cada dibujo, para quitarla de espaldas con `"sin"`).
-  4. Rehacer la hoja (sin `--mascara`) y probar con `--captura --durmientes` (los doce juntos, el vecino primero).
-  Lo que lleva cada uno: la mayoría, `{}` (lo de siempre: tono 55-110°); el oficinista y el escolta, viveza desde 0,02-0,03
-  (su piel es casi gris); el crío, viveza hasta 0,45 (si no, entra su pelo rubio) y sus sombras marrones; los vigilantes y el
-  guardia, `"grueso"`; el arrastrado, tono desde 35°: solo la cara, los brazos y las manos (su cuerpo marrón es como su ropa; todo
-  verde no le pegaba, lo eligió el dueño el 20 nov), `"huecos"` para las sombras marrones de la boca y `"barbilla"` para
-  su mandíbula, que en su dibujo es del marrón del cuerpo (salía marrón al abrir la boca); la barbilla no se pone de
-  espaldas (`"sin"`: ahí la mancha más alta es un trozo de mejilla y debajo está la espalda), ni con la cara de más de 10
-  filas (la cabeza echada atrás: debajo está la camisa), y con `"lado"` coge también el borde oliva y marrón de la mitad
-  de abajo de la cara (de perfil, la barbilla y la boca por delante); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
-  opción, todas las hojas salen idénticas a las de antes. Lo que no se ha podido: en el ataque de frente del vigilante, la
-  cara se ve amarilla en algunos fotogramas (el paso del chaleco neón la toma por chaleco, y lo que pinta de amarillo no se
-  toca), y en el de tentáculos quedan grises algunos píxeles claros de pies y brazos (iguales que los del pantalón).
-- **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
-  casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
-  mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus
-  dibujos) ni la sangre de la cara (boca y mejilla: `sin_sangre_cara.py`, igual). El **crío con GPT** (8 nov), entero: `--zombi rapido` → `assets/sources/zombi-rapido-gpt-48`
-  → `zombi.py zombi-rapido-gpt-48 zombi-rapido-gpt` (corre a 10 fotogramas por segundo; el ataque, 0,6 s). Como corre,
-  `zombi_gpt.py` pone su cabeza a la altura que la dibuja GPT y deja que los pies se levanten, en un lienzo de 64 (de
-  perfil estira mucho la pierna). Textos, en `assets/sources/zombi-rapido-gpt/textos-gpt.md` (referencia
-  `capturas/referencia-rapido.png`). Desde el 8 nov es **el crío del juego** (`zombi_rapido.tscn` y su ficha de
-  Sujetos); el de PixelLab (`zombi-rapido`) ya no se usa. `--captura --crio-gpt` lo pone junto al de PixelLab y
-  `--captura --tres-zombis`, junto a la vecina y el vecino.
-- **El gordo más real (8 nov):** el de PixelLab con `"suave": 0.8` en su `zombi.json`, como el crío (lo eligió el dueño
-  en vez de rehacerlo con GPT). Ojo: la mejora solo cambia la capa de fuera del contorno; vale para los de contorno de
-  un píxel (el crío, el gordo), no para el arrastrado de PixelLab, que lo tenía de dos. `--captura --gordo-real`.
-  Desde el 20 nov (lo pidió el dueño), las fístulas y lo que le cuelga de la barriga, del verde de la piel del vecino en
-  vez de rojo: `"heridas_verdes": {}` en su `zombi.json` (`zombi.py`, antes del `"suave"`). Es herida lo rojo salvo lo
-  que está a 5 píxeles o menos de los dientes y los ojos (la boca se queda roja) y el rojo oscuro del borde de la figura
-  (el contorno); lo rojo casi negro de dentro de la herida, rodeado de verde, pasa a verde oscuro. El tono, con `"tono"`
-  (78 grados). También cambia la sangre que salta en el golpe (es del mismo rojo). La pierna de detrás, que PixelLab
-  pinta en sombra de un rojo oscuro casi liso, no pasa a verde sino a carne en sombra: en lo bajo de la figura, las
-  manchas grandes de casi un solo color, y de ellas solo lo oscuro. Y escupiendo hacia abajo ya no pinta el chorro hasta
-  el suelo (acababa en una raya recta): `"cambiar": {"south": {"5": 6}}` en su `"ataque"` usa ahí el fotograma 6 de
-  PixelLab (la boca llena de moco) en vez del 5. `"cambiar"` vale para cualquier animación de `zombi.py`.
-- **El arrastrado con GPT (8 nov):** `--zombi lento` → `assets/sources/zombi-lento-gpt-48` → `zombi.py zombi-lento-gpt-48
-  zombi-lento-gpt` (textos en `assets/sources/zombi-lento-gpt/textos-gpt.md`, referencia `capturas/referencia-lento.png`).
-  Va por el suelo: arrastrarse en lienzo de 64, y en el ataque, el golpe y la muerte cada fotograma a la altura que lo
-  dibuja GPT (`ALTURA_GPT`), de perfil y en diagonal de frente colocado por el final del cuerpo (no por las manos) y la
-  muerte medida por el ancho. GPT rechazaba por violencia casi todo lo de espaldas (el muñón rojo): de espaldas se le
-  pidió arrastrarse con una copia con el final del cuerpo en marrón (`capturas/lento-para-gpt-sin-rojo.png`) y
-  `rojo_espalda.py` se lo vuelve a pintar; el ataque, el golpe y la muerte de espaldas, el golpe de perfil y el de
-  diagonal de frente los monta `espaldas.py` con sus otros dibujos (pasarlo después de `zombi_gpt.py`).
-  Desde el 9 nov, al 80 % y de perfil y en diagonal algo menos, para que no se vea más grande que de frente (`TAMANO` y
-  `TAMANO_VISTA` en `zombi_gpt.py`; rehacerlo entero: `personaje`, `andar` de las 5 vistas, `ataque` y
-  `muerte` de frente, en diagonal y de perfil, `golpe south`, `rojo_espalda.py`, `espaldas.py` y `zombi.py`), con su
-  choque, sombra y altura a escala en `zombi_lento.tscn`. `--captura --lento-gpt` lo pone junto al vecino. Desde el 8 nov es **el arrastrado del juego** (`zombi_lento.tscn`
-  y su ficha de Sujetos), con una sola ropa, la marrón: el de PixelLab y sus 6 de colores (`zombi-lento-rojo`, `-bata`…)
-  ya no se usan.
-- **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
-  C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
-  Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es
-  naranja, sin `boca: fogonazo` y la boca a mano en `armas.gd`; `andar.ciclo` y `andar.espejo` para el andar. Retoques:
-  `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `golpe_andando.py` (mete en la hoja el golpe dado mientras
-  anda, dibujado entero por PixelLab: filas nuevas al final, animación `attackwalk`; después, `cara.py <skin> <arma>`
-  con cada skin y `piernas.py <arma>`), `piernas.py` (las piernas de cada hoja de golpe, para partir a
-  Johnny por la cintura al golpear andando: `<hoja>-piernas.png`; hay que volver a pasarlo si se rehace el paso o el golpe
-  de una hoja, y `--ver` deja fotos para repasar el recorte), `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
-  ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y
-  quita el parpadeo de espaldas, que confundía el arma con unos ojos; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`),
-  `bate_metal.py` (el bate de aluminio con el mango de cinta negra: busca el bate de madera en cada dibujo por su forma,
-  porque comparte los colores con la piel, y lo repinta; lee `assets/sources/conserje-48-bate/hoja-madera.png`, los
-  golpes que no acierta van a mano en `AJUSTES` y `py tools/bate_metal.py muestra` deja antes y después en `capturas/`) y
-  `cara.py` (las skins: `py tools/cara.py <skin> [arma]`). Al final de todos, `respiracion.py`: rehace el reposo de
-  todas las hojas de Johnny y sus skins (solo sube el pecho, la cabeza quieta; dos respiraciones en 6 s, con el
-  parpadeo) y conserva las puntas del lanza ácido. Va después porque los otros esperan el reposo viejo de 20 dibujos:
-  si se rehace una hoja con ellos, se vuelve a pasar `py tools/respiracion.py` (las que ya están hechas no las toca).
-- **La salida de incendios:** `puerta_salida.py` dibuja a mano, sin PixelLab, la puerta roja de las escaleras y el
-  cartel EXIT (apagado y encendido): `py tools/puerta_salida.py`.
-- **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
-  `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
-  `taquilla.py`, `helicoptero_gpt.py` (el helicóptero de Velaria, de GPT), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
-  nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (el colchón con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas, y la pared con chapa lagrimada y la línea amarilla de su pasillo), `guias_trasteros.py` (las guías de PixelLab de las cajas y la carretilla de ese pasillo y de la estantería y el colchón de sus habitaciones; ya no se usa: ahora salen de GPT con `muebles_gpt.py`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py` (el científico muerto de PixelLab; ya no se usa: pisaría el de GPT) y `cientifico_muerto_gpt.py` (el científico muerto de GPT, M14: lo reduce como los muebles y le separa la piel y el pelo en sus capas, que el juego pinta con los colores de cada página).
-- **El inventario en la mochila (M100):** `inventario_gpt.py` reduce como los muebles la mochila (la de la referencia
-  vaciada por GPT; la ensancha o estrecha para que su forro caiga donde van las casillas y escribe su `MOCHILA_EN`), el
-  papel de la ficha, la cinta de los títulos y la etiqueta de la llave (`assets/sources/inventario/` → `assets/ui/inventario-*.png`).
-- **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `suelo_salon.py` (el suelo de nogal del salón), `suelo_rejilla.py` (el suelo de rejillas de la cocina del cocinero: un panel por cuadro del damero), `azotea_gpt.py` (la azotea
-  entera, de GPT; ver `FONDOS.md`).
-- **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
-  `hacer_casillas.py`, `recortes_bestiario.py`.
-- **El logo** (`assets/ui/logo.png`, «JOHNNY RUSH» grande y «ZOMBIE ESCAPE» pequeño debajo; lo ponen `menu_principal.gd` y el final de
-  `pruebas/trailer.gd`): no está dibujado a mano, lo genera `py tools/logo.py`; la pantalla de carga de la web, `assets/web/carga.html`, lleva una copia
-  metida dentro: si cambia el logo, ver «La pantalla de carga» en `docs/WEB.md` (el programa de `src/titulo.js` del juego JS, pasado a
-  Python: cada letra es una cuadrícula de 5×7 con relieve, babas y un filo crema). Las letras están en `LETRAS` (J, H, N, Y, R y U son
-  las añadidas al pasar al nombre nuevo), los colores en `REPARTOS` (`py tools/logo.py todas` los enseña todos juntos; el elegido es
-  `VARIANTE`) y `py tools/logo.py viejo` rehace el logo de antes, idéntico, para comprobar que el programa no ha cambiado.
-- **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en
-  `tools/efectos/*.wav`, que no van a git).
-- **Música de 8 bits:** `motor-8bit.mjs` y las canciones (`turno-de-noche.mjs`; `el-ultimo-inquilino.mjs`, la del menú
-  y los Apartamentos hasta el 10 nov, que ya no va en el juego: si se vuelve a sacar, borrar sus `.ogg` de `assets/musica/`;
-  `villancico-8bit.mjs`, de prueba). `node tools/<canción>.mjs` saca el `.wav` y el `.ogg`; con `--veces 4`, en bucle.
-  El motor tiene también instrumentos «de 16 bits» (sierra con varias voces y filtro, seno, FM, coro, reverberación de
-  sala, la cinta que tiembla) y percusión de tráiler (`taiko`, `caja16`, `charles`, `platillo16`, `golpe`, `ascenso`):
-  las canciones de explorar los edificios, hechas el 9 nov en tres estilos por edificio para elegir. Las elegidas,
-  `ultimas-rebajas.mjs` y `junta-de-accionistas.mjs`; las otras se quedan por si acaso (`hilo-musical.mjs`,
-  `caja-registradora.mjs`, `musica-en-espera.mjs`, `horas-extra.mjs`). El 10 nov, en el mismo estilo épico, las del
-  menú (`el-conserje.mjs`, de una sola capa), los Apartamentos (`planta-por-planta.mjs`) y los jefes
-  (`jefe-de-planta.mjs`, a -25 LUFS como las peleas): comparten los instrumentos de orquesta y el tema principal del
-  juego, «el tema de Johnny», en `orquesta.mjs` (cada una lo toca en su tono con `enTono`). Cada una deja en `tools/efectos/elegir/` la
-  canción entera y la base sola (con `index.html` para escucharlas todas) y, con `--juego`, sus capas en
-  `assets/musica/` ya a su volumen (`sacarCancion`, que lo mide con ffmpeg). El 11 nov, la del menú pasó a ser de terror:
-  `sin-luz.mjs` (re menor, zumbido grave, una caja de música con la cinta que tiembla, latido y notas que chocan);
-  `el-conserje.mjs` se queda por si acaso, sin su `.ogg` en el juego.
-  Por capas: cada instrumento dice su `capa` (y la percusión y demás, la suya en `capas` de `crearMotor`), `guardar()`
-  saca un `.wav` por capa, a la misma ganancia, que sumados suenan como la canción entera, y la partitura pasa cada uno
-  a su `.ogg`. El trailer suma las capas al montar.
-
-## docs/
-
-- `historial/`: los planes ya terminados (`CENTRO_COMERCIAL.md`, `JEFES_APARTAMENTOS.md`). Solo para saber por qué se
-  decidió algo; lo que vale es el código.
-- `MENSAJES.md`: «Contáctanos», adónde llegan los mensajes de los jugadores y cómo los analiza Claude.
-- `IDIOMAS.md` (cómo se traduce el juego y cómo se escribe un texto nuevo) y `GLOSARIO_EN.md` (cómo se dice cada nombre en inglés).
-- `PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md`: del juego JS y de lo dibujado después; valen
-  para las ideas y los números.
+`# Mapa del código
+`
+`Una línea o dos por archivo, para saber dónde mirar. Lo fino (números, por qué se hizo así) está en los comentarios
+`de cada script; lo que se hizo y cuándo, en git. Si algo cambia de sitio o aparece un archivo nuevo, se apunta aquí
+`en una línea.
+`
+`## Raíz
+`
+`- `project.godot`: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque.
+`- `default_bus_layout.tres`: buses de audio. `export_presets.cfg` y `vercel.json`: ver `WEB.md`.
+`- `api/contacto.js`: el programita de Vercel que recibe los mensajes de «Contáctanos» y abre con cada uno un aviso en
+`  GitHub (`docs/MENSAJES.md`). Se publica con la web.
+`- `locale/<idioma>.po` (`en`, `pt_BR`, `de`, `fr`, `ru`, `zh_CN`): las traducciones (el español es el idioma de origen: cada texto del código es su clave). La
+`  carga `project.godot` (`[internationalization]`) y la pone al día `tools/traducciones.py`. Todo en `docs/IDIOMAS.md`.
+`
+`## escenas/
+`
+`- `menu_principal.tscn`: la escena de inicio. `partida.tscn`: Johnny y la pantalla (el mapa lo monta `partida.gd`).
+`- `partida_prueba.tscn`: la misma con el script de prueba; el menú la abre en vez de la otra con `--captura`.
+`- `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y uno por jefe. Los
+`  shaders: `cintura` (Johnny partido por la cintura al golpear andando, solo para un arma de golpe que no traiga ese
+`  golpe dibujado entero: las cinco de ahora lo traen, `ataqueandando_<dirección>`, de `tools/golpe_andando.py`, y
+`  `johnny.atacar` usa ese; `johnny.acompasar_golpe` cambia entre el de pie y el de andando si se para o echa a andar a
+`  mitad. Si no lo trae, qué es pierna lo dice la imagen
+`  `assets/sprites/<hoja>-piernas.png` de cada arma de golpe, que saca `tools/piernas.py` y pone `johnny.poner_mascara_piernas`;
+`  de ella se pintan las piernas de andar y con ella se le quitan las suyas al golpe; prueba: `--captura --ataque-andando`;
+`  incluye `quemaduras.gdshaderinc` para arder
+`  como los zombis, `johnny.arder`, y de `Llamas` solo le queda la luz; prueba: `--captura --johnny-ardiendo`; y las manchas de ácido
+`  de los zombis cuando lleva algo que corroe, `Johnny.CORROEN`: el veneno del gordo, el charco de ácido y la porquería del Glotón,
+`  M65; prueba: `--captura --reventon`), `destello` + `quemaduras.gdshaderinc` (destello,
+`  hielo, fuego y ácido de los enemigos; el "vomito" de los bañados por la Gastroenteritis, el estado `vomito` que pone
+`  su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
+`  con "pelado") y `brillo`.
+`- `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas: chorro a presión al estilo del "flamethrower" de pixelfx, con piloto azul, lenguas que suben y algo de humo en la punta) y
+`  `chorro_acido` (lanza ácido) y `chorro_hielo` (lanza hielo: una nube de congelación, bocanadas de niebla que salen sin prisa,
+`  se hinchan, se juntan y bajan, con cristalitos; el lanza hielo no hace daño, solo congela); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
+`- `luces/`: `lampara.tscn`, `fuego.tscn`, `luz_suave.tres` y los shaders `niebla` y `suelo_a_oscuras`.
+`
+`## scripts/
+`
+`**Johnny y sus armas**
+`- `johnny.gd`: moverse (18 nov: si se queda encajado más de 1 s, `desatascar` lo saca al hueco libre más cercano; `--atasco-johnny`), vida, apuntar y atacar (`tiro`, `blanco_en_linea`), recibir daño (`recibir_dano(cantidad,
+`  quien, peligro)`; quién le ha quitado vida la última vez queda en `golpe_de`: un enemigo, por su meta `"tipo"`, que
+`  lee `Bestiario.de` y le ponen al nacer `partida.meter_zombi`, la modista a sus maniquíes y los jefes al mutar; o un
+`  peligro de `Menus.PELIGROS`: el charco que más quema, `charco_que_quema`, el agua con corriente, el cable pelado o su
+`  granada, `explosion.de`), tropezar (`caer`) y despertarse tumbado tras una derrota (`despertar`), las skins (`vestir`, y sus ventajas en `arma()`, `ignifugo()`, `devolver()`), la
+`  munición (`municion`, `reserva()`, `meter_municion()`, `arma_de_caja()`) y el depósito del lanzallamas y el lanza
+`  ácido (`echar_fuego`, `rellenos()`, `coger_relleno`). `mejoras.gd`: sus atributos.
+`- `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
+`  llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. El lanza hielo
+`  (`lanza_hielo`) se llena con la bombona de nitrógeno (`nitrogeno`); su hoja, `tools/hoja_lanza_hielo.py` (la del lanza
+`  ácido con otros colores), y sus iconos, `tools/icono_lanza_hielo.py` e `icono_nitrogeno.py`. `familia()`:
+`  cuerpo a cuerpo, A distancia o especial (por dentro, las dos últimas son de tipo `"fuego"`). Las **calidades**
+`  (`CALIDADES`: Normal, Poco común, Rara y Épica, con su color, su daño, lo de su familia y las piezas que cuesta
+`  subir a ella en el banco, `coste()`: los arrojables, más baratos; `con_calidad()`, `que_da()`, `al_baul()`,
+`  `pieza()`): cada arma que lleva Johnny tiene la suya (`johnny.calidades`, `johnny.base()`; lleva una
+`  de cada arma: `partida.llevar_arma`) y el baúl guarda armas y paquetes de arrojables con la suya. **Durabilidad**
+`  (9 nov, `nuevas()`): un arma o un montón de arrojables dura la partida en curso y tantas más como su calidad (Normal
+`  0, Poco común 1, Rara 2, Épica 3); `johnny.quedan`, `lanzables.quedan` y "quedan" en el baúl. Sacarlo del baúl gasta
+`  una (`estrenar()`, marca "usada"); mejorarlo suma una. Al acabar la partida (ganes, caigas o abandones),
+`  `Objetos.cerrar_baul` devuelve al baúl lo que lleva con partidas y destruye lo que no tiene (también lo "usado" del
+`  baúl); el cartel lo dice (`partida.filas_rotas`). También borra **toda la munición del baúl** (`Armas.MUNICION`: balas,
+`  cartuchos, gasolina…) y la de la mochila no entra al ganar: la munición no pasa de una partida a otra (16 nov). La **fregona mejorada** (15 nov) no se queda en el baúl: se aparta
+`  en "fregona" del guardado (`Objetos.apartar_fregona`, también la de un guardado de antes que estaba en el baúl) y
+`  Johnny empieza cada partida con ella, gastando una (`partida.dar_fregona`, con `estrenar`); al quedarse sin partidas se
+`  rompe (el cartel lo dice) y vuelve la Normal. Si se deja en el suelo, al acabar vuelve igual (`Objetos.cerrar_baul`,
+`  F22). Prueba: `--fregona-mejorada`. La ficha lo enseña como «Durabilidad: N», el mismo número en el baúl y encima: las partidas que le quedan (`texto_partidas()`, `durabilidad()`). Sin estrenar, de 1 (Normal) a 4 (Épica); al sacarla del baúl baja 1 al momento y con 0, en rojo, es su última partida (16 nov; con el M115 lo que llevabas contaba la partida en curso y decía uno más). Prueba: `--durabilidad`. La **Épica**
+`  (`EPICA`) trae además un truco de su familia (`TRUCO`, `truco()`): golpe de gracia (cada 4 golpes, uno crítico:
+`  `johnny.golpear`), balas que atraviesan (`bala.gd`, `atraviesa`, estela morada), estallido (el zombi que mata
+`  revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños
+`  al romperse o explotar: `soltar_racimo` de `proyectil.gd` y `granada.gd`). `bala.gd`. Lo que **se ve de la calidad**
+`  del arma en la mano (`AURA`, `traza()`; la Normal, nada): `aura_arma.gd` (hija de Johnny: la luz del color, el halo y
+`  las chispas de la punta del arma, que sale de `boca` o, en cuerpo a cuerpo, de `punta`), `tajo.gd` (el haz del
+`  golpe, que suelta `johnny.golpear` y sigue el `gesto` del dibujo de cada arma: de lado, de arriba abajo, de abajo arriba o recto) y la trazadora de la bala (`bala.calidad`). Se prueba con `--aura` y `--tajos`. Al pasar a un arma Normal, `AuraArma.cambiar` repinta una vez más (`queue_redraw`) para borrar el halo: si no, se quedaba una mancha verde quieta en el suelo (`--luz-verde`).
+`- `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
+`  ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas (ya no las echa ningún arma).
+`- `llamarada.gd`: la llama continua del lanzallamas, el chorro del lanza ácido, el rayo del lanza rayos y la niebla del
+`  lanza hielo (cono, daño cada 0,25 s, empuje, luz; `variante`: "llama", "acido", "rayo" o "hielo". El hielo enfría a los
+`  zombis, `zombi.enfriar`: azules y lentos (`helor`, `HELOR_*`) y, con "congela" segundos de chorro, congelados "congelado"
+`  segundos; los copos que caen, `copos`. El rayo se dibuja a código —zigzag, ramitas y
+`  arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
+`  `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido, y la de sangre de la punta de la
+`  motosierra (`sangra` en `armas.gd`). La **motosierra** (6 nov): golpe lento y fuerte por encima de la cabeza
+`  (`golpe_dura`: su golpe dura 0,7 s y no 0,5), casilla de 112×112; su hoja sale de PixelLab y la sangre de la espada
+`  la pinta `tools/sangre_motosierra.py` (receta en `assets/pixellab.json` → `conserje-48-motosierra`); prueba `--motosierra`. La **katana**
+`  (6 nov): envainada a la cadera; el golpe es desenvainar con un corte de abajo arriba que deja una media luna de luz
+`  (casilla de 96×96 con los pies en 48,84; receta en `assets/pixellab.json` → `conserje-48-katana`); prueba `--katana`.
+`  La **gatling** (6 nov): arma a distancia con su propia munición, la cinta de balas (`"cinta"` en `Armas.MUNICION`);
+`  los cañones giran medio segundo antes de la primera bala (`arranque`; `johnny.gd`: `giro_t`, `girando()`), Johnny
+`  anda más despacio mientras dispara (`lenta`) y sin el empujón del dibujo (`sin_patada`); usa el fogonazo de la MP5
+`  (`fogonazo`). Receta en `assets/pixellab.json` → `conserje-48-gatling`; prueba `--gatling`.
+`  El **lanzagranadas** (6 nov): arma a distancia con su propia munición, las granadas de 40 mm (`"granadas_40"` en
+`  `Armas.MUNICION`); con `"granada": true` no dispara balas sino `granada_40.gd`, que vuela despacio y revienta al
+`  tocar a un zombi, una pared o al llegar a su alcance con la explosión de la granada de mano (también a Johnny, como
+`  mucho `Lanzables.DANO_JOHNNY`). Tambor de 6 que se recarga de una en una (`cartucho`); usa el fogonazo de la escopeta
+`  y su sonido `"lanzagranadas"`. Receta en `assets/pixellab.json` → `conserje-48-lanzagranadas`; prueba `--lanzagranadas`.
+`- `lanzables.gd`: molotov, granada, atraedora y congeladora. Desde el 15 nov Johnny no empieza con ninguno (`reiniciar`,
+`  `inicio` 0) ni los suelta ningún zombi, ni la barricada ni los supervivientes: se compran en la tienda (van al baúl) y
+`  se sacan del baúl (las pruebas sí empiezan con 2 molotovs y 2 granadas, como antes: `partida_prueba.empezar_prueba`,
+`  salvo las de `SIN_LANZABLES`). Su tutorial sale con el primero que se consigue (`partida.mirar_tutoriales` y
+`  `ordenador.comprar_lanzable`). Dentro de un apartamento, al explotar o romperse se oyen como
+`  un disparo y despiertan a todo el piso, que va a por Johnny (`ruido`, M107, 15 nov: lo llaman `granada.explotar` y
+`  `proyectil.caer`; prueba `--arrojable-alerta`). Van en **montones** (M18, 28 oct): cada hueco lleva un montón
+`  de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, sus cuentas en
+`  `en_mano`; desde el 16 nov también dos o tres de la misma clave; F cambia el que se lanza, `elegido`, y `tipo` es su
+`  clave; `poner` los prepara en las pruebas; en el inventario se arrastran de un hueco a otro de la mano: `mover_en_mano`)
+`  y de repuesto (`REPUESTO`, ninguno desde el 13 nov; `repuesto` y sus cuentas en `en_repuesto`). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
+`  sin llenar, luego en uno nuevo). Al acabarse el de la mano entra otro de repuesto (`repasar`, `relevo`: el de su
+`  clave, uno de su tipo o el primero). Un montón se señala por su sitio, el nombre de su casilla en el inventario
+`  (`"l1"`, `"e3"`: `clave_en`, `cuantos_en`, `sitio_de`, `quitar`, `mejorar`); `a_la_mano` y `al_repuesto`, por su
+`  número. Lo que cuesta uno en la tienda (`PRECIOS`). La clave de un montón es el tipo y, si no es Normal, la calidad
+`  detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con `mejorar`). Al acabar la partida
+`  vuelven al baúl los que tienen partidas por delante (la durabilidad: `Armas.nuevas`; los Normales se rompen); allí se
+`  juntan los del mismo tipo, calidad y partidas en casillas de un montón como el de la mano, con los talentos del guardado
+`  (`Objetos.monton_arrojables`, `cabe_en_monton`; `Objetos.arrojables_al_baul`, `caben_arrojables`; si sube el Artificiero, los
+`  llenos no cambian) y salen de montón en montón («Sacar 2»). Se prueba con `--montones` y `--casillas-baul`. A los jefes, el fuego y las explosiones les hacen la mitad (`A_JEFES`,
+`  `a_jefe`: lo miran `explosion.gd`, `charco.gd` y `proyectil.gd`).
+`  `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
+`  Rebota en las paredes también en el aire (`choque_hasta`, con `mapa.muro_entre`) y en los muebles solo a ras de suelo;
+`  por eso lanzar de un toque (`mas_cercano`) no le apunta a un zombi tras una pared. Todo lo que vuela en parábola
+`  (`proyectil.gd`: el molotov de Johnny y lo que lanzan los zombis y los jefes) pasa por encima de los muebles pero no de
+`  las paredes (hay techo): se rompe contra ellas, de este lado (`mirar_paredes`, y la marca de los jefes ya sale ahí).
+`  Su explosión (y el congelado de la congeladora) tampoco pasa las paredes (`explosion.paredes`; desde el 10 nov, todas
+`  las explosiones, también la del zombi explosivo y la de Mezcla explosiva). Ningún daño de Johnny pasa una pared, puerta
+`  cerrada o barricada (los muebles, sí): el golpe cuerpo a cuerpo, el barrido de Ninja, Pararrayos, la descarga, el
+`  estallido de las Épicas, el fuego del molotov al romperse y los charcos (de todos, para Johnny y para los zombis) lo
+`  miran con `ArmasCreadas.tapado`. Se prueba con
+`  `--granada-pared` (lo demás, con un tabique fino).
+`- `sala_armas.gd`: la sala de pruebas (F9 desde cualquier sitio; F9 otra vez, de vuelta): la diana, todas las armas,
+`  las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al
+`  salir, Johnny vuelve a llevar lo que llevaba. Su panel de pruebas (tecla P) es `ui/panel_pruebas.gd`.
+`
+`**Zombis, jefes y lo que hacen daño**
+`- `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
+`  `enfurecer`, la furia del grito de la dependienta (18 nov: +25 % de velocidad, de ritmo de ataque y de vida mientras ella viva, ardiendo en rojo con el fuego del shader en rojos, `furia` en `quemaduras.gdshaderinc`; antes, M80, una burbuja dorada), la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
+`  números en su `.tscn`. Heredan: `zombi_explosivo.gd` (su dibujo, desde el 20 nov: el hombretón de la gabardina rehecho en PixelLab a 112 px y reducido (un cuarto más alto que Johnny, con la cabeza agrandada y la gabardina azul marino), `assets/sources/explosivo-112-gpt/`, ver `docs/ZOMBIS_112.md`; prueba `--explosivo-nuevo`; desde el 19 nov, lo pidió el dueño, revienta sin dejar cuerpo: `caer_muerto` lo esconde y `cachos.gd` lanza 12 cachos de carne de PixelLab, `assets/sprites/cachos-carne.png`, hecha con `assets/sources/zombi-explosivo-gpt/carne.py`, que vuelan hacia todos los lados, sueltan gotas y al caer dejan su mancha y salpicaduras; no atraviesan paredes; en el sitio deja la marca negra de la explosión, `Mancha.quemado`, y encima un reventón de sangre con salpicaduras alrededor; se prueba con `--cachos`; 20 nov: con muchos reventando a la vez daba tirones, sobre todo por la sangre: `Mancha` quita las gotas de más una vez por fotograma y no en cada una, la marca negra sale de una plantilla por radio con las celdas seguidas de una fila en un rectángulo, y las gotas en el aire comparten su consulta de choque; se mide con `--explosivos-carga`; ni los cachos, ni su sangre, ni la marca pasan las paredes: `recorte.gd`, prueba `--explosivo-pared`), `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
+`  va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
+`  dirección; de espaldas va por delante del dibujo, en el nodo `delante`; desde el 19 nov, lo pidió el dueño, reducido
+`  a la altura de Johnny y con su borde negro: `"reducir"` en su `zombi.json`, casilla 80×88 con los pies en 40,58,
+`  `"realce"` para que no salga casi negro, y a escala 2 en su `.tscn`; `HOMBRO` se midió otra vez a esa escala; y su
+`  tentáculo, con píxeles como los de Johnny y borde negro: se pinta en dos lienzos pequeños a la mitad, `_capa`, que
+`  solo se pintan mientras ataca, y se ven al doble sin suavizar),
+`  `zombi_venenoso.gd`,
+`  `zombi_dependienta.gd` (grita «¡¡¡AAAHHH!!!» una sola vez al despertar y enfurece a todos los demás zombis que hay (a ella no, `se_enfurece`), hasta que muere; luego pelea como un durmiente más; los jefes y el jefe de seguridad no se enfurecen, `se_enfurece`; `--captura --edificio centro --grito`; su dibujo, desde el 18 nov, el de 112 px de PixelLab; desde el 19 nov (lo pidió el dueño), reducido a la altura de Johnny y con su borde negro (`"reducir"` en su ficha: casilla de 64 con los pies en 32,55, a escala 2 como los zombis de 48), que monta `tools/hoja_112.py` (receta en `docs/ZOMBIS_112.md`) con su animación `grito` en las 8 direcciones, siempre de cara; sale en las tiendas del centro comercial a suertes, una como mucho, y en la de ropa siempre una: si no le toca, `Planta.horda` cambia por ella uno de los de siempre, 19 nov; `--captura --edificio centro --dependientas` lo mira en 200 plantas; `--captura --dependienta` la pone al lado de Johnny y de otros zombis y saca fotos de seis andando hacia él) y `zombi_guardia.gd` (el guardia de la llave maestra, el jefe de seguridad: hasta que ruge no le hace daño nada, `inmune()`, y encima sale «¡INMUNE!» en gris, `zombi.avisar_inmune`; hace la ronda y, al ver a Johnny, ruge una sola vez, siempre de frente a la pantalla, con «¡¡¡GRRR!!!» en rojo encima y su animación `grito` (solo `grito_s`); mientras ruge, Johnny se queda petrificado (`johnny.sin_mandos`, lo mismo que tras un relato: ni anda ni ataca) y dice encima «¡¡¡QUÉ SUSTO!!!» (`partida._al_rugir`, con `gran_aviso`); suena el gruñido del botón JUGAR (`Sonido.grunir`); y va a por él con sus guardias; 17 nov: antes pitaba, huía y se cansaba). Los guardias que trae su rugido (`partida._al_rugir`: `guardias_del_rugido()`, 4 en la planta baja y 2 más por planta) llevan la marca `llamado`, como los vecinos que llama un jefe: al caer no sueltan nada (ni dólares, ni mutágeno, ni munición); solo suelta él, además de la llave maestra (y, en la planta de la Joyería, la llave dorada), un dólar y un mutágeno por cada guardia que llama y uno más (5 y 5 en la planta baja, 7 y 7 en la primera...; `--captura --edificio centro --guardia`). El rugido de GPT (`rugir-<vista>.webp`) lo pasa `zombi_gpt.py` devolviéndole el verde a la piel (`PIEL_GRIS`: GPT se la dio gris) y `zombi.py` lo monta si hay carpeta `rugir/` (solo la vista `south`: solo hace falta `rugir-s.webp`).
+`  Los de Torre Velaria: `zombi_oficinista.gd` (guarda las distancias y tira tazas y grapadoras, `bala_zombi.gd`) y
+`  `zombi_escolta.gd` (el chaleco para media bala de frente, con `Zombi.de_bala`, que pone `bala.gd`; el táser deja a Johnny
+`  tieso con el `"calambre"` de `estados.gd`, desde `dar_zarpazo`, que cualquier tipo puede cambiar). Salen en los
+`  departamentos (`planta.gd`, `horda`: `OFICINISTAS` y `ESCOLTAS_SEGURIDAD`) y los escoltas, con la alarma de las cámaras.
+`  Pruebas: `--captura --edificio torre --oficinista` y `--escolta`.
+`  `zombi_unas.gd`, el de las uñas (23 nov; su dibujo, en `docs/ZOMBIS_112.md`): copiado del oficinista, guarda las
+`  distancias y cada 2,5-3 s, si ve a Johnny y hay paso libre, se planta y dispara 3 uñas en abanico (12° entre una y
+`  otra; `bala_zombi.gd`, forma `"una"`, a la altura de su mano, `alto`). Sin zarpazo: acorralado, dispara a quemarropa.
+`  Sale en todos los edificios desde el nivel 3 (`planta.gd`, `horda`, con el dinamitero) y en el garaje desde la
+`  oleada 7 (`garaje.gd`, `tipos`). Prueba: `--captura --unas`.
+`  El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
+`  no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
+`  `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos (una imagen por tamaño, compartida, y por debajo de los personajes, `z_index` -1, para que se dibujen juntas: con hordas grandes, en la web, ahorra mucho).
+`  `tentaculo.gd` (`Tentaculo`; se pinta con `trozos`, no con `draw_circle`: en la web se atascaba, ver `docs/WEB.md`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
+`  latigazos del gerente mutado: levantado y enroscado durante el aviso, estirado como un látigo en el golpe; avisa
+`  con lo mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes
+`  y los muebles (`apuntar`). Cada uno le da sus colores, sacados de su hoja (`PALETA`: contorno, capas y
+`  ventosas, de aro o de puntitos), y sus medidas; los del zombi, oscurecidos como su dibujo en el juego (el
+`  shader de los zombis multiplica el dibujo por sí mismo y salen más oscuros que en la hoja).
+`  `lengua.gd` (`Lengua`, hereda de `Tentaculo`): las lenguas del latigazo del Glotón y de la criatura del
+`  científico (19 nov, para que el golpe no se vea plano: `sombra()` en el suelo por debajo del jefe, `estela()` clara
+`  mientras salen disparadas y `chasquido()` en cada punta al pegar, el "latigazo" de `efecto_suelo.gd`, hecho con
+`  pixelfx en `tools/pixelfx/latigazo.js`; las del Glotón, más gruesas). Encima de las capas, la carne: dos venas
+`  moradas que culebrean, bultos y ampollas amarillas como los granos del Glotón (`con_detalles`; cada lengua, los suyos).
+`  En los fotogramas del golpe del Glotón (5 a 8) se borraron las lenguas de PixelLab, que chocaban con estas
+`  (`tools/gloton_sin_lengua.py`), y lo que eso dejó (agujeros en la boca, hilos oscuros colgando, trocitos sueltos) se limpió
+`  el 21 nov con `tools/gloton_restos.py`. En los de la criatura (3 a 8), lo que sobresalía del cuerpo de las suyas se borró con `tools/criatura_sin_lengua.py` (21 nov; las que cuelgan por delante del pecho se quedan). Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
+`  y con el contorno de un píxel, `borde`), pero con otra forma: en el aviso no se pintan (las enrosca su dibujo) y
+`  en el golpe salen disparadas de la boca (`BOCAS`, medida en cada fotograma del golpe, del 5 al 8, en cada dirección: la lengua sigue a la cabeza;
+`  `boca()`), caen
+`  sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`. Las del Glotón y las de la criatura, y su sombra, se pintan en un `LienzoPixelado`
+`  (`lienzo_pixelado.gd`, 21 nov): un visor a mitad de tamaño que se enseña al doble sin suavizar, para que cada píxel
+`  de la lengua mida lo mismo que uno de su dibujo y caiga en su cuadrícula (pintadas a 1 × 1 se veían más finas que él).
+`  Las 8 direcciones de cerca, con `--lenguas-bocas` (y `--lenguas-bocas --de-criatura`).
+`- `portera.gd`: la jefa por defecto, por estados.
+`- `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
+`  `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
+`  (también el de la portera) es `vapor_rabia.gd`; todos los avisos en el suelo de los jefes son `aviso.gd` (los
+`  pinta el shader `escenas/personajes/aviso.gdshader`, en cuadraditos de pixel art): las cargas (flechas que se
+`  encienden hasta la pared; también los latigazos de tentáculos y lenguas), los golpes, saltos y círculos (se
+`  llenan hacia fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas; con `oculto`, no se pintan
+`  pero siguen ahí para el bot, como el del aspirado del Glotón mientras aspira; los golpes cuerpo a cuerpo, los saltos de la mascota y del Gymbro, el círculo de la portera y la onda de
+`  la criatura, `Aviso.golpe`, se cortan donde chocarían con una pared o un mueble, porque no los atraviesan: solo
+`  dan a Johnny si no está `Aviso.tapado`, un rayo de la capa 1), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
+`  criatura; se cortan donde el disparo se pararía en una pared o un mueble y ahí acaban en la estrella de las
+`  cargas; `Aviso.alcance`, medido en cada fotograma con un círculo del ancho de la barra y la capa 1). El cono del
+`  giro del bombero se llena de lado, hacia donde girará, con flechas dentro que corren hacia ahí (`flechas`) y, como las marcas en el suelo de lo que
+`  lanzan los jefes (`proyectil.gd`: molotovs, sartenes, probetas, cafés y cubos, que son un `Aviso.abanico` aplastado),
+`  un estilo más flojo (`sutil`; el borrador, en `tools/pixelfx/_giro.js`). Los golpes, círculos y barras van con el estilo del borrador A de pixelfx
+`  (`tools/pixelfx/aviso-a.js` y `_aviso.js`, que no se exportan: solo para probar ideas): toda la zona oscura desde el
+`  principio, con dos bordes (el de dentro late cada vez más deprisa), el relleno de color con su frente claro y un
+`  fogonazo blanco justo antes de pegar (`relleno()` y, en las rayas finas, `hilo()`, con contorno oscuro). Se prueban con
+`  `--golpes`, `--franja`, `--avisos`, `--marcas`, `--disparos` (las barras junto a la pared y en campo abierto) y
+`  `--golpes-pared` (cada golpe, salto y onda con Johnny tras la pared, y su aviso cortado). Heredan:
+`  - Apartamentos: `gloton.gd` (+ `lengua.gd`; su aspirado avisa con el abanico rojo de siempre, cortado en el borde de
+`    la elipse o en la pared, `puntas_aspirado`, y al aspirar el aviso se oculta y se ve el aire, pintado con código en la
+`    cuadrícula de los píxeles, `pintar_aire`: polvo y arcos de succión por el suelo, corrientes que se juntan y se
+`    retuercen al entrarle en la boca y un remolino en ella, más cuanto más fuerte aspira; prueba: `--captura --jefe
+`    gloton --aire`), `gymbro.gd` (+ `pesa.gd`; con los suplementos se vuelve de metal, que se desconcha según pierde armadura y revienta
+`  en esquirlas al acabarse, con los sonidos "acero", "metalizar" y "chatarra"; prueba: `--captura --jefe gymbro --metal`), `bombero.gd` (+ `bola_fuego.gd` y `chorro_fuego.gd`, el fuego de los conos del giro: bocanadas de pixelfx que vuelan hasta la pared, se aplastan contra ella y acaban en humo; las balas rebotan en el borde de su burbuja, `bala.rebotar`, con un fogonazo y una onda, `bombero.onda_en`).
+`  - Centro comercial: `antidisturbios.gd` (rehecho el 21 nov, `docs/JEFES_CENTRO.md`: dos fases; con escudo no baja de media vida y se le agrieta al estrellarse cargando contra las taquillas de su oficina, `jefe-antidisturbios` en el catálogo, con islas de `pasillo` propio; a la 3ª revienta y pasa a la fase 2. Lanza `pelota_goma.gd`, que rebotan y se acumulan y se rompen de un disparo, `bala.gd`, y botes de gas, el proyectil `gas`, que deja una nube, `nube_gas.gd`, con el humo de pixelfx `efecto_suelo` "gas"; sin escudo, `barrido_electrico.gd`, olas de chispas de pared a pared que solo se pasan por el hueco (esquivando, también dan), y el combo de 3 porrazos con la porra clavada; al reventar el escudo cambia a la hoja `jefe-antidisturbios-sin`, otro offset; `--captura --edificio centro --jefe antidisturbios --muro`), `cocinero.gd` (rehecho el 23 nov, `docs/JEFES_CENTRO.md`: su Cocina central, `jefe-cocinero` en el catálogo, tiene tres fogones o freidoras en cada pared y la olla gigante en medio, el mueble `bigpot` puesto con `en_medio`; va a removerla y se cura por cada saco de ingredientes que quede, `saco_ingredientes.gd`, y sin ninguno se pone enfermo; el suelo de rejillas, `suelo-rejilla`, `ESTILO_TIENDA` "jefe-cocinero" en `mapa.gd`; el damero, `fogones_damero.gd`, cuadros de 4×4 casillas con las llamas de pixelfx `efecto_suelo` "fogon-llamas"; sartenes que rebotan, `sarten_rebota.gd`; a media vida, la hoja `jefe-cocinero-sin`, la cruz, la ola de aceite, `ola_aceite.gd`, el combo y la lluvia, `cuchillo.gd`; `--captura --edificio centro --jefe cocinero --banquete`; la sala, `--cocina`), `modista.gd` (+ `maniqui_vivo.gd`),
+`    `mascota.gd`.
+`  - Torre Velaria: `directora.gd` (la directora de Recursos Humanos, + `cae_encima.gd`: su sello gigante y las cajas de cartón,
+`    que caen del techo con su marca en el suelo; el sello «despide» a Johnny, `johnny.despedir()`: unos segundos sin el arma de
+`    fuego. Su Despacho de Recursos Humanos, `jefe-directora` en el catálogo, con muebles fijos de la torre; prueba
+`    `--captura --edificio torre --jefe directora --despacho`). `informatico.gd` (el informático: tira teclados en abanico,
+`    `teclado.gd`; el cortocircuito, `cortocircuito.gd`: franjas del suelo que dan corriente por turnos, con chispitas antes; el
+`    apagón de su sala unos segundos, `Luz.evento`; enfadado se «reinicia» junto a otro armario. Pinta las lucecitas de los armarios
+`    de servidores, que lucen a oscuras. Su Centro de datos, `jefe-informatico` en el catálogo: pared de armarios y filas sueltas,
+`    `islas`; prueba `--captura --edificio torre --jefe informatico --datos`). `presentador.gd` (el presentador: el grito al
+`    micrófono, un cono en el suelo y una onda que empuja; los focos de su sala, cuyo haz sigue a Johnny y, si los mira, ponen la
+`    pantalla blanca; los cañones de confeti, `confeti.gd`, que revientan donde estaba Johnny. Sienta a su público de oficinistas
+`    en las butacas, `sentado` en `zombi.gd`: no se despiertan solos, el apuntado automático no los elige y, enfadado, los levanta a
+`    todos; si muere, se desploman con él. Su Plató de presentaciones, `jefe-presentador` en el catálogo: escenario con pantalla,
+`    atril y focos en la pared de arriba y filas de butacas, `islas` con `arriba`; prueba
+`    `--captura --edificio torre --jefe presentador --plato`). `becario.gd` (el becario: corre a la fotocopiadora más cercana y,
+`    con un destello, salen sus copias, `copia_becario.gd`, iguales pero sin sombra y más claras, que mueren de un golpe y no
+`    pegan hasta que se enfada; él se cambia de sitio con una y es el único que se refleja en el frontal de las fotocopiadoras
+`    cercanas. El carrito del correo, dibujado con código, embiste por una franja roja, `embestir` de `minijefe.gd`. Los vasos de
+`    café, `"cafe"` en `proyectil.gd`, dejan el charco `"cafe"` de `charco.gd`, que resbala. Si muere, las copias se deshacen en
+`    papeles. Su Sala de fotocopias, `jefe-becario` en el catálogo: tres fotocopiadoras, impresoras, archivadores y lámparas arriba,
+`    fuentes y plantas a los lados y dos filas de escritorios, `islas` con `arriba`; prueba
+`    `--captura --edificio torre --jefe becario --fotocopias`).
+`  - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
+`    `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
+`    espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`
+`    (el doctor Salas; las lenguas de la criatura, `lengua.gd`; lo seguido que ataca la criatura se mide con `--criatura`). `helicoptero.gd`: el que llega al final (su cuerpo,
+`    `helicoptero.png`, de GPT con `tools/helicoptero_gpt.py`, que le quita las aspas; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
+`    el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
+`- `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; los
+`  alfileres de la modista; las tazas y grapadoras del oficinista, que dan vueltas; las uñas de hueso del de las uñas,
+`  `dibujar_una`), `salpicadura.gd`
+`  (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
+`  `explosion.gd` (lo que se ve es la explosión de pixelfx: `tools/pixelfx/explosion.js`, una copia de "small-explosion" más
+`  grande y sin las piedras ni la tierra, que caían en raya vista desde arriba, ni la raya del suelo que brillaba y se quedaba sola al final, opción "marca", 20 nov; la exporta `exportar_explosion.mjs` en
+`  `explosion.png` y `explosion-brillo.png`, con sus dos capas; las pequeñas, a la mitad. Prueba: `--captura --explosion`).
+`- `recorte.gd` (10 nov): ningún efecto se pinta encima de las paredes ni al otro lado. La explosión, los de pixelfx
+`  (`efecto_suelo.gd`, salvo los golpes contra la pared), los charcos, las quemaduras, la ceniza y las partículas llevan
+`  uno de sus materiales (`escenas/armas/recorte.gdshader`, y `recorte_suma` para las capas de brillo). El mapa, al
+`  montarse, le pasa sus muros como una máscara de un punto por casilla, y cada píxel solo se pinta si entre el centro
+`  del efecto y él no hay muro (por las puertas abiertas, sí pasa). Lo que sube (explosión, llamas) se mira a la altura
+`  del suelo: se corta en las paredes de los lados y la de abajo, pero por delante de la de arriba se sigue viendo, como
+`  un personaje. Prueba: `--captura --efectos-pared`. Desde el 20 nov, también lo que vuela con su altura (modo
+`  "vuela", `recorte_vuela.gdshader`: los cachos del zombi explosivo llevan su altura en el rojo del color): cada píxel mira
+`  el suelo de debajo, lo tapa la cara del tabique de delante (`cara_pared.gd`, 96 de alto) y no se ve por encima de la de
+`  detrás. Para lo que no usa ese shader, lo mismo en `Recorte.muro_en`, `techo` y `tapa` (las gotas en el aire de
+`  `particulas.gd` chocan con el techo y las tapa la cara; las de `Mancha` no se pintan en una casilla de muro).
+`  `Mancha.sangre` lleva el recorte "suelo". Prueba: `--captura --explosivo-pared`.
+`  Desde el 20 nov (lo pidió el dueño: que nada atraviese las paredes), también el cuerpo de un zombi muerto: el shader
+`  de los zombis (`destello.gdshader`) y su copia que brilla (`brillo.gdshader`) incluyen `recorte_cuerpo.gdshaderinc`,
+`  que mete el recorte en los huecos `VERTICE` y `RECORTE` de `quemaduras.gdshaderinc`. Va apagado y `zombi.recortar_cuerpo`
+`  lo enciende al morir, en el modo "aire" (en vida no hace falta: choca con las paredes, y así no cuesta nada). Y el
+`  charco de sangre del que muere a tiros o golpes (`Mancha.charco`), las brasas y el humo de los quemados y sus restos
+`  (`quemado.gd`, también los del ácido). Prueba: `--captura --muerto-pared` (un gordo y un vecino muertos contra la pared).
+`- `poligono.gd` (11 nov): un polígono de color pintado con `draw_polygon`. **No usar `Polygon2D` para nada que cambie
+`  cada fotograma** (el rayo de la linterna, la pantalla de la tele): en la web de Godot 4.7.2, al redibujarse con los
+`  mismos puntos actualiza su malla atando los índices al búfer equivocado y Chrome llena la consola de avisos de WebGL
+`  («element array buffers can not be bound to a different target», «bufferSubData: no buffer»). Es un fallo de Godot
+`  (godotengine/godot#124726), arreglado para la 4.8; con ella se podría volver a `Polygon2D`.
+`- `charco.gd` (todos los charcos) y `estados.gd` (lo que hacen: veneno, frío, calambrazo, tirado, `frenado`...).
+`  Los líquidos (veneno, ácido, vómito, lejía, agua, aceite y café; también el agua con corriente de Electrónica, `peligros/agua.gd`) se pintan
+`  igual, con `Charco.preparar_liquido` y `pintar_liquido`: cuadraditos de un píxel del dibujo (`GOTA`), contorno oscuro, bandas
+`  que se mecen, luz de arriba a la izquierda y un brillo en vetas; el agua, con anillos de ondas (`pintar_ondas`).
+`  Los cuadraditos los pinta la tarjeta gráfica (11 nov): `Charco.hacer_dibujo` los guarda una vez en una textura (un texel por
+`  cuadradito) que lleva un hijo `Sprite2D` del charco, y `escenas/armas/liquido.gdshader` hace con ella lo mismo que hacía el
+`  código; cada vez solo se le pasan el tiempo (`t`) y lo que lleva hecho (`e`). El fuego del molotov y del aceite, igual, con
+`  `fuego_suelo.gdshader` (sus llamas y ascuas las sigue pintando el charco). Los dos llevan el recorte de las paredes del
+`  charco (`recorte.gdshaderinc`) y precisión alta (`highp`, para los móviles), y están en `calentador.gd`. Antes costaban
+`  0,7 ms cada charco y 1,1 ms cada fuego cada vez que se pintaban; ahora, casi nada (`--charcos` lo mide: «Pintar charcos»).
+`  El fuego (molotov, el del aceite al arder y el de la cocina del restaurante, `peligros/fuego.gd`), el aceite hirviendo del cocinero y la porquería del Glotón (`peligros/porqueria.gd`,
+`  quieta: se pinta una vez) van con el mismo cuadradito y el mismo dibujo.
+`  El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
+`  el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
+`  `efecto_suelo.gd` hace los efectos de pixelfx que salen una vez en el suelo (sus tres hojas y el precalentado para que
+`  el primero no pare el juego); los otros tipos son `gases`, la nube del Flatulento (`mutaciones.gd`), del tamaño de su radio,
+`  y `molotov`, la botella al romperse (`proyectil.llamarada`: el chasquido, la gasolina que prende, llamas, chispas y
+`  cristales que saltan y resbalan; un efecto hecho para el juego, `tools/pixelfx/molotov.js`, exportado con
+`  `exportar.mjs`; se precalienta al lanzarla). Prueba: `--captura --molotov`.
+`  Y `sangre` (roja), `sangre-verde` (el venenoso) y `sangre-morada` (el de tentáculos): el zombi que muere de un golpe fuerte
+`  (un crítico, uno que empuja como una explosión, `Zombi.MUERTE_FUERTE`, o uno que le sobra media vida: `zombi.muerte_fuerte`)
+`  revienta en sangre (`partida.sangre`): un efecto hecho para el juego, `tools/pixelfx/reventon-sangre.js` y sus colores
+`  `-verde.js` y `-morada.js`; se precalienta al aparecer el primer zombi de cada color. Prueba: `--captura --reventon-sangre`.
+`  Y `chispazo`: la electricidad al dar a un zombi (M50), el `zap-hit` de pixelfx desde arriba (`tools/pixelfx/chispazo.js`):
+`  un nudo de rayitos a la altura del cuerpo, chispas que hacen eses y una quemadura de helecho en el suelo. Lo sueltan el
+`  lanza rayos en cada zombi que toca (`llamarada.golpe_de_rayo`; se precalienta al sacarlo) y `ArmasCreadas.rayo`.
+`- `relampago.gd` (`Relampago`): el rayo que salta de un sitio a otro (la descarga de un zombi a otro, el estallido de las
+`  Épicas de rayo y Pararrayos; lo suelta `ArmasCreadas.rayo`, con el chispazo donde da). Dibujado a código como los rayos de
+`  pixelfx: zigzag partido por la mitad con ramas, borde, cuerpo celeste y centro blanco, rehecho 20 veces por segundo y fuera
+`  en 0,22 s. Prueba: `--captura --chispazos`. El rayo continuo del lanza rayos (`llamarada.trazar_rayo`, en cada paso, y
+`  `dibujar_rayo`) se traza y se entinta con lo mismo (`Relampago.trazar`, `pintar_con` y `disco`): es la "tormenta" del
+`  borrador A de pixelfx (`tools/pixelfx/rayo-tormenta.js`, con `_rayo.js`): tronco con fogonazo blanco de vez en cuando,
+`  dos hebras finas que cambian a otro ritmo, nudos de luz que corren hacia los zombis, latigazos a los lados y un nudo que
+`  chisporrotea en la boca y en cada zombi, con un halo que suma luz (`llamarada.halo`). Prueba: `--captura
+`  --pistola-electrica` (con `--rafaga`, fotos seguidas del rayo para hacer un GIF).
+`- Escarcha (M51; `efecto_suelo.gd`, `escarcha` y `escarcha-zombi`): la congeladora ya no explota en fuego. Su explosión
+`  (`explosion.gd`, `helada`) hace el mismo daño pero suelta el estallido de escarcha de pixelfx (`tools/pixelfx/escarcha.js`,
+`  a la escala de su radio), con luz fría y sin quemadura en el suelo. Cada zombi que se congela (la congeladora y la cámara
+`  frigorífica, `zombi.congelar`) suelta la pequeña (`escarcha-zombi.js`). La congeladora usa el congelado de verdad
+`  (`zombi.congelar`: azul hielo con el shader, el dibujo parado, copos; cuenta para Mezcla explosiva). Prueba: `--captura --escarcha`.
+`  Y `deshielo`: cuando se le acaba el congelado (`zombi.deshelar`), el hielo revienta en trozos
+`  (`tools/pixelfx/deshielo.js`, la idea del `ice-shatter` de pixelfx), con su sonido (`deshielo`).
+`  Mientras está congelado le envuelve el `bloque-hielo` (15 nov; `tools/pixelfx/bloque-hielo.js`, el bloque facetado del
+`  `ice/freeze`): un `EfectoSuelo` hijo del zombi con `bucle` (tras formarse, repite sus últimos fotogramas hasta que se
+`  quita). Añicos: un golpe o una bala a un congelado lo mata de una vez (número azul hielo y esquirlas en vez
+`  de sangre): `zombi.reventar_hielo`: sin cuerpo ni sangre, el efecto `anicos` (`tools/pixelfx/anicos.js`)
+`  y un charco de agua que solo se ve y se seca (`charco.gd`, `deshielo`). Prueba: `--anicos`.
+`  Los jefes (`Minijefe` y la portera) llevan su frío aparte (`hielo_jefe.gd`, `HieloJefe`): se enfrían a la mitad,
+`  se congelan solo 2 s (con el mismo bloque, más grande), congelados todo golpe es crítico y, al deshelarse, 3 s sin
+`  frío. Prueba: `--lanza-hielo` (el Gymbro) y `--anicos` (la portera).
+`- Golpes de los jefes (M58; `efecto_suelo.gd`, `pisoton` y `golpe-pared`, con la idea del `dirt-explosion` de pixelfx):
+`  el pisotón (`tools/pixelfx/golpe-suelo.js`: polvo, grietas, una onda por el suelo y cascotes) al aterrizar el Gymbro y
+`  la mascota y en el puñetazo del científico, a la escala de su zona (`EfectoSuelo.ONDA_PISOTON`); y el golpe contra la
+`  pared (`golpe-pared.js`: nube de yeso y cascotes) en `minijefe.estrellarse`. Se precalientan en `minijefe._ready`.
+`  Prueba: `--captura --impactos` (`--golpes` es otra: el aviso de los golpes cuerpo a cuerpo).
+`- La llamada de la atraedora (M52; `efecto_suelo.gd`, `llamada`): en cada pitido (`granada.gd`), dos ondas amarillas que
+`  se abren por el suelo y el ring-ring del despertador (`tools/pixelfx/llamada.js`); va de hija de la granada. Como pita
+`  cada vez más deprisa, las ondas también. Prueba: `--captura --llamada`.
+`- El lanzallamas y el lanza ácido al dar (M59 y M60; `efecto_suelo.gd`): en cada pellizco (`llamarada.quemar`), en cada
+`  zombi tocado, `chorro-fuego` (una bocanada que lo lame y sube) o `chorro-acido` (gotas, burbujas y vapor), y, si el chorro
+`  se corta en una pared, `pared-fuego` o `pared-acido` (más anchos; el ácido chorrea). Un efecto con cuatro versiones:
+`  `tools/pixelfx/chorro-golpe.js`, `-acido.js`, `chorro-pared.js` y `-acido.js`. Se precalientan al sacar el arma.
+`  El lanza hielo, `chorro-hielo` y `pared-hielo` (niebla que cae, esquirlas que escarchan el suelo y cristalitos:
+`  `chorro-golpe-hielo.js` y `chorro-pared-hielo.js`, el tipo "hielo" de `chorro-golpe.js`).
+`  Pruebas: `--captura --lanzallamas`, `--desintegrador` y `--lanza-hielo`.
+`- Recoger y curar (M53 y M56; `efecto_suelo.gd`): `recoger`, el destello dorado al coger algo del suelo (`billete.gd`:
+`  billetes, lanzables, objetos, armas y munición; `tools/pixelfx/recoger.js`), y `curacion`, la médica cura a Johnny
+`  (`aliado.curar`; `curacion.js`, rehecha en la M66: un círculo de luz verde con un anillo a sus pies, una columna de luz que
+`  le sube alrededor, cruces con borde y chispitas, de hijo de Johnny; ya no hay raya de la médica a Johnny). Prueba: `--captura --recoger-curar`.
+`- El desfibrilador (M55; `efecto_suelo.gd`, `desfibrilador`): cuando Johnny cae con el talento y vuelve con toda la vida
+`  (`johnny.recibir_dano`), dos descargas en el pecho (rayitos, chispas y un anillo eléctrico) y luego un latido verde de
+`  electrocardiograma sobre la cabeza (`tools/pixelfx/desfibrilador.js`, de hijo de Johnny). Se precalienta en
+`  `johnny.preparar_fogonazo` si tiene el talento. Prueba: `--captura --desfibrilador`.
+`- Elegir una mutación (M54; `efecto_suelo.gd`, `mutar`, en vez del anillo morado de antes): en `partida.elegir_mutacion`,
+`  Johnny se enciende de morado, dos hebras de ADN le suben enroscadas, ondas blandas por el suelo y burbujitas
+`  (`tools/pixelfx/mutar.js`, de hijo de Johnny). Se precalienta al abrir el recuadro. Prueba: `--captura --mutaciones`.
+`- El recuadro de elegir mutación (`menus.mutacion`, desde el 16 nov): arriba la frase del virus como el grito de la llave
+`  (letra pixelada a 32 con contorno, en blanco) y «¡¡¡DIFERENTE!!!»; dos tarjetas-botón con el dibujo grande del efecto
+`  (`assets/ui/mutaciones/<id>.png`, 100×100 a escala 2, de GPT con `tools/muebles_gpt.py`) y, debajo y fuera, el nombre y
+`  lo que hace con la letra lisa. Se elige con el ratón, 1 y 2 o el mando. La prueba `--mutaciones` saca también
+`  `captura-mutacion-larga.png` con las dos explicaciones más largas, para ver que no se sale en ningún idioma.
+`- El rugido de los jefes (M57; `efecto_suelo.gd`, `rugido`): en su presentación (`ui/presentacion.gd`), al gritar, ondas
+`  de sonido que salen de la cabeza (con borde oscuro, para que se lean en cualquier suelo), un destello rojizo y una onda
+`  de polvo a sus pies con piedrecitas (`tools/pixelfx/rugido.js`). Va junto al jefe, no de hijo (hay jefes que crecen);
+`  los que entran escondidos (la Modista) no lo llevan. Prueba: `--captura --presentacion` (`captura-presentacion-rugido.png`).
+`- Los tentáculos de Tentacular (M29; `efecto_suelo.gd`, `tentaculos`, en vez del anillo morado): cuando la mutación
+`  empuja (`mutaciones.actuar`), seis tentáculos le salen a Johnny de la cintura, restallan ondulando hasta donde llega el
+`  empujón (escala: su radio / `EfectoSuelo.RADIO_TENTACULOS`), dan en el suelo (onda y baba) y se recogen enroscándose; los
+`  que van hacia arriba de la pantalla, detrás de él (`tools/pixelfx/tentaculos.js`, de hijo de Johnny). Se precalienta en
+`  `mutaciones._physics_process`. Prueba: `--captura --tentacular` (`--tentaculos` es la del zombi de tentáculos).
+`- `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
+`  Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
+`  con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
+`  y se precalienta al coger el arma (`johnny.preparar_fogonazo`). El fogonazo dibujado en las hojas de Johnny sigue
+`  debajo. Prueba: `--captura --fogonazos`. También los supervivientes que disparan (`aliado.disparar`, con
+`  `Aliado.FOGONAZO_ARMA`): el policía, el de la pistola, y el militar, el de la MP5; se precalienta al aparecer
+`  (`aliado.preparar_fogonazo`). Prueba: `--captura --fogonazos-aliados`.
+`- `chispa.gd`: la chispa de pixelfx ("hit-spark") de las balas al dar a un zombi (la suelta `bala.chocar`): del color de
+`  la estela (normal, crítica, cada calidad; la Épica que atraviesa, morada), más pequeña con los perdigones, en 5
+`  direcciones (hacia la izquierda, dada la vuelta) y con las chispas cayendo al suelo. Por encima de los personajes.
+`  Contra las paredes sigue `impacto.gd`. Se precalienta con el fogonazo. Prueba: `--captura --chispas`.
+`- La trazadora de las balas (`bala.gd`, `_draw`), en código y no con hojas para que valga para cualquier ángulo y color:
+`  el cuerpo gordo de siempre y, como el "bullet-tracer" de pixelfx, una cola fina que se enfría, parpadea y acaba a
+`  trozos, y chispitas que suelta y caen (`mover_chispitas`). Prueba: `--captura --trazadora`.
+`- `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
+`  `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd` (18 nov: la palanca se baja con {usar}, con `zona_usar.gd` y su contorno amarillo, no al acercarse). De las habitaciones de los jefes de los Apartamentos:
+`  `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`; al tropezar, Johnny se cae de espaldas, se queda tumbado y se levanta con sus dibujos de PixelLab, sin el arma: `johnny.caer`, hoja `conserje-48-caida`, que monta `tools/caida.py`, y la de cada skin, `tools/caida_skins.py`; se prueba con una skin con `--skin X`), `cerco.gd` (bombero) y
+`  `luz_jefe.gd` (la luz fija de esas habitaciones) y `bidones.gd` (M16: tres bidones de pie en la elipse limpia, de fuego en la
+`  del Glotón y de ácido en la del bombero, `Peligros.bidones`; se empujan como los muebles, con `zona_usar.gd` y su contorno,
+`  ruedan en línea recta hacia el jefe y, si le dan, lo atontan 5 s, `Minijefe.atontar`, y revientan en su charco; si no,
+`  contra la pared. De un solo uso. Contra la burbuja del giro del bombero no le hacen nada. Dibujos `bidon-<fuego|acido>[-tumbado].png`,
+`  de `tools/bidones.py`: de GPT si está `assets/sources/bidon-…-gpt.webp`, si no, provisionales. Prueba:
+`  `--captura --jefe gloton --bidon` o `--jefe bombero --bidon`).
+`  De los departamentos de Torre Velaria: `viento.gd` (el ventanal roto de Marketing y Dirección: arrastra a Johnny y tira a
+`  los zombis por la ventana, que cuentan sin cuerpo ni botín: `partida.gd`, meta `"ventana"`), `camaras.gd` (Informática y
+`  Seguridad: la alarma y los refuerzos, dos escoltas de Velaria; se rompen de un tiro desde `bala.gd`, `romper_en`), `gas.gd` y `valvula.gd`
+`  (Recursos Humanos: duerme a los zombis y los despierta frenéticos, `zombi.gd` `gasear`; a Johnny no le hace nada).
+`  Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
+`  Y `laboratorio.gd`, la planta 40 de la torre (`planta.gd`, `laboratorio`, en lugar de la azotea; suelo y pared
+`  `laboratorio`): la cabina blindada de la presidenta (dibujada con código, con `presidenta.png` dentro, de
+`  `py tools/presidenta_hoja.py`), las 6 cápsulas (muebles `capsule`/`capsuleopen`), las mesas (`labbench`), los láseres, el gas
+`  (a los zombis los pone frenéticos al momento) y la puerta del helipuerto, que se abre al caer el jefe (`partida.gd`,
+`  `fin_del_edificio`: no baja el helicóptero). La partida le pasa el jefe (`mapa.laboratorio.jefe`); a media vida, o con
+`  `romper_cabina()`, la cabina se rompe y queda en automático. Prueba: `--captura --edificio torre --laboratorio`.
+`  El jefe de la planta 40 es `sujeto_1.gd` (el Sujeto 1, extends `Minijefe`; números en sus `const`): anda hacia Johnny,
+`  rueda de lado cuando le van a dar (la bala le pregunta, `esquivar_bala()` en `bala.gd`: 1 de cada 3, como mucho cada 2,5 s),
+`  fregonazo en abanico (`Aviso.golpe`) y cubos de agua en curva (`proyectil.gd` "cubo", con su anillo; dejan el charco
+`  "agua_cubo" de `charco.gd`, que resbala 6 s). A media vida se parte (`partir()`): llama a `romper_cabina()`, saca dos mitades
+`  (la misma escena con `mitad = true`, más pequeñas y rápidas) y él se queda de **mando** invisible, fuera del grupo
+`  "zombis": su vida es la suma de las dos (la barra) y cae cuando caen las dos, así `partida.gd` y `laboratorio.gd` lo tratan
+`  como a cualquier jefe. Al caer una, la otra se enfada (`enfadar()`). Prueba: `--captura --edificio torre --jefe sujeto_1
+`  --sujeto`.
+`- `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
+`  primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
+`- `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la
+`  tarjeta gráfica una sola vez, `solidos_de`), `disuelto.gd` (el que muere con ácido encima: hereda de `quemado.gd`;
+`  le cubre el ácido, se deshace a agujeros con los valores `comido` y `deshecho` del shader de quemaduras y deja un charco
+`  verdoso sin daño y sus huesos; si además arde, gana el fuego; se prueba con `--disuelto`), `cuerpo.gd` (el cuerpo de un enemigo al caer: si tendido se metería en una
+`  pared, resbala hasta quedar sobre el suelo; se prueba con `--cuerpo-pared`), `brillo.gd`
+`  (lo que luce a oscuras), `particulas.gd`, `cachos.gd` (los cachos de carne del zombi explosivo), `impacto.gd` (la bala que da en una pared: el efecto Impact de la librería
+`  de efectos de Sprite Fusion, pasado a GDScript, más pequeño y del color de la estela; se prueba con `--impacto`),
+`  `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
+`  cuerpo a cuerpo dura la `parada` de cada arma en `armas.gd`, más si mata o es crítico y más aún el golpe de gracia; hay
+`  también al matar a un jefe, en las explosiones que pillan a alguien y cuando le hacen daño a Johnny. No se suman, tras
+`  uno hay un respiro sin otro corto y la pausa lo corta; la música y el fundido a negro no se frenan. El ajuste
+`  «Temblor de pantalla» de Opciones (`ajustes.temblor`: 1, 0,5 o 0; `intensidad()`) multiplica el temblor y lo que dura
+`  cada parón: con 0 no hay ninguno de los dos. Se prueba con `--sensacion` y `--temblor`).
+`- `persona.gd`: una persona dibujada con formas, para quien no tenga hoja de PixelLab.
+`
+`**Partida y progreso**
+`- `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o llave maestra y su guardia, jefes, escaleras,
+`  ascensor, dinero, soltar objetos y munición, pausa, fin). Ningún zombi se queda donde no se le puede matar (10 nov):
+`  `meter_zombi` lleva al suelo más cercano (`mapa.suelo_cerca`) al que se pida dentro de un muro o fuera del mapa, y
+`  `rescatar_atascados` (la red de seguridad, en cada combate) devuelve al suelo al que lleve medio segundo con el centro
+`  en un muro, o lo quita sin contarlo; prueba `--jefe portera --atascado`. Cada planta, más dura (M72, en `meter_zombi`): los jefes de
+`  planta, `JEFE_POR_PLANTA` (×1,35) de vida por planta, y los demás zombis, `ZOMBI_POR_PLANTA` (+10 %) de vida y de
+`  zarpazo por planta, y de vida además `VIDA_EDIFICIO` (×1 Apartamentos, ×1,5 centro, ×2 torre; los jefes de planta, `VIDA_EDIFICIO_JEFE` ×1,3 y ×1,6: con la pistola y la fregona ya no se pasa el juego) (el guardia, solo el zarpazo: su vida ya sube en `poner_guardia`); prueba `--dificultad`, que da
+`  los números de cada planta y los de antes. Desde la planta baja, además, zarpazos más fuertes (el `dano` de cada
+`  escena de zombi: normal y lento 12, rápido 10, dependienta 8, vigilante y guardia 15) y menos respiro tras un golpe
+`  (`johnny.INVULNERABLE`, 0,7 s). Tras una derrota (M31: `pesadilla` en el guardado), la
+`  partida siguiente empieza con `despertar`: sale de negro, Johnny tumbado en la sala de mantenimiento se levanta
+`  (`johnny.despertar`, con los dibujos del tropezón) y dice una de `FRASES_DESPERTAR`; prueba `--despertar`. Salir de un sitio no lo reinicia: `montar` hace su mapa solo
+`  la primera vez (`hacer_mapa`) y al salir lo guarda entero en `mapas`, fuera de la escena, donde nada se mueve; al
+`  volver lo saca tal cual (`sacar_mapa`; lo que no hay que repetir va con `nuevo`, y `supervivientes.recoger` y
+`  `joyeria.recoger` quitan lo que ellos vuelven a poner). Lo que esté fuera del mapa y apunte a algo de dentro tiene que
+`  soltarlo al salir (la caza de los aliados) o mirar `is_inside_tree()` (las gotas de `particulas.gd`), porque los
+`  zombis guardados siguen existiendo. Al dejar la planta se tiran (`tirar_mapas`). En la partida de prueba no se guardan
+`  (`guarda_mapas`), salvo con `--volver`: las demás pruebas cambian la ficha de un sitio y cuentan con que se rehaga. La
+`  sala de pruebas y la exposición empiezan siempre de cero. La llave de los Apartamentos no está en el suelo: la lleva
+`  un zombi al azar de los apartamentos normales (`planta.gd` lo elige con `llave: true`; `zombi_de_la_llave`) y la
+`  suelta al caer. Y la entrada a la sala de pruebas (`pruebas`,
+`  `sitio_pruebas`, `en_pruebas`: allí los zombis no cuentan ni sueltan nada). Avisa a la prueba en
+`  `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
+`- `edificios.gd`: la ficha de cada edificio (apartamentos, centro y torre), `MINIJEFES` y el sorteo de qué jefe va en cada planta
+`  (`orden_jefes`, `jefe_de()`). Cuándo se abre cada uno, `abierto()`: con los tres `requisitos()` del edificio de antes
+`  (su ficha `abre`) cumplidos (completarlo, todas las páginas de su dosier y todos sus vídeos, desde el 10 nov); salen en
+`  la tarjeta cerrada de «Elige edificio», uno por renglón y en verde los cumplidos (`--edificios`: fotos
+`  `captura-edificios-nada/medias/todo.png`). La Torre pide los vídeos del Centro, que aún no tiene teles (M92). `porcentaje()`: el tanto por ciento de
+`  un edificio al lado de «Completado» (un tercio por completarlo, otro por su dosier y otro por sus vídeos; `cuentas()`).
+`- `alerta.gd` (la «mejora del compuesto VD-7», M121, 16 nov: niveles 1 a 5, cada uno +20 % de vida, daño, velocidad y ataque a todos los enemigos, `Alerta.vida()`/`dano()`/`velocidad()`/`ataque()`; se aplica en `partida.mejora_vd7()` y en `johnny.recibir_dano`; el ataque, con `ritmo` en zombis y minijefes y `rapido` en los minijefes; prueba `--alerta N`), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `garaje.gd` (el reto del
+`  día desde el 16 nov, M125: un garaje subterráneo con 25 oleadas de durmientes, un jefe del edificio cada 5 y $N por
+`  la oleada N, que te llevas siempre; las constantes del principio son la dificultad. Cada día, una condición sacada de
+`  la fecha, `CONDICIONES`: una familia de cosas que no vale, `prohibido()`, que miran el baúl y el inventario, `johnny.intentar_atacar`,
+`  `lanzables.lanzar` y `partida.usar_objeto`. Se juega una vez al día en cada edificio (`gastar()`, al entrar) y guarda el
+`  récord de oleadas de cada condición, `Guardado.GARAJE` en «garajes»; el botón de «Elige edificio» lo enseña debajo y su
+`  cuadro, solo la condición («Sin armas a distancia») y el récord con ella (16 nov). Pruebas `--reto si` (desde el botón) y `--garaje` (las oleadas). Hasta el 16 nov el reto era
+`  `reto.gd`, un edificio con una regla rara: quitado) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
+`- `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`): el portero, el
+`  glotón, el gymbro, el bombero, el doctor Salas (M36: `doble()`; desde el 15 nov, la mitad de las veces el durmiente
+`  suelta otra cosa más, otro billete o munición, en `partida.gd`; se consigue matando al doctor Salas), el cocinero (M90: `cura()`, las vendas y los
+`  botiquines curan un 50 % más, en `partida.cura_de`), el antidisturbios (M90: `aguante()`, tras un golpe 1,2 s sin
+`  recibir otro en vez de 0,7, y `firme()`, nada le tira al suelo; en `johnny.gd`: `recibir_dano`, `pisar` y `caer`) y
+`  la modista (M90: `camuflaje()`, los zombis dormidos no se despiertan porque Johnny entre en su habitación y le ven a
+`  la mitad de distancia; en `zombi.vigilar` y en `zombi_guardia.gd`), la mascota (M90: `rapidez()`, anda un 15 % más
+`  rápido; en `johnny.gd`, al andar) y el gerente (M90: `comision()`, la mitad de los billetes valen $2; en
+`  `partida.valor_billete`). Y las cinco de Torre Velaria (parte 9): la directora (`despido()`, «Despido»: el primer golpe
+`  a un zombi dormido, o dormido por el gas, lo mata; en `zombi.recibir_golpe`, que mira la skin con `puesta_en()`), el
+`  informático (`invisible()`, las cámaras no le ven, en `peligros/camaras.ve`; y `linterna()`, la linterna llega un 50 %
+`  más lejos, en `luz/luz.gd`, `_process`), el presentador (`municion()`, las cajas de munición dan un 30 % más, en
+`  `johnny.sumar_municion`), el becario (`copia()`, «Copia de seguridad»: una vez por partida, al caer, se levanta con
+`  25 de vida; en `johnny.recibir_dano`, después del desfibrilador, con `copia_usada`, que va en la partida guardada) y el
+`  Sujeto 1 (`mutacion()`, empieza cada partida eligiendo una mutación: `partida.mutacion_al_empezar`). En la taquilla
+`  (`ui/taquilla.gd`) ya no caben todas: la lista se desliza (`ALTO_LISTA`).
+`- `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
+`  botiquín, 40 (M72: antes 50), que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
+`  la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3, pero en su grupo «Curas» (`CURAS`, 4 casillas, M67: `casillas` las
+`  pone al final y `ocupadas` cuenta solo las de «Objetos»); se usan con la tecla 1 y la 2,
+`  `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín y las
+`  vendas los sueltan los armaritos de los baños, uno por apartamento con botiquín o vendas a medias (`Planta.armaritos`, M12; se abren con el clic como el ordenador, `zona_usar.gd`, M11), `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
+`  cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (lo que cabe en cada una, `monton`: la munición, un hueco de munición, `Armas.MUNICION.hueco`;
+`  las curas, su `TOPE`; las piezas, `MONTON`, 99. El baúl guarda cuántos hay y `objetos_baul` los reparte, `caben_baul` dice
+`  cuántos más entran y `tanda`, cuántos salen: la munición, la casilla entera. Puede pasar de 32: no deja guardar más;
+`  prueba `--casillas-baul`). Y las **piezas**
+`  de mejora de las armas (`PIEZAS`, «materiales» en el juego: cuerpo a cuerpo, a distancia, especial y arrojable): no salen
+`  al azar ni de los zombis (Fase 4, 15 nov): en los Apartamentos, de los muebles que se abren (`MUEBLES_CON_PIEZA`: el
+`  armario, la mesilla, el escritorio y la librería; `mueble.gd` les pone la zona de `zona_usar.gd` y `partida.abrir_mueble`
+`  los abre una vez, `datos.abierto`, con un 35 % de material, `pieza_de_mueble()`; desde el 16 nov solo de las familias de las
+`  armas que lleva Johnny en ese momento, `partida.familias_que_lleva()`: la de la mano, las de repuesto y los lanzables); en el centro
+`  comercial y en la torre, cada jefe (`piezas_de_jefe()`, 4, en `partida.meter_zombi`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
+`  de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (32×32; desde el 15 nov, de GPT con `tools/muebles_gpt.py`: engranaje de bronce, de plata y de oro y matraz verde; los de antes eran de PixelLab).
+`  `talentos.gd` (**el jugador los ve como «mutaciones»** desde el 15 nov, lo pidió el dueño: el programa es MUTACIONES.EXE,
+`  el botón «Resetear mutaciones» y el árbol ya no tiene nombre en la barra de tareas; por dentro siguen siendo talentos, y
+`  las mutaciones de los jefes, `mutaciones.gd`, se llaman para el jugador «efectos secundarios»). Tres ramas, `RAMAS`:
+`  Militar, Superviviente y Químico, cada talento una línea en `LISTA` y lo que hace
+`  en `aplicar_uno`, sobre los atributos de `mejoras.gd`; para lo que no es un número, `Mejoras.de_johnny` se los da a
+`  quien no tiene a Johnny a mano. Químico (M14): Catalizador suma daño al lanzallamas, al lanza ácido, al lanza rayos, al
+`  molotov y a la congeladora (`johnny.arma_de`, `lanzables.lanzar`); Guantes de goma quita daño de los estados
+`  (`johnny.gd`); Incendiario alarga lo que arden (`zombi.prender` y `contagiar`); Desatascador sube lo que come el ácido
+`  (`ArmasCreadas.con_acido`); Criogenia las hace durar más congeladas (`granada.gd`; desde el 15 nov ya no da congeladoras);
+`  Reacción en cadena y Residuo tóxico, al morir el zombi (`zombi.quimica_al_morir`: el estallido de las Épicas y un
+`  charco `residuo`, `charco.gd`), y Pararrayos, al recibir un golpe (`johnny.pararrayos`, con `Talentos.PARARRAYOS`).
+`  En el ordenador, las tres ramas a la vez (`arbol_talentos.gd`, ver más abajo). Se prueba con `--quimico`. Cada punto
+`  se compra en su talento. Desde el 15 nov, con **mutágeno** (el guardado más el de la partida, `partida.mutageno_total`; antes, desde el 6 nov,
+`  con los dólares ahorrados, y antes, con puntos de talento): dentro de cada talento el 1.º punto cuesta 1, el 2.º 1,
+`  el 3.º 2, el 4.º 2 y el 5.º 3 (`Talentos.PRECIOS`); los de un solo punto, 3 (`PRECIO_UNICO`); el árbol entero,
+`  192 (hasta el 19 nov, 40 veces más: 25 a 125, cuando cada durmiente soltaba un mutágeno). `Talentos.precio(s, id)` es lo del punto siguiente, `motivo(s, id, mutageno)` dice si se puede («sin_mutageno»
+`  si no llega) y `subir(id, partida)` lo cobra: primero del cogido en esta partida (`partida.mutageno`, el que se
+`  perdería al caer) y lo que falte, del guardado ("mutageno"); lo de la partida se quita también de la partida guardada
+`  a medias (`PartidaGuardada.gastar_mutageno`: si no, cerrar el juego y seguirla lo devolvería). Se prueba en
+`  `--comprar-talentos`. Lo comprado es para siempre
+`  (en "talentos" del guardado). Un guardado de antes del cambio empieza el árbol de cero, una sola vez y sin devolver
+`  nada (`guardado.gd`, la marca `talentos_mutageno`); `dolares_talentos` ya no existe.
+`  «Resetear mutaciones» (M32; antes «Resetear talentos»): quita todos los puntos, gratis pero sin devolver lo gastado (desde el 6 nov; antes devolvía
+`  todo menos 20 $), con una ventanita que pregunta «¿Seguro?» (`Talentos.resetear`, `ordenador.resetear_talentos`, `preguntar_reseteo`, `aviso`); se prueba con
+`  `--comprar-talentos` (también los precios, la partida a medias y el guardado viejo). Revisión de
+`  Militar y Superviviente (M15): Durito llega a 3 (`guardado.gd` devuelve en dólares los puntos que sobren si un talento
+`  admite menos; desde el 15 nov ya no, porque el árbol de esos guardados empieza de cero), Ajolote cura solo hasta la mitad (`johnny.REGENERA_TOPE`), Ninja cada 5 s (`NINJA_ESPERA`), Puntería
+`  también lanza más lejos (`alcance_lanzar`, `lanzables.alcance()`) y Mirilla da un crítico de cada 3 disparos. Cada
+`  tarjeta con puntos dice lo que da ahora y con otro (`Talentos.efecto`), y los críticos salen en amarillo, grandes y con
+`  «!» (`Zombi.numero_golpe`, con `Zombi.critico`, que ponen `johnny.golpear` y `bala.gd`). Se prueba con
+`  `--equilibrio-talentos`. Niveles 4 y 5 (M16): cada rama llega a 36 puntos, con un talento de 3 puntos debajo de cada
+`  uno del nivel 3 y una «corona» de 1 punto que pide los tres del 4 al máximo (`"pide"` admite una lista:
+`  `Talentos.requisitos`, `faltan` y `nombres`, que usa la tarjeta bloqueada del ordenador). Militar: Frenesí y Gatillo
+`  fácil (`ritmo_cuerpo`, `ritmo_fuego` y `recarga`, en `johnny.arma_de`), Racimo (se suma al racimo de las Épicas en
+`  `lanzables.lanzar`) y Veterano (`critico` y `critico_x`, en `johnny.con_critico`). Superviviente: Blindaje (más
+`  `escudo`), Sombra (`esquiva_espera`), Segundo aliento (`johnny.quitar_vida`, una vez por planta: `aliento_usado`, que
+`  quita `partida.nueva_planta`) y Adrenalina (`johnny.adrenalina()`, con `Talentos.ADRENALINA`: el daño en `arma_de` y
+`  `lanzables.adrenalina()`, la velocidad al andar y el aviso en `avisar_adrenalina`). Químico: Napalm (`charco.extra`,
+`  desde `proyectil.caer`), Pegajoso (`zombi.ir_hacia`), Alto voltaje (`saltos`: el rayo del lanza rayos y el de
+`  Pararrayos) y Mezcla explosiva (`zombi.quimica_al_morir` con `efectos_puestos`; la marca del rayo, `zombi.electrico`,
+`  la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
+`  `--talentos-altos`). Desde el 11 nov (bloque J) todos los talentos hacen la mitad (el precio no cambia): lo que daba +10 % da +5 %; lo que daba un objeto entero por punto (Artificiero, Durito, Criogenia, Racimo, Alto voltaje) da 1 cada 2 puntos (`int(n / 2.0)`); el Ajolote cura cada 10 s (`REGENERA_CADA`); Larguirucho ×1,5, Mirilla 1 de cada 6, Veterano ×2,5 y +5 %, Fabricante ×1,15 y ×1,25, Pararrayos 10 de daño y 0,5 s, Mezcla explosiva radio 45 y 15 de daño, Adrenalina +15 % y +10 %), y desde el 15 nov (lo pidió el dueño): Artificiero +1 de cada lanzable por punto (en cada montón, `Lanzables.extra_talentos`; al empezar, solo molotovs y granadas, los que se tienen de salida), Racimo 1 por punto y en todos los lanzables, Durito 2 menos por punto, Reflejos cada 10 s con un punto (10,5 − 0,5 por punto), Desfibrilador con la mitad de la vida (y el tercio del medio), Blindaje 5 por punto, Criogenia sin congeladoras, Alto voltaje 1 durmiente más por punto, y el charco de Residuo tóxico y la explosión de Mezcla explosiva (15) también le hacen daño a Johnny,
+`  `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
+`- **Lo que suelta un durmiente** (15 nov, lo pidió el dueño; `partida.gd`, `zombi.murio`): una cosa (y llena la barra
+`  del mutágeno), un billete el 80 % de las veces y munición de un arma de fuego que lleve el 20 % (`soltar_premio_durmiente`,
+`  `BILLETE_ZOMBI`, `MUNICION_ZOMBI`; sin arma de fuego, el billete). Ya no sueltan objetos (`Objetos.que_suelta` solo lo
+`  mira el guardia) ni lanzables. Los jefes y el guardia, como antes, sin lanzables. Prueba: `--botin`.
+`- **El mutágeno** (15 nov; con barra desde el 19 nov, lo pidió el dueño): ya no cae al suelo. Cada zombi que muere llena
+`  una barra (`partida.llenar_mutageno`, puntos de `MUTAGENO_ZOMBI`: arrastrado 1, vecino y vecina 2, crío 3, gordo 4,
+`  tentáculos y dinamitero 5, el guardia 5, los demás 2, `MUTAGENO_OTRO`; los jefes y los que llama un jefe, nada; ni en
+`  el garaje) y, cada vez que llega a 100 (`MUTAGENO_BARRA`), da un mutágeno y sigue con lo que sobra: el sonido
+`  `"mutageno_punto"`, el efecto de las mutaciones en Johnny (`EfectoSuelo` "mutar") y un «+1» grande y morado encima de su cabeza (`gran_aviso`). La barra, en el HUD justo
+`  encima de la de vida (`hud.gd`, `pintar_mutageno`/`mover_mutageno`: del tamaño y con el marco de la de vida, líquido morado
+`  oscuro, el tanto por ciento con las cifras a cuadraditos de la vida, `pintar_cifras`, burbujas, un brillo que la
+`  recorre y, al completarse, destello blanco; el escudo va encima de ella, `alto_encima`). Lo lleno va en `partida.mutageno_barra`. Se
+`  cuenta en `partida.mutageno` y los dos van en la partida guardada a medias (`PartidaGuardada`). Los guardados de antes
+`  del 19 nov dividen su mutágeno entre 40 una vez (marca `mutageno_barra` de `guardado.gd`). Prueba: `--mutageno`. Al completar el edificio, el que quede pasa al guardado ("mutageno",
+`  `partida.terminar`; lo pidió el dueño el 15 nov); si caes o abandonas, el de esa partida se pierde, y el guardado no
+`  (`partida.mutageno_ahorrado`). Prueba: `--mutageno-guardado`. La primera vez que se coge, su tutorial («mutageno», en `mirar_tutoriales`; prueba `--tutorial-mutageno`). Se ve, el guardado más el de la partida
+`  (`mutageno_total`, también para el tope), en el inventario, debajo de los dólares, en la pantallita de `chapa.gd` en morado (`CHAPA.MORADO`, el de su barra; hasta el 19 nov, verde, la piel de los
+`  durmientes) y con una hélice de ADN dibujada a cuadraditos en vez del «$» (`dibujar_marcador(..., adn)`, `ADN`). Los dos
+`  marcadores del inventario miden lo mismo (`fijo`, `medida_fija`): 4 casillas (`CIFRAS`) con un «8» apagado en cada una vacía (las cifras de todos los marcadores son de reloj
+`  digital desde el 15 nov: siete rayas con las puntas en pico, dibujadas a cuadraditos, cada cifra con las suyas encendidas
+`  y las demás apagadas: `RAYAS`, `ENCENDIDAS`, `dibujar_cifra`)
+`  debajo de la cifra y, de 10.000 en adelante (`MAXIMO`), «8MAX» (la «A», más ancha que un 8, va centrada a mano). Y 10.000
+`  es el tope de verdad (`partida.TOPE`, 15 nov): con la cartera (lo ahorrado más lo de la partida) o el mutágeno en MAX,
+`  los enemigos dejan de soltarlos, lo que hay en el suelo no se coge (`puede`), los fajos (eventos, joyería) suman solo
+`  lo que cabe (`sumar_dolares`, `cabe_dolares`), lo ahorrado al acabar no pasa de ahí y, al cobrar un logro, se suma
+`  solo lo que cabe: el logro queda cobrado igual y lo demás se pierde para siempre (`Logros.cobrar`, `Logros.TOPE`; lo
+`  avisa el tutorial de Logros y el mensaje del archivador). Lo prueba `--mutageno`. Cuánto
+`  da una partida: `--durmientes-planta` (unos 300 en los Apartamentos y 340 en el centro y la torre, más las hordas).
+`  Prueba: `--mutageno`. Se gasta en los talentos del ordenador (ver `talentos.gd`, arriba), que lo enseñan arriba a la
+`  izquierda, igual que el inventario, en vez de lo ahorrado (`CHAPA.dibujar_mutageno`).
+`- `idioma.gd` (autoload `Idioma`: el idioma del juego y `Idioma.t("texto")` / `Idioma.n("uno", "varios", n)` para traducir,
+`  también desde los `static`; se elige en Opciones, se guarda en `ajustes.idioma` y avisa con la señal `cambiado`; con
+`  `--captura` es español salvo con `--ingles`, y al cerrar cuenta los textos sin traducir. Cómo se escribe un texto,
+`  las tablas `# [traducir]` y la herramienta: `docs/IDIOMAS.md`; nombres fijos del inglés: `docs/GLOSARIO_EN.md`).
+`- Los datos con texto (`armas.gd`, `objetos.gd`, `lanzables.gd`, `talentos.gd`, `logros.gd`, `mutaciones.gd`, `skins.gd`,
+`  `eventos.gd`, `averia.gd`, `joyeria.gd`, `barricada.gd`) guardan los textos en español en tablas `# [traducir]` y
+`  **sus funciones los devuelven ya traducidos** (`Armas.nombre`, `Objetos.nombre`, `Lanzables.uno/varios`,
+`  `Talentos.nombre_de/desc_de/nombre_rama`, `Logros.nombre_de/desc_de/nombre_tema`, `Skins.nombre/como/efecto`...): quien
+`  los enseña usa esas funciones, no la tabla directa (`docs/IDIOMAS.md`).
+`- `partida_guardada.gd` (la partida a medias: al empezar cada planta, una foto de lo que lleva la partida en `en_curso`
+`  del guardado; «Continuar partida» del menú vuelve al principio de esa planta, que sale igual porque la semilla de
+`  la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida. Una foto de antes del 13 nov con
+`  arrojables de repuesto (ya no hay): pasan al baúl al continuar, `sobrantes_al_baul`)
+`- `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
+`  `baul_equipo`, las armas y los arrojables con su calidad; aparte, `fregona`, la fregona mejorada (15 nov); los arrojables, juntos hasta lo que cabe en un montón (`Objetos.monton_arrojables`); un guardado de antes de eso
+`  (sin `montones_baul`) reparte al cargar sus montones de 99, una vez y sin perder nada aunque pase de 32 casillas. Tres huecos
+`  (M45): el progreso de cada uno en `guardado.json` (el 1, el de siempre), `guardado-2.json` y `guardado-3.json`; los
+`  ajustes de Opciones, de los tres, en `guardado-ajustes.json` con el hueco en uso. `base` es el nombre sin `.json`
+`  (la prueba usa `usar("user://guardado-prueba")`), `elegir_hueco`, `hueco_usado`, `borrar_hueco`), `huecos.gd`
+`  (`Huecos`, la pantalla «Elige partida» del menú: una tarjeta por hueco con su resumen o «Vacía», y «Borrar partida»
+`  con confirmación; elegir uno monta el menú otra vez; se prueba con `--huecos`), `logros.gd` (40 desde el M17, 28 oct, y 42 con los dos de la torre, 5 nov; 84 desde el M122, 16 nov: los de cada arma, tres por arma (10, 50 y 200 durmientes con ella, sumando partidas, en "logros_cuentas" → "con_arma"), hechos solos con `de_armas()` en los apartados Cuerpo a cuerpo, A distancia y Especiales, y en el ordenador solo se ve el nivel que toca, `toca_ver()`; prueba `--logros`; uno =
+`  una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
+`  —skins, bestiario, páginas, objetos, rescatados, talentos, edificio completado— y los da por conseguidos el repaso,
+`  `revisar()`: al empezar, cada vez que se escribe el guardado (`Guardado.escrituras`), al acabar y al abrir el
+`  programa Logros; `meta()` y `hecho()` dicen cuánto piden y cuánto llevan. Lo que solo cuentan los logros —jefes,
+`  victorias, armas con las que se ha matado, reglas del reto— va en `logros_cuentas` del guardado. Los de jefes, en
+`  `jefe_sale` y `jefe_muerto`; los de ganar, en `partida_ganada`; varios a la vez salen en un solo aviso, `avisar`. En
+`  la partida de prueba el repaso va apagado, `repasar`, salvo en `--logros`. Con una de las ayudas de `AYUDAS`
+`  encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta nada; los zombis de esas partidas van
+`  aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
+`  `historia.gd` (dosier, noticias y relatos, con la historia resumida arriba; se edita sin tocar los `id` y todos los
+`  textos se ven con `--historia`, y los relatos con `--relato`; los de Torre Velaria, solos, con `--historia-torre`. En la
+`  torre las páginas dicen su planta como «vestíbulo» o «planta 10» (`donde(p, edificio)`) y la última la suelta el Sujeto 1
+`  en el «laboratorio») y `bestiario.gd` (sus fichas;
+`  `recorte` lo calcula `tools/recortes_bestiario.py`). Un enemigo visto por primera vez va a `sujetos_nuevos` del
+`  guardado: su casilla, su pestaña y el icono de Sujetos llevan el «!» hasta que se hace clic en él (`es_nuevo`,
+`  `mirado`; 15 nov). Prueba: `--sujetos-nuevos`.
+`- `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
+`  llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
+`  (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste «Tutoriales: Sí/No» (abajo en la lista de Tutorial, con «Que vuelvan a salir todos»). Cada uno sale una sola vez: los
+`  pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
+`  mutación sacan el suyo antes de abrirse; las vendas y el botiquín sacan los dos «curas», uno solo para las dos curas (M110)
+`  y fuera de la guía, que solo enseña las vendas: M62; el de los trasteros, al entrar en las viviendas), `eventos.gd`,
+`  `supervivientes.gd` y el menú (el de la alerta). Se prueba con `--tutorial`. `marca(id)` dice si va un «!» encima del
+`  mueble de la sala de mantenimiento que enseña ese tutorial (taquilla, ordenador, banco, baúl y la puerta de los
+`  trasteros: `mapa.marcas_sala`); `marcas` los apaga en la partida de prueba (salvo `--marcas-sala`).
+`- `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
+`  encendidos). Su flecha, con la tele de las noticias encendida (al coger la página del dosier), lleva antes a la tele
+`  que al jefe (`tele_por_ver`, 15 nov). Al empezar, la ventana *Cómo se juega* sin la línea de atacar
+`  (`partida.ver_tutorial`, `Tutoriales.texto(id, sin_atacar)`; hasta el 17 nov era *Moverse y esquivar*, que se unió a ella). En la primera pelea saca las ventanas de `PASOS`: *Atacar* (al
+`  despertarse el primer zombi o al cerrarse la puerta: `guia.mostrar("atacar")` en partida.gd; *Lanzables* sale con el primero que se consigue),
+`  *Cambiar de arma* (si no salió ya) y *Munición y recarga* con medio cargador; tras cada una, la casilla
+`  del HUD que toca late (`hud.latido`) hasta que se hace o pasan `DURA` segundos. Hasta el 15 nov (M109) eso eran
+`  letreros encima de Johnny. *Atacar* solo sale con la guía: al ver *Cómo se juega* se apunta también
+`  (`partida.ver_tutorial`). Además, una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la
+`  llave y un primer apartamento fácil (3 zombis, sin la llave, vendas en el armarito). Lo demás (*Vendas*, *Jefes*,
+`  *La vida en tercios*...), con sus ventanas de siempre. Con la guía, no se sale de la sala de mantenimiento al pasillo mientras quede algún «!»
+`  en ella (`partida.falta_sala`: Johnny dice «¡CREO QUE MEJOR INVESTIGO UN POCO MÁS!» y no sale la flecha; el del ordenador
+`  cuenta solo por sus tutoriales y el regalo, `ordenador.falta_ver`: un enemigo nuevo en Sujetos o un logro sin cobrar
+`  no encierran a nadie, L37; se prueba con `--marcas-sala`). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
+`  apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`. La
+`  ventana de los tercios sí sale con la guía, al perder el primero (M35; `--guiado --tercios`).
+`- `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos; la horda dura 1 minuto de cerradura con unos 150 zombis en grupos cada vez más seguidos y por tramos de 20 s, `HORDA` y `TIPOS`, M40) y `aliado.gd` (cada superviviente que te
+`  acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`; en la horda, delante de la puerta, trastea en la cerradura: echado hacia ella, a empujones, con chispitas que lucen a oscuras y un clic, `trastear`, M63). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico),
+`  `barricada.gd` (ferretero) y `copia.gd` (el informático joven de la torre, id `programador`: protegerle 60 s mientras
+`  copia los archivos, con las cámaras saltando; su precio de empleado, `Supervivientes.precio`, y lo de acompañar:
+`  `abre_codigo` y `informatico_cerca`, que ciega las cámaras; `--edificio torre --programador`) y `valvulas.gd` (la
+`  limpiadora de noche, id `limpiadora`: encerrada en el aseo de Recursos Humanos, que en su planta es el cuarto de la
+`  limpieza, `Planta.cuarto_limpieza`, con el gas dentro; hay que cerrar las tres válvulas del departamento, una por rejilla
+`  y para siempre (`Peligros.gas` con `tres`), con los zombis dormidos por el gas que despiertan frenéticos al cerrar una cerca
+`  o con un golpe, `Zombi.espabilar_gas`; ya rescatada, la fregona barre 200° en vez de 140°, `Supervivientes.FREGONA_ANCHA`;
+`  acompañando, friega los charcos de `Charco.FREGABLES` con su gesto, `Aliado.fregar`; `--edificio torre --limpiadora`) y
+`  `tornos.gd` (la recepcionista, id `recepcionista`: siempre en el vestíbulo, la planta 1, detrás del mostrador con la
+`  persiana bajada, `Planta.mostrador`, `Planta.mostrador_fijo` y `Tornos.Persiana`; sube al llegar Johnny; al unirse, abre
+`  los tornos con su tarjeta 60 s mientras entran zombis por las puertas del vestíbulo, y los tornos los frenan a 0,45,
+`  `Tornos.freno` desde `Zombi.ir_hacia`, con la zona amarilla en el suelo; ya rescatada, al llegar a cada planta dice dónde
+`  está lo que abre la sala del jefe, `Supervivientes.pista` y `avisar_pista`; acompañando, grita «¡Detrás!» si un zombi va
+`  a pegar a Johnny por la espalda en medio segundo, `Aliado.avisar`; `--edificio torre --recepcionista`).
+`- **Interpolación de física** (`project.godot`): para que en pantallas de 120 o 144 Hz no vaya a saltitos, Godot dibuja en
+`  sitios intermedios entre paso y paso de física. `pantalla.gd` la apaga para todo el juego y solo la lleva Johnny
+`  (`johnny.tscn`, con todo lo que le cuelga y su cámara, que va al ritmo de la física): lo que se mueve en cada fotograma en
+`  vez de en cada paso temblaría con ella. Si a Johnny le llevan de golpe más de `SALTO` (otra habitación, un evento), él
+`  mismo se lo dice a Godot (`_notification`). Lo que cuelgue de Johnny y se mueva solo, en `_physics_process` (como
+`  `aura_arma.gd`). Se mide con `--suavidad` (con `--disable-vsync --max-fps 144` delante, como en una pantalla de 144 Hz).
+`- `registro.gd` (autoload `Registro`, el primero de todos): el registro de errores para que el jugador lo mande. Godot ya
+`  escribe la consola en `user://logs/godot.log` (en Windows, `%APPDATA%\Johnny Rush\logs`, los 5 últimos); esto le pone
+`  al arrancar una cabecera (versión del juego, `application/config/version`, sistema, procesador, tarjeta, memoria,
+`  pantalla e idioma), las migas `Registro.apuntar("...")` (la planta a la que llega, en `partida.gd`), y los errores y
+`  avisos con su archivo, línea y trazas del script, contados en `errores` y `avisos`. Guarda las últimas 400 líneas en
+`  memoria para la web, que no tiene archivo (hasta el 10 nov hubo un botón en Opciones para abrirlo o copiarlo; ahora está
+`  «Contáctanos», que no lo manda). Al cerrar el juego escribe el resumen, «Registro al cerrar: N
+`  errores y M avisos» con cada uno distinto y cuántas veces salió: así se ve de un vistazo si una prueba `--captura` (o
+`  la partida de un jugador) ha ido limpia. Detrás, Godot suelta al apagarse unas líneas de «leaked at exit» y «resources
+`  still in use»: son los dibujos y letras que guardan las `static var` de los scripts, no afectan y se dejan (9 nov).
+`  Se prueba con `--registro`.
+`- `contacto.gd` (`Contacto`): «Contáctanos» de Opciones → General (la página, `contacto()` de `opciones.gd`). Manda el
+`  mensaje del jugador (solo el texto, sin datos técnicos) a `api/contacto.js`,
+`  en Vercel, que abre un aviso en el repositorio privado de mensajes. En las pruebas no sale nada del ordenador. Todo en
+`  `docs/MENSAJES.md`; se prueba con `--contacto`.
+`- `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
+`  la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
+`  (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Y el **brillo** de Opciones → Pantalla
+`  (`poner_brillo`, ajuste «brillo» de 0 a 100, 50 = sin tocar): una capa por encima de todo que vuelve a pintar la pantalla
+`  más clara o más oscura (`escenas/luces/brillo_pantalla.gdshader`); en 50 no está. Se prueba con `--brillo`. Ver `docs/ESCRITORIO.md`. También pone
+`  el tope de imágenes por segundo: 240 siempre (`TOPE`, por si el vsync falla y la gráfica se pone a tope) y 30 con el juego en
+`  segundo plano (`FUERA`: otra ventana delante o minimizado; las pruebas `--captura` no se frenan). En la web, pide
+`  al navegador que deje Esc para el juego mientras dura la pantalla completa (`QUEDARSE_ESC`, ver `docs/WEB.md`), y a cada
+`  mando que se enchufa le pasa `Controles.ordenar_mando` (M73).
+`- `formas.gd` (`Formas`): `disco`, `arco`, `poligono` y `polilinea`, lo mismo que `draw_circle`, `draw_arc`, `draw_colored_polygon` y
+`  `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
+`  Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
+`- `sonido.gd` (autoload: efectos sintetizados y música; el gruñido de zombi al pulsar JUGAR en el menú principal (solo ahí), `grunir`:
+`  `assets/sonidos/grunido.ogg` (`GRUNIDO`, de PixelLab, al doble de velocidad: los hechos con código sonaban a perro y a
+`  helicóptero), por su propio reproductor (si se pulsa otra vez, empieza de nuevo); cada efecto cambia un poco al azar de tono y de volumen cada
+`  vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
+`  prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
+`  sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y
+`  los zombis despiertos, que cuenta cada medio segundo: explorando, el ritmo entra con uno; en la horda, la melodía,
+`  con `MUCHOS` (6); con el jefe, la capa intensa, cuando sale. Suben en 1 s y bajan tras 5 s sin hacer falta. En la
+`  partida, `"menu"` pone la canción de explorar de ese edificio (`EXPLORAR`, por `Sonido.edificio`, que pone la partida
+`  y el menú principal deja en `""`; fuera, la del menú, de una sola capa); `liberar` suelta las canciones que ya no
+`  tocan, para que en la web no haya más de dos guardadas (tres en la sala del jefe). Se prueba con `--musica`), `controles.gd` (las teclas cambiadas en Opciones; y `con_mando`, si se juega con el mando: lo último que se ha tocado,
+`  que mira `pantalla.gd` con `fijarse`, M44; y `ordenar_mando`, que en la web da el orden estándar a los mandos que el
+`  navegador no reconoce, para que su L2 no sea Start, M73, ver `docs/CONTROLES.md`).
+`
+`**ui/**
+`- `hud.gd`: desde el 19 nov, en el ordenador, la pantalla va **partida en HUD y juego**: el HUD en su franja de abajo
+`  (`FRANJA`, 100 de alto, con fondo liso y una raya arriba: `pintar_fondo`), en una fila y a su tamaño (`ESCALA_FRANJA`, 1;
+`  en el móvil sigue `ESCALA`, 1,5, encima del juego y sin franja): la vida con las balas, el mutágeno y el escudo encima; las
+`  curas; el nombre del sitio con el minimapa debajo (a 2/3, `MAPA_FRANJA`), y las armas. `Pantalla.franja_hud` dice lo que
+`  tapa la franja (0 en el móvil y fuera de la partida): con ella `partida.encuadrar` corre la cámara (mira la mitad de la
+`  franja más abajo que Johnny, `Camara.position`, y su límite de abajo pasa del mapa lo que tapa la franja), el viñeteado
+`  (`ambiente.gd`) y las flechas del borde (`supervivientes.flecha`) se quedan en el juego y la presentación del jefe no baja
+`  del mapa. Prueba: `--franja-hud`. El HUD (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,
+`  sacado de `barra-vida.png` cogiendo solo algunas de sus filas para que no se deformen los remaches; mientras se ve,
+`  las balas y el depósito suben encima de ella; `mover_escudo`, `pintar_escudo`, `con_escudo`; se prueba con
+`  `--escudo`). El escudo (Acero, Blindaje, Endurecimiento: `johnny.escudo`, M23) se gasta antes que la vida: en
+`  `johnny.quitar_vida`, todo lo que le quitan (golpes, charcos, el ácido del Glotón) sale del escudo, ya rebajado por
+`  Durito, y lo que sobra del golpe que lo rompe, de la vida.
+`- `cuenta_atras.gd` (`CuentaAtras.dibujar`, M64): la cuenta atrás de arriba, la misma para la horda del rescate, la
+`  barricada, la avería y la joyería: la barra en el marco de la barra de vida (`barra-vida.png`, ×1,5), llena como la
+`  sangre (brillo arriba, sombra abajo) y el texto encima con contorno, sin caja; los últimos diez segundos, el número
+`  en grande. Cada uno le pasa su texto, sus colores y lo hecho.
+`- `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
+`  jefe), `menus.gd` (pausa y fin; desde el 11 nov, al ganar el cartel solo trae tiempo, dólares, enemigos derrotados y la nueva mejor marca, sin frase de debajo; desde el 14 nov, al ganar y al caer, dos botones: «Jugar otra vez» (señal `reintentar`: `partida` recarga la escena, el mismo edificio desde la sala de mantenimiento; sin la tecla R, que quitó el M102) y «Menú principal»; el cartel del final dice al caer
+`  quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
+`  peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; sus botones
+`  no hacen caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al abrir el juego, encima, el aviso de fotosensibilidad, `aviso_luces.gd`
+`  (`AvisoLuces`, una vez por cada vez que se abre el juego; cualquier tecla, clic, toque o botón lo quita; prueba `--aviso`); desde el 11 nov, la tarjeta de un edificio completado solo dice «Récord: m:ss», el reto del día es un botón grande con «Premio $10» debajo y su cuadro al pasar el ratón (`boton_reto`, `cuadro_reto`; prueba `--edificios`); desde el 16 nov (M120), el reto del día solo sale tras completar algún edificio (si no, un letrero gris) y encima del selector de mejora pone «Compuesto VD-7»; en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
+`  monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; la lista de idiomas, con botones que llenan el sitio hasta «Volver»; Contáctanos, también para avisar de un texto mal
+`  traducido (desde el 12 nov, en vez del botón aparte con un formulario de Google); el temblor de
+`  pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
+`  `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
+`  (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
+`  respaldo; `crear_liso()`, el mismo tema con la letra lisa Rubik, para los tutoriales y el aviso de fotosensibilidad), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
+`  (autoload: el saltito de los botones), `tele.gd` (la emisión de las noticias, solo la pantalla con los subtítulos debajo, a `escala` 2 en la tele de los salones y 1,5 en el reproductor; con `continuo` pasa sola de un trozo al siguiente, como un vídeo, y avisa con `acabada`; mientras sale cada subtítulo, la reportera «habla» con pitidos de 8 bits sin palabras, `voz_reportera.gd` (M93: sílabas de onda cuadrada con la nota y el largo al azar, por el bus de Efectos y su propio altavoz, que se calla al saltar la frase, en la pausa y al cerrar; prueba `--voz-reportera`, que deja una muestra en `capturas/voz-reportera.wav`); `adelantar()` es el clic izquierdo del que tiene prisa, en la tele del salón y en el reproductor (también A del mando, Intro o Espacio en la del salón): acaba la frase de golpe y, ya acabada, pasa a la siguiente; `reproductor.gd` es el reproductor de los 90 de VIDEOS.EXE: el mueble, la calle de detrás (la del 14, la del centro o la de la torre, según el
+`  `sitio` de la noticia) y la reportera son dibujos de PixelLab de `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano. Lo que dice la reportera va con letras de 18 y por
+`  trozos, los que caben en el cuadro (`partir`, que mide con el mismo texto; en chino, letra a letra): al pulsar, el siguiente).
+`- `arbol_talentos.gd`: el árbol de talentos de ConserjeOS (MUTACIONES.EXE desde el 15 nov; antes TALENTOS.EXE), desde el 6 nov. Una chapa oscura con las tres
+`  ramas a la vez, cada una de su color (`COLORES`: Militar rojo, Superviviente verde, Químico amarillo), dibujada con
+`  código (`_draw`): cada talento es un hexágono con su icono y sus cuadraditos, y las rayas al que pide se encienden al
+`  llenarlo. Encima de cada hexágono, un botón transparente `b_<id>`. La ficha (qué hace, ahora y con otro, qué abre y
+`  el pie: desde el 15 nov solo el precio, en un marcador con la hélice y sin las rayas apagadas de las cifras, verde si
+`  llega y gris si no: `marcador_precio`, `CHAPA.dibujar_marcador` con `solo_luz`) sale al lado del que está bajo el ratón o, con el teclado, el mando o el dedo, del marcado
+`  (`quien`, `modo`); con el dedo, el primer toque solo la enseña y el segundo compra (`al_pulsar`, `listo`). Las flechas
+`  van de hexágono en hexágono sin escaparse al escritorio (`poner_vecinos`). Arriba a la izquierda, el mutágeno (`mutageno`,
+`  el guardado más el de la partida, en el mismo marcador fijo que el inventario, sin dibujo al lado: `CHAPA.dibujar_mutageno`). Prueba: `--arbol-talentos`
+`  (también mide el pie más largo en cada idioma). La chapa y sus colores los comparte con la tienda de armas: están en
+`  `chapa.gd`.
+`- `chapa.gd`: lo que comparten el árbol de talentos y la tienda de armas: los colores de la chapa oscura (`BORDE`,
+`  `CHAPA`, `REMACHE`, `TEXTO`, `AMARILLO`...), `dibujar` (el marco con sus remaches), `dibujar_ahorrado` (el billete y
+`  la pantallita de caja registradora, con el «$» pegado a la cifra; `caja_ahorrado` dice dónde acaba; con `fijo`, la
+`  de 4 casillas del inventario, sin el billete: la de la tienda de armas desde el 15 nov) y
+`  `dibujar_mutageno` (el marcador fijo del inventario, con la hélice en morado, en el árbol de talentos).
+`- `tienda_armas.gd`: la tienda de armas de ConserjeOS (ARMAS.EXE), desde el 6 nov. Todo a la vez, sin desplazarse: a la
+`  izquierda, una fila por grupo (`GRUPOS`: Cuerpo a cuerpo, A distancia y Especiales, de `Armas.familia`, y Arrojables,
+`  de `Lanzables.PRECIOS`) con sus casillas (el icono, sin precio: sale en la ficha; lo que llevas y lo lleno, con el borde verde, sin letrero (el botón de la ficha dice «LLENO» desde el 15 nov); desde el 16 nov, lo que te llega con el borde amarillo y lo que no, con el dibujo muy oscuro:
+`  `estado`). A la derecha, la ficha fija de lo elegido: el dibujo ×3, los medidores de 10 cuadraditos (`medidas`,
+`  `valor`; cada uno contra el arma de la tienda que más tiene de eso, `maximos`; los llenos, con los colores de las barras
+`  del inventario, `INVENTARIO.color_barra`, desde el 15 nov), qué hace (`INVENTARIO.QUE_HACE`; sus
+`  números y cuántos llevas ya no, desde el 11 nov) y el botón de comprar (`b_comprar`, sin foco: compra lo de la ficha). Desde el 15 nov solo enseña el precio, en un
+`  marcador como el de lo ahorrado pero sin rayas apagadas (`CHAPA.dibujar_marcador` con `solo_luz`): amarillo si llega y
+`  gris si no (`dibujar_comprar`); con el baúl lleno (lo comprado va allí desde el 15 nov), «Baúl lleno» y no se compra
+`  (`estado` "lleno"). Sin nada
+`  elegido (al abrir con el ratón), la ficha dice que se pase por un arma y lo de esta partida (`nota`); cómo va la
+`  tienda lo cuenta su tutorial («tienda», la primera vez que se abre: `ordenador.abrir`). El regalo de bienvenida
+`  (desde el 10 nov Johnny empieza solo con la fregona: `Armas.SIEMPRE`): la primera pistola, gratis una sola vez
+`  (Guardado `regalo_cogido`, `es_regalo`), y desde el 15 nov también un molotov, una granada y una atraedora
+`  (`REGALO_LANZABLES`, Guardado `regalos_lanzables`), con un «!» en cada casilla (`regalos_a_la_vista`), «¡COMPRA UN
+`  ARMA!» en la ficha vacía y «Regalo de bienvenida» en su botón. Va al baúl, como todo lo comprado. Mientras quede algo
+`  sin coger (`regalo_pendiente`), ARMAS.EXE y la mesa del ordenador llevan su «!» (`novedades`) y no se sale de la sala
+`  de mantenimiento (`partida.cruzar`). Se prueba con `--regalo`. Lo elegido es, con el ratón, la última casilla por la que pasó (se queda al ir hacia «Comprar»); con
+`  el teclado, el mando o el dedo, la marcada (`quien`); tras comprar se rehace con lo comprado elegido. Con el dedo, el
+`  primer toque enseña y el segundo compra (`al_pulsar`, `listo`). Los textos largos se parten a mano (`partir`; en
+`  chino, letra a letra). Prueba: `--tienda-armas` (con fotos en alemán, ruso y chino). Las armas que tienen sus
+`  dibujos de la tienda (`assets/ui/tienda/<id>.png`, 48 en diagonal, para la casilla, y `<id>-grande.png`, 96x48 en
+`  horizontal, para la ficha a ×2; `dibujo_tienda`, de PixelLab: `assets/pixellab.json` → `tienda-dibujos`) los usan; las
+`  demás, el icono de siempre. Desde el 16 nov el dibujo de 48 sale en **todos** los sitios donde hay un arma (también la
+`  fregona): `Objetos.textura(nombre)` da el de la tienda si lo hay y, si no, el icono de 32 (`Objetos.de_tienda` dice
+`  cuál es). Lo usan el HUD, los botones del móvil, la pausa (`Tema.icono_y_texto`), el inventario, el baúl y el banco
+`  (`inventario.dibujo`: en las casillas pequeñas, en el cuadro de 32 del icono viejo), las armas del suelo
+`  (`partida.soltar_arma`, a ×1) y el premio de la joyería (64 de lado). Cada sitio lo pone en el cuadro que ocupaba el
+`  icono viejo. Prueba: `--dibujos-armas` (y `--edificio centro --joyeria`).
+`- `archivador_logros.gd`: los logros de ConserjeOS (LOGROS.EXE), desde el 7 nov. La misma chapa oscura, como un
+`  archivador: arriba, lo ahorrado y, a la derecha, «Logros 10/42» y «Por cobrar $X». A la izquierda, un botón por página
+`  (`b_tema_<tema>`): «Resumen» y uno por apartado de `Logros.TEMAS`, con su barrita, su cuenta y un «!» si tiene algo por
+`  cobrar; las barras, en amarillo mientras falta y en verde al completarlas. A la derecha, la página (`pagina`, que se queda al rehacer la ventana):
+`  el Resumen enseña lo que hay por cobrar (los que no caben, «Y N más»; si no hay nada, «Casi lo tienes»: los que se
+`  hacen varias veces y van más avanzados) y «Cómo vas», una barra con todos y una por apartado; un apartado, sus logros
+`  en filas (`b_<id>`: icono, nombre, su barra si `meta` > 1, lo que pide cortado con «...» y la placa del premio: apagada,
+`  amarilla «Cobrar $X» o verde «Hecho»). Pulsar una fila cobra (`ordenador.cobrar_logro`); lo que pide, entero, sale en la
+`  línea de abajo. `programa_logros` lo monta, le pone a cada botón su línea de abajo y decide qué se marca. Prueba:
+`  `--archivador-logros`.
+`- `carpeta_dosier.gd`: el Dosier de ConserjeOS (DOSIER.TXT), desde el 7 nov. La ventana va maximizada (tapa los iconos)
+`  y, encima de la chapa oscura, una carpeta de archivo marrón con una pestaña por edificio (`b_edificio_<id>`, «Apartamentos
+`  2/5»). A la izquierda, las páginas del edificio como fichas (`b_<id>`: en papel las
+`  encontradas, con «Página N» y su título; arrancadas las que faltan, solo con «Página N»); a la derecha, la hoja de la que se mira,
+`  con un clip (cambia al pasar por una ficha, `ver`). El edificio y la página se quedan al rehacer la ventana
+`  (`recordado`, `recordada`). Sin desplazarse. `programa_dosier` lo monta y le pone a cada botón su línea de abajo (quién
+`  la llevaba o dónde buscarla). Prueba: `--dosier-carpeta` (también si cabe cada hoja, en alemán, ruso y chino).
+`- `hoja_dosier.gd`: una página del dosier dibujada como expediente de Velaria Corp. (`Historia.hoja()` y
+`  `hoja_arrancada()`; la usan la ventanita de página encontrada, `menus.pagina`, y la carpeta). Papel viejo con motitas y
+`  un cerco de café; el logo de Velaria (`assets/ui/velaria-logo.png`, 24x24, de `tools/logo_velaria.py`, sacado de la imagen de GPT: una luna creciente
+`  morada en un círculo azul marino; lo eligió el dueño el 7 nov y es el logo de Velaria para todo), «Investigación del sueño», código de
+`  barras y referencia (`VD7-AP-01`: edificio y número); la franja con el edificio, «HALLADO EN» y n / total; el tipo, el
+`  título, el sello de «CONFIDENCIAL»; el texto a todo lo ancho (la foto del muerto se quitó el 7 nov) y la nota en un
+`  pósit (amarillo, con la esquina doblada, pequeño y casi cuadrado: las notas son cortas; la nota, letra a letra como escrita a mano con boli, `a_mano_en`, siempre a 16), pegado abajo a la derecha; las últimas líneas del texto se estrechan para dejarle sitio. Mide de alto lo que necesita: si pasa de `alto_max`, prueba con la letra más pequeña y la
+`  cabecera compacta (`PRUEBAS`); nunca corta texto. La arrancada es el trozo de arriba, roto, con `Historia.falta()`.
+`- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Vídeos, Colecciones). Colecciones es solo el bestiario desde el 8 nov, titulado «Sujetos» (desde el 11 nov también su icono y su ventana, SUJETOS.EXE; por dentro sigue siendo "colecciones"). Desde el 11 nov todas las ventanas van maximizadas y sin la barra de explicación de abajo (`info` se sigue montando escondida: las pruebas leen su texto) (los objetos y las páginas ya no salen; las páginas, en DOSIER.TXT),
+`  maximizado: arriba lo visto con su barra, dos pestañas (`Bestiario.familias()`: los durmientes, zombis de siempre, y los
+`  sonámbulos, los jefes) con las páginas de 12 a su derecha, a la izquierda la ficha (`ficha_bestiario`: el enemigo grande y moviéndose bajo la lámpara de `assets/ui/foco-sujetos.png` (de GPT, `tools/foco_sujetos.py`), con polvo y algún parpadeo; si falta, una interrogación casi negra
+`  grande, `assets/ui/interrogacion.png`, la de GPT con el dibujo de la «!»; debajo, con la letra lisa, su nombre, dónde sale, su frase y cuántos se han matado, `matados` del guardado, que suma `partida.contar_matado` al acabar) y a la
+`  derecha la cuadrícula (`casilla_zombi`; jefes con marco dorado; los que faltan, con la interrogación). Se prueba con `--coleccion`. Al comprar o subir algo
+`  el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
+`  prueba con `--ordenador-arriba`, con clics de verdad). Con el teclado o el mando, Godot solo pasa a un botón que se
+`  vea: `encadenar` le dice a cada botón de una lista con desplazamiento cuál tiene encima y debajo (`--ordenador-teclado`). La tienda es
+`  `tienda_armas.gd` (`programa_armas` la monta y le pone a cada casilla su línea de abajo). Desde el 15 nov lo comprado
+`  va al baúl, sin estrenar (`comprar_arma`; los arrojables, de uno en uno, `comprar_lanzable`, a su casilla con
+`  `Objetos.arrojables_al_baul`), y el baúl lleva un «!» hasta abrirlo (Guardado `baul_nuevo`, `mapa.marcas_sala`). Con el
+`  baúl lleno no se compra. Antes iba a la mano (y con dos armas de ese tipo, la de repuesto al baúl: `repuesto_al_baul`,
+`  quitado). Las pruebas que compran un arma para usarla la sacan con `comprar_y_llevar` (`prueba_comun.gd`); la tienda
+`  se prueba con `--tienda` y `--tienda-armas`. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: cada programa con su tutorial sin ver, que sale al abrirlo la primera vez, `MESA.TUTORIAL_DE`; Colecciones y Logros por cobrar; la tienda sin el regalo cogido. El rótulo amarillo, solo con lo de verdad nuevo, no por el tutorial; se prueba con `--marcas-sala`)
+`  llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`); se ponen y se quitan con `poner_aviso`, y
+`  `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones o cobrar un logro, sin tener
+`  que apagar (y al apagar también se pone al día el «!» de la mesa). Y los avisos de sucesos, además de la
+`  línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`:
+`  nuevas, logro y skin nueva); la skin sin ver se apunta en `skins_nuevo` del guardado hasta que se abre la taquilla.
+`  Se prueba con `--novedades` y `--avisos-ordenador` (que se quitan al mirar o cobrar).
+`- **Las noticias (M91):** ya no están en el ordenador. Cada planta generada tiene **una tele** que enseña las noticias de
+`  Canal 8: `Planta.tele_de_la_planta` marca un mueble `tv` de un salón de un apartamento normal, al azar (`tele: true` en el
+`  mueble y `sitio.tele = {"estado": "apagada"}`; `mapa.gd` le cuelga `tele_salon.gd` y su zona de uso). Al limpiar ese
+`  apartamento (`partida.encender_tele`) y si queda alguna noticia sin ver de ese edificio, se enciende («encendida»: pantalla
+`  en blanco, luz, «!» encima). Con el clic delante (`partida.abrir_tele`) sale `menus.noticia` con el juego parado: la primera
+`  todas las noticias del edificio que no están en `videos_vistos` y cuya página ya se tiene, **seguidas** (`Historia.noticias_pendientes`,
+`  `partida.poner_noticia`; así se pone al día quien cogió páginas sin ver su tele), cada una vista seguida (`Tele.continuo`), solo la pantalla de la tele grande con los subtítulos debajo. Cada una vista entera queda en `videos_vistos`; al acabar la última, la tele se apaga para siempre («vista»);
+`  si se cierra antes (Apagar o Esc), sigue encendida con las que falten. Cada ranura de guardado lleva sus vistas. **VIDEOS.EXE**
+`  (`programa_videos`, en el ordenador): pestañas por edificio como el Dosier y «Vídeo 1, 2…» (los no vistos, apagados), y el vídeo en
+`  un reproductor multimedia de los 90 (`reproductor.gd`: pausa, parar, anterior, siguiente y contador; barra y volumen de adorno). Se prueba con `--noticias`.
+`  **Ligado al dosier:** ya no suelta páginas ningún jefe. Cada planta tiene su muerto con una página (`planta.cientifico`) y
+`  lleva la **primera que te falte** del edificio (`Historia.pendiente`; si no la coges, la lleva el de la planta siguiente),
+`  pero cada página tiene su planta mínima (`Historia.pagina_de_planta`, `partida.pagina_aqui`): la 1 en cualquiera, la 2 desde la
+`  primera, la 3 desde la segunda, la 4 en la tercera; si la que toca aún no sale en esa planta, allí no hay muerto. La 5 solo
+`  sale con el edificio completado, y en una sola planta por partida (`partida.planta_pagina5`, sorteada al empezar). La noticia N
+`  se hace con la página N: la tele solo se enciende si has cogido la página de esa planta (`partida.tele_con_pagina`; o si en esa
+`  planta no hay página que coger) y queda alguna noticia cuya página ya tienes. Se prueba con `--dosier-plantas`. Al coger la página con el apartamento de la tele ya limpio, se enciende al momento.
+`- `inventario.gd`: el inventario «todo a la vista», desde el M100 (13 nov) dentro de una mochila abierta de GPT (la
+`  referencia vaciada, `assets/ui/inventario-mochila.png`; sin el marco gris ni el título), más pequeño que antes para que
+`  se vea la mochila entera (casillas de 48, armas de 64, Johnny a ×3; la letra, igual), con la ficha en un papel
+`  cuadriculado con clip (`FICHA`, letra oscura), los títulos de grupo en tiras de cinta (`cinta`) y la llave en una
+`  etiqueta de cartón (`hueco_llave`) con el dinero a su derecha en la pantallita de la tienda de armas
+`  (`chapa.gd`). Sin números «x/y»: ni en los títulos ni en las casillas de armas y arrojables; sin «F cambia». Los
+`  cuadraditos de las barras de la ficha, por colores (`color_barra`: rojos hasta 3, amarillos de 4 a 7, verdes de 8
+`  a 10). Los cuatro dibujos, de `tools/inventario_gpt.py` (prueba: `--mochila`). Arriba, en medio y encima de la
+`  cremallera, las 4 casillas de las mutaciones de los jefes que lleva (`fila_mutaciones`, 17 nov; en el juego,
+`  «efectos secundarios»), con sus dibujos a la mitad (`assets/ui/mutaciones/mini`, de `tools/muebles_gpt.py`): al pasar
+`  por una se despliega debajo su recuadro (`globo_mutacion`: nombre con la letra del juego y lo que hace con la lisa; en
+`  las vacías, «Efecto secundario»). Prueba: `--inventario-mutaciones`. Dentro:
+`  (en medio, la mochila y la munición, 8 y 8, y abajo, centradas, las 2 casillas
+`  de las curas, `cuadro`; desde el 13 nov no hay arrojables de repuesto, `Lanzables.REPUESTO` es 0; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
+`  arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, con el banco de frente de fondo, `assets/ui/banco-fondo.png` de GPT, y los textos de encima de la madera en oscuro, `TINTA_BANCO`; desde el M105, 15 nov, la ficha va dentro del tablero claro, justo debajo de las casillas, y las del baúl caben en el alto de 2 filas; `en_banco`, `no_mejora`,
+`  `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl;
+`  en el juego se llaman «materiales de fabricación» desde el 11 nov, por dentro siguen siendo "pieza_*"). El baúl y el
+`  banco ya no llevan la línea de teclas de abajo (`pintar_ayuda`, solo en el inventario) ni la frase de qué es debajo
+`  del nombre; el banco solo dice lo que cuesta, sin lo que tienes ni lo que falta
+`  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). Desde el 16 nov, cada cosa de Objetos, Munición, Curas y el
+`  baúl va en la casilla que le da el jugador: los datos no guardan casillas, así que encima va una lista de qué va en cada una
+`  (`partida.orden_casillas` y, el baúl, «orden_baul» del guardado; `colocar`, `pintar_grupo`, sitios «M3», «U0», «C1», «B12»);
+`  las claves «m3», «b12» siguen siendo las de los datos. Se mueve arrastrando a otra casilla del grupo (`colocar_en`: va o se
+`  cambian) o con «Mover» de la ficha (`llevando`, `mover_marca`: mando y teclado), y «Ordenar» lo agrupa por tipo (`ordenar`,
+`  `tipo_orden`). Prueba: `--ordenar`. Los lanzables se tiran al suelo como las armas,
+`  de uno en uno o el montón en la zona roja, y vuelven con su calidad y sus partidas (`partida.soltar_lanzable` con
+`  "tirado"; 15 nov, prueba `--tirar-lanzables`). `taquilla.gd`: la ventanita de las skins (las que no se tienen, con la interrogación de Sujetos en la vista y en su carta; la frase de cada carta, con la letra lisa; la lista mide justo las cartas enteras que caben y la rueda, la barra y la cruceta la mueven de carta en carta, sin cortar ninguna: `igualar` y `rueda`, M112).
+`- `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la
+`  mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.
+`- `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas); con la misma pinta, `charla` (lo que cuenta un vecino de los trasteros, con varios botones: `eleccion`)
+`  y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
+`  y la ficha del elegido). La ficha (`ficha()`): el icono, el título y las líneas (sin fotos desde el 8 nov).
+`- `confirmar.gd` (`Confirmar`): la ventanita «¿Estás seguro?» en el centro de la pantalla, con lo que se perdería y
+`  Sí / No (el foco empieza en No; el elegido, sea cual sea, se ve en rojo, y el ratón encima también lo elige; Esc o B
+`  dicen que no). La usan «Borrar partida» (`huecos.gd`) y «Destruir» del
+`  inventario y del baúl. `Confirmar.preguntar(dueño, detalle).respondido` dice si se ha dicho que sí.
+`- `relato.gd`: los textos de la historia sobre negro (`Historia.RELATOS`): la introducción y un final por edificio, cada
+`  uno una sola vez (`relatos` en el guardado; no salen en el reto, y una partida continuada no pasa por la introducción
+`  pero sí saca el final). Las líneas salen solas,
+`  cualquier pulsación saca la siguiente y cierra al final; Esc o B la saltan. La abre `partida.ver_relato`: la
+`  introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final (menos el de
+`  los Apartamentos: desde el 16 nov sale al elegir el centro comercial por primera vez, también en `_ready`).
+`- `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos; y el jefe de seguridad,
+`  con su ronda y su rugido conectado a `partida._al_rugir`, 19 nov), zombis, las ayudas
+`  que se encienden y se apagan, Johnny invencible, la diana, ir a la exposición o a la sala de un jefe y lo de las
+`  antiguas teclas de prueba (mutaciones, objeto, piezas al baúl, Colecciones, científico).
+`
+`**mapa/**
+`- `mapa.gd`: monta un sitio (suelos, paredes, choques, muebles, peligros, niebla, navegación; escaparates y neones del
+`  centro, la azotea, las viviendas). Estilos de cada sala: `ESTILO_DE`, `ESTILO_TIENDA`, `PASILLOS`.
+`  `acustica_en(pos)`: cómo suena ahí la pistola, "seca", "eco" o "duro", según el sitio y el uso de la habitación.
+`  `poner_caras` pone la cara (el papel, de 3 casillas) a cada pared con suelo debajo, y a los tabiques que cuelgan de una
+`  pared con suelo encima (`tabique_colgado`) les sube la tapa del muro hasta lo alto de la pared de al lado (`tapa` de
+`  `cara_pared.gd`), para que cada habitación quede cerrada a su altura y no se vea el suelo de arriba en un hueco.
+`- `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
+`  Los zombis de un piso (`horda`): un presupuesto (`BASE`, `POR_NIVEL`, el coste de cada tipo en `COSTE`) repartido por
+`  el tamaño de las habitaciones y, aparte, `EXTRA_POR_SALA` (2) zombis baratos (lentos, normales o rápidos) en cada
+`  habitación de los pisos de los Apartamentos: los que quepan, lejos de la
+`  puerta (`LEJOS_PUERTA`), de los muebles y de los otros. Sin esos 2 había unos 13 por piso; con ellos, unos 27. La prueba
+`  `--zombis-sala` los cuenta por habitación. En las tiendas del centro comercial, `EXTRA_TIENDA` (M84): 14 de más en la
+`  sala de venta, 1 en los baños y 3 en las demás salas; de unos 9 por tienda a unos 27. Los cuenta `--zombis-tienda`.
+`  La sala de mantenimiento se ve como las viviendas ("cajas": vestuario, despacho y taller, cada uno en su caja de
+`  tabiques con oscuro alrededor), y también los dos edificios enteros: el pasillo de los Apartamentos, sus pisos, las
+`  habitaciones de sus jefes, y la galería del centro comercial, sus tiendas y las de sus minijefes. Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
+`  (`mapa.cara_de_caja`): encima de una puerta de lado entre dos estancias no sale cara, el tabique se ve plano.
+`  Por dónde se llega: solo la planta baja (el portal del edificio) tiene una puerta de llegada a la izquierda; en las
+`  demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo no
+`  tiene puerta a la izquierda; y la azotea (desde el 28 oct) tiene su puerta de llegada a la derecha, como la salida de
+`  incendios (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
+`  La azotea (la misma en el centro comercial y en los Apartamentos; desde el 11 nov) es entera una imagen de GPT
+`  (`azotea-gpt.png`, de `tools/azotea_gpt.py`; `mapa.al_aire`: sin caras ni tapas, la imagen hace de suelo, muros y
+`  barandilla): el helipuerto de hormigón verde a ras de suelo, con su aro amarillo y su H, las líneas blancas, la
+`  barandilla de los cuatro lados, la caseta de arriba a la izquierda y la pasarela de la derecha, donde está la puerta de
+`  llegada (`AZOTEA_ENTRADA`). Los muros siguen la barandilla (`AZOTEA_MURO_ARRIBA` 4 filas, `AZOTEA_MURO_ABAJO` 3, a los
+`  lados 2). Sin aparatos. Lo de dentro de las líneas blancas (`PLATAFORMA`, `plataforma()`) es el ring del jefe final:
+`  espera en el aro (`AZOTEA_ARO`; `esperando` en `minijefe.gd`) y, al entrar Johnny en las líneas, empieza la pelea
+`  (`partida.mirar_ring`). No choca nada: se entra y se sale andando. No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
+`  `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
+`  puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
+`  puerta abajo), y la habitación de cada jefe; `tienda.gd` da cada tienda: desde la M77, todas fijas, dibujadas con letras en `Tienda.PLANOS` (la electrónica, con su
+`  charco: `~`; todas con su aseo de empleados y su botiquín, M81), leídas con `Apartamento.del_plano` y con sus muebles puestos a mano
+`  (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); **pared alta** (18 nov, el dueño; de momento solo la tienda de ropa, la primera que
+`  se rehace por dentro): con `"sube": 4` en `Tienda.TIPOS`, su pared mide 4 casillas en vez de 3 (`sitio.sube`, puesto en
+`  `Planta.generar`, que también sube `arriba_extra`; `mapa.sube` lo pasa a las caras, `cara_pared.gd alto`, a los tabiques
+`  de arriba, `tabique.gd sube`, y al dintel) y sus puertas de dentro, de 86 a 118 de alto (`puerta_bano.gd alargar`): con la
+`  de siempre, la dependienta (105 de alto) no cabía por ellas. Los dibujos de la pared y de las puertas no se estiran: se
+`  alargan repitiendo su franja de en medio (`alargar.gd`). Se mira con `--puerta-dependienta` (la dependienta delante de
+`  cada puerta y dentro del hueco, con lo alto de cada uno); desde el 18 nov la tienda de ropa tiene **plano nuevo** (50 × 30: el aseo de
+`  7 × 12, el almacén de 17 × 12 y tres probadores de 6 × 8 en la pared de arriba; sin el pasillo del medio) y está
+`  **vacía** mientras el dueño la rehace (sin muebles: los `colocados` de `*-ropa`, vacíos; y sin restos de sangre y
+`  pintadas, `"limpia"` en `Tienda.TIPOS` y `mapa.limpio`, como la galería; el botiquín del aseo sigue). Su plano de
+`  antes, `"ropa-antigua"`, solo lo usan Recursos Humanos y Dirección de la torre (`"plano"` en su `"presta"`); la galería, igual
+`  (`colocados` de `"galeria"`, se mira con `--galeria`; desde el 17 nov vacía mientras el dueño la rehace: sin muebles ni restos
+`  sueltos de sangre y pintadas, `mapa.galeria`; solo las puertas de las tiendas, sus escaparates y letreros, el ascensor, las
+`  salidas; tampoco apliques: se sortean y se quitan en `planta.gd`; ni el número de la planta junto al ascensor, `sin_cartel`; la luz la dan tres neones dibujados de GPT en los huecos de
+`  la pared de arriba, un casete, un radiocasete y un tocadiscos, que parpadean como los apliques: `neon_galeria.gd`, puestos
+`  por `mapa.poner_neones_galeria`, de `tools/neones_galeria.py`, encendidos y apagados; `--galeria` saca también
+`  `captura-galeria-<planta>-luz.png`, con la penumbra). Los departamentos de Torre Velaria (el tercer edificio,
+`  `docs/PLAN_TERCER_EDIFICIO.md`) también son tipos de `Tienda.TIPOS`, con `"edificio": "torre"`: toman el plano de una
+`  tienda del centro (`"presta"`, `Tienda.plano_de`), pero con muebles propios (`colocados` de `<sala>-<tipo>`, puestos con
+`  `py tools/muebles_torre.py` a partir de los de esa tienda), suelos y paredes propios (`Mapa.ESTILO_TIENDA`) y su rótulo
+`  iluminado en vez del neón (`neon.gd`, `iluminado`); su pasillo es el de `Catalogo.SALAS["torre"]` y el vestíbulo, el de
+`  `"vestibulo"` (`Planta.generar`, `estilo_pasillo`), con el ventanal de la ciudad de noche (`ventanal.gd`) en vez de
+`  escaparates y el cartel de la planta (0, 10...40) dibujado en `puerta.gd` (`cartel_torre`); se miran con
+`  `--edificio torre --torre` y `--edificio torre --departamentos` (`--tipo X`);
+`  `viviendas.gd`, el pasillo de los rescatados (nueve habitaciones: las de la torre, `TORRE`, la cuarta de arriba, la
+`  cuarta de abajo y la del fondo, con su puerta de lado; las de quien aún no está en `Supervivientes.DATOS`, cerradas). Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
+`  habitación y el pasillo, cerrados por sus tabiques de una casilla de grueso, lisos y de un gris muy oscuro (`tabique.gd` y
+`  `mapa.poner_tabiques`); solo la pared de arriba de cada uno tiene altura (su cara y, encima, su tabique, con los de los
+`  lados subiendo hasta él), los demás tabiques se ven planos y el muro que sobra alrededor se ve oscuro,
+`  como fuera del mapa (`mapa.FUERA`). Las de arriba tapan sus tres últimas filas (la pared del pasillo) y el pasillo, las suyas (la de las
+`  de abajo): `Viviendas.TAPADAS`. Sus habitaciones son los trasteros del edificio: todas iguales, de chapa
+`  crema acanalada con el suelo de hormigón gris azulado y la puerta azul lisa con pomo de metal (`suelo-`, `pared-`,
+`  `techo-` y `puerta-trastero`, de `tools/trastero.py`; la puerta, `trastero` en `puerta_bano.gd`). Cada una lleva un colchón en el suelo en la esquina de arriba a la derecha, con la
+`  almohada descolocada y la colcha del color del superviviente, y una estantería metálica vacía en la esquina de arriba a
+`  la izquierda (algo separada de ella): `colocados` de `habitacion-<id>` en `catalogo.gd`. Los dos, y la puerta azul de
+`  frente, de GPT desde el 10 nov (M8), reducidos con `tools/muebles_gpt.py` (`colchon_trastero`, `estanteria_trastero`,
+`  `puerta_trastero`); los colores de la colcha, con `tools/camas_viviendas.py` (a partir de
+`  `assets/sources/viviendas/colchon-gpt.png`), y las puertas abiertas y de lado, con `tools/trastero.py`. Los de PixelLab
+`  de antes, en `assets/sources/salas/descartes/`.
+`  El pasillo es el de una zona de trasteros: el mismo suelo de hormigón con una línea amarilla pintada a lo largo
+`  (`linea-trastero`, la pinta `mapa.dibujar_fondo` a la altura que dice `"linea"` en la sala del pasillo) y la misma
+`  chapa con una franja de chapa lagrimada abajo (`pared-trastero-pasillo`), las dos de `tools/trastero.py`; contra la
+`  pared de arriba, cajas de cartón apiladas (`boxstack`, `boxpile`) y carretillas cargadas (`handtruck`), de imágenes
+`  de GPT reducidas con `tools/muebles_gpt.py` (`colocados` de `pasillo-viviendas` en `catalogo.gd`, lejos de las puertas), y
+`  en la pared de arriba, a la izquierda de la primera puerta, el cartel de «TRASTEROS» (`cartel_trasteros.gd`: la placa
+`  azul vieja de una imagen de GPT sin letras, `cartel-trasteros.png` de `tools/cartel_trasteros.py`, estirada por en medio, y
+`  encima «TRASTEROS» traducido con `Tema.FUENTE` a 16). El pasillo empieza y acaba donde las habitaciones (`ENTRADA` y `FINAL`, 0).
+`- `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano; `fijos` parte la fila de la pared en dos si la puerta está en esa pared; 18 nov: `repasar(sitio)`, al final de generar cada sala, quita el mueble que tape una puerta o deje un trozo de suelo sin salida y lo dice con «Muebles · en «X» se quitan por cortar el paso»; `--captura --muebles-paso [--semillas N]` lo mira en muchos edificios y dibuja los planos), `mueble.gd` (el armario, la mesilla, el escritorio y la librería se abren y a veces dan un material: `Objetos.MUEBLES_CON_PIEZA`; la nevera y la encimera de las cocinas, si ya vive alguien en los trasteros, la comida favorita de uno de ellos: `Objetos.MUEBLES_CON_COMIDA`, M124).
+`- **La comida favorita** (M124, 16 nov): cada superviviente tiene la suya (`"comida"` en `Supervivientes.DATOS`; los objetos, `Objetos.COMIDAS`: dónut, manzana, lata de judías, yogur, bocadillo, bebida energética, pizza, termo de café y ensalada). Sale de la nevera y la encimera (35 %, `COMIDA_MUEBLE`, solo la de los que ya viven en los trasteros: `comida_de_mueble`), va en la mochila y pasa al baúl como lo demás, pero no sale al azar ni cuenta para el logro de los objetos. En los trasteros (desde el 16 nov, sin el icono de su comida debajo del nombre), delante de él sale con el contorno amarillo de los muebles (`zona_usar.montar_animado`: una copia de su animación que solo pinta el borde) y se usa la E (`zona_usar.gd`; en el móvil, «Hablar»): desde el 17 nov abre con el juego parado una ventana como las de tutorial (`Tutorial.charla`) con lo que cuenta de su vida (`Supervivientes.VIDAS`, su comida entre asteriscos, que `vida_de` pinta en amarillo) y dos botones: «Seguir» y «Dar de comer» (`dar_de_comer`: su comida de la mochila o, si no, del baúl, y te acompaña), apagado si no la llevas, con una nota de dónde sale (`pedir_vecino`). Antes, sin ella, la pedía en blanco (`PIDE`, quitado). Acompaña **una partida**: al acabarla (`partida.terminar`) `acompanante` vuelve a `""`. Su tutorial, `comida` (al abrir la primera nevera con comida). Pruebas: `--captura --comida` y `--captura --charla` (el contorno y la ventana).
+`- **Cortinas de los probadores** (18 nov, el dueño; de GPT): en la tienda de ropa (pared alta), las puertas de los probadores son una cortina roja (`cortina` en `puerta_bano.gd`, la pone `mapa.poner_hojas`): dibujo entero de 32 × 61 (`cortina-probador`, cerrada, y `cortina-probador-abierta`, recogida a la izquierda; `tools/cortina_gpt.py`, de `assets/sources/ropa/cortina-*-gpt.webp`); al abrirse se desliza (`cortina_de_frente`). Se mira con `--puerta-dependienta`.
+`- **Espejos de los probadores** (18 nov, el dueño; de GPT): `espejoprobador` en `catalogo.gd` (36 × 50, `tools/muebles_gpt.py`, `assets/sources/ropa/espejo-probador-gpt.webp`), uno en la pared del fondo de cada probador, apoyado en el rodapié (11 píxeles del suelo) (`probadores-ropa`; con la entrada por arriba, la tienda inversa, sin espejos).
+`- **Puf de los probadores** (18 nov, el dueño; de GPT): `pufprobador` en `catalogo.gd` (18 × 20, `tools/muebles_gpt.py`, `assets/sources/ropa/puf-probador-gpt.webp`), blanco, en la esquina de arriba a la izquierda de cada probador (en la tienda inversa, la de abajo a la izquierda), aunque tape un poco el espejo.
+`- **Gancho de los probadores** (18 nov, el dueño; de GPT): `ganchoprobador` en `catalogo.gd` (10 × 16 de perfil, solo tiene dibujo de lado `mueble-ganchoprobador-lado`, con la placa a la izquierda: en la pared derecha sale en espejo; `tools/muebles_gpt.py`, `assets/sources/ropa/perchero-probador-gpt.webp`), colgado a media altura (20 píxeles transparentes debajo), dos en la pared derecha de cada probador (con 7 píxeles de aire a la izquierda del dibujo para que no se meta en el tabique).
+`- **Alfombrilla de los probadores** (18 nov, el dueño; de GPT): `alfombra-probador` (66 × 44, con las esquinas redondeadas, `tools/muebles_gpt.py`, `assets/sources/ropa/alfombra-probador-gpt.webp`), blanca; no es un mueble sino una pieza del suelo, pintada en `mapa.dibujar_fondo` delante del espejo de cada probador (a casilla y tres cuartos de la pared del fondo; en la tienda inversa, abajo).
+`- **Aseo de la tienda de ropa** (18 nov, el dueño): suelo y pared del vestuario de Johnny de la sala de mantenimiento (`"bano-ropa"` en `Mapa.ESTILO_TIENDA`, con un tercer dato opcional: el techo, `bano-b`).
+`- **Aseo de la tienda de ropa, muebles** (18 nov, el dueño): sin toalla ni balda (`Planta.colgados_bano` no pone nada en la tienda de ropa), con el armarito del botiquín, una taquilla azul arriba a la derecha (`taquillaropa`, copia de adorno de `taquilla.png`, la de las skins de Johnny: `mueble-taquillaropa.png`) y el lavabo y el váter en la pared de la derecha, encima de la puerta al almacén (`bano-ropa` en `catalogo.gd`; en la tienda inversa, la taquilla abajo).
+`- **Cambios del 18 nov (tienda de ropa):** el aseo lleva el lavabo y el váter en la pared de la izquierda y la taquilla arriba a la derecha, también en la tienda inversa; el puf de los probadores, arriba a la izquierda en las dos; y el almacén (`"almacen-ropa"` en `Mapa.ESTILO_TIENDA`) con el suelo de hormigón de los trasteros (`suelo-trastero`, sin su línea amarilla, que se pinta aparte) y la pared de chapa de su pasillo (`pared-trastero-pasillo`, techo `trastero`).
+`- **Más cambios al aseo de la tienda de ropa** (18 nov, el dueño): lavabo y váter más separados; el banco del vestuario de Johnny en vertical abajo a la derecha (`lockerbench` con su dibujo de lado, `mueble-lockerbench-lado.png`, de `tools/banco_vestuario_lado.py`: 14 × 44, choque de 88); y la puerta del aseo, en la tienda normal subida dos filas para quedar en el medio de lo que se ve (`Tienda.del_plano`; en la inversa, donde está en el plano). Ojo: en la tienda normal el aseo se ve con las 4 primeras filas ocupadas por la pared alta, así que las posiciones de los muebles de sus paredes laterales se cuentan desde el suelo y llegan hasta la fila 8.
+`- **Almacén de la tienda de ropa** (18 nov, el dueño): suelo de los trasteros sin la línea amarilla y pared de su pasillo; muebles de los trasteros (`almacen-ropa` en `catalogo.gd`): `storageshelf` en la pared de arriba (normal: cinco con la misma separación; inversa: dos a cada lado de la puerta), montones de `boxstack` abajo (normal: dos a cada lado de la puerta; inversa: cinco con la misma separación) y el `handtruck` de frente, algo separado de la pared derecha. **Ojo con la tienda normal:** la pared alta de la sala de venta tapa las 4 últimas filas de las salas de arriba (el aseo y el almacén se ven con 8 de sus 12 filas), así que lo que iría en su pared de abajo se pone a 8 filas (`"libre"`). `--tiendas-fijas` saca además `captura-fija-<tipo>-<lado>-almacen.png` y `...-abiertas.png`. La puerta del aseo va 3 filas más arriba que en el plano en la normal y 1 en la inversa (`Tienda.del_plano`).
+`- **Estanterías del almacén de la tienda de ropa, con ropa doblada** (18 nov, el dueño; de GPT): `ropashelf`, `ropashelf2`, `ropashelf3` y `ropashelf4` en `catalogo.gd` (la `storageshelf` de los trasteros con montones de ropa en las tres baldas de abajo, cuatro repartos distintos: `tools/ropa_estanterias.py`, de `assets/sources/ropa/montones-ropa-gpt.webp`, seis montones reducidos a 15 × 9).
+`- **Apocalipsis en la tienda de ropa** (18 nov, el dueño): ya no es `"limpia"`; `Tienda.TIPOS["ropa"]."destrozada"` (aseo, probadores y almacén) pone en esas salas solo la sangre de los pasillos de los pisos (`sangre-suelo-N` con sus salpicones: `mapa.manchas_de_las_salas`, `manchas_en_sala`, más charcos cuanto más grande la sala), sin papeles, cristales ni pintadas, y nada en las paredes; desde el 19 nov, también la sala de venta (`"tienda"`), con su suciedad del suelo y la sangre de las paredes.
+`- **Suciedad del suelo de la tienda de ropa** (18 nov, el dueño): sobre el suelo de las salas destrozadas, una capa transparente con las grietas, huecos, arañazos y manchas del suelo del pasillo del ascensor (`suciedad-suelo.png`, de `tools/suciedad_suelo.py`, sacada de `suelo-pasillo.png`; se pinta en `mapa.dibujar_fondo`).
+`- **Sangre en las paredes de la tienda de ropa** (18 nov, el dueño; GPT no dejó pedirla): `sangre-pared-1..12.png`, los charcos de `sangre-suelo-N` (los de los pasillos de los pisos) con regueros que chorrean (`tools/sangre_pared.py`), puestos en las caras de las paredes de las salas destrozadas (`mapa.sangre_de_pared`, desde `poner_caras`).
+`- **Puertas metálicas de la tienda de ropa** (18 nov, el dueño): la del aseo, la metálica de la sala de mantenimiento (`METAL`); la del almacén (a la sala de venta), la de los trasteros de las viviendas pero en gris acero (`TRASTERO_METALIZADA`: `puerta-trastero-metal.png` y `-abierta`, de `tools/trastero_metal.py`). `puerta_bano.metalizada` las marca (marco de acero); las pone `mapa.poner_hojas`.
+`- **Sala de venta de la tienda de ropa** (18 nov, el dueño; GPT, ropa de los años 90): 15 muebles a **escala 1** (`"escala": 1.0` en `catalogo.gd`, que lee `mueble.gd`: el doble de detalle, como la dependienta; `tools/venta_ropa_gpt.py`, de `assets/sources/ropa/venta-*-gpt.webp`): de pared `ropamodulo`, `ropabarra`, `ropazapatos`, `ropavitrina`, `ropaoval`; de suelo `ropaperchero1`/`2`, `roparuedas`, `ropamesa`, `ropatarimas`, los maniquíes `ropamaniqui1..4` y la caja `ropamostrador` (vista desde el lado del cliente). Puestos todos con `"libre"` (`tienda-ropa` en `catalogo.gd`). **Ojo con las filas:** en la normal la fila 0 es el suelo del entrante de los probadores y la pared de la izquierda tiene la base en la fila 4 (la pared alta tapa las salas de arriba, no la sala de venta); en la inversa, la fila 0 es la base de la pared de arriba. Desde el 19 nov la inversa lleva los mismos 14 que la normal, uno de cada y sin la vitrina: los de suelo en espejo (la fila, 17 menos la de la normal) y los de pared contra la pared de la entrada, a sus lados. **Destrozados** (19 nov, el dueño, GPT): los 15 salen rotos, de `venta-<id>-destrozado-gpt` (las limpias se guardan); los altos de `tools/venta_ropa_gpt.py`, para que midan lo mismo que los limpios. GPT ya los hizo en dorado menos el zapatero (`a_dorado_zapatero_roto`, una máscara a mano de postes y baldas) y el marco plateado de la vitrina (`a_dorado_vitrina`: todo menos lo de dentro del cristal).
+`- **Suelo y pared destrozados de la tienda de ropa** (19 nov, el dueño; GPT): tres suelos y tres paredes (`tools/ropa_gpt.py`, de `assets/sources/suelos/ropa-suelo-destrozado<N>-gpt.webp` y `ropa-pared-destrozada<N>-gpt.webp` → `suelo-ropa-d<N>`, `pared-ropa-d<N>`; los suelos, igualados de color) que en la sala de venta y los probadores destrozados se **mezclan a trozos** (`MEZCLA_TIENDA` en `mapa.gd`, con su peso: el suelo quemado y la pared del boquete, menos): cada trozo de suelo de 128 píxeles (`mapa.pintar_suelo`) y cada tramo de pared del ancho de su dibujo (`cara_pared.gd`, `paredes`) sale de uno, **siempre el mismo en el mismo sitio** (`CARA.elegir`, sin azar). El suelo y la pared limpios (`suelo-ropa`, `pared-ropa`) se quedan para las salas sin destrozar.
+`- **Puf y alfombrilla de los probadores, destrozados** (19 nov, el dueño; GPT, ya en beige y la alfombrilla ya redondeada): `puf-probador-destrozado-gpt.webp` y `alfombra-probador-destrozada-gpt.webp` (`tools/muebles_gpt.py`, que con ellos no tiñe ni redondea; la alfombrilla se recorta por su contorno, `RECORTE`, sin los flecos de fuera, para que mida lo mismo, 66 × 44). Las limpias se guardan.
+`- **Almacén de la tienda de ropa, destrozado** (19 nov, el dueño; GPT): las cuatro estanterías con ropa (`estanteria<N>-destrozada-gpt.webp`) y los montones de cajas (`cajas-destrozadas-gpt.webp` y `cajas-destrozadas<N>-gpt.webp`: cinco, cada uno destrozado de otra forma, `cajasropa` a `cajasropa5`, uno distinto en cada sitio) salen de `tools/muebles_gpt.py` (`ropashelf`…, `cajasropa`; `tools/ropa_estanterias.py` ya no se pasa); y tres suelos de hormigón y tres paredes de tablas (`assets/sources/suelos/almacen-ropa-*-destrozad*-gpt.webp` → `suelo-almacen-ropa-d<N>` de 128 y `pared-almacen-ropa-d<N>` de 48 × 48, en `tools/ropa_gpt.py`) mezclados como los de la sala de venta (`"almacen-ropa"` en `MEZCLA_TIENDA`). Los trasteros de los Apartamentos siguen con lo suyo. La carretilla, también destrozada (`carretilla-destrozada-gpt.webp` → `carretillaropa`, del tamaño de la `handtruck`, que sigue en el pasillo de los trasteros de las viviendas).
+`- **Aseo de la tienda de ropa, destrozado** (19 nov, el dueño; GPT): la taquilla, el lavabo, el váter y el banco (de frente y «en vertical») del vestuario de Johnny, destrozados, en `tools/muebles_gpt.py` (`taquilla_ropa`, `lavabo_ropa`, `vater_ropa`, `banco_ropa`, `banco_ropa_lado`), con tipos propios en `catalogo.gd` (`taquillaropa`, `staffsinkropa`, `stafftoiletropa`, `lockerbenchropa`) para que el vestuario de la sala de mantenimiento y los baños de los pisos sigan igual; y tres suelos de baldosa y tres paredes de azulejo (`assets/sources/suelos/aseo-ropa-*-gpt.webp` → `suelo-aseo-ropa-d<N>` y `pared-aseo-ropa-d<N>`, en `tools/ropa_gpt.py`) mezclados igual (`"bano-ropa"` en `MEZCLA_TIENDA`). A estos se les iguala el color de fondo, del todo en los bordes, para que los trozos no se vean como cuadrados distintos.
+`- **Puertas y cortinas de la tienda de ropa, destrozadas** (19 nov, el dueño; GPT), con la misma forma y tamaño que las de antes: las cortinas de los probadores (`tools/cortina_gpt.py`, de `cortina-*-destrozada-gpt.webp`, ya en beige: sin `a_beige`; tres, rotas cada una de otra forma, `cortina-probador`, `-probador2` y `-probador3` con su `-abierta`: `CORTINAS` y `CORTINAS_ABIERTAS` en `puerta_bano.gd`, y cada probador lleva siempre la suya por orden, `cortina_n`, que pone `mapa.poner_hojas`; lo recogido de cada una, `CORTINA_RECOGIDA`), la entrada vista desde dentro (`tools/puerta_abajo_ropa.py`, de `puerta-entrada-arriba-destrozada-gpt.webp`, la hoja de 11 de alto como la de antes); en la inversa, la entrada de la pared de arriba es la de la fachada destrozada, de frente (`puerta-ropa-destrozada.png`, `tools/muebles_gpt.py` `puerta_ropa_destrozada`; `puerta.gd` `RESTAURANTE_ROPA`, con `puerta.tienda`); desde la galería sigue limpia y las metálicas (`tools/puertas_ropa_destrozadas.py`: cada columna del dibujo viejo toma su columna de la imagen de GPT y se reduce mezclando colores, con el contorno, la línea oscura y la sombra del suelo de antes): la del aseo, `METAL_ROPA` (`puerta-aseo-ropa-lado-cerrada` y `-abierta-lado`), y la del almacén, `TRASTERO_METALIZADA` (`puerta-almacen-ropa` y `-abierta`; de lado, las del aseo). La metálica de la sala de mantenimiento (`METAL`) sigue igual.
+`- **Muebles que se abren en la tienda de ropa** (19 nov, el dueño): todos los de la sala de venta menos los maniquíes, la taquilla del aseo y las estanterías y cajas del almacén van en `Objetos.MUEBLES_CON_PIEZA` (se abren una vez, con su contorno amarillo, y a veces sueltan un material). Las cajas del almacén son `cajasropa` (el mismo dibujo que `boxstack`, `mueble-cajasropa.png`), para que las de los trasteros de las viviendas sigan sin abrirse. `--tiendas-fijas` dice cuántos se abren y saca `captura-fija-<tipo>-<lado>-abrir.png` y `...-abierto.png` (Johnny abriendo la caja).
+`- **Puerta de entrada de la tienda de ropa, desde dentro** (19 nov, el dueño; de GPT): en la tienda normal, la del muro de abajo es la puerta doble de cristal negro de su fachada vista desde arriba (`puerta-abajo-ropa.png`, 72 × 64 al doble de detalle, de `tools/puerta_abajo_ropa.py` y `assets/sources/ropa/puerta-entrada-arriba-gpt.webp`; `puerta.gd` `ABAJO_ROPA`, con `puerta.tienda`, que pone `mapa.gd`). `--tiendas-fijas` saca `captura-fija-<tipo>-<lado>-entrada.png` (Johnny delante, sin marcador ni minimapa).
+`- `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
+`  mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
+`  los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Johnny las cierra a mano
+`  como se usa el baúl (`zona_usar.gd`, con «Cerrar» en el móvil; `cerrar`, `poner_uso`): no si hay alguien en el hueco
+`  (tiembla), y cerrada a mano no se reabre sola hasta que Johnny y los suyos se van de delante (`espera`), salvo para un acompañante que se ha quedado pegado a ella por el lado contrario al de Johnny, que la abre él (`atrancado`, `lado_de`; `--puerta-aliado`, 11 nov); usándola
+`  otra vez se abre (`-- --captura --puertas`). Cerradas paran la luz,
+`  las balas, la vista de los zombis y la niebla. Y las cerradas con llave (su hueco lleva `cerrada`): el baño del
+`  superviviente, las viviendas sin rescatar y la cámara acorazada de la joyería (`acero`). Las viviendas de los ya
+`  rescatados llevan la suya abierta del todo (`libre` y `abierta` desde el principio: no choca ni tapa la luz; la
+`  pone `mapa.poner_viviendas`). Llenan el hueco: de frente,
+`  con su marco y, encima, el dintel (un trozo de `cara_pared.gd` con `desde`, que pone `mapa.poner_caras`); de lado,
+`  sobre su umbral. De frente, abierta del todo es un dibujo de PixelLab (`puerta-bano-abierta.png`, la puerta casi de
+`  canto con su canto, su pomo y su sombra; la hace `tools/puerta_abierta.py`: guía con nuestra puerta, PixelLab,
+`  recolor al marrón de la cerrada); mientras gira, se tuerce por código a 63 grados (`GIRO`). La de lado (tabiques
+`  verticales; `hoja_de_lado`) cerrada es `puerta-bano-lado-cerrada.png`, un tablón de madera fino con su pomo de latón
+`  que sobresale por los dos lados (16 × 32, dibujado en `py tools/puerta_lado_cerrada.py` con la madera y el pomo de la
+`  puerta de frente: a 5 píxeles de ancho PixelLab no puede dibujar nada); al abrirse gira la puerta de verdad hacia la habitación de
+`  la derecha y abierta del todo (153 grados, `GIRO_LADO`) es `puerta-bano-abierta-lado.png`: de pie junto a la pared, con
+`  la bisagra arriba del hueco (`py tools/puerta_abierta.py guia lado`). La blindada de acero y la del almacén con
+`  tablas siguen con la hoja vista desde arriba. Dentro de una abierta (`zombi.en_puerta`, en su `arrimo`) los zombis pasan
+`  apretados: sin esquivarse ni chocar entre ellos (`zombi.pedir_velocidad`), y el venenoso y el de tentáculos no se
+`  plantan ahí a atacar, para no taponarla. Se prueba con `--puertas` y, con un grupo de cada tipo, `--atasco-puertas`.
+`- `puerta.gd` (las salidas) y `cartel_salida.gd`: las de la pared de arriba se ven de frente; las de la de abajo, que se ve por detrás,
+`  son el hueco en el muro con la hoja vista desde arriba (`puerta-abajo.png`). La salida de incendios es la puerta de las escaleras, al fondo del
+`  pasillo, en el muro de la derecha. Se abre cuando cae el jefe de la planta (`jefa_muerta` en `partida.gd`, que llama a
+`  `actualizar_puertas`). Vista desde arriba, es una hoja de chapa roja fina metida en el hueco, con su barra antipánico
+`  de aluminio sobresaliendo hacia el pasillo y las escaleras detrás (`puerta-salida.png`, 36 × 36). Encima, en la pared de
+`  arriba, un cartel EXIT (`cartel-salida-apagado.png` / `-encendido.png`, 36 × 13) que `mapa.gd` crea junto a la puerta y
+`  que la puerta enciende (`abierta`): apagado es verde oscuro y sin luz; al caer el jefe arranca con unos parpadeos y se
+`  queda verde vivo, sin que le afecte la penumbra, con halo y una luz verde de verdad (la de `lampara.gd`); si Johnny
+`  vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
+`  no dibuja). Se prueba con `--salida`.
+`- `cara_pared.gd`, `neon.gd` (el letrero de neón de las tiendas y el rótulo iluminado de los departamentos de la torre), `ventanal.gd` (el ventanal con la ciudad de noche del pasillo de la torre); `tele_salon.gd` (M91: la tele de un salón que enseña las noticias, ver abajo), `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`, `zona_usar.gd` (la zona de delante de esos muebles: con Johnny en ella, se abren con la acción `usar` (E, B en el mando, el botón del móvil; desde el 13 nov atacar solo ataca, también delante de ellos); `johnny.ante_mueble` dice delante de cuál está; `--armarito-clic`),
+`  `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo, y encima
+`  del banco, el baúl y la puerta de los trasteros mientras no se haya visto su tutorial; se
+`  pone con una `condicion` y se mira cada segundo; su dibujo, de GPT, `assets/sprites/exclamacion.png`, y el pequeño de los
+`  iconos del escritorio y de Logros, `assets/ui/exclamacion-pequena.png`, los dos de `tools/muebles_gpt.py`)
+`  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `terminal.gd` (los ordenadores con
+`  las tres cifras del código de la sala del jefe en Torre Velaria: `Planta.codigo` y `partida.poner_terminales`).
+`
+`**luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny y su linterna de pecho: el cono del suelo, el foco en el pecho y el rayo tenue entre los dos; fogonazos; prueba `--captura --linterna`), `lampara.gd`, `fuego.gd`.
+`
+`**pruebas/**: lo que solo se usa con `--captura`.
+`- `captura.gd` (clase `Captura`): `activa()`, `dato("--jefe", "antidisturbios")` y `foto("captura-x.png")` (la guarda en `capturas/`, que lleva un `.gdignore` para que Godot no la importe).
+`  Y el seguro de las pruebas: el menú pasa a la partida con `Captura.ir_a_la_partida()`, que antes de abrir la de prueba
+`  mira que compile (si no, `diagnosticar()` carga uno a uno los archivos de `scripts/pruebas/` para que cada uno cuente su
+`  error y su línea) y, si no, cierra con el código 2; y `vigilar()` (puesto por el menú con `--captura`, salvo en el trailer)
+`  cierra con el código 1 al primer error de script a mitad de una prueba, y con su reloj, si la prueba se cuelga sin error
+`  (150 s; la larga, 900; `--limite N` lo cambia), diciendo si el juego estaba en pausa (una página del dosier o el relato
+`  paran los `create_timer(s, false)`: en la prueba, esperar ahí con `create_timer(s, true)`). En los dos casos dice
+`  `ERROR DE LA PRUEBA: …` en la terminal: nunca más una prueba en negro que no acaba.
+`- La partida de prueba va en una cadena de archivos por tema, cada uno hereda del anterior: `prueba_comun.gd` (hereda
+`  de `partida.gd`) → `prueba_jefes_salas.gd` → `prueba_jefes.gd` → `prueba_armas.gd` → `prueba_skins.gd` →
+`  `prueba_inventario.gd` → `prueba_fotos.gd` → `prueba_sitios.gd` → `prueba_reglas.gd` → `prueba_larga.gd` →
+`  `trailer.gd` → `prueba_bot.gd` → `partida_prueba.gd`, el último, que los tiene todos. Al principio de `partida_prueba.gd` está la lista de opciones
+`  (`--jefe`, `--armas`, `--inventario`...) con el archivo de cada una.
+`- **El jugador automático (el bot, `docs/BOT.md`):** `bot.gd` es su cerebro (un nodo que pulsa los botones de andar
+`  y apunta y ataca con Johnny en el modo `"quieto"`; ve los avisos de los jefes, `aviso.gd`, las balas, lo que lanzan, los
+`  charcos y los peligros del suelo, y juega a tres niveles: `NIVELES`); `prueba_bot.gd` (en la cadena) lo pone a pelear
+`  con cada jefe (`--bot-jefes`), a jugar partidas enteras (`--bot-partida`) o carreras de partidas seguidas con su propio
+`  guardado, comprando en el ordenador y sacando del baúl (`--bot-carrera`), y lo apunta todo en `capturas/bot/`;
+`  `py tools/bot.py` lo lanza y hace los resúmenes. Sin pantalla (`--headless`), `Captura.foto` no hace nada.
+`- `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
+`  edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
+`- `prueba_aviso.gd` (`PruebaAviso`, fuera de la cadena: la lanza el menú con `--aviso`): el aviso de fotosensibilidad sale,
+`  no se quita sin querer ni pulsa el botón de detrás, se quita pasado el rato y no vuelve a salir.
+`- `prueba_grunido.gd` (`PruebaGrunido`, fuera de la cadena: la lanza el menú con `--grunido`): el gruñido suena al pulsar
+`  JUGAR y no con otro botón, no se amontona y no va en bucle.
+`- `prueba_huecos.gd` (`PruebaHuecos`, fuera de la cadena: la lanza el menú con `--huecos`): con sus propios archivos,
+`  el guardado viejo pasa al hueco 1, cambiar de hueco no cambia los ajustes, la pantalla «Elige partida» y borrar un hueco.
+`- `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú
+`  principal (JUGAR, «Elige edificio», Opciones, Tutorial) y los botones de mando de mentira que usa también
+`  `probar_mando()` de `prueba_varias.gd` (la pausa, Opciones, un tutorial, el inventario, la taquilla, el ordenador, una
+`  página, el panel de pruebas y el cartel del final). También `mando_web` (`--mandoweb`, la lanza `partida_prueba.gd`, solo
+`  en la web): enchufa desde el navegador un mando de mentira sin orden estándar y otro con él, y mira que el L2 lance sin
+`  abrir la pausa (M73).
+`
+`## assets/
+`
+`- `sprites/`: las hojas (`.png` + `.json`) y sus animaciones (`.tres`). Hoja nueva →
+`  `py tools/hacer_frames.py assets/sprites/<nombre>`.
+`- `musica/`: «Sin luz» (el menú principal, de terror desde el 11 nov: solo `sin-luz-base.ogg`), «Turno de noche» (las hordas:
+`  `turno-de-noche-base.ogg` y `-melodia.ogg`), «Jefe de planta» (los jefes: `-base.ogg` y `-intensa.ogg`) y las de
+`  explorar cada edificio: «Planta por planta» (Apartamentos), «Últimas rebajas» (Centro comercial) y «Junta de
+`  accionistas» (Torre Velaria), con `-base.ogg` y `-ritmo.ogg`. Épicas menos la de las hordas y la del menú; las capas
+`  que suenan a la vez (`CANCIONES`, `MOMENTOS` y `EXPLORAR` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
+`  (ver `docs/WEB.md`).
+`- `sonidos/`: el gruñido de zombi del botón JUGAR (`grunido.ogg`, de PixelLab, ver
+`  `pixellab.json` «grunidos-botones»; los demás efectos se sintetizan en `sonido.gd`).
+`- `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
+`  25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`; y `rubik.ttf`, la letra lisa que eligió el dueño el 11 nov 2026,
+`  la de los tutoriales y el aviso de fotosensibilidad, con su chino `noto-sans-sc-recortada.woff2` (`tools/recortar_noto_sc.py`); ver
+`  `docs/IDIOMAS.md`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
+`- `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab (no va en el juego exportado: solo lo
+`  usan las herramientas).
+`- Los dibujos se importan **sin relleno en lo transparente** (`fix_alpha_border=false`, también por defecto para los nuevos, en
+`  `[importer_defaults]` de `project.godot`) y con la compresión WebP sin pérdida al máximo (`rendering/textures/webp_compression`):
+`  se ven idénticos y pesan un tercio menos (M47, ver «Lo que pesa la web» en `docs/WEB.md`).
+`- `web/carga.html`: la página de la web, con su pantalla de carga (ver `docs/WEB.md`).
+`
+`## tools/
+`
+`- **Los mensajes de los jugadores:** `mensajes.py` lista los de «Contáctanos» (nuevos y analizados) y los marca (`docs/MENSAJES.md`).
+`- **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
+`- **El bot:** `bot.py` lanza al jugador automático (contra los jefes, partidas enteras o carreras) y hace los resúmenes
+`  (ver `docs/BOT.md`).
+`- **Lo dibujado en otro idioma:** `cartel_planta_idiomas.py` hace los carteles de planta con la palabra de cada idioma («FLOOR»,
+`  «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`).
+`- **El número de la planta, gastado:** los carteles limpios están en `assets/sources/cartel/limpios/` (ahí escriben `guias_cartel.py sprites`
+`  y `cartel_planta_idiomas.py`) y `cartel_roto.py` saca de ellos los del juego (`assets/sprites/cartel-planta-*.png`), con la pintura
+`  pelada, un desconchón y grietas. Si se toca un cartel, hay que pasarlo otra vez; la palabra se protege para que se lea.
+`- **Las puertas sucias:** `puertas_sucias.py` saca de cada puerta de madera limpia su copia `-sucia.png`, con mugre, arañazos, huellas de
+`  manos y sangre (lo que lleva cada una, a mano en `RECETAS`). Las de piso y las de dentro de frente son tres dibujos, para que no sean todas
+`  iguales. Las limpias se quedan para las zonas seguras (`ZONAS_SEGURAS` en `mapa.gd`). Si se regenera una puerta, hay que pasarlo otra vez.
+`- **Los iconos del escritorio de otro color:** `colorear_iconos.py` pone cada flecha de `escritorio-talentos.png` del color de su
+`  rama (Militar, Superviviente y Químico, de izquierda a derecha), la mirilla de `escritorio-armas.png` de metal (gris acero), la copa de `escritorio-logros.png` dorada, la carpeta de `escritorio-dosier.png` en marrón, el «play» de `escritorio-videos.png` en azul, el rojo de `escritorio-apagar.png` más oscuro y el cuaderno de `escritorio-colecciones.png` (Sujetos) y la interrogación de los sujetos sin ver (`assets/ui/interrogacion.png`) casi negros. `muebles_gpt.py`
+`  los saca amarillos: si se regeneran, hay que pasarlo otra vez (lo ya coloreado no lo vuelve a tocar: lo apunta dentro del PNG).
+`- **La puerta de la pared de abajo:** `puerta_abajo.py` hace `puerta-abajo.png`, el hueco en el muro con su marco y la hoja vista desde arriba
+`  (esa pared se ve por detrás), en tres modelos: madera sucia, madera limpia y cristal del centro comercial; la pinta `puerta.gd`.
+`- **La puerta automática del supermercado** (17 nov; la primera fachada propia de una tienda: se rehacen de una en una): de
+`  GPT (`assets/sources/puerta-super-gpt.webp`, 64x40 con `muebles_gpt.py puerta_super`), partida por `puerta_super.py` en el
+`  marco (caja del motor, cristales fijos, carril) y las dos hojas del medio. `puerta.gd` (`es_super`, `puerta_super`) pinta el
+`  oscuro de dentro, las hojas corridas y el marco encima: al acercarse Johnny (su sensor, una zona grande delante) se abren si
+`  la tienda no está cerrada con llave (con llave, la lucecita del sensor en rojo). Sus escaparates van más separados
+`  (`Planta.escaparate_a`) y son distintos, también de GPT (`muebles_gpt.py escaparate_super escaparate_super_derecha`):
+`  bebidas a la izquierda y comida a la derecha (una tienda con `escaparate-<tipo>-derecha.png` lo usa a la derecha de su
+`  puerta: `mapa.poner_escaparates`). Y su letrero, en vez del neón: «SUPERMARKET» en letras corpóreas azul marino (de GPT,
+`  `muebles_gpt.py letrero_super`), en inglés para todos los idiomas, como una marca (el dueño, 17 nov), con su resplandor azul
+`  por detrás (`letrero_halo.py`), fijo salvo unos 6 apagones por minuto (su lámpara con `tramo` 7 s en vez de 3,5:
+`  `lampara.gd`), en los que las letras se oscurecen y saltan chispas de la E caída, que también chisporrotea sola cada pocos
+`  segundos (`neon.gd`, `LETREROS`, `CHISPAS_EN`, `chispazo`; suena «chispa» si Johnny está cerca). Prueba:
+`  `--captura --edificio centro --puerta-super` (con fotos seguidas de las chispas y una del apagón). Desde el 17 nov la
+`  puerta automática no es solo del súper: `Planta.PUERTA_AUTOMATICA` (supermercado, farmacia) dice qué tiendas la llevan (la
+`  misma imagen; `puerta.gd es_super` y `Planta.escaparate_a`, que separa sus escaparates); para pasar otra tienda, añadirla
+`  ahí. Se prueba con `--puerta-super farmacia` (la tienda, detrás; sin letrero con chispas, esa parte se salta).
+`- **Los escaparates de la farmacia, con neones dentro** (17 nov, el dueño): a cada lado de su puerta, un escaparate vacío como el
+`  del súper pero más estrecho (de GPT, `muebles_gpt.py escaparate_farmacia`), con un neón colgado dentro, por detrás del cristal:
+`  la cruz verde de LEDs a la izquierda y la botella de tubo con su cruz a la derecha (de GPT, `assets/sources/centro/neon-farmacia-<nombre>-gpt.webp`,
+`  reducidas «como los muebles» por `py tools/neones_galeria.py farmacia-cruz farmacia-botella`, a 28 y 27 de alto para caber en el
+`  cristal: la cruz, a 28, con los LEDs regulares; es una chapa entera y apagada enseña los LEDs muertos). `escaparate_farmacia.py`
+`  parte el escaparate en el fondo (marco y cristal oscuro liso, debajo del neón) y los reflejos (encima), para que el neón se vea
+`  detrás del cristal. Los neones los pinta `neon_galeria.gd` (sin su halo, para no salirse del cristal); fallan menos que los de la
+`  pared (`tramo` 7), sin chispas (detrás del cristal no saldrían, el dueño). Qué tienda lleva neones y cuáles:
+`  `mapa.ESCAPARATES_NEON` (`poner_escaparates`). Las chispas de los letreros salen de `chispas_neon.gd`.
+`- **El letrero de la farmacia** (17 nov, el dueño): «PHARMACY» en tubos de neón verdes, de GPT
+`  (`assets/sources/centro/letrero-farmacia-gpt.webp`), en inglés como el del súper, con la Y suelta y torcida. Se reduce con
+`  `py tools/neones_galeria.py letrero-farmacia` (sale `letrero-farmacia.png` y, apagado, `letrero-farmacia-apagado.png`, 90x19) y
+`  su resplandor con `py tools/letrero_halo.py farmacia`. `neon.gd` lo trata como los letreros dibujados (`LETREROS`), pero al
+`  fallar la luz se ven los tubos de cristal sin luz (`tubos_apagados`); las chispas saltan de la punta rota de la Y (`CHISPAS_EN`). Prueba: `--puerta-super farmacia` (fotos `captura-puerta-super-neones*`).
+`- **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
+`  cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
+`  `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`
+`  (`FERRETERIA`) en la pared de arriba de la galería para la tienda `ferreteria`. De momento fija (no se abre sola). Prueba: `--puerta-super ferreteria`
+`  (si no sale en las 4 plantas de siempre, prueba otras semillas).
+`- **Los escaparates de la ferretería** (17 nov, el dueño): el escaparate vacío de la farmacia (`escaparate_farmacia.py ferreteria` saca
+`  `escaparate-ferreteria-fondo/cristal.png`), con la verja por delante de todo (`verja-escaparate.png`, de GPT, `muebles_gpt.py verja`). A la
+`  izquierda de la puerta, un panel de herramientas colgadas (dibujo fijo, `panel-herramientas.png`, `muebles_gpt.py panel_herramientas`);
+`  a la derecha, un neón de llave, destornillador y martillo (`neones_galeria.py ferreteria-herramientas`), sin verja (no se apreciaba). Capas, de abajo arriba: fondo,
+`  herramientas, reflejos del cristal y verja (`mapa.ESCAPARATES_NEON`; un color transparente = dibujo fijo, sin parpadeo).
+`- **El letrero de la ferretería** (17 nov, el dueño): «HARDWARE» en tubos de neón azul claro, de GPT
+`  (`assets/sources/centro/letrero-ferreteria-gpt.webp`, solo las letras), en inglés como los demás. `py tools/neones_galeria.py letrero-ferreteria`
+`  (sale `letrero-ferreteria.png`, 91x18, y el apagado) y `py tools/letrero_halo.py ferreteria`; en `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas
+`  saltan de la esquina de abajo de la última E). Prueba: `--puerta-super ferreteria`.
+`- **El aseo y el almacén de la ferretería** (20 nov, el dueño): iguales que los de la tienda de ropa. La tienda, de 50 × 30 como la de ropa: arriba,
+`  el aseo (7 × 12), el almacén (17 × 12, con sus puertas en los mismos sitios que en la ropa) y el taller (20 × 12, con su puerta en medio), pared con pared
+`  (sin el trozo de sala de venta que subía entre el almacén y el taller); abajo, la sala de venta (46 × 13). La sala de venta y el
+`  taller, sin muebles de momento (`tienda-ferreteria` y `taller-ferreteria` vacíos). Su suelo y pared destrozados
+`  (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-ferreteria" y "almacen-ferreteria"), la suciedad y la sangre (`Tienda.TIPOS`
+`  "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo gris), sus muebles (los de
+`  `bano-ropa` y `almacen-ropa`), sus puertas metálicas y sin toalla ni balda. El plano de antes, `ferreteria-antigua`, para
+`  Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. Los paneles de la
+`  pared de la sala de venta (23 nov, el dueño): uno distinto en cada hueco, a escala 1 (136x86), del rodapié a la moldura; los huecos,
+`  en `mapa.gd` (`PANELES_TIENDA`: 9 con la puerta abajo, 3 + 4 + 2 entre las puertas del almacén y del taller, y 10 con la puerta
+`  arriba, 5 + 5 a los lados de la entrada; "" es un hueco aún sin panel) y se pintan en la cara del muro (`paneles_de_pared`, con
+`  "mitad" en `cara_pared.gd`). Cada panel, un panel
+`  perforado vacío de GPT con una herramienta de GPT colgada varias veces (ganchos, sombra, etiqueta naranja, huecos vacíos, alguna
+`  torcida y sangre por encima), montado a tamaño de GPT y reducido mezclando colores: `py tools/paneles_ferreteria.py [nombre]` (en su
+`  lista `PANELES`, cada uno con sus `huecos` y su `sangre`) saca `panel-<nombre>.png`. Hechos: `martillos` (panel gris,
+`  `panel-vacio-gpt.webp`, y `martillo-gpt.webp`, con la cabeza oscurecida para que destaque) y `alicates` (panel azul con tres tiros,
+`  `panel-vacio-azul-gpt.webp`, recortado por el marco, y `alicates-gpt.webp`, de un gancho entre los mangos), juntos en medio de la
+`  pared, y \`llaves\` (panel gris con remaches, \`panel-vacio-remaches-gpt.webp\`, y \`llave-inglesa-gpt.webp\`, algo oscurecida y
+`  boca abajo, de un gancho metido en el agujero del mango), en el trozo de la izquierda. (El de llaves inglesas, de GPT entero, se borró: está en git.)
+`  El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
+`  `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
+`  (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
+`  misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen). Del 20 al 23 nov la pared fue toda de paneles perforados de chapa gris oscura;
+`  ahora vuelve a ser la blanca, con un panel de herramientas en cada hueco (abajo).
+`  Mientras se rehace, `Tienda.TIPOS` "despejadas" (`mapa.despejada`): sin nada por el
+`  suelo (restos, charcos ni la capa de suciedad) de la sala de venta y del taller, ni en las paredes de la sala de venta, del almacén y del taller.
+`- **La puerta de la tienda de electrónica** (17 nov, el dueño): la misma puerta de cristal de la ferretería, algo más pequeña (28x43 → 28x40, con
+`  su cartel «OPEN» pequeño: `muebles_gpt.py puerta_electronica cartel_open_pequeno` y `puerta_ferreteria.py electronica`), dentro de un marco de
+`  neón rosa y cian abierto por abajo (de GPT, `assets/sources/centro/marco-electronica-gpt.webp`; `neones_galeria.py electronica-marco`, 44x47, con
+`  un ancho fijo `ANCHOS`). `puerta.gd` lo pone de hijo (`NEON_MARCO`, `neon_galeria.gd`): falla de vez en cuando, sin halo. Fija, no se abre sola.
+`- **Los escaparates de la tienda de electrónica** (17 nov, el dueño): como los de la farmacia (`escaparate_farmacia.py electronica`, el mismo marco
+`  vacío), con un neón de GPT dentro, detrás del cristal: el ordenador rosa a la izquierda y el mando de consola (azul lavanda, con el anillo verde, la
+`  barra amarilla y la cruceta rosa) a la derecha. `neones_galeria.py electronica-ordenador electronica-mando`; `mapa.ESCAPARATES_NEON`.
+`- **El letrero de la tienda de electrónica** (17 nov, el dueño): «ELECTRONICS» en tubos de neón rosa de un solo trazo, con una línea azul debajo (de GPT,
+`  `assets/sources/centro/letrero-electronica-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-electronica` (97x19, y el apagado) y
+`  `py tools/letrero_halo.py electronica`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea azul).
+`- **La puerta del restaurante** (17 nov, el dueño): doble, de cristal sin marco, con pinzas de acero en las esquinas y dos barras largas en el medio (de GPT,
+`  `assets/sources/centro/puerta-restaurante-gpt.webp`; `muebles_gpt.py puerta_restaurante`, 36x43; `puerta.gd`, `RESTAURANTE`). Fija, no se abre sola. La tienda de ropa lleva la misma (17 nov, el dueño).
+`- **Los escaparates del restaurante** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py restaurante`) con un neón de GPT dentro, detrás
+`  del cristal: una hamburguesa (pan amarillo, lechuga verde, carne roja) a la izquierda y un trozo de pizza a la derecha (`neones_galeria.py
+`  restaurante-hamburguesa restaurante-pizza`; `mapa.ESCAPARATES_NEON`).
+`- **El letrero del restaurante** (17 nov, el dueño): «RESTAURANT» en tubos de neón rosa de un solo trazo, con una línea azul arriba y otra abajo (de GPT,
+`  `assets/sources/centro/letrero-restaurante-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-restaurante` (86x20, y el apagado) y
+`  `py tools/letrero_halo.py restaurante`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea de abajo).
+`- **Los escaparates de la tienda de ropa** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py ropa`) con un neón de GPT dentro, detrás
+`  del cristal: las compras (bolsa, caja, bolso y zapato de tacón) a la izquierda y la etiqueta «SALE» inclinada a la derecha (`neones_galeria.py ropa-compras
+`  ropa-sale`; `mapa.ESCAPARATES_NEON`). Sustituyen al maniquí con sangre.
+`- **El letrero de la tienda de ropa** (17 nov, el dueño): «Fashion» (F mayúscula) en tubos de neón azul-cian de un solo trazo, con una línea rosa debajo (de GPT,
+`  `assets/sources/centro/letrero-ropa-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-ropa` (66x21, y el apagado) y
+`  `py tools/letrero_halo.py ropa`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan de la punta derecha de la línea rosa).
+`- **La puerta de la joyería** (17 nov, el dueño): doble, de acero inoxidable pulido, con una ventana alta de cristal en cada hoja, dos barras largas en el medio, el
+`  cilindro de la cerradura y la caja del cierrapuertas arriba (de GPT, `assets/sources/centro/puerta-joyeria-gpt.webp`; `muebles_gpt.py puerta_joyeria`, 34x43;
+`  `puerta.gd`, `JOYERIA`). Fija. Para probarla, `--puerta-super joyeria` le pone la joyería a la planta (no la sortea nadie: `Planta.joyeria_planta`).
+`- **Los escaparates de la joyería** (17 nov, el dueño): el marco vacío de la farmacia (`escaparate_farmacia.py joyeria`) con un neón de GPT dentro, detrás del
+`  cristal: el diamante en neón blanco a la izquierda y los lingotes en amarillo dorado a la derecha (`neones_galeria.py joyeria-diamante joyeria-lingotes`;
+`  `mapa.ESCAPARATES_NEON`). GPT hizo los lingotes en blanco: `neones_galeria.py` los pinta de dorado (`RECOLOREAR`: el color del borde del tubo y el de su
+`  centro), así que otro neón que salga del color equivocado se puede arreglar igual, sin pedirlo otra vez.
+`- **El letrero de la joyería** (17 nov, el dueño): «JEWELRY» en tubos de neón amarillo dorado de un solo trazo (de GPT,
+`  `assets/sources/centro/letrero-joyeria-gpt.webp`), en inglés como los demás. `py tools/neones_galeria.py letrero-joyeria` (94x19, y el apagado) y
+`  `py tools/letrero_halo.py joyeria`; `neon.gd` (`LETREROS`, `CHISPAS_EN`: las chispas saltan del pie de la pata de la R).
+`- **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
+`  arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
+`- **La puerta de la sala de mantenimiento en el pasillo y su cartel:** `puerta_servicio.py` dibuja píxel a píxel la puerta de acero
+`  (`puerta-servicio.png`, 36 × 43; antes, la de PixelLab, gris claro y lisa): acero apagado con grano, mugre que sube del suelo, la chapa
+`  de las patadas arañada, la mancha de las manos en la manilla, polvo en la rejilla y algo de óxido. `cartel_mantenimiento.py` reduce la
+`  imagen de GPT del cartel «SALA DE MANTENIMIENTO» (`assets/sources/cartel-mantenimiento-gpt.webp`, chapa esmaltada azul como el de
+`  TRASTEROS) mezclando colores (`pasar` de `muebles_gpt.py`): la placa sin letras (`cartel-mantenimiento-liso.png`, 64 × 15) y, aparte, la
+`  de GPT con sus letras (`cartel-mantenimiento.png`, ya sin usar). `puerta.gd` (`cartel_mantenimiento`) la pone a la derecha de la puerta
+`  (donde iba la placa de la llave inglesa, que ya no está), del tamaño del de TRASTEROS: estirada por en medio con lo que mida
+`  «MANTENIMIENTO» ya traducido, en una línea y con la letra a 16. Los apliques del pasillo no se ponen encima (`planta.gd`). Prueba:
+`  `--captura --cartel-sala`.
+`- **El pasillo de los Apartamentos, decorado (M95, 13 nov):** `pasillo_gpt.py` reduce «como los muebles» las imágenes de GPT de
+`  `assets/sources/pasillo/` (la manguera de incendios, el extintor y ocho cuadros: `manguera.png`, `extintor.png`, `cuadro-*.png`)
+`  y alarga la alfombra hasta lo que mide el pasillo (sus dos puntas y, en medio, un medallón repetido, antes de reducir:
+`  776 × 36) y luego la ensucia (M108, `ensuciar`, con semilla fija: sale siempre igual): camino pisado más gris y oscuro por
+`  el centro, manchones desteñidos, cercos de mugre, manchas de café, grasa y sangre vieja, calvas, polvo y migas (más por los
+`  bordes largos), algún mordisco en los bordes y las puntas deshilachadas, con flecos de 1 a 3 píxeles (por eso
+`  `alfombra-baja.png` mide 782 × 36). Lo sucio va tramado a puntitos, como en pixel art. Solo la alfombra:
+`  `py tools/pasillo_gpt.py alfombra`. `planta.gd` (`colgados`, `CUADROS`) cuelga en la pared de arriba cuadros distintos en cada
+`  planta (cinco; en la baja, cuatro), en los huecos entre puertas, apliques, macetas y carteles (a la derecha del todo no, por el
+`  cartel EXIT); en la planta baja, además, la manguera y el extintor junto al portal; en todas, otro extintor justo debajo del
+`  cartel EXIT de la salida de incendios (M94); y en todas las plantas (M99), la alfombra
+`  larga por el centro del suelo (`alfombra`). Los pinta `mapa.gd` (`poner_colgados`, con su sombra en la pared, y `dibujar_fondo`). Prueba: `--captura --pasillo-baja`.
+`- **Los baños de los pisos, con toallas (M96, 13 nov):** tres imágenes de GPT reducidas con `muebles_gpt.py` (`toallero.png`,
+`  la toalla gris en su barra negra; `toalla-gancho.png`, la blanca colgada de un gancho; `balda-bano.png`, la balda blanca con
+`  toallas). `planta.gd` (`colgados_bano`, con su propio dado) pone en la pared de arriba de cada baño una de las dos toallas al
+`  lado de la ducha y la balda en medio del hueco más ancho que quede, sin tapar el armarito, las puertas ni los muebles. Las
+`  pinta `mapa.gd` (`poner_caras`) como adornos de la cara del muro, con su sombra, así que se oscurecen con la niebla de
+`  la habitación. Prueba: `--captura --piso`.
+`- **Las manchas de sangre del pasillo de dentro de los pisos (L36, 13 nov):** el suelo de ese pasillo traía dos manchas pintadas
+`  que, al repetirse el trozo, salían iguales por todas partes; `dormitorios.py` las tapa (`tapar`: un rectángulo de tablas de las
+`  mismas filas, corrido a un lado) antes de reducir. Ahora van sueltas: `manchas_gpt.py` saca doce distintas, rojas y líquidas, de
+`  dos imágenes de GPT con fondo blanco (`assets/sources/pasillo/manchas-sangre-a-gpt.webp` y `-b-gpt.webp`: el blanco pasa a
+`  transparencia, para que los bordes finos dejen ver el suelo) y las reduce «como los muebles» (`sangre-suelo-1.png` ... `-12.png`).
+`  `mapa.gd` (`manchas_del_pasillo`) pone de 6 a 8 distintas en cada pasillo de piso, en casillas al azar separadas, giradas y
+`  volteadas, y solo donde caben enteras sobre su suelo (no encima de un tabique); se pintan con los restos. Cada una lleva
+`  alrededor salpicones de gotas lanzadas hacia fuera, en cuadraditos como los de los tiros (`salpicar_mancha`, `salpicones`).
+`  Prueba: `--captura --piso` (`captura-piso-<lado>-pasillo.png`).
+`- **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta
+`  o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
+`- **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de
+`  `assets/fuentes/zombie-scape-ui.ttf` (ver `docs/IDIOMAS.md`, «Las tildes de la letra del juego»); después, `--headless --path . --import`.
+`- **La sala de mantenimiento, sin sangre:** `sala_sin_sangre.py` ya solo limpia la mancha del marco de las puertas de dentro
+`  (`puerta-bano`). Los suelos, las paredes y los muebles de la sala ya no salen de ahí: son nuevos y limpios (de GPT o dibujados).
+`- **El vestuario de la sala de mantenimiento:** `vestuario_azulejo.py` dibuja su pared de azulejo blanco (`pared-vestuario`, 480x48,
+`  azulejos de 8) y su suelo de baldosa beis (`suelo-vestuario`, 128x128, baldosas de 16), como la foto del dueño: una cuadrícula
+`  limpia con algo de diferencia entre piezas y grano dentro de cada una.
+`- **El despacho de la sala de mantenimiento:** `despacho_ladrillo.py` saca su pared de ladrillo rojo visto (`pared-despacho`, 468x48) y
+`  su suelo de tarima envejecida (`suelo-despacho`, 128x128) de dos imágenes de GPT (`assets/sources/despacho-*-gpt.webp`). La pared no
+`  se reduce sin más: mide cada ladrillo de la imagen y lo vuelve a dibujar limpio (3 píxeles de ladrillo y 1 de junta).
+`- **El taller de la sala de mantenimiento:** `taller_vinilo.py` saca su suelo de vinilo gris con motitas (`suelo-taller`, 128x128) y
+`  su pared blanca con el zócalo del mismo vinilo (`pared-taller`) de dos imágenes de GPT (`assets/sources/taller-*-gpt.webp`).
+`  El baúl (`baul.png`, 42x23, también el de la sala de pruebas), un arcón de plástico negro: `baul_plastico.py` lo pasa a mano píxel a
+`  píxel copiando el dibujo de GPT (`assets/sources/baul-plastico-gpt.webp`; reducido sin más se emborronaba). Ocupa 78x36 en el suelo.
+`  El banco de trabajo (`banco-trabajo.png`, 48x58, acero gris con el tablero perforado naranja) y la estantería de entre los
+`  dos (`mueble-canshelf.png`, 40x68, acero galvanizado con cajas): `muebles_gpt.py` los saca de sus imágenes de GPT
+`  (`assets/sources/banco-trabajo-gpt.webp` y `estanteria-metal-gpt.webp`, en pixel art sobre negro puro) reduciéndolas
+`  mezclando colores, como las tuberías, para que conserven las sombras y el volumen. La estantería no pasa por
+`  `importar.py` (si se reimporta `mantenimiento/estanteria-botes.png`, la pisa). Para otro mueble de GPT, se añade a su lista.
+`  También sale así la mesa del ordenador del despacho (`mesa-ordenador.png`, 48x49, de nogal con el monitor y la torre beige de
+`  los 90; de `assets/sources/mesa-ordenador-gpt.webp`): el resplandor azul de la pantalla lo sigue poniendo `ordenador.gd`.
+`  `ordenador_mantenimiento.py` (la de PixelLab de antes) ya no se usa: si se pasa, la pisa.
+`  Y el corcho colgado en la pared del despacho, a la izquierda de la mesa (`corcho.png`, 44x29, sin marco, con papeles crema y
+`  chinchetas doradas; de `assets/sources/corcho-gpt.webp`): `mapa.gd` lo cuelga por su borde de abajo. `guias_mantenimiento.py
+`  corcho` (el de antes) ya no se usa: si se pasa, lo pisa.
+`  Y la papelera del despacho, a la derecha de la mesa (el `wastebasket` del catálogo, `mueble-wastebasket.png`, 14x21, de
+`  rejilla gris oscura con papeles blancos; de `assets/sources/papelera-gpt.webp`): ocupa 28x22 en el suelo. No pasa por
+`  `importar.py` (si se reimporta `despacho/papelera.png`, la pisa).
+`  Y la ducha del vestuario, que también sale en los dos baños de los pisos (el `showertray` del catálogo,
+`  `mueble-showertray.png`, 36x66, mampara de cristal azulado de frente con perfiles de aluminio sobre su plato blanco; de
+`  `assets/sources/ducha-gpt.webp`): ocupa 72x44 en el suelo (antes 72x64, para que el plato quede pegado a la pared), lo de más sube por la pared. No pasa por
+`  `importar.py` (si se reimporta `vestuario/plato-ducha.png`, la pisa).
+`  Y el lavabo de pie con su espejo, de lado (el `staffsink` del catálogo, `mueble-staffsink-lado.png`, 20x66, para la pared
+`  de la izquierda; en la de la derecha el juego le da la vuelta; de `assets/sources/lavabo-gpt.webp`): sale en el vestuario y
+`  en los baños de los pisos. No pasa por `importar.py` (si se reimporta `vestuario/lavabo-espejo-lado.png`, lo pisa).
+`  Y el váter, de lado (el `stafftoilet` del catálogo, `mueble-stafftoilet-lado.png`, 26x37, la cisterna en la pared de la
+`  izquierda y la tapa levantada; de `assets/sources/vater-gpt.webp`): igual que el lavabo, en el vestuario y en los baños de
+`  los pisos. No pasa por `importar.py` (si se reimporta `vestuario/vater-vestuario-lado.png`, lo pisa).
+`  Y el banco largo del vestuario, suelto en medio (el `lockerbench` del catálogo, `mueble-lockerbench.png`, 64x28, listones de
+`  haya sobre tubo gris con su zapatero; de `assets/sources/banco-vestuario-gpt.webp`). No pasa por `importar.py` (si se
+`  reimporta `vestuario/banco-vestuario.png`, lo pisa).
+`  Y la taquilla de las skins, en el vestuario (`taquilla.png`, 28x56, gris claro con tres puertas azules; de
+`  `assets/sources/taquilla-gpt.webp`): ocupa lo mismo en el suelo que la de antes y el «!» se pone solo encima. `taquilla.py`
+`  (la de antes, dibujada a mano) ya no se usa: si se pasa, la pisa.
+`  En las paredes de los lados del taller, debajo de sus puertas, tuberías (`boilerpipes`, las blancas de la caldera, a la izquierda;
+`  `firepipes`, las rojas de incendios, a la derecha, donde antes iba el carro de la limpieza): `taller_tuberias.py` las recorta de la
+`  imagen de GPT (`assets/sources/taller-tuberias-gpt.webp`) como originales de lado, y `importar.py` las pasa a sprite.
+`  La puerta del despacho al taller, metálica (`PUERTA_BANO.METAL`, la elige `mapa.poner_hojas`): `puerta_metal.py` saca las tres de las
+`  imágenes de GPT tal cual (`puerta-metal-gpt-2.webp`: la cerrada y la abierta; `puerta-metal-gpt-frente.webp`: la de frente, la que
+`  gira): les quita el fondo y las reduce; la abierta, metida en la forma de la de madera para que gire igual. Se abre hacia el
+`  despacho (`al_reves` en `puerta_bano.gd`: todo dado la vuelta alrededor del medio del hueco), no hacia el taller: abierta
+`  hacia allí se quedaba de pie junto al banco de trabajo y no dejaba usarlo.
+`  Las salidas de la sala (la de la pared de abajo y, girada, la de la derecha, que da a los trasteros; y la de los trasteros que
+`  vuelve a ella) llevan esa misma hoja, cerrada: `puerta_abajo_metal.py` la pone tumbada en el hueco de chapa gris de
+`  `puerta-abajo.png` (`puerta-abajo-metal.png`, que usa `puerta.gd`; el cuarto dibujo de `puerta-abajo.png` ya no se usa).
+`- **Efectos de pixelfx** (el plugin de efectos pixel art, MIT, `git clone https://github.com/patch-gg/pixelfx`):
+`  `pixelfx/exportar.mjs` saca un efecto en tres hojas para Godot (detrás del personaje, delante y el brillo, que se suma)
+`  y `pixelfx/escudo-fuego.js` es la burbuja de fuego del jefe de bomberos (`escudo-fuego-*.png`, en `bombero.gd`):
+`  `node tools/pixelfx/exportar.mjs <pixelfx> tools/pixelfx/escudo-fuego.js assets/sprites`.
+`  `pixelfx/reventon-veneno.js` es el reventón del gordo ("acid-splash" pasado a vista desde arriba, `reventon-veneno-*.png`):
+`  `node tools/pixelfx/exportar.mjs <pixelfx> tools/pixelfx/reventon-veneno.js assets/sprites`.
+`  `pixelfx/nube-gases.js` es la nube del Flatulento ("poison-cloud" desde arriba, `nube-gases-*.png`), igual.
+`  `pixelfx/escudo-cristal.js` es lo mismo en azul y más pequeño: la cúpula del científico jefe (`escudo-cristal-*.png`,
+`  en `cientifico_jefe.gd`; las balas rebotan en su borde igual que en la burbuja del bombero, con `colores_escudo()`).
+`  `pixelfx/explosion.js` y `exportar_explosion.mjs`: la explosión (`node tools/pixelfx/exportar_explosion.mjs <pixelfx>
+`  assets/sprites`, y copiar el origen que escribe en `ORIGEN` de `explosion.gd`). `hojas.mjs` pinta las capas que se le
+`  pidan ("front", y "back" para la explosión).
+`  `caida.py` monta la hoja del tropiezo de Johnny (`conserje-48-caida`: caer y levantarse de PixelLab, colocados para que
+`  no den saltos y quede tumbado en el suelo): `py tools/caida.py`. Luego `py tools/caida_skins.py` saca la de cada skin:
+`  busca en cada dibujo la cabeza de siempre y cuánto está girada, la borra y pega encima la de la skin girada igual
+`  (`cara.py` no sirve aquí: busca la cabeza derecha). Con `muestra`, `capturas/captura-caida-<skin>.png` para revisarla.
+`  `pixelfx/fogonazo.js` son los fogonazos ("muzzle-pistol", "muzzle-smg" y "muzzle-shotgun" partidos en llama y humo,
+`  sin casquillo) y `pixelfx/exportar_fogonazo.mjs` los saca girados y recortados (`fogonazo-<arma>-<parte>*.png`) y
+`  escribe las medidas para `TIPOS` de `fogonazo.gd`: `node tools/pixelfx/exportar_fogonazo.mjs <pixelfx> assets/sprites`.
+`  `pixelfx/chispa.js` es la chispa de las balas ("hit-spark" con tallas, colores y apuntando a cualquier lado) y
+`  `pixelfx/exportar_chispa.mjs` la saca (`chispa-bala*.png` y `chispa-perdigon*.png`) con las medidas para `chispa.gd`:
+`  `node tools/pixelfx/exportar_chispa.mjs <pixelfx> assets/sprites`. Los dos exportadores con variantes comparten
+`  `pixelfx/hojas.mjs` (dibujar cada variante, recortar y pegar en las hojas).
+`  `pixelfx/bocanadas.mjs` hace `bocanadas-fuego.png`, las bocanadas de fuego y de humo de "fire-breath" en 10 tamaños y
+`  10 edades, para el chorro del lanzallamas del bombero (`node tools/pixelfx/bocanadas.mjs <pixelfx> assets/sprites`).
+`- **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
+`  animaciones), `jefe_hoja.py` (jefes: `py tools/jefe_hoja.py gloton-72 jefe-gloton`; cada jefe en su ficha `JEFES`),
+`  `superviviente.py`, `zombi.py` + `png.py`, `piel.py`, `piel_verde.py` (la piel del verde del vecino, ver abajo), `espejo_oeste.py`, `hoja.py` (hoja de revisión); `hoja_112.py` (los zombis de 112 px, como la dependienta: hoja apretada, cada fotograma recortado con su `margin`; receta en `docs/ZOMBIS_112.md`). `reducir.py`: reduce un zombi detallado a la altura de Johnny con su borde negro; lo usan `hoja_112.py` y `zombi.py` si la ficha trae `"reducir"` (cómo, al principio del archivo).
+`- **Un zombi hecho con GPT (la vecina, 8 nov):** `zombi_gpt.py` pasa las imágenes de GPT (`assets/sources/zombi-vecina-gpt/`:
+`  `personaje.webp` con las 5 vistas en fila y una por animación y vista, `andar-s.webp`, `ataque-e.webp`…, con los fotogramas
+`  en una o dos filas sobre negro puro) a los dibujos que monta `zombi.py`: quita el fondo, reduce mezclando colores como los
+`  muebles, con un contorno suave, y coloca cada fotograma midiendo la rejilla de GPT con un punto que no se mueve (la cabeza
+`  al andar, los pies en lo demás). Las 3 vistas del oeste salen en espejo. `py tools/zombi_gpt.py personaje`, luego
+`  `py tools/zombi_gpt.py <andar|ataque|golpe|muerte> <south|south-east|east|north-east|north>`, y después `zombi.py
+`  zombi-vecina-48 zombi-vecina` y `hacer_frames.py`. Sale en los apartamentos (`planta.gd`, `horda`), con el coste del vecino.
+`  **La médica con GPT (10 nov, M17):** `--zombi medica` (referencia `capturas/referencia-medica.png`, 1920 de ancho) con `personaje`, `andar`, `ataque` (el pinchazo), `muerte` (la caída) y `forzar` (solo `south` y `north`: agachada con la ganzúa; el fotograma 1 es ella de pie, solo para medir). Luego `py tools/medica_gpt_montar.py`, `py tools/superviviente.py medicagpt` y `hacer_frames.py assets/sprites/superviviente-medicagpt`. `aliado.gd` usa esa hoja para `medico` y, si la hoja tiene `forzar_<dir>`, `trastear()` no menea el cuerpo (`forzar_con_dibujo`): lo hace el dibujo. El policía, igual (`--zombi policia`, referencia `capturas/referencia-policia.png`; `py tools/medica_gpt_montar.py policia`, `py tools/superviviente.py policiagpt`): sus bocas de disparo salen del fogonazo que dibuja GPT en el fotograma 4. El militar, igual (`--zombi militar`, referencia `capturas/referencia-militar.png`; `py tools/medica_gpt_montar.py militar`, `py tools/superviviente.py militargpt`).
+`  Sirve para otros zombis con `--zombi <nombre>` delante (cada uno en su ficha `ZOMBIS`: carpetas, hasta qué gris es fondo,
+`  lienzo del ataque, golpe y muerte, y si el golpe va con los pies clavados). El **vecino rehecho con GPT** (8 nov):
+`  `--zombi normal` → `assets/sources/zombi-normal-gpt-48` → `zombi.py zombi-normal-gpt-48 zombi-normal-gpt` (anda a 7
+`  fotogramas por segundo: `"fps_andar"` en su `zombi.json`). Los textos que se le pidieron a GPT, enteros, en
+`  `assets/sources/zombi-normal-gpt/textos-gpt.md` (con lo aprendido: el paso descrito fotograma a fotograma, los pies
+`  clavados al atacar y en el golpe, y en qué rodilla va el roto). Desde el 8 nov es **el vecino del juego**
+`  (`zombi_normal.tscn`, y su ficha de Sujetos), con una sola ropa, la camisa azul: las 6 de colores del de PixelLab
+`  (`zombi-normal-rojo`, `-bata`…) ya no se usan. `--captura --vecino-gpt` lo pone junto al de PixelLab para comparar.
+`- **El jefe de seguridad con GPT (17 nov):** el guardia de la llave maestra (`zombi_guardia.tscn`) deja el dibujo del
+`  vigilante y lleva el suyo: `--zombi guardia` (carpeta `zombi-guardia-gpt`, con el `personaje.webp` del vecino de
+`  referencia de estilo y la foto recortada de un guardia; textos en su `textos-gpt.md`) → `zombi-guardia-gpt-48` →
+`  `zombi.py zombi-guardia-gpt-48 zombi-guardia` y `hacer_frames.py assets/sprites/zombi-guardia`. Al 87 % (`TAMANO`:
+`  GPT lo dibujó más grande y no cabía en 48), anda a 8 fotogramas por segundo y, huyendo, su andar va a ×2,4
+`  (`PASO_HUYENDO`), para que no patine. La ropa, gris marengo y no negra, para que el fondo negro no se la coma.
+`  Desde el 19 nov, con el contorno negro cerrado como los vigilantes (`"cerrar_borde"` en su `zombi.json`; foto de
+`  cerca al lado de Johnny en `--captura --guardia-f9`).
+`- **Los vigilantes con GPT (17 nov):** un hombre y una mujer con chaleco amarillo fosforito, en vez del vigilante de
+`  PixelLab: `--zombi vigilante` y `--zombi vigilante-mujer` (carpetas `zombi-vigilante-gpt` y `zombi-vigilante-mujer-gpt`,
+`  cada una con su `personaje.webp` y sus textos en `textos-gpt.md`) → `zombi.py ... zombi-vigilante` y
+`  `zombi-vigilante-mujer` (con el `zombi.json` del jefe de seguridad). Tan corpulentos como él (`TAMANO` 0,97 y 0,82,
+`  `ESTIRO` 1,2 y 1,22) para no parecer enanos al lado de Johnny. `zombi_vigilante.tscn` lleva las dos hojas en `ropas`:
+`  cada vigilante que sale (patrullas, joyería, el rugido del jefe, «¡A TRABAJAR!», refuerzos) es hombre o mujer al azar,
+`  mitad y mitad, con los mismos números. Lo aprendido: la frase de la piel verde en cada texto (si no, GPT la pinta gris)
+`  y, en las muertes, «cae hacia donde mira y la cabeza queda en ese lado» (una salió tumbada al revés en los últimos
+`  fotogramas y se giró en espejo en su hoja). Desde el 19 nov (lo pidió el dueño), con el contorno negro cerrado como el de
+`  Johnny: `"cerrar_borde": "#050202"` en sus dos `zombi.json` pinta de ese color los píxeles del borde que PixelLab
+`  dejaba del color de al lado (chaleco, piel), sin hacerlos más grandes; `--captura --vigilantes` los enseña. `--guardia` cuenta los dibujos de sus guardias y saca
+`  `captura-guardia-vigilantes.png` con uno de cada.
+`- **Chaleco amarillo neón (20 nov):** los vigilantes y el jefe de seguridad, con `"neon": {}` en sus tres `zombi.json`
+`  (lo pidió el dueño: GPT dejó el chaleco y las franjas reflectantes amarillo verdoso y en el juego parecían verdes).
+`  `zombi.py` busca en cada fotograma el chaleco y lo pasa a amarillo (sombras hacia el naranja, luces a amarillo puro,
+`  más vivo). La piel verde tiene el mismo tono, así que se separan por lo vivo que es el color: chaleco seguro si es
+`  bastante vivo para su claridad (`"alto"`, 0,5; a más claro, más vivo tiene que ser), y lo algo menos vivo (`"bajo"`,
+`  0,3: el borde de la franja del jefe) solo pegado a una zona con 3 píxeles seguros o más; lo casi negro, nunca (el
+`  contorno de las manos). El tono va en `"tono"` ([50, 60] grados). Se comprueba con `--captura --vigilantes` y
+`  `--captura --edificio centro --guardia`.
+`- **La piel de los durmientes, del verde del vecino (20 nov):** lo pidió el dueño: los once durmientes normales con la
+`  piel del mismo verde que el vecino (`zombi-normal-gpt`, la referencia, que no se toca): la vecina, el arrastrado (era
+`  marrón: solo cara, brazos y manos), el crío, el dinamitero, el de tentáculos (era casi blanco), la dependienta, los dos vigilantes, el guardia, el
+`  oficinista y el escolta. El gordo y los jefes, no (decidido por él). Va en su ficha, `"piel_verde": {...}` (en
+`  `zombi.json` para `zombi.py` y en `hoja.json` para `hoja_112.py`), y lo hace `tools/piel_verde.py` sobre cada dibujo ya
+`  terminado (al final, después del chaleco neón, que no se toca). **Receta:**
+`  1. Medir su piel: tono, claridad y viveza (la del vecino: tono ~78-80°, viveza 0,28 en las sombras y subiendo en las
+`     luces). Con eso, en la ficha, `"tono"`, `"viveza"` y `"claridad"` de su piel (lo que no cumpla, no cambia).
+`  2. Mirar lo elegido antes de tocar la hoja: `py tools/zombi.py <fuente> <hoja> --mascara <carpeta>` (o `py
+`     tools/hoja_112.py <carpeta> --mascara <carpeta>`) deja en esa carpeta la hoja con lo elegido pintado de rosa, sin
+`     tocar `assets/sprites`. Mirarla en las 8 vistas y en fotogramas de cada animación.
+`  3. Si se cuela algo: `"fuera"` (colores que no son piel aunque lo parezcan), `"mancha"` (tamaño mínimo), `"grueso":
+`     true` (fuera las rayas finas: la franja reflectante de los vigilantes) o `"luz"` (más oscura: el de tentáculos, tan
+`     pálido, salía verde lima). Si falta algo: `"sombra"` (las sombras de otro color pegadas a la piel) o `"huecos"` (lo de
+`     otro color encerrado entre piel, a 4 píxeles o menos por los dos lados: las sombras marrones alrededor de la boca) o
+`     `"barbilla"` (lo de debajo de la cara, tan ancho como ella: la mandíbula de otro color; `tools/zombi.py` le dice hacia
+`     dónde mira cada dibujo, para quitarla de espaldas con `"sin"`).
+`  4. Rehacer la hoja (sin `--mascara`) y probar con `--captura --durmientes` (los doce juntos, el vecino primero).
+`  Lo que lleva cada uno: la mayoría, `{}` (lo de siempre: tono 55-110°); el oficinista y el escolta, viveza desde 0,02-0,03
+`  (su piel es casi gris); el crío, viveza hasta 0,45 (si no, entra su pelo rubio) y sus sombras marrones; los vigilantes y el
+`  guardia, `"grueso"`; el arrastrado, tono desde 35°: solo la cara, los brazos y las manos (su cuerpo marrón es como su ropa; todo
+`  verde no le pegaba, lo eligió el dueño el 20 nov), `"huecos"` para las sombras marrones de la boca y `"barbilla"` para
+`  su mandíbula, que en su dibujo es del marrón del cuerpo (salía marrón al abrir la boca); la barbilla no se pone de
+`  espaldas (`"sin"`: ahí la mancha más alta es un trozo de mejilla y debajo está la espalda), ni con la cara de más de 10
+`  filas (la cabeza echada atrás: debajo está la camisa), y con `"lado"` coge también el borde oliva y marrón de la mitad
+`  de abajo de la cara (de perfil, la barbilla y la boca por delante); el de tentáculos, solo lo claro (lo de claridad media es el brillo del pantalón gris) y más oscuro. Sin la
+`  opción, todas las hojas salen idénticas a las de antes. Lo que no se ha podido: en el ataque de frente del vigilante, la
+`  cara se ve amarilla en algunos fotogramas (el paso del chaleco neón la toma por chaleco, y lo que pinta de amarillo no se
+`  toca), y en el de tentáculos quedan grises algunos píxeles claros de pies y brazos (iguales que los del pantalón).
+`- **El crío más real (8 nov):** el de PixelLab, con `"suave": 0.8` en su `zombi.json`: `zombi.py` le cambia el contorno
+`  casi negro por el color de dentro al 60 % y le da el retoque de los de GPT, algo más oscuro (lo eligió el dueño). Y sin el
+`  mechón rubio de la nuca en las vistas de perfil (`assets/sources/zombi-rapido-48/sin_mechon.py`, pasado una vez sobre sus
+`  dibujos) ni la sangre de la cara (boca y mejilla: `sin_sangre_cara.py`, igual). El **crío con GPT** (8 nov), entero: `--zombi rapido` → `assets/sources/zombi-rapido-gpt-48`
+`  → `zombi.py zombi-rapido-gpt-48 zombi-rapido-gpt` (corre a 10 fotogramas por segundo; el ataque, 0,6 s). Como corre,
+`  `zombi_gpt.py` pone su cabeza a la altura que la dibuja GPT y deja que los pies se levanten, en un lienzo de 64 (de
+`  perfil estira mucho la pierna). Textos, en `assets/sources/zombi-rapido-gpt/textos-gpt.md` (referencia
+`  `capturas/referencia-rapido.png`). Desde el 8 nov es **el crío del juego** (`zombi_rapido.tscn` y su ficha de
+`  Sujetos); el de PixelLab (`zombi-rapido`) ya no se usa. `--captura --crio-gpt` lo pone junto al de PixelLab y
+`  `--captura --tres-zombis`, junto a la vecina y el vecino.
+`- **El gordo más real (8 nov):** el de PixelLab con `"suave": 0.8` en su `zombi.json`, como el crío (lo eligió el dueño
+`  en vez de rehacerlo con GPT). Ojo: la mejora solo cambia la capa de fuera del contorno; vale para los de contorno de
+`  un píxel (el crío, el gordo), no para el arrastrado de PixelLab, que lo tenía de dos. `--captura --gordo-real`.
+`  Desde el 20 nov (lo pidió el dueño), las fístulas y lo que le cuelga de la barriga, del verde de la piel del vecino en
+`  vez de rojo: `"heridas_verdes": {}` en su `zombi.json` (`zombi.py`, antes del `"suave"`). Es herida lo rojo salvo lo
+`  que está a 5 píxeles o menos de los dientes y los ojos (la boca se queda roja) y el rojo oscuro del borde de la figura
+`  (el contorno); lo rojo casi negro de dentro de la herida, rodeado de verde, pasa a verde oscuro. El tono, con `"tono"`
+`  (78 grados). También cambia la sangre que salta en el golpe (es del mismo rojo). La pierna de detrás, que PixelLab
+`  pinta en sombra de un rojo oscuro casi liso, no pasa a verde sino a carne en sombra: en lo bajo de la figura, las
+`  manchas grandes de casi un solo color, y de ellas solo lo oscuro. Y escupiendo hacia abajo ya no pinta el chorro hasta
+`  el suelo (acababa en una raya recta): `"cambiar": {"south": {"5": 6}}` en su `"ataque"` usa ahí el fotograma 6 de
+`  PixelLab (la boca llena de moco) en vez del 5. `"cambiar"` vale para cualquier animación de `zombi.py`.
+`- **El arrastrado con GPT (8 nov):** `--zombi lento` → `assets/sources/zombi-lento-gpt-48` → `zombi.py zombi-lento-gpt-48
+`  zombi-lento-gpt` (textos en `assets/sources/zombi-lento-gpt/textos-gpt.md`, referencia `capturas/referencia-lento.png`).
+`  Va por el suelo: arrastrarse en lienzo de 64, y en el ataque, el golpe y la muerte cada fotograma a la altura que lo
+`  dibuja GPT (`ALTURA_GPT`), de perfil y en diagonal de frente colocado por el final del cuerpo (no por las manos) y la
+`  muerte medida por el ancho. GPT rechazaba por violencia casi todo lo de espaldas (el muñón rojo): de espaldas se le
+`  pidió arrastrarse con una copia con el final del cuerpo en marrón (`capturas/lento-para-gpt-sin-rojo.png`) y
+`  `rojo_espalda.py` se lo vuelve a pintar; el ataque, el golpe y la muerte de espaldas, el golpe de perfil y el de
+`  diagonal de frente los monta `espaldas.py` con sus otros dibujos (pasarlo después de `zombi_gpt.py`).
+`  Desde el 9 nov, al 80 % y de perfil y en diagonal algo menos, para que no se vea más grande que de frente (`TAMANO` y
+`  `TAMANO_VISTA` en `zombi_gpt.py`; rehacerlo entero: `personaje`, `andar` de las 5 vistas, `ataque` y
+`  `muerte` de frente, en diagonal y de perfil, `golpe south`, `rojo_espalda.py`, `espaldas.py` y `zombi.py`), con su
+`  choque, sombra y altura a escala en `zombi_lento.tscn`. `--captura --lento-gpt` lo pone junto al vecino. Desde el 8 nov es **el arrastrado del juego** (`zombi_lento.tscn`
+`  y su ficha de Sujetos), con una sola ropa, la marrón: el de PixelLab y sus 6 de colores (`zombi-lento-rojo`, `-bata`…)
+`  ya no se usan.
+`- **Johnny con un arma:** se monta con `tools/arma.py` del juego JS (`PYTHONPATH=tools py
+`  C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`; la receta, en la skill `arma-nueva` de ese juego).
+`  Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es
+`  naranja, sin `boca: fogonazo` y la boca a mano en `armas.gd`; `andar.ciclo` y `andar.espejo` para el andar. Retoques:
+`  `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `golpe_andando.py` (mete en la hoja el golpe dado mientras
+`  anda, dibujado entero por PixelLab: filas nuevas al final, animación `attackwalk`; después, `cara.py <skin> <arma>`
+`  con cada skin y `piernas.py <arma>`), `piernas.py` (las piernas de cada hoja de golpe, para partir a
+`  Johnny por la cintura al golpear andando: `<hoja>-piernas.png`; hay que volver a pasarlo si se rehace el paso o el golpe
+`  de una hoja, y `--ver` deja fotos para repasar el recorte), `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
+`  ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y
+`  quita el parpadeo de espaldas, que confundía el arma con unos ojos; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`),
+`  `bate_metal.py` (el bate de aluminio con el mango de cinta negra: busca el bate de madera en cada dibujo por su forma,
+`  porque comparte los colores con la piel, y lo repinta; lee `assets/sources/conserje-48-bate/hoja-madera.png`, los
+`  golpes que no acierta van a mano en `AJUSTES` y `py tools/bate_metal.py muestra` deja antes y después en `capturas/`) y
+`  `cara.py` (las skins: `py tools/cara.py <skin> [arma]`). Al final de todos, `respiracion.py`: rehace el reposo de
+`  todas las hojas de Johnny y sus skins (solo sube el pecho, la cabeza quieta; dos respiraciones en 6 s, con el
+`  parpadeo) y conserva las puntas del lanza ácido. Va después porque los otros esperan el reposo viejo de 20 dibujos:
+`  si se rehace una hoja con ellos, se vuelve a pasar `py tools/respiracion.py` (las que ya están hechas no las toca).
+`- **La salida de incendios:** `puerta_salida.py` dibuja a mano, sin PixelLab, la puerta roja de las escaleras y el
+`  cartel EXIT (apagado y encendido): `py tools/puerta_salida.py`.
+`- **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
+`  `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
+`  `taquilla.py`, `helicoptero_gpt.py` (el helicóptero de Velaria, de GPT), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
+`  nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (el colchón con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas, y la pared con chapa lagrimada y la línea amarilla de su pasillo), `guias_trasteros.py` (las guías de PixelLab de las cajas y la carretilla de ese pasillo y de la estantería y el colchón de sus habitaciones; ya no se usa: ahora salen de GPT con `muebles_gpt.py`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py` (el científico muerto de PixelLab; ya no se usa: pisaría el de GPT) y `cientifico_muerto_gpt.py` (el científico muerto de GPT, M14: lo reduce como los muebles y le separa la piel y el pelo en sus capas, que el juego pinta con los colores de cada página).
+`- **El inventario en la mochila (M100):** `inventario_gpt.py` reduce como los muebles la mochila (la de la referencia
+`  vaciada por GPT; la ensancha o estrecha para que su forro caiga donde van las casillas y escribe su `MOCHILA_EN`), el
+`  papel de la ficha, la cinta de los títulos y la etiqueta de la llave (`assets/sources/inventario/` → `assets/ui/inventario-*.png`).
+`- **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `suelo_salon.py` (el suelo de nogal del salón), `suelo_rejilla.py` (el suelo de rejillas de la cocina del cocinero: un panel por cuadro del damero), `azotea_gpt.py` (la azotea
+`  entera, de GPT; ver `FONDOS.md`).
+`- **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
+`  `hacer_casillas.py`, `recortes_bestiario.py`.
+`- **El logo** (`assets/ui/logo.png`, «JOHNNY RUSH» grande y «ZOMBIE ESCAPE» pequeño debajo; lo ponen `menu_principal.gd` y el final de
+`  `pruebas/trailer.gd`): no está dibujado a mano, lo genera `py tools/logo.py`; la pantalla de carga de la web, `assets/web/carga.html`, lleva una copia
+`  metida dentro: si cambia el logo, ver «La pantalla de carga» en `docs/WEB.md` (el programa de `src/titulo.js` del juego JS, pasado a
+`  Python: cada letra es una cuadrícula de 5×7 con relieve, babas y un filo crema). Las letras están en `LETRAS` (J, H, N, Y, R y U son
+`  las añadidas al pasar al nombre nuevo), los colores en `REPARTOS` (`py tools/logo.py todas` los enseña todos juntos; el elegido es
+`  `VARIANTE`) y `py tools/logo.py viejo` rehace el logo de antes, idéntico, para comprobar que el programa no ha cambiado.
+`- **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en
+`  `tools/efectos/*.wav`, que no van a git).
+`- **Música de 8 bits:** `motor-8bit.mjs` y las canciones (`turno-de-noche.mjs`; `el-ultimo-inquilino.mjs`, la del menú
+`  y los Apartamentos hasta el 10 nov, que ya no va en el juego: si se vuelve a sacar, borrar sus `.ogg` de `assets/musica/`;
+`  `villancico-8bit.mjs`, de prueba). `node tools/<canción>.mjs` saca el `.wav` y el `.ogg`; con `--veces 4`, en bucle.
+`  El motor tiene también instrumentos «de 16 bits» (sierra con varias voces y filtro, seno, FM, coro, reverberación de
+`  sala, la cinta que tiembla) y percusión de tráiler (`taiko`, `caja16`, `charles`, `platillo16`, `golpe`, `ascenso`):
+`  las canciones de explorar los edificios, hechas el 9 nov en tres estilos por edificio para elegir. Las elegidas,
+`  `ultimas-rebajas.mjs` y `junta-de-accionistas.mjs`; las otras se quedan por si acaso (`hilo-musical.mjs`,
+`  `caja-registradora.mjs`, `musica-en-espera.mjs`, `horas-extra.mjs`). El 10 nov, en el mismo estilo épico, las del
+`  menú (`el-conserje.mjs`, de una sola capa), los Apartamentos (`planta-por-planta.mjs`) y los jefes
+`  (`jefe-de-planta.mjs`, a -25 LUFS como las peleas): comparten los instrumentos de orquesta y el tema principal del
+`  juego, «el tema de Johnny», en `orquesta.mjs` (cada una lo toca en su tono con `enTono`). Cada una deja en `tools/efectos/elegir/` la
+`  canción entera y la base sola (con `index.html` para escucharlas todas) y, con `--juego`, sus capas en
+`  `assets/musica/` ya a su volumen (`sacarCancion`, que lo mide con ffmpeg). El 11 nov, la del menú pasó a ser de terror:
+`  `sin-luz.mjs` (re menor, zumbido grave, una caja de música con la cinta que tiembla, latido y notas que chocan);
+`  `el-conserje.mjs` se queda por si acaso, sin su `.ogg` en el juego.
+`  Por capas: cada instrumento dice su `capa` (y la percusión y demás, la suya en `capas` de `crearMotor`), `guardar()`
+`  saca un `.wav` por capa, a la misma ganancia, que sumados suenan como la canción entera, y la partitura pasa cada uno
+`  a su `.ogg`. El trailer suma las capas al montar.
+`
+`## docs/
+`
+`- `historial/`: los planes ya terminados (`CENTRO_COMERCIAL.md`, `JEFES_APARTAMENTOS.md`). Solo para saber por qué se
+`  decidió algo; lo que vale es el código.
+`- `MENSAJES.md`: «Contáctanos», adónde llegan los mensajes de los jugadores y cómo los analiza Claude.
+`- `IDIOMAS.md` (cómo se traduce el juego y cómo se escribe un texto nuevo) y `GLOSARIO_EN.md` (cómo se dice cada nombre en inglés).
+`- `PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md`: del juego JS y de lo dibujado después; valen
+`  para las ideas y los números.
