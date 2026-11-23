@@ -4,7 +4,7 @@
 # cabeza, su sombra y su etiqueta de precio naranja. Hay huecos vacíos (solo ganchos y etiqueta) y uno colgado torcido
 # de un solo gancho. Se monta todo a tamaño de GPT y luego se reduce mezclando colores, como tools/muebles_gpt.py,
 # para que los martillos y el panel queden con el mismo acabado.
-#   py tools/panel_martillos.py           → assets/sprites/panel-martillos.png (136x86, a escala 1, como panel-llaves.png)
+#   py tools/panel_martillos.py           → assets/sprites/panel-martillos.png (136x86, a escala 1: un píxel por unidad)
 #   (y luego Godot --headless --path . --import)
 import os
 import random

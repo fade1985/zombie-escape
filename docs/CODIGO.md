@@ -1142,12 +1142,15 @@ en una línea.
   (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-ferreteria" y "almacen-ferreteria"), la suciedad y la sangre (`Tienda.TIPOS`
   "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo gris), sus muebles (los de
   `bano-ropa` y `almacen-ropa`), sus puertas metálicas y sin toalla ni balda. El plano de antes, `ferreteria-antigua`, para
-  Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. El panel de llaves vandalizado
-  para sus paredes, `panel-llaves.png` (136x86, a escala 1; `muebles_gpt.py panel_llaves`), aún sin poner. Y el de martillos
-  (23 nov, el dueño), `panel-martillos.png`, del mismo tamaño y también sin poner: el panel vacío de GPT (`panel-vacio-gpt.webp`)
+  Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. Los paneles de la
+  pared de la sala de venta (23 nov, el dueño): uno distinto en cada hueco, a escala 1 (136x86), del rodapié a la moldura; los huecos,
+  en `mapa.gd` (`PANELES_TIENDA`: 9 con la puerta abajo, 3 + 4 + 2 entre las puertas del almacén y del taller, y 10 con la puerta
+  arriba, 5 + 5 a los lados de la entrada; "" es un hueco aún sin panel) y se pintan en la cara del muro (`paneles_de_pared`, con
+  "mitad" en `cara_pared.gd`). De momento, solo el de martillos, `panel-martillos.png`: el panel vacío de GPT (`panel-vacio-gpt.webp`)
   y el martillo de GPT (`martillo-gpt.webp`) colgado once veces con sus ganchos, su sombra y su etiqueta, con dos huecos vacíos y
-  uno torcido, la cabeza oscurecida (para que destaque sobre la chapa) y sangre por encima (la lista `SANGRE`); se monta a tamaño de GPT y se reduce mezclando colores (`py tools/panel_martillos.py`, la lista `HUECOS`). El panel
-  vacío sirve para llenarlo con otras herramientas igual.
+  uno torcido, la cabeza oscurecida (para que destaque sobre la chapa) y sangre por encima (la lista `SANGRE`); se monta a tamaño de
+  GPT y se reduce mezclando colores (`py tools/panel_martillos.py`, la lista `HUECOS`). El panel vacío sirve para llenarlo con otras
+  herramientas igual. (El de llaves inglesas, de GPT entero, se borró: está en git.)
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
   (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la

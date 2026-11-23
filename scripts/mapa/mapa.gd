@@ -763,6 +763,42 @@ func poner_muros() -> void:
 		cuerpo.add_child(sombra)
 
 
+# (23 nov, el dueño) Los paneles colgados en la pared de arriba de la sala de venta de una tienda, cada uno distinto: su dibujo
+# (assets/sprites/<dibujo>.png, a escala 1: 136x86, tools/panel_martillos.py) y su centro, en casillas desde la esquina de
+# arriba a la izquierda de la sala, según el lado de la puerta. Están todos los huecos; "" es uno aún sin panel. Con la
+# puerta abajo, la pared tiene tres trozos (las puertas del almacén y del taller): 3 + 4 + 2; con la puerta arriba, dos
+# (la entrada en medio): 5 + 5. Los paneles, casi pegados, del rodapié a la moldura
+const PANELES_TIENDA := {"ferreteria": {
+	"abajo": [["", 2.6875], ["", 7.5], ["", 12.3125],
+		["", 19.325], ["panel-martillos", 23.775], ["", 28.225], ["", 32.675],
+		["", 39.29], ["", 43.58]],
+	"arriba": [["", 2.25], ["", 6.625], ["", 11.0], ["", 15.375], ["", 19.75],
+		["panel-martillos", 26.25], ["", 30.625], ["", 35.0], ["", 39.375], ["", 43.75]],
+}}
+
+
+# Los paneles de PANELES_TIENDA que caen en esta cara (la de arriba de la sala de venta), con su sombra
+func paneles_de_pared(cara: Node2D, sala: int) -> Array:
+	var lista := []
+	if sala < 0 or sala >= sitio.apt.salas.size():
+		return lista
+	var s: Dictionary = sitio.apt.salas[sala]
+	if s.uso != "tienda":
+		return lista
+	for p in PANELES_TIENDA.get(sitio.get("tienda", ""), {}).get(sitio.apt.entrada.lado, []):
+		if p[0] == "":
+			continue
+		var t: Texture2D = load("res://assets/sprites/%s.png" % p[0])
+		var centro: float = (s.c0 + p[1]) * CASILLA - cara.position.x   # en unidades, desde el borde izquierdo de la cara
+		if centro < 0.0 or centro > cara.ancho:
+			continue
+		# en píxeles del dibujo (la cara va a escala 2; el panel, a la mitad): abajo, justo encima del rodapié
+		var en := Vector2(floorf(centro / 2.0 - t.get_width() / 4.0), -3.0 - t.get_height() / 2.0)
+		lista.append({"dibujo": t, "x": en.x + 1, "y": en.y + 1, "color": Color(0, 0, 0, 0.3), "mitad": true})
+		lista.append({"dibujo": t, "x": en.x, "y": en.y, "mitad": true})
+	return lista
+
+
 # Una cara en cada tramo de muro que tiene suelo justo debajo, con el papel de la habitación de debajo
 func poner_caras() -> void:
 	if al_aire:
@@ -793,6 +829,8 @@ func poner_caras() -> void:
 					cara.adornos = sangre_de_pared(cara.ancho)
 				else:
 					cara.adornos = restos_de_pared(cara.ancho)
+			if sitio.has("tienda") and sitio.has("apt"):
+				cara.adornos += paneles_de_pared(cara, sala)
 			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
 			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
 				cara.adornos += colgados(cara)

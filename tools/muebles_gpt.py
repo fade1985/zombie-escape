@@ -352,7 +352,6 @@ MUEBLES = {
     # las llaves arrancadas, óxido, sangre y una mano ensangrentada; para colgar en las paredes de la tienda (aún sin poner).
     # A escala 1 (un píxel, una unidad: el doble de detalle, como los muebles de la tienda de ropa), 136x86: cabe en la pared de la
     # tienda (96 unidades de alto). A escala 2 (60x38) no se veía ni un detalle
-    "panel_llaves": ("assets/sources/centro/panel-llaves-gpt.webp", "assets/sprites/panel-llaves.png", 136, 86, False),
     "verja": ("assets/sources/centro/verja-gpt.webp", "assets/sprites/verja-escaparate.png", 44, 37, False, (), "negro"),
     # la puerta de la tienda de electrónica: la misma de la ferretería, un poco más pequeña, con su cartel más pequeño, dentro de un marco de neón
     "puerta_electronica": ("assets/sources/centro/puerta-ferreteria-gpt.webp", "assets/sprites/puerta-electronica-entera.png", 28, 40, False),
