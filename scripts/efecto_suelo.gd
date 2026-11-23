@@ -35,6 +35,9 @@
 #    cientifico_jefe.gd en el puñetazo), con la idea del "dirt-explosion" de pixelfx (tools/pixelfx/golpe-suelo.js): polvo,
 #    grietas, una onda que se abre por el suelo y cascotes. Hecho para una onda de 200 (la zona del salto del Gymbro): con
 #    otra, "escala".
+#  - "fogon-llamas": un cuadro de los fogones en damero del cocinero cuando quema (24 nov; fogones_damero.gd), un efecto
+#    hecho para el juego (tools/pixelfx/fogon-llamas.js): la plancha al rojo, lenguas de fuego desiguales por todo el
+#    cuadro (64×64 del dibujo, 4×4 casillas), chispas y brasas, y se apaga. Todo en la hoja de detrás (en el suelo).
 #  - "golpe-pared": una carga que se estrella (M58; minijefe.estrellarse): la nube de yeso y los cascotes que caen
 #    (tools/pixelfx/golpe-pared.js).
 #  - "llamada": la atraedora llamando a los zombis (M52; granada.gd): en cada pitido, dos ondas amarillas que se abren por
@@ -114,6 +117,9 @@ const TIPOS := {
 	"golpe-pared": {"hojas": [preload("res://assets/sprites/golpe-pared-detras.png"),
 		preload("res://assets/sprites/golpe-pared-delante.png"), preload("res://assets/sprites/golpe-pared-brillo.png")],
 		"origen": Vector2(60, 74), "fotogramas": 20},
+	"fogon-llamas": {"hojas": [preload("res://assets/sprites/fogon-llamas-detras.png"),
+		preload("res://assets/sprites/fogon-llamas-delante.png"), preload("res://assets/sprites/fogon-llamas-brillo.png")],
+		"origen": Vector2(48, 80), "fotogramas": 19},
 	"llamada": {"hojas": [preload("res://assets/sprites/llamada-detras.png"),
 		preload("res://assets/sprites/llamada-delante.png"), preload("res://assets/sprites/llamada-brillo.png")],
 		"origen": Vector2(84, 60), "fotogramas": 12},
