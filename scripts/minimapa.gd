@@ -91,7 +91,7 @@ func _process(delta: float) -> void:
 func casillas() -> Array:
 	var planta: Dictionary = partida.planta
 	var pasillo: Dictionary = planta.sitios[0]
-	var aqui: int = partida.aqui
+	var aqui: int = sitio_aqui()
 	var lista := []
 	var x0 := MARGEN + PUNTA + 4
 	var largo := ANCHO - x0 * 2
@@ -156,7 +156,14 @@ func casillas() -> Array:
 
 # Si Johnny ha bajado en el ascensor a la sala de mantenimiento o a las viviendas (está en la planta baja, no en la suya)
 func abajo() -> bool:
-	return partida.planta.num > 1 and partida.planta.sitios[partida.aqui].tipo in ["mantenimiento", "viviendas"]
+	return partida.planta.num > 1 and partida.planta.sitios[sitio_aqui()].tipo in ["mantenimiento", "viviendas"]
+
+
+# El sitio de la planta donde está Johnny. Al cambiar de planta (el panel de pruebas, F9, «Ir a» la sala de un jefe), un
+# momento la planta ya es la nueva y "aqui" aún es el sitio de la de antes, que puede no existir en esta (23 nov: «Invalid
+# access of index '5'»): mientras tanto, el pasillo
+func sitio_aqui() -> int:
+	return partida.aqui if partida.aqui < partida.planta.sitios.size() else 0
 
 
 static func par(v: float) -> float:
@@ -293,7 +300,7 @@ func rejilla(sitio: Dictionary) -> Dictionary:
 
 
 func dibujar_sitio(fondo: Rect2) -> void:
-	var sitio: Dictionary = partida.planta.sitios[partida.aqui]
+	var sitio: Dictionary = partida.planta.sitios[sitio_aqui()]
 	var mapa: Node = partida.mapa
 	if mapa == null:
 		return

@@ -2025,10 +2025,17 @@ func probar_muro() -> void:
 func probar_ir_sala_otro() -> void:
 	nueva_planta(1)
 	var antes: String = edificio
-	await ir_al_jefe("antidisturbios")
-	await get_tree().create_timer(0.8, false).timeout
-	print("Ir a otra sala: de %s a %s · planta del jefe %s · en su sala %s · se guarda %s (esperado: apartamentos, centro, antidisturbios, true, false)" % [
-		antes, edificio, planta.jefe, planta.sitios[aqui].tipo == "jefe", guarda_partida])
+	# (con --sala X, a la de ese minijefe del centro comercial; si no, la del antidisturbios)
+	var tipo := Captura.dato("--sala", "antidisturbios")
+	# desde el último sitio de la planta, que en la del jefe no existe (23 nov: el minimapa buscaba ese sitio en la
+	# planta nueva y fallaba, «Invalid access of index '5'»)
+	await montar(planta.sitios.size() - 1, 0, false)
+	await get_tree().create_timer(0.5, false).timeout
+	print("Ir a otra sala: desde el sitio %d de %d" % [aqui, planta.sitios.size()])
+	await ir_al_jefe(tipo)
+	await get_tree().create_timer(2.5, false).timeout
+	print("Ir a otra sala: de %s a %s · planta del jefe %s · en su sala %s · se guarda %s (esperado: apartamentos, centro, %s, true, false)" % [
+		antes, edificio, planta.jefe, planta.sitios[aqui].tipo == "jefe", guarda_partida, tipo])
 	Captura.foto("captura-ir-sala-otro.png")
 
 

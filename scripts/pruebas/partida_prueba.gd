@@ -49,8 +49,9 @@
 #   --muro              (con --edificio centro --jefe antidisturbios) el antidisturbios rehecho (21 nov): las taquillas,
 #                       el tope de media vida con escudo, pelotas, gas, las grietas hasta romperlo, el barrido y el
 #                       combo con la porra clavada, con fotos                               [prueba_jefes.gd]
-#   --ir-sala-otro      el panel de pruebas lleva a la sala de un minijefe de otro edificio: desde los Apartamentos, a la
-#                       del antidisturbios (cambia de edificio y deja de guardarse)        [prueba_jefes.gd]
+#   --ir-sala-otro      el panel de pruebas lleva a la sala de un minijefe de otro edificio: desde el último sitio de la
+#                       1ª planta de los Apartamentos, a la del antidisturbios (con --sala X, a la de ese minijefe);
+#                       cambia de edificio y deja de guardarse                             [prueba_jefes.gd]
 #   --cocina            (con --edificio centro --jefe cocinero) la Cocina central: los fogones y las freidoras
 #                       de las paredes y la olla gigante en medio, con foto               [prueba_jefes.gd]
 #   --banquete          (con --edificio centro --jefe cocinero) el cocinero rehecho (23 nov): la olla y los sacos,
