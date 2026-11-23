@@ -1983,7 +1983,10 @@ func probar_muro() -> void:
 	Captura.foto("captura-muro-pelotas.png")
 	# el gas
 	jefe.cambiar("aviso_gas")
-	await get_tree().create_timer(1.8, false).timeout
+	await get_tree().create_timer(0.3, false).timeout
+	print("Muro: al lanzar el gas, animación «%s» (esperado: lanzar_...)" % jefe.sprite.animation)
+	Captura.foto("captura-muro-lanzar.png")
+	await get_tree().create_timer(1.5, false).timeout
 	var gas := get_tree().get_nodes_in_group("nubes_gas")
 	print("Muro: nubes de gas %d (esperado: 3)" % gas.size())
 	Captura.foto("captura-muro-gas.png")
@@ -2035,13 +2038,18 @@ func probar_muro() -> void:
 			Captura.foto("captura-muro-grieta.png")
 			johnny.global_position = centro + Vector2(0, 2000)   # (fuera del camino de las cargas siguientes)
 	print("Muro: escudo roto %s, fase %d, pelotas %d (esperado: true, 2, 0)" % [not jefe.escudo, jefe.fase, jefe.pelotas().size()])
+	print("Muro: al romperse, animación «%s» (esperado: romper_s)" % jefe.sprite.animation)
 	Captura.foto("captura-muro-roto.png")
 	await get_tree().create_timer(1.6, false).timeout
+	print("Muro: tras el grito, hoja sin escudo %s (esperado: true)" % (jefe.sprite.sprite_frames == jefe.HOJA_SIN))
 	# el barrido eléctrico
 	jefe.global_position = centro + Vector2(-200, 0)
 	johnny.global_position = centro + Vector2(200, 0)
 	jefe.cambiar("aviso_barrido")
-	await get_tree().create_timer(1.5, false).timeout
+	await get_tree().create_timer(0.4, false).timeout
+	print("Muro: al preparar el barrido, animación «%s» (esperado: suelo_...)" % jefe.sprite.animation)
+	Captura.foto("captura-muro-suelo.png")
+	await get_tree().create_timer(1.1, false).timeout
 	var barridos := 0
 	for n in jefe.get_parent().get_children():
 		if n is BarridoElectrico:
@@ -2062,7 +2070,7 @@ func probar_muro() -> void:
 	print("Muro: tras el combo, %s (esperado: clavado)" % jefe.estado)
 	var antes: int = jefe.vida
 	jefe.recibir_golpe(10, Vector2.RIGHT * 10.0)
-	print("Muro: un golpe de 10 con la porra clavada le quita %d (esperado: 15)" % (antes - jefe.vida))
+	print("Muro: un golpe de 10 con la porra clavada le quita %d (esperado: 15) · animación «%s» (esperado: suelo_...)" % [antes - jefe.vida, jefe.sprite.animation])
 	Captura.foto("captura-muro-clavado.png")
 
 

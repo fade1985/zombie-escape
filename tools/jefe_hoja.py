@@ -57,8 +57,27 @@ JEFES = {
             # usa allí lo de antes (antidisturbios.gd)
             "correr": ("correr_escudo", 14, True, True),
             "empujon": ("empujon_escudo", 14, False, False),
+            # 23 nov: lanzar el bote de gas con el escudo en el otro brazo, y el escudo reventando al pasar a la
+            # fase 2 (solo se usa de frente: en las otras direcciones salió raro)
+            "lanzar": ("lanzar_gas", 12, False, False),
+            "romper": ("romper_escudo", 10, False, False),
         },
         "de_frente": ["silbato"],
+    },
+    # el antidisturbios sin escudo (la fase 2, otra hoja: antidisturbios.gd la cambia al reventar el escudo). Los
+    # nombres son los de la hoja con escudo, para que el código sirva igual; "suelo" es el porrazo contra el suelo (el
+    # aviso del barrido y la porra clavada del combo)
+    "antidisturbios-sin-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("andar_sin", 9, True, True),
+            "porrazo": ("porrazo_sin", 12, False, False),
+            "suelo": ("suelo_sin", 12, False, False),
+            "golpe": ("golpe_sin", 16, False, False),
+            "muerte": ("muerte_sin", 10, False, False),
+        },
+        "sin": {"golpe_s": [3, 4]},   # (de frente, la cabeza sale de espaldas en esos dos)
     },
     # el cocinero: "lanzar" vale para el abanico, la lluvia y la sartén
     "cocinero-72": {

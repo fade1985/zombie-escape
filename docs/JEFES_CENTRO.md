@@ -111,6 +111,12 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
 - Pistas para saber que hay que romper el escudo (21 nov): Johnny lo dice al entrar («Ese escudo lo aguanta todo...
   A ver si consigo que se lo estampe contra las taquillas») y junto a la barra de vida hay tres escuditos que se
   agrietan con cada choque (`barra_jefe.gd`, `pintar_escudo`).
+- Más animaciones (23 nov, v3): lanzar el bote con el escudo en el otro brazo (`lanzar`), el escudo reventando al
+  pasar de fase (`romper`, solo de frente: en las otras direcciones salió raro) y un dibujo nuevo **sin escudo** (otro
+  estado del personaje en PixelLab, `assets/sources/antidisturbios-sin-72`) con su andar, porrazo (el combo), porrazo
+  al suelo (`suelo`: el aviso del barrido y la porra clavada), golpe y muerte. Es otra hoja,
+  `jefe-antidisturbios-sin`, con los mismos nombres: `animar` la pone al acabar de reventar el escudo, con su offset.
+  Descartadas por prescindibles: mareado, el silbato en otras direcciones y repetir el noreste.
 
 ### Dibujos nuevos
 El antidisturbios sin escudo con la porra (andar, combo, golpe al suelo, muerte). El escudo agrietado y las

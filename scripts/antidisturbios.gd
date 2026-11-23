@@ -29,6 +29,10 @@ extends Minijefe
 const PELOTA := preload("res://scripts/pelota_goma.gd")
 const BARRIDO := preload("res://scripts/barrido_electrico.gd")
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
+# la hoja sin escudo (fase 2): se pone cuando acaba de reventar el escudo (animar); su casilla es más pequeña
+const HOJA_SIN := preload("res://assets/sprites/jefe-antidisturbios-sin.tres")
+const OFFSET_SIN := Vector2(-43, -82)
+const ROMPER := 1.0                # lo que dura el escudo reventando, al principio del grito
 
 const REFUERZO := "vigilante"
 const REFUERZOS := 2               # cuántos llegan al silbato (solo con escudo)
@@ -50,6 +54,7 @@ const DANO_CARGA := 20
 const ATONTADO := 2.0              # lo que se queda atontado al estrellarse en la azotea (en las tiendas, 5 s: minijefe.gd)
 const PIE := 30.0                  # a qué altura dibuja los pies respecto a su centro
 const GOLPE_PORRAZO := 4           # fotograma del porrazo en el que la porra baja
+const GOLPE_SUELO := 5             # fotograma del golpe al suelo (sin escudo) en el que la porra da en el suelo
 # Las pelotas de goma
 const AVISO_PELOTAS := 0.6
 const PELOTAS := 3                 # las de cada tanda, en abanico
@@ -162,13 +167,13 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta)
 			if t >= AVISO_GAS:
 				tirar_gas(johnny)
-				cambiar("recuperar", {"dur": 0.35})
+				cambiar("recuperar", {"dur": 0.35, "lanzar": true})
 		"aviso_barrido":
 			frenar(delta)
 			girar_hacia(delta, hacia.normalized())
 			if t >= AVISO_BARRIDO:
 				barrer(johnny)
-				cambiar("recuperar", {"dur": 0.6})
+				cambiar("recuperar", {"dur": 0.6, "suelo": true})
 		"aviso_combo":
 			# entre golpe y golpe se gira hacia Johnny, deprisa
 			frenar(delta, 8.0)
@@ -473,7 +478,30 @@ func clonc(fuerza: Vector2) -> void:
 func animar() -> void:
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
+	if not escudo and sprite.sprite_frames != HOJA_SIN and not (estado == "grito" and t < ROMPER):
+		# ya ha reventado el escudo: a partir de aquí, el dibujo sin él (23 nov)
+		sprite.animation = "quieto_s"   # (la hoja nueva no tiene "romper")
+		sprite.sprite_frames = HOJA_SIN
+		sprite.offset = OFFSET_SIN
 	match estado:
+		"aviso_gas" when dibujada("lanzar", dir):
+			# con el escudo: saca el bote del cinturón y lo lanza (23 nov); la otra mitad, en "recuperar"
+			fijar("lanzar", dir, int(t / AVISO_GAS * mitad("lanzar", dir)))
+		"recuperar" when datos.get("lanzar", false) and dibujada("lanzar", dir):
+			fijar("lanzar", dir, mitad("lanzar", dir) + avance("lanzar_" + dir, t / datos.dur) / 2)
+		"aviso_barrido" when dibujada("suelo", dir):
+			# sin escudo: levanta la porra y la estampa contra el suelo justo al salir las olas (fotograma GOLPE_SUELO)
+			fijar("suelo", dir, mini(GOLPE_SUELO - 1, int(t / AVISO_BARRIDO * GOLPE_SUELO)))
+			sprite.position.x = sin(tiempo * 40.0) * 1.5   # (la porra echa chispas: tiembla)
+		"recuperar" when datos.get("suelo", false) and dibujada("suelo", dir):
+			var resto := sprite.sprite_frames.get_frame_count("suelo_" + dir) - GOLPE_SUELO
+			fijar("suelo", dir, GOLPE_SUELO + int(clampf(t / datos.dur, 0.0, 0.99) * resto))
+		"clavado" when dibujada("suelo", dir):
+			fijar("suelo", dir, sprite.sprite_frames.get_frame_count("suelo_" + dir) - 1)
+			sprite.position.x = sin(tiempo * 30.0) * 1.0
+		"grito" when t < ROMPER and dibujada("romper", "s"):
+			# el escudo revienta (de frente, como el grito)
+			fijar("romper", "s", avance("romper_s", t / ROMPER))
 		"aviso_porrazo", "aviso_gas", "aviso_barrido":
 			var dura: float = {"aviso_porrazo": AVISO_PORRAZO, "aviso_gas": AVISO_GAS, "aviso_barrido": AVISO_BARRIDO}[estado]
 			fijar("porrazo", dir, mini(GOLPE_PORRAZO - 1, int(t / dura * GOLPE_PORRAZO)))
