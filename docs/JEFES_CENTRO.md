@@ -141,7 +141,8 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
   pared dejando un tajo rojo: solo da el cuchillo que pilla a Johnny al pasar.
 - **La olla se vuelca**: una ola de aceite cruza la sala y deja libres un par de mesas o huecos.
   Desde el 24 nov, la olla se vuelca de verdad: una animación de PixelLab (`assets/sources/salas/centro/olla-vuelca`,
-  hoja `olla-vuelca`) que sustituye un momento a su dibujo quieto; la ola sale cuando el guiso llega al suelo.
+  hoja `olla-vuelca`) que sustituye un momento a su dibujo quieto; la ola sale cuando el guiso llega al suelo. La ola es ahora de guiso verde, del color de lo que cae de la olla
+  (`ola_aceite.gd`; era aceite dorado): el frente ondula, deja una película detrás y lleva burbujas, huesos, carne y gotas.
 - La olla le cura más a menudo: hay que vigilar los ingredientes.
 
 ### Cómo quedó (23 nov)
