@@ -24,7 +24,9 @@ B = 11                            # el tamaño de un «píxel» de GPT en sus im
 #     chorretón de sangre del azul), o None para recortar por todo lo que no es fondo
 #   colgar: "cabeza", de dos ganchos debajo de la cabeza, a los lados del mango (el martillo); "medio", de un gancho
 #     entre los dos mangos, justo debajo de donde se juntan (los alicates); "agujero", boca abajo, de un gancho metido
-#     en el agujero del final del mango (la llave inglesa); "rollo", de un gancho metido por el agujero del centro (la cinta)
+#     en el agujero del final del mango (la llave inglesa); "rollo", de un gancho metido por el agujero del centro (la cinta);
+#     "hueco", de un gancho metido por un hueco cerrado de arriba (el del mango del serrucho)
+#   girar: (si hace falta) los grados que se gira la herramienta de GPT antes de colgarla, al revés que las agujas del reloj
 #   apoyo: con "cabeza", a qué alto (en tanto por uno) van los ganchos; por defecto, 0.15 (debajo de la cabeza del martillo)
 #   oscurecer: la parte de arriba (en tanto por uno del alto) cuyos grises se oscurecen, o 0; oscuro: cuánto (por defecto, a la mitad)
 #   huecos: (centro x, alto de arriba y, alto de la herramienta, giro en grados, qué hay), en píxeles del panel ya
@@ -142,6 +144,29 @@ PANELES = {
             (780, 560, 3, 2),      # en el blanco
         ],
     },
+    # el tercer panel azul, el del marco negro (sin nada delante del golpe de arriba, la mancha de humedad de la derecha,
+    # los arañazos de abajo a la izquierda ni el rastro de sangre de abajo) con serruchos, de pie: del hueco del mango, la
+    # hoja hacia abajo (el serrucho de GPT, en horizontal, se gira)
+    "serruchos": {
+        "panel": "assets/sources/centro/panel-vacio-azul3-gpt.webp",
+        "herramienta": "assets/sources/centro/serrucho-gpt.webp",
+        "recorte": None,
+        "colgar": "hueco",
+        "girar": 90,
+        "oscurecer": 0,
+        "huecos": [
+            (150, 110, 330, 0, "colgada"), (330, 110, 290, 0, "colgada"), (510, 110, 330, 0, "vacio"),
+            (690, 110, 290, 0, "colgada"), (870, 110, 330, 7, "torcido"), (1050, 110, 290, 0, "colgada"),
+            (270, 520, 265, 0, "colgada"), (450, 520, 230, 0, "colgada"), (630, 520, 265, 0, "vacio"),
+            (810, 520, 230, 0, "colgada"), (990, 520, 210, 0, "colgada"),
+        ],
+        "sangre": [
+            (330, 330, 4, 3),      # en la hoja del segundo
+            (880, 250, 3, 2),      # en el torcido
+            (560, 470, 5, 3),      # en la chapa, entre las dos filas
+            (450, 660, 3, 2),      # en uno de abajo
+        ],
+    },
 }
 
 
@@ -223,9 +248,26 @@ def tenir(m, color):
     return m
 
 
+def huecos_cerrados(m, hasta):
+    """Los píxeles transparentes de m que no se llegan desde el borde (los huecos cerrados), de las filas de arriba (hasta "hasta")."""
+    a = m.split()[3].load()
+    W, H = m.size
+    fuera = bytearray(W * H)
+    cola = deque([(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)])
+    while cola:
+        x, y = cola.popleft()
+        if x < 0 or y < 0 or x >= W or y >= H or fuera[y * W + x] or a[x, y] > 0:
+            continue
+        fuera[y * W + x] = 1
+        cola.extend(((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)))
+    return [(x, y) for y in range(hasta) for x in range(W) if a[x, y] == 0 and not fuera[y * W + x]]
+
+
 def montar(nombre, p):
     panel = sin_fondo(p["panel"], p["recorte"])
-    herramienta = sin_fondo(p["herramienta"], todo_negro=p["colgar"] == "rollo")
+    herramienta = sin_fondo(p["herramienta"], todo_negro=p["colgar"] in ("rollo", "hueco"))
+    if p.get("girar"):
+        herramienta = herramienta.rotate(p["girar"], expand=True)   # (en grados, al revés que las agujas del reloj)
     hw, hh = herramienta.size
     if p["oscurecer"]:
         # los grises de arriba (la cabeza), más negros
@@ -266,6 +308,14 @@ def montar(nombre, p):
             arriba = next(yy for yy in range(alto // 2, 0, -1) if a[centro, yy] > 0)
             gancho(d, cx, y + arriba + 1)
             eje = (centro, alto // 2)
+        elif p["colgar"] == "hueco":
+            # de un gancho metido por un hueco cerrado de la parte de arriba (el del mango del serrucho), apoyado en él por
+            # arriba; el gancho se ve por el hueco
+            dentro = huecos_cerrados(m, int(alto * 0.45))
+            centro = sum(q[0] for q in dentro) // len(dentro)
+            arriba = min(q[1] for q in dentro)
+            gancho(d, cx, y + arriba + 1)
+            eje = (centro, arriba + B)
         elif p["colgar"] == "agujero":
             # boca abajo: el agujero del mango, arriba; el gancho sale del panel por él (se ve dentro del agujero)
             m = m.rotate(180)
@@ -286,7 +336,7 @@ def montar(nombre, p):
             gy = y + abre - B
             gancho(d, cx, gy)
             eje = (centro, abre)
-        if que == "torcido" and p["colgar"] == "agujero":
+        if que == "torcido" and p["colgar"] in ("agujero", "hueco"):
             # girada alrededor del agujero, que se queda en su gancho
             w0, h0 = m.size
             m = m.rotate(-giro, resample=Image.BICUBIC, expand=True)
