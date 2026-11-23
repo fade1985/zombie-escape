@@ -790,12 +790,44 @@ msgid "¡GRAAAAH!"
 msgstr "GRAAAAH!"
 
 #: scripts/cocinero.gd
-msgid "¡CALENTITO!"
-msgstr "QUENTINHO!"
+msgid "Si se come ese guiso, se cura... A ver qué cocina sin ingredientes"
+msgstr "Se ele comer esse ensopado, se cura... Quero ver o que ele cozinha sem ingredientes"
 
 #: scripts/cocinero.gd
-msgid "¡A LA OLLA!"
-msgstr "PRA PANELA!"
+msgid "¿Y MIS INGREDIENTES?"
+msgstr "CADÊ MEUS INGREDIENTES?"
+
+#: scripts/cocinero.gd
+msgid "¡SE ME HAN CLAVADO!"
+msgstr "FICARAM PRESAS!"
+
+#: scripts/cocinero.gd
+msgid "¡A LOS FOGONES!"
+msgstr "PRO FOGÃO!"
+
+#: scripts/cocinero.gd
+msgid "¡QUE SE VUELCA!"
+msgstr "VAI VIRAR!"
+
+#: scripts/cocinero.gd
+msgid "¡FUEGO EN LOS FOGONES!"
+msgstr "FOGO NAS BOCAS!"
+
+#: scripts/cocinero.gd
+msgid "¡PUAJ!"
+msgstr "ECA!"
+
+#: scripts/cocinero.gd scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "NHAC!"
+
+#: scripts/cocinero.gd
+msgid "¡A FREGAR!"
+msgstr "HORA DA LOUÇA!"
+
+#: scripts/cocinero.gd
+msgid "¡SERVICIO DE URGENCIA!"
+msgstr "SERVIÇO DE URGÊNCIA!"
 
 #: scripts/copia.gd
 msgid "¡Se ha cerrado la puerta! Protege al %s mientras copia los archivos"
@@ -1238,10 +1270,6 @@ msgstr "AQUI NINGUÉM PARA!"
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "FOME!"
-
-#: scripts/gloton.gd scripts/johnny.gd
-msgid "¡ÑAM!"
-msgstr "NHAC!"
 
 #: scripts/gloton.gd
 msgid "¡TENGO HAMBRE!"

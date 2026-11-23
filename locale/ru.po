@@ -791,12 +791,44 @@ msgid "¡GRAAAAH!"
 msgstr "ГРААААХ!"
 
 #: scripts/cocinero.gd
-msgid "¡CALENTITO!"
-msgstr "ГОРЯЧЕНЬКОЕ!"
+msgid "Si se come ese guiso, se cura... A ver qué cocina sin ingredientes"
+msgstr "Если он съест это рагу, то вылечится... Посмотрим, что он приготовит без продуктов"
 
 #: scripts/cocinero.gd
-msgid "¡A LA OLLA!"
-msgstr "В СУП!"
+msgid "¿Y MIS INGREDIENTES?"
+msgstr "ГДЕ МОИ ПРОДУКТЫ?"
+
+#: scripts/cocinero.gd
+msgid "¡SE ME HAN CLAVADO!"
+msgstr "ЗАСТРЯЛИ!"
+
+#: scripts/cocinero.gd
+msgid "¡A LOS FOGONES!"
+msgstr "К ПЛИТЕ!"
+
+#: scripts/cocinero.gd
+msgid "¡QUE SE VUELCA!"
+msgstr "ОПРОКИДЫВАЕТСЯ!"
+
+#: scripts/cocinero.gd
+msgid "¡FUEGO EN LOS FOGONES!"
+msgstr "ОГОНЬ НА КОНФОРКАХ!"
+
+#: scripts/cocinero.gd
+msgid "¡PUAJ!"
+msgstr "ФУ!"
+
+#: scripts/cocinero.gd scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "ЧАВК!"
+
+#: scripts/cocinero.gd
+msgid "¡A FREGAR!"
+msgstr "МЫТЬ ПОСУДУ!"
+
+#: scripts/cocinero.gd
+msgid "¡SERVICIO DE URGENCIA!"
+msgstr "СРОЧНЫЙ ЗАКАЗ!"
 
 #: scripts/copia.gd
 msgid "¡Se ha cerrado la puerta! Protege al %s mientras copia los archivos"
@@ -1240,10 +1272,6 @@ msgstr "ПЕРЕКУРА НЕ БУДЕТ!"
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "ЖРАТЬ!"
-
-#: scripts/gloton.gd scripts/johnny.gd
-msgid "¡ÑAM!"
-msgstr "ЧАВК!"
 
 #: scripts/gloton.gd
 msgid "¡TENGO HAMBRE!"

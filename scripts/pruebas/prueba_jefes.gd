@@ -560,10 +560,11 @@ func probar_fotocopias() -> void:
 	Captura.foto("captura-becario-muerto.png")
 
 
-# Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 9 fogones y
-# freidoras (tres en cada pared), que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
-# Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los
-# muebles con su charco ya extendido (-llena-izquierda y -llena-derecha). Cuenta cuántos rebosan en 60 s, normal y enfadado, y cuántas veces dos a la vez
+# Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero, con sus 9 fogones y
+# freidoras (tres en cada pared) y la olla gigante en medio. (Hasta el 23 nov los fogones rebosaban aceite hirviendo,
+# M82; con el cocinero rehecho ya no: ahora el suelo se pone al rojo en damero, --banquete.) Foto: captura-cocina.png
+# (con --puerta-arriba, solo la cocina detrás de una puerta que se abre por arriba: ningún mueble delante de la puerta,
+# captura-cocina-puerta-arriba.png)
 func probar_cocina() -> void:
 	if "--puerta-arriba" in OS.get_cmdline_user_args():
 		# (18 nov) la Cocina central detrás de una puerta de abajo del pasillo, que se abre por arriba: antes el fogón del
@@ -579,10 +580,10 @@ func probar_cocina() -> void:
 	jefa.set_physics_process(false)
 	johnny.set_physics_process(false)
 	var fogones: Array = jefa.fogones()
-	print("Cocina: %d muebles que rebosan (esperado: 9, tres arriba, tres a la izquierda y tres a la derecha): %s" % [fogones.size(), fogones.map(func(m): return "%s en %s" % [
+	print("Cocina: %d fogones y freidoras (esperado: 9, tres arriba, tres a la izquierda y tres a la derecha): %s" % [fogones.size(), fogones.map(func(m): return "%s en %s" % [
 		m.datos.tipo, m.datos.lado])])
-	if fogones.is_empty():
-		return
+	var olla: Node2D = jefa.buscar_olla()
+	print("Cocina: la olla gigante en medio %s (esperado: true)" % (olla != null))
 	if "--puerta-arriba" in OS.get_cmdline_user_args():
 		var sitio: Dictionary = mapa.sitio
 		var entrada: Rect2 = Muebles.delante_de({"cols": sitio.apt.cols, "filas": sitio.apt.filas}, sitio.apt.entrada.lado,
@@ -594,67 +595,10 @@ func probar_cocina() -> void:
 		Captura.foto("captura-cocina-puerta-arriba.png")
 		get_tree().quit()
 		return
-	# Johnny, en medio de la cocina (entre los muebles)
-	var medio := Vector2.ZERO
-	for m in fogones:
-		medio += m.global_position / fogones.size()
-	johnny.global_position = medio
-	var paso := 1.0 / 60.0
-	var correr := func(segundos: float) -> void:
-		for i in roundi(segundos * 60.0):
-			jefa.tiempo += paso
-			jefa.rebosar(paso, johnny)
-			await get_tree().physics_frame
-	# el primero, a mano: el de la pared de arriba más cerca de Johnny (que salga en la foto)
-	var cerca: Node2D = fogones.filter(func(m): return m.datos.lado == "arriba").reduce(func(x, m): return m if 		m.global_position.distance_to(medio) < x.global_position.distance_to(medio) else x)
-	jefa.rebosando.append([cerca, jefa.AVISO_REBOSE])
-	jefa.mojado[cerca] = jefa.tiempo + jefa.AVISO_REBOSE + jefa.DURA_REBOSE
-	jefa.rebose = 99.0
-	await correr.call(0.6)
-	print("Cocina: avisando %d (esperado: 1)" % jefa.rebosando.size())
-	Captura.foto("captura-cocina-aviso.png")
-	await correr.call(3.4)
-	var charcos := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "hirviendo")
-	print("Cocina: charcos %d, extendido a los 3 s %s (esperado: 1, entre 0,7 y 0,85)" % [charcos.size(),
-		charcos.map(func(c): return "%.2f" % c.extendido())])
-	Captura.foto("captura-cocina-crece.png")
-	# todos los demás, a la vez (para ver dónde queda el charco de cada uno)
-	for m in fogones:
-		if jefa.mojado.get(m, 0.0) <= jefa.tiempo:
-			jefa.derramar(m)
-	await correr.call(6.5)
-	# la cocina no cabe entera en la pantalla: una foto con Johnny hacia cada lado (la pared de arriba sale en las dos)
-	var bordes: Array = fogones.map(func(m): return m.global_position.x)
-	for lado in ["izquierda", "derecha"]:
-		johnny.global_position = Vector2(lerpf(bordes.min(), bordes.max(), 0.15 if lado == "izquierda" else 0.85), medio.y + 60.0)
-		await get_tree().create_timer(1.0, false).timeout   # (la cámara va suave: que llegue)
-		Captura.foto("captura-cocina-llena-%s.png" % lado)
-	johnny.global_position = medio
-	# cuántos rebosan en 60 s (sin esperar de verdad: los charcos, fuera al momento), normal y enfadado
-	for c in get_tree().get_nodes_in_group("charcos"):
-		c.remove_from_group("charcos")
-		c.queue_free()
-	for fase in [1, 2]:
-		jefa.fase = fase
-		jefa.mojado.clear()
-		jefa.rebosando.clear()
-		jefa.rebose = 0.0
-		var soltados := 0
-		var dobles := 0
-		for i in 3600:
-			jefa.tiempo += paso
-			var antes: int = jefa.rebosando.size()
-			jefa.rebosar(paso, johnny)
-			if jefa.rebosando.size() - antes >= 2:
-				dobles += 1
-			for c in get_tree().get_nodes_in_group("charcos"):
-				if not c.is_queued_for_deletion():
-					soltados += 1
-					c.remove_from_group("charcos")
-					c.queue_free()
-		print("Cocina, %s: rebosan %d en 60 s (esperado: %s), %d veces dos a la vez (esperado: %s)" % [
-			"enfadado" if fase == 2 else "normal", soltados, "13 o 14" if fase == 1 else "unos 30", dobles,
-			"0" if fase == 1 else "unas 10"])
+	if olla:
+		johnny.global_position = olla.global_position + Vector2(0, 160)
+	await get_tree().create_timer(1.0, false).timeout
+	Captura.foto("captura-cocina.png")
 
 
 # Con "--captura --jefe gloton --sangre": la sangre ácida de Johnny. Johnny quieto a 3 y a 10 casillas: dos golpes
@@ -1122,7 +1066,7 @@ func probar_bombero() -> void:
 
 
 # El cocinero, para la foto del jefe: un charco de aceite debajo de él (no le quema) y otro debajo de Johnny,
-# unos cuchillos ya clavados, la lluvia marcando el suelo y el abanico recién lanzado
+# unos cuchillos ya clavados y la lluvia marcando el suelo
 func probar_cocinero() -> void:
 	var antes_johnny: int = johnny.vida
 	# que nadie le dispare mientras tanto (ni Johnny solo, ni el superviviente que le acompaña): así se ve lo que
@@ -1144,8 +1088,6 @@ func probar_cocinero() -> void:
 		c.position = jefa.position.lerp(johnny.position, 0.5) + Vector2((i - 1) * 50.0, 50.0)
 		mapa.cosas.add_child(c)
 	jefa.lluvia(johnny)
-	jefa.empezar("aviso_abanico", (johnny.position - jefa.position).angle())
-	jefa.t = 0.3   # el aviso ya casi acabado: en la foto acaba de lanzar el abanico
 	await get_tree().create_timer(0.1, false).timeout   # (las balas que ya volaban, que lleguen antes de contar)
 	var antes_jefe: int = jefa.vida
 	await get_tree().create_timer(0.19, false).timeout
@@ -2088,3 +2030,126 @@ func probar_ir_sala_otro() -> void:
 	print("Ir a otra sala: de %s a %s · planta del jefe %s · en su sala %s · se guarda %s (esperado: apartamentos, centro, antidisturbios, true, false)" % [
 		antes, edificio, planta.jefe, planta.sitios[aqui].tipo == "jefe", guarda_partida])
 	Captura.foto("captura-ir-sala-otro.png")
+
+
+# Con "--captura --edificio centro --jefe cocinero --banquete": el cocinero rehecho (23 nov, docs/JEFES_CENTRO.md,
+# «El banquete»), en su Cocina central, con Johnny quieto y sin que le maten. Cada línea dice lo esperado. Fotos
+# (captura-banquete-*.png): sala (la olla y los tres sacos), damero-aviso y damero-quema (los fogones en el suelo),
+# sartenes (rebotando), remover (con su barrita), sacos (los tres rotos: tachados junto a la barra), enfermo,
+# gorro (el gorro volando al enfadarse), cruz (el aviso), ola (la ola de aceite), clavado (el combo)
+func probar_banquete() -> void:
+	if not await ir_a_la_sala_del_jefe("cocinero"):
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED   # (que nadie le dispare: se cuenta lo que le entra)
+	johnny.invulnerable = 99999.0
+	johnny.set_physics_process(false)
+	var jefe: Node2D = jefa
+	await get_tree().create_timer(0.6, false).timeout
+	var olla: Node2D = jefe.olla
+	print("Banquete: olla %s · sacos %d (esperado: true, 3)" % [olla != null, jefe.sacos_vivos()])
+	print("Banquete: Johnny dice «%s» (esperado: la pista del guiso y los ingredientes)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
+	var c: Vector2 = jefe.centro_olla()
+	johnny.global_position = c + Vector2(160, 160)
+	jefe.global_position = c + Vector2(-200, 120)
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	jefe.cocina = 99.0
+	await get_tree().create_timer(0.8, false).timeout
+	Captura.foto("captura-banquete-sala.png")
+	# los fogones en damero
+	jefe.damero()
+	await get_tree().create_timer(0.7, false).timeout
+	Captura.foto("captura-banquete-damero-aviso.png")
+	await get_tree().create_timer(0.6, false).timeout
+	Captura.foto("captura-banquete-damero-quema.png")
+	await get_tree().create_timer(2.5, false).timeout
+	print("Banquete: el damero se ha ido %s (esperado: true)" % get_tree().current_scene.find_children("*", "FogonesDamero", true, false).is_empty())
+	# las sartenes: cuatro, y «¡A FREGAR!»
+	for i in 4:
+		jefe.mirada = jefe.global_position.direction_to(johnny.global_position).rotated(i * 0.8 - 1.2)
+		jefe.sarten()
+	await get_tree().create_timer(1.5, false).timeout
+	print("Banquete: sartenes rebotando %d (esperado: 4) · gotas de aceite %d (esperado: unas cuantas)" % [jefe.sartenes().size(),
+		get_tree().get_nodes_in_group("charcos").size()])
+	Captura.foto("captura-banquete-sartenes.png")
+	jefe.fregar()
+	await get_tree().create_timer(3.0, false).timeout
+	print("Banquete: tras «¡A FREGAR!», sartenes %d (esperado: 0)" % jefe.sartenes().size())
+	# a cocinar con los tres sacos: se cura
+	jefe.vida = roundi(jefe.vida_max * 0.6)
+	var cura_esperada: int = jefe.vida + roundi(jefe.vida_max * 0.12)
+	johnny.global_position = c + Vector2(150, 40)   # (cerca de la olla: que salga su barrita en la foto)
+	jefe.cambiar("ir_olla")
+	await get_tree().create_timer(3.0, false).timeout
+	print("Banquete: yendo a la olla, estado %s (esperado: remover)" % jefe.estado)
+	Captura.foto("captura-banquete-remover.png")
+	print("Banquete: al remover, animación «%s» (esperado: remover_...)" % jefe.sprite.animation)
+	while jefe.estado == "remover":
+		await get_tree().physics_frame
+	print("Banquete: con 3 sacos se cura a %d (esperado: %d) · sacos nuevos %d (esperado: 3)" % [jefe.vida, cura_esperada, jefe.sacos_vivos()])
+	# sin sacos: el guiso sale malo (antes, que acaben de caer: cayendo no se rompen)
+	await get_tree().create_timer(0.6, false).timeout
+	for s in jefe.sacos:
+		s.recibir_golpe(999, Vector2.RIGHT)
+	await get_tree().create_timer(0.3, false).timeout
+	print("Banquete: sacos rotos %d (esperado: 3) · se los ha comido el grupo de zombis %s (esperado: false)" % [jefe.sacos_rotos(),
+		get_tree().get_nodes_in_group("zombis").any(func(z): return z is SacoIngredientes)])
+	Captura.foto("captura-banquete-sacos.png")
+	jefe.cambiar("remover")
+	while jefe.estado == "remover":
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.5, false).timeout
+	var antes: int = jefe.vida
+	jefe.recibir_golpe(10, Vector2.RIGHT * 10.0)
+	print("Banquete: sin sacos, estado %s · un golpe de 10 le quita %d (esperado: enfermo, 20) · animación «%s»" % [jefe.estado,
+		antes - jefe.vida, jefe.sprite.animation])
+	Captura.foto("captura-banquete-enfermo.png")
+	# a media vida: «servicio de urgencia»
+	jefe.cambiar("andar")
+	jefe.vida = jefe.vida_max / 2
+	await get_tree().create_timer(0.9, false).timeout
+	print("Banquete: fase %d, estado %s (esperado: 2, grito)" % [jefe.fase, jefe.estado])
+	Captura.foto("captura-banquete-gorro.png")
+	await get_tree().create_timer(1.0, false).timeout
+	print("Banquete: hoja sin gorro %s (esperado: true)" % (jefe.sprite.sprite_frames == jefe.HOJA_SIN))
+	jefe.cocina = 99.0
+	# el corte en cruz, con Johnny en una franja
+	jefe.global_position = c + Vector2(-260, 150)
+	johnny.global_position = jefe.global_position + Vector2(220, 0)
+	jefe.cambiar("aviso_cruz", {"giro": 0.0, "segunda": true})
+	await get_tree().create_timer(0.5, false).timeout
+	Captura.foto("captura-banquete-cruz.png")
+	johnny.invulnerable = 0.0
+	var vida_johnny: int = johnny.vida
+	await get_tree().create_timer(0.4, false).timeout
+	print("Banquete: la cruz le quita a Johnny %d (esperado: más de 0)" % (vida_johnny - johnny.vida))
+	johnny.invulnerable = 99999.0
+	johnny.vida = vida_johnny
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	# la olla se vuelca
+	johnny.global_position = c + Vector2(0, 250)
+	jefe.cambiar("aviso_ola", {"angulo": 0.0})
+	await get_tree().create_timer(1.6, false).timeout
+	var olas := get_tree().current_scene.find_children("*", "OlaAceite", true, false)
+	print("Banquete: olas de aceite %d (esperado: 1)" % olas.size())
+	Captura.foto("captura-banquete-ola.png")
+	await get_tree().create_timer(3.0, false).timeout
+	# el combo y los cuchillos clavados
+	jefe.global_position = johnny.global_position + Vector2(-110, 0)
+	jefe.mirada = Vector2.RIGHT
+	jefe.empezar("aviso_combo", 0.0, {"golpe": 0})
+	var hasta := 0.0
+	while jefe.estado != "clavado" and hasta < 3.0:
+		await get_tree().physics_frame
+		hasta += 1.0 / 60.0
+	antes = jefe.vida
+	jefe.recibir_golpe(10, Vector2.RIGHT * 10.0)
+	print("Banquete: tras el combo, %s · un golpe de 10 le quita %d (esperado: clavado, 15)" % [jefe.estado, antes - jefe.vida])
+	Captura.foto("captura-banquete-clavado.png")
+	# y al morir, lo suyo se va con él
+	jefe.recibir_golpe(99999, Vector2.RIGHT * 10.0)
+	await get_tree().create_timer(0.5, false).timeout
+	print("Banquete: muerto, sacos que quedan %d · zombis %d (esperado: 0, 0)" % [get_tree().get_nodes_in_group("sacos_ingredientes").size(),
+		get_tree().get_nodes_in_group("zombis").size()])

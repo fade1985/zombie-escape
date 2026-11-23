@@ -6,7 +6,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 | Jefe | Estado |
 |---|---|
 | Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
-| Cocinero | pendiente |
+| Cocinero | hecho, pendiente del visto bueno del dueño (23 nov) |
 | Modista | pendiente |
 | Mascota | pendiente |
 | Gerente | pendiente |
@@ -139,6 +139,28 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
 - **Corte en cruz**: franjas en cruz o en X desde él hasta las paredes.
 - **La olla se vuelca**: una ola de aceite cruza la sala y deja libres un par de mesas o huecos.
 - La olla le cura más a menudo: hay que vigilar los ingredientes.
+
+### Cómo quedó (23 nov)
+- `cocinero.gd`, `saco_ingredientes.gd`, `sarten_rebota.gd`, `fogones_damero.gd`, `ola_aceite.gd` (el barrido del
+  antidisturbios con otro dibujo: `barrido_electrico.gd` ahora tiene velocidad, daño y sonidos que se cambian).
+- La olla es un mueble de verdad (`bigpot`, dibujo de PixelLab), puesto en medio de la cocina con la opción nueva
+  `en_medio` de `Catalogo.SALAS` (`muebles.gd`, `en_medio`): choca y los zombis la rodean.
+- Los sacos: 3 (patatas, tomates, harina; PixelLab), caen cada vez que cocina, aguantan 40 y son del grupo "zombis" (se
+  rompen a golpes, a tiros y con explosiones). Cocina cada 17 s (12 en la fase 2); remueve 4,5 s (3,5); se cura un 4 %
+  de su vida por saco que quede (5 %). Sin sacos: enfermo 4,5 s y le entra el doble. Si se rompen todos antes, va a
+  cocinar enseguida («¿Y MIS INGREDIENTES?»). Junto a la barra, tres saquitos que se tachan (`barra_jefe.gd`, `pintar_sacos`).
+- El damero: cuadros de 2×2 casillas en toda la sala, aviso 1,1 s (0,8 en la fase 2) y quema 0,7 s, 12 de daño; esquivando
+  también quema: hay que salir del cuadro. Cada 9 s (7,5).
+- Sartenes: hasta 4, rebotan y sueltan gotitas de aceite de 3 s; con 3 o más, «¡A FREGAR!» (cada 12 s): tiemblan 0,6 s y
+  vuelven a su mano dando a quien pillen. Solo en la fase 1.
+- Se fueron el abanico de cuchillos, la sartén de antes y el aceite que rebosaban los fogones solos (M82).
+- Fase 2: otra hoja (`jefe-cocinero-sin`, PixelLab: calvo y con un cuchillo en cada mano), el gorro sale volando
+  (con código). Cruz cada 5 s (+ o X, la mitad de las veces encadena la otra), 18 de daño; ola cada 13 s (dos olas, cada
+  una con su hueco; sale de la olla hacia Johnny, así que detrás de la olla no llega); combo de dos cuchillazos y
+  cuchillos clavados 1,6 s (le entra un 50 % más); lluvia de 6 cuchillos cada 8 s.
+- Animaciones nuevas de PixelLab: remover y enfermo (con y sin gorro) y, sin gorro, andar, cuchillazo doble y lanzar.
+- Pista: al entrar, Johnny dice «Si se come ese guiso, se cura... A ver qué cocina sin ingredientes».
+- Prueba: `--captura --edificio centro --jefe cocinero --banquete`.
 
 ## 3. La modista · «El desfile»
 

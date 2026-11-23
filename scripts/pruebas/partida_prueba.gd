@@ -51,8 +51,11 @@
 #                       combo con la porra clavada, con fotos                               [prueba_jefes.gd]
 #   --ir-sala-otro      el panel de pruebas lleva a la sala de un minijefe de otro edificio: desde los Apartamentos, a la
 #                       del antidisturbios (cambia de edificio y deja de guardarse)        [prueba_jefes.gd]
-#   --cocina            (con --edificio centro --jefe cocinero) la Cocina central (M82): los fogones y las
-#                       freidoras que rebosan aceite hirviendo, con fotos; y cuántos, normal y enfadado [prueba_jefes.gd]
+#   --cocina            (con --edificio centro --jefe cocinero) la Cocina central: los fogones y las freidoras
+#                       de las paredes y la olla gigante en medio, con foto               [prueba_jefes.gd]
+#   --banquete          (con --edificio centro --jefe cocinero) el cocinero rehecho (23 nov): la olla y los sacos,
+#                       el damero, las sartenes, curarse, el guiso malo, la fase 2 sin gorro, la cruz, la ola de
+#                       aceite y el combo con los cuchillos clavados, con fotos            [prueba_jefes.gd]
 #                       (con --puerta-arriba, solo la cocina detrás de una puerta que se abre por arriba: ningún mueble
 #                       delante de la puerta, captura-cocina-puerta-arriba.png)
 #   --crios             (con --edificio centro --jefe mascota) cuántos críos salen en 20 s, normal y enfadada, cuántos
@@ -734,6 +737,10 @@ func empezar_prueba() -> void:
 	elif "--ir-sala-otro" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_ir_sala_otro()
+		get_tree().quit()
+	elif "--banquete" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_banquete()
 		get_tree().quit()
 	elif "--muro" in args:
 		set_process(false)   # sin la prueba larga

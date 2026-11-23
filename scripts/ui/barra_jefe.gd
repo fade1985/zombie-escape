@@ -112,6 +112,7 @@ func _draw() -> void:
 		x += trozo
 	draw_texture_rect_region(MARCO, Rect2(ANCHO - PUNTA, 0, PUNTA, ALTO), Rect2(MARCO.get_width() - PUNTA, 0, PUNTA, ALTO))
 	pintar_escudo()
+	pintar_sacos()
 	# La vida en números
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(value), roundi(max_value)]
@@ -142,6 +143,50 @@ func pintar_escudo() -> void:
 					if GRIETA_ESCUDITO.has(Vector2i(x, y)):
 						col = Tema.LINEA
 				draw_rect(Rect2(esquina + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+
+
+# Los sacos de ingredientes del cocinero ("sacos_rotos" y SACOS, cocinero.gd): a la derecha de la barra, un saquito de
+# pixel art por cada saco que hay en la cocina, tachado con una X roja cuando Johnny lo rompe. Así se ve que hay que
+# romperlos (y cuántos faltan) antes de que termine de cocinar
+func pintar_sacos() -> void:
+	if not is_instance_valid(jefe) or not jefe.has_method("sacos_rotos") or jefe.estado == "muerto":
+		return
+	var rotos: int = jefe.sacos_rotos()
+	for i in jefe.SACOS:
+		var roto: bool = i < rotos
+		var esquina := Vector2(ANCHO + 6.0 + i * 22.0, 0.0)
+		for y in SAQUITO.size():
+			var fila: String = SAQUITO[y]
+			for x in fila.length():
+				var c := fila[x]
+				if c == ".":
+					continue
+				var col: Color = {"o": Tema.LINEA, "#": Color("#c8a060"), "b": Color("#e8c890"), "s": Color("#8a6a3a"),
+					"c": Color("#d8402a")}[c]
+				if roto and c != "o":
+					col = col.darkened(0.55)
+				draw_rect(Rect2(esquina + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+		if roto:
+			for k in 8:
+				for p in [Vector2(1 + k, 2 + k), Vector2(8 - k, 2 + k)]:
+					draw_rect(Rect2(esquina + p * 2.0, Vector2(2, 2)), Color("#ff3a4a"))
+
+
+# El saquito (10×12 píxeles del dibujo): o, el borde; #, la arpillera; b, su brillo; s, la sombra; c, la cuerda
+const SAQUITO := [
+	"...oooo...",
+	"...o##o...",
+	"..occcco..",
+	"..o#bb#o..",
+	".o##b###o.",
+	"o###b####o",
+	"o##b#####o",
+	"o########o",
+	"o#######so",
+	"o######sso",
+	".o####sso.",
+	"..oooooo..",
+]
 
 
 # El escudito (8×14 píxeles del dibujo): o, el borde; #, el plástico; b, su brillo; s, la sombra. Y la grieta que

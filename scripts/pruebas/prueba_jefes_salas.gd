@@ -1148,7 +1148,7 @@ func probar_avisos() -> void:
 		["gerente", "aviso_latigazo", "AVISO_LATIGAZO"], ["gerente", "aviso_contratos", "AVISO_CONTRATOS"],
 		["cientifico_jefe", "aviso_lenguas", "AVISO_LENGUAS"], ["cientifico_jefe", "aviso_punetazo", "AVISO_PUNETAZO"],
 		["cientifico_jefe", "aviso_probetas", "AVISO_PROBETAS"], ["cientifico_jefe", "aviso_fuego", "AVISO_FUEGO"],
-		["modista", "aviso_alfileres", 1.0], ["cocinero", "aviso_abanico", "AVISO_ABANICO"],
+		["modista", "aviso_alfileres", 1.0], ["cocinero", "aviso_cruz", "AVISO_CRUZ"],
 		["bombero", "aviso_giro", "AVISO_GIRO"], ["bombero", "giro", 1.0]])
 
 

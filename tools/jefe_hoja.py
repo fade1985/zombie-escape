@@ -89,10 +89,30 @@ JEFES = {
             "cuchillazo": ("cuchillazo", 12, False, False),
             "golpe": ("golpe", 16, False, False),
             "muerte": ("muerte", 10, False, False),
+            # 23 nov (el cocinero rehecho, docs/JEFES_CENTRO.md): remover la olla y enfermo con el guiso malo
+            "remover": ("remover", 10, True, True),
+            "enfermo": ("enfermo", 8, True, True),
         },
         "sangre": True,
         # PixelLab dejó el gorro cortado por arriba en las vistas de espaldas (se salía del lienzo de 72)
         "copa": ["ne", "n", "no"],
+    },
+    # el cocinero sin gorro y con un cuchillo en cada mano (la fase 2, «servicio de urgencia»: otra hoja, cocinero.gd la
+    # cambia al enfadarse). Los nombres son los de la hoja con gorro, para que el código sirva igual; el "golpe" no está
+    # (se rellena con la vista quieta: es el aviso de la ola, que hace él quieto)
+    "cocinero-sin-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("andar_sin", 9, True, True),
+            "lanzar": ("lanzar_sin", 12, False, False),
+            "cuchillazo": ("cuchillazo_sin", 12, False, False),
+            "golpe": ("golpe_sin", 16, False, False),
+            "muerte": ("muerte_sin", 10, False, False),
+            "remover": ("remover_sin", 10, True, True),
+            "enfermo": ("enfermo_sin", 8, True, True),
+        },
+        "sangre": True,
     },
     # la modista: los alfileres y el brillo de los ojos, con código
     "modista-72": {

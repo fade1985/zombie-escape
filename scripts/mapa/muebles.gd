@@ -64,7 +64,29 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 				{"zona": s.id, "despejar": despejar, "paso": paso})
 		if datos.has("islas"):
 			lista += islas(datos.islas, rng, geo, s.id, despejar, paso, lista)
+		if datos.has("en_medio"):
+			lista += en_medio(datos.en_medio, geo, s.id)
 	return lista
+
+
+# Un mueble suelto justo en el centro de la sala (la olla gigante de la cocina del cocinero)
+static func en_medio(tipo: String, geo: Dictionary, zona: int) -> Array:
+	var c0: int = geo.cols
+	var c1 := -1
+	var f0: int = geo.filas
+	var f1 := -1
+	for f in geo.filas:
+		for c in geo.cols:
+			if geo.dueno[f * geo.cols + c] == zona:
+				c0 = mini(c0, c)
+				c1 = maxi(c1, c)
+				f0 = mini(f0, f)
+				f1 = maxi(f1, f)
+	if c1 < 0:
+		return []
+	var centro := Vector2((c0 + c1 + 1) / 2.0, (f0 + f1 + 1) / 2.0) * CASILLA
+	var dep: float = Catalogo.MUEBLES[tipo].dep
+	return [nuevo(tipo, {"lado": "arriba", "base": roundf((centro.y - dep / 2.0) / 2.0) * 2.0}, roundf(centro.x / 2.0) * 2.0, zona)]
 
 
 # Los muebles de un piso: los que el dueño ha puesto a mano, siempre en el mismo sitio. Cada habitación lleva los

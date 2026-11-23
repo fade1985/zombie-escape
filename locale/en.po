@@ -790,12 +790,44 @@ msgid "¡GRAAAAH!"
 msgstr "GRAAAAH!"
 
 #: scripts/cocinero.gd
-msgid "¡CALENTITO!"
-msgstr "PIPING HOT!"
+msgid "Si se come ese guiso, se cura... A ver qué cocina sin ingredientes"
+msgstr "If he eats that stew, he heals... Let's see what he cooks without ingredients"
 
 #: scripts/cocinero.gd
-msgid "¡A LA OLLA!"
-msgstr "INTO THE POT!"
+msgid "¿Y MIS INGREDIENTES?"
+msgstr "WHERE ARE MY INGREDIENTS?!"
+
+#: scripts/cocinero.gd
+msgid "¡SE ME HAN CLAVADO!"
+msgstr "THEY'RE STUCK!"
+
+#: scripts/cocinero.gd
+msgid "¡A LOS FOGONES!"
+msgstr "TO THE STOVE!"
+
+#: scripts/cocinero.gd
+msgid "¡QUE SE VUELCA!"
+msgstr "IT'S TIPPING OVER!"
+
+#: scripts/cocinero.gd
+msgid "¡FUEGO EN LOS FOGONES!"
+msgstr "BURNERS ON!"
+
+#: scripts/cocinero.gd
+msgid "¡PUAJ!"
+msgstr "BLEGH!"
+
+#: scripts/cocinero.gd scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "CHOMP!"
+
+#: scripts/cocinero.gd
+msgid "¡A FREGAR!"
+msgstr "WASH-UP TIME!"
+
+#: scripts/cocinero.gd
+msgid "¡SERVICIO DE URGENCIA!"
+msgstr "RUSH SERVICE!"
 
 #: scripts/copia.gd
 msgid "¡Se ha cerrado la puerta! Protege al %s mientras copia los archivos"
@@ -1238,10 +1270,6 @@ msgstr "NOBODY CLOCKS OUT!"
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "HUNGRY!"
-
-#: scripts/gloton.gd scripts/johnny.gd
-msgid "¡ÑAM!"
-msgstr "CHOMP!"
 
 #: scripts/gloton.gd
 msgid "¡TENGO HAMBRE!"

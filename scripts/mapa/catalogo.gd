@@ -136,6 +136,8 @@ const MUEBLES := {
 	"metalshelf":      {"len": 80,  "dep": 40, "paredes": "",      "archivo": "centro/estanteria-metal"},
 	"pallet":          {"len": 68,  "dep": 56, "paredes": "todas", "archivo": "centro/pale"},
 	"lockers":         {"len": 100, "dep": 40, "paredes": "",      "archivo": "centro/taquillas"},
+	# la olla gigante del cocinero, en medio de su cocina (cocinero.gd: la remueve y se come el guiso)
+	"bigpot":          {"len": 156, "dep": 84, "paredes": "todas", "archivo": "centro/olla-gigante"},
 	"workbench":       {"len": 100, "dep": 48, "paredes": "lados", "archivo": "centro/banco-trabajo"},
 	"freezershelf":    {"len": 84,  "dep": 44, "paredes": "",      "archivo": "centro/estanteria-camara"},
 	"industrialstove": {"len": 84,  "dep": 54, "paredes": "lados", "archivo": "centro/fogon-industrial"},
@@ -948,13 +950,15 @@ const SALAS := {
 		"muebles": ["gondola", "metalshelf", "pallet", "checkout", "mannequin"],
 		"cuantos": [2, 3],
 	},
-	# la Cocina central del cocinero (minijefe; planta.gd pone apt.tipo = "cocinero"): tres muebles que rebosan aceite
-	# hirviendo en cada pared (M82, cocinero.gd), siempre en el mismo sitio (muebles.gd, fijos): en el fondo, dos
+	# la Cocina central del cocinero (minijefe; planta.gd pone apt.tipo = "cocinero"): tres fogones o freidoras en cada
+	# pared (hasta el 23 nov rebosaban aceite hirviendo, M82), siempre en el mismo sitio (muebles.gd, fijos): en el fondo, dos
 	# freidoras y un fogón industrial, con dos mesas de acero entre medias (no sueltan nada); a cada lado, tres fogones
 	# (las freidoras no tienen dibujo de lado). La pared de abajo, vacía (ahí está la puerta)
 	"jefe-cocinero": {
 		"muebles": [],
 		"cuantos": [0, 0],
+		# y en medio, su olla gigante (cocinero.gd: va a removerla y, si termina, se cura)
+		"en_medio": "bigpot",
 		"fijos": {
 			"arriba": ["fryer", "steeltable", "industrialstove", "steeltable", "fryer"],
 			"izquierda": ["industrialstove", "industrialstove", "industrialstove"],

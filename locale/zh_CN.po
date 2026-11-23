@@ -789,12 +789,44 @@ msgid "¡GRAAAAH!"
 msgstr "吼啊啊啊！"
 
 #: scripts/cocinero.gd
-msgid "¡CALENTITO!"
-msgstr "趁热吃！"
+msgid "Si se come ese guiso, se cura... A ver qué cocina sin ingredientes"
+msgstr "他要是吃了那锅炖菜就会回血……看他没了食材还能做什么"
 
 #: scripts/cocinero.gd
-msgid "¡A LA OLLA!"
-msgstr "下锅！"
+msgid "¿Y MIS INGREDIENTES?"
+msgstr "我的食材呢？"
+
+#: scripts/cocinero.gd
+msgid "¡SE ME HAN CLAVADO!"
+msgstr "卡住了！"
+
+#: scripts/cocinero.gd
+msgid "¡A LOS FOGONES!"
+msgstr "开火做饭！"
+
+#: scripts/cocinero.gd
+msgid "¡QUE SE VUELCA!"
+msgstr "要翻了！"
+
+#: scripts/cocinero.gd
+msgid "¡FUEGO EN LOS FOGONES!"
+msgstr "灶台着火！"
+
+#: scripts/cocinero.gd
+msgid "¡PUAJ!"
+msgstr "呕！"
+
+#: scripts/cocinero.gd scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "啊呜！"
+
+#: scripts/cocinero.gd
+msgid "¡A FREGAR!"
+msgstr "洗碗了！"
+
+#: scripts/cocinero.gd
+msgid "¡SERVICIO DE URGENCIA!"
+msgstr "加急出餐！"
 
 #: scripts/copia.gd
 msgid "¡Se ha cerrado la puerta! Protege al %s mientras copia los archivos"
@@ -1236,10 +1268,6 @@ msgstr "谁也不准下班！"
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "好饿！"
-
-#: scripts/gloton.gd scripts/johnny.gd
-msgid "¡ÑAM!"
-msgstr "啊呜！"
 
 #: scripts/gloton.gd
 msgid "¡TENGO HAMBRE!"

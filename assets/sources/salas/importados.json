@@ -131,6 +131,10 @@
     "huella": "81156ec94af52298",
     "sprite": "mueble-drinkfridge"
   },
+  "centro/olla-gigante.png": {
+    "huella": "d66c99aa64307444",
+    "sprite": "mueble-bigpot"
+  },
   "centro/pale.png": {
     "huella": "6caca18f4f1bddc1",
     "sprite": "mueble-pallet"
