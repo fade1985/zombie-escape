@@ -168,7 +168,8 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
 - Fase 2: otra hoja (`jefe-cocinero-sin`, PixelLab: calvo y con un cuchillo en cada mano), el gorro sale volando
   (con código). Cruz cada 5 s (+ o X, la mitad de las veces encadena la otra), 18 de daño; ola cada 13 s (dos olas, cada
   una con su hueco; sale de la olla hacia Johnny, así que detrás de la olla no llega); combo de dos cuchillazos y
-  cuchillos clavados 1,6 s (le entra un 50 % más); lluvia de 6 cuchillos cada 8 s.
+  cuchillos clavados 1,6 s (le entra un 50 % más); lluvia de 6 cuchillos cada 8 s; la marca de cada
+  uno es el aviso de los jefes (`aviso.gd`, un círculo de cuadraditos que se llena; 24 nov, el dueño: antes, un anillo rojo).
 - Animaciones nuevas de PixelLab: remover y enfermo (con y sin gorro) y, sin gorro, andar, cuchillazo doble y lanzar.
 - Pista: al entrar, Johnny dice «Si se come ese guiso, se cura... A ver qué cocina sin ingredientes».
 - Prueba: `--captura --edificio centro --jefe cocinero --banquete`.

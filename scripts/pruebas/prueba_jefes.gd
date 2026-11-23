@@ -2043,7 +2043,7 @@ func probar_ir_sala_otro() -> void:
 # «El banquete»), en su Cocina central, con Johnny quieto y sin que le maten. Cada línea dice lo esperado. Fotos
 # (captura-banquete-*.png): sala (la olla y los tres sacos), damero-aviso y damero-quema (los fogones en el suelo),
 # sartenes (rebotando), remover (con su barrita), sacos (los tres rotos: tachados junto a la barra), enfermo,
-# gorro (el gorro volando al enfadarse), cruz (el aviso) y cruz-vuelo (los cuchillos saliendo), vuelca (la olla volcándose), ola (la ola de aceite), clavado (el combo)
+# gorro (el gorro volando al enfadarse), cruz (el aviso) y cruz-vuelo (los cuchillos saliendo), vuelca (la olla volcándose), lluvia (las marcas de los cuchillos), ola (la ola de aceite), clavado (el combo)
 func probar_banquete() -> void:
 	if not await ir_a_la_sala_del_jefe("cocinero"):
 		return
@@ -2146,6 +2146,14 @@ func probar_banquete() -> void:
 	johnny.vida = vida_johnny
 	jefe.cambiar("andar")
 	jefe.dur = 99.0
+	# la lluvia de cuchillos: sus marcas en el suelo, el aviso de los jefes
+	jefe.lluvia(johnny)
+	await get_tree().create_timer(0.75, false).timeout
+	Captura.foto("captura-banquete-lluvia.png")
+	print("Banquete: lluvia, cuchillos marcando %d (esperado: unos cuantos)" % get_tree().current_scene.find_children("*", "Cuchillo", true, false).size())
+	johnny.invulnerable = 99999.0
+	await get_tree().create_timer(1.5, false).timeout
+	johnny.vida = vida_johnny
 	# la olla se vuelca
 	johnny.global_position = c + Vector2(0, 170)
 	jefe.cambiar("aviso_ola", {"angulo": 0.0})

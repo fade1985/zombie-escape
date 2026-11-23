@@ -1,7 +1,8 @@
 # Un cuchillo del cocinero (minijefe del centro comercial), dibujado con código como la botella de lejía de la
 # portera. Llega de dos maneras:
 #   - "vuela": lanzado en línea recta, dando vueltas en el aire a la altura del cuerpo (el abanico).
-#   - "cae": primero sale su marca roja en el suelo y, al acabarse, cae de punta desde arriba (la lluvia).
+#   - "cae": primero sale su marca en el suelo (el aviso de los jefes, aviso.gd) y, al acabarse, cae de punta desde
+#     arriba (la lluvia).
 # Si le da a Johnny le quita lo suyo. Si no, se queda clavado un rato (en el suelo o en la pared) y se desvanece.
 # Se crea con Cuchillo.new(); el cocinero también usa dibujar() para los que lleva en la mano.
 class_name Cuchillo
@@ -106,14 +107,11 @@ func dentro(punto: Vector2, margen: float) -> bool:
 
 func _draw() -> void:
 	if modo == "cae" and clavado < 0.0:
-		var k := clampf((t - espera) / aviso, 0.0, 1.0)
-		# la marca: un anillo rojo que se va llenando; y, cayendo, la sombra del cuchillo
-		var rojo := Color(1, 0.24, 0.35)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.6))
-		Formas.disco(self, Vector2.ZERO, RADIO_CAE * k, Color(rojo, 0.15 + 0.2 * k))
-		Formas.arco(self, Vector2.ZERO, RADIO_CAE, 0.0, TAU, 24, Color(rojo, 0.5 + 0.4 * k), 3.0)
-		draw_line(Vector2(-10, 0), Vector2(10, 0), Color(rojo, 0.8), 3.0)
-		draw_line(Vector2(0, -10), Vector2(0, 10), Color(rojo, 0.8), 3.0)
+		# la marca: el aviso de los jefes (aviso.gd, un círculo aplastado de cuadraditos que se va llenando, como los
+		# saltos), del tamaño de lo que pilla; y, cayendo, la sombra del cuchillo
+		if t >= espera:
+			var k := clampf((t - espera) / aviso, 0.0, 1.0)
+			Aviso.abanico(self, Vector2.ZERO, 0.0, PI, RADIO_CAE, k, t, 0.6)
 		if t < espera + aviso:
 			return
 		Formas.disco(self, Vector2.ZERO, 6.0 + 6.0 * (1.0 - alto / ALTO), Color(0, 0, 0, 0.3))
