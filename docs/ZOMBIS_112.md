@@ -27,6 +27,17 @@ cinta de la dinamita). La cara, reducida a unos 6 píxeles, salía con puntos su
 sangre mezclados, y sombras moradas): `"cara"` la deja ya reducida en tres verdes (los de la dependienta) con los ojos y
 la boca en un verde muy oscuro. Se prueba con `--captura --explosivo-nuevo`.
 
+**El de las uñas (23 nov)**, un durmiente flaquísimo que dispara las uñas, se hizo **a 160** en vez de a 112 (el dueño lo
+quería con más detalle): frente de GPT en magenta, `py tools/unas_referencia.py 160` (sale `referencia-160.png`),
+«Durmiente uñas 160» (id `17f80a9c-aee4-479f-83cd-3d9d9e59c49d`; carpeta `assets/sources/unas-gpt/`, con sus textos). A
+160 cuesta más: personaje 4, golpe en v3 6 por dirección; el andar (esqueleto, 3) y el modo barato (1) igual. En total,
+60 generaciones. La muerte salió con un chorro de sangre aunque se pidió sin ella: lo quita `tools/unas_sin_sangre.py`
+(los originales, en `capturas/unas-muerte-con-sangre/`). En la ficha, `"lienzo": {"casilla": 220, "pose": 160}` (las
+animaciones salen de 212 a 224 y se ponen en el centro) y reducido a la altura del gordo, 67 píxeles
+(`"casilla": 94, "pies": [47, 84]`). Su piel es más amarilla que la de los demás: `"piel_verde"` lleva su tono y deja
+fuera los calzoncillos (menos vivos) y las puntas de las uñas (más claras). El andar de frente y de espaldas cruzaba
+las piernas: se rehízo con el mismo esqueleto y `"posture": 1` (los pies separados); con texto no daba el segundo paso.
+
 ## 1. El personaje en PixelLab
 
 - Personaje de **112 px** (el de la dependienta: «Dependienta verde 112», id `de59f7de-5243-4d15-a7b3-5b11f9115676`).

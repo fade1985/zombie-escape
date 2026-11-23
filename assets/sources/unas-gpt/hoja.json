@@ -1,0 +1,13 @@
+{
+  "piel_verde": {"tono": [30, 70], "viveza": [0.27, 0.9], "claridad": [0.15, 0.62]},
+  "sprite": "zombi-unas",
+  "lienzo": {"casilla": 220, "pose": 160},
+  "reposo": {"cintura": 83, "baja": 2},
+  "reducir": {"casilla": 94, "pies": [47, 84], "borde": "#050202"},
+  "animaciones": {
+    "walk": {"de": "andar", "fps": 10},
+    "attack": {"de": "disparo", "desde": 1, "duracion": 0.6, "impacto": 3},
+    "hurt": {"de": "golpe", "desde": 1, "duracion": 0.35},
+    "death": {"de": "muerte", "desde": 1, "duracion": 0.9, "alinear": true}
+  }
+}

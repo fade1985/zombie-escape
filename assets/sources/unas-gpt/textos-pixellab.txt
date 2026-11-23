@@ -1,0 +1,106 @@
+TEXTOS PARA PIXELLAB: EL DURMIENTE DE LAS UÑAS (160 px, 23 nov)
+Referencia: referencia-160.png (sale de frente.webp, de GPT, con py tools/unas_referencia.py 160).
+Primero se hizo a 112 («Durmiente uñas 112», id cc19b2ac-5708-4a67-979d-01e62c2e568b, sus poses en 112/rotaciones);
+el dueño lo quiso con más detalle y se rehízo a 160: «Durmiente uñas 160», id 17f80a9c-aee4-479f-83cd-3d9d9e59c49d.
+En el juego se reduce hasta el alto del gordo: 67 píxeles de dibujo (casilla 96, escala 2).
+Cinco direcciones: abajo (south), abajo-derecha (south-east), derecha (east), arriba-derecha (north-east) y arriba (north).
+Las tres de la izquierda salen en espejo.
+Disparo: la animación solo hace el gesto de lanzar; las uñas que vuelan las pone el juego (proyectil aparte),
+así que no hay que dibujar uñas en el aire ni dedos sin uñas.
+
+Coste a 160: personaje 4 (hecho) + andar 3 × 5 + golpe ~6 × 5 (v3 cobra por el tamaño) + disparo 1 × 5 + muerte ~1-2 × 5
+= unas 55-60 generaciones (a 112 eran 42).
+
+
+==================== 1. EL PERSONAJE ====================
+
+create_character, modo v3, con la referencia (160 × 160) · 4 generaciones
+Nombre: Durmiente uñas 160
+Descripción:
+extremely tall, emaciated skeletal zombie with a very long thin neck, a small bald skull, a gaunt grey-green face with glowing white eyes and an open mouth full of yellow fangs, visible ribs and a sunken belly, rotting olive-green skin with dark red stripes across the neck, arms and legs, bruised purple knees, shins and feet, dried blood stains, torn dirty white underwear, very long spindly arms hanging down to the knees, large dark red bony hands with long thin fingers ending in very long sharp yellowish bone nails like knives, long thin legs and long bare feet
+
+
+==================== 2. ANDAR (8 fotogramas, las 5 direcciones) ====================
+
+Modo esqueleto (el que dio el andar fluido a la dependienta): skeleton-v3, plantilla walking-8-frames,
+motion_adjustments {"stride": 1.15, "arm_swing": 0.6}, una dirección por llamada · 3 por dirección
+(sin texto: la plantilla lleva el movimiento)
+
+ABAJO y ARRIBA, rehechos (23 nov): así cruzaba las piernas (un pie delante del otro, como en una pasarela). Se
+quedaron los de motion_adjustments {"posture": 1, "stride": 0.9, "arm_swing": 0.6} («andar abierto», 3 por
+dirección): «posture» le pone la postura de la plantilla, con los pies separados. Se probó también con texto en v3
+(«feet kept wide apart... the legs never cross», 6 por dirección): de frente las volvía a cruzar y de espaldas no
+completaba el segundo paso, y como empieza en la pose de pie, al dar la vuelta pegaba un salto.
+
+
+==================== 3. GOLPE (8 fotogramas, modo v3) · 3 por dirección ====================
+
+ABAJO
+extremely tall emaciated zombie with long knife-like nails, facing the viewer, is knocked back by a hard punch to the face: its head on the long neck is thrown back so its face points up at the ceiling, its back arches and its upper body leans backward away from the viewer, its knees bend to absorb the blow while both feet stay planted in place without stepping, its long arms swing out loosely, then it slowly straightens and returns to its upright starting pose; it keeps facing the viewer the whole time
+
+ABAJO-DERECHA
+extremely tall emaciated zombie with long knife-like nails, seen in three-quarter view, facing down and to the right, is knocked back by a hard punch to the face: its head on the long neck is thrown back so its face points up at the ceiling, its back arches and its upper body leans backward toward the top left, its knees bend to absorb the blow while both feet stay planted in place without stepping, its long arms swing out loosely, then it slowly straightens and returns to its upright starting pose; it keeps facing down-right the whole time
+
+DERECHA
+extremely tall emaciated zombie with long knife-like nails, seen from the side in profile, facing right, is knocked back by a hard punch to the face: its head on the long neck is thrown back so its face points up at the ceiling, its back arches and its upper body leans backward toward the left, its knees bend to absorb the blow while both feet stay planted in place without stepping, its long arms swing out loosely, then it slowly straightens and returns to its upright starting pose; it keeps facing right in profile the whole time
+
+ARRIBA-DERECHA
+extremely tall emaciated zombie with long knife-like nails, seen in three-quarter view from behind, facing up and to the right, is knocked back by a hard punch to the face: its head on the long neck is thrown back so its face points up at the ceiling, its back arches and its upper body leans backward toward the bottom left, its knees bend to absorb the blow while both feet stay planted in place without stepping, its long arms swing out loosely, then it slowly straightens and returns to its upright starting pose; it keeps facing up-right the whole time
+
+ARRIBA
+extremely tall emaciated zombie with long knife-like nails, seen from behind, facing away from the viewer, is knocked back by a hard punch to the face: its head on the long neck is thrown back so its face points up at the ceiling, its back arches and its upper body leans backward toward the viewer, its knees bend to absorb the blow while both feet stay planted in place without stepping, its long arms swing out loosely, then it slowly straightens and returns to its upright starting pose; it keeps its back to the viewer the whole time
+
+
+==================== 4. DISPARO DE UÑAS (8 fotogramas, modo barato pixminimax) · 1 por dirección ====================
+
+En el juego: en el fotograma en que el brazo queda estirado, el juego lanza las uñas (proyectil aparte).
+Con el modo barato van además:
+  personaje: extremely tall emaciated zombie with very long spindly arms and long knife-like yellowish nails on every finger
+  pose de partida: (la de cada dirección, debajo del texto)
+
+ABAJO
+extremely tall emaciated zombie facing the viewer plants both feet, pulls its right arm back behind its shoulder, then whips the long arm forward and straight out toward the viewer with the hand open and the fingers spread wide, the long nails pointing at the viewer as if flinging them, holds the arm stretched out for a moment, then lets it swing back down to hang at its side; the nails stay on its fingers the whole time; it keeps facing the viewer the whole time
+Pose de partida: standing upright facing the viewer, both long arms hanging down at its sides
+
+ABAJO-DERECHA
+extremely tall emaciated zombie seen in three-quarter view, facing down and to the right, plants both feet, pulls its right arm back behind its shoulder, then whips the long arm forward and straight out toward the bottom right with the hand open and the fingers spread wide, the long nails pointing down-right as if flinging them, holds the arm stretched out for a moment, then lets it swing back down to hang at its side; the nails stay on its fingers the whole time; it keeps facing down-right the whole time
+Pose de partida: standing upright in three-quarter view facing down and to the right, both long arms hanging down at its sides
+
+DERECHA
+extremely tall emaciated zombie seen from the side in profile, facing right, plants both feet, pulls its arm back behind its body, then whips the long arm forward and straight out to the right at shoulder height with the hand open and the fingers spread wide, the long nails pointing right as if flinging them, holds the arm stretched out for a moment, then lets it swing back down to hang at its side; the nails stay on its fingers the whole time; it keeps facing right in profile the whole time
+Pose de partida: standing upright seen from the side in profile facing right, both long arms hanging down at its sides
+
+ARRIBA-DERECHA
+extremely tall emaciated zombie seen in three-quarter view from behind, facing up and to the right, plants both feet, pulls its right arm back, then whips the long arm forward and straight out toward the top right with the hand open and the fingers spread wide, the long nails pointing up-right as if flinging them, holds the arm stretched out for a moment, then lets it swing back down to hang at its side; the nails stay on its fingers the whole time; it keeps facing up-right the whole time and never turns toward the viewer
+Pose de partida: standing upright in three-quarter view from behind, facing up and to the right, both long arms hanging down at its sides
+
+ARRIBA
+extremely tall emaciated zombie seen from behind, facing away from the viewer, plants both feet, pulls its right arm back down by its hip, then whips the long arm up and straight out away from the viewer toward the top of the image with the hand open and the fingers spread wide, as if flinging its nails, holds the arm stretched out for a moment, then lets it swing back down to hang at its side; the nails stay on its fingers the whole time; it keeps its back to the viewer the whole time and never turns around
+Pose de partida: standing upright seen from behind, facing away from the viewer, both long arms hanging down at its sides
+
+
+==================== 5. MUERTE (12 fotogramas, modo barato pixminimax) · 1 por dirección ====================
+
+Con el modo barato van además:
+  personaje: extremely tall emaciated zombie with very long spindly arms and long knife-like yellowish nails on every finger
+  pose de partida: (la de cada dirección, debajo del texto)
+
+ABAJO
+killed by a headshot: it is seen from the front, facing the viewer; the shot hits its face from the front, so its head on the long neck snaps back and it falls BACKWARD away from the viewer, like a tall plank tipping over toward the top of the image; its back and the back of its head hit the floor first; it ends lying flat on its back on the floor, face up looking at the ceiling, its head toward the top of the image and its feet toward the bottom; because it now lies flat on the floor seen from above, its whole body looks much shorter than when it stood, about half its standing height, long arms spread limp, completely still; it never falls forward, never falls to the side and never lands face down; no blood splashes
+Pose de partida: standing straight facing the viewer, both long arms hanging down at its sides
+
+ABAJO-DERECHA
+killed by a headshot: it is seen in three-quarter view facing down and to the right; the shot hits its face from the bottom right, so its head on the long neck snaps back and it falls BACKWARD toward the top left, away from where it faces, like a tall plank tipping over; its back and the back of its head hit the floor first; it ends lying flat on its back, face up looking at the ceiling, its head toward the top left and its feet toward the bottom right, long arms spread limp, completely still; it never falls forward and never lands face down; no blood splashes
+Pose de partida: standing straight in three-quarter view facing down and to the right, both long arms hanging down at its sides
+
+DERECHA
+killed by a headshot: it is seen from the side in profile, facing right; the shot hits its face from the right, so its head on the long neck snaps back and it falls BACKWARD toward the left, away from where it faces, like a tall plank tipping over; its back and the back of its head hit the floor first; it ends lying flat on its back, face up looking at the ceiling, its head toward the left and its feet toward the right, long arms spread limp, completely still; it never falls forward and never lands face down; no blood splashes
+Pose de partida: standing straight seen from the side in profile facing right, both long arms hanging down at its sides
+
+ARRIBA-DERECHA
+killed by a headshot: it is seen in three-quarter view from behind, facing up and to the right; the shot hits its face from the top right, so its head on the long neck snaps back and it falls BACKWARD toward the bottom left, away from where it faces, like a tall plank tipping over; its back and the back of its head hit the floor first; it ends lying flat on its back, face up looking at the ceiling, its head toward the bottom left and its feet toward the top right, long arms spread limp, completely still; it never falls forward and never lands face down; no blood splashes
+Pose de partida: standing straight in three-quarter view from behind, facing up and to the right, both long arms hanging down at its sides
+
+ARRIBA
+killed by a headshot: it is seen from behind, facing away from the camera; the shot hits its face from the front, so its head on the long neck snaps back and it falls BACKWARD toward the camera, like a tall plank tipping over toward the bottom of the image; its back and the back of its head hit the floor first; it ends lying flat on its back on the floor, face up looking at the ceiling, its head toward the bottom of the image and its feet toward the top; because it now lies flat on the floor seen from above, its whole body looks much shorter than when it stood, about half its standing height, long arms spread limp, completely still; it never falls forward, never falls to the side and never lands face down; no blood splashes
+Pose de partida: standing straight seen from behind, facing away from the viewer, both long arms hanging down at its sides

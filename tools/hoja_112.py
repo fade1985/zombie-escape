@@ -30,6 +30,9 @@ La ficha (hoja.json), por ejemplo la de la dependienta:
     cinta de la dinamita, verde oliva más vivo, se quedaba verde chillón).
   - "piel_verde": {...}: la piel, del verde de la del vecino (tools/piel_verde.py; desde el 20 nov, como los demás
     durmientes normales); --mascara carpeta la deja de rosa en esa carpeta para ver lo que elige.
+  - "lienzo": {"casilla": 220, "pose": 160}: si el personaje no es de 112 (el de las uñas, 23 nov, se hizo a 160 para
+    que tuviera más detalle): la pose de pie mide "pose" y las animaciones van en una casilla de "casilla" (las de
+    otro tamaño se ponen en su centro). Los pies, en el centro y 2 píxeles por encima de lo de abajo de la pose.
   - Si una dirección tiene menos fotogramas que south (el andar north-east de la dependienta, 7 y no 8), cada uno dura
     algo más para que vaya al mismo ritmo.
 
@@ -56,9 +59,13 @@ CARPETA = sys.argv[1]
 SRC = f'assets/sources/{CARPETA}/animaciones'
 FICHA = json.load(open(f'assets/sources/{CARPETA}/hoja.json', encoding='utf-8'))
 SPRITE = FICHA['sprite']
-C = 152                    # casilla (el lienzo de las animaciones)
-R = 112                    # lienzo de las poses de pie
-PIES = (76, 130)           # los pies dentro de la casilla
+# Los tamaños, de la ficha ("lienzo": {"casilla": 220, "pose": 160}, el de las uñas, 23 nov, hecho a 160 para que
+# tuviera más detalle); sin ella, los de la dependienta. Los fotogramas de otro tamaño (PixelLab hace cada lienzo a la
+# medida de lo que se mueve: 212, 216, 224...) se ponen en el centro de la casilla, que es donde PixelLab centra al personaje.
+LIENZO = FICHA.get('lienzo', {})
+C = LIENZO.get('casilla', 152)  # casilla (el lienzo de las animaciones)
+R = LIENZO.get('pose', 112)     # lienzo de las poses de pie
+PIES = (C // 2, (C - R) // 2 + R - 2)   # los pies dentro de la casilla (76, 130 con los de la dependienta)
 DIRS = ['south', 'south-east', 'east', 'north-east', 'north', 'north-west', 'west', 'south-west']
 ESPEJO = {'north-west': 'north-east', 'west': 'east', 'south-west': 'south-east'}
 PROPIAS = [d for d in DIRS if d not in ESPEJO]
@@ -227,8 +234,16 @@ def preparar(f):
     return cabeza(luz(piel(sin_parche(f))))
 
 
+def encajar(f):
+    """Un fotograma de otro tamaño, en el centro de la casilla (solo si la ficha trae "lienzo")."""
+    if f.size == (C, C) or not LIENZO:
+        return f
+    m = (C - f.width) // 2
+    return f.crop((-m, -m, C - m, C - m))
+
+
 def cargar(anim, d):
-    fs = [preparar(Image.open(p).convert('RGBA')) for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
+    fs = [preparar(encajar(Image.open(p).convert('RGBA'))) for p in sorted(glob.glob(f'{SRC}/{anim}/{d}/frame_*.png'))]
     assert fs, f'faltan los fotogramas de {anim}/{d}'
     assert fs[0].size == (C, C), f'{anim}/{d}: el lienzo tiene que ser de {C}×{C} (es {fs[0].size})'
     return fs

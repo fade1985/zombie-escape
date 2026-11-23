@@ -28,7 +28,10 @@ def reducida(f, pies_grande, ficha):
     px_, py_ = ficha['pies']
     # el trozo del dibujo grande que cae en la casilla nueva, con los pies en su sitio (puede empezar en medio píxel)
     x0, y0 = pies_grande[0] - px_ / k, pies_grande[1] - py_ / k
-    aire = 8                                       # (por si el trozo se sale un poco del dibujo grande)
+    # (por si el trozo se sale un poco del dibujo grande) 8, y más solo si hace falta: al de las uñas (de 220 a 94 con
+    # los pies abajo) se le salía por arriba. No se pone más a todos porque cambia un poco cómo mezcla los bordes y
+    # las hojas ya hechas (el explosivo) saldrían distintas.
+    aire = max(8, int(-min(x0, y0)) + 2)
     grande = Image.new('RGBA', (f.width + 2 * aire, f.height + 2 * aire), (0, 0, 0, 0))
     grande.paste(f, (aire, aire))
     caja = (x0 + aire, y0 + aire, x0 + aire + ancho / k, y0 + aire + alto / k)
