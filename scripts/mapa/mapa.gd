@@ -1460,6 +1460,8 @@ func manchas_del_pasillo() -> void:
 # tienda de ropa), la misma de los pasillos de los pisos (sangre-suelo-N, con sus salpicones), y nada más: más charcos cuantas más
 # casillas tiene la sala
 func manchas_de_las_salas() -> void:
+	if not sitio.has("apt"):   # (la azotea, el vestíbulo, los pasillos de la torre...: sin salas que destrozar)
+		return
 	for s in sitio.apt.salas:
 		if sala_destrozada(s.id) and not despejada(s.id, "suelo"):
 			manchas_en_sala(s, 53, -2)
