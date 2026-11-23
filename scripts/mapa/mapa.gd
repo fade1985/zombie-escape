@@ -770,15 +770,16 @@ func poner_muros() -> void:
 
 # (23 nov, el dueño) Los paneles colgados en la pared de arriba de la sala de venta de una tienda, cada uno distinto: su dibujo
 # (assets/sprites/<dibujo>.png, a escala 1: 136x86, tools/paneles_ferreteria.py) y su centro, en casillas desde la esquina de
-# arriba a la izquierda de la sala, según el lado de la puerta. Están todos los huecos; "" es uno aún sin panel. Con la
-# puerta abajo, la pared tiene tres trozos (las puertas del almacén y del taller): 3 + 4 + 2; con la puerta arriba, dos
-# (la entrada en medio): 5 + 5. Los paneles, casi pegados, del rodapié a la moldura
+# arriba a la izquierda de la sala, según el lado de la puerta. Con la puerta abajo, la pared tiene tres trozos (las puertas
+# del almacén y del taller: de 0 a 15, de 17 a 35 y de 37 a 46): 3 + 3 + 2; con la puerta arriba, dos (la entrada en medio:
+# de 0 a 22 y de 24 a 46): 4 + 4. (24 nov) Todos a la misma distancia unos de otros (3/8 de casilla, 6 píxeles) y cada grupo,
+# centrado en su trozo; un azul y un gris, alternos. Del rodapié a la moldura
 const PANELES_TIENDA := {"ferreteria": {
-	"abajo": [["panel-destornilladores", 2.6875], ["panel-taladros", 7.5], ["panel-serruchos", 12.3125],
-		["", 19.325], ["panel-martillos", 23.775], ["panel-alicates", 28.225], ["panel-cinta", 32.675],
-		["panel-llaves", 39.29], ["panel-radiales", 43.58]],
-	"arriba": [["", 2.25], ["panel-destornilladores", 6.625], ["panel-taladros", 11.0], ["panel-serruchos", 15.375], ["", 19.75],
-		["panel-martillos", 26.25], ["panel-alicates", 30.625], ["panel-cinta", 35.0], ["panel-llaves", 39.375], ["panel-radiales", 43.75]],
+	"abajo": [["panel-destornilladores", 2.875], ["panel-taladros", 7.5], ["panel-serruchos", 12.125],
+		["panel-martillos", 21.375], ["panel-alicates", 26.0], ["panel-cinta", 30.625],
+		["panel-llaves", 39.1875], ["panel-radiales", 43.8125]],
+	"arriba": [["panel-destornilladores", 4.0625], ["panel-taladros", 8.6875], ["panel-serruchos", 13.3125], ["panel-martillos", 17.9375],
+		["panel-alicates", 28.0625], ["panel-cinta", 32.6875], ["panel-llaves", 37.3125], ["panel-radiales", 41.9375]],
 }}
 
 

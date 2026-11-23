@@ -1143,9 +1143,10 @@ en una línea.
   "destrozada": ["bano", "almacen"]; el resto de la tienda sigue con sus restos de siempre y el suelo gris), sus muebles (los de
   `bano-ropa` y `almacen-ropa`), sus puertas metálicas y sin toalla ni balda. El plano de antes, `ferreteria-antigua`, para
   Marketing. Prueba: `--tiendas-fijas --tipo ferreteria` y `--rodear-muebles --tipo ferreteria`. Los paneles de la
-  pared de la sala de venta (23 nov, el dueño): uno distinto en cada hueco, a escala 1 (136x86), del rodapié a la moldura; los huecos,
-  en `mapa.gd` (`PANELES_TIENDA`: 9 con la puerta abajo, 3 + 4 + 2 entre las puertas del almacén y del taller, y 10 con la puerta
-  arriba, 5 + 5 a los lados de la entrada; "" es un hueco aún sin panel) y se pintan en la cara del muro (`paneles_de_pared`, con
+  pared de la sala de venta (23 nov, el dueño): ocho, todos distintos, a escala 1 (136x86), del rodapié a la moldura; dónde va cada uno,
+  en `mapa.gd` (`PANELES_TIENDA`: con la puerta abajo, 3 + 3 + 2 entre las puertas del almacén y del taller, y con la puerta
+  arriba, 4 + 4 a los lados de la entrada; desde el 24 nov, todos a la misma distancia, 6 píxeles, cada grupo centrado en su trozo
+  de pared y un azul y un gris alternos; no se harán más) y se pintan en la cara del muro (`paneles_de_pared`, con
   "mitad" en `cara_pared.gd`). Cada panel, un panel
   perforado vacío de GPT con una herramienta de GPT colgada varias veces (ganchos, sombra, etiqueta naranja, huecos vacíos, alguna
   torcida y sangre por encima), montado a tamaño de GPT y reducido mezclando colores: `py tools/paneles_ferreteria.py [nombre]` (en su
@@ -1160,9 +1161,9 @@ en una línea.
   `panel-vacio-azul3-gpt.webp`, y `serrucho-gpt.webp`, que viene en horizontal y se pone de pie, `girar`; de un gancho metido por el
   hueco del mango, `colgar` "hueco"), junto al de taladros. Y `radiales` (el gris del marco de aluminio,
   `panel-vacio-aluminio-gpt.webp`, y `radial-gpt.webp`, vista desde arriba, tumbada, con el cuerpo en dos ganchos: `colgar` "cuerpo" y
-  `apoyos`), en el último hueco de la derecha. Y `destornilladores` (el cuarto azul, el del marco metalizado,
+  `apoyos`), el último de la derecha. Y `destornilladores` (el cuarto azul, el del marco metalizado,
   `panel-vacio-azul4-gpt.webp`, y `destornillador-gpt.webp`, de pie, de dos largos, del agujero del remate del mango: `colgar`
-  "hueco"), en el primer hueco de la izquierda (con la puerta arriba, el segundo). (El de llaves inglesas, de GPT entero, se borró: está en git.)
+  "hueco"), el primero de la izquierda. (El de llaves inglesas, de GPT entero, se borró: está en git.)
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
   (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
