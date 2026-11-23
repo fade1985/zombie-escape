@@ -24,11 +24,12 @@ B = 11                            # el tamaño de un «píxel» de GPT en sus im
 #     chorretón de sangre del azul), o None para recortar por todo lo que no es fondo
 #   colgar: "cabeza", de dos ganchos debajo de la cabeza, a los lados del mango (el martillo); "medio", de un gancho
 #     entre los dos mangos, justo debajo de donde se juntan (los alicates); "agujero", boca abajo, de un gancho metido
-#     en el agujero del final del mango (la llave inglesa)
+#     en el agujero del final del mango (la llave inglesa); "rollo", de un gancho metido por el agujero del centro (la cinta)
 #   apoyo: con "cabeza", a qué alto (en tanto por uno) van los ganchos; por defecto, 0.15 (debajo de la cabeza del martillo)
 #   oscurecer: la parte de arriba (en tanto por uno del alto) cuyos grises se oscurecen, o 0; oscuro: cuánto (por defecto, a la mitad)
 #   huecos: (centro x, alto de arriba y, alto de la herramienta, giro en grados, qué hay), en píxeles del panel ya
 #     recortado (unos 1396x885): "colgada", "vacio" (solo ganchos y etiqueta) o "torcido" (girada)
+#   colores: (si la herramienta se tiñe, la cinta) el color de cada hueco, de COLORES_CINTA
 #   sangre: (x, y, tamaño, chorretones), encima de todo
 PANELES = {
     "martillos": {
@@ -119,16 +120,41 @@ PANELES = {
             (890, 560, 4, 2),      # en el de abajo a la derecha
         ],
     },
+    # el panel gris con cinta americana (sin nada delante de la grieta, la sangre de arriba, las telarañas, el óxido de la
+    # derecha, la cinta de abajo a la izquierda ni la huella de grasa) con rollos de cinta aislante de varios colores (el rollo
+    # de GPT es blanco y se tiñe: COLORES_CINTA)
+    "cinta": {
+        "panel": "assets/sources/centro/panel-vacio-cinta-gpt.webp",
+        "herramienta": "assets/sources/centro/cinta-aislante-gpt.webp",
+        "recorte": None,
+        "colgar": "rollo",
+        "oscurecer": 0,
+        "huecos": [
+            (270, 200, 200, 0, "colgada"), (500, 200, 180, 0, "colgada"), (730, 200, 200, 0, "colgada"),
+            (960, 200, 180, 0, "vacio"), (1190, 200, 200, 0, "colgada"),
+            (330, 500, 180, 0, "colgada"), (550, 500, 200, 0, "colgada"), (770, 500, 180, 0, "colgada"),
+            (990, 500, 200, 0, "colgada"),
+        ],
+        "colores": ["negro", "rojo", "azul", "negro", "amarillo", "verde", "negro", "blanco", "rojo"],
+        "sangre": [
+            (1190, 250, 3, 2),     # en el amarillo (en los oscuros no se vería)
+            (860, 450, 4, 3),      # en la chapa, entre las dos filas
+            (780, 560, 3, 2),      # en el blanco
+        ],
+    },
 }
 
 
-def sin_fondo(ruta, recorte=None):
-    """La imagen de GPT sin el negro puro que se llega desde el borde, recortada (como muebles_gpt.pasar)."""
+def sin_fondo(ruta, recorte=None, todo_negro=False):
+    """La imagen de GPT sin el negro puro que se llega desde el borde, recortada (como muebles_gpt.pasar). Con todo_negro,
+    también el de los huecos encerrados (el agujero del rollo de cinta)."""
     im = Image.open(ruta).convert("RGBA")
     W, H = im.size
     px = im.load()
     fondo = bytearray(W * H)
     cola = deque([(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)])
+    if todo_negro:
+        cola.extend((x, y) for y in range(H) for x in range(W) if max(px[x, y][:3]) < 6)
     while cola:
         x, y = cola.popleft()
         if x < 0 or y < 0 or x >= W or y >= H or fondo[y * W + x] or max(px[x, y][:3]) >= 6:
@@ -175,9 +201,31 @@ def sangre(d, x, y, tam, semilla, gotas=2):
         d.rectangle((px - B // 2, y + largo, px + B + B // 2 - 1, y + largo + B + B // 2), fill=rojos[2])
 
 
+# Los colores de la cinta aislante (los de siempre), para teñir el rollo blanco de GPT: lo gris (la cinta), multiplicado
+# por su color y con su brillo; el cartón del centro (marrón: tiene color), igual
+COLORES_CINTA = {
+    "negro": (58, 58, 64), "rojo": (205, 30, 28), "azul": (35, 75, 190), "amarillo": (240, 200, 30),
+    "verde": (40, 150, 60), "blanco": (240, 240, 236),
+}
+
+
+def tenir(m, color):
+    m = m.copy()
+    pm = m.load()
+    for yy in range(m.height):
+        for xx in range(m.width):
+            r_, g_, b_, a_ = pm[xx, yy]
+            if not a_ or max(r_, g_, b_) - min(r_, g_, b_) > 30:
+                continue
+            luz = max(r_, g_, b_) / 235.0
+            brillo = max(0.0, luz - 0.92) / 0.08 * 90
+            pm[xx, yy] = tuple(min(255, int(c * min(luz, 1.0) + brillo)) for c in color) + (a_,)
+    return m
+
+
 def montar(nombre, p):
     panel = sin_fondo(p["panel"], p["recorte"])
-    herramienta = sin_fondo(p["herramienta"])
+    herramienta = sin_fondo(p["herramienta"], todo_negro=p["colgar"] == "rollo")
     hw, hh = herramienta.size
     if p["oscurecer"]:
         # los grises de arriba (la cabeza), más negros
@@ -195,9 +243,11 @@ def montar(nombre, p):
     d = ImageDraw.Draw(capa)
     puntas = []       # los ganchos que se ven por delante de la herramienta (los del agujero de la llave)
 
-    for cx, y, alto, giro, que in p["huecos"]:
+    for i, (cx, y, alto, giro, que) in enumerate(p["huecos"]):
         ancho = round(hw * alto / hh)
         m = herramienta.resize((ancho, alto), Image.LANCZOS)
+        if p.get("colores"):
+            m = tenir(m, COLORES_CINTA[p["colores"][i]])
         a = m.split()[3].load()
         if p["colgar"] == "cabeza":
             # el mango: su centro en el dibujo (el martillo no es simétrico: la uña sobresale más que la boca)
@@ -210,6 +260,12 @@ def montar(nombre, p):
             gancho(d, cx - mango_w // 2 - 3 * B // 2, gy)
             gancho(d, cx + mango_w // 2 + 3 * B // 2, gy)
             eje = (centro, round(alto * (apoyo + 0.02)))
+        elif p["colgar"] == "rollo":
+            # de un gancho metido por el agujero: el rollo se apoya en él por arriba (el gancho se ve por el agujero)
+            centro = ancho // 2
+            arriba = next(yy for yy in range(alto // 2, 0, -1) if a[centro, yy] > 0)
+            gancho(d, cx, y + arriba + 1)
+            eje = (centro, alto // 2)
         elif p["colgar"] == "agujero":
             # boca abajo: el agujero del mango, arriba; el gancho sale del panel por él (se ve dentro del agujero)
             m = m.rotate(180)
