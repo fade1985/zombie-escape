@@ -101,7 +101,7 @@ Sin escudo ya se le pega por todos lados, así que pelea más rápido y más agr
 - Cuarto ajuste: el humo del gas, de pixelfx (el "smoke-bomb" visto desde arriba, `tools/pixelfx/gas-lacrimogeno.js`,
   `efecto_suelo.gd` "gas"), y el bote que vuela, en pixel art; las estrellitas de atontado (de todos los jefes y de
   Johnny en el suelo), el "stunned" de pixelfx (`tools/pixelfx/estrellitas.js`); el barrido, 5 olas, y ya no se pasa
-  esquivando: solo por el hueco. Más gas: 3 botes de cada vez (4 en la fase 2), repartidos alrededor de Johnny, cada
+  esquivando: solo por el hueco (23 nov: las olas, cada 1,9 s en vez de 1,4, y el hueco de la primera, cerca de Johnny para que le dé tiempo a llegar). Más gas: 3 botes de cada vez (4 en la fase 2), repartidos alrededor de Johnny, cada
   5 s (4 en la fase 2). Pelotas: como mucho 12 a la vez (antes 9). El barrido, cada 11 s (antes 7).
 - Animaciones nuevas de PixelLab (21 nov): correr con el escudo delante (la carga) y el empujón con el escudo (al
   disparar las pelotas). Hacia el noreste las dos salieron mal y allí se usa lo de antes (`descartes/`). La de lanzar

@@ -2054,6 +2054,9 @@ func probar_muro() -> void:
 	for n in jefe.get_parent().get_children():
 		if n is BarridoElectrico:
 			barridos += 1
+			var s: float = (johnny.global_position - n.global_position).dot(n.lado)
+			print("Muro: primer hueco a %d de Johnny, a lo largo de la raya (esperado: 64 o menos, salvo pegado a una pared) · entre olas %.1f s (esperado: 1.9)" % [
+				absf(n.olas[0].hueco - s), n.olas[1].sale - n.olas[0].sale])
 	print("Muro: barridos en marcha %d (esperado: 1)" % barridos)
 	Captura.foto("captura-muro-barrido.png")
 	await get_tree().create_timer(3.0, false).timeout

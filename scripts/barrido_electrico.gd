@@ -18,11 +18,17 @@ const MAX_LADO := 1400.0   # lo más lejos que se busca la pared a cada lado
 var dir := Vector2.RIGHT     # hacia dónde avanzan (ya redondeada a lo ancho o a lo alto)
 var olas: Array = []         # cada una: {"sale": segundos}; su "hueco" (dónde está, a lo largo de la raya) lo pone _ready
 var dueno: Node2D = null
+var cerca_de := Vector2.INF  # si se pone (el sitio de Johnny), el hueco de la primera ola sale cerca de él
 var t := 0.0
 var lado := Vector2.DOWN     # a lo largo de la raya
 var desde := -600.0          # dónde acaba la raya a cada lado (lo que deja la pared)
 var hasta := 600.0
 var fondo := 1200.0          # hasta dónde avanza (la pared de enfrente)
+# lo que cambia la ola de aceite del cocinero (ola_aceite.gd, que es este mismo barrido con otro dibujo)
+var velocidad := VELOCIDAD
+var dano := DANO
+var sonido_sale := "calambre"
+var sonido_da := "rayo"
 
 
 func _ready() -> void:
@@ -39,13 +45,19 @@ func _ready() -> void:
 		if ola.has("hueco"):
 			continue
 		var h := 0.0
+		if anterior == INF and cerca_de != Vector2.INF:
+			# la primera, cerca de Johnny: que le dé tiempo a llegar (23 nov, lo pidió el dueño)
+			var s := (cerca_de - global_position).dot(lado) + randf_range(-HUECO, HUECO)
+			ola.hueco = clampf(s, desde + HUECO + 24.0, maxf(desde + HUECO + 24.0, hasta - HUECO - 24.0))
+			anterior = ola.hueco
+			continue
 		for i in 8:
 			h = randf_range(desde + HUECO + 24.0, maxf(desde + HUECO + 24.0, hasta - HUECO - 24.0))
 			if absf(h - anterior) >= 220.0:
 				break
 		ola.hueco = h
 		anterior = h
-	Sonido.tocar("calambre")
+	Sonido.tocar(sonido_sale)
 
 
 # Lo que hay desde aquí hasta la pared (los muros del mapa; los muebles no la paran)
@@ -69,12 +81,12 @@ func _physics_process(delta: float) -> void:
 	var quedan := false
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	for ola in olas:
-		var d1: float = (t - ola.sale) * VELOCIDAD
+		var d1: float = (t - ola.sale) * velocidad
 		if d1 <= fondo:
 			quedan = true
 		if d1 < 0.0 or ola.get("dio", false) or johnny == null or not johnny.vivo:
 			continue
-		var d0: float = (antes - ola.sale) * VELOCIDAD
+		var d0: float = (antes - ola.sale) * velocidad
 		var rel: Vector2 = johnny.global_position - global_position
 		var p := rel.dot(dir)
 		var s := rel.dot(lado)
@@ -84,16 +96,16 @@ func _physics_process(delta: float) -> void:
 			ola.dio = true
 			if johnny.esquiva_t > 0.0:
 				johnny.invulnerable = 0.0   # (lo que protege la esquiva no vale aquí: solo el hueco)
-			johnny.recibir_dano(DANO, dueno)
+			johnny.recibir_dano(dano, dueno)
 			johnny.empujar(dir * 350.0)
-			Sonido.tocar("rayo")
+			Sonido.tocar(sonido_da)
 	if not quedan:
 		queue_free()
 
 
 func _draw() -> void:
 	for ola in olas:
-		var d: float = (t - ola.sale) * VELOCIDAD
+		var d: float = (t - ola.sale) * velocidad
 		if d < 0.0 or d > fondo:
 			continue
 		pintar_ola(d, ola.hueco)

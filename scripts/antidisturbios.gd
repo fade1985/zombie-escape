@@ -69,7 +69,7 @@ const ESPERA_GAS := [5.0, 4.0]
 # El barrido eléctrico (fase 2)
 const AVISO_BARRIDO := 0.7
 const OLAS := 5
-const ENTRE_OLAS := 1.4            # lo que tarda en salir cada ola tras la anterior
+const ENTRE_OLAS := 1.9            # lo que tarda en salir cada ola tras la anterior (23 nov: 1,4 las juntaba mucho)
 const ESPERA_BARRIDO := 11.0   # entre un barrido y el siguiente (antes 7: el dueño lo subió el 21 nov)
 # El combo de porrazos (fase 2)
 const AVISO_COMBO := [0.5, 0.32, 0.32]   # el aviso de cada golpe
@@ -404,6 +404,7 @@ func barrer(johnny: Node2D) -> void:
 	var b := BARRIDO.new()
 	b.dir = global_position.direction_to(johnny.global_position)
 	b.dueno = self
+	b.cerca_de = johnny.global_position
 	for i in OLAS:
 		b.olas.append({"sale": i * ENTRE_OLAS})
 	b.position = position
