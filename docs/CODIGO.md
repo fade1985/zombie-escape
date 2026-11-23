@@ -147,6 +147,11 @@ en una línea.
   tieso con el `"calambre"` de `estados.gd`, desde `dar_zarpazo`, que cualquier tipo puede cambiar). Salen en los
   departamentos (`planta.gd`, `horda`: `OFICINISTAS` y `ESCOLTAS_SEGURIDAD`) y los escoltas, con la alarma de las cámaras.
   Pruebas: `--captura --edificio torre --oficinista` y `--escolta`.
+  `zombi_unas.gd`, el de las uñas (23 nov; su dibujo, en `docs/ZOMBIS_112.md`): copiado del oficinista, guarda las
+  distancias y cada 2,5-3 s, si ve a Johnny y hay paso libre, se planta y dispara 3 uñas en abanico (12° entre una y
+  otra; `bala_zombi.gd`, forma `"una"`, a la altura de su mano, `alto`). Sin zarpazo: acorralado, dispara a quemarropa.
+  Sale en todos los edificios desde el nivel 3 (`planta.gd`, `horda`, con el dinamitero) y en el garaje desde la
+  oleada 7 (`garaje.gd`, `tipos`). Prueba: `--captura --unas`.
   El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
   no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos (una imagen por tamaño, compartida, y por debajo de los personajes, `z_index` -1, para que se dibujen juntas: con hordas grandes, en la web, ahorra mucho).
@@ -227,7 +232,8 @@ en una línea.
     `helicoptero.png`, de GPT con `tools/helicoptero_gpt.py`, que le quita las aspas; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
     el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; los
-  alfileres de la modista y las tazas y grapadoras del oficinista, que dan vueltas), `salpicadura.gd`
+  alfileres de la modista; las tazas y grapadoras del oficinista, que dan vueltas; las uñas de hueso del de las uñas,
+  `dibujar_una`), `salpicadura.gd`
   (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
   `explosion.gd` (lo que se ve es la explosión de pixelfx: `tools/pixelfx/explosion.js`, una copia de "small-explosion" más
   grande y sin las piedras ni la tierra, que caían en raya vista desde arriba, ni la raya del suelo que brillaba y se quedaba sola al final, opción "marca", 20 nov; la exporta `exportar_explosion.mjs` en

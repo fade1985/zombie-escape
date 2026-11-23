@@ -54,6 +54,11 @@ const LISTA := {
 		"frase": "Guarda las distancias y escupe un moco que deja el suelo envenenado.",
 		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-venenoso.tres",
 		"recorte": Rect2i(38, 51, 65, 67), "retrato": "quieto_s", "escala": 2, "jefe": false},
+	# el de las uñas (23 nov: dibujo de GPT y animaciones de PixelLab)
+	"unas": {"nombre": "El de las uñas",
+		"frase": "Un vecino estirado como un palo. Se dispara las uñas de los dedos de tres en tres: apártate de lado.",
+		"edificios": ["apartamentos", "centro", "torre"], "hoja": "res://assets/sprites/zombi-unas.tres",
+		"recorte": Rect2i(35, 18, 25, 67), "retrato": "quieto_s", "escala": 2, "jefe": false},
 	"portera": {"nombre": "La portera",
 		"frase": "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-portera.tres",

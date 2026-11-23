@@ -11,7 +11,9 @@ var vida := 6.0
 var forma := "gota"   # "gota": agua sucia de fregar (la portera); "polvo": una nubecita (su giro); "alfiler": una
                       # aguja con la cabeza roja (la modista)
                       # "taza" y "grapadora": lo que tira el oficinista de Torre Velaria (dan vueltas al volar)
+                      # "una": una uña de hueso, la astilla que dispara el de las uñas (zombi_unas.gd)
 var agua: Dictionary = AGUA   # los colores de la gota (AGUA_ROJA, con la portera enfadada)
+var alto := ALTO          # a qué altura vuela (la uña, más alta: a la de la mano del de las uñas, que es muy alto)
 var dueno: Node2D = null   # quien la lanza (para la skin del glotón: johnny.gd, devolver())
 var t := randf() * TAU     # para que cada gota tiemble a su ritmo
 var edad := 0.0            # el polvo se va hinchando al volar
@@ -26,6 +28,9 @@ const AGUA_ROJA := {"borde": Color("#2e1416", 0.95), "oscuro": Color("#6e2a2a", 
 # El polvo del giro: gris claro, algo transparente y con el borde suave, sin brillo
 const POLVO := {"borde": Color("#4a4646", 0.6), "oscuro": Color("#857f78", 0.75), "medio": Color("#b0aaa2", 0.72),
 	"claro": Color("#dcd7ce", 0.8), "brillo": Color("#dcd7ce", 0.8)}
+# La uña del de las uñas: amarilla de hueso, como las del dibujo, con el borde oscuro (sin brillo: es hueso, no cristal)
+const UNA := {"borde": Color("#2a2418"), "oscuro": Color("#98875f"), "medio": Color("#d9c992"),
+	"claro": Color("#efe4b8"), "brillo": Color("#efe4b8")}
 # Lo que tira el oficinista, dibujado a píxeles: o borde, w y s el blanco y la sombra de la taza, c el café, r el rojo
 # y m el metal de la grapadora
 const OBJETOS := {
@@ -61,7 +66,7 @@ func _physics_process(delta: float) -> void:
 	global_position = despues
 	t += delta
 	edad += delta
-	if forma != "alfiler":
+	if forma != "alfiler" and forma != "una":
 		queue_redraw()   # la gota tiembla al volar y el polvo da vueltas
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) < johnny.RADIO + radio:
@@ -75,6 +80,11 @@ func salpicar(donde: Vector2, hacia: Vector2) -> void:
 		Salpicadura.lanzar(get_parent(), donde, hacia, agua)
 	elif forma == "polvo":
 		Salpicadura.lanzar(get_parent(), donde, hacia, POLVO, true)   # se deshace, sin mancha
+	elif forma == "una":
+		# se astilla: unos trocitos de hueso
+		for i in 4:
+			var v := (-hacia.normalized()).rotated(randf_range(-1.2, 1.2)) * randf_range(50.0, 130.0)
+			Particulas.soltar(get_parent(), donde + Vector2(0, -alto), v, [UNA.medio, UNA.oscuro][i % 2], 2, 0.25)
 	elif OBJETOS.has(forma):
 		# se rompe en trocitos de sus colores
 		for i in 6:
@@ -97,6 +107,15 @@ func _draw() -> void:
 		for x in range(-r, r + 1):
 			if Vector2(x, y * 2.0).length() <= r:
 				draw_rect(Rect2(Vector2(x, y) * PIXEL, Vector2(PIXEL, PIXEL)), Color(0, 0, 0, 0.22))
+	if forma == "una":
+		# la uña: una astilla alargada que apunta hacia donde vuela (16 direcciones, a píxeles rectos)
+		var hacia := posmod(roundi(velocidad.angle() / TAU * 16.0), 16)
+		var clave_una := "una_%d" % hacia
+		if not dibujos.has(clave_una):
+			dibujos[clave_una] = dibujar_una(hacia * TAU / 16.0)
+		for p in dibujos[clave_una]:
+			draw_rect(Rect2(p[0] + Vector2(0, -alto), Vector2(PIXEL, PIXEL)), p[1])
+		return
 	if OBJETOS.has(forma):
 		# la taza o la grapadora, dando vueltas: el dibujo girado de cuarto en cuarto (para que los píxeles sigan rectos)
 		var ob: Dictionary = OBJETOS[forma]
@@ -156,6 +175,21 @@ static func dibujar_gota(radio: float, angulo: float, estira: float, colores: Di
 		return k <= 1.0 and v <= (ancho + crece) * pow(1.0 - k, 0.7)
 	var n := ceili((largo + radio) / PIXEL) + 2
 	return pintar(dentro, n, colores, Vector2(-0.2, -0.35) * ancho, maxf(ancho * 0.28, PIXEL * 1.1))
+
+
+# Los píxeles de una uña de hueso: larga y estrecha, con la punta afilada delante y la raíz roma detrás
+static func dibujar_una(angulo: float) -> Array:
+	var d := Vector2.from_angle(angulo)
+	var lado := d.orthogonal()
+	var dentro := func(c: Vector2, crece: float) -> bool:
+		var u := c.dot(d)
+		var v := absf(c.dot(lado))
+		if u >= 0.0:   # delante, la punta: se afila en recto
+			var k := u / (12.0 + crece)
+			return k <= 1.0 and v <= (2.6 + crece) * (1.0 - k) + crece * 0.3
+		var k := -u / (5.0 + crece)   # detrás, la raíz: redonda
+		return k <= 1.0 and v <= (2.6 + crece) * sqrt(1.0 - k * k)
+	return pintar(dentro, 8, UNA, Vector2.ZERO, 0.0)
 
 
 # Los píxeles de una nubecita de polvo (o del vapor de la portera, con otros colores): una bola en medio y tres

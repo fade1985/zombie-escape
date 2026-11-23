@@ -5704,3 +5704,90 @@ func probar_dependienta_nueva() -> void:
 	print("Retrato del bestiario: %s (esperado: (18.0, 46.0))" % retrato.get_size())
 	retrato.get_image().save_png(Captura.CARPETA + "captura-dependienta-retrato.png")
 	get_tree().quit()
+
+
+# Con "-- --captura --unas": el de las uñas (23 nov). En la sala de pruebas: primero, quieto de frente al lado de Johnny,
+# el vecino, el gordo y el dinamitero, para ver su tamaño (captura-unas-tamano.png). Luego tres que guardan las
+# distancias y disparan a Johnny (quieto e invencible): cuenta las uñas de cada disparo (esperado: 3 en abanico, unos 12°
+# entre una y otra), cuántas le dan y cuántas se paran antes de tiempo (en una pared o en Johnny), con fotos de las uñas
+# volando (captura-unas-tiro-N.png). Y uno muerto (captura-unas-muerto.png) y su retrato del bestiario
+# (captura-unas-retrato.png)
+func probar_unas() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(0, 230)
+	johnny.direccion = "s"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	# ── el tamaño: en fila, todos de frente ──
+	var fila: Array = []
+	var tipos := ["normal", "venenoso", "explosivo", "unas"]
+	for i in tipos.size():
+		var z: Node2D = meter_zombi(tipos[i], johnny.position + Vector2(70 + i * 80, 0))
+		z.process_mode = Node.PROCESS_MODE_DISABLED   # (quietos: ni andan ni atacan)
+		fila.append(z)
+	for z in fila:
+		for hijo in z.get_children():   # (parado así, su sombra y lo demás no se ponen en su sitio: solo el dibujo)
+			if hijo is CanvasItem and hijo != z.sprite:
+				hijo.visible = false
+		z.sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+		z.sprite.play("quieto_s" if z.sprite.sprite_frames.has_animation("quieto_s") else "reposo_s")
+	await get_tree().create_timer(0.3).timeout
+	await RenderingServer.frame_post_draw
+	Captura.foto("captura-unas-tamano.png")
+	for z in fila:
+		z.queue_free()
+	await get_tree().create_timer(0.2).timeout
+	# ── tres disparando a Johnny ──
+	var ellos: Array = []
+	for v in [Vector2(1, -0.4), Vector2(-1, -0.6), Vector2(0.3, 1)]:
+		ellos.append(meter_zombi("unas", johnny.position + v.normalized() * 240.0))
+	var vistas := {}          # cada uña, la primera vez que se ve
+	var disparos: Array = []  # [cuántas, grados entre la primera y la última] de cada disparo
+	var acabadas := [0, 0]    # [antes de tiempo (pared o Johnny), en total]
+	var golpes := 0
+	var fotos := 0
+	for paso in 420:   # 7 s
+		await get_tree().physics_frame
+		var nuevas: Array = []
+		for b in get_tree().get_nodes_in_group("balas_zombi"):
+			if not vistas.has(b):
+				vistas[b] = true
+				nuevas.append(b)
+				b.tree_exiting.connect(func():
+					acabadas[1] += 1
+					if b.vida > 0.0:
+						acabadas[0] += 1)
+		if not nuevas.is_empty():
+			var angulos: Array = nuevas.map(func(b): return rad_to_deg(b.velocidad.angle()))
+			disparos.append([nuevas.size(), absf(angle_difference(deg_to_rad(angulos.min()), deg_to_rad(angulos.max()))) * 180.0 / PI,
+				nuevas[0].forma])
+		if johnny.invulnerable > 0.0:   # le ha dado una: se cuenta y se le quita el rato sin daño, para contar la siguiente
+			golpes += 1
+			johnny.invulnerable = 0.0
+		johnny.global_position = sala.diana.global_position + Vector2(0, 230)   # quieto, que no le empujen
+		if fotos < 3 and paso % 6 == 0 and get_tree().get_nodes_in_group("balas_zombi").size() >= 2:
+			fotos += 1
+			await RenderingServer.frame_post_draw
+			Captura.foto("captura-unas-tiro-%d.png" % fotos)
+	print("Uñas: disparos %s (esperado: [3, ~24°, una] en cada uno)" % [disparos])
+	print("Uñas: %d le dan a Johnny; %d de %d se paran antes de tiempo (pared o Johnny)" % [golpes, acabadas[0], acabadas[1]])
+	# ── uno muerto ──
+	ellos[0].herir(999.0)
+	await get_tree().create_timer(2.5).timeout
+	Captura.foto("captura-unas-muerto.png")
+	var retrato := Bestiario.retrato("unas")
+	print("Retrato del bestiario: %s (esperado: (25.0, 67.0))" % retrato.get_size())
+	retrato.get_image().save_png(Captura.CARPETA + "captura-unas-retrato.png")
+	get_tree().quit()

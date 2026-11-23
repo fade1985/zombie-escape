@@ -53,7 +53,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 
 | Español | Portugués |
 |---|---|
-| el vecino · la vecina · el arrastrado · el crío · el dinamitero · el de los tentáculos · el gordo | o vizinho · a vizinha · o rastejante · o moleque · o dinamiteiro · o dos tentáculos · o gordo |
+| el vecino · la vecina · el arrastrado · el crío · el dinamitero · el de los tentáculos · el gordo · el de las uñas | o vizinho · a vizinha · o rastejante · o moleque · o dinamiteiro · o dos tentáculos · o gordo · o das unhas |
 | la dependienta · el vigilante · el guardia de la llave maestra · el maniquí | a vendedora · o segurança · o guarda da chave mestra · o manequim |
 | ¡¡¡AAAHHH!!! (grito de la dependienta) | AAAHHH!!! |
 

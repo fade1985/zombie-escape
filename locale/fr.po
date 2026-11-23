@@ -554,6 +554,14 @@ msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
 msgstr "Il garde ses distances et crache un mollard qui empoisonne le sol."
 
 #: scripts/bestiario.gd
+msgid "El de las uñas"
+msgstr "Le gars aux ongles"
+
+#: scripts/bestiario.gd
+msgid "Un vecino estirado como un palo. Se dispara las uñas de los dedos de tres en tres: apártate de lado."
+msgstr "Un voisin maigre comme un clou. Il tire ses ongles trois par trois : esquive sur le côté."
+
+#: scripts/bestiario.gd
 msgid "La portera"
 msgstr "La gardienne"
 

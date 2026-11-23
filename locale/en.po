@@ -554,6 +554,14 @@ msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
 msgstr "He keeps his distance and spits a loogie that leaves the floor poisoned."
 
 #: scripts/bestiario.gd
+msgid "El de las uñas"
+msgstr "The Nail Guy"
+
+#: scripts/bestiario.gd
+msgid "Un vecino estirado como un palo. Se dispara las uñas de los dedos de tres en tres: apártate de lado."
+msgstr "A neighbor stretched thin as a stick. He shoots his fingernails three at a time: sidestep them."
+
+#: scripts/bestiario.gd
 msgid "La portera"
 msgstr "The Super"
 

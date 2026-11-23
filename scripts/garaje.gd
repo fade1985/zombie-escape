@@ -330,7 +330,7 @@ func tipos(n: int) -> Array:
 	if n >= 3:
 		lista += ["rapido", "rapido"]
 	if n >= 7:
-		lista += ["explosivo", "venenoso"]
+		lista += ["explosivo", "venenoso", "unas"]   # (y el de las uñas, en todos los edificios)
 	if n >= 9:
 		match partida.ed.generador:
 			"tienda": lista.append("vigilante")

@@ -60,7 +60,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Español | Chino |
 |---|---|
 | el vecino · la vecina · el arrastrado · el crío · el dinamitero | 邻居 · 女邻居 · 爬行者 · 熊孩子 · 自爆客 |
-| el de los tentáculos · el gordo | 触手怪 · 胖子 |
+| el de los tentáculos · el gordo · el de las uñas | 触手怪 · 胖子 · 指甲怪 |
 | la dependienta · el vigilante · el guardia (de la llave maestra) · el maniquí | 店员 · 巡逻保安 · 持万能钥匙的保安 · 假人模特 |
 | durmiente · noctámbulo | 沉睡者 · 夜行者 |
 | sujeto(s) · Sujeto 0 | 受试者 · 0号受试者 (el Dr. Salas, en sus gritos: 实验品) |

@@ -49,6 +49,7 @@ const ZOMBIS := {
 	"dependienta": preload("res://escenas/personajes/zombi_dependienta.tscn"),
 	"oficinista": preload("res://escenas/personajes/zombi_oficinista.tscn"),   # los de Torre Velaria
 	"escolta": preload("res://escenas/personajes/zombi_escolta.tscn"),
+	"unas": preload("res://escenas/personajes/zombi_unas.tscn"),   # el de las uñas: en todos los edificios desde el nivel 3
 	"antidisturbios": preload("res://escenas/personajes/antidisturbios.tscn"),   # minijefes del centro comercial
 	"mascota": preload("res://escenas/personajes/mascota.tscn"),
 	"cocinero": preload("res://escenas/personajes/cocinero.tscn"),
@@ -99,7 +100,7 @@ const BILLETE_ZOMBI := 0.8         # lo que suelta cada durmiente además del mu
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
-	"oficinista": Color("#9cb87a"), "escolta": Color("#93ad84"),
+	"oficinista": Color("#9cb87a"), "escolta": Color("#93ad84"), "unas": Color("#768650"),
 	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "modista": Color("#93b07a"),
 	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80"), "gloton": Color("#b9a06e"), "gymbro": Color("#c2b48a"),
 	"bombero": Color("#6b6158"), "cientifico_jefe": Color("#d9d6c8"), "directora": Color("#9aa88a"),
@@ -117,7 +118,7 @@ const BILLETES_JEFA := 10          # lo único que suelta cada jefe al caer, tam
 # puntos de la barra (el que no está, como el vecino: dependienta, vigilante, oficinista, escolta, maniquí...). Los jefes
 # y los zombis que llama un jefe, nada
 const MUTAGENO_ZOMBI := {"lento": 1, "normal": 2, "vecina": 2, "rapido": 3, "venenoso": 4, "tentaculos": 5,
-	"explosivo": 5, "guardia": 5}
+	"explosivo": 5, "guardia": 5, "unas": 4}
 const MUTAGENO_OTRO := 2
 const MUTAGENO_BARRA := 100   # lo que hay que llenar para un mutágeno
 const CHAPA_UI := preload("res://scripts/ui/chapa.gd")   # (su MAXIMO, el tope)

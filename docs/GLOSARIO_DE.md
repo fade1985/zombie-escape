@@ -33,7 +33,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | el cocinero · la modista · la mascota | der Koch · die Schneiderin · das Maskottchen | |
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | Sicherheitsbüro · Großküche · Schneiderei · Spielwaren | |
 | los Apartamentos · el Centro comercial | das Mietshaus · das Einkaufszentrum | |
-| Durmientes: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Nachbar, Nachbarin, Kriecher, Bengel, Sprengmeister, Tentakeltyp, Dicke | |
+| Durmientes: vecino, vecina, arrastrado, crío, dinamitero, el de los tentáculos, gordo, el de las uñas | Nachbar, Nachbarin, Kriecher, Bengel, Sprengmeister, Tentakeltyp, Dicke, Nageltyp | |
 | dependienta · vigilante · guardia (de la llave maestra) · maniquí | Verkäuferin · Wachmann · Wächter (Wächter mit dem Generalschlüssel) · Schaufensterpuppe | |
 | durmiente · noctámbulo · Sujeto 0 | Schläfer · Nachtschwärmer · Proband 0 | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Polizist · Soldat · Ärztin · Handwerker · Apothekerin · Techniker | |

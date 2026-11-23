@@ -554,6 +554,14 @@ msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
 msgstr "Mantém distância e cospe uma meleca que deixa o chão envenenado."
 
 #: scripts/bestiario.gd
+msgid "El de las uñas"
+msgstr "O das unhas"
+
+#: scripts/bestiario.gd
+msgid "Un vecino estirado como un palo. Se dispara las uñas de los dedos de tres en tres: apártate de lado."
+msgstr "Um vizinho esticado feito um palito. Dispara as unhas dos dedos de três em três: desvie para o lado."
+
+#: scripts/bestiario.gd
 msgid "La portera"
 msgstr "A síndica"
 

@@ -555,6 +555,14 @@ msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
 msgstr "Держится на расстоянии и плюется соплей, от которой пол становится ядовитым."
 
 #: scripts/bestiario.gd
+msgid "El de las uñas"
+msgstr "Ногтемёт"
+
+#: scripts/bestiario.gd
+msgid "Un vecino estirado como un palo. Se dispara las uñas de los dedos de tres en tres: apártate de lado."
+msgstr "Сосед, вытянутый как жердь. Стреляет ногтями по три за раз: уходи в сторону."
+
+#: scripts/bestiario.gd
 msgid "La portera"
 msgstr "Вахтерша"
 

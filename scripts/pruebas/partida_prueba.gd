@@ -539,6 +539,8 @@
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --dependienta       la dependienta (del alto de Johnny desde el 19 nov) al lado de Johnny y de otros zombis, y seis andando
 #                       hacia Johnny desde seis lados (fotos para un GIF) [prueba_varias.gd]
+#   --unas              el de las uñas (23 nov) al lado de Johnny y de otros zombis; tres disparándole (3 uñas en
+#                       abanico, cuántas le dan y cuántas se paran), uno muerto y su retrato del bestiario [prueba_varias.gd]
 #   --vecina            la vecina hecha con GPT (en todas las vistas) junto al vecino: andar, atacar, golpe y muerte [prueba_varias.gd]
 #   --vecino-gpt        el vecino rehecho con GPT junto al de PixelLab, quietos en dos filas en sus 8 direcciones:
 #                       andar, atacar, golpe y muerte (el de GPT es el vecino del juego desde el 8 nov) [prueba_varias.gd]
@@ -1468,6 +1470,9 @@ func empezar_prueba() -> void:
 	elif "--dependienta" in args:
 		set_process(false)   # sin la prueba larga
 		probar_dependienta_nueva()
+	elif "--unas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_unas()
 	elif "--vecina" in args:
 		set_process(false)   # sin la prueba larga
 		probar_vecina()

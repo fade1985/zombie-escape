@@ -94,7 +94,7 @@ const TELE_EN := {
 
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
 const COSTE := {"lento": 0.5, "normal": 1.0, "vecina": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0,
-	"vigilante": 1.5, "dependienta": 1.5, "oficinista": 1.5, "escolta": 2.0}
+	"vigilante": 1.5, "dependienta": 1.5, "oficinista": 1.5, "escolta": 2.0, "unas": 1.5}
 # Presupuesto de un apartamento: "base" más "por_nivel" por cada nivel (el nivel sube con la planta y con el
 # orden del apartamento dentro de ella). Son los números del juego JS, equilibrados con partidas simuladas.
 const BASE := 5.0
@@ -892,6 +892,7 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 		tipos += ["rapido", "venenoso"]
 	if nivel >= 3:
 		tipos.append("explosivo")
+		tipos.append("unas")   # el de las uñas (23 nov): en todos los edificios
 	if nivel >= 4:
 		tipos.append("tentaculos")
 	# en las tiendas del centro comercial, además, los suyos: la dependienta desde la planta baja (una por tienda

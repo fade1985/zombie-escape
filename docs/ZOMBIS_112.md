@@ -37,6 +37,8 @@ animaciones salen de 212 a 224 y se ponen en el centro) y reducido a la altura d
 (`"casilla": 94, "pies": [47, 84]`). Su piel es más amarilla que la de los demás: `"piel_verde"` lleva su tono y deja
 fuera los calzoncillos (menos vivos) y las puntas de las uñas (más claras). El andar de frente y de espaldas cruzaba
 las piernas: se rehízo con el mismo esqueleto y `"posture": 1` (los pies separados); con texto no daba el segundo paso.
+En el juego (`zombi_unas.tscn`): escala 2 y `offset = Vector2(-47, -84)`; el "hit" de su `attack` (0,375) es cuando
+suelta las uñas (`momento_zarpazo`, en `zombi_unas.gd`).
 
 ## 1. El personaje en PixelLab
 

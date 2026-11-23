@@ -21,7 +21,7 @@ const JEFES := {"portera": "Portera", "antidisturbios": "Antidisturbios", "cocin
 const ZOMBIS := {"normal": "Normal", "lento": "Lento", "rapido": "Rápido", "explosivo": "Explosivo",
 	"tentaculos": "Tentáculos", "venenoso": "Venenoso", "vigilante": "Vigilante", "dependienta": "Dependienta",
 	"oficinista": "Oficinista", "escolta": "Escolta de Velaria",
-	"vecina": "Vecina"}   # (sin atajo: es la 11)
+	"vecina": "Vecina", "unas": "El de las uñas"}   # (sin atajo: son la 11 y la 12)
 const CUANTOS := [1, 3, 5, 10]
 # Los botones del Reto del día (pestaña «Ir a»): lo que no vale con cada condición (Garaje.CONDICIONES)
 const RETOS := {"cuerpo": "sin cuerpo a cuerpo", "distancia": "sin distancia", "especial": "sin especiales",
