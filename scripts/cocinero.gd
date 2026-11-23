@@ -4,7 +4,7 @@
 #
 # Es lento y se queda a media distancia. En las dos fases:
 #   - La olla: en medio de su cocina hay una olla gigante (el mueble "bigpot", catalogo.gd). Cada tanto va a ella y la
-#     remueve (una barrita encima dice cuánto le falta); al terminar se come el guiso y se cura un poco por cada saco
+#     remueve (una barrita encima dice cuánto le falta; mientras, con un escudo que no deja entrar nada); al terminar se come el guiso y se cura por cada saco
 #     de ingredientes que quede. Los sacos (saco_ingredientes.gd): tres que caen por la cocina cada vez que cocina. Si
 #     Johnny los rompe todos, el guiso sale malo: se pone enfermo, doblado unos segundos, y le entra el doble (la
 #     ventana para pegarle). Si los rompe antes de tiempo, va a cocinar enseguida («¿Y MIS INGREDIENTES?»). Junto a su
@@ -16,7 +16,8 @@
 #     con tres o más, grita «¡A FREGAR!» y vuelven volando a su mano, dando a quien pillen por el camino.
 # A media vida, «servicio de urgencia»: grita, se le cae el gorro (otra hoja: jefe-cocinero-sin, calvo y con un
 # cuchillo en cada mano) y recoge las sartenes. Fase 2:
-#   - Corte en cruz: avisa con cuatro franjas desde él hasta las paredes, en + o en X (a veces una detrás de la otra).
+#   - Corte en cruz: avisa con cuatro franjas desde él hasta las paredes, en + o en X (a veces una detrás de la otra),
+#     con cuatro cuchillos apuntando por ellas; luego salen volando hasta la pared y dan al que pillan al pasar.
 #   - La olla se vuelca: tiembla y sale una ola de aceite (ola_aceite.gd, el barrido del antidisturbios con otro
 #     dibujo) que cruza la sala hacia Johnny; dos olas, cada una con su hueco. Detrás de la olla no llega.
 #   - Combo: dos cuchillazos seguidos y en el segundo se le clavan los cuchillos en el suelo (le entra un 50 % más).
@@ -36,12 +37,16 @@ const LEJOS := 360.0               # ...y si está más lejos, va a por él (ent
 const CADA_COCINA := [17.0, 12.0]  # cada cuánto va a cocinar (normal y enfadado)
 const PRISA := 2.5                 # sin sacos, lo que tarda en ir a cocinar
 const REMUEVE := [4.5, 3.5]        # lo que tarda en remover
-const CURA_SACO := [0.04, 0.05]    # lo que se cura por cada saco que quede (parte de su vida)
+const CURA_SACO := [0.07, 0.08]    # lo que se cura por cada saco que quede (parte de su vida; 24 nov, el dueño: más, eran 4 y 5 %)
 const SACOS := 3
 const ENFERMO := 4.5               # lo que se queda doblado con el guiso malo
 const DOBLE := 2.0                 # lo que le entra enfermo
 const ARCADAS := [0.15, 1.7, 3.2]  # cuándo vomita estando enfermo (además, estrellitas: con_estrellas)
 const CHARCO := "res://escenas/armas/charco.tscn"
+const ESCUDO := [preload("res://assets/sprites/escudo-cristal-detras.png"),   # (las tres hojas de la cúpula)
+	preload("res://assets/sprites/escudo-cristal-delante.png"), preload("res://assets/sprites/escudo-cristal-brillo.png")]
+const ESCUDO_ESCALA := 3.0         # el escudo de remover (la cúpula del científico, a su medida: 2), a la del cocinero
+const ESCUDO_SUBE := 0.25
 const CLAVADO := 1.6               # con los cuchillos clavados en el suelo
 const MAS_CLAVADO := 1.5           # lo que le entra así
 # los ataques
@@ -60,6 +65,8 @@ const AVISO_CRUZ := 0.8
 const AVISO_CRUZ_2 := 0.55         # la segunda cruz, cuando la encadena
 const MEDIO_CRUZ := 20.0           # medio ancho de cada franja
 const DANO_CRUZ := 18
+const VUELO_CRUZ := 1000.0         # lo rápido que salen los cuatro cuchillos de la cruz
+const ANCHO_CUCHILLO := 34.0       # lo que pilla cada cuchillo a lo largo (al pasar por donde está Johnny)
 const AVISO_OLA := 1.0
 const AVISO_LLUVIA := 0.5          # lo que tarda en tirarlos hacia arriba
 const LLUVIA := 6                  # los que caen alrededor de Johnny
@@ -84,11 +91,31 @@ var sacos: Array = []              # los sacos de ingredientes de esta vez (los 
 var olla: Node2D = null            # el mueble de la olla gigante (si lo hay)
 var cocinadas := 0                 # las veces que ha terminado de cocinar (para la prueba)
 var golpe_escudo := -9.0           # cuándo le dieron en el escudo (para que se encienda)
+var escudo: Array[Sprite2D] = []   # las tres capas del escudo (detrás, delante y brillo)
+var escudo_k := 0.0                # lo subido que está (0 = no hay, 1 = entero)
 var aviso_inmune := 0.0            # para no gritar «¡INMUNE!» a cada golpe
 
 
 func _ready() -> void:
 	super()
+	# el escudo de cuando remueve: lo de detrás, por debajo de su dibujo; lo de delante y el brillo, encima
+	for i in 3:
+		var capa := Sprite2D.new()
+		capa.texture = ESCUDO[i]
+		capa.hframes = 8
+		capa.vframes = 6
+		capa.offset = Vector2(40, 40) - Vector2(40, 38)   # (el centro de la esfera en cada fotograma)
+		capa.position = Vector2(0, -arriba * 0.45)
+		capa.visible = false
+		if i > 0:
+			capa.z_index = 1
+		if i == 2:
+			var suma := CanvasItemMaterial.new()
+			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+			capa.material = suma
+		add_child(capa)
+		move_child(capa, $Sprite.get_index() + (0 if i == 0 else i))
+		escudo.append(capa)
 	pista.call_deferred()
 
 
@@ -186,7 +213,8 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				cruz(johnny)
 		"cruz":
 			frenar(delta)
-			if t >= DESPUES:
+			volar_cruz(johnny)
+			if t >= maxf(DESPUES, datos.largo_max / VUELO_CRUZ + 0.35):
 				# a veces encadena la otra (la + y luego la X, o al revés)
 				if not datos.segunda and randf() < 0.5:
 					cambiar("aviso_cruz", {"giro": PI / 4.0 - datos.get("giro", 0.0), "segunda": true})
@@ -260,6 +288,7 @@ func elegir(johnny: Node2D, d: float) -> void:
 				Sonido.tocar("chisporroteo")
 			"cruz":
 				cambiar("aviso_cruz", {"giro": 0.0 if randf() < 0.5 else PI / 4.0})
+				gritar(Idioma.t("¡CORTE EN CRUZ!"), Color("#ff6a5a"), 20)
 				Sonido.tocar("barrido")
 			"damero":
 				empezar("aviso_damero", angulo)
@@ -486,15 +515,29 @@ func brazos(giro: float) -> Array:
 
 
 # El corte en cruz: si Johnny está en alguna de las cuatro franjas (hasta la pared), le da
-func cruz(johnny: Node2D) -> void:
-	Sonido.tocar("barrido")
-	Temblor.temblar(5.0)
-	var rel: Vector2 = johnny.global_position - global_position
+func cruz(_johnny: Node2D) -> void:
+	Sonido.tocar("cuchillos")
+	Temblor.temblar(4.0)
+	var largos: Array = []
 	for a in brazos(datos.get("giro", 0.0)):
-		var d := Vector2.from_angle(a)
-		var largo := Aviso.alcance(self, Vector2(0, 6), a, 1400.0, MEDIO_CRUZ)
+		largos.append(Aviso.alcance(self, Vector2(0, 6), a, 1400.0, MEDIO_CRUZ))
+	datos.largos = largos
+	datos.largo_max = largos.max()
+	datos.dio = false
+
+
+# Los cuatro cuchillos de la cruz van por sus franjas hasta la pared: al que pille a Johnny por el camino, le da (una vez)
+func volar_cruz(johnny: Node2D) -> void:
+	if datos.dio or johnny == null or not johnny.vivo:
+		return
+	var rel: Vector2 = johnny.global_position - global_position
+	var brazos_ := brazos(datos.get("giro", 0.0))
+	for i in 4:
+		var d := Vector2.from_angle(brazos_[i])
+		var va := minf(radio + t * VUELO_CRUZ, datos.largos[i])
 		var a_lo_largo := rel.dot(d)
-		if a_lo_largo > 0.0 and a_lo_largo < largo + johnny.RADIO and absf(rel.cross(d)) < MEDIO_CRUZ + johnny.RADIO:
+		if absf(rel.cross(d)) < MEDIO_CRUZ + johnny.RADIO and absf(a_lo_largo - va) < ANCHO_CUCHILLO + johnny.RADIO 				and a_lo_largo > 0.0 and a_lo_largo < datos.largos[i] + johnny.RADIO:
+			datos.dio = true
 			johnny.recibir_dano(DANO_CRUZ, self)
 			johnny.empujar(d * 400.0)
 			return
@@ -575,28 +618,19 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	return cantidad
 
 
-# El escudo mientras remueve: una burbuja azul clarito alrededor de él que aparece de golpe, palpita y, si le dan, se
-# enciende; a cuadraditos de 2, como todo
-func pintar_escudo(lienzo: Node2D) -> void:
-	var sale := minf(1.0, t / 0.15)
-	var golpe := maxf(0.0, 1.0 - (tiempo - golpe_escudo) / 0.25)
-	var centro := Vector2(0, -arriba * 0.45)
-	var r := Vector2(78.0, 92.0) * (0.6 + 0.4 * sale) * (1.0 + 0.03 * sin(tiempo * 6.0))
-	lienzo.draw_set_transform(centro, 0.0, r / r.y)
-	lienzo.draw_circle(Vector2.ZERO, r.y, Color(0.55, 0.85, 1.0, (0.10 + 0.15 * golpe) * sale))
-	lienzo.draw_set_transform(Vector2.ZERO)
-	# el borde: puntos que dan vueltas, más claros por arriba
-	var n := 44
-	for i in n:
-		var a := TAU * i / n + tiempo * 0.8
-		var p := ((centro + Vector2(cos(a) * r.x, sin(a) * r.y)) / 2.0).floor() * 2.0
-		var luz := 0.5 + 0.5 * maxf(0.0, -sin(a))
-		var c := Color(0.6 + 0.4 * luz, 0.9, 1.0, (0.45 + 0.35 * luz + 0.4 * golpe) * sale)
-		lienzo.draw_rect(Rect2(p - Vector2(2, 2), Vector2(4, 4)), c)
-	# y un brillo en la parte de arriba a la izquierda
-	var brillo := ((centro + Vector2(-r.x * 0.45, -r.y * 0.6)) / 2.0).floor() * 2.0
-	lienzo.draw_rect(Rect2(brillo, Vector2(10, 4)), Color(1, 1, 1, 0.5 * sale))
-	lienzo.draw_rect(Rect2(brillo + Vector2(-4, 4), Vector2(4, 6)), Color(1, 1, 1, 0.4 * sale))
+# El escudo mientras remueve: la cúpula de cristal del científico (cientifico_jefe.gd), el "divine-shield" de pixelfx
+# (tools/pixelfx/escudo-cristal.js), más grande. Sube al empezar a remover, baja al acabar y, si le dan, brilla
+func animar_escudo() -> void:
+	var paso := get_physics_process_delta_time()
+	escudo_k = clampf(escudo_k + paso / ESCUDO_SUBE * (1.0 if estado == "remover" else -1.0), 0.0, 1.0)
+	var destello := maxf(0.0, 1.0 - (tiempo - golpe_escudo) / 0.25)
+	var cuadro := int(tiempo * 20.0) % 48
+	for i in escudo.size():
+		escudo[i].visible = escudo_k > 0.0
+		escudo[i].scale = Vector2.ONE * ESCUDO_ESCALA * escudo_k
+		escudo[i].frame = cuadro
+	escudo[1].modulate = Color.WHITE.lerp(Color(1.2, 1.4, 1.6), destello)
+	escudo[2].modulate = Color.WHITE * (1.0 + 2.0 * destello)
 
 
 # «¡SERVICIO DE URGENCIA!»: recoge las sartenes y se le cae el gorro (la hoja cambia a mitad del grito: animar)
@@ -628,6 +662,7 @@ func morir() -> void:
 # ── Dibujo ──
 
 func animar() -> void:
+	animar_escudo()
 	# a mitad del grito de enfadarse, la hoja sin gorro
 	if fase == 2 and sprite.sprite_frames != HOJA_SIN and not (estado == "grito" and t < 0.6):
 		sprite.sprite_frames = HOJA_SIN
@@ -701,19 +736,31 @@ func _draw() -> void:
 			var brazos_ := brazos(datos.get("giro", 0.0))
 			for i in 4:
 				Aviso.disparo(self, Vector2(0, 6), brazos_[i], 1400.0, MEDIO_CRUZ, k, tiempo, i)
+				# los cuatro cuchillos, ya preparados junto a él, temblando, apuntando por donde van a salir
+				var tiembla := Vector2(randf_range(-1, 1), randf_range(-1, 1)) * 2.0 * k
+				Cuchillo.dibujar(self, Vector2(0, 6) + Vector2.from_angle(brazos_[i]) * (radio + 20.0) + tiembla, brazos_[i], 2.0)
+			draw_set_transform(Vector2.ZERO)
 		"cruz":
-			# el tajo: cuatro rayas blancas que se apagan enseguida
-			if t < 0.25:
-				var a := 1.0 - t / 0.25
-				for b in brazos(datos.get("giro", 0.0)):
-					var largo := Aviso.alcance(self, Vector2(0, 6), b, 1400.0, MEDIO_CRUZ)
-					var d := Vector2.from_angle(b)
-					var paso := 2.0
-					var n := int(largo / 8.0)
-					for j in n:
-						var p := ((Vector2(0, 6) + d * (radio + j * 8.0)) / paso).floor() * paso
-						draw_rect(Rect2(p - Vector2(3, 3), Vector2(6, 6)), Color(1, 1, 1, 0.8 * a))
-						draw_rect(Rect2(p - Vector2(6, 6), Vector2(12, 12)), Color(1, 0.4, 0.4, 0.25 * a))
+			var brazos_ := brazos(datos.get("giro", 0.0))
+			for i in 4:
+				var d := Vector2.from_angle(brazos_[i])
+				var largo: float = datos.largos[i]
+				var va := minf(radio + t * VUELO_CRUZ, largo)
+				# el tajo que deja el cuchillo: blanco y rojo, y se apaga
+				var apaga := clampf(1.0 - (t - va / VUELO_CRUZ) / 0.5, 0.0, 1.0)
+				var j := radio
+				while j < va:
+					var q := 1.0 - (va - j) / maxf(1.0, largo) * 0.6
+					var p := ((Vector2(0, 6) + d * j) / 2.0).floor() * 2.0
+					draw_rect(Rect2(p - Vector2(10, 10), Vector2(20, 20)), Color(1, 0.3, 0.25, 0.3 * q * apaga))
+					draw_rect(Rect2(p - Vector2(4, 4), Vector2(8, 8)), Color(1, 1, 1, 0.9 * q * apaga))
+					j += 6.0
+				# el cuchillo: gira mientras vuela; en la pared, se queda clavado un momento
+				var fin := clampf(1.0 - (t - largo / VUELO_CRUZ) / 0.35, 0.0, 1.0)
+				if fin > 0.0:
+					var giro: float = brazos_[i] + (t * 30.0 if va < largo else PI * 0.25)
+					Cuchillo.dibujar(self, Vector2(0, 6) + d * va, giro, 2.0)
+					draw_set_transform(Vector2.ZERO)
 
 
 # Por encima: la lluvia (los cuchillos subiendo), la barrita de lo que le falta a la olla y el gorro que sale volando
@@ -724,7 +771,6 @@ func pintar_encima(lienzo: Node2D) -> void:
 			var x := (i - (LLUVIA - 1) / 2.0) * 12.0 * (1.0 + k)
 			Cuchillo.dibujar(lienzo, Vector2(x, -arriba * 0.7 - k * k * 420.0 - i * 6.0), -PI / 2.0 + tiempo * 14.0 + i)
 	if estado == "remover":
-		pintar_escudo(lienzo)
 		# encima de la olla (o de él, sin olla)
 		var arriba_olla := (olla.global_position - Vector2(0, 160)) if olla else global_position - Vector2(0, arriba + 30)
 		var c: Vector2 = ((arriba_olla - global_position) / 2.0).floor() * 2.0

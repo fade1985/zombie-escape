@@ -749,7 +749,7 @@ msgstr "Eine Kopie von Johnny, gemacht aus seinem Blut: rollt sich vor Kugeln we
 msgid "¡A ARDER!"
 msgstr "FEUER FREI!"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/cocinero.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "IMMUN!"
 
@@ -808,6 +808,10 @@ msgstr "AN DEN HERD!"
 #: scripts/cocinero.gd
 msgid "¡QUE SE VUELCA!"
 msgstr "ES KIPPT UM!"
+
+#: scripts/cocinero.gd
+msgid "¡CORTE EN CRUZ!"
+msgstr "KREUZSCHNITT!"
 
 #: scripts/cocinero.gd
 msgid "¡FUEGO EN LOS FOGONES!"

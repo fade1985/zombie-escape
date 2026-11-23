@@ -749,7 +749,7 @@ msgstr "Uma cópia de Johnny feita com o sangue dele: rola para escapar das bala
 msgid "¡A ARDER!"
 msgstr "VAI ARDER!"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/cocinero.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "IMUNE!"
 
@@ -808,6 +808,10 @@ msgstr "PRO FOGÃO!"
 #: scripts/cocinero.gd
 msgid "¡QUE SE VUELCA!"
 msgstr "VAI VIRAR!"
+
+#: scripts/cocinero.gd
+msgid "¡CORTE EN CRUZ!"
+msgstr "CORTE EM CRUZ!"
 
 #: scripts/cocinero.gd
 msgid "¡FUEGO EN LOS FOGONES!"

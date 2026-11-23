@@ -121,9 +121,9 @@ func _draw() -> void:
 
 
 # El cuchillo, a cuadraditos (2 unidades por píxel del dibujo): mango de madera con remaches y hoja de acero,
-# con la punta hacia "angulo"
-static func dibujar(lienzo: CanvasItem, donde: Vector2, angulo: float) -> void:
-	lienzo.draw_set_transform(donde, angulo)
+# con la punta hacia "angulo" ("escala": más grande, como los de la cruz del cocinero)
+static func dibujar(lienzo: CanvasItem, donde: Vector2, angulo: float, escala := 1.0) -> void:
+	lienzo.draw_set_transform(donde, angulo, Vector2(escala, escala))
 	var px := func(x: float, y: float, w: float, h: float, c: String) -> void:
 		lienzo.draw_rect(Rect2(x * 2.0, y * 2.0, w * 2.0, h * 2.0), Color(c))
 	px.call(-7, -2, 6, 4, "#1d1b2c")   # el contorno del mango

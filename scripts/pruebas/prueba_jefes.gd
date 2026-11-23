@@ -2043,7 +2043,7 @@ func probar_ir_sala_otro() -> void:
 # «El banquete»), en su Cocina central, con Johnny quieto y sin que le maten. Cada línea dice lo esperado. Fotos
 # (captura-banquete-*.png): sala (la olla y los tres sacos), damero-aviso y damero-quema (los fogones en el suelo),
 # sartenes (rebotando), remover (con su barrita), sacos (los tres rotos: tachados junto a la barra), enfermo,
-# gorro (el gorro volando al enfadarse), cruz (el aviso), ola (la ola de aceite), clavado (el combo)
+# gorro (el gorro volando al enfadarse), cruz (el aviso) y cruz-vuelo (los cuchillos saliendo), ola (la ola de aceite), clavado (el combo)
 func probar_banquete() -> void:
 	if not await ir_a_la_sala_del_jefe("cocinero"):
 		return
@@ -2085,7 +2085,7 @@ func probar_banquete() -> void:
 	print("Banquete: tras «¡A FREGAR!», sartenes %d (esperado: 0)" % jefe.sartenes().size())
 	# a cocinar con los tres sacos: se cura
 	jefe.vida = roundi(jefe.vida_max * 0.6)
-	var cura_esperada: int = jefe.vida + roundi(jefe.vida_max * 0.12)
+	var cura_esperada: int = jefe.vida + roundi(jefe.vida_max * jefe.CURA_SACO[0] * 3)
 	johnny.global_position = c + Vector2(150, 40)   # (cerca de la olla: que salga su barrita en la foto)
 	jefe.cambiar("ir_olla")
 	await get_tree().create_timer(3.0, false).timeout
@@ -2136,6 +2136,10 @@ func probar_banquete() -> void:
 	Captura.foto("captura-banquete-cruz.png")
 	johnny.invulnerable = 0.0
 	var vida_johnny: int = johnny.vida
+	while jefe.estado == "aviso_cruz":
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.12, false).timeout
+	Captura.foto("captura-banquete-cruz-vuelo.png")   # (los cuatro cuchillos saliendo)
 	await get_tree().create_timer(0.4, false).timeout
 	print("Banquete: la cruz le quita a Johnny %d (esperado: más de 0)" % (vida_johnny - johnny.vida))
 	johnny.invulnerable = 99999.0

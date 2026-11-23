@@ -748,7 +748,7 @@ msgstr "用强尼的血造出来的复制品：会翻滚躲开子弹，抡起拖
 msgid "¡A ARDER!"
 msgstr "消防演习！"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/cocinero.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "免疫！"
 
@@ -807,6 +807,10 @@ msgstr "开火做饭！"
 #: scripts/cocinero.gd
 msgid "¡QUE SE VUELCA!"
 msgstr "要翻了！"
+
+#: scripts/cocinero.gd
+msgid "¡CORTE EN CRUZ!"
+msgstr "十字斩！"
 
 #: scripts/cocinero.gd
 msgid "¡FUEGO EN LOS FOGONES!"

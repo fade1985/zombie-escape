@@ -749,7 +749,7 @@ msgstr "A copy of Johnny made from his blood: rolls to dodge bullets, sweeps wit
 msgid "¡A ARDER!"
 msgstr "FIRE DRILL!"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/cocinero.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "IMMUNE!"
 
@@ -808,6 +808,10 @@ msgstr "TO THE STOVE!"
 #: scripts/cocinero.gd
 msgid "¡QUE SE VUELCA!"
 msgstr "IT'S TIPPING OVER!"
+
+#: scripts/cocinero.gd
+msgid "¡CORTE EN CRUZ!"
+msgstr "CROSS CUT!"
 
 #: scripts/cocinero.gd
 msgid "¡FUEGO EN LOS FOGONES!"

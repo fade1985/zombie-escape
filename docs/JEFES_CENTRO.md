@@ -136,7 +136,9 @@ pelotas, el gas y las chispas, con código.
 
 ### Fase 2: «servicio de urgencia»
 Se le cae el gorro, coge dos cuchillos, modo frenético.
-- **Corte en cruz**: franjas en cruz o en X desde él hasta las paredes.
+- **Corte en cruz**: franjas en cruz o en X desde él hasta las paredes. Desde el 24 nov (el dueño: no se entendía), grita
+  «¡CORTE EN CRUZ!», en el aviso tiene cuatro cuchillos grandes apuntando por las franjas y luego salen volando hasta la
+  pared dejando un tajo rojo: solo da el cuchillo que pilla a Johnny al pasar.
 - **La olla se vuelca**: una ola de aceite cruza la sala y deja libres un par de mesas o huecos.
 - La olla le cura más a menudo: hay que vigilar los ingredientes.
 
@@ -147,8 +149,8 @@ Se le cae el gorro, coge dos cuchillos, modo frenético.
   `en_medio` de `Catalogo.SALAS` (`muebles.gd`, `en_medio`): choca y los zombis la rodean.
 - Los sacos: 3 (patatas, tomates, harina; PixelLab), caen cada vez que cocina, aguantan 40 y son del grupo "zombis" (se
   rompen a golpes, a tiros y con explosiones). Cocina cada 17 s (12 en la fase 2); remueve 4,5 s (3,5), con un escudo de burbuja azul que no deja entrar nada («¡INMUNE!»; 24 nov, el
-  dueño); se cura un 4 %
-  de su vida por saco que quede (5 %). Sin sacos: enfermo 4,5 s y le entra el doble; se da la
+  dueño); se cura un 7 %
+  de su vida por saco que quede (8 %; 24 nov, el dueño: más, eran 4 y 5 %). Sin sacos: enfermo 4,5 s y le entra el doble; se da la
   vuelta, vomita tres veces (un chorro y un charco «vomito», que a Johnny no le hace nada) y lleva estrellitas (24 nov, el dueño:
   que se note). Si se rompen todos antes, va a
   cocinar enseguida («¿Y MIS INGREDIENTES?»). Junto a la barra, tres saquitos que se tachan (`barra_jefe.gd`, `pintar_sacos`).

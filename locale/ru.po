@@ -750,7 +750,7 @@ msgstr "Копия Джонни, сделанная из его крови: пе
 msgid "¡A ARDER!"
 msgstr "ГОРИ ЯСНО!"
 
-#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd scripts/zombi.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/cocinero.gd scripts/minijefe.gd scripts/zombi.gd
 msgid "¡INMUNE!"
 msgstr "НЕ БЕРЕТ!"
 
@@ -809,6 +809,10 @@ msgstr "К ПЛИТЕ!"
 #: scripts/cocinero.gd
 msgid "¡QUE SE VUELCA!"
 msgstr "ОПРОКИДЫВАЕТСЯ!"
+
+#: scripts/cocinero.gd
+msgid "¡CORTE EN CRUZ!"
+msgstr "КРЕСТОВЫЙ РАЗРЕЗ!"
 
 #: scripts/cocinero.gd
 msgid "¡FUEGO EN LOS FOGONES!"
