@@ -95,11 +95,18 @@ func salpicar(donde: Vector2, hacia: Vector2) -> void:
 # La gota de agua sucia (o la nubecita de polvo, o el alfiler), a la altura del cuerpo y con su sombra en el suelo
 func _draw() -> void:
 	if forma == "alfiler":
+		# el alfiler: su sombra, dos estelas desvaídas detrás y el dibujo (32 direcciones, a píxeles rectos)
 		var d := velocidad.normalized()
-		var a := Vector2(0, -ALTO)
-		draw_line(a - d * 9.0, a + d * 8.0, Color("#1d1b2c"), 4.0)
-		draw_line(a - d * 8.0, a + d * 7.0, Color("#d8dde6"), 2.0)
-		Formas.disco(self, a - d * 8.0, 3.0, Color("#e0303a"))
+		var hacia := posmod(roundi(velocidad.angle() / TAU * 32.0), 32)
+		var clave := "alfiler_%d" % hacia
+		if not dibujos.has(clave):
+			dibujos[clave] = dibujar_alfiler(hacia * TAU / 32.0)
+		for x in range(-3, 4):
+			draw_rect(Rect2(Vector2(x, 0) * PIXEL - Vector2(1, 1), Vector2(PIXEL, PIXEL)), Color(0, 0, 0, 0.22))
+		for e in [[2, 0.15], [1, 0.32], [0, 1.0]]:
+			var atras: Vector2 = (-d * 9.0 * e[0] / PIXEL).round() * PIXEL
+			for px in dibujos[clave]:
+				draw_rect(Rect2(px[0] + atras + Vector2(0, -ALTO), Vector2(PIXEL, PIXEL)), Color(px[1], px[1].a * e[1]))
 		return
 	# la sombra: un óvalo de píxeles, aplastado como el suelo
 	var r := roundi(radio * 0.8 / PIXEL)
@@ -190,6 +197,37 @@ static func dibujar_una(angulo: float) -> Array:
 		var k := -u / (5.0 + crece)   # detrás, la raíz: redonda
 		return k <= 1.0 and v <= (2.6 + crece) * sqrt(1.0 - k * k)
 	return pintar(dentro, 8, UNA, Vector2.ZERO, 0.0)
+
+
+# El alfiler de la modista, a píxeles (mirando a la derecha): la cabeza roja redonda con su brillo, la aguja de acero
+# con una raya de luz y la punta. Se gira hacia "angulo" píxel a píxel (cada píxel nuevo toma el del dibujo que le cae
+# encima), para que siga a cuadraditos rectos. Devuelve [posición, color] de cada píxel
+const ALFILER := [
+	".ooo...........",
+	"oRrRoooooooooo.",
+	"oRRRsSSSSSSSSso",
+	"oRRDoooooooooo.",
+	".ooo...........",
+]
+const COLORES_ALFILER := {"o": "#1d1b2c", "R": "#e0303a", "r": "#ff9a9a", "D": "#8e1a24", "s": "#9aa3b0", "S": "#eef2f7"}
+
+static func dibujar_alfiler(angulo: float) -> Array:
+	var ancho: int = ALFILER[0].length()
+	var alto_: int = ALFILER.size()
+	var centro := Vector2(ancho / 2.0, alto_ / 2.0)
+	var lado := ancho / 2 + 2
+	var pixeles := []
+	for y in range(-lado, lado):
+		for x in range(-lado, lado):
+			var p := (Vector2(x + 0.5, y + 0.5)).rotated(-angulo) + centro
+			var i := int(floor(p.x))
+			var j := int(floor(p.y))
+			if i < 0 or j < 0 or i >= ancho or j >= alto_:
+				continue
+			var c: String = ALFILER[j][i]
+			if c != ".":
+				pixeles.append([Vector2(x, y) * PIXEL, Color(COLORES_ALFILER[c])])
+	return pixeles
 
 
 # Los píxeles de una nubecita de polvo (o del vapor de la portera, con otros colores): una bola en medio y tres
