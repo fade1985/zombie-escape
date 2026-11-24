@@ -747,15 +747,17 @@ const SALAS := {
 	# una góndola debajo de cada mostrador, con paso entre los dos, y a la izquierda de cada una, con media casilla de separación, los cepillos (la del almacén) y la
 	# torre (la de la rebotica); y a la izquierda de los cepillos, también a media casilla, la tercera góndola (24 nov, el dueño).
 	# Libre el paso de la entrada. En la inversa (la entrada arriba), lo mismo dado la vuelta de arriba abajo (24 nov, el dueño): los
-	# mostradores abajo, delante de las puertas, y las vitrinas, las sillas y la garrafa por encima de la pared de abajo, que tapa lo de detrás
+	# mostradores abajo, delante de las puertas; donde irían las vitrinas, la góndola de bebé con la torre a su izquierda, por encima de la
+	# pared de abajo (que tapa lo de detrás); y contra la pared de arriba, de la entrada a la pared de la derecha, con el mismo espacio
+	# entre todo, una vitrina, las sillas con la garrafa al lado y la otra vitrina
 	"tienda-farmacia": {"colocados": {
 		"abajo": [["farmamostrador", 36.0, "libre", 2.75], ["farmamostrador3", 16.0, "libre", 2.75], ["farmagondola1", 16.0, "libre", 7.5], ["farmagondola2", 36.0, "libre", 7.5],
 			["farmacosmetica", 23.0, "libre", 7.0], ["farmacepillos", 12.5, "libre", 7.5], ["farmatorre", 32.31, "libre", 7.5],
 			["farmavitrina", 4.22], ["farmavitrina2", 10.78], ["farmagondola3", 9.0, "libre", 7.5], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
-		"arriba": [["farmamostrador2", 36.0, "libre", 8.25], ["farmamostrador4", 16.0, "libre", 8.25], ["farmagondola1", 16.0, "libre", 3.5], ["farmagondola2", 36.0, "libre", 3.5],
-			["farmacosmetica", 23.0, "libre", 4.0], ["farmacepillos", 12.5, "libre", 3.5], ["farmatorre", 32.31, "libre", 3.5],
-			["farmavitrina", 4.22, "libre", 9.4], ["farmavitrina2", 10.78, "libre", 9.4], ["farmagondola3", 9.0, "libre", 3.5],
-			["farmasillas", 26.0, "libre", 9.5], ["farmagarrafa", 28.25, "libre", 9.6]]}},
+		"arriba": [["farmamostrador2", 36.0, "libre", 8.25], ["farmamostrador4", 16.0, "libre", 8.25], ["farmagondola1", 16.0, "libre", 3.5],
+			["farmacosmetica", 23.0, "libre", 4.0], ["farmacepillos", 12.5, "libre", 3.5], ["farmagondola3", 9.0, "libre", 3.5],
+			["farmatorre", 5.06, "libre", 9.34], ["farmagondola2", 8.75, "libre", 9.4],
+			["farmavitrina", 28.38], ["farmasillas", 34.48], ["farmagarrafa", 36.73], ["farmavitrina2", 41.62]]}},
 	# la rebotica (20 × 12, la puerta en medio): en la normal, los cuatro robots dispensadores seguidos contra la pared de arriba, con el
 	# mismo espacio entre ellos y las paredes (24 nov, el dueño); debajo, las dos mesas en isla, una a cada lado del paso de la puerta,
 	# y a la derecha de la de la derecha, el cubo de residuos; y abajo, la mesa de acero, con el carro de acero a su izquierda; libre
