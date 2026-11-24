@@ -54,6 +54,7 @@ const AVISO_CARRETE := 0.45
 const CARRETES := 3                # los que tira de una vez, en abanico
 const ABANICO_CARRETES := 0.45     # lo que se separan entre sí (radianes)
 const ABRE_CARRETE := 0.5          # lo que se desvía (al azar) de Johnny al tirarlo: así los hilos se cruzan
+const CARRERA_ATADO := 560.0       # lo deprisa que va a por Johnny atado
 const TENSAR := 1.6                # lo que dura tirando de los hilos (el aviso de los hilos es menos: hilo_modista.gd)
 const MIN_TENSAR := 4              # con menos hilos no tensa
 # Esconderse entre los maniquíes
@@ -94,6 +95,7 @@ const OJOS_EN := {"s": [Vector2(-5, -91), Vector2(1, -91)], "se": [Vector2(0, -9
 	"n": [], "ne": [], "no": []}
 const CABEZA := Vector2(-2, -89)
 
+var tirados := 0                  # los carretes que lleva tirados (para los gordos)
 var disfraz: Sprite2D = null       # escondida, el dibujo del maniquí que hace de ella (vestir)
 var espera := {"tijeretazo": 1.0, "alfileres": 2.0, "carrete": 1.0, "tensar": 6.0, "esconderse": 4.0, "corte": 2.0}
 var vivos: Array = []
@@ -204,6 +206,14 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta)
 			if t >= TENSAR:
 				andar(0.4)
+		"a_por":
+			# corre a por Johnny atado y, al llegar, el tijeretazo
+			marcha = camino_a(johnny) * CARRERA_ATADO
+			mirada = hacia.normalized()
+			if d < DISTANCIA_TIJERETAZO * 0.8:
+				apuntar_tijeretazo(hacia)
+			elif t >= 1.0:
+				andar(0.3)
 		"ojos":
 			# le brillan los ojos... y se cambia de sitio (si le pegan antes, se queda: la han pillado)
 			frenar(delta)
@@ -364,6 +374,8 @@ func ve_a(johnny: Node2D) -> bool:
 
 func tirar_carrete(angulo: float) -> void:
 	var hilo := HiloModista.new()
+	tirados += 1
+	hilo.doble = tirados % 3 == 0   # uno de cada tres, el gordo (dos golpes)
 	hilo.dir = Vector2.from_angle(angulo)
 	hilo.dueno = self
 	hilo.position = position + Vector2(0, PIE - 4.0) + hilo.dir.normalized() * (radio + 4.0)   # (antes de entrar: mide la pared desde ahí)
@@ -380,6 +392,13 @@ func hilos_vivos() -> int:
 # Los que ya están tendidos de pared a pared (los que pinta la barra de vida y los que cuentan para tensar)
 func hilos_tendidos() -> int:
 	return hilos.filter(func(h): return is_instance_valid(h) and h.tendido()).size()
+
+
+# Un hilo tensado ha pillado a Johnny y lo ha dejado atado (hilo_modista.gd): va corriendo a por él con las tijeras
+func atado(_johnny: Node2D) -> void:
+	if fase == 1 and estado in ["tensar", "andar"]:
+		cambiar("a_por")
+		gritar(Idioma.t("¡TE TENGO!"), Color("#ff5d73"), 20)
 
 
 func tensar() -> void:

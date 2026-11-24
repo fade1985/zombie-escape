@@ -66,10 +66,6 @@ func _physics_process(delta: float) -> void:
 			chocar(true)
 			return
 
-	# ¿Ha pasado por un hilo de la modista (hilo_modista.gd)? Lo corta (y sigue)
-	for hilo in get_tree().get_nodes_in_group("hilos"):
-		hilo.cortar_en(global_position)
-
 	# ¿Ha dado a algún zombi?
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi in tocados:

@@ -2223,7 +2223,10 @@ func probar_desfile() -> void:
 	jefe.tensar()
 	await get_tree().create_timer(0.5, false).timeout
 	Captura.foto("captura-desfile-tensar.png")
-	await get_tree().create_timer(0.8, false).timeout
+	await get_tree().create_timer(0.45, false).timeout
+	Captura.foto("captura-desfile-barrido.png")
+	print("Desfile: barrido, Johnny atado %s · ella %s (esperado: true, a_por o el tijeretazo)" % [johnny.pisando.has("atado"), jefe.estado])   # (Johnny está parado en la prueba: lo pisado no pasa a sus estados)
+	await get_tree().create_timer(0.4, false).timeout
 	print("Desfile: tensado, a Johnny le quita %d (esperado: más de 0)" % (vida_johnny - johnny.vida))
 	johnny.invulnerable = 99999.0
 	johnny.vida = vida_johnny
@@ -2234,11 +2237,23 @@ func probar_desfile() -> void:
 	johnny.golpear((medio - johnny.global_position).angle())
 	await get_tree().create_timer(0.5, false).timeout
 	print("Desfile: tras un golpe, hilos %d (esperado: 3)" % jefe.hilos_vivos())
+	# el gordo: un golpe le quita una hebra, el segundo lo corta
+	var gordo: HiloModista = jefe.hilos.filter(func(h): return h.doble)[0]
+	medio = gordo.global_position + gordo.dir * gordo.largo * 0.5
+	johnny.global_position = medio + gordo.dir.orthogonal() * 30.0
+	johnny.golpear((medio - johnny.global_position).angle())
+	await get_tree().create_timer(0.5, false).timeout
+	var tras_uno := gordo.estado
+	johnny.golpear((medio - johnny.global_position).angle())
+	await get_tree().create_timer(0.1, false).timeout
+	print("Desfile: el gordo, tras un golpe %s, tras dos %s (esperado: flojo, cortado)" % [tras_uno, gordo.estado if is_instance_valid(gordo) else "cortado"])
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
 	# el abanico: tres carretes de golpe
 	jefe.global_position = c + Vector2(60, -160)
 	jefe.cambiar("aviso_carrete", {"angulo": PI / 2.0})
 	await get_tree().create_timer(0.6, false).timeout
-	print("Desfile: tras un abanico, hilos %d (esperado: 6)" % jefe.hilos_vivos())
+	print("Desfile: tras un abanico, hilos %d (esperado: 5)" % jefe.hilos_vivos())
 	# esconderse: retales de todos los maniquíes a la vez
 	johnny.global_position = c
 	jefe.global_position = c + Vector2(-60, -160)

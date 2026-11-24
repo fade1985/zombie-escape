@@ -3022,6 +3022,10 @@ msgid "¡A LA PASARELA!"
 msgstr "上T台！"
 
 #: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "抓到你了！"
+
+#: scripts/modista.gd
 msgid "¡A TENSAR!"
 msgstr "拉紧！"
 

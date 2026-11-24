@@ -3030,6 +3030,10 @@ msgid "¡A LA PASARELA!"
 msgstr "НА ПОДИУМ!"
 
 #: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "ПОПАЛСЯ!"
+
+#: scripts/modista.gd
 msgid "¡A TENSAR!"
 msgstr "НАТЯНУТЬ!"
 

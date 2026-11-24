@@ -37,6 +37,8 @@ const LISTA := {
 	"tirado": {"despues": 0.7, "frena": 1.0, "zombis": false, "color": Color("#ffd23f")},
 	# los hilos flojos de la modista (hilo_modista.gd): se te enredan en los pies y andas más despacio
 	"enredado": {"despues": 0.3, "frena": 0.45, "zombis": false, "color": Color("#e8dcc4")},
+	# el tirón de los hilos de la modista: te deja atado, quieto, mientras ella viene a por ti con las tijeras
+	"atado": {"despues": 1.3, "frena": 1.0, "zombis": false, "color": Color("#ff5d6a")},
 }
 
 const TICK_ZOMBI := 0.5   # a los zombis el daño de los estados se les da a pellizcos, cada medio segundo

@@ -3026,6 +3026,10 @@ msgid "¡A LA PASARELA!"
 msgstr "PRA PASSARELA!"
 
 #: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "TE PEGUEI!"
+
+#: scripts/modista.gd
 msgid "¡A TENSAR!"
 msgstr "ESTICA!"
 
