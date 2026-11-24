@@ -9,6 +9,8 @@
 #   escalera-gpt  -> ferreescalera, una escalera de tijera de aluminio, abierta y vista en diagonal
 #   carretilla-gpt  -> ferrecarretilla, una carretilla de obra roja, en diagonal
 #   gondola-tornillos-gpt, -tornillos2-  -> ferregondola1, 2: góndolas de panel perforado, la de tornillería y la de cerrajería
+#   lona-bloques-gpt, lona-tablones-gpt  -> ferrelona1, 2 (para el taller): un palé de bloques y un montón de tablones y barras,
+#     tapados con una lona (el palé, del mismo ancho que los de cemento: la lona sobresale un poco)
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -22,7 +24,8 @@ MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferr
            ("latas-pintura-gpt", "ferrelatas1", 94), ("latas-pintura2-gpt", "ferrelatas2", 116),
            ("transpaleta-gpt", "ferretranspaleta", 110), ("escalera-gpt", "ferreescalera", 72),
            ("carretilla-gpt", "ferrecarretilla", 100),
-           ("gondola-tornillos-gpt", "ferregondola1", 140), ("gondola-tornillos2-gpt", "ferregondola2", 140)]
+           ("gondola-tornillos-gpt", "ferregondola1", 140), ("gondola-tornillos2-gpt", "ferregondola2", 140),
+           ("lona-bloques-gpt", "ferrelona1", 86), ("lona-tablones-gpt", "ferrelona2", 150)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (el asa de la transpaleta, la rendija entre sus
 # horquillas, entre los peldaños de la escalera, entre los tubos de la carretilla): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
 CON_HUECOS = {"ferretranspaleta", "ferreescalera", "ferrecarretilla"}

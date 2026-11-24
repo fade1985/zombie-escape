@@ -1184,7 +1184,9 @@ en una línea.
   "hueco"), el primero de la izquierda. (El de llaves inglesas, de GPT entero, se borró: está en git.)
   El taller, destrozado: baldosa de barro roja y pared de hormigón blanca, tres de cada (de GPT, desde una foto del dueño;
   `py tools/taller_ferreteria_gpt.py`: las baldosas, cada una por dentro y las juntas aparte, de un píxel) que se mezclan a trozos
-  (`MEZCLA_TIENDA` "taller-ferreteria"). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
+  (`MEZCLA_TIENDA` "taller-ferreteria") (24 nov, el dueño: dos cargas tapadas con lona de GPT, `ferrelona1`, un palé de bloques, y `ferrelona2`, tablones y barras;
+  `lona-bloques-gpt.webp` y `lona-tablones-gpt.webp`, con `py tools/muebles_ferreteria_gpt.py`; contra la pared de enfrente de la puerta,
+  `taller-ferreteria` en `catalogo.gd`). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
   misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen). Del 20 al 23 nov la pared fue toda de paneles perforados de chapa gris oscura;
   ahora vuelve a ser la blanca, con un panel de herramientas en cada hueco (abajo).
   Mientras se rehace, `Tienda.TIPOS` "despejadas" (`mapa.despejada`): sin nada por el

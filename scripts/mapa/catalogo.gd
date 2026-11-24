@@ -143,6 +143,9 @@ const MUEBLES := {
 	# dos góndolas de panel perforado, de tornillería y de cerrajería (24 nov, el dueño; GPT): el mismo mueble, con distinto género
 	"ferregondola1": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-tornillos-gpt", "escala": 1.0},
 	"ferregondola2": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-tornillos2-gpt", "escala": 1.0},
+	# para el taller de la ferretería (24 nov, el dueño; GPT): un palé de bloques y un montón de tablones y barras, tapados con una lona
+	"ferrelona1": {"len": 86, "dep": 48, "paredes": "", "archivo": "centro/lona-bloques-gpt", "escala": 1.0},
+	"ferrelona2": {"len": 150, "dep": 40, "paredes": "", "archivo": "centro/lona-tablones-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -534,8 +537,11 @@ const SALAS := {
 		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],
 	}},
-	# (20 nov, el dueño) el taller, también vacío de momento (antes, dos bancos de trabajo, una estantería y palés: está en git)
-	"taller-ferreteria": {"colocados": {"abajo": [], "arriba": []}},
+	# (20 nov, el dueño) el taller (antes, dos bancos de trabajo, una estantería y palés: está en git). Desde el 24 nov, las dos lonas
+	# contra la pared del fondo, la de enfrente de la puerta (que está en medio, casillas 9 a 11): el palé a la izquierda, los tablones a la derecha
+	"taller-ferreteria": {"colocados": {
+		"abajo": [["ferrelona1", 3.5, "libre", 0.875], ["ferrelona2", 15.5, "libre", 0.75]],
+		"arriba": [["ferrelona1", 3.5, "libre", 10.125], ["ferrelona2", 15.5, "libre", 10.25]]}},
 	# M77: la electrónica fija (Tienda.PLANOS, con el charco con corriente dibujado a la izquierda). Con la puerta abajo:
 	# una estantería de teles al fondo del trozo que llega hasta atrás, teles, estanterías y palés delante de las
 	# taquillas y del almacén, dos cajas a la derecha y dos filas de tres estanterías de teles a la derecha (a la izquierda,
