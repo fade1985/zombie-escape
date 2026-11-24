@@ -270,7 +270,8 @@ func _draw() -> void:
 				return
 			# la de la sala de mantenimiento (la de la placa con la llave inglesa), de acero en los dos edificios; las
 			# demás, la del edificio
-			if centro and salida.get("neon", "") == "ferreteria":
+			# (y la salida de la ferretería inversa vista desde dentro, la misma: 24 nov, el dueño)
+			if centro and (salida.get("neon", "") == "ferreteria" or tienda == "ferreteria"):
 				draw_texture_rect(FERRETERIA, Rect2(-30, -86, 60, 86), false)
 				return
 			# (y la de la tienda de ropa vista desde dentro, en la inversa: la misma de la fachada, pero destrozada; 19 nov, el dueño)
