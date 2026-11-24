@@ -6,6 +6,7 @@
 #   pale-cemento-gpt, -cemento2-, -cemento3-  -> ferrepale1..3, palés de sacos de cemento: lleno, a medio gastar y con el plástico roto
 #   latas-pintura-gpt, latas-pintura2-gpt  -> ferrelatas1, 2: montones de latas de pintura, uno alto y otro bajo y ancho
 #   transpaleta-gpt  -> ferretranspaleta, una transpaleta naranja de lado (las horquillas, a la izquierda)
+#   escalera-gpt  -> ferreescalera, una escalera de tijera de aluminio, abierta y vista en diagonal
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -17,13 +18,15 @@ from PIL import Image
 MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferreteria-dentro-gpt", "ferremostrador2", 164),
            ("pale-cemento-gpt", "ferrepale1", 80), ("pale-cemento2-gpt", "ferrepale2", 80), ("pale-cemento3-gpt", "ferrepale3", 80),
            ("latas-pintura-gpt", "ferrelatas1", 94), ("latas-pintura2-gpt", "ferrelatas2", 116),
-           ("transpaleta-gpt", "ferretranspaleta", 110)]
+           ("transpaleta-gpt", "ferretranspaleta", 110), ("escalera-gpt", "ferreescalera", 72)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (el asa de la transpaleta, la rendija entre sus
-# horquillas): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
-CON_HUECOS = {"ferretranspaleta"}
+# horquillas, entre los peldaños de la escalera): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
+CON_HUECOS = {"ferretranspaleta", "ferreescalera"}
 HUECO_MIN = 1000
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
+# los de barras finas, que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad, como los paneles de la pared)
+FINOS = {"ferreescalera"}
 
 
 def quitar_fondo(im):
@@ -76,10 +79,11 @@ for origen, tipo, largo in MUEBLES:
         im = quitar_huecos(im)
     im = im.crop(im.getbbox())
     alto = round(largo * im.height / im.width)
-    peq = (round(largo / PIXEL), round(alto / PIXEL))
+    pixel = 1 if tipo in FINOS else PIXEL
+    peq = (round(largo / pixel), round(alto / pixel))
     s = im.convert("RGBa").resize(peq, Image.LANCZOS).convert("RGBA")
     s.putalpha(s.split()[3].point(lambda v: 255 if v > 110 else 0))
-    s = s.resize((peq[0] * PIXEL, peq[1] * PIXEL), Image.NEAREST)
+    s = s.resize((peq[0] * pixel, peq[1] * pixel), Image.NEAREST)
     ancho, alto = s.size
     ruta = f"assets/sprites/mueble-{tipo}.png"
     s.save(ruta)
