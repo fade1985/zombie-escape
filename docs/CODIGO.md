@@ -1160,6 +1160,14 @@ en una línea.
   se pueden registrar como las cajas de la ropa (`MUEBLES_CON_PIEZA`); y la carretilla, la de la ropa con cajas de suero (`farmacarretilla`, `carretilla-farmacia-gpt.webp`). `--rodear-muebles --uso almacen`
   da FALLOS en la fila de abajo de los tres almacenes (ropa, ferretería y farmacia, el mismo sitio): los montones están a menos de un
   Johnny de la pared y entre ellos, pero no dejan rincones encerrados. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.
+- **El supermercado, rehecho por dentro** (25 nov, el dueño; se está haciendo): con la misma distribución y tamaño que la farmacia (50 × 30):
+  arriba, el aseo (7 × 12), el almacén (17 × 12) y la cámara frigorífica (20 × 12, en el sitio del taller, con su puerta en medio y su frío,
+  `Peligros.FRIO`); abajo, la sala de venta (46 × 13). El plano de antes queda como `supermercado-antiguo`, porque lo usa Atención al cliente
+  en la torre (`Tienda.TIPOS` "presta" "plano"; sus muebles no cambian). El aseo y el almacén, como los de la farmacia: su suelo y pared
+  destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-supermercado" y "almacen-supermercado"), la sangre, sus puertas metálicas (también la de
+  la cámara a la sala de venta) y sin toalla ni balda; el almacén, de momento con los muebles del de la ropa. La sala de venta y la cámara,
+  sin muebles de momento (sus muebles de antes, en git). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
+  de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
   cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
   `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`

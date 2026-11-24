@@ -28,8 +28,13 @@ const CON_ARTICULO := {"supermercado": "Un supermercado", "ferreteria": "Una fer
 # (docs/IDIOMAS.md): son datos (se guardan así en la planta) y se enseñan ya traducidos con nombre(), neon() y
 # Planta.nombre_de_sitio
 const TIPOS := {
-	"supermercado": {"nombre": "Supermercado", "neon": "SUPER", "salas": ["almacen", "camara", "bano"],   # [traducir]
-		"color": Color("#5dff8a")},
+	"supermercado": {"nombre": "Supermercado", "neon": "SUPER", "salas": ["almacen", "camara"],   # [traducir]
+		"color": Color("#5dff8a"),
+		# (25 nov, el dueño) rehecho como la farmacia: su aseo y su almacén, iguales que los de la ropa, destrozados, y la cámara en el
+		# sitio del taller. Mientras se rehace, sin nada por el suelo de la sala de venta y de la cámara ni en sus paredes ni en las del
+		# almacén ("despejadas", mapa.despejada)
+		"destrozada": ["bano", "almacen"],
+		"despejadas": {"suelo": ["tienda", "camara"], "pared": ["tienda", "almacen", "camara"]}},
 	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"],   # [traducir]
 		"color": Color("#ff9a3c"),
 		# (20 nov, el dueño) su aseo y su almacén, rehechos como los de la tienda de ropa, su taller y su sala de venta: destrozados (ver "ropa",
@@ -63,7 +68,7 @@ const TIPOS := {
 	# (Catalogo.SALAS "<sala>-<tipo>", Mapa.ESTILO_TIENDA)
 	"atencion": {"nombre": "Atención al cliente", "neon": "CLIENTES", "salas": ["impresoras", "office", "bano"],   # [traducir]
 		"color": Color("#dff1ff"), "edificio": "torre",
-		"presta": {"tipo": "supermercado", "usos": {"impresoras": "camara", "office": "almacen"}}},
+		"presta": {"tipo": "supermercado", "plano": "supermercado-antiguo", "usos": {"impresoras": "camara", "office": "almacen"}}},
 	"informatica": {"nombre": "Informática", "neon": "INFORMATICA", "salas": ["servidores", "almacen", "bano"],   # [traducir]
 		"color": Color("#9fd8ff"), "edificio": "torre",
 		"presta": {"tipo": "electronica", "usos": {"servidores": "taquillas"}}},
@@ -110,9 +115,44 @@ const LETRAS := {"V": {"uso": "tienda"}, "K": {"uso": "camara"}, "A": {"uso": "a
 	"N": {"uso": "entrevistas"}, "U": {"uso": "estudio"}, "C": {"uso": "camaras"}, "Y": {"uso": "armero"},
 	"D": {"uso": "despacho"}, "J": {"uso": "juntas"}}
 const PLANOS := {
-	# el supermercado: la cámara a la izquierda y el almacén a la derecha, con el aseo en su rincón; entre los dos, un
-	# trozo de sala de venta que llega hasta el fondo
+	# el supermercado (25 nov, el dueño: rehecho como la farmacia, 50 × 30): arriba, de izquierda a derecha, el aseo de empleados
+	# (7 × 12), el almacén (17 × 12; el aseo se abre a él) y la cámara frigorífica (20 × 12, con su puerta en medio, en el sitio del
+	# taller); abajo, la sala de venta (46 × 13)
 	"supermercado": [
+		"##################################################",
+		"##################################################",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",   # no-tr
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",   # no-tr
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#KKKKKKKKKKKKKKKKKKKK##",
+		"#################  ##################  ###########",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"########################EE########################",
+		"########################EE########################",
+	],
+	# el supermercado de antes (M77, hasta el 25 nov): la cámara a la izquierda y el almacén a la derecha, con el aseo en su
+	# rincón; entre los dos, un trozo de sala de venta que llega hasta el fondo. Ahora solo lo usa Atención al cliente (TIPOS "presta")
+	"supermercado-antiguo": [
 		"############################################",
 		"############################################",
 		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",

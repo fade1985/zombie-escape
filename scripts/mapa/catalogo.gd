@@ -542,51 +542,22 @@ const SALAS := {
 	},
 	# Las salas de las tiendas del centro comercial (tienda.gd), fijas desde la M77: "<uso>-<tipo de tienda>" ("tienda-
 	# supermercado", "cocina-restaurante", "bano-farmacia"...), cada una solo con sus "colocados" (Muebles.de_tienda)
-	"tienda-supermercado": {
-		# M77: el supermercado fijo (Tienda.PLANOS; casillas desde la esquina de la sala de venta, la 2,2 del plano). Con la
-		# puerta abajo: tres neveras de bebidas al fondo del trozo que llega hasta atrás, palés y estanterías delante de la
-		# cámara y del almacén (sueltos: esas paredes están más abajo que la de arriba de la sala), dos cajas a la izquierda,
-		# dos filas de tres góndolas a cada lado del pasillo de la entrada y palés por la derecha y abajo. Volteada (la
-		# puerta arriba), las neveras y las cajas en la pared de la entrada y las góndolas, más arriba
-		"colocados": {
-			"abajo": [
-				["drinkfridge", 14.5], ["drinkfridge", 17.0], ["drinkfridge", 19.5],
-				["pallet", 1.75, "libre", 10.875], ["metalshelf", 9.75, "libre", 10.625],
-				["metalshelf", 23.5, "libre", 13.625], ["metalshelf", 30.5, "libre", 13.625],
-				["metalshelf", 33.0, "libre", 13.625], ["pallet", 37.5, "libre", 13.875],
-				["checkout", 17.0, "izquierda"], ["checkout", 21.0, "izquierda"],
-				["pallet", 18.0, "derecha"], ["pallet", 22.0, "derecha"],
-				["gondola", 5.4375, "libre", 16.75], ["gondola", 9.3125, "libre", 16.75], ["gondola", 13.1875, "libre", 16.75],
-				["gondola", 26.4375, "libre", 16.75], ["gondola", 30.3125, "libre", 16.75], ["gondola", 34.1875, "libre", 16.75],
-				["gondola", 5.4375, "libre", 22.25], ["gondola", 9.3125, "libre", 22.25], ["gondola", 13.1875, "libre", 22.25],
-				["gondola", 26.4375, "libre", 22.25], ["gondola", 30.3125, "libre", 22.25], ["gondola", 34.1875, "libre", 22.25],
-			],
-			"arriba": [
-				["drinkfridge", 2.0], ["drinkfridge", 4.0], ["drinkfridge", 6.0], ["metalshelf", 9.5],
-				["checkout", 15.0], ["checkout", 25.0], ["metalshelf", 30.5], ["drinkfridge", 34.0], ["drinkfridge", 36.0],
-				["pallet", 6.0, "izquierda"], ["pallet", 6.0, "derecha"], ["pallet", 15.0, "abajo"], ["pallet", 19.0, "abajo"],
-				["gondola", 5.4375, "libre", 4.5], ["gondola", 9.3125, "libre", 4.5], ["gondola", 13.1875, "libre", 4.5],
-				["gondola", 26.4375, "libre", 4.5], ["gondola", 30.3125, "libre", 4.5], ["gondola", 34.1875, "libre", 4.5],
-				["gondola", 5.4375, "libre", 9.5], ["gondola", 9.3125, "libre", 9.5], ["gondola", 13.1875, "libre", 9.5],
-				["gondola", 26.4375, "libre", 9.5], ["gondola", 30.3125, "libre", 9.5], ["gondola", 34.1875, "libre", 9.5],
-			],
-		},
-	},
-	# la cámara, el almacén y el aseo de empleados (M81: con su botiquín en el armarito, planta.gd, armaritos) del
-	# supermercado fijo (M77)
-	"camara-supermercado": {"colocados": {
-		"abajo": [["freezershelf", 1.75], ["freezershelf", 6.0], ["freezershelf", 10.25], ["pallet", 4.5, "derecha"]],
-		"arriba": [["freezershelf", 1.75], ["freezershelf", 9.25], ["pallet", 5.0, "derecha"], ["pallet", 6.0, "abajo"]],
-	}},
+	# el supermercado (25 nov, el dueño: rehecho como la farmacia, Tienda.PLANOS). La sala de venta y la cámara, sin muebles de momento:
+	# se irán poniendo los de GPT (antes, neveras, góndolas, cajas, palés y estanterías de metal: está en git)
+	"tienda-supermercado": {"colocados": {"abajo": [], "arriba": []}},
+	"camara-supermercado": {"colocados": {"abajo": [], "arriba": []}},
+	# su almacén, de momento el mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en la ferretería y la
+	# farmacia), y su aseo, el mismo que el de la farmacia (bano-farmacia)
 	"almacen-supermercado": {"colocados": {
-		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.0], ["lockers", 8.0], ["pallet", 6.0, "izquierda"]],
-		# (volteado, la sala es una L: arriba, un brazo estrecho hacia la derecha; las taquillas, al fondo de ese brazo, que no
-		# tapen su boca ni la puerta de arriba: Muebles.repasar, 18 nov)
-		"arriba": [["metalshelf", 1.5], ["lockers", 15.5], ["pallet", 7.0, "izquierda"], ["pallet", 3.0, "abajo"]],
-	}},
+		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
+			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
+			["carretillaropa", 15.8, "libre", 4.0]],
+		"arriba": [["ropashelf3", 1.88], ["ropashelf", 5.12], ["ropashelf4", 11.21], ["ropashelf2", 14.79],
+			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
+			["carretillaropa", 15.8, "libre", 6.0]]}},
 	"bano-supermercado": {"colocados": {
-		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
-		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],
 	}},
 	# M77: la ferretería fija (Tienda.PLANOS). (20 nov, el dueño) la sala de venta, sin muebles de momento: se rehará, como la de la
 	# tienda de ropa (antes llevaba bancos de trabajo, palés, cajas y dos filas de estanterías: está en git)
