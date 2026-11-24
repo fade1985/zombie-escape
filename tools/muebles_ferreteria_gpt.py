@@ -5,6 +5,7 @@
 #   mostrador-ferreteria-dentro-gpt  -> ferremostrador2, el mismo desde el lado del dependiente (la inversa: se entra por arriba)
 #   pale-cemento-gpt, -cemento2-, -cemento3-  -> ferrepale1..3, palés de sacos de cemento: lleno, a medio gastar y con el plástico roto
 #   latas-pintura-gpt, latas-pintura2-gpt  -> ferrelatas1, 2: montones de latas de pintura, uno alto y otro bajo y ancho
+#   transpaleta-gpt  -> ferretranspaleta, una transpaleta naranja de lado (las horquillas, a la izquierda)
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -15,7 +16,12 @@ from PIL import Image
 # latas, con las latas del mismo tamaño (en las dos imágenes de GPT miden igual: el ancho de cada una, 8 unidades por cada 100 píxeles)
 MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferreteria-dentro-gpt", "ferremostrador2", 164),
            ("pale-cemento-gpt", "ferrepale1", 80), ("pale-cemento2-gpt", "ferrepale2", 80), ("pale-cemento3-gpt", "ferrepale3", 80),
-           ("latas-pintura-gpt", "ferrelatas1", 94), ("latas-pintura2-gpt", "ferrelatas2", 116)]
+           ("latas-pintura-gpt", "ferrelatas1", 94), ("latas-pintura2-gpt", "ferrelatas2", 116),
+           ("transpaleta-gpt", "ferretranspaleta", 110)]
+# los que llevan huecos cerrados de negro puro que han de verse transparentes (el asa de la transpaleta, la rendija entre sus
+# horquillas): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
+CON_HUECOS = {"ferretranspaleta"}
+HUECO_MIN = 1000
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 
@@ -39,8 +45,35 @@ def quitar_fondo(im):
     return im
 
 
+def quitar_huecos(im):
+    """Los huecos cerrados de negro puro de más de HUECO_MIN píxeles, transparentes."""
+    px = im.load()
+    w, h = im.size
+    visto = bytearray(w * h)
+    for y0 in range(h):
+        for x0 in range(w):
+            if visto[y0 * w + x0] or px[x0, y0][3] == 0 or max(px[x0, y0][:3]) >= 8:
+                continue
+            visto[y0 * w + x0] = 1
+            cola = deque([(x0, y0)])
+            hueco = []
+            while cola:
+                x, y = cola.popleft()
+                hueco.append((x, y))
+                for a, b in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= a < w and 0 <= b < h and not visto[b * w + a] and px[a, b][3] and max(px[a, b][:3]) < 8:
+                        visto[b * w + a] = 1
+                        cola.append((a, b))
+            if len(hueco) > HUECO_MIN:
+                for x, y in hueco:
+                    px[x, y] = (0, 0, 0, 0)
+    return im
+
+
 for origen, tipo, largo in MUEBLES:
     im = quitar_fondo(Image.open(f"assets/sources/centro/{origen}.webp").convert("RGBA"))
+    if tipo in CON_HUECOS:
+        im = quitar_huecos(im)
     im = im.crop(im.getbbox())
     alto = round(largo * im.height / im.width)
     peq = (round(largo / PIXEL), round(alto / PIXEL))
