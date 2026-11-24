@@ -1151,7 +1151,7 @@ en una línea.
   `ferrepale1` lleno, `ferrepale2` a medio gastar y `ferrepale3` con el plástico roto (`pale-cemento-gpt.webp`, `-cemento2-`,
   `-cemento3-`), seguidos en la mitad derecha de la sala de venta. Y dos montones de latas de pintura (24 nov, el dueño; GPT, la
   misma herramienta, con las latas del mismo tamaño en los dos): `ferrelatas1`, alto, y `ferrelatas2`, bajo y ancho
-  (`latas-pintura-gpt.webp` y `latas-pintura2-gpt.webp`), juntos en la mitad izquierda, a la altura de los palés. Y una
+  (`latas-pintura-gpt.webp` y `latas-pintura2-gpt.webp`), juntos en la mitad izquierda (en la normal, algo más arriba que los palés). Y una
   transpaleta naranja de lado (`ferretranspaleta`, `transpaleta-gpt.webp`; la herramienta quita sus huecos cerrados de negro puro,
   `CON_HUECOS`: el asa y la rendija entre las horquillas), a la derecha de los palés, con las horquillas hacia ellos. Y una
   escalera de tijera de aluminio en diagonal (`ferreescalera`, `escalera-gpt.webp`; también con sus huecos quitados y, como es de
