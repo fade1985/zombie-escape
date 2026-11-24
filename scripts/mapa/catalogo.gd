@@ -140,6 +140,9 @@ const MUEBLES := {
 	"ferreescalera": {"len": 72, "dep": 40, "paredes": "", "archivo": "centro/escalera-gpt", "escala": 1.0},
 	# una carretilla de obra roja, en diagonal (24 nov, el dueño; GPT; los huecos entre los tubos, huecos)
 	"ferrecarretilla": {"len": 100, "dep": 40, "paredes": "", "archivo": "centro/carretilla-gpt", "escala": 1.0},
+	# dos góndolas de panel perforado, de tornillería y de cerrajería (24 nov, el dueño; GPT): el mismo mueble, con distinto género
+	"ferregondola1": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-tornillos-gpt", "escala": 1.0},
+	"ferregondola2": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-tornillos2-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -516,7 +519,7 @@ const SALAS := {
 	}},
 	# M77: la ferretería fija (Tienda.PLANOS). (20 nov, el dueño) la sala de venta, sin muebles de momento: se rehará, como la de la
 	# tienda de ropa (antes llevaba bancos de trabajo, palés, cajas y dos filas de estanterías: está en git)
-	"tienda-ferreteria": {"colocados": {"abajo": [["ferremostrador", 16.0, "libre", 2.75], ["ferrepale1", 31.25, "libre", 7.0], ["ferrepale2", 34.0, "libre", 7.0], ["ferrepale3", 36.75, "libre", 7.0], ["ferretranspaleta", 40.25, "libre", 7.0], ["ferrelatas1", 5.5, "libre", 7.0], ["ferrelatas2", 9.0, "libre", 7.0], ["ferreescalera", 2.625, "libre", 7.0], ["ferrecarretilla", 34.0, "libre", 10.0]], "arriba": [["ferremostrador2", 16.0, "libre", 8.25], ["ferrepale1", 31.25, "libre", 6.0], ["ferrepale2", 34.0, "libre", 6.0], ["ferrepale3", 36.75, "libre", 6.0], ["ferretranspaleta", 40.25, "libre", 6.0], ["ferrelatas1", 5.5, "libre", 6.0], ["ferrelatas2", 9.0, "libre", 6.0], ["ferreescalera", 2.625, "libre", 6.0], ["ferrecarretilla", 34.0, "libre", 9.0]]}},
+	"tienda-ferreteria": {"colocados": {"abajo": [["ferremostrador", 16.0, "libre", 2.75], ["ferrepale1", 31.25, "libre", 7.0], ["ferrepale2", 34.0, "libre", 7.0], ["ferrepale3", 36.75, "libre", 7.0], ["ferretranspaleta", 40.25, "libre", 7.0], ["ferrelatas1", 5.5, "libre", 7.0], ["ferrelatas2", 9.0, "libre", 7.0], ["ferreescalera", 2.625, "libre", 7.0], ["ferrecarretilla", 34.0, "libre", 10.0], ["ferregondola1", 4.5, "libre", 10.5], ["ferregondola2", 9.25, "libre", 10.5]], "arriba": [["ferremostrador2", 16.0, "libre", 8.25], ["ferrepale1", 31.25, "libre", 4.5], ["ferrepale2", 34.0, "libre", 4.5], ["ferrepale3", 36.75, "libre", 4.5], ["ferretranspaleta", 40.25, "libre", 4.5], ["ferrelatas1", 5.5, "libre", 4.5], ["ferrelatas2", 9.0, "libre", 4.5], ["ferreescalera", 2.625, "libre", 4.5], ["ferrecarretilla", 34.0, "libre", 8.25], ["ferregondola1", 4.5, "libre", 8.25], ["ferregondola2", 9.25, "libre", 8.25]]}},
 	# el almacén (20 nov, el dueño: el mismo que el de la tienda de ropa, almacen-ropa) y el taller de la ferretería fija (M77)
 	"almacen-ferreteria": {"colocados": {
 		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],

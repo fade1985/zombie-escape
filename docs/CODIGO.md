@@ -1157,7 +1157,10 @@ en una línea.
   escalera de tijera de aluminio en diagonal (`ferreescalera`, `escalera-gpt.webp`; también con sus huecos quitados y, como es de
   barras finas, con el doble de detalle, `FINOS`), a la izquierda de las latas. Y una carretilla de obra roja en diagonal
   (`ferrecarretilla`, `carretilla-gpt.webp`; con sus huecos quitados y con el doble de detalle, como la escalera), delante de los
-  palés, con paso entre medias. Los paneles de la
+  palés, con paso entre medias. Y dos góndolas de panel perforado, el mismo mueble con distinto género (`ferregondola1`, de
+  tornillería, y `ferregondola2`, de cerrajería y herramienta pequeña; `gondola-tornillos-gpt.webp` y `-tornillos2-`, con el doble
+  de detalle), juntas abajo a la izquierda. En la inversa, que tiene menos suelo a la vista (la pared de abajo tapa sus últimas filas),
+  van en dos filas: arriba las latas, la escalera, los palés y la transpaleta, y abajo, a la altura del mostrador, las góndolas y la carretilla. Los paneles de la
   pared de la sala de venta (23 nov, el dueño): ocho, todos distintos, a escala 1 (136x86), del rodapié a la moldura; dónde va cada uno,
   en `mapa.gd` (`PANELES_TIENDA`: con la puerta abajo, 3 + 3 + 2 entre las puertas del almacén y del taller, y con la puerta
   arriba, 4 + 4 a los lados de la entrada; desde el 24 nov, en cada trozo, el mismo espacio entre los paneles que entre ellos y las
