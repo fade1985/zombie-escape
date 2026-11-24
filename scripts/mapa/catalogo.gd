@@ -715,12 +715,13 @@ const SALAS := {
 	# un mostrador delante de cada puerta, centrado con ella (24 nov, el dueño): el primero, en la de la rebotica (donde se esconde la
 	# farmacéutica), y el segundo, en la del almacén, como el de la ferretería;
 	# a la izquierda, las góndolas, la mesa de cosmética y los expositores; a la derecha, la vitrina y la fuente; las sillas de espera,
-	# en la normal, pegadas a la pared de arriba, entre las puertas del almacén y de la rebotica, y la fuente a su derecha (24 nov, el dueño).
+	# en la normal, pegadas a la pared de arriba, entre las puertas del almacén y de la rebotica, y la fuente a su derecha; y la vitrina,
+	# también pegada a ella, en medio entre la pared de la izquierda y la puerta del almacén (24 nov, el dueño).
 	# Libre el paso de la entrada. En la inversa (la entrada arriba), en dos filas, como en la ferretería
 	"tienda-farmacia": {"colocados": {
 		"abajo": [["farmamostrador", 36.0, "libre", 2.75], ["farmamostrador3", 16.0, "libre", 2.75], ["farmagondola1", 5.0, "libre", 5.5], ["farmagondola2", 10.0, "libre", 5.5],
 			["farmacosmetica", 5.0, "libre", 10.5], ["farmatorre", 9.5, "libre", 10.5], ["farmacepillos", 12.0, "libre", 10.5],
-			["farmavitrina", 29.0, "libre", 7.0], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
+			["farmavitrina", 7.5], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
 		"arriba": [["farmamostrador2", 36.0, "libre", 8.25], ["farmamostrador4", 16.0, "libre", 8.25], ["farmagondola1", 5.0, "libre", 4.5], ["farmagondola2", 10.0, "libre", 4.5],
 			["farmacosmetica", 5.0, "libre", 8.25], ["farmatorre", 14.5, "libre", 4.5], ["farmacepillos", 17.0, "libre", 4.5],
 			["farmavitrina", 29.0, "libre", 4.5], ["farmasillas", 42.0, "libre", 4.5], ["farmagarrafa", 43.5, "libre", 8.25]]}},
