@@ -96,6 +96,9 @@ const ESTILO_TIENDA := {
 	"bano-farmacia": [["vestuario"], "vestuario", "bano-b"], "almacen-farmacia": [["trastero"], "trastero-pasillo", "trastero"],
 	# (25 nov, el dueño) y los del supermercado, iguales
 	"bano-supermercado": [["vestuario"], "vestuario", "bano-b"], "almacen-supermercado": [["trastero"], "trastero-pasillo", "trastero"],
+	# y su sala de venta (porcelánico gris claro y pared de listones de madera clara sobre un panel gris), destrozada (25 nov, el dueño;
+	# de GPT, tools/suelos_supermercado_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
+	"tienda-supermercado": [["venta-supermercado-d1"], "venta-supermercado-d1", "venta"],
 	# y su sala de venta (porcelánico gris y pared blanca con franja verde) y su rebotica (vinilo gris y paneles de chapa blanca),
 	# destrozadas (24 nov, el dueño; de GPT, tools/suelos_farmacia_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
 	"tienda-farmacia": [["venta-farmacia-d1"], "venta-farmacia-d1", "venta"],
@@ -148,7 +151,11 @@ const MEZCLA_TIENDA := {
 	"bano-supermercado": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
 	"almacen-supermercado": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
-		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]}}
+		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
+	# y su sala de venta (las baldosas rotas con el rastro de sangre y la leche y la fruta, d2 y d3, y la madera arrancada y la quemada, los que
+	# menos, que se ven mucho)
+	"tienda-supermercado": {"suelos": [["venta-supermercado-d1", 3], ["venta-supermercado-d2", 1], ["venta-supermercado-d3", 1]],
+		"paredes": [["venta-supermercado-d1", 2], ["venta-supermercado-d2", 1], ["venta-supermercado-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
 # los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)

@@ -1165,7 +1165,13 @@ en una línea.
   `Peligros.FRIO`); abajo, la sala de venta (46 × 13). El plano de antes queda como `supermercado-antiguo`, porque lo usa Atención al cliente
   en la torre (`Tienda.TIPOS` "presta" "plano"; sus muebles no cambian). El aseo y el almacén, como los de la farmacia: su suelo y pared
   destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-supermercado" y "almacen-supermercado"), la sangre, sus puertas metálicas (también la de
-  la cámara a la sala de venta) y sin toalla ni balda; el almacén, de momento con los muebles del de la ropa. La sala de venta y la cámara,
+  la cámara a la sala de venta) y sin toalla ni balda; el almacén, de momento con los muebles del de la ropa. El suelo y la pared de la sala
+  de venta (de una foto del dueño: porcelánico gris claro y, en la pared, listones verticales de madera clara sobre un panel de porcelánico
+  gris y rodapié antracita), destrozados, tres de cada, de GPT: `py tools/suelos_supermercado_gpt.py` (copia de la de la farmacia;
+  `assets/sources/suelos/venta-supermercado-suelo-destrozado<N>-gpt.webp` y `-pared-destrozada<N>-`, a `suelo-`/`pared-venta-supermercado-d<N>.png`),
+  mezclados a trozos (`MEZCLA_TIENDA` "tienda-supermercado"; las baldosas rotas, la leche y la fruta, la madera arrancada y la quemada, los que
+  menos). Los listones, unos 38 en la imagen de GPT, se emborronaban a 48 píxeles: la herramienta les marca una ranura oscura cada 3 píxeles
+  después de reducir, solo donde hay madera (`listones`). La sala de venta y la cámara,
   sin muebles de momento (sus muebles de antes, en git). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
   de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
