@@ -3018,6 +3018,10 @@ msgid "Uno de esos maniquíes respira..."
 msgstr "Eine dieser Schaufensterpuppen atmet..."
 
 #: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "FINDEST DU MICH?"
+
+#: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "AUF DEN LAUFSTEG!"
 

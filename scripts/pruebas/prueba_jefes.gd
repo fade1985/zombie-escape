@@ -2234,6 +2234,11 @@ func probar_desfile() -> void:
 	johnny.golpear((medio - johnny.global_position).angle())
 	await get_tree().create_timer(0.5, false).timeout
 	print("Desfile: tras un golpe, hilos %d (esperado: 3)" % jefe.hilos_vivos())
+	# el abanico: tres carretes de golpe
+	jefe.global_position = c + Vector2(60, -160)
+	jefe.cambiar("aviso_carrete", {"angulo": PI / 2.0})
+	await get_tree().create_timer(0.6, false).timeout
+	print("Desfile: tras un abanico, hilos %d (esperado: 6)" % jefe.hilos_vivos())
 	# esconderse: retales de todos los maniquíes a la vez
 	johnny.global_position = c
 	jefe.global_position = c + Vector2(-60, -160)
@@ -2242,6 +2247,13 @@ func probar_desfile() -> void:
 	print("Desfile: estado %s (esperado: escondida) · nubes de retales %d (esperado: una por maniquí y la suya)" % [jefe.estado,
 		get_tree().current_scene.find_children("*", "EfectoSuelo", true, false).filter(func(e): return e.tipo == "retales").size()])
 	Captura.foto("captura-desfile-retales.png")
+	await get_tree().create_timer(1.0, false).timeout
+	print("Desfile: escondida, disfrazada %s · su dibujo visible %s (esperado: true, false)" % [
+		is_instance_valid(jefe.disfraz) and jefe.disfraz.visible, jefe.sprite.visible])
+	johnny.global_position = jefe.global_position + Vector2(-120, 140)   # (que salga en la foto, entre los demás)
+	await get_tree().create_timer(0.5, false).timeout
+	Captura.foto("captura-desfile-disfraz.png")
+	johnny.global_position = c
 	jefe.datos.dur = 99.0
 	# un maniquí que no es ella: revienta en alfileres
 	var s: Node2D = get_tree().get_nodes_in_group("senuelos")[0]

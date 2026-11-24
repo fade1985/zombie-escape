@@ -3014,6 +3014,10 @@ msgid "Uno de esos maniquíes respira..."
 msgstr "那些假人模特里有一个在呼吸……"
 
 #: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "你找不到我的！"
+
+#: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "上T台！"
 

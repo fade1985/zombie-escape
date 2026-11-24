@@ -3018,6 +3018,10 @@ msgid "Uno de esos maniquíes respira..."
 msgstr "Um desses manequins está respirando..."
 
 #: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "DUVIDO QUE ME ACHE!"
+
+#: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "PRA PASSARELA!"
 

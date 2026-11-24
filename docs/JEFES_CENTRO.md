@@ -196,12 +196,14 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   queda quieto bajo el foco.
 - **Hilos** (fase 1): tira un carrete hacia Johnny (desviado al azar, para que se crucen) que rueda hasta la pared
   dejando el hilo; el carrete da 8 al pasar. Flojo, el hilo **solo enreda** (el estado nuevo "enredado": anda un 45 %
-  más despacio). Hasta 5, uno cada 3 s. Con 3 o más tendidos, cada 9 s, «¡A TENSAR!»: se ponen rojos, 0,8 s de aviso y
-  0,5 s que quitan 14. Un golpe o un tiro que pase por encima los corta. Junto a la barra, cinco carretitos: llenos los
+  más despacio). Tira tres de golpe, en abanico, cada 2,4 s, hasta 10 (24 nov, el dueño: más, si no cortarlos no
+  aporta; eran uno cada 3 s, hasta 5). Con 4 o más tendidos, cada 9 s, «¡A TENSAR!»: se ponen rojos, 0,8 s de aviso y
+  0,5 s que quitan 14. Un golpe o un tiro que pase por encima los corta. Junto a la barra, diez carretitos: llenos los
   hilos tendidos, y en rojo cuando ya puede tensar (`barra_jefe.gd`, `pintar_hilos`).
-- **Esconderse** (cada 7 s): le brillan los ojos 0,6 s y se cambia con un maniquí lejano; a la vez salen retales de
+- **Esconderse** (cada 7 s): grita «¿A QUE NO ME ENCUENTRAS?», le brillan los ojos 0,6 s y se cambia con un maniquí lejano; a la vez salen retales de
   todos los maniquíes (`tools/pixelfx/retales.js`, el "feather-burst" en granate y crema), para que no se vea con cuál.
-  Escondida 4,5 s: ya no salta si Johnny se acerca. Solo la delata que **respira** (sube un píxel la mitad de cada
+  Escondida 6 s (eran 4,5), **disfrazada de maniquí**: se dibuja con el mismo dibujo que el maniquí con el que se cambia
+  (24 nov, el dueño: antes se veía solo un salto, porque ella no se parece a los maniquíes). Ya no salta si Johnny se acerca. Solo la delata que **respira** (sube un píxel la mitad de cada
   respiración de 1,7 s) y un parpadeo de los ojos cada 2-3,5 s. Si le pegan escondida: «¡ME HAS VISTO!», aturdida 2,5 s
   con estrellitas y le entra el doble. Si le pegan a otro maniquí: un aro rojo de 0,5 s y revienta en 12 alfileres.
   Cada maniquí lleva para eso un señuelo invisible del grupo "zombis" (el apuntado automático no lo busca).

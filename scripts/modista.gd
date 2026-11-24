@@ -49,14 +49,17 @@ const MEDIO_TIJERETAZO := 0.8      # medio ángulo del trozo que corta
 const DANO_TIJERETAZO := 22
 const DISTANCIA_TIJERETAZO := 140.0   # si Johnny está más cerca que esto, prefiere el tijeretazo
 # Los carretes y los hilos
-const MAX_HILOS := 5
+const MAX_HILOS := 10
 const AVISO_CARRETE := 0.45
+const CARRETES := 3                # los que tira de una vez, en abanico
+const ABANICO_CARRETES := 0.45     # lo que se separan entre sí (radianes)
 const ABRE_CARRETE := 0.5          # lo que se desvía (al azar) de Johnny al tirarlo: así los hilos se cruzan
 const TENSAR := 1.6                # lo que dura tirando de los hilos (el aviso de los hilos es menos: hilo_modista.gd)
-const MIN_TENSAR := 3              # con menos hilos no tensa
+const MIN_TENSAR := 4              # con menos hilos no tensa
 # Esconderse entre los maniquíes
 const OJOS := 0.6                  # lo que le brillan los ojos antes de cambiarse de sitio
-const ESCONDIDA := 4.5             # lo que se queda quieta como un maniquí más
+const OJOS_MANIQUI := [Vector2(-5, -103), Vector2(1, -103)]   # escondida, sus ojos van en la cabeza del maniquí
+const ESCONDIDA := 6.0             # lo que se queda quieta como un maniquí más
 const RESPIRA := 1.7               # lo que tarda cada respiración (sube y baja un píxel)
 const PARPADEO := [2.0, 3.5]       # cada cuánto le brillan un instante los ojos escondida
 const LEJOS_DE_JOHNNY := 220.0     # el maniquí con el que se cambia está por lo menos así de lejos de Johnny
@@ -80,7 +83,7 @@ const CONGELADA := 2.2             # lo que se queda tiesa si la pilla el foco
 const MAS_CONGELADA := 2.0
 const INMUNE_FOCO := 3.5           # después, el foco no la para este rato
 # Lo que espera entre ataque y ataque (normal y enfadada; 0: no lo hace)
-const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [3.0, 0.0], "tensar": [9.0, 0.0],
+const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [2.4, 0.0], "tensar": [9.0, 0.0],
 	"esconderse": [7.0, 0.0], "corte": [0.0, 5.5]}
 # Los fotogramas de sus animaciones en los que corta las tijeras y lanza los alfileres (el brazo ya estirado)
 const CORTA := 4
@@ -91,6 +94,7 @@ const OJOS_EN := {"s": [Vector2(-5, -91), Vector2(1, -91)], "se": [Vector2(0, -9
 	"n": [], "ne": [], "no": []}
 const CABEZA := Vector2(-2, -89)
 
+var disfraz: Sprite2D = null       # escondida, el dibujo del maniquí que hace de ella (vestir)
 var espera := {"tijeretazo": 1.0, "alfileres": 2.0, "carrete": 1.0, "tensar": 6.0, "esconderse": 4.0, "corte": 2.0}
 var vivos: Array = []
 var hilos: Array = []
@@ -133,6 +137,7 @@ func empezar_escondida() -> void:
 	if m == null:
 		return
 	global_position = m.global_position - PIE_MANIQUI
+	vestir(m)
 	m.get_parent().remove_child(m)
 	m.queue_free()
 	rehornear()
@@ -185,7 +190,11 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"aviso_carrete":
 			frenar(delta)
 			if t >= AVISO_CARRETE:
-				tirar_carrete(datos.angulo)
+				# un abanico de carretes de golpe: la sala se llena de hilos enseguida (por eso conviene cortarlos)
+				for i in CARRETES:
+					var abre := (i - (CARRETES - 1) / 2.0) * ABANICO_CARRETES
+					if hilos_vivos() < MAX_HILOS:
+						tirar_carrete(datos.angulo + abre)
 				cambiar("carrete", {"angulo": datos.angulo})
 		"carrete":
 			frenar(delta)
@@ -286,6 +295,8 @@ func elegir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 		if espera.esconderse <= 0.0 and d > 160.0 and maniqui_lejos(johnny) != null:
 			espera.esconderse = ESPERAS.esconderse[f]
 			cambiar("ojos")
+			# (lo grita donde está ahora: luego, escondida, ya no dice nada que la delate)
+			gritar(Idioma.t("¿A QUE NO ME ENCUENTRAS?"), Color("#ffd23f"), 18)
 			return
 		if espera.carrete <= 0.0 and hilos_vivos() < MAX_HILOS:
 			espera.carrete = ESPERAS.carrete[f]
@@ -418,6 +429,7 @@ func cambiarse(johnny: Node2D) -> void:
 	if m == null:
 		andar(0.3)
 		return
+	vestir(m)
 	var antes := global_position
 	var paso: Vector2 = antes + PIE_MANIQUI - m.global_position
 	global_position = m.global_position - PIE_MANIQUI
@@ -442,6 +454,32 @@ func salir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 		apuntar_alfileres(hacia)
 	else:
 		andar(0.4)
+
+
+# Escondida se disfraza de maniquí: en vez de su dibujo, el mismo que los maniquíes de la tienda (vestir copia el del
+# maniquí con el que se cambia). Al salir de "escondida", por lo que sea, vuelve a ser ella
+func cambiar(nuevo: String, nuevos_datos := {}) -> void:
+	super(nuevo, nuevos_datos)
+	var escondida_ya := nuevo == "escondida"
+	if is_instance_valid(disfraz):
+		disfraz.visible = escondida_ya
+	sprite.visible = not (escondida_ya and is_instance_valid(disfraz))
+
+
+func vestir(m: Node2D) -> void:
+	var suyo := m.get_node_or_null("Sprite") as Sprite2D
+	if suyo == null:
+		return
+	if not is_instance_valid(disfraz):
+		disfraz = Sprite2D.new()
+		add_child(disfraz)
+	disfraz.texture = suyo.texture
+	disfraz.scale = suyo.scale
+	disfraz.centered = false
+	disfraz.flip_h = suyo.flip_h
+	disfraz.offset = suyo.offset
+	disfraz.position = PIE_MANIQUI   # (los pies del maniquí: donde estaban los del de verdad)
+	disfraz.visible = false
 
 
 # ¿Está quieta entre los maniquíes? (el apuntado automático de Johnny no la busca: johnny.gd)
@@ -697,6 +735,8 @@ func animar() -> void:
 			# respira: sube un píxel la mitad de cada respiración (lo único que la delata)
 			if fmod(t, RESPIRA) < RESPIRA * 0.5:
 				sprite.position.y = PIE - 2.0
+			if is_instance_valid(disfraz):
+				disfraz.position.y = PIE_MANIQUI.y - (2.0 if fmod(t, RESPIRA) < RESPIRA * 0.5 else 0.0)
 		"descubierta":
 			if tiene("aturdida_s"):
 				poner("aturdida_s")
@@ -763,9 +803,12 @@ func _pintar_ojos() -> void:
 	if k <= 0.0:
 		return
 	var dir := direccion()
-	var cabeza: Vector2 = CABEZA if OJOS_EN[dir].is_empty() else (OJOS_EN[dir][0] + OJOS_EN[dir][-1]) / 2.0
+	var puntos: Array = OJOS_EN[dir]
+	if estado == "escondida" and is_instance_valid(disfraz):
+		puntos = OJOS_MANIQUI.map(func(p): return p + Vector2(0, disfraz.position.y - PIE_MANIQUI.y))
+	var cabeza: Vector2 = CABEZA if puntos.is_empty() else (puntos[0] + puntos[-1]) / 2.0
 	Formas.disco(ojos, cabeza, 16.0, Color(1.0, 0.36, 0.45, 0.18 * k))
-	for p in OJOS_EN[dir]:
+	for p in puntos:
 		Formas.disco(ojos, p, 4.5, Color(1.0, 0.42, 0.5, 0.45 * k))
 		ojos.draw_rect(Rect2(p - Vector2(2, 1), Vector2(4, 2)), Color(1.0, 0.95, 0.7, k))
 

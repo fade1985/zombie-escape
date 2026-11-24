@@ -3022,6 +3022,10 @@ msgid "Uno de esos maniquíes respira..."
 msgstr "Один из этих манекенов дышит..."
 
 #: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "А НУ, НАЙДИ МЕНЯ!"
+
+#: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "НА ПОДИУМ!"
 
