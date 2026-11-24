@@ -7,6 +7,7 @@
 #   latas-pintura-gpt, latas-pintura2-gpt  -> ferrelatas1, 2: montones de latas de pintura, uno alto y otro bajo y ancho
 #   transpaleta-gpt  -> ferretranspaleta, una transpaleta naranja de lado (las horquillas, a la izquierda)
 #   escalera-gpt  -> ferreescalera, una escalera de tijera de aluminio, abierta y vista en diagonal
+#   carretilla-gpt  -> ferrecarretilla, una carretilla de obra roja, en diagonal
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -18,15 +19,16 @@ from PIL import Image
 MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferreteria-dentro-gpt", "ferremostrador2", 164),
            ("pale-cemento-gpt", "ferrepale1", 80), ("pale-cemento2-gpt", "ferrepale2", 80), ("pale-cemento3-gpt", "ferrepale3", 80),
            ("latas-pintura-gpt", "ferrelatas1", 94), ("latas-pintura2-gpt", "ferrelatas2", 116),
-           ("transpaleta-gpt", "ferretranspaleta", 110), ("escalera-gpt", "ferreescalera", 72)]
+           ("transpaleta-gpt", "ferretranspaleta", 110), ("escalera-gpt", "ferreescalera", 72),
+           ("carretilla-gpt", "ferrecarretilla", 100)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (el asa de la transpaleta, la rendija entre sus
-# horquillas, entre los peldaños de la escalera): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
-CON_HUECOS = {"ferretranspaleta", "ferreescalera"}
+# horquillas, entre los peldaños de la escalera, entre los tubos de la carretilla): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
+CON_HUECOS = {"ferretranspaleta", "ferreescalera", "ferrecarretilla"}
 HUECO_MIN = 1000
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # los de barras finas, que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad, como los paneles de la pared)
-FINOS = {"ferreescalera"}
+FINOS = {"ferreescalera", "ferrecarretilla"}
 
 
 def quitar_fondo(im):
