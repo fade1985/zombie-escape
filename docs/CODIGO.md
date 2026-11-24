@@ -1134,9 +1134,11 @@ en una línea.
   "rebotica-farmacia"). Los muebles, de GPT desde
   fotos suyas, con `py tools/muebles_farmacia_gpt.py [tipo ...]` (copia de la de la ferretería; `assets/sources/centro/<nombre>-gpt.webp`):
   el mostrador por los dos lados (`farmamostrador`, el del cliente, en la normal, y `farmamostrador2`, el de la farmacéutica, en la inversa),
-  delante de la puerta de la rebotica; las góndolas de medicinas y de bebé (`farmagondola1`, `2`), la mesa de cosmética (`farmacosmetica`),
+  delante de la puerta de la rebotica, y un segundo mostrador (`farmamostrador3` y `farmamostrador4`, con otras cosas encima y otros
+  destrozos; `mostrador-farmacia2-gpt.webp` y `-farmacia2-dentro-`) delante de la del almacén, cada uno centrado con su puerta; las góndolas de medicinas y de bebé (`farmagondola1`, `2`), la mesa de cosmética (`farmacosmetica`),
   el expositor en torre (`farmatorre`) y el de cepillos con ruedas (`farmacepillos`), a la izquierda; la vitrina de cristal (`farmavitrina`),
-  las sillas de espera (`farmasillas`) y la fuente de agua (`farmagarrafa`), a la derecha; libre el paso de la entrada
+  las sillas de espera (`farmasillas`) y la fuente de agua (`farmagarrafa`), a la derecha (en la normal, pegadas a la pared de
+  arriba, entre las puertas del almacén y de la rebotica); libre el paso de la entrada
   (`tienda-farmacia` en `catalogo.gd`; en la inversa, en dos filas). En la rebotica, el robot dispensador (`farmarobot`) contra la pared de
   arriba. En el almacén, la estantería de farmacia (`farmabalda1`, en los sitios de las de la ropa) y, hasta que se hagan las suyas, las
   cajas y la carretilla de la ropa. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.

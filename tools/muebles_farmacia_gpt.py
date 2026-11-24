@@ -3,6 +3,8 @@
 # (tools/muebles_ferreteria_gpt.py, de donde sale esta):
 #   mostrador-farmacia-gpt         -> farmamostrador, el mostrador desde el lado del cliente (la tienda normal: se entra por abajo)
 #   mostrador-farmacia-dentro-gpt  -> farmamostrador2, el mismo desde el lado de la farmacéutica (la inversa: se entra por arriba)
+#   mostrador-farmacia2-gpt, mostrador-farmacia2-dentro-gpt  -> farmamostrador3, 4: el segundo mostrador (otras cosas encima y
+#     otros destrozos), por los dos lados, como el primero
 #   gondola-medicinas-gpt, gondola-bebe-gpt  -> farmagondola1, 2: góndolas blancas, la de medicinas y la de bebé (pañales y leche)
 #   vitrina-farmacia-gpt     -> farmavitrina, una vitrina baja de cristal con cosmética, el cristal reventado
 #   expositor-torre-gpt      -> farmatorre, un expositor redondo de madera, en torre
@@ -21,6 +23,7 @@ from PIL import Image
 # proporción. Los dos mostradores, del mismo largo, para que sean el mismo mueble (y como el de la ferretería); las dos góndolas,
 # iguales; la estantería del almacén, del ancho de las de la ropa y la ferretería (88)
 MUEBLES = [("mostrador-farmacia-gpt", "farmamostrador", 164), ("mostrador-farmacia-dentro-gpt", "farmamostrador2", 164),
+           ("mostrador-farmacia2-gpt", "farmamostrador3", 164), ("mostrador-farmacia2-dentro-gpt", "farmamostrador4", 164),
            ("gondola-medicinas-gpt", "farmagondola1", 140), ("gondola-bebe-gpt", "farmagondola2", 140),
            ("vitrina-farmacia-gpt", "farmavitrina", 150), ("expositor-torre-gpt", "farmatorre", 64),
            ("expositor-cepillos-gpt", "farmacepillos", 52), ("mesa-cosmetica-gpt", "farmacosmetica", 130),
