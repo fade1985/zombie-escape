@@ -1192,7 +1192,9 @@ en una línea.
   montones de cajas son de ferretería (24 nov, GPT, `cajas-ferreteria-gpt.webp` a `cajas-ferreteria5-gpt.webp`, la misma herramienta):
   `ferrecajas1` a `ferrecajas5` (taladros, tornillería, pintura, azulejos y fontanería), en los sitios de los de ropa; y las estanterías, `ferrebalda1` a `ferrebalda4` (`estanteria-almacen-ferreteria-gpt.webp` a `-ferreteria4-gpt.webp`: metal
   oxidado con herramientas y cable, fontanería y jardín, electricidad, y una saqueada con una balda caída; del ancho de las de ropa,
-  88, con los huecos entre baldas vacíos, y alternadas para que no haya dos iguales juntas). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
+  88, con los huecos entre baldas vacíos, y alternadas para que no haya dos iguales juntas). La carretilla de mano, también
+  de ferretería: `ferrecarretillamano` (`carretilla-almacen-ferreteria-gpt.webp`, amarilla, con un saco de cemento y una caja; con el
+  doble de detalle y el hueco del asa vacío). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
   misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen). Del 20 al 23 nov la pared fue toda de paneles perforados de chapa gris oscura;
   ahora vuelve a ser la blanca, con un panel de herramientas en cada hueco (abajo).
   Mientras se rehace, `Tienda.TIPOS` "despejadas" (`mapa.despejada`): sin nada por el
