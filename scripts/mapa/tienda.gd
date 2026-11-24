@@ -48,9 +48,10 @@ const TIPOS := {
 		"destrozada": ["bano", "probadores", "almacen", "tienda"]},
 	"farmacia": {"nombre": "Farmacia", "neon": "FARMACIA", "salas": ["almacen", "rebotica"],   # [traducir]
 		"color": Color("#3dff6e"),
-		# (24 nov, el dueño) rehecha como la ferretería: su aseo y su almacén, iguales que los de la ropa, destrozados. Y, mientras se
-		# rehace, sin nada por el suelo de la sala de venta y de la rebotica ni en sus paredes ("despejadas", mapa.despejada)
-		"destrozada": ["bano", "almacen"],
+		# (24 nov, el dueño) rehecha como la ferretería: su aseo y su almacén, iguales que los de la ropa, y su sala de venta y su
+		# rebotica, con su suelo y pared de GPT, destrozados. Y, mientras se rehace, sin nada por el suelo de la sala de venta y de la
+		# rebotica ni en sus paredes ("despejadas", mapa.despejada)
+		"destrozada": ["bano", "almacen", "tienda", "rebotica"],
 		"despejadas": {"suelo": ["tienda", "rebotica"], "pared": ["tienda", "almacen", "rebotica"]}},
 	# la joyería (parte 9): no entra en el sorteo de cada planta, sale una por partida (Planta.joyeria_planta).
 	# Al fondo, la cámara acorazada: la sala opcional con riesgo (su puerta y su premio, en los trozos 2 y 3)

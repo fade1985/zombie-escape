@@ -1127,7 +1127,11 @@ en una línea.
   ropa y la ferretería: su suelo y pared destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-farmacia" y "almacen-farmacia"), la suciedad
   y la sangre (`Tienda.TIPOS` "destrozada"), sus puertas metálicas (la de la rebotica a la sala de venta, la del almacén) y sin toalla
   ni balda. Mientras se rehace, va `"despejadas"` (sin nada por el suelo de la sala de venta y la rebotica ni en sus paredes ni en las
-  del almacén); faltan el suelo y la pared de la sala de venta y de la rebotica (de GPT, desde fotos del dueño). Los muebles, de GPT desde
+  del almacén). El suelo y la pared de la sala de venta (porcelánico gris claro y pared blanca con franja verde y rodapié de
+  aluminio) y de la rebotica (losetas de vinilo gris azulado y paneles de chapa blanca con perfiles de aluminio, de la foto del robot),
+  destrozados, tres de cada, de GPT: `py tools/suelos_farmacia_gpt.py` (como la del taller de la ferretería; `assets/sources/suelos/<sala>-farmacia-suelo-destrozado<N>-gpt.webp`
+  y `-pared-destrozada<N>-`, a `suelo-`/`pared-<sala>-farmacia-d<N>.png`), mezclados a trozos (`MEZCLA_TIENDA` "tienda-farmacia" y
+  "rebotica-farmacia"). Los muebles, de GPT desde
   fotos suyas, con `py tools/muebles_farmacia_gpt.py [tipo ...]` (copia de la de la ferretería; `assets/sources/centro/<nombre>-gpt.webp`):
   el mostrador por los dos lados (`farmamostrador`, el del cliente, en la normal, y `farmamostrador2`, el de la farmacéutica, en la inversa),
   delante de la puerta de la rebotica; las góndolas de medicinas y de bebé (`farmagondola1`, `2`), la mesa de cosmética (`farmacosmetica`),

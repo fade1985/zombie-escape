@@ -94,6 +94,10 @@ const ESTILO_TIENDA := {
 	"bano-ferreteria": [["vestuario"], "vestuario", "bano-b"], "almacen-ferreteria": [["trastero"], "trastero-pasillo", "trastero"],
 	# (24 nov, el dueño) y los de la farmacia, iguales
 	"bano-farmacia": [["vestuario"], "vestuario", "bano-b"], "almacen-farmacia": [["trastero"], "trastero-pasillo", "trastero"],
+	# y su sala de venta (porcelánico gris y pared blanca con franja verde) y su rebotica (vinilo gris y paneles de chapa blanca),
+	# destrozadas (24 nov, el dueño; de GPT, tools/suelos_farmacia_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
+	"tienda-farmacia": [["venta-farmacia-d1"], "venta-farmacia-d1", "venta"],
+	"rebotica-farmacia": [["rebotica-farmacia-d1"], "rebotica-farmacia-d1", "almacen"],
 	# y su taller, destrozado (baldosa de barro roja y pared de hormigón blanca, de GPT: tools/taller_ferreteria_gpt.py)
 	"taller-ferreteria": [["taller-ferreteria-d1"], "taller-ferreteria-d1", "almacen"],
 	# y su almacén, como el pasillo de los trasteros pero sin la línea amarilla (hormigón y chapa; el techo, el de los trasteros)
@@ -132,7 +136,12 @@ const MEZCLA_TIENDA := {
 	"bano-farmacia": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
 	"almacen-farmacia": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
-		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]}}
+		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
+	# y su sala de venta y su rebotica (los del boquete, el panel arrancado y los restos de farmacia, d3, los que menos, que se ven mucho)
+	"tienda-farmacia": {"suelos": [["venta-farmacia-d1", 2], ["venta-farmacia-d2", 2], ["venta-farmacia-d3", 1]],
+		"paredes": [["venta-farmacia-d1", 2], ["venta-farmacia-d2", 2], ["venta-farmacia-d3", 1]]},
+	"rebotica-farmacia": {"suelos": [["rebotica-farmacia-d1", 2], ["rebotica-farmacia-d2", 2], ["rebotica-farmacia-d3", 1]],
+		"paredes": [["rebotica-farmacia-d1", 2], ["rebotica-farmacia-d2", 2], ["rebotica-farmacia-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
 # los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)
