@@ -199,6 +199,8 @@ const MUEBLES := {
 	"farmapalet3": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero3-gpt", "escala": 1.0},
 	"farmapalet4": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero4-gpt", "escala": 1.0},
 	"farmapalet5": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero5-gpt", "escala": 1.0},
+	# (24 nov, el dueño) la carretilla del almacén, como la de la ropa pero con cajas de suero
+	"farmacarretilla": {"len": 40, "dep": 28, "paredes": "", "archivo": "centro/carretilla-farmacia-gpt", "escala": 1.0},
 	"farmarobot": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia-gpt", "escala": 1.0},
 	# (24 nov, el dueño) otros tres robots: con el brazo arriba, con la puerta abierta y apagado y quemado
 	"farmarobot2": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia2-gpt", "escala": 1.0},
@@ -763,10 +765,10 @@ const SALAS := {
 	"almacen-farmacia": {"colocados": {
 		"abajo": [["farmabalda1", 1.9], ["farmabalda2", 5.2], ["farmabalda4", 8.5], ["farmabalda3", 11.8], ["farmabalda1", 15.1],
 			["farmapalet1", 2.0, "libre", 7.4], ["farmapalet4", 5.0, "libre", 7.4], ["farmapalet3", 11.33, "libre", 7.4], ["farmapalet5", 14.67, "libre", 7.4],
-			["carretillaropa", 15.8, "libre", 4.0]],
+			["farmacarretilla", 15.8, "libre", 4.0]],
 		"arriba": [["farmabalda3", 1.88], ["farmabalda1", 5.12], ["farmabalda4", 11.21], ["farmabalda2", 14.79],
 			["farmapalet3", 2.17, "abajo"], ["farmapalet1", 5.33, "abajo"], ["farmapalet5", 8.5, "abajo"], ["farmapalet2", 11.67, "abajo"], ["farmapalet4", 14.83, "abajo"],
-			["carretillaropa", 15.8, "libre", 6.0]]}},
+			["farmacarretilla", 15.8, "libre", 6.0]]}},
 	"bano-farmacia": {"colocados": {
 		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],

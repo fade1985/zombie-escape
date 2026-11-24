@@ -20,6 +20,7 @@
 #   estanteria-almacen-farmacia3-gpt, -farmacia4-gpt -> farmabalda3, 4: la de frascos y garrafas, y la saqueada, con una balda caída
 #   palet-suero-gpt .. palet-suero5-gpt -> farmapalet1..5, los palets del almacén (en vez de las cajas de cartón): el de cajas de
 #     botellas de suero entero, el medio vacío, el de cajas blancas de bolsas de suero, el derrumbado y el de garrafas
+#   carretilla-farmacia-gpt  -> farmacarretilla, la carretilla de mano del almacén (como la de la ropa, con cajas de suero)
 #   robot-farmacia-gpt       -> farmarobot, el robot dispensador de la rebotica
 #   robot-farmacia2-gpt .. 4  -> farmarobot2..4, otros tres: con el brazo arriba y la pantalla rota, con la puerta abierta y el
 #     brazo caído, y apagado y quemado por dentro
@@ -46,14 +47,14 @@ MUEBLES = [("mostrador-farmacia-gpt", "farmamostrador", 164), ("mostrador-farmac
            ("sillas-espera-gpt", "farmasillas", 110), ("garrafa-agua-gpt", "farmagarrafa", 32),
            ("estanteria-almacen-farmacia-gpt", "farmabalda1", 88), ("estanteria-almacen-farmacia2-gpt", "farmabalda2", 88), ("estanteria-almacen-farmacia3-gpt", "farmabalda3", 88), ("estanteria-almacen-farmacia4-gpt", "farmabalda4", 88),
            ("palet-suero-gpt", "farmapalet1", 64), ("palet-suero2-gpt", "farmapalet2", 64), ("palet-suero3-gpt", "farmapalet3", 64),
-           ("palet-suero4-gpt", "farmapalet4", 64), ("palet-suero5-gpt", "farmapalet5", 64), ("robot-farmacia-gpt", "farmarobot", 150),
+           ("palet-suero4-gpt", "farmapalet4", 64), ("palet-suero5-gpt", "farmapalet5", 64), ("carretilla-farmacia-gpt", "farmacarretilla", 40), ("robot-farmacia-gpt", "farmarobot", 150),
            ("robot-farmacia2-gpt", "farmarobot2", 150), ("robot-farmacia3-gpt", "farmarobot3", 150), ("robot-farmacia4-gpt", "farmarobot4", 150),
            ("mesa-laboratorio-gpt", "farmaisla1", 160), ("mesa-laboratorio2-gpt", "farmaisla2", 160),
            ("taburete-laboratorio-gpt", "farmataburete", 30), ("mesa-acero-gpt", "farmaacero", 136),
            ("carro-acero-gpt", "farmacarro", 56), ("contenedor-residuos-gpt", "farmaresiduos", 48)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (entre las baldas de la estantería del almacén): se
 # quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
-CON_HUECOS = {"farmabalda1", "farmabalda2", "farmabalda3", "farmabalda4", "farmapalet1", "farmapalet2", "farmapalet3", "farmapalet4", "farmapalet5", "farmaisla1", "farmaisla2", "farmataburete", "farmacarro"}   # y entre la encimera y el estante, las patas, las baldas
+CON_HUECOS = {"farmabalda1", "farmabalda2", "farmabalda3", "farmabalda4", "farmapalet1", "farmapalet2", "farmapalet3", "farmapalet4", "farmapalet5", "farmacarretilla", "farmaisla1", "farmaisla2", "farmataburete", "farmacarro"}   # y entre la encimera y el estante, las patas, las baldas
 HUECO_MIN = 1000
 # lo más altos que pueden ser (las estanterías del almacén, contra la pared de arriba: lo que pase de lo que miden las de la
 # ferretería, 136, se sale por encima de la pared)
