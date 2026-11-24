@@ -1135,7 +1135,8 @@ en una línea.
   fotos suyas, con `py tools/muebles_farmacia_gpt.py [tipo ...]` (copia de la de la ferretería; `assets/sources/centro/<nombre>-gpt.webp`):
   el mostrador por los dos lados (`farmamostrador`, el del cliente, en la normal, y `farmamostrador2`, el de la farmacéutica, en la inversa),
   delante de la puerta de la rebotica, y un segundo mostrador (`farmamostrador3` y `farmamostrador4`, con otras cosas encima y otros
-  destrozos; `mostrador-farmacia2-gpt.webp` y `-farmacia2-dentro-`) delante de la del almacén, cada uno centrado con su puerta; las góndolas de medicinas y de bebé (`farmagondola1`, `2`), la mesa de cosmética (`farmacosmetica`),
+  destrozos; `mostrador-farmacia2-gpt.webp` y `-farmacia2-dentro-`) delante de la del almacén, cada uno centrado con su puerta; las góndolas de medicinas, de bebé y de vitaminas (`farmagondola1`, `2`, `3`; `gondola-vitaminas-gpt.webp`), una segunda vitrina
+  (`farmavitrina2`, de gafas y aparatos; `vitrina-farmacia2-gpt.webp`), la mesa de cosmética (`farmacosmetica`),
   el expositor en torre (`farmatorre`) y el de cepillos con ruedas (`farmacepillos`), a la izquierda; la vitrina de cristal (`farmavitrina`),
   las sillas de espera (`farmasillas`) y la fuente de agua (`farmagarrafa`), a la derecha (en la normal, pegadas a la pared de
   arriba, entre las puertas del almacén y de la rebotica); libre el paso de la entrada

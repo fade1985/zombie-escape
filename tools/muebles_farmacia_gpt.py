@@ -6,7 +6,9 @@
 #   mostrador-farmacia2-gpt, mostrador-farmacia2-dentro-gpt  -> farmamostrador3, 4: el segundo mostrador (otras cosas encima y
 #     otros destrozos), por los dos lados, como el primero
 #   gondola-medicinas-gpt, gondola-bebe-gpt  -> farmagondola1, 2: góndolas blancas, la de medicinas y la de bebé (pañales y leche)
+#   gondola-vitaminas-gpt    -> farmagondola3, la tercera góndola: vitaminas y cuidado personal
 #   vitrina-farmacia-gpt     -> farmavitrina, una vitrina baja de cristal con cosmética, el cristal reventado
+#   vitrina-farmacia2-gpt    -> farmavitrina2, la segunda vitrina: gafas, termómetros y un tensiómetro
 #   expositor-torre-gpt      -> farmatorre, un expositor redondo de madera, en torre
 #   expositor-cepillos-gpt   -> farmacepillos, un expositor rojo con ruedas, de cepillos y pasta de dientes
 #   mesa-cosmetica-gpt       -> farmacosmetica, una mesa isla de madera con cremas y champús
@@ -25,6 +27,7 @@ from PIL import Image
 MUEBLES = [("mostrador-farmacia-gpt", "farmamostrador", 164), ("mostrador-farmacia-dentro-gpt", "farmamostrador2", 164),
            ("mostrador-farmacia2-gpt", "farmamostrador3", 164), ("mostrador-farmacia2-dentro-gpt", "farmamostrador4", 164),
            ("gondola-medicinas-gpt", "farmagondola1", 140), ("gondola-bebe-gpt", "farmagondola2", 140),
+           ("gondola-vitaminas-gpt", "farmagondola3", 140), ("vitrina-farmacia2-gpt", "farmavitrina2", 150),
            ("vitrina-farmacia-gpt", "farmavitrina", 150), ("expositor-torre-gpt", "farmatorre", 64),
            ("expositor-cepillos-gpt", "farmacepillos", 52), ("mesa-cosmetica-gpt", "farmacosmetica", 130),
            ("sillas-espera-gpt", "farmasillas", 110), ("garrafa-agua-gpt", "farmagarrafa", 32),
@@ -36,7 +39,7 @@ HUECO_MIN = 1000
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # los de cosas pequeñas (cajitas, botes, cepillos), que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad)
-FINOS = {"farmagondola1", "farmagondola2", "farmavitrina", "farmatorre", "farmacepillos", "farmacosmetica", "farmabalda1", "farmarobot"}
+FINOS = {"farmagondola1", "farmagondola2", "farmagondola3", "farmavitrina", "farmavitrina2", "farmatorre", "farmacepillos", "farmacosmetica", "farmabalda1", "farmarobot"}
 
 
 def quitar_fondo(im):

@@ -180,6 +180,8 @@ const MUEBLES := {
 	"farmamostrador4": {"len": 164, "dep": 48, "paredes": "", "archivo": "centro/mostrador-farmacia2-dentro-gpt", "escala": 1.0},
 	"farmagondola1": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-medicinas-gpt", "escala": 1.0},
 	"farmagondola2": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-bebe-gpt", "escala": 1.0},
+	"farmagondola3": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-vitaminas-gpt", "escala": 1.0},
+	"farmavitrina2": {"len": 150, "dep": 40, "paredes": "", "archivo": "centro/vitrina-farmacia2-gpt", "escala": 1.0},
 	"farmavitrina": {"len": 150, "dep": 40, "paredes": "", "archivo": "centro/vitrina-farmacia-gpt", "escala": 1.0},
 	"farmatorre": {"len": 64, "dep": 44, "paredes": "", "archivo": "centro/expositor-torre-gpt", "escala": 1.0},
 	"farmacepillos": {"len": 52, "dep": 32, "paredes": "", "archivo": "centro/expositor-cepillos-gpt", "escala": 1.0},
@@ -715,15 +717,16 @@ const SALAS := {
 	# un mostrador delante de cada puerta, centrado con ella (24 nov, el dueño): el primero, en la de la rebotica (donde se esconde la
 	# farmacéutica), y el segundo, en la del almacén, como el de la ferretería;
 	# a la izquierda, las góndolas, la mesa de cosmética y los expositores; a la derecha, la vitrina y la fuente; las sillas de espera,
-	# en la normal, pegadas a la pared de arriba, entre las puertas del almacén y de la rebotica, y la fuente a su derecha; y la vitrina,
-	# también pegada a ella, en medio entre la pared de la izquierda y la puerta del almacén; la mesa de cosmética, en el centro, delante de la entrada;
+	# en la normal, pegadas a la pared de arriba, entre las puertas del almacén y de la rebotica, y la fuente a su derecha; y las dos
+	# vitrinas, también pegadas a ella, entre la pared de la izquierda y la puerta del almacén, con el mismo espacio entre la pared, las
+	# dos y la puerta; la mesa de cosmética, en el centro, delante de la entrada;
 	# una góndola debajo de cada mostrador, con paso entre los dos, y a la izquierda de cada una, pegados, los cepillos (la del almacén) y la
-	# torre (la de la rebotica) (24 nov, el dueño).
+	# torre (la de la rebotica); y a la izquierda de los cepillos, pegada, la tercera góndola (24 nov, el dueño).
 	# Libre el paso de la entrada. En la inversa (la entrada arriba), en dos filas, como en la ferretería
 	"tienda-farmacia": {"colocados": {
 		"abajo": [["farmamostrador", 36.0, "libre", 2.75], ["farmamostrador3", 16.0, "libre", 2.75], ["farmagondola1", 16.0, "libre", 7.5], ["farmagondola2", 36.0, "libre", 7.5],
 			["farmacosmetica", 23.0, "libre", 7.0], ["farmacepillos", 13.0, "libre", 7.5], ["farmatorre", 32.81, "libre", 7.5],
-			["farmavitrina", 7.5], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
+			["farmavitrina", 4.22], ["farmavitrina2", 10.78], ["farmagondola3", 10.0, "libre", 7.5], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
 		"arriba": [["farmamostrador2", 36.0, "libre", 8.25], ["farmamostrador4", 16.0, "libre", 8.25], ["farmagondola1", 5.0, "libre", 4.5], ["farmagondola2", 10.0, "libre", 4.5],
 			["farmacosmetica", 5.0, "libre", 8.25], ["farmatorre", 14.5, "libre", 4.5], ["farmacepillos", 17.0, "libre", 4.5],
 			["farmavitrina", 29.0, "libre", 4.5], ["farmasillas", 42.0, "libre", 4.5], ["farmagarrafa", 43.5, "libre", 8.25]]}},
