@@ -62,6 +62,9 @@
 #                       aceite y el combo con los cuchillos clavados, con fotos            [prueba_jefes.gd]
 #                       (con --puerta-arriba, solo la cocina detrás de una puerta que se abre por arriba: ningún mueble
 #                       delante de la puerta, captura-cocina-puerta-arriba.png)
+#   --fiesta            (con --edificio centro --jefe mascota) la mascota rehecha (24 nov), fase 1: las cajas sorpresa,
+#                       las pelotas al chocar, el salto que las dispara, comerse una caja (sentada, le entra más,
+#                       revientan las pelotas) y la caja nueva, con fotos                   [prueba_jefes.gd]
 #   --crios             (con --edificio centro --jefe mascota) cuántos críos salen en 20 s, normal y enfadada, cuántos
 #                       a la vez como mucho y a qué distancia de Johnny (M85)              [prueba_jefes.gd]
 #   --metal             (con --jefe gymbro) el cuerpo de metal de sus suplementos: sube, se desconcha y revienta; y
@@ -758,6 +761,10 @@ func empezar_prueba() -> void:
 	elif "--atascado" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_atascado()
+		get_tree().quit()
+	elif "--fiesta" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_fiesta()
 		get_tree().quit()
 	elif "--crios" in args:
 		set_process(false)   # sin la prueba larga

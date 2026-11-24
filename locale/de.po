@@ -761,6 +761,10 @@ msgstr "ALLES BRENNT!"
 msgid "DESPEDIDO"
 msgstr "GEFEUERT"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "ÜBERRASCHUNG!"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MEHR PROBANDEN!"
@@ -2994,6 +2998,10 @@ msgid "Trastero"
 msgstr "Kellerabteil"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Diese Springteufel-Kisten... Was, wenn ich es gegen eine krachen lasse?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "GRATIS KNUDDELN!"
 
@@ -3604,10 +3612,6 @@ msgstr "FRISCH GEWISCHT!"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "APPLAUS, BITTE!"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "ÜBERRASCHUNG!"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

@@ -761,6 +761,10 @@ msgstr "FIVE-ALARM FIRE!"
 msgid "DESPEDIDO"
 msgstr "FIRED"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRISE!"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MORE TEST SUBJECTS!"
@@ -2994,6 +2998,10 @@ msgid "Trastero"
 msgstr "Storage Unit"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Those jack-in-the-boxes... What if I make it crash into one?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "FREE HUGS!"
 
@@ -3604,10 +3612,6 @@ msgstr "I JUST MOPPED!"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "A ROUND OF APPLAUSE!"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "SURPRISE!"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

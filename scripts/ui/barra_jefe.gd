@@ -114,6 +114,7 @@ func _draw() -> void:
 	pintar_escudo()
 	pintar_sacos()
 	pintar_hilos()
+	pintar_cajas()
 	# La vida en números
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(value), roundi(max_value)]
@@ -215,6 +216,60 @@ const CARRETITO := [
 
 
 # El saquito (10×12 píxeles del dibujo): o, el borde; #, la arpillera; b, su brillo; s, la sombra; c, la cuerda
+# Las cajas sorpresa de la mascota ("cajas_listas" y CAJAS, mascota.gd): a la derecha de la barra, una cajita de pixel
+# art por cada caja que puede haber en la sala; las que están en la sala, cerradas y de colores, y las que se ha comido
+# (hasta que cae otra), abiertas, apagadas y con el muñeco fuera. Así se ve que las cajas importan
+func pintar_cajas() -> void:
+	if not is_instance_valid(jefe) or not jefe.has_method("cajas_listas") or jefe.estado == "muerto":
+		return
+	var listas: int = jefe.cajas_listas()
+	for i in jefe.CAJAS:
+		var abierta: bool = i >= listas
+		var dibujo: Array = CAJITA_ABIERTA if abierta else CAJITA
+		var esquina := Vector2(ANCHO + 6.0 + i * 22.0, -4.0)
+		for y in dibujo.size():
+			var fila: String = dibujo[y]
+			for x in fila.length():
+				var c := fila[x]
+				if c == ".":
+					continue
+				var col: Color = {"o": Tema.LINEA, "#": Color("#d8402a"), "y": Color("#ffd23f"), "b": Color("#f4f0e4"),
+					"m": Color("#a0a0a8"), "c": Color("#ff5d73")}[c]
+				if abierta and c not in ["o", "c", "m"]:   # (la caja usada, apagada; el muñeco fuera, no)
+					col = col.darkened(0.55)
+				draw_rect(Rect2(esquina + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+
+
+# o, el borde; #, rojo; y, amarillo; b, la interrogación; m, la manivela y el muelle; c, la cara del muñeco
+const CAJITA := [
+	"..........",
+	"..........",
+	"..........",
+	"oooooooo..",
+	"o######o..",
+	"oyyyyyyoom",
+	"o##bb##o.m",
+	"oyyybyyoom",
+	"o##b###o..",
+	"oyyyyyyo..",
+	"o###b##o..",
+	"oooooooo..",
+]
+const CAJITA_ABIERTA := [
+	"..ooo.....",
+	".occco....",
+	"..ooo.....",
+	"...m......",
+	"oooooooo..",
+	"o######o..",
+	"oyyyyyyo..",
+	"o######o..",
+	"oyyyyyyo..",
+	"o######o..",
+	"oyyyyyyo..",
+	"oooooooo..",
+]
+
 const SAQUITO := [
 	"...oooo...",
 	"...o##o...",

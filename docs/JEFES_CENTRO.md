@@ -8,7 +8,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 | Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
 | Cocinero | hecho, pendiente del visto bueno del dueño (23 nov) |
 | Modista | hecha, con el visto bueno del dueño (24 nov) |
-| Mascota | pendiente |
+| Mascota | en curso: fase 1 hecha (24 nov), falta el tren y la fase 2 |
 | Gerente | pendiente |
 
 ## Por qué
@@ -244,6 +244,21 @@ Se le rompe la tripa y va soltando relleno.
 - El relleno se queda en el suelo y arde con el fuego (molotov, lanzallamas): daño enorme si la llevas por encima.
 - Más pequeña y mucho más rápida; rebota por la sala como una pelota más.
 - Los críos traen globos que al reventar sueltan más pelotas.
+
+### Cómo va quedando (24 nov)
+- Fase 1 hecha: `mascota.gd`, `caja_sorpresa.gd` y las pelotas de goma del antidisturbios (`pelota_goma.gd`, con
+  `juguete`: una raya blanca, y `rapidez_normal`: tras el salto van frenando hasta su rapidez).
+- Pelotas: 2 cada vez que se estrella o rebota en una pared, como mucho 12. Al caer de un salto, las de menos de 170
+  salen disparadas a 520.
+- Cajas sorpresa: 3 por la sala (dibujo de PixelLab, la caja y el muñeco del muelle saliendo, `caja-sorpresa` y
+  `caja-sorpresa-salta`; son muebles: chocan con todo). Si se come una embistiendo (de frente o rozándola), «¡SORPRESA!»:
+  sale despedida hacia atrás, cae de culo (animación de PixelLab `sorpresa`, solo de frente) y se queda 5 s sentada con
+  estrellitas; le entra un 50 % más, y todas las pelotas revientan (cada una a menos de 140 le quita 12). La caja se va a
+  los 4 s y a los 6 s cae otra.
+- Pistas: Johnny al entrar («Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?») y tres cajitas junto a
+  la barra (`barra_jefe.gd`, `pintar_cajas`): cerradas las que hay, abiertas las usadas.
+- Los críos ya solo salen en la fase 2.
+- Prueba: `--captura --edificio centro --jefe mascota --fiesta`.
 
 ## 5. El gerente · «La junta de accionistas»
 

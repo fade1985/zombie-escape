@@ -760,6 +760,10 @@ msgstr "一片火海！"
 msgid "DESPEDIDO"
 msgstr "已开除"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "惊喜！"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "再来点实验品！"
@@ -2990,6 +2994,10 @@ msgid "Trastero"
 msgstr "储藏室"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "那些惊喜盒……要是让它撞上一个会怎样？"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "免费抱抱！"
 
@@ -3596,10 +3604,6 @@ msgstr "我刚拖的地！"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "掌声欢迎！"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "惊喜！"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

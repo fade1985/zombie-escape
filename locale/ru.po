@@ -762,6 +762,10 @@ msgstr "ГОРИ ОНО ВСЕ!"
 msgid "DESPEDIDO"
 msgstr "УВОЛЕН"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "СЮРПРИЗ!"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "ЕЩЕ КРОЛИКИ!"
@@ -2998,6 +3002,10 @@ msgid "Trastero"
 msgstr "Кладовка"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Эти коробки с сюрпризом... А что, если заставить его врезаться в одну?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "ОБНИМАШКИ!"
 
@@ -3612,10 +3620,6 @@ msgstr "КУДА ПО ПОМЫТОМУ?!"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "АПЛОДИСМЕНТЫ!"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "СЮРПРИЗ!"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

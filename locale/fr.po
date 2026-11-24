@@ -761,6 +761,10 @@ msgstr "TOUT BRÛLE !"
 msgid "DESPEDIDO"
 msgstr "VIRÉ"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRISE !"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MES COBAYES !"
@@ -2994,6 +2998,10 @@ msgid "Trastero"
 msgstr "Cave"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Ces boîtes à surprise... Et si je la faisais foncer dans l'une d'elles ?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "CÂLINS GRATUITS !"
 
@@ -3604,10 +3612,6 @@ msgstr "JE VIENS DE LAVER !"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "ON L'APPLAUDIT !"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "SURPRISE !"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

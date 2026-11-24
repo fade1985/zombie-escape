@@ -18,6 +18,10 @@ var dueno: Node2D = null
 var color := Color("#ff9a3c")
 var t := 0.0
 var espera := 0.0
+# Las pelotas saltarinas de la mascota (mascota.gd): con una raya blanca por en medio, como las de playa; y, cuando el
+# salto las lanza más deprisa, van frenando hasta su rapidez de siempre ("rapidez_normal"; 0: no frena)
+var juguete := false
+var rapidez_normal := 0.0
 
 
 func _ready() -> void:
@@ -31,6 +35,8 @@ func _physics_process(delta: float) -> void:
 	t += delta
 	espera -= delta
 	queue_redraw()
+	if rapidez_normal > 0.0 and velocidad.length() > rapidez_normal:
+		velocidad = velocidad.normalized() * move_toward(velocidad.length(), rapidez_normal, 260.0 * delta)
 	var antes := global_position
 	var despues := antes + velocidad * delta
 	# rebota en las paredes y los muebles (capa de choque 1), como una bola de billar
@@ -119,7 +125,7 @@ func _draw() -> void:
 			var col: Color
 			match fila[x]:
 				"o": col = Color("#1d1b2c")
-				"#": col = color
+				"#": col = Color("#f4f0e4") if juguete and y in [4, 5] else color
 				"s": col = color.darkened(0.35)
 				"b": col = color.lightened(0.6)
 				_: continue

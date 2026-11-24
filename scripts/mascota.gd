@@ -9,9 +9,31 @@
 #     creciendo, donde va a caer; al caer quita 18 a lo que esté en ese círculo. En el aire no se le puede dar.
 # Enfadada (a media vida): 3 embestidas seguidas con menos aviso; si choca con una pared rebota y, tras un aviso corto
 # con su franja (AVISO_REBOTE), sigue; solo se marea si se estrella en la última.
-# M85: durante todo el combate van saliendo críos (el zombi rápido) por la tienda, lejos de Johnny (salir_crios()).
+# M85: en la fase 2 van saliendo críos (el zombi rápido) por la tienda, lejos de Johnny (salir_crios()).
+#
+# Rehecha el 24 nov (docs/JEFES_CENTRO.md, «La fiesta de cumpleaños»), fase 1:
+#   - Pelotas saltarinas: cada vez que se estrella (o rebota) contra una pared suelta PELOTAS_PARED pelotas de juguete
+#     (pelota_goma.gd, con "juguete") que rebotan sin parar y se suman (como mucho MAX_PELOTAS).
+#   - Al caer de un salto, las pelotas cercanas salen disparadas hacia fuera, más deprisa (aplastar_pelotas).
+#   - El truco, las cajas sorpresa (caja_sorpresa.gd): hay CAJAS por la sala; si se come una embistiendo, el muñeco
+#     salta, ella cae de culo mareada SORPRESA s (le entra un MAS_SORPRESA más) y todas las pelotas revientan (las que
+#     tiene cerca le hacen daño). La caja se va y al rato cae otra. Pistas: lo dice Johnny al entrar y junto a la barra
+#     de vida hay una cajita por cada caja (ui/barra_jefe.gd, pintar_cajas).
 extends Minijefe
 
+const PELOTA := preload("res://scripts/pelota_goma.gd")
+const CAJA := preload("res://scripts/caja_sorpresa.gd")
+const PELOTAS_PARED := 2
+const MAX_PELOTAS := 12
+const VELOCIDAD_PELOTA := 240.0
+const APLASTA := 170.0                 # al caer de un salto, las pelotas a menos de esto salen disparadas...
+const DISPARO_APLASTA := 520.0         # ...así de deprisa (luego frenan hasta VELOCIDAD_PELOTA)
+const CAJAS := 3
+const SORPRESA := 5.0                  # lo que se queda sentada y mareada tras comerse una caja
+const MAS_SORPRESA := 1.5              # lo que le entra así
+const REVIENTA_CERCA := 140.0          # las pelotas que revientan a menos de esto le hacen daño...
+const DANO_REVIENTA := 12              # ...esto cada una
+const REPONE_CAJA := 6.0               # lo que tarda en caer otra caja cuando una se va
 const VELOCIDAD := 140.0
 const AVISO_EMBESTIDA := [0.6, 0.4]    # normal y enfadada
 const AVISO_REBOTE := 0.3              # enfadada, al rebotar en una pared (hasta el 27 oct, sin aviso ni franja)
@@ -40,12 +62,29 @@ const CRIOS_LEJOS := 300.0
 var espera_embestida := 1.5
 var espera_salto := 3.0
 var espera_crio := 3.0
+var cajas: Array = []          # las cajas sorpresa que hay ahora en la sala
+var reponer: Array = []        # lo que falta para que caiga cada caja nueva (una por cada caja que se ha ido)
+var cajas_puestas := false
+var inicio := Vector2.ZERO     # donde sale (el medio de la sala): las cajas caen a su alrededor
+
+
+func _ready() -> void:
+	super()
+	pista.call_deferred()
+
+
+# La pista para el jugador: Johnny lo dice al entrar (si está la presentación, al acabar)
+func pista() -> void:
+	var partida := get_tree().current_scene
+	if partida and partida.has_method("decir"):
+		partida.decir(Idioma.t("Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"), 4.0)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
 	espera_embestida -= delta
 	espera_salto -= delta
 	salir_crios(delta, johnny)
+	reponer_cajas(delta, johnny)
 	match estado:
 		"andar":
 			perseguir(delta, johnny, VELOCIDAD)
@@ -60,10 +99,16 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				cambiar("embestida", {"quedan": datos.quedan - 1})
 				Sonido.tocar("rugido")
 		"embestida":
-			match embestir(delta, johnny, VELOCIDAD_EMBESTIDA, DANO_EMBESTIDA, TIEMPO_EMBESTIDA, PIE):
+			var como := embestir(delta, johnny, VELOCIDAD_EMBESTIDA, DANO_EMBESTIDA, TIEMPO_EMBESTIDA, PIE)
+			var caja := caja_tocada() if como in ["", "pared"] and t > 0.05 else null
+			if caja:
+				sorpresa(caja)
+				return
+			match como:
 				"pillado":
 					cambiar("recuperar", {"dur": 0.5, "quedan": datos.quedan})
 				"pared":
+					soltar_pelotas()
 					if datos.quedan > 0:
 						rebotar()
 					else:
@@ -81,6 +126,11 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"atontado":
 			frenar(delta, 4.0)
 			if t >= tiempo_atontado(MAREADA):   # (3 s, salvo en la azotea)
+				andar(0.4)
+		"sorpresa":
+			# sentada de culo, mareada: ¡a por ella!
+			frenar(delta, 5.0)
+			if t >= SORPRESA:
 				andar(0.4)
 		"agacharse":
 			frenar(delta, 12.0)
@@ -161,6 +211,7 @@ func aterrizar(johnny: Node2D) -> void:
 	Temblor.temblar(12.0)
 	# el pisotón de pixelfx (M58), del tamaño de la zona donde cae
 	EfectoSuelo.soltar(get_parent(), "pisoton", global_position + Vector2(0, PIE - 6), RADIO_SALTO / EfectoSuelo.ONDA_PISOTON)
+	aplastar_pelotas()
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < RADIO_SALTO + johnny.RADIO and johnny.esquiva_t <= 0.0 \
 			and not Aviso.tapado(self, johnny.global_position + Vector2(0, 16), Vector2(0, PIE - 6)):
@@ -172,7 +223,7 @@ func aterrizar(johnny: Node2D) -> void:
 # unas CRIOS_LEJOS unidades de Johnny (como si saliera de entre los juguetes). En la sala de pruebas (quieta), no.
 func salir_crios(delta: float, johnny: Node2D) -> void:
 	espera_crio -= delta
-	if espera_crio > 0.0 or quieto:
+	if espera_crio > 0.0 or quieto or fase == 1:   # (desde el 24 nov, solo en la fase 2)
 		return
 	espera_crio = CRIOS_CADA[fase - 1]
 	if crios() >= CRIOS_MAX[fase - 1]:
@@ -195,11 +246,128 @@ func crios() -> int:
 	return get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get_meta("tipo", "") == "rapido").size()
 
 
-# Si cae en mitad de un salto o mareada, que caiga en el suelo y derecha
+# ── Las pelotas saltarinas ──
+
+func pelotas() -> Array:
+	return get_tree().get_nodes_in_group("pelotas_goma")
+
+
+# Al estrellarse contra una pared: PELOTAS_PARED pelotas que salen rebotando hacia atrás, hacia la sala
+func soltar_pelotas() -> void:
+	var hay := pelotas().size()
+	for i in mini(PELOTAS_PARED, MAX_PELOTAS - hay):
+		var p := PELOTA.new()
+		p.juguete = true
+		p.rapidez_normal = VELOCIDAD_PELOTA
+		p.velocidad = (-mirada).rotated(randf_range(0.35, 0.8) * (1 if i % 2 == 0 else -1)) * VELOCIDAD_PELOTA
+		p.dueno = self
+		p.position = position - mirada * (radio * 0.5) + Vector2(0, PIE * 0.3)
+		get_parent().add_child(p)
+
+
+# Al caer de un salto: las pelotas cercanas salen disparadas hacia fuera, más deprisa (luego van frenando)
+func aplastar_pelotas() -> void:
+	for p in pelotas():
+		var hacia: Vector2 = p.global_position - global_position
+		if hacia.length() < APLASTA:
+			p.velocidad = (hacia.normalized() if hacia != Vector2.ZERO else Vector2.from_angle(randf() * TAU)) * DISPARO_APLASTA
+
+
+# ── Las cajas sorpresa ──
+
+# Cuántas cajas hay listas ahora (para la barra de vida, ui/barra_jefe.gd)
+func cajas_listas() -> int:
+	return cajas.filter(func(c): return is_instance_valid(c) and not c.abierta).size()
+
+
+# La primera vez, las CAJAS de la sala; luego, cada caja que se va deja una cuenta atrás para que caiga otra
+func reponer_cajas(delta: float, johnny: Node2D) -> void:
+	cajas = cajas.filter(func(c): return is_instance_valid(c))
+	if not cajas_puestas:
+		cajas_puestas = true
+		inicio = global_position
+		for i in CAJAS:
+			poner_caja(johnny)
+		return
+	for i in reponer.size():
+		reponer[i] -= delta
+	while not reponer.is_empty() and reponer[0] <= 0.0:
+		reponer.pop_front()
+		poner_caja(johnny)
+
+
+# Una caja nueva en un sitio libre de la sala: ni pegada a una pared, ni a las otras cajas, ni encima de nadie
+func poner_caja(johnny: Node2D) -> void:
+	var mapa_nav := agente.get_navigation_map()
+	var donde := Vector2.INF
+	for intento in 40:
+		var p: Vector2 = inicio + Vector2(randf_range(-1.0, 1.0) * 560.0, randf_range(-1.0, 1.0) * 260.0)
+		var libre := true
+		for lado in [Vector2.ZERO, Vector2(56, 0), Vector2(-56, 0), Vector2(0, 50), Vector2(0, -50)]:
+			if NavigationServer2D.map_get_closest_point(mapa_nav, p + lado).distance_to(p + lado) > 6.0:
+				libre = false
+		if not libre or p.distance_to(johnny.global_position) < 110.0 or p.distance_to(global_position) < 140.0:
+			continue
+		if cajas.any(func(c): return c.global_position.distance_to(p) < 220.0):
+			continue
+		donde = p
+		break
+	if donde == Vector2.INF:
+		return   # (no cabe: lo vuelve a intentar dentro de un rato)
+	var c := CAJA.new()
+	c.position = donde
+	get_parent().add_child(c)
+	cajas.append(c)
+
+
+# La caja contra la que va embistiendo, si la toca (de frente o rozándola)
+func caja_tocada() -> Node2D:
+	for c in cajas:
+		if is_instance_valid(c) and c.lista() and c.global_position.distance_to(global_position) < radio + CAJA.RADIO + 10.0:
+			return c
+	return null
+
+
+# ¡Sorpresa! Se ha comido una caja: el muñeco salta, ella cae de culo mareada y todas las pelotas revientan
+func sorpresa(caja: Node2D) -> void:
+	caja.abrir()
+	reponer.append(REPONE_CAJA + CAJA.ABIERTA)
+	marcha = -mirada * 420.0   # (el muñeco la tira hacia atrás: cae de culo al lado de la caja, no detrás)
+	global_position -= mirada * 6.0
+	cambiar("sorpresa")
+	Temblor.temblar(12.0)
+	Sonido.tocar("portazo")
+	var dano := 0
+	var hay := pelotas().size()
+	for p in pelotas():
+		if p.global_position.distance_to(global_position) < REVIENTA_CERCA:
+			dano += DANO_REVIENTA
+		p.reventar()
+	if hay > 0:
+		Sonido.tocar("explosion")
+	if dano > 0:
+		recibir_golpe(dano, Vector2.ZERO, true)
+
+
+# Sentada tras la caja, le entra más; y lleva estrellitas
+func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
+	return roundi(cantidad * MAS_SORPRESA) if estado == "sorpresa" else cantidad
+
+
+func con_estrellas() -> bool:
+	return estado in ["atontado", "sorpresa"]
+
+
+# Si cae en mitad de un salto o mareada, que caiga en el suelo y derecha; y se van las cajas
 func morir() -> void:
 	sprite.position = Vector2(0, PIE)
 	sprite.rotation = 0.0
 	$Choque.set_deferred("disabled", false)
+	for c in cajas:
+		if is_instance_valid(c):
+			c.irse()
+	cajas.clear()
+	reponer.clear()
 	super()
 
 
@@ -233,6 +401,15 @@ func animar() -> void:
 			fijar("golpe", dir, avance("golpe_" + dir, minf(1.0, t / 0.5) * 0.6))
 			sprite.position.x = sin(tiempo * 6.0) * 4.0
 			sprite.rotation = sin(tiempo * 6.0) * 0.08
+		"sorpresa":
+			# cae de culo (de frente: animación de PixelLab) y se queda sentada con la cabeza dando vueltas (los
+			# últimos fotogramas, de ida y vuelta)
+			var n := sprite.sprite_frames.get_frame_count("sorpresa_s")
+			var f := int(t * 12.0)
+			if f >= n:
+				var vuelta := int((t - n / 12.0) * 6.0) % 6
+				f = n - 1 - (vuelta if vuelta < 3 else 6 - vuelta)
+			fijar("sorpresa", "s", f)
 		"agacharse":
 			fijar("salto", dir, int(t / AGACHARSE * DESPEGUE))
 		"salto":

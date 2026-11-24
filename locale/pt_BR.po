@@ -761,6 +761,10 @@ msgstr "TUDO QUEIMA!"
 msgid "DESPEDIDO"
 msgstr "DEMITIDO"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRESA!"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MAIS COBAIAS!"
@@ -2994,6 +2998,10 @@ msgid "Trastero"
 msgstr "Depósito"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Essas caixas-surpresa... E se eu fizer ele bater numa?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "ABRAÇO GRÁTIS!"
 
@@ -3604,10 +3612,6 @@ msgstr "ACABEI DE PASSAR PANO!"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "UMA SALVA DE PALMAS!"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "SURPRESA!"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

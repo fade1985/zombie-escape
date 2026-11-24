@@ -143,7 +143,10 @@ JEFES = {
             "salto": ("salto", 12, False, False),
             "golpe": ("golpe", 16, False, False),
             "muerte": ("muerte", 10, False, False),
+            # 24 nov: cae de culo y se queda sentada, mareada (la caja sorpresa; solo de frente)
+            "sorpresa": ("sorpresa", 12, False, False),
         },
+        "de_frente": ["sorpresa"],
     },
     # el gerente (jefe final, lienzo de 128 como la portera): los contratos salen con código (contrato.gd). Sin
     # golpe ni muerte (cae de lado; en la parte 3 el que muere es el mutado); la jeringa es para la parte 3
