@@ -189,6 +189,7 @@ const MUEBLES := {
 	"farmasillas": {"len": 110, "dep": 36, "paredes": "", "archivo": "centro/sillas-espera-gpt", "escala": 1.0},
 	"farmagarrafa": {"len": 32, "dep": 28, "paredes": "", "archivo": "centro/garrafa-agua-gpt", "escala": 1.0},
 	"farmabalda1": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-farmacia-gpt", "escala": 1.0},
+	"farmabalda2": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-farmacia2-gpt", "escala": 1.0},
 	"farmarobot": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia-gpt", "escala": 1.0},
 	# (24 nov, el dueño) otros tres robots: con el brazo arriba, con la puerta abierta y apagado y quemado
 	"farmarobot2": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia2-gpt", "escala": 1.0},
@@ -751,10 +752,10 @@ const SALAS := {
 			["farmaacero", 5.5, "libre", 8.4], ["farmacarro", 2.0, "libre", 8.59]],
 		"arriba": [["farmarobot", 4.5]]}},
 	"almacen-farmacia": {"colocados": {
-		"abajo": [["farmabalda1", 1.9], ["farmabalda1", 5.2], ["farmabalda1", 8.5], ["farmabalda1", 11.8], ["farmabalda1", 15.1],
+		"abajo": [["farmabalda1", 1.9], ["farmabalda2", 5.2], ["farmabalda1", 8.5], ["farmabalda2", 11.8], ["farmabalda1", 15.1],
 			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
 			["carretillaropa", 15.8, "libre", 4.0]],
-		"arriba": [["farmabalda1", 1.88], ["farmabalda1", 5.12], ["farmabalda1", 11.21], ["farmabalda1", 14.79],
+		"arriba": [["farmabalda2", 1.88], ["farmabalda1", 5.12], ["farmabalda2", 11.21], ["farmabalda1", 14.79],
 			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
 			["carretillaropa", 15.8, "libre", 6.0]]}},
 	"bano-farmacia": {"colocados": {
