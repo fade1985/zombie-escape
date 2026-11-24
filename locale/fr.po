@@ -3034,6 +3034,10 @@ msgid "¡A TENSAR!"
 msgstr "ON TEND !"
 
 #: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "TROP LENT !"
+
+#: scripts/modista.gd
 msgid "¡ME HAS VISTO!"
 msgstr "TU M'AS VUE !"
 

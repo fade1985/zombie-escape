@@ -3038,6 +3038,10 @@ msgid "¡A TENSAR!"
 msgstr "НАТЯНУТЬ!"
 
 #: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "СЛИШКОМ МЕДЛЕННО!"
+
+#: scripts/modista.gd
 msgid "¡ME HAS VISTO!"
 msgstr "ТЫ МЕНЯ ЗАМЕТИЛ!"
 

@@ -61,6 +61,7 @@ const AVISO_CUCHILLAZO := 0.5
 const ALCANCE_CUCHILLAZO := 110.0
 const MEDIO_CUCHILLAZO := 0.9      # medio ángulo del trozo que barre
 const DANO_CUCHILLAZO := 20
+const SEGUIDOS := 2                   # cuchillazos seguidos como mucho antes de hacer otra cosa
 const DISTANCIA_CUCHILLAZO := 140.0   # si Johnny está más cerca que esto, prefiere el cuchillazo (o el combo)
 const AVISO_COMBO := [0.5, 0.35]   # el de cada golpe del combo
 const AVISO_SARTEN := 0.6
@@ -91,6 +92,7 @@ const DESPUES := 0.4               # lo que tarda en acabar la animación despu�
 const SUBEN := 0.4                 # la lluvia: lo que se ven subir los cuchillos al tirarlos
 const OFFSET_SIN := Vector2(-46, -80)   # (el de la hoja sin gorro: lo dice tools/jefe_hoja.py al montarla)
 
+var seguidos := 0                     # cuchillazos seguidos (elegir)
 var espera := {"cuchillazo": 0.8, "damero": 4.0, "sarten": 2.0, "fregar": 8.0, "cruz": 1.0, "ola": 5.0, "lluvia": 3.0}
 var lado := 1.0                    # hacia qué lado da los pasitos
 var cocina := 12.0                 # lo que falta para ir a cocinar
@@ -274,7 +276,10 @@ func elegir(johnny: Node2D, d: float) -> void:
 		cambiar("ir_olla")
 		gritar(Idioma.t("¡A LOS FOGONES!"), Color("#ffb347"), 20)
 		return
-	if d < DISTANCIA_CUCHILLAZO and espera.cuchillazo <= 0.0:
+	# de cerca, el cuchillazo... pero no más de SEGUIDOS veces seguidas: luego, otra cosa (24 nov, el dueño: a cuerpo a
+	# cuerpo solo daba cuchillazos)
+	if d < DISTANCIA_CUCHILLAZO and espera.cuchillazo <= 0.0 and seguidos < SEGUIDOS:
+		seguidos += 1
 		espera.cuchillazo = ESPERAS.cuchillazo[f]
 		if enfadado():
 			empezar("aviso_combo", angulo, {"golpe": 0})
@@ -290,6 +295,7 @@ func elegir(johnny: Node2D, d: float) -> void:
 			continue
 		if k == "cruz" and d > 520.0:
 			continue
+		seguidos = 0
 		espera[k] = ESPERAS[k][f]
 		match k:
 			"ola":

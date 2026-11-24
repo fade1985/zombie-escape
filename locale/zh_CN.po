@@ -3030,6 +3030,10 @@ msgid "¡A TENSAR!"
 msgstr "拉紧！"
 
 #: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "太慢了！"
+
+#: scripts/modista.gd
 msgid "¡ME HAS VISTO!"
 msgstr "被你发现了！"
 

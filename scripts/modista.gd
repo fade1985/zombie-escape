@@ -55,6 +55,10 @@ const CARRETES := 3                # los que tira de una vez, en abanico
 const ABANICO_CARRETES := 0.45     # lo que se separan entre sí (radianes)
 const ABRE_CARRETE := 0.5          # lo que se desvía (al azar) de Johnny al tirarlo: así los hilos se cruzan
 const CARRERA_ATADO := 560.0       # lo deprisa que va a por Johnny atado
+const CRECIDA := 8.0               # si no la encuentran escondida, lo que dura crecida: más rápida
+const RAPIDA := 2.0                # crecida, lo deprisa que se le pasan las esperas entre ataques
+const ANDA_CRECIDA := 1.4          # crecida, lo deprisa que anda
+const SEGUIDOS := 2                # tijeretazos seguidos como mucho antes de hacer otra cosa
 const TENSAR := 1.6                # lo que dura tirando de los hilos (el aviso de los hilos es menos: hilo_modista.gd)
 const MIN_TENSAR := 4              # con menos hilos no tensa
 # Esconderse entre los maniquíes
@@ -95,6 +99,8 @@ const OJOS_EN := {"s": [Vector2(-5, -91), Vector2(1, -91)], "se": [Vector2(0, -9
 	"n": [], "ne": [], "no": []}
 const CABEZA := Vector2(-2, -89)
 
+var crecida := 0.0                 # lo que le queda de crecida (salir)
+var seguidos := 0                  # tijeretazos seguidos (elegir)
 var tirados := 0                  # los carretes que lleva tirados (para los gordos)
 var disfraz: Sprite2D = null       # escondida, el dibujo del maniquí que hace de ella (vestir)
 var espera := {"tijeretazo": 1.0, "alfileres": 2.0, "carrete": 1.0, "tensar": 6.0, "esconderse": 4.0, "corte": 2.0}
@@ -148,8 +154,17 @@ func empezar_escondida() -> void:
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
+	# crecida (no la han encontrado a tiempo: salir), las esperas entre ataques corren más deprisa
 	for k in espera:
-		espera[k] -= delta
+		espera[k] -= delta * (RAPIDA if crecida > 0.0 else 1.0)
+	if crecida > 0.0:
+		crecida -= delta
+		if estado not in ["escondida", "congelada"]:
+			# roja, latiendo
+			var late := 0.5 + 0.5 * sin(tiempo * 12.0)
+			sprite.modulate = Color(1.0, 0.55 + 0.25 * late, 0.55 + 0.25 * late)
+		if crecida <= 0.0 and fase == 1 and estado != "escondida":
+			sprite.modulate = Color.WHITE
 	sin_foco -= delta
 	var hacia: Vector2 = johnny.global_position - global_position
 	var d := hacia.length()
@@ -275,7 +290,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 
 # Andando: en la tienda se queda a media distancia; en la pasarela, además, se aparta del foco
 func rondar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
-	var rapidez: float = VELOCIDAD[fase - 1]
+	var rapidez: float = VELOCIDAD[fase - 1] * (ANDA_CRECIDA if crecida > 0.0 else 1.0)
 	var quiero := Vector2.ZERO
 	if d > LEJOS + 60.0:
 		quiero = camino_a(johnny) * rapidez
@@ -294,15 +309,21 @@ func rondar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
 
 func elegir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 	var f := fase - 1
-	if d < DISTANCIA_TIJERETAZO and espera.tijeretazo <= 0.0:
+	# de cerca, el tijeretazo... pero no más de SEGUIDOS veces seguidas: luego, otra cosa (24 nov, el dueño: a
+	# cuerpo a cuerpo solo daba tijeretazos). Entonces los alfileres y el esconderse valen también de cerca
+	if d < DISTANCIA_TIJERETAZO and espera.tijeretazo <= 0.0 and seguidos < SEGUIDOS:
+		seguidos += 1
 		apuntar_tijeretazo(hacia)
 		return
+	var antes := seguidos
+	var de_cerca_vale := seguidos >= SEGUIDOS
+	seguidos = 0
 	if fase == 1:
 		if espera.tensar <= 0.0 and hilos_tendidos() >= MIN_TENSAR:
 			espera.tensar = ESPERAS.tensar[f]
 			tensar()
 			return
-		if espera.esconderse <= 0.0 and d > 160.0 and maniqui_lejos(johnny) != null:
+		if espera.esconderse <= 0.0 and (d > 160.0 or de_cerca_vale) and maniqui_lejos(johnny) != null:
 			espera.esconderse = ESPERAS.esconderse[f]
 			cambiar("ojos")
 			# (lo grita donde está ahora: luego, escondida, ya no dice nada que la delate)
@@ -321,10 +342,11 @@ func elegir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 			cambiar("aviso_corte", {"aviso": AVISO_CORTE[0], "quedan": CORTES})
 			gritar(Idioma.t("¡A LA PASARELA!"), Color("#ff5d73"), 18)
 			return
-	if d > 160.0 and d < ALCANCE_ALFILERES and espera.alfileres <= 0.0 and ve_a(johnny):
+	if (d > 160.0 or de_cerca_vale) and d < ALCANCE_ALFILERES and espera.alfileres <= 0.0 and ve_a(johnny):
 		apuntar_alfileres(hacia)
 		return
 	# nada a mano: sigue andando un poco y vuelve a mirar
+	seguidos = antes
 	andar(0.3)
 
 
@@ -469,6 +491,11 @@ func cambiarse(johnny: Node2D) -> void:
 # Deja de estar escondida sin que la pillen: alfileres desde allí o a andar
 func salir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 	espera.esconderse = ESPERAS.esconderse[0]
+	# no la han encontrado a tiempo: sale crecida, un rato más rápida (24 nov, el dueño)
+	crecida = CRECIDA
+	gritar(Idioma.t("¡DEMASIADO LENTO!"), Color("#ff5d73"), 20)
+	Sonido.tocar("rugido")
+	soplo(global_position)
 	if d > 170.0 and d < ALCANCE_ALFILERES and ve_a(johnny):
 		apuntar_alfileres(hacia)
 	else:
@@ -569,6 +596,7 @@ func soplo(donde: Vector2) -> void:
 # ── La pasarela (fase 2) ──
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
+	crecida = 0.0
 	super(johnny, Idioma.t("¡QUE EMPIECE EL DESFILE!"))
 	for h in hilos:
 		if is_instance_valid(h):

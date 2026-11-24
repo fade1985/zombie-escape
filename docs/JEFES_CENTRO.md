@@ -210,6 +210,11 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   (24 nov, el dueño: antes se veía solo un salto, porque ella no se parece a los maniquíes). Ya no salta si Johnny se acerca. Solo la delata que **respira** (sube un píxel la mitad de cada
   respiración de 1,7 s) y un parpadeo de los ojos cada 2-3,5 s. Si le pegan escondida: «¡ME HAS VISTO!», aturdida 2,5 s
   con estrellitas y le entra el doble. Si le pegan a otro maniquí: un aro rojo de 0,5 s y revienta en 12 alfileres.
+  Si nadie la encuentra a tiempo, sale **crecida** (24 nov, el dueño): «¡DEMASIADO LENTO!», roja latiendo 8 s, con
+  las esperas entre ataques al doble de rápido y andando un 40 % más deprisa.
+- **De cerca** (24 nov, el dueño: a cuerpo a cuerpo solo daba tijeretazos): como mucho dos tijeretazos seguidos;
+  luego otra cosa, y entonces el escondite y los alfileres valen también de cerca. Lo mismo el cocinero con el
+  cuchillazo.
   Cada maniquí lleva para eso un señuelo invisible del grupo "zombis" (el apuntado automático no lo busca).
 - Se quedan los alfileres y el tijeretazo; se fue «¡TE TOMO MEDIDAS!». Ella anda a media distancia (unos 260).
 - **Fase 2**: «¡QUE EMPIECE EL DESFILE!» con su pose; los hilos se caen, se apagan las lámparas de la tienda (más

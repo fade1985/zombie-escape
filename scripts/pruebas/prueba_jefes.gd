@@ -2288,6 +2288,13 @@ func probar_desfile() -> void:
 	print("Desfile: le pegan escondida, estado %s · un golpe de 10 le quita %d (esperado: descubierta, 20)" % [jefe.estado, antes - jefe.vida])
 	await get_tree().create_timer(0.4, false).timeout
 	Captura.foto("captura-desfile-descubierta.png")
+	# si no la encuentran a tiempo, sale crecida: las esperas corren el doble
+	jefe.salir(johnny, Vector2.ZERO, 0.0)
+	jefe.espera.carrete = 10.0
+	await get_tree().create_timer(1.0, false).timeout
+	print("Desfile: sin encontrarla, crecida %.1f · la espera del carrete baja %.1f en 1 s (esperado: unos 7, unos 2)" % [jefe.crecida,
+		10.0 - jefe.espera.carrete])
+	Captura.foto("captura-desfile-crecida.png")
 	# a media vida: el desfile
 	jefe.cambiar("andar")
 	jefe.vida = jefe.vida_max / 2
