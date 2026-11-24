@@ -13,6 +13,8 @@
 #     tapados con una lona (el palé, del mismo ancho que los de cemento: la lona sobresale un poco)
 #   banco-taller-gpt, carro-herramientas-gpt, hormigonera-gpt, bidones-gpt, estanteria-taller-gpt  -> ferrebanco, ferrecarro,
 #     ferrehormigonera, ferrebidones, ferreestanteria (también para el taller)
+#   cajas-ferreteria-gpt .. cajas-ferreteria5-gpt  -> ferrecajas1..5, montones de cajas para el almacén: herramientas eléctricas,
+#     tornillería, latas de pintura, azulejos y fontanería
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -29,7 +31,10 @@ MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferr
            ("gondola-tornillos-gpt", "ferregondola1", 140), ("gondola-tornillos2-gpt", "ferregondola2", 140),
            ("lona-bloques-gpt", "ferrelona1", 86), ("lona-tablones-gpt", "ferrelona2", 150),
            ("banco-taller-gpt", "ferrebanco", 150), ("carro-herramientas-gpt", "ferrecarro", 60), ("hormigonera-gpt", "ferrehormigonera", 88),
-           ("bidones-gpt", "ferrebidones", 120), ("estanteria-taller-gpt", "ferreestanteria", 76)]
+           ("bidones-gpt", "ferrebidones", 120), ("estanteria-taller-gpt", "ferreestanteria", 76),
+           # los cinco montones de cajas del almacén, con las cajas a la misma escala (unos 64 de ancho, como los de la tienda de ropa)
+           ("cajas-ferreteria-gpt", "ferrecajas1", 64), ("cajas-ferreteria2-gpt", "ferrecajas2", 64), ("cajas-ferreteria3-gpt", "ferrecajas3", 66),
+           ("cajas-ferreteria4-gpt", "ferrecajas4", 56), ("cajas-ferreteria5-gpt", "ferrecajas5", 66)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (el asa de la transpaleta, la rendija entre sus
 # horquillas, entre los peldaños de la escalera, entre los tubos de la carretilla): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
 CON_HUECOS = {"ferretranspaleta", "ferreescalera", "ferrecarretilla", "ferrebanco", "ferrecarro", "ferrehormigonera",
