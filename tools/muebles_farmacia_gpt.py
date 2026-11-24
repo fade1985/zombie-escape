@@ -1,0 +1,105 @@
+# Los muebles de la farmacia (24 nov, el dueño; de GPT, desde fotos suyas): imágenes sobre negro puro
+# (assets/sources/centro/<imagen>.webp) reducidas a sprite de escala 1 MEZCLANDO colores, como los de la ferretería
+# (tools/muebles_ferreteria_gpt.py, de donde sale esta):
+#   mostrador-farmacia-gpt         -> farmamostrador, el mostrador desde el lado del cliente (la tienda normal: se entra por abajo)
+#   mostrador-farmacia-dentro-gpt  -> farmamostrador2, el mismo desde el lado de la farmacéutica (la inversa: se entra por arriba)
+#   gondola-medicinas-gpt, gondola-bebe-gpt  -> farmagondola1, 2: góndolas blancas, la de medicinas y la de bebé (pañales y leche)
+#   vitrina-farmacia-gpt     -> farmavitrina, una vitrina baja de cristal con cosmética, el cristal reventado
+#   expositor-torre-gpt      -> farmatorre, un expositor redondo de madera, en torre
+#   expositor-cepillos-gpt   -> farmacepillos, un expositor rojo con ruedas, de cepillos y pasta de dientes
+#   mesa-cosmetica-gpt       -> farmacosmetica, una mesa isla de madera con cremas y champús
+#   sillas-espera-gpt        -> farmasillas, una bancada de tres sillas de espera naranjas
+#   garrafa-agua-gpt         -> farmagarrafa, una fuente de agua de garrafa
+#   estanteria-almacen-farmacia-gpt  -> farmabalda1, la estantería de metal del almacén, con cajitas de medicinas
+#   robot-farmacia-gpt       -> farmarobot, el robot dispensador de la rebotica
+#   py tools/muebles_farmacia_gpt.py   (y luego Godot --headless --path . --import)
+import json
+from collections import deque
+from PIL import Image
+
+# (imagen, tipo, largo): el largo en el juego, en unidades (escala 1: un píxel por unidad; una casilla, 32); el alto sale de la
+# proporción. Los dos mostradores, del mismo largo, para que sean el mismo mueble (y como el de la ferretería); las dos góndolas,
+# iguales; la estantería del almacén, del ancho de las de la ropa y la ferretería (88)
+MUEBLES = [("mostrador-farmacia-gpt", "farmamostrador", 164), ("mostrador-farmacia-dentro-gpt", "farmamostrador2", 164),
+           ("gondola-medicinas-gpt", "farmagondola1", 140), ("gondola-bebe-gpt", "farmagondola2", 140),
+           ("vitrina-farmacia-gpt", "farmavitrina", 150), ("expositor-torre-gpt", "farmatorre", 64),
+           ("expositor-cepillos-gpt", "farmacepillos", 52), ("mesa-cosmetica-gpt", "farmacosmetica", 130),
+           ("sillas-espera-gpt", "farmasillas", 110), ("garrafa-agua-gpt", "farmagarrafa", 32),
+           ("estanteria-almacen-farmacia-gpt", "farmabalda1", 88), ("robot-farmacia-gpt", "farmarobot", 150)]
+# los que llevan huecos cerrados de negro puro que han de verse transparentes (entre las baldas de la estantería del almacén): se
+# quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
+CON_HUECOS = {"farmabalda1"}
+HUECO_MIN = 1000
+# lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
+PIXEL = 2
+# los de cosas pequeñas (cajitas, botes, cepillos), que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad)
+FINOS = {"farmagondola1", "farmagondola2", "farmavitrina", "farmatorre", "farmacepillos", "farmacosmetica", "farmabalda1", "farmarobot"}
+
+
+def quitar_fondo(im):
+    """El negro puro que se llega desde el borde, transparente."""
+    px = im.load()
+    w, h = im.size
+    hecho = bytearray(w * h)
+    cola = deque([(x, y) for x in range(w) for y in (0, h - 1)] + [(x, y) for y in range(h) for x in (0, w - 1)])
+    while cola:
+        x, y = cola.popleft()
+        if x < 0 or y < 0 or x >= w or y >= h or hecho[y * w + x] or max(px[x, y][:3]) >= 8:
+            continue
+        hecho[y * w + x] = 1
+        cola.extend(((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)))
+    for y in range(h):
+        for x in range(w):
+            if hecho[y * w + x]:
+                px[x, y] = (0, 0, 0, 0)
+    return im
+
+
+def quitar_huecos(im):
+    """Los huecos cerrados de negro puro de más de HUECO_MIN píxeles, transparentes."""
+    px = im.load()
+    w, h = im.size
+    visto = bytearray(w * h)
+    for y0 in range(h):
+        for x0 in range(w):
+            if visto[y0 * w + x0] or px[x0, y0][3] == 0 or max(px[x0, y0][:3]) >= 8:
+                continue
+            visto[y0 * w + x0] = 1
+            cola = deque([(x0, y0)])
+            hueco = []
+            while cola:
+                x, y = cola.popleft()
+                hueco.append((x, y))
+                for a, b in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= a < w and 0 <= b < h and not visto[b * w + a] and px[a, b][3] and max(px[a, b][:3]) < 8:
+                        visto[b * w + a] = 1
+                        cola.append((a, b))
+            if len(hueco) > HUECO_MIN:
+                for x, y in hueco:
+                    px[x, y] = (0, 0, 0, 0)
+    return im
+
+
+import sys
+solo = set(sys.argv[1:])   # py tools/muebles_farmacia_gpt.py [tipo ...]: solo esos
+for origen, tipo, largo in MUEBLES:
+    if solo and tipo not in solo:
+        continue
+    im = quitar_fondo(Image.open(f"assets/sources/centro/{origen}.webp").convert("RGBA"))
+    if tipo in CON_HUECOS:
+        im = quitar_huecos(im)
+    im = im.crop(im.getbbox())
+    alto = round(largo * im.height / im.width)
+    pixel = 1 if tipo in FINOS else PIXEL
+    peq = (round(largo / pixel), round(alto / pixel))
+    s = im.convert("RGBa").resize(peq, Image.LANCZOS).convert("RGBA")
+    s.putalpha(s.split()[3].point(lambda v: 255 if v > 110 else 0))
+    s = s.resize((peq[0] * pixel, peq[1] * pixel), Image.NEAREST)
+    ancho, alto = s.size
+    ruta = f"assets/sprites/mueble-{tipo}.png"
+    s.save(ruta)
+    with open(ruta.replace(".png", ".json"), "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"cell": [ancho, alto], "pivot": [ancho // 2, alto], "scale": 1,
+                   "anims": {"idle": {"fps": 1, "dirs": {"south": {"row": 0, "frames": 1}}}}}, f, indent=2)
+        f.write("\n")
+    print(f"{tipo}: {ancho}x{alto} (de {im.width}x{im.height})")

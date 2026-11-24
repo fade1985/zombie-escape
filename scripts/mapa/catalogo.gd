@@ -169,6 +169,22 @@ const MUEBLES := {
 	"ferrejardin": {"len": 120, "dep": 40, "paredes": "", "archivo": "centro/expositor-jardin-gpt", "escala": 1.0},
 	"ferrecesta": {"len": 90, "dep": 40, "paredes": "", "archivo": "centro/cesta-ofertas-gpt", "escala": 1.0},
 	"ferremalla": {"len": 82, "dep": 48, "paredes": "", "archivo": "centro/pale-malla-gpt", "escala": 1.0},
+	# los muebles de la farmacia (24 nov, el dueño; GPT desde fotos suyas, tools/muebles_farmacia_gpt.py): el mostrador por los dos
+	# lados (el del cliente, la tienda normal, y el de la farmacéutica, la inversa), dos góndolas (medicinas y bebé), una vitrina de
+	# cristal, un expositor en torre, uno de cepillos con ruedas, una mesa de cosmética, unas sillas de espera, una fuente de agua,
+	# la estantería del almacén y el robot dispensador de la rebotica
+	"farmamostrador":  {"len": 164, "dep": 48, "paredes": "", "archivo": "centro/mostrador-farmacia-gpt", "escala": 1.0},
+	"farmamostrador2": {"len": 164, "dep": 48, "paredes": "", "archivo": "centro/mostrador-farmacia-dentro-gpt", "escala": 1.0},
+	"farmagondola1": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-medicinas-gpt", "escala": 1.0},
+	"farmagondola2": {"len": 140, "dep": 40, "paredes": "", "archivo": "centro/gondola-bebe-gpt", "escala": 1.0},
+	"farmavitrina": {"len": 150, "dep": 40, "paredes": "", "archivo": "centro/vitrina-farmacia-gpt", "escala": 1.0},
+	"farmatorre": {"len": 64, "dep": 44, "paredes": "", "archivo": "centro/expositor-torre-gpt", "escala": 1.0},
+	"farmacepillos": {"len": 52, "dep": 32, "paredes": "", "archivo": "centro/expositor-cepillos-gpt", "escala": 1.0},
+	"farmacosmetica": {"len": 130, "dep": 48, "paredes": "", "archivo": "centro/mesa-cosmetica-gpt", "escala": 1.0},
+	"farmasillas": {"len": 110, "dep": 36, "paredes": "", "archivo": "centro/sillas-espera-gpt", "escala": 1.0},
+	"farmagarrafa": {"len": 32, "dep": 28, "paredes": "", "archivo": "centro/garrafa-agua-gpt", "escala": 1.0},
+	"farmabalda1": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-farmacia-gpt", "escala": 1.0},
+	"farmarobot": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -689,45 +705,32 @@ const SALAS := {
 			["carretillaropa", 15.8, "libre", 6.0]]}},
 	"bano-ropa": {"colocados": {"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 5.85, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]]}},
-	"tienda-farmacia": {
-		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
-		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas
-		# de tres estanterías a cada lado del pasillo de la entrada. Volteada, las neveras y las estanterías, en la pared de
-		# la entrada, y el mostrador, en el trozo de abajo
-		"colocados": {
-			"abajo": [
-				["metalshelf", 22.5], ["metalshelf", 25.25], ["metalshelf", 28.0], ["pharmacycounter", 25.25, "libre", 5.5],
-				["metalshelf", 2.0, "libre", 10.625], ["drinkfridge", 6.0, "libre", 10.75], ["metalshelf", 18.0, "libre", 10.625],
-				["bench", 18.0, "izquierda"], ["bench", 18.0, "derecha"],
-				["metalshelf", 3.0, "libre", 15.0], ["metalshelf", 5.75, "libre", 15.0], ["metalshelf", 8.5, "libre", 15.0],
-				["metalshelf", 20.5, "libre", 15.0], ["metalshelf", 23.25, "libre", 15.0], ["metalshelf", 26.0, "libre", 15.0],
-				["metalshelf", 3.0, "libre", 20.5], ["metalshelf", 5.75, "libre", 20.5], ["metalshelf", 8.5, "libre", 20.5],
-				["metalshelf", 20.5, "libre", 20.5], ["metalshelf", 23.25, "libre", 20.5], ["metalshelf", 26.0, "libre", 20.5],
-			],
-			"arriba": [
-				["drinkfridge", 2.0], ["drinkfridge", 4.0], ["metalshelf", 8.0], ["metalshelf", 11.0],
-				["metalshelf", 19.0], ["metalshelf", 22.0], ["metalshelf", 25.0], ["metalshelf", 28.0],
-				["bench", 6.5, "izquierda"], ["bench", 6.5, "derecha"],
-				["pharmacycounter", 25.25, "libre", 20.0], ["metalshelf", 22.75, "libre", 24.0], ["metalshelf", 27.75, "libre", 24.0],
-				["metalshelf", 3.0, "libre", 5.0], ["metalshelf", 5.75, "libre", 5.0], ["metalshelf", 8.5, "libre", 5.0],
-				["metalshelf", 20.5, "libre", 5.0], ["metalshelf", 23.25, "libre", 5.0], ["metalshelf", 26.0, "libre", 5.0],
-				["metalshelf", 3.0, "libre", 10.5], ["metalshelf", 5.75, "libre", 10.5], ["metalshelf", 8.5, "libre", 10.5],
-				["metalshelf", 20.5, "libre", 10.5], ["metalshelf", 23.25, "libre", 10.5], ["metalshelf", 26.0, "libre", 10.5],
-			],
-		},
-	},
-	# la rebotica (con sitio en medio para la farmacéutica) y el aseo de empleados (M81) de la farmacia fija (M77)
-	"rebotica-farmacia": {"colocados": {
-		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.25], ["metalshelf", 7.0], ["pallet", 10.25], ["pallet", 4.5, "derecha"],
-			["pharmacycounter", 8.5, "libre", 5.0]],
-		# (volteada, el palé de la pared de abajo, a la izquierda: en medio cerraba con el mostrador la esquina de abajo a la
-		# derecha, Muebles.repasar, 18 nov)
-		"arriba": [["metalshelf", 1.25], ["metalshelf", 3.5], ["pallet", 10.5], ["pallet", 4.5, "derecha"], ["pallet", 2.0, "abajo"],
-			["pharmacycounter", 8.5, "libre", 5.0]],
-	}},
+	# la farmacia, rehecha (24 nov, el dueño) con la distribución de la ferretería: la sala de venta y la rebotica, sin muebles de
+	# momento (se van poniendo los de GPT); el almacén y el aseo, los mismos que los de la ropa y la ferretería (el almacén, con sus
+	# estanterías de farmacia y, hasta que se hagan las suyas, las cajas y la carretilla de la ropa). La de antes, en git
+	# La sala de venta (46 × 13; la entrada, en medio, casillas 22 y 23; la puerta del almacén, 15 y 16, y la de la rebotica, 36 y 37):
+	# el mostrador delante de la puerta de la rebotica (donde se esconde la farmacéutica), como el de la ferretería delante del almacén;
+	# a la izquierda, las góndolas, la mesa de cosmética y los expositores; a la derecha, la vitrina, las sillas de espera y la fuente.
+	# Libre el paso de la entrada. En la inversa (la entrada arriba), en dos filas, como en la ferretería
+	"tienda-farmacia": {"colocados": {
+		"abajo": [["farmamostrador", 37.0, "libre", 2.75], ["farmagondola1", 5.0, "libre", 5.5], ["farmagondola2", 10.0, "libre", 5.5],
+			["farmacosmetica", 5.0, "libre", 10.5], ["farmatorre", 9.5, "libre", 10.5], ["farmacepillos", 12.0, "libre", 10.5],
+			["farmavitrina", 29.0, "libre", 7.0], ["farmasillas", 42.0, "libre", 10.5], ["farmagarrafa", 43.5, "libre", 6.5]],
+		"arriba": [["farmamostrador2", 37.0, "libre", 8.25], ["farmagondola1", 5.0, "libre", 4.5], ["farmagondola2", 10.0, "libre", 4.5],
+			["farmacosmetica", 5.0, "libre", 8.25], ["farmatorre", 14.5, "libre", 8.25], ["farmacepillos", 17.0, "libre", 8.25],
+			["farmavitrina", 29.0, "libre", 4.5], ["farmasillas", 42.0, "libre", 4.5], ["farmagarrafa", 43.5, "libre", 8.25]]}},
+	# la rebotica (20 × 12, la puerta en medio): el robot dispensador contra la pared de arriba, a la izquierda de la puerta en la inversa
+	"rebotica-farmacia": {"colocados": {"abajo": [["farmarobot", 4.5]], "arriba": [["farmarobot", 4.5]]}},
+	"almacen-farmacia": {"colocados": {
+		"abajo": [["farmabalda1", 1.9], ["farmabalda1", 5.2], ["farmabalda1", 8.5], ["farmabalda1", 11.8], ["farmabalda1", 15.1],
+			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
+			["carretillaropa", 15.8, "libre", 4.0]],
+		"arriba": [["farmabalda1", 1.88], ["farmabalda1", 5.12], ["farmabalda1", 11.21], ["farmabalda1", 14.79],
+			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
+			["carretillaropa", 15.8, "libre", 6.0]]}},
 	"bano-farmacia": {"colocados": {
-		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
-		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],
 	}},
 	# la joyería (parte 9): vitrinas bajas en filas, vitrinas altas contra la pared; detrás, la trastienda (como un
 	# almacén pequeño) y la cámara acorazada con sus cajas fuertes

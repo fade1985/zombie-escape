@@ -1121,6 +1121,21 @@ en una línea.
   `py tools/neones_galeria.py letrero-farmacia` (sale `letrero-farmacia.png` y, apagado, `letrero-farmacia-apagado.png`, 90x19) y
   su resplandor con `py tools/letrero_halo.py farmacia`. `neon.gd` lo trata como los letreros dibujados (`LETREROS`), pero al
   fallar la luz se ven los tubos de cristal sin luz (`tubos_apagados`); las chispas saltan de la punta rota de la Y (`CHISPAS_EN`). Prueba: `--puerta-super farmacia` (fotos `captura-puerta-super-neones*`).
+- **La farmacia, rehecha por dentro** (24 nov, el dueño): con la misma distribución y tamaño que la ferretería y la tienda de ropa (50 × 30):
+  arriba, el aseo (7 × 12), el almacén (17 × 12) y la rebotica (20 × 12, en el sitio del taller, con su puerta en medio; ahí sigue
+  escondida la farmacéutica); abajo, la sala de venta (46 × 13). El plano de antes está en git. El aseo y el almacén, iguales que los de la
+  ropa y la ferretería: su suelo y pared destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-farmacia" y "almacen-farmacia"), la suciedad
+  y la sangre (`Tienda.TIPOS` "destrozada"), sus puertas metálicas (la de la rebotica a la sala de venta, la del almacén) y sin toalla
+  ni balda. Mientras se rehace, va `"despejadas"` (sin nada por el suelo de la sala de venta y la rebotica ni en sus paredes ni en las
+  del almacén); faltan el suelo y la pared de la sala de venta y de la rebotica (de GPT, desde fotos del dueño). Los muebles, de GPT desde
+  fotos suyas, con `py tools/muebles_farmacia_gpt.py [tipo ...]` (copia de la de la ferretería; `assets/sources/centro/<nombre>-gpt.webp`):
+  el mostrador por los dos lados (`farmamostrador`, el del cliente, en la normal, y `farmamostrador2`, el de la farmacéutica, en la inversa),
+  delante de la puerta de la rebotica; las góndolas de medicinas y de bebé (`farmagondola1`, `2`), la mesa de cosmética (`farmacosmetica`),
+  el expositor en torre (`farmatorre`) y el de cepillos con ruedas (`farmacepillos`), a la izquierda; la vitrina de cristal (`farmavitrina`),
+  las sillas de espera (`farmasillas`) y la fuente de agua (`farmagarrafa`), a la derecha; libre el paso de la entrada
+  (`tienda-farmacia` en `catalogo.gd`; en la inversa, en dos filas). En la rebotica, el robot dispensador (`farmarobot`) contra la pared de
+  arriba. En el almacén, la estantería de farmacia (`farmabalda1`, en los sitios de las de la ropa) y, hasta que se hagan las suyas, las
+  cajas y la carretilla de la ropa. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
   cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
   `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`

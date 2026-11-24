@@ -46,8 +46,12 @@ const TIPOS := {
 	"ropa": {"nombre": "Tienda de ropa", "neon": "MODA", "salas": ["probadores", "almacen"],   # [traducir]
 		"color": Color("#ff5fd0"), "sube": 4,
 		"destrozada": ["bano", "probadores", "almacen", "tienda"]},
-	"farmacia": {"nombre": "Farmacia", "neon": "FARMACIA", "salas": ["rebotica", "bano"],   # [traducir]
-		"color": Color("#3dff6e")},
+	"farmacia": {"nombre": "Farmacia", "neon": "FARMACIA", "salas": ["almacen", "rebotica"],   # [traducir]
+		"color": Color("#3dff6e"),
+		# (24 nov, el dueño) rehecha como la ferretería: su aseo y su almacén, iguales que los de la ropa, destrozados. Y, mientras se
+		# rehace, sin nada por el suelo de la sala de venta y de la rebotica ni en sus paredes ("despejadas", mapa.despejada)
+		"destrozada": ["bano", "almacen"],
+		"despejadas": {"suelo": ["tienda", "rebotica"], "pared": ["tienda", "almacen", "rebotica"]}},
 	# la joyería (parte 9): no entra en el sorteo de cada planta, sale una por partida (Planta.joyeria_planta).
 	# Al fondo, la cámara acorazada: la sala opcional con riesgo (su puerta y su premio, en los trozos 2 y 3)
 	"joyeria": {"nombre": "Joyería", "neon": "JOYAS", "salas": ["trastienda", "acorazada"],   # [traducir]
@@ -349,39 +353,41 @@ const PLANOS := {
 		"###################EE###################",
 		"###################EE###################",
 	],
-	# la farmacia: a la izquierda, el aseo de empleados y la rebotica (el aseo se abre a ella; la farmacéutica se esconde
-	# en la rebotica, detrás de su puerta a la sala de venta); a la derecha, un trozo de venta hasta el fondo, con el mostrador
+	# la farmacia: arriba, de izquierda a derecha, el aseo de empleados, el almacén (el aseo se abre a él) y la rebotica (con la
+	# farmacéutica escondida, detrás de su puerta a la sala de venta); abajo, la sala de venta. Desde el 24 nov (el dueño), con la
+	# misma distribución y tamaño que la ferretería y la tienda de ropa (50 × 30): el aseo, 7 × 12, el almacén, 17 × 12, y la
+	# rebotica, 20 × 12 con su puerta en medio (en el sitio del taller); la sala de venta, 46 × 13. El plano de antes, en git
 	"farmacia": [
-		"##################################",
-		"##################################",
-		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
-		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
-		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
-		"##BBBBBBB RRRRRRRRRRRR#VVVVVVVVV##",   # no-tr
-		"##BBBBBBB RRRRRRRRRRRR#VVVVVVVVV##",   # no-tr
-		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
-		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
-		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
-		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
-		"###############  ######VVVVVVVVV##",   # no-tr
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"################EE################",
-		"################EE################",
+		"##################################################",
+		"##################################################",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",   # no-tr
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",   # no-tr
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#RRRRRRRRRRRRRRRRRRRR##",
+		"#################  ##################  ###########",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"########################EE########################",
+		"########################EE########################",
 	],
 	# la joyería: al fondo, el aseo de empleados, la trastienda (el aseo se abre a ella) y la cámara acorazada, con su
 	# única puerta a la sala de venta (Planta la vuelve de acero y cerrada: joyeria.gd). No le cabe un trozo de venta hasta

@@ -92,6 +92,8 @@ const ESTILO_TIENDA := {
 	"bano-ropa": [["vestuario"], "vestuario", "bano-b"],
 	# (20 nov, el dueño) y el aseo y el almacén de la ferretería, igual que esos
 	"bano-ferreteria": [["vestuario"], "vestuario", "bano-b"], "almacen-ferreteria": [["trastero"], "trastero-pasillo", "trastero"],
+	# (24 nov, el dueño) y los de la farmacia, iguales
+	"bano-farmacia": [["vestuario"], "vestuario", "bano-b"], "almacen-farmacia": [["trastero"], "trastero-pasillo", "trastero"],
 	# y su taller, destrozado (baldosa de barro roja y pared de hormigón blanca, de GPT: tools/taller_ferreteria_gpt.py)
 	"taller-ferreteria": [["taller-ferreteria-d1"], "taller-ferreteria-d1", "almacen"],
 	# y su almacén, como el pasillo de los trasteros pero sin la línea amarilla (hormigón y chapa; el techo, el de los trasteros)
@@ -125,7 +127,12 @@ const MEZCLA_TIENDA := {
 	"taller-ferreteria": {"suelos": [["taller-ferreteria-d1", 1], ["taller-ferreteria-d2", 1], ["taller-ferreteria-d3", 1]],
 		"paredes": [["taller-ferreteria-d1", 1], ["taller-ferreteria-d2", 1], ["taller-ferreteria-d3", 1]]},
 	"bano-ferreteria": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
-		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]}}
+		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
+	# (24 nov, el dueño) el aseo y el almacén de la farmacia, iguales que los de la ropa y la ferretería
+	"bano-farmacia": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
+		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
+	"almacen-farmacia": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
+		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
 # los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)
@@ -1140,14 +1147,15 @@ func poner_hojas() -> void:
 			elif "almacen" in usos:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
 				hoja.metalizada = true
-		# (20 nov, el dueño) el aseo y el almacén de la ferretería, iguales que los de la ropa: sus puertas, las mismas
-		if sitio.get("tienda", "") == "ferreteria":
+		# (20 nov, el dueño) el aseo y el almacén de la ferretería, iguales que los de la ropa: sus puertas, las mismas (y, desde el
+		# 24 nov, los de la farmacia, con la rebotica en el sitio del taller)
+		if sitio.get("tienda", "") in ["ferreteria", "farmacia"]:
 			var usos_f: Array = [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]
 			if "bano" in usos_f:
 				hoja.madera = PUERTA_BANO.METAL_ROPA
 				hoja.metalizada = true
 			# (24 nov, el dueño) y la del taller a la sala de venta, la misma que la del almacén
-			elif ("almacen" in usos_f or "taller" in usos_f) and "tienda" in usos_f:
+			elif ("almacen" in usos_f or "taller" in usos_f or "rebotica" in usos_f) and "tienda" in usos_f:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
 				hoja.metalizada = true
 		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
