@@ -3014,12 +3014,36 @@ msgid "¡PUMBA!"
 msgstr "BONK!"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "One of those mannequins is breathing..."
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "TO THE RUNWAY!"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "PULL TIGHT!"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "YOU SPOTTED ME!"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "HSSSS!"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "TIME FOR A FITTING!"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "LET THE FASHION SHOW BEGIN!"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "If the spotlight catches her, she freezes stiff..."
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "FROZEN STIFF!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"

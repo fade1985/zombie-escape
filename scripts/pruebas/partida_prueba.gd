@@ -54,6 +54,9 @@
 #                       cambia de edificio y deja de guardarse                             [prueba_jefes.gd]
 #   --cocina            (con --edificio centro --jefe cocinero) la Cocina central: los fogones y las freidoras
 #                       de las paredes y la olla gigante en medio, con foto               [prueba_jefes.gd]
+#   --desfile           (con --edificio centro --jefe modista) la modista rehecha (24 nov): esconderse entre los
+#                       maniquíes, los hilos y los carretes, tensar, el maniquí que revienta, descubierta, el
+#                       apagón con el foco, congelada y el corte de pared a pared, con fotos   [prueba_jefes.gd]
 #   --banquete          (con --edificio centro --jefe cocinero) el cocinero rehecho (23 nov): la olla y los sacos,
 #                       el damero, las sartenes, curarse, el guiso malo, la fase 2 sin gorro, la cruz, la ola de
 #                       aceite y el combo con los cuchillos clavados, con fotos            [prueba_jefes.gd]
@@ -739,6 +742,10 @@ func empezar_prueba() -> void:
 	elif "--ir-sala-otro" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_ir_sala_otro()
+		get_tree().quit()
+	elif "--desfile" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_desfile()
 		get_tree().quit()
 	elif "--banquete" in args:
 		set_process(false)   # sin la prueba larga

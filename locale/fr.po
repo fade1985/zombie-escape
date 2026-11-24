@@ -3014,12 +3014,36 @@ msgid "¡PUMBA!"
 msgstr "PAF !"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "Un de ces mannequins respire..."
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "SUR LE PODIUM !"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "ON TEND !"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "TU M'AS VUE !"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "SSSS !"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "À L'ESSAYAGE !"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "QUE LE DÉFILÉ COMMENCE !"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "Si le projecteur l'attrape, elle se fige..."
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "FIGÉE !"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"

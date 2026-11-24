@@ -3010,12 +3010,36 @@ msgid "¡PUMBA!"
 msgstr "砰！"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "那些假人模特里有一个在呼吸……"
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "上T台！"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "拉紧！"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "被你发现了！"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "嘶——！"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "给你量尺寸！"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "时装秀开始！"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "只要聚光灯照到她，她就会僵住……"
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "僵住了！"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"

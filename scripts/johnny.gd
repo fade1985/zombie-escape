@@ -951,6 +951,9 @@ func golpear(angulo: float) -> void:
 			tocados += 1
 			if de_gracia:
 				Particulas.anillo(get_parent(), zombi.global_position + Vector2(0, -20), zombi.radio + 10.0, Armas.color(Armas.EPICA), 0.3)
+	# los hilos de la modista (hilo_modista.gd): el golpe los corta
+	for hilo in get_tree().get_nodes_in_group("hilos"):
+		hilo.cortar_golpe(global_position, angulo, w.alcance, mitad)
 	if tocados > 0 and w.calidad >= Armas.EPICA:
 		gracia = 0 if de_gracia else gracia + 1
 		if de_gracia:

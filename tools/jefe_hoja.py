@@ -114,7 +114,8 @@ JEFES = {
         },
         "sangre": True,
     },
-    # la modista: los alfileres y el brillo de los ojos, con código
+    # la modista: los alfileres y el brillo de los ojos, con código. Del 24 nov («El desfile», v3): el corte (el
+    # tijeretazo de pared a pared de la pasarela) y, solo de frente, aturdida (descubierta) y desfile (su pose al gritar)
     "modista-72": {
         "anims": {
             "quieto": ("rotations", 1, True, False),
@@ -124,7 +125,13 @@ JEFES = {
             "tijeretazo": ("tijeretazo", 12, False, False),
             "golpe": ("golpe", 16, False, False),
             "muerte": ("muerte", 10, False, False),
+            "corte": ("corte", 14, False, False),
+            "aturdida": ("aturdida", 8, True, False),
+            "desfile": ("desfile", 10, False, False),
         },
+        "de_frente": ["aturdida", "desfile"],
+        # (de frente y abajo a la derecha, PixelLab pintó al final unas tijeras gigantes brillando encima)
+        "sin": {"corte_s": [6, 7], "corte_se": [7, 8]},
     },
     # la mascota: la embestida es una carrera en bucle y el salto va por fotogramas (agacharse, aire, caer)
     "mascota-72": {

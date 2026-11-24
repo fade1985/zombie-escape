@@ -2182,3 +2182,133 @@ func probar_banquete() -> void:
 	await get_tree().create_timer(0.5, false).timeout
 	print("Banquete: muerto, sacos que quedan %d · zombis %d (esperado: 0, 0)" % [get_tree().get_nodes_in_group("sacos_ingredientes").size(),
 		get_tree().get_nodes_in_group("zombis").size()])
+
+
+# Con "--captura --edificio centro --jefe modista --desfile": la modista rehecha (24 nov, docs/JEFES_CENTRO.md,
+# «El desfile»), en su Taller de costura, con Johnny quieto y sin que le maten. Cada línea dice lo esperado. Fotos
+# (captura-desfile-*.png): escondida (entre sus maniquíes), hilos (cuatro tendidos, con los carretitos junto a la
+# barra), tensar (el aviso rojo), retales (la nube al esconderse), revienta (el aro del maniquí equivocado) y
+# alfileres (saliendo), descubierta (aturdida, con estrellitas), grito (la pose del desfile), pasarela (a oscuras,
+# con el foco), congelada (tiesa bajo el foco) y corte-aviso / corte (el tijeretazo de pared a pared)
+func probar_desfile() -> void:
+	if not await ir_a_la_sala_del_jefe("modista"):
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED   # (que nadie le dispare: se cuenta lo que le entra)
+	johnny.invulnerable = 99999.0
+	johnny.set_physics_process(false)
+	var jefe: Node2D = jefa
+	await get_tree().create_timer(0.6, false).timeout
+	jefe.esperando = false   # (sin esperar a que acabe la presentación)
+	var maniquies: Array = jefe.maniquies()
+	print("Desfile: estado %s · maniquíes %d · señuelos %d (esperado: escondida, unos cuantos, los mismos)" % [jefe.estado,
+		maniquies.size(), get_tree().get_nodes_in_group("senuelos").size()])
+	print("Desfile: Johnny dice «%s» (esperado: la pista de que uno respira)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
+	var c: Vector2 = johnny.global_position
+	Captura.foto("captura-desfile-escondida.png")
+	# los carretes: cuatro hilos que cruzan la sala
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	jefe.global_position = c + Vector2(-60, -160)
+	for i in 4:
+		jefe.tirar_carrete(i * TAU / 4.0 + 0.4)
+	await get_tree().create_timer(4.5, false).timeout
+	print("Desfile: hilos tendidos %d (esperado: 4)" % jefe.hilos_tendidos())
+	Captura.foto("captura-desfile-hilos.png")
+	# tensar: con Johnny encima de uno, le quita
+	var hilo: HiloModista = jefe.hilos[0]
+	johnny.global_position = hilo.global_position + hilo.dir * hilo.largo * 0.5
+	johnny.invulnerable = 0.0
+	var vida_johnny: int = johnny.vida
+	jefe.tensar()
+	await get_tree().create_timer(0.5, false).timeout
+	Captura.foto("captura-desfile-tensar.png")
+	await get_tree().create_timer(0.8, false).timeout
+	print("Desfile: tensado, a Johnny le quita %d (esperado: más de 0)" % (vida_johnny - johnny.vida))
+	johnny.invulnerable = 99999.0
+	johnny.vida = vida_johnny
+	# un golpe corta el hilo que tiene delante
+	var otro: HiloModista = jefe.hilos[1]
+	var medio: Vector2 = otro.global_position + otro.dir * otro.largo * 0.5
+	johnny.global_position = medio + otro.dir.orthogonal() * 30.0
+	johnny.golpear((medio - johnny.global_position).angle())
+	await get_tree().create_timer(0.5, false).timeout
+	print("Desfile: tras un golpe, hilos %d (esperado: 3)" % jefe.hilos_vivos())
+	# esconderse: retales de todos los maniquíes a la vez
+	johnny.global_position = c
+	jefe.global_position = c + Vector2(-60, -160)
+	jefe.cambiar("ojos")
+	await get_tree().create_timer(0.95, false).timeout
+	print("Desfile: estado %s (esperado: escondida) · nubes de retales %d (esperado: una por maniquí y la suya)" % [jefe.estado,
+		get_tree().current_scene.find_children("*", "EfectoSuelo", true, false).filter(func(e): return e.tipo == "retales").size()])
+	Captura.foto("captura-desfile-retales.png")
+	jefe.datos.dur = 99.0
+	# un maniquí que no es ella: revienta en alfileres
+	var s: Node2D = get_tree().get_nodes_in_group("senuelos")[0]
+	johnny.global_position = s.global_position + Vector2(0, 180)
+	s.recibir_golpe(10, Vector2.UP)
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-desfile-revienta.png")
+	await get_tree().create_timer(0.3, false).timeout
+	print("Desfile: alfileres volando %d (esperado: %d)" % [get_tree().get_nodes_in_group("balas_zombi").size(), jefe.ALFILERES_REVIENTA])
+	Captura.foto("captura-desfile-alfileres.png")
+	# ella: descubierta, el doble
+	await get_tree().create_timer(0.8, false).timeout
+	johnny.global_position = jefe.global_position + Vector2(0, 160)
+	jefe.recibir_golpe(10, Vector2.UP)
+	var antes: int = jefe.vida
+	jefe.recibir_golpe(10, Vector2.UP)
+	print("Desfile: le pegan escondida, estado %s · un golpe de 10 le quita %d (esperado: descubierta, 20)" % [jefe.estado, antes - jefe.vida])
+	await get_tree().create_timer(0.4, false).timeout
+	Captura.foto("captura-desfile-descubierta.png")
+	# a media vida: el desfile
+	jefe.cambiar("andar")
+	jefe.vida = jefe.vida_max / 2
+	await get_tree().create_timer(0.5, false).timeout
+	print("Desfile: fase %d, estado %s · hilos %d · señuelos %d (esperado: 2, grito, 0, 0)" % [jefe.fase, jefe.estado,
+		jefe.hilos_vivos(), get_tree().get_nodes_in_group("senuelos").size()])
+	Captura.foto("captura-desfile-grito.png")
+	await get_tree().create_timer(1.2, false).timeout
+	if Luz.apagada:
+		luz.alternar()   # (con penumbra: que se vea el apagón)
+	await get_tree().create_timer(0.8, false).timeout
+	print("Desfile: foco %s · oscuridad de más %.2f · maniquíes vivos %d (esperado: true, 0.45, 3)" % [is_instance_valid(jefe.foco),
+		Luz.evento, jefe.vivos.size()])
+	jefe.dur = 99.0
+	jefe.espera.corte = 99.0
+	johnny.global_position = jefe.foco.global_position + Vector2(0, 60)
+	jefe.global_position = jefe.foco.global_position + Vector2(260, 0)
+	await get_tree().physics_frame
+	Captura.foto("captura-desfile-pasarela.png")
+	# el foco la pilla: tiesa, el doble
+	jefe.global_position = jefe.foco.global_position + Vector2(40, -10)
+	await get_tree().create_timer(0.1, false).timeout
+	antes = jefe.vida
+	jefe.recibir_golpe(10, Vector2.UP)
+	print("Desfile: bajo el foco, estado %s · un golpe de 10 le quita %d (esperado: congelada, 20)" % [jefe.estado, antes - jefe.vida])
+	Captura.foto("captura-desfile-congelada.png")
+	await get_tree().create_timer(2.4, false).timeout
+	# el corte de pared a pared, lejos del foco
+	jefe.sin_foco = 99.0
+	var lado := 1.0 if jefe.foco.ida > 0 else -1.0
+	jefe.global_position = jefe.foco.global_position + Vector2(-260 * lado, 160)
+	johnny.global_position = jefe.global_position + Vector2(240 * lado, 0)
+	jefe.mirada = jefe.global_position.direction_to(johnny.global_position)
+	jefe.cambiar("aviso_corte", {"aviso": 0.9, "quedan": 1})
+	await get_tree().create_timer(0.6, false).timeout
+	Captura.foto("captura-desfile-corte-aviso.png")
+	johnny.invulnerable = 0.0
+	vida_johnny = johnny.vida
+	while jefe.estado == "aviso_corte":
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-desfile-corte.png")
+	while jefe.estado == "corte":
+		await get_tree().physics_frame
+	print("Desfile: el corte le quita a Johnny %d (esperado: más de 0)" % (vida_johnny - johnny.vida))
+	johnny.invulnerable = 99999.0
+	# y al caer, vuelve la luz y no queda nada suyo
+	jefe.recibir_golpe(99999, Vector2.RIGHT * 10.0)
+	await get_tree().create_timer(1.0, false).timeout
+	print("Desfile: muerta, foco %s · oscuridad de más %.2f · zombis %d (esperado: false, 0.00, 0)" % [is_instance_valid(jefe.foco),
+		Luz.evento, get_tree().get_nodes_in_group("zombis").size()])

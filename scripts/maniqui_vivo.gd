@@ -1,7 +1,8 @@
 # Un maniquí del Taller de costura que ha cobrado vida (cuando la modista se enfada: modista.gd). Tiene el dibujo
 # del mueble y solo se mueve cuando Johnny no lo mira: si Johnny lo tiene delante (hacia donde mira y sin nada en
 # medio), se queda quieto como un mueble más, congelado en la postura en que lo pilla; en cuanto le da la espalda,
-# se le acerca deprisa a saltitos tiesos, y si le toca le hace daño. Se rompe a golpes (se desmorona en trozos), y
+# se le acerca deprisa a saltitos tiesos, y si le toca le hace daño (bajo el foco de la pasarela, quieto también: foco_modista.gd).
+# Se rompe a golpes (se desmorona en trozos), y
 # cuando cae la modista se caen todos. Sus animaciones (M89) son de PixelLab, hechas sobre el dibujo del mueble
 # (pixellab.json → maniqui-vivo): despertar, andar y romper, en hojas de fotogramas en fila.
 # Está en el grupo "zombis" (con radio, vida y recibir_golpe): las balas, los golpes y las explosiones le dan.
@@ -67,8 +68,9 @@ func _physics_process(delta: float) -> void:
 			poner_hoja(HOJA_ANDAR)
 		return
 	var johnny := get_tree().get_first_node_in_group("jugador")
-	if johnny == null or not johnny.vivo or lo_mira(johnny):
-		# quieto como un mueble, congelado en el fotograma en que se ha quedado (a medio salto, torcido...)
+	if johnny == null or not johnny.vivo or lo_mira(johnny) or FocoModista.alumbrado(get_tree(), global_position):
+		# quieto como un mueble, congelado en el fotograma en que se ha quedado (a medio salto, torcido...); también
+		# bajo el foco de la pasarela (foco_modista.gd)
 		estado = "quieto"
 		return
 	estado = "andar"

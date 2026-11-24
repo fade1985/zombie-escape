@@ -1,52 +1,88 @@
-# La modista: una de los cuatro minijefes del centro comercial (su tienda, el Taller de costura). La encargada de
-# la tienda de ropa, alta y tiesa como un maniquí, con unas tijeras de sastre enormes. Lo común de los minijefes,
-# en minijefe.gd.
+# La modista: una de los minijefes del centro comercial (su tienda, el Taller de costura), rehecha el 24 nov como
+# «El desfile» (docs/JEFES_CENTRO.md): una pelea de mirar y pensar. La encargada de la tienda de ropa, alta y tiesa
+# como un maniquí, con unas tijeras de sastre enormes. Lo común de los minijefes, en minijefe.gd.
 #
-# Su tienda está llena de maniquíes de cuerpo entero con su mismo vestido (el mueble "tallmannequin" del
-# catálogo), y juega con ellos:
-#   - Se esconde: le brillan los ojos un instante y se cambia de sitio con un maniquí lejano (el maniquí aparece
-#     donde estaba ella). Allí se queda quieta, de frente, como uno más. Si Johnny se le acerca o le pega, salta;
-#     si no, le tira alfileres desde allí o se vuelve a cambiar. Al llegar al sitio nuevo le brillan otra vez los
-#     ojos, un momento: quien esté atento sabe dónde se ha metido.
-#   - Ráfaga de alfileres: marca una raya en el suelo (que sigue a Johnny hasta un poco antes de tirar) y lanza
-#     unos cuantos seguidos, en línea recta: 8 cada uno.
-#   - Tijeretazo: si Johnny está cerca, marca en rojo un trozo de suelo (medio segundo) y corta: 22 y empuja.
-# Enfadada (a media vida): 3 maniquíes cobran vida (maniqui_vivo.gd: solo se mueven cuando Johnny no los mira),
-# se cambia de sitio más a menudo y las ráfagas son más largas.
+# Fase 1, «la tienda» (su tienda está llena de maniquíes de cuerpo entero con su mismo vestido, "tallmannequin"):
+#   - Carretes: tira un carrete que rueda hasta la pared dejando un hilo tendido (hilo_modista.gd). Flojo, enreda
+#     (frena a Johnny); los hilos se acumulan (hasta MAX_HILOS) y se cortan de un golpe o de un tiro.
+#   - «¡A TENSAR!»: con 3 hilos o más, tira de todos: se ponen rojos y, tras el aviso, hacen daño un momento.
+#   - El truco, esconderse: le brillan los ojos y, en una nube de retales que sale de TODOS los maniquíes a la vez,
+#     se cambia de sitio con uno. Quieta entre ellos, solo se la distingue porque **respira** (sube y baja un
+#     píxel) y algún parpadeo de los ojos. Si Johnny le pega a ella, queda descubierta (DESCUBIERTA s aturdida,
+#     le entra el doble); si le pega a un maniquí que no es, ese maniquí revienta en un anillo de alfileres (con
+#     aviso). Cada maniquí lleva un "señuelo" (Senuelo, abajo) para recibir esos golpes.
+#   - De relleno: la ráfaga de alfileres (una raya en el suelo que sigue a Johnny y luego varios seguidos) y el
+#     tijeretazo de cerca (marca roja de medio segundo).
+#   - Pista: al entrar, Johnny dice «Uno de esos maniquíes respira...». Junto a la barra de vida, un carretito por
+#     cada hilo tendido (ui/barra_jefe.gd, pintar_hilos).
+# A media vida, «¡QUE EMPIECE EL DESFILE!» (su pose de pasarela): los hilos se caen, se apagan las luces de la tienda,
+# se enciende un foco que recorre la sala (foco_modista.gd) y 3 maniquíes cobran vida (maniqui_vivo.gd).
+# Fase 2, «la pasarela»:
+#   - Bajo el foco, los maniquíes se quedan quietos; a oscuras (y si Johnny no los mira), se mueven.
+#   - Ella ronda por la oscuridad apartándose del foco (se le ven los ojos) y lanza tijeretazos de pared a pared: una
+#     franja de aviso y cruza la sala corriendo con las tijeras por delante, CORTES veces seguidas.
+#   - El truco: si el foco la pilla (también a mitad de un corte), se queda congelada como un maniquí (CONGELADA s,
+#     le entra el doble). Luego un rato (INMUNE_FOCO) el foco no la para.
+#   - Pista: al apagarse las luces, Johnny dice «Si el foco la pilla, se queda tiesa...».
+# Sus animaciones (PixelLab, tools/jefe_hoja.py): andar, alfileres, tijeretazo, golpe, muerte, corte (el tijeretazo
+# largo) y, solo de frente, aturdida y desfile.
 extends Minijefe
 
 const VIVO := preload("res://scripts/maniqui_vivo.gd")
 const BALA := preload("res://escenas/armas/bala_zombi.tscn")
 const MANIQUI := "tallmannequin"   # los maniquíes de su tienda (catalogo.gd)
-const VELOCIDAD := 90.0
+const VELOCIDAD := [90.0, 120.0]
+const LEJOS := 260.0               # se queda más o menos a esta distancia de Johnny
 # Los alfileres: cuántos en cada ráfaga (normal y enfadada), cada cuánto sale uno, lo deprisa que vuelan y el daño
-const ALFILERES := [5, 7]
+const ALFILERES := [5, 6]
 const CADA_ALFILER := 0.09
 const VELOCIDAD_ALFILER := 480.0
 const DANO_ALFILER := 8
-const AVISO_ALFILERES := [0.7, 0.5]
+const AVISO_ALFILERES := [0.7, 0.6]
 const FIJA := 0.2                  # la raya deja de seguir a Johnny este rato antes de tirar
 const GIRO_RAYA := 2.5             # lo deprisa que la raya sigue a Johnny (radianes por segundo)
 const ALCANCE_ALFILERES := 700.0   # más lejos que esto no tira
-const ANCHO_AVISO := 10.0         # medio ancho de la franja que avisa de los alfileres (aviso.gd, disparo())
+const ANCHO_AVISO := 10.0          # medio ancho de la franja que avisa de los alfileres (aviso.gd, disparo())
 const AVISO_TIJERETAZO := 0.5
 const ALCANCE_TIJERETAZO := 110.0
 const MEDIO_TIJERETAZO := 0.8      # medio ángulo del trozo que corta
 const DANO_TIJERETAZO := 22
 const DISTANCIA_TIJERETAZO := 140.0   # si Johnny está más cerca que esto, prefiere el tijeretazo
+# Los carretes y los hilos
+const MAX_HILOS := 5
+const AVISO_CARRETE := 0.45
+const ABRE_CARRETE := 0.5          # lo que se desvía (al azar) de Johnny al tirarlo: así los hilos se cruzan
+const TENSAR := 1.6                # lo que dura tirando de los hilos (el aviso de los hilos es menos: hilo_modista.gd)
+const MIN_TENSAR := 3              # con menos hilos no tensa
 # Esconderse entre los maniquíes
 const OJOS := 0.6                  # lo que le brillan los ojos antes de cambiarse de sitio
-const OJOS_LLEGAR := 0.35          # y al llegar al sitio nuevo
-const ESCONDIDA := [1.8, 1.2]      # lo que se queda quieta como un maniquí más (normal y enfadada; M88: antes [2.6, 1.8])
-const CAMBIOS := [4.0, 2.5]        # cada cuánto se cambia de sitio (M88: antes [7.0, 4.5])
-const LEJOS_DE_JOHNNY := 260.0     # el maniquí con el que se cambia está por lo menos así de lejos de Johnny
-const DESPIERTA := 130.0           # escondida, si Johnny se le acerca más que esto, salta
-const OTRA_VEZ := [0.5, 0.8]       # al dejar de esconderse, lo probable que vuelva a cambiarse de sitio (M88: antes [0.25, 0.5])
+const ESCONDIDA := 4.5             # lo que se queda quieta como un maniquí más
+const RESPIRA := 1.7               # lo que tarda cada respiración (sube y baja un píxel)
+const PARPADEO := [2.0, 3.5]       # cada cuánto le brillan un instante los ojos escondida
+const LEJOS_DE_JOHNNY := 220.0     # el maniquí con el que se cambia está por lo menos así de lejos de Johnny
+const DESCUBIERTA := 2.5           # lo que se queda aturdida si la encuentran
+const MAS_DESCUBIERTA := 2.0       # lo que le entra entonces
+const REVIENTA := 0.5              # el aviso del maniquí equivocado antes de reventar en alfileres
+const ALFILERES_REVIENTA := 12
+const RADIO_REVIENTA := 90.0       # el aro del aviso (los alfileres llegan más lejos)
 const VIVOS := 3                   # los maniquíes que cobran vida al enfadarse
 const PIE := 30.0                  # a qué altura dibuja los pies respecto a su centro
 const PIE_MANIQUI := Vector2(0, 26)   # su centro, respecto a los pies de un maniquí (para ponerse en su sitio)
-# Los fotogramas de sus animaciones en los que corta las tijeras (el tajo blanco; hacia la izquierda, en el 5) y
-# lanza los alfileres (el brazo ya estirado)
+# La pasarela (fase 2)
+const OSCURO := 0.45               # la oscuridad de más con las luces apagadas (luz.gd, evento; con la de la tienda, casi negro)
+const AVISO_CORTE := [0.9, 0.55]   # el aviso del primer corte y el de los siguientes
+const CORTES := 3
+const VELOCIDAD_CORTE := 900.0
+const DURA_CORTE := 1.4            # lo más que corre en un corte
+const ANCHO_CORTE := 26.0          # lo cerca de su camino que tiene que estar Johnny para que le corte
+const DANO_CORTE := 18
+const CONGELADA := 2.2             # lo que se queda tiesa si la pilla el foco
+const MAS_CONGELADA := 2.0
+const INMUNE_FOCO := 3.5           # después, el foco no la para este rato
+# Lo que espera entre ataque y ataque (normal y enfadada; 0: no lo hace)
+const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [3.0, 0.0], "tensar": [9.0, 0.0],
+	"esconderse": [7.0, 0.0], "corte": [0.0, 5.5]}
+# Los fotogramas de sus animaciones en los que corta las tijeras y lanza los alfileres (el brazo ya estirado)
 const CORTA := 4
 const LANZA := 4
 # Dónde tiene los ojos en cada dirección (respecto a su centro), para el brillo; de espaldas, solo el resplandor
@@ -55,11 +91,14 @@ const OJOS_EN := {"s": [Vector2(-5, -91), Vector2(1, -91)], "se": [Vector2(0, -9
 	"n": [], "ne": [], "no": []}
 const CABEZA := Vector2(-2, -89)
 
-var espera_tijeretazo := 1.0
-var espera_alfileres := 1.5
-var espera_cambio := 3.0
+var espera := {"tijeretazo": 1.0, "alfileres": 2.0, "carrete": 1.0, "tensar": 6.0, "esconderse": 4.0, "corte": 2.0}
 var vivos: Array = []
+var hilos: Array = []
 var ojos: Node2D                   # el brillo de los ojos, que se ve también a oscuras
+var foco: FocoModista = null
+var sin_foco := 0.0                # mientras sea > 0, el foco no la congela
+var parpadeo := 2.0
+var lamparas: Array = []           # las que se apagaron al empezar el desfile, con lo que lucían: [nodo, fuerza]
 
 
 func _ready() -> void:
@@ -72,11 +111,23 @@ func _ready() -> void:
 	ojos.material = sin_luz
 	ojos.draw.connect(_pintar_ojos)
 	add_child(ojos)
+	get_tree().create_timer(0.5).timeout.connect(func():
+		if is_inside_tree():
+			EfectoSuelo.precalentar(get_parent(), "retales"))
 	# al aparecer ya está escondida: ocupa el sitio de un maniquí (sin dejar otro donde estaba)
 	empezar_escondida.call_deferred()
+	pista.call_deferred()
+
+
+# La pista para el jugador: Johnny lo dice al entrar (si está la presentación, al acabar)
+func pista() -> void:
+	var partida := get_tree().current_scene
+	if partida and partida.has_method("decir"):
+		partida.decir(Idioma.t("Uno de esos maniquíes respira..."), 4.0)
 
 
 func empezar_escondida() -> void:
+	poner_senuelos()
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	var m: Node2D = maniqui_lejos(johnny) if johnny else null
 	if m == null:
@@ -86,20 +137,22 @@ func empezar_escondida() -> void:
 	m.queue_free()
 	rehornear()
 	mirada = Vector2.DOWN
-	cambiar("escondida", {"dur": ESCONDIDA[0] + 1.0, "llegada": false})
+	cambiar("escondida", {"dur": ESCONDIDA})
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
-	espera_tijeretazo -= delta
-	espera_alfileres -= delta
-	espera_cambio -= delta
+	for k in espera:
+		espera[k] -= delta
+	sin_foco -= delta
 	var hacia: Vector2 = johnny.global_position - global_position
 	var d := hacia.length()
+	# la pasarela: si el foco la pilla, se queda tiesa (salvo justo después de otra vez)
+	if fase == 2 and sin_foco <= 0.0 and estado not in ["congelada", "grito"] and bajo_foco():
+		congelarse()
+		return
 	match estado:
 		"andar":
-			perseguir(delta, johnny, VELOCIDAD)
-			if marcha.length() > 10.0:
-				mirada = marcha.normalized()
+			rondar(delta, johnny, hacia, d)
 			if t >= dur:
 				elegir(johnny, hacia, d)
 		"aviso_tijeretazo":
@@ -110,7 +163,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"tijeretazo":
 			frenar(delta)
 			if t >= 0.4:
-				andar(0.5 if enfadado() else 0.8)
+				andar(0.6)
 		"aviso_alfileres":
 			# la raya sigue a Johnny (despacio) hasta un poco antes de tirar
 			frenar(delta)
@@ -124,25 +177,45 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta)
 			datos.siguiente -= delta
 			if datos.quedan > 0 and datos.siguiente <= 0.0:
-				lanzar_alfiler(datos.angulo + randf_range(-0.03, 0.03))
+				lanzar_alfiler(position, datos.angulo + randf_range(-0.03, 0.03))
 				datos.quedan -= 1
 				datos.siguiente = CADA_ALFILER
 			elif datos.quedan <= 0 and datos.siguiente <= -0.25:
-				andar(0.5 if enfadado() else 0.8)
+				andar(0.6)
+		"aviso_carrete":
+			frenar(delta)
+			if t >= AVISO_CARRETE:
+				tirar_carrete(datos.angulo)
+				cambiar("carrete", {"angulo": datos.angulo})
+		"carrete":
+			frenar(delta)
+			if t >= 0.35:
+				andar(0.5)
+		"tensar":
+			frenar(delta)
+			if t >= TENSAR:
+				andar(0.4)
 		"ojos":
 			# le brillan los ojos... y se cambia de sitio (si le pegan antes, se queda: la han pillado)
 			frenar(delta)
 			if datos.get("pillada", false):
-				pillada(johnny, hacia, d)
+				pillada()
 			elif t >= OJOS:
 				cambiarse(johnny)
 		"escondida":
 			marcha = Vector2.ZERO
 			mirada = Vector2.DOWN
-			if datos.get("pillada", false) or d < DESPIERTA:
-				pillada(johnny, hacia, d)
-			elif t >= datos.dur:
+			parpadeo -= delta
+			if parpadeo <= -0.18:
+				parpadeo = randf_range(PARPADEO[0], PARPADEO[1])
+			if t >= datos.dur:
 				salir(johnny, hacia, d)
+		"descubierta":
+			# aturdida: el doble de daño (danar) y estrellitas
+			marcha = Vector2.ZERO
+			if t >= DESCUBIERTA:
+				espera.esconderse = ESPERAS.esconderse[0]
+				andar(0.3)
 		"pillada":
 			# un respingo (su animación de golpe) y salta a por Johnny
 			frenar(delta)
@@ -153,17 +226,81 @@ func pensar(delta: float, johnny: Node2D) -> void:
 					apuntar_alfileres(hacia)
 				else:
 					andar(0.4)
+		"aviso_corte":
+			# la franja hasta la pared, que sigue a Johnny hasta un poco antes
+			frenar(delta)
+			if t < datos.aviso - FIJA:
+				mirada = hacia.normalized()
+			if t >= datos.aviso:
+				cambiar("corte", {"quedan": datos.quedan, "dio": false})
+				Sonido.tocar("tijeras")
+		"corte":
+			if correr_corte(delta, johnny):
+				soltar_tajo(datos.get("desde", global_position))
+				if datos.quedan > 1:
+					cambiar("aviso_corte", {"aviso": AVISO_CORTE[1], "quedan": datos.quedan - 1})
+					mirada = global_position.direction_to(johnny.global_position)
+				else:
+					andar(0.7)
+		"congelada":
+			marcha = Vector2.ZERO
+			if t >= CONGELADA:
+				sprite.modulate = Color(1.0, 0.8, 0.78)
+				sin_foco = INMUNE_FOCO
+				andar(0.3)
+		"atontado":
+			marcha = Vector2.ZERO
+			if t >= datos.get("dura", 2.0):
+				andar(0.3)
+
+
+# Andando: en la tienda se queda a media distancia; en la pasarela, además, se aparta del foco
+func rondar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
+	var rapidez: float = VELOCIDAD[fase - 1]
+	var quiero := Vector2.ZERO
+	if d > LEJOS + 60.0:
+		quiero = camino_a(johnny) * rapidez
+	elif d < LEJOS - 80.0:
+		quiero = -hacia.normalized() * rapidez * 0.8
+	else:
+		quiero = hacia.normalized().orthogonal() * rapidez * 0.5 * (1.0 if int(tiempo / 3.0) % 2 else -1.0)
+	if is_instance_valid(foco):
+		var lejos_foco := global_position - foco.global_position
+		if lejos_foco.length() < FocoModista.RADIO * 2.0:
+			quiero += lejos_foco.normalized() * rapidez * 1.2
+	marcha += (quiero.limit_length(rapidez * 1.2) - marcha) * (1.0 - exp(-delta * 6.0))
+	if marcha.length() > 10.0:
+		mirada = marcha.normalized() if d > LEJOS else hacia.normalized()
 
 
 func elegir(johnny: Node2D, hacia: Vector2, d: float) -> void:
-	if d < DISTANCIA_TIJERETAZO and espera_tijeretazo <= 0.0:
+	var f := fase - 1
+	if d < DISTANCIA_TIJERETAZO and espera.tijeretazo <= 0.0:
 		apuntar_tijeretazo(hacia)
 		return
-	if espera_cambio <= 0.0 and d > 180.0 and maniqui_lejos(johnny) != null:
-		espera_cambio = CAMBIOS[fase - 1]
-		cambiar("ojos")
-		return
-	if d > 160.0 and d < ALCANCE_ALFILERES and espera_alfileres <= 0.0 and ve_a(johnny):
+	if fase == 1:
+		if espera.tensar <= 0.0 and hilos_tendidos() >= MIN_TENSAR:
+			espera.tensar = ESPERAS.tensar[f]
+			tensar()
+			return
+		if espera.esconderse <= 0.0 and d > 160.0 and maniqui_lejos(johnny) != null:
+			espera.esconderse = ESPERAS.esconderse[f]
+			cambiar("ojos")
+			return
+		if espera.carrete <= 0.0 and hilos_vivos() < MAX_HILOS:
+			espera.carrete = ESPERAS.carrete[f]
+			var angulo := hacia.angle() + randf_range(-ABRE_CARRETE, ABRE_CARRETE)
+			mirada = Vector2.from_angle(angulo)
+			cambiar("aviso_carrete", {"angulo": angulo})
+			return
+	else:
+		if espera.corte <= 0.0:
+			espera.corte = ESPERAS.corte[f]
+			mirada = hacia.normalized()
+			cambiar("aviso_corte", {"aviso": AVISO_CORTE[0], "quedan": CORTES})
+			gritar(Idioma.t("¡A LA PASARELA!"), Color("#ff5d73"), 18)
+			return
+	if d > 160.0 and d < ALCANCE_ALFILERES and espera.alfileres <= 0.0 and ve_a(johnny):
 		apuntar_alfileres(hacia)
 		return
 	# nada a mano: sigue andando un poco y vuelve a mirar
@@ -171,13 +308,13 @@ func elegir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 
 
 func apuntar_tijeretazo(hacia: Vector2) -> void:
-	espera_tijeretazo = 1.0 if enfadado() else 1.4
+	espera.tijeretazo = ESPERAS.tijeretazo[fase - 1]
 	mirada = hacia.normalized()
 	cambiar("aviso_tijeretazo", {"angulo": hacia.angle()})
 
 
 func apuntar_alfileres(hacia: Vector2) -> void:
-	espera_alfileres = 2.0 if enfadado() else 2.8
+	espera.alfileres = ESPERAS.alfileres[fase - 1]
 	mirada = hacia.normalized()
 	cambiar("aviso_alfileres", {"angulo": hacia.angle(), "aviso": AVISO_ALFILERES[fase - 1]})
 
@@ -193,24 +330,53 @@ func tijeretazo(johnny: Node2D) -> void:
 		johnny.empujar(hacia.normalized() * 650.0)
 
 
-# Un alfiler: una bala de los malos (bala_zombi.gd) con forma de aguja
-func lanzar_alfiler(angulo: float) -> void:
+# Un alfiler: una bala de los malos (bala_zombi.gd) con forma de aguja, desde "desde" (en las coordenadas de la sala)
+func lanzar_alfiler(desde: Vector2, angulo: float, separacion := -1.0) -> void:
 	var dir := Vector2.from_angle(angulo)
 	var bala := BALA.instantiate()
 	bala.dueno = self
-	bala.position = position + dir * (radio + 6.0)
+	bala.position = desde + dir * (radio + 6.0 if separacion < 0.0 else separacion)
 	bala.velocidad = dir * VELOCIDAD_ALFILER
 	bala.dano = DANO_ALFILER
 	bala.radio = 5.0
 	bala.forma = "alfiler"
 	get_parent().add_child(bala)
-	Sonido.tocar("alfiler")
 
 
 # ¿Ve a Johnny desde donde está? (los muebles y los maniquíes tapan)
 func ve_a(johnny: Node2D) -> bool:
 	var rayo := PhysicsRayQueryParameters2D.create(global_position, johnny.global_position, 1)
 	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
+
+
+# ── Los hilos ──
+
+func tirar_carrete(angulo: float) -> void:
+	var hilo := HiloModista.new()
+	hilo.dir = Vector2.from_angle(angulo)
+	hilo.dueno = self
+	hilo.position = position + Vector2(0, PIE - 4.0) + hilo.dir.normalized() * (radio + 4.0)   # (antes de entrar: mide la pared desde ahí)
+	get_parent().add_child(hilo)
+	hilos.append(hilo)
+	Sonido.tocar("alfiler")
+
+
+func hilos_vivos() -> int:
+	hilos = hilos.filter(func(h): return is_instance_valid(h) and h.estado != "cortado")
+	return hilos.size()
+
+
+# Los que ya están tendidos de pared a pared (los que pinta la barra de vida y los que cuentan para tensar)
+func hilos_tendidos() -> int:
+	return hilos.filter(func(h): return is_instance_valid(h) and h.tendido()).size()
+
+
+func tensar() -> void:
+	cambiar("tensar")
+	gritar(Idioma.t("¡A TENSAR!"), Color("#ff5d73"), 20)
+	for h in hilos:
+		if is_instance_valid(h):
+			h.tensar()
 
 
 # ── Los maniquíes ──
@@ -228,7 +394,25 @@ func maniqui_lejos(johnny: Node2D) -> Node2D:
 	return buenos.pick_random() if not buenos.is_empty() else null
 
 
-# Se cambia de sitio con un maniquí: ella va a donde estaba él y él aparece donde estaba ella
+# A cada maniquí, su señuelo (el que recibe los golpes de Johnny para saber si se ha equivocado)
+func poner_senuelos() -> void:
+	for m in maniquies():
+		if m.get_node_or_null("Senuelo") == null:
+			var s := Senuelo.new()
+			s.name = "Senuelo"   # no-tr (nombre de nodo)
+			s.modista = self
+			s.position = -PIE_MANIQUI
+			m.add_child(s)
+
+
+func quitar_senuelos() -> void:
+	for s in get_tree().get_nodes_in_group("senuelos"):
+		s.remove_from_group("zombis")
+		s.queue_free()
+
+
+# Se cambia de sitio con un maniquí: ella va a donde estaba él y él aparece donde estaba ella. A la vez, sale una
+# nube de retales de todos los maniquíes (y de ella): así no se ve con cuál se ha cambiado
 func cambiarse(johnny: Node2D) -> void:
 	var m := maniqui_lejos(johnny)
 	if m == null:
@@ -241,20 +425,21 @@ func cambiarse(johnny: Node2D) -> void:
 	m.datos.x += paso.x
 	m.datos.y += paso.y
 	rehornear()
-	soplo(antes)
+	for otro in maniquies():
+		soplo(otro.global_position - PIE_MANIQUI)
 	soplo(global_position)
 	Sonido.tocar("esquiva")
 	marcha = Vector2.ZERO
 	mirada = Vector2.DOWN
-	cambiar("escondida", {"dur": ESCONDIDA[fase - 1], "llegada": true})
+	parpadeo = randf_range(PARPADEO[0], PARPADEO[1])
+	cambiar("escondida", {"dur": ESCONDIDA})
 
 
-# Deja de estar escondida sin que la pillen: alfileres desde allí, otro cambio de sitio o a andar
+# Deja de estar escondida sin que la pillen: alfileres desde allí o a andar
 func salir(johnny: Node2D, hacia: Vector2, d: float) -> void:
+	espera.esconderse = ESPERAS.esconderse[0]
 	if d > 170.0 and d < ALCANCE_ALFILERES and ve_a(johnny):
 		apuntar_alfileres(hacia)
-	elif randf() < OTRA_VEZ[fase - 1] and maniqui_lejos(johnny) != null:
-		cambiar("ojos")
 	else:
 		andar(0.4)
 
@@ -264,17 +449,52 @@ func escondida() -> bool:
 	return estado == "escondida"
 
 
-# Si le pegan escondida (o con los ojos brillando), la han pillado: el golpe le hace el daño de siempre
+# Si le pegan escondida, la han encontrado: aturdida y el doble de daño. Con los ojos brillando, solo la pillan (no se
+# cambia de sitio). Descubierta o congelada en el foco, le entra el doble
 func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
-	if estado == "escondida" or estado == "ojos":
-		datos.pillada = true
+	match estado:
+		"escondida":
+			descubrirse()
+		"ojos":
+			datos.pillada = true
+		"descubierta":
+			return roundi(cantidad * MAS_DESCUBIERTA)
+		"congelada":
+			return roundi(cantidad * MAS_CONGELADA)
 	return cantidad
 
 
-func pillada(_johnny: Node2D, _hacia: Vector2, _d: float) -> void:
-	espera_cambio = CAMBIOS[fase - 1]
+func descubrirse() -> void:
+	cambiar("descubierta")
+	marcha = Vector2.ZERO
+	gritar(Idioma.t("¡ME HAS VISTO!"), Color("#ffd23f"), 20)
+	Sonido.tocar("golpe")
+	soplo(global_position)
+
+
+func pillada() -> void:
+	espera.esconderse = ESPERAS.esconderse[0]
 	cambiar("pillada")
 	gritar(Idioma.t("¡SSSS!"), Color("#ff5d73"), 20)
+
+
+# Le han pegado a un maniquí (su señuelo): si ella está escondida y no es ella, revienta en alfileres
+func maniqui_golpeado(s: Senuelo) -> void:
+	if estado != "escondida" or s.revienta > 0.0 or s.espera > 0.0:
+		return
+	s.revienta = REVIENTA
+	Sonido.tocar("alfiler")
+
+
+# El maniquí equivocado revienta: un anillo de alfileres alrededor y una nube de retales
+func reventar(s: Senuelo) -> void:
+	var desde: Vector2 = get_parent().to_local(s.global_position)
+	var giro := randf() * TAU
+	for i in ALFILERES_REVIENTA:
+		lanzar_alfiler(desde, giro + i * TAU / ALFILERES_REVIENTA, 30.0)
+	soplo(s.global_position)
+	Sonido.tocar("tijeras")
+	Temblor.temblar(4.0)
 
 
 # El mapa vuelve a mirar por dónde se puede andar (los maniquíes han cambiado de sitio)
@@ -284,20 +504,103 @@ func rehornear() -> void:
 		mapa.rehornear()
 
 
-# Un soplo de hilos y trocitos de tela donde aparece o desaparece
+# Una nube de retales (pixelfx: tools/pixelfx/retales.js) donde aparece o desaparece
 func soplo(donde: Vector2) -> void:
-	for i in 10:
-		Particulas.soltar(self, donde + Vector2(randf_range(-22, 22), randf_range(-90, 20)),
-			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 90.0),
-			[Color("#6b1f2a"), Color("#e8dcc4"), Color("#e8b33a")][i % 3], 3, 0.5)
+	EfectoSuelo.soltar(get_parent(), "retales", get_parent().to_local(donde) + Vector2(0, -30), 0.8)
+
+
+# ── La pasarela (fase 2) ──
+
+func al_enfadarse(johnny: Node2D, _grito := "") -> void:
+	super(johnny, Idioma.t("¡QUE EMPIECE EL DESFILE!"))
+	for h in hilos:
+		if is_instance_valid(h):
+			h.caer()
+	hilos.clear()
+	quitar_senuelos()
+	# las luces se apagan a mitad del grito (con su chasquido) y se enciende el foco
+	get_tree().create_timer(0.7, false).timeout.connect(func():
+		if is_inside_tree() and estado != "muerto":
+			apagar_luces()
+			despertar_maniquies(johnny))
+
+
+func apagar_luces() -> void:
+	Sonido.tocar("apagon")
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	if mapa:
+		for n in mapa.find_children("*", "", true, false):
+			if n.scene_file_path == Eventos.LAMPARA and n.get("fuerza") != null:
+				lamparas.append([n, n.fuerza])
+				n.fuerza = 0.0
+				for hijo in ["Bombilla", "Polvo"]:   # no-tr (nombres de nodo)
+					if n.has_node(hijo):
+						n.get_node(hijo).hide()
+	Luz.evento += OSCURO
+	foco = FocoModista.new()
+	get_parent().add_child(foco)
+	var partida := get_tree().current_scene
+	if partida and partida.has_method("decir"):
+		partida.decir(Idioma.t("Si el foco la pilla, se queda tiesa..."), 3.5)
+
+
+# Al caer ella vuelve la luz
+func encender_luces() -> void:
+	if not is_instance_valid(foco):
+		return
+	foco.queue_free()
+	foco = null
+	Luz.evento = maxf(0.0, Luz.evento - OSCURO)
+	for l in lamparas:
+		if is_instance_valid(l[0]):
+			l[0].fuerza = l[1]
+			for hijo in ["Bombilla", "Polvo"]:   # no-tr (nombres de nodo)
+				if l[0].has_node(hijo):
+					l[0].get_node(hijo).show()
+	lamparas.clear()
+
+
+func bajo_foco() -> bool:
+	return FocoModista.alumbrado(get_tree(), global_position + Vector2(0, PIE - 10.0))
+
+
+func congelarse() -> void:
+	cambiar("congelada", {"anim": sprite.animation, "frame": sprite.frame})
+	marcha = Vector2.ZERO
+	sprite.modulate = Color(0.78, 0.8, 0.86)
+	gritar(Idioma.t("¡TIESA!"), Color("#fff4c0"), 20)
+	Sonido.tocar("golpe")
+
+
+# Un paso del corte: corre recta con las tijeras por delante y corta a Johnny si le pilla (una vez). Devuelve si ha
+# terminado (contra la pared, un mueble o al acabarse el tiempo)
+func correr_corte(_delta: float, johnny: Node2D) -> bool:
+	if not datos.has("desde"):
+		datos.desde = global_position
+	marcha = mirada * VELOCIDAD_CORTE
+	if randf() < 0.5:
+		Particulas.soltar(self, global_position + Vector2(randf_range(-10, 10), PIE),
+			-mirada.rotated(randf_range(-0.6, 0.6)) * 60.0, Color("#c8ccd4"), 2, 0.3)
+	var d := global_position.distance_to(johnny.global_position)
+	if not datos.dio and d < radio + johnny.RADIO + ANCHO_CORTE * 0.5:
+		datos.dio = true
+		johnny.recibir_dano(DANO_CORTE, self)
+		johnny.empujar(mirada.orthogonal() * signf(mirada.orthogonal().dot(johnny.global_position - global_position) + 0.01) * 700.0)
+	if t > 0.1 and get_real_velocity().length() < VELOCIDAD_CORTE * 0.35 or t > 0.05 and toca_muro(self):
+		marcha = Vector2.ZERO
+		return true
+	return t >= DURA_CORTE
+
+
+# El tajo que deja en el suelo por donde ha pasado (blanco, se apaga en un momento)
+func soltar_tajo(desde: Vector2) -> void:
+	var tajo := TajoCorte.new()
+	tajo.a = desde + Vector2(0, PIE - 6.0)
+	tajo.b = global_position + Vector2(0, PIE - 6.0)
+	get_parent().add_child(tajo)
 
 
 # Enfadada: tres maniquíes cobran vida (los de la tienda; si no hay bastantes, aparecen a su alrededor)
-func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, Idioma.t("¡TE TOMO MEDIDAS!"))
-	despertar_maniquies(johnny)
-
-
 func despertar_maniquies(johnny: Node2D) -> void:
 	var lista := maniquies().filter(func(m): return m.global_position.distance_to(johnny.global_position) > 200.0)
 	lista.shuffle()
@@ -329,19 +632,35 @@ func maniqui_roto() -> void:
 		p.contar_matado("maniqui")
 
 
+func con_estrellas() -> bool:
+	return estado in ["atontado", "descubierta"]
+
+
 func morir() -> void:
 	super()
 	ojos.queue_redraw()
+	for h in hilos:
+		if is_instance_valid(h):
+			h.cortar()
+	quitar_senuelos()
+	encender_luces()
 	# sin ella, los maniquíes vuelven a ser maniquíes (y se caen)
 	for vivo in vivos:
 		if is_instance_valid(vivo):
 			vivo.morir()
-	# mientras no tenga su animación de muerte (solo la vista quieta), cae de lado
-	if sprite.sprite_frames.get_frame_count(sprite.animation) == 1:
-		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
+
+
+func _exit_tree() -> void:
+	# (si se va de la sala con el desfile a medias, que no se quede la oscuridad de más)
+	if is_instance_valid(foco):
+		Luz.evento = maxf(0.0, Luz.evento - OSCURO)
 
 
 # ── Dibujo ──
+
+func tiene(nombre: String) -> bool:
+	return sprite.sprite_frames.has_animation(nombre)
+
 
 func animar() -> void:
 	var dir := direccion()
@@ -352,25 +671,59 @@ func animar() -> void:
 		"tijeretazo":
 			var resto := sprite.sprite_frames.get_frame_count("tijeretazo_" + dir) - CORTA
 			fijar("tijeretazo", dir, CORTA + clampi(int(t / 0.4 * resto), 0, maxi(0, resto - 1)))
-		"aviso_alfileres":
-			fijar("alfileres", dir, mini(LANZA - 1, int(t / datos.aviso * LANZA)))
+		"aviso_alfileres", "aviso_carrete":
+			var aviso: float = datos.aviso if estado == "aviso_alfileres" else AVISO_CARRETE
+			fijar("alfileres", dir, mini(LANZA - 1, int(t / aviso * LANZA)))
 		"alfileres":
 			# con el brazo fuera mientras salen; luego vuelve a la postura
 			var total := sprite.sprite_frames.get_frame_count("alfileres_" + dir)
 			var k: float = t / (ALFILERES[fase - 1] * CADA_ALFILER + 0.25)
 			fijar("alfileres", dir, LANZA + clampi(int(k * (total - LANZA)), 0, maxi(0, total - LANZA - 1)))
+		"carrete":
+			var total := sprite.sprite_frames.get_frame_count("alfileres_" + dir)
+			fijar("alfileres", dir, LANZA + clampi(int(t / 0.35 * (total - LANZA)), 0, maxi(0, total - LANZA - 1)))
+		"tensar":
+			# tira de los hilos: el brazo atrás (el principio del tijeretazo) y tiembla
+			fijar("tijeretazo", dir, 2)
+			sprite.position.x = sin(tiempo * 40.0) * 1.0
 		"pillada":
 			# el respingo, desde el fotograma 2 (en el 1 PixelLab pintó una raya blanca en varias direcciones)
 			var total := sprite.sprite_frames.get_frame_count("golpe_" + dir)
 			fijar("golpe", dir, mini(total - 1, 2 + int(t / 0.35 * (total - 2))))
-		"ojos", "escondida":
+		"ojos":
 			fijar("quieto", dir, 0)
-		"grito":
+		"escondida":
 			fijar("quieto", "s", 0)
-			sprite.position.x = sin(tiempo * 50.0) * 2.0
+			# respira: sube un píxel la mitad de cada respiración (lo único que la delata)
+			if fmod(t, RESPIRA) < RESPIRA * 0.5:
+				sprite.position.y = PIE - 2.0
+		"descubierta":
+			if tiene("aturdida_s"):
+				poner("aturdida_s")
+			else:
+				fijar("golpe", "s", 4 + int(t * 6.0) % 3)
+		"aviso_corte":
+			var nombre := "corte" if tiene("corte_" + dir) else "tijeretazo"
+			fijar(nombre, dir, mini(2, int(t / datos.aviso * 3.0)))
+			sprite.position.x = sin(tiempo * 50.0) * 1.0
+		"corte":
+			var nombre := "corte" if tiene("corte_" + dir) else "tijeretazo"
+			fijar(nombre, dir, 3 + int(t * 14.0) % maxi(1, sprite.sprite_frames.get_frame_count(nombre + "_" + dir) - 3))
+		"congelada":
+			# tiesa en la postura en que la ha pillado (y gris)
+			if tiene(datos.anim):
+				fijar(datos.anim.get_slice("_", 0), datos.anim.get_slice("_", 1), datos.frame)
+		"grito":
+			if tiene("desfile_s"):
+				fijar("desfile", "s", avance("desfile_s", t / 1.2))
+			else:
+				fijar("quieto", "s", 0)
+				sprite.position.x = sin(tiempo * 50.0) * 2.0
+		"atontado":
+			fijar("golpe", "s", 4 + int(t * 6.0) % 3)
 		_:
 			if marcha.length() > 8.0:
-				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD, 0.4, 1.5))
+				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD[fase - 1], 0.4, 1.5))
 			else:
 				poner("reposo_" + dir)
 	ojos.queue_redraw()
@@ -388,15 +741,25 @@ func _draw() -> void:
 			# por donde irán los alfileres, como las cargas: flechas que se encienden hacia fuera (aviso.gd)
 			Aviso.disparo(self, Vector2(0, 6), datos.angulo, radio + ALCANCE_ALFILERES, ANCHO_AVISO,
 				minf(1.0, t / datos.aviso), tiempo, 0, 5.0)
+		"aviso_carrete":
+			Aviso.disparo(self, Vector2(0, PIE - 4.0), datos.angulo, radio + 260.0, 8.0,
+				minf(1.0, t / AVISO_CARRETE), tiempo, 0, 4.0)
+		"aviso_corte":
+			franja(1600.0, minf(1.0, t / datos.aviso))
 
 
-# El brillo de los ojos: antes de cambiarse de sitio (cada vez más fuerte) y al llegar al sitio nuevo (se apaga)
+# El brillo de los ojos: antes de cambiarse de sitio (cada vez más fuerte), en algún parpadeo escondida y, en la
+# pasarela, siempre (a oscuras es lo que se le ve)
 func _pintar_ojos() -> void:
+	if estado == "muerto":
+		return
 	var k := 0.0
 	if estado == "ojos":
 		k = minf(1.0, t / (OJOS * 0.5))
-	elif estado == "escondida" and datos.get("llegada", false) and t < OJOS_LLEGAR:
-		k = 1.0 - t / OJOS_LLEGAR
+	elif estado == "escondida" and parpadeo < 0.0:
+		k = 0.7
+	elif fase == 2 and estado not in ["grito", "congelada"]:
+		k = 0.75
 	if k <= 0.0:
 		return
 	var dir := direccion()
@@ -405,3 +768,81 @@ func _pintar_ojos() -> void:
 	for p in OJOS_EN[dir]:
 		Formas.disco(ojos, p, 4.5, Color(1.0, 0.42, 0.5, 0.45 * k))
 		ojos.draw_rect(Rect2(p - Vector2(2, 1), Vector2(4, 2)), Color(1.0, 0.95, 0.7, k))
+
+
+# El señuelo de un maniquí: va dentro del maniquí (sigue sus cambios de sitio) y es del grupo "zombis" para que le
+# lleguen los golpes, los tiros y las explosiones de Johnny. No tiene vida que perder: avisa a la modista
+# (maniqui_golpeado) y, si toca, revienta en alfileres tras un aviso (un aro rojo). El apuntado automático no lo busca
+# (escondida()). Al pasar a la fase 2 o al caer ella, se quitan (que no se quede la puerta cerrada)
+class Senuelo extends CharacterBody2D:
+	var modista: Node2D
+	var radio := 22.0
+	var vida := 1
+	var vida_max := 1
+	var revienta := 0.0      # > 0: el aviso de reventar, en marcha
+	var espera := 0.0        # después de reventar, un rato sin volver a hacerlo
+	var tiempo := 0.0
+
+	func _ready() -> void:
+		add_to_group("zombis")
+		add_to_group("senuelos")
+		collision_layer = 0
+		collision_mask = 0
+
+	func escondida() -> bool:
+		return true
+
+	func recibir_golpe(_cantidad: int, _fuerza: Vector2, _de_lleno := false, _de_aliado := false) -> void:
+		if is_instance_valid(modista):
+			modista.maniqui_golpeado(self)
+
+	func herir(_cantidad: float, _color := Color.WHITE) -> void:
+		pass
+
+	func _physics_process(delta: float) -> void:
+		tiempo += delta
+		espera -= delta
+		if revienta > 0.0:
+			revienta -= delta
+			if revienta <= 0.0:
+				espera = 1.5
+				if is_instance_valid(modista):
+					modista.reventar(self)
+		queue_redraw()
+
+	func _draw() -> void:
+		if revienta > 0.0:
+			var k: float = 1.0 - revienta / 0.5
+			Aviso.golpe(self, Vector2(0, 26), 0.0, PI, 90.0, k, tiempo)
+
+
+# El tajo blanco que deja un corte por el suelo: una raya que se estrecha y se apaga
+class TajoCorte extends Node2D:
+	var a := Vector2.ZERO
+	var b := Vector2.ZERO
+	var t := 0.0
+
+	func _ready() -> void:
+		z_index = -1
+		var sin_luz := CanvasItemMaterial.new()
+		sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = sin_luz
+
+	func _process(delta: float) -> void:
+		t += delta
+		if t >= 0.45:
+			queue_free()
+		queue_redraw()
+
+	func _draw() -> void:
+		var k := 1.0 - t / 0.45
+		var largo := a.distance_to(b)
+		var n := int(largo / 2.0)
+		var lado := (b - a).normalized().orthogonal()
+		for i in n + 1:
+			var u := float(i) / maxf(1.0, n)
+			var ancho := sin(u * PI) * 3.0 * k
+			var p := a.lerp(b, u) - global_position
+			for w in range(-int(ancho), int(ancho) + 1, 2):
+				draw_rect(Rect2(((p + lado * w) / 2.0).floor() * 2.0, Vector2(2, 2)),
+					Color(1.0, 0.98, 0.92, k * (1.0 if w == 0 else 0.6)))

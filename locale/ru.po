@@ -3018,12 +3018,36 @@ msgid "¡PUMBA!"
 msgstr "БАЦ!"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "Один из этих манекенов дышит..."
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "НА ПОДИУМ!"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "НАТЯНУТЬ!"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "ТЫ МЕНЯ ЗАМЕТИЛ!"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "ШШШШ!"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "СНИМУ МЕРКУ!"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "ДА НАЧНЁТСЯ ПОКАЗ!"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "Если прожектор её поймает, она застынет..."
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "ЗАСТЫЛА!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"

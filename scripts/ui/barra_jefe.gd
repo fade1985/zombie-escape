@@ -113,6 +113,7 @@ func _draw() -> void:
 	draw_texture_rect_region(MARCO, Rect2(ANCHO - PUNTA, 0, PUNTA, ALTO), Rect2(MARCO.get_width() - PUNTA, 0, PUNTA, ALTO))
 	pintar_escudo()
 	pintar_sacos()
+	pintar_hilos()
 	# La vida en números
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(value), roundi(max_value)]
@@ -170,6 +171,47 @@ func pintar_sacos() -> void:
 			for k in 8:
 				for p in [Vector2(1 + k, 2 + k), Vector2(8 - k, 2 + k)]:
 					draw_rect(Rect2(esquina + p * 2.0, Vector2(2, 2)), Color("#ff3a4a"))
+
+
+# Los hilos de la modista ("hilos_tendidos" y MAX_HILOS, modista.gd; solo en la fase 1): a la derecha de la barra, un
+# carretito por cada hilo que puede tender; lleno de hilo, los que ya cruzan la sala, y vacío, los que no. Con los que
+# hacen falta para «¡A TENSAR!» (MIN_TENSAR), los llenos se ponen rojos: van a hacer daño
+func pintar_hilos() -> void:
+	if not is_instance_valid(jefe) or not jefe.has_method("hilos_tendidos") or jefe.estado == "muerto" or jefe.fase != 1:
+		return
+	var tendidos: int = jefe.hilos_tendidos()
+	var peligro: bool = tendidos >= jefe.MIN_TENSAR
+	for i in jefe.MAX_HILOS:
+		var lleno: bool = i < tendidos
+		var esquina := Vector2(ANCHO + 6.0 + i * 16.0, 2.0)
+		for y in CARRETITO.size():
+			var fila: String = CARRETITO[y]
+			for x in fila.length():
+				var c := fila[x]
+				if c == ".":
+					continue
+				var col: Color = {"o": Tema.LINEA, "m": Color("#b07a46"), "s": Color("#6a4424"), "h": Color("#e8dcc4")}[c]
+				if c == "h":
+					if not lleno:
+						col = Color("#3a2a24")
+					elif peligro:
+						col = Color("#ff5d6a")
+				draw_rect(Rect2(esquina + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+
+
+# El carretito (6×10 píxeles del dibujo): o, el borde; m, la madera; s, su sombra; h, el hilo enrollado
+const CARRETITO := [
+	"oooooo",
+	"ommmmo",
+	"oohhoo",
+	".ohho.",
+	".ohho.",
+	".ohho.",
+	".ohho.",
+	"oohhoo",
+	"osssso",
+	"oooooo",
+]
 
 
 # El saquito (10×12 píxeles del dibujo): o, el borde; #, la arpillera; b, su brillo; s, la sombra; c, la cuerda
