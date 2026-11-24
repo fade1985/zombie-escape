@@ -225,9 +225,10 @@ func doble() -> bool:
 
 
 # Si es una puerta automática (la del supermercado y, desde el 17 nov, la de la farmacia: Planta.PUERTA_AUTOMATICA): la de
-# su fachada, en la pared de arriba de la galería
+# su fachada, en la pared de arriba de la galería (y, desde el 24 nov, la salida de la farmacia inversa vista desde dentro, en la
+# pared de arriba de su sala de venta: la misma de la fachada; el dueño)
 func es_super() -> bool:
-	return centro and salida.dir == "arriba" and salida.get("neon", "") in Planta.PUERTA_AUTOMATICA
+	return centro and salida.dir == "arriba" and (salida.get("neon", "") in Planta.PUERTA_AUTOMATICA or tienda == "farmacia")
 
 
 # Las hojas de la puerta del súper se abren poco a poco mientras Johnny está delante y se cierran al irse
