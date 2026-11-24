@@ -7,8 +7,8 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 |---|---|
 | Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
 | Cocinero | hecho, pendiente del visto bueno del dueño (23 nov) |
-| Modista | pendiente |
-| Mascota | pendiente |
+| Modista | hecha, con el visto bueno del dueño (24 nov) |
+| Mascota | en curso: fase 1 hecha (24 nov), falta el tren y la fase 2 |
 | Gerente | pendiente |
 
 ## Por qué
@@ -191,6 +191,43 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
 - Ella ataca desde la oscuridad con tijeretazos que cruzan la sala en línea, de un borde al otro.
 - **El truco**: si el foco la pilla, se queda congelada como un maniquí.
 
+### Cómo quedó (24 nov)
+- `modista.gd`, `hilo_modista.gd` (los hilos y su carrete), `foco_modista.gd` (el foco); `maniqui_vivo.gd` también se
+  queda quieto bajo el foco.
+- **Hilos** (fase 1): tira un carrete hacia Johnny (desviado al azar, para que se crucen) que rueda hasta la pared
+  dejando el hilo; el carrete da 8 al pasar. Flojo, el hilo **solo enreda** (el estado nuevo "enredado": anda un 45 %
+  más despacio). Tira cinco de golpe, en abanico, cada 1,6 s, hasta 16 (24 nov, el dueño, dos veces: más; eran uno cada
+  3 s, hasta 5, y luego tres cada 2,4 s, hasta 10). Con 4 o más tendidos, cada 9 s, «¡A TENSAR!»: se ponen rojos, 0,8 s de aviso con un
+  abanico rojo en el suelo, y **barren la sala**: cada hilo gira como una guadaña unos 45° sobre su carrete de la
+  pared, hacia donde está ella (las paredes lo paran), en 0,55 s. Al que pilla le quita 14 y lo deja **atado** 1,3 s
+  (el estado "atado"); ella grita «¡TE TENGO!» y va corriendo a por él para darle un tijeretazo. **Solo se cortan a
+  golpes** (los tiros los atraviesan) y uno de cada tres es **gordo**: hacen falta dos golpes (24 nov, el dueño: se
+  esquivaban y se rompían demasiado fácil). Junto a la barra, dieciséis carretitos: llenos los
+  hilos tendidos, y en rojo cuando ya puede tensar (`barra_jefe.gd`, `pintar_hilos`).
+- **Esconderse** (cada 7 s): grita «¿A QUE NO ME ENCUENTRAS?», le brillan los ojos 0,6 s y se cambia con un maniquí lejano; a la vez salen retales de
+  todos los maniquíes (`tools/pixelfx/retales.js`, el "feather-burst" en granate y crema), para que no se vea con cuál.
+  Escondida 6 s (eran 4,5), **disfrazada de maniquí**: se dibuja con el mismo dibujo que el maniquí con el que se cambia
+  (24 nov, el dueño: antes se veía solo un salto, porque ella no se parece a los maniquíes). Ya no salta si Johnny se acerca. Solo la delata que **respira** (sube un píxel la mitad de cada
+  respiración de 1,7 s) y un parpadeo de los ojos cada 2-3,5 s. Si le pegan escondida: «¡ME HAS VISTO!», aturdida 2,5 s
+  con estrellitas y le entra el doble. Si le pegan a otro maniquí: un aro rojo de 0,5 s y revienta en 12 alfileres.
+  Si nadie la encuentra a tiempo, sale **crecida** (24 nov, el dueño): «¡DEMASIADO LENTO!», roja latiendo 8 s, con
+  las esperas entre ataques al doble de rápido y andando un 40 % más deprisa.
+- **De cerca** (24 nov, el dueño: a cuerpo a cuerpo solo daba tijeretazos): como mucho dos tijeretazos seguidos;
+  luego otra cosa, y entonces el escondite y los alfileres valen también de cerca. Lo mismo el cocinero con el
+  cuchillazo.
+  Cada maniquí lleva para eso un señuelo invisible del grupo "zombis" (el apuntado automático no lo busca).
+- Se quedan los alfileres y el tijeretazo; se fue «¡TE TOMO MEDIDAS!». Ella anda a media distancia (unos 260).
+- **Fase 2**: «¡QUE EMPIECE EL DESFILE!» con su pose; los hilos se caen, se apagan las lámparas de la tienda (más
+  oscuridad: `Luz.evento` + 0,45), sale el foco (radio 120, cruza de lado a lado a 115 y sube y baja en 14 s) y
+  despiertan 3 maniquíes. Johnny dice «Si el foco la pilla, se queda tiesa...». Ella ronda apartándose del foco (se le
+  ven los ojos) y cada 5,5 s, «¡A LA PASARELA!»: franja de aviso hasta la pared (0,9 s, luego 0,55) y cruza corriendo
+  a 900 con las tijeras por delante, 3 veces seguidas, 18 de daño. Si el foco la pilla (también corriendo): «¡TIESA!»,
+  gris y quieta 2,2 s, le entra el doble; luego 3,5 s en que el foco no la para. Al caer ella vuelve la luz.
+- Animaciones nuevas de PixelLab (v3, 20 generaciones): corte (8 direcciones; de frente y abajo a la derecha se quitan
+  los dos últimos fotogramas, con unas tijeras gigantes brillando), aturdida y desfile (solo de frente).
+- Pista: al entrar, Johnny dice «Uno de esos maniquíes respira...».
+- Prueba: `--captura --edificio centro --jefe modista --desfile`.
+
 ## 4. La mascota · «La fiesta de cumpleaños»
 
 **Idea central:** caos de juguetes que rebotan y se acumulan.
@@ -207,6 +244,21 @@ Se le rompe la tripa y va soltando relleno.
 - El relleno se queda en el suelo y arde con el fuego (molotov, lanzallamas): daño enorme si la llevas por encima.
 - Más pequeña y mucho más rápida; rebota por la sala como una pelota más.
 - Los críos traen globos que al reventar sueltan más pelotas.
+
+### Cómo va quedando (24 nov)
+- Fase 1 hecha: `mascota.gd`, `caja_sorpresa.gd` y las pelotas de goma del antidisturbios (`pelota_goma.gd`, con
+  `juguete`: una raya blanca, y `rapidez_normal`: tras el salto van frenando hasta su rapidez).
+- Pelotas: 2 cada vez que se estrella o rebota en una pared, como mucho 12. Al caer de un salto, las de menos de 170
+  salen disparadas a 520.
+- Cajas sorpresa: 3 por la sala (dibujo de PixelLab, la caja y el muñeco del muelle saliendo, `caja-sorpresa` y
+  `caja-sorpresa-salta`; son muebles: chocan con todo). Si se come una embistiendo (de frente o rozándola), «¡SORPRESA!»:
+  sale despedida hacia atrás, cae de culo (animación de PixelLab `sorpresa`, solo de frente) y se queda 5 s sentada con
+  estrellitas; le entra un 50 % más, y todas las pelotas revientan (cada una a menos de 140 le quita 12). La caja se va a
+  los 4 s y a los 6 s cae otra.
+- Pistas: Johnny al entrar («Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?») y tres cajitas junto a
+  la barra (`barra_jefe.gd`, `pintar_cajas`): cerradas las que hay, abiertas las usadas.
+- Los críos ya solo salen en la fase 2.
+- Prueba: `--captura --edificio centro --jefe mascota --fiesta`.
 
 ## 5. El gerente · «La junta de accionistas»
 

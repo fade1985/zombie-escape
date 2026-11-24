@@ -68,6 +68,8 @@
 #    estrellitas.js). En bucle, de hijo de quien las lleva, que lo enseña o lo esconde.
 #  - "gas": la nube de gas lacrimógeno del antidisturbios (21 nov; nube_gas.gd), el humo del "smoke-bomb" visto desde
 #    arriba (tools/pixelfx/gas-lacrimogeno.js): bolas de humo que llenan la elipse que pica, 7 s.
+#  - "retales": la modista se esconde o aparece entre sus maniquíes, o revienta un maniquí equivocado (24 nov; modista.gd):
+#    el "feather-burst" con trocitos de tela granate y crema que se mecen y caen (tools/pixelfx/retales.js).
 #  - "tentaculos": la mutación Tentacular empuja (M29; mutaciones.actuar): seis tentáculos morados le salen a Johnny de la
 #    cintura, restallan hasta donde llega el empujón, dan en el suelo y se recogen (tools/pixelfx/tentaculos.js). La escala
 #    va con el radio de la mutación (RADIO_TENTACULOS a escala 1). De hijo de Johnny.
@@ -168,6 +170,9 @@ const TIPOS := {
 	"gas": {"hojas": [preload("res://assets/sprites/gas-lacrimogeno-detras.png"),
 		preload("res://assets/sprites/gas-lacrimogeno-delante.png"), preload("res://assets/sprites/gas-lacrimogeno-brillo.png")],
 		"origen": Vector2(58, 62), "fotogramas": 140},
+	"retales": {"hojas": [preload("res://assets/sprites/retales-detras.png"),
+		preload("res://assets/sprites/retales-delante.png"), preload("res://assets/sprites/retales-brillo.png")],
+		"origen": Vector2(80, 60), "fotogramas": 48},
 }
 const RADIO_TENTACULOS := 90.0   # hasta dónde llegan los "tentaculos" a escala 1 (45 píxeles del dibujo)
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1

@@ -762,6 +762,10 @@ msgstr "ГОРИ ОНО ВСЕ!"
 msgid "DESPEDIDO"
 msgstr "УВОЛЕН"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "СЮРПРИЗ!"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "ЕЩЕ КРОЛИКИ!"
@@ -2998,6 +3002,10 @@ msgid "Trastero"
 msgstr "Кладовка"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Эти коробки с сюрпризом... А что, если заставить его врезаться в одну?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "ОБНИМАШКИ!"
 
@@ -3018,12 +3026,48 @@ msgid "¡PUMBA!"
 msgstr "БАЦ!"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "Один из этих манекенов дышит..."
+
+#: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "А НУ, НАЙДИ МЕНЯ!"
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "НА ПОДИУМ!"
+
+#: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "ПОПАЛСЯ!"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "НАТЯНУТЬ!"
+
+#: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "СЛИШКОМ МЕДЛЕННО!"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "ТЫ МЕНЯ ЗАМЕТИЛ!"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "ШШШШ!"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "СНИМУ МЕРКУ!"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "ДА НАЧНЁТСЯ ПОКАЗ!"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "Если прожектор её поймает, она застынет..."
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "ЗАСТЫЛА!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -3576,10 +3620,6 @@ msgstr "КУДА ПО ПОМЫТОМУ?!"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "АПЛОДИСМЕНТЫ!"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "СЮРПРИЗ!"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

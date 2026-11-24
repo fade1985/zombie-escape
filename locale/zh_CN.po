@@ -760,6 +760,10 @@ msgstr "一片火海！"
 msgid "DESPEDIDO"
 msgstr "已开除"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "惊喜！"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "再来点实验品！"
@@ -2990,6 +2994,10 @@ msgid "Trastero"
 msgstr "储藏室"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "那些惊喜盒……要是让它撞上一个会怎样？"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "免费抱抱！"
 
@@ -3010,12 +3018,48 @@ msgid "¡PUMBA!"
 msgstr "砰！"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "那些假人模特里有一个在呼吸……"
+
+#: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "你找不到我的！"
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "上T台！"
+
+#: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "抓到你了！"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "拉紧！"
+
+#: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "太慢了！"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "被你发现了！"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "嘶——！"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "给你量尺寸！"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "时装秀开始！"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "只要聚光灯照到她，她就会僵住……"
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "僵住了！"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -3560,10 +3604,6 @@ msgstr "我刚拖的地！"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "掌声欢迎！"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "惊喜！"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

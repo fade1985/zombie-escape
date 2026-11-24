@@ -5239,5 +5239,11 @@
     ],
     "cost": "6 generaciones (1 cada uno de 1,5 s)",
     "updated": "2026-11-11"
+  },
+  "modista-desfile": {
+    "kind": "animate_character v3",
+    "character_id": "69ab29bc-3bdd-46e7-bc55-d428edd6e735",
+    "nota": "La modista rehecha («El desfile», 24 nov; docs/JEFES_CENTRO.md). Tres animaciones v3 de 8 fotogramas: corte (las 8 direcciones, grupo e02aed3a-d3d6-4a72-9e64-5a288dbf7bba; direction_prompts con «She keeps the same three-quarter view and facing direction the whole time» y, de espaldas, «Strict (three-quarter) back view»: «She lunges forward fast with her huge open tailor scissors thrust out in front of her, then snaps them shut»), aturdida (solo south, grupo b7167fd4-d7e9-421a-92c6-f38131b03a46: «Dazed and dizzy, she sways and staggers on the spot, her head lolling, one hand on her forehead, the scissors hanging loose in the other hand») y desfile (solo south, grupo 54898922-aa35-45dd-b927-0b2d002eaa46: «A dramatic fashion runway pose: she puts one hand on her hip and raises the scissors high above her head»). Bajadas con tools/bajar_zip.py a assets/sources/modista-72/<animación>/ y montadas con tools/jefe_hoja.py modista-72 jefe-modista. Del corte, de frente y abajo a la derecha, PixelLab pintó unas tijeras gigantes brillando en los dos últimos fotogramas: se quitan al montar (\"sin\").",
+    "coste": "20 generaciones (16 el corte, 2 cada una de las otras)"
   }
 }

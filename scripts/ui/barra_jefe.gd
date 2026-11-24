@@ -113,6 +113,8 @@ func _draw() -> void:
 	draw_texture_rect_region(MARCO, Rect2(ANCHO - PUNTA, 0, PUNTA, ALTO), Rect2(MARCO.get_width() - PUNTA, 0, PUNTA, ALTO))
 	pintar_escudo()
 	pintar_sacos()
+	pintar_hilos()
+	pintar_cajas()
 	# La vida en números
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(value), roundi(max_value)]
@@ -172,7 +174,102 @@ func pintar_sacos() -> void:
 					draw_rect(Rect2(esquina + p * 2.0, Vector2(2, 2)), Color("#ff3a4a"))
 
 
+# Los hilos de la modista ("hilos_tendidos" y MAX_HILOS, modista.gd; solo en la fase 1): a la derecha de la barra, un
+# carretito por cada hilo que puede tender; lleno de hilo, los que ya cruzan la sala, y vacío, los que no. Con los que
+# hacen falta para «¡A TENSAR!» (MIN_TENSAR), los llenos se ponen rojos: van a hacer daño
+func pintar_hilos() -> void:
+	if not is_instance_valid(jefe) or not jefe.has_method("hilos_tendidos") or jefe.estado == "muerto" or jefe.fase != 1:
+		return
+	var tendidos: int = jefe.hilos_tendidos()
+	var peligro: bool = tendidos >= jefe.MIN_TENSAR
+	for i in jefe.MAX_HILOS:
+		var lleno: bool = i < tendidos
+		var esquina := Vector2(ANCHO + 6.0 + i * 16.0, 2.0)
+		for y in CARRETITO.size():
+			var fila: String = CARRETITO[y]
+			for x in fila.length():
+				var c := fila[x]
+				if c == ".":
+					continue
+				var col: Color = {"o": Tema.LINEA, "m": Color("#b07a46"), "s": Color("#6a4424"), "h": Color("#e8dcc4")}[c]
+				if c == "h":
+					if not lleno:
+						col = Color("#3a2a24")
+					elif peligro:
+						col = Color("#ff5d6a")
+				draw_rect(Rect2(esquina + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+
+
+# El carretito (6×10 píxeles del dibujo): o, el borde; m, la madera; s, su sombra; h, el hilo enrollado
+const CARRETITO := [
+	"oooooo",
+	"ommmmo",
+	"oohhoo",
+	".ohho.",
+	".ohho.",
+	".ohho.",
+	".ohho.",
+	"oohhoo",
+	"osssso",
+	"oooooo",
+]
+
+
 # El saquito (10×12 píxeles del dibujo): o, el borde; #, la arpillera; b, su brillo; s, la sombra; c, la cuerda
+# Las cajas sorpresa de la mascota ("cajas_listas" y CAJAS, mascota.gd): a la derecha de la barra, una cajita de pixel
+# art por cada caja que puede haber en la sala; las que están en la sala, cerradas y de colores, y las que se ha comido
+# (hasta que cae otra), abiertas, apagadas y con el muñeco fuera. Así se ve que las cajas importan
+func pintar_cajas() -> void:
+	if not is_instance_valid(jefe) or not jefe.has_method("cajas_listas") or jefe.estado == "muerto":
+		return
+	var listas: int = jefe.cajas_listas()
+	for i in jefe.CAJAS:
+		var abierta: bool = i >= listas
+		var dibujo: Array = CAJITA_ABIERTA if abierta else CAJITA
+		var esquina := Vector2(ANCHO + 6.0 + i * 22.0, -4.0)
+		for y in dibujo.size():
+			var fila: String = dibujo[y]
+			for x in fila.length():
+				var c := fila[x]
+				if c == ".":
+					continue
+				var col: Color = {"o": Tema.LINEA, "#": Color("#d8402a"), "y": Color("#ffd23f"), "b": Color("#f4f0e4"),
+					"m": Color("#a0a0a8"), "c": Color("#ff5d73")}[c]
+				if abierta and c not in ["o", "c", "m"]:   # (la caja usada, apagada; el muñeco fuera, no)
+					col = col.darkened(0.55)
+				draw_rect(Rect2(esquina + Vector2(x, y) * 2.0, Vector2(2, 2)), col)
+
+
+# o, el borde; #, rojo; y, amarillo; b, la interrogación; m, la manivela y el muelle; c, la cara del muñeco
+const CAJITA := [
+	"..........",
+	"..........",
+	"..........",
+	"oooooooo..",
+	"o######o..",
+	"oyyyyyyoom",
+	"o##bb##o.m",
+	"oyyybyyoom",
+	"o##b###o..",
+	"oyyyyyyo..",
+	"o###b##o..",
+	"oooooooo..",
+]
+const CAJITA_ABIERTA := [
+	"..ooo.....",
+	".occco....",
+	"..ooo.....",
+	"...m......",
+	"oooooooo..",
+	"o######o..",
+	"oyyyyyyo..",
+	"o######o..",
+	"oyyyyyyo..",
+	"o######o..",
+	"oyyyyyyo..",
+	"oooooooo..",
+]
+
 const SAQUITO := [
 	"...oooo...",
 	"...o##o...",

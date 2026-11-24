@@ -761,6 +761,10 @@ msgstr "ALLES BRENNT!"
 msgid "DESPEDIDO"
 msgstr "GEFEUERT"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "ÜBERRASCHUNG!"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MEHR PROBANDEN!"
@@ -2994,6 +2998,10 @@ msgid "Trastero"
 msgstr "Kellerabteil"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Diese Springteufel-Kisten... Was, wenn ich es gegen eine krachen lasse?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "GRATIS KNUDDELN!"
 
@@ -3014,12 +3022,48 @@ msgid "¡PUMBA!"
 msgstr "RUMMS!"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "Eine dieser Schaufensterpuppen atmet..."
+
+#: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "FINDEST DU MICH?"
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "AUF DEN LAUFSTEG!"
+
+#: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "HAB DICH!"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "FESTZIEHEN!"
+
+#: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "ZU LANGSAM!"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "DU HAST MICH GESEHEN!"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "SSSS!"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "ICH NEHM MASS!"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "DIE MODENSCHAU BEGINNT!"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "Wenn der Scheinwerfer sie erwischt, erstarrt sie..."
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "ERSTARRT!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -3568,10 +3612,6 @@ msgstr "FRISCH GEWISCHT!"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "APPLAUS, BITTE!"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "ÜBERRASCHUNG!"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

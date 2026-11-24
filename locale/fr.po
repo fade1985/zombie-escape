@@ -761,6 +761,10 @@ msgstr "TOUT BRÛLE !"
 msgid "DESPEDIDO"
 msgstr "VIRÉ"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRISE !"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MES COBAYES !"
@@ -2994,6 +2998,10 @@ msgid "Trastero"
 msgstr "Cave"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Ces boîtes à surprise... Et si je la faisais foncer dans l'une d'elles ?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "CÂLINS GRATUITS !"
 
@@ -3014,12 +3022,48 @@ msgid "¡PUMBA!"
 msgstr "PAF !"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "Un de ces mannequins respire..."
+
+#: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "TU NE ME TROUVERAS PAS !"
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "SUR LE PODIUM !"
+
+#: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "JE T'AI EU !"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "ON TEND !"
+
+#: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "TROP LENT !"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "TU M'AS VUE !"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "SSSS !"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "À L'ESSAYAGE !"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "QUE LE DÉFILÉ COMMENCE !"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "Si le projecteur l'attrape, elle se fige..."
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "FIGÉE !"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -3568,10 +3612,6 @@ msgstr "JE VIENS DE LAVER !"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "ON L'APPLAUDIT !"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "SURPRISE !"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"

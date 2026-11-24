@@ -761,6 +761,10 @@ msgstr "FIVE-ALARM FIRE!"
 msgid "DESPEDIDO"
 msgstr "FIRED"
 
+#: scripts/caja_sorpresa.gd scripts/presentador.gd
+msgid "¡SORPRESA!"
+msgstr "SURPRISE!"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MORE TEST SUBJECTS!"
@@ -2994,6 +2998,10 @@ msgid "Trastero"
 msgstr "Storage Unit"
 
 #: scripts/mascota.gd
+msgid "Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?"
+msgstr "Those jack-in-the-boxes... What if I make it crash into one?"
+
+#: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "FREE HUGS!"
 
@@ -3014,12 +3022,48 @@ msgid "¡PUMBA!"
 msgstr "BONK!"
 
 #: scripts/modista.gd
+msgid "Uno de esos maniquíes respira..."
+msgstr "One of those mannequins is breathing..."
+
+#: scripts/modista.gd
+msgid "¿A QUE NO ME ENCUENTRAS?"
+msgstr "BET YOU CAN'T FIND ME!"
+
+#: scripts/modista.gd
+msgid "¡A LA PASARELA!"
+msgstr "TO THE RUNWAY!"
+
+#: scripts/modista.gd
+msgid "¡TE TENGO!"
+msgstr "GOT YOU!"
+
+#: scripts/modista.gd
+msgid "¡A TENSAR!"
+msgstr "PULL TIGHT!"
+
+#: scripts/modista.gd
+msgid "¡DEMASIADO LENTO!"
+msgstr "TOO SLOW!"
+
+#: scripts/modista.gd
+msgid "¡ME HAS VISTO!"
+msgstr "YOU SPOTTED ME!"
+
+#: scripts/modista.gd
 msgid "¡SSSS!"
 msgstr "HSSSS!"
 
 #: scripts/modista.gd
-msgid "¡TE TOMO MEDIDAS!"
-msgstr "TIME FOR A FITTING!"
+msgid "¡QUE EMPIECE EL DESFILE!"
+msgstr "LET THE FASHION SHOW BEGIN!"
+
+#: scripts/modista.gd
+msgid "Si el foco la pilla, se queda tiesa..."
+msgstr "If the spotlight catches her, she freezes stiff..."
+
+#: scripts/modista.gd
+msgid "¡TIESA!"
+msgstr "FROZEN STIFF!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -3568,10 +3612,6 @@ msgstr "I JUST MOPPED!"
 #: scripts/presentador.gd
 msgid "¡UN APLAUSO!"
 msgstr "A ROUND OF APPLAUSE!"
-
-#: scripts/presentador.gd
-msgid "¡SORPRESA!"
-msgstr "SURPRISE!"
 
 #: scripts/presentador.gd
 msgid "¡¿ME OÍS AL FONDO?!"
