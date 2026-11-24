@@ -158,8 +158,11 @@ const MUEBLES := {
 	"ferrecajas3": {"len": 66, "dep": 36, "paredes": "", "archivo": "centro/cajas-ferreteria3-gpt", "escala": 1.0},
 	"ferrecajas4": {"len": 56, "dep": 36, "paredes": "", "archivo": "centro/cajas-ferreteria4-gpt", "escala": 1.0},
 	"ferrecajas5": {"len": 66, "dep": 36, "paredes": "", "archivo": "centro/cajas-ferreteria5-gpt", "escala": 1.0},
-	# la estantería del almacén de la ferretería (24 nov, el dueño), de la medida de las de ropa
+	# las estanterías del almacén de la ferretería (24 nov, el dueño), de la medida de las de ropa
 	"ferrebalda1": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-ferreteria-gpt", "escala": 1.0},
+	"ferrebalda2": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-ferreteria2-gpt", "escala": 1.0},
+	"ferrebalda3": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-ferreteria3-gpt", "escala": 1.0},
+	"ferrebalda4": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-ferreteria4-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -540,10 +543,10 @@ const SALAS := {
 	# el almacén (20 nov, el dueño: el mismo que el de la tienda de ropa, almacen-ropa; 24 nov: con montones de cajas y estanterías de ferretería
 	# en los sitios de los de ropa) y el taller de la ferretería fija (M77)
 	"almacen-ferreteria": {"colocados": {
-		"abajo": [["ferrebalda1", 1.9], ["ferrebalda1", 5.2], ["ferrebalda1", 8.5], ["ferrebalda1", 11.8], ["ferrebalda1", 15.1],
+		"abajo": [["ferrebalda1", 1.9], ["ferrebalda2", 5.2], ["ferrebalda4", 8.5], ["ferrebalda3", 11.8], ["ferrebalda1", 15.1],
 			["ferrecajas1", 2.0, "libre", 7.4], ["ferrecajas4", 5.0, "libre", 7.4], ["ferrecajas2", 11.33, "libre", 7.4], ["ferrecajas5", 14.67, "libre", 7.4],
 			["carretillaropa", 15.8, "libre", 4.0]],
-		"arriba": [["ferrebalda1", 1.88], ["ferrebalda1", 5.12], ["ferrebalda1", 11.21], ["ferrebalda1", 14.79],
+		"arriba": [["ferrebalda3", 1.88], ["ferrebalda1", 5.12], ["ferrebalda4", 11.21], ["ferrebalda2", 14.79],
 			["ferrecajas3", 2.17, "abajo"], ["ferrecajas1", 5.33, "abajo"], ["ferrecajas5", 8.5, "abajo"], ["ferrecajas2", 11.67, "abajo"], ["ferrecajas4", 14.83, "abajo"],
 			["carretillaropa", 15.8, "libre", 6.0]]}},
 	# (20 nov, el dueño) el aseo, el mismo que el de la tienda de ropa (bano-ropa: sus muebles destrozados, en los mismos sitios; el

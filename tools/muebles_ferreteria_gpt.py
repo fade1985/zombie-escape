@@ -15,7 +15,8 @@
 #     ferrehormigonera, ferrebidones, ferreestanteria (también para el taller)
 #   cajas-ferreteria-gpt .. cajas-ferreteria5-gpt  -> ferrecajas1..5, montones de cajas para el almacén: herramientas eléctricas,
 #     tornillería, latas de pintura, azulejos y fontanería
-#   estanteria-almacen-ferreteria-gpt  -> ferrebalda1, la estantería de metal del almacén con mercancía (los huecos entre baldas, vacíos)
+#   estanteria-almacen-ferreteria-gpt .. -ferreteria4-gpt  -> ferrebalda1..4, las estanterías de metal del almacén (los huecos entre
+#     baldas, vacíos): herramientas y cable, fontanería y jardín, electricidad, y una saqueada con una balda caída
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -37,11 +38,12 @@ MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferr
            ("cajas-ferreteria-gpt", "ferrecajas1", 64), ("cajas-ferreteria2-gpt", "ferrecajas2", 64), ("cajas-ferreteria3-gpt", "ferrecajas3", 66),
            ("cajas-ferreteria4-gpt", "ferrecajas4", 56), ("cajas-ferreteria5-gpt", "ferrecajas5", 66),
            # la estantería del almacén, del mismo ancho que las de la tienda de ropa (88)
-           ("estanteria-almacen-ferreteria-gpt", "ferrebalda1", 88)]
+           ("estanteria-almacen-ferreteria-gpt", "ferrebalda1", 88), ("estanteria-almacen-ferreteria2-gpt", "ferrebalda2", 88),
+           ("estanteria-almacen-ferreteria3-gpt", "ferrebalda3", 88), ("estanteria-almacen-ferreteria4-gpt", "ferrebalda4", 88)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (el asa de la transpaleta, la rendija entre sus
 # horquillas, entre los peldaños de la escalera, entre los tubos de la carretilla): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
 CON_HUECOS = {"ferretranspaleta", "ferreescalera", "ferrecarretilla", "ferrebanco", "ferrecarro", "ferrehormigonera",
-              "ferreestanteria", "ferrebalda1"}
+              "ferreestanteria", "ferrebalda1", "ferrebalda2", "ferrebalda3", "ferrebalda4"}
 HUECO_MIN = 1000
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
