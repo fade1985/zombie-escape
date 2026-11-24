@@ -708,16 +708,16 @@ const SALAS := {
 	# la farmacia, rehecha (24 nov, el dueño) con la distribución de la ferretería: la sala de venta y la rebotica, sin muebles de
 	# momento (se van poniendo los de GPT); el almacén y el aseo, los mismos que los de la ropa y la ferretería (el almacén, con sus
 	# estanterías de farmacia y, hasta que se hagan las suyas, las cajas y la carretilla de la ropa). La de antes, en git
-	# La sala de venta (46 × 13; la entrada, en medio, casillas 22 y 23; la puerta del almacén, 15 y 16, y la de la rebotica, 36 y 37):
+	# La sala de venta (46 × 13; la entrada, en medio, casillas 22 y 23; la puerta del almacén, 15 y 16, y la de la rebotica, 35 y 36):
 	# el mostrador delante de la puerta de la rebotica (donde se esconde la farmacéutica), como el de la ferretería delante del almacén;
 	# a la izquierda, las góndolas, la mesa de cosmética y los expositores; a la derecha, la vitrina y la fuente; las sillas de espera,
 	# en la normal, pegadas a la pared de arriba, entre las puertas del almacén y de la rebotica, y la fuente a su derecha (24 nov, el dueño).
 	# Libre el paso de la entrada. En la inversa (la entrada arriba), en dos filas, como en la ferretería
 	"tienda-farmacia": {"colocados": {
-		"abajo": [["farmamostrador", 37.0, "libre", 2.75], ["farmagondola1", 5.0, "libre", 5.5], ["farmagondola2", 10.0, "libre", 5.5],
+		"abajo": [["farmamostrador", 36.0, "libre", 2.75], ["farmagondola1", 5.0, "libre", 5.5], ["farmagondola2", 10.0, "libre", 5.5],
 			["farmacosmetica", 5.0, "libre", 10.5], ["farmatorre", 9.5, "libre", 10.5], ["farmacepillos", 12.0, "libre", 10.5],
 			["farmavitrina", 29.0, "libre", 7.0], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
-		"arriba": [["farmamostrador2", 37.0, "libre", 8.25], ["farmagondola1", 5.0, "libre", 4.5], ["farmagondola2", 10.0, "libre", 4.5],
+		"arriba": [["farmamostrador2", 36.0, "libre", 8.25], ["farmagondola1", 5.0, "libre", 4.5], ["farmagondola2", 10.0, "libre", 4.5],
 			["farmacosmetica", 5.0, "libre", 8.25], ["farmatorre", 14.5, "libre", 8.25], ["farmacepillos", 17.0, "libre", 8.25],
 			["farmavitrina", 29.0, "libre", 4.5], ["farmasillas", 42.0, "libre", 4.5], ["farmagarrafa", 43.5, "libre", 8.25]]}},
 	# la rebotica (20 × 12, la puerta en medio): el robot dispensador contra la pared de arriba, a la izquierda de la puerta en la inversa
