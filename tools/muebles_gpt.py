@@ -399,6 +399,9 @@ MUEBLES = {
     # y el mismo banco «en vertical», pegado a la pared de la derecha (como el de tools/banco_vestuario_lado.py)
     "banco_ropa_lado": ("assets/sources/ropa/banco-vestuario-vertical-destrozado-gpt.webp", "assets/sprites/mueble-lockerbenchropa-lado.png", 14, 44, True, (), "negro"),
     "cartel_open": ("assets/sources/centro/cartel-open-gpt.webp", "assets/sprites/cartel-open.png", 20, 18, False),
+    # el de «CERRADO», rojo (24 nov, el dueño): el de la salida de la ferretería inversa vista desde dentro (tools/puerta_ferreteria.py
+    # ferreteria-cerrado); casi tan ancho como el cristal, para que se note (las siete letras no llegan a leerse)
+    "cartel_cerrado": ("assets/sources/centro/cartel-cerrado-gpt.webp", "assets/sprites/cartel-cerrado.png", 24, 18, False),
 }
 
 

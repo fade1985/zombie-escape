@@ -15,6 +15,9 @@ signal cerca(indice: int)   # Johnny se acerca a una puerta de tienda de la pare
 # La puerta de la ferretería (17 nov, el dueño; de GPT, tools/puerta_ferreteria.py): de cristal, de una hoja, con un cartel «OPEN»
 # por detrás del cristal. 30 × 43 píxeles
 const FERRETERIA := preload("res://assets/sprites/puerta-ferreteria.png")
+# y la misma con el cartel rojo de «CERRADO» (24 nov, el dueño; tools/puerta_ferreteria.py ferreteria-cerrado): la salida de la
+# ferretería inversa vista desde dentro
+const FERRETERIA_CERRADO := preload("res://assets/sprites/puerta-ferreteria-cerrado.png")
 # La misma, un poco más pequeña, de la tienda de electrónica, dentro de un marco de neón rosa y cian (neon_galeria.gd; 17 nov, el dueño)
 const ELECTRONICA := preload("res://assets/sprites/puerta-electronica.png")
 # La puerta doble de cristal sin marco del restaurante (17 nov, el dueño; de GPT, muebles_gpt.py puerta_restaurante): 36 × 43 píxeles
@@ -270,9 +273,9 @@ func _draw() -> void:
 				return
 			# la de la sala de mantenimiento (la de la placa con la llave inglesa), de acero en los dos edificios; las
 			# demás, la del edificio
-			# (y la salida de la ferretería inversa vista desde dentro, la misma: 24 nov, el dueño)
+			# (y la salida de la ferretería inversa vista desde dentro, la misma con el cartel de «CERRADO»: 24 nov, el dueño)
 			if centro and (salida.get("neon", "") == "ferreteria" or tienda == "ferreteria"):
-				draw_texture_rect(FERRETERIA, Rect2(-30, -86, 60, 86), false)
+				draw_texture_rect(FERRETERIA_CERRADO if tienda == "ferreteria" else FERRETERIA, Rect2(-30, -86, 60, 86), false)
 				return
 			# (y la de la tienda de ropa vista desde dentro, en la inversa: la misma de la fachada, pero destrozada; 19 nov, el dueño)
 			if centro and (salida.get("neon", "") in ["restaurante", "ropa"] or tienda == "ropa"):   # (la de la ropa, la misma: el dueño, 17 nov)

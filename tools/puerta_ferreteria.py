@@ -10,9 +10,11 @@ BASE = np.array([0, 10, 12], float)       # el oscuro del cristal, sin reflejo
 BRILLO = np.array([70, 150, 160], float)  # el color de los reflejos, a tope
 
 # (la de electrónica, más pequeña: py tools/muebles_gpt.py puerta_electronica cartel_open_pequeno && py tools/puerta_ferreteria.py electronica)
+# (y la de la ferretería con el cartel rojo de «CERRADO», la salida de la inversa vista desde dentro; 24 nov, el dueño:
+#  py tools/muebles_gpt.py cartel_cerrado && py tools/puerta_ferreteria.py ferreteria-cerrado; sale puerta-ferreteria-cerrado.png)
 TIENDA = sys.argv[1] if len(sys.argv) > 1 else 'ferreteria'
-CARTEL = 'cartel-open' if TIENDA == 'ferreteria' else 'cartel-open-pequeno'
-puerta = Image.open(f'assets/sprites/puerta-{TIENDA}-entera.png').convert('RGBA')
+CARTEL = {'ferreteria': 'cartel-open', 'ferreteria-cerrado': 'cartel-cerrado'}.get(TIENDA, 'cartel-open-pequeno')
+puerta = Image.open(f"assets/sprites/puerta-{TIENDA.replace('-cerrado', '')}-entera.png").convert('RGBA')
 cartel = Image.open(f'assets/sprites/{CARTEL}.png').convert('RGBA')
 a = np.asarray(puerta).astype(float)
 rgb, alfa = a[..., :3], a[..., 3]
