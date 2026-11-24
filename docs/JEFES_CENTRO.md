@@ -7,7 +7,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 |---|---|
 | Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
 | Cocinero | hecho, pendiente del visto bueno del dueño (23 nov) |
-| Modista | hecha, pendiente del visto bueno del dueño (24 nov) |
+| Modista | hecha, con el visto bueno del dueño (24 nov) |
 | Mascota | pendiente |
 | Gerente | pendiente |
 
