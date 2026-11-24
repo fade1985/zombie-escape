@@ -18,6 +18,12 @@
 #   robot-farmacia-gpt       -> farmarobot, el robot dispensador de la rebotica
 #   robot-farmacia2-gpt .. 4  -> farmarobot2..4, otros tres: con el brazo arriba y la pantalla rota, con la puerta abierta y el
 #     brazo caído, y apagado y quemado por dentro
+#   mesa-laboratorio-gpt, mesa-laboratorio2-gpt  -> farmaisla1, 2: las mesas en isla del laboratorio con su estante alto, la de
+#     los microscopios y la del baño maría
+#   taburete-laboratorio-gpt -> farmataburete, un taburete alto de laboratorio
+#   mesa-acero-gpt           -> farmaacero, la mesa de trabajo de acero con cajones y el brazo extractor
+#   carro-acero-gpt          -> farmacarro, una estantería de acero con ruedas
+#   contenedor-residuos-gpt  -> farmaresiduos, el cubo amarillo de residuos sanitarios
 #   py tools/muebles_farmacia_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -34,15 +40,19 @@ MUEBLES = [("mostrador-farmacia-gpt", "farmamostrador", 164), ("mostrador-farmac
            ("expositor-cepillos-gpt", "farmacepillos", 52), ("mesa-cosmetica-gpt", "farmacosmetica", 130),
            ("sillas-espera-gpt", "farmasillas", 110), ("garrafa-agua-gpt", "farmagarrafa", 32),
            ("estanteria-almacen-farmacia-gpt", "farmabalda1", 88), ("robot-farmacia-gpt", "farmarobot", 150),
-           ("robot-farmacia2-gpt", "farmarobot2", 150), ("robot-farmacia3-gpt", "farmarobot3", 150), ("robot-farmacia4-gpt", "farmarobot4", 150)]
+           ("robot-farmacia2-gpt", "farmarobot2", 150), ("robot-farmacia3-gpt", "farmarobot3", 150), ("robot-farmacia4-gpt", "farmarobot4", 150),
+           ("mesa-laboratorio-gpt", "farmaisla1", 160), ("mesa-laboratorio2-gpt", "farmaisla2", 160),
+           ("taburete-laboratorio-gpt", "farmataburete", 30), ("mesa-acero-gpt", "farmaacero", 136),
+           ("carro-acero-gpt", "farmacarro", 56), ("contenedor-residuos-gpt", "farmaresiduos", 48)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (entre las baldas de la estantería del almacén): se
 # quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
-CON_HUECOS = {"farmabalda1"}
+CON_HUECOS = {"farmabalda1", "farmaisla1", "farmaisla2", "farmataburete", "farmacarro"}   # y entre la encimera y el estante, las patas, las baldas
 HUECO_MIN = 1000
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # los de cosas pequeñas (cajitas, botes, cepillos), que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad)
-FINOS = {"farmagondola1", "farmagondola2", "farmagondola3", "farmavitrina", "farmavitrina2", "farmatorre", "farmacepillos", "farmacosmetica", "farmabalda1", "farmarobot", "farmarobot2", "farmarobot3", "farmarobot4"}
+FINOS = {"farmagondola1", "farmagondola2", "farmagondola3", "farmavitrina", "farmavitrina2", "farmatorre", "farmacepillos", "farmacosmetica", "farmabalda1", "farmarobot", "farmarobot2", "farmarobot3", "farmarobot4",
+         "farmaisla1", "farmaisla2", "farmataburete", "farmaacero", "farmacarro", "farmaresiduos"}
 
 
 def quitar_fondo(im):

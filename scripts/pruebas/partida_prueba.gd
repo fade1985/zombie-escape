@@ -341,6 +341,7 @@
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera (también con la luz del juego, -luz) [prueba_sitios.gd]
 #   --rodear-muebles    (con --edificio centro; --tipo X, otra tienda: ropa si no) que los muebles sueltos de la sala de venta,
 #                       normal e inversa, se rodean y no hay rincones encerrados entre ellos (con el cuerpo de Johnny) [prueba_sitios.gd]
+#                       (--uso X, los de otra sala de la tienda: --uso rebotica, el laboratorio de la farmacia)
 #   --dependientas      (con --edificio centro) en 200 plantas, que cada tienda de ropa tiene justo una dependienta [prueba_sitios.gd]
 #   --puerta-dependienta (con --edificio centro; --tipo X, otra tienda: ropa si no) la dependienta (112 px) delante de
 #                       cada puerta de frente de la tienda y dentro del hueco, con Johnny al lado: si cabe [prueba_sitios.gd]

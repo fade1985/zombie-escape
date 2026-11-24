@@ -4397,6 +4397,8 @@ const RODEAR_RADIO := 18.0
 func probar_rodear_muebles() -> void:
 	var args := OS.get_cmdline_user_args()
 	var tipo: String = args[args.find("--tipo") + 1] if "--tipo" in args else "ropa"
+	# (--uso X: otra sala de la tienda en vez de la de venta, como la rebotica de la farmacia; 24 nov)
+	var uso: String = args[args.find("--uso") + 1] if "--uso" in args else "tienda"
 	var fallos := 0
 	for lado in ["abajo", "arriba"]:
 		var hallada := {}
@@ -4423,7 +4425,7 @@ func probar_rodear_muebles() -> void:
 		await get_tree().create_timer(0.4).timeout
 		var sala: Dictionary = {}
 		for s in sitio.apt.salas:
-			if s.uso == "tienda":
+			if s.uso == uso:
 				sala = s
 		# los puntos de la sala de venta donde cabe Johnny
 		var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state

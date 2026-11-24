@@ -194,6 +194,14 @@ const MUEBLES := {
 	"farmarobot2": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia2-gpt", "escala": 1.0},
 	"farmarobot3": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia3-gpt", "escala": 1.0},
 	"farmarobot4": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia4-gpt", "escala": 1.0},
+	# (24 nov, el dueño) lo demás del laboratorio: las dos mesas en isla con su estante alto (la de los microscopios y la del baño
+	# maría), el taburete, la mesa de acero con cajones, el carro de acero y el cubo de residuos
+	"farmaisla1": {"len": 160, "dep": 44, "paredes": "", "archivo": "centro/mesa-laboratorio-gpt", "escala": 1.0},
+	"farmaisla2": {"len": 160, "dep": 44, "paredes": "", "archivo": "centro/mesa-laboratorio2-gpt", "escala": 1.0},
+	"farmataburete": {"len": 30, "dep": 20, "paredes": "", "archivo": "centro/taburete-laboratorio-gpt", "escala": 1.0},
+	"farmaacero": {"len": 136, "dep": 40, "paredes": "", "archivo": "centro/mesa-acero-gpt", "escala": 1.0},
+	"farmacarro": {"len": 56, "dep": 28, "paredes": "", "archivo": "centro/carro-acero-gpt", "escala": 1.0},
+	"farmaresiduos": {"len": 48, "dep": 28, "paredes": "", "archivo": "centro/contenedor-residuos-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -735,8 +743,14 @@ const SALAS := {
 			["farmacosmetica", 5.0, "libre", 8.25], ["farmatorre", 14.5, "libre", 4.5], ["farmacepillos", 17.0, "libre", 4.5],
 			["farmavitrina", 29.0, "libre", 4.5], ["farmasillas", 42.0, "libre", 4.5], ["farmagarrafa", 43.5, "libre", 8.25]]}},
 	# la rebotica (20 × 12, la puerta en medio): en la normal, los cuatro robots dispensadores seguidos contra la pared de arriba, con el
-	# mismo espacio entre ellos y las paredes (24 nov, el dueño); en la inversa (la puerta arriba), uno, a la izquierda de la puerta
-	"rebotica-farmacia": {"colocados": {"abajo": [["farmarobot", 2.59], ["farmarobot3", 7.53], ["farmarobot2", 12.47], ["farmarobot4", 17.41]], "arriba": [["farmarobot", 4.5]]}},
+	# mismo espacio entre ellos y las paredes (24 nov, el dueño); debajo, las dos mesas en isla, una a cada lado del paso de la puerta,
+	# con dos taburetes delante de cada una; y abajo, la mesa de acero a la izquierda y el carro y el cubo de residuos a la derecha,
+	# libre el paso de la puerta al centro (todo por encima de la fila 9: lo de más abajo lo tapa la pared de abajo). En la inversa (la puerta arriba), uno, a la izquierda de la puerta
+	"rebotica-farmacia": {"colocados": {"abajo": [["farmarobot", 2.59], ["farmarobot3", 7.53], ["farmarobot2", 12.47], ["farmarobot4", 17.41],
+			["farmaisla1", 5.5, "libre", 4.3], ["farmaisla2", 14.5, "libre", 4.3],
+			["farmataburete", 4.0, "libre", 5.8], ["farmataburete", 7.0, "libre", 5.8], ["farmataburete", 13.0, "libre", 5.8], ["farmataburete", 16.0, "libre", 5.8],
+			["farmaacero", 5.5, "libre", 8.4], ["farmacarro", 14.5, "libre", 8.4], ["farmaresiduos", 17.5, "libre", 8.4]],
+		"arriba": [["farmarobot", 4.5]]}},
 	"almacen-farmacia": {"colocados": {
 		"abajo": [["farmabalda1", 1.9], ["farmabalda1", 5.2], ["farmabalda1", 8.5], ["farmabalda1", 11.8], ["farmabalda1", 15.1],
 			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],

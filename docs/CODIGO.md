@@ -1142,7 +1142,11 @@ en una línea.
   arriba, entre las puertas del almacén y de la rebotica); libre el paso de la entrada
   (`tienda-farmacia` en `catalogo.gd`; en la inversa, en dos filas). En la rebotica, los robots dispensadores (`farmarobot` y, desde el 24 nov,
   `farmarobot2` a `4`: con el brazo arriba, con la puerta abierta y quemado; `robot-farmacia2-gpt.webp` a `4`) contra la pared de
-  arriba: en la normal, los cuatro seguidos; en la inversa, uno. La prueba `--tiendas-fijas` saca también la rebotica y el taller
+  arriba: en la normal, los cuatro seguidos; en la inversa, uno. Debajo, en la normal (24 nov, de fotos del dueño): las dos mesas en isla
+  con su estante alto (`farmaisla1`, la de los microscopios, y `farmaisla2`, la del baño maría), una a cada lado del paso de la puerta, con
+  dos taburetes (`farmataburete`) delante de cada una, y más abajo la mesa de acero (`farmaacero`), el carro de acero (`farmacarro`) y el
+  cubo de residuos (`farmaresiduos`); todo por encima de la fila 9, porque la pared de abajo tapa lo que queda detrás.
+  `--rodear-muebles --tipo farmacia --uso rebotica` comprueba los muebles de la rebotica en vez de los de la sala de venta. La prueba `--tiendas-fijas` saca también la rebotica y el taller
   (`captura-fija-<tipo>-<lado>-rebotica.png`, `-taller`). En el almacén, la estantería de farmacia (`farmabalda1`, en los sitios de las de la ropa) y, hasta que se hagan las suyas, las
   cajas y la carretilla de la ropa. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
