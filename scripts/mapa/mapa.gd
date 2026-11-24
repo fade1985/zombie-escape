@@ -1146,7 +1146,8 @@ func poner_hojas() -> void:
 			if "bano" in usos_f:
 				hoja.madera = PUERTA_BANO.METAL_ROPA
 				hoja.metalizada = true
-			elif "almacen" in usos_f and "tienda" in usos_f:
+			# (24 nov, el dueño) y la del taller a la sala de venta, la misma que la del almacén
+			elif ("almacen" in usos_f or "taller" in usos_f) and "tienda" in usos_f:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
 				hoja.metalizada = true
 		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
