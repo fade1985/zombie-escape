@@ -761,13 +761,13 @@ const SALAS := {
 	# y a la derecha de la de la derecha, el cubo de residuos; y abajo, la mesa de acero, con el carro de acero a su izquierda; libre
 	# el paso de la puerta al centro (todo por encima de la fila 9: lo de más abajo lo tapa la pared de abajo). En la inversa (la
 	# puerta arriba), dos robots, uno a cada lado de la puerta, centrados en su trozo de pared (no caben los cuatro), y lo demás como
-	# en la normal (24 nov, el dueño)
+	# en la normal pero una casilla más abajo (24 nov, el dueño)
 	"rebotica-farmacia": {"colocados": {"abajo": [["farmarobot", 2.59], ["farmarobot3", 7.53], ["farmarobot2", 12.47], ["farmarobot4", 17.41],
 			["farmaisla1", 5.5, "libre", 4.3], ["farmaisla2", 14.5, "libre", 4.3], ["farmaresiduos", 18.25, "libre", 4.55],
 			["farmaacero", 5.5, "libre", 8.4], ["farmacarro", 2.0, "libre", 8.59]],
 		"arriba": [["farmarobot", 4.5], ["farmarobot2", 15.5],
-			["farmaisla1", 5.5, "libre", 4.3], ["farmaisla2", 14.5, "libre", 4.3], ["farmaresiduos", 18.25, "libre", 4.55],
-			["farmaacero", 5.5, "libre", 8.4], ["farmacarro", 2.0, "libre", 8.59]]}},
+			["farmaisla1", 5.5, "libre", 5.3], ["farmaisla2", 14.5, "libre", 5.3], ["farmaresiduos", 18.25, "libre", 5.55],
+			["farmaacero", 5.5, "libre", 9.4], ["farmacarro", 2.0, "libre", 9.59]]}},
 	"almacen-farmacia": {"colocados": {
 		"abajo": [["farmabalda1", 1.9], ["farmabalda2", 5.2], ["farmabalda4", 8.5], ["farmabalda3", 11.8], ["farmabalda1", 15.1],
 			["farmapalet1", 2.0, "libre", 7.4], ["farmapalet4", 5.0, "libre", 7.4], ["farmapalet3", 11.33, "libre", 7.4], ["farmapalet5", 14.67, "libre", 7.4],
