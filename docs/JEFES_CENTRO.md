@@ -196,13 +196,13 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   queda quieto bajo el foco.
 - **Hilos** (fase 1): tira un carrete hacia Johnny (desviado al azar, para que se crucen) que rueda hasta la pared
   dejando el hilo; el carrete da 8 al pasar. Flojo, el hilo **solo enreda** (el estado nuevo "enredado": anda un 45 %
-  más despacio). Tira tres de golpe, en abanico, cada 2,4 s, hasta 10 (24 nov, el dueño: más, si no cortarlos no
-  aporta; eran uno cada 3 s, hasta 5). Con 4 o más tendidos, cada 9 s, «¡A TENSAR!»: se ponen rojos, 0,8 s de aviso con un
+  más despacio). Tira cinco de golpe, en abanico, cada 1,6 s, hasta 16 (24 nov, el dueño, dos veces: más; eran uno cada
+  3 s, hasta 5, y luego tres cada 2,4 s, hasta 10). Con 4 o más tendidos, cada 9 s, «¡A TENSAR!»: se ponen rojos, 0,8 s de aviso con un
   abanico rojo en el suelo, y **barren la sala**: cada hilo gira como una guadaña unos 45° sobre su carrete de la
   pared, hacia donde está ella (las paredes lo paran), en 0,55 s. Al que pilla le quita 14 y lo deja **atado** 1,3 s
   (el estado "atado"); ella grita «¡TE TENGO!» y va corriendo a por él para darle un tijeretazo. **Solo se cortan a
   golpes** (los tiros los atraviesan) y uno de cada tres es **gordo**: hacen falta dos golpes (24 nov, el dueño: se
-  esquivaban y se rompían demasiado fácil). Junto a la barra, diez carretitos: llenos los
+  esquivaban y se rompían demasiado fácil). Junto a la barra, dieciséis carretitos: llenos los
   hilos tendidos, y en rojo cuando ya puede tensar (`barra_jefe.gd`, `pintar_hilos`).
 - **Esconderse** (cada 7 s): grita «¿A QUE NO ME ENCUENTRAS?», le brillan los ojos 0,6 s y se cambia con un maniquí lejano; a la vez salen retales de
   todos los maniquíes (`tools/pixelfx/retales.js`, el "feather-burst" en granate y crema), para que no se vea con cuál.

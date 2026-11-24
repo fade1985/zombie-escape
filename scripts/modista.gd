@@ -49,10 +49,10 @@ const MEDIO_TIJERETAZO := 0.8      # medio ángulo del trozo que corta
 const DANO_TIJERETAZO := 22
 const DISTANCIA_TIJERETAZO := 140.0   # si Johnny está más cerca que esto, prefiere el tijeretazo
 # Los carretes y los hilos
-const MAX_HILOS := 10
+const MAX_HILOS := 16
 const AVISO_CARRETE := 0.45
-const CARRETES := 3                # los que tira de una vez, en abanico
-const ABANICO_CARRETES := 0.45     # lo que se separan entre sí (radianes)
+const CARRETES := 5                # los que tira de una vez, en abanico
+const ABANICO_CARRETES := 0.35     # lo que se separan entre sí (radianes)
 const ABRE_CARRETE := 0.5          # lo que se desvía (al azar) de Johnny al tirarlo: así los hilos se cruzan
 const CARRERA_ATADO := 560.0       # lo deprisa que va a por Johnny atado
 const CRECIDA := 8.0               # si no la encuentran escondida, lo que dura crecida: más rápida
@@ -88,7 +88,7 @@ const CONGELADA := 2.2             # lo que se queda tiesa si la pilla el foco
 const MAS_CONGELADA := 2.0
 const INMUNE_FOCO := 3.5           # después, el foco no la para este rato
 # Lo que espera entre ataque y ataque (normal y enfadada; 0: no lo hace)
-const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [2.4, 0.0], "tensar": [9.0, 0.0],
+const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [1.6, 0.0], "tensar": [9.0, 0.0],
 	"esconderse": [7.0, 0.0], "corte": [0.0, 5.5]}
 # Los fotogramas de sus animaciones en los que corta las tijeras y lanza los alfileres (el brazo ya estirado)
 const CORTA := 4

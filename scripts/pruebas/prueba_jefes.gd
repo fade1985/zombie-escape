@@ -2253,7 +2253,7 @@ func probar_desfile() -> void:
 	jefe.global_position = c + Vector2(60, -160)
 	jefe.cambiar("aviso_carrete", {"angulo": PI / 2.0})
 	await get_tree().create_timer(0.6, false).timeout
-	print("Desfile: tras un abanico, hilos %d (esperado: 5)" % jefe.hilos_vivos())
+	print("Desfile: tras un abanico, hilos %d (esperado: 7)" % jefe.hilos_vivos())
 	# esconderse: retales de todos los maniquíes a la vez
 	johnny.global_position = c
 	jefe.global_position = c + Vector2(-60, -160)
