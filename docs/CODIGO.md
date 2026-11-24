@@ -1171,7 +1171,10 @@ en una línea.
   `assets/sources/suelos/venta-supermercado-suelo-destrozado<N>-gpt.webp` y `-pared-destrozada<N>-`, a `suelo-`/`pared-venta-supermercado-d<N>.png`),
   mezclados a trozos (`MEZCLA_TIENDA` "tienda-supermercado"; las baldosas rotas, la leche y la fruta, la madera arrancada y la quemada, los que
   menos). Los listones, unos 38 en la imagen de GPT, se emborronaban a 48 píxeles: la herramienta les marca una ranura oscura cada 3 píxeles
-  después de reducir, solo donde hay madera (`listones`). La sala de venta y la cámara,
+  después de reducir, solo donde hay madera (`listones`). Y la cámara, igual (otra foto del dueño: paneles de resina gris oscuro con juntas claras
+  y paneles aislantes blancos con rodapié de acero inoxidable, con escarcha, hielo y sangre; `camara-supermercado-…-gpt.webp`, la misma herramienta,
+  `ESTILO_TIENDA`/`MEZCLA_TIENDA` "camara-supermercado", y `"destrozada"` con "camara"). `--tiendas-fijas` saca también la cámara
+  (`captura-fija-<tipo>-<lado>-camara.png`, con el marco de escarcha del frío). La sala de venta y la cámara,
   sin muebles de momento (sus muebles de antes, en git). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
   de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un

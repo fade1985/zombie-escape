@@ -99,6 +99,8 @@ const ESTILO_TIENDA := {
 	# y su sala de venta (porcelánico gris claro y pared de listones de madera clara sobre un panel gris), destrozada (25 nov, el dueño;
 	# de GPT, tools/suelos_supermercado_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
 	"tienda-supermercado": [["venta-supermercado-d1"], "venta-supermercado-d1", "venta"],
+	# y su cámara frigorífica (resina gris oscuro y paneles aislantes blancos con rodapié de acero, con escarcha y hielo), igual
+	"camara-supermercado": [["camara-supermercado-d1"], "camara-supermercado-d1", "camara"],
 	# y su sala de venta (porcelánico gris y pared blanca con franja verde) y su rebotica (vinilo gris y paneles de chapa blanca),
 	# destrozadas (24 nov, el dueño; de GPT, tools/suelos_farmacia_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
 	"tienda-farmacia": [["venta-farmacia-d1"], "venta-farmacia-d1", "venta"],
@@ -155,7 +157,10 @@ const MEZCLA_TIENDA := {
 	# y su sala de venta (las baldosas rotas con el rastro de sangre y la leche y la fruta, d2 y d3, y la madera arrancada y la quemada, los que
 	# menos, que se ven mucho)
 	"tienda-supermercado": {"suelos": [["venta-supermercado-d1", 3], ["venta-supermercado-d2", 1], ["venta-supermercado-d3", 1]],
-		"paredes": [["venta-supermercado-d1", 2], ["venta-supermercado-d2", 1], ["venta-supermercado-d3", 1]]}}
+		"paredes": [["venta-supermercado-d1", 2], ["venta-supermercado-d2", 1], ["venta-supermercado-d3", 1]]},
+	# y su cámara (el charco de hielo, los restos, el panel reventado y la costra de hielo, los que menos)
+	"camara-supermercado": {"suelos": [["camara-supermercado-d1", 3], ["camara-supermercado-d2", 1], ["camara-supermercado-d3", 1]],
+		"paredes": [["camara-supermercado-d1", 2], ["camara-supermercado-d2", 1], ["camara-supermercado-d3", 1]]}}
 const TROZO_SUELO := 128   # el lado de los trozos de suelo mezclados (el de sus dibujos), en píxeles
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra (el de
 # los Apartamentos ya no: desde el 8 nov es un portal de baldosa, tools/portal_gpt.py)

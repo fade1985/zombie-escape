@@ -30,10 +30,10 @@ const CON_ARTICULO := {"supermercado": "Un supermercado", "ferreteria": "Una fer
 const TIPOS := {
 	"supermercado": {"nombre": "Supermercado", "neon": "SUPER", "salas": ["almacen", "camara"],   # [traducir]
 		"color": Color("#5dff8a"),
-		# (25 nov, el dueño) rehecho como la farmacia: su aseo y su almacén, iguales que los de la ropa, y su sala de venta, con su suelo y
-		# pared de GPT, destrozados, y la cámara en el sitio del taller. Mientras se rehace, sin nada por el suelo de la sala de venta y de
+		# (25 nov, el dueño) rehecho como la farmacia: su aseo y su almacén, iguales que los de la ropa, y su sala de venta y su cámara (en el
+		# sitio del taller), con su suelo y pared de GPT, destrozados. Mientras se rehace, sin nada por el suelo de la sala de venta y de
 		# la cámara ni en sus paredes ni en las del almacén ("despejadas", mapa.despejada)
-		"destrozada": ["bano", "almacen", "tienda"],
+		"destrozada": ["bano", "almacen", "tienda", "camara"],
 		"despejadas": {"suelo": ["tienda", "camara"], "pared": ["tienda", "almacen", "camara"]}},
 	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"],   # [traducir]
 		"color": Color("#ff9a3c"),

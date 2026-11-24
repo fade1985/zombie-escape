@@ -1,9 +1,11 @@
-# El suelo y la pared de la sala de venta del supermercado, destrozados (25 nov, el dueño; de GPT, a partir de una foto suya: baldosa
-# grande de porcelánico gris claro y, en la pared, listones verticales de madera clara arriba, un panel de porcelánico gris abajo y
-# rodapié antracita). Tres suelos y tres paredes, que en la tienda se mezclan a trozos (mapa.gd, MEZCLA_TIENDA), hechos como los de la
+# El suelo y la pared de la sala de venta y de la cámara frigorífica del supermercado, destrozados (25 nov, el dueño; de GPT, a partir
+# de fotos suyas: la sala de venta, baldosa grande de porcelánico gris claro y, en la pared, listones verticales de madera clara arriba,
+# un panel de porcelánico gris abajo y rodapié antracita; la cámara, paneles de resina gris oscuro con juntas claras y paneles aislantes
+# blancos con rodapié de acero inoxidable, con escarcha y hielo). Tres suelos y tres paredes, que en la tienda se mezclan a trozos (mapa.gd, MEZCLA_TIENDA), hechos como los de la
 # farmacia (tools/suelos_farmacia_gpt.py, de donde sale esta):
-#   assets/sources/suelos/venta-supermercado-suelo-destrozado<N>-gpt.webp → assets/sprites/suelo-venta-supermercado-d<N>.png (128 × 128)
-#   assets/sources/suelos/venta-supermercado-pared-destrozada<N>-gpt.webp → assets/sprites/pared-venta-supermercado-d<N>.png (48 × 48)
+#   assets/sources/suelos/<sala>-supermercado-suelo-destrozado<N>-gpt.webp → assets/sprites/suelo-<sala>-supermercado-d<N>.png (128 × 128)
+#   assets/sources/suelos/<sala>-supermercado-pared-destrozada<N>-gpt.webp → assets/sprites/pared-<sala>-supermercado-d<N>.png (48 × 48)
+# con <sala> venta o camara.
 # El suelo, 8 × 8 baldosas de 16 píxeles (cada baldosa por dentro y las juntas aparte); la pared, entera a 48 × 48. A los tres de
 # cada uno se les iguala la mancha de luz de fondo, para que al mezclarse no se vean los cuadros.
 #   py tools/suelos_supermercado_gpt.py   (y luego Godot --headless --path . --import)
@@ -88,14 +90,15 @@ def listones(p):
                 p.putpixel((x, y), (int(r * 0.5), int(g * 0.45), int(b * 0.4)))
 
 
-for sala in ('venta',):
+for sala in ('venta', 'camara'):
     suelos = [suelo(f'assets/sources/suelos/{sala}-supermercado-suelo-destrozado{i}-gpt.webp') for i in (1, 2, 3)]
     paredes = [Image.open(f'assets/sources/suelos/{sala}-supermercado-pared-destrozada{i}-gpt.webp').convert('RGB').resize((48, 48), Image.LANCZOS)
                for i in (1, 2, 3)]
     # (solo lo claro u oscuro, no el color, como en la farmacia: las manchas grandes y la sangre dejarían un halo de otro color)
     for i, s, p in zip((1, 2, 3), _igualar(suelos, 10, 28, 0.45, False, True), _igualar(paredes, 5, 12, 0.45, True, True)):
         guardar(s, f'suelo-{sala}-supermercado-d{i}')
-        listones(p)
+        if sala == 'venta':
+            listones(p)
         for x in range(48):   # la última fila, más oscura, como las de las otras paredes
             p.putpixel((x, 47), tuple(int(v * 0.68) for v in p.getpixel((x, 47))))
         guardar(p, f'pared-{sala}-supermercado-d{i}')
