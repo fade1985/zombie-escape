@@ -1148,8 +1148,11 @@ en una línea.
   (`farmacarro`) a su izquierda; todo por encima de la fila 9, porque la pared de abajo tapa lo que queda detrás. (El taburete,
   `farmataburete`, está hecho pero el dueño lo quitó.)
   `--rodear-muebles --tipo farmacia --uso rebotica` comprueba los muebles de la rebotica en vez de los de la sala de venta. La prueba `--tiendas-fijas` saca también la rebotica y el taller
-  (`captura-fija-<tipo>-<lado>-rebotica.png`, `-taller`). En el almacén, las estanterías de farmacia (`farmabalda1`, de cajitas de medicinas, `farmabalda2`, de material de curas, `farmabalda3`, de frascos y garrafas, y `farmabalda4`, la saqueada, mezcladas en los sitios de las de la ropa; el 24 nov, rehechas más bajas: la primera se salía por encima de la pared, y `muebles_farmacia_gpt.py` les pone un tope de alto, `ALTO_MAX`, 136 como las de la ferretería) y, hasta que se hagan las suyas, las
-  cajas y la carretilla de la ropa. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.
+  (`captura-fija-<tipo>-<lado>-rebotica.png`, `-taller`). En el almacén, las estanterías de farmacia (`farmabalda1`, de cajitas de medicinas, `farmabalda2`, de material de curas, `farmabalda3`, de frascos y garrafas, y `farmabalda4`, la saqueada, mezcladas en los sitios de las de la ropa; el 24 nov, rehechas más bajas: la primera se salía por encima de la pared, y `muebles_farmacia_gpt.py` les pone un tope de alto, `ALTO_MAX`, 136 como las de la ferretería); en los sitios de las cajas de cartón, cinco palets
+  de suero (`farmapalet1` a `5`, `palet-suero-gpt.webp` a `5`: cajas de botellas, medio vacío, cajas de bolsas, derrumbado y garrafas), que
+  se pueden registrar como las cajas de la ropa (`MUEBLES_CON_PIEZA`); la carretilla, aún la de la ropa. `--rodear-muebles --uso almacen`
+  da FALLOS en la fila de abajo de los tres almacenes (ropa, ferretería y farmacia, el mismo sitio): los montones están a menos de un
+  Johnny de la pared y entre ellos, pero no dejan rincones encerrados. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
   cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
   `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`

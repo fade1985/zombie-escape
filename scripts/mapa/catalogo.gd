@@ -192,6 +192,13 @@ const MUEBLES := {
 	"farmabalda2": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-farmacia2-gpt", "escala": 1.0},
 	"farmabalda3": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-farmacia3-gpt", "escala": 1.0},
 	"farmabalda4": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-farmacia4-gpt", "escala": 1.0},
+	# (24 nov, el dueño) los palets del almacén, en vez de las cajas de cartón de la ropa: de cajas de botellas de suero, medio vacío,
+	# de cajas de bolsas de suero, derrumbado y de garrafas
+	"farmapalet1": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero-gpt", "escala": 1.0},
+	"farmapalet2": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero2-gpt", "escala": 1.0},
+	"farmapalet3": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero3-gpt", "escala": 1.0},
+	"farmapalet4": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero4-gpt", "escala": 1.0},
+	"farmapalet5": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/palet-suero5-gpt", "escala": 1.0},
 	"farmarobot": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia-gpt", "escala": 1.0},
 	# (24 nov, el dueño) otros tres robots: con el brazo arriba, con la puerta abierta y apagado y quemado
 	"farmarobot2": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia2-gpt", "escala": 1.0},
@@ -755,10 +762,10 @@ const SALAS := {
 		"arriba": [["farmarobot", 4.5]]}},
 	"almacen-farmacia": {"colocados": {
 		"abajo": [["farmabalda1", 1.9], ["farmabalda2", 5.2], ["farmabalda4", 8.5], ["farmabalda3", 11.8], ["farmabalda1", 15.1],
-			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
+			["farmapalet1", 2.0, "libre", 7.4], ["farmapalet4", 5.0, "libre", 7.4], ["farmapalet3", 11.33, "libre", 7.4], ["farmapalet5", 14.67, "libre", 7.4],
 			["carretillaropa", 15.8, "libre", 4.0]],
 		"arriba": [["farmabalda3", 1.88], ["farmabalda1", 5.12], ["farmabalda4", 11.21], ["farmabalda2", 14.79],
-			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
+			["farmapalet3", 2.17, "abajo"], ["farmapalet1", 5.33, "abajo"], ["farmapalet5", 8.5, "abajo"], ["farmapalet2", 11.67, "abajo"], ["farmapalet4", 14.83, "abajo"],
 			["carretillaropa", 15.8, "libre", 6.0]]}},
 	"bano-farmacia": {"colocados": {
 		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
