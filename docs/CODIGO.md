@@ -1149,7 +1149,9 @@ en una línea.
   delante de la puerta del almacén, lo más cerca que deja pasar a Johnny entre los dos (`tienda-ferreteria` en `catalogo.gd`; en la
   inversa, la pared de abajo tapa sus últimas filas: el paso, el que se ve por encima de ella). Y tres palés de sacos de cemento (24 nov, el dueño; GPT, la misma herramienta):
   `ferrepale1` lleno, `ferrepale2` a medio gastar y `ferrepale3` con el plástico roto (`pale-cemento-gpt.webp`, `-cemento2-`,
-  `-cemento3-`), seguidos en la mitad derecha de la sala de venta. Los paneles de la
+  `-cemento3-`), seguidos en la mitad derecha de la sala de venta. Y dos montones de latas de pintura (24 nov, el dueño; GPT, la
+  misma herramienta, con las latas del mismo tamaño en los dos): `ferrelatas1`, alto, y `ferrelatas2`, bajo y ancho
+  (`latas-pintura-gpt.webp` y `latas-pintura2-gpt.webp`), juntos en la mitad izquierda, a la altura de los palés. Los paneles de la
   pared de la sala de venta (23 nov, el dueño): ocho, todos distintos, a escala 1 (136x86), del rodapié a la moldura; dónde va cada uno,
   en `mapa.gd` (`PANELES_TIENDA`: con la puerta abajo, 3 + 3 + 2 entre las puertas del almacén y del taller, y con la puerta
   arriba, 4 + 4 a los lados de la entrada; desde el 24 nov, en cada trozo, el mismo espacio entre los paneles que entre ellos y las

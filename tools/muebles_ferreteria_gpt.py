@@ -4,15 +4,18 @@
 #   mostrador-ferreteria-gpt         -> ferremostrador, el mostrador de cobro desde el lado del cliente (la tienda normal: se entra por abajo)
 #   mostrador-ferreteria-dentro-gpt  -> ferremostrador2, el mismo desde el lado del dependiente (la inversa: se entra por arriba)
 #   pale-cemento-gpt, -cemento2-, -cemento3-  -> ferrepale1..3, palés de sacos de cemento: lleno, a medio gastar y con el plástico roto
+#   latas-pintura-gpt, latas-pintura2-gpt  -> ferrelatas1, 2: montones de latas de pintura, uno alto y otro bajo y ancho
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
 from PIL import Image
 
 # (imagen, tipo, largo): el largo en el juego, en unidades (escala 1: un píxel por unidad); el alto sale de la proporción. Los dos
-# mostradores, con el mismo largo de encimera, para que sean el mismo mueble; los tres palés, del mismo ancho
+# mostradores, con el mismo largo de encimera, para que sean el mismo mueble; los tres palés, del mismo ancho; los dos montones de
+# latas, con las latas del mismo tamaño (en las dos imágenes de GPT miden igual: el ancho de cada una, 8 unidades por cada 100 píxeles)
 MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferreteria-dentro-gpt", "ferremostrador2", 164),
-           ("pale-cemento-gpt", "ferrepale1", 80), ("pale-cemento2-gpt", "ferrepale2", 80), ("pale-cemento3-gpt", "ferrepale3", 80)]
+           ("pale-cemento-gpt", "ferrepale1", 80), ("pale-cemento2-gpt", "ferrepale2", 80), ("pale-cemento3-gpt", "ferrepale3", 80),
+           ("latas-pintura-gpt", "ferrelatas1", 94), ("latas-pintura2-gpt", "ferrelatas2", 116)]
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 
