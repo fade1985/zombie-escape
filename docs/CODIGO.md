@@ -1140,8 +1140,10 @@ en una línea.
   el expositor en torre (`farmatorre`) y el de cepillos con ruedas (`farmacepillos`), a la izquierda; la vitrina de cristal (`farmavitrina`),
   las sillas de espera (`farmasillas`) y la fuente de agua (`farmagarrafa`), a la derecha (en la normal, pegadas a la pared de
   arriba, entre las puertas del almacén y de la rebotica); libre el paso de la entrada
-  (`tienda-farmacia` en `catalogo.gd`; en la inversa, en dos filas). En la rebotica, el robot dispensador (`farmarobot`) contra la pared de
-  arriba. En el almacén, la estantería de farmacia (`farmabalda1`, en los sitios de las de la ropa) y, hasta que se hagan las suyas, las
+  (`tienda-farmacia` en `catalogo.gd`; en la inversa, en dos filas). En la rebotica, los robots dispensadores (`farmarobot` y, desde el 24 nov,
+  `farmarobot2` a `4`: con el brazo arriba, con la puerta abierta y quemado; `robot-farmacia2-gpt.webp` a `4`) contra la pared de
+  arriba: en la normal, los cuatro seguidos; en la inversa, uno. La prueba `--tiendas-fijas` saca también la rebotica y el taller
+  (`captura-fija-<tipo>-<lado>-rebotica.png`, `-taller`). En el almacén, la estantería de farmacia (`farmabalda1`, en los sitios de las de la ropa) y, hasta que se hagan las suyas, las
   cajas y la carretilla de la ropa. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
   cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y

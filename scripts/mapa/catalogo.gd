@@ -190,6 +190,10 @@ const MUEBLES := {
 	"farmagarrafa": {"len": 32, "dep": 28, "paredes": "", "archivo": "centro/garrafa-agua-gpt", "escala": 1.0},
 	"farmabalda1": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-farmacia-gpt", "escala": 1.0},
 	"farmarobot": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia-gpt", "escala": 1.0},
+	# (24 nov, el dueño) otros tres robots: con el brazo arriba, con la puerta abierta y apagado y quemado
+	"farmarobot2": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia2-gpt", "escala": 1.0},
+	"farmarobot3": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia3-gpt", "escala": 1.0},
+	"farmarobot4": {"len": 150, "dep": 48, "paredes": "", "archivo": "centro/robot-farmacia4-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -730,8 +734,9 @@ const SALAS := {
 		"arriba": [["farmamostrador2", 36.0, "libre", 8.25], ["farmamostrador4", 16.0, "libre", 8.25], ["farmagondola1", 5.0, "libre", 4.5], ["farmagondola2", 10.0, "libre", 4.5],
 			["farmacosmetica", 5.0, "libre", 8.25], ["farmatorre", 14.5, "libre", 4.5], ["farmacepillos", 17.0, "libre", 4.5],
 			["farmavitrina", 29.0, "libre", 4.5], ["farmasillas", 42.0, "libre", 4.5], ["farmagarrafa", 43.5, "libre", 8.25]]}},
-	# la rebotica (20 × 12, la puerta en medio): el robot dispensador contra la pared de arriba, a la izquierda de la puerta en la inversa
-	"rebotica-farmacia": {"colocados": {"abajo": [["farmarobot", 4.5]], "arriba": [["farmarobot", 4.5]]}},
+	# la rebotica (20 × 12, la puerta en medio): en la normal, los cuatro robots dispensadores seguidos contra la pared de arriba, con el
+	# mismo espacio entre ellos y las paredes (24 nov, el dueño); en la inversa (la puerta arriba), uno, a la izquierda de la puerta
+	"rebotica-farmacia": {"colocados": {"abajo": [["farmarobot", 2.59], ["farmarobot3", 7.53], ["farmarobot2", 12.47], ["farmarobot4", 17.41]], "arriba": [["farmarobot", 4.5]]}},
 	"almacen-farmacia": {"colocados": {
 		"abajo": [["farmabalda1", 1.9], ["farmabalda1", 5.2], ["farmabalda1", 8.5], ["farmabalda1", 11.8], ["farmabalda1", 15.1],
 			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],

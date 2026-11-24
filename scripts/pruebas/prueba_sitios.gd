@@ -1310,7 +1310,7 @@ func probar_tiendas() -> void:
 # iguales. De cada una, con la puerta abajo y arriba: si el plano está bien (Apartamento.fallos), sus salas, cuántos
 # muebles lleva (los puestos a mano) y cuántos armaritos con botiquín tiene su aseo (M81), y su plano con letras. Luego la
 # busca en una planta, la monta sin zombis y saca captura-fija-<tipo>-<lado>.png (entera, sin penumbra) y
-# captura-fija-<tipo>-<lado>-aseo.png (Johnny en el aseo de empleados). Con "--tipo X", solo esa. Luego se cierra
+# captura-fija-<tipo>-<lado>-aseo.png (Johnny en el aseo de empleados; y -almacen, -rebotica y -taller, en esas salas). Con "--tipo X", solo esa. Luego se cierra
 func probar_tiendas_fijas() -> void:
 	var args := OS.get_cmdline_user_args()
 	var solo: String = args[args.find("--tipo") + 1] if "--tipo" in args else ""
@@ -1370,11 +1370,13 @@ func probar_tiendas_fijas() -> void:
 					johnny.get_node("Camara").reset_smoothing()
 					await get_tree().create_timer(0.8).timeout
 					Captura.foto("captura-fija-%s-%s-aseo.png" % [tipo, lado])
-				if s.uso == "almacen":
-					johnny.position = s.centro
+				# (y, desde el 24 nov, la rebotica de la farmacia y el taller de la ferretería: captura-fija-<tipo>-<lado>-<uso>.png)
+				if s.uso in ["almacen", "rebotica", "taller"]:
+					# (en la rebotica y el taller, Johnny 3 casillas más arriba: lo alto de la pared de arriba, con sus muebles altos, se salía de la foto)
+					johnny.position = s.centro - (Vector2(0, 96) if s.uso != "almacen" else Vector2.ZERO)
 					johnny.get_node("Camara").reset_smoothing()
 					await get_tree().create_timer(0.8).timeout
-					Captura.foto("captura-fija-%s-%s-almacen.png" % [tipo, lado])
+					Captura.foto("captura-fija-%s-%s-%s.png" % [tipo, lado, s.uso])
 			johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
 			await foto_entera(sitio, "captura-fija-%s-%s.png" % [tipo, lado])
 			# y con todas las puertas de dentro abiertas (captura-fija-<tipo>-<lado>-abiertas.png)
