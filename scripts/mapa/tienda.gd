@@ -33,10 +33,8 @@ const TIPOS := {
 	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"],   # [traducir]
 		"color": Color("#ff9a3c"),
 		# (20 nov, el dueño) su aseo y su almacén, rehechos como los de la tienda de ropa, su taller y su sala de venta: destrozados (ver "ropa",
-		# abajo). Y, mientras se rehace, sin nada por el suelo de la sala de venta y del taller ni en las paredes de la sala de
-		# venta, del almacén y del taller ("despejadas", mapa.despejada)
-		"destrozada": ["bano", "almacen", "taller", "tienda"],
-		"despejadas": {"suelo": ["tienda", "taller"], "pared": ["tienda", "almacen", "taller"]}},
+		# abajo). (24 nov, el dueño: terminada) ya no va "despejadas": restos, sangre y suciedad por el suelo y cosas en las paredes
+		"destrozada": ["bano", "almacen", "taller", "tienda"]},
 	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"],   # [traducir]
 		"color": Color("#4fe3ff")},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
