@@ -720,13 +720,13 @@ const SALAS := {
 	# en la normal, pegadas a la pared de arriba, entre las puertas del almacén y de la rebotica, y la fuente a su derecha; y las dos
 	# vitrinas, también pegadas a ella, entre la pared de la izquierda y la puerta del almacén, con el mismo espacio entre la pared, las
 	# dos y la puerta; la mesa de cosmética, en el centro, delante de la entrada;
-	# una góndola debajo de cada mostrador, con paso entre los dos, y a la izquierda de cada una, pegados, los cepillos (la del almacén) y la
-	# torre (la de la rebotica); y a la izquierda de los cepillos, pegada, la tercera góndola (24 nov, el dueño).
+	# una góndola debajo de cada mostrador, con paso entre los dos, y a la izquierda de cada una, con media casilla de separación, los cepillos (la del almacén) y la
+	# torre (la de la rebotica); y a la izquierda de los cepillos, también a media casilla, la tercera góndola (24 nov, el dueño).
 	# Libre el paso de la entrada. En la inversa (la entrada arriba), en dos filas, como en la ferretería
 	"tienda-farmacia": {"colocados": {
 		"abajo": [["farmamostrador", 36.0, "libre", 2.75], ["farmamostrador3", 16.0, "libre", 2.75], ["farmagondola1", 16.0, "libre", 7.5], ["farmagondola2", 36.0, "libre", 7.5],
-			["farmacosmetica", 23.0, "libre", 7.0], ["farmacepillos", 13.0, "libre", 7.5], ["farmatorre", 32.81, "libre", 7.5],
-			["farmavitrina", 4.22], ["farmavitrina2", 10.78], ["farmagondola3", 10.0, "libre", 7.5], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
+			["farmacosmetica", 23.0, "libre", 7.0], ["farmacepillos", 12.5, "libre", 7.5], ["farmatorre", 32.31, "libre", 7.5],
+			["farmavitrina", 4.22], ["farmavitrina2", 10.78], ["farmagondola3", 9.0, "libre", 7.5], ["farmasillas", 26.0], ["farmagarrafa", 28.25]],
 		"arriba": [["farmamostrador2", 36.0, "libre", 8.25], ["farmamostrador4", 16.0, "libre", 8.25], ["farmagondola1", 5.0, "libre", 4.5], ["farmagondola2", 10.0, "libre", 4.5],
 			["farmacosmetica", 5.0, "libre", 8.25], ["farmatorre", 14.5, "libre", 4.5], ["farmacepillos", 17.0, "libre", 4.5],
 			["farmavitrina", 29.0, "libre", 4.5], ["farmasillas", 42.0, "libre", 4.5], ["farmagarrafa", 43.5, "libre", 8.25]]}},
