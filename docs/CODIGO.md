@@ -1142,10 +1142,14 @@ en una línea.
   arriba, entre las puertas del almacén y de la rebotica); libre el paso de la entrada
   (`tienda-farmacia` en `catalogo.gd`; en la inversa, en dos filas). En la rebotica, los robots dispensadores (`farmarobot` y, desde el 24 nov,
   `farmarobot2` a `4`: con el brazo arriba, con la puerta abierta y quemado; `robot-farmacia2-gpt.webp` a `4`) contra la pared de
-  arriba: en la normal, los cuatro seguidos; en la inversa, uno. Debajo, en la normal (24 nov, de fotos del dueño): las dos mesas en isla
+  arriba: en la normal, los cuatro seguidos. Debajo, en la normal (24 nov, de fotos del dueño): las dos mesas en isla
   con su estante alto (`farmaisla1`, la de los microscopios, y `farmaisla2`, la del baño maría), una a cada lado del paso de la puerta, y a
   la derecha de la segunda el cubo de residuos (`farmaresiduos`); más abajo, la mesa de acero (`farmaacero`) con el carro de acero
-  (`farmacarro`) a su izquierda; todo por encima de la fila 9, porque la pared de abajo tapa lo que queda detrás. (El taburete,
+  (`farmacarro`) a su izquierda; todo por encima de la fila 9, porque la pared de abajo tapa lo que queda detrás.
+  La inversa (24 nov, el dueño), como la normal dada la vuelta de arriba abajo, en la sala de venta y en la rebotica: los mostradores
+  (el lado de dentro) abajo, delante de las puertas; lo que en la normal va contra la pared de arriba, en la inversa un poco por encima de
+  la de abajo (`"libre"`, no `"abajo"`: la pared de abajo de la sala tapa sus últimas filas); y en la rebotica, los cuatro robots contra
+  la pared de abajo y lo demás encima. (El taburete,
   `farmataburete`, está hecho pero el dueño lo quitó.)
   `--rodear-muebles --tipo farmacia --uso rebotica` comprueba los muebles de la rebotica en vez de los de la sala de venta. La prueba `--tiendas-fijas` saca también la rebotica y el taller
   (`captura-fija-<tipo>-<lado>-rebotica.png`, `-taller`). En el almacén, las estanterías de farmacia (`farmabalda1`, de cajitas de medicinas, `farmabalda2`, de material de curas, `farmabalda3`, de frascos y garrafas, y `farmabalda4`, la saqueada, mezcladas en los sitios de las de la ropa; el 24 nov, rehechas más bajas: la primera se salía por encima de la pared, y `muebles_farmacia_gpt.py` les pone un tope de alto, `ALTO_MAX`, 136 como las de la ferretería); en los sitios de las cajas de cartón, cinco palets
