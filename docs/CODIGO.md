@@ -1194,7 +1194,10 @@ en una línea.
   oxidado con herramientas y cable, fontanería y jardín, electricidad, y una saqueada con una balda caída; del ancho de las de ropa,
   88, con los huecos entre baldas vacíos, y alternadas para que no haya dos iguales juntas). La carretilla de mano, también
   de ferretería: `ferrecarretillamano` (`carretilla-almacen-ferreteria-gpt.webp`, amarilla, con un saco de cemento y una caja; con el
-  doble de detalle y el hueco del asa vacío). Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
+  doble de detalle y el hueco del asa vacío). En la sala de venta, además (24 nov), un expositor de herramientas de jardín, una
+  cesta de ofertas y un palé de rollos de malla y alambre (`ferrejardin`, `ferrecesta`, `ferremalla`; `expositor-jardin-gpt.webp`,
+  `cesta-ofertas-gpt.webp`, `pale-malla-gpt.webp`; con el doble de detalle; el expositor, con los huecos entre los mangos vacíos),
+  en el centro, a los lados del paso de la puerta. Y la sala de venta, igual: hormigón pulido gris y pared blanca con rodapié de chapa (la
   misma herramienta; igualados solo de luz, que la pintura amarilla dejaba un halo azul; los de la pintura, los que menos salen). Del 20 al 23 nov la pared fue toda de paneles perforados de chapa gris oscura;
   ahora vuelve a ser la blanca, con un panel de herramientas en cada hueco (abajo).
   Mientras se rehace, `Tienda.TIPOS` "despejadas" (`mapa.despejada`): sin nada por el

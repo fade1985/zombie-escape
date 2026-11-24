@@ -18,6 +18,8 @@
 #   estanteria-almacen-ferreteria-gpt .. -ferreteria4-gpt  -> ferrebalda1..4, las estanterías de metal del almacén (los huecos entre
 #     baldas, vacíos): herramientas y cable, fontanería y jardín, electricidad, y una saqueada con una balda caída
 #   carretilla-almacen-ferreteria-gpt  -> ferrecarretillamano, la carretilla de mano amarilla del almacén, con un saco y una caja
+#   expositor-jardin-gpt, cesta-ofertas-gpt, pale-malla-gpt  -> ferrejardin, ferrecesta, ferremalla (sala de venta): palas y
+#     rastrillos en su soporte, una cesta de rejilla con guantes, brochas y cinta, y rollos de malla de gallinero y alambre en un palé
 #   py tools/muebles_ferreteria_gpt.py   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -42,18 +44,21 @@ MUEBLES = [("mostrador-ferreteria-gpt", "ferremostrador", 164), ("mostrador-ferr
            ("estanteria-almacen-ferreteria-gpt", "ferrebalda1", 88), ("estanteria-almacen-ferreteria2-gpt", "ferrebalda2", 88),
            ("estanteria-almacen-ferreteria3-gpt", "ferrebalda3", 88), ("estanteria-almacen-ferreteria4-gpt", "ferrebalda4", 88),
            # la carretilla de mano del almacén, del ancho de la de la tienda de ropa (40)
-           ("carretilla-almacen-ferreteria-gpt", "ferrecarretillamano", 40)]
+           ("carretilla-almacen-ferreteria-gpt", "ferrecarretillamano", 40),
+           # tres más para la sala de venta: el expositor de herramientas de jardín, la cesta de ofertas y un palé de malla y alambre
+           # (el palé, del mismo ancho de madera que los de cemento)
+           ("expositor-jardin-gpt", "ferrejardin", 120), ("cesta-ofertas-gpt", "ferrecesta", 90), ("pale-malla-gpt", "ferremalla", 82)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (el asa de la transpaleta, la rendija entre sus
 # horquillas, entre los peldaños de la escalera, entre los tubos de la carretilla): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
 CON_HUECOS = {"ferretranspaleta", "ferreescalera", "ferrecarretilla", "ferrebanco", "ferrecarro", "ferrehormigonera",
               "ferreestanteria", "ferrebalda1", "ferrebalda2", "ferrebalda3", "ferrebalda4",
-              "ferrecarretillamano"}
+              "ferrecarretillamano", "ferrejardin"}
 HUECO_MIN = 1000
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # los de barras finas o cosas pequeñas (los blísteres de las góndolas), que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad, como los paneles de la pared)
 FINOS = {"ferreescalera", "ferrecarretilla", "ferregondola1", "ferregondola2", "ferrebanco", "ferrecarro", "ferrehormigonera", "ferreestanteria",
-         "ferrecarretillamano"}
+         "ferrecarretillamano", "ferrejardin", "ferrecesta", "ferremalla"}
 
 
 def quitar_fondo(im):

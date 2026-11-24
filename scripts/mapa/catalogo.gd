@@ -165,6 +165,10 @@ const MUEBLES := {
 	"ferrebalda4": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/estanteria-almacen-ferreteria4-gpt", "escala": 1.0},
 	# la carretilla de mano del almacén de la ferretería (24 nov, el dueño), de la medida de la de ropa
 	"ferrecarretillamano": {"len": 40, "dep": 28, "paredes": "", "archivo": "centro/carretilla-almacen-ferreteria-gpt", "escala": 1.0},
+	# (24 nov, el dueño) tres más para la sala de venta: el expositor de herramientas de jardín, la cesta de ofertas y el palé de malla
+	"ferrejardin": {"len": 120, "dep": 40, "paredes": "", "archivo": "centro/expositor-jardin-gpt", "escala": 1.0},
+	"ferrecesta": {"len": 90, "dep": 40, "paredes": "", "archivo": "centro/cesta-ofertas-gpt", "escala": 1.0},
+	"ferremalla": {"len": 82, "dep": 48, "paredes": "", "archivo": "centro/pale-malla-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -541,7 +545,7 @@ const SALAS := {
 	}},
 	# M77: la ferretería fija (Tienda.PLANOS). (20 nov, el dueño) la sala de venta, sin muebles de momento: se rehará, como la de la
 	# tienda de ropa (antes llevaba bancos de trabajo, palés, cajas y dos filas de estanterías: está en git)
-	"tienda-ferreteria": {"colocados": {"abajo": [["ferremostrador", 16.0, "libre", 2.75], ["ferrepale1", 31.25, "libre", 7.0], ["ferrepale2", 34.0, "libre", 7.0], ["ferrepale3", 36.75, "libre", 7.0], ["ferretranspaleta", 40.25, "libre", 7.0], ["ferrelatas1", 5.5, "libre", 5.5], ["ferrelatas2", 9.0, "libre", 5.5], ["ferreescalera", 2.625, "libre", 5.5], ["ferrecarretilla", 34.0, "libre", 10.0], ["ferregondola1", 4.5, "libre", 10.5], ["ferregondola2", 9.25, "libre", 10.5]], "arriba": [["ferremostrador2", 16.0, "libre", 8.25], ["ferrepale1", 31.25, "libre", 4.5], ["ferrepale2", 34.0, "libre", 4.5], ["ferrepale3", 36.75, "libre", 4.5], ["ferretranspaleta", 40.25, "libre", 4.5], ["ferrelatas1", 5.5, "libre", 4.5], ["ferrelatas2", 9.0, "libre", 4.5], ["ferreescalera", 2.625, "libre", 4.5], ["ferrecarretilla", 34.0, "libre", 8.25], ["ferregondola1", 4.5, "libre", 8.25], ["ferregondola2", 9.25, "libre", 8.25]]}},
+	"tienda-ferreteria": {"colocados": {"abajo": [["ferremostrador", 16.0, "libre", 2.75], ["ferrepale1", 31.25, "libre", 7.0], ["ferrepale2", 34.0, "libre", 7.0], ["ferrepale3", 36.75, "libre", 7.0], ["ferretranspaleta", 40.25, "libre", 7.0], ["ferrelatas1", 5.5, "libre", 5.5], ["ferrelatas2", 9.0, "libre", 5.5], ["ferreescalera", 2.625, "libre", 5.5], ["ferrecarretilla", 34.0, "libre", 10.0], ["ferregondola1", 4.5, "libre", 10.5], ["ferregondola2", 9.25, "libre", 10.5], ["ferrejardin", 16.0, "libre", 6.5], ["ferrecesta", 16.0, "libre", 10.5], ["ferremalla", 27.5, "libre", 7.0]], "arriba": [["ferremostrador2", 16.0, "libre", 8.25], ["ferrepale1", 31.25, "libre", 4.5], ["ferrepale2", 34.0, "libre", 4.5], ["ferrepale3", 36.75, "libre", 4.5], ["ferretranspaleta", 40.25, "libre", 4.5], ["ferrelatas1", 5.5, "libre", 4.5], ["ferrelatas2", 9.0, "libre", 4.5], ["ferreescalera", 2.625, "libre", 4.5], ["ferrecarretilla", 34.0, "libre", 8.25], ["ferregondola1", 4.5, "libre", 8.25], ["ferregondola2", 9.25, "libre", 8.25], ["ferrejardin", 16.0, "libre", 4.5], ["ferrecesta", 28.0, "libre", 8.25], ["ferremalla", 27.5, "libre", 4.5]]}},
 	# el almacén (20 nov, el dueño: el mismo que el de la tienda de ropa, almacen-ropa; 24 nov: con montones de cajas, estanterías y carretilla de
 	# ferretería en los sitios de los de ropa) y el taller de la ferretería fija (M77)
 	"almacen-ferreteria": {"colocados": {
