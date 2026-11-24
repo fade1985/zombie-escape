@@ -1147,9 +1147,10 @@ en una línea.
   la derecha de la segunda el cubo de residuos (`farmaresiduos`); más abajo, la mesa de acero (`farmaacero`) con el carro de acero
   (`farmacarro`) a su izquierda; todo por encima de la fila 9, porque la pared de abajo tapa lo que queda detrás.
   La inversa (24 nov, el dueño), en la sala de venta, como la normal dada la vuelta de arriba abajo: los mostradores
-  (el lado de dentro) abajo, delante de las puertas; abajo a la izquierda, un poco por encima de la pared de abajo (`"libre"`, no
-  `"abajo"`: esa pared tapa las últimas filas de la sala), la góndola de bebé con la torre; y contra la pared de arriba, de la entrada a
-  la pared de la derecha y con el mismo espacio entre todo, las dos vitrinas con las sillas y la garrafa en medio. En la rebotica de la inversa, solo dos
+  (el lado de dentro) abajo, delante de las puertas, y en su fila, con el pie alineado, la torre con la góndola de bebé y la mesa de
+  cosmética (`"libre"`, no `"abajo"`: la pared de abajo tapa las últimas filas de la sala); contra la pared de arriba, a la izquierda de la
+  entrada, las otras dos góndolas con los cepillos en medio, y a la derecha, con el mismo espacio entre todo, las dos vitrinas con las
+  sillas y la garrafa en medio. En la rebotica de la inversa, solo dos
   robots, uno a cada lado de la puerta y centrados en su trozo de pared, y lo demás como en la normal pero una casilla más abajo. (El taburete,
   `farmataburete`, está hecho pero el dueño lo quitó.)
   `--rodear-muebles --tipo farmacia --uso rebotica` comprueba los muebles de la rebotica en vez de los de la sala de venta. La prueba `--tiendas-fijas` saca también la rebotica y el taller
