@@ -103,6 +103,12 @@ const OJOS_EN := {"s": [Vector2(-5, -91), Vector2(1, -91)], "se": [Vector2(0, -9
 	"so": [Vector2(-9, -91), Vector2(-4, -91)], "e": [Vector2(4, -86)], "o": [Vector2(-8, -86)],
 	"n": [], "ne": [], "no": []}
 const CABEZA := Vector2(-2, -89)
+const ESTELA_OJOS := 10            # los fotogramas que dura la estela de los ojos en la pasarela
+# Cada ojo, a píxeles del dibujo (2 unidades) desde el ojo: el centro casi blanco, el rojo de alrededor y el brillo
+const OJO_CENTRO := [Vector2(-1, 0), Vector2(0, 0)]
+const OJO_ROJO := [Vector2(-2, 0), Vector2(1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(-1, 1), Vector2(0, 1)]
+const OJO_BRILLO := [Vector2(-3, 0), Vector2(2, 0), Vector2(-2, -1), Vector2(1, -1), Vector2(-2, 1), Vector2(1, 1),
+	Vector2(-1, -2), Vector2(0, -2), Vector2(-1, 2), Vector2(0, 2)]
 
 var pillada_antes := false         # la última vez que iba a esconderse, la pillaron (danar, "ojos")
 var presentada := false            # ya se ha escondido la primera vez, al acabar la presentación (presentarse)
@@ -119,6 +125,7 @@ var ojos: Node2D                   # el brillo de los ojos, que se ve también a
 var foco: FocoModista = null
 var sin_foco := 0.0                # mientras sea > 0, el foco no la congela
 var parpadeo := 2.0
+var estela_ojos: Array = []        # en la pasarela, por dónde han pasado los ojos (en el mundo): la estela roja (_pintar_ojos)
 var lamparas: Array = []           # las que se apagaron al empezar el desfile, con lo que lucían: [nodo, fuerza]
 
 
@@ -950,11 +957,42 @@ func _pintar_ojos() -> void:
 	var puntos: Array = OJOS_EN[dir]
 	if estado == "escondida" and is_instance_valid(disfraz):
 		puntos = OJOS_MANIQUI.map(func(p): return p + Vector2(0, disfraz.position.y - PIE_MANIQUI.y))
+	# (laten un poco: que se note que están vivos)
+	k *= 0.85 + 0.15 * sin(tiempo * 7.0)
 	var cabeza: Vector2 = CABEZA if puntos.is_empty() else (puntos[0] + puntos[-1]) / 2.0
-	Formas.disco(ojos, cabeza, 16.0, Color(1.0, 0.36, 0.45, 0.18 * k))
+	# el resplandor, a cuadraditos salteados (como un tramado), no un círculo liso
+	var c0 := (cabeza / 2.0).floor()
+	for y in range(-5, 6):
+		for x in range(-6, 7):
+			if (x + y) % 2 == 0 and x * x * 0.7 + y * y <= 25.0:
+				ojos.draw_rect(Rect2((c0 + Vector2(x, y)) * 2.0, Vector2(2, 2)), Color(0.9, 0.12, 0.25, 0.13 * k))
+	# en la pasarela, la estela: los ojos dejan un rastro rojo al moverse (a oscuras es lo que se le ve)
+	if fase == 2 and estado != "escondida":
+		estela_ojos.push_front(puntos.map(func(p): return ojos.to_global(p)))
+		if estela_ojos.size() > ESTELA_OJOS:
+			estela_ojos.pop_back()
+		for i in range(1, estela_ojos.size()):
+			var a := (1.0 - float(i) / ESTELA_OJOS) * 0.55 * k
+			for g in estela_ojos[i]:
+				var q: Vector2 = (ojos.to_local(g) / 2.0).floor() * 2.0
+				ojos.draw_rect(Rect2(q - Vector2(2, 0), Vector2(4, 2)), Color(1.0, 0.2, 0.32, a))
+	else:
+		estela_ojos.clear()
 	for p in puntos:
-		Formas.disco(ojos, p, 4.5, Color(1.0, 0.42, 0.5, 0.45 * k))
-		ojos.draw_rect(Rect2(p - Vector2(2, 1), Vector2(4, 2)), Color(1.0, 0.95, 0.7, k))
+		var o: Vector2 = (p / 2.0).floor()
+		for d in OJO_BRILLO:
+			ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.16, 0.3, 0.4 * k))
+		for d in OJO_ROJO:
+			ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.3, 0.38, 0.9 * k))
+		for d in OJO_CENTRO:
+			ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.95, 0.78, k))
+	# y, de vez en cuando, un destello en cruz en un ojo
+	if not puntos.is_empty() and fmod(tiempo, 2.3) < 0.14:
+		var o: Vector2 = (puntos[0] / 2.0).floor()
+		for i in range(2, 5):
+			var a := (1.0 - (i - 2.0) / 3.0) * k
+			for d in [Vector2(-1 - i, 0), Vector2(i, 0), Vector2(0, 1 - i), Vector2(0, i - 1)]:
+				ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.92, 0.85, a))
 
 
 # El señuelo de un maniquí: va dentro del maniquí (sigue sus cambios de sitio) y es del grupo "zombis" para que le

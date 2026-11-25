@@ -2415,6 +2415,13 @@ func probar_desfile() -> void:
 	jefe.global_position = jefe.foco.global_position + Vector2(260, 0)
 	await get_tree().physics_frame
 	Captura.foto("captura-desfile-pasarela.png")
+	# los ojos a oscuras, moviéndose: la estela roja
+	var sale: Vector2 = jefe.global_position
+	for i in 8:
+		jefe.global_position = sale + Vector2(0, 14 * i)
+		await get_tree().process_frame
+	Captura.foto("captura-desfile-ojos.png")
+	jefe.global_position = sale
 	# en el borde del foco, nada; de lleno, cegada (el doble) y el foco se para
 	var pies := Vector2(0, jefe.PIE - 10.0)
 	jefe.global_position = jefe.foco.global_position - pies + Vector2(FocoModista.RADIO * 0.75, 0)

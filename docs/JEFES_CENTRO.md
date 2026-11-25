@@ -234,6 +234,9 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   aturdida con estrellitas, le entra el doble, y el foco se para encima de ella latiendo más fuerte mientras dura.
   Ronda apartándose del foco menos que antes (hasta 1,5 radios, a 0,7 de su velocidad), para que la pille alguna vez.
   Al caer ella vuelve la luz.
+- Los ojos (25 nov, el dueño: eran un círculo rojo liso): a píxeles, el centro casi blanco, un rojo alrededor y un
+  resplandor tramado (cuadraditos salteados); laten un poco, cada 2,3 s un destello en cruz y, en la pasarela, dejan
+  una estela roja al moverse (`_pintar_ojos`). Foto: `captura-desfile-ojos.png`.
 - Animaciones nuevas de PixelLab (v3, 20 generaciones): corte (8 direcciones; de frente y abajo a la derecha se quitan
   los dos últimos fotogramas, con unas tijeras gigantes brillando), aturdida y desfile (solo de frente).
 - Pista: al entrar, Johnny dice «Uno de esos maniquíes respira...».
