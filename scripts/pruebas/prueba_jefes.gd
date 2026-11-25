@@ -2268,6 +2268,12 @@ func probar_desfile() -> void:
 	johnny.global_position = jefe.global_position + Vector2(-120, 140)   # (que salga en la foto, entre los demás)
 	await get_tree().create_timer(0.5, false).timeout
 	Captura.foto("captura-desfile-disfraz.png")
+	var antes_alfileres := get_tree().get_nodes_in_group("balas_zombi").size()
+	jefe.disparo_escondida(johnny)
+	print("Desfile: escondida dispara, alfileres nuevos %d (esperado: 3, el suyo y dos señuelos)" % [
+		get_tree().get_nodes_in_group("balas_zombi").size() - antes_alfileres])
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-desfile-dispara.png")
 	johnny.global_position = c
 	jefe.datos.dur = 99.0
 	# un maniquí que no es ella: revienta en alfileres
@@ -2277,7 +2283,7 @@ func probar_desfile() -> void:
 	await get_tree().create_timer(0.3, false).timeout
 	Captura.foto("captura-desfile-revienta.png")
 	await get_tree().create_timer(0.3, false).timeout
-	print("Desfile: alfileres volando %d (esperado: %d)" % [get_tree().get_nodes_in_group("balas_zombi").size(), jefe.ALFILERES_REVIENTA])
+	print("Desfile: alfileres volando %d (esperado: %d y los que tira escondida, de 3 en 3)" % [get_tree().get_nodes_in_group("balas_zombi").size(), jefe.ALFILERES_REVIENTA])
 	Captura.foto("captura-desfile-alfileres.png")
 	# ella: descubierta, el doble
 	await get_tree().create_timer(0.8, false).timeout

@@ -64,11 +64,12 @@ const MIN_TENSAR := 4              # con menos hilos no tensa
 # Esconderse entre los maniquíes
 const OJOS := 0.6                  # lo que le brillan los ojos antes de cambiarse de sitio
 const OJOS_MANIQUI := [Vector2(-5, -103), Vector2(1, -103)]   # escondida, sus ojos van en la cabeza del maniquí
+const DISPARO_ESCONDIDA := 1.5     # escondida, cada cuánto le tira un alfiler (y dos señuelos a la vez: disparo_escondida)
 const ESCONDIDA := 6.0             # lo que se queda quieta como un maniquí más
 const RESPIRA := 1.7               # lo que tarda cada respiración (sube y baja un píxel)
 const PARPADEO := [2.0, 3.5]       # cada cuánto le brillan un instante los ojos escondida
 const LEJOS_DE_JOHNNY := 220.0     # el maniquí con el que se cambia está por lo menos así de lejos de Johnny
-const DESCUBIERTA := 2.5           # lo que se queda aturdida si la encuentran
+const DESCUBIERTA := 1.5           # lo que se queda aturdida si la encuentran
 const MAS_DESCUBIERTA := 2.0       # lo que le entra entonces
 const REVIENTA := 0.5              # el aviso del maniquí equivocado antes de reventar en alfileres
 const ALFILERES_REVIENTA := 12
@@ -78,15 +79,15 @@ const PIE := 30.0                  # a qué altura dibuja los pies respecto a su
 const PIE_MANIQUI := Vector2(0, 26)   # su centro, respecto a los pies de un maniquí (para ponerse en su sitio)
 # La pasarela (fase 2)
 const OSCURO := 0.45               # la oscuridad de más con las luces apagadas (luz.gd, evento; con la de la tienda, casi negro)
-const AVISO_CORTE := [0.9, 0.55]   # el aviso del primer corte y el de los siguientes
-const CORTES := 3
+const AVISO_CORTE := [0.9, 0.45]   # el aviso del primer corte y el de los siguientes
+const CORTES := 4
 const VELOCIDAD_CORTE := 900.0
 const DURA_CORTE := 1.4            # lo más que corre en un corte
 const ANCHO_CORTE := 26.0          # lo cerca de su camino que tiene que estar Johnny para que le corte
 const DANO_CORTE := 18
-const CONGELADA := 2.2             # lo que se queda tiesa si la pilla el foco
+const CONGELADA := 1.3             # lo que se queda tiesa si la pilla el foco
 const MAS_CONGELADA := 2.0
-const INMUNE_FOCO := 3.5           # después, el foco no la para este rato
+const INMUNE_FOCO := 5.0           # después, el foco no la para este rato
 # Lo que espera entre ataque y ataque (normal y enfadada; 0: no lo hace)
 const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [1.6, 0.0], "tensar": [9.0, 0.0],
 	"esconderse": [7.0, 0.0], "corte": [0.0, 5.5]}
@@ -242,6 +243,9 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			parpadeo -= delta
 			if parpadeo <= -0.18:
 				parpadeo = randf_range(PARPADEO[0], PARPADEO[1])
+			if t >= datos.get("siguiente", DISPARO_ESCONDIDA):
+				datos.siguiente = t + DISPARO_ESCONDIDA
+				disparo_escondida(johnny)
 			if t >= datos.dur:
 				salir(johnny, hacia, d)
 		"descubierta":
@@ -455,6 +459,19 @@ func poner_senuelos() -> void:
 			s.modista = self
 			s.position = -PIE_MANIQUI
 			m.add_child(s)
+
+
+# Escondida no se queda tranquila (25 nov, el dueño: era fácil esperar): le tira un alfiler a Johnny y, a la vez, otros
+# dos maniquíes cualquiera también, para que no se sepa cuál es ella (fijarse en cuál tira siempre es otra pista)
+func disparo_escondida(johnny: Node2D) -> void:
+	var desde: Array[Vector2] = [global_position]
+	var otros := get_tree().get_nodes_in_group("senuelos").filter(func(s): return s.revienta <= 0.0 		and s.global_position.distance_to(johnny.global_position) < ALCANCE_ALFILERES)
+	otros.shuffle()
+	for s in otros.slice(0, 2):
+		desde.append(s.global_position)
+	for g in desde:
+		var p: Vector2 = get_parent().to_local(g)
+		lanzar_alfiler(p, (johnny.global_position - g).angle() + randf_range(-0.05, 0.05))
 
 
 func quitar_senuelos() -> void:

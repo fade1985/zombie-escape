@@ -210,6 +210,10 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   (24 nov, el dueño: antes se veía solo un salto, porque ella no se parece a los maniquíes). Ya no salta si Johnny se acerca. Solo la delata que **respira** (sube un píxel la mitad de cada
   respiración de 1,7 s) y un parpadeo de los ojos cada 2-3,5 s. Si le pegan escondida: «¡ME HAS VISTO!», aturdida 2,5 s
   con estrellitas y le entra el doble. Si le pegan a otro maniquí: un aro rojo de 0,5 s y revienta en 12 alfileres.
+  Más difícil (25 nov, el dueño: quedaba fácil): **escondida dispara**, cada 1,5 s un alfiler suyo hacia Johnny y,
+  a la vez, otros dos desde dos maniquíes cualquiera (esperar ya no es seguro; fijarse en cuál tira siempre es otra
+  pista); descubierta ya solo 1,5 s (eran 2,5); tiesa bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
+  pare (eran 3,5); en la pasarela, cuatro cortes seguidos (eran tres), los siguientes con 0,45 s de aviso (eran 0,55).
   Si nadie la encuentra a tiempo, sale **crecida** (24 nov, el dueño): «¡DEMASIADO LENTO!», roja latiendo 8 s, con
   las esperas entre ataques al doble de rápido y andando un 40 % más deprisa.
 - **De cerca** (24 nov, el dueño: a cuerpo a cuerpo solo daba tijeretazos): como mucho dos tijeretazos seguidos;
