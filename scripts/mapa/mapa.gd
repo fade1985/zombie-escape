@@ -809,8 +809,14 @@ func poner_muros() -> void:
 # del almacén y del taller: de 0 a 15, de 17 a 35 y de 37 a 46): 3 + 3 + 2; con la puerta arriba, dos (la entrada en medio:
 # de 0 a 22 y de 24 a 46): 4 + 4. (24 nov) En cada trozo, el mismo espacio entre los paneles que entre ellos y las puertas o
 # las esquinas (9 píxeles, 21, 2 o 3 en el último, tan estrecho, y 16 con la puerta arriba); un azul y un gris, alternos. Del
-# rodapié a la moldura
-const PANELES_TIENDA := {"ferreteria": {
+# rodapié a la moldura.
+# (25 nov, el dueño) Y en otras salas de la tienda, con la clave "<uso>-<tienda>": el aparato del frío de la cámara del súper
+# (mueble-camaraevaporador.png, de tools/muebles_supermercado_gpt.py), en el hueco entre las dos estanterías de en medio en la
+# normal, y en la inversa, a la derecha de la puerta, antes de las estanterías. Con "alto" detrás, colgado arriba, bajo la moldura
+const PANELES_TIENDA := {"camara-supermercado": {
+	"abajo": [["mueble-camaraevaporador", 10.0, "alto"]],
+	"arriba": [["mueble-camaraevaporador", 12.33, "alto"]],
+}, "ferreteria": {
 	"abajo": [["panel-destornilladores", 2.6875], ["panel-taladros", 7.5], ["panel-serruchos", 12.3125],
 		["panel-martillos", 20.4375], ["panel-alicates", 26.0], ["panel-cinta", 31.5625],
 		["panel-llaves", 39.3125], ["panel-radiales", 43.6875]],
@@ -819,15 +825,14 @@ const PANELES_TIENDA := {"ferreteria": {
 }}
 
 
-# Los paneles de PANELES_TIENDA que caen en esta cara (la de arriba de la sala de venta), con su sombra
+# Los paneles de PANELES_TIENDA que caen en esta cara (la de arriba de la sala de venta, o de otra sala con "<uso>-<tienda>"), con su sombra
 func paneles_de_pared(cara: Node2D, sala: int) -> Array:
 	var lista := []
 	if sala < 0 or sala >= sitio.apt.salas.size():
 		return lista
 	var s: Dictionary = sitio.apt.salas[sala]
-	if s.uso != "tienda":
-		return lista
-	for p in PANELES_TIENDA.get(sitio.get("tienda", ""), {}).get(sitio.apt.entrada.lado, []):
+	var clave: String = sitio.get("tienda", "") if s.uso == "tienda" else "%s-%s" % [s.uso, sitio.get("tienda", "")]
+	for p in PANELES_TIENDA.get(clave, {}).get(sitio.apt.entrada.lado, []):
 		if p[0] == "":
 			continue
 		var t: Texture2D = load("res://assets/sprites/%s.png" % p[0])
@@ -836,6 +841,8 @@ func paneles_de_pared(cara: Node2D, sala: int) -> Array:
 			continue
 		# en píxeles del dibujo (la cara va a escala 2; el panel, a la mitad): abajo, justo encima del rodapié
 		var en := Vector2(floorf(centro / 2.0 - t.get_width() / 4.0), -3.0 - t.get_height() / 2.0)
+		if p.size() > 2 and p[2] == "alto":   # (colgado arriba: 2 píxeles por debajo de lo alto de la cara)
+			en.y = 2.0 - cara.alto / 2.0
 		lista.append({"dibujo": t, "x": en.x + 1, "y": en.y + 1, "color": Color(0, 0, 0, 0.3), "mitad": true})
 		lista.append({"dibujo": t, "x": en.x, "y": en.y, "mitad": true})
 	return lista

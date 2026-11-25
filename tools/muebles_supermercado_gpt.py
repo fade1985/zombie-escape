@@ -7,6 +7,8 @@
 #   burra-embutidos-gpt  -> camaraburra, un carro burra con ruedas de chorizos, salchichones y jamones colgados
 #   pale-verduras-gpt    -> camarapale, un palé con cajas verdes de verdura y fruta apiladas
 #   colgador-carne-gpt   -> camaracolgador, un pórtico de acero con piezas de carne colgadas de ganchos
+#   evaporador-camara-gpt -> camaraevaporador, el aparato del frío, con sus dos ventiladores: no es un mueble, va colgado arriba en
+#     la pared (mapa.gd, PANELES_TIENDA), en el hueco entre dos estanterías
 #   py tools/muebles_supermercado_gpt.py [tipo ...]   (y luego Godot --headless --path . --import)
 import json
 from collections import deque
@@ -17,7 +19,7 @@ from PIL import Image
 MUEBLES = [("estanteria-camara-verdura-gpt", "camarabalda1", 112), ("estanteria-camara-carne-gpt", "camarabalda2", 112),
            ("estanteria-camara-lacteos-gpt", "camarabalda3", 112), ("estanteria-camara-saqueada-gpt", "camarabalda4", 112),
            ("burra-embutidos-gpt", "camaraburra", 88), ("pale-verduras-gpt", "camarapale", 64),
-           ("colgador-carne-gpt", "camaracolgador", 160)]
+           ("colgador-carne-gpt", "camaracolgador", 160), ("evaporador-camara-gpt", "camaraevaporador", 52)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (entre las baldas, las barras, las tablas del palé
 # y las piezas de carne): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
 CON_HUECOS = {"camarabalda1", "camarabalda2", "camarabalda3", "camarabalda4", "camaraburra", "camarapale", "camaracolgador"}
@@ -28,7 +30,7 @@ ALTO_MAX = {"camarabalda1": 136, "camarabalda2": 136, "camarabalda3": 136, "cama
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # los de cosas pequeñas, que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad): todos, como en la farmacia
-FINOS = set(CON_HUECOS)
+FINOS = set(CON_HUECOS) | {"camaraevaporador"}
 
 
 def quitar_fondo(im):

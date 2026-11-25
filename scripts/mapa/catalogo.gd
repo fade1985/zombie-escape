@@ -563,7 +563,8 @@ const SALAS := {
 	"camara-supermercado": {"colocados": {
 		"abajo": [["camarabalda1", 3.2], ["camarabalda2", 7.73], ["camarabalda3", 12.27], ["camarabalda4", 16.8],
 			["camaraburra", 2.625, "libre", 7.6875], ["camarapale", 6.25, "libre", 7.6875], ["camaracolgador", 15.75, "libre", 7.625]],
-		"arriba": [["camarabalda1", 2.56], ["camarabalda2", 6.44], ["camarabalda3", 13.56], ["camarabalda4", 17.44],
+		# (con el aparato del frío colgado a la derecha de la puerta, mapa.PANELES_TIENDA: a ese lado, los huecos, de 16 unidades)
+		"arriba": [["camarabalda1", 2.56], ["camarabalda2", 6.44], ["camarabalda3", 14.98], ["camarabalda4", 18.16],
 			["camaraburra", 2.625, "libre", 7.6875], ["camarapale", 6.25, "libre", 7.6875], ["camaracolgador", 15.75, "libre", 7.625]]}},
 	# su almacén, de momento el mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en la ferretería y la
 	# farmacia), y su aseo, el mismo que el de la farmacia (bano-farmacia)

@@ -1183,7 +1183,11 @@ en una línea.
   quitados y con el doble de detalle. En la normal, las cuatro estanterías contra la pared de arriba, con el mismo hueco entre ellas y con
   las paredes; abajo, con el pie en la fila 8,25, la burra y el palé a la izquierda del paso de la puerta (casillas 8,5 a 11,5) y el colgador
   a la derecha, a 40 unidades o más de todo (Johnny pasa por 36). En la inversa, las estanterías de dos en dos a los lados de la puerta y
-  lo demás igual (`camara-supermercado` en `catalogo.gd`). Prueba: `--rodear-muebles --tipo supermercado --uso camara`. La sala de venta,
+  lo demás igual (`camara-supermercado` en `catalogo.gd`). Prueba: `--rodear-muebles --tipo supermercado --uso camara`. Y el aparato del
+  frío (el evaporador, con sus dos ventiladores; `evaporador-camara-gpt.webp`, `mueble-camaraevaporador.png`, 52 × 30, la misma herramienta),
+  que no es un mueble: va colgado arriba en la pared, bajo la moldura, con `PANELES_TIENDA` de `mapa.gd` (desde el 25 nov vale para otras
+  salas con la clave "<uso>-<tienda>", y con "alto", arriba en vez de sobre el rodapié): en la normal, en el hueco entre las dos estanterías de
+  en medio; en la inversa, a la derecha de la puerta, antes de las estanterías (que a ese lado quedan a 16 unidades unas de otras). La sala de venta,
   sin muebles de momento (sus muebles de antes, en git). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
   de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
