@@ -19,10 +19,16 @@ from PIL import Image
 MUEBLES = [("estanteria-camara-verdura-gpt", "camarabalda1", 112), ("estanteria-camara-carne-gpt", "camarabalda2", 112),
            ("estanteria-camara-lacteos-gpt", "camarabalda3", 112), ("estanteria-camara-saqueada-gpt", "camarabalda4", 112),
            ("burra-embutidos-gpt", "camaraburra", 88), ("pale-verduras-gpt", "camarapale", 64),
-           ("colgador-carne-gpt", "camaracolgador", 160), ("evaporador-camara-gpt", "camaraevaporador", 52)]
+           ("colgador-carne-gpt", "camaracolgador", 160), ("evaporador-camara-gpt", "camaraevaporador", 52),
+           # la línea de cajas de la sala de venta: la misma caja con tres destrozos, vista desde el cliente y desde la cajera
+           ("caja-super-gpt", "supercaja1", 160), ("caja-super-dentro-gpt", "supercaja1dentro", 160), ("caja-super2-gpt", "supercaja2", 160),
+           ("caja-super2-dentro-gpt", "supercaja2dentro", 160), ("caja-super3-gpt", "supercaja3", 160),
+           ("caja-super3-dentro-gpt", "supercaja3dentro", 160),
+           # el arco antirrobo, a los lados de la entrada
+           ("arco-antirrobo-gpt", "superarco", 24)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (entre las baldas, las barras, las tablas del palé
 # y las piezas de carne): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
-CON_HUECOS = {"camarabalda1", "camarabalda2", "camarabalda3", "camarabalda4", "camaraburra", "camarapale", "camaracolgador"}
+CON_HUECOS = {"camarabalda1", "camarabalda2", "camarabalda3", "camarabalda4", "camaraburra", "camarapale", "camaracolgador", "superarco"}
 HUECO_MIN = 1000
 # lo más altas que pueden ser (las estanterías, contra la pared de arriba: lo que pase de 136, como las del almacén, se sale por
 # encima de la pared)
@@ -30,7 +36,8 @@ ALTO_MAX = {"camarabalda1": 136, "camarabalda2": 136, "camarabalda3": 136, "cama
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # los de cosas pequeñas, que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad): todos, como en la farmacia
-FINOS = set(CON_HUECOS) | {"camaraevaporador"}
+FINOS = set(CON_HUECOS) | {"camaraevaporador", "supercaja1", "supercaja2", "supercaja2dentro", "supercaja3", "supercaja1dentro",
+                                         "supercaja3dentro"}
 
 
 def quitar_fondo(im):

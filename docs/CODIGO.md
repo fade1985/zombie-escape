@@ -1187,8 +1187,14 @@ en una línea.
   frío (el evaporador, con sus dos ventiladores; `evaporador-camara-gpt.webp`, `mueble-camaraevaporador.png`, 52 × 30, la misma herramienta),
   que no es un mueble: va colgado arriba en la pared, bajo la moldura, con `PANELES_TIENDA` de `mapa.gd` (desde el 25 nov vale para otras
   salas con la clave "<uso>-<tienda>", y con "alto", arriba en vez de sobre el rodapié): en la normal, en el hueco entre las dos estanterías de
-  en medio; en la inversa, a la derecha de la puerta, antes de las estanterías (que a ese lado quedan a 16 unidades unas de otras). La sala de venta,
-  sin muebles de momento (sus muebles de antes, en git). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
+  en medio; en la inversa, a la derecha de la puerta, antes de las estanterías (que a ese lado quedan a 16 unidades unas de otras). En la sala de venta,
+  de momento, la línea de cajas (sus muebles de antes, en git): la misma caja de GPT con tres destrozos (abandonada a mitad de compra, con el
+  monitor arrancado y saqueada), vista desde el cliente (`caja-super-gpt`, `caja-super2-`, `caja-super3-`; `supercaja1..3`) y desde la cajera
+  (`-dentro-`; `supercaja1dentro..3dentro`), todas de 160 de ancho y 48 de hondo, y el arco antirrobo (`arco-antirrobo-gpt`, `superarco`,
+  24 × 88). Tres cajas a cada lado de la entrada con 48 de pasillo entre ellas y con las paredes (3 × 160 + 4 × 48 = las 21 casillas de cada
+  lado) y los arcos a los lados del paso; con el pie del mueble (no el de los trozos tirados de su dibujo) en la misma línea: en la normal,
+  en la fila 9, junto a la entrada; en la inversa, en la fila 3,75, bajo la pared de la entrada y con paso por detrás. Las cajas sueltan
+  piezas (`MUEBLES_CON_PIEZA`). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
   de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
   cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y

@@ -224,6 +224,16 @@ const MUEBLES := {
 	"camaraburra": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/burra-embutidos-gpt", "escala": 1.0},
 	"camarapale": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/pale-verduras-gpt", "escala": 1.0},
 	"camaracolgador": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/colgador-carne-gpt", "escala": 1.0},
+	# (25 nov, el dueño) la línea de cajas de la sala de venta del supermercado, de GPT: la misma caja con tres destrozos (abandonada a
+	# mitad de compra, con el monitor arrancado y saqueada), vista desde el cliente (en la normal) y desde la cajera (en la inversa,
+	# las «dentro»), y el arco antirrobo que va a los lados de la entrada
+	"supercaja1": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super-gpt", "escala": 1.0},
+	"supercaja2": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super2-gpt", "escala": 1.0},
+	"supercaja3": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super3-gpt", "escala": 1.0},
+	"supercaja1dentro": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super-dentro-gpt", "escala": 1.0},
+	"supercaja2dentro": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super2-dentro-gpt", "escala": 1.0},
+	"supercaja3dentro": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super3-dentro-gpt", "escala": 1.0},
+	"superarco": {"len": 24, "dep": 16, "paredes": "", "archivo": "centro/arco-antirrobo-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -554,7 +564,18 @@ const SALAS := {
 	# supermercado", "cocina-restaurante", "bano-farmacia"...), cada una solo con sus "colocados" (Muebles.de_tienda)
 	# el supermercado (25 nov, el dueño: rehecho como la farmacia, Tienda.PLANOS). La sala de venta, sin muebles de momento: se irán
 	# poniendo los de GPT (antes, neveras, góndolas, cajas, palés y estanterías de metal: está en git)
-	"tienda-supermercado": {"colocados": {"abajo": [], "arriba": []}},
+	# la sala de venta (46 × 13; la entrada, de la casilla 21 a la 25): la línea de cajas (25 nov, el dueño), tres a cada lado de la
+	# entrada, con 48 de pasillo entre ellas y con las paredes (3 × 160 + 4 × 48 = las 21 casillas de cada lado), y los dos arcos
+	# antirrobo a los lados del paso, a 48 de las cajas. Todas con el pie del mueble (no el de los trozos tirados por el suelo de su
+	# dibujo) en la misma línea: en la normal, junto a la entrada (fila 9), vistas desde el cliente; en la inversa, bajo la pared de
+	# la entrada (fila 3,75), vistas desde la cajera, con paso por detrás
+	"tienda-supermercado": {"colocados": {
+		"abajo": [["supercaja1", 4.0, "libre", 9.0], ["supercaja2", 10.5, "libre", 8.875], ["supercaja3", 17.0, "libre", 8.96875],
+			["superarco", 21.375, "libre", 8.75], ["superarco", 24.625, "libre", 8.75],
+			["supercaja2", 29.0, "libre", 8.875], ["supercaja3", 35.5, "libre", 8.96875], ["supercaja1", 42.0, "libre", 9.0]],
+		"arriba": [["supercaja1dentro", 4.0, "libre", 3.46875], ["supercaja2dentro", 10.5, "libre", 3.6875], ["supercaja3dentro", 17.0, "libre", 3.625],
+			["superarco", 21.375, "libre", 3.5], ["superarco", 24.625, "libre", 3.5],
+			["supercaja2dentro", 29.0, "libre", 3.6875], ["supercaja3dentro", 35.5, "libre", 3.625], ["supercaja1dentro", 42.0, "libre", 3.46875]]}},
 	# su cámara (20 × 12, la puerta en medio, casillas 9 a 11), medida para que no sobre nada: en la normal, las cuatro estanterías
 	# contra la pared de arriba, con el mismo hueco entre ellas y con las paredes (1,9 casillas); abajo, con el pie en la fila 8,25 (la
 	# pared de abajo tapa lo de detrás), la burra y el palé a la izquierda del paso de la puerta (8,5 a 11,5) y el colgador a la
