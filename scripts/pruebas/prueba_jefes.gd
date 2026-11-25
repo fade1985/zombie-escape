@@ -753,6 +753,64 @@ func probar_direcciones() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --jefe X --choques": en la sala del jefe X, lo que pararía una bala (la capa de choque 1, la que mira
+# bala.gd). Se lanzan rayos de lado a lado de la sala en una rejilla y se cuenta con qué dan, por tipo de nodo; y se
+# dice si alguno da justo encima de una mancha de sangre del suelo
+func probar_choques() -> void:
+	var tipo: String = planta.jefe if planta else ""
+	var args := OS.get_cmdline_user_args()
+	if "--jefe" in args:
+		tipo = args[args.find("--jefe") + 1]
+	if not await ir_a_la_sala_del_jefe(tipo):
+		return
+	jefa.process_mode = Node.PROCESS_MODE_DISABLED
+	jefa.global_position = Vector2(-9999, -9999)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.process_mode = Node.PROCESS_MODE_DISABLED
+	await get_tree().physics_frame
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var ancho: float = planta.sitios[aqui].ancho
+	var alto: float = planta.sitios[aqui].alto
+	var cuenta := {}
+	var en_sangre := 0
+	var manchas: Array = mapa.restos.filter(func(r): return r.dibujo.resource_path.contains("sangre"))
+	for i in 60:
+		for horizontal in [true, false]:
+			var a: Vector2
+			var b: Vector2
+			if horizontal:
+				a = mapa.to_global(Vector2(mapa.MURO + 4.0, alto * (i + 0.5) / 60.0))
+				b = mapa.to_global(Vector2(ancho - mapa.MURO - 4.0, alto * (i + 0.5) / 60.0))
+			else:
+				a = mapa.to_global(Vector2(ancho * (i + 0.5) / 60.0, mapa.MURO + 4.0))
+				b = mapa.to_global(Vector2(ancho * (i + 0.5) / 60.0, alto - mapa.MURO - 4.0))
+			var rayo := PhysicsRayQueryParameters2D.create(a, b, 1)
+			var dio: Dictionary = espacio.intersect_ray(rayo)
+			if dio.is_empty():
+				continue
+			var n: Node = dio.collider
+			var spr: Node = n.get_node_or_null("Sprite")
+			var nombre := "%s (%s, tipo %s, dibujo %s)" % [n.name, n.get_class(), n.get("datos").get("tipo", "?") if n.get("datos") is Dictionary else "-", spr.texture.resource_path.get_file() if spr is Sprite2D and spr.texture else "-"]
+			cuenta[nombre] = cuenta.get(nombre, 0) + 1
+			var local: Vector2 = mapa.to_local(dio.position)
+			if manchas.any(func(m): return m.pos.distance_to(local) < 24.0):
+				en_sangre += 1
+	print("Choques en la sala del jefe %s: manchas de sangre en el suelo %d · rayos que paran encima de una %d" % [tipo, manchas.size(), en_sangre])
+	for k in cuenta:
+		print("  %d × %s" % [cuenta[k], k])
+	# y lo que recibe balas sin ser pared (el grupo "zombis", que mira bala.gd): cuántos de cada, y si se ven
+	var otros := {}
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z == jefa:
+			continue
+		var script_z: Script = z.get_script()
+		var k := "%s (%s, se ve %s)" % [script_z.resource_path.get_file() if script_z else z.get_class(), z.name.left(12), z.is_visible_in_tree()]
+		otros[k] = otros.get(k, 0) + 1
+	print("Choques: lo que para balas sin ser pared ni el jefe:")
+	for k in otros:
+		print("  %d × %s" % [otros[k], k])
+
+
 func ir_a_la_sala_del_jefe(tipo: String) -> bool:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe X, la suya
