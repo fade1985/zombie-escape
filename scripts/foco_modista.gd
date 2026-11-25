@@ -9,11 +9,11 @@
 class_name FocoModista
 extends Node2D
 
-const RADIO := 120.0
+const RADIO := 150.0             # (25 nov, el dueño: algo más grande; era 120)
 const VELOCIDAD := 115.0       # lo deprisa que cruza de lado a lado
 const VUELTA_ALTO := 14.0      # lo que tarda en bajar y volver a subir (segundos)
 const COLOR := Color(1.0, 0.96, 0.84)
-const CENTRO := 55.0           # la modista se ciega si tiene los pies a menos de esto del centro (de lleno)
+const CENTRO := 68.0           # la modista se ciega si tiene los pies a menos de esto del centro (de lleno)
 
 var zona := Rect2()            # por donde puede ir su centro (dentro de las paredes)
 var ida := 1.0                 # hacia dónde va ahora (1 a la derecha, -1 a la izquierda)

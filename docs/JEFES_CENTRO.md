@@ -226,11 +226,11 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   Cada maniquí lleva para eso un señuelo invisible del grupo "zombis" (el apuntado automático no lo busca).
 - Se quedan los alfileres y el tijeretazo; se fue «¡TE TOMO MEDIDAS!». Ella anda a media distancia (unos 260).
 - **Fase 2**: «¡QUE EMPIECE EL DESFILE!» con su pose; los hilos se caen, se apagan las lámparas de la tienda (más
-  oscuridad: `Luz.evento` + 0,45), sale el foco (radio 120, cruza de lado a lado a 115 y sube y baja en 14 s) y
+  oscuridad: `Luz.evento` + 0,45), sale el foco (radio 150, era 120; cruza de lado a lado a 115 y sube y baja en 14 s) y
   despiertan 3 maniquíes. Johnny dice «Si el foco la pilla de lleno, se queda ciega...». Ella ronda apartándose del foco (se le
   ven los ojos) y cada 5,5 s, «¡A LA PASARELA!»: franja de aviso hasta la pared (0,9 s, luego 0,55) y cruza corriendo
   a 900 con las tijeras por delante, 3 veces seguidas, 18 de daño. Si el foco la pilla **de lleno** (los pies a menos
-  de 55 del centro, también corriendo; 25 nov, el dueño: antes bastaba rozar el borde y no se entendía): «¡CEGADA!»,
+  de 68 del centro, también corriendo; 25 nov, el dueño: antes bastaba rozar el borde y no se entendía): «¡CEGADA!»,
   aturdida con estrellitas, le entra el doble, y el foco se para encima de ella latiendo más fuerte mientras dura.
   Ronda apartándose del foco menos que antes (hasta 1,5 radios, a 0,7 de su velocidad), para que la pille alguna vez.
   Al caer ella vuelve la luz.
