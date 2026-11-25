@@ -2402,8 +2402,9 @@ func probar_desfile() -> void:
 # Con "--captura --edificio centro --jefe mascota --fiesta": la mascota rehecha, fase 1 (24 nov, docs/JEFES_CENTRO.md,
 # «La fiesta de cumpleaños»), en su Juguetería, con Johnny quieto, sin que le hagan daño y esquivando (que las
 # embestidas no se paren en él). Cada línea dice lo esperado. Fotos (captura-fiesta-*.png): sala (las tres cajas y
-# las tres cajitas junto a la barra), pelotas (tras tres choques contra la pared), salto (las pelotas saliendo
-# disparadas al caer), sorpresa (el muñeco saltando de la caja) y sentada (de culo, con las estrellitas)
+# las tres cajitas junto a la barra), baile (a saltitos alrededor de Johnny), pelotas (tras tres choques contra la
+# pared), salto (las pelotas saliendo disparadas al caer), regalos (sus marcas en el suelo), soplo-aviso y soplo (el
+# matasuegras: el cono y el soplido), sorpresa (el muñeco saltando de la caja) y sentada (de culo, con las estrellitas)
 func probar_fiesta() -> void:
 	if not await ir_a_la_sala_del_jefe("mascota"):
 		return
@@ -2420,6 +2421,32 @@ func probar_fiesta() -> void:
 	print("Fiesta: Johnny dice «%s» (esperado: la pista de las cajas sorpresa)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
 	print("Fiesta: críos en la fase 1 %d (esperado: 0)" % jefe.crios())
 	Captura.foto("captura-fiesta-sala.png")
+	# el baile: 3 s sin atacar, a saltitos alrededor de Johnny, a media distancia
+	jefe.espera_embestida = 99.0
+	jefe.espera_regalos = 99.0
+	jefe.espera_salto = 99.0
+	jefe.espera_soplo = 99.0
+	johnny.global_position = jefe.inicio + Vector2(0, 120)
+	jefe.global_position = jefe.inicio + Vector2(-60, -60)
+	var salida: Vector2 = jefe.global_position
+	jefe.andar(0.3)
+	var lejos := [9999.0, 0.0]
+	var andado := 0.0
+	for paso in 180:
+		if jefe.estado != "andar":
+			jefe.andar(0.3)
+		var antes_paso: Vector2 = jefe.global_position
+		await get_tree().physics_frame
+		andado += antes_paso.distance_to(jefe.global_position)
+		if paso > 60:   # (el primer segundo va a su sitio)
+			var dd: float = jefe.global_position.distance_to(johnny.global_position)
+			lejos = [minf(lejos[0], dd), maxf(lejos[1], dd)]
+		if paso == 100:
+			Captura.foto("captura-fiesta-baile.png")
+	print("Fiesta: bailando, de Johnny entre %d y %d (esperado: entre unos 180 y 360) · ha andado %d (esperado: bastante, más de 300)" % [
+		lejos[0], lejos[1], andado])
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
 	# tres embestidas contra la pared de arriba: dos pelotas cada vez
 	# (por columnas sin ninguna caja encima: las cajas caen al azar)
 	var columnas: Array = []
@@ -2434,8 +2461,8 @@ func probar_fiesta() -> void:
 			if jefe.estado != "embestida":
 				break
 			await get_tree().physics_frame
-		print("Fiesta: embestida %d contra la pared, estado %s (esperado: atontado) · pelotas %d (esperado: %d)" % [i + 1,
-			jefe.estado, jefe.pelotas().size(), 2 * (i + 1)])
+		print("Fiesta: embestida %d contra la pared, estado %s, mareada %s s (esperado: atontado, 1.0) · pelotas %d (esperado: %d)" % [i + 1,
+			jefe.estado, jefe.datos.get("dura", "?"), jefe.pelotas().size(), 2 * (i + 1)])
 		jefe.cambiar("andar")
 		jefe.dur = 99.0
 	await get_tree().create_timer(1.0, false).timeout
@@ -2458,6 +2485,46 @@ func probar_fiesta() -> void:
 	await get_tree().create_timer(2.0, false).timeout
 	print("Fiesta: 2 s después, la más rápida va a %d (esperado: %d)" % [jefe.pelotas().map(func(p): return p.velocidad.length()).max(),
 		jefe.VELOCIDAD_PELOTA])
+	# «¡REGALOS!»: cuatro regalos alrededor de Johnny; al caer, cada uno suelta dos pelotas
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	for p in jefe.pelotas():
+		p.queue_free()
+	await get_tree().physics_frame
+	johnny.global_position = jefe.inicio + Vector2(0, 100)
+	jefe.global_position = jefe.inicio + Vector2(-260, -40)
+	jefe.espera_regalos = 0.0
+	jefe.elegir_fiesta(johnny, jefe.global_position.distance_to(johnny.global_position))
+	print("Fiesta: con Johnny lejos y los regalos listos, estado %s (esperado: regalos)" % jefe.estado)
+	await get_tree().create_timer(jefe.AVISO_REGALOS + 0.5, false).timeout
+	var regalos := get_tree().current_scene.find_children("*", "Regalo", true, false).size()
+	print("Fiesta: regalos volando %d (esperado: 4)" % regalos)
+	Captura.foto("captura-fiesta-regalos.png")
+	await get_tree().create_timer(1.4, false).timeout
+	print("Fiesta: caídos, regalos %d · pelotas %d (esperado: 0, 8)" % [get_tree().current_scene.find_children("*", "Regalo", true, false).size(),
+		jefe.pelotas().size()])
+	# el matasuegras: con Johnny cerca, el cono y el soplido, que le manda lejos
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	johnny.set_physics_process(true)
+	johnny.esquiva_t = 0.0
+	johnny.global_position = jefe.inicio + Vector2(120, 0)
+	jefe.global_position = jefe.inicio
+	jefe.espera_soplo = 0.0
+	jefe.elegir_fiesta(johnny, jefe.global_position.distance_to(johnny.global_position))
+	print("Fiesta: con Johnny cerca, estado %s (esperado: aviso_soplo)" % jefe.estado)
+	await get_tree().create_timer(jefe.AVISO_SOPLO * 0.6, false).timeout
+	Captura.foto("captura-fiesta-soplo-aviso.png")
+	while jefe.estado == "aviso_soplo":
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-fiesta-soplo.png")
+	var anim_soplo: String = jefe.sprite.animation
+	await get_tree().create_timer(0.5, false).timeout
+	print("Fiesta: tras el soplido, Johnny a %d (esperado: más de 250) · animación «%s» (esperado: matasuegras_e)" % [
+		johnny.global_position.distance_to(jefe.global_position), anim_soplo])
+	johnny.set_physics_process(false)
+	johnny.esquiva_t = 99999.0
 	# la caja sorpresa: embiste contra ella desde el lado del centro
 	jefe.cambiar("andar")
 	jefe.dur = 99.0

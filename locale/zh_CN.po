@@ -3002,6 +3002,14 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "免费抱抱！"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "礼物！"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "嘟——！"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "蹦！"
 

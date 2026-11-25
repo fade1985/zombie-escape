@@ -3010,6 +3010,14 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "ОБНИМАШКИ!"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "ПОДАРКИ!"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "ДУДУУУУ!"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "ПРЫГ!"
 

@@ -3006,6 +3006,14 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "ABRAÇO GRÁTIS!"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "PRESENTES!"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "FIUUUU!"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "BOING!"
 

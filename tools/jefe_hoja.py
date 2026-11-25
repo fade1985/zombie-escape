@@ -145,6 +145,8 @@ JEFES = {
             "muerte": ("muerte", 10, False, False),
             # 24 nov: cae de culo y se queda sentada, mareada (la caja sorpresa; solo de frente)
             "sorpresa": ("sorpresa", 12, False, False),
+            # 25 nov: soplar el matasuegras gigante
+            "matasuegras": ("matasuegras", 12, False, False),
         },
         "de_frente": ["sorpresa"],
     },

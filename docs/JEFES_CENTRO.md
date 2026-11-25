@@ -274,6 +274,14 @@ Se le rompe la tripa y va soltando relleno.
 - Pistas: Johnny al entrar («Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?») y tres cajitas junto a
   la barra (`barra_jefe.gd`, `pintar_cajas`): cerradas las que hay, abiertas las usadas.
 - Los críos ya solo salen en la fase 2.
+- 25 nov (el dueño: no paraba de perseguir, embestía poco y casi no salían pelotas):
+  - Ya no persigue: baila a saltitos alrededor de Johnny, a 210-330 de él, y desde ahí ataca.
+  - Embiste cada 2,2 s y corre hasta chocar con algo (como mucho 3,2 s): contra la pared solo se sacude 1 s (antes 3)
+    y suelta sus 2 pelotas; la que la deja sentada es la caja.
+  - «¡REGALOS!» (cada 6 s): tira 4 regalos (dibujo de PixelLab, `regalo.png`; `regalo.gd`) alrededor de Johnny, cada uno
+    con su marca en el suelo; al caer quitan 12 y sueltan 2 pelotas cada uno.
+  - El matasuegras (con Johnny a menos de 180, cada 3 s): aviso en cono 0,6 s y sopla (animación nueva de PixelLab,
+    `matasuegras`, 8 direcciones): quita 10, le manda lejos y dispara las pelotas que pille, con confeti.
 - Prueba: `--captura --edificio centro --jefe mascota --fiesta`.
 
 ## 5. El gerente · «La junta de accionistas»
