@@ -62,6 +62,7 @@ const SEGUIDOS := 2                # tijeretazos seguidos como mucho antes de ha
 const TENSAR := 1.6                # lo que dura tirando de los hilos (el aviso de los hilos es menos: hilo_modista.gd)
 const MIN_TENSAR := 4              # con menos hilos no tensa
 # Esconderse entre los maniquíes
+const CERCA_MANIQUI := 64.0        # si Johnny está así de cerca de donde estaba ella, el maniquí no va allí (cambiarse)
 const OJOS := 0.6                  # lo que le brillan los ojos antes de cambiarse de sitio
 const OJOS_MANIQUI := [Vector2(-5, -103), Vector2(1, -103)]   # escondida, sus ojos van en la cabeza del maniquí
 const PRIMER_TIRO := 3.0           # al entrar en la sala, lo que tarda en tirar la primera vez (después de su presentación)
@@ -103,6 +104,8 @@ const OJOS_EN := {"s": [Vector2(-5, -91), Vector2(1, -91)], "se": [Vector2(0, -9
 const CABEZA := Vector2(-2, -89)
 
 var pillada_antes := false         # la última vez que iba a esconderse, la pillaron (danar, "ojos")
+var presentada := false            # ya se ha escondido la primera vez, al acabar la presentación (presentarse)
+var primer_escondite := true       # la primera vez que se esconde, el primer alfiler tarda más (cambiarse)
 var reloj_tiros := 0.0             # escondida, lo que falta para tirar (ver "escondida" en pensar)
 var crecida := 0.0                 # lo que le queda de crecida (salir)
 var seguidos := 0                  # tijeretazos seguidos (elegir)
@@ -131,8 +134,8 @@ func _ready() -> void:
 	get_tree().create_timer(0.5).timeout.connect(func():
 		if is_inside_tree():
 			EfectoSuelo.precalentar(get_parent(), "retales"))
-	# al aparecer ya está escondida: ocupa el sitio de un maniquí (sin dejar otro donde estaba)
-	empezar_escondida.call_deferred()
+	# sale a la vista en la presentación; al acabar, se esconde (presentarse, en pensar)
+	poner_senuelos.call_deferred()
 	pista.call_deferred()
 
 
@@ -143,23 +146,27 @@ func pista() -> void:
 		partida.decir(Idioma.t("Uno de esos maniquíes respira..."), 4.0)
 
 
-func empezar_escondida() -> void:
-	poner_senuelos()
-	var johnny := get_tree().get_first_node_in_group("jugador")
-	var m: Node2D = maniqui_lejos(johnny) if johnny else null
-	if m == null:
-		return
-	global_position = m.global_position - PIE_MANIQUI
-	vestir(m)
-	m.get_parent().remove_child(m)
-	m.queue_free()
-	rehornear()
-	mirada = Vector2.DOWN
-	cambiar("escondida", {"dur": ESCONDIDA})
-	reloj_tiros = PRIMER_TIRO   # (al empezar, más margen: que dé tiempo a situarse)
+# Al acabar la presentación (25 nov, el dueño: antes ya empezaba escondida y no se sabía qué pasaba): a la vista de
+# todos le brillan los ojos, grita «¿A QUE NO ME ENCUENTRAS?» y se cambia con un maniquí. Esta primera vez no se la
+# puede pillar, y el primer alfiler tarda PRIMER_TIRO (cambiarse)
+func presentarse() -> void:
+	presentada = true
+	espera.esconderse = ESPERAS.esconderse[0]
+	pillada_antes = true
+	cambiar("ojos")
+	gritar(Idioma.t("¿A QUE NO ME ENCUENTRAS?"), Color("#ffd23f"), 18)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
+	if not presentada:
+		# (mientras dura la presentación, quieta: se esconde al acabar)
+		var partida := get_tree().current_scene
+		var presentacion = partida.get("presentacion") if partida else null
+		if presentacion == null or not presentacion.activa:
+			presentarse()
+		else:
+			frenar(delta)
+		return
 	# crecida (no la han encontrado a tiempo: salir), las esperas entre ataques corren más deprisa
 	for k in espera:
 		espera[k] -= delta * (RAPIDA if crecida > 0.0 else 1.0)
@@ -534,9 +541,15 @@ func cambiarse(johnny: Node2D) -> void:
 	var antes := global_position
 	var paso: Vector2 = antes + PIE_MANIQUI - m.global_position
 	global_position = m.global_position - PIE_MANIQUI
-	m.global_position += paso
-	m.datos.x += paso.x
-	m.datos.y += paso.y
+	if johnny.global_position.distance_to(antes + PIE_MANIQUI) < CERCA_MANIQUI:
+		# Johnny está pegado a donde estaba ella: si el maniquí apareciera ahí, lo dejaría encajado entre maniquíes
+		# (25 nov, el dueño). Así que esta vez el maniquí no va a ningún sitio: se va (ella ocupa su hueco)
+		m.get_parent().remove_child(m)
+		m.queue_free()
+	else:
+		m.global_position += paso
+		m.datos.x += paso.x
+		m.datos.y += paso.y
 	rehornear()
 	for otro in maniquies():
 		soplo(otro.global_position - PIE_MANIQUI)
@@ -546,6 +559,9 @@ func cambiarse(johnny: Node2D) -> void:
 	mirada = Vector2.DOWN
 	parpadeo = randf_range(PARPADEO[0], PARPADEO[1])
 	cambiar("escondida", {"dur": ESCONDIDA})
+	if primer_escondite:
+		primer_escondite = false
+		reloj_tiros = PRIMER_TIRO   # (la primera vez, más margen: que dé tiempo a situarse)
 
 
 # Deja de estar escondida sin que la pillen: alfileres desde allí o a andar

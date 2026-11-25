@@ -234,6 +234,11 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
 - Animaciones nuevas de PixelLab (v3, 20 generaciones): corte (8 direcciones; de frente y abajo a la derecha se quitan
   los dos últimos fotogramas, con unas tijeras gigantes brillando), aturdida y desfile (solo de frente).
 - Pista: al entrar, Johnny dice «Uno de esos maniquíes respira...».
+- Entrada (25 nov, el dueño: empezaba ya escondida y no se sabía qué pasaba): sale a la vista en su presentación, como
+  los demás jefes, y al acabar le brillan los ojos, grita «¿A QUE NO ME ENCUENTRAS?» y se cambia con un maniquí (esa
+  primera vez no se la puede pillar). Se ve con `--captura --edificio centro --jefe modista --presentacion`.
+- Al cambiarse, si Johnny está pegado a donde estaba ella, el maniquí no aparece allí (lo dejaba encajado entre
+  maniquíes): se quita (`CERCA_MANIQUI`).
 - Prueba: `--captura --edificio centro --jefe modista --desfile`.
 
 ## 4. La mascota · «La fiesta de cumpleaños»

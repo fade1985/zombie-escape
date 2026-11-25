@@ -124,8 +124,8 @@ func probar_presentacion() -> void:
 # tres (al caer ella, se caen)
 func probar_modista(jefa: Node2D) -> void:
 	var antes: Vector2 = jefa.position
-	print("Modista: %d maniquíes en %s | al entrar, escondida: %s" % [jefa.maniquies().size(), planta.sitios[aqui].nombre,
-		jefa.estado == "escondida"])
+	print("Modista: %d maniquíes en %s | al entrar, a la vista (se esconde al acabar la presentación): %s" % [jefa.maniquies().size(), planta.sitios[aqui].nombre,
+		jefa.estado != "escondida"])
 	jefa.cambiarse(johnny)
 	print("Modista: se cambia de sitio con un maniquí (a %d unidades) | ahora: %s" % [antes.distance_to(jefa.position), jefa.estado])
 	jefa.despertar_maniquies(johnny)
@@ -2207,7 +2207,18 @@ func probar_desfile() -> void:
 	johnny.set_physics_process(false)
 	var jefe: Node2D = jefa
 	await get_tree().create_timer(0.6, false).timeout
-	jefe.esperando = false   # (sin esperar a que acabe la presentación)
+	jefe.esperando = false   # (sin esperar a que acabe la presentación; aquí no la hay: se esconde nada más salir)
+	await get_tree().create_timer(jefe.OJOS + 0.2, false).timeout
+	# con Johnny pegado a ella al cambiarse, no le cae un maniquí encima
+	var cuantos: int = jefe.maniquies().size()
+	var sitio: Vector2 = jefe.global_position
+	var j0: Vector2 = johnny.global_position
+	johnny.global_position = sitio + jefe.PIE_MANIQUI + Vector2(10, 0)
+	jefe.cambiarse(johnny)
+	await get_tree().process_frame
+	var encima: int = jefe.maniquies().filter(func(m): return m.global_position.distance_to(johnny.global_position) < 40.0).size()
+	print("Desfile: cambiándose con Johnny pegado, maniquíes encima %d · maniquíes %d de %d (esperado: 0, uno menos)" % [encima, jefe.maniquies().size(), cuantos])
+	johnny.global_position = j0
 	var maniquies: Array = jefe.maniquies()
 	print("Desfile: estado %s · maniquíes %d · señuelos %d (esperado: escondida, unos cuantos, los mismos)" % [jefe.estado,
 		maniquies.size(), get_tree().get_nodes_in_group("senuelos").size()])
