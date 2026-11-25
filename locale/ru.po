@@ -1277,6 +1277,10 @@ msgstr "ЗА РАБОТУ!"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "ПЕРЕКУРА НЕ БУДЕТ!"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "ХЛОП!"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "ЖРАТЬ!"
@@ -3014,6 +3018,10 @@ msgid "¡REGALOS!"
 msgstr "ПОДАРКИ!"
 
 #: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "ГОРЯЧО!"
+
+#: scripts/mascota.gd
 msgid "¡PIIIII!"
 msgstr "ДУДУУУУ!"
 
@@ -3024,6 +3032,10 @@ msgstr "ПРЫГ!"
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "ДАВАЙ ИГРАТЬ!"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "Из него сыплется набивка! Наверняка она горит..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"

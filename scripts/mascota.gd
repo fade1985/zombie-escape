@@ -28,6 +28,17 @@
 #     las pelotas que pille salen disparadas).
 #   - El tren de juguete (tren_juguete.gd): unas vías dan la vuelta a la sala y cada ESPERA_TREN s el tren pita y da una
 #     vuelta. Si la pilla mareada o sentada encima de las vías, la atropella.
+# 25 nov, la fase 2, «descosida»: a media vida se dobla, se le raja la barriga (la animación "descoserse") y sale una
+# nube de relleno; desde ahí lleva el dibujo descosido (jefe-mascota-descosida, otro estado del mismo personaje en
+# PixelLab). Ya no baila, ni salta, ni tira regalos, ni sopla: corre detrás de Johnny mucho más deprisa y embiste
+# EMBESTIDAS[1] veces seguidas rebotando en las paredes.
+#   - Va soltando relleno (relleno.gd): pegotes de algodón que se quedan en el suelo un rato. Con cualquier fuego
+#     (molotov, lanzallamas, explosiones, las velas) arden, y el fuego corre por el reguero. Si ella pisa su relleno
+#     ardiendo, le quita DANO_QUEMA (quemarse). Lo dice Johnny al empezar la fase.
+#   - La tarta de cumpleaños (tarta.gd) cae en medio de la sala: si le da una bala o ella se la come embistiendo, las
+#     velas salen volando y prenden donde caen (el relleno de alrededor, también).
+#   - Los críos llevan un globo (globo.gd): al morir el crío, revienta y suelta dos pelotas.
+#   - Las cajas sorpresa siguen ahí, pero se queda en el suelo menos (SORPRESA_2).
 extends Minijefe
 
 const PELOTA := preload("res://scripts/pelota_goma.gd")
@@ -45,6 +56,20 @@ const DANO_REVIENTA := 12              # ...esto cada una
 const REPONE_CAJA := 6.0               # lo que tarda en caer otra caja cuando una se va
 const REGALO := preload("res://scripts/regalo.gd")
 const TREN := preload("res://scripts/tren_juguete.gd")
+const RELLENO := preload("res://scripts/relleno.gd")
+const TARTA := preload("res://scripts/tarta.gd")
+const GLOBO := preload("res://scripts/globo.gd")
+const HOJA_DESCOSIDA := preload("res://assets/sprites/jefe-mascota-descosida.tres")
+const OFFSET_DESCOSIDA := Vector2(-41, -72)
+const VELOCIDAD_2 := 215.0             # fase 2: corre mucho más
+const VELOCIDAD_EMBESTIDA_2 := 600.0
+const ESPERA_EMBESTIDA_2 := 1.8
+const SORPRESA_2 := 3.0                # fase 2: lo que se queda en el suelo tras comerse una caja
+const SUELTA_RELLENO := [0.45, 0.12]   # cada cuánto suelta un pegote de relleno (andando y embistiendo)
+const MAX_RELLENO := 30
+const DANO_QUEMA := 16                 # pisando su relleno ardiendo, esto cada ESPERA_QUEMA s
+const ESPERA_QUEMA := 0.5
+const RAJA := 8                        # el fotograma de "descoserse" en el que se le raja la barriga
 const ESPERA_TREN := [11.0, 8.0]       # cada cuánto sale el tren (normal y enfadada)
 const VELOCIDAD_BAILE := 190.0         # fase 1: lo deprisa que va de un sitio a otro a saltitos
 const BAILE := [210.0, 330.0]          # a qué distancia de Johnny se pone (de, a)
@@ -98,6 +123,10 @@ var espera_soplo := 0.0
 var punto := Vector2.INF       # fase 1: el sitio al que va bailando
 var tren: Node2D = null        # el tren de juguete y sus vías
 var espera_tren := 6.0
+var tarta: Node2D = null       # fase 2: la tarta de cumpleaños
+var suelta := 0.0              # fase 2: lo que falta para soltar otro pegote de relleno
+var espera_quema := 0.0
+var rajada := false            # ya ha soltado la nube de relleno de la transición
 var punto_t := 0.0             # lo que lleva yendo a ese sitio
 var cajas: Array = []          # las cajas sorpresa que hay ahora en la sala
 var reponer: Array = []        # lo que falta para que caiga cada caja nueva (una por cada caja que se ha ido)
@@ -128,12 +157,15 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		tren.salir()
 	salir_crios(delta, johnny)
 	reponer_cajas(delta, johnny)
+	if fase == 2:
+		soltar_relleno(delta)
+		quemarse(delta)
 	match estado:
 		"andar":
 			if fase == 1:
 				bailar(delta, johnny)
 			else:
-				perseguir(delta, johnny, VELOCIDAD)
+				perseguir(delta, johnny, VELOCIDAD_2)
 				if marcha.length() > 10.0:
 					mirada = marcha.normalized()
 			if t >= dur:
@@ -145,7 +177,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				cambiar("embestida", {"quedan": datos.quedan - 1})
 				Sonido.tocar("rugido")
 		"embestida":
-			var como := embestir(delta, johnny, VELOCIDAD_EMBESTIDA, DANO_EMBESTIDA, tiempo_embestida(), PIE)
+			var como := embestir(delta, johnny, velocidad_embestida(), DANO_EMBESTIDA, tiempo_embestida(), PIE)
 			var caja := caja_tocada() if como in ["", "pared"] and t > 0.05 else null
 			if caja:
 				sorpresa(caja)
@@ -154,6 +186,8 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				"pillado":
 					cambiar("recuperar", {"dur": 0.5, "quedan": datos.quedan})
 				"pared":
+					if is_instance_valid(tarta) and tarta.global_position.distance_to(global_position) < radio + TARTA.RADIO + 30.0:
+						tarta.tocada(global_position)   # (se ha comido la tarta: las velas salen volando)
 					soltar_pelotas()
 					if datos.quedan > 0:
 						rebotar()
@@ -178,7 +212,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"sorpresa":
 			# sentada de culo, mareada: ¡a por ella!
 			frenar(delta, 5.0)
-			if t >= SORPRESA:
+			if t >= (SORPRESA if fase == 1 else SORPRESA_2):
 				andar(0.4)
 		"regalos":
 			# con los brazos arriba, mirando a Johnny; al acabar el aviso, los tira
@@ -220,18 +254,13 @@ func elegir(johnny: Node2D) -> void:
 	if fase == 1:
 		elegir_fiesta(johnny, d)
 		return
-	var embiste := espera_embestida <= 0.0 and d > 160.0
-	var salta := espera_salto <= 0.0 and d > 90.0 and d < 420.0
-	if embiste and (not salta or randf() < 0.55):
-		espera_embestida = 2.5 if enfadado() else 3.2
-		apuntar(johnny, EMBESTIDAS[fase - 1], AVISO_EMBESTIDA[fase - 1])
+	# fase 2: corre detrás de Johnny y, en cuanto puede, embiste (varias veces seguidas, rebotando)
+	if espera_embestida <= 0.0 and d > 140.0:
+		espera_embestida = ESPERA_EMBESTIDA_2
+		apuntar(johnny, EMBESTIDAS[1], AVISO_EMBESTIDA[1])
 		gritar(Idioma.t("¡ABRAZOS GRATIS!"), Color("#ff5d73"), 20)
 		return
-	if salta:
-		espera_salto = 3.0 if enfadado() else 4.0
-		cambiar("agacharse")
-		return
-	# nada a mano: sigue andando un poco y vuelve a mirar
+	# nada a mano: sigue corriendo un poco y vuelve a mirar
 	andar(0.3)
 
 
@@ -266,6 +295,87 @@ func elegir_fiesta(johnny: Node2D, d: float) -> void:
 # Lo que corre como mucho en una embestida: en la fase 1, hasta chocar con algo
 func tiempo_embestida() -> float:
 	return TIEMPO_EMBESTIDA_1 if fase == 1 else TIEMPO_EMBESTIDA
+
+
+func velocidad_embestida() -> float:
+	return VELOCIDAD_EMBESTIDA if fase == 1 else VELOCIDAD_EMBESTIDA_2
+
+
+# ── La fase 2: el relleno, la tarta y los globos ──
+
+# Corriendo, se le va cayendo el relleno de la barriga (embistiendo, mucho más)
+func soltar_relleno(delta: float) -> void:
+	if not estado in ["andar", "embestida", "recuperar"] or marcha.length() < 60.0:
+		return
+	suelta -= delta
+	if suelta > 0.0:
+		return
+	suelta = SUELTA_RELLENO[1] if estado == "embestida" else SUELTA_RELLENO[0]
+	poner_relleno(position + Vector2(randf_range(-10, 10), PIE * 0.6))
+
+
+func poner_relleno(donde: Vector2) -> void:
+	var hay := get_tree().get_nodes_in_group("relleno").filter(func(r): return not r.is_queued_for_deletion())
+	if hay.size() >= MAX_RELLENO:
+		hay[0].queue_free()   # (el más viejo)
+	var r := RELLENO.new()
+	r.position = donde
+	get_parent().add_child(r)
+
+
+# Si pisa su relleno ardiendo, se quema (y mucho)
+func quemarse(delta: float) -> void:
+	espera_quema -= delta
+	if espera_quema > 0.0 or estado == "grito":
+		return
+	for c in get_tree().get_nodes_in_group("charcos"):
+		if c.has_meta("relleno") and c.arde_en(global_position + Vector2(0, PIE * 0.5), radio * 0.4):
+			espera_quema = ESPERA_QUEMA
+			recibir_golpe(DANO_QUEMA, Vector2.ZERO, true)
+			gritar(Idioma.t("¡QUEMA!"), Color("#ff9a3c"), 18)
+			for i in 8:
+				Particulas.soltar(get_parent(), global_position + Vector2(randf_range(-20, 20), randf_range(-40, 20)),
+					Vector2(randf_range(-30, 30), randf_range(-140, -70)), Llamas.FUEGO[i % 4], randf_range(2, 4), 0.5)
+			return
+
+
+# Al empezar la fase 2: la tarta cae en medio de la sala (donde no haya nadie)
+func poner_tarta(johnny: Node2D) -> void:
+	var mapa_nav := agente.get_navigation_map()
+	var donde := inicio
+	for intento in 12:
+		var p: Vector2 = inicio + (Vector2.ZERO if intento == 0 else Vector2.from_angle(randf() * TAU) * randf_range(40, 160))
+		p = NavigationServer2D.map_get_closest_point(mapa_nav, p)
+		if p.distance_to(johnny.global_position) > 130.0 and p.distance_to(global_position) > 130.0 \
+				and not cajas.any(func(c): return is_instance_valid(c) and c.global_position.distance_to(p) < 150.0):
+			donde = p
+			break
+	tarta = TARTA.new()
+	tarta.position = donde
+	get_parent().add_child(tarta)
+
+
+# A los críos que acaban de salir, su globo
+func poner_globos() -> void:
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.get_meta("tipo", "") == "rapido" and not z.has_meta("globo"):
+			z.set_meta("globo", true)
+			var g := GLOBO.new()
+			g.dueno = self
+			z.add_child(g)
+
+
+# La nube de relleno de cuando se le raja la barriga: pegotes alrededor y una nube blanca
+func rajarse() -> void:
+	rajada = true
+	Sonido.tocar("chof")
+	Temblor.temblar(8.0)
+	for i in 8:
+		poner_relleno(position + Vector2.from_angle(i * TAU / 8.0 + randf_range(-0.3, 0.3)) * Vector2(randf_range(40, 110), randf_range(25, 70)))
+	for i in 40:
+		var a := randf() * TAU
+		Particulas.soltar(get_parent(), global_position + Vector2(0, -10), Vector2(cos(a), sin(a) * 0.7 - 0.4) * randf_range(60, 220),
+			[Color("#f4f0e4"), Color("#ffffff"), Color("#d6cfbd")][i % 3], randf_range(3, 6), randf_range(0.5, 0.9))
 
 
 # Fase 1: va a saltitos de un sitio a otro alrededor de Johnny, a media distancia (BAILE), mirándole. Cuando llega (o
@@ -415,6 +525,7 @@ func salir_crios(delta: float, johnny: Node2D) -> void:
 		if mejor.distance_to(johnny.global_position) > CRIOS_LEJOS * 0.75:
 			break
 	pide_zombi.emit("rapido", mejor)
+	poner_globos.call_deferred()
 
 
 # Cuántos críos quedan vivos
@@ -506,6 +617,8 @@ func poner_caja(johnny: Node2D) -> void:
 			continue
 		if cajas.any(func(c): return c.global_position.distance_to(p) < 220.0):
 			continue
+		if is_instance_valid(tarta) and tarta.global_position.distance_to(p) < 150.0:
+			continue
 		donde = p
 		break
 	if donde == Vector2.INF:
@@ -572,6 +685,12 @@ func morir() -> void:
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 	super(johnny, Idioma.t("¡HORA DE JUGAR!"))
+	sprite.modulate = Color.WHITE   # (el dibujo descosido ya se ve enfadado)
+	espera_embestida = 0.6
+	poner_tarta(johnny)
+	var partida := get_tree().current_scene
+	if partida and partida.has_method("decir"):
+		partida.decir(Idioma.t("¡Va soltando relleno! Seguro que eso arde..."), 4.0)
 
 
 # En la foto de la prueba (--captura): saltando, con su sombra en el suelo donde va a caer
@@ -585,6 +704,11 @@ func foto(johnny: Node2D) -> void:
 # ── Dibujo ──
 
 func animar() -> void:
+	if fase == 2 and estado != "grito" and sprite.sprite_frames != HOJA_DESCOSIDA:
+		sprite.sprite_frames = HOJA_DESCOSIDA
+		sprite.offset = OFFSET_DESCOSIDA
+		if not rajada:
+			rajarse()
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
 	sprite.rotation = 0.0
@@ -629,11 +753,20 @@ func animar() -> void:
 			var resto := sprite.sprite_frames.get_frame_count("salto_" + dir) - ATERRIZA
 			fijar("salto", dir, ATERRIZA + clampi(int(t / 0.5 * resto), 0, maxi(0, resto - 1)))
 		"grito":
-			fijar("quieto", "s", 0)
-			sprite.position.x = sin(tiempo * 50.0) * 2.0
+			if fase == 2 and sprite.sprite_frames != HOJA_DESCOSIDA:
+				# se descose: se dobla, se le raja la barriga y le sale el relleno (y luego, el dibujo descosido)
+				var f := int(t * 10.0)
+				fijar("descoserse", "s", f)
+				if f >= RAJA and not rajada:
+					rajarse()
+				if f >= sprite.sprite_frames.get_frame_count("descoserse_s") - 1:
+					sprite.position.x = sin(tiempo * 50.0) * 2.0
+			else:
+				fijar("quieto", "s", 0)
+				sprite.position.x = sin(tiempo * 50.0) * 2.0
 		_:
 			if marcha.length() > 8.0:
-				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD, 0.4, 1.5))
+				poner("andar_" + dir, clampf(marcha.length() / (VELOCIDAD if fase == 1 else VELOCIDAD_2), 0.4, 1.5))
 				if fase == 1 and estado == "andar":
 					sprite.position.y = PIE - absf(sin(tiempo * 11.0)) * 9.0   # (bailando: a saltitos)
 			else:
@@ -646,7 +779,7 @@ func _draw() -> void:
 		return
 	match estado:
 		"aviso_embestida":
-			franja(VELOCIDAD_EMBESTIDA * tiempo_embestida(), minf(1.0, t / datos.aviso))
+			franja(velocidad_embestida() * tiempo_embestida(), minf(1.0, t / datos.aviso))
 		"aviso_soplo":
 			# el cono del matasuegras (se corta donde hay paredes o muebles)
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_SOPLO, ALCANCE_SOPLO, minf(1.0, t / AVISO_SOPLO), tiempo)

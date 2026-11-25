@@ -2730,3 +2730,113 @@ func probar_tren() -> void:
 		roundi(tren.DANO_JEFE * jefe.MAS_SORPRESA)])
 	await get_tree().create_timer(0.2, false).timeout
 	Captura.foto("captura-tren-atropello.png")
+
+
+# La mascota, fase 2 «descosida» (25 nov): la transición (se descose, la nube de relleno, la tarta que cae, la pista de
+# Johnny), el dibujo descosido y el relleno que va soltando, el fuego que corre por el relleno, ella quemándose al
+# pisarlo, la tarta tiroteada (las velas por el aire y los fuegos donde caen), un crío con globo (al morir, dos pelotas) y
+# lo que se queda en el suelo tras una caja. Fotos: descosida-raja, descosida-corre, descosida-fuego, descosida-tarta,
+# descosida-globo
+func probar_descosida() -> void:
+	if not await ir_a_la_sala_del_jefe("mascota"):
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	var jefe: Node2D = jefa
+	jefe.espera_tren = 99999.0
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	await get_tree().create_timer(1.0, false).timeout
+	johnny.global_position = jefe.inicio + Vector2(0, 120)
+	jefe.global_position = jefe.inicio + Vector2(-120, -20)
+	# a media vida: se descose
+	jefe.vida = int(jefe.vida_max * 0.5) - 1
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	print("Descosida: fase %d, estado %s (esperado: 2, grito)" % [jefe.fase, jefe.estado])
+	await get_tree().create_timer(1.15, false).timeout
+	Captura.foto("captura-descosida-raja.png")
+	print("Descosida: animación «%s», rajada %s · relleno %d (esperado: descoserse_s, true, 8)" % [jefe.sprite.animation, jefe.rajada,
+		get_tree().get_nodes_in_group("relleno").size()])
+	while jefe.estado == "grito":
+		await get_tree().physics_frame
+	print("Descosida: dibujo descosido %s · tarta %s (esperado: true, true)" % [jefe.sprite.sprite_frames == jefe.HOJA_DESCOSIDA,
+		is_instance_valid(jefe.tarta)])
+	# corre detrás de Johnny soltando relleno
+	jefe.espera_embestida = 99.0
+	var antes: int = get_tree().get_nodes_in_group("relleno").size()
+	var vel := 0.0
+	for i in 90:
+		await get_tree().physics_frame
+		vel = maxf(vel, jefe.marcha.length())
+	Captura.foto("captura-descosida-corre.png")
+	print("Descosida: corriendo, velocidad %d (esperado: unos 215) · relleno nuevo %d (esperado: 2-4)" % [vel,
+		get_tree().get_nodes_in_group("relleno").size() - antes])
+	# el fuego: en un pegote, y corre por los de al lado
+	for r in get_tree().get_nodes_in_group("relleno"):
+		r.queue_free()
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	jefe.set_physics_process(false)
+	await get_tree().physics_frame
+	var fila: Vector2 = jefe.inicio + Vector2(-260, 120)
+	for i in 6:
+		jefe.poner_relleno(fila + Vector2(i * 45, 0))
+	await get_tree().physics_frame
+	var fuego: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+	fuego.tipo = "fuego"
+	fuego.escala = 0.4
+	fuego.position = fila - Vector2(10, 0) - jefe.get_parent().global_position
+	jefe.get_parent().add_child(fuego)
+	await get_tree().create_timer(1.6, false).timeout
+	Captura.foto("captura-descosida-fuego.png")
+	var ardiendo := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.has_meta("relleno"))
+	print("Descosida: relleno ardiendo %d de 6 · queda sin arder %d (esperado: 6, 0)" % [ardiendo.size(),
+		get_tree().get_nodes_in_group("relleno").size()])
+	# ella, encima de su relleno ardiendo
+	jefe.set_physics_process(true)
+	jefe.global_position = ardiendo[2].global_position - Vector2(0, jefe.PIE * 0.5)
+	var vida: int = jefe.vida
+	await get_tree().create_timer(0.3, false).timeout
+	print("Descosida: pisando su relleno ardiendo, le quita %d (esperado: al menos %d)" % [vida - jefe.vida, jefe.DANO_QUEMA])
+	jefe.global_position = jefe.inicio + Vector2(-300, -150)
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	# la tarta: una bala le da y las velas salen volando; donde caen, fuego
+	var tarta: Node2D = jefe.tarta
+	johnny.global_position = tarta.global_position + Vector2(-160, 40)
+	for i in 3:
+		jefe.poner_relleno(tarta.global_position + Vector2(150 + i * 30, randf_range(-60, 60)))
+	var fuegos: int = get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "fuego" and not c.has_meta("relleno")).size()
+	tarta.tocada_bala(Vector2(600, 0))
+	print("Descosida: tarta tiroteada, velas volando %d · lista %s (esperado: 3, false)" % [tarta.velas.size(), tarta.lista()])
+	await get_tree().create_timer(tarta.VUELO * 0.5, false).timeout
+	Captura.foto("captura-descosida-tarta.png")
+	await get_tree().create_timer(tarta.VUELO * 0.5 + 0.2, false).timeout
+	print("Descosida: velas caídas, fuegos nuevos %d (esperado: 3)" % [get_tree().get_nodes_in_group("charcos").filter(
+		func(c): return c.tipo == "fuego" and not c.has_meta("relleno")).size() - fuegos])
+	await get_tree().create_timer(tarta.RECARGA, false).timeout
+	print("Descosida: a los %d s, la tarta otra vez encendida %s (esperado: true)" % [tarta.RECARGA, tarta.lista()])
+	# un crío con globo: al morir, dos pelotas
+	for p in jefe.pelotas():
+		p.queue_free()
+	await get_tree().physics_frame
+	var crio: Node2D = meter_zombi("rapido", johnny.global_position + Vector2(140, 0))
+	crio.set_meta("tipo", "rapido")
+	jefe.poner_globos()
+	crio.process_mode = Node.PROCESS_MODE_DISABLED
+	await get_tree().create_timer(0.3, false).timeout
+	print("Descosida: el crío lleva globo %s (esperado: true)" % [crio.find_children("*", "Globo", false, false).size() == 1])
+	Captura.foto("captura-descosida-globo.png")
+	crio.process_mode = Node.PROCESS_MODE_INHERIT
+	var habia: int = jefe.pelotas().size()   # (los otros críos, si se queman en el fuego, también sueltan las suyas)
+	crio.recibir_golpe(99999, Vector2.UP * 100.0)
+	await get_tree().physics_frame
+	print("Descosida: muerto el crío, pelotas nuevas %d (esperado: 2)" % (jefe.pelotas().size() - habia))
+	# la caja sorpresa: en la fase 2 se queda menos en el suelo
+	jefe.cambiar("sorpresa")
+	var desde: float = jefe.tiempo
+	while jefe.estado == "sorpresa":
+		await get_tree().physics_frame
+	print("Descosida: en el suelo tras la caja %.1f s (esperado: %.1f, más lento en la prueba: %.1f)" % [jefe.tiempo - desde, jefe.SORPRESA_2,
+		jefe.SORPRESA_2 / jefe.ritmo])

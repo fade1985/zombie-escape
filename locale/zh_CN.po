@@ -1273,6 +1273,10 @@ msgstr "都给我干活！"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "谁也不准下班！"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "啪！"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "好饿！"
@@ -3006,6 +3010,10 @@ msgid "¡REGALOS!"
 msgstr "礼物！"
 
 #: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "好烫！"
+
+#: scripts/mascota.gd
 msgid "¡PIIIII!"
 msgstr "嘟——！"
 
@@ -3016,6 +3024,10 @@ msgstr "蹦！"
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "游戏时间！"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "它在掉填充物！那东西肯定一点就着……"
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"

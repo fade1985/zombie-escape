@@ -1275,6 +1275,10 @@ msgstr "BACK TO WORK!"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "NOBODY CLOCKS OUT!"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "POP!"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "HUNGRY!"
@@ -3010,6 +3014,10 @@ msgid "¡REGALOS!"
 msgstr "PRESENTS!"
 
 #: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "IT BURNS!"
+
+#: scripts/mascota.gd
 msgid "¡PIIIII!"
 msgstr "TOOOOT!"
 
@@ -3020,6 +3028,10 @@ msgstr "BOING!"
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "PLAYTIME!"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "It's dropping stuffing! Bet that burns..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"

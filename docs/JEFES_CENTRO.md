@@ -8,7 +8,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 | Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
 | Cocinero | hecho, pendiente del visto bueno del dueño (23 nov) |
 | Modista | hecha, con el visto bueno del dueño (24 nov) |
-| Mascota | en curso: fase 1 y el tren hechos (25 nov), falta la fase 2 |
+| Mascota | hecha, pendiente del visto bueno del dueño (25 nov) |
 | Gerente | pendiente |
 
 ## Por qué
@@ -276,7 +276,7 @@ Se le rompe la tripa y va soltando relleno.
 - Más pequeña y mucho más rápida; rebota por la sala como una pelota más.
 - Los críos traen globos que al reventar sueltan más pelotas.
 
-### Cómo va quedando (24 nov)
+### Cómo quedó (24 y 25 nov)
 - Fase 1 hecha: `mascota.gd`, `caja_sorpresa.gd` y las pelotas de goma del antidisturbios (`pelota_goma.gd`, con
   `juguete`: una raya blanca, y `rapidez_normal`: tras el salto van frenando hasta su rapidez).
 - Pelotas: 2 cada vez que se estrella o rebota en una pared, como mucho 12. Al caer de un salto, las de menos de 170
@@ -304,6 +304,26 @@ Se le rompe la tripa y va soltando relleno.
   un lado (esquivando, no). Si pilla a la mascota mareada o sentada encima de las vías, la atropella: 45 («¡ATROPELLO!»;
   sentada, 68). Las cajas no caen sobre las vías. Prueba: `--captura --edificio centro --jefe mascota --tren`.
 - Prueba: `--captura --edificio centro --jefe mascota --fiesta`.
+- Fase 2, «descosida» (25 nov):
+  - Transición: en el grito de media vida se dobla y se le raja la barriga (animación de PixelLab `descoserse`, de
+    frente, en la hoja normal); al rajarse sale una nube de relleno y 8 pegotes alrededor. Desde ahí lleva el dibujo
+    descosido: `jefe-mascota-descosida` (un «estado» del mismo personaje en PixelLab, con su andar, embestida, golpe,
+    muerte y sorpresa; `tools/jefe_hoja.py mascota-descosida-72 jefe-mascota-descosida`). No se hizo más pequeña: el
+    dibujo nuevo ya va encorvado.
+  - Ya no baila, ni salta, ni tira regalos, ni sopla: corre detrás de Johnny a 215 (antes 140) y embiste cada 1,8 s, 3
+    veces seguidas a 600 rebotando en las paredes (con sus pelotas en cada choque).
+  - El relleno (`relleno.gd`): andando suelta un pegote cada 0,45 s y embistiendo cada 0,12 s (como mucho 30; duran
+    10 s). Arde con cualquier fuego: un charco de fuego (molotov, aceite...), la llamarada del lanzallamas, una
+    explosión o una vela; deja un fuego pequeño (el del molotov, con la marca `relleno`) y prende el de al lado a los
+    0,15 s, así que el fuego corre por el reguero. Si ella pisa su relleno ardiendo le quita 16 cada 0,5 s
+    («¡QUEMA!»), además de la quemadura normal. Pista: Johnny dice «¡Va soltando relleno! Seguro que eso arde...».
+  - La tarta (`tarta.gd`, dibujo de PixelLab `tarta.png` sin las llamas: titilan con código) cae en medio de la sala.
+    Es un mueble. Si le da una bala (`bala.gd` llama a `tocada_bala` del mueble que toca) o ella se la come embistiendo,
+    sus 3 velas salen volando hacia el otro lado (110-240, con su marca en el suelo) y donde caen dejan un fuego pequeño
+    que prende el relleno de alrededor. Se vuelve a encender a los 7 s.
+  - Los críos llevan un globo (`globo.gd`, dibujado con código): al morir el crío revienta («¡POP!») y suelta 2
+    pelotas. Las cajas sorpresa siguen, pero se queda 3 s en el suelo (antes 5).
+  - Prueba: `--captura --edificio centro --jefe mascota --descosida`.
 
 ## 5. El gerente · «La junta de accionistas»
 

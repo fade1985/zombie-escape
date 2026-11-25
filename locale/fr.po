@@ -1275,6 +1275,10 @@ msgstr "AU TRAVAIL !"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "PAS DE PAUSE ICI !"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "POP !"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "FAIM !"
@@ -3010,6 +3014,10 @@ msgid "¡REGALOS!"
 msgstr "CADEAUX !"
 
 #: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "ÇA BRÛLE !"
+
+#: scripts/mascota.gd
 msgid "¡PIIIII!"
 msgstr "POUÊÊÊT !"
 
@@ -3020,6 +3028,10 @@ msgstr "BOING !"
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "C'EST LA RÉCRÉ !"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "Elle perd son rembourrage ! Ça doit bien brûler..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
