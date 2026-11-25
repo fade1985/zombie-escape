@@ -1174,7 +1174,16 @@ en una línea.
   después de reducir, solo donde hay madera (`listones`). Y la cámara, igual (otra foto del dueño: paneles de resina gris oscuro con juntas claras
   y paneles aislantes blancos con rodapié de acero inoxidable, con escarcha, hielo y sangre; `camara-supermercado-…-gpt.webp`, la misma herramienta,
   `ESTILO_TIENDA`/`MEZCLA_TIENDA` "camara-supermercado", y `"destrozada"` con "camara"). `--tiendas-fijas` saca también la cámara
-  (`captura-fija-<tipo>-<lado>-camara.png`, con el marco de escarcha del frío). La sala de venta y la cámara,
+  (`captura-fija-<tipo>-<lado>-camara.png`, con el marco de escarcha del frío). Los muebles de la cámara (25 nov, el dueño; de GPT desde fotos
+  suyas, con `py tools/muebles_supermercado_gpt.py`, copia de la de la farmacia; `assets/sources/centro/<nombre>-gpt.webp`), medidos para que
+  no sobre nada: la misma estantería de acero inoxidable helada con cuatro cargas (`camarabalda1` a `4`: verdura y fruta, carne envasada,
+  lácteos y cajas, y saqueada con una balda caída; `estanteria-camara-verdura-gpt.webp`, `-carne-`, `-lacteos-`, `-saqueada-`; 85 × 136, con
+  el tope de alto, `ALTO_MAX`), la burra de embutidos (`camaraburra`, `burra-embutidos-gpt.webp`, 88 × 129), el palé de cajas de verdura
+  (`camarapale`, `pale-verduras-gpt.webp`) y el colgador de carne (`camaracolgador`, `colgador-carne-gpt.webp`, 160); todos con sus huecos
+  quitados y con el doble de detalle. En la normal, las cuatro estanterías contra la pared de arriba, con el mismo hueco entre ellas y con
+  las paredes; abajo, con el pie en la fila 8,25, la burra y el palé a la izquierda del paso de la puerta (casillas 8,5 a 11,5) y el colgador
+  a la derecha, a 40 unidades o más de todo (Johnny pasa por 36). En la inversa, las estanterías de dos en dos a los lados de la puerta y
+  lo demás igual (`camara-supermercado` en `catalogo.gd`). Prueba: `--rodear-muebles --tipo supermercado --uso camara`. La sala de venta,
   sin muebles de momento (sus muebles de antes, en git). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
   de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un

@@ -214,6 +214,16 @@ const MUEBLES := {
 	"farmaacero": {"len": 136, "dep": 40, "paredes": "", "archivo": "centro/mesa-acero-gpt", "escala": 1.0},
 	"farmacarro": {"len": 56, "dep": 28, "paredes": "", "archivo": "centro/carro-acero-gpt", "escala": 1.0},
 	"farmaresiduos": {"len": 48, "dep": 28, "paredes": "", "archivo": "centro/contenedor-residuos-gpt", "escala": 1.0},
+	# (25 nov, el dueño) la cámara frigorífica del supermercado, de GPT (tools/muebles_supermercado_gpt.py): la misma estantería de acero
+	# helada con verdura, carne, lácteos y saqueada (85 × 136: más anchas se salían por encima de la pared), la burra de embutidos, el
+	# palé de cajas de verdura y el colgador de carne
+	"camarabalda1": {"len": 85, "dep": 36, "paredes": "", "archivo": "centro/estanteria-camara-verdura-gpt", "escala": 1.0},
+	"camarabalda2": {"len": 85, "dep": 36, "paredes": "", "archivo": "centro/estanteria-camara-carne-gpt", "escala": 1.0},
+	"camarabalda3": {"len": 85, "dep": 36, "paredes": "", "archivo": "centro/estanteria-camara-lacteos-gpt", "escala": 1.0},
+	"camarabalda4": {"len": 86, "dep": 36, "paredes": "", "archivo": "centro/estanteria-camara-saqueada-gpt", "escala": 1.0},
+	"camaraburra": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/burra-embutidos-gpt", "escala": 1.0},
+	"camarapale": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/pale-verduras-gpt", "escala": 1.0},
+	"camaracolgador": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/colgador-carne-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -542,10 +552,19 @@ const SALAS := {
 	},
 	# Las salas de las tiendas del centro comercial (tienda.gd), fijas desde la M77: "<uso>-<tipo de tienda>" ("tienda-
 	# supermercado", "cocina-restaurante", "bano-farmacia"...), cada una solo con sus "colocados" (Muebles.de_tienda)
-	# el supermercado (25 nov, el dueño: rehecho como la farmacia, Tienda.PLANOS). La sala de venta y la cámara, sin muebles de momento:
-	# se irán poniendo los de GPT (antes, neveras, góndolas, cajas, palés y estanterías de metal: está en git)
+	# el supermercado (25 nov, el dueño: rehecho como la farmacia, Tienda.PLANOS). La sala de venta, sin muebles de momento: se irán
+	# poniendo los de GPT (antes, neveras, góndolas, cajas, palés y estanterías de metal: está en git)
 	"tienda-supermercado": {"colocados": {"abajo": [], "arriba": []}},
-	"camara-supermercado": {"colocados": {"abajo": [], "arriba": []}},
+	# su cámara (20 × 12, la puerta en medio, casillas 9 a 11), medida para que no sobre nada: en la normal, las cuatro estanterías
+	# contra la pared de arriba, con el mismo hueco entre ellas y con las paredes (1,9 casillas); abajo, con el pie en la fila 8,25 (la
+	# pared de abajo tapa lo de detrás), la burra y el palé a la izquierda del paso de la puerta (8,5 a 11,5) y el colgador a la
+	# derecha, a 40 unidades o más de todo (Johnny pasa por 36). En la inversa (la puerta arriba), las estanterías de dos en dos a
+	# los lados de la puerta, con el mismo hueco, y lo demás igual
+	"camara-supermercado": {"colocados": {
+		"abajo": [["camarabalda1", 3.2], ["camarabalda2", 7.73], ["camarabalda3", 12.27], ["camarabalda4", 16.8],
+			["camaraburra", 2.625, "libre", 7.6875], ["camarapale", 6.25, "libre", 7.6875], ["camaracolgador", 15.75, "libre", 7.625]],
+		"arriba": [["camarabalda1", 2.56], ["camarabalda2", 6.44], ["camarabalda3", 13.56], ["camarabalda4", 17.44],
+			["camaraburra", 2.625, "libre", 7.6875], ["camarapale", 6.25, "libre", 7.6875], ["camaracolgador", 15.75, "libre", 7.625]]}},
 	# su almacén, de momento el mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en la ferretería y la
 	# farmacia), y su aseo, el mismo que el de la farmacia (bano-farmacia)
 	"almacen-supermercado": {"colocados": {
