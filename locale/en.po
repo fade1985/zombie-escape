@@ -3042,6 +3042,14 @@ msgid "¡A LA PASARELA!"
 msgstr "TO THE RUNWAY!"
 
 #: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "GET OVER HERE!"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "NOT IN THE DARK!"
+
+#: scripts/modista.gd
 msgid "¡TE TENGO!"
 msgstr "GOT YOU!"
 
@@ -4638,6 +4646,14 @@ msgstr "Here, this was in lost and found!"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "\"Restricted access: floor 40\"… what's up there?"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "CHOO-CHOOO!"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "RUN OVER!"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

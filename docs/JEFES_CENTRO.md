@@ -234,6 +234,18 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   aturdida con estrellitas, le entra el doble, y el foco se para encima de ella latiendo más fuerte mientras dura.
   Ronda apartándose del foco menos que antes (hasta 1,5 radios, a 0,7 de su velocidad), para que la pille alguna vez.
   Al caer ella vuelve la luz.
+- La pasarela, más dura (25 nov, el dueño: se le podía pegar sin más y era fácil; la inmunidad fuera de la luz se
+  descartó porque obligaba a esperar):
+  - **A oscuras se defiende:** ataja uno de cada dos golpes con las tijeras (chispas, «¡A OSCURAS NO!») y, si Johnny
+    está cerca, contesta con un tijeretazo rápido (aviso de 0,3 s). Con cualquier luz del foco encima no puede.
+  - **Ojos en los maniquíes vivos:** llevan los mismos ojos rojos que ella (`Modista.pintar_ojo`), así que a oscuras
+    no se sabe cuál es; la delata su estela.
+  - **Hilos invisibles:** vuelve a tirar carretes (3 de golpe cada 4,5 s, hasta 6 hilos), pero a oscuras no se ven:
+    solo los trozos que alumbra el foco y un brillo que los recorre cada 2,6 s (`hilo_modista.gd`, `oculto`). Enredan.
+  - **El tirón:** una raya de aviso (0,75 s) que sigue a Johnny; si le pilla, le quita 6 y lo arrastra hacia ella
+    («¡VEN AQUÍ!») y le tira un tijeretazo. Cada 6 s, entre 140 y 420 de distancia.
+  - **El desfile de alfileres:** su franja de aviso (0,75 s) y cruza la sala a 480 pasando junto a Johnny, soltando
+    un alfiler a cada lado cada 0,13 s (más lentos: 280). Cada 8 s.
 - Los ojos (25 nov, el dueño: eran un círculo rojo liso): a píxeles, el centro casi blanco, un rojo alrededor y un
   resplandor tramado (cuadraditos salteados); laten un poco, cada 2,3 s un destello en cruz y, en la pasarela, dejan
   una estela roja al moverse (`_pintar_ojos`). Foto: `captura-desfile-ojos.png`.

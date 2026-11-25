@@ -3038,6 +3038,14 @@ msgid "¡A LA PASARELA!"
 msgstr "上T台！"
 
 #: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "给我过来！"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "黑暗中休想！"
+
+#: scripts/modista.gd
 msgid "¡TE TENGO!"
 msgstr "抓到你了！"
 
@@ -4630,6 +4638,14 @@ msgstr "给，这是失物招领处的！"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "「限制进入：40 层」……上面有什么？"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "呜——呜——！"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "碾过去了！"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

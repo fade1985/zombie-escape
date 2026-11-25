@@ -2457,7 +2457,57 @@ func probar_desfile() -> void:
 		await get_tree().physics_frame
 	print("Desfile: el corte le quita a Johnny %d (esperado: más de 0)" % (vida_johnny - johnny.vida))
 	johnny.invulnerable = 99999.0
+	# la pasarela, más dura: a oscuras ataja uno de cada dos golpes y contesta; el tirón; el desfile de alfileres;
+	# los hilos que no se ven; los ojos de los maniquíes vivos
+	jefe.sin_foco = 99.0
+	jefe.dur = 99.0
+	for k in jefe.espera:
+		jefe.espera[k] = 99.0
+	jefe.global_position = jefe.foco.global_position + Vector2(0, 330)
+	if jefe.bajo_luz():
+		jefe.global_position = jefe.foco.global_position + Vector2(0, -330)
+	johnny.global_position = jefe.global_position + Vector2(90, 0)
+	jefe.cambiar("andar")
+	jefe.ataja = false
+	antes = jefe.vida
+	jefe.recibir_golpe(10, Vector2.UP)
+	var ataja_uno: int = antes - jefe.vida
+	var contesta: String = jefe.estado
+	jefe.recibir_golpe(10, Vector2.UP)
+	print("Desfile: a oscuras, dos golpes de 10 le quitan %d y %d · contesta con %s (esperado: 0 y 10 en algún orden, aviso_tijeretazo)" % [
+		ataja_uno, antes - jefe.vida - ataja_uno, contesta])
+	Captura.foto("captura-desfile-ataja.png")
+	await get_tree().create_timer(0.6, false).timeout
+	jefe.cambiar("andar")
+	johnny.global_position = jefe.global_position + Vector2(260, 0)
+	johnny.velocity = Vector2.ZERO
+	jefe.cambiar("aviso_tiron", {"angulo": 0.0})
+	await get_tree().create_timer(jefe.AVISO_TIRON * 0.6, false).timeout
+	Captura.foto("captura-desfile-tiron-aviso.png")
+	for i in 120:
+		if jefe.estado != "aviso_tiron":
+			break
+		await get_tree().physics_frame
+	print("Desfile: el tirón, estado %s · Johnny arrastrado hacia ella %s (esperado: tiron, true)" % [jefe.estado, johnny.velocity.x < -300.0])
+	Captura.foto("captura-desfile-tiron.png")
+	await get_tree().create_timer(0.8, false).timeout
+	jefe.cambiar("andar")
+	var balas_antes := get_tree().get_nodes_in_group("balas_zombi").size()
+	jefe.apuntar_desfile(johnny)
+	await get_tree().create_timer(jefe.AVISO_DESFILE * 0.7, false).timeout
+	Captura.foto("captura-desfile-desfile-aviso.png")
+	await get_tree().create_timer(jefe.AVISO_DESFILE * 0.3 + 0.5, false).timeout
+	print("Desfile: el desfile de alfileres, estado %s · alfileres nuevos %d (esperado: desfile o andar, unos cuantos)" % [jefe.estado,
+		get_tree().get_nodes_in_group("balas_zombi").size() - balas_antes])
+	Captura.foto("captura-desfile-desfile.png")
+	jefe.tirar_carrete(PI / 2.0)
+	print("Desfile: en la pasarela, el hilo nuevo oculto %s (esperado: true)" % jefe.hilos[-1].oculto)
+	await get_tree().create_timer(1.5, false).timeout
+	Captura.foto("captura-desfile-hilo-oculto.png")
+	var vivo_ojos: Array = jefe.vivos.filter(func(v): return is_instance_valid(v) and v.estado != "muerto")
+	print("Desfile: maniquíes vivos con ojos %d (esperado: los vivos que quedan)" % vivo_ojos.filter(func(v): return v.has_node("Ojos")).size())
 	# y al caer, vuelve la luz y no queda nada suyo
+	jefe.cambiar("congelada")   # (que no ataje el golpe)
 	jefe.recibir_golpe(99999, Vector2.RIGHT * 10.0)
 	await get_tree().create_timer(1.0, false).timeout
 	print("Desfile: muerta, foco %s · oscuridad de más %.2f · zombis %d (esperado: false, 0.00, 0)" % [is_instance_valid(jefe.foco),
@@ -2482,6 +2532,7 @@ func probar_fiesta() -> void:
 	jefe.cambiar("andar")
 	jefe.dur = 99.0
 	await get_tree().create_timer(1.2, false).timeout
+	jefe.espera_tren = 99999.0   # (el tren va en su prueba, --tren)
 	print("Fiesta: cajas %d · listas %d (esperado: 3, 3)" % [jefe.cajas.size(), jefe.cajas_listas()])
 	print("Fiesta: Johnny dice «%s» (esperado: la pista de las cajas sorpresa)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
 	print("Fiesta: críos en la fase 1 %d (esperado: 0)" % jefe.crios())
@@ -2627,3 +2678,55 @@ func probar_fiesta() -> void:
 	print("Fiesta: se levanta a los %.1f s (esperado: %.1f, con el ritmo del VD-7)" % [sentada, jefe.SORPRESA / jefe.ritmo])
 	await get_tree().create_timer(jefe.REPONE_CAJA + 1.5, false).timeout
 	print("Fiesta: la caja se ha ido %s · cajas listas otra vez %d (esperado: true, 3)" % [not is_instance_valid(caja), jefe.cajas_listas()])
+
+
+# Con "--captura --edificio centro --jefe mascota --tren": el tren de juguete de la Juguetería (25 nov,
+# docs/JEFES_CENTRO.md, «La fiesta de cumpleaños»): las vías alrededor de la sala, ninguna caja encima, el aviso, la
+# vuelta, Johnny atropellado (se le aparta) y la mascota sentada encima de las vías, atropellada. Cada línea dice lo
+# esperado. Fotos (captura-tren-*.png): sala (las vías y el tren en su estación), aviso (las vías en rojo) y corre
+func probar_tren() -> void:
+	if not await ir_a_la_sala_del_jefe("mascota"):
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	var jefe: Node2D = jefa
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	await get_tree().create_timer(1.0, false).timeout
+	jefe.espera_tren = 999.0
+	jefe.global_position = jefe.inicio + Vector2(0, 30)
+	var tren: Node2D = jefe.tren
+	print("Tren: vías %s · largo de la vuelta %d (esperado: true, unos 2000-3000) · cajas encima de las vías %d (esperado: 0)" % [
+		tren != null, tren.largo if tren else 0, jefe.cajas.filter(func(c): return tren.cerca_de_via(c.global_position, 60.0)).size()])
+	johnny.global_position = jefe.inicio + Vector2(0, 160)
+	Captura.foto("captura-tren-sala.png")
+	# Johnny en las vías, delante del tren
+	johnny.invulnerable = 0.0
+	johnny.vida = johnny.stats.vida_max
+	johnny.global_position = tren.en(tren.s + 420.0)[0]
+	var vida: int = johnny.vida
+	tren.salir()
+	await get_tree().create_timer(tren.AVISO * 0.5, false).timeout
+	print("Tren: avisando, estado %s (esperado: aviso)" % tren.estado)
+	Captura.foto("captura-tren-aviso.png")
+	await get_tree().create_timer(tren.AVISO * 0.5 + 0.8, false).timeout
+	Captura.foto("captura-tren-corre.png")
+	await get_tree().create_timer(0.6, false).timeout
+	print("Tren: a Johnny le quita %d (esperado: %d, algo menos con su defensa) · ya no está en las vías %s (esperado: true)" % [vida - johnny.vida, tren.DANO,
+		not tren.cerca_de_via(johnny.global_position, tren.RADIO)])
+	johnny.invulnerable = 99999.0
+	while tren.estado != "parado":
+		await get_tree().physics_frame
+	print("Tren: tras una vuelta, parado en su estación %s (esperado: true)" % [tren.estado == "parado"])
+	# la mascota sentada encima de las vías: la atropella
+	johnny.global_position = jefe.inicio
+	jefe.global_position = tren.en(tren.s + 700.0)[0]
+	jefe.vida = jefe.vida_max
+	jefe.cambiar("sorpresa")
+	tren.salir()
+	while tren.estado != "parado" and jefe.vida == jefe.vida_max:
+		await get_tree().physics_frame
+	print("Tren: atropella a la mascota sentada, le quita %d (esperado: %d, con lo que le entra sentada)" % [jefe.vida_max - jefe.vida,
+		roundi(tren.DANO_JEFE * jefe.MAS_SORPRESA)])
+	await get_tree().create_timer(0.2, false).timeout
+	Captura.foto("captura-tren-atropello.png")

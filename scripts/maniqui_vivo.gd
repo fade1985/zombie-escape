@@ -22,6 +22,8 @@ const VISTA := 0.95        # medio ángulo de lo que ve Johnny por delante: si e
 const LEJOS := 900.0       # más lejos que esto, Johnny ya no lo ve
 const DESPERTAR := 0.7     # lo que tarda en cobrar vida (tiembla)
 const PIE := 12.0          # sus pies, por debajo de su centro
+# Sus ojos rojos, como los de la modista (25 nov, el dueño): a oscuras no se sabe cuál es ella (la delata su estela)
+const OJOS := [Vector2(-5, -117), Vector2(1, -117)]
 
 var radio := 18.0
 var vida := 45
@@ -31,6 +33,8 @@ var t := 0.0
 var paso := randf()        # el tiempo que lleva andando (para su animación; cada uno empieza en un punto del paso)
 var sprite: Sprite2D
 var agente: NavigationAgent2D
+var ojos: Node2D
+var tiempo := randf() * 5.0
 
 
 func _ready() -> void:
@@ -49,6 +53,14 @@ func _ready() -> void:
 	sprite.position = Vector2(0, PIE)   # sus pies
 	add_child(sprite)
 	poner_hoja(HOJA_DESPERTAR)
+	ojos = Node2D.new()
+	ojos.name = "Ojos"   # no-tr (nombre de nodo)
+	ojos.z_index = 2
+	var sin_luz := CanvasItemMaterial.new()
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	ojos.material = sin_luz
+	ojos.draw.connect(_pintar_ojos)
+	add_child(ojos)
 	agente = NavigationAgent2D.new()
 	agente.radius = 18.0
 	agente.path_desired_distance = 16.0
@@ -60,6 +72,8 @@ func _physics_process(delta: float) -> void:
 	if estado == "muerto":
 		return
 	t += delta
+	tiempo += delta
+	ojos.queue_redraw()
 	if estado == "despertar":
 		# tiembla, da un tirón de cabeza y levanta los brazos (su animación, una vez)
 		sprite.frame = mini(int(t / DESPERTAR * HOJA_DESPERTAR.n), HOJA_DESPERTAR.n - 1)
@@ -84,6 +98,16 @@ func _physics_process(delta: float) -> void:
 		sprite.flip_h = velocity.x < 0.0
 	if global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + 4.0:
 		johnny.recibir_dano(DANO, self)
+
+
+# Los ojos (los mismos de la modista: Modista.pintar_ojo), encendiéndose al despertar y latiendo un poco
+func _pintar_ojos() -> void:
+	if estado == "muerto":
+		return
+	var k := (minf(1.0, t / DESPERTAR) if estado == "despertar" else 1.0) * 0.75 * (0.85 + 0.15 * sin(tiempo * 7.0))
+	for p in OJOS:
+		var q: Vector2 = Vector2(-p.x - 4.0, p.y) if sprite.flip_h else p
+		load("res://scripts/modista.gd").pintar_ojo(ojos, q, k)
 
 
 # ¿Lo está mirando Johnny? (lo tiene por delante, no muy lejos y sin nada en medio)
@@ -123,6 +147,7 @@ func morir() -> void:
 	if estado == "muerto":
 		return
 	estado = "muerto"
+	ojos.queue_redraw()
 	remove_from_group("zombis")
 	$Choque.set_deferred("disabled", true)
 	z_index = -1

@@ -91,10 +91,30 @@ const ANCHO_CORTE := 26.0          # lo cerca de su camino que tiene que estar J
 const DANO_CORTE := 18
 const CONGELADA := 1.3             # lo que se queda cegada si la pilla el foco de lleno
 const MAS_CONGELADA := 2.0
+# La pasarela, más dura (25 nov, el dueño: se le podía pegar sin más y era fácil):
+#   - a oscuras ataja uno de cada dos golpes con las tijeras («¡A OSCURAS NO!») y, si Johnny está cerca, contesta con
+#     un tijeretazo rápido (AVISO_CONTRA); en la luz del foco no puede (ataja_golpe);
+#   - vuelve a tirar carretes, pero sus hilos no se ven a oscuras: solo en la luz o cuando les pasa un brillo
+#     (hilo_modista.gd, oculto);
+#   - el tirón: le lanza un hilo (aviso en el suelo) y, si le da, lo arrastra hacia ella y le tira un tijeretazo;
+#   - el desfile de alfileres: cruza la sala (con su franja de aviso) soltando alfileres a los dos lados.
+const AVISO_CONTRA := 0.3
+const MAX_HILOS_PASARELA := 6
+const CARRETES_PASARELA := 3
+const AVISO_TIRON := 0.75
+const LARGO_TIRON := 440.0
+const ANCHO_TIRON := 20.0
+const TIRON := 950.0               # lo fuerte que arrastra a Johnny
+const DANO_TIRON := 6
+const AVISO_DESFILE := 0.75
+const VELOCIDAD_DESFILE := 480.0
+const DURA_DESFILE := 1.3
+const CADA_DESFILE := 0.13         # cada cuánto suelta un par de alfileres
+const ALFILER_DESFILE := 280.0     # esos alfileres van más despacio (que se puedan esquivar)
 const INMUNE_FOCO := 5.0           # después, el foco no la para este rato
 # Lo que espera entre ataque y ataque (normal y enfadada; 0: no lo hace)
-const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [1.6, 0.0], "tensar": [9.0, 0.0],
-	"esconderse": [7.0, 0.0], "corte": [0.0, 5.5]}
+const ESPERAS := {"tijeretazo": [1.4, 1.1], "alfileres": [3.5, 5.0], "carrete": [1.6, 4.5], "tensar": [9.0, 0.0],
+	"esconderse": [7.0, 0.0], "corte": [0.0, 5.5], "tiron": [0.0, 6.0], "desfile": [0.0, 8.0]}
 # Los fotogramas de sus animaciones en los que corta las tijeras y lanza los alfileres (el brazo ya estirado)
 const CORTA := 4
 const LANZA := 4
@@ -118,7 +138,10 @@ var crecida := 0.0                 # lo que le queda de crecida (salir)
 var seguidos := 0                  # tijeretazos seguidos (elegir)
 var tirados := 0                  # los carretes que lleva tirados (para los gordos)
 var disfraz: Sprite2D = null       # escondida, el dibujo del maniquí que hace de ella (vestir)
-var espera := {"tijeretazo": 1.0, "alfileres": 2.0, "carrete": 1.0, "tensar": 6.0, "esconderse": 4.0, "corte": 2.0}
+var espera := {"tijeretazo": 1.0, "alfileres": 2.0, "carrete": 1.0, "tensar": 6.0, "esconderse": 4.0, "corte": 2.0,
+	"tiron": 2.5, "desfile": 4.0}
+var ataja := false                 # en la pasarela, ataja un golpe sí y otro no (ataja_golpe)
+var aviso_ataja := 0.0             # para no repetir «¡A OSCURAS NO!» a cada golpe
 var vivos: Array = []
 var hilos: Array = []
 var ojos: Node2D                   # el brillo de los ojos, que se ve también a oscuras
@@ -187,6 +210,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		if crecida <= 0.0 and fase == 1 and estado != "escondida":
 			sprite.modulate = Color.WHITE
 	sin_foco -= delta
+	aviso_ataja -= delta
 	var hacia: Vector2 = johnny.global_position - global_position
 	var d := hacia.length()
 	# la pasarela: si el foco la pilla de lleno, se queda cegada (salvo justo después de otra vez)
@@ -200,7 +224,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				elegir(johnny, hacia, d)
 		"aviso_tijeretazo":
 			frenar(delta)
-			if t >= AVISO_TIJERETAZO:
+			if t >= datos.get("aviso", AVISO_TIJERETAZO):
 				cambiar("tijeretazo", {"angulo": datos.angulo})
 				tijeretazo(johnny)
 		"tijeretazo":
@@ -229,9 +253,10 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta)
 			if t >= AVISO_CARRETE:
 				# un abanico de carretes de golpe: la sala se llena de hilos enseguida (por eso conviene cortarlos)
-				for i in CARRETES:
-					var abre := (i - (CARRETES - 1) / 2.0) * ABANICO_CARRETES
-					if hilos_vivos() < MAX_HILOS:
+				var cuantos := CARRETES if fase == 1 else CARRETES_PASARELA
+				for i in cuantos:
+					var abre := (i - (cuantos - 1) / 2.0) * ABANICO_CARRETES
+					if hilos_vivos() < (MAX_HILOS if fase == 1 else MAX_HILOS_PASARELA):
 						tirar_carrete(datos.angulo + abre)
 				cambiar("carrete", {"angulo": datos.angulo})
 		"carrete":
@@ -290,6 +315,39 @@ func pensar(delta: float, johnny: Node2D) -> void:
 					apuntar_alfileres(hacia)
 				else:
 					andar(0.4)
+		"aviso_tiron":
+			# la raya del hilo sigue a Johnny (despacio) hasta un poco antes de lanzarlo
+			frenar(delta)
+			if t < AVISO_TIRON - FIJA:
+				var paso := GIRO_RAYA * delta
+				datos.angulo += clampf(angle_difference(datos.angulo, hacia.angle()), -paso, paso)
+				mirada = Vector2.from_angle(datos.angulo)
+			if t >= AVISO_TIRON:
+				tirar_hilo(johnny)
+		"tiron":
+			frenar(delta)
+			if t >= 0.3:
+				if datos.dio and d < DISTANCIA_TIJERETAZO + 60.0:
+					apuntar_tijeretazo(hacia)
+				else:
+					andar(0.5)
+		"aviso_desfile":
+			frenar(delta)
+			if t >= AVISO_DESFILE:
+				cambiar("desfile", {"siguiente": 0.0})
+				Sonido.tocar("esquiva")
+		"desfile":
+			# cruza la sala soltando un alfiler a cada lado cada CADA_DESFILE
+			marcha = mirada * VELOCIDAD_DESFILE
+			datos.siguiente -= delta
+			if datos.siguiente <= 0.0:
+				datos.siguiente = CADA_DESFILE
+				for lado in [-1.0, 1.0]:
+					lanzar_alfiler(position, mirada.angle() + lado * PI / 2.0, -1.0, ALFILER_DESFILE)
+			if t > 0.1 and get_real_velocity().length() < VELOCIDAD_DESFILE * 0.35 or t > 0.05 and toca_muro(self) \
+					or t >= DURA_DESFILE:
+				marcha = Vector2.ZERO
+				andar(0.6)
 		"aviso_corte":
 			# la franja hasta la pared, que sigue a Johnny hasta un poco antes
 			frenar(delta)
@@ -372,6 +430,21 @@ func elegir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 			cambiar("aviso_corte", {"aviso": AVISO_CORTE[0], "quedan": CORTES})
 			gritar(Idioma.t("¡A LA PASARELA!"), Color("#ff5d73"), 18)
 			return
+		if espera.tiron <= 0.0 and d > 140.0 and d < LARGO_TIRON - 20.0 and ve_a(johnny):
+			espera.tiron = ESPERAS.tiron[f]
+			mirada = hacia.normalized()
+			cambiar("aviso_tiron", {"angulo": hacia.angle()})
+			return
+		if espera.desfile <= 0.0:
+			espera.desfile = ESPERAS.desfile[f]
+			apuntar_desfile(johnny)
+			return
+		if espera.carrete <= 0.0 and hilos_vivos() < MAX_HILOS_PASARELA:
+			espera.carrete = ESPERAS.carrete[f]
+			var angulo := hacia.angle() + randf_range(-ABRE_CARRETE, ABRE_CARRETE)
+			mirada = Vector2.from_angle(angulo)
+			cambiar("aviso_carrete", {"angulo": angulo})
+			return
 	if (d > 160.0 or de_cerca_vale) and d < ALCANCE_ALFILERES and espera.alfileres <= 0.0 and ve_a(johnny):
 		apuntar_alfileres(hacia)
 		return
@@ -384,6 +457,60 @@ func apuntar_tijeretazo(hacia: Vector2) -> void:
 	espera.tijeretazo = ESPERAS.tijeretazo[fase - 1]
 	mirada = hacia.normalized()
 	cambiar("aviso_tijeretazo", {"angulo": hacia.angle()})
+
+
+# El desfile de alfileres: corre en línea recta pasando junto a Johnny (por un lado u otro), con su franja de aviso
+func apuntar_desfile(johnny: Node2D) -> void:
+	var lado := 1.0 if randf() < 0.5 else -1.0
+	var hacia: Vector2 = johnny.global_position - global_position
+	var meta: Vector2 = johnny.global_position + hacia.normalized().orthogonal() * lado * 90.0
+	mirada = global_position.direction_to(meta)
+	cambiar("aviso_desfile")
+
+
+# El tirón: lanza un hilo por la raya; si Johnny está en ella (y no hay nada en medio), lo arrastra hacia ella
+func tirar_hilo(johnny: Node2D) -> void:
+	var angulo: float = datos.angulo
+	var dir := Vector2.from_angle(angulo)
+	var rel: Vector2 = johnny.global_position - global_position
+	var a_lo_largo := rel.dot(dir)
+	var dio: bool = johnny.vivo and a_lo_largo > 0.0 and a_lo_largo < LARGO_TIRON \
+		and absf(rel.dot(dir.orthogonal())) < ANCHO_TIRON + johnny.RADIO and not Aviso.tapado(self, johnny.global_position)
+	cambiar("tiron", {"angulo": angulo, "dio": dio, "hasta": a_lo_largo if dio else LARGO_TIRON})
+	Sonido.tocar("alfiler")
+	if dio:
+		johnny.recibir_dano(DANO_TIRON, self)
+		johnny.empujar(-dir * TIRON)
+		gritar(Idioma.t("¡VEN AQUÍ!"), Color("#ff5d73"), 18)
+
+
+# En la pasarela, a oscuras, ataja uno de cada dos golpes con las tijeras (chispas y «¡A OSCURAS NO!») y, si Johnny
+# está cerca, le contesta con un tijeretazo rápido. En la luz del foco no puede: no ve. Devuelve si lo ha atajado
+func ataja_golpe() -> bool:
+	if fase != 2 or estado in ["congelada", "grito", "corte", "desfile", "muerto"] or bajo_luz():
+		return false
+	ataja = not ataja
+	if not ataja:
+		return false
+	for i in 7:
+		Particulas.soltar(get_parent(), global_position + Vector2(randf_range(-12, 12), -randf_range(30, 60)),
+			Vector2.from_angle(randf() * TAU) * randf_range(60.0, 170.0), Color("#fff4c0") if i % 2 else Color("#c8ccd4"), 3, 0.3)
+	Sonido.tocar("tijeras")
+	if aviso_ataja <= 0.0:
+		aviso_ataja = 2.0
+		gritar(Idioma.t("¡A OSCURAS NO!"), Color("#c8ccd4"), 16)
+	var johnny := get_tree().get_first_node_in_group("jugador")
+	if johnny and estado in ["andar", "aviso_alfileres", "alfileres", "aviso_carrete", "carrete", "pillada"] \
+			and global_position.distance_to(johnny.global_position) < DISTANCIA_TIJERETAZO + 40.0:
+		espera.tijeretazo = ESPERAS.tijeretazo[1]
+		mirada = global_position.direction_to(johnny.global_position)
+		cambiar("aviso_tijeretazo", {"angulo": mirada.angle(), "aviso": AVISO_CONTRA})
+	return true
+
+
+# ¿Le da la luz del foco (aunque sea el borde)?
+func bajo_luz() -> bool:
+	return FocoModista.alumbrado(get_tree(), global_position + Vector2(0, PIE - 10.0))
 
 
 func apuntar_alfileres(hacia: Vector2) -> void:
@@ -404,12 +531,12 @@ func tijeretazo(johnny: Node2D) -> void:
 
 
 # Un alfiler: una bala de los malos (bala_zombi.gd) con forma de aguja, desde "desde" (en las coordenadas de la sala)
-func lanzar_alfiler(desde: Vector2, angulo: float, separacion := -1.0) -> void:
+func lanzar_alfiler(desde: Vector2, angulo: float, separacion := -1.0, rapidez := VELOCIDAD_ALFILER) -> void:
 	var dir := Vector2.from_angle(angulo)
 	var bala := BALA.instantiate()
 	bala.dueno = self
 	bala.position = desde + dir * (radio + 6.0 if separacion < 0.0 else separacion)
-	bala.velocidad = dir * VELOCIDAD_ALFILER
+	bala.velocidad = dir * rapidez
 	bala.dano = DANO_ALFILER
 	bala.radio = 5.0
 	bala.forma = "alfiler"
@@ -430,6 +557,7 @@ func tirar_carrete(angulo: float) -> void:
 	hilo.doble = tirados % 3 == 0   # uno de cada tres, el gordo (dos golpes)
 	hilo.dir = Vector2.from_angle(angulo)
 	hilo.dueno = self
+	hilo.oculto = fase == 2   # (en la pasarela, a oscuras no se ve)
 	hilo.position = position + Vector2(0, PIE - 4.0) + hilo.dir.normalized() * (radio + 4.0)   # (antes de entrar: mide la pared desde ahí)
 	get_parent().add_child(hilo)
 	hilos.append(hilo)
@@ -622,6 +750,8 @@ func escondida() -> bool:
 # Si le pegan escondida, la han encontrado: aturdida y el doble de daño. Con los ojos brillando, solo la pillan (no se
 # cambia de sitio). Descubierta o congelada en el foco, le entra el doble
 func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
+	if ataja_golpe():
+		return 0
 	match estado:
 		"escondida":
 			descubrirse()
@@ -845,12 +975,12 @@ func animar() -> void:
 	sprite.position = Vector2(0, PIE)
 	match estado:
 		"aviso_tijeretazo":
-			fijar("tijeretazo", dir, mini(CORTA - 1, int(t / AVISO_TIJERETAZO * CORTA)))
+			fijar("tijeretazo", dir, mini(CORTA - 1, int(t / datos.get("aviso", AVISO_TIJERETAZO) * CORTA)))
 		"tijeretazo":
 			var resto := sprite.sprite_frames.get_frame_count("tijeretazo_" + dir) - CORTA
 			fijar("tijeretazo", dir, CORTA + clampi(int(t / 0.4 * resto), 0, maxi(0, resto - 1)))
-		"aviso_alfileres", "aviso_carrete":
-			var aviso: float = datos.aviso if estado == "aviso_alfileres" else AVISO_CARRETE
+		"aviso_alfileres", "aviso_carrete", "aviso_tiron":
+			var aviso: float = datos.aviso if estado == "aviso_alfileres" else (AVISO_CARRETE if estado == "aviso_carrete" else AVISO_TIRON)
 			fijar("alfileres", dir, mini(LANZA - 1, int(t / aviso * LANZA)))
 		"alfileres":
 			# con el brazo fuera mientras salen; luego vuelve a la postura
@@ -882,6 +1012,12 @@ func animar() -> void:
 				poner("aturdida_s")
 			else:
 				fijar("golpe", "s", 4 + int(t * 6.0) % 3)
+		"tiron":
+			var total := sprite.sprite_frames.get_frame_count("alfileres_" + dir)
+			fijar("alfileres", dir, LANZA + clampi(int(t / 0.3 * (total - LANZA)), 0, maxi(0, total - LANZA - 1)))
+		"aviso_desfile":
+			fijar("quieto", dir, 0)
+			sprite.position.x = sin(tiempo * 50.0) * 1.0
 		"aviso_corte":
 			var nombre := "corte" if tiene("corte_" + dir) else "tijeretazo"
 			fijar(nombre, dir, mini(2, int(t / datos.aviso * 3.0)))
@@ -927,7 +1063,7 @@ func _draw() -> void:
 						ANCHO_AVISO, k, tiempo, i, 5.0)
 		"aviso_tijeretazo":
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_TIJERETAZO, ALCANCE_TIJERETAZO,
-				minf(1.0, t / AVISO_TIJERETAZO), tiempo)
+				minf(1.0, t / datos.get("aviso", AVISO_TIJERETAZO)), tiempo)
 		"aviso_alfileres":
 			# por donde irán los alfileres, como las cargas: flechas que se encienden hacia fuera (aviso.gd)
 			Aviso.disparo(self, Vector2(0, 6), datos.angulo, radio + ALCANCE_ALFILERES, ANCHO_AVISO,
@@ -937,6 +1073,18 @@ func _draw() -> void:
 				minf(1.0, t / AVISO_CARRETE), tiempo, 0, 4.0)
 		"aviso_corte":
 			franja(1600.0, minf(1.0, t / datos.aviso))
+		"aviso_desfile":
+			franja(VELOCIDAD_DESFILE * DURA_DESFILE, minf(1.0, t / AVISO_DESFILE))
+		"aviso_tiron":
+			Aviso.disparo(self, Vector2(0, 6), datos.angulo, LARGO_TIRON, ANCHO_TIRON, minf(1.0, t / AVISO_TIRON), tiempo, 0, 4.0)
+		"tiron":
+			# el hilo, un instante: de su mano hasta donde llega (si ha pillado a Johnny, va encogiendo)
+			var dir := Vector2.from_angle(datos.angulo)
+			var k := 1.0 - t / 0.3
+			var hasta: float = datos.hasta * (1.0 - t / 0.3 if datos.dio else 1.0)
+			for i in int(hasta / 2.0):
+				var c := ((Vector2(0, -30) + dir * i * 2.0) / 2.0).floor() * 2.0
+				draw_rect(Rect2(c, Vector2(2, 2)), Color(HiloModista.ROJO if datos.dio else HiloModista.HILO, k))
 
 
 # El brillo de los ojos: antes de cambiarse de sitio (cada vez más fuerte), en algún parpadeo escondida y, en la
@@ -979,13 +1127,7 @@ func _pintar_ojos() -> void:
 	else:
 		estela_ojos.clear()
 	for p in puntos:
-		var o: Vector2 = (p / 2.0).floor()
-		for d in OJO_BRILLO:
-			ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.16, 0.3, 0.4 * k))
-		for d in OJO_ROJO:
-			ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.3, 0.38, 0.9 * k))
-		for d in OJO_CENTRO:
-			ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.95, 0.78, k))
+		pintar_ojo(ojos, p, k)
 	# y, de vez en cuando, un destello en cruz en un ojo
 	if not puntos.is_empty() and fmod(tiempo, 2.3) < 0.14:
 		var o: Vector2 = (puntos[0] / 2.0).floor()
@@ -993,6 +1135,18 @@ func _pintar_ojos() -> void:
 			var a := (1.0 - (i - 2.0) / 3.0) * k
 			for d in [Vector2(-1 - i, 0), Vector2(i, 0), Vector2(0, 1 - i), Vector2(0, i - 1)]:
 				ojos.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.92, 0.85, a))
+
+
+# Un ojo rojo a píxeles en "p" (el centro casi blanco, el rojo de alrededor y el brillo). Static: los maniquíes vivos
+# llevan los mismos (maniqui_vivo.gd), para que a oscuras no se sepa cuál es ella
+static func pintar_ojo(lienzo: CanvasItem, p: Vector2, k: float) -> void:
+	var o: Vector2 = (p / 2.0).floor()
+	for d in OJO_BRILLO:
+		lienzo.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.16, 0.3, 0.4 * k))
+	for d in OJO_ROJO:
+		lienzo.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.3, 0.38, 0.9 * k))
+	for d in OJO_CENTRO:
+		lienzo.draw_rect(Rect2((o + d) * 2.0, Vector2(2, 2)), Color(1.0, 0.95, 0.78, k))
 
 
 # El señuelo de un maniquí: va dentro del maniquí (sigue sus cambios de sitio) y es del grupo "zombis" para que le
