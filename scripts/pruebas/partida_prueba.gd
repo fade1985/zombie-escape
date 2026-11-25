@@ -67,6 +67,8 @@
 #   --fiesta            (con --edificio centro --jefe mascota) la mascota rehecha (24 nov), fase 1: las cajas sorpresa,
 #                       las pelotas al chocar, el salto que las dispara, comerse una caja (sentada, le entra más,
 #                       revientan las pelotas) y la caja nueva, con fotos                   [prueba_jefes.gd]
+#   --tren              (con --edificio centro --jefe mascota) el tren de juguete (25 nov): las vías, el aviso,
+#                       la vuelta, Johnny y la mascota sentada atropellados, con fotos  [prueba_jefes.gd]
 #   --crios             (con --edificio centro --jefe mascota) cuántos críos salen en 20 s, normal y enfadada, cuántos
 #                       a la vez como mucho y a qué distancia de Johnny (M85)              [prueba_jefes.gd]
 #   --metal             (con --jefe gymbro) el cuerpo de metal de sus suplementos: sube, se desconcha y revienta; y
@@ -771,6 +773,10 @@ func empezar_prueba() -> void:
 	elif "--fiesta" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_fiesta()
+		get_tree().quit()
+	elif "--tren" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_tren()
 		get_tree().quit()
 	elif "--crios" in args:
 		set_process(false)   # sin la prueba larga

@@ -26,6 +26,8 @@
 #   - «¡REGALOS!»: tira REGALOS regalos por el aire alrededor de Johnny (regalo.gd); al caer revientan y sueltan pelotas.
 #   - El matasuegras: con Johnny cerca, sopla un matasuegras gigante: un cono que le quita un poco y le manda lejos (y
 #     las pelotas que pille salen disparadas).
+#   - El tren de juguete (tren_juguete.gd): unas vías dan la vuelta a la sala y cada ESPERA_TREN s el tren pita y da una
+#     vuelta. Si la pilla mareada o sentada encima de las vías, la atropella.
 extends Minijefe
 
 const PELOTA := preload("res://scripts/pelota_goma.gd")
@@ -42,6 +44,8 @@ const REVIENTA_CERCA := 140.0          # las pelotas que revientan a menos de es
 const DANO_REVIENTA := 12              # ...esto cada una
 const REPONE_CAJA := 6.0               # lo que tarda en caer otra caja cuando una se va
 const REGALO := preload("res://scripts/regalo.gd")
+const TREN := preload("res://scripts/tren_juguete.gd")
+const ESPERA_TREN := [11.0, 8.0]       # cada cuánto sale el tren (normal y enfadada)
 const VELOCIDAD_BAILE := 190.0         # fase 1: lo deprisa que va de un sitio a otro a saltitos
 const BAILE := [210.0, 330.0]          # a qué distancia de Johnny se pone (de, a)
 const SACUDE := 1.0                    # fase 1: lo que se queda sacudiendo la cabeza tras estrellarse contra una pared
@@ -92,6 +96,8 @@ var espera_crio := 3.0
 var espera_regalos := 3.0
 var espera_soplo := 0.0
 var punto := Vector2.INF       # fase 1: el sitio al que va bailando
+var tren: Node2D = null        # el tren de juguete y sus vías
+var espera_tren := 6.0
 var punto_t := 0.0             # lo que lleva yendo a ese sitio
 var cajas: Array = []          # las cajas sorpresa que hay ahora en la sala
 var reponer: Array = []        # lo que falta para que caiga cada caja nueva (una por cada caja que se ha ido)
@@ -116,6 +122,10 @@ func pensar(delta: float, johnny: Node2D) -> void:
 	espera_salto -= delta
 	espera_regalos -= delta
 	espera_soplo -= delta
+	espera_tren -= delta
+	if espera_tren <= 0.0 and is_instance_valid(tren):
+		espera_tren = ESPERA_TREN[fase - 1]
+		tren.salir()
 	salir_crios(delta, johnny)
 	reponer_cajas(delta, johnny)
 	match estado:
@@ -465,6 +475,11 @@ func reponer_cajas(delta: float, johnny: Node2D) -> void:
 	if not cajas_puestas:
 		cajas_puestas = true
 		inicio = global_position
+		# primero las vías (las cajas no caen encima)
+		tren = TREN.new()
+		tren.dueno = self
+		tren.position = position
+		get_parent().add_child(tren)
 		for i in CAJAS:
 			poner_caja(johnny)
 		return
@@ -486,6 +501,8 @@ func poner_caja(johnny: Node2D) -> void:
 			if NavigationServer2D.map_get_closest_point(mapa_nav, p + lado).distance_to(p + lado) > 6.0:
 				libre = false
 		if not libre or p.distance_to(johnny.global_position) < 110.0 or p.distance_to(global_position) < 140.0:
+			continue
+		if is_instance_valid(tren) and tren.cerca_de_via(p + Vector2(0, -24), 95.0):   # (la caja es alta: que su dibujo no tape las vías)
 			continue
 		if cajas.any(func(c): return c.global_position.distance_to(p) < 220.0):
 			continue
@@ -547,6 +564,9 @@ func morir() -> void:
 			c.irse()
 	cajas.clear()
 	reponer.clear()
+	if is_instance_valid(tren):
+		tren.dueno = null
+		tren.estado = "parado"   # (el tren se queda donde esté, quieto: ya no hace daño)
 	super()
 
 
