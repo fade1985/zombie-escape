@@ -234,6 +234,22 @@ const MUEBLES := {
 	"supercaja2dentro": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super2-dentro-gpt", "escala": 1.0},
 	"supercaja3dentro": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/caja-super3-dentro-gpt", "escala": 1.0},
 	"superarco": {"len": 24, "dep": 16, "paredes": "", "archivo": "centro/arco-antirrobo-gpt", "escala": 1.0},
+	# (26 nov, el dueño) el resto de la sala de venta del supermercado, de GPT desde fotos suyas: los mostradores de carnicería, charcutería
+	# y pescadería, desde el cliente y desde dentro; la panadería, la nevera alta de congelados, el arcón, la nevera de carne envasada y las
+	# góndolas de aceite, de cajas y de higiene
+	"supercarne": {"len": 208, "dep": 48, "paredes": "", "archivo": "centro/mostrador-carniceria-gpt", "escala": 1.0},
+	"supercarnedentro": {"len": 208, "dep": 48, "paredes": "", "archivo": "centro/mostrador-carniceria-dentro-gpt", "escala": 1.0},
+	"supercharcu": {"len": 208, "dep": 48, "paredes": "", "archivo": "centro/mostrador-charcuteria-gpt", "escala": 1.0},
+	"supercharcudentro": {"len": 208, "dep": 48, "paredes": "", "archivo": "centro/mostrador-charcuteria-dentro-gpt", "escala": 1.0},
+	"superpescado": {"len": 208, "dep": 48, "paredes": "", "archivo": "centro/mostrador-pescaderia-gpt", "escala": 1.0},
+	"superpescadodentro": {"len": 208, "dep": 48, "paredes": "", "archivo": "centro/mostrador-pescaderia-dentro-gpt", "escala": 1.0},
+	"superpan": {"len": 192, "dep": 48, "paredes": "", "archivo": "centro/mueble-panaderia-gpt", "escala": 1.0},
+	"supernevera": {"len": 128, "dep": 40, "paredes": "", "archivo": "centro/nevera-congelados-gpt", "escala": 1.0},
+	"superarcon": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/arcon-congelador-gpt", "escala": 1.0},
+	"supercarnenevera": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/nevera-carne-gpt", "escala": 1.0},
+	"supergondola1": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/gondola-aceite-gpt", "escala": 1.0},
+	"supergondola2": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/gondola-cajas-gpt", "escala": 1.0},
+	"supergondola3": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/gondola-higiene-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -569,11 +585,26 @@ const SALAS := {
 	# antirrobo a los lados del paso, a 48 de las cajas. Todas con el pie del mueble (no el de los trozos tirados por el suelo de su
 	# dibujo) en la misma línea: en la normal, junto a la entrada (fila 9), vistas desde el cliente; en la inversa, bajo la pared de
 	# la entrada (fila 3,75), vistas desde la cajera, con paso por detrás
+	# (26 nov) el resto de la sala de venta, en dos filas más con 48 o más de pasillo y las dos puertas (casillas 15-17 y 35-37) libres.
+	# En la normal, contra la pared de arriba (pie en la fila 1,5) la carnicería, la charcutería, la pescadería, la panadería y dos neveras
+	# de congelados, y en medio (pie en la 5,5), alineadas con las cajas, las tres góndolas, dos arcones y la nevera de carne. En la inversa,
+	# en medio (pie en la 7) y, al fondo (pie en la 10,1, que más abajo lo tapa la pared), los mostradores vistos desde dentro, la panadería y
+	# un arcón (las neveras altas se verían por la espalda); ahí la carnicería va pegada a la pared de la izquierda, con 48 hasta la charcutería, para poder rodearlas
 	"tienda-supermercado": {"colocados": {
-		"abajo": [["supercaja1", 4.0, "libre", 9.0], ["supercaja2", 10.5, "libre", 8.875], ["supercaja3", 17.0, "libre", 8.96875],
+		"abajo": [
+			["supercarne", 3.92, "libre", 0.75], ["supercharcu", 11.08, "libre", 0.75], ["superpescado", 22.08, "libre", 1.0625],
+			["superpan", 30.17, "libre", 1.0], ["supernevera", 39.33, "libre", 1.09375], ["supernevera", 43.67, "libre", 1.09375],
+			["supergondola1", 4.0, "libre", 4.9375], ["supergondola2", 10.5, "libre", 5.03125], ["supergondola3", 17.0, "libre", 5.0],
+			["superarcon", 29.0, "libre", 4.875], ["supercarnenevera", 35.5, "libre", 5.03125], ["superarcon", 42.0, "libre", 4.875],
+			["supercaja1", 4.0, "libre", 9.0], ["supercaja2", 10.5, "libre", 8.875], ["supercaja3", 17.0, "libre", 8.96875],
 			["superarco", 21.375, "libre", 8.75], ["superarco", 24.625, "libre", 8.75],
 			["supercaja2", 29.0, "libre", 8.875], ["supercaja3", 35.5, "libre", 8.96875], ["supercaja1", 42.0, "libre", 9.0]],
-		"arriba": [["supercaja1dentro", 4.0, "libre", 3.46875], ["supercaja2dentro", 10.5, "libre", 3.6875], ["supercaja3dentro", 17.0, "libre", 3.625],
+		"arriba": [
+			["supercarnedentro", 3.25, "libre", 9.40625], ["supercharcudentro", 11.25, "libre", 9.40625], ["superpescadodentro", 22.08, "libre", 9.375],
+			["superpan", 30.17, "libre", 9.625], ["superarcon", 41.5, "libre", 9.5],
+			["supergondola1", 4.0, "libre", 6.4375], ["supergondola2", 10.5, "libre", 6.53125], ["supergondola3", 17.0, "libre", 6.5],
+			["superarcon", 29.0, "libre", 6.375], ["supercarnenevera", 35.5, "libre", 6.53125], ["superarcon", 42.0, "libre", 6.375],
+			["supercaja1dentro", 4.0, "libre", 3.46875], ["supercaja2dentro", 10.5, "libre", 3.6875], ["supercaja3dentro", 17.0, "libre", 3.625],
 			["superarco", 21.375, "libre", 3.5], ["superarco", 24.625, "libre", 3.5],
 			["supercaja2dentro", 29.0, "libre", 3.6875], ["supercaja3dentro", 35.5, "libre", 3.625], ["supercaja1dentro", 42.0, "libre", 3.46875]]}},
 	# su cámara (20 × 12, la puerta en medio, casillas 9 a 11), medida para que no sobre nada: en la normal, las cuatro estanterías

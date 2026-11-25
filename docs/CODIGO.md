@@ -1196,6 +1196,13 @@ en una línea.
   en la fila 9, junto a la entrada; en la inversa, en la fila 3,75, bajo la pared de la entrada y con paso por detrás. Las cajas sueltan
   piezas (`MUEBLES_CON_PIEZA`). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
   de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
+  El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
+  carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208
+  de ancho), la panadería (`superpan`, 192), la nevera alta de congelados (`supernevera`, 128 × 126), el arcón (`superarcon`), la nevera baja de
+  carne envasada (`supercarnenevera`) y las góndolas de aceite, cajas e higiene (`supergondola1` a `3`), los tres últimos grupos de 160. En la
+  normal, contra la pared de arriba (pie en la fila 1,5) los mostradores, la panadería y dos neveras altas, y en medio (fila 5,5), alineados con
+  las cajas, las tres góndolas a un lado y arcón, carne y arcón al otro. En la inversa, la fila de en medio en la 7 y al fondo (fila 10,1) los
+  mostradores «dentro», la panadería y un arcón. Las puertas del almacén (casillas 15-17) y de la cámara (35-37), libres. Todos sueltan piezas.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
   cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
   `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`
