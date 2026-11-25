@@ -2268,6 +2268,16 @@ func probar_desfile() -> void:
 	johnny.global_position = jefe.global_position + Vector2(-120, 140)   # (que salga en la foto, entre los demás)
 	await get_tree().create_timer(0.5, false).timeout
 	Captura.foto("captura-desfile-disfraz.png")
+	# el aviso de los tiros de escondida, a medias
+	jefe.datos.tiros = jefe.apuntar_escondida(johnny)
+	jefe.datos.dispara = jefe.t + 99.0
+	jefe.datos.erase("siguiente")
+	await get_tree().physics_frame
+	jefe.datos.dispara = jefe.t + jefe.AVISO_ESCONDIDA * 0.4
+	await get_tree().create_timer(0.1, false).timeout
+	Captura.foto("captura-desfile-aviso-escondida.png")
+	await get_tree().create_timer(0.5, false).timeout
+	print("Desfile: tras el aviso, tiros pendientes %s (esperado: false: ya ha tirado)" % jefe.datos.has("tiros"))
 	var antes_alfileres := get_tree().get_nodes_in_group("balas_zombi").size()
 	jefe.disparo_escondida(johnny)
 	print("Desfile: escondida dispara, alfileres nuevos %d (esperado: 3, el suyo y dos señuelos)" % [

@@ -211,8 +211,9 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   respiración de 1,7 s) y un parpadeo de los ojos cada 2-3,5 s. Si le pegan escondida: «¡ME HAS VISTO!», aturdida 2,5 s
   con estrellitas y le entra el doble. Si le pegan a otro maniquí: un aro rojo de 0,5 s y revienta en 12 alfileres.
   Más difícil (25 nov, el dueño: quedaba fácil): **escondida dispara**, cada 1,5 s un alfiler suyo hacia Johnny y,
-  a la vez, otros dos desde dos maniquíes cualquiera (esperar ya no es seguro; fijarse en cuál tira siempre es otra
-  pista); descubierta ya solo 1,5 s (eran 2,5); tiesa bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
+  a la vez, otros dos desde dos maniquíes cualquiera que tengan vía libre hasta Johnny (esperar ya no es seguro;
+  fijarse en cuál tira siempre es otra pista). Para que sea justo (25 nov, el dueño: no se veía de dónde venían), 0,6 s
+  antes sale en el suelo la raya de flechas de cada uno, y al tirar, un destello rojo y unos retales en el maniquí; descubierta ya solo 1,5 s (eran 2,5); tiesa bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
   pare (eran 3,5); en la pasarela, cuatro cortes seguidos (eran tres), los siguientes con 0,45 s de aviso (eran 0,55).
   Si nadie la encuentra a tiempo, sale **crecida** (24 nov, el dueño): «¡DEMASIADO LENTO!», roja latiendo 8 s, con
   las esperas entre ataques al doble de rápido y andando un 40 % más deprisa.

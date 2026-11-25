@@ -64,6 +64,7 @@ const MIN_TENSAR := 4              # con menos hilos no tensa
 # Esconderse entre los maniquíes
 const OJOS := 0.6                  # lo que le brillan los ojos antes de cambiarse de sitio
 const OJOS_MANIQUI := [Vector2(-5, -103), Vector2(1, -103)]   # escondida, sus ojos van en la cabeza del maniquí
+const AVISO_ESCONDIDA := 0.6       # lo que dura su aviso en el suelo antes de tirar
 const DISPARO_ESCONDIDA := 1.5     # escondida, cada cuánto le tira un alfiler (y dos señuelos a la vez: disparo_escondida)
 const ESCONDIDA := 6.0             # lo que se queda quieta como un maniquí más
 const RESPIRA := 1.7               # lo que tarda cada respiración (sube y baja un píxel)
@@ -243,9 +244,14 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			parpadeo -= delta
 			if parpadeo <= -0.18:
 				parpadeo = randf_range(PARPADEO[0], PARPADEO[1])
-			if t >= datos.get("siguiente", DISPARO_ESCONDIDA):
+			# cada DISPARO_ESCONDIDA, tres alfileres (el suyo y dos señuelos), con su aviso antes
+			if not datos.has("tiros") and t >= datos.get("siguiente", DISPARO_ESCONDIDA) - AVISO_ESCONDIDA:
+				datos.tiros = apuntar_escondida(johnny)
+				datos.dispara = t + AVISO_ESCONDIDA
+			if datos.has("tiros") and t >= datos.dispara:
+				disparar_escondida(datos.tiros)
+				datos.erase("tiros")
 				datos.siguiente = t + DISPARO_ESCONDIDA
-				disparo_escondida(johnny)
 			if t >= datos.dur:
 				salir(johnny, hacia, d)
 		"descubierta":
@@ -462,16 +468,47 @@ func poner_senuelos() -> void:
 
 
 # Escondida no se queda tranquila (25 nov, el dueño: era fácil esperar): le tira un alfiler a Johnny y, a la vez, otros
-# dos maniquíes cualquiera también, para que no se sepa cuál es ella (fijarse en cuál tira siempre es otra pista)
-func disparo_escondida(johnny: Node2D) -> void:
+# dos maniquíes cualquiera también, para que no se sepa cuál es ella (fijarse en cuál tira siempre es otra pista).
+# Para que sea justo, antes sale el aviso de los tres en el suelo (AVISO_ESCONDIDA: la raya de flechas, _draw) y, al
+# tirar, un destello rojo y unos retales en el maniquí que tira. apuntar_escondida elige quién y hacia dónde
+# ([posición, ángulo] de cada uno); disparar_escondida los suelta
+func apuntar_escondida(johnny: Node2D) -> Array:
 	var desde: Array[Vector2] = [global_position]
-	var otros := get_tree().get_nodes_in_group("senuelos").filter(func(s): return s.revienta <= 0.0 		and s.global_position.distance_to(johnny.global_position) < ALCANCE_ALFILERES)
+	var otros := get_tree().get_nodes_in_group("senuelos").filter(func(s): return s.revienta <= 0.0 		and s.global_position.distance_to(johnny.global_position) < ALCANCE_ALFILERES and libre(s.global_position, johnny))
 	otros.shuffle()
 	for s in otros.slice(0, 2):
 		desde.append(s.global_position)
+	var tiros := []
 	for g in desde:
-		var p: Vector2 = get_parent().to_local(g)
-		lanzar_alfiler(p, (johnny.global_position - g).angle() + randf_range(-0.05, 0.05))
+		tiros.append([g, (johnny.global_position - g).angle()])
+	return tiros
+
+
+# ¿Un alfiler tirado desde ahí llega a Johnny? (sale un poco por delante, como en lanzar_alfiler: así no choca con el
+# propio maniquí; los muebles y los otros maniquíes lo paran)
+func libre(desde: Vector2, johnny: Node2D) -> bool:
+	var dir := desde.direction_to(johnny.global_position)
+	var rayo := PhysicsRayQueryParameters2D.create(desde + dir * (radio + 6.0), johnny.global_position, 1)
+	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
+
+
+func disparar_escondida(tiros: Array) -> void:
+	for tiro in tiros:
+		var g: Vector2 = tiro[0]
+		var dir := Vector2.from_angle(tiro[1])
+		lanzar_alfiler(get_parent().to_local(g), tiro[1])
+		# el destello en la mano (a la altura a la que vuelan los alfileres) y unos retales
+		var mano := g + Vector2(0, -BalaZombi.ALTO) + dir * 20.0
+		for i in 6:
+			var v := dir.rotated(randf_range(-0.9, 0.9)) * randf_range(40.0, 110.0)
+			Particulas.soltar(get_parent(), get_parent().to_local(mano), v, Color("#ff5d73") if i % 2 == 0 else Color("#fff4c0"), 2, 0.3)
+		EfectoSuelo.soltar(get_parent(), "retales", get_parent().to_local(g) + Vector2(0, -30), 0.35)
+	Sonido.tocar("alfiler")
+
+
+# Lo de antes, de golpe (sin aviso): solo para la prueba
+func disparo_escondida(johnny: Node2D) -> void:
+	disparar_escondida(apuntar_escondida(johnny))
 
 
 func quitar_senuelos() -> void:
@@ -838,6 +875,15 @@ func _draw() -> void:
 	if estado == "muerto":
 		return
 	match estado:
+		"escondida":
+			# el aviso de los alfileres que va a tirar escondida (el suyo y los de dos señuelos)
+			if datos.has("tiros"):
+				var k := clampf(1.0 - (datos.dispara - t) / AVISO_ESCONDIDA, 0.0, 1.0)
+				for i in datos.tiros.size():
+					var g: Vector2 = datos.tiros[i][0]
+					var a: float = datos.tiros[i][1]
+					Aviso.disparo(self, to_local(g) + Vector2(0, 6) + Vector2.from_angle(a) * 30.0, a, ALCANCE_ALFILERES,
+						ANCHO_AVISO, k, tiempo, i, 5.0)
 		"aviso_tijeretazo":
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_TIJERETAZO, ALCANCE_TIJERETAZO,
 				minf(1.0, t / AVISO_TIJERETAZO), tiempo)
