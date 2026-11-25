@@ -64,6 +64,7 @@ const MIN_TENSAR := 4              # con menos hilos no tensa
 # Esconderse entre los maniquíes
 const OJOS := 0.6                  # lo que le brillan los ojos antes de cambiarse de sitio
 const OJOS_MANIQUI := [Vector2(-5, -103), Vector2(1, -103)]   # escondida, sus ojos van en la cabeza del maniquí
+const PRIMER_TIRO := 3.0           # al entrar en la sala, lo que tarda en tirar la primera vez (después de su presentación)
 const AVISO_ESCONDIDA := 0.6       # lo que dura su aviso en el suelo antes de tirar
 const DISPARO_ESCONDIDA := 1.5     # escondida, cada cuánto le tira un alfiler (y dos señuelos a la vez: disparo_escondida)
 const ESCONDIDA := 6.0             # lo que se queda quieta como un maniquí más
@@ -101,6 +102,8 @@ const OJOS_EN := {"s": [Vector2(-5, -91), Vector2(1, -91)], "se": [Vector2(0, -9
 	"n": [], "ne": [], "no": []}
 const CABEZA := Vector2(-2, -89)
 
+var pillada_antes := false         # la última vez que iba a esconderse, la pillaron (danar, "ojos")
+var reloj_tiros := 0.0             # escondida, lo que falta para tirar (ver "escondida" en pensar)
 var crecida := 0.0                 # lo que le queda de crecida (salir)
 var seguidos := 0                  # tijeretazos seguidos (elegir)
 var tirados := 0                  # los carretes que lleva tirados (para los gordos)
@@ -153,6 +156,7 @@ func empezar_escondida() -> void:
 	rehornear()
 	mirada = Vector2.DOWN
 	cambiar("escondida", {"dur": ESCONDIDA})
+	reloj_tiros = PRIMER_TIRO   # (al empezar, más margen: que dé tiempo a situarse)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
@@ -244,14 +248,15 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			parpadeo -= delta
 			if parpadeo <= -0.18:
 				parpadeo = randf_range(PARPADEO[0], PARPADEO[1])
-			# cada DISPARO_ESCONDIDA, tres alfileres (el suyo y dos señuelos), con su aviso antes
-			if not datos.has("tiros") and t >= datos.get("siguiente", DISPARO_ESCONDIDA) - AVISO_ESCONDIDA:
+			# cada DISPARO_ESCONDIDA, tres alfileres (el suyo y dos señuelos), con su aviso antes. Con su propio reloj, que
+			# solo corre aquí (mientras sale su presentación no piensa: si no, nada más acabar ya tiraba)
+			reloj_tiros -= delta
+			if not datos.has("tiros") and reloj_tiros <= AVISO_ESCONDIDA:
 				datos.tiros = apuntar_escondida(johnny)
-				datos.dispara = t + AVISO_ESCONDIDA
-			if datos.has("tiros") and t >= datos.dispara:
+			if datos.has("tiros") and reloj_tiros <= 0.0:
 				disparar_escondida(datos.tiros)
 				datos.erase("tiros")
-				datos.siguiente = t + DISPARO_ESCONDIDA
+				reloj_tiros = DISPARO_ESCONDIDA
 			if t >= datos.dur:
 				salir(johnny, hacia, d)
 		"descubierta":
@@ -520,6 +525,7 @@ func quitar_senuelos() -> void:
 # Se cambia de sitio con un maniquí: ella va a donde estaba él y él aparece donde estaba ella. A la vez, sale una
 # nube de retales de todos los maniquíes (y de ella): así no se ve con cuál se ha cambiado
 func cambiarse(johnny: Node2D) -> void:
+	pillada_antes = false
 	var m := maniqui_lejos(johnny)
 	if m == null:
 		andar(0.3)
@@ -560,6 +566,8 @@ func salir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 # maniquí con el que se cambia). Al salir de "escondida", por lo que sea, vuelve a ser ella
 func cambiar(nuevo: String, nuevos_datos := {}) -> void:
 	super(nuevo, nuevos_datos)
+	if nuevo == "escondida":
+		reloj_tiros = DISPARO_ESCONDIDA
 	var escondida_ya := nuevo == "escondida"
 	if is_instance_valid(disfraz):
 		disfraz.visible = escondida_ya
@@ -594,7 +602,11 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 		"escondida":
 			descubrirse()
 		"ojos":
-			datos.pillada = true
+			# (solo una vez seguida: si la última vez ya la pillaron, esta se esconde aunque le peguen; 25 nov, el
+			# dueño: pegándole sin parar no se escondía nunca)
+			if not pillada_antes:
+				datos.pillada = true
+				pillada_antes = true
 		"descubierta":
 			return roundi(cantidad * MAS_DESCUBIERTA)
 		"congelada":
@@ -878,7 +890,7 @@ func _draw() -> void:
 		"escondida":
 			# el aviso de los alfileres que va a tirar escondida (el suyo y los de dos señuelos)
 			if datos.has("tiros"):
-				var k := clampf(1.0 - (datos.dispara - t) / AVISO_ESCONDIDA, 0.0, 1.0)
+				var k := clampf(1.0 - reloj_tiros / AVISO_ESCONDIDA, 0.0, 1.0)
 				for i in datos.tiros.size():
 					var g: Vector2 = datos.tiros[i][0]
 					var a: float = datos.tiros[i][1]

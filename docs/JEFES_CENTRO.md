@@ -213,7 +213,10 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   Más difícil (25 nov, el dueño: quedaba fácil): **escondida dispara**, cada 1,5 s un alfiler suyo hacia Johnny y,
   a la vez, otros dos desde dos maniquíes cualquiera que tengan vía libre hasta Johnny (esperar ya no es seguro;
   fijarse en cuál tira siempre es otra pista). Para que sea justo (25 nov, el dueño: no se veía de dónde venían), 0,6 s
-  antes sale en el suelo la raya de flechas de cada uno, y al tirar, un destello rojo y unos retales en el maniquí; descubierta ya solo 1,5 s (eran 2,5); tiesa bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
+  antes sale en el suelo la raya de flechas de cada uno, y al tirar, un destello rojo y unos retales en el maniquí. Al
+  entrar en la sala, el primer tiro tarda 3 s después de su presentación (su propio reloj, que no corre mientras sale
+  el título). Pegarle con los ojos brillando la «pilla» solo una vez seguida: la siguiente se esconde aunque le peguen
+  (25 nov, el dueño: a cuerpo a cuerpo no se escondía nunca); descubierta ya solo 1,5 s (eran 2,5); tiesa bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
   pare (eran 3,5); en la pasarela, cuatro cortes seguidos (eran tres), los siguientes con 0,45 s de aviso (eran 0,55).
   Si nadie la encuentra a tiempo, sale **crecida** (24 nov, el dueño): «¡DEMASIADO LENTO!», roja latiendo 8 s, con
   las esperas entre ataques al doble de rápido y andando un 40 % más deprisa.

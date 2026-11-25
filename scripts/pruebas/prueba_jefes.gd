@@ -2204,6 +2204,18 @@ func probar_desfile() -> void:
 	print("Desfile: estado %s · maniquíes %d · señuelos %d (esperado: escondida, unos cuantos, los mismos)" % [jefe.estado,
 		maniquies.size(), get_tree().get_nodes_in_group("senuelos").size()])
 	print("Desfile: Johnny dice «%s» (esperado: la pista de que uno respira)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
+	# pegándole sin parar con los ojos brillando: la primera vez la pillan, la segunda se esconde igual
+	var donde_antes: Vector2 = jefe.global_position
+	jefe.cambiar("ojos")
+	jefe.recibir_golpe(1, Vector2.UP)
+	var primera: bool = jefe.datos.get("pillada", false)
+	jefe.cambiar("ojos")
+	jefe.recibir_golpe(1, Vector2.UP)
+	print("Desfile: con los ojos brillando, pillada la 1ª %s, la 2ª %s (esperado: true, false)" % [primera, jefe.datos.get("pillada", false)])
+	jefe.cambiar("escondida", {"dur": jefe.ESCONDIDA})
+	jefe.reloj_tiros = jefe.PRIMER_TIRO
+	jefe.global_position = donde_antes
+	print("Desfile: al empezar, le falta para tirar %.1f s (esperado: unos %.1f, menos lo poco que haya pensado)" % [jefe.reloj_tiros, jefe.PRIMER_TIRO])
 	var c: Vector2 = johnny.global_position
 	Captura.foto("captura-desfile-escondida.png")
 	# los carretes: cuatro hilos que cruzan la sala
@@ -2269,18 +2281,14 @@ func probar_desfile() -> void:
 	await get_tree().create_timer(0.5, false).timeout
 	Captura.foto("captura-desfile-disfraz.png")
 	# el aviso de los tiros de escondida, a medias
-	jefe.datos.tiros = jefe.apuntar_escondida(johnny)
-	jefe.datos.dispara = jefe.t + 99.0
-	jefe.datos.erase("siguiente")
-	await get_tree().physics_frame
-	jefe.datos.dispara = jefe.t + jefe.AVISO_ESCONDIDA * 0.4
+	jefe.reloj_tiros = jefe.AVISO_ESCONDIDA * 0.4
 	await get_tree().create_timer(0.1, false).timeout
 	Captura.foto("captura-desfile-aviso-escondida.png")
 	await get_tree().create_timer(0.5, false).timeout
 	print("Desfile: tras el aviso, tiros pendientes %s (esperado: false: ya ha tirado)" % jefe.datos.has("tiros"))
 	var antes_alfileres := get_tree().get_nodes_in_group("balas_zombi").size()
 	jefe.disparo_escondida(johnny)
-	print("Desfile: escondida dispara, alfileres nuevos %d (esperado: 3, el suyo y dos señuelos)" % [
+	print("Desfile: escondida dispara, alfileres nuevos %d (esperado: de 1 a 3: el suyo y hasta dos señuelos con vía libre)" % [
 		get_tree().get_nodes_in_group("balas_zombi").size() - antes_alfileres])
 	await get_tree().create_timer(0.15, false).timeout
 	Captura.foto("captura-desfile-dispara.png")
