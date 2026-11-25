@@ -8,7 +8,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 | Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
 | Cocinero | hecho, pendiente del visto bueno del dueño (23 nov) |
 | Modista | hecha, con el visto bueno del dueño (24 nov) |
-| Mascota | en curso: fase 1 hecha (24 nov), falta el tren y la fase 2 |
+| Mascota | en curso: fase 1 y el tren hechos (25 nov), falta la fase 2 |
 | Gerente | pendiente |
 
 ## Por qué
@@ -297,6 +297,12 @@ Se le rompe la tripa y va soltando relleno.
     con su marca en el suelo; al caer quitan 12 y sueltan 2 pelotas cada uno.
   - El matasuegras (con Johnny a menos de 180, cada 3 s): aviso en cono 0,6 s y sopla (animación nueva de PixelLab,
     `matasuegras`, 8 direcciones): quita 10, le manda lejos y dispara las pelotas que pille, con confeti.
+- El tren de juguete (25 nov, `tren_juguete.gd`): unas vías pintadas con código (traviesas y raíles) dan la vuelta a
+  la sala, un rectángulo de esquinas redondeadas a 130 de las paredes (unas 3000 de vuelta). El tren (locomotora y 3
+  vagones, PixelLab en 8 direcciones: `tren-locomotora`, `tren-vagon`) espera en su estación; cada 11 s (8 en la fase
+  2) pita («¡CHU-CHUUU!»), las vías parpadean en rojo 1,3 s y da una vuelta a 400. A Johnny le quita 16 y le aparta a
+  un lado (esquivando, no). Si pilla a la mascota mareada o sentada encima de las vías, la atropella: 45 («¡ATROPELLO!»;
+  sentada, 68). Las cajas no caen sobre las vías. Prueba: `--captura --edificio centro --jefe mascota --tren`.
 - Prueba: `--captura --edificio centro --jefe mascota --fiesta`.
 
 ## 5. El gerente · «La junta de accionistas»
