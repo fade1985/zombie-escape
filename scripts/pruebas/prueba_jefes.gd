@@ -2032,10 +2032,18 @@ func probar_ir_sala_otro() -> void:
 	await montar(planta.sitios.size() - 1, 0, false)
 	await get_tree().create_timer(0.5, false).timeout
 	print("Ir a otra sala: desde el sitio %d de %d" % [aqui, planta.sitios.size()])
+	# (25 nov) como al usar el panel: desde la sala de pruebas (F9), donde le dan la pistola. Llega con lo que lleva
+	# en ella, no con lo de antes de entrar (aquí, la escopeta); y sin la munición sin fin de la sala
+	llevar_arma("escopeta", 1)
+	await pruebas()
+	await get_tree().create_timer(0.3, false).timeout
+	var llevaba: Dictionary = johnny.huecos.duplicate()
 	await ir_al_jefe(tipo)
 	await get_tree().create_timer(2.5, false).timeout
 	print("Ir a otra sala: de %s a %s · planta del jefe %s · en su sala %s · se guarda %s (esperado: apartamentos, centro, %s, true, false)" % [
 		antes, edificio, planta.jefe, planta.sitios[aqui].tipo == "jefe", guarda_partida, tipo])
+	print("Ir a otra sala: armas al llegar %s (esperado: las de la sala de pruebas, %s) · munición sin fin %s (esperado: false)" % [
+		johnny.huecos, llevaba, johnny.municion_sin_fin])
 	Captura.foto("captura-ir-sala-otro.png")
 
 
