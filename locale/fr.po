@@ -1275,6 +1275,10 @@ msgstr "AU TRAVAIL !"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "PAS DE PAUSE ICI !"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "POP !"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "FAIM !"
@@ -3006,12 +3010,28 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "CÂLINS GRATUITS !"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "CADEAUX !"
+
+#: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "ÇA BRÛLE !"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "POUÊÊÊT !"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "BOING !"
 
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "C'EST LA RÉCRÉ !"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "Elle perd son rembourrage ! Ça doit bien brûler..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
@@ -3032,6 +3052,14 @@ msgstr "TU NE ME TROUVERAS PAS !"
 #: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "SUR LE PODIUM !"
+
+#: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "VIENS ICI !"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "PAS DANS LE NOIR !"
 
 #: scripts/modista.gd
 msgid "¡TE TENGO!"
@@ -3058,12 +3086,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "QUE LE DÉFILÉ COMMENCE !"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "Si le projecteur l'attrape, elle se fige..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "Si le projecteur la prend en plein, elle est aveuglée..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "FIGÉE !"
+msgid "¡CEGADA!"
+msgstr "AVEUGLÉE !"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -4630,6 +4658,14 @@ msgstr "Tiens, c'était aux objets trouvés !"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "« Accès restreint : étage 40 »… qu'est-ce qu'il y a là-haut ?"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "TCHOU-TCHOUUU !"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "ÉCRASÉ !"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

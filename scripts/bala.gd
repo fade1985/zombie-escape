@@ -49,6 +49,9 @@ func _physics_process(delta: float) -> void:
 	if pared:
 		global_position = pared.position
 		normal_pared = pared.normal
+		# la tarta de la mascota (tarta.gd): se le caen las velas
+		if is_instance_valid(pared.collider) and pared.collider.has_method("tocada_bala"):
+			pared.collider.tocada_bala(velocidad)
 		# junto a una cámara de seguridad de Torre Velaria (peligros/camaras.gd), la rompe
 		for camaras in get_tree().get_nodes_in_group("camaras"):
 			camaras.romper_en(pared.position)
