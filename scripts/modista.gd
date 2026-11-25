@@ -677,9 +677,11 @@ func cambiarse(johnny: Node2D) -> void:
 	var antes := global_position
 	var paso: Vector2 = antes + PIE_MANIQUI - m.global_position
 	global_position = m.global_position - PIE_MANIQUI
-	if johnny.global_position.distance_to(antes + PIE_MANIQUI) < CERCA_MANIQUI:
+	if primer_escondite or johnny.global_position.distance_to(antes + PIE_MANIQUI) < CERCA_MANIQUI:
 		# Johnny está pegado a donde estaba ella: si el maniquí apareciera ahí, lo dejaría encajado entre maniquíes
-		# (25 nov, el dueño). Así que esta vez el maniquí no va a ningún sitio: se va (ella ocupa su hueco)
+		# (25 nov, el dueño). Y la primera vez (al acabar la presentación) ella está en medio de la sala, fuera de las
+		# filas: un maniquí ahí rompía el dibujo de la tienda (25 nov, el dueño). Así que el maniquí no va a ningún
+		# sitio: se va (ella ocupa su hueco)
 		m.get_parent().remove_child(m)
 		m.queue_free()
 	else:
