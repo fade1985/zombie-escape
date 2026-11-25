@@ -3054,12 +3054,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "时装秀开始！"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "只要聚光灯照到她，她就会僵住……"
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "如果聚光灯正好照中她，她就会被晃瞎……"
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "僵住了！"
+msgid "¡CEGADA!"
+msgstr "被晃瞎了！"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"

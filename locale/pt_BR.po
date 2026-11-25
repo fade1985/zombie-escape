@@ -3058,12 +3058,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "QUE COMECE O DESFILE!"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "Se o holofote pegar ela, ela fica dura..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "Se o holofote pegar ela em cheio, ela fica cega..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "DURA!"
+msgid "¡CEGADA!"
+msgstr "CEGA!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"

@@ -3058,12 +3058,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "DIE MODENSCHAU BEGINNT!"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "Wenn der Scheinwerfer sie erwischt, erstarrt sie..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "Wenn der Scheinwerfer sie voll erwischt, ist sie geblendet..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "ERSTARRT!"
+msgid "¡CEGADA!"
+msgstr "GEBLENDET!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"

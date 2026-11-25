@@ -2357,12 +2357,20 @@ func probar_desfile() -> void:
 	jefe.global_position = jefe.foco.global_position + Vector2(260, 0)
 	await get_tree().physics_frame
 	Captura.foto("captura-desfile-pasarela.png")
-	# el foco la pilla: tiesa, el doble
-	jefe.global_position = jefe.foco.global_position + Vector2(40, -10)
+	# en el borde del foco, nada; de lleno, cegada (el doble) y el foco se para
+	var pies := Vector2(0, jefe.PIE - 10.0)
+	jefe.global_position = jefe.foco.global_position - pies + Vector2(FocoModista.RADIO * 0.75, 0)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	var en_borde: String = jefe.estado
+	jefe.global_position = jefe.foco.global_position - pies + Vector2(10, 0)
 	await get_tree().create_timer(0.1, false).timeout
 	antes = jefe.vida
 	jefe.recibir_golpe(10, Vector2.UP)
-	print("Desfile: bajo el foco, estado %s · un golpe de 10 le quita %d (esperado: congelada, 20)" % [jefe.estado, antes - jefe.vida])
+	var foco_antes: Vector2 = jefe.foco.global_position
+	await get_tree().create_timer(0.3, false).timeout
+	print("Desfile: en el borde del foco, estado %s (esperado: no congelada) · de lleno, estado %s · un golpe de 10 le quita %d · el foco se mueve %d · estrellitas %s (esperado: congelada, 20, 0, true)" % [
+		en_borde, jefe.estado, antes - jefe.vida, roundi(jefe.foco.global_position.distance_to(foco_antes)), jefe.estrellas != null])
 	Captura.foto("captura-desfile-congelada.png")
 	await get_tree().create_timer(2.4, false).timeout
 	# el corte de pared a pared, lejos del foco

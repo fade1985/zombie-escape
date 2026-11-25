@@ -21,9 +21,10 @@
 #   - Bajo el foco, los maniquíes se quedan quietos; a oscuras (y si Johnny no los mira), se mueven.
 #   - Ella ronda por la oscuridad apartándose del foco (se le ven los ojos) y lanza tijeretazos de pared a pared: una
 #     franja de aviso y cruza la sala corriendo con las tijeras por delante, CORTES veces seguidas.
-#   - El truco: si el foco la pilla (también a mitad de un corte), se queda congelada como un maniquí (CONGELADA s,
-#     le entra el doble). Luego un rato (INMUNE_FOCO) el foco no la para.
-#   - Pista: al apagarse las luces, Johnny dice «Si el foco la pilla, se queda tiesa...».
+#   - El truco: si el foco la pilla de lleno (en medio del círculo, también a mitad de un corte), se queda cegada
+#     («¡CEGADA!», aturdida con estrellitas, CONGELADA s, le entra el doble) y el foco se para encima de ella,
+#     latiendo. Luego un rato (INMUNE_FOCO) el foco no la para.
+#   - Pista: al apagarse las luces, Johnny dice «Si el foco la pilla de lleno, se queda ciega...».
 # Sus animaciones (PixelLab, tools/jefe_hoja.py): andar, alfileres, tijeretazo, golpe, muerte, corte (el tijeretazo
 # largo) y, solo de frente, aturdida y desfile.
 extends Minijefe
@@ -88,7 +89,7 @@ const VELOCIDAD_CORTE := 900.0
 const DURA_CORTE := 1.4            # lo más que corre en un corte
 const ANCHO_CORTE := 26.0          # lo cerca de su camino que tiene que estar Johnny para que le corte
 const DANO_CORTE := 18
-const CONGELADA := 1.3             # lo que se queda tiesa si la pilla el foco
+const CONGELADA := 1.3             # lo que se queda cegada si la pilla el foco de lleno
 const MAS_CONGELADA := 2.0
 const INMUNE_FOCO := 5.0           # después, el foco no la para este rato
 # Lo que espera entre ataque y ataque (normal y enfadada; 0: no lo hace)
@@ -181,7 +182,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 	sin_foco -= delta
 	var hacia: Vector2 = johnny.global_position - global_position
 	var d := hacia.length()
-	# la pasarela: si el foco la pilla, se queda tiesa (salvo justo después de otra vez)
+	# la pasarela: si el foco la pilla de lleno, se queda cegada (salvo justo después de otra vez)
 	if fase == 2 and sin_foco <= 0.0 and estado not in ["congelada", "grito"] and bajo_foco():
 		congelarse()
 		return
@@ -322,8 +323,8 @@ func rondar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
 		quiero = hacia.normalized().orthogonal() * rapidez * 0.5 * (1.0 if int(tiempo / 3.0) % 2 else -1.0)
 	if is_instance_valid(foco):
 		var lejos_foco := global_position - foco.global_position
-		if lejos_foco.length() < FocoModista.RADIO * 2.0:
-			quiero += lejos_foco.normalized() * rapidez * 1.2
+		if lejos_foco.length() < FocoModista.RADIO * 1.5:
+			quiero += lejos_foco.normalized() * rapidez * 0.7
 	marcha += (quiero.limit_length(rapidez * 1.2) - marcha) * (1.0 - exp(-delta * 6.0))
 	if marcha.length() > 10.0:
 		mirada = marcha.normalized() if d > LEJOS else hacia.normalized()
@@ -708,7 +709,7 @@ func apagar_luces() -> void:
 	get_parent().add_child(foco)
 	var partida := get_tree().current_scene
 	if partida and partida.has_method("decir"):
-		partida.decir(Idioma.t("Si el foco la pilla, se queda tiesa..."), 3.5)
+		partida.decir(Idioma.t("Si el foco la pilla de lleno, se queda ciega..."), 3.5)
 
 
 # Al caer ella vuelve la luz
@@ -727,16 +728,19 @@ func encender_luces() -> void:
 	lamparas.clear()
 
 
+# De lleno: con los pies en medio del círculo (25 nov, el dueño: antes bastaba con rozar el borde)
 func bajo_foco() -> bool:
-	return FocoModista.alumbrado(get_tree(), global_position + Vector2(0, PIE - 10.0))
+	return FocoModista.alumbrado(get_tree(), global_position + Vector2(0, PIE - 10.0), true)
 
 
+# El foco la ciega: aturdida (con estrellitas, como descubierta), «¡CEGADA!» y el foco se para encima, latiendo
 func congelarse() -> void:
-	cambiar("congelada", {"anim": sprite.animation, "frame": sprite.frame})
+	cambiar("congelada")
 	marcha = Vector2.ZERO
-	sprite.modulate = Color(0.78, 0.8, 0.86)
-	gritar(Idioma.t("¡TIESA!"), Color("#fff4c0"), 20)
+	gritar(Idioma.t("¡CEGADA!"), Color("#fff4c0"), 20)
 	Sonido.tocar("golpe")
+	if is_instance_valid(foco):
+		foco.parar(CONGELADA)
 
 
 # Un paso del corte: corre recta con las tijeras por delante y corta a Johnny si le pilla (una vez). Devuelve si ha
@@ -800,7 +804,7 @@ func maniqui_roto() -> void:
 
 
 func con_estrellas() -> bool:
-	return estado in ["atontado", "descubierta"]
+	return estado in ["atontado", "descubierta", "congelada"]
 
 
 func morir() -> void:
@@ -879,9 +883,11 @@ func animar() -> void:
 			var nombre := "corte" if tiene("corte_" + dir) else "tijeretazo"
 			fijar(nombre, dir, 3 + int(t * 14.0) % maxi(1, sprite.sprite_frames.get_frame_count(nombre + "_" + dir) - 3))
 		"congelada":
-			# tiesa en la postura en que la ha pillado (y gris)
-			if tiene(datos.anim):
-				fijar(datos.anim.get_slice("_", 0), datos.anim.get_slice("_", 1), datos.frame)
+			# cegada: aturdida, como descubierta
+			if tiene("aturdida_s"):
+				poner("aturdida_s")
+			else:
+				fijar("golpe", "s", 4 + int(t * 6.0) % 3)
 		"grito":
 			if tiene("desfile_s"):
 				fijar("desfile", "s", avance("desfile_s", t / 1.2))

@@ -216,7 +216,7 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   antes sale en el suelo la raya de flechas de cada uno, y al tirar, un destello rojo y unos retales en el maniquí. Al
   entrar en la sala, el primer tiro tarda 3 s después de su presentación (su propio reloj, que no corre mientras sale
   el título). Pegarle con los ojos brillando la «pilla» solo una vez seguida: la siguiente se esconde aunque le peguen
-  (25 nov, el dueño: a cuerpo a cuerpo no se escondía nunca); descubierta ya solo 1,5 s (eran 2,5); tiesa bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
+  (25 nov, el dueño: a cuerpo a cuerpo no se escondía nunca); descubierta ya solo 1,5 s (eran 2,5); cegada bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
   pare (eran 3,5); en la pasarela, cuatro cortes seguidos (eran tres), los siguientes con 0,45 s de aviso (eran 0,55).
   Si nadie la encuentra a tiempo, sale **crecida** (24 nov, el dueño): «¡DEMASIADO LENTO!», roja latiendo 8 s, con
   las esperas entre ataques al doble de rápido y andando un 40 % más deprisa.
@@ -227,10 +227,13 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
 - Se quedan los alfileres y el tijeretazo; se fue «¡TE TOMO MEDIDAS!». Ella anda a media distancia (unos 260).
 - **Fase 2**: «¡QUE EMPIECE EL DESFILE!» con su pose; los hilos se caen, se apagan las lámparas de la tienda (más
   oscuridad: `Luz.evento` + 0,45), sale el foco (radio 120, cruza de lado a lado a 115 y sube y baja en 14 s) y
-  despiertan 3 maniquíes. Johnny dice «Si el foco la pilla, se queda tiesa...». Ella ronda apartándose del foco (se le
+  despiertan 3 maniquíes. Johnny dice «Si el foco la pilla de lleno, se queda ciega...». Ella ronda apartándose del foco (se le
   ven los ojos) y cada 5,5 s, «¡A LA PASARELA!»: franja de aviso hasta la pared (0,9 s, luego 0,55) y cruza corriendo
-  a 900 con las tijeras por delante, 3 veces seguidas, 18 de daño. Si el foco la pilla (también corriendo): «¡TIESA!»,
-  gris y quieta 2,2 s, le entra el doble; luego 3,5 s en que el foco no la para. Al caer ella vuelve la luz.
+  a 900 con las tijeras por delante, 3 veces seguidas, 18 de daño. Si el foco la pilla **de lleno** (los pies a menos
+  de 55 del centro, también corriendo; 25 nov, el dueño: antes bastaba rozar el borde y no se entendía): «¡CEGADA!»,
+  aturdida con estrellitas, le entra el doble, y el foco se para encima de ella latiendo más fuerte mientras dura.
+  Ronda apartándose del foco menos que antes (hasta 1,5 radios, a 0,7 de su velocidad), para que la pille alguna vez.
+  Al caer ella vuelve la luz.
 - Animaciones nuevas de PixelLab (v3, 20 generaciones): corte (8 direcciones; de frente y abajo a la derecha se quitan
   los dos últimos fotogramas, con unas tijeras gigantes brillando), aturdida y desfile (solo de frente).
 - Pista: al entrar, Johnny dice «Uno de esos maniquíes respira...».

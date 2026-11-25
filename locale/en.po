@@ -3058,12 +3058,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "LET THE FASHION SHOW BEGIN!"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "If the spotlight catches her, she freezes stiff..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "If the spotlight catches her full on, she goes blind..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "FROZEN STIFF!"
+msgid "¡CEGADA!"
+msgstr "BLINDED!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
