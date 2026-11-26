@@ -98,6 +98,10 @@ const ESTILO_TIENDA := {
 	"bano-supermercado": [["vestuario"], "vestuario", "bano-b"], "almacen-supermercado": [["trastero"], "trastero-pasillo", "trastero"],
 	# (26 nov, el dueño) y los de la electrónica, iguales
 	"bano-electronica": [["vestuario"], "vestuario", "bano-b"], "almacen-electronica": [["trastero"], "trastero-pasillo", "trastero"],
+	# y su sala de juegos en red, en el sitio del taller (de momento con el uso "taquillas"): porcelánico blanco roto y pared de yeso blanco
+	# con una franja negra arriba con su tira de luz LED roja y rodapié negro, destrozados (26 nov, el dueño; de GPT, tools/suelos_electronica_gpt.py;
+	# se mezclan a trozos, MEZCLA_TIENDA)
+	"taquillas-electronica": [["juegos-electronica-d1"], "juegos-electronica-d1", "almacen"],
 	# y su sala de venta (porcelánico gris claro y pared de listones de madera clara sobre un panel gris), destrozada (25 nov, el dueño;
 	# de GPT, tools/suelos_supermercado_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
 	"tienda-supermercado": [["venta-supermercado-d1"], "venta-supermercado-d1", "venta"],
@@ -161,6 +165,9 @@ const MEZCLA_TIENDA := {
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
 	"almacen-electronica": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
 		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
+	# y su sala de juegos (las baldosas rotas con la bebida y el cable, y la quemada con los cristales, los que menos, que se ven mucho)
+	"taquillas-electronica": {"suelos": [["juegos-electronica-d1", 3], ["juegos-electronica-d2", 1], ["juegos-electronica-d3", 1]],
+		"paredes": [["juegos-electronica-d1", 2], ["juegos-electronica-d2", 1], ["juegos-electronica-d3", 1]]},
 	# y su sala de venta (las baldosas rotas con el rastro de sangre y la leche y la fruta, d2 y d3, y la madera arrancada y la quemada, los que
 	# menos, que se ven mucho)
 	"tienda-supermercado": {"suelos": [["venta-supermercado-d1", 3], ["venta-supermercado-d2", 1], ["venta-supermercado-d3", 1]],

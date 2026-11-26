@@ -1206,6 +1206,13 @@ en una línea.
   su suelo y pared destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-electronica" y "almacen-electronica"), la sangre, sus puertas metálicas
   (también la de las taquillas a la sala de venta) y sin toalla ni balda; el almacén, de momento con los muebles del de la ropa. La sala de
   venta y las taquillas, sin muebles de momento (los de antes, en git) y `"despejadas"` mientras se rehace.
+  Las taquillas son ahora la **sala de juegos en red** (26 nov, el dueño; de momento con el uso "taquillas" y ese nombre): su suelo y su pared
+  (de una foto del dueño de un local de juegos en red: porcelánico blanco roto y pared de yeso blanco con una franja negra arriba con una
+  tira de luz LED roja y rodapié negro), destrozados, tres de cada, de GPT: `py tools/suelos_electronica_gpt.py` (copia de la del súper;
+  `assets/sources/suelos/juegos-electronica-suelo-destrozado<N>-gpt.webp` y `-pared-destrozada<N>-`, a `suelo-`/`pared-juegos-electronica-d<N>.png`),
+  mezclados a trozos (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "taquillas-electronica"; las baldosas rotas y la quemada, las que menos). La tira de luz,
+  que al reducir se mezclaba con el negro y el blanco, se repinta roja viva después (`led`), en la misma fila en las tres paredes.
+  `--tiendas-fijas` saca también esta sala (`captura-fija-electronica-<lado>-taquillas.png`).
   Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208

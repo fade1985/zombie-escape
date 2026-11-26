@@ -1370,8 +1370,9 @@ func probar_tiendas_fijas() -> void:
 					johnny.get_node("Camara").reset_smoothing()
 					await get_tree().create_timer(0.8).timeout
 					Captura.foto("captura-fija-%s-%s-aseo.png" % [tipo, lado])
-				# (y, desde el 24 nov, la rebotica de la farmacia y el taller de la ferretería, y el 25, la cámara: captura-fija-<tipo>-<lado>-<uso>.png)
-				if s.uso in ["almacen", "rebotica", "taller", "camara"]:
+				# (y, desde el 24 nov, la rebotica de la farmacia y el taller de la ferretería, y el 25, la cámara, y el 26, la sala de juegos de la electrónica (uso "taquillas"):
+				# captura-fija-<tipo>-<lado>-<uso>.png)
+				if s.uso in ["almacen", "rebotica", "taller", "camara", "taquillas"]:
 					# (en la rebotica y el taller, Johnny 3 casillas más arriba: lo alto de la pared de arriba, con sus muebles altos, se salía de la foto)
 					johnny.position = s.centro - (Vector2(0, 96) if s.uso != "almacen" else Vector2.ZERO)
 					johnny.get_node("Camara").reset_smoothing()

@@ -41,10 +41,10 @@ const TIPOS := {
 		"destrozada": ["bano", "almacen", "taller", "tienda"]},
 	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"],   # [traducir]
 		"color": Color("#4fe3ff"),
-		# (26 nov, el dueño) rehecha como el supermercado: su aseo y su almacén, iguales que los de la ropa, destrozados, y las taquillas en el
-		# sitio del taller. Mientras se rehace, sin nada por el suelo de la sala de venta y de las taquillas ni en sus paredes ni en las del
-		# almacén ("despejadas", mapa.despejada)
-		"destrozada": ["bano", "almacen"],
+		# (26 nov, el dueño) rehecha como el supermercado: su aseo y su almacén, iguales que los de la ropa, y la sala de juegos en red (de
+		# momento con el uso "taquillas", en el sitio del taller), con su suelo y pared de GPT, destrozados. Mientras se rehace, sin nada por
+		# el suelo de la sala de venta y de la de juegos ni en sus paredes ni en las del almacén ("despejadas", mapa.despejada)
+		"destrozada": ["bano", "almacen", "taquillas"],
 		"despejadas": {"suelo": ["tienda", "taquillas"], "pared": ["tienda", "almacen", "taquillas"]}},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
 		"color": Color("#ff4f5e")},
