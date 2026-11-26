@@ -40,7 +40,12 @@ const TIPOS := {
 		# abajo). (24 nov, el dueño: terminada) ya no va "despejadas": restos, sangre y suciedad por el suelo y cosas en las paredes
 		"destrozada": ["bano", "almacen", "taller", "tienda"]},
 	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"],   # [traducir]
-		"color": Color("#4fe3ff")},
+		"color": Color("#4fe3ff"),
+		# (26 nov, el dueño) rehecha como el supermercado: su aseo y su almacén, iguales que los de la ropa, destrozados, y las taquillas en el
+		# sitio del taller. Mientras se rehace, sin nada por el suelo de la sala de venta y de las taquillas ni en sus paredes ni en las del
+		# almacén ("despejadas", mapa.despejada)
+		"destrozada": ["bano", "almacen"],
+		"despejadas": {"suelo": ["tienda", "taquillas"], "pared": ["tienda", "almacen", "taquillas"]}},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
 		"color": Color("#ff4f5e")},
 	# (18 nov, el dueño: la primera que se rehace por dentro. "sube": su pared, de 4 casillas en vez de 3, y sus puertas de
@@ -70,7 +75,7 @@ const TIPOS := {
 		"presta": {"tipo": "supermercado", "plano": "supermercado-antiguo", "usos": {"impresoras": "camara", "office": "almacen"}}},
 	"informatica": {"nombre": "Informática", "neon": "INFORMATICA", "salas": ["servidores", "almacen", "bano"],   # [traducir]
 		"color": Color("#9fd8ff"), "edificio": "torre",
-		"presta": {"tipo": "electronica", "usos": {"servidores": "taquillas"}}},
+		"presta": {"tipo": "electronica", "plano": "electronica-antigua", "usos": {"servidores": "taquillas"}}},
 	"rrhh": {"nombre": "Recursos Humanos", "neon": "RR.HH.", "salas": ["archivo", "entrevistas", "bano"],   # [traducir]
 		"color": Color("#ffe9c9"), "edificio": "torre",
 		"presta": {"tipo": "ropa", "plano": "ropa-antigua", "usos": {"archivo": "almacen", "entrevistas": "probadores"}}},
@@ -253,10 +258,45 @@ const PLANOS := {
 		"###################EE###################",
 		"###################EE###################",
 	],
-	# la electrónica: a la izquierda, las taquillas; a la derecha, el almacén y el aseo de empleados; entre los dos, un
-	# trozo de sala de venta hasta el fondo. El charco con corriente (~), siempre en el mismo sitio: a la izquierda,
-	# delante de las taquillas
+	# la electrónica (26 nov, el dueño: rehecha como el supermercado, 50 × 30): arriba, de izquierda a derecha, el aseo de empleados
+	# (7 × 12), el almacén (17 × 12; el aseo se abre a él) y las taquillas (20 × 12, con su puerta en medio, en el sitio del taller);
+	# abajo, la sala de venta (46 × 13), con el charco con corriente (~) a la izquierda
 	"electronica": [
+		"##################################################",
+		"##################################################",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",   # no-tr
+		"##BBBBBBB AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",   # no-tr
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"##BBBBBBB#AAAAAAAAAAAAAAAAA#QQQQQQQQQQQQQQQQQQQQ##",
+		"#################  ##################  ###########",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVV~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVV~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVV~~~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVV~~~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVV~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"########################EE########################",
+		"########################EE########################",
+	],
+	# la electrónica de antes (M77, hasta el 26 nov): a la izquierda, las taquillas; a la derecha, el almacén y el aseo de empleados;
+	# entre los dos, un trozo de sala de venta hasta el fondo, con el charco con corriente (~) delante de las taquillas. Ahora solo la usa
+	# Informática (TIPOS "presta", que no lleva el charco)
+	"electronica-antigua": [
 		"########################################",
 		"########################################",
 		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",

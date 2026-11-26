@@ -673,44 +673,21 @@ const SALAS := {
 		"arriba": [["ferrelona1", 3.5, "libre", 10.125], ["ferrelona2", 15.5, "libre", 10.25], ["ferrebanco", 4.75, "libre", 0.75],
 			["ferreestanteria", 13.0, "libre", 0.5], ["ferrecarro", 16.5, "libre", 0.75], ["ferrebidones", 3.0, "libre", 6.0],
 			["ferrehormigonera", 16.0, "libre", 6.0]]}},
-	# M77: la electrónica fija (Tienda.PLANOS, con el charco con corriente dibujado a la izquierda). Con la puerta abajo:
-	# una estantería de teles al fondo del trozo que llega hasta atrás, teles, estanterías y palés delante de las
-	# taquillas y del almacén, dos cajas a la derecha y dos filas de tres estanterías de teles a la derecha (a la izquierda,
-	# el charco). Volteada, las cajas y las teles de pared, en la de la entrada
-	"tienda-electronica": {
-		"colocados": {
-			"abajo": [
-				["tvshelf", 14.5],
-				["metalshelf", 2.0, "libre", 10.625], ["pallet", 8.75, "libre", 10.875],
-				["tvshelf", 20.0, "libre", 10.625], ["tvshelf", 27.0, "libre", 10.625], ["tvshelf", 31.0, "libre", 10.625],
-				["pallet", 34.5, "libre", 10.875],
-				["pallet", 21.5, "izquierda"], ["checkout", 16.0, "derecha"], ["checkout", 20.0, "derecha"],
-				["pallet", 2.0, "abajo"], ["pallet", 33.5, "abajo"],
-				["tvshelf", 23.3125, "libre", 15.0], ["tvshelf", 26.9375, "libre", 15.0], ["tvshelf", 30.5625, "libre", 15.0],
-				["tvshelf", 23.3125, "libre", 20.5], ["tvshelf", 26.9375, "libre", 20.5], ["tvshelf", 30.5625, "libre", 20.5],
-			],
-			"arriba": [
-				["metalshelf", 2.0], ["tvshelf", 7.0], ["tvshelf", 11.0], ["checkout", 14.5], ["checkout", 22.0],
-				["tvshelf", 27.0], ["tvshelf", 31.0], ["pallet", 34.5],
-				["pallet", 3.0, "izquierda"], ["pallet", 7.75, "derecha"], ["pallet", 12.5, "abajo"], ["pallet", 16.5, "abajo"],
-				["tvshelf", 23.3125, "libre", 5.0], ["tvshelf", 26.9375, "libre", 5.0], ["tvshelf", 30.5625, "libre", 5.0],
-				["tvshelf", 23.3125, "libre", 10.5], ["tvshelf", 26.9375, "libre", 10.5], ["tvshelf", 30.5625, "libre", 10.5],
-			],
-		},
-	},
-	# las taquillas, el almacén (con sitio libre en su pared de arriba para el cuadro eléctrico: Peligros.cuadro_electrico)
-	# y el aseo de empleados (M81) de la electrónica fija (M77)
-	"taquillas-electronica": {"colocados": {
-		"abajo": [["lockers", 1.75], ["lockers", 5.0], ["lockers", 8.25], ["bench", 4.5, "derecha"]],
-		"arriba": [["lockers", 1.75], ["lockers", 8.25], ["bench", 4.5, "derecha"], ["bench", 4.5, "izquierda"]],
-	}},
+	# la electrónica (26 nov, el dueño: rehecha como el supermercado, Tienda.PLANOS). La sala de venta y las taquillas, sin muebles de momento:
+	# se irán poniendo los de GPT (antes, estanterías de teles, palés, cajas y taquillas de metal: está en git). Su almacén, de momento el
+	# mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en el súper), y su aseo, el mismo que el del súper
+	"tienda-electronica": {"colocados": {"abajo": [], "arriba": []}},
+	"taquillas-electronica": {"colocados": {"abajo": [], "arriba": []}},
 	"almacen-electronica": {"colocados": {
-		"abajo": [["metalshelf", 1.5], ["pallet", 7.5], ["pallet", 5.0, "izquierda"]],
-		"arriba": [["metalshelf", 1.5], ["pallet", 4.5, "abajo"], ["pallet", 7.0, "abajo"], ["pallet", 4.0, "izquierda"]],
-	}},
+		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
+			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
+			["carretillaropa", 15.8, "libre", 4.0]],
+		"arriba": [["ropashelf3", 1.88], ["ropashelf", 5.12], ["ropashelf4", 11.21], ["ropashelf2", 14.79],
+			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
+			["carretillaropa", 15.8, "libre", 6.0]]}},
 	"bano-electronica": {"colocados": {
-		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
-		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
+		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],
 	}},
 	# M77: el restaurante fijo (Tienda.PLANOS). Con la puerta abajo: neveras y una caja al fondo del trozo que llega hasta
 	# atrás, bancos y neveras delante de la cocina y de la cámara, bancos en los lados y dos filas de tres mesas a cada

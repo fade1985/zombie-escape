@@ -1198,6 +1198,15 @@ en una línea.
   dueño la dio por terminada), llevó `"despejadas"`. En la inversa, la salida vista desde dentro es la puerta automática de la fachada
   (`puerta.gd es_super`, como en la farmacia); en la normal, la misma vista desde arriba en el muro de abajo, que se abre igual (`es_super_abajo`,
   `py tools/puerta_abajo_super.py`). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
+- **La electrónica, rehecha por dentro** (26 nov, el dueño; en marcha): con la misma distribución y tamaño que el supermercado (50 × 30):
+  arriba, el aseo (7 × 12), el almacén (17 × 12) y las taquillas (20 × 12, en el sitio del taller, con su puerta en medio); abajo, la sala de
+  venta (46 × 13), con el charco con corriente (`~` en el plano, `Peligros.agua`) a la izquierda, del mismo tamaño que antes (31 casillas).
+  El cuadro eléctrico sigue saliendo en la pared de arriba del almacén o de las taquillas. El plano de antes queda como `electronica-antigua`,
+  porque lo usa Informática en la torre (`Tienda.TIPOS` "presta" "plano"; sus muebles no cambian). El aseo y el almacén, como los del súper:
+  su suelo y pared destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-electronica" y "almacen-electronica"), la sangre, sus puertas metálicas
+  (también la de las taquillas a la sala de venta) y sin toalla ni balda; el almacén, de momento con los muebles del de la ropa. La sala de
+  venta y las taquillas, sin muebles de momento (los de antes, en git) y `"despejadas"` mientras se rehace.
+  Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208
   de ancho), la panadería (`superpan`, 192), la nevera alta de congelados (`supernevera`, 128 × 126), el arcón (`superarcon`), la nevera baja de

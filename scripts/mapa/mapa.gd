@@ -96,6 +96,8 @@ const ESTILO_TIENDA := {
 	"bano-farmacia": [["vestuario"], "vestuario", "bano-b"], "almacen-farmacia": [["trastero"], "trastero-pasillo", "trastero"],
 	# (25 nov, el dueño) y los del supermercado, iguales
 	"bano-supermercado": [["vestuario"], "vestuario", "bano-b"], "almacen-supermercado": [["trastero"], "trastero-pasillo", "trastero"],
+	# (26 nov, el dueño) y los de la electrónica, iguales
+	"bano-electronica": [["vestuario"], "vestuario", "bano-b"], "almacen-electronica": [["trastero"], "trastero-pasillo", "trastero"],
 	# y su sala de venta (porcelánico gris claro y pared de listones de madera clara sobre un panel gris), destrozada (25 nov, el dueño;
 	# de GPT, tools/suelos_supermercado_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
 	"tienda-supermercado": [["venta-supermercado-d1"], "venta-supermercado-d1", "venta"],
@@ -153,6 +155,11 @@ const MEZCLA_TIENDA := {
 	"bano-supermercado": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
 		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
 	"almacen-supermercado": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
+		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
+	# (26 nov, el dueño) y los de la electrónica, iguales
+	"bano-electronica": {"suelos": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]],
+		"paredes": [["aseo-ropa-d1", 1], ["aseo-ropa-d2", 1], ["aseo-ropa-d3", 1]]},
+	"almacen-electronica": {"suelos": [["almacen-ropa-d1", 2], ["almacen-ropa-d2", 2], ["almacen-ropa-d3", 1]],
 		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
 	# y su sala de venta (las baldosas rotas con el rastro de sangre y la leche y la fruta, d2 y d3, y la madera arrancada y la quemada, los que
 	# menos, que se ven mucho)
@@ -1183,14 +1190,14 @@ func poner_hojas() -> void:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
 				hoja.metalizada = true
 		# (20 nov, el dueño) el aseo y el almacén de la ferretería, iguales que los de la ropa: sus puertas, las mismas (y, desde el
-		# 24 nov, los de la farmacia, con la rebotica en el sitio del taller; y el 25, los del supermercado, con la cámara)
-		if sitio.get("tienda", "") in ["ferreteria", "farmacia", "supermercado"]:
+		# 24 nov, los de la farmacia, con la rebotica en el sitio del taller; y el 25, los del supermercado, con la cámara; y el 26, los de la electrónica, con las taquillas)
+		if sitio.get("tienda", "") in ["ferreteria", "farmacia", "supermercado", "electronica"]:
 			var usos_f: Array = [sitio.apt.salas[d.a].uso, sitio.apt.salas[d.b].uso]
 			if "bano" in usos_f:
 				hoja.madera = PUERTA_BANO.METAL_ROPA
 				hoja.metalizada = true
 			# (24 nov, el dueño) y la del taller a la sala de venta, la misma que la del almacén
-			elif ("almacen" in usos_f or "taller" in usos_f or "rebotica" in usos_f or "camara" in usos_f) and "tienda" in usos_f:
+			elif ("almacen" in usos_f or "taller" in usos_f or "rebotica" in usos_f or "camara" in usos_f or "taquillas" in usos_f) and "tienda" in usos_f:
 				hoja.madera = PUERTA_BANO.TRASTERO_METALIZADA
 				hoja.metalizada = true
 		hoja.alargar((sube - TABIQUE.SUBE) * 16)   # con la pared alta, la puerta también: 16 píxeles del dibujo por casilla más
