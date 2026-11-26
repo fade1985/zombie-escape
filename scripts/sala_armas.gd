@@ -84,6 +84,7 @@ var ultima_muerte := ""
 
 func _ready() -> void:
 	z_index = 50   # las líneas, por encima de todo lo del suelo
+	add_to_group("sala_pruebas")   # (para quedarse_con_lo_de_aqui, desde partida.ir_al_jefe)
 	partida = get_tree().current_scene
 	vida_mentira = ZOMBI_VIDA
 	if "--captura" in OS.get_cmdline_user_args():
@@ -114,6 +115,15 @@ func _ready() -> void:
 	var pantalla: Node = partida.get_node("Pantalla")
 	pantalla.add_child(panel)
 	pantalla.move_child(panel, partida.negro.get_index())
+
+
+# El panel de pruebas lleva a la sala de un jefe (partida.ir_al_jefe): Johnny se va con las armas, balas y arrojables
+# que tenga ahora (25 nov, lo pidió el dueño: antes volvía a lo de antes de entrar, que solía ser la fregona sola).
+# Solo vuelve lo que es de esta sala: la munición sin fin
+func quedarse_con_lo_de_aqui() -> void:
+	if is_instance_valid(johnny) and not entrada.is_empty():
+		johnny.municion_sin_fin = entrada.sin_fin
+	entrada = {}
 
 
 func _exit_tree() -> void:

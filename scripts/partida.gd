@@ -2593,6 +2593,12 @@ func ir_a_azotea() -> void:
 # habitación, sin jugar hasta ella. Rehace la planta que le tocó en el sorteo de esta partida (como recién llegado) y
 # Johnny entra por la puerta: el jefe sale como siempre, con su presentación (acaba cuando ya ha salido)
 func ir_al_jefe(tipo: String) -> void:
+	# desde la sala de pruebas (su panel): con las armas que lleve ahora, no con las de antes de entrar; como son de
+	# prueba, esta partida deja de guardarse
+	if en_pruebas():
+		for sala in get_tree().get_nodes_in_group("sala_pruebas"):
+			sala.quedarse_con_lo_de_aqui()
+		guarda_partida = false
 	# (el panel de pruebas: un minijefe de otro edificio) la partida se cambia a ese edificio y deja de guardarse,
 	# para no pisar la guardada de verdad con una de prueba
 	if not orden_jefes.has(tipo):

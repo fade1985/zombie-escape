@@ -145,6 +145,24 @@ JEFES = {
             "muerte": ("muerte", 10, False, False),
             # 24 nov: cae de culo y se queda sentada, mareada (la caja sorpresa; solo de frente)
             "sorpresa": ("sorpresa", 12, False, False),
+            # 25 nov: soplar el matasuegras gigante
+            "matasuegras": ("matasuegras", 12, False, False),
+            # 25 nov: la transición a la fase 2: se dobla, se le raja la barriga y le sale el relleno
+            "descoserse": ("descoserse", 10, False, False),
+        },
+        "de_frente": ["sorpresa", "descoserse"],
+    },
+    # la mascota en la fase 2, descosida (un "estado" del mismo personaje en PixelLab: la barriga rajada y el relleno
+    # saliendo); más deprisa, sin saltos, regalos ni matasuegras
+    "mascota-descosida-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 12, True, True),
+            "embestida": ("embestida", 16, True, False, True),
+            "golpe": ("golpe", 16, False, False),
+            "muerte": ("muerte", 10, False, False),
+            "sorpresa": ("sorpresa", 12, False, False),
         },
         "de_frente": ["sorpresa"],
     },
