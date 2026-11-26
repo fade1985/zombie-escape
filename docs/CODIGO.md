@@ -1196,7 +1196,7 @@ en una línea.
   en la fila 9, junto a la entrada; en la inversa, en la fila 3,75, bajo la pared de la entrada y con paso por detrás. Las cajas sueltan
   piezas (`MUEBLES_CON_PIEZA`). Mientras se rehízo (hasta el 26 nov, cuando el
   dueño la dio por terminada), llevó `"despejadas"`. En la inversa, la salida vista desde dentro es la puerta automática de la fachada
-  (`puerta.gd es_super`, como en la farmacia); en la normal, la misma vista desde arriba en el muro de abajo (`ABAJO_SUPER`,
+  (`puerta.gd es_super`, como en la farmacia); en la normal, la misma vista desde arriba en el muro de abajo, que se abre igual (`es_super_abajo`,
   `py tools/puerta_abajo_super.py`). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208

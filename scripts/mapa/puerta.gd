@@ -51,8 +51,11 @@ const ABAJO_DIBUJO := Vector2(36, 32)
 # la de la tienda de ropa (19 nov, el dueño; de GPT, tools/puerta_abajo_ropa.py): el mismo hueco, con la puerta doble de cristal negro de su
 # fachada vista desde arriba, al doble de detalle (72 × 64 píxeles para 72 × 64 unidades)
 const ABAJO_ROPA := preload("res://assets/sprites/puerta-abajo-ropa.png")
-# la del supermercado (26 nov, el dueño; tools/puerta_abajo_super.py): su puerta automática de la fachada vista desde arriba
+# la del supermercado (26 nov, el dueño; tools/puerta_abajo_super.py): su puerta automática de la fachada vista desde arriba, que se
+# abre igual: el paso, las dos hojas y los cristales fijos encima (64 × 32 píxeles, 128 × 64 unidades)
 const ABAJO_SUPER := preload("res://assets/sprites/puerta-abajo-super.png")
+const ABAJO_SUPER_MARCO := preload("res://assets/sprites/puerta-abajo-super-marco.png")
+const ABAJO_SUPER_HOJAS := preload("res://assets/sprites/puerta-abajo-super-hojas.png")
 # la de chapa gris, con la hoja de la puerta metálica del despacho al taller (tools/puerta_abajo_metal.py): la que se usa de verdad
 const ABAJO_METAL := preload("res://assets/sprites/puerta-abajo-metal.png")
 # la misma con la hoja en gris marengo metalizado (tools/puerta_abajo_metal.py): la puerta de la calle del portal de los Apartamentos
@@ -194,7 +197,7 @@ func _ready() -> void:
 				cerca.emit(indice))
 	# la puerta automática del súper: su sensor ve a Johnny en una zona grande delante y abre las hojas (si no está
 	# cerrada con llave)
-	if es_super():
+	if es_super() or es_super_abajo():
 		var sensor := Area2D.new()
 		sensor.collision_layer = 0
 		sensor.collision_mask = 2
@@ -202,7 +205,7 @@ func _ready() -> void:
 		var sensor_caja := RectangleShape2D.new()
 		sensor_caja.size = Vector2(176, 120)
 		sensor_forma.shape = sensor_caja
-		sensor_forma.position = Vector2(0, 60)
+		sensor_forma.position = Vector2(0, -60 if salida.dir == "abajo" else 60)
 		sensor.add_child(sensor_forma)
 		add_child(sensor)
 		sensor.body_entered.connect(func(cuerpo):
@@ -231,6 +234,23 @@ func doble() -> bool:
 # sala de venta: la misma de la fachada; el dueño, la farmacia el 24 nov y el supermercado el 26)
 func es_super() -> bool:
 	return centro and salida.dir == "arriba" and (salida.get("neon", "") in Planta.PUERTA_AUTOMATICA or tienda in Planta.PUERTA_AUTOMATICA)
+
+
+# La del supermercado vista desde dentro en la tienda normal, en el muro de abajo: también automática (no la farmacia, de momento)
+func es_super_abajo() -> bool:
+	return centro and salida.dir == "abajo" and tienda == "supermercado"
+
+
+# Vista desde arriba: el paso, las dos hojas (cada una corrida hacia su lado) y encima los cristales fijos; la lucecita del
+# sensor, roja mientras no se pueda salir
+func puerta_super_abajo() -> void:
+	var corre := roundf(ease(apertura, -2.0) * SUPER_CORRE) * 2.0
+	draw_texture_rect(ABAJO_SUPER, Rect2(-36, 0, 72, 64), false)
+	draw_texture_rect_region(ABAJO_SUPER_HOJAS, Rect2(-32 - corre, 0, 32, 64), Rect2(16, 0, 16, 32))
+	draw_texture_rect_region(ABAJO_SUPER_HOJAS, Rect2(corre, 0, 32, 64), Rect2(32, 0, 16, 32))
+	draw_texture_rect(ABAJO_SUPER_MARCO, Rect2(-64, 0, 128, 64), false)
+	if not abierta:
+		draw_rect(Rect2(-2, 8, 4, 4), Color("d42a1e"))
 
 
 # Las hojas de la puerta del súper se abren poco a poco mientras Johnny está delante y se cierran al irse
@@ -308,8 +328,8 @@ func _draw() -> void:
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
 			if metal:
 				draw_texture_rect(ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
-			elif centro and tienda == "supermercado":
-				draw_texture_rect(ABAJO_SUPER, Rect2(-36, 0, 72, 64), false)
+			elif es_super_abajo():
+				puerta_super_abajo()
 			elif centro and tienda == "ropa":
 				draw_texture_rect(ABAJO_ROPA, Rect2(-36, 0, 72, 64), false)
 			else:
