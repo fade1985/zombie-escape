@@ -102,6 +102,8 @@ const ESTILO_TIENDA := {
 	# con una franja negra arriba con su tira de luz LED roja y rodapié negro, destrozados (26 nov, el dueño; de GPT, tools/suelos_electronica_gpt.py;
 	# se mezclan a trozos, MEZCLA_TIENDA)
 	"taquillas-electronica": [["juegos-electronica-d1"], "juegos-electronica-d1", "almacen"],
+	# (27 nov, el dueño) y su sala de venta, igual que la de juegos (con su tira de neón)
+	"tienda-electronica": [["juegos-electronica-d1"], "juegos-electronica-d1", "almacen"],
 	# y su sala de venta (porcelánico gris claro y pared de listones de madera clara sobre un panel gris), destrozada (25 nov, el dueño;
 	# de GPT, tools/suelos_supermercado_gpt.py; se mezclan a trozos, MEZCLA_TIENDA)
 	"tienda-supermercado": [["venta-supermercado-d1"], "venta-supermercado-d1", "venta"],
@@ -167,6 +169,8 @@ const MEZCLA_TIENDA := {
 		"paredes": [["almacen-ropa-d1", 1], ["almacen-ropa-d2", 1], ["almacen-ropa-d3", 1]]},
 	# y su sala de juegos (las baldosas rotas con la bebida y el cable, y la quemada con los cristales, los que menos, que se ven mucho)
 	"taquillas-electronica": {"suelos": [["juegos-electronica-d1", 3], ["juegos-electronica-d2", 1], ["juegos-electronica-d3", 1]],
+		"paredes": [["juegos-electronica-d1", 2], ["juegos-electronica-d2", 1], ["juegos-electronica-d3", 1]]},
+	"tienda-electronica": {"suelos": [["juegos-electronica-d1", 3], ["juegos-electronica-d2", 1], ["juegos-electronica-d3", 1]],
 		"paredes": [["juegos-electronica-d1", 2], ["juegos-electronica-d2", 1], ["juegos-electronica-d3", 1]]},
 	# y su sala de venta (las baldosas rotas con el rastro de sangre y la leche y la fruta, d2 y d3, y la madera arrancada y la quemada, los que
 	# menos, que se ven mucho)
@@ -842,7 +846,7 @@ const PANELES_TIENDA := {"camara-supermercado": {
 # (27 nov, el dueño) Las salas de tienda ("<uso>-<tienda>") cuya pared lleva una tira de neón que luce sola, aunque la sala esté a
 # oscuras: la de la sala de juegos de la electrónica (de momento con el uso "taquillas"). Cada dibujo de su pared, con su capa de luz al
 # lado (pared-<x>-neon.png, de tools/suelos_electronica_gpt.py; cara_pared.gd y neon_pared.gd)
-const NEON_PARED := ["taquillas-electronica"]
+const NEON_PARED := ["taquillas-electronica", "tienda-electronica"]   # (y, desde el 27 nov, su sala de venta)
 
 
 # Los paneles de PANELES_TIENDA que caen en esta cara (la de arriba de la sala de venta, o de otra sala con "<uso>-<tienda>"), con su sombra

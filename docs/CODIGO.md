@@ -1230,6 +1230,8 @@ en una línea.
   azul morada floja, sin sombras y solo en su sala (`Catalogo.MUEBLES` "luz", `mapa.gd poner_luz_de_color`).
   Prueba: `--rodear-muebles --tipo electronica --uso taquillas`.
   `--tiendas-fijas` saca también esta sala (`captura-fija-electronica-<lado>-taquillas.png`).
+  La sala de venta lleva (27 nov, el dueño) el mismo suelo y la misma pared, con su tira de neón (`ESTILO_TIENDA`/`MEZCLA_TIENDA`
+  "tienda-electronica", `NEON_PARED`, y "tienda" en "destrozada").
   Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208

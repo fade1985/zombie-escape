@@ -44,7 +44,8 @@ const TIPOS := {
 		# (26 nov, el dueño) rehecha como el supermercado: su aseo y su almacén, iguales que los de la ropa, y la sala de juegos en red (de
 		# momento con el uso "taquillas", en el sitio del taller), con su suelo y pared de GPT, destrozados. Mientras se rehace, sin nada por
 		# el suelo de la sala de venta y de la de juegos ni en sus paredes ni en las del almacén ("despejadas", mapa.despejada)
-		"destrozada": ["bano", "almacen", "taquillas"],
+		# (27 nov, el dueño) y la sala de venta, con el mismo suelo y pared que la de juegos
+		"destrozada": ["bano", "almacen", "taquillas", "tienda"],
 		"despejadas": {"suelo": ["tienda", "taquillas"], "pared": ["tienda", "almacen", "taquillas"]}},
 	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"],   # [traducir]
 		"color": Color("#ff4f5e")},
