@@ -33,21 +33,29 @@ MUEBLES = [("estanteria-camara-verdura-gpt", "camarabalda1", 112), ("estanteria-
            ("mueble-panaderia-gpt", "superpan", 192), ("nevera-congelados-gpt", "supernevera", 128),
            ("arcon-congelador-gpt", "superarcon", 160), ("nevera-carne-gpt", "supercarnenevera", 160),
            ("gondola-aceite-gpt", "supergondola1", 160), ("gondola-cajas-gpt", "supergondola2", 160),
-           ("gondola-higiene-gpt", "supergondola3", 160)]
+           ("gondola-higiene-gpt", "supergondola3", 160),
+           # el almacén: recortadas de una sola imagen (almacen-supermercado-gpt.webp), hecha sobre los muebles del de la tienda de ropa
+           ("estante-super1-gpt", "superestante1", 84), ("estante-super2-gpt", "superestante2", 84), ("estante-super3-gpt", "superestante3", 84),
+           ("estante-super4-gpt", "superestante4", 84), ("bultos-super1-gpt", "superbultos1", 64), ("bultos-super2-gpt", "superbultos2", 64),
+           ("bultos-super3-gpt", "superbultos3", 64), ("bultos-super4-gpt", "superbultos4", 64), ("bultos-super5-gpt", "superbultos5", 64),
+           ("carretilla-super-gpt", "supercarretilla", 46)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (entre las baldas, las barras, las tablas del palé
 # y las piezas de carne): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
-CON_HUECOS = {"camarabalda1", "camarabalda2", "camarabalda3", "camarabalda4", "camaraburra", "camarapale", "camaracolgador", "superarco"}
+CON_HUECOS = {"camarabalda1", "camarabalda2", "camarabalda3", "camarabalda4", "camaraburra", "camarapale", "camaracolgador", "superarco",
+              "superestante1", "superestante2", "superestante3", "superestante4", "supercarretilla"}
 HUECO_MIN = 1000
 # lo más altas que pueden ser (las estanterías, contra la pared de arriba: lo que pase de 136, como las del almacén, se sale por
 # encima de la pared)
-ALTO_MAX = {"camarabalda1": 136, "camarabalda2": 136, "camarabalda3": 136, "camarabalda4": 136, "supernevera": 136}
+ALTO_MAX = {"camarabalda1": 136, "camarabalda2": 136, "camarabalda3": 136, "camarabalda4": 136, "supernevera": 136, "superestante1": 132, "superestante2": 132, "superestante3": 132, "superestante4": 132}
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # los de cosas pequeñas, que con PIXEL 2 se emborronan, con el doble de detalle (un píxel por unidad): todos, como en la farmacia
 FINOS = set(CON_HUECOS) | {"camaraevaporador", "supercaja1", "supercaja2", "supercaja2dentro", "supercaja3", "supercaja1dentro",
                                          "supercaja3dentro",
                                          "supercarne", "supercarnedentro", "supercharcu", "supercharcudentro", "superpescado", "superpescadodentro",
-                                         "superpan", "supernevera", "superarcon", "supercarnenevera", "supergondola1", "supergondola2", "supergondola3"}
+                                         "superpan", "supernevera", "superarcon", "supercarnenevera", "supergondola1", "supergondola2", "supergondola3",
+                                         "superestante1", "superestante2", "superestante3", "superestante4", "superbultos1", "superbultos2", "superbultos3",
+                                         "superbultos4", "superbultos5", "supercarretilla"}
 
 
 def quitar_fondo(im):

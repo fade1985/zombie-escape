@@ -73,7 +73,9 @@ const MUEBLES_CON_PIEZA := ["wardrobe", "nightstand", "desk", "bookshelf",
 	"supercaja1", "supercaja2", "supercaja3", "supercaja1dentro", "supercaja2dentro", "supercaja3dentro",
 	# (26 nov) y el resto de su sala de venta
 	"supercarne", "supercarnedentro", "supercharcu", "supercharcudentro", "superpescado", "superpescadodentro", "superpan",
-	"supernevera", "superarcon", "supercarnenevera", "supergondola1", "supergondola2", "supergondola3"]
+	"supernevera", "superarcon", "supercarnenevera", "supergondola1", "supergondola2", "supergondola3",
+	# y las estanterías y cajas de su almacén
+	"superestante1", "superestante2", "superestante3", "superestante4", "superbultos1", "superbultos2", "superbultos3", "superbultos4", "superbultos5"]
 const PIEZA_MUEBLE := 0.35   # probabilidad de que un mueble tenga un material
 const PIEZAS_JEFE := 4       # las que soltaba cada jefe al caer en el centro comercial y en la torre (desde el 16 nov ya no: los muebles)
 

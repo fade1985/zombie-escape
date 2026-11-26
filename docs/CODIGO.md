@@ -1165,7 +1165,7 @@ en una línea.
   `Peligros.FRIO`); abajo, la sala de venta (46 × 13). El plano de antes queda como `supermercado-antiguo`, porque lo usa Atención al cliente
   en la torre (`Tienda.TIPOS` "presta" "plano"; sus muebles no cambian). El aseo y el almacén, como los de la farmacia: su suelo y pared
   destrozados (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "bano-supermercado" y "almacen-supermercado"), la sangre, sus puertas metálicas (también la de
-  la cámara a la sala de venta) y sin toalla ni balda; el almacén, de momento con los muebles del de la ropa. El suelo y la pared de la sala
+  la cámara a la sala de venta) y sin toalla ni balda; el almacén, colocado como el de la ropa, con sus propios muebles (26 nov: ver abajo). El suelo y la pared de la sala
   de venta (de una foto del dueño: porcelánico gris claro y, en la pared, listones verticales de madera clara sobre un panel de porcelánico
   gris y rodapié antracita), destrozados, tres de cada, de GPT: `py tools/suelos_supermercado_gpt.py` (copia de la de la farmacia;
   `assets/sources/suelos/venta-supermercado-suelo-destrozado<N>-gpt.webp` y `-pared-destrozada<N>-`, a `suelo-`/`pared-venta-supermercado-d<N>.png`),
@@ -1203,6 +1203,9 @@ en una línea.
   normal, contra la pared de arriba (pie en la fila 1,5) los mostradores, la panadería y dos neveras altas, y en medio (fila 5,5), alineados con
   las cajas, las tres góndolas a un lado y arcón, carne y arcón al otro. En la inversa, la fila de en medio en la 7 y al fondo (fila 10,1) los
   mostradores «dentro», la panadería y un arcón. Las puertas del almacén (casillas 15-17) y de la cámara (35-37), libres. Todos sueltan piezas.
+  El almacén (26 nov, el dueño): los muebles del de la ropa redibujados por GPT con comida, en una sola imagen (`almacen-supermercado-gpt.webp`)
+  recortada en diez (`estante-super1` a `4`, `bultos-super1` a `5`, `carretilla-super`): `superestante1..4` (84 × 132: latas y botes, pasta y
+  arroz, bebidas y saqueada), `superbultos1..5` (64 de ancho) y `supercarretilla` (46), en los mismos sitios. Las estanterías y las cajas sueltan piezas.
 - **La puerta de la ferretería** (17 nov, el dueño): de cristal, de una sola hoja (de GPT, `assets/sources/centro/puerta-ferreteria-gpt.webp`), con un
   cartel «OPEN» verde colgado por detrás del cristal (`cartel-open-gpt.webp`). `muebles_gpt.py puerta_ferreteria cartel_open` las reduce y
   `tools/puerta_ferreteria.py` las junta (cristal liso, cartel y, encima, los reflejos) en `puerta-ferreteria.png`, 30x43; la pinta `puerta.gd`

@@ -250,6 +250,18 @@ const MUEBLES := {
 	"supergondola1": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/gondola-aceite-gpt", "escala": 1.0},
 	"supergondola2": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/gondola-cajas-gpt", "escala": 1.0},
 	"supergondola3": {"len": 160, "dep": 40, "paredes": "", "archivo": "centro/gondola-higiene-gpt", "escala": 1.0},
+	# (26 nov, el dueño) el almacén del supermercado: los muebles del de la tienda de ropa, redibujados por GPT con comida y recortados de
+	# una sola imagen
+	"superestante1": {"len": 84, "dep": 36, "paredes": "", "archivo": "centro/estante-super1-gpt", "escala": 1.0},
+	"superestante2": {"len": 84, "dep": 36, "paredes": "", "archivo": "centro/estante-super2-gpt", "escala": 1.0},
+	"superestante3": {"len": 84, "dep": 36, "paredes": "", "archivo": "centro/estante-super3-gpt", "escala": 1.0},
+	"superestante4": {"len": 84, "dep": 36, "paredes": "", "archivo": "centro/estante-super4-gpt", "escala": 1.0},
+	"superbultos1": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/bultos-super1-gpt", "escala": 1.0},
+	"superbultos2": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/bultos-super2-gpt", "escala": 1.0},
+	"superbultos3": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/bultos-super3-gpt", "escala": 1.0},
+	"superbultos4": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/bultos-super4-gpt", "escala": 1.0},
+	"superbultos5": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/bultos-super5-gpt", "escala": 1.0},
+	"supercarretilla": {"len": 46, "dep": 28, "paredes": "", "archivo": "centro/carretilla-super-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -618,15 +630,15 @@ const SALAS := {
 		# (con el aparato del frío colgado a la derecha de la puerta, mapa.PANELES_TIENDA: a ese lado, los huecos, de 16 unidades)
 		"arriba": [["camarabalda1", 2.56], ["camarabalda2", 6.44], ["camarabalda3", 14.98], ["camarabalda4", 18.16],
 			["camaraburra", 2.625, "libre", 7.6875], ["camarapale", 6.25, "libre", 7.6875], ["camaracolgador", 15.75, "libre", 7.625]]}},
-	# su almacén, de momento el mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en la ferretería y la
-	# farmacia), y su aseo, el mismo que el de la farmacia (bano-farmacia)
+	# su almacén, colocado como el de la tienda de ropa (almacen-ropa) pero con los suyos (superestante, superbultos, supercarretilla), y
+	# su aseo, el mismo que el de la farmacia (bano-farmacia)
 	"almacen-supermercado": {"colocados": {
-		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
-			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
-			["carretillaropa", 15.8, "libre", 4.0]],
-		"arriba": [["ropashelf3", 1.88], ["ropashelf", 5.12], ["ropashelf4", 11.21], ["ropashelf2", 14.79],
-			["cajasropa3", 2.17, "abajo"], ["cajasropa", 5.33, "abajo"], ["cajasropa5", 8.5, "abajo"], ["cajasropa2", 11.67, "abajo"], ["cajasropa4", 14.83, "abajo"],
-			["carretillaropa", 15.8, "libre", 6.0]]}},
+		"abajo": [["superestante1", 1.9], ["superestante2", 5.2], ["superestante3", 8.5], ["superestante4", 11.8], ["superestante1", 15.1],
+			["superbultos1", 2.25, "libre", 7.4], ["superbultos4", 5.25, "libre", 7.4], ["superbultos2", 11.1, "libre", 7.4], ["superbultos5", 14.6, "libre", 7.4],
+			["supercarretilla", 15.8, "libre", 4.0]],
+		"arriba": [["superestante3", 1.88], ["superestante1", 5.12], ["superestante4", 11.21], ["superestante2", 14.79],
+			["superbultos3", 2.17, "abajo"], ["superbultos1", 5.33, "abajo"], ["superbultos5", 8.5, "abajo"], ["superbultos2", 11.67, "abajo"], ["superbultos4", 14.83, "abajo"],
+			["supercarretilla", 15.8, "libre", 6.0]]}},
 	"bano-supermercado": {"colocados": {
 		"abajo": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 7.75, "derecha"]],
 		"arriba": [["taquillaropa", 6.0], ["staffsinkropa", 3.3, "izquierda"], ["stafftoiletropa", 6.7, "izquierda"], ["lockerbenchropa", 9.2, "derecha"]],
