@@ -1160,7 +1160,7 @@ en una línea.
   se pueden registrar como las cajas de la ropa (`MUEBLES_CON_PIEZA`); y la carretilla, la de la ropa con cajas de suero (`farmacarretilla`, `carretilla-farmacia-gpt.webp`). `--rodear-muebles --uso almacen`
   da FALLOS en la fila de abajo de los tres almacenes (ropa, ferretería y farmacia, el mismo sitio): los montones están a menos de un
   Johnny de la pared y entre ellos, pero no dejan rincones encerrados. Prueba: `--tiendas-fijas --tipo farmacia` y `--rodear-muebles --tipo farmacia`.
-- **El supermercado, rehecho por dentro** (25 nov, el dueño; se está haciendo): con la misma distribución y tamaño que la farmacia (50 × 30):
+- **El supermercado, rehecho por dentro** (25 y 26 nov, el dueño; terminado): con la misma distribución y tamaño que la farmacia (50 × 30):
   arriba, el aseo (7 × 12), el almacén (17 × 12) y la cámara frigorífica (20 × 12, en el sitio del taller, con su puerta en medio y su frío,
   `Peligros.FRIO`); abajo, la sala de venta (46 × 13). El plano de antes queda como `supermercado-antiguo`, porque lo usa Atención al cliente
   en la torre (`Tienda.TIPOS` "presta" "plano"; sus muebles no cambian). El aseo y el almacén, como los de la farmacia: su suelo y pared
@@ -1194,8 +1194,10 @@ en una línea.
   24 × 88). Tres cajas a cada lado de la entrada con 48 de pasillo entre ellas y con las paredes (3 × 160 + 4 × 48 = las 21 casillas de cada
   lado) y los arcos a los lados del paso; con el pie del mueble (no el de los trozos tirados de su dibujo) en la misma línea: en la normal,
   en la fila 9, junto a la entrada; en la inversa, en la fila 3,75, bajo la pared de la entrada y con paso por detrás. Las cajas sueltan
-  piezas (`MUEBLES_CON_PIEZA`). Mientras se rehace, `"despejadas"` (suelo de la sala de venta y la cámara; paredes
-  de esas y del almacén). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
+  piezas (`MUEBLES_CON_PIEZA`). Mientras se rehízo (hasta el 26 nov, cuando el
+  dueño la dio por terminada), llevó `"despejadas"`. En la inversa, la salida vista desde dentro es la puerta automática de la fachada
+  (`puerta.gd es_super`, como en la farmacia); en la normal, la misma vista desde arriba en el muro de abajo (`ABAJO_SUPER`,
+  `py tools/puerta_abajo_super.py`). Prueba: `--tiendas-fijas --tipo supermercado` y `--rodear-muebles --tipo supermercado`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208
   de ancho), la panadería (`superpan`, 192), la nevera alta de congelados (`supernevera`, 128 × 126), el arcón (`superarcon`), la nevera baja de

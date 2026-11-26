@@ -51,6 +51,8 @@ const ABAJO_DIBUJO := Vector2(36, 32)
 # la de la tienda de ropa (19 nov, el dueño; de GPT, tools/puerta_abajo_ropa.py): el mismo hueco, con la puerta doble de cristal negro de su
 # fachada vista desde arriba, al doble de detalle (72 × 64 píxeles para 72 × 64 unidades)
 const ABAJO_ROPA := preload("res://assets/sprites/puerta-abajo-ropa.png")
+# la del supermercado (26 nov, el dueño; tools/puerta_abajo_super.py): su puerta automática de la fachada vista desde arriba
+const ABAJO_SUPER := preload("res://assets/sprites/puerta-abajo-super.png")
 # la de chapa gris, con la hoja de la puerta metálica del despacho al taller (tools/puerta_abajo_metal.py): la que se usa de verdad
 const ABAJO_METAL := preload("res://assets/sprites/puerta-abajo-metal.png")
 # la misma con la hoja en gris marengo metalizado (tools/puerta_abajo_metal.py): la puerta de la calle del portal de los Apartamentos
@@ -225,10 +227,10 @@ func doble() -> bool:
 
 
 # Si es una puerta automática (la del supermercado y, desde el 17 nov, la de la farmacia: Planta.PUERTA_AUTOMATICA): la de
-# su fachada, en la pared de arriba de la galería (y, desde el 24 nov, la salida de la farmacia inversa vista desde dentro, en la
-# pared de arriba de su sala de venta: la misma de la fachada; el dueño)
+# su fachada, en la pared de arriba de la galería (y su salida en la tienda inversa vista desde dentro, en la pared de arriba de su
+# sala de venta: la misma de la fachada; el dueño, la farmacia el 24 nov y el supermercado el 26)
 func es_super() -> bool:
-	return centro and salida.dir == "arriba" and (salida.get("neon", "") in Planta.PUERTA_AUTOMATICA or tienda == "farmacia")
+	return centro and salida.dir == "arriba" and (salida.get("neon", "") in Planta.PUERTA_AUTOMATICA or tienda in Planta.PUERTA_AUTOMATICA)
 
 
 # Las hojas de la puerta del súper se abren poco a poco mientras Johnny está delante y se cierran al irse
@@ -306,6 +308,8 @@ func _draw() -> void:
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
 			if metal:
 				draw_texture_rect(ABAJO_METAL, Rect2(-36, 0, 72, 64), false)
+			elif centro and tienda == "supermercado":
+				draw_texture_rect(ABAJO_SUPER, Rect2(-36, 0, 72, 64), false)
 			elif centro and tienda == "ropa":
 				draw_texture_rect(ABAJO_ROPA, Rect2(-36, 0, 72, 64), false)
 			else:

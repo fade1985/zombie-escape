@@ -30,11 +30,10 @@ const CON_ARTICULO := {"supermercado": "Un supermercado", "ferreteria": "Una fer
 const TIPOS := {
 	"supermercado": {"nombre": "Supermercado", "neon": "SUPER", "salas": ["almacen", "camara"],   # [traducir]
 		"color": Color("#5dff8a"),
-		# (25 nov, el dueño) rehecho como la farmacia: su aseo y su almacén, iguales que los de la ropa, y su sala de venta y su cámara (en el
-		# sitio del taller), con su suelo y pared de GPT, destrozados. Mientras se rehace, sin nada por el suelo de la sala de venta y de
-		# la cámara ni en sus paredes ni en las del almacén ("despejadas", mapa.despejada)
-		"destrozada": ["bano", "almacen", "tienda", "camara"],
-		"despejadas": {"suelo": ["tienda", "camara"], "pared": ["tienda", "almacen", "camara"]}},
+		# (25 nov, el dueño) rehecho como la farmacia: su aseo y su almacén, colocados como los de la ropa, y su sala de venta y su cámara (en el
+		# sitio del taller), con su suelo y pared de GPT, destrozados. (26 nov, el dueño: terminado) ya no va "despejadas": restos, sangre y
+		# suciedad por el suelo y cosas en las paredes
+		"destrozada": ["bano", "almacen", "tienda", "camara"]},
 	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"],   # [traducir]
 		"color": Color("#ff9a3c"),
 		# (20 nov, el dueño) su aseo y su almacén, rehechos como los de la tienda de ropa, su taller y su sala de venta: destrozados (ver "ropa",
