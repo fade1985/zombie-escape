@@ -1216,6 +1216,14 @@ en una línea.
   transparente en lo demás) y el juego la pinta encima de la pared sin que le afecte la oscuridad (`neon_pared.gd`, hija de la cara del muro,
   `cara_pared.gd` "neon"; las salas que la llevan, `NEON_PARED` de `mapa.gd`), tramo a tramo con el dibujo de pared que le toque (en la pared
   rota falta un trozo); zumba un poco y de vez en cuando falla un momento, como los neones.
+  Sus muebles (27 nov, el dueño; de GPT desde fotos suyas, `py tools/muebles_electronica_gpt.py`, copia de la del súper, recortados de dos
+  imágenes con tres piezas cada una, `puestos-juegos-gpt.webp` y `sillas-juegos-gpt.webp`): el puesto de dos jugadores (`juegospuesto1` a `3`:
+  la mesa negra con sus dos monitores, teclados, ratones y auriculares, las dos torres de luces en el estante de arriba y sus dos sillas gamer
+  delante; abandonado, destrozado y saqueado; 128 × 152, 64 de hondo, se registran, `MUEBLES_CON_PIEZA`) y la silla gamer suelta (`juegossilla1`
+  a `3`: de espaldas, rajada y volcada; hechas, sin poner de momento). Colocación (`taquillas-electronica` en `catalogo.gd`, igual en las dos
+  versiones): cuatro puestos contra la pared de arriba, de dos en dos a cada lado de un paso de 4 casillas (el de la puerta y, en la normal,
+  el sitio del cuadro eléctrico), y tres sueltos más abajo con el pie en la fila 7, a 2,5 casillas entre ellos y a 1,5 de las paredes.
+  Prueba: `--rodear-muebles --tipo electronica --uso taquillas`.
   `--tiendas-fijas` saca también esta sala (`captura-fija-electronica-<lado>-taquillas.png`).
   Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de

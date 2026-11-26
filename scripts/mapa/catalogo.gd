@@ -262,6 +262,15 @@ const MUEBLES := {
 	"superbultos4": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/bultos-super4-gpt", "escala": 1.0},
 	"superbultos5": {"len": 64, "dep": 36, "paredes": "", "archivo": "centro/bultos-super5-gpt", "escala": 1.0},
 	"supercarretilla": {"len": 46, "dep": 28, "paredes": "", "archivo": "centro/carretilla-super-gpt", "escala": 1.0},
+	# (27 nov, el dueño) la sala de juegos en red de la electrónica, de GPT (tools/muebles_electronica_gpt.py): el puesto de dos jugadores
+	# (la mesa con sus monitores y sus torres de luces, y sus dos sillas gamer delante: lo hondo, la mesa y las sillas) con tres destrozos
+	# (abandonado, destrozado y saqueado), y la silla gamer suelta (de espaldas, rajada y volcada)
+	"juegospuesto1": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos1-gpt", "escala": 1.0},
+	"juegospuesto2": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos2-gpt", "escala": 1.0},
+	"juegospuesto3": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos3-gpt", "escala": 1.0},
+	"juegossilla1": {"len": 36, "dep": 24, "paredes": "", "archivo": "centro/silla-juegos1-gpt", "escala": 1.0},
+	"juegossilla2": {"len": 36, "dep": 24, "paredes": "", "archivo": "centro/silla-juegos2-gpt", "escala": 1.0},
+	"juegossilla3": {"len": 48, "dep": 30, "paredes": "", "archivo": "centro/silla-juegos3-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -677,7 +686,16 @@ const SALAS := {
 	# se irán poniendo los de GPT (antes, estanterías de teles, palés, cajas y taquillas de metal: está en git). Su almacén, de momento el
 	# mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en el súper), y su aseo, el mismo que el del súper
 	"tienda-electronica": {"colocados": {"abajo": [], "arriba": []}},
-	"taquillas-electronica": {"colocados": {"abajo": [], "arriba": []}},
+	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
+	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
+	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de
+	# pasillo y el pie en la fila 7 (que su dibujo no tape las sillas de la primera), con el mismo espacio entre ellos (2,5 casillas) y
+	# casilla y media con las paredes, para poder rodearlos; debajo, libre hasta la pared de abajo
+	"taquillas-electronica": {"colocados": {
+		"abajo": [["juegospuesto1", 2.0], ["juegospuesto2", 6.0], ["juegospuesto3", 14.0], ["juegospuesto1", 18.0],
+			["juegospuesto3", 3.5, "libre", 6.0], ["juegospuesto1", 10.0, "libre", 6.0], ["juegospuesto2", 16.5, "libre", 6.0]],
+		"arriba": [["juegospuesto2", 2.0], ["juegospuesto1", 6.0], ["juegospuesto1", 14.0], ["juegospuesto3", 18.0],
+			["juegospuesto1", 3.5, "libre", 6.0], ["juegospuesto3", 10.0, "libre", 6.0], ["juegospuesto2", 16.5, "libre", 6.0]]}},
 	"almacen-electronica": {"colocados": {
 		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],
 			["cajasropa", 2.0, "libre", 7.4], ["cajasropa4", 5.0, "libre", 7.4], ["cajasropa2", 11.33, "libre", 7.4], ["cajasropa5", 14.67, "libre", 7.4],
