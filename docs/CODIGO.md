@@ -1232,6 +1232,17 @@ en una línea.
   `--tiendas-fijas` saca también esta sala (`captura-fija-electronica-<lado>-taquillas.png`).
   La sala de venta lleva (27 nov, el dueño) el mismo suelo y la misma pared, con su tira de neón (`ESTILO_TIENDA`/`MEZCLA_TIENDA`
   "tienda-electronica", `NEON_PARED`, y "tienda" en "destrozada").
+  Sus muebles (27 nov, el dueño; una tienda de electrónica retro de segunda mano, de GPT desde fotos suyas, con la misma herramienta; recortados
+  de `estanterias-retro-gpt.webp`, `piezas-retro-gpt.webp` e `islas-retro-gpt.webp`, tres piezas cada una, y la caja por los dos lados,
+  `caja-retro-gpt.webp` y `-dentro-`): las estanterías de pared de radios antiguas, de equipos de música y de ordenadores beige (`retroestante1`
+  a `3`, con el tope de alto, 136, unos 106 de ancho), el casetero (`retrocasetes`), el expositor de vinilos (`retrovinilos`) y el montón de torres
+  viejas (`retrotorres`), de pared; el cajón de discos (`retrodiscos`), el carro de rejilla (`retrocarro`) y la mesa de ordenadores (`retromesa`),
+  sueltos; y el mostrador de la caja (`retrocaja`, desde el cliente, en la normal; `retrocajadentro`, desde dentro, en la inversa). Colocación
+  (`tienda-electronica` en `catalogo.gd`): el rincón del charco y su cable, libre; en la normal, el casetero a la izquierda de la puerta del almacén,
+  las cuatro estanterías entre las puertas, los vinilos y las torres a la derecha, los sueltos con el pie en la fila 6 y la caja a la derecha
+  de la entrada con el pie en la 9,5; en la inversa, el casetero, los vinilos y las torres a la izquierda de la entrada, la caja suelta a su
+  derecha con el pie en la 3,75 y paso por detrás, las estanterías a continuación y los sueltos con el pie en la 8. Se registran las
+  estanterías, el casetero, las torres, la mesa y la caja (`MUEBLES_CON_PIEZA`). Prueba: `--rodear-muebles --tipo electronica`.
   Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208

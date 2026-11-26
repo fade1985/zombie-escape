@@ -14,12 +14,24 @@ from PIL import Image
 # proporción. Los tres puestos, del mismo largo (4 casillas: dos jugadores), para que sean el mismo mueble
 MUEBLES = [("puesto-juegos1-gpt", "juegospuesto1", 128), ("puesto-juegos2-gpt", "juegospuesto2", 128),
            ("puesto-juegos3-gpt", "juegospuesto3", 128),
-           ("silla-juegos1-gpt", "juegossilla1", 36), ("silla-juegos2-gpt", "juegossilla2", 36), ("silla-juegos3-gpt", "juegossilla3", 48)]
+           ("silla-juegos1-gpt", "juegossilla1", 36), ("silla-juegos2-gpt", "juegossilla2", 36), ("silla-juegos3-gpt", "juegossilla3", 48),
+           # (27 nov) la sala de venta, una tienda de electrónica retro de segunda mano, recortadas de tres imágenes con tres piezas cada
+           # una (estanterias-retro-gpt, piezas-retro-gpt e islas-retro-gpt) y la caja por los dos lados: las estanterías de pared (radios
+           # antiguas, equipos de música y ordenadores beige), el casetero, el expositor de vinilos y el montón de torres viejas (de pared), el
+           # cajón de discos, el carro de rejilla y la mesa de ordenadores (sueltos), y el mostrador de la caja (desde el cliente y desde dentro)
+           ("estante-retro1-gpt", "retroestante1", 192), ("estante-retro2-gpt", "retroestante2", 192), ("estante-retro3-gpt", "retroestante3", 192),
+           ("casetero-retro-gpt", "retrocasetes", 128), ("vinilos-retro-gpt", "retrovinilos", 128), ("torres-retro-gpt", "retrotorres", 96),
+           ("cajon-discos-gpt", "retrodiscos", 160), ("carro-discos-gpt", "retrocarro", 88), ("mesa-pcs-gpt", "retromesa", 160),
+           ("caja-retro-gpt", "retrocaja", 192), ("caja-retro-dentro-gpt", "retrocajadentro", 192)]
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (bajo la mesa, entre las patas y las sillas, y entre las
 # ruedas de las sillas): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
-CON_HUECOS = {"juegospuesto1", "juegospuesto2", "juegospuesto3", "juegossilla1", "juegossilla2", "juegossilla3"}
+CON_HUECOS = {"juegospuesto1", "juegospuesto2", "juegospuesto3", "juegossilla1", "juegossilla2", "juegossilla3",
+              "retroestante1", "retroestante2", "retroestante3", "retrocasetes", "retrovinilos", "retrodiscos", "retrocarro", "retromesa",
+              "retrocajadentro"}
 HUECO_MIN = 1000
-ALTO_MAX = {}
+# lo más altos que pueden ser (los de pared, contra la de arriba: lo que pase de 136, como las estanterías del súper, se sale por encima
+# de la pared; más altos que anchos, se estrechan)
+ALTO_MAX = {"retroestante1": 136, "retroestante2": 136, "retroestante3": 136, "retrocasetes": 136, "retrovinilos": 136}
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # todos con el doble de detalle (un píxel por unidad), como en el súper

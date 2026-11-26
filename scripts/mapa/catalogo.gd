@@ -272,6 +272,21 @@ const MUEBLES := {
 	"juegossilla1": {"len": 36, "dep": 24, "paredes": "", "archivo": "centro/silla-juegos1-gpt", "escala": 1.0},
 	"juegossilla2": {"len": 36, "dep": 24, "paredes": "", "archivo": "centro/silla-juegos2-gpt", "escala": 1.0},
 	"juegossilla3": {"len": 48, "dep": 30, "paredes": "", "archivo": "centro/silla-juegos3-gpt", "escala": 1.0},
+	# (27 nov, el dueño) y su sala de venta, una tienda de electrónica retro de segunda mano, de GPT (tools/muebles_electronica_gpt.py): las
+	# estanterías de pared (radios antiguas, equipos de música y ordenadores beige; con el tope de alto, más estrechas), el casetero, el
+	# expositor de vinilos y el montón de torres viejas, de pared; el cajón de discos, el carro de rejilla y la mesa de ordenadores, sueltos; y
+	# el mostrador de la caja, desde el cliente (en la normal) y desde dentro (en la inversa)
+	"retroestante1": {"len": 107, "dep": 36, "paredes": "", "archivo": "centro/estante-retro1-gpt", "escala": 1.0},
+	"retroestante2": {"len": 104, "dep": 36, "paredes": "", "archivo": "centro/estante-retro2-gpt", "escala": 1.0},
+	"retroestante3": {"len": 106, "dep": 36, "paredes": "", "archivo": "centro/estante-retro3-gpt", "escala": 1.0},
+	"retrocasetes": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/casetero-retro-gpt", "escala": 1.0},
+	"retrovinilos": {"len": 87, "dep": 36, "paredes": "", "archivo": "centro/vinilos-retro-gpt", "escala": 1.0},
+	"retrotorres": {"len": 96, "dep": 40, "paredes": "", "archivo": "centro/torres-retro-gpt", "escala": 1.0},
+	"retrodiscos": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/cajon-discos-gpt", "escala": 1.0},
+	"retrocarro": {"len": 88, "dep": 40, "paredes": "", "archivo": "centro/carro-discos-gpt", "escala": 1.0},
+	"retromesa": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/mesa-pcs-gpt", "escala": 1.0},
+	"retrocaja": {"len": 192, "dep": 40, "paredes": "", "archivo": "centro/caja-retro-gpt", "escala": 1.0},
+	"retrocajadentro": {"len": 192, "dep": 40, "paredes": "", "archivo": "centro/caja-retro-dentro-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -686,7 +701,24 @@ const SALAS := {
 	# la electrónica (26 nov, el dueño: rehecha como el supermercado, Tienda.PLANOS). La sala de venta y las taquillas, sin muebles de momento:
 	# se irán poniendo los de GPT (antes, estanterías de teles, palés, cajas y taquillas de metal: está en git). Su almacén, de momento el
 	# mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en el súper), y su aseo, el mismo que el del súper
-	"tienda-electronica": {"colocados": {"abajo": [], "arriba": []}},
+	# (27 nov, el dueño) la sala de venta (46 × 13; las puertas del almacén y de la sala de juegos, en las casillas 15-17 y 35-37 de la pared de
+	# arriba en la normal, y de la de abajo en la inversa; la entrada, en la 22-24; el charco con corriente, de la 3 a la 12 y de la fila 4 a la
+	# 8, con su cable bajando de la pared de arriba: ese rincón, libre). En la normal: contra la pared de arriba, el casetero a la izquierda de
+	# la puerta del almacén, cuatro estanterías entre las puertas (con el mismo hueco entre ellas y con las puertas) y, a la derecha, el
+	# expositor de vinilos y el montón de torres; sueltos, con el pie en la fila 6, el cajón de discos, el carro y la mesa de ordenadores (el
+	# cajón, 0,4 casillas más abajo: lo de debajo de su dibujo son discos tirados); y la caja, desde el cliente, a la derecha de la entrada con
+	# el pie en la fila 9,5. En la inversa: a la izquierda de la entrada, en la pared de arriba, el casetero, los vinilos y las torres; a la
+	# derecha, la caja desde dentro, suelta con el pie en la fila 3,75 y paso por detrás, y las cuatro estanterías; y los sueltos, con el pie
+	# en la fila 8
+	"tienda-electronica": {"colocados": {
+		"abajo": [["retrocasetes", 13.0], ["retroestante1", 19.62], ["retroestante2", 23.87], ["retroestante3", 28.1], ["retroestante1", 32.38],
+			["retrovinilos", 39.45], ["retrotorres", 43.41],
+			["retrodiscos", 17.0, "libre", 5.65], ["retrocarro", 36.0, "libre", 5.375], ["retromesa", 42.0, "libre", 5.25],
+			["retrocaja", 30.5, "libre", 8.875]],
+		"arriba": [["retrocasetes", 13.0], ["retrovinilos", 16.5], ["retrotorres", 20.0],
+			["retrocajadentro", 28.5, "libre", 3.125],
+			["retroestante1", 33.82], ["retroestante2", 37.27], ["retroestante3", 40.7], ["retroestante1", 44.18],
+			["retrodiscos", 17.0, "libre", 7.65], ["retrocarro", 36.0, "libre", 7.375], ["retromesa", 42.0, "libre", 7.25]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de
