@@ -98,6 +98,23 @@ def led(p, fila):
             p.putpixel((x, y), (int(r + (230 - r) * f), int(g + (30 - g) * f), int(b + (30 - b) * f)))
 
 
+# (27 nov, el dueño: que luzca como un neón rojo) La tira sola, con su resplandor, en otro dibujo (pared-...-d<N>-neon.png, transparente
+# en lo demás): el juego lo pinta encima de la pared sin que le afecte la oscuridad (neon_pared.gd), como los letreros de neón. El tubo,
+# rojo vivo casi blanco en medio; alrededor, el resplandor, cada vez más flojo, más largo hacia abajo (hacia la pared blanca)
+RESPLANDOR = ((-3, 40), (-2, 80), (-1, 190), (1, 190), (2, 110), (3, 60), (4, 28))
+
+
+def neon(p, fila):
+    n = Image.new('RGBA', (48, 48), (0, 0, 0, 0))
+    for x in range(48):
+        if p.getpixel((x, fila)) != (255, 52, 44):   # (solo donde led() ha encendido la tira)
+            continue
+        n.putpixel((x, fila), (255, 120, 104, 255))
+        for d, a in RESPLANDOR:
+            n.putpixel((x, fila + d), (255, 36, 30, a))
+    return n
+
+
 for sala in ('juegos',):
     suelos = [suelo(f'assets/sources/suelos/{sala}-electronica-suelo-destrozado{i}-gpt.webp') for i in (1, 2, 3)]
     paredes = [Image.open(f'assets/sources/suelos/{sala}-electronica-pared-destrozada{i}-gpt.webp').convert('RGB').resize((48, 48), Image.LANCZOS)
@@ -107,6 +124,7 @@ for sala in ('juegos',):
     for i, s, p in zip((1, 2, 3), _igualar(suelos, 10, 28, 0.45, False, True), _igualar(paredes, 5, 12, 0.45, True, True)):
         guardar(s, f'suelo-{sala}-electronica-d{i}')
         led(p, fila)
+        neon(p, fila).save(f'assets/sprites/pared-{sala}-electronica-d{i}-neon.png')
         for x in range(48):   # la última fila, más oscura, como las de las otras paredes
             p.putpixel((x, 47), tuple(int(v * 0.68) for v in p.getpixel((x, 47))))
         guardar(p, f'pared-{sala}-electronica-d{i}')

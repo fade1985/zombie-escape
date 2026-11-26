@@ -1212,6 +1212,10 @@ en una línea.
   `assets/sources/suelos/juegos-electronica-suelo-destrozado<N>-gpt.webp` y `-pared-destrozada<N>-`, a `suelo-`/`pared-juegos-electronica-d<N>.png`),
   mezclados a trozos (`ESTILO_TIENDA`/`MEZCLA_TIENDA` "taquillas-electronica"; las baldosas rotas y la quemada, las que menos). La tira de luz,
   que al reducir se mezclaba con el negro y el blanco, se repinta roja viva después (`led`), en la misma fila en las tres paredes.
+  Y luce como un neón rojo (27 nov, el dueño): la herramienta saca también la tira sola con su resplandor (`pared-juegos-electronica-d<N>-neon.png`,
+  transparente en lo demás) y el juego la pinta encima de la pared sin que le afecte la oscuridad (`neon_pared.gd`, hija de la cara del muro,
+  `cara_pared.gd` "neon"; las salas que la llevan, `NEON_PARED` de `mapa.gd`), tramo a tramo con el dibujo de pared que le toque (en la pared
+  rota falta un trozo); zumba un poco y de vez en cuando falla un momento, como los neones.
   `--tiendas-fijas` saca también esta sala (`captura-fija-electronica-<lado>-taquillas.png`).
   Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de

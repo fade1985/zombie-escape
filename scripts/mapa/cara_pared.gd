@@ -28,12 +28,18 @@ var filo := Color.TRANSPARENT      # el filo de luz y el contorno oscuro (mapa.g
 var contorno := Color.BLACK
 var borde_izq := false     # y su contorno oscuro a la izquierda y a la derecha, donde da al suelo
 var borde_der := false
+var neon := false          # (27 nov) si su papel lleva una tira de neón que luce sola (neon_pared.gd; mapa.gd: NEON_PARED)
 
 
 func _ready() -> void:
 	# Repetir la textura a lo largo; scale 2 porque se dibuja en píxeles del dibujo
 	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	set_process(puede_tapar)
+	if neon and not tapa:
+		var luz := Node2D.new()
+		luz.set_script(preload("res://scripts/mapa/neon_pared.gd"))
+		luz.cara = self
+		add_child(luz)
 
 
 func _draw() -> void:

@@ -839,6 +839,12 @@ const PANELES_TIENDA := {"camara-supermercado": {
 }}
 
 
+# (27 nov, el dueño) Las salas de tienda ("<uso>-<tienda>") cuya pared lleva una tira de neón que luce sola, aunque la sala esté a
+# oscuras: la de la sala de juegos de la electrónica (de momento con el uso "taquillas"). Cada dibujo de su pared, con su capa de luz al
+# lado (pared-<x>-neon.png, de tools/suelos_electronica_gpt.py; cara_pared.gd y neon_pared.gd)
+const NEON_PARED := ["taquillas-electronica"]
+
+
 # Los paneles de PANELES_TIENDA que caen en esta cara (la de arriba de la sala de venta, o de otra sala con "<uso>-<tienda>"), con su sombra
 func paneles_de_pared(cara: Node2D, sala: int) -> Array:
 	var lista := []
@@ -860,6 +866,13 @@ func paneles_de_pared(cara: Node2D, sala: int) -> Array:
 		lista.append({"dibujo": t, "x": en.x + 1, "y": en.y + 1, "color": Color(0, 0, 0, 0.3), "mitad": true})
 		lista.append({"dibujo": t, "x": en.x, "y": en.y, "mitad": true})
 	return lista
+
+
+# "<uso>-<tienda>" de una sala de la tienda (o "" fuera de las tiendas)
+func tienda_de_sala(sala: int) -> String:
+	if not sitio.has("tienda") or not sitio.has("apt") or sala < 0 or sala >= sitio.apt.salas.size():
+		return ""
+	return "%s-%s" % [sitio.apt.salas[sala].uso, sitio.tienda]
 
 
 # Una cara en cada tramo de muro que tiene suelo justo debajo, con el papel de la habitación de debajo
@@ -884,6 +897,8 @@ func poner_caras() -> void:
 			cara.paredes = estilos[sala].get("paredes", [])
 			cara.techo = estilos[sala].techo
 			cara.moldura = not cajas   # con cajas, encima va su tabique
+			if tienda_de_sala(sala) in NEON_PARED:
+				cara.neon = true
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
 			if centro and not limpio:
 				if despejada(sala, "pared"):
