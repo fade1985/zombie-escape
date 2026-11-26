@@ -1275,6 +1275,10 @@ msgstr "BACK TO WORK!"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "NOBODY CLOCKS OUT!"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "POP!"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "HUNGRY!"
@@ -3006,12 +3010,28 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "FREE HUGS!"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "PRESENTS!"
+
+#: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "IT BURNS!"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "TOOOOT!"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "BOING!"
 
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "PLAYTIME!"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "It's dropping stuffing! Bet that burns..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
@@ -3032,6 +3052,14 @@ msgstr "BET YOU CAN'T FIND ME!"
 #: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "TO THE RUNWAY!"
+
+#: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "GET OVER HERE!"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "NOT IN THE DARK!"
 
 #: scripts/modista.gd
 msgid "¡TE TENGO!"
@@ -3058,12 +3086,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "LET THE FASHION SHOW BEGIN!"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "If the spotlight catches her, she freezes stiff..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "If the spotlight catches her full on, she goes blind..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "FROZEN STIFF!"
+msgid "¡CEGADA!"
+msgstr "BLINDED!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -4630,6 +4658,14 @@ msgstr "Here, this was in lost and found!"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "\"Restricted access: floor 40\"… what's up there?"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "CHOO-CHOOO!"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "RUN OVER!"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

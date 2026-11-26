@@ -124,8 +124,8 @@ func probar_presentacion() -> void:
 # tres (al caer ella, se caen)
 func probar_modista(jefa: Node2D) -> void:
 	var antes: Vector2 = jefa.position
-	print("Modista: %d maniquíes en %s | al entrar, escondida: %s" % [jefa.maniquies().size(), planta.sitios[aqui].nombre,
-		jefa.estado == "escondida"])
+	print("Modista: %d maniquíes en %s | al entrar, a la vista (se esconde al acabar la presentación): %s" % [jefa.maniquies().size(), planta.sitios[aqui].nombre,
+		jefa.estado != "escondida"])
 	jefa.cambiarse(johnny)
 	print("Modista: se cambia de sitio con un maniquí (a %d unidades) | ahora: %s" % [antes.distance_to(jefa.position), jefa.estado])
 	jefa.despertar_maniquies(johnny)
@@ -751,6 +751,64 @@ func probar_direcciones() -> void:
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-direcciones-%s.png" % d)
 	get_tree().quit()
+
+
+# Con "--captura --jefe X --choques": en la sala del jefe X, lo que pararía una bala (la capa de choque 1, la que mira
+# bala.gd). Se lanzan rayos de lado a lado de la sala en una rejilla y se cuenta con qué dan, por tipo de nodo; y se
+# dice si alguno da justo encima de una mancha de sangre del suelo
+func probar_choques() -> void:
+	var tipo: String = planta.jefe if planta else ""
+	var args := OS.get_cmdline_user_args()
+	if "--jefe" in args:
+		tipo = args[args.find("--jefe") + 1]
+	if not await ir_a_la_sala_del_jefe(tipo):
+		return
+	jefa.process_mode = Node.PROCESS_MODE_DISABLED
+	jefa.global_position = Vector2(-9999, -9999)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.process_mode = Node.PROCESS_MODE_DISABLED
+	await get_tree().physics_frame
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var ancho: float = planta.sitios[aqui].ancho
+	var alto: float = planta.sitios[aqui].alto
+	var cuenta := {}
+	var en_sangre := 0
+	var manchas: Array = mapa.restos.filter(func(r): return r.dibujo.resource_path.contains("sangre"))
+	for i in 60:
+		for horizontal in [true, false]:
+			var a: Vector2
+			var b: Vector2
+			if horizontal:
+				a = mapa.to_global(Vector2(mapa.MURO + 4.0, alto * (i + 0.5) / 60.0))
+				b = mapa.to_global(Vector2(ancho - mapa.MURO - 4.0, alto * (i + 0.5) / 60.0))
+			else:
+				a = mapa.to_global(Vector2(ancho * (i + 0.5) / 60.0, mapa.MURO + 4.0))
+				b = mapa.to_global(Vector2(ancho * (i + 0.5) / 60.0, alto - mapa.MURO - 4.0))
+			var rayo := PhysicsRayQueryParameters2D.create(a, b, 1)
+			var dio: Dictionary = espacio.intersect_ray(rayo)
+			if dio.is_empty():
+				continue
+			var n: Node = dio.collider
+			var spr: Node = n.get_node_or_null("Sprite")
+			var nombre := "%s (%s, tipo %s, dibujo %s)" % [n.name, n.get_class(), n.get("datos").get("tipo", "?") if n.get("datos") is Dictionary else "-", spr.texture.resource_path.get_file() if spr is Sprite2D and spr.texture else "-"]
+			cuenta[nombre] = cuenta.get(nombre, 0) + 1
+			var local: Vector2 = mapa.to_local(dio.position)
+			if manchas.any(func(m): return m.pos.distance_to(local) < 24.0):
+				en_sangre += 1
+	print("Choques en la sala del jefe %s: manchas de sangre en el suelo %d · rayos que paran encima de una %d" % [tipo, manchas.size(), en_sangre])
+	for k in cuenta:
+		print("  %d × %s" % [cuenta[k], k])
+	# y lo que recibe balas sin ser pared (el grupo "zombis", que mira bala.gd): cuántos de cada, y si se ven
+	var otros := {}
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z == jefa:
+			continue
+		var script_z: Script = z.get_script()
+		var k := "%s (%s, se ve %s)" % [script_z.resource_path.get_file() if script_z else z.get_class(), z.name.left(12), z.is_visible_in_tree()]
+		otros[k] = otros.get(k, 0) + 1
+	print("Choques: lo que para balas sin ser pared ni el jefe:")
+	for k in otros:
+		print("  %d × %s" % [otros[k], k])
 
 
 func ir_a_la_sala_del_jefe(tipo: String) -> bool:
@@ -2032,10 +2090,18 @@ func probar_ir_sala_otro() -> void:
 	await montar(planta.sitios.size() - 1, 0, false)
 	await get_tree().create_timer(0.5, false).timeout
 	print("Ir a otra sala: desde el sitio %d de %d" % [aqui, planta.sitios.size()])
+	# (25 nov) como al usar el panel: desde la sala de pruebas (F9), donde le dan la pistola. Llega con lo que lleva
+	# en ella, no con lo de antes de entrar (aquí, la escopeta); y sin la munición sin fin de la sala
+	llevar_arma("escopeta", 1)
+	await pruebas()
+	await get_tree().create_timer(0.3, false).timeout
+	var llevaba: Dictionary = johnny.huecos.duplicate()
 	await ir_al_jefe(tipo)
 	await get_tree().create_timer(2.5, false).timeout
 	print("Ir a otra sala: de %s a %s · planta del jefe %s · en su sala %s · se guarda %s (esperado: apartamentos, centro, %s, true, false)" % [
 		antes, edificio, planta.jefe, planta.sitios[aqui].tipo == "jefe", guarda_partida, tipo])
+	print("Ir a otra sala: armas al llegar %s (esperado: las de la sala de pruebas, %s) · munición sin fin %s (esperado: false)" % [
+		johnny.huecos, llevaba, johnny.municion_sin_fin])
 	Captura.foto("captura-ir-sala-otro.png")
 
 
@@ -2199,11 +2265,34 @@ func probar_desfile() -> void:
 	johnny.set_physics_process(false)
 	var jefe: Node2D = jefa
 	await get_tree().create_timer(0.6, false).timeout
-	jefe.esperando = false   # (sin esperar a que acabe la presentación)
+	jefe.esperando = false   # (sin esperar a que acabe la presentación; aquí no la hay: se esconde nada más salir)
+	await get_tree().create_timer(jefe.OJOS + 0.2, false).timeout
+	# con Johnny pegado a ella al cambiarse, no le cae un maniquí encima
+	var cuantos: int = jefe.maniquies().size()
+	var sitio: Vector2 = jefe.global_position
+	var j0: Vector2 = johnny.global_position
+	johnny.global_position = sitio + jefe.PIE_MANIQUI + Vector2(10, 0)
+	jefe.cambiarse(johnny)
+	await get_tree().process_frame
+	var encima: int = jefe.maniquies().filter(func(m): return m.global_position.distance_to(johnny.global_position) < 40.0).size()
+	print("Desfile: cambiándose con Johnny pegado, maniquíes encima %d · maniquíes %d de %d (esperado: 0, uno menos)" % [encima, jefe.maniquies().size(), cuantos])
+	johnny.global_position = j0
 	var maniquies: Array = jefe.maniquies()
 	print("Desfile: estado %s · maniquíes %d · señuelos %d (esperado: escondida, unos cuantos, los mismos)" % [jefe.estado,
 		maniquies.size(), get_tree().get_nodes_in_group("senuelos").size()])
 	print("Desfile: Johnny dice «%s» (esperado: la pista de que uno respira)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
+	# pegándole sin parar con los ojos brillando: la primera vez la pillan, la segunda se esconde igual
+	var donde_antes: Vector2 = jefe.global_position
+	jefe.cambiar("ojos")
+	jefe.recibir_golpe(1, Vector2.UP)
+	var primera: bool = jefe.datos.get("pillada", false)
+	jefe.cambiar("ojos")
+	jefe.recibir_golpe(1, Vector2.UP)
+	print("Desfile: con los ojos brillando, pillada la 1ª %s, la 2ª %s (esperado: true, false)" % [primera, jefe.datos.get("pillada", false)])
+	jefe.cambiar("escondida", {"dur": jefe.ESCONDIDA})
+	jefe.reloj_tiros = jefe.PRIMER_TIRO
+	jefe.global_position = donde_antes
+	print("Desfile: al empezar, le falta para tirar %.1f s (esperado: unos %.1f, menos lo poco que haya pensado)" % [jefe.reloj_tiros, jefe.PRIMER_TIRO])
 	var c: Vector2 = johnny.global_position
 	Captura.foto("captura-desfile-escondida.png")
 	# los carretes: cuatro hilos que cruzan la sala
@@ -2268,6 +2357,18 @@ func probar_desfile() -> void:
 	johnny.global_position = jefe.global_position + Vector2(-120, 140)   # (que salga en la foto, entre los demás)
 	await get_tree().create_timer(0.5, false).timeout
 	Captura.foto("captura-desfile-disfraz.png")
+	# el aviso de los tiros de escondida, a medias
+	jefe.reloj_tiros = jefe.AVISO_ESCONDIDA * 0.4
+	await get_tree().create_timer(0.1, false).timeout
+	Captura.foto("captura-desfile-aviso-escondida.png")
+	await get_tree().create_timer(0.5, false).timeout
+	print("Desfile: tras el aviso, tiros pendientes %s (esperado: false: ya ha tirado)" % jefe.datos.has("tiros"))
+	var antes_alfileres := get_tree().get_nodes_in_group("balas_zombi").size()
+	jefe.disparo_escondida(johnny)
+	print("Desfile: escondida dispara, alfileres nuevos %d (esperado: de 1 a 3: el suyo y hasta dos señuelos con vía libre)" % [
+		get_tree().get_nodes_in_group("balas_zombi").size() - antes_alfileres])
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-desfile-dispara.png")
 	johnny.global_position = c
 	jefe.datos.dur = 99.0
 	# un maniquí que no es ella: revienta en alfileres
@@ -2277,7 +2378,7 @@ func probar_desfile() -> void:
 	await get_tree().create_timer(0.3, false).timeout
 	Captura.foto("captura-desfile-revienta.png")
 	await get_tree().create_timer(0.3, false).timeout
-	print("Desfile: alfileres volando %d (esperado: %d)" % [get_tree().get_nodes_in_group("balas_zombi").size(), jefe.ALFILERES_REVIENTA])
+	print("Desfile: alfileres volando %d (esperado: %d y los que tira escondida, de 3 en 3)" % [get_tree().get_nodes_in_group("balas_zombi").size(), jefe.ALFILERES_REVIENTA])
 	Captura.foto("captura-desfile-alfileres.png")
 	# ella: descubierta, el doble
 	await get_tree().create_timer(0.8, false).timeout
@@ -2314,12 +2415,27 @@ func probar_desfile() -> void:
 	jefe.global_position = jefe.foco.global_position + Vector2(260, 0)
 	await get_tree().physics_frame
 	Captura.foto("captura-desfile-pasarela.png")
-	# el foco la pilla: tiesa, el doble
-	jefe.global_position = jefe.foco.global_position + Vector2(40, -10)
+	# los ojos a oscuras, moviéndose: la estela roja
+	var sale: Vector2 = jefe.global_position
+	for i in 8:
+		jefe.global_position = sale + Vector2(0, 14 * i)
+		await get_tree().process_frame
+	Captura.foto("captura-desfile-ojos.png")
+	jefe.global_position = sale
+	# en el borde del foco, nada; de lleno, cegada (el doble) y el foco se para
+	var pies := Vector2(0, jefe.PIE - 10.0)
+	jefe.global_position = jefe.foco.global_position - pies + Vector2(FocoModista.RADIO * 0.75, 0)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	var en_borde: String = jefe.estado
+	jefe.global_position = jefe.foco.global_position - pies + Vector2(10, 0)
 	await get_tree().create_timer(0.1, false).timeout
 	antes = jefe.vida
 	jefe.recibir_golpe(10, Vector2.UP)
-	print("Desfile: bajo el foco, estado %s · un golpe de 10 le quita %d (esperado: congelada, 20)" % [jefe.estado, antes - jefe.vida])
+	var foco_antes: Vector2 = jefe.foco.global_position
+	await get_tree().create_timer(0.3, false).timeout
+	print("Desfile: en el borde del foco, estado %s (esperado: no congelada) · de lleno, estado %s · un golpe de 10 le quita %d · el foco se mueve %d · estrellitas %s (esperado: congelada, 20, 0, true)" % [
+		en_borde, jefe.estado, antes - jefe.vida, roundi(jefe.foco.global_position.distance_to(foco_antes)), jefe.estrellas != null])
 	Captura.foto("captura-desfile-congelada.png")
 	await get_tree().create_timer(2.4, false).timeout
 	# el corte de pared a pared, lejos del foco
@@ -2341,7 +2457,57 @@ func probar_desfile() -> void:
 		await get_tree().physics_frame
 	print("Desfile: el corte le quita a Johnny %d (esperado: más de 0)" % (vida_johnny - johnny.vida))
 	johnny.invulnerable = 99999.0
+	# la pasarela, más dura: a oscuras ataja uno de cada dos golpes y contesta; el tirón; el desfile de alfileres;
+	# los hilos que no se ven; los ojos de los maniquíes vivos
+	jefe.sin_foco = 99.0
+	jefe.dur = 99.0
+	for k in jefe.espera:
+		jefe.espera[k] = 99.0
+	jefe.global_position = jefe.foco.global_position + Vector2(0, 330)
+	if jefe.bajo_luz():
+		jefe.global_position = jefe.foco.global_position + Vector2(0, -330)
+	johnny.global_position = jefe.global_position + Vector2(90, 0)
+	jefe.cambiar("andar")
+	jefe.ataja = false
+	antes = jefe.vida
+	jefe.recibir_golpe(10, Vector2.UP)
+	var ataja_uno: int = antes - jefe.vida
+	var contesta: String = jefe.estado
+	jefe.recibir_golpe(10, Vector2.UP)
+	print("Desfile: a oscuras, dos golpes de 10 le quitan %d y %d · contesta con %s (esperado: 0 y 10 en algún orden, aviso_tijeretazo)" % [
+		ataja_uno, antes - jefe.vida - ataja_uno, contesta])
+	Captura.foto("captura-desfile-ataja.png")
+	await get_tree().create_timer(0.6, false).timeout
+	jefe.cambiar("andar")
+	johnny.global_position = jefe.global_position + Vector2(260, 0)
+	johnny.velocity = Vector2.ZERO
+	jefe.cambiar("aviso_tiron", {"angulo": 0.0})
+	await get_tree().create_timer(jefe.AVISO_TIRON * 0.6, false).timeout
+	Captura.foto("captura-desfile-tiron-aviso.png")
+	for i in 120:
+		if jefe.estado != "aviso_tiron":
+			break
+		await get_tree().physics_frame
+	print("Desfile: el tirón, estado %s · Johnny arrastrado hacia ella %s (esperado: tiron, true)" % [jefe.estado, johnny.velocity.x < -300.0])
+	Captura.foto("captura-desfile-tiron.png")
+	await get_tree().create_timer(0.8, false).timeout
+	jefe.cambiar("andar")
+	var balas_antes := get_tree().get_nodes_in_group("balas_zombi").size()
+	jefe.apuntar_desfile(johnny)
+	await get_tree().create_timer(jefe.AVISO_DESFILE * 0.7, false).timeout
+	Captura.foto("captura-desfile-desfile-aviso.png")
+	await get_tree().create_timer(jefe.AVISO_DESFILE * 0.3 + 0.5, false).timeout
+	print("Desfile: el desfile de alfileres, estado %s · alfileres nuevos %d (esperado: desfile o andar, unos cuantos)" % [jefe.estado,
+		get_tree().get_nodes_in_group("balas_zombi").size() - balas_antes])
+	Captura.foto("captura-desfile-desfile.png")
+	jefe.tirar_carrete(PI / 2.0)
+	print("Desfile: en la pasarela, el hilo nuevo oculto %s (esperado: true)" % jefe.hilos[-1].oculto)
+	await get_tree().create_timer(1.5, false).timeout
+	Captura.foto("captura-desfile-hilo-oculto.png")
+	var vivo_ojos: Array = jefe.vivos.filter(func(v): return is_instance_valid(v) and v.estado != "muerto")
+	print("Desfile: maniquíes vivos con ojos %d (esperado: los vivos que quedan)" % vivo_ojos.filter(func(v): return v.has_node("Ojos")).size())
 	# y al caer, vuelve la luz y no queda nada suyo
+	jefe.cambiar("congelada")   # (que no ataje el golpe)
 	jefe.recibir_golpe(99999, Vector2.RIGHT * 10.0)
 	await get_tree().create_timer(1.0, false).timeout
 	print("Desfile: muerta, foco %s · oscuridad de más %.2f · zombis %d (esperado: false, 0.00, 0)" % [is_instance_valid(jefe.foco),
@@ -2351,8 +2517,9 @@ func probar_desfile() -> void:
 # Con "--captura --edificio centro --jefe mascota --fiesta": la mascota rehecha, fase 1 (24 nov, docs/JEFES_CENTRO.md,
 # «La fiesta de cumpleaños»), en su Juguetería, con Johnny quieto, sin que le hagan daño y esquivando (que las
 # embestidas no se paren en él). Cada línea dice lo esperado. Fotos (captura-fiesta-*.png): sala (las tres cajas y
-# las tres cajitas junto a la barra), pelotas (tras tres choques contra la pared), salto (las pelotas saliendo
-# disparadas al caer), sorpresa (el muñeco saltando de la caja) y sentada (de culo, con las estrellitas)
+# las tres cajitas junto a la barra), baile (a saltitos alrededor de Johnny), pelotas (tras tres choques contra la
+# pared), salto (las pelotas saliendo disparadas al caer), regalos (sus marcas en el suelo), soplo-aviso y soplo (el
+# matasuegras: el cono y el soplido), sorpresa (el muñeco saltando de la caja) y sentada (de culo, con las estrellitas)
 func probar_fiesta() -> void:
 	if not await ir_a_la_sala_del_jefe("mascota"):
 		return
@@ -2365,10 +2532,37 @@ func probar_fiesta() -> void:
 	jefe.cambiar("andar")
 	jefe.dur = 99.0
 	await get_tree().create_timer(1.2, false).timeout
+	jefe.espera_tren = 99999.0   # (el tren va en su prueba, --tren)
 	print("Fiesta: cajas %d · listas %d (esperado: 3, 3)" % [jefe.cajas.size(), jefe.cajas_listas()])
 	print("Fiesta: Johnny dice «%s» (esperado: la pista de las cajas sorpresa)" % [aviso.text if presentacion.pendiente.is_empty() else str(presentacion.pendiente)])
 	print("Fiesta: críos en la fase 1 %d (esperado: 0)" % jefe.crios())
 	Captura.foto("captura-fiesta-sala.png")
+	# el baile: 3 s sin atacar, a saltitos alrededor de Johnny, a media distancia
+	jefe.espera_embestida = 99.0
+	jefe.espera_regalos = 99.0
+	jefe.espera_salto = 99.0
+	jefe.espera_soplo = 99.0
+	johnny.global_position = jefe.inicio + Vector2(0, 120)
+	jefe.global_position = jefe.inicio + Vector2(-60, -60)
+	var salida: Vector2 = jefe.global_position
+	jefe.andar(0.3)
+	var lejos := [9999.0, 0.0]
+	var andado := 0.0
+	for paso in 180:
+		if jefe.estado != "andar":
+			jefe.andar(0.3)
+		var antes_paso: Vector2 = jefe.global_position
+		await get_tree().physics_frame
+		andado += antes_paso.distance_to(jefe.global_position)
+		if paso > 60:   # (el primer segundo va a su sitio)
+			var dd: float = jefe.global_position.distance_to(johnny.global_position)
+			lejos = [minf(lejos[0], dd), maxf(lejos[1], dd)]
+		if paso == 100:
+			Captura.foto("captura-fiesta-baile.png")
+	print("Fiesta: bailando, de Johnny entre %d y %d (esperado: entre unos 180 y 360) · ha andado %d (esperado: bastante, más de 300)" % [
+		lejos[0], lejos[1], andado])
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
 	# tres embestidas contra la pared de arriba: dos pelotas cada vez
 	# (por columnas sin ninguna caja encima: las cajas caen al azar)
 	var columnas: Array = []
@@ -2383,8 +2577,8 @@ func probar_fiesta() -> void:
 			if jefe.estado != "embestida":
 				break
 			await get_tree().physics_frame
-		print("Fiesta: embestida %d contra la pared, estado %s (esperado: atontado) · pelotas %d (esperado: %d)" % [i + 1,
-			jefe.estado, jefe.pelotas().size(), 2 * (i + 1)])
+		print("Fiesta: embestida %d contra la pared, estado %s, mareada %s s (esperado: atontado, 1.0) · pelotas %d (esperado: %d)" % [i + 1,
+			jefe.estado, jefe.datos.get("dura", "?"), jefe.pelotas().size(), 2 * (i + 1)])
 		jefe.cambiar("andar")
 		jefe.dur = 99.0
 	await get_tree().create_timer(1.0, false).timeout
@@ -2407,6 +2601,46 @@ func probar_fiesta() -> void:
 	await get_tree().create_timer(2.0, false).timeout
 	print("Fiesta: 2 s después, la más rápida va a %d (esperado: %d)" % [jefe.pelotas().map(func(p): return p.velocidad.length()).max(),
 		jefe.VELOCIDAD_PELOTA])
+	# «¡REGALOS!»: cuatro regalos alrededor de Johnny; al caer, cada uno suelta dos pelotas
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	for p in jefe.pelotas():
+		p.queue_free()
+	await get_tree().physics_frame
+	johnny.global_position = jefe.inicio + Vector2(0, 100)
+	jefe.global_position = jefe.inicio + Vector2(-260, -40)
+	jefe.espera_regalos = 0.0
+	jefe.elegir_fiesta(johnny, jefe.global_position.distance_to(johnny.global_position))
+	print("Fiesta: con Johnny lejos y los regalos listos, estado %s (esperado: regalos)" % jefe.estado)
+	await get_tree().create_timer(jefe.AVISO_REGALOS + 0.5, false).timeout
+	var regalos := get_tree().current_scene.find_children("*", "Regalo", true, false).size()
+	print("Fiesta: regalos volando %d (esperado: 4)" % regalos)
+	Captura.foto("captura-fiesta-regalos.png")
+	await get_tree().create_timer(1.4, false).timeout
+	print("Fiesta: caídos, regalos %d · pelotas %d (esperado: 0, 8)" % [get_tree().current_scene.find_children("*", "Regalo", true, false).size(),
+		jefe.pelotas().size()])
+	# el matasuegras: con Johnny cerca, el cono y el soplido, que le manda lejos
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	johnny.set_physics_process(true)
+	johnny.esquiva_t = 0.0
+	johnny.global_position = jefe.inicio + Vector2(120, 0)
+	jefe.global_position = jefe.inicio
+	jefe.espera_soplo = 0.0
+	jefe.elegir_fiesta(johnny, jefe.global_position.distance_to(johnny.global_position))
+	print("Fiesta: con Johnny cerca, estado %s (esperado: aviso_soplo)" % jefe.estado)
+	await get_tree().create_timer(jefe.AVISO_SOPLO * 0.6, false).timeout
+	Captura.foto("captura-fiesta-soplo-aviso.png")
+	while jefe.estado == "aviso_soplo":
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-fiesta-soplo.png")
+	var anim_soplo: String = jefe.sprite.animation
+	await get_tree().create_timer(0.5, false).timeout
+	print("Fiesta: tras el soplido, Johnny a %d (esperado: más de 250) · animación «%s» (esperado: matasuegras_e)" % [
+		johnny.global_position.distance_to(jefe.global_position), anim_soplo])
+	johnny.set_physics_process(false)
+	johnny.esquiva_t = 99999.0
 	# la caja sorpresa: embiste contra ella desde el lado del centro
 	jefe.cambiar("andar")
 	jefe.dur = 99.0
@@ -2444,3 +2678,165 @@ func probar_fiesta() -> void:
 	print("Fiesta: se levanta a los %.1f s (esperado: %.1f, con el ritmo del VD-7)" % [sentada, jefe.SORPRESA / jefe.ritmo])
 	await get_tree().create_timer(jefe.REPONE_CAJA + 1.5, false).timeout
 	print("Fiesta: la caja se ha ido %s · cajas listas otra vez %d (esperado: true, 3)" % [not is_instance_valid(caja), jefe.cajas_listas()])
+
+
+# Con "--captura --edificio centro --jefe mascota --tren": el tren de juguete de la Juguetería (25 nov,
+# docs/JEFES_CENTRO.md, «La fiesta de cumpleaños»): las vías alrededor de la sala, ninguna caja encima, el aviso, la
+# vuelta, Johnny atropellado (se le aparta) y la mascota sentada encima de las vías, atropellada. Cada línea dice lo
+# esperado. Fotos (captura-tren-*.png): sala (las vías y el tren en su estación), aviso (las vías en rojo) y corre
+func probar_tren() -> void:
+	if not await ir_a_la_sala_del_jefe("mascota"):
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	var jefe: Node2D = jefa
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	await get_tree().create_timer(1.0, false).timeout
+	jefe.espera_tren = 999.0
+	jefe.global_position = jefe.inicio + Vector2(0, 30)
+	var tren: Node2D = jefe.tren
+	print("Tren: vías %s · largo de la vuelta %d (esperado: true, unos 2000-3000) · cajas encima de las vías %d (esperado: 0)" % [
+		tren != null, tren.largo if tren else 0, jefe.cajas.filter(func(c): return tren.cerca_de_via(c.global_position, 60.0)).size()])
+	johnny.global_position = jefe.inicio + Vector2(0, 160)
+	Captura.foto("captura-tren-sala.png")
+	# Johnny en las vías, delante del tren
+	johnny.invulnerable = 0.0
+	johnny.vida = johnny.stats.vida_max
+	johnny.global_position = tren.en(tren.s + 420.0)[0]
+	var vida: int = johnny.vida
+	tren.salir()
+	await get_tree().create_timer(tren.AVISO * 0.5, false).timeout
+	print("Tren: avisando, estado %s (esperado: aviso)" % tren.estado)
+	Captura.foto("captura-tren-aviso.png")
+	await get_tree().create_timer(tren.AVISO * 0.5 + 0.8, false).timeout
+	Captura.foto("captura-tren-corre.png")
+	await get_tree().create_timer(0.6, false).timeout
+	print("Tren: a Johnny le quita %d (esperado: %d, algo menos con su defensa) · ya no está en las vías %s (esperado: true)" % [vida - johnny.vida, tren.DANO,
+		not tren.cerca_de_via(johnny.global_position, tren.RADIO)])
+	johnny.invulnerable = 99999.0
+	while tren.estado != "parado":
+		await get_tree().physics_frame
+	print("Tren: tras una vuelta, parado en su estación %s (esperado: true)" % [tren.estado == "parado"])
+	# la mascota sentada encima de las vías: la atropella
+	johnny.global_position = jefe.inicio
+	jefe.global_position = tren.en(tren.s + 700.0)[0]
+	jefe.vida = jefe.vida_max
+	jefe.cambiar("sorpresa")
+	tren.salir()
+	while tren.estado != "parado" and jefe.vida == jefe.vida_max:
+		await get_tree().physics_frame
+	print("Tren: atropella a la mascota sentada, le quita %d (esperado: %d, con lo que le entra sentada)" % [jefe.vida_max - jefe.vida,
+		roundi(tren.DANO_JEFE * jefe.MAS_SORPRESA)])
+	await get_tree().create_timer(0.2, false).timeout
+	Captura.foto("captura-tren-atropello.png")
+
+
+# La mascota, fase 2 «descosida» (25 nov): la transición (se descose, la nube de relleno, la tarta que cae, la pista de
+# Johnny), el dibujo descosido y el relleno que va soltando, el fuego que corre por el relleno, ella quemándose al
+# pisarlo, la tarta tiroteada (las velas por el aire y los fuegos donde caen), un crío con globo (al morir, dos pelotas) y
+# lo que se queda en el suelo tras una caja. Fotos: descosida-raja, descosida-corre, descosida-fuego, descosida-tarta,
+# descosida-globo
+func probar_descosida() -> void:
+	if not await ir_a_la_sala_del_jefe("mascota"):
+		return
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	var jefe: Node2D = jefa
+	jefe.espera_tren = 99999.0
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	await get_tree().create_timer(1.0, false).timeout
+	johnny.global_position = jefe.inicio + Vector2(0, 120)
+	jefe.global_position = jefe.inicio + Vector2(-120, -20)
+	# a media vida: se descose
+	jefe.vida = int(jefe.vida_max * 0.5) - 1
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	print("Descosida: fase %d, estado %s (esperado: 2, grito)" % [jefe.fase, jefe.estado])
+	await get_tree().create_timer(1.15, false).timeout
+	Captura.foto("captura-descosida-raja.png")
+	print("Descosida: animación «%s», rajada %s · relleno %d (esperado: descoserse_s, true, 8)" % [jefe.sprite.animation, jefe.rajada,
+		get_tree().get_nodes_in_group("relleno").size()])
+	while jefe.estado == "grito":
+		await get_tree().physics_frame
+	print("Descosida: dibujo descosido %s · tarta %s (esperado: true, true)" % [jefe.sprite.sprite_frames == jefe.HOJA_DESCOSIDA,
+		is_instance_valid(jefe.tarta)])
+	# corre detrás de Johnny soltando relleno
+	jefe.espera_embestida = 99.0
+	var antes: int = get_tree().get_nodes_in_group("relleno").size()
+	var vel := 0.0
+	for i in 90:
+		await get_tree().physics_frame
+		vel = maxf(vel, jefe.marcha.length())
+	Captura.foto("captura-descosida-corre.png")
+	print("Descosida: corriendo, velocidad %d (esperado: unos 215) · relleno nuevo %d (esperado: 2-4)" % [vel,
+		get_tree().get_nodes_in_group("relleno").size() - antes])
+	# el fuego: en un pegote, y corre por los de al lado
+	for r in get_tree().get_nodes_in_group("relleno"):
+		r.queue_free()
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	jefe.set_physics_process(false)
+	await get_tree().physics_frame
+	var fila: Vector2 = jefe.inicio + Vector2(-260, 120)
+	for i in 6:
+		jefe.poner_relleno(fila + Vector2(i * 45, 0))
+	await get_tree().physics_frame
+	var fuego: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+	fuego.tipo = "fuego"
+	fuego.escala = 0.4
+	fuego.position = fila - Vector2(10, 0) - jefe.get_parent().global_position
+	jefe.get_parent().add_child(fuego)
+	await get_tree().create_timer(1.6, false).timeout
+	Captura.foto("captura-descosida-fuego.png")
+	var ardiendo := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.has_meta("relleno"))
+	print("Descosida: relleno ardiendo %d de 6 · queda sin arder %d (esperado: 6, 0)" % [ardiendo.size(),
+		get_tree().get_nodes_in_group("relleno").size()])
+	# ella, encima de su relleno ardiendo
+	jefe.set_physics_process(true)
+	jefe.global_position = ardiendo[2].global_position - Vector2(0, jefe.PIE * 0.5)
+	var vida: int = jefe.vida
+	await get_tree().create_timer(0.3, false).timeout
+	print("Descosida: pisando su relleno ardiendo, le quita %d (esperado: al menos %d)" % [vida - jefe.vida, jefe.DANO_QUEMA])
+	jefe.global_position = jefe.inicio + Vector2(-300, -150)
+	jefe.cambiar("andar")
+	jefe.dur = 99.0
+	# la tarta: una bala le da y las velas salen volando; donde caen, fuego
+	var tarta: Node2D = jefe.tarta
+	johnny.global_position = tarta.global_position + Vector2(-160, 40)
+	for i in 3:
+		jefe.poner_relleno(tarta.global_position + Vector2(150 + i * 30, randf_range(-60, 60)))
+	var fuegos: int = get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "fuego" and not c.has_meta("relleno")).size()
+	tarta.tocada_bala(Vector2(600, 0))
+	print("Descosida: tarta tiroteada, velas volando %d · lista %s (esperado: 3, false)" % [tarta.velas.size(), tarta.lista()])
+	await get_tree().create_timer(tarta.VUELO * 0.5, false).timeout
+	Captura.foto("captura-descosida-tarta.png")
+	await get_tree().create_timer(tarta.VUELO * 0.5 + 0.2, false).timeout
+	print("Descosida: velas caídas, fuegos nuevos %d (esperado: 3)" % [get_tree().get_nodes_in_group("charcos").filter(
+		func(c): return c.tipo == "fuego" and not c.has_meta("relleno")).size() - fuegos])
+	await get_tree().create_timer(tarta.RECARGA, false).timeout
+	print("Descosida: a los %d s, la tarta otra vez encendida %s (esperado: true)" % [tarta.RECARGA, tarta.lista()])
+	# un crío con globo: al morir, dos pelotas
+	for p in jefe.pelotas():
+		p.queue_free()
+	await get_tree().physics_frame
+	var crio: Node2D = meter_zombi("rapido", johnny.global_position + Vector2(140, 0))
+	crio.set_meta("tipo", "rapido")
+	jefe.poner_globos()
+	crio.process_mode = Node.PROCESS_MODE_DISABLED
+	await get_tree().create_timer(0.3, false).timeout
+	print("Descosida: el crío lleva globo %s (esperado: true)" % [crio.find_children("*", "Globo", false, false).size() == 1])
+	Captura.foto("captura-descosida-globo.png")
+	crio.process_mode = Node.PROCESS_MODE_INHERIT
+	var habia: int = jefe.pelotas().size()   # (los otros críos, si se queman en el fuego, también sueltan las suyas)
+	crio.recibir_golpe(99999, Vector2.UP * 100.0)
+	await get_tree().physics_frame
+	print("Descosida: muerto el crío, pelotas nuevas %d (esperado: 2)" % (jefe.pelotas().size() - habia))
+	# la caja sorpresa: en la fase 2 se queda menos en el suelo
+	jefe.cambiar("sorpresa")
+	var desde: float = jefe.tiempo
+	while jefe.estado == "sorpresa":
+		await get_tree().physics_frame
+	print("Descosida: en el suelo tras la caja %.1f s (esperado: %.1f, más lento en la prueba: %.1f)" % [jefe.tiempo - desde, jefe.SORPRESA_2,
+		jefe.SORPRESA_2 / jefe.ritmo])

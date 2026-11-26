@@ -8,7 +8,7 @@ gerente), **uno a uno**. Al terminar cada uno, se marca aquí como hecho y se ap
 | Antidisturbios | hecho, con el visto bueno del dueño (21 nov) |
 | Cocinero | hecho, pendiente del visto bueno del dueño (23 nov) |
 | Modista | hecha, con el visto bueno del dueño (24 nov) |
-| Mascota | en curso: fase 1 hecha (24 nov), falta el tren y la fase 2 |
+| Mascota | hecha, pendiente del visto bueno del dueño (25 nov) |
 | Gerente | pendiente |
 
 ## Por qué
@@ -210,6 +210,14 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   (24 nov, el dueño: antes se veía solo un salto, porque ella no se parece a los maniquíes). Ya no salta si Johnny se acerca. Solo la delata que **respira** (sube un píxel la mitad de cada
   respiración de 1,7 s) y un parpadeo de los ojos cada 2-3,5 s. Si le pegan escondida: «¡ME HAS VISTO!», aturdida 2,5 s
   con estrellitas y le entra el doble. Si le pegan a otro maniquí: un aro rojo de 0,5 s y revienta en 12 alfileres.
+  Más difícil (25 nov, el dueño: quedaba fácil): **escondida dispara**, cada 1,5 s un alfiler suyo hacia Johnny y,
+  a la vez, otros dos desde dos maniquíes cualquiera que tengan vía libre hasta Johnny (esperar ya no es seguro;
+  fijarse en cuál tira siempre es otra pista). Para que sea justo (25 nov, el dueño: no se veía de dónde venían), 0,6 s
+  antes sale en el suelo la raya de flechas de cada uno, y al tirar, un destello rojo y unos retales en el maniquí. Al
+  entrar en la sala, el primer tiro tarda 3 s después de su presentación (su propio reloj, que no corre mientras sale
+  el título). Pegarle con los ojos brillando la «pilla» solo una vez seguida: la siguiente se esconde aunque le peguen
+  (25 nov, el dueño: a cuerpo a cuerpo no se escondía nunca); descubierta ya solo 1,5 s (eran 2,5); cegada bajo el foco 1,3 s (eran 2,2) y luego 5 s sin que el foco la
+  pare (eran 3,5); en la pasarela, cuatro cortes seguidos (eran tres), los siguientes con 0,45 s de aviso (eran 0,55).
   Si nadie la encuentra a tiempo, sale **crecida** (24 nov, el dueño): «¡DEMASIADO LENTO!», roja latiendo 8 s, con
   las esperas entre ataques al doble de rápido y andando un 40 % más deprisa.
 - **De cerca** (24 nov, el dueño: a cuerpo a cuerpo solo daba tijeretazos): como mucho dos tijeretazos seguidos;
@@ -218,14 +226,37 @@ Se apagan las luces; solo un foco recorre la sala de lado a lado.
   Cada maniquí lleva para eso un señuelo invisible del grupo "zombis" (el apuntado automático no lo busca).
 - Se quedan los alfileres y el tijeretazo; se fue «¡TE TOMO MEDIDAS!». Ella anda a media distancia (unos 260).
 - **Fase 2**: «¡QUE EMPIECE EL DESFILE!» con su pose; los hilos se caen, se apagan las lámparas de la tienda (más
-  oscuridad: `Luz.evento` + 0,45), sale el foco (radio 120, cruza de lado a lado a 115 y sube y baja en 14 s) y
-  despiertan 3 maniquíes. Johnny dice «Si el foco la pilla, se queda tiesa...». Ella ronda apartándose del foco (se le
+  oscuridad: `Luz.evento` + 0,45), sale el foco (radio 150, era 120; cruza de lado a lado a 115 y sube y baja en 14 s) y
+  despiertan 3 maniquíes. Johnny dice «Si el foco la pilla de lleno, se queda ciega...». Ella ronda apartándose del foco (se le
   ven los ojos) y cada 5,5 s, «¡A LA PASARELA!»: franja de aviso hasta la pared (0,9 s, luego 0,55) y cruza corriendo
-  a 900 con las tijeras por delante, 3 veces seguidas, 18 de daño. Si el foco la pilla (también corriendo): «¡TIESA!»,
-  gris y quieta 2,2 s, le entra el doble; luego 3,5 s en que el foco no la para. Al caer ella vuelve la luz.
+  a 900 con las tijeras por delante, 3 veces seguidas, 18 de daño. Si el foco la pilla **de lleno** (los pies a menos
+  de 68 del centro, también corriendo; 25 nov, el dueño: antes bastaba rozar el borde y no se entendía): «¡CEGADA!»,
+  aturdida con estrellitas, le entra el doble, y el foco se para encima de ella latiendo más fuerte mientras dura.
+  Ronda apartándose del foco menos que antes (hasta 1,5 radios, a 0,7 de su velocidad), para que la pille alguna vez.
+  Al caer ella vuelve la luz.
+- La pasarela, más dura (25 nov, el dueño: se le podía pegar sin más y era fácil; la inmunidad fuera de la luz se
+  descartó porque obligaba a esperar):
+  - **A oscuras se defiende:** ataja uno de cada dos golpes con las tijeras (chispas, «¡A OSCURAS NO!») y, si Johnny
+    está cerca, contesta con un tijeretazo rápido (aviso de 0,3 s). Con cualquier luz del foco encima no puede.
+  - **Ojos en los maniquíes vivos:** llevan los mismos ojos rojos que ella (`Modista.pintar_ojo`), así que a oscuras
+    no se sabe cuál es; la delata su estela.
+  - **Hilos invisibles:** vuelve a tirar carretes (3 de golpe cada 4,5 s, hasta 6 hilos), pero a oscuras no se ven:
+    solo los trozos que alumbra el foco y un brillo que los recorre cada 2,6 s (`hilo_modista.gd`, `oculto`). Enredan.
+  - **El tirón:** una raya de aviso (0,75 s) que sigue a Johnny; si le pilla, le quita 6 y lo arrastra hacia ella
+    («¡VEN AQUÍ!») y le tira un tijeretazo. Cada 6 s, entre 140 y 420 de distancia.
+  - **El desfile de alfileres:** su franja de aviso (0,75 s) y cruza la sala a 480 pasando junto a Johnny, soltando
+    un alfiler a cada lado cada 0,13 s (más lentos: 280). Cada 8 s.
+- Los ojos (25 nov, el dueño: eran un círculo rojo liso): a píxeles, el centro casi blanco, un rojo alrededor y un
+  resplandor tramado (cuadraditos salteados); laten un poco, cada 2,3 s un destello en cruz y, en la pasarela, dejan
+  una estela roja al moverse (`_pintar_ojos`). Foto: `captura-desfile-ojos.png`.
 - Animaciones nuevas de PixelLab (v3, 20 generaciones): corte (8 direcciones; de frente y abajo a la derecha se quitan
   los dos últimos fotogramas, con unas tijeras gigantes brillando), aturdida y desfile (solo de frente).
 - Pista: al entrar, Johnny dice «Uno de esos maniquíes respira...».
+- Entrada (25 nov, el dueño: empezaba ya escondida y no se sabía qué pasaba): sale a la vista en su presentación, como
+  los demás jefes, y al acabar le brillan los ojos, grita «¿A QUE NO ME ENCUENTRAS?» y se cambia con un maniquí (esa
+  primera vez no se la puede pillar). Se ve con `--captura --edificio centro --jefe modista --presentacion`.
+- Al cambiarse, si Johnny está pegado a donde estaba ella, el maniquí no aparece allí (lo dejaba encajado entre
+  maniquíes): se quita (`CERCA_MANIQUI`).
 - Prueba: `--captura --edificio centro --jefe modista --desfile`.
 
 ## 4. La mascota · «La fiesta de cumpleaños»
@@ -245,7 +276,7 @@ Se le rompe la tripa y va soltando relleno.
 - Más pequeña y mucho más rápida; rebota por la sala como una pelota más.
 - Los críos traen globos que al reventar sueltan más pelotas.
 
-### Cómo va quedando (24 nov)
+### Cómo quedó (24 y 25 nov)
 - Fase 1 hecha: `mascota.gd`, `caja_sorpresa.gd` y las pelotas de goma del antidisturbios (`pelota_goma.gd`, con
   `juguete`: una raya blanca, y `rapidez_normal`: tras el salto van frenando hasta su rapidez).
 - Pelotas: 2 cada vez que se estrella o rebota en una pared, como mucho 12. Al caer de un salto, las de menos de 170
@@ -258,7 +289,41 @@ Se le rompe la tripa y va soltando relleno.
 - Pistas: Johnny al entrar («Esas cajas sorpresa... ¿Y si consigo que se estrelle contra una?») y tres cajitas junto a
   la barra (`barra_jefe.gd`, `pintar_cajas`): cerradas las que hay, abiertas las usadas.
 - Los críos ya solo salen en la fase 2.
+- 25 nov (el dueño: no paraba de perseguir, embestía poco y casi no salían pelotas):
+  - Ya no persigue: baila a saltitos alrededor de Johnny, a 210-330 de él, y desde ahí ataca.
+  - Embiste cada 2,2 s y corre hasta chocar con algo (como mucho 3,2 s): contra la pared solo se sacude 1 s (antes 3)
+    y suelta sus 2 pelotas; la que la deja sentada es la caja.
+  - «¡REGALOS!» (cada 6 s): tira 4 regalos (dibujo de PixelLab, `regalo.png`; `regalo.gd`) alrededor de Johnny, cada uno
+    con su marca en el suelo; al caer quitan 12 y sueltan 2 pelotas cada uno.
+  - El matasuegras (con Johnny a menos de 180, cada 3 s): aviso en cono 0,6 s y sopla (animación nueva de PixelLab,
+    `matasuegras`, 8 direcciones): quita 10, le manda lejos y dispara las pelotas que pille, con confeti.
+- El tren de juguete (25 nov, `tren_juguete.gd`): unas vías pintadas con código (traviesas y raíles) dan la vuelta a
+  la sala, un rectángulo de esquinas redondeadas a 130 de las paredes (unas 3000 de vuelta). El tren (locomotora y 3
+  vagones, PixelLab en 8 direcciones: `tren-locomotora`, `tren-vagon`) espera en su estación; cada 11 s (8 en la fase
+  2) pita («¡CHU-CHUUU!»), las vías parpadean en rojo 1,3 s y da una vuelta a 400. A Johnny le quita 16 y le aparta a
+  un lado (esquivando, no). Si pilla a la mascota mareada o sentada encima de las vías, la atropella: 45 («¡ATROPELLO!»;
+  sentada, 68). Las cajas no caen sobre las vías. Prueba: `--captura --edificio centro --jefe mascota --tren`.
 - Prueba: `--captura --edificio centro --jefe mascota --fiesta`.
+- Fase 2, «descosida» (25 nov):
+  - Transición: en el grito de media vida se dobla y se le raja la barriga (animación de PixelLab `descoserse`, de
+    frente, en la hoja normal); al rajarse sale una nube de relleno y 8 pegotes alrededor. Desde ahí lleva el dibujo
+    descosido: `jefe-mascota-descosida` (un «estado» del mismo personaje en PixelLab, con su andar, embestida, golpe,
+    muerte y sorpresa; `tools/jefe_hoja.py mascota-descosida-72 jefe-mascota-descosida`). No se hizo más pequeña: el
+    dibujo nuevo ya va encorvado.
+  - Ya no baila, ni salta, ni tira regalos, ni sopla: corre detrás de Johnny a 215 (antes 140) y embiste cada 1,8 s, 3
+    veces seguidas a 600 rebotando en las paredes (con sus pelotas en cada choque).
+  - El relleno (`relleno.gd`): andando suelta un pegote cada 0,45 s y embistiendo cada 0,12 s (como mucho 30; duran
+    10 s). Arde con cualquier fuego: un charco de fuego (molotov, aceite...), la llamarada del lanzallamas, una
+    explosión o una vela; deja un fuego pequeño (el del molotov, con la marca `relleno`) y prende el de al lado a los
+    0,15 s, así que el fuego corre por el reguero. Si ella pisa su relleno ardiendo le quita 16 cada 0,5 s
+    («¡QUEMA!»), además de la quemadura normal. Pista: Johnny dice «¡Va soltando relleno! Seguro que eso arde...».
+  - La tarta (`tarta.gd`, dibujo de PixelLab `tarta.png` sin las llamas: titilan con código) cae en medio de la sala.
+    Es un mueble. Si le da una bala (`bala.gd` llama a `tocada_bala` del mueble que toca) o ella se la come embistiendo,
+    sus 3 velas salen volando hacia el otro lado (110-240, con su marca en el suelo) y donde caen dejan un fuego pequeño
+    que prende el relleno de alrededor. Se vuelve a encender a los 7 s.
+  - Los críos llevan un globo (`globo.gd`, dibujado con código): al morir el crío revienta («¡POP!») y suelta 2
+    pelotas. Las cajas sorpresa siguen, pero se queda 3 s en el suelo (antes 5).
+  - Prueba: `--captura --edificio centro --jefe mascota --descosida`.
 
 ## 5. El gerente · «La junta de accionistas»
 
