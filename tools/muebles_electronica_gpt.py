@@ -70,6 +70,32 @@ def quitar_huecos(im):
     return im
 
 
+# (27 nov, el dueño: que las torres y las pantallas encendidas den luz como los neones) Lo que luce de los puestos, en otro dibujo
+# (mueble-<tipo>-luz.png, transparente en lo demás), que el juego pinta encima sin que le afecte la oscuridad (mueble.gd): los píxeles
+# claros y de color vivo (los ventiladores de las torres, las pantallas encendidas y los teclados de luces), solo por encima de las sillas
+# (LUZ_HASTA: las franjas rojas de las sillas no lucen), con un resplandor alrededor
+LUZ = {"juegospuesto1", "juegospuesto2", "juegospuesto3"}
+LUZ_HASTA = 0.6   # hasta qué parte del alto (de arriba abajo): lo de debajo son las sillas
+
+
+def capa_luz(s):
+    from PIL import ImageFilter
+    w, h = s.size
+    px = s.load()
+    nucleo = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    nx = nucleo.load()
+    for y in range(int(h * LUZ_HASTA)):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            alto, bajo = max(r, g, b), min(r, g, b)
+            if a and alto >= 110 and (alto - bajo) >= 0.38 * alto and not (r > 1.6 * max(g, b)):   # (de color vivo, y no rojo: la sangre)
+                k = min(1.25, 255 / alto)
+                nx[x, y] = (int(r * k), int(g * k), int(b * k), 255)
+    halo = nucleo.filter(ImageFilter.GaussianBlur(2.2))
+    halo.putalpha(halo.split()[3].point(lambda v: min(150, int(v * 1.8))))
+    return Image.alpha_composite(halo, nucleo)
+
+
 import sys
 solo = set(sys.argv[1:])   # py tools/muebles_electronica_gpt.py [tipo ...]: solo esos
 for origen, tipo, largo in MUEBLES:
@@ -94,4 +120,6 @@ for origen, tipo, largo in MUEBLES:
         json.dump({"cell": [ancho, alto], "pivot": [ancho // 2, alto], "scale": 1,
                    "anims": {"idle": {"fps": 1, "dirs": {"south": {"row": 0, "frames": 1}}}}}, f, indent=2)
         f.write("\n")
+    if tipo in LUZ:
+        capa_luz(s).save(ruta.replace(".png", "-luz.png"))
     print(f"{tipo}: {ancho}x{alto} (de {im.width}x{im.height})")

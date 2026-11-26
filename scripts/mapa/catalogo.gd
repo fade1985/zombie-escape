@@ -264,10 +264,11 @@ const MUEBLES := {
 	"supercarretilla": {"len": 46, "dep": 28, "paredes": "", "archivo": "centro/carretilla-super-gpt", "escala": 1.0},
 	# (27 nov, el dueño) la sala de juegos en red de la electrónica, de GPT (tools/muebles_electronica_gpt.py): el puesto de dos jugadores
 	# (la mesa con sus monitores y sus torres de luces, y sus dos sillas gamer delante: lo hondo, la mesa y las sillas) con tres destrozos
-	# (abandonado, destrozado y saqueado), y la silla gamer suelta (de espaldas, rajada y volcada)
-	"juegospuesto1": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos1-gpt", "escala": 1.0},
-	"juegospuesto2": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos2-gpt", "escala": 1.0},
-	"juegospuesto3": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos3-gpt", "escala": 1.0},
+	# (abandonado, destrozado y saqueado), y la silla gamer suelta (de espaldas, rajada y volcada). (27 nov) Con "luz", echan una luz de ese
+	# color en el suelo de delante, como los neones (mapa.gd, poner_luz_de_color; lo que luce del dibujo, mueble.gd)
+	"juegospuesto1": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos1-gpt", "escala": 1.0, "luz": Color("#8a86ff")},
+	"juegospuesto2": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos2-gpt", "escala": 1.0, "luz": Color("#8a86ff")},
+	"juegospuesto3": {"len": 128, "dep": 64, "paredes": "", "archivo": "centro/puesto-juegos3-gpt", "escala": 1.0, "luz": Color("#8a86ff")},
 	"juegossilla1": {"len": 36, "dep": 24, "paredes": "", "archivo": "centro/silla-juegos1-gpt", "escala": 1.0},
 	"juegossilla2": {"len": 36, "dep": 24, "paredes": "", "archivo": "centro/silla-juegos2-gpt", "escala": 1.0},
 	"juegossilla3": {"len": 48, "dep": 30, "paredes": "", "archivo": "centro/silla-juegos3-gpt", "escala": 1.0},

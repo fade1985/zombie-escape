@@ -1112,6 +1112,8 @@ func poner_muebles() -> void:
 			mueble.add_child(tele_salon)
 		if (m.tipo == "lamp" or m.tipo == "nightstand") and not m.get("apagada", false):
 			poner_lampara(mueble, m)   # (las apagadas, sin luz ni brillo: solo el dibujo)
+		if Catalogo.MUEBLES.get(m.tipo, {}).has("luz"):
+			poner_luz_de_color(mueble, m, Catalogo.MUEBLES[m.tipo].luz)
 	if sitio.tipo == "armas":
 		# el baúl de pruebas de la sala de pruebas (sala_armas.gd), arriba a la izquierda
 		baul = ARRIMABLE.new()
@@ -1273,6 +1275,28 @@ func poner_lampara(mueble: Node2D, m: Dictionary) -> void:
 	if sitio.has("apt"):   # en un apartamento, solo alumbra su habitación (y las tapas de los muros)
 		luz.get_node("LuzCosas").range_item_cull_mask = Luz.CAPA_COSAS | Luz.capa_sala(m.zona)
 	mueble.add_child(luz)
+
+
+# (27 nov, el dueño) La luz de color que echan en el suelo de delante los muebles que lucen (Catalogo.MUEBLES "luz": los puestos de la sala
+# de juegos de la electrónica, con sus torres y pantallas encendidas), como la de los neones: una lámpara sin bombilla ni polvo, floja,
+# sin sombras (son muchas juntas; en la web pesan) y que solo alumbra su habitación
+func poner_luz_de_color(mueble: Node2D, m: Dictionary, color: Color) -> void:
+	var luz := LAMPARA.instantiate()
+	luz.semilla = fposmod(sin(m.x * 12.9898 + m.y * 78.233) * 43758.5453, 1.0)
+	luz.alto = 90.0
+	luz.radio = 140.0
+	luz.fuerza = 0.5
+	luz.suelo = Vector2(0, 12)
+	luz.mapa = self
+	luz.zona = m.zona
+	if sitio.has("apt"):
+		luz.get_node("LuzCosas").range_item_cull_mask = Luz.CAPA_COSAS | Luz.capa_sala(m.zona)
+	mueble.add_child(luz)
+	luz.get_node("Bombilla").visible = false
+	luz.get_node("Polvo").visible = false
+	luz.get_node("LuzSuelo").shadow_enabled = false
+	for nombre in ["LuzSuelo", "LuzCosas"]:   # no-tr (nombres de nodo)
+		luz.get_node(nombre).color = color
 
 
 # Los apliques de la pared de arriba del pasillo (planta.gd): su dibujo y su luz. El nodo va en el pie de la

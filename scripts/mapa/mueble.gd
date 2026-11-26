@@ -17,6 +17,7 @@ signal usar
 
 const LETRAS := "bcdefghijklmnopqrstuvwxyz"
 const ZONA_USAR := preload("res://scripts/mapa/zona_usar.gd")
+const LUZ := preload("res://scripts/mapa/luz_mueble.gd")
 
 var datos: Dictionary
 var zona := -1
@@ -70,6 +71,19 @@ func montar(m: Dictionary, surtido: int) -> void:
 	var t := sprite.texture.get_size()
 	sprite.offset = Vector2(-floorf(t.x / 2.0), -t.y)
 	add_child(sprite)
+	# (27 nov) si tiene lo que luce aparte (mueble-<tipo>-luz.png: las torres y pantallas de los puestos de juego), encima y sin
+	# oscuridad (luz_mueble.gd)
+	var capa: String = (queda[0] as String).replace(".png", "-luz.png")
+	if ResourceLoader.exists(capa):
+		var luz := Sprite2D.new()
+		luz.name = "Luz"
+		luz.set_script(LUZ)
+		luz.texture = load(capa)
+		luz.scale = sprite.scale
+		luz.centered = false
+		luz.flip_h = sprite.flip_h
+		luz.offset = sprite.offset
+		add_child(luz)
 
 	var forma := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()

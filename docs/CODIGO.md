@@ -1223,6 +1223,11 @@ en una línea.
   a `3`: de espaldas, rajada y volcada; hechas, sin poner de momento). Colocación (`taquillas-electronica` en `catalogo.gd`, igual en las dos
   versiones): cuatro puestos contra la pared de arriba, de dos en dos a cada lado de un paso de 4 casillas (el de la puerta y, en la normal,
   el sitio del cuadro eléctrico), y tres sueltos más abajo con el pie en la fila 7, a 2,5 casillas entre ellos y a 1,5 de las paredes.
+  Y dan luz como los neones (27 nov, el dueño): la herramienta saca de cada puesto lo que luce (los ventiladores de las torres, las pantallas
+  encendidas y los teclados de luces; los píxeles claros y de color vivo, por encima de las sillas y sin el rojo de la sangre) con un
+  resplandor alrededor (`mueble-juegospuesto<N>-luz.png`), y el juego lo pinta encima sin que le afecte la oscuridad (`luz_mueble.gd`, que
+  pone `mueble.gd` a cualquier mueble con su `-luz.png`; tiembla y a veces parpadea); y cada puesto echa en el suelo de delante una luz
+  azul morada floja, sin sombras y solo en su sala (`Catalogo.MUEBLES` "luz", `mapa.gd poner_luz_de_color`).
   Prueba: `--rodear-muebles --tipo electronica --uso taquillas`.
   `--tiendas-fijas` saca también esta sala (`captura-fija-electronica-<lado>-taquillas.png`).
   Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
