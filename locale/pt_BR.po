@@ -1275,6 +1275,10 @@ msgstr "BORA TRABALHAR!"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "AQUI NINGUÉM PARA!"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "POP!"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "FOME!"
@@ -3006,12 +3010,28 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "ABRAÇO GRÁTIS!"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "PRESENTES!"
+
+#: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "QUEIMA!"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "FIUUUU!"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "BOING!"
 
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "HORA DE BRINCAR!"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "Está soltando enchimento! Aposto que isso pega fogo..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
@@ -3032,6 +3052,14 @@ msgstr "DUVIDO QUE ME ACHE!"
 #: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "PRA PASSARELA!"
+
+#: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "VEM CÁ!"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "NO ESCURO, NÃO!"
 
 #: scripts/modista.gd
 msgid "¡TE TENGO!"
@@ -3058,12 +3086,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "QUE COMECE O DESFILE!"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "Se o holofote pegar ela, ela fica dura..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "Se o holofote pegar ela em cheio, ela fica cega..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "DURA!"
+msgid "¡CEGADA!"
+msgstr "CEGA!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -4630,6 +4658,14 @@ msgstr "Toma, isto estava nos achados e perdidos!"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "\"Acesso restrito: andar 40\"… o que tem lá em cima?"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "PIUÍ-PIUÍÍ!"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "ATROPELADO!"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

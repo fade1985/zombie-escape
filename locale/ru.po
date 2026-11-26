@@ -1277,6 +1277,10 @@ msgstr "ЗА РАБОТУ!"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "ПЕРЕКУРА НЕ БУДЕТ!"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "ХЛОП!"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "ЖРАТЬ!"
@@ -3010,12 +3014,28 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "ОБНИМАШКИ!"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "ПОДАРКИ!"
+
+#: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "ГОРЯЧО!"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "ДУДУУУУ!"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "ПРЫГ!"
 
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "ДАВАЙ ИГРАТЬ!"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "Из него сыплется набивка! Наверняка она горит..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
@@ -3036,6 +3056,14 @@ msgstr "А НУ, НАЙДИ МЕНЯ!"
 #: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "НА ПОДИУМ!"
+
+#: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "ИДИ СЮДА!"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "В ТЕМНОТЕ НЕ ВЫЙДЕТ!"
 
 #: scripts/modista.gd
 msgid "¡TE TENGO!"
@@ -3062,12 +3090,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "ДА НАЧНЁТСЯ ПОКАЗ!"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "Если прожектор её поймает, она застынет..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "Если прожектор поймает её в самый центр, она ослепнет..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "ЗАСТЫЛА!"
+msgid "¡CEGADA!"
+msgstr "ОСЛЕПЛА!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -4638,6 +4666,14 @@ msgstr "Держи, это было в бюро находок!"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "«Доступ ограничен: этаж 40»… что там наверху?"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "ЧУХ-ЧУУУХ!"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "ПЕРЕЕХАЛ!"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

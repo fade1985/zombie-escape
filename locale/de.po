@@ -1275,6 +1275,10 @@ msgstr "AN DIE ARBEIT!"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "KEINER MACHT PAUSE!"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "PLOPP!"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "HUNGER!"
@@ -3006,12 +3010,28 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "GRATIS KNUDDELN!"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "GESCHENKE!"
+
+#: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "HEISS!"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "TRÖÖÖÖT!"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "BOING!"
 
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "SPIELZEIT!"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "Es verliert Füllung! Die brennt bestimmt..."
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
@@ -3032,6 +3052,14 @@ msgstr "FINDEST DU MICH?"
 #: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "AUF DEN LAUFSTEG!"
+
+#: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "KOMM HER!"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "NICHT IM DUNKELN!"
 
 #: scripts/modista.gd
 msgid "¡TE TENGO!"
@@ -3058,12 +3086,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "DIE MODENSCHAU BEGINNT!"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "Wenn der Scheinwerfer sie erwischt, erstarrt sie..."
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "Wenn der Scheinwerfer sie voll erwischt, ist sie geblendet..."
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "ERSTARRT!"
+msgid "¡CEGADA!"
+msgstr "GEBLENDET!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -4630,6 +4658,14 @@ msgstr "Hier, das war im Fundbüro!"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "„Zutritt verboten: Stockwerk 40“ … was ist da oben?"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "TSCHU-TSCHUUU!"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "ÜBERFAHREN!"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

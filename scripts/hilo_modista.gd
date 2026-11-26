@@ -37,6 +37,7 @@ var estado := "rodando"       # rodando, flojo, aviso, tenso o cortado
 var t := 0.0
 var dio := false              # ya ha dado a Johnny en esta tensada (o el carrete al pasar)
 var tiempo := 0.0
+var oculto := false           # en la pasarela (fase 2): a oscuras no se ve; solo en la luz del foco o con un brillo que lo recorre
 var doble := false            # el gordo: aguanta dos golpes
 var ancla := Vector2.ZERO     # tensando, el carrete (sobre el que gira)
 var desde := Vector2.ZERO     # tensando, dónde empezaba el alfiler
@@ -231,14 +232,20 @@ func _draw() -> void:
 	var lado := dir.orthogonal()
 	if lado.y < 0.0:
 		lado = -lado   # (la comba, siempre hacia abajo en la pantalla)
+	var focos: Array = get_tree().get_nodes_in_group("foco_modista") if oculto else []
+	var brillo := fmod(tiempo, 2.6) / 0.8   # (oculto: por dónde va el brillo que lo recorre; pasado 1, ninguno)
 	for i in n + 1:
 		var u := float(i) / maxf(1.0, n)
 		var p := b * u + lado * comba * sin(u * PI)
 		var c := (p / 2.0).floor() * 2.0
-		draw_rect(Rect2(c + Vector2(0, 4), Vector2(2, 2)), Color(SOMBRA, SOMBRA.a * k))
-		draw_rect(Rect2(c, Vector2(2, 2)), Color(color, k))
+		var ve := k
+		if oculto:
+			ve = k * (1.0 if focos.any(func(f): return f.alumbra(global_position + c)) else
+				(0.85 if absf(u - brillo) < 0.05 else 0.06))
+		draw_rect(Rect2(c + Vector2(0, 4), Vector2(2, 2)), Color(SOMBRA, SOMBRA.a * ve))
+		draw_rect(Rect2(c, Vector2(2, 2)), Color(color, ve))
 		if doble:
-			draw_rect(Rect2(c + lado.round() * 2.0, Vector2(2, 2)), Color(color.darkened(0.3), k))
+			draw_rect(Rect2(c + lado.round() * 2.0, Vector2(2, 2)), Color(color.darkened(0.3), ve))
 	if estado == "tenso":
 		# el brillo del hilo tenso
 		for i in range(0, n + 1, 3):

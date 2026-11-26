@@ -1273,6 +1273,10 @@ msgstr "都给我干活！"
 msgid "¡AQUÍ NO PARA NADIE!"
 msgstr "谁也不准下班！"
 
+#: scripts/globo.gd
+msgid "¡POP!"
+msgstr "啪！"
+
 #: scripts/gloton.gd
 msgid "¡HAMBRE!"
 msgstr "好饿！"
@@ -3002,12 +3006,28 @@ msgid "¡ABRAZOS GRATIS!"
 msgstr "免费抱抱！"
 
 #: scripts/mascota.gd
+msgid "¡REGALOS!"
+msgstr "礼物！"
+
+#: scripts/mascota.gd
+msgid "¡QUEMA!"
+msgstr "好烫！"
+
+#: scripts/mascota.gd
+msgid "¡PIIIII!"
+msgstr "嘟——！"
+
+#: scripts/mascota.gd
 msgid "¡BOING!"
 msgstr "蹦！"
 
 #: scripts/mascota.gd
 msgid "¡HORA DE JUGAR!"
 msgstr "游戏时间！"
+
+#: scripts/mascota.gd
+msgid "¡Va soltando relleno! Seguro que eso arde..."
+msgstr "它在掉填充物！那东西肯定一点就着……"
 
 #: scripts/minijefe.gd scripts/sujeto_1.gd
 msgid "¡GRRR!"
@@ -3028,6 +3048,14 @@ msgstr "你找不到我的！"
 #: scripts/modista.gd
 msgid "¡A LA PASARELA!"
 msgstr "上T台！"
+
+#: scripts/modista.gd
+msgid "¡VEN AQUÍ!"
+msgstr "给我过来！"
+
+#: scripts/modista.gd
+msgid "¡A OSCURAS NO!"
+msgstr "黑暗中休想！"
 
 #: scripts/modista.gd
 msgid "¡TE TENGO!"
@@ -3054,12 +3082,12 @@ msgid "¡QUE EMPIECE EL DESFILE!"
 msgstr "时装秀开始！"
 
 #: scripts/modista.gd
-msgid "Si el foco la pilla, se queda tiesa..."
-msgstr "只要聚光灯照到她，她就会僵住……"
+msgid "Si el foco la pilla de lleno, se queda ciega..."
+msgstr "如果聚光灯正好照中她，她就会被晃瞎……"
 
 #: scripts/modista.gd
-msgid "¡TIESA!"
-msgstr "僵住了！"
+msgid "¡CEGADA!"
+msgstr "被晃瞎了！"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -4622,6 +4650,14 @@ msgstr "给，这是失物招领处的！"
 #: scripts/tornos.gd
 msgid "«Acceso restringido: planta 40»… ¿qué hay ahí arriba?"
 msgstr "「限制进入：40 层」……上面有什么？"
+
+#: scripts/tren_juguete.gd
+msgid "¡CHU-CHUUU!"
+msgstr "呜——呜——！"
+
+#: scripts/tren_juguete.gd
+msgid "¡ATROPELLO!"
+msgstr "碾过去了！"
 
 #: scripts/tutoriales.gd
 msgid "Apunta y ataca con {apuntar}."

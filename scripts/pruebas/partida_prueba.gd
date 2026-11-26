@@ -54,6 +54,8 @@
 #                       cambia de edificio y deja de guardarse                             [prueba_jefes.gd]
 #   --cocina            (con --edificio centro --jefe cocinero) la Cocina central: los fogones y las freidoras
 #                       de las paredes y la olla gigante en medio, con foto               [prueba_jefes.gd]
+#   --choques           (con --jefe X) con qué chocan las balas en la sala del jefe: rayos por toda la sala; lo que no
+#                       es pared ni mueble se apunta (25 nov: ¿la sangre del suelo para las balas?)   [prueba_jefes.gd]
 #   --desfile           (con --edificio centro --jefe modista) la modista rehecha (24 nov): esconderse entre los
 #                       maniquíes, los hilos y los carretes, tensar, el maniquí que revienta, descubierta, el
 #                       apagón con el foco, congelada y el corte de pared a pared, con fotos   [prueba_jefes.gd]
@@ -65,6 +67,11 @@
 #   --fiesta            (con --edificio centro --jefe mascota) la mascota rehecha (24 nov), fase 1: las cajas sorpresa,
 #                       las pelotas al chocar, el salto que las dispara, comerse una caja (sentada, le entra más,
 #                       revientan las pelotas) y la caja nueva, con fotos                   [prueba_jefes.gd]
+#   --tren              (con --edificio centro --jefe mascota) el tren de juguete (25 nov): las vías, el aviso,
+#                       la vuelta, Johnny y la mascota sentada atropellados, con fotos  [prueba_jefes.gd]
+#   --descosida         (con --edificio centro --jefe mascota) la mascota, fase 2 (25 nov): se descose, el relleno
+#                       que suelta y el fuego que corre por él, ella quemándose, la tarta y sus velas, el crío con
+#                       globo (al morir, dos pelotas) y la caja, con fotos                [prueba_jefes.gd]
 #   --crios             (con --edificio centro --jefe mascota) cuántos críos salen en 20 s, normal y enfadada, cuántos
 #                       a la vez como mucho y a qué distancia de Johnny (M85)              [prueba_jefes.gd]
 #   --metal             (con --jefe gymbro) el cuerpo de metal de sus suplementos: sube, se desconcha y revienta; y
@@ -750,6 +757,10 @@ func empezar_prueba() -> void:
 		set_process(false)   # sin la prueba larga
 		await probar_desfile()
 		get_tree().quit()
+	elif "--choques" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_choques()
+		get_tree().quit()
 	elif "--banquete" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_banquete()
@@ -765,6 +776,14 @@ func empezar_prueba() -> void:
 	elif "--fiesta" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_fiesta()
+		get_tree().quit()
+	elif "--tren" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_tren()
+		get_tree().quit()
+	elif "--descosida" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_descosida()
 		get_tree().quit()
 	elif "--crios" in args:
 		set_process(false)   # sin la prueba larga
