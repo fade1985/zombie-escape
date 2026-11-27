@@ -984,6 +984,91 @@ func probar_volver_planta() -> void:
 	print("Volver · al subir de planta: %s, mapas guardados %d (esperado: como recién llegada, 1)" % [nodos_ahora(), mapas.size()])
 
 
+# Con "--captura --edificio centro --laberinto" (27 nov, el dueño): la electrónica inundada (Tienda.LABERINTOS), con la puerta
+# abajo y arriba. Dice cuántas casillas de agua lleva, si desde la entrada se llega a la puerta de la sala de juegos sin pisar
+# agua (y a la del almacén no), si algún mueble suelto tapa el camino seco, si en_agua (agua.gd) dice lo mismo que el dibujo en
+# cada casilla de la sala de venta y lo que tarda en montarse la tienda. Saca captura-laberinto-<lado>.png (entera, con la luz
+# del juego) y captura-laberinto-<lado>-cerca.png (Johnny en el camino, de cerca). Luego se cierra
+func probar_laberinto() -> void:
+	for lado in ["abajo", "arriba"]:
+		var t := Tienda.generar(0, "electronica", false, lado)
+		var venta: Dictionary = t.salas.filter(func(s): return s.uso == "tienda")[0]
+		var mojado := {}
+		for k in t.get("agua", []):
+			mojado[k] = true
+		var seco := {}
+		for f in t.filas:
+			for c in t.cols:
+				if t.dueno[f * t.cols + c] != -1 and not mojado.has(Vector2i(c, f)):
+					seco[Vector2i(c, f)] = true
+		var entrada := Vector2i(t.entrada.c, t.filas - Tienda.BORDE - 1 if t.entrada.lado == "abajo" else Tienda.BORDE)
+		var llega := {}
+		for p in t.puertas:
+			if p.a == venta.id or p.b == venta.id:
+				var otra: Dictionary = t.salas[p.b if p.a == venta.id else p.a]
+				llega[otra.uso] = not Peligros.camino(seco, entrada, Vector2i(p.c, p.f)).is_empty()
+		print("Laberinto (puerta %s): %d casillas de agua, cable en %s · se llega en seco a la sala de juegos %s, al almacén %s (esperado: true, false)" % [
+			lado, mojado.size(), t.get("cable", "-"), llega.get("taquillas", false), llega.get("almacen", true)])
+		# la tienda montada, en una planta
+		var hallada := {}
+		for i in 200:
+			Planta.semilla = 3000 + i
+			var num := 1 + i % 4
+			var pl: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+			for idx in pl.sitios.size():
+				if pl.sitios[idx].get("tienda", "") == "electronica" and pl.sitios[idx].tipo != "jefe" and pl.sitios[idx].apt.entrada.lado == lado:
+					hallada = {"semilla": 3000 + i, "num": num, "idx": idx}
+					break
+			if not hallada.is_empty():
+				break
+		if hallada.is_empty():
+			Planta.semilla = 0
+			print("Laberinto (puerta %s): no sale en ninguna planta" % lado)
+			continue
+		Planta.semilla = hallada.semilla
+		nueva_planta(hallada.num)
+		Planta.semilla = 0
+		var sitio: Dictionary = planta.sitios[hallada.idx]
+		sitio.limpio = true   # sin zombis: aquí se mira el agua
+		johnny.vida = 999
+		var desde := Time.get_ticks_msec()
+		await montar(hallada.idx, 0, false)
+		var tarda := Time.get_ticks_msec() - desde
+		var agua: Node = mapa.find_child("Agua", true, false)
+		if agua == null:
+			agua = get_tree().current_scene.find_child("Agua", true, false)
+		# los muebles sueltos de la sala de venta, en el agua (no en el camino)
+		var tapan := []
+		for m in sitio.muebles:
+			if m.zona != venta.id:
+				continue
+			var h := Muebles.hueco(m)
+			for k in seco:
+				if h.has_point(Peligros.centro(k)):
+					tapan.append(m.tipo)
+					break
+		# en_agua, casilla a casilla (su centro) y, en las esquinas redondeadas, el pico de fuera
+		var mal := 0
+		var esquinas := 0
+		for f in venta.fondo:
+			for c in venta.ancho:
+				var k := Vector2i(venta.c0 + c, venta.f0 + f)
+				if agua.en_agua(Peligros.centro(k)) != mojado.has(k):
+					mal += 1
+				if mojado.has(k) and not mojado.has(k + Vector2i.LEFT) and not mojado.has(k + Vector2i.UP):
+					esquinas += 1
+					if agua.en_agua(Vector2(k) * 32.0 + Vector2(1, 1)):
+						mal += 1
+		print("Laberinto (puerta %s): montada en %d ms · muebles en el camino %s (esperado: []) · en_agua distinto del dibujo en %d sitios (esperado: 0; %d esquinas redondeadas)" % [
+			lado, tarda, tapan, mal, esquinas])
+		johnny.position = Peligros.centro(Vector2i(venta.c0 + 6, venta.f0 + (3 if lado == "abajo" else 8)))
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(1.0).timeout
+		Captura.foto("captura-laberinto-%s-cerca.png" % lado)
+		await foto_entera(sitio, "captura-laberinto-%s.png" % lado, true)
+	get_tree().quit()
+
+
 # Una foto del sitio montado entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
 func foto_entera(sitio: Dictionary, nombre: String, con_luz := false) -> void:
 	for s in sitio.apt.salas:

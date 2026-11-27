@@ -709,16 +709,17 @@ const SALAS := {
 	# cajón, 0,4 casillas más abajo: lo de debajo de su dibujo son discos tirados); y la caja, desde el cliente, a la derecha de la entrada con
 	# el pie en la fila 9,5. En la inversa: a la izquierda de la entrada, en la pared de arriba, el casetero, los vinilos y las torres; a la
 	# derecha, la caja desde dentro, suelta con el pie en la fila 3,75 y paso por detrás, y las cuatro estanterías; y los sueltos, con el pie
-	# en la fila 8
+	# en la fila 8. (27 nov, el dueño: la tienda inundada, Tienda.LABERINTOS) los sueltos, de islas en el agua (los números, el centro de su
+	# hueco): el cajón de discos y la mesa entre los dos pasillos de la izquierda, el carro entre los de la derecha y la caja junto al callejón
 	"tienda-electronica": {"colocados": {
 		"abajo": [["retrocasetes", 13.0], ["retroestante1", 19.62], ["retroestante2", 23.87], ["retroestante3", 28.1], ["retroestante1", 32.38],
 			["retrovinilos", 39.45], ["retrotorres", 43.41],
-			["retrodiscos", 17.0, "libre", 5.65], ["retrocarro", 36.0, "libre", 5.375], ["retromesa", 42.0, "libre", 5.25],
-			["retrocaja", 30.5, "libre", 8.875]],
+			["retrodiscos", 12.5, "libre", 5.5], ["retromesa", 21.0, "libre", 5.5], ["retrocarro", 33.0, "libre", 5.0],
+			["retrocaja", 40.5, "libre", 8.875]],
 		"arriba": [["retrocasetes", 13.0], ["retrovinilos", 16.5], ["retrotorres", 20.0],
-			["retrocajadentro", 28.5, "libre", 3.125],
+			["retrocajadentro", 40.5, "libre", 3.3],
 			["retroestante1", 33.82], ["retroestante2", 37.27], ["retroestante3", 40.7], ["retroestante1", 44.18],
-			["retrodiscos", 17.0, "libre", 7.65], ["retrocarro", 36.0, "libre", 7.375], ["retromesa", 42.0, "libre", 7.25]]}},
+			["retrodiscos", 12.5, "libre", 6.5], ["retromesa", 21.0, "libre", 6.5], ["retrocarro", 33.0, "libre", 7.0]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de

@@ -564,14 +564,19 @@ static func agua(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 				charco[opciones[rng.randi() % opciones.size()]] = true
 			if charco.size() < AGUA.casillas[0]:
 				continue
+		# (27 nov, el dueño: la electrónica inundada, Tienda.LABERINTOS) el camino seco solo llega a la sala de juegos y el cable
+		# cae donde dice su dibujo: la prueba --laberinto mira que se llega
+		var inundada: bool = apt.has("cable")
 		var pasa := suelo.duplicate()
 		for k in charco:
 			pasa.erase(k)
-		if dentro.any(func(p): return camino(pasa, entrada, Vector2i(p.c, p.f)).is_empty()):
+		if not inundada and dentro.any(func(p): return camino(pasa, entrada, Vector2i(p.c, p.f)).is_empty()):
 			continue
 		# el cable: desde el pie de la pared (de arriba) más cercano a una casilla del charco
 		var mejor := {}
-		for k in charco:
+		if inundada:
+			mejor = {"largo": 0.0, "agua": apt.cable + Vector2i(0, 1), "pared": apt.cable}
+		for k in ([] if inundada else charco):
 			for f in range(maxi(0, k.y - 8), k.y + 1):
 				for c in range(k.x - 8, k.x + 9):
 					if dueno(apt, c, f) == 0 and dueno(apt, c, f - 1) == -1 and not bajo_mueble(sitio, Vector2i(c, f)):

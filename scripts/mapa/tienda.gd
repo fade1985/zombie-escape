@@ -261,7 +261,7 @@ const PLANOS := {
 	],
 	# la electrónica (26 nov, el dueño: rehecha como el supermercado, 50 × 30): arriba, de izquierda a derecha, el aseo de empleados
 	# (7 × 12), el almacén (17 × 12; el aseo se abre a él) y las taquillas (20 × 12, con su puerta en medio, en el sitio del taller);
-	# abajo, la sala de venta (46 × 13), con el charco con corriente (~) a la izquierda
+	# abajo, la sala de venta (46 × 13). (27 nov, el dueño) inundada: su agua con corriente, el laberinto de LABERINTOS
 	"electronica": [
 		"##################################################",
 		"##################################################",
@@ -282,11 +282,11 @@ const PLANOS := {
 		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
 		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
 		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVVV~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVV~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVV~~~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVV~~~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
-		"##VVVV~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
 		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
 		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
 		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
@@ -506,6 +506,48 @@ const PLANOS := {
 	],
 }
 
+# (27 nov, el dueño) la sala de venta inundada de la electrónica: el agua con corriente (Peligros.agua) y, entre ella, un camino
+# seco que hay que seguir con cuidado hasta la sala de juegos (donde está el cuadro que corta la luz). Un dibujo por versión, tal
+# como se ve en la pantalla ("abajo": la puerta de la calle abajo; "arriba": la inversa), con una letra por casilla de la sala:
+#   ~  agua         .  seco         C  agua, y ahí cae el cable pelado desde la pared de arriba
+# Las 3 últimas filas no se ven (las tapa la cara de la pared de abajo): ahí, agua menos el paso de la entrada (en la normal) o el de
+# la puerta de la sala de juegos (en la inversa). La inversa no es la normal volteada: así el camino no cae en lo que no se ve ni
+# debajo de los muebles de la pared de arriba. Los muebles sueltos van en el agua (Catalogo, "tienda-electronica")
+const LABERINTOS := {
+	"electronica": {
+		"abajo": [
+			"~~~C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~",
+			"~~~~~.........................~~~~~~.......~~~",
+			"~~~~~.........................~~~~~~.......~~~",
+			"~~~~~..~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~..~~~",
+			"~~~~~..~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~..~~~",
+			"~~~~~..~~~~~~~~~~~~~~~~~~~~~...............~~~",
+			"~~~~~...................~~~~...............~~~",
+			"~~~~~...................~~~~~~~~~~..~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~..~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
+		],
+		"arriba": [
+			"~~~C~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~..~~~~~~~~~~",
+			"~~~~~...................~~~~~~~~~~..~~~~~~~~~~",
+			"~~~~~...................~~~~...............~~~",
+			"~~~~~..~~~~~~~~~~~~~~~~~~~~~...............~~~",
+			"~~~~~..~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~..~~~",
+			"~~~~~..~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~..~~~",
+			"~~~~~.........................~~~~~~.......~~~",
+			"~~~~~.........................~~~~~~.......~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~",
+		],
+	},
+}
+
 # Los tipos de local de ese edificio ("centro": las tiendas; "torre": los departamentos), sin la joyería (no se sortea)
 static func de_edificio(edificio: String) -> Array:
 	return TIPOS.keys().filter(func(t): return t != "joyeria" and TIPOS[t].get("edificio", "centro") == edificio)
@@ -597,7 +639,22 @@ static func del_plano(tipo: String, lado: String) -> Dictionary:
 	if lado == "arriba":
 		Apartamento.voltear(t)
 	t.lado = lado
+	if LABERINTOS.has(tipo):
+		inundar(t, LABERINTOS[tipo][lado])
 	return t
+
+
+# La sala de venta inundada (LABERINTOS): sus casillas de agua ("agua") y la del cable ("cable"), ya en su sitio de la tienda
+static func inundar(t: Dictionary, dibujo: Array) -> void:
+	var venta: Dictionary = t.salas.filter(func(s): return s.uso == "tienda")[0]
+	t.agua = []
+	for f in dibujo.size():
+		for c in dibujo[f].length():
+			var k := Vector2i(venta.c0 + c, venta.f0 + f)
+			if dibujo[f][c] != ".":
+				t.agua.append(k)
+			if dibujo[f][c] == "C":
+				t.cable = k
 
 
 # Como Apartamento.describir, con los nombres de las tiendas: la sala de venta se llama como la tienda

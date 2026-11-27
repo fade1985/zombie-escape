@@ -9,8 +9,11 @@
 # Si el técnico la arregla (su rescate, averia.gd), el cable queda empalmado con cinta aislante y el agua ya no da
 # calambres nunca más ("arreglado"); la corriente sigue siendo la de la luz de la tienda.
 #
-# Se dibuja todo con código: el charco (como los demás charcos: a cuadraditos que tiemblan, charco.gd), las
+# Se dibuja todo con código: el agua (como los demás charcos: a cuadraditos que tiemblan, charco.gd), las
 # chispitas sobre el agua, los rayos de cada calambrazo y el cable, que baja por la pared y llega hasta el agua.
+# (27 nov, el dueño) la tienda está inundada (Tienda.LABERINTOS): solo se puede andar por un camino seco hasta la sala de
+# juegos. Tanta agua la pinta la tarjeta gráfica de una vez (escenas/armas/agua_corriente.gdshader), con el borde en las
+# casillas y las esquinas de fuera redondeadas: lo que se ve seco está seco (en_agua mira lo mismo).
 extends Node2D
 
 const CASILLA := 32
@@ -19,11 +22,15 @@ const RAYO := Color("#9fe8ff")
 const CABLE := Color("#16171b")
 const COBRE := Color("#d9873f")
 const TELE := Color(0.55, 0.75, 1.0)
+const SHADER := preload("res://escenas/armas/agua_corriente.gdshader")
+const LADO := 16.0           # cuadraditos (Charco.GOTA) por casilla
+const REDONDEO := 4.0        # el radio de las esquinas de fuera, en cuadraditos (como en el shader)
 
 var datos: Dictionary
 var mapa: Node
 var mojado := {}             # las casillas del charco
-var charco: Node2D           # el dibujo del agua (se pinta una vez)
+var charco: Node2D           # el cable por el suelo (se pinta una vez) y, detrás, el agua (dibujo)
+var dibujo: Sprite2D         # el agua: la pinta el shader (agua_corriente.gdshader)
 var chispas: Node2D          # lo eléctrico: luce por sí mismo
 var cuadro: Node2D
 var pared: Node2D            # el cable que baja por la pared
@@ -34,9 +41,7 @@ var punta: Vector2           # la punta pelada del cable
 var t := 0.0
 var pulso := 0.0
 var destello := 0.0
-var celdas: Array = []       # los cuadraditos del agua, como los de Charco.preparar_liquido (hacer_celdas)
-var sitios := {}             # cada cuadradito, por su sitio
-var ondas: Array = []        # los anillos de ondas (Charco.hacer_ondas)
+var cerca_cable: Array = []  # las casillas de agua cerca del cable: adonde van los rayos de cada calambrazo
 
 
 func montar(d: Dictionary, m: Node) -> void:
@@ -53,6 +58,10 @@ func montar(d: Dictionary, m: Node) -> void:
 	charco.light_mask = Luz.CAPA_SUELO
 	charco.draw.connect(dibujar_charco)
 	add_child(charco)
+	hacer_dibujo()
+	for c in d.casillas:
+		if absi(c.x - d.cable.x) + absi(c.y - d.cable.y) <= 8:
+			cerca_cable.append(c)
 	chispas = Node2D.new()
 	chispas.name = "Chispas"
 	var propio := CanvasItemMaterial.new()
@@ -141,8 +150,21 @@ func arreglar() -> void:
 	pared.queue_redraw()
 
 
+# ¿Está en el agua? Como la pinta el shader: su casilla mojada, menos las esquinas de fuera redondeadas
 func en_agua(p: Vector2) -> bool:
-	return mojado.has(Peligros.casilla(p))
+	var c := Peligros.casilla(p)
+	if not mojado.has(c):
+		return false
+	var l := (p - Vector2(c) * CASILLA) / Charco.GOTA   # dentro de la casilla, en cuadraditos (de 0 a 16)
+	for sx in [-1, 1]:
+		for sy in [-1, 1]:
+			if mojado.has(c + Vector2i(sx, 0)) or mojado.has(c + Vector2i(0, sy)):
+				continue
+			var en_esquina: bool = (l.x < REDONDEO if sx < 0 else l.x > LADO - REDONDEO) and (l.y < REDONDEO if sy < 0 else l.y > LADO - REDONDEO)
+			var centro := Vector2(REDONDEO if sx < 0 else LADO - REDONDEO, REDONDEO if sy < 0 else LADO - REDONDEO)
+			if en_esquina and l.distance_to(centro) > REDONDEO:
+				return false
+	return true
 
 
 func _physics_process(delta: float) -> void:
@@ -165,8 +187,7 @@ func _physics_process(delta: float) -> void:
 				Sonido.tocar("chispa")
 		luz_cable.energy = (0.5 + 0.35 * randf() + destello * 4.0) * Luz.fuerza()
 	charco.modulate = Color.WHITE.lerp(Color(1.7, 2.0, 2.3), destello / 0.2)
-	if Engine.get_physics_frames() % 2 == 0:
-		charco.queue_redraw()   # el agua se mueve (a 30 fotogramas: tiene muchos cuadraditos)
+	dibujo.material.set_shader_parameter("t", t)   # el agua se mueve
 	chispas.queue_redraw()
 
 
@@ -187,7 +208,7 @@ func calambrazo(johnny: Node2D) -> void:
 	destello = 0.2
 	rayos.clear()
 	for i in 4:
-		rayos.append(rayo_hasta(datos.casillas.pick_random()))
+		rayos.append(rayo_hasta((cerca_cable if not cerca_cable.is_empty() else datos.casillas).pick_random()))
 	var visto: bool = mapa.niebla.get(0, 0.0) < 0.5
 	if visto:
 		Luz.destello(self, punta, 260.0, 0.25, 0.8, RAYO)
@@ -221,16 +242,48 @@ func rayo_hasta(meta: Vector2i) -> Array:
 
 # ── Dibujos ──
 
-# El charco, con el dibujo de los demás líquidos (Charco.pintar_liquido, con los colores del agua): cuadraditos de un
-# píxel del dibujo, contorno oscuro, bandas de color que se mecen, la luz de arriba a la izquierda, un brillo en vetas
-# que resbala y unos anillos de ondas. Encima, el cable
-func dibujar_charco() -> void:
-	if celdas.is_empty():
-		hacer_celdas()
+# El agua: un Sprite2D detrás del cable, con una textura de un texel por casilla (rojo: agua; con una casilla seca alrededor)
+# que agrandada cubre el agua entera, y el shader (agua_corriente.gdshader), con los colores del agua de los charcos
+# (Charco.BURBUJEO) y unos anillos de ondas repartidos por el agua (en casillas con agua a los cuatro lados)
+func hacer_dibujo() -> void:
+	var c0 := Vector2i(999999, 999999)
+	var c1 := Vector2i(-999999, -999999)
+	for c in datos.casillas:
+		c0 = Vector2i(mini(c0.x, c.x), mini(c0.y, c.y))
+		c1 = Vector2i(maxi(c1.x, c.x), maxi(c1.y, c.y))
+	c0 -= Vector2i.ONE
+	var imagen := Image.create(c1.x - c0.x + 2, c1.y - c0.y + 2, false, Image.FORMAT_R8)
+	for c in datos.casillas:
+		imagen.set_pixel(c.x - c0.x, c.y - c0.y, Color.RED)
+	dibujo = Sprite2D.new()
+	dibujo.name = "Dibujo"   # no-tr (nombre de nodo)
+	dibujo.texture = ImageTexture.create_from_image(imagen)
+	dibujo.centered = false
+	dibujo.position = Vector2(c0) * CASILLA
+	dibujo.scale = Vector2(CASILLA, CASILLA)
+	dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	dibujo.show_behind_parent = true
+	dibujo.light_mask = Luz.CAPA_SUELO
+	var m := ShaderMaterial.new()
+	m.shader = SHADER
+	m.set_shader_parameter("esquina", dibujo.position)
 	var col: Dictionary = Charco.BURBUJEO.agua
-	Charco.pintar_liquido(charco, celdas, col, t, 0.0)
-	Charco.pintar_ondas(charco, ondas, sitios, col, t)
-	# el cable por el suelo, desde el pie de la pared hasta el agua, con una curva
+	for k in ["borde", "oscuro", "medio", "centro", "brillo", "luz"]:
+		m.set_shader_parameter(k, col[k])
+	var lista := PackedVector4Array()
+	var hondas: Array = datos.casillas.filter(func(c): return Peligros.LADOS.all(func(v): return mojado.has(c + v)))
+	hondas.shuffle()
+	for c in hondas.slice(0, clampi(datos.casillas.size() / 18, 2, 24)):
+		var p := Peligros.centro(c) + Vector2(randf_range(-8, 8), randf_range(-8, 8))
+		lista.append(Vector4(p.x, p.y, randf_range(1.8, 2.6), randf() * 3.0))
+	m.set_shader_parameter("ondas", lista)
+	m.set_shader_parameter("cuantas", lista.size())
+	dibujo.material = m
+	charco.add_child(dibujo)
+
+
+# El cable por el suelo, desde el pie de la pared hasta el agua, con una curva, y su punta
+func dibujar_charco() -> void:
 	var desde: Vector2 = datos.cable_desde + Vector2(0, 4)
 	var lado := Vector2(punta - desde).orthogonal().normalized() * (18.0 if hash(datos.cable) % 2 else -18.0)
 	var medio := (desde + punta) / 2.0 + lado
@@ -251,107 +304,11 @@ func dibujar_charco() -> void:
 		charco.draw_line(punta, punta + h, COBRE, 2.0)
 
 
-# Los cuadraditos del charco (cada casilla, 8x8). "lejos" es, para cada cuadradito de las casillas mojadas, a cuántos
-# está del suelo seco; emborronado (la media de un cuadrado de 5x5) para que las esquinas de las casillas no dejen picos,
-# el agua llega hasta donde pasa de un umbral que ondula (el borde redondo). Luego, lo hondo de cada uno, que da su color
-func hacer_celdas() -> void:
-	var c0 := Vector2i(999999, 999999)
-	var c1 := Vector2i(-999999, -999999)
-	for c in datos.casillas:
-		c0 = Vector2i(mini(c0.x, c.x), mini(c0.y, c.y))
-		c1 = Vector2i(maxi(c1.x, c.x), maxi(c1.y, c.y))
-	var esquina := Vector2(c0) * CASILLA
-	var lado := int(CASILLA / Charco.GOTA)
-	var an := (c1.x - c0.x + 1) * lado
-	var al := (c1.y - c0.y + 1) * lado
-	var mojada := func(x: int, y: int) -> bool:
-		return x >= 0 and y >= 0 and x < an and y < al and mojado.has(c0 + Vector2i(x / lado, y / lado))
-	var lejos := distancias(an, al, mojada)
-	for i in lejos.size():
-		lejos[i] = minf(lejos[i], 12.0)
-	var suave := borronear(borronear(lejos, an, al, 1, 0), an, al, 0, 1)   # la media de un cuadrado de 9x9
-	var ruido_liso := FastNoiseLite.new()
-	ruido_liso.seed = hash(c0)
-	ruido_liso.frequency = 0.06
-	var agua := PackedByteArray()
-	agua.resize(an * al)
-	for y in al:
-		for x in an:
-			var ruido := ruido_liso.get_noise_2d(x * Charco.GOTA, y * Charco.GOTA)
-			agua[y * an + x] = 1 if lejos[y * an + x] > 0.0 and suave[y * an + x] > 5.0 + ruido * 2.2 else 0
-	var dentro := func(x: int, y: int) -> bool:
-		return x >= 0 and y >= 0 and x < an and y < al and agua[y * an + x] == 1
-	var hondo := distancias(an, al, dentro)
-	var centro := Vector2(an, al) * Charco.GOTA / 2.0
-	for y in al:
-		for x in an:
-			if agua[y * an + x] == 1:
-				var h: float = hondo[y * an + x]
-				celdas.append([Vector2(x, y) * Charco.GOTA - centro, clampf(1.0 - (h - 1.0) / 10.0, 0.0, 1.0), -1.0, INF, 0.0])
-	sitios = Charco.preparar_liquido(celdas, minf(an, al) * Charco.GOTA / 2.0, ruido_liso)
-	ondas = Charco.hacer_ondas(celdas, clampi(datos.casillas.size() / 4, 2, 6), 48.0)
-	# las posiciones, del centro del charco a las del mundo
-	for c in celdas:
-		c[0] += esquina + centro
-	for o in ondas:
-		o[0] += esquina + centro
-	var mundo := {}
-	for k in sitios:
-		mundo[k + Vector2i(((esquina + centro) / Charco.GOTA).round())] = sitios[k]
-	sitios = mundo
-
-
-# Media de cada valor con los 4 de cada lado, en una dirección (dx, dy): dos pasadas hacen un cuadrado
-func borronear(v: PackedFloat32Array, an: int, al: int, dx: int, dy: int) -> PackedFloat32Array:
-	var out := PackedFloat32Array()
-	out.resize(an * al)
-	for y in al:
-		for x in an:
-			var suma := 0.0
-			for k in range(-4, 5):
-				suma += v[clampi(y + k * dy, 0, al - 1) * an + clampi(x + k * dx, 0, an - 1)]
-			out[y * an + x] = suma / 9.0
-	return out
-
-
-# Para cada cuadradito, a cuántos está del primero que no cumple "vale" (fuera de la cuadrícula tampoco cumple).
-# Dos pasadas, con 1 en recto y 1,4 en diagonal: basta para un borde redondo
-func distancias(an: int, al: int, vale: Callable) -> PackedFloat32Array:
-	var d := PackedFloat32Array()
-	d.resize(an * al)
-	for y in al:
-		for x in an:
-			d[y * an + x] = 9999.0 if vale.call(x, y) else 0.0
-	for y in al:
-		for x in an:
-			var i := y * an + x
-			if d[i] == 0.0:
-				continue
-			var m := d[i]
-			m = minf(m, (d[i - 1] if x > 0 else 0.0) + 1.0)
-			m = minf(m, (d[i - an] if y > 0 else 0.0) + 1.0)
-			m = minf(m, (d[i - an - 1] if x > 0 and y > 0 else 0.0) + 1.4)
-			m = minf(m, (d[i - an + 1] if x < an - 1 and y > 0 else 0.0) + 1.4)
-			d[i] = m
-	for y in range(al - 1, -1, -1):
-		for x in range(an - 1, -1, -1):
-			var i := y * an + x
-			if d[i] == 0.0:
-				continue
-			var m := d[i]
-			m = minf(m, (d[i + 1] if x < an - 1 else 0.0) + 1.0)
-			m = minf(m, (d[i + an] if y < al - 1 else 0.0) + 1.0)
-			m = minf(m, (d[i + an + 1] if x < an - 1 and y < al - 1 else 0.0) + 1.4)
-			m = minf(m, (d[i + an - 1] if x > 0 and y < al - 1 else 0.0) + 1.4)
-			d[i] = m
-	return d
-
-
 # Lo eléctrico, que luce solo: chispitas sueltas sobre el agua y, en cada calambrazo, los rayos
 func dibujar_chispas() -> void:
 	if not datos.corriente or datos.get("arreglado", false):
 		return
-	for i in 6:
+	for i in clampi(datos.casillas.size() / 8, 6, 50):   # (más cuantas más casillas: la tienda inundada lleva cientos)
 		var c: Vector2i = datos.casillas[int(fposmod(t * 13.0 + i * 7.3, 1.0) * datos.casillas.size())]
 		if randf() < 0.5:
 			chispas.draw_rect(Rect2(Vector2(c) * CASILLA + Vector2(randi_range(1, 14), randi_range(1, 14)) * 2.0, Vector2(2, 2)), RAYO)

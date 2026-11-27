@@ -352,6 +352,8 @@
 #   --durmientes-planta cuántos durmientes trae cada planta de cada edificio y la partida entera (el mutágeno que da) [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera (también con la luz del juego, -luz) [prueba_sitios.gd]
+#   --laberinto         (con --edificio centro) la electrónica inundada (27 nov): el camino seco llega a la sala de juegos (y al
+#                       almacén no), ningún mueble lo tapa, el agua se pisa donde se ve y lo que tarda en montarse; fotos  [prueba_sitios.gd]
 #   --rodear-muebles    (con --edificio centro; --tipo X, otra tienda: ropa si no) que los muebles sueltos de la sala de venta,
 #                       normal e inversa, se rodean y no hay rincones encerrados entre ellos (con el cuerpo de Johnny) [prueba_sitios.gd]
 #                       (--uso X, los de otra sala de la tienda: --uso rebotica, el laboratorio de la farmacia)
@@ -1344,6 +1346,9 @@ func empezar_prueba() -> void:
 	elif "--dependientas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_dependientas()
+	elif "--laberinto" in args:
+		set_process(false)   # sin la prueba larga
+		probar_laberinto()
 	elif "--rodear-muebles" in args:
 		set_process(false)   # sin la prueba larga
 		probar_rodear_muebles()
