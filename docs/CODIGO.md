@@ -1255,10 +1255,20 @@ en una línea.
   anillos de ondas) y el borde justo en las casillas, con las esquinas de fuera redondeadas; `agua.gd en_agua` mira lo mismo, así que lo que
   se ve seco está seco. Los rayos de cada calambrazo van a las casillas cerca del cable y las chispitas crecen con el agua. Sin atajos (el
   dueño): al meter el pie en el agua con corriente, calambrazo al momento, con su rayo, y Johnny vuelve a donde estaba en seco, también
-  esquivando (`agua.gd rechazar`, `ultimo_seco`). Las paredes del laberinto (`tienda-electronica` en `catalogo.gd`): filas de muebles bajos
-  pegados, con el pie justo encima del pasillo de abajo para que su dibujo (más alto que lo que ocupa) no tape el de arriba: cajón de discos,
-  caja, mesa de ordenadores y cajón entre el pasillo de arriba y el de abajo, y caja y cajón entre los dos de la derecha (en la inversa solo
-  la caja); sin el carro. El cuadro eléctrico, siempre en la pared de arriba de la sala de juegos (`Peligros.agua`, usos ["taquillas"]): en
+  esquivando (`agua.gd rechazar`, `ultimo_seco`). La tienda, en dos zonas (27 nov, el dueño; doce muebles más de GPT, de
+  `musica-pared-gpt.webp`, `musica-bajos-gpt.webp`, `electronica-pared-gpt.webp` y `electronica-bajos-gpt.webp`, recortados en `cds-musica-gpt`,
+  `guitarras-musica-gpt`, `vinilos2-musica-gpt`, `expositor-cds-gpt`, `escucha-musica-gpt`, `amplis-musica-gpt`, `teles-retro-gpt`,
+  `consolas-retro-gpt`, `camaras-retro-gpt`, `mesa-consolas-gpt`, `vitrina-retro-gpt` y `pale-retro-gpt`): a la izquierda, música y discos (de
+  pared, el panel de guitarras `musicaguitarras`, la estantería de CDs `musicacds` y la de vinilos `musicavinilos`; bajos, el expositor de CDs
+  `musicaexpositor`, el puesto de escucha con dos tocadiscos `musicaescucha` y la torre de amplificadores `musicaamplis`); a la derecha,
+  electrónica (de pared, las teles `retroteles`, las consolas `retroconsolas` y las cámaras y radios `retrocamaras`, que solo cabe en la
+  inversa; bajos, la vitrina rota `retrovitrina`, la mesa de consolas con su tele `retromesaconsolas` y el palé de cajas `retropale`). Los de
+  pared, con el tope de 136 de alto. Las paredes del laberinto (`tienda-electronica` en `catalogo.gd`): filas de muebles bajos pegados, con el
+  pie justo encima del pasillo de abajo para que su dibujo (más alto que lo que ocupa) no tape el de arriba: expositor de CDs, cajón de discos,
+  caja y puesto de escucha entre los pasillos de la izquierda, y vitrina y mesa de consolas entre los de la derecha; en la normal, además, en el
+  agua de debajo del pasillo de abajo, los amplificadores y el carro a la izquierda y la mesa de ordenadores y el palé a la derecha (en la
+  inversa esa parte la tapa la pared). El pasillo de en medio de la derecha (en la normal) va una fila más abajo, para que quepan. El cuadro
+  eléctrico, siempre en la pared de arriba de la sala de juegos (`Peligros.agua`, usos ["taquillas"]): en
   la normal, en el paso de en medio; en la inversa, donde estaba el primer puesto de esa pared, que se quita. Prueba: `--laberinto`
   (`captura-laberinto-<lado>.png`, `-cerca` y `-cuadro`).
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de

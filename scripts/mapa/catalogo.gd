@@ -287,6 +287,20 @@ const MUEBLES := {
 	"retromesa": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/mesa-pcs-gpt", "escala": 1.0},
 	"retrocaja": {"len": 192, "dep": 40, "paredes": "", "archivo": "centro/caja-retro-gpt", "escala": 1.0},
 	"retrocajadentro": {"len": 192, "dep": 40, "paredes": "", "archivo": "centro/caja-retro-dentro-gpt", "escala": 1.0},
+	# (27 nov, el dueño: la sala de venta en dos zonas, música y discos a la izquierda y electrónica a la derecha) de pared y bajos (las
+	# paredes del laberinto, Tienda.LABERINTOS)
+	"musicacds": {"len": 83, "dep": 36, "paredes": "", "archivo": "centro/cds-musica-gpt", "escala": 1.0},
+	"musicaguitarras": {"len": 80, "dep": 36, "paredes": "", "archivo": "centro/guitarras-musica-gpt", "escala": 1.0},
+	"musicavinilos": {"len": 85, "dep": 36, "paredes": "", "archivo": "centro/vinilos2-musica-gpt", "escala": 1.0},
+	"retroteles": {"len": 87, "dep": 36, "paredes": "", "archivo": "centro/teles-retro-gpt", "escala": 1.0},
+	"retroconsolas": {"len": 84, "dep": 36, "paredes": "", "archivo": "centro/consolas-retro-gpt", "escala": 1.0},
+	"retrocamaras": {"len": 87, "dep": 36, "paredes": "", "archivo": "centro/camaras-retro-gpt", "escala": 1.0},
+	"musicaexpositor": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/expositor-cds-gpt", "escala": 1.0},
+	"musicaescucha": {"len": 144, "dep": 48, "paredes": "", "archivo": "centro/escucha-musica-gpt", "escala": 1.0},
+	"musicaamplis": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/amplis-musica-gpt", "escala": 1.0},
+	"retromesaconsolas": {"len": 144, "dep": 48, "paredes": "", "archivo": "centro/mesa-consolas-gpt", "escala": 1.0},
+	"retrovitrina": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/vitrina-retro-gpt", "escala": 1.0},
+	"retropale": {"len": 144, "dep": 48, "paredes": "", "archivo": "centro/pale-retro-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -701,27 +715,30 @@ const SALAS := {
 	# la electrónica (26 nov, el dueño: rehecha como el supermercado, Tienda.PLANOS). La sala de venta y las taquillas, sin muebles de momento:
 	# se irán poniendo los de GPT (antes, estanterías de teles, palés, cajas y taquillas de metal: está en git). Su almacén, de momento el
 	# mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en el súper), y su aseo, el mismo que el del súper
-	# (27 nov, el dueño) la sala de venta (46 × 13; las puertas del almacén y de la sala de juegos, en las casillas 15-17 y 35-37 de la pared de
-	# arriba en la normal, y de la de abajo en la inversa; la entrada, en la 22-24; el charco con corriente, de la 3 a la 12 y de la fila 4 a la
-	# 8, con su cable bajando de la pared de arriba: ese rincón, libre). En la normal: contra la pared de arriba, el casetero a la izquierda de
-	# la puerta del almacén, cuatro estanterías entre las puertas (con el mismo hueco entre ellas y con las puertas) y, a la derecha, el
-	# expositor de vinilos y el montón de torres; sueltos, con el pie en la fila 6, el cajón de discos, el carro y la mesa de ordenadores (el
-	# cajón, 0,4 casillas más abajo: lo de debajo de su dibujo son discos tirados); y la caja, desde el cliente, a la derecha de la entrada con
-	# el pie en la fila 9,5. En la inversa: a la izquierda de la entrada, en la pared de arriba, el casetero, los vinilos y las torres; a la
-	# derecha, la caja desde dentro, suelta con el pie en la fila 3,75 y paso por detrás, y las cuatro estanterías; y los sueltos, con el pie
-	# en la fila 8. (27 nov, el dueño: la tienda inundada, Tienda.LABERINTOS) los sueltos son las paredes del laberinto: filas de muebles
-	# bajos pegados (cajón de discos, caja, mesa de ordenadores, cajón de discos) entre el pasillo de arriba y el de abajo, y (caja y cajón)
-	# entre los dos de la derecha (en la inversa solo la caja: el cajón taparía el pasillo de encima). Con el pie justo encima del pasillo de
-	# abajo, que su dibujo, más alto que lo que ocupa, no tape el de arriba (los números, el centro de su hueco). Sin el carro
+	# (27 nov, el dueño) la sala de venta (46 × 13; las puertas del almacén y de la sala de juegos, en las casillas 15-16 y 36-37 de la pared de
+	# arriba en la normal, y de la de abajo en la inversa; la entrada, en la 22-23), inundada: el laberinto de Tienda.LABERINTOS, con el cable
+	# bajando de la pared de arriba por la casilla 3 (ese trozo de pared, libre). En dos zonas (27 nov, el dueño): a la izquierda, música y
+	# discos; a la derecha, junto a la sala de juegos, electrónica. Contra la pared de arriba, pegados: el panel de guitarras, la estantería de
+	# CDs, el casetero, la estantería de vinilos y el expositor de vinilos; luego las tres estanterías de radios, equipos y ordenadores, la de
+	# consolas, la de teles, la de cámaras (solo en la inversa: en la normal no cabe) y las torres (en la normal, entre y tras las puertas).
+	# Las paredes del laberinto, filas de muebles bajos pegados con el pie justo encima del pasillo de abajo (que su dibujo, más alto que lo
+	# que ocupa, tape lo menos posible el de arriba; los números, el centro de su hueco): entre los pasillos de la izquierda, el expositor de
+	# CDs, el cajón de discos, la caja (junto a la entrada: desde el cliente en la normal y desde dentro en la inversa) y el puesto de
+	# escucha; entre los de la derecha, la vitrina y la mesa de consolas. En la normal, además, en el agua de debajo del pasillo de abajo:
+	# los amplificadores y el carro de discos a la izquierda, y la mesa de ordenadores y el palé de cajas a la derecha
 	"tienda-electronica": {"colocados": {
-		"abajo": [["retrocasetes", 13.0], ["retroestante1", 19.62], ["retroestante2", 23.87], ["retroestante3", 28.1], ["retroestante1", 32.38],
-			["retrovinilos", 39.45], ["retrotorres", 43.41],
-			["retrodiscos", 9.5, "libre", 6.15], ["retrocaja", 15.0, "libre", 6.275], ["retromesa", 20.5, "libre", 6.15],
-			["retrodiscos", 25.5, "libre", 6.15], ["retrocaja", 33.0, "libre", 5.325], ["retrodiscos", 38.5, "libre", 5.2]],
-		"arriba": [["retrocasetes", 13.0], ["retrovinilos", 16.5], ["retrotorres", 20.0],
-			["retroestante1", 33.82], ["retroestante2", 37.27], ["retroestante3", 40.7], ["retroestante1", 44.18],
-			["retrodiscos", 9.5, "libre", 7.2], ["retrocaja", 15.0, "libre", 7.325], ["retromesa", 20.5, "libre", 7.2],
-			["retrodiscos", 25.5, "libre", 7.2], ["retrocaja", 33.0, "libre", 7.325]]}},
+		"abajo": [["musicaguitarras", 6.25], ["musicacds", 8.9], ["retrocasetes", 11.675], ["musicavinilos", 18.33], ["retrovinilos", 21.12],
+			["retroestante1", 24.27], ["retroestante2", 27.665], ["retroestante3", 31.045], ["retroconsolas", 34.115],
+			["retroteles", 39.36], ["retrotorres", 42.32],
+			["musicaexpositor", 9.6, "libre", 6.2], ["retrodiscos", 14.7, "libre", 6.2], ["retrocaja", 20.3, "libre", 6.325],
+			["musicaescucha", 25.65, "libre", 6.2], ["retrovitrina", 32.75, "libre", 6.2], ["retromesaconsolas", 37.75, "libre", 6.2],
+			["musicaamplis", 9.0, "libre", 11.05], ["retrocarro", 15.0, "libre", 11.175],
+			["retromesa", 28.0, "libre", 11.05], ["retropale", 34.0, "libre", 11.05]],
+		"arriba": [["musicaguitarras", 6.25], ["musicacds", 8.9], ["retrocasetes", 11.675], ["musicavinilos", 14.48], ["retrovinilos", 17.27],
+			["retroestante1", 25.67], ["retroestante2", 29.065], ["retroestante3", 32.445], ["retroteles", 35.56], ["retroconsolas", 38.335],
+			["retrocamaras", 41.11], ["retrotorres", 44.07],
+			["musicaexpositor", 9.6, "libre", 7.2], ["retrodiscos", 14.7, "libre", 7.2], ["retrocajadentro", 20.3, "libre", 7.325],
+			["musicaescucha", 25.65, "libre", 7.2], ["retrovitrina", 32.75, "libre", 7.2], ["retromesaconsolas", 37.75, "libre", 7.2]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de

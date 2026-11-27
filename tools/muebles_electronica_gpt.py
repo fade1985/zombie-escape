@@ -22,16 +22,28 @@ MUEBLES = [("puesto-juegos1-gpt", "juegospuesto1", 128), ("puesto-juegos2-gpt", 
            ("estante-retro1-gpt", "retroestante1", 192), ("estante-retro2-gpt", "retroestante2", 192), ("estante-retro3-gpt", "retroestante3", 192),
            ("casetero-retro-gpt", "retrocasetes", 128), ("vinilos-retro-gpt", "retrovinilos", 128), ("torres-retro-gpt", "retrotorres", 96),
            ("cajon-discos-gpt", "retrodiscos", 160), ("carro-discos-gpt", "retrocarro", 88), ("mesa-pcs-gpt", "retromesa", 160),
-           ("caja-retro-gpt", "retrocaja", 192), ("caja-retro-dentro-gpt", "retrocajadentro", 192)]
+           ("caja-retro-gpt", "retrocaja", 192), ("caja-retro-dentro-gpt", "retrocajadentro", 192),
+           # (27 nov, el dueño: la sala de venta, en dos zonas: música y discos a la izquierda y electrónica a la derecha) recortadas de
+           # cuatro imágenes con tres piezas cada una (musica-pared-gpt, musica-bajos-gpt, electronica-pared-gpt y electronica-bajos-gpt):
+           # de pared, la estantería de CDs, el panel de guitarras con su amplificador, la estantería de vinilos, la de teles de tubo, la de
+           # consolas y la de cámaras; bajos (las paredes del laberinto), el expositor de CDs, el puesto de escucha con dos tocadiscos, el
+           # montón de amplificadores, la mesa de consolas con su tele, la vitrina rota de walkmans y calculadoras y el palé de cajas
+           ("cds-musica-gpt", "musicacds", 192), ("guitarras-musica-gpt", "musicaguitarras", 192), ("vinilos2-musica-gpt", "musicavinilos", 192),
+           ("teles-retro-gpt", "retroteles", 192), ("consolas-retro-gpt", "retroconsolas", 192), ("camaras-retro-gpt", "retrocamaras", 192),
+           ("expositor-cds-gpt", "musicaexpositor", 160), ("escucha-musica-gpt", "musicaescucha", 144), ("amplis-musica-gpt", "musicaamplis", 160),
+           ("mesa-consolas-gpt", "retromesaconsolas", 144), ("vitrina-retro-gpt", "retrovitrina", 160), ("pale-retro-gpt", "retropale", 144)]
+NUEVOS = {"musicacds", "musicaguitarras", "musicavinilos", "retroteles", "retroconsolas", "retrocamaras", "musicaexpositor",
+          "musicaescucha", "musicaamplis", "retromesaconsolas", "retrovitrina", "retropale"}
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (bajo la mesa, entre las patas y las sillas, y entre las
 # ruedas de las sillas): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
 CON_HUECOS = {"juegospuesto1", "juegospuesto2", "juegospuesto3", "juegossilla1", "juegossilla2", "juegossilla3",
               "retroestante1", "retroestante2", "retroestante3", "retrocasetes", "retrovinilos", "retrodiscos", "retrocarro", "retromesa",
-              "retrocajadentro"}
+              "retrocajadentro"} | NUEVOS
 HUECO_MIN = 1000
 # lo más altos que pueden ser (los de pared, contra la de arriba: lo que pase de 136, como las estanterías del súper, se sale por encima
 # de la pared; más altos que anchos, se estrechan)
-ALTO_MAX = {"retroestante1": 136, "retroestante2": 136, "retroestante3": 136, "retrocasetes": 136, "retrovinilos": 136}
+ALTO_MAX = {"retroestante1": 136, "retroestante2": 136, "retroestante3": 136, "retrocasetes": 136, "retrovinilos": 136,
+            "musicacds": 136, "musicaguitarras": 136, "musicavinilos": 136, "retroteles": 136, "retroconsolas": 136, "retrocamaras": 136}
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # todos con el doble de detalle (un píxel por unidad), como en el súper
