@@ -709,26 +709,29 @@ const SALAS := {
 	# cajón, 0,4 casillas más abajo: lo de debajo de su dibujo son discos tirados); y la caja, desde el cliente, a la derecha de la entrada con
 	# el pie en la fila 9,5. En la inversa: a la izquierda de la entrada, en la pared de arriba, el casetero, los vinilos y las torres; a la
 	# derecha, la caja desde dentro, suelta con el pie en la fila 3,75 y paso por detrás, y las cuatro estanterías; y los sueltos, con el pie
-	# en la fila 8. (27 nov, el dueño: la tienda inundada, Tienda.LABERINTOS) los sueltos, de islas en el agua (los números, el centro de su
-	# hueco): el cajón de discos y la mesa entre los dos pasillos de la izquierda, el carro entre los de la derecha y la caja junto al callejón
+	# en la fila 8. (27 nov, el dueño: la tienda inundada, Tienda.LABERINTOS) los sueltos son las paredes del laberinto: filas de muebles
+	# bajos pegados (cajón de discos, caja, mesa de ordenadores, cajón de discos) entre el pasillo de arriba y el de abajo, y (caja y cajón)
+	# entre los dos de la derecha (en la inversa solo la caja: el cajón taparía el pasillo de encima). Con el pie justo encima del pasillo de
+	# abajo, que su dibujo, más alto que lo que ocupa, no tape el de arriba (los números, el centro de su hueco). Sin el carro
 	"tienda-electronica": {"colocados": {
 		"abajo": [["retrocasetes", 13.0], ["retroestante1", 19.62], ["retroestante2", 23.87], ["retroestante3", 28.1], ["retroestante1", 32.38],
 			["retrovinilos", 39.45], ["retrotorres", 43.41],
-			["retrodiscos", 12.5, "libre", 5.5], ["retromesa", 21.0, "libre", 5.5], ["retrocarro", 33.0, "libre", 5.0],
-			["retrocaja", 40.5, "libre", 8.875]],
+			["retrodiscos", 9.5, "libre", 6.15], ["retrocaja", 15.0, "libre", 6.275], ["retromesa", 20.5, "libre", 6.15],
+			["retrodiscos", 25.5, "libre", 6.15], ["retrocaja", 33.0, "libre", 5.325], ["retrodiscos", 38.5, "libre", 5.2]],
 		"arriba": [["retrocasetes", 13.0], ["retrovinilos", 16.5], ["retrotorres", 20.0],
-			["retrocajadentro", 40.5, "libre", 3.3],
 			["retroestante1", 33.82], ["retroestante2", 37.27], ["retroestante3", 40.7], ["retroestante1", 44.18],
-			["retrodiscos", 12.5, "libre", 6.5], ["retromesa", 21.0, "libre", 6.5], ["retrocarro", 33.0, "libre", 7.0]]}},
+			["retrodiscos", 9.5, "libre", 7.2], ["retrocaja", 15.0, "libre", 7.325], ["retromesa", 20.5, "libre", 7.2],
+			["retrodiscos", 25.5, "libre", 7.2], ["retrocaja", 33.0, "libre", 7.325]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de
 	# pasillo y el pie en la fila 7 (que su dibujo no tape las sillas de la primera), con el mismo espacio entre ellos (2,5 casillas) y
-	# casilla y media con las paredes, para poder rodearlos; debajo, libre hasta la pared de abajo
+	# casilla y media con las paredes, para poder rodearlos; debajo, libre hasta la pared de abajo. (27 nov, el dueño: el cuadro eléctrico,
+	# siempre aquí) en la inversa, sin el primero de la pared de arriba: ahí va el cuadro (en la normal, en el paso de en medio)
 	"taquillas-electronica": {"colocados": {
 		"abajo": [["juegospuesto1", 2.0], ["juegospuesto2", 6.0], ["juegospuesto3", 14.0], ["juegospuesto1", 18.0],
 			["juegospuesto3", 3.5, "libre", 6.0], ["juegospuesto1", 10.0, "libre", 6.0], ["juegospuesto2", 16.5, "libre", 6.0]],
-		"arriba": [["juegospuesto2", 2.0], ["juegospuesto1", 6.0], ["juegospuesto1", 14.0], ["juegospuesto3", 18.0],
+		"arriba": [["juegospuesto1", 6.0], ["juegospuesto1", 14.0], ["juegospuesto3", 18.0],
 			["juegospuesto1", 3.5, "libre", 6.0], ["juegospuesto3", 10.0, "libre", 6.0], ["juegospuesto2", 16.5, "libre", 6.0]]}},
 	"almacen-electronica": {"colocados": {
 		"abajo": [["ropashelf", 1.9], ["ropashelf2", 5.2], ["ropashelf3", 8.5], ["ropashelf4", 11.8], ["ropashelf", 15.1],

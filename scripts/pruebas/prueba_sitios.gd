@@ -988,7 +988,7 @@ func probar_volver_planta() -> void:
 # abajo y arriba. Dice cuántas casillas de agua lleva, si desde la entrada se llega a la puerta de la sala de juegos sin pisar
 # agua (y a la del almacén no), si algún mueble suelto tapa el camino seco, si en_agua (agua.gd) dice lo mismo que el dibujo en
 # cada casilla de la sala de venta y lo que tarda en montarse la tienda. Saca captura-laberinto-<lado>.png (entera, con la luz
-# del juego) y captura-laberinto-<lado>-cerca.png (Johnny en el camino, de cerca). Luego se cierra
+# del juego) y captura-laberinto-<lado>-cerca.png (Johnny en el camino, de cerca) y -cuadro (delante del cuadro, en la sala de juegos). Luego se cierra
 func probar_laberinto() -> void:
 	for lado in ["abajo", "arriba"]:
 		var t := Tienda.generar(0, "electronica", false, lado)
@@ -1061,10 +1061,32 @@ func probar_laberinto() -> void:
 						mal += 1
 		print("Laberinto (puerta %s): montada en %d ms · muebles en el camino %s (esperado: []) · en_agua distinto del dibujo en %d sitios (esperado: 0; %d esquinas redondeadas)" % [
 			lado, tarda, tapan, mal, esquinas])
+		# el agua echa para atrás: Johnny en seco y, de golpe, dentro del agua (también esquivando)
+		var pel: Dictionary = sitio.peligros.filter(func(x): return x.tipo == "agua")[0]
+		for esquivando in [false, true]:
+			var seco_k := Vector2i(venta.c0 + 6, venta.f0 + (3 if lado == "abajo" else 8))
+			johnny.global_position = Peligros.centro(seco_k)
+			johnny.invulnerable = 0.0
+			await get_tree().physics_frame
+			await get_tree().physics_frame
+			var antes: int = johnny.vida
+			if esquivando:
+				johnny.esquiva_t = 0.16
+			johnny.global_position = Peligros.centro(seco_k + Vector2i(-2, 0))   # (dos casillas a la izquierda: agua)
+			await get_tree().physics_frame
+			await get_tree().physics_frame
+			print("Laberinto (puerta %s): pisa el agua%s: vuelve al seco %s, le quita %d de vida (esperado: true, %d)" % [lado,
+				" esquivando" if esquivando else "", not agua.en_agua(johnny.global_position), antes - johnny.vida, Peligros.AGUA.dano])
+		print("Laberinto (puerta %s): cuadro eléctrico en %s (esperado: Sala de juegos o Taquillas)" % [lado, sitio.apt.salas[pel.cuadro.sala].nombre])
+		await get_tree().create_timer(0.6).timeout
 		johnny.position = Peligros.centro(Vector2i(venta.c0 + 6, venta.f0 + (3 if lado == "abajo" else 8)))
 		johnny.get_node("Camara").reset_smoothing()
 		await get_tree().create_timer(1.0).timeout
 		Captura.foto("captura-laberinto-%s-cerca.png" % lado)
+		johnny.position = Vector2(pel.cuadro.x, pel.cuadro.y + 50)   # (y Johnny delante del cuadro: captura-laberinto-<lado>-cuadro.png)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(1.0).timeout
+		Captura.foto("captura-laberinto-%s-cuadro.png" % lado)
 		await foto_entera(sitio, "captura-laberinto-%s.png" % lado, true)
 	get_tree().quit()
 

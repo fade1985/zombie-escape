@@ -507,12 +507,12 @@ const PLANOS := {
 }
 
 # (27 nov, el dueño) la sala de venta inundada de la electrónica: el agua con corriente (Peligros.agua) y, entre ella, un camino
-# seco que hay que seguir con cuidado hasta la sala de juegos (donde está el cuadro que corta la luz). Un dibujo por versión, tal
-# como se ve en la pantalla ("abajo": la puerta de la calle abajo; "arriba": la inversa), con una letra por casilla de la sala:
+# seco, uno solo y sin atajos (el agua te echa para atrás, agua.gd), hasta la sala de juegos (donde está el cuadro que corta la
+# luz). Un dibujo por versión, tal como se ve en la pantalla ("abajo": la puerta de la calle abajo; "arriba": la inversa), con una letra por casilla de la sala:
 #   ~  agua         .  seco         C  agua, y ahí cae el cable pelado desde la pared de arriba
 # Las 3 últimas filas no se ven (las tapa la cara de la pared de abajo): ahí, agua menos el paso de la entrada (en la normal) o el de
 # la puerta de la sala de juegos (en la inversa). La inversa no es la normal volteada: así el camino no cae en lo que no se ve ni
-# debajo de los muebles de la pared de arriba. Los muebles sueltos van en el agua (Catalogo, "tienda-electronica")
+# debajo de los muebles de la pared de arriba. Entre los pasillos, filas de muebles bajos (Catalogo, "tienda-electronica")
 const LABERINTOS := {
 	"electronica": {
 		"abajo": [
@@ -524,8 +524,8 @@ const LABERINTOS := {
 			"~~~~~..~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~..~~~",
 			"~~~~~..~~~~~~~~~~~~~~~~~~~~~...............~~~",
 			"~~~~~...................~~~~...............~~~",
-			"~~~~~...................~~~~~~~~~~..~~~~~~~~~~",
-			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~..~~~~~~~~~~",
+			"~~~~~...................~~~~~~~~~~~~~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
 			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
 			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
 			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
@@ -533,8 +533,8 @@ const LABERINTOS := {
 		"arriba": [
 			"~~~C~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
 			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
-			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~..~~~~~~~~~~",
-			"~~~~~...................~~~~~~~~~~..~~~~~~~~~~",
+			"~~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~~~~~~~~~~~~",
+			"~~~~~...................~~~~~~~~~~~~~~~~~~~~~~",
 			"~~~~~...................~~~~...............~~~",
 			"~~~~~..~~~~~~~~~~~~~~~~~~~~~...............~~~",
 			"~~~~~..~~~~~~~~~~~~~~~~~~~~~..~~~~~~~~~~~..~~~",

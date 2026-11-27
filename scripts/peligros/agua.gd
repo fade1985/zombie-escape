@@ -42,6 +42,7 @@ var t := 0.0
 var pulso := 0.0
 var destello := 0.0
 var cerca_cable: Array = []  # las casillas de agua cerca del cable: adonde van los rayos de cada calambrazo
+var ultimo_seco := Vector2.INF   # dónde estuvo Johnny en seco por última vez: ahí lo devuelve el agua (rechazar)
 
 
 func montar(d: Dictionary, m: Node) -> void:
@@ -171,6 +172,11 @@ func _physics_process(delta: float) -> void:
 	t += delta
 	destello = maxf(0.0, destello - delta)
 	var johnny := get_tree().get_first_node_in_group("jugador")
+	if johnny and johnny.vivo:
+		if not en_agua(johnny.global_position):
+			ultimo_seco = johnny.global_position
+		elif datos.corriente and not datos.get("arreglado", false) and johnny.global_position.distance_to(ultimo_seco) < 96.0:
+			rechazar(johnny)
 	if datos.corriente and not datos.get("arreglado", false):
 		if johnny and johnny.vivo and cerca(johnny.global_position, 90.0):
 			Peligros.avisar(self, datos, Idioma.t("¡Ojo! El agua tiene corriente"))
@@ -229,6 +235,25 @@ func calambrazo(johnny: Node2D) -> void:
 		dio = true
 	if dio or (johnny and cerca(johnny.global_position, 200.0)):
 		Sonido.tocar("calambre")
+
+
+# (27 nov, el dueño: sin atajos por el agua) Johnny acaba de meter el pie en el agua con corriente: calambrazo al momento, con
+# su rayo desde el cable, y de vuelta a donde estaba en seco. Esquivando tampoco se cruza (se le corta la esquiva)
+func rechazar(johnny: Node2D) -> void:
+	var a: Dictionary = Peligros.AGUA
+	var dentro: Vector2 = johnny.global_position
+	johnny.esquiva_t = 0.0
+	johnny.global_position = ultimo_seco
+	johnny.velocity = Vector2.ZERO
+	johnny.pisar({"calambre": {"despues": a.tieso}})
+	johnny.recibir_dano(a.dano, null, "agua")
+	destello = 0.2
+	rayos = [rayo_hasta(Peligros.casilla(dentro))]
+	Luz.destello(self, dentro, 180.0, 0.2, 0.8, RAYO)
+	for k in 8:
+		Particulas.soltar(self, dentro + Vector2(randf_range(-10, 10), -randf_range(0, 20)),
+			Vector2(randf_range(-80, 80), randf_range(-90, 10)), Color.WHITE if k % 2 else RAYO, 2, 0.25)
+	Sonido.tocar("calambre")
 
 
 # Un rayo de la punta del cable hasta una casilla del charco, yendo por el agua (casilla a casilla, en zigzag)

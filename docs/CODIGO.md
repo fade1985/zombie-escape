@@ -1245,17 +1245,22 @@ en una línea.
   estanterías, el casetero, las torres, la mesa y la caja (`MUEBLES_CON_PIEZA`). Prueba: `--rodear-muebles --tipo electronica`.
   Prueba: `--tiendas-fijas --tipo electronica` y `--rodear-muebles --tipo electronica`.
   **El laberinto de agua y electricidad** (27 nov, el dueño; parte 1 de 5, notas de la sesión en la carpeta de notas compartidas): la sala
-  de venta, inundada con el agua con corriente, y un camino seco de 2 casillas de ancho que da vueltas desde la entrada hasta la puerta de la
-  sala de juegos (con un callejón sin salida); la puerta del almacén queda rodeada de agua. Ya no va el charco del plano (`~`): el agua sale
+  de venta, inundada con el agua con corriente, y un solo camino seco de 2 casillas de ancho que da vueltas desde la entrada hasta la puerta de
+  la sala de juegos, sin callejones ni atajos; la puerta del almacén queda rodeada de agua. Ya no va el charco del plano (`~`): el agua sale
   de `Tienda.LABERINTOS`, un dibujo de la sala de venta por versión tal como se ve (`~` agua, `.` seco, `C` donde cae el cable), que
   `Tienda.inundar` pasa a `apt.agua` y `apt.cable`; la inversa no es la normal volteada (las 3 últimas filas las tapa la pared y el camino no
   puede ir debajo de los muebles de la pared de arriba). `Peligros.agua` usa ese cable y no pide camino seco a todas las puertas. Tanta agua
   (436 casillas) ya no se calcula a cuadraditos como los charcos: la pinta la tarjeta gráfica de una vez (`escenas/armas/agua_corriente.gdshader`,
   con una textura de un texel por casilla, en `agua.gd hacer_dibujo`), con el mismo aspecto (contorno, bandas que se mecen, vetas de brillo y
   anillos de ondas) y el borde justo en las casillas, con las esquinas de fuera redondeadas; `agua.gd en_agua` mira lo mismo, así que lo que
-  se ve seco está seco. Los rayos de cada calambrazo van a las casillas cerca del cable y las chispitas crecen con el agua. Los sueltos
-  (`tienda-electronica` en `catalogo.gd`) son islas en el agua: el cajón de discos y la mesa entre los dos pasillos de la izquierda, el carro
-  entre los de la derecha y la caja junto al callejón. Prueba: `--laberinto` (`captura-laberinto-<lado>.png` y `-cerca`).
+  se ve seco está seco. Los rayos de cada calambrazo van a las casillas cerca del cable y las chispitas crecen con el agua. Sin atajos (el
+  dueño): al meter el pie en el agua con corriente, calambrazo al momento, con su rayo, y Johnny vuelve a donde estaba en seco, también
+  esquivando (`agua.gd rechazar`, `ultimo_seco`). Las paredes del laberinto (`tienda-electronica` en `catalogo.gd`): filas de muebles bajos
+  pegados, con el pie justo encima del pasillo de abajo para que su dibujo (más alto que lo que ocupa) no tape el de arriba: cajón de discos,
+  caja, mesa de ordenadores y cajón entre el pasillo de arriba y el de abajo, y caja y cajón entre los dos de la derecha (en la inversa solo
+  la caja); sin el carro. El cuadro eléctrico, siempre en la pared de arriba de la sala de juegos (`Peligros.agua`, usos ["taquillas"]): en
+  la normal, en el paso de en medio; en la inversa, donde estaba el primer puesto de esa pared, que se quita. Prueba: `--laberinto`
+  (`captura-laberinto-<lado>.png`, `-cerca` y `-cuadro`).
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208
   de ancho), la panadería (`superpan`, 192), la nevera alta de congelados (`supernevera`, 128 × 126), el arcón (`superarcon`), la nevera baja de

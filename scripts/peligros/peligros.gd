@@ -585,7 +585,8 @@ static func agua(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 							mejor = {"largo": largo, "agua": k, "pared": Vector2i(c, f)}
 		if mejor.is_empty():
 			continue
-		var cuadro := cuadro_electrico(sitio, rng)
+		# (en la inundada, siempre en la pared de arriba de la sala de juegos, la de uso "taquillas": se llega por el laberinto)
+		var cuadro := cuadro_electrico(sitio, rng, ["taquillas"], false) if inundada else cuadro_electrico(sitio, rng)
 		if cuadro.is_empty():
 			continue
 		return {"tipo": "agua", "sala": 0, "casillas": charco.keys(), "cable": mejor.agua,
