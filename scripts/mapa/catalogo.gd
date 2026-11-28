@@ -303,6 +303,9 @@ const MUEBLES := {
 	"telespared3": {"len": 104, "dep": 36, "paredes": "", "archivo": "centro/teles-pared3-gpt", "escala": 1.0},
 	"telespared4": {"len": 119, "dep": 36, "paredes": "", "archivo": "centro/teles-pared4-gpt", "escala": 1.0},
 	"telespared5": {"len": 119, "dep": 36, "paredes": "", "archivo": "centro/teles-pared5-gpt", "escala": 1.0},
+	# (28 nov, el dueño, desde dos fotos suyas) dos módulos más de la misma pared, con equipos de música antiguos
+	"hifipared1": {"len": 130, "dep": 36, "paredes": "", "archivo": "centro/hifi-pared1-gpt", "escala": 1.0},
+	"hifipared2": {"len": 127, "dep": 36, "paredes": "", "archivo": "centro/hifi-pared2-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -720,11 +723,16 @@ const SALAS := {
 	# (27 nov, el dueño) la sala de venta (46 × 13; las puertas del almacén y de la sala de juegos, en las casillas 15-16 y 35-36 de la pared de
 	# arriba en la normal, y de la de abajo en la inversa; la entrada, en la 22-23), inundada: el laberinto de Tienda.LABERINTOS, con el cable
 	# bajando de la pared de arriba por la casilla 3 (ese trozo de pared, libre). (28 nov, el dueño) sus muebles se rehacen: de momento
-	# solo la pared de teles planas, sus cinco módulos contra la pared de arriba, con el mismo hueco entre ellos y con las puertas o la
-	# pared (en la normal, entre las puertas, casillas 17 a 35: 4,5 unidades; en la inversa, de la entrada a la pared, 24 a 46: 25,8). Antes, en dos zonas (música y electrónica) con filas de muebles bajos de paredes del laberinto: está en git
+	# solo los módulos de pared: la pared de teles planas, sus cinco módulos contra la pared de arriba, con el mismo hueco entre ellos y con las puertas o la
+	# pared (en la normal, entre las puertas, casillas 17 a 35: 4,5 unidades; en la inversa, de la entrada a la pared, 24 a 46: 25,8);
+	# y los dos de equipos de música a la izquierda, de la casilla 5 (el cable, en la 3, con su pared libre) a la puerta del almacén en la
+	# normal (21,0 unidades de hueco) y a la entrada en la inversa (95,7). Antes, en dos zonas (música y electrónica) con filas de
+	# muebles bajos de paredes del laberinto: está en git
 	"tienda-electronica": {"colocados": {
-		"abajo": [["telespared1", 18.766], ["telespared2", 22.141], ["telespared3", 25.516], ["telespared4", 29.141], ["telespared5", 33.0]],
-		"arriba": [["telespared1", 26.432], ["telespared2", 30.474], ["telespared3", 34.516], ["telespared4", 38.807], ["telespared5", 43.333]]}},
+		"abajo": [["telespared1", 18.766], ["telespared2", 22.141], ["telespared3", 25.516], ["telespared4", 29.141], ["telespared5", 33.0],
+			["hifipared1", 7.688], ["hifipared2", 12.359]],
+		"arriba": [["telespared1", 26.432], ["telespared2", 30.474], ["telespared3", 34.516], ["telespared4", 38.807], ["telespared5", 43.333],
+			["hifipared1", 10.021], ["hifipared2", 17.026]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de
