@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqj6vc30fuf81"
-path="res://.godot/imported/mueble-retromesaconsolas.png-8ed96fa15c6d7f67bce281543452bea4.ctex"
+uid="uid://yxgbgo2oia4b"
+path="res://.godot/imported/mueble-telespared2.png-c9ef36bab2a95e56b877de000a27bb67.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/mueble-retromesaconsolas.png"
-dest_files=["res://.godot/imported/mueble-retromesaconsolas.png-8ed96fa15c6d7f67bce281543452bea4.ctex"]
+source_file="res://assets/sprites/mueble-telespared2.png"
+dest_files=["res://.godot/imported/mueble-telespared2.png-c9ef36bab2a95e56b877de000a27bb67.ctex"]
 
 [params]
 

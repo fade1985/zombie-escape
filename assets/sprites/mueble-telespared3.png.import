@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl7djtpptju7p"
-path="res://.godot/imported/mueble-retrovinilos.png-5c2e110745514d0e5431b287756211b3.ctex"
+uid="uid://cudacm2lh4ndr"
+path="res://.godot/imported/mueble-telespared3.png-196e4bb5ad76688d0a5f709868f6a577.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/mueble-retrovinilos.png"
-dest_files=["res://.godot/imported/mueble-retrovinilos.png-5c2e110745514d0e5431b287756211b3.ctex"]
+source_file="res://assets/sprites/mueble-telespared3.png"
+dest_files=["res://.godot/imported/mueble-telespared3.png-196e4bb5ad76688d0a5f709868f6a577.ctex"]
 
 [params]
 

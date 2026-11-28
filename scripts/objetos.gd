@@ -80,7 +80,8 @@ const MUEBLES_CON_PIEZA := ["wardrobe", "nightstand", "desk", "bookshelf",
 	"juegospuesto1", "juegospuesto2", "juegospuesto3",
 	# y los de su sala de venta
 	"retroestante1", "retroestante2", "retroestante3", "retrocasetes", "retrotorres", "retromesa", "retrocaja", "retrocajadentro",
-	"musicacds", "musicavinilos", "retroteles", "retroconsolas", "retrocamaras", "musicaexpositor", "retromesaconsolas", "retrovitrina", "retropale"]
+	"musicacds", "retroteles", "retrocamaras", "musicaexpositor", "retrovitrina", "retropale",
+	"telespared1", "telespared2", "telespared3"]
 const PIEZA_MUEBLE := 0.35   # probabilidad de que un mueble tenga un material
 const PIEZAS_JEFE := 4       # las que soltaba cada jefe al caer en el centro comercial y en la torre (desde el 16 nov ya no: los muebles)
 

@@ -280,7 +280,6 @@ const MUEBLES := {
 	"retroestante2": {"len": 104, "dep": 36, "paredes": "", "archivo": "centro/estante-retro2-gpt", "escala": 1.0},
 	"retroestante3": {"len": 106, "dep": 36, "paredes": "", "archivo": "centro/estante-retro3-gpt", "escala": 1.0},
 	"retrocasetes": {"len": 88, "dep": 36, "paredes": "", "archivo": "centro/casetero-retro-gpt", "escala": 1.0},
-	"retrovinilos": {"len": 87, "dep": 36, "paredes": "", "archivo": "centro/vinilos-retro-gpt", "escala": 1.0},
 	"retrotorres": {"len": 96, "dep": 40, "paredes": "", "archivo": "centro/torres-retro-gpt", "escala": 1.0},
 	"retrodiscos": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/cajon-discos-gpt", "escala": 1.0},
 	"retrocarro": {"len": 88, "dep": 40, "paredes": "", "archivo": "centro/carro-discos-gpt", "escala": 1.0},
@@ -291,16 +290,17 @@ const MUEBLES := {
 	# paredes del laberinto, Tienda.LABERINTOS)
 	"musicacds": {"len": 83, "dep": 36, "paredes": "", "archivo": "centro/cds-musica-gpt", "escala": 1.0},
 	"musicaguitarras": {"len": 80, "dep": 36, "paredes": "", "archivo": "centro/guitarras-musica-gpt", "escala": 1.0},
-	"musicavinilos": {"len": 85, "dep": 36, "paredes": "", "archivo": "centro/vinilos2-musica-gpt", "escala": 1.0},
 	"retroteles": {"len": 87, "dep": 36, "paredes": "", "archivo": "centro/teles-retro-gpt", "escala": 1.0},
-	"retroconsolas": {"len": 84, "dep": 36, "paredes": "", "archivo": "centro/consolas-retro-gpt", "escala": 1.0},
 	"retrocamaras": {"len": 87, "dep": 36, "paredes": "", "archivo": "centro/camaras-retro-gpt", "escala": 1.0},
 	"musicaexpositor": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/expositor-cds-gpt", "escala": 1.0},
 	"musicaescucha": {"len": 144, "dep": 48, "paredes": "", "archivo": "centro/escucha-musica-gpt", "escala": 1.0},
 	"musicaamplis": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/amplis-musica-gpt", "escala": 1.0},
-	"retromesaconsolas": {"len": 144, "dep": 48, "paredes": "", "archivo": "centro/mesa-consolas-gpt", "escala": 1.0},
 	"retrovitrina": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/vitrina-retro-gpt", "escala": 1.0},
 	"retropale": {"len": 144, "dep": 48, "paredes": "", "archivo": "centro/pale-retro-gpt", "escala": 1.0},
+	# (28 nov, el dueño, desde una foto suya) la pared de teles planas: tres módulos que encajan pegados (`tools/muebles_electronica_gpt.py`)
+	"telespared1": {"len": 104, "dep": 36, "paredes": "", "archivo": "centro/teles-pared1-gpt", "escala": 1.0},
+	"telespared2": {"len": 103, "dep": 36, "paredes": "", "archivo": "centro/teles-pared2-gpt", "escala": 1.0},
+	"telespared3": {"len": 104, "dep": 36, "paredes": "", "archivo": "centro/teles-pared3-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -719,26 +719,27 @@ const SALAS := {
 	# arriba en la normal, y de la de abajo en la inversa; la entrada, en la 22-23), inundada: el laberinto de Tienda.LABERINTOS, con el cable
 	# bajando de la pared de arriba por la casilla 3 (ese trozo de pared, libre). En dos zonas (27 nov, el dueño): a la izquierda, música y
 	# discos; a la derecha, junto a la sala de juegos, electrónica. Contra la pared de arriba, pegados: el panel de guitarras, la estantería de
-	# CDs, el casetero, la estantería de vinilos y el expositor de vinilos; luego las tres estanterías de radios, equipos y ordenadores, la de
-	# consolas, la de teles, la de cámaras (solo en la inversa: en la normal no cabe) y las torres (en la normal, entre y tras las puertas).
+	# CDs y el casetero; luego las estanterías de equipos de música y de radios, la pared de teles planas (sus tres módulos pegados, 28 nov,
+	# el dueño), la estantería de teles de tubo, la de ordenadores (solo en la inversa), la de cámaras (solo en la inversa) y las torres (en la
+	# normal, entre y tras las puertas). (28 nov, el dueño) sin las estanterías de vinilos ni de consolas ni la mesa de consolas, que copiaban
+	# una portada y consolas de verdad: en su sitio, las teles planas y el palé de cajas.
 	# Las paredes del laberinto, filas de muebles bajos pegados con el pie justo encima del pasillo de abajo (que su dibujo, más alto que lo
 	# que ocupa, tape lo menos posible el de arriba; los números, el centro de su hueco): entre los pasillos de la izquierda, el expositor de
 	# CDs, el cajón de discos, la caja (junto a la entrada: desde el cliente en la normal y desde dentro en la inversa) y el puesto de
-	# escucha; entre los de la derecha, la vitrina y la mesa de consolas. En la normal, además, en el agua de debajo del pasillo de abajo:
-	# los amplificadores y el carro de discos a la izquierda, y la mesa de ordenadores y el palé de cajas a la derecha
+	# escucha; entre los de la derecha, la vitrina y el palé de cajas. En la normal, además, en el agua de debajo del pasillo de abajo:
+	# los amplificadores y el carro de discos a la izquierda, y la mesa de ordenadores a la derecha
 	"tienda-electronica": {"colocados": {
-		"abajo": [["musicaguitarras", 6.25], ["musicacds", 8.9], ["retrocasetes", 11.675], ["musicavinilos", 18.33], ["retrovinilos", 21.12],
-			["retroestante1", 24.27], ["retroestante2", 27.665], ["retroestante3", 31.045], ["retroconsolas", 34.115],
+		"abajo": [["musicaguitarras", 6.25], ["musicacds", 8.9], ["retrocasetes", 11.675],
+			["retroestante2", 18.625], ["retroestante1", 21.922], ["telespared1", 25.219], ["telespared2", 28.453], ["telespared3", 31.688],
 			["retroteles", 39.36], ["retrotorres", 42.32],
 			["musicaexpositor", 9.6, "libre", 6.2], ["retrodiscos", 14.7, "libre", 6.2], ["retrocaja", 20.3, "libre", 6.325],
-			["musicaescucha", 25.65, "libre", 6.2], ["retrovitrina", 32.75, "libre", 6.2], ["retromesaconsolas", 37.75, "libre", 6.2],
-			["musicaamplis", 9.0, "libre", 11.05], ["retrocarro", 15.0, "libre", 11.175],
-			["retromesa", 28.0, "libre", 11.05], ["retropale", 34.0, "libre", 11.05]],
-		"arriba": [["musicaguitarras", 6.25], ["musicacds", 8.9], ["retrocasetes", 11.675], ["musicavinilos", 14.48], ["retrovinilos", 17.27],
-			["retroestante1", 25.67], ["retroestante2", 29.065], ["retroestante3", 32.445], ["retroteles", 35.56], ["retroconsolas", 38.335],
-			["retrocamaras", 41.11], ["retrotorres", 44.07],
+			["musicaescucha", 25.65, "libre", 6.2], ["retrovitrina", 32.75, "libre", 6.2], ["retropale", 37.75, "libre", 6.2],
+			["musicaamplis", 9.0, "libre", 11.05], ["retrocarro", 15.0, "libre", 11.175], ["retromesa", 31.0, "libre", 11.05]],
+		"arriba": [["musicaguitarras", 6.25], ["musicacds", 8.9], ["retrocasetes", 11.675], ["retroestante2", 14.675], ["retroestante1", 17.972],
+			["telespared1", 25.623], ["telespared2", 28.857], ["telespared3", 32.091], ["retroteles", 35.076], ["retroestante3", 38.09],
+			["retrocamaras", 41.11], ["retrotorres", 43.97],
 			["musicaexpositor", 9.6, "libre", 7.2], ["retrodiscos", 14.7, "libre", 7.2], ["retrocajadentro", 20.3, "libre", 7.325],
-			["musicaescucha", 25.65, "libre", 7.2], ["retrovitrina", 32.75, "libre", 7.2], ["retromesaconsolas", 37.75, "libre", 7.2]]}},
+			["musicaescucha", 25.65, "libre", 7.2], ["retrovitrina", 32.75, "libre", 7.2], ["retropale", 37.75, "libre", 7.2]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de
