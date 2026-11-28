@@ -717,14 +717,14 @@ const SALAS := {
 	# la electrónica (26 nov, el dueño: rehecha como el supermercado, Tienda.PLANOS). La sala de venta y las taquillas, sin muebles de momento:
 	# se irán poniendo los de GPT (antes, estanterías de teles, palés, cajas y taquillas de metal: está en git). Su almacén, de momento el
 	# mismo que el de la tienda de ropa (almacen-ropa: se cambiarán por los suyos, como en el súper), y su aseo, el mismo que el del súper
-	# (27 nov, el dueño) la sala de venta (46 × 13; las puertas del almacén y de la sala de juegos, en las casillas 15-16 y 36-37 de la pared de
+	# (27 nov, el dueño) la sala de venta (46 × 13; las puertas del almacén y de la sala de juegos, en las casillas 15-16 y 35-36 de la pared de
 	# arriba en la normal, y de la de abajo en la inversa; la entrada, en la 22-23), inundada: el laberinto de Tienda.LABERINTOS, con el cable
 	# bajando de la pared de arriba por la casilla 3 (ese trozo de pared, libre). (28 nov, el dueño) sus muebles se rehacen: de momento
-	# solo la pared de teles planas, sus cinco módulos pegados contra la pared de arriba (en la normal, centrados entre las puertas; en la
-	# inversa, a la derecha de la entrada). Antes, en dos zonas (música y electrónica) con filas de muebles bajos de paredes del laberinto: está en git
+	# solo la pared de teles planas, sus cinco módulos contra la pared de arriba, con el mismo hueco entre ellos y con las puertas o la
+	# pared (en la normal, entre las puertas, casillas 17 a 35: 4,5 unidades; en la inversa, de la entrada a la pared, 24 a 46: 25,8). Antes, en dos zonas (música y electrónica) con filas de muebles bajos de paredes del laberinto: está en git
 	"tienda-electronica": {"colocados": {
-		"abajo": [["telespared1", 19.545], ["telespared2", 22.779], ["telespared3", 26.014], ["telespared4", 29.498], ["telespared5", 33.217]],
-		"arriba": [["telespared1", 25.623], ["telespared2", 28.857], ["telespared3", 32.091], ["telespared4", 35.575], ["telespared5", 39.294]]}},
+		"abajo": [["telespared1", 18.766], ["telespared2", 22.141], ["telespared3", 25.516], ["telespared4", 29.141], ["telespared5", 33.0]],
+		"arriba": [["telespared1", 26.432], ["telespared2", 30.474], ["telespared3", 34.516], ["telespared4", 38.807], ["telespared5", 43.333]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de
