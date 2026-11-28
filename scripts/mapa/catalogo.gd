@@ -297,10 +297,12 @@ const MUEBLES := {
 	"musicaamplis": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/amplis-musica-gpt", "escala": 1.0},
 	"retrovitrina": {"len": 160, "dep": 48, "paredes": "", "archivo": "centro/vitrina-retro-gpt", "escala": 1.0},
 	"retropale": {"len": 144, "dep": 48, "paredes": "", "archivo": "centro/pale-retro-gpt", "escala": 1.0},
-	# (28 nov, el dueño, desde una foto suya) la pared de teles planas: tres módulos que encajan pegados (`tools/muebles_electronica_gpt.py`)
+	# (28 nov, el dueño, desde una foto suya) la pared de teles planas: cinco módulos que encajan pegados (`tools/muebles_electronica_gpt.py`)
 	"telespared1": {"len": 104, "dep": 36, "paredes": "", "archivo": "centro/teles-pared1-gpt", "escala": 1.0},
 	"telespared2": {"len": 103, "dep": 36, "paredes": "", "archivo": "centro/teles-pared2-gpt", "escala": 1.0},
 	"telespared3": {"len": 104, "dep": 36, "paredes": "", "archivo": "centro/teles-pared3-gpt", "escala": 1.0},
+	"telespared4": {"len": 119, "dep": 36, "paredes": "", "archivo": "centro/teles-pared4-gpt", "escala": 1.0},
+	"telespared5": {"len": 119, "dep": 36, "paredes": "", "archivo": "centro/teles-pared5-gpt", "escala": 1.0},
 	# Los del centro comercial (PixelLab, con las guías de tools/guias_centro.py). Los altos (estanterías,
 	# taquillas, neveras) solo en la pared del fondo: de lado, vistos desde arriba, no se entienden
 	"gondola":         {"len": 124, "dep": 44, "paredes": "",      "archivo": "centro/gondola"},
@@ -718,11 +720,11 @@ const SALAS := {
 	# (27 nov, el dueño) la sala de venta (46 × 13; las puertas del almacén y de la sala de juegos, en las casillas 15-16 y 36-37 de la pared de
 	# arriba en la normal, y de la de abajo en la inversa; la entrada, en la 22-23), inundada: el laberinto de Tienda.LABERINTOS, con el cable
 	# bajando de la pared de arriba por la casilla 3 (ese trozo de pared, libre). (28 nov, el dueño) sus muebles se rehacen: de momento
-	# solo la pared de teles planas, sus tres módulos pegados contra la pared de arriba (en la normal, entre las puertas; en la inversa, a la
-	# derecha de la entrada). Antes, en dos zonas (música y electrónica) con filas de muebles bajos de paredes del laberinto: está en git
+	# solo la pared de teles planas, sus cinco módulos pegados contra la pared de arriba (en la normal, centrados entre las puertas; en la
+	# inversa, a la derecha de la entrada). Antes, en dos zonas (música y electrónica) con filas de muebles bajos de paredes del laberinto: está en git
 	"tienda-electronica": {"colocados": {
-		"abajo": [["telespared1", 25.219], ["telespared2", 28.453], ["telespared3", 31.688]],
-		"arriba": [["telespared1", 25.623], ["telespared2", 28.857], ["telespared3", 32.091]]}},
+		"abajo": [["telespared1", 19.545], ["telespared2", 22.779], ["telespared3", 26.014], ["telespared4", 29.498], ["telespared5", 33.217]],
+		"arriba": [["telespared1", 25.623], ["telespared2", 28.857], ["telespared3", 32.091], ["telespared4", 35.575], ["telespared5", 39.294]]}},
 	# (27 nov, el dueño) la sala de juegos en red (de momento con el uso "taquillas"): siete puestos de dos jugadores en dos filas mirando
 	# hacia abajo. La primera, contra la pared de arriba: de dos en dos a cada lado de un paso de 4 casillas en medio (el de la puerta y,
 	# en la normal, el sitio del cuadro eléctrico): 2 × 128 + 128 + 2 × 128 = las 20 casillas. La segunda, tres sueltos, con 3 casillas de

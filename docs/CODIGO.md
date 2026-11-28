@@ -1256,13 +1256,15 @@ en una línea.
   se ve seco está seco. Los rayos de cada calambrazo van a las casillas cerca del cable y las chispitas crecen con el agua. Sin atajos (el
   dueño): al meter el pie en el agua con corriente, calambrazo al momento, con su rayo, y Johnny vuelve a donde estaba en seco, también
   esquivando (`agua.gd rechazar`, `ultimo_seco`). Sus muebles (28 nov, el dueño) se rehacen: de momento solo la pared de teles planas (desde una
-  foto suya; `teles-pared-gpt.webp`, recortada en `teles-pared1-gpt` a `3-`), tres módulos que encajan pegados, `telespared1` (entero),
-  `telespared2` (una tele rajada y otra colgando) y `telespared3` (con huecos vacíos), contra la pared de arriba: en la normal, entre las
-  puertas; en la inversa, a la derecha de la entrada. Antes (27-28 nov, en git) iba en dos zonas, música y electrónica, con filas de muebles
-  bajos haciendo de paredes del laberinto; sus sprites siguen (`musica*`, `retro*`), menos las estanterías de vinilos, la de consolas y la mesa
-  de consolas, borradas por copiar una portada de disco y consolas de verdad (las imágenes enteras de GPT se quedan en `assets/sources/`, que no
-  entra en el juego). El cuadro eléctrico, siempre en la pared de arriba de la sala de juegos (`Peligros.agua`, usos ["taquillas"]): en la
-  normal, en el paso de en medio; en la inversa, donde estaba el primer puesto de esa pared, que se quita. Prueba: `--laberinto`
+  foto suya; `teles-pared-gpt.webp`, recortada en `teles-pared1-gpt` a `3-`), cinco módulos que encajan pegados, `telespared1` (entero),
+  `telespared2` (una tele rajada y otra colgando) y `telespared3` (con huecos vacíos), y de `teles-pared-b-gpt.webp` (`teles-pared4-gpt` y `5-`,
+  algo más anchos, 119) `telespared4` (teles curvas y barras de sonido) y `telespared5` (la tele enorme rota, vídeos y mandos), contra la pared
+  de arriba: en la normal, los cinco centrados entre las puertas; en la inversa, a la derecha de la entrada. Antes (27-28 nov, en git) iba en
+  dos zonas, música y electrónica, con filas de muebles bajos haciendo de paredes del laberinto; sus sprites siguen (`musica*`, `retro*`), menos
+  las estanterías de vinilos, la de consolas y la mesa de consolas, borradas por copiar una portada de disco y consolas de verdad (las imágenes
+  enteras de GPT se quedan en `assets/sources/`, que no entra en el juego). El cuadro eléctrico, siempre en la pared de arriba de la sala de
+  juegos (`Peligros.agua`, usos ["taquillas"]): en la normal, en el paso de en medio; en la inversa, donde estaba el primer puesto de esa pared,
+  que se quita. Prueba: `--laberinto`
   (`captura-laberinto-<lado>.png`, `-cerca` y `-cuadro`).
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208
