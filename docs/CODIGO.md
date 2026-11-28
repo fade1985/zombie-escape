@@ -1255,25 +1255,14 @@ en una línea.
   anillos de ondas) y el borde justo en las casillas, con las esquinas de fuera redondeadas; `agua.gd en_agua` mira lo mismo, así que lo que
   se ve seco está seco. Los rayos de cada calambrazo van a las casillas cerca del cable y las chispitas crecen con el agua. Sin atajos (el
   dueño): al meter el pie en el agua con corriente, calambrazo al momento, con su rayo, y Johnny vuelve a donde estaba en seco, también
-  esquivando (`agua.gd rechazar`, `ultimo_seco`). La tienda, en dos zonas (27 nov, el dueño; muebles de GPT de `musica-pared-gpt.webp`,
-  `musica-bajos-gpt.webp`, `electronica-pared-gpt.webp` y `electronica-bajos-gpt.webp`, recortados en `cds-musica-gpt`, `guitarras-musica-gpt`,
-  `expositor-cds-gpt`, `escucha-musica-gpt`, `amplis-musica-gpt`, `teles-retro-gpt`, `camaras-retro-gpt`, `vitrina-retro-gpt` y
-  `pale-retro-gpt`): a la izquierda, música y discos (de pared, el panel de guitarras `musicaguitarras`, la estantería de CDs `musicacds` y el
-  casetero; bajos, el expositor de CDs `musicaexpositor`, el puesto de escucha con dos tocadiscos `musicaescucha` y la torre de amplificadores
-  `musicaamplis`); a la derecha, electrónica (de pared, las estanterías de equipos de música y de radios, la pared de teles planas, las teles de
-  tubo `retroteles`, la estantería de ordenadores y la de cámaras y radios `retrocamaras`, estas dos solo en la inversa, y las torres; bajos, la
-  vitrina rota `retrovitrina` y dos montones de cajas de cartón como los del almacén, `cajasropa`; 28 nov, el dueño: sin el palé `retropale`).
-  La pared de teles planas (28 nov, el dueño, desde una foto suya; `teles-pared-gpt.webp`, recortada en `teles-pared1-gpt` a `3-`): tres módulos
-  que encajan pegados, `telespared1` (entero), `telespared2` (una tele rajada y otra colgando) y `telespared3` (con huecos vacíos). Fuera (28
-  nov, el dueño), las estanterías de vinilos (`retrovinilos`, `musicavinilos`), la de consolas y la mesa de consolas, que copiaban una portada
-  de disco y consolas de verdad: borrados sus sprites y recortes (las imágenes enteras de GPT se quedan en `assets/sources/`, que no entra en el
-  juego). Los de pared, con el tope de 136 de alto. Las paredes del laberinto (`tienda-electronica` en `catalogo.gd`): filas de muebles bajos
-  pegados, con el pie justo encima del pasillo de abajo para que su dibujo (más alto que lo que ocupa) no tape el de arriba: expositor de CDs,
-  cajón de discos, caja y puesto de escucha entre los pasillos de la izquierda, y vitrina y cajas entre los de la derecha; en la normal, además,
-  en el agua de debajo del pasillo de abajo, los amplificadores y el carro a la izquierda y la mesa de ordenadores a la derecha (en la inversa
-  esa parte la tapa la pared). El pasillo de en medio de la derecha (en la normal) va una fila más abajo, para que quepan. El cuadro eléctrico,
-  siempre en la pared de arriba de la sala de juegos (`Peligros.agua`, usos ["taquillas"]): en la normal, en el paso de en medio; en la inversa,
-  donde estaba el primer puesto de esa pared, que se quita. Prueba: `--laberinto`
+  esquivando (`agua.gd rechazar`, `ultimo_seco`). Sus muebles (28 nov, el dueño) se rehacen: de momento solo la pared de teles planas (desde una
+  foto suya; `teles-pared-gpt.webp`, recortada en `teles-pared1-gpt` a `3-`), tres módulos que encajan pegados, `telespared1` (entero),
+  `telespared2` (una tele rajada y otra colgando) y `telespared3` (con huecos vacíos), contra la pared de arriba: en la normal, entre las
+  puertas; en la inversa, a la derecha de la entrada. Antes (27-28 nov, en git) iba en dos zonas, música y electrónica, con filas de muebles
+  bajos haciendo de paredes del laberinto; sus sprites siguen (`musica*`, `retro*`), menos las estanterías de vinilos, la de consolas y la mesa
+  de consolas, borradas por copiar una portada de disco y consolas de verdad (las imágenes enteras de GPT se quedan en `assets/sources/`, que no
+  entra en el juego). El cuadro eléctrico, siempre en la pared de arriba de la sala de juegos (`Peligros.agua`, usos ["taquillas"]): en la
+  normal, en el paso de en medio; en la inversa, donde estaba el primer puesto de esa pared, que se quita. Prueba: `--laberinto`
   (`captura-laberinto-<lado>.png`, `-cerca` y `-cuadro`).
   El resto de la sala de venta (26 nov, el dueño; de GPT desde fotos suyas, misma herramienta y con el doble de detalle): los mostradores de
   carnicería, charcutería y pescadería vistos desde el cliente y desde dentro (`supercarne`, `supercharcu`, `superpescado` y sus `…dentro`; 208
