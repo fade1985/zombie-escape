@@ -40,10 +40,12 @@ MUEBLES = [("puesto-juegos1-gpt", "juegospuesto1", 128), ("puesto-juegos2-gpt", 
            # (28 nov, el dueño) dos módulos más (de teles-pared-b-gpt.webp): con teles curvas y barras de sonido, y con la tele enorme rota
            ("teles-pared4-gpt", "telespared4", 192), ("teles-pared5-gpt", "telespared5", 192),
            # (28 nov, el dueño, desde dos fotos suyas) dos módulos de la misma pared con equipos de música antiguos (de hifi-pared-gpt.webp)
-           ("hifi-pared1-gpt", "hifipared1", 192), ("hifi-pared2-gpt", "hifipared2", 192)]
+           ("hifi-pared1-gpt", "hifipared1", 192), ("hifi-pared2-gpt", "hifipared2", 192),
+           # (28 nov, el dueño) dos más (de hifi-pared-b-gpt.webp): con radiocasetes, auriculares y cintas, y con la cadena y los altavoces
+           ("hifi-pared3-gpt", "hifipared3", 192), ("hifi-pared4-gpt", "hifipared4", 192)]
 NUEVOS = {"musicacds", "musicaguitarras", "retroteles", "retrocamaras", "musicaexpositor",
           "musicaescucha", "musicaamplis", "retrovitrina", "retropale",
-          "telespared1", "telespared2", "telespared3", "telespared4", "telespared5", "hifipared1", "hifipared2"}
+          "telespared1", "telespared2", "telespared3", "telespared4", "telespared5", "hifipared1", "hifipared2", "hifipared3", "hifipared4"}
 # los que llevan huecos cerrados de negro puro que han de verse transparentes (bajo la mesa, entre las patas y las sillas, y entre las
 # ruedas de las sillas): se quitan los de más de HUECO_MIN píxeles de GPT (los pequeños son sombras del dibujo)
 CON_HUECOS = {"juegospuesto1", "juegospuesto2", "juegospuesto3", "juegossilla1", "juegossilla2", "juegossilla3",
@@ -54,7 +56,7 @@ HUECO_MIN = 1000
 # de la pared; más altos que anchos, se estrechan)
 ALTO_MAX = {"retroestante1": 136, "retroestante2": 136, "retroestante3": 136, "retrocasetes": 136,
             "musicacds": 136, "musicaguitarras": 136, "retroteles": 136, "retrocamaras": 136,
-            "telespared1": 136, "telespared2": 136, "telespared3": 136, "telespared4": 136, "telespared5": 136, "hifipared1": 136, "hifipared2": 136}
+            "telespared1": 136, "telespared2": 136, "telespared3": 136, "telespared4": 136, "telespared5": 136, "hifipared1": 136, "hifipared2": 136, "hifipared3": 136, "hifipared4": 136}
 # lo grande que es cada píxel del dibujo (como los muebles de la tienda de ropa: 2, el mismo detalle que el resto del juego)
 PIXEL = 2
 # todos con el doble de detalle (un píxel por unidad), como en el súper
